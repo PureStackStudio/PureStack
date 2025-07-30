@@ -64,8 +64,8 @@ export class Style extends BaseStyle<Style> {
 function getValues(propType: PropType) {
   return (
     propType.values?.value
-      ?.map?.((x) => '     * ' + x.$.name.replaceAll('"', '') + ': ' + x.desc)
-      .join('\r\n\r\n') ?? ''
+      ?.map?.((x) => '   * ' + x.$.name.replaceAll('"', '') + ': ' + x.desc)
+      .join('\r\n\r\n') ?? '   *'
   )
 }
 
@@ -118,42 +118,37 @@ function getAnyType(propType: PropType) {
 }
 
 function createValuesTSDoc(values: string) {
-  if (!values) return ''
-  return `     * values:
-     * \`\`\`md
+  if (!values?.replace('*', '').trim()) return '   *'
+  return `   *
+   * values:
+   * \`\`\`md
 ${values}
-     * \`\`\`
-     *`
+   * \`\`\``
 }
 function createMethod(propType: PropType) {
   const { name, restriction, browsers, ref, syntax } = propType.$
   const desc = propType.desc?.replace?.('@', '`@`')
   const cname = camelize(name)
   const values = createValuesTSDoc(getValues(propType))
-  /*const anyType =
-    propType.$.restriction == 'enum'
-      ? getEnumType(propType)
-      : getAnyType(propType)*/
   const anyType = `CSSProps['${name}']`
   const code = `
-    /**
-     * ${desc}.
-     * 
-     * syntax:  \`${(syntax ?? ' ').replace('$(name)', name)}\`
-     * 
-     * restriction: ${restriction}
-     * 
-     * browsers: ${browsers}
-     * 
-     * ref: ${ref}
-     * 
+  /**
+   * ${desc}.
+   * 
+   * syntax:  \`${(syntax ?? ' ').replace('$(name)', name)}\`
+   * 
+   * restriction: ${restriction}
+   * 
+   * browsers: ${browsers}
+   * 
+   * ref: ${ref}
 ${values}
-     * @param value -
-     */
-    ${cname}(value: ${anyType}) {
-      this.props.set('${name}', value)
-      return this
-    }
+   * @param value -
+   */
+  ${cname}(value: ${anyType}) {
+  this.props.set('${name}', value)
+  return this
+}
 `
   return code
 }
@@ -166,15 +161,6 @@ function createMethods() {
   return result
 }
 
-const code = createCode()
-const formatted = await prettier.format(code, {
-  parser: 'typescript',
-  semi: false,
-  singleQuote: true,
-  tabWidth: 2,
-  endOfLine: 'lf',
-})
-
 function createProps() {
   let result = ''
   for (const prop of cssProps) {
@@ -184,15 +170,21 @@ function createProps() {
 }
 function createProp(propType: PropType) {
   const { name } = propType.$
-  /*const desc = propType.desc?.replace?.('@', '`@`')
-  const cname = camelize(name)
-  const values = createValuesTSDoc(getValues(propType))*/
   const anyType =
     propType.$.restriction == 'enum'
       ? getEnumType(propType)
       : getAnyType(propType)
   return `'${name}': ${anyType},\n`
 }
+
+const code = createCode()
+const formatted = await prettier.format(code, {
+  parser: 'typescript',
+  semi: false,
+  singleQuote: true,
+  tabWidth: 2,
+  endOfLine: 'lf',
+})
 
 const outTs = fileURLToPath(new URL('../style.ts', import.meta.url))
 fs.writeFileSync(outTs, formatted)
