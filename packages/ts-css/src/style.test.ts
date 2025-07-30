@@ -1,19 +1,15 @@
-import { beforeEach, describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
 import { Style } from './style'
 
 describe('Style', () => {
-  beforeEach(() => {
-    // Reset the static ID counter before each test
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ;(Style as any).nextId = 1
-  })
-
   it('assigns incremental ids and default selector', () => {
     const s1 = new Style()
+    const id1 = s1.id
     const s2 = new Style()
-    expect(s1.id).toBe(1)
-    expect(s2.id).toBe(2)
+    const s3 = new Style()
+    expect(s2.id).toBe(id1 + 1)
+    expect(s3.id).toBe(id1 + 2)
     expect(s1.selector).toBe('')
   })
 
@@ -47,12 +43,28 @@ describe('Style', () => {
     expect(child1.selector).toBe('div')
   })
 
-  it('handles media query children correctly', () => {
-    const s = new Style('abc')
-    const mediaChild = s.media('max-width: 600px').color('red').toString()
-    expect(mediaChild).toBe('@media(max-width: 600px)')
-    const mediaChild2 = s.media('max-width: 600px').color('red').toString()
-    expect(mediaChild2).toBe(mediaChild)
+  it('handles media query children correctly', async () => {
+    const s = new Style().select('.red')
+    s.media('max-width: 600px').color('red')
+    expect(await s.toPrettyCSS()).toBe(`@media (max-width: 600px) {
+  .red {
+    color: red;
+  }
+}
+`)
+    s.media('max-width: 700px').color('red')
+    expect(await s.toPrettyCSS()).toBe(`@media (max-width: 600px) {
+  .red {
+    color: red;
+  }
+}
+
+@media (max-width: 700px) {
+  .red {
+    color: red;
+  }
+}
+`)
   })
 
   it('sets zoom property and is chainable', () => {
@@ -62,9 +74,18 @@ describe('Style', () => {
     expect(s.props.get('zoom')).toBe('normal')
   })
 
+  it(':where selector', async () => {
+    const s = new Style()
+    s.select(':where(#a, .bar, .foo)').color('red')
+    expect(await s.toPrettyCSS()).toBe(`:where(#a, .bar, .foo) {
+  color: red;
+}
+`)
+  })
+
   it('toString outputs CSS rules', () => {
     const s = new Style('div').color('green')
-    const cssText = s.toString()
+    const cssText = s.toCSS()
     expect(cssText).toContain('div')
     expect(cssText).toContain('color: green;')
   })
