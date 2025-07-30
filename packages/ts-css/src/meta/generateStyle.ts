@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Run: yarn tsx packages/ts-css/src/meta/generateStyle.ts
  */
@@ -61,7 +60,17 @@ function getValues(propType: PropType) {
 function getEnumType(propType: PropType) {
   const stringType = ' | (string & {})'
   if (!propType.values.value.map)
-    return `"${(propType.values.value as any).$.name}"` + stringType
+    return (
+      `"${
+        (
+          propType.values.value as unknown as {
+            $: {
+              name: string
+            }
+          }
+        ).$.name
+      }"` + stringType
+    )
   return (
     propType.values.value
       .map((x) => `"${x.$.name.replaceAll('"', '')}"`)
@@ -81,8 +90,13 @@ function getAnyType(propType: PropType) {
   if (!propType?.values?.value) return 'string'
   if (!propType.values.value.map)
     return (
-      `"${(propType.values.value as any).$.name.replaceAll('"', '')}"` +
-      stringType
+      `"${(
+        propType.values.value as unknown as {
+          $: {
+            name: string
+          }
+        }
+      ).$.name.replaceAll('"', '')}"` + stringType
     )
   return (
     propType.values.value
