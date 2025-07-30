@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { ch, h } from './tsNode'
+import { h } from './tsNode'
 
 describe('TSNode', () => {
   describe('toHtml', () => {
@@ -161,7 +161,7 @@ describe('TSNode', () => {
             h('').raw('Content'),
             h('footer')
               .children(h('').text('Footer text'))
-              .children(ch('UserRow')),
+              .children(h('UserRow')),
           ),
         )
       expect(nested.toHtml()).toBe(

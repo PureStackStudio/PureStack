@@ -73,11 +73,7 @@ export class TSNode<K extends HtmlTag> {
     leaf.#raw = html
     return leaf
   }
-  attr(
-    attrs: Partial<
-      Record<SpecificAttributesForTag<K extends HtmlTag ? K : ''>, string>
-    >,
-  ): TSNode<K> {
+  attr(attrs: Partial<Record<SpecificAttributesForTag<K>, string>>): TSNode<K> {
     return this.#withAttributes(attrs as Record<string, string>)
   }
 
@@ -89,11 +85,7 @@ export class TSNode<K extends HtmlTag> {
     return this.#withAttributes({ class: args.join(' ') })
   }
 
-  attrAll(
-    attrs: Partial<
-      Record<AttributesForTag<K extends HtmlTag ? K : ''>, string>
-    >,
-  ): TSNode<K> {
+  attrAll(attrs: Partial<Record<AttributesForTag<K>, string>>): TSNode<K> {
     return this.#withAttributes(attrs as Record<string, string>)
   }
   attrCustom(attrs: Record<string, string>): TSNode<K> {
@@ -222,11 +214,7 @@ export class TSNode<K extends HtmlTag> {
   }
 }
 
-export function ch<K extends HtmlTag>(tag: string): TSNode<K> {
-  return new TSNode(tag as K)
-}
-
-export function h<K extends HtmlTag>(tag: K | '') {
+export function h<K extends HtmlTag>(tag: K) {
   return new TSNode(tag as K)
 }
 

@@ -93,7 +93,7 @@ ${specificEntries}
 }
 
 /** All supported HTML tags */
-export type HtmlTag = keyof SpecificAttributesMap | ''
+export type HtmlTag = keyof SpecificAttributesMap | (string & {})
 
 /** Base set shared by every tag */
 export type BaseAttributes =
@@ -103,7 +103,7 @@ export type BaseAttributes =
 
 /** Tag-specific attrs for T */
 export type SpecificAttributesForTag<T extends HtmlTag> =
-  T extends keyof SpecificAttributesMap ? SpecificAttributesMap[T] : never
+  T extends keyof SpecificAttributesMap ? SpecificAttributesMap[T] : string
 
 /** All allowed attrs for T (base + specific) */
 export type AttributesForTag<T extends HtmlTag> =
