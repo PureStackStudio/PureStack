@@ -50,7 +50,7 @@ export class BaseStyle<T extends RootStyle> extends RootStyle {
 
   media(query: string) {
     if (!query) return this
-    const selector = query.startsWith('@') ? query : `@media(${query})`
+    const selector = query.startsWith('@media') ? query : `@media(${query})`
     let child = this.children.get(selector)
     if (child) {
       return this.cast(child).selectWithoutParentKey(this.selector)
