@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { css } from '.'
+import { css } from './css'
 import { Style } from './style'
 
 describe('Style', () => {
