@@ -1,0 +1,248 @@
+import { isString } from '@purestack/utils'
+import { escapeHtml } from 'packages/utils/src/escapeHtml'
+import prettier from 'prettier'
+
+import {
+  AriaAttributes,
+  AttributesForTag,
+  EventAttributes,
+  GlobalAttributes,
+  HtmlTag,
+  SpecificAttributesForTag,
+} from './html'
+
+/**
+ * Represents an immutable builder node for constructing HTML-like trees in TypeScript.
+ * Each method returns a fresh TSNode, retaining chain context via the #parent link.
+ */
+class TSNode<K extends HtmlTag> {
+  /** Link to the previous node in the chain for context (e.g., tag inheritance). */
+  #parent?: TSNode<K>
+
+  /** Literal text content for this node, if any. */
+  #text: string = ''
+
+  /** Literal html content for this node, if any. */
+  #raw: string = ''
+
+  /** The tag name (e.g., 'div', 'span') this node represents. */
+  #tag: string = ''
+
+  /** Child TSNode instances nested under this node. */
+  #children: TSNode<''>[] = []
+
+  /** Attributes applied to this node. */
+  #attributes: Record<string, string> = {}
+
+  /**
+   * Creates a ts.
+   * @param tagOrParent - A tag name or a `TSNode` parent.
+   */
+  constructor(tagOrParent?: K | TSNode<K>) {
+    if (tagOrParent == null) {
+      return
+    }
+    if (isString(tagOrParent)) {
+      this.#tag = tagOrParent
+    } else {
+      const parent = tagOrParent as TSNode<K>
+      this.#attributes = parent.#attributes
+      this.#children = parent.#children
+      this.#tag = parent.#tag
+      this.#parent = parent
+    }
+  }
+
+  /**
+   * Appends a new text node under this node's tag context.
+   * @param text - The string content for the new text node.
+   * @returns A ts wrapping the text node and linked in the chain.
+   */
+  text(text: string): TSNode<K> {
+    const leaf = new TSNode(this)
+    leaf.#text = escapeHtml(text, false)
+    return leaf
+  }
+  /**
+   * Appends a new raw html code under this node's tag context.
+   * @param html - The raw html string for the new html node.
+   * @returns A ts wrapping the html node and linked in the chain.
+   */
+  raw(html: string): TSNode<K> {
+    const leaf = new TSNode(this)
+    leaf.#raw = html
+    return leaf
+  }
+  attr(
+    attrs: Partial<
+      Record<SpecificAttributesForTag<K extends HtmlTag ? K : ''>, string>
+    >,
+  ): TSNode<K> {
+    return this.#withAttributes(attrs as Record<string, string>)
+  }
+
+  id(id: string) {
+    return this.#withAttributes({ id })
+  }
+
+  class(...args: string[]) {
+    return this.#withAttributes({ class: args.join(' ') })
+  }
+
+  attrAll(
+    attrs: Partial<
+      Record<AttributesForTag<K extends HtmlTag ? K : ''>, string>
+    >,
+  ): TSNode<K> {
+    return this.#withAttributes(attrs as Record<string, string>)
+  }
+  attrCustom(attrs: Record<string, string>): TSNode<K> {
+    return this.#withAttributes(attrs as Record<string, string>)
+  }
+  attrGlobal(attrs: Partial<Record<GlobalAttributes, string>>): TSNode<K> {
+    return this.#withAttributes(attrs as Record<string, string>)
+  }
+  attrAria(attrs: Partial<Record<AriaAttributes, string>>): TSNode<K> {
+    return this.#withAttributes(attrs as Record<string, string>)
+  }
+  attrEvents(attrs: Partial<Record<EventAttributes, string>>): TSNode<K> {
+    return this.#withAttributes(attrs as Record<string, string>)
+  }
+  /**
+   * Appends provided TSNode instances as children under this node's tag context.
+   * @param args - One or more TSNode instances to include as children.
+   * @returns A ts wrapping the group of children and linked in the chain.
+   */
+  children(...args: TSNode<''>[]): TSNode<K> {
+    const container = new TSNode(this)
+    container.#children = [...this.#children, ...args]
+    return container
+  }
+
+  /**
+   * Serializes this node into an HTML string, handling multiple grouped chains throughout the tree.
+   * @param options - Prettier options
+   * @returns The HTML string representing the combined root context and its subtree.
+   */
+  toHtml() {
+    const chain = this.#collectChain()
+    const raws = chain.filter((x) => !!x.#raw)
+    if (raws.length) return raws.map((x) => x.#raw).join('')
+    const code = TSNode.#serialize(this.#tag, this.#attributes, this.#children)
+    return code
+  }
+
+  /**
+   * Serializes this node into an HTML string, handling multiple grouped chains throughout the tree.
+   * @param options - Prettier options
+   * @returns The HTML string representing the combined root context and its subtree.
+   */
+  async toPrettyHtml(options?: prettier.Options) {
+    const fmt: prettier.Options = {
+      parser: 'html',
+      semi: false,
+      singleQuote: true,
+      tabWidth: 2,
+      endOfLine: 'lf',
+      ...options,
+    }
+    const code = this.toHtml()
+    return prettier.format(code, fmt)
+  }
+  /**
+   * Creates a ts in the chain with added attributes.
+   * @param attrs - A map of attribute names to values.
+   * @returns A ts linked to this as parent and containing the merged attributes.
+   */
+  #withAttributes(attrs: Record<string, string>): TSNode<K> {
+    const node = new TSNode(this)
+    node.#attributes = { ...this.#attributes, ...attrs }
+    return node
+  }
+
+  /**
+   * Collects the full parent chain from the root context down to this node.
+   * @returns An array of TSNode instances representing the call chain.
+   */
+  #collectChain(): TSNode<K>[] {
+    const chain: TSNode<K>[] = [this]
+    let cursor = this.#parent
+    while (cursor) {
+      chain.unshift(cursor)
+      cursor = cursor.#parent
+    }
+    return chain
+  }
+
+  /**
+   * Recursively serializes a tag name, its attributes, and its TSNode children into HTML.
+   * @param tag - The HTML tag name for this level.
+   * @param attrs - A map of attribute names to values.
+   * @param children - Child TSNode instances to render inside this tag.
+   * @returns The HTML string for this tag and its subtree.
+   */
+  static #serialize(
+    tag: string,
+    attrs: Record<string, string>,
+    children: TSNode<''>[],
+    text = '',
+  ): string {
+    let html = ''
+    if (tag) {
+      const attrString = Object.entries(attrs)
+        .map(([key, val]) => ` ${key}="${escapeHtml(val, true)}"`)
+        .join('')
+      if (voidTags.has(tag)) {
+        html += `<${tag}${attrString}/>`
+        return html
+      }
+      html += `<${tag}${attrString}>`
+    }
+    if (text) html += text
+    for (const child of children) {
+      const chain = child.#collectChain()
+      const text = chain.map((c) => c.#text).join('')
+      const raws = chain.filter((x) => !!x.#raw)
+      if (raws.length) {
+        html += raws.map((x) => x.#raw).join('')
+        continue
+      }
+      const childTag = chain[0].#tag
+      html += TSNode.#serialize(
+        childTag,
+        child.#attributes,
+        child.#children,
+        text,
+      )
+    }
+    if (tag) {
+      html += `</${tag}>`
+    }
+    return html
+  }
+}
+
+export function ch<K extends HtmlTag>(tag: string): TSNode<K> {
+  return new TSNode(tag as K)
+}
+
+export function h<K extends HtmlTag>(tag: K | '') {
+  return new TSNode(tag as K)
+}
+
+const voidTags = new Set([
+  'area',
+  'base',
+  'br',
+  'col',
+  'embed',
+  'hr',
+  'img',
+  'input',
+  'link',
+  'meta',
+  'param',
+  'source',
+  'track',
+  'wbr',
+])

@@ -1,16 +1,16 @@
 {
-  "name": "@purestack/ts-html",
+  "name": "@purestack/utils",
   "version": "1.0.0",
   "packageManager": "yarn@4.9.2",
-  "main": "./dist/ts-html.cjs",
-  "module": "./dist/ts-html.js",
-  "types": "./dist/ts-html.d.ts",
+  "main": "./dist/utils.cjs",
+  "module": "./dist/utils.js",
+  "types": "./dist/utils.d.ts",
   "type": "module",
   "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/koculu/purestack.git",
-    "directory": "packages/ts-html"
+    "directory": "packages/utils"
   },
   "homepage": "https://tenray.io/purestack",
   "bugs": {
@@ -18,8 +18,8 @@
   },
   "exports": {
     ".": {
-      "require": "./dist/ts-html.cjs",
-      "import": "./dist/ts-html.js"
+      "require": "./dist/utils.cjs",
+      "import": "./dist/utils.js"
     }
   },
   "license": "MIT",
@@ -32,8 +32,5 @@
     "build": "tsc",
     "lint": "eslint ./src",
     "test": "vitest"
-  },
-  "dependencies": {
-    "prettier": "^3.6.2"
   }
 }
