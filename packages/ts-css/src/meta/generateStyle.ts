@@ -36,12 +36,24 @@ type PropType = {
 
 function createCode() {
   const methods = createMethods()
+  const props = createProps()
   const code = `
 import { BaseStyle } from './baseStyle'
+
+export type CSSProps = {
+  ${props}
+} & Record<string, string | number>
 
 export class Style extends BaseStyle<Style> {
   constructor(selector?: string) {
     super((s) => new Style(s), selector)
+  }
+
+  css(css: Partial<CSSProps>) {
+      for (const [key, value] of Object.entries(css)) {
+        this.props.set(key, value as string)
+      }
+      return this
   }
 
   ${methods}
@@ -105,50 +117,23 @@ function getAnyType(propType: PropType) {
   )
 }
 
-function createEnumMethod(propType: PropType) {
-  const { name, restriction, browsers, ref, syntax } = propType.$
-  const desc = propType.desc?.replace?.('@', '`@`')
-  const cname = camelize(name)
-  const values = createValuesTSDoc(getValues(propType))
-  const enumType = getEnumType(propType)
-  const code = `
-    /**
-     * ${desc}.
-     * 
-     * syntax:  \`${(syntax ?? ' ').replace('$(name)', name)}\`
-     * 
-     * restriction: ${restriction}
-     * 
-     * browsers: ${browsers}
-     * 
-     * ref: ${ref}
-     * 
-${values}
-     * @param value - 
-     */
-    ${cname}(value: ${enumType}) {
-      this.props.set('${name}', value)
-      return this
-    }
-`
-  return code
-}
-
 function createValuesTSDoc(values: string) {
   if (!values) return ''
   return `     * values:
-     * \`\`\`
+     * \`\`\`md
 ${values}
      * \`\`\`
      *`
 }
 function createMethod(propType: PropType) {
-  if (propType.$.restriction == 'enum') return createEnumMethod(propType)
   const { name, restriction, browsers, ref, syntax } = propType.$
   const desc = propType.desc?.replace?.('@', '`@`')
   const cname = camelize(name)
   const values = createValuesTSDoc(getValues(propType))
-  const anyType = getAnyType(propType)
+  const anyType =
+    propType.$.restriction == 'enum'
+      ? getEnumType(propType)
+      : getAnyType(propType)
   const code = `
     /**
      * ${desc}.
@@ -188,6 +173,25 @@ const formatted = await prettier.format(code, {
   tabWidth: 2,
   endOfLine: 'lf',
 })
+
+function createProps() {
+  let result = ''
+  for (const prop of cssProps) {
+    result += createProp(prop as PropType)
+  }
+  return result
+}
+function createProp(propType: PropType) {
+  const { name } = propType.$
+  /*const desc = propType.desc?.replace?.('@', '`@`')
+  const cname = camelize(name)
+  const values = createValuesTSDoc(getValues(propType))*/
+  const anyType =
+    propType.$.restriction == 'enum'
+      ? getEnumType(propType)
+      : getAnyType(propType)
+  return `'${name}': ${anyType},\n`
+}
 
 const outTs = fileURLToPath(new URL('../style.ts', import.meta.url))
 fs.writeFileSync(outTs, formatted)

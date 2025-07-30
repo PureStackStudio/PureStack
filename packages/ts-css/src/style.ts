@@ -1,8 +1,1945 @@
 import { BaseStyle } from './baseStyle'
 
+export type CSSProps = {
+  'additive-symbols': string
+  'align-content':
+    | 'center'
+    | 'flex-end'
+    | 'flex-start'
+    | 'space-around'
+    | 'space-between'
+    | 'stretch'
+    | 'start'
+    | 'end'
+    | 'normal'
+    | 'baseline'
+    | 'first baseline'
+    | 'last baseline'
+    | 'space-around'
+    | 'space-between'
+    | 'space-evenly'
+    | 'stretch'
+    | 'safe'
+    | 'unsafe'
+    | (string & {})
+  'align-items':
+    | 'baseline'
+    | 'center'
+    | 'flex-end'
+    | 'flex-start'
+    | 'stretch'
+    | 'normal'
+    | 'start'
+    | 'end'
+    | 'self-start'
+    | 'self-end'
+    | 'first baseline'
+    | 'last baseline'
+    | 'stretch'
+    | 'safe'
+    | 'unsafe'
+    | (string & {})
+  'justify-items':
+    | 'auto'
+    | 'normal'
+    | 'end'
+    | 'start'
+    | 'flex-end'
+    | 'flex-start'
+    | 'self-end'
+    | 'self-start'
+    | 'center'
+    | 'left'
+    | 'right'
+    | 'baseline'
+    | 'first baseline'
+    | 'last baseline'
+    | 'stretch'
+    | 'safe'
+    | 'unsafe'
+    | 'legacy'
+    | (string & {})
+  'justify-self':
+    | 'auto'
+    | 'normal'
+    | 'end'
+    | 'start'
+    | 'flex-end'
+    | 'flex-start'
+    | 'self-end'
+    | 'self-start'
+    | 'center'
+    | 'left'
+    | 'right'
+    | 'baseline'
+    | 'first baseline'
+    | 'last baseline'
+    | 'stretch'
+    | 'save'
+    | 'unsave'
+    | (string & {})
+  'align-self':
+    | 'auto'
+    | 'normal'
+    | 'self-end'
+    | 'self-start'
+    | 'baseline'
+    | 'center'
+    | 'flex-end'
+    | 'flex-start'
+    | 'stretch'
+    | 'baseline'
+    | 'first baseline'
+    | 'last baseline'
+    | 'safe'
+    | 'unsafe'
+    | (string & {})
+  all: 'revert' | (string & {})
+  alt: 'none' | (string & {})
+  animation:
+    | 'alternate'
+    | 'alternate-reverse'
+    | 'backwards'
+    | 'both'
+    | 'forwards'
+    | 'infinite'
+    | 'none'
+    | 'normal'
+    | 'reverse'
+    | (string & {})
+  'animation-delay': string
+  'animation-direction':
+    | 'alternate'
+    | 'alternate-reverse'
+    | 'normal'
+    | 'reverse'
+    | (string & {})
+  'animation-duration': string
+  'animation-fill-mode':
+    | 'backwards'
+    | 'both'
+    | 'forwards'
+    | 'none'
+    | (string & {})
+  'animation-iteration-count': 'infinite' | (string & {})
+  'animation-name': 'none' | (string & {})
+  'animation-play-state': 'paused' | 'running' | (string & {})
+  'animation-timing-function': string
+  'backface-visibility': 'hidden' | 'visible' | (string & {})
+  background: 'fixed' | 'local' | 'none' | 'scroll' | (string & {})
+  'background-attachment': 'fixed' | 'local' | 'scroll' | (string & {})
+  'background-blend-mode':
+    | 'normal'
+    | 'multiply'
+    | 'screen'
+    | 'overlay'
+    | 'darken'
+    | 'lighten'
+    | 'color-dodge'
+    | 'color-burn'
+    | 'hard-light'
+    | 'soft-light'
+    | 'difference'
+    | 'exclusion'
+    | 'hue'
+    | 'saturation'
+    | 'color'
+    | 'luminosity'
+    | (string & {})
+  'background-clip': string
+  'background-color': string
+  'background-image': 'none' | (string & {})
+  'background-origin': string
+  'background-position': string
+  'background-repeat': 'logical' | (string & {})
+  'background-size': 'auto' | 'contain' | 'cover' | (string & {})
+  'block-size': 'auto' | (string & {})
+  border: string
+  'border-block-end': string
+  'border-block-start': string
+  'border-block-end-color': string
+  'border-block-start-color': string
+  'border-block-end-style': string
+  'border-block-start-style': string
+  'border-block-end-width': string
+  'border-block-start-width': string
+  'border-bottom': string
+  'border-bottom-color': string
+  'border-bottom-left-radius': string
+  'border-bottom-right-radius': string
+  'border-bottom-style': string
+  'border-bottom-width': string
+  'border-collapse': 'collapse' | 'separate' | (string & {})
+  'border-color': 'logical' | (string & {})
+  'border-image':
+    | 'auto'
+    | 'fill'
+    | 'none'
+    | 'repeat'
+    | 'round'
+    | 'space'
+    | 'stretch'
+    | 'url()'
+    | (string & {})
+  'border-image-outset': string
+  'border-image-repeat':
+    | 'repeat'
+    | 'round'
+    | 'space'
+    | 'stretch'
+    | (string & {})
+  'border-image-slice': 'fill' | (string & {})
+  'border-image-source': 'none' | (string & {})
+  'border-image-width': 'auto' | (string & {})
+  'border-inline-end': string
+  'border-inline-start': string
+  'border-inline-end-color': string
+  'border-inline-start-color': string
+  'border-inline-end-style': string
+  'border-inline-start-style': string
+  'border-inline-end-width': string
+  'border-inline-start-width': string
+  'border-left': string
+  'border-left-color': string
+  'border-left-style': string
+  'border-left-width': string
+  'border-radius': string
+  'border-right': string
+  'border-right-color': string
+  'border-right-style': string
+  'border-right-width': string
+  'border-spacing': string
+  'border-style': 'logical' | (string & {})
+  'border-top': string
+  'border-top-color': string
+  'border-top-left-radius': string
+  'border-top-right-radius': string
+  'border-top-style': string
+  'border-top-width': string
+  'border-width': 'logical' | (string & {})
+  bottom: 'auto' | (string & {})
+  'box-decoration-break': 'clone' | 'slice' | (string & {})
+  'box-shadow': 'inset' | 'none' | (string & {})
+  'box-sizing': 'border-box' | 'content-box' | (string & {})
+  'caption-side':
+    | 'block-end'
+    | 'block-start'
+    | 'bottom'
+    | 'inline-end'
+    | 'inline-start'
+    | 'top'
+    | (string & {})
+  'caret-color': 'auto' | (string & {})
+  clear:
+    | 'both'
+    | 'inline-end'
+    | 'inline-start'
+    | 'left'
+    | 'none'
+    | 'right'
+    | (string & {})
+  clip: 'auto' | 'rect()' | (string & {})
+  'clip-path': 'none' | 'url()' | (string & {})
+  'clip-rule': 'evenodd' | 'nonzero' | (string & {})
+  color: string
+  'color-interpolation-filters': 'auto' | 'linearRGB' | 'sRGB' | (string & {})
+  'column-count': 'auto' | (string & {})
+  'column-fill': 'auto' | 'balance' | (string & {})
+  'column-gap': 'normal' | (string & {})
+  'column-rule': string
+  'column-rule-style': string
+  'column-rule-width': string
+  columns: 'auto' | (string & {})
+  'column-span': 'all' | 'none' | (string & {})
+  'column-width':
+    | 'auto'
+    | 'fill'
+    | 'fit-content'
+    | 'max-content'
+    | 'min-content'
+    | (string & {})
+  contain:
+    | 'none'
+    | 'strict'
+    | 'content'
+    | 'size'
+    | 'layout'
+    | 'style'
+    | 'paint'
+    | (string & {})
+  content:
+    | 'attr()'
+    | 'box'
+    | 'check'
+    | 'circle'
+    | 'close-quote'
+    | 'contents'
+    | 'counter(name)'
+    | 'counter(name, style)'
+    | 'counters(name, string)'
+    | 'counters(name, string, style)'
+    | 'date(format)'
+    | 'diamond'
+    | 'disc'
+    | 'endnote'
+    | 'footnote'
+    | 'hyphen'
+    | 'icon'
+    | 'inhibit'
+    | 'list-item'
+    | 'no-close-quote'
+    | 'none'
+    | 'no-open-quote'
+    | 'normal'
+    | 'open-quote'
+    | 'pending()'
+    | 'section-note'
+    | 'square'
+    | 'string(name)'
+    | 'url()'
+    | (string & {})
+  'counter-increment': 'none' | (string & {})
+  'counter-reset': 'none' | (string & {})
+  cursor:
+    | 'alias'
+    | 'all-scroll'
+    | 'auto'
+    | 'cell'
+    | 'col-resize'
+    | 'context-menu'
+    | 'copy'
+    | 'crosshair'
+    | 'default'
+    | 'e-resize'
+    | 'ew-resize'
+    | 'grab'
+    | 'grabbing'
+    | 'help'
+    | 'move'
+    | '-moz-grab'
+    | '-moz-grabbing'
+    | '-moz-zoom-in'
+    | '-moz-zoom-out'
+    | 'ne-resize'
+    | 'nesw-resize'
+    | 'no-drop'
+    | 'none'
+    | 'not-allowed'
+    | 'n-resize'
+    | 'ns-resize'
+    | 'nw-resize'
+    | 'nwse-resize'
+    | 'pointer'
+    | 'progress'
+    | 'row-resize'
+    | 'se-resize'
+    | 's-resize'
+    | 'sw-resize'
+    | 'text'
+    | 'vertical-text'
+    | 'wait'
+    | '-webkit-grab'
+    | '-webkit-grabbing'
+    | '-webkit-zoom-in'
+    | '-webkit-zoom-out'
+    | 'w-resize'
+    | 'zoom-in'
+    | 'zoom-out'
+    | (string & {})
+  direction: 'ltr' | 'rtl' | (string & {})
+  display:
+    | 'block'
+    | 'contents'
+    | 'flex'
+    | 'flexbox'
+    | 'flow'
+    | 'flow-root'
+    | 'grid'
+    | 'inline'
+    | 'inline-block'
+    | 'inline-flex'
+    | 'inline-flexbox'
+    | 'inline-grid'
+    | 'inline-table'
+    | 'list-item'
+    | '-moz-box'
+    | '-moz-deck'
+    | '-moz-grid'
+    | '-moz-grid-group'
+    | '-moz-grid-line'
+    | '-moz-groupbox'
+    | '-moz-inline-box'
+    | '-moz-inline-grid'
+    | '-moz-inline-stack'
+    | '-moz-marker'
+    | '-moz-popup'
+    | '-moz-stack'
+    | '-ms-flexbox'
+    | '-ms-grid'
+    | '-ms-inline-flexbox'
+    | '-ms-inline-grid'
+    | 'none'
+    | 'ruby'
+    | 'ruby-base'
+    | 'ruby-base-container'
+    | 'ruby-base-group'
+    | 'ruby-text'
+    | 'ruby-text-container'
+    | 'ruby-text-group'
+    | 'run-in'
+    | 'table'
+    | 'table-caption'
+    | 'table-cell'
+    | 'table-column'
+    | 'table-column-group'
+    | 'table-footer-group'
+    | 'table-header-group'
+    | 'table-row'
+    | 'table-row-group'
+    | '-webkit-box'
+    | '-webkit-flex'
+    | '-webkit-inline-box'
+    | '-webkit-inline-flex'
+    | (string & {})
+  'empty-cells': 'hide' | '-moz-show-background' | 'show' | (string & {})
+  'enable-background': 'accumulate' | 'new' | (string & {})
+  fallback: string
+  fill:
+    | 'child'
+    | 'child()'
+    | 'context-fill'
+    | 'context-stroke'
+    | 'url()'
+    | 'none'
+    | (string & {})
+  'fill-opacity': number
+  'fill-rule': 'evenodd' | 'nonzero' | (string & {})
+  filter:
+    | 'none'
+    | 'blur()'
+    | 'brightness()'
+    | 'contrast()'
+    | 'drop-shadow()'
+    | 'grayscale()'
+    | 'hue-rotate()'
+    | 'invert()'
+    | 'opacity()'
+    | 'saturate()'
+    | 'sepia()'
+    | 'url()'
+    | (string & {})
+  flex: 'auto' | 'content' | 'none' | (string & {})
+  'flex-basis': 'auto' | 'content' | (string & {})
+  'flex-direction':
+    | 'column'
+    | 'column-reverse'
+    | 'row'
+    | 'row-reverse'
+    | (string & {})
+  'flex-flow':
+    | 'column'
+    | 'column-reverse'
+    | 'nowrap'
+    | 'row'
+    | 'row-reverse'
+    | 'wrap'
+    | 'wrap-reverse'
+    | (string & {})
+  'flex-grow': number
+  'flex-shrink': number
+  'flex-wrap': 'nowrap' | 'wrap' | 'wrap-reverse' | (string & {})
+  float:
+    | 'inline-end'
+    | 'inline-start'
+    | 'left'
+    | 'none'
+    | 'right'
+    | (string & {})
+  'flood-color': string
+  'flood-opacity': string
+  font:
+    | '100'
+    | '200'
+    | '300'
+    | '400'
+    | '500'
+    | '600'
+    | '700'
+    | '800'
+    | '900'
+    | 'bold'
+    | 'bolder'
+    | 'caption'
+    | 'icon'
+    | 'italic'
+    | 'large'
+    | 'larger'
+    | 'lighter'
+    | 'medium'
+    | 'menu'
+    | 'message-box'
+    | 'normal'
+    | 'oblique'
+    | 'small'
+    | 'small-caps'
+    | 'small-caption'
+    | 'smaller'
+    | 'status-bar'
+    | 'x-large'
+    | 'x-small'
+    | 'xx-large'
+    | 'xx-small'
+    | (string & {})
+  'font-family':
+    | "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+    | 'Arial, Helvetica, sans-serif'
+    | "Cambria, Cochin, Georgia, Times, 'Times New Roman', serif"
+    | "'Courier New', Courier, monospace"
+    | 'cursive'
+    | 'fantasy'
+    | "'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif"
+    | "Georgia, 'Times New Roman', Times, serif"
+    | "'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif"
+    | "Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif"
+    | "'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif"
+    | 'monospace'
+    | 'sans-serif'
+    | "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+    | 'serif'
+    | "'Times New Roman', Times, serif"
+    | "'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif"
+    | 'Verdana, Geneva, Tahoma, sans-serif'
+    | (string & {})
+  'font-feature-settings':
+    | 'aalt'
+    | 'abvf'
+    | 'abvm'
+    | 'abvs'
+    | 'afrc'
+    | 'akhn'
+    | 'blwf'
+    | 'blwm'
+    | 'blws'
+    | 'calt'
+    | 'case'
+    | 'ccmp'
+    | 'cfar'
+    | 'cjct'
+    | 'clig'
+    | 'cpct'
+    | 'cpsp'
+    | 'cswh'
+    | 'curs'
+    | 'c2pc'
+    | 'c2sc'
+    | 'dist'
+    | 'dlig'
+    | 'dnom'
+    | 'dtls'
+    | 'expt'
+    | 'falt'
+    | 'fin2'
+    | 'fin3'
+    | 'fina'
+    | 'flac'
+    | 'frac'
+    | 'fwid'
+    | 'half'
+    | 'haln'
+    | 'halt'
+    | 'hist'
+    | 'hkna'
+    | 'hlig'
+    | 'hngl'
+    | 'hojo'
+    | 'hwid'
+    | 'init'
+    | 'isol'
+    | 'ital'
+    | 'jalt'
+    | 'jp78'
+    | 'jp83'
+    | 'jp90'
+    | 'jp04'
+    | 'kern'
+    | 'lfbd'
+    | 'liga'
+    | 'ljmo'
+    | 'lnum'
+    | 'locl'
+    | 'ltra'
+    | 'ltrm'
+    | 'mark'
+    | 'med2'
+    | 'medi'
+    | 'mgrk'
+    | 'mkmk'
+    | 'nalt'
+    | 'nlck'
+    | 'nukt'
+    | 'numr'
+    | 'onum'
+    | 'opbd'
+    | 'ordn'
+    | 'ornm'
+    | 'palt'
+    | 'pcap'
+    | 'pkna'
+    | 'pnum'
+    | 'pref'
+    | 'pres'
+    | 'pstf'
+    | 'psts'
+    | 'pwid'
+    | 'qwid'
+    | 'rand'
+    | 'rclt'
+    | 'rlig'
+    | 'rkrf'
+    | 'rphf'
+    | 'rtbd'
+    | 'rtla'
+    | 'rtlm'
+    | 'ruby'
+    | 'salt'
+    | 'sinf'
+    | 'size'
+    | 'smcp'
+    | 'smpl'
+    | 'ssty'
+    | 'stch'
+    | 'subs'
+    | 'sups'
+    | 'swsh'
+    | 'titl'
+    | 'tjmo'
+    | 'tnam'
+    | 'tnum'
+    | 'trad'
+    | 'twid'
+    | 'unic'
+    | 'valt'
+    | 'vatu'
+    | 'vert'
+    | 'vhal'
+    | 'vjmo'
+    | 'vkna'
+    | 'vkrn'
+    | 'vpal'
+    | 'vrt2'
+    | 'zero'
+    | 'normal'
+    | 'off'
+    | 'on'
+    | (string & {})
+  'font-kerning': 'auto' | 'none' | 'normal' | (string & {})
+  'font-language-override': 'normal' | (string & {})
+  'font-size':
+    | 'large'
+    | 'larger'
+    | 'medium'
+    | 'small'
+    | 'smaller'
+    | 'x-large'
+    | 'x-small'
+    | 'xx-large'
+    | 'xx-small'
+    | (string & {})
+  'font-size-adjust': number
+  'font-stretch':
+    | 'condensed'
+    | 'expanded'
+    | 'extra-condensed'
+    | 'extra-expanded'
+    | 'narrower'
+    | 'normal'
+    | 'semi-condensed'
+    | 'semi-expanded'
+    | 'ultra-condensed'
+    | 'ultra-expanded'
+    | 'wider'
+    | (string & {})
+  'font-style': 'italic' | 'normal' | 'oblique' | (string & {})
+  'font-synthesis': 'none' | 'style' | 'weight' | (string & {})
+  'font-variant': 'normal' | 'small-caps' | (string & {})
+  'font-variant-alternates':
+    | 'annotation()'
+    | 'character-variant()'
+    | 'historical-forms'
+    | 'normal'
+    | 'ornaments()'
+    | 'styleset()'
+    | 'stylistic()'
+    | 'swash()'
+    | (string & {})
+  'font-variant-caps':
+    | 'all-petite-caps'
+    | 'all-small-caps'
+    | 'normal'
+    | 'petite-caps'
+    | 'small-caps'
+    | 'titling-caps'
+    | 'unicase'
+    | (string & {})
+  'font-variant-east-asian':
+    | 'full-width'
+    | 'jis04'
+    | 'jis78'
+    | 'jis83'
+    | 'jis90'
+    | 'normal'
+    | 'proportional-width'
+    | 'ruby'
+    | 'simplified'
+    | 'traditional'
+    | (string & {})
+  'font-variant-ligatures':
+    | 'additional-ligatures'
+    | 'common-ligatures'
+    | 'contextual'
+    | 'discretionary-ligatures'
+    | 'historical-ligatures'
+    | 'no-additional-ligatures'
+    | 'no-common-ligatures'
+    | 'no-contextual'
+    | 'no-discretionary-ligatures'
+    | 'no-historical-ligatures'
+    | 'none'
+    | 'normal'
+    | (string & {})
+  'font-variant-numeric':
+    | 'diagonal-fractions'
+    | 'lining-nums'
+    | 'normal'
+    | 'oldstyle-nums'
+    | 'ordinal'
+    | 'proportional-nums'
+    | 'slashed-zero'
+    | 'stacked-fractions'
+    | 'tabular-nums'
+    | (string & {})
+  'font-variant-position': 'normal' | 'sub' | 'super' | (string & {})
+  'font-weight':
+    | '100'
+    | '200'
+    | '300'
+    | '400'
+    | '500'
+    | '600'
+    | '700'
+    | '800'
+    | '900'
+    | 'bold'
+    | 'bolder'
+    | 'lighter'
+    | 'normal'
+    | (string & {})
+  'glyph-orientation-horizontal': string
+  'glyph-orientation-vertical': 'auto' | (string & {})
+  'grid-area': 'auto' | 'span' | (string & {})
+  grid: string
+  'grid-auto-columns':
+    | 'min-content'
+    | 'max-content'
+    | 'auto'
+    | 'minmax()'
+    | (string & {})
+  'grid-auto-flow': 'row' | 'column' | 'dense' | (string & {})
+  'grid-auto-rows':
+    | 'min-content'
+    | 'max-content'
+    | 'auto'
+    | 'minmax()'
+    | (string & {})
+  'grid-column': 'auto' | 'span' | (string & {})
+  'grid-column-end': 'auto' | 'span' | (string & {})
+  'grid-column-gap': string
+  'grid-column-start': 'auto' | 'span' | (string & {})
+  'grid-gap': string
+  'grid-row': 'auto' | 'span' | (string & {})
+  'grid-row-end': 'auto' | 'span' | (string & {})
+  'grid-row-gap': string
+  'grid-row-start': 'auto' | 'span' | (string & {})
+  'grid-template':
+    | 'none'
+    | 'min-content'
+    | 'max-content'
+    | 'auto'
+    | 'subgrid'
+    | 'minmax()'
+    | 'repeat()'
+    | (string & {})
+  'grid-template-areas': 'none' | (string & {})
+  'grid-template-columns':
+    | 'none'
+    | 'min-content'
+    | 'max-content'
+    | 'auto'
+    | 'subgrid'
+    | 'minmax()'
+    | 'repeat()'
+    | (string & {})
+  'grid-template-rows':
+    | 'none'
+    | 'min-content'
+    | 'max-content'
+    | 'auto'
+    | 'subgrid'
+    | 'minmax()'
+    | 'repeat()'
+    | (string & {})
+  height:
+    | 'auto'
+    | 'fill'
+    | 'fit-content'
+    | 'max-content'
+    | 'min-content'
+    | (string & {})
+  hyphens: 'auto' | 'manual' | 'none' | (string & {})
+  'image-orientation': 'flip' | 'from-image' | (string & {})
+  'image-rendering':
+    | 'auto'
+    | 'crisp-edges'
+    | '-moz-crisp-edges'
+    | 'optimizeQuality'
+    | 'optimizeSpeed'
+    | 'pixelated'
+    | (string & {})
+  'ime-mode':
+    | 'active'
+    | 'auto'
+    | 'disabled'
+    | 'inactive'
+    | 'normal'
+    | (string & {})
+  'inline-size': 'auto' | (string & {})
+  isolation: 'auto' | 'isolate' | (string & {})
+  'justify-content':
+    | 'center'
+    | 'start'
+    | 'end'
+    | 'left'
+    | 'right'
+    | 'safe'
+    | 'unsafe'
+    | 'stretch'
+    | 'space-evenly'
+    | 'flex-end'
+    | 'flex-start'
+    | 'space-around'
+    | 'space-between'
+    | 'baseline'
+    | 'first baseline'
+    | 'last baseline'
+    | (string & {})
+  kerning: 'auto' | (string & {})
+  left: 'auto' | (string & {})
+  'letter-spacing': 'normal' | (string & {})
+  'lighting-color': string
+  'line-break':
+    | 'auto'
+    | 'loose'
+    | 'normal'
+    | 'strict'
+    | 'anywhere'
+    | (string & {})
+  'line-height': 'normal' | (string & {})
+  'list-style':
+    | 'armenian'
+    | 'circle'
+    | 'decimal'
+    | 'decimal-leading-zero'
+    | 'disc'
+    | 'georgian'
+    | 'hanging'
+    | 'inside'
+    | 'lower-alpha'
+    | 'lower-greek'
+    | 'lower-latin'
+    | 'lower-roman'
+    | 'none'
+    | 'outside'
+    | 'square'
+    | 'symbols()'
+    | 'upper-alpha'
+    | 'upper-latin'
+    | 'upper-roman'
+    | 'url()'
+    | (string & {})
+  'list-style-image': 'none' | (string & {})
+  'list-style-position': 'inside' | 'outside' | (string & {})
+  'list-style-type':
+    | 'arabic-indic'
+    | 'armenian'
+    | 'bengali'
+    | 'cambodian'
+    | 'circle'
+    | 'cjk-decimal'
+    | 'cjk-earthly-branch'
+    | 'cjk-heavenly-stem'
+    | 'decimal'
+    | 'decimal-leading-zero'
+    | 'devanagari'
+    | 'disc'
+    | 'disclosure-closed'
+    | 'disclosure-open'
+    | 'georgian'
+    | 'gujarati'
+    | 'gurmukhi'
+    | 'hebrew'
+    | 'hiragana'
+    | 'hiragana-iroha'
+    | 'kannada'
+    | 'katakana'
+    | 'katakana-iroha'
+    | 'khmer'
+    | 'lao'
+    | 'lower-alpha'
+    | 'lower-armenian'
+    | 'lower-greek'
+    | 'lower-latin'
+    | 'lower-roman'
+    | 'malayalam'
+    | 'mongolian'
+    | 'myanmar'
+    | 'none'
+    | 'oriya'
+    | 'persian'
+    | 'square'
+    | 'tamil'
+    | 'telugu'
+    | 'thai'
+    | 'tibetan'
+    | 'symbols()'
+    | 'upper-alpha'
+    | 'upper-armenian'
+    | 'upper-latin'
+    | 'upper-roman'
+    | (string & {})
+  margin: 'auto' | 'logical' | (string & {})
+  'margin-block-end': 'auto' | (string & {})
+  'margin-block-start': 'auto' | (string & {})
+  'margin-bottom': 'auto' | (string & {})
+  'margin-inline-end': 'auto' | (string & {})
+  'margin-inline-start': 'auto' | (string & {})
+  'margin-left': 'auto' | (string & {})
+  'margin-right': 'auto' | (string & {})
+  'margin-top': 'auto' | (string & {})
+  marker: 'none' | 'child' | 'url()' | (string & {})
+  'marker-end': 'none' | 'child' | 'url()' | (string & {})
+  'marker-mid': 'none' | 'child' | 'url()' | (string & {})
+  'marker-start': 'none' | 'child' | 'url()' | (string & {})
+  'mask-image': 'none' | 'url()' | (string & {})
+  'mask-mode': 'alpha' | 'auto' | 'luminance' | (string & {})
+  'mask-origin': string
+  'mask-position': string
+  'mask-repeat': string
+  'mask-size': 'auto' | 'contain' | 'cover' | (string & {})
+  'mask-type': 'alpha' | 'luminance' | (string & {})
+  'max-block-size': 'none' | (string & {})
+  'max-height':
+    | 'none'
+    | 'fill'
+    | 'fit-content'
+    | 'max-content'
+    | 'min-content'
+    | (string & {})
+  'max-inline-size': 'none' | (string & {})
+  'max-width':
+    | 'none'
+    | 'fill'
+    | 'fit-content'
+    | 'max-content'
+    | 'min-content'
+    | (string & {})
+  'min-block-size': string
+  'min-height':
+    | 'auto'
+    | 'fill'
+    | 'fit-content'
+    | 'max-content'
+    | 'min-content'
+    | (string & {})
+  'min-inline-size': string
+  'min-width':
+    | 'auto'
+    | 'fill'
+    | 'fit-content'
+    | 'max-content'
+    | 'min-content'
+    | (string & {})
+  'mix-blend-mode':
+    | 'normal'
+    | 'multiply'
+    | 'screen'
+    | 'overlay'
+    | 'darken'
+    | 'lighten'
+    | 'color-dodge'
+    | 'color-burn'
+    | 'hard-light'
+    | 'soft-light'
+    | 'difference'
+    | 'exclusion'
+    | 'hue'
+    | 'saturation'
+    | 'color'
+    | 'luminosity'
+    | (string & {})
+  motion: 'none' | 'path()' | 'url()' | 'auto' | 'reverse' | (string & {})
+  'motion-offset': string
+  'motion-path': 'none' | 'path()' | 'url()' | (string & {})
+  'motion-rotation': 'auto' | 'reverse' | (string & {})
+  '-moz-animation':
+    | 'alternate'
+    | 'alternate-reverse'
+    | 'backwards'
+    | 'both'
+    | 'forwards'
+    | 'infinite'
+    | 'none'
+    | 'normal'
+    | 'reverse'
+    | (string & {})
+  '-moz-animation-delay': string
+  '-moz-animation-direction':
+    | 'alternate'
+    | 'alternate-reverse'
+    | 'normal'
+    | 'reverse'
+    | (string & {})
+  '-moz-animation-duration': string
+  '-moz-animation-iteration-count': 'infinite' | (string & {})
+  '-moz-animation-name': 'none' | (string & {})
+  '-moz-animation-play-state': 'paused' | 'running' | (string & {})
+  '-moz-animation-timing-function': string
+  '-moz-appearance':
+    | 'button'
+    | 'button-arrow-down'
+    | 'button-arrow-next'
+    | 'button-arrow-previous'
+    | 'button-arrow-up'
+    | 'button-bevel'
+    | 'checkbox'
+    | 'checkbox-container'
+    | 'checkbox-label'
+    | 'dialog'
+    | 'groupbox'
+    | 'listbox'
+    | 'menuarrow'
+    | 'menuimage'
+    | 'menuitem'
+    | 'menuitemtext'
+    | 'menulist'
+    | 'menulist-button'
+    | 'menulist-text'
+    | 'menulist-textfield'
+    | 'menupopup'
+    | 'menuradio'
+    | 'menuseparator'
+    | '-moz-mac-unified-toolbar'
+    | '-moz-win-borderless-glass'
+    | '-moz-win-browsertabbar-toolbox'
+    | '-moz-win-communications-toolbox'
+    | '-moz-win-glass'
+    | '-moz-win-media-toolbox'
+    | 'none'
+    | 'progressbar'
+    | 'progresschunk'
+    | 'radio'
+    | 'radio-container'
+    | 'radio-label'
+    | 'radiomenuitem'
+    | 'resizer'
+    | 'resizerpanel'
+    | 'scrollbarbutton-down'
+    | 'scrollbarbutton-left'
+    | 'scrollbarbutton-right'
+    | 'scrollbarbutton-up'
+    | 'scrollbar-small'
+    | 'scrollbartrack-horizontal'
+    | 'scrollbartrack-vertical'
+    | 'separator'
+    | 'spinner'
+    | 'spinner-downbutton'
+    | 'spinner-textfield'
+    | 'spinner-upbutton'
+    | 'statusbar'
+    | 'statusbarpanel'
+    | 'tab'
+    | 'tabpanels'
+    | 'tab-scroll-arrow-back'
+    | 'tab-scroll-arrow-forward'
+    | 'textfield'
+    | 'textfield-multiline'
+    | 'toolbar'
+    | 'toolbox'
+    | 'tooltip'
+    | 'treeheadercell'
+    | 'treeheadersortarrow'
+    | 'treeitem'
+    | 'treetwistyopen'
+    | 'treeview'
+    | 'treewisty'
+    | 'window'
+    | (string & {})
+  '-moz-backface-visibility': 'hidden' | 'visible' | (string & {})
+  '-moz-background-clip': 'padding' | (string & {})
+  '-moz-background-inline-policy':
+    | 'bounding-box'
+    | 'continuous'
+    | 'each-box'
+    | (string & {})
+  '-moz-background-origin': string
+  '-moz-border-bottom-colors': string
+  '-moz-border-image':
+    | 'auto'
+    | 'fill'
+    | 'none'
+    | 'repeat'
+    | 'round'
+    | 'space'
+    | 'stretch'
+    | 'url()'
+    | (string & {})
+  '-moz-border-left-colors': string
+  '-moz-border-right-colors': string
+  '-moz-border-top-colors': string
+  '-moz-box-align':
+    | 'baseline'
+    | 'center'
+    | 'end'
+    | 'start'
+    | 'stretch'
+    | (string & {})
+  '-moz-box-direction': 'normal' | 'reverse' | (string & {})
+  '-moz-box-flex': number
+  '-moz-box-flexgroup': number
+  '-moz-box-ordinal-group': number
+  '-moz-box-orient':
+    | 'block-axis'
+    | 'horizontal'
+    | 'inline-axis'
+    | 'vertical'
+    | (string & {})
+  '-moz-box-pack': 'center' | 'end' | 'justify' | 'start' | (string & {})
+  '-moz-box-sizing':
+    | 'border-box'
+    | 'content-box'
+    | 'padding-box'
+    | (string & {})
+  '-moz-column-count': number
+  '-moz-column-gap': 'normal' | (string & {})
+  '-moz-column-rule': string
+  '-moz-column-rule-color': string
+  '-moz-column-rule-style': string
+  '-moz-column-rule-width': string
+  '-moz-columns': 'auto' | (string & {})
+  '-moz-column-width': 'auto' | (string & {})
+  '-moz-font-feature-settings':
+    | 'c2cs'
+    | 'dlig'
+    | 'kern'
+    | 'liga'
+    | 'lnum'
+    | 'onum'
+    | 'smcp'
+    | 'swsh'
+    | 'tnum'
+    | 'normal'
+    | 'off'
+    | 'on'
+    | (string & {})
+  '-moz-hyphens': 'auto' | 'manual' | 'none' | (string & {})
+  '-moz-perspective': 'none' | (string & {})
+  '-moz-perspective-origin': string
+  '-moz-text-align-last':
+    | 'auto'
+    | 'center'
+    | 'end'
+    | 'justify'
+    | 'left'
+    | 'right'
+    | 'start'
+    | (string & {})
+  '-moz-text-decoration-color': string
+  '-moz-text-decoration-line':
+    | 'line-through'
+    | 'none'
+    | 'overline'
+    | 'underline'
+    | (string & {})
+  '-moz-text-decoration-style':
+    | 'dashed'
+    | 'dotted'
+    | 'double'
+    | 'none'
+    | 'solid'
+    | 'wavy'
+    | (string & {})
+  '-moz-text-size-adjust': 'auto' | 'none' | (string & {})
+  '-moz-transform':
+    | 'matrix()'
+    | 'matrix3d()'
+    | 'none'
+    | 'perspective'
+    | 'rotate()'
+    | 'rotate3d()'
+    | "rotateX('angle')"
+    | "rotateY('angle')"
+    | "rotateZ('angle')"
+    | 'scale()'
+    | 'scale3d()'
+    | 'scaleX()'
+    | 'scaleY()'
+    | 'scaleZ()'
+    | 'skew()'
+    | 'skewX()'
+    | 'skewY()'
+    | 'translate()'
+    | 'translate3d()'
+    | 'translateX()'
+    | 'translateY()'
+    | 'translateZ()'
+    | (string & {})
+  '-moz-transform-origin': string
+  '-moz-transition': 'all' | 'none' | (string & {})
+  '-moz-transition-delay': string
+  '-moz-transition-duration': string
+  '-moz-transition-property': 'all' | 'none' | (string & {})
+  '-moz-transition-timing-function': string
+  '-moz-user-focus': 'ignore' | 'normal' | (string & {})
+  '-moz-user-select':
+    | 'all'
+    | 'element'
+    | 'elements'
+    | '-moz-all'
+    | '-moz-none'
+    | 'none'
+    | 'text'
+    | 'toggle'
+    | (string & {})
+  negative: string
+  'object-fit':
+    | 'contain'
+    | 'cover'
+    | 'fill'
+    | 'none'
+    | 'scale-down'
+    | (string & {})
+  'object-position': string
+  opacity: number
+  order: number
+  orphans: number
+  'offset-block-end': 'auto' | (string & {})
+  'offset-block-start': 'auto' | (string & {})
+  'offset-inline-end': 'auto' | (string & {})
+  'offset-inline-start': 'auto' | (string & {})
+  outline: 'auto' | 'invert' | (string & {})
+  'outline-color': 'invert' | (string & {})
+  'outline-offset': string
+  'outline-style': 'auto' | (string & {})
+  'outline-width': string
+  overflow:
+    | 'auto'
+    | 'clip'
+    | 'hidden'
+    | '-moz-hidden-unscrollable'
+    | 'scroll'
+    | 'visible'
+    | (string & {})
+  'overflow-wrap': 'break-word' | 'normal' | 'anywhere' | (string & {})
+  'overflow-x':
+    | 'auto'
+    | 'clip'
+    | 'hidden'
+    | 'scroll'
+    | 'visible'
+    | (string & {})
+  'overflow-y':
+    | 'auto'
+    | 'clip'
+    | 'hidden'
+    | 'scroll'
+    | 'visible'
+    | (string & {})
+  pad: string
+  padding: 'logical' | (string & {})
+  'padding-bottom': string
+  'padding-block-end': string
+  'padding-block-start': string
+  'padding-inline-end': string
+  'padding-inline-start': string
+  'padding-left': string
+  'padding-right': string
+  'padding-top': string
+  'page-break-after':
+    | 'always'
+    | 'auto'
+    | 'avoid'
+    | 'left'
+    | 'recto'
+    | 'right'
+    | 'verso'
+    | (string & {})
+  'page-break-before':
+    | 'always'
+    | 'auto'
+    | 'avoid'
+    | 'left'
+    | 'right'
+    | (string & {})
+  'page-break-inside': 'auto' | 'avoid' | (string & {})
+  'paint-order': 'fill' | 'markers' | 'normal' | 'stroke' | (string & {})
+  perspective: 'none' | (string & {})
+  'perspective-origin': string
+  'pointer-events':
+    | 'all'
+    | 'fill'
+    | 'none'
+    | 'painted'
+    | 'stroke'
+    | 'visible'
+    | 'visibleFill'
+    | 'visiblePainted'
+    | 'visibleStroke'
+    | (string & {})
+  position:
+    | 'absolute'
+    | 'center'
+    | 'fixed'
+    | '-ms-page'
+    | 'page'
+    | 'relative'
+    | 'static'
+    | 'sticky'
+    | '-webkit-sticky'
+    | (string & {})
+  prefix: string
+  quotes: 'none' | (string & {})
+  range: 'auto' | 'infinite' | (string & {})
+  resize:
+    | 'both'
+    | 'block'
+    | 'horizontal'
+    | 'inline'
+    | 'none'
+    | 'vertical'
+    | (string & {})
+  right: 'auto' | (string & {})
+  'ruby-align':
+    | 'auto'
+    | 'center'
+    | 'distribute-letter'
+    | 'distribute-space'
+    | 'left'
+    | 'line-edge'
+    | 'right'
+    | 'start'
+    | 'space-between'
+    | 'space-around'
+    | (string & {})
+  'ruby-overhang': 'auto' | 'end' | 'none' | 'start' | (string & {})
+  'ruby-position': 'after' | 'before' | 'inline' | 'right' | (string & {})
+  'ruby-span': 'attr(x)' | 'none' | (string & {})
+  'scroll-behavior': 'auto' | 'smooth' | (string & {})
+  'scroll-snap-coordinate': 'none' | 'border-box' | 'margin-box' | (string & {})
+  'scroll-snap-destination': string
+  'scroll-snap-points-x': 'none' | 'repeat()' | (string & {})
+  'scroll-snap-points-y': 'none' | 'repeat()' | (string & {})
+  'scroll-snap-type': 'none' | 'mandatory' | 'proximity' | (string & {})
+  'shape-image-threshold': number
+  'shape-margin': string
+  'shape-outside': 'margin-box' | 'none' | (string & {})
+  size: string
+  src: 'url()' | 'format()' | 'local()' | (string & {})
+  'stop-color': string
+  'stop-opacity': number
+  stroke:
+    | 'child'
+    | 'child()'
+    | 'context-fill'
+    | 'context-stroke'
+    | 'url()'
+    | 'none'
+    | (string & {})
+  'stroke-dasharray': 'none' | (string & {})
+  'stroke-dashoffset': string
+  'stroke-linecap': 'butt' | 'round' | 'square' | (string & {})
+  'stroke-linejoin':
+    | 'arcs'
+    | 'bevel'
+    | 'miter'
+    | 'miter-clip'
+    | 'round'
+    | (string & {})
+  'stroke-miterlimit': number
+  'stroke-opacity': number
+  'stroke-width': string
+  suffix: string
+  system:
+    | 'additive'
+    | 'alphabetic'
+    | 'cyclic'
+    | 'extends'
+    | 'fixed'
+    | 'numeric'
+    | 'symbolic'
+    | (string & {})
+  symbols: string
+  'table-layout': 'auto' | 'fixed' | (string & {})
+  'tab-size': string
+  'text-align':
+    | 'center'
+    | 'end'
+    | 'justify'
+    | 'left'
+    | 'match-parent'
+    | 'right'
+    | 'start'
+    | (string & {})
+  'text-align-last':
+    | 'auto'
+    | 'center'
+    | 'end'
+    | 'justify'
+    | 'left'
+    | 'right'
+    | 'start'
+    | (string & {})
+  'text-anchor': 'end' | 'middle' | 'start' | (string & {})
+  'text-decoration':
+    | 'dashed'
+    | 'dotted'
+    | 'double'
+    | 'line-through'
+    | 'none'
+    | 'overline'
+    | 'solid'
+    | 'underline'
+    | 'wavy'
+    | (string & {})
+  'text-decoration-color': string
+  'text-decoration-line':
+    | 'line-through'
+    | 'none'
+    | 'overline'
+    | 'underline'
+    | (string & {})
+  'text-decoration-style':
+    | 'dashed'
+    | 'dotted'
+    | 'double'
+    | 'none'
+    | 'solid'
+    | 'wavy'
+    | (string & {})
+  'text-indent': 'each-line' | 'hanging' | (string & {})
+  'text-orientation':
+    | 'mixed'
+    | 'sideways'
+    | 'sideways-left'
+    | 'sideways-right'
+    | 'upright'
+    | 'use-glyph-orientation'
+    | (string & {})
+  'text-overflow': 'clip' | 'ellipsis' | (string & {})
+  'text-rendering':
+    | 'auto'
+    | 'geometricPrecision'
+    | 'optimizeLegibility'
+    | 'optimizeSpeed'
+    | (string & {})
+  'text-shadow': 'none' | (string & {})
+  'text-transform':
+    | 'capitalize'
+    | 'full-width'
+    | 'lowercase'
+    | 'none'
+    | 'uppercase'
+    | (string & {})
+  top: 'auto' | (string & {})
+  'touch-action':
+    | 'auto'
+    | 'cross-slide-x'
+    | 'cross-slide-y'
+    | 'double-tap-zoom'
+    | 'manipulation'
+    | 'none'
+    | 'pan-x'
+    | 'pan-y'
+    | 'pinch-zoom'
+    | (string & {})
+  transform:
+    | 'matrix()'
+    | 'matrix3d()'
+    | 'none'
+    | 'perspective()'
+    | 'rotate()'
+    | 'rotate3d()'
+    | "rotateX('angle')"
+    | "rotateY('angle')"
+    | "rotateZ('angle')"
+    | 'scale()'
+    | 'scale3d()'
+    | 'scaleX()'
+    | 'scaleY()'
+    | 'scaleZ()'
+    | 'skew()'
+    | 'skewX()'
+    | 'skewY()'
+    | 'translate()'
+    | 'translate3d()'
+    | 'translateX()'
+    | 'translateY()'
+    | 'translateZ()'
+    | (string & {})
+  'transform-origin': string
+  'transform-style': 'flat' | 'preserve-3d' | (string & {})
+  transition: 'all' | 'none' | (string & {})
+  'transition-delay': string
+  'transition-duration': string
+  'transition-property': 'all' | 'none' | (string & {})
+  'transition-timing-function': string
+  'unicode-bidi':
+    | 'bidi-override'
+    | 'embed'
+    | 'isolate'
+    | 'isolate-override'
+    | 'normal'
+    | 'plaintext'
+    | (string & {})
+  'unicode-range':
+    | 'U+26'
+    | 'U+20-24F, U+2B0-2FF, U+370-4FF, U+1E00-1EFF, U+2000-20CF, U+2100-23FF, U+2500-26FF, U+E000-F8FF, U+FB00-FB4F'
+    | 'U+20-17F, U+2B0-2FF, U+2000-206F, U+20A0-20CF, U+2100-21FF, U+2600-26FF'
+    | 'U+20-2FF, U+370-4FF, U+1E00-20CF, U+2100-23FF, U+2500-26FF, U+FB00-FB4F, U+FFF0-FFFD'
+    | 'U+20-4FF, U+530-58F, U+10D0-10FF, U+1E00-23FF, U+2440-245F, U+2500-26FF, U+FB00-FB4F, U+FE20-FE2F, U+FFF0-FFFD'
+    | 'U+00-7F'
+    | 'U+80-FF'
+    | 'U+100-17F'
+    | 'U+180-24F'
+    | 'U+1E00-1EFF'
+    | 'U+250-2AF'
+    | 'U+370-3FF'
+    | 'U+1F00-1FFF'
+    | 'U+400-4FF'
+    | 'U+500-52F'
+    | 'U+00-52F, U+1E00-1FFF, U+2200-22FF'
+    | 'U+530-58F'
+    | 'U+590-5FF'
+    | 'U+600-6FF'
+    | 'U+750-77F'
+    | 'U+8A0-8FF'
+    | 'U+700-74F'
+    | 'U+900-97F'
+    | 'U+980-9FF'
+    | 'U+A00-A7F'
+    | 'U+A80-AFF'
+    | 'U+B00-B7F'
+    | 'U+B80-BFF'
+    | 'U+C00-C7F'
+    | 'U+C80-CFF'
+    | 'U+D00-D7F'
+    | 'U+D80-DFF'
+    | 'U+118A0-118FF'
+    | 'U+E00-E7F'
+    | 'U+1A20-1AAF'
+    | 'U+AA80-AADF'
+    | 'U+E80-EFF'
+    | 'U+F00-FFF'
+    | 'U+1000-109F'
+    | 'U+10A0-10FF'
+    | 'U+1200-137F'
+    | 'U+1380-139F'
+    | 'U+2D80-2DDF'
+    | 'U+AB00-AB2F'
+    | 'U+1780-17FF'
+    | 'U+1800-18AF'
+    | 'U+1B80-1BBF'
+    | 'U+1CC0-1CCF'
+    | 'U+4E00-9FD5'
+    | 'U+3400-4DB5'
+    | 'U+2F00-2FDF'
+    | 'U+2E80-2EFF'
+    | 'U+1100-11FF'
+    | 'U+AC00-D7AF'
+    | 'U+3040-309F'
+    | 'U+30A0-30FF'
+    | 'U+A5, U+4E00-9FFF, U+30??, U+FF00-FF9F'
+    | 'U+A4D0-A4FF'
+    | 'U+A000-A48F'
+    | 'U+A490-A4CF'
+    | 'U+2000-206F'
+    | 'U+3000-303F'
+    | 'U+2070-209F'
+    | 'U+20A0-20CF'
+    | 'U+2100-214F'
+    | 'U+2150-218F'
+    | 'U+2190-21FF'
+    | 'U+2200-22FF'
+    | 'U+2300-23FF'
+    | 'U+E000-F8FF'
+    | 'U+FB00-FB4F'
+    | 'U+FB50-FDFF'
+    | 'U+1F600-1F64F'
+    | 'U+2600-26FF'
+    | 'U+1F300-1F5FF'
+    | 'U+1F900-1F9FF'
+    | 'U+1F680-1F6FF'
+    | (string & {})
+  'user-select': 'all' | 'auto' | 'contain' | 'none' | 'text' | (string & {})
+  'vertical-align':
+    | 'alphabetic'
+    | 'auto'
+    | 'baseline'
+    | 'bottom'
+    | 'center'
+    | 'central'
+    | 'mathematical'
+    | 'middle'
+    | 'sub'
+    | 'super'
+    | 'text-bottom'
+    | 'text-top'
+    | 'top'
+    | '-webkit-baseline-middle'
+    | (string & {})
+  visibility: 'collapse' | 'hidden' | 'visible' | (string & {})
+  '-webkit-animation':
+    | 'alternate'
+    | 'alternate-reverse'
+    | 'backwards'
+    | 'both'
+    | 'forwards'
+    | 'infinite'
+    | 'none'
+    | 'normal'
+    | 'reverse'
+    | (string & {})
+  '-webkit-animation-delay': string
+  '-webkit-animation-direction':
+    | 'alternate'
+    | 'alternate-reverse'
+    | 'normal'
+    | 'reverse'
+    | (string & {})
+  '-webkit-animation-duration': string
+  '-webkit-animation-fill-mode':
+    | 'backwards'
+    | 'both'
+    | 'forwards'
+    | 'none'
+    | (string & {})
+  '-webkit-animation-iteration-count': 'infinite' | (string & {})
+  '-webkit-animation-name': 'none' | (string & {})
+  '-webkit-animation-play-state': 'paused' | 'running' | (string & {})
+  '-webkit-animation-timing-function': string
+  '-webkit-appearance':
+    | 'button'
+    | 'button-bevel'
+    | 'caps-lock-indicator'
+    | 'caret'
+    | 'checkbox'
+    | 'default-button'
+    | 'listbox'
+    | 'listitem'
+    | 'media-fullscreen-button'
+    | 'media-mute-button'
+    | 'media-play-button'
+    | 'media-seek-back-button'
+    | 'media-seek-forward-button'
+    | 'media-slider'
+    | 'media-sliderthumb'
+    | 'menulist'
+    | 'menulist-button'
+    | 'menulist-text'
+    | 'menulist-textfield'
+    | 'none'
+    | 'push-button'
+    | 'radio'
+    | 'scrollbarbutton-down'
+    | 'scrollbarbutton-left'
+    | 'scrollbarbutton-right'
+    | 'scrollbarbutton-up'
+    | 'scrollbargripper-horizontal'
+    | 'scrollbargripper-vertical'
+    | 'scrollbarthumb-horizontal'
+    | 'scrollbarthumb-vertical'
+    | 'scrollbartrack-horizontal'
+    | 'scrollbartrack-vertical'
+    | 'searchfield'
+    | 'searchfield-cancel-button'
+    | 'searchfield-decoration'
+    | 'searchfield-results-button'
+    | 'searchfield-results-decoration'
+    | 'slider-horizontal'
+    | 'sliderthumb-horizontal'
+    | 'sliderthumb-vertical'
+    | 'slider-vertical'
+    | 'square-button'
+    | 'textarea'
+    | 'textfield'
+    | (string & {})
+  '-webkit-backdrop-filter':
+    | 'none'
+    | 'blur()'
+    | 'brightness()'
+    | 'contrast()'
+    | 'drop-shadow()'
+    | 'grayscale()'
+    | 'hue-rotate()'
+    | 'invert()'
+    | 'opacity()'
+    | 'saturate()'
+    | 'sepia()'
+    | 'url()'
+    | (string & {})
+  '-webkit-backface-visibility': 'hidden' | 'visible' | (string & {})
+  '-webkit-background-clip': string
+  '-webkit-background-composite': 'border' | 'padding' | (string & {})
+  '-webkit-background-origin': string
+  '-webkit-border-image':
+    | 'auto'
+    | 'fill'
+    | 'none'
+    | 'repeat'
+    | 'round'
+    | 'space'
+    | 'stretch'
+    | 'url()'
+    | (string & {})
+  '-webkit-box-align':
+    | 'baseline'
+    | 'center'
+    | 'end'
+    | 'start'
+    | 'stretch'
+    | (string & {})
+  '-webkit-box-direction': 'normal' | 'reverse' | (string & {})
+  '-webkit-box-flex': number
+  '-webkit-box-flex-group': number
+  '-webkit-box-ordinal-group': number
+  '-webkit-box-orient':
+    | 'block-axis'
+    | 'horizontal'
+    | 'inline-axis'
+    | 'vertical'
+    | (string & {})
+  '-webkit-box-pack': 'center' | 'end' | 'justify' | 'start' | (string & {})
+  '-webkit-box-reflect': 'above' | 'below' | 'left' | 'right' | (string & {})
+  '-webkit-box-sizing': 'border-box' | 'content-box' | (string & {})
+  '-webkit-break-after':
+    | 'always'
+    | 'auto'
+    | 'avoid'
+    | 'avoid-column'
+    | 'avoid-page'
+    | 'avoid-region'
+    | 'column'
+    | 'left'
+    | 'page'
+    | 'region'
+    | 'right'
+    | (string & {})
+  '-webkit-break-before':
+    | 'always'
+    | 'auto'
+    | 'avoid'
+    | 'avoid-column'
+    | 'avoid-page'
+    | 'avoid-region'
+    | 'column'
+    | 'left'
+    | 'page'
+    | 'region'
+    | 'right'
+    | (string & {})
+  '-webkit-break-inside':
+    | 'auto'
+    | 'avoid'
+    | 'avoid-column'
+    | 'avoid-page'
+    | 'avoid-region'
+    | (string & {})
+  '-webkit-column-break-after':
+    | 'always'
+    | 'auto'
+    | 'avoid'
+    | 'avoid-column'
+    | 'avoid-page'
+    | 'avoid-region'
+    | 'column'
+    | 'left'
+    | 'page'
+    | 'region'
+    | 'right'
+    | (string & {})
+  '-webkit-column-break-before':
+    | 'always'
+    | 'auto'
+    | 'avoid'
+    | 'avoid-column'
+    | 'avoid-page'
+    | 'avoid-region'
+    | 'column'
+    | 'left'
+    | 'page'
+    | 'region'
+    | 'right'
+    | (string & {})
+  '-webkit-column-break-inside':
+    | 'auto'
+    | 'avoid'
+    | 'avoid-column'
+    | 'avoid-page'
+    | 'avoid-region'
+    | (string & {})
+  '-webkit-column-count': number
+  '-webkit-column-gap': 'normal' | (string & {})
+  '-webkit-column-rule': string
+  '-webkit-column-rule-color': string
+  '-webkit-column-rule-style': string
+  '-webkit-column-rule-width': string
+  '-webkit-columns': 'auto' | (string & {})
+  '-webkit-column-span': 'all' | 'none' | (string & {})
+  '-webkit-column-width': 'auto' | (string & {})
+  '-webkit-filter':
+    | 'none'
+    | 'blur()'
+    | 'brightness()'
+    | 'contrast()'
+    | 'drop-shadow()'
+    | 'grayscale()'
+    | 'hue-rotate()'
+    | 'invert()'
+    | 'opacity()'
+    | 'saturate()'
+    | 'sepia()'
+    | 'url()'
+    | (string & {})
+  '-webkit-flow-from': 'none' | (string & {})
+  '-webkit-flow-into': 'none' | (string & {})
+  '-webkit-font-feature-settings':
+    | 'c2cs'
+    | 'dlig'
+    | 'kern'
+    | 'liga'
+    | 'lnum'
+    | 'onum'
+    | 'smcp'
+    | 'swsh'
+    | 'tnum'
+    | 'normal'
+    | 'off'
+    | 'on'
+    | (string & {})
+  '-webkit-hyphens': 'auto' | 'manual' | 'none' | (string & {})
+  '-webkit-line-break': 'after-white-space' | 'normal' | (string & {})
+  '-webkit-margin-bottom-collapse':
+    | 'collapse'
+    | 'discard'
+    | 'separate'
+    | (string & {})
+  '-webkit-margin-collapse': 'collapse' | 'discard' | 'separate' | (string & {})
+  '-webkit-margin-start': 'auto' | (string & {})
+  '-webkit-margin-top-collapse':
+    | 'collapse'
+    | 'discard'
+    | 'separate'
+    | (string & {})
+  '-webkit-mask-clip': string
+  '-webkit-mask-image': 'none' | 'url()' | (string & {})
+  '-webkit-mask-origin': string
+  '-webkit-mask-repeat': string
+  '-webkit-mask-size': 'auto' | 'contain' | 'cover' | (string & {})
+  '-webkit-nbsp-mode': 'normal' | 'space' | (string & {})
+  '-webkit-overflow-scrolling': 'auto' | 'touch' | (string & {})
+  '-webkit-padding-start': string
+  '-webkit-perspective': 'none' | (string & {})
+  '-webkit-perspective-origin': string
+  '-webkit-region-fragment': 'auto' | 'break' | (string & {})
+  '-webkit-tap-highlight-color': string
+  '-webkit-text-fill-color': string
+  '-webkit-text-size-adjust': 'auto' | 'none' | (string & {})
+  '-webkit-text-stroke': string
+  '-webkit-text-stroke-color': string
+  '-webkit-text-stroke-width': string
+  '-webkit-touch-callout': 'none' | (string & {})
+  '-webkit-transform':
+    | 'matrix()'
+    | 'matrix3d()'
+    | 'none'
+    | 'perspective()'
+    | 'rotate()'
+    | 'rotate3d()'
+    | "rotateX('angle')"
+    | "rotateY('angle')"
+    | "rotateZ('angle')"
+    | 'scale()'
+    | 'scale3d()'
+    | 'scaleX()'
+    | 'scaleY()'
+    | 'scaleZ()'
+    | 'skew()'
+    | 'skewX()'
+    | 'skewY()'
+    | 'translate()'
+    | 'translate3d()'
+    | 'translateX()'
+    | 'translateY()'
+    | 'translateZ()'
+    | (string & {})
+  '-webkit-transform-origin': string
+  '-webkit-transform-origin-x': string
+  '-webkit-transform-origin-y': string
+  '-webkit-transform-origin-z': string
+  '-webkit-transform-style': 'flat' | 'preserve-3d' | (string & {})
+  '-webkit-transition': 'all' | 'none' | (string & {})
+  '-webkit-transition-delay': string
+  '-webkit-transition-duration': string
+  '-webkit-transition-property': 'all' | 'none' | (string & {})
+  '-webkit-transition-timing-function': string
+  '-webkit-user-drag': 'auto' | 'element' | 'none' | (string & {})
+  '-webkit-user-modify':
+    | 'read-only'
+    | 'read-write'
+    | 'read-write-plaintext-only'
+    | (string & {})
+  '-webkit-user-select': 'auto' | 'none' | 'text' | (string & {})
+  widows: number
+  width:
+    | 'auto'
+    | 'fill'
+    | 'fit-content'
+    | 'max-content'
+    | 'min-content'
+    | (string & {})
+  'will-change': 'auto' | 'contents' | 'scroll-position' | (string & {})
+  'word-break': 'break-all' | 'keep-all' | 'normal' | (string & {})
+  'word-spacing': 'normal' | (string & {})
+  'word-wrap': 'break-word' | 'normal' | (string & {})
+  'writing-mode':
+    | 'horizontal-tb'
+    | 'sideways-lr'
+    | 'sideways-rl'
+    | 'vertical-lr'
+    | 'vertical-rl'
+    | (string & {})
+  'z-index': number
+  zoom: 'normal' | (string & {})
+} & Record<string, string | number>
+
 export class Style extends BaseStyle<Style> {
   constructor(selector?: string) {
     super((s) => new Style(s), selector)
+  }
+
+  css(css: Partial<CSSProps>) {
+    for (const [key, value] of Object.entries(css)) {
+      this.props.set(key, value as string)
+    }
+    return this
   }
 
   /**
@@ -36,7 +1973,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-flexbox/#align-content
      * 
      * values:
-     * ```
+     * ```md
      * center: Lines are packed toward the center of the flex container.
 
      * flex-end: Lines are packed toward the end of the flex container.
@@ -74,7 +2011,7 @@ export class Style extends BaseStyle<Style> {
      * unsafe: undefined
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   alignContent(
     value:
@@ -114,7 +2051,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-flexbox/#align-items
      * 
      * values:
-     * ```
+     * ```md
      * baseline: If the flex item's inline axis is the same as the cross axis, this value is identical to 'flex-start'. Otherwise, it participates in baseline alignment.
 
      * center: The flex item's margin box is centered in the cross axis within the line.
@@ -146,7 +2083,7 @@ export class Style extends BaseStyle<Style> {
      * unsafe: undefined
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   alignItems(
     value:
@@ -183,7 +2120,7 @@ export class Style extends BaseStyle<Style> {
      * ref: https://www.w3.org/TR/css-grid-1/#row-align
      * 
      * values:
-     * ```
+     * ```md
      * auto: undefined
 
      * normal: undefined
@@ -221,7 +2158,7 @@ export class Style extends BaseStyle<Style> {
      * legacy: undefined
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   justifyItems(
     value:
@@ -261,7 +2198,7 @@ export class Style extends BaseStyle<Style> {
      * ref: https://www.w3.org/TR/css-grid-1/#row-align
      * 
      * values:
-     * ```
+     * ```md
      * auto: undefined
 
      * normal: undefined
@@ -297,7 +2234,7 @@ export class Style extends BaseStyle<Style> {
      * unsave: undefined
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   justifySelf(
     value:
@@ -336,7 +2273,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-flexbox/#align-items
      * 
      * values:
-     * ```
+     * ```md
      * auto: Computes to the value of 'align-items' on the element's parent, or 'stretch' if the element has no parent. On absolutely positioned elements, it computes to itself.
 
      * normal: undefined
@@ -366,7 +2303,7 @@ export class Style extends BaseStyle<Style> {
      * unsafe: undefined
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   alignSelf(
     value:
@@ -402,7 +2339,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-cascade-3/#all-shorthand
      * 
 
-     * @param value - 
+     * @param value -
      */
   all(value: 'revert' | (string & {})) {
     this.props.set('all', value)
@@ -440,7 +2377,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-animations/#animation
      * 
      * values:
-     * ```
+     * ```md
      * alternate: The animation cycle iterations that are odd counts are played in the normal direction, and the animation cycle iterations that are even counts are played in a reverse direction.
 
      * alternate-reverse: The animation cycle iterations that are odd counts are played in the reverse direction, and the animation cycle iterations that are even counts are played in a normal direction.
@@ -510,7 +2447,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-animations/#animation-direction
      * 
      * values:
-     * ```
+     * ```md
      * alternate: The animation cycle iterations that are odd counts are played in the normal direction, and the animation cycle iterations that are even counts are played in a reverse direction.
 
      * alternate-reverse: The animation cycle iterations that are odd counts are played in the reverse direction, and the animation cycle iterations that are even counts are played in a normal direction.
@@ -520,7 +2457,7 @@ export class Style extends BaseStyle<Style> {
      * reverse: All iterations of the animation are played in the reverse direction from the way they were specified.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   animationDirection(
     value:
@@ -565,7 +2502,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-animations/#animation-fill-mode-property
      * 
      * values:
-     * ```
+     * ```md
      * backwards: The beginning property value (as defined in the first @keyframes at-rule) is applied before the animation is displayed, during the period defined by 'animation-delay'.
 
      * both: Both forwards and backwards fill modes are applied.
@@ -575,7 +2512,7 @@ export class Style extends BaseStyle<Style> {
      * none: There is no change to the property value between the time the animation is applied and the time the animation begins playing or after the animation completes.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   animationFillMode(
     value: 'backwards' | 'both' | 'forwards' | 'none' | (string & {}),
@@ -634,13 +2571,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-animations/#animation-play-state
      * 
      * values:
-     * ```
+     * ```md
      * paused: A running animation will be paused.
 
      * running: Resume playback of a paused animation.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   animationPlayState(value: 'paused' | 'running' | (string & {})) {
     this.props.set('animation-play-state', value)
@@ -678,13 +2615,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-transforms/#backface-visibility-property
      * 
      * values:
-     * ```
+     * ```md
      * hidden: Back side is hidden.
 
      * visible: Back side is visible.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   backfaceVisibility(value: 'hidden' | 'visible' | (string & {})) {
     this.props.set('backface-visibility', value)
@@ -703,7 +2640,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-background/#background
      * 
      * values:
-     * ```
+     * ```md
      * fixed: The background is fixed with regard to the viewport. In paged media where there is no viewport, a 'fixed' background is fixed with respect to the page box and therefore replicated on every page.
 
      * local: The background is fixed with regard to the element's contents: if the element has a scrolling mechanism, the background scrolls with the element's contents.
@@ -732,7 +2669,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-background/#the-background-attachment
      * 
      * values:
-     * ```
+     * ```md
      * fixed: The background is fixed with regard to the viewport. In paged media where there is no viewport, a 'fixed' background is fixed with respect to the page box and therefore replicated on every page.
 
      * local: The background is fixed with regard to the element's contents: if the element has a scrolling mechanism, the background scrolls with the element's contents.
@@ -740,7 +2677,7 @@ export class Style extends BaseStyle<Style> {
      * scroll: The background is fixed with regard to the element itself and does not scroll with its contents. (It is effectively attached to the element's border.)
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   backgroundAttachment(value: 'fixed' | 'local' | 'scroll' | (string & {})) {
     this.props.set('background-attachment', value)
@@ -759,7 +2696,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/compositing-1/#propdef-background-blend-mode
      * 
      * values:
-     * ```
+     * ```md
      * normal: Default attribute which specifies no blending
 
      * multiply: The source color is multiplied by the destination color and replaces the destination.
@@ -793,7 +2730,7 @@ export class Style extends BaseStyle<Style> {
      * luminosity: Creates a color with the luminosity of the source color and the hue and saturation of the backdrop color.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   backgroundBlendMode(
     value:
@@ -945,7 +2882,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-background/#the-background-size
      * 
      * values:
-     * ```
+     * ```md
      * auto: Resolved by using the image's intrinsic ratio and the size of the other dimension, or failing that, using the image's intrinsic size, or failing that, treating it as 100%.
 
      * contain: Scale the image, while preserving its intrinsic aspect ratio (if any), to the largest size such that both its width and its height can fit inside the background positioning area.
@@ -1276,13 +3213,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/CSS2/tables.html#borders
      * 
      * values:
-     * ```
+     * ```md
      * collapse: Selects the collapsing borders model.
 
      * separate: Selects the separated borders border model.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   borderCollapse(value: 'collapse' | 'separate' | (string & {})) {
     this.props.set('border-collapse', value)
@@ -1320,7 +3257,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-background/#border-image
      * 
      * values:
-     * ```
+     * ```md
      * auto: If 'auto' is specified then the border image width is the intrinsic width or height (whichever is applicable) of the corresponding image slice. If the image does not have the required intrinsic dimension then the corresponding border-width is used instead.
 
      * fill: Causes the middle part of the border-image to be preserved.
@@ -1387,7 +3324,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-background/#the-border-image-repeat
      * 
      * values:
-     * ```
+     * ```md
      * repeat: The image is tiled (repeated) to fill the area.
 
      * round: The image is tiled (repeated) to fill the area. If it does not fill the area with a whole number of tiles, the image is rescaled so that it does.
@@ -1397,7 +3334,7 @@ export class Style extends BaseStyle<Style> {
      * stretch: The image is stretched to fill the area.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   borderImageRepeat(
     value: 'repeat' | 'round' | 'space' | 'stretch' | (string & {}),
@@ -1988,13 +3925,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-break/#break-decoration
      * 
      * values:
-     * ```
+     * ```md
      * clone: Each box is independently wrapped with the border and padding.
 
      * slice: The effect is as though the element were rendered with no breaks present, and then sliced by the breaks afterward.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   boxDecorationBreak(value: 'clone' | 'slice' | (string & {})) {
     this.props.set('box-decoration-break', value)
@@ -2013,7 +3950,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-background/#box-shadow
      * 
      * values:
-     * ```
+     * ```md
      * inset: Changes the drop shadow from an outer shadow (one that shadows the box onto the canvas, as if it were lifted above the canvas) to an inner shadow (one that shadows the canvas onto the box, as if the box were cut out of the canvas and shifted behind it).
 
      * none: No shadow.
@@ -2038,13 +3975,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-ui/#box-sizing
      * 
      * values:
-     * ```
+     * ```md
      * border-box: The specified width and height (and respective min/max properties) on this element determine the border box of the element.
 
      * content-box: Behavior of width and height as specified by CSS2.1. The specified width and height (and respective min/max properties) apply to the width and height respectively of the content box of the element.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   boxSizing(value: 'border-box' | 'content-box' | (string & {})) {
     this.props.set('box-sizing', value)
@@ -2063,7 +4000,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/CSS2/tables.html#caption-position
      * 
      * values:
-     * ```
+     * ```md
      * block-end: Logical 'bottom'
 
      * block-start: Logical 'top'
@@ -2077,7 +4014,7 @@ export class Style extends BaseStyle<Style> {
      * top: Positions the caption box above the table box.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   captionSide(
     value:
@@ -2124,7 +4061,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/2006/WD-CSS21-20060411/visuren.html#propdef-clear
      * 
      * values:
-     * ```
+     * ```md
      * both: The clearance of the generated box is set to the amount necessary to place the top border edge below the bottom outer edge of any right-floating and left-floating boxes that resulted from elements earlier in the source document.
 
      * inline-end: Logical 'right'
@@ -2138,7 +4075,7 @@ export class Style extends BaseStyle<Style> {
      * right: The clearance of the generated box is set to the amount necessary to place the top border edge below the bottom outer edge of any right-floating boxes that resulted from elements earlier in the source document.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   clear(
     value:
@@ -2166,13 +4103,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-masking/#clip-property
      * 
      * values:
-     * ```
+     * ```md
      * auto: The element does not clip.
 
      * rect(): Specifies offsets from the edges of the border box.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   clip(value: 'auto' | 'rect()' | (string & {})) {
     this.props.set('clip', value)
@@ -2191,7 +4128,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-masking/#the-clip-path
      * 
      * values:
-     * ```
+     * ```md
      * none: No clipping path gets created.
 
      * url(): References a <clipPath> element to create a clipping path.
@@ -2216,13 +4153,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-masking-1/#the-clip-rule
      * 
      * values:
-     * ```
+     * ```md
      * evenodd: Determines the 'insideness' of a point on the canvas by drawing a ray from that point to infinity in any direction and counting the number of path segments from the given shape that the ray crosses.
 
      * nonzero: Determines the 'insideness' of a point on the canvas by drawing a ray from that point to infinity in any direction and then examining the places where a segment of the shape crosses the ray.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   clipRule(value: 'evenodd' | 'nonzero' | (string & {})) {
     this.props.set('clip-rule', value)
@@ -2260,7 +4197,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/filter-effects/#ColorInterpolationFiltersProperty
      * 
      * values:
-     * ```
+     * ```md
      * auto: Color operations are not required to occur in a particular color space.
 
      * linearRGB: Color operations should occur in the linearized RGB color space.
@@ -2268,7 +4205,7 @@ export class Style extends BaseStyle<Style> {
      * sRGB: Color operations should occur in the sRGB color space.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   colorInterpolationFilters(
     value: 'auto' | 'linearRGB' | 'sRGB' | (string & {}),
@@ -2308,13 +4245,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-multicol/#filling-columns
      * 
      * values:
-     * ```
+     * ```md
      * auto: Fills columns sequentially.
 
      * balance: Balance content equally between columns, if possible.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   columnFill(value: 'auto' | 'balance' | (string & {})) {
     this.props.set('column-fill', value)
@@ -2428,13 +4365,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-multicol/#column-span0
      * 
      * values:
-     * ```
+     * ```md
      * all: The element spans across all columns. Content in the normal flow that appears before the element is automatically balanced across all columns before the element appear.
 
      * none: The element does not span multiple columns.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   columnSpan(value: 'all' | 'none' | (string & {})) {
     this.props.set('column-span', value)
@@ -2453,7 +4390,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-multicol/#column-width
      * 
      * values:
-     * ```
+     * ```md
      * auto: The width depends on the values of other properties.
 
      * fill: Specifies the optimal column width as the fill-available inline size of the multi-column element.
@@ -2492,7 +4429,7 @@ export class Style extends BaseStyle<Style> {
      * ref: https://drafts.csswg.org/css-containment-3/#propdef-contain
      * 
      * values:
-     * ```
+     * ```md
      * none: Indicates that the property has no effect.
 
      * strict: Turns on all forms of containment for the element.
@@ -2508,7 +4445,7 @@ export class Style extends BaseStyle<Style> {
      * paint: Turns on paint containment for the element.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   contain(
     value:
@@ -2537,7 +4474,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-content/#content
      * 
      * values:
-     * ```
+     * ```md
      * attr(): The attr(n) function returns as a string the value of attribute n for the subject of the selector.
 
      * box: A hollow square.
@@ -2686,7 +4623,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-ui/#cursor0
      * 
      * values:
-     * ```
+     * ```md
      * alias: Indicates an alias of/shortcut to something is to be created. Often rendered as an arrow with a small curved arrow next to it.
 
      * all-scroll: Indicates that the something can be scrolled in any direction. Often rendered as arrows pointing up, down, left, and right with a dot in the middle.
@@ -2842,13 +4779,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-writing-modes-3/#direction
      * 
      * values:
-     * ```
+     * ```md
      * ltr: Left-to-right direction.
 
      * rtl: Right-to-left direction.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   direction(value: 'ltr' | 'rtl' | (string & {})) {
     this.props.set('direction', value)
@@ -2867,7 +4804,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-display-3/#propdef-display
      * 
      * values:
-     * ```
+     * ```md
      * block: The element generates a block-level box
 
      * contents: The element itself does not generate any boxes, but its children and pseudo-elements still generate boxes as normal.
@@ -2973,7 +4910,7 @@ export class Style extends BaseStyle<Style> {
      * -webkit-inline-flex: Inline-level flex container.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   display(
     value:
@@ -3047,7 +4984,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/CSS2/tables.html#empty-cells
      * 
      * values:
-     * ```
+     * ```md
      * hide: No borders or backgrounds are drawn around/behind empty cells.
 
      * -moz-show-background: undefined
@@ -3055,7 +4992,7 @@ export class Style extends BaseStyle<Style> {
      * show: Borders and backgrounds are drawn around/behind empty cells (like normal cells).
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   emptyCells(value: 'hide' | '-moz-show-background' | 'show' | (string & {})) {
     this.props.set('empty-cells', value)
@@ -3074,7 +5011,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/filter-effects/#AccessBackgroundImage
      * 
      * values:
-     * ```
+     * ```md
      * accumulate: If the ancestor container element has a property of new, then all graphics elements within the current container are rendered both on the parent's background image and onto the target.
 
      * new: Create a new background image canvas. All children of the current container element can access the background, and they will be rendered onto both the parent's background image canvas in addition to the target device.
@@ -3118,7 +5055,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/SVG2/painting.html#FillProperty
      * 
      * values:
-     * ```
+     * ```md
      * child: A reference to the last child paint server element of the element being painted.
 
      * child(): A reference to the nth child paint server element of the element being painted.
@@ -3179,13 +5116,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/SVG2/painting.html#WindingRule
      * 
      * values:
-     * ```
+     * ```md
      * evenodd: Determines the 'insideness' of a point on the canvas by drawing a ray from that point to infinity in any direction and counting the number of path segments from the given shape that the ray crosses.
 
      * nonzero: Determines the 'insideness' of a point on the canvas by drawing a ray from that point to infinity in any direction and then examining the places where a segment of the shape crosses the ray.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   fillRule(value: 'evenodd' | 'nonzero' | (string & {})) {
     this.props.set('fill-rule', value)
@@ -3204,7 +5141,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/filter-effects/#propdef-filter
      * 
      * values:
-     * ```
+     * ```md
      * none: No filter effects are applied.
 
      * blur(): Applies a Gaussian blur to the input image.
@@ -3264,7 +5201,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-flexbox/#flex
      * 
      * values:
-     * ```
+     * ```md
      * auto: Retrieves the value of the main size property as the used 'flex-basis'.
 
      * content: Indicates automatic sizing, based on the flex item's content.
@@ -3291,7 +5228,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-flexbox/#flex-basis-propdef
      * 
      * values:
-     * ```
+     * ```md
      * auto: Retrieves the value of the main size property as the used 'flex-basis'.
 
      * content: Indicates automatic sizing, based on the flex item's content.
@@ -3316,7 +5253,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-flexbox/#flex-direction
      * 
      * values:
-     * ```
+     * ```md
      * column: The flex container's main axis has the same orientation as the block axis of the current writing mode.
 
      * column-reverse: Same as 'column', except the main-start and main-end directions are swapped.
@@ -3326,7 +5263,7 @@ export class Style extends BaseStyle<Style> {
      * row-reverse: Same as 'row', except the main-start and main-end directions are swapped.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   flexDirection(
     value: 'column' | 'column-reverse' | 'row' | 'row-reverse' | (string & {}),
@@ -3347,7 +5284,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-flexbox/#flex-flow
      * 
      * values:
-     * ```
+     * ```md
      * column: The flex container's main axis has the same orientation as the block axis of the current writing mode.
 
      * column-reverse: Same as 'column', except the main-start and main-end directions are swapped.
@@ -3363,7 +5300,7 @@ export class Style extends BaseStyle<Style> {
      * wrap-reverse: Same as 'wrap', except the cross-start and cross-end directions are swapped.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   flexFlow(
     value:
@@ -3430,7 +5367,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-flexbox/#flex-wrap
      * 
      * values:
-     * ```
+     * ```md
      * nowrap: The flex container is single-line.
 
      * wrap: The flexbox is multi-line.
@@ -3438,7 +5375,7 @@ export class Style extends BaseStyle<Style> {
      * wrap-reverse: Same as 'wrap', except the cross-start and cross-end directions are swapped.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   flexWrap(value: 'nowrap' | 'wrap' | 'wrap-reverse' | (string & {})) {
     this.props.set('flex-wrap', value)
@@ -3457,7 +5394,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/CSS21/visuren.html#propdef-float
      * 
      * values:
-     * ```
+     * ```md
      * inline-end: A keyword indicating that the element must float on the end side of its containing block. That is the right side with ltr scripts, and the left side with rtl scripts.
 
      * inline-start: A keyword indicating that the element must float on the start side of its containing block. That is the left side with ltr scripts, and the right side with rtl scripts.
@@ -3469,7 +5406,7 @@ export class Style extends BaseStyle<Style> {
      * right: Similar to 'left', except the box is floated to the right, and content flows on the left side of the box, starting at the top.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   float(
     value:
@@ -3534,7 +5471,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-fonts/#propdef-font
      * 
      * values:
-     * ```
+     * ```md
      * 100: Thin
 
      * 200: Extra Light (Ultra Light)
@@ -3651,7 +5588,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-fonts/#font-family0
      * 
      * values:
-     * ```
+     * ```md
      * system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif: undefined
 
      * Arial, Helvetica, sans-serif: undefined
@@ -3729,7 +5666,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-fonts/#propdef-font-feature-settings
      * 
      * values:
-     * ```
+     * ```md
      * aalt: Access All Alternates.
 
      * abvf: Above-base Forms. Required in Khmer script.
@@ -4113,7 +6050,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-fonts/#propdef-font-kerning
      * 
      * values:
-     * ```
+     * ```md
      * auto: Specifies that kerning is applied at the discretion of the user agent.
 
      * none: Specifies that kerning is not applied.
@@ -4121,7 +6058,7 @@ export class Style extends BaseStyle<Style> {
      * normal: Specifies that kerning is applied.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   fontKerning(value: 'auto' | 'none' | 'normal' | (string & {})) {
     this.props.set('font-kerning', value)
@@ -4159,7 +6096,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-fonts/#font-size-prop
      * 
      * values:
-     * ```
+     * ```md
      * large: undefined
 
      * larger: undefined
@@ -4229,7 +6166,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-fonts/#font-stretch0
      * 
      * values:
-     * ```
+     * ```md
      * condensed: undefined
 
      * expanded: undefined
@@ -4253,7 +6190,7 @@ export class Style extends BaseStyle<Style> {
      * wider: Indicates a wider value relative to the width of the parent element.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   fontStretch(
     value:
@@ -4286,7 +6223,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-fonts/#font-style0
      * 
      * values:
-     * ```
+     * ```md
      * italic: Selects a font that is labeled as an 'italic' face, or an 'oblique' face if one is not
 
      * normal: Selects a face that is classified as 'normal'.
@@ -4294,7 +6231,7 @@ export class Style extends BaseStyle<Style> {
      * oblique: Selects a font that is labeled as an 'oblique' face, or an 'italic' face if one is not.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   fontStyle(value: 'italic' | 'normal' | 'oblique' | (string & {})) {
     this.props.set('font-style', value)
@@ -4313,7 +6250,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-fonts/#propdef-font-synthesis
      * 
      * values:
-     * ```
+     * ```md
      * none: Disallow all synthetic faces.
 
      * style: Allow synthetic italic faces.
@@ -4321,7 +6258,7 @@ export class Style extends BaseStyle<Style> {
      * weight: Allow synthetic bold faces.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   fontSynthesis(value: 'none' | 'style' | 'weight' | (string & {})) {
     this.props.set('font-synthesis', value)
@@ -4340,13 +6277,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-fonts/#font-variant-prop
      * 
      * values:
-     * ```
+     * ```md
      * normal: Specifies a face that is not labeled as a small-caps font.
 
      * small-caps: Specifies a font that is labeled as a small-caps font. If a genuine small-caps font is not available, user agents should simulate a small-caps font.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   fontVariant(value: 'normal' | 'small-caps' | (string & {})) {
     this.props.set('font-variant', value)
@@ -4365,7 +6302,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-fonts/#propdef-font-variant-alternates
      * 
      * values:
-     * ```
+     * ```md
      * annotation(): Enables display of alternate annotation forms.
 
      * character-variant(): Enables display of specific character variants.
@@ -4383,7 +6320,7 @@ export class Style extends BaseStyle<Style> {
      * swash(): Enables display of swash glyphs.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   fontVariantAlternates(
     value:
@@ -4413,7 +6350,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-fonts/#font-variant-caps-prop
      * 
      * values:
-     * ```
+     * ```md
      * all-petite-caps: Enables display of petite capitals for both upper and lowercase letters.
 
      * all-small-caps: Enables display of small capitals for both upper and lowercase letters.
@@ -4429,7 +6366,7 @@ export class Style extends BaseStyle<Style> {
      * unicase: Enables display of mixture of small capitals for uppercase letters with normal lowercase letters.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   fontVariantCaps(
     value:
@@ -4458,7 +6395,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-fonts/#font-variant-east-asian-prop
      * 
      * values:
-     * ```
+     * ```md
      * full-width: Enables rendering of full-width variants.
 
      * jis04: Enables rendering of JIS04 forms.
@@ -4480,7 +6417,7 @@ export class Style extends BaseStyle<Style> {
      * traditional: Enables rendering of traditional forms.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   fontVariantEastAsian(
     value:
@@ -4512,7 +6449,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-fonts/#font-variant-ligatures-prop
      * 
      * values:
-     * ```
+     * ```md
      * additional-ligatures: Enables display of additional ligatures.
 
      * common-ligatures: Enables display of common ligatures.
@@ -4538,7 +6475,7 @@ export class Style extends BaseStyle<Style> {
      * normal: Implies that the defaults set by the font are used.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   fontVariantLigatures(
     value:
@@ -4572,7 +6509,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-fonts/#font-variant-numeric-prop
      * 
      * values:
-     * ```
+     * ```md
      * diagonal-fractions: Enables display of lining diagonal fractions.
 
      * lining-nums: Enables display of lining numerals.
@@ -4592,7 +6529,7 @@ export class Style extends BaseStyle<Style> {
      * tabular-nums: Enables display of tabular numerals.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   fontVariantNumeric(
     value:
@@ -4623,7 +6560,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-fonts/#propdef-font-variant-position
      * 
      * values:
-     * ```
+     * ```md
      * normal: None of the features are enabled.
 
      * sub: Enables display of subscript variants (OpenType feature: subs).
@@ -4631,7 +6568,7 @@ export class Style extends BaseStyle<Style> {
      * super: Enables display of superscript variants (OpenType feature: sups).
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   fontVariantPosition(value: 'normal' | 'sub' | 'super' | (string & {})) {
     this.props.set('font-variant-position', value)
@@ -4650,7 +6587,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-fonts/#font-weight-the-font-weight-property
      * 
      * values:
-     * ```
+     * ```md
      * 100: Thin
 
      * 200: Extra Light (Ultra Light)
@@ -4678,7 +6615,7 @@ export class Style extends BaseStyle<Style> {
      * normal: Same as 400
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   fontWeight(
     value:
@@ -4751,7 +6688,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-area
      * 
      * values:
-     * ```
+     * ```md
      * auto: The property contributes nothing to the grid item's placement, indicating auto-placement, an automatic span, or a default span of one.
 
      * span: Contributes a grid span to the grid item's placement such that the corresponding edge of the grid item's grid area is N lines from its opposite edge.
@@ -4795,7 +6732,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-auto-columns
      * 
      * values:
-     * ```
+     * ```md
      * min-content: Represents the largest min-content contribution of the grid items occupying the grid track.
 
      * max-content: Represents the largest max-content contribution of the grid items occupying the grid track.
@@ -4826,7 +6763,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-auto-flow
      * 
      * values:
-     * ```
+     * ```md
      * row: The auto-placement algorithm places items by filling each row in turn, adding new rows as necessary.
 
      * column: The auto-placement algorithm places items by filling each column in turn, adding new columns as necessary.
@@ -4834,7 +6771,7 @@ export class Style extends BaseStyle<Style> {
      * dense: If specified, the auto-placement algorithm uses a "dense" packing algorithm, which attempts to fill in holes earlier in the grid if smaller items come up later.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   gridAutoFlow(value: 'row' | 'column' | 'dense' | (string & {})) {
     this.props.set('grid-auto-flow', value)
@@ -4853,7 +6790,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-auto-rows
      * 
      * values:
-     * ```
+     * ```md
      * min-content: Represents the largest min-content contribution of the grid items occupying the grid track.
 
      * max-content: Represents the largest max-content contribution of the grid items occupying the grid track.
@@ -4884,7 +6821,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-column
      * 
      * values:
-     * ```
+     * ```md
      * auto: The property contributes nothing to the grid item's placement, indicating auto-placement, an automatic span, or a default span of one.
 
      * span: Contributes a grid span to the grid item's placement such that the corresponding edge of the grid item's grid area is N lines from its opposite edge.
@@ -4909,7 +6846,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-column-end
      * 
      * values:
-     * ```
+     * ```md
      * auto: The property contributes nothing to the grid item's placement, indicating auto-placement, an automatic span, or a default span of one.
 
      * span: Contributes a grid span to the grid item's placement such that the corresponding edge of the grid item's grid area is N lines from its opposite edge.
@@ -4953,7 +6890,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-column-start
      * 
      * values:
-     * ```
+     * ```md
      * auto: The property contributes nothing to the grid item's placement, indicating auto-placement, an automatic span, or a default span of one.
 
      * span: Contributes a grid span to the grid item's placement such that the corresponding edge of the grid item's grid area is N lines from its opposite edge.
@@ -4997,7 +6934,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-row
      * 
      * values:
-     * ```
+     * ```md
      * auto: The property contributes nothing to the grid item's placement, indicating auto-placement, an automatic span, or a default span of one.
 
      * span: Contributes a grid span to the grid item's placement such that the corresponding edge of the grid item's grid area is N lines from its opposite edge.
@@ -5022,7 +6959,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-row-end
      * 
      * values:
-     * ```
+     * ```md
      * auto: The property contributes nothing to the grid item's placement, indicating auto-placement, an automatic span, or a default span of one.
 
      * span: Contributes a grid span to the grid item's placement such that the corresponding edge of the grid item's grid area is N lines from its opposite edge.
@@ -5066,7 +7003,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-row-start
      * 
      * values:
-     * ```
+     * ```md
      * auto: The property contributes nothing to the grid item's placement, indicating auto-placement, an automatic span, or a default span of one.
 
      * span: Contributes a grid span to the grid item's placement such that the corresponding edge of the grid item's grid area is N lines from its opposite edge.
@@ -5091,7 +7028,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-template
      * 
      * values:
-     * ```
+     * ```md
      * none: Sets all three properties to their initial values.
 
      * min-content: Represents the largest min-content contribution of the grid items occupying the grid track.
@@ -5155,7 +7092,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-template-columns
      * 
      * values:
-     * ```
+     * ```md
      * none: There is no explicit grid; any rows/columns will be implicitly generated.
 
      * min-content: Represents the largest min-content contribution of the grid items occupying the grid track.
@@ -5200,7 +7137,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-template-rows
      * 
      * values:
-     * ```
+     * ```md
      * none: There is no explicit grid; any rows/columns will be implicitly generated.
 
      * min-content: Represents the largest min-content contribution of the grid items occupying the grid track.
@@ -5245,7 +7182,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-box/#height
      * 
      * values:
-     * ```
+     * ```md
      * auto: The height depends on the values of other properties.
 
      * fill: Use the fill-available inline size or fill-available block size, as appropriate to the writing mode.
@@ -5284,7 +7221,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-text-3/#hyphens-property
      * 
      * values:
-     * ```
+     * ```md
      * auto: Conditional hyphenation characters inside a word, if present, take priority over automatic resources when determining hyphenation points within the word.
 
      * manual: Words are only broken at line breaks where there are characters inside the word that suggest line break opportunities
@@ -5292,7 +7229,7 @@ export class Style extends BaseStyle<Style> {
      * none: Words are not broken at line breaks, even if characters inside the word suggest line break points.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   hyphens(value: 'auto' | 'manual' | 'none' | (string & {})) {
     this.props.set('hyphens', value)
@@ -5311,7 +7248,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css4-images/#image-orientation
      * 
      * values:
-     * ```
+     * ```md
      * flip: After rotating by the precededing angle, the image is flipped horizontally. Defaults to 0deg if the angle is ommitted.
 
      * from-image: If the image has an orientation specified in its metadata, such as EXIF, this value computes to the angle that the metadata specifies is necessary to correctly orient the image.
@@ -5336,7 +7273,7 @@ export class Style extends BaseStyle<Style> {
      * ref: https://drafts.csswg.org/css-images-3/#the-image-rendering
      * 
      * values:
-     * ```
+     * ```md
      * auto: The image should be scaled with an algorithm that maximizes the appearance of the image.
 
      * crisp-edges: The image must be scaled with an algorithm that preserves contrast and edges in the image, and which does not smooth colors or introduce blur to the image in the process.
@@ -5350,7 +7287,7 @@ export class Style extends BaseStyle<Style> {
      * pixelated: When scaling the image up, the 'nearest neighbor' or similar algorithm must be used, so that the image appears to be simply composed of very large pixels.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   imageRendering(
     value:
@@ -5378,7 +7315,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-ui/#ime-mode
      * 
      * values:
-     * ```
+     * ```md
      * active: The input method editor is initially active; text entry is performed using it unless the user specifically dismisses it.
 
      * auto: No change is made to the current input method editor state. This is the default.
@@ -5390,7 +7327,7 @@ export class Style extends BaseStyle<Style> {
      * normal: The IME state should be normal; this value can be used in a user style sheet to override the page setting.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   imeMode(
     value:
@@ -5436,13 +7373,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/compositing-1/#isolation
      * 
      * values:
-     * ```
+     * ```md
      * auto: Elements are not isolated unless an operation is applied that causes the creation of a stacking context.
 
      * isolate: In CSS will turn the element into a stacking context.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   isolation(value: 'auto' | 'isolate' | (string & {})) {
     this.props.set('isolation', value)
@@ -5461,7 +7398,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-flexbox/#align-content
      * 
      * values:
-     * ```
+     * ```md
      * center: Flex items are packed toward the center of the line.
 
      * start: The items are packed flush to each other toward the start edge of the alignment container in the main axis.
@@ -5495,7 +7432,7 @@ export class Style extends BaseStyle<Style> {
      * last baseline: Specifies participation in last-baseline alignment.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   justifyContent(
     value:
@@ -5609,7 +7546,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-text/#line-break0
      * 
      * values:
-     * ```
+     * ```md
      * auto: The UA determines the set of line-breaking restrictions to use for CJK scripts, and it may vary the restrictions based on the length of the line; e.g., use a less restrictive set of line-break rules for short lines.
 
      * loose: Breaks text using the least restrictive set of line-breaking rules. Typically used for short lines, such as in newspapers.
@@ -5621,7 +7558,7 @@ export class Style extends BaseStyle<Style> {
      * anywhere: There is a soft wrap opportunity around every typographic character unit, including around any punctuation character or preserved white spaces, or in the middle of words, disregarding any prohibition against line breaks, even those introduced by characters with the GL, WJ, or ZWJ line breaking classes or mandated by the word-break property.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   lineBreak(
     value: 'auto' | 'loose' | 'normal' | 'strict' | 'anywhere' | (string & {}),
@@ -5661,7 +7598,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-lists/#list-style
      * 
      * values:
-     * ```
+     * ```md
      * armenian: undefined
 
      * circle: A hollow circle.
@@ -5764,13 +7701,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-lists/#list-style-position
      * 
      * values:
-     * ```
+     * ```md
      * inside: The marker box is outside the principal block box, as described in the section on the ::marker pseudo-element below.
 
      * outside: The ::marker pseudo-element is an inline element placed immediately before all ::before pseudo-elements in the principal block box, after which the element's content flows.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   listStylePosition(value: 'inside' | 'outside' | (string & {})) {
     this.props.set('list-style-position', value)
@@ -5789,7 +7726,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-lists/#list-style-type
      * 
      * values:
-     * ```
+     * ```md
      * arabic-indic: Arabic-indic numbering.
 
      * armenian: Traditional uppercase Armenian numbering.
@@ -5951,7 +7888,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-box/#margin1
      * 
      * values:
-     * ```
+     * ```md
      * auto: undefined
 
      * logical: Indicates that the values map to the logical properties instead of the physical ones.
@@ -6128,7 +8065,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/SVG2/painting.html#MarkerProperty
      * 
      * values:
-     * ```
+     * ```md
      * none: Indicates that no marker symbol will be drawn at the given vertex or vertices.
 
      * child: Indicates that the last child <marker> element of the element where the property is specified will be used.
@@ -6155,7 +8092,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/SVG2/painting.html#VertexMarkerProperties
      * 
      * values:
-     * ```
+     * ```md
      * none: Indicates that no marker symbol will be drawn at the given vertex or vertices.
 
      * child: Indicates that the last child <marker> element of the element where the property is specified will be used.
@@ -6182,7 +8119,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/SVG2/painting.html#VertexMarkerProperties
      * 
      * values:
-     * ```
+     * ```md
      * none: Indicates that no marker symbol will be drawn at the given vertex or vertices.
 
      * child: Indicates that the last child <marker> element of the element where the property is specified will be used.
@@ -6209,7 +8146,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/SVG2/painting.html#VertexMarkerProperties
      * 
      * values:
-     * ```
+     * ```md
      * none: Indicates that no marker symbol will be drawn at the given vertex or vertices.
 
      * child: Indicates that the last child <marker> element of the element where the property is specified will be used.
@@ -6236,7 +8173,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-masking-1/#the-mask-image
      * 
      * values:
-     * ```
+     * ```md
      * none: Counts as a transparent black image layer.
 
      * url(): Reference to a <mask element or to a CSS image.
@@ -6261,7 +8198,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-masking-1/#the-mask-mode
      * 
      * values:
-     * ```
+     * ```md
      * alpha: Alpha values of the mask layer image should be used as the mask values.
 
      * auto: Use alpha values if 'mask-image' is an image, luminance if a <mask> element or a CSS image.
@@ -6345,7 +8282,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-masking-1/#the-mask-size
      * 
      * values:
-     * ```
+     * ```md
      * auto: Resolved by using the image's intrinsic ratio and the size of the other dimension, or failing that, using the image's intrinsic size, or failing that, treating it as 100%.
 
      * contain: Scale the image, while preserving its intrinsic aspect ratio (if any), to the largest size such that both its width and its height can fit inside the background positioning area.
@@ -6372,13 +8309,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-masking-1/#the-mask-type
      * 
      * values:
-     * ```
+     * ```md
      * alpha: Indicates that the alpha values of the mask should be used.
 
      * luminance: Indicates that the luminance values of the mask should be used.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   maskType(value: 'alpha' | 'luminance' | (string & {})) {
     this.props.set('mask-type', value)
@@ -6416,7 +8353,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-box/#max-height
      * 
      * values:
-     * ```
+     * ```md
      * none: No limit on the height of the box.
 
      * fill: Use the fill-available inline size or fill-available block size, as appropriate to the writing mode.
@@ -6474,7 +8411,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-box/#max-width
      * 
      * values:
-     * ```
+     * ```md
      * none: No limit on the width of the box.
 
      * fill: Use the fill-available inline size or fill-available block size, as appropriate to the writing mode.
@@ -6532,7 +8469,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-box/#min-height
      * 
      * values:
-     * ```
+     * ```md
      * auto: undefined
 
      * fill: Use the fill-available inline size or fill-available block size, as appropriate to the writing mode.
@@ -6590,7 +8527,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-box/#min-width
      * 
      * values:
-     * ```
+     * ```md
      * auto: undefined
 
      * fill: Use the fill-available inline size or fill-available block size, as appropriate to the writing mode.
@@ -6629,7 +8566,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/compositing-1/#propdef-mix-blend-mode
      * 
      * values:
-     * ```
+     * ```md
      * normal: Default attribute which specifies no blending
 
      * multiply: The source color is multiplied by the destination color and replaces the destination.
@@ -6663,7 +8600,7 @@ export class Style extends BaseStyle<Style> {
      * luminosity: Creates a color with the luminosity of the source color and the hue and saturation of the backdrop color.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   mixBlendMode(
     value:
@@ -6701,7 +8638,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/motion-1/#propdef-motion
      * 
      * values:
-     * ```
+     * ```md
      * none: No motion path gets created.
 
      * path(): Defines an SVG path as a string, with optional 'fill-rule' as the first argument.
@@ -6753,7 +8690,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/motion-1/#propdef-motion-path
      * 
      * values:
-     * ```
+     * ```md
      * none: No motion path gets created.
 
      * path(): Defines an SVG path as a string, with optional 'fill-rule' as the first argument.
@@ -6780,7 +8717,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/motion-1/#propdef-motion-rotation
      * 
      * values:
-     * ```
+     * ```md
      * auto: Indicates that the object is rotated by the angle of the direction of the motion path.
 
      * reverse: Indicates that the object is rotated by the angle of the direction of the motion path plus 180 degrees.
@@ -6805,7 +8742,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-animations/#animation
      * 
      * values:
-     * ```
+     * ```md
      * alternate: The animation cycle iterations that are odd counts are played in the normal direction, and the animation cycle iterations that are even counts are played in a reverse direction.
 
      * alternate-reverse: The animation cycle iterations that are odd counts are played in the reverse direction, and the animation cycle iterations that are even counts are played in a normal direction.
@@ -6875,7 +8812,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-animations/#animation-direction
      * 
      * values:
-     * ```
+     * ```md
      * alternate: The animation cycle iterations that are odd counts are played in the normal direction, and the animation cycle iterations that are even counts are played in a reverse direction.
 
      * alternate-reverse: The animation cycle iterations that are odd counts are played in the reverse direction, and the animation cycle iterations that are even counts are played in a normal direction.
@@ -6885,7 +8822,7 @@ export class Style extends BaseStyle<Style> {
      * reverse: All iterations of the animation are played in the reverse direction from the way they were specified.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   mozAnimationDirection(
     value:
@@ -6968,13 +8905,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-animations/#animation-play-state
      * 
      * values:
-     * ```
+     * ```md
      * paused: A running animation will be paused.
 
      * running: Resume playback of a paused animation.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   mozAnimationPlayState(value: 'paused' | 'running' | (string & {})) {
     this.props.set('-moz-animation-play-state', value)
@@ -7012,7 +8949,7 @@ export class Style extends BaseStyle<Style> {
      * ref: https://developer.mozilla.org/en/CSS/-moz-appearance
      * 
      * values:
-     * ```
+     * ```md
      * button: undefined
 
      * button-arrow-down: undefined
@@ -7150,7 +9087,7 @@ export class Style extends BaseStyle<Style> {
      * window: undefined
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   mozAppearance(
     value:
@@ -7240,13 +9177,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-3d-transforms/#backface-visibility
      * 
      * values:
-     * ```
+     * ```md
      * hidden: undefined
 
      * visible: undefined
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   mozBackfaceVisibility(value: 'hidden' | 'visible' | (string & {})) {
     this.props.set('-moz-backface-visibility', value)
@@ -7284,7 +9221,7 @@ export class Style extends BaseStyle<Style> {
      * ref: https://developer.mozilla.org/en/CSS/-moz-background-inline-policy
      * 
      * values:
-     * ```
+     * ```md
      * bounding-box: undefined
 
      * continuous: undefined
@@ -7292,7 +9229,7 @@ export class Style extends BaseStyle<Style> {
      * each-box: undefined
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   mozBackgroundInlinePolicy(
     value: 'bounding-box' | 'continuous' | 'each-box' | (string & {}),
@@ -7351,7 +9288,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-background/#border-image
      * 
      * values:
-     * ```
+     * ```md
      * auto: If 'auto' is specified then the border image width is the intrinsic width or height (whichever is applicable) of the corresponding image slice. If the image does not have the required intrinsic dimension then the corresponding border-width is used instead.
 
      * fill: Causes the middle part of the border-image to be preserved.
@@ -7456,7 +9393,7 @@ export class Style extends BaseStyle<Style> {
      * ref: https://developer.mozilla.org/en/CSS/-moz-box-align
      * 
      * values:
-     * ```
+     * ```md
      * baseline: If this box orientation is inline-axis or horizontal, all children are placed with their baselines aligned, and extra space placed before or after as necessary. For block flows, the baseline of the first non-empty line box located within the element is used. For tables, the baseline of the first cell is used.
 
      * center: Any extra space is divided evenly, with half placed above the child and the other half placed after the child.
@@ -7468,7 +9405,7 @@ export class Style extends BaseStyle<Style> {
      * stretch: The height of each child is adjusted to that of the containing block.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   mozBoxAlign(
     value: 'baseline' | 'center' | 'end' | 'start' | 'stretch' | (string & {}),
@@ -7489,13 +9426,13 @@ export class Style extends BaseStyle<Style> {
      * ref: https://developer.mozilla.org/en/CSS/-moz-box-direction
      * 
      * values:
-     * ```
+     * ```md
      * normal: A box with a computed value of horizontal for box-orient displays its children from left to right. A box with a computed value of vertical displays its children from top to bottom.
 
      * reverse: A box with a computed value of horizontal for box-orient displays its children from right to left. A box with a computed value of vertical displays its children from bottom to top.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   mozBoxDirection(value: 'normal' | 'reverse' | (string & {})) {
     this.props.set('-moz-box-direction', value)
@@ -7571,7 +9508,7 @@ export class Style extends BaseStyle<Style> {
      * ref: https://developer.mozilla.org/en/CSS/-moz-box-orient
      * 
      * values:
-     * ```
+     * ```md
      * block-axis: Elements are oriented along the box's axis.
 
      * horizontal: The box displays its children from left to right in a horizontal line.
@@ -7581,7 +9518,7 @@ export class Style extends BaseStyle<Style> {
      * vertical: The box displays its children from stacked from top to bottom vertically.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   mozBoxOrient(
     value:
@@ -7607,7 +9544,7 @@ export class Style extends BaseStyle<Style> {
      * ref: https://developer.mozilla.org/en/CSS/-moz-box-pack
      * 
      * values:
-     * ```
+     * ```md
      * center: The extra space is divided evenly, with half placed before the first child and the other half placed after the last child.
 
      * end: For normal direction boxes, the right edge of the last child is placed at the right side, with all extra space placed before the first child. For reverse direction boxes, the left edge of the first child is placed at the left side, with all extra space placed after the last child.
@@ -7617,7 +9554,7 @@ export class Style extends BaseStyle<Style> {
      * start: For normal direction boxes, the left edge of the first child is placed at the left side, with all extra space placed after the last child. For reverse direction boxes, the right edge of the last child is placed at the right side, with all extra space placed before the first child.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   mozBoxPack(value: 'center' | 'end' | 'justify' | 'start' | (string & {})) {
     this.props.set('-moz-box-pack', value)
@@ -7636,7 +9573,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-ui/#box-sizing
      * 
      * values:
-     * ```
+     * ```md
      * border-box: The specified width and height (and respective min/max properties) on this element determine the border box of the element.
 
      * content-box: Behavior of width and height as specified by CSS2.1. The specified width and height (and respective min/max properties) apply to the width and height respectively of the content box of the element.
@@ -7644,7 +9581,7 @@ export class Style extends BaseStyle<Style> {
      * padding-box: The specified width and height (and respective min/max properties) on this element determine the padding box of the element.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   mozBoxSizing(
     value: 'border-box' | 'content-box' | 'padding-box' | (string & {}),
@@ -7817,7 +9754,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-fonts/#propdef-font-feature-settings
      * 
      * values:
-     * ```
+     * ```md
      * c2cs: undefined
 
      * dlig: undefined
@@ -7877,7 +9814,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-text/#hyphens0
      * 
      * values:
-     * ```
+     * ```md
      * auto: Conditional hyphenation characters inside a word, if present, take priority over automatic resources when determining hyphenation points within the word.
 
      * manual: Words are only broken at line breaks where there are characters inside the word that suggest line break opportunities
@@ -7885,7 +9822,7 @@ export class Style extends BaseStyle<Style> {
      * none: Words are not broken at line breaks, even if characters inside the word suggest line break points.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   mozHyphens(value: 'auto' | 'manual' | 'none' | (string & {})) {
     this.props.set('-moz-hyphens', value)
@@ -7942,7 +9879,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-text/#text-align-last0
      * 
      * values:
-     * ```
+     * ```md
      * auto: undefined
 
      * center: The inline contents are centered within the line box.
@@ -7958,7 +9895,7 @@ export class Style extends BaseStyle<Style> {
      * start: The inline contents are aligned to the start edge of the line box.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   mozTextAlignLast(
     value:
@@ -8006,7 +9943,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-text-decor-3/#text-decoration-line
      * 
      * values:
-     * ```
+     * ```md
      * line-through: Each line of text has a line through the middle.
 
      * none: Neither produces nor inhibits text decoration.
@@ -8016,7 +9953,7 @@ export class Style extends BaseStyle<Style> {
      * underline: Each line of text is underlined.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   mozTextDecorationLine(
     value: 'line-through' | 'none' | 'overline' | 'underline' | (string & {}),
@@ -8037,7 +9974,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-text-decor-3/#text-decoration-style
      * 
      * values:
-     * ```
+     * ```md
      * dashed: Produces a dashed line style.
 
      * dotted: Produces a dotted line.
@@ -8051,7 +9988,7 @@ export class Style extends BaseStyle<Style> {
      * wavy: Produces a wavy line.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   mozTextDecorationStyle(
     value:
@@ -8079,7 +10016,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://dev.w3.org/csswg/css-size-adjust/
      * 
      * values:
-     * ```
+     * ```md
      * auto: Renderers must use the default size adjustment when displaying on a small device.
 
      * none: Renderers must not do size adjustment when displaying on a small device.
@@ -8104,7 +10041,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-2d-transforms/#transform-property
      * 
      * values:
-     * ```
+     * ```md
      * matrix(): Specifies a 2D transformation in the form of a transformation matrix of six values. matrix(a,b,c,d,e,f) is equivalent to applying the transformation matrix [a b c d e f]
 
      * matrix3d(): Specifies a 3D transformation as a 4x4 homogeneous matrix of 16 values in column-major order.
@@ -8150,7 +10087,7 @@ export class Style extends BaseStyle<Style> {
      * translateZ(): Specifies a translation by the given amount in the Z direction. Note that percentage values are not allowed in the translateZ translation-value, and if present are evaluated as 0.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   mozTransform(
     value:
@@ -8213,7 +10150,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-transitions/#transition
      * 
      * values:
-     * ```
+     * ```md
      * all: Every property that is able to undergo a transition will do so.
 
      * none: No property will transition.
@@ -8276,7 +10213,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-transitions/#transition-property
      * 
      * values:
-     * ```
+     * ```md
      * all: Every property that is able to undergo a transition will do so.
 
      * none: No property will transition.
@@ -8320,7 +10257,7 @@ export class Style extends BaseStyle<Style> {
      * ref: https://developer.mozilla.org/en-US/docs/CSS/-moz-user-focus
      * 
      * values:
-     * ```
+     * ```md
      * ignore: undefined
 
      * normal: undefined
@@ -8345,7 +10282,7 @@ export class Style extends BaseStyle<Style> {
      * ref: https://developer.mozilla.org/en/CSS/-moz-user-select
      * 
      * values:
-     * ```
+     * ```md
      * all: undefined
 
      * element: undefined
@@ -8363,7 +10300,7 @@ export class Style extends BaseStyle<Style> {
      * toggle: undefined
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   mozUserSelect(
     value:
@@ -8412,7 +10349,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-images/#object-fit
      * 
      * values:
-     * ```
+     * ```md
      * contain: The replaced content is sized to maintain its aspect ratio while fitting within the element's content box: its concrete object size is resolved as a contain constraint against the element's used width and height.
 
      * cover: The replaced content is sized to maintain its aspect ratio while filling the element's entire content box: its concrete object size is resolved as a cover constraint against the element's used width and height.
@@ -8424,7 +10361,7 @@ export class Style extends BaseStyle<Style> {
      * scale-down: Size the content as if 'none' or 'contain' were specified, whichever would result in a smaller concrete object size.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   objectFit(
     value: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down' | (string & {}),
@@ -8597,7 +10534,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-ui/#outline0
      * 
      * values:
-     * ```
+     * ```md
      * auto: Permits the user agent to render a custom outline style, typically the default platform style.
 
      * invert: Performs a color inversion on the pixels on the screen.
@@ -8698,7 +10635,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-overflow-3/#overflow
      * 
      * values:
-     * ```
+     * ```md
      * auto: The behavior of the 'auto' value is UA-dependent, but should cause a scrolling mechanism to be provided for overflowing boxes.
 
      * clip: Behaves as 'hidden' except forbids scrolling entirely, through any mechanism.
@@ -8712,7 +10649,7 @@ export class Style extends BaseStyle<Style> {
      * visible: Content is not clipped, i.e., it may be rendered outside the content box.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   overflow(
     value:
@@ -8740,7 +10677,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-text/#overflow-wrap0
      * 
      * values:
-     * ```
+     * ```md
      * break-word: An otherwise unbreakable sequence of characters may be broken at an arbitrary point if there are no otherwise-acceptable break points in the line.
 
      * normal: Lines may break only at allowed break points.
@@ -8748,7 +10685,7 @@ export class Style extends BaseStyle<Style> {
      * anywhere: There is a soft wrap opportunity around every typographic character unit, including around any punctuation character or preserved white spaces, or in the middle of words, disregarding any prohibition against line breaks, even those introduced by characters with the GL, WJ, or ZWJ line breaking classes or mandated by the word-break property.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   overflowWrap(value: 'break-word' | 'normal' | 'anywhere' | (string & {})) {
     this.props.set('overflow-wrap', value)
@@ -8767,7 +10704,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-box/#overflow-x
      * 
      * values:
-     * ```
+     * ```md
      * auto: The behavior of the 'auto' value is UA-dependent, but should cause a scrolling mechanism to be provided for overflowing boxes.
 
      * clip: Behaves as 'hidden' except forbids scrolling entirely, through any mechanism.
@@ -8779,7 +10716,7 @@ export class Style extends BaseStyle<Style> {
      * visible: Content is not clipped, i.e., it may be rendered outside the content box.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   overflowX(
     value: 'auto' | 'clip' | 'hidden' | 'scroll' | 'visible' | (string & {}),
@@ -8800,7 +10737,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-box/#overflow-x
      * 
      * values:
-     * ```
+     * ```md
      * auto: The behavior of the 'auto' value is UA-dependent, but should cause a scrolling mechanism to be provided for overflowing boxes.
 
      * clip: Behaves as 'hidden' except forbids scrolling entirely, through any mechanism.
@@ -8812,7 +10749,7 @@ export class Style extends BaseStyle<Style> {
      * visible: Content is not clipped, i.e., it may be rendered outside the content box.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   overflowY(
     value: 'auto' | 'clip' | 'hidden' | 'scroll' | 'visible' | (string & {}),
@@ -9023,7 +10960,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-break/#page-break-properties
      * 
      * values:
-     * ```
+     * ```md
      * always: Always force a page break after the generated box.
 
      * auto: Neither force nor forbid a page break after generated box.
@@ -9039,7 +10976,7 @@ export class Style extends BaseStyle<Style> {
      * verso: Equivalent to left in left-to-right page progressions and right in right-to-left page progressions.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   pageBreakAfter(
     value:
@@ -9068,7 +11005,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-break/#page-break-properties
      * 
      * values:
-     * ```
+     * ```md
      * always: Always force a page break before the generated box.
 
      * auto: Neither force nor forbid a page break before the generated box.
@@ -9080,7 +11017,7 @@ export class Style extends BaseStyle<Style> {
      * right: Force one or two page breaks before the generated box so that the next page is formatted as a right page.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   pageBreakBefore(
     value: 'always' | 'auto' | 'avoid' | 'left' | 'right' | (string & {}),
@@ -9101,13 +11038,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-break/#page-break-properties
      * 
      * values:
-     * ```
+     * ```md
      * auto: Neither force nor forbid a page break inside the generated box.
 
      * avoid: Avoid a page break inside the generated box.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   pageBreakInside(value: 'auto' | 'avoid' | (string & {})) {
     this.props.set('page-break-inside', value)
@@ -9126,7 +11063,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/SVG2/painting.html#PaintOrderProperty
      * 
      * values:
-     * ```
+     * ```md
      * fill: undefined
 
      * markers: undefined
@@ -9136,7 +11073,7 @@ export class Style extends BaseStyle<Style> {
      * stroke: undefined
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   paintOrder(value: 'fill' | 'markers' | 'normal' | 'stroke' | (string & {})) {
     this.props.set('paint-order', value)
@@ -9193,7 +11130,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/SVG2/interact.html#PointerEventsProperty
      * 
      * values:
-     * ```
+     * ```md
      * all: The given element can be the target element for pointer events whenever the pointer is over either the interior or the perimeter of the element.
 
      * fill: The given element can be the target element for pointer events whenever the pointer is over the interior of the element.
@@ -9213,7 +11150,7 @@ export class Style extends BaseStyle<Style> {
      * visibleStroke: The given element can be the target element for pointer events when the 'visibility' property is set to visible and when the pointer is over the perimeter of the element.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   pointerEvents(
     value:
@@ -9244,7 +11181,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-positioning/#propdef-position
      * 
      * values:
-     * ```
+     * ```md
      * absolute: The box's position (and possibly size) is specified with the 'top', 'right', 'bottom', and 'left' properties. These properties specify offsets with respect to the box's 'containing block'.
 
      * center: Center positioned boxes are taken out of the normal flow. This means they have no impact on the layout of later siblings.
@@ -9264,7 +11201,7 @@ export class Style extends BaseStyle<Style> {
      * -webkit-sticky: The box's position is calculated according to the normal flow. Then the box is offset relative to its flow root and containing block and in all cases, including table elements, does not affect the position of any following boxes.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   position(
     value:
@@ -9333,7 +11270,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-counter-styles-3/#descdef-counter-style-range
      * 
      * values:
-     * ```
+     * ```md
      * auto: The range depends on the counter system.
 
      * infinite: If used as the first value in a range, it represents negative infinity; if used as the second value, it represents positive infinity.
@@ -9358,7 +11295,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-ui/#resize0
      * 
      * values:
-     * ```
+     * ```md
      * both: The UA presents a bidirectional resizing mechanism to allow the user to adjust both the height and the width of the element.
 
      * block: Logical 'vertical'
@@ -9372,7 +11309,7 @@ export class Style extends BaseStyle<Style> {
      * vertical: The UA presents a unidirectional vertical resizing mechanism to allow the user to adjust only the height of the element.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   resize(
     value:
@@ -9419,7 +11356,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-ruby/#rubyalign
      * 
      * values:
-     * ```
+     * ```md
      * auto: The user agent determines how the ruby contents are aligned. This is the initial value.
 
      * center: The ruby content is centered within its box.
@@ -9441,7 +11378,7 @@ export class Style extends BaseStyle<Style> {
      * space-around: As for 'space-between' except that there exists an extra justification opportunities whose space is distributed half before and half after the ruby content.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   rubyAlign(
     value:
@@ -9473,7 +11410,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-ruby/#rubyover
      * 
      * values:
-     * ```
+     * ```md
      * auto: The ruby text can overhang text adjacent to the base on either side. This is the initial value.
 
      * end: The ruby text can overhang the text that follows it.
@@ -9483,7 +11420,7 @@ export class Style extends BaseStyle<Style> {
      * start: The ruby text can overhang the text that precedes it.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   rubyOverhang(value: 'auto' | 'end' | 'none' | 'start' | (string & {})) {
     this.props.set('ruby-overhang', value)
@@ -9502,7 +11439,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-ruby/#ruby-position
      * 
      * values:
-     * ```
+     * ```md
      * after: The ruby text appears after the base. This is a relatively rare setting used in ideographic East Asian writing systems, most easily found in educational text.
 
      * before: The ruby text appears before the base. This is the most common setting used in ideographic East Asian writing systems.
@@ -9512,7 +11449,7 @@ export class Style extends BaseStyle<Style> {
      * right: The ruby text appears on the right of the base. Unlike 'before' and 'after', this value is not relative to the text flow direction.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   rubyPosition(value: 'after' | 'before' | 'inline' | 'right' | (string & {})) {
     this.props.set('ruby-position', value)
@@ -9531,13 +11468,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-ruby/#rubyspan
      * 
      * values:
-     * ```
+     * ```md
      * attr(x): The value of attribute 'x' is a string value. The string value is evaluated as a <number> to determine the number of ruby base elements to be spanned by the annotation element.
 
      * none: No spanning. The computed value is '1'.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   rubySpan(value: 'attr(x)' | 'none' | (string & {})) {
     this.props.set('ruby-span', value)
@@ -9556,13 +11493,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/cssom-view/#scroll-behavior
      * 
      * values:
-     * ```
+     * ```md
      * auto: Scrolls in an instant fashion.
 
      * smooth: Scrolls in a smooth fashion using a user-agent-defined timing function and time period.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   scrollBehavior(value: 'auto' | 'smooth' | (string & {})) {
     this.props.set('scroll-behavior', value)
@@ -9581,7 +11518,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-snappoints-1/#propdef-scroll-snap-coordinate
      * 
      * values:
-     * ```
+     * ```md
      * none: Specifies that this element does not contribute a snap point.
 
      * border-box: Specifies the offset of the snap coordinate from the start edge of the element's border box.
@@ -9629,13 +11566,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-snappoints-1/#propdef-scroll-snap-points-x
      * 
      * values:
-     * ```
+     * ```md
      * none: No snap points are defined by this scroll container.
 
      * repeat(): Defines an interval at which snap points are defined, starting from the container's relevant start edge.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   scrollSnapPointsX(value: 'none' | 'repeat()' | (string & {})) {
     this.props.set('scroll-snap-points-x', value)
@@ -9654,13 +11591,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-snappoints-1/#propdef-scroll-snap-points-y
      * 
      * values:
-     * ```
+     * ```md
      * none: No snap points are defined by this scroll container.
 
      * repeat(): Defines an interval at which snap points are defined, starting from the container's relevant start edge.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   scrollSnapPointsY(value: 'none' | 'repeat()' | (string & {})) {
     this.props.set('scroll-snap-points-y', value)
@@ -9679,7 +11616,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-snappoints-1/#propdef-scroll-snap-type
      * 
      * values:
-     * ```
+     * ```md
      * none: The visual viewport of this scroll container must ignore snap points, if any, when scrolled.
 
      * mandatory: The visual viewport of this scroll container is guaranteed to rest on a snap point when there are no active scrolling operations.
@@ -9687,7 +11624,7 @@ export class Style extends BaseStyle<Style> {
      * proximity: The visual viewport of this scroll container may come to rest on a snap point at the termination of a scroll at the discretion of the UA given the parameters of the scroll.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   scrollSnapType(value: 'none' | 'mandatory' | 'proximity' | (string & {})) {
     this.props.set('scroll-snap-type', value)
@@ -9744,7 +11681,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-shapes-1/#shape-outside-property
      * 
      * values:
-     * ```
+     * ```md
      * margin-box: The background is painted within (clipped to) the margin box.
 
      * none: The float area is unaffected.
@@ -9788,7 +11725,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-fonts/#src-desc
      * 
      * values:
-     * ```
+     * ```md
      * url(): Reference font by URL
 
      * format(): Optional hint describing the format of the font resource.
@@ -9853,7 +11790,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/SVG2/painting.html#StrokeProperty
      * 
      * values:
-     * ```
+     * ```md
      * child: A reference to the last child paint server element of the element being painted.
 
      * child(): A reference to the nth child paint server element of the element being painted.
@@ -9933,7 +11870,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/SVG2/painting.html#StrokeLinecapProperty
      * 
      * values:
-     * ```
+     * ```md
      * butt: Indicates that the stroke for each subpath does not extend beyond its two endpoints.
 
      * round: Indicates that at each end of each subpath, the shape representing the stroke will be extended by a half circle with a radius equal to the stroke width.
@@ -9941,7 +11878,7 @@ export class Style extends BaseStyle<Style> {
      * square: Indicates that at the end of each subpath, the shape representing the stroke will be extended by a rectangle with the same width as the stroke width and whose length is half of the stroke width.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   strokeLinecap(value: 'butt' | 'round' | 'square' | (string & {})) {
     this.props.set('stroke-linecap', value)
@@ -9960,7 +11897,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/SVG2/painting.html#StrokeLinejoinProperty
      * 
      * values:
-     * ```
+     * ```md
      * arcs: Indicates that an arcs corner is to be used to join path segments.
 
      * bevel: Indicates that a bevelled corner is to be used to join path segments.
@@ -9972,7 +11909,7 @@ export class Style extends BaseStyle<Style> {
      * round: Indicates that a round corner is to be used to join path segments.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   strokeLinejoin(
     value: 'arcs' | 'bevel' | 'miter' | 'miter-clip' | 'round' | (string & {}),
@@ -10069,7 +12006,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-counter-styles-3/#descdef-counter-style-system
      * 
      * values:
-     * ```
+     * ```md
      * additive: Represents "sign-value" numbering systems, which, rather than using reusing digits in different positions to change their value, define additional digits with much larger values, so that the value of the number can be obtained by adding all the digits together.
 
      * alphabetic: Interprets the list of counter symbols as digits to an alphabetic numbering system, similar to the default lower-alpha counter style, which wraps from "a", "b", "c", to "aa", "ab", "ac".
@@ -10133,13 +12070,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/CSS2/tables.html#width-layout
      * 
      * values:
-     * ```
+     * ```md
      * auto: Use any automatic table layout algorithm.
 
      * fixed: Use the fixed table layout algorithm.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   tableLayout(value: 'auto' | 'fixed' | (string & {})) {
     this.props.set('table-layout', value)
@@ -10177,7 +12114,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-text/#text-align0
      * 
      * values:
-     * ```
+     * ```md
      * center: The inline contents are centered within the line box.
 
      * end: The inline contents are aligned to the end edge of the line box.
@@ -10222,7 +12159,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-text/#text-align-last0
      * 
      * values:
-     * ```
+     * ```md
      * auto: Content on the affected line is aligned per 'text-align' unless 'text-align' is set to 'justify', in which case it is 'start-aligned'.
 
      * center: The inline contents are centered within the line box.
@@ -10238,7 +12175,7 @@ export class Style extends BaseStyle<Style> {
      * start: The inline contents are aligned to the start edge of the line box.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   textAlignLast(
     value:
@@ -10267,7 +12204,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/SVG2/text.html#TextAnchorProperty
      * 
      * values:
-     * ```
+     * ```md
      * end: The rendered characters are aligned such that the end of the resulting rendered text is at the initial current text position.
 
      * middle: The rendered characters are aligned such that the geometric middle of the resulting rendered text is at the initial current text position.
@@ -10275,7 +12212,7 @@ export class Style extends BaseStyle<Style> {
      * start: The rendered characters are aligned such that the start of the resulting rendered text is at the initial current text position.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   textAnchor(value: 'end' | 'middle' | 'start' | (string & {})) {
     this.props.set('text-anchor', value)
@@ -10294,7 +12231,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-text-decor-3/#text-decoration-style
      * 
      * values:
-     * ```
+     * ```md
      * dashed: Produces a dashed line style.
 
      * dotted: Produces a dotted line.
@@ -10364,7 +12301,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-text-decor-3/#text-decoration-line
      * 
      * values:
-     * ```
+     * ```md
      * line-through: Each line of text has a line through the middle.
 
      * none: Neither produces nor inhibits text decoration.
@@ -10374,7 +12311,7 @@ export class Style extends BaseStyle<Style> {
      * underline: Each line of text is underlined.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   textDecorationLine(
     value: 'line-through' | 'none' | 'overline' | 'underline' | (string & {}),
@@ -10395,7 +12332,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-text-decor-3/#text-decoration-style
      * 
      * values:
-     * ```
+     * ```md
      * dashed: Produces a dashed line style.
 
      * dotted: Produces a dotted line.
@@ -10409,7 +12346,7 @@ export class Style extends BaseStyle<Style> {
      * wavy: Produces a wavy line.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   textDecorationStyle(
     value:
@@ -10437,7 +12374,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-text/#text-indent0
      * 
      * values:
-     * ```
+     * ```md
      * each-line: Indentation affects the first line of the block container as well as each line after a forced line break, but does not affect lines after a text wrap break.
 
      * hanging: Inverts which lines are affected.
@@ -10462,7 +12399,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-writing-modes-3/#text-orientation
      * 
      * values:
-     * ```
+     * ```md
      * mixed: In vertical writing modes, characters from horizontal-only scripts are set sideways, i.e. 90° clockwise from their standard orientation in horizontal text.
 
      * sideways: This value is equivalent to 'sideways-right' in 'vertical-rl' writing mode and equivalent to 'sideways-left' in 'vertical-lr' writing mode.
@@ -10476,7 +12413,7 @@ export class Style extends BaseStyle<Style> {
      * use-glyph-orientation: This value deprecated and only applies to SVG.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   textOrientation(
     value:
@@ -10504,7 +12441,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-ui/#text-overflow0
      * 
      * values:
-     * ```
+     * ```md
      * clip: Clip inline content that overflows. Characters may be only partially rendered.
 
      * ellipsis: Render an ellipsis character (U+2026) to represent clipped inline content.
@@ -10529,7 +12466,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/SVG2/painting.html#TextRenderingProperty
      * 
      * values:
-     * ```
+     * ```md
      * auto: undefined
 
      * geometricPrecision: Indicates that the user agent shall emphasize geometric precision over legibility and rendering speed.
@@ -10539,7 +12476,7 @@ export class Style extends BaseStyle<Style> {
      * optimizeSpeed: Indicates that the user agent shall emphasize rendering speed over legibility and geometric precision.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   textRendering(
     value:
@@ -10584,7 +12521,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-text/#text-transform0
      * 
      * values:
-     * ```
+     * ```md
      * capitalize: Puts the first typographic letter unit of each word in titlecase.
 
      * full-width: Puts all characters in fullwidth form. If the character does not have corresponding fullwidth form, it is left as is.
@@ -10596,7 +12533,7 @@ export class Style extends BaseStyle<Style> {
      * uppercase: Puts all letters in uppercase.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   textTransform(
     value:
@@ -10642,7 +12579,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/pointerevents/#the-touch-action-css-property
      * 
      * values:
-     * ```
+     * ```md
      * auto: The user agent may determine any permitted touch behaviors for touches that begin on the element.
 
      * cross-slide-x: undefined
@@ -10662,7 +12599,7 @@ export class Style extends BaseStyle<Style> {
      * pinch-zoom: undefined
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   touchAction(
     value:
@@ -10693,7 +12630,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-transforms/#transform-property
      * 
      * values:
-     * ```
+     * ```md
      * matrix(): Specifies a 2D transformation in the form of a transformation matrix of six values. matrix(a,b,c,d,e,f) is equivalent to applying the transformation matrix [a b c d e f]
 
      * matrix3d(): Specifies a 3D transformation as a 4x4 homogeneous matrix of 16 values in column-major order.
@@ -10739,7 +12676,7 @@ export class Style extends BaseStyle<Style> {
      * translateZ(): Specifies a translation by the given amount in the Z direction. Note that percentage values are not allowed in the translateZ translation-value, and if present are evaluated as 0.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   transform(
     value:
@@ -10802,13 +12739,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-transforms/#propdef-transform-style
      * 
      * values:
-     * ```
+     * ```md
      * flat: All children of this element are rendered flattened into the 2D plane of the element.
 
      * preserve-3d: Flattening is not performed, so children maintain their position in 3D space.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   transformStyle(value: 'flat' | 'preserve-3d' | (string & {})) {
     this.props.set('transform-style', value)
@@ -10827,7 +12764,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-transitions/#transition
      * 
      * values:
-     * ```
+     * ```md
      * all: Every property that is able to undergo a transition will do so.
 
      * none: No property will transition.
@@ -10890,7 +12827,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-transitions/#transition-property
      * 
      * values:
-     * ```
+     * ```md
      * all: Every property that is able to undergo a transition will do so.
 
      * none: No property will transition.
@@ -10934,7 +12871,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-writing-modes-3/#unicode-bidi
      * 
      * values:
-     * ```
+     * ```md
      * bidi-override: Inside the element, reordering is strictly in sequence according to the 'direction' property; the implicit part of the bidirectional algorithm is ignored.
 
      * embed: If the element is inline-level, this value opens an additional level of embedding with respect to the bidirectional algorithm. The direction of this embedding level is given by the 'direction' property.
@@ -10948,7 +12885,7 @@ export class Style extends BaseStyle<Style> {
      * plaintext: For the purposes of the Unicode bidirectional algorithm, the base directionality of each bidi paragraph for which the element forms the containing block is determined not by the element's computed 'direction'.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   unicodeBidi(
     value:
@@ -10976,7 +12913,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-fonts/#unicode-range-desc
      * 
      * values:
-     * ```
+     * ```md
      * U+26: Ampersand.
 
      * U+20-24F, U+2B0-2FF, U+370-4FF, U+1E00-1EFF, U+2000-20CF, U+2100-23FF, U+2500-26FF, U+E000-F8FF, U+FB00-FB4F: WGL4 character set (Pan-European).
@@ -11231,7 +13168,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-ui-4/#propdef-user-select
      * 
      * values:
-     * ```
+     * ```md
      * all: The content of the element must be selected atomically
 
      * auto: undefined
@@ -11243,7 +13180,7 @@ export class Style extends BaseStyle<Style> {
      * text: The element imposes no constraint on the selection.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   userSelect(
     value: 'all' | 'auto' | 'contain' | 'none' | 'text' | (string & {}),
@@ -11264,7 +13201,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-linebox/#vertical-align
      * 
      * values:
-     * ```
+     * ```md
      * alphabetic: Match the box's alphabetic baseline to that of its parent.
 
      * auto: Align the dominant baseline of the parent box with the equivalent, or heuristically reconstructed, baseline of the element inline box.
@@ -11330,7 +13267,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-box/#visibility
      * 
      * values:
-     * ```
+     * ```md
      * collapse: Table-specific. If used on elements other than rows, row groups, columns, or column groups, 'collapse' has the same meaning as 'hidden'.
 
      * hidden: The generated box is invisible (fully transparent, nothing is drawn), but still affects layout.
@@ -11338,7 +13275,7 @@ export class Style extends BaseStyle<Style> {
      * visible: The generated box is visible.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   visibility(value: 'collapse' | 'hidden' | 'visible' | (string & {})) {
     this.props.set('visibility', value)
@@ -11357,7 +13294,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-animations/#animation
      * 
      * values:
-     * ```
+     * ```md
      * alternate: The animation cycle iterations that are odd counts are played in the normal direction, and the animation cycle iterations that are even counts are played in a reverse direction.
 
      * alternate-reverse: The animation cycle iterations that are odd counts are played in the reverse direction, and the animation cycle iterations that are even counts are played in a normal direction.
@@ -11427,7 +13364,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-animations/#animation-direction
      * 
      * values:
-     * ```
+     * ```md
      * alternate: The animation cycle iterations that are odd counts are played in the normal direction, and the animation cycle iterations that are even counts are played in a reverse direction.
 
      * alternate-reverse: The animation cycle iterations that are odd counts are played in the reverse direction, and the animation cycle iterations that are even counts are played in a normal direction.
@@ -11437,7 +13374,7 @@ export class Style extends BaseStyle<Style> {
      * reverse: All iterations of the animation are played in the reverse direction from the way they were specified.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitAnimationDirection(
     value:
@@ -11482,7 +13419,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-animations/#animation-fill-mode-property
      * 
      * values:
-     * ```
+     * ```md
      * backwards: The beginning property value (as defined in the first @keyframes at-rule) is applied before the animation is displayed, during the period defined by 'animation-delay'.
 
      * both: Both forwards and backwards fill modes are applied.
@@ -11492,7 +13429,7 @@ export class Style extends BaseStyle<Style> {
      * none: There is no change to the property value between the time the animation is applied and the time the animation begins playing or after the animation completes.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitAnimationFillMode(
     value: 'backwards' | 'both' | 'forwards' | 'none' | (string & {}),
@@ -11551,13 +13488,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-animations/#animation-play-state
      * 
      * values:
-     * ```
+     * ```md
      * paused: A running animation will be paused.
 
      * running: Resume playback of a paused animation.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitAnimationPlayState(value: 'paused' | 'running' | (string & {})) {
     this.props.set('-webkit-animation-play-state', value)
@@ -11595,7 +13532,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://css-infos.net/property/-webkit-appearance
      * 
      * values:
-     * ```
+     * ```md
      * button: undefined
 
      * button-bevel: undefined
@@ -11685,7 +13622,7 @@ export class Style extends BaseStyle<Style> {
      * textfield: undefined
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitAppearance(
     value:
@@ -11751,7 +13688,7 @@ export class Style extends BaseStyle<Style> {
      * ref: https://drafts.fxtf.org/filters-2/#propdef-backdrop-filter
      * 
      * values:
-     * ```
+     * ```md
      * none: No filter effects are applied.
 
      * blur(): Applies a Gaussian blur to the input image.
@@ -11811,13 +13748,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-3d-transforms/#backface-visibility
      * 
      * values:
-     * ```
+     * ```md
      * hidden: undefined
 
      * visible: undefined
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitBackfaceVisibility(value: 'hidden' | 'visible' | (string & {})) {
     this.props.set('-webkit-backface-visibility', value)
@@ -11855,13 +13792,13 @@ export class Style extends BaseStyle<Style> {
      * ref: undefined
      * 
      * values:
-     * ```
+     * ```md
      * border: undefined
 
      * padding: undefined
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitBackgroundComposite(value: 'border' | 'padding' | (string & {})) {
     this.props.set('-webkit-background-composite', value)
@@ -11899,7 +13836,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-background/#border-image
      * 
      * values:
-     * ```
+     * ```md
      * auto: If 'auto' is specified then the border image width is the intrinsic width or height (whichever is applicable) of the corresponding image slice. If the image does not have the required intrinsic dimension then the corresponding border-width is used instead.
 
      * fill: Causes the middle part of the border-image to be preserved.
@@ -11947,7 +13884,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://css-infos.net/property/-webkit-box-align
      * 
      * values:
-     * ```
+     * ```md
      * baseline: If this box orientation is inline-axis or horizontal, all children are placed with their baselines aligned, and extra space placed before or after as necessary. For block flows, the baseline of the first non-empty line box located within the element is used. For tables, the baseline of the first cell is used.
 
      * center: Any extra space is divided evenly, with half placed above the child and the other half placed after the child.
@@ -11959,7 +13896,7 @@ export class Style extends BaseStyle<Style> {
      * stretch: The height of each child is adjusted to that of the containing block.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitBoxAlign(
     value: 'baseline' | 'center' | 'end' | 'start' | 'stretch' | (string & {}),
@@ -11980,13 +13917,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://css-infos.net/property/-webkit-box-direction
      * 
      * values:
-     * ```
+     * ```md
      * normal: A box with a computed value of horizontal for box-orient displays its children from left to right. A box with a computed value of vertical displays its children from top to bottom.
 
      * reverse: A box with a computed value of horizontal for box-orient displays its children from right to left. A box with a computed value of vertical displays its children from bottom to top.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitBoxDirection(value: 'normal' | 'reverse' | (string & {})) {
     this.props.set('-webkit-box-direction', value)
@@ -12062,7 +13999,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://css-infos.net/property/-webkit-box-orient
      * 
      * values:
-     * ```
+     * ```md
      * block-axis: Elements are oriented along the box's axis.
 
      * horizontal: The box displays its children from left to right in a horizontal line.
@@ -12072,7 +14009,7 @@ export class Style extends BaseStyle<Style> {
      * vertical: The box displays its children from stacked from top to bottom vertically.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitBoxOrient(
     value:
@@ -12098,7 +14035,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://css-infos.net/property/-webkit-box-pack
      * 
      * values:
-     * ```
+     * ```md
      * center: The extra space is divided evenly, with half placed before the first child and the other half placed after the last child.
 
      * end: For normal direction boxes, the right edge of the last child is placed at the right side, with all extra space placed before the first child. For reverse direction boxes, the left edge of the first child is placed at the left side, with all extra space placed after the last child.
@@ -12108,7 +14045,7 @@ export class Style extends BaseStyle<Style> {
      * start: For normal direction boxes, the left edge of the first child is placed at the left side, with all extra space placed after the last child. For reverse direction boxes, the right edge of the last child is placed at the right side, with all extra space placed before the first child.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitBoxPack(value: 'center' | 'end' | 'justify' | 'start' | (string & {})) {
     this.props.set('-webkit-box-pack', value)
@@ -12127,7 +14064,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://css-infos.net/property/-webkit-box-reflect
      * 
      * values:
-     * ```
+     * ```md
      * above: The reflection appears above the border box.
 
      * below: The reflection appears below the border box.
@@ -12158,13 +14095,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-ui/#box-sizing
      * 
      * values:
-     * ```
+     * ```md
      * border-box: The specified width and height (and respective min/max properties) on this element determine the border box of the element.
 
      * content-box: Behavior of width and height as specified by CSS2.1. The specified width and height (and respective min/max properties) apply to the width and height respectively of the content box of the element.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitBoxSizing(value: 'border-box' | 'content-box' | (string & {})) {
     this.props.set('-webkit-box-sizing', value)
@@ -12183,7 +14120,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-multicol/#column-breaks
      * 
      * values:
-     * ```
+     * ```md
      * always: Always force a page break before/after the generated box.
 
      * auto: Neither force nor forbid a page/column break before/after the generated box.
@@ -12207,7 +14144,7 @@ export class Style extends BaseStyle<Style> {
      * right: Force one or two page breaks before/after the generated box so that the next page is formatted as a right page.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitBreakAfter(
     value:
@@ -12240,7 +14177,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-multicol/#column-breaks
      * 
      * values:
-     * ```
+     * ```md
      * always: Always force a page break before/after the generated box.
 
      * auto: Neither force nor forbid a page/column break before/after the generated box.
@@ -12264,7 +14201,7 @@ export class Style extends BaseStyle<Style> {
      * right: Force one or two page breaks before/after the generated box so that the next page is formatted as a right page.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitBreakBefore(
     value:
@@ -12297,7 +14234,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-multicol/#column-breaks
      * 
      * values:
-     * ```
+     * ```md
      * auto: Neither force nor forbid a page/column break inside the generated box.
 
      * avoid: Avoid a page/column break inside the generated box.
@@ -12309,7 +14246,7 @@ export class Style extends BaseStyle<Style> {
      * avoid-region: undefined
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitBreakInside(
     value:
@@ -12336,7 +14273,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-multicol/#column-breaks
      * 
      * values:
-     * ```
+     * ```md
      * always: Always force a page break before/after the generated box.
 
      * auto: Neither force nor forbid a page/column break before/after the generated box.
@@ -12360,7 +14297,7 @@ export class Style extends BaseStyle<Style> {
      * right: Force one or two page breaks before/after the generated box so that the next page is formatted as a right page.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitColumnBreakAfter(
     value:
@@ -12393,7 +14330,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-multicol/#column-breaks
      * 
      * values:
-     * ```
+     * ```md
      * always: Always force a page break before/after the generated box.
 
      * auto: Neither force nor forbid a page/column break before/after the generated box.
@@ -12417,7 +14354,7 @@ export class Style extends BaseStyle<Style> {
      * right: Force one or two page breaks before/after the generated box so that the next page is formatted as a right page.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitColumnBreakBefore(
     value:
@@ -12450,7 +14387,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-multicol/#column-breaks
      * 
      * values:
-     * ```
+     * ```md
      * auto: Neither force nor forbid a page/column break inside the generated box.
 
      * avoid: Avoid a page/column break inside the generated box.
@@ -12462,7 +14399,7 @@ export class Style extends BaseStyle<Style> {
      * avoid-region: undefined
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitColumnBreakInside(
     value:
@@ -12622,13 +14559,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-multicol/#column-span0
      * 
      * values:
-     * ```
+     * ```md
      * all: The element spans across all columns. Content in the normal flow that appears before the element is automatically balanced across all columns before the element appear.
 
      * none: The element does not span multiple columns.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitColumnSpan(value: 'all' | 'none' | (string & {})) {
     this.props.set('-webkit-column-span', value)
@@ -12666,7 +14603,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/filter-effects/#propdef-filter
      * 
      * values:
-     * ```
+     * ```md
      * none: No filter effects are applied.
 
      * blur(): Applies a Gaussian blur to the input image.
@@ -12764,7 +14701,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-fonts/#propdef-font-feature-settings
      * 
      * values:
-     * ```
+     * ```md
      * c2cs: undefined
 
      * dlig: undefined
@@ -12824,7 +14761,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-text/#hyphens0
      * 
      * values:
-     * ```
+     * ```md
      * auto: Conditional hyphenation characters inside a word, if present, take priority over automatic resources when determining hyphenation points within the word.
 
      * manual: Words are only broken at line breaks where there are characters inside the word that suggest line break opportunities
@@ -12832,7 +14769,7 @@ export class Style extends BaseStyle<Style> {
      * none: Words are not broken at line breaks, even if characters inside the word suggest line break points.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitHyphens(value: 'auto' | 'manual' | 'none' | (string & {})) {
     this.props.set('-webkit-hyphens', value)
@@ -12851,7 +14788,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://css-infos.net/property/-webkit-line-break
      * 
      * values:
-     * ```
+     * ```md
      * after-white-space: undefined
 
      * normal: undefined
@@ -12876,7 +14813,7 @@ export class Style extends BaseStyle<Style> {
      * ref: undefined
      * 
      * values:
-     * ```
+     * ```md
      * collapse: undefined
 
      * discard: undefined
@@ -12884,7 +14821,7 @@ export class Style extends BaseStyle<Style> {
      * separate: undefined
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitMarginBottomCollapse(
     value: 'collapse' | 'discard' | 'separate' | (string & {}),
@@ -12905,7 +14842,7 @@ export class Style extends BaseStyle<Style> {
      * ref: undefined
      * 
      * values:
-     * ```
+     * ```md
      * collapse: undefined
 
      * discard: undefined
@@ -12913,7 +14850,7 @@ export class Style extends BaseStyle<Style> {
      * separate: undefined
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitMarginCollapse(
     value: 'collapse' | 'discard' | 'separate' | (string & {}),
@@ -12953,7 +14890,7 @@ export class Style extends BaseStyle<Style> {
      * ref: undefined
      * 
      * values:
-     * ```
+     * ```md
      * collapse: undefined
 
      * discard: undefined
@@ -12961,7 +14898,7 @@ export class Style extends BaseStyle<Style> {
      * separate: undefined
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitMarginTopCollapse(
     value: 'collapse' | 'discard' | 'separate' | (string & {}),
@@ -13001,7 +14938,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-masking-1/#the-mask-image
      * 
      * values:
-     * ```
+     * ```md
      * none: Counts as a transparent black image layer.
 
      * url(): Reference to a <mask element or to a CSS image.
@@ -13064,7 +15001,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-masking-1/#the-mask-size
      * 
      * values:
-     * ```
+     * ```md
      * auto: Resolved by using the image's intrinsic ratio and the size of the other dimension, or failing that, using the image's intrinsic size, or failing that, treating it as 100%.
 
      * contain: Scale the image, while preserving its intrinsic aspect ratio (if any), to the largest size such that both its width and its height can fit inside the background positioning area.
@@ -13091,7 +15028,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://css-infos.net/property/-webkit-nbsp-mode
      * 
      * values:
-     * ```
+     * ```md
      * normal: undefined
 
      * space: undefined
@@ -13116,7 +15053,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://css-infos.net/property/-webkit-nbsp-mode
      * 
      * values:
-     * ```
+     * ```md
      * auto: undefined
 
      * touch: undefined
@@ -13198,13 +15135,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://dev.w3.org/csswg/css-regions/#region-fragment
      * 
      * values:
-     * ```
+     * ```md
      * auto: Content flows as it would in a regular content box.
 
      * break: If the content fits within the CSS Region, then this property has no effect.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitRegionFragment(value: 'auto' | 'break' | (string & {})) {
     this.props.set('-webkit-region-fragment', value)
@@ -13261,7 +15198,7 @@ export class Style extends BaseStyle<Style> {
      * ref: https://drafts.csswg.org/css-size-adjust/#text-size-adjust
      * 
      * values:
-     * ```
+     * ```md
      * auto: Renderers must use the default size adjustment when displaying on a small device.
 
      * none: Renderers must not do size adjustment when displaying on a small device.
@@ -13343,7 +15280,7 @@ export class Style extends BaseStyle<Style> {
      * ref: undefined
      * 
 
-     * @param value - 
+     * @param value -
      */
   webkitTouchCallout(value: 'none' | (string & {})) {
     this.props.set('-webkit-touch-callout', value)
@@ -13362,7 +15299,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-2d-transforms/#transform-property
      * 
      * values:
-     * ```
+     * ```md
      * matrix(): Specifies a 2D transformation in the form of a transformation matrix of six values. matrix(a,b,c,d,e,f) is equivalent to applying the transformation matrix [a b c d e f]
 
      * matrix3d(): Specifies a 3D transformation as a 4x4 homogeneous matrix of 16 values in column-major order.
@@ -13408,7 +15345,7 @@ export class Style extends BaseStyle<Style> {
      * translateZ(): Specifies a translation by the given amount in the Z direction. Note that percentage values are not allowed in the translateZ translation-value, and if present are evaluated as 0.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitTransform(
     value:
@@ -13528,13 +15465,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-3d-transforms/#transform-origin
      * 
      * values:
-     * ```
+     * ```md
      * flat: All children of this element are rendered flattened into the 2D plane of the element.
 
      * preserve-3d: Flattening is not performed, so children maintain their position in 3D space.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitTransformStyle(value: 'flat' | 'preserve-3d' | (string & {})) {
     this.props.set('-webkit-transform-style', value)
@@ -13553,7 +15490,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-transitions/#transition
      * 
      * values:
-     * ```
+     * ```md
      * all: Every property that is able to undergo a transition will do so.
 
      * none: No property will transition.
@@ -13616,7 +15553,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-transitions/#transition-property
      * 
      * values:
-     * ```
+     * ```md
      * all: Every property that is able to undergo a transition will do so.
 
      * none: No property will transition.
@@ -13660,7 +15597,7 @@ export class Style extends BaseStyle<Style> {
      * ref: undefined
      * 
      * values:
-     * ```
+     * ```md
      * auto: undefined
 
      * element: undefined
@@ -13668,7 +15605,7 @@ export class Style extends BaseStyle<Style> {
      * none: undefined
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitUserDrag(value: 'auto' | 'element' | 'none' | (string & {})) {
     this.props.set('-webkit-user-drag', value)
@@ -13687,7 +15624,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://css-infos.net/property/-webkit-user-modify
      * 
      * values:
-     * ```
+     * ```md
      * read-only: undefined
 
      * read-write: undefined
@@ -13695,7 +15632,7 @@ export class Style extends BaseStyle<Style> {
      * read-write-plaintext-only: undefined
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitUserModify(
     value:
@@ -13720,7 +15657,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://css-infos.net/property/-webkit-user-select
      * 
      * values:
-     * ```
+     * ```md
      * auto: undefined
 
      * none: undefined
@@ -13728,7 +15665,7 @@ export class Style extends BaseStyle<Style> {
      * text: undefined
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   webkitUserSelect(value: 'auto' | 'none' | 'text' | (string & {})) {
     this.props.set('-webkit-user-select', value)
@@ -13766,7 +15703,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-box/#width
      * 
      * values:
-     * ```
+     * ```md
      * auto: The width depends on the values of other properties.
 
      * fill: Use the fill-available inline size or fill-available block size, as appropriate to the writing mode.
@@ -13805,7 +15742,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-will-change/
      * 
      * values:
-     * ```
+     * ```md
      * auto: Expresses no particular intent.
 
      * contents: Indicates that the author expects to animate or change something about the element's contents in the near future.
@@ -13832,7 +15769,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-text/#word-break0
      * 
      * values:
-     * ```
+     * ```md
      * break-all: Lines may break between any two grapheme clusters for non-CJK scripts.
 
      * keep-all: Block characters can no longer create implied break points.
@@ -13840,7 +15777,7 @@ export class Style extends BaseStyle<Style> {
      * normal: Breaks non-CJK scripts according to their own rules.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   wordBreak(value: 'break-all' | 'keep-all' | 'normal' | (string & {})) {
     this.props.set('word-break', value)
@@ -13878,13 +15815,13 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css3-text/#word-wrap0
      * 
      * values:
-     * ```
+     * ```md
      * break-word: An otherwise unbreakable sequence of characters may be broken at an arbitrary point if there are no otherwise-acceptable break points in the line.
 
      * normal: Lines may break only at allowed break points.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   wordWrap(value: 'break-word' | 'normal' | (string & {})) {
     this.props.set('word-wrap', value)
@@ -13903,7 +15840,7 @@ export class Style extends BaseStyle<Style> {
      * ref: http://www.w3.org/TR/css-writing-modes-3/#writing-mode
      * 
      * values:
-     * ```
+     * ```md
      * horizontal-tb: Top-to-bottom block flow direction. The writing mode is horizontal.
 
      * sideways-lr: Left-to-right block flow direction. The writing mode is vertical, while the typographic mode is horizontal.
@@ -13915,7 +15852,7 @@ export class Style extends BaseStyle<Style> {
      * vertical-rl: Right-to-left block flow direction. The writing mode is vertical.
      * ```
      *
-     * @param value - 
+     * @param value -
      */
   writingMode(
     value:

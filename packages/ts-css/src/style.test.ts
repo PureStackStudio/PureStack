@@ -84,9 +84,12 @@ describe('Style', () => {
   })
 
   it('toString outputs CSS rules', () => {
-    const s = new Style('div').color('green')
+    const s = new Style('div').color('red').css({
+      color: 'green',
+    })
     const cssText = s.toCSS()
     expect(cssText).toContain('div')
     expect(cssText).toContain('color: green;')
+    expect(cssText).not.toContain('red')
   })
 })
