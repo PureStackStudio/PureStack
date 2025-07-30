@@ -8,6 +8,8 @@ import { timeIt } from './timeIt'
 
 const emojis: Record<string, string> = {
   '@purestack/ts-html': '⚙️',
+  '@purestack/ts-css': '⚙️',
+  '@purestack/utils': '⚙️',
 }
 const packages: PackageJson[] = globSync(['packages/**/package.json']).map(
   (p) => JSON.parse(readFileSync(path.join(p), 'utf8')),

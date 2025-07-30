@@ -544,6 +544,14 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@purestack/ts-css@workspace:packages/ts-css":
+  version: 0.0.0-use.local
+  resolution: "@purestack/ts-css@workspace:packages/ts-css"
+  dependencies:
+    prettier: "npm:^3.6.2"
+  languageName: unknown
+  linkType: soft
+
 "@purestack/ts-html@workspace:packages/ts-html":
   version: 0.0.0-use.local
   resolution: "@purestack/ts-html@workspace:packages/ts-html"
