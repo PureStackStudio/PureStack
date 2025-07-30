@@ -1956,7 +1956,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  additiveSymbols(value: string) {
+  additiveSymbols(value: CSSProps['additive-symbols']) {
     this.props.set('additive-symbols', value)
     return this
   }
@@ -2013,28 +2013,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  alignContent(
-    value:
-      | 'center'
-      | 'flex-end'
-      | 'flex-start'
-      | 'space-around'
-      | 'space-between'
-      | 'stretch'
-      | 'start'
-      | 'end'
-      | 'normal'
-      | 'baseline'
-      | 'first baseline'
-      | 'last baseline'
-      | 'space-around'
-      | 'space-between'
-      | 'space-evenly'
-      | 'stretch'
-      | 'safe'
-      | 'unsafe'
-      | (string & {}),
-  ) {
+  alignContent(value: CSSProps['align-content']) {
     this.props.set('align-content', value)
     return this
   }
@@ -2085,25 +2064,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  alignItems(
-    value:
-      | 'baseline'
-      | 'center'
-      | 'flex-end'
-      | 'flex-start'
-      | 'stretch'
-      | 'normal'
-      | 'start'
-      | 'end'
-      | 'self-start'
-      | 'self-end'
-      | 'first baseline'
-      | 'last baseline'
-      | 'stretch'
-      | 'safe'
-      | 'unsafe'
-      | (string & {}),
-  ) {
+  alignItems(value: CSSProps['align-items']) {
     this.props.set('align-items', value)
     return this
   }
@@ -2160,28 +2121,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  justifyItems(
-    value:
-      | 'auto'
-      | 'normal'
-      | 'end'
-      | 'start'
-      | 'flex-end'
-      | 'flex-start'
-      | 'self-end'
-      | 'self-start'
-      | 'center'
-      | 'left'
-      | 'right'
-      | 'baseline'
-      | 'first baseline'
-      | 'last baseline'
-      | 'stretch'
-      | 'safe'
-      | 'unsafe'
-      | 'legacy'
-      | (string & {}),
-  ) {
+  justifyItems(value: CSSProps['justify-items']) {
     this.props.set('justify-items', value)
     return this
   }
@@ -2236,27 +2176,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  justifySelf(
-    value:
-      | 'auto'
-      | 'normal'
-      | 'end'
-      | 'start'
-      | 'flex-end'
-      | 'flex-start'
-      | 'self-end'
-      | 'self-start'
-      | 'center'
-      | 'left'
-      | 'right'
-      | 'baseline'
-      | 'first baseline'
-      | 'last baseline'
-      | 'stretch'
-      | 'save'
-      | 'unsave'
-      | (string & {}),
-  ) {
+  justifySelf(value: CSSProps['justify-self']) {
     this.props.set('justify-self', value)
     return this
   }
@@ -2305,24 +2225,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  alignSelf(
-    value:
-      | 'auto'
-      | 'normal'
-      | 'self-end'
-      | 'self-start'
-      | 'baseline'
-      | 'center'
-      | 'flex-end'
-      | 'flex-start'
-      | 'stretch'
-      | 'baseline'
-      | 'first baseline'
-      | 'last baseline'
-      | 'safe'
-      | 'unsafe'
-      | (string & {}),
-  ) {
+  alignSelf(value: CSSProps['align-self']) {
     this.props.set('align-self', value)
     return this
   }
@@ -2341,7 +2244,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  all(value: 'revert' | (string & {})) {
+  all(value: CSSProps['all']) {
     this.props.set('all', value)
     return this
   }
@@ -2360,7 +2263,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  alt(value: 'none' | (string & {})) {
+  alt(value: CSSProps['alt']) {
     this.props.set('alt', value)
     return this
   }
@@ -2399,19 +2302,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  animation(
-    value:
-      | 'alternate'
-      | 'alternate-reverse'
-      | 'backwards'
-      | 'both'
-      | 'forwards'
-      | 'infinite'
-      | 'none'
-      | 'normal'
-      | 'reverse'
-      | (string & {}),
-  ) {
+  animation(value: CSSProps['animation']) {
     this.props.set('animation', value)
     return this
   }
@@ -2430,7 +2321,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  animationDelay(value: string) {
+  animationDelay(value: CSSProps['animation-delay']) {
     this.props.set('animation-delay', value)
     return this
   }
@@ -2459,14 +2350,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  animationDirection(
-    value:
-      | 'alternate'
-      | 'alternate-reverse'
-      | 'normal'
-      | 'reverse'
-      | (string & {}),
-  ) {
+  animationDirection(value: CSSProps['animation-direction']) {
     this.props.set('animation-direction', value)
     return this
   }
@@ -2485,7 +2369,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  animationDuration(value: string) {
+  animationDuration(value: CSSProps['animation-duration']) {
     this.props.set('animation-duration', value)
     return this
   }
@@ -2514,9 +2398,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  animationFillMode(
-    value: 'backwards' | 'both' | 'forwards' | 'none' | (string & {}),
-  ) {
+  animationFillMode(value: CSSProps['animation-fill-mode']) {
     this.props.set('animation-fill-mode', value)
     return this
   }
@@ -2535,7 +2417,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  animationIterationCount(value: 'infinite' | (string & {})) {
+  animationIterationCount(value: CSSProps['animation-iteration-count']) {
     this.props.set('animation-iteration-count', value)
     return this
   }
@@ -2554,7 +2436,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  animationName(value: 'none' | (string & {})) {
+  animationName(value: CSSProps['animation-name']) {
     this.props.set('animation-name', value)
     return this
   }
@@ -2579,7 +2461,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  animationPlayState(value: 'paused' | 'running' | (string & {})) {
+  animationPlayState(value: CSSProps['animation-play-state']) {
     this.props.set('animation-play-state', value)
     return this
   }
@@ -2598,7 +2480,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  animationTimingFunction(value: string) {
+  animationTimingFunction(value: CSSProps['animation-timing-function']) {
     this.props.set('animation-timing-function', value)
     return this
   }
@@ -2623,7 +2505,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  backfaceVisibility(value: 'hidden' | 'visible' | (string & {})) {
+  backfaceVisibility(value: CSSProps['backface-visibility']) {
     this.props.set('backface-visibility', value)
     return this
   }
@@ -2652,7 +2534,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  background(value: 'fixed' | 'local' | 'none' | 'scroll' | (string & {})) {
+  background(value: CSSProps['background']) {
     this.props.set('background', value)
     return this
   }
@@ -2679,7 +2561,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  backgroundAttachment(value: 'fixed' | 'local' | 'scroll' | (string & {})) {
+  backgroundAttachment(value: CSSProps['background-attachment']) {
     this.props.set('background-attachment', value)
     return this
   }
@@ -2732,26 +2614,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  backgroundBlendMode(
-    value:
-      | 'normal'
-      | 'multiply'
-      | 'screen'
-      | 'overlay'
-      | 'darken'
-      | 'lighten'
-      | 'color-dodge'
-      | 'color-burn'
-      | 'hard-light'
-      | 'soft-light'
-      | 'difference'
-      | 'exclusion'
-      | 'hue'
-      | 'saturation'
-      | 'color'
-      | 'luminosity'
-      | (string & {}),
-  ) {
+  backgroundBlendMode(value: CSSProps['background-blend-mode']) {
     this.props.set('background-blend-mode', value)
     return this
   }
@@ -2770,7 +2633,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  backgroundClip(value: string) {
+  backgroundClip(value: CSSProps['background-clip']) {
     this.props.set('background-clip', value)
     return this
   }
@@ -2789,7 +2652,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  backgroundColor(value: string) {
+  backgroundColor(value: CSSProps['background-color']) {
     this.props.set('background-color', value)
     return this
   }
@@ -2808,7 +2671,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  backgroundImage(value: 'none' | (string & {})) {
+  backgroundImage(value: CSSProps['background-image']) {
     this.props.set('background-image', value)
     return this
   }
@@ -2827,7 +2690,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  backgroundOrigin(value: string) {
+  backgroundOrigin(value: CSSProps['background-origin']) {
     this.props.set('background-origin', value)
     return this
   }
@@ -2846,7 +2709,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  backgroundPosition(value: string) {
+  backgroundPosition(value: CSSProps['background-position']) {
     this.props.set('background-position', value)
     return this
   }
@@ -2865,7 +2728,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  backgroundRepeat(value: 'logical' | (string & {})) {
+  backgroundRepeat(value: CSSProps['background-repeat']) {
     this.props.set('background-repeat', value)
     return this
   }
@@ -2892,7 +2755,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  backgroundSize(value: 'auto' | 'contain' | 'cover' | (string & {})) {
+  backgroundSize(value: CSSProps['background-size']) {
     this.props.set('background-size', value)
     return this
   }
@@ -2911,7 +2774,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  blockSize(value: 'auto' | (string & {})) {
+  blockSize(value: CSSProps['block-size']) {
     this.props.set('block-size', value)
     return this
   }
@@ -2930,7 +2793,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  border(value: string) {
+  border(value: CSSProps['border']) {
     this.props.set('border', value)
     return this
   }
@@ -2949,7 +2812,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderBlockEnd(value: string) {
+  borderBlockEnd(value: CSSProps['border-block-end']) {
     this.props.set('border-block-end', value)
     return this
   }
@@ -2968,7 +2831,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderBlockStart(value: string) {
+  borderBlockStart(value: CSSProps['border-block-start']) {
     this.props.set('border-block-start', value)
     return this
   }
@@ -2987,7 +2850,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderBlockEndColor(value: string) {
+  borderBlockEndColor(value: CSSProps['border-block-end-color']) {
     this.props.set('border-block-end-color', value)
     return this
   }
@@ -3006,7 +2869,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderBlockStartColor(value: string) {
+  borderBlockStartColor(value: CSSProps['border-block-start-color']) {
     this.props.set('border-block-start-color', value)
     return this
   }
@@ -3025,7 +2888,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderBlockEndStyle(value: string) {
+  borderBlockEndStyle(value: CSSProps['border-block-end-style']) {
     this.props.set('border-block-end-style', value)
     return this
   }
@@ -3044,7 +2907,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderBlockStartStyle(value: string) {
+  borderBlockStartStyle(value: CSSProps['border-block-start-style']) {
     this.props.set('border-block-start-style', value)
     return this
   }
@@ -3063,7 +2926,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderBlockEndWidth(value: string) {
+  borderBlockEndWidth(value: CSSProps['border-block-end-width']) {
     this.props.set('border-block-end-width', value)
     return this
   }
@@ -3082,7 +2945,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderBlockStartWidth(value: string) {
+  borderBlockStartWidth(value: CSSProps['border-block-start-width']) {
     this.props.set('border-block-start-width', value)
     return this
   }
@@ -3101,7 +2964,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderBottom(value: string) {
+  borderBottom(value: CSSProps['border-bottom']) {
     this.props.set('border-bottom', value)
     return this
   }
@@ -3120,7 +2983,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderBottomColor(value: string) {
+  borderBottomColor(value: CSSProps['border-bottom-color']) {
     this.props.set('border-bottom-color', value)
     return this
   }
@@ -3139,7 +3002,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderBottomLeftRadius(value: string) {
+  borderBottomLeftRadius(value: CSSProps['border-bottom-left-radius']) {
     this.props.set('border-bottom-left-radius', value)
     return this
   }
@@ -3158,7 +3021,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderBottomRightRadius(value: string) {
+  borderBottomRightRadius(value: CSSProps['border-bottom-right-radius']) {
     this.props.set('border-bottom-right-radius', value)
     return this
   }
@@ -3177,7 +3040,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderBottomStyle(value: string) {
+  borderBottomStyle(value: CSSProps['border-bottom-style']) {
     this.props.set('border-bottom-style', value)
     return this
   }
@@ -3196,7 +3059,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderBottomWidth(value: string) {
+  borderBottomWidth(value: CSSProps['border-bottom-width']) {
     this.props.set('border-bottom-width', value)
     return this
   }
@@ -3221,7 +3084,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  borderCollapse(value: 'collapse' | 'separate' | (string & {})) {
+  borderCollapse(value: CSSProps['border-collapse']) {
     this.props.set('border-collapse', value)
     return this
   }
@@ -3240,7 +3103,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderColor(value: 'logical' | (string & {})) {
+  borderColor(value: CSSProps['border-color']) {
     this.props.set('border-color', value)
     return this
   }
@@ -3277,18 +3140,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  borderImage(
-    value:
-      | 'auto'
-      | 'fill'
-      | 'none'
-      | 'repeat'
-      | 'round'
-      | 'space'
-      | 'stretch'
-      | 'url()'
-      | (string & {}),
-  ) {
+  borderImage(value: CSSProps['border-image']) {
     this.props.set('border-image', value)
     return this
   }
@@ -3307,7 +3159,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderImageOutset(value: string) {
+  borderImageOutset(value: CSSProps['border-image-outset']) {
     this.props.set('border-image-outset', value)
     return this
   }
@@ -3336,9 +3188,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  borderImageRepeat(
-    value: 'repeat' | 'round' | 'space' | 'stretch' | (string & {}),
-  ) {
+  borderImageRepeat(value: CSSProps['border-image-repeat']) {
     this.props.set('border-image-repeat', value)
     return this
   }
@@ -3357,7 +3207,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderImageSlice(value: 'fill' | (string & {})) {
+  borderImageSlice(value: CSSProps['border-image-slice']) {
     this.props.set('border-image-slice', value)
     return this
   }
@@ -3376,7 +3226,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderImageSource(value: 'none' | (string & {})) {
+  borderImageSource(value: CSSProps['border-image-source']) {
     this.props.set('border-image-source', value)
     return this
   }
@@ -3395,7 +3245,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderImageWidth(value: 'auto' | (string & {})) {
+  borderImageWidth(value: CSSProps['border-image-width']) {
     this.props.set('border-image-width', value)
     return this
   }
@@ -3414,7 +3264,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderInlineEnd(value: string) {
+  borderInlineEnd(value: CSSProps['border-inline-end']) {
     this.props.set('border-inline-end', value)
     return this
   }
@@ -3433,7 +3283,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderInlineStart(value: string) {
+  borderInlineStart(value: CSSProps['border-inline-start']) {
     this.props.set('border-inline-start', value)
     return this
   }
@@ -3452,7 +3302,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderInlineEndColor(value: string) {
+  borderInlineEndColor(value: CSSProps['border-inline-end-color']) {
     this.props.set('border-inline-end-color', value)
     return this
   }
@@ -3471,7 +3321,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderInlineStartColor(value: string) {
+  borderInlineStartColor(value: CSSProps['border-inline-start-color']) {
     this.props.set('border-inline-start-color', value)
     return this
   }
@@ -3490,7 +3340,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderInlineEndStyle(value: string) {
+  borderInlineEndStyle(value: CSSProps['border-inline-end-style']) {
     this.props.set('border-inline-end-style', value)
     return this
   }
@@ -3509,7 +3359,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderInlineStartStyle(value: string) {
+  borderInlineStartStyle(value: CSSProps['border-inline-start-style']) {
     this.props.set('border-inline-start-style', value)
     return this
   }
@@ -3528,7 +3378,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderInlineEndWidth(value: string) {
+  borderInlineEndWidth(value: CSSProps['border-inline-end-width']) {
     this.props.set('border-inline-end-width', value)
     return this
   }
@@ -3547,7 +3397,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderInlineStartWidth(value: string) {
+  borderInlineStartWidth(value: CSSProps['border-inline-start-width']) {
     this.props.set('border-inline-start-width', value)
     return this
   }
@@ -3566,7 +3416,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderLeft(value: string) {
+  borderLeft(value: CSSProps['border-left']) {
     this.props.set('border-left', value)
     return this
   }
@@ -3585,7 +3435,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderLeftColor(value: string) {
+  borderLeftColor(value: CSSProps['border-left-color']) {
     this.props.set('border-left-color', value)
     return this
   }
@@ -3604,7 +3454,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderLeftStyle(value: string) {
+  borderLeftStyle(value: CSSProps['border-left-style']) {
     this.props.set('border-left-style', value)
     return this
   }
@@ -3623,7 +3473,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderLeftWidth(value: string) {
+  borderLeftWidth(value: CSSProps['border-left-width']) {
     this.props.set('border-left-width', value)
     return this
   }
@@ -3642,7 +3492,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderRadius(value: string) {
+  borderRadius(value: CSSProps['border-radius']) {
     this.props.set('border-radius', value)
     return this
   }
@@ -3661,7 +3511,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderRight(value: string) {
+  borderRight(value: CSSProps['border-right']) {
     this.props.set('border-right', value)
     return this
   }
@@ -3680,7 +3530,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderRightColor(value: string) {
+  borderRightColor(value: CSSProps['border-right-color']) {
     this.props.set('border-right-color', value)
     return this
   }
@@ -3699,7 +3549,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderRightStyle(value: string) {
+  borderRightStyle(value: CSSProps['border-right-style']) {
     this.props.set('border-right-style', value)
     return this
   }
@@ -3718,7 +3568,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderRightWidth(value: string) {
+  borderRightWidth(value: CSSProps['border-right-width']) {
     this.props.set('border-right-width', value)
     return this
   }
@@ -3737,7 +3587,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderSpacing(value: string) {
+  borderSpacing(value: CSSProps['border-spacing']) {
     this.props.set('border-spacing', value)
     return this
   }
@@ -3756,7 +3606,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderStyle(value: 'logical' | (string & {})) {
+  borderStyle(value: CSSProps['border-style']) {
     this.props.set('border-style', value)
     return this
   }
@@ -3775,7 +3625,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderTop(value: string) {
+  borderTop(value: CSSProps['border-top']) {
     this.props.set('border-top', value)
     return this
   }
@@ -3794,7 +3644,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderTopColor(value: string) {
+  borderTopColor(value: CSSProps['border-top-color']) {
     this.props.set('border-top-color', value)
     return this
   }
@@ -3813,7 +3663,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderTopLeftRadius(value: string) {
+  borderTopLeftRadius(value: CSSProps['border-top-left-radius']) {
     this.props.set('border-top-left-radius', value)
     return this
   }
@@ -3832,7 +3682,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderTopRightRadius(value: string) {
+  borderTopRightRadius(value: CSSProps['border-top-right-radius']) {
     this.props.set('border-top-right-radius', value)
     return this
   }
@@ -3851,7 +3701,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderTopStyle(value: string) {
+  borderTopStyle(value: CSSProps['border-top-style']) {
     this.props.set('border-top-style', value)
     return this
   }
@@ -3870,7 +3720,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderTopWidth(value: string) {
+  borderTopWidth(value: CSSProps['border-top-width']) {
     this.props.set('border-top-width', value)
     return this
   }
@@ -3889,7 +3739,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  borderWidth(value: 'logical' | (string & {})) {
+  borderWidth(value: CSSProps['border-width']) {
     this.props.set('border-width', value)
     return this
   }
@@ -3908,7 +3758,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  bottom(value: 'auto' | (string & {})) {
+  bottom(value: CSSProps['bottom']) {
     this.props.set('bottom', value)
     return this
   }
@@ -3933,7 +3783,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  boxDecorationBreak(value: 'clone' | 'slice' | (string & {})) {
+  boxDecorationBreak(value: CSSProps['box-decoration-break']) {
     this.props.set('box-decoration-break', value)
     return this
   }
@@ -3958,7 +3808,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  boxShadow(value: 'inset' | 'none' | (string & {})) {
+  boxShadow(value: CSSProps['box-shadow']) {
     this.props.set('box-shadow', value)
     return this
   }
@@ -3983,7 +3833,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  boxSizing(value: 'border-box' | 'content-box' | (string & {})) {
+  boxSizing(value: CSSProps['box-sizing']) {
     this.props.set('box-sizing', value)
     return this
   }
@@ -4016,16 +3866,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  captionSide(
-    value:
-      | 'block-end'
-      | 'block-start'
-      | 'bottom'
-      | 'inline-end'
-      | 'inline-start'
-      | 'top'
-      | (string & {}),
-  ) {
+  captionSide(value: CSSProps['caption-side']) {
     this.props.set('caption-side', value)
     return this
   }
@@ -4044,7 +3885,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  caretColor(value: 'auto' | (string & {})) {
+  caretColor(value: CSSProps['caret-color']) {
     this.props.set('caret-color', value)
     return this
   }
@@ -4077,16 +3918,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  clear(
-    value:
-      | 'both'
-      | 'inline-end'
-      | 'inline-start'
-      | 'left'
-      | 'none'
-      | 'right'
-      | (string & {}),
-  ) {
+  clear(value: CSSProps['clear']) {
     this.props.set('clear', value)
     return this
   }
@@ -4111,7 +3943,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  clip(value: 'auto' | 'rect()' | (string & {})) {
+  clip(value: CSSProps['clip']) {
     this.props.set('clip', value)
     return this
   }
@@ -4136,7 +3968,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  clipPath(value: 'none' | 'url()' | (string & {})) {
+  clipPath(value: CSSProps['clip-path']) {
     this.props.set('clip-path', value)
     return this
   }
@@ -4161,7 +3993,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  clipRule(value: 'evenodd' | 'nonzero' | (string & {})) {
+  clipRule(value: CSSProps['clip-rule']) {
     this.props.set('clip-rule', value)
     return this
   }
@@ -4180,7 +4012,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  color(value: string) {
+  color(value: CSSProps['color']) {
     this.props.set('color', value)
     return this
   }
@@ -4207,9 +4039,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  colorInterpolationFilters(
-    value: 'auto' | 'linearRGB' | 'sRGB' | (string & {}),
-  ) {
+  colorInterpolationFilters(value: CSSProps['color-interpolation-filters']) {
     this.props.set('color-interpolation-filters', value)
     return this
   }
@@ -4228,7 +4058,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  columnCount(value: 'auto' | (string & {})) {
+  columnCount(value: CSSProps['column-count']) {
     this.props.set('column-count', value)
     return this
   }
@@ -4253,7 +4083,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  columnFill(value: 'auto' | 'balance' | (string & {})) {
+  columnFill(value: CSSProps['column-fill']) {
     this.props.set('column-fill', value)
     return this
   }
@@ -4272,7 +4102,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  columnGap(value: 'normal' | (string & {})) {
+  columnGap(value: CSSProps['column-gap']) {
     this.props.set('column-gap', value)
     return this
   }
@@ -4291,7 +4121,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  columnRule(value: string) {
+  columnRule(value: CSSProps['column-rule']) {
     this.props.set('column-rule', value)
     return this
   }
@@ -4310,7 +4140,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  columnRuleStyle(value: string) {
+  columnRuleStyle(value: CSSProps['column-rule-style']) {
     this.props.set('column-rule-style', value)
     return this
   }
@@ -4329,7 +4159,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  columnRuleWidth(value: string) {
+  columnRuleWidth(value: CSSProps['column-rule-width']) {
     this.props.set('column-rule-width', value)
     return this
   }
@@ -4348,7 +4178,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  columns(value: 'auto' | (string & {})) {
+  columns(value: CSSProps['columns']) {
     this.props.set('columns', value)
     return this
   }
@@ -4373,7 +4203,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  columnSpan(value: 'all' | 'none' | (string & {})) {
+  columnSpan(value: CSSProps['column-span']) {
     this.props.set('column-span', value)
     return this
   }
@@ -4404,15 +4234,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  columnWidth(
-    value:
-      | 'auto'
-      | 'fill'
-      | 'fit-content'
-      | 'max-content'
-      | 'min-content'
-      | (string & {}),
-  ) {
+  columnWidth(value: CSSProps['column-width']) {
     this.props.set('column-width', value)
     return this
   }
@@ -4447,17 +4269,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  contain(
-    value:
-      | 'none'
-      | 'strict'
-      | 'content'
-      | 'size'
-      | 'layout'
-      | 'style'
-      | 'paint'
-      | (string & {}),
-  ) {
+  contain(value: CSSProps['contain']) {
     this.props.set('contain', value)
     return this
   }
@@ -4536,39 +4348,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  content(
-    value:
-      | 'attr()'
-      | 'box'
-      | 'check'
-      | 'circle'
-      | 'close-quote'
-      | 'contents'
-      | 'counter(name)'
-      | 'counter(name, style)'
-      | 'counters(name, string)'
-      | 'counters(name, string, style)'
-      | 'date(format)'
-      | 'diamond'
-      | 'disc'
-      | 'endnote'
-      | 'footnote'
-      | 'hyphen'
-      | 'icon'
-      | 'inhibit'
-      | 'list-item'
-      | 'no-close-quote'
-      | 'none'
-      | 'no-open-quote'
-      | 'normal'
-      | 'open-quote'
-      | 'pending()'
-      | 'section-note'
-      | 'square'
-      | 'string(name)'
-      | 'url()'
-      | (string & {}),
-  ) {
+  content(value: CSSProps['content']) {
     this.props.set('content', value)
     return this
   }
@@ -4587,7 +4367,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  counterIncrement(value: 'none' | (string & {})) {
+  counterIncrement(value: CSSProps['counter-increment']) {
     this.props.set('counter-increment', value)
     return this
   }
@@ -4606,7 +4386,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  counterReset(value: 'none' | (string & {})) {
+  counterReset(value: CSSProps['counter-reset']) {
     this.props.set('counter-reset', value)
     return this
   }
@@ -4715,54 +4495,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  cursor(
-    value:
-      | 'alias'
-      | 'all-scroll'
-      | 'auto'
-      | 'cell'
-      | 'col-resize'
-      | 'context-menu'
-      | 'copy'
-      | 'crosshair'
-      | 'default'
-      | 'e-resize'
-      | 'ew-resize'
-      | 'grab'
-      | 'grabbing'
-      | 'help'
-      | 'move'
-      | '-moz-grab'
-      | '-moz-grabbing'
-      | '-moz-zoom-in'
-      | '-moz-zoom-out'
-      | 'ne-resize'
-      | 'nesw-resize'
-      | 'no-drop'
-      | 'none'
-      | 'not-allowed'
-      | 'n-resize'
-      | 'ns-resize'
-      | 'nw-resize'
-      | 'nwse-resize'
-      | 'pointer'
-      | 'progress'
-      | 'row-resize'
-      | 'se-resize'
-      | 's-resize'
-      | 'sw-resize'
-      | 'text'
-      | 'vertical-text'
-      | 'wait'
-      | '-webkit-grab'
-      | '-webkit-grabbing'
-      | '-webkit-zoom-in'
-      | '-webkit-zoom-out'
-      | 'w-resize'
-      | 'zoom-in'
-      | 'zoom-out'
-      | (string & {}),
-  ) {
+  cursor(value: CSSProps['cursor']) {
     this.props.set('cursor', value)
     return this
   }
@@ -4787,7 +4520,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  direction(value: 'ltr' | 'rtl' | (string & {})) {
+  direction(value: CSSProps['direction']) {
     this.props.set('direction', value)
     return this
   }
@@ -4912,62 +4645,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  display(
-    value:
-      | 'block'
-      | 'contents'
-      | 'flex'
-      | 'flexbox'
-      | 'flow'
-      | 'flow-root'
-      | 'grid'
-      | 'inline'
-      | 'inline-block'
-      | 'inline-flex'
-      | 'inline-flexbox'
-      | 'inline-grid'
-      | 'inline-table'
-      | 'list-item'
-      | '-moz-box'
-      | '-moz-deck'
-      | '-moz-grid'
-      | '-moz-grid-group'
-      | '-moz-grid-line'
-      | '-moz-groupbox'
-      | '-moz-inline-box'
-      | '-moz-inline-grid'
-      | '-moz-inline-stack'
-      | '-moz-marker'
-      | '-moz-popup'
-      | '-moz-stack'
-      | '-ms-flexbox'
-      | '-ms-grid'
-      | '-ms-inline-flexbox'
-      | '-ms-inline-grid'
-      | 'none'
-      | 'ruby'
-      | 'ruby-base'
-      | 'ruby-base-container'
-      | 'ruby-base-group'
-      | 'ruby-text'
-      | 'ruby-text-container'
-      | 'ruby-text-group'
-      | 'run-in'
-      | 'table'
-      | 'table-caption'
-      | 'table-cell'
-      | 'table-column'
-      | 'table-column-group'
-      | 'table-footer-group'
-      | 'table-header-group'
-      | 'table-row'
-      | 'table-row-group'
-      | '-webkit-box'
-      | '-webkit-flex'
-      | '-webkit-inline-box'
-      | '-webkit-inline-flex'
-      | (string & {}),
-  ) {
+  display(value: CSSProps['display']) {
     this.props.set('display', value)
     return this
   }
@@ -4994,7 +4672,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  emptyCells(value: 'hide' | '-moz-show-background' | 'show' | (string & {})) {
+  emptyCells(value: CSSProps['empty-cells']) {
     this.props.set('empty-cells', value)
     return this
   }
@@ -5019,7 +4697,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  enableBackground(value: 'accumulate' | 'new' | (string & {})) {
+  enableBackground(value: CSSProps['enable-background']) {
     this.props.set('enable-background', value)
     return this
   }
@@ -5038,7 +4716,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  fallback(value: string) {
+  fallback(value: CSSProps['fallback']) {
     this.props.set('fallback', value)
     return this
   }
@@ -5071,16 +4749,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  fill(
-    value:
-      | 'child'
-      | 'child()'
-      | 'context-fill'
-      | 'context-stroke'
-      | 'url()'
-      | 'none'
-      | (string & {}),
-  ) {
+  fill(value: CSSProps['fill']) {
     this.props.set('fill', value)
     return this
   }
@@ -5099,7 +4768,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  fillOpacity(value: number) {
+  fillOpacity(value: CSSProps['fill-opacity']) {
     this.props.set('fill-opacity', value)
     return this
   }
@@ -5124,7 +4793,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  fillRule(value: 'evenodd' | 'nonzero' | (string & {})) {
+  fillRule(value: CSSProps['fill-rule']) {
     this.props.set('fill-rule', value)
     return this
   }
@@ -5169,22 +4838,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  filter(
-    value:
-      | 'none'
-      | 'blur()'
-      | 'brightness()'
-      | 'contrast()'
-      | 'drop-shadow()'
-      | 'grayscale()'
-      | 'hue-rotate()'
-      | 'invert()'
-      | 'opacity()'
-      | 'saturate()'
-      | 'sepia()'
-      | 'url()'
-      | (string & {}),
-  ) {
+  filter(value: CSSProps['filter']) {
     this.props.set('filter', value)
     return this
   }
@@ -5211,7 +4865,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  flex(value: 'auto' | 'content' | 'none' | (string & {})) {
+  flex(value: CSSProps['flex']) {
     this.props.set('flex', value)
     return this
   }
@@ -5236,7 +4890,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  flexBasis(value: 'auto' | 'content' | (string & {})) {
+  flexBasis(value: CSSProps['flex-basis']) {
     this.props.set('flex-basis', value)
     return this
   }
@@ -5265,9 +4919,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  flexDirection(
-    value: 'column' | 'column-reverse' | 'row' | 'row-reverse' | (string & {}),
-  ) {
+  flexDirection(value: CSSProps['flex-direction']) {
     this.props.set('flex-direction', value)
     return this
   }
@@ -5302,17 +4954,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  flexFlow(
-    value:
-      | 'column'
-      | 'column-reverse'
-      | 'nowrap'
-      | 'row'
-      | 'row-reverse'
-      | 'wrap'
-      | 'wrap-reverse'
-      | (string & {}),
-  ) {
+  flexFlow(value: CSSProps['flex-flow']) {
     this.props.set('flex-flow', value)
     return this
   }
@@ -5331,7 +4973,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  flexGrow(value: number) {
+  flexGrow(value: CSSProps['flex-grow']) {
     this.props.set('flex-grow', value)
     return this
   }
@@ -5350,7 +4992,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  flexShrink(value: number) {
+  flexShrink(value: CSSProps['flex-shrink']) {
     this.props.set('flex-shrink', value)
     return this
   }
@@ -5377,7 +5019,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  flexWrap(value: 'nowrap' | 'wrap' | 'wrap-reverse' | (string & {})) {
+  flexWrap(value: CSSProps['flex-wrap']) {
     this.props.set('flex-wrap', value)
     return this
   }
@@ -5408,15 +5050,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  float(
-    value:
-      | 'inline-end'
-      | 'inline-start'
-      | 'left'
-      | 'none'
-      | 'right'
-      | (string & {}),
-  ) {
+  float(value: CSSProps['float']) {
     this.props.set('float', value)
     return this
   }
@@ -5435,7 +5069,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  floodColor(value: string) {
+  floodColor(value: CSSProps['flood-color']) {
     this.props.set('flood-color', value)
     return this
   }
@@ -5454,7 +5088,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  floodOpacity(value: string) {
+  floodOpacity(value: CSSProps['flood-opacity']) {
     this.props.set('flood-opacity', value)
     return this
   }
@@ -5537,41 +5171,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  font(
-    value:
-      | '100'
-      | '200'
-      | '300'
-      | '400'
-      | '500'
-      | '600'
-      | '700'
-      | '800'
-      | '900'
-      | 'bold'
-      | 'bolder'
-      | 'caption'
-      | 'icon'
-      | 'italic'
-      | 'large'
-      | 'larger'
-      | 'lighter'
-      | 'medium'
-      | 'menu'
-      | 'message-box'
-      | 'normal'
-      | 'oblique'
-      | 'small'
-      | 'small-caps'
-      | 'small-caption'
-      | 'smaller'
-      | 'status-bar'
-      | 'x-large'
-      | 'x-small'
-      | 'xx-large'
-      | 'xx-small'
-      | (string & {}),
-  ) {
+  font(value: CSSProps['font']) {
     this.props.set('font', value)
     return this
   }
@@ -5628,28 +5228,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  fontFamily(
-    value:
-      | "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
-      | 'Arial, Helvetica, sans-serif'
-      | "Cambria, Cochin, Georgia, Times, 'Times New Roman', serif"
-      | "'Courier New', Courier, monospace"
-      | 'cursive'
-      | 'fantasy'
-      | "'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif"
-      | "Georgia, 'Times New Roman', Times, serif"
-      | "'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif"
-      | "Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif"
-      | "'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif"
-      | 'monospace'
-      | 'sans-serif'
-      | "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
-      | 'serif'
-      | "'Times New Roman', Times, serif"
-      | "'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif"
-      | 'Verdana, Geneva, Tahoma, sans-serif'
-      | (string & {}),
-  ) {
+  fontFamily(value: CSSProps['font-family']) {
     this.props.set('font-family', value)
     return this
   }
@@ -5910,130 +5489,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  fontFeatureSettings(
-    value:
-      | 'aalt'
-      | 'abvf'
-      | 'abvm'
-      | 'abvs'
-      | 'afrc'
-      | 'akhn'
-      | 'blwf'
-      | 'blwm'
-      | 'blws'
-      | 'calt'
-      | 'case'
-      | 'ccmp'
-      | 'cfar'
-      | 'cjct'
-      | 'clig'
-      | 'cpct'
-      | 'cpsp'
-      | 'cswh'
-      | 'curs'
-      | 'c2pc'
-      | 'c2sc'
-      | 'dist'
-      | 'dlig'
-      | 'dnom'
-      | 'dtls'
-      | 'expt'
-      | 'falt'
-      | 'fin2'
-      | 'fin3'
-      | 'fina'
-      | 'flac'
-      | 'frac'
-      | 'fwid'
-      | 'half'
-      | 'haln'
-      | 'halt'
-      | 'hist'
-      | 'hkna'
-      | 'hlig'
-      | 'hngl'
-      | 'hojo'
-      | 'hwid'
-      | 'init'
-      | 'isol'
-      | 'ital'
-      | 'jalt'
-      | 'jp78'
-      | 'jp83'
-      | 'jp90'
-      | 'jp04'
-      | 'kern'
-      | 'lfbd'
-      | 'liga'
-      | 'ljmo'
-      | 'lnum'
-      | 'locl'
-      | 'ltra'
-      | 'ltrm'
-      | 'mark'
-      | 'med2'
-      | 'medi'
-      | 'mgrk'
-      | 'mkmk'
-      | 'nalt'
-      | 'nlck'
-      | 'nukt'
-      | 'numr'
-      | 'onum'
-      | 'opbd'
-      | 'ordn'
-      | 'ornm'
-      | 'palt'
-      | 'pcap'
-      | 'pkna'
-      | 'pnum'
-      | 'pref'
-      | 'pres'
-      | 'pstf'
-      | 'psts'
-      | 'pwid'
-      | 'qwid'
-      | 'rand'
-      | 'rclt'
-      | 'rlig'
-      | 'rkrf'
-      | 'rphf'
-      | 'rtbd'
-      | 'rtla'
-      | 'rtlm'
-      | 'ruby'
-      | 'salt'
-      | 'sinf'
-      | 'size'
-      | 'smcp'
-      | 'smpl'
-      | 'ssty'
-      | 'stch'
-      | 'subs'
-      | 'sups'
-      | 'swsh'
-      | 'titl'
-      | 'tjmo'
-      | 'tnam'
-      | 'tnum'
-      | 'trad'
-      | 'twid'
-      | 'unic'
-      | 'valt'
-      | 'vatu'
-      | 'vert'
-      | 'vhal'
-      | 'vjmo'
-      | 'vkna'
-      | 'vkrn'
-      | 'vpal'
-      | 'vrt2'
-      | 'zero'
-      | 'normal'
-      | 'off'
-      | 'on'
-      | (string & {}),
-  ) {
+  fontFeatureSettings(value: CSSProps['font-feature-settings']) {
     this.props.set('font-feature-settings', value)
     return this
   }
@@ -6060,7 +5516,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  fontKerning(value: 'auto' | 'none' | 'normal' | (string & {})) {
+  fontKerning(value: CSSProps['font-kerning']) {
     this.props.set('font-kerning', value)
     return this
   }
@@ -6079,7 +5535,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  fontLanguageOverride(value: 'normal' | (string & {})) {
+  fontLanguageOverride(value: CSSProps['font-language-override']) {
     this.props.set('font-language-override', value)
     return this
   }
@@ -6118,19 +5574,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  fontSize(
-    value:
-      | 'large'
-      | 'larger'
-      | 'medium'
-      | 'small'
-      | 'smaller'
-      | 'x-large'
-      | 'x-small'
-      | 'xx-large'
-      | 'xx-small'
-      | (string & {}),
-  ) {
+  fontSize(value: CSSProps['font-size']) {
     this.props.set('font-size', value)
     return this
   }
@@ -6149,7 +5593,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  fontSizeAdjust(value: number) {
+  fontSizeAdjust(value: CSSProps['font-size-adjust']) {
     this.props.set('font-size-adjust', value)
     return this
   }
@@ -6192,21 +5636,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  fontStretch(
-    value:
-      | 'condensed'
-      | 'expanded'
-      | 'extra-condensed'
-      | 'extra-expanded'
-      | 'narrower'
-      | 'normal'
-      | 'semi-condensed'
-      | 'semi-expanded'
-      | 'ultra-condensed'
-      | 'ultra-expanded'
-      | 'wider'
-      | (string & {}),
-  ) {
+  fontStretch(value: CSSProps['font-stretch']) {
     this.props.set('font-stretch', value)
     return this
   }
@@ -6233,7 +5663,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  fontStyle(value: 'italic' | 'normal' | 'oblique' | (string & {})) {
+  fontStyle(value: CSSProps['font-style']) {
     this.props.set('font-style', value)
     return this
   }
@@ -6260,7 +5690,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  fontSynthesis(value: 'none' | 'style' | 'weight' | (string & {})) {
+  fontSynthesis(value: CSSProps['font-synthesis']) {
     this.props.set('font-synthesis', value)
     return this
   }
@@ -6285,7 +5715,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  fontVariant(value: 'normal' | 'small-caps' | (string & {})) {
+  fontVariant(value: CSSProps['font-variant']) {
     this.props.set('font-variant', value)
     return this
   }
@@ -6322,18 +5752,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  fontVariantAlternates(
-    value:
-      | 'annotation()'
-      | 'character-variant()'
-      | 'historical-forms'
-      | 'normal'
-      | 'ornaments()'
-      | 'styleset()'
-      | 'stylistic()'
-      | 'swash()'
-      | (string & {}),
-  ) {
+  fontVariantAlternates(value: CSSProps['font-variant-alternates']) {
     this.props.set('font-variant-alternates', value)
     return this
   }
@@ -6368,17 +5787,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  fontVariantCaps(
-    value:
-      | 'all-petite-caps'
-      | 'all-small-caps'
-      | 'normal'
-      | 'petite-caps'
-      | 'small-caps'
-      | 'titling-caps'
-      | 'unicase'
-      | (string & {}),
-  ) {
+  fontVariantCaps(value: CSSProps['font-variant-caps']) {
     this.props.set('font-variant-caps', value)
     return this
   }
@@ -6419,20 +5828,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  fontVariantEastAsian(
-    value:
-      | 'full-width'
-      | 'jis04'
-      | 'jis78'
-      | 'jis83'
-      | 'jis90'
-      | 'normal'
-      | 'proportional-width'
-      | 'ruby'
-      | 'simplified'
-      | 'traditional'
-      | (string & {}),
-  ) {
+  fontVariantEastAsian(value: CSSProps['font-variant-east-asian']) {
     this.props.set('font-variant-east-asian', value)
     return this
   }
@@ -6477,22 +5873,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  fontVariantLigatures(
-    value:
-      | 'additional-ligatures'
-      | 'common-ligatures'
-      | 'contextual'
-      | 'discretionary-ligatures'
-      | 'historical-ligatures'
-      | 'no-additional-ligatures'
-      | 'no-common-ligatures'
-      | 'no-contextual'
-      | 'no-discretionary-ligatures'
-      | 'no-historical-ligatures'
-      | 'none'
-      | 'normal'
-      | (string & {}),
-  ) {
+  fontVariantLigatures(value: CSSProps['font-variant-ligatures']) {
     this.props.set('font-variant-ligatures', value)
     return this
   }
@@ -6531,19 +5912,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  fontVariantNumeric(
-    value:
-      | 'diagonal-fractions'
-      | 'lining-nums'
-      | 'normal'
-      | 'oldstyle-nums'
-      | 'ordinal'
-      | 'proportional-nums'
-      | 'slashed-zero'
-      | 'stacked-fractions'
-      | 'tabular-nums'
-      | (string & {}),
-  ) {
+  fontVariantNumeric(value: CSSProps['font-variant-numeric']) {
     this.props.set('font-variant-numeric', value)
     return this
   }
@@ -6570,7 +5939,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  fontVariantPosition(value: 'normal' | 'sub' | 'super' | (string & {})) {
+  fontVariantPosition(value: CSSProps['font-variant-position']) {
     this.props.set('font-variant-position', value)
     return this
   }
@@ -6617,23 +5986,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  fontWeight(
-    value:
-      | '100'
-      | '200'
-      | '300'
-      | '400'
-      | '500'
-      | '600'
-      | '700'
-      | '800'
-      | '900'
-      | 'bold'
-      | 'bolder'
-      | 'lighter'
-      | 'normal'
-      | (string & {}),
-  ) {
+  fontWeight(value: CSSProps['font-weight']) {
     this.props.set('font-weight', value)
     return this
   }
@@ -6652,7 +6005,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  glyphOrientationHorizontal(value: string) {
+  glyphOrientationHorizontal(value: CSSProps['glyph-orientation-horizontal']) {
     this.props.set('glyph-orientation-horizontal', value)
     return this
   }
@@ -6671,7 +6024,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  glyphOrientationVertical(value: 'auto' | (string & {})) {
+  glyphOrientationVertical(value: CSSProps['glyph-orientation-vertical']) {
     this.props.set('glyph-orientation-vertical', value)
     return this
   }
@@ -6696,7 +6049,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  gridArea(value: 'auto' | 'span' | (string & {})) {
+  gridArea(value: CSSProps['grid-area']) {
     this.props.set('grid-area', value)
     return this
   }
@@ -6715,7 +6068,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  grid(value: string) {
+  grid(value: CSSProps['grid']) {
     this.props.set('grid', value)
     return this
   }
@@ -6744,9 +6097,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  gridAutoColumns(
-    value: 'min-content' | 'max-content' | 'auto' | 'minmax()' | (string & {}),
-  ) {
+  gridAutoColumns(value: CSSProps['grid-auto-columns']) {
     this.props.set('grid-auto-columns', value)
     return this
   }
@@ -6773,7 +6124,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  gridAutoFlow(value: 'row' | 'column' | 'dense' | (string & {})) {
+  gridAutoFlow(value: CSSProps['grid-auto-flow']) {
     this.props.set('grid-auto-flow', value)
     return this
   }
@@ -6802,9 +6153,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  gridAutoRows(
-    value: 'min-content' | 'max-content' | 'auto' | 'minmax()' | (string & {}),
-  ) {
+  gridAutoRows(value: CSSProps['grid-auto-rows']) {
     this.props.set('grid-auto-rows', value)
     return this
   }
@@ -6829,7 +6178,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  gridColumn(value: 'auto' | 'span' | (string & {})) {
+  gridColumn(value: CSSProps['grid-column']) {
     this.props.set('grid-column', value)
     return this
   }
@@ -6854,7 +6203,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  gridColumnEnd(value: 'auto' | 'span' | (string & {})) {
+  gridColumnEnd(value: CSSProps['grid-column-end']) {
     this.props.set('grid-column-end', value)
     return this
   }
@@ -6873,7 +6222,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  gridColumnGap(value: string) {
+  gridColumnGap(value: CSSProps['grid-column-gap']) {
     this.props.set('grid-column-gap', value)
     return this
   }
@@ -6898,7 +6247,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  gridColumnStart(value: 'auto' | 'span' | (string & {})) {
+  gridColumnStart(value: CSSProps['grid-column-start']) {
     this.props.set('grid-column-start', value)
     return this
   }
@@ -6917,7 +6266,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  gridGap(value: string) {
+  gridGap(value: CSSProps['grid-gap']) {
     this.props.set('grid-gap', value)
     return this
   }
@@ -6942,7 +6291,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  gridRow(value: 'auto' | 'span' | (string & {})) {
+  gridRow(value: CSSProps['grid-row']) {
     this.props.set('grid-row', value)
     return this
   }
@@ -6967,7 +6316,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  gridRowEnd(value: 'auto' | 'span' | (string & {})) {
+  gridRowEnd(value: CSSProps['grid-row-end']) {
     this.props.set('grid-row-end', value)
     return this
   }
@@ -6986,7 +6335,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  gridRowGap(value: string) {
+  gridRowGap(value: CSSProps['grid-row-gap']) {
     this.props.set('grid-row-gap', value)
     return this
   }
@@ -7011,7 +6360,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  gridRowStart(value: 'auto' | 'span' | (string & {})) {
+  gridRowStart(value: CSSProps['grid-row-start']) {
     this.props.set('grid-row-start', value)
     return this
   }
@@ -7046,17 +6395,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  gridTemplate(
-    value:
-      | 'none'
-      | 'min-content'
-      | 'max-content'
-      | 'auto'
-      | 'subgrid'
-      | 'minmax()'
-      | 'repeat()'
-      | (string & {}),
-  ) {
+  gridTemplate(value: CSSProps['grid-template']) {
     this.props.set('grid-template', value)
     return this
   }
@@ -7075,7 +6414,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  gridTemplateAreas(value: 'none' | (string & {})) {
+  gridTemplateAreas(value: CSSProps['grid-template-areas']) {
     this.props.set('grid-template-areas', value)
     return this
   }
@@ -7110,17 +6449,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  gridTemplateColumns(
-    value:
-      | 'none'
-      | 'min-content'
-      | 'max-content'
-      | 'auto'
-      | 'subgrid'
-      | 'minmax()'
-      | 'repeat()'
-      | (string & {}),
-  ) {
+  gridTemplateColumns(value: CSSProps['grid-template-columns']) {
     this.props.set('grid-template-columns', value)
     return this
   }
@@ -7155,17 +6484,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  gridTemplateRows(
-    value:
-      | 'none'
-      | 'min-content'
-      | 'max-content'
-      | 'auto'
-      | 'subgrid'
-      | 'minmax()'
-      | 'repeat()'
-      | (string & {}),
-  ) {
+  gridTemplateRows(value: CSSProps['grid-template-rows']) {
     this.props.set('grid-template-rows', value)
     return this
   }
@@ -7196,15 +6515,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  height(
-    value:
-      | 'auto'
-      | 'fill'
-      | 'fit-content'
-      | 'max-content'
-      | 'min-content'
-      | (string & {}),
-  ) {
+  height(value: CSSProps['height']) {
     this.props.set('height', value)
     return this
   }
@@ -7231,7 +6542,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  hyphens(value: 'auto' | 'manual' | 'none' | (string & {})) {
+  hyphens(value: CSSProps['hyphens']) {
     this.props.set('hyphens', value)
     return this
   }
@@ -7256,7 +6567,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  imageOrientation(value: 'flip' | 'from-image' | (string & {})) {
+  imageOrientation(value: CSSProps['image-orientation']) {
     this.props.set('image-orientation', value)
     return this
   }
@@ -7289,16 +6600,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  imageRendering(
-    value:
-      | 'auto'
-      | 'crisp-edges'
-      | '-moz-crisp-edges'
-      | 'optimizeQuality'
-      | 'optimizeSpeed'
-      | 'pixelated'
-      | (string & {}),
-  ) {
+  imageRendering(value: CSSProps['image-rendering']) {
     this.props.set('image-rendering', value)
     return this
   }
@@ -7329,15 +6631,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  imeMode(
-    value:
-      | 'active'
-      | 'auto'
-      | 'disabled'
-      | 'inactive'
-      | 'normal'
-      | (string & {}),
-  ) {
+  imeMode(value: CSSProps['ime-mode']) {
     this.props.set('ime-mode', value)
     return this
   }
@@ -7356,7 +6650,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  inlineSize(value: 'auto' | (string & {})) {
+  inlineSize(value: CSSProps['inline-size']) {
     this.props.set('inline-size', value)
     return this
   }
@@ -7381,7 +6675,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  isolation(value: 'auto' | 'isolate' | (string & {})) {
+  isolation(value: CSSProps['isolation']) {
     this.props.set('isolation', value)
     return this
   }
@@ -7434,26 +6728,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  justifyContent(
-    value:
-      | 'center'
-      | 'start'
-      | 'end'
-      | 'left'
-      | 'right'
-      | 'safe'
-      | 'unsafe'
-      | 'stretch'
-      | 'space-evenly'
-      | 'flex-end'
-      | 'flex-start'
-      | 'space-around'
-      | 'space-between'
-      | 'baseline'
-      | 'first baseline'
-      | 'last baseline'
-      | (string & {}),
-  ) {
+  justifyContent(value: CSSProps['justify-content']) {
     this.props.set('justify-content', value)
     return this
   }
@@ -7472,7 +6747,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  kerning(value: 'auto' | (string & {})) {
+  kerning(value: CSSProps['kerning']) {
     this.props.set('kerning', value)
     return this
   }
@@ -7491,7 +6766,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  left(value: 'auto' | (string & {})) {
+  left(value: CSSProps['left']) {
     this.props.set('left', value)
     return this
   }
@@ -7510,7 +6785,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  letterSpacing(value: 'normal' | (string & {})) {
+  letterSpacing(value: CSSProps['letter-spacing']) {
     this.props.set('letter-spacing', value)
     return this
   }
@@ -7529,7 +6804,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  lightingColor(value: string) {
+  lightingColor(value: CSSProps['lighting-color']) {
     this.props.set('lighting-color', value)
     return this
   }
@@ -7560,9 +6835,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  lineBreak(
-    value: 'auto' | 'loose' | 'normal' | 'strict' | 'anywhere' | (string & {}),
-  ) {
+  lineBreak(value: CSSProps['line-break']) {
     this.props.set('line-break', value)
     return this
   }
@@ -7581,7 +6854,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  lineHeight(value: 'normal' | (string & {})) {
+  lineHeight(value: CSSProps['line-height']) {
     this.props.set('line-height', value)
     return this
   }
@@ -7642,30 +6915,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  listStyle(
-    value:
-      | 'armenian'
-      | 'circle'
-      | 'decimal'
-      | 'decimal-leading-zero'
-      | 'disc'
-      | 'georgian'
-      | 'hanging'
-      | 'inside'
-      | 'lower-alpha'
-      | 'lower-greek'
-      | 'lower-latin'
-      | 'lower-roman'
-      | 'none'
-      | 'outside'
-      | 'square'
-      | 'symbols()'
-      | 'upper-alpha'
-      | 'upper-latin'
-      | 'upper-roman'
-      | 'url()'
-      | (string & {}),
-  ) {
+  listStyle(value: CSSProps['list-style']) {
     this.props.set('list-style', value)
     return this
   }
@@ -7684,7 +6934,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  listStyleImage(value: 'none' | (string & {})) {
+  listStyleImage(value: CSSProps['list-style-image']) {
     this.props.set('list-style-image', value)
     return this
   }
@@ -7709,7 +6959,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  listStylePosition(value: 'inside' | 'outside' | (string & {})) {
+  listStylePosition(value: CSSProps['list-style-position']) {
     this.props.set('list-style-position', value)
     return this
   }
@@ -7822,56 +7072,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  listStyleType(
-    value:
-      | 'arabic-indic'
-      | 'armenian'
-      | 'bengali'
-      | 'cambodian'
-      | 'circle'
-      | 'cjk-decimal'
-      | 'cjk-earthly-branch'
-      | 'cjk-heavenly-stem'
-      | 'decimal'
-      | 'decimal-leading-zero'
-      | 'devanagari'
-      | 'disc'
-      | 'disclosure-closed'
-      | 'disclosure-open'
-      | 'georgian'
-      | 'gujarati'
-      | 'gurmukhi'
-      | 'hebrew'
-      | 'hiragana'
-      | 'hiragana-iroha'
-      | 'kannada'
-      | 'katakana'
-      | 'katakana-iroha'
-      | 'khmer'
-      | 'lao'
-      | 'lower-alpha'
-      | 'lower-armenian'
-      | 'lower-greek'
-      | 'lower-latin'
-      | 'lower-roman'
-      | 'malayalam'
-      | 'mongolian'
-      | 'myanmar'
-      | 'none'
-      | 'oriya'
-      | 'persian'
-      | 'square'
-      | 'tamil'
-      | 'telugu'
-      | 'thai'
-      | 'tibetan'
-      | 'symbols()'
-      | 'upper-alpha'
-      | 'upper-armenian'
-      | 'upper-latin'
-      | 'upper-roman'
-      | (string & {}),
-  ) {
+  listStyleType(value: CSSProps['list-style-type']) {
     this.props.set('list-style-type', value)
     return this
   }
@@ -7896,7 +7097,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  margin(value: 'auto' | 'logical' | (string & {})) {
+  margin(value: CSSProps['margin']) {
     this.props.set('margin', value)
     return this
   }
@@ -7915,7 +7116,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  marginBlockEnd(value: 'auto' | (string & {})) {
+  marginBlockEnd(value: CSSProps['margin-block-end']) {
     this.props.set('margin-block-end', value)
     return this
   }
@@ -7934,7 +7135,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  marginBlockStart(value: 'auto' | (string & {})) {
+  marginBlockStart(value: CSSProps['margin-block-start']) {
     this.props.set('margin-block-start', value)
     return this
   }
@@ -7953,7 +7154,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  marginBottom(value: 'auto' | (string & {})) {
+  marginBottom(value: CSSProps['margin-bottom']) {
     this.props.set('margin-bottom', value)
     return this
   }
@@ -7972,7 +7173,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  marginInlineEnd(value: 'auto' | (string & {})) {
+  marginInlineEnd(value: CSSProps['margin-inline-end']) {
     this.props.set('margin-inline-end', value)
     return this
   }
@@ -7991,7 +7192,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  marginInlineStart(value: 'auto' | (string & {})) {
+  marginInlineStart(value: CSSProps['margin-inline-start']) {
     this.props.set('margin-inline-start', value)
     return this
   }
@@ -8010,7 +7211,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  marginLeft(value: 'auto' | (string & {})) {
+  marginLeft(value: CSSProps['margin-left']) {
     this.props.set('margin-left', value)
     return this
   }
@@ -8029,7 +7230,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  marginRight(value: 'auto' | (string & {})) {
+  marginRight(value: CSSProps['margin-right']) {
     this.props.set('margin-right', value)
     return this
   }
@@ -8048,7 +7249,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  marginTop(value: 'auto' | (string & {})) {
+  marginTop(value: CSSProps['margin-top']) {
     this.props.set('margin-top', value)
     return this
   }
@@ -8075,7 +7276,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  marker(value: 'none' | 'child' | 'url()' | (string & {})) {
+  marker(value: CSSProps['marker']) {
     this.props.set('marker', value)
     return this
   }
@@ -8102,7 +7303,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  markerEnd(value: 'none' | 'child' | 'url()' | (string & {})) {
+  markerEnd(value: CSSProps['marker-end']) {
     this.props.set('marker-end', value)
     return this
   }
@@ -8129,7 +7330,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  markerMid(value: 'none' | 'child' | 'url()' | (string & {})) {
+  markerMid(value: CSSProps['marker-mid']) {
     this.props.set('marker-mid', value)
     return this
   }
@@ -8156,7 +7357,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  markerStart(value: 'none' | 'child' | 'url()' | (string & {})) {
+  markerStart(value: CSSProps['marker-start']) {
     this.props.set('marker-start', value)
     return this
   }
@@ -8181,7 +7382,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  maskImage(value: 'none' | 'url()' | (string & {})) {
+  maskImage(value: CSSProps['mask-image']) {
     this.props.set('mask-image', value)
     return this
   }
@@ -8208,7 +7409,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  maskMode(value: 'alpha' | 'auto' | 'luminance' | (string & {})) {
+  maskMode(value: CSSProps['mask-mode']) {
     this.props.set('mask-mode', value)
     return this
   }
@@ -8227,7 +7428,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  maskOrigin(value: string) {
+  maskOrigin(value: CSSProps['mask-origin']) {
     this.props.set('mask-origin', value)
     return this
   }
@@ -8246,7 +7447,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  maskPosition(value: string) {
+  maskPosition(value: CSSProps['mask-position']) {
     this.props.set('mask-position', value)
     return this
   }
@@ -8265,7 +7466,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  maskRepeat(value: string) {
+  maskRepeat(value: CSSProps['mask-repeat']) {
     this.props.set('mask-repeat', value)
     return this
   }
@@ -8292,7 +7493,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  maskSize(value: 'auto' | 'contain' | 'cover' | (string & {})) {
+  maskSize(value: CSSProps['mask-size']) {
     this.props.set('mask-size', value)
     return this
   }
@@ -8317,7 +7518,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  maskType(value: 'alpha' | 'luminance' | (string & {})) {
+  maskType(value: CSSProps['mask-type']) {
     this.props.set('mask-type', value)
     return this
   }
@@ -8336,7 +7537,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  maxBlockSize(value: 'none' | (string & {})) {
+  maxBlockSize(value: CSSProps['max-block-size']) {
     this.props.set('max-block-size', value)
     return this
   }
@@ -8367,15 +7568,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  maxHeight(
-    value:
-      | 'none'
-      | 'fill'
-      | 'fit-content'
-      | 'max-content'
-      | 'min-content'
-      | (string & {}),
-  ) {
+  maxHeight(value: CSSProps['max-height']) {
     this.props.set('max-height', value)
     return this
   }
@@ -8394,7 +7587,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  maxInlineSize(value: 'none' | (string & {})) {
+  maxInlineSize(value: CSSProps['max-inline-size']) {
     this.props.set('max-inline-size', value)
     return this
   }
@@ -8425,15 +7618,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  maxWidth(
-    value:
-      | 'none'
-      | 'fill'
-      | 'fit-content'
-      | 'max-content'
-      | 'min-content'
-      | (string & {}),
-  ) {
+  maxWidth(value: CSSProps['max-width']) {
     this.props.set('max-width', value)
     return this
   }
@@ -8452,7 +7637,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  minBlockSize(value: string) {
+  minBlockSize(value: CSSProps['min-block-size']) {
     this.props.set('min-block-size', value)
     return this
   }
@@ -8483,15 +7668,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  minHeight(
-    value:
-      | 'auto'
-      | 'fill'
-      | 'fit-content'
-      | 'max-content'
-      | 'min-content'
-      | (string & {}),
-  ) {
+  minHeight(value: CSSProps['min-height']) {
     this.props.set('min-height', value)
     return this
   }
@@ -8510,7 +7687,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  minInlineSize(value: string) {
+  minInlineSize(value: CSSProps['min-inline-size']) {
     this.props.set('min-inline-size', value)
     return this
   }
@@ -8541,15 +7718,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  minWidth(
-    value:
-      | 'auto'
-      | 'fill'
-      | 'fit-content'
-      | 'max-content'
-      | 'min-content'
-      | (string & {}),
-  ) {
+  minWidth(value: CSSProps['min-width']) {
     this.props.set('min-width', value)
     return this
   }
@@ -8602,26 +7771,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  mixBlendMode(
-    value:
-      | 'normal'
-      | 'multiply'
-      | 'screen'
-      | 'overlay'
-      | 'darken'
-      | 'lighten'
-      | 'color-dodge'
-      | 'color-burn'
-      | 'hard-light'
-      | 'soft-light'
-      | 'difference'
-      | 'exclusion'
-      | 'hue'
-      | 'saturation'
-      | 'color'
-      | 'luminosity'
-      | (string & {}),
-  ) {
+  mixBlendMode(value: CSSProps['mix-blend-mode']) {
     this.props.set('mix-blend-mode', value)
     return this
   }
@@ -8652,9 +7802,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  motion(
-    value: 'none' | 'path()' | 'url()' | 'auto' | 'reverse' | (string & {}),
-  ) {
+  motion(value: CSSProps['motion']) {
     this.props.set('motion', value)
     return this
   }
@@ -8673,7 +7821,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  motionOffset(value: string) {
+  motionOffset(value: CSSProps['motion-offset']) {
     this.props.set('motion-offset', value)
     return this
   }
@@ -8700,7 +7848,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  motionPath(value: 'none' | 'path()' | 'url()' | (string & {})) {
+  motionPath(value: CSSProps['motion-path']) {
     this.props.set('motion-path', value)
     return this
   }
@@ -8725,7 +7873,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  motionRotation(value: 'auto' | 'reverse' | (string & {})) {
+  motionRotation(value: CSSProps['motion-rotation']) {
     this.props.set('motion-rotation', value)
     return this
   }
@@ -8764,19 +7912,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  mozAnimation(
-    value:
-      | 'alternate'
-      | 'alternate-reverse'
-      | 'backwards'
-      | 'both'
-      | 'forwards'
-      | 'infinite'
-      | 'none'
-      | 'normal'
-      | 'reverse'
-      | (string & {}),
-  ) {
+  mozAnimation(value: CSSProps['-moz-animation']) {
     this.props.set('-moz-animation', value)
     return this
   }
@@ -8795,7 +7931,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozAnimationDelay(value: string) {
+  mozAnimationDelay(value: CSSProps['-moz-animation-delay']) {
     this.props.set('-moz-animation-delay', value)
     return this
   }
@@ -8824,14 +7960,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  mozAnimationDirection(
-    value:
-      | 'alternate'
-      | 'alternate-reverse'
-      | 'normal'
-      | 'reverse'
-      | (string & {}),
-  ) {
+  mozAnimationDirection(value: CSSProps['-moz-animation-direction']) {
     this.props.set('-moz-animation-direction', value)
     return this
   }
@@ -8850,7 +7979,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozAnimationDuration(value: string) {
+  mozAnimationDuration(value: CSSProps['-moz-animation-duration']) {
     this.props.set('-moz-animation-duration', value)
     return this
   }
@@ -8869,7 +7998,9 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozAnimationIterationCount(value: 'infinite' | (string & {})) {
+  mozAnimationIterationCount(
+    value: CSSProps['-moz-animation-iteration-count'],
+  ) {
     this.props.set('-moz-animation-iteration-count', value)
     return this
   }
@@ -8888,7 +8019,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozAnimationName(value: 'none' | (string & {})) {
+  mozAnimationName(value: CSSProps['-moz-animation-name']) {
     this.props.set('-moz-animation-name', value)
     return this
   }
@@ -8913,7 +8044,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  mozAnimationPlayState(value: 'paused' | 'running' | (string & {})) {
+  mozAnimationPlayState(value: CSSProps['-moz-animation-play-state']) {
     this.props.set('-moz-animation-play-state', value)
     return this
   }
@@ -8932,7 +8063,9 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozAnimationTimingFunction(value: string) {
+  mozAnimationTimingFunction(
+    value: CSSProps['-moz-animation-timing-function'],
+  ) {
     this.props.set('-moz-animation-timing-function', value)
     return this
   }
@@ -9089,78 +8222,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  mozAppearance(
-    value:
-      | 'button'
-      | 'button-arrow-down'
-      | 'button-arrow-next'
-      | 'button-arrow-previous'
-      | 'button-arrow-up'
-      | 'button-bevel'
-      | 'checkbox'
-      | 'checkbox-container'
-      | 'checkbox-label'
-      | 'dialog'
-      | 'groupbox'
-      | 'listbox'
-      | 'menuarrow'
-      | 'menuimage'
-      | 'menuitem'
-      | 'menuitemtext'
-      | 'menulist'
-      | 'menulist-button'
-      | 'menulist-text'
-      | 'menulist-textfield'
-      | 'menupopup'
-      | 'menuradio'
-      | 'menuseparator'
-      | '-moz-mac-unified-toolbar'
-      | '-moz-win-borderless-glass'
-      | '-moz-win-browsertabbar-toolbox'
-      | '-moz-win-communications-toolbox'
-      | '-moz-win-glass'
-      | '-moz-win-media-toolbox'
-      | 'none'
-      | 'progressbar'
-      | 'progresschunk'
-      | 'radio'
-      | 'radio-container'
-      | 'radio-label'
-      | 'radiomenuitem'
-      | 'resizer'
-      | 'resizerpanel'
-      | 'scrollbarbutton-down'
-      | 'scrollbarbutton-left'
-      | 'scrollbarbutton-right'
-      | 'scrollbarbutton-up'
-      | 'scrollbar-small'
-      | 'scrollbartrack-horizontal'
-      | 'scrollbartrack-vertical'
-      | 'separator'
-      | 'spinner'
-      | 'spinner-downbutton'
-      | 'spinner-textfield'
-      | 'spinner-upbutton'
-      | 'statusbar'
-      | 'statusbarpanel'
-      | 'tab'
-      | 'tabpanels'
-      | 'tab-scroll-arrow-back'
-      | 'tab-scroll-arrow-forward'
-      | 'textfield'
-      | 'textfield-multiline'
-      | 'toolbar'
-      | 'toolbox'
-      | 'tooltip'
-      | 'treeheadercell'
-      | 'treeheadersortarrow'
-      | 'treeitem'
-      | 'treetwistyopen'
-      | 'treeview'
-      | 'treewisty'
-      | 'window'
-      | (string & {}),
-  ) {
+  mozAppearance(value: CSSProps['-moz-appearance']) {
     this.props.set('-moz-appearance', value)
     return this
   }
@@ -9185,7 +8247,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  mozBackfaceVisibility(value: 'hidden' | 'visible' | (string & {})) {
+  mozBackfaceVisibility(value: CSSProps['-moz-backface-visibility']) {
     this.props.set('-moz-backface-visibility', value)
     return this
   }
@@ -9204,7 +8266,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozBackgroundClip(value: 'padding' | (string & {})) {
+  mozBackgroundClip(value: CSSProps['-moz-background-clip']) {
     this.props.set('-moz-background-clip', value)
     return this
   }
@@ -9231,9 +8293,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  mozBackgroundInlinePolicy(
-    value: 'bounding-box' | 'continuous' | 'each-box' | (string & {}),
-  ) {
+  mozBackgroundInlinePolicy(value: CSSProps['-moz-background-inline-policy']) {
     this.props.set('-moz-background-inline-policy', value)
     return this
   }
@@ -9252,7 +8312,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozBackgroundOrigin(value: string) {
+  mozBackgroundOrigin(value: CSSProps['-moz-background-origin']) {
     this.props.set('-moz-background-origin', value)
     return this
   }
@@ -9271,7 +8331,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozBorderBottomColors(value: string) {
+  mozBorderBottomColors(value: CSSProps['-moz-border-bottom-colors']) {
     this.props.set('-moz-border-bottom-colors', value)
     return this
   }
@@ -9308,18 +8368,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  mozBorderImage(
-    value:
-      | 'auto'
-      | 'fill'
-      | 'none'
-      | 'repeat'
-      | 'round'
-      | 'space'
-      | 'stretch'
-      | 'url()'
-      | (string & {}),
-  ) {
+  mozBorderImage(value: CSSProps['-moz-border-image']) {
     this.props.set('-moz-border-image', value)
     return this
   }
@@ -9338,7 +8387,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozBorderLeftColors(value: string) {
+  mozBorderLeftColors(value: CSSProps['-moz-border-left-colors']) {
     this.props.set('-moz-border-left-colors', value)
     return this
   }
@@ -9357,7 +8406,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozBorderRightColors(value: string) {
+  mozBorderRightColors(value: CSSProps['-moz-border-right-colors']) {
     this.props.set('-moz-border-right-colors', value)
     return this
   }
@@ -9376,7 +8425,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozBorderTopColors(value: string) {
+  mozBorderTopColors(value: CSSProps['-moz-border-top-colors']) {
     this.props.set('-moz-border-top-colors', value)
     return this
   }
@@ -9407,9 +8456,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  mozBoxAlign(
-    value: 'baseline' | 'center' | 'end' | 'start' | 'stretch' | (string & {}),
-  ) {
+  mozBoxAlign(value: CSSProps['-moz-box-align']) {
     this.props.set('-moz-box-align', value)
     return this
   }
@@ -9434,7 +8481,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  mozBoxDirection(value: 'normal' | 'reverse' | (string & {})) {
+  mozBoxDirection(value: CSSProps['-moz-box-direction']) {
     this.props.set('-moz-box-direction', value)
     return this
   }
@@ -9453,7 +8500,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozBoxFlex(value: number) {
+  mozBoxFlex(value: CSSProps['-moz-box-flex']) {
     this.props.set('-moz-box-flex', value)
     return this
   }
@@ -9472,7 +8519,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozBoxFlexgroup(value: number) {
+  mozBoxFlexgroup(value: CSSProps['-moz-box-flexgroup']) {
     this.props.set('-moz-box-flexgroup', value)
     return this
   }
@@ -9491,7 +8538,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozBoxOrdinalGroup(value: number) {
+  mozBoxOrdinalGroup(value: CSSProps['-moz-box-ordinal-group']) {
     this.props.set('-moz-box-ordinal-group', value)
     return this
   }
@@ -9520,14 +8567,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  mozBoxOrient(
-    value:
-      | 'block-axis'
-      | 'horizontal'
-      | 'inline-axis'
-      | 'vertical'
-      | (string & {}),
-  ) {
+  mozBoxOrient(value: CSSProps['-moz-box-orient']) {
     this.props.set('-moz-box-orient', value)
     return this
   }
@@ -9556,7 +8596,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  mozBoxPack(value: 'center' | 'end' | 'justify' | 'start' | (string & {})) {
+  mozBoxPack(value: CSSProps['-moz-box-pack']) {
     this.props.set('-moz-box-pack', value)
     return this
   }
@@ -9583,9 +8623,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  mozBoxSizing(
-    value: 'border-box' | 'content-box' | 'padding-box' | (string & {}),
-  ) {
+  mozBoxSizing(value: CSSProps['-moz-box-sizing']) {
     this.props.set('-moz-box-sizing', value)
     return this
   }
@@ -9604,7 +8642,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozColumnCount(value: number) {
+  mozColumnCount(value: CSSProps['-moz-column-count']) {
     this.props.set('-moz-column-count', value)
     return this
   }
@@ -9623,7 +8661,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozColumnGap(value: 'normal' | (string & {})) {
+  mozColumnGap(value: CSSProps['-moz-column-gap']) {
     this.props.set('-moz-column-gap', value)
     return this
   }
@@ -9642,7 +8680,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozColumnRule(value: string) {
+  mozColumnRule(value: CSSProps['-moz-column-rule']) {
     this.props.set('-moz-column-rule', value)
     return this
   }
@@ -9661,7 +8699,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozColumnRuleColor(value: string) {
+  mozColumnRuleColor(value: CSSProps['-moz-column-rule-color']) {
     this.props.set('-moz-column-rule-color', value)
     return this
   }
@@ -9680,7 +8718,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozColumnRuleStyle(value: string) {
+  mozColumnRuleStyle(value: CSSProps['-moz-column-rule-style']) {
     this.props.set('-moz-column-rule-style', value)
     return this
   }
@@ -9699,7 +8737,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozColumnRuleWidth(value: string) {
+  mozColumnRuleWidth(value: CSSProps['-moz-column-rule-width']) {
     this.props.set('-moz-column-rule-width', value)
     return this
   }
@@ -9718,7 +8756,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozColumns(value: 'auto' | (string & {})) {
+  mozColumns(value: CSSProps['-moz-columns']) {
     this.props.set('-moz-columns', value)
     return this
   }
@@ -9737,7 +8775,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozColumnWidth(value: 'auto' | (string & {})) {
+  mozColumnWidth(value: CSSProps['-moz-column-width']) {
     this.props.set('-moz-column-width', value)
     return this
   }
@@ -9782,22 +8820,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  mozFontFeatureSettings(
-    value:
-      | 'c2cs'
-      | 'dlig'
-      | 'kern'
-      | 'liga'
-      | 'lnum'
-      | 'onum'
-      | 'smcp'
-      | 'swsh'
-      | 'tnum'
-      | 'normal'
-      | 'off'
-      | 'on'
-      | (string & {}),
-  ) {
+  mozFontFeatureSettings(value: CSSProps['-moz-font-feature-settings']) {
     this.props.set('-moz-font-feature-settings', value)
     return this
   }
@@ -9824,7 +8847,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  mozHyphens(value: 'auto' | 'manual' | 'none' | (string & {})) {
+  mozHyphens(value: CSSProps['-moz-hyphens']) {
     this.props.set('-moz-hyphens', value)
     return this
   }
@@ -9843,7 +8866,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozPerspective(value: 'none' | (string & {})) {
+  mozPerspective(value: CSSProps['-moz-perspective']) {
     this.props.set('-moz-perspective', value)
     return this
   }
@@ -9862,7 +8885,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozPerspectiveOrigin(value: string) {
+  mozPerspectiveOrigin(value: CSSProps['-moz-perspective-origin']) {
     this.props.set('-moz-perspective-origin', value)
     return this
   }
@@ -9897,17 +8920,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  mozTextAlignLast(
-    value:
-      | 'auto'
-      | 'center'
-      | 'end'
-      | 'justify'
-      | 'left'
-      | 'right'
-      | 'start'
-      | (string & {}),
-  ) {
+  mozTextAlignLast(value: CSSProps['-moz-text-align-last']) {
     this.props.set('-moz-text-align-last', value)
     return this
   }
@@ -9926,7 +8939,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozTextDecorationColor(value: string) {
+  mozTextDecorationColor(value: CSSProps['-moz-text-decoration-color']) {
     this.props.set('-moz-text-decoration-color', value)
     return this
   }
@@ -9955,9 +8968,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  mozTextDecorationLine(
-    value: 'line-through' | 'none' | 'overline' | 'underline' | (string & {}),
-  ) {
+  mozTextDecorationLine(value: CSSProps['-moz-text-decoration-line']) {
     this.props.set('-moz-text-decoration-line', value)
     return this
   }
@@ -9990,16 +9001,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  mozTextDecorationStyle(
-    value:
-      | 'dashed'
-      | 'dotted'
-      | 'double'
-      | 'none'
-      | 'solid'
-      | 'wavy'
-      | (string & {}),
-  ) {
+  mozTextDecorationStyle(value: CSSProps['-moz-text-decoration-style']) {
     this.props.set('-moz-text-decoration-style', value)
     return this
   }
@@ -10024,7 +9026,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  mozTextSizeAdjust(value: 'auto' | 'none' | (string & {})) {
+  mozTextSizeAdjust(value: CSSProps['-moz-text-size-adjust']) {
     this.props.set('-moz-text-size-adjust', value)
     return this
   }
@@ -10089,32 +9091,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  mozTransform(
-    value:
-      | 'matrix()'
-      | 'matrix3d()'
-      | 'none'
-      | 'perspective'
-      | 'rotate()'
-      | 'rotate3d()'
-      | "rotateX('angle')"
-      | "rotateY('angle')"
-      | "rotateZ('angle')"
-      | 'scale()'
-      | 'scale3d()'
-      | 'scaleX()'
-      | 'scaleY()'
-      | 'scaleZ()'
-      | 'skew()'
-      | 'skewX()'
-      | 'skewY()'
-      | 'translate()'
-      | 'translate3d()'
-      | 'translateX()'
-      | 'translateY()'
-      | 'translateZ()'
-      | (string & {}),
-  ) {
+  mozTransform(value: CSSProps['-moz-transform']) {
     this.props.set('-moz-transform', value)
     return this
   }
@@ -10133,7 +9110,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozTransformOrigin(value: string) {
+  mozTransformOrigin(value: CSSProps['-moz-transform-origin']) {
     this.props.set('-moz-transform-origin', value)
     return this
   }
@@ -10158,7 +9135,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  mozTransition(value: 'all' | 'none' | (string & {})) {
+  mozTransition(value: CSSProps['-moz-transition']) {
     this.props.set('-moz-transition', value)
     return this
   }
@@ -10177,7 +9154,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozTransitionDelay(value: string) {
+  mozTransitionDelay(value: CSSProps['-moz-transition-delay']) {
     this.props.set('-moz-transition-delay', value)
     return this
   }
@@ -10196,7 +9173,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozTransitionDuration(value: string) {
+  mozTransitionDuration(value: CSSProps['-moz-transition-duration']) {
     this.props.set('-moz-transition-duration', value)
     return this
   }
@@ -10221,7 +9198,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  mozTransitionProperty(value: 'all' | 'none' | (string & {})) {
+  mozTransitionProperty(value: CSSProps['-moz-transition-property']) {
     this.props.set('-moz-transition-property', value)
     return this
   }
@@ -10240,7 +9217,9 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  mozTransitionTimingFunction(value: string) {
+  mozTransitionTimingFunction(
+    value: CSSProps['-moz-transition-timing-function'],
+  ) {
     this.props.set('-moz-transition-timing-function', value)
     return this
   }
@@ -10265,7 +9244,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  mozUserFocus(value: 'ignore' | 'normal' | (string & {})) {
+  mozUserFocus(value: CSSProps['-moz-user-focus']) {
     this.props.set('-moz-user-focus', value)
     return this
   }
@@ -10302,18 +9281,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  mozUserSelect(
-    value:
-      | 'all'
-      | 'element'
-      | 'elements'
-      | '-moz-all'
-      | '-moz-none'
-      | 'none'
-      | 'text'
-      | 'toggle'
-      | (string & {}),
-  ) {
+  mozUserSelect(value: CSSProps['-moz-user-select']) {
     this.props.set('-moz-user-select', value)
     return this
   }
@@ -10332,7 +9300,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  negative(value: string) {
+  negative(value: CSSProps['negative']) {
     this.props.set('negative', value)
     return this
   }
@@ -10363,9 +9331,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  objectFit(
-    value: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down' | (string & {}),
-  ) {
+  objectFit(value: CSSProps['object-fit']) {
     this.props.set('object-fit', value)
     return this
   }
@@ -10384,7 +9350,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  objectPosition(value: string) {
+  objectPosition(value: CSSProps['object-position']) {
     this.props.set('object-position', value)
     return this
   }
@@ -10403,7 +9369,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  opacity(value: number) {
+  opacity(value: CSSProps['opacity']) {
     this.props.set('opacity', value)
     return this
   }
@@ -10422,7 +9388,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  order(value: number) {
+  order(value: CSSProps['order']) {
     this.props.set('order', value)
     return this
   }
@@ -10441,7 +9407,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  orphans(value: number) {
+  orphans(value: CSSProps['orphans']) {
     this.props.set('orphans', value)
     return this
   }
@@ -10460,7 +9426,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  offsetBlockEnd(value: 'auto' | (string & {})) {
+  offsetBlockEnd(value: CSSProps['offset-block-end']) {
     this.props.set('offset-block-end', value)
     return this
   }
@@ -10479,7 +9445,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  offsetBlockStart(value: 'auto' | (string & {})) {
+  offsetBlockStart(value: CSSProps['offset-block-start']) {
     this.props.set('offset-block-start', value)
     return this
   }
@@ -10498,7 +9464,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  offsetInlineEnd(value: 'auto' | (string & {})) {
+  offsetInlineEnd(value: CSSProps['offset-inline-end']) {
     this.props.set('offset-inline-end', value)
     return this
   }
@@ -10517,7 +9483,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  offsetInlineStart(value: 'auto' | (string & {})) {
+  offsetInlineStart(value: CSSProps['offset-inline-start']) {
     this.props.set('offset-inline-start', value)
     return this
   }
@@ -10542,7 +9508,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  outline(value: 'auto' | 'invert' | (string & {})) {
+  outline(value: CSSProps['outline']) {
     this.props.set('outline', value)
     return this
   }
@@ -10561,7 +9527,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  outlineColor(value: 'invert' | (string & {})) {
+  outlineColor(value: CSSProps['outline-color']) {
     this.props.set('outline-color', value)
     return this
   }
@@ -10580,7 +9546,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  outlineOffset(value: string) {
+  outlineOffset(value: CSSProps['outline-offset']) {
     this.props.set('outline-offset', value)
     return this
   }
@@ -10599,7 +9565,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  outlineStyle(value: 'auto' | (string & {})) {
+  outlineStyle(value: CSSProps['outline-style']) {
     this.props.set('outline-style', value)
     return this
   }
@@ -10618,7 +9584,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  outlineWidth(value: string) {
+  outlineWidth(value: CSSProps['outline-width']) {
     this.props.set('outline-width', value)
     return this
   }
@@ -10651,16 +9617,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  overflow(
-    value:
-      | 'auto'
-      | 'clip'
-      | 'hidden'
-      | '-moz-hidden-unscrollable'
-      | 'scroll'
-      | 'visible'
-      | (string & {}),
-  ) {
+  overflow(value: CSSProps['overflow']) {
     this.props.set('overflow', value)
     return this
   }
@@ -10687,7 +9644,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  overflowWrap(value: 'break-word' | 'normal' | 'anywhere' | (string & {})) {
+  overflowWrap(value: CSSProps['overflow-wrap']) {
     this.props.set('overflow-wrap', value)
     return this
   }
@@ -10718,9 +9675,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  overflowX(
-    value: 'auto' | 'clip' | 'hidden' | 'scroll' | 'visible' | (string & {}),
-  ) {
+  overflowX(value: CSSProps['overflow-x']) {
     this.props.set('overflow-x', value)
     return this
   }
@@ -10751,9 +9706,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  overflowY(
-    value: 'auto' | 'clip' | 'hidden' | 'scroll' | 'visible' | (string & {}),
-  ) {
+  overflowY(value: CSSProps['overflow-y']) {
     this.props.set('overflow-y', value)
     return this
   }
@@ -10772,7 +9725,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  pad(value: string) {
+  pad(value: CSSProps['pad']) {
     this.props.set('pad', value)
     return this
   }
@@ -10791,7 +9744,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  padding(value: 'logical' | (string & {})) {
+  padding(value: CSSProps['padding']) {
     this.props.set('padding', value)
     return this
   }
@@ -10810,7 +9763,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  paddingBottom(value: string) {
+  paddingBottom(value: CSSProps['padding-bottom']) {
     this.props.set('padding-bottom', value)
     return this
   }
@@ -10829,7 +9782,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  paddingBlockEnd(value: string) {
+  paddingBlockEnd(value: CSSProps['padding-block-end']) {
     this.props.set('padding-block-end', value)
     return this
   }
@@ -10848,7 +9801,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  paddingBlockStart(value: string) {
+  paddingBlockStart(value: CSSProps['padding-block-start']) {
     this.props.set('padding-block-start', value)
     return this
   }
@@ -10867,7 +9820,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  paddingInlineEnd(value: string) {
+  paddingInlineEnd(value: CSSProps['padding-inline-end']) {
     this.props.set('padding-inline-end', value)
     return this
   }
@@ -10886,7 +9839,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  paddingInlineStart(value: string) {
+  paddingInlineStart(value: CSSProps['padding-inline-start']) {
     this.props.set('padding-inline-start', value)
     return this
   }
@@ -10905,7 +9858,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  paddingLeft(value: string) {
+  paddingLeft(value: CSSProps['padding-left']) {
     this.props.set('padding-left', value)
     return this
   }
@@ -10924,7 +9877,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  paddingRight(value: string) {
+  paddingRight(value: CSSProps['padding-right']) {
     this.props.set('padding-right', value)
     return this
   }
@@ -10943,7 +9896,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  paddingTop(value: string) {
+  paddingTop(value: CSSProps['padding-top']) {
     this.props.set('padding-top', value)
     return this
   }
@@ -10978,17 +9931,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  pageBreakAfter(
-    value:
-      | 'always'
-      | 'auto'
-      | 'avoid'
-      | 'left'
-      | 'recto'
-      | 'right'
-      | 'verso'
-      | (string & {}),
-  ) {
+  pageBreakAfter(value: CSSProps['page-break-after']) {
     this.props.set('page-break-after', value)
     return this
   }
@@ -11019,9 +9962,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  pageBreakBefore(
-    value: 'always' | 'auto' | 'avoid' | 'left' | 'right' | (string & {}),
-  ) {
+  pageBreakBefore(value: CSSProps['page-break-before']) {
     this.props.set('page-break-before', value)
     return this
   }
@@ -11046,7 +9987,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  pageBreakInside(value: 'auto' | 'avoid' | (string & {})) {
+  pageBreakInside(value: CSSProps['page-break-inside']) {
     this.props.set('page-break-inside', value)
     return this
   }
@@ -11075,7 +10016,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  paintOrder(value: 'fill' | 'markers' | 'normal' | 'stroke' | (string & {})) {
+  paintOrder(value: CSSProps['paint-order']) {
     this.props.set('paint-order', value)
     return this
   }
@@ -11094,7 +10035,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  perspective(value: 'none' | (string & {})) {
+  perspective(value: CSSProps['perspective']) {
     this.props.set('perspective', value)
     return this
   }
@@ -11113,7 +10054,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  perspectiveOrigin(value: string) {
+  perspectiveOrigin(value: CSSProps['perspective-origin']) {
     this.props.set('perspective-origin', value)
     return this
   }
@@ -11152,19 +10093,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  pointerEvents(
-    value:
-      | 'all'
-      | 'fill'
-      | 'none'
-      | 'painted'
-      | 'stroke'
-      | 'visible'
-      | 'visibleFill'
-      | 'visiblePainted'
-      | 'visibleStroke'
-      | (string & {}),
-  ) {
+  pointerEvents(value: CSSProps['pointer-events']) {
     this.props.set('pointer-events', value)
     return this
   }
@@ -11203,19 +10132,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  position(
-    value:
-      | 'absolute'
-      | 'center'
-      | 'fixed'
-      | '-ms-page'
-      | 'page'
-      | 'relative'
-      | 'static'
-      | 'sticky'
-      | '-webkit-sticky'
-      | (string & {}),
-  ) {
+  position(value: CSSProps['position']) {
     this.props.set('position', value)
     return this
   }
@@ -11234,7 +10151,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  prefix(value: string) {
+  prefix(value: CSSProps['prefix']) {
     this.props.set('prefix', value)
     return this
   }
@@ -11253,7 +10170,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  quotes(value: 'none' | (string & {})) {
+  quotes(value: CSSProps['quotes']) {
     this.props.set('quotes', value)
     return this
   }
@@ -11278,7 +10195,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  range(value: 'auto' | 'infinite' | (string & {})) {
+  range(value: CSSProps['range']) {
     this.props.set('range', value)
     return this
   }
@@ -11311,16 +10228,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  resize(
-    value:
-      | 'both'
-      | 'block'
-      | 'horizontal'
-      | 'inline'
-      | 'none'
-      | 'vertical'
-      | (string & {}),
-  ) {
+  resize(value: CSSProps['resize']) {
     this.props.set('resize', value)
     return this
   }
@@ -11339,7 +10247,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  right(value: 'auto' | (string & {})) {
+  right(value: CSSProps['right']) {
     this.props.set('right', value)
     return this
   }
@@ -11380,20 +10288,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  rubyAlign(
-    value:
-      | 'auto'
-      | 'center'
-      | 'distribute-letter'
-      | 'distribute-space'
-      | 'left'
-      | 'line-edge'
-      | 'right'
-      | 'start'
-      | 'space-between'
-      | 'space-around'
-      | (string & {}),
-  ) {
+  rubyAlign(value: CSSProps['ruby-align']) {
     this.props.set('ruby-align', value)
     return this
   }
@@ -11422,7 +10317,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  rubyOverhang(value: 'auto' | 'end' | 'none' | 'start' | (string & {})) {
+  rubyOverhang(value: CSSProps['ruby-overhang']) {
     this.props.set('ruby-overhang', value)
     return this
   }
@@ -11451,7 +10346,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  rubyPosition(value: 'after' | 'before' | 'inline' | 'right' | (string & {})) {
+  rubyPosition(value: CSSProps['ruby-position']) {
     this.props.set('ruby-position', value)
     return this
   }
@@ -11476,7 +10371,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  rubySpan(value: 'attr(x)' | 'none' | (string & {})) {
+  rubySpan(value: CSSProps['ruby-span']) {
     this.props.set('ruby-span', value)
     return this
   }
@@ -11501,7 +10396,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  scrollBehavior(value: 'auto' | 'smooth' | (string & {})) {
+  scrollBehavior(value: CSSProps['scroll-behavior']) {
     this.props.set('scroll-behavior', value)
     return this
   }
@@ -11528,9 +10423,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  scrollSnapCoordinate(
-    value: 'none' | 'border-box' | 'margin-box' | (string & {}),
-  ) {
+  scrollSnapCoordinate(value: CSSProps['scroll-snap-coordinate']) {
     this.props.set('scroll-snap-coordinate', value)
     return this
   }
@@ -11549,7 +10442,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  scrollSnapDestination(value: string) {
+  scrollSnapDestination(value: CSSProps['scroll-snap-destination']) {
     this.props.set('scroll-snap-destination', value)
     return this
   }
@@ -11574,7 +10467,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  scrollSnapPointsX(value: 'none' | 'repeat()' | (string & {})) {
+  scrollSnapPointsX(value: CSSProps['scroll-snap-points-x']) {
     this.props.set('scroll-snap-points-x', value)
     return this
   }
@@ -11599,7 +10492,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  scrollSnapPointsY(value: 'none' | 'repeat()' | (string & {})) {
+  scrollSnapPointsY(value: CSSProps['scroll-snap-points-y']) {
     this.props.set('scroll-snap-points-y', value)
     return this
   }
@@ -11626,7 +10519,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  scrollSnapType(value: 'none' | 'mandatory' | 'proximity' | (string & {})) {
+  scrollSnapType(value: CSSProps['scroll-snap-type']) {
     this.props.set('scroll-snap-type', value)
     return this
   }
@@ -11645,7 +10538,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  shapeImageThreshold(value: number) {
+  shapeImageThreshold(value: CSSProps['shape-image-threshold']) {
     this.props.set('shape-image-threshold', value)
     return this
   }
@@ -11664,7 +10557,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  shapeMargin(value: string) {
+  shapeMargin(value: CSSProps['shape-margin']) {
     this.props.set('shape-margin', value)
     return this
   }
@@ -11689,7 +10582,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  shapeOutside(value: 'margin-box' | 'none' | (string & {})) {
+  shapeOutside(value: CSSProps['shape-outside']) {
     this.props.set('shape-outside', value)
     return this
   }
@@ -11708,7 +10601,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  size(value: string) {
+  size(value: CSSProps['size']) {
     this.props.set('size', value)
     return this
   }
@@ -11735,7 +10628,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  src(value: 'url()' | 'format()' | 'local()' | (string & {})) {
+  src(value: CSSProps['src']) {
     this.props.set('src', value)
     return this
   }
@@ -11754,7 +10647,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  stopColor(value: string) {
+  stopColor(value: CSSProps['stop-color']) {
     this.props.set('stop-color', value)
     return this
   }
@@ -11773,7 +10666,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  stopOpacity(value: number) {
+  stopOpacity(value: CSSProps['stop-opacity']) {
     this.props.set('stop-opacity', value)
     return this
   }
@@ -11806,16 +10699,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  stroke(
-    value:
-      | 'child'
-      | 'child()'
-      | 'context-fill'
-      | 'context-stroke'
-      | 'url()'
-      | 'none'
-      | (string & {}),
-  ) {
+  stroke(value: CSSProps['stroke']) {
     this.props.set('stroke', value)
     return this
   }
@@ -11834,7 +10718,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  strokeDasharray(value: 'none' | (string & {})) {
+  strokeDasharray(value: CSSProps['stroke-dasharray']) {
     this.props.set('stroke-dasharray', value)
     return this
   }
@@ -11853,7 +10737,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  strokeDashoffset(value: string) {
+  strokeDashoffset(value: CSSProps['stroke-dashoffset']) {
     this.props.set('stroke-dashoffset', value)
     return this
   }
@@ -11880,7 +10764,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  strokeLinecap(value: 'butt' | 'round' | 'square' | (string & {})) {
+  strokeLinecap(value: CSSProps['stroke-linecap']) {
     this.props.set('stroke-linecap', value)
     return this
   }
@@ -11911,9 +10795,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  strokeLinejoin(
-    value: 'arcs' | 'bevel' | 'miter' | 'miter-clip' | 'round' | (string & {}),
-  ) {
+  strokeLinejoin(value: CSSProps['stroke-linejoin']) {
     this.props.set('stroke-linejoin', value)
     return this
   }
@@ -11932,7 +10814,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  strokeMiterlimit(value: number) {
+  strokeMiterlimit(value: CSSProps['stroke-miterlimit']) {
     this.props.set('stroke-miterlimit', value)
     return this
   }
@@ -11951,7 +10833,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  strokeOpacity(value: number) {
+  strokeOpacity(value: CSSProps['stroke-opacity']) {
     this.props.set('stroke-opacity', value)
     return this
   }
@@ -11970,7 +10852,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  strokeWidth(value: string) {
+  strokeWidth(value: CSSProps['stroke-width']) {
     this.props.set('stroke-width', value)
     return this
   }
@@ -11989,7 +10871,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  suffix(value: string) {
+  suffix(value: CSSProps['suffix']) {
     this.props.set('suffix', value)
     return this
   }
@@ -12024,17 +10906,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  system(
-    value:
-      | 'additive'
-      | 'alphabetic'
-      | 'cyclic'
-      | 'extends'
-      | 'fixed'
-      | 'numeric'
-      | 'symbolic'
-      | (string & {}),
-  ) {
+  system(value: CSSProps['system']) {
     this.props.set('system', value)
     return this
   }
@@ -12053,7 +10925,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  symbols(value: string) {
+  symbols(value: CSSProps['symbols']) {
     this.props.set('symbols', value)
     return this
   }
@@ -12078,7 +10950,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  tableLayout(value: 'auto' | 'fixed' | (string & {})) {
+  tableLayout(value: CSSProps['table-layout']) {
     this.props.set('table-layout', value)
     return this
   }
@@ -12097,7 +10969,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  tabSize(value: string) {
+  tabSize(value: CSSProps['tab-size']) {
     this.props.set('tab-size', value)
     return this
   }
@@ -12132,17 +11004,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  textAlign(
-    value:
-      | 'center'
-      | 'end'
-      | 'justify'
-      | 'left'
-      | 'match-parent'
-      | 'right'
-      | 'start'
-      | (string & {}),
-  ) {
+  textAlign(value: CSSProps['text-align']) {
     this.props.set('text-align', value)
     return this
   }
@@ -12177,17 +11039,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  textAlignLast(
-    value:
-      | 'auto'
-      | 'center'
-      | 'end'
-      | 'justify'
-      | 'left'
-      | 'right'
-      | 'start'
-      | (string & {}),
-  ) {
+  textAlignLast(value: CSSProps['text-align-last']) {
     this.props.set('text-align-last', value)
     return this
   }
@@ -12214,7 +11066,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  textAnchor(value: 'end' | 'middle' | 'start' | (string & {})) {
+  textAnchor(value: CSSProps['text-anchor']) {
     this.props.set('text-anchor', value)
     return this
   }
@@ -12253,19 +11105,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  textDecoration(
-    value:
-      | 'dashed'
-      | 'dotted'
-      | 'double'
-      | 'line-through'
-      | 'none'
-      | 'overline'
-      | 'solid'
-      | 'underline'
-      | 'wavy'
-      | (string & {}),
-  ) {
+  textDecoration(value: CSSProps['text-decoration']) {
     this.props.set('text-decoration', value)
     return this
   }
@@ -12284,7 +11124,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  textDecorationColor(value: string) {
+  textDecorationColor(value: CSSProps['text-decoration-color']) {
     this.props.set('text-decoration-color', value)
     return this
   }
@@ -12313,9 +11153,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  textDecorationLine(
-    value: 'line-through' | 'none' | 'overline' | 'underline' | (string & {}),
-  ) {
+  textDecorationLine(value: CSSProps['text-decoration-line']) {
     this.props.set('text-decoration-line', value)
     return this
   }
@@ -12348,16 +11186,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  textDecorationStyle(
-    value:
-      | 'dashed'
-      | 'dotted'
-      | 'double'
-      | 'none'
-      | 'solid'
-      | 'wavy'
-      | (string & {}),
-  ) {
+  textDecorationStyle(value: CSSProps['text-decoration-style']) {
     this.props.set('text-decoration-style', value)
     return this
   }
@@ -12382,7 +11211,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  textIndent(value: 'each-line' | 'hanging' | (string & {})) {
+  textIndent(value: CSSProps['text-indent']) {
     this.props.set('text-indent', value)
     return this
   }
@@ -12415,16 +11244,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  textOrientation(
-    value:
-      | 'mixed'
-      | 'sideways'
-      | 'sideways-left'
-      | 'sideways-right'
-      | 'upright'
-      | 'use-glyph-orientation'
-      | (string & {}),
-  ) {
+  textOrientation(value: CSSProps['text-orientation']) {
     this.props.set('text-orientation', value)
     return this
   }
@@ -12449,7 +11269,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  textOverflow(value: 'clip' | 'ellipsis' | (string & {})) {
+  textOverflow(value: CSSProps['text-overflow']) {
     this.props.set('text-overflow', value)
     return this
   }
@@ -12478,14 +11298,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  textRendering(
-    value:
-      | 'auto'
-      | 'geometricPrecision'
-      | 'optimizeLegibility'
-      | 'optimizeSpeed'
-      | (string & {}),
-  ) {
+  textRendering(value: CSSProps['text-rendering']) {
     this.props.set('text-rendering', value)
     return this
   }
@@ -12504,7 +11317,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  textShadow(value: 'none' | (string & {})) {
+  textShadow(value: CSSProps['text-shadow']) {
     this.props.set('text-shadow', value)
     return this
   }
@@ -12535,15 +11348,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  textTransform(
-    value:
-      | 'capitalize'
-      | 'full-width'
-      | 'lowercase'
-      | 'none'
-      | 'uppercase'
-      | (string & {}),
-  ) {
+  textTransform(value: CSSProps['text-transform']) {
     this.props.set('text-transform', value)
     return this
   }
@@ -12562,7 +11367,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  top(value: 'auto' | (string & {})) {
+  top(value: CSSProps['top']) {
     this.props.set('top', value)
     return this
   }
@@ -12601,19 +11406,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  touchAction(
-    value:
-      | 'auto'
-      | 'cross-slide-x'
-      | 'cross-slide-y'
-      | 'double-tap-zoom'
-      | 'manipulation'
-      | 'none'
-      | 'pan-x'
-      | 'pan-y'
-      | 'pinch-zoom'
-      | (string & {}),
-  ) {
+  touchAction(value: CSSProps['touch-action']) {
     this.props.set('touch-action', value)
     return this
   }
@@ -12678,32 +11471,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  transform(
-    value:
-      | 'matrix()'
-      | 'matrix3d()'
-      | 'none'
-      | 'perspective()'
-      | 'rotate()'
-      | 'rotate3d()'
-      | "rotateX('angle')"
-      | "rotateY('angle')"
-      | "rotateZ('angle')"
-      | 'scale()'
-      | 'scale3d()'
-      | 'scaleX()'
-      | 'scaleY()'
-      | 'scaleZ()'
-      | 'skew()'
-      | 'skewX()'
-      | 'skewY()'
-      | 'translate()'
-      | 'translate3d()'
-      | 'translateX()'
-      | 'translateY()'
-      | 'translateZ()'
-      | (string & {}),
-  ) {
+  transform(value: CSSProps['transform']) {
     this.props.set('transform', value)
     return this
   }
@@ -12722,7 +11490,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  transformOrigin(value: string) {
+  transformOrigin(value: CSSProps['transform-origin']) {
     this.props.set('transform-origin', value)
     return this
   }
@@ -12747,7 +11515,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  transformStyle(value: 'flat' | 'preserve-3d' | (string & {})) {
+  transformStyle(value: CSSProps['transform-style']) {
     this.props.set('transform-style', value)
     return this
   }
@@ -12772,7 +11540,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  transition(value: 'all' | 'none' | (string & {})) {
+  transition(value: CSSProps['transition']) {
     this.props.set('transition', value)
     return this
   }
@@ -12791,7 +11559,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  transitionDelay(value: string) {
+  transitionDelay(value: CSSProps['transition-delay']) {
     this.props.set('transition-delay', value)
     return this
   }
@@ -12810,7 +11578,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  transitionDuration(value: string) {
+  transitionDuration(value: CSSProps['transition-duration']) {
     this.props.set('transition-duration', value)
     return this
   }
@@ -12835,7 +11603,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  transitionProperty(value: 'all' | 'none' | (string & {})) {
+  transitionProperty(value: CSSProps['transition-property']) {
     this.props.set('transition-property', value)
     return this
   }
@@ -12854,7 +11622,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  transitionTimingFunction(value: string) {
+  transitionTimingFunction(value: CSSProps['transition-timing-function']) {
     this.props.set('transition-timing-function', value)
     return this
   }
@@ -12887,16 +11655,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  unicodeBidi(
-    value:
-      | 'bidi-override'
-      | 'embed'
-      | 'isolate'
-      | 'isolate-override'
-      | 'normal'
-      | 'plaintext'
-      | (string & {}),
-  ) {
+  unicodeBidi(value: CSSProps['unicode-bidi']) {
     this.props.set('unicode-bidi', value)
     return this
   }
@@ -13071,87 +11830,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  unicodeRange(
-    value:
-      | 'U+26'
-      | 'U+20-24F, U+2B0-2FF, U+370-4FF, U+1E00-1EFF, U+2000-20CF, U+2100-23FF, U+2500-26FF, U+E000-F8FF, U+FB00-FB4F'
-      | 'U+20-17F, U+2B0-2FF, U+2000-206F, U+20A0-20CF, U+2100-21FF, U+2600-26FF'
-      | 'U+20-2FF, U+370-4FF, U+1E00-20CF, U+2100-23FF, U+2500-26FF, U+FB00-FB4F, U+FFF0-FFFD'
-      | 'U+20-4FF, U+530-58F, U+10D0-10FF, U+1E00-23FF, U+2440-245F, U+2500-26FF, U+FB00-FB4F, U+FE20-FE2F, U+FFF0-FFFD'
-      | 'U+00-7F'
-      | 'U+80-FF'
-      | 'U+100-17F'
-      | 'U+180-24F'
-      | 'U+1E00-1EFF'
-      | 'U+250-2AF'
-      | 'U+370-3FF'
-      | 'U+1F00-1FFF'
-      | 'U+400-4FF'
-      | 'U+500-52F'
-      | 'U+00-52F, U+1E00-1FFF, U+2200-22FF'
-      | 'U+530-58F'
-      | 'U+590-5FF'
-      | 'U+600-6FF'
-      | 'U+750-77F'
-      | 'U+8A0-8FF'
-      | 'U+700-74F'
-      | 'U+900-97F'
-      | 'U+980-9FF'
-      | 'U+A00-A7F'
-      | 'U+A80-AFF'
-      | 'U+B00-B7F'
-      | 'U+B80-BFF'
-      | 'U+C00-C7F'
-      | 'U+C80-CFF'
-      | 'U+D00-D7F'
-      | 'U+D80-DFF'
-      | 'U+118A0-118FF'
-      | 'U+E00-E7F'
-      | 'U+1A20-1AAF'
-      | 'U+AA80-AADF'
-      | 'U+E80-EFF'
-      | 'U+F00-FFF'
-      | 'U+1000-109F'
-      | 'U+10A0-10FF'
-      | 'U+1200-137F'
-      | 'U+1380-139F'
-      | 'U+2D80-2DDF'
-      | 'U+AB00-AB2F'
-      | 'U+1780-17FF'
-      | 'U+1800-18AF'
-      | 'U+1B80-1BBF'
-      | 'U+1CC0-1CCF'
-      | 'U+4E00-9FD5'
-      | 'U+3400-4DB5'
-      | 'U+2F00-2FDF'
-      | 'U+2E80-2EFF'
-      | 'U+1100-11FF'
-      | 'U+AC00-D7AF'
-      | 'U+3040-309F'
-      | 'U+30A0-30FF'
-      | 'U+A5, U+4E00-9FFF, U+30??, U+FF00-FF9F'
-      | 'U+A4D0-A4FF'
-      | 'U+A000-A48F'
-      | 'U+A490-A4CF'
-      | 'U+2000-206F'
-      | 'U+3000-303F'
-      | 'U+2070-209F'
-      | 'U+20A0-20CF'
-      | 'U+2100-214F'
-      | 'U+2150-218F'
-      | 'U+2190-21FF'
-      | 'U+2200-22FF'
-      | 'U+2300-23FF'
-      | 'U+E000-F8FF'
-      | 'U+FB00-FB4F'
-      | 'U+FB50-FDFF'
-      | 'U+1F600-1F64F'
-      | 'U+2600-26FF'
-      | 'U+1F300-1F5FF'
-      | 'U+1F900-1F9FF'
-      | 'U+1F680-1F6FF'
-      | (string & {}),
-  ) {
+  unicodeRange(value: CSSProps['unicode-range']) {
     this.props.set('unicode-range', value)
     return this
   }
@@ -13182,9 +11861,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  userSelect(
-    value: 'all' | 'auto' | 'contain' | 'none' | 'text' | (string & {}),
-  ) {
+  userSelect(value: CSSProps['user-select']) {
     this.props.set('user-select', value)
     return this
   }
@@ -13233,24 +11910,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  verticalAlign(
-    value:
-      | 'alphabetic'
-      | 'auto'
-      | 'baseline'
-      | 'bottom'
-      | 'center'
-      | 'central'
-      | 'mathematical'
-      | 'middle'
-      | 'sub'
-      | 'super'
-      | 'text-bottom'
-      | 'text-top'
-      | 'top'
-      | '-webkit-baseline-middle'
-      | (string & {}),
-  ) {
+  verticalAlign(value: CSSProps['vertical-align']) {
     this.props.set('vertical-align', value)
     return this
   }
@@ -13277,7 +11937,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  visibility(value: 'collapse' | 'hidden' | 'visible' | (string & {})) {
+  visibility(value: CSSProps['visibility']) {
     this.props.set('visibility', value)
     return this
   }
@@ -13316,19 +11976,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitAnimation(
-    value:
-      | 'alternate'
-      | 'alternate-reverse'
-      | 'backwards'
-      | 'both'
-      | 'forwards'
-      | 'infinite'
-      | 'none'
-      | 'normal'
-      | 'reverse'
-      | (string & {}),
-  ) {
+  webkitAnimation(value: CSSProps['-webkit-animation']) {
     this.props.set('-webkit-animation', value)
     return this
   }
@@ -13347,7 +11995,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitAnimationDelay(value: string) {
+  webkitAnimationDelay(value: CSSProps['-webkit-animation-delay']) {
     this.props.set('-webkit-animation-delay', value)
     return this
   }
@@ -13376,14 +12024,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitAnimationDirection(
-    value:
-      | 'alternate'
-      | 'alternate-reverse'
-      | 'normal'
-      | 'reverse'
-      | (string & {}),
-  ) {
+  webkitAnimationDirection(value: CSSProps['-webkit-animation-direction']) {
     this.props.set('-webkit-animation-direction', value)
     return this
   }
@@ -13402,7 +12043,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitAnimationDuration(value: string) {
+  webkitAnimationDuration(value: CSSProps['-webkit-animation-duration']) {
     this.props.set('-webkit-animation-duration', value)
     return this
   }
@@ -13431,9 +12072,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitAnimationFillMode(
-    value: 'backwards' | 'both' | 'forwards' | 'none' | (string & {}),
-  ) {
+  webkitAnimationFillMode(value: CSSProps['-webkit-animation-fill-mode']) {
     this.props.set('-webkit-animation-fill-mode', value)
     return this
   }
@@ -13452,7 +12091,9 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitAnimationIterationCount(value: 'infinite' | (string & {})) {
+  webkitAnimationIterationCount(
+    value: CSSProps['-webkit-animation-iteration-count'],
+  ) {
     this.props.set('-webkit-animation-iteration-count', value)
     return this
   }
@@ -13471,7 +12112,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitAnimationName(value: 'none' | (string & {})) {
+  webkitAnimationName(value: CSSProps['-webkit-animation-name']) {
     this.props.set('-webkit-animation-name', value)
     return this
   }
@@ -13496,7 +12137,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitAnimationPlayState(value: 'paused' | 'running' | (string & {})) {
+  webkitAnimationPlayState(value: CSSProps['-webkit-animation-play-state']) {
     this.props.set('-webkit-animation-play-state', value)
     return this
   }
@@ -13515,7 +12156,9 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitAnimationTimingFunction(value: string) {
+  webkitAnimationTimingFunction(
+    value: CSSProps['-webkit-animation-timing-function'],
+  ) {
     this.props.set('-webkit-animation-timing-function', value)
     return this
   }
@@ -13624,54 +12267,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitAppearance(
-    value:
-      | 'button'
-      | 'button-bevel'
-      | 'caps-lock-indicator'
-      | 'caret'
-      | 'checkbox'
-      | 'default-button'
-      | 'listbox'
-      | 'listitem'
-      | 'media-fullscreen-button'
-      | 'media-mute-button'
-      | 'media-play-button'
-      | 'media-seek-back-button'
-      | 'media-seek-forward-button'
-      | 'media-slider'
-      | 'media-sliderthumb'
-      | 'menulist'
-      | 'menulist-button'
-      | 'menulist-text'
-      | 'menulist-textfield'
-      | 'none'
-      | 'push-button'
-      | 'radio'
-      | 'scrollbarbutton-down'
-      | 'scrollbarbutton-left'
-      | 'scrollbarbutton-right'
-      | 'scrollbarbutton-up'
-      | 'scrollbargripper-horizontal'
-      | 'scrollbargripper-vertical'
-      | 'scrollbarthumb-horizontal'
-      | 'scrollbarthumb-vertical'
-      | 'scrollbartrack-horizontal'
-      | 'scrollbartrack-vertical'
-      | 'searchfield'
-      | 'searchfield-cancel-button'
-      | 'searchfield-decoration'
-      | 'searchfield-results-button'
-      | 'searchfield-results-decoration'
-      | 'slider-horizontal'
-      | 'sliderthumb-horizontal'
-      | 'sliderthumb-vertical'
-      | 'slider-vertical'
-      | 'square-button'
-      | 'textarea'
-      | 'textfield'
-      | (string & {}),
-  ) {
+  webkitAppearance(value: CSSProps['-webkit-appearance']) {
     this.props.set('-webkit-appearance', value)
     return this
   }
@@ -13716,22 +12312,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitBackdropFilter(
-    value:
-      | 'none'
-      | 'blur()'
-      | 'brightness()'
-      | 'contrast()'
-      | 'drop-shadow()'
-      | 'grayscale()'
-      | 'hue-rotate()'
-      | 'invert()'
-      | 'opacity()'
-      | 'saturate()'
-      | 'sepia()'
-      | 'url()'
-      | (string & {}),
-  ) {
+  webkitBackdropFilter(value: CSSProps['-webkit-backdrop-filter']) {
     this.props.set('-webkit-backdrop-filter', value)
     return this
   }
@@ -13756,7 +12337,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitBackfaceVisibility(value: 'hidden' | 'visible' | (string & {})) {
+  webkitBackfaceVisibility(value: CSSProps['-webkit-backface-visibility']) {
     this.props.set('-webkit-backface-visibility', value)
     return this
   }
@@ -13775,7 +12356,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitBackgroundClip(value: string) {
+  webkitBackgroundClip(value: CSSProps['-webkit-background-clip']) {
     this.props.set('-webkit-background-clip', value)
     return this
   }
@@ -13800,7 +12381,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitBackgroundComposite(value: 'border' | 'padding' | (string & {})) {
+  webkitBackgroundComposite(value: CSSProps['-webkit-background-composite']) {
     this.props.set('-webkit-background-composite', value)
     return this
   }
@@ -13819,7 +12400,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitBackgroundOrigin(value: string) {
+  webkitBackgroundOrigin(value: CSSProps['-webkit-background-origin']) {
     this.props.set('-webkit-background-origin', value)
     return this
   }
@@ -13856,18 +12437,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitBorderImage(
-    value:
-      | 'auto'
-      | 'fill'
-      | 'none'
-      | 'repeat'
-      | 'round'
-      | 'space'
-      | 'stretch'
-      | 'url()'
-      | (string & {}),
-  ) {
+  webkitBorderImage(value: CSSProps['-webkit-border-image']) {
     this.props.set('-webkit-border-image', value)
     return this
   }
@@ -13898,9 +12468,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitBoxAlign(
-    value: 'baseline' | 'center' | 'end' | 'start' | 'stretch' | (string & {}),
-  ) {
+  webkitBoxAlign(value: CSSProps['-webkit-box-align']) {
     this.props.set('-webkit-box-align', value)
     return this
   }
@@ -13925,7 +12493,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitBoxDirection(value: 'normal' | 'reverse' | (string & {})) {
+  webkitBoxDirection(value: CSSProps['-webkit-box-direction']) {
     this.props.set('-webkit-box-direction', value)
     return this
   }
@@ -13944,7 +12512,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitBoxFlex(value: number) {
+  webkitBoxFlex(value: CSSProps['-webkit-box-flex']) {
     this.props.set('-webkit-box-flex', value)
     return this
   }
@@ -13963,7 +12531,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitBoxFlexGroup(value: number) {
+  webkitBoxFlexGroup(value: CSSProps['-webkit-box-flex-group']) {
     this.props.set('-webkit-box-flex-group', value)
     return this
   }
@@ -13982,7 +12550,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitBoxOrdinalGroup(value: number) {
+  webkitBoxOrdinalGroup(value: CSSProps['-webkit-box-ordinal-group']) {
     this.props.set('-webkit-box-ordinal-group', value)
     return this
   }
@@ -14011,14 +12579,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitBoxOrient(
-    value:
-      | 'block-axis'
-      | 'horizontal'
-      | 'inline-axis'
-      | 'vertical'
-      | (string & {}),
-  ) {
+  webkitBoxOrient(value: CSSProps['-webkit-box-orient']) {
     this.props.set('-webkit-box-orient', value)
     return this
   }
@@ -14047,7 +12608,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitBoxPack(value: 'center' | 'end' | 'justify' | 'start' | (string & {})) {
+  webkitBoxPack(value: CSSProps['-webkit-box-pack']) {
     this.props.set('-webkit-box-pack', value)
     return this
   }
@@ -14076,9 +12637,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitBoxReflect(
-    value: 'above' | 'below' | 'left' | 'right' | (string & {}),
-  ) {
+  webkitBoxReflect(value: CSSProps['-webkit-box-reflect']) {
     this.props.set('-webkit-box-reflect', value)
     return this
   }
@@ -14103,7 +12662,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitBoxSizing(value: 'border-box' | 'content-box' | (string & {})) {
+  webkitBoxSizing(value: CSSProps['-webkit-box-sizing']) {
     this.props.set('-webkit-box-sizing', value)
     return this
   }
@@ -14146,21 +12705,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitBreakAfter(
-    value:
-      | 'always'
-      | 'auto'
-      | 'avoid'
-      | 'avoid-column'
-      | 'avoid-page'
-      | 'avoid-region'
-      | 'column'
-      | 'left'
-      | 'page'
-      | 'region'
-      | 'right'
-      | (string & {}),
-  ) {
+  webkitBreakAfter(value: CSSProps['-webkit-break-after']) {
     this.props.set('-webkit-break-after', value)
     return this
   }
@@ -14203,21 +12748,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitBreakBefore(
-    value:
-      | 'always'
-      | 'auto'
-      | 'avoid'
-      | 'avoid-column'
-      | 'avoid-page'
-      | 'avoid-region'
-      | 'column'
-      | 'left'
-      | 'page'
-      | 'region'
-      | 'right'
-      | (string & {}),
-  ) {
+  webkitBreakBefore(value: CSSProps['-webkit-break-before']) {
     this.props.set('-webkit-break-before', value)
     return this
   }
@@ -14248,15 +12779,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitBreakInside(
-    value:
-      | 'auto'
-      | 'avoid'
-      | 'avoid-column'
-      | 'avoid-page'
-      | 'avoid-region'
-      | (string & {}),
-  ) {
+  webkitBreakInside(value: CSSProps['-webkit-break-inside']) {
     this.props.set('-webkit-break-inside', value)
     return this
   }
@@ -14299,21 +12822,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitColumnBreakAfter(
-    value:
-      | 'always'
-      | 'auto'
-      | 'avoid'
-      | 'avoid-column'
-      | 'avoid-page'
-      | 'avoid-region'
-      | 'column'
-      | 'left'
-      | 'page'
-      | 'region'
-      | 'right'
-      | (string & {}),
-  ) {
+  webkitColumnBreakAfter(value: CSSProps['-webkit-column-break-after']) {
     this.props.set('-webkit-column-break-after', value)
     return this
   }
@@ -14356,21 +12865,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitColumnBreakBefore(
-    value:
-      | 'always'
-      | 'auto'
-      | 'avoid'
-      | 'avoid-column'
-      | 'avoid-page'
-      | 'avoid-region'
-      | 'column'
-      | 'left'
-      | 'page'
-      | 'region'
-      | 'right'
-      | (string & {}),
-  ) {
+  webkitColumnBreakBefore(value: CSSProps['-webkit-column-break-before']) {
     this.props.set('-webkit-column-break-before', value)
     return this
   }
@@ -14401,15 +12896,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitColumnBreakInside(
-    value:
-      | 'auto'
-      | 'avoid'
-      | 'avoid-column'
-      | 'avoid-page'
-      | 'avoid-region'
-      | (string & {}),
-  ) {
+  webkitColumnBreakInside(value: CSSProps['-webkit-column-break-inside']) {
     this.props.set('-webkit-column-break-inside', value)
     return this
   }
@@ -14428,7 +12915,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitColumnCount(value: number) {
+  webkitColumnCount(value: CSSProps['-webkit-column-count']) {
     this.props.set('-webkit-column-count', value)
     return this
   }
@@ -14447,7 +12934,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitColumnGap(value: 'normal' | (string & {})) {
+  webkitColumnGap(value: CSSProps['-webkit-column-gap']) {
     this.props.set('-webkit-column-gap', value)
     return this
   }
@@ -14466,7 +12953,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitColumnRule(value: string) {
+  webkitColumnRule(value: CSSProps['-webkit-column-rule']) {
     this.props.set('-webkit-column-rule', value)
     return this
   }
@@ -14485,7 +12972,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitColumnRuleColor(value: string) {
+  webkitColumnRuleColor(value: CSSProps['-webkit-column-rule-color']) {
     this.props.set('-webkit-column-rule-color', value)
     return this
   }
@@ -14504,7 +12991,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitColumnRuleStyle(value: string) {
+  webkitColumnRuleStyle(value: CSSProps['-webkit-column-rule-style']) {
     this.props.set('-webkit-column-rule-style', value)
     return this
   }
@@ -14523,7 +13010,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitColumnRuleWidth(value: string) {
+  webkitColumnRuleWidth(value: CSSProps['-webkit-column-rule-width']) {
     this.props.set('-webkit-column-rule-width', value)
     return this
   }
@@ -14542,7 +13029,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitColumns(value: 'auto' | (string & {})) {
+  webkitColumns(value: CSSProps['-webkit-columns']) {
     this.props.set('-webkit-columns', value)
     return this
   }
@@ -14567,7 +13054,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitColumnSpan(value: 'all' | 'none' | (string & {})) {
+  webkitColumnSpan(value: CSSProps['-webkit-column-span']) {
     this.props.set('-webkit-column-span', value)
     return this
   }
@@ -14586,7 +13073,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitColumnWidth(value: 'auto' | (string & {})) {
+  webkitColumnWidth(value: CSSProps['-webkit-column-width']) {
     this.props.set('-webkit-column-width', value)
     return this
   }
@@ -14631,22 +13118,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitFilter(
-    value:
-      | 'none'
-      | 'blur()'
-      | 'brightness()'
-      | 'contrast()'
-      | 'drop-shadow()'
-      | 'grayscale()'
-      | 'hue-rotate()'
-      | 'invert()'
-      | 'opacity()'
-      | 'saturate()'
-      | 'sepia()'
-      | 'url()'
-      | (string & {}),
-  ) {
+  webkitFilter(value: CSSProps['-webkit-filter']) {
     this.props.set('-webkit-filter', value)
     return this
   }
@@ -14665,7 +13137,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitFlowFrom(value: 'none' | (string & {})) {
+  webkitFlowFrom(value: CSSProps['-webkit-flow-from']) {
     this.props.set('-webkit-flow-from', value)
     return this
   }
@@ -14684,7 +13156,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitFlowInto(value: 'none' | (string & {})) {
+  webkitFlowInto(value: CSSProps['-webkit-flow-into']) {
     this.props.set('-webkit-flow-into', value)
     return this
   }
@@ -14729,22 +13201,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitFontFeatureSettings(
-    value:
-      | 'c2cs'
-      | 'dlig'
-      | 'kern'
-      | 'liga'
-      | 'lnum'
-      | 'onum'
-      | 'smcp'
-      | 'swsh'
-      | 'tnum'
-      | 'normal'
-      | 'off'
-      | 'on'
-      | (string & {}),
-  ) {
+  webkitFontFeatureSettings(value: CSSProps['-webkit-font-feature-settings']) {
     this.props.set('-webkit-font-feature-settings', value)
     return this
   }
@@ -14771,7 +13228,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitHyphens(value: 'auto' | 'manual' | 'none' | (string & {})) {
+  webkitHyphens(value: CSSProps['-webkit-hyphens']) {
     this.props.set('-webkit-hyphens', value)
     return this
   }
@@ -14796,7 +13253,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitLineBreak(value: 'after-white-space' | 'normal' | (string & {})) {
+  webkitLineBreak(value: CSSProps['-webkit-line-break']) {
     this.props.set('-webkit-line-break', value)
     return this
   }
@@ -14824,7 +13281,7 @@ export class Style extends BaseStyle<Style> {
      * @param value -
      */
   webkitMarginBottomCollapse(
-    value: 'collapse' | 'discard' | 'separate' | (string & {}),
+    value: CSSProps['-webkit-margin-bottom-collapse'],
   ) {
     this.props.set('-webkit-margin-bottom-collapse', value)
     return this
@@ -14852,9 +13309,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitMarginCollapse(
-    value: 'collapse' | 'discard' | 'separate' | (string & {}),
-  ) {
+  webkitMarginCollapse(value: CSSProps['-webkit-margin-collapse']) {
     this.props.set('-webkit-margin-collapse', value)
     return this
   }
@@ -14873,7 +13328,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitMarginStart(value: 'auto' | (string & {})) {
+  webkitMarginStart(value: CSSProps['-webkit-margin-start']) {
     this.props.set('-webkit-margin-start', value)
     return this
   }
@@ -14900,9 +13355,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitMarginTopCollapse(
-    value: 'collapse' | 'discard' | 'separate' | (string & {}),
-  ) {
+  webkitMarginTopCollapse(value: CSSProps['-webkit-margin-top-collapse']) {
     this.props.set('-webkit-margin-top-collapse', value)
     return this
   }
@@ -14921,7 +13374,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitMaskClip(value: string) {
+  webkitMaskClip(value: CSSProps['-webkit-mask-clip']) {
     this.props.set('-webkit-mask-clip', value)
     return this
   }
@@ -14946,7 +13399,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitMaskImage(value: 'none' | 'url()' | (string & {})) {
+  webkitMaskImage(value: CSSProps['-webkit-mask-image']) {
     this.props.set('-webkit-mask-image', value)
     return this
   }
@@ -14965,7 +13418,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitMaskOrigin(value: string) {
+  webkitMaskOrigin(value: CSSProps['-webkit-mask-origin']) {
     this.props.set('-webkit-mask-origin', value)
     return this
   }
@@ -14984,7 +13437,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitMaskRepeat(value: string) {
+  webkitMaskRepeat(value: CSSProps['-webkit-mask-repeat']) {
     this.props.set('-webkit-mask-repeat', value)
     return this
   }
@@ -15011,7 +13464,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitMaskSize(value: 'auto' | 'contain' | 'cover' | (string & {})) {
+  webkitMaskSize(value: CSSProps['-webkit-mask-size']) {
     this.props.set('-webkit-mask-size', value)
     return this
   }
@@ -15036,7 +13489,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitNbspMode(value: 'normal' | 'space' | (string & {})) {
+  webkitNbspMode(value: CSSProps['-webkit-nbsp-mode']) {
     this.props.set('-webkit-nbsp-mode', value)
     return this
   }
@@ -15061,7 +13514,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitOverflowScrolling(value: 'auto' | 'touch' | (string & {})) {
+  webkitOverflowScrolling(value: CSSProps['-webkit-overflow-scrolling']) {
     this.props.set('-webkit-overflow-scrolling', value)
     return this
   }
@@ -15080,7 +13533,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitPaddingStart(value: string) {
+  webkitPaddingStart(value: CSSProps['-webkit-padding-start']) {
     this.props.set('-webkit-padding-start', value)
     return this
   }
@@ -15099,7 +13552,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitPerspective(value: 'none' | (string & {})) {
+  webkitPerspective(value: CSSProps['-webkit-perspective']) {
     this.props.set('-webkit-perspective', value)
     return this
   }
@@ -15118,7 +13571,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitPerspectiveOrigin(value: string) {
+  webkitPerspectiveOrigin(value: CSSProps['-webkit-perspective-origin']) {
     this.props.set('-webkit-perspective-origin', value)
     return this
   }
@@ -15143,7 +13596,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitRegionFragment(value: 'auto' | 'break' | (string & {})) {
+  webkitRegionFragment(value: CSSProps['-webkit-region-fragment']) {
     this.props.set('-webkit-region-fragment', value)
     return this
   }
@@ -15162,7 +13615,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitTapHighlightColor(value: string) {
+  webkitTapHighlightColor(value: CSSProps['-webkit-tap-highlight-color']) {
     this.props.set('-webkit-tap-highlight-color', value)
     return this
   }
@@ -15181,7 +13634,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitTextFillColor(value: string) {
+  webkitTextFillColor(value: CSSProps['-webkit-text-fill-color']) {
     this.props.set('-webkit-text-fill-color', value)
     return this
   }
@@ -15206,7 +13659,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitTextSizeAdjust(value: 'auto' | 'none' | (string & {})) {
+  webkitTextSizeAdjust(value: CSSProps['-webkit-text-size-adjust']) {
     this.props.set('-webkit-text-size-adjust', value)
     return this
   }
@@ -15225,7 +13678,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitTextStroke(value: string) {
+  webkitTextStroke(value: CSSProps['-webkit-text-stroke']) {
     this.props.set('-webkit-text-stroke', value)
     return this
   }
@@ -15244,7 +13697,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitTextStrokeColor(value: string) {
+  webkitTextStrokeColor(value: CSSProps['-webkit-text-stroke-color']) {
     this.props.set('-webkit-text-stroke-color', value)
     return this
   }
@@ -15263,7 +13716,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitTextStrokeWidth(value: string) {
+  webkitTextStrokeWidth(value: CSSProps['-webkit-text-stroke-width']) {
     this.props.set('-webkit-text-stroke-width', value)
     return this
   }
@@ -15282,7 +13735,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitTouchCallout(value: 'none' | (string & {})) {
+  webkitTouchCallout(value: CSSProps['-webkit-touch-callout']) {
     this.props.set('-webkit-touch-callout', value)
     return this
   }
@@ -15347,32 +13800,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitTransform(
-    value:
-      | 'matrix()'
-      | 'matrix3d()'
-      | 'none'
-      | 'perspective()'
-      | 'rotate()'
-      | 'rotate3d()'
-      | "rotateX('angle')"
-      | "rotateY('angle')"
-      | "rotateZ('angle')"
-      | 'scale()'
-      | 'scale3d()'
-      | 'scaleX()'
-      | 'scaleY()'
-      | 'scaleZ()'
-      | 'skew()'
-      | 'skewX()'
-      | 'skewY()'
-      | 'translate()'
-      | 'translate3d()'
-      | 'translateX()'
-      | 'translateY()'
-      | 'translateZ()'
-      | (string & {}),
-  ) {
+  webkitTransform(value: CSSProps['-webkit-transform']) {
     this.props.set('-webkit-transform', value)
     return this
   }
@@ -15391,7 +13819,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitTransformOrigin(value: string) {
+  webkitTransformOrigin(value: CSSProps['-webkit-transform-origin']) {
     this.props.set('-webkit-transform-origin', value)
     return this
   }
@@ -15410,7 +13838,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitTransformOriginX(value: string) {
+  webkitTransformOriginX(value: CSSProps['-webkit-transform-origin-x']) {
     this.props.set('-webkit-transform-origin-x', value)
     return this
   }
@@ -15429,7 +13857,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitTransformOriginY(value: string) {
+  webkitTransformOriginY(value: CSSProps['-webkit-transform-origin-y']) {
     this.props.set('-webkit-transform-origin-y', value)
     return this
   }
@@ -15448,7 +13876,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitTransformOriginZ(value: string) {
+  webkitTransformOriginZ(value: CSSProps['-webkit-transform-origin-z']) {
     this.props.set('-webkit-transform-origin-z', value)
     return this
   }
@@ -15473,7 +13901,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitTransformStyle(value: 'flat' | 'preserve-3d' | (string & {})) {
+  webkitTransformStyle(value: CSSProps['-webkit-transform-style']) {
     this.props.set('-webkit-transform-style', value)
     return this
   }
@@ -15498,7 +13926,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitTransition(value: 'all' | 'none' | (string & {})) {
+  webkitTransition(value: CSSProps['-webkit-transition']) {
     this.props.set('-webkit-transition', value)
     return this
   }
@@ -15517,7 +13945,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitTransitionDelay(value: string) {
+  webkitTransitionDelay(value: CSSProps['-webkit-transition-delay']) {
     this.props.set('-webkit-transition-delay', value)
     return this
   }
@@ -15536,7 +13964,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitTransitionDuration(value: string) {
+  webkitTransitionDuration(value: CSSProps['-webkit-transition-duration']) {
     this.props.set('-webkit-transition-duration', value)
     return this
   }
@@ -15561,7 +13989,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitTransitionProperty(value: 'all' | 'none' | (string & {})) {
+  webkitTransitionProperty(value: CSSProps['-webkit-transition-property']) {
     this.props.set('-webkit-transition-property', value)
     return this
   }
@@ -15580,7 +14008,9 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  webkitTransitionTimingFunction(value: string) {
+  webkitTransitionTimingFunction(
+    value: CSSProps['-webkit-transition-timing-function'],
+  ) {
     this.props.set('-webkit-transition-timing-function', value)
     return this
   }
@@ -15607,7 +14037,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitUserDrag(value: 'auto' | 'element' | 'none' | (string & {})) {
+  webkitUserDrag(value: CSSProps['-webkit-user-drag']) {
     this.props.set('-webkit-user-drag', value)
     return this
   }
@@ -15634,13 +14064,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitUserModify(
-    value:
-      | 'read-only'
-      | 'read-write'
-      | 'read-write-plaintext-only'
-      | (string & {}),
-  ) {
+  webkitUserModify(value: CSSProps['-webkit-user-modify']) {
     this.props.set('-webkit-user-modify', value)
     return this
   }
@@ -15667,7 +14091,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  webkitUserSelect(value: 'auto' | 'none' | 'text' | (string & {})) {
+  webkitUserSelect(value: CSSProps['-webkit-user-select']) {
     this.props.set('-webkit-user-select', value)
     return this
   }
@@ -15686,7 +14110,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  widows(value: number) {
+  widows(value: CSSProps['widows']) {
     this.props.set('widows', value)
     return this
   }
@@ -15717,15 +14141,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  width(
-    value:
-      | 'auto'
-      | 'fill'
-      | 'fit-content'
-      | 'max-content'
-      | 'min-content'
-      | (string & {}),
-  ) {
+  width(value: CSSProps['width']) {
     this.props.set('width', value)
     return this
   }
@@ -15752,7 +14168,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  willChange(value: 'auto' | 'contents' | 'scroll-position' | (string & {})) {
+  willChange(value: CSSProps['will-change']) {
     this.props.set('will-change', value)
     return this
   }
@@ -15779,7 +14195,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  wordBreak(value: 'break-all' | 'keep-all' | 'normal' | (string & {})) {
+  wordBreak(value: CSSProps['word-break']) {
     this.props.set('word-break', value)
     return this
   }
@@ -15798,7 +14214,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  wordSpacing(value: 'normal' | (string & {})) {
+  wordSpacing(value: CSSProps['word-spacing']) {
     this.props.set('word-spacing', value)
     return this
   }
@@ -15823,7 +14239,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  wordWrap(value: 'break-word' | 'normal' | (string & {})) {
+  wordWrap(value: CSSProps['word-wrap']) {
     this.props.set('word-wrap', value)
     return this
   }
@@ -15854,15 +14270,7 @@ export class Style extends BaseStyle<Style> {
      *
      * @param value -
      */
-  writingMode(
-    value:
-      | 'horizontal-tb'
-      | 'sideways-lr'
-      | 'sideways-rl'
-      | 'vertical-lr'
-      | 'vertical-rl'
-      | (string & {}),
-  ) {
+  writingMode(value: CSSProps['writing-mode']) {
     this.props.set('writing-mode', value)
     return this
   }
@@ -15881,7 +14289,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  zIndex(value: number) {
+  zIndex(value: CSSProps['z-index']) {
     this.props.set('z-index', value)
     return this
   }
@@ -15900,7 +14308,7 @@ export class Style extends BaseStyle<Style> {
 
      * @param value -
      */
-  zoom(value: 'normal' | (string & {})) {
+  zoom(value: CSSProps['zoom']) {
     this.props.set('zoom', value)
     return this
   }

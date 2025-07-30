@@ -130,10 +130,11 @@ function createMethod(propType: PropType) {
   const desc = propType.desc?.replace?.('@', '`@`')
   const cname = camelize(name)
   const values = createValuesTSDoc(getValues(propType))
-  const anyType =
+  /*const anyType =
     propType.$.restriction == 'enum'
       ? getEnumType(propType)
-      : getAnyType(propType)
+      : getAnyType(propType)*/
+  const anyType = `CSSProps['${name}']`
   const code = `
     /**
      * ${desc}.
