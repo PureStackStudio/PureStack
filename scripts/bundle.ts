@@ -10,7 +10,7 @@ const emojis: Record<string, string> = {
   '@purestack/ts-html': '⚙️',
 }
 const packages: PackageJson[] = globSync(['packages/**/package.json']).map(
-  (p) => JSON.parse(readFileSync(path.join(p), 'utf8'))
+  (p) => JSON.parse(readFileSync(path.join(p), 'utf8')),
 )
 const mainPkgName =
   packages.map((x) => x.name).filter((n) => !n.startsWith('@'))[0] ??
@@ -64,7 +64,7 @@ function getEntries(pkg: PackageJson) {
     if (key == '.') continue
     if (!key.startsWith('./'))
       throw new Error(
-        `${pkg.name} package additional export keys should start with ./`
+        `${pkg.name} package additional export keys should start with ./`,
       )
     const name = key.substring(2) // skip './'
     result.push({
@@ -93,6 +93,7 @@ async function bundlePackage(pkg: PackageJson) {
         minify: { compress: true, mangle: true, removeWhitespace: true },
         external: [
           'esbuild',
+          'prettier',
           ...packages.filter((x) => x != pkg).map((x) => x.name),
         ],
         noExternal: [],
@@ -123,7 +124,7 @@ function replaceVersion(version: string) {
       return {
         code: code.replace(
           /\bversion = PURESTACK_VERSION\b/g,
-          'version = ' + JSON.stringify(version)
+          'version = ' + JSON.stringify(version),
         ),
         map: null,
       }

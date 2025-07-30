@@ -1,5 +1,5 @@
 import { isString } from '@purestack/utils'
-import { escapeHtml } from 'packages/utils/src/escapeHtml'
+import { escapeHtml } from '@purestack/utils'
 import prettier from 'prettier'
 
 import {
@@ -15,7 +15,7 @@ import {
  * Represents an immutable builder node for constructing HTML-like trees in TypeScript.
  * Each method returns a fresh TSNode, retaining chain context via the #parent link.
  */
-class TSNode<K extends HtmlTag> {
+export class TSNode<K extends HtmlTag> {
   /** Link to the previous node in the chain for context (e.g., tag inheritance). */
   #parent?: TSNode<K>
 

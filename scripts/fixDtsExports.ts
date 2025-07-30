@@ -56,8 +56,10 @@ export async function fixDtsExports(directory: string): Promise<void> {
       // 🏷 Add `export` to any top-level declarations missing it
       content = content.replace(
         /^\s*(interface|type|enum|class|function|const)\s+/gm,
-        'export $1 '
+        'export $1 ',
       )
+
+      content = content.replace('#private;', '')
 
       // 🧹 Remove //#region and //#endregion comments
       content = content.replace(/\/\/#(region|endregion)[^\n]*\n/g, '')
@@ -76,6 +78,6 @@ export async function fixDtsExports(directory: string): Promise<void> {
         '/* eslint-disable @typescript-eslint/no-unused-vars */\n' + content
 
       await fs.writeFile(filePath, content, 'utf8')
-    })
+    }),
   )
 }
