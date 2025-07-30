@@ -1,6 +1,21 @@
 import { BaseStyle } from './baseStyle'
 
 export type CSSProps = {
+  whitespace:
+    | 'normal'
+    | 'nowrap'
+    | 'pre'
+    | 'pre-wrap'
+    | 'pre-line'
+    | 'break-spaces'
+    | 'collapse balance'
+    | 'preserve nowrap'
+    | 'inherit'
+    | 'initial'
+    | 'revert'
+    | 'revert-layer'
+    | 'unset'
+    | (string & {})
   'additive-symbols': string
   'align-content':
     | 'center'
