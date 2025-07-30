@@ -1943,7 +1943,7 @@ export type CSSProps = {
     | (string & {})
   'z-index': number
   zoom: 'normal' | (string & {})
-} & Record<string, string | number>
+} & Record<string & {}, string | number>
 
 export class Style extends BaseStyle<Style> {
   constructor(selector?: string) {
@@ -1954,6 +1954,11 @@ export class Style extends BaseStyle<Style> {
     for (const [key, value] of Object.entries(css)) {
       this.props.set(key, value as string)
     }
+    return this
+  }
+
+  set<T extends keyof CSSProps>(key: T, value: CSSProps[T]) {
+    this.props.set(key, value)
     return this
   }
 

@@ -1,5 +1,5 @@
 import { Style } from './style'
 
-export function css(selector?: string) {
+export function s(selector?: string) {
   return new Style(selector)
 }

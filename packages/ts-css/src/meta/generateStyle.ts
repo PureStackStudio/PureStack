@@ -57,7 +57,7 @@ export type CSSProps = {
     | 'unset'
     | (string & {})
   ${props}
-} & Record<string, string | number>
+} & Record<string & {}, string | number>
 
 export class Style extends BaseStyle<Style> {
   constructor(selector?: string) {
@@ -69,6 +69,11 @@ export class Style extends BaseStyle<Style> {
         this.props.set(key, value as string)
       }
       return this
+  }
+
+  set<T extends keyof CSSProps>(key: T, value: CSSProps[T]) {
+    this.props.set(key, value)
+    return this
   }
 
   ${methods}

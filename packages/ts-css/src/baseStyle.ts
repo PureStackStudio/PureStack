@@ -39,12 +39,12 @@ export class BaseStyle<T extends RootStyle> extends RootStyle {
     return child
   }
 
-  cast(val: T) {
+  #cast(val: T) {
     return val as unknown as BaseStyle<T>
   }
 
   use(css: T) {
-    this.cast(css).props.forEach((value, key) => this.props.set(key, value))
+    this.#cast(css).props.forEach((value, key) => this.props.set(key, value))
     return this
   }
 
@@ -53,17 +53,12 @@ export class BaseStyle<T extends RootStyle> extends RootStyle {
     const selector = query.startsWith('@media') ? query : `@media(${query})`
     let child = this.children.get(selector)
     if (child) {
-      return this.cast(child).selectWithoutParentKey(this.selector)
+      return this.#cast(child).selectWithoutParentKey(this.selector)
     }
     child = this.#createT(selector)
     this.children.set(selector, child)
-    child = this.cast(child).selectWithoutParentKey(this.selector)
+    child = this.#cast(child).selectWithoutParentKey(this.selector)
     return child
-  }
-
-  raw(key: string, value: string) {
-    this.props.set(key, value)
-    return this
   }
 
   toCSS() {

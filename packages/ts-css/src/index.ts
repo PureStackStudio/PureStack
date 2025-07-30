@@ -1,4 +1,4 @@
-export { css } from './css'
+export { s } from './s'
 export { Style } from './style'
 
 declare const PURESTACK_VERSION: string
