@@ -91,6 +91,13 @@ export function getHeadConfig(basic: BasicHeadConfig): HeadConfig {
       content: basic.applicationName,
     })
 
+  if (basic.favIcon)
+    links.push({
+      rel: basic.favIcon.rel ?? 'shortcut icon',
+      href: basic.favIcon.href,
+      type: basic.favIcon.type ?? 'image/svg+xml',
+    })
+
   if (nameMetas.length) config.nameMetas = nameMetas
   if (propertyMetas.length) config.propertyMetas = propertyMetas
   if (links.length) config.links = links

@@ -101,4 +101,13 @@ export interface BasicHeadConfig {
    * Application name for Windows tiles or Progressive Web Apps.
    */
   applicationName?: string
+
+  /**
+   * Favicon.
+   */
+  favIcon?: {
+    rel?: 'shortcut icon' | (string & {})
+    href?: string
+    type?: 'image/svg+xml' | (string & {})
+  }
 }

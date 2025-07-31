@@ -193,9 +193,9 @@ export type IconSizes = `${number}x${number}` | 'any' | (string & {})
  */
 export interface LinkTag {
   /** Specifies the relationship between the document and the linked resource. */
-  rel: LinkRel
+  rel?: LinkRel
   /** URL of the linked resource. */
-  href: string
+  href?: string
   /** Human-readable title (e.g. for rel="search") */
   title?: string
   /** Optional MIME type of the linked resource. */
