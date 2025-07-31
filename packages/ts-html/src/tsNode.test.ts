@@ -22,8 +22,10 @@ describe('TSNode', () => {
       )
     })
 
-    it('renders raw HTML overriding wrapper', () => {
-      expect(h('div').raw('<span>raw</span>').toHtml()).toBe('<span>raw</span>')
+    it('renders raw HTML inside wrapper', () => {
+      expect(h('div').raw('<span>raw</span>').toHtml()).toBe(
+        '<div><span>raw</span></div>',
+      )
     })
 
     it('merges multiple attributes correctly', () => {

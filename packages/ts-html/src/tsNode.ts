@@ -69,6 +69,7 @@ export class TSNode<K extends HtmlTag> {
    * @returns A ts wrapping the html node and linked in the chain.
    */
   raw(html: string): TSNode<K> {
+    if (this.#tag) return this.children(h().raw(html))
     const leaf = new TSNode(this)
     leaf.#raw = html
     return leaf

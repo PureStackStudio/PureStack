@@ -7,7 +7,7 @@ export interface SEOHead {
   /**
    * Page title, displayed in browser tabs and search engine results.
    */
-  title: string
+  title?: string
 
   /**
    * Meta description tag content, used by search engines.
@@ -27,7 +27,7 @@ export interface SEOHead {
    * const charsetMeta: CharsetMetaTag = { charset: 'utf-8' };
    * ```
    */
-  charset?: 'utf-8' | 'utf-16' | (string & {})
+  charset?: 'utf-8' | (string & {})
 
   /**
    * Viewport meta tag.
