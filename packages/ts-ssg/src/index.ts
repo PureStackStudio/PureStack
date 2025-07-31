@@ -23,35 +23,6 @@ async function main() {
 main().catch(console.error)
 
 /**
- * Generic link tag descriptor.
- */
-interface LinkTag {
-  rel: string
-  href: string
-  type?: string
-}
-
-/**
- * Generic meta tag descriptor.
- */
-interface MetaTag {
-  charset?: string
-  name?: string
-  property?: string
-  content?: string
-}
-
-export interface SeoBasics {
-  // Standard tags
-  charset?: string
-  viewport?: string
-  title?: string
-  description?: string
-  linkTags?: LinkTag[]
-  metaTags?: MetaTag[]
-}
-
-/**
  * Creates a <head> element populated with SEO tags according to SeoBasics.
  */
 export function createHead(options: SeoBasics) {

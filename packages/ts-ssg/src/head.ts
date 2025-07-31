@@ -1,3 +1,5 @@
+import { h, TSNode } from '@purestack/ts-html'
+
 /**
  * Allowed values for the `name` attribute of `<meta name="...">`.
  */
@@ -376,6 +378,96 @@ export interface HeadConfig {
   noscript?: NoScriptTag
 }
 
-export function createHead(config: HeadConfig) {
-  return config
+export function createHead(config: HeadConfig): TSNode<'head'> {
+  const head = h('head')
+  const children = new Array<TSNode<''>>()
+
+  // <title>
+  if (config.title) {
+    children.push(h('title').children(h().text(config.title)))
+  }
+
+  // <base>
+  if (config.base) {
+    const { href, target } = config.base
+    children.push(h('base').attrAll({ href, target }))
+  }
+
+  // <meta charset>
+  if (config.charset) {
+    children.push(h('meta').attr({ charset: config.charset }))
+  }
+
+  // <meta name="...">
+  config.nameMetas?.forEach((m: NameMetaTag) => {
+    children.push(
+      h('meta').attr({
+        name: m.name,
+        content: m.content,
+      }),
+    )
+  })
+
+  // <meta property="...">
+  config.propertyMetas?.forEach((m: PropertyMetaTag) => {
+    children.push(
+      h('meta').attrCustom({
+        property: m.property,
+        content: m.content,
+      }),
+    )
+  })
+
+  // <meta http-equiv="...">
+  config.httpEquivMetas?.forEach((m: HttpEquivMetaTag) => {
+    children.push(
+      h('meta').attrCustom({
+        'http-equiv': m.httpEquiv,
+        content: m.content,
+      }),
+    )
+  })
+
+  // <link …>
+  config.links?.forEach((link: LinkTag) => {
+    const attrs: Record<string, string> = {
+      rel: link.rel,
+      href: link.href,
+    }
+    if (link.type) attrs.type = link.type
+    if (link.sizes) attrs.sizes = link.sizes
+    if (link.media) attrs.media = link.media
+    if (link.hreflang) attrs.hreflang = link.hreflang
+    if (link.as) attrs.as = link.as
+    if (link.crossOrigin) attrs.crossorigin = link.crossOrigin
+    if (link.importance) attrs.importance = link.importance
+
+    children.push(h('link').attrCustom(attrs))
+  })
+
+  // <style>…</style>
+  config.styles?.forEach((style: StyleTag) => {
+    children.push(h('style').children(h().raw(style.cssText)))
+  })
+
+  // <script …>…</script>
+  config.scripts?.forEach((script: ScriptTag) => {
+    const attrs: Record<string, string> = {}
+    if (script.src) attrs.src = script.src
+    if (script.type) attrs.type = script.type
+    if (script.async) attrs.async = '' // boolean attrs rendered as present
+    if (script.defer) attrs.defer = ''
+
+    const node = h('script').attrCustom(attrs)
+    children.push(
+      script.content ? node.children(h().raw(script.content)) : node,
+    )
+  })
+
+  // <noscript>…</noscript>
+  if (config.noscript) {
+    children.push(h('noscript').raw(config.noscript.content))
+  }
+
+  return head.children(...children)
 }
