@@ -1,0 +1,39 @@
+{
+  "name": "@purestack/ts-ssg",
+  "version": "1.0.0",
+  "packageManager": "yarn@4.9.2",
+  "main": "./dist/ts-ssg.cjs",
+  "module": "./dist/ts-ssg.js",
+  "types": "./dist/ts-ssg.d.ts",
+  "type": "module",
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koculu/purestack.git",
+    "directory": "packages/ts-ssg"
+  },
+  "homepage": "https://tenray.io/purestack",
+  "bugs": {
+    "url": "https://github.com/koculu/purestack/issues"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/ts-ssg.cjs",
+      "import": "./dist/ts-ssg.js"
+    }
+  },
+  "license": "MIT",
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint ./src",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "prettier": "^3.6.2"
+  }
+}
