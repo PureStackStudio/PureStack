@@ -1,4 +1,4 @@
-import { HeadConfig, NameMetaTag, PropertyMetaTag } from './head'
+import { HeadConfig, LinkTag, NameMetaTag, PropertyMetaTag } from './head'
 
 /**
  * Basic SEO-optimized head section configuration.
@@ -110,72 +110,66 @@ export function seoHeadToHeadConfig(seo: SEOHead): HeadConfig {
 
   config.title = seo.title
 
+  const nameMetas: NameMetaTag[] = []
+  const propertyMetas: PropertyMetaTag[] = []
+  const links: LinkTag[] = []
+
   if (seo.description) {
-    config.nameMetas = [{ name: 'description', content: seo.description }]
+    nameMetas.push({ name: 'description', content: seo.description })
   }
   if (seo.keywords) {
-    config.nameMetas = [
-      ...(config.nameMetas || []),
-      { name: 'keywords', content: seo.keywords.join(',') },
-    ]
+    nameMetas.push({ name: 'keywords', content: seo.keywords.join(',') })
   }
   if (seo.robots) {
-    config.nameMetas = [
-      ...(config.nameMetas || []),
-      { name: 'robots', content: seo.robots },
-    ]
+    nameMetas.push({ name: 'robots', content: seo.robots })
   }
 
-  // Canonical link
   if (seo.canonicalUrl) {
-    config.links = [{ rel: 'canonical', href: seo.canonicalUrl }]
+    links.push({ rel: 'canonical', href: seo.canonicalUrl })
   }
 
-  // Open Graph
   if (seo.openGraph) {
-    const props: PropertyMetaTag[] = []
     const og = seo.openGraph
-    if (og.title) props.push({ property: 'og:title', content: og.title })
+    if (og.title)
+      propertyMetas.push({ property: 'og:title', content: og.title })
     if (og.description)
-      props.push({ property: 'og:description', content: og.description })
-    if (og.url) props.push({ property: 'og:url', content: og.url })
-    if (og.image) props.push({ property: 'og:image', content: og.image })
-    if (og.type) props.push({ property: 'og:type', content: og.type })
+      propertyMetas.push({
+        property: 'og:description',
+        content: og.description,
+      })
+    if (og.url) propertyMetas.push({ property: 'og:url', content: og.url })
+    if (og.image)
+      propertyMetas.push({ property: 'og:image', content: og.image })
+    if (og.type) propertyMetas.push({ property: 'og:type', content: og.type })
     if (og.siteName)
-      props.push({ property: 'og:site_name', content: og.siteName })
-    if (og.locale) props.push({ property: 'og:locale', content: og.locale })
-    if (props.length) {
-      config.propertyMetas = props
-    }
+      propertyMetas.push({ property: 'og:site_name', content: og.siteName })
+    if (og.locale)
+      propertyMetas.push({ property: 'og:locale', content: og.locale })
   }
 
-  // Twitter Cards
   if (seo.twitter) {
-    const tm: NameMetaTag[] = []
     const tw = seo.twitter
-    if (tw.cardType) tm.push({ name: 'twitter:card', content: tw.cardType })
-    if (tw.site) tm.push({ name: 'twitter:site', content: tw.site })
-    if (tw.creator) tm.push({ name: 'twitter:creator', content: tw.creator })
-    if (tw.title) tm.push({ name: 'twitter:title', content: tw.title })
+    if (tw.cardType)
+      nameMetas.push({ name: 'twitter:card', content: tw.cardType })
+    if (tw.site) nameMetas.push({ name: 'twitter:site', content: tw.site })
+    if (tw.creator)
+      nameMetas.push({ name: 'twitter:creator', content: tw.creator })
+    if (tw.title) nameMetas.push({ name: 'twitter:title', content: tw.title })
     if (tw.description)
-      tm.push({ name: 'twitter:description', content: tw.description })
-    if (tw.image) tm.push({ name: 'twitter:image', content: tw.image })
-    config.nameMetas = [...(config.nameMetas || []), ...tm]
+      nameMetas.push({ name: 'twitter:description', content: tw.description })
+    if (tw.image) nameMetas.push({ name: 'twitter:image', content: tw.image })
   }
 
-  // Theme color & application name
   if (seo.themeColor) {
-    config.nameMetas = [
-      ...(config.nameMetas || []),
-      { name: 'theme-color', content: seo.themeColor },
-    ]
+    nameMetas.push({ name: 'theme-color', content: seo.themeColor })
   }
   if (seo.applicationName) {
-    config.nameMetas = [
-      ...(config.nameMetas || []),
-      { name: 'application-name', content: seo.applicationName },
-    ]
+    nameMetas.push({ name: 'application-name', content: seo.applicationName })
   }
+
+  if (nameMetas.length) config.nameMetas = nameMetas
+  if (propertyMetas.length) config.propertyMetas = propertyMetas
+  if (links.length) config.links = links
 
   return config
 }
