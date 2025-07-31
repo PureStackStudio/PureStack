@@ -1,6 +1,7 @@
+import { toColorizer } from '@logpot/printer'
 import { h } from '@purestack/ts-html'
 import { createLogger, getLogger } from 'logpot'
-import { toColorizer } from '@logpot/printer'
+
 import { createHead } from './head'
 import { getHeadConfig } from './seo-head'
 
