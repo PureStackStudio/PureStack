@@ -124,6 +124,7 @@ export class TSNode<K extends HtmlTag> {
   ) {
     if (this.#tag == tag) return this
     const root = new TSNode<K>(this)
+    root.#parent = undefined
     const stack = [root]
     while (stack.length) {
       const cursor = stack.pop()!
@@ -140,7 +141,11 @@ export class TSNode<K extends HtmlTag> {
           return root
         }
       }
-      const newChildren = children.map((c) => new TSNode(c))
+      const newChildren = children.map((c) => {
+        const tc = new TSNode(c)
+        tc.#parent = undefined
+        return tc
+      })
       cursor.#children = newChildren
       stack.push(...newChildren)
     }
