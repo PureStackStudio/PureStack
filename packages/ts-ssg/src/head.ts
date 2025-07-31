@@ -324,7 +324,6 @@ export interface NoScriptTag {
  *   <style>body { background: #fff; }</style>
  *   <script src="/main.js" type="module" defer></script>
  *   <noscript>Please enable JavaScript to view this site.</noscript>
- *   <template><meta name="theme-color" content="#fff"></template>
  * </head>
  * ```
  * ```ts
@@ -339,7 +338,6 @@ export interface NoScriptTag {
  *   styles: [ { cssText: 'body { background: #fff; }' } ],
  *   scripts: [ { src: '/main.js', type: 'module', defer: true } ],
  *   noscript: { content: 'Please enable JavaScript to view this site.' },
- *   templates: [ { html: '<meta name="theme-color" content="#fff">' } ]
  * };
  * ```
  */
@@ -383,18 +381,14 @@ export function createHead(config: HeadConfig): TSNode<'head'> {
   const meta = h('meta')
   const children = new Array<TSNode<''>>()
 
-  if (config.title) {
-    children.push(h('title').children(h().text(config.title)))
-  }
+  if (config.title) children.push(h('title').children(h().text(config.title)))
 
   if (config.base) {
     const { href, target } = config.base
     children.push(h('base').attrAll({ href, target }))
   }
 
-  if (config.charset) {
-    children.push(meta.attr({ charset: config.charset }))
-  }
+  if (config.charset) children.push(meta.attr({ charset: config.charset }))
 
   config.nameMetas?.forEach((m: NameMetaTag) => {
     children.push(
@@ -405,7 +399,6 @@ export function createHead(config: HeadConfig): TSNode<'head'> {
     )
   })
 
-  // <meta property="...">
   config.propertyMetas?.forEach((m: PropertyMetaTag) => {
     children.push(
       meta.attrCustom({
@@ -441,7 +434,7 @@ export function createHead(config: HeadConfig): TSNode<'head'> {
   })
 
   config.styles?.forEach((style: StyleTag) => {
-    children.push(h('style').children(h().raw(style.cssText)))
+    children.push(h('style').raw(style.cssText))
   })
 
   config.scripts?.forEach((script: ScriptTag) => {
@@ -452,14 +445,10 @@ export function createHead(config: HeadConfig): TSNode<'head'> {
     if (script.defer) attrs.defer = ''
 
     const node = h('script').attrCustom(attrs)
-    children.push(
-      script.content ? node.children(h().raw(script.content)) : node,
-    )
+    children.push(script.content ? node.raw(script.content) : node)
   })
 
-  if (config.noscript) {
-    children.push(h('noscript').raw(config.noscript.content))
-  }
+  if (config.noscript) children.push(h('noscript').raw(config.noscript.content))
 
   return head.children(...children)
 }
