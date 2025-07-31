@@ -32,7 +32,7 @@ describe('TSNode', () => {
       const node = h('a')
         .attr({ href: 'url' })
         .attrGlobal({ title: 'title' })
-        .attrCustom({ 'data-test': 'value' })
+        .attr({ 'data-test': 'value' })
 
       expect(node.toHtml()).toBe(
         '<a href="url" title="title" data-test="value"></a>',
@@ -99,7 +99,7 @@ describe('TSNode', () => {
     it('merges attributes with correct override order', () => {
       const node = h('button')
         .attrAria({ 'aria-label': 'first' })
-        .attrCustom({ 'aria-label': 'second' })
+        .attr({ 'aria-label': 'second' })
 
       expect(node.toHtml()).toBe('<button aria-label="second"></button>')
     })

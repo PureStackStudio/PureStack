@@ -405,7 +405,7 @@ export function createHead(config: HeadConfig): TSNode<'head'> {
 
   config.httpEquivMetas?.forEach((m: HttpEquivMetaTag) => {
     children.push(
-      meta.attrCustom({
+      meta.attr({
         'http-equiv': m.httpEquiv,
         content: m.content,
       }),
@@ -413,10 +413,10 @@ export function createHead(config: HeadConfig): TSNode<'head'> {
   })
 
   config.links?.forEach((link: LinkTag) => {
-    const attrs: Record<string, string> = {
+    const attrs = {
       ...link,
     }
-    children.push(h('link').attrCustom(attrs))
+    children.push(h('link').attr(attrs))
   })
 
   config.styles?.forEach((style: StyleTag) => {
@@ -434,7 +434,7 @@ export function createHead(config: HeadConfig): TSNode<'head'> {
     if (integrity) attrs.integrity = integrity
     if (nonce) attrs.nonce = nonce
 
-    const node = h('script').attrCustom(attrs)
+    const node = h('script').attr(attrs)
     children.push(content ? node.raw(content) : node)
   })
 

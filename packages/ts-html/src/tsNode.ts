@@ -76,9 +76,6 @@ export class TSNode<K extends HtmlTag> {
     leaf.#raw = html
     return leaf
   }
-  attr(attrs: Partial<Record<SpecificAttributesForTag<K>, string>>): TSNode<K> {
-    return this.#withAttributes(attrs as Record<string, string>)
-  }
 
   id(id: string) {
     return this.#withAttributes({ id })
@@ -88,19 +85,40 @@ export class TSNode<K extends HtmlTag> {
     return this.#withAttributes({ class: args.join(' ') })
   }
 
-  attrAll(attrs: Partial<Record<AttributesForTag<K>, string>>): TSNode<K> {
+  attr(
+    attrs:
+      | Partial<Record<SpecificAttributesForTag<K>, string>>
+      | Partial<Record<string, string>>,
+  ): TSNode<K> {
     return this.#withAttributes(attrs as Record<string, string>)
   }
-  attrCustom(attrs: Record<string, string>): TSNode<K> {
+
+  attrAll(
+    attrs:
+      | Partial<Record<AttributesForTag<K>, string>>
+      | Partial<Record<string, string>>,
+  ): TSNode<K> {
     return this.#withAttributes(attrs as Record<string, string>)
   }
-  attrGlobal(attrs: Partial<Record<GlobalAttributes, string>>): TSNode<K> {
+  attrGlobal(
+    attrs:
+      | Partial<Record<GlobalAttributes, string>>
+      | Partial<Record<string, string>>,
+  ): TSNode<K> {
     return this.#withAttributes(attrs as Record<string, string>)
   }
-  attrAria(attrs: Partial<Record<AriaAttributes, string>>): TSNode<K> {
+  attrAria(
+    attrs:
+      | Partial<Record<AriaAttributes, string>>
+      | Partial<Record<string, string>>,
+  ): TSNode<K> {
     return this.#withAttributes(attrs as Record<string, string>)
   }
-  attrEvents(attrs: Partial<Record<EventAttributes, string>>): TSNode<K> {
+  attrEvents(
+    attrs:
+      | Partial<Record<EventAttributes, string>>
+      | Partial<Record<string, string>>,
+  ): TSNode<K> {
     return this.#withAttributes(attrs as Record<string, string>)
   }
   /**
