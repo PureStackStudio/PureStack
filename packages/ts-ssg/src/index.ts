@@ -59,10 +59,12 @@ async function run() {
     dir: 'ltr',
   })
   const body = h('body').children(
-    h('div').raw('abcdef'),
+    h('main').raw('abcdef'),
     h('script').raw('<><>şşş<<<'),
   )
-  const page = html.children(head, body)
+  const page = html
+    .children(head, body)
+    .select('main', (b) => b.children(h('style').text('hello')))
 
   return await page.toPrettyHtml()
 }

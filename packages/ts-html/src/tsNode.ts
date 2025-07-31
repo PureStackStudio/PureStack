@@ -63,13 +63,15 @@ export class TSNode<K extends HtmlTag> {
     leaf.#text = escapeHtml(text, false)
     return leaf
   }
+
   /**
-   * Appends a new raw html code under this node's tag context.
+   * Appends or replace a new raw html code under this node's tag context.
    * @param html - The raw html string for the new html node.
+   * @param replace - If true current tag is replaced, if false raw content added to the children of the current tag.
    * @returns A ts wrapping the html node and linked in the chain.
    */
-  raw(html: string): TSNode<K> {
-    if (this.#tag) return this.children(h().raw(html))
+  raw(html: string, replace = false): TSNode<K> {
+    if (this.#tag && !replace) return this.children(h().raw(html))
     const leaf = new TSNode(this)
     leaf.#raw = html
     return leaf
@@ -110,6 +112,39 @@ export class TSNode<K extends HtmlTag> {
     const container = new TSNode(this)
     container.#children = [...this.#children, ...args]
     return container
+  }
+
+  /** Select tag by name in the subtree of current node, replace it with the callback and return a new node with replaced element.
+   * @param tag     - tag name
+   * @param replace - replacer
+   */
+  select<T extends HtmlTag, P extends HtmlTag = T>(
+    tag: T,
+    replace: (node: TSNode<T>) => TSNode<P>,
+  ) {
+    if (this.#tag == tag) return this
+    const root = new TSNode<K>(this)
+    const stack = [root]
+    while (stack.length) {
+      const cursor = stack.pop()!
+      const children = cursor.#children
+      const len = children.length
+      for (let i = 0; i < len; ++i) {
+        const child = children[i]
+        if (child.#tag == tag) {
+          cursor.#children = [
+            ...children.slice(0, i),
+            replace(child),
+            ...children.slice(i + 1),
+          ]
+          return root
+        }
+      }
+      const newChildren = children.map((c) => new TSNode(c))
+      cursor.#children = newChildren
+      stack.push(...newChildren)
+    }
+    throw new Error('Cannot find child with tag name:' + tag)
   }
 
   /**
