@@ -1,3 +1,5 @@
+import { HeadConfig, NameMetaTag, PropertyMetaTag } from './head'
+
 /**
  * Basic SEO-optimized head section configuration.
  */
@@ -79,4 +81,101 @@ export interface SEOHead {
   /**
    * Application name for Windows tiles or Progressive Web Apps. */
   applicationName?: string
+}
+
+/**
+ * Converts an SEOHead object into a HeadConfig structure.
+ *
+ * @param seo - The SEOHead configuration.
+ * @returns A HeadConfig suitable for low-level rendering.
+ *
+ * @example
+ * ```ts
+ * const seo: SEOHead = {
+ *   title: 'My Site',
+ *   description: 'Welcome to my site',
+ *   keywords: ['blog','tech'],
+ *   canonicalUrl: 'https://example.com',
+ *   robots: 'index,follow',
+ *   openGraph: { title: 'My OG Title', image: '/og.png' },
+ *   twitter: { cardType: 'summary_large_image', site: '@example' },
+ *   themeColor: '#ffffff',
+ *   applicationName: 'MyApp'
+ * };
+ * const headConfig = seoHeadToHeadConfig(seo);
+ * ```
+ */
+export function seoHeadToHeadConfig(seo: SEOHead): HeadConfig {
+  const config: HeadConfig = {}
+
+  config.title = seo.title
+
+  if (seo.description) {
+    config.nameMetas = [{ name: 'description', content: seo.description }]
+  }
+  if (seo.keywords) {
+    config.nameMetas = [
+      ...(config.nameMetas || []),
+      { name: 'keywords', content: seo.keywords.join(',') },
+    ]
+  }
+  if (seo.robots) {
+    config.nameMetas = [
+      ...(config.nameMetas || []),
+      { name: 'robots', content: seo.robots },
+    ]
+  }
+
+  // Canonical link
+  if (seo.canonicalUrl) {
+    config.links = [{ rel: 'canonical', href: seo.canonicalUrl }]
+  }
+
+  // Open Graph
+  if (seo.openGraph) {
+    const props: PropertyMetaTag[] = []
+    const og = seo.openGraph
+    if (og.title) props.push({ property: 'og:title', content: og.title })
+    if (og.description)
+      props.push({ property: 'og:description', content: og.description })
+    if (og.url) props.push({ property: 'og:url', content: og.url })
+    if (og.image) props.push({ property: 'og:image', content: og.image })
+    if (og.type) props.push({ property: 'og:type', content: og.type })
+    if (og.siteName)
+      props.push({ property: 'og:site_name', content: og.siteName })
+    if (og.locale) props.push({ property: 'og:locale', content: og.locale })
+    if (props.length) {
+      config.propertyMetas = props
+    }
+  }
+
+  // Twitter Cards
+  if (seo.twitter) {
+    const tm: NameMetaTag[] = []
+    const tw = seo.twitter
+    if (tw.cardType) tm.push({ name: 'twitter:card', content: tw.cardType })
+    if (tw.site) tm.push({ name: 'twitter:site', content: tw.site })
+    if (tw.creator) tm.push({ name: 'twitter:creator', content: tw.creator })
+    if (tw.title) tm.push({ name: 'twitter:title', content: tw.title })
+    if (tw.description)
+      tm.push({ name: 'twitter:description', content: tw.description })
+    if (tw.image) tm.push({ name: 'twitter:image', content: tw.image })
+    config.nameMetas = [...(config.nameMetas || []), ...tm]
+  }
+
+  // Theme color & application name
+  if (seo.themeColor) {
+    config.nameMetas = [
+      ...(config.nameMetas || []),
+      { name: 'theme-color', content: seo.themeColor },
+    ]
+  }
+  if (seo.applicationName) {
+    config.nameMetas = [
+      ...(config.nameMetas || []),
+      { name: 'application-name', content: seo.applicationName },
+    ]
+  }
+
+  return config
 }
