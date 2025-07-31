@@ -1,1 +1,5 @@
+export type { BasicHeadConfig } from './head/basicHeadConfig'
+export { createHead } from './head/createHead'
+export { getHeadConfig } from './head/getHeadConfig'
+export type { HeadConfig } from './head/headConfig'
 export { h, TSNode } from './tsNode'
