@@ -1,5 +1,6 @@
 import { h } from '@purestack/ts-html'
 import { createLogger, getLogger } from 'logpot'
+import { toColorizer } from '@logpot/printer'
 import { createHead } from './head'
 import { getHeadConfig } from './seo-head'
 
@@ -18,7 +19,7 @@ async function main() {
     },
   })
 
-  getLogger().debug(await run())
+  getLogger().debug(colorizeHTML(await run()))
   await logger.close()
 }
 
@@ -63,4 +64,17 @@ async function run() {
   const page = html.children(head, body)
 
   return await page.toPrettyHtml()
+}
+
+function colorizeHTML(html: string) {
+  const tagColor = toColorizer('#106767')
+  return html
+    .replace(/(&lt;|<)\/?([a-zA-Z0-9-]+)/g, (_, lt, tag) => lt + tagColor(tag))
+    .replace(/(\/?<)/g, tagColor('$1'))
+    .replace(
+      /([a-zA-Z-]+)(=)/g,
+      (_, attr, eq) => toColorizer('cyan')(attr) + toColorizer('gray')(eq),
+    )
+    .replace(/("[^"]*")/g, toColorizer('yellow')('$1'))
+    .replace(/(\/?>)/g, tagColor('$1'))
 }
