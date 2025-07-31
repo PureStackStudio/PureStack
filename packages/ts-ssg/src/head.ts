@@ -1,0 +1,393 @@
+/**
+ * Represents the `<title>` element in the document head.
+ *
+ * @example
+ * ```html
+ * <head>
+ *   <title>My Page Title</title>
+ * </head>
+ * ```
+ * ```ts
+ * const titleTag: TitleTag = { title: 'My Page Title' };
+ * ```
+ */
+export interface TitleTag {
+  /** The text content of the `<title>` element. */
+  title: string
+}
+
+/**
+ * Known charsets for `<meta charset="...">`, with fallback to any string.
+ *
+ * @example
+ * ```html
+ * <head>
+ *   <meta charset="utf-8">
+ * </head>
+ * ```
+ * ```ts
+ * const charsetMeta: CharsetMetaTag = { charset: 'utf-8' };
+ * ```
+ */
+export interface CharsetMetaTag {
+  /** Character encoding label (e.g. 'utf-8', 'utf-16', or any other). */
+  charset: 'utf-8' | 'utf-16' | (string & {})
+}
+
+/**
+ * Allowed values for the `name` attribute of `<meta name="...">`.
+ */
+export type MetaName =
+  | 'description'
+  | 'keywords'
+  | 'robots'
+  | 'author'
+  | 'viewport'
+  | 'application-name'
+  | 'mobile-web-app-capable'
+  | 'theme-color'
+  | 'generator'
+  | 'referrer'
+  | 'format-detection'
+  | 'language'
+  | (string & {})
+
+/**
+ * Represents a `<meta name="..." content="...">` element.
+ *
+ * @example
+ * ```html
+ * <head>
+ *   <meta name="description" content="A concise description of the page.">
+ * </head>
+ * ```
+ * ```ts
+ * const nameMeta: NameMetaTag = {
+ *   name: 'description',
+ *   content: 'A concise description of the page.'
+ * };
+ * ```
+ */
+export interface NameMetaTag {
+  /** The `name` attribute value. */
+  name: MetaName
+  /** The `content` attribute value. */
+  content: string
+}
+
+/**
+ * Allowed values for Open Graph `<meta property="...">`.
+ */
+export type OpenGraphProperty =
+  | 'og:title'
+  | 'og:description'
+  | 'og:url'
+  | 'og:image'
+  | 'og:image:alt'
+  | 'og:type'
+  | 'og:site_name'
+  | 'og:locale'
+  | (string & {})
+
+/**
+ * Represents a `<meta property="..." content="...">` element.
+ *
+ * @example
+ * ```html
+ * <head>
+ *   <meta property="og:title" content="My App Home">
+ * </head>
+ * ```
+ * ```ts
+ * const propertyMeta: PropertyMetaTag = {
+ *   property: 'og:title',
+ *   content: 'My App Home'
+ * };
+ * ```
+ */
+export interface PropertyMetaTag {
+  /** The `property` attribute value. */
+  property: OpenGraphProperty
+  /** The `content` attribute value. */
+  content: string
+}
+
+/**
+ * Allowed values for `<meta http-equiv="...">`.
+ */
+export type HttpEquiv =
+  | 'content-type'
+  | 'refresh'
+  | 'x-ua-compatible'
+  | 'content-security-policy'
+  | (string & {})
+
+/**
+ * Represents a `<meta http-equiv="..." content="...">` element.
+ *
+ * @example
+ * ```html
+ * <head>
+ *   <meta http-equiv="content-security-policy" content="default-src 'self'">
+ * </head>
+ * ```
+ * ```ts
+ * const httpEquivMeta: HttpEquivMetaTag = {
+ *   httpEquiv: 'content-security-policy',
+ *   content: "default-src 'self'"
+ * };
+ * ```
+ */
+export interface HttpEquivMetaTag {
+  /** The `http-equiv` attribute value. */
+  httpEquiv: HttpEquiv
+  /** The `content` attribute value. */
+  content: string
+}
+
+/**
+ * Allowed values for the `rel` attribute of `<link>` elements.
+ */
+export type LinkRel =
+  | 'stylesheet'
+  | 'icon'
+  | 'shortcut icon'
+  | 'preload'
+  | 'prefetch'
+  | 'dns-prefetch'
+  | 'preconnect'
+  | 'alternate'
+  | 'manifest'
+  | 'canonical'
+  | 'sitemap'
+  | 'apple-touch-icon'
+  | 'mask-icon'
+  | 'search'
+  | (string & {})
+
+/**
+ * Allowed values for the `as` attribute of `<link rel="preload">`.
+ */
+export type LinkAs =
+  | 'script'
+  | 'style'
+  | 'font'
+  | 'image'
+  | 'document'
+  | 'fetch'
+  | 'audio'
+  | 'video'
+  | (string & {})
+
+/**
+ * Pattern-checked values for `sizes` attribute on icon links (e.g. "32x32" or "any").
+ */
+export type IconSizes = `${number}x${number}` | 'any' | (string & {})
+
+/**
+ * Represents a generic `<link>` element with common attributes.
+ *
+ * @example
+ * ```html
+ * <head>
+ *   <link rel="stylesheet" href="/styles.css">
+ * </head>
+ * ```
+ * ```ts
+ * const stylesheetLink: LinkTag = { rel: 'stylesheet', href: '/styles.css' };
+ * ```
+ */
+export interface LinkTag {
+  /** Specifies the relationship between the document and the linked resource. */
+  rel: LinkRel
+  /** URL of the linked resource. */
+  href: string
+  /** Optional MIME type of the linked resource. */
+  type?: string
+  /** For icon links, defines dimensions or "any". */
+  sizes?: IconSizes
+  /** Media query for applying the link. */
+  media?: string
+  /** Language of the linked resource. */
+  hreflang?: string
+  /** Defines the fetch destination for preload links. */
+  as?: LinkAs
+  /** CORS setting for the resource. */
+  crossOrigin?: 'anonymous' | 'use-credentials' | (string & {})
+  /** Importance hint (e.g. for preload priority). */
+  importance?: 'low' | 'high' | (string & {})
+}
+
+/**
+ * Represents the `<base>` element, which sets a base URL for relative links.
+ *
+ * @example
+ * ```html
+ * <head>
+ *   <base href="https://example.com/" target="_blank">
+ * </head>
+ * ```
+ * ```ts
+ * const baseTag: BaseTag = { href: 'https://example.com/', target: '_blank' };
+ * ```
+ */
+export interface BaseTag {
+  /** Base URL for all relative URLs in the document. */
+  href: string
+  /** Default browsing context for linked URLs. */
+  target?: string | (string & {})
+}
+
+/**
+ * Represents a `<style>` element with inline CSS text.
+ *
+ * @example
+ * ```html
+ * <head>
+ *   <style>body { margin: 0; }</style>
+ * </head>
+ * ```
+ * ```ts
+ * const styleTag: StyleTag = { cssText: 'body { margin: 0; }' };
+ * ```
+ */
+export interface StyleTag {
+  /** Raw CSS text to be injected in a `<style>` block. */
+  cssText: string
+}
+
+/**
+ * Allowed values for the `type` attribute of `<script>` elements.
+ */
+export type ScriptType =
+  | 'text/javascript'
+  | 'application/javascript'
+  | 'module'
+  | 'application/ld+json'
+  | (string & {})
+
+/**
+ * Represents a `<script>` element, either external or inline.
+ *
+ * @example
+ * ```html
+ * <head>
+ *   <script src="/bundle.js" type="module" defer></script>
+ * </head>
+ * ```
+ * ```ts
+ * const scriptTag: ScriptTag = { src: '/bundle.js', type: 'module', defer: true };
+ * ```
+ */
+export interface ScriptTag {
+  /** URL of the external script file. */
+  src?: string
+  /** MIME type or module indicator. */
+  type?: ScriptType
+  /** Load script asynchronously. */
+  async?: boolean
+  /** Defer execution until after parsing. */
+  defer?: boolean
+  /** Inline script or JSON text. */
+  content?: string
+}
+
+/**
+ * Represents a `<noscript>` element, used to provide fallback content when scripts are disabled.
+ *
+ * @example
+ * ```html
+ * <head>
+ *   <noscript>Please enable JavaScript to view this site.</noscript>
+ * </head>
+ * ```
+ * ```ts
+ * const noscriptTag: NoScriptTag = {
+ *   content: '<link rel="stylesheet" href="nojs.css">'
+ * };
+ * ```
+ */
+export interface NoScriptTag {
+  /** HTML content to render if JavaScript is disabled. */
+  content: string
+}
+
+/**
+ * Represents a `<template>` element for holding deferred head fragments that may be injected later.
+ *
+ * @example
+ * ```html
+ * <head>
+ *   <template><meta name="theme-color" content="#000"></template>
+ * </head>
+ * ```
+ * ```ts
+ * const templateTag: TemplateTag = {
+ *   html: '<meta name="theme-color" content="#000">'
+ * };
+ * ```
+ */
+export interface TemplateTag {
+  /** Raw HTML to be stored in the template. */
+  html: string
+}
+
+/**
+ * Aggregates all supported head elements into separate collections.
+ *
+ * @example
+ * ```html
+ * <head>
+ *   <title>My App</title>
+ *   <base href="https://example.com/">
+ *   <meta charset="utf-8">
+ *   <meta name="viewport" content="width=device-width,initial-scale=1">
+ *   <meta property="og:url" content="https://example.com">
+ *   <meta http-equiv="refresh" content="30">
+ *   <link rel="icon" href="/favicon.ico" sizes="32x32">
+ *   <style>body { background: #fff; }</style>
+ *   <script src="/main.js" type="module" defer></script>
+ *   <noscript>Please enable JavaScript to view this site.</noscript>
+ *   <template><meta name="theme-color" content="#fff"></template>
+ * </head>
+ * ```
+ * ```ts
+ * const headConfig: HeadConfig = {
+ *   title: { title: 'My App' },
+ *   base: { href: 'https://example.com/' },
+ *   charsets: [ { charset: 'utf-8' } ],
+ *   nameMetas: [ { name: 'viewport', content: 'width=device-width,initial-scale=1' } ],
+ *   propertyMetas: [ { property: 'og:url', content: 'https://example.com' } ],
+ *   httpEquivMetas: [ { httpEquiv: 'refresh', content: '30' } ],
+ *   links: [ { rel: 'icon', href: '/favicon.ico', sizes: '32x32' } ],
+ *   styles: [ { cssText: 'body { background: #fff; }' } ],
+ *   scripts: [ { src: '/main.js', type: 'module', defer: true } ],
+ *   noscripts: [ { content: 'Please enable JavaScript to view this site.' } ],
+ *   templates: [ { html: '<meta name="theme-color" content="#fff">' } ]
+ * };
+ * ```
+ */
+export interface HeadConfig {
+  /** `<title>` element data. */
+  title?: TitleTag
+  /** `<base>` element data. */
+  base?: BaseTag
+  /** `<meta charset>` elements. */
+  charsets?: CharsetMetaTag[]
+  /** `<meta name>` elements. */
+  nameMetas?: NameMetaTag[]
+  /** `<meta property>` elements. */
+  propertyMetas?: PropertyMetaTag[]
+  /** `<meta http-equiv>` elements. */
+  httpEquivMetas?: HttpEquivMetaTag[]
+  /** `<link>` elements (icons, stylesheets, preloads, etc.). */
+  links?: LinkTag[]
+  /** Inline `<style>` blocks. */
+  styles?: StyleTag[]
+  /** `<script>` elements, inline or external. */
+  scripts?: ScriptTag[]
+  /** `<noscript>` fallbacks. */
+  noscripts?: NoScriptTag[]
+  /** Deferred head fragments in `<template>`. */
+  templates?: TemplateTag[]
+}

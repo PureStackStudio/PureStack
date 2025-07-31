@@ -117,11 +117,12 @@ export class TSNode<K extends HtmlTag> {
    * @returns The HTML string representing the combined root context and its subtree.
    */
   toHtml() {
+    const docType = this.#tag == 'html' ? '<!DOCTYPE html>\n' : ''
     const chain = this.#collectChain()
     const raws = chain.filter((x) => !!x.#raw)
     if (raws.length) return raws.map((x) => x.#raw).join('')
     const code = TSNode.#serialize(this.#tag, this.#attributes, this.#children)
-    return code
+    return docType + code
   }
 
   /**
@@ -214,8 +215,8 @@ export class TSNode<K extends HtmlTag> {
   }
 }
 
-export function h<K extends HtmlTag>(tag: K) {
-  return new TSNode(tag as K)
+export function h<K extends HtmlTag>(tag?: K) {
+  return new TSNode((tag as K) ?? '')
 }
 
 const voidTags = new Set([

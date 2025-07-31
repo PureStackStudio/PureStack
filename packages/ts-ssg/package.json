@@ -34,6 +34,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "logpot": "^1.0.4",
     "prettier": "^3.6.2"
   }
 }

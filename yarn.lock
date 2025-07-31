@@ -444,6 +444,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@logpot/printer@npm:1.0.4":
+  version: 1.0.4
+  resolution: "@logpot/printer@npm:1.0.4"
+  dependencies:
+    "@logpot/utils": "npm:1.0.4"
+  checksum: 10c0/d2323184da38a9eb658056c94a7bc8668fbaca6ec74f36308e768a8ccbe42ac9adbe6f9db1760bcfaf91aa65c4ff31a1d37b681ae8f6906d4345cf263bbe7ac5
+  languageName: node
+  linkType: hard
+
+"@logpot/utils@npm:1.0.4":
+  version: 1.0.4
+  resolution: "@logpot/utils@npm:1.0.4"
+  checksum: 10c0/9241af827e01442fde7a30fcf32fe39ab6d952a9f6a881830dd48325fe8091ebcd8e81f074e6ba0a8bb65fd8646e160095410c921c04e608a45fbff570a0026f
+  languageName: node
+  linkType: hard
+
 "@microsoft/tsdoc-config@npm:0.17.1":
   version: 0.17.1
   resolution: "@microsoft/tsdoc-config@npm:0.17.1"
@@ -556,6 +572,15 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@purestack/ts-html@workspace:packages/ts-html"
   dependencies:
+    prettier: "npm:^3.6.2"
+  languageName: unknown
+  linkType: soft
+
+"@purestack/ts-ssg@workspace:packages/ts-ssg":
+  version: 0.0.0-use.local
+  resolution: "@purestack/ts-ssg@workspace:packages/ts-ssg"
+  dependencies:
+    logpot: "npm:^1.0.4"
     prettier: "npm:^3.6.2"
   languageName: unknown
   linkType: soft
@@ -2222,6 +2247,16 @@ __metadata:
   version: 4.6.2
   resolution: "lodash.merge@npm:4.6.2"
   checksum: 10c0/402fa16a1edd7538de5b5903a90228aa48eb5533986ba7fa26606a49db2572bf414ff73a2c9f5d5fd36b31c46a5d5c7e1527749c07cbcf965ccff5fbdf32c506
+  languageName: node
+  linkType: hard
+
+"logpot@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "logpot@npm:1.0.4"
+  dependencies:
+    "@logpot/printer": "npm:1.0.4"
+    "@logpot/utils": "npm:1.0.4"
+  checksum: 10c0/c53cc395a8167f77a404db813f9a4bc9fa7eadd637fe737712649f7140c9f0678771aca6eb3118c7942c4f84eda81bcae1236a20d08dec3beb0d22b33ded17bc
   languageName: node
   linkType: hard
 
