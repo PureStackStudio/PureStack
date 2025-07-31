@@ -198,6 +198,8 @@ export interface LinkTag {
   rel: LinkRel
   /** URL of the linked resource. */
   href: string
+  /** Human-readable title (e.g. for rel="search") */
+  title?: string
   /** Optional MIME type of the linked resource. */
   type?: string
   /** For icon links, defines dimensions or "any". */
@@ -286,6 +288,10 @@ export interface ScriptTag {
   defer?: boolean
   /** Inline script or JSON text. */
   content?: string
+  /** Subresource Integrity hash */
+  integrity?: string
+  /** CSP nonce value */
+  nonce?: string
 }
 
 /**
@@ -381,14 +387,13 @@ export function createHead(config: HeadConfig): TSNode<'head'> {
   const meta = h('meta')
   const children = new Array<TSNode<''>>()
 
+  if (config.charset) children.push(meta.attr({ charset: config.charset }))
   if (config.title) children.push(h('title').children(h().text(config.title)))
 
   if (config.base) {
     const { href, target } = config.base
     children.push(h('base').attrAll({ href, target }))
   }
-
-  if (config.charset) children.push(meta.attr({ charset: config.charset }))
 
   config.nameMetas?.forEach((m: NameMetaTag) => {
     children.push(
@@ -422,6 +427,7 @@ export function createHead(config: HeadConfig): TSNode<'head'> {
       rel: link.rel,
       href: link.href,
     }
+    if (link.title) attrs.title = link.title
     if (link.type) attrs.type = link.type
     if (link.sizes) attrs.sizes = link.sizes
     if (link.media) attrs.media = link.media
@@ -443,6 +449,8 @@ export function createHead(config: HeadConfig): TSNode<'head'> {
     if (script.type) attrs.type = script.type
     if (script.async) attrs.async = '' // boolean attrs rendered as present
     if (script.defer) attrs.defer = ''
+    if (script.integrity) attrs.integrity = script.integrity
+    if (script.nonce) attrs.nonce = script.nonce
 
     const node = h('script').attrCustom(attrs)
     children.push(script.content ? node.raw(script.content) : node)
