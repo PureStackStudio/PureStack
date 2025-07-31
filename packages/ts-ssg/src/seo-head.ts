@@ -1,0 +1,82 @@
+/**
+ * Basic SEO-optimized head section configuration.
+ */
+export interface SEOHead {
+  /**
+   * Page title, displayed in browser tabs and search engine results.
+   */
+  title: string
+
+  /**
+   * Meta description tag content, used by search engines.
+   */
+  description?: string
+
+  /**
+   * Keywords relevant to the page, separated into an array.
+   */
+  keywords?: string[]
+
+  /**
+   * Canonical URL to indicate the preferred version of a page.
+   */
+  canonicalUrl?: string
+
+  /**
+   * Directives for web crawlers, e.g. "index,follow" or "noindex,nofollow".
+   */
+  robots?: 'index,follow' | 'noindex,nofollow' | (string & {})
+
+  /**
+   * Open Graph properties for social media sharing.
+   */
+  openGraph?: {
+    /** Title for Open Graph. */
+    title?: string
+    /** Description for Open Graph. */
+    description?: string
+    /** URL for Open Graph. */
+    url?: string
+    /** Image URL for Open Graph. */
+    image?: string
+    /** Type of content, e.g., "website", "article". */
+    type?: string
+    /** Site name for Open Graph. */
+    siteName?: string
+    /** Locale for Open Graph, e.g., "en_US". */
+    locale?: string
+  }
+
+  /**
+   * Twitter Card metadata for Twitter sharing.
+   */
+  twitter?: {
+    /**
+     * Card type, e.g., "summary", "summary_large_image".
+     */
+    cardType?:
+      | 'summary'
+      | 'summary_large_image'
+      | 'app'
+      | 'player'
+      | (string & {})
+    /** Twitter username for the website. */
+    site?: string
+    /** Twitter username for the content creator. */
+    creator?: string
+    /** Title for Twitter Card. */
+    title?: string
+    /** Description for Twitter Card. */
+    description?: string
+    /** Image URL for Twitter Card. */
+    image?: string
+  }
+
+  /**
+   * Theme color for mobile browsers and PWA. */
+  themeColor?: string
+
+  /**
+   * Application name for Windows tiles or Progressive Web Apps. */
+  applicationName?: string
+}

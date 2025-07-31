@@ -1,40 +1,4 @@
 /**
- * Represents the `<title>` element in the document head.
- *
- * @example
- * ```html
- * <head>
- *   <title>My Page Title</title>
- * </head>
- * ```
- * ```ts
- * const titleTag: TitleTag = { title: 'My Page Title' };
- * ```
- */
-export interface TitleTag {
-  /** The text content of the `<title>` element. */
-  title: string
-}
-
-/**
- * Known charsets for `<meta charset="...">`, with fallback to any string.
- *
- * @example
- * ```html
- * <head>
- *   <meta charset="utf-8">
- * </head>
- * ```
- * ```ts
- * const charsetMeta: CharsetMetaTag = { charset: 'utf-8' };
- * ```
- */
-export interface CharsetMetaTag {
-  /** Character encoding label (e.g. 'utf-8', 'utf-16', or any other). */
-  charset: 'utf-8' | 'utf-16' | (string & {})
-}
-
-/**
  * Allowed values for the `name` attribute of `<meta name="...">`.
  */
 export type MetaName =
@@ -147,6 +111,16 @@ export interface HttpEquivMetaTag {
 
 /**
  * Allowed values for the `rel` attribute of `<link>` elements.
+ *
+ * @example
+ * ```html
+ * <head>
+ *   <link rel="stylesheet" href="/styles.css">
+ * </head>
+ * ```
+ * ```ts
+ * const linkRel: LinkRel = 'stylesheet';
+ * ```
  */
 export type LinkRel =
   | 'stylesheet'
@@ -167,6 +141,16 @@ export type LinkRel =
 
 /**
  * Allowed values for the `as` attribute of `<link rel="preload">`.
+ *
+ * @example
+ * ```html
+ * <head>
+ *   <link rel="preload" href="/app.js" as="script">
+ * </head>
+ * ```
+ * ```ts
+ * const linkAs: LinkAs = 'script';
+ * ```
  */
 export type LinkAs =
   | 'script'
@@ -181,6 +165,16 @@ export type LinkAs =
 
 /**
  * Pattern-checked values for `sizes` attribute on icon links (e.g. "32x32" or "any").
+ *
+ * @example
+ * ```html
+ * <head>
+ *   <link rel="icon" href="/favicon.png" sizes="32x32">
+ * </head>
+ * ```
+ * ```ts
+ * const iconSizes: IconSizes = '32x32';
+ * ```
  */
 export type IconSizes = `${number}x${number}` | 'any' | (string & {})
 
@@ -313,26 +307,6 @@ export interface NoScriptTag {
 }
 
 /**
- * Represents a `<template>` element for holding deferred head fragments that may be injected later.
- *
- * @example
- * ```html
- * <head>
- *   <template><meta name="theme-color" content="#000"></template>
- * </head>
- * ```
- * ```ts
- * const templateTag: TemplateTag = {
- *   html: '<meta name="theme-color" content="#000">'
- * };
- * ```
- */
-export interface TemplateTag {
-  /** Raw HTML to be stored in the template. */
-  html: string
-}
-
-/**
  * Aggregates all supported head elements into separate collections.
  *
  * @example
@@ -355,25 +329,37 @@ export interface TemplateTag {
  * const headConfig: HeadConfig = {
  *   title: { title: 'My App' },
  *   base: { href: 'https://example.com/' },
- *   charsets: [ { charset: 'utf-8' } ],
+ *   charset: 'utf-8'
  *   nameMetas: [ { name: 'viewport', content: 'width=device-width,initial-scale=1' } ],
  *   propertyMetas: [ { property: 'og:url', content: 'https://example.com' } ],
  *   httpEquivMetas: [ { httpEquiv: 'refresh', content: '30' } ],
  *   links: [ { rel: 'icon', href: '/favicon.ico', sizes: '32x32' } ],
  *   styles: [ { cssText: 'body { background: #fff; }' } ],
  *   scripts: [ { src: '/main.js', type: 'module', defer: true } ],
- *   noscripts: [ { content: 'Please enable JavaScript to view this site.' } ],
+ *   noscript: { content: 'Please enable JavaScript to view this site.' },
  *   templates: [ { html: '<meta name="theme-color" content="#fff">' } ]
  * };
  * ```
  */
 export interface HeadConfig {
-  /** `<title>` element data. */
-  title?: TitleTag
+  /** The text content of the `<title>` element. */
+  title?: string
   /** `<base>` element data. */
   base?: BaseTag
-  /** `<meta charset>` elements. */
-  charsets?: CharsetMetaTag[]
+  /**
+   * Known charset for `<meta charset="...">`.
+   *
+   * @example
+   * ```html
+   * <head>
+   *   <meta charset="utf-8">
+   * </head>
+   * ```
+   * ```ts
+   * const charsetMeta: CharsetMetaTag = { charset: 'utf-8' };
+   * ```
+   */
+  charset?: 'utf-8' | 'utf-16' | (string & {})
   /** `<meta name>` elements. */
   nameMetas?: NameMetaTag[]
   /** `<meta property>` elements. */
@@ -386,8 +372,16 @@ export interface HeadConfig {
   styles?: StyleTag[]
   /** `<script>` elements, inline or external. */
   scripts?: ScriptTag[]
-  /** `<noscript>` fallbacks. */
-  noscripts?: NoScriptTag[]
-  /** Deferred head fragments in `<template>`. */
-  templates?: TemplateTag[]
+  /** `<noscript>` fallback. */
+  noscript?: NoScriptTag
 }
+
+export function createHead(config: HeadConfig) {
+  return config
+}
+
+createHead({
+  scripts: [{ type: 'module', src: '' }],
+  styles: [{ cssText: '' }],
+  links: [{ rel: 'stylesheet', href: '' }],
+})
