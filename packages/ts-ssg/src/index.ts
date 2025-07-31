@@ -64,7 +64,9 @@ async function run() {
   )
   const page = html
     .children(head, body)
-    .select('main', (b) => b.children(h('style').text('hello')))
+    .select('body', (b) =>
+      b.attr({ xyz: 'xyz' }).children(h('style').text('hello')),
+    )
 
   return await page.toPrettyHtml()
 }
