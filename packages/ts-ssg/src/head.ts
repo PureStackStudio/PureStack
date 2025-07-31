@@ -211,7 +211,7 @@ export interface LinkTag {
   /** Defines the fetch destination for preload links. */
   as?: LinkAs
   /** CORS setting for the resource. */
-  crossOrigin?: 'anonymous' | 'use-credentials' | (string & {})
+  crossorigin?: 'anonymous' | 'use-credentials' | (string & {})
   /** Importance hint (e.g. for preload priority). */
   importance?: 'low' | 'high' | (string & {})
 }
