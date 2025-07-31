@@ -380,28 +380,25 @@ export interface HeadConfig {
 
 export function createHead(config: HeadConfig): TSNode<'head'> {
   const head = h('head')
+  const meta = h('meta')
   const children = new Array<TSNode<''>>()
 
-  // <title>
   if (config.title) {
     children.push(h('title').children(h().text(config.title)))
   }
 
-  // <base>
   if (config.base) {
     const { href, target } = config.base
     children.push(h('base').attrAll({ href, target }))
   }
 
-  // <meta charset>
   if (config.charset) {
-    children.push(h('meta').attr({ charset: config.charset }))
+    children.push(meta.attr({ charset: config.charset }))
   }
 
-  // <meta name="...">
   config.nameMetas?.forEach((m: NameMetaTag) => {
     children.push(
-      h('meta').attr({
+      meta.attr({
         name: m.name,
         content: m.content,
       }),
@@ -411,24 +408,22 @@ export function createHead(config: HeadConfig): TSNode<'head'> {
   // <meta property="...">
   config.propertyMetas?.forEach((m: PropertyMetaTag) => {
     children.push(
-      h('meta').attrCustom({
+      meta.attrCustom({
         property: m.property,
         content: m.content,
       }),
     )
   })
 
-  // <meta http-equiv="...">
   config.httpEquivMetas?.forEach((m: HttpEquivMetaTag) => {
     children.push(
-      h('meta').attrCustom({
+      meta.attrCustom({
         'http-equiv': m.httpEquiv,
         content: m.content,
       }),
     )
   })
 
-  // <link …>
   config.links?.forEach((link: LinkTag) => {
     const attrs: Record<string, string> = {
       rel: link.rel,
@@ -445,12 +440,10 @@ export function createHead(config: HeadConfig): TSNode<'head'> {
     children.push(h('link').attrCustom(attrs))
   })
 
-  // <style>…</style>
   config.styles?.forEach((style: StyleTag) => {
     children.push(h('style').children(h().raw(style.cssText)))
   })
 
-  // <script …>…</script>
   config.scripts?.forEach((script: ScriptTag) => {
     const attrs: Record<string, string> = {}
     if (script.src) attrs.src = script.src
@@ -464,7 +457,6 @@ export function createHead(config: HeadConfig): TSNode<'head'> {
     )
   })
 
-  // <noscript>…</noscript>
   if (config.noscript) {
     children.push(h('noscript').raw(config.noscript.content))
   }
