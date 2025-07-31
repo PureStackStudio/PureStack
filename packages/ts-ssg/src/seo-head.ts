@@ -75,11 +75,13 @@ export interface SEOHead {
   }
 
   /**
-   * Theme color for mobile browsers and PWA. */
+   * Theme color for mobile browsers and PWA.
+   * */
   themeColor?: string
 
   /**
-   * Application name for Windows tiles or Progressive Web Apps. */
+   * Application name for Windows tiles or Progressive Web Apps.
+   */
   applicationName?: string
 }
 
@@ -118,7 +120,7 @@ export function seoHeadToHeadConfig(seo: SEOHead): HeadConfig {
     nameMetas.push({ name: 'description', content: seo.description })
   }
   if (seo.keywords) {
-    nameMetas.push({ name: 'keywords', content: seo.keywords.join(',') })
+    nameMetas.push({ name: 'keywords', content: seo.keywords.join(', ') })
   }
   if (seo.robots) {
     nameMetas.push({ name: 'robots', content: seo.robots })
