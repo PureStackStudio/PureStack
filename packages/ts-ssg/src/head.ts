@@ -424,16 +424,18 @@ export function createHead(config: HeadConfig): TSNode<'head'> {
   })
 
   config.scripts?.forEach((script: ScriptTag) => {
+    const { src, type, async, defer, integrity, nonce, content } = script
+
     const attrs: Record<string, string> = {}
-    if (script.src) attrs.src = script.src
-    if (script.type) attrs.type = script.type
-    if (script.async) attrs.async = '' // boolean attrs rendered as present
-    if (script.defer) attrs.defer = ''
-    if (script.integrity) attrs.integrity = script.integrity
-    if (script.nonce) attrs.nonce = script.nonce
+    if (src) attrs.src = src
+    if (type) attrs.type = type
+    if (async) attrs.async = '' // boolean attrs rendered as present
+    if (defer) attrs.defer = ''
+    if (integrity) attrs.integrity = integrity
+    if (nonce) attrs.nonce = nonce
 
     const node = h('script').attrCustom(attrs)
-    children.push(script.content ? node.raw(script.content) : node)
+    children.push(content ? node.raw(content) : node)
   })
 
   if (config.noscript) children.push(h('noscript').raw(config.noscript.content))
