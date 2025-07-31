@@ -396,21 +396,11 @@ export function createHead(config: HeadConfig): TSNode<'head'> {
   }
 
   config.nameMetas?.forEach((m: NameMetaTag) => {
-    children.push(
-      meta.attr({
-        name: m.name,
-        content: m.content,
-      }),
-    )
+    children.push(meta.attr(m))
   })
 
   config.propertyMetas?.forEach((m: PropertyMetaTag) => {
-    children.push(
-      meta.attrCustom({
-        property: m.property,
-        content: m.content,
-      }),
-    )
+    children.push(meta.attr(m))
   })
 
   config.httpEquivMetas?.forEach((m: HttpEquivMetaTag) => {
@@ -424,18 +414,8 @@ export function createHead(config: HeadConfig): TSNode<'head'> {
 
   config.links?.forEach((link: LinkTag) => {
     const attrs: Record<string, string> = {
-      rel: link.rel,
-      href: link.href,
+      ...link,
     }
-    if (link.title) attrs.title = link.title
-    if (link.type) attrs.type = link.type
-    if (link.sizes) attrs.sizes = link.sizes
-    if (link.media) attrs.media = link.media
-    if (link.hreflang) attrs.hreflang = link.hreflang
-    if (link.as) attrs.as = link.as
-    if (link.crossOrigin) attrs.crossorigin = link.crossOrigin
-    if (link.importance) attrs.importance = link.importance
-
     children.push(h('link').attrCustom(attrs))
   })
 
