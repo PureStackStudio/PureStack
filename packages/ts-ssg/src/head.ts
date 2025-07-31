@@ -379,9 +379,3 @@ export interface HeadConfig {
 export function createHead(config: HeadConfig) {
   return config
 }
-
-createHead({
-  scripts: [{ type: 'module', src: '' }],
-  styles: [{ cssText: '' }],
-  links: [{ rel: 'stylesheet', href: '' }],
-})

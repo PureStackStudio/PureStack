@@ -15,6 +15,26 @@ export interface SEOHead {
   description?: string
 
   /**
+   * Known charset for `<meta charset="...">`.
+   *
+   * @example
+   * ```html
+   * <head>
+   *   <meta charset="utf-8">
+   * </head>
+   * ```
+   * ```ts
+   * const charsetMeta: CharsetMetaTag = { charset: 'utf-8' };
+   * ```
+   */
+  charset?: 'utf-8' | 'utf-16' | (string & {})
+
+  /**
+   * Viewport meta tag.
+   */
+  viewport?: 'width=device-width,initial-scale=1' | (string & {})
+
+  /**
    * Keywords relevant to the page, separated into an array.
    */
   keywords?: string[]
@@ -107,28 +127,25 @@ export interface SEOHead {
  * const headConfig = seoHeadToHeadConfig(seo);
  * ```
  */
-export function seoHeadToHeadConfig(seo: SEOHead): HeadConfig {
+export function getHeadConfig(seo: SEOHead): HeadConfig {
   const config: HeadConfig = {}
+  const nameMetas = new Array<NameMetaTag>()
+  const propertyMetas = new Array<PropertyMetaTag>()
+  const links = new Array<LinkTag>()
 
   config.title = seo.title
+  config.charset = seo.charset
+  if (seo.viewport) nameMetas.push({ name: 'viewport', content: seo.viewport })
 
-  const nameMetas: NameMetaTag[] = []
-  const propertyMetas: PropertyMetaTag[] = []
-  const links: LinkTag[] = []
-
-  if (seo.description) {
+  if (seo.description)
     nameMetas.push({ name: 'description', content: seo.description })
-  }
-  if (seo.keywords) {
-    nameMetas.push({ name: 'keywords', content: seo.keywords.join(', ') })
-  }
-  if (seo.robots) {
-    nameMetas.push({ name: 'robots', content: seo.robots })
-  }
 
-  if (seo.canonicalUrl) {
-    links.push({ rel: 'canonical', href: seo.canonicalUrl })
-  }
+  if (seo.keywords)
+    nameMetas.push({ name: 'keywords', content: seo.keywords.join(', ') })
+
+  if (seo.robots) nameMetas.push({ name: 'robots', content: seo.robots })
+
+  if (seo.canonicalUrl) links.push({ rel: 'canonical', href: seo.canonicalUrl })
 
   if (seo.openGraph) {
     const og = seo.openGraph
@@ -162,12 +179,11 @@ export function seoHeadToHeadConfig(seo: SEOHead): HeadConfig {
     if (tw.image) nameMetas.push({ name: 'twitter:image', content: tw.image })
   }
 
-  if (seo.themeColor) {
+  if (seo.themeColor)
     nameMetas.push({ name: 'theme-color', content: seo.themeColor })
-  }
-  if (seo.applicationName) {
+
+  if (seo.applicationName)
     nameMetas.push({ name: 'application-name', content: seo.applicationName })
-  }
 
   if (nameMetas.length) config.nameMetas = nameMetas
   if (propertyMetas.length) config.propertyMetas = propertyMetas
