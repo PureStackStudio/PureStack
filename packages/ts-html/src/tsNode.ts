@@ -71,7 +71,7 @@ export class TSNode<K extends HtmlTag> {
    * @returns A ts wrapping the html node and linked in the chain.
    */
   raw(html: string, replace = false): TSNode<K> {
-    if (this.#tag && !replace) return this.children(h().raw(html))
+    if (this.#tag && !replace) return this.push(h().raw(html))
     const leaf = new TSNode(this)
     leaf.#raw = html
     return leaf
@@ -126,7 +126,7 @@ export class TSNode<K extends HtmlTag> {
    * @param args - One or more TSNode instances to include as children.
    * @returns A ts wrapping the group of children and linked in the chain.
    */
-  children(...args: TSNode<''>[]): TSNode<K> {
+  push(...args: TSNode<''>[]): TSNode<K> {
     const container = new TSNode(this)
     container.#children = [...this.#children, ...args]
     return container

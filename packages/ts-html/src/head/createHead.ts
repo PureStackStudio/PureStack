@@ -16,7 +16,7 @@ export function createHead(config: HeadConfig): TSNode<'head'> {
   const children = new Array<TSNode<''>>()
 
   if (config.charset) children.push(meta.attr({ charset: config.charset }))
-  if (config.title) children.push(h('title').children(h().text(config.title)))
+  if (config.title) children.push(h('title').push(h().text(config.title)))
 
   if (config.base) {
     const { href, target } = config.base
@@ -68,5 +68,5 @@ export function createHead(config: HeadConfig): TSNode<'head'> {
 
   if (config.noscript) children.push(h('noscript').raw(config.noscript.content))
 
-  return head.children(...children)
+  return head.push(...children)
 }

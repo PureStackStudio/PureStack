@@ -17,9 +17,7 @@ describe('TSNode', () => {
     it('escapes special characters in text', () => {
       const text = '<&>"\''
       const escaped = '&lt;&amp;&gt;"\''
-      expect(h('p').children(h('').text(text)).toHtml()).toBe(
-        `<p>${escaped}</p>`,
-      )
+      expect(h('p').push(h('').text(text)).toHtml()).toBe(`<p>${escaped}</p>`)
     })
 
     it('renders raw HTML inside wrapper', () => {
@@ -44,7 +42,7 @@ describe('TSNode', () => {
         .attrAria({ 'aria-label': 'Label' })
         .attrGlobal({ class: 'btn' })
         .attrEvents({ onclick: 'handle()' })
-        .children(h('').text('Click'))
+        .push(h('').text('Click'))
 
       expect(node.toHtml()).toBe(
         '<button aria-label="Label" class="btn" onclick="handle()">Click</button>',
@@ -53,10 +51,7 @@ describe('TSNode', () => {
 
     it('renders nested children correctly', () => {
       const htmlStr = h('ul')
-        .children(
-          h('li').children(h('').text('one')),
-          h('li').children(h('').text('two')),
-        )
+        .push(h('li').push(h('').text('one')), h('li').push(h('').text('two')))
         .toHtml()
 
       expect(htmlStr).toBe('<ul><li>one</li><li>two</li></ul>')
@@ -80,7 +75,7 @@ describe('TSNode', () => {
   describe('toPrettyHtml', () => {
     it('formats HTML with indentation', async () => {
       const pretty = await h('div')
-        .children(h('div').children(h('').raw('x')))
+        .push(h('div').push(h('').raw('x')))
         .toPrettyHtml({ printWidth: 5 })
 
       expect(pretty).toBe('<div>\n  <div>\n    x\n  </div>\n</div>\n')
@@ -109,7 +104,7 @@ describe('TSNode', () => {
     it('accumulates children across multiple children() calls', () => {
       const childA = h('').text('A')
       const childB = h('').text('B')
-      const div = h('div').children(childA).children(childB)
+      const div = h('div').push(childA).push(childB)
 
       expect(div.toHtml()).toBe('<div>AB</div>')
     })
@@ -125,15 +120,12 @@ describe('TSNode', () => {
 
   describe('raw and text in fragments', () => {
     it('renders raw and text siblings correctly', () => {
-      const div = h('div').children(
-        h('').raw('<b>Hi</b>'),
-        h('').text(' there'),
-      )
+      const div = h('div').push(h('').raw('<b>Hi</b>'), h('').text(' there'))
       expect(div.toHtml()).toBe('<div><b>Hi</b> there</div>')
     })
 
     it('renders text via fragment children', () => {
-      const frag = h('').children(h('').text('frag text'))
+      const frag = h('').push(h('').text('frag text'))
       expect(frag.toHtml()).toBe('frag text')
     })
   })
@@ -141,12 +133,12 @@ describe('TSNode', () => {
   describe('raw override behavior', () => {
     it('child raw overrides entire serialization, dropping children, attributes', () => {
       const result = h('div')
-        .children(
+        .push(
           h('span').text('a'),
           h('')
             .raw('raw')
             .attr({ class: 'aa' })
-            .children(h('img').attr({ src: 'abc' })),
+            .push(h('img').attr({ src: 'abc' })),
           h('span').text('b'),
         )
         .toHtml()
@@ -158,12 +150,10 @@ describe('TSNode', () => {
     it('renders nested mixed raw and text correctly', () => {
       const nested = h('section')
         .attrGlobal({ id: 'main' })
-        .children(
-          h('article').children(
+        .push(
+          h('article').push(
             h('').raw('Content'),
-            h('footer')
-              .children(h('').text('Footer text'))
-              .children(h('UserRow')),
+            h('footer').push(h('').text('Footer text')).push(h('UserRow')),
           ),
         )
       expect(nested.toHtml()).toBe(

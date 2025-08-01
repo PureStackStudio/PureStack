@@ -30,11 +30,11 @@ export function getHtml(config?: BasicHeadConfig) {
       lang: 'en',
       dir: 'ltr',
     })
-    .children(getHead(config))
+    .push(getHead(config))
 }
 export function getHead(config?: BasicHeadConfig) {
   const meta = h('meta')
-  const head = createHead(getHeadConfig(merge(DEFAULTS, config))).children(
+  const head = createHead(getHeadConfig(merge(DEFAULTS, config))).push(
     meta.attr({
       name: 'generator',
       content: 'ts-ssg v1.0.0',
