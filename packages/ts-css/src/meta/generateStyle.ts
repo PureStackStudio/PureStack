@@ -138,7 +138,7 @@ function createMethod(propType: PropType) {
   const desc = propType.desc?.replace?.('@', '`@`')
   const cname = camelize(name)
   const values = createValuesTSDoc(getValues(propType))
-  const anyType = `CSSProps['${camelize(name)}']`
+  const anyType = `CSSProps['${cname}']`
   const code = `
   /**
    * ${desc}.
@@ -154,7 +154,7 @@ ${values}
    * @param value -
    */
   ${cname}(value: ${anyType}) {
-  this.props.set('${name}', value)
+  this.set('${name}', value)
   return this
 }
 `

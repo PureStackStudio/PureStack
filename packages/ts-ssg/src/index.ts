@@ -29,6 +29,18 @@ main().catch(console.error)
 
 async function run() {
   const style = s()
+  style
+    .select('.custom-variant theme-midnight')
+    .borderLeft('solid 1px green')
+    .select(' &:where([data-theme="midnight"] *)')
+    .css({
+      color: '--bg-red',
+    })
+  style
+    .select('custom-variant theme-midnight')
+    .select(' &:where([data-theme="midnight"] *)')
+    .select('.myclass')
+    .color('red')
   const body = h('body')
   const html = getHtml()
   const page = html

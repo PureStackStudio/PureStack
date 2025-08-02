@@ -1,5 +1,7 @@
 import prettier from 'prettier'
 
+import { autoVar } from './autoVar'
+import { hyphenizeCss } from './hyphenize'
 import type { CSSProps } from './style'
 
 export abstract class RootStyle {
@@ -22,9 +24,14 @@ export class BaseStyle<T extends RootStyle> extends RootStyle {
     this.#createT = createT
   }
 
+  set(key: string, value: string | number) {
+    this.props.set(hyphenizeCss(key), autoVar(value))
+    return this
+  }
+
   css(css: Partial<CSSProps>) {
     for (const [key, value] of Object.entries(css)) {
-      this.props.set(hyphenizeCss(key), value as string)
+      this.set(key, value as string)
     }
     return this
   }
@@ -138,18 +145,7 @@ ${props}
       | 'unset'
       | (string & {}),
   ) {
-    this.props.set('white-space', value)
+    this.set('white-space', value)
     return this
   }
-}
-
-const hyphenizeCss = (prop: string): string => {
-  // Handle vendor prefixes (Webkit, Moz, O, Ms) by turning e.g. WebkitFoo -> -webkit-foo
-  const withVendor = prop.replace(
-    /^(Webkit|Moz|O|Ms)(?=[A-Z])/,
-    (m) => '-' + m.toLowerCase(),
-  )
-
-  // Insert hyphens before uppercase letters and lowercase everything
-  return withVendor.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
 }
