@@ -15,15 +15,16 @@ export function LinkButton(opts: LinkButtonProps) {
 
 function createStyles(style: Style) {
   style.select('.link-button').css({
-    'align-items': 'center',
+    alignItems: 'center',
     border: '1px solid transparent',
-    'border-radius': '999rem',
+    borderRadius: '999rem',
     display: 'inline-flex',
-    'font-size': 'var(--sl-text-sm)',
+    fontSize: 'var(--sl-text-sm)',
     gap: '0.5em',
-    'line-height': '1.1875',
-    'outline-offset': '0.25rem',
+    lineHeight: '1.1875',
+    outlineOffset: '0.25rem',
     padding: '0.4375rem 1.125rem',
-    'text-decoration': 'none',
+    textDecoration: 'none',
+    background: '#ff44aa',
   })
 }

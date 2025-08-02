@@ -64,18 +64,6 @@ export class Style extends BaseStyle<Style> {
     super((s) => new Style(s), selector)
   }
 
-  css(css: Partial<CSSProps>) {
-      for (const [key, value] of Object.entries(css)) {
-        this.props.set(key, value as string)
-      }
-      return this
-  }
-
-  set<T extends keyof CSSProps>(key: T, value: CSSProps[T]) {
-    this.props.set(key, value)
-    return this
-  }
-
   ${methods}
 }`
   return code
@@ -150,7 +138,7 @@ function createMethod(propType: PropType) {
   const desc = propType.desc?.replace?.('@', '`@`')
   const cname = camelize(name)
   const values = createValuesTSDoc(getValues(propType))
-  const anyType = `CSSProps['${name}']`
+  const anyType = `CSSProps['${camelize(name)}']`
   const code = `
   /**
    * ${desc}.
@@ -194,7 +182,7 @@ function createProp(propType: PropType) {
     propType.$.restriction == 'enum'
       ? getEnumType(propType)
       : getAnyType(propType)
-  return `'${name}': ${anyType},\n`
+  return `'${camelize(name)}': ${anyType},\n`
 }
 
 const code = createCode()

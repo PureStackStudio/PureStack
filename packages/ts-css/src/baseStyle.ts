@@ -1,5 +1,7 @@
 import prettier from 'prettier'
 
+import type { CSSProps } from './style'
+
 export abstract class RootStyle {
   static nextId = 1
   id: number
@@ -18,6 +20,13 @@ export class BaseStyle<T extends RootStyle> extends RootStyle {
   constructor(createT: (selector?: string) => T, selector?: string) {
     super(selector)
     this.#createT = createT
+  }
+
+  css(css: Partial<CSSProps>) {
+    for (const [key, value] of Object.entries(css)) {
+      this.props.set(hyphenizeCss(key), value as string)
+    }
+    return this
   }
 
   select(selector: string) {
@@ -39,12 +48,14 @@ export class BaseStyle<T extends RootStyle> extends RootStyle {
     return child
   }
 
-  #cast(val: T) {
+  #asBaseStyle(val: T) {
     return val as unknown as BaseStyle<T>
   }
 
   use(css: T) {
-    this.#cast(css).props.forEach((value, key) => this.props.set(key, value))
+    this.#asBaseStyle(css).props.forEach((value, key) =>
+      this.props.set(key, value),
+    )
     return this
   }
 
@@ -53,11 +64,11 @@ export class BaseStyle<T extends RootStyle> extends RootStyle {
     const selector = query.startsWith('@media') ? query : `@media(${query})`
     let child = this.children.get(selector)
     if (child) {
-      return this.#cast(child).selectWithoutParentKey(this.selector)
+      return this.#asBaseStyle(child).selectWithoutParentKey(this.selector)
     }
     child = this.#createT(selector)
     this.children.set(selector, child)
-    child = this.#cast(child).selectWithoutParentKey(this.selector)
+    child = this.#asBaseStyle(child).selectWithoutParentKey(this.selector)
     return child
   }
 
@@ -109,6 +120,7 @@ ${props}
     const code = this.toCSS()
     return prettier.format(code, fmt)
   }
+
   whiteSpace(
     value:
       | 'normal'
@@ -129,4 +141,15 @@ ${props}
     this.props.set('white-space', value)
     return this
   }
+}
+
+const hyphenizeCss = (prop: string): string => {
+  // Handle vendor prefixes (Webkit, Moz, O, Ms) by turning e.g. WebkitFoo -> -webkit-foo
+  const withVendor = prop.replace(
+    /^(Webkit|Moz|O|Ms)(?=[A-Z])/,
+    (m) => '-' + m.toLowerCase(),
+  )
+
+  // Insert hyphens before uppercase letters and lowercase everything
+  return withVendor.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
 }

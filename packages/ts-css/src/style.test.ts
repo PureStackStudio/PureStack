@@ -23,7 +23,7 @@ describe('Style', () => {
 
   it('sets raw property and is chainable', () => {
     const st = s()
-    const ret = st.set('foo-bar', 'baz')
+    const ret = st.css({ 'foo-bar': 'baz' })
     expect(ret).toBe(st)
     expect(st.props.get('foo-bar')).toBe('baz')
   })
