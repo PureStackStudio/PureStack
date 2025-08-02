@@ -11,7 +11,7 @@ async function main() {
     consoleTransport: {
       formatter: {
         kind: 'template',
-        template: '\n{msg:#b40657}\n',
+        template: '\n{msg}\n',
         printer: {
           objectFormatter: {
             showBrackets: false,

@@ -1,10 +1,11 @@
 import { type ColorOrColorizer, toColorizer } from '@logpot/printer'
 
 interface ColorizeOptions {
-  tagColor?: ColorOrColorizer
-  attrKeyColor?: ColorOrColorizer
-  attrValueColor?: ColorOrColorizer
-  attrEqColor?: ColorOrColorizer
+  content?: ColorOrColorizer
+  tag?: ColorOrColorizer
+  attrKey?: ColorOrColorizer
+  attrValue?: ColorOrColorizer
+  attrEq?: ColorOrColorizer
 }
 
 export function colorizeHTML(
@@ -12,20 +13,21 @@ export function colorizeHTML(
   options: ColorizeOptions = {},
 ): string {
   const {
-    tagColor: tagColorOption = '#106767',
-    attrKeyColor: attrKeyColorOption = 'cyan',
-    attrValueColor: attrValueColorOption = 'yellow',
-    attrEqColor: attrEqColorOption = 'gray',
+    content: contentOption = '#b40657',
+    tag: tagColorOption = '#106767',
+    attrKey: attrKeyColorOption = 'cyan',
+    attrValue: attrValueColorOption = 'yellow',
+    attrEq: attrEqColorOption = 'gray',
   } = options
+  const content = toColorizer(contentOption)
   const tagColor = toColorizer(tagColorOption)
   const attrKeyColor = toColorizer(attrKeyColorOption)
   const attrValueColor = toColorizer(attrValueColorOption)
   const attrEqColor = toColorizer(attrEqColorOption)
-
-  return (
+  return content(
     html
       // Color the opening delimiter, optional slash, and tag name together.
-      .replace(/(&lt;|<)(\/?)([a-zA-Z0-9:-]+)/g, (_, lt, slash, tag) => {
+      .replace(/(&lt;|<)(\/?)([!a-zA-Z0-9:-]+)/g, (_, lt, slash, tag) => {
         // e.g., "<", "/", "div" -> we might want the "<" and "/" and tag name each colored; here we color them all with tagColor
         return tagColor(`${lt}${slash}${tag}`)
       })
@@ -38,6 +40,6 @@ export function colorizeHTML(
         return attrValueColor(m)
       })
       // Closing bracket or self-close
-      .replace(/(\/?>)/g, (m) => tagColor(m))
+      .replace(/(\/?>)/g, (m) => tagColor(m)),
   )
 }
