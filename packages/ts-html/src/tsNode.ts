@@ -11,6 +11,8 @@ import {
   SpecificAttributesForTag,
 } from './html'
 
+export type Attributes = Partial<Record<string, string>>
+
 /**
  * Represents an immutable builder node for constructing HTML-like trees in TypeScript.
  * Each method returns a fresh TSNode, retaining chain context via the #parent link.
@@ -29,7 +31,7 @@ export class TSNode<K extends HtmlTag> {
   #children: TSNode<''>[] = []
 
   /** Attributes applied to this node. */
-  #attributes: Record<string, string> = {}
+  #attributes: Attributes = {}
 
   /**
    * Creates a ts.
@@ -86,40 +88,30 @@ export class TSNode<K extends HtmlTag> {
   }
 
   attr(
-    attrs:
-      | Partial<Record<SpecificAttributesForTag<K>, string>>
-      | Partial<Record<string, string>>,
+    attrs: Partial<Record<SpecificAttributesForTag<K>, string>> | Attributes,
   ): TSNode<K> {
-    return this.#withAttributes(attrs as Record<string, string>)
+    return this.#withAttributes(attrs)
   }
 
   attrAll(
-    attrs:
-      | Partial<Record<AttributesForTag<K>, string>>
-      | Partial<Record<string, string>>,
+    attrs: Partial<Record<AttributesForTag<K>, string>> | Attributes,
   ): TSNode<K> {
-    return this.#withAttributes(attrs as Record<string, string>)
+    return this.#withAttributes(attrs)
   }
   attrGlobal(
-    attrs:
-      | Partial<Record<GlobalAttributes, string>>
-      | Partial<Record<string, string>>,
+    attrs: Partial<Record<GlobalAttributes, string>> | Attributes,
   ): TSNode<K> {
-    return this.#withAttributes(attrs as Record<string, string>)
+    return this.#withAttributes(attrs)
   }
   attrAria(
-    attrs:
-      | Partial<Record<AriaAttributes, string>>
-      | Partial<Record<string, string>>,
+    attrs: Partial<Record<AriaAttributes, string>> | Attributes,
   ): TSNode<K> {
-    return this.#withAttributes(attrs as Record<string, string>)
+    return this.#withAttributes(attrs)
   }
   attrEvents(
-    attrs:
-      | Partial<Record<EventAttributes, string>>
-      | Partial<Record<string, string>>,
+    attrs: Partial<Record<EventAttributes, string>> | Attributes,
   ): TSNode<K> {
-    return this.#withAttributes(attrs as Record<string, string>)
+    return this.#withAttributes(attrs)
   }
   /**
    * Appends provided TSNode instances as children under this node's tag context.
@@ -200,7 +192,7 @@ export class TSNode<K extends HtmlTag> {
    * @param attrs - A map of attribute names to values.
    * @returns A ts linked to this as parent and containing the merged attributes.
    */
-  #withAttributes(attrs: Record<string, string>): TSNode<K> {
+  #withAttributes(attrs: Attributes): TSNode<K> {
     const node = new TSNode(this)
     node.#attributes = { ...this.#attributes, ...attrs }
     return node
@@ -215,14 +207,14 @@ export class TSNode<K extends HtmlTag> {
    */
   static #serialize(
     tag: string,
-    attrs: Record<string, string>,
+    attrs: Attributes,
     children: TSNode<''>[],
     text = '',
   ): string {
     let html = ''
     if (tag) {
       const attrString = Object.entries(attrs)
-        .map(([key, val]) => ` ${key}="${escapeHtml(val, true)}"`)
+        .map(([key, val]) => ` ${key}="${escapeHtml(val ?? '', true)}"`)
         .join('')
       if (voidTags.has(tag)) {
         html += `<${tag}${attrString}/>`
