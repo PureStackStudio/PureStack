@@ -21,9 +21,9 @@ export function Header(style: Style) {
 function createStyles(style: Style) {
   style.select('.header').css({
     display: 'flex',
-    gap: 'var(--sl-nav-gap)',
-    'justify-content': 'space-between',
-    'align-items': 'center',
+    gap: '--sl-nav-gap',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     height: '100%',
   })
 }
