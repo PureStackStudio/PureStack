@@ -59,5 +59,7 @@ function getScript() {
 function getMain() {
   return h('main')
     .push(h('test').text('123').raw('<img src="a.png"/>').text('456'))
+    .push(h('button').attr({ disabled: '', class: 'abc', style: '' }))
+    .push(h('form').attr({ disabled: '', class: 'abc', name: '' }))
     .raw('<p>abcdef</p>')
 }

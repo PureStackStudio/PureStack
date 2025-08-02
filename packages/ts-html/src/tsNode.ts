@@ -214,7 +214,9 @@ export class TSNode<K extends HtmlTag> {
     let html = ''
     if (tag) {
       const attrString = Object.entries(attrs)
-        .map(([key, val]) => ` ${key}="${escapeHtml(val ?? '', true)}"`)
+        .map(([key, val]) =>
+          !val ? ` ${key}` : ` ${key}="${escapeHtml(val, true)}"`,
+        )
         .join('')
       if (voidTags.has(tag)) {
         html += `<${tag}${attrString}/>`
