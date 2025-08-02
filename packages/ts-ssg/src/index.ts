@@ -3,7 +3,7 @@ import { h } from '@purestack/ts-html'
 import { createLogger, getLogger } from 'logpot'
 
 import { colorizeHTML } from './colorizeHTML'
-import { getHeader } from './components/header'
+import { Header } from './components/header'
 import { getHtml } from './head'
 
 async function main() {
@@ -32,8 +32,11 @@ async function run() {
   const body = h('body')
   const html = getHtml()
   const page = html
-    .push(body.push(getHeader(style), getMain(), getScript()))
-    .select('main', (n) => n.attr({ id: '66' }).push(h('style').text('hello')))
+    .push(body.push(Header(style), getMain(), getScript()))
+    .select('main', (n) =>
+      n.attr({ id: '66' }).push(h('template').id(33).text('hello')),
+    )
+    .select('head', (head) => head.push(h('style').raw(style.toCSS())))
 
   return await page.toPrettyHtml()
 }

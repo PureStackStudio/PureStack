@@ -1,7 +1,9 @@
 import { Style } from '@purestack/ts-css'
 import { h } from '@purestack/ts-html'
 
-export function getHeader(style: Style) {
+import { LinkButton } from './linkButton'
+
+export function Header(style: Style) {
   createStyles(style)
   const div = h('div')
   return div
@@ -12,6 +14,7 @@ export function getHeader(style: Style) {
       div.class('d-flex').push(h('SocialIcons')),
       h('ThemeSelect'),
       h('LanguageSelect'),
+      LinkButton({ style, href: '/' }),
     )
 }
 

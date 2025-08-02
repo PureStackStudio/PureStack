@@ -16,9 +16,6 @@ import {
  * Each method returns a fresh TSNode, retaining chain context via the #parent link.
  */
 export class TSNode<K extends HtmlTag> {
-  /** Link to the previous node in the chain for context (e.g., tag inheritance). */
-  #parent?: TSNode<K>
-
   /** Literal text content for this node, if any. */
   #text: string = ''
 
@@ -38,9 +35,9 @@ export class TSNode<K extends HtmlTag> {
    * Creates a ts.
    * @param tagOrParent - A tag name or a `TSNode` parent.
    */
-  constructor(tagOrParent?: K | TSNode<K>) {
+  constructor(tagOrParent: string | TSNode<K>) {
     if (tagOrParent == null) {
-      return
+      tagOrParent = ''
     }
     if (isString(tagOrParent)) {
       this.#tag = tagOrParent
@@ -49,7 +46,8 @@ export class TSNode<K extends HtmlTag> {
       this.#attributes = parent.#attributes
       this.#children = parent.#children
       this.#tag = parent.#tag
-      this.#parent = parent
+      this.#text = parent.#text
+      this.#raw = parent.#raw
     }
   }
 
@@ -77,8 +75,8 @@ export class TSNode<K extends HtmlTag> {
     return leaf
   }
 
-  id(id: string) {
-    return this.#withAttributes({ id })
+  id(id: string | number) {
+    return this.#withAttributes({ id: String(id) })
   }
 
   class(...args: string[]) {
@@ -142,7 +140,6 @@ export class TSNode<K extends HtmlTag> {
   ) {
     if (this.#tag == tag) return this
     const root = new TSNode<K>(this)
-    root.#parent = undefined
     const stack = [root]
     while (stack.length) {
       const cursor = stack.pop()!
@@ -159,11 +156,7 @@ export class TSNode<K extends HtmlTag> {
           return root
         }
       }
-      const newChildren = children.map((c) => {
-        const tc = new TSNode(c)
-        tc.#parent = undefined
-        return tc
-      })
+      const newChildren = children.map((c) => new TSNode(c))
       cursor.#children = newChildren
       stack.push(...newChildren)
     }
@@ -177,9 +170,8 @@ export class TSNode<K extends HtmlTag> {
    */
   toHtml() {
     const docType = this.#tag == 'html' ? '<!DOCTYPE html>\n' : ''
-    const chain = this.#collectChain()
-    const raws = chain.filter((x) => !!x.#raw)
-    if (raws.length) return raws.map((x) => x.#raw).join('')
+    const raw = this.#raw
+    if (raw.length) return raw
     const code = TSNode.#serialize(this.#tag, this.#attributes, this.#children)
     return docType + code
   }
@@ -213,20 +205,6 @@ export class TSNode<K extends HtmlTag> {
   }
 
   /**
-   * Collects the full parent chain from the root context down to this node.
-   * @returns An array of TSNode instances representing the call chain.
-   */
-  #collectChain(): TSNode<K>[] {
-    const chain: TSNode<K>[] = [this]
-    let cursor = this.#parent
-    while (cursor) {
-      chain.unshift(cursor)
-      cursor = cursor.#parent
-    }
-    return chain
-  }
-
-  /**
    * Recursively serializes a tag name, its attributes, and its TSNode children into HTML.
    * @param tag - The HTML tag name for this level.
    * @param attrs - A map of attribute names to values.
@@ -252,14 +230,13 @@ export class TSNode<K extends HtmlTag> {
     }
     if (text) html += text
     for (const child of children) {
-      const chain = child.#collectChain()
-      const text = chain.map((c) => c.#text).join('')
-      const raws = chain.filter((x) => !!x.#raw)
-      if (raws.length) {
-        html += raws.map((x) => x.#raw).join('')
+      const text = child.#text
+      const raw = child.#raw
+      if (raw.length) {
+        html += raw
         continue
       }
-      const childTag = chain[0].#tag
+      const childTag = child.#tag
       html += TSNode.#serialize(
         childTag,
         child.#attributes,
