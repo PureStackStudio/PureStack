@@ -11,7 +11,7 @@ import {
   SpecificAttributesForTag,
 } from './html'
 
-export type Attributes = Partial<Record<string, string>>
+type Attributes = Partial<Record<string, string>>
 
 /**
  * Represents an immutable builder node for constructing HTML-like trees in TypeScript.
@@ -88,28 +88,28 @@ export class TSNode<K extends HtmlTag> {
   }
 
   attr(
-    attrs: Partial<Record<SpecificAttributesForTag<K>, string>> | Attributes,
+    attrs: Partial<Record<SpecificAttributesForTag<K> | (string & {}), string>>,
   ): TSNode<K> {
     return this.#withAttributes(attrs)
   }
 
   attrAll(
-    attrs: Partial<Record<AttributesForTag<K>, string>> | Attributes,
+    attrs: Partial<Record<AttributesForTag<K> | (string & {}), string>>,
   ): TSNode<K> {
     return this.#withAttributes(attrs)
   }
   attrGlobal(
-    attrs: Partial<Record<GlobalAttributes, string>> | Attributes,
+    attrs: Partial<Record<GlobalAttributes | (string & {}), string>>,
   ): TSNode<K> {
     return this.#withAttributes(attrs)
   }
   attrAria(
-    attrs: Partial<Record<AriaAttributes, string>> | Attributes,
+    attrs: Partial<Record<AriaAttributes | (string & {}), string>>,
   ): TSNode<K> {
     return this.#withAttributes(attrs)
   }
   attrEvents(
-    attrs: Partial<Record<EventAttributes, string>> | Attributes,
+    attrs: Partial<Record<EventAttributes | (string & {}), string>>,
   ): TSNode<K> {
     return this.#withAttributes(attrs)
   }
@@ -246,7 +246,7 @@ export class TSNode<K extends HtmlTag> {
 }
 
 export function h<K extends HtmlTag>(tag?: K) {
-  return new TSNode((tag as K) ?? '')
+  return new TSNode<K>((tag as K) ?? '')
 }
 
 const voidTags = new Set([
