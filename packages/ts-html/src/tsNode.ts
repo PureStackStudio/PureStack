@@ -54,9 +54,11 @@ export class TSNode<K extends HtmlTag> {
   /**
    * Appends a new text node under this node's tag context.
    * @param text - The string content for the new text node.
+   * @param replace - If true current tag text is replaced, if false text content added to the children of the current tag.
    * @returns A ts wrapping the text node and linked in the chain.
    */
-  text(text: string): TSNode<K> {
+  text(text: string, replace = false): TSNode<K> {
+    if (this.#tag && !replace) return this.push(h().text(text))
     const leaf = new TSNode(this)
     leaf.#text = escapeHtml(text, false)
     return leaf
