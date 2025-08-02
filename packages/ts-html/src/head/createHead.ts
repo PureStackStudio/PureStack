@@ -18,16 +18,15 @@ export function createHead(config: HeadConfig): TSNode<'head'> {
   if (config.title) children.push(h('title').push(h().text(config.title)))
 
   if (config.base) {
-    const { href, target } = config.base
-    children.push(h('base').attrAll({ href, target }))
+    children.push(h('base').attr(config.base))
   }
 
   config.nameMetas?.forEach((m: NameMetaTag) => {
-    children.push(meta.attr({ ...m }))
+    children.push(meta.attr(m))
   })
 
   config.propertyMetas?.forEach((m: PropertyMetaTag) => {
-    children.push(meta.attr({ ...m }))
+    children.push(meta.attr(m))
   })
 
   config.httpEquivMetas?.forEach((m: HttpEquivMetaTag) => {
@@ -40,10 +39,7 @@ export function createHead(config: HeadConfig): TSNode<'head'> {
   })
 
   config.links?.forEach((link: LinkTag) => {
-    const attrs = {
-      ...link,
-    }
-    children.push(h('link').attr(attrs))
+    children.push(h('link').attr(link))
   })
 
   config.styles?.forEach((style: StyleTag) => {

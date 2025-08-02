@@ -11,7 +11,7 @@ import {
   SpecificAttributesForTag,
 } from './html'
 
-type Attributes = Partial<Record<string, string>>
+export type Attributes = Partial<Record<string, string>>
 
 /**
  * Represents an immutable builder node for constructing HTML-like trees in TypeScript.

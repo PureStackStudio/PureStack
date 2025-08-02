@@ -1,3 +1,5 @@
+import { Attributes } from '../tsNode'
+
 /**
  * Allowed values for the `name` attribute of `<meta name="...">`.
  */
@@ -32,7 +34,7 @@ export type MetaName =
  * };
  * ```
  */
-export interface NameMetaTag {
+export interface NameMetaTag extends Attributes {
   /** The `name` attribute value. */
   name: MetaName
   /** The `content` attribute value. */
@@ -69,7 +71,7 @@ export type OpenGraphProperty =
  * };
  * ```
  */
-export interface PropertyMetaTag {
+export interface PropertyMetaTag extends Attributes {
   /** The `property` attribute value. */
   property: OpenGraphProperty
   /** The `content` attribute value. */
@@ -191,7 +193,7 @@ export type IconSizes = `${number}x${number}` | 'any' | (string & {})
  * const stylesheetLink: LinkTag = { rel: 'stylesheet', href: '/styles.css' };
  * ```
  */
-export interface LinkTag {
+export interface LinkTag extends Attributes {
   /** Specifies the relationship between the document and the linked resource. */
   rel?: LinkRel
   /** URL of the linked resource. */
@@ -227,7 +229,7 @@ export interface LinkTag {
  * const baseTag: BaseTag = { href: 'https://example.com/', target: '_blank' };
  * ```
  */
-export interface BaseTag {
+export interface BaseTag extends Attributes {
   /** Base URL for all relative URLs in the document. */
   href: string
   /** Default browsing context for linked URLs. */
