@@ -1,8 +1,8 @@
 import prettier from 'prettier'
 
 import { autoVar } from './autoVar'
+import type { CSSProps } from './cssProps'
 import { hyphenizeCss } from './hyphenize'
-import type { CSSProps } from './style'
 
 export abstract class RootStyle {
   static nextId = 1

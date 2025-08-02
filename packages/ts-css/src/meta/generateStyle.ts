@@ -34,13 +34,9 @@ type PropType = {
   }
 }
 
-function createCode() {
-  const methods = createMethods()
+function createCSSProps() {
   const props = createProps()
-  const code = `
-import { BaseStyle } from './baseStyle'
-
-export type CSSProps = {
+  const code = `export type CSSProps = {
   whitespace:
     | 'normal'
     | 'nowrap'
@@ -58,6 +54,15 @@ export type CSSProps = {
     | (string & {})
   ${props}
 } & Record<string & {}, string | number>
+`
+  return code
+}
+
+function createCode() {
+  const methods = createMethods()
+  const code = `
+import { BaseStyle } from './baseStyle'
+import { CSSProps } from './cssProps'
 
 export class Style extends BaseStyle<Style> {
   constructor(selector?: string) {
@@ -186,14 +191,22 @@ function createProp(propType: PropType) {
 }
 
 const code = createCode()
-const formatted = await prettier.format(code, {
+const propsCode = createCSSProps()
+const fmt: prettier.Options = {
   parser: 'typescript',
   semi: false,
   singleQuote: true,
   tabWidth: 2,
   endOfLine: 'lf',
-})
+}
+const formatted1 = await prettier.format(code, fmt)
+const formatted2 = await prettier.format(propsCode, fmt)
 
-const outTs = fileURLToPath(new URL('../style.ts', import.meta.url))
-fs.writeFileSync(outTs, formatted)
-console.log(`✅ Wrote ${outTs}`)
+writeCode('../style.ts', formatted1)
+writeCode('../cssProps.ts', formatted2)
+
+function writeCode(file: string, code: string) {
+  const outTs = fileURLToPath(new URL(file, import.meta.url))
+  fs.writeFileSync(outTs, code)
+  console.log(`✅ Wrote ${outTs}`)
+}
