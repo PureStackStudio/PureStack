@@ -92,7 +92,7 @@ async function bundlePackage(pkg: PackageJson) {
         tsconfig: `./tsconfig.build.json`,
         format: ['esm', 'cjs'],
         treeshake: true,
-        minify: { compress: true, mangle: true, removeWhitespace: true },
+        minify: { compress: true, mangle: true },
         external: [
           'esbuild',
           'prettier',
