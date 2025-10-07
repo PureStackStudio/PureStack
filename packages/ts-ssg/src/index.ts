@@ -1,8 +1,8 @@
+import { colorizeHTML } from '@logpot/printer'
 import { s } from '@purestack/ts-css'
 import { h } from '@purestack/ts-html'
 import { createLogger, getLogger } from 'logpot'
 
-import { colorizeHTML } from './colorizeHTML'
 import { Header } from './components/header'
 import { getHtml } from './head'
 
@@ -11,17 +11,18 @@ async function main() {
     consoleTransport: {
       formatter: {
         kind: 'template',
-        template: '\n{msg}\n',
         printer: {
+          quotes: '',
           objectFormatter: {
             showBrackets: false,
+            showCommas: false,
           },
         },
       },
     },
   })
 
-  getLogger().debug(colorizeHTML(await run()))
+  getLogger().debug('\n' + colorizeHTML(await run()))
   await logger.close()
 }
 
@@ -29,18 +30,6 @@ main().catch(console.error)
 
 async function run() {
   const style = s()
-  style
-    .select('.custom-variant theme-midnight')
-    .borderLeft('solid 1px green')
-    .select(' &:where([data-theme="midnight"] *)')
-    .css({
-      color: '--bg-red',
-    })
-  style
-    .select('custom-variant theme-midnight')
-    .select(' &:where([data-theme="midnight"] *)')
-    .select('.myclass')
-    .color('red')
   const body = h('body')
   const html = getHtml()
   const page = html

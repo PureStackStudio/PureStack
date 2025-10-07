@@ -25,13 +25,9 @@ const DEFAULTS: BasicHeadConfig = {
 }
 
 export function getHtml(config?: BasicHeadConfig) {
-  return h('html')
-    .attr({
-      lang: 'en',
-      dir: 'ltr',
-    })
-    .push(getHead(config))
+  return h('html').push(getHead(config))
 }
+
 export function getHead(config?: BasicHeadConfig) {
   const meta = h('meta')
   const head = createHead(getHeadConfig(merge(DEFAULTS, config))).push(

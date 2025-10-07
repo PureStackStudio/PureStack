@@ -5,10 +5,11 @@ import { LinkButton } from './linkButton'
 
 export function Header(style: Style) {
   createStyles(style)
-  const div = h('div')
+  const div = h('header')
   return div
     .class('header')
     .push(
+      h('nav'),
       div.class('title-wrapper d-flex'),
       div.class('d-flex').push(h('Search')),
       div.class('d-flex').push(h('SocialIcons')),
