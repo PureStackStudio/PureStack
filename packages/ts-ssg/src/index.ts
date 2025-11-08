@@ -4,6 +4,7 @@ import { h } from '@purestack/ts-html'
 import { createLogger, getLogger } from 'logpot'
 
 import { Header } from './components/header'
+import { LinkButton } from './components/linkButton'
 import { getHtml } from './head'
 
 async function main() {
@@ -28,8 +29,8 @@ async function main() {
 
 main().catch(console.error)
 
+const style = s()
 async function run() {
-  const style = s()
   const body = h('body')
   const html = getHtml()
   const page = html
@@ -51,4 +52,5 @@ function getMain() {
     .push(h('button').attr({ disabled: '', class: 'abc', style: '' }))
     .push(h('form').attr({ disabled: '', class: 'abc', name: '' }))
     .raw('<p>abcdef</p>')
+    .push(LinkButton({ href: 'https://example.com', style: s() }))
 }
