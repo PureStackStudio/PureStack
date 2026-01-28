@@ -104,9 +104,10 @@ export class BaseStyle<T extends RootStyle> extends RootStyle {
     })
     const selector = this.selector
     if (selector.startsWith('@media')) {
-      result = `${selector} {${children
+      const mediaContent = children
         .map((x) => '\r\n' + x[1].toCSS())[0]
-        .trimEnd()}
+        .trimEnd()
+      result = `${selector} {${mediaContent}
 }
 
 `
