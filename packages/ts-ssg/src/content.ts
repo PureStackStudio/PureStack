@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
+import { getLogger } from 'logpot'
 export interface ContentFile {
   absPath: string
   relPath: string
@@ -9,9 +10,13 @@ export interface ContentFile {
 
 const CONTENT_EXTS = new Set(['.md', '.mdx'])
 
-export async function discoverContent(contentDir: string): Promise<ContentFile[]> {
+export async function discoverContent(
+  contentDir: string,
+): Promise<ContentFile[]> {
+  const log = getLogger()
   const files: ContentFile[] = []
   await walkDir(contentDir, contentDir, files)
+  log.info('ts-ssg discover complete', { files })
   return files.sort((a, b) => a.relPath.localeCompare(b.relPath))
 }
 

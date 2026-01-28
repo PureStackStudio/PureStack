@@ -19,7 +19,6 @@ if (entryUrl && import.meta.url === pathToFileURL(entryUrl).href) {
 async function runCli() {
   const logger = await createLogger({ runAsWorker: false })
   const log = getLogger()
-  log.info('ts-ssg build started')
   try {
     const result = await buildSite()
     log.info('ts-ssg build completed', { ...result })

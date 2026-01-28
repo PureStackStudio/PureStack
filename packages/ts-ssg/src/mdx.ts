@@ -26,7 +26,8 @@ export async function compileMdxToHtml(source: string): Promise<string> {
     })
     .use(rehypeStringify, { allowDangerousHtml: true })
     .process(cleaned)
-  return String(file)
+  const html = String(file)
+  return html
 }
 
 const mdxJsxHandler: Handler = (state, node) => {
