@@ -49,6 +49,12 @@ modal(config, style)
 | (Namespace separator) 
  */
 
-const source = style.toString()
-fs.writeFileSync('./dist/css/ts-css-bootstrap.css', source)
-console.log('compiled css')
+async function main() {
+  const source = await style.toPrettyCSS()
+  fs.writeFileSync('./dist/css/ts-css-bootstrap.css', source)
+  console.log('compiled css')
+}
+
+main()
+  .then()
+  .catch((err) => console.error(err))
