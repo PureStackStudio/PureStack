@@ -1,7 +1,8 @@
 import { Style } from '@purestack/ts-css'
+
 import { hexToRgb } from '../colorMaster'
 import { CssConfig } from '../cssConfig'
-import { singlePropClass } from './utility'
+
 /**
  * https://html-css-js.com/css/generator/box-shadow/
  * https://dev.to/5t3ph/use-currentcolor-to-keep-css-dry-and-component-colors-flexible-26p

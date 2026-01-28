@@ -35,12 +35,6 @@ node dist/ts-css-bootstrap.js
 
 That will write `dist/css/ts-css-bootstrap.css`.
 
-Note: the generator does **not** create the `dist/css` directory. Ensure it exists before running:
-
-```bash
-mkdir -p dist/css
-```
-
 ## How it works
 
 The entry file `src/index.ts` creates a `CssConfig` and a `Style`, then runs a series of modules that append selectors and declarations:

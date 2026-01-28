@@ -1,4 +1,5 @@
 import { Style } from '@purestack/ts-css'
+
 import { CssConfig } from '../cssConfig'
 
 export function modal(config: CssConfig, style: Style) {

@@ -51,6 +51,7 @@ modal(config, style)
 
 async function main() {
   const source = await style.toPrettyCSS()
+  fs.mkdirSync('./dist/css', { recursive: true })
   fs.writeFileSync('./dist/css/ts-css-bootstrap.css', source)
   console.log('compiled css')
 }
