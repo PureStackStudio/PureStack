@@ -132,7 +132,7 @@ export class TSNode<K extends HtmlTag> {
     tag: T,
     replace: (node: TSNode<T>) => TSNode<P>,
   ) {
-    if (this.#tag == tag) return this
+    if (this.#tag == tag) return replace(this as TSNode<T>)
     const root = new TSNode<K>(this)
     const stack = [root]
     while (stack.length) {

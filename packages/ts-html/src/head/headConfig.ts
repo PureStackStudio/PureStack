@@ -29,9 +29,9 @@ import {
  * ```
  * ```ts
  * const headConfig: HeadConfig = {
- *   title: { title: 'My App' },
+ *   title: 'My App',
  *   base: { href: 'https://example.com/' },
- *   charset: 'utf-8'
+ *   charset: 'utf-8',
  *   nameMetas: [ { name: 'viewport', content: 'width=device-width,initial-scale=1' } ],
  *   propertyMetas: [ { property: 'og:url', content: 'https://example.com' } ],
  *   httpEquivMetas: [ { httpEquiv: 'refresh', content: '30' } ],
