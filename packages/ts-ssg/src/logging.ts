@@ -3,9 +3,11 @@ export interface LoggerLike {
 }
 
 export function logError(logger: LoggerLike, error: unknown, msg: string) {
-  if (error instanceof Error) {
+  const isError = error instanceof Error
+  if (isError) {
     logger.error(msg, error)
     return
   }
-  logger.error(msg, { error: String(error) })
+  const errorText = String(error)
+  logger.error(msg, { error: errorText })
 }

@@ -24,12 +24,14 @@ async function walkDir(root: string, dir: string, acc: ContentFile[]) {
   const entries = await fs.readdir(dir, { withFileTypes: true })
   for (const entry of entries) {
     const absPath = path.join(dir, entry.name)
-    if (entry.isDirectory()) {
+    const isDir = entry.isDirectory()
+    if (isDir) {
       await walkDir(root, absPath, acc)
       continue
     }
     const ext = path.extname(entry.name)
-    if (!CONTENT_EXTS.has(ext)) {
+    const isContentExt = CONTENT_EXTS.has(ext)
+    if (!isContentExt) {
       continue
     }
     acc.push({

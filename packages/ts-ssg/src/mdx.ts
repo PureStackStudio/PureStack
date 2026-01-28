@@ -39,16 +39,14 @@ const mdxJsxHandler: Handler = (state, node) => {
   const props: Record<string, string> = {}
   const attributes = jsxNode.attributes ?? []
   for (const attr of attributes) {
-    if (attr.type !== 'mdxJsxAttribute') {
-      continue
-    }
+    const isAttribute = attr.type === 'mdxJsxAttribute'
+    if (!isAttribute) continue
     if (typeof attr.value === 'string') {
       props[attr.name] = attr.value
       continue
     }
-    if (attr.value == null) {
-      props[attr.name] = ''
-    }
+    const isEmpty = attr.value == null
+    if (isEmpty) props[attr.name] = ''
   }
   const children = state.all(node)
   return {

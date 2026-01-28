@@ -9,7 +9,10 @@ export { buildSite } from './build'
 export { type PartialConfig, resolveConfig, type SiteConfig } from './config'
 
 const entryUrl = process.argv[1]
-if (entryUrl && import.meta.url === pathToFileURL(entryUrl).href) {
+const isDirectRun =
+  typeof entryUrl === 'string' &&
+  import.meta.url === pathToFileURL(entryUrl).href
+if (isDirectRun) {
   runCli().catch((error) => {
     console.error(error)
     process.exitCode = 1

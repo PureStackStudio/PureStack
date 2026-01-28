@@ -50,17 +50,18 @@ export async function buildSite(
 
 function resolveOutPath(outDir: string, file: ContentFile) {
   const baseName = path.basename(file.relPath, file.ext)
-  if (baseName === 'index') {
-    return path.join(outDir, path.dirname(file.relPath), 'index.html')
-  }
-  return path.join(outDir, path.dirname(file.relPath), baseName, 'index.html')
+  const dir = path.dirname(file.relPath)
+  const isIndex = baseName === 'index'
+  const segments = isIndex ? [dir, 'index.html'] : [dir, baseName, 'index.html']
+  return path.join(outDir, ...segments)
 }
 
 function resolveTitle(frontmatter: Record<string, unknown>, relPath: string) {
   const title = frontmatter.title
-  if (typeof title === 'string' && title.trim().length > 0) {
-    return title.trim()
-  }
+  const normalizedTitle = typeof title === 'string' ? title.trim() : ''
+  const hasTitle = normalizedTitle.length > 0
+  if (hasTitle) return normalizedTitle
   const base = path.basename(relPath, path.extname(relPath))
-  return base === 'index' ? '' : base
+  const isIndex = base === 'index'
+  return isIndex ? '' : base
 }
