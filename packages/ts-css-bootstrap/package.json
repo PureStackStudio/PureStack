@@ -34,6 +34,6 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@purestack/ts-css": "^1.0.0"
+    "@purestack/ts-css": "workspace:^"
   }
 }

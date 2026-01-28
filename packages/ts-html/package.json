@@ -34,7 +34,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@purestack/utils": "^1.0.0",
-    "prettier": "^3.6.2"
+    "@purestack/utils": "workspace:^",
+    "prettier": "^3.8.1"
   }
 }
