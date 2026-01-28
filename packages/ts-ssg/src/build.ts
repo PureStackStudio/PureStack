@@ -20,7 +20,7 @@ export async function buildSite(
 ): Promise<BuildResult> {
   const config = resolveConfig(input)
   const log = getLogger()
-  log.info('ts-ssg build config resolved', {
+  log.info('build config resolved', {
     contentDir: config.contentDir,
     outDir: config.outDir,
   })
@@ -40,7 +40,7 @@ export async function buildSite(
     const outPath = path.join(config.outDir, replaceExt(file.relPath, '.html'))
     await ensureDir(outPath)
     await fs.writeFile(outPath, html, 'utf-8')
-    log.info('ts-ssg page written', { outPath })
+    log.info('page written', { outPath })
     pages += 1
   }
 

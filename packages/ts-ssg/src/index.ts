@@ -21,9 +21,9 @@ async function runCli() {
   const log = getLogger()
   try {
     const result = await buildSite()
-    log.info('ts-ssg build completed', { ...result })
+    log.info('build completed', { ...result })
   } catch (error) {
-    logError(log, error, 'ts-ssg build failed')
+    logError(log, error, 'build failed')
     throw error
   } finally {
     await logger.close()

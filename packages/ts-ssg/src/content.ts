@@ -16,7 +16,7 @@ export async function discoverContent(
   const log = getLogger()
   const files: ContentFile[] = []
   await walkDir(contentDir, contentDir, files)
-  log.info('ts-ssg discover complete', { files })
+  log.info('discover complete', { files })
   return files.sort((a, b) => a.relPath.localeCompare(b.relPath))
 }
 
