@@ -5,8 +5,8 @@ import matter from 'gray-matter'
 import { getLogger } from 'logpot'
 
 import { type PartialConfig, resolveConfig } from './config'
-import { discoverContent } from './content'
-import { ensureDir, replaceExt } from './fs'
+import { ContentFile, discoverContent } from './content'
+import { ensureDir } from './fs'
 import { compileMdxToHtml } from './mdx'
 import { renderPage } from './renderer'
 
@@ -37,7 +37,7 @@ export async function buildSite(
       siteTitle: config.siteTitle,
     })
 
-    const outPath = path.join(config.outDir, replaceExt(file.relPath, '.html'))
+    const outPath = resolveOutPath(config.outDir, file)
     await ensureDir(outPath)
     await fs.writeFile(outPath, html, 'utf-8')
     log.info('page written', { outPath })
@@ -46,6 +46,14 @@ export async function buildSite(
 
   const result = { outDir: config.outDir, pages }
   return result
+}
+
+function resolveOutPath(outDir: string, file: ContentFile) {
+  const baseName = path.basename(file.relPath, file.ext)
+  if (baseName === 'index') {
+    return path.join(outDir, path.dirname(file.relPath), 'index.html')
+  }
+  return path.join(outDir, path.dirname(file.relPath), baseName, 'index.html')
 }
 
 function resolveTitle(frontmatter: Record<string, unknown>, relPath: string) {
