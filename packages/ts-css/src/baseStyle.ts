@@ -36,6 +36,20 @@ export class BaseStyle<T extends RootStyle> extends RootStyle {
     return this
   }
 
+  /** Select a child element with the given selector.
+   * ```
+   * + (Next-sibling combinator)
+   * > (Child combinator)
+   * || (Column combinator)
+   * ~ (Subsequent sibling combinator)
+   * " " (Descendant combinator)
+   * | (Namespace separator)
+   * ```
+   * Example:
+   * ```ts
+   * style.select('.container > .item').set('color', 'red')
+   * ```
+   */
   select(selector: string) {
     let child = this.children.get(selector)
     if (child) return child
