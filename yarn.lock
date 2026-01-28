@@ -765,7 +765,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@purestack/ts-css@workspace:packages/ts-css":
+"@purestack/ts-css-bootstrap@workspace:packages/ts-css-bootstrap":
+  version: 0.0.0-use.local
+  resolution: "@purestack/ts-css-bootstrap@workspace:packages/ts-css-bootstrap"
+  dependencies:
+    "@purestack/ts-css": "npm:^1.0.0"
+  languageName: unknown
+  linkType: soft
+
+"@purestack/ts-css@npm:^1.0.0, @purestack/ts-css@workspace:packages/ts-css":
   version: 0.0.0-use.local
   resolution: "@purestack/ts-css@workspace:packages/ts-css"
   dependencies:

@@ -1,0 +1,39 @@
+{
+  "name": "@purestack/ts-css-bootstrap",
+  "version": "1.0.0",
+  "packageManager": "yarn@4.9.2",
+  "main": "./dist/ts-css-bootstrap.cjs",
+  "module": "./dist/ts-css-bootstrap.js",
+  "types": "./dist/ts-css-bootstrap.d.ts",
+  "type": "module",
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koculu/purestack.git",
+    "directory": "packages/ts-css-bootstrap"
+  },
+  "homepage": "https://tenray.io/purestack",
+  "bugs": {
+    "url": "https://github.com/koculu/purestack/issues"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/ts-css-bootstrap.cjs",
+      "import": "./dist/ts-css-bootstrap.js"
+    }
+  },
+  "license": "MIT",
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint ./src",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@purestack/ts-css": "^1.0.0"
+  }
+}
