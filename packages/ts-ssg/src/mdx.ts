@@ -29,7 +29,7 @@ export async function compileMdxToHtml(source: string): Promise<string> {
   return String(file)
 }
 
-const mdxJsxHandler: Handler = (h, node) => {
+const mdxJsxHandler: Handler = (state, node) => {
   const jsxNode = node as {
     name?: string
     attributes?: Array<{ type: string; name: string; value: unknown }>
@@ -49,8 +49,13 @@ const mdxJsxHandler: Handler = (h, node) => {
       props[attr.name] = ''
     }
   }
-  const children = h.all(node)
-  return h(node, tagName, props, children)
+  const children = state.all(node)
+  return {
+    type: 'element',
+    tagName,
+    properties: props,
+    children,
+  } as unknown as ReturnType<Handler>
 }
 
 function stripMdxImports(source: string) {
