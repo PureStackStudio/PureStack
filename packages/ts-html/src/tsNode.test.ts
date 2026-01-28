@@ -110,6 +110,27 @@ describe('TSNode', () => {
     })
   })
 
+  describe('clone', () => {
+    it('clones tag, attributes, and children', () => {
+      const base = h('div')
+        .attr({ id: 'root' })
+        .push(h('span').push(h('').text('x')))
+      const cloned = base.clone()
+
+      expect(cloned.toHtml()).toBe(base.toHtml())
+    })
+
+    it('does not mutate original when the clone is changed', () => {
+      const base = h('div').attr({ id: 'a' }).push(h('span'))
+      const cloned = base.clone()
+
+      const modified = cloned.attr({ id: 'b' }).push(h('em'))
+
+      expect(base.toHtml()).toBe('<div id="a"><span></span></div>')
+      expect(modified.toHtml()).toBe('<div id="b"><span></span><em></em></div>')
+    })
+  })
+
   describe('attribute escaping', () => {
     it('escapes attribute values', () => {
       expect(h('img').attr({ alt: '<&>' }).toHtml()).toBe(

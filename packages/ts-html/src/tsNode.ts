@@ -13,8 +13,8 @@ import {
 export type Attributes = Partial<Record<string, string>>
 
 /**
- * Represents an immutable builder node for constructing HTML-like trees in TypeScript.
- * Each method returns a fresh TSNode, retaining chain context via the #parent link.
+ * Immutable builder node for constructing HTML-like trees in TypeScript.
+ * Every mutating operation returns a new node to keep composition functional.
  */
 export class TSNode<K extends HtmlTag> {
   /** Literal text content for this node, if any. */
@@ -33,14 +33,19 @@ export class TSNode<K extends HtmlTag> {
   #attributes: Attributes = {}
 
   /**
-   * Creates a ts node.
-   * @param tag - A tag name. Use empty string for fragments.
+   * Creates a TSNode for a tag or fragment.
+   * @param tag - A tag name; use empty string or omit for fragments.
    */
   constructor(tag?: string) {
     this.#tag = tag ?? ''
   }
 
+  /**
+   * Returns a shallow clone of this node.
+   * The children array is copied, but child nodes are reused.
+   */
   clone(): TSNode<K> {
+    // Shallow clone to preserve immutability; children are re-used as nodes.
     const node = new TSNode<K>(this.#tag)
     node.#attributes = { ...this.#attributes }
     node.#children = [...this.#children]
@@ -75,35 +80,56 @@ export class TSNode<K extends HtmlTag> {
     return leaf
   }
 
+  /**
+   * Sets the `id` attribute.
+   */
   id(id: string | number) {
     return this.#withAttributes({ id: String(id) })
   }
 
+  /**
+   * Sets the `class` attribute by joining all values with spaces.
+   */
   class(...args: string[]) {
     return this.#withAttributes({ class: args.join(' ') })
   }
 
+  /**
+   * Sets tag-specific attributes.
+   */
   attr(
     attrs: Partial<Record<SpecificAttributesForTag<K> | (string & {}), string>>,
   ): TSNode<K> {
     return this.#withAttributes(attrs)
   }
 
+  /**
+   * Sets any attributes allowed on the tag (global + specific + aria + events).
+   */
   attrAll(
     attrs: Partial<Record<AttributesForTag<K> | (string & {}), string>>,
   ): TSNode<K> {
     return this.#withAttributes(attrs)
   }
+  /**
+   * Sets global HTML attributes (e.g. `id`, `class`, `title`).
+   */
   attrGlobal(
     attrs: Partial<Record<GlobalAttributes | (string & {}), string>>,
   ): TSNode<K> {
     return this.#withAttributes(attrs)
   }
+  /**
+   * Sets ARIA attributes (e.g. `aria-label`).
+   */
   attrAria(
     attrs: Partial<Record<AriaAttributes | (string & {}), string>>,
   ): TSNode<K> {
     return this.#withAttributes(attrs)
   }
+  /**
+   * Sets event-handler attributes (e.g. `onclick`).
+   */
   attrEvents(
     attrs: Partial<Record<EventAttributes | (string & {}), string>>,
   ): TSNode<K> {
@@ -120,9 +146,11 @@ export class TSNode<K extends HtmlTag> {
     return container
   }
 
-  /** Select tag by name in the subtree of current node, replace it with the callback and return a new node with the replaced element.
-   * @param tag     - tag name
-   * @param replace - replacer
+  /**
+   * Selects the first matching tag in the subtree (including this node),
+   * replaces it using the provided callback, and returns a new root.
+   * @param tag - Tag name to find.
+   * @param replace - Replacer callback for the matching node.
    */
   select<T extends HtmlTag, P extends HtmlTag = T>(
     tag: T,
@@ -154,9 +182,8 @@ export class TSNode<K extends HtmlTag> {
   }
 
   /**
-   * Serializes this node into an HTML string, handling multiple grouped chains throughout the tree.
-   * @param options - Prettier options
-   * @returns The HTML string representing the combined root context and its subtree.
+   * Serializes this node into an HTML string.
+   * @returns The HTML string representing this node and its subtree.
    */
   toHtml() {
     const docType = this.#tag == 'html' ? '<!DOCTYPE html>\n' : ''
@@ -167,9 +194,9 @@ export class TSNode<K extends HtmlTag> {
   }
 
   /**
-   * Serializes this node into an HTML string, handling multiple grouped chains throughout the tree.
-   * @param options - Prettier options
-   * @returns The HTML string representing the combined root context and its subtree.
+   * Serializes this node into a formatted HTML string using Prettier.
+   * @param options - Prettier options to override defaults.
+   * @returns The formatted HTML string.
    */
   async toPrettyHtml(options?: prettier.Options) {
     const fmt: prettier.Options = {
@@ -184,9 +211,9 @@ export class TSNode<K extends HtmlTag> {
     return prettier.format(code, fmt)
   }
   /**
-   * Creates a ts in the chain with added attributes.
+   * Creates a TSNode with merged attributes.
    * @param attrs - A map of attribute names to values.
-   * @returns A ts linked to this as parent and containing the merged attributes.
+   * @returns A new node containing the merged attributes.
    */
   #withAttributes(attrs: Attributes): TSNode<K> {
     const node = this.clone()
