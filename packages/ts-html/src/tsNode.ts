@@ -1,4 +1,3 @@
-import { isString } from '@purestack/utils'
 import { escapeHtml } from '@purestack/utils'
 import prettier from 'prettier'
 
@@ -34,23 +33,20 @@ export class TSNode<K extends HtmlTag> {
   #attributes: Attributes = {}
 
   /**
-   * Creates a ts.
-   * @param tagOrParent - A tag name or a `TSNode` parent.
+   * Creates a ts node.
+   * @param tag - A tag name. Use empty string for fragments.
    */
-  constructor(tagOrParent: string | TSNode<K>) {
-    if (tagOrParent == null) {
-      tagOrParent = ''
-    }
-    if (isString(tagOrParent)) {
-      this.#tag = tagOrParent
-    } else {
-      const parent = tagOrParent as TSNode<K>
-      this.#attributes = parent.#attributes
-      this.#children = parent.#children
-      this.#tag = parent.#tag
-      this.#text = parent.#text
-      this.#raw = parent.#raw
-    }
+  constructor(tag?: string) {
+    this.#tag = tag ?? ''
+  }
+
+  clone(): TSNode<K> {
+    const node = new TSNode<K>(this.#tag)
+    node.#attributes = { ...this.#attributes }
+    node.#children = [...this.#children]
+    node.#text = this.#text
+    node.#raw = this.#raw
+    return node
   }
 
   /**
@@ -61,7 +57,7 @@ export class TSNode<K extends HtmlTag> {
    */
   text(text: string, replace = false): TSNode<K> {
     if (this.#tag && !replace) return this.push(h().text(text))
-    const leaf = new TSNode(this)
+    const leaf = this.clone()
     leaf.#text = escapeHtml(text, false)
     return leaf
   }
@@ -74,7 +70,7 @@ export class TSNode<K extends HtmlTag> {
    */
   raw(html: string, replace = false): TSNode<K> {
     if (this.#tag && !replace) return this.push(h().raw(html))
-    const leaf = new TSNode(this)
+    const leaf = this.clone()
     leaf.#raw = html
     return leaf
   }
@@ -119,7 +115,7 @@ export class TSNode<K extends HtmlTag> {
    * @returns A ts wrapping the group of children and linked in the chain.
    */
   push(...args: TSNode<''>[]): TSNode<K> {
-    const container = new TSNode(this)
+    const container = this.clone()
     container.#children = [...this.#children, ...args]
     return container
   }
@@ -132,8 +128,8 @@ export class TSNode<K extends HtmlTag> {
     tag: T,
     replace: (node: TSNode<T>) => TSNode<P>,
   ) {
-    if (this.#tag == tag) return replace(this as TSNode<T>)
-    const root = new TSNode<K>(this)
+    if (this.#tag == tag) return replace(this.clone() as TSNode<T>)
+    const root = this.clone()
     const stack = [root]
     while (stack.length) {
       const cursor = stack.pop()!
@@ -150,7 +146,7 @@ export class TSNode<K extends HtmlTag> {
           return root
         }
       }
-      const newChildren = children.map((c) => new TSNode(c))
+      const newChildren = children.map((c) => c.clone())
       cursor.#children = newChildren
       stack.push(...newChildren)
     }
@@ -193,7 +189,7 @@ export class TSNode<K extends HtmlTag> {
    * @returns A ts linked to this as parent and containing the merged attributes.
    */
   #withAttributes(attrs: Attributes): TSNode<K> {
-    const node = new TSNode(this)
+    const node = this.clone()
     node.#attributes = { ...this.#attributes, ...attrs }
     return node
   }
