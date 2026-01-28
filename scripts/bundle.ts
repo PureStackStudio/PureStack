@@ -1,7 +1,7 @@
 import { globSync, readFileSync } from 'fs'
 import { rm } from 'fs/promises'
 import path from 'path'
-import { build, Options } from 'tsdown'
+import { build, InlineConfig } from 'tsdown'
 
 import { fixDtsExports } from './fixDtsExports'
 import { timeIt } from './timeIt'
@@ -9,6 +9,8 @@ import { timeIt } from './timeIt'
 const emojis: Record<string, string> = {
   '@purestack/ts-html': '⚙️',
   '@purestack/ts-css': '⚙️',
+  '@purestack/ts-css-bootstrap': '⚙️',
+  '@purestack/ts-ssg': '⚙️',
   '@purestack/utils': '⚙️',
 }
 const packages: PackageJson[] = globSync(['packages/**/package.json']).map(
@@ -85,12 +87,12 @@ async function bundlePackage(pkg: PackageJson) {
     const banner = getBanner(pkg)
     const outDir = getOutDir(pkg)
     await timeIt(`build: ${name}`, emoji, async () => {
-      const opts: Options = {
+      const opts: InlineConfig = {
         entry: { [unscope(name)]: input },
         platform: 'node',
         target: 'esnext',
         tsconfig: `./tsconfig.build.json`,
-        format: ['esm', 'cjs'],
+        format: ['module'],
         treeshake: true,
         minify: { compress: true, mangle: true },
         external: [
@@ -110,7 +112,7 @@ async function bundlePackage(pkg: PackageJson) {
         clean: false,
         unbundle: false,
         outDir,
-        silent: true,
+        logLevel: 'silent',
         plugins: [replaceVersion(pkg.version), addBanner(banner)],
       }
       await build(opts)

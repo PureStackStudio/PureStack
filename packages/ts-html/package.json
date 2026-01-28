@@ -2,9 +2,8 @@
   "name": "@purestack/ts-html",
   "version": "1.0.0",
   "packageManager": "yarn@4.9.2",
-  "main": "./dist/ts-html.cjs",
-  "module": "./dist/ts-html.js",
-  "types": "./dist/ts-html.d.ts",
+  "module": "./dist/ts-html.mjs",
+  "types": "./dist/ts-html.d.mts",
   "type": "module",
   "sideEffects": false,
   "repository": {

@@ -2,9 +2,8 @@
   "name": "@purestack/ts-css-bootstrap",
   "version": "1.0.0",
   "packageManager": "yarn@4.9.2",
-  "main": "./dist/ts-css-bootstrap.cjs",
-  "module": "./dist/ts-css-bootstrap.js",
-  "types": "./dist/ts-css-bootstrap.d.ts",
+  "module": "./dist/ts-css-bootstrap.mjs",
+  "types": "./dist/ts-css-bootstrap.d.mts",
   "type": "module",
   "sideEffects": false,
   "repository": {

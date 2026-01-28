@@ -2,9 +2,8 @@
   "name": "@purestack/ts-ssg",
   "version": "1.0.0",
   "packageManager": "yarn@4.9.2",
-  "main": "./dist/ts-ssg.cjs",
-  "module": "./dist/ts-ssg.js",
-  "types": "./dist/ts-ssg.d.ts",
+  "module": "./dist/ts-ssg.mjs",
+  "types": "./dist/ts-ssg.d.mts",
   "type": "module",
   "sideEffects": false,
   "repository": {

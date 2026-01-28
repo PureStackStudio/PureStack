@@ -2,9 +2,8 @@
   "name": "@purestack/ts-css",
   "version": "1.0.0",
   "packageManager": "yarn@4.9.2",
-  "main": "./dist/ts-css.cjs",
-  "module": "./dist/ts-css.js",
-  "types": "./dist/ts-css.d.ts",
+  "module": "./dist/ts-css.mjs",
+  "types": "./dist/ts-css.d.mts",
   "type": "module",
   "sideEffects": false,
   "repository": {

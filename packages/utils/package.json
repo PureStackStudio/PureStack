@@ -2,9 +2,8 @@
   "name": "@purestack/utils",
   "version": "1.0.0",
   "packageManager": "yarn@4.9.2",
-  "main": "./dist/utils.cjs",
-  "module": "./dist/utils.js",
-  "types": "./dist/utils.d.ts",
+  "module": "./dist/utils.mjs",
+  "types": "./dist/utils.d.mts",
   "type": "module",
   "sideEffects": false,
   "repository": {
