@@ -124,7 +124,7 @@ export class TSNode<K extends HtmlTag> {
     return container
   }
 
-  /** Select tag by name in the subtree of current node, replace it with the callback and return a new node with replaced element.
+  /** Select tag by name in the subtree of current node, replace it with the callback and return a new node with the replaced element.
    * @param tag     - tag name
    * @param replace - replacer
    */
