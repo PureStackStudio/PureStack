@@ -30,7 +30,7 @@ const distPaths = [
   ),
 ]
 
-const tgxFiles = globSync(['**/*.tgx'])
+const tgzFiles = globSync(['**/*.tgz'])
   .filter((p) => !p.includes('node_modules') && !p.includes('.git'))
   .map((p) => path.join(projectRoot, p))
 
@@ -49,7 +49,7 @@ async function main() {
     await removePath(distPath)
   }
 
-  for (const file of tgxFiles) {
+  for (const file of tgzFiles) {
     await removePath(file)
   }
 }
