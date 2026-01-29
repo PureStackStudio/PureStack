@@ -54,7 +54,7 @@ const mdxJsxHandler: Handler = (state, node) => {
     tagName,
     properties: props,
     children,
-  } as unknown as ReturnType<Handler>
+  } as ReturnType<Handler>
 }
 
 function stripMdxImports(source: string) {
