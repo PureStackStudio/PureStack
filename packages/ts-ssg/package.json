@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
+    "@logpot/utils": "^1.0.0",
     "logpot": "^1.0.6",
     "mdast-util-to-hast": "^13.2.1",
     "prettier": "^3.8.1",

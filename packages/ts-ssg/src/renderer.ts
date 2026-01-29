@@ -1,22 +1,17 @@
-import { h } from '@purestack/ts-html'
+import { type BasicHeadConfig, h } from '@purestack/ts-html'
+
+import { getHead } from './head'
 
 export interface RenderPageInput {
-  title: string
   bodyHtml: string
-  siteTitle: string
+  headConfig?: BasicHeadConfig
 }
 
 export async function renderPage(input: RenderPageInput): Promise<string> {
-  const { title, bodyHtml, siteTitle } = input
+  const { bodyHtml, headConfig } = input
+  const head = getHead(headConfig)
   const html = h('html').push(
-    h('head').push(
-      h('meta').attr({ charset: 'utf-8' }),
-      h('meta').attr({
-        name: 'viewport',
-        content: 'width=device-width,initial-scale=1',
-      }),
-      h('title').text(title ? `${title} | ${siteTitle}` : siteTitle),
-    ),
+    head,
     h('body').push(h('main').push(h('article').raw(bodyHtml))),
   )
   return await html.toPrettyHtml()
