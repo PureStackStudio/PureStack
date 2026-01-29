@@ -2,10 +2,10 @@ import { pathToFileURL } from 'node:url'
 
 import { createLogger, getLogger } from 'logpot'
 
-import { buildSite } from './build'
+import { buildSite } from './build/site'
 import { logError } from './logging'
 
-export { buildSite } from './build'
+export { buildSite } from './build/site'
 export { type PartialConfig, resolveConfig, type SiteConfig } from './config'
 
 const entryUrl = process.argv[1]

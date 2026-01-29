@@ -2,6 +2,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 
 import { getLogger } from 'logpot'
+
 export interface ContentFile {
   absPath: string
   relPath: string
