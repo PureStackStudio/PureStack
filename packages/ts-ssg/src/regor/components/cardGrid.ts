@@ -11,10 +11,7 @@ const cardGridTemplate = html`<div class="card-grid">
   <slot></slot>
 </div>`
 
-let stylesRegistered = false
-export function registerCardStyles() {
-  if (stylesRegistered) return
-  stylesRegistered = true
+function registerCardGridStyles() {
   styleBuilder
     .select('.card-grid')
     .set('display', 'grid')
@@ -30,18 +27,20 @@ export function registerCardStyles() {
     .set('color', '#222')
 }
 
-export const cardGrid = createComponent<CardGrid>(
-  (head) => {
-    head.disableSwitch = true
-    return {
-      title: head.props.title,
-    }
-  },
-  cardGridTemplate,
-  {
-    props: ['title'],
-  },
-)
+function createCardGridComponent() {
+  return createComponent<CardGrid>(
+    (head) => {
+      head.disableSwitch = true
+      return {
+        title: head.props.title,
+      }
+    },
+    cardGridTemplate,
+    {
+      props: ['title'],
+    },
+  )
+}
 
 interface Card {
   icon: string
@@ -54,27 +53,37 @@ const cardTemplate = html`<div class="card">
   <slot></slot>
 </div>`
 
-styleBuilder
-  .select('.card')
-  .set('display', 'grid')
-  .set('gap', '8px')
-  .set('padding', '16px')
-  .set('border-radius', '10px')
-  .set('border', '1px solid #ededed')
+function registerCardStyles() {
+  styleBuilder
+    .select('.card')
+    .set('display', 'grid')
+    .set('gap', '8px')
+    .set('padding', '16px')
+    .set('border-radius', '10px')
+    .set('border', '1px solid #ededed')
 
-styleBuilder.select('.card__icon').set('font-weight', 600)
-styleBuilder.select('.card__title').set('color', '#444')
+  styleBuilder.select('.card__icon').set('font-weight', 600)
+  styleBuilder.select('.card__title').set('color', '#444')
+}
 
-export const card = createComponent<Card>(
-  (head) => {
-    head.disableSwitch = true
-    return {
-      icon: head.props.icon,
-      title: head.props.title,
-    }
-  },
-  cardTemplate,
-  {
-    props: ['icon', 'title'],
-  },
-)
+function createCardComponent() {
+  return createComponent<Card>(
+    (head) => {
+      head.disableSwitch = true
+      return {
+        icon: head.props.icon,
+        title: head.props.title,
+      }
+    },
+    cardTemplate,
+    {
+      props: ['icon', 'title'],
+    },
+  )
+}
+
+export function createCardComponents() {
+  registerCardGridStyles()
+  registerCardStyles()
+  return { card: createCardComponent(), cardGrid: createCardGridComponent() }
+}

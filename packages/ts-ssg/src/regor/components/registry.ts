@@ -1,14 +1,8 @@
 import type { Component } from 'regor'
 
-export interface ComponentRegistry {
-  register<TProps>(name: string, component: Component<TProps>): void
-  registerMany<TProps>(components: Record<string, Component<TProps>>): void
-  getAll(): Record<string, Component<unknown>>
-}
-
 const registry = new Map<string, Component<unknown>>()
 
-export const componentRegistry: ComponentRegistry = {
+export const componentRegistry = {
   register<TProps>(name: string, component: Component<TProps>) {
     registry.set(name, component as Component<unknown>)
   },

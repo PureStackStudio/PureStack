@@ -1,15 +1,8 @@
 import { Style } from '@purestack/ts-css'
 
-export interface StyleBuilder {
-  get(name?: string): Style
-  select(selector: string, name?: string): Style
-  list(): string[]
-  render(name?: string, pretty?: boolean): Promise<string>
-}
-
 const styleBuilders = new Map<string, Style>()
 
-export const styleBuilder: StyleBuilder = {
+export const styleBuilder = {
   get(name = '') {
     const existing = styleBuilders.get(name)
     if (existing) return existing
