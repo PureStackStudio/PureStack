@@ -492,7 +492,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@logpot/utils@npm:1.0.6":
+"@logpot/utils@npm:1.0.6, @logpot/utils@npm:^1.0.6":
   version: 1.0.6
   resolution: "@logpot/utils@npm:1.0.6"
   checksum: 10c0/b8b1544699ae163a77d06079acc64fea5765413fae713c6c44e515e6677dfa0a2462b53eb50ce32fc6d8d7e98a4a7ab6f7ea9da61635dca83840000ebfa82f94
@@ -621,7 +621,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@purestack/ts-ssg@workspace:packages/ts-ssg"
   dependencies:
+    "@logpot/utils": "npm:^1.0.6"
     gray-matter: "npm:^4.0.3"
+    hast-util-to-html: "npm:^9.0.5"
     logpot: "npm:^1.0.6"
     mdast-util-to-hast: "npm:^13.2.1"
     prettier: "npm:^3.8.1"
@@ -2356,7 +2358,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hast-util-to-html@npm:^9.0.0":
+"hast-util-to-html@npm:^9.0.0, hast-util-to-html@npm:^9.0.5":
   version: 9.0.5
   resolution: "hast-util-to-html@npm:9.0.5"
   dependencies:
