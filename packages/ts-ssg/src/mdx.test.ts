@@ -7,7 +7,7 @@ describe('compileMdxToHtml', () => {
     const source = '<CustomComponent data-id="x" />\n\nParagraph text.'
     const html = await compileMdxToHtml(source)
 
-    expect(html).toContain('<CustomComponent')
+    expect(html).toContain('<customcomponent')
     expect(html).toContain('data-id="x"')
     expect(html).toContain('<p>Paragraph text.</p>')
   })
@@ -24,8 +24,8 @@ describe('compileMdxToHtml', () => {
       'spanning two lines.',
     ].join('\n')
     const html = await compileMdxToHtml(source)
-    expect(html).toContain('<OuterComponent>')
-    expect(html).toContain('<InnerComponent')
+    expect(html).toContain('<outercomponent')
+    expect(html).toContain('<innercomponent')
     expect(html).toContain('data-flag="true"')
     expect(html).toContain('Multi-line\ntext content.')
     expect(html).toContain('<p>Another paragraph\nspanning two lines.</p>')
@@ -45,11 +45,11 @@ describe('compileMdxToHtml', () => {
     ].join('\n')
     const html = await compileMdxToHtml(source)
 
-    expect(html).toContain('<Banner')
+    expect(html).toContain('<banner')
     expect(html).toContain('title="Hello"')
     expect(html).toContain('<p>Intro text.</p>')
-    expect(html).toContain('<Callout kind="info">')
+    expect(html).toContain('<callout kind="info">')
     expect(html).toContain('Callout content.')
-    expect(html).toContain('<Footer>')
+    expect(html).toContain('<footer')
   })
 })

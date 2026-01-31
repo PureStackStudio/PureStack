@@ -5,10 +5,12 @@ import { registerDomGlobals } from '../registerDomGlobals'
 import { card, cardGrid } from './cardGrid'
 
 export const renderApp = (html: string) => {
-  const isHtml =
-    !html.startsWith('<!DOCTYPE html>') && !html.startsWith('<html')
-  if (!isHtml) html = `<!DOCTYPE html><html><body>${html}</body></html>`
-  const { document, window } = parseHTML(html)
+  const isDocument =
+    html.startsWith('<!DOCTYPE html>') || html.startsWith('<html')
+  const htmlToParse = isDocument
+    ? html
+    : `<!DOCTYPE html><html><body>${html}</body></html>`
+  const { document, window } = parseHTML(htmlToParse)
   const restoreGlobals = registerDomGlobals(window, document)
 
   try {
@@ -21,7 +23,7 @@ export const renderApp = (html: string) => {
         element: document.body,
       },
     )
-    if (isHtml) return document.documentElement.outerHTML
+    if (isDocument) return document.documentElement.outerHTML
     return document.body.innerHTML
   } finally {
     restoreGlobals()

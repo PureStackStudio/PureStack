@@ -39,6 +39,7 @@ export function registerDomGlobals(
   for (const key of keys) original[key] = globals[key]
 
   const win = window as Record<string, unknown>
+  ensureDocumentCreateRange(document)
   globals.window = window
   globals.document = document
   globals.Node = win.Node
@@ -61,6 +62,30 @@ export function registerDomGlobals(
     for (const key of keys) globals[key] = original[key]
   }
 }
+
+function ensureDocumentCreateRange(document: unknown): void {
+  const doc = document as Record<string, unknown>
+  if (typeof doc.createRange === 'function') return
+  doc.createRange = () => {
+    const range = {
+      setStart() {},
+      setEnd() {},
+      collapse() {},
+      selectNodeContents() {},
+      createContextualFragment(html: string) {
+        const doc = document as Document
+        const container = doc.createElement('div')
+        container.innerHTML = html
+        const fragment = doc.createDocumentFragment()
+        while (container.firstChild) {
+          fragment.appendChild(container.firstChild)
+        }
+        return fragment
+      },
+    }
+    return range as unknown as Range
+  }
+}
 // define default document for component creation
 const { document, window } = parseHTML('<html><body></body></html>')
-registerDomGlobals(document, window)
+registerDomGlobals(window, document)
