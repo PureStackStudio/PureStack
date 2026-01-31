@@ -18,6 +18,7 @@ export async function buildPage(config: SiteConfig, file: ContentFile) {
   const html = await renderPage({
     bodyHtml,
     headConfig,
+    styleHref: config.styleHref,
   })
   const outPath = resolveOutPath(config.outDir, file)
   await writeHtml(outPath, html)

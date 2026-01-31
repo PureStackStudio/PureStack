@@ -2,7 +2,7 @@ import { parseHTML } from 'linkedom'
 import { createApp } from 'regor'
 
 import { registerDomGlobals } from '../registerDomGlobals'
-import { card, cardGrid } from './cardGrid'
+import { card, cardGrid, registerCardStyles } from './cardGrid'
 
 export const renderApp = (html: string) => {
   const isDocument =
@@ -14,6 +14,7 @@ export const renderApp = (html: string) => {
   const restoreGlobals = registerDomGlobals(window, document)
 
   try {
+    registerCardStyles()
     createApp(
       {
         components: { cardGrid, card },

@@ -3,6 +3,7 @@ import { getLogger } from 'logpot'
 import { type PartialConfig, resolveConfig } from '../config'
 import { discoverContent } from '../content'
 import { buildPage } from './page'
+import { writeStyles } from './styles'
 
 export interface BuildResult {
   outDir: string
@@ -25,5 +26,6 @@ export async function buildSite(
     pages += 1
   }
 
+  await writeStyles(config.outDir, config.styleFileName)
   return { outDir: config.outDir, pages }
 }

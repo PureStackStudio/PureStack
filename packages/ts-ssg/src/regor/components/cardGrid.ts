@@ -1,13 +1,34 @@
 import { createComponent, html } from 'regor'
 
+import { styleBuilder } from '../../styles'
+
 interface CardGrid {
   title: string
 }
 
-const cardGridTemplate = html`<div>
-  <div>Card Grid {{ title }}</div>
+const cardGridTemplate = html`<div class="card-grid">
+  <div class="card-grid__title">Card Grid {{ title }}</div>
   <slot></slot>
 </div>`
+
+let stylesRegistered = false
+export function registerCardStyles() {
+  if (stylesRegistered) return
+  stylesRegistered = true
+  styleBuilder
+    .select('.card-grid')
+    .set('display', 'grid')
+    .set('gap', '16px')
+    .set('padding', '24px')
+    .set('border-radius', '12px')
+    .set('border', '1px solid #e6e6e6')
+
+  styleBuilder
+    .select('.card-grid__title')
+    .set('font-size', '18px')
+    .set('font-weight', 600)
+    .set('color', '#222')
+}
 
 export const cardGrid = createComponent<CardGrid>(
   (head) => {
@@ -27,11 +48,22 @@ interface Card {
   title: string
 }
 
-const cardTemplate = html`<div>
-  <div>icon: {{ icon }}</div>
-  <div>Card {{ title }}</div>
+const cardTemplate = html`<div class="card">
+  <div class="card__icon">icon: {{ icon }}</div>
+  <div class="card__title">Card {{ title }}</div>
   <slot></slot>
 </div>`
+
+styleBuilder
+  .select('.card')
+  .set('display', 'grid')
+  .set('gap', '8px')
+  .set('padding', '16px')
+  .set('border-radius', '10px')
+  .set('border', '1px solid #ededed')
+
+styleBuilder.select('.card__icon').set('font-weight', 600)
+styleBuilder.select('.card__title').set('color', '#444')
 
 export const card = createComponent<Card>(
   (head) => {
