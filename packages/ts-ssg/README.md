@@ -1,0 +1,109 @@
+# @purestack/ts-ssg
+
+TypeScript-first static site generator for Markdown and MDX, built on the PureStack toolchain.
+It converts `.md`/`.mdx` content to HTML, runs custom Regor components during render, and emits
+static pages plus CSS generated via `@purestack/ts-css`.
+
+## Highlights
+- Markdown + MDX pipeline powered by Unified (remark/rehype).
+- Frontmatter-aware head config (title/description plus arbitrary head overrides).
+- Regor component rendering in MDX/HTML (server-side, using LinkeDOM).
+- CSS collected during render and emitted as static files.
+- Simple, programmatic build API with sensible defaults.
+
+## How it works
+1. **Discover content**: `discoverContent()` scans the content directory for `.md` and `.mdx`.
+2. **Parse frontmatter**: `gray-matter` extracts frontmatter + body content.
+3. **Compile MDX**: `compileMdxToHtml()` uses remark/rehype and custom MDX JSX handlers.
+4. **Render components**: `renderApp()` boots a Regor app in LinkeDOM, mounts components, and
+   returns HTML.
+5. **Build page shell**: `renderPage()` creates `<html>`, `<head>`, and `<body>` using
+   `@purestack/ts-html`, injecting the stylesheet link.
+6. **Write output**: HTML pages are written to `dist/site`, plus generated CSS files.
+
+## Project layout
+- `src/build/`: build pipeline (page rendering, output paths, head resolution, IO).
+- `src/mdx.ts`: MDX/Markdown compiler and JSX handling.
+- `src/renderer.ts`: HTML shell renderer and stylesheet injection.
+- `src/regor/`: LinkeDOM globals + Regor component registry and built-ins.
+- `src/styles.ts`: CSS builder registry.
+- `sample-content/`: example MDX/Markdown content.
+
+## Configuration
+`resolveConfig()` builds a `SiteConfig` from defaults + overrides.
+
+Default values:
+- `rootDir`: package root (derived from `src` location).
+- `contentDir`: `<rootDir>/sample-content`
+- `outDir`: `<rootDir>/dist/site`
+- `siteTitle`: `ts-ssg`
+- `styleFileName`: `site.css`
+- `styleHref`: `/<styleFileName>`
+
+## Usage
+
+### Programmatic build
+```ts
+import { buildSite } from '@purestack/ts-ssg'
+
+await buildSite({
+  contentDir: './content',
+  outDir: './public',
+  siteTitle: 'My Docs',
+})
+```
+
+### Running as a CLI entry
+When the package entry is executed directly, it runs `buildSite()` and logs a build summary.
+This is useful for scripted builds after `tsc` output is available.
+
+## Content and routes
+- Supported extensions: `.md` and `.mdx`
+- Output paths:
+  - `index.mdx` -> `<outDir>/index.html`
+  - `guide/overview.md` -> `<outDir>/guide/overview/index.html`
+  - `guide/index.mdx` -> `<outDir>/guide/index.html`
+
+## Frontmatter -> head config
+`resolveHeadConfig()` inspects frontmatter keys:
+- `title`: page title
+- `description`: meta description
+- `head`: object merged into the base head config
+
+The base head config is defined in `src/head.ts` and includes charset, viewport,
+Open Graph defaults, and a generator meta tag.
+
+## Regor components in MDX
+Custom components are registered via `componentRegistry` and rendered by `renderApp()`.
+
+```ts
+import { componentRegistry } from '@purestack/ts-ssg'
+import { createComponent, html } from 'regor'
+
+componentRegistry.register(
+  'banner',
+  createComponent(() => ({ title: 'Hello' }), html`<div>Banner</div>`),
+)
+```
+
+Built-in components are registered automatically:
+- `cardGrid`
+- `card`
+
+Notes:
+- MDX `import`/`export` lines are stripped during compilation.
+- Components must be available in the registry at build time.
+
+## Styles
+Use `styleBuilder` to register CSS at build time. `writeStyles()` emits a CSS file for each
+named style builder, plus the default stylesheet.
+
+```ts
+import { styleBuilder } from '@purestack/ts-ssg'
+
+styleBuilder.select('body').set('font-family', 'system-ui')
+```
+
+## Development notes
+- Tests: `yarn workspace @purestack/ts-ssg test`
+- Build: `yarn workspace @purestack/ts-ssg build`
