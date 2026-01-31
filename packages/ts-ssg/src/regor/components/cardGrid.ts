@@ -6,6 +6,7 @@ interface CardGrid {
 
 const cardGridTemplate = html`<div>
   <div>Card Grid {{ message }}</div>
+  <slot></slot>
 </div>`
 
 export const cardGrid = createComponent<CardGrid>(

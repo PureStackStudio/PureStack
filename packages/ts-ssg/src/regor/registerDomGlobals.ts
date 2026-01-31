@@ -7,6 +7,7 @@ type GlobalKey =
   | 'Node'
   | 'Element'
   | 'HTMLElement'
+  | 'HTMLSlotElement'
   | 'DocumentFragment'
   | 'CustomEvent'
   | 'Event'
@@ -27,6 +28,7 @@ export function registerDomGlobals(
     'Node',
     'Element',
     'HTMLElement',
+    'HTMLSlotElement',
     'DocumentFragment',
     'CustomEvent',
     'Event',
@@ -45,10 +47,11 @@ export function registerDomGlobals(
   globals.Node = win.Node
   globals.Element = win.Element
   globals.HTMLElement = win.HTMLElement
+  globals.HTMLSlotElement = win.HTMLSlotElement
   globals.DocumentFragment = win.DocumentFragment
   globals.CustomEvent = win.CustomEvent
   globals.Event = win.Event
-  globals.Comment = win.Comment
+  globals.Comment = createCommentConstructor(document)
   globals.Text = win.Text
   globals.HTMLTemplateElement = win.HTMLTemplateElement
 
@@ -85,6 +88,16 @@ function ensureDocumentCreateRange(document: unknown): void {
     }
     return range as unknown as Range
   }
+}
+
+function createCommentConstructor(document: unknown): typeof Comment {
+  const doc = document as Document
+  const prototype = Object.getPrototypeOf(doc.createComment(''))
+  const CommentShim = function Comment(this: Comment, data?: string) {
+    return doc.createComment(data ?? '')
+  } as unknown as typeof Comment
+  CommentShim.prototype = prototype
+  return CommentShim
 }
 // define default document for component creation
 const { document, window } = parseHTML('<html><body></body></html>')

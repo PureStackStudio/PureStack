@@ -629,7 +629,7 @@ __metadata:
     logpot: "npm:^1.0.6"
     mdast-util-to-hast: "npm:^13.2.1"
     prettier: "npm:^3.8.1"
-    regor: "npm:^1.1.1"
+    regor: "npm:^1.1.2"
     rehype-stringify: "npm:^10.0.1"
     remark-mdx: "npm:^3.1.1"
     remark-parse: "npm:^11.0.0"
@@ -3801,10 +3801,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regor@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "regor@npm:1.1.1"
-  checksum: 10c0/4a72d6f496a32be9ad8de06ed0b3d5745b0e4ce81cd6144052f4539b7235c6c3d66e4243c492a8733fa54e50508beeb66932036df7fc935f7413d66ab8e15a30
+"regor@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "regor@npm:1.1.2"
+  checksum: 10c0/dd4546f72425b064666f538faada23d59c7cde11aa8a94eb85c748b3c0c6dbea065f4bd47ae31eb49bf3bf75396325b3a13bf07584eb288f5737a038b7bf23b8
   languageName: node
   linkType: hard
 
