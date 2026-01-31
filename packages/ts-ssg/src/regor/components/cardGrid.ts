@@ -18,7 +18,7 @@ export const cardGrid = createComponent<CardGrid>(
   },
   cardGridTemplate,
   {
-    props: ['message', 'stagger'],
+    props: ['title'],
   },
 )
 
