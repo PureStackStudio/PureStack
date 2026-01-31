@@ -622,6 +622,7 @@ __metadata:
   resolution: "@purestack/ts-ssg@workspace:packages/ts-ssg"
   dependencies:
     "@logpot/utils": "npm:^1.0.6"
+    css.escape: "npm:^1.5.1"
     gray-matter: "npm:^4.0.3"
     hast-util-to-html: "npm:^9.0.5"
     linkedom: "npm:^0.18.12"
@@ -965,6 +966,13 @@ __metadata:
   dependencies:
     "@types/deep-eql": "npm:*"
   checksum: 10c0/49282bf0e8246800ebb36f17256f97bd3a8c4fb31f92ad3c0eaa7623518d7e87f1eaad4ad206960fcaf7175854bdff4cb167e4fe96811e0081b4ada83dd533ec
+  languageName: node
+  linkType: hard
+
+"@types/css.escape@npm:^1.5.2":
+  version: 1.5.2
+  resolution: "@types/css.escape@npm:1.5.2"
+  checksum: 10c0/9232b774ab674cbc4bc53df937cf68f60faa53074171d7e0d74ba01f9678e7bd33eeab7245f300e14113454b9e9d18fb837557d0527b298cd7b0e54dddc84ab8
   languageName: node
   linkType: hard
 
@@ -1695,6 +1703,13 @@ __metadata:
   version: 6.2.2
   resolution: "css-what@npm:6.2.2"
   checksum: 10c0/91e24c26fb977b4ccef30d7007d2668c1c10ac0154cc3f42f7304410e9594fb772aea4f30c832d2993b132ca8d99338050866476210316345ec2e7d47b248a56
+  languageName: node
+  linkType: hard
+
+"css.escape@npm:^1.5.1":
+  version: 1.5.1
+  resolution: "css.escape@npm:1.5.1"
+  checksum: 10c0/5e09035e5bf6c2c422b40c6df2eb1529657a17df37fda5d0433d722609527ab98090baf25b13970ca754079a0f3161dd3dfc0e743563ded8cfa0749d861c1525
   languageName: node
   linkType: hard
 
@@ -3756,6 +3771,7 @@ __metadata:
   dependencies:
     "@eslint/js": "npm:^9.39.2"
     "@stylistic/eslint-plugin": "npm:^5.7.1"
+    "@types/css.escape": "npm:^1.5.2"
     "@types/node": "npm:^25.1.0"
     esbuild: "npm:^0.27.2"
     eslint: "npm:^9.39.2"

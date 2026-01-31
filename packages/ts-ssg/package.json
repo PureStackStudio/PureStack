@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "@logpot/utils": "^1.0.6",
+    "css.escape": "^1.5.1",
     "gray-matter": "^4.0.3",
     "hast-util-to-html": "^9.0.5",
     "linkedom": "^0.18.12",

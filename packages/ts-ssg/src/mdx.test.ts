@@ -45,7 +45,6 @@ describe('compileMdxToHtml', () => {
     ].join('\n')
     const html = await compileMdxToHtml(source)
 
-    console.log(html)
     expect(html).toContain('<Banner')
     expect(html).toContain('title="Hello"')
     expect(html).toContain('<p>Intro text.</p>')
