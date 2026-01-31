@@ -7,6 +7,7 @@ import { logError } from './logging'
 
 export { buildSite } from './build/site'
 export { type PartialConfig, resolveConfig, type SiteConfig } from './config'
+export { componentRegistry } from './regor/components/registry'
 export { styleBuilder } from './styles'
 
 const entryUrl = process.argv[1]

@@ -2,7 +2,9 @@ import { parseHTML } from 'linkedom'
 import { createApp } from 'regor'
 
 import { registerDomGlobals } from '../registerDomGlobals'
-import { card, cardGrid, registerCardStyles } from './cardGrid'
+import { registerCardStyles } from './cardGrid'
+import { initBuiltinComponents } from './initBuiltinComponents'
+import { componentRegistry } from './registry'
 
 export const renderApp = (html: string) => {
   const isDocument =
@@ -15,9 +17,13 @@ export const renderApp = (html: string) => {
 
   try {
     registerCardStyles()
+    initBuiltinComponents()
+    const components = {
+      ...componentRegistry.getAll(),
+    }
     createApp(
       {
-        components: { cardGrid, card },
+        components,
         message: 'Hello from app!',
       },
       {
