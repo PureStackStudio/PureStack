@@ -1,4 +1,5 @@
 import cssEscape from 'css.escape'
+import { parseHTML } from 'linkedom'
 
 type GlobalKey =
   | 'window'
@@ -60,3 +61,6 @@ export function registerDomGlobals(
     for (const key of keys) globals[key] = original[key]
   }
 }
+// define default document for component creation
+const { document, window } = parseHTML('<html><body></body></html>')
+registerDomGlobals(document, window)

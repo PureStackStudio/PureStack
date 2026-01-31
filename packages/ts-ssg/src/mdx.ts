@@ -7,6 +7,8 @@ import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import { unified } from 'unified'
 
+import { renderApp } from './regor/components/renderApp'
+
 export async function compileMdxToHtml(source: string): Promise<string> {
   const cleaned = stripMdxImports(source)
   const file = await unified()
@@ -29,7 +31,7 @@ export async function compileMdxToHtml(source: string): Promise<string> {
     .use(rehypeStringify, { allowDangerousHtml: true })
     .process(cleaned)
   const html = String(file)
-  return html
+  return renderApp(html)
 }
 
 // Sample usage:
