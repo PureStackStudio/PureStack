@@ -28,7 +28,7 @@ function registerCardGridStyles() {
 }
 
 function createCardGridComponent() {
-  return createComponent<CardGrid>(() => ({}), cardGridTemplate, {
+  return createComponent<CardGrid>(cardGridTemplate, () => ({}), {
     props: ['title'],
   })
 }
@@ -58,7 +58,7 @@ function registerCardStyles() {
 }
 
 function createCardComponent() {
-  return createComponent<Card>(() => ({}), cardTemplate, {
+  return createComponent<Card>(cardTemplate, () => ({}), {
     props: ['icon', 'title'],
   })
 }
