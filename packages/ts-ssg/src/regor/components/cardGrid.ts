@@ -28,18 +28,9 @@ function registerCardGridStyles() {
 }
 
 function createCardGridComponent() {
-  return createComponent<CardGrid>(
-    (head) => {
-      head.disableSwitch = true
-      return {
-        title: head.props.title,
-      }
-    },
-    cardGridTemplate,
-    {
-      props: ['title'],
-    },
-  )
+  return createComponent<CardGrid>(() => ({}), cardGridTemplate, {
+    props: ['title'],
+  })
 }
 
 interface Card {
@@ -67,19 +58,9 @@ function registerCardStyles() {
 }
 
 function createCardComponent() {
-  return createComponent<Card>(
-    (head) => {
-      head.disableSwitch = true
-      return {
-        icon: head.props.icon,
-        title: head.props.title,
-      }
-    },
-    cardTemplate,
-    {
-      props: ['icon', 'title'],
-    },
-  )
+  return createComponent<Card>(() => ({}), cardTemplate, {
+    props: ['icon', 'title'],
+  })
 }
 
 export function createCardComponents() {
