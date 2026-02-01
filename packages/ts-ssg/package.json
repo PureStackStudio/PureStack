@@ -41,7 +41,7 @@
     "logpot": "^1.0.6",
     "mdast-util-to-hast": "^13.2.1",
     "prettier": "^3.8.1",
-    "regor": "^1.1.4",
+    "regor": "^1.1.5",
     "rehype-stringify": "^10.0.1",
     "remark-mdx": "^3.1.1",
     "remark-parse": "^11.0.0",
