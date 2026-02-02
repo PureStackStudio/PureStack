@@ -1,8 +1,8 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
-import { ensureDir } from '../fs'
-import { styleBuilder } from '../styles'
+import { styleBuilder } from '../style/styles'
+import { ensureDir } from '../util/fs'
 
 export interface WriteStylesResult {
   outPath: string

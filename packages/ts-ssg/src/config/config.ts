@@ -15,6 +15,7 @@ export type PartialConfig = Partial<SiteConfig>
 const DEFAULT_ROOT = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   '..',
+  '..',
 )
 
 export function resolveConfig(input: PartialConfig = {}): SiteConfig {

@@ -1,7 +1,7 @@
 import { getLogger } from 'logpot'
 
-import { type PartialConfig, resolveConfig } from '../config'
-import { discoverContent } from '../content'
+import { type PartialConfig, resolveConfig } from '../config/config'
+import { discoverContent } from '../discover/content'
 import { buildPage } from './page'
 import { writeStyles } from './styles'
 

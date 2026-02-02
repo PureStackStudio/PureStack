@@ -7,7 +7,7 @@ import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import { unified } from 'unified'
 
-import { renderApp } from './regor/components/renderApp'
+import { renderApp } from '../regor/components/renderApp'
 
 export async function compileMdxToHtml(source: string): Promise<string> {
   const cleaned = stripMdxImports(source)
@@ -34,10 +34,6 @@ export async function compileMdxToHtml(source: string): Promise<string> {
   return renderApp(html)
 }
 
-// Sample usage:
-// export function processMdxComponent(htmlMarkup: string): string {
-//   return '<custom></custom>'
-// }
 export function processMdxComponent(htmlMarkup: string): string {
   return htmlMarkup
 }

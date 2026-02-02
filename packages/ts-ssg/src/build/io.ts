@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises'
 
-import { ensureDir } from '../fs'
+import { ensureDir } from '../util/fs'
 
 export async function readSource(absPath: string) {
   return fs.readFile(absPath, 'utf-8')

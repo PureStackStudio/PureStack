@@ -1,6 +1,6 @@
 import { type BasicHeadConfig, h } from '@purestack/ts-html'
 
-import { getHead } from './head'
+import { getHead } from './config/head'
 
 export interface RenderPageInput {
   bodyHtml: string

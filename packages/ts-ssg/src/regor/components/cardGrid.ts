@@ -1,6 +1,6 @@
 import { createComponent, html } from 'regor'
 
-import { styleBuilder } from '../../styles'
+import { styleBuilder } from '../../style/styles'
 
 interface CardGrid {
   title: string

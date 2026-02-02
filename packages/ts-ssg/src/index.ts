@@ -3,12 +3,16 @@ import { pathToFileURL } from 'node:url'
 import { createLogger, getLogger } from 'logpot'
 
 import { buildSite } from './build/site'
-import { logError } from './logging'
+import { logError } from './util/logging'
 
 export { buildSite } from './build/site'
-export { type PartialConfig, resolveConfig, type SiteConfig } from './config'
+export {
+  type PartialConfig,
+  resolveConfig,
+  type SiteConfig,
+} from './config/config'
 export { componentRegistry } from './regor/components/registry'
-export { styleBuilder } from './styles'
+export { styleBuilder } from './style/styles'
 
 const entryUrl = process.argv[1]
 const isDirectRun =

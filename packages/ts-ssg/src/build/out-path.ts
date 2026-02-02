@@ -1,6 +1,6 @@
 import path from 'node:path'
 
-import { type ContentFile } from '../content'
+import { type ContentFile } from '../discover/content'
 
 export function resolveOutPath(outDir: string, file: ContentFile) {
   const baseName = path.basename(file.relPath, file.ext)
