@@ -39,6 +39,10 @@ export async function copyStaticAsset(
   try {
     await ensureDir(outPath)
     await fs.copyFile(asset.absPath, outPath)
+    log.info('static asset copied', {
+      assetPath: asset.absPath,
+      outPath,
+    })
     return { outPath, copied: true }
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error)
