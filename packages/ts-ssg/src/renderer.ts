@@ -11,10 +11,10 @@ export interface RenderPageInput {
 
 export async function renderPage(input: RenderPageInput): Promise<string> {
   const { bodyHtml, headConfig, styleLinks } = input
-  const head = getHead(headConfig)
+  let head = getHead(headConfig)
   if (styleLinks && styleLinks.length > 0) {
     for (const link of styleLinks) {
-      head.push(
+      head = head.push(
         h('link').attr({
           rel: link.rel,
           href: link.href,
@@ -31,7 +31,7 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
       .filter((theme): theme is string => Boolean(theme))
     if (themes.length > 0) {
       const script = buildThemeSwitchScript(themes)
-      head.push(h('script').raw(script))
+      head = head.push(h('script').raw(script))
     }
   }
   const html = h('html').push(
