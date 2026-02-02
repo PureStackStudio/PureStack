@@ -52,10 +52,13 @@ function normalizeTemplateName(name: string | undefined) {
   return trimmed.length > 0 ? trimmed : 'doc'
 }
 
-function renderDocTemplate({ head, bodyHtml }: PageTemplateInput) {
+function renderDocTemplate({ head, bodyHtml, navigation }: PageTemplateInput) {
+  const navNode = renderDocNav(navigation)
   return h('html').push(
     head,
-    h('body').push(h('main').push(h('article').raw(bodyHtml))),
+    h('body').push(
+      h('main').push(...(navNode ? [navNode] : []), h('article').raw(bodyHtml)),
+    ),
   )
 }
 
@@ -68,4 +71,29 @@ function renderSplashTemplate({ head, bodyHtml }: PageTemplateInput) {
         h('main').push(h('section').attr({ class: 'splash' }).raw(bodyHtml)),
       ),
   )
+}
+
+function renderDocNav(navigation?: PageTemplateInput['navigation']) {
+  const items = navigation?.items ?? []
+  if (items.length === 0) return undefined
+  return h('nav')
+    .attr({ class: 'doc-nav', 'aria-label': 'Page navigation' })
+    .push(renderNavList(items))
+}
+
+function renderNavList(
+  items: NonNullable<PageTemplateInput['navigation']>['items'],
+) {
+  const list = h('ul').attr({ class: 'doc-nav__list' })
+  for (const item of items) {
+    const content = item.url
+      ? h('a').attr({ href: item.url }).text(item.title)
+      : h('span').text(item.title)
+    const li = h('li').attr({ class: 'doc-nav__item' }).push(content)
+    if (item.children && item.children.length > 0) {
+      li.push(renderNavList(item.children))
+    }
+    list.push(li)
+  }
+  return list
 }
