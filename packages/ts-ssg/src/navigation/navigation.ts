@@ -481,6 +481,9 @@ function sortNavItems(items: NavItem[], sortBy: NavigationSort): NavItem[] {
     if (sortBy === 'path') {
       return (a.url ?? '').localeCompare(b.url ?? '')
     }
+    const urlA = a.url ?? ''
+    const urlB = b.url ?? ''
+    if (urlA && urlB) return urlA.localeCompare(urlB)
     return a.title.localeCompare(b.title)
   })
   return sorted.map((item) => ({
