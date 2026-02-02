@@ -55,10 +55,12 @@ export class TSNode<K extends HtmlTag> {
   }
 
   /**
-   * Appends a new text node under this node's tag context.
-   * @param text - The string content for the new text node.
-   * @param replace - If true current tag text is replaced, if false text content added to the children of the current tag.
-   * @returns A ts wrapping the text node and linked in the chain.
+   * Adds escaped text content.
+   * If this node has a tag and `replace` is false, a child text node is appended.
+   * Otherwise this node's own text content is replaced.
+   * @param text - The string content for the text.
+   * @param replace - When true, replaces this node's text; when false and a tag is present, appends a child text node.
+   * @returns A new TSNode with the text change applied.
    */
   text(text: string, replace = false): TSNode<K> {
     if (this.#tag && !replace) return this.push(h().text(text))
@@ -68,10 +70,12 @@ export class TSNode<K extends HtmlTag> {
   }
 
   /**
-   * Appends or replace a new raw html code under this node's tag context.
-   * @param html - The raw html string for the new html node.
-   * @param replace - If true current tag is replaced, if false raw content added to the children of the current tag.
-   * @returns A ts wrapping the html node and linked in the chain.
+   * Adds raw HTML content (no escaping).
+   * If this node has a tag and `replace` is false, a child raw node is appended.
+   * Otherwise this node's own raw HTML content is replaced.
+   * @param html - The raw HTML string to insert.
+   * @param replace - When true, replaces this node's raw HTML; when false and a tag is present, appends a child raw node.
+   * @returns A new TSNode with the raw HTML change applied.
    */
   raw(html: string, replace = false): TSNode<K> {
     if (this.#tag && !replace) return this.push(h().raw(html))
@@ -136,9 +140,9 @@ export class TSNode<K extends HtmlTag> {
     return this.#withAttributes(attrs)
   }
   /**
-   * Appends provided TSNode instances as children under this node's tag context.
+   * Appends provided TSNode instances as children.
    * @param args - One or more TSNode instances to include as children.
-   * @returns A ts wrapping the group of children and linked in the chain.
+   * @returns A new TSNode with the children appended.
    */
   push(...args: TSNode<''>[]): TSNode<K> {
     const container = this.clone()
@@ -147,10 +151,11 @@ export class TSNode<K extends HtmlTag> {
   }
 
   /**
-   * Selects the first matching tag in the subtree (including this node),
+   * Selects the first matching tag in a depth-first traversal (including this node),
    * replaces it using the provided callback, and returns a new root.
    * @param tag - Tag name to find.
    * @param replace - Replacer callback for the matching node.
+   * @throws If no matching tag is found.
    */
   select<T extends HtmlTag, P extends HtmlTag = T>(
     tag: T,
@@ -226,6 +231,7 @@ export class TSNode<K extends HtmlTag> {
    * @param tag - The HTML tag name for this level.
    * @param attrs - A map of attribute names to values.
    * @param children - Child TSNode instances to render inside this tag.
+   * @param text - Escaped text content to render before children.
    * @returns The HTML string for this tag and its subtree.
    */
   static #serialize(
