@@ -6,6 +6,7 @@ import type { Component } from 'regor'
 import { type SiteConfig } from '../config/config'
 import { type ContentFile } from '../discover/content'
 import { compileMdxToHtml } from '../mdx/mdx'
+import type { PageTemplateMap } from '../page-templates'
 import { renderPage } from '../renderer'
 import { resolveThemeStyleLinks } from '../style/themes'
 import { resolveHeadConfig } from './head-config'
@@ -15,6 +16,7 @@ import { resolveOutPath, resolveRouteInfo } from './out-path'
 export interface BuildContext {
   config: SiteConfig
   components?: Record<string, Component<unknown>>
+  templates?: PageTemplateMap
 }
 
 export interface PageRenderResult {
@@ -24,6 +26,7 @@ export interface PageRenderResult {
   headConfig: BasicHeadConfig
   bodyHtml: string
   html: string
+  template?: string
   outPath: string
   urlPath: string
 }
@@ -56,6 +59,7 @@ export async function renderPageFromFile(
   const bodyHtml = await compileMdxToHtml(parsed.content, {
     components: context.components,
   })
+  const template = resolveTemplateName(frontmatter)
   const html = await renderPage({
     bodyHtml,
     headConfig,
@@ -63,6 +67,8 @@ export async function renderPageFromFile(
       context.config.styleHref,
       context.config.styleThemes,
     ),
+    template,
+    templates: context.templates,
   })
   const { urlPath } = resolveRouteInfo(file)
   const outPath = resolveOutPath(context.config.outDir, file)
@@ -73,7 +79,13 @@ export async function renderPageFromFile(
     headConfig,
     bodyHtml,
     html,
+    template,
     outPath,
     urlPath,
   }
+}
+
+function resolveTemplateName(frontmatter: Record<string, unknown>) {
+  const template = frontmatter.template
+  return typeof template === 'string' ? template : undefined
 }

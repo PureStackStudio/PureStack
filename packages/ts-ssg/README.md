@@ -94,6 +94,37 @@ or falls back to `siteTitle` when no page title is provided.
 The base head config is defined in `src/head.ts` and includes charset, viewport,
 Open Graph defaults, and a generator meta tag.
 
+## Page templates (layouts)
+Pages can select a template via frontmatter:
+
+```md
+---
+title: API Reference
+template: api
+---
+```
+
+Built-in templates: `doc` (default) and `splash`.
+
+You can provide custom templates when building:
+
+```ts
+import { buildSite, type PageTemplate } from '@purestack/ts-ssg'
+import { h } from '@purestack/ts-html'
+
+const apiTemplate: PageTemplate = ({ head, bodyHtml }) =>
+  h('html').push(
+    head,
+    h('body').push(h('main').attr({ class: 'api' }).raw(bodyHtml)),
+  )
+
+await buildSite({
+  templates: {
+    api: apiTemplate,
+  },
+})
+```
+
 ## Regor components in MDX
 Custom components are registered via `componentRegistry` and rendered by `renderApp()`.
 

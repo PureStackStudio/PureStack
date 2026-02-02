@@ -24,6 +24,13 @@ export {
   type DevServerOptions,
   startDevServer,
 } from './dev/server'
+export {
+  defaultTemplates,
+  type PageTemplate,
+  type PageTemplateInput,
+  type PageTemplateMap,
+  resolvePageTemplate,
+} from './page-templates'
 export { componentRegistry } from './regor/components/registry'
 export { styleBuilder } from './style/styles'
 

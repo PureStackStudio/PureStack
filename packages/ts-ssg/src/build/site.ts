@@ -3,6 +3,7 @@ import type { Component } from 'regor'
 
 import { type PartialSiteConfig, resolveSiteConfig } from '../config/config'
 import { type ContentFile, discoverContent } from '../discover/content'
+import type { PageTemplateMap } from '../page-templates'
 import { copyStaticAssets } from './assets'
 import { prepareOutDir } from './io'
 import {
@@ -51,6 +52,7 @@ export interface BuildOptions {
   concurrency?: number
   hooks?: BuildHooks
   components?: Record<string, Component<unknown>>
+  templates?: PageTemplateMap
 }
 
 export type BuildInput = PartialSiteConfig & BuildOptions
@@ -62,6 +64,7 @@ export async function buildSite(input: BuildInput = {}): Promise<BuildResult> {
   const context: BuildContext = {
     config,
     components: input.components,
+    templates: input.templates,
   }
 
   await hooks.onConfigResolved?.(context)

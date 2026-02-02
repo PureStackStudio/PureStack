@@ -1,16 +1,19 @@
 import { type BasicHeadConfig, h } from '@purestack/ts-html'
 
 import { getHead } from './config/head'
+import { type PageTemplateMap, resolvePageTemplate } from './page-templates'
 import type { ThemeStylesheetLink } from './style/themes'
 
 export interface RenderPageInput {
   bodyHtml: string
   headConfig?: BasicHeadConfig
   styleLinks?: ThemeStylesheetLink[]
+  template?: string
+  templates?: PageTemplateMap
 }
 
 export async function renderPage(input: RenderPageInput): Promise<string> {
-  const { bodyHtml, headConfig, styleLinks } = input
+  const { bodyHtml, headConfig, styleLinks, template, templates } = input
   let head = getHead(headConfig)
   if (styleLinks && styleLinks.length > 0) {
     for (const link of styleLinks) {
@@ -34,10 +37,17 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
       head = head.push(h('script').raw(script))
     }
   }
-  const html = h('html').push(
-    head,
-    h('body').push(h('main').push(h('article').raw(bodyHtml))),
+  const { pageTemplate, templateName } = resolvePageTemplate(
+    template,
+    templates,
   )
+  const html = await pageTemplate({
+    head,
+    bodyHtml,
+    headConfig,
+    styleLinks,
+    templateName,
+  })
   return await html.toPrettyHtml()
 }
 
