@@ -6,7 +6,7 @@
   "properties": {
     "$schema": {
       "type": "string",
-      "description": "URL to the JSON schema"
+      "description": "JSON Schema file URL."
     },
     "siteTitle": {
       "type": "string",

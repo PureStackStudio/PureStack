@@ -1,0 +1,8 @@
+{
+  "json.schemas": [
+    {
+      "fileMatch": ["packages/ts-ssg/sample-content/siteConfig.json"],
+      "url": "./packages/ts-ssg/schema/siteConfig.schema.json"
+    }
+  ]
+}

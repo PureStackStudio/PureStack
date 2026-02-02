@@ -1,5 +1,5 @@
 {
-  "$schema": "./siteConfig.schema.json",
+  "$schema": "../schema/siteConfig.schema.json",
   "siteTitle": "ts-ssg",
   "styleFileName": "site.css",
   "styleHref": "/site.css",
