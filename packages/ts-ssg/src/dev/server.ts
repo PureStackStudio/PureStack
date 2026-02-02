@@ -140,6 +140,7 @@ export async function startDevServer(
   })
   server.listen(port, host, () => {
     log.info('dev server listening', {
+      url: `http://${host}:${port}/`,
       host,
       port,
       outDir: config.outDir,
