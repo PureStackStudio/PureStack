@@ -19,13 +19,21 @@ export interface StaticAssetFile {
 
 const CONTENT_EXTS = new Set(['.md', '.mdx'])
 
+export function isContentFile(_relPath: string, ext: string) {
+  return CONTENT_EXTS.has(ext)
+}
+
+export function isSiteConfigFile(relPath: string) {
+  return path.basename(relPath) === SITE_CONFIG_FILENAME
+}
+
 export async function discoverContent(
   contentDir: string,
 ): Promise<ContentFile[]> {
   const log = getLogger()
   const files: ContentFile[] = []
-  await walkDir(contentDir, contentDir, files, (_relPath, ext) =>
-    CONTENT_EXTS.has(ext),
+  await walkDir(contentDir, contentDir, files, (relPath, ext) =>
+    isContentFile(relPath, ext),
   )
   log.info('discover complete', { files })
   return files.sort((a, b) => a.relPath.localeCompare(b.relPath))
@@ -37,8 +45,8 @@ export async function discoverStaticAssets(
   const log = getLogger()
   const assets: StaticAssetFile[] = []
   await walkDir(contentDir, contentDir, assets, (relPath, ext) => {
-    if (path.basename(relPath) === SITE_CONFIG_FILENAME) return false
-    return !CONTENT_EXTS.has(ext)
+    if (isSiteConfigFile(relPath)) return false
+    return !isContentFile(relPath, ext)
   })
   log.info('static assets discovered', { assets })
   return assets.sort((a, b) => a.relPath.localeCompare(b.relPath))

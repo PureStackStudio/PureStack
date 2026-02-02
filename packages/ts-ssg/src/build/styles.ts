@@ -1,3 +1,4 @@
+import crypto from 'node:crypto'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
@@ -6,6 +7,8 @@ import { ensureDir } from '../util/fs'
 
 export interface WriteStylesResult {
   outPath: string
+  outputs: string[]
+  signature: string
 }
 
 export async function writeStyles(
@@ -13,6 +16,7 @@ export async function writeStyles(
   fileName: string,
 ): Promise<WriteStylesResult> {
   const resultPaths: string[] = []
+  const hash = crypto.createHash('sha256')
   const defaultName = fileName.replace(/\.css$/i, '')
   const named = styleBuilder.list().filter((name) => name !== '')
   named.sort()
@@ -24,8 +28,14 @@ export async function writeStyles(
     const outPath = path.join(outDir, `${cssName}.css`)
     await ensureDir(outPath)
     await fs.writeFile(outPath, css)
+    hash.update(css)
+    hash.update('\0')
     resultPaths.push(outPath)
   }
 
-  return { outPath: resultPaths[0] ?? path.join(outDir, fileName) }
+  return {
+    outPath: resultPaths[0] ?? path.join(outDir, fileName),
+    outputs: resultPaths,
+    signature: hash.digest('hex'),
+  }
 }

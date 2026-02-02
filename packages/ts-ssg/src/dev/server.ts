@@ -5,7 +5,8 @@ import path from 'node:path'
 
 import { createLogger, getLogger } from 'logpot'
 
-import { type BuildInput, buildSite } from '../build/site'
+import { createIncrementalBuilder } from '../build/incremental'
+import { type BuildInput } from '../build/site'
 import { resolveSiteConfig } from '../config/config'
 import { logError } from '../util/logging'
 
@@ -46,10 +47,12 @@ export async function startDevServer(
     pending: false,
     timer: undefined as NodeJS.Timeout | undefined,
     reason: 'initial build',
+    changedPaths: new Set<string>(),
   }
 
-  const scheduleRebuild = (reason: string) => {
+  const scheduleRebuild = (reason: string, filePath?: string) => {
     requestState.reason = reason
+    if (filePath) requestState.changedPaths.add(filePath)
     if (requestState.timer) clearTimeout(requestState.timer)
     requestState.timer = setTimeout(() => {
       requestState.timer = undefined
@@ -63,19 +66,54 @@ export async function startDevServer(
     requestState.inFlight = true
     while (requestState.pending) {
       requestState.pending = false
-      await rebuild(requestState.reason)
+      if (requestState.changedPaths.size > 0) {
+        await rebuildChanged()
+      } else {
+        await rebuild(requestState.reason)
+      }
     }
     requestState.inFlight = false
   }
 
+  const incremental = await createIncrementalBuilder(input)
+
   const rebuild = async (reason: string) => {
-    log.info('build started', { reason })
     try {
-      await buildSite(input)
-      log.info('build completed', { outDir: config.outDir })
+      await incremental.buildAll(reason)
       if (liveReload) broadcast(clients, 'reload', reason)
     } catch (error) {
       logError(log, error, 'build failed')
+    }
+  }
+
+  const rebuildChanged = async () => {
+    const paths = [...requestState.changedPaths]
+    requestState.changedPaths.clear()
+    if (paths.length === 0) {
+      await rebuild(requestState.reason)
+      return
+    }
+    let requiresFull = false
+    let touched = false
+    for (const filePath of paths) {
+      const change = await incremental.applyChange(filePath)
+      if (change.fullRebuild) {
+        requiresFull = true
+        break
+      }
+      touched =
+        touched ||
+        change.changedPages > 0 ||
+        change.changedAssets > 0 ||
+        change.deletedPages > 0 ||
+        change.deletedAssets > 0
+    }
+    if (requiresFull) {
+      await rebuild(requestState.reason)
+      return
+    }
+    if (touched && liveReload) {
+      broadcast(clients, 'reload', requestState.reason)
     }
   }
 
@@ -151,7 +189,7 @@ export async function startDevServer(
 
   if (watch) {
     watcher = await watchTree(config.contentDir, (filePath) => {
-      scheduleRebuild(`content change: ${filePath}`)
+      scheduleRebuild(`content change: ${filePath}`, filePath)
     })
     log.info('watching content', { contentDir: config.contentDir })
   }

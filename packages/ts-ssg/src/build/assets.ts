@@ -10,6 +10,10 @@ export interface CopyStaticAssetsResult {
   assets: number
 }
 
+export interface CopyStaticAssetResult {
+  outPath: string
+}
+
 export async function copyStaticAssets(
   contentDir: string,
   outDir: string,
@@ -23,6 +27,16 @@ export async function copyStaticAssets(
   }
   log.info('static assets copied', { count: assets.length })
   return { assets: assets.length }
+}
+
+export async function copyStaticAsset(
+  outDir: string,
+  asset: StaticAssetFile,
+): Promise<CopyStaticAssetResult> {
+  const outPath = resolveStaticOutPath(outDir, asset)
+  await ensureDir(outPath)
+  await fs.copyFile(asset.absPath, outPath)
+  return { outPath }
 }
 
 export function resolveStaticOutPath(outDir: string, asset: StaticAssetFile) {
