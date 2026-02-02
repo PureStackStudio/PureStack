@@ -125,6 +125,34 @@ await buildSite({
 })
 ```
 
+## Navigation menus
+`@purestack/ts-ssg` can build navigation trees from your content folders and/or
+custom menu files. Navigation data is exposed to page templates (but not
+rendered by default), letting you decide the final UI.
+
+Quick start (auto menus):
+
+```ts
+import { buildSite } from '@purestack/ts-ssg'
+
+await buildSite({
+  navigation: { mode: 'auto', maxDepth: 2 },
+})
+```
+
+Custom per-folder menus:
+
+```
+content/
+  _nav.json
+  guide/
+    _nav.json
+    index.mdx
+    intro.mdx
+```
+
+See `NAVIGATION.md` for the full spec.
+
 ## Regor components in MDX
 Custom components are registered via `componentRegistry` and rendered by `renderApp()`.
 

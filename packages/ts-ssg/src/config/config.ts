@@ -2,6 +2,10 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import {
+  type NavigationConfig,
+  resolveNavigationConfig,
+} from '../navigation/navigation'
 import { resolveThemes } from '../style/themes'
 
 export interface SiteConfig {
@@ -12,13 +16,19 @@ export interface SiteConfig {
   styleFileName: string
   styleHref: string
   styleThemes: string[]
+  navigation: NavigationConfig
 }
 
 export type PartialSiteConfig = Partial<SiteConfig>
 export type SiteConfigFile = Partial<
   Pick<
     SiteConfig,
-    'outDir' | 'siteTitle' | 'styleFileName' | 'styleHref' | 'styleThemes'
+    | 'outDir'
+    | 'siteTitle'
+    | 'styleFileName'
+    | 'styleHref'
+    | 'styleThemes'
+    | 'navigation'
   >
 >
 
@@ -37,7 +47,11 @@ export function resolveSiteConfig(input: PartialSiteConfig = {}): SiteConfig {
     input.outDir ??
     resolveOutDirFromFile(fileConfig.outDir, rootDir) ??
     path.join(rootDir, 'dist', 'site')
-  const siteTitle = resolveString(input.siteTitle, fileConfig.siteTitle, 'ts-ssg')
+  const siteTitle = resolveString(
+    input.siteTitle,
+    fileConfig.siteTitle,
+    'ts-ssg',
+  )
   const styleFileName = resolveString(
     input.styleFileName,
     fileConfig.styleFileName,
@@ -49,6 +63,10 @@ export function resolveSiteConfig(input: PartialSiteConfig = {}): SiteConfig {
     `/${styleFileName}`,
   )
   const styleThemes = resolveThemes(input.styleThemes, fileConfig.styleThemes)
+  const navigation = resolveNavigationConfig(
+    input.navigation,
+    fileConfig.navigation,
+  )
   return {
     rootDir,
     contentDir,
@@ -57,6 +75,7 @@ export function resolveSiteConfig(input: PartialSiteConfig = {}): SiteConfig {
     styleFileName,
     styleHref,
     styleThemes,
+    navigation,
   }
 }
 

@@ -25,10 +25,22 @@ export {
   startDevServer,
 } from './dev/server'
 export {
+  buildNavigation,
+  type NavigationConfig,
+  type NavigationMode,
+  type NavigationSort,
+  type NavigationTree,
+  type NavItem,
+  type PageNavigation,
+  resolveNavigationConfig,
+  resolvePageNavigation,
+} from './navigation/navigation'
+export {
   defaultTemplates,
   type PageTemplate,
   type PageTemplateInput,
   type PageTemplateMap,
+  type PageTemplatePage,
   resolvePageTemplate,
 } from './page-templates'
 export { componentRegistry } from './regor/components/registry'

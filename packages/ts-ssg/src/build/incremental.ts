@@ -13,6 +13,12 @@ import {
   isSiteConfigFile,
   type StaticAssetFile,
 } from '../discover/content'
+import {
+  buildNavigation,
+  type NavigationTree,
+  resolveFolderKey,
+  resolveNavigationConfig,
+} from '../navigation/navigation'
 import { styleBuilder } from '../style/styles'
 import { orderThemes, resolveThemeFileName } from '../style/themes'
 import { copyStaticAsset, resolveStaticOutPath } from './assets'
@@ -57,7 +63,20 @@ export async function createIncrementalBuilder(
 ): Promise<IncrementalBuilder> {
   const config = resolveSiteConfig(input)
   const log = getLogger()
-  const context = { config, components: input.components }
+  const navigationConfig = resolveNavigationConfig(
+    input.navigation ?? config.navigation,
+  )
+  let navigation: NavigationTree | undefined = await buildNavigation(
+    config.contentDir,
+    await discoverContent(config.contentDir),
+    navigationConfig,
+  )
+  const context = {
+    config,
+    components: input.components,
+    templates: input.templates,
+    navigation,
+  }
   const existing = await readManifest(config.outDir)
   let manifest =
     existing && isCompatibleManifest(existing, config)
@@ -70,6 +89,10 @@ export async function createIncrementalBuilder(
     const hooks = mergeHooks(input.hooks, {
       onContentDiscovered: async (_ctx, files) => {
         discoveredContent = files
+      },
+      onNavigationBuilt: async (_ctx, tree) => {
+        navigation = tree
+        context.navigation = tree
       },
       onStylesWritten: async (_ctx, result) => {
         stylesResult = {
@@ -99,6 +122,56 @@ export async function createIncrementalBuilder(
     return result
   }
 
+  const rebuildNavigationForChange = async (
+    relPath: string,
+    result: IncrementalBuildResult,
+  ) => {
+    const contentFiles = await discoverContent(config.contentDir)
+    navigation = await buildNavigation(
+      config.contentDir,
+      contentFiles,
+      navigationConfig,
+    )
+    context.navigation = navigation
+
+    const affectedFolders = collectAffectedFolders(
+      relPath,
+      navigationConfig.maxDepth,
+    )
+    const affectedFiles = contentFiles.filter((file) =>
+      affectedFolders.has(resolveFolderKey(file.relPath)),
+    )
+    const affectedRelPaths = new Set(affectedFiles.map((file) => file.relPath))
+
+    for (const file of affectedFiles) {
+      await buildPage(context, file)
+      const signature = await readSignature(file.absPath)
+      if (!signature) continue
+      const outPath = resolveOutPath(config.outDir, file)
+      manifest.content[file.relPath] = {
+        relPath: file.relPath,
+        ext: file.ext,
+        outPath,
+        ...signature,
+      }
+      result.changedPages += 1
+    }
+
+    const deletions = Object.keys(manifest.content).filter((key) => {
+      if (affectedRelPaths.has(key)) return false
+      const folder = resolveFolderKey(key)
+      return affectedFolders.has(folder)
+    })
+    for (const key of deletions) {
+      const entry = manifest.content[key]
+      if (entry) {
+        await removeFile(entry.outPath)
+        delete manifest.content[key]
+        result.deletedPages += 1
+      }
+    }
+  }
+
   const applyChange = async (filePath: string) => {
     const relPath = path.relative(config.contentDir, filePath)
     const reason = `content change: ${filePath}`
@@ -126,6 +199,11 @@ export async function createIncrementalBuilder(
     const assetEntry = manifest.assets[relPath]
 
     if (!signature) {
+      if (contentEntry && navigationConfig.mode !== 'none') {
+        await rebuildNavigationForChange(relPath, result)
+        await writeManifest(config.outDir, manifest)
+        return result
+      }
       if (contentEntry) {
         await removeFile(contentEntry.outPath)
         delete manifest.content[relPath]
@@ -145,6 +223,11 @@ export async function createIncrementalBuilder(
     const treatedAsContent = contentEntry || isContentFile(relPath, ext)
     if (treatedAsContent) {
       if (signatureEqual(contentEntry, signature)) {
+        return result
+      }
+      if (navigationConfig.mode !== 'none') {
+        await rebuildNavigationForChange(relPath, result)
+        await writeManifest(config.outDir, manifest)
         return result
       }
       const contentFile = toContentFile(config.contentDir, relPath, ext)
@@ -198,6 +281,10 @@ function mergeHooks(
       await base.onContentDiscovered?.(ctx, files)
       await next.onContentDiscovered?.(ctx, files)
     },
+    onNavigationBuilt: async (ctx, tree) => {
+      await base.onNavigationBuilt?.(ctx, tree)
+      await next.onNavigationBuilt?.(ctx, tree)
+    },
     onPageStart: async (ctx, file) => {
       await base.onPageStart?.(ctx, file)
       await next.onPageStart?.(ctx, file)
@@ -219,6 +306,24 @@ function mergeHooks(
       await next.onBuildComplete?.(ctx, result)
     },
   }
+}
+
+function collectAffectedFolders(relPath: string, maxDepth: number) {
+  const folder = resolveFolderKey(relPath)
+  const result = new Set<string>()
+  result.add(folder)
+  if (!folder) return result
+  const segments = folder.split('/')
+  const limit = Math.max(1, Math.floor(maxDepth))
+  for (let depth = 1; depth <= limit - 1; depth += 1) {
+    const slice = segments.slice(0, segments.length - depth)
+    if (slice.length === 0) {
+      result.add('')
+    } else {
+      result.add(slice.join('/'))
+    }
+  }
+  return result
 }
 
 function toContentFile(

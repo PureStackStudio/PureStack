@@ -6,6 +6,11 @@ import type { Component } from 'regor'
 import { type SiteConfig } from '../config/config'
 import { type ContentFile } from '../discover/content'
 import { compileMdxToHtml } from '../mdx/mdx'
+import {
+  type NavigationTree,
+  type PageNavigation,
+  resolvePageNavigation,
+} from '../navigation/navigation'
 import type { PageTemplateMap } from '../page-templates'
 import { renderPage } from '../renderer'
 import { resolveThemeStyleLinks } from '../style/themes'
@@ -17,6 +22,7 @@ export interface BuildContext {
   config: SiteConfig
   components?: Record<string, Component<unknown>>
   templates?: PageTemplateMap
+  navigation?: NavigationTree
 }
 
 export interface PageRenderResult {
@@ -29,6 +35,7 @@ export interface PageRenderResult {
   template?: string
   outPath: string
   urlPath: string
+  navigation?: PageNavigation
 }
 
 export async function buildPage(
@@ -60,6 +67,8 @@ export async function renderPageFromFile(
     components: context.components,
   })
   const template = resolveTemplateName(frontmatter)
+  const { urlPath } = resolveRouteInfo(file)
+  const navigation = resolvePageNavigation(context.navigation, file)
   const html = await renderPage({
     bodyHtml,
     headConfig,
@@ -69,8 +78,13 @@ export async function renderPageFromFile(
     ),
     template,
     templates: context.templates,
+    navigation,
+    page: {
+      relPath: file.relPath,
+      urlPath,
+      frontmatter,
+    },
   })
-  const { urlPath } = resolveRouteInfo(file)
   const outPath = resolveOutPath(context.config.outDir, file)
   return {
     file,
@@ -82,6 +96,7 @@ export async function renderPageFromFile(
     template,
     outPath,
     urlPath,
+    navigation,
   }
 }
 

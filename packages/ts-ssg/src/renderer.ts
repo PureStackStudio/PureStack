@@ -1,7 +1,12 @@
 import { type BasicHeadConfig, h } from '@purestack/ts-html'
 
 import { getHead } from './config/head'
-import { type PageTemplateMap, resolvePageTemplate } from './page-templates'
+import type { PageNavigation } from './navigation/navigation'
+import {
+  type PageTemplateMap,
+  type PageTemplatePage,
+  resolvePageTemplate,
+} from './page-templates'
 import type { ThemeStylesheetLink } from './style/themes'
 
 export interface RenderPageInput {
@@ -10,6 +15,8 @@ export interface RenderPageInput {
   styleLinks?: ThemeStylesheetLink[]
   template?: string
   templates?: PageTemplateMap
+  navigation?: PageNavigation
+  page?: PageTemplatePage
 }
 
 export async function renderPage(input: RenderPageInput): Promise<string> {
@@ -47,6 +54,8 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
     headConfig,
     styleLinks,
     templateName,
+    navigation: input.navigation,
+    page: input.page,
   })
   return await html.toPrettyHtml()
 }

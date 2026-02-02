@@ -1,6 +1,13 @@
 import { type BasicHeadConfig, h, type TSNode } from '@purestack/ts-html'
 
+import type { PageNavigation } from './navigation/navigation'
 import type { ThemeStylesheetLink } from './style/themes'
+
+export interface PageTemplatePage {
+  relPath: string
+  urlPath: string
+  frontmatter: Record<string, unknown>
+}
 
 export interface PageTemplateInput {
   head: TSNode<'head'>
@@ -8,6 +15,8 @@ export interface PageTemplateInput {
   headConfig?: BasicHeadConfig
   styleLinks?: ThemeStylesheetLink[]
   templateName: string
+  navigation?: PageNavigation
+  page?: PageTemplatePage
 }
 
 export type PageTemplate = (

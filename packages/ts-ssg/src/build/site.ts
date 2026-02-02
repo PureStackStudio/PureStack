@@ -3,6 +3,11 @@ import type { Component } from 'regor'
 
 import { type PartialSiteConfig, resolveSiteConfig } from '../config/config'
 import { type ContentFile, discoverContent } from '../discover/content'
+import {
+  buildNavigation,
+  type NavigationConfig,
+  type NavigationTree,
+} from '../navigation/navigation'
 import type { PageTemplateMap } from '../page-templates'
 import { copyStaticAssets } from './assets'
 import { prepareOutDir } from './io'
@@ -24,6 +29,10 @@ export interface BuildHooks {
   onContentDiscovered?: (
     context: BuildContext,
     files: ContentFile[],
+  ) => void | Promise<void>
+  onNavigationBuilt?: (
+    context: BuildContext,
+    navigation: NavigationTree | undefined,
   ) => void | Promise<void>
   onPageStart?: (
     context: BuildContext,
@@ -53,6 +62,7 @@ export interface BuildOptions {
   hooks?: BuildHooks
   components?: Record<string, Component<unknown>>
   templates?: PageTemplateMap
+  navigation?: NavigationConfig
 }
 
 export type BuildInput = PartialSiteConfig & BuildOptions
@@ -80,6 +90,13 @@ export async function buildSite(input: BuildInput = {}): Promise<BuildResult> {
 
   const files = await discoverContent(config.contentDir)
   await hooks.onContentDiscovered?.(context, files)
+  const navigation = await buildNavigation(
+    config.contentDir,
+    files,
+    input.navigation ?? config.navigation,
+  )
+  context.navigation = navigation
+  await hooks.onNavigationBuilt?.(context, navigation)
 
   const concurrency = normalizeConcurrency(input.concurrency)
   let pages = 0
