@@ -61,6 +61,8 @@ export function registerDomGlobals(
       ? windowCss
       : { escape: cssEscape }
 
+  ensureInnerTextSetter(window)
+
   return () => {
     for (const key of keys) globals[key] = original[key]
   }
@@ -105,4 +107,29 @@ function createCommentConstructor(document: unknown): typeof Comment {
   } as unknown as typeof Comment
   CommentShim.prototype = prototype
   return CommentShim
+}
+
+function ensureInnerTextSetter(window: unknown): void {
+  const win = window as Record<string, unknown>
+  const elementProto = (win.HTMLElement as typeof HTMLElement | undefined)
+    ?.prototype
+  const nodeProto = (win.Node as typeof Node | undefined)?.prototype
+  const setter = function (this: Node, value: unknown) {
+    this.textContent = value == null ? '' : String(value)
+  }
+  const getter = function (this: Node) {
+    return this.textContent ?? ''
+  }
+
+  for (const proto of [elementProto, nodeProto]) {
+    if (!proto) continue
+    const desc = Object.getOwnPropertyDescriptor(proto, 'innerText')
+    if (desc?.set) continue
+    Object.defineProperty(proto, 'innerText', {
+      configurable: true,
+      enumerable: true,
+      get: getter,
+      set: setter,
+    })
+  }
 }
