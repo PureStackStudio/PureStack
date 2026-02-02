@@ -13,8 +13,8 @@ import {
 export type Attributes = Partial<Record<string, string>>
 
 /**
- * Immutable builder node for constructing HTML-like trees in TypeScript.
- * Every mutating operation returns a new node to keep composition functional.
+ * Mutable builder node for constructing HTML-like trees in TypeScript.
+ * Mutating operations modify the current instance and return it for chaining.
  */
 export class TSNode<K extends HtmlTag> {
   /** Literal text content for this node, if any. */
@@ -60,13 +60,12 @@ export class TSNode<K extends HtmlTag> {
    * Otherwise this node's own text content is replaced.
    * @param text - The string content for the text.
    * @param replace - When true, replaces this node's text; when false and a tag is present, appends a child text node.
-   * @returns A new TSNode with the text change applied.
+   * @returns This TSNode for chaining.
    */
   text(text: string, replace = false): TSNode<K> {
     if (this.#tag && !replace) return this.push(h().text(text))
-    const leaf = this.clone()
-    leaf.#text = escapeHtml(text, false)
-    return leaf
+    this.#text = escapeHtml(text, false)
+    return this
   }
 
   /**
@@ -75,13 +74,12 @@ export class TSNode<K extends HtmlTag> {
    * Otherwise this node's own raw HTML content is replaced.
    * @param html - The raw HTML string to insert.
    * @param replace - When true, replaces this node's raw HTML; when false and a tag is present, appends a child raw node.
-   * @returns A new TSNode with the raw HTML change applied.
+   * @returns This TSNode for chaining.
    */
   raw(html: string, replace = false): TSNode<K> {
     if (this.#tag && !replace) return this.push(h().raw(html))
-    const leaf = this.clone()
-    leaf.#raw = html
-    return leaf
+    this.#raw = html
+    return this
   }
 
   /**
@@ -140,19 +138,25 @@ export class TSNode<K extends HtmlTag> {
     return this.#withAttributes(attrs)
   }
   /**
-   * Appends provided TSNode instances as children.
-   * @param args - One or more TSNode instances to include as children.
-   * @returns A new TSNode with the children appended.
+   * Appends provided TSNode instances or string content as children.
+   * String values are appended as text nodes.
+   * @param args - One or more TSNode instances or strings to include as children.
+   * @returns This TSNode for chaining.
    */
-  push(...args: TSNode<''>[]): TSNode<K> {
-    const container = this.clone()
-    container.#children = [...this.#children, ...args]
-    return container
+  push(...args: Array<TSNode<''> | string>): TSNode<K> {
+    for (const arg of args) {
+      if (typeof arg === 'string') {
+        this.#children = [...this.#children, h().text(arg)]
+        continue
+      }
+      this.#children = [...this.#children, arg]
+    }
+    return this
   }
 
   /**
    * Selects the first matching tag in a depth-first traversal (including this node),
-   * replaces it using the provided callback, and returns a new root.
+   * replaces it using the provided callback, and returns this root.
    * @param tag - Tag name to find.
    * @param replace - Replacer callback for the matching node.
    * @throws If no matching tag is found.
@@ -161,9 +165,8 @@ export class TSNode<K extends HtmlTag> {
     tag: T,
     replace: (node: TSNode<T>) => TSNode<P>,
   ) {
-    if (this.#tag == tag) return replace(this.clone() as TSNode<T>)
-    const root = this.clone()
-    const stack = [root]
+    if (this.#tag == tag) return replace(this as unknown as TSNode<T>)
+    const stack = [this as TSNode<''>]
     while (stack.length) {
       const cursor = stack.pop()!
       const children = cursor.#children
@@ -176,12 +179,10 @@ export class TSNode<K extends HtmlTag> {
             replace(child),
             ...children.slice(i + 1),
           ]
-          return root
+          return this
         }
       }
-      const newChildren = children.map((c) => c.clone())
-      cursor.#children = newChildren
-      stack.push(...newChildren)
+      stack.push(...children)
     }
     throw new Error('Cannot find child with tag name:' + tag)
   }
@@ -218,12 +219,11 @@ export class TSNode<K extends HtmlTag> {
   /**
    * Creates a TSNode with merged attributes.
    * @param attrs - A map of attribute names to values.
-   * @returns A new node containing the merged attributes.
+   * @returns This TSNode for chaining.
    */
   #withAttributes(attrs: Attributes): TSNode<K> {
-    const node = this.clone()
-    node.#attributes = { ...this.#attributes, ...attrs }
-    return node
+    this.#attributes = { ...this.#attributes, ...attrs }
+    return this
   }
 
   /**

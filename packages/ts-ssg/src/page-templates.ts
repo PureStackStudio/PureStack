@@ -74,7 +74,10 @@ function renderSplashTemplate({ head, bodyHtml }: PageTemplateInput) {
 }
 
 function renderDocNav(navigation?: PageTemplateInput['navigation']) {
-  const items = navigation?.items ?? []
+  const items =
+    navigation?.items && navigation.items.length > 0
+      ? navigation.items
+      : (navigation?.global ?? [])
   if (items.length === 0) return undefined
   return h('nav')
     .attr({ class: 'doc-nav', 'aria-label': 'Page navigation' })

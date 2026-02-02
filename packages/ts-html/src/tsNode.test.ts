@@ -82,12 +82,12 @@ describe('TSNode', () => {
     })
   })
 
-  describe('immutability and chaining', () => {
-    it('preserves original node when adding attributes', () => {
+  describe('mutability and chaining', () => {
+    it('mutates original node when adding attributes', () => {
       const base = h('input')
       const derived = base.attr({ type: 'text' })
 
-      expect(base.toHtml()).toBe('<input/>')
+      expect(base.toHtml()).toBe('<input type="text"/>')
       expect(derived.toHtml()).toBe('<input type="text"/>')
     })
 
