@@ -19,6 +19,7 @@ export interface ManifestConfig {
   siteTitle: string
   styleFileName: string
   styleHref: string
+  styleThemes: string[]
 }
 
 export interface ContentManifestEntry extends FileSignature {
@@ -58,6 +59,7 @@ export function manifestConfigFromSiteConfig(config: SiteConfig): ManifestConfig
     siteTitle: config.siteTitle,
     styleFileName: config.styleFileName,
     styleHref: config.styleHref,
+    styleThemes: config.styleThemes,
   }
 }
 
@@ -83,7 +85,9 @@ export function isCompatibleManifest(
     manifest.config.outDir === expected.outDir &&
     manifest.config.siteTitle === expected.siteTitle &&
     manifest.config.styleFileName === expected.styleFileName &&
-    manifest.config.styleHref === expected.styleHref
+    manifest.config.styleHref === expected.styleHref &&
+    Array.isArray(manifest.config.styleThemes) &&
+    manifest.config.styleThemes.join('|') === expected.styleThemes.join('|')
   )
 }
 

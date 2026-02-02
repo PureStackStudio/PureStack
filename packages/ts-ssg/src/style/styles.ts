@@ -1,23 +1,43 @@
 import { Style } from '@purestack/ts-css'
 
-const styleBuilders = new Map<string, Style>()
+import { normalizeThemeName, type ThemeName } from './themes'
+
+const styleBuilders = new Map<ThemeName, Style>()
 
 export const styleBuilder = {
-  get(name = '') {
-    const existing = styleBuilders.get(name)
+  get(theme?: ThemeName) {
+    if (!theme) {
+      throw new Error(
+        'Theme name is required. Create both light and dark themes.',
+      )
+    }
+    const normalized = normalizeThemeName(theme)
+    const existing = styleBuilders.get(normalized)
     if (existing) return existing
     const created = new Style()
-    styleBuilders.set(name, created)
+    styleBuilders.set(normalized, created)
     return created
   },
-  select(selector: string, name = '') {
-    return styleBuilder.get(name).select(selector)
+  select(selector: string, theme?: ThemeName) {
+    return styleBuilder.get(theme).select(selector)
+  },
+  has(theme: ThemeName) {
+    const normalized = normalizeThemeName(theme)
+    return styleBuilders.has(normalized)
+  },
+  ensureThemes(themes: ThemeName[]) {
+    const missing = themes.filter((theme) => !styleBuilder.has(theme))
+    if (missing.length > 0) {
+      throw new Error(
+        `Missing theme styles for: ${missing.map(normalizeThemeName).join(', ')}`,
+      )
+    }
   },
   list() {
     return [...styleBuilders.keys()]
   },
-  async render(name: string = '', pretty: boolean = true) {
-    const style = styleBuilder.get(name)
+  async render(theme: ThemeName, pretty: boolean = true) {
+    const style = styleBuilder.get(theme)
     return pretty ? style.toPrettyCSS() : style.toCSS()
   },
 }

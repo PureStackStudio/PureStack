@@ -3,5 +3,6 @@
   "siteTitle": "ts-ssg",
   "styleFileName": "site.css",
   "styleHref": "/site.css",
+  "styleThemes": ["light", "dark"],
   "outDir": "dist/site"
 }

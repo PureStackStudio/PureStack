@@ -90,7 +90,11 @@ export async function buildSite(input: BuildInput = {}): Promise<BuildResult> {
     pages += 1
   })
 
-  const styleResult = await writeStyles(config.outDir, config.styleFileName)
+  const styleResult = await writeStyles(
+    config.outDir,
+    config.styleFileName,
+    config.styleThemes,
+  )
   await hooks.onStylesWritten?.(context, styleResult)
 
   const result = { outDir: config.outDir, pages }

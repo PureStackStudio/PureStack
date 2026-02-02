@@ -2,6 +2,8 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import { resolveThemes } from '../style/themes'
+
 export interface SiteConfig {
   rootDir: string
   contentDir: string
@@ -9,11 +11,15 @@ export interface SiteConfig {
   siteTitle: string
   styleFileName: string
   styleHref: string
+  styleThemes: string[]
 }
 
 export type PartialSiteConfig = Partial<SiteConfig>
 export type SiteConfigFile = Partial<
-  Pick<SiteConfig, 'outDir' | 'siteTitle' | 'styleFileName' | 'styleHref'>
+  Pick<
+    SiteConfig,
+    'outDir' | 'siteTitle' | 'styleFileName' | 'styleHref' | 'styleThemes'
+  >
 >
 
 const DEFAULT_ROOT = path.resolve(
@@ -42,7 +48,16 @@ export function resolveSiteConfig(input: PartialSiteConfig = {}): SiteConfig {
     fileConfig.styleHref,
     `/${styleFileName}`,
   )
-  return { rootDir, contentDir, outDir, siteTitle, styleFileName, styleHref }
+  const styleThemes = resolveThemes(input.styleThemes, fileConfig.styleThemes)
+  return {
+    rootDir,
+    contentDir,
+    outDir,
+    siteTitle,
+    styleFileName,
+    styleHref,
+    styleThemes,
+  }
 }
 
 function resolveString(...values: Array<string | undefined>) {

@@ -1,23 +1,28 @@
 import { type BasicHeadConfig, h } from '@purestack/ts-html'
 
 import { getHead } from './config/head'
+import type { ThemeStylesheetLink } from './style/themes'
 
 export interface RenderPageInput {
   bodyHtml: string
   headConfig?: BasicHeadConfig
-  styleHref?: string
+  styleLinks?: ThemeStylesheetLink[]
 }
 
 export async function renderPage(input: RenderPageInput): Promise<string> {
-  const { bodyHtml, headConfig, styleHref } = input
+  const { bodyHtml, headConfig, styleLinks } = input
   const head = getHead(headConfig)
-  if (styleHref) {
-    head.push(
-      h('link').attr({
-        rel: 'stylesheet',
-        href: styleHref,
-      }),
-    )
+  if (styleLinks && styleLinks.length > 0) {
+    for (const link of styleLinks) {
+      head.push(
+        h('link').attr({
+          rel: link.rel,
+          href: link.href,
+          ...(link.media ? { media: link.media } : {}),
+          ...(link.title ? { title: link.title } : {}),
+        }),
+      )
+    }
   }
   const html = h('html').push(
     head,

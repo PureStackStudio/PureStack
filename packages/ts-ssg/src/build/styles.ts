@@ -3,6 +3,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 
 import { styleBuilder } from '../style/styles'
+import { orderThemes, resolveThemeFileName } from '../style/themes'
 import { ensureDir } from '../util/fs'
 
 export interface WriteStylesResult {
@@ -14,27 +15,30 @@ export interface WriteStylesResult {
 export async function writeStyles(
   outDir: string,
   fileName: string,
+  themes: string[],
 ): Promise<WriteStylesResult> {
   const resultPaths: string[] = []
   const hash = crypto.createHash('sha256')
-  const defaultName = fileName.replace(/\.css$/i, '')
-  const named = styleBuilder.list().filter((name) => name !== '')
-  named.sort()
-  const names = ['', ...named]
+  const orderedThemes = orderThemes(themes)
+  styleBuilder.ensureThemes(orderedThemes)
+  let lightOutPath: string | undefined
 
-  for (const name of names) {
-    const css = await styleBuilder.render(name, true)
-    const cssName = name === '' ? defaultName : name
-    const outPath = path.join(outDir, `${cssName}.css`)
+  for (const theme of orderedThemes) {
+    const css = await styleBuilder.render(theme, true)
+    const cssName = resolveThemeFileName(fileName, theme)
+    const outPath = path.join(outDir, cssName)
     await ensureDir(outPath)
     await fs.writeFile(outPath, css)
     hash.update(css)
     hash.update('\0')
     resultPaths.push(outPath)
+    if (theme === 'light') {
+      lightOutPath = outPath
+    }
   }
 
   return {
-    outPath: resultPaths[0] ?? path.join(outDir, fileName),
+    outPath: lightOutPath ?? path.join(outDir, resolveThemeFileName(fileName, 'light')),
     outputs: resultPaths,
     signature: hash.digest('hex'),
   }

@@ -7,6 +7,7 @@ import { type SiteConfig } from '../config/config'
 import { type ContentFile } from '../discover/content'
 import { compileMdxToHtml } from '../mdx/mdx'
 import { renderPage } from '../renderer'
+import { resolveThemeStyleLinks } from '../style/themes'
 import { resolveHeadConfig } from './head-config'
 import { readSource, writeHtml } from './io'
 import { resolveOutPath, resolveRouteInfo } from './out-path'
@@ -58,7 +59,10 @@ export async function renderPageFromFile(
   const html = await renderPage({
     bodyHtml,
     headConfig,
-    styleHref: context.config.styleHref,
+    styleLinks: resolveThemeStyleLinks(
+      context.config.styleHref,
+      context.config.styleThemes,
+    ),
   })
   const { urlPath } = resolveRouteInfo(file)
   const outPath = resolveOutPath(context.config.outDir, file)

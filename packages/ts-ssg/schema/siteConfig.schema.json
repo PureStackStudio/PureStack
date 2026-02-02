@@ -23,6 +23,14 @@
       "description": "Public href injected into rendered pages for the site stylesheet.",
       "default": "/site.css"
     },
+    "styleThemes": {
+      "type": "array",
+      "description": "Theme names to emit as stylesheets. Must include light and dark.",
+      "items": {
+        "type": "string"
+      },
+      "default": ["light", "dark"]
+    },
     "outDir": {
       "type": "string",
       "description": "Output directory path. Relative paths are resolved from the project root.",

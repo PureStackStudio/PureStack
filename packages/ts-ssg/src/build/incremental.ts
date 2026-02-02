@@ -14,6 +14,7 @@ import {
   type StaticAssetFile,
 } from '../discover/content'
 import { styleBuilder } from '../style/styles'
+import { orderThemes, resolveThemeFileName } from '../style/themes'
 import { copyStaticAsset, resolveStaticOutPath } from './assets'
 import {
   type AssetManifestEntry,
@@ -301,16 +302,14 @@ async function buildManifest(
 async function computeStylesSignature(
   config: ReturnType<typeof resolveSiteConfig>,
 ): Promise<StylesManifestEntry> {
-  const defaultName = config.styleFileName.replace(/\.css$/i, '')
-  const named = styleBuilder.list().filter((name) => name !== '')
-  named.sort()
-  const names = ['', ...named]
+  const orderedThemes = orderThemes(config.styleThemes)
+  styleBuilder.ensureThemes(orderedThemes)
   const hash = crypto.createHash('sha256')
   const outputs: string[] = []
 
-  for (const name of names) {
-    const cssName = name === '' ? defaultName : name
-    const outPath = path.join(config.outDir, `${cssName}.css`)
+  for (const theme of orderedThemes) {
+    const cssName = resolveThemeFileName(config.styleFileName, theme)
+    const outPath = path.join(config.outDir, cssName)
     outputs.push(outPath)
     try {
       const css = await fs.readFile(outPath, 'utf8')
