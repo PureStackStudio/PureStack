@@ -10,7 +10,7 @@ export interface SiteConfig {
   styleHref: string
 }
 
-export type PartialConfig = Partial<SiteConfig>
+export type PartialSiteConfig = Partial<SiteConfig>
 
 const DEFAULT_ROOT = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -18,7 +18,7 @@ const DEFAULT_ROOT = path.resolve(
   '..',
 )
 
-export function resolveConfig(input: PartialConfig = {}): SiteConfig {
+export function resolveSiteConfig(input: PartialSiteConfig = {}): SiteConfig {
   const rootDir = input.rootDir ?? DEFAULT_ROOT
   const contentDir = input.contentDir ?? path.join(rootDir, 'sample-content')
   const outDir = input.outDir ?? path.join(rootDir, 'dist', 'site')

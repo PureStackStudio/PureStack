@@ -1,13 +1,29 @@
 import { merge } from '@logpot/utils'
 import type { BasicHeadConfig } from '@purestack/ts-html'
 
-export function resolveHeadConfig(frontmatter: Record<string, unknown>) {
+export interface HeadConfigOptions {
+  siteTitle?: string
+}
+
+export function resolveHeadConfig(
+  frontmatter: Record<string, unknown>,
+  options: HeadConfigOptions = {},
+) {
   const title = frontmatter.title
   const description = frontmatter.description
   const head = frontmatter.head
+  const siteTitle = options.siteTitle
+  const resolvedTitle =
+    typeof title === 'string'
+      ? siteTitle
+        ? `${title} | ${siteTitle}`
+        : title
+      : typeof siteTitle === 'string'
+        ? siteTitle
+        : undefined
 
   const base: BasicHeadConfig = {
-    ...(typeof title === 'string' ? { title } : {}),
+    ...(typeof resolvedTitle === 'string' ? { title: resolvedTitle } : {}),
     ...(typeof description === 'string' ? { description } : {}),
   }
 

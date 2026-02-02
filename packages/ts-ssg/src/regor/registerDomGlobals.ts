@@ -66,6 +66,13 @@ export function registerDomGlobals(
   }
 }
 
+export function ensureDomGlobals(): () => void {
+  const globals = globalThis as Record<string, unknown>
+  if (globals.document && globals.window) return () => {}
+  const { document, window } = parseHTML('<html><body></body></html>')
+  return registerDomGlobals(window, document)
+}
+
 function ensureDocumentCreateRange(document: unknown): void {
   const doc = document as Record<string, unknown>
   if (typeof doc.createRange === 'function') return
@@ -99,6 +106,3 @@ function createCommentConstructor(document: unknown): typeof Comment {
   CommentShim.prototype = prototype
   return CommentShim
 }
-// define default document for component creation
-const { document, window } = parseHTML('<html><body></body></html>')
-registerDomGlobals(window, document)

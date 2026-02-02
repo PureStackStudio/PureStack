@@ -10,6 +10,7 @@ static pages plus CSS generated via `@purestack/ts-css`.
 - Regor component rendering in MDX/HTML (server-side, using LinkeDOM).
 - CSS collected during render and emitted as static files.
 - Simple, programmatic build API with sensible defaults.
+- Build hooks and optional concurrency for extensibility and speed.
 
 ## How it works
 1. **Discover content**: `discoverContent()` scans the content directory for `.md` and `.mdx`.
@@ -50,6 +51,8 @@ await buildSite({
   contentDir: './content',
   outDir: './public',
   siteTitle: 'My Docs',
+  cleanOutDir: true,
+  concurrency: 4,
 })
 ```
 
@@ -69,6 +72,9 @@ This is useful for scripted builds after `tsc` output is available.
 - `title`: page title
 - `description`: meta description
 - `head`: object merged into the base head config
+
+If `siteTitle` is set, the page title is composed as `"<title> | <siteTitle>"`,
+or falls back to `siteTitle` when no page title is provided.
 
 The base head config is defined in `src/head.ts` and includes charset, viewport,
 Open Graph defaults, and a generator meta tag.
@@ -94,6 +100,19 @@ Notes:
 - MDX `import`/`export` lines are stripped during compilation.
 - Components must be available in the registry at build time.
 
+You can also pass components directly to `buildSite()`:
+
+```ts
+import { buildSite } from '@purestack/ts-ssg'
+import { createComponent, html } from 'regor'
+
+await buildSite({
+  components: {
+    banner: createComponent(html`<div>Banner</div>`, []),
+  },
+})
+```
+
 ## Styles
 Use `styleBuilder` to register CSS at build time. `writeStyles()` emits a CSS file for each
 named style builder, plus the default stylesheet.
@@ -102,6 +121,21 @@ named style builder, plus the default stylesheet.
 import { styleBuilder } from '@purestack/ts-ssg'
 
 styleBuilder.select('body').set('font-family', 'system-ui')
+```
+
+## Build hooks
+`buildSite()` accepts a `hooks` object for extending the pipeline.
+
+```ts
+import { buildSite, type BuildHooks } from '@purestack/ts-ssg'
+
+const hooks: BuildHooks = {
+  onPageRendered(_context, page) {
+    console.log('rendered', page.urlPath)
+  },
+}
+
+await buildSite({ hooks })
 ```
 
 ## Development notes

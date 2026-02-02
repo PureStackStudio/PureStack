@@ -14,4 +14,13 @@ export const componentRegistry = {
   getAll(): Record<string, Component<unknown>> {
     return Object.fromEntries(registry.entries())
   },
+  snapshot(): Map<string, Component<unknown>> {
+    return new Map(registry)
+  },
+  restore(snapshot: Map<string, Component<unknown>>) {
+    registry.clear()
+    for (const [name, component] of snapshot) {
+      registry.set(name, component)
+    }
+  },
 }

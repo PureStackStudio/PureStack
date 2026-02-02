@@ -14,8 +14,9 @@ export async function writeStyles(
 ): Promise<WriteStylesResult> {
   const resultPaths: string[] = []
   const defaultName = fileName.replace(/\.css$/i, '')
-  const names = new Set(styleBuilder.list())
-  names.add('')
+  const named = styleBuilder.list().filter((name) => name !== '')
+  named.sort()
+  const names = ['', ...named]
 
   for (const name of names) {
     const css = await styleBuilder.render(name, true)

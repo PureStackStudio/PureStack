@@ -5,10 +5,16 @@ import { createLogger, getLogger } from 'logpot'
 import { buildSite } from './build/site'
 import { logError } from './util/logging'
 
-export { buildSite } from './build/site'
 export {
-  type PartialConfig,
-  resolveConfig,
+  type BuildHooks,
+  type BuildInput,
+  type BuildOptions,
+  type BuildResult,
+  buildSite,
+} from './build/site'
+export {
+  type PartialSiteConfig as PartialConfig,
+  resolveSiteConfig as resolveConfig,
   type SiteConfig,
 } from './config/config'
 export { componentRegistry } from './regor/components/registry'
