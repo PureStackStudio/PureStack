@@ -9,6 +9,8 @@ export interface ThemeStylesheetLink {
   rel: string
   media?: string
   title?: string
+  dataTheme?: string
+  disabled?: boolean
 }
 
 export function normalizeThemeName(name: string): string {
@@ -91,27 +93,13 @@ export function resolveThemeStyleLinks(
   const ordered = orderThemes(themes)
   return ordered.map((theme) => {
     const href = resolveThemeHref(styleHref, theme)
-    if (theme === 'light') {
-      return {
-        theme,
-        href,
-        rel: 'stylesheet',
-        media: '(prefers-color-scheme: light)',
-      }
-    }
-    if (theme === 'dark') {
-      return {
-        theme,
-        href,
-        rel: 'stylesheet',
-        media: '(prefers-color-scheme: dark)',
-      }
-    }
     return {
       theme,
       href,
-      rel: 'alternate stylesheet',
-      title: theme,
+      rel: 'stylesheet',
+      dataTheme: theme,
+      disabled: theme !== 'light',
+      ...(theme !== 'light' ? { title: theme } : {}),
     }
   })
 }

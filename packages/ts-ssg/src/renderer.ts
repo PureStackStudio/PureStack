@@ -20,8 +20,18 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
           href: link.href,
           ...(link.media ? { media: link.media } : {}),
           ...(link.title ? { title: link.title } : {}),
+          ...(link.dataTheme ? { 'data-theme': link.dataTheme } : {}),
+          ...(link.disabled ? { disabled: '' } : {}),
         }),
       )
+    }
+
+    const themes = styleLinks
+      .map((link) => link.dataTheme)
+      .filter((theme): theme is string => Boolean(theme))
+    if (themes.length > 0) {
+      const script = buildThemeSwitchScript(themes)
+      head.push(h('script').raw(script))
     }
   }
   const html = h('html').push(
@@ -29,4 +39,24 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
     h('body').push(h('main').push(h('article').raw(bodyHtml))),
   )
   return await html.toPrettyHtml()
+}
+
+/**
+ * Builds the inline theme switcher runtime.
+ *
+ * Usage (runtime):
+ *   window.tsSsgTheme.get()
+ *   window.tsSsgTheme.list()
+ *   window.tsSsgTheme.set(theme: string)
+ *
+ * Behavior:
+ * - Reads preferred theme from localStorage key "ts-ssg-theme" if present.
+ * - Falls back to prefers-color-scheme when available.
+ * - Enables the matching <link data-theme="..."> and disables the rest.
+ * - Adds data-theme, data-theme-mode, and data-theme-ready attributes on <html>.
+ */
+function buildThemeSwitchScript(themes: string[]) {
+  const unique = [...new Set(themes)]
+  const serialized = JSON.stringify(unique)
+  return `(function(){var themes=${serialized};if(!themes.length){return;}var storageKey='ts-ssg-theme';var root=document.documentElement;function isValid(theme){return themes.indexOf(theme)!==-1;}function getStored(){try{return localStorage.getItem(storageKey)||'';}catch(e){return ''}}function setStored(theme){try{localStorage.setItem(storageKey,theme);}catch(e){}}function prefersDark(){return window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;}function resolvePreferred(){var stored=getStored();if(isValid(stored)){return stored;}if(prefersDark()&&isValid('dark')){return 'dark';}return themes[0];}function applyTheme(theme){if(!isValid(theme)){return;}var links=document.querySelectorAll('link[data-theme]');for(var i=0;i<links.length;i++){var link=links[i];var linkTheme=link.getAttribute('data-theme');link.disabled=linkTheme!==theme;}root.setAttribute('data-theme',theme);}var current=resolvePreferred();applyTheme(current);root.setAttribute('data-theme',current);root.setAttribute('data-theme-mode','auto');root.setAttribute('data-theme-ready','true');window.tsSsgTheme={get:function(){return current;},list:function(){return themes.slice();},set:function(theme){if(!isValid(theme)){return;}current=theme;applyTheme(current);setStored(current);}};})();`
 }
