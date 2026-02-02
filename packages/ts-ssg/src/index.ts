@@ -45,6 +45,7 @@ export {
 } from './page-templates'
 export { componentRegistry } from './regor/components/registry'
 export { styleBuilder } from './style/styles'
+export type { TsSsgContext } from './ts-ssg-context'
 
 const entryUrl = process.argv[1]
 const isDirectRun =

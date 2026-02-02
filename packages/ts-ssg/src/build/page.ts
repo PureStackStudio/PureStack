@@ -11,7 +11,7 @@ import {
   type PageNavigation,
   resolvePageNavigation,
 } from '../navigation/navigation'
-import type { PageTemplateMap } from '../page-templates'
+import type { PageTemplateMap, PageTemplatePage } from '../page-templates'
 import { renderPage } from '../renderer'
 import { resolveThemeStyleLinks } from '../style/themes'
 import { resolveHeadConfig } from './head-config'
@@ -36,6 +36,7 @@ export interface PageRenderResult {
   outPath: string
   urlPath: string
   navigation?: PageNavigation
+  page?: PageTemplatePage
 }
 
 export async function buildPage(
@@ -60,15 +61,25 @@ export async function renderPageFromFile(
   const source = await readSource(file.absPath)
   const parsed = matter(source)
   const frontmatter = parsed.data as Record<string, unknown>
+  const { urlPath } = resolveRouteInfo(file)
+  const navigation = resolvePageNavigation(context.navigation, file)
+  const pageInfo = {
+    relPath: file.relPath,
+    urlPath,
+    frontmatter,
+  }
   const headConfig = resolveHeadConfig(frontmatter, {
     siteTitle: context.config.siteTitle,
   })
   const bodyHtml = await compileMdxToHtml(parsed.content, {
     components: context.components,
+    context: {
+      site: context.config,
+      page: pageInfo,
+      navigation,
+    },
   })
   const template = resolveTemplateName(frontmatter)
-  const { urlPath } = resolveRouteInfo(file)
-  const navigation = resolvePageNavigation(context.navigation, file)
   const html = await renderPage({
     bodyHtml,
     headConfig,
@@ -79,11 +90,7 @@ export async function renderPageFromFile(
     template,
     templates: context.templates,
     navigation,
-    page: {
-      relPath: file.relPath,
-      urlPath,
-      frontmatter,
-    },
+    page: pageInfo,
   })
   const outPath = resolveOutPath(context.config.outDir, file)
   return {
@@ -97,6 +104,7 @@ export async function renderPageFromFile(
     outPath,
     urlPath,
     navigation,
+    page: pageInfo,
   }
 }
 
