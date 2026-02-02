@@ -60,6 +60,21 @@ await buildSite({
 When the package entry is executed directly, it runs `buildSite()` and logs a build summary.
 This is useful for scripted builds after `tsc` output is available.
 
+### Dev server (serve + watch + live reload)
+Run a fast static server that rebuilds on content changes and refreshes the browser.
+
+```bash
+node ./dist/ts-ssg.js --serve --port 4173
+```
+
+Flags:
+- `--serve` (or `serve`/`dev`): start the dev server
+- `--port <number>`: port to bind (default 4173)
+- `--host <string>`: host to bind (default 127.0.0.1)
+- `--no-watch`: disable watching
+- `--no-reload`: disable live reload injection
+- `--clean`: clean output directory on each rebuild
+
 ## Content and routes
 - Supported extensions: `.md` and `.mdx`
 - Output paths:
