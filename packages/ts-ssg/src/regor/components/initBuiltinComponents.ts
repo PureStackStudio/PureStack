@@ -1,5 +1,5 @@
 import { createCardComponents } from './cardGrid'
-import { createNavigationComponents } from './navigation'
+import { createNavigationComponents } from './navComponent'
 import { componentRegistry } from './registry'
 
 export function initBuiltinComponents() {
