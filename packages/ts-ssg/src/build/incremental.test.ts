@@ -2,7 +2,8 @@ import fs from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
 
-import { describe, expect, it } from 'vitest'
+import { createLogger } from 'logpot'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import { resolveSiteConfig } from '../config/config'
 import { createIncrementalBuilder } from './incremental'
@@ -29,6 +30,16 @@ async function fileExists(filePath: string) {
 }
 
 describe('incremental builder', () => {
+  let logger: Awaited<ReturnType<typeof createLogger>> | undefined
+
+  beforeAll(async () => {
+    logger = await createLogger({ runAsWorker: false })
+  })
+
+  afterAll(async () => {
+    await logger?.close()
+  })
+
   it('removes deleted content outputs and updates manifest', async () => {
     await withTempDir(async (base) => {
       const contentDir = path.join(base, 'content')

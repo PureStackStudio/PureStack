@@ -2,7 +2,8 @@ import fs from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
 
-import { describe, expect, it } from 'vitest'
+import { createLogger } from 'logpot'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import { discoverContent, discoverStaticAssets } from './content'
 
@@ -12,6 +13,16 @@ async function writeFile(filePath: string, contents = '') {
 }
 
 describe('discoverContent + discoverStaticAssets', () => {
+  let logger: Awaited<ReturnType<typeof createLogger>> | undefined
+
+  beforeAll(async () => {
+    logger = await createLogger({ runAsWorker: false })
+  })
+
+  afterAll(async () => {
+    await logger?.close()
+  })
+
   it('separates markdown content from static assets', async () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-'))
     try {
