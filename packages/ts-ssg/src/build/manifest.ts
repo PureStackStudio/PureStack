@@ -122,6 +122,7 @@ export async function readSignature(
 ): Promise<FileSignature | null> {
   try {
     const stats = await fs.stat(absPath)
+    if (!stats.isFile()) return null
     return { mtimeMs: stats.mtimeMs, size: stats.size }
   } catch (error) {
     const err = error as NodeJS.ErrnoException

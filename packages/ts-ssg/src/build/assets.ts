@@ -12,6 +12,7 @@ export interface CopyStaticAssetsResult {
 
 export interface CopyStaticAssetResult {
   outPath: string
+  copied: boolean
 }
 
 export async function copyStaticAssets(
@@ -33,10 +34,21 @@ export async function copyStaticAsset(
   outDir: string,
   asset: StaticAssetFile,
 ): Promise<CopyStaticAssetResult> {
+  const log = getLogger()
   const outPath = resolveStaticOutPath(outDir, asset)
-  await ensureDir(outPath)
-  await fs.copyFile(asset.absPath, outPath)
-  return { outPath }
+  try {
+    await ensureDir(outPath)
+    await fs.copyFile(asset.absPath, outPath)
+    return { outPath, copied: true }
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error)
+    log.error('static asset copy failed', {
+      assetPath: asset.absPath,
+      outPath,
+      error: message,
+    })
+    return { outPath, copied: false }
+  }
 }
 
 export function resolveStaticOutPath(outDir: string, asset: StaticAssetFile) {

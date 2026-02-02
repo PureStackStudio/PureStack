@@ -165,16 +165,17 @@ export async function createIncrementalBuilder(
     }
 
     const assetFile = toAssetFile(config.contentDir, relPath, ext)
-    await copyStaticAsset(config.outDir, assetFile)
-    const outPath = resolveStaticOutPath(config.outDir, assetFile)
-    manifest.assets[relPath] = {
-      relPath,
-      ext,
-      outPath,
-      ...signature,
+    const assetCopy = await copyStaticAsset(config.outDir, assetFile)
+    if (assetCopy.copied) {
+      manifest.assets[relPath] = {
+        relPath,
+        ext,
+        outPath: assetCopy.outPath,
+        ...signature,
+      }
+      result.changedAssets += 1
+      await writeManifest(config.outDir, manifest)
     }
-    result.changedAssets += 1
-    await writeManifest(config.outDir, manifest)
     return result
   }
 
