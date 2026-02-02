@@ -31,6 +31,41 @@
       },
       "default": ["light", "dark"]
     },
+    "navigation": {
+      "type": "object",
+      "description": "Navigation menu configuration for auto/custom/hybrid menus.",
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["auto", "custom", "hybrid", "none"],
+          "description": "Menu generation mode.",
+          "default": "auto"
+        },
+        "navFileName": {
+          "type": "string",
+          "description": "Filename used for custom navigation definitions.",
+          "default": "_nav.json"
+        },
+        "maxDepth": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum folder depth for nested navigation.",
+          "default": 1
+        },
+        "includeIndex": {
+          "type": "boolean",
+          "description": "Whether index pages appear in auto navigation.",
+          "default": true
+        },
+        "sortBy": {
+          "type": "string",
+          "enum": ["order", "title", "path"],
+          "description": "Sorting strategy for navigation items.",
+          "default": "order"
+        }
+      }
+    },
     "outDir": {
       "type": "string",
       "description": "Output directory path. Relative paths are resolved from the project root.",
