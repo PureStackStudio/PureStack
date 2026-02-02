@@ -3,6 +3,7 @@ import type { Component } from 'regor'
 
 import { type PartialSiteConfig, resolveSiteConfig } from '../config/config'
 import { type ContentFile, discoverContent } from '../discover/content'
+import { copyStaticAssets } from './assets'
 import { prepareOutDir } from './io'
 import {
   type BuildContext,
@@ -71,6 +72,8 @@ export async function buildSite(input: BuildInput = {}): Promise<BuildResult> {
   })
 
   await prepareOutDir(config.outDir, { clean: input.cleanOutDir })
+
+  await copyStaticAssets(config.contentDir, config.outDir)
 
   const files = await discoverContent(config.contentDir)
   await hooks.onContentDiscovered?.(context, files)

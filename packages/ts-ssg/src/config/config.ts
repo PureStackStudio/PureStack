@@ -21,7 +21,7 @@ const DEFAULT_ROOT = path.resolve(
   '..',
   '..',
 )
-const SITE_CONFIG_FILENAME = 'siteConfig.json'
+export const SITE_CONFIG_FILENAME = 'siteConfig.json'
 
 export function resolveSiteConfig(input: PartialSiteConfig = {}): SiteConfig {
   const rootDir = input.rootDir ?? DEFAULT_ROOT
