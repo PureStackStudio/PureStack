@@ -5,7 +5,7 @@ import path from 'node:path'
 
 import { createLogger, getLogger } from 'logpot'
 
-import { buildSite, type BuildInput } from '../build/site'
+import { type BuildInput, buildSite } from '../build/site'
 import { resolveSiteConfig } from '../config/config'
 import { logError } from '../util/logging'
 
