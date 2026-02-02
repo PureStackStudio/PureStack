@@ -1,0 +1,7 @@
+{
+  "$schema": "./siteConfig.schema.json",
+  "siteTitle": "ts-ssg",
+  "styleFileName": "site.css",
+  "styleHref": "/site.css",
+  "outDir": "dist/site"
+}

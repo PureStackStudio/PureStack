@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ts-ssg Site Config",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "URL to the JSON schema"
+    },
+    "siteTitle": {
+      "type": "string",
+      "description": "Default site title used by the head config when a page does not provide its own title.",
+      "default": "ts-ssg"
+    },
+    "styleFileName": {
+      "type": "string",
+      "description": "CSS file name written to the output directory.",
+      "default": "site.css"
+    },
+    "styleHref": {
+      "type": "string",
+      "description": "Public href injected into rendered pages for the site stylesheet.",
+      "default": "/site.css"
+    },
+    "outDir": {
+      "type": "string",
+      "description": "Output directory path. Relative paths are resolved from the project root.",
+      "default": "dist/site"
+    }
+  }
+}
