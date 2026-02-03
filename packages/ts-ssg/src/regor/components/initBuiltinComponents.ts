@@ -1,3 +1,4 @@
+import { registerNormalizeStyles } from '../../style/normalize.css'
 import { ensureDomGlobals } from '../registerDomGlobals'
 import { createCardComponents } from './cardGrid'
 import { registerDocLayoutStyles } from './docLayoutStyles'
@@ -12,6 +13,7 @@ export function initBuiltinComponents() {
   if (initialized) return
   initialized = true
   ensureDomGlobals()
+  registerNormalizeStyles()
   registerDocLayoutStyles()
   componentRegistry.registerMany(createCardComponents())
   componentRegistry.registerMany(createTopBarComponents())
