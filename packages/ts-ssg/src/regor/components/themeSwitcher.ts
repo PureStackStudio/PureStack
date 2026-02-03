@@ -41,10 +41,10 @@ function registerThemeSwitcherStyles() {
       .set('display', 'inline-flex')
       .set('align-items', 'center')
       .set('justify-content', 'space-between')
-      .set('gap', '6px')
+      .set('gap', '2px')
       .set('height', '38px')
-      .set('min-width', '84px')
-      .set('padding', '0 10px')
+      .set('min-width', '76px')
+      .set('padding', '0 6px')
       .set('border-radius', '999px')
       .set('border', '1px solid transparent')
       .set('background', 'transparent')
@@ -154,6 +154,13 @@ function registerThemeSwitcherStyles() {
     .select('.theme-switcher__icon--moon svg', 'dark')
     .set('fill', 'currentColor')
     .set('stroke', 'none')
+
+  styleBuilder
+    .select('.theme-switcher__icon--sun', 'light')
+    .set('color', '#f5a524')
+  styleBuilder
+    .select('.theme-switcher__icon--sun', 'dark')
+    .set('color', '#f7b955')
 
   styleBuilder
     .select('.theme-switcher[data-theme="light"] .theme-switcher__icon--moon', 'light')
