@@ -12,6 +12,7 @@ import {
   resolvePageNavigation,
 } from '../navigation/navigation'
 import type { PageTemplateMap, PageTemplatePage } from '../page-templates'
+import { renderApp } from '../regor/components/renderApp'
 import { renderPage } from '../renderer'
 import { resolveThemeStyleLinks } from '../style/themes'
 import { resolveHeadConfig } from './head-config'
@@ -68,19 +69,20 @@ export async function renderPageFromFile(
     urlPath,
     frontmatter,
   }
-  const headConfig = resolveHeadConfig(frontmatter, {
-    siteTitle: context.config.siteTitle,
-  })
-  const bodyHtml = await compileMdxToHtml(parsed.content, {
+  const renderAppOptions = {
     components: context.components,
     context: {
       site: context.config,
       page: pageInfo,
       navigation,
     },
+  }
+  const headConfig = resolveHeadConfig(frontmatter, {
+    siteTitle: context.config.siteTitle,
   })
+  const bodyHtml = await compileMdxToHtml(parsed.content)
   const template = resolveTemplateName(frontmatter)
-  const html = await renderPage({
+  const htmlShell = await renderPage({
     bodyHtml,
     headConfig,
     styleLinks: resolveThemeStyleLinks(
@@ -93,6 +95,7 @@ export async function renderPageFromFile(
     page: pageInfo,
     siteTitle: context.config.siteTitle,
   })
+  const html = renderApp(htmlShell, renderAppOptions)
   const outPath = resolveOutPath(context.config.outDir, file)
   return {
     file,
