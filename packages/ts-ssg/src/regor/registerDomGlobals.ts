@@ -62,6 +62,7 @@ export function registerDomGlobals(
       : { escape: cssEscape }
 
   ensureInnerTextSetter(window)
+  patchElementClone(window)
 
   return () => {
     for (const key of keys) globals[key] = original[key]
@@ -132,4 +133,64 @@ function ensureInnerTextSetter(window: unknown): void {
       set: setter,
     })
   }
+}
+
+function patchElementClone(window: unknown): void {
+  const win = window as {
+    Element?: typeof Element
+    HTMLTemplateElement?: typeof HTMLTemplateElement
+  }
+  const elementProto = win.Element?.prototype
+  if (!elementProto) return
+  const originalClone = elementProto.cloneNode as (deep?: boolean) => Node
+  if ((originalClone as { __regorPatched?: boolean }).__regorPatched) return
+
+  const syncTemplateContent = (
+    source: HTMLTemplateElement,
+    target: HTMLTemplateElement,
+  ) => {
+    // LinkeDOM clones template.childNodes, but Regor mutates template.content.
+    const sourceContent = source.content
+    if (!sourceContent) return
+    const targetContent = target.content
+    targetContent.replaceChildren()
+    for (const node of sourceContent.childNodes) {
+      targetContent.appendChild(node.cloneNode(true))
+    }
+  }
+
+  elementProto.cloneNode = function cloneNodePatched(
+    this: Element,
+    deep?: boolean,
+  ) {
+    const clone = originalClone.call(this, deep) as Element
+    if (deep) {
+      const TemplateCtor = win.HTMLTemplateElement
+      if (TemplateCtor && this instanceof TemplateCtor) {
+        if (clone instanceof TemplateCtor) {
+          syncTemplateContent(this, clone)
+        }
+        return clone
+      }
+      const sourceTemplates = this.querySelectorAll?.('template')
+      const cloneTemplates = clone.querySelectorAll?.('template')
+      if (
+        sourceTemplates &&
+        cloneTemplates &&
+        sourceTemplates.length === cloneTemplates.length &&
+        TemplateCtor
+      ) {
+        for (let i = 0; i < sourceTemplates.length; i += 1) {
+          const source = sourceTemplates[i] as HTMLTemplateElement
+          const target = cloneTemplates[i] as HTMLTemplateElement
+          if (source instanceof TemplateCtor && target instanceof TemplateCtor) {
+            syncTemplateContent(source, target)
+          }
+        }
+      }
+    }
+    return clone
+  }
+  ;(elementProto.cloneNode as { __regorPatched?: boolean }).__regorPatched =
+    true
 }
