@@ -17,6 +17,7 @@ export interface RenderPageInput {
   templates?: PageTemplateMap
   navigation?: PageNavigation
   page?: PageTemplatePage
+  siteTitle?: string
 }
 
 export async function renderPage(input: RenderPageInput): Promise<string> {
@@ -56,6 +57,7 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
     templateName,
     navigation: input.navigation,
     page: input.page,
+    siteTitle: input.siteTitle,
   })
   return await html.toPrettyHtml()
 }

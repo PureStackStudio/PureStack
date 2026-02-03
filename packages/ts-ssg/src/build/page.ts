@@ -91,6 +91,7 @@ export async function renderPageFromFile(
     templates: context.templates,
     navigation,
     page: pageInfo,
+    siteTitle: context.config.siteTitle,
   })
   const outPath = resolveOutPath(context.config.outDir, file)
   return {

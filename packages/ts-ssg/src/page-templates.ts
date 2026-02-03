@@ -17,6 +17,7 @@ export interface PageTemplateInput {
   templateName: string
   navigation?: PageNavigation
   page?: PageTemplatePage
+  siteTitle?: string
 }
 
 export type PageTemplate = (
@@ -52,13 +53,74 @@ function normalizeTemplateName(name: string | undefined) {
   return trimmed.length > 0 ? trimmed : 'doc'
 }
 
-function renderDocTemplate({ head, bodyHtml, navigation }: PageTemplateInput) {
+function renderDocTemplate({
+  head,
+  bodyHtml,
+  navigation,
+  siteTitle,
+}: PageTemplateInput) {
   const navNode = renderDocNav(navigation)
+  const hasNav = Boolean(navNode)
+  const brandLabel = siteTitle?.trim() || 'Docs'
   return h('html').push(
     head,
-    h('body').push(
-      h('main').push(...(navNode ? [navNode] : []), h('article').raw(bodyHtml)),
-    ),
+    h('body')
+      .attr({ class: 'template-doc' })
+      .push(
+        ...(hasNav
+          ? [
+              h('input').attr({
+                class: 'doc-nav-toggle',
+                id: 'doc-nav-toggle',
+                type: 'checkbox',
+                'aria-hidden': 'true',
+              }),
+              h('header')
+                .attr({ class: 'doc-header' })
+                .push(
+                  h('a')
+                    .attr({ class: 'doc-header__logo', href: '/' })
+                    .text(brandLabel),
+                  h('div')
+                    .attr({ class: 'doc-header__actions' })
+                    .push(
+                      h('button').attr({
+                        class: 'doc-header__icon doc-header__search',
+                        type: 'button',
+                        'aria-label': 'Search',
+                      }),
+                      h('label').attr({
+                        class: 'doc-header__icon doc-header__toggle',
+                        for: 'doc-nav-toggle',
+                        role: 'button',
+                        'aria-label': 'Toggle navigation',
+                      }),
+                    ),
+                ),
+              h('label').attr({
+                class: 'doc-overlay',
+                for: 'doc-nav-toggle',
+                'aria-hidden': 'true',
+              }),
+            ]
+          : []),
+        h('div')
+          .attr({
+            class: hasNav ? 'doc-shell' : 'doc-shell doc-shell--single',
+          })
+          .push(
+            ...(hasNav
+              ? [
+                  h('aside')
+                    .attr({ class: 'doc-sidebar', id: 'doc-sidebar' })
+                    .push(navNode!),
+                ]
+              : []),
+            h('main')
+              .attr({ class: 'doc-main' })
+              .push(h('article').attr({ class: 'doc-content' }).raw(bodyHtml)),
+          ),
+      ),
   )
 }
 
