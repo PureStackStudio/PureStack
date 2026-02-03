@@ -97,11 +97,6 @@ function renderDocTemplate({
                       }),
                     ),
                 ),
-              h('label').attr({
-                class: 'doc-overlay',
-                for: 'doc-nav-toggle',
-                'aria-hidden': 'true',
-              }),
             ]
           : []),
         h('div')

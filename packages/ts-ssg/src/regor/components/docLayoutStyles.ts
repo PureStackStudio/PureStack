@@ -66,7 +66,7 @@ export function registerDocLayoutStyles() {
   const baseHeader = (theme: string) =>
     styleBuilder
       .select('.doc-header', theme)
-      .set('display', 'none')
+      .set('display', 'flex')
       .set('align-items', 'center')
       .set('justify-content', 'space-between')
       .set('gap', '16px')
@@ -208,20 +208,6 @@ export function registerDocLayoutStyles() {
     .select('.doc-nav-toggle', 'dark')
     .set('display', 'none')
 
-  const baseOverlay = (theme: string) =>
-    styleBuilder
-      .select('.doc-overlay', theme)
-      .set('position', 'fixed')
-      .set('inset', '0')
-      .set('background', 'rgba(8, 11, 18, 0.6)')
-      .set('opacity', '0')
-      .set('pointer-events', 'none')
-      .set('transition', 'opacity 200ms ease')
-      .set('z-index', '30')
-
-  baseOverlay('light').set('background', 'rgba(20, 24, 33, 0.45)')
-  baseOverlay('dark').set('background', 'rgba(8, 11, 18, 0.65)')
-
   styleBuilder
     .select('.doc-nav', 'light')
     .set('background', '#f6f7fb')
@@ -298,15 +284,6 @@ export function registerDocLayoutStyles() {
   baseDocText('dark').set('color', '#b0b6c6')
 
   styleBuilder
-    .select('.doc-nav-toggle:checked ~ .doc-overlay', 'light')
-    .set('opacity', '1')
-    .set('pointer-events', 'auto')
-  styleBuilder
-    .select('.doc-nav-toggle:checked ~ .doc-overlay', 'dark')
-    .set('opacity', '1')
-    .set('pointer-events', 'auto')
-
-  styleBuilder
     .select('.doc-nav-toggle:checked ~ .doc-header .doc-header__toggle::before', 'light')
     .set('top', '20px')
     .set('transform', 'rotate(45deg)')
@@ -335,15 +312,6 @@ export function registerDocLayoutStyles() {
 
   mobileShell('light')
   mobileShell('dark')
-
-  const mobileHeader = (theme: string) =>
-    styleBuilder
-      .select('.doc-header', theme)
-      .media('max-width: 1023px')
-      .set('display', 'flex')
-
-  mobileHeader('light')
-  mobileHeader('dark')
 
   const mobileSidebar = (theme: string) =>
     styleBuilder
