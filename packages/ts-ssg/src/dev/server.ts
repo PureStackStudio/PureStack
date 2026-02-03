@@ -68,15 +68,20 @@ export async function startDevServer(
     requestState.pending = true
     if (requestState.inFlight) return
     requestState.inFlight = true
-    while (requestState.pending) {
-      requestState.pending = false
-      if (requestState.changedPaths.size > 0) {
-        await rebuildChanged()
-      } else {
-        await rebuild(requestState.reason)
+    try {
+      while (requestState.pending) {
+        requestState.pending = false
+        if (requestState.changedPaths.size > 0) {
+          await rebuildChanged()
+        } else {
+          await rebuild(requestState.reason)
+        }
       }
+    } catch (error) {
+      logError(log, error, 'rebuild failed')
+    } finally {
+      requestState.inFlight = false
     }
-    requestState.inFlight = false
   }
 
   const incremental = incrementalEnabled
@@ -109,7 +114,14 @@ export async function startDevServer(
     let requiresFull = false
     let touched = false
     for (const filePath of paths) {
-      const change = await incremental.applyChange(filePath)
+      let change: Awaited<ReturnType<typeof incremental.applyChange>>
+      try {
+        change = await incremental.applyChange(filePath)
+      } catch (error) {
+        logError(log, error, 'incremental apply failed')
+        requiresFull = true
+        break
+      }
       if (change.fullRebuild) {
         requiresFull = true
         break
@@ -156,6 +168,9 @@ export async function startDevServer(
       req.on('close', () => {
         clients.delete(res)
       })
+      res.on('error', () => {
+        clients.delete(res)
+      })
       return
     }
 
@@ -186,12 +201,26 @@ export async function startDevServer(
       } else {
         res.writeHead(200)
       }
-      fs.createReadStream(filePath).pipe(res)
+      const stream = fs.createReadStream(filePath)
+      stream.on('error', (error) => {
+        logError(log, error, 'static stream failed')
+        if (!res.headersSent) {
+          res.writeHead(500)
+        }
+        res.end()
+      })
+      stream.pipe(res)
     } catch (error) {
       res.writeHead(500)
       res.end('Internal server error')
       logError(log, error, 'serve failed')
     }
+  })
+  server.on('error', (error) => {
+    logError(log, error, 'dev server error')
+  })
+  server.on('clientError', (_error, socket) => {
+    socket.end('HTTP/1.1 400 Bad Request\r\n\r\n')
   })
   server.listen(port, host, () => {
     log.info('dev server listening', {
@@ -254,8 +283,17 @@ function broadcast(
   data: string,
 ) {
   for (const client of clients) {
-    client.write(`event: ${event}\n`)
-    client.write(`data: ${data}\n\n`)
+    try {
+      client.write(`event: ${event}\n`)
+      client.write(`data: ${data}\n\n`)
+    } catch {
+      clients.delete(client)
+      try {
+        client.end()
+      } catch {
+        // ignore secondary close errors
+      }
+    }
   }
 }
 
