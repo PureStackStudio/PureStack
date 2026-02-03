@@ -3,8 +3,6 @@ import { createComponent, html } from 'regor'
 import type { NavItem } from '../../navigation/navigation'
 import type { TsSsgContext } from '../../ts-ssg-context'
 
-const NAV_CLASS = 'nav-menu'
-
 function resolveContext(): TsSsgContext | undefined {
   return globalThis.tsSsgContext
 }
@@ -14,17 +12,16 @@ interface NavMenuProps {
 }
 
 interface NavListProps {
-  items: NavItem[]
+  items?: NavItem[]
 }
 
-const navItemTemplate = html`<li class="${NAV_CLASS}__item">
+const navItemTemplate = html`<li class="nav__item">
   <slot name="content"></slot>
   <slot name="children"></slot>
 </li>`
 
-const navListTemplate = html`<ul class="${NAV_CLASS}__list">
+const navListTemplate = html`<ul class="nav__list">
   <nav-item r-for="item in items">
-    abc
     <template #content>
       <a r-if="item.url" :href="item.url">{{ item.title }}</a>
       <span r-else>{{ item.title }}</span>
@@ -39,7 +36,7 @@ const navListTemplate = html`<ul class="${NAV_CLASS}__list">
 </ul>`
 
 const navMenuTemplate = html`<nav
-  class="${NAV_CLASS}"
+  class="nav__menu"
   aria-label="Site navigation"
 >
   <nav-list :items="items"></nav-list>
@@ -48,22 +45,20 @@ const navMenuTemplate = html`<nav
 function resolveNavItems(): NavItem[] {
   const context = resolveContext()
   const items = context?.navigation?.items ?? []
-  if (items.length > 0)
-    return [...items, ...(context?.navigation?.global ?? [])]
+  if (items.length > 0) return items
   return context?.navigation?.global ?? []
 }
 
 function createNavItemComponent() {
-  return createComponent<Record<string, never>>(navItemTemplate, [])
+  return createComponent<Record<string, never>>(navItemTemplate, {})
 }
 
 function createNavListComponent() {
   return createComponent<NavListProps>(navListTemplate, {
-    context: () => {
-      return {
-        items: resolveContext()?.navigation?.items ?? [],
-      }
-    },
+    props: ['items'],
+    context: (head) => ({
+      items: head.props.items,
+    }),
   })
 }
 
@@ -84,6 +79,5 @@ export function createNavigationComponents() {
     navItem,
     navList,
     navMenu,
-    navigation: navMenu,
   }
 }
