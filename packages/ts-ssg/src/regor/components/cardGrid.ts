@@ -19,28 +19,22 @@ function registerCardGridStyles() {
   const baseGrid = (theme: string) =>
     styleBuilder
       .select('.card-grid', theme)
-      .set('display', 'grid')
-      .set('gap', '16px')
-      .set('padding', '24px')
-      .set('border-radius', themeOptions.radii.md)
+      .display('grid')
+      .gap('16px')
+      .padding('24px')
+      .borderRadius(themeOptions.radii.md)
 
-  baseGrid('light').set(
-    'border',
-    `1px solid ${palette('light').cardGrid.border}`,
-  )
-  baseGrid('dark').set(
-    'border',
-    `1px solid ${palette('dark').cardGrid.border}`,
-  )
+  baseGrid('light').border(`1px solid ${palette('light').cardGrid.border}`)
+  baseGrid('dark').border(`1px solid ${palette('dark').cardGrid.border}`)
 
   const baseTitle = (theme: string) =>
     styleBuilder
       .select('.card-grid__title', theme)
-      .set('font-size', '18px')
-      .set('font-weight', 600)
+      .fontSize('18px')
+      .fontWeight('600')
 
-  baseTitle('light').set('color', palette('light').cardGrid.title)
-  baseTitle('dark').set('color', palette('dark').cardGrid.title)
+  baseTitle('light').color(palette('light').cardGrid.title)
+  baseTitle('dark').color(palette('dark').cardGrid.title)
 }
 
 function createCardGridComponent() {
@@ -65,28 +59,23 @@ function registerCardStyles() {
   const baseCard = (theme: string) =>
     styleBuilder
       .select('.card', theme)
-      .set('display', 'grid')
-      .set('gap', '8px')
-      .set('padding', '16px')
-      .set('border-radius', themeOptions.radii.md)
+      .display('grid')
+      .gap('8px')
+      .padding('16px')
+      .borderRadius(themeOptions.radii.md)
 
-  baseCard('light').set(
-    'border',
-    `1px solid ${palette('light').card.border}`,
-  )
-  baseCard('dark').set('border', `1px solid ${palette('dark').card.border}`)
+  baseCard('light').border(`1px solid ${palette('light').card.border}`)
+  baseCard('dark').border(`1px solid ${palette('dark').card.border}`)
 
   const baseIcon = (theme: string) =>
-    styleBuilder.select('.card__icon', theme).set('font-weight', 600)
+    styleBuilder.select('.card__icon', theme).fontWeight('600')
   baseIcon('light')
   baseIcon('dark')
 
   styleBuilder
     .select('.card__title', 'light')
-    .set('color', palette('light').card.title)
-  styleBuilder
-    .select('.card__title', 'dark')
-    .set('color', palette('dark').card.title)
+    .color(palette('light').card.title)
+  styleBuilder.select('.card__title', 'dark').color(palette('dark').card.title)
 }
 
 function createCardComponent() {

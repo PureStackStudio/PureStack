@@ -7193,11 +7193,11 @@ export const cssProps = [
   },
   {
     $: {
-      name: 'grid-gap',
+      name: 'gap',
       restriction: 'length',
       version: '3.0',
       browsers: 'FF52,C57,S10.1,O44',
-      ref: 'http://www.w3.org/TR/css-grid-1/#propdef-grid-gap',
+      ref: 'http://www.w3.org/TR/css-grid-1/#propdef-gap',
       syntax: '#item1 { $(name): 2em 1em; }',
     },
     desc: "Shorthand that specifies the gutters between grid columns and grid rows in one declaration. Replaced by 'gap' property.",
@@ -16539,7 +16539,7 @@ export const cssProps = [
   },
   {
     $: {
-      name: '-webkit-backdrop-filter',
+      name: 'backdrop-filter',
       restriction: 'enum, url',
       version: '4.0',
       browsers: 'S9',

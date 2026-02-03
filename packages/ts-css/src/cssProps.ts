@@ -758,7 +758,7 @@ export type CSSProps = {
   gridColumnEnd: 'auto' | 'span' | (string & {})
   gridColumnGap: string
   gridColumnStart: 'auto' | 'span' | (string & {})
-  gridGap: string
+  gap: string
   gridRow: 'auto' | 'span' | (string & {})
   gridRowEnd: 'auto' | 'span' | (string & {})
   gridRowGap: string
@@ -1662,7 +1662,7 @@ export type CSSProps = {
     | 'textarea'
     | 'textfield'
     | (string & {})
-  webkitBackdropFilter:
+  backdropFilter:
     | 'none'
     | 'blur()'
     | 'brightness()'

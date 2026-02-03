@@ -43,40 +43,40 @@ function registerTopBarStyles() {
   const baseBar = (theme: string) =>
     styleBuilder
       .select('.topbar', theme)
-      .set('display', 'flex')
-      .set('align-items', 'center')
-      .set('justify-content', 'space-between')
-      .set('gap', '16px')
-      .set('padding', '16px')
-      .set('position', 'sticky')
-      .set('top', '0')
-      .set('z-index', '40')
-      .set('backdrop-filter', 'blur(10px)')
-      .set('border-bottom', '1px solid transparent')
+      .display('flex')
+      .alignItems('center')
+      .justifyContent('space-between')
+      .gap('16px')
+      .padding('16px')
+      .position('sticky')
+      .top('0')
+      .zIndex(40)
+      .backdropFilter('blur(10px)')
+      .borderBottom('1px solid transparent')
 
   baseBar('light')
-    .set('background', palette('light').topBar.background)
-    .set('border-bottom-color', palette('light').topBar.border)
+    .background(palette('light').topBar.background)
+    .borderBottomColor(palette('light').topBar.border)
   baseBar('dark')
-    .set('background', palette('dark').topBar.background)
-    .set('border-bottom-color', palette('dark').topBar.border)
+    .background(palette('dark').topBar.background)
+    .borderBottomColor(palette('dark').topBar.border)
 
   const baseLogo = (theme: string) =>
     styleBuilder
       .select('.topbar__logo', theme)
-      .set('font-size', '22px')
-      .set('font-weight', 700)
-      .set('text-decoration', 'none')
+      .fontSize('22px')
+      .fontWeight('700')
+      .textDecoration('none')
 
-  baseLogo('light').set('color', palette('light').topBar.logo)
-  baseLogo('dark').set('color', palette('dark').topBar.logo)
+  baseLogo('light').color(palette('light').topBar.logo)
+  baseLogo('dark').color(palette('dark').topBar.logo)
 
   const baseActions = (theme: string) =>
     styleBuilder
       .select('.topbar__actions', theme)
-      .set('display', 'flex')
-      .set('align-items', 'center')
-      .set('gap', '10px')
+      .display('flex')
+      .alignItems('center')
+      .gap('10px')
 
   baseActions('light')
   baseActions('dark')
@@ -84,50 +84,50 @@ function registerTopBarStyles() {
   const baseIcon = (theme: string) =>
     styleBuilder
       .select('.topbar__icon', theme)
-      .set('width', '42px')
-      .set('height', '42px')
-      .set('border-radius', themeOptions.radii.pill)
-      .set('display', 'grid')
-      .set('place-items', 'center')
-      .set('border', '1px solid transparent')
-      .set('background', 'transparent')
-      .set('cursor', 'pointer')
-      .set('position', 'relative')
-      .set('padding', '0')
+      .width('42px')
+      .height('42px')
+      .borderRadius(themeOptions.radii.pill)
+      .display('grid')
+      .placeItems('center')
+      .border('1px solid transparent')
+      .background('transparent')
+      .cursor('pointer')
+      .position('relative')
+      .padding('0')
 
-  baseIcon('light').set('color', palette('light').topBar.icon)
-  baseIcon('dark').set('color', palette('dark').topBar.icon)
+  baseIcon('light').color(palette('light').topBar.icon)
+  baseIcon('dark').color(palette('dark').topBar.icon)
 
   styleBuilder
     .select('.topbar__toggle', 'light')
-    .set('background', palette('light').topBar.toggleBackground)
-    .set('border-color', palette('light').topBar.toggleBorder)
+    .background(palette('light').topBar.toggleBackground)
+    .borderColor(palette('light').topBar.toggleBorder)
   styleBuilder
     .select('.topbar__toggle', 'dark')
-    .set('background', palette('dark').topBar.toggleBackground)
-    .set('border-color', palette('dark').topBar.toggleBorder)
-    .set('color', palette('dark').topBar.toggleIcon)
+    .background(palette('dark').topBar.toggleBackground)
+    .borderColor(palette('dark').topBar.toggleBorder)
+    .color(palette('dark').topBar.toggleIcon)
 
   styleBuilder
     .select('.topbar__search', 'light')
-    .set('border', '0')
-    .set('background', 'transparent')
+    .border('0')
+    .background('transparent')
   styleBuilder
     .select('.topbar__search', 'dark')
-    .set('border', '0')
-    .set('background', 'transparent')
+    .border('0')
+    .background('transparent')
 
   const baseSearchBefore = (theme: string) =>
     styleBuilder
       .select('.topbar__search::before', theme)
-      .set('content', '""')
-      .set('width', '16px')
-      .set('height', '16px')
-      .set('border', '2px solid currentColor')
-      .set('border-radius', '50%')
-      .set('position', 'absolute')
-      .set('top', '11px')
-      .set('left', '11px')
+      .content('""')
+      .width('16px')
+      .height('16px')
+      .border('2px solid currentColor')
+      .borderRadius('50%')
+      .position('absolute')
+      .top('11px')
+      .left('11px')
 
   baseSearchBefore('light')
   baseSearchBefore('dark')
@@ -135,14 +135,14 @@ function registerTopBarStyles() {
   const baseSearchAfter = (theme: string) =>
     styleBuilder
       .select('.topbar__search::after', theme)
-      .set('content', '""')
-      .set('width', '10px')
-      .set('height', '2px')
-      .set('background', 'currentColor')
-      .set('position', 'absolute')
-      .set('right', '9px')
-      .set('bottom', '12px')
-      .set('transform', 'rotate(45deg)')
+      .content('""')
+      .width('10px')
+      .height('2px')
+      .background('currentColor')
+      .position('absolute')
+      .right('9px')
+      .bottom('12px')
+      .transform('rotate(45deg)')
 
   baseSearchAfter('light')
   baseSearchAfter('dark')
@@ -150,15 +150,15 @@ function registerTopBarStyles() {
   const baseToggleBefore = (theme: string) =>
     styleBuilder
       .select('.topbar__toggle::before', theme)
-      .set('content', '""')
-      .set('width', '18px')
-      .set('height', '2px')
-      .set('background', 'currentColor')
-      .set('position', 'absolute')
-      .set('top', '14px')
-      .set('left', '12px')
-      .set('transition', 'transform 200ms ease, top 200ms ease')
-      .set('box-shadow', '0 6px 0 0 currentColor')
+      .content('""')
+      .width('18px')
+      .height('2px')
+      .background('currentColor')
+      .position('absolute')
+      .top('14px')
+      .left('12px')
+      .transition('transform 200ms ease, top 200ms ease')
+      .boxShadow('0 6px 0 0 currentColor')
 
   baseToggleBefore('light')
   baseToggleBefore('dark')
@@ -166,43 +166,43 @@ function registerTopBarStyles() {
   const baseToggleAfter = (theme: string) =>
     styleBuilder
       .select('.topbar__toggle::after', theme)
-      .set('content', '""')
-      .set('width', '18px')
-      .set('height', '2px')
-      .set('background', 'currentColor')
-      .set('position', 'absolute')
-      .set('top', '26px')
-      .set('left', '12px')
-      .set('transition', 'transform 200ms ease, top 200ms ease')
+      .content('""')
+      .width('18px')
+      .height('2px')
+      .background('currentColor')
+      .position('absolute')
+      .top('26px')
+      .left('12px')
+      .transition('transform 200ms ease, top 200ms ease')
 
   baseToggleAfter('light')
   baseToggleAfter('dark')
 
-  styleBuilder.select('.doc-nav-toggle', 'light').set('display', 'none')
-  styleBuilder.select('.doc-nav-toggle', 'dark').set('display', 'none')
+  styleBuilder.select('.doc-nav-toggle', 'light').display('none')
+  styleBuilder.select('.doc-nav-toggle', 'dark').display('none')
 
   styleBuilder
     .select(
       '.doc-nav-toggle:checked ~ .topbar .topbar__toggle::before',
       'light',
     )
-    .set('top', '20px')
-    .set('transform', 'rotate(45deg)')
-    .set('box-shadow', 'none')
+    .top('20px')
+    .transform('rotate(45deg)')
+    .boxShadow('none')
   styleBuilder
     .select('.doc-nav-toggle:checked ~ .topbar .topbar__toggle::before', 'dark')
-    .set('top', '20px')
-    .set('transform', 'rotate(45deg)')
-    .set('box-shadow', 'none')
+    .top('20px')
+    .transform('rotate(45deg)')
+    .boxShadow('none')
 
   styleBuilder
     .select('.doc-nav-toggle:checked ~ .topbar .topbar__toggle::after', 'light')
-    .set('top', '20px')
-    .set('transform', 'rotate(-45deg)')
+    .top('20px')
+    .transform('rotate(-45deg)')
   styleBuilder
     .select('.doc-nav-toggle:checked ~ .topbar .topbar__toggle::after', 'dark')
-    .set('top', '20px')
-    .set('transform', 'rotate(-45deg)')
+    .top('20px')
+    .transform('rotate(-45deg)')
 }
 
 function createTopBarComponent() {

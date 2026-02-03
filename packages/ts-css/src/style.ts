@@ -4167,18 +4167,18 @@ export class Style extends BaseStyle<Style> {
   /**
    * Shorthand that specifies the gutters between grid columns and grid rows in one declaration. Replaced by 'gap' property..
    *
-   * syntax:  `#item1 { grid-gap: 2em 1em; }`
+   * syntax:  `#item1 { gap: 2em 1em; }`
    *
    * restriction: length
    *
    * browsers: FF52,C57,S10.1,O44
    *
-   * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-gap
+   * ref: http://www.w3.org/TR/css-grid-1/#propdef-gap
    *
    * @param value -
    */
-  gridGap(value: CSSProps['gridGap']) {
-    this.set('grid-gap', value)
+  gap(value: CSSProps['gap']) {
+    this.set('gap', value)
     return this
   }
 
@@ -9959,7 +9959,7 @@ export class Style extends BaseStyle<Style> {
   /**
    * Applies a filter effect where the first filter in the list takes the element's background image as the input image..
    * 
-   * syntax:  `div { -webkit-backdrop-filter: blur(2px); }`
+   * syntax:  `div { backdrop-filter: blur(2px); }`
    * 
    * restriction: enum, url
    * 
@@ -9995,8 +9995,8 @@ export class Style extends BaseStyle<Style> {
    * ```
    * @param value -
    */
-  webkitBackdropFilter(value: CSSProps['webkitBackdropFilter']) {
-    this.set('-webkit-backdrop-filter', value)
+  backdropFilter(value: CSSProps['backdropFilter']) {
+    this.set('backdrop-filter', value)
     return this
   }
 
@@ -11911,6 +11911,16 @@ export class Style extends BaseStyle<Style> {
    */
   zoom(value: CSSProps['zoom']) {
     this.set('zoom', value)
+    return this
+  }
+
+  placeItems(value: string) {
+    this.set('place-items', value)
+    return this
+  }
+
+  inset(value: string) {
+    this.set('inset', value)
     return this
   }
 }
