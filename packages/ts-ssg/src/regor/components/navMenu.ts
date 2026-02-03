@@ -3,7 +3,7 @@ import { createComponent, html } from 'regor'
 import type { NavItem } from '../../navigation/navigation'
 import { styleBuilder } from '../../style/styles'
 import { getThemeOptions, getThemePalette } from '../../style/themeOptions'
-import type { TsSsgContext } from '../../ts-ssg-context'
+import type { TsSsgContext } from '../ts-ssg-context'
 import { resolveTsSsgContext } from '../resolveTsSsgContext'
 
 interface NavMenuProps {

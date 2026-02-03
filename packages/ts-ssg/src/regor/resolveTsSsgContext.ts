@@ -1,6 +1,6 @@
 import type { ComponentHead } from 'regor'
 
-import type { TsSsgContext } from '../ts-ssg-context'
+import type { TsSsgContext } from './ts-ssg-context'
 
 type ContextCarrier = {
   tsSsgContext?: TsSsgContext

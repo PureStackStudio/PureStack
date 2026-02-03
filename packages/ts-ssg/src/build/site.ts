@@ -8,9 +8,9 @@ import {
   type NavigationConfig,
   type NavigationTree,
 } from '../navigation/navigation'
-import type { PageTemplateMap } from '../page-templates'
 import { initBuiltinComponents } from '../regor/initBuiltinComponents'
 import { setThemeOptions } from '../style/themeOptions'
+import type { PageTemplateMap } from '../templates/page-templates'
 import { copyStaticAssets } from './assets'
 import { prepareOutDir } from './io'
 import {

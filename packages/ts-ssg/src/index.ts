@@ -35,15 +35,8 @@ export {
   resolveNavigationConfig,
   resolvePageNavigation,
 } from './navigation/navigation'
-export {
-  defaultTemplates,
-  type PageTemplate,
-  type PageTemplateInput,
-  type PageTemplateMap,
-  type PageTemplatePage,
-  resolvePageTemplate,
-} from './page-templates'
 export { componentRegistry } from './regor/registry'
+export type { TsSsgContext } from './regor/ts-ssg-context'
 export { styleBuilder } from './style/styles'
 export {
   DEFAULT_THEME_OPTIONS,
@@ -55,7 +48,14 @@ export {
   type ThemeOptionsInput,
   type ThemePalette,
 } from './style/themeOptions'
-export type { TsSsgContext } from './ts-ssg-context'
+export {
+  defaultTemplates,
+  type PageTemplate,
+  type PageTemplateInput,
+  type PageTemplateMap,
+  type PageTemplatePage,
+  resolvePageTemplate,
+} from './templates/page-templates'
 
 const entryUrl = process.argv[1]
 const isDirectRun =

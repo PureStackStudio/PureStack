@@ -2,7 +2,7 @@ import { parseHTML } from 'linkedom'
 import type { Component } from 'regor'
 import { createApp } from 'regor'
 
-import type { TsSsgContext } from '../ts-ssg-context'
+import type { TsSsgContext } from './ts-ssg-context'
 import { registerDomGlobals } from './registerDomGlobals'
 import { componentRegistry } from './registry'
 

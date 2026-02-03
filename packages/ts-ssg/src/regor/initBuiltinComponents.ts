@@ -1,9 +1,9 @@
 import { registerNormalizeStyles } from '../style/normalize.css'
+import { registerDocLayoutStyles } from '../templates/docLayoutStyles'
 import { createCardComponents } from './components/cardGrid'
 import { createNavigationComponents } from './components/navMenu'
 import { createThemeSwitcherComponents } from './components/themeSwitcher'
 import { createTopBarComponents } from './components/topBar'
-import { registerDocLayoutStyles } from './docLayoutStyles'
 import { ensureDomGlobals } from './registerDomGlobals'
 import { componentRegistry } from './registry'
 

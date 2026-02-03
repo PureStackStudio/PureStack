@@ -11,13 +11,16 @@ import {
   type PageNavigation,
   resolvePageNavigation,
 } from '../navigation/navigation'
-import type { PageTemplateMap, PageTemplatePage } from '../page-templates'
 import { renderApp } from '../regor/renderApp'
-import { renderPage } from '../renderer'
 import { resolveThemeStyleLinks } from '../style/themes'
+import type {
+  PageTemplateMap,
+  PageTemplatePage,
+} from '../templates/page-templates'
 import { resolveHeadConfig } from './head-config'
 import { readSource, writeHtml } from './io'
 import { resolveOutPath, resolveRouteInfo } from './out-path'
+import { renderPage } from './renderer'
 
 export interface BuildContext {
   config: SiteConfig
