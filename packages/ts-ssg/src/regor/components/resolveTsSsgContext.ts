@@ -12,11 +12,11 @@ function hasTsSsgContext(value: unknown): value is ContextCarrier {
 
 export function resolveTsSsgContext(
   head?: Pick<ComponentHead, 'ctx'>,
-): TsSsgContext | undefined {
+): TsSsgContext {
   const stack = head?.ctx ?? []
   for (const ctx of stack) {
     if (!hasTsSsgContext(ctx)) continue
     if (ctx.tsSsgContext) return ctx.tsSsgContext
   }
-  return undefined
+  throw new Error('tsSsgContext is not available in the Regor context stack.')
 }

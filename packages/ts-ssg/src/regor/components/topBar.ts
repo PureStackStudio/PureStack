@@ -1,15 +1,10 @@
-import type { ComponentHead } from 'regor'
 import { createComponent, html } from 'regor'
 
 import { styleBuilder } from '../../style/styles'
 import type { TsSsgContext } from '../../ts-ssg-context'
 import { resolveTsSsgContext } from './resolveTsSsgContext'
 
-function resolveContext(head?: ComponentHead): TsSsgContext | undefined {
-  return resolveTsSsgContext(head)
-}
-
-function resolveBrandLabel(context?: TsSsgContext): string {
+function resolveBrandLabel(context: TsSsgContext): string {
   const label = context?.site?.siteTitle
   if (typeof label !== 'string') return 'Docs'
   const trimmed = label.trim()
@@ -208,12 +203,9 @@ function registerTopBarStyles() {
 
 function createTopBarComponent() {
   return createComponent(topBarTemplate, {
-    context: (head) => {
-      const context = resolveContext(head)
-      return {
-        brandLabel: resolveBrandLabel(context),
-      }
-    },
+    context: (head) => ({
+      brandLabel: resolveBrandLabel(resolveTsSsgContext(head)),
+    }),
   })
 }
 
