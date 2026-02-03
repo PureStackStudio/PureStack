@@ -7,6 +7,8 @@ const themeSwitcherTemplate = html`<button
   type="button"
   aria-label="Switch theme"
 >
+  <span class="theme-switcher__track" aria-hidden="true"></span>
+  <span class="theme-switcher__thumb" aria-hidden="true"></span>
   <span class="theme-switcher__icon theme-switcher__icon--sun" aria-hidden="true">
     <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
       <circle cx="12" cy="12" r="4"></circle>
@@ -20,7 +22,6 @@ const themeSwitcherTemplate = html`<button
       <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
     </svg>
   </span>
-  <span class="theme-switcher__divider" aria-hidden="true"></span>
   <span
     class="theme-switcher__icon theme-switcher__icon--moon"
     aria-hidden="true"
@@ -39,30 +40,34 @@ function registerThemeSwitcherStyles() {
       .select('.theme-switcher', theme)
       .set('display', 'inline-flex')
       .set('align-items', 'center')
-      .set('gap', '8px')
-      .set('height', '40px')
-      .set('padding', '0 12px')
+      .set('justify-content', 'space-between')
+      .set('gap', '10px')
+      .set('height', '42px')
+      .set('min-width', '108px')
+      .set('padding', '0 14px')
       .set('border-radius', '999px')
       .set('border', '1px solid transparent')
       .set('background', 'transparent')
       .set('cursor', 'pointer')
       .set('font-size', '0')
+      .set('position', 'relative')
+      .set('overflow', 'hidden')
 
   baseSwitcher('light')
-    .set('background', '#ffffff')
-    .set('border-color', '#d8deee')
+    .set('background', '#fdfdff')
+    .set('border-color', '#d7dded')
     .set('color', '#3c4250')
   baseSwitcher('dark')
-    .set('background', '#1f2430')
+    .set('background', '#161b24')
     .set('border-color', '#2d3340')
     .set('color', '#d8deee')
 
   styleBuilder
     .select('.theme-switcher:hover', 'light')
-    .set('background', '#f1f4fb')
+    .set('background', '#f4f6ff')
   styleBuilder
     .select('.theme-switcher:hover', 'dark')
-    .set('background', '#252b38')
+    .set('background', '#1d2431')
 
   styleBuilder
     .select('.theme-switcher:focus-visible', 'light')
@@ -73,6 +78,46 @@ function registerThemeSwitcherStyles() {
     .set('outline', '2px solid #91a7ff')
     .set('outline-offset', '2px')
 
+  const baseTrack = (theme: string) =>
+    styleBuilder
+      .select('.theme-switcher__track', theme)
+      .set('position', 'absolute')
+      .set('inset', '4px')
+      .set('border-radius', '999px')
+      .set('background', 'linear-gradient(120deg, rgba(255, 226, 160, 0.9), rgba(246, 181, 92, 0.9))')
+      .set('opacity', '0.7')
+      .set('transition', 'opacity 180ms ease, transform 220ms ease')
+
+  baseTrack('light')
+  baseTrack('dark')
+
+  styleBuilder
+    .select('.theme-switcher__track', 'dark')
+    .set('background', 'linear-gradient(120deg, rgba(88, 111, 255, 0.85), rgba(49, 62, 110, 0.9))')
+
+  const baseThumb = (theme: string) =>
+    styleBuilder
+      .select('.theme-switcher__thumb', theme)
+      .set('position', 'absolute')
+      .set('top', '6px')
+      .set('left', '6px')
+      .set('width', '30px')
+      .set('height', '30px')
+      .set('border-radius', '50%')
+      .set('background', 'rgba(255, 255, 255, 0.85)')
+      .set('box-shadow', '0 6px 16px rgba(20, 24, 38, 0.25)')
+      .set('backdrop-filter', 'blur(8px)')
+      .set('transform', 'translateX(0)')
+      .set('transition', 'transform 220ms ease, background 180ms ease')
+
+  baseThumb('light')
+  baseThumb('dark')
+
+  styleBuilder
+    .select('.theme-switcher__thumb', 'dark')
+    .set('background', 'rgba(25, 30, 44, 0.9)')
+    .set('box-shadow', '0 8px 18px rgba(9, 12, 22, 0.5)')
+
   const baseIcon = (theme: string) =>
     styleBuilder
       .select('.theme-switcher__icon', theme)
@@ -81,6 +126,8 @@ function registerThemeSwitcherStyles() {
       .set('justify-content', 'center')
       .set('width', '18px')
       .set('height', '18px')
+      .set('position', 'relative')
+      .set('z-index', '2')
 
   baseIcon('light')
   baseIcon('dark')
@@ -108,16 +155,39 @@ function registerThemeSwitcherStyles() {
     .set('fill', 'currentColor')
     .set('stroke', 'none')
 
-  const baseDivider = (theme: string) =>
-    styleBuilder
-      .select('.theme-switcher__divider', theme)
-      .set('width', '1px')
-      .set('height', '18px')
-      .set('background', 'currentColor')
-      .set('opacity', '0.3')
+  styleBuilder
+    .select('.theme-switcher[data-theme="light"] .theme-switcher__icon--moon', 'light')
+    .set('opacity', '0.35')
+    .set('transform', 'scale(0.92)')
+  styleBuilder
+    .select('.theme-switcher[data-theme="light"] .theme-switcher__icon--sun', 'light')
+    .set('opacity', '1')
+    .set('transform', 'scale(1)')
+  styleBuilder
+    .select('.theme-switcher[data-theme="dark"] .theme-switcher__icon--sun', 'dark')
+    .set('opacity', '0.35')
+    .set('transform', 'scale(0.92)')
+  styleBuilder
+    .select('.theme-switcher[data-theme="dark"] .theme-switcher__icon--moon', 'dark')
+    .set('opacity', '1')
+    .set('transform', 'scale(1)')
 
-  baseDivider('light')
-  baseDivider('dark')
+  styleBuilder
+    .select('.theme-switcher__icon', 'light')
+    .set('transition', 'transform 160ms ease, opacity 160ms ease')
+  styleBuilder
+    .select('.theme-switcher__icon', 'dark')
+    .set('transition', 'transform 160ms ease, opacity 160ms ease')
+
+  styleBuilder
+    .select('.theme-switcher[data-theme="dark"] .theme-switcher__thumb', 'dark')
+    .set('transform', 'translateX(54px)')
+  styleBuilder
+    .select('.theme-switcher[data-theme="dark"] .theme-switcher__track', 'dark')
+    .set('opacity', '0.85')
+  styleBuilder
+    .select('.theme-switcher[data-theme="light"] .theme-switcher__track', 'light')
+    .set('opacity', '0.85')
 }
 
 function createThemeSwitcherComponent() {
