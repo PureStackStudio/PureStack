@@ -27,6 +27,12 @@ export interface DevServerHandle {
 const DEFAULT_HOST = '127.0.0.1'
 const DEFAULT_PORT = 4173
 const LIVE_RELOAD_PATH = '/__ts-ssg/events'
+const HEALTH_PATH = '/__ts-ssg/health'
+const LIVE_RELOAD_HEARTBEAT_MS = 25000
+const REQUEST_TIMEOUT_MS = 30000
+const SLOW_REQUEST_MS = 1000
+const LIVE_RELOAD_MAX_CLIENTS = 8
+const LIVE_RELOAD_MAX_PER_ADDRESS = 2
 
 export async function startDevServer(
   input: DevServerInput = {},
@@ -34,6 +40,13 @@ export async function startDevServer(
   const config = resolveSiteConfig(input)
   const logger = await createLogger()
   const log = getLogger()
+  const debug =
+    process.env.TS_SSG_DEV_DEBUG === '1' ||
+    process.env.TS_SSG_DEV_DEBUG === 'true'
+  const debugLog = (message: string, data?: Record<string, unknown>) => {
+    if (!debug) return
+    log.info(message, data)
+  }
 
   const host = input.host ?? DEFAULT_HOST
   const port = input.port ?? DEFAULT_PORT
@@ -41,10 +54,22 @@ export async function startDevServer(
   const liveReload = input.liveReload ?? true
   const incrementalEnabled = input.incremental ?? true
 
-  const clients = new Set<http.ServerResponse>()
+  const clients = new Map<
+    http.ServerResponse,
+    { createdAt: number; address?: string }
+  >()
   let startupReloadPending = true
   let initialBuildDone = false
   let watcher: { close: () => void } | undefined
+  let healthTimer: NodeJS.Timeout | undefined
+  let heartbeatTimer: NodeJS.Timeout | undefined
+  let lastRebuildStartedAt = 0
+  let lastRebuildEndedAt = 0
+  let lastRebuildReason = 'initial build'
+  let lastRebuildError: string | undefined
+  let activeRequests = 0
+  let activeConnections = 0
+  let requestCounter = 0
 
   const requestState = {
     inFlight: false,
@@ -60,6 +85,12 @@ export async function startDevServer(
     if (requestState.timer) clearTimeout(requestState.timer)
     requestState.timer = setTimeout(() => {
       requestState.timer = undefined
+      debugLog('rebuild scheduled', {
+        reason: requestState.reason,
+        pending: requestState.pending,
+        inFlight: requestState.inFlight,
+        queuedPaths: requestState.changedPaths.size,
+      })
       void requestRebuild()
     }, 120)
   }
@@ -72,12 +103,16 @@ export async function startDevServer(
       while (requestState.pending) {
         requestState.pending = false
         if (requestState.changedPaths.size > 0) {
+          lastRebuildReason = 'incremental changes'
           await rebuildChanged()
         } else {
+          lastRebuildReason = requestState.reason
           await rebuild(requestState.reason)
         }
       }
     } catch (error) {
+      lastRebuildError =
+        error instanceof Error ? error.message : String(error)
       logError(log, error, 'rebuild failed')
     } finally {
       requestState.inFlight = false
@@ -89,6 +124,9 @@ export async function startDevServer(
     : createFullRebuildBuilder(input, config)
 
   const rebuild = async (reason: string) => {
+    lastRebuildStartedAt = Date.now()
+    lastRebuildError = undefined
+    debugLog('rebuild started', { reason })
     try {
       await incremental.buildAll(reason)
       if (!initialBuildDone) {
@@ -100,11 +138,24 @@ export async function startDevServer(
       }
       if (liveReload) broadcast(clients, 'reload', reason)
     } catch (error) {
+      lastRebuildError =
+        error instanceof Error ? error.message : String(error)
       logError(log, error, 'build failed')
+    } finally {
+      lastRebuildEndedAt = Date.now()
+      debugLog('rebuild finished', {
+        reason,
+        durationMs: lastRebuildEndedAt - lastRebuildStartedAt,
+      })
     }
   }
 
   const rebuildChanged = async () => {
+    lastRebuildStartedAt = Date.now()
+    lastRebuildError = undefined
+    debugLog('incremental rebuild started', {
+      changedPaths: requestState.changedPaths.size,
+    })
     const paths = [...requestState.changedPaths]
     requestState.changedPaths.clear()
     if (paths.length === 0) {
@@ -140,11 +191,53 @@ export async function startDevServer(
     if (touched && liveReload) {
       broadcast(clients, 'reload', requestState.reason)
     }
+    lastRebuildEndedAt = Date.now()
+    debugLog('incremental rebuild finished', {
+      durationMs: lastRebuildEndedAt - lastRebuildStartedAt,
+      touched,
+      requiresFull,
+    })
   }
 
   await rebuild('initial build')
 
   const server = http.createServer(async (req, res) => {
+    const requestId = (requestCounter += 1)
+    const requestStartedAt = Date.now()
+    let requestPathname = ''
+    activeRequests += 1
+    res.on('finish', () => {
+      activeRequests = Math.max(0, activeRequests - 1)
+      const durationMs = Date.now() - requestStartedAt
+      if (
+        debug &&
+        requestPathname !== LIVE_RELOAD_PATH &&
+        durationMs >= SLOW_REQUEST_MS
+      ) {
+        debugLog('slow request finished', {
+          id: requestId,
+          method: req.method,
+          url: req.url,
+          durationMs,
+        })
+      }
+    })
+    res.on('close', () => {
+      activeRequests = Math.max(0, activeRequests - 1)
+      const durationMs = Date.now() - requestStartedAt
+      if (
+        debug &&
+        requestPathname !== LIVE_RELOAD_PATH &&
+        durationMs >= SLOW_REQUEST_MS
+      ) {
+        debugLog('slow request closed', {
+          id: requestId,
+          method: req.method,
+          url: req.url,
+          durationMs,
+        })
+      }
+    })
     if (!req.url) {
       res.writeHead(400)
       res.end()
@@ -152,27 +245,90 @@ export async function startDevServer(
     }
 
     const { pathname } = new URL(req.url, `http://${host}:${port}`)
+    requestPathname = pathname
 
-    if (liveReload && pathname === LIVE_RELOAD_PATH) {
+    if (pathname === HEALTH_PATH) {
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
+      res.end(
+        JSON.stringify(
+          {
+            inFlight: requestState.inFlight,
+            pending: requestState.pending,
+            queuedPaths: requestState.changedPaths.size,
+            clients: clients.size,
+            activeRequests,
+            activeConnections,
+            lastRebuildReason,
+            lastRebuildStartedAt,
+            lastRebuildEndedAt,
+            lastRebuildError,
+          },
+          null,
+          2,
+        ),
+      )
+      return
+    }
+
+  if (liveReload && pathname === LIVE_RELOAD_PATH) {
+      req.setTimeout(0)
+      res.setTimeout(0)
+      res.socket?.setTimeout(0)
       res.writeHead(200, {
         'Content-Type': 'text/event-stream',
         'Cache-Control': 'no-cache',
         Connection: 'keep-alive',
+        'X-Accel-Buffering': 'no',
       })
       res.write('event: ping\ndata: ready\n\n')
-      clients.add(res)
+      pruneLiveReloadClients(clients)
+      if (clients.size >= LIVE_RELOAD_MAX_CLIENTS) {
+        closeOldestLiveReloadClients(
+          clients,
+          clients.size - LIVE_RELOAD_MAX_CLIENTS + 1,
+        )
+      }
+      const address = req.socket.remoteAddress
+      if (address) {
+        closeLiveReloadClientsForAddress(
+          clients,
+          address,
+          LIVE_RELOAD_MAX_PER_ADDRESS - 1,
+        )
+      }
+      clients.set(res, { createdAt: Date.now(), address })
+      debugLog('live reload client connected', {
+        clients: clients.size,
+        address,
+      })
       if (startupReloadPending && initialBuildDone) {
         startupReloadPending = false
         broadcast(clients, 'reload', 'server restart')
       }
       req.on('close', () => {
         clients.delete(res)
+        debugLog('live reload client closed', {
+          clients: clients.size,
+        })
       })
       res.on('error', () => {
         clients.delete(res)
+        debugLog('live reload client error', {
+          clients: clients.size,
+        })
       })
       return
     }
+
+    res.setTimeout(REQUEST_TIMEOUT_MS, () => {
+      debugLog('request timeout', {
+        id: requestId,
+        method: req.method,
+        url: req.url,
+        timeoutMs: REQUEST_TIMEOUT_MS,
+      })
+      res.destroy()
+    })
 
     const fileResult = await resolveStaticFile(config.outDir, pathname)
     if (!fileResult) {
@@ -190,6 +346,7 @@ export async function startDevServer(
           : html
         res.writeHead(200, {
           'Content-Type': 'text/html; charset=utf-8',
+          Connection: 'close',
         })
         res.end(injected)
         return
@@ -197,11 +354,33 @@ export async function startDevServer(
 
       const contentType = contentTypeForExt(ext)
       if (contentType) {
-        res.writeHead(200, { 'Content-Type': contentType })
+        res.writeHead(200, {
+          'Content-Type': contentType,
+          Connection: 'close',
+        })
       } else {
-        res.writeHead(200)
+        res.writeHead(200, { Connection: 'close' })
       }
       const stream = fs.createReadStream(filePath)
+      let streamClosed = false
+      const closeStream = () => {
+        if (streamClosed) return
+        streamClosed = true
+        try {
+          stream.destroy()
+        } catch {
+          // ignore stream close errors
+        }
+      }
+      req.on('aborted', () => {
+        closeStream()
+      })
+      res.on('close', () => {
+        closeStream()
+      })
+      res.on('error', () => {
+        closeStream()
+      })
       stream.on('error', (error) => {
         logError(log, error, 'static stream failed')
         if (!res.headersSent) {
@@ -222,6 +401,12 @@ export async function startDevServer(
   server.on('clientError', (_error, socket) => {
     socket.end('HTTP/1.1 400 Bad Request\r\n\r\n')
   })
+  server.on('connection', (socket) => {
+    activeConnections += 1
+    socket.on('close', () => {
+      activeConnections = Math.max(0, activeConnections - 1)
+    })
+  })
   server.listen(port, host, () => {
     log.info('dev server listening', {
       url: `http://${host}:${port}/`,
@@ -241,8 +426,32 @@ export async function startDevServer(
     log.info('watching content', { contentDir: config.contentDir })
   }
 
+  if (liveReload) {
+    heartbeatTimer = setInterval(() => {
+      broadcast(clients, 'ping', 'heartbeat')
+      debugLog('live reload heartbeat', { clients: clients.size })
+    }, LIVE_RELOAD_HEARTBEAT_MS)
+  }
+
+  if (debug) {
+    healthTimer = setInterval(() => {
+      debugLog('dev server health', {
+        inFlight: requestState.inFlight,
+        pending: requestState.pending,
+        queuedPaths: requestState.changedPaths.size,
+        clients: clients.size,
+        lastRebuildReason,
+        lastRebuildStartedAt,
+        lastRebuildEndedAt,
+        lastRebuildError,
+      })
+    }, 10000)
+  }
+
   const shutdown = async () => {
     watcher?.close()
+    if (healthTimer) clearInterval(healthTimer)
+    if (heartbeatTimer) clearInterval(heartbeatTimer)
     await new Promise<void>((resolve) => server.close(() => resolve()))
     await logger.close()
   }
@@ -251,8 +460,10 @@ export async function startDevServer(
     log.info('dev server shutting down', { signal })
     void shutdown().finally(() => {
       process.exitCode = 0
-    })
-  }
+  })
+  server.keepAliveTimeout = 1000
+  server.headersTimeout = 5000
+}
 
   process.on('SIGINT', handleSignal)
   process.on('SIGTERM', handleSignal)
@@ -278,14 +489,26 @@ function createFullRebuildBuilder(
 }
 
 function broadcast(
-  clients: Set<http.ServerResponse>,
+  clients: Map<http.ServerResponse, { createdAt: number; address?: string }>,
   event: string,
   data: string,
 ) {
-  for (const client of clients) {
+  for (const client of clients.keys()) {
+    if (!isLiveReloadClientAlive(client)) {
+      clients.delete(client)
+      continue
+    }
     try {
-      client.write(`event: ${event}\n`)
-      client.write(`data: ${data}\n\n`)
+      const okEvent = client.write(`event: ${event}\n`)
+      const okData = client.write(`data: ${data}\n\n`)
+      if (!okEvent || !okData) {
+        clients.delete(client)
+        try {
+          client.end()
+        } catch {
+          // ignore secondary close errors
+        }
+      }
     } catch {
       clients.delete(client)
       try {
@@ -293,6 +516,56 @@ function broadcast(
       } catch {
         // ignore secondary close errors
       }
+    }
+  }
+}
+
+function isLiveReloadClientAlive(client: http.ServerResponse) {
+  return client.writable && !client.writableEnded && !client.destroyed
+}
+
+function pruneLiveReloadClients(
+  clients: Map<http.ServerResponse, { createdAt: number; address?: string }>,
+) {
+  for (const client of clients.keys()) {
+    if (!isLiveReloadClientAlive(client)) {
+      clients.delete(client)
+    }
+  }
+}
+
+function closeOldestLiveReloadClients(
+  clients: Map<http.ServerResponse, { createdAt: number; address?: string }>,
+  count: number,
+) {
+  const entries = [...clients.entries()].sort(
+    (left, right) => left[1].createdAt - right[1].createdAt,
+  )
+  for (const [client] of entries.slice(0, count)) {
+    clients.delete(client)
+    try {
+      client.end()
+    } catch {
+      // ignore close errors
+    }
+  }
+}
+
+function closeLiveReloadClientsForAddress(
+  clients: Map<http.ServerResponse, { createdAt: number; address?: string }>,
+  address: string,
+  keepNewest: number,
+) {
+  const entries = [...clients.entries()]
+    .filter(([, meta]) => meta.address === address)
+    .sort((left, right) => left[1].createdAt - right[1].createdAt)
+  const toClose = Math.max(0, entries.length - keepNewest)
+  for (const [client] of entries.slice(0, toClose)) {
+    clients.delete(client)
+    try {
+      client.end()
+    } catch {
+      // ignore close errors
     }
   }
 }
