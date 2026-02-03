@@ -21,7 +21,7 @@ describe('navigation', () => {
   let logger: Awaited<ReturnType<typeof createLogger>> | undefined
 
   beforeAll(async () => {
-    logger = await createLogger({ runAsWorker: false })
+    logger = await createLogger()
   })
 
   afterAll(async () => {

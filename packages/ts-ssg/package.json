@@ -34,12 +34,12 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@logpot/utils": "^1.0.6",
+    "@logpot/utils": "^1.0.7",
     "css.escape": "^1.5.1",
     "gray-matter": "^4.0.3",
     "hast-util-to-html": "^9.0.5",
     "linkedom": "^0.18.12",
-    "logpot": "^1.0.6",
+    "logpot": "^1.0.7",
     "mdast-util-to-hast": "^13.2.1",
     "prettier": "^3.8.1",
     "regor": "^1.1.5",

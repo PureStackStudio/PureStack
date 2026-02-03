@@ -66,7 +66,7 @@ async function runCli() {
       await startDevServer(cli.input)
       return
     }
-    logger = await createLogger({ runAsWorker: false })
+    logger = await createLogger()
     const log = getLogger()
     const result = await buildSite(cli.input)
     log.info('build completed', { ...result })

@@ -483,19 +483,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@logpot/printer@npm:1.0.6":
-  version: 1.0.6
-  resolution: "@logpot/printer@npm:1.0.6"
+"@logpot/printer@npm:1.0.7":
+  version: 1.0.7
+  resolution: "@logpot/printer@npm:1.0.7"
   dependencies:
-    "@logpot/utils": "npm:1.0.6"
-  checksum: 10c0/d714403736cca1d41124e29e5f714c7e258990acdcd129c5373fb7ebd2f0f57ecf44361431ec4199e06a7ba61bebf3ff13fe47f9538bbf8de69d7430755b9d30
+    "@logpot/utils": "npm:1.0.7"
+  checksum: 10c0/b931c374f6150052b2701cdff4fae35240400bcd33a82963ea60e712decbf88a894ee84d3f68d2908eb56a7349409937059c6f9fe20c126fd14f837b5fe4057d
   languageName: node
   linkType: hard
 
-"@logpot/utils@npm:1.0.6, @logpot/utils@npm:^1.0.6":
-  version: 1.0.6
-  resolution: "@logpot/utils@npm:1.0.6"
-  checksum: 10c0/b8b1544699ae163a77d06079acc64fea5765413fae713c6c44e515e6677dfa0a2462b53eb50ce32fc6d8d7e98a4a7ab6f7ea9da61635dca83840000ebfa82f94
+"@logpot/utils@npm:1.0.7, @logpot/utils@npm:^1.0.7":
+  version: 1.0.7
+  resolution: "@logpot/utils@npm:1.0.7"
+  checksum: 10c0/fdd1ac1c3d43c420538bd11475ab55e55fe791ba28d1b500408a0b4089e9fa72e051218f60c0d521765419cdef03d052c577dfdde69b057c5c222cfae8603b8a
   languageName: node
   linkType: hard
 
@@ -621,12 +621,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@purestack/ts-ssg@workspace:packages/ts-ssg"
   dependencies:
-    "@logpot/utils": "npm:^1.0.6"
+    "@logpot/utils": "npm:^1.0.7"
     css.escape: "npm:^1.5.1"
     gray-matter: "npm:^4.0.3"
     hast-util-to-html: "npm:^9.0.5"
     linkedom: "npm:^0.18.12"
-    logpot: "npm:^1.0.6"
+    logpot: "npm:^1.0.7"
     mdast-util-to-hast: "npm:^13.2.1"
     prettier: "npm:^3.8.1"
     regor: "npm:^1.1.5"
@@ -1047,12 +1047,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^25.1.0":
-  version: 25.1.0
-  resolution: "@types/node@npm:25.1.0"
+"@types/node@npm:^25.2.0":
+  version: 25.2.0
+  resolution: "@types/node@npm:25.2.0"
   dependencies:
     undici-types: "npm:~7.16.0"
-  checksum: 10c0/5f393a127dc9565e2e152514a271455d580c7095afc51302e73ffe8aac3526b64ebacc3c10dd40c93cef81a95436ef2c6a8b522930df567a3f6b189c0eef649a
+  checksum: 10c0/89559ea0de5c8c2da051b384f2cd3161012446816e05d18841838f814e57eb1865f000622e903f08d14f5242736063ed4003a4a359730fdd367e35e2122a8fce
   languageName: node
   linkType: hard
 
@@ -2851,13 +2851,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"logpot@npm:^1.0.6":
-  version: 1.0.6
-  resolution: "logpot@npm:1.0.6"
+"logpot@npm:^1.0.7":
+  version: 1.0.7
+  resolution: "logpot@npm:1.0.7"
   dependencies:
-    "@logpot/printer": "npm:1.0.6"
-    "@logpot/utils": "npm:1.0.6"
-  checksum: 10c0/464b4d5ff5d6dfffed29539cf4d9f9e08b007b7d6f1f473ccb391a5aa825c4837b3f7b6bd21f5a732d5c906be296518d2635431d30a1e42663a5487ee933cd61
+    "@logpot/printer": "npm:1.0.7"
+    "@logpot/utils": "npm:1.0.7"
+  checksum: 10c0/3e1b94ccabcfe3064f4b13b32542e4e40b4e19c5856a870151b9bacadfdf576782b2b58bed9bd37af5c65b632be0eefbad3ada9cdbd3c741ae8822cc6973508a
   languageName: node
   linkType: hard
 
@@ -3772,7 +3772,7 @@ __metadata:
     "@eslint/js": "npm:^9.39.2"
     "@stylistic/eslint-plugin": "npm:^5.7.1"
     "@types/css.escape": "npm:^1.5.2"
-    "@types/node": "npm:^25.1.0"
+    "@types/node": "npm:^25.2.0"
     esbuild: "npm:^0.27.2"
     eslint: "npm:^9.39.2"
     eslint-plugin-simple-import-sort: "npm:^12.1.1"

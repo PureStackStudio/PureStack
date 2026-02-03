@@ -9,6 +9,42 @@ function resolveContext(): TsSsgContext | undefined {
   return globalThis.tsSsgContext
 }
 
+interface NavMenuProps {
+  items?: NavItem[]
+}
+
+interface NavListProps {
+  items: NavItem[]
+}
+
+const navItemTemplate = html`<li class="${NAV_CLASS}__item">
+  <slot name="content"></slot>
+  <slot name="children"></slot>
+</li>`
+
+const navListTemplate = html`<ul class="${NAV_CLASS}__list">
+  <nav-item r-for="item in items">
+    abc
+    <template #content>
+      <a r-if="item.url" :href="item.url">{{ item.title }}</a>
+      <span r-else>{{ item.title }}</span>
+    </template>
+    <template #children>
+      <nav-list
+        r-if="item.children && item.children.length > 0"
+        :items="item.children"
+      ></nav-list>
+    </template>
+  </nav-item>
+</ul>`
+
+const navMenuTemplate = html`<nav
+  class="${NAV_CLASS}"
+  aria-label="Site navigation"
+>
+  <nav-list :items="items"></nav-list>
+</nav>`
+
 function resolveNavItems(): NavItem[] {
   const context = resolveContext()
   const items = context?.navigation?.items ?? []
@@ -16,46 +52,37 @@ function resolveNavItems(): NavItem[] {
   return context?.navigation?.global ?? []
 }
 
-function buildNavMarkup(items: NavItem[]): string {
-  return `<nav class="${NAV_CLASS}" aria-label="Site navigation">${renderList(
-    items,
-  )}</nav>`
+function createNavItemComponent() {
+  return createComponent<Record<string, never>>(navItemTemplate, [])
 }
 
-function renderList(items: NavItem[]): string {
-  const children = items
-    .map((item) => {
-      const label = escapeHtml(item.title)
-      const link = item.url
-        ? `<a href="${escapeHtml(item.url)}">${label}</a>`
-        : `<span>${label}</span>`
-      const nested =
-        item.children && item.children.length > 0
-          ? renderList(item.children)
-          : ''
-      return `<li class="${NAV_CLASS}__item">${link}${nested}</li>`
-    })
-    .join('')
-  return `<ul class="${NAV_CLASS}__list">${children}</ul>`
+function createNavListComponent() {
+  return createComponent<NavListProps>(navListTemplate, {
+    context: () => {
+      return {
+        items: resolveContext()?.navigation?.items ?? [],
+      }
+    },
+  })
 }
 
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
-}
-
-function createNavigationComponent() {
-  const items = resolveNavItems()
-  const markup = buildNavMarkup(items)
-  const template = html`${markup}`
-  return createComponent<Record<string, never>>(template, [])
+function createNavMenuComponent() {
+  return createComponent<NavMenuProps>(navMenuTemplate, {
+    props: ['items'],
+    context: (head) => ({
+      items: head.props.items ?? resolveNavItems(),
+    }),
+  })
 }
 
 export function createNavigationComponents() {
-  const component = createNavigationComponent()
-  return { navigation: component, navMenu: component }
+  const navItem = createNavItemComponent()
+  const navList = createNavListComponent()
+  const navMenu = createNavMenuComponent()
+  return {
+    navItem,
+    navList,
+    navMenu,
+    navigation: navMenu,
+  }
 }

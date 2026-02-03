@@ -33,7 +33,7 @@ describe('incremental builder', () => {
   let logger: Awaited<ReturnType<typeof createLogger>> | undefined
 
   beforeAll(async () => {
-    logger = await createLogger({ runAsWorker: false })
+    logger = await createLogger()
   })
 
   afterAll(async () => {
@@ -77,7 +77,9 @@ describe('incremental builder', () => {
         styleHref: '/site.css',
       })
 
-      const result = await builder.applyChange(path.join(contentDir, 'index.md'))
+      const result = await builder.applyChange(
+        path.join(contentDir, 'index.md'),
+      )
       expect(result.deletedPages).toBe(1)
       expect(await fileExists(outPath)).toBe(false)
 

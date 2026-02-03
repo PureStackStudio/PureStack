@@ -31,7 +31,7 @@ export async function startDevServer(
   input: DevServerInput = {},
 ): Promise<DevServerHandle> {
   const config = resolveSiteConfig(input)
-  const logger = await createLogger({ runAsWorker: false })
+  const logger = await createLogger()
   const log = getLogger()
 
   const host = input.host ?? DEFAULT_HOST
