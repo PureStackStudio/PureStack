@@ -48,7 +48,8 @@ const navMenuTemplate = html`<nav
 function resolveNavItems(): NavItem[] {
   const context = resolveContext()
   const items = context?.navigation?.items ?? []
-  if (items.length > 0) return items
+  if (items.length > 0)
+    return [...items, ...(context?.navigation?.global ?? [])]
   return context?.navigation?.global ?? []
 }
 
