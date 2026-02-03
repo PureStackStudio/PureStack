@@ -51,10 +51,9 @@ export {
   getThemePalette,
   resolveThemeOptions,
   setThemeOptions,
-  type ThemeColorPalette,
-  type ThemeColorToken,
   type ThemeOptions,
   type ThemeOptionsInput,
+  type ThemePalette,
 } from './style/themeOptions'
 export type { TsSsgContext } from './ts-ssg-context'
 

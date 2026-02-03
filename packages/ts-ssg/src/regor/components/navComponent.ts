@@ -153,13 +153,13 @@ function registerNavStyles() {
       .set('max-height', '100%')
 
   baseMenu('light')
-    .set('background', palette('light').navBackground)
-    .set('border-color', palette('light').navBorder)
-    .set('color', palette('light').panelText)
+    .set('background', palette('light').nav.background)
+    .set('border-color', palette('light').nav.border)
+    .set('color', palette('light').panel.text)
   baseMenu('dark')
-    .set('background', palette('dark').navBackground)
-    .set('border-color', palette('dark').navBorder)
-    .set('color', palette('dark').panelText)
+    .set('background', palette('dark').nav.background)
+    .set('border-color', palette('dark').nav.border)
+    .set('color', palette('dark').panel.text)
 
   const baseList = (theme: string) =>
     styleBuilder
@@ -180,8 +180,14 @@ function registerNavStyles() {
       .set('padding-left', '12px')
       .set('border-left', '1px solid transparent')
 
-  nestedList('light').set('border-left-color', palette('light').navNestedBorder)
-  nestedList('dark').set('border-left-color', palette('dark').navNestedBorder)
+  nestedList('light').set(
+    'border-left-color',
+    palette('light').nav.nestedBorder,
+  )
+  nestedList('dark').set(
+    'border-left-color',
+    palette('dark').nav.nestedBorder,
+  )
 
   const baseItem = (theme: string) =>
     styleBuilder
@@ -202,32 +208,32 @@ function registerNavStyles() {
       .set('font-weight', 600)
       .set('transition', 'background 160ms ease, color 160ms ease')
 
-  baseLink('light').set('color', palette('light').navText)
-  baseLink('dark').set('color', palette('dark').navText)
+  baseLink('light').set('color', palette('light').nav.text)
+  baseLink('dark').set('color', palette('dark').nav.text)
 
   styleBuilder
     .select('.nav__link:hover', 'light')
-    .set('background', palette('light').navHoverBackground)
+    .set('background', palette('light').nav.hoverBackground)
   styleBuilder
     .select('.nav__link:hover', 'dark')
-    .set('background', palette('dark').navHoverBackground)
+    .set('background', palette('dark').nav.hoverBackground)
 
   styleBuilder
     .select('.nav__link--active', 'light')
-    .set('background', palette('light').navActiveBackground)
-    .set('color', palette('light').navActiveText)
+    .set('background', palette('light').nav.activeBackground)
+    .set('color', palette('light').nav.activeText)
   styleBuilder
     .select('.nav__link--active', 'dark')
-    .set('background', palette('dark').navActiveBackground)
-    .set('color', palette('dark').navActiveText)
+    .set('background', palette('dark').nav.activeBackground)
+    .set('color', palette('dark').nav.activeText)
 
   styleBuilder
     .select('.nav__link:focus-visible', 'light')
-    .set('outline', `2px solid ${palette('light').navFocusRing}`)
+    .set('outline', `2px solid ${palette('light').nav.focusRing}`)
     .set('outline-offset', '2px')
   styleBuilder
     .select('.nav__link:focus-visible', 'dark')
-    .set('outline', `2px solid ${palette('dark').navFocusRing}`)
+    .set('outline', `2px solid ${palette('dark').nav.focusRing}`)
     .set('outline-offset', '2px')
 
   const baseText = (theme: string) =>
@@ -238,8 +244,8 @@ function registerNavStyles() {
       .set('border-radius', themeOptions.radii.md)
       .set('font-weight', 600)
 
-  baseText('light').set('color', palette('light').navTextMuted)
-  baseText('dark').set('color', palette('dark').navTextMuted)
+  baseText('light').set('color', palette('light').nav.textMuted)
+  baseText('dark').set('color', palette('dark').nav.textMuted)
 
   const baseLeaf = (theme: string) =>
     styleBuilder.select('.nav__leaf', theme).set('display', 'block')
@@ -267,33 +273,33 @@ function registerNavStyles() {
 
   styleBuilder
     .select('.nav__summary:hover', 'light')
-    .set('background', palette('light').navSummaryHoverBackground)
+    .set('background', palette('light').nav.summaryHoverBackground)
   styleBuilder
     .select('.nav__summary:hover', 'dark')
-    .set('background', palette('dark').navSummaryHoverBackground)
+    .set('background', palette('dark').nav.summaryHoverBackground)
 
   styleBuilder
     .select('.nav__summary:focus-visible', 'light')
-    .set('outline', `2px solid ${palette('light').navFocusRing}`)
+    .set('outline', `2px solid ${palette('light').nav.focusRing}`)
     .set('outline-offset', '2px')
   styleBuilder
     .select('.nav__summary:focus-visible', 'dark')
-    .set('outline', `2px solid ${palette('dark').navFocusRing}`)
+    .set('outline', `2px solid ${palette('dark').nav.focusRing}`)
     .set('outline-offset', '2px')
 
   styleBuilder
     .select('.nav__summary--active', 'light')
-    .set('background', palette('light').navActiveBackground)
+    .set('background', palette('light').nav.activeBackground)
   styleBuilder
     .select('.nav__summary--active', 'dark')
-    .set('background', palette('dark').navActiveBackground)
+    .set('background', palette('dark').nav.activeBackground)
 
   styleBuilder
     .select('.nav__summary--active .nav__text', 'light')
-    .set('color', palette('light').navActiveText)
+    .set('color', palette('light').nav.activeText)
   styleBuilder
     .select('.nav__summary--active .nav__text', 'dark')
-    .set('color', palette('dark').navActiveText)
+    .set('color', palette('dark').nav.activeText)
 
   styleBuilder
     .select('.nav__summary-content', 'light')
@@ -318,8 +324,8 @@ function registerNavStyles() {
       .set('transform', 'rotate(-45deg)')
       .set('transition', 'transform 160ms ease')
 
-  baseChevron('light').set('color', palette('light').navChevron)
-  baseChevron('dark').set('color', palette('dark').navChevron)
+  baseChevron('light').set('color', palette('light').nav.chevron)
+  baseChevron('dark').set('color', palette('dark').nav.chevron)
 
   styleBuilder
     .select('.nav__group[open] > .nav__summary .nav__chevron', 'light')
@@ -348,11 +354,11 @@ function registerNavStyles() {
       .set('text-transform', 'uppercase')
 
   baseBadge('light')
-    .set('background', palette('light').navBadgeBackground)
-    .set('color', palette('light').navBadgeText)
+    .set('background', palette('light').nav.badgeBackground)
+    .set('color', palette('light').nav.badgeText)
   baseBadge('dark')
-    .set('background', palette('dark').navBadgeBackground)
-    .set('color', palette('dark').navBadgeText)
+    .set('background', palette('dark').nav.badgeBackground)
+    .set('color', palette('dark').nav.badgeText)
 }
 
 function createNavItemComponent() {

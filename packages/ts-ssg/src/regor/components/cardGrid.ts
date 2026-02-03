@@ -24,8 +24,14 @@ function registerCardGridStyles() {
       .set('padding', '24px')
       .set('border-radius', themeOptions.radii.md)
 
-  baseGrid('light').set('border', `1px solid ${palette('light').cardGridBorder}`)
-  baseGrid('dark').set('border', `1px solid ${palette('dark').cardGridBorder}`)
+  baseGrid('light').set(
+    'border',
+    `1px solid ${palette('light').cardGrid.border}`,
+  )
+  baseGrid('dark').set(
+    'border',
+    `1px solid ${palette('dark').cardGrid.border}`,
+  )
 
   const baseTitle = (theme: string) =>
     styleBuilder
@@ -33,8 +39,8 @@ function registerCardGridStyles() {
       .set('font-size', '18px')
       .set('font-weight', 600)
 
-  baseTitle('light').set('color', palette('light').cardGridTitle)
-  baseTitle('dark').set('color', palette('dark').cardGridTitle)
+  baseTitle('light').set('color', palette('light').cardGrid.title)
+  baseTitle('dark').set('color', palette('dark').cardGrid.title)
 }
 
 function createCardGridComponent() {
@@ -64,8 +70,11 @@ function registerCardStyles() {
       .set('padding', '16px')
       .set('border-radius', themeOptions.radii.md)
 
-  baseCard('light').set('border', `1px solid ${palette('light').cardBorder}`)
-  baseCard('dark').set('border', `1px solid ${palette('dark').cardBorder}`)
+  baseCard('light').set(
+    'border',
+    `1px solid ${palette('light').card.border}`,
+  )
+  baseCard('dark').set('border', `1px solid ${palette('dark').card.border}`)
 
   const baseIcon = (theme: string) =>
     styleBuilder.select('.card__icon', theme).set('font-weight', 600)
@@ -74,10 +83,10 @@ function registerCardStyles() {
 
   styleBuilder
     .select('.card__title', 'light')
-    .set('color', palette('light').cardTitle)
+    .set('color', palette('light').card.title)
   styleBuilder
     .select('.card__title', 'dark')
-    .set('color', palette('dark').cardTitle)
+    .set('color', palette('dark').card.title)
 }
 
 function createCardComponent() {

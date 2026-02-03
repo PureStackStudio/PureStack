@@ -55,11 +55,11 @@ function registerTopBarStyles() {
       .set('border-bottom', '1px solid transparent')
 
   baseBar('light')
-    .set('background', palette('light').topBarBackground)
-    .set('border-bottom-color', palette('light').topBarBorder)
+    .set('background', palette('light').topBar.background)
+    .set('border-bottom-color', palette('light').topBar.border)
   baseBar('dark')
-    .set('background', palette('dark').topBarBackground)
-    .set('border-bottom-color', palette('dark').topBarBorder)
+    .set('background', palette('dark').topBar.background)
+    .set('border-bottom-color', palette('dark').topBar.border)
 
   const baseLogo = (theme: string) =>
     styleBuilder
@@ -68,8 +68,8 @@ function registerTopBarStyles() {
       .set('font-weight', 700)
       .set('text-decoration', 'none')
 
-  baseLogo('light').set('color', palette('light').topBarLogo)
-  baseLogo('dark').set('color', palette('dark').topBarLogo)
+  baseLogo('light').set('color', palette('light').topBar.logo)
+  baseLogo('dark').set('color', palette('dark').topBar.logo)
 
   const baseActions = (theme: string) =>
     styleBuilder
@@ -95,18 +95,18 @@ function registerTopBarStyles() {
       .set('position', 'relative')
       .set('padding', '0')
 
-  baseIcon('light').set('color', palette('light').topBarIcon)
-  baseIcon('dark').set('color', palette('dark').topBarIcon)
+  baseIcon('light').set('color', palette('light').topBar.icon)
+  baseIcon('dark').set('color', palette('dark').topBar.icon)
 
   styleBuilder
     .select('.topbar__toggle', 'light')
-    .set('background', palette('light').topBarToggleBackground)
-    .set('border-color', palette('light').topBarToggleBorder)
+    .set('background', palette('light').topBar.toggleBackground)
+    .set('border-color', palette('light').topBar.toggleBorder)
   styleBuilder
     .select('.topbar__toggle', 'dark')
-    .set('background', palette('dark').topBarToggleBackground)
-    .set('border-color', palette('dark').topBarToggleBorder)
-    .set('color', palette('dark').topBarToggleIcon)
+    .set('background', palette('dark').topBar.toggleBackground)
+    .set('border-color', palette('dark').topBar.toggleBorder)
+    .set('color', palette('dark').topBar.toggleIcon)
 
   styleBuilder
     .select('.topbar__search', 'light')

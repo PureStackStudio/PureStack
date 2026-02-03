@@ -84,28 +84,28 @@ function registerThemeSwitcherStyles() {
       .set('overflow', 'hidden')
 
   baseSwitcher('light')
-    .set('background', palette('light').themeSwitcherBackground)
-    .set('border-color', palette('light').themeSwitcherBorder)
-    .set('color', palette('light').themeSwitcherText)
+    .set('background', palette('light').themeSwitcher.background)
+    .set('border-color', palette('light').themeSwitcher.border)
+    .set('color', palette('light').themeSwitcher.text)
   baseSwitcher('dark')
-    .set('background', palette('dark').themeSwitcherBackground)
-    .set('border-color', palette('dark').themeSwitcherBorder)
-    .set('color', palette('dark').themeSwitcherText)
+    .set('background', palette('dark').themeSwitcher.background)
+    .set('border-color', palette('dark').themeSwitcher.border)
+    .set('color', palette('dark').themeSwitcher.text)
 
   styleBuilder
     .select('.theme-switcher:hover', 'light')
-    .set('background', palette('light').themeSwitcherHoverBackground)
+    .set('background', palette('light').themeSwitcher.hoverBackground)
   styleBuilder
     .select('.theme-switcher:hover', 'dark')
-    .set('background', palette('dark').themeSwitcherHoverBackground)
+    .set('background', palette('dark').themeSwitcher.hoverBackground)
 
   styleBuilder
     .select('.theme-switcher:focus-visible', 'light')
-    .set('outline', `2px solid ${palette('light').navFocusRing}`)
+    .set('outline', `2px solid ${palette('light').nav.focusRing}`)
     .set('outline-offset', '2px')
   styleBuilder
     .select('.theme-switcher:focus-visible', 'dark')
-    .set('outline', `2px solid ${palette('dark').navFocusRing}`)
+    .set('outline', `2px solid ${palette('dark').nav.focusRing}`)
     .set('outline-offset', '2px')
 
   const baseTrack = (theme: string) =>
@@ -114,8 +114,8 @@ function registerThemeSwitcherStyles() {
       .set('position', 'absolute')
       .set('inset', '6px')
       .set('border-radius', themeOptions.radii.pill)
-      .set('background', palette(theme).themeSwitcherTrackBackground)
-      .set('box-shadow', palette(theme).themeSwitcherTrackShadow)
+      .set('background', palette(theme).themeSwitcher.trackBackground)
+      .set('box-shadow', palette(theme).themeSwitcher.trackShadow)
       .set('transition', 'opacity 180ms ease, transform 220ms ease')
 
   baseTrack('light')
@@ -123,8 +123,8 @@ function registerThemeSwitcherStyles() {
 
   styleBuilder
     .select('.theme-switcher__track', 'dark')
-    .set('background', palette('dark').themeSwitcherTrackBackground)
-    .set('box-shadow', palette('dark').themeSwitcherTrackShadow)
+    .set('background', palette('dark').themeSwitcher.trackBackground)
+    .set('box-shadow', palette('dark').themeSwitcher.trackShadow)
 
   const baseThumb = (theme: string) =>
     styleBuilder
@@ -135,8 +135,8 @@ function registerThemeSwitcherStyles() {
       .set('width', '36px')
       .set('height', '36px')
       .set('border-radius', '50%')
-      .set('background', palette(theme).themeSwitcherThumbBackground)
-      .set('box-shadow', palette(theme).themeSwitcherThumbShadow)
+      .set('background', palette(theme).themeSwitcher.thumbBackground)
+      .set('box-shadow', palette(theme).themeSwitcher.thumbShadow)
       .set('backdrop-filter', 'blur(8px)')
       .set('transform', 'translateY(-50%) translateX(0)')
       .set('display', 'grid')
@@ -152,8 +152,8 @@ function registerThemeSwitcherStyles() {
 
   styleBuilder
     .select('.theme-switcher__thumb', 'dark')
-    .set('background', palette('dark').themeSwitcherThumbBackground)
-    .set('box-shadow', palette('dark').themeSwitcherThumbShadow)
+    .set('background', palette('dark').themeSwitcher.thumbBackground)
+    .set('box-shadow', palette('dark').themeSwitcher.thumbShadow)
 
   const baseTrackIcon = (theme: string) =>
     styleBuilder
@@ -173,19 +173,19 @@ function registerThemeSwitcherStyles() {
   styleBuilder
     .select('.theme-switcher__track-icon--sun', 'light')
     .set('left', '18px')
-    .set('color', palette('light').themeSwitcherTrackSun)
+    .set('color', palette('light').themeSwitcher.trackSun)
   styleBuilder
     .select('.theme-switcher__track-icon--moon', 'light')
     .set('right', '18px')
-    .set('color', palette('light').themeSwitcherTrackMoon)
+    .set('color', palette('light').themeSwitcher.trackMoon)
   styleBuilder
     .select('.theme-switcher__track-icon--sun', 'dark')
     .set('left', '18px')
-    .set('color', palette('dark').themeSwitcherTrackSun)
+    .set('color', palette('dark').themeSwitcher.trackSun)
   styleBuilder
     .select('.theme-switcher__track-icon--moon', 'dark')
     .set('right', '18px')
-    .set('color', palette('dark').themeSwitcherTrackMoon)
+    .set('color', palette('dark').themeSwitcher.trackMoon)
 
   const baseTrackSvg = (theme: string) =>
     styleBuilder
@@ -249,16 +249,16 @@ function registerThemeSwitcherStyles() {
 
   styleBuilder
     .select('.theme-switcher__icon--sun', 'light')
-    .set('color', palette('light').themeSwitcherThumbIcon)
+    .set('color', palette('light').themeSwitcher.thumbIcon)
   styleBuilder
     .select('.theme-switcher__icon--sun', 'dark')
-    .set('color', palette('dark').themeSwitcherThumbIcon)
+    .set('color', palette('dark').themeSwitcher.thumbIcon)
   styleBuilder
     .select('.theme-switcher__icon--moon', 'light')
-    .set('color', palette('light').themeSwitcherThumbIcon)
+    .set('color', palette('light').themeSwitcher.thumbIcon)
   styleBuilder
     .select('.theme-switcher__icon--moon', 'dark')
-    .set('color', palette('dark').themeSwitcherThumbIcon)
+    .set('color', palette('dark').themeSwitcher.thumbIcon)
 
   styleBuilder
     .select('.theme-switcher__icon', 'light')

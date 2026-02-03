@@ -11,8 +11,8 @@ export function registerDocLayoutStyles() {
       .set('margin', '0')
       .set('min-height', '100vh')
       .set('font-family', themeOptions.typography.baseFamily)
-      .set('background', palette(theme).appBackground)
-      .set('color', palette(theme).appText)
+      .set('background', palette(theme).app.background)
+      .set('color', palette(theme).app.text)
 
   baseDoc('light')
   baseDoc('dark')
@@ -69,16 +69,16 @@ export function registerDocLayoutStyles() {
 
   styleBuilder
     .select('.doc-nav', 'light')
-    .set('background', palette('light').navBackground)
-    .set('border', `1px solid ${palette('light').navBorder}`)
+    .set('background', palette('light').nav.background)
+    .set('border', `1px solid ${palette('light').nav.border}`)
     .set('border-radius', themeOptions.radii.lg)
     .set('padding', '16px')
     .set('height', '100%')
     .set('box-sizing', 'border-box')
   styleBuilder
     .select('.doc-nav', 'dark')
-    .set('background', palette('dark').navBackground)
-    .set('border', `1px solid ${palette('dark').navBorder}`)
+    .set('background', palette('dark').nav.background)
+    .set('border', `1px solid ${palette('dark').nav.border}`)
     .set('border-radius', themeOptions.radii.lg)
     .set('padding', '16px')
     .set('height', '100%')
@@ -99,11 +99,11 @@ export function registerDocLayoutStyles() {
   styleBuilder
     .select('.doc-nav__list .doc-nav__list', 'light')
     .set('padding-left', '12px')
-    .set('border-left', `1px solid ${palette('light').navNestedBorder}`)
+    .set('border-left', `1px solid ${palette('light').nav.nestedBorder}`)
   styleBuilder
     .select('.doc-nav__list .doc-nav__list', 'dark')
     .set('padding-left', '12px')
-    .set('border-left', `1px solid ${palette('dark').navNestedBorder}`)
+    .set('border-left', `1px solid ${palette('dark').nav.nestedBorder}`)
 
   const baseDocItem = (theme: string) =>
     styleBuilder.select('.doc-nav__item', theme).set('display', 'grid')
@@ -121,15 +121,15 @@ export function registerDocLayoutStyles() {
       .set('font-weight', 600)
       .set('transition', 'background 160ms ease, color 160ms ease')
 
-  baseDocLink('light').set('color', palette('light').navText)
-  baseDocLink('dark').set('color', palette('dark').navText)
+  baseDocLink('light').set('color', palette('light').nav.text)
+  baseDocLink('dark').set('color', palette('dark').nav.text)
 
   styleBuilder
     .select('.doc-nav__item a:hover', 'light')
-    .set('background', palette('light').navHoverBackground)
+    .set('background', palette('light').nav.hoverBackground)
   styleBuilder
     .select('.doc-nav__item a:hover', 'dark')
-    .set('background', palette('dark').navHoverBackground)
+    .set('background', palette('dark').nav.hoverBackground)
 
   const baseDocText = (theme: string) =>
     styleBuilder
@@ -139,8 +139,8 @@ export function registerDocLayoutStyles() {
       .set('border-radius', '10px')
       .set('font-weight', 600)
 
-  baseDocText('light').set('color', palette('light').navTextMuted)
-  baseDocText('dark').set('color', palette('dark').navTextMuted)
+  baseDocText('light').set('color', palette('light').nav.textMuted)
+  baseDocText('dark').set('color', palette('dark').nav.textMuted)
 
   const mobileShell = (theme: string) =>
     styleBuilder
