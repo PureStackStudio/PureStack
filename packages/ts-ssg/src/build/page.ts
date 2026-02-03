@@ -75,6 +75,7 @@ export async function renderPageFromFile(
       site: context.config,
       page: pageInfo,
       navigation,
+      theme: context.config.theme,
     },
   }
   const headConfig = resolveHeadConfig(frontmatter, {

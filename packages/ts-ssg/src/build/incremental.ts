@@ -21,6 +21,7 @@ import {
 } from '../navigation/navigation'
 import { initBuiltinComponents } from '../regor/components/initBuiltinComponents'
 import { styleBuilder } from '../style/styles'
+import { setThemeOptions } from '../style/themeOptions'
 import { orderThemes, resolveThemeFileName } from '../style/themes'
 import { copyStaticAsset, resolveStaticOutPath } from './assets'
 import {
@@ -62,8 +63,9 @@ export interface IncrementalBuilder {
 export async function createIncrementalBuilder(
   input: BuildInput = {},
 ): Promise<IncrementalBuilder> {
-  initBuiltinComponents()
   const config = resolveSiteConfig(input)
+  setThemeOptions(config.theme)
+  initBuiltinComponents()
   const log = getLogger()
   const navigationConfig = resolveNavigationConfig(
     input.navigation ?? config.navigation,

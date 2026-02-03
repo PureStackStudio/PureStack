@@ -2,6 +2,7 @@ import { createComponent, html } from 'regor'
 
 import type { NavItem } from '../../navigation/navigation'
 import { styleBuilder } from '../../style/styles'
+import { getThemeOptions, getThemePalette } from '../../style/themeOptions'
 import type { TsSsgContext } from '../../ts-ssg-context'
 import { resolveTsSsgContext } from './resolveTsSsgContext'
 
@@ -137,25 +138,28 @@ function buildNavState(
 }
 
 function registerNavStyles() {
+  const themeOptions = getThemeOptions()
+  const palette = (theme: string) => getThemePalette(theme, themeOptions)
+
   const baseMenu = (theme: string) =>
     styleBuilder
       .select('.nav__menu', theme)
       .set('display', 'block')
       .set('padding', '16px')
-      .set('border-radius', '16px')
+      .set('border-radius', themeOptions.radii.lg)
       .set('border', '1px solid transparent')
-      .set('font-size', '15px')
-      .set('line-height', '1.4')
+      .set('font-size', themeOptions.typography.baseSize)
+      .set('line-height', themeOptions.typography.baseLineHeight)
       .set('max-height', '100%')
 
   baseMenu('light')
-    .set('background', '#f6f7fb')
-    .set('border-color', '#e1e4ef')
-    .set('color', '#1f2937')
+    .set('background', palette('light').navBackground)
+    .set('border-color', palette('light').navBorder)
+    .set('color', palette('light').panelText)
   baseMenu('dark')
-    .set('background', '#1b1f27')
-    .set('border-color', '#2a2f38')
-    .set('color', '#e7eaf3')
+    .set('background', palette('dark').navBackground)
+    .set('border-color', palette('dark').navBorder)
+    .set('color', palette('dark').panelText)
 
   const baseList = (theme: string) =>
     styleBuilder
@@ -176,8 +180,8 @@ function registerNavStyles() {
       .set('padding-left', '12px')
       .set('border-left', '1px solid transparent')
 
-  nestedList('light').set('border-left-color', '#d9deee')
-  nestedList('dark').set('border-left-color', '#2b313c')
+  nestedList('light').set('border-left-color', palette('light').navNestedBorder)
+  nestedList('dark').set('border-left-color', palette('dark').navNestedBorder)
 
   const baseItem = (theme: string) =>
     styleBuilder
@@ -193,33 +197,37 @@ function registerNavStyles() {
       .select('.nav__link', theme)
       .set('display', 'block')
       .set('padding', '8px 12px')
-      .set('border-radius', '10px')
+      .set('border-radius', themeOptions.radii.md)
       .set('text-decoration', 'none')
       .set('font-weight', 600)
       .set('transition', 'background 160ms ease, color 160ms ease')
 
-  baseLink('light').set('color', '#1f2937')
-  baseLink('dark').set('color', '#e6e9f2')
+  baseLink('light').set('color', palette('light').navText)
+  baseLink('dark').set('color', palette('dark').navText)
 
-  styleBuilder.select('.nav__link:hover', 'light').set('background', '#e9edf7')
-  styleBuilder.select('.nav__link:hover', 'dark').set('background', '#262b35')
+  styleBuilder
+    .select('.nav__link:hover', 'light')
+    .set('background', palette('light').navHoverBackground)
+  styleBuilder
+    .select('.nav__link:hover', 'dark')
+    .set('background', palette('dark').navHoverBackground)
 
   styleBuilder
     .select('.nav__link--active', 'light')
-    .set('background', '#d7e2ff')
-    .set('color', '#0b1a3d')
+    .set('background', palette('light').navActiveBackground)
+    .set('color', palette('light').navActiveText)
   styleBuilder
     .select('.nav__link--active', 'dark')
-    .set('background', '#b7c6ff')
-    .set('color', '#101a32')
+    .set('background', palette('dark').navActiveBackground)
+    .set('color', palette('dark').navActiveText)
 
   styleBuilder
     .select('.nav__link:focus-visible', 'light')
-    .set('outline', '2px solid #9ab3ff')
+    .set('outline', `2px solid ${palette('light').navFocusRing}`)
     .set('outline-offset', '2px')
   styleBuilder
     .select('.nav__link:focus-visible', 'dark')
-    .set('outline', '2px solid #91a7ff')
+    .set('outline', `2px solid ${palette('dark').navFocusRing}`)
     .set('outline-offset', '2px')
 
   const baseText = (theme: string) =>
@@ -227,11 +235,11 @@ function registerNavStyles() {
       .select('.nav__text', theme)
       .set('display', 'block')
       .set('padding', '8px 12px')
-      .set('border-radius', '10px')
+      .set('border-radius', themeOptions.radii.md)
       .set('font-weight', 600)
 
-  baseText('light').set('color', '#4b5563')
-  baseText('dark').set('color', '#b0b6c6')
+  baseText('light').set('color', palette('light').navTextMuted)
+  baseText('dark').set('color', palette('dark').navTextMuted)
 
   const baseLeaf = (theme: string) =>
     styleBuilder.select('.nav__leaf', theme).set('display', 'block')
@@ -252,40 +260,40 @@ function registerNavStyles() {
       .set('gap', '8px')
       .set('cursor', 'pointer')
       .set('padding', '4px')
-      .set('border-radius', '12px')
+      .set('border-radius', themeOptions.radii.md)
 
   baseSummary('light')
   baseSummary('dark')
 
   styleBuilder
     .select('.nav__summary:hover', 'light')
-    .set('background', '#eef1f8')
+    .set('background', palette('light').navSummaryHoverBackground)
   styleBuilder
     .select('.nav__summary:hover', 'dark')
-    .set('background', '#252a34')
+    .set('background', palette('dark').navSummaryHoverBackground)
 
   styleBuilder
     .select('.nav__summary:focus-visible', 'light')
-    .set('outline', '2px solid #9ab3ff')
+    .set('outline', `2px solid ${palette('light').navFocusRing}`)
     .set('outline-offset', '2px')
   styleBuilder
     .select('.nav__summary:focus-visible', 'dark')
-    .set('outline', '2px solid #91a7ff')
+    .set('outline', `2px solid ${palette('dark').navFocusRing}`)
     .set('outline-offset', '2px')
 
   styleBuilder
     .select('.nav__summary--active', 'light')
-    .set('background', '#d7e2ff')
+    .set('background', palette('light').navActiveBackground)
   styleBuilder
     .select('.nav__summary--active', 'dark')
-    .set('background', '#b7c6ff')
+    .set('background', palette('dark').navActiveBackground)
 
   styleBuilder
     .select('.nav__summary--active .nav__text', 'light')
-    .set('color', '#0b1a3d')
+    .set('color', palette('light').navActiveText)
   styleBuilder
     .select('.nav__summary--active .nav__text', 'dark')
-    .set('color', '#101a32')
+    .set('color', palette('dark').navActiveText)
 
   styleBuilder
     .select('.nav__summary-content', 'light')
@@ -310,8 +318,8 @@ function registerNavStyles() {
       .set('transform', 'rotate(-45deg)')
       .set('transition', 'transform 160ms ease')
 
-  baseChevron('light').set('color', '#7b8597')
-  baseChevron('dark').set('color', '#9aa4b2')
+  baseChevron('light').set('color', palette('light').navChevron)
+  baseChevron('dark').set('color', palette('dark').navChevron)
 
   styleBuilder
     .select('.nav__group[open] > .nav__summary .nav__chevron', 'light')
@@ -333,14 +341,18 @@ function registerNavStyles() {
     styleBuilder
       .select('.nav__badge', theme)
       .set('padding', '2px 8px')
-      .set('border-radius', '999px')
+      .set('border-radius', themeOptions.radii.pill)
       .set('font-size', '11px')
       .set('font-weight', 700)
       .set('letter-spacing', '0.02em')
       .set('text-transform', 'uppercase')
 
-  baseBadge('light').set('background', '#e6ecfb').set('color', '#3a4a7d')
-  baseBadge('dark').set('background', '#2a3244').set('color', '#b9c6ff')
+  baseBadge('light')
+    .set('background', palette('light').navBadgeBackground)
+    .set('color', palette('light').navBadgeText)
+  baseBadge('dark')
+    .set('background', palette('dark').navBadgeBackground)
+    .set('color', palette('dark').navBadgeText)
 }
 
 function createNavItemComponent() {

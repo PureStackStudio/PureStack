@@ -1,6 +1,7 @@
 import { createComponent, html } from 'regor'
 
 import { styleBuilder } from '../../style/styles'
+import { getThemeOptions, getThemePalette } from '../../style/themeOptions'
 
 const themeSwitcherTemplate = html`<button
   class="theme-switcher"
@@ -61,6 +62,9 @@ const themeSwitcherTemplate = html`<button
 </button>`
 
 function registerThemeSwitcherStyles() {
+  const themeOptions = getThemeOptions()
+  const palette = (theme: string) => getThemePalette(theme, themeOptions)
+
   const baseSwitcher = (theme: string) =>
     styleBuilder
       .select('.theme-switcher', theme)
@@ -71,7 +75,7 @@ function registerThemeSwitcherStyles() {
       .set('height', '42px')
       .set('min-width', '90px')
       .set('padding', '0')
-      .set('border-radius', '999px')
+      .set('border-radius', themeOptions.radii.pill)
       .set('border', '1px solid transparent')
       .set('background', 'transparent')
       .set('cursor', 'pointer')
@@ -80,28 +84,28 @@ function registerThemeSwitcherStyles() {
       .set('overflow', 'hidden')
 
   baseSwitcher('light')
-    .set('background', '#e7eaef')
-    .set('border-color', '#d1d6e2')
-    .set('color', '#8a909c')
+    .set('background', palette('light').themeSwitcherBackground)
+    .set('border-color', palette('light').themeSwitcherBorder)
+    .set('color', palette('light').themeSwitcherText)
   baseSwitcher('dark')
-    .set('background', '#1b202b')
-    .set('border-color', '#2a313e')
-    .set('color', '#8c94a3')
+    .set('background', palette('dark').themeSwitcherBackground)
+    .set('border-color', palette('dark').themeSwitcherBorder)
+    .set('color', palette('dark').themeSwitcherText)
 
   styleBuilder
     .select('.theme-switcher:hover', 'light')
-    .set('background', '#e3e7ee')
+    .set('background', palette('light').themeSwitcherHoverBackground)
   styleBuilder
     .select('.theme-switcher:hover', 'dark')
-    .set('background', '#1f2633')
+    .set('background', palette('dark').themeSwitcherHoverBackground)
 
   styleBuilder
     .select('.theme-switcher:focus-visible', 'light')
-    .set('outline', '2px solid #9ab3ff')
+    .set('outline', `2px solid ${palette('light').navFocusRing}`)
     .set('outline-offset', '2px')
   styleBuilder
     .select('.theme-switcher:focus-visible', 'dark')
-    .set('outline', '2px solid #91a7ff')
+    .set('outline', `2px solid ${palette('dark').navFocusRing}`)
     .set('outline-offset', '2px')
 
   const baseTrack = (theme: string) =>
@@ -109,12 +113,9 @@ function registerThemeSwitcherStyles() {
       .select('.theme-switcher__track', theme)
       .set('position', 'absolute')
       .set('inset', '6px')
-      .set('border-radius', '999px')
-      .set('background', '#d6d9e0')
-      .set(
-        'box-shadow',
-        'inset 0 3px 6px rgba(0, 0, 0, 0.12), inset 0 -2px 4px rgba(255, 255, 255, 0.7)',
-      )
+      .set('border-radius', themeOptions.radii.pill)
+      .set('background', palette(theme).themeSwitcherTrackBackground)
+      .set('box-shadow', palette(theme).themeSwitcherTrackShadow)
       .set('transition', 'opacity 180ms ease, transform 220ms ease')
 
   baseTrack('light')
@@ -122,11 +123,8 @@ function registerThemeSwitcherStyles() {
 
   styleBuilder
     .select('.theme-switcher__track', 'dark')
-    .set('background', '#2a3140')
-    .set(
-      'box-shadow',
-      'inset 0 3px 7px rgba(0, 0, 0, 0.45), inset 0 -2px 4px rgba(255, 255, 255, 0.05)',
-    )
+    .set('background', palette('dark').themeSwitcherTrackBackground)
+    .set('box-shadow', palette('dark').themeSwitcherTrackShadow)
 
   const baseThumb = (theme: string) =>
     styleBuilder
@@ -137,11 +135,8 @@ function registerThemeSwitcherStyles() {
       .set('width', '36px')
       .set('height', '36px')
       .set('border-radius', '50%')
-      .set('background', '#ff9a1f')
-      .set(
-        'box-shadow',
-        '0 10px 18px rgba(0, 0, 0, 0.18), inset 0 3px 6px rgba(255, 255, 255, 0.3)',
-      )
+      .set('background', palette(theme).themeSwitcherThumbBackground)
+      .set('box-shadow', palette(theme).themeSwitcherThumbShadow)
       .set('backdrop-filter', 'blur(8px)')
       .set('transform', 'translateY(-50%) translateX(0)')
       .set('display', 'grid')
@@ -157,11 +152,8 @@ function registerThemeSwitcherStyles() {
 
   styleBuilder
     .select('.theme-switcher__thumb', 'dark')
-    .set('background', '#4f6bd5')
-    .set(
-      'box-shadow',
-      '0 12px 20px rgba(5, 8, 20, 0.55), inset 0 3px 6px rgba(255, 255, 255, 0.2)',
-    )
+    .set('background', palette('dark').themeSwitcherThumbBackground)
+    .set('box-shadow', palette('dark').themeSwitcherThumbShadow)
 
   const baseTrackIcon = (theme: string) =>
     styleBuilder
@@ -181,19 +173,19 @@ function registerThemeSwitcherStyles() {
   styleBuilder
     .select('.theme-switcher__track-icon--sun', 'light')
     .set('left', '18px')
-    .set('color', '#f2a02a')
+    .set('color', palette('light').themeSwitcherTrackSun)
   styleBuilder
     .select('.theme-switcher__track-icon--moon', 'light')
     .set('right', '18px')
-    .set('color', '#9aa1ad')
+    .set('color', palette('light').themeSwitcherTrackMoon)
   styleBuilder
     .select('.theme-switcher__track-icon--sun', 'dark')
     .set('left', '18px')
-    .set('color', '#7f8796')
+    .set('color', palette('dark').themeSwitcherTrackSun)
   styleBuilder
     .select('.theme-switcher__track-icon--moon', 'dark')
     .set('right', '18px')
-    .set('color', '#b7c5ff')
+    .set('color', palette('dark').themeSwitcherTrackMoon)
 
   const baseTrackSvg = (theme: string) =>
     styleBuilder
@@ -257,16 +249,16 @@ function registerThemeSwitcherStyles() {
 
   styleBuilder
     .select('.theme-switcher__icon--sun', 'light')
-    .set('color', '#ffffff')
+    .set('color', palette('light').themeSwitcherThumbIcon)
   styleBuilder
     .select('.theme-switcher__icon--sun', 'dark')
-    .set('color', '#ffffff')
+    .set('color', palette('dark').themeSwitcherThumbIcon)
   styleBuilder
     .select('.theme-switcher__icon--moon', 'light')
-    .set('color', '#ffffff')
+    .set('color', palette('light').themeSwitcherThumbIcon)
   styleBuilder
     .select('.theme-switcher__icon--moon', 'dark')
-    .set('color', '#ffffff')
+    .set('color', palette('dark').themeSwitcherThumbIcon)
 
   styleBuilder
     .select('.theme-switcher__icon', 'light')

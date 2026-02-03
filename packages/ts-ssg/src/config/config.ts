@@ -6,6 +6,11 @@ import {
   type NavigationConfig,
   resolveNavigationConfig,
 } from '../navigation/navigation'
+import {
+  resolveThemeOptions,
+  type ThemeOptions,
+  type ThemeOptionsInput,
+} from '../style/themeOptions'
 import { resolveThemes } from '../style/themes'
 
 export interface SiteConfig {
@@ -17,9 +22,12 @@ export interface SiteConfig {
   styleHref: string
   styleThemes: string[]
   navigation: NavigationConfig
+  theme: ThemeOptions
 }
 
-export type PartialSiteConfig = Partial<SiteConfig>
+export type PartialSiteConfig = Partial<Omit<SiteConfig, 'theme'>> & {
+  theme?: ThemeOptionsInput
+}
 export type SiteConfigFile = Partial<
   Pick<
     SiteConfig,
@@ -30,7 +38,7 @@ export type SiteConfigFile = Partial<
     | 'styleThemes'
     | 'navigation'
   >
->
+> & { theme?: ThemeOptionsInput }
 
 const DEFAULT_ROOT = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -67,6 +75,7 @@ export function resolveSiteConfig(input: PartialSiteConfig = {}): SiteConfig {
     input.navigation,
     fileConfig.navigation,
   )
+  const theme = resolveThemeOptions(input.theme, fileConfig.theme)
   return {
     rootDir,
     contentDir,
@@ -76,6 +85,7 @@ export function resolveSiteConfig(input: PartialSiteConfig = {}): SiteConfig {
     styleHref,
     styleThemes,
     navigation,
+    theme,
   }
 }
 

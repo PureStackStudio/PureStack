@@ -1,6 +1,7 @@
 import { createComponent, html } from 'regor'
 
 import { styleBuilder } from '../../style/styles'
+import { getThemeOptions, getThemePalette } from '../../style/themeOptions'
 
 interface CardGrid {
   title: string
@@ -12,16 +13,19 @@ const cardGridTemplate = html`<div class="card-grid">
 </div>`
 
 function registerCardGridStyles() {
+  const themeOptions = getThemeOptions()
+  const palette = (theme: string) => getThemePalette(theme, themeOptions)
+
   const baseGrid = (theme: string) =>
     styleBuilder
       .select('.card-grid', theme)
       .set('display', 'grid')
       .set('gap', '16px')
       .set('padding', '24px')
-      .set('border-radius', '12px')
+      .set('border-radius', themeOptions.radii.md)
 
-  baseGrid('light').set('border', '1px solid #e6e6e6')
-  baseGrid('dark').set('border', '1px solid #2f2f2f')
+  baseGrid('light').set('border', `1px solid ${palette('light').cardGridBorder}`)
+  baseGrid('dark').set('border', `1px solid ${palette('dark').cardGridBorder}`)
 
   const baseTitle = (theme: string) =>
     styleBuilder
@@ -29,8 +33,8 @@ function registerCardGridStyles() {
       .set('font-size', '18px')
       .set('font-weight', 600)
 
-  baseTitle('light').set('color', '#222')
-  baseTitle('dark').set('color', '#f0f0f0')
+  baseTitle('light').set('color', palette('light').cardGridTitle)
+  baseTitle('dark').set('color', palette('dark').cardGridTitle)
 }
 
 function createCardGridComponent() {
@@ -49,24 +53,31 @@ const cardTemplate = html`<div class="card">
 </div>`
 
 function registerCardStyles() {
+  const themeOptions = getThemeOptions()
+  const palette = (theme: string) => getThemePalette(theme, themeOptions)
+
   const baseCard = (theme: string) =>
     styleBuilder
       .select('.card', theme)
       .set('display', 'grid')
       .set('gap', '8px')
       .set('padding', '16px')
-      .set('border-radius', '10px')
+      .set('border-radius', themeOptions.radii.md)
 
-  baseCard('light').set('border', '1px solid #ededed')
-  baseCard('dark').set('border', '1px solid #353535')
+  baseCard('light').set('border', `1px solid ${palette('light').cardBorder}`)
+  baseCard('dark').set('border', `1px solid ${palette('dark').cardBorder}`)
 
   const baseIcon = (theme: string) =>
     styleBuilder.select('.card__icon', theme).set('font-weight', 600)
   baseIcon('light')
   baseIcon('dark')
 
-  styleBuilder.select('.card__title', 'light').set('color', '#444')
-  styleBuilder.select('.card__title', 'dark').set('color', '#d6d6d6')
+  styleBuilder
+    .select('.card__title', 'light')
+    .set('color', palette('light').cardTitle)
+  styleBuilder
+    .select('.card__title', 'dark')
+    .set('color', palette('dark').cardTitle)
 }
 
 function createCardComponent() {

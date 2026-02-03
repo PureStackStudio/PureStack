@@ -1,6 +1,7 @@
 import { createComponent, html } from 'regor'
 
 import { styleBuilder } from '../../style/styles'
+import { getThemeOptions, getThemePalette } from '../../style/themeOptions'
 import type { TsSsgContext } from '../../ts-ssg-context'
 import { resolveTsSsgContext } from './resolveTsSsgContext'
 
@@ -36,6 +37,9 @@ const topBarTemplate = html`<input
   </header>`
 
 function registerTopBarStyles() {
+  const themeOptions = getThemeOptions()
+  const palette = (theme: string) => getThemePalette(theme, themeOptions)
+
   const baseBar = (theme: string) =>
     styleBuilder
       .select('.topbar', theme)
@@ -51,11 +55,11 @@ function registerTopBarStyles() {
       .set('border-bottom', '1px solid transparent')
 
   baseBar('light')
-    .set('background', '#f8f9fd')
-    .set('border-bottom-color', '#e1e4ef')
+    .set('background', palette('light').topBarBackground)
+    .set('border-bottom-color', palette('light').topBarBorder)
   baseBar('dark')
-    .set('background', '#222733')
-    .set('border-bottom-color', '#2d3340')
+    .set('background', palette('dark').topBarBackground)
+    .set('border-bottom-color', palette('dark').topBarBorder)
 
   const baseLogo = (theme: string) =>
     styleBuilder
@@ -64,8 +68,8 @@ function registerTopBarStyles() {
       .set('font-weight', 700)
       .set('text-decoration', 'none')
 
-  baseLogo('light').set('color', '#2f4ea1')
-  baseLogo('dark').set('color', '#a9c1ff')
+  baseLogo('light').set('color', palette('light').topBarLogo)
+  baseLogo('dark').set('color', palette('dark').topBarLogo)
 
   const baseActions = (theme: string) =>
     styleBuilder
@@ -82,7 +86,7 @@ function registerTopBarStyles() {
       .select('.topbar__icon', theme)
       .set('width', '42px')
       .set('height', '42px')
-      .set('border-radius', '999px')
+      .set('border-radius', themeOptions.radii.pill)
       .set('display', 'grid')
       .set('place-items', 'center')
       .set('border', '1px solid transparent')
@@ -91,18 +95,18 @@ function registerTopBarStyles() {
       .set('position', 'relative')
       .set('padding', '0')
 
-  baseIcon('light').set('color', '#3c4250')
-  baseIcon('dark').set('color', '#d2d8e8')
+  baseIcon('light').set('color', palette('light').topBarIcon)
+  baseIcon('dark').set('color', palette('dark').topBarIcon)
 
   styleBuilder
     .select('.topbar__toggle', 'light')
-    .set('background', '#ffffff')
-    .set('border-color', '#d8deee')
+    .set('background', palette('light').topBarToggleBackground)
+    .set('border-color', palette('light').topBarToggleBorder)
   styleBuilder
     .select('.topbar__toggle', 'dark')
-    .set('background', '#f3f5fb')
-    .set('border-color', '#d7ddef')
-    .set('color', '#1b2030')
+    .set('background', palette('dark').topBarToggleBackground)
+    .set('border-color', palette('dark').topBarToggleBorder)
+    .set('color', palette('dark').topBarToggleIcon)
 
   styleBuilder
     .select('.topbar__search', 'light')

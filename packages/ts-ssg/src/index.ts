@@ -45,6 +45,17 @@ export {
 } from './page-templates'
 export { componentRegistry } from './regor/components/registry'
 export { styleBuilder } from './style/styles'
+export {
+  DEFAULT_THEME_OPTIONS,
+  getThemeOptions,
+  getThemePalette,
+  resolveThemeOptions,
+  setThemeOptions,
+  type ThemeColorPalette,
+  type ThemeColorToken,
+  type ThemeOptions,
+  type ThemeOptionsInput,
+} from './style/themeOptions'
 export type { TsSsgContext } from './ts-ssg-context'
 
 const entryUrl = process.argv[1]
