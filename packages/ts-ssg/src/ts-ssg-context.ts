@@ -9,17 +9,3 @@ export interface TsSsgContext {
   navigation?: PageNavigation
   theme: ThemeOptions
 }
-
-export interface TsSsgContextGlobal {
-  tsSsgContext?: TsSsgContext
-}
-
-declare global {
-  var tsSsgContext: TsSsgContext | undefined
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-  interface Window extends TsSsgContextGlobal {}
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-  interface GlobalThis extends TsSsgContextGlobal {}
-}
-
-export {}
