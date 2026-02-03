@@ -53,11 +53,7 @@ function normalizeTemplateName(name: string | undefined) {
   return trimmed.length > 0 ? trimmed : 'doc'
 }
 
-function renderDocTemplate({
-  head,
-  bodyHtml,
-  navigation,
-}: PageTemplateInput) {
+function renderDocTemplate({ head, bodyHtml, navigation }: PageTemplateInput) {
   const navNode = renderDocNav(navigation)
   const hasNav = Boolean(navNode)
   return h('html').push(
@@ -65,11 +61,7 @@ function renderDocTemplate({
     h('body')
       .attr({ class: 'template-doc' })
       .push(
-        ...(hasNav
-          ? [
-              h('doc-header'),
-            ]
-          : []),
+        h('top-bar'),
         h('div')
           .attr({
             class: hasNav ? 'doc-shell' : 'doc-shell doc-shell--single',

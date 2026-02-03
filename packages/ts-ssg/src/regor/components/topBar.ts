@@ -13,22 +13,22 @@ function resolveBrandLabel(): string {
   return trimmed.length > 0 ? trimmed : 'Docs'
 }
 
-const docHeaderTemplate = html`<input
+const topBarTemplate = html`<input
     class="doc-nav-toggle"
     id="doc-nav-toggle"
     type="checkbox"
     aria-hidden="true"
   />
-  <header class="doc-header">
-    <a class="doc-header__logo" href="/">{{ brandLabel }}</a>
-    <div class="doc-header__actions">
+  <header class="topbar">
+    <a class="topbar__logo" href="/">{{ brandLabel }}</a>
+    <div class="topbar__actions">
       <button
-        class="doc-header__icon doc-header__search"
+        class="topbar__icon topbar__search"
         type="button"
         aria-label="Search"
       ></button>
       <label
-        class="doc-header__icon doc-header__toggle"
+        class="topbar__icon topbar__toggle"
         for="doc-nav-toggle"
         role="button"
         aria-label="Toggle navigation"
@@ -36,14 +36,14 @@ const docHeaderTemplate = html`<input
     </div>
   </header>`
 
-function createDocHeaderComponent() {
-  return createComponent(docHeaderTemplate, {
+function createTopBarComponent() {
+  return createComponent(topBarTemplate, {
     context: () => ({
       brandLabel: resolveBrandLabel(),
     }),
   })
 }
 
-export function createDocHeaderComponents() {
-  return { docHeader: createDocHeaderComponent() }
+export function createTopBarComponents() {
+  return { topBar: createTopBarComponent() }
 }

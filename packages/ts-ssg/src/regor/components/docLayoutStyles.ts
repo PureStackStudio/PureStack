@@ -65,7 +65,7 @@ export function registerDocLayoutStyles() {
 
   const baseHeader = (theme: string) =>
     styleBuilder
-      .select('.doc-header', theme)
+      .select('.topbar', theme)
       .set('display', 'flex')
       .set('align-items', 'center')
       .set('justify-content', 'space-between')
@@ -86,7 +86,7 @@ export function registerDocLayoutStyles() {
 
   const baseLogo = (theme: string) =>
     styleBuilder
-      .select('.doc-header__logo', theme)
+      .select('.topbar__logo', theme)
       .set('font-size', '22px')
       .set('font-weight', 700)
       .set('text-decoration', 'none')
@@ -96,7 +96,7 @@ export function registerDocLayoutStyles() {
 
   const baseActions = (theme: string) =>
     styleBuilder
-      .select('.doc-header__actions', theme)
+      .select('.topbar__actions', theme)
       .set('display', 'flex')
       .set('align-items', 'center')
       .set('gap', '10px')
@@ -106,7 +106,7 @@ export function registerDocLayoutStyles() {
 
   const baseIcon = (theme: string) =>
     styleBuilder
-      .select('.doc-header__icon', theme)
+      .select('.topbar__icon', theme)
       .set('width', '42px')
       .set('height', '42px')
       .set('border-radius', '999px')
@@ -122,27 +122,27 @@ export function registerDocLayoutStyles() {
   baseIcon('dark').set('color', '#d2d8e8')
 
   styleBuilder
-    .select('.doc-header__toggle', 'light')
+    .select('.topbar__toggle', 'light')
     .set('background', '#ffffff')
     .set('border-color', '#d8deee')
   styleBuilder
-    .select('.doc-header__toggle', 'dark')
+    .select('.topbar__toggle', 'dark')
     .set('background', '#f3f5fb')
     .set('border-color', '#d7ddef')
     .set('color', '#1b2030')
 
   styleBuilder
-    .select('.doc-header__search', 'light')
+    .select('.topbar__search', 'light')
     .set('border', '0')
     .set('background', 'transparent')
   styleBuilder
-    .select('.doc-header__search', 'dark')
+    .select('.topbar__search', 'dark')
     .set('border', '0')
     .set('background', 'transparent')
 
   const baseSearchBefore = (theme: string) =>
     styleBuilder
-      .select('.doc-header__search::before', theme)
+      .select('.topbar__search::before', theme)
       .set('content', '""')
       .set('width', '16px')
       .set('height', '16px')
@@ -157,7 +157,7 @@ export function registerDocLayoutStyles() {
 
   const baseSearchAfter = (theme: string) =>
     styleBuilder
-      .select('.doc-header__search::after', theme)
+      .select('.topbar__search::after', theme)
       .set('content', '""')
       .set('width', '10px')
       .set('height', '2px')
@@ -172,7 +172,7 @@ export function registerDocLayoutStyles() {
 
   const baseToggleBefore = (theme: string) =>
     styleBuilder
-      .select('.doc-header__toggle::before', theme)
+      .select('.topbar__toggle::before', theme)
       .set('content', '""')
       .set('width', '18px')
       .set('height', '2px')
@@ -188,7 +188,7 @@ export function registerDocLayoutStyles() {
 
   const baseToggleAfter = (theme: string) =>
     styleBuilder
-      .select('.doc-header__toggle::after', theme)
+      .select('.topbar__toggle::after', theme)
       .set('content', '""')
       .set('width', '18px')
       .set('height', '2px')
@@ -201,12 +201,8 @@ export function registerDocLayoutStyles() {
   baseToggleAfter('light')
   baseToggleAfter('dark')
 
-  styleBuilder
-    .select('.doc-nav-toggle', 'light')
-    .set('display', 'none')
-  styleBuilder
-    .select('.doc-nav-toggle', 'dark')
-    .set('display', 'none')
+  styleBuilder.select('.doc-nav-toggle', 'light').set('display', 'none')
+  styleBuilder.select('.doc-nav-toggle', 'dark').set('display', 'none')
 
   styleBuilder
     .select('.doc-nav', 'light')
@@ -284,22 +280,25 @@ export function registerDocLayoutStyles() {
   baseDocText('dark').set('color', '#b0b6c6')
 
   styleBuilder
-    .select('.doc-nav-toggle:checked ~ .doc-header .doc-header__toggle::before', 'light')
+    .select(
+      '.doc-nav-toggle:checked ~ .topbar .topbar__toggle::before',
+      'light',
+    )
     .set('top', '20px')
     .set('transform', 'rotate(45deg)')
     .set('box-shadow', 'none')
   styleBuilder
-    .select('.doc-nav-toggle:checked ~ .doc-header .doc-header__toggle::before', 'dark')
+    .select('.doc-nav-toggle:checked ~ .topbar .topbar__toggle::before', 'dark')
     .set('top', '20px')
     .set('transform', 'rotate(45deg)')
     .set('box-shadow', 'none')
 
   styleBuilder
-    .select('.doc-nav-toggle:checked ~ .doc-header .doc-header__toggle::after', 'light')
+    .select('.doc-nav-toggle:checked ~ .topbar .topbar__toggle::after', 'light')
     .set('top', '20px')
     .set('transform', 'rotate(-45deg)')
   styleBuilder
-    .select('.doc-nav-toggle:checked ~ .doc-header .doc-header__toggle::after', 'dark')
+    .select('.doc-nav-toggle:checked ~ .topbar .topbar__toggle::after', 'dark')
     .set('top', '20px')
     .set('transform', 'rotate(-45deg)')
 
