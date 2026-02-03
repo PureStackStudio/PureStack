@@ -23,6 +23,7 @@ const topBarTemplate = html`<input
   <header class="topbar">
     <a class="topbar__logo" href="/">{{ brandLabel }}</a>
     <div class="topbar__actions">
+      <theme-switcher></theme-switcher>
       <button
         class="topbar__icon topbar__search"
         type="button"
