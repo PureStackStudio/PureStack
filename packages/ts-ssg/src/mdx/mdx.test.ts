@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest'
 
+import { renderApp } from '../regor/components/renderApp'
 import { compileMdxToHtml } from './mdx'
 
 describe('compileMdxToHtml', () => {
   it('renders a custom JSX component at root level', async () => {
     const source = '<CustomComponent data-id="x" />\n\nParagraph text.'
-    const html = await compileMdxToHtml(source)
+    const html = renderApp(await compileMdxToHtml(source))
 
     expect(html).toContain('<customcomponent')
     expect(html).toContain('data-id="x"')
@@ -23,7 +24,7 @@ describe('compileMdxToHtml', () => {
       'Another paragraph',
       'spanning two lines.',
     ].join('\n')
-    const html = await compileMdxToHtml(source)
+    const html = renderApp(await compileMdxToHtml(source))
     expect(html).toContain('<outercomponent')
     expect(html).toContain('<innercomponent')
     expect(html).toContain('data-flag="true"')
@@ -43,7 +44,7 @@ describe('compileMdxToHtml', () => {
       '',
       '<Footer />',
     ].join('\n')
-    const html = await compileMdxToHtml(source)
+    const html = renderApp(await compileMdxToHtml(source))
 
     expect(html).toContain('<banner')
     expect(html).toContain('title="Hello"')
