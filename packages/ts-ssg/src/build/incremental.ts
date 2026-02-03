@@ -19,6 +19,7 @@ import {
   resolveFolderKey,
   resolveNavigationConfig,
 } from '../navigation/navigation'
+import { initBuiltinComponents } from '../regor/components/initBuiltinComponents'
 import { styleBuilder } from '../style/styles'
 import { orderThemes, resolveThemeFileName } from '../style/themes'
 import { copyStaticAsset, resolveStaticOutPath } from './assets'
@@ -61,6 +62,7 @@ export interface IncrementalBuilder {
 export async function createIncrementalBuilder(
   input: BuildInput = {},
 ): Promise<IncrementalBuilder> {
+  initBuiltinComponents()
   const config = resolveSiteConfig(input)
   const log = getLogger()
   const navigationConfig = resolveNavigationConfig(

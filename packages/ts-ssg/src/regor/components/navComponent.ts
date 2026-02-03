@@ -1,11 +1,13 @@
+import type { ComponentHead } from 'regor'
 import { createComponent, html } from 'regor'
 
 import type { NavItem } from '../../navigation/navigation'
 import { styleBuilder } from '../../style/styles'
 import type { TsSsgContext } from '../../ts-ssg-context'
+import { resolveTsSsgContext } from './resolveTsSsgContext'
 
-function resolveContext(): TsSsgContext | undefined {
-  return globalThis.tsSsgContext
+function resolveContext(head?: ComponentHead): TsSsgContext | undefined {
+  return resolveTsSsgContext(head)
 }
 
 interface NavMenuProps {
@@ -74,8 +76,7 @@ const navMenuTemplate = html`<nav
   <nav-list :items="items"></nav-list>
 </nav>`
 
-function resolveNavItems(): NavItem[] {
-  const context = resolveContext()
+function resolveNavItems(context?: TsSsgContext): NavItem[] {
   const items = context?.navigation?.items ?? []
   if (items.length > 0) return items
   return context?.navigation?.global ?? []
@@ -107,8 +108,7 @@ function normalizePath(url: string | undefined): string | undefined {
   return withSlash.endsWith('/') ? withSlash : `${withSlash}/`
 }
 
-function resolveCurrentPath(): string | undefined {
-  const context = resolveContext()
+function resolveCurrentPath(context?: TsSsgContext): string | undefined {
   const fromContext = normalizePath(context?.page?.urlPath)
   if (fromContext) return fromContext
   if (typeof window !== 'undefined' && window.location?.pathname) {
@@ -364,12 +364,15 @@ function createNavListComponent() {
 function createNavMenuComponent() {
   return createComponent<NavMenuProps>(navMenuTemplate, {
     props: ['items'],
-    context: (head) => ({
-      items: buildNavState(
-        head.props.items ?? resolveNavItems(),
-        resolveCurrentPath(),
-      ),
-    }),
+    context: (head) => {
+      const context = resolveContext(head)
+      return {
+        items: buildNavState(
+          head.props.items ?? resolveNavItems(context),
+          resolveCurrentPath(context),
+        ),
+      }
+    },
   })
 }
 

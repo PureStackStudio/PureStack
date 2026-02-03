@@ -1,14 +1,16 @@
+import type { ComponentHead } from 'regor'
 import { createComponent, html } from 'regor'
 
 import { styleBuilder } from '../../style/styles'
 import type { TsSsgContext } from '../../ts-ssg-context'
+import { resolveTsSsgContext } from './resolveTsSsgContext'
 
-function resolveContext(): TsSsgContext | undefined {
-  return globalThis.tsSsgContext
+function resolveContext(head?: ComponentHead): TsSsgContext | undefined {
+  return resolveTsSsgContext(head)
 }
 
-function resolveBrandLabel(): string {
-  const label = resolveContext()?.site?.siteTitle
+function resolveBrandLabel(context?: TsSsgContext): string {
+  const label = context?.site?.siteTitle
   if (typeof label !== 'string') return 'Docs'
   const trimmed = label.trim()
   return trimmed.length > 0 ? trimmed : 'Docs'
@@ -181,7 +183,10 @@ function registerTopBarStyles() {
   styleBuilder.select('.doc-nav-toggle', 'dark').set('display', 'none')
 
   styleBuilder
-    .select('.doc-nav-toggle:checked ~ .topbar .topbar__toggle::before', 'light')
+    .select(
+      '.doc-nav-toggle:checked ~ .topbar .topbar__toggle::before',
+      'light',
+    )
     .set('top', '20px')
     .set('transform', 'rotate(45deg)')
     .set('box-shadow', 'none')
@@ -203,9 +208,12 @@ function registerTopBarStyles() {
 
 function createTopBarComponent() {
   return createComponent(topBarTemplate, {
-    context: () => ({
-      brandLabel: resolveBrandLabel(),
-    }),
+    context: (head) => {
+      const context = resolveContext(head)
+      return {
+        brandLabel: resolveBrandLabel(context),
+      }
+    },
   })
 }
 

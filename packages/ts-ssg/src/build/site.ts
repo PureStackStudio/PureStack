@@ -9,6 +9,7 @@ import {
   type NavigationTree,
 } from '../navigation/navigation'
 import type { PageTemplateMap } from '../page-templates'
+import { initBuiltinComponents } from '../regor/components/initBuiltinComponents'
 import { copyStaticAssets } from './assets'
 import { prepareOutDir } from './io'
 import {
@@ -76,6 +77,7 @@ export async function buildSite(input: BuildInput = {}): Promise<BuildResult> {
     components: input.components,
     templates: input.templates,
   }
+  initBuiltinComponents()
 
   await hooks.onConfigResolved?.(context)
 
