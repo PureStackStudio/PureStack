@@ -6,7 +6,7 @@ import path from 'node:path'
 import { createLogger, getLogger } from 'logpot'
 
 import { createIncrementalBuilder } from '../build/incremental'
-import { type BuildInput } from '../build/site'
+import { type BuildInput, buildSite } from '../build/site'
 import { resolveSiteConfig } from '../config/config'
 import { logError } from '../util/logging'
 
@@ -15,6 +15,7 @@ export interface DevServerOptions {
   port?: number
   watch?: boolean
   liveReload?: boolean
+  incremental?: boolean
 }
 
 export type DevServerInput = BuildInput & DevServerOptions
@@ -38,8 +39,11 @@ export async function startDevServer(
   const port = input.port ?? DEFAULT_PORT
   const watch = input.watch ?? true
   const liveReload = input.liveReload ?? true
+  const incrementalEnabled = input.incremental ?? true
 
   const clients = new Set<http.ServerResponse>()
+  let startupReloadPending = true
+  let initialBuildDone = false
   let watcher: { close: () => void } | undefined
 
   const requestState = {
@@ -75,11 +79,20 @@ export async function startDevServer(
     requestState.inFlight = false
   }
 
-  const incremental = await createIncrementalBuilder(input)
+  const incremental = incrementalEnabled
+    ? await createIncrementalBuilder(input)
+    : createFullRebuildBuilder(input, config)
 
   const rebuild = async (reason: string) => {
     try {
       await incremental.buildAll(reason)
+      if (!initialBuildDone) {
+        initialBuildDone = true
+        if (startupReloadPending && clients.size > 0) {
+          startupReloadPending = false
+          broadcast(clients, 'reload', 'server restart')
+        }
+      }
       if (liveReload) broadcast(clients, 'reload', reason)
     } catch (error) {
       logError(log, error, 'build failed')
@@ -136,6 +149,10 @@ export async function startDevServer(
       })
       res.write('event: ping\ndata: ready\n\n')
       clients.add(res)
+      if (startupReloadPending && initialBuildDone) {
+        startupReloadPending = false
+        broadcast(clients, 'reload', 'server restart')
+      }
       req.on('close', () => {
         clients.delete(res)
       })
@@ -184,6 +201,7 @@ export async function startDevServer(
       outDir: config.outDir,
       liveReload,
       watch,
+      incremental: incrementalEnabled,
     })
   })
 
@@ -211,6 +229,23 @@ export async function startDevServer(
   process.on('SIGTERM', handleSignal)
 
   return { close: shutdown }
+}
+
+function createFullRebuildBuilder(
+  input: BuildInput,
+  config: ReturnType<typeof resolveSiteConfig>,
+) {
+  return {
+    buildAll: async () => buildSite({ ...input, ...config }),
+    applyChange: async (filePath: string) => ({
+      fullRebuild: true,
+      changedPages: 0,
+      changedAssets: 0,
+      deletedPages: 0,
+      deletedAssets: 0,
+      reason: `content change: ${filePath}`,
+    }),
+  }
 }
 
 function broadcast(
