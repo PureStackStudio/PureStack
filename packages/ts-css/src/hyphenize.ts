@@ -24,10 +24,18 @@ export function hyphenizeCss(prop: string): string {
     /^(webkit|moz|ms)(?=[A-Z])/i,
     (_, prefix) => '-' + prefix.toLowerCase(),
   )
+  const withOpera = withVendor.replace(/^o/i, (match, _offset, value) => {
+    const next = value[match.length]
+    const isUppercase =
+      typeof next === 'string' &&
+      next.toUpperCase() === next &&
+      next.toLowerCase() !== next
+    return isUppercase ? '-o' : match
+  })
 
   // 1. Split acronym boundaries like "XMLHttp" → "XML-Http"
   // 2. Then split camelCase boundaries like "fooBar" → "foo-Bar"
-  const withSeparators = withVendor
+  const withSeparators = withOpera
     .replace(/([A-Z]+)([A-Z][a-z])/g, '$1-$2')
     .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
 

@@ -19,6 +19,10 @@ describe('hyphenizeCss', () => {
     expect(hyphenizeCss('MsTransition')).toBe('-ms-transition')
     expect(hyphenizeCss('OAnimation')).toBe('-o-animation')
     expect(hyphenizeCss('oAnimation')).toBe('-o-animation')
+    expect(hyphenizeCss('OTransition')).toBe('-o-transition')
+    expect(hyphenizeCss('oTransition')).toBe('-o-transition')
+    expect(hyphenizeCss('opacity')).toBe('opacity')
+    expect(hyphenizeCss('Opacity')).toBe('opacity')
   })
 
   it('splits acronym-heavy names properly', () => {
@@ -41,6 +45,8 @@ describe('hyphenizeCss', () => {
     expect(hyphenizeCss('aB')).toBe('a-b')
     expect(hyphenizeCss('A')).toBe('a')
     expect(hyphenizeCss('')).toBe('') // empty string
+    expect(hyphenizeCss('opacity')).toBe('opacity')
+    expect(hyphenizeCss('Opacity')).toBe('opacity')
   })
 
   it('lowercases everything except preserves delimiting hyphens', () => {
