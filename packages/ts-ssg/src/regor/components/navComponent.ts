@@ -184,10 +184,7 @@ function registerNavStyles() {
   nestedList('dark').borderLeftColor(palette('dark').nav.nestedBorder)
 
   const baseItem = (theme: string) =>
-    styleBuilder
-      .select('.nav__item', theme)
-      .display('grid')
-      .gap('4px')
+    styleBuilder.select('.nav__item', theme).display('grid').gap('4px')
 
   baseItem('light')
   baseItem('dark')
@@ -199,7 +196,7 @@ function registerNavStyles() {
       .padding('8px 12px')
       .borderRadius(themeOptions.radii.md)
       .textDecoration('none')
-      .fontWeight(600)
+      .fontWeight('600')
       .transition('background 160ms ease, color 160ms ease')
 
   baseLink('light').color(palette('light').nav.text)
@@ -236,7 +233,7 @@ function registerNavStyles() {
       .display('block')
       .padding('8px 12px')
       .borderRadius(themeOptions.radii.md)
-      .fontWeight(600)
+      .fontWeight('600')
 
   baseText('light').color(palette('light').nav.textMuted)
   baseText('dark').color(palette('dark').nav.textMuted)
@@ -343,7 +340,7 @@ function registerNavStyles() {
       .padding('2px 8px')
       .borderRadius(themeOptions.radii.pill)
       .fontSize('11px')
-      .fontWeight(700)
+      .fontWeight('700')
       .letterSpacing('0.02em')
       .textTransform('uppercase')
 
