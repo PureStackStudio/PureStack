@@ -1,5 +1,5 @@
-import { styleBuilder } from '../../style/styles'
-import { getThemeOptions, getThemePalette } from '../../style/themeOptions'
+import { styleBuilder } from '../style/styles'
+import { getThemeOptions, getThemePalette } from '../style/themeOptions'
 
 export function registerDocLayoutStyles() {
   const themeOptions = getThemeOptions()

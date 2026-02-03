@@ -19,7 +19,7 @@ import {
   resolveFolderKey,
   resolveNavigationConfig,
 } from '../navigation/navigation'
-import { initBuiltinComponents } from '../regor/components/initBuiltinComponents'
+import { initBuiltinComponents } from '../regor/initBuiltinComponents'
 import { styleBuilder } from '../style/styles'
 import { setThemeOptions } from '../style/themeOptions'
 import { orderThemes, resolveThemeFileName } from '../style/themes'

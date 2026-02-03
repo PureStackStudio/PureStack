@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { renderApp } from '../regor/components/renderApp'
+import { renderApp } from '../regor/renderApp'
 import { compileMdxToHtml } from './mdx'
 
 describe('compileMdxToHtml', () => {

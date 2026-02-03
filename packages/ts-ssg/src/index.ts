@@ -43,7 +43,7 @@ export {
   type PageTemplatePage,
   resolvePageTemplate,
 } from './page-templates'
-export { componentRegistry } from './regor/components/registry'
+export { componentRegistry } from './regor/registry'
 export { styleBuilder } from './style/styles'
 export {
   DEFAULT_THEME_OPTIONS,

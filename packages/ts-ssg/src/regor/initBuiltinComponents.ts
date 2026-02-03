@@ -1,11 +1,11 @@
-import { registerNormalizeStyles } from '../../style/normalize.css'
-import { ensureDomGlobals } from '../registerDomGlobals'
-import { createCardComponents } from './cardGrid'
+import { registerNormalizeStyles } from '../style/normalize.css'
+import { createCardComponents } from './components/cardGrid'
+import { createNavigationComponents } from './components/navMenu'
+import { createThemeSwitcherComponents } from './components/themeSwitcher'
+import { createTopBarComponents } from './components/topBar'
 import { registerDocLayoutStyles } from './docLayoutStyles'
-import { createNavigationComponents } from './navComponent'
+import { ensureDomGlobals } from './registerDomGlobals'
 import { componentRegistry } from './registry'
-import { createThemeSwitcherComponents } from './themeSwitcher'
-import { createTopBarComponents } from './topBar'
 
 let initialized = false
 

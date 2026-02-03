@@ -9,7 +9,7 @@ import {
   type NavigationTree,
 } from '../navigation/navigation'
 import type { PageTemplateMap } from '../page-templates'
-import { initBuiltinComponents } from '../regor/components/initBuiltinComponents'
+import { initBuiltinComponents } from '../regor/initBuiltinComponents'
 import { setThemeOptions } from '../style/themeOptions'
 import { copyStaticAssets } from './assets'
 import { prepareOutDir } from './io'

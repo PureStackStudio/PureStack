@@ -3,7 +3,7 @@ import { createComponent, html } from 'regor'
 import { styleBuilder } from '../../style/styles'
 import { getThemeOptions, getThemePalette } from '../../style/themeOptions'
 import type { TsSsgContext } from '../../ts-ssg-context'
-import { resolveTsSsgContext } from './resolveTsSsgContext'
+import { resolveTsSsgContext } from '../resolveTsSsgContext'
 
 function resolveBrandLabel(context: TsSsgContext): string {
   const label = context?.site?.siteTitle

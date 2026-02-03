@@ -12,7 +12,7 @@ import {
   resolvePageNavigation,
 } from '../navigation/navigation'
 import type { PageTemplateMap, PageTemplatePage } from '../page-templates'
-import { renderApp } from '../regor/components/renderApp'
+import { renderApp } from '../regor/renderApp'
 import { renderPage } from '../renderer'
 import { resolveThemeStyleLinks } from '../style/themes'
 import { resolveHeadConfig } from './head-config'
