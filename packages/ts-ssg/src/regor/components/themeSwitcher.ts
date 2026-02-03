@@ -134,10 +134,11 @@ function registerThemeSwitcherStyles() {
       .set('background', '#ff9a1f')
       .set('box-shadow', '0 10px 18px rgba(0, 0, 0, 0.18), inset 0 3px 6px rgba(255, 255, 255, 0.3)')
       .set('backdrop-filter', 'blur(8px)')
-      .set('transform', 'translateY(-50%)')
+      .set('transform', 'translateY(-50%) translateX(0)')
       .set('display', 'grid')
       .set('place-items', 'center')
-      .set('transition', 'left 260ms ease, background 200ms ease, box-shadow 200ms ease')
+      .set('transition', 'transform 260ms cubic-bezier(0.4, 0, 0.2, 1), background 200ms ease, box-shadow 200ms ease')
+      .set('will-change', 'transform')
 
   baseThumb('light')
   baseThumb('dark')
@@ -259,9 +260,6 @@ function registerThemeSwitcherStyles() {
     .select('.theme-switcher__icon', 'dark')
     .set('transition', 'transform 160ms ease, opacity 160ms ease')
 
-  styleBuilder
-    .select('.theme-switcher[data-theme="dark"] .theme-switcher__thumb', 'dark')
-    .set('left', 'calc(100% - 10px - 36px)')
   styleBuilder
     .select('.theme-switcher[data-theme="dark"] .theme-switcher__track', 'dark')
     .set('opacity', '0.85')
