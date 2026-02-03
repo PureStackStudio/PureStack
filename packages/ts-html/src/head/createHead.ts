@@ -11,10 +11,10 @@ import { HeadConfig } from './headConfig'
 
 export function createHead(config: HeadConfig): TSNode<'head'> {
   const head = h('head')
-  const meta = h('meta')
   const children = new Array<TSNode<''>>()
+  const meta = () => h('meta')
 
-  if (config.charset) children.push(meta.attr({ charset: config.charset }))
+  if (config.charset) children.push(meta().attr({ charset: config.charset }))
   if (config.title) children.push(h('title').push(h().text(config.title)))
 
   if (config.base) {
@@ -22,16 +22,16 @@ export function createHead(config: HeadConfig): TSNode<'head'> {
   }
 
   config.nameMetas?.forEach((m: NameMetaTag) => {
-    children.push(meta.attr(m))
+    children.push(meta().attr(m))
   })
 
   config.propertyMetas?.forEach((m: PropertyMetaTag) => {
-    children.push(meta.attr(m))
+    children.push(meta().attr(m))
   })
 
   config.httpEquivMetas?.forEach((m: HttpEquivMetaTag) => {
     children.push(
-      meta.attr({
+      meta().attr({
         'http-equiv': m.httpEquiv,
         content: m.content,
       }),
