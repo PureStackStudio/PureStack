@@ -1,5 +1,6 @@
 import { createComponent, html } from 'regor'
 
+import { getSvgIcon } from '../../style/icons'
 import { styleBuilder } from '../../style/styles'
 import { getThemeOptions, getThemePalette } from '../../style/themeOptions'
 
@@ -18,8 +19,11 @@ export interface ThemePricingColors {
   planSummary: string
   planPrice: string
   planPeriod: string
+  planIconBackground: string
+  planIconColor: string
   planFeature: string
-  planFeatureBullet: string
+  planFeatureIconBackground: string
+  planFeatureIconColor: string
   planBadgeBackground: string
   planBadgeText: string
   planNote: string
@@ -54,11 +58,19 @@ interface PricingPlanModel {
   badge?: string
   note?: string
   variant?: string
+  icon?: string
   ctaLabel?: string
   ctaLink?: string
   hasBadge: boolean
   hasPrice: boolean
   hasCta: boolean
+  hasIcon: boolean
+  iconSvg?: string
+}
+
+interface PricingFeatureModel {
+  icon?: string
+  iconSvg?: string
 }
 
 const pricingTableTemplate = html`<section class="pricing">
@@ -78,6 +90,7 @@ const pricingPlanTemplate = html`<article
   :class="{ 'pricing-plan--featured': variant === 'featured' }"
 >
   <div class="pricing-plan__head">
+    <div class="pricing-plan__icon" r-if="hasIcon" r-html="iconSvg"></div>
     <div class="pricing-plan__title-row">
       <h3 class="pricing-plan__title">{{ title }}</h3>
       <span class="pricing-plan__badge" r-if="hasBadge">{{ badge }}</span>
@@ -96,6 +109,11 @@ const pricingPlanTemplate = html`<article
   </ul>
   <p class="pricing-plan__note" r-if="note">{{ note }}</p>
 </article>`
+
+const pricingFeatureTemplate = html`<li class="pricing-feature">
+  <span class="pricing-feature__icon" r-html="iconSvg"></span>
+  <span class="pricing-feature__text"><slot></slot></span>
+</li>`
 
 function registerPricingStyles() {
   const themeOptions = getThemeOptions()
@@ -220,6 +238,37 @@ function registerPricingStyles() {
 
   basePlanHead('light')
   basePlanHead('dark')
+
+  const basePlanIcon = (theme: string) =>
+    styleBuilder
+      .select('.pricing-plan__icon', theme)
+      .width('34px')
+      .height('34px')
+      .display('inline-flex')
+      .alignItems('center')
+      .justifyContent('center')
+      .borderRadius('10px')
+      .background(palette(theme).pricing.planIconBackground)
+      .color(palette(theme).pricing.planIconColor)
+      .marginBottom('2px')
+
+  basePlanIcon('light')
+  basePlanIcon('dark')
+
+  const basePlanIconSvg = (theme: string) =>
+    styleBuilder
+      .select('.pricing-plan__icon svg', theme)
+      .width('18px')
+      .height('18px')
+      .display('block')
+      .stroke('currentColor')
+      .fill('none')
+      .set('stroke-linecap', 'round')
+      .set('stroke-linejoin', 'round')
+      .set('stroke-width', '1.9')
+
+  basePlanIconSvg('light')
+  basePlanIconSvg('dark')
 
   const baseTitleRow = (theme: string) =>
     styleBuilder
@@ -371,10 +420,12 @@ function registerPricingStyles() {
 
   const baseFeatureItem = (theme: string) =>
     styleBuilder
-      .select('.pricing-plan__features li', theme)
+      .select('.pricing-feature', theme)
       .set('break-inside', 'avoid')
-      .position('relative')
-      .paddingLeft('18px')
+      .display('grid')
+      .gridTemplateColumns('18px minmax(0, 1fr)')
+      .gap('8px')
+      .alignItems('start')
       .fontSize('13px')
       .lineHeight('1.5')
       .marginBottom('8px')
@@ -382,20 +433,42 @@ function registerPricingStyles() {
   baseFeatureItem('light').color(palette('light').pricing.planFeature)
   baseFeatureItem('dark').color(palette('dark').pricing.planFeature)
 
-  const baseFeatureBullet = (theme: string) =>
+  const baseFeatureIcon = (theme: string) =>
     styleBuilder
-      .select('.pricing-plan__features li::before', theme)
-      .content('""')
-      .position('absolute')
-      .left('0')
-      .top('0.55em')
-      .width('8px')
-      .height('8px')
-      .borderRadius('50%')
-      .background(palette(theme).pricing.planFeatureBullet)
+      .select('.pricing-feature__icon', theme)
+      .width('18px')
+      .height('18px')
+      .display('inline-flex')
+      .alignItems('center')
+      .justifyContent('center')
+      .borderRadius('6px')
+      .background(palette(theme).pricing.planFeatureIconBackground)
+      .color(palette(theme).pricing.planFeatureIconColor)
+      .marginTop('1px')
 
-  baseFeatureBullet('light')
-  baseFeatureBullet('dark')
+  baseFeatureIcon('light')
+  baseFeatureIcon('dark')
+
+  const baseFeatureIconSvg = (theme: string) =>
+    styleBuilder
+      .select('.pricing-feature__icon svg', theme)
+      .width('12px')
+      .height('12px')
+      .display('block')
+      .stroke('currentColor')
+      .fill('none')
+      .set('stroke-linecap', 'round')
+      .set('stroke-linejoin', 'round')
+      .set('stroke-width', '2')
+
+  baseFeatureIconSvg('light')
+  baseFeatureIconSvg('dark')
+
+  const baseFeatureText = (theme: string) =>
+    styleBuilder.select('.pricing-feature__text', theme).display('block')
+
+  baseFeatureText('light')
+  baseFeatureText('dark')
 
   const baseNote = (theme: string) =>
     styleBuilder
@@ -513,10 +586,18 @@ function createPricingPlanComponent() {
       'badge',
       'note',
       'variant',
+      'icon',
       'ctaLabel',
       'ctaLink',
     ],
     context: (head) => resolvePricingPlanContext(head.props),
+  })
+}
+
+function createPricingFeatureComponent() {
+  return createComponent<PricingFeatureModel>(pricingFeatureTemplate, {
+    props: ['icon'],
+    context: (head) => resolvePricingFeatureContext(head.props),
   })
 }
 
@@ -525,6 +606,7 @@ export function createPricingComponents() {
   return {
     pricingTable: createPricingTableComponent(),
     pricingPlan: createPricingPlanComponent(),
+    pricingFeature: createPricingFeatureComponent(),
   }
 }
 
@@ -553,6 +635,7 @@ function resolvePricingPlanContext(props: PricingPlanModel): PricingPlanModel {
   const badge = resolveString(props.badge)
   const note = resolveString(props.note)
   const variant = resolveVariant(props.variant)
+  const icon = resolveString(props.icon)
   const ctaLabel = resolveString(props.ctaLabel)
   const ctaLink = resolveString(props.ctaLink)
   const hasCta = Boolean(ctaLabel && ctaLink)
@@ -564,9 +647,22 @@ function resolvePricingPlanContext(props: PricingPlanModel): PricingPlanModel {
     badge,
     note,
     variant,
+    icon,
     hasBadge: Boolean(badge),
     hasPrice: Boolean(price),
     hasCta,
+    hasIcon: Boolean(icon),
+    iconSvg: getSvgIcon(icon, 'code'),
+  }
+}
+
+function resolvePricingFeatureContext(
+  props: PricingFeatureModel,
+): PricingFeatureModel {
+  const icon = resolveString(props.icon)
+  return {
+    icon,
+    iconSvg: getSvgIcon(icon, 'check'),
   }
 }
 
