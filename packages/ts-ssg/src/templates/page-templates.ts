@@ -55,7 +55,8 @@ function normalizeTemplateName(name: string | undefined) {
 
 function renderDocTemplate({ head, bodyHtml, navigation }: PageTemplateInput) {
   const hasNavItems =
-    (navigation?.items?.length ?? 0) > 0 || (navigation?.global?.length ?? 0) > 0
+    (navigation?.items?.length ?? 0) > 0 ||
+    (navigation?.global?.length ?? 0) > 0
   return h('html').push(
     head,
     h('body')
@@ -95,4 +96,3 @@ function renderSplashTemplate({ head, bodyHtml }: PageTemplateInput) {
       ),
   )
 }
-
