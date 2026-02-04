@@ -208,7 +208,7 @@ function registerPricingStyles() {
       .select('.pricing__footnote', theme)
       .position('relative')
       .zIndex('1')
-      .margin('20px 0 0')
+      .margin('5px 0 0 !important;')
       .fontSize('12px')
 
   baseFootnote('light').color(palette('light').pricing.footnote)
@@ -231,10 +231,7 @@ function registerPricingStyles() {
   basePlan('dark')
 
   const basePlanHead = (theme: string) =>
-    styleBuilder
-      .select('.pricing-plan__head', theme)
-      .display('grid')
-      .gap('6px')
+    styleBuilder.select('.pricing-plan__head', theme).display('grid').gap('6px')
 
   basePlanHead('light')
   basePlanHead('dark')
@@ -326,9 +323,7 @@ function registerPricingStyles() {
   basePeriod('dark').color(palette('dark').pricing.planPeriod)
 
   const baseCta = (theme: string) =>
-    styleBuilder
-      .select('.pricing-plan__cta', theme)
-      .margin('0')
+    styleBuilder.select('.pricing-plan__cta', theme).margin('0')
 
   baseCta('light')
   baseCta('dark')
@@ -349,7 +344,9 @@ function registerPricingStyles() {
       .background(palette(theme).pricing.planCtaBackground)
       .color(palette(theme).pricing.planCtaText)
       .boxShadow(palette(theme).pricing.planCtaShadow)
-      .transition('transform 180ms ease, box-shadow 180ms ease, background 180ms ease')
+      .transition(
+        'transform 180ms ease, box-shadow 180ms ease, background 180ms ease',
+      )
 
   baseCtaLink('light')
   baseCtaLink('dark')
@@ -544,10 +541,15 @@ function createPricingPlanComponent() {
 
 export function createPricingComponents() {
   registerPricingStyles()
-  return { pricingTable: createPricingTableComponent(), pricingPlan: createPricingPlanComponent() }
+  return {
+    pricingTable: createPricingTableComponent(),
+    pricingPlan: createPricingPlanComponent(),
+  }
 }
 
-function resolvePricingTableContext(props: PricingTableProps): PricingTableContext {
+function resolvePricingTableContext(
+  props: PricingTableProps,
+): PricingTableContext {
   const eyebrow = resolveString(props.eyebrow)
   const title = resolveString(props.title)
   const subtitle = resolveString(props.subtitle)
@@ -562,7 +564,9 @@ function resolvePricingTableContext(props: PricingTableProps): PricingTableConte
   }
 }
 
-function resolvePricingPlanContext(props: PricingPlanProps): PricingPlanContext {
+function resolvePricingPlanContext(
+  props: PricingPlanProps,
+): PricingPlanContext {
   const title = resolveString(props.title) || 'Plan'
   const summary = resolveString(props.summary)
   const price = resolveString(props.price)
@@ -574,8 +578,7 @@ function resolvePricingPlanContext(props: PricingPlanProps): PricingPlanContext 
   const ctaLink = resolveString(props.ctaLink)
   const ctaTarget = resolveString(props.ctaTarget)
   const rawRel = resolveString(props.ctaRel)
-  const ctaRel =
-    rawRel || (ctaTarget === '_blank' ? 'noopener noreferrer' : '')
+  const ctaRel = rawRel || (ctaTarget === '_blank' ? 'noopener noreferrer' : '')
   const hasCta = Boolean(ctaLabel && ctaLink)
   return {
     title,
