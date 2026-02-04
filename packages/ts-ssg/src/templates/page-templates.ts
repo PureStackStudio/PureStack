@@ -54,8 +54,8 @@ function normalizeTemplateName(name: string | undefined) {
 }
 
 function renderDocTemplate({ head, bodyHtml, navigation }: PageTemplateInput) {
-  const navNode = renderDocNav(navigation)
-  const hasNav = Boolean(navNode)
+  const hasNavItems =
+    (navigation?.items?.length ?? 0) > 0 || (navigation?.global?.length ?? 0) > 0
   return h('html').push(
     head,
     h('body')
@@ -64,14 +64,14 @@ function renderDocTemplate({ head, bodyHtml, navigation }: PageTemplateInput) {
         h('top-bar'),
         h('div')
           .attr({
-            class: hasNav ? 'doc-shell' : 'doc-shell doc-shell--single',
+            class: hasNavItems ? 'doc-shell' : 'doc-shell doc-shell--single',
           })
           .push(
-            ...(hasNav
+            ...(hasNavItems
               ? [
                   h('aside')
                     .attr({ class: 'doc-sidebar', id: 'doc-sidebar' })
-                    .push(navNode!),
+                    .push(h('nav-menu')),
                 ]
               : []),
             h('main')
@@ -96,30 +96,3 @@ function renderSplashTemplate({ head, bodyHtml }: PageTemplateInput) {
   )
 }
 
-function renderDocNav(navigation?: PageTemplateInput['navigation']) {
-  const items =
-    navigation?.items && navigation.items.length > 0
-      ? navigation.items
-      : (navigation?.global ?? [])
-  if (items.length === 0) return undefined
-  return h('nav')
-    .attr({ class: 'doc-nav', 'aria-label': 'Page navigation' })
-    .push(renderNavList(items))
-}
-
-function renderNavList(
-  items: NonNullable<PageTemplateInput['navigation']>['items'],
-) {
-  const list = h('ul').attr({ class: 'doc-nav__list' })
-  for (const item of items) {
-    const content = item.url
-      ? h('a').attr({ href: item.url }).text(item.title)
-      : h('span').text(item.title)
-    const li = h('li').attr({ class: 'doc-nav__item' }).push(content)
-    if (item.children && item.children.length > 0) {
-      li.push(renderNavList(item.children))
-    }
-    list.push(li)
-  }
-  return list
-}
