@@ -110,14 +110,15 @@ function registerTopBarStyles() {
 
   styleBuilder
     .select('.topbar__toggle', 'light')
-    .background(palette('light').topBar.toggleBackground)
-    .borderColor(palette('light').topBar.toggleBorder)
+    .background(palette('light').themeSwitcher.background)
+    .borderColor(palette('light').themeSwitcher.border)
+    .color(palette('light').topBar.icon)
     .display('none')
   styleBuilder
     .select('.topbar__toggle', 'dark')
-    .background(palette('dark').topBar.toggleBackground)
-    .borderColor(palette('dark').topBar.toggleBorder)
-    .color(palette('dark').topBar.toggleIcon)
+    .background(palette('dark').themeSwitcher.background)
+    .borderColor(palette('dark').themeSwitcher.border)
+    .color(palette('dark').topBar.icon)
     .display('none')
 
   styleBuilder
@@ -126,6 +127,22 @@ function registerTopBarStyles() {
   styleBuilder
     .select('.template-doc--nav-drawer .topbar__toggle', 'dark')
     .display('grid')
+
+  styleBuilder
+    .select('.topbar__toggle:hover', 'light')
+    .background(palette('light').themeSwitcher.hoverBackground)
+  styleBuilder
+    .select('.topbar__toggle:hover', 'dark')
+    .background(palette('dark').themeSwitcher.hoverBackground)
+
+  styleBuilder
+    .select('.topbar__toggle:focus-visible', 'light')
+    .outline(`2px solid ${palette('light').nav.focusRing}`)
+    .outlineOffset('2px')
+  styleBuilder
+    .select('.topbar__toggle:focus-visible', 'dark')
+    .outline(`2px solid ${palette('dark').nav.focusRing}`)
+    .outlineOffset('2px')
 
   styleBuilder
     .select('.topbar__search', 'light')

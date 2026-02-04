@@ -52,11 +52,7 @@ export function registerDocLayoutStyles() {
   baseMain('dark')
 
   const baseContent = (theme: string) =>
-    styleBuilder
-      .select('.doc-content', theme)
-      .maxWidth('920px')
-      .margin('0')
-      .padding('8px 0 80px')
+    styleBuilder.select('.doc-content', theme).margin('0').padding('8px 0 80px')
 
   baseContent('light')
   baseContent('dark')
@@ -198,7 +194,10 @@ export function registerDocLayoutStyles() {
 
   const mobileInlineSidebar = (theme: string) =>
     styleBuilder
-      .select('.template-doc:not(.template-doc--nav-drawer) .doc-sidebar', theme)
+      .select(
+        '.template-doc:not(.template-doc--nav-drawer) .doc-sidebar',
+        theme,
+      )
       .media('max-width: 1023px')
       .position('static')
       .top('auto')
