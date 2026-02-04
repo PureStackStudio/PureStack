@@ -94,10 +94,12 @@ const pricingPlanTemplate = html`<article
   :class="{ 'pricing-plan--featured': variant === 'featured' }"
 >
   <div class="pricing-plan__head">
-    <div class="pricing-plan__icon" r-if="hasIcon" r-html="iconSvg"></div>
+    <div class="pricing-plan__meta">
+      <div class="pricing-plan__icon" r-if="hasIcon" r-html="iconSvg"></div>
+      <span class="pricing-plan__badge" r-if="hasBadge">{{ badge }}</span>
+    </div>
     <div class="pricing-plan__title-row">
       <h3 class="pricing-plan__title">{{ title }}</h3>
-      <span class="pricing-plan__badge" r-if="hasBadge">{{ badge }}</span>
     </div>
     <p class="pricing-plan__summary" r-if="summary">{{ summary }}</p>
   </div>
@@ -243,6 +245,17 @@ function registerPricingStyles() {
   basePlanHead('light')
   basePlanHead('dark')
 
+  const baseMeta = (theme: string) =>
+    styleBuilder
+      .select('.pricing-plan__meta', theme)
+      .display('flex')
+      .alignItems('center')
+      .justifyContent('space-between')
+      .gap('12px')
+
+  baseMeta('light')
+  baseMeta('dark')
+
   const basePlanIcon = (theme: string) =>
     styleBuilder
       .select('.pricing-plan__icon', theme)
@@ -286,13 +299,11 @@ function registerPricingStyles() {
   const baseTitleRow = (theme: string) =>
     styleBuilder
       .select('.pricing-plan__title-row', theme)
-      .position('relative')
       .display('flex')
       .flexWrap('wrap')
       .gap('10px')
       .alignItems('center')
-      .justifyContent('space-between')
-      .paddingRight('96px')
+      .justifyContent('flex-start')
 
   baseTitleRow('light')
   baseTitleRow('dark')
@@ -310,9 +321,6 @@ function registerPricingStyles() {
   const baseBadge = (theme: string) =>
     styleBuilder
       .select('.pricing-plan__badge', theme)
-      .position('absolute')
-      .top('0')
-      .right('0')
       .padding('4px 10px')
       .borderRadius(themeOptions.radii.pill)
       .fontSize('11px')
