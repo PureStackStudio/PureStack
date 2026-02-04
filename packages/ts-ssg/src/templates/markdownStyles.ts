@@ -25,60 +25,64 @@ export function registerMarkdownStyles() {
       .margin('2.2em 0 0.6em')
       .set('scroll-margin-top', '96px')
 
-  headingBase('.doc-content h1', 'light').fontSize('2.4rem').margin('0 0 0.5em')
-  headingBase('.doc-content h1', 'dark').fontSize('2.4rem').margin('0 0 0.5em')
-  headingBase('.doc-content h2', 'light').fontSize('1.9rem')
-  headingBase('.doc-content h2', 'dark').fontSize('1.9rem')
-  headingBase('.doc-content h3', 'light').fontSize('1.5rem')
-  headingBase('.doc-content h3', 'dark').fontSize('1.5rem')
-  headingBase('.doc-content h4', 'light').fontSize('1.25rem')
-  headingBase('.doc-content h4', 'dark').fontSize('1.25rem')
-  headingBase('.doc-content h5', 'light')
+  headingBase('.doc-content :where(h1)', 'light')
+    .fontSize('2.4rem')
+    .margin('0 0 0.5em')
+  headingBase('.doc-content :where(h1)', 'dark')
+    .fontSize('2.4rem')
+    .margin('0 0 0.5em')
+  headingBase('.doc-content :where(h2)', 'light').fontSize('1.9rem')
+  headingBase('.doc-content :where(h2)', 'dark').fontSize('1.9rem')
+  headingBase('.doc-content :where(h3)', 'light').fontSize('1.5rem')
+  headingBase('.doc-content :where(h3)', 'dark').fontSize('1.5rem')
+  headingBase('.doc-content :where(h4)', 'light').fontSize('1.25rem')
+  headingBase('.doc-content :where(h4)', 'dark').fontSize('1.25rem')
+  headingBase('.doc-content :where(h5)', 'light')
     .fontSize('1.05rem')
     .textTransform('uppercase')
     .letterSpacing('0.04em')
-  headingBase('.doc-content h5', 'dark')
+  headingBase('.doc-content :where(h5)', 'dark')
     .fontSize('1.05rem')
     .textTransform('uppercase')
     .letterSpacing('0.04em')
-  headingBase('.doc-content h6', 'light')
+  headingBase('.doc-content :where(h6)', 'light')
     .fontSize('0.95rem')
     .textTransform('uppercase')
     .letterSpacing('0.06em')
     .color(palette('light').nav.textMuted)
-  headingBase('.doc-content h6', 'dark')
+  headingBase('.doc-content :where(h6)', 'dark')
     .fontSize('0.95rem')
     .textTransform('uppercase')
     .letterSpacing('0.06em')
     .color(palette('dark').nav.textMuted)
 
-  styleBuilder.select('.doc-content h1:first-child', 'light').marginTop('0')
-  styleBuilder.select('.doc-content h1:first-child', 'dark').marginTop('0')
+  styleBuilder.select('.doc-content :where(h1:first-child)', 'light').marginTop('0')
+  styleBuilder.select('.doc-content :where(h1:first-child)', 'dark').marginTop('0')
 
   const baseParagraph = (theme: string) =>
-    styleBuilder.select('.doc-content p', theme).margin('0 0 1em')
+    styleBuilder.select('.doc-content :where(p)', theme).margin('0 0 1em')
   baseParagraph('light')
   baseParagraph('dark')
 
   const baseLists = (theme: string) =>
     styleBuilder
-      .select('.doc-content ul, .doc-content ol', theme)
+      .select('.doc-content :where(ul, ol)', theme)
       .margin('0 0 1em 1.4em')
       .padding('0')
   baseLists('light')
   baseLists('dark')
 
   const baseListItems = (theme: string) =>
-    styleBuilder.select('.doc-content li', theme).margin('0.35em 0')
+    styleBuilder.select('.doc-content :where(li)', theme).margin('0.35em 0')
   baseListItems('light')
   baseListItems('dark')
 
-  styleBuilder.select('.doc-content li > p', 'light').margin('0.4em 0')
-  styleBuilder.select('.doc-content li > p', 'dark').margin('0.4em 0')
+  styleBuilder.select('.doc-content :where(li > p)', 'light').margin('0.4em 0')
+  styleBuilder.select('.doc-content :where(li > p)', 'dark').margin('0.4em 0')
 
   const baseLinks = (theme: string) =>
     styleBuilder
-      .select('.doc-content a', theme)
+      .select('.doc-content :where(a)', theme)
       .color(linkColor(theme))
       .textDecoration('none')
       .fontWeight('600')
@@ -86,24 +90,24 @@ export function registerMarkdownStyles() {
   baseLinks('dark')
 
   styleBuilder
-    .select('.doc-content a:hover', 'light')
+    .select('.doc-content :where(a:hover)', 'light')
     .textDecoration('underline')
   styleBuilder
-    .select('.doc-content a:hover', 'dark')
+    .select('.doc-content :where(a:hover)', 'dark')
     .textDecoration('underline')
 
   styleBuilder
-    .select('.doc-content a:focus-visible', 'light')
+    .select('.doc-content :where(a:focus-visible)', 'light')
     .outline(`2px solid ${palette('light').nav.focusRing}`)
     .outlineOffset('2px')
   styleBuilder
-    .select('.doc-content a:focus-visible', 'dark')
+    .select('.doc-content :where(a:focus-visible)', 'dark')
     .outline(`2px solid ${palette('dark').nav.focusRing}`)
     .outlineOffset('2px')
 
   const baseInlineCode = (theme: string) =>
     styleBuilder
-      .select('.doc-content code', theme)
+      .select('.doc-content :where(code)', theme)
       .fontFamily("'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace")
       .fontSize('0.9em')
       .background(palette(theme).surface.altBackground)
@@ -115,7 +119,7 @@ export function registerMarkdownStyles() {
 
   const basePre = (theme: string) =>
     styleBuilder
-      .select('.doc-content pre', theme)
+      .select('.doc-content :where(pre)', theme)
       .margin('0 0 1.4em')
       .padding('18px 20px')
       .background(palette(theme).surface.altBackground)
@@ -128,13 +132,13 @@ export function registerMarkdownStyles() {
   basePre('dark')
 
   styleBuilder
-    .select('.doc-content pre code', 'light')
+    .select('.doc-content :where(pre code)', 'light')
     .background('transparent')
     .border('none')
     .padding('0')
     .fontSize('inherit')
   styleBuilder
-    .select('.doc-content pre code', 'dark')
+    .select('.doc-content :where(pre code)', 'dark')
     .background('transparent')
     .border('none')
     .padding('0')
@@ -142,7 +146,7 @@ export function registerMarkdownStyles() {
 
   const baseBlockquote = (theme: string) =>
     styleBuilder
-      .select('.doc-content blockquote', theme)
+      .select('.doc-content :where(blockquote)', theme)
       .margin('0 0 1.4em')
       .padding('0.65em 1.1em')
       .borderLeft(`3px solid ${palette(theme).surface.border}`)
@@ -153,7 +157,7 @@ export function registerMarkdownStyles() {
 
   const baseTables = (theme: string) =>
     styleBuilder
-      .select('.doc-content table', theme)
+      .select('.doc-content :where(table)', theme)
       .width('100%')
       .borderCollapse('collapse')
       .margin('0 0 1.4em')
@@ -162,7 +166,7 @@ export function registerMarkdownStyles() {
 
   const baseCells = (theme: string) =>
     styleBuilder
-      .select('.doc-content th, .doc-content td', theme)
+      .select('.doc-content :where(th, td)', theme)
       .border(`1px solid ${palette(theme).surface.border}`)
       .padding('8px 10px')
       .textAlign('left')
@@ -170,17 +174,17 @@ export function registerMarkdownStyles() {
   baseCells('dark')
 
   styleBuilder
-    .select('.doc-content th', 'light')
+    .select('.doc-content :where(th)', 'light')
     .background(palette('light').surface.altBackground)
     .fontWeight('700')
   styleBuilder
-    .select('.doc-content th', 'dark')
+    .select('.doc-content :where(th)', 'dark')
     .background(palette('dark').surface.altBackground)
     .fontWeight('700')
 
   const baseHr = (theme: string) =>
     styleBuilder
-      .select('.doc-content hr', theme)
+      .select('.doc-content :where(hr)', theme)
       .border('none')
       .borderTop(`1px solid ${palette(theme).surface.border}`)
       .margin('2em 0')
@@ -189,7 +193,7 @@ export function registerMarkdownStyles() {
 
   const baseMedia = (theme: string) =>
     styleBuilder
-      .select('.doc-content img, .doc-content video', theme)
+      .select('.doc-content :where(img, video)', theme)
       .maxWidth('100%')
       .height('auto')
       .borderRadius(themeOptions.radii.md)
@@ -197,16 +201,16 @@ export function registerMarkdownStyles() {
   baseMedia('light')
   baseMedia('dark')
 
-  styleBuilder.select('.doc-content figure', 'light').margin('0 0 1.4em')
-  styleBuilder.select('.doc-content figure', 'dark').margin('0 0 1.4em')
+  styleBuilder.select('.doc-content :where(figure)', 'light').margin('0 0 1.4em')
+  styleBuilder.select('.doc-content :where(figure)', 'dark').margin('0 0 1.4em')
 
   styleBuilder
-    .select('.doc-content figcaption', 'light')
+    .select('.doc-content :where(figcaption)', 'light')
     .marginTop('0.6em')
     .fontSize('0.9em')
     .color(palette('light').nav.textMuted)
   styleBuilder
-    .select('.doc-content figcaption', 'dark')
+    .select('.doc-content :where(figcaption)', 'dark')
     .marginTop('0.6em')
     .fontSize('0.9em')
     .color(palette('dark').nav.textMuted)
