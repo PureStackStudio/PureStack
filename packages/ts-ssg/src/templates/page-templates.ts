@@ -20,6 +20,8 @@ export interface PageTemplateInput {
   siteTitle?: string
 }
 
+type NavMode = 'sidebar' | 'drawer'
+
 export type PageTemplate = (
   input: PageTemplateInput,
 ) => TSNode<'html'> | Promise<TSNode<'html'>>
@@ -53,20 +55,32 @@ function normalizeTemplateName(name: string | undefined) {
   return trimmed.length > 0 ? trimmed : 'doc'
 }
 
-function renderDocTemplate({ head, bodyHtml, navigation }: PageTemplateInput) {
+function renderDocTemplate({
+  head,
+  bodyHtml,
+  navigation,
+  page,
+}: PageTemplateInput) {
   const hasNavItems =
     (navigation?.items?.length ?? 0) > 0 ||
     (navigation?.global?.length ?? 0) > 0
+  const navMode = resolveNavMode(page?.frontmatter)
+  const bodyClass =
+    navMode === 'drawer' ? 'template-doc template-doc--nav-drawer' : 'template-doc'
+  const shellClass =
+    hasNavItems && navMode === 'drawer'
+      ? 'doc-shell doc-shell--nav-drawer'
+      : hasNavItems
+        ? 'doc-shell'
+        : 'doc-shell doc-shell--single'
   return h('html').push(
     head,
     h('body')
-      .attr({ class: 'template-doc' })
+      .attr({ class: bodyClass })
       .push(
         h('top-bar'),
         h('div')
-          .attr({
-            class: hasNavItems ? 'doc-shell' : 'doc-shell doc-shell--single',
-          })
+          .attr({ class: shellClass })
           .push(
             ...(hasNavItems
               ? [
@@ -84,6 +98,17 @@ function renderDocTemplate({ head, bodyHtml, navigation }: PageTemplateInput) {
           ),
       ),
   )
+}
+
+function resolveNavMode(frontmatter: Record<string, unknown> | undefined): NavMode {
+  if (!isPlainObject(frontmatter)) return 'sidebar'
+  const layout = isPlainObject(frontmatter.layout) ? frontmatter.layout : undefined
+  const navMode = layout?.navMode
+  return navMode === 'drawer' ? 'drawer' : 'sidebar'
+}
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
 
 function renderSplashTemplate({ head, bodyHtml }: PageTemplateInput) {

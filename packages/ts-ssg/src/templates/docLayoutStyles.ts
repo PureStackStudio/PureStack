@@ -38,6 +38,14 @@ export function registerDocLayoutStyles() {
   singleShell('light')
   singleShell('dark')
 
+  const drawerShell = (theme: string) =>
+    styleBuilder
+      .select('.doc-shell--nav-drawer', theme)
+      .gridTemplateColumns('1fr')
+
+  drawerShell('light')
+  drawerShell('dark')
+
   const baseMain = (theme: string) =>
     styleBuilder.select('.doc-main', theme).minWidth('0')
   baseMain('light')
@@ -64,6 +72,23 @@ export function registerDocLayoutStyles() {
 
   baseSidebar('light')
   baseSidebar('dark')
+
+  const drawerSidebar = (theme: string) =>
+    styleBuilder
+      .select('.template-doc--nav-drawer .doc-sidebar', theme)
+      .position('fixed')
+      .top('72px')
+      .left('16px')
+      .right('16px')
+      .bottom('16px')
+      .height('auto')
+      .transform('translateX(-120%)')
+      .transition('transform 220ms ease')
+      .zIndex(35)
+      .boxShadow(themeOptions.shadows.strong)
+
+  drawerSidebar('light')
+  drawerSidebar('dark')
 
   styleBuilder
     .select('.doc-nav', 'light')
