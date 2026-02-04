@@ -1,12 +1,13 @@
 ---
-title: LogPot
+title: CalcCore
+description: Backend-native calculation engine for SaaS platforms.
 template: doc
 sidebar:
   order: 1
 hero:
-  title: "LogPot"
+  title: "CalcCore"
   tagline: |
-    A modern logging library for TypeScript with custom levels, worker-thread offloading, fully customizable templates, and built-in transports featuring file rotation, retention, batching, compression, HTTP authentication (OAuth2, Basic, ...) and more.
+    Deterministic calculations for SaaS backends Excel-compatible formulas. Backend-grade execution. CalcCore is a headless calculation engine designed for modern SaaS systems. It allows you to author complex business logic using Excel-compatible formulas or code, then run that logic safely, deterministically, and at scale — without Excel in production.
   image:
     file: ../logo.svg
   actions:
@@ -21,93 +22,162 @@ hero:
         target: _blank
 ---
 
-import { CardGrid, Card, LinkCard } from '@astrojs/starlight/components';
 
-LogPot makes structured, high-performance logging effortless.
-Whether you’re shipping logs to stdout, files with rotation, HTTP endpoints, or your own custom sink, LogPot’s clean API and robust feature set let you focus on your application. never your logger.
+# CalcCore
 
-BEGIN NAV --------
-<NavMenu/>
-END OF NAV --------
+## Backend-native calculation engine  
+### Excel-compatible logic, designed for production systems
 
-<CardGrid title="Key Features">
+CalcCore is a **headless calculation engine** for SaaS backends and internal platforms.
 
-  <Card title="✅ Type-Safe Events" icon="seti:typescript">
-    Define custom level maps & metadata shapes with full compile-time guarantees.
-  </Card>
-  <Card title="🔌 Pluggable Transports" icon="seti:docker">
-    Console, File (rotation, batching, retries), HTTP (auth, batching), or your own sink via abstract base.
-  </Card>
+It enables teams to **define complex calculation logic using familiar Excel-style formulas or code**, and **execute that logic deterministically and efficiently inside backend services**.
 
-  <Card title="🎨 Powerful Formatting" icon="seti:json">
-    Out-of-the-box JSON-array, NDJSON, envelope, or fully templatable text with padding, truncation, colors & emoji.
-  </Card>
-
-  <Card title="🐞 Robust Error Handling" icon="error">
-    Turn <code>Error</code> objects (including nested causes & <code>AggregateError</code>) into safe, circular-free JSON with optional stack & hooks.
-  </Card>
-
-  <Card title="⚙️ Fine-Grained Control" icon="setting">
-    Level filters, category sets, sync/async transformers, gzip compression, custom field maps, and merge-meta options.
-  </Card>
-
-  <Card title="🧵 Worker Threads" icon="rocket">
-    Push heavy I/O and formatting off the event loop. keep your app responsive at scale.
-  </Card>
-
-</CardGrid>
+CalcCore focuses on correctness, predictability, and long-term maintainability in production environments.
 
 ---
 
-## 🚦 Quick Links
+## Why CalcCore exists
 
-<LinkCard
-  title="Overview"
-  href="overview"
-  description="Why LogPot is different"
-  icon="puzzle"
-/>
-<LinkCard
-  title="Getting Started"
-  href="getting-started"
-  description="Your first few lines of code"
-  icon="rocket"
-/>
-<LinkCard
-  title="Features"
-  href="features"
-  description="In-depth walkthrough"
-  icon="list"
-/>
-<LinkCard
-  title="Transports"
-  href="transports"
-  description="Built-in & custom sinks"
-  icon="share"
-/>
-<LinkCard
-  title="Formatting"
-  href="formatting"
-  description="Templates, JSON, NDJSON & more"
-  icon="paintcan"
-/>
-<LinkCard
-  title="API Reference"
-  href="reference"
-  description="All types, interfaces & functions"
-  icon="file-code"
-/>
-<LinkCard
-  title="Contributing"
-  href="https://github.com/koculu/logpot/blob/main/.github/CONTRIBUTING.md"
-  description="Help build the future of logging"
-  icon="heart"
-  target="_blank"
-/>
-<LinkCard
-  title="Community & Support"
-  href="https://github.com/koculu/logpot/discussions"
-  description="Join discussions or ask questions"
-  icon="comment"
-  target="_blank"
-/>
+Many backend systems rely on complex calculation logic:
+
+- pricing and discount models  
+- financial and accounting rules  
+- forecasting and planning logic  
+- eligibility and decision rules  
+
+In practice, this logic is often designed and validated using spreadsheets, then reimplemented in code for production use.
+
+CalcCore bridges this gap by providing a **dedicated calculation runtime** that can execute spreadsheet-style logic directly in backend systems, with production-grade guarantees.
+
+---
+
+## What CalcCore provides
+
+### Backend-oriented execution model
+CalcCore is designed for:
+- APIs and services
+- background jobs
+- batch processing
+- high-throughput workloads
+
+It integrates naturally into modern backend architectures.
+
+---
+
+### Deterministic and reproducible calculations
+CalcCore emphasizes predictable behavior:
+
+- explicit evaluation semantics  
+- controlled recalculation behavior  
+- consistent results for identical inputs  
+
+This makes calculations easier to test, debug, and reproduce over time.
+
+---
+
+### Familiar formula semantics
+CalcCore supports a wide range of **Excel-compatible functions and behaviors**, including:
+
+- arithmetic and logical expressions  
+- lookup and reference functions  
+- financial and date/time calculations  
+- array-oriented and table-style logic  
+
+Teams can work with familiar concepts without introducing a new modeling language.
+
+---
+
+### Flexible model authoring
+Calculation models can be authored in multiple ways:
+
+- **Code-first**, for engineering-owned logic and CI-driven workflows  
+- **Excel-based**, for scenarios where spreadsheet authoring and validation are preferred  
+
+Both approaches compile into the same execution model at runtime.
+
+---
+
+### Designed for observability
+CalcCore exposes rich execution information:
+
+- structured error reporting  
+- dependency-aware evaluation  
+- optional calculation traces  
+
+This supports debugging, auditing, and long-term operational confidence.
+
+---
+
+## Example: pricing logic in a backend service
+
+```csharp
+var model = Model.Create("pricing:v1", m =>
+{
+    var age        = m.Input.Number("customer.age");
+    var orderTotal = m.Input.Number("order.total");
+
+    var discount =
+        m.If(age >= 60, 0.15,
+        m.If(orderTotal >= 200, 0.10, 0.00));
+
+    m.Output("price.final",
+        orderTotal * (1 - discount) * 1.19);
+});
+
+var engine = new EvaluationEngine(model);
+
+var result = engine.Evaluate(new
+{
+    customer = new { age = 42 },
+    order    = new { total = 199.90 }
+});
+````
+
+This model can be evaluated repeatedly with different inputs, producing consistent and predictable results suitable for production use.
+
+---
+
+## Who CalcCore is designed for
+
+CalcCore is a good fit for teams that:
+
+* operate SaaS platforms with non-trivial calculation logic
+* need predictable and testable calculation behavior
+* want to reduce the gap between spreadsheet-based models and backend execution
+* value long-term maintainability and correctness
+
+Typical adopters include SaaS companies, fintech platforms, internal tooling teams, and data-driven services.
+
+---
+
+## Getting started
+
+* [Quick Start](/docs/quick-start)
+* [Authoring Models (Code-First)](/docs/authoring-models-code)
+* [Authoring Models (Excel)](/docs/authoring-models-excel)
+* [How CalcCore Works](/how-it-works)
+
+---
+
+## Pricing
+
+CalcCore is commercially licensed and priced for backend and SaaS usage, with simple and predictable terms.
+
+* per-service licensing
+* no usage-based surprises
+* suitable for long-running production systems
+
+[View Pricing](/pricing)
+
+---
+
+## A focus on long-term reliability
+
+CalcCore is developed with an emphasis on:
+
+* correctness over convenience
+* explicit behavior over hidden magic
+* stable APIs and execution semantics
+
+It is intended for teams that treat calculation logic as a core part of their system architecture.
+
