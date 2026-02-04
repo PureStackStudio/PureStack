@@ -121,12 +121,12 @@ function registerPricingStyles() {
       .select('.pricing', theme)
       .position('relative')
       .overflow('hidden')
-      .padding('32px')
+      .padding('28px')
       .borderRadius(themeOptions.radii.lg)
       .border(`1px solid ${palette(theme).pricing.border}`)
       .background(palette(theme).pricing.background)
       .boxShadow(themeOptions.shadows.soft)
-      .margin('0 0 36px')
+      .margin('0 0 32px')
 
   basePricing('light')
   basePricing('dark')
@@ -150,8 +150,8 @@ function registerPricingStyles() {
       .position('relative')
       .zIndex('1')
       .display('grid')
-      .gap('8px')
-      .margin('0 0 24px')
+      .gap('6px')
+      .margin('0 0 20px')
 
   baseHeader('light')
   baseHeader('dark')
@@ -183,7 +183,7 @@ function registerPricingStyles() {
     styleBuilder
       .select('.pricing__subtitle', theme)
       .margin('0')
-      .fontSize('15px')
+      .fontSize('14px')
       .lineHeight('1.6')
       .maxWidth('680px')
 
@@ -196,8 +196,8 @@ function registerPricingStyles() {
       .position('relative')
       .zIndex('1')
       .display('grid')
-      .gridTemplateColumns('repeat(4, minmax(0, 1fr))')
-      .gap('20px')
+      .gridTemplateColumns('repeat(2, minmax(0, 1fr))')
+      .gap('16px')
       .alignItems('stretch')
 
   baseGrid('light')
@@ -209,7 +209,7 @@ function registerPricingStyles() {
       .position('relative')
       .zIndex('1')
       .margin('20px 0 0')
-      .fontSize('13px')
+      .fontSize('12px')
 
   baseFootnote('light').color(palette('light').pricing.footnote)
   baseFootnote('dark').color(palette('dark').pricing.footnote)
@@ -219,8 +219,8 @@ function registerPricingStyles() {
       .select('.pricing-plan', theme)
       .display('flex')
       .flexDirection('column')
-      .gap('16px')
-      .padding('22px')
+      .gap('12px')
+      .padding('18px')
       .borderRadius(themeOptions.radii.md)
       .border(`1px solid ${palette(theme).pricing.planBorder}`)
       .background(palette(theme).pricing.planBackground)
@@ -282,7 +282,7 @@ function registerPricingStyles() {
     styleBuilder
       .select('.pricing-plan__summary', theme)
       .margin('0')
-      .fontSize('14px')
+      .fontSize('13px')
       .lineHeight('1.5')
 
   baseSummary('light').color(palette('light').pricing.planSummary)
@@ -301,7 +301,7 @@ function registerPricingStyles() {
   const baseAmount = (theme: string) =>
     styleBuilder
       .select('.pricing-plan__amount', theme)
-      .fontSize('28px')
+      .fontSize('24px')
       .fontWeight('700')
       .letterSpacing('-0.02em')
 
@@ -311,7 +311,7 @@ function registerPricingStyles() {
   const basePeriod = (theme: string) =>
     styleBuilder
       .select('.pricing-plan__period', theme)
-      .fontSize('13px')
+      .fontSize('11px')
       .textTransform('uppercase')
       .letterSpacing('0.12em')
       .fontWeight('600')
@@ -322,7 +322,7 @@ function registerPricingStyles() {
   const baseCta = (theme: string) =>
     styleBuilder
       .select('.pricing-plan__cta', theme)
-      .margin('2px 0 0')
+      .margin('0')
 
   baseCta('light')
   baseCta('dark')
@@ -334,10 +334,10 @@ function registerPricingStyles() {
       .alignItems('center')
       .justifyContent('center')
       .gap('8px')
-      .padding('10px 16px')
+      .padding('9px 14px')
       .borderRadius(themeOptions.radii.pill)
       .fontWeight('600')
-      .fontSize('14px')
+      .fontSize('13px')
       .textDecoration('none')
       .border(`1px solid ${palette(theme).pricing.planCtaBorder}`)
       .background(palette(theme).pricing.planCtaBackground)
@@ -374,8 +374,9 @@ function registerPricingStyles() {
       .listStyle('none')
       .padding('0')
       .margin('0')
-      .display('grid')
-      .gap('10px')
+      .display('block')
+      .set('column-gap', '18px')
+      .set('column-count', '1')
 
   baseFeatures('light')
   baseFeatures('dark')
@@ -383,10 +384,12 @@ function registerPricingStyles() {
   const baseFeatureItem = (theme: string) =>
     styleBuilder
       .select('.pricing-plan__features li', theme)
+      .set('break-inside', 'avoid')
       .position('relative')
-      .paddingLeft('22px')
-      .fontSize('14px')
+      .paddingLeft('18px')
+      .fontSize('13px')
       .lineHeight('1.5')
+      .marginBottom('8px')
 
   baseFeatureItem('light').color(palette('light').pricing.planFeature)
   baseFeatureItem('dark').color(palette('dark').pricing.planFeature)
@@ -410,7 +413,7 @@ function registerPricingStyles() {
     styleBuilder
       .select('.pricing-plan__note', theme)
       .margin('0')
-      .fontSize('12px')
+      .fontSize('11px')
       .lineHeight('1.5')
 
   baseNote('light').color(palette('light').pricing.planNote)
@@ -443,12 +446,12 @@ function registerPricingStyles() {
   styleBuilder
     .select('.pricing-plan--featured', 'light')
     .position('relative')
-    .transform('translateY(-6px)')
+    .transform('translateY(-4px)')
 
   styleBuilder
     .select('.pricing-plan--featured', 'dark')
     .position('relative')
-    .transform('translateY(-6px)')
+    .transform('translateY(-4px)')
 
   const featuredCta = (theme: string) =>
     styleBuilder
@@ -468,14 +471,14 @@ function registerPricingStyles() {
     .select('.pricing-plan--featured .pricing-plan__cta-link:hover', 'dark')
     .background(palette('dark').pricing.planHighlightCtaHover)
 
-  const tabletGrid = (theme: string) =>
+  const featureColumns = (theme: string) =>
     styleBuilder
-      .select('.pricing__grid', theme)
-      .media('max-width: 1100px')
-      .gridTemplateColumns('repeat(2, minmax(0, 1fr))')
+      .select('.pricing-plan__features', theme)
+      .media('min-width: 1400px')
+      .set('column-count', '2')
 
-  tabletGrid('light')
-  tabletGrid('dark')
+  featureColumns('light')
+  featureColumns('dark')
 
   const mobileGrid = (theme: string) =>
     styleBuilder
@@ -490,7 +493,7 @@ function registerPricingStyles() {
     styleBuilder
       .select('.pricing', theme)
       .media('max-width: 720px')
-      .padding('24px')
+      .padding('22px')
 
   mobilePricing('light')
   mobilePricing('dark')
