@@ -37,23 +37,16 @@ export interface ThemePricingColors {
   focusRing: string
 }
 
-interface PricingTableProps {
+interface PricingTableModel {
   eyebrow?: string
   title?: string
   subtitle?: string
   footnote?: string
-}
-
-interface PricingTableContext {
-  eyebrow: string
-  title: string
-  subtitle: string
-  footnote: string
   hasHeader: boolean
   hasFootnote: boolean
 }
 
-interface PricingPlanProps {
+interface PricingPlanModel {
   title?: string
   summary?: string
   price?: string
@@ -65,15 +58,6 @@ interface PricingPlanProps {
   ctaLink?: string
   ctaTarget?: string
   ctaRel?: string
-}
-
-interface PricingPlanContext {
-  title: string
-  summary: string
-  price: string
-  period: string
-  badge: string
-  note: string
   planClass: string
   hasBadge: boolean
   hasPrice: boolean
@@ -512,15 +496,15 @@ function registerPricingStyles() {
 }
 
 function createPricingTableComponent() {
-  return createComponent<PricingTableContext>(pricingTableTemplate, {
+  return createComponent<PricingTableModel>(pricingTableTemplate, {
     props: ['eyebrow', 'title', 'subtitle', 'footnote'],
     context: (head) =>
-      resolvePricingTableContext(head.props as PricingTableProps),
+      resolvePricingTableContext(head.props as PricingTableModel),
   })
 }
 
 function createPricingPlanComponent() {
-  return createComponent<PricingPlanContext>(pricingPlanTemplate, {
+  return createComponent<PricingPlanModel>(pricingPlanTemplate, {
     props: [
       'title',
       'summary',
@@ -535,7 +519,7 @@ function createPricingPlanComponent() {
       'ctaRel',
     ],
     context: (head) =>
-      resolvePricingPlanContext(head.props as PricingPlanProps),
+      resolvePricingPlanContext(head.props as PricingPlanModel),
   })
 }
 
@@ -548,8 +532,8 @@ export function createPricingComponents() {
 }
 
 function resolvePricingTableContext(
-  props: PricingTableProps,
-): PricingTableContext {
+  props: PricingTableModel,
+): PricingTableModel {
   const eyebrow = resolveString(props.eyebrow)
   const title = resolveString(props.title)
   const subtitle = resolveString(props.subtitle)
@@ -565,8 +549,8 @@ function resolvePricingTableContext(
 }
 
 function resolvePricingPlanContext(
-  props: PricingPlanProps,
-): PricingPlanContext {
+  props: PricingPlanModel,
+): PricingPlanModel {
   const title = resolveString(props.title) || 'Plan'
   const summary = resolveString(props.summary)
   const price = resolveString(props.price)
