@@ -1,6 +1,7 @@
 import type { ThemeCardColors, ThemeCardGridColors } from '../regor/components/cardGrid'
 import type { ThemeHeroColors } from '../regor/components/hero'
 import type { ThemeNavColors } from '../regor/components/navMenu'
+import type { ThemePricingColors } from '../regor/components/pricing'
 import type { ThemeSwitcherColors } from '../regor/components/themeSwitcher'
 import type { ThemeTopBarColors } from '../regor/components/topBar'
 import { normalizeThemeName, type ThemeName } from './themes'
@@ -35,6 +36,7 @@ export interface ThemePalette {
   cardGrid: ThemeCardGridColors
   card: ThemeCardColors
   hero: ThemeHeroColors
+  pricing: ThemePricingColors
 }
 
 export interface ThemeOptions {
@@ -157,6 +159,41 @@ export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
         glow:
           'radial-gradient(circle at 10% 20%, rgba(120, 152, 255, 0.45), transparent 55%), radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.5), transparent 50%)',
       },
+      pricing: {
+        background:
+          'linear-gradient(135deg, rgba(248, 249, 255, 0.96), rgba(233, 239, 255, 0.96))',
+        border: '#d8e0f5',
+        title: '#0f172a',
+        subtitle: '#4b5563',
+        eyebrow: '#6b7280',
+        footnote: '#6b7280',
+        glow:
+          'radial-gradient(circle at 15% 20%, rgba(124, 152, 255, 0.35), transparent 55%), radial-gradient(circle at 80% 5%, rgba(255, 255, 255, 0.6), transparent 60%)',
+        planBackground: '#ffffff',
+        planBorder: '#e2e8f5',
+        planShadow: '0 12px 20px rgba(15, 23, 42, 0.08)',
+        planTitle: '#0f172a',
+        planSummary: '#4b5563',
+        planPrice: '#111827',
+        planPeriod: '#6b7280',
+        planFeature: '#1f2937',
+        planFeatureBullet: '#7b8bf5',
+        planBadgeBackground: '#eef2ff',
+        planBadgeText: '#3730a3',
+        planNote: '#6b7280',
+        planCtaBackground: '#ffffff',
+        planCtaText: '#1f3a8a',
+        planCtaBorder: '#c7d2fe',
+        planCtaHover: '#eef2ff',
+        planCtaShadow: '0 10px 18px rgba(46, 64, 130, 0.12)',
+        planHighlightBackground: '#f3f6ff',
+        planHighlightBorder: '#b7c6ff',
+        planHighlightShadow: '0 18px 30px rgba(53, 78, 170, 0.18)',
+        planHighlightCtaBackground: '#1f4ed8',
+        planHighlightCtaText: '#ffffff',
+        planHighlightCtaHover: '#1b45c2',
+        focusRing: '#93a9ff',
+      },
     },
     dark: {
       app: {
@@ -241,6 +278,41 @@ export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
         logoShadow: '0 22px 34px rgba(8, 10, 18, 0.55)',
         glow:
           'radial-gradient(circle at 15% 20%, rgba(74, 111, 255, 0.35), transparent 55%), radial-gradient(circle at 85% 10%, rgba(255, 255, 255, 0.08), transparent 60%)',
+      },
+      pricing: {
+        background:
+          'linear-gradient(135deg, rgba(20, 23, 32, 0.98), rgba(28, 33, 45, 0.98))',
+        border: '#2b3240',
+        title: '#f5f7ff',
+        subtitle: '#c4cad9',
+        eyebrow: '#9aa4b2',
+        footnote: '#9aa4b2',
+        glow:
+          'radial-gradient(circle at 15% 20%, rgba(74, 111, 255, 0.28), transparent 55%), radial-gradient(circle at 85% 5%, rgba(255, 255, 255, 0.08), transparent 60%)',
+        planBackground: '#181c24',
+        planBorder: '#2a313f',
+        planShadow: '0 16px 26px rgba(5, 10, 22, 0.4)',
+        planTitle: '#f5f7ff',
+        planSummary: '#b8c0d2',
+        planPrice: '#f5f7ff',
+        planPeriod: '#9aa4b2',
+        planFeature: '#d6dbea',
+        planFeatureBullet: '#7c92ff',
+        planBadgeBackground: '#2b3560',
+        planBadgeText: '#c7d2ff',
+        planNote: '#9aa4b2',
+        planCtaBackground: '#1a2235',
+        planCtaText: '#cfd8ff',
+        planCtaBorder: '#334166',
+        planCtaHover: '#202a40',
+        planCtaShadow: '0 14px 24px rgba(5, 10, 22, 0.35)',
+        planHighlightBackground: '#20283a',
+        planHighlightBorder: '#4b5cc4',
+        planHighlightShadow: '0 20px 36px rgba(5, 10, 22, 0.45)',
+        planHighlightCtaBackground: '#b8c9ff',
+        planHighlightCtaText: '#101827',
+        planHighlightCtaHover: '#a6bbff',
+        focusRing: '#91a7ff',
       },
     },
   },
@@ -329,5 +401,6 @@ function mergePalette(base: ThemePalette, override?: Partial<ThemePalette>) {
     cardGrid: { ...base.cardGrid, ...(override.cardGrid ?? {}) },
     card: { ...base.card, ...(override.card ?? {}) },
     hero: { ...base.hero, ...(override.hero ?? {}) },
+    pricing: { ...base.pricing, ...(override.pricing ?? {}) },
   }
 }
