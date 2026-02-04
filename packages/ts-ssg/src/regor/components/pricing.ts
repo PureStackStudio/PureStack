@@ -507,13 +507,29 @@ function registerPricingStyles() {
 
 function createPricingTableComponent() {
   return createComponent<PricingTableContext>(pricingTableTemplate, {
-    context: (props) => resolvePricingTableContext(props as PricingTableProps),
+    props: ['eyebrow', 'title', 'subtitle', 'footnote'],
+    context: (head) =>
+      resolvePricingTableContext(head.props as PricingTableProps),
   })
 }
 
 function createPricingPlanComponent() {
   return createComponent<PricingPlanContext>(pricingPlanTemplate, {
-    context: (props) => resolvePricingPlanContext(props as PricingPlanProps),
+    props: [
+      'title',
+      'summary',
+      'price',
+      'period',
+      'badge',
+      'note',
+      'variant',
+      'ctaLabel',
+      'ctaLink',
+      'ctaTarget',
+      'ctaRel',
+    ],
+    context: (head) =>
+      resolvePricingPlanContext(head.props as PricingPlanProps),
   })
 }
 
