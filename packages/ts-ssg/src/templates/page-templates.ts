@@ -76,7 +76,10 @@ function renderDocTemplate({ head, bodyHtml, navigation }: PageTemplateInput) {
               : []),
             h('main')
               .attr({ class: 'doc-main' })
-              .push(h('article').attr({ class: 'doc-content' }).raw(bodyHtml)),
+              .push(
+                h('hero-banner'),
+                h('article').attr({ class: 'doc-content' }).raw(bodyHtml),
+              ),
           ),
       ),
   )

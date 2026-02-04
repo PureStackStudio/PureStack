@@ -415,7 +415,7 @@ export type CSSProps = {
     | 'url()'
     | 'none'
     | (string & {})
-  fillOpacity: number
+  fillOpacity: number | string
   fillRule: 'evenodd' | 'nonzero' | (string & {})
   filter:
     | 'none'
@@ -448,8 +448,8 @@ export type CSSProps = {
     | 'wrap'
     | 'wrap-reverse'
     | (string & {})
-  flexGrow: number
-  flexShrink: number
+  flexGrow: number | string
+  flexShrink: number | string
   flexWrap: 'nowrap' | 'wrap' | 'wrap-reverse' | (string & {})
   float:
     | 'inline-end'
@@ -648,7 +648,7 @@ export type CSSProps = {
     | 'xx-large'
     | 'xx-small'
     | (string & {})
-  fontSizeAdjust: number
+  fontSizeAdjust: number | string
   fontStretch:
     | 'condensed'
     | 'expanded'
@@ -1110,9 +1110,9 @@ export type CSSProps = {
     | 'stretch'
     | (string & {})
   mozBoxDirection: 'normal' | 'reverse' | (string & {})
-  mozBoxFlex: number
-  mozBoxFlexgroup: number
-  mozBoxOrdinalGroup: number
+  mozBoxFlex: number | string
+  mozBoxFlexgroup: number | string
+  mozBoxOrdinalGroup: number | string
   mozBoxOrient:
     | 'block-axis'
     | 'horizontal'
@@ -1121,7 +1121,7 @@ export type CSSProps = {
     | (string & {})
   mozBoxPack: 'center' | 'end' | 'justify' | 'start' | (string & {})
   mozBoxSizing: 'border-box' | 'content-box' | 'padding-box' | (string & {})
-  mozColumnCount: number
+  mozColumnCount: number | string
   mozColumnGap: 'normal' | (string & {})
   mozColumnRule: string
   mozColumnRuleColor: string
@@ -1221,9 +1221,9 @@ export type CSSProps = {
     | 'scale-down'
     | (string & {})
   objectPosition: string
-  opacity: number
-  order: number
-  orphans: number
+  opacity: number | string
+  order: number | string
+  orphans: number | string
   offsetBlockEnd: 'auto' | (string & {})
   offsetBlockStart: 'auto' | (string & {})
   offsetInlineEnd: 'auto' | (string & {})
@@ -1329,13 +1329,13 @@ export type CSSProps = {
   scrollSnapPointsX: 'none' | 'repeat()' | (string & {})
   scrollSnapPointsY: 'none' | 'repeat()' | (string & {})
   scrollSnapType: 'none' | 'mandatory' | 'proximity' | (string & {})
-  shapeImageThreshold: number
+  shapeImageThreshold: number | string
   shapeMargin: string
   shapeOutside: 'margin-box' | 'none' | (string & {})
   size: string
   src: 'url()' | 'format()' | 'local()' | (string & {})
   stopColor: string
-  stopOpacity: number
+  stopOpacity: number | string
   stroke:
     | 'child'
     | 'child()'
@@ -1354,8 +1354,8 @@ export type CSSProps = {
     | 'miter-clip'
     | 'round'
     | (string & {})
-  strokeMiterlimit: number
-  strokeOpacity: number
+  strokeMiterlimit: number | string
+  strokeOpacity: number | string
   strokeWidth: string
   suffix: string
   system:
@@ -1698,9 +1698,9 @@ export type CSSProps = {
     | 'stretch'
     | (string & {})
   webkitBoxDirection: 'normal' | 'reverse' | (string & {})
-  webkitBoxFlex: number
-  webkitBoxFlexGroup: number
-  webkitBoxOrdinalGroup: number
+  webkitBoxFlex: number | string
+  webkitBoxFlexGroup: number | string
+  webkitBoxOrdinalGroup: number | string
   webkitBoxOrient:
     | 'block-axis'
     | 'horizontal'
@@ -1776,7 +1776,7 @@ export type CSSProps = {
     | 'avoid-page'
     | 'avoid-region'
     | (string & {})
-  webkitColumnCount: number
+  webkitColumnCount: number | string
   webkitColumnGap: 'normal' | (string & {})
   webkitColumnRule: string
   webkitColumnRuleColor: string
@@ -1884,7 +1884,7 @@ export type CSSProps = {
     | 'read-write-plaintext-only'
     | (string & {})
   webkitUserSelect: 'auto' | 'none' | 'text' | (string & {})
-  widows: number
+  widows: number | string
   width:
     | 'auto'
     | 'fill'
@@ -1903,6 +1903,6 @@ export type CSSProps = {
     | 'vertical-lr'
     | 'vertical-rl'
     | (string & {})
-  zIndex: number
+  zIndex: number | string
   zoom: 'normal' | (string & {})
 } & Record<string & {}, string | number>

@@ -70,6 +70,26 @@ export interface ThemeCardColors {
   title: string
 }
 
+export interface ThemeHeroColors {
+  background: string
+  border: string
+  title: string
+  tagline: string
+  eyebrow: string
+  focusRing: string
+  primaryBackground: string
+  primaryText: string
+  primaryHover: string
+  primaryShadow: string
+  secondaryText: string
+  secondaryHover: string
+  secondaryBorder: string
+  logoBackground: string
+  logoBorder: string
+  logoShadow: string
+  glow: string
+}
+
 export interface ThemePalette {
   app: ThemeAppColors
   surface: ThemeSurfaceColors
@@ -79,6 +99,7 @@ export interface ThemePalette {
   themeSwitcher: ThemeSwitcherColors
   cardGrid: ThemeCardGridColors
   card: ThemeCardColors
+  hero: ThemeHeroColors
 }
 
 export interface ThemeOptions {
@@ -180,6 +201,27 @@ export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
         border: '#ededed',
         title: '#444444',
       },
+      hero: {
+        background:
+          'linear-gradient(135deg, rgba(241, 244, 255, 0.95), rgba(232, 238, 255, 0.95))',
+        border: '#d7def2',
+        title: '#10162f',
+        tagline: '#4b5563',
+        eyebrow: '#6b7280',
+        focusRing: '#9ab3ff',
+        primaryBackground: '#b9c9ff',
+        primaryText: '#1b223a',
+        primaryHover: '#a7bbff',
+        primaryShadow: '0 12px 24px rgba(87, 112, 209, 0.25)',
+        secondaryText: '#1f2937',
+        secondaryHover: '#e2e8ff',
+        secondaryBorder: '#cfd8f5',
+        logoBackground: '#ffffff',
+        logoBorder: '#e0e6fb',
+        logoShadow: '0 18px 30px rgba(25, 35, 70, 0.15)',
+        glow:
+          'radial-gradient(circle at 10% 20%, rgba(120, 152, 255, 0.45), transparent 55%), radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.5), transparent 50%)',
+      },
     },
     dark: {
       app: {
@@ -243,6 +285,27 @@ export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
       card: {
         border: '#353535',
         title: '#d6d6d6',
+      },
+      hero: {
+        background:
+          'linear-gradient(135deg, rgba(24, 27, 34, 0.98), rgba(30, 34, 42, 0.98))',
+        border: '#2a2f38',
+        title: '#f5f7ff',
+        tagline: '#c4cad9',
+        eyebrow: '#9aa4b2',
+        focusRing: '#91a7ff',
+        primaryBackground: '#b8c9ff',
+        primaryText: '#111827',
+        primaryHover: '#a6bbff',
+        primaryShadow: '0 14px 26px rgba(15, 20, 35, 0.45)',
+        secondaryText: '#e7eaf3',
+        secondaryHover: '#2a2f3b',
+        secondaryBorder: '#3a4150',
+        logoBackground: '#11141c',
+        logoBorder: '#2a2f38',
+        logoShadow: '0 22px 34px rgba(8, 10, 18, 0.55)',
+        glow:
+          'radial-gradient(circle at 15% 20%, rgba(74, 111, 255, 0.35), transparent 55%), radial-gradient(circle at 85% 10%, rgba(255, 255, 255, 0.08), transparent 60%)',
       },
     },
   },
@@ -330,5 +393,6 @@ function mergePalette(base: ThemePalette, override?: Partial<ThemePalette>) {
     },
     cardGrid: { ...base.cardGrid, ...(override.cardGrid ?? {}) },
     card: { ...base.card, ...(override.card ?? {}) },
+    hero: { ...base.hero, ...(override.hero ?? {}) },
   }
 }
