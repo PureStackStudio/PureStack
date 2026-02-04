@@ -56,7 +56,6 @@ interface PricingPlanModel {
   variant?: string
   ctaLabel?: string
   ctaLink?: string
-  planClass: string
   hasBadge: boolean
   hasPrice: boolean
   hasCta: boolean
@@ -74,7 +73,10 @@ const pricingTableTemplate = html`<section class="pricing">
   <p class="pricing__footnote" r-if="hasFootnote">{{ footnote }}</p>
 </section>`
 
-const pricingPlanTemplate = html`<article :class="planClass">
+const pricingPlanTemplate = html`<article
+  class="pricing-plan"
+  :class="{ 'pricing-plan--featured': variant === 'featured' }"
+>
   <div class="pricing-plan__head">
     <div class="pricing-plan__title-row">
       <h3 class="pricing-plan__title">{{ title }}</h3>
@@ -561,9 +563,7 @@ function resolvePricingPlanContext(props: PricingPlanModel): PricingPlanModel {
     period,
     badge,
     note,
-    planClass: ['pricing-plan', variant ? `pricing-plan--${variant}` : '']
-      .filter(Boolean)
-      .join(' '),
+    variant,
     hasBadge: Boolean(badge),
     hasPrice: Boolean(price),
     hasCta,
