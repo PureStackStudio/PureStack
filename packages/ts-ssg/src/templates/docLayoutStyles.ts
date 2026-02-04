@@ -180,7 +180,7 @@ export function registerDocLayoutStyles() {
 
   const mobileSidebar = (theme: string) =>
     styleBuilder
-      .select('.doc-sidebar', theme)
+      .select('.template-doc--nav-drawer .doc-sidebar', theme)
       .media('max-width: 1023px')
       .position('fixed')
       .top('72px')
@@ -195,6 +195,17 @@ export function registerDocLayoutStyles() {
 
   mobileSidebar('light')
   mobileSidebar('dark')
+
+  const mobileInlineSidebar = (theme: string) =>
+    styleBuilder
+      .select('.template-doc:not(.template-doc--nav-drawer) .doc-sidebar', theme)
+      .media('max-width: 1023px')
+      .position('static')
+      .top('auto')
+      .height('auto')
+
+  mobileInlineSidebar('light')
+  mobileInlineSidebar('dark')
 
   styleBuilder
     .select('.doc-nav-toggle:checked ~ .doc-shell .doc-sidebar', 'light')

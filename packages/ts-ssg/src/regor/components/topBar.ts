@@ -112,11 +112,20 @@ function registerTopBarStyles() {
     .select('.topbar__toggle', 'light')
     .background(palette('light').topBar.toggleBackground)
     .borderColor(palette('light').topBar.toggleBorder)
+    .display('none')
   styleBuilder
     .select('.topbar__toggle', 'dark')
     .background(palette('dark').topBar.toggleBackground)
     .borderColor(palette('dark').topBar.toggleBorder)
     .color(palette('dark').topBar.toggleIcon)
+    .display('none')
+
+  styleBuilder
+    .select('.template-doc--nav-drawer .topbar__toggle', 'light')
+    .display('grid')
+  styleBuilder
+    .select('.template-doc--nav-drawer .topbar__toggle', 'dark')
+    .display('grid')
 
   styleBuilder
     .select('.topbar__search', 'light')
