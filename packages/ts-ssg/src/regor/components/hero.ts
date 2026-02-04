@@ -5,6 +5,26 @@ import { getThemeOptions, getThemePalette } from '../../style/themeOptions'
 import { resolveTsSsgContext } from '../resolveTsSsgContext'
 import type { TsSsgContext } from '../ts-ssg-context'
 
+export interface ThemeHeroColors {
+  background: string
+  border: string
+  title: string
+  tagline: string
+  eyebrow: string
+  focusRing: string
+  primaryBackground: string
+  primaryText: string
+  primaryHover: string
+  primaryShadow: string
+  secondaryText: string
+  secondaryHover: string
+  secondaryBorder: string
+  logoBackground: string
+  logoBorder: string
+  logoShadow: string
+  glow: string
+}
+
 interface HeroImage {
   file?: string
   src?: string

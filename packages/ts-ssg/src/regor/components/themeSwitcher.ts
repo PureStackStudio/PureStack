@@ -3,6 +3,20 @@ import { createComponent, html } from 'regor'
 import { styleBuilder } from '../../style/styles'
 import { getThemeOptions, getThemePalette } from '../../style/themeOptions'
 
+export interface ThemeSwitcherColors {
+  background: string
+  border: string
+  text: string
+  hoverBackground: string
+  trackBackground: string
+  trackShadow: string
+  thumbBackground: string
+  thumbShadow: string
+  trackSun: string
+  trackMoon: string
+  thumbIcon: string
+}
+
 const themeSwitcherTemplate = html`<button
   class="theme-switcher"
   type="button"

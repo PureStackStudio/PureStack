@@ -3,8 +3,24 @@ import { createComponent, html } from 'regor'
 import type { NavItem } from '../../navigation/navigation'
 import { styleBuilder } from '../../style/styles'
 import { getThemeOptions, getThemePalette } from '../../style/themeOptions'
-import type { TsSsgContext } from '../ts-ssg-context'
 import { resolveTsSsgContext } from '../resolveTsSsgContext'
+import type { TsSsgContext } from '../ts-ssg-context'
+
+export interface ThemeNavColors {
+  background: string
+  border: string
+  text: string
+  textMuted: string
+  hoverBackground: string
+  nestedBorder: string
+  summaryHoverBackground: string
+  activeBackground: string
+  activeText: string
+  focusRing: string
+  chevron: string
+  badgeBackground: string
+  badgeText: string
+}
 
 interface NavMenuProps {
   items?: NavItem[]

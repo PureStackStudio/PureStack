@@ -3,6 +3,16 @@ import { createComponent, html } from 'regor'
 import { styleBuilder } from '../../style/styles'
 import { getThemeOptions, getThemePalette } from '../../style/themeOptions'
 
+export interface ThemeCardGridColors {
+  border: string
+  title: string
+}
+
+export interface ThemeCardColors {
+  border: string
+  title: string
+}
+
 interface CardGrid {
   title: string
 }

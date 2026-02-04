@@ -1,3 +1,8 @@
+import type { ThemeCardColors, ThemeCardGridColors } from '../regor/components/cardGrid'
+import type { ThemeHeroColors } from '../regor/components/hero'
+import type { ThemeNavColors } from '../regor/components/navMenu'
+import type { ThemeSwitcherColors } from '../regor/components/themeSwitcher'
+import type { ThemeTopBarColors } from '../regor/components/topBar'
 import { normalizeThemeName, type ThemeName } from './themes'
 
 export type ThemeMode = 'light' | 'dark'
@@ -18,76 +23,6 @@ export interface ThemePanelColors {
   background: string
   border: string
   text: string
-}
-
-export interface ThemeNavColors {
-  background: string
-  border: string
-  text: string
-  textMuted: string
-  hoverBackground: string
-  nestedBorder: string
-  summaryHoverBackground: string
-  activeBackground: string
-  activeText: string
-  focusRing: string
-  chevron: string
-  badgeBackground: string
-  badgeText: string
-}
-
-export interface ThemeTopBarColors {
-  background: string
-  border: string
-  logo: string
-  icon: string
-  toggleBackground: string
-  toggleBorder: string
-  toggleIcon: string
-}
-
-export interface ThemeSwitcherColors {
-  background: string
-  border: string
-  text: string
-  hoverBackground: string
-  trackBackground: string
-  trackShadow: string
-  thumbBackground: string
-  thumbShadow: string
-  trackSun: string
-  trackMoon: string
-  thumbIcon: string
-}
-
-export interface ThemeCardGridColors {
-  border: string
-  title: string
-}
-
-export interface ThemeCardColors {
-  border: string
-  title: string
-}
-
-export interface ThemeHeroColors {
-  background: string
-  border: string
-  title: string
-  tagline: string
-  eyebrow: string
-  focusRing: string
-  primaryBackground: string
-  primaryText: string
-  primaryHover: string
-  primaryShadow: string
-  secondaryText: string
-  secondaryHover: string
-  secondaryBorder: string
-  logoBackground: string
-  logoBorder: string
-  logoShadow: string
-  glow: string
 }
 
 export interface ThemePalette {

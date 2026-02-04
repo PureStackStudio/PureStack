@@ -2,8 +2,18 @@ import { createComponent, html } from 'regor'
 
 import { styleBuilder } from '../../style/styles'
 import { getThemeOptions, getThemePalette } from '../../style/themeOptions'
-import type { TsSsgContext } from '../ts-ssg-context'
 import { resolveTsSsgContext } from '../resolveTsSsgContext'
+import type { TsSsgContext } from '../ts-ssg-context'
+
+export interface ThemeTopBarColors {
+  background: string
+  border: string
+  logo: string
+  icon: string
+  toggleBackground: string
+  toggleBorder: string
+  toggleIcon: string
+}
 
 function resolveBrandLabel(context: TsSsgContext): string {
   const label = context?.site?.siteTitle
