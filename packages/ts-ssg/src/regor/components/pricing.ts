@@ -56,13 +56,10 @@ interface PricingPlanModel {
   variant?: string
   ctaLabel?: string
   ctaLink?: string
-  ctaTarget?: string
-  ctaRel?: string
   planClass: string
   hasBadge: boolean
   hasPrice: boolean
   hasCta: boolean
-  ctaHtml: string
 }
 
 const pricingTableTemplate = html`<section class="pricing">
@@ -89,7 +86,9 @@ const pricingPlanTemplate = html`<article :class="planClass">
     <span class="pricing-plan__amount">{{ price }}</span>
     <span class="pricing-plan__period" r-if="period">{{ period }}</span>
   </div>
-  <div class="pricing-plan__cta" r-if="hasCta" r-html="ctaHtml"></div>
+  <div class="pricing-plan__cta" r-if="hasCta">
+    <a class="pricing-plan__cta-link" :href="ctaLink">{{ ctaLabel }}</a>
+  </div>
   <ul class="pricing-plan__features">
     <slot></slot>
   </ul>
@@ -514,8 +513,6 @@ function createPricingPlanComponent() {
       'variant',
       'ctaLabel',
       'ctaLink',
-      'ctaTarget',
-      'ctaRel',
     ],
     context: (head) => resolvePricingPlanContext(head.props),
   })
@@ -556,9 +553,6 @@ function resolvePricingPlanContext(props: PricingPlanModel): PricingPlanModel {
   const variant = resolveVariant(props.variant)
   const ctaLabel = resolveString(props.ctaLabel)
   const ctaLink = resolveString(props.ctaLink)
-  const ctaTarget = resolveString(props.ctaTarget)
-  const rawRel = resolveString(props.ctaRel)
-  const ctaRel = rawRel || (ctaTarget === '_blank' ? 'noopener noreferrer' : '')
   const hasCta = Boolean(ctaLabel && ctaLink)
   return {
     title,
@@ -573,34 +567,7 @@ function resolvePricingPlanContext(props: PricingPlanModel): PricingPlanModel {
     hasBadge: Boolean(badge),
     hasPrice: Boolean(price),
     hasCta,
-    ctaHtml: hasCta
-      ? renderPricingCta({
-          label: ctaLabel,
-          link: ctaLink,
-          target: ctaTarget,
-          rel: ctaRel || undefined,
-        })
-      : '',
   }
-}
-
-function renderPricingCta(action: {
-  label: string
-  link: string
-  target?: string
-  rel?: string
-}) {
-  const attrs = [
-    'class="pricing-plan__cta-link"',
-    `href="${escapeAttr(action.link)}"`,
-  ]
-  if (action.target) {
-    attrs.push(`target="${escapeAttr(action.target)}"`)
-  }
-  if (action.rel) {
-    attrs.push(`rel="${escapeAttr(action.rel)}"`)
-  }
-  return `<a ${attrs.join(' ')}>${escapeHtml(action.label)}</a>`
 }
 
 function resolveVariant(value?: string) {
@@ -614,15 +581,4 @@ function resolveString(value: unknown) {
   return typeof value === 'string' && value.trim().length > 0
     ? value.trim()
     : ''
-}
-
-function escapeHtml(value: string) {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-}
-
-function escapeAttr(value: string) {
-  return escapeHtml(value).replace(/"/g, '&quot;')
 }
