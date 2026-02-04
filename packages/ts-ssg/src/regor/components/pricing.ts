@@ -155,7 +155,7 @@ function registerPricingStyles() {
   const baseTitle = (theme: string) =>
     styleBuilder
       .select('.pricing__title', theme)
-      .margin('0')
+      .margin('0 !important')
       .fontSize('clamp(24px, 3.2vw, 34px)')
       .fontWeight('700')
       .letterSpacing('-0.02em')
@@ -498,8 +498,7 @@ function registerPricingStyles() {
 function createPricingTableComponent() {
   return createComponent<PricingTableModel>(pricingTableTemplate, {
     props: ['eyebrow', 'title', 'subtitle', 'footnote'],
-    context: (head) =>
-      resolvePricingTableContext(head.props as PricingTableModel),
+    context: (head) => resolvePricingTableContext(head.props),
   })
 }
 
@@ -518,8 +517,7 @@ function createPricingPlanComponent() {
       'ctaTarget',
       'ctaRel',
     ],
-    context: (head) =>
-      resolvePricingPlanContext(head.props as PricingPlanModel),
+    context: (head) => resolvePricingPlanContext(head.props),
   })
 }
 
@@ -548,9 +546,7 @@ function resolvePricingTableContext(
   }
 }
 
-function resolvePricingPlanContext(
-  props: PricingPlanModel,
-): PricingPlanModel {
+function resolvePricingPlanContext(props: PricingPlanModel): PricingPlanModel {
   const title = resolveString(props.title) || 'Plan'
   const summary = resolveString(props.summary)
   const price = resolveString(props.price)
