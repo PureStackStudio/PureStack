@@ -205,7 +205,7 @@ function registerPricingStyles() {
       .position('relative')
       .zIndex('1')
       .display('grid')
-      .gridTemplateColumns('repeat(2, minmax(0, 1fr))')
+      .gridTemplateColumns('1fr')
       .gap('16px')
       .alignItems('stretch')
 
@@ -562,23 +562,23 @@ function registerPricingStyles() {
     .select('.pricing-plan--featured .pricing-plan__cta-link:hover', 'dark')
     .background(palette('dark').pricing.planHighlightCtaHover)
 
-  const featureColumns = (theme: string) =>
-    styleBuilder
-      .select('.pricing-plan__features', theme)
-      .media('min-width: 1400px')
-      .set('column-count', '2')
-
-  featureColumns('light')
-  featureColumns('dark')
-
-  const mobileGrid = (theme: string) =>
+  const mediumGrid = (theme: string) =>
     styleBuilder
       .select('.pricing__grid', theme)
-      .media('max-width: 720px')
-      .gridTemplateColumns('1fr')
+      .media('min-width: 900px')
+      .gridTemplateColumns('repeat(2, minmax(0, 1fr))')
 
-  mobileGrid('light')
-  mobileGrid('dark')
+  mediumGrid('light')
+  mediumGrid('dark')
+
+  const wideGrid = (theme: string) =>
+    styleBuilder
+      .select('.pricing__grid', theme)
+      .media('min-width: 1400px')
+      .gridTemplateColumns('repeat(4, minmax(0, 1fr))')
+
+  wideGrid('light')
+  wideGrid('dark')
 
   const mobilePricing = (theme: string) =>
     styleBuilder
