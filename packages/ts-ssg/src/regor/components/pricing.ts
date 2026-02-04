@@ -20,10 +20,14 @@ export interface ThemePricingColors {
   planPrice: string
   planPeriod: string
   planIconBackground: string
+  planIconGradient: string
   planIconColor: string
+  planIconRing: string
   planFeature: string
   planFeatureIconBackground: string
+  planFeatureIconGradient: string
   planFeatureIconColor: string
+  planFeatureIconRing: string
   planBadgeBackground: string
   planBadgeText: string
   planNote: string
@@ -242,30 +246,39 @@ function registerPricingStyles() {
   const basePlanIcon = (theme: string) =>
     styleBuilder
       .select('.pricing-plan__icon', theme)
-      .width('34px')
-      .height('34px')
+      .width('44px')
+      .height('44px')
       .display('inline-flex')
       .alignItems('center')
       .justifyContent('center')
-      .borderRadius('10px')
-      .background(palette(theme).pricing.planIconBackground)
+      .borderRadius('12px')
+      .background(palette(theme).pricing.planIconGradient)
+      .border(`1px solid ${palette(theme).pricing.planIconRing}`)
       .color(palette(theme).pricing.planIconColor)
-      .marginBottom('2px')
+      .boxShadow('0 10px 20px rgba(35, 56, 135, 0.25)')
+      .marginBottom('4px')
 
   basePlanIcon('light')
   basePlanIcon('dark')
 
+  styleBuilder
+    .select('.pricing-plan__icon', 'light')
+    .set('background-color', palette('light').pricing.planIconBackground)
+  styleBuilder
+    .select('.pricing-plan__icon', 'dark')
+    .set('background-color', palette('dark').pricing.planIconBackground)
+
   const basePlanIconSvg = (theme: string) =>
     styleBuilder
       .select('.pricing-plan__icon svg', theme)
-      .width('18px')
-      .height('18px')
+      .width('24px')
+      .height('24px')
       .display('block')
       .stroke('currentColor')
       .fill('none')
       .set('stroke-linecap', 'round')
       .set('stroke-linejoin', 'round')
-      .set('stroke-width', '1.9')
+      .set('stroke-width', '2.2')
 
   basePlanIconSvg('light')
   basePlanIconSvg('dark')
@@ -436,30 +449,39 @@ function registerPricingStyles() {
   const baseFeatureIcon = (theme: string) =>
     styleBuilder
       .select('.pricing-feature__icon', theme)
-      .width('18px')
-      .height('18px')
+      .width('22px')
+      .height('22px')
       .display('inline-flex')
       .alignItems('center')
       .justifyContent('center')
-      .borderRadius('6px')
-      .background(palette(theme).pricing.planFeatureIconBackground)
+      .borderRadius('7px')
+      .background(palette(theme).pricing.planFeatureIconGradient)
+      .border(`1px solid ${palette(theme).pricing.planFeatureIconRing}`)
       .color(palette(theme).pricing.planFeatureIconColor)
-      .marginTop('1px')
+      .boxShadow('0 8px 16px rgba(39, 61, 146, 0.2)')
+      .marginTop('0')
 
   baseFeatureIcon('light')
   baseFeatureIcon('dark')
 
+  styleBuilder
+    .select('.pricing-feature__icon', 'light')
+    .set('background-color', palette('light').pricing.planFeatureIconBackground)
+  styleBuilder
+    .select('.pricing-feature__icon', 'dark')
+    .set('background-color', palette('dark').pricing.planFeatureIconBackground)
+
   const baseFeatureIconSvg = (theme: string) =>
     styleBuilder
       .select('.pricing-feature__icon svg', theme)
-      .width('12px')
-      .height('12px')
+      .width('14px')
+      .height('14px')
       .display('block')
       .stroke('currentColor')
       .fill('none')
       .set('stroke-linecap', 'round')
       .set('stroke-linejoin', 'round')
-      .set('stroke-width', '2')
+      .set('stroke-width', '2.2')
 
   baseFeatureIconSvg('light')
   baseFeatureIconSvg('dark')
