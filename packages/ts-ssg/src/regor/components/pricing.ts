@@ -242,11 +242,13 @@ function registerPricingStyles() {
   const baseTitleRow = (theme: string) =>
     styleBuilder
       .select('.pricing-plan__title-row', theme)
+      .position('relative')
       .display('flex')
       .flexWrap('wrap')
       .gap('10px')
       .alignItems('center')
       .justifyContent('space-between')
+      .paddingRight('96px')
 
   baseTitleRow('light')
   baseTitleRow('dark')
@@ -264,6 +266,9 @@ function registerPricingStyles() {
   const baseBadge = (theme: string) =>
     styleBuilder
       .select('.pricing-plan__badge', theme)
+      .position('absolute')
+      .top('0')
+      .right('0')
       .padding('4px 10px')
       .borderRadius(themeOptions.radii.pill)
       .fontSize('11px')
@@ -294,6 +299,7 @@ function registerPricingStyles() {
       .display('flex')
       .gap('10px')
       .alignItems('baseline')
+      .set('min-height', '38px')
 
   basePrice('light')
   basePrice('dark')
