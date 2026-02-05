@@ -32,6 +32,16 @@ export function registerDocLayoutStyles() {
   baseShell('light')
   baseShell('dark')
 
+  const fullMainShell = (theme: string) =>
+    styleBuilder
+      .select('.template-doc--full-main .doc-shell', theme)
+      .maxWidth('none')
+      .margin('0')
+      .padding('32px clamp(24px, 6vw, 64px)')
+
+  fullMainShell('light')
+  fullMainShell('dark')
+
   const singleShell = (theme: string) =>
     styleBuilder.select('.doc-shell--single', theme).gridTemplateColumns('1fr')
 

@@ -65,8 +65,14 @@ function renderDocTemplate({
     (navigation?.items?.length ?? 0) > 0 ||
     (navigation?.global?.length ?? 0) > 0
   const navMode = resolveNavMode(page?.frontmatter)
-  const bodyClass =
-    navMode === 'drawer' ? 'template-doc template-doc--nav-drawer' : 'template-doc'
+  const layoutClass = resolveDocLayoutClass(page?.frontmatter)
+  const bodyClass = [
+    'template-doc',
+    navMode === 'drawer' ? 'template-doc--nav-drawer' : '',
+    layoutClass,
+  ]
+    .filter(Boolean)
+    .join(' ')
   const shellClass =
     hasNavItems && navMode === 'drawer'
       ? 'doc-shell doc-shell--nav-drawer'
@@ -105,6 +111,15 @@ function resolveNavMode(frontmatter: Record<string, unknown> | undefined): NavMo
   const layout = isPlainObject(frontmatter.layout) ? frontmatter.layout : undefined
   const navMode = layout?.navMode
   return navMode === 'drawer' ? 'drawer' : 'sidebar'
+}
+
+function resolveDocLayoutClass(
+  frontmatter: Record<string, unknown> | undefined,
+) {
+  if (!isPlainObject(frontmatter)) return ''
+  const layout = isPlainObject(frontmatter.layout) ? frontmatter.layout : undefined
+  const fullWidth = layout?.fullWidthMain
+  return fullWidth === true ? 'template-doc--full-main' : ''
 }
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
