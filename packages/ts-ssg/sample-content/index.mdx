@@ -7,24 +7,41 @@ layout:
   navMode: drawer
 nav:
   order: 1
-hero:
-  title: "CalcCore"
-  tagline: |
-    Deterministic calculations for SaaS backends Excel-compatible formulas. Backend-grade execution. CalcCore is a headless calculation engine designed for modern SaaS systems. It allows you to author complex business logic using Excel-compatible formulas or code, then run that logic safely, deterministically, and at scale — without Excel in production.
-  image:
-    file: ../logo.svg
-  actions:
-    - text: "Get Started"
-      icon: right-arrow
-      link: ./getting-started
-    - text: "View on GitHub"
-      icon: external
-      variant: minimal
-      link: https://github.com/koculu/logpot
-      attrs:
-        target: _blank
 ---
 
+
+<hero-banner>
+  <template name="eyebrow"><span>Backend-native calculation engine</span></template>
+  <template name="title"><span>CalcCore</span></template>
+  <template name="tagline">
+    <span>
+      Deterministic calculations for SaaS backends Excel-compatible formulas.
+      Backend-grade execution. CalcCore is a headless calculation engine designed
+      for modern SaaS systems. It allows you to author complex business logic using
+      Excel-compatible formulas or code, then run that logic safely, deterministically,
+      and at scale — without Excel in production.
+    </span>
+  </template>
+  <template name="actions">
+    <a class="hero__action hero__action--primary" href="./getting-started" data-icon="right-arrow">
+      Get Started
+    </a>
+    <a
+      class="hero__action hero__action--minimal"
+      href="https://github.com/koculu/logpot"
+      data-icon="external"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      View on GitHub
+    </a>
+  </template>
+  <template name="media">
+    <div class="hero__logo-frame">
+      <img class="hero__logo" src="../logo.svg" alt="CalcCore logo" />
+    </div>
+  </template>
+</hero-banner>
 
 # CalcCore
 
@@ -134,7 +151,7 @@ var result = engine.Evaluate(new
     customer = new { age = 42 },
     order    = new { total = 199.90 }
 });
-````
+```
 
 This model can be evaluated repeatedly with different inputs, producing consistent and predictable results suitable for production use.
 

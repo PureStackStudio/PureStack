@@ -1,48 +1,43 @@
-import type { Element, Properties } from 'hast'
-import { toHtml } from 'hast-util-to-html'
+import type { Element, Properties, Root } from 'hast'
 import type { Handler } from 'mdast-util-to-hast'
+import { toHast } from 'mdast-util-to-hast'
+import rehypeRaw from 'rehype-raw'
 import rehypeStringify from 'rehype-stringify'
 import remarkMdx from 'remark-mdx'
 import remarkParse from 'remark-parse'
-import remarkRehype from 'remark-rehype'
 import { unified } from 'unified'
 
 export async function compileMdxToHtml(source: string): Promise<string> {
   const cleaned = stripMdxImports(source)
-  const file = await unified()
-    .use(remarkParse)
-    .use(remarkMdx)
-    .use(remarkRehype, {
-      allowDangerousHtml: true,
-      handlers: {
-        mdxJsxFlowElement: mdxJsxHandler,
-        mdxJsxTextElement: mdxJsxHandler,
-      },
-      passThrough: [
-        'mdxjsEsm',
-        'mdxFlowExpression',
-        'mdxTextExpression',
-        'mdxJsxFlowElement',
-        'mdxJsxTextElement',
-      ],
-    })
-    .use(rehypeStringify, { allowDangerousHtml: true })
-    .process(cleaned)
-  const html = String(file)
+  const file = unified().use(remarkParse).use(remarkMdx).parse(cleaned)
+  const tree = toHast(file, {
+    allowDangerousHtml: true,
+    handlers: {
+      mdxJsxFlowElement: mdxJsxHandler,
+      mdxJsxTextElement: mdxJsxHandler,
+    },
+    passThrough: [
+      'mdxjsEsm',
+      'mdxFlowExpression',
+      'mdxTextExpression',
+      'mdxJsxFlowElement',
+      'mdxJsxTextElement',
+    ],
+  })
+  const html = String(
+    unified()
+      .use(rehypeRaw)
+      .use(rehypeStringify, { allowDangerousHtml: true })
+      .stringify(tree as Root),
+  )
   return html
 }
 
-export function processMdxComponent(htmlMarkup: string): string {
-  return htmlMarkup
-}
-
-const mdxJsxHandler: Handler = (state, node, parent) => {
+const mdxJsxHandler: Handler = (state, node) => {
   const jsxNode = getMdxJsxNode(node)
   const props = extractMdxJsxProps(jsxNode)
-  const children = state.all(node) ?? []
-  const element = buildMdxJsxElement(jsxNode.name, props, children)
-  if (!isRootLevelMdxFlowComponent(node, parent)) return element
-  return buildProcessedRawNode(element)
+  const children = normalizeMdxJsxChildren(jsxNode.name, state.all(node) ?? [])
+  return buildMdxJsxElement(jsxNode.name, props, children)
 }
 
 type MdxJsxNode = {
@@ -73,6 +68,15 @@ function buildMdxJsxElement(
   props: Properties,
   children: Element['children'],
 ): Element {
+  if (name && name.toLowerCase() === 'template') {
+    return {
+      type: 'element',
+      tagName: 'template',
+      properties: props,
+      children: [],
+      content: { type: 'root', children },
+    } as Element
+  }
   return {
     type: 'element',
     tagName: name ?? 'div',
@@ -81,25 +85,56 @@ function buildMdxJsxElement(
   }
 }
 
-function isRootLevelMdxFlowComponent(node: unknown, parent: unknown): boolean {
-  if (!hasNodeType(node) || node.type !== 'mdxJsxFlowElement') return false
-  if (!hasNodeType(parent) || parent.type !== 'root') return false
-  return true
-}
+const INLINE_TAGS = new Set([
+  'a',
+  'span',
+  'strong',
+  'em',
+  'b',
+  'i',
+  'u',
+  's',
+  'small',
+  'code',
+  'kbd',
+  'mark',
+  'q',
+  'sub',
+  'sup',
+  'time',
+  'abbr',
+  'cite',
+  'data',
+  'dfn',
+  'samp',
+  'var',
+  'del',
+  'ins',
+  'label',
+  'ruby',
+  'rt',
+  'rp',
+  'bdi',
+  'bdo',
+  'wbr',
+  'br',
+])
 
-function hasNodeType(value: unknown): value is { type: string } {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    'type' in value &&
-    typeof (value as { type?: unknown }).type === 'string'
-  )
-}
-
-function buildProcessedRawNode(element: Element): ReturnType<Handler> {
-  const htmlMarkup = toHtml(element, { allowDangerousHtml: true })
-  const processed = processMdxComponent(htmlMarkup)
-  return { type: 'raw', value: processed } as ReturnType<Handler>
+function normalizeMdxJsxChildren(
+  name: string | undefined,
+  children: Element['children'],
+) {
+  if (!name) return children
+  if (!INLINE_TAGS.has(name.toLowerCase())) return children
+  const normalized: Element['children'] = []
+  for (const child of children) {
+    if (child.type === 'element' && child.tagName === 'p') {
+      normalized.push(...(child.children ?? []))
+      continue
+    }
+    normalized.push(child)
+  }
+  return normalized
 }
 
 function stripMdxImports(source: string) {

@@ -2,8 +2,6 @@ import { createComponent, html } from 'regor'
 
 import { styleBuilder } from '../../style/styles'
 import { getThemeOptions, getThemePalette } from '../../style/themeOptions'
-import { resolveTsSsgContext } from '../resolveTsSsgContext'
-import type { TsSsgContext } from '../ts-ssg-context'
 
 export interface ThemeHeroColors {
   background: string
@@ -25,65 +23,15 @@ export interface ThemeHeroColors {
   glow: string
 }
 
-interface HeroImage {
-  file?: string
-  src?: string
-  alt?: string
-}
-
-interface HeroActionInput {
-  text?: string
-  label?: string
-  link?: string
-  href?: string
-  icon?: string
-  variant?: string
-  target?: string
-  rel?: string
-  attrs?: Record<string, unknown>
-}
-
-interface HeroFrontmatter {
-  title?: string
-  tagline?: string
-  eyebrow?: string
-  image?: HeroImage
-  actions?: HeroActionInput[]
-}
-
-interface HeroAction {
-  text: string
-  link: string
-  icon?: string
-  variant?: string
-  target?: string
-  rel?: string
-}
-
-interface HeroContext {
-  hasHero: boolean
-  title: string
-  tagline: string
-  eyebrow: string
-  imageSrc: string
-  imageAlt: string
-  actionsHtml: string
-  hasActions: boolean
-}
-
-const heroTemplate = html`<section class="hero" r-if="hasHero">
+const heroTemplate = html`<section class="hero">
   <div class="hero__inner">
     <div class="hero__content">
-      <p class="hero__eyebrow" r-if="eyebrow">{{ eyebrow }}</p>
-      <h1 class="hero__title">{{ title }}</h1>
-      <p class="hero__tagline" r-if="tagline">{{ tagline }}</p>
-      <div class="hero__actions" r-if="hasActions" r-html="actionsHtml"></div>
+      <p class="hero__eyebrow"><slot name="eyebrow"></slot></p>
+      <h1 class="hero__title"><slot name="title"></slot></h1>
+      <p class="hero__tagline"><slot name="tagline"></slot></p>
+      <div class="hero__actions"><slot name="actions"></slot></div>
     </div>
-    <div class="hero__media" r-if="imageSrc">
-      <div class="hero__logo-frame">
-        <img class="hero__logo" :src="imageSrc" :alt="imageAlt" />
-      </div>
-    </div>
+    <div class="hero__media"><slot name="media"></slot></div>
   </div>
 </section>`
 
@@ -166,6 +114,11 @@ function registerHeroStyles() {
   baseTitle('light').color(palette('light').hero.title)
   baseTitle('dark').color(palette('dark').hero.title)
 
+  const baseEmptyTitle = (theme: string) =>
+    styleBuilder.select('.hero__title:empty', theme).display('none')
+  baseEmptyTitle('light')
+  baseEmptyTitle('dark')
+
   const baseTagline = (theme: string) =>
     styleBuilder
       .select('.hero__tagline', theme)
@@ -177,6 +130,11 @@ function registerHeroStyles() {
   baseTagline('light').color(palette('light').hero.tagline)
   baseTagline('dark').color(palette('dark').hero.tagline)
 
+  const baseEmptyTagline = (theme: string) =>
+    styleBuilder.select('.hero__tagline:empty', theme).display('none')
+  baseEmptyTagline('light')
+  baseEmptyTagline('dark')
+
   const baseActions = (theme: string) =>
     styleBuilder
       .select('.hero__actions', theme)
@@ -187,6 +145,11 @@ function registerHeroStyles() {
 
   baseActions('light')
   baseActions('dark')
+
+  const baseEmptyActions = (theme: string) =>
+    styleBuilder.select('.hero__actions:empty', theme).display('none')
+  baseEmptyActions('light')
+  baseEmptyActions('dark')
 
   const baseAction = (theme: string) =>
     styleBuilder
@@ -292,6 +255,16 @@ function registerHeroStyles() {
   baseMedia('light')
   baseMedia('dark')
 
+  const baseEmptyMedia = (theme: string) =>
+    styleBuilder.select('.hero__media:empty', theme).display('none')
+  baseEmptyMedia('light')
+  baseEmptyMedia('dark')
+
+  const baseEmptyEyebrow = (theme: string) =>
+    styleBuilder.select('.hero__eyebrow:empty', theme).display('none')
+  baseEmptyEyebrow('light')
+  baseEmptyEyebrow('dark')
+
   const baseLogoFrame = (theme: string) =>
     styleBuilder
       .select('.hero__logo-frame', theme)
@@ -354,114 +327,10 @@ function registerHeroStyles() {
 }
 
 function createHeroBannerComponent() {
-  return createComponent<HeroContext>(heroTemplate, {
-    context: (head) => resolveHeroContext(resolveTsSsgContext(head)),
-  })
+  return createComponent<Record<string, never>>(heroTemplate, {})
 }
 
 export function createHeroComponents() {
   registerHeroStyles()
   return { heroBanner: createHeroBannerComponent() }
-}
-
-function resolveHeroContext(context: TsSsgContext): HeroContext {
-  const frontmatter = context?.page?.frontmatter ?? {}
-  const hero = isPlainObject(frontmatter.hero)
-    ? (frontmatter.hero as HeroFrontmatter)
-    : undefined
-  const title =
-    resolveString(hero?.title) || resolveString(frontmatter.title) || ''
-  const tagline = resolveString(hero?.tagline) || ''
-  const eyebrow = resolveString(hero?.eyebrow) || ''
-  const image = isPlainObject(hero?.image) ? hero?.image : undefined
-  const imageSrc = resolveString(image?.file) || resolveString(image?.src) || ''
-  const imageAlt = resolveString(image?.alt) || title || 'Hero image'
-  const actions = resolveHeroActions(hero?.actions)
-  const actionsHtml = actions.map(renderHeroAction).join('')
-  const hasHero = Boolean(
-    title || tagline || imageSrc || actions.length > 0 || eyebrow,
-  )
-  return {
-    hasHero,
-    title,
-    tagline,
-    eyebrow,
-    imageSrc,
-    imageAlt,
-    actionsHtml,
-    hasActions: actions.length > 0,
-  }
-}
-
-function resolveHeroActions(value: unknown): HeroAction[] {
-  if (!Array.isArray(value)) return []
-  const actions: HeroAction[] = []
-  for (const raw of value) {
-    if (!isPlainObject(raw)) continue
-    const text =
-      resolveString(raw.text) ||
-      resolveString(raw.label) ||
-      resolveString(raw.title)
-    const link = resolveString(raw.link) || resolveString(raw.href)
-    if (!text || !link) continue
-    const icon = resolveString(raw.icon)
-    const variant = resolveString(raw.variant)
-    const attrs = isPlainObject(raw.attrs) ? raw.attrs : undefined
-    const target =
-      resolveString(attrs?.target) || resolveString(raw.target) || undefined
-    const rel = resolveString(attrs?.rel) || resolveString(raw.rel) || undefined
-    const safeRel =
-      rel ?? (target === '_blank' ? 'noopener noreferrer' : undefined)
-    actions.push({
-      text,
-      link,
-      icon,
-      variant,
-      target,
-      rel: safeRel,
-    })
-  }
-  return actions
-}
-
-function renderHeroAction(action: HeroAction) {
-  const variant =
-    action.variant && action.variant.toLowerCase() === 'minimal'
-      ? 'hero__action--minimal'
-      : 'hero__action--primary'
-  const attrs = [
-    `class="hero__action ${variant}"`,
-    `href="${escapeAttr(action.link)}"`,
-  ]
-  if (action.icon) {
-    attrs.push(`data-icon="${escapeAttr(action.icon)}"`)
-  }
-  if (action.target) {
-    attrs.push(`target="${escapeAttr(action.target)}"`)
-  }
-  if (action.rel) {
-    attrs.push(`rel="${escapeAttr(action.rel)}"`)
-  }
-  return `<a ${attrs.join(' ')}>${escapeHtml(action.text)}</a>`
-}
-
-function resolveString(value: unknown) {
-  return typeof value === 'string' && value.trim().length > 0
-    ? value.trim()
-    : ''
-}
-
-function isPlainObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value)
-}
-
-function escapeHtml(value: string) {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-}
-
-function escapeAttr(value: string) {
-  return escapeHtml(value).replace(/"/g, '&quot;')
 }

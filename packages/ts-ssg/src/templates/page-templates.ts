@@ -80,10 +80,7 @@ function renderDocTemplate({
               : []),
             h('main')
               .attr({ class: 'doc-main' })
-              .push(
-                h('hero-banner'),
-                h('article').attr({ class: 'doc-content' }).raw(bodyHtml),
-              ),
+              .push(h('article').attr({ class: 'doc-content' }).raw(bodyHtml)),
           ),
       ),
   )
@@ -124,9 +121,13 @@ function buildDocShellClass(showNav: boolean, navMode: NavMode) {
   return 'doc-shell'
 }
 
-function resolveNavMode(frontmatter: Record<string, unknown> | undefined): NavMode {
+function resolveNavMode(
+  frontmatter: Record<string, unknown> | undefined,
+): NavMode {
   if (!isPlainObject(frontmatter)) return 'sidebar'
-  const layout = isPlainObject(frontmatter.layout) ? frontmatter.layout : undefined
+  const layout = isPlainObject(frontmatter.layout)
+    ? frontmatter.layout
+    : undefined
   const navMode = layout?.navMode
   return navMode === 'drawer' ? 'drawer' : 'sidebar'
 }
@@ -135,7 +136,9 @@ function resolveDocLayoutClass(
   frontmatter: Record<string, unknown> | undefined,
 ) {
   if (!isPlainObject(frontmatter)) return ''
-  const layout = isPlainObject(frontmatter.layout) ? frontmatter.layout : undefined
+  const layout = isPlainObject(frontmatter.layout)
+    ? frontmatter.layout
+    : undefined
   const fullWidth = layout?.fullWidthMain
   return fullWidth === true ? 'template-doc--full-main' : ''
 }
