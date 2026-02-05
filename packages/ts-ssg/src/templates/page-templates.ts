@@ -101,19 +101,27 @@ function resolveDocLayout(
 ): DocLayout {
   const navMode = resolveNavMode(frontmatter)
   const layoutClass = resolveDocLayoutClass(frontmatter)
+  const showNav = hasNavItems(navigation)
+  const bodyClass = buildDocBodyClass(navMode, layoutClass)
+  const shellClass = buildDocShellClass(showNav, navMode)
+  return { bodyClass, shellClass, showNav }
+}
+
+function hasNavItems(navigation: PageNavigation | undefined) {
   const itemCount = navigation?.items?.length ?? 0
   const globalCount = navigation?.global?.length ?? 0
-  const showNav = itemCount + globalCount > 0
+  return itemCount + globalCount > 0
+}
+
+function buildDocBodyClass(navMode: NavMode, layoutClass: string) {
   const navClass = navMode === 'drawer' ? 'template-doc--nav-drawer' : ''
-  const bodyClass = ['template-doc', navClass, layoutClass]
-    .filter(Boolean)
-    .join(' ')
-  const shellClass = !showNav
-    ? 'doc-shell doc-shell--single'
-    : navMode === 'drawer'
-      ? 'doc-shell doc-shell--nav-drawer'
-      : 'doc-shell'
-  return { bodyClass, shellClass, showNav }
+  return ['template-doc', navClass, layoutClass].filter(Boolean).join(' ')
+}
+
+function buildDocShellClass(showNav: boolean, navMode: NavMode) {
+  if (!showNav) return 'doc-shell doc-shell--single'
+  if (navMode === 'drawer') return 'doc-shell doc-shell--nav-drawer'
+  return 'doc-shell'
 }
 
 function resolveNavMode(frontmatter: Record<string, unknown> | undefined): NavMode {
