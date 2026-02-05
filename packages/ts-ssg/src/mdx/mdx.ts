@@ -7,7 +7,7 @@ import remarkMdx from 'remark-mdx'
 import remarkParse from 'remark-parse'
 import { unified } from 'unified'
 
-export async function compileMdxToHtml(source: string): Promise<string> {
+export function compileMdxToHtml(source: string): string {
   const cleaned = stripMdxImports(source)
   const file = unified().use(remarkParse).use(remarkMdx).parse(cleaned)
   const tree = toHast(file, {
@@ -24,11 +24,14 @@ export async function compileMdxToHtml(source: string): Promise<string> {
       'mdxJsxTextElement',
     ],
   })
+  if (!isHastRoot(tree)) {
+    throw new Error('MDX compilation did not produce a HAST root node.')
+  }
   const html = String(
     unified()
       .use(rehypeRaw)
       .use(rehypeStringify, { allowDangerousHtml: true })
-      .stringify(tree as Root),
+      .stringify(tree),
   )
   return html
 }
@@ -147,4 +150,8 @@ function stripMdxImports(source: string) {
       !line.startsWith('export\t'),
   )
   return filtered.join('\n')
+}
+
+function isHastRoot(node: ReturnType<typeof toHast>): node is Root {
+  return Boolean(node && node.type === 'root')
 }

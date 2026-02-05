@@ -84,7 +84,7 @@ export async function renderPageFromFile(
   const headConfig = resolveHeadConfig(frontmatter, {
     siteTitle: context.config.siteTitle,
   })
-  const bodyHtml = await compileMdxToHtml(parsed.content)
+  const bodyHtml = compileMdxToHtml(parsed.content)
   const template = resolveTemplateName(frontmatter)
   const htmlShell = await renderPage({
     bodyHtml,
