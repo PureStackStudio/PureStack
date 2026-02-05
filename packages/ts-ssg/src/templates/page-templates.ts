@@ -61,34 +61,17 @@ function renderDocTemplate({
   navigation,
   page,
 }: PageTemplateInput) {
-  const hasNavItems =
-    (navigation?.items?.length ?? 0) > 0 ||
-    (navigation?.global?.length ?? 0) > 0
-  const navMode = resolveNavMode(page?.frontmatter)
-  const layoutClass = resolveDocLayoutClass(page?.frontmatter)
-  const bodyClass = [
-    'template-doc',
-    navMode === 'drawer' ? 'template-doc--nav-drawer' : '',
-    layoutClass,
-  ]
-    .filter(Boolean)
-    .join(' ')
-  const shellClass =
-    hasNavItems && navMode === 'drawer'
-      ? 'doc-shell doc-shell--nav-drawer'
-      : hasNavItems
-        ? 'doc-shell'
-        : 'doc-shell doc-shell--single'
+  const layout = resolveDocLayout(page?.frontmatter, navigation)
   return h('html').push(
     head,
     h('body')
-      .attr({ class: bodyClass })
+      .attr({ class: layout.bodyClass })
       .push(
         h('top-bar'),
         h('div')
-          .attr({ class: shellClass })
+          .attr({ class: layout.shellClass })
           .push(
-            ...(hasNavItems
+            ...(layout.showNav
               ? [
                   h('aside')
                     .attr({ class: 'doc-sidebar', id: 'doc-sidebar' })
@@ -104,6 +87,33 @@ function renderDocTemplate({
           ),
       ),
   )
+}
+
+type DocLayout = {
+  bodyClass: string
+  shellClass: string
+  showNav: boolean
+}
+
+function resolveDocLayout(
+  frontmatter: Record<string, unknown> | undefined,
+  navigation: PageNavigation | undefined,
+): DocLayout {
+  const navMode = resolveNavMode(frontmatter)
+  const layoutClass = resolveDocLayoutClass(frontmatter)
+  const itemCount = navigation?.items?.length ?? 0
+  const globalCount = navigation?.global?.length ?? 0
+  const showNav = itemCount + globalCount > 0
+  const navClass = navMode === 'drawer' ? 'template-doc--nav-drawer' : ''
+  const bodyClass = ['template-doc', navClass, layoutClass]
+    .filter(Boolean)
+    .join(' ')
+  const shellClass = !showNav
+    ? 'doc-shell doc-shell--single'
+    : navMode === 'drawer'
+      ? 'doc-shell doc-shell--nav-drawer'
+      : 'doc-shell'
+  return { bodyClass, shellClass, showNav }
 }
 
 function resolveNavMode(frontmatter: Record<string, unknown> | undefined): NavMode {
