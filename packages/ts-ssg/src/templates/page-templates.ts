@@ -81,6 +81,13 @@ function renderDocTemplate({
             h('main')
               .attr({ class: 'doc-main' })
               .push(h('article').attr({ class: 'doc-content' }).raw(bodyHtml)),
+            ...(layout.showToc
+              ? [
+                  h('aside')
+                    .attr({ class: 'doc-toc', id: 'doc-toc' })
+                    .push(h('page-toc')),
+                ]
+              : []),
           ),
       ),
   )
@@ -90,6 +97,7 @@ type DocLayout = {
   bodyClass: string
   shellClass: string
   showNav: boolean
+  showToc: boolean
 }
 
 function resolveDocLayout(
@@ -99,9 +107,10 @@ function resolveDocLayout(
   const navMode = resolveNavMode(frontmatter)
   const layoutClass = resolveDocLayoutClass(frontmatter)
   const showNav = hasNavItems(navigation)
+  const showToc = resolveTocEnabled(frontmatter)
   const bodyClass = buildDocBodyClass(navMode, layoutClass)
-  const shellClass = buildDocShellClass(showNav, navMode)
-  return { bodyClass, shellClass, showNav }
+  const shellClass = buildDocShellClass(showNav, showToc, navMode)
+  return { bodyClass, shellClass, showNav, showToc }
 }
 
 function hasNavItems(navigation: PageNavigation | undefined) {
@@ -115,10 +124,18 @@ function buildDocBodyClass(navMode: NavMode, layoutClass: string) {
   return ['template-doc', navClass, layoutClass].filter(Boolean).join(' ')
 }
 
-function buildDocShellClass(showNav: boolean, navMode: NavMode) {
-  if (!showNav) return 'doc-shell doc-shell--single'
-  if (navMode === 'drawer') return 'doc-shell doc-shell--nav-drawer'
-  return 'doc-shell'
+function buildDocShellClass(
+  showNav: boolean,
+  showToc: boolean,
+  navMode: NavMode,
+) {
+  const classes = ['doc-shell']
+  if (!showNav && !showToc) classes.push('doc-shell--single')
+  if (navMode === 'drawer') classes.push('doc-shell--nav-drawer')
+  if (showToc) {
+    classes.push(showNav ? 'doc-shell--toc' : 'doc-shell--toc-only')
+  }
+  return classes.join(' ')
 }
 
 function resolveNavMode(
@@ -141,6 +158,14 @@ function resolveDocLayoutClass(
     : undefined
   const fullWidth = layout?.fullWidthMain
   return fullWidth === true ? 'template-doc--full-main' : ''
+}
+
+function resolveTocEnabled(frontmatter: Record<string, unknown> | undefined) {
+  if (!isPlainObject(frontmatter)) return false
+  const layout = isPlainObject(frontmatter.layout)
+    ? frontmatter.layout
+    : undefined
+  return layout?.showToc === true
 }
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {

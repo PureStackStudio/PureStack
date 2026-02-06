@@ -3,6 +3,7 @@ import { type BasicHeadConfig, h } from '@purestack/ts-html'
 import { getHead } from '../config/head'
 import type { PageNavigation } from '../navigation/navigation'
 import type { ThemeStylesheetLink } from '../style/themes'
+import { buildPageTocScript } from '../templates/buildPageTocScript'
 import { buildThemeSwitchScript } from '../templates/buildThemeSwitchScript'
 import {
   type PageTemplateMap,
@@ -50,6 +51,10 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
     template,
     templates,
   )
+  if (isTocEnabled(input.page?.frontmatter)) {
+    const script = buildPageTocScript()
+    head.push(h('script').raw(script))
+  }
   const html = await pageTemplate({
     head,
     bodyHtml,
@@ -61,4 +66,16 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
     siteTitle: input.siteTitle,
   })
   return await html.toPrettyHtml()
+}
+
+function isTocEnabled(frontmatter: Record<string, unknown> | undefined) {
+  if (!isPlainObject(frontmatter)) return false
+  const layout = isPlainObject(frontmatter.layout)
+    ? frontmatter.layout
+    : undefined
+  return layout?.showToc === true
+}
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
 }

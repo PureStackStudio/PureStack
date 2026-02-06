@@ -4,6 +4,7 @@ import { registerMarkdownStyles } from '../templates/markdownStyles'
 import { createCardComponents } from './components/cardGrid'
 import { createHeroComponents } from './components/hero'
 import { createNavigationComponents } from './components/navMenu'
+import { createPageTocComponents } from './components/pageToc'
 import { createPricingComponents } from './components/pricing'
 import { createThemeSwitcherComponents } from './components/themeSwitcher'
 import { createTopBarComponents } from './components/topBar'
@@ -24,5 +25,6 @@ export function initBuiltinComponents() {
   componentRegistry.registerMany(createTopBarComponents())
   componentRegistry.registerMany(createThemeSwitcherComponents())
   componentRegistry.registerMany(createNavigationComponents())
+  componentRegistry.registerMany(createPageTocComponents())
   componentRegistry.registerMany(createPricingComponents())
 }

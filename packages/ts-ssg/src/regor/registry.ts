@@ -11,8 +11,11 @@ export const componentRegistry = {
       registry.set(name, component)
     }
   },
-  getAll(): Record<string, Component<never>> {
-    return Object.fromEntries(registry.entries())
+  getAll(): Record<string, Component<unknown>> {
+    return Object.fromEntries(registry.entries()) as Record<
+      string,
+      Component<unknown>
+    >
   },
   hasComponentName(name: string) {
     return hasComponentName(name, registry)
