@@ -35,6 +35,53 @@ const heroTemplate = html`<section class="hero">
   </div>
 </section>`
 
+const heroActionTemplate = html`<a
+  class="hero__action"
+  :class="className"
+  :href="href"
+  r-if="hasHref"
+  :data-icon="hasIcon ? icon : null"
+  :target="hasTarget ? target : null"
+  :rel="hasRel ? rel : null"
+>
+  <slot></slot>
+</a>`
+
+const heroMediaTemplate = html`<div class="hero__logo-frame" r-if="hasMedia">
+  <img class="hero__logo" :src="src" :alt="alt" />
+</div>`
+
+interface HeroActionProps {
+  href?: string
+  variant?: string
+  icon?: string
+  target?: string
+  rel?: string
+}
+
+interface HeroActionContext {
+  href: string
+  className: string
+  icon: string
+  target: string
+  rel: string
+  hasHref: boolean
+  hasIcon: boolean
+  hasTarget: boolean
+  hasRel: boolean
+}
+
+interface HeroMediaProps {
+  src?: string
+  alt?: string
+}
+
+interface HeroMediaContext {
+  src: string
+  alt: string
+  hasMedia: boolean
+}
+
 function registerHeroStyles() {
   const themeOptions = getThemeOptions()
   const palette = (theme: string) => getThemePalette(theme, themeOptions)
@@ -330,7 +377,65 @@ function createHeroBannerComponent() {
   return createComponent<Record<string, never>>(heroTemplate, {})
 }
 
+function createHeroActionComponent() {
+  return createComponent<HeroActionContext>(heroActionTemplate, {
+    props: ['href', 'variant', 'icon', 'target', 'rel'],
+    context: (head) => resolveHeroActionContext(head.props),
+  })
+}
+
+function createHeroMediaComponent() {
+  return createComponent<HeroMediaContext>(heroMediaTemplate, {
+    props: ['src', 'alt'],
+    context: (head) => resolveHeroMediaContext(head.props),
+  })
+}
+
 export function createHeroComponents() {
   registerHeroStyles()
-  return { heroBanner: createHeroBannerComponent() }
+  return {
+    heroBanner: createHeroBannerComponent(),
+    heroAction: createHeroActionComponent(),
+    heroMedia: createHeroMediaComponent(),
+  }
+}
+
+function resolveHeroActionContext(props: HeroActionProps): HeroActionContext {
+  const href = resolveString(props.href)
+  const normalizedVariant = resolveString(props.variant).toLowerCase()
+  const variant =
+    normalizedVariant === 'primary'
+      ? 'hero__action--primary'
+      : 'hero__action--minimal'
+  const icon = resolveString(props.icon)
+  const target = resolveString(props.target)
+  const relRaw = resolveString(props.rel)
+  const rel = relRaw || (target === '_blank' ? 'noopener noreferrer' : '')
+  return {
+    href,
+    className: variant,
+    icon,
+    target,
+    rel,
+    hasHref: Boolean(href),
+    hasIcon: Boolean(icon),
+    hasTarget: Boolean(target),
+    hasRel: Boolean(rel),
+  }
+}
+
+function resolveHeroMediaContext(props: HeroMediaProps): HeroMediaContext {
+  const src = resolveString(props.src)
+  const alt = resolveString(props.alt)
+  return {
+    src,
+    alt: alt || 'Hero image',
+    hasMedia: Boolean(src),
+  }
+}
+
+function resolveString(value: unknown) {
+  return typeof value === 'string' && value.trim().length > 0
+    ? value.trim()
+    : ''
 }

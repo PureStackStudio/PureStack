@@ -7,6 +7,8 @@ import remarkMdx from 'remark-mdx'
 import remarkParse from 'remark-parse'
 import { unified } from 'unified'
 
+import { componentRegistry } from '../regor/registry'
+
 export function compileMdxToHtml(source: string): string {
   const cleaned = stripMdxImports(source)
   const file = unified().use(remarkParse).use(remarkMdx).parse(cleaned)
@@ -128,16 +130,19 @@ function normalizeMdxJsxChildren(
   children: Element['children'],
 ) {
   if (!name) return children
-  if (!INLINE_TAGS.has(name.toLowerCase())) return children
-  const normalized: Element['children'] = []
+  const normalized = name.toLowerCase()
+  if (!INLINE_TAGS.has(normalized) && !componentRegistry.hasComponentName(name)) {
+    return children
+  }
+  const next: Element['children'] = []
   for (const child of children) {
     if (child.type === 'element' && child.tagName === 'p') {
-      normalized.push(...(child.children ?? []))
+      next.push(...(child.children ?? []))
       continue
     }
-    normalized.push(child)
+    next.push(child)
   }
-  return normalized
+  return next
 }
 
 function stripMdxImports(source: string) {

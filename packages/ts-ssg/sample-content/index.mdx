@@ -3,14 +3,14 @@ title: CalcCore
 description: Backend-native calculation engine for SaaS platforms.
 template: doc
 layout:
-  fullWidthMain: true
+  fullWidthMain: false
   navMode: drawer
 nav:
   order: 1
 ---
 
 
-<hero-banner>
+<HeroBanner>
   <template name="eyebrow"><span>Backend-native calculation engine</span></template>
   <template name="title"><span>CalcCore</span></template>
   <template name="tagline">
@@ -23,25 +23,22 @@ nav:
     </span>
   </template>
   <template name="actions">
-    <a class="hero__action hero__action--primary" href="./getting-started" data-icon="right-arrow">
+    <HeroAction href="./getting-started" icon="right-arrow" variant="primary">
       Get Started
-    </a>
-    <a
-      class="hero__action hero__action--minimal"
+    </HeroAction>
+    <HeroAction
       href="https://github.com/koculu/logpot"
-      data-icon="external"
+      icon="external"
+      variant="minimal"
       target="_blank"
-      rel="noopener noreferrer"
     >
       View on GitHub
-    </a>
+    </HeroAction>
   </template>
   <template name="media">
-    <div class="hero__logo-frame">
-      <img class="hero__logo" src="../logo.svg" alt="CalcCore logo" />
-    </div>
+    <HeroMedia src="../logo.svg" alt="CalcCore logo" />
   </template>
-</hero-banner>
+</HeroBanner>
 
 # CalcCore
 
