@@ -29,7 +29,7 @@ const DEFAULT_PORT = 4173
 const LIVE_RELOAD_PATH = '/__ts-ssg/events'
 const REQUEST_TIMEOUT_MS = 30000
 const LIVE_RELOAD_MAX_CLIENTS = 8
-const LIVE_RELOAD_MAX_PER_ADDRESS = 2
+const LIVE_RELOAD_MAX_PER_ADDRESS = 1
 
 export async function startDevServer(
   input: DevServerInput = {},
@@ -183,7 +183,7 @@ export async function startDevServer(
         closeLiveReloadClientsForAddress(
           clients,
           address,
-          LIVE_RELOAD_MAX_PER_ADDRESS - 1,
+          LIVE_RELOAD_MAX_PER_ADDRESS,
         )
       }
       clients.set(res, { createdAt: Date.now(), address })
