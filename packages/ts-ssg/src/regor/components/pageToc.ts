@@ -213,6 +213,21 @@ function registerPageTocStyles() {
   baseEmpty('light').color(palette('light').nav.textMuted)
   baseEmpty('dark').color(palette('dark').nav.textMuted)
 
+  const baseTarget = (theme: string) =>
+    styleBuilder
+      .select('.doc-content .page-toc__target', theme)
+      .scrollMarginTop('96px')
+      .padding('0')
+      .borderRadius('0')
+      .transition('background 200ms ease, color 200ms ease')
+
+  baseTarget('light')
+    .background(palette('light').surface.altBackground)
+    .color('#bd5454')
+  baseTarget('dark')
+    .background(palette('dark').surface.altBackground)
+    .color('#bd5454')
+
   const tocShell = (theme: string) =>
     styleBuilder
       .select('.doc-shell--toc', theme)

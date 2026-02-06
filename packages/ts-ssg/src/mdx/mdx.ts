@@ -22,8 +22,7 @@ export interface MdxCompileResult {
 }
 
 export function compileMdx(source: string): MdxCompileResult {
-  const cleaned = stripMdxImports(source)
-  const file = unified().use(remarkParse).use(remarkMdx).parse(cleaned)
+  const file = unified().use(remarkParse).use(remarkMdx).parse(source)
   const tree = toHast(file, {
     allowDangerousHtml: true,
     handlers: {
@@ -148,7 +147,10 @@ function normalizeMdxJsxChildren(
 ) {
   if (!name) return children
   const normalized = name.toLowerCase()
-  if (!INLINE_TAGS.has(normalized) && !componentRegistry.hasComponentName(name)) {
+  if (
+    !INLINE_TAGS.has(normalized) &&
+    !componentRegistry.hasComponentName(name)
+  ) {
     return children
   }
   const next: Element['children'] = []
@@ -160,18 +162,6 @@ function normalizeMdxJsxChildren(
     next.push(child)
   }
   return next
-}
-
-function stripMdxImports(source: string) {
-  const lines = source.split(/\r?\n/)
-  const filtered = lines.filter(
-    (line) =>
-      !line.startsWith('import ') &&
-      !line.startsWith('export ') &&
-      !line.startsWith('import\t') &&
-      !line.startsWith('export\t'),
-  )
-  return filtered.join('\n')
 }
 
 function isHastRoot(node: ReturnType<typeof toHast>): node is Root {

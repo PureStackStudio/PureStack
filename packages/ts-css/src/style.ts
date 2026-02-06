@@ -11923,4 +11923,9 @@ export class Style extends BaseStyle<Style> {
     this.set('inset', value)
     return this
   }
+
+  scrollMarginTop(value: string) {
+    this.set('scroll-margin-top', value)
+    return this
+  }
 }

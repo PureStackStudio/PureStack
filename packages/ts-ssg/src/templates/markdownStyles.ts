@@ -23,7 +23,7 @@ export function registerMarkdownStyles() {
       .letterSpacing('-0.015em')
       .lineHeight('1.15')
       .margin('2.2em 0 0.6em')
-      .set('scroll-margin-top', '96px')
+      .scrollMarginTop('96px')
 
   headingBase('.doc-content :where(h1)', 'light')
     .fontSize('2.4rem')
@@ -56,8 +56,12 @@ export function registerMarkdownStyles() {
     .letterSpacing('0.06em')
     .color(palette('dark').nav.textMuted)
 
-  styleBuilder.select('.doc-content :where(h1:first-child)', 'light').marginTop('0')
-  styleBuilder.select('.doc-content :where(h1:first-child)', 'dark').marginTop('0')
+  styleBuilder
+    .select('.doc-content :where(h1:first-child)', 'light')
+    .marginTop('0')
+  styleBuilder
+    .select('.doc-content :where(h1:first-child)', 'dark')
+    .marginTop('0')
 
   const baseParagraph = (theme: string) =>
     styleBuilder.select('.doc-content :where(p)', theme).margin('0 0 1em')
@@ -201,7 +205,9 @@ export function registerMarkdownStyles() {
   baseMedia('light')
   baseMedia('dark')
 
-  styleBuilder.select('.doc-content :where(figure)', 'light').margin('0 0 1.4em')
+  styleBuilder
+    .select('.doc-content :where(figure)', 'light')
+    .margin('0 0 1.4em')
   styleBuilder.select('.doc-content :where(figure)', 'dark').margin('0 0 1.4em')
 
   styleBuilder
