@@ -2,6 +2,7 @@ import { type BasicHeadConfig, h } from '@purestack/ts-html'
 
 import { getHead } from '../config/head'
 import type { PageNavigation } from '../navigation/navigation'
+import { getThemeOptions } from '../style/themeOptions'
 import type { ThemeStylesheetLink } from '../style/themes'
 import { buildPageTocScript } from '../templates/buildPageTocScript'
 import { buildThemeSwitchScript } from '../templates/buildThemeSwitchScript'
@@ -25,8 +26,22 @@ export interface RenderPageInput {
 export async function renderPage(input: RenderPageInput): Promise<string> {
   const { bodyHtml, headConfig, styleLinks, template, templates } = input
   const head = getHead(headConfig)
+  const themes = (styleLinks ?? [])
+    .map((link) => link.dataTheme)
+    .filter((theme): theme is string => Boolean(theme))
+  head.push(h('style').raw(buildCriticalThemeStyle(themes.length > 0)))
   if (styleLinks && styleLinks.length > 0) {
     for (const link of styleLinks) {
+      head.push(
+        h('link').attr({
+          rel: 'preload',
+          as: 'style',
+          href: link.href,
+          ...(link.media ? { media: link.media } : {}),
+          ...(link.title ? { title: link.title } : {}),
+          ...(link.dataTheme ? { 'data-theme': link.dataTheme } : {}),
+        }),
+      )
       head.push(
         h('link').attr({
           rel: link.rel,
@@ -39,9 +54,6 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
       )
     }
 
-    const themes = styleLinks
-      .map((link) => link.dataTheme)
-      .filter((theme): theme is string => Boolean(theme))
     if (themes.length > 0) {
       const script = buildThemeSwitchScript(themes)
       head.push(h('script').raw(script))
@@ -66,6 +78,23 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
     siteTitle: input.siteTitle,
   })
   return await html.toPrettyHtml()
+}
+
+function buildCriticalThemeStyle(hasThemeGate: boolean) {
+  const options = getThemeOptions()
+  const light = options.colors.light.app
+  const dark = options.colors.dark.app
+  const css = [
+    ':root{color-scheme:light dark;}',
+    `html,body{background:${light.background};color:${light.text};}`,
+    '@media (prefers-color-scheme: dark){',
+    `html,body{background:${dark.background};color:${dark.text};}`,
+    '}',
+  ]
+  if (hasThemeGate) {
+    css.push('html:not([data-theme-ready]) body{visibility:hidden;}')
+  }
+  return css.join('')
 }
 
 function isTocEnabled(frontmatter: Record<string, unknown> | undefined) {
