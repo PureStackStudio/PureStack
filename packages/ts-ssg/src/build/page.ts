@@ -5,7 +5,11 @@ import type { Component } from 'regor'
 
 import { type SiteConfig } from '../config/config'
 import { type ContentFile } from '../discover/content'
-import { compileMdx, type PageOutlineItem } from '../mdx/mdx'
+import {
+  compileMdx,
+  type MdxRenderOptions,
+  type PageOutlineItem,
+} from '../mdx/mdx'
 import {
   type NavigationTree,
   type PageNavigation,
@@ -27,6 +31,7 @@ export interface BuildContext {
   components?: Record<string, Component<unknown>>
   templates?: PageTemplateMap
   navigation?: NavigationTree
+  mdx?: MdxRenderOptions
 }
 
 export interface PageRenderResult {
@@ -86,7 +91,7 @@ export async function renderPageFromFile(
   const headConfig = resolveHeadConfig(frontmatter, {
     siteTitle: context.config.siteTitle,
   })
-  const compiled = compileMdx(parsed.content)
+  const compiled = compileMdx(parsed.content, context.mdx)
   const bodyHtml = compiled.html
   const template = resolveTemplateName(frontmatter)
   const htmlShell = await renderPage({

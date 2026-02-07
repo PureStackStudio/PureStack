@@ -135,6 +135,23 @@ export function registerMarkdownStyles() {
   basePre('light')
   basePre('dark')
 
+  const shikiPre = (theme: string, colorVar: string, bgVar: string) =>
+    styleBuilder
+      .select('.doc-content :where(pre.shiki.shiki-themes)', theme)
+      .background(`var(${bgVar}, ${palette(theme).surface.altBackground})`)
+      .color(`var(${colorVar}, ${palette(theme).panel.text})`)
+
+  shikiPre('light', '--shiki-light', '--shiki-light-bg')
+  shikiPre('dark', '--shiki-dark', '--shiki-dark-bg')
+
+  const shikiSpan = (theme: string, colorVar: string) =>
+    styleBuilder
+      .select('.doc-content :where(pre.shiki.shiki-themes span)', theme)
+      .color(`var(${colorVar})`)
+
+  shikiSpan('light', '--shiki-light')
+  shikiSpan('dark', '--shiki-dark')
+
   styleBuilder
     .select('.doc-content :where(pre code)', 'light')
     .background('transparent')

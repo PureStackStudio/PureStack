@@ -4,6 +4,14 @@ import type { Component } from 'regor'
 import { type PartialSiteConfig, resolveSiteConfig } from '../config/config'
 import { type ContentFile, discoverContent } from '../discover/content'
 import {
+  createMdxHighlighter,
+  DEFAULT_MDX_CODE_LANGS,
+  DEFAULT_MDX_CODE_THEMES,
+  type MdxCodeHighlighter,
+  type MdxCodeLangs,
+  type MdxCodeThemes,
+} from '../mdx/highlight'
+import {
   buildNavigation,
   type NavigationConfig,
   type NavigationTree,
@@ -65,18 +73,35 @@ export interface BuildOptions {
   components?: Record<string, Component<unknown>>
   templates?: PageTemplateMap
   navigation?: NavigationConfig
+  mdx?: MdxOptions
 }
 
 export type BuildInput = PartialSiteConfig & BuildOptions
+
+export interface MdxOptions {
+  highlighter?: MdxCodeHighlighter
+  themes?: MdxCodeThemes
+  langs?: MdxCodeLangs
+  disableHighlighter?: boolean
+}
 
 export async function buildSite(input: BuildInput = {}): Promise<BuildResult> {
   const config = resolveSiteConfig(input)
   const log = getLogger()
   const hooks = input.hooks ?? {}
+  const mdxThemes = input.mdx?.themes ?? DEFAULT_MDX_CODE_THEMES
+  const mdxLangs = input.mdx?.langs ?? DEFAULT_MDX_CODE_LANGS
+  const mdxHighlighter = input.mdx?.disableHighlighter
+    ? undefined
+    : (input.mdx?.highlighter ??
+      (await createMdxHighlighter(mdxThemes, mdxLangs)))
   const context: BuildContext = {
     config,
     components: input.components,
     templates: input.templates,
+    mdx: {
+      highlighter: mdxHighlighter,
+    },
   }
   setThemeOptions(config.theme)
   initBuiltinComponents()

@@ -8,6 +8,16 @@ import remarkParse from 'remark-parse'
 import { unified } from 'unified'
 
 import { componentRegistry } from '../regor/registry'
+import { type MdxCodeHighlighter } from './highlight'
+import { applyShikiHighlighting } from './shikiHighlighting'
+
+export {
+  DEFAULT_MDX_CODE_LANGS,
+  DEFAULT_MDX_CODE_THEMES,
+  type MdxCodeHighlighter,
+  type MdxCodeLangs,
+  type MdxCodeThemes,
+} from './highlight'
 
 export interface PageOutlineItem {
   id: string
@@ -21,7 +31,14 @@ export interface MdxCompileResult {
   outline: PageOutlineItem[]
 }
 
-export function compileMdx(source: string): MdxCompileResult {
+export interface MdxRenderOptions {
+  highlighter?: MdxCodeHighlighter
+}
+
+export function compileMdx(
+  source: string,
+  options: MdxRenderOptions = {},
+): MdxCompileResult {
   const file = unified().use(remarkParse).use(remarkMdx).parse(source)
   const tree = toHast(file, {
     allowDangerousHtml: true,
@@ -41,6 +58,9 @@ export function compileMdx(source: string): MdxCompileResult {
     throw new Error('MDX compilation did not produce a HAST root node.')
   }
   const outline = collectOutline(tree)
+  if (options.highlighter) {
+    applyShikiHighlighting(tree, options.highlighter)
+  }
   const html = String(
     unified()
       .use(rehypeRaw)

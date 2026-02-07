@@ -12,6 +12,7 @@ export {
   type BuildOptions,
   type BuildResult,
   buildSite,
+  type MdxOptions,
 } from './build/site'
 export {
   type PartialSiteConfig as PartialConfig,
@@ -24,6 +25,14 @@ export {
   type DevServerOptions,
   startDevServer,
 } from './dev/server'
+export {
+  createMdxHighlighter,
+  DEFAULT_MDX_CODE_LANGS,
+  DEFAULT_MDX_CODE_THEMES,
+  type MdxCodeHighlighter,
+  type MdxCodeLangs,
+  type MdxCodeThemes,
+} from './mdx/highlight'
 export {
   buildNavigation,
   type NavigationConfig,
