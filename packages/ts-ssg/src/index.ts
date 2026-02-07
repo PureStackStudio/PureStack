@@ -59,10 +59,10 @@ export {
 } from './style/themeOptions'
 export {
   defaultTemplates,
+  type PageInfo,
   type PageTemplate,
   type PageTemplateInput,
   type PageTemplateMap,
-  type PageTemplatePage,
   resolvePageTemplate,
 } from './templates/page-templates'
 

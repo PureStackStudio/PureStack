@@ -26,7 +26,7 @@ export interface DevServerHandle {
   close: () => Promise<void>
 }
 
-const DEFAULT_HOST = '127.0.0.1'
+const DEFAULT_HOST = '0.0.0.0'
 const DEFAULT_PORT = 4173
 const LIVE_RELOAD_PATH = '/__ts-ssg/events'
 const REQUEST_TIMEOUT_MS = 30000

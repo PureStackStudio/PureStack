@@ -28,5 +28,5 @@ export function compileMdx(
 }
 
 export function compileMdxToHtml(source: string): string {
-  return compileMdx(source).html
+  return compileMdx(source).bodyHtml
 }

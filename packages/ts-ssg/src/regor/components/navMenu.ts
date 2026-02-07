@@ -121,7 +121,7 @@ function normalizePath(url: string | undefined): string | undefined {
 }
 
 function resolveCurrentPath(context: TsSsgContext): string | undefined {
-  const fromContext = normalizePath(context?.page?.urlPath)
+  const fromContext = normalizePath(context?.pageInfo?.urlPath)
   if (fromContext) return fromContext
   if (typeof window !== 'undefined' && window.location?.pathname) {
     return normalizePath(window.location.pathname)

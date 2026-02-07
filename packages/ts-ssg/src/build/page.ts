@@ -18,10 +18,7 @@ import {
 } from '../navigation/navigation'
 import { renderApp } from '../regor/renderApp'
 import { resolveThemeStyleLinks } from '../style/themes'
-import type {
-  PageTemplateMap,
-  PageTemplatePage,
-} from '../templates/page-templates'
+import type { PageInfo, PageTemplateMap } from '../templates/page-templates'
 import { resolveHeadConfig } from './head-config'
 import { readSource, writeHtml } from './io'
 import { resolveOutPath, resolveRouteInfo } from './out-path'
@@ -47,7 +44,7 @@ export interface PageRenderResult {
   urlPath: string
   renderTimeMs: number
   navigation?: PageNavigation
-  page?: PageTemplatePage
+  pageInfo?: PageInfo
   outline?: PageOutlineItem[]
 }
 
@@ -88,64 +85,45 @@ export async function renderPageFromFile(
   const outPath = resolveOutPath(context.config.outDir, file)
   try {
     const source = await readSource(file.absPath)
-    const parsed = matter(source)
-    const frontmatter = parsed.data as Record<string, unknown>
+    const parsedContent = parsePageSource(source)
     const navigation = resolvePageNavigation(context.navigation, file)
-    const pageInfo = {
-      relPath: file.relPath,
+    const pageInfo = createPageTemplateInfo(
+      file,
       urlPath,
-      frontmatter,
-    }
-    const renderAppOptions = {
-      components: context.components,
-      context: {
-        site: context.config,
-        page: pageInfo,
-        navigation,
-        outline: new Array<PageOutlineItem>(),
-        theme: context.config.theme,
-      },
-    }
-    const headConfig = resolveHeadConfig(frontmatter, {
+      parsedContent.frontmatter,
+    )
+    const headConfig = resolveHeadConfig(parsedContent.frontmatter, {
       siteTitle: context.config.siteTitle,
     })
-    const compiled =
-      file.ext === '.mdx'
-        ? compileMdx(parsed.content, context.mdx)
-        : compileMarkdown(parsed.content, context.mdx)
-    const bodyHtml = compiled.html
-    const template = resolveTemplateName(frontmatter)
-    const htmlShell = await renderPage({
-      bodyHtml,
+    const compiled = compilePageContent(file, parsedContent.body, context.mdx)
+    const template = resolveTemplateName(parsedContent.frontmatter)
+    const htmlShell = await renderPageShell({
+      context,
+      bodyHtml: compiled.bodyHtml,
       headConfig,
-      styleLinks: resolveThemeStyleLinks(
-        context.config.styleHref,
-        context.config.styleThemes,
-      ),
       template,
-      templates: context.templates,
       navigation,
-      page: pageInfo,
-      siteTitle: context.config.siteTitle,
+      pageInfo,
     })
-    renderAppOptions.context.outline = compiled.outline
-    const html = renderApp(htmlShell, renderAppOptions)
+    const html = renderPageApp(context, htmlShell, {
+      pageInfo,
+      navigation,
+      outline: compiled.outline,
+    })
     const renderTimeMs =
       Number(process.hrtime.bigint() - renderStart) / 1_000_000
     return {
       file,
-      frontmatter,
-      body: parsed.content,
+      ...parsedContent,
       headConfig,
-      bodyHtml,
+      ...compiled,
       html,
       template,
       outPath,
       urlPath,
       renderTimeMs,
       navigation,
-      page: pageInfo,
-      outline: compiled.outline,
+      pageInfo,
     }
   } catch (error) {
     throw attachPageContext(error, {
@@ -159,6 +137,89 @@ export async function renderPageFromFile(
 function resolveTemplateName(frontmatter: Record<string, unknown>) {
   const template = frontmatter.template
   return typeof template === 'string' ? template : undefined
+}
+
+type ParsedPageSource = {
+  body: string
+  frontmatter: Record<string, unknown>
+}
+
+function parsePageSource(source: string): ParsedPageSource {
+  const parsed = matter(source)
+  return {
+    body: parsed.content,
+    frontmatter: parsed.data as Record<string, unknown>,
+  }
+}
+
+function createPageTemplateInfo(
+  file: ContentFile,
+  urlPath: string,
+  frontmatter: Record<string, unknown>,
+): PageInfo {
+  return {
+    relPath: file.relPath,
+    urlPath,
+    frontmatter,
+  }
+}
+
+function compilePageContent(
+  file: ContentFile,
+  sourceBody: string,
+  mdxOptions: MdxRenderOptions | undefined,
+) {
+  return file.ext === '.mdx'
+    ? compileMdx(sourceBody, mdxOptions)
+    : compileMarkdown(sourceBody, mdxOptions)
+}
+
+type RenderPageShellInput = {
+  context: BuildContext
+  bodyHtml: string
+  headConfig: BasicHeadConfig
+  template: string | undefined
+  navigation: PageNavigation | undefined
+  pageInfo: PageInfo
+}
+
+async function renderPageShell(input: RenderPageShellInput): Promise<string> {
+  const { context, bodyHtml, headConfig, template, navigation, pageInfo } =
+    input
+  return await renderPage({
+    bodyHtml,
+    headConfig,
+    styleLinks: resolveThemeStyleLinks(
+      context.config.styleHref,
+      context.config.styleThemes,
+    ),
+    template,
+    templates: context.templates,
+    navigation,
+    pageInfo,
+    siteTitle: context.config.siteTitle,
+  })
+}
+
+type RenderAppContextInput = {
+  pageInfo: PageInfo
+  navigation: PageNavigation | undefined
+  outline: PageOutlineItem[]
+}
+
+function renderPageApp(
+  context: BuildContext,
+  htmlShell: string,
+  appContext: RenderAppContextInput,
+) {
+  return renderApp(htmlShell, {
+    components: context.components,
+    context: {
+      site: context.config,
+      ...appContext,
+      theme: context.config.theme,
+    },
+  })
 }
 
 type PageErrorContext = {

@@ -299,9 +299,7 @@ class MiniDocument extends MiniNode {
   override cloneNode(deep?: boolean): MiniNode {
     const clone = new MiniDocument()
     if (deep) {
-      for (const child of this.childNodes) {
-        clone.appendChild(child.cloneNode(true))
-      }
+      cloneChildNodesTo(clone, this.childNodes)
       clone.linkHtmlBody()
     }
     return clone
@@ -324,9 +322,7 @@ class MiniDocumentFragment extends MiniNode {
   override cloneNode(deep?: boolean): MiniNode {
     const clone = new MiniDocumentFragment()
     if (deep) {
-      for (const child of this.childNodes) {
-        clone.appendChild(child.cloneNode(true))
-      }
+      cloneChildNodesTo(clone, this.childNodes)
     }
     return clone
   }
@@ -465,13 +461,9 @@ class MiniElement extends MiniNode {
       const clone = new MiniHTMLTemplateElement()
       clone._ownerDocument = this.ownerDocument
       clone.content._ownerDocument = clone._ownerDocument
-      for (const [key, value] of this.attributes.entries()) {
-        clone.setAttribute(key, value)
-      }
+      copyElementAttributes(this, clone)
       if (deep) {
-        for (const child of this.content.childNodes) {
-          clone.content.appendChild(child.cloneNode(true))
-        }
+        cloneChildNodesTo(clone.content, this.content.childNodes)
       }
       return clone
     }
@@ -481,13 +473,9 @@ class MiniElement extends MiniNode {
         : new MiniHTMLElement(this.tagName)
     clone.namespaceURI = this.namespaceURI
     clone._ownerDocument = this.ownerDocument
-    for (const [key, value] of this.attributes.entries()) {
-      clone.setAttribute(key, value)
-    }
+    copyElementAttributes(this, clone)
     if (deep) {
-      for (const child of this.childNodes) {
-        clone.appendChild(child.cloneNode(true))
-      }
+      cloneChildNodesTo(clone, this.childNodes)
     }
     return clone
   }
@@ -509,16 +497,9 @@ class MiniHTMLTemplateElement extends MiniHTMLElement {
     const clone = new MiniHTMLTemplateElement()
     clone._ownerDocument = this.ownerDocument
     clone.content._ownerDocument = clone._ownerDocument
-    for (const [key, value] of this.getAttributeNames().map((name) => [
-      name,
-      this.getAttribute(name) ?? '',
-    ])) {
-      clone.setAttribute(key, value)
-    }
+    copyElementAttributes(this, clone)
     if (deep) {
-      for (const child of this.content.childNodes) {
-        clone.content.appendChild(child.cloneNode(true))
-      }
+      cloneChildNodesTo(clone.content, this.content.childNodes)
     }
     return clone
   }
@@ -687,6 +668,18 @@ function createStyleDeclaration() {
 }
 
 type StyleDeclaration = ReturnType<typeof createStyleDeclaration>
+
+function cloneChildNodesTo(target: MiniNode, nodes: MiniNode[]) {
+  for (const child of nodes) {
+    target.appendChild(child.cloneNode(true))
+  }
+}
+
+function copyElementAttributes(source: MiniElement, target: MiniElement) {
+  for (const name of source.getAttributeNames()) {
+    target.setAttribute(name, source.getAttribute(name) ?? '')
+  }
+}
 
 function insertNode(
   parent: MiniNode,

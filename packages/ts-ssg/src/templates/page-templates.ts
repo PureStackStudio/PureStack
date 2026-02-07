@@ -3,7 +3,7 @@ import { type BasicHeadConfig, h, type TSNode } from '@purestack/ts-html'
 import type { PageNavigation } from '../navigation/navigation'
 import type { ThemeStylesheetLink } from '../style/themes'
 
-export interface PageTemplatePage {
+export interface PageInfo {
   relPath: string
   urlPath: string
   frontmatter: Record<string, unknown>
@@ -16,7 +16,7 @@ export interface PageTemplateInput {
   styleLinks?: ThemeStylesheetLink[]
   templateName: string
   navigation?: PageNavigation
-  page?: PageTemplatePage
+  pageInfo?: PageInfo
   siteTitle?: string
 }
 
@@ -59,7 +59,7 @@ function renderDocTemplate({
   head,
   bodyHtml,
   navigation,
-  page,
+  pageInfo: page,
 }: PageTemplateInput) {
   const layout = resolveDocLayout(page?.frontmatter, navigation)
   return h('html').push(

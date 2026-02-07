@@ -7,8 +7,8 @@ import type { ThemeStylesheetLink } from '../style/themes'
 import { buildPageTocScript } from '../templates/buildPageTocScript'
 import { buildThemeSwitchScript } from '../templates/buildThemeSwitchScript'
 import {
+  type PageInfo,
   type PageTemplateMap,
-  type PageTemplatePage,
   resolvePageTemplate,
 } from '../templates/page-templates'
 
@@ -19,54 +19,22 @@ export interface RenderPageInput {
   template?: string
   templates?: PageTemplateMap
   navigation?: PageNavigation
-  page?: PageTemplatePage
+  pageInfo?: PageInfo
   siteTitle?: string
 }
 
 export async function renderPage(input: RenderPageInput): Promise<string> {
   const { bodyHtml, headConfig, styleLinks, template, templates } = input
   const head = getHead(headConfig)
-  const themes = (styleLinks ?? [])
-    .map((link) => link.dataTheme)
-    .filter((theme): theme is string => Boolean(theme))
+  const themes = getStyleThemes(styleLinks)
   head.push(h('style').raw(buildCriticalThemeStyle(themes.length > 0)))
-  if (styleLinks && styleLinks.length > 0) {
-    for (const link of styleLinks) {
-      head.push(
-        h('link').attr({
-          rel: 'preload',
-          as: 'style',
-          href: link.href,
-          ...(link.media ? { media: link.media } : {}),
-          ...(link.title ? { title: link.title } : {}),
-          ...(link.dataTheme ? { 'data-theme': link.dataTheme } : {}),
-        }),
-      )
-      head.push(
-        h('link').attr({
-          rel: link.rel,
-          href: link.href,
-          ...(link.media ? { media: link.media } : {}),
-          ...(link.title ? { title: link.title } : {}),
-          ...(link.dataTheme ? { 'data-theme': link.dataTheme } : {}),
-          ...(link.disabled ? { disabled: '' } : {}),
-        }),
-      )
-    }
-
-    if (themes.length > 0) {
-      const script = buildThemeSwitchScript(themes)
-      head.push(h('script').raw(script))
-    }
-  }
+  appendStyleLinkTags(head, styleLinks)
+  appendThemeSwitchScript(head, themes)
   const { pageTemplate, templateName } = resolvePageTemplate(
     template,
     templates,
   )
-  if (isTocEnabled(input.page?.frontmatter)) {
-    const script = buildPageTocScript()
-    head.push(h('script').raw(script))
-  }
+  appendTocScript(head, input.pageInfo?.frontmatter)
   const html = await pageTemplate({
     head,
     bodyHtml,
@@ -74,10 +42,65 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
     styleLinks,
     templateName,
     navigation: input.navigation,
-    page: input.page,
+    pageInfo: input.pageInfo,
     siteTitle: input.siteTitle,
   })
   return await html.toPrettyHtml()
+}
+
+function getStyleThemes(
+  styleLinks: ThemeStylesheetLink[] | undefined,
+): string[] {
+  return (styleLinks ?? [])
+    .map((link) => link.dataTheme)
+    .filter((theme): theme is string => Boolean(theme))
+}
+
+function appendStyleLinkTags(
+  head: ReturnType<typeof getHead>,
+  styleLinks: ThemeStylesheetLink[] | undefined,
+) {
+  if (!styleLinks || styleLinks.length === 0) return
+  for (const link of styleLinks) {
+    head.push(
+      h('link').attr({
+        rel: 'preload',
+        as: 'style',
+        href: link.href,
+        ...(link.media ? { media: link.media } : {}),
+        ...(link.title ? { title: link.title } : {}),
+        ...(link.dataTheme ? { 'data-theme': link.dataTheme } : {}),
+      }),
+    )
+    head.push(
+      h('link').attr({
+        rel: link.rel,
+        href: link.href,
+        ...(link.media ? { media: link.media } : {}),
+        ...(link.title ? { title: link.title } : {}),
+        ...(link.dataTheme ? { 'data-theme': link.dataTheme } : {}),
+        ...(link.disabled ? { disabled: '' } : {}),
+      }),
+    )
+  }
+}
+
+function appendThemeSwitchScript(
+  head: ReturnType<typeof getHead>,
+  themes: string[],
+) {
+  if (themes.length === 0) return
+  const script = buildThemeSwitchScript(themes)
+  head.push(h('script').raw(script))
+}
+
+function appendTocScript(
+  head: ReturnType<typeof getHead>,
+  frontmatter: Record<string, unknown> | undefined,
+) {
+  if (!isTocEnabled(frontmatter)) return
+  const script = buildPageTocScript()
+  head.push(h('script').raw(script))
 }
 
 function buildCriticalThemeStyle(hasThemeGate: boolean) {

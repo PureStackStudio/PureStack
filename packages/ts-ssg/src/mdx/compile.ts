@@ -18,7 +18,7 @@ export interface PageOutlineItem {
 }
 
 export interface MdxCompileResult {
-  html: string
+  bodyHtml: string
   outline: PageOutlineItem[]
 }
 
@@ -55,13 +55,13 @@ export function compileAstToHtml(
   if (options.highlighter) {
     applyShikiHighlighting(tree, options.highlighter)
   }
-  const html = String(
+  const bodyHtml = String(
     unified()
       .use(rehypeRaw)
       .use(rehypeStringify, { allowDangerousHtml: true })
       .stringify(tree),
   )
-  return { html, outline }
+  return { bodyHtml, outline }
 }
 
 const mdxJsxHandler: Handler = (state, node) => {

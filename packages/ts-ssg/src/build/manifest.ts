@@ -1,3 +1,4 @@
+import type { Stats } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
@@ -80,15 +81,7 @@ export function isCompatibleManifest(
 ) {
   if (manifest.version !== MANIFEST_VERSION) return false
   const expected = manifestConfigFromSiteConfig(config)
-  return (
-    manifest.config.contentDir === expected.contentDir &&
-    manifest.config.outDir === expected.outDir &&
-    manifest.config.siteTitle === expected.siteTitle &&
-    manifest.config.styleFileName === expected.styleFileName &&
-    manifest.config.styleHref === expected.styleHref &&
-    Array.isArray(manifest.config.styleThemes) &&
-    manifest.config.styleThemes.join('|') === expected.styleThemes.join('|')
-  )
+  return manifestConfigEqual(manifest.config, expected)
 }
 
 export async function readManifest(
@@ -97,16 +90,9 @@ export async function readManifest(
   const filePath = manifestPath(outDir)
   try {
     const raw = await fs.readFile(filePath, 'utf8')
-    const parsed = JSON.parse(raw) as BuildManifest
-    if (!parsed || typeof parsed !== 'object') return null
-    if (!parsed.config || typeof parsed.config !== 'object') return null
-    if (!parsed.content || typeof parsed.content !== 'object') return null
-    if (!parsed.assets || typeof parsed.assets !== 'object') return null
-    if (!parsed.styles || typeof parsed.styles !== 'object') return null
-    return parsed
+    return parseManifestJson(raw)
   } catch (error) {
-    const err = error as NodeJS.ErrnoException
-    if (err.code === 'ENOENT') return null
+    if (isEnoent(error)) return null
     throw error
   }
 }
@@ -126,11 +112,9 @@ export async function readSignature(
 ): Promise<FileSignature | null> {
   try {
     const stats = await fs.stat(absPath)
-    if (!stats.isFile()) return null
-    return { mtimeMs: stats.mtimeMs, size: stats.size }
+    return fileSignatureFromStats(stats)
   } catch (error) {
-    const err = error as NodeJS.ErrnoException
-    if (err.code === 'ENOENT') return null
+    if (isEnoent(error)) return null
     throw error
   }
 }
@@ -141,4 +125,46 @@ export function signatureEqual(
 ) {
   if (!left || !right) return false
   return left.mtimeMs === right.mtimeMs && left.size === right.size
+}
+
+function manifestConfigEqual(left: ManifestConfig, right: ManifestConfig) {
+  return (
+    left.contentDir === right.contentDir &&
+    left.outDir === right.outDir &&
+    left.siteTitle === right.siteTitle &&
+    left.styleFileName === right.styleFileName &&
+    left.styleHref === right.styleHref &&
+    Array.isArray(left.styleThemes) &&
+    left.styleThemes.join('|') === right.styleThemes.join('|')
+  )
+}
+
+function parseManifestJson(raw: string): BuildManifest | null {
+  const parsed = JSON.parse(raw) as BuildManifest
+  return isBuildManifest(parsed) ? parsed : null
+}
+
+function isBuildManifest(value: unknown): value is BuildManifest {
+  if (!value || typeof value !== 'object') return false
+  const manifest = value as Record<string, unknown>
+  return (
+    isPlainObject(manifest.config) &&
+    isPlainObject(manifest.content) &&
+    isPlainObject(manifest.assets) &&
+    isPlainObject(manifest.styles)
+  )
+}
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+function isEnoent(error: unknown): boolean {
+  const err = error as NodeJS.ErrnoException
+  return err?.code === 'ENOENT'
+}
+
+function fileSignatureFromStats(stats: Stats): FileSignature | null {
+  if (!stats.isFile()) return null
+  return { mtimeMs: stats.mtimeMs, size: stats.size }
 }
