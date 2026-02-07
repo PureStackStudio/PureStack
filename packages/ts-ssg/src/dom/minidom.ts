@@ -229,6 +229,9 @@ class MiniDocument extends MiniNode {
           ? new MiniHTMLSlotElement()
           : new MiniHTMLElement(tagName)
     el._ownerDocument = this
+    if (el instanceof MiniHTMLTemplateElement) {
+      el.content._ownerDocument = this
+    }
     return el
   }
 
@@ -453,7 +456,7 @@ class MiniElement extends MiniNode {
     const selectors = splitSelectorList(selector)
     for (const sel of selectors) {
       const chain = parseSelectorChain(sel)
-      if (chain.length === 1 && matchesSelectorPart(this, chain[0])) {
+      if (chain.length === 1 && matchesSelectorPart(this, chain[0].part)) {
         return true
       }
       if (matchesSelectorChain(this, chain)) return true
@@ -465,6 +468,7 @@ class MiniElement extends MiniNode {
     if (this instanceof MiniHTMLTemplateElement) {
       const clone = new MiniHTMLTemplateElement()
       clone._ownerDocument = this.ownerDocument
+      clone.content._ownerDocument = clone._ownerDocument
       for (const [key, value] of this.attributes.entries()) {
         clone.setAttribute(key, value)
       }
@@ -478,7 +482,7 @@ class MiniElement extends MiniNode {
     const clone =
       this.tagName.toLowerCase() === 'slot'
         ? new MiniHTMLSlotElement()
-        : new MiniElement(this.tagName)
+        : new MiniHTMLElement(this.tagName)
     clone.namespaceURI = this.namespaceURI
     clone._ownerDocument = this.ownerDocument
     for (const [key, value] of this.attributes.entries()) {
@@ -508,6 +512,7 @@ class MiniHTMLTemplateElement extends MiniHTMLElement {
   override cloneNode(deep?: boolean): MiniNode {
     const clone = new MiniHTMLTemplateElement()
     clone._ownerDocument = this.ownerDocument
+    clone.content._ownerDocument = clone._ownerDocument
     for (const [key, value] of this.getAttributeNames().map((name) => [
       name,
       this.getAttribute(name) ?? '',
@@ -701,6 +706,14 @@ function insertNode(
     return node
   }
 
+  let cursor: MiniNode | null = parent
+  while (cursor) {
+    if (cursor === node) {
+      throw new Error('Cannot insert an ancestor into its descendant')
+    }
+    cursor = cursor.parentNode
+  }
+
   if (node.parentNode) {
     node.parentNode.removeChild(node)
   }
@@ -867,9 +880,19 @@ function parseAttributes(input: string, start: number) {
         i = endQuote === -1 ? input.length : endQuote + 1
       } else {
         const valueStart = i
-        while (i < input.length && /[^\s>]/.test(input[i])) i += 1
+        while (i < input.length && /[^\s>/]/.test(input[i])) i += 1
         value = decodeEntities(input.slice(valueStart, i))
+        if (input[i] === '/' && input[i + 1] === '>') {
+          selfClosing = true
+          i += 2
+          attrs.set(name, value)
+          break
+        }
       }
+    }
+    if (nameStart === i) {
+      i += 1
+      continue
     }
     attrs.set(name, value)
   }
@@ -877,12 +900,17 @@ function parseAttributes(input: string, start: number) {
 }
 
 function decodeEntities(value: string) {
+  const safeCodePoint = (code: number) => {
+    if (!Number.isFinite(code)) return '\uFFFD'
+    if (code < 0 || code > 0x10ffff) return '\uFFFD'
+    return String.fromCodePoint(code)
+  }
   return value
     .replace(/&#x([0-9a-fA-F]+);?/g, (_, hex: string) =>
-      String.fromCodePoint(Number.parseInt(hex, 16)),
+      safeCodePoint(Number.parseInt(hex, 16)),
     )
     .replace(/&#([0-9]+);?/g, (_, dec: string) =>
-      String.fromCodePoint(Number.parseInt(dec, 10)),
+      safeCodePoint(Number.parseInt(dec, 10)),
     )
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
@@ -945,7 +973,12 @@ type SelectorPart = {
   id: string | null
   classes: string[]
   attrs: Array<{ name: string; value?: string }>
-  notAttrs: Array<{ name: string; value?: string }>
+  notParts: SelectorPart[]
+}
+
+type SelectorStep = {
+  part: SelectorPart
+  combinatorToPrev: ' ' | '>' | null
 }
 
 function querySelectorFrom(
@@ -983,8 +1016,15 @@ function querySelectorAllFrom(
       if (matchesSelectorChain(el, chain)) results.push(el)
     }
   }
+  const unique: MiniElement[] = []
+  const seen = new Set<MiniElement>()
+  for (const el of results) {
+    if (seen.has(el)) continue
+    seen.add(el)
+    unique.push(el)
+  }
   if (filterTemplates && rawSelector === 'template') {
-    return results.filter((el) => {
+    return unique.filter((el) => {
       if (el.tagName.toLowerCase() !== 'template') return true
       if (el.hasAttribute('name')) return false
       const hasNamedSlot = el
@@ -993,7 +1033,7 @@ function querySelectorAllFrom(
       return !hasNamedSlot
     })
   }
-  return results
+  return unique
 }
 
 function splitSelectorList(selector: string) {
@@ -1015,30 +1055,103 @@ function splitSelectorList(selector: string) {
 }
 
 function parseSelectorChain(selector: string) {
-  const parts: string[] = []
+  const parts: SelectorStep[] = []
   let current = ''
   let depth = 0
-  for (let i = 0; i < selector.length; i += 1) {
+  let pending: ' ' | '>' | null = null
+  let i = 0
+
+  const pushCurrent = () => {
+    const trimmed = current.trim()
+    if (!trimmed) return
+    parts.push({
+      part: parseSelectorPart(trimmed),
+      combinatorToPrev: pending,
+    })
+    current = ''
+    pending = ' '
+  }
+
+  while (i < selector.length) {
     const ch = selector[i]
     if (ch === '[' || ch === '(') depth += 1
     if (ch === ']' || ch === ')') depth = Math.max(0, depth - 1)
-    if (/\s/.test(ch) && depth === 0) {
-      if (current.trim()) parts.push(current.trim())
-      current = ''
+
+    if (depth === 0 && (ch === '+' || ch === '~')) {
+      return []
+    }
+
+    if (depth === 0 && ch === '>') {
+      pushCurrent()
+      pending = '>'
+      i += 1
+      while (i < selector.length && /\s/.test(selector[i])) i += 1
       continue
     }
+
+    if (depth === 0 && /\s/.test(ch)) {
+      pushCurrent()
+      pending = pending ?? ' '
+      i += 1
+      while (i < selector.length && /\s/.test(selector[i])) i += 1
+      continue
+    }
+
     current += ch
+    i += 1
   }
-  if (current.trim()) parts.push(current.trim())
-  return parts.map(parseSelectorPart)
+
+  pushCurrent()
+  if (parts.length > 0 && parts[0]?.combinatorToPrev) {
+    parts[0].combinatorToPrev = null
+  }
+  return parts
 }
 
 function parseSelectorPart(part: string): SelectorPart {
+  const notParts: SelectorPart[] = []
+  let base = ''
+  let i = 0
+
+  while (i < part.length) {
+    if (part.startsWith(':not(', i)) {
+      const end = part.indexOf(')', i + 5)
+      const raw = part.slice(i + 5, end === -1 ? part.length : end).trim()
+      const parsed = parseSimpleSelectorPart(raw)
+      if (parsed) notParts.push(parsed)
+      i = end === -1 ? part.length : end + 1
+      continue
+    }
+    base += part[i]
+    i += 1
+  }
+
+  const basePart = parseSimpleSelectorPart(base.trim()) ?? {
+    tag: null,
+    id: null,
+    classes: [],
+    attrs: [],
+    notParts: [],
+  }
+  basePart.notParts = notParts
+  return basePart
+}
+
+function parseSimpleSelectorPart(part: string): SelectorPart | null {
+  if (!part) {
+    return {
+      tag: null,
+      id: null,
+      classes: [],
+      attrs: [],
+      notParts: [],
+    }
+  }
+  if (/[\s>+~,]/.test(part)) return null
   let tag: string | null = null
   let id: string | null = null
   const classes: string[] = []
   const attrs: Array<{ name: string; value?: string }> = []
-  const notAttrs: Array<{ name: string; value?: string }> = []
   let i = 0
 
   if (part.startsWith('*')) {
@@ -1074,14 +1187,6 @@ function parseSelectorPart(part: string): SelectorPart {
       i = end === -1 ? part.length : end + 1
       continue
     }
-    if (part.startsWith(':not(', i)) {
-      const end = part.indexOf(')', i + 5)
-      const raw = part.slice(i + 5, end === -1 ? part.length : end)
-      const attr = parseAttributeSelector(raw)
-      if (attr) notAttrs.push(attr)
-      i = end === -1 ? part.length : end + 1
-      continue
-    }
     i += 1
   }
 
@@ -1090,7 +1195,7 @@ function parseSelectorPart(part: string): SelectorPart {
     id,
     classes,
     attrs,
-    notAttrs,
+    notParts: [],
   }
 }
 
@@ -1122,12 +1227,17 @@ function unescapeSelector(value: string) {
 function collectElements(root: MiniNode) {
   const results: MiniElement[] = []
   const stack: MiniNode[] = []
+  const pushChildren = (node: MiniNode) => {
+    for (let i = node.childNodes.length - 1; i >= 0; i -= 1) {
+      stack.push(node.childNodes[i])
+    }
+  }
   if (root instanceof MiniDocument) {
-    stack.push(...root.childNodes)
+    pushChildren(root)
   } else if (root instanceof MiniDocumentFragment) {
-    stack.push(...root.childNodes)
+    pushChildren(root)
   } else if (root instanceof MiniElement) {
-    stack.push(...root.childNodes)
+    pushChildren(root)
   }
 
   while (stack.length > 0) {
@@ -1136,32 +1246,44 @@ function collectElements(root: MiniNode) {
     if (node instanceof MiniElement) {
       results.push(node)
       if (!(node instanceof MiniHTMLTemplateElement)) {
-        stack.push(...node.childNodes)
+        pushChildren(node)
       }
     }
   }
   return results
 }
 
-function matchesSelectorChain(el: MiniElement, chain: SelectorPart[]) {
-  let current: MiniNode | null = el
-  for (let i = chain.length - 1; i >= 0; i -= 1) {
-    const part = chain[i]
-    let matched = false
-    while (current && current instanceof MiniNode) {
-      if (current instanceof MiniElement && matchesSelectorPart(current, part)) {
-        matched = true
-        current = current.parentNode
-        break
-      }
-      current = current.parentNode
+function matchesSelectorChain(el: MiniElement, chain: SelectorStep[]) {
+  const matchAt = (node: MiniNode | null, index: number): boolean => {
+    if (!(node instanceof MiniElement)) return false
+    const step = chain[index]
+    if (!matchesSelectorPart(node, step.part)) return false
+    if (index === 0) return true
+    const combinator = step.combinatorToPrev ?? ' '
+    if (combinator === '>') {
+      return matchAt(node.parentNode, index - 1)
     }
-    if (!matched) return false
+    let parent = node.parentNode
+    while (parent) {
+      if (parent instanceof MiniElement && matchAt(parent, index - 1)) return true
+      parent = parent.parentNode
+    }
+    return false
+  }
+
+  if (chain.length === 0) return false
+  return matchAt(el, chain.length - 1)
+}
+
+function matchesSelectorPart(el: MiniElement, part: SelectorPart) {
+  if (!matchesSelectorPartBasic(el, part)) return false
+  for (const notPart of part.notParts) {
+    if (matchesSelectorPartBasic(el, notPart)) return false
   }
   return true
 }
 
-function matchesSelectorPart(el: MiniElement, part: SelectorPart) {
+function matchesSelectorPartBasic(el: MiniElement, part: SelectorPart) {
   const tag = part.tag
   if (tag && tag !== '*' && el.tagName.toLowerCase() !== tag) return false
   if (part.id) {
@@ -1180,11 +1302,6 @@ function matchesSelectorPart(el: MiniElement, part: SelectorPart) {
     if (attr.value !== undefined && el.getAttribute(attr.name) !== attr.value) {
       return false
     }
-  }
-  for (const attr of part.notAttrs) {
-    if (!el.hasAttribute(attr.name)) continue
-    if (attr.value === undefined) return false
-    if (el.getAttribute(attr.name) === attr.value) return false
   }
   return true
 }

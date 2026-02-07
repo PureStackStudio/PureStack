@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { parseHtml } from './minidom'
+import {
+  type MiniElement,
+  type MiniHTMLTemplateElement,
+  parseFragment,
+  parseHtml,
+} from './minidom'
 
 describe('minidom entity decoding', () => {
   it('decodes numeric entities without double-escaping', () => {
@@ -9,6 +14,158 @@ describe('minidom entity decoding', () => {
     )
     expect(document.body?.innerHTML).toBe(
       '<p>&lt;code&gt; &amp; &lt;</p>',
+    )
+  })
+})
+
+describe('minidom selectors', () => {
+  it('returns the first match in document order', () => {
+    const { document } = parseHtml(
+      '<html><body><div><span id="a"></span><span id="b"></span></div></body></html>',
+    )
+    expect(document.querySelector('span')?.getAttribute('id')).toBe('a')
+  })
+
+  it('supports child and descendant combinators', () => {
+    const { document } = parseHtml(
+      '<html><body><div id="root"><span id="inner"></span></div><span id="outer"></span></body></html>',
+    )
+    expect(document.querySelector('div > span')?.getAttribute('id')).toBe(
+      'inner',
+    )
+    expect(document.querySelector('div span')?.getAttribute('id')).toBe(
+      'inner',
+    )
+  })
+
+  it('supports :not() with simple selectors', () => {
+    const { document } = parseHtml(
+      '<html><body><span class="skip"></span><span class="keep"></span></body></html>',
+    )
+    const matches = document.querySelectorAll('span:not(.skip)')
+    expect(matches.map((el) => el.getAttribute('class'))).toEqual(['keep'])
+  })
+
+  it('supports :not() with attribute and id selectors', () => {
+    const { document } = parseHtml(
+      '<html><body><div id="a" data-kind="x"></div><div id="b"></div><div id="c" data-kind="y"></div></body></html>',
+    )
+    const matches = document.querySelectorAll('div:not([data-kind="x"]):not(#c)')
+    expect(matches.map((el) => el.getAttribute('id'))).toEqual(['b'])
+  })
+
+  it('does not match sibling combinators that are unsupported', () => {
+    const { document } = parseHtml(
+      '<html><body><div id="a"></div><div id="b"></div></body></html>',
+    )
+    expect(document.querySelector('div + div')).toBeNull()
+    expect(document.querySelector('div ~ div')).toBeNull()
+  })
+
+  it('returns unique matches for selector lists', () => {
+    const { document } = parseHtml(
+      '<html><body><span class="x" id="a"></span><span class="x" id="b"></span></body></html>',
+    )
+    const matches = document.querySelectorAll('span, .x')
+    expect(matches.map((el) => el.getAttribute('id'))).toEqual(['a', 'b'])
+  })
+})
+
+describe('minidom templates', () => {
+  it('propagates ownerDocument into template content', () => {
+    const { document } = parseHtml(
+      '<html><body><template><span>hi</span></template></body></html>',
+    )
+    const template = document.querySelector('template') as
+      | MiniHTMLTemplateElement
+      | null
+    const span = template?.content?.firstChild as MiniElement | null
+    expect(span?.ownerDocument).toBe(document)
+  })
+
+  it('clones template content deeply', () => {
+    const { document } = parseHtml(
+      '<html><body><template><div><span>ok</span></div></template></body></html>',
+    )
+    const template = document.querySelector('template') as
+      | MiniHTMLTemplateElement
+      | null
+    const clone = template?.cloneNode(true) as MiniHTMLTemplateElement | undefined
+    const span = clone?.content.querySelector('span')
+    expect(span?.textContent).toBe('ok')
+    expect(span?.ownerDocument).toBe(document)
+  })
+})
+
+describe('minidom parsing and serialization', () => {
+  it('keeps raw text in script and style nodes', () => {
+    const { document } = parseHtml(
+      '<html><body><script>if (a < b && c > d) { x = "&lt;raw&gt;" }</script></body></html>',
+    )
+    const script = document.querySelector('script')
+    expect(script?.textContent).toBe('if (a < b && c > d) { x = "&lt;raw&gt;" }')
+    expect(script?.outerHTML).toContain('x = "&lt;raw&gt;"')
+  })
+
+  it('parses document fragments and preserves insertion order', () => {
+    const { document } = parseHtml('<html><body><div id="root"></div></body></html>')
+    const root = document.querySelector('#root')
+    const fragment = parseFragment('<span id="a"></span><span id="b"></span>', document)
+    root?.appendChild(fragment)
+    expect(root?.querySelectorAll('span').map((el) => el.getAttribute('id'))).toEqual([
+      'a',
+      'b',
+    ])
+  })
+
+  it('supports replaceWith and replaceChildren', () => {
+    const { document } = parseHtml('<html><body><div><i id="old"></i></div></body></html>')
+    const old = document.querySelector('#old')
+    const first = document.createElement('b')
+    first.setAttribute('id', 'new-a')
+    const second = document.createElement('b')
+    second.setAttribute('id', 'new-b')
+    old?.replaceWith(first, second)
+    const div = document.querySelector('div')
+    expect(div?.querySelectorAll('b').map((el) => el.getAttribute('id'))).toEqual([
+      'new-a',
+      'new-b',
+    ])
+    div?.replaceChildren(document.createTextNode('done'))
+    expect(div?.textContent).toBe('done')
+  })
+
+  it('treats unquoted attributes before /> as self-closing', () => {
+    const { document } = parseHtml(
+      '<html><body><div data-x=test/></body></html>',
+    )
+    const div = document.querySelector('div')
+    expect(div?.getAttribute('data-x')).toBe('test')
+    expect(div?.childNodes.length).toBe(0)
+  })
+
+  it('does not throw on invalid numeric entities', () => {
+    const { document } = parseHtml(
+      '<html><body><p>&#x110000; and &#99999999;</p></body></html>',
+    )
+    expect(document.querySelector('p')?.textContent).toBe('\uFFFD and \uFFFD')
+  })
+})
+
+describe('minidom cloning and tree safety', () => {
+  it('preserves HTMLElement type when cloning regular elements', () => {
+    const { document, window } = parseHtml('<html><body><div></div></body></html>')
+    const div = document.querySelector('div')
+    const clone = div?.cloneNode(false)
+    expect(clone instanceof window.HTMLElement).toBe(true)
+  })
+
+  it('throws when creating a parent-child cycle', () => {
+    const { document } = parseHtml('<html><body><div id="a"><span id="b"></span></div></body></html>')
+    const div = document.querySelector('#a')
+    const span = document.querySelector('#b')
+    expect(() => span?.appendChild(div as never)).toThrow(
+      'Cannot insert an ancestor into its descendant',
     )
   })
 })
