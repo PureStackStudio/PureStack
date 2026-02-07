@@ -1,5 +1,6 @@
 import cssEscape from 'css.escape'
-import { parseHTML } from 'linkedom'
+
+import { parseHtml } from '../dom/minidom'
 
 type GlobalKey =
   | 'window'
@@ -41,63 +42,62 @@ export function registerDomGlobals(
   for (const key of keys) original[key] = globals[key]
 
   const win = window as Record<string, unknown>
-  ensureDocumentCreateRange(document)
-  globals.window = window
-  globals.document = document
-  globals.Node = win.Node
-  globals.Element = win.Element
-  globals.HTMLElement = win.HTMLElement
-  globals.HTMLSlotElement = win.HTMLSlotElement
-  globals.DocumentFragment = win.DocumentFragment
-  globals.CustomEvent = win.CustomEvent
-  globals.Event = win.Event
-  globals.Comment = createCommentConstructor(document)
-  globals.Text = win.Text
-  globals.HTMLTemplateElement = win.HTMLTemplateElement
+  assignGlobal(globals, 'window', window)
+  assignGlobal(globals, 'document', document)
+  assignGlobal(globals, 'Node', win.Node)
+  assignGlobal(globals, 'Element', win.Element)
+  assignGlobal(globals, 'HTMLElement', win.HTMLElement)
+  assignGlobal(
+    globals,
+    'HTMLSlotElement',
+    (document as Document).createElement('slot').constructor,
+  )
+  assignGlobal(globals, 'DocumentFragment', win.DocumentFragment)
+  assignGlobal(globals, 'CustomEvent', win.CustomEvent)
+  assignGlobal(globals, 'Event', win.Event)
+  assignGlobal(globals, 'Comment', createCommentConstructor(document))
+  assignGlobal(globals, 'Text', win.Text)
+  assignGlobal(
+    globals,
+    'HTMLTemplateElement',
+    (document as Document).createElement('template').constructor,
+  )
 
   const windowCss = win.CSS as { escape?: unknown } | undefined
-  globals.CSS =
+  assignGlobal(
+    globals,
+    'CSS',
     windowCss && typeof windowCss.escape === 'function'
       ? windowCss
       : { escape: cssEscape }
-
-  ensureInnerTextSetter(window)
-  patchElementClone(window)
+  )
 
   return () => {
     for (const key of keys) globals[key] = original[key]
   }
 }
 
+function assignGlobal(
+  globals: Record<string, unknown>,
+  key: GlobalKey,
+  value: unknown,
+) {
+  try {
+    Object.defineProperty(globals, key, {
+      value,
+      configurable: true,
+      writable: true,
+    })
+  } catch {
+    globals[key] = value
+  }
+}
+
 export function ensureDomGlobals(): () => void {
   const globals = globalThis as Record<string, unknown>
   if (globals.document && globals.window) return () => {}
-  const { document, window } = parseHTML('<html><body></body></html>')
+  const { document, window } = parseHtml('<html><body></body></html>')
   return registerDomGlobals(window, document)
-}
-
-function ensureDocumentCreateRange(document: unknown): void {
-  const doc = document as Record<string, unknown>
-  if (typeof doc.createRange === 'function') return
-  doc.createRange = () => {
-    const range = {
-      setStart() {},
-      setEnd() {},
-      collapse() {},
-      selectNodeContents() {},
-      createContextualFragment(html: string) {
-        const doc = document as Document
-        const container = doc.createElement('div')
-        container.innerHTML = html
-        const fragment = doc.createDocumentFragment()
-        while (container.firstChild) {
-          fragment.appendChild(container.firstChild)
-        }
-        return fragment
-      },
-    }
-    return range as unknown as Range
-  }
 }
 
 function createCommentConstructor(document: unknown): typeof Comment {
@@ -108,89 +108,4 @@ function createCommentConstructor(document: unknown): typeof Comment {
   } as unknown as typeof Comment
   CommentShim.prototype = prototype
   return CommentShim
-}
-
-function ensureInnerTextSetter(window: unknown): void {
-  const win = window as Record<string, unknown>
-  const elementProto = (win.HTMLElement as typeof HTMLElement | undefined)
-    ?.prototype
-  const nodeProto = (win.Node as typeof Node | undefined)?.prototype
-  const setter = function (this: Node, value: unknown) {
-    this.textContent = value == null ? '' : String(value)
-  }
-  const getter = function (this: Node) {
-    return this.textContent ?? ''
-  }
-
-  for (const proto of [elementProto, nodeProto]) {
-    if (!proto) continue
-    const desc = Object.getOwnPropertyDescriptor(proto, 'innerText')
-    if (desc?.set) continue
-    Object.defineProperty(proto, 'innerText', {
-      configurable: true,
-      enumerable: true,
-      get: getter,
-      set: setter,
-    })
-  }
-}
-
-function patchElementClone(window: unknown): void {
-  const win = window as {
-    Element?: typeof Element
-    HTMLTemplateElement?: typeof HTMLTemplateElement
-  }
-  const elementProto = win.Element?.prototype
-  if (!elementProto) return
-  const originalClone = elementProto.cloneNode as (deep?: boolean) => Node
-  if ((originalClone as { __regorPatched?: boolean }).__regorPatched) return
-
-  const syncTemplateContent = (
-    source: HTMLTemplateElement,
-    target: HTMLTemplateElement,
-  ) => {
-    // LinkeDOM clones template.childNodes, but Regor mutates template.content.
-    const sourceContent = source.content
-    if (!sourceContent) return
-    const targetContent = target.content
-    targetContent.replaceChildren()
-    for (const node of sourceContent.childNodes) {
-      targetContent.appendChild(node.cloneNode(true))
-    }
-  }
-
-  elementProto.cloneNode = function cloneNodePatched(
-    this: Element,
-    deep?: boolean,
-  ) {
-    const clone = originalClone.call(this, deep) as Element
-    if (deep) {
-      const TemplateCtor = win.HTMLTemplateElement
-      if (TemplateCtor && this instanceof TemplateCtor) {
-        if (clone instanceof TemplateCtor) {
-          syncTemplateContent(this, clone)
-        }
-        return clone
-      }
-      const sourceTemplates = this.querySelectorAll?.('template')
-      const cloneTemplates = clone.querySelectorAll?.('template')
-      if (
-        sourceTemplates &&
-        cloneTemplates &&
-        sourceTemplates.length === cloneTemplates.length &&
-        TemplateCtor
-      ) {
-        for (let i = 0; i < sourceTemplates.length; i += 1) {
-          const source = sourceTemplates[i] as HTMLTemplateElement
-          const target = cloneTemplates[i] as HTMLTemplateElement
-          if (source instanceof TemplateCtor && target instanceof TemplateCtor) {
-            syncTemplateContent(source, target)
-          }
-        }
-      }
-    }
-    return clone
-  }
-  ;(elementProto.cloneNode as { __regorPatched?: boolean }).__regorPatched =
-    true
 }

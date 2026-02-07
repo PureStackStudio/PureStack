@@ -1,16 +1,23 @@
-import { parseHTML } from 'linkedom'
 import { createComponent, html } from 'regor'
 import { describe, expect, it } from 'vitest'
 
+import {
+  type MiniDocument,
+  type MiniElement,
+  type MiniHTMLTemplateElement,
+  type MiniNode,
+  type MiniWindow,
+  parseHtml,
+} from '../dom/minidom'
 import { registerDomGlobals } from './registerDomGlobals'
 
 type DomEnv = {
-  document: Document
-  window: Window
+  document: MiniDocument
+  window: MiniWindow
 }
 
 function withDom<T>(markup: string, run: (env: DomEnv) => T): T {
-  const { document, window } = parseHTML(markup)
+  const { document, window } = parseHtml(markup)
   const cleanup = registerDomGlobals(window, document)
   try {
     return run({ document, window })
@@ -19,14 +26,14 @@ function withDom<T>(markup: string, run: (env: DomEnv) => T): T {
   }
 }
 
-function mountTemplate(template: string, document: Document): HTMLElement {
+function mountTemplate(template: string, document: MiniDocument) {
   const component = createComponent(html`${template}`)
   const wrapper = document.createElement('div')
-  wrapper.appendChild(component.template.cloneNode(true))
+  wrapper.appendChild(component.template.cloneNode(true) as unknown as MiniNode)
   return wrapper
 }
 
-describe('regor + linkedom compatibility', () => {
+describe('regor + minidom compatibility', () => {
   it('interpolates simple text nodes into r-text bindings', () =>
     withDom('<html><body></body></html>', ({ document }) => {
       const wrapper = mountTemplate(
@@ -44,8 +51,10 @@ describe('regor + linkedom compatibility', () => {
         '<div><template #content><span>{{ item.title }}</span></template></div>',
         document,
       )
-      const template = wrapper.querySelector('template')
-      const contentSpan = template?.content?.firstChild as HTMLElement | null
+      const template = wrapper.querySelector('template') as
+        | MiniHTMLTemplateElement
+        | null
+      const contentSpan = template?.content?.firstChild as MiniElement | null
       expect(contentSpan?.getAttribute('r-text')).toBe(' item.title ')
       expect(contentSpan?.textContent).toBe('')
     }),
@@ -76,19 +85,23 @@ describe('regor + linkedom compatibility', () => {
         '<template><template><span>{{ x }}</span></template></template>',
         document,
       )
-      const outer = wrapper.querySelector('template')
+      const outer = wrapper.querySelector('template') as
+        | MiniHTMLTemplateElement
+        | null
       const inner = outer?.content?.querySelector?.(
         'template',
-      ) as HTMLTemplateElement | null
-      const span = inner?.content?.firstChild as HTMLElement | null
+      ) as MiniHTMLTemplateElement | null
+      const span = inner?.content?.firstChild as MiniElement | null
       expect(span?.getAttribute('r-text')).toBe(' x ')
     }))
 
-  it('exposes template.content in linkedom', () =>
+  it('exposes template.content in minidom', () =>
     withDom(
       '<html><body><template><span>x</span></template></body></html>',
       ({ document }) => {
-        const template = document.querySelector('template')
+        const template = document.querySelector('template') as
+          | MiniHTMLTemplateElement
+          | null
         expect(template?.content).toBeTruthy()
         expect(template?.content?.childNodes.length).toBe(1)
       },

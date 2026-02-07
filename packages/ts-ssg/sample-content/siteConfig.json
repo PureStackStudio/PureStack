@@ -10,7 +10,7 @@
   "navigation": {
     "mode": "auto",
     "navFileName": "_nav.json",
-    "maxDepth": 2,
+    "maxDepth": 20,
     "includeIndex": true,
     "sortBy": "order"
   },

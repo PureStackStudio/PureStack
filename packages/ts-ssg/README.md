@@ -7,7 +7,7 @@ static pages plus CSS generated via `@purestack/ts-css`.
 ## Highlights
 - Markdown + MDX pipeline powered by Unified (remark/rehype).
 - Frontmatter-aware head config (title/description plus arbitrary head overrides).
-- Regor component rendering in MDX/HTML (server-side, using LinkeDOM).
+- Regor component rendering in MDX/HTML (server-side, using a custom minimal DOM).
 - CSS collected during render and emitted as static files.
 - Simple, programmatic build API with sensible defaults.
 - Build hooks and optional concurrency for extensibility and speed.
@@ -16,7 +16,7 @@ static pages plus CSS generated via `@purestack/ts-css`.
 1. **Discover content**: `discoverContent()` scans the content directory for `.md` and `.mdx`.
 2. **Parse frontmatter**: `gray-matter` extracts frontmatter + body content.
 3. **Compile MDX**: `compileMdxToHtml()` uses remark/rehype and custom MDX JSX handlers.
-4. **Render components**: `renderApp()` boots a Regor app in LinkeDOM, mounts components, and
+4. **Render components**: `renderApp()` boots a Regor app in the minimal DOM, mounts components, and
    returns HTML.
 5. **Build page shell**: `renderPage()` creates `<html>`, `<head>`, and `<body>` using
    `@purestack/ts-html`, injecting the stylesheet link.
@@ -26,7 +26,7 @@ static pages plus CSS generated via `@purestack/ts-css`.
 - `src/build/`: build pipeline (page rendering, output paths, head resolution, IO).
 - `src/mdx.ts`: MDX/Markdown compiler and JSX handling.
 - `src/renderer.ts`: HTML shell renderer and stylesheet injection.
-- `src/regor/`: LinkeDOM globals + Regor component registry and built-ins.
+- `src/regor/`: DOM globals + Regor component registry and built-ins.
 - `src/styles.ts`: CSS builder registry.
 - `sample-content/`: example MDX/Markdown content.
 

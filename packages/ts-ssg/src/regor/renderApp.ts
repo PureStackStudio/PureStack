@@ -1,7 +1,7 @@
-import { parseHTML } from 'linkedom'
 import type { Component } from 'regor'
 import { createApp } from 'regor'
 
+import { parseHtml } from '../dom/minidom'
 import { registerDomGlobals } from './registerDomGlobals'
 import { componentRegistry } from './registry'
 import type { TsSsgContext } from './ts-ssg-context'
@@ -17,7 +17,7 @@ export const renderApp = (html: string, options: RenderAppOptions = {}) => {
   const htmlToParse = isDocument
     ? html
     : `<!DOCTYPE html><html><body>${html}</body></html>`
-  const { document, window } = parseHTML(htmlToParse)
+  const { document, window } = parseHtml(htmlToParse)
   const cleanup = registerDomGlobals(window, document)
   const snapshot = componentRegistry.snapshot()
   try {
@@ -33,11 +33,11 @@ export const renderApp = (html: string, options: RenderAppOptions = {}) => {
         tsSsgContext: options.context,
       },
       {
-        element: document.body,
+        element: document.body as unknown as Node,
       },
     )
-    if (isDocument) return document.documentElement.outerHTML
-    return document.body.innerHTML
+    if (isDocument) return document.documentElement?.outerHTML ?? ''
+    return document.body?.innerHTML ?? ''
   } finally {
     componentRegistry.restore(snapshot)
     cleanup()

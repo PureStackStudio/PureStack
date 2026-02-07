@@ -89,9 +89,9 @@ const navMenuTemplate = html`<nav
 </nav>`
 
 function resolveNavItems(context: TsSsgContext): NavItem[] {
-  const items = context?.navigation?.items ?? []
-  if (items.length > 0) return items
-  return context?.navigation?.global ?? []
+  const globalItems = context?.navigation?.global ?? []
+  if (globalItems.length > 0) return globalItems
+  return context?.navigation?.items ?? []
 }
 
 interface NavItemState extends NavItem {
