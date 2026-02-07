@@ -1,3 +1,4 @@
+import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 
 import { createLogger, getLogger } from 'logpot'
@@ -135,6 +136,10 @@ function parseCliArgs(args: string[]): CliState {
   const host = readValue('--host')
   if (host) {
     state.input.host = host
+  }
+  const contentDir = readValue('--content')
+  if (contentDir) {
+    state.input.contentDir = path.resolve(contentDir)
   }
 
   if (args.includes('--no-watch')) {

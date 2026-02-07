@@ -18,7 +18,7 @@
   "exports": {
     ".": {
       "require": "./dist/ts-css.cjs",
-      "import": "./dist/ts-css.js"
+      "import": "./dist/ts-css.mjs"
     }
   },
   "license": "MIT",

@@ -91,7 +91,7 @@ async function bundlePackage(pkg: PackageJson) {
         entry: { [unscope(name)]: input },
         platform: 'node',
         target: 'esnext',
-        tsconfig: `./tsconfig.build.json`,
+        tsconfig: `./tsconfig.json`,
         format: ['module'],
         treeshake: true,
         minify: { compress: true, mangle: true },
@@ -106,6 +106,7 @@ async function bundlePackage(pkg: PackageJson) {
         outputOptions: {
           banner: '',
           sourcemap: true,
+          codeSplitting: false,
         },
         dts: name === mainPkgName || name.startsWith('@'),
         sourcemap: true,

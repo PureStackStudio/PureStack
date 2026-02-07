@@ -18,7 +18,7 @@
   "exports": {
     ".": {
       "require": "./dist/ts-css-bootstrap.cjs",
-      "import": "./dist/ts-css-bootstrap.js"
+      "import": "./dist/ts-css-bootstrap.mjs"
     }
   },
   "license": "MIT",

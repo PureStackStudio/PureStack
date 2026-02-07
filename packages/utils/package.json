@@ -18,7 +18,7 @@
   "exports": {
     ".": {
       "require": "./dist/utils.cjs",
-      "import": "./dist/utils.js"
+      "import": "./dist/utils.mjs"
     }
   },
   "license": "MIT",
