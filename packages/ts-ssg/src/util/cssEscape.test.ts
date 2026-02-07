@@ -5,7 +5,7 @@ import cssEscape from './cssEscape'
 describe('cssEscape', () => {
   it('throws when called with no arguments', () => {
     expect(() => (cssEscape as () => string)()).toThrow(
-      '`CSS.escape` requires an argument.',
+      '`cssEscape` requires an argument.',
     )
   })
 
@@ -41,7 +41,9 @@ describe('cssEscape', () => {
 
   it('escapes selector punctuation and existing backslashes', () => {
     expect(cssEscape('[\\:src]')).toBe('\\[\\\\\\:src\\]')
-    expect(JSON.stringify(cssEscape('[\\:src]'))).toBe('"\\\\[\\\\\\\\\\\\:src\\\\]"')
+    expect(JSON.stringify(cssEscape('[\\:src]'))).toBe(
+      '"\\\\[\\\\\\\\\\\\:src\\\\]"',
+    )
   })
 
   it('handles edge-case identifiers and Unicode code units', () => {
