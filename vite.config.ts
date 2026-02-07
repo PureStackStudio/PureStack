@@ -8,6 +8,6 @@ export default defineConfig({
     }),
   ],
   test: {
-    include: ['packages/**/*.{test,spec}.{js,cjs,mjs,ts,cts,mts,jsx,tsx}'],
+    include: ['packages/*/src/**/*.{test,spec}.{js,cjs,mjs,ts,cts,mts,jsx,tsx}'],
   },
 })
