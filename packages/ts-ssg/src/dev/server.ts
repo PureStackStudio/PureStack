@@ -51,9 +51,10 @@ export async function startDevServer(
     http.ServerResponse,
     { createdAt: number; address?: string }
   >()
+  const backgroundRenderTasks = new Map<string, Promise<void>>()
   let liveReloadVersion = 0
-  let startupReloadPending = true
   let initialBuildDone = false
+  let shuttingDown = false
   let watcher: { close: () => void } | undefined
   const requestState = {
     inFlight: false,
@@ -75,7 +76,13 @@ export async function startDevServer(
     emitState()
   }
 
+  const notifyPageRendered = (pathname: string) => {
+    if (!liveReload) return
+    broadcast(clients, 'page-rendered', pathname)
+  }
+
   const scheduleRebuild = (reason: string, filePath?: string) => {
+    if (shuttingDown) return
     requestState.reason = reason
     if (filePath) requestState.changedPaths.add(filePath)
     if (requestState.timer) clearTimeout(requestState.timer)
@@ -86,6 +93,7 @@ export async function startDevServer(
   }
 
   const requestRebuild = async () => {
+    if (shuttingDown) return
     requestState.pending = true
     if (requestState.inFlight) return
     requestState.inFlight = true
@@ -135,10 +143,6 @@ export async function startDevServer(
       }
       if (!initialBuildDone) {
         initialBuildDone = true
-        if (startupReloadPending && clients.size > 0) {
-          startupReloadPending = false
-          notifyReload('server restart')
-        }
       }
       notifyReload(reason)
     } catch (error) {
@@ -223,10 +227,6 @@ export async function startDevServer(
         )
       }
       clients.set(res, { createdAt: Date.now(), address })
-      if (startupReloadPending && initialBuildDone) {
-        startupReloadPending = false
-        notifyReload('server restart')
-      }
       req.on('close', () => {
         clients.delete(res)
       })
@@ -266,20 +266,31 @@ export async function startDevServer(
           : html
         res.writeHead(200, {
           'Content-Type': 'text/html; charset=utf-8',
+          'Cache-Control': 'no-store, no-cache, must-revalidate',
+          Pragma: 'no-cache',
+          Expires: '0',
           Connection: 'close',
         })
         res.end(injected)
         if (incrementalEnabled) {
-          void incremental
-            .renderIfDirtyByOutPath(filePath)
-            .then((rendered) => {
-              if (rendered) {
-                notifyReload('page rendered')
-              }
-            })
-            .catch((error) => {
-              logError(log, error, 'background render failed')
-            })
+          const existing = backgroundRenderTasks.get(filePath)
+          if (!existing) {
+            const task = incremental
+              .renderIfDirtyByOutPath(filePath)
+              .then((rendered) => {
+                if (rendered) {
+                  notifyPageRendered(pathname)
+                }
+              })
+              .catch((error) => {
+                logError(log, error, 'background render failed')
+              })
+              .finally(() => {
+                backgroundRenderTasks.delete(filePath)
+              })
+            backgroundRenderTasks.set(filePath, task)
+            void task
+          }
         }
         return
       }
@@ -357,6 +368,14 @@ export async function startDevServer(
   void requestRebuild()
 
   const shutdown = async () => {
+    if (shuttingDown) return
+    shuttingDown = true
+    if (requestState.timer) {
+      clearTimeout(requestState.timer)
+      requestState.timer = undefined
+    }
+    process.off('SIGINT', handleSignal)
+    process.off('SIGTERM', handleSignal)
     watcher?.close()
     await new Promise<void>((resolve) => server.close(() => resolve()))
     await logger.close()
@@ -414,16 +433,8 @@ function broadcast(
       continue
     }
     try {
-      const okEvent = client.write(`event: ${event}\n`)
-      const okData = client.write(`data: ${data}\n\n`)
-      if (!okEvent || !okData) {
-        clients.delete(client)
-        try {
-          client.end()
-        } catch {
-          // ignore secondary close errors
-        }
-      }
+      client.write(`event: ${event}\n`)
+      client.write(`data: ${data}\n\n`)
     } catch {
       clients.delete(client)
       try {
@@ -491,13 +502,21 @@ function injectLiveReload(html: string, endpoint: string, version: number) {
     `<script data-ts-ssg-live-reload>` +
     `(() => {` +
     `const pageVersion = __PAGE_VERSION__;` +
+    `const normalize = (value) => {` +
+    `if (!value) return '/';` +
+    `let next = value.startsWith('/') ? value : '/' + value;` +
+    `if (next.length > 1 && next.endsWith('/')) next = next.slice(0, -1);` +
+    `return next;` +
+    `};` +
     `const source = new EventSource('${endpoint}');` +
     `source.addEventListener('state', (event) => {` +
     `const next = Number(event.data);` +
     `if (!Number.isFinite(next)) return;` +
     `if (next > pageVersion) location.reload();` +
     `});` +
-    `source.addEventListener('reload', () => location.reload());` +
+    `source.addEventListener('page-rendered', (event) => {` +
+    `if (normalize(event.data) === normalize(location.pathname)) location.reload();` +
+    `});` +
     `})();` +
     `</script>`
   const withVersion = snippet.replace('__PAGE_VERSION__', String(version))
