@@ -991,7 +991,6 @@ type CompiledSelector = {
 }
 
 const selectorListCache = new Map<string, CompiledSelector[]>()
-
 function getCompiledSelectors(selector: string) {
   const key = selector.trim()
   const cached = selectorListCache.get(key)
@@ -1063,26 +1062,13 @@ function findFirstMatchingElement(
   root: MiniNode,
   match: (el: MiniElement) => boolean,
 ) {
-  const stack: MiniNode[] = []
-  const pushChildren = (node: MiniNode) => {
-    for (let i = node.childNodes.length - 1; i >= 0; i -= 1) {
-      stack.push(node.childNodes[i])
-    }
-  }
-  if (root instanceof MiniDocument || root instanceof MiniDocumentFragment) {
-    pushChildren(root)
-  } else if (root instanceof MiniElement) {
-    pushChildren(root)
-  }
-
-  while (stack.length > 0) {
-    const node = stack.pop()
-    if (!(node instanceof MiniElement)) continue
-    if (match(node)) return node
-    if (!(node instanceof MiniHTMLTemplateElement)) {
-      pushChildren(node)
-    }
-  }
+  let found: MiniElement | null = null
+  forEachElement(root, (el) => {
+    if (!match(el)) return false
+    found = el
+    return true
+  })
+  if (found) return found
   return null
 }
 
@@ -1115,24 +1101,34 @@ function querySelectorAllFrom(
   filterTemplates = true,
 ) {
   const rawSelector = selector.trim()
+  if (rawSelector === '*') {
+    const all: MiniElement[] = []
+    forEachElement(root, (el) => {
+      all.push(el)
+      return false
+    })
+    return all
+  }
   const compiledSelectors = getCompiledSelectors(rawSelector)
   if (compiledSelectors.length === 0) return []
-  const nodes = collectElements(root)
   const results: MiniElement[] = []
   if (compiledSelectors.length === 1) {
     const compiled = compiledSelectors[0]
-    for (const el of nodes) {
+    forEachElement(root, (el) => {
       if (matchesCompiledSelector(el, compiled)) results.push(el)
-    }
+      return false
+    })
   } else {
-    for (const el of nodes) {
+    forEachElement(root, (el) => {
       if (compiledSelectors.some((compiled) => matchesCompiledSelector(el, compiled))) {
         results.push(el)
       }
-    }
+      return false
+    })
   }
+  let output = results
   if (filterTemplates && rawSelector === 'template') {
-    return results.filter((el) => {
+    output = results.filter((el) => {
       if (el.tagName.toLowerCase() !== 'template') return true
       if (el.hasAttribute('name')) return false
       const hasNamedSlot = el
@@ -1141,7 +1137,33 @@ function querySelectorAllFrom(
       return !hasNamedSlot
     })
   }
-  return results
+  return output
+}
+
+function forEachElement(
+  root: MiniNode,
+  iteratee: (el: MiniElement) => boolean,
+) {
+  const stack: MiniNode[] = []
+  const pushChildren = (node: MiniNode) => {
+    for (let i = node.childNodes.length - 1; i >= 0; i -= 1) {
+      stack.push(node.childNodes[i])
+    }
+  }
+  if (root instanceof MiniDocument || root instanceof MiniDocumentFragment) {
+    pushChildren(root)
+  } else if (root instanceof MiniElement) {
+    pushChildren(root)
+  }
+
+  while (stack.length > 0) {
+    const node = stack.pop()
+    if (!(node instanceof MiniElement)) continue
+    if (iteratee(node)) return
+    if (!(node instanceof MiniHTMLTemplateElement)) {
+      pushChildren(node)
+    }
+  }
 }
 
 function splitSelectorList(selector: string) {
@@ -1330,35 +1352,6 @@ function parseAttributeSelector(raw: string) {
 
 function unescapeSelector(value: string) {
   return value.replace(/\\(.)/g, '$1')
-}
-
-function collectElements(root: MiniNode) {
-  const results: MiniElement[] = []
-  const stack: MiniNode[] = []
-  const pushChildren = (node: MiniNode) => {
-    for (let i = node.childNodes.length - 1; i >= 0; i -= 1) {
-      stack.push(node.childNodes[i])
-    }
-  }
-  if (root instanceof MiniDocument) {
-    pushChildren(root)
-  } else if (root instanceof MiniDocumentFragment) {
-    pushChildren(root)
-  } else if (root instanceof MiniElement) {
-    pushChildren(root)
-  }
-
-  while (stack.length > 0) {
-    const node = stack.pop()
-    if (!node) continue
-    if (node instanceof MiniElement) {
-      results.push(node)
-      if (!(node instanceof MiniHTMLTemplateElement)) {
-        pushChildren(node)
-      }
-    }
-  }
-  return results
 }
 
 function matchesSelectorChain(el: MiniElement, chain: SelectorStep[]) {
