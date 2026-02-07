@@ -59,6 +59,7 @@ export interface IncrementalBuildResult {
 export interface IncrementalBuilder {
   buildAll: (reason: string) => Promise<BuildResult>
   applyChange: (filePath: string) => Promise<IncrementalBuildResult>
+  renderIfDirtyByOutPath: (outPath: string) => Promise<boolean>
 }
 
 export async function createIncrementalBuilder(
@@ -87,6 +88,36 @@ export async function createIncrementalBuilder(
     existing && isCompatibleManifest(existing, config)
       ? existing
       : createEmptyManifest(config)
+  const dirtyPages = new Set<string>()
+  const renderInFlight = new Map<string, Promise<boolean>>()
+  const outPathToRelPath = new Map<string, string>()
+  const relPathToOutPath = new Map<string, string>()
+
+  const indexManifestContent = () => {
+    outPathToRelPath.clear()
+    relPathToOutPath.clear()
+    for (const entry of Object.values(manifest.content)) {
+      outPathToRelPath.set(entry.outPath, entry.relPath)
+      relPathToOutPath.set(entry.relPath, entry.outPath)
+    }
+  }
+
+  const setContentIndex = (relPath: string, outPath: string) => {
+    const prevOutPath = relPathToOutPath.get(relPath)
+    if (prevOutPath && prevOutPath !== outPath) {
+      outPathToRelPath.delete(prevOutPath)
+    }
+    relPathToOutPath.set(relPath, outPath)
+    outPathToRelPath.set(outPath, relPath)
+  }
+
+  const removeContentIndex = (relPath: string) => {
+    const outPath = relPathToOutPath.get(relPath)
+    if (outPath) outPathToRelPath.delete(outPath)
+    relPathToOutPath.delete(relPath)
+  }
+
+  indexManifestContent()
 
   const buildAll = async (reason: string) => {
     let discoveredContent: ContentFile[] | undefined
@@ -125,6 +156,8 @@ export async function createIncrementalBuilder(
     )
     manifest = nextManifest
     await writeManifest(config.outDir, nextManifest)
+    indexManifestContent()
+    dirtyPages.clear()
 
     log.info('build completed', { outDir: config.outDir })
     return {
@@ -147,12 +180,17 @@ export async function createIncrementalBuilder(
       navigationConfig,
     )
     context.navigation = navigation
+    dirtyPages.clear()
+    for (const file of contentFiles) {
+      dirtyPages.add(file.relPath)
+    }
 
     const contentEntry = manifest.content[relPath]
     if (!signature) {
       if (contentEntry) {
         await removeFile(contentEntry.outPath)
         delete manifest.content[relPath]
+        removeContentIndex(relPath)
         result.deletedPages += 1
       }
       return
@@ -170,7 +208,9 @@ export async function createIncrementalBuilder(
       outPath,
       ...signature,
     }
+    setContentIndex(relPath, outPath)
     result.changedPages += 1
+    dirtyPages.delete(relPath)
   }
 
   const applyChange = async (filePath: string) => {
@@ -208,6 +248,7 @@ export async function createIncrementalBuilder(
       if (contentEntry) {
         await removeFile(contentEntry.outPath)
         delete manifest.content[relPath]
+        removeContentIndex(relPath)
         result.deletedPages += 1
       }
       if (assetEntry) {
@@ -240,6 +281,7 @@ export async function createIncrementalBuilder(
         outPath,
         ...signature,
       }
+      setContentIndex(relPath, outPath)
       result.changedPages += 1
       await writeManifest(config.outDir, manifest)
       return result
@@ -264,7 +306,60 @@ export async function createIncrementalBuilder(
     return result
   }
 
-  return { buildAll, applyChange }
+  const renderIfDirtyByOutPath = async (outPath: string) => {
+    const relPath = outPathToRelPath.get(outPath)
+    if (!relPath) return false
+    if (!dirtyPages.has(relPath)) return false
+    const inFlight = renderInFlight.get(relPath)
+    if (inFlight) return inFlight
+
+    const task = (async () => {
+      try {
+        const absPath = path.join(config.contentDir, relPath)
+        const signature = await readSignature(absPath)
+        if (!signature) {
+          const entry = manifest.content[relPath]
+          if (entry) {
+            await removeFile(entry.outPath)
+            delete manifest.content[relPath]
+            removeContentIndex(relPath)
+            await writeManifest(config.outDir, manifest)
+          }
+          dirtyPages.delete(relPath)
+          return false
+        }
+
+        const entry = manifest.content[relPath]
+        const ext = entry?.ext ?? path.extname(relPath)
+        const contentFile = toContentFile(config.contentDir, relPath, ext)
+        await buildPage(context, contentFile)
+        const nextOutPath = resolveOutPath(config.outDir, contentFile)
+        manifest.content[relPath] = {
+          relPath,
+          ext: contentFile.ext,
+          outPath: nextOutPath,
+          ...signature,
+        }
+        setContentIndex(relPath, nextOutPath)
+        dirtyPages.delete(relPath)
+        await writeManifest(config.outDir, manifest)
+        return true
+      } catch (error) {
+        log.error('incremental render failed', {
+          relPath,
+          error: error instanceof Error ? error.message : String(error),
+        })
+        return false
+      } finally {
+        renderInFlight.delete(relPath)
+      }
+    })()
+
+    renderInFlight.set(relPath, task)
+    return task
+  }
+
+  return { buildAll, applyChange, renderIfDirtyByOutPath }
 }
 
 function mergeHooks(

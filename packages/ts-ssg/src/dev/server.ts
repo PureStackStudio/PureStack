@@ -51,6 +51,7 @@ export async function startDevServer(
     http.ServerResponse,
     { createdAt: number; address?: string }
   >()
+  let liveReloadVersion = 0
   let startupReloadPending = true
   let initialBuildDone = false
   let watcher: { close: () => void } | undefined
@@ -60,6 +61,18 @@ export async function startDevServer(
     timer: undefined as NodeJS.Timeout | undefined,
     reason: 'initial build',
     changedPaths: new Set<string>(),
+  }
+
+  const emitState = () => {
+    if (!liveReload) return
+    broadcast(clients, 'state', String(liveReloadVersion))
+  }
+
+  const notifyReload = (reason: string) => {
+    liveReloadVersion += 1
+    if (!liveReload) return
+    broadcast(clients, 'reload', reason)
+    emitState()
   }
 
   const scheduleRebuild = (reason: string, filePath?: string) => {
@@ -107,10 +120,10 @@ export async function startDevServer(
         initialBuildDone = true
         if (startupReloadPending && clients.size > 0) {
           startupReloadPending = false
-          broadcast(clients, 'reload', 'server restart')
+          notifyReload('server restart')
         }
       }
-      if (liveReload) broadcast(clients, 'reload', reason)
+      notifyReload(reason)
     } catch (error) {
       logError(log, error, 'build failed')
     } finally {
@@ -151,8 +164,8 @@ export async function startDevServer(
       await rebuild(requestState.reason)
       return
     }
-    if (touched && liveReload) {
-      broadcast(clients, 'reload', requestState.reason)
+    if (touched) {
+      notifyReload(requestState.reason)
     }
   }
 
@@ -178,6 +191,7 @@ export async function startDevServer(
         'X-Accel-Buffering': 'no',
       })
       res.write('event: ping\ndata: ready\n\n')
+      res.write(`event: state\ndata: ${liveReloadVersion}\n\n`)
       pruneLiveReloadClients(clients)
       if (clients.size >= LIVE_RELOAD_MAX_CLIENTS) {
         closeOldestLiveReloadClients(
@@ -196,7 +210,7 @@ export async function startDevServer(
       clients.set(res, { createdAt: Date.now(), address })
       if (startupReloadPending && initialBuildDone) {
         startupReloadPending = false
-        broadcast(clients, 'reload', 'server restart')
+        notifyReload('server restart')
       }
       req.on('close', () => {
         clients.delete(res)
@@ -223,13 +237,25 @@ export async function startDevServer(
       if (ext === '.html') {
         const html = await fsPromises.readFile(filePath, 'utf8')
         const injected = liveReload
-          ? injectLiveReload(html, LIVE_RELOAD_PATH)
+          ? injectLiveReload(html, LIVE_RELOAD_PATH, liveReloadVersion)
           : html
         res.writeHead(200, {
           'Content-Type': 'text/html; charset=utf-8',
           Connection: 'close',
         })
         res.end(injected)
+        if (incrementalEnabled) {
+          void incremental
+            .renderIfDirtyByOutPath(filePath)
+            .then((rendered) => {
+              if (rendered) {
+                notifyReload('page rendered')
+              }
+            })
+            .catch((error) => {
+              logError(log, error, 'background render failed')
+            })
+        }
         return
       }
 
@@ -357,6 +383,7 @@ function createFullRebuildBuilder(
       deletedAssets: 0,
       reason: `content change: ${filePath}`,
     }),
+    renderIfDirtyByOutPath: async () => false,
   }
 }
 
@@ -442,27 +469,34 @@ function closeLiveReloadClientsForAddress(
   }
 }
 
-function injectLiveReload(html: string, endpoint: string) {
+function injectLiveReload(html: string, endpoint: string, version: number) {
   if (html.includes('data-ts-ssg-live-reload')) return html
   const snippet =
     `<script data-ts-ssg-live-reload>` +
     `(() => {` +
+    `const pageVersion = __PAGE_VERSION__;` +
     `const source = new EventSource('${endpoint}');` +
+    `source.addEventListener('state', (event) => {` +
+    `const next = Number(event.data);` +
+    `if (!Number.isFinite(next)) return;` +
+    `if (next > pageVersion) location.reload();` +
+    `});` +
     `source.addEventListener('reload', () => location.reload());` +
     `})();` +
     `</script>`
+  const withVersion = snippet.replace('__PAGE_VERSION__', String(version))
 
   const bodyIndex = html.lastIndexOf('</body>')
   if (bodyIndex !== -1) {
-    return html.slice(0, bodyIndex) + snippet + html.slice(bodyIndex)
+    return html.slice(0, bodyIndex) + withVersion + html.slice(bodyIndex)
   }
 
   const headIndex = html.lastIndexOf('</head>')
   if (headIndex !== -1) {
-    return html.slice(0, headIndex) + snippet + html.slice(headIndex)
+    return html.slice(0, headIndex) + withVersion + html.slice(headIndex)
   }
 
-  return html + snippet
+  return html + withVersion
 }
 
 async function resolveStaticFile(outDir: string, pathname: string) {
