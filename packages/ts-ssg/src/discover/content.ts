@@ -35,7 +35,7 @@ export async function discoverContent(
   await walkDir(contentDir, contentDir, files, (relPath, ext) =>
     isContentFile(relPath, ext),
   )
-  log.info('discover complete', { files })
+  log.info('discover complete', { fileCount: files.length })
   return files.sort((a, b) => a.relPath.localeCompare(b.relPath))
 }
 
