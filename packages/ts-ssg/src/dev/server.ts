@@ -57,6 +57,7 @@ export async function startDevServer(
   let shuttingDown = false
   let watcher: { close: () => void } | undefined
   const requestState = {
+    // Serializes queued rebuild requests to avoid overlapping incremental mutations.
     inFlight: false,
     pending: false,
     timer: undefined as NodeJS.Timeout | undefined,
@@ -64,21 +65,23 @@ export async function startDevServer(
     changedPaths: new Set<string>(),
   }
 
-  const emitState = () => {
+  const emitState = (reason: string) => {
     if (!liveReload) return
-    broadcast(clients, 'state', String(liveReloadVersion))
+    broadcastJson(clients, 'state', {
+      version: liveReloadVersion,
+      reason,
+    })
   }
 
   const notifyReload = (reason: string) => {
     liveReloadVersion += 1
     if (!liveReload) return
-    broadcast(clients, 'reload', reason)
-    emitState()
+    emitState(reason)
   }
 
   const notifyPageRendered = (pathname: string) => {
     if (!liveReload) return
-    broadcast(clients, 'page-rendered', pathname)
+    broadcastJson(clients, 'page-rendered', { path: pathname })
   }
 
   const scheduleRebuild = (reason: string, filePath?: string) => {
@@ -200,39 +203,7 @@ export async function startDevServer(
     const { pathname } = new URL(req.url, `http://${host}:${port}`)
 
     if (liveReload && pathname === LIVE_RELOAD_PATH) {
-      req.setTimeout(0)
-      res.setTimeout(0)
-      res.socket?.setTimeout(0)
-      res.writeHead(200, {
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-        Connection: 'keep-alive',
-        'X-Accel-Buffering': 'no',
-      })
-      res.write('event: ping\ndata: ready\n\n')
-      res.write(`event: state\ndata: ${liveReloadVersion}\n\n`)
-      pruneLiveReloadClients(clients)
-      if (clients.size >= LIVE_RELOAD_MAX_CLIENTS) {
-        closeOldestLiveReloadClients(
-          clients,
-          clients.size - LIVE_RELOAD_MAX_CLIENTS + 1,
-        )
-      }
-      const address = req.socket.remoteAddress
-      if (address) {
-        closeLiveReloadClientsForAddress(
-          clients,
-          address,
-          LIVE_RELOAD_MAX_PER_ADDRESS,
-        )
-      }
-      clients.set(res, { createdAt: Date.now(), address })
-      req.on('close', () => {
-        clients.delete(res)
-      })
-      res.on('error', () => {
-        clients.delete(res)
-      })
+      registerLiveReloadClient(clients, req, res, liveReloadVersion)
       return
     }
 
@@ -264,17 +235,11 @@ export async function startDevServer(
         const injected = liveReload
           ? injectLiveReload(html, LIVE_RELOAD_PATH, liveReloadVersion)
           : html
-        res.writeHead(200, {
-          'Content-Type': 'text/html; charset=utf-8',
-          'Cache-Control': 'no-store, no-cache, must-revalidate',
-          Pragma: 'no-cache',
-          Expires: '0',
-          Connection: 'close',
-        })
-        res.end(injected)
+        writeHtmlResponse(res, 200, injected)
         if (incrementalEnabled) {
           const existing = backgroundRenderTasks.get(filePath)
           if (!existing) {
+            // One background render notification per output file prevents fan-out storms.
             const task = incremental
               .renderIfDirtyByOutPath(filePath)
               .then((rendered) => {
@@ -422,8 +387,66 @@ function createFullRebuildBuilder(
   }
 }
 
+type LiveReloadClientMeta = { createdAt: number; address?: string }
+
+type LiveReloadClients = Map<http.ServerResponse, LiveReloadClientMeta>
+
+function registerLiveReloadClient(
+  clients: LiveReloadClients,
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+  version: number,
+) {
+  req.setTimeout(0)
+  res.setTimeout(0)
+  res.socket?.setTimeout(0)
+  res.writeHead(200, {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    Connection: 'keep-alive',
+    'X-Accel-Buffering': 'no',
+  })
+  writeSseEvent(res, 'ping', 'ready')
+  writeSseEvent(
+    res,
+    'state',
+    JSON.stringify({ version, reason: 'connect' }),
+  )
+  pruneLiveReloadClients(clients)
+  if (clients.size >= LIVE_RELOAD_MAX_CLIENTS) {
+    closeOldestLiveReloadClients(
+      clients,
+      clients.size - LIVE_RELOAD_MAX_CLIENTS + 1,
+    )
+  }
+  const address = req.socket.remoteAddress
+  if (address) {
+    closeLiveReloadClientsForAddress(
+      clients,
+      address,
+      LIVE_RELOAD_MAX_PER_ADDRESS,
+    )
+  }
+  clients.set(res, { createdAt: Date.now(), address })
+  req.on('close', () => {
+    clients.delete(res)
+  })
+  res.on('error', () => {
+    clients.delete(res)
+  })
+}
+
+function writeSseEvent(
+  res: http.ServerResponse,
+  event: string,
+  data: string,
+) {
+  res.write(`event: ${event}\n`)
+  res.write(`data: ${data}\n\n`)
+}
+
 function broadcast(
-  clients: Map<http.ServerResponse, { createdAt: number; address?: string }>,
+  clients: LiveReloadClients,
   event: string,
   data: string,
 ) {
@@ -433,8 +456,7 @@ function broadcast(
       continue
     }
     try {
-      client.write(`event: ${event}\n`)
-      client.write(`data: ${data}\n\n`)
+      writeSseEvent(client, event, data)
     } catch {
       clients.delete(client)
       try {
@@ -444,6 +466,14 @@ function broadcast(
       }
     }
   }
+}
+
+function broadcastJson(
+  clients: LiveReloadClients,
+  event: string,
+  payload: Record<string, unknown>,
+) {
+  broadcast(clients, event, JSON.stringify(payload))
 }
 
 function isLiveReloadClientAlive(client: http.ServerResponse) {
@@ -502,6 +532,9 @@ function injectLiveReload(html: string, endpoint: string, version: number) {
     `<script data-ts-ssg-live-reload>` +
     `(() => {` +
     `const pageVersion = __PAGE_VERSION__;` +
+    `const parseJSON = (value) => {` +
+    `try { return JSON.parse(value); } catch { return null; }` +
+    `};` +
     `const normalize = (value) => {` +
     `if (!value) return '/';` +
     `let next = value.startsWith('/') ? value : '/' + value;` +
@@ -510,12 +543,14 @@ function injectLiveReload(html: string, endpoint: string, version: number) {
     `};` +
     `const source = new EventSource('${endpoint}');` +
     `source.addEventListener('state', (event) => {` +
-    `const next = Number(event.data);` +
+    `const payload = parseJSON(event.data);` +
+    `const next = Number(payload?.version);` +
     `if (!Number.isFinite(next)) return;` +
     `if (next > pageVersion) location.reload();` +
     `});` +
     `source.addEventListener('page-rendered', (event) => {` +
-    `if (normalize(event.data) === normalize(location.pathname)) location.reload();` +
+    `const payload = parseJSON(event.data);` +
+    `if (normalize(payload?.path) === normalize(location.pathname)) location.reload();` +
     `});` +
     `})();` +
     `</script>`
@@ -536,6 +571,25 @@ function injectLiveReload(html: string, endpoint: string, version: number) {
 
 function isLikelyHtmlPath(pathname: string) {
   return pathname.endsWith('/') || path.extname(pathname) === ''
+}
+
+function htmlNoCacheHeaders() {
+  return {
+    'Content-Type': 'text/html; charset=utf-8',
+    'Cache-Control': 'no-store, no-cache, must-revalidate',
+    Pragma: 'no-cache',
+    Expires: '0',
+    Connection: 'close',
+  }
+}
+
+function writeHtmlResponse(
+  res: http.ServerResponse,
+  statusCode: number,
+  body: string,
+) {
+  res.writeHead(statusCode, htmlNoCacheHeaders())
+  res.end(body)
 }
 
 async function resolveStaticFile(outDir: string, pathname: string) {
