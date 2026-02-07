@@ -169,8 +169,6 @@ export async function startDevServer(
     }
   }
 
-  await rebuild('initial build')
-
   const server = http.createServer(async (req, res) => {
     if (!req.url) {
       res.writeHead(400)
@@ -225,7 +223,17 @@ export async function startDevServer(
       res.destroy()
     })
 
-    const fileResult = await resolveStaticFile(config.outDir, pathname)
+    let fileResult = await resolveStaticFile(config.outDir, pathname)
+    if (!fileResult && incrementalEnabled && isLikelyHtmlPath(pathname)) {
+      try {
+        const rendered = await incremental.renderByUrlPath(pathname)
+        if (rendered) {
+          fileResult = await resolveStaticFile(config.outDir, pathname)
+        }
+      } catch (error) {
+        logError(log, error, 'lazy route render failed')
+      }
+    }
     if (!fileResult) {
       res.writeHead(404)
       res.end('Not found')
@@ -341,6 +349,8 @@ export async function startDevServer(
     log.info('watching content', { contentDir: config.contentDir })
   }
 
+  void requestRebuild()
+
   const shutdown = async () => {
     watcher?.close()
     await new Promise<void>((resolve) => server.close(() => resolve()))
@@ -384,6 +394,7 @@ function createFullRebuildBuilder(
       reason: `content change: ${filePath}`,
     }),
     renderIfDirtyByOutPath: async () => false,
+    renderByUrlPath: async () => false,
   }
 }
 
@@ -497,6 +508,10 @@ function injectLiveReload(html: string, endpoint: string, version: number) {
   }
 
   return html + withVersion
+}
+
+function isLikelyHtmlPath(pathname: string) {
+  return pathname.endsWith('/') || path.extname(pathname) === ''
 }
 
 async function resolveStaticFile(outDir: string, pathname: string) {
