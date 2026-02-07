@@ -108,13 +108,30 @@ export async function startDevServer(
   const incremental = incrementalEnabled
     ? await createIncrementalBuilder(input)
     : createFullRebuildBuilder(input, config)
-  let initialBuildResult: BuildResult | null = null
+
+  const logInitialBuildMetrics = (result: BuildResult) => {
+    const startupMs = Math.round(performance.now() - startupStart)
+    const contentCounts = result.content
+    const assetCounts = result.assets
+    log.info('initial build completed', {
+      reason: 'initial build',
+      metrics: {
+        startupMs,
+        pages: result.pages ?? 0,
+        contentTotal: contentCounts?.total ?? 0,
+        contentMd: contentCounts?.byExt['.md'] ?? 0,
+        contentMdx: contentCounts?.byExt['.mdx'] ?? 0,
+        assetTotal: assetCounts?.total ?? 0,
+        assetByExt: assetCounts?.byExt ?? {},
+      },
+    })
+  }
 
   const rebuild = async (reason: string) => {
     try {
       const result = await incremental.buildAll(reason)
       if (!initialBuildDone) {
-        initialBuildResult = result
+        logInitialBuildMetrics(result)
       }
       if (!initialBuildDone) {
         initialBuildDone = true
@@ -319,9 +336,6 @@ export async function startDevServer(
   server.keepAliveTimeout = 1000
   server.headersTimeout = 5000
   server.listen(port, host, () => {
-    const startupMs = Math.round(performance.now() - startupStart)
-    const contentCounts = initialBuildResult?.content
-    const assetCounts = initialBuildResult?.assets
     log.info('dev server listening', {
       url: `http://${host}:${port}/`,
       host,
@@ -330,15 +344,6 @@ export async function startDevServer(
       liveReload,
       watch,
       incremental: incrementalEnabled,
-      metrics: {
-        startupMs,
-        pages: initialBuildResult?.pages ?? 0,
-        contentTotal: contentCounts?.total ?? 0,
-        contentMd: contentCounts?.byExt['.md'] ?? 0,
-        contentMdx: contentCounts?.byExt['.mdx'] ?? 0,
-        assetTotal: assetCounts?.total ?? 0,
-        assetByExt: assetCounts?.byExt ?? {},
-      },
     })
   })
 
