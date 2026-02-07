@@ -45,6 +45,7 @@ export interface PageRenderResult {
   template?: string
   outPath: string
   urlPath: string
+  renderTimeMs: number
   navigation?: PageNavigation
   page?: PageTemplatePage
   outline?: PageOutlineItem[]
@@ -62,13 +63,27 @@ export async function buildPage(
 export async function writePage(page: PageRenderResult): Promise<void> {
   await writeHtml(page.outPath, page.html)
   const log = getLogger()
-  log.info('page written', { outPath: page.outPath, urlPath: page.urlPath })
+  const renderTimeMs = Math.round(page.renderTimeMs)
+  log.info('page written', {
+    outPath: page.outPath,
+    urlPath: page.urlPath,
+    renderTimeMs,
+  })
+  if (renderTimeMs > 2000) {
+    log.warn('page render slow', {
+      outPath: page.outPath,
+      urlPath: page.urlPath,
+      renderTimeMs,
+      thresholdMs: 2000,
+    })
+  }
 }
 
 export async function renderPageFromFile(
   context: BuildContext,
   file: ContentFile,
 ): Promise<PageRenderResult> {
+  const renderStart = process.hrtime.bigint()
   const { urlPath } = resolveRouteInfo(file)
   const outPath = resolveOutPath(context.config.outDir, file)
   try {
@@ -115,6 +130,8 @@ export async function renderPageFromFile(
     })
     renderAppOptions.context.outline = compiled.outline
     const html = renderApp(htmlShell, renderAppOptions)
+    const renderTimeMs =
+      Number(process.hrtime.bigint() - renderStart) / 1_000_000
     return {
       file,
       frontmatter,
@@ -125,6 +142,7 @@ export async function renderPageFromFile(
       template,
       outPath,
       urlPath,
+      renderTimeMs,
       navigation,
       page: pageInfo,
       outline: compiled.outline,
