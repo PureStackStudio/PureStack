@@ -1,6 +1,5 @@
-import cssEscape from 'css.escape'
-
 import { parseHtml } from '../dom/minidom'
+import cssEscape from '../util/cssEscape'
 
 type GlobalKey =
   | 'window'
@@ -69,7 +68,7 @@ export function registerDomGlobals(
     'CSS',
     windowCss && typeof windowCss.escape === 'function'
       ? windowCss
-      : { escape: cssEscape }
+      : { escape: cssEscape },
   )
 
   return () => {

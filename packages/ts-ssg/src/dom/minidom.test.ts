@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
+import cssEscape from '../util/cssEscape'
 import {
   type MiniElement,
   type MiniHTMLTemplateElement,
@@ -12,9 +13,7 @@ describe('minidom entity decoding', () => {
     const { document } = parseHtml(
       '<html><body><p>&#x3C;code&#x3E; &amp; &#60;</p></body></html>',
     )
-    expect(document.body?.innerHTML).toBe(
-      '<p>&lt;code&gt; &amp; &lt;</p>',
-    )
+    expect(document.body?.innerHTML).toBe('<p>&lt;code&gt; &amp; &lt;</p>')
   })
 })
 
@@ -33,9 +32,7 @@ describe('minidom selectors', () => {
     expect(document.querySelector('div > span')?.getAttribute('id')).toBe(
       'inner',
     )
-    expect(document.querySelector('div span')?.getAttribute('id')).toBe(
-      'inner',
-    )
+    expect(document.querySelector('div span')?.getAttribute('id')).toBe('inner')
   })
 
   it('supports :not() with simple selectors', () => {
@@ -50,7 +47,9 @@ describe('minidom selectors', () => {
     const { document } = parseHtml(
       '<html><body><div id="a" data-kind="x"></div><div id="b"></div><div id="c" data-kind="y"></div></body></html>',
     )
-    const matches = document.querySelectorAll('div:not([data-kind="x"]):not(#c)')
+    const matches = document.querySelectorAll(
+      'div:not([data-kind="x"]):not(#c)',
+    )
     expect(matches.map((el) => el.getAttribute('id'))).toEqual(['b'])
   })
 
@@ -69,6 +68,16 @@ describe('minidom selectors', () => {
     const matches = document.querySelectorAll('span, .x')
     expect(matches.map((el) => el.getAttribute('id'))).toEqual(['a', 'b'])
   })
+
+  it('supports CSS.escape output in attribute-name selectors', () => {
+    const { document } = parseHtml(
+      '<html><body><img :src="a.png"><img src="b.png"></body></html>',
+    )
+    const selector = `[${cssEscape(':src')}]`
+    const matches = document.querySelectorAll(selector)
+    expect(matches).toHaveLength(1)
+    expect(matches[0]?.getAttribute(':src')).toBe('a.png')
+  })
 })
 
 describe('minidom templates', () => {
@@ -76,9 +85,9 @@ describe('minidom templates', () => {
     const { document } = parseHtml(
       '<html><body><template><span>hi</span></template></body></html>',
     )
-    const template = document.querySelector('template') as
-      | MiniHTMLTemplateElement
-      | null
+    const template = document.querySelector(
+      'template',
+    ) as MiniHTMLTemplateElement | null
     const span = template?.content?.firstChild as MiniElement | null
     expect(span?.ownerDocument).toBe(document)
   })
@@ -87,10 +96,12 @@ describe('minidom templates', () => {
     const { document } = parseHtml(
       '<html><body><template><div><span>ok</span></div></template></body></html>',
     )
-    const template = document.querySelector('template') as
+    const template = document.querySelector(
+      'template',
+    ) as MiniHTMLTemplateElement | null
+    const clone = template?.cloneNode(true) as
       | MiniHTMLTemplateElement
-      | null
-    const clone = template?.cloneNode(true) as MiniHTMLTemplateElement | undefined
+      | undefined
     const span = clone?.content.querySelector('span')
     expect(span?.textContent).toBe('ok')
     expect(span?.ownerDocument).toBe(document)
@@ -103,23 +114,31 @@ describe('minidom parsing and serialization', () => {
       '<html><body><script>if (a < b && c > d) { x = "&lt;raw&gt;" }</script></body></html>',
     )
     const script = document.querySelector('script')
-    expect(script?.textContent).toBe('if (a < b && c > d) { x = "&lt;raw&gt;" }')
+    expect(script?.textContent).toBe(
+      'if (a < b && c > d) { x = "&lt;raw&gt;" }',
+    )
     expect(script?.outerHTML).toContain('x = "&lt;raw&gt;"')
   })
 
   it('parses document fragments and preserves insertion order', () => {
-    const { document } = parseHtml('<html><body><div id="root"></div></body></html>')
+    const { document } = parseHtml(
+      '<html><body><div id="root"></div></body></html>',
+    )
     const root = document.querySelector('#root')
-    const fragment = parseFragment('<span id="a"></span><span id="b"></span>', document)
+    const fragment = parseFragment(
+      '<span id="a"></span><span id="b"></span>',
+      document,
+    )
     root?.appendChild(fragment)
-    expect(root?.querySelectorAll('span').map((el) => el.getAttribute('id'))).toEqual([
-      'a',
-      'b',
-    ])
+    expect(
+      root?.querySelectorAll('span').map((el) => el.getAttribute('id')),
+    ).toEqual(['a', 'b'])
   })
 
   it('supports replaceWith and replaceChildren', () => {
-    const { document } = parseHtml('<html><body><div><i id="old"></i></div></body></html>')
+    const { document } = parseHtml(
+      '<html><body><div><i id="old"></i></div></body></html>',
+    )
     const old = document.querySelector('#old')
     const first = document.createElement('b')
     first.setAttribute('id', 'new-a')
@@ -127,10 +146,9 @@ describe('minidom parsing and serialization', () => {
     second.setAttribute('id', 'new-b')
     old?.replaceWith(first, second)
     const div = document.querySelector('div')
-    expect(div?.querySelectorAll('b').map((el) => el.getAttribute('id'))).toEqual([
-      'new-a',
-      'new-b',
-    ])
+    expect(
+      div?.querySelectorAll('b').map((el) => el.getAttribute('id')),
+    ).toEqual(['new-a', 'new-b'])
     div?.replaceChildren(document.createTextNode('done'))
     expect(div?.textContent).toBe('done')
   })
@@ -154,14 +172,18 @@ describe('minidom parsing and serialization', () => {
 
 describe('minidom cloning and tree safety', () => {
   it('preserves HTMLElement type when cloning regular elements', () => {
-    const { document, window } = parseHtml('<html><body><div></div></body></html>')
+    const { document, window } = parseHtml(
+      '<html><body><div></div></body></html>',
+    )
     const div = document.querySelector('div')
     const clone = div?.cloneNode(false)
     expect(clone instanceof window.HTMLElement).toBe(true)
   })
 
   it('throws when creating a parent-child cycle', () => {
-    const { document } = parseHtml('<html><body><div id="a"><span id="b"></span></div></body></html>')
+    const { document } = parseHtml(
+      '<html><body><div id="a"><span id="b"></span></div></body></html>',
+    )
     const div = document.querySelector('#a')
     const span = document.querySelector('#b')
     expect(() => span?.appendChild(div as never)).toThrow(

@@ -1,4 +1,4 @@
-import cssEscape from 'css.escape'
+import cssEscape from '../util/cssEscape'
 
 const VOID_ELEMENTS = new Set([
   'area',
