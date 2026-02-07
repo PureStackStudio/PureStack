@@ -3,6 +3,7 @@ import type { Component } from 'regor'
 
 import { type PartialSiteConfig, resolveSiteConfig } from '../config/config'
 import { type ContentFile, discoverContent } from '../discover/content'
+import { MdxRenderOptions } from '../mdx/compile'
 import {
   createMdxHighlighter,
   DEFAULT_MDX_CODE_LANGS,
@@ -95,21 +96,9 @@ export interface MdxOptions {
 export async function buildSite(input: BuildInput = {}): Promise<BuildResult> {
   const config = resolveSiteConfig(input)
   const log = getLogger()
-  const hooks = input.hooks ?? {}
-  const mdxThemes = input.mdx?.themes ?? DEFAULT_MDX_CODE_THEMES
-  const mdxLangs = input.mdx?.langs ?? DEFAULT_MDX_CODE_LANGS
-  const mdxHighlighter = input.mdx?.disableHighlighter
-    ? undefined
-    : (input.mdx?.highlighter ??
-      (await createMdxHighlighter(mdxThemes, mdxLangs)))
-  const context: BuildContext = {
-    config,
-    components: input.components,
-    templates: input.templates,
-    mdx: {
-      highlighter: mdxHighlighter,
-    },
-  }
+  const hooks = resolveBuildHooks(input.hooks)
+  const mdxOptions = await resolveMdxBuildOptions(input.mdx)
+  const context = createBuildContext(input, config, mdxOptions)
   setThemeOptions(config.theme)
   initBuiltinComponents()
 
@@ -124,9 +113,9 @@ export async function buildSite(input: BuildInput = {}): Promise<BuildResult> {
 
   await copyStaticAssets(config.contentDir, config.outDir)
 
-  const files = await discoverContent(config.contentDir)
+  const files = await discoverBuildContent(config.contentDir)
   await hooks.onContentDiscovered?.(context, files)
-  const navigation = await buildNavigation(
+  const navigation = await buildBuildNavigation(
     config.contentDir,
     files,
     input.navigation ?? config.navigation,
@@ -135,15 +124,11 @@ export async function buildSite(input: BuildInput = {}): Promise<BuildResult> {
   await hooks.onNavigationBuilt?.(context, navigation)
 
   const concurrency = normalizeConcurrency(input.concurrency)
-  let pages = 0
-
-  await runWithConcurrency(files, concurrency, async (file) => {
-    await hooks.onPageStart?.(context, file)
-    const page = await renderPageFromFile(context, file)
-    await hooks.onPageRendered?.(context, page)
-    await writePage(page)
-    await hooks.onPageWritten?.(context, page)
-    pages += 1
+  const pages = await buildPagesWithConcurrency({
+    files,
+    concurrency,
+    context,
+    hooks,
   })
 
   const styleResult = await writeStyles(
@@ -156,6 +141,69 @@ export async function buildSite(input: BuildInput = {}): Promise<BuildResult> {
   const result = { outDir: config.outDir, pages }
   await hooks.onBuildComplete?.(context, result)
   return result
+}
+
+function resolveBuildHooks(hooks: BuildHooks | undefined): BuildHooks {
+  return hooks ?? {}
+}
+
+async function resolveMdxBuildOptions(
+  mdx: MdxOptions | undefined,
+): Promise<MdxRenderOptions> {
+  const mdxThemes = mdx?.themes ?? DEFAULT_MDX_CODE_THEMES
+  const mdxLangs = mdx?.langs ?? DEFAULT_MDX_CODE_LANGS
+  const highlighter = mdx?.disableHighlighter
+    ? undefined
+    : (mdx?.highlighter ?? (await createMdxHighlighter(mdxThemes, mdxLangs)))
+  return { highlighter }
+}
+
+function createBuildContext(
+  input: BuildInput,
+  config: ReturnType<typeof resolveSiteConfig>,
+  mdx: MdxRenderOptions,
+): BuildContext {
+  return {
+    config,
+    components: input.components,
+    templates: input.templates,
+    mdx,
+  }
+}
+
+async function discoverBuildContent(contentDir: string) {
+  return await discoverContent(contentDir)
+}
+
+async function buildBuildNavigation(
+  contentDir: string,
+  files: ContentFile[],
+  navigation: NavigationConfig | undefined,
+) {
+  return await buildNavigation(contentDir, files, navigation)
+}
+
+type BuildPagesWithConcurrencyInput = {
+  files: ContentFile[]
+  concurrency: number
+  context: BuildContext
+  hooks: BuildHooks
+}
+
+async function buildPagesWithConcurrency(
+  input: BuildPagesWithConcurrencyInput,
+): Promise<number> {
+  const { files, concurrency, context, hooks } = input
+  let pages = 0
+  await runWithConcurrency(files, concurrency, async (file) => {
+    await hooks.onPageStart?.(context, file)
+    const page = await renderPageFromFile(context, file)
+    await hooks.onPageRendered?.(context, page)
+    await writePage(page)
+    await hooks.onPageWritten?.(context, page)
+    pages += 1
+  })
+  return pages
 }
 
 function normalizeConcurrency(value?: number) {

@@ -6,7 +6,10 @@ import { performance } from 'node:perf_hooks'
 
 import { createLogger, getLogger } from 'logpot'
 
-import { createIncrementalBuilder } from '../build/incremental'
+import {
+  createIncrementalBuilder,
+  type IncrementalBuilder,
+} from '../build/incremental'
 import { type BuildInput, type BuildResult, buildSite } from '../build/site'
 import { resolveSiteConfig } from '../config/config'
 import { discoverContent, discoverStaticAssets } from '../discover/content'
@@ -33,6 +36,22 @@ const REQUEST_TIMEOUT_MS = 30000
 const LIVE_RELOAD_MAX_CLIENTS = 8
 const LIVE_RELOAD_MAX_PER_ADDRESS = 1
 
+type ResolvedDevServerOptions = {
+  host: string
+  port: number
+  watch: boolean
+  liveReload: boolean
+  incrementalEnabled: boolean
+}
+
+type RebuildRequestState = {
+  inFlight: boolean
+  pending: boolean
+  timer: NodeJS.Timeout | undefined
+  reason: string
+  changedPaths: Set<string>
+}
+
 export async function startDevServer(
   input: DevServerInput = {},
 ): Promise<DevServerHandle> {
@@ -41,11 +60,8 @@ export async function startDevServer(
   const logger = await createLogger()
   const log = getLogger()
 
-  const host = input.host ?? DEFAULT_HOST
-  const port = input.port ?? DEFAULT_PORT
-  const watch = input.watch ?? true
-  const liveReload = input.liveReload ?? true
-  const incrementalEnabled = input.incremental ?? true
+  const { host, port, watch, liveReload, incrementalEnabled } =
+    resolveDevServerOptions(input)
 
   const clients = new Map<
     http.ServerResponse,
@@ -56,14 +72,7 @@ export async function startDevServer(
   let initialBuildDone = false
   let shuttingDown = false
   let watcher: { close: () => void } | undefined
-  const requestState = {
-    // Serializes queued rebuild requests to avoid overlapping incremental mutations.
-    inFlight: false,
-    pending: false,
-    timer: undefined as NodeJS.Timeout | undefined,
-    reason: 'initial build',
-    changedPaths: new Set<string>(),
-  }
+  const requestState = createRebuildRequestState()
 
   const emitState = (reason: string) => {
     if (!liveReload) return
@@ -193,116 +202,21 @@ export async function startDevServer(
     }
   }
 
-  const server = http.createServer(async (req, res) => {
-    if (!req.url) {
-      res.writeHead(400)
-      res.end()
-      return
-    }
-
-    const { pathname } = new URL(req.url, `http://${host}:${port}`)
-
-    if (liveReload && pathname === LIVE_RELOAD_PATH) {
-      registerLiveReloadClient(clients, req, res, liveReloadVersion)
-      return
-    }
-
-    res.setTimeout(REQUEST_TIMEOUT_MS, () => {
-      res.destroy()
-    })
-
-    let fileResult = await resolveStaticFile(config.outDir, pathname)
-    if (!fileResult && incrementalEnabled && isLikelyHtmlPath(pathname)) {
-      try {
-        const rendered = await incremental.renderByUrlPath(pathname)
-        if (rendered) {
-          fileResult = await resolveStaticFile(config.outDir, pathname)
-        }
-      } catch (error) {
-        logError(log, error, 'lazy route render failed')
-      }
-    }
-    if (!fileResult) {
-      res.writeHead(404)
-      res.end('Not found')
-      return
-    }
-
-    const { filePath, ext } = fileResult
-    try {
-      if (ext === '.html') {
-        const html = await fsPromises.readFile(filePath, 'utf8')
-        const injected = liveReload
-          ? injectLiveReload(html, LIVE_RELOAD_PATH, liveReloadVersion)
-          : html
-        writeHtmlResponse(res, 200, injected)
-        if (incrementalEnabled) {
-          const existing = backgroundRenderTasks.get(filePath)
-          if (!existing) {
-            // One background render notification per output file prevents fan-out storms.
-            const task = incremental
-              .renderIfDirtyByOutPath(filePath)
-              .then((rendered) => {
-                if (rendered) {
-                  notifyPageRendered(pathname)
-                }
-              })
-              .catch((error) => {
-                logError(log, error, 'background render failed')
-              })
-              .finally(() => {
-                backgroundRenderTasks.delete(filePath)
-              })
-            backgroundRenderTasks.set(filePath, task)
-            void task
-          }
-        }
-        return
-      }
-
-      const contentType = contentTypeForExt(ext)
-      if (contentType) {
-        res.writeHead(200, {
-          'Content-Type': contentType,
-          Connection: 'close',
-        })
-      } else {
-        res.writeHead(200, { Connection: 'close' })
-      }
-      const stream = fs.createReadStream(filePath)
-      let streamClosed = false
-      const closeStream = () => {
-        if (streamClosed) return
-        streamClosed = true
-        try {
-          stream.destroy()
-        } catch {
-          // ignore stream close errors
-        }
-      }
-      req.on('aborted', () => {
-        closeStream()
-      })
-      res.on('close', () => {
-        closeStream()
-      })
-      res.on('error', () => {
-        closeStream()
-      })
-      stream.on('error', (error) => {
-        logError(log, error, 'static stream failed')
-        if (!res.headersSent) {
-          res.writeHead(500)
-        }
-        res.end()
-      })
-      stream.pipe(res)
-    } catch (error) {
-      res.writeHead(500)
-      res.end('Internal server error')
-      logError(log, error, 'serve failed')
-    }
-  })
+  const server = http.createServer(
+    createDevServerRequestHandler({
+      host,
+      port,
+      outDir: config.outDir,
+      liveReload,
+      incrementalEnabled,
+      incremental,
+      clients,
+      getLiveReloadVersion: () => liveReloadVersion,
+      backgroundRenderTasks,
+      notifyPageRendered,
+      log,
+    }),
+  )
   server.on('error', (error) => {
     logError(log, error, 'dev server error')
   })
@@ -357,6 +271,278 @@ export async function startDevServer(
   process.on('SIGTERM', handleSignal)
 
   return { close: shutdown }
+}
+
+function resolveDevServerOptions(
+  input: DevServerInput,
+): ResolvedDevServerOptions {
+  return {
+    host: input.host ?? DEFAULT_HOST,
+    port: input.port ?? DEFAULT_PORT,
+    watch: input.watch ?? true,
+    liveReload: input.liveReload ?? true,
+    incrementalEnabled: input.incremental ?? true,
+  }
+}
+
+function createRebuildRequestState(): RebuildRequestState {
+  return {
+    // Serializes queued rebuild requests to avoid overlapping incremental mutations.
+    inFlight: false,
+    pending: false,
+    timer: undefined,
+    reason: 'initial build',
+    changedPaths: new Set<string>(),
+  }
+}
+
+type DevServerRequestHandlerInput = {
+  host: string
+  port: number
+  outDir: string
+  liveReload: boolean
+  incrementalEnabled: boolean
+  incremental: IncrementalBuilder
+  clients: LiveReloadClients
+  getLiveReloadVersion: () => number
+  backgroundRenderTasks: Map<string, Promise<void>>
+  notifyPageRendered: (pathname: string) => void
+  log: ReturnType<typeof getLogger>
+}
+
+function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
+  const {
+    host,
+    port,
+    outDir,
+    liveReload,
+    incrementalEnabled,
+    incremental,
+    clients,
+    getLiveReloadVersion,
+    backgroundRenderTasks,
+    notifyPageRendered,
+    log,
+  } = input
+
+  return async (req: http.IncomingMessage, res: http.ServerResponse) => {
+    if (!req.url) {
+      res.writeHead(400)
+      res.end()
+      return
+    }
+
+    const { pathname } = new URL(req.url, `http://${host}:${port}`)
+
+    if (liveReload && pathname === LIVE_RELOAD_PATH) {
+      registerLiveReloadClient(
+        clients,
+        req,
+        res,
+        getLiveReloadVersion(),
+      )
+      return
+    }
+
+    res.setTimeout(REQUEST_TIMEOUT_MS, () => {
+      res.destroy()
+    })
+
+    const fileResult = await resolveRequestFile({
+      outDir,
+      pathname,
+      incrementalEnabled,
+      incremental,
+      log,
+    })
+    if (!fileResult) {
+      res.writeHead(404)
+      res.end('Not found')
+      return
+    }
+
+    const liveReloadVersion = getLiveReloadVersion()
+    await serveResolvedFile({
+      req,
+      res,
+      filePath: fileResult.filePath,
+      ext: fileResult.ext,
+      pathname,
+      liveReload,
+      liveReloadVersion,
+      incrementalEnabled,
+      incremental,
+      backgroundRenderTasks,
+      notifyPageRendered,
+      log,
+    })
+  }
+}
+
+type ResolveRequestFileInput = {
+  outDir: string
+  pathname: string
+  incrementalEnabled: boolean
+  incremental: IncrementalBuilder
+  log: ReturnType<typeof getLogger>
+}
+
+async function resolveRequestFile(input: ResolveRequestFileInput) {
+  const { outDir, pathname, incrementalEnabled, incremental, log } = input
+  let fileResult = await resolveStaticFile(outDir, pathname)
+  if (!fileResult && incrementalEnabled && isLikelyHtmlPath(pathname)) {
+    try {
+      const rendered = await incremental.renderByUrlPath(pathname)
+      if (rendered) {
+        fileResult = await resolveStaticFile(outDir, pathname)
+      }
+    } catch (error) {
+      logError(log, error, 'lazy route render failed')
+    }
+  }
+  return fileResult
+}
+
+type ServeResolvedFileInput = {
+  req: http.IncomingMessage
+  res: http.ServerResponse
+  filePath: string
+  ext: string
+  pathname: string
+  liveReload: boolean
+  liveReloadVersion: number
+  incrementalEnabled: boolean
+  incremental: IncrementalBuilder
+  backgroundRenderTasks: Map<string, Promise<void>>
+  notifyPageRendered: (pathname: string) => void
+  log: ReturnType<typeof getLogger>
+}
+
+async function serveResolvedFile(input: ServeResolvedFileInput): Promise<void> {
+  const {
+    req,
+    res,
+    filePath,
+    ext,
+    pathname,
+    liveReload,
+    liveReloadVersion,
+    incrementalEnabled,
+    incremental,
+    backgroundRenderTasks,
+    notifyPageRendered,
+    log,
+  } = input
+  try {
+    if (ext === '.html') {
+      const html = await fsPromises.readFile(filePath, 'utf8')
+      const injected = liveReload
+        ? injectLiveReload(html, LIVE_RELOAD_PATH, liveReloadVersion)
+        : html
+      writeHtmlResponse(res, 200, injected)
+      if (incrementalEnabled) {
+        queueBackgroundRender({
+          filePath,
+          pathname,
+          incremental,
+          backgroundRenderTasks,
+          notifyPageRendered,
+          log,
+        })
+      }
+      return
+    }
+
+    serveStaticStream(req, res, filePath, ext, log)
+  } catch (error) {
+    res.writeHead(500)
+    res.end('Internal server error')
+    logError(log, error, 'serve failed')
+  }
+}
+
+type QueueBackgroundRenderInput = {
+  filePath: string
+  pathname: string
+  incremental: IncrementalBuilder
+  backgroundRenderTasks: Map<string, Promise<void>>
+  notifyPageRendered: (pathname: string) => void
+  log: ReturnType<typeof getLogger>
+}
+
+function queueBackgroundRender(input: QueueBackgroundRenderInput) {
+  const {
+    filePath,
+    pathname,
+    incremental,
+    backgroundRenderTasks,
+    notifyPageRendered,
+    log,
+  } = input
+  const existing = backgroundRenderTasks.get(filePath)
+  if (existing) return
+  // One background render notification per output file prevents fan-out storms.
+  const task = incremental
+    .renderIfDirtyByOutPath(filePath)
+    .then((rendered) => {
+      if (rendered) {
+        notifyPageRendered(pathname)
+      }
+    })
+    .catch((error) => {
+      logError(log, error, 'background render failed')
+    })
+    .finally(() => {
+      backgroundRenderTasks.delete(filePath)
+    })
+  backgroundRenderTasks.set(filePath, task)
+  void task
+}
+
+function serveStaticStream(
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+  filePath: string,
+  ext: string,
+  log: ReturnType<typeof getLogger>,
+) {
+  const contentType = contentTypeForExt(ext)
+  if (contentType) {
+    res.writeHead(200, {
+      'Content-Type': contentType,
+      Connection: 'close',
+    })
+  } else {
+    res.writeHead(200, { Connection: 'close' })
+  }
+  const stream = fs.createReadStream(filePath)
+  let streamClosed = false
+  const closeStream = () => {
+    if (streamClosed) return
+    streamClosed = true
+    try {
+      stream.destroy()
+    } catch {
+      // ignore stream close errors
+    }
+  }
+  req.on('aborted', () => {
+    closeStream()
+  })
+  res.on('close', () => {
+    closeStream()
+  })
+  res.on('error', () => {
+    closeStream()
+  })
+  stream.on('error', (error) => {
+    logError(log, error, 'static stream failed')
+    if (!res.headersSent) {
+      res.writeHead(500)
+    }
+    res.end()
+  })
+  stream.pipe(res)
 }
 
 function createFullRebuildBuilder(

@@ -240,14 +240,7 @@ export async function createIncrementalBuilder(
   const applyChange = async (filePath: string) => {
     const relPath = path.relative(config.contentDir, filePath)
     const reason = `content change: ${filePath}`
-    const result: IncrementalBuildResult = {
-      fullRebuild: false,
-      changedPages: 0,
-      changedAssets: 0,
-      deletedPages: 0,
-      deletedAssets: 0,
-      reason,
-    }
+    const result = createIncrementalResult(reason)
 
     if (relPath.startsWith('..') || relPath.startsWith('.\\..')) {
       return result
@@ -264,69 +257,35 @@ export async function createIncrementalBuilder(
     const assetEntry = manifest.assets[relPath]
 
     if (!signature) {
-      if (contentEntry && navigationConfig.mode !== 'none') {
-        await rebuildNavigationForChange(relPath, ext, result, signature)
-        await writeManifest(config.outDir, manifest)
-        return result
-      }
-      if (contentEntry) {
-        await removeFile(contentEntry.outPath)
-        delete manifest.content[relPath]
-        removeContentIndex(relPath)
-        result.deletedPages += 1
-      }
-      if (assetEntry) {
-        await removeFile(assetEntry.outPath)
-        delete manifest.assets[relPath]
-        result.deletedAssets += 1
-      }
-      if (contentEntry || assetEntry) {
-        await writeManifest(config.outDir, manifest)
-      }
+      await handleMissingSignatureChange({
+        relPath,
+        ext,
+        result,
+        contentEntry,
+        assetEntry,
+      })
       return result
     }
 
     const treatedAsContent = contentEntry || isContentFile(relPath, ext)
     if (treatedAsContent) {
-      if (signatureEqual(contentEntry, signature)) {
-        return result
-      }
-      if (navigationConfig.mode !== 'none') {
-        await rebuildNavigationForChange(relPath, ext, result, signature)
-        await writeManifest(config.outDir, manifest)
-        return result
-      }
-      const contentFile = toContentFile(config.contentDir, relPath, ext)
-      await buildPage(context, contentFile)
-      const outPath = resolveOutPath(config.outDir, contentFile)
-      manifest.content[relPath] = {
+      await handleContentChange({
         relPath,
         ext,
-        outPath,
-        ...signature,
-      }
-      setContentIndex(relPath, outPath, ext)
-      result.changedPages += 1
-      await writeManifest(config.outDir, manifest)
+        signature,
+        contentEntry,
+        result,
+      })
       return result
     }
 
-    if (signatureEqual(assetEntry, signature)) {
-      return result
-    }
-
-    const assetFile = toAssetFile(config.contentDir, relPath, ext)
-    const assetCopy = await copyStaticAsset(config.outDir, assetFile)
-    if (assetCopy.copied) {
-      manifest.assets[relPath] = {
-        relPath,
-        ext,
-        outPath: assetCopy.outPath,
-        ...signature,
-      }
-      result.changedAssets += 1
-      await writeManifest(config.outDir, manifest)
-    }
+    await handleAssetChange({
+      relPath,
+      ext,
+      signature,
+      assetEntry,
+      result,
+    })
     return result
   }
 
@@ -401,6 +360,110 @@ export async function createIncrementalBuilder(
       if (!relPath) return false
     }
     return renderPageByRelPath(relPath, false)
+  }
+
+  function createIncrementalResult(reason: string): IncrementalBuildResult {
+    return {
+      fullRebuild: false,
+      changedPages: 0,
+      changedAssets: 0,
+      deletedPages: 0,
+      deletedAssets: 0,
+      reason,
+    }
+  }
+
+  type HandleMissingSignatureChangeInput = {
+    relPath: string
+    ext: string
+    result: IncrementalBuildResult
+    contentEntry: ContentManifestEntry | undefined
+    assetEntry: AssetManifestEntry | undefined
+  }
+
+  const handleMissingSignatureChange = async (
+    input: HandleMissingSignatureChangeInput,
+  ) => {
+    const { relPath, ext, result, contentEntry, assetEntry } = input
+    if (contentEntry && navigationConfig.mode !== 'none') {
+      await rebuildNavigationForChange(relPath, ext, result, null)
+      await writeManifest(config.outDir, manifest)
+      return
+    }
+    if (contentEntry) {
+      await removeFile(contentEntry.outPath)
+      delete manifest.content[relPath]
+      removeContentIndex(relPath)
+      result.deletedPages += 1
+    }
+    if (assetEntry) {
+      await removeFile(assetEntry.outPath)
+      delete manifest.assets[relPath]
+      result.deletedAssets += 1
+    }
+    if (contentEntry || assetEntry) {
+      await writeManifest(config.outDir, manifest)
+    }
+  }
+
+  type HandleContentChangeInput = {
+    relPath: string
+    ext: string
+    signature: FileSignature
+    contentEntry: ContentManifestEntry | undefined
+    result: IncrementalBuildResult
+  }
+
+  const handleContentChange = async (input: HandleContentChangeInput) => {
+    const { relPath, ext, signature, contentEntry, result } = input
+    if (signatureEqual(contentEntry, signature)) {
+      return
+    }
+    if (navigationConfig.mode !== 'none') {
+      await rebuildNavigationForChange(relPath, ext, result, signature)
+      await writeManifest(config.outDir, manifest)
+      return
+    }
+    const contentFile = toContentFile(config.contentDir, relPath, ext)
+    await buildPage(context, contentFile)
+    const outPath = resolveOutPath(config.outDir, contentFile)
+    manifest.content[relPath] = {
+      relPath,
+      ext,
+      outPath,
+      ...signature,
+    }
+    setContentIndex(relPath, outPath, ext)
+    result.changedPages += 1
+    await writeManifest(config.outDir, manifest)
+  }
+
+  type HandleAssetChangeInput = {
+    relPath: string
+    ext: string
+    signature: FileSignature
+    assetEntry: AssetManifestEntry | undefined
+    result: IncrementalBuildResult
+  }
+
+  const handleAssetChange = async (input: HandleAssetChangeInput) => {
+    const { relPath, ext, signature, assetEntry, result } = input
+    if (signatureEqual(assetEntry, signature)) {
+      return
+    }
+    const assetFile = toAssetFile(config.contentDir, relPath, ext)
+    const assetCopy = await copyStaticAsset(config.outDir, assetFile)
+    if (!assetCopy.copied) {
+      return
+    }
+    manifest.assets[relPath] = {
+      relPath,
+      ext,
+      outPath: assetCopy.outPath,
+      ...signature,
+    }
+    result.changedAssets += 1
+    await writeManifest(config.outDir, manifest)
   }
 
   return { buildAll, applyChange, renderIfDirtyByOutPath, renderByUrlPath }

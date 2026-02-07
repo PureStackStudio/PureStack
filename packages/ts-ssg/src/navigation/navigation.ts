@@ -120,39 +120,11 @@ export async function buildNavigation(
     config.mode === 'auto'
       ? {}
       : await loadCustomNavigation(contentDir, folderSet, config)
-
-  const baseByFolder: Record<string, NavItem[]> = {}
-  const folders = new Set([
-    ...Object.keys(autoByFolder),
-    ...Object.keys(customByFolder),
-  ])
-  folders.add('')
-
-  for (const folder of folders) {
-    const autoItems = autoByFolder[folder] ?? []
-    const custom = customByFolder[folder]
-    if (config.mode === 'auto') {
-      baseByFolder[folder] = autoItems
-      continue
-    }
-    if (config.mode === 'custom') {
-      baseByFolder[folder] = custom?.items ?? []
-      continue
-    }
-
-    if (!custom) {
-      baseByFolder[folder] = autoItems
-      continue
-    }
-
-    if (custom.mode === 'override') {
-      baseByFolder[folder] = custom.items
-      continue
-    }
-
-    const merged = [...autoItems, ...custom.items]
-    baseByFolder[folder] = sortNavItems(merged, config.sortBy)
-  }
+  const baseByFolder = buildBaseFolderNavigation(
+    autoByFolder,
+    customByFolder,
+    config,
+  )
 
   const byFolder = buildNestedNavigation(
     folderTree,
@@ -162,6 +134,44 @@ export async function buildNavigation(
   )
   const global = byFolder[''] ?? []
   return { mode: config.mode, config, byFolder, global }
+}
+
+function buildBaseFolderNavigation(
+  autoByFolder: Record<string, NavItem[]>,
+  customByFolder: Record<string, NavFile>,
+  config: ResolvedNavigationConfig,
+) {
+  const byFolder: Record<string, NavItem[]> = {}
+  const folders = new Set([
+    ...Object.keys(autoByFolder),
+    ...Object.keys(customByFolder),
+  ])
+  folders.add('')
+  for (const folder of folders) {
+    byFolder[folder] = resolveBaseFolderItems(
+      folder,
+      autoByFolder,
+      customByFolder,
+      config,
+    )
+  }
+  return byFolder
+}
+
+function resolveBaseFolderItems(
+  folder: string,
+  autoByFolder: Record<string, NavItem[]>,
+  customByFolder: Record<string, NavFile>,
+  config: ResolvedNavigationConfig,
+) {
+  const autoItems = autoByFolder[folder] ?? []
+  const custom = customByFolder[folder]
+  if (config.mode === 'auto') return autoItems
+  if (config.mode === 'custom') return custom?.items ?? []
+  if (!custom) return autoItems
+  if (custom.mode === 'override') return custom.items
+  const merged = [...autoItems, ...custom.items]
+  return sortNavItems(merged, config.sortBy)
 }
 
 export function resolvePageNavigation(
@@ -277,28 +287,16 @@ function buildNestedNavigation(
         a.name.localeCompare(b.name),
       )
       for (const child of children) {
-        const childItems = buildNode(child, remaining - 1)
-        if (childItems.length === 0) continue
-        const childOverride = customByFolder[child.relPath]?.mode === 'override'
-        const indexMeta = child.pages.find(
-          (page) => page.isIndex && !page.hidden,
+        const childItem = buildNestedChildNavItem(
+          child,
+          buildNode,
+          remaining,
+          customByFolder,
+          config,
         )
-        if (!childOverride && indexMeta && config.includeIndex) {
-          const indexItem = toNavItem(indexMeta)
-          const filtered = childItems.filter(
-            (item) => item.url !== indexMeta.urlPath,
-          )
-          items.push(
-            filtered.length > 0
-              ? { ...indexItem, children: filtered }
-              : indexItem,
-          )
-          continue
+        if (childItem) {
+          items.push(childItem)
         }
-        items.push({
-          title: humanizeSegment(child.name),
-          children: childItems,
-        })
       }
     }
 
@@ -309,6 +307,30 @@ function buildNestedNavigation(
 
   buildNode(root, depth)
   return byFolder
+}
+
+function buildNestedChildNavItem(
+  child: FolderNode,
+  buildNode: (node: FolderNode, remaining: number) => NavItem[],
+  remaining: number,
+  customByFolder: Record<string, NavFile>,
+  config: ResolvedNavigationConfig,
+): NavItem | null {
+  const childItems = buildNode(child, remaining - 1)
+  if (childItems.length === 0) return null
+  const childOverride = customByFolder[child.relPath]?.mode === 'override'
+  const indexMeta = child.pages.find((page) => page.isIndex && !page.hidden)
+  if (!childOverride && indexMeta && config.includeIndex) {
+    const indexItem = toNavItem(indexMeta)
+    const filtered = childItems.filter((item) => item.url !== indexMeta.urlPath)
+    return filtered.length > 0
+      ? { ...indexItem, children: filtered }
+      : indexItem
+  }
+  return {
+    title: humanizeSegment(child.name),
+    children: childItems,
+  }
 }
 
 function buildFolderTree(metas: ContentMeta[]): FolderNode {
