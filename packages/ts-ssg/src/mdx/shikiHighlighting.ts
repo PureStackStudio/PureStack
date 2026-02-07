@@ -19,6 +19,13 @@ export function applyShikiHighlighting(
           continue
         }
       }
+      if (child.tagName === 'code' && !isPre(node)) {
+        const highlighted = highlightInlineCode(child, highlighter)
+        if (highlighted) {
+          children[index] = highlighted
+          continue
+        }
+      }
       if (child.children && child.children.length > 0) {
         visit(child)
       }
@@ -38,6 +45,51 @@ function highlightPre(
   const language = resolveLanguage(code) ?? resolveLanguage(pre)
   const text = collectText(code).trimEnd()
   if (text.length === 0) return undefined
+  return renderHighlightedPre(text, language, highlighter)
+}
+
+function highlightInlineCode(
+  code: Element,
+  highlighter: MdxCodeHighlighter,
+): Element | undefined {
+  const language = resolveLanguage(code)
+  const text = collectText(code).trimEnd()
+  if (text.length === 0) return undefined
+  const html = highlighter.codeToHtml(text, language)
+  const parsed = fromHtml(html, { fragment: true })
+  const replacement = parsed.children?.find(
+    (child) => child.type === 'element' && child.tagName === 'pre',
+  ) as Element | undefined
+  if (!replacement) return undefined
+  const highlightedCode = replacement.children?.find(
+    (child) => child.type === 'element' && child.tagName === 'code',
+  ) as Element | undefined
+  if (!highlightedCode) return undefined
+  code.children = highlightedCode.children ?? []
+  if (!code.properties) code.properties = {}
+  code.properties.className = mergeClassNames(
+    code.properties.className,
+    'shiki',
+    'shiki-inline',
+    'shiki-themes',
+  )
+  const style =
+    typeof replacement.properties?.style === 'string'
+      ? replacement.properties.style
+      : ''
+  code.properties.style = stripStyle(style, [
+    'background',
+    'background-color',
+    'color',
+  ])
+  return code
+}
+
+function renderHighlightedPre(
+  text: string,
+  language: string | undefined,
+  highlighter: MdxCodeHighlighter,
+): Element | undefined {
   const html = highlighter.codeToHtml(text, language)
   const parsed = fromHtml(html, { fragment: true })
   const replacement = parsed.children?.find(
@@ -80,6 +132,10 @@ function collectText(node: Element | Text): string {
     }
   }
   return text
+}
+
+function isPre(node: Root | Element) {
+  return node.type === 'element' && node.tagName === 'pre'
 }
 
 function normalizeShikiPre(pre: Element) {

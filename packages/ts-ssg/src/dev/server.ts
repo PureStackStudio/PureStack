@@ -2,12 +2,14 @@ import fs from 'node:fs'
 import fsPromises from 'node:fs/promises'
 import http from 'node:http'
 import path from 'node:path'
+import { performance } from 'node:perf_hooks'
 
 import { createLogger, getLogger } from 'logpot'
 
 import { createIncrementalBuilder } from '../build/incremental'
-import { type BuildInput, buildSite } from '../build/site'
+import { type BuildInput, type BuildResult, buildSite } from '../build/site'
 import { resolveSiteConfig } from '../config/config'
+import { discoverContent, discoverStaticAssets } from '../discover/content'
 import { logError } from '../util/logging'
 
 export interface DevServerOptions {
@@ -34,6 +36,7 @@ const LIVE_RELOAD_MAX_PER_ADDRESS = 1
 export async function startDevServer(
   input: DevServerInput = {},
 ): Promise<DevServerHandle> {
+  const startupStart = performance.now()
   const config = resolveSiteConfig(input)
   const logger = await createLogger()
   const log = getLogger()
@@ -92,10 +95,14 @@ export async function startDevServer(
   const incremental = incrementalEnabled
     ? await createIncrementalBuilder(input)
     : createFullRebuildBuilder(input, config)
+  let initialBuildResult: BuildResult | null = null
 
   const rebuild = async (reason: string) => {
     try {
-      await incremental.buildAll(reason)
+      const result = await incremental.buildAll(reason)
+      if (!initialBuildDone) {
+        initialBuildResult = result
+      }
       if (!initialBuildDone) {
         initialBuildDone = true
         if (startupReloadPending && clients.size > 0) {
@@ -278,6 +285,9 @@ export async function startDevServer(
   server.keepAliveTimeout = 1000
   server.headersTimeout = 5000
   server.listen(port, host, () => {
+    const startupMs = Math.round(performance.now() - startupStart)
+    const contentCounts = initialBuildResult?.content
+    const assetCounts = initialBuildResult?.assets
     log.info('dev server listening', {
       url: `http://${host}:${port}/`,
       host,
@@ -286,6 +296,15 @@ export async function startDevServer(
       liveReload,
       watch,
       incremental: incrementalEnabled,
+      metrics: {
+        startupMs,
+        pages: initialBuildResult?.pages ?? 0,
+        contentTotal: contentCounts?.total ?? 0,
+        contentMd: contentCounts?.byExt['.md'] ?? 0,
+        contentMdx: contentCounts?.byExt['.mdx'] ?? 0,
+        assetTotal: assetCounts?.total ?? 0,
+        assetByExt: assetCounts?.byExt ?? {},
+      },
     })
   })
 
@@ -320,7 +339,16 @@ function createFullRebuildBuilder(
   config: ReturnType<typeof resolveSiteConfig>,
 ) {
   return {
-    buildAll: async () => buildSite({ ...input, ...config }),
+    buildAll: async () => {
+      const result = await buildSite({ ...input, ...config })
+      const contentFiles = await discoverContent(config.contentDir)
+      const assetFiles = await discoverStaticAssets(config.contentDir)
+      return {
+        ...result,
+        content: countByExt(contentFiles),
+        assets: countByExt(assetFiles),
+      }
+    },
     applyChange: async (filePath: string) => ({
       fullRebuild: true,
       changedPages: 0,
@@ -502,6 +530,15 @@ function contentTypeForExt(ext: string) {
     default:
       return undefined
   }
+}
+
+function countByExt(files: Array<{ ext: string }>) {
+  const byExt: Record<string, number> = {}
+  for (const file of files) {
+    const ext = file.ext || ''
+    byExt[ext] = (byExt[ext] ?? 0) + 1
+  }
+  return { total: files.length, byExt }
 }
 
 async function watchTree(root: string, onChange: (filePath: string) => void) {

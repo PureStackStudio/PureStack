@@ -40,6 +40,7 @@ import {
 import { resolveOutPath } from './out-path'
 import { buildPage } from './page'
 import {
+  type BuildCountSummary,
   type BuildHooks,
   type BuildInput,
   type BuildResult,
@@ -113,6 +114,9 @@ export async function createIncrementalBuilder(
       discoveredContent ?? (await discoverContent(config.contentDir))
     const assetFiles = await discoverStaticAssets(config.contentDir)
 
+    const contentCounts = countByExt(contentFiles)
+    const assetCounts = countByExt(assetFiles)
+
     const nextManifest = await buildManifest(
       config,
       contentFiles,
@@ -123,7 +127,11 @@ export async function createIncrementalBuilder(
     await writeManifest(config.outDir, nextManifest)
 
     log.info('build completed', { outDir: config.outDir })
-    return result
+    return {
+      ...result,
+      content: contentCounts,
+      assets: assetCounts,
+    }
   }
 
   const rebuildNavigationForChange = async (
@@ -432,4 +440,13 @@ async function computeStylesSignature(
   }
 
   return { signature: hash.digest('hex'), outputs }
+}
+
+function countByExt(files: Array<{ ext: string }>): BuildCountSummary {
+  const byExt: Record<string, number> = {}
+  for (const file of files) {
+    const ext = file.ext || ''
+    byExt[ext] = (byExt[ext] ?? 0) + 1
+  }
+  return { total: files.length, byExt }
 }

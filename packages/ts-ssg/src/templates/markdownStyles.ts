@@ -152,6 +152,16 @@ export function registerMarkdownStyles() {
   shikiSpan('light', '--shiki-light')
   shikiSpan('dark', '--shiki-dark')
 
+  const shikiInline = (theme: string, colorVar: string) =>
+    styleBuilder
+      .select('.doc-content :where(code.shiki-inline)', theme)
+      .color(`var(${colorVar}, ${palette(theme).panel.text})`)
+      .background(palette(theme).surface.altBackground)
+      .border(`1px solid ${palette(theme).surface.altBorder}`)
+
+  shikiInline('light', '--shiki-light')
+  shikiInline('dark', '--shiki-dark')
+
   styleBuilder
     .select('.doc-content :where(pre code)', 'light')
     .background('transparent')

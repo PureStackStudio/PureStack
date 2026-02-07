@@ -32,6 +32,13 @@ import { writeStyles, type WriteStylesResult } from './styles'
 export interface BuildResult {
   outDir: string
   pages: number
+  content?: BuildCountSummary
+  assets?: BuildCountSummary
+}
+
+export interface BuildCountSummary {
+  total: number
+  byExt: Record<string, number>
 }
 
 export interface BuildHooks {
