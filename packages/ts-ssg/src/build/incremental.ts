@@ -16,7 +16,6 @@ import {
 import {
   buildNavigation,
   type NavigationTree,
-  resolveFolderKey,
   resolveNavigationConfig,
 } from '../navigation/navigation'
 import { initBuiltinComponents } from '../regor/initBuiltinComponents'
@@ -29,6 +28,7 @@ import {
   type BuildManifest,
   type ContentManifestEntry,
   createEmptyManifest,
+  type FileSignature,
   isCompatibleManifest,
   manifestConfigFromSiteConfig,
   readManifest,
@@ -136,7 +136,9 @@ export async function createIncrementalBuilder(
 
   const rebuildNavigationForChange = async (
     relPath: string,
+    ext: string,
     result: IncrementalBuildResult,
+    signature: FileSignature | null,
   ) => {
     const contentFiles = await discoverContent(config.contentDir)
     navigation = await buildNavigation(
@@ -146,42 +148,29 @@ export async function createIncrementalBuilder(
     )
     context.navigation = navigation
 
-    const affectedFolders = collectAffectedFolders(
-      relPath,
-      navigationConfig.maxDepth,
-    )
-    const affectedFiles = contentFiles.filter((file) =>
-      affectedFolders.has(resolveFolderKey(file.relPath)),
-    )
-    const affectedRelPaths = new Set(affectedFiles.map((file) => file.relPath))
-
-    for (const file of affectedFiles) {
-      await buildPage(context, file)
-      const signature = await readSignature(file.absPath)
-      if (!signature) continue
-      const outPath = resolveOutPath(config.outDir, file)
-      manifest.content[file.relPath] = {
-        relPath: file.relPath,
-        ext: file.ext,
-        outPath,
-        ...signature,
-      }
-      result.changedPages += 1
-    }
-
-    const deletions = Object.keys(manifest.content).filter((key) => {
-      if (affectedRelPaths.has(key)) return false
-      const folder = resolveFolderKey(key)
-      return affectedFolders.has(folder)
-    })
-    for (const key of deletions) {
-      const entry = manifest.content[key]
-      if (entry) {
-        await removeFile(entry.outPath)
-        delete manifest.content[key]
+    const contentEntry = manifest.content[relPath]
+    if (!signature) {
+      if (contentEntry) {
+        await removeFile(contentEntry.outPath)
+        delete manifest.content[relPath]
         result.deletedPages += 1
       }
+      return
     }
+
+    const contentFile =
+      contentFiles.find((file) => file.relPath === relPath) ??
+      toContentFile(config.contentDir, relPath, ext)
+
+    await buildPage(context, contentFile)
+    const outPath = resolveOutPath(config.outDir, contentFile)
+    manifest.content[relPath] = {
+      relPath,
+      ext: contentFile.ext,
+      outPath,
+      ...signature,
+    }
+    result.changedPages += 1
   }
 
   const applyChange = async (filePath: string) => {
@@ -212,7 +201,7 @@ export async function createIncrementalBuilder(
 
     if (!signature) {
       if (contentEntry && navigationConfig.mode !== 'none') {
-        await rebuildNavigationForChange(relPath, result)
+        await rebuildNavigationForChange(relPath, ext, result, signature)
         await writeManifest(config.outDir, manifest)
         return result
       }
@@ -238,7 +227,7 @@ export async function createIncrementalBuilder(
         return result
       }
       if (navigationConfig.mode !== 'none') {
-        await rebuildNavigationForChange(relPath, result)
+        await rebuildNavigationForChange(relPath, ext, result, signature)
         await writeManifest(config.outDir, manifest)
         return result
       }
@@ -318,24 +307,6 @@ function mergeHooks(
       await next.onBuildComplete?.(ctx, result)
     },
   }
-}
-
-function collectAffectedFolders(relPath: string, maxDepth: number) {
-  const folder = resolveFolderKey(relPath)
-  const result = new Set<string>()
-  result.add(folder)
-  if (!folder) return result
-  const segments = folder.split('/')
-  const limit = Math.max(1, Math.floor(maxDepth))
-  for (let depth = 1; depth <= limit - 1; depth += 1) {
-    const slice = segments.slice(0, segments.length - depth)
-    if (slice.length === 0) {
-      result.add('')
-    } else {
-      result.add(slice.join('/'))
-    }
-  }
-  return result
 }
 
 function toContentFile(
