@@ -2,7 +2,7 @@ import fs from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
 
-import { createLogger } from 'logpot'
+import { disableLogger, getLogger, Logger } from 'logpot'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import { discoverContent } from '../discover/content'
@@ -18,10 +18,11 @@ async function withTempDir<T>(worker: (dir: string) => Promise<T>) {
 }
 
 describe('navigation', () => {
-  let logger: Awaited<ReturnType<typeof createLogger>> | undefined
+  let logger: Logger | undefined
 
   beforeAll(async () => {
-    logger = await createLogger()
+    disableLogger()
+    logger = getLogger()
   })
 
   afterAll(async () => {

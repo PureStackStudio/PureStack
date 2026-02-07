@@ -4,7 +4,7 @@ import http from 'node:http'
 import path from 'node:path'
 import { performance } from 'node:perf_hooks'
 
-import { createLogger, getLogger } from 'logpot'
+import { createLogger, getLogger, Logger } from 'logpot'
 
 import {
   createIncrementalBuilder,
@@ -307,7 +307,7 @@ type DevServerRequestHandlerInput = {
   getLiveReloadVersion: () => number
   backgroundRenderTasks: Map<string, Promise<void>>
   notifyPageRendered: (pathname: string) => void
-  log: ReturnType<typeof getLogger>
+  log: Logger
 }
 
 function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
@@ -335,12 +335,7 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
     const { pathname } = new URL(req.url, `http://${host}:${port}`)
 
     if (liveReload && pathname === LIVE_RELOAD_PATH) {
-      registerLiveReloadClient(
-        clients,
-        req,
-        res,
-        getLiveReloadVersion(),
-      )
+      registerLiveReloadClient(clients, req, res, getLiveReloadVersion())
       return
     }
 
@@ -384,7 +379,7 @@ type ResolveRequestFileInput = {
   pathname: string
   incrementalEnabled: boolean
   incremental: IncrementalBuilder
-  log: ReturnType<typeof getLogger>
+  log: Logger
 }
 
 async function resolveRequestFile(input: ResolveRequestFileInput) {
@@ -415,7 +410,7 @@ type ServeResolvedFileInput = {
   incremental: IncrementalBuilder
   backgroundRenderTasks: Map<string, Promise<void>>
   notifyPageRendered: (pathname: string) => void
-  log: ReturnType<typeof getLogger>
+  log: Logger
 }
 
 async function serveResolvedFile(input: ServeResolvedFileInput): Promise<void> {
@@ -467,7 +462,7 @@ type QueueBackgroundRenderInput = {
   incremental: IncrementalBuilder
   backgroundRenderTasks: Map<string, Promise<void>>
   notifyPageRendered: (pathname: string) => void
-  log: ReturnType<typeof getLogger>
+  log: Logger
 }
 
 function queueBackgroundRender(input: QueueBackgroundRenderInput) {
@@ -504,7 +499,7 @@ function serveStaticStream(
   res: http.ServerResponse,
   filePath: string,
   ext: string,
-  log: ReturnType<typeof getLogger>,
+  log: Logger,
 ) {
   const contentType = contentTypeForExt(ext)
   if (contentType) {
@@ -593,11 +588,7 @@ function registerLiveReloadClient(
     'X-Accel-Buffering': 'no',
   })
   writeSseEvent(res, 'ping', 'ready')
-  writeSseEvent(
-    res,
-    'state',
-    JSON.stringify({ version, reason: 'connect' }),
-  )
+  writeSseEvent(res, 'state', JSON.stringify({ version, reason: 'connect' }))
   pruneLiveReloadClients(clients)
   if (clients.size >= LIVE_RELOAD_MAX_CLIENTS) {
     closeOldestLiveReloadClients(
@@ -622,20 +613,12 @@ function registerLiveReloadClient(
   })
 }
 
-function writeSseEvent(
-  res: http.ServerResponse,
-  event: string,
-  data: string,
-) {
+function writeSseEvent(res: http.ServerResponse, event: string, data: string) {
   res.write(`event: ${event}\n`)
   res.write(`data: ${data}\n\n`)
 }
 
-function broadcast(
-  clients: LiveReloadClients,
-  event: string,
-  data: string,
-) {
+function broadcast(clients: LiveReloadClients, event: string, data: string) {
   for (const client of clients.keys()) {
     if (!isLiveReloadClientAlive(client)) {
       clients.delete(client)
