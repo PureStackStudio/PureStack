@@ -453,13 +453,9 @@ class MiniElement extends MiniNode {
   }
 
   matches(selector: string) {
-    const selectors = splitSelectorList(selector)
-    for (const sel of selectors) {
-      const chain = parseSelectorChain(sel)
-      if (chain.length === 1 && matchesSelectorPart(this, chain[0].part)) {
-        return true
-      }
-      if (matchesSelectorChain(this, chain)) return true
+    const compiledSelectors = getCompiledSelectors(selector)
+    for (const compiled of compiledSelectors) {
+      if (matchesCompiledSelector(this, compiled)) return true
     }
     return false
   }
@@ -706,12 +702,14 @@ function insertNode(
     return node
   }
 
-  let cursor: MiniNode | null = parent
-  while (cursor) {
-    if (cursor === node) {
-      throw new Error('Cannot insert an ancestor into its descendant')
+  if (node.childNodes.length > 0) {
+    let cursor: MiniNode | null = parent
+    while (cursor) {
+      if (cursor === node) {
+        throw new Error('Cannot insert an ancestor into its descendant')
+      }
+      cursor = cursor.parentNode
     }
-    cursor = cursor.parentNode
   }
 
   if (node.parentNode) {
@@ -981,6 +979,113 @@ type SelectorStep = {
   combinatorToPrev: ' ' | '>' | null
 }
 
+type FastSelector =
+  | { kind: 'any' }
+  | { kind: 'tag'; tag: string }
+  | { kind: 'attr'; name: string; value?: string }
+  | { kind: 'tagAttr'; tag: string; name: string; value?: string }
+
+type CompiledSelector = {
+  chain: SelectorStep[]
+  fast: FastSelector | null
+}
+
+const selectorListCache = new Map<string, CompiledSelector[]>()
+
+function getCompiledSelectors(selector: string) {
+  const key = selector.trim()
+  const cached = selectorListCache.get(key)
+  if (cached) return cached
+  const compiled = splitSelectorList(key)
+    .map((sel) => {
+      const chain = parseSelectorChain(sel)
+      return {
+        chain,
+        fast: toFastSelector(chain),
+      }
+    })
+    .filter((entry) => entry.chain.length > 0)
+  selectorListCache.set(key, compiled)
+  return compiled
+}
+
+function toFastSelector(chain: SelectorStep[]): FastSelector | null {
+  if (chain.length !== 1) return null
+  if (chain[0].combinatorToPrev !== null) return null
+  const part = chain[0].part
+  if (part.notParts.length > 0) return null
+  if (part.id) return null
+  if (part.classes.length > 0) return null
+  if (part.attrs.length > 1) return null
+
+  if (part.attrs.length === 0) {
+    if (part.tag === '*') return { kind: 'any' }
+    if (part.tag) return { kind: 'tag', tag: part.tag }
+    return null
+  }
+
+  const attr = part.attrs[0]
+  if (part.tag && part.tag !== '*') {
+    return {
+      kind: 'tagAttr',
+      tag: part.tag,
+      name: attr.name,
+      value: attr.value,
+    }
+  }
+  return {
+    kind: 'attr',
+    name: attr.name,
+    value: attr.value,
+  }
+}
+
+function matchesFastSelector(el: MiniElement, fast: FastSelector) {
+  if (fast.kind === 'any') return true
+  if (fast.kind === 'tag') return el.tagName.toLowerCase() === fast.tag
+  if (fast.kind === 'attr') {
+    if (!el.hasAttribute(fast.name)) return false
+    if (fast.value === undefined) return true
+    return el.getAttribute(fast.name) === fast.value
+  }
+  if (el.tagName.toLowerCase() !== fast.tag) return false
+  if (!el.hasAttribute(fast.name)) return false
+  if (fast.value === undefined) return true
+  return el.getAttribute(fast.name) === fast.value
+}
+
+function matchesCompiledSelector(el: MiniElement, compiled: CompiledSelector) {
+  if (compiled.fast) return matchesFastSelector(el, compiled.fast)
+  return matchesSelectorChain(el, compiled.chain)
+}
+
+function findFirstMatchingElement(
+  root: MiniNode,
+  match: (el: MiniElement) => boolean,
+) {
+  const stack: MiniNode[] = []
+  const pushChildren = (node: MiniNode) => {
+    for (let i = node.childNodes.length - 1; i >= 0; i -= 1) {
+      stack.push(node.childNodes[i])
+    }
+  }
+  if (root instanceof MiniDocument || root instanceof MiniDocumentFragment) {
+    pushChildren(root)
+  } else if (root instanceof MiniElement) {
+    pushChildren(root)
+  }
+
+  while (stack.length > 0) {
+    const node = stack.pop()
+    if (!(node instanceof MiniElement)) continue
+    if (match(node)) return node
+    if (!(node instanceof MiniHTMLTemplateElement)) {
+      pushChildren(node)
+    }
+  }
+  return null
+}
+
 function querySelectorFrom(
   root: MiniNode,
   selector: string,
@@ -996,8 +1101,12 @@ function querySelectorFrom(
   selector: string,
   firstOnly: boolean,
 ): MiniElement | MiniElement[] | null {
-  const results = querySelectorAllFrom(root, selector, false)
-  return firstOnly ? results[0] ?? null : results
+  if (!firstOnly) return querySelectorAllFrom(root, selector, false)
+  const compiledSelectors = getCompiledSelectors(selector)
+  if (compiledSelectors.length === 0) return null
+  return findFirstMatchingElement(root, (el) =>
+    compiledSelectors.some((compiled) => matchesCompiledSelector(el, compiled)),
+  )
 }
 
 function querySelectorAllFrom(
@@ -1006,25 +1115,24 @@ function querySelectorAllFrom(
   filterTemplates = true,
 ) {
   const rawSelector = selector.trim()
-  const selectors = splitSelectorList(selector)
+  const compiledSelectors = getCompiledSelectors(rawSelector)
+  if (compiledSelectors.length === 0) return []
+  const nodes = collectElements(root)
   const results: MiniElement[] = []
-  for (const sel of selectors) {
-    const chain = parseSelectorChain(sel)
-    if (chain.length === 0) continue
-    const nodes = collectElements(root)
+  if (compiledSelectors.length === 1) {
+    const compiled = compiledSelectors[0]
     for (const el of nodes) {
-      if (matchesSelectorChain(el, chain)) results.push(el)
+      if (matchesCompiledSelector(el, compiled)) results.push(el)
+    }
+  } else {
+    for (const el of nodes) {
+      if (compiledSelectors.some((compiled) => matchesCompiledSelector(el, compiled))) {
+        results.push(el)
+      }
     }
   }
-  const unique: MiniElement[] = []
-  const seen = new Set<MiniElement>()
-  for (const el of results) {
-    if (seen.has(el)) continue
-    seen.add(el)
-    unique.push(el)
-  }
   if (filterTemplates && rawSelector === 'template') {
-    return unique.filter((el) => {
+    return results.filter((el) => {
       if (el.tagName.toLowerCase() !== 'template') return true
       if (el.hasAttribute('name')) return false
       const hasNamedSlot = el
@@ -1033,7 +1141,7 @@ function querySelectorAllFrom(
       return !hasNamedSlot
     })
   }
-  return unique
+  return results
 }
 
 function splitSelectorList(selector: string) {
