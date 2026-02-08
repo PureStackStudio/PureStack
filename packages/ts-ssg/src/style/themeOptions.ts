@@ -30,10 +30,22 @@ export interface ThemePanelColors {
   text: string
 }
 
+export interface ThemeCodeCopyStateColors {
+  background: string
+  border: string
+  text: string
+}
+
+export interface ThemeCodeCopyColors {
+  copied: ThemeCodeCopyStateColors
+  error: ThemeCodeCopyStateColors
+}
+
 export interface ThemePalette {
   app: ThemeAppColors
   surface: ThemeSurfaceColors
   panel: ThemePanelColors
+  codeCopy: ThemeCodeCopyColors
   nav: ThemeNavColors
   topBar: ThemeTopBarColors
   themeSwitcher: ThemeSwitcherColors
@@ -94,6 +106,18 @@ export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
         background: '#f6f7fb',
         border: '#e1e4ef',
         text: '#1f2937',
+      },
+      codeCopy: {
+        copied: {
+          background: '#e8f8ef',
+          border: '#7ecb9c',
+          text: '#0f6a3f',
+        },
+        error: {
+          background: '#fff0f0',
+          border: '#e0a1a1',
+          text: '#8b1d1d',
+        },
       },
       nav: {
         background: '#f6f7fb',
@@ -219,6 +243,18 @@ export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
         background: '#1b1f27',
         border: '#2a2f38',
         text: '#e7eaf3',
+      },
+      codeCopy: {
+        copied: {
+          background: '#0f3325',
+          border: '#2f8f63',
+          text: '#93f0bf',
+        },
+        error: {
+          background: '#3a1717',
+          border: '#9f4848',
+          text: '#ffb0b0',
+        },
       },
       nav: {
         background: '#1b1f27',
@@ -461,6 +497,16 @@ function mergePalette(base: ThemePalette, override?: Partial<ThemePalette>) {
     app: { ...base.app, ...(override.app ?? {}) },
     surface: { ...base.surface, ...(override.surface ?? {}) },
     panel: { ...base.panel, ...(override.panel ?? {}) },
+    codeCopy: {
+      copied: {
+        ...base.codeCopy.copied,
+        ...(override.codeCopy?.copied ?? {}),
+      },
+      error: {
+        ...base.codeCopy.error,
+        ...(override.codeCopy?.error ?? {}),
+      },
+    },
     nav: { ...base.nav, ...(override.nav ?? {}) },
     topBar: { ...base.topBar, ...(override.topBar ?? {}) },
     themeSwitcher: {
