@@ -2,6 +2,7 @@ import { createComponent, html } from 'regor'
 
 import { getSvgIcon } from '../../style/icons'
 import { styleBuilder } from '../../style/styles'
+import type { ThemeMode, ThemeOptions, ThemePalette } from '../../style/themeOptions'
 import { themes } from '../../style/themeOptions'
 
 export interface ThemePricingColors {
@@ -122,481 +123,345 @@ const pricingFeatureTemplate = html`<li class="pricing-feature">
 </li>`
 
 function registerPricingStyles() {
-  const options = themes.getOptions()
-  const palette = (theme: string) => themes.palette(theme)
+  themes.forEach((theme, palette, options) => {
+    applyPricingShellStyles(theme, palette, options)
+    applyPricingHeaderStyles(theme, palette)
+    applyPricingPlanStyles(theme, palette, options)
+    applyPricingFeatureStyles(theme, palette)
+    applyPricingFeaturedStyles(theme, palette, options)
+    applyPricingResponsiveStyles(theme)
+  })
+}
 
-  const basePricing = (theme: string) =>
-    styleBuilder
-      .select('.pricing', theme)
-      .position('relative')
-      .overflow('hidden')
-      .padding('28px')
-      .borderRadius(options.radii.lg)
-      .border(`1px solid ${palette(theme).pricing.border}`)
-      .background(palette(theme).pricing.background)
-      .boxShadow(options.shadows.soft)
-      .margin('0 0 32px')
-
-  basePricing('light')
-  basePricing('dark')
-
-  const basePricingGlow = (theme: string) =>
-    styleBuilder
-      .select('.pricing::before', theme)
-      .content('""')
-      .position('absolute')
-      .inset('0')
-      .opacity('0.4')
-      .background(palette(theme).pricing.glow)
-      .pointerEvents('none')
-
-  basePricingGlow('light')
-  basePricingGlow('dark')
-
-  const baseHeader = (theme: string) =>
-    styleBuilder
-      .select('.pricing__header', theme)
-      .position('relative')
-      .zIndex('1')
-      .display('grid')
-      .gap('6px')
-      .margin('0 0 20px')
-
-  baseHeader('light')
-  baseHeader('dark')
-
-  const baseEyebrow = (theme: string) =>
-    styleBuilder
-      .select('.pricing__eyebrow', theme)
-      .textTransform('uppercase')
-      .letterSpacing('0.18em')
-      .fontSize('11px')
-      .fontWeight('700')
-      .margin('0')
-
-  baseEyebrow('light').color(palette('light').pricing.eyebrow)
-  baseEyebrow('dark').color(palette('dark').pricing.eyebrow)
-
-  const baseTitle = (theme: string) =>
-    styleBuilder
-      .select('.pricing__title', theme)
-      .margin('0 !important')
-      .fontSize('clamp(24px, 3.2vw, 34px)')
-      .fontWeight('700')
-      .letterSpacing('-0.02em')
-
-  baseTitle('light').color(palette('light').pricing.title)
-  baseTitle('dark').color(palette('dark').pricing.title)
-
-  const baseSubtitle = (theme: string) =>
-    styleBuilder
-      .select('.pricing__subtitle', theme)
-      .margin('0')
-      .fontSize('14px')
-      .lineHeight('1.6')
-      .maxWidth('680px')
-
-  baseSubtitle('light').color(palette('light').pricing.subtitle)
-  baseSubtitle('dark').color(palette('dark').pricing.subtitle)
-
-  const baseGrid = (theme: string) =>
-    styleBuilder
-      .select('.pricing__grid', theme)
-      .position('relative')
-      .zIndex('1')
-      .display('grid')
-      .gridTemplateColumns('1fr')
-      .gap('16px')
-      .alignItems('stretch')
-
-  baseGrid('light')
-  baseGrid('dark')
-
-  const baseFootnote = (theme: string) =>
-    styleBuilder
-      .select('.pricing__footnote', theme)
-      .position('relative')
-      .zIndex('1')
-      .margin('5px 0 0 !important;')
-      .fontSize('12px')
-
-  baseFootnote('light').color(palette('light').pricing.footnote)
-  baseFootnote('dark').color(palette('dark').pricing.footnote)
-
-  const basePlan = (theme: string) =>
-    styleBuilder
-      .select('.pricing-plan', theme)
-      .display('flex')
-      .flexDirection('column')
-      .gap('12px')
-      .padding('18px')
-      .borderRadius(options.radii.md)
-      .border(`1px solid ${palette(theme).pricing.planBorder}`)
-      .background(palette(theme).pricing.planBackground)
-      .boxShadow(palette(theme).pricing.planShadow)
-      .height('100%')
-
-  basePlan('light')
-  basePlan('dark')
-
-  const basePlanHead = (theme: string) =>
-    styleBuilder.select('.pricing-plan__head', theme).display('grid').gap('6px')
-
-  basePlanHead('light')
-  basePlanHead('dark')
-
-  const baseMeta = (theme: string) =>
-    styleBuilder
-      .select('.pricing-plan__meta', theme)
-      .display('flex')
-      .alignItems('center')
-      .justifyContent('space-between')
-      .gap('12px')
-
-  baseMeta('light')
-  baseMeta('dark')
-
-  const basePlanIcon = (theme: string) =>
-    styleBuilder
-      .select('.pricing-plan__icon', theme)
-      .width('44px')
-      .height('44px')
-      .display('inline-flex')
-      .alignItems('center')
-      .justifyContent('center')
-      .borderRadius('12px')
-      .background(palette(theme).pricing.planIconGradient)
-      .border(`1px solid ${palette(theme).pricing.planIconRing}`)
-      .color(palette(theme).pricing.planIconColor)
-      .boxShadow('0 10px 20px rgba(35, 56, 135, 0.25)')
-      .marginBottom('4px')
-
-  basePlanIcon('light')
-  basePlanIcon('dark')
+function applyPricingShellStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
+  styleBuilder
+    .select('.pricing', theme)
+    .position('relative')
+    .overflow('hidden')
+    .padding('28px')
+    .borderRadius(options.radii.lg)
+    .border(`1px solid ${palette.pricing.border}`)
+    .background(palette.pricing.background)
+    .boxShadow(options.shadows.soft)
+    .margin('0 0 32px')
 
   styleBuilder
-    .select('.pricing-plan__icon', 'light')
-    .set('background-color', palette('light').pricing.planIconBackground)
-  styleBuilder
-    .select('.pricing-plan__icon', 'dark')
-    .set('background-color', palette('dark').pricing.planIconBackground)
-
-  const basePlanIconSvg = (theme: string) =>
-    styleBuilder
-      .select('.pricing-plan__icon svg', theme)
-      .width('24px')
-      .height('24px')
-      .display('block')
-      .stroke('currentColor')
-      .fill('none')
-      .set('stroke-linecap', 'round')
-      .set('stroke-linejoin', 'round')
-      .set('stroke-width', '2.2')
-
-  basePlanIconSvg('light')
-  basePlanIconSvg('dark')
-
-  const baseTitleRow = (theme: string) =>
-    styleBuilder
-      .select('.pricing-plan__title-row', theme)
-      .display('flex')
-      .flexWrap('wrap')
-      .gap('10px')
-      .alignItems('center')
-      .justifyContent('flex-start')
-
-  baseTitleRow('light')
-  baseTitleRow('dark')
-
-  const basePlanTitle = (theme: string) =>
-    styleBuilder
-      .select('.pricing-plan__title', theme)
-      .margin('0')
-      .fontSize('18px')
-      .fontWeight('700')
-
-  basePlanTitle('light').color(palette('light').pricing.planTitle)
-  basePlanTitle('dark').color(palette('dark').pricing.planTitle)
-
-  const baseBadge = (theme: string) =>
-    styleBuilder
-      .select('.pricing-plan__badge', theme)
-      .padding('4px 10px')
-      .borderRadius(options.radii.pill)
-      .fontSize('11px')
-      .fontWeight('700')
-      .textTransform('uppercase')
-      .letterSpacing('0.1em')
-
-  baseBadge('light')
-    .background(palette('light').pricing.planBadgeBackground)
-    .color(palette('light').pricing.planBadgeText)
-  baseBadge('dark')
-    .background(palette('dark').pricing.planBadgeBackground)
-    .color(palette('dark').pricing.planBadgeText)
-
-  const baseSummary = (theme: string) =>
-    styleBuilder
-      .select('.pricing-plan__summary', theme)
-      .margin('0')
-      .fontSize('13px')
-      .lineHeight('1.5')
-
-  baseSummary('light').color(palette('light').pricing.planSummary)
-  baseSummary('dark').color(palette('dark').pricing.planSummary)
-
-  const basePrice = (theme: string) =>
-    styleBuilder
-      .select('.pricing-plan__price', theme)
-      .display('flex')
-      .gap('10px')
-      .alignItems('baseline')
-      .set('min-height', '38px')
-
-  basePrice('light')
-  basePrice('dark')
-
-  const baseAmount = (theme: string) =>
-    styleBuilder
-      .select('.pricing-plan__amount', theme)
-      .fontSize('24px')
-      .fontWeight('700')
-      .letterSpacing('-0.02em')
-
-  baseAmount('light').color(palette('light').pricing.planPrice)
-  baseAmount('dark').color(palette('dark').pricing.planPrice)
-
-  const basePeriod = (theme: string) =>
-    styleBuilder
-      .select('.pricing-plan__period', theme)
-      .fontSize('11px')
-      .textTransform('uppercase')
-      .letterSpacing('0.12em')
-      .fontWeight('600')
-
-  basePeriod('light').color(palette('light').pricing.planPeriod)
-  basePeriod('dark').color(palette('dark').pricing.planPeriod)
-
-  const baseCta = (theme: string) =>
-    styleBuilder.select('.pricing-plan__cta', theme).margin('0')
-
-  baseCta('light')
-  baseCta('dark')
-
-  const baseCtaLink = (theme: string) =>
-    styleBuilder
-      .select('.pricing-plan__cta-link', theme)
-      .display('inline-flex')
-      .alignItems('center')
-      .justifyContent('center')
-      .gap('8px')
-      .padding('9px 14px')
-      .borderRadius(options.radii.pill)
-      .fontWeight('600')
-      .fontSize('13px')
-      .textDecoration('none')
-      .border(`1px solid ${palette(theme).pricing.planCtaBorder}`)
-      .background(palette(theme).pricing.planCtaBackground)
-      .color(palette(theme).pricing.planCtaText)
-      .boxShadow(palette(theme).pricing.planCtaShadow)
-      .transition(
-        'transform 180ms ease, box-shadow 180ms ease, background 180ms ease',
-      )
-
-  baseCtaLink('light')
-  baseCtaLink('dark')
+    .select('.pricing::before', theme)
+    .content('""')
+    .position('absolute')
+    .inset('0')
+    .opacity('0.4')
+    .background(palette.pricing.glow)
+    .pointerEvents('none')
 
   styleBuilder
-    .select('.pricing-plan__cta-link:hover', 'light')
-    .background(palette('light').pricing.planCtaHover)
+    .select('.pricing__grid', theme)
+    .position('relative')
+    .zIndex('1')
+    .display('grid')
+    .gridTemplateColumns('1fr')
+    .gap('16px')
+    .alignItems('stretch')
+}
+
+function applyPricingHeaderStyles(theme: ThemeMode, palette: ThemePalette) {
+  styleBuilder
+    .select('.pricing__header', theme)
+    .position('relative')
+    .zIndex('1')
+    .display('grid')
+    .gap('6px')
+    .margin('0 0 20px')
+
+  styleBuilder
+    .select('.pricing__eyebrow', theme)
+    .textTransform('uppercase')
+    .letterSpacing('0.18em')
+    .fontSize('11px')
+    .fontWeight('700')
+    .margin('0')
+    .color(palette.pricing.eyebrow)
+
+  styleBuilder
+    .select('.pricing__title', theme)
+    .margin('0 !important')
+    .fontSize('clamp(24px, 3.2vw, 34px)')
+    .fontWeight('700')
+    .letterSpacing('-0.02em')
+    .color(palette.pricing.title)
+
+  styleBuilder
+    .select('.pricing__subtitle', theme)
+    .margin('0')
+    .fontSize('14px')
+    .lineHeight('1.6')
+    .maxWidth('680px')
+    .color(palette.pricing.subtitle)
+
+  styleBuilder
+    .select('.pricing__footnote', theme)
+    .position('relative')
+    .zIndex('1')
+    .margin('5px 0 0 !important;')
+    .fontSize('12px')
+    .color(palette.pricing.footnote)
+}
+
+function applyPricingPlanStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
+  styleBuilder
+    .select('.pricing-plan', theme)
+    .display('flex')
+    .flexDirection('column')
+    .gap('12px')
+    .padding('18px')
+    .borderRadius(options.radii.md)
+    .border(`1px solid ${palette.pricing.planBorder}`)
+    .background(palette.pricing.planBackground)
+    .boxShadow(palette.pricing.planShadow)
+    .height('100%')
+
+  styleBuilder.select('.pricing-plan__head', theme).display('grid').gap('6px')
+
+  styleBuilder
+    .select('.pricing-plan__meta', theme)
+    .display('flex')
+    .alignItems('center')
+    .justifyContent('space-between')
+    .gap('12px')
+
+  styleBuilder
+    .select('.pricing-plan__icon', theme)
+    .width('44px')
+    .height('44px')
+    .display('inline-flex')
+    .alignItems('center')
+    .justifyContent('center')
+    .borderRadius('12px')
+    .background(palette.pricing.planIconGradient)
+    .set('background-color', palette.pricing.planIconBackground)
+    .border(`1px solid ${palette.pricing.planIconRing}`)
+    .color(palette.pricing.planIconColor)
+    .boxShadow('0 10px 20px rgba(35, 56, 135, 0.25)')
+    .marginBottom('4px')
+
+  styleBuilder
+    .select('.pricing-plan__icon svg', theme)
+    .width('24px')
+    .height('24px')
+    .display('block')
+    .stroke('currentColor')
+    .fill('none')
+    .set('stroke-linecap', 'round')
+    .set('stroke-linejoin', 'round')
+    .set('stroke-width', '2.2')
+
+  styleBuilder
+    .select('.pricing-plan__title-row', theme)
+    .display('flex')
+    .flexWrap('wrap')
+    .gap('10px')
+    .alignItems('center')
+    .justifyContent('flex-start')
+
+  styleBuilder
+    .select('.pricing-plan__title', theme)
+    .margin('0')
+    .fontSize('18px')
+    .fontWeight('700')
+    .color(palette.pricing.planTitle)
+
+  styleBuilder
+    .select('.pricing-plan__badge', theme)
+    .padding('4px 10px')
+    .borderRadius(options.radii.pill)
+    .fontSize('11px')
+    .fontWeight('700')
+    .textTransform('uppercase')
+    .letterSpacing('0.1em')
+    .background(palette.pricing.planBadgeBackground)
+    .color(palette.pricing.planBadgeText)
+
+  styleBuilder
+    .select('.pricing-plan__summary', theme)
+    .margin('0')
+    .fontSize('13px')
+    .lineHeight('1.5')
+    .color(palette.pricing.planSummary)
+
+  styleBuilder
+    .select('.pricing-plan__price', theme)
+    .display('flex')
+    .gap('10px')
+    .alignItems('baseline')
+    .set('min-height', '38px')
+
+  styleBuilder
+    .select('.pricing-plan__amount', theme)
+    .fontSize('24px')
+    .fontWeight('700')
+    .letterSpacing('-0.02em')
+    .color(palette.pricing.planPrice)
+
+  styleBuilder
+    .select('.pricing-plan__period', theme)
+    .fontSize('11px')
+    .textTransform('uppercase')
+    .letterSpacing('0.12em')
+    .fontWeight('600')
+    .color(palette.pricing.planPeriod)
+
+  styleBuilder.select('.pricing-plan__cta', theme).margin('0')
+
+  styleBuilder
+    .select('.pricing-plan__cta-link', theme)
+    .display('inline-flex')
+    .alignItems('center')
+    .justifyContent('center')
+    .gap('8px')
+    .padding('9px 14px')
+    .borderRadius(options.radii.pill)
+    .fontWeight('600')
+    .fontSize('13px')
+    .textDecoration('none')
+    .border(`1px solid ${palette.pricing.planCtaBorder}`)
+    .background(palette.pricing.planCtaBackground)
+    .color(palette.pricing.planCtaText)
+    .boxShadow(palette.pricing.planCtaShadow)
+    .transition(
+      'transform 180ms ease, box-shadow 180ms ease, background 180ms ease',
+    )
+
+  styleBuilder
+    .select('.pricing-plan__cta-link:hover', theme)
+    .background(palette.pricing.planCtaHover)
     .transform('translateY(-1px)')
 
   styleBuilder
-    .select('.pricing-plan__cta-link:hover', 'dark')
-    .background(palette('dark').pricing.planCtaHover)
-    .transform('translateY(-1px)')
-
-  styleBuilder
-    .select('.pricing-plan__cta-link:focus-visible', 'light')
-    .outline(`2px solid ${palette('light').pricing.focusRing}`)
+    .select('.pricing-plan__cta-link:focus-visible', theme)
+    .outline(`2px solid ${palette.pricing.focusRing}`)
     .outlineOffset('2px')
 
   styleBuilder
-    .select('.pricing-plan__cta-link:focus-visible', 'dark')
-    .outline(`2px solid ${palette('dark').pricing.focusRing}`)
-    .outlineOffset('2px')
+    .select('.pricing-plan__note', theme)
+    .margin('0')
+    .fontSize('11px')
+    .lineHeight('1.5')
+    .color(palette.pricing.planNote)
+}
 
-  const baseFeatures = (theme: string) =>
-    styleBuilder
-      .select('.pricing-plan__features', theme)
-      .listStyle('none')
-      .padding('0')
-      .margin('0')
-      .display('block')
-      .set('column-gap', '18px')
-      .set('column-count', '1')
-
-  baseFeatures('light')
-  baseFeatures('dark')
-
-  const baseFeatureItem = (theme: string) =>
-    styleBuilder
-      .select('.pricing-feature', theme)
-      .set('break-inside', 'avoid')
-      .display('grid')
-      .gridTemplateColumns('18px minmax(0, 1fr)')
-      .gap('8px')
-      .alignItems('start')
-      .fontSize('13px')
-      .lineHeight('1.5')
-      .marginBottom('8px')
-
-  baseFeatureItem('light').color(palette('light').pricing.planFeature)
-  baseFeatureItem('dark').color(palette('dark').pricing.planFeature)
-
-  const baseFeatureIcon = (theme: string) =>
-    styleBuilder
-      .select('.pricing-feature__icon', theme)
-      .width('22px')
-      .height('22px')
-      .display('inline-flex')
-      .alignItems('center')
-      .justifyContent('center')
-      .borderRadius('7px')
-      .background(palette(theme).pricing.planFeatureIconGradient)
-      .border(`1px solid ${palette(theme).pricing.planFeatureIconRing}`)
-      .color(palette(theme).pricing.planFeatureIconColor)
-      .boxShadow('0 8px 16px rgba(39, 61, 146, 0.2)')
-      .marginTop('0')
-
-  baseFeatureIcon('light')
-  baseFeatureIcon('dark')
+function applyPricingFeatureStyles(theme: ThemeMode, palette: ThemePalette) {
+  styleBuilder
+    .select('.pricing-plan__features', theme)
+    .listStyle('none')
+    .padding('0')
+    .margin('0')
+    .display('block')
+    .set('column-gap', '18px')
+    .set('column-count', '1')
 
   styleBuilder
-    .select('.pricing-feature__icon', 'light')
-    .set('background-color', palette('light').pricing.planFeatureIconBackground)
-  styleBuilder
-    .select('.pricing-feature__icon', 'dark')
-    .set('background-color', palette('dark').pricing.planFeatureIconBackground)
-
-  const baseFeatureIconSvg = (theme: string) =>
-    styleBuilder
-      .select('.pricing-feature__icon svg', theme)
-      .width('14px')
-      .height('14px')
-      .display('block')
-      .stroke('currentColor')
-      .fill('none')
-      .set('stroke-linecap', 'round')
-      .set('stroke-linejoin', 'round')
-      .set('stroke-width', '2.2')
-
-  baseFeatureIconSvg('light')
-  baseFeatureIconSvg('dark')
-
-  const baseFeatureText = (theme: string) =>
-    styleBuilder.select('.pricing-feature__text', theme).display('block')
-
-  baseFeatureText('light')
-  baseFeatureText('dark')
-
-  const baseNote = (theme: string) =>
-    styleBuilder
-      .select('.pricing-plan__note', theme)
-      .margin('0')
-      .fontSize('11px')
-      .lineHeight('1.5')
-
-  baseNote('light').color(palette('light').pricing.planNote)
-  baseNote('dark').color(palette('dark').pricing.planNote)
-
-  const featuredPlan = (theme: string) =>
-    styleBuilder
-      .select('.pricing-plan--featured', theme)
-      .background(palette(theme).pricing.planHighlightBackground)
-      .border(`1px solid ${palette(theme).pricing.planHighlightBorder}`)
-      .boxShadow(palette(theme).pricing.planHighlightShadow)
-
-  featuredPlan('light')
-  featuredPlan('dark')
-
-  const featuredBefore = (theme: string) =>
-    styleBuilder
-      .select('.pricing-plan--featured::before', theme)
-      .content('""')
-      .position('absolute')
-      .inset('0')
-      .borderRadius(options.radii.md)
-      .border(`1px solid ${palette(theme).pricing.planHighlightBorder}`)
-      .opacity('0.5')
-      .pointerEvents('none')
-
-  featuredBefore('light')
-  featuredBefore('dark')
+    .select('.pricing-feature', theme)
+    .set('break-inside', 'avoid')
+    .display('grid')
+    .gridTemplateColumns('18px minmax(0, 1fr)')
+    .gap('8px')
+    .alignItems('start')
+    .fontSize('13px')
+    .lineHeight('1.5')
+    .marginBottom('8px')
+    .color(palette.pricing.planFeature)
 
   styleBuilder
-    .select('.pricing-plan--featured', 'light')
+    .select('.pricing-feature__icon', theme)
+    .width('22px')
+    .height('22px')
+    .display('inline-flex')
+    .alignItems('center')
+    .justifyContent('center')
+    .borderRadius('7px')
+    .background(palette.pricing.planFeatureIconGradient)
+    .set('background-color', palette.pricing.planFeatureIconBackground)
+    .border(`1px solid ${palette.pricing.planFeatureIconRing}`)
+    .color(palette.pricing.planFeatureIconColor)
+    .boxShadow('0 8px 16px rgba(39, 61, 146, 0.2)')
+    .marginTop('0')
+
+  styleBuilder
+    .select('.pricing-feature__icon svg', theme)
+    .width('14px')
+    .height('14px')
+    .display('block')
+    .stroke('currentColor')
+    .fill('none')
+    .set('stroke-linecap', 'round')
+    .set('stroke-linejoin', 'round')
+    .set('stroke-width', '2.2')
+
+  styleBuilder.select('.pricing-feature__text', theme).display('block')
+}
+
+function applyPricingFeaturedStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
+  styleBuilder
+    .select('.pricing-plan--featured', theme)
     .position('relative')
     .transform('translateY(-4px)')
+    .background(palette.pricing.planHighlightBackground)
+    .border(`1px solid ${palette.pricing.planHighlightBorder}`)
+    .boxShadow(palette.pricing.planHighlightShadow)
 
   styleBuilder
-    .select('.pricing-plan--featured', 'dark')
-    .position('relative')
-    .transform('translateY(-4px)')
-
-  const featuredCta = (theme: string) =>
-    styleBuilder
-      .select('.pricing-plan--featured .pricing-plan__cta-link', theme)
-      .background(palette(theme).pricing.planHighlightCtaBackground)
-      .color(palette(theme).pricing.planHighlightCtaText)
-      .borderColor('transparent')
-
-  featuredCta('light')
-  featuredCta('dark')
+    .select('.pricing-plan--featured::before', theme)
+    .content('""')
+    .position('absolute')
+    .inset('0')
+    .borderRadius(options.radii.md)
+    .border(`1px solid ${palette.pricing.planHighlightBorder}`)
+    .opacity('0.5')
+    .pointerEvents('none')
 
   styleBuilder
-    .select('.pricing-plan--featured .pricing-plan__cta-link:hover', 'light')
-    .background(palette('light').pricing.planHighlightCtaHover)
+    .select('.pricing-plan--featured .pricing-plan__cta-link', theme)
+    .background(palette.pricing.planHighlightCtaBackground)
+    .color(palette.pricing.planHighlightCtaText)
+    .borderColor('transparent')
 
   styleBuilder
-    .select('.pricing-plan--featured .pricing-plan__cta-link:hover', 'dark')
-    .background(palette('dark').pricing.planHighlightCtaHover)
+    .select('.pricing-plan--featured .pricing-plan__cta-link:hover', theme)
+    .background(palette.pricing.planHighlightCtaHover)
+}
 
-  const mediumGrid = (theme: string) =>
-    styleBuilder
-      .select('.pricing__grid', theme)
-      .media('min-width: 900px')
-      .gridTemplateColumns('repeat(2, minmax(0, 1fr))')
+function applyPricingResponsiveStyles(theme: ThemeMode) {
+  styleBuilder
+    .select('.pricing__grid', theme)
+    .media('min-width: 900px')
+    .gridTemplateColumns('repeat(2, minmax(0, 1fr))')
 
-  mediumGrid('light')
-  mediumGrid('dark')
+  styleBuilder
+    .select('.pricing__grid', theme)
+    .media('min-width: 1400px')
+    .gridTemplateColumns('repeat(4, minmax(0, 1fr))')
 
-  const wideGrid = (theme: string) =>
-    styleBuilder
-      .select('.pricing__grid', theme)
-      .media('min-width: 1400px')
-      .gridTemplateColumns('repeat(4, minmax(0, 1fr))')
+  styleBuilder
+    .select('.pricing', theme)
+    .media('max-width: 720px')
+    .padding('22px')
 
-  wideGrid('light')
-  wideGrid('dark')
-
-  const mobilePricing = (theme: string) =>
-    styleBuilder
-      .select('.pricing', theme)
-      .media('max-width: 720px')
-      .padding('22px')
-
-  mobilePricing('light')
-  mobilePricing('dark')
-
-  const mobileFeatured = (theme: string) =>
-    styleBuilder
-      .select('.pricing-plan--featured', theme)
-      .media('max-width: 720px')
-      .transform('translateY(0)')
-
-  mobileFeatured('light')
-  mobileFeatured('dark')
+  styleBuilder
+    .select('.pricing-plan--featured', theme)
+    .media('max-width: 720px')
+    .transform('translateY(0)')
 }
 
 function createPricingTableComponent() {

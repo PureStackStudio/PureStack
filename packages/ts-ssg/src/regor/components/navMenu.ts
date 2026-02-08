@@ -154,10 +154,7 @@ function buildNavState(
 }
 
 function registerNavStyles() {
-  const options = themes.getOptions()
-  const palette = (theme: string) => themes.palette(theme)
-
-  const baseMenu = (theme: string) =>
+  themes.forEach((theme, palette, options) => {
     styleBuilder
       .select('.nav__menu', theme)
       .display('block')
@@ -167,17 +164,10 @@ function registerNavStyles() {
       .fontSize(options.typography.baseSize)
       .lineHeight(options.typography.baseLineHeight)
       .maxHeight('100%')
+      .background(palette.nav.background)
+      .borderColor(palette.nav.border)
+      .color(palette.panel.text)
 
-  baseMenu('light')
-    .background(palette('light').nav.background)
-    .borderColor(palette('light').nav.border)
-    .color(palette('light').panel.text)
-  baseMenu('dark')
-    .background(palette('dark').nav.background)
-    .borderColor(palette('dark').nav.border)
-    .color(palette('dark').panel.text)
-
-  const baseList = (theme: string) =>
     styleBuilder
       .select('.nav__list', theme)
       .listStyle('none')
@@ -186,26 +176,15 @@ function registerNavStyles() {
       .display('grid')
       .gap('4px')
 
-  baseList('light')
-  baseList('dark')
-
-  const nestedList = (theme: string) =>
     styleBuilder
       .select('.nav__list .nav__list', theme)
       .marginTop('6px')
       .paddingLeft('12px')
       .borderLeft('1px solid transparent')
+      .borderLeftColor(palette.nav.nestedBorder)
 
-  nestedList('light').borderLeftColor(palette('light').nav.nestedBorder)
-  nestedList('dark').borderLeftColor(palette('dark').nav.nestedBorder)
-
-  const baseItem = (theme: string) =>
     styleBuilder.select('.nav__item', theme).display('grid').gap('4px')
 
-  baseItem('light')
-  baseItem('dark')
-
-  const baseLink = (theme: string) =>
     styleBuilder
       .select('.nav__link', theme)
       .display('block')
@@ -214,57 +193,33 @@ function registerNavStyles() {
       .textDecoration('none')
       .fontWeight('600')
       .transition('background 160ms ease, color 160ms ease')
+      .color(palette.nav.text)
 
-  baseLink('light').color(palette('light').nav.text)
-  baseLink('dark').color(palette('dark').nav.text)
+    styleBuilder
+      .select('.nav__link:hover', theme)
+      .background(palette.nav.hoverBackground)
 
-  styleBuilder
-    .select('.nav__link:hover', 'light')
-    .background(palette('light').nav.hoverBackground)
-  styleBuilder
-    .select('.nav__link:hover', 'dark')
-    .background(palette('dark').nav.hoverBackground)
+    styleBuilder
+      .select('.nav__link--active', theme)
+      .background(palette.nav.activeBackground)
+      .color(palette.nav.activeText)
 
-  styleBuilder
-    .select('.nav__link--active', 'light')
-    .background(palette('light').nav.activeBackground)
-    .color(palette('light').nav.activeText)
-  styleBuilder
-    .select('.nav__link--active', 'dark')
-    .background(palette('dark').nav.activeBackground)
-    .color(palette('dark').nav.activeText)
+    styleBuilder
+      .select('.nav__link:focus-visible', theme)
+      .outline(`2px solid ${palette.nav.focusRing}`)
+      .outlineOffset('2px')
 
-  styleBuilder
-    .select('.nav__link:focus-visible', 'light')
-    .outline(`2px solid ${palette('light').nav.focusRing}`)
-    .outlineOffset('2px')
-  styleBuilder
-    .select('.nav__link:focus-visible', 'dark')
-    .outline(`2px solid ${palette('dark').nav.focusRing}`)
-    .outlineOffset('2px')
-
-  const baseText = (theme: string) =>
     styleBuilder
       .select('.nav__text', theme)
       .display('block')
       .padding('8px 12px')
       .borderRadius(options.radii.md)
       .fontWeight('600')
+      .color(palette.nav.textMuted)
 
-  baseText('light').color(palette('light').nav.textMuted)
-  baseText('dark').color(palette('dark').nav.textMuted)
-
-  const baseLeaf = (theme: string) =>
     styleBuilder.select('.nav__leaf', theme).display('block')
-  baseLeaf('light')
-  baseLeaf('dark')
-
-  const baseGroup = (theme: string) =>
     styleBuilder.select('.nav__group', theme).display('grid')
-  baseGroup('light')
-  baseGroup('dark')
 
-  const baseSummary = (theme: string) =>
     styleBuilder
       .select('.nav__summary', theme)
       .display('flex')
@@ -275,53 +230,30 @@ function registerNavStyles() {
       .padding('4px')
       .borderRadius(options.radii.md)
 
-  baseSummary('light')
-  baseSummary('dark')
+    styleBuilder
+      .select('.nav__summary:hover', theme)
+      .background(palette.nav.summaryHoverBackground)
 
-  styleBuilder
-    .select('.nav__summary:hover', 'light')
-    .background(palette('light').nav.summaryHoverBackground)
-  styleBuilder
-    .select('.nav__summary:hover', 'dark')
-    .background(palette('dark').nav.summaryHoverBackground)
+    styleBuilder
+      .select('.nav__summary:focus-visible', theme)
+      .outline(`2px solid ${palette.nav.focusRing}`)
+      .outlineOffset('2px')
 
-  styleBuilder
-    .select('.nav__summary:focus-visible', 'light')
-    .outline(`2px solid ${palette('light').nav.focusRing}`)
-    .outlineOffset('2px')
-  styleBuilder
-    .select('.nav__summary:focus-visible', 'dark')
-    .outline(`2px solid ${palette('dark').nav.focusRing}`)
-    .outlineOffset('2px')
+    styleBuilder
+      .select('.nav__summary--active', theme)
+      .background(palette.nav.activeBackground)
 
-  styleBuilder
-    .select('.nav__summary--active', 'light')
-    .background(palette('light').nav.activeBackground)
-  styleBuilder
-    .select('.nav__summary--active', 'dark')
-    .background(palette('dark').nav.activeBackground)
+    styleBuilder
+      .select('.nav__summary--active .nav__text', theme)
+      .color(palette.nav.activeText)
 
-  styleBuilder
-    .select('.nav__summary--active .nav__text', 'light')
-    .color(palette('light').nav.activeText)
-  styleBuilder
-    .select('.nav__summary--active .nav__text', 'dark')
-    .color(palette('dark').nav.activeText)
+    styleBuilder
+      .select('.nav__summary-content', theme)
+      .display('flex')
+      .alignItems('center')
+      .gap('8px')
+      .flex('1')
 
-  styleBuilder
-    .select('.nav__summary-content', 'light')
-    .display('flex')
-    .alignItems('center')
-    .gap('8px')
-    .flex('1')
-  styleBuilder
-    .select('.nav__summary-content', 'dark')
-    .display('flex')
-    .alignItems('center')
-    .gap('8px')
-    .flex('1')
-
-  const baseChevron = (theme: string) =>
     styleBuilder
       .select('.nav__chevron', theme)
       .width('8px')
@@ -330,27 +262,18 @@ function registerNavStyles() {
       .borderBottom('2px solid currentColor')
       .transform('rotate(-45deg)')
       .transition('transform 160ms ease')
+      .color(palette.nav.chevron)
 
-  baseChevron('light').color(palette('light').nav.chevron)
-  baseChevron('dark').color(palette('dark').nav.chevron)
+    styleBuilder
+      .select('.nav__group[open] > .nav__summary .nav__chevron', theme)
+      .transform('rotate(45deg)')
 
-  styleBuilder
-    .select('.nav__group[open] > .nav__summary .nav__chevron', 'light')
-    .transform('rotate(45deg)')
-  styleBuilder
-    .select('.nav__group[open] > .nav__summary .nav__chevron', 'dark')
-    .transform('rotate(45deg)')
+    styleBuilder
+      .select('.nav__summary::-webkit-details-marker', theme)
+      .display('none')
 
-  styleBuilder
-    .select('.nav__summary::-webkit-details-marker', 'light')
-    .display('none')
-  styleBuilder
-    .select('.nav__summary::-webkit-details-marker', 'dark')
-    .display('none')
-  styleBuilder.select('.nav__summary::marker', 'light').content('""')
-  styleBuilder.select('.nav__summary::marker', 'dark').content('""')
+    styleBuilder.select('.nav__summary::marker', theme).content('""')
 
-  const baseBadge = (theme: string) =>
     styleBuilder
       .select('.nav__badge', theme)
       .padding('2px 8px')
@@ -359,13 +282,9 @@ function registerNavStyles() {
       .fontWeight('700')
       .letterSpacing('0.02em')
       .textTransform('uppercase')
-
-  baseBadge('light')
-    .background(palette('light').nav.badgeBackground)
-    .color(palette('light').nav.badgeText)
-  baseBadge('dark')
-    .background(palette('dark').nav.badgeBackground)
-    .color(palette('dark').nav.badgeText)
+      .background(palette.nav.badgeBackground)
+      .color(palette.nav.badgeText)
+  })
 }
 
 function createNavItemComponent() {

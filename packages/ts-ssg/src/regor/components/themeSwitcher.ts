@@ -76,10 +76,7 @@ const themeSwitcherTemplate = html`<button
 </button>`
 
 function registerThemeSwitcherStyles() {
-  const options = themes.getOptions()
-  const palette = (theme: string) => themes.palette(theme)
-
-  const baseSwitcher = (theme: string) =>
+  themes.forEach((theme, palette, options) => {
     styleBuilder
       .select('.theme-switcher', theme)
       .display('inline-flex')
@@ -91,56 +88,32 @@ function registerThemeSwitcherStyles() {
       .padding('0')
       .borderRadius(options.radii.pill)
       .border('1px solid transparent')
-      .background('transparent')
+      .background(palette.themeSwitcher.background)
+      .borderColor(palette.themeSwitcher.border)
+      .color(palette.themeSwitcher.text)
       .cursor('pointer')
       .fontSize('0')
       .position('relative')
       .overflow('hidden')
 
-  baseSwitcher('light')
-    .background(palette('light').themeSwitcher.background)
-    .borderColor(palette('light').themeSwitcher.border)
-    .color(palette('light').themeSwitcher.text)
-  baseSwitcher('dark')
-    .background(palette('dark').themeSwitcher.background)
-    .borderColor(palette('dark').themeSwitcher.border)
-    .color(palette('dark').themeSwitcher.text)
+    styleBuilder
+      .select('.theme-switcher:hover', theme)
+      .background(palette.themeSwitcher.hoverBackground)
 
-  styleBuilder
-    .select('.theme-switcher:hover', 'light')
-    .background(palette('light').themeSwitcher.hoverBackground)
-  styleBuilder
-    .select('.theme-switcher:hover', 'dark')
-    .background(palette('dark').themeSwitcher.hoverBackground)
+    styleBuilder
+      .select('.theme-switcher:focus-visible', theme)
+      .outline(`2px solid ${palette.nav.focusRing}`)
+      .outlineOffset('2px')
 
-  styleBuilder
-    .select('.theme-switcher:focus-visible', 'light')
-    .outline(`2px solid ${palette('light').nav.focusRing}`)
-    .outlineOffset('2px')
-  styleBuilder
-    .select('.theme-switcher:focus-visible', 'dark')
-    .outline(`2px solid ${palette('dark').nav.focusRing}`)
-    .outlineOffset('2px')
-
-  const baseTrack = (theme: string) =>
     styleBuilder
       .select('.theme-switcher__track', theme)
       .position('absolute')
       .inset('6px')
       .borderRadius(options.radii.pill)
-      .background(palette(theme).themeSwitcher.trackBackground)
-      .boxShadow(palette(theme).themeSwitcher.trackShadow)
+      .background(palette.themeSwitcher.trackBackground)
+      .boxShadow(palette.themeSwitcher.trackShadow)
       .transition('opacity 180ms ease, transform 220ms ease')
 
-  baseTrack('light')
-  baseTrack('dark')
-
-  styleBuilder
-    .select('.theme-switcher__track', 'dark')
-    .background(palette('dark').themeSwitcher.trackBackground)
-    .boxShadow(palette('dark').themeSwitcher.trackShadow)
-
-  const baseThumb = (theme: string) =>
     styleBuilder
       .select('.theme-switcher__thumb', theme)
       .position('absolute')
@@ -149,8 +122,8 @@ function registerThemeSwitcherStyles() {
       .width('36px')
       .height('36px')
       .borderRadius('50%')
-      .background(palette(theme).themeSwitcher.thumbBackground)
-      .boxShadow(palette(theme).themeSwitcher.thumbShadow)
+      .background(palette.themeSwitcher.thumbBackground)
+      .boxShadow(palette.themeSwitcher.thumbShadow)
       .backdropFilter('blur(8px)')
       .transform('translateY(-50%) translateX(0)')
       .display('grid')
@@ -160,15 +133,6 @@ function registerThemeSwitcherStyles() {
       )
       .willChange('transform')
 
-  baseThumb('light')
-  baseThumb('dark')
-
-  styleBuilder
-    .select('.theme-switcher__thumb', 'dark')
-    .background(palette('dark').themeSwitcher.thumbBackground)
-    .boxShadow(palette('dark').themeSwitcher.thumbShadow)
-
-  const baseTrackIcon = (theme: string) =>
     styleBuilder
       .select('.theme-switcher__track-icon', theme)
       .position('absolute')
@@ -180,27 +144,16 @@ function registerThemeSwitcherStyles() {
       .opacity(0.55)
       .transform('translateY(-50%)')
 
-  baseTrackIcon('light')
-  baseTrackIcon('dark')
+    styleBuilder
+      .select('.theme-switcher__track-icon--sun', theme)
+      .left('18px')
+      .color(palette.themeSwitcher.trackSun)
 
-  styleBuilder
-    .select('.theme-switcher__track-icon--sun', 'light')
-    .left('18px')
-    .color(palette('light').themeSwitcher.trackSun)
-  styleBuilder
-    .select('.theme-switcher__track-icon--moon', 'light')
-    .right('18px')
-    .color(palette('light').themeSwitcher.trackMoon)
-  styleBuilder
-    .select('.theme-switcher__track-icon--sun', 'dark')
-    .left('18px')
-    .color(palette('dark').themeSwitcher.trackSun)
-  styleBuilder
-    .select('.theme-switcher__track-icon--moon', 'dark')
-    .right('18px')
-    .color(palette('dark').themeSwitcher.trackMoon)
+    styleBuilder
+      .select('.theme-switcher__track-icon--moon', theme)
+      .right('18px')
+      .color(palette.themeSwitcher.trackMoon)
 
-  const baseTrackSvg = (theme: string) =>
     styleBuilder
       .select('.theme-switcher__track-icon svg', theme)
       .width('18px')
@@ -211,19 +164,11 @@ function registerThemeSwitcherStyles() {
       .strokeLinecap('round')
       .strokeLinejoin('round')
 
-  baseTrackSvg('light')
-  baseTrackSvg('dark')
+    styleBuilder
+      .select('.theme-switcher__track-icon--moon svg', theme)
+      .fill('currentColor')
+      .stroke('none')
 
-  styleBuilder
-    .select('.theme-switcher__track-icon--moon svg', 'light')
-    .fill('currentColor')
-    .stroke('none')
-  styleBuilder
-    .select('.theme-switcher__track-icon--moon svg', 'dark')
-    .fill('currentColor')
-    .stroke('none')
-
-  const baseIcon = (theme: string) =>
     styleBuilder
       .select('.theme-switcher__icon', theme)
       .display('grid')
@@ -233,11 +178,8 @@ function registerThemeSwitcherStyles() {
       .position('relative')
       .zIndex(2)
       .gridArea('1 / 1')
+      .transition('transform 160ms ease, opacity 160ms ease')
 
-  baseIcon('light')
-  baseIcon('dark')
-
-  const baseSvg = (theme: string) =>
     styleBuilder
       .select('.theme-switcher__icon svg', theme)
       .width('18px')
@@ -248,93 +190,49 @@ function registerThemeSwitcherStyles() {
       .strokeLinecap('round')
       .strokeLinejoin('round')
 
-  baseSvg('light')
-  baseSvg('dark')
+    styleBuilder
+      .select('.theme-switcher__icon--moon svg', theme)
+      .fill('currentColor')
+      .stroke('none')
 
-  styleBuilder
-    .select('.theme-switcher__icon--moon svg', 'light')
-    .fill('currentColor')
-    .stroke('none')
-  styleBuilder
-    .select('.theme-switcher__icon--moon svg', 'dark')
-    .fill('currentColor')
-    .stroke('none')
+    styleBuilder
+      .select('.theme-switcher__icon--sun', theme)
+      .color(palette.themeSwitcher.thumbIcon)
+      .opacity(0)
+      .transform('scale(0.6)')
 
-  styleBuilder
-    .select('.theme-switcher__icon--sun', 'light')
-    .color(palette('light').themeSwitcher.thumbIcon)
-  styleBuilder
-    .select('.theme-switcher__icon--sun', 'dark')
-    .color(palette('dark').themeSwitcher.thumbIcon)
-  styleBuilder
-    .select('.theme-switcher__icon--moon', 'light')
-    .color(palette('light').themeSwitcher.thumbIcon)
-  styleBuilder
-    .select('.theme-switcher__icon--moon', 'dark')
-    .color(palette('dark').themeSwitcher.thumbIcon)
+    styleBuilder
+      .select('.theme-switcher__icon--moon', theme)
+      .color(palette.themeSwitcher.thumbIcon)
+      .opacity(0)
+      .transform('scale(0.6)')
 
-  styleBuilder
-    .select('.theme-switcher__icon', 'light')
-    .transition('transform 160ms ease, opacity 160ms ease')
-  styleBuilder
-    .select('.theme-switcher__icon', 'dark')
-    .transition('transform 160ms ease, opacity 160ms ease')
+    styleBuilder
+      .select(
+        `.theme-switcher[data-theme="${theme}"] .theme-switcher__track`,
+        theme,
+      )
+      .opacity(0.85)
 
-  styleBuilder
-    .select('.theme-switcher[data-theme="dark"] .theme-switcher__track', 'dark')
-    .opacity(0.85)
-  styleBuilder
-    .select(
-      '.theme-switcher[data-theme="light"] .theme-switcher__track',
-      'light',
-    )
-    .opacity(0.85)
+    const activeIcon = theme === 'dark' ? 'moon' : 'sun'
+    const inactiveIcon = theme === 'dark' ? 'sun' : 'moon'
 
-  styleBuilder
-    .select('.theme-switcher__icon--sun', 'light')
-    .opacity(0)
-    .transform('scale(0.6)')
-  styleBuilder
-    .select('.theme-switcher__icon--moon', 'light')
-    .opacity(0)
-    .transform('scale(0.6)')
-  styleBuilder
-    .select('.theme-switcher__icon--sun', 'dark')
-    .opacity(0)
-    .transform('scale(0.6)')
-  styleBuilder
-    .select('.theme-switcher__icon--moon', 'dark')
-    .opacity(0)
-    .transform('scale(0.6)')
+    styleBuilder
+      .select(
+        `.theme-switcher[data-theme="${theme}"] .theme-switcher__icon--${activeIcon}`,
+        theme,
+      )
+      .opacity(1)
+      .transform('scale(1)')
 
-  styleBuilder
-    .select(
-      '.theme-switcher[data-theme="light"] .theme-switcher__icon--sun',
-      'light',
-    )
-    .opacity(1)
-    .transform('scale(1)')
-  styleBuilder
-    .select(
-      '.theme-switcher[data-theme="light"] .theme-switcher__icon--moon',
-      'light',
-    )
-    .opacity(0)
-    .transform('scale(0.6)')
-  styleBuilder
-    .select(
-      '.theme-switcher[data-theme="dark"] .theme-switcher__icon--moon',
-      'dark',
-    )
-    .opacity(1)
-    .transform('scale(1)')
-  styleBuilder
-    .select(
-      '.theme-switcher[data-theme="dark"] .theme-switcher__icon--sun',
-      'dark',
-    )
-    .opacity(0)
-    .transform('scale(0.6)')
+    styleBuilder
+      .select(
+        `.theme-switcher[data-theme="${theme}"] .theme-switcher__icon--${inactiveIcon}`,
+        theme,
+      )
+      .opacity(0)
+      .transform('scale(0.6)')
+  })
 }
 
 function createThemeSwitcherComponent() {

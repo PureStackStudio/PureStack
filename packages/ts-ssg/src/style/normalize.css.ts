@@ -1,10 +1,9 @@
 import { styleBuilder } from './styles'
+import { themes } from './themeOptions'
 
 export function registerNormalizeStyles() {
-  const baseNormalize = (theme: string) => {
-    styleBuilder
-      .select('*, *::before, *::after', theme)
-      .boxSizing('border-box')
+  themes.forEach((theme) => {
+    styleBuilder.select('*, *::before, *::after', theme).boxSizing('border-box')
 
     styleBuilder
       .select('html', theme)
@@ -15,10 +14,7 @@ export function registerNormalizeStyles() {
 
     styleBuilder.select('main', theme).display('block')
 
-    styleBuilder
-      .select('h1', theme)
-      .fontSize('2em')
-      .margin('0.67em 0')
+    styleBuilder.select('h1', theme).fontSize('2em').margin('0.67em 0')
 
     styleBuilder
       .select('hr', theme)
@@ -88,9 +84,7 @@ export function registerNormalizeStyles() {
       )
       .outline('1px dotted ButtonText')
 
-    styleBuilder
-      .select('fieldset', theme)
-      .padding('0.35em 0.75em 0.625em')
+    styleBuilder.select('fieldset', theme).padding('0.35em 0.75em 0.625em')
 
     styleBuilder
       .select('legend', theme)
@@ -147,8 +141,5 @@ export function registerNormalizeStyles() {
       .select('table', theme)
       .borderCollapse('collapse')
       .borderSpacing('0')
-  }
-
-  baseNormalize('light')
-  baseNormalize('dark')
+  })
 }

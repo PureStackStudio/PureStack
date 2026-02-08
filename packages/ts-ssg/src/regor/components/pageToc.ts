@@ -63,10 +63,7 @@ function resolveTitle(props: PageTocProps) {
 }
 
 function registerPageTocStyles() {
-  const options = themes.getOptions()
-  const palette = (theme: string) => themes.palette(theme)
-
-  const baseToc = (theme: string) =>
+  themes.forEach((theme, palette, options) => {
     styleBuilder
       .select('.page-toc', theme)
       .display('grid')
@@ -76,28 +73,18 @@ function registerPageTocStyles() {
       .border('1px solid transparent')
       .fontSize('0.95rem')
       .lineHeight('1.5')
+      .background(palette.nav.background)
+      .borderColor(palette.nav.border)
+      .color(palette.panel.text)
 
-  baseToc('light')
-    .background(palette('light').nav.background)
-    .borderColor(palette('light').nav.border)
-    .color(palette('light').panel.text)
-  baseToc('dark')
-    .background(palette('dark').nav.background)
-    .borderColor(palette('dark').nav.border)
-    .color(palette('dark').panel.text)
-
-  const baseHeader = (theme: string) =>
     styleBuilder
       .select('.page-toc__header', theme)
       .fontWeight('700')
       .fontSize('0.95rem')
       .letterSpacing('0.02em')
       .textTransform('uppercase')
+      .color(palette.nav.textMuted)
 
-  baseHeader('light').color(palette('light').nav.textMuted)
-  baseHeader('dark').color(palette('dark').nav.textMuted)
-
-  const baseList = (theme: string) =>
     styleBuilder
       .select('.page-toc__list', theme)
       .listStyle('none')
@@ -106,25 +93,13 @@ function registerPageTocStyles() {
       .display('grid')
       .gap('6px')
 
-  baseList('light')
-  baseList('dark')
+    styleBuilder
+      .select('.page-toc__list--nested', theme)
+      .paddingLeft('12px')
+      .borderLeft(`1px solid ${palette.nav.nestedBorder}`)
 
-  styleBuilder
-    .select('.page-toc__list--nested', 'light')
-    .paddingLeft('12px')
-    .borderLeft(`1px solid ${palette('light').nav.nestedBorder}`)
-  styleBuilder
-    .select('.page-toc__list--nested', 'dark')
-    .paddingLeft('12px')
-    .borderLeft(`1px solid ${palette('dark').nav.nestedBorder}`)
-
-  const baseItem = (theme: string) =>
     styleBuilder.select('.page-toc__item', theme).display('grid')
 
-  baseItem('light')
-  baseItem('dark')
-
-  const baseLink = (theme: string) =>
     styleBuilder
       .select('.page-toc__link', theme)
       .display('block')
@@ -133,126 +108,73 @@ function registerPageTocStyles() {
       .textDecoration('none')
       .fontWeight('600')
       .transition('background 160ms ease, color 160ms ease')
+      .color(palette.nav.text)
 
-  baseLink('light').color(palette('light').nav.text)
-  baseLink('dark').color(palette('dark').nav.text)
+    styleBuilder
+      .select('.page-toc__link:hover', theme)
+      .background(palette.nav.hoverBackground)
 
-  styleBuilder
-    .select('.page-toc__link:hover', 'light')
-    .background(palette('light').nav.hoverBackground)
-  styleBuilder
-    .select('.page-toc__link:hover', 'dark')
-    .background(palette('dark').nav.hoverBackground)
+    styleBuilder
+      .select('.page-toc__link--active', theme)
+      .background(palette.nav.activeBackground)
+      .color(palette.nav.activeText)
 
-  styleBuilder
-    .select('.page-toc__link--active', 'light')
-    .background(palette('light').nav.activeBackground)
-    .color(palette('light').nav.activeText)
-  styleBuilder
-    .select('.page-toc__link--active', 'dark')
-    .background(palette('dark').nav.activeBackground)
-    .color(palette('dark').nav.activeText)
+    styleBuilder
+      .select('.page-toc__link--active:hover', theme)
+      .background(palette.nav.activeBackground)
+      .color(palette.nav.activeText)
 
-  styleBuilder
-    .select('.page-toc__link--active:hover', 'light')
-    .background(palette('light').nav.activeBackground)
-    .color(palette('light').nav.activeText)
-  styleBuilder
-    .select('.page-toc__link--active:hover', 'dark')
-    .background(palette('dark').nav.activeBackground)
-    .color(palette('dark').nav.activeText)
+    styleBuilder
+      .select('.page-toc__link--sub.page-toc__link--active:hover', theme)
+      .background(palette.nav.activeBackground)
+      .color(palette.nav.activeText)
 
-  styleBuilder
-    .select('.page-toc__link--sub.page-toc__link--active:hover', 'light')
-    .background(palette('light').nav.activeBackground)
-    .color(palette('light').nav.activeText)
-  styleBuilder
-    .select('.page-toc__link--sub.page-toc__link--active:hover', 'dark')
-    .background(palette('dark').nav.activeBackground)
-    .color(palette('dark').nav.activeText)
+    styleBuilder
+      .select('.page-toc__link:focus-visible', theme)
+      .outline(`2px solid ${palette.nav.focusRing}`)
+      .outlineOffset('2px')
 
-  styleBuilder
-    .select('.page-toc__link:focus-visible', 'light')
-    .outline(`2px solid ${palette('light').nav.focusRing}`)
-    .outlineOffset('2px')
-  styleBuilder
-    .select('.page-toc__link:focus-visible', 'dark')
-    .outline(`2px solid ${palette('dark').nav.focusRing}`)
-    .outlineOffset('2px')
-
-  const baseSubLink = (theme: string) =>
     styleBuilder
       .select('.page-toc__link--sub', theme)
       .fontWeight('500')
+      .color(palette.nav.textMuted)
 
-  baseSubLink('light').color(palette('light').nav.textMuted)
-  baseSubLink('dark').color(palette('dark').nav.textMuted)
+    styleBuilder
+      .select('.page-toc__link--sub:not(.page-toc__link--active):hover', theme)
+      .color(palette.nav.textMuted)
 
-  styleBuilder
-    .select('.page-toc__link--sub:not(.page-toc__link--active):hover', 'light')
-    .color(palette('light').nav.textMuted)
-  styleBuilder
-    .select('.page-toc__link--sub:not(.page-toc__link--active):hover', 'dark')
-    .color(palette('dark').nav.textMuted)
+    styleBuilder
+      .select('.page-toc__link--sub.page-toc__link--active', theme)
+      .background(palette.nav.activeBackground)
+      .color(palette.nav.activeText)
 
-  styleBuilder
-    .select('.page-toc__link--sub.page-toc__link--active', 'light')
-    .background(palette('light').nav.activeBackground)
-    .color(palette('light').nav.activeText)
-  styleBuilder
-    .select('.page-toc__link--sub.page-toc__link--active', 'dark')
-    .background(palette('dark').nav.activeBackground)
-    .color(palette('dark').nav.activeText)
-
-  const baseEmpty = (theme: string) =>
     styleBuilder
       .select('.page-toc__empty', theme)
       .fontSize('0.9rem')
       .fontWeight('600')
+      .color(palette.nav.textMuted)
 
-  baseEmpty('light').color(palette('light').nav.textMuted)
-  baseEmpty('dark').color(palette('dark').nav.textMuted)
-
-  const baseTarget = (theme: string) =>
     styleBuilder
       .select('.doc-content .page-toc__target', theme)
       .scrollMarginTop('96px')
       .padding('0')
       .borderRadius('0')
       .transition('background 200ms ease, color 200ms ease')
+      .background(palette.surface.altBackground)
+      .color('#bd5454')
 
-  baseTarget('light')
-    .background(palette('light').surface.altBackground)
-    .color('#bd5454')
-  baseTarget('dark')
-    .background(palette('dark').surface.altBackground)
-    .color('#bd5454')
-
-  const tocShell = (theme: string) =>
     styleBuilder
       .select('.doc-shell--toc', theme)
       .gridTemplateColumns('260px minmax(0, 1fr) 240px')
 
-  tocShell('light')
-  tocShell('dark')
-
-  const tocOnlyShell = (theme: string) =>
     styleBuilder
       .select('.doc-shell--toc-only', theme)
       .gridTemplateColumns('minmax(0, 1fr) 240px')
 
-  tocOnlyShell('light')
-  tocOnlyShell('dark')
-
-  const drawerTocShell = (theme: string) =>
     styleBuilder
       .select('.doc-shell--nav-drawer.doc-shell--toc', theme)
       .gridTemplateColumns('minmax(0, 1fr) 240px')
 
-  drawerTocShell('light')
-  drawerTocShell('dark')
-
-  const baseTocColumn = (theme: string) =>
     styleBuilder
       .select('.doc-toc', theme)
       .position('fixed')
@@ -263,18 +185,8 @@ function registerPageTocStyles() {
       .height('calc(100vh - 112px)')
       .overflow('auto')
 
-  baseTocColumn('light')
-  baseTocColumn('dark')
+    styleBuilder.select('.template-doc--full-main .doc-toc', theme).right('32px')
 
-  const fullMainToc = (theme: string) =>
-    styleBuilder
-      .select('.template-doc--full-main .doc-toc', theme)
-      .right('32px')
-
-  fullMainToc('light')
-  fullMainToc('dark')
-
-  const mobileToc = (theme: string) =>
     styleBuilder
       .select('.doc-toc', theme)
       .media('max-width: 1023px')
@@ -283,9 +195,7 @@ function registerPageTocStyles() {
       .width('auto')
       .top('auto')
       .height('auto')
-
-  mobileToc('light')
-  mobileToc('dark')
+  })
 }
 
 function createPageTocComponent() {

@@ -47,10 +47,7 @@ const topBarTemplate = html`<input
   </header>`
 
 function registerTopBarStyles() {
-  const options = themes.getOptions()
-  const palette = (theme: string) => themes.palette(theme)
-
-  const baseBar = (theme: string) =>
+  themes.forEach((theme, palette, options) => {
     styleBuilder
       .select('.topbar', theme)
       .display('flex')
@@ -63,35 +60,22 @@ function registerTopBarStyles() {
       .zIndex(40)
       .backdropFilter('blur(10px)')
       .borderBottom('1px solid transparent')
+      .background(palette.topBar.background)
+      .borderBottomColor(palette.topBar.border)
 
-  baseBar('light')
-    .background(palette('light').topBar.background)
-    .borderBottomColor(palette('light').topBar.border)
-  baseBar('dark')
-    .background(palette('dark').topBar.background)
-    .borderBottomColor(palette('dark').topBar.border)
-
-  const baseLogo = (theme: string) =>
     styleBuilder
       .select('.topbar__logo', theme)
       .fontSize('22px')
       .fontWeight('700')
       .textDecoration('none')
+      .color(palette.topBar.logo)
 
-  baseLogo('light').color(palette('light').topBar.logo)
-  baseLogo('dark').color(palette('dark').topBar.logo)
-
-  const baseActions = (theme: string) =>
     styleBuilder
       .select('.topbar__actions', theme)
       .display('flex')
       .alignItems('center')
       .gap('10px')
 
-  baseActions('light')
-  baseActions('dark')
-
-  const baseIcon = (theme: string) =>
     styleBuilder
       .select('.topbar__icon', theme)
       .width('42px')
@@ -104,49 +88,26 @@ function registerTopBarStyles() {
       .cursor('pointer')
       .position('relative')
       .padding('0')
+      .color(palette.topBar.icon)
 
-  baseIcon('light').color(palette('light').topBar.icon)
-  baseIcon('dark').color(palette('dark').topBar.icon)
+    styleBuilder
+      .select('.topbar__toggle', theme)
+      .background(palette.topBar.toggleBackground)
+      .borderColor(palette.topBar.toggleBorder)
+      .color(palette.topBar.toggleIcon)
+      .display('none')
 
-  styleBuilder
-    .select('.topbar__toggle', 'light')
-    .background(palette('light').topBar.toggleBackground)
-    .borderColor(palette('light').topBar.toggleBorder)
-    .color(palette('light').topBar.toggleIcon)
-    .display('none')
-  styleBuilder
-    .select('.topbar__toggle', 'dark')
-    .background(palette('dark').topBar.toggleBackground)
-    .borderColor(palette('dark').topBar.toggleBorder)
-    .color(palette('dark').topBar.toggleIcon)
-    .display('none')
+    styleBuilder
+      .select('.template-doc--nav-drawer .topbar__toggle', theme)
+      .display('grid')
 
-  styleBuilder
-    .select('.template-doc--nav-drawer .topbar__toggle', 'light')
-    .display('grid')
-  styleBuilder
-    .select('.template-doc--nav-drawer .topbar__toggle', 'dark')
-    .display('grid')
+    styleBuilder
+      .select('.topbar__toggle:focus-visible', theme)
+      .outline(`2px solid ${palette.nav.focusRing}`)
+      .outlineOffset('2px')
 
-  styleBuilder
-    .select('.topbar__toggle:focus-visible', 'light')
-    .outline(`2px solid ${palette('light').nav.focusRing}`)
-    .outlineOffset('2px')
-  styleBuilder
-    .select('.topbar__toggle:focus-visible', 'dark')
-    .outline(`2px solid ${palette('dark').nav.focusRing}`)
-    .outlineOffset('2px')
+    styleBuilder.select('.topbar__search', theme).border('0').background('transparent')
 
-  styleBuilder
-    .select('.topbar__search', 'light')
-    .border('0')
-    .background('transparent')
-  styleBuilder
-    .select('.topbar__search', 'dark')
-    .border('0')
-    .background('transparent')
-
-  const baseSearchBefore = (theme: string) =>
     styleBuilder
       .select('.topbar__search::before', theme)
       .content('""')
@@ -158,10 +119,6 @@ function registerTopBarStyles() {
       .top('11px')
       .left('11px')
 
-  baseSearchBefore('light')
-  baseSearchBefore('dark')
-
-  const baseSearchAfter = (theme: string) =>
     styleBuilder
       .select('.topbar__search::after', theme)
       .content('""')
@@ -173,10 +130,6 @@ function registerTopBarStyles() {
       .bottom('12px')
       .transform('rotate(45deg)')
 
-  baseSearchAfter('light')
-  baseSearchAfter('dark')
-
-  const baseToggleBefore = (theme: string) =>
     styleBuilder
       .select('.topbar__toggle::before', theme)
       .content('""')
@@ -189,10 +142,6 @@ function registerTopBarStyles() {
       .transition('transform 200ms ease, top 200ms ease')
       .boxShadow('0 6px 0 0 currentColor')
 
-  baseToggleBefore('light')
-  baseToggleBefore('dark')
-
-  const baseToggleAfter = (theme: string) =>
     styleBuilder
       .select('.topbar__toggle::after', theme)
       .content('""')
@@ -204,34 +153,19 @@ function registerTopBarStyles() {
       .left('12px')
       .transition('transform 200ms ease, top 200ms ease')
 
-  baseToggleAfter('light')
-  baseToggleAfter('dark')
+    styleBuilder.select('.doc-nav-toggle', theme).display('none')
 
-  styleBuilder.select('.doc-nav-toggle', 'light').display('none')
-  styleBuilder.select('.doc-nav-toggle', 'dark').display('none')
+    styleBuilder
+      .select('.doc-nav-toggle:checked ~ .topbar .topbar__toggle::before', theme)
+      .top('20px')
+      .transform('rotate(45deg)')
+      .boxShadow('none')
 
-  styleBuilder
-    .select(
-      '.doc-nav-toggle:checked ~ .topbar .topbar__toggle::before',
-      'light',
-    )
-    .top('20px')
-    .transform('rotate(45deg)')
-    .boxShadow('none')
-  styleBuilder
-    .select('.doc-nav-toggle:checked ~ .topbar .topbar__toggle::before', 'dark')
-    .top('20px')
-    .transform('rotate(45deg)')
-    .boxShadow('none')
-
-  styleBuilder
-    .select('.doc-nav-toggle:checked ~ .topbar .topbar__toggle::after', 'light')
-    .top('20px')
-    .transform('rotate(-45deg)')
-  styleBuilder
-    .select('.doc-nav-toggle:checked ~ .topbar .topbar__toggle::after', 'dark')
-    .top('20px')
-    .transform('rotate(-45deg)')
+    styleBuilder
+      .select('.doc-nav-toggle:checked ~ .topbar .topbar__toggle::after', theme)
+      .top('20px')
+      .transform('rotate(-45deg)')
+  })
 }
 
 function createTopBarComponent() {

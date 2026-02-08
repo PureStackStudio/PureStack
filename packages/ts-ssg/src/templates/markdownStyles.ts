@@ -119,11 +119,6 @@ function registerPreAndCopyButtonStyles() {
       .fontSize('0.9em')
 
     styleBuilder
-      .select('.doc-content :where(pre.code-copy-ready)', theme)
-      .paddingTop('2.9rem')
-      .paddingRight('1.1rem')
-
-    styleBuilder
       .select('.doc-content :where(pre > .code-copy-button)', theme)
       .position('absolute')
       .top('12px')
