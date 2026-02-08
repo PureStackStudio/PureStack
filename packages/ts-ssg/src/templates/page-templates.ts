@@ -1,7 +1,7 @@
 import { type BasicHeadConfig, h, type TSNode } from '@purestack/ts-html'
 
 import type { PageNavigation } from '../navigation/navigation'
-import type { ThemeStylesheetLink } from '../style/themes'
+import type { ThemeStylesheetLink } from '../style/themeAssets'
 
 export interface PageInfo {
   relPath: string

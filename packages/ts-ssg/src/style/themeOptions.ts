@@ -7,7 +7,7 @@ import type { ThemeNavColors } from '../regor/components/navMenu'
 import type { ThemePricingColors } from '../regor/components/pricing'
 import type { ThemeSwitcherColors } from '../regor/components/themeSwitcher'
 import type { ThemeTopBarColors } from '../regor/components/topBar'
-import { normalizeThemeName, type ThemeName } from './themes'
+import { normalizeThemeName, type ThemeName } from './themeAssets'
 
 export const THEME_MODES = ['light', 'dark'] as const
 export type ThemeMode = (typeof THEME_MODES)[number]

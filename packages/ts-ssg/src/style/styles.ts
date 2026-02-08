@@ -1,6 +1,6 @@
 import { Style } from '@purestack/ts-css'
 
-import { normalizeThemeName, type ThemeName } from './themes'
+import { normalizeThemeName, type ThemeName } from './themeAssets'
 
 const styleBuilders = new Map<ThemeName, Style>()
 

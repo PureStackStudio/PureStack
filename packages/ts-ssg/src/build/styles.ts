@@ -3,7 +3,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 
 import { styleBuilder } from '../style/styles'
-import { orderThemes, resolveThemeFileName } from '../style/themes'
+import { orderThemes, resolveThemeFileName } from '../style/themeAssets'
 import { ensureDir } from '../util/fs'
 
 export interface WriteStylesResult {

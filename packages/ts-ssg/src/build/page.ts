@@ -17,7 +17,7 @@ import {
   resolvePageNavigation,
 } from '../navigation/navigation'
 import { renderApp } from '../regor/renderApp'
-import { resolveThemeStyleLinks } from '../style/themes'
+import { resolveThemeStyleLinks } from '../style/themeAssets'
 import type { PageInfo, PageTemplateMap } from '../templates/page-templates'
 import { resolveHeadConfig } from './head-config'
 import { readSource, writeHtml } from './io'

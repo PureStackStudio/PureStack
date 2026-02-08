@@ -6,12 +6,12 @@ import {
   type NavigationConfig,
   resolveNavigationConfig,
 } from '../navigation/navigation'
+import { resolveThemes } from '../style/themeAssets'
 import {
   type ThemeOptions,
   type ThemeOptionsInput,
   themes,
 } from '../style/themeOptions'
-import { resolveThemes } from '../style/themes'
 
 export interface SiteConfig {
   rootDir: string

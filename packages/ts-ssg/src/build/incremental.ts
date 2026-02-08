@@ -20,8 +20,8 @@ import {
 } from '../navigation/navigation'
 import { initBuiltinComponents } from '../regor/initBuiltinComponents'
 import { styleBuilder } from '../style/styles'
+import { orderThemes, resolveThemeFileName } from '../style/themeAssets'
 import { themes } from '../style/themeOptions'
-import { orderThemes, resolveThemeFileName } from '../style/themes'
 import { copyStaticAsset, resolveStaticOutPath } from './assets'
 import {
   type AssetManifestEntry,
