@@ -23,28 +23,21 @@ const cardGridTemplate = html`<div class="card-grid">
 </div>`
 
 function registerCardGridStyles() {
-  const options = themes.getOptions()
-  const palette = (theme: string) => themes.palette(theme)
-
-  const baseGrid = (theme: string) =>
+  themes.forEach((theme, palette, options) => {
     styleBuilder
       .select('.card-grid', theme)
       .display('grid')
       .gap('16px')
       .padding('24px')
       .borderRadius(options.radii.md)
+      .border(`1px solid ${palette.cardGrid.border}`)
 
-  baseGrid('light').border(`1px solid ${palette('light').cardGrid.border}`)
-  baseGrid('dark').border(`1px solid ${palette('dark').cardGrid.border}`)
-
-  const baseTitle = (theme: string) =>
     styleBuilder
       .select('.card-grid__title', theme)
       .fontSize('18px')
       .fontWeight('600')
-
-  baseTitle('light').color(palette('light').cardGrid.title)
-  baseTitle('dark').color(palette('dark').cardGrid.title)
+      .color(palette.cardGrid.title)
+  })
 }
 
 function createCardGridComponent() {
@@ -63,28 +56,19 @@ const cardTemplate = html`<div class="card">
 </div>`
 
 function registerCardStyles() {
-  const options = themes.getOptions()
-  const palette = (theme: string) => themes.palette(theme)
-  const baseCard = (theme: string) =>
+  themes.forEach((theme, palette, options) => {
     styleBuilder
       .select('.card', theme)
       .display('grid')
       .gap('8px')
       .padding('16px')
       .borderRadius(options.radii.md)
+      .border(`1px solid ${palette.card.border}`)
 
-  baseCard('light').border(`1px solid ${palette('light').card.border}`)
-  baseCard('dark').border(`1px solid ${palette('dark').card.border}`)
-
-  const baseIcon = (theme: string) =>
     styleBuilder.select('.card__icon', theme).fontWeight('600')
-  baseIcon('light')
-  baseIcon('dark')
 
-  styleBuilder
-    .select('.card__title', 'light')
-    .color(palette('light').card.title)
-  styleBuilder.select('.card__title', 'dark').color(palette('dark').card.title)
+    styleBuilder.select('.card__title', theme).color(palette.card.title)
+  })
 }
 
 function createCardComponent() {
