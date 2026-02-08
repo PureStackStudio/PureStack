@@ -1,38 +1,26 @@
 import { styleBuilder } from '../style/styles'
 import {
   type ThemeMode,
-  type ThemeOptions,
   themes,
 } from '../style/themeOptions'
 
-type MarkdownStyleContext = {
-  options: ThemeOptions
-  palette: (theme: ThemeMode) => ReturnType<typeof themes.palette>
-  linkColor: (theme: ThemeMode) => string
-}
-
 export function registerMarkdownStyles() {
-  const options = themes.getOptions()
-  const palette = (theme: ThemeMode) => themes.palette(theme)
-  const linkColor = (theme: ThemeMode) => palette(theme).topBar.logo
-  const ctx: MarkdownStyleContext = { options, palette, linkColor }
-
-  registerBaseProseStyles(ctx)
+  registerBaseProseStyles()
   registerHeadingStyles()
   registerListStyles()
-  registerLinkStyles(ctx)
-  registerCodeStyles(ctx)
-  registerBlockquoteStyles(ctx)
+  registerLinkStyles()
+  registerCodeStyles()
+  registerBlockquoteStyles()
   registerTableStyles()
   registerHrStyles()
-  registerMediaStyles(ctx)
+  registerMediaStyles()
 }
 
-function registerBaseProseStyles(ctx: MarkdownStyleContext) {
-  themes.forEach((theme, palette) => {
+function registerBaseProseStyles() {
+  themes.forEach((theme, palette, options) => {
     styleBuilder
       .select('.doc-content', theme)
-      .fontSize(ctx.options.typography.baseSize)
+      .fontSize(options.typography.baseSize)
       .lineHeight('1.7')
       .color(palette.panel.text)
 
@@ -82,11 +70,11 @@ function registerListStyles() {
   })
 }
 
-function registerLinkStyles(ctx: MarkdownStyleContext) {
+function registerLinkStyles() {
   themes.forEach((theme, palette) => {
     styleBuilder
       .select('.doc-content :where(a)', theme)
-      .color(ctx.linkColor(theme))
+      .color(palette.topBar.logo)
       .textDecoration('none')
       .fontWeight('600')
     styleBuilder.select('.doc-content :where(a:hover)', theme).textDecoration('underline')
@@ -97,34 +85,34 @@ function registerLinkStyles(ctx: MarkdownStyleContext) {
   })
 }
 
-function registerCodeStyles(ctx: MarkdownStyleContext) {
-  registerInlineCodeStyles(ctx)
-  registerPreAndCopyButtonStyles(ctx)
-  registerShikiStyles(ctx)
+function registerCodeStyles() {
+  registerInlineCodeStyles()
+  registerPreAndCopyButtonStyles()
+  registerShikiStyles()
 }
 
-function registerInlineCodeStyles(ctx: MarkdownStyleContext) {
-  themes.forEach((theme, palette) => {
+function registerInlineCodeStyles() {
+  themes.forEach((theme, palette, options) => {
     styleBuilder
       .select('.doc-content :where(code)', theme)
       .fontFamily("'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace")
       .fontSize('0.9em')
       .background(palette.surface.altBackground)
       .border(`1px solid ${palette.surface.altBorder}`)
-      .borderRadius(ctx.options.radii.sm)
+      .borderRadius(options.radii.sm)
       .padding('0.15em 0.35em')
   })
 }
 
-function registerPreAndCopyButtonStyles(ctx: MarkdownStyleContext) {
-  themes.forEach((theme, palette) => {
+function registerPreAndCopyButtonStyles() {
+  themes.forEach((theme, palette, options) => {
     styleBuilder
       .select('.doc-content :where(pre)', theme)
       .margin('0 0 1.4em')
       .padding('18px 20px')
       .background(palette.surface.altBackground)
       .border(`1px solid ${palette.surface.altBorder}`)
-      .borderRadius(ctx.options.radii.md)
+      .borderRadius(options.radii.md)
       .position('relative')
       .overflow('auto')
       .lineHeight('1.6')
@@ -150,7 +138,7 @@ function registerPreAndCopyButtonStyles(ctx: MarkdownStyleContext) {
       .display('inline-flex')
       .alignItems('center')
       .justifyContent('center')
-      .borderRadius(ctx.options.radii.sm)
+      .borderRadius(options.radii.sm)
       .boxShadow('0 1px 2px rgba(0,0,0,0.08)')
       .cursor('pointer')
       .opacity(0)
@@ -226,15 +214,17 @@ function registerPreAndCopyButtonStyles(ctx: MarkdownStyleContext) {
     .color('#ffb0b0')
 }
 
-function registerShikiStyles(ctx: MarkdownStyleContext) {
+function registerShikiStyles() {
+  const light = themes.palette('light')
+  const dark = themes.palette('dark')
   styleBuilder
     .select('.doc-content :where(pre.shiki.shiki-themes)', 'light')
-    .background(`var(--shiki-light-bg, ${ctx.palette('light').surface.altBackground})`)
-    .color(`var(--shiki-light, ${ctx.palette('light').panel.text})`)
+    .background(`var(--shiki-light-bg, ${light.surface.altBackground})`)
+    .color(`var(--shiki-light, ${light.panel.text})`)
   styleBuilder
     .select('.doc-content :where(pre.shiki.shiki-themes)', 'dark')
-    .background(`var(--shiki-dark-bg, ${ctx.palette('dark').surface.altBackground})`)
-    .color(`var(--shiki-dark, ${ctx.palette('dark').panel.text})`)
+    .background(`var(--shiki-dark-bg, ${dark.surface.altBackground})`)
+    .color(`var(--shiki-dark, ${dark.panel.text})`)
 
   styleBuilder
     .select('.doc-content :where(pre.shiki.shiki-themes span)', 'light')
@@ -245,25 +235,25 @@ function registerShikiStyles(ctx: MarkdownStyleContext) {
 
   styleBuilder
     .select('.doc-content :where(code.shiki-inline)', 'light')
-    .color(`var(--shiki-light, ${ctx.palette('light').panel.text})`)
-    .background(ctx.palette('light').surface.altBackground)
-    .border(`1px solid ${ctx.palette('light').surface.altBorder}`)
+    .color(`var(--shiki-light, ${light.panel.text})`)
+    .background(light.surface.altBackground)
+    .border(`1px solid ${light.surface.altBorder}`)
   styleBuilder
     .select('.doc-content :where(code.shiki-inline)', 'dark')
-    .color(`var(--shiki-dark, ${ctx.palette('dark').panel.text})`)
-    .background(ctx.palette('dark').surface.altBackground)
-    .border(`1px solid ${ctx.palette('dark').surface.altBorder}`)
+    .color(`var(--shiki-dark, ${dark.panel.text})`)
+    .background(dark.surface.altBackground)
+    .border(`1px solid ${dark.surface.altBorder}`)
 }
 
-function registerBlockquoteStyles(ctx: MarkdownStyleContext) {
-  themes.forEach((theme, palette) => {
+function registerBlockquoteStyles() {
+  themes.forEach((theme, palette, options) => {
     styleBuilder
       .select('.doc-content :where(blockquote)', theme)
       .margin('0 0 1.4em')
       .padding('0.65em 1.1em')
       .borderLeft(`3px solid ${palette.surface.border}`)
       .background(palette.surface.altBackground)
-      .borderRadius(ctx.options.radii.sm)
+      .borderRadius(options.radii.sm)
   })
 }
 
@@ -296,13 +286,13 @@ function registerHrStyles() {
   })
 }
 
-function registerMediaStyles(ctx: MarkdownStyleContext) {
-  themes.forEach((theme, palette) => {
+function registerMediaStyles() {
+  themes.forEach((theme, palette, options) => {
     styleBuilder
       .select('.doc-content :where(img, video)', theme)
       .maxWidth('100%')
       .height('auto')
-      .borderRadius(ctx.options.radii.md)
+      .borderRadius(options.radii.md)
       .border(`1px solid ${palette.surface.border}`)
 
     styleBuilder.select('.doc-content :where(figure)', theme).margin('0 0 1.4em')
