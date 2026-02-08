@@ -18,7 +18,7 @@ import {
   type NavigationTree,
 } from '../navigation/navigation'
 import { initBuiltinComponents } from '../regor/initBuiltinComponents'
-import { setThemeOptions } from '../style/themeOptions'
+import { themes } from '../style/themeOptions'
 import type { PageTemplateMap } from '../templates/page-templates'
 import { copyStaticAssets } from './assets'
 import { prepareOutDir } from './io'
@@ -99,7 +99,7 @@ export async function buildSite(input: BuildInput = {}): Promise<BuildResult> {
   const hooks = resolveBuildHooks(input.hooks)
   const mdxOptions = await resolveMdxBuildOptions(input.mdx)
   const context = createBuildContext(input, config, mdxOptions)
-  setThemeOptions(config.theme)
+  themes.setOptions(config.theme)
   initBuiltinComponents()
 
   await hooks.onConfigResolved?.(context)

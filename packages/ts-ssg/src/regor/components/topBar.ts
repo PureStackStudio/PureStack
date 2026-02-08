@@ -1,7 +1,7 @@
 import { createComponent, html } from 'regor'
 
 import { styleBuilder } from '../../style/styles'
-import { getThemeOptions, getThemePalette } from '../../style/themeOptions'
+import { themes } from '../../style/themeOptions'
 import { resolveTsSsgContext } from '../resolveTsSsgContext'
 import type { TsSsgContext } from '../ts-ssg-context'
 
@@ -47,8 +47,8 @@ const topBarTemplate = html`<input
   </header>`
 
 function registerTopBarStyles() {
-  const themeOptions = getThemeOptions()
-  const palette = (theme: string) => getThemePalette(theme, themeOptions)
+  const options = themes.getOptions()
+  const palette = (theme: string) => themes.palette(theme)
 
   const baseBar = (theme: string) =>
     styleBuilder
@@ -96,7 +96,7 @@ function registerTopBarStyles() {
       .select('.topbar__icon', theme)
       .width('42px')
       .height('42px')
-      .borderRadius(themeOptions.radii.pill)
+      .borderRadius(options.radii.pill)
       .display('grid')
       .placeItems('center')
       .border('1px solid transparent')

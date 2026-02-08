@@ -50,13 +50,13 @@ export type { TsSsgContext } from './regor/ts-ssg-context'
 export { styleBuilder } from './style/styles'
 export {
   DEFAULT_THEME_OPTIONS,
-  getThemeOptions,
-  getThemePalette,
-  resolveThemeOptions,
-  setThemeOptions,
+  THEME_MODES,
+  type ThemeMode,
   type ThemeOptions,
   type ThemeOptionsInput,
   type ThemePalette,
+  type Themes,
+  themes,
 } from './style/themeOptions'
 export {
   defaultTemplates,

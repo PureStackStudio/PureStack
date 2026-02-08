@@ -1,16 +1,16 @@
 import { styleBuilder } from '../style/styles'
-import { getThemeOptions, getThemePalette } from '../style/themeOptions'
+import { themes } from '../style/themeOptions'
 
 export function registerDocLayoutStyles() {
-  const themeOptions = getThemeOptions()
-  const palette = (theme: string) => getThemePalette(theme, themeOptions)
+  const options = themes.getOptions()
+  const palette = (theme: string) => themes.palette(theme)
 
   const baseDoc = (theme: string) =>
     styleBuilder
       .select('.template-doc', theme)
       .margin('0')
       .minHeight('100vh')
-      .fontFamily(themeOptions.typography.baseFamily)
+      .fontFamily(options.typography.baseFamily)
       .background(palette(theme).app.background)
       .color(palette(theme).app.text)
 
@@ -94,7 +94,7 @@ export function registerDocLayoutStyles() {
       .transition('transform 220ms ease')
       .zIndex(35)
       .overflow('auto')
-      .boxShadow(themeOptions.shadows.strong)
+      .boxShadow(options.shadows.strong)
 
   drawerSidebar('light')
   drawerSidebar('dark')
@@ -103,7 +103,7 @@ export function registerDocLayoutStyles() {
     .select('.doc-nav', 'light')
     .background(palette('light').nav.background)
     .border(`1px solid ${palette('light').nav.border}`)
-    .borderRadius(themeOptions.radii.lg)
+    .borderRadius(options.radii.lg)
     .padding('16px')
     .height('100%')
     .boxSizing('border-box')
@@ -111,7 +111,7 @@ export function registerDocLayoutStyles() {
     .select('.doc-nav', 'dark')
     .background(palette('dark').nav.background)
     .border(`1px solid ${palette('dark').nav.border}`)
-    .borderRadius(themeOptions.radii.lg)
+    .borderRadius(options.radii.lg)
     .padding('16px')
     .height('100%')
     .boxSizing('border-box')
@@ -197,7 +197,7 @@ export function registerDocLayoutStyles() {
       .transform('translateX(-120%)')
       .transition('transform 220ms ease')
       .zIndex(35)
-      .boxShadow(themeOptions.shadows.strong)
+      .boxShadow(options.shadows.strong)
 
   mobileSidebar('light')
   mobileSidebar('dark')

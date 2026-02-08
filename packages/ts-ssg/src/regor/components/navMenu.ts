@@ -2,7 +2,7 @@ import { createComponent, html } from 'regor'
 
 import type { NavItem } from '../../navigation/navigation'
 import { styleBuilder } from '../../style/styles'
-import { getThemeOptions, getThemePalette } from '../../style/themeOptions'
+import { themes } from '../../style/themeOptions'
 import { resolveTsSsgContext } from '../resolveTsSsgContext'
 import type { TsSsgContext } from '../ts-ssg-context'
 
@@ -154,18 +154,18 @@ function buildNavState(
 }
 
 function registerNavStyles() {
-  const themeOptions = getThemeOptions()
-  const palette = (theme: string) => getThemePalette(theme, themeOptions)
+  const options = themes.getOptions()
+  const palette = (theme: string) => themes.palette(theme)
 
   const baseMenu = (theme: string) =>
     styleBuilder
       .select('.nav__menu', theme)
       .display('block')
       .padding('16px')
-      .borderRadius(themeOptions.radii.lg)
+      .borderRadius(options.radii.lg)
       .border('1px solid transparent')
-      .fontSize(themeOptions.typography.baseSize)
-      .lineHeight(themeOptions.typography.baseLineHeight)
+      .fontSize(options.typography.baseSize)
+      .lineHeight(options.typography.baseLineHeight)
       .maxHeight('100%')
 
   baseMenu('light')
@@ -210,7 +210,7 @@ function registerNavStyles() {
       .select('.nav__link', theme)
       .display('block')
       .padding('8px 12px')
-      .borderRadius(themeOptions.radii.md)
+      .borderRadius(options.radii.md)
       .textDecoration('none')
       .fontWeight('600')
       .transition('background 160ms ease, color 160ms ease')
@@ -248,7 +248,7 @@ function registerNavStyles() {
       .select('.nav__text', theme)
       .display('block')
       .padding('8px 12px')
-      .borderRadius(themeOptions.radii.md)
+      .borderRadius(options.radii.md)
       .fontWeight('600')
 
   baseText('light').color(palette('light').nav.textMuted)
@@ -273,7 +273,7 @@ function registerNavStyles() {
       .gap('8px')
       .cursor('pointer')
       .padding('4px')
-      .borderRadius(themeOptions.radii.md)
+      .borderRadius(options.radii.md)
 
   baseSummary('light')
   baseSummary('dark')
@@ -354,7 +354,7 @@ function registerNavStyles() {
     styleBuilder
       .select('.nav__badge', theme)
       .padding('2px 8px')
-      .borderRadius(themeOptions.radii.pill)
+      .borderRadius(options.radii.pill)
       .fontSize('11px')
       .fontWeight('700')
       .letterSpacing('0.02em')

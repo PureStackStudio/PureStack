@@ -1,4 +1,7 @@
-import type { ThemeCardColors, ThemeCardGridColors } from '../regor/components/cardGrid'
+import type {
+  ThemeCardColors,
+  ThemeCardGridColors,
+} from '../regor/components/cardGrid'
 import type { ThemeHeroColors } from '../regor/components/hero'
 import type { ThemeNavColors } from '../regor/components/navMenu'
 import type { ThemePricingColors } from '../regor/components/pricing'
@@ -6,7 +9,8 @@ import type { ThemeSwitcherColors } from '../regor/components/themeSwitcher'
 import type { ThemeTopBarColors } from '../regor/components/topBar'
 import { normalizeThemeName, type ThemeName } from './themes'
 
-export type ThemeMode = 'light' | 'dark'
+export const THEME_MODES = ['light', 'dark'] as const
+export type ThemeMode = (typeof THEME_MODES)[number]
 
 export interface ThemeAppColors {
   background: string
@@ -156,8 +160,7 @@ export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
         logoBackground: '#ffffff',
         logoBorder: '#e0e6fb',
         logoShadow: '0 18px 30px rgba(25, 35, 70, 0.15)',
-        glow:
-          'radial-gradient(circle at 10% 20%, rgba(120, 152, 255, 0.45), transparent 55%), radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.5), transparent 50%)',
+        glow: 'radial-gradient(circle at 10% 20%, rgba(120, 152, 255, 0.45), transparent 55%), radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.5), transparent 50%)',
       },
       pricing: {
         background:
@@ -167,8 +170,7 @@ export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
         subtitle: '#4b5563',
         eyebrow: '#6b7280',
         footnote: '#6b7280',
-        glow:
-          'radial-gradient(circle at 15% 20%, rgba(124, 152, 255, 0.35), transparent 55%), radial-gradient(circle at 80% 5%, rgba(255, 255, 255, 0.6), transparent 60%)',
+        glow: 'radial-gradient(circle at 15% 20%, rgba(124, 152, 255, 0.35), transparent 55%), radial-gradient(circle at 80% 5%, rgba(255, 255, 255, 0.6), transparent 60%)',
         planBackground: '#ffffff',
         planBorder: '#e2e8f5',
         planShadow: '0 12px 20px rgba(15, 23, 42, 0.08)',
@@ -283,8 +285,7 @@ export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
         logoBackground: '#11141c',
         logoBorder: '#2a2f38',
         logoShadow: '0 22px 34px rgba(8, 10, 18, 0.55)',
-        glow:
-          'radial-gradient(circle at 15% 20%, rgba(74, 111, 255, 0.35), transparent 55%), radial-gradient(circle at 85% 10%, rgba(255, 255, 255, 0.08), transparent 60%)',
+        glow: 'radial-gradient(circle at 15% 20%, rgba(74, 111, 255, 0.35), transparent 55%), radial-gradient(circle at 85% 10%, rgba(255, 255, 255, 0.08), transparent 60%)',
       },
       pricing: {
         background:
@@ -294,8 +295,7 @@ export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
         subtitle: '#c4cad9',
         eyebrow: '#9aa4b2',
         footnote: '#9aa4b2',
-        glow:
-          'radial-gradient(circle at 15% 20%, rgba(74, 111, 255, 0.28), transparent 55%), radial-gradient(circle at 85% 5%, rgba(255, 255, 255, 0.08), transparent 60%)',
+        glow: 'radial-gradient(circle at 15% 20%, rgba(74, 111, 255, 0.28), transparent 55%), radial-gradient(circle at 85% 5%, rgba(255, 255, 255, 0.08), transparent 60%)',
         planBackground: '#181c24',
         planBorder: '#2a313f',
         planShadow: '0 16px 26px rgba(5, 10, 22, 0.4)',
@@ -356,7 +356,7 @@ export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
 
 let activeThemeOptions: ThemeOptions = DEFAULT_THEME_OPTIONS
 
-export function resolveThemeOptions(
+function resolveThemeOptions(
   ...values: Array<ThemeOptionsInput | undefined>
 ): ThemeOptions {
   let merged = DEFAULT_THEME_OPTIONS
@@ -366,20 +366,75 @@ export function resolveThemeOptions(
   return merged
 }
 
-export function setThemeOptions(options: ThemeOptions) {
+function setThemeOptions(options: ThemeOptions) {
   activeThemeOptions = options
 }
 
-export function getThemeOptions(): ThemeOptions {
+function getThemeOptions(): ThemeOptions {
   return activeThemeOptions
 }
 
-export function getThemePalette(
+function getThemePalette(
   theme: ThemeName,
-  options: ThemeOptions = activeThemeOptions,
 ): ThemePalette {
+  const mode = resolveThemeMode(theme)
+  return activeThemeOptions.colors[mode]
+}
+
+function resolveThemeMode(theme: ThemeName): ThemeMode {
   const normalized = normalizeThemeName(theme)
-  return normalized === 'dark' ? options.colors.dark : options.colors.light
+  if (normalized === 'dark') return 'dark'
+  if (normalized === 'light') return 'light'
+  if (
+    normalized.startsWith('dark-') ||
+    normalized.endsWith('-dark') ||
+    normalized.includes('dark')
+  ) {
+    return 'dark'
+  }
+  if (
+    normalized.startsWith('light-') ||
+    normalized.endsWith('-light') ||
+    normalized.includes('light')
+  ) {
+    return 'light'
+  }
+  return 'light'
+}
+
+function forEachTheme(
+  run: (theme: ThemeMode, palette: ThemePalette) => void,
+) {
+  for (const theme of THEME_MODES) {
+    run(theme, activeThemeOptions.colors[theme])
+  }
+}
+
+export interface Themes {
+  readonly modes: readonly ThemeMode[]
+  readonly defaults: ThemeOptions
+  resolve: (...values: Array<ThemeOptionsInput | undefined>) => ThemeOptions
+  setOptions: (options: ThemeOptions) => void
+  getOptions: () => ThemeOptions
+  palette: (theme: ThemeName) => ThemePalette
+  forEach: (
+    run: (
+      theme: ThemeMode,
+      palette: ThemePalette,
+      options: ThemeOptions,
+    ) => void,
+  ) => void
+}
+
+export const themes: Themes = {
+  modes: THEME_MODES,
+  defaults: DEFAULT_THEME_OPTIONS,
+  resolve: (...values) => resolveThemeOptions(...values),
+  setOptions: (options) => setThemeOptions(options),
+  getOptions: () => getThemeOptions(),
+  palette: (theme) => getThemePalette(theme),
+  forEach: (run) =>
+    forEachTheme((theme, palette) => run(theme, palette, activeThemeOptions)),
 }
 
 function mergeThemeOptions(

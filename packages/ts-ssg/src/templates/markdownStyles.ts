@@ -1,22 +1,47 @@
 import { styleBuilder } from '../style/styles'
-import { getThemeOptions, getThemePalette } from '../style/themeOptions'
+import {
+  type ThemeMode,
+  type ThemeOptions,
+  themes,
+} from '../style/themeOptions'
+
+type MarkdownStyleContext = {
+  options: ThemeOptions
+  palette: (theme: ThemeMode) => ReturnType<typeof themes.palette>
+  linkColor: (theme: ThemeMode) => string
+}
 
 export function registerMarkdownStyles() {
-  const themeOptions = getThemeOptions()
-  const palette = (theme: string) => getThemePalette(theme, themeOptions)
-  const linkColor = (theme: string) => palette(theme).topBar.logo
+  const options = themes.getOptions()
+  const palette = (theme: ThemeMode) => themes.palette(theme)
+  const linkColor = (theme: ThemeMode) => palette(theme).topBar.logo
+  const ctx: MarkdownStyleContext = { options, palette, linkColor }
 
-  const baseProse = (theme: string) =>
+  registerBaseProseStyles(ctx)
+  registerHeadingStyles()
+  registerListStyles()
+  registerLinkStyles(ctx)
+  registerCodeStyles(ctx)
+  registerBlockquoteStyles(ctx)
+  registerTableStyles()
+  registerHrStyles()
+  registerMediaStyles(ctx)
+}
+
+function registerBaseProseStyles(ctx: MarkdownStyleContext) {
+  themes.forEach((theme, palette) => {
     styleBuilder
       .select('.doc-content', theme)
-      .fontSize(themeOptions.typography.baseSize)
+      .fontSize(ctx.options.typography.baseSize)
       .lineHeight('1.7')
-      .color(palette(theme).panel.text)
+      .color(palette.panel.text)
 
-  baseProse('light')
-  baseProse('dark')
+    styleBuilder.select('.doc-content :where(p)', theme).margin('0 0 1em')
+  })
+}
 
-  const headingBase = (selector: string, theme: string) =>
+function registerHeadingStyles() {
+  const headingBase = (selector: string, theme: ThemeMode) =>
     styleBuilder
       .select(selector, theme)
       .fontWeight('700')
@@ -25,226 +50,267 @@ export function registerMarkdownStyles() {
       .margin('2.2em 0 0.6em')
       .scrollMarginTop('96px')
 
-  headingBase('.doc-content :where(h1)', 'light')
-    .fontSize('2.4rem')
-    .margin('0 0 0.5em')
-  headingBase('.doc-content :where(h1)', 'dark')
-    .fontSize('2.4rem')
-    .margin('0 0 0.5em')
-  headingBase('.doc-content :where(h2)', 'light').fontSize('1.9rem')
-  headingBase('.doc-content :where(h2)', 'dark').fontSize('1.9rem')
-  headingBase('.doc-content :where(h3)', 'light').fontSize('1.5rem')
-  headingBase('.doc-content :where(h3)', 'dark').fontSize('1.5rem')
-  headingBase('.doc-content :where(h4)', 'light').fontSize('1.25rem')
-  headingBase('.doc-content :where(h4)', 'dark').fontSize('1.25rem')
-  headingBase('.doc-content :where(h5)', 'light')
-    .fontSize('1.05rem')
-    .textTransform('uppercase')
-    .letterSpacing('0.04em')
-  headingBase('.doc-content :where(h5)', 'dark')
-    .fontSize('1.05rem')
-    .textTransform('uppercase')
-    .letterSpacing('0.04em')
-  headingBase('.doc-content :where(h6)', 'light')
-    .fontSize('0.95rem')
-    .textTransform('uppercase')
-    .letterSpacing('0.06em')
-    .color(palette('light').nav.textMuted)
-  headingBase('.doc-content :where(h6)', 'dark')
-    .fontSize('0.95rem')
-    .textTransform('uppercase')
-    .letterSpacing('0.06em')
-    .color(palette('dark').nav.textMuted)
+  themes.forEach((theme, palette) => {
+    headingBase('.doc-content :where(h1)', theme)
+      .fontSize('2.4rem')
+      .margin('0 0 0.5em')
+    headingBase('.doc-content :where(h2)', theme).fontSize('1.9rem')
+    headingBase('.doc-content :where(h3)', theme).fontSize('1.5rem')
+    headingBase('.doc-content :where(h4)', theme).fontSize('1.25rem')
+    headingBase('.doc-content :where(h5)', theme)
+      .fontSize('1.05rem')
+      .textTransform('uppercase')
+      .letterSpacing('0.04em')
+    headingBase('.doc-content :where(h6)', theme)
+      .fontSize('0.95rem')
+      .textTransform('uppercase')
+      .letterSpacing('0.06em')
+      .color(palette.nav.textMuted)
 
-  styleBuilder
-    .select('.doc-content :where(h1:first-child)', 'light')
-    .marginTop('0')
-  styleBuilder
-    .select('.doc-content :where(h1:first-child)', 'dark')
-    .marginTop('0')
+    styleBuilder.select('.doc-content :where(h1:first-child)', theme).marginTop('0')
+  })
+}
 
-  const baseParagraph = (theme: string) =>
-    styleBuilder.select('.doc-content :where(p)', theme).margin('0 0 1em')
-  baseParagraph('light')
-  baseParagraph('dark')
-
-  const baseLists = (theme: string) =>
+function registerListStyles() {
+  themes.forEach((theme) => {
     styleBuilder
       .select('.doc-content :where(ul, ol)', theme)
       .margin('0 0 1em 1.4em')
       .padding('0')
-  baseLists('light')
-  baseLists('dark')
-
-  const baseListItems = (theme: string) =>
     styleBuilder.select('.doc-content :where(li)', theme).margin('0.35em 0')
-  baseListItems('light')
-  baseListItems('dark')
+    styleBuilder.select('.doc-content :where(li > p)', theme).margin('0.4em 0')
+  })
+}
 
-  styleBuilder.select('.doc-content :where(li > p)', 'light').margin('0.4em 0')
-  styleBuilder.select('.doc-content :where(li > p)', 'dark').margin('0.4em 0')
-
-  const baseLinks = (theme: string) =>
+function registerLinkStyles(ctx: MarkdownStyleContext) {
+  themes.forEach((theme, palette) => {
     styleBuilder
       .select('.doc-content :where(a)', theme)
-      .color(linkColor(theme))
+      .color(ctx.linkColor(theme))
       .textDecoration('none')
       .fontWeight('600')
-  baseLinks('light')
-  baseLinks('dark')
+    styleBuilder.select('.doc-content :where(a:hover)', theme).textDecoration('underline')
+    styleBuilder
+      .select('.doc-content :where(a:focus-visible)', theme)
+      .outline(`2px solid ${palette.nav.focusRing}`)
+      .outlineOffset('2px')
+  })
+}
 
-  styleBuilder
-    .select('.doc-content :where(a:hover)', 'light')
-    .textDecoration('underline')
-  styleBuilder
-    .select('.doc-content :where(a:hover)', 'dark')
-    .textDecoration('underline')
+function registerCodeStyles(ctx: MarkdownStyleContext) {
+  registerInlineCodeStyles(ctx)
+  registerPreAndCopyButtonStyles(ctx)
+  registerShikiStyles(ctx)
+}
 
-  styleBuilder
-    .select('.doc-content :where(a:focus-visible)', 'light')
-    .outline(`2px solid ${palette('light').nav.focusRing}`)
-    .outlineOffset('2px')
-  styleBuilder
-    .select('.doc-content :where(a:focus-visible)', 'dark')
-    .outline(`2px solid ${palette('dark').nav.focusRing}`)
-    .outlineOffset('2px')
-
-  const baseInlineCode = (theme: string) =>
+function registerInlineCodeStyles(ctx: MarkdownStyleContext) {
+  themes.forEach((theme, palette) => {
     styleBuilder
       .select('.doc-content :where(code)', theme)
       .fontFamily("'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace")
       .fontSize('0.9em')
-      .background(palette(theme).surface.altBackground)
-      .border(`1px solid ${palette(theme).surface.altBorder}`)
-      .borderRadius(themeOptions.radii.sm)
+      .background(palette.surface.altBackground)
+      .border(`1px solid ${palette.surface.altBorder}`)
+      .borderRadius(ctx.options.radii.sm)
       .padding('0.15em 0.35em')
-  baseInlineCode('light')
-  baseInlineCode('dark')
+  })
+}
 
-  const basePre = (theme: string) =>
+function registerPreAndCopyButtonStyles(ctx: MarkdownStyleContext) {
+  themes.forEach((theme, palette) => {
     styleBuilder
       .select('.doc-content :where(pre)', theme)
       .margin('0 0 1.4em')
       .padding('18px 20px')
-      .background(palette(theme).surface.altBackground)
-      .border(`1px solid ${palette(theme).surface.altBorder}`)
-      .borderRadius(themeOptions.radii.md)
+      .background(palette.surface.altBackground)
+      .border(`1px solid ${palette.surface.altBorder}`)
+      .borderRadius(ctx.options.radii.md)
+      .position('relative')
       .overflow('auto')
       .lineHeight('1.6')
       .fontSize('0.9em')
-  basePre('light')
-  basePre('dark')
 
-  const shikiPre = (theme: string, colorVar: string, bgVar: string) =>
     styleBuilder
-      .select('.doc-content :where(pre.shiki.shiki-themes)', theme)
-      .background(`var(${bgVar}, ${palette(theme).surface.altBackground})`)
-      .color(`var(${colorVar}, ${palette(theme).panel.text})`)
+      .select('.doc-content :where(pre.code-copy-ready)', theme)
+      .paddingTop('2.9rem')
+      .paddingRight('1.1rem')
 
-  shikiPre('light', '--shiki-light', '--shiki-light-bg')
-  shikiPre('dark', '--shiki-dark', '--shiki-dark-bg')
-
-  const shikiSpan = (theme: string, colorVar: string) =>
     styleBuilder
-      .select('.doc-content :where(pre.shiki.shiki-themes span)', theme)
-      .color(`var(${colorVar})`)
+      .select('.doc-content :where(pre > .code-copy-button)', theme)
+      .position('absolute')
+      .top('12px')
+      .right('12px')
+      .zIndex(2)
+      .border(`1px solid ${palette.surface.border}`)
+      .background(palette.panel.background)
+      .color(palette.panel.text)
+      .width('2.15rem')
+      .height('2.15rem')
+      .padding('0')
+      .display('inline-flex')
+      .alignItems('center')
+      .justifyContent('center')
+      .borderRadius(ctx.options.radii.sm)
+      .boxShadow('0 1px 2px rgba(0,0,0,0.08)')
+      .cursor('pointer')
+      .opacity(0)
+      .transform('translateY(-4px)')
+      .pointerEvents('none')
+      .transition(
+        'opacity 140ms ease, transform 180ms ease, background-color 140ms ease, border-color 140ms ease, color 140ms ease',
+      )
 
-  shikiSpan('light', '--shiki-light')
-  shikiSpan('dark', '--shiki-dark')
-
-  const shikiInline = (theme: string, colorVar: string) =>
     styleBuilder
-      .select('.doc-content :where(code.shiki-inline)', theme)
-      .color(`var(${colorVar}, ${palette(theme).panel.text})`)
-      .background(palette(theme).surface.altBackground)
-      .border(`1px solid ${palette(theme).surface.altBorder}`)
+      .select(
+        '.doc-content :where(pre:hover > .code-copy-button, pre:focus-within > .code-copy-button)',
+        theme,
+      )
+      .opacity(1)
+      .transform('translateY(0)')
+      .pointerEvents('auto')
 
-  shikiInline('light', '--shiki-light')
-  shikiInline('dark', '--shiki-dark')
+    styleBuilder
+      .select('.doc-content :where(pre > .code-copy-button svg)', theme)
+      .width('1.05rem')
+      .height('1.05rem')
+      .display('block')
+
+    styleBuilder
+      .select('.doc-content :where(pre > .code-copy-button:hover)', theme)
+      .background(palette.surface.altBackground)
+      .borderColor(palette.surface.altBorder)
+
+    styleBuilder
+      .select('.doc-content :where(pre > .code-copy-button:focus-visible)', theme)
+      .opacity(1)
+      .transform('translateY(0)')
+      .pointerEvents('auto')
+      .outline(`2px solid ${palette.nav.focusRing}`)
+      .outlineOffset('2px')
+
+    styleBuilder
+      .select('.doc-content :where(pre > .code-copy-button)', theme)
+      .media('hover: none')
+      .opacity(1)
+      .transform('translateY(0)')
+      .pointerEvents('auto')
+
+    styleBuilder
+      .select('.doc-content :where(pre code)', theme)
+      .background('transparent')
+      .border('none')
+      .padding('0')
+      .fontSize('inherit')
+  })
 
   styleBuilder
-    .select('.doc-content :where(pre code)', 'light')
-    .background('transparent')
-    .border('none')
-    .padding('0')
-    .fontSize('inherit')
+    .select('.doc-content :where(pre > .code-copy-button.is-copied)', 'light')
+    .background('#e8f8ef')
+    .borderColor('#7ecb9c')
+    .color('#0f6a3f')
   styleBuilder
-    .select('.doc-content :where(pre code)', 'dark')
-    .background('transparent')
-    .border('none')
-    .padding('0')
-    .fontSize('inherit')
+    .select('.doc-content :where(pre > .code-copy-button.is-copied)', 'dark')
+    .background('#0f3325')
+    .borderColor('#2f8f63')
+    .color('#93f0bf')
 
-  const baseBlockquote = (theme: string) =>
+  styleBuilder
+    .select('.doc-content :where(pre > .code-copy-button.is-error)', 'light')
+    .background('#fff0f0')
+    .borderColor('#e0a1a1')
+    .color('#8b1d1d')
+  styleBuilder
+    .select('.doc-content :where(pre > .code-copy-button.is-error)', 'dark')
+    .background('#3a1717')
+    .borderColor('#9f4848')
+    .color('#ffb0b0')
+}
+
+function registerShikiStyles(ctx: MarkdownStyleContext) {
+  styleBuilder
+    .select('.doc-content :where(pre.shiki.shiki-themes)', 'light')
+    .background(`var(--shiki-light-bg, ${ctx.palette('light').surface.altBackground})`)
+    .color(`var(--shiki-light, ${ctx.palette('light').panel.text})`)
+  styleBuilder
+    .select('.doc-content :where(pre.shiki.shiki-themes)', 'dark')
+    .background(`var(--shiki-dark-bg, ${ctx.palette('dark').surface.altBackground})`)
+    .color(`var(--shiki-dark, ${ctx.palette('dark').panel.text})`)
+
+  styleBuilder
+    .select('.doc-content :where(pre.shiki.shiki-themes span)', 'light')
+    .color('var(--shiki-light)')
+  styleBuilder
+    .select('.doc-content :where(pre.shiki.shiki-themes span)', 'dark')
+    .color('var(--shiki-dark)')
+
+  styleBuilder
+    .select('.doc-content :where(code.shiki-inline)', 'light')
+    .color(`var(--shiki-light, ${ctx.palette('light').panel.text})`)
+    .background(ctx.palette('light').surface.altBackground)
+    .border(`1px solid ${ctx.palette('light').surface.altBorder}`)
+  styleBuilder
+    .select('.doc-content :where(code.shiki-inline)', 'dark')
+    .color(`var(--shiki-dark, ${ctx.palette('dark').panel.text})`)
+    .background(ctx.palette('dark').surface.altBackground)
+    .border(`1px solid ${ctx.palette('dark').surface.altBorder}`)
+}
+
+function registerBlockquoteStyles(ctx: MarkdownStyleContext) {
+  themes.forEach((theme, palette) => {
     styleBuilder
       .select('.doc-content :where(blockquote)', theme)
       .margin('0 0 1.4em')
       .padding('0.65em 1.1em')
-      .borderLeft(`3px solid ${palette(theme).surface.border}`)
-      .background(palette(theme).surface.altBackground)
-      .borderRadius(themeOptions.radii.sm)
-  baseBlockquote('light')
-  baseBlockquote('dark')
+      .borderLeft(`3px solid ${palette.surface.border}`)
+      .background(palette.surface.altBackground)
+      .borderRadius(ctx.options.radii.sm)
+  })
+}
 
-  const baseTables = (theme: string) =>
+function registerTableStyles() {
+  themes.forEach((theme, palette) => {
     styleBuilder
       .select('.doc-content :where(table)', theme)
       .width('100%')
       .borderCollapse('collapse')
       .margin('0 0 1.4em')
-  baseTables('light')
-  baseTables('dark')
-
-  const baseCells = (theme: string) =>
     styleBuilder
       .select('.doc-content :where(th, td)', theme)
-      .border(`1px solid ${palette(theme).surface.border}`)
+      .border(`1px solid ${palette.surface.border}`)
       .padding('8px 10px')
       .textAlign('left')
-  baseCells('light')
-  baseCells('dark')
+    styleBuilder
+      .select('.doc-content :where(th)', theme)
+      .background(palette.surface.altBackground)
+      .fontWeight('700')
+  })
+}
 
-  styleBuilder
-    .select('.doc-content :where(th)', 'light')
-    .background(palette('light').surface.altBackground)
-    .fontWeight('700')
-  styleBuilder
-    .select('.doc-content :where(th)', 'dark')
-    .background(palette('dark').surface.altBackground)
-    .fontWeight('700')
-
-  const baseHr = (theme: string) =>
+function registerHrStyles() {
+  themes.forEach((theme, palette) => {
     styleBuilder
       .select('.doc-content :where(hr)', theme)
       .border('none')
-      .borderTop(`1px solid ${palette(theme).surface.border}`)
+      .borderTop(`1px solid ${palette.surface.border}`)
       .margin('2em 0')
-  baseHr('light')
-  baseHr('dark')
+  })
+}
 
-  const baseMedia = (theme: string) =>
+function registerMediaStyles(ctx: MarkdownStyleContext) {
+  themes.forEach((theme, palette) => {
     styleBuilder
       .select('.doc-content :where(img, video)', theme)
       .maxWidth('100%')
       .height('auto')
-      .borderRadius(themeOptions.radii.md)
-      .border(`1px solid ${palette(theme).surface.border}`)
-  baseMedia('light')
-  baseMedia('dark')
+      .borderRadius(ctx.options.radii.md)
+      .border(`1px solid ${palette.surface.border}`)
 
-  styleBuilder
-    .select('.doc-content :where(figure)', 'light')
-    .margin('0 0 1.4em')
-  styleBuilder.select('.doc-content :where(figure)', 'dark').margin('0 0 1.4em')
+    styleBuilder.select('.doc-content :where(figure)', theme).margin('0 0 1.4em')
 
-  styleBuilder
-    .select('.doc-content :where(figcaption)', 'light')
-    .marginTop('0.6em')
-    .fontSize('0.9em')
-    .color(palette('light').nav.textMuted)
-  styleBuilder
-    .select('.doc-content :where(figcaption)', 'dark')
-    .marginTop('0.6em')
-    .fontSize('0.9em')
-    .color(palette('dark').nav.textMuted)
+    styleBuilder
+      .select('.doc-content :where(figcaption)', theme)
+      .marginTop('0.6em')
+      .fontSize('0.9em')
+      .color(palette.nav.textMuted)
+  })
 }

@@ -1,7 +1,7 @@
 import { createComponent, html } from 'regor'
 
 import { styleBuilder } from '../../style/styles'
-import { getThemeOptions, getThemePalette } from '../../style/themeOptions'
+import { themes } from '../../style/themeOptions'
 
 export interface ThemeHeroColors {
   background: string
@@ -83,8 +83,8 @@ interface HeroMediaContext {
 }
 
 function registerHeroStyles() {
-  const themeOptions = getThemeOptions()
-  const palette = (theme: string) => getThemePalette(theme, themeOptions)
+  const options = themes.getOptions()
+  const palette = (theme: string) => themes.palette(theme)
 
   const baseHero = (theme: string) =>
     styleBuilder
@@ -92,10 +92,10 @@ function registerHeroStyles() {
       .position('relative')
       .overflow('hidden')
       .padding('28px')
-      .borderRadius(themeOptions.radii.lg)
+      .borderRadius(options.radii.lg)
       .border(`1px solid ${palette(theme).hero.border}`)
       .background(palette(theme).hero.background)
-      .boxShadow(themeOptions.shadows.soft)
+      .boxShadow(options.shadows.soft)
       .margin('0 0 32px')
       .color(palette(theme).hero.title)
 
@@ -205,7 +205,7 @@ function registerHeroStyles() {
       .alignItems('center')
       .gap('8px')
       .padding('12px 22px')
-      .borderRadius(themeOptions.radii.pill)
+      .borderRadius(options.radii.pill)
       .border('1px solid transparent')
       .fontWeight('600')
       .textDecoration('none')
@@ -316,7 +316,7 @@ function registerHeroStyles() {
     styleBuilder
       .select('.hero__logo-frame', theme)
       .padding('18px 22px')
-      .borderRadius(themeOptions.radii.lg)
+      .borderRadius(options.radii.lg)
       .background(palette(theme).hero.logoBackground)
       .border(`1px solid ${palette(theme).hero.logoBorder}`)
       .boxShadow(palette(theme).hero.logoShadow)

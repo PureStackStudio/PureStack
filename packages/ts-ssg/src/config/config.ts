@@ -7,9 +7,9 @@ import {
   resolveNavigationConfig,
 } from '../navigation/navigation'
 import {
-  resolveThemeOptions,
   type ThemeOptions,
   type ThemeOptionsInput,
+  themes,
 } from '../style/themeOptions'
 import { resolveThemes } from '../style/themes'
 
@@ -75,7 +75,7 @@ export function resolveSiteConfig(input: PartialSiteConfig = {}): SiteConfig {
     input.navigation,
     fileConfig.navigation,
   )
-  const theme = resolveThemeOptions(input.theme, fileConfig.theme)
+  const theme = themes.resolve(input.theme, fileConfig.theme)
   return {
     rootDir,
     contentDir,

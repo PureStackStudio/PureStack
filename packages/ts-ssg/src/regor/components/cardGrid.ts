@@ -1,7 +1,7 @@
 import { createComponent, html } from 'regor'
 
 import { styleBuilder } from '../../style/styles'
-import { getThemeOptions, getThemePalette } from '../../style/themeOptions'
+import { themes } from '../../style/themeOptions'
 
 export interface ThemeCardGridColors {
   border: string
@@ -23,8 +23,8 @@ const cardGridTemplate = html`<div class="card-grid">
 </div>`
 
 function registerCardGridStyles() {
-  const themeOptions = getThemeOptions()
-  const palette = (theme: string) => getThemePalette(theme, themeOptions)
+  const options = themes.getOptions()
+  const palette = (theme: string) => themes.palette(theme)
 
   const baseGrid = (theme: string) =>
     styleBuilder
@@ -32,7 +32,7 @@ function registerCardGridStyles() {
       .display('grid')
       .gap('16px')
       .padding('24px')
-      .borderRadius(themeOptions.radii.md)
+      .borderRadius(options.radii.md)
 
   baseGrid('light').border(`1px solid ${palette('light').cardGrid.border}`)
   baseGrid('dark').border(`1px solid ${palette('dark').cardGrid.border}`)
@@ -63,16 +63,15 @@ const cardTemplate = html`<div class="card">
 </div>`
 
 function registerCardStyles() {
-  const themeOptions = getThemeOptions()
-  const palette = (theme: string) => getThemePalette(theme, themeOptions)
-
+  const options = themes.getOptions()
+  const palette = (theme: string) => themes.palette(theme)
   const baseCard = (theme: string) =>
     styleBuilder
       .select('.card', theme)
       .display('grid')
       .gap('8px')
       .padding('16px')
-      .borderRadius(themeOptions.radii.md)
+      .borderRadius(options.radii.md)
 
   baseCard('light').border(`1px solid ${palette('light').card.border}`)
   baseCard('dark').border(`1px solid ${palette('dark').card.border}`)

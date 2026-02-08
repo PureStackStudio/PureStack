@@ -2,7 +2,7 @@ import { createComponent, html } from 'regor'
 
 import { getSvgIcon } from '../../style/icons'
 import { styleBuilder } from '../../style/styles'
-import { getThemeOptions, getThemePalette } from '../../style/themeOptions'
+import { themes } from '../../style/themeOptions'
 
 export interface ThemePricingColors {
   background: string
@@ -122,8 +122,8 @@ const pricingFeatureTemplate = html`<li class="pricing-feature">
 </li>`
 
 function registerPricingStyles() {
-  const themeOptions = getThemeOptions()
-  const palette = (theme: string) => getThemePalette(theme, themeOptions)
+  const options = themes.getOptions()
+  const palette = (theme: string) => themes.palette(theme)
 
   const basePricing = (theme: string) =>
     styleBuilder
@@ -131,10 +131,10 @@ function registerPricingStyles() {
       .position('relative')
       .overflow('hidden')
       .padding('28px')
-      .borderRadius(themeOptions.radii.lg)
+      .borderRadius(options.radii.lg)
       .border(`1px solid ${palette(theme).pricing.border}`)
       .background(palette(theme).pricing.background)
-      .boxShadow(themeOptions.shadows.soft)
+      .boxShadow(options.shadows.soft)
       .margin('0 0 32px')
 
   basePricing('light')
@@ -230,7 +230,7 @@ function registerPricingStyles() {
       .flexDirection('column')
       .gap('12px')
       .padding('18px')
-      .borderRadius(themeOptions.radii.md)
+      .borderRadius(options.radii.md)
       .border(`1px solid ${palette(theme).pricing.planBorder}`)
       .background(palette(theme).pricing.planBackground)
       .boxShadow(palette(theme).pricing.planShadow)
@@ -322,7 +322,7 @@ function registerPricingStyles() {
     styleBuilder
       .select('.pricing-plan__badge', theme)
       .padding('4px 10px')
-      .borderRadius(themeOptions.radii.pill)
+      .borderRadius(options.radii.pill)
       .fontSize('11px')
       .fontWeight('700')
       .textTransform('uppercase')
@@ -391,7 +391,7 @@ function registerPricingStyles() {
       .justifyContent('center')
       .gap('8px')
       .padding('9px 14px')
-      .borderRadius(themeOptions.radii.pill)
+      .borderRadius(options.radii.pill)
       .fontWeight('600')
       .fontSize('13px')
       .textDecoration('none')
@@ -526,7 +526,7 @@ function registerPricingStyles() {
       .content('""')
       .position('absolute')
       .inset('0')
-      .borderRadius(themeOptions.radii.md)
+      .borderRadius(options.radii.md)
       .border(`1px solid ${palette(theme).pricing.planHighlightBorder}`)
       .opacity('0.5')
       .pointerEvents('none')

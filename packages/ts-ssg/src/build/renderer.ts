@@ -2,8 +2,9 @@ import { type BasicHeadConfig, h } from '@purestack/ts-html'
 
 import { getHead } from '../config/head'
 import type { PageNavigation } from '../navigation/navigation'
-import { getThemeOptions } from '../style/themeOptions'
+import { themes } from '../style/themeOptions'
 import type { ThemeStylesheetLink } from '../style/themes'
+import { buildCodeCopyScript } from '../templates/buildCodeCopyScript'
 import { buildPageTocScript } from '../templates/buildPageTocScript'
 import { buildThemeSwitchScript } from '../templates/buildThemeSwitchScript'
 import {
@@ -30,6 +31,7 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
   head.push(h('style').raw(buildCriticalThemeStyle(themes.length > 0)))
   appendStyleLinkTags(head, styleLinks)
   appendThemeSwitchScript(head, themes)
+  appendCodeCopyScript(head)
   const { pageTemplate, templateName } = resolvePageTemplate(
     template,
     templates,
@@ -103,8 +105,13 @@ function appendTocScript(
   head.push(h('script').raw(script))
 }
 
+function appendCodeCopyScript(head: ReturnType<typeof getHead>) {
+  const script = buildCodeCopyScript()
+  head.push(h('script').raw(script))
+}
+
 function buildCriticalThemeStyle(hasThemeGate: boolean) {
-  const options = getThemeOptions()
+  const options = themes.getOptions()
   const light = options.colors.light.app
   const dark = options.colors.dark.app
   const css = [

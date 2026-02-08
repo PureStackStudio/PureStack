@@ -2,7 +2,7 @@ import { createComponent, html } from 'regor'
 
 import type { PageOutlineItem } from '../../mdx/mdx'
 import { styleBuilder } from '../../style/styles'
-import { getThemeOptions, getThemePalette } from '../../style/themeOptions'
+import { themes } from '../../style/themeOptions'
 import { resolveTsSsgContext } from '../resolveTsSsgContext'
 import type { TsSsgContext } from '../ts-ssg-context'
 
@@ -63,8 +63,8 @@ function resolveTitle(props: PageTocProps) {
 }
 
 function registerPageTocStyles() {
-  const themeOptions = getThemeOptions()
-  const palette = (theme: string) => getThemePalette(theme, themeOptions)
+  const options = themes.getOptions()
+  const palette = (theme: string) => themes.palette(theme)
 
   const baseToc = (theme: string) =>
     styleBuilder
@@ -72,7 +72,7 @@ function registerPageTocStyles() {
       .display('grid')
       .gap('12px')
       .padding('16px')
-      .borderRadius(themeOptions.radii.lg)
+      .borderRadius(options.radii.lg)
       .border('1px solid transparent')
       .fontSize('0.95rem')
       .lineHeight('1.5')
@@ -129,7 +129,7 @@ function registerPageTocStyles() {
       .select('.page-toc__link', theme)
       .display('block')
       .padding('6px 10px')
-      .borderRadius(themeOptions.radii.md)
+      .borderRadius(options.radii.md)
       .textDecoration('none')
       .fontWeight('600')
       .transition('background 160ms ease, color 160ms ease')

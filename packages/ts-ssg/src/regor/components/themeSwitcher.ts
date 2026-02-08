@@ -1,7 +1,7 @@
 import { createComponent, html } from 'regor'
 
 import { styleBuilder } from '../../style/styles'
-import { getThemeOptions, getThemePalette } from '../../style/themeOptions'
+import { themes } from '../../style/themeOptions'
 
 export interface ThemeSwitcherColors {
   background: string
@@ -76,8 +76,8 @@ const themeSwitcherTemplate = html`<button
 </button>`
 
 function registerThemeSwitcherStyles() {
-  const themeOptions = getThemeOptions()
-  const palette = (theme: string) => getThemePalette(theme, themeOptions)
+  const options = themes.getOptions()
+  const palette = (theme: string) => themes.palette(theme)
 
   const baseSwitcher = (theme: string) =>
     styleBuilder
@@ -89,7 +89,7 @@ function registerThemeSwitcherStyles() {
       .height('42px')
       .minWidth('90px')
       .padding('0')
-      .borderRadius(themeOptions.radii.pill)
+      .borderRadius(options.radii.pill)
       .border('1px solid transparent')
       .background('transparent')
       .cursor('pointer')
@@ -127,7 +127,7 @@ function registerThemeSwitcherStyles() {
       .select('.theme-switcher__track', theme)
       .position('absolute')
       .inset('6px')
-      .borderRadius(themeOptions.radii.pill)
+      .borderRadius(options.radii.pill)
       .background(palette(theme).themeSwitcher.trackBackground)
       .boxShadow(palette(theme).themeSwitcher.trackShadow)
       .transition('opacity 180ms ease, transform 220ms ease')
