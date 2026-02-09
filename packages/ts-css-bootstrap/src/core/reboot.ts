@@ -219,7 +219,7 @@ function setForm(style: Style, config: CssConfig) {
     .display('none !important')
   style
     .select('button,[type="button"],[type="reset"],[type="submit"]')
-    .webkitAppearance('button')
+    .appearance('button')
     .select(':not(disabled)')
     .cursor('pointer')
   style.select('::-moz-focus-inner').padding('0').borderStyle('none')
@@ -242,16 +242,10 @@ function setForm(style: Style, config: CssConfig) {
     )
     .padding('0')
   style.select('::-webkit-inner-spin-button').height('auto')
-  style
-    .select('[type="search"]')
-    .webkitAppearance('textfield')
-    .outlineOffset('-2px')
-  style.select('::-webkit-search-decoration').webkitAppearance('none')
+  style.select('[type="search"]').appearance('textfield').outlineOffset('-2px')
+  style.select('::-webkit-search-decoration').appearance('none')
   style.select('::-webkit-color-swatch-wrapper').padding('0')
-  style
-    .select('::file-selector-button')
-    .font('inherit')
-    .webkitAppearance('button')
+  style.select('::file-selector-button').font('inherit').appearance('button')
 }
 
 function setPrimitives3(style: Style, _config: CssConfig) {

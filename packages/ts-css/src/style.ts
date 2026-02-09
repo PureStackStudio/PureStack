@@ -11928,4 +11928,9 @@ export class Style extends BaseStyle<Style> {
     this.set('scroll-margin-top', value)
     return this
   }
+
+  appearance(value: CSSProps['webkitAppearance']) {
+    this.set('appearance', value)
+    return this
+  }
 }

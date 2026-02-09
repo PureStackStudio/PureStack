@@ -67,7 +67,7 @@ export function registerNormalizeStyles() {
 
     styleBuilder
       .select('button, [type="button"], [type="reset"], [type="submit"]', theme)
-      .webkitAppearance('button')
+      .appearance('button')
 
     styleBuilder
       .select(
@@ -110,16 +110,16 @@ export function registerNormalizeStyles() {
 
     styleBuilder
       .select('[type="search"]', theme)
-      .webkitAppearance('textfield')
+      .appearance('textfield')
       .outlineOffset('-2px')
 
     styleBuilder
       .select('[type="search"]::-webkit-search-decoration', theme)
-      .webkitAppearance('none')
+      .appearance('none')
 
     styleBuilder
       .select('::-webkit-file-upload-button', theme)
-      .webkitAppearance('button')
+      .appearance('button')
       .font('inherit')
 
     styleBuilder.select('details', theme).display('block')
