@@ -2,7 +2,7 @@ import { merge } from '@logpot/utils'
 
 import { builtInSkins } from './skins'
 import { normalizeThemeName, type ThemeName } from './themeAssets'
-import { ThemePalette } from './themePalette'
+import type { ThemePalette } from './themePalette'
 
 const DEFAULT_SKIN = builtInSkins.ocean
 export const THEME_MODES = ['light', 'dark'] as const

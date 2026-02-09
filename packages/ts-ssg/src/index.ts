@@ -60,10 +60,10 @@ export {
   type ThemeMode,
   type ThemeOptions,
   type ThemeOptionsInput,
-  type ThemePalette,
   type Themes,
   themes,
 } from './style/themeOptions'
+export type { ThemePalette } from './style/themePalette'
 export {
   defaultTemplates,
   type PageInfo,
