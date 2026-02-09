@@ -1,0 +1,274 @@
+---
+title: Alert Component Samples
+description: Rich examples for AlertBox with tone, variant, icon, and action slot usage.
+sidebar:
+  order: 6
+---
+
+# AlertBox Samples
+
+`AlertBox` is a rich, theme-aware callout component for inline notices, warnings, release notes, and action prompts.
+
+## 1. Basic informational alert
+
+<AlertBox
+  tone="info"
+  title="Heads up: API contract update"
+  meta="Updated 2 hours ago"
+>
+  The `v2` API response now includes `traceId` in every payload. Existing clients remain compatible.
+</AlertBox>
+
+## 2. Success alert with actions
+
+<AlertBox
+  tone="success"
+  title="Deployment completed"
+  badge="Stable"
+  eyebrow="Release"
+  icon="check"
+  meta="Build #1042 finished in 3m 12s"
+>
+  Your production rollout passed smoke tests and latency checks. No regressions detected in core endpoints.
+  <template name="actions">
+    <a href="#release-notes">View release notes</a>
+    <a href="#observability">Open observability dashboard</a>
+  </template>
+</AlertBox>
+
+## 3. Warning alert in outline mode
+
+<AlertBox
+  tone="warning"
+  variant="outline"
+  title="Planned maintenance window"
+  icon="clock"
+  meta="Sunday 01:00 - 02:00 UTC"
+>
+  During maintenance, background job throughput may be reduced.
+  <ul>
+    <li>Read operations stay available.</li>
+    <li>Retry failed writes after the maintenance window.</li>
+    <li>Webhook delivery can be delayed by a few minutes.</li>
+  </ul>
+</AlertBox>
+
+## 4. Danger alert with assertive live region
+
+<AlertBox
+  tone="danger"
+  title="Payment authorization failed"
+  badge="Action required"
+  role="alert"
+  live="assertive"
+  meta="Error code: BILLING-402"
+>
+  We could not renew your subscription. Update the payment method to avoid service interruption.
+  <template name="actions">
+    <a href="#retry-payment">Retry payment</a>
+    <a href="#billing-settings">Open billing settings</a>
+  </template>
+</AlertBox>
+
+## 5. Accent feature callout
+
+<AlertBox
+  tone="accent"
+  variant="feature"
+  eyebrow="New"
+  title="Private beta: rule simulation"
+  badge="Invite only"
+  icon="rocket"
+>
+  Simulate pricing and eligibility rules before publishing changes. Compare expected and computed outcomes side-by-side.
+  <template name="actions">
+    <a href="#join-beta">Request beta access</a>
+  </template>
+</AlertBox>
+
+## 6. Compact alerts for dense pages
+
+<AlertBox tone="neutral" compact="true" title="SDK note" icon="code">
+  `@purestack/ts-ssg` now exports `builtInSkins` directly from the package root.
+</AlertBox>
+
+<AlertBox tone="info" compact="true" title="Migration tip" icon="stack">
+  Keep component styles palette-driven. Avoid hardcoded color values in component files.
+</AlertBox>
+
+## 7. Inline mode
+
+<AlertBox tone="info" inline="true" title="Inline guidance" icon="none">
+  Use inline alerts for short contextual guidance inside long documents.
+</AlertBox>
+
+## 8. Content-rich alert with code and list
+
+<AlertBox
+  tone="info"
+  title="Recommended hardening steps"
+  icon="shield"
+>
+  Before enabling public access:
+  <ol>
+    <li>Set strict `Content-Security-Policy` headers.</li>
+    <li>Enable detailed request logging for error triage.</li>
+    <li>Pin versions in deployment config and lockfiles.</li>
+  </ol>
+  Example config key:
+  <p><code>security.csp.defaultSrc = 'self'</code></p>
+</AlertBox>
+
+## 9. Full prop showcase
+
+```html
+<AlertBox
+  tone="info|success|warning|danger|accent|neutral"
+  variant="soft|outline|feature"
+  title="Alert title"
+  eyebrow="Optional eyebrow"
+  badge="Optional badge"
+  meta="Optional metadata line"
+  icon="check|clock|support|rocket|none"
+  compact="true|false"
+  inline="true|false"
+  role="status|alert|note"
+  live="off|polite|assertive"
+>
+  Body content goes here.
+  <template name="actions">
+    <a href="#">Action</a>
+  </template>
+</AlertBox>
+```
+
+## 10. Deprecation notice
+
+<AlertBox
+  tone="warning"
+  variant="outline"
+  eyebrow="Deprecation"
+  title="Legacy webhook endpoint will be removed"
+  badge="v1"
+  icon="clock"
+  meta="Removal date: 2026-06-30"
+>
+  The endpoint `/api/webhooks/v1/events` is deprecated and will be removed.
+  Migrate to `/api/webhooks/v2/events` to keep delivery guarantees.
+  <template name="actions">
+    <a href="#migration-guide">Open migration guide</a>
+    <a href="#api-changelog">Read API changelog</a>
+  </template>
+</AlertBox>
+
+## 11. Security advisory
+
+<AlertBox
+  tone="danger"
+  variant="feature"
+  eyebrow="Security"
+  title="Rotate leaked token immediately"
+  badge="Critical"
+  icon="shield"
+  role="alert"
+  live="assertive"
+>
+  A token with elevated privileges was exposed in build logs. Revoke all compromised keys and issue new scoped tokens.
+  <template name="actions">
+    <a href="#rotate-keys">Rotate keys now</a>
+    <a href="#security-runbook">Open incident runbook</a>
+  </template>
+</AlertBox>
+
+## 12. Incident status update
+
+<AlertBox
+  tone="info"
+  variant="soft"
+  eyebrow="Incident"
+  title="Queue processing delays in EU region"
+  badge="Investigating"
+  icon="support"
+  meta="INC-4381 • Last update 14:42 UTC"
+>
+  We are seeing elevated queue latency for EU workloads. No data loss has been observed.
+  <template name="actions">
+    <a href="#status-page">View public status page</a>
+    <a href="#subscribe-updates">Subscribe to updates</a>
+  </template>
+</AlertBox>
+
+## 13. Feature flag notice
+
+<AlertBox
+  tone="accent"
+  variant="outline"
+  title="New cache engine behind feature flag"
+  eyebrow="Rollout"
+  badge="Canary"
+  icon="rocket"
+>
+  Enable `runtime.cache.v2` for 5% traffic first. Measure p95 latency and error-rate before expanding rollout.
+</AlertBox>
+
+## 14. Compliance policy alert
+
+<AlertBox
+  tone="neutral"
+  variant="outline"
+  title="Data retention policy updated"
+  eyebrow="Policy"
+  icon="stack"
+  meta="Effective: next billing cycle"
+>
+  Audit log retention changed from 30 to 90 days for all paid plans.
+  Contact legal if your tenant requires a custom retention term.
+</AlertBox>
+
+## 15. Maintenance completed
+
+<AlertBox
+  tone="success"
+  title="Maintenance completed successfully"
+  badge="Resolved"
+  icon="check"
+  meta="Total downtime: 0 minutes"
+>
+  Schema migration and index optimization are complete. Throughput improved by approximately 18%.
+  <template name="actions">
+    <a href="#postmortem">Read maintenance summary</a>
+  </template>
+</AlertBox>
+
+## 16. No-icon text-only inline alert
+
+<AlertBox
+  tone="warning"
+  inline="true"
+  compact="true"
+  icon="none"
+  title="Quota nearing limit"
+>
+  Current usage is at 92% of your monthly allocation.
+</AlertBox>
+
+## 17. Dense checklist alert
+
+<AlertBox
+  tone="accent"
+  variant="feature"
+  eyebrow="Launch checklist"
+  title="Before publishing your SDK"
+  icon="code"
+>
+  <ul>
+    <li>Confirm semantic version and changelog entries.</li>
+    <li>Run docs build and verify code examples compile.</li>
+    <li>Validate package export map in Node ESM and CJS projects.</li>
+    <li>Smoke-test install on a clean environment.</li>
+  </ul>
+  <template name="actions">
+    <a href="#release-checklist">Open full checklist</a>
+    <a href="#publish-runbook">Open publish runbook</a>
+  </template>
+</AlertBox>

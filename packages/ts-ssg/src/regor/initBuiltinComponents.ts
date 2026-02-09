@@ -1,6 +1,7 @@
 import { registerNormalizeStyles } from '../style/normalize.css'
 import { registerDocLayoutStyles } from '../templates/docLayoutStyles'
 import { registerMarkdownStyles } from '../templates/markdownStyles'
+import { createAlertComponents } from './components/alert'
 import { createCardComponents } from './components/cardGrid'
 import { createHeroComponents } from './components/hero'
 import { createNavigationComponents } from './components/navMenu'
@@ -20,6 +21,7 @@ export function initBuiltinComponents() {
   registerNormalizeStyles()
   registerDocLayoutStyles()
   registerMarkdownStyles()
+  componentRegistry.registerMany(createAlertComponents())
   componentRegistry.registerMany(createCardComponents())
   componentRegistry.registerMany(createHeroComponents())
   componentRegistry.registerMany(createTopBarComponents())
