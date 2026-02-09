@@ -4,7 +4,7 @@ import { builtInSkins } from './skins'
 import { normalizeThemeName, type ThemeName } from './themeAssets'
 import type { ThemePalette } from './themePalette'
 
-const DEFAULT_SKIN = builtInSkins.pastel
+const DEFAULT_SKIN = builtInSkins.ocean
 export const THEME_MODES = ['light', 'dark'] as const
 export type ThemeMode = (typeof THEME_MODES)[number]
 
