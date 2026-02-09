@@ -142,9 +142,9 @@ function registerPreAndCopyButtonStyles(
     .top('12px')
     .right('12px')
     .zIndex(2)
-    .border(`1px solid ${palette.border.subtle}`)
-    .background(palette.background.panel)
-    .color(palette.text.default)
+    .border(`1px solid ${palette.border.default}`)
+    .background(palette.action.neutral.background)
+    .color(palette.action.neutral.text)
     .width('2.15rem')
     .height('2.15rem')
     .padding('0')
@@ -152,7 +152,7 @@ function registerPreAndCopyButtonStyles(
     .alignItems('center')
     .justifyContent('center')
     .borderRadius(options.radii.sm)
-    .boxShadow('0 1px 2px rgba(0,0,0,0.08)')
+    .boxShadow(palette.effect.interactiveShadow)
     .cursor('pointer')
     .opacity(0)
     .transform('translateY(-4px)')
@@ -178,16 +178,28 @@ function registerPreAndCopyButtonStyles(
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button:hover)', theme)
-    .background(palette.background.surfaceAlt)
-    .borderColor(palette.border.default)
+    .background(palette.action.neutral.hover)
+    .borderColor(palette.border.strong)
+
+  styleBuilder
+    .select('.doc-content :where(pre > .code-copy-button:active)', theme)
+    .background(palette.action.neutral.active)
+    .borderColor(palette.border.strong)
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button:focus-visible)', theme)
     .opacity(1)
     .transform('translateY(0)')
     .pointerEvents('auto')
-    .outline(`2px solid ${palette.border.focus}`)
+    .outline(`2px solid ${palette.action.neutral.focusRing}`)
     .outlineOffset('2px')
+
+  styleBuilder
+    .select('.doc-content :where(pre > .code-copy-button:disabled)', theme)
+    .background(palette.action.neutral.disabled)
+    .color(palette.text.soft)
+    .borderColor(palette.border.subtle)
+    .cursor('not-allowed')
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button)', theme)
@@ -205,9 +217,9 @@ function registerPreAndCopyButtonStyles(
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button.is-copied)', theme)
-    .background(palette.status.success.background)
-    .borderColor(palette.status.success.border)
-    .color(palette.status.success.text)
+    .background(palette.badge.accent.background)
+    .borderColor(palette.border.accent)
+    .color(palette.badge.accent.text)
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button.is-error)', theme)
