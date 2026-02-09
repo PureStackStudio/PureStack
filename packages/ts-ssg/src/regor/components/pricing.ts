@@ -209,7 +209,7 @@ function applyPricingPlanStyles(
     .set('background-color', palette.icon.accent.background)
     .border(`1px solid ${palette.icon.accent.ring}`)
     .color(palette.icon.accent.color)
-    .boxShadow('0 10px 20px rgba(35, 56, 135, 0.25)')
+    .boxShadow(palette.effect.accentShadow)
     .marginBottom('4px')
 
   styleBuilder
@@ -351,7 +351,7 @@ function applyPricingFeatureStyles(theme: ThemeMode, palette: ThemePalette) {
     .set('background-color', palette.icon.neutral.background)
     .border(`1px solid ${palette.icon.neutral.ring}`)
     .color(palette.icon.neutral.color)
-    .boxShadow('0 8px 16px rgba(39, 61, 146, 0.2)')
+    .boxShadow(palette.effect.interactiveShadow)
     .marginTop('0')
 
   styleBuilder
