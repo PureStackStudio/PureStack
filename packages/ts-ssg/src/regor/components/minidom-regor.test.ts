@@ -8,8 +8,8 @@ import {
   type MiniNode,
   type MiniWindow,
   parseHtml,
-} from '../dom/minidom'
-import { registerDomGlobals } from './registerDomGlobals'
+} from '../../dom/minidom'
+import { registerDomGlobals } from '../registerDomGlobals'
 
 type DomEnv = {
   document: MiniDocument
@@ -51,14 +51,13 @@ describe('regor + minidom compatibility', () => {
         '<div><template #content><span>{{ item.title }}</span></template></div>',
         document,
       )
-      const template = wrapper.querySelector('template') as
-        | MiniHTMLTemplateElement
-        | null
+      const template = wrapper.querySelector(
+        'template',
+      ) as MiniHTMLTemplateElement | null
       const contentSpan = template?.content?.firstChild as MiniElement | null
       expect(contentSpan?.getAttribute('r-text')).toBe(' item.title ')
       expect(contentSpan?.textContent).toBe('')
-    }),
-  )
+    }))
 
   it('handles mixed text + interpolation', () =>
     withDom('<html><body></body></html>', ({ document }) => {
@@ -85,9 +84,9 @@ describe('regor + minidom compatibility', () => {
         '<template><template><span>{{ x }}</span></template></template>',
         document,
       )
-      const outer = wrapper.querySelector('template') as
-        | MiniHTMLTemplateElement
-        | null
+      const outer = wrapper.querySelector(
+        'template',
+      ) as MiniHTMLTemplateElement | null
       const inner = outer?.content?.querySelector?.(
         'template',
       ) as MiniHTMLTemplateElement | null
@@ -99,9 +98,9 @@ describe('regor + minidom compatibility', () => {
     withDom(
       '<html><body><template><span>x</span></template></body></html>',
       ({ document }) => {
-        const template = document.querySelector('template') as
-          | MiniHTMLTemplateElement
-          | null
+        const template = document.querySelector(
+          'template',
+        ) as MiniHTMLTemplateElement | null
         expect(template?.content).toBeTruthy()
         expect(template?.content?.childNodes.length).toBe(1)
       },

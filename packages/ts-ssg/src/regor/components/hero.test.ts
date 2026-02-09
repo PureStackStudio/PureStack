@@ -1,15 +1,17 @@
 import type { Component } from 'regor'
 import { describe, expect, it } from 'vitest'
 
-import { createHeroComponents } from './components/hero'
-import { ensureDomGlobals } from './registerDomGlobals'
-import { renderApp } from './renderApp'
+import { ensureDomGlobals } from '../registerDomGlobals'
+import { renderApp } from '../renderApp'
+import { createHeroComponents } from './hero'
 
 describe('HeroBanner rendering', () => {
   it('renders named slot templates into hero sections', () => {
     const cleanup = ensureDomGlobals()
-    const components =
-      createHeroComponents() as Record<string, Component<unknown>>
+    const components = createHeroComponents() as Record<
+      string,
+      Component<unknown>
+    >
     const html = renderApp(
       `<HeroBanner>
         <template name="eyebrow"><span>Backend-native calculation engine</span></template>
