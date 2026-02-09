@@ -1,8 +1,9 @@
 import { createComponent, html } from 'regor'
 
 import { styleBuilder } from '../../style/styles'
-import type { ThemeMode, ThemeOptions, ThemePalette } from '../../style/themeOptions'
+import type { ThemeMode, ThemeOptions } from '../../style/themeOptions'
 import { themes } from '../../style/themeOptions'
+import type { ThemePalette } from '../../style/themePalette'
 
 const heroTemplate = html`<section class="hero">
   <div class="hero__inner">
@@ -78,7 +79,7 @@ function applyHeroShellStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-    styleBuilder
+  styleBuilder
     .select('.hero', theme)
     .position('relative')
     .overflow('hidden')
@@ -110,7 +111,7 @@ function applyHeroShellStyles(
 }
 
 function applyHeroContentStyles(theme: ThemeMode, palette: ThemePalette) {
-    styleBuilder
+  styleBuilder
     .select('.hero__content', theme)
     .display('grid')
     .gap('16px')
@@ -152,7 +153,7 @@ function applyHeroActionStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-    styleBuilder
+  styleBuilder
     .select('.hero__actions', theme)
     .display('flex')
     .flexWrap('wrap')
@@ -229,7 +230,7 @@ function applyHeroMediaStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-    styleBuilder
+  styleBuilder
     .select('.hero__media', theme)
     .display('flex')
     .justifyContent('center')

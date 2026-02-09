@@ -2,8 +2,9 @@ import { createComponent, html } from 'regor'
 
 import { getSvgIcon } from '../../style/icons'
 import { styleBuilder } from '../../style/styles'
-import type { ThemeMode, ThemeOptions, ThemePalette } from '../../style/themeOptions'
+import type { ThemeMode, ThemeOptions } from '../../style/themeOptions'
 import { themes } from '../../style/themeOptions'
+import type { ThemePalette } from '../../style/themePalette'
 
 interface PricingTableModel {
   eyebrow?: string
@@ -97,7 +98,7 @@ function applyPricingShellStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-    styleBuilder
+  styleBuilder
     .select('.pricing', theme)
     .position('relative')
     .overflow('hidden')
@@ -128,7 +129,7 @@ function applyPricingShellStyles(
 }
 
 function applyPricingHeaderStyles(theme: ThemeMode, palette: ThemePalette) {
-    styleBuilder
+  styleBuilder
     .select('.pricing__header', theme)
     .position('relative')
     .zIndex('1')
@@ -175,7 +176,7 @@ function applyPricingPlanStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-    styleBuilder
+  styleBuilder
     .select('.pricing-plan', theme)
     .display('flex')
     .flexDirection('column')
@@ -317,7 +318,7 @@ function applyPricingPlanStyles(
 }
 
 function applyPricingFeatureStyles(theme: ThemeMode, palette: ThemePalette) {
-    styleBuilder
+  styleBuilder
     .select('.pricing-plan__features', theme)
     .listStyle('none')
     .padding('0')
@@ -372,7 +373,7 @@ function applyPricingFeaturedStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-    styleBuilder
+  styleBuilder
     .select('.pricing-plan--featured', theme)
     .position('relative')
     .transform('translateY(-4px)')

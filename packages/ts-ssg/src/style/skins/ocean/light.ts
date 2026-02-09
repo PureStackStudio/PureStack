@@ -1,4 +1,4 @@
-import type { ThemePalette } from '../../themeOptions'
+import type { ThemePalette } from '../../themePalette'
 
 export const oceanLight: ThemePalette = {
   background: {
@@ -15,6 +15,8 @@ export const oceanLight: ThemePalette = {
     feature: '#f3f6ff',
     successMuted: '#e8f8ef',
     dangerMuted: '#fff0f0',
+    raised: '#ffffff',
+    overlay: 'rgba(15, 23, 42, 0.42)',
   },
   text: {
     default: '#1f2937',
@@ -24,6 +26,8 @@ export const oceanLight: ThemePalette = {
     inverse: '#ffffff',
     success: '#0f6a3f',
     danger: '#8b1d1d',
+    soft: '#6b7280',
+    strong: '#1f2937',
   },
   border: {
     subtle: '#e1e4ef',
@@ -33,17 +37,33 @@ export const oceanLight: ThemePalette = {
     focus: '#9ab3ff',
     success: '#7ecb9c',
     danger: '#e0a1a1',
+    soft: '#e1e4ef',
+    hard: '#cfd8f5',
   },
   action: {
     neutral: {
       background: '#ffffff',
       text: '#1f2937',
       hover: '#eef2ff',
+      active: '#eef2ff',
+      disabled: '#ffffff',
+      focusRing: '#9ab3ff',
     },
     accent: {
       background: '#b9c9ff',
       text: '#1b223a',
       hover: '#a7bbff',
+      active: '#a7bbff',
+      disabled: '#b9c9ff',
+      focusRing: '#9ab3ff',
+    },
+    ghost: {
+      background: 'transparent',
+      text: '#1f2937',
+      hover: 'rgba(0, 0, 0, 0.04)',
+      active: 'rgba(0, 0, 0, 0.08)',
+      disabled: 'rgba(0, 0, 0, 0.02)',
+      focusRing: '#9ab3ff',
     },
   },
   status: {
@@ -57,11 +77,29 @@ export const oceanLight: ThemePalette = {
       border: '#e0a1a1',
       text: '#8b1d1d',
     },
+    info: {
+      background: '#e8f1ff',
+      border: '#9bbcf0',
+      text: '#1d4f91',
+    },
+    warning: {
+      background: '#fff4e5',
+      border: '#e1b878',
+      text: '#8a5b16',
+    },
   },
   badge: {
     accent: {
       background: '#e6ecfb',
       text: '#3a4a7d',
+    },
+    muted: {
+      background: '#f1f5f9',
+      text: '#475569',
+    },
+    strong: {
+      background: '#334155',
+      text: '#ffffff',
     },
   },
   icon: {
@@ -76,6 +114,12 @@ export const oceanLight: ThemePalette = {
       gradient: 'linear-gradient(135deg, #eff3ff, #e1e9ff)',
       color: '#5b6fe0',
       ring: '#d2ddff',
+    },
+    subtle: {
+      background: '#f8fafc',
+      gradient: 'linear-gradient(135deg, #f8fafc, #eef2f7)',
+      color: '#64748b',
+      ring: '#cbd5e1',
     },
   },
   effect: {
@@ -92,5 +136,9 @@ export const oceanLight: ThemePalette = {
       'inset 0 3px 6px rgba(0, 0, 0, 0.12), inset 0 -2px 4px rgba(255, 255, 255, 0.7)',
     thumbShadow:
       '0 10px 18px rgba(0, 0, 0, 0.18), inset 0 3px 6px rgba(255, 255, 255, 0.3)',
+    overlayScrim: 'rgba(15, 23, 42, 0.46)',
+    focusGlow: '0 0 0 4px rgba(99, 102, 241, 0.22)',
+    insetShadow:
+      'inset 0 1px 0 rgba(255, 255, 255, 0.6), inset 0 -1px 0 rgba(15, 23, 42, 0.08)',
   },
 }

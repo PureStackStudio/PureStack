@@ -1,4 +1,4 @@
-import type { ThemePalette } from '../../themeOptions'
+import type { ThemePalette } from '../../themePalette'
 
 export const extraoLight: ThemePalette = {
   background: {
@@ -15,6 +15,8 @@ export const extraoLight: ThemePalette = {
     feature: '#e8f0f4',
     successMuted: '#e9f4ef',
     dangerMuted: '#f9edef',
+    raised: '#ffffff',
+    overlay: 'rgba(15, 23, 42, 0.42)',
   },
   text: {
     default: '#242424',
@@ -24,6 +26,8 @@ export const extraoLight: ThemePalette = {
     inverse: '#ffffff',
     success: '#205e46',
     danger: '#842f42',
+    soft: '#5c7c89',
+    strong: '#242424',
   },
   border: {
     subtle: '#d7e1e7',
@@ -33,17 +37,33 @@ export const extraoLight: ThemePalette = {
     focus: '#1f4959',
     success: '#89b5a1',
     danger: '#d2a0ac',
+    soft: '#d7e1e7',
+    hard: '#9fb8c5',
   },
   action: {
     neutral: {
       background: '#ffffff',
       text: '#242424',
       hover: '#eef3f6',
+      active: '#eef3f6',
+      disabled: '#ffffff',
+      focusRing: '#1f4959',
     },
     accent: {
       background: '#1f4959',
       text: '#ffffff',
       hover: '#173846',
+      active: '#173846',
+      disabled: '#1f4959',
+      focusRing: '#1f4959',
+    },
+    ghost: {
+      background: 'transparent',
+      text: '#242424',
+      hover: 'rgba(0, 0, 0, 0.04)',
+      active: 'rgba(0, 0, 0, 0.08)',
+      disabled: 'rgba(0, 0, 0, 0.02)',
+      focusRing: '#1f4959',
     },
   },
   status: {
@@ -57,11 +77,29 @@ export const extraoLight: ThemePalette = {
       border: '#d6a1af',
       text: '#8a3448',
     },
+    info: {
+      background: '#e8f1ff',
+      border: '#9bbcf0',
+      text: '#1d4f91',
+    },
+    warning: {
+      background: '#fff4e5',
+      border: '#e1b878',
+      text: '#8a5b16',
+    },
   },
   badge: {
     accent: {
       background: '#d6e4eb',
       text: '#1f4959',
+    },
+    muted: {
+      background: '#f1f5f9',
+      text: '#475569',
+    },
+    strong: {
+      background: '#334155',
+      text: '#ffffff',
     },
   },
   icon: {
@@ -76,6 +114,12 @@ export const extraoLight: ThemePalette = {
       gradient: 'linear-gradient(135deg, #f5f9fc, #e5eef3)',
       color: '#516b78',
       ring: '#c1d2dc',
+    },
+    subtle: {
+      background: '#f8fafc',
+      gradient: 'linear-gradient(135deg, #f8fafc, #eef2f7)',
+      color: '#64748b',
+      ring: '#cbd5e1',
     },
   },
   effect: {
@@ -92,5 +136,9 @@ export const extraoLight: ThemePalette = {
       'inset 0 3px 6px rgba(36, 36, 36, 0.14), inset 0 -2px 4px rgba(255, 255, 255, 0.72)',
     thumbShadow:
       '0 10px 18px rgba(8, 23, 33, 0.22), inset 0 3px 6px rgba(255, 255, 255, 0.28)',
+    overlayScrim: 'rgba(15, 23, 42, 0.46)',
+    focusGlow: '0 0 0 4px rgba(99, 102, 241, 0.22)',
+    insetShadow:
+      'inset 0 1px 0 rgba(255, 255, 255, 0.6), inset 0 -1px 0 rgba(15, 23, 42, 0.08)',
   },
 }

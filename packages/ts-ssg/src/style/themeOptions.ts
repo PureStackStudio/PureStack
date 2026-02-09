@@ -2,7 +2,9 @@ import { merge } from '@logpot/utils'
 
 import { builtInSkins } from './skins'
 import { normalizeThemeName, type ThemeName } from './themeAssets'
+import { ThemePalette } from './themePalette'
 
+const DEFAULT_SKIN = builtInSkins.ocean
 export const THEME_MODES = ['light', 'dark'] as const
 export type ThemeMode = (typeof THEME_MODES)[number]
 
@@ -10,95 +12,6 @@ type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends Record<string, unknown>
     ? DeepPartial<T[K]>
     : T[K]
-}
-
-export interface ThemePalette {
-  background: {
-    canvas: string
-    surface: string
-    surfaceAlt: string
-    panel: string
-    showcase: string
-    showcaseAlt: string
-    accentMuted: string
-    accent: string
-    feature: string
-    successMuted: string
-    dangerMuted: string
-  }
-  text: {
-    default: string
-    muted: string
-    subtle: string
-    accent: string
-    inverse: string
-    success: string
-    danger: string
-  }
-  border: {
-    subtle: string
-    default: string
-    strong: string
-    accent: string
-    focus: string
-    success: string
-    danger: string
-  }
-  action: {
-    neutral: {
-      background: string
-      text: string
-      hover: string
-    }
-    accent: {
-      background: string
-      text: string
-      hover: string
-    }
-  }
-  status: {
-    success: {
-      background: string
-      border: string
-      text: string
-    }
-    danger: {
-      background: string
-      border: string
-      text: string
-    }
-  }
-  badge: {
-    accent: {
-      background: string
-      text: string
-    }
-  }
-  icon: {
-    accent: {
-      background: string
-      gradient: string
-      color: string
-      ring: string
-    }
-    neutral: {
-      background: string
-      gradient: string
-      color: string
-      ring: string
-    }
-  }
-  effect: {
-    glowPrimary: string
-    glowSecondary: string
-    floatingShadow: string
-    panelShadow: string
-    panelShadowStrong: string
-    accentShadow: string
-    interactiveShadow: string
-    trackShadow: string
-    thumbShadow: string
-  }
 }
 
 export interface ThemeOptions {
@@ -137,7 +50,7 @@ export type ThemeOptionsInput = {
 
 export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
   colors: {
-    ...builtInSkins.ocean,
+    ...DEFAULT_SKIN,
   },
   radii: {
     sm: '8px',

@@ -1,4 +1,4 @@
-import type { ThemePalette } from '../../themeOptions'
+import type { ThemePalette } from '../../themePalette'
 
 export const pastelDark: ThemePalette = {
   background: {
@@ -15,6 +15,8 @@ export const pastelDark: ThemePalette = {
     feature: '#2d2947',
     successMuted: '#1b3128',
     dangerMuted: '#3a232b',
+    raised: '#111a24',
+    overlay: 'rgba(0, 0, 0, 0.62)',
   },
   text: {
     default: '#eeeaff',
@@ -24,6 +26,8 @@ export const pastelDark: ThemePalette = {
     inverse: '#1a1728',
     success: '#9fe0be',
     danger: '#f0b8c4',
+    soft: '#a99fc7',
+    strong: '#eeeaff',
   },
   border: {
     subtle: '#3a3551',
@@ -33,17 +37,33 @@ export const pastelDark: ThemePalette = {
     focus: '#9181c5',
     success: '#4f8d70',
     danger: '#956272',
+    soft: '#3a3551',
+    hard: '#5e5582',
   },
   action: {
     neutral: {
       background: '#2a2540',
       text: '#eeeaff',
       hover: '#352f4f',
+      active: '#352f4f',
+      disabled: '#2a2540',
+      focusRing: '#9181c5',
     },
     accent: {
       background: '#c1b0f7',
       text: '#1c182d',
       hover: '#b09de8',
+      active: '#b09de8',
+      disabled: '#c1b0f7',
+      focusRing: '#9181c5',
+    },
+    ghost: {
+      background: 'transparent',
+      text: '#cfc8ea',
+      hover: 'rgba(255, 255, 255, 0.08)',
+      active: 'rgba(255, 255, 255, 0.12)',
+      disabled: 'rgba(255, 255, 255, 0.04)',
+      focusRing: '#9181c5',
     },
   },
   status: {
@@ -57,11 +77,29 @@ export const pastelDark: ThemePalette = {
       border: '#956272',
       text: '#f0b8c4',
     },
+    info: {
+      background: '#1a2f49',
+      border: '#40608f',
+      text: '#bad1f0',
+    },
+    warning: {
+      background: '#3b2b14',
+      border: '#8f6a34',
+      text: '#f0d39f',
+    },
   },
   badge: {
     accent: {
       background: '#3a325b',
       text: '#d8ccff',
+    },
+    muted: {
+      background: '#1e293b',
+      text: '#cbd5e1',
+    },
+    strong: {
+      background: '#94a3b8',
+      text: '#0f172a',
     },
   },
   icon: {
@@ -76,6 +114,12 @@ export const pastelDark: ThemePalette = {
       gradient: 'linear-gradient(135deg, #3a3358, #2f2948)',
       color: '#beb1dd',
       ring: '#534a78',
+    },
+    subtle: {
+      background: '#1f2937',
+      gradient: 'linear-gradient(135deg, #263242, #1b2533)',
+      color: '#a8b3c7',
+      ring: '#334155',
     },
   },
   effect: {
@@ -92,5 +136,9 @@ export const pastelDark: ThemePalette = {
       'inset 0 3px 7px rgba(8, 6, 16, 0.5), inset 0 -2px 4px rgba(255, 255, 255, 0.05)',
     thumbShadow:
       '0 12px 20px rgba(9, 7, 18, 0.56), inset 0 3px 6px rgba(255, 255, 255, 0.18)',
+    overlayScrim: 'rgba(0, 0, 0, 0.66)',
+    focusGlow: '0 0 0 4px rgba(147, 197, 253, 0.28)',
+    insetShadow:
+      'inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -1px 0 rgba(0, 0, 0, 0.35)',
   },
 }

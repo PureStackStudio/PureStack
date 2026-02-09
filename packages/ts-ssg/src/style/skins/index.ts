@@ -1,4 +1,4 @@
-import type { ThemePalette } from '../themeOptions'
+import type { ThemePalette } from '../themePalette'
 import { evergreenDark } from './evergreen/dark'
 import { evergreenLight } from './evergreen/light'
 import { extraoDark } from './extrao/dark'

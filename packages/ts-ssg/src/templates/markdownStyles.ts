@@ -2,9 +2,9 @@ import { styleBuilder } from '../style/styles'
 import {
   type ThemeMode,
   type ThemeOptions,
-  type ThemePalette,
   themes,
 } from '../style/themeOptions'
+import { type ThemePalette } from '../style/themePalette'
 
 export function registerMarkdownStyles() {
   themes.forEach((theme, palette, options) => {
@@ -25,7 +25,7 @@ function registerBaseProseStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-    styleBuilder
+  styleBuilder
     .select('.doc-content', theme)
     .fontSize(options.typography.baseSize)
     .lineHeight('1.7')
@@ -35,7 +35,7 @@ function registerBaseProseStyles(
 }
 
 function registerHeadingStyles(theme: ThemeMode, palette: ThemePalette) {
-    styleBuilder
+  styleBuilder
     .select('.doc-content :where(h1, h2, h3, h4, h5, h6)', theme)
     .fontWeight('700')
     .letterSpacing('-0.015em')
@@ -80,12 +80,14 @@ function registerListStyles(theme: ThemeMode) {
 }
 
 function registerLinkStyles(theme: ThemeMode, palette: ThemePalette) {
-    styleBuilder
+  styleBuilder
     .select('.doc-content :where(a)', theme)
     .color(palette.text.accent)
     .textDecoration('none')
     .fontWeight('600')
-  styleBuilder.select('.doc-content :where(a:hover)', theme).textDecoration('underline')
+  styleBuilder
+    .select('.doc-content :where(a:hover)', theme)
+    .textDecoration('underline')
   styleBuilder
     .select('.doc-content :where(a:focus-visible)', theme)
     .outline(`2px solid ${palette.border.focus}`)
@@ -107,7 +109,7 @@ function registerInlineCodeStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-    styleBuilder
+  styleBuilder
     .select('.doc-content :where(code)', theme)
     .fontFamily("'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace")
     .fontSize('0.9em')
@@ -122,7 +124,7 @@ function registerPreAndCopyButtonStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-    styleBuilder
+  styleBuilder
     .select('.doc-content :where(pre)', theme)
     .margin('0 0 1.4em')
     .padding('18px 20px')
@@ -240,7 +242,7 @@ function registerBlockquoteStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-    styleBuilder
+  styleBuilder
     .select('.doc-content :where(blockquote)', theme)
     .margin('0 0 1.4em')
     .padding('0.65em 1.1em')
@@ -250,7 +252,7 @@ function registerBlockquoteStyles(
 }
 
 function registerTableStyles(theme: ThemeMode, palette: ThemePalette) {
-    styleBuilder
+  styleBuilder
     .select('.doc-content :where(table)', theme)
     .width('100%')
     .borderCollapse('collapse')
@@ -267,7 +269,7 @@ function registerTableStyles(theme: ThemeMode, palette: ThemePalette) {
 }
 
 function registerHrStyles(theme: ThemeMode, palette: ThemePalette) {
-    styleBuilder
+  styleBuilder
     .select('.doc-content :where(hr)', theme)
     .border('none')
     .borderTop(`1px solid ${palette.border.subtle}`)
@@ -279,7 +281,7 @@ function registerMediaStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-    styleBuilder
+  styleBuilder
     .select('.doc-content :where(img, video)', theme)
     .maxWidth('100%')
     .height('auto')
