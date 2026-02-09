@@ -3,13 +3,13 @@ import { themes } from '../style/themeOptions'
 
 export function registerDocLayoutStyles() {
   themes.forEach((theme, palette, options) => {
-    styleBuilder
+        styleBuilder
       .select('.template-doc', theme)
       .margin('0')
       .minHeight('100vh')
       .fontFamily(options.typography.baseFamily)
-      .background(palette.app.background)
-      .color(palette.app.text)
+      .background(palette.background.canvas)
+      .color(palette.text.default)
 
     styleBuilder
       .select('.doc-shell', theme)
@@ -59,8 +59,8 @@ export function registerDocLayoutStyles() {
 
     styleBuilder
       .select('.doc-nav', theme)
-      .background(palette.nav.background)
-      .border(`1px solid ${palette.nav.border}`)
+      .background(palette.background.surface)
+      .border(`1px solid ${palette.border.subtle}`)
       .borderRadius(options.radii.lg)
       .padding('16px')
       .height('100%')
@@ -77,7 +77,7 @@ export function registerDocLayoutStyles() {
     styleBuilder
       .select('.doc-nav__list .doc-nav__list', theme)
       .paddingLeft('12px')
-      .borderLeft(`1px solid ${palette.nav.nestedBorder}`)
+      .borderLeft(`1px solid ${palette.border.default}`)
 
     styleBuilder.select('.doc-nav__item', theme).display('grid')
 
@@ -89,11 +89,11 @@ export function registerDocLayoutStyles() {
       .textDecoration('none')
       .fontWeight('600')
       .transition('background 160ms ease, color 160ms ease')
-      .color(palette.nav.text)
+      .color(palette.text.default)
 
     styleBuilder
       .select('.doc-nav__item a:hover', theme)
-      .background(palette.nav.hoverBackground)
+      .background(palette.background.accentMuted)
 
     styleBuilder
       .select('.doc-nav__item span', theme)
@@ -101,7 +101,7 @@ export function registerDocLayoutStyles() {
       .padding('8px 12px')
       .borderRadius('10px')
       .fontWeight('600')
-      .color(palette.nav.textMuted)
+      .color(palette.text.subtle)
 
     styleBuilder
       .select('.doc-shell', theme)

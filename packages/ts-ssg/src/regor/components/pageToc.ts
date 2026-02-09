@@ -64,7 +64,7 @@ function resolveTitle(props: PageTocProps) {
 
 function registerPageTocStyles() {
   themes.forEach((theme, palette, options) => {
-    styleBuilder
+        styleBuilder
       .select('.page-toc', theme)
       .display('grid')
       .gap('12px')
@@ -73,9 +73,9 @@ function registerPageTocStyles() {
       .border('1px solid transparent')
       .fontSize('0.95rem')
       .lineHeight('1.5')
-      .background(palette.nav.background)
-      .borderColor(palette.nav.border)
-      .color(palette.panel.text)
+      .background(palette.background.surface)
+      .borderColor(palette.border.subtle)
+      .color(palette.text.default)
 
     styleBuilder
       .select('.page-toc__header', theme)
@@ -83,7 +83,7 @@ function registerPageTocStyles() {
       .fontSize('0.95rem')
       .letterSpacing('0.02em')
       .textTransform('uppercase')
-      .color(palette.nav.textMuted)
+      .color(palette.text.subtle)
 
     styleBuilder
       .select('.page-toc__list', theme)
@@ -96,7 +96,7 @@ function registerPageTocStyles() {
     styleBuilder
       .select('.page-toc__list--nested', theme)
       .paddingLeft('12px')
-      .borderLeft(`1px solid ${palette.nav.nestedBorder}`)
+      .borderLeft(`1px solid ${palette.border.default}`)
 
     styleBuilder.select('.page-toc__item', theme).display('grid')
 
@@ -108,51 +108,51 @@ function registerPageTocStyles() {
       .textDecoration('none')
       .fontWeight('600')
       .transition('background 160ms ease, color 160ms ease')
-      .color(palette.nav.text)
+      .color(palette.text.default)
 
     styleBuilder
       .select('.page-toc__link:hover', theme)
-      .background(palette.nav.hoverBackground)
+      .background(palette.background.accentMuted)
 
     styleBuilder
       .select('.page-toc__link--active', theme)
-      .background(palette.nav.activeBackground)
-      .color(palette.nav.activeText)
+      .background(palette.action.accent.background)
+      .color(palette.action.accent.text)
 
     styleBuilder
       .select('.page-toc__link--active:hover', theme)
-      .background(palette.nav.activeBackground)
-      .color(palette.nav.activeText)
+      .background(palette.action.accent.background)
+      .color(palette.action.accent.text)
 
     styleBuilder
       .select('.page-toc__link--sub.page-toc__link--active:hover', theme)
-      .background(palette.nav.activeBackground)
-      .color(palette.nav.activeText)
+      .background(palette.action.accent.background)
+      .color(palette.action.accent.text)
 
     styleBuilder
       .select('.page-toc__link:focus-visible', theme)
-      .outline(`2px solid ${palette.nav.focusRing}`)
+      .outline(`2px solid ${palette.border.focus}`)
       .outlineOffset('2px')
 
     styleBuilder
       .select('.page-toc__link--sub', theme)
       .fontWeight('500')
-      .color(palette.nav.textMuted)
+      .color(palette.text.subtle)
 
     styleBuilder
       .select('.page-toc__link--sub:not(.page-toc__link--active):hover', theme)
-      .color(palette.nav.textMuted)
+      .color(palette.text.subtle)
 
     styleBuilder
       .select('.page-toc__link--sub.page-toc__link--active', theme)
-      .background(palette.nav.activeBackground)
-      .color(palette.nav.activeText)
+      .background(palette.action.accent.background)
+      .color(palette.action.accent.text)
 
     styleBuilder
       .select('.page-toc__empty', theme)
       .fontSize('0.9rem')
       .fontWeight('600')
-      .color(palette.nav.textMuted)
+      .color(palette.text.subtle)
 
     styleBuilder
       .select('.doc-content .page-toc__target', theme)
@@ -160,8 +160,8 @@ function registerPageTocStyles() {
       .padding('0')
       .borderRadius('0')
       .transition('background 200ms ease, color 200ms ease')
-      .background(palette.surface.altBackground)
-      .color('#bd5454')
+      .background(palette.background.feature)
+      .color(palette.text.accent)
 
     styleBuilder
       .select('.doc-shell--toc', theme)

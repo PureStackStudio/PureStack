@@ -6,22 +6,6 @@ import { themes } from '../../style/themeOptions'
 import { resolveTsSsgContext } from '../resolveTsSsgContext'
 import type { TsSsgContext } from '../ts-ssg-context'
 
-export interface ThemeNavColors {
-  background: string
-  border: string
-  text: string
-  textMuted: string
-  hoverBackground: string
-  nestedBorder: string
-  summaryHoverBackground: string
-  activeBackground: string
-  activeText: string
-  focusRing: string
-  chevron: string
-  badgeBackground: string
-  badgeText: string
-}
-
 interface NavMenuProps {
   items?: NavItem[]
 }
@@ -155,7 +139,7 @@ function buildNavState(
 
 function registerNavStyles() {
   themes.forEach((theme, palette, options) => {
-    styleBuilder
+        styleBuilder
       .select('.nav__menu', theme)
       .display('block')
       .padding('16px')
@@ -164,9 +148,9 @@ function registerNavStyles() {
       .fontSize(options.typography.baseSize)
       .lineHeight(options.typography.baseLineHeight)
       .maxHeight('100%')
-      .background(palette.nav.background)
-      .borderColor(palette.nav.border)
-      .color(palette.panel.text)
+      .background(palette.background.surface)
+      .borderColor(palette.border.subtle)
+      .color(palette.text.default)
 
     styleBuilder
       .select('.nav__list', theme)
@@ -181,7 +165,7 @@ function registerNavStyles() {
       .marginTop('6px')
       .paddingLeft('12px')
       .borderLeft('1px solid transparent')
-      .borderLeftColor(palette.nav.nestedBorder)
+      .borderLeftColor(palette.border.default)
 
     styleBuilder.select('.nav__item', theme).display('grid').gap('4px')
 
@@ -193,20 +177,20 @@ function registerNavStyles() {
       .textDecoration('none')
       .fontWeight('600')
       .transition('background 160ms ease, color 160ms ease')
-      .color(palette.nav.text)
+      .color(palette.text.default)
 
     styleBuilder
       .select('.nav__link:hover', theme)
-      .background(palette.nav.hoverBackground)
+      .background(palette.background.accentMuted)
 
     styleBuilder
       .select('.nav__link--active', theme)
-      .background(palette.nav.activeBackground)
-      .color(palette.nav.activeText)
+      .background(palette.action.accent.background)
+      .color(palette.action.accent.text)
 
-    styleBuilder
-      .select('.nav__link:focus-visible', theme)
-      .outline(`2px solid ${palette.nav.focusRing}`)
+  styleBuilder
+    .select('.nav__link:focus-visible', theme)
+    .outline(`2px solid ${palette.border.focus}`)
       .outlineOffset('2px')
 
     styleBuilder
@@ -215,7 +199,7 @@ function registerNavStyles() {
       .padding('8px 12px')
       .borderRadius(options.radii.md)
       .fontWeight('600')
-      .color(palette.nav.textMuted)
+      .color(palette.text.subtle)
 
     styleBuilder.select('.nav__leaf', theme).display('block')
     styleBuilder.select('.nav__group', theme).display('grid')
@@ -232,20 +216,20 @@ function registerNavStyles() {
 
     styleBuilder
       .select('.nav__summary:hover', theme)
-      .background(palette.nav.summaryHoverBackground)
+      .background(palette.background.surfaceAlt)
 
     styleBuilder
       .select('.nav__summary:focus-visible', theme)
-      .outline(`2px solid ${palette.nav.focusRing}`)
+      .outline(`2px solid ${palette.border.focus}`)
       .outlineOffset('2px')
 
     styleBuilder
       .select('.nav__summary--active', theme)
-      .background(palette.nav.activeBackground)
+      .background(palette.action.accent.background)
 
     styleBuilder
       .select('.nav__summary--active .nav__text', theme)
-      .color(palette.nav.activeText)
+      .color(palette.action.accent.text)
 
     styleBuilder
       .select('.nav__summary-content', theme)
@@ -262,7 +246,7 @@ function registerNavStyles() {
       .borderBottom('2px solid currentColor')
       .transform('rotate(-45deg)')
       .transition('transform 160ms ease')
-      .color(palette.nav.chevron)
+      .color(palette.text.subtle)
 
     styleBuilder
       .select('.nav__group[open] > .nav__summary .nav__chevron', theme)
@@ -282,8 +266,8 @@ function registerNavStyles() {
       .fontWeight('700')
       .letterSpacing('0.02em')
       .textTransform('uppercase')
-      .background(palette.nav.badgeBackground)
-      .color(palette.nav.badgeText)
+      .background(palette.badge.accent.background)
+      .color(palette.badge.accent.text)
   })
 }
 

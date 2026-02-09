@@ -5,16 +5,6 @@ import { themes } from '../../style/themeOptions'
 import { resolveTsSsgContext } from '../resolveTsSsgContext'
 import type { TsSsgContext } from '../ts-ssg-context'
 
-export interface ThemeTopBarColors {
-  background: string
-  border: string
-  logo: string
-  icon: string
-  toggleBackground: string
-  toggleBorder: string
-  toggleIcon: string
-}
-
 function resolveBrandLabel(context: TsSsgContext): string {
   const label = context?.site?.siteTitle
   if (typeof label !== 'string') return 'Docs'
@@ -48,7 +38,7 @@ const topBarTemplate = html`<input
 
 function registerTopBarStyles() {
   themes.forEach((theme, palette, options) => {
-    styleBuilder
+        styleBuilder
       .select('.topbar', theme)
       .display('flex')
       .alignItems('center')
@@ -60,15 +50,15 @@ function registerTopBarStyles() {
       .zIndex(40)
       .backdropFilter('blur(10px)')
       .borderBottom('1px solid transparent')
-      .background(palette.topBar.background)
-      .borderBottomColor(palette.topBar.border)
+      .background(palette.background.surfaceAlt)
+      .borderBottomColor(palette.border.subtle)
 
     styleBuilder
       .select('.topbar__logo', theme)
       .fontSize('22px')
       .fontWeight('700')
       .textDecoration('none')
-      .color(palette.topBar.logo)
+      .color(palette.text.accent)
 
     styleBuilder
       .select('.topbar__actions', theme)
@@ -88,13 +78,13 @@ function registerTopBarStyles() {
       .cursor('pointer')
       .position('relative')
       .padding('0')
-      .color(palette.topBar.icon)
+      .color(palette.text.subtle)
 
     styleBuilder
       .select('.topbar__toggle', theme)
-      .background(palette.topBar.toggleBackground)
-      .borderColor(palette.topBar.toggleBorder)
-      .color(palette.topBar.toggleIcon)
+      .background(palette.background.surface)
+      .borderColor(palette.border.default)
+      .color(palette.text.subtle)
       .display('none')
 
     styleBuilder
@@ -103,7 +93,7 @@ function registerTopBarStyles() {
 
     styleBuilder
       .select('.topbar__toggle:focus-visible', theme)
-      .outline(`2px solid ${palette.nav.focusRing}`)
+      .outline(`2px solid ${palette.border.focus}`)
       .outlineOffset('2px')
 
     styleBuilder.select('.topbar__search', theme).border('0').background('transparent')

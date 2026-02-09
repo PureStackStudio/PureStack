@@ -25,17 +25,17 @@ function registerBaseProseStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-  styleBuilder
+    styleBuilder
     .select('.doc-content', theme)
     .fontSize(options.typography.baseSize)
     .lineHeight('1.7')
-    .color(palette.panel.text)
+    .color(palette.text.default)
 
   styleBuilder.select('.doc-content :where(p)', theme).margin('0 0 1em')
 }
 
 function registerHeadingStyles(theme: ThemeMode, palette: ThemePalette) {
-  styleBuilder
+    styleBuilder
     .select('.doc-content :where(h1, h2, h3, h4, h5, h6)', theme)
     .fontWeight('700')
     .letterSpacing('-0.015em')
@@ -63,7 +63,7 @@ function registerHeadingStyles(theme: ThemeMode, palette: ThemePalette) {
     .select('.doc-content :where(h6)', theme)
     .fontSize('0.95rem')
     .letterSpacing('0.06em')
-    .color(palette.nav.textMuted)
+    .color(palette.text.subtle)
 
   styleBuilder
     .select('.doc-content :where(h1:first-child)', theme)
@@ -80,15 +80,15 @@ function registerListStyles(theme: ThemeMode) {
 }
 
 function registerLinkStyles(theme: ThemeMode, palette: ThemePalette) {
-  styleBuilder
+    styleBuilder
     .select('.doc-content :where(a)', theme)
-    .color(palette.topBar.logo)
+    .color(palette.text.accent)
     .textDecoration('none')
     .fontWeight('600')
   styleBuilder.select('.doc-content :where(a:hover)', theme).textDecoration('underline')
   styleBuilder
     .select('.doc-content :where(a:focus-visible)', theme)
-    .outline(`2px solid ${palette.nav.focusRing}`)
+    .outline(`2px solid ${palette.border.focus}`)
     .outlineOffset('2px')
 }
 
@@ -99,7 +99,7 @@ function registerCodeStyles(
 ) {
   registerInlineCodeStyles(theme, palette, options)
   registerPreAndCopyButtonStyles(theme, palette, options)
-  registerShikiStyles(theme, palette)
+  registerShikiStyles(theme)
 }
 
 function registerInlineCodeStyles(
@@ -107,12 +107,12 @@ function registerInlineCodeStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-  styleBuilder
+    styleBuilder
     .select('.doc-content :where(code)', theme)
     .fontFamily("'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace")
     .fontSize('0.9em')
-    .background(palette.surface.altBackground)
-    .border(`1px solid ${palette.surface.altBorder}`)
+    .background(palette.background.surfaceAlt)
+    .border(`1px solid ${palette.border.default}`)
     .borderRadius(options.radii.sm)
     .padding('0.15em 0.35em')
 }
@@ -122,12 +122,12 @@ function registerPreAndCopyButtonStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-  styleBuilder
+    styleBuilder
     .select('.doc-content :where(pre)', theme)
     .margin('0 0 1.4em')
     .padding('18px 20px')
-    .background(palette.surface.altBackground)
-    .border(`1px solid ${palette.surface.altBorder}`)
+    .background(palette.background.surfaceAlt)
+    .border(`1px solid ${palette.border.default}`)
     .borderRadius(options.radii.md)
     .position('relative')
     .overflow('auto')
@@ -140,9 +140,9 @@ function registerPreAndCopyButtonStyles(
     .top('12px')
     .right('12px')
     .zIndex(2)
-    .border(`1px solid ${palette.surface.border}`)
-    .background(palette.panel.background)
-    .color(palette.panel.text)
+    .border(`1px solid ${palette.border.subtle}`)
+    .background(palette.background.panel)
+    .color(palette.text.default)
     .width('2.15rem')
     .height('2.15rem')
     .padding('0')
@@ -176,15 +176,15 @@ function registerPreAndCopyButtonStyles(
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button:hover)', theme)
-    .background(palette.surface.altBackground)
-    .borderColor(palette.surface.altBorder)
+    .background(palette.background.surfaceAlt)
+    .borderColor(palette.border.default)
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button:focus-visible)', theme)
     .opacity(1)
     .transform('translateY(0)')
     .pointerEvents('auto')
-    .outline(`2px solid ${palette.nav.focusRing}`)
+    .outline(`2px solid ${palette.border.focus}`)
     .outlineOffset('2px')
 
   styleBuilder
@@ -203,22 +203,26 @@ function registerPreAndCopyButtonStyles(
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button.is-copied)', theme)
-    .background(palette.codeCopy.copied.background)
-    .borderColor(palette.codeCopy.copied.border)
-    .color(palette.codeCopy.copied.text)
+    .background(palette.status.success.background)
+    .borderColor(palette.status.success.border)
+    .color(palette.status.success.text)
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button.is-error)', theme)
-    .background(palette.codeCopy.error.background)
-    .borderColor(palette.codeCopy.error.border)
-    .color(palette.codeCopy.error.text)
+    .background(palette.status.danger.background)
+    .borderColor(palette.status.danger.border)
+    .color(palette.status.danger.text)
 }
 
-function registerShikiStyles(theme: ThemeMode, palette: ThemePalette) {
+function registerShikiStyles(theme: ThemeMode) {
   styleBuilder
     .select('.doc-content :where(pre.shiki.shiki-themes)', theme)
-    .background(`var(--shiki-${theme}-bg, ${palette.surface.altBackground})`)
-    .color(`var(--shiki-${theme}, ${palette.panel.text})`)
+    .background(`var(--shiki-${theme}-bg)`)
+    .color(`var(--shiki-${theme})`)
+
+  styleBuilder
+    .select('.doc-content :where(pre.shiki.shiki-themes .line)', theme)
+    .color(`var(--shiki-${theme})`)
 
   styleBuilder
     .select('.doc-content :where(pre.shiki.shiki-themes span)', theme)
@@ -226,9 +230,9 @@ function registerShikiStyles(theme: ThemeMode, palette: ThemePalette) {
 
   styleBuilder
     .select('.doc-content :where(code.shiki-inline)', theme)
-    .color(`var(--shiki-${theme}, ${palette.panel.text})`)
-    .background(palette.surface.altBackground)
-    .border(`1px solid ${palette.surface.altBorder}`)
+    .color(`var(--shiki-${theme})`)
+    .background(`var(--shiki-${theme}-bg)`)
+    .border('none')
 }
 
 function registerBlockquoteStyles(
@@ -236,37 +240,37 @@ function registerBlockquoteStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-  styleBuilder
+    styleBuilder
     .select('.doc-content :where(blockquote)', theme)
     .margin('0 0 1.4em')
     .padding('0.65em 1.1em')
-    .borderLeft(`3px solid ${palette.surface.border}`)
-    .background(palette.surface.altBackground)
+    .borderLeft(`3px solid ${palette.border.subtle}`)
+    .background(palette.background.surfaceAlt)
     .borderRadius(options.radii.sm)
 }
 
 function registerTableStyles(theme: ThemeMode, palette: ThemePalette) {
-  styleBuilder
+    styleBuilder
     .select('.doc-content :where(table)', theme)
     .width('100%')
     .borderCollapse('collapse')
     .margin('0 0 1.4em')
   styleBuilder
     .select('.doc-content :where(th, td)', theme)
-    .border(`1px solid ${palette.surface.border}`)
+    .border(`1px solid ${palette.border.subtle}`)
     .padding('8px 10px')
     .textAlign('left')
   styleBuilder
     .select('.doc-content :where(th)', theme)
-    .background(palette.surface.altBackground)
+    .background(palette.background.surfaceAlt)
     .fontWeight('700')
 }
 
 function registerHrStyles(theme: ThemeMode, palette: ThemePalette) {
-  styleBuilder
+    styleBuilder
     .select('.doc-content :where(hr)', theme)
     .border('none')
-    .borderTop(`1px solid ${palette.surface.border}`)
+    .borderTop(`1px solid ${palette.border.subtle}`)
     .margin('2em 0')
 }
 
@@ -275,12 +279,12 @@ function registerMediaStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-  styleBuilder
+    styleBuilder
     .select('.doc-content :where(img, video)', theme)
     .maxWidth('100%')
     .height('auto')
     .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.surface.border}`)
+    .border(`1px solid ${palette.border.subtle}`)
 
   styleBuilder.select('.doc-content :where(figure)', theme).margin('0 0 1.4em')
 
@@ -288,5 +292,5 @@ function registerMediaStyles(
     .select('.doc-content :where(figcaption)', theme)
     .marginTop('0.6em')
     .fontSize('0.9em')
-    .color(palette.nav.textMuted)
+    .color(palette.text.subtle)
 }

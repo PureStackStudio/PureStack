@@ -4,26 +4,6 @@ import { styleBuilder } from '../../style/styles'
 import type { ThemeMode, ThemeOptions, ThemePalette } from '../../style/themeOptions'
 import { themes } from '../../style/themeOptions'
 
-export interface ThemeHeroColors {
-  background: string
-  border: string
-  title: string
-  tagline: string
-  eyebrow: string
-  focusRing: string
-  primaryBackground: string
-  primaryText: string
-  primaryHover: string
-  primaryShadow: string
-  secondaryText: string
-  secondaryHover: string
-  secondaryBorder: string
-  logoBackground: string
-  logoBorder: string
-  logoShadow: string
-  glow: string
-}
-
 const heroTemplate = html`<section class="hero">
   <div class="hero__inner">
     <div class="hero__content">
@@ -98,17 +78,17 @@ function applyHeroShellStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-  styleBuilder
+    styleBuilder
     .select('.hero', theme)
     .position('relative')
     .overflow('hidden')
     .padding('28px')
     .borderRadius(options.radii.lg)
-    .border(`1px solid ${palette.hero.border}`)
-    .background(palette.hero.background)
+    .border(`1px solid ${palette.border.subtle}`)
+    .background(palette.background.showcase)
     .boxShadow(options.shadows.soft)
     .margin('0 0 32px')
-    .color(palette.hero.title)
+    .color(palette.text.default)
 
   styleBuilder
     .select('.hero::before', theme)
@@ -116,7 +96,7 @@ function applyHeroShellStyles(
     .position('absolute')
     .inset('0')
     .opacity('0.35')
-    .background(palette.hero.glow)
+    .background(palette.effect.glowPrimary)
     .pointerEvents('none')
 
   styleBuilder
@@ -130,7 +110,7 @@ function applyHeroShellStyles(
 }
 
 function applyHeroContentStyles(theme: ThemeMode, palette: ThemePalette) {
-  styleBuilder
+    styleBuilder
     .select('.hero__content', theme)
     .display('grid')
     .gap('16px')
@@ -142,7 +122,7 @@ function applyHeroContentStyles(theme: ThemeMode, palette: ThemePalette) {
     .letterSpacing('0.12em')
     .fontSize('11px')
     .fontWeight('700')
-    .color(palette.hero.eyebrow)
+    .color(palette.text.subtle)
 
   styleBuilder
     .select('.hero__title', theme)
@@ -151,7 +131,7 @@ function applyHeroContentStyles(theme: ThemeMode, palette: ThemePalette) {
     .lineHeight('1.05')
     .letterSpacing('-0.02em')
     .fontWeight('700')
-    .color(palette.hero.title)
+    .color(palette.text.default)
 
   styleBuilder.select('.hero__title:empty', theme).display('none')
 
@@ -161,7 +141,7 @@ function applyHeroContentStyles(theme: ThemeMode, palette: ThemePalette) {
     .fontSize('17px')
     .lineHeight('1.6')
     .whiteSpace('pre-line')
-    .color(palette.hero.tagline)
+    .color(palette.text.subtle)
 
   styleBuilder.select('.hero__tagline:empty', theme).display('none')
   styleBuilder.select('.hero__eyebrow:empty', theme).display('none')
@@ -172,7 +152,7 @@ function applyHeroActionStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-  styleBuilder
+    styleBuilder
     .select('.hero__actions', theme)
     .display('flex')
     .flexWrap('wrap')
@@ -198,28 +178,28 @@ function applyHeroActionStyles(
 
   styleBuilder
     .select('.hero__action:focus-visible', theme)
-    .outline(`2px solid ${palette.hero.focusRing}`)
+    .outline(`2px solid ${palette.border.focus}`)
     .outlineOffset('2px')
 
   styleBuilder
     .select('.hero__action--primary', theme)
-    .background(palette.hero.primaryBackground)
-    .color(palette.hero.primaryText)
-    .boxShadow(palette.hero.primaryShadow)
+    .background(palette.action.accent.background)
+    .color(palette.action.accent.text)
+    .boxShadow(palette.effect.accentShadow)
 
   styleBuilder
     .select('.hero__action--primary:hover', theme)
-    .background(palette.hero.primaryHover)
+    .background(palette.action.accent.hover)
     .transform('translateY(-1px)')
 
   styleBuilder
     .select('.hero__action--minimal', theme)
-    .color(palette.hero.secondaryText)
-    .borderColor(palette.hero.secondaryBorder)
+    .color(palette.action.neutral.text)
+    .borderColor(palette.border.strong)
 
   styleBuilder
     .select('.hero__action--minimal:hover', theme)
-    .background(palette.hero.secondaryHover)
+    .background(palette.action.neutral.hover)
 
   styleBuilder
     .select('.hero__action[data-icon="right-arrow"]::after', theme)
@@ -249,7 +229,7 @@ function applyHeroMediaStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-  styleBuilder
+    styleBuilder
     .select('.hero__media', theme)
     .display('flex')
     .justifyContent('center')
@@ -261,9 +241,9 @@ function applyHeroMediaStyles(
     .select('.hero__logo-frame', theme)
     .padding('18px 22px')
     .borderRadius(options.radii.lg)
-    .background(palette.hero.logoBackground)
-    .border(`1px solid ${palette.hero.logoBorder}`)
-    .boxShadow(palette.hero.logoShadow)
+    .background(palette.background.panel)
+    .border(`1px solid ${palette.border.subtle}`)
+    .boxShadow(palette.effect.floatingShadow)
 
   styleBuilder
     .select('.hero__logo', theme)

@@ -5,47 +5,6 @@ import { styleBuilder } from '../../style/styles'
 import type { ThemeMode, ThemeOptions, ThemePalette } from '../../style/themeOptions'
 import { themes } from '../../style/themeOptions'
 
-export interface ThemePricingColors {
-  background: string
-  border: string
-  title: string
-  subtitle: string
-  eyebrow: string
-  footnote: string
-  glow: string
-  planBackground: string
-  planBorder: string
-  planShadow: string
-  planTitle: string
-  planSummary: string
-  planPrice: string
-  planPeriod: string
-  planIconBackground: string
-  planIconGradient: string
-  planIconColor: string
-  planIconRing: string
-  planFeature: string
-  planFeatureIconBackground: string
-  planFeatureIconGradient: string
-  planFeatureIconColor: string
-  planFeatureIconRing: string
-  planBadgeBackground: string
-  planBadgeText: string
-  planNote: string
-  planCtaBackground: string
-  planCtaText: string
-  planCtaBorder: string
-  planCtaHover: string
-  planCtaShadow: string
-  planHighlightBackground: string
-  planHighlightBorder: string
-  planHighlightShadow: string
-  planHighlightCtaBackground: string
-  planHighlightCtaText: string
-  planHighlightCtaHover: string
-  focusRing: string
-}
-
 interface PricingTableModel {
   eyebrow?: string
   title?: string
@@ -138,14 +97,14 @@ function applyPricingShellStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-  styleBuilder
+    styleBuilder
     .select('.pricing', theme)
     .position('relative')
     .overflow('hidden')
     .padding('28px')
     .borderRadius(options.radii.lg)
-    .border(`1px solid ${palette.pricing.border}`)
-    .background(palette.pricing.background)
+    .border(`1px solid ${palette.border.subtle}`)
+    .background(palette.background.showcaseAlt)
     .boxShadow(options.shadows.soft)
     .margin('0 0 32px')
 
@@ -155,7 +114,7 @@ function applyPricingShellStyles(
     .position('absolute')
     .inset('0')
     .opacity('0.4')
-    .background(palette.pricing.glow)
+    .background(palette.effect.glowSecondary)
     .pointerEvents('none')
 
   styleBuilder
@@ -169,7 +128,7 @@ function applyPricingShellStyles(
 }
 
 function applyPricingHeaderStyles(theme: ThemeMode, palette: ThemePalette) {
-  styleBuilder
+    styleBuilder
     .select('.pricing__header', theme)
     .position('relative')
     .zIndex('1')
@@ -184,7 +143,7 @@ function applyPricingHeaderStyles(theme: ThemeMode, palette: ThemePalette) {
     .fontSize('11px')
     .fontWeight('700')
     .margin('0')
-    .color(palette.pricing.eyebrow)
+    .color(palette.text.subtle)
 
   styleBuilder
     .select('.pricing__title', theme)
@@ -192,7 +151,7 @@ function applyPricingHeaderStyles(theme: ThemeMode, palette: ThemePalette) {
     .fontSize('clamp(24px, 3.2vw, 34px)')
     .fontWeight('700')
     .letterSpacing('-0.02em')
-    .color(palette.pricing.title)
+    .color(palette.text.default)
 
   styleBuilder
     .select('.pricing__subtitle', theme)
@@ -200,7 +159,7 @@ function applyPricingHeaderStyles(theme: ThemeMode, palette: ThemePalette) {
     .fontSize('14px')
     .lineHeight('1.6')
     .maxWidth('680px')
-    .color(palette.pricing.subtitle)
+    .color(palette.text.subtle)
 
   styleBuilder
     .select('.pricing__footnote', theme)
@@ -208,7 +167,7 @@ function applyPricingHeaderStyles(theme: ThemeMode, palette: ThemePalette) {
     .zIndex('1')
     .margin('5px 0 0 !important;')
     .fontSize('12px')
-    .color(palette.pricing.footnote)
+    .color(palette.text.subtle)
 }
 
 function applyPricingPlanStyles(
@@ -216,16 +175,16 @@ function applyPricingPlanStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-  styleBuilder
+    styleBuilder
     .select('.pricing-plan', theme)
     .display('flex')
     .flexDirection('column')
     .gap('12px')
     .padding('18px')
     .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.pricing.planBorder}`)
-    .background(palette.pricing.planBackground)
-    .boxShadow(palette.pricing.planShadow)
+    .border(`1px solid ${palette.border.default}`)
+    .background(palette.background.panel)
+    .boxShadow(palette.effect.panelShadow)
     .height('100%')
 
   styleBuilder.select('.pricing-plan__head', theme).display('grid').gap('6px')
@@ -245,10 +204,10 @@ function applyPricingPlanStyles(
     .alignItems('center')
     .justifyContent('center')
     .borderRadius('12px')
-    .background(palette.pricing.planIconGradient)
-    .set('background-color', palette.pricing.planIconBackground)
-    .border(`1px solid ${palette.pricing.planIconRing}`)
-    .color(palette.pricing.planIconColor)
+    .background(palette.icon.accent.gradient)
+    .set('background-color', palette.icon.accent.background)
+    .border(`1px solid ${palette.icon.accent.ring}`)
+    .color(palette.icon.accent.color)
     .boxShadow('0 10px 20px rgba(35, 56, 135, 0.25)')
     .marginBottom('4px')
 
@@ -276,7 +235,7 @@ function applyPricingPlanStyles(
     .margin('0')
     .fontSize('18px')
     .fontWeight('700')
-    .color(palette.pricing.planTitle)
+    .color(palette.text.default)
 
   styleBuilder
     .select('.pricing-plan__badge', theme)
@@ -286,15 +245,15 @@ function applyPricingPlanStyles(
     .fontWeight('700')
     .textTransform('uppercase')
     .letterSpacing('0.1em')
-    .background(palette.pricing.planBadgeBackground)
-    .color(palette.pricing.planBadgeText)
+    .background(palette.badge.accent.background)
+    .color(palette.badge.accent.text)
 
   styleBuilder
     .select('.pricing-plan__summary', theme)
     .margin('0')
     .fontSize('13px')
     .lineHeight('1.5')
-    .color(palette.pricing.planSummary)
+    .color(palette.text.subtle)
 
   styleBuilder
     .select('.pricing-plan__price', theme)
@@ -308,7 +267,7 @@ function applyPricingPlanStyles(
     .fontSize('24px')
     .fontWeight('700')
     .letterSpacing('-0.02em')
-    .color(palette.pricing.planPrice)
+    .color(palette.text.default)
 
   styleBuilder
     .select('.pricing-plan__period', theme)
@@ -316,7 +275,7 @@ function applyPricingPlanStyles(
     .textTransform('uppercase')
     .letterSpacing('0.12em')
     .fontWeight('600')
-    .color(palette.pricing.planPeriod)
+    .color(palette.text.subtle)
 
   styleBuilder.select('.pricing-plan__cta', theme).margin('0')
 
@@ -331,22 +290,22 @@ function applyPricingPlanStyles(
     .fontWeight('600')
     .fontSize('13px')
     .textDecoration('none')
-    .border(`1px solid ${palette.pricing.planCtaBorder}`)
-    .background(palette.pricing.planCtaBackground)
-    .color(palette.pricing.planCtaText)
-    .boxShadow(palette.pricing.planCtaShadow)
+    .border(`1px solid ${palette.border.default}`)
+    .background(palette.action.neutral.background)
+    .color(palette.action.neutral.text)
+    .boxShadow(palette.effect.interactiveShadow)
     .transition(
       'transform 180ms ease, box-shadow 180ms ease, background 180ms ease',
     )
 
   styleBuilder
     .select('.pricing-plan__cta-link:hover', theme)
-    .background(palette.pricing.planCtaHover)
+    .background(palette.action.neutral.hover)
     .transform('translateY(-1px)')
 
   styleBuilder
     .select('.pricing-plan__cta-link:focus-visible', theme)
-    .outline(`2px solid ${palette.pricing.focusRing}`)
+    .outline(`2px solid ${palette.border.focus}`)
     .outlineOffset('2px')
 
   styleBuilder
@@ -354,11 +313,11 @@ function applyPricingPlanStyles(
     .margin('0')
     .fontSize('11px')
     .lineHeight('1.5')
-    .color(palette.pricing.planNote)
+    .color(palette.text.subtle)
 }
 
 function applyPricingFeatureStyles(theme: ThemeMode, palette: ThemePalette) {
-  styleBuilder
+    styleBuilder
     .select('.pricing-plan__features', theme)
     .listStyle('none')
     .padding('0')
@@ -377,7 +336,7 @@ function applyPricingFeatureStyles(theme: ThemeMode, palette: ThemePalette) {
     .fontSize('13px')
     .lineHeight('1.5')
     .marginBottom('8px')
-    .color(palette.pricing.planFeature)
+    .color(palette.text.default)
 
   styleBuilder
     .select('.pricing-feature__icon', theme)
@@ -387,10 +346,10 @@ function applyPricingFeatureStyles(theme: ThemeMode, palette: ThemePalette) {
     .alignItems('center')
     .justifyContent('center')
     .borderRadius('7px')
-    .background(palette.pricing.planFeatureIconGradient)
-    .set('background-color', palette.pricing.planFeatureIconBackground)
-    .border(`1px solid ${palette.pricing.planFeatureIconRing}`)
-    .color(palette.pricing.planFeatureIconColor)
+    .background(palette.icon.neutral.gradient)
+    .set('background-color', palette.icon.neutral.background)
+    .border(`1px solid ${palette.icon.neutral.ring}`)
+    .color(palette.icon.neutral.color)
     .boxShadow('0 8px 16px rgba(39, 61, 146, 0.2)')
     .marginTop('0')
 
@@ -413,13 +372,13 @@ function applyPricingFeaturedStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-  styleBuilder
+    styleBuilder
     .select('.pricing-plan--featured', theme)
     .position('relative')
     .transform('translateY(-4px)')
-    .background(palette.pricing.planHighlightBackground)
-    .border(`1px solid ${palette.pricing.planHighlightBorder}`)
-    .boxShadow(palette.pricing.planHighlightShadow)
+    .background(palette.background.feature)
+    .border(`1px solid ${palette.border.accent}`)
+    .boxShadow(palette.effect.panelShadowStrong)
 
   styleBuilder
     .select('.pricing-plan--featured::before', theme)
@@ -427,19 +386,19 @@ function applyPricingFeaturedStyles(
     .position('absolute')
     .inset('0')
     .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.pricing.planHighlightBorder}`)
+    .border(`1px solid ${palette.border.accent}`)
     .opacity('0.5')
     .pointerEvents('none')
 
   styleBuilder
     .select('.pricing-plan--featured .pricing-plan__cta-link', theme)
-    .background(palette.pricing.planHighlightCtaBackground)
-    .color(palette.pricing.planHighlightCtaText)
+    .background(palette.action.accent.background)
+    .color(palette.action.accent.text)
     .borderColor('transparent')
 
   styleBuilder
     .select('.pricing-plan--featured .pricing-plan__cta-link:hover', theme)
-    .background(palette.pricing.planHighlightCtaHover)
+    .background(palette.action.accent.hover)
 }
 
 function applyPricingResponsiveStyles(theme: ThemeMode) {

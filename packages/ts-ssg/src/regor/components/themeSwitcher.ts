@@ -3,20 +3,6 @@ import { createComponent, html } from 'regor'
 import { styleBuilder } from '../../style/styles'
 import { themes } from '../../style/themeOptions'
 
-export interface ThemeSwitcherColors {
-  background: string
-  border: string
-  text: string
-  hoverBackground: string
-  trackBackground: string
-  trackShadow: string
-  thumbBackground: string
-  thumbShadow: string
-  trackSun: string
-  trackMoon: string
-  thumbIcon: string
-}
-
 const themeSwitcherTemplate = html`<button
   class="theme-switcher"
   type="button"
@@ -77,7 +63,7 @@ const themeSwitcherTemplate = html`<button
 
 function registerThemeSwitcherStyles() {
   themes.forEach((theme, palette, options) => {
-    styleBuilder
+        styleBuilder
       .select('.theme-switcher', theme)
       .display('inline-flex')
       .alignItems('center')
@@ -88,9 +74,9 @@ function registerThemeSwitcherStyles() {
       .padding('0')
       .borderRadius(options.radii.pill)
       .border('1px solid transparent')
-      .background(palette.themeSwitcher.background)
-      .borderColor(palette.themeSwitcher.border)
-      .color(palette.themeSwitcher.text)
+      .background(palette.background.surface)
+      .borderColor(palette.border.default)
+      .color(palette.text.subtle)
       .cursor('pointer')
       .fontSize('0')
       .position('relative')
@@ -98,11 +84,11 @@ function registerThemeSwitcherStyles() {
 
     styleBuilder
       .select('.theme-switcher:hover', theme)
-      .background(palette.themeSwitcher.hoverBackground)
+      .background(palette.background.surfaceAlt)
 
     styleBuilder
       .select('.theme-switcher:focus-visible', theme)
-      .outline(`2px solid ${palette.nav.focusRing}`)
+      .outline(`2px solid ${palette.border.focus}`)
       .outlineOffset('2px')
 
     styleBuilder
@@ -110,8 +96,8 @@ function registerThemeSwitcherStyles() {
       .position('absolute')
       .inset('6px')
       .borderRadius(options.radii.pill)
-      .background(palette.themeSwitcher.trackBackground)
-      .boxShadow(palette.themeSwitcher.trackShadow)
+      .background(palette.border.default)
+      .boxShadow(palette.effect.trackShadow)
       .transition('opacity 180ms ease, transform 220ms ease')
 
     styleBuilder
@@ -122,8 +108,8 @@ function registerThemeSwitcherStyles() {
       .width('36px')
       .height('36px')
       .borderRadius('50%')
-      .background(palette.themeSwitcher.thumbBackground)
-      .boxShadow(palette.themeSwitcher.thumbShadow)
+      .background(palette.action.accent.background)
+      .boxShadow(palette.effect.thumbShadow)
       .backdropFilter('blur(8px)')
       .transform('translateY(-50%) translateX(0)')
       .display('grid')
@@ -147,12 +133,12 @@ function registerThemeSwitcherStyles() {
     styleBuilder
       .select('.theme-switcher__track-icon--sun', theme)
       .left('18px')
-      .color(palette.themeSwitcher.trackSun)
+      .color(palette.action.accent.hover)
 
     styleBuilder
       .select('.theme-switcher__track-icon--moon', theme)
       .right('18px')
-      .color(palette.themeSwitcher.trackMoon)
+      .color(palette.text.subtle)
 
     styleBuilder
       .select('.theme-switcher__track-icon svg', theme)
@@ -197,13 +183,13 @@ function registerThemeSwitcherStyles() {
 
     styleBuilder
       .select('.theme-switcher__icon--sun', theme)
-      .color(palette.themeSwitcher.thumbIcon)
+      .color(palette.text.inverse)
       .opacity(0)
       .transform('scale(0.6)')
 
     styleBuilder
       .select('.theme-switcher__icon--moon', theme)
-      .color(palette.themeSwitcher.thumbIcon)
+      .color(palette.text.inverse)
       .opacity(0)
       .transform('scale(0.6)')
 

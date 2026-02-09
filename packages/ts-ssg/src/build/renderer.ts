@@ -112,8 +112,16 @@ function appendCodeCopyScript(head: ReturnType<typeof getHead>) {
 
 function buildCriticalThemeStyle(hasThemeGate: boolean) {
   const options = themes.getOptions()
-  const light = options.colors.light.app
-  const dark = options.colors.dark.app
+  const lightPalette = options.colors.light
+  const darkPalette = options.colors.dark
+  const light = {
+    background: lightPalette.background.canvas,
+    text: lightPalette.text.default,
+  }
+  const dark = {
+    background: darkPalette.background.canvas,
+    text: darkPalette.text.default,
+  }
   const css = [
     ':root{color-scheme:light dark;}',
     `html,body{background:${light.background};color:${light.text};}`,

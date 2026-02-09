@@ -47,6 +47,12 @@ export {
 } from './navigation/navigation'
 export { componentRegistry } from './regor/registry'
 export type { TsSsgContext } from './regor/ts-ssg-context'
+export {
+  type BuiltInSkinName,
+  type BuiltInSkinPair,
+  type BuiltInSkins,
+  builtInSkins,
+} from './style/skins'
 export { styleBuilder } from './style/styles'
 export {
   DEFAULT_THEME_OPTIONS,
