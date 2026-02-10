@@ -6,25 +6,16 @@ import type { ThemeMode, ThemeOptions } from '../../style/themeOptions'
 import { themes } from '../../style/themeOptions'
 import type { ThemePalette } from '../../style/themePalette'
 
-interface AlertBoxProps {
-  title?: string
-  eyebrow?: string
-  badge?: string
-  meta?: string
-  tone?: string
-  variant?: string
-  icon?: string
-  compact?: unknown
-  inline?: unknown
-  role?: string
-  live?: string
-}
-
 interface AlertBoxContext {
   title: string
   eyebrow: string
   badge: string
   meta: string
+  tone?: string
+  variant?: string
+  icon?: string
+  compact?: unknown
+  inline?: unknown
   rootClass: string
   role: string
   live: string
@@ -84,10 +75,7 @@ function applyAlertShellStyles(
     .color(palette.text.default)
     .boxShadow(palette.effect.panelShadow)
 
-  styleBuilder
-    .select('.alert--compact', theme)
-    .padding('10px 12px')
-    .gap('10px')
+  styleBuilder.select('.alert--compact', theme).padding('10px 12px').gap('10px')
 
   styleBuilder
     .select('.alert--inline', theme)
@@ -248,7 +236,10 @@ function applyAlertToneStyles(theme: ThemeMode, palette: ThemePalette) {
     .background(palette.status.info.background)
     .borderColor(palette.status.info.border)
   styleBuilder
-    .select('.alert--soft.alert--tone-info .alert__title, .alert--soft.alert--tone-info .alert__icon', theme)
+    .select(
+      '.alert--soft.alert--tone-info .alert__title, .alert--soft.alert--tone-info .alert__icon',
+      theme,
+    )
     .color(palette.status.info.text)
 
   styleBuilder
@@ -256,7 +247,10 @@ function applyAlertToneStyles(theme: ThemeMode, palette: ThemePalette) {
     .background(palette.status.success.background)
     .borderColor(palette.status.success.border)
   styleBuilder
-    .select('.alert--soft.alert--tone-success .alert__title, .alert--soft.alert--tone-success .alert__icon', theme)
+    .select(
+      '.alert--soft.alert--tone-success .alert__title, .alert--soft.alert--tone-success .alert__icon',
+      theme,
+    )
     .color(palette.status.success.text)
 
   styleBuilder
@@ -264,7 +258,10 @@ function applyAlertToneStyles(theme: ThemeMode, palette: ThemePalette) {
     .background(palette.status.warning.background)
     .borderColor(palette.status.warning.border)
   styleBuilder
-    .select('.alert--soft.alert--tone-warning .alert__title, .alert--soft.alert--tone-warning .alert__icon', theme)
+    .select(
+      '.alert--soft.alert--tone-warning .alert__title, .alert--soft.alert--tone-warning .alert__icon',
+      theme,
+    )
     .color(palette.status.warning.text)
 
   styleBuilder
@@ -272,7 +269,10 @@ function applyAlertToneStyles(theme: ThemeMode, palette: ThemePalette) {
     .background(palette.status.danger.background)
     .borderColor(palette.status.danger.border)
   styleBuilder
-    .select('.alert--soft.alert--tone-danger .alert__title, .alert--soft.alert--tone-danger .alert__icon', theme)
+    .select(
+      '.alert--soft.alert--tone-danger .alert__title, .alert--soft.alert--tone-danger .alert__icon',
+      theme,
+    )
     .color(palette.status.danger.text)
 
   styleBuilder
@@ -280,7 +280,10 @@ function applyAlertToneStyles(theme: ThemeMode, palette: ThemePalette) {
     .background(palette.background.accentMuted)
     .borderColor(palette.border.accent)
   styleBuilder
-    .select('.alert--soft.alert--tone-accent .alert__title, .alert--soft.alert--tone-accent .alert__icon', theme)
+    .select(
+      '.alert--soft.alert--tone-accent .alert__title, .alert--soft.alert--tone-accent .alert__icon',
+      theme,
+    )
     .color(palette.text.accent)
 
   styleBuilder
@@ -297,7 +300,10 @@ function applyAlertToneStyles(theme: ThemeMode, palette: ThemePalette) {
     .borderColor(palette.status.info.border)
     .borderLeft(`4px solid ${palette.status.info.border}`)
   styleBuilder
-    .select('.alert--outline.alert--tone-info .alert__title, .alert--outline.alert--tone-info .alert__icon', theme)
+    .select(
+      '.alert--outline.alert--tone-info .alert__title, .alert--outline.alert--tone-info .alert__icon',
+      theme,
+    )
     .color(palette.status.info.text)
 
   styleBuilder
@@ -305,7 +311,10 @@ function applyAlertToneStyles(theme: ThemeMode, palette: ThemePalette) {
     .borderColor(palette.status.success.border)
     .borderLeft(`4px solid ${palette.status.success.border}`)
   styleBuilder
-    .select('.alert--outline.alert--tone-success .alert__title, .alert--outline.alert--tone-success .alert__icon', theme)
+    .select(
+      '.alert--outline.alert--tone-success .alert__title, .alert--outline.alert--tone-success .alert__icon',
+      theme,
+    )
     .color(palette.status.success.text)
 
   styleBuilder
@@ -313,7 +322,10 @@ function applyAlertToneStyles(theme: ThemeMode, palette: ThemePalette) {
     .borderColor(palette.status.warning.border)
     .borderLeft(`4px solid ${palette.status.warning.border}`)
   styleBuilder
-    .select('.alert--outline.alert--tone-warning .alert__title, .alert--outline.alert--tone-warning .alert__icon', theme)
+    .select(
+      '.alert--outline.alert--tone-warning .alert__title, .alert--outline.alert--tone-warning .alert__icon',
+      theme,
+    )
     .color(palette.status.warning.text)
 
   styleBuilder
@@ -321,7 +333,10 @@ function applyAlertToneStyles(theme: ThemeMode, palette: ThemePalette) {
     .borderColor(palette.status.danger.border)
     .borderLeft(`4px solid ${palette.status.danger.border}`)
   styleBuilder
-    .select('.alert--outline.alert--tone-danger .alert__title, .alert--outline.alert--tone-danger .alert__icon', theme)
+    .select(
+      '.alert--outline.alert--tone-danger .alert__title, .alert--outline.alert--tone-danger .alert__icon',
+      theme,
+    )
     .color(palette.status.danger.text)
 
   styleBuilder
@@ -329,7 +344,10 @@ function applyAlertToneStyles(theme: ThemeMode, palette: ThemePalette) {
     .borderColor(palette.border.accent)
     .borderLeft(`4px solid ${palette.border.accent}`)
   styleBuilder
-    .select('.alert--outline.alert--tone-accent .alert__title, .alert--outline.alert--tone-accent .alert__icon', theme)
+    .select(
+      '.alert--outline.alert--tone-accent .alert__title, .alert--outline.alert--tone-accent .alert__icon',
+      theme,
+    )
     .color(palette.text.accent)
 
   styleBuilder
@@ -349,10 +367,7 @@ function applyAlertToneStyles(theme: ThemeMode, palette: ThemePalette) {
 }
 
 function applyAlertResponsiveStyles(theme: ThemeMode) {
-  styleBuilder
-    .select('.alert', theme)
-    .media('max-width: 720px')
-    .padding('12px')
+  styleBuilder.select('.alert', theme).media('max-width: 720px').padding('12px')
 
   styleBuilder
     .select('.alert__actions', theme)
@@ -361,7 +376,7 @@ function applyAlertResponsiveStyles(theme: ThemeMode) {
 }
 
 function createAlertBoxComponent() {
-  return createComponent<AlertBoxProps>(alertBoxTemplate, {
+  return createComponent<AlertBoxContext>(alertBoxTemplate, {
     props: [
       'title',
       'eyebrow',
@@ -386,15 +401,9 @@ export function createAlertComponents() {
   }
 }
 
-function resolveAlertBoxContext(props: AlertBoxProps): AlertBoxContext {
-  const title = resolveString(props.title)
-  const eyebrow = resolveString(props.eyebrow)
-  const badge = resolveString(props.badge)
-  const meta = resolveString(props.meta)
+function resolveAlertBoxContext(props: AlertBoxContext): AlertBoxContext {
   const tone = resolveTone(props.tone)
   const variant = resolveVariant(props.variant)
-  const compact = resolveBooleanish(props.compact)
-  const inline = resolveBooleanish(props.inline)
   const iconName = resolveIconName(props.icon, tone)
   const role = resolveRole(props.role, tone)
   const live = resolveLive(props.live)
@@ -402,33 +411,30 @@ function resolveAlertBoxContext(props: AlertBoxProps): AlertBoxContext {
   const hasIcon = iconName.length > 0
 
   return {
-    title,
-    eyebrow,
-    badge,
-    meta,
+    ...props,
     role,
     live,
     hasLive,
     iconSvg: hasIcon ? getSvgIcon(iconName, 'support') : '',
-    hasTitle: Boolean(title),
-    hasEyebrow: Boolean(eyebrow),
-    hasBadge: Boolean(badge),
-    hasMeta: Boolean(meta),
+    hasTitle: Boolean(props.title),
+    hasEyebrow: Boolean(props.eyebrow),
+    hasBadge: Boolean(props.badge),
+    hasMeta: Boolean(props.meta),
     hasIcon,
-    hasHeader: Boolean(title || eyebrow || badge),
+    hasHeader: Boolean(props.title || props.eyebrow || props.badge),
     rootClass: [
       `alert--tone-${tone}`,
       `alert--${variant}`,
-      compact ? 'alert--compact' : '',
-      inline ? 'alert--inline' : '',
+      props.compact ? 'alert--compact' : '',
+      props.inline ? 'alert--inline' : '',
     ]
       .filter(Boolean)
       .join(' '),
   }
 }
 
-function resolveTone(value: unknown) {
-  const normalized = resolveString(value).toLowerCase()
+function resolveTone(value?: string) {
+  const normalized = value?.toLowerCase() || ''
   if (
     normalized === 'info' ||
     normalized === 'success' ||
@@ -442,8 +448,8 @@ function resolveTone(value: unknown) {
   return 'info'
 }
 
-function resolveVariant(value: unknown) {
-  const normalized = resolveString(value).toLowerCase()
+function resolveVariant(value?: string) {
+  const normalized = value?.toLowerCase() || ''
   if (
     normalized === 'soft' ||
     normalized === 'outline' ||
@@ -454,17 +460,21 @@ function resolveVariant(value: unknown) {
   return 'soft'
 }
 
-function resolveRole(value: unknown, tone: string) {
-  const normalized = resolveString(value).toLowerCase()
-  if (normalized === 'alert' || normalized === 'status' || normalized === 'note') {
+function resolveRole(value?: string, tone?: string) {
+  const normalized = value?.toLowerCase() || ''
+  if (
+    normalized === 'alert' ||
+    normalized === 'status' ||
+    normalized === 'note'
+  ) {
     return normalized
   }
   if (tone === 'danger' || tone === 'warning') return 'alert'
   return 'status'
 }
 
-function resolveLive(value: unknown) {
-  const normalized = resolveString(value).toLowerCase()
+function resolveLive(value?: string) {
+  const normalized = value?.toLowerCase() || ''
   if (
     normalized === 'off' ||
     normalized === 'polite' ||
@@ -475,8 +485,8 @@ function resolveLive(value: unknown) {
   return ''
 }
 
-function resolveIconName(value: unknown, tone: string) {
-  const normalized = resolveString(value).toLowerCase()
+function resolveIconName(value?: string, tone?: string) {
+  const normalized = value?.toLowerCase() ?? ''
   if (normalized === 'none' || normalized === 'off' || normalized === 'false') {
     return ''
   }
@@ -487,23 +497,4 @@ function resolveIconName(value: unknown, tone: string) {
   if (tone === 'accent') return 'rocket'
   if (tone === 'neutral') return 'stack'
   return 'support'
-}
-
-function resolveBooleanish(value: unknown) {
-  if (typeof value === 'boolean') return value
-  if (typeof value === 'number') return value !== 0
-  const normalized = resolveString(value).toLowerCase()
-  if (!normalized) return false
-  return (
-    normalized === 'true' ||
-    normalized === '1' ||
-    normalized === 'yes' ||
-    normalized === 'on'
-  )
-}
-
-function resolveString(value: unknown) {
-  return typeof value === 'string' && value.trim().length > 0
-    ? value.trim()
-    : ''
 }
