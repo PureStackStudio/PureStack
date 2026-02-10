@@ -6,11 +6,11 @@ import { themes } from '../../style/themeOptions'
 import { resolveTsSsgContext } from '../resolveTsSsgContext'
 import type { TsSsgContext } from '../ts-ssg-context'
 
-interface NavMenuProps {
+interface NavMenuContext {
   items?: NavItem[]
 }
 
-interface NavListProps {
+interface NavListContext {
   items?: NavItemState[]
 }
 
@@ -139,7 +139,7 @@ function buildNavState(
 
 function registerNavStyles() {
   themes.forEach((theme, palette, options) => {
-        styleBuilder
+    styleBuilder
       .select('.nav__menu', theme)
       .display('block')
       .padding('16px')
@@ -188,9 +188,9 @@ function registerNavStyles() {
       .background(palette.action.accent.background)
       .color(palette.action.accent.text)
 
-  styleBuilder
-    .select('.nav__link:focus-visible', theme)
-    .outline(`2px solid ${palette.border.focus}`)
+    styleBuilder
+      .select('.nav__link:focus-visible', theme)
+      .outline(`2px solid ${palette.border.focus}`)
       .outlineOffset('2px')
 
     styleBuilder
@@ -276,7 +276,7 @@ function createNavItemComponent() {
 }
 
 function createNavListComponent() {
-  return createComponent<NavListProps>(navListTemplate, {
+  return createComponent<NavListContext>(navListTemplate, {
     props: ['items'],
     context: (head) => ({
       items: head.props.items,
@@ -285,7 +285,7 @@ function createNavListComponent() {
 }
 
 function createNavMenuComponent() {
-  return createComponent<NavMenuProps>(navMenuTemplate, {
+  return createComponent<NavMenuContext>(navMenuTemplate, {
     props: ['items'],
     context: (head) => {
       const context = resolveTsSsgContext(head)

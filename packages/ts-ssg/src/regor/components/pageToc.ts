@@ -6,14 +6,14 @@ import { themes } from '../../style/themeOptions'
 import { resolveTsSsgContext } from '../resolveTsSsgContext'
 import type { TsSsgContext } from '../ts-ssg-context'
 
-interface PageTocProps {
+interface PageTocContext {
   items?: PageOutlineItem[]
   title?: string
 }
 
-interface PageTocItem extends PageOutlineItem {
+interface PageTocItemContext extends PageOutlineItem {
   href: string
-  children?: PageTocItem[]
+  children?: PageTocItemContext[]
 }
 
 const pageTocTemplate = html`<nav class="page-toc" aria-label="On this page">
@@ -39,7 +39,7 @@ const pageTocTemplate = html`<nav class="page-toc" aria-label="On this page">
   <div class="page-toc__empty" r-else>No sections yet.</div>
 </nav>`
 
-function toPageTocItems(items: PageOutlineItem[]): PageTocItem[] {
+function toPageTocItems(items: PageOutlineItem[]): PageTocItemContext[] {
   return items.map((item) => {
     const { children, ...rest } = item
     const mappedChildren = children ? toPageTocItems(children) : undefined
@@ -51,12 +51,15 @@ function toPageTocItems(items: PageOutlineItem[]): PageTocItem[] {
   })
 }
 
-function resolveItems(props: PageTocProps, context: TsSsgContext | undefined) {
+function resolveItems(
+  props: PageTocContext,
+  context: TsSsgContext | undefined,
+) {
   const items = props.items ?? context?.outline ?? []
   return toPageTocItems(items)
 }
 
-function resolveTitle(props: PageTocProps) {
+function resolveTitle(props: PageTocContext) {
   return typeof props.title === 'string' && props.title.trim().length > 0
     ? props.title.trim()
     : 'On this page'
@@ -64,7 +67,7 @@ function resolveTitle(props: PageTocProps) {
 
 function registerPageTocStyles() {
   themes.forEach((theme, palette, options) => {
-        styleBuilder
+    styleBuilder
       .select('.page-toc', theme)
       .display('grid')
       .gap('12px')
@@ -185,7 +188,9 @@ function registerPageTocStyles() {
       .height('calc(100vh - 112px)')
       .overflow('auto')
 
-    styleBuilder.select('.template-doc--full-main .doc-toc', theme).right('32px')
+    styleBuilder
+      .select('.template-doc--full-main .doc-toc', theme)
+      .right('32px')
 
     styleBuilder
       .select('.doc-toc', theme)
@@ -199,7 +204,7 @@ function registerPageTocStyles() {
 }
 
 function createPageTocComponent() {
-  return createComponent<PageTocProps>(pageTocTemplate, {
+  return createComponent<PageTocContext>(pageTocTemplate, {
     props: ['items', 'title'],
     context: (head) => {
       const context = resolveTsSsgContext(head)

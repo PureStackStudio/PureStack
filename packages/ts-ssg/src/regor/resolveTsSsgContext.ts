@@ -10,8 +10,8 @@ function hasTsSsgContext(value: unknown): value is ContextCarrier {
   return typeof value === 'object' && value !== null && 'tsSsgContext' in value
 }
 
-export function resolveTsSsgContext(
-  head?: Pick<ComponentHead, 'ctx'>,
+export function resolveTsSsgContext<TContext>(
+  head?: ComponentHead<TContext>,
 ): TsSsgContext {
   const stack = head?.ctx ?? []
   for (const ctx of stack) {

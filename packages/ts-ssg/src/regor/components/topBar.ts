@@ -38,7 +38,7 @@ const topBarTemplate = html`<input
 
 function registerTopBarStyles() {
   themes.forEach((theme, palette, options) => {
-        styleBuilder
+    styleBuilder
       .select('.topbar', theme)
       .display('flex')
       .alignItems('center')
@@ -96,7 +96,10 @@ function registerTopBarStyles() {
       .outline(`2px solid ${palette.border.focus}`)
       .outlineOffset('2px')
 
-    styleBuilder.select('.topbar__search', theme).border('0').background('transparent')
+    styleBuilder
+      .select('.topbar__search', theme)
+      .border('0')
+      .background('transparent')
 
     styleBuilder
       .select('.topbar__search::before', theme)
@@ -146,7 +149,10 @@ function registerTopBarStyles() {
     styleBuilder.select('.doc-nav-toggle', theme).display('none')
 
     styleBuilder
-      .select('.doc-nav-toggle:checked ~ .topbar .topbar__toggle::before', theme)
+      .select(
+        '.doc-nav-toggle:checked ~ .topbar .topbar__toggle::before',
+        theme,
+      )
       .top('20px')
       .transform('rotate(45deg)')
       .boxShadow('none')
