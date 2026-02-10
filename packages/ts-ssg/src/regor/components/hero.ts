@@ -33,16 +33,9 @@ const heroMediaTemplate = html`<div class="hero__logo-frame" r-if="hasMedia">
   <img class="hero__logo" :src="src" :alt="alt" />
 </div>`
 
-interface HeroActionProps {
-  href?: string
-  variant?: string
-  icon?: string
-  target?: string
-  rel?: string
-}
-
 interface HeroActionContext {
   href: string
+  variant?: string
   className: string
   icon: string
   target: string
@@ -51,11 +44,6 @@ interface HeroActionContext {
   hasIcon: boolean
   hasTarget: boolean
   hasRel: boolean
-}
-
-interface HeroMediaProps {
-  src?: string
-  alt?: string
 }
 
 interface HeroMediaContext {
@@ -304,42 +292,29 @@ export function createHeroComponents() {
   }
 }
 
-function resolveHeroActionContext(props: HeroActionProps): HeroActionContext {
-  const href = resolveString(props.href)
-  const normalizedVariant = resolveString(props.variant).toLowerCase()
-  const variant =
+function resolveHeroActionContext(props: HeroActionContext): HeroActionContext {
+  const normalizedVariant = props.variant?.toLowerCase()
+  const className =
     normalizedVariant === 'primary'
       ? 'hero__action--primary'
       : 'hero__action--minimal'
-  const icon = resolveString(props.icon)
-  const target = resolveString(props.target)
-  const relRaw = resolveString(props.rel)
-  const rel = relRaw || (target === '_blank' ? 'noopener noreferrer' : '')
+  const rel =
+    props.rel || (props.target === '_blank' ? 'noopener noreferrer' : '')
   return {
-    href,
-    className: variant,
-    icon,
-    target,
+    ...props,
+    className,
     rel,
-    hasHref: Boolean(href),
-    hasIcon: Boolean(icon),
-    hasTarget: Boolean(target),
+    hasHref: Boolean(props.href),
+    hasIcon: Boolean(props.icon),
+    hasTarget: Boolean(props.target),
     hasRel: Boolean(rel),
   }
 }
 
-function resolveHeroMediaContext(props: HeroMediaProps): HeroMediaContext {
-  const src = resolveString(props.src)
-  const alt = resolveString(props.alt)
+function resolveHeroMediaContext(props: HeroMediaContext): HeroMediaContext {
   return {
-    src,
-    alt: alt || 'Hero image',
-    hasMedia: Boolean(src),
+    ...props,
+    alt: props.alt || 'Hero image',
+    hasMedia: Boolean(props.src),
   }
-}
-
-function resolveString(value: unknown) {
-  return typeof value === 'string' && value.trim().length > 0
-    ? value.trim()
-    : ''
 }
