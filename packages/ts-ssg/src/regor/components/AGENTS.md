@@ -32,9 +32,11 @@ Template Rules
 
 Props & Context
 
-- Explicitly type props with an interface.
+- The generic in `createComponent<T>` is the template context type (`T`), not the props type.
+- Do not explicitly type props. Treat `head.props` as Regor internal input and normalize what you need in `context`.
 - List props in `createComponent` via `props: [...]` when they are used.
 - Use `context` to derive computed values, and keep it pure (no mutations or side-effects).
+- Treat the `context` callback return as runtime handoff to Regor; TypeScript guidance ends at that boundary.
 - Do not read from `window` or rely on runtime globals during render.
 
 Styling Rules (styleBuilder)
@@ -75,6 +77,5 @@ Checklist Before Finishing
 
 - New component registered in `initBuiltinComponents`.
 - Light and dark styles implemented.
-- Props typed and used via `createComponent`.
 - Focus-visible and ARIA covered for interactive elements.
 - Class names follow BEM and are scoped to the component.
