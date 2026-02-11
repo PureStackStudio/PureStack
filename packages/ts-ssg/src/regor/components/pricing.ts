@@ -217,13 +217,21 @@ function applyPricingPlanHeaderStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
+  applyPricingPlanMetaStyles(theme, palette)
+  applyPricingPlanIconStyles(theme, palette)
+  applyPricingPlanTitleStyles(theme, palette, options)
+}
+
+function applyPricingPlanMetaStyles(theme: ThemeMode, _palette: ThemePalette) {
   styleBuilder
     .select('.pricing-plan__meta', theme)
     .display('flex')
     .alignItems('center')
     .justifyContent('space-between')
     .gap('12px')
+}
 
+function applyPricingPlanIconStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.pricing-plan__icon', theme)
     .width('44px')
@@ -249,7 +257,13 @@ function applyPricingPlanHeaderStyles(
     .set('stroke-linecap', 'round')
     .set('stroke-linejoin', 'round')
     .set('stroke-width', '2.2')
+}
 
+function applyPricingPlanTitleStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.pricing-plan__title-row', theme)
     .display('flex')

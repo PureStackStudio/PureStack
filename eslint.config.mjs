@@ -33,6 +33,14 @@ export default tseslint.config(
       ],
       'eol-last': ['error', 'always'], // add single empty line at the end of the file
       ...(tsdocPlugin ? { 'tsdoc/syntax': 'error' } : {}),
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
     },
-  }
+  },
 )

@@ -198,9 +198,10 @@ function renderSplashTemplate({ head, bodyHtml, pageInfo }: PageTemplateInput) {
 }
 
 function buildDefaultFooter(siteTitle?: string) {
+  const title = `${siteTitle || 'Your Site'} keeps shipping after launch`
   return h('site-footer')
     .attr({
-      title: `${siteTitle || 'Your Site'} keeps shipping after launch`,
+      title,
       ctaLabel: 'Get Started',
       ctaHref: '/',
       newsletterTitle: 'Stay in the loop',
@@ -209,54 +210,75 @@ function buildDefaultFooter(siteTitle?: string) {
       h('p').raw(
         'Ship docs, marketing pages, changelogs, and product hubs with one reusable architecture.',
       ),
-      h('template')
-        .attr({ name: 'status' })
-        .push(
-          h('span').raw('Performance-first'),
-          h('span').raw('Accessible by default'),
-          h('span').raw('SEO-ready output'),
-        ),
-      h('template')
-        .attr({ name: 'columns' })
-        .push(
-          h('footer-column')
-            .attr({ title: 'Product' })
-            .push(
-              h('footer-link').attr({ href: '/', label: 'Overview' }),
-              h('footer-link').attr({
-                href: '/guide/',
-                label: 'Documentation',
-              }),
-              h('footer-link').attr({
-                href: '/features/',
-                label: 'Features',
-              }),
-            ),
-          h('footer-column')
-            .attr({ title: 'Company' })
-            .push(
-              h('footer-link').attr({ href: '/about/', label: 'About' }),
-              h('footer-link').attr({ href: '/blog/', label: 'Blog' }),
-              h('footer-link').attr({
-                href: '/contact/',
-                label: 'Contact',
-              }),
-            ),
-        ),
-      h('template')
-        .attr({ name: 'legal' })
-        .push(
-          h('a').attr({ href: '/privacy/' }).raw('Privacy'),
-          h('a').attr({ href: '/terms/' }).raw('Terms'),
-        ),
-      h('template')
-        .attr({ name: 'social' })
-        .push(
-          h('footer-social').attr({
-            href: 'https://github.com',
-            label: 'GitHub',
-            target: '_blank',
-          }),
-        ),
+      buildDefaultFooterStatusSlot(),
+      buildDefaultFooterColumnsSlot(),
+      buildDefaultFooterLegalSlot(),
+      buildDefaultFooterSocialSlot(),
+    )
+}
+
+function buildDefaultFooterStatusSlot() {
+  return h('template')
+    .attr({ name: 'status' })
+    .push(
+      h('span').raw('Performance-first'),
+      h('span').raw('Accessible by default'),
+      h('span').raw('SEO-ready output'),
+    )
+}
+
+function buildDefaultFooterColumnsSlot() {
+  return h('template')
+    .attr({ name: 'columns' })
+    .push(buildDefaultFooterProductColumn(), buildDefaultFooterCompanyColumn())
+}
+
+function buildDefaultFooterProductColumn() {
+  return h('footer-column')
+    .attr({ title: 'Product' })
+    .push(
+      h('footer-link').attr({ href: '/', label: 'Overview' }),
+      h('footer-link').attr({
+        href: '/guide/',
+        label: 'Documentation',
+      }),
+      h('footer-link').attr({
+        href: '/features/',
+        label: 'Features',
+      }),
+    )
+}
+
+function buildDefaultFooterCompanyColumn() {
+  return h('footer-column')
+    .attr({ title: 'Company' })
+    .push(
+      h('footer-link').attr({ href: '/about/', label: 'About' }),
+      h('footer-link').attr({ href: '/blog/', label: 'Blog' }),
+      h('footer-link').attr({
+        href: '/contact/',
+        label: 'Contact',
+      }),
+    )
+}
+
+function buildDefaultFooterLegalSlot() {
+  return h('template')
+    .attr({ name: 'legal' })
+    .push(
+      h('a').attr({ href: '/privacy/' }).raw('Privacy'),
+      h('a').attr({ href: '/terms/' }).raw('Terms'),
+    )
+}
+
+function buildDefaultFooterSocialSlot() {
+  return h('template')
+    .attr({ name: 'social' })
+    .push(
+      h('footer-social').attr({
+        href: 'https://github.com',
+        label: 'GitHub',
+        target: '_blank',
+      }),
     )
 }

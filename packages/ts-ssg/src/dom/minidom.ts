@@ -730,99 +730,154 @@ function parseInto(
   inRawText = false,
 ) {
   let index = 0
-  const stack: Array<{ node: MiniNode; container: MiniNode }> = [
-    { node: root, container: root },
-  ]
-
-  const current = () => stack[stack.length - 1]?.container ?? root
+  const stack: ParseStackEntry[] = [{ node: root, container: root }]
 
   while (index < html.length) {
     if (inRawText) {
-      appendText(current(), html.slice(index), document)
+      appendText(currentContainer(stack, root), html.slice(index), document)
       break
     }
     const lt = html.indexOf('<', index)
     if (lt === -1) {
       const text = html.slice(index)
-      appendText(current(), text, document)
+      appendText(currentContainer(stack, root), text, document)
       break
     }
     if (lt > index) {
-      appendText(current(), html.slice(index, lt), document)
+      appendText(currentContainer(stack, root), html.slice(index, lt), document)
       index = lt
     }
 
-    if (html.startsWith('<!--', index)) {
-      const end = html.indexOf('-->', index + 4)
-      const content =
-        end === -1 ? html.slice(index + 4) : html.slice(index + 4, end)
-      current().appendChild(document.createComment(content))
-      index = end === -1 ? html.length : end + 3
+    const next = parseTagLikeAt({
+      html,
+      index,
+      stack,
+      root,
+      document,
+    })
+    if (next !== null) {
+      index = next
       continue
     }
 
-    if (html.startsWith('<!DOCTYPE', index) || html.startsWith('<!doctype', index)) {
-      const end = html.indexOf('>', index + 2)
-      index = end === -1 ? html.length : end + 1
-      continue
-    }
-
-    if (html[index + 1] === '/') {
-      const closeEnd = html.indexOf('>', index + 2)
-      const tagName = html
-        .slice(index + 2, closeEnd === -1 ? html.length : closeEnd)
-        .trim()
-        .toLowerCase()
-      for (let i = stack.length - 1; i > 0; i -= 1) {
-        const node = stack[i].node
-        if (node instanceof MiniElement) {
-          const name = node.tagName.toLowerCase()
-          stack.pop()
-          if (name === tagName) break
-        }
-      }
-      index = closeEnd === -1 ? html.length : closeEnd + 1
-      continue
-    }
-
-    const tagMatch = /^<\s*([a-zA-Z0-9:_-]+)/.exec(html.slice(index))
-    if (!tagMatch) {
-      index += 1
-      continue
-    }
-    const tagName = tagMatch[1].toLowerCase()
-    const start = index + tagMatch[0].length
-    const { attrs, end, selfClosing } = parseAttributes(html, start)
-    const isVoid = VOID_ELEMENTS.has(tagName)
-    const element = document.createElement(tagName)
-    for (const [key, value] of attrs.entries()) {
-      element.setAttribute(key, value)
-    }
-    current().appendChild(element)
-    index = end
-
-    if (selfClosing || isVoid) continue
-
-    if (RAW_TEXT_ELEMENTS.has(tagName)) {
-      const close = html.toLowerCase().indexOf(`</${tagName}`, index)
-      const rawText =
-        close === -1 ? html.slice(index) : html.slice(index, close)
-      appendText(element, rawText, document)
-      if (close !== -1) {
-        const closeEnd = html.indexOf('>', close + tagName.length + 2)
-        index = closeEnd === -1 ? html.length : closeEnd + 1
-      } else {
-        index = html.length
-      }
-      continue
-    }
-
-    if (element instanceof MiniHTMLTemplateElement) {
-      stack.push({ node: element, container: element.content })
-    } else {
-      stack.push({ node: element, container: element })
-    }
+    index += 1
   }
+}
+
+type ParseStackEntry = { node: MiniNode; container: MiniNode }
+
+type ParseTagLikeInput = {
+  html: string
+  index: number
+  stack: ParseStackEntry[]
+  root: MiniNode
+  document: MiniDocument
+}
+
+function parseTagLikeAt(input: ParseTagLikeInput): number | null {
+  const { html, index, stack, root, document } = input
+  const comment = parseCommentTag(html, index, currentContainer(stack, root), document)
+  if (comment !== null) return comment
+
+  const doctype = parseDoctypeTag(html, index)
+  if (doctype !== null) return doctype
+
+  if (html[index + 1] === '/') {
+    return parseClosingTag(html, index, stack)
+  }
+  return parseOpeningTag(html, index, stack, root, document)
+}
+
+function currentContainer(stack: ParseStackEntry[], root: MiniNode): MiniNode {
+  return stack[stack.length - 1]?.container ?? root
+}
+
+function parseCommentTag(
+  html: string,
+  index: number,
+  parent: MiniNode,
+  document: MiniDocument,
+): number | null {
+  if (!html.startsWith('<!--', index)) return null
+  const end = html.indexOf('-->', index + 4)
+  const content = end === -1 ? html.slice(index + 4) : html.slice(index + 4, end)
+  parent.appendChild(document.createComment(content))
+  return end === -1 ? html.length : end + 3
+}
+
+function parseDoctypeTag(html: string, index: number): number | null {
+  if (!html.startsWith('<!DOCTYPE', index) && !html.startsWith('<!doctype', index)) {
+    return null
+  }
+  const end = html.indexOf('>', index + 2)
+  return end === -1 ? html.length : end + 1
+}
+
+function parseClosingTag(
+  html: string,
+  index: number,
+  stack: ParseStackEntry[],
+): number {
+  const closeEnd = html.indexOf('>', index + 2)
+  const tagName = html
+    .slice(index + 2, closeEnd === -1 ? html.length : closeEnd)
+    .trim()
+    .toLowerCase()
+  for (let i = stack.length - 1; i > 0; i -= 1) {
+    const node = stack[i].node
+    if (!(node instanceof MiniElement)) continue
+    const name = node.tagName.toLowerCase()
+    stack.pop()
+    if (name === tagName) break
+  }
+  return closeEnd === -1 ? html.length : closeEnd + 1
+}
+
+function parseOpeningTag(
+  html: string,
+  index: number,
+  stack: ParseStackEntry[],
+  root: MiniNode,
+  document: MiniDocument,
+): number | null {
+  const tagMatch = /^<\s*([a-zA-Z0-9:_-]+)/.exec(html.slice(index))
+  if (!tagMatch) return null
+
+  const tagName = tagMatch[1].toLowerCase()
+  const start = index + tagMatch[0].length
+  const { attrs, end, selfClosing } = parseAttributes(html, start)
+  const element = document.createElement(tagName)
+  for (const [key, value] of attrs.entries()) {
+    element.setAttribute(key, value)
+  }
+  currentContainer(stack, root).appendChild(element)
+
+  if (selfClosing || VOID_ELEMENTS.has(tagName)) return end
+  if (RAW_TEXT_ELEMENTS.has(tagName)) {
+    return parseRawTextContent(html, end, tagName, element, document)
+  }
+
+  if (element instanceof MiniHTMLTemplateElement) {
+    stack.push({ node: element, container: element.content })
+  } else {
+    stack.push({ node: element, container: element })
+  }
+  return end
+}
+
+function parseRawTextContent(
+  html: string,
+  index: number,
+  tagName: string,
+  element: MiniElement,
+  document: MiniDocument,
+): number {
+  const close = html.toLowerCase().indexOf(`</${tagName}`, index)
+  const rawText = close === -1 ? html.slice(index) : html.slice(index, close)
+  appendText(element, rawText, document)
+  if (close === -1) return html.length
+  const closeEnd = html.indexOf('>', close + tagName.length + 2)
+  return closeEnd === -1 ? html.length : closeEnd + 1
 }
 
 function appendText(parent: MiniNode, text: string, document: MiniDocument) {

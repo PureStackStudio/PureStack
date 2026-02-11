@@ -147,6 +147,16 @@ function applyHeroActionStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
+  applyHeroActionShellStyles(theme, palette, options)
+  applyHeroActionVariantStyles(theme, palette)
+  applyHeroActionIconStyles(theme)
+}
+
+function applyHeroActionShellStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.hero__actions', theme)
     .display('flex')
@@ -175,7 +185,9 @@ function applyHeroActionStyles(
     .select('.hero__action:focus-visible', theme)
     .outline(`2px solid ${palette.border.focus}`)
     .outlineOffset('2px')
+}
 
+function applyHeroActionVariantStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.hero__action--primary', theme)
     .background(palette.action.accent.background)
@@ -195,7 +207,9 @@ function applyHeroActionStyles(
   styleBuilder
     .select('.hero__action--minimal:hover', theme)
     .background(palette.action.neutral.hover)
+}
 
+function applyHeroActionIconStyles(theme: ThemeMode) {
   styleBuilder
     .select('.hero__action[data-icon="right-arrow"]::after', theme)
     .content('""')

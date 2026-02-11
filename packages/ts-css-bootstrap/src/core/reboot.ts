@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Style } from '@purestack/ts-css'
 
 import { CssConfig } from '../cssConfig'

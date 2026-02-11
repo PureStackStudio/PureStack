@@ -277,6 +277,12 @@ function applyFooterContentStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
+  applyFooterHeadingStyles(theme, palette)
+  applyFooterPrimaryStyles(theme, palette)
+  applyFooterStatusStyles(theme, palette, options)
+}
+
+function applyFooterHeadingStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.site-footer__eyebrow', theme)
     .margin('0')
@@ -285,7 +291,6 @@ function applyFooterContentStyles(
     .textTransform('uppercase')
     .letterSpacing('0.14em')
     .color(palette.text.subtle)
-
   styleBuilder
     .select('.site-footer__title', theme)
     .margin('0')
@@ -293,7 +298,6 @@ function applyFooterContentStyles(
     .lineHeight('1.12')
     .letterSpacing('-0.02em')
     .color(palette.text.strong)
-
   styleBuilder
     .select('.site-footer__tagline', theme)
     .margin('0')
@@ -301,37 +305,37 @@ function applyFooterContentStyles(
     .lineHeight('1.6')
     .whiteSpace('pre-line')
     .color(palette.text.subtle)
+}
 
-  styleBuilder
-    .select('.site-footer__primary', theme)
-    .display('grid')
-    .gap('14px')
-
+function applyFooterPrimaryStyles(theme: ThemeMode, palette: ThemePalette) {
+  styleBuilder.select('.site-footer__primary', theme).display('grid').gap('14px')
   styleBuilder
     .select('.site-footer__primary-content', theme)
     .display('grid')
     .gap('10px')
-
   styleBuilder
     .select('.site-footer__primary-content :where(p)', theme)
     .margin('0')
     .lineHeight('1.7')
     .color(palette.text.muted)
-
   styleBuilder
     .select('.site-footer__primary-content :where(a)', theme)
     .color(palette.text.accent)
     .fontWeight('600')
+}
 
+function applyFooterStatusStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.site-footer__status', theme)
     .display('flex')
     .alignItems('center')
     .gap('8px')
     .flexWrap('wrap')
-
   styleBuilder.select('.site-footer__status:empty', theme).display('none')
-
   styleBuilder
     .select('.site-footer__status :where(span, a, strong)', theme)
     .display('inline-flex')
@@ -394,12 +398,22 @@ function applyFooterNewsletterStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
+  applyFooterNewsletterShellStyles(theme, palette, options)
+  applyFooterNewsletterFieldStyles(theme, palette, options)
+  applyFooterNewsletterButtonStyles(theme, palette, options)
+  applyFooterNewsletterMetaStyles(theme, palette)
+}
+
+function applyFooterNewsletterShellStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.site-footer__columns', theme)
     .display('grid')
     .gridTemplateColumns('repeat(2, minmax(0, 1fr))')
     .gap('16px')
-
   styleBuilder
     .select('.site-footer__newsletter', theme)
     .display('grid')
@@ -408,7 +422,6 @@ function applyFooterNewsletterStyles(
     .borderRadius(options.radii.md)
     .background(palette.background.surface)
     .border(`1px solid ${palette.border.default}`)
-
   styleBuilder
     .select('.site-footer__newsletter-title', theme)
     .margin('0')
@@ -416,31 +429,33 @@ function applyFooterNewsletterStyles(
     .fontWeight('700')
     .letterSpacing('-0.01em')
     .color(palette.text.strong)
-
   styleBuilder
     .select('.site-footer__newsletter-body', theme)
     .margin('0')
     .fontSize('14px')
     .lineHeight('1.6')
     .color(palette.text.muted)
-
   styleBuilder
     .select('.site-footer__newsletter-form', theme)
     .display('grid')
     .gap('8px')
+}
 
+function applyFooterNewsletterFieldStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.site-footer__newsletter-label', theme)
     .fontSize('12px')
     .fontWeight('600')
     .color(palette.text.subtle)
-
   styleBuilder
     .select('.site-footer__newsletter-row', theme)
     .display('grid')
     .gridTemplateColumns('minmax(0, 1fr) auto')
     .gap('8px')
-
   styleBuilder
     .select('.site-footer__newsletter-input', theme)
     .width('100%')
@@ -449,17 +464,21 @@ function applyFooterNewsletterStyles(
     .border(`1px solid ${palette.border.default}`)
     .background(palette.background.surfaceAlt)
     .color(palette.text.default)
-
   styleBuilder
     .select('.site-footer__newsletter-input::placeholder', theme)
     .color(palette.text.soft)
-
   styleBuilder
     .select('.site-footer__newsletter-input:focus-visible', theme)
     .outline(`2px solid ${palette.border.focus}`)
     .outlineOffset('2px')
     .borderColor(palette.border.focus)
+}
 
+function applyFooterNewsletterButtonStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.site-footer__newsletter-button', theme)
     .padding('10px 14px')
@@ -470,21 +489,20 @@ function applyFooterNewsletterStyles(
     .fontWeight('700')
     .cursor('pointer')
     .transition('background 170ms ease, transform 170ms ease')
-
   styleBuilder
     .select('.site-footer__newsletter-button:hover', theme)
     .background(palette.action.neutral.hover)
     .transform('translateY(-1px)')
-
   styleBuilder
     .select('.site-footer__newsletter-button:focus-visible', theme)
     .outline(`2px solid ${palette.action.neutral.focusRing}`)
     .outlineOffset('2px')
+}
 
+function applyFooterNewsletterMetaStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.site-footer__newsletter-extra:empty', theme)
     .display('none')
-
   styleBuilder
     .select('.site-footer__newsletter-extra', theme)
     .fontSize('12px')
@@ -497,6 +515,16 @@ function applyFooterColumnStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
+  applyFooterColumnShellStyles(theme, palette, options)
+  applyFooterColumnListStyles(theme)
+  applyFooterLinkStyles(theme, palette, options)
+}
+
+function applyFooterColumnShellStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.footer-column', theme)
     .display('grid')
@@ -505,12 +533,10 @@ function applyFooterColumnStyles(
     .borderRadius(options.radii.md)
     .background(palette.background.surface)
     .border(`1px solid ${palette.border.subtle}`)
-
   styleBuilder
     .select('.footer-column--compact', theme)
     .gap('6px')
     .padding('10px')
-
   styleBuilder
     .select('.footer-column__title', theme)
     .margin('0')
@@ -519,14 +545,15 @@ function applyFooterColumnStyles(
     .textTransform('uppercase')
     .letterSpacing('0.08em')
     .color(palette.text.subtle)
-
   styleBuilder
     .select('.footer-column__description', theme)
     .margin('0')
     .fontSize('13px')
     .lineHeight('1.5')
     .color(palette.text.soft)
+}
 
+function applyFooterColumnListStyles(theme: ThemeMode) {
   styleBuilder
     .select('.footer-column__list', theme)
     .listStyle('none')
@@ -534,9 +561,14 @@ function applyFooterColumnStyles(
     .padding('0')
     .display('grid')
     .gap('4px')
-
   styleBuilder.select('.footer-link-item', theme).listStyle('none')
+}
 
+function applyFooterLinkStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.footer-link', theme)
     .display('inline-flex')
@@ -547,19 +579,14 @@ function applyFooterColumnStyles(
     .lineHeight('1.6')
     .color(palette.text.default)
     .transition('color 150ms ease')
-
   styleBuilder.select('.footer-link--muted', theme).color(palette.text.subtle)
-
   styleBuilder.select('.footer-link--strong', theme).fontWeight('700')
-
   styleBuilder.select('.footer-link:hover', theme).color(palette.text.accent)
-
   styleBuilder
     .select('.footer-link:focus-visible', theme)
     .outline(`2px solid ${palette.border.focus}`)
     .outlineOffset('2px')
     .borderRadius(options.radii.sm)
-
   styleBuilder
     .select('.footer-link[data-icon="external"]::after', theme)
     .content('""')
@@ -568,7 +595,6 @@ function applyFooterColumnStyles(
     .borderTop('2px solid currentColor')
     .borderRight('2px solid currentColor')
     .transform('translateY(-1px)')
-
   styleBuilder
     .select('.footer-link[data-icon="arrow"]::after', theme)
     .content('"->"')
@@ -580,6 +606,12 @@ function applyFooterBottomStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
+  applyFooterBottomShellStyles(theme, palette)
+  applyFooterBottomLegalStyles(theme, palette, options)
+  applyFooterBottomSocialStyles(theme, palette, options)
+}
+
+function applyFooterBottomShellStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.site-footer__bottom', theme)
     .display('grid')
@@ -588,38 +620,46 @@ function applyFooterBottomStyles(
     .alignItems('center')
     .paddingTop('8px')
     .borderTop(`1px solid ${palette.border.subtle}`)
-
   styleBuilder
     .select('.site-footer__copyright', theme)
     .margin('0')
     .fontSize('13px')
     .lineHeight('1.5')
     .color(palette.text.soft)
+}
 
+function applyFooterBottomLegalStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.site-footer__legal', theme)
     .display('flex')
     .alignItems('center')
     .gap('12px')
     .flexWrap('wrap')
-
   styleBuilder
     .select('.site-footer__legal :where(a)', theme)
     .fontSize('13px')
     .fontWeight('600')
     .textDecoration('none')
     .color(palette.text.subtle)
-
   styleBuilder
     .select('.site-footer__legal :where(a:hover)', theme)
     .color(palette.text.accent)
-
   styleBuilder
     .select('.site-footer__legal :where(a:focus-visible)', theme)
     .outline(`2px solid ${palette.border.focus}`)
     .outlineOffset('2px')
     .borderRadius(options.radii.sm)
+}
 
+function applyFooterBottomSocialStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.site-footer__social', theme)
     .display('flex')
@@ -627,7 +667,6 @@ function applyFooterBottomStyles(
     .gap('8px')
     .justifyContent('flex-end')
     .flexWrap('wrap')
-
   styleBuilder
     .select('.footer-social', theme)
     .display('inline-flex')
@@ -644,18 +683,15 @@ function applyFooterBottomStyles(
     .transition(
       'background 160ms ease, border-color 160ms ease, transform 160ms ease',
     )
-
   styleBuilder
     .select('.footer-social:hover', theme)
     .background(palette.background.accentMuted)
     .borderColor(palette.border.accent)
     .transform('translateY(-1px)')
-
   styleBuilder
     .select('.footer-social:focus-visible', theme)
     .outline(`2px solid ${palette.border.focus}`)
     .outlineOffset('2px')
-
   styleBuilder
     .select('.footer-social__icon', theme)
     .width('16px')
@@ -663,7 +699,6 @@ function applyFooterBottomStyles(
     .display('inline-flex')
     .alignItems('center')
     .justifyContent('center')
-
   styleBuilder
     .select('.footer-social__icon svg', theme)
     .width('16px')
