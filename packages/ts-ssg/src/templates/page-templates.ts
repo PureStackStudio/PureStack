@@ -63,6 +63,7 @@ function renderDocTemplate({
   siteTitle,
 }: PageTemplateInput) {
   const layout = resolveDocLayout(page?.frontmatter, navigation)
+  const showFooter = resolveFooterEnabled(page?.frontmatter)
   return h('html').push(
     head,
     h('body')
@@ -90,7 +91,7 @@ function renderDocTemplate({
                 ]
               : []),
           ),
-        buildDefaultFooter(siteTitle),
+        ...(showFooter ? [buildDefaultFooter(siteTitle)] : []),
       ),
   )
 }
@@ -170,18 +171,28 @@ function resolveTocEnabled(frontmatter: Record<string, unknown> | undefined) {
   return layout?.showToc === true
 }
 
+function resolveFooterEnabled(frontmatter: Record<string, unknown> | undefined) {
+  if (!isPlainObject(frontmatter)) return true
+  const layout = isPlainObject(frontmatter.layout)
+    ? frontmatter.layout
+    : undefined
+  if (typeof layout?.showFooter === 'boolean') return layout.showFooter
+  return true
+}
+
 function isPlainObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
 
-function renderSplashTemplate({ head, bodyHtml }: PageTemplateInput) {
+function renderSplashTemplate({ head, bodyHtml, pageInfo }: PageTemplateInput) {
+  const showFooter = resolveFooterEnabled(pageInfo?.frontmatter)
   return h('html').push(
     head,
     h('body')
       .attr({ class: 'template-splash' })
       .push(
         h('main').push(h('section').attr({ class: 'splash' }).raw(bodyHtml)),
-        buildDefaultFooter(),
+        ...(showFooter ? [buildDefaultFooter()] : []),
       ),
   )
 }

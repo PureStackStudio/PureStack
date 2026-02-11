@@ -1,4 +1,4 @@
-import { createComponent, html } from 'regor'
+import { createApp, createComponent, html } from 'regor'
 import { describe, expect, it } from 'vitest'
 
 import {
@@ -103,6 +103,42 @@ describe('regor + minidom compatibility', () => {
         ) as MiniHTMLTemplateElement | null
         expect(template?.content).toBeTruthy()
         expect(template?.content?.childNodes.length).toBe(1)
+      },
+    ))
+
+  it('teleports component root to target element via r-teleport directive', () =>
+    withDom(
+      '<html><body><div id="app"><TeleportProbe></TeleportProbe><div id="teleport-host"></div></div></body></html>',
+      ({ document }) => {
+        const appRoot = document.querySelector('#app')
+        if (!appRoot) throw new Error('missing #app root')
+        const teleportHost = document.querySelector('#teleport-host')
+        if (!teleportHost) throw new Error('missing #teleport-host')
+
+        const teleportProbe = createComponent(
+          html`<section class="teleport-probe" r-teleport="#teleport-host">
+            <span>Teleported payload</span>
+          </section>`,
+        )
+
+        createApp(
+          {
+            components: {
+              teleportProbe,
+            },
+          },
+          {
+            element: appRoot as unknown as Node,
+          },
+        )
+
+        const appHtml = (appRoot as MiniElement).innerHTML
+        const hostHtml = (teleportHost as MiniElement).innerHTML
+        expect(hostHtml).toContain('teleport-probe')
+        expect(hostHtml).toContain('Teleported payload')
+        expect(appHtml).toContain("teleported => '#teleport-host'")
+        const [beforeHost = ''] = appHtml.split('<div id="teleport-host">')
+        expect(beforeHost).not.toContain('teleport-probe')
       },
     ))
 })

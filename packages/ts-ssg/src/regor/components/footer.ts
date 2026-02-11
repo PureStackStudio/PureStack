@@ -91,6 +91,7 @@ const siteFooterTemplate = html`<footer
   class="site-footer"
   :class="rootClass"
   :aria-label="ariaLabel"
+  r-teleport="body"
 >
   <div class="site-footer__inner">
     <div class="site-footer__top">
@@ -162,10 +163,17 @@ const siteFooterTemplate = html`<footer
   </div>
 </footer>`
 
-const footerColumnTemplate = html`<section class="footer-column" :class="rootClass">
+const footerColumnTemplate = html`<section
+  class="footer-column"
+  :class="rootClass"
+>
   <h3 class="footer-column__title" r-if="hasTitle">{{ title }}</h3>
-  <p class="footer-column__description" r-if="hasDescription">{{ description }}</p>
-  <ul class="footer-column__list"><slot></slot></ul>
+  <p class="footer-column__description" r-if="hasDescription">
+    {{ description }}
+  </p>
+  <ul class="footer-column__list">
+    <slot></slot>
+  </ul>
 </section>`
 
 const footerLinkTemplate = html`<li class="footer-link-item">
@@ -457,7 +465,9 @@ function applyFooterActionStyles(
     .outline(`2px solid ${palette.action.neutral.focusRing}`)
     .outlineOffset('2px')
 
-  styleBuilder.select('.site-footer__newsletter-extra:empty', theme).display('none')
+  styleBuilder
+    .select('.site-footer__newsletter-extra:empty', theme)
+    .display('none')
 
   styleBuilder
     .select('.site-footer__newsletter-extra', theme)
@@ -480,7 +490,10 @@ function applyFooterColumnStyles(
     .background(palette.background.surface)
     .border(`1px solid ${palette.border.subtle}`)
 
-  styleBuilder.select('.footer-column--compact', theme).gap('6px').padding('10px')
+  styleBuilder
+    .select('.footer-column--compact', theme)
+    .gap('6px')
+    .padding('10px')
 
   styleBuilder
     .select('.footer-column__title', theme)
@@ -506,9 +519,7 @@ function applyFooterColumnStyles(
     .display('grid')
     .gap('4px')
 
-  styleBuilder
-    .select('.footer-link-item', theme)
-    .listStyle('none')
+  styleBuilder.select('.footer-link-item', theme).listStyle('none')
 
   styleBuilder
     .select('.footer-link', theme)
@@ -811,7 +822,8 @@ function resolveSiteFooterContext(
     newsletterName: props.newsletterName || 'email',
     newsletterPlaceholder: props.newsletterPlaceholder || 'name@company.com',
     newsletterButtonLabel: props.newsletterButtonLabel || 'Subscribe',
-    copyright: props.copyright || `© ${year} ${siteTitle}. All rights reserved.`,
+    copyright:
+      props.copyright || `© ${year} ${siteTitle}. All rights reserved.`,
     rootClass: `site-footer--tone-${tone} site-footer--variant-${variant}`,
     showNewsletter,
     hasEyebrow: Boolean(props.eyebrow || true),
@@ -837,7 +849,8 @@ function resolveFooterColumnContext(
 
 function resolveFooterLinkContext(props: FooterLinkProps): FooterLinkContext {
   const variant = resolveFooterLinkVariant(props.variant)
-  const rel = props.rel || (props.target === '_blank' ? 'noopener noreferrer' : '')
+  const rel =
+    props.rel || (props.target === '_blank' ? 'noopener noreferrer' : '')
   return {
     ...props,
     rootClass: `footer-link--${variant}`,
@@ -852,12 +865,16 @@ function resolveFooterLinkContext(props: FooterLinkProps): FooterLinkContext {
 function resolveFooterSocialContext(
   props: FooterSocialProps,
 ): FooterSocialContext {
-  const rel = props.rel || (props.target === '_blank' ? 'noopener noreferrer' : '')
+  const rel =
+    props.rel || (props.target === '_blank' ? 'noopener noreferrer' : '')
   return {
     ...props,
     rel,
     label: props.label || '',
-    iconSvg: getSvgIcon(resolveFooterSocialIcon(props.icon, props.label), 'code'),
+    iconSvg: getSvgIcon(
+      resolveFooterSocialIcon(props.icon, props.label),
+      'code',
+    ),
     hasHref: Boolean(props.href),
     hasTarget: Boolean(props.target),
     hasRel: Boolean(rel),
@@ -906,7 +923,8 @@ function resolveFooterSocialIcon(icon?: string, label?: string) {
   if (normalized.includes('github')) return 'code'
   if (normalized.includes('discord')) return 'support'
   if (normalized.includes('linkedin')) return 'building'
-  if (normalized.includes('x') || normalized.includes('twitter')) return 'rocket'
+  if (normalized.includes('x') || normalized.includes('twitter'))
+    return 'rocket'
   if (normalized.includes('community') || normalized.includes('forum')) {
     return 'stack'
   }
