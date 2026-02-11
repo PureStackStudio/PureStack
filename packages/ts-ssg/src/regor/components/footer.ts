@@ -352,6 +352,15 @@ function applyFooterActionStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
+  applyFooterCtaStyles(theme, palette, options)
+  applyFooterNewsletterStyles(theme, palette, options)
+}
+
+function applyFooterCtaStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.site-footer__cta', theme)
     .display('inline-flex')
@@ -378,7 +387,13 @@ function applyFooterActionStyles(
     .select('.site-footer__cta:focus-visible', theme)
     .outline(`2px solid ${palette.action.accent.focusRing}`)
     .outlineOffset('2px')
+}
 
+function applyFooterNewsletterStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.site-footer__columns', theme)
     .display('grid')

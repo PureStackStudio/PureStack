@@ -66,6 +66,25 @@ function applyAlertShellStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
+  applyAlertContainerStyles(theme, palette, options)
+  applyAlertIconStyles(theme, palette, options)
+  applyAlertHeaderStyles(theme, palette, options)
+  applyAlertBodyStyles(theme, palette, options)
+  applyAlertActionStyles(theme, palette, options)
+  applyAlertMetaStyles(theme, palette)
+}
+
+function applyAlertToneStyles(theme: ThemeMode, palette: ThemePalette) {
+  applyAlertSoftToneStyles(theme, palette)
+  applyAlertOutlineToneStyles(theme, palette)
+  applyAlertFeatureToneStyles(theme, palette)
+}
+
+function applyAlertContainerStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.alert', theme)
     .display('grid')
@@ -81,12 +100,17 @@ function applyAlertShellStyles(
     .boxShadow(palette.effect.panelShadow)
 
   styleBuilder.select('.alert--compact', theme).padding('10px 12px').gap('10px')
-
   styleBuilder
     .select('.alert--inline', theme)
     .gridTemplateColumns('1fr')
     .gap('8px')
+}
 
+function applyAlertIconStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.alert__icon', theme)
     .width('32px')
@@ -101,11 +125,7 @@ function applyAlertShellStyles(
     .color(palette.icon.neutral.color)
     .boxShadow(palette.effect.interactiveShadow)
 
-  styleBuilder
-    .select('.alert--inline .alert__icon', theme)
-    .width('26px')
-    .height('26px')
-
+  styleBuilder.select('.alert--inline .alert__icon', theme).width('26px').height('26px')
   styleBuilder
     .select('.alert__icon svg', theme)
     .width('16px')
@@ -116,13 +136,14 @@ function applyAlertShellStyles(
     .set('stroke-linecap', 'round')
     .set('stroke-linejoin', 'round')
     .set('stroke-width', '2.2')
+}
 
-  styleBuilder
-    .select('.alert__content', theme)
-    .display('grid')
-    .gap('10px')
-    .minWidth('0')
-
+function applyAlertHeaderStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
+  styleBuilder.select('.alert__content', theme).display('grid').gap('10px').minWidth('0')
   styleBuilder
     .select('.alert__header', theme)
     .display('flex')
@@ -159,24 +180,21 @@ function applyAlertShellStyles(
     .letterSpacing('0.08em')
     .background(palette.badge.muted.background)
     .color(palette.badge.muted.text)
+}
 
+function applyAlertBodyStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder.select('.alert__body', theme).display('grid').gap('8px')
-
-  styleBuilder
-    .select('.alert__body :where(p, ul, ol)', theme)
-    .margin('0')
-    .lineHeight('1.6')
-
-  styleBuilder
-    .select('.alert__body :where(strong)', theme)
-    .color(palette.text.strong)
-
+  styleBuilder.select('.alert__body :where(p, ul, ol)', theme).margin('0').lineHeight('1.6')
+  styleBuilder.select('.alert__body :where(strong)', theme).color(palette.text.strong)
   styleBuilder
     .select('.alert__body :where(a)', theme)
     .color(palette.text.accent)
     .fontWeight('600')
     .textDecoration('underline')
-
   styleBuilder
     .select('.alert__body :where(code)', theme)
     .fontFamily("'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace")
@@ -185,14 +203,19 @@ function applyAlertShellStyles(
     .border(`1px solid ${palette.border.subtle}`)
     .borderRadius(options.radii.sm)
     .padding('0.1em 0.35em')
+}
 
+function applyAlertActionStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.alert__actions', theme)
     .display('flex')
     .alignItems('center')
     .flexWrap('wrap')
     .gap('8px')
-
   styleBuilder.select('.alert__actions:empty', theme).display('none')
 
   styleBuilder
@@ -217,16 +240,16 @@ function applyAlertShellStyles(
     .select('.alert__actions :where(a, button):hover', theme)
     .background(palette.action.neutral.hover)
     .transform('translateY(-1px)')
-
   styleBuilder
     .select('.alert__actions :where(a, button):active', theme)
     .background(palette.action.neutral.active)
-
   styleBuilder
     .select('.alert__actions :where(a, button):focus-visible', theme)
     .outline(`2px solid ${palette.action.neutral.focusRing}`)
     .outlineOffset('2px')
+}
 
+function applyAlertMetaStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.alert__meta', theme)
     .margin('0')
@@ -235,134 +258,106 @@ function applyAlertShellStyles(
     .color(palette.text.subtle)
 }
 
-function applyAlertToneStyles(theme: ThemeMode, palette: ThemePalette) {
-  styleBuilder
-    .select('.alert--soft.alert--tone-info', theme)
-    .background(palette.status.info.background)
-    .borderColor(palette.status.info.border)
-  styleBuilder
-    .select(
-      '.alert--soft.alert--tone-info .alert__title, .alert--soft.alert--tone-info .alert__icon',
-      theme,
-    )
-    .color(palette.status.info.text)
+function applyAlertSoftToneStyles(theme: ThemeMode, palette: ThemePalette) {
+  const tones = [
+    {
+      tone: 'info',
+      background: palette.status.info.background,
+      border: palette.status.info.border,
+      text: palette.status.info.text,
+    },
+    {
+      tone: 'success',
+      background: palette.status.success.background,
+      border: palette.status.success.border,
+      text: palette.status.success.text,
+    },
+    {
+      tone: 'warning',
+      background: palette.status.warning.background,
+      border: palette.status.warning.border,
+      text: palette.status.warning.text,
+    },
+    {
+      tone: 'danger',
+      background: palette.status.danger.background,
+      border: palette.status.danger.border,
+      text: palette.status.danger.text,
+    },
+    {
+      tone: 'accent',
+      background: palette.background.accentMuted,
+      border: palette.border.accent,
+      text: palette.text.accent,
+    },
+  ]
 
-  styleBuilder
-    .select('.alert--soft.alert--tone-success', theme)
-    .background(palette.status.success.background)
-    .borderColor(palette.status.success.border)
-  styleBuilder
-    .select(
-      '.alert--soft.alert--tone-success .alert__title, .alert--soft.alert--tone-success .alert__icon',
-      theme,
-    )
-    .color(palette.status.success.text)
-
-  styleBuilder
-    .select('.alert--soft.alert--tone-warning', theme)
-    .background(palette.status.warning.background)
-    .borderColor(palette.status.warning.border)
-  styleBuilder
-    .select(
-      '.alert--soft.alert--tone-warning .alert__title, .alert--soft.alert--tone-warning .alert__icon',
-      theme,
-    )
-    .color(palette.status.warning.text)
-
-  styleBuilder
-    .select('.alert--soft.alert--tone-danger', theme)
-    .background(palette.status.danger.background)
-    .borderColor(palette.status.danger.border)
-  styleBuilder
-    .select(
-      '.alert--soft.alert--tone-danger .alert__title, .alert--soft.alert--tone-danger .alert__icon',
-      theme,
-    )
-    .color(palette.status.danger.text)
-
-  styleBuilder
-    .select('.alert--soft.alert--tone-accent', theme)
-    .background(palette.background.accentMuted)
-    .borderColor(palette.border.accent)
-  styleBuilder
-    .select(
-      '.alert--soft.alert--tone-accent .alert__title, .alert--soft.alert--tone-accent .alert__icon',
-      theme,
-    )
-    .color(palette.text.accent)
+  for (const tone of tones) {
+    applyAlertToneVariantStyles(theme, 'soft', tone.tone, tone.background, tone.border, tone.text)
+  }
 
   styleBuilder
     .select('.alert--soft.alert--tone-neutral', theme)
     .background(palette.background.surfaceAlt)
     .borderColor(palette.border.default)
+}
 
-  styleBuilder
-    .select('.alert--outline', theme)
-    .background(palette.background.surface)
+function applyAlertOutlineToneStyles(theme: ThemeMode, palette: ThemePalette) {
+  styleBuilder.select('.alert--outline', theme).background(palette.background.surface)
 
-  styleBuilder
-    .select('.alert--outline.alert--tone-info', theme)
-    .borderColor(palette.status.info.border)
-    .borderLeft(`4px solid ${palette.status.info.border}`)
-  styleBuilder
-    .select(
-      '.alert--outline.alert--tone-info .alert__title, .alert--outline.alert--tone-info .alert__icon',
+  const tones = [
+    { tone: 'info', border: palette.status.info.border, text: palette.status.info.text },
+    {
+      tone: 'success',
+      border: palette.status.success.border,
+      text: palette.status.success.text,
+    },
+    {
+      tone: 'warning',
+      border: palette.status.warning.border,
+      text: palette.status.warning.text,
+    },
+    { tone: 'danger', border: palette.status.danger.border, text: palette.status.danger.text },
+    { tone: 'accent', border: palette.border.accent, text: palette.text.accent },
+  ]
+
+  for (const tone of tones) {
+    applyAlertToneVariantStyles(
       theme,
+      'outline',
+      tone.tone,
+      palette.background.surface,
+      tone.border,
+      tone.text,
     )
-    .color(palette.status.info.text)
+  }
+}
 
+function applyAlertToneVariantStyles(
+  theme: ThemeMode,
+  variant: 'soft' | 'outline',
+  tone: string,
+  background: string,
+  borderColor: string,
+  textColor: string,
+) {
+  const baseSelector = `.alert--${variant}.alert--tone-${tone}`
+  styleBuilder.select(baseSelector, theme).background(background).borderColor(borderColor)
+  if (variant === 'outline') {
+    styleBuilder.select(baseSelector, theme).borderLeft(`4px solid ${borderColor}`)
+  }
   styleBuilder
-    .select('.alert--outline.alert--tone-success', theme)
-    .borderColor(palette.status.success.border)
-    .borderLeft(`4px solid ${palette.status.success.border}`)
-  styleBuilder
-    .select(
-      '.alert--outline.alert--tone-success .alert__title, .alert--outline.alert--tone-success .alert__icon',
-      theme,
-    )
-    .color(palette.status.success.text)
+    .select(`${baseSelector} .alert__title, ${baseSelector} .alert__icon`, theme)
+    .color(textColor)
+}
 
-  styleBuilder
-    .select('.alert--outline.alert--tone-warning', theme)
-    .borderColor(palette.status.warning.border)
-    .borderLeft(`4px solid ${palette.status.warning.border}`)
-  styleBuilder
-    .select(
-      '.alert--outline.alert--tone-warning .alert__title, .alert--outline.alert--tone-warning .alert__icon',
-      theme,
-    )
-    .color(palette.status.warning.text)
-
-  styleBuilder
-    .select('.alert--outline.alert--tone-danger', theme)
-    .borderColor(palette.status.danger.border)
-    .borderLeft(`4px solid ${palette.status.danger.border}`)
-  styleBuilder
-    .select(
-      '.alert--outline.alert--tone-danger .alert__title, .alert--outline.alert--tone-danger .alert__icon',
-      theme,
-    )
-    .color(palette.status.danger.text)
-
-  styleBuilder
-    .select('.alert--outline.alert--tone-accent', theme)
-    .borderColor(palette.border.accent)
-    .borderLeft(`4px solid ${palette.border.accent}`)
-  styleBuilder
-    .select(
-      '.alert--outline.alert--tone-accent .alert__title, .alert--outline.alert--tone-accent .alert__icon',
-      theme,
-    )
-    .color(palette.text.accent)
-
+function applyAlertFeatureToneStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.alert--feature', theme)
     .background(palette.background.feature)
     .borderColor(palette.border.accent)
     .boxShadow(palette.effect.panelShadowStrong)
-  styleBuilder
-    .select('.alert--feature .alert__title', theme)
-    .color(palette.text.accent)
+  styleBuilder.select('.alert--feature .alert__title', theme).color(palette.text.accent)
   styleBuilder
     .select('.alert--feature .alert__icon', theme)
     .set('background-color', palette.icon.accent.background)

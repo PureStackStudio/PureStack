@@ -124,6 +124,18 @@ function registerPreAndCopyButtonStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
+  registerPreShellStyles(theme, palette, options)
+  registerCopyButtonBaseStyles(theme, palette, options)
+  registerCopyButtonInteractionStyles(theme, palette)
+  registerCopyButtonStateStyles(theme, palette)
+  registerPreCodeResetStyles(theme)
+}
+
+function registerPreShellStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.doc-content :where(pre)', theme)
     .margin('0 0 1.4em')
@@ -135,7 +147,13 @@ function registerPreAndCopyButtonStyles(
     .overflow('auto')
     .lineHeight('1.6')
     .fontSize('0.9em')
+}
 
+function registerCopyButtonBaseStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button)', theme)
     .position('absolute')
@@ -160,7 +178,12 @@ function registerPreAndCopyButtonStyles(
     .transition(
       'opacity 140ms ease, transform 180ms ease, background-color 140ms ease, border-color 140ms ease, color 140ms ease',
     )
+}
 
+function registerCopyButtonInteractionStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+) {
   styleBuilder
     .select(
       '.doc-content :where(pre:hover > .code-copy-button, pre:focus-within > .code-copy-button)',
@@ -185,7 +208,9 @@ function registerPreAndCopyButtonStyles(
     .select('.doc-content :where(pre > .code-copy-button:active)', theme)
     .background(palette.action.neutral.active)
     .borderColor(palette.border.strong)
+}
 
+function registerCopyButtonStateStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button:focus-visible)', theme)
     .opacity(1)
@@ -209,13 +234,6 @@ function registerPreAndCopyButtonStyles(
     .pointerEvents('auto')
 
   styleBuilder
-    .select('.doc-content :where(pre code)', theme)
-    .background('transparent')
-    .border('none')
-    .padding('0')
-    .fontSize('inherit')
-
-  styleBuilder
     .select('.doc-content :where(pre > .code-copy-button.is-copied)', theme)
     .background(palette.badge.accent.background)
     .borderColor(palette.border.accent)
@@ -226,6 +244,15 @@ function registerPreAndCopyButtonStyles(
     .background(palette.status.danger.background)
     .borderColor(palette.status.danger.border)
     .color(palette.status.danger.text)
+}
+
+function registerPreCodeResetStyles(theme: ThemeMode) {
+  styleBuilder
+    .select('.doc-content :where(pre code)', theme)
+    .background('transparent')
+    .border('none')
+    .padding('0')
+    .fontSize('inherit')
 }
 
 function registerShikiStyles(theme: ThemeMode) {

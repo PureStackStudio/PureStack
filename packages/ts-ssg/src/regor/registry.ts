@@ -13,10 +13,10 @@ export const componentRegistry = {
       registry.set(name, component as Component<never>)
     }
   },
-  getAll(): Record<string, Component<unknown>> {
+  getAll(): Record<string, Component> {
     return Object.fromEntries(registry.entries()) as unknown as Record<
       string,
-      Component<unknown>
+      Component
     >
   },
   hasComponentName(name: string) {

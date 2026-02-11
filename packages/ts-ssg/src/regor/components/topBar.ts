@@ -1,7 +1,8 @@
 import { createComponent, html } from 'regor'
 
 import { styleBuilder } from '../../style/styles'
-import { themes } from '../../style/themeOptions'
+import { type ThemeMode, type ThemeOptions,themes } from '../../style/themeOptions'
+import type { ThemePalette } from '../../style/themePalette'
 import { resolveTsSsgContext } from '../resolveTsSsgContext'
 import type { TsSsgContext } from '../ts-ssg-context'
 
@@ -38,130 +39,128 @@ const topBarTemplate = html`<input
 
 function registerTopBarStyles() {
   themes.forEach((theme, palette, options) => {
-    styleBuilder
-      .select('.topbar', theme)
-      .display('flex')
-      .alignItems('center')
-      .justifyContent('space-between')
-      .gap('16px')
-      .padding('16px')
-      .position('sticky')
-      .top('0')
-      .zIndex(40)
-      .backdropFilter('blur(10px)')
-      .borderBottom('1px solid transparent')
-      .background(palette.background.surfaceAlt)
-      .borderBottomColor(palette.border.subtle)
-
-    styleBuilder
-      .select('.topbar__logo', theme)
-      .fontSize('22px')
-      .fontWeight('700')
-      .textDecoration('none')
-      .color(palette.text.accent)
-
-    styleBuilder
-      .select('.topbar__actions', theme)
-      .display('flex')
-      .alignItems('center')
-      .gap('10px')
-
-    styleBuilder
-      .select('.topbar__icon', theme)
-      .width('42px')
-      .height('42px')
-      .borderRadius(options.radii.pill)
-      .display('grid')
-      .placeItems('center')
-      .border('1px solid transparent')
-      .background('transparent')
-      .cursor('pointer')
-      .position('relative')
-      .padding('0')
-      .color(palette.text.subtle)
-
-    styleBuilder
-      .select('.topbar__toggle', theme)
-      .background(palette.background.surface)
-      .borderColor(palette.border.default)
-      .color(palette.text.subtle)
-      .display('none')
-
-    styleBuilder
-      .select('.template-doc--nav-drawer .topbar__toggle', theme)
-      .display('grid')
-
-    styleBuilder
-      .select('.topbar__toggle:focus-visible', theme)
-      .outline(`2px solid ${palette.border.focus}`)
-      .outlineOffset('2px')
-
-    styleBuilder
-      .select('.topbar__search', theme)
-      .border('0')
-      .background('transparent')
-
-    styleBuilder
-      .select('.topbar__search::before', theme)
-      .content('""')
-      .width('16px')
-      .height('16px')
-      .border('2px solid currentColor')
-      .borderRadius('50%')
-      .position('absolute')
-      .top('11px')
-      .left('11px')
-
-    styleBuilder
-      .select('.topbar__search::after', theme)
-      .content('""')
-      .width('10px')
-      .height('2px')
-      .background('currentColor')
-      .position('absolute')
-      .right('9px')
-      .bottom('12px')
-      .transform('rotate(45deg)')
-
-    styleBuilder
-      .select('.topbar__toggle::before', theme)
-      .content('""')
-      .width('18px')
-      .height('2px')
-      .background('currentColor')
-      .position('absolute')
-      .top('14px')
-      .left('12px')
-      .transition('transform 200ms ease, top 200ms ease')
-      .boxShadow('0 6px 0 0 currentColor')
-
-    styleBuilder
-      .select('.topbar__toggle::after', theme)
-      .content('""')
-      .width('18px')
-      .height('2px')
-      .background('currentColor')
-      .position('absolute')
-      .top('26px')
-      .left('12px')
-      .transition('transform 200ms ease, top 200ms ease')
-
-    styleBuilder.select('.doc-nav-toggle', theme).display('none')
-
-    styleBuilder
-      .select(
-        '.doc-nav-toggle:checked ~ .topbar .topbar__toggle::before',
-        theme,
-      )
-      .top('20px')
-      .transform('rotate(45deg)')
-      .boxShadow('none')
-
-    styleBuilder
-      .select('.doc-nav-toggle:checked ~ .topbar .topbar__toggle::after', theme)
-      .top('20px')
-      .transform('rotate(-45deg)')
+    registerTopBarShellStyles(theme, palette, options)
+    registerTopBarSearchIconStyles(theme)
+    registerTopBarToggleStyles(theme, palette)
   })
+}
+
+function registerTopBarShellStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
+  styleBuilder
+    .select('.topbar', theme)
+    .display('flex')
+    .alignItems('center')
+    .justifyContent('space-between')
+    .gap('16px')
+    .padding('16px')
+    .position('sticky')
+    .top('0')
+    .zIndex(40)
+    .backdropFilter('blur(10px)')
+    .borderBottom('1px solid transparent')
+    .background(palette.background.surfaceAlt)
+    .borderBottomColor(palette.border.subtle)
+  styleBuilder
+    .select('.topbar__logo', theme)
+    .fontSize('22px')
+    .fontWeight('700')
+    .textDecoration('none')
+    .color(palette.text.accent)
+  styleBuilder
+    .select('.topbar__actions', theme)
+    .display('flex')
+    .alignItems('center')
+    .gap('10px')
+  styleBuilder
+    .select('.topbar__icon', theme)
+    .width('42px')
+    .height('42px')
+    .borderRadius(options.radii.pill)
+    .display('grid')
+    .placeItems('center')
+    .border('1px solid transparent')
+    .background('transparent')
+    .cursor('pointer')
+    .position('relative')
+    .padding('0')
+    .color(palette.text.subtle)
+}
+
+function registerTopBarSearchIconStyles(theme: ThemeMode) {
+  styleBuilder.select('.topbar__search', theme).border('0').background('transparent')
+  styleBuilder
+    .select('.topbar__search::before', theme)
+    .content('""')
+    .width('16px')
+    .height('16px')
+    .border('2px solid currentColor')
+    .borderRadius('50%')
+    .position('absolute')
+    .top('11px')
+    .left('11px')
+  styleBuilder
+    .select('.topbar__search::after', theme)
+    .content('""')
+    .width('10px')
+    .height('2px')
+    .background('currentColor')
+    .position('absolute')
+    .right('9px')
+    .bottom('12px')
+    .transform('rotate(45deg)')
+}
+
+function registerTopBarToggleStyles(theme: ThemeMode, palette: ThemePalette) {
+  styleBuilder
+    .select('.topbar__toggle', theme)
+    .background(palette.background.surface)
+    .borderColor(palette.border.default)
+    .color(palette.text.subtle)
+    .display('none')
+  styleBuilder
+    .select('.template-doc--nav-drawer .topbar__toggle', theme)
+    .display('grid')
+  styleBuilder
+    .select('.topbar__toggle:focus-visible', theme)
+    .outline(`2px solid ${palette.border.focus}`)
+    .outlineOffset('2px')
+
+  styleBuilder
+    .select('.topbar__toggle::before', theme)
+    .content('""')
+    .width('18px')
+    .height('2px')
+    .background('currentColor')
+    .position('absolute')
+    .top('14px')
+    .left('12px')
+    .transition('transform 200ms ease, top 200ms ease')
+    .boxShadow('0 6px 0 0 currentColor')
+  styleBuilder
+    .select('.topbar__toggle::after', theme)
+    .content('""')
+    .width('18px')
+    .height('2px')
+    .background('currentColor')
+    .position('absolute')
+    .top('26px')
+    .left('12px')
+    .transition('transform 200ms ease, top 200ms ease')
+
+  styleBuilder.select('.doc-nav-toggle', theme).display('none')
+  styleBuilder
+    .select('.doc-nav-toggle:checked ~ .topbar .topbar__toggle::before', theme)
+    .top('20px')
+    .transform('rotate(45deg)')
+    .boxShadow('none')
+  styleBuilder
+    .select('.doc-nav-toggle:checked ~ .topbar .topbar__toggle::after', theme)
+    .top('20px')
+    .transform('rotate(-45deg)')
 }
 
 function createTopBarComponent() {

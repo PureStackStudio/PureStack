@@ -185,6 +185,18 @@ function applyPricingPlanStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
+  applyPricingPlanShellStyles(theme, palette, options)
+  applyPricingPlanHeaderStyles(theme, palette, options)
+  applyPricingPlanPriceStyles(theme, palette)
+  applyPricingPlanCtaStyles(theme, palette, options)
+  applyPricingPlanNoteStyles(theme, palette)
+}
+
+function applyPricingPlanShellStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.pricing-plan', theme)
     .display('flex')
@@ -198,7 +210,13 @@ function applyPricingPlanStyles(
     .height('100%')
 
   styleBuilder.select('.pricing-plan__head', theme).display('grid').gap('6px')
+}
 
+function applyPricingPlanHeaderStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.pricing-plan__meta', theme)
     .display('flex')
@@ -264,7 +282,9 @@ function applyPricingPlanStyles(
     .fontSize('13px')
     .lineHeight('1.5')
     .color(palette.text.subtle)
+}
 
+function applyPricingPlanPriceStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.pricing-plan__price', theme)
     .display('flex')
@@ -286,7 +306,13 @@ function applyPricingPlanStyles(
     .letterSpacing('0.12em')
     .fontWeight('600')
     .color(palette.text.subtle)
+}
 
+function applyPricingPlanCtaStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder.select('.pricing-plan__cta', theme).margin('0')
 
   styleBuilder
@@ -317,7 +343,9 @@ function applyPricingPlanStyles(
     .select('.pricing-plan__cta-link:focus-visible', theme)
     .outline(`2px solid ${palette.border.focus}`)
     .outlineOffset('2px')
+}
 
+function applyPricingPlanNoteStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.pricing-plan__note', theme)
     .margin('0')
