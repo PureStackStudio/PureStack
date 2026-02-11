@@ -109,7 +109,6 @@ function parseArgs(argv: string[]): CliArgs {
     }
     if (token === '--json') {
       args.json = true
-      continue
     }
   }
 
@@ -219,7 +218,7 @@ function findFunctionSpan(
 }
 
 function shouldKeepEntry(
-  entry: FunctionEntry,
+  _entry: FunctionEntry,
   includeStyles: boolean,
 ): boolean {
   if (includeStyles) return true
