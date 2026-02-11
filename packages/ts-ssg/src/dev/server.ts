@@ -35,6 +35,7 @@ const LIVE_RELOAD_PATH = '/__ts-ssg/events'
 const REQUEST_TIMEOUT_MS = 30000
 const LIVE_RELOAD_MAX_CLIENTS = 8
 const LIVE_RELOAD_MAX_PER_ADDRESS = 1
+const LOOPBACK_HOST = '127.0.0.1'
 
 type ResolvedDevServerOptions = {
   host: string
@@ -226,8 +227,9 @@ export async function startDevServer(
   server.keepAliveTimeout = 1000
   server.headersTimeout = 5000
   server.listen(port, host, () => {
+    const displayHost = host === '0.0.0.0' ? LOOPBACK_HOST : host
     log.info('dev server listening', {
-      url: `http://${host}:${port}/`,
+      url: `http://${displayHost}:${port}/`,
       host,
       port,
       outDir: config.outDir,
