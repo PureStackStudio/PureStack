@@ -1,8 +1,12 @@
 import type { ThemePalette } from '../themePalette'
+import { cyberpunkGlowDark } from './cyberpunk/dark'
+import { cyberpunkGlowLight } from './cyberpunk/light'
 import { evergreenDark } from './evergreen/dark'
 import { evergreenLight } from './evergreen/light'
 import { extraoDark } from './extrao/dark'
 import { extraoLight } from './extrao/light'
+import { neonDark } from './neon/dark'
+import { neonLight } from './neon/light'
 import { oceanDark } from './ocean/dark'
 import { oceanLight } from './ocean/light'
 import { pastelDark } from './pastel/dark'
@@ -17,7 +21,13 @@ export { oceanLight } from './ocean/light'
 export { pastelDark } from './pastel/dark'
 export { pastelLight } from './pastel/light'
 
-export type BuiltInSkinName = 'ocean' | 'evergreen' | 'pastel' | 'extrao'
+export type BuiltInSkinName =
+  | 'ocean'
+  | 'evergreen'
+  | 'pastel'
+  | 'extrao'
+  | 'cyberpunk'
+  | 'neon'
 
 export interface BuiltInSkinPair {
   light: ThemePalette
@@ -42,5 +52,13 @@ export const builtInSkins: BuiltInSkins = {
   pastel: {
     light: pastelLight,
     dark: pastelDark,
+  },
+  cyberpunk: {
+    light: cyberpunkGlowLight,
+    dark: cyberpunkGlowDark,
+  },
+  neon: {
+    light: neonLight,
+    dark: neonDark,
   },
 }
