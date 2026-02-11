@@ -3,6 +3,7 @@ import { registerDocLayoutStyles } from '../templates/docLayoutStyles'
 import { registerMarkdownStyles } from '../templates/markdownStyles'
 import { createAlertComponents } from './components/alert'
 import { createCardComponents } from './components/cardGrid'
+import { createFooterComponents } from './components/footer'
 import { createHeroComponents } from './components/hero'
 import { createNavigationComponents } from './components/navMenu'
 import { createPageTocComponents } from './components/pageToc'
@@ -23,6 +24,7 @@ export function initBuiltinComponents() {
   registerMarkdownStyles()
   componentRegistry.registerMany(createAlertComponents())
   componentRegistry.registerMany(createCardComponents())
+  componentRegistry.registerMany(createFooterComponents())
   componentRegistry.registerMany(createHeroComponents())
   componentRegistry.registerMany(createTopBarComponents())
   componentRegistry.registerMany(createThemeSwitcherComponents())

@@ -60,6 +60,7 @@ function renderDocTemplate({
   bodyHtml,
   navigation,
   pageInfo: page,
+  siteTitle,
 }: PageTemplateInput) {
   const layout = resolveDocLayout(page?.frontmatter, navigation)
   return h('html').push(
@@ -89,6 +90,7 @@ function renderDocTemplate({
                 ]
               : []),
           ),
+        buildDefaultFooter(siteTitle),
       ),
   )
 }
@@ -179,6 +181,71 @@ function renderSplashTemplate({ head, bodyHtml }: PageTemplateInput) {
       .attr({ class: 'template-splash' })
       .push(
         h('main').push(h('section').attr({ class: 'splash' }).raw(bodyHtml)),
+        buildDefaultFooter(),
       ),
   )
+}
+
+function buildDefaultFooter(siteTitle?: string) {
+  return h('site-footer')
+    .attr({
+      title: `${siteTitle || 'Your Site'} keeps shipping after launch`,
+      ctaLabel: 'Get Started',
+      ctaHref: '/',
+      newsletterTitle: 'Stay in the loop',
+    })
+    .push(
+      h('p').raw(
+        'Ship docs, marketing pages, changelogs, and product hubs with one reusable architecture.',
+      ),
+      h('template')
+        .attr({ name: 'status' })
+        .push(
+          h('span').raw('Performance-first'),
+          h('span').raw('Accessible by default'),
+          h('span').raw('SEO-ready output'),
+        ),
+      h('template')
+        .attr({ name: 'columns' })
+        .push(
+          h('footer-column')
+            .attr({ title: 'Product' })
+            .push(
+              h('footer-link').attr({ href: '/', label: 'Overview' }),
+              h('footer-link').attr({
+                href: '/guide/',
+                label: 'Documentation',
+              }),
+              h('footer-link').attr({
+                href: '/features/',
+                label: 'Features',
+              }),
+            ),
+          h('footer-column')
+            .attr({ title: 'Company' })
+            .push(
+              h('footer-link').attr({ href: '/about/', label: 'About' }),
+              h('footer-link').attr({ href: '/blog/', label: 'Blog' }),
+              h('footer-link').attr({
+                href: '/contact/',
+                label: 'Contact',
+              }),
+            ),
+        ),
+      h('template')
+        .attr({ name: 'legal' })
+        .push(
+          h('a').attr({ href: '/privacy/' }).raw('Privacy'),
+          h('a').attr({ href: '/terms/' }).raw('Terms'),
+        ),
+      h('template')
+        .attr({ name: 'social' })
+        .push(
+          h('footer-social').attr({
+            href: 'https://github.com',
+            label: 'GitHub',
+            target: '_blank',
+          }),
+        ),
+    )
 }

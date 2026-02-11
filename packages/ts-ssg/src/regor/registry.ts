@@ -1,18 +1,20 @@
+import { isPlainObject } from '@purestack/utils'
 import type { Component } from 'regor'
 
 const registry = new Map<string, Component<never>>()
 
 export const componentRegistry = {
-  register<TProps>(name: string, component: Component<TProps>) {
+  register(name: string, component: Component<never>) {
     registry.set(name, component)
   },
-  registerMany(components: Record<string, Component<never>>) {
+  registerMany<TComponents>(components: TComponents) {
+    if (!isPlainObject(components)) return
     for (const [name, component] of Object.entries(components)) {
-      registry.set(name, component)
+      registry.set(name, component as Component<never>)
     }
   },
   getAll(): Record<string, Component<unknown>> {
-    return Object.fromEntries(registry.entries()) as Record<
+    return Object.fromEntries(registry.entries()) as unknown as Record<
       string,
       Component<unknown>
     >
