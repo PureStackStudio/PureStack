@@ -1,6 +1,6 @@
-import fs from 'fs'
+import fs from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import prettier from 'prettier'
-import { fileURLToPath } from 'url'
 
 interface HtmlAttrDef {
   name: string

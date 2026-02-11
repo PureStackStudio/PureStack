@@ -1,9 +1,9 @@
 /**
  * Run: yarn tsx packages/ts-css/src/meta/generateStyle.ts
  */
-import fs from 'fs'
+import fs from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import prettier from 'prettier'
-import { fileURLToPath } from 'url'
 
 import { cssProps } from './cssProps'
 
@@ -77,7 +77,7 @@ export class Style extends BaseStyle<Style> {
 function getValues(propType: PropType) {
   return (
     propType.values?.value
-      ?.map?.((x) => '   * ' + x.$.name.replaceAll('"', '') + ': ' + x.desc)
+      ?.map?.((x) => `   * ${x.$.name.replaceAll('"', '')}: ${x.desc}`)
       .join('\r\n\r\n') ?? '   *'
   )
 }
@@ -85,17 +85,15 @@ function getValues(propType: PropType) {
 function getEnumType(propType: PropType) {
   const stringType = ' | (string & {})'
   if (!propType.values.value.map)
-    return (
-      `"${
-        (
-          propType.values.value as unknown as {
-            $: {
-              name: string
-            }
+    return `"${
+      (
+        propType.values.value as unknown as {
+          $: {
+            name: string
           }
-        ).$.name
-      }"` + stringType
-    )
+        }
+      ).$.name
+    }"${stringType}`
   return (
     propType.values.value
       .map((x) => `"${x.$.name.replaceAll('"', '')}"`)
@@ -106,23 +104,21 @@ function getEnumType(propType: PropType) {
 function getAnyType(propType: PropType) {
   const restriction = propType.$.restriction
   if (
-    restriction == 'integer' ||
-    restriction == 'number(0-1)' ||
-    restriction == 'number'
+    restriction === 'integer' ||
+    restriction === 'number(0-1)' ||
+    restriction === 'number'
   )
     return 'number'
   const stringType = ' | (string & {})'
   if (!propType?.values?.value) return 'string'
   if (!propType.values.value.map)
-    return (
-      `"${(
-        propType.values.value as unknown as {
-          $: {
-            name: string
-          }
+    return `"${(
+      propType.values.value as unknown as {
+        $: {
+          name: string
         }
-      ).$.name.replaceAll('"', '')}"` + stringType
-    )
+      }
+    ).$.name.replaceAll('"', '')}"${stringType}`
   return (
     propType.values.value
       .map((x) => `"${x.$.name.replaceAll('"', '')}"`)
@@ -184,7 +180,7 @@ function createProps() {
 function createProp(propType: PropType) {
   const { name } = propType.$
   const anyType =
-    propType.$.restriction == 'enum'
+    propType.$.restriction === 'enum'
       ? getEnumType(propType)
       : getAnyType(propType)
   return `'${camelize(name)}': ${anyType},\n`

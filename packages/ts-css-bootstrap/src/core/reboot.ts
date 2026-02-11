@@ -1,6 +1,6 @@
-import { Style } from '@purestack/ts-css'
+import type { Style } from '@purestack/ts-css'
 
-import { CssConfig } from '../cssConfig'
+import type { CssConfig } from '../cssConfig'
 
 // Reboot
 //
@@ -83,12 +83,12 @@ function setHeading(style: Style, config: CssConfig) {
   for (const [key, value] of Object.entries(headerColors)) {
     style.select(`${key}, .${key}`).color(`${value} !important`)
   }
-  style.select('h1, .h1').fontSize(size[1] + 'rem')
-  style.select('h2, .h2').fontSize(size[2] + 'rem')
-  style.select('h3, .h3').fontSize(size[3] + 'rem')
-  style.select('h4, .h4').fontSize(size[4] + 'rem')
-  style.select('h5, .h5').fontSize(size[5] + 'rem')
-  style.select('h6, .h6').fontSize(size[6] + 'rem')
+  style.select('h1, .h1').fontSize(`${size[1]}rem`)
+  style.select('h2, .h2').fontSize(`${size[2]}rem`)
+  style.select('h3, .h3').fontSize(`${size[3]}rem`)
+  style.select('h4, .h4').fontSize(`${size[4]}rem`)
+  style.select('h5, .h5').fontSize(`${size[5]}rem`)
+  style.select('h6, .h6').fontSize(`${size[6]}rem`)
 }
 
 function setP(style: Style, config: CssConfig) {

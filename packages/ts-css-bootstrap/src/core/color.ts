@@ -1,10 +1,10 @@
 /** 
 https://colorhunt.co/palettes/popular
 */
-import { Style } from '@purestack/ts-css'
+import type { Style } from '@purestack/ts-css'
 
 import { hexToRgb } from '../colorMaster'
-import { CssConfig } from '../cssConfig'
+import type { CssConfig } from '../cssConfig'
 
 export function color(config: CssConfig, style: Style) {
   const theme = [...Object.entries(config.colors)]

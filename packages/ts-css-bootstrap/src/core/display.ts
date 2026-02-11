@@ -1,9 +1,9 @@
-import { Style } from '@purestack/ts-css'
+import type { Style } from '@purestack/ts-css'
 
-import { CssConfig } from '../cssConfig'
+import type { CssConfig } from '../cssConfig'
 import { singlePropClass } from './utility'
 
-export function display(config: CssConfig, style: Style) {
+export function display(_config: CssConfig, style: Style) {
   singlePropClass(
     style,
     'display',

@@ -19,7 +19,7 @@ const VOID_ELEMENTS = new Set([
 
 const RAW_TEXT_ELEMENTS = new Set(['script', 'style', 'textarea'])
 
-export const enum NodeType {
+export enum NodeType {
   ELEMENT_NODE = 1,
   TEXT_NODE = 3,
   COMMENT_NODE = 8,

@@ -1,7 +1,7 @@
 import fsPromises from 'node:fs/promises'
 import http from 'node:http'
 
-import { createLogger, getLogger, Logger } from 'logpot'
+import { createLogger, getLogger, type Logger } from 'logpot'
 
 import {
   createIncrementalBuilder,

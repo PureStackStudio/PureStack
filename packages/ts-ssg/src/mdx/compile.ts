@@ -7,7 +7,7 @@ import rehypeStringify from 'rehype-stringify'
 import { unified } from 'unified'
 
 import { componentRegistry } from '../regor/registry'
-import { type MdxCodeHighlighter } from './highlight'
+import type { MdxCodeHighlighter } from './highlight'
 import { applyShikiHighlighting } from './shikiHighlighting'
 
 export interface PageOutlineItem {

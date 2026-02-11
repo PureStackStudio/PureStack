@@ -3,8 +3,8 @@ import matter from 'gray-matter'
 import { getLogger } from 'logpot'
 import type { Component } from 'regor'
 
-import { type SiteConfig } from '../config/config'
-import { type ContentFile } from '../discover/content'
+import type { SiteConfig } from '../config/config'
+import type { ContentFile } from '../discover/content'
 import { compileMarkdown } from '../mdx/md'
 import {
   compileMdx,

@@ -1,7 +1,7 @@
-import { Style } from '@purestack/ts-css'
+import type { Style } from '@purestack/ts-css'
 
 import { hexToRgb } from '../colorMaster'
-import { CssConfig } from '../cssConfig'
+import type { CssConfig } from '../cssConfig'
 
 /**
  * https://html-css-js.com/css/generator/box-shadow/

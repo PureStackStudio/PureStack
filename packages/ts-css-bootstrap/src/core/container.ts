@@ -1,6 +1,6 @@
-import { Style } from '@purestack/ts-css'
+import type { Style } from '@purestack/ts-css'
 
-import { BreakPoint, CssConfig } from '../cssConfig'
+import type { BreakPoint, CssConfig } from '../cssConfig'
 import { createMediaQueries, getBreakpoints } from './utility'
 
 /**
@@ -35,7 +35,7 @@ export function container(config: CssConfig, style: Style) {
 function getContainerClasses(config: CssConfig, startFrom: string) {
   return getBreakpoints(config, startFrom)
     .map((x) => {
-      const key = x.key ? '-' + x.key : ''
+      const key = x.key ? `-${x.key}` : ''
       return `.container${key}`
     })
     .join(',')
@@ -54,7 +54,7 @@ function setContainer(config: CssConfig, style: Style) {
 }
 
 function setMaxWidths(config: CssConfig, style: Style, breakpoint: BreakPoint) {
-  if (breakpoint.key == '') return
+  if (breakpoint.key === '') return
   const containerClasses = getContainerClasses(config, breakpoint.key)
   style.select(`.container, ${containerClasses}`).maxWidth(breakpoint.width)
 }

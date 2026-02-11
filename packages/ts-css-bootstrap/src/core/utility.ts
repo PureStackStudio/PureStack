@@ -1,6 +1,6 @@
-import { Style } from '@purestack/ts-css'
+import type { Style } from '@purestack/ts-css'
 
-import { BreakPoint, CssConfig, emptyBreakpoint } from '../cssConfig'
+import { type BreakPoint, type CssConfig, emptyBreakpoint } from '../cssConfig'
 
 export function formatNumber(number: number, maxDecimalPlaces: number = 8) {
   const fixedString = number.toFixed(maxDecimalPlaces)
@@ -8,23 +8,25 @@ export function formatNumber(number: number, maxDecimalPlaces: number = 8) {
 }
 
 export function toPercentage(number: number) {
-  return formatNumber(number * 100) + '%'
+  return `${formatNumber(number * 100)}%`
 }
 
 export function toPixel(number: number) {
-  return formatNumber(number) + 'px'
+  return `${formatNumber(number)}px`
 }
 
 export function toRem(number: number) {
-  return formatNumber(number) + 'rem'
+  return `${formatNumber(number)}rem`
 }
 
 export function getBreakpoints(config: CssConfig, startFrom: string = 'sm') {
   const breakpoints = config.breakpoints
-  const index = startFrom ? breakpoints.findIndex((x) => x.key == startFrom) : 0
-  if (index < 0) throw new Error('Undefined breakpoint.' + startFrom)
-  const result = new Array<BreakPoint>()
-  if (startFrom == '') result.push(emptyBreakpoint)
+  const index = startFrom
+    ? breakpoints.findIndex((x) => x.key === startFrom)
+    : 0
+  if (index < 0) throw new Error(`Undefined breakpoint.${startFrom}`)
+  const result: BreakPoint[] = []
+  if (startFrom === '') result.push(emptyBreakpoint)
 
   for (let i = index; i < breakpoints.length; ++i) {
     const bp = breakpoints[i]
@@ -62,7 +64,7 @@ export function singlePropClassResponsive(
     config,
     style,
     (_: CssConfig, style: Style, breakpoint: BreakPoint) => {
-      const key = breakpoint.key ? '-' + breakpoint.key : ''
+      const key = breakpoint.key ? `-${breakpoint.key}` : ''
       for (const [prop, value] of Object.entries(values)) {
         let postfix = prop ? `-${prop}` : ''
         postfix += postSeletor

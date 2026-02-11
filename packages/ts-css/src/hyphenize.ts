@@ -22,7 +22,7 @@ export function hyphenizeCss(prop: string): string {
   // Normalize vendor prefixes (case-insensitive) at the start, e.g. WebkitFoo / msBar → -webkit-foo / -ms-bar
   const withVendor = prop.replace(
     /^(webkit|moz|ms)(?=[A-Z])/i,
-    (_, prefix) => '-' + prefix.toLowerCase(),
+    (_, prefix) => `-${prefix.toLowerCase()}`,
   )
   const withOpera = withVendor.replace(/^o/i, (match, _offset, value) => {
     const next = value[match.length]

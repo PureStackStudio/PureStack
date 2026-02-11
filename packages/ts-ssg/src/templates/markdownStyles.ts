@@ -4,7 +4,7 @@ import {
   type ThemeOptions,
   themes,
 } from '../style/themeOptions'
-import { type ThemePalette } from '../style/themePalette'
+import type { ThemePalette } from '../style/themePalette'
 
 export function registerMarkdownStyles() {
   themes.forEach((theme, palette, options) => {

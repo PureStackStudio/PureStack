@@ -1,5 +1,5 @@
 import { BaseStyle } from './baseStyle'
-import { CSSProps } from './cssProps'
+import type { CSSProps } from './cssProps'
 
 export class Style extends BaseStyle<Style> {
   constructor(selector?: string) {

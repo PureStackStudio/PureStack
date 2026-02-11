@@ -1,10 +1,4 @@
-// Adapted from `css.escape` v1.5.1 by Mathias Bynens (MIT).
-// https://mths.be/cssescape
 export default function cssEscape(value: unknown): string {
-  if (arguments.length === 0) {
-    throw new TypeError('`cssEscape` requires an argument.')
-  }
-
   const string = String(value)
   const length = string.length
   let index = -1

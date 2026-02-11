@@ -1,9 +1,9 @@
-import { Style } from '@purestack/ts-css'
+import type { Style } from '@purestack/ts-css'
 
-import { CssConfig } from '../cssConfig'
+import type { CssConfig } from '../cssConfig'
 import { singlePropClass } from './utility'
 
-export function text(config: CssConfig, style: Style) {
+export function text(_config: CssConfig, style: Style) {
   singlePropClass(
     style,
     'text-align',

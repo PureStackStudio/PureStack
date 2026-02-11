@@ -1,9 +1,9 @@
-import { Style } from '@purestack/ts-css'
+import type { Style } from '@purestack/ts-css'
 
-import { CssConfig } from '../cssConfig'
+import type { CssConfig } from '../cssConfig'
 import { singlePropClass } from './utility'
 
-export function size(config: CssConfig, style: Style) {
+export function size(_config: CssConfig, style: Style) {
   singlePropClass(
     style,
     'width',

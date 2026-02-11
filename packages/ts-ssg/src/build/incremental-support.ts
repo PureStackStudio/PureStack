@@ -3,7 +3,7 @@ import path from 'node:path'
 
 import type { SiteConfig } from '../config/config'
 import type { ContentFile, StaticAssetFile } from '../discover/content'
-import { type MdxRenderOptions } from '../mdx/compile'
+import type { MdxRenderOptions } from '../mdx/compile'
 import {
   createMdxHighlighter,
   DEFAULT_MDX_CODE_LANGS,

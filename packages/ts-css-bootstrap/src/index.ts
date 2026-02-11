@@ -108,8 +108,8 @@ export async function writeBootstrapCssFile(
   style: Style,
   outputPath: string = './dist/css/ts-css-bootstrap.css',
 ) {
-  const { promises: fs } = await import('fs')
-  const path = await import('path')
+  const { promises: fs } = await import('node:fs')
+  const path = await import('node:path')
   await fs.mkdir(path.dirname(outputPath), { recursive: true })
   const source = await style.toPrettyCSS()
   await fs.writeFile(outputPath, source)

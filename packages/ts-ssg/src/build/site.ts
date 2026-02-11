@@ -1,6 +1,6 @@
 import type { Component } from 'regor'
 
-import { type PartialSiteConfig } from '../config/config'
+import type { PartialSiteConfig } from '../config/config'
 import type { ContentFile } from '../discover/content'
 import type {
   MdxCodeHighlighter,

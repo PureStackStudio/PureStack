@@ -1,9 +1,9 @@
-import { Style } from '@purestack/ts-css'
+import type { Style } from '@purestack/ts-css'
 
-import { CssConfig } from '../cssConfig'
+import type { CssConfig } from '../cssConfig'
 import { singlePropClass } from './utility'
 
-export function overflow(config: CssConfig, style: Style) {
+export function overflow(_config: CssConfig, style: Style) {
   singlePropClass(style, 'overflow', {
     auto: 'auto',
     hidden: 'hidden',

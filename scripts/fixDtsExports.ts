@@ -1,6 +1,6 @@
-import { globSync } from 'fs'
-import fs, { unlink } from 'fs/promises'
-import path from 'path'
+import { globSync } from 'node:fs'
+import fs, { unlink } from 'node:fs/promises'
+import path from 'node:path'
 
 /**
  * Removes .d.cts files.
@@ -10,7 +10,7 @@ import path from 'path'
  * - Removing combined export blocks
  * - Adding `export` to all top-level declarations
  * - Stripping `//#region` and mapping comments
- * - Disabling the unused‑vars ESLint rule
+ * - Disabling Biome's unused-vars rule for generated declarations
  */
 export async function fixDtsExports(directory: string): Promise<void> {
   const dctsFiles = globSync(path.join(directory, '/*.d.cts'))
@@ -39,6 +39,7 @@ export async function fixDtsExports(directory: string): Promise<void> {
 
       const exportLines: string[] = []
       let m: RegExpExecArray | null
+      // biome-ignore lint/suspicious/noAssignInExpressions: 'n/a'
       while ((m = importRegex.exec(content)) !== null) {
         const isType = m[1]?.trim() ? 'type ' : ''
         const names = m[2].trim()
@@ -68,14 +69,15 @@ export async function fixDtsExports(directory: string): Promise<void> {
       content = content.replace(/\/\/# sourceMappingURL=.*$/gm, '')
 
       // add export lines
-      content += '\n' + exportLines.join('\n') + '\n'
+      content += `\n${exportLines.join('\n')}\n`
 
       // 💅 Clean up extra newlines
       content = content.replace(/\n{3,}/g, '\n\n')
 
-      // 🚫 Add ESLint disable for unused vars at the very top
+      // 🚫 Disable noUnusedVariables for generated declaration files.
       content =
-        '/* eslint-disable @typescript-eslint/no-unused-vars */\n' + content
+        '/* biome-ignore-all lint/suspicious/noUnusedVariables: generated declaration file */\n' +
+        content
 
       await fs.writeFile(filePath, content, 'utf8')
     }),

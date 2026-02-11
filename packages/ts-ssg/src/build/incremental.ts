@@ -53,7 +53,7 @@ import {
 } from './page'
 import { buildPagefindIndex } from './pagefind'
 import type { BuildHooks, BuildInput, BuildResult } from './site'
-import { writeStyles, type WriteStylesResult } from './styles'
+import { type WriteStylesResult, writeStyles } from './styles'
 
 export interface IncrementalBuildResult {
   fullRebuild: boolean

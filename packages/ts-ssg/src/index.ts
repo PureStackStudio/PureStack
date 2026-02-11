@@ -36,11 +36,11 @@ export {
 } from './mdx/highlight'
 export {
   buildNavigation,
+  type NavItem,
   type NavigationConfig,
   type NavigationMode,
   type NavigationSort,
   type NavigationTree,
-  type NavItem,
   type PageNavigation,
   resolveNavigationConfig,
   resolvePageNavigation,
@@ -117,7 +117,6 @@ function parseCliArgs(args: string[]): CliState {
   for (const arg of args) {
     if (arg === '--serve' || arg === 'serve' || arg === 'dev') {
       state.command = 'serve'
-      continue
     }
   }
 

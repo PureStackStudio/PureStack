@@ -3,10 +3,7 @@
   "siteTitle": "ts-ssg",
   "styleFileName": "site.css",
   "styleHref": "/site.css",
-  "styleThemes": [
-    "light",
-    "dark"
-  ],
+  "styleThemes": ["light", "dark"],
   "navigation": {
     "mode": "auto",
     "navFileName": "_nav.json",

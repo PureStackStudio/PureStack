@@ -1,6 +1,6 @@
-import { BasicHeadConfig } from './basicHeadConfig'
-import { LinkTag, NameMetaTag, PropertyMetaTag } from './head'
-import { HeadConfig } from './headConfig'
+import type { BasicHeadConfig } from './basicHeadConfig'
+import type { LinkTag, NameMetaTag, PropertyMetaTag } from './head'
+import type { HeadConfig } from './headConfig'
 
 /**
  * Converts an BasicHeadConfig into a HeadConfig structure.
@@ -27,9 +27,9 @@ import { HeadConfig } from './headConfig'
 
 export function getHeadConfig(basic: BasicHeadConfig): HeadConfig {
   const config: HeadConfig = {}
-  const nameMetas = new Array<NameMetaTag>()
-  const propertyMetas = new Array<PropertyMetaTag>()
-  const links = new Array<LinkTag>()
+  const nameMetas: NameMetaTag[] = []
+  const propertyMetas: PropertyMetaTag[] = []
+  const links: LinkTag[] = []
 
   config.title = basic.title
   config.charset = basic.charset

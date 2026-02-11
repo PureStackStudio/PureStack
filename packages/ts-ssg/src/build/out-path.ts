@@ -1,6 +1,6 @@
 import path from 'node:path'
 
-import { type ContentFile } from '../discover/content'
+import type { ContentFile } from '../discover/content'
 
 export interface RouteInfo {
   route: string

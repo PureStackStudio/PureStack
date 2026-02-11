@@ -1,4 +1,4 @@
-import { Attributes } from '../tsNode'
+import type { Attributes } from '../tsNode'
 
 /**
  * Allowed values for the `name` attribute of `<meta name="...">`.

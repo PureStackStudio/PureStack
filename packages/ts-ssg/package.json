@@ -30,7 +30,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "lint": "eslint ./src",
+    "lint": "biome check ./src --formatter-enabled=false",
     "test": "vitest"
   },
   "dependencies": {
@@ -41,7 +41,6 @@
     "logpot": "^1.0.7",
     "mdast-util-to-hast": "^13.2.1",
     "pagefind": "^1.4.0",
-    "prettier": "^3.8.1",
     "regor": "^1.2.1",
     "rehype-raw": "^7.0.0",
     "rehype-stringify": "^10.0.1",

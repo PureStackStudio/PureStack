@@ -1,5 +1,5 @@
-import { h, TSNode } from '../tsNode'
-import {
+import { h, type TSNode } from '../tsNode'
+import type {
   HttpEquivMetaTag,
   LinkTag,
   NameMetaTag,
@@ -7,11 +7,11 @@ import {
   ScriptTag,
   StyleTag,
 } from './head'
-import { HeadConfig } from './headConfig'
+import type { HeadConfig } from './headConfig'
 
 export function createHead(config: HeadConfig): TSNode<'head'> {
   const head = h('head')
-  const children = new Array<TSNode<''>>()
+  const children: TSNode<''>[] = []
   const meta = () => h('meta')
 
   if (config.charset) children.push(meta().attr({ charset: config.charset }))

@@ -1,6 +1,6 @@
-import { Style } from '@purestack/ts-css'
+import type { Style } from '@purestack/ts-css'
 
-import { BreakPoint, CssConfig } from '../cssConfig'
+import type { BreakPoint, CssConfig } from '../cssConfig'
 import { createMediaQueries, toPercentage } from './utility'
 
 export function grid(config: CssConfig, style: Style) {
@@ -29,7 +29,7 @@ function setRow(config: CssConfig, style: Style) {
 }
 
 function setCol(config: CssConfig, style: Style, breakpoint: BreakPoint) {
-  const key = breakpoint.key ? '-' + breakpoint.key : ''
+  const key = breakpoint.key ? `-${breakpoint.key}` : ''
   style.select(`.col${key}`).flex('1 0 0%')
   style.select(`.col${key}-auto`).flex('0 0 auto').width('auto')
   const colCount = config.grid.columns
@@ -44,7 +44,7 @@ function setCol(config: CssConfig, style: Style, breakpoint: BreakPoint) {
 }
 
 function setRowCol(config: CssConfig, style: Style, breakpoint: BreakPoint) {
-  const key = breakpoint.key ? '-' + breakpoint.key : ''
+  const key = breakpoint.key ? `-${breakpoint.key}` : ''
   style.select(`.row-cols${key}-auto > *`).flex('0 0 auto').width('auto')
   const rowColCount = config.grid.columns / 2
   for (let i = 1; i <= rowColCount; ++i) {

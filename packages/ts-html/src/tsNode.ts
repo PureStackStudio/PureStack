@@ -1,7 +1,7 @@
 import { escapeHtml } from '@purestack/utils'
 import prettier from 'prettier'
 
-import {
+import type {
   AriaAttributes,
   AttributesForTag,
   EventAttributes,
@@ -165,15 +165,16 @@ export class TSNode<K extends HtmlTag> {
     tag: T,
     replace: (node: TSNode<T>) => TSNode<P>,
   ) {
-    if (this.#tag == tag) return replace(this as unknown as TSNode<T>)
+    if (this.#tag === tag) return replace(this as unknown as TSNode<T>)
     const stack = [this as TSNode<''>]
     while (stack.length) {
+      // biome-ignore lint/style/noNonNullAssertion: 'n/a'
       const cursor = stack.pop()!
       const children = cursor.#children
       const len = children.length
       for (let i = 0; i < len; ++i) {
         const child = children[i]
-        if (child.#tag == tag) {
+        if (child.#tag === tag) {
           cursor.#children = [
             ...children.slice(0, i),
             replace(child),
@@ -184,7 +185,7 @@ export class TSNode<K extends HtmlTag> {
       }
       stack.push(...children)
     }
-    throw new Error('Cannot find child with tag name:' + tag)
+    throw new Error(`Cannot find child with tag name:${tag}`)
   }
 
   /**
@@ -192,7 +193,7 @@ export class TSNode<K extends HtmlTag> {
    * @returns The HTML string representing this node and its subtree.
    */
   toHtml() {
-    const docType = this.#tag == 'html' ? '<!DOCTYPE html>\n' : ''
+    const docType = this.#tag === 'html' ? '<!DOCTYPE html>\n' : ''
     const raw = this.#raw
     if (raw.length) return raw
     const code = TSNode.#serialize(this.#tag, this.#attributes, this.#children)

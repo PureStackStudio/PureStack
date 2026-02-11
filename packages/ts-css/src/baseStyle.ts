@@ -55,7 +55,7 @@ export class BaseStyle<T extends RootStyle> extends RootStyle {
     if (child) return child
     const selectors = new Set(['+', '>', '|', '~', ' ', '|', ':'])
     const separator =
-      this.selector.length == 0 || selectors.has(selector[0]) ? '' : ' '
+      this.selector.length === 0 || selectors.has(selector[0]) ? '' : ' '
     child = this.#createT(this.selector + separator + selector)
     this.children.set(selector, child)
     return child
@@ -74,9 +74,9 @@ export class BaseStyle<T extends RootStyle> extends RootStyle {
   }
 
   use(css: T) {
-    this.#asBaseStyle(css).props.forEach((value, key) =>
-      this.props.set(key, value),
-    )
+    this.#asBaseStyle(css).props.forEach((value, key) => {
+      this.props.set(key, value)
+    })
     return this
   }
 
@@ -105,7 +105,7 @@ export class BaseStyle<T extends RootStyle> extends RootStyle {
     const selector = this.selector
     if (selector.startsWith('@media')) {
       const mediaContent = children
-        .map((x) => '\r\n' + x[1].toCSS())[0]
+        .map((x) => `\r\n${x[1].toCSS()}`)[0]
         .trimEnd()
       result = `${selector} {${mediaContent}
 }
@@ -115,17 +115,17 @@ export class BaseStyle<T extends RootStyle> extends RootStyle {
     }
     if (selector && this.props.size > 0) {
       const props = [...this.props.entries()]
-        .filter((x) => (typeof x[1] as unknown) != undefined)
+        .filter((x) => (typeof x[1] as unknown) !== undefined)
         .map((x) => `  ${x[0]}: ${x[1]};`.replaceAll(';;', ';'))
         .join('\r\n')
-      if (props.trim() != '')
+      if (props.trim() !== '')
         result = `${selector} {
 ${props}
 }
 
 `
     }
-    if (children.length == 0) return result
+    if (children.length === 0) return result
     for (const c of children) {
       result += c[1].toCSS()
     }

@@ -3,12 +3,6 @@ import { describe, expect, it } from 'vitest'
 import cssEscape from './cssEscape'
 
 describe('cssEscape', () => {
-  it('throws when called with no arguments', () => {
-    expect(() => (cssEscape as () => string)()).toThrow(
-      '`cssEscape` requires an argument.',
-    )
-  })
-
   it('replaces null with replacement character', () => {
     expect(cssEscape('a\0b')).toBe('a\uFFFDb')
   })

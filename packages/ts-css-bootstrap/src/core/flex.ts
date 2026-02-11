@@ -1,9 +1,9 @@
-import { Style } from '@purestack/ts-css'
+import type { Style } from '@purestack/ts-css'
 
-import { CssConfig } from '../cssConfig'
+import type { CssConfig } from '../cssConfig'
 import { singlePropClass } from './utility'
 
-export function flex(config: CssConfig, style: Style) {
+export function flex(_config: CssConfig, style: Style) {
   style.select('.flex-fill').flex('1 1 auto !important')
 
   singlePropClass(style, 'flex-direction', {
