@@ -491,32 +491,23 @@ function resolvePricingTableContext(
   }
 }
 
-function resolvePricingPlanContext(props: PricingPlanProps): PricingPlanContext {
+function resolvePricingPlanContext(
+  props: PricingPlanProps,
+): PricingPlanContext {
   const title = resolveString(props.title) || 'Plan'
-  const summary = resolveString(props.summary)
-  const price = resolveString(props.price)
-  const period = resolveString(props.period)
-  const badge = resolveString(props.badge)
-  const note = resolveString(props.note)
   const variant = resolveVariant(props.variant)
-  const icon = resolveString(props.icon)
   const ctaLabel = resolveString(props.ctaLabel)
   const ctaLink = resolveString(props.ctaLink)
   const hasCta = Boolean(ctaLabel && ctaLink)
   return {
+    ...props,
     title,
-    summary,
-    price,
-    period,
-    badge,
-    note,
     variant,
-    icon,
-    hasBadge: Boolean(badge),
-    hasPrice: Boolean(price),
+    hasBadge: Boolean(props.badge),
+    hasPrice: Boolean(props.price),
     hasCta,
-    hasIcon: Boolean(icon),
-    iconSvg: getSvgIcon(icon, 'code'),
+    hasIcon: Boolean(props.icon),
+    iconSvg: getSvgIcon(props.icon, 'code'),
   }
 }
 

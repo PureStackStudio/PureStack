@@ -34,6 +34,7 @@
     "bundle": "yarn tsx --no-warnings scripts/bundle.ts && eslint 'packages/**/*.d.ts' --fix",
     "cleanup": "yarn tsx --no-warnings scripts/cleanup.ts",
     "test": "vitest",
-    "package": "yarn workspaces foreach --no-private --all --parallel pack"
+    "package": "yarn workspaces foreach --no-private --all --parallel pack",
+    "longest": "yarn tsx ./scripts/longest-functions.ts"
   }
 }
