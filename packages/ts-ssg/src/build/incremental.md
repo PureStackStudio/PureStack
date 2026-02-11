@@ -38,10 +38,12 @@ reason about “what changed?” vs “what must be rebuilt?”.
 
 This is the canonical full build path:
 
-- Merges user hooks with internal hooks to capture discovered content, updated
-  navigation, and styles output signature.
-- Calls `buildSite` (the full pipeline).
-- Re-discovers content and assets to build an authoritative manifest snapshot.
+- Resolves user hooks from `input.hooks`.
+- Prepares output directory and copies static assets.
+- Discovers content and rebuilds navigation.
+- Renders all pages with configured concurrency.
+- Writes styles and captures style outputs/signature.
+- Discovers assets to build an authoritative manifest snapshot.
 - Writes the manifest to disk with `writeManifest`.
 
 The output is deterministic with `generatedAt` being the only volatile field.
@@ -111,7 +113,8 @@ even when the build inputs are the same.
 
 ## Utilities and decisions
 
-- `mergeHooks` composes user hooks with internal hooks without losing ordering.
+- `normalizeConcurrency` and `runWithConcurrency` keep full builds parallel but
+  bounded.
 - `collectAffectedFolders` computes folder scopes based on
   `navigationConfig.maxDepth` to decide what pages must be rebuilt.
 - `readSignature` + `signatureEqual` provide the cheap change detector for both

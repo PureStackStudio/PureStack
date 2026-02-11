@@ -31,6 +31,8 @@ import { styleBuilder } from '../style/styles'
 import { orderThemes, resolveThemeFileName } from '../style/themeAssets'
 import { themes } from '../style/themeOptions'
 import { copyStaticAsset, resolveStaticOutPath } from './assets'
+import { copyStaticAssets } from './assets'
+import { prepareOutDir } from './io'
 import {
   type AssetManifestEntry,
   type BuildManifest,
@@ -46,14 +48,9 @@ import {
   writeManifest,
 } from './manifest'
 import { resolveOutPath, resolveRouteInfo } from './out-path'
-import { buildPage } from './page'
-import {
-  type BuildCountSummary,
-  type BuildHooks,
-  type BuildInput,
-  type BuildResult,
-  buildSite,
-} from './site'
+import { buildPage, renderPageFromFile, writePage } from './page'
+import type { BuildCountSummary, BuildInput, BuildResult } from './site'
+import { writeStyles } from './styles'
 
 export interface IncrementalBuildResult {
   fullRebuild: boolean
@@ -154,29 +151,44 @@ export async function createIncrementalBuilder(
   indexManifestContent()
 
   const buildAll = async (reason: string) => {
-    let discoveredContent: ContentFile[] | undefined
-    let stylesResult: StylesManifestEntry | undefined
-    const hooks = mergeHooks(input.hooks, {
-      onContentDiscovered: async (_ctx, files) => {
-        discoveredContent = files
-      },
-      onNavigationBuilt: async (_ctx, tree) => {
-        navigation = tree
-        context.navigation = tree
-      },
-      onStylesWritten: async (_ctx, result) => {
-        stylesResult = {
-          signature: result.signature,
-          outputs: result.outputs,
-        }
-      },
-    })
+    const hooks = input.hooks ?? {}
 
     log.info('build started', { reason })
-    const result = await buildSite({ ...input, ...config, hooks })
+    await hooks.onConfigResolved?.(context)
+    await prepareOutDir(config.outDir, { clean: input.cleanOutDir })
+    await copyStaticAssets(config.contentDir, config.outDir)
 
-    const contentFiles =
-      discoveredContent ?? (await discoverContent(config.contentDir))
+    const contentFiles = await discoverContent(config.contentDir)
+    await hooks.onContentDiscovered?.(context, contentFiles)
+    navigation = await buildNavigation(
+      config.contentDir,
+      contentFiles,
+      navigationConfig,
+    )
+    context.navigation = navigation
+    await hooks.onNavigationBuilt?.(context, navigation)
+
+    const concurrency = normalizeConcurrency(input.concurrency)
+    let pages = 0
+    await runWithConcurrency(contentFiles, concurrency, async (file) => {
+      await hooks.onPageStart?.(context, file)
+      const page = await renderPageFromFile(context, file)
+      await hooks.onPageRendered?.(context, page)
+      await writePage(page)
+      await hooks.onPageWritten?.(context, page)
+      pages += 1
+    })
+
+    const styleResult = await writeStyles(
+      config.outDir,
+      config.styleFileName,
+      config.styleThemes,
+    )
+    await hooks.onStylesWritten?.(context, styleResult)
+
+    const result = { outDir: config.outDir, pages }
+    await hooks.onBuildComplete?.(context, result)
+
     const assetFiles = await discoverStaticAssets(config.contentDir)
 
     const contentCounts = countByExt(contentFiles)
@@ -186,7 +198,7 @@ export async function createIncrementalBuilder(
       config,
       contentFiles,
       assetFiles,
-      stylesResult,
+      { signature: styleResult.signature, outputs: styleResult.outputs },
     )
     manifest = nextManifest
     await writeManifest(config.outDir, nextManifest)
@@ -490,46 +502,28 @@ async function resolveMdxBuildOptions(
   return { highlighter }
 }
 
-function mergeHooks(
-  base: BuildHooks | undefined,
-  next: BuildHooks,
-): BuildHooks {
-  if (!base) return next
-  return {
-    ...base,
-    onConfigResolved: async (ctx) => {
-      await base.onConfigResolved?.(ctx)
-      await next.onConfigResolved?.(ctx)
-    },
-    onContentDiscovered: async (ctx, files) => {
-      await base.onContentDiscovered?.(ctx, files)
-      await next.onContentDiscovered?.(ctx, files)
-    },
-    onNavigationBuilt: async (ctx, tree) => {
-      await base.onNavigationBuilt?.(ctx, tree)
-      await next.onNavigationBuilt?.(ctx, tree)
-    },
-    onPageStart: async (ctx, file) => {
-      await base.onPageStart?.(ctx, file)
-      await next.onPageStart?.(ctx, file)
-    },
-    onPageRendered: async (ctx, page) => {
-      await base.onPageRendered?.(ctx, page)
-      await next.onPageRendered?.(ctx, page)
-    },
-    onPageWritten: async (ctx, page) => {
-      await base.onPageWritten?.(ctx, page)
-      await next.onPageWritten?.(ctx, page)
-    },
-    onStylesWritten: async (ctx, result) => {
-      await base.onStylesWritten?.(ctx, result)
-      await next.onStylesWritten?.(ctx, result)
-    },
-    onBuildComplete: async (ctx, result) => {
-      await base.onBuildComplete?.(ctx, result)
-      await next.onBuildComplete?.(ctx, result)
-    },
-  }
+function normalizeConcurrency(value?: number) {
+  if (typeof value !== 'number' || Number.isNaN(value)) return 1
+  return Math.max(1, Math.floor(value))
+}
+
+async function runWithConcurrency<T>(
+  items: T[],
+  concurrency: number,
+  worker: (item: T) => Promise<void>,
+) {
+  if (items.length === 0) return
+  const limit = Math.min(concurrency, items.length)
+  let index = 0
+  const workers = Array.from({ length: limit }, async () => {
+    while (true) {
+      const current = index
+      index += 1
+      if (current >= items.length) return
+      await worker(items[current])
+    }
+  })
+  await Promise.all(workers)
 }
 
 function toContentFile(

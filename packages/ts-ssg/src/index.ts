@@ -154,9 +154,6 @@ function parseCliArgs(args: string[]): CliState {
   if (args.includes('--no-reload')) {
     state.input.liveReload = false
   }
-  if (args.includes('--full')) {
-    state.input.incremental = false
-  }
   if (args.includes('--clean')) {
     state.input.cleanOutDir = true
   }

@@ -10,9 +10,8 @@ import {
   createIncrementalBuilder,
   type IncrementalBuilder,
 } from '../build/incremental'
-import { type BuildInput, type BuildResult, buildSite } from '../build/site'
+import type { BuildInput, BuildResult } from '../build/site'
 import { resolveSiteConfig } from '../config/config'
-import { discoverContent, discoverStaticAssets } from '../discover/content'
 import { logError } from '../util/logging'
 
 export interface DevServerOptions {
@@ -20,7 +19,6 @@ export interface DevServerOptions {
   port?: number
   watch?: boolean
   liveReload?: boolean
-  incremental?: boolean
 }
 
 export type DevServerInput = BuildInput & DevServerOptions
@@ -42,7 +40,6 @@ type ResolvedDevServerOptions = {
   port: number
   watch: boolean
   liveReload: boolean
-  incrementalEnabled: boolean
 }
 
 type RebuildRequestState = {
@@ -61,8 +58,7 @@ export async function startDevServer(
   const logger = await createLogger()
   const log = getLogger()
 
-  const { host, port, watch, liveReload, incrementalEnabled } =
-    resolveDevServerOptions(input)
+  const { host, port, watch, liveReload } = resolveDevServerOptions(input)
 
   const clients = new Map<
     http.ServerResponse,
@@ -126,9 +122,7 @@ export async function startDevServer(
     }
   }
 
-  const incremental = incrementalEnabled
-    ? await createIncrementalBuilder(input)
-    : createFullRebuildBuilder(input, config)
+  const incremental = await createIncrementalBuilder(input)
 
   const logInitialBuildMetrics = (result: BuildResult) => {
     const startupMs = Math.round(performance.now() - startupStart)
@@ -211,7 +205,6 @@ export async function startDevServer(
       port,
       outDir: config.outDir,
       liveReload,
-      incrementalEnabled,
       incremental,
       clients,
       getLiveReloadVersion: () => liveReloadVersion,
@@ -237,7 +230,7 @@ export async function startDevServer(
       outDir: config.outDir,
       liveReload,
       watch,
-      incremental: incrementalEnabled,
+      incremental: true,
     })
   })
 
@@ -285,7 +278,6 @@ function resolveDevServerOptions(
     port: input.port ?? DEFAULT_PORT,
     watch: input.watch ?? true,
     liveReload: input.liveReload ?? true,
-    incrementalEnabled: input.incremental ?? true,
   }
 }
 
@@ -305,7 +297,6 @@ type DevServerRequestHandlerInput = {
   port: number
   outDir: string
   liveReload: boolean
-  incrementalEnabled: boolean
   incremental: IncrementalBuilder
   clients: LiveReloadClients
   getLiveReloadVersion: () => number
@@ -320,7 +311,6 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
     port,
     outDir,
     liveReload,
-    incrementalEnabled,
     incremental,
     clients,
     getLiveReloadVersion,
@@ -350,7 +340,6 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
     const fileResult = await resolveRequestFile({
       outDir,
       pathname,
-      incrementalEnabled,
       incremental,
       log,
     })
@@ -369,7 +358,6 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
       pathname,
       liveReload,
       liveReloadVersion,
-      incrementalEnabled,
       incremental,
       backgroundRenderTasks,
       notifyPageRendered,
@@ -381,15 +369,14 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
 type ResolveRequestFileInput = {
   outDir: string
   pathname: string
-  incrementalEnabled: boolean
   incremental: IncrementalBuilder
   log: Logger
 }
 
 async function resolveRequestFile(input: ResolveRequestFileInput) {
-  const { outDir, pathname, incrementalEnabled, incremental, log } = input
+  const { outDir, pathname, incremental, log } = input
   let fileResult = await resolveStaticFile(outDir, pathname)
-  if (!fileResult && incrementalEnabled && isLikelyHtmlPath(pathname)) {
+  if (!fileResult && isLikelyHtmlPath(pathname)) {
     try {
       const rendered = await incremental.renderByUrlPath(pathname)
       if (rendered) {
@@ -410,7 +397,6 @@ type ServeResolvedFileInput = {
   pathname: string
   liveReload: boolean
   liveReloadVersion: number
-  incrementalEnabled: boolean
   incremental: IncrementalBuilder
   backgroundRenderTasks: Map<string, Promise<void>>
   notifyPageRendered: (pathname: string) => void
@@ -426,7 +412,6 @@ async function serveResolvedFile(input: ServeResolvedFileInput): Promise<void> {
     pathname,
     liveReload,
     liveReloadVersion,
-    incrementalEnabled,
     incremental,
     backgroundRenderTasks,
     notifyPageRendered,
@@ -439,16 +424,14 @@ async function serveResolvedFile(input: ServeResolvedFileInput): Promise<void> {
         ? injectLiveReload(html, LIVE_RELOAD_PATH, liveReloadVersion)
         : html
       writeHtmlResponse(res, 200, injected)
-      if (incrementalEnabled) {
-        queueBackgroundRender({
-          filePath,
-          pathname,
-          incremental,
-          backgroundRenderTasks,
-          notifyPageRendered,
-          log,
-        })
-      }
+      queueBackgroundRender({
+        filePath,
+        pathname,
+        incremental,
+        backgroundRenderTasks,
+        notifyPageRendered,
+        log,
+      })
       return
     }
 
@@ -542,34 +525,6 @@ function serveStaticStream(
     res.end()
   })
   stream.pipe(res)
-}
-
-function createFullRebuildBuilder(
-  input: BuildInput,
-  config: ReturnType<typeof resolveSiteConfig>,
-) {
-  return {
-    buildAll: async () => {
-      const result = await buildSite({ ...input, ...config })
-      const contentFiles = await discoverContent(config.contentDir)
-      const assetFiles = await discoverStaticAssets(config.contentDir)
-      return {
-        ...result,
-        content: countByExt(contentFiles),
-        assets: countByExt(assetFiles),
-      }
-    },
-    applyChange: async (filePath: string) => ({
-      fullRebuild: true,
-      changedPages: 0,
-      changedAssets: 0,
-      deletedPages: 0,
-      deletedAssets: 0,
-      reason: `content change: ${filePath}`,
-    }),
-    renderIfDirtyByOutPath: async () => false,
-    renderByUrlPath: async () => false,
-  }
 }
 
 type LiveReloadClientMeta = { createdAt: number; address?: string }
@@ -830,15 +785,6 @@ function contentTypeForExt(ext: string) {
     default:
       return undefined
   }
-}
-
-function countByExt(files: Array<{ ext: string }>) {
-  const byExt: Record<string, number> = {}
-  for (const file of files) {
-    const ext = file.ext || ''
-    byExt[ext] = (byExt[ext] ?? 0) + 1
-  }
-  return { total: files.length, byExt }
 }
 
 async function watchTree(root: string, onChange: (filePath: string) => void) {
