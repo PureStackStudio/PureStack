@@ -53,7 +53,9 @@ export function manifestPath(outDir: string) {
   return path.join(outDir, MANIFEST_DIRNAME, MANIFEST_FILENAME)
 }
 
-export function manifestConfigFromSiteConfig(config: SiteConfig): ManifestConfig {
+export function manifestConfigFromSiteConfig(
+  config: SiteConfig,
+): ManifestConfig {
   return {
     contentDir: config.contentDir,
     outDir: config.outDir,

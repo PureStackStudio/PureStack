@@ -171,7 +171,9 @@ function resolveTocEnabled(frontmatter: Record<string, unknown> | undefined) {
   return layout?.showToc === true
 }
 
-function resolveFooterEnabled(frontmatter: Record<string, unknown> | undefined) {
+function resolveFooterEnabled(
+  frontmatter: Record<string, unknown> | undefined,
+) {
   if (!isPlainObject(frontmatter)) return true
   const layout = isPlainObject(frontmatter.layout)
     ? frontmatter.layout

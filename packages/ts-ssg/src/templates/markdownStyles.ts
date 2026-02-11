@@ -210,7 +210,10 @@ function registerCopyButtonInteractionStyles(
     .borderColor(palette.border.strong)
 }
 
-function registerCopyButtonStateStyles(theme: ThemeMode, palette: ThemePalette) {
+function registerCopyButtonStateStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+) {
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button:focus-visible)', theme)
     .opacity(1)

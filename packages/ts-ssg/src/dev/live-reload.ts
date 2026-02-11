@@ -128,7 +128,11 @@ function closeLiveReloadClientsForAddress(
   }
 }
 
-export function injectLiveReload(html: string, endpoint: string, version: number) {
+export function injectLiveReload(
+  html: string,
+  endpoint: string,
+  version: number,
+) {
   if (html.includes('data-ts-ssg-live-reload')) return html
   const snippet =
     `<script data-ts-ssg-live-reload>` +

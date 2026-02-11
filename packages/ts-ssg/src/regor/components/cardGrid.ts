@@ -14,7 +14,7 @@ const cardGridTemplate = html`<div class="card-grid">
 
 function registerCardGridStyles() {
   themes.forEach((theme, palette, options) => {
-        styleBuilder
+    styleBuilder
       .select('.card-grid', theme)
       .display('grid')
       .gap('16px')
@@ -47,7 +47,7 @@ const cardTemplate = html`<div class="card">
 
 function registerCardStyles() {
   themes.forEach((theme, palette, options) => {
-        styleBuilder
+    styleBuilder
       .select('.card', theme)
       .display('grid')
       .gap('8px')
@@ -57,9 +57,7 @@ function registerCardStyles() {
 
     styleBuilder.select('.card__icon', theme).fontWeight('600')
 
-    styleBuilder
-      .select('.card__title', theme)
-      .color(palette.text.subtle)
+    styleBuilder.select('.card__title', theme).color(palette.text.subtle)
   })
 }
 

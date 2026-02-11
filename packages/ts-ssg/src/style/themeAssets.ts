@@ -36,9 +36,7 @@ export function orderThemes(themes: ThemeName[]): ThemeName[] {
   const normalized = normalizeThemes(themes)
   const missing = REQUIRED_THEMES.filter((theme) => !normalized.includes(theme))
   if (missing.length > 0) {
-    throw new Error(
-      `styleThemes must include ${REQUIRED_THEMES.join(', ')}.`,
-    )
+    throw new Error(`styleThemes must include ${REQUIRED_THEMES.join(', ')}.`)
   }
   const extras = normalized.filter(
     (theme) => !REQUIRED_THEMES.includes(theme as RequiredTheme),
@@ -50,7 +48,9 @@ export function orderThemes(themes: ThemeName[]): ThemeName[] {
 export function resolveThemes(
   ...values: Array<ThemeName[] | undefined>
 ): ThemeName[] {
-  const picked = values.find((value) => Array.isArray(value) && value.length > 0)
+  const picked = values.find(
+    (value) => Array.isArray(value) && value.length > 0,
+  )
   if (!picked) {
     return [...REQUIRED_THEMES]
   }

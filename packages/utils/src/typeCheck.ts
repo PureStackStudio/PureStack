@@ -27,7 +27,7 @@ export function isAbortError(err: unknown): boolean {
  * @returns `true` if `func` is of type "function", otherwise `false`.
  */
 export function isFunction(
-  func: unknown
+  func: unknown,
 ): func is (...args: unknown[]) => unknown {
   return typeof func === 'function'
 }
@@ -39,7 +39,7 @@ export function isFunction(
  * @returns `true` if `value` is a non-null object whose prototype is `Object.prototype` or `null`.
  */
 export function isPlainObject(
-  value: unknown
+  value: unknown,
 ): value is Record<string, unknown> {
   if (typeof value !== 'object' || value === null) return false
   const proto = Object.getPrototypeOf(value)
@@ -63,7 +63,7 @@ export function isNumberOrBoolean(value: unknown): value is number | boolean {
  * @returns `true` if `value` is an object literal or `Object.create(null)` and has no keys, otherwise `false`.
  */
 export function isEmptyPlainObject(
-  value: unknown
+  value: unknown,
 ): value is Record<string, never> {
   if (!isPlainObject(value)) return false
   for (const _ in value) {

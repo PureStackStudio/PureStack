@@ -2,7 +2,11 @@ import { createComponent, html } from 'regor'
 
 import type { PageOutlineItem } from '../../mdx/mdx'
 import { styleBuilder } from '../../style/styles'
-import { type ThemeMode, type ThemeOptions,themes } from '../../style/themeOptions'
+import {
+  type ThemeMode,
+  type ThemeOptions,
+  themes,
+} from '../../style/themeOptions'
 import type { ThemePalette } from '../../style/themePalette'
 import { resolveTsSsgContext } from '../resolveTsSsgContext'
 import type { TsSsgContext } from '../ts-ssg-context'
@@ -166,10 +170,7 @@ function registerPageTocLinkStyles(
     .color(palette.action.accent.text)
 }
 
-function registerPageTocTargetStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-) {
+function registerPageTocTargetStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.doc-content .page-toc__target', theme)
     .scrollMarginTop('96px')

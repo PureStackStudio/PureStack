@@ -22,8 +22,7 @@ const SVG_ICONS: Record<SvgIconName, string> = {
     '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7v5l3 2"/><circle cx="12" cy="12" r="9"/></svg>',
   support:
     '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M4 12v4a2 2 0 0 0 2 2h1v-6H6a2 2 0 0 0-2 2Zm16 0v4a2 2 0 0 1-2 2h-1v-6h1a2 2 0 0 1 2 2Z"/></svg>',
-  code:
-    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8 4 12l4 4M16 8l4 4-4 4M13.5 6l-3 12"/></svg>',
+  code: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8 4 12l4 4M16 8l4 4-4 4M13.5 6l-3 12"/></svg>',
   rocket:
     '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4c3 0 6 3 6 6-2 0-4 .7-5.5 2.2L11 16l-3-3 3.8-3.5A7.7 7.7 0 0 1 14 4Z"/><path d="M7 14l3 3M6 18c1.2 0 2.3-.5 3.1-1.3L10 16l-1.3-.9A4.4 4.4 0 0 0 6 18Z"/></svg>',
   building:

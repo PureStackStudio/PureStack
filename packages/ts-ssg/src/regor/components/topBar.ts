@@ -1,7 +1,11 @@
 import { createComponent, html } from 'regor'
 
 import { styleBuilder } from '../../style/styles'
-import { type ThemeMode, type ThemeOptions,themes } from '../../style/themeOptions'
+import {
+  type ThemeMode,
+  type ThemeOptions,
+  themes,
+} from '../../style/themeOptions'
 import type { ThemePalette } from '../../style/themePalette'
 import { resolveTsSsgContext } from '../resolveTsSsgContext'
 import type { TsSsgContext } from '../ts-ssg-context'
@@ -152,10 +156,7 @@ function registerTopBarToggleStyles(theme: ThemeMode, palette: ThemePalette) {
     .select('.topbar', theme)
     .media('max-width: 900px')
     .gridTemplateColumns('auto minmax(160px, 1fr) auto')
-  styleBuilder
-    .select('.topbar', theme)
-    .media('max-width: 720px')
-    .gap('10px')
+  styleBuilder.select('.topbar', theme).media('max-width: 720px').gap('10px')
   styleBuilder
     .select('.topbar__search .site-search', theme)
     .media('max-width: 720px')

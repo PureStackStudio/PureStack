@@ -53,4 +53,20 @@ describe('compileMdxToHtml', () => {
     expect(html).toContain('Callout content.')
     expect(html).toContain('<footer')
   })
+
+  it('renders GFM tables as table elements', async () => {
+    const source = [
+      '| Name | Type |',
+      '| ---- | ---- |',
+      '| Bus  | Land |',
+      '| Ship | Sea  |',
+    ].join('\n')
+    const html = renderApp(compileMdxToHtml(source))
+
+    expect(html).toContain('<table>')
+    expect(html).toContain('<thead>')
+    expect(html).toContain('<tbody>')
+    expect(html).toContain('<td>Bus</td>')
+    expect(html).toContain('<td>Sea</td>')
+  })
 })

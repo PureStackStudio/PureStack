@@ -99,7 +99,7 @@ class MiniNode {
     if (!this.parentNode) return null
     const siblings = this.parentNode.childNodes
     const index = siblings.indexOf(this)
-    return index >= 0 ? siblings[index + 1] ?? null : null
+    return index >= 0 ? (siblings[index + 1] ?? null) : null
   }
 
   get parentElement(): MiniElement | null {
@@ -130,7 +130,7 @@ class MiniNode {
     if (!this.parentNode) return null
     const siblings = this.parentNode.childNodes
     const index = siblings.indexOf(this)
-    return index > 0 ? siblings[index - 1] ?? null : null
+    return index > 0 ? (siblings[index - 1] ?? null) : null
   }
 
   appendChild(node: MiniNode): MiniNode {
@@ -266,8 +266,7 @@ class MiniDocument extends MiniNode {
       setEnd() {},
       collapse() {},
       selectNodeContents() {},
-      createContextualFragment: (html: string) =>
-        parseFragment(html, this),
+      createContextualFragment: (html: string) => parseFragment(html, this),
     }
   }
 
@@ -479,7 +478,6 @@ class MiniElement extends MiniNode {
     }
     return clone
   }
-
 }
 
 class MiniHTMLElement extends MiniElement {}
@@ -776,7 +774,12 @@ type ParseTagLikeInput = {
 
 function parseTagLikeAt(input: ParseTagLikeInput): number | null {
   const { html, index, stack, root, document } = input
-  const comment = parseCommentTag(html, index, currentContainer(stack, root), document)
+  const comment = parseCommentTag(
+    html,
+    index,
+    currentContainer(stack, root),
+    document,
+  )
   if (comment !== null) return comment
 
   const doctype = parseDoctypeTag(html, index)
@@ -800,13 +803,17 @@ function parseCommentTag(
 ): number | null {
   if (!html.startsWith('<!--', index)) return null
   const end = html.indexOf('-->', index + 4)
-  const content = end === -1 ? html.slice(index + 4) : html.slice(index + 4, end)
+  const content =
+    end === -1 ? html.slice(index + 4) : html.slice(index + 4, end)
   parent.appendChild(document.createComment(content))
   return end === -1 ? html.length : end + 3
 }
 
 function parseDoctypeTag(html: string, index: number): number | null {
-  if (!html.startsWith('<!DOCTYPE', index) && !html.startsWith('<!doctype', index)) {
+  if (
+    !html.startsWith('<!DOCTYPE', index) &&
+    !html.startsWith('<!doctype', index)
+  ) {
     return null
   }
   const end = html.indexOf('>', index + 2)
@@ -977,7 +984,8 @@ function escapeAttribute(value: string) {
 }
 
 function serializeNode(node: MiniNode, rawText = false): string {
-  if (node instanceof MiniText) return rawText ? node.data : escapeText(node.data)
+  if (node instanceof MiniText)
+    return rawText ? node.data : escapeText(node.data)
   if (node instanceof MiniComment) return `<!--${node.data}-->`
   if (node instanceof MiniDocumentFragment || node instanceof MiniDocument) {
     return node.childNodes.map((child) => serializeNode(child)).join('')
@@ -1168,7 +1176,11 @@ function querySelectorAllFrom(
     })
   } else {
     forEachElement(root, (el) => {
-      if (compiledSelectors.some((compiled) => matchesCompiledSelector(el, compiled))) {
+      if (
+        compiledSelectors.some((compiled) =>
+          matchesCompiledSelector(el, compiled),
+        )
+      ) {
         results.push(el)
       }
       return false
@@ -1414,7 +1426,8 @@ function matchesSelectorChain(el: MiniElement, chain: SelectorStep[]) {
     }
     let parent = node.parentNode
     while (parent) {
-      if (parent instanceof MiniElement && matchAt(parent, index - 1)) return true
+      if (parent instanceof MiniElement && matchAt(parent, index - 1))
+        return true
       parent = parent.parentNode
     }
     return false

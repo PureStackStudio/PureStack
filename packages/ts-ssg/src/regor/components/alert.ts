@@ -125,7 +125,10 @@ function applyAlertIconStyles(
     .color(palette.icon.neutral.color)
     .boxShadow(palette.effect.interactiveShadow)
 
-  styleBuilder.select('.alert--inline .alert__icon', theme).width('26px').height('26px')
+  styleBuilder
+    .select('.alert--inline .alert__icon', theme)
+    .width('26px')
+    .height('26px')
   styleBuilder
     .select('.alert__icon svg', theme)
     .width('16px')
@@ -143,7 +146,11 @@ function applyAlertHeaderStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-  styleBuilder.select('.alert__content', theme).display('grid').gap('10px').minWidth('0')
+  styleBuilder
+    .select('.alert__content', theme)
+    .display('grid')
+    .gap('10px')
+    .minWidth('0')
   styleBuilder
     .select('.alert__header', theme)
     .display('flex')
@@ -188,8 +195,13 @@ function applyAlertBodyStyles(
   options: ThemeOptions,
 ) {
   styleBuilder.select('.alert__body', theme).display('grid').gap('8px')
-  styleBuilder.select('.alert__body :where(p, ul, ol)', theme).margin('0').lineHeight('1.6')
-  styleBuilder.select('.alert__body :where(strong)', theme).color(palette.text.strong)
+  styleBuilder
+    .select('.alert__body :where(p, ul, ol)', theme)
+    .margin('0')
+    .lineHeight('1.6')
+  styleBuilder
+    .select('.alert__body :where(strong)', theme)
+    .color(palette.text.strong)
   styleBuilder
     .select('.alert__body :where(a)', theme)
     .color(palette.text.accent)
@@ -293,7 +305,14 @@ function applyAlertSoftToneStyles(theme: ThemeMode, palette: ThemePalette) {
   ]
 
   for (const tone of tones) {
-    applyAlertToneVariantStyles(theme, 'soft', tone.tone, tone.background, tone.border, tone.text)
+    applyAlertToneVariantStyles(
+      theme,
+      'soft',
+      tone.tone,
+      tone.background,
+      tone.border,
+      tone.text,
+    )
   }
 
   styleBuilder
@@ -303,10 +322,16 @@ function applyAlertSoftToneStyles(theme: ThemeMode, palette: ThemePalette) {
 }
 
 function applyAlertOutlineToneStyles(theme: ThemeMode, palette: ThemePalette) {
-  styleBuilder.select('.alert--outline', theme).background(palette.background.surface)
+  styleBuilder
+    .select('.alert--outline', theme)
+    .background(palette.background.surface)
 
   const tones = [
-    { tone: 'info', border: palette.status.info.border, text: palette.status.info.text },
+    {
+      tone: 'info',
+      border: palette.status.info.border,
+      text: palette.status.info.text,
+    },
     {
       tone: 'success',
       border: palette.status.success.border,
@@ -317,8 +342,16 @@ function applyAlertOutlineToneStyles(theme: ThemeMode, palette: ThemePalette) {
       border: palette.status.warning.border,
       text: palette.status.warning.text,
     },
-    { tone: 'danger', border: palette.status.danger.border, text: palette.status.danger.text },
-    { tone: 'accent', border: palette.border.accent, text: palette.text.accent },
+    {
+      tone: 'danger',
+      border: palette.status.danger.border,
+      text: palette.status.danger.text,
+    },
+    {
+      tone: 'accent',
+      border: palette.border.accent,
+      text: palette.text.accent,
+    },
   ]
 
   for (const tone of tones) {
@@ -342,12 +375,20 @@ function applyAlertToneVariantStyles(
   textColor: string,
 ) {
   const baseSelector = `.alert--${variant}.alert--tone-${tone}`
-  styleBuilder.select(baseSelector, theme).background(background).borderColor(borderColor)
+  styleBuilder
+    .select(baseSelector, theme)
+    .background(background)
+    .borderColor(borderColor)
   if (variant === 'outline') {
-    styleBuilder.select(baseSelector, theme).borderLeft(`4px solid ${borderColor}`)
+    styleBuilder
+      .select(baseSelector, theme)
+      .borderLeft(`4px solid ${borderColor}`)
   }
   styleBuilder
-    .select(`${baseSelector} .alert__title, ${baseSelector} .alert__icon`, theme)
+    .select(
+      `${baseSelector} .alert__title, ${baseSelector} .alert__icon`,
+      theme,
+    )
     .color(textColor)
 }
 
@@ -357,7 +398,9 @@ function applyAlertFeatureToneStyles(theme: ThemeMode, palette: ThemePalette) {
     .background(palette.background.feature)
     .borderColor(palette.border.accent)
     .boxShadow(palette.effect.panelShadowStrong)
-  styleBuilder.select('.alert--feature .alert__title', theme).color(palette.text.accent)
+  styleBuilder
+    .select('.alert--feature .alert__title', theme)
+    .color(palette.text.accent)
   styleBuilder
     .select('.alert--feature .alert__icon', theme)
     .set('background-color', palette.icon.accent.background)

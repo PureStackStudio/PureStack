@@ -1,4 +1,5 @@
-﻿import remarkMdx from 'remark-mdx'
+import remarkGfm from 'remark-gfm'
+import remarkMdx from 'remark-mdx'
 import remarkParse from 'remark-parse'
 import { unified } from 'unified'
 
@@ -23,7 +24,11 @@ export function compileMdx(
   source: string,
   options: MdxRenderOptions = {},
 ): MdxCompileResult {
-  const file = unified().use(remarkParse).use(remarkMdx).parse(source)
+  const file = unified()
+    .use(remarkParse)
+    .use(remarkGfm)
+    .use(remarkMdx)
+    .parse(source)
   return compileAstToHtml(file, options, { stripMdxArtifacts: true })
 }
 

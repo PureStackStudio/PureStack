@@ -308,7 +308,10 @@ function applyFooterHeadingStyles(theme: ThemeMode, palette: ThemePalette) {
 }
 
 function applyFooterPrimaryStyles(theme: ThemeMode, palette: ThemePalette) {
-  styleBuilder.select('.site-footer__primary', theme).display('grid').gap('14px')
+  styleBuilder
+    .select('.site-footer__primary', theme)
+    .display('grid')
+    .gap('14px')
   styleBuilder
     .select('.site-footer__primary-content', theme)
     .display('grid')
@@ -499,7 +502,10 @@ function applyFooterNewsletterButtonStyles(
     .outlineOffset('2px')
 }
 
-function applyFooterNewsletterMetaStyles(theme: ThemeMode, palette: ThemePalette) {
+function applyFooterNewsletterMetaStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+) {
   styleBuilder
     .select('.site-footer__newsletter-extra:empty', theme)
     .display('none')

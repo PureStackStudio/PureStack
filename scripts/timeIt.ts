@@ -11,7 +11,7 @@ const green = (s: string) => `\x1b[32m${s}\x1b[0m`
 export async function timeIt<T>(
   label: string,
   emoji: string,
-  fn: () => T | Promise<T>
+  fn: () => T | Promise<T>,
 ): Promise<T> {
   const start = process.hrtime()
   const result = await Promise.resolve(fn())

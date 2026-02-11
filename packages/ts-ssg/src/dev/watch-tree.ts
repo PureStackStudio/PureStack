@@ -2,7 +2,10 @@
 import fsPromises from 'node:fs/promises'
 import path from 'node:path'
 
-export async function watchTree(root: string, onChange: (filePath: string) => void) {
+export async function watchTree(
+  root: string,
+  onChange: (filePath: string) => void,
+) {
   const watchers: fs.FSWatcher[] = []
   const supportsRecursive =
     process.platform === 'win32' || process.platform === 'darwin'

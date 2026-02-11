@@ -114,11 +114,7 @@ function appendCodeCopyScript(head: ReturnType<typeof getHead>) {
 
 function appendPagefindSearchScript(head: ReturnType<typeof getHead>) {
   const script = buildPagefindSearchScript()
-  head.push(
-    h('script')
-      .attr({ type: 'module' })
-      .raw(script),
-  )
+  head.push(h('script').attr({ type: 'module' }).raw(script))
 }
 
 function buildCriticalThemeStyle(hasThemeGate: boolean) {

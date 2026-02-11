@@ -1,7 +1,11 @@
 import { createComponent, html } from 'regor'
 
 import { styleBuilder } from '../../style/styles'
-import { type ThemeMode, type ThemeOptions,themes } from '../../style/themeOptions'
+import {
+  type ThemeMode,
+  type ThemeOptions,
+  themes,
+} from '../../style/themeOptions'
 import type { ThemePalette } from '../../style/themePalette'
 
 const themeSwitcherTemplate = html`<button
@@ -214,7 +218,10 @@ function registerThemeSwitcherIconStyles(
 
 function registerThemeSwitcherActiveStateStyles(theme: ThemeMode) {
   styleBuilder
-    .select(`.theme-switcher[data-theme="${theme}"] .theme-switcher__track`, theme)
+    .select(
+      `.theme-switcher[data-theme="${theme}"] .theme-switcher__track`,
+      theme,
+    )
     .opacity(0.85)
 
   const activeIcon = theme === 'dark' ? 'moon' : 'sun'

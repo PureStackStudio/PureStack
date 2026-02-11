@@ -2,7 +2,11 @@ import { createComponent, html } from 'regor'
 
 import type { NavItem } from '../../navigation/navigation'
 import { styleBuilder } from '../../style/styles'
-import { type ThemeMode, type ThemeOptions,themes } from '../../style/themeOptions'
+import {
+  type ThemeMode,
+  type ThemeOptions,
+  themes,
+} from '../../style/themeOptions'
 import type { ThemePalette } from '../../style/themePalette'
 import { resolveTsSsgContext } from '../resolveTsSsgContext'
 import type { TsSsgContext } from '../ts-ssg-context'
@@ -261,7 +265,9 @@ function registerNavSummaryStyles(
   styleBuilder
     .select('.nav__group[open] > .nav__summary .nav__chevron', theme)
     .transform('rotate(45deg)')
-  styleBuilder.select('.nav__summary::-webkit-details-marker', theme).display('none')
+  styleBuilder
+    .select('.nav__summary::-webkit-details-marker', theme)
+    .display('none')
   styleBuilder.select('.nav__summary::marker', theme).content('""')
 }
 

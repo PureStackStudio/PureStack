@@ -12,12 +12,22 @@ export function registerNormalizeStyles() {
 
 function applyNormalizeDocumentRules(theme: string) {
   styleBuilder.select('*, *::before, *::after', theme).boxSizing('border-box')
-  styleBuilder.select('html', theme).lineHeight('1.15').webkitTextSizeAdjust('100%')
+  styleBuilder
+    .select('html', theme)
+    .lineHeight('1.15')
+    .webkitTextSizeAdjust('100%')
   styleBuilder.select('body', theme).margin('0')
   styleBuilder.select('main', theme).display('block')
   styleBuilder.select('h1', theme).fontSize('2em').margin('0.67em 0')
-  styleBuilder.select('hr', theme).boxSizing('content-box').height('0').overflow('visible')
-  styleBuilder.select('pre', theme).fontFamily('monospace, monospace').fontSize('1em')
+  styleBuilder
+    .select('hr', theme)
+    .boxSizing('content-box')
+    .height('0')
+    .overflow('visible')
+  styleBuilder
+    .select('pre', theme)
+    .fontFamily('monospace, monospace')
+    .fontSize('1em')
   styleBuilder.select('a', theme).backgroundColor('transparent')
 }
 
@@ -80,9 +90,17 @@ function applyNormalizeFormRules(theme: string) {
     .whiteSpace('normal')
   styleBuilder.select('progress', theme).verticalAlign('baseline')
   styleBuilder.select('textarea', theme).overflow('auto')
-  styleBuilder.select('[type="checkbox"], [type="radio"]', theme).boxSizing('border-box').padding('0')
-  styleBuilder.select('[type="number"]::-webkit-inner-spin-button', theme).height('auto')
-  styleBuilder.select('[type="search"]', theme).appearance('textfield').outlineOffset('-2px')
+  styleBuilder
+    .select('[type="checkbox"], [type="radio"]', theme)
+    .boxSizing('border-box')
+    .padding('0')
+  styleBuilder
+    .select('[type="number"]::-webkit-inner-spin-button', theme)
+    .height('auto')
+  styleBuilder
+    .select('[type="search"]', theme)
+    .appearance('textfield')
+    .outlineOffset('-2px')
   styleBuilder
     .select('[type="search"]::-webkit-search-decoration', theme)
     .appearance('none')
@@ -105,5 +123,8 @@ function applyNormalizeMediaRules(theme: string) {
     .select('button, input, textarea, select', theme)
     .font('inherit')
     .color('inherit')
-  styleBuilder.select('table', theme).borderCollapse('collapse').borderSpacing('0')
+  styleBuilder
+    .select('table', theme)
+    .borderCollapse('collapse')
+    .borderSpacing('0')
 }

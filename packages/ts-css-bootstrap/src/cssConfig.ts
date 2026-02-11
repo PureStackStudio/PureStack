@@ -20,7 +20,7 @@ interface ColorVariations {
 export class CssConfig {
   modal = {
     zIndex: 1055,
-    margin: '0.5rem'
+    margin: '0.5rem',
   }
 
   breakpoints: BreakPoint[] = [
@@ -162,7 +162,7 @@ export class CssConfig {
         opt.left,
         opt.right,
         opt.count,
-        opt.reverse
+        opt.reverse,
       )
       if (log) {
         console.log('------------------------------------------------')

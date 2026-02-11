@@ -38,7 +38,9 @@ export async function writeStyles(
   }
 
   return {
-    outPath: lightOutPath ?? path.join(outDir, resolveThemeFileName(fileName, 'light')),
+    outPath:
+      lightOutPath ??
+      path.join(outDir, resolveThemeFileName(fileName, 'light')),
     outputs: resultPaths,
     signature: hash.digest('hex'),
   }

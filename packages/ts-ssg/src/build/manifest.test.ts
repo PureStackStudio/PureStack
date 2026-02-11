@@ -47,11 +47,11 @@ describe('manifest', () => {
   it('compares signatures correctly', () => {
     expect(signatureEqual(undefined, null)).toBe(false)
     expect(signatureEqual({ mtimeMs: 1, size: 2 }, null)).toBe(false)
-    expect(signatureEqual({ mtimeMs: 1, size: 2 }, { mtimeMs: 1, size: 2 })).toBe(
-      true,
-    )
-    expect(signatureEqual({ mtimeMs: 1, size: 2 }, { mtimeMs: 2, size: 2 })).toBe(
-      false,
-    )
+    expect(
+      signatureEqual({ mtimeMs: 1, size: 2 }, { mtimeMs: 1, size: 2 }),
+    ).toBe(true)
+    expect(
+      signatureEqual({ mtimeMs: 1, size: 2 }, { mtimeMs: 2, size: 2 }),
+    ).toBe(false)
   })
 })

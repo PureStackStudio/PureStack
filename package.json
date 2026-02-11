@@ -17,6 +17,7 @@
     "eslint": "^10.0.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-tsdoc": "^0.5.0",
+    "prettier": "^3.8.1",
     "tsdown": "^0.20.3",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
@@ -35,6 +36,7 @@
     "cleanup": "yarn tsx --no-warnings scripts/cleanup.ts",
     "test": "vitest",
     "package": "yarn workspaces foreach --no-private --all --parallel pack",
-    "longest": "yarn tsx ./scripts/longest-functions.ts"
+    "longest": "yarn tsx ./scripts/longest-functions.ts",
+    "format": "yarn prettier --write \"**/*.ts\""
   }
 }

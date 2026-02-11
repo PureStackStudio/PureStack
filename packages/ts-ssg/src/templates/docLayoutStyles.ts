@@ -1,5 +1,9 @@
 import { styleBuilder } from '../style/styles'
-import { type ThemeMode, type ThemeOptions,themes } from '../style/themeOptions'
+import {
+  type ThemeMode,
+  type ThemeOptions,
+  themes,
+} from '../style/themeOptions'
 import type { ThemePalette } from '../style/themePalette'
 
 export function registerDocLayoutStyles() {
@@ -42,12 +46,17 @@ function registerDocLayoutShellStyles(
     .padding('32px clamp(24px, 6vw, 64px)')
 
   styleBuilder.select('.doc-shell--single', theme).gridTemplateColumns('1fr')
-  styleBuilder.select('.doc-shell--nav-drawer', theme).gridTemplateColumns('1fr')
+  styleBuilder
+    .select('.doc-shell--nav-drawer', theme)
+    .gridTemplateColumns('1fr')
   styleBuilder.select('.doc-main', theme).minWidth('0')
   styleBuilder.select('.doc-content', theme).margin('0').padding('8px 0 80px')
 }
 
-function registerDocLayoutSidebarStyles(theme: ThemeMode, options: ThemeOptions) {
+function registerDocLayoutSidebarStyles(
+  theme: ThemeMode,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.doc-sidebar', theme)
     .position('sticky')

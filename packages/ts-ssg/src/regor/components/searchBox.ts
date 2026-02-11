@@ -1,7 +1,11 @@
 import { createComponent, html } from 'regor'
 
 import { styleBuilder } from '../../style/styles'
-import { type ThemeMode, type ThemeOptions,themes } from '../../style/themeOptions'
+import {
+  type ThemeMode,
+  type ThemeOptions,
+  themes,
+} from '../../style/themeOptions'
 import type { ThemePalette } from '../../style/themePalette'
 import { resolveTsSsgContext } from '../resolveTsSsgContext'
 import type { TsSsgContext } from '../ts-ssg-context'
@@ -10,10 +14,7 @@ interface SearchBoxContext {
   placeholder: string
 }
 
-const searchBoxTemplate = html`<div
-  class="site-search"
-  data-pagefind-search
->
+const searchBoxTemplate = html`<div class="site-search" data-pagefind-search>
   <label class="site-search__field">
     <span class="site-search__sr-only">Search site</span>
     <span class="site-search__icon" aria-hidden="true">
