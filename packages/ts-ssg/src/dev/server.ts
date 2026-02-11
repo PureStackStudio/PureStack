@@ -134,8 +134,10 @@ export async function startDevServer(
     const startupMs = Math.round(performance.now() - startupStart)
     const contentCounts = result.content
     const assetCounts = result.assets
+    const displayHost = host === '0.0.0.0' ? LOOPBACK_HOST : host
     log.info('initial build completed', {
       reason: 'initial build',
+      url: `http://${displayHost}:${port}/`,
       metrics: {
         startupMs,
         pages: result.pages ?? 0,
