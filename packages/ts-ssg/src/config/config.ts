@@ -115,6 +115,8 @@ function loadSiteConfigFile(contentDir: string): SiteConfigFile {
     const err = error as NodeJS.ErrnoException
     if (err.code === 'ENOENT') return {}
     const message = err.message ?? String(err)
-    throw new Error(`Failed to read ${SITE_CONFIG_FILENAME}: ${message}`)
+    throw new Error(`Failed to read ${SITE_CONFIG_FILENAME}: ${message}`, {
+      cause: error,
+    })
   }
 }

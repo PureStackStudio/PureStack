@@ -41,14 +41,14 @@
     "logpot": "^1.0.7",
     "mdast-util-to-hast": "^13.2.1",
     "prettier": "^3.8.1",
-    "regor": "^1.1.9",
+    "regor": "^1.2.0",
     "rehype-raw": "^7.0.0",
     "rehype-stringify": "^10.0.1",
     "remark-mdx": "^3.1.1",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
     "shiki": "^3.22.0",
-    "tm-themes": "^1.11.0",
+    "tm-themes": "^1.11.1",
     "unified": "^11.0.5"
   }
 }

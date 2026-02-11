@@ -426,7 +426,9 @@ async function readNavFile(
     const err = error as NodeJS.ErrnoException
     if (err.code === 'ENOENT') return null
     const message = err.message ?? String(err)
-    throw new Error(`Failed to read nav file ${filePath}: ${message}`)
+    throw new Error(`Failed to read nav file ${filePath}: ${message}`, {
+      cause: error,
+    })
   }
 }
 

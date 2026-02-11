@@ -1,8 +1,15 @@
 import eslint from '@eslint/js'
 import stylistic from '@stylistic/eslint-plugin'
 import simpleImportSort from 'eslint-plugin-simple-import-sort'
-import tsdocPlugin from 'eslint-plugin-tsdoc'
 import tseslint from 'typescript-eslint'
+
+let tsdocPlugin
+try {
+  const tsdocModule = await import('eslint-plugin-tsdoc')
+  tsdocPlugin = tsdocModule.default ?? tsdocModule
+} catch {
+  tsdocPlugin = undefined
+}
 
 export default tseslint.config(
   eslint.configs.recommended,
@@ -11,7 +18,7 @@ export default tseslint.config(
     plugins: {
       'simple-import-sort': simpleImportSort,
       '@stylistic': stylistic,
-      'eslint-plugin-tsdoc': tsdocPlugin,
+      ...(tsdocPlugin ? { tsdoc: tsdocPlugin } : {}),
     },
     rules: {
       'simple-import-sort/imports': 'error',
@@ -25,7 +32,7 @@ export default tseslint.config(
         },
       ],
       'eol-last': ['error', 'always'], // add single empty line at the end of the file
-      'eslint-plugin-tsdoc/syntax': 'error',
+      ...(tsdocPlugin ? { 'tsdoc/syntax': 'error' } : {}),
     },
   }
 )
