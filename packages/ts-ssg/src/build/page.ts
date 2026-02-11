@@ -1,10 +1,14 @@
 import type { BasicHeadConfig } from '@purestack/ts-html'
-import matter from 'gray-matter'
 import { getLogger } from 'logpot'
 import type { Component } from 'regor'
 
 import type { SiteConfig } from '../config/config'
 import type { ContentFile } from '../discover/content'
+import {
+  type PageFrontmatter,
+  parseFrontmatterSource,
+  resolveFrontmatterTemplate,
+} from '../frontmatter/frontmatter'
 import { compileMarkdown } from '../mdx/md'
 import {
   compileMdx,
@@ -34,7 +38,7 @@ export interface BuildContext {
 
 export interface PageRenderResult {
   file: ContentFile
-  frontmatter: Record<string, unknown>
+  frontmatter: PageFrontmatter
   body: string
   headConfig: BasicHeadConfig
   bodyHtml: string
@@ -96,7 +100,7 @@ export async function renderPageFromFile(
       siteTitle: context.config.siteTitle,
     })
     const compiled = compilePageContent(file, parsedContent.body, context.mdx)
-    const template = resolveTemplateName(parsedContent.frontmatter)
+    const template = resolveFrontmatterTemplate(parsedContent.frontmatter)
     const htmlShell = await renderPageShell({
       context,
       bodyHtml: compiled.bodyHtml,
@@ -134,28 +138,19 @@ export async function renderPageFromFile(
   }
 }
 
-function resolveTemplateName(frontmatter: Record<string, unknown>) {
-  const template = frontmatter.template
-  return typeof template === 'string' ? template : undefined
-}
-
 type ParsedPageSource = {
   body: string
-  frontmatter: Record<string, unknown>
+  frontmatter: PageFrontmatter
 }
 
 function parsePageSource(source: string): ParsedPageSource {
-  const parsed = matter(source)
-  return {
-    body: parsed.content,
-    frontmatter: parsed.data as Record<string, unknown>,
-  }
+  return parseFrontmatterSource(source)
 }
 
 function createPageTemplateInfo(
   file: ContentFile,
   urlPath: string,
-  frontmatter: Record<string, unknown>,
+  frontmatter: PageFrontmatter,
 ): PageInfo {
   return {
     relPath: file.relPath,

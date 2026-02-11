@@ -1,10 +1,11 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-
-import matter from 'gray-matter'
-
 import { resolveRouteInfo } from '../build/out-path'
 import type { ContentFile } from '../discover/content'
+import {
+  getFrontmatterNav,
+  parseFrontmatterSource,
+} from '../frontmatter/frontmatter'
 
 export type NavigationMode = 'auto' | 'custom' | 'hybrid' | 'none'
 export type NavigationSort = 'order' | 'title' | 'path'
@@ -209,15 +210,15 @@ async function loadContentMeta(files: ContentFile[]): Promise<ContentMeta[]> {
   const result: ContentMeta[] = []
   for (const file of files) {
     const raw = await fs.readFile(file.absPath, 'utf8')
-    const parsed = matter(raw)
-    const frontmatter = parsed.data as Record<string, unknown>
+    const parsed = parseFrontmatterSource(raw)
+    const frontmatter = parsed.frontmatter
     const relPosix = toPosixPath(file.relPath)
     const baseName = path.posix.basename(relPosix, file.ext)
     const isIndex = baseName === 'index'
     const folder = resolveFolderKey(file.relPath)
     const { urlPath } = resolveRouteInfo(file)
 
-    const nav = isPlainObject(frontmatter.nav) ? frontmatter.nav : undefined
+    const nav = getFrontmatterNav(frontmatter)
     const hidden =
       resolveBoolean(nav?.hidden) ||
       resolveBoolean(frontmatter.hidden) ||
@@ -225,7 +226,7 @@ async function loadContentMeta(files: ContentFile[]): Promise<ContentMeta[]> {
     const title =
       resolveString(nav?.title) ||
       resolveString(frontmatter.title) ||
-      extractHeadingTitle(parsed.content) ||
+      extractHeadingTitle(parsed.body) ||
       humanizeSegment(baseName)
     const order = resolveNumber(nav?.order) ?? resolveNumber(frontmatter.order)
 

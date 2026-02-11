@@ -1,12 +1,14 @@
 import { merge } from '@logpot/utils'
 import type { BasicHeadConfig } from '@purestack/ts-html'
 
+import type { PageFrontmatter } from '../frontmatter/frontmatter'
+
 export interface HeadConfigOptions {
   siteTitle?: string
 }
 
 export function resolveHeadConfig(
-  frontmatter: Record<string, unknown>,
+  frontmatter: PageFrontmatter,
   options: HeadConfigOptions = {},
 ) {
   const title = frontmatter.title

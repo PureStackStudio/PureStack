@@ -1,6 +1,10 @@
 import { type BasicHeadConfig, h } from '@purestack/ts-html'
 
 import { getHead } from '../config/head'
+import {
+  type PageFrontmatter,
+  resolveFrontmatterTocEnabled,
+} from '../frontmatter/frontmatter'
 import type { PageNavigation } from '../navigation/navigation'
 import type { ThemeStylesheetLink } from '../style/themeAssets'
 import { themes } from '../style/themeOptions'
@@ -100,9 +104,9 @@ function appendThemeSwitchScript(
 
 function appendTocScript(
   head: ReturnType<typeof getHead>,
-  frontmatter: Record<string, unknown> | undefined,
+  frontmatter: PageFrontmatter | undefined,
 ) {
-  if (!isTocEnabled(frontmatter)) return
+  if (!resolveFrontmatterTocEnabled(frontmatter)) return
   const script = buildPageTocScript()
   head.push(h('script').raw(script))
 }
@@ -140,16 +144,4 @@ function buildCriticalThemeStyle(hasThemeGate: boolean) {
     css.push('html:not([data-theme-ready]) body{visibility:hidden;}')
   }
   return css.join('')
-}
-
-function isTocEnabled(frontmatter: Record<string, unknown> | undefined) {
-  if (!isPlainObject(frontmatter)) return false
-  const layout = isPlainObject(frontmatter.layout)
-    ? frontmatter.layout
-    : undefined
-  return layout?.showToc === true
-}
-
-function isPlainObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value)
 }

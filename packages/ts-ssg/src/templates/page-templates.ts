@@ -1,12 +1,20 @@
 import { type BasicHeadConfig, h, type TSNode } from '@purestack/ts-html'
 
+import {
+  type FrontmatterNavMode,
+  type PageFrontmatter,
+  resolveFrontmatterFooterEnabled,
+  resolveFrontmatterFullWidthMain,
+  resolveFrontmatterNavMode,
+  resolveFrontmatterTocEnabled,
+} from '../frontmatter/frontmatter'
 import type { PageNavigation } from '../navigation/navigation'
 import type { ThemeStylesheetLink } from '../style/themeAssets'
 
 export interface PageInfo {
   relPath: string
   urlPath: string
-  frontmatter: Record<string, unknown>
+  frontmatter: PageFrontmatter
 }
 
 export interface PageTemplateInput {
@@ -19,8 +27,6 @@ export interface PageTemplateInput {
   pageInfo?: PageInfo
   siteTitle?: string
 }
-
-type NavMode = 'sidebar' | 'drawer'
 
 export type PageTemplate = (
   input: PageTemplateInput,
@@ -63,7 +69,7 @@ function renderDocTemplate({
   siteTitle,
 }: PageTemplateInput) {
   const layout = resolveDocLayout(page?.frontmatter, navigation)
-  const showFooter = resolveFooterEnabled(page?.frontmatter)
+  const showFooter = resolveFrontmatterFooterEnabled(page?.frontmatter)
   return h('html').push(
     head,
     h('body')
@@ -104,13 +110,13 @@ type DocLayout = {
 }
 
 function resolveDocLayout(
-  frontmatter: Record<string, unknown> | undefined,
+  frontmatter: PageFrontmatter | undefined,
   navigation: PageNavigation | undefined,
 ): DocLayout {
-  const navMode = resolveNavMode(frontmatter)
+  const navMode = resolveFrontmatterNavMode(frontmatter)
   const layoutClass = resolveDocLayoutClass(frontmatter)
   const showNav = hasNavItems(navigation)
-  const showToc = resolveTocEnabled(frontmatter)
+  const showToc = resolveFrontmatterTocEnabled(frontmatter)
   const bodyClass = buildDocBodyClass(navMode, layoutClass)
   const shellClass = buildDocShellClass(showNav, showToc, navMode)
   return { bodyClass, shellClass, showNav, showToc }
@@ -122,7 +128,7 @@ function hasNavItems(navigation: PageNavigation | undefined) {
   return itemCount + globalCount > 0
 }
 
-function buildDocBodyClass(navMode: NavMode, layoutClass: string) {
+function buildDocBodyClass(navMode: FrontmatterNavMode, layoutClass: string) {
   const navClass = navMode === 'drawer' ? 'template-doc--nav-drawer' : ''
   return ['template-doc', navClass, layoutClass].filter(Boolean).join(' ')
 }
@@ -130,7 +136,7 @@ function buildDocBodyClass(navMode: NavMode, layoutClass: string) {
 function buildDocShellClass(
   showNav: boolean,
   showToc: boolean,
-  navMode: NavMode,
+  navMode: FrontmatterNavMode,
 ) {
   const classes = ['doc-shell']
   if (!showNav && !showToc) classes.push('doc-shell--single')
@@ -141,53 +147,16 @@ function buildDocShellClass(
   return classes.join(' ')
 }
 
-function resolveNavMode(
-  frontmatter: Record<string, unknown> | undefined,
-): NavMode {
-  if (!isPlainObject(frontmatter)) return 'sidebar'
-  const layout = isPlainObject(frontmatter.layout)
-    ? frontmatter.layout
-    : undefined
-  const navMode = layout?.navMode
-  return navMode === 'drawer' ? 'drawer' : 'sidebar'
-}
-
 function resolveDocLayoutClass(
-  frontmatter: Record<string, unknown> | undefined,
+  frontmatter: PageFrontmatter | undefined,
 ) {
-  if (!isPlainObject(frontmatter)) return ''
-  const layout = isPlainObject(frontmatter.layout)
-    ? frontmatter.layout
-    : undefined
-  const fullWidth = layout?.fullWidthMain
-  return fullWidth === true ? 'template-doc--full-main' : ''
-}
-
-function resolveTocEnabled(frontmatter: Record<string, unknown> | undefined) {
-  if (!isPlainObject(frontmatter)) return false
-  const layout = isPlainObject(frontmatter.layout)
-    ? frontmatter.layout
-    : undefined
-  return layout?.showToc === true
-}
-
-function resolveFooterEnabled(
-  frontmatter: Record<string, unknown> | undefined,
-) {
-  if (!isPlainObject(frontmatter)) return true
-  const layout = isPlainObject(frontmatter.layout)
-    ? frontmatter.layout
-    : undefined
-  if (typeof layout?.showFooter === 'boolean') return layout.showFooter
-  return true
-}
-
-function isPlainObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value)
+  return resolveFrontmatterFullWidthMain(frontmatter)
+    ? 'template-doc--full-main'
+    : ''
 }
 
 function renderSplashTemplate({ head, bodyHtml, pageInfo }: PageTemplateInput) {
-  const showFooter = resolveFooterEnabled(pageInfo?.frontmatter)
+  const showFooter = resolveFrontmatterFooterEnabled(pageInfo?.frontmatter)
   return h('html').push(
     head,
     h('body')

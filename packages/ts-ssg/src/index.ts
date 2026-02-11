@@ -27,6 +27,22 @@ export {
   startDevServer,
 } from './dev/server'
 export {
+  type FrontmatterLayoutOptions,
+  type FrontmatterNavMode,
+  type FrontmatterNavOptions,
+  getFrontmatterLayout,
+  getFrontmatterNav,
+  normalizeFrontmatter,
+  type PageFrontmatter,
+  type ParsedFrontmatterSource,
+  parseFrontmatterSource,
+  resolveFrontmatterFooterEnabled,
+  resolveFrontmatterFullWidthMain,
+  resolveFrontmatterNavMode,
+  resolveFrontmatterTemplate,
+  resolveFrontmatterTocEnabled,
+} from './frontmatter/frontmatter'
+export {
   createMdxHighlighter,
   DEFAULT_MDX_CODE_LANGS,
   DEFAULT_MDX_CODE_THEMES,
