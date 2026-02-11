@@ -1,10 +1,7 @@
 import { type BasicHeadConfig, h } from '@purestack/ts-html'
 
 import { getHead } from '../config/head'
-import {
-  type PageFrontmatter,
-  resolveFrontmatterTocEnabled,
-} from '../frontmatter/frontmatter'
+import type { PageFrontmatter } from '../frontmatter/frontmatter'
 import type { PageNavigation } from '../navigation/navigation'
 import type { ThemeStylesheetLink } from '../style/themeAssets'
 import { themes } from '../style/themeOptions'
@@ -25,7 +22,7 @@ export interface RenderPageInput {
   template?: string
   templates?: PageTemplateMap
   navigation?: PageNavigation
-  pageInfo?: PageInfo
+  pageInfo: PageInfo
   siteTitle?: string
 }
 
@@ -42,7 +39,7 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
     template,
     templates,
   )
-  appendTocScript(head, input.pageInfo?.frontmatter)
+  appendTocScript(head, input.pageInfo.frontmatter)
   const html = await pageTemplate({
     head,
     bodyHtml,
@@ -104,9 +101,9 @@ function appendThemeSwitchScript(
 
 function appendTocScript(
   head: ReturnType<typeof getHead>,
-  frontmatter: PageFrontmatter | undefined,
+  frontmatter: PageFrontmatter,
 ) {
-  if (!resolveFrontmatterTocEnabled(frontmatter)) return
+  if (!frontmatter.layout.showToc) return
   const script = buildPageTocScript()
   head.push(h('script').raw(script))
 }

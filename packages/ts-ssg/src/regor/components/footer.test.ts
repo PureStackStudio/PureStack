@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 
 import { resolveSiteConfig } from '../../config/config'
 import { parseHtml } from '../../dom/minidom'
+import { normalizeFrontmatter } from '../../frontmatter/frontmatter'
 import { ensureDomGlobals } from '../registerDomGlobals'
 import { renderApp } from '../renderApp'
 import { createFooterComponents } from './footer'
@@ -15,6 +16,11 @@ describe('SiteFooter rendering', () => {
       Component<unknown>
     >
     const site = resolveSiteConfig()
+    const pageInfo = {
+      relPath: 'index.md',
+      urlPath: '/',
+      frontmatter: normalizeFrontmatter({}),
+    }
     const html = renderApp(
       `<SiteFooter title="Build with confidence" ctaLabel="Start free" ctaHref="/signup">
         <p>Everything your team needs to ship docs, pages, and growth loops from one stack.</p>
@@ -44,7 +50,7 @@ describe('SiteFooter rendering', () => {
           <FooterSocial href="https://github.com/purestack" label="GitHub" />
         </template>
       </SiteFooter>`,
-      { components, context: { site, theme: site.theme } },
+      { components, context: { site, theme: site.theme, pageInfo } },
     )
     cleanup()
 
@@ -66,6 +72,11 @@ describe('SiteFooter rendering', () => {
       Component<unknown>
     >
     const site = resolveSiteConfig()
+    const pageInfo = {
+      relPath: 'index.md',
+      urlPath: '/',
+      frontmatter: normalizeFrontmatter({}),
+    }
     const html = renderApp(
       `<div id="teleport-target"></div>
       <SiteFooter
@@ -75,7 +86,7 @@ describe('SiteFooter rendering', () => {
       >
         <p>Footer content</p>
       </SiteFooter>`,
-      { components, context: { site, theme: site.theme } },
+      { components, context: { site, theme: site.theme, pageInfo } },
     )
     cleanup()
 

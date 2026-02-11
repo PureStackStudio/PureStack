@@ -28,19 +28,11 @@ export {
 } from './dev/server'
 export {
   type FrontmatterLayoutOptions,
-  type FrontmatterNavMode,
   type FrontmatterNavOptions,
-  getFrontmatterLayout,
-  getFrontmatterNav,
   normalizeFrontmatter,
   type PageFrontmatter,
   type ParsedFrontmatterSource,
   parseFrontmatterSource,
-  resolveFrontmatterFooterEnabled,
-  resolveFrontmatterFullWidthMain,
-  resolveFrontmatterNavMode,
-  resolveFrontmatterTemplate,
-  resolveFrontmatterTocEnabled,
 } from './frontmatter/frontmatter'
 export {
   createMdxHighlighter,

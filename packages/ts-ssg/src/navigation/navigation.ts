@@ -2,10 +2,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import { resolveRouteInfo } from '../build/out-path'
 import type { ContentFile } from '../discover/content'
-import {
-  getFrontmatterNav,
-  parseFrontmatterSource,
-} from '../frontmatter/frontmatter'
+import { parseFrontmatterSource } from '../frontmatter/frontmatter'
 
 export type NavigationMode = 'auto' | 'custom' | 'hybrid' | 'none'
 export type NavigationSort = 'order' | 'title' | 'path'
@@ -210,7 +207,7 @@ async function loadContentMeta(files: ContentFile[]): Promise<ContentMeta[]> {
   const result: ContentMeta[] = []
   for (const file of files) {
     const raw = await fs.readFile(file.absPath, 'utf8')
-    const parsed = parseFrontmatterSource(raw)
+    const parsed = parseFrontmatterSource(raw, file.relPath)
     const frontmatter = parsed.frontmatter
     const relPosix = toPosixPath(file.relPath)
     const baseName = path.posix.basename(relPosix, file.ext)
@@ -218,7 +215,7 @@ async function loadContentMeta(files: ContentFile[]): Promise<ContentMeta[]> {
     const folder = resolveFolderKey(file.relPath)
     const { urlPath } = resolveRouteInfo(file)
 
-    const nav = getFrontmatterNav(frontmatter)
+    const nav = frontmatter.nav
     const hidden =
       resolveBoolean(nav?.hidden) ||
       resolveBoolean(frontmatter.hidden) ||

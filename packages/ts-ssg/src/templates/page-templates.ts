@@ -1,13 +1,6 @@
 import { type BasicHeadConfig, h, type TSNode } from '@purestack/ts-html'
 
-import {
-  type FrontmatterNavMode,
-  type PageFrontmatter,
-  resolveFrontmatterFooterEnabled,
-  resolveFrontmatterFullWidthMain,
-  resolveFrontmatterNavMode,
-  resolveFrontmatterTocEnabled,
-} from '../frontmatter/frontmatter'
+import type { PageFrontmatter } from '../frontmatter/frontmatter'
 import type { PageNavigation } from '../navigation/navigation'
 import type { ThemeStylesheetLink } from '../style/themeAssets'
 
@@ -24,7 +17,7 @@ export interface PageTemplateInput {
   styleLinks?: ThemeStylesheetLink[]
   templateName: string
   navigation?: PageNavigation
-  pageInfo?: PageInfo
+  pageInfo: PageInfo
   siteTitle?: string
 }
 
@@ -65,11 +58,12 @@ function renderDocTemplate({
   head,
   bodyHtml,
   navigation,
-  pageInfo: page,
+  pageInfo,
   siteTitle,
 }: PageTemplateInput) {
-  const layout = resolveDocLayout(page?.frontmatter, navigation)
-  const showFooter = resolveFrontmatterFooterEnabled(page?.frontmatter)
+  const frontmatter = pageInfo.frontmatter
+  const layout = resolveDocLayout(frontmatter, navigation)
+  const showFooter = frontmatter.layout.showFooter
   return h('html').push(
     head,
     h('body')
@@ -110,13 +104,13 @@ type DocLayout = {
 }
 
 function resolveDocLayout(
-  frontmatter: PageFrontmatter | undefined,
+  frontmatter: PageFrontmatter,
   navigation: PageNavigation | undefined,
 ): DocLayout {
-  const navMode = resolveFrontmatterNavMode(frontmatter)
+  const navMode = frontmatter.layout.navMode
   const layoutClass = resolveDocLayoutClass(frontmatter)
   const showNav = hasNavItems(navigation)
-  const showToc = resolveFrontmatterTocEnabled(frontmatter)
+  const showToc = frontmatter.layout.showToc
   const bodyClass = buildDocBodyClass(navMode, layoutClass)
   const shellClass = buildDocShellClass(showNav, showToc, navMode)
   return { bodyClass, shellClass, showNav, showToc }
@@ -128,7 +122,10 @@ function hasNavItems(navigation: PageNavigation | undefined) {
   return itemCount + globalCount > 0
 }
 
-function buildDocBodyClass(navMode: FrontmatterNavMode, layoutClass: string) {
+function buildDocBodyClass(
+  navMode: PageFrontmatter['layout']['navMode'],
+  layoutClass: string,
+) {
   const navClass = navMode === 'drawer' ? 'template-doc--nav-drawer' : ''
   return ['template-doc', navClass, layoutClass].filter(Boolean).join(' ')
 }
@@ -136,7 +133,7 @@ function buildDocBodyClass(navMode: FrontmatterNavMode, layoutClass: string) {
 function buildDocShellClass(
   showNav: boolean,
   showToc: boolean,
-  navMode: FrontmatterNavMode,
+  navMode: PageFrontmatter['layout']['navMode'],
 ) {
   const classes = ['doc-shell']
   if (!showNav && !showToc) classes.push('doc-shell--single')
@@ -148,15 +145,13 @@ function buildDocShellClass(
 }
 
 function resolveDocLayoutClass(
-  frontmatter: PageFrontmatter | undefined,
+  frontmatter: PageFrontmatter,
 ) {
-  return resolveFrontmatterFullWidthMain(frontmatter)
-    ? 'template-doc--full-main'
-    : ''
+  return frontmatter.layout.fullWidthMain ? 'template-doc--full-main' : ''
 }
 
 function renderSplashTemplate({ head, bodyHtml, pageInfo }: PageTemplateInput) {
-  const showFooter = resolveFrontmatterFooterEnabled(pageInfo?.frontmatter)
+  const showFooter = pageInfo.frontmatter.layout.showFooter
   return h('html').push(
     head,
     h('body')

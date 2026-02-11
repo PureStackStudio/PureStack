@@ -7,7 +7,6 @@ import type { ContentFile } from '../discover/content'
 import {
   type PageFrontmatter,
   parseFrontmatterSource,
-  resolveFrontmatterTemplate,
 } from '../frontmatter/frontmatter'
 import { compileMarkdown } from '../mdx/md'
 import {
@@ -48,7 +47,7 @@ export interface PageRenderResult {
   urlPath: string
   renderTimeMs: number
   navigation?: PageNavigation
-  pageInfo?: PageInfo
+  pageInfo: PageInfo
   outline?: PageOutlineItem[]
 }
 
@@ -89,7 +88,7 @@ export async function renderPageFromFile(
   const outPath = resolveOutPath(context.config.outDir, file)
   try {
     const source = await readSource(file.absPath)
-    const parsedContent = parsePageSource(source)
+    const parsedContent = parsePageSource(source, file.relPath)
     const navigation = resolvePageNavigation(context.navigation, file)
     const pageInfo = createPageTemplateInfo(
       file,
@@ -100,7 +99,7 @@ export async function renderPageFromFile(
       siteTitle: context.config.siteTitle,
     })
     const compiled = compilePageContent(file, parsedContent.body, context.mdx)
-    const template = resolveFrontmatterTemplate(parsedContent.frontmatter)
+    const template = parsedContent.frontmatter.template
     const htmlShell = await renderPageShell({
       context,
       bodyHtml: compiled.bodyHtml,
@@ -143,8 +142,8 @@ type ParsedPageSource = {
   frontmatter: PageFrontmatter
 }
 
-function parsePageSource(source: string): ParsedPageSource {
-  return parseFrontmatterSource(source)
+function parsePageSource(source: string, sourceLabel?: string): ParsedPageSource {
+  return parseFrontmatterSource(source, sourceLabel)
 }
 
 function createPageTemplateInfo(

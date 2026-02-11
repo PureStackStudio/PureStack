@@ -6,7 +6,7 @@ import type { PageInfo } from '../templates/page-templates'
 
 export interface TsSsgContext {
   site: SiteConfig
-  pageInfo?: PageInfo
+  pageInfo: PageInfo
   navigation?: PageNavigation
   outline?: PageOutlineItem[]
   theme: ThemeOptions
