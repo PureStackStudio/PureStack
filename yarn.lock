@@ -799,6 +799,48 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@pagefind/darwin-arm64@npm:1.4.0":
+  version: 1.4.0
+  resolution: "@pagefind/darwin-arm64@npm:1.4.0"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@pagefind/darwin-x64@npm:1.4.0":
+  version: 1.4.0
+  resolution: "@pagefind/darwin-x64@npm:1.4.0"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@pagefind/freebsd-x64@npm:1.4.0":
+  version: 1.4.0
+  resolution: "@pagefind/freebsd-x64@npm:1.4.0"
+  conditions: os=freebsd & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@pagefind/linux-arm64@npm:1.4.0":
+  version: 1.4.0
+  resolution: "@pagefind/linux-arm64@npm:1.4.0"
+  conditions: os=linux & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@pagefind/linux-x64@npm:1.4.0":
+  version: 1.4.0
+  resolution: "@pagefind/linux-x64@npm:1.4.0"
+  conditions: os=linux & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@pagefind/windows-x64@npm:1.4.0":
+  version: 1.4.0
+  resolution: "@pagefind/windows-x64@npm:1.4.0"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
 "@pkgjs/parseargs@npm:^0.11.0":
   version: 0.11.0
   resolution: "@pkgjs/parseargs@npm:0.11.0"
@@ -841,6 +883,7 @@ __metadata:
     hast-util-to-html: "npm:^9.0.5"
     logpot: "npm:^1.0.7"
     mdast-util-to-hast: "npm:^13.2.1"
+    pagefind: "npm:^1.4.0"
     prettier: "npm:^3.8.1"
     regor: "npm:^1.2.1"
     rehype-raw: "npm:^7.0.0"
@@ -3917,6 +3960,35 @@ __metadata:
   version: 1.0.1
   resolution: "package-json-from-dist@npm:1.0.1"
   checksum: 10c0/62ba2785eb655fec084a257af34dbe24292ab74516d6aecef97ef72d4897310bc6898f6c85b5cd22770eaa1ce60d55a0230e150fb6a966e3ecd6c511e23d164b
+  languageName: node
+  linkType: hard
+
+"pagefind@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "pagefind@npm:1.4.0"
+  dependencies:
+    "@pagefind/darwin-arm64": "npm:1.4.0"
+    "@pagefind/darwin-x64": "npm:1.4.0"
+    "@pagefind/freebsd-x64": "npm:1.4.0"
+    "@pagefind/linux-arm64": "npm:1.4.0"
+    "@pagefind/linux-x64": "npm:1.4.0"
+    "@pagefind/windows-x64": "npm:1.4.0"
+  dependenciesMeta:
+    "@pagefind/darwin-arm64":
+      optional: true
+    "@pagefind/darwin-x64":
+      optional: true
+    "@pagefind/freebsd-x64":
+      optional: true
+    "@pagefind/linux-arm64":
+      optional: true
+    "@pagefind/linux-x64":
+      optional: true
+    "@pagefind/windows-x64":
+      optional: true
+  bin:
+    pagefind: lib/runner/bin.cjs
+  checksum: 10c0/4a9ccb57e008f093b745670b2c8144dbe851c42e4fbd89797c1f46bd78560deb1634a14dfae0cbc4a36cd8eee9aeeafda67d861930520eb6413b63f445b6b8ca
   languageName: node
   linkType: hard
 
