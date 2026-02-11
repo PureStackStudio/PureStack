@@ -6,16 +6,19 @@ import type { ThemeMode, ThemeOptions } from '../../style/themeOptions'
 import { themes } from '../../style/themeOptions'
 import type { ThemePalette } from '../../style/themePalette'
 
-interface PricingTableModel {
+interface PricingTableProps {
   eyebrow?: string
   title?: string
   subtitle?: string
   footnote?: string
+}
+
+interface PricingTableContext extends PricingTableProps {
   hasHeader: boolean
   hasFootnote: boolean
 }
 
-interface PricingPlanModel {
+interface PricingPlanProps {
   title?: string
   summary?: string
   price?: string
@@ -26,6 +29,9 @@ interface PricingPlanModel {
   icon?: string
   ctaLabel?: string
   ctaLink?: string
+}
+
+interface PricingPlanContext extends PricingPlanProps {
   hasBadge: boolean
   hasPrice: boolean
   hasCta: boolean
@@ -33,8 +39,11 @@ interface PricingPlanModel {
   iconSvg?: string
 }
 
-interface PricingFeatureModel {
+interface PricingFeatureProps {
   icon?: string
+}
+
+interface PricingFeatureContext extends PricingFeatureProps {
   iconSvg?: string
 }
 
@@ -425,14 +434,14 @@ function applyPricingResponsiveStyles(theme: ThemeMode) {
 }
 
 function createPricingTableComponent() {
-  return createComponent<PricingTableModel>(pricingTableTemplate, {
+  return createComponent<PricingTableContext>(pricingTableTemplate, {
     props: ['eyebrow', 'title', 'subtitle', 'footnote'],
     context: (head) => resolvePricingTableContext(head.props),
   })
 }
 
 function createPricingPlanComponent() {
-  return createComponent<PricingPlanModel>(pricingPlanTemplate, {
+  return createComponent<PricingPlanContext>(pricingPlanTemplate, {
     props: [
       'title',
       'summary',
@@ -450,7 +459,7 @@ function createPricingPlanComponent() {
 }
 
 function createPricingFeatureComponent() {
-  return createComponent<PricingFeatureModel>(pricingFeatureTemplate, {
+  return createComponent<PricingFeatureContext>(pricingFeatureTemplate, {
     props: ['icon'],
     context: (head) => resolvePricingFeatureContext(head.props),
   })
@@ -466,8 +475,8 @@ export function createPricingComponents() {
 }
 
 function resolvePricingTableContext(
-  props: PricingTableModel,
-): PricingTableModel {
+  props: PricingTableProps,
+): PricingTableContext {
   const eyebrow = resolveString(props.eyebrow)
   const title = resolveString(props.title)
   const subtitle = resolveString(props.subtitle)
@@ -482,7 +491,7 @@ function resolvePricingTableContext(
   }
 }
 
-function resolvePricingPlanContext(props: PricingPlanModel): PricingPlanModel {
+function resolvePricingPlanContext(props: PricingPlanProps): PricingPlanContext {
   const title = resolveString(props.title) || 'Plan'
   const summary = resolveString(props.summary)
   const price = resolveString(props.price)
@@ -512,8 +521,8 @@ function resolvePricingPlanContext(props: PricingPlanModel): PricingPlanModel {
 }
 
 function resolvePricingFeatureContext(
-  props: PricingFeatureModel,
-): PricingFeatureModel {
+  props: PricingFeatureProps,
+): PricingFeatureContext {
   const icon = resolveString(props.icon)
   return {
     icon,

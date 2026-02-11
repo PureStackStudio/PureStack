@@ -6,16 +6,21 @@ import type { ThemeMode, ThemeOptions } from '../../style/themeOptions'
 import { themes } from '../../style/themeOptions'
 import type { ThemePalette } from '../../style/themePalette'
 
-interface AlertBoxContext {
-  title: string
-  eyebrow: string
-  badge: string
-  meta: string
+interface AlertBoxProps {
+  title?: string
+  eyebrow?: string
+  badge?: string
+  meta?: string
   tone?: string
   variant?: string
   icon?: string
   compact?: unknown
   inline?: unknown
+  role?: string
+  live?: string
+}
+
+interface AlertBoxContext extends AlertBoxProps {
   rootClass: string
   role: string
   live: string
@@ -401,7 +406,7 @@ export function createAlertComponents() {
   }
 }
 
-function resolveAlertBoxContext(props: AlertBoxContext): AlertBoxContext {
+function resolveAlertBoxContext(props: AlertBoxProps): AlertBoxContext {
   const tone = resolveTone(props.tone)
   const variant = resolveVariant(props.variant)
   const iconName = resolveIconName(props.icon, tone)
