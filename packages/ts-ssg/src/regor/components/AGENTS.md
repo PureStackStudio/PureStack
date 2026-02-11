@@ -32,8 +32,7 @@ Template Rules
 
 Props & Context
 
-- The generic in `createComponent<T>` is the template context type (`T`), not the props type.
-- Do not explicitly type props. Treat `head.props` as Regor internal input and normalize what you need in `context`.
+- The generic in `createComponent<T>` is the template context type (`T`), not the props type and context callback provides calculated values to the component context.
 - List props in `createComponent` via `props: [...]` when they are used.
 - Use `context` to derive computed values, and keep it pure (no mutations or side-effects).
 - Treat the `context` callback return as runtime handoff to Regor; TypeScript guidance ends at that boundary.
