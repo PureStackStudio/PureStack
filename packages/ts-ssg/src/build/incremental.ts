@@ -1,24 +1,13 @@
-import fs from 'node:fs/promises'
 import path from 'node:path'
 
 import { getLogger } from 'logpot'
 
 import { resolveSiteConfig } from '../config/config'
 import {
-  type ContentFile,
   discoverContent,
   isContentFile,
   isSiteConfigFile,
-  type StaticAssetFile,
 } from '../discover/content'
-import { type MdxRenderOptions } from '../mdx/compile'
-import {
-  createMdxHighlighter,
-  DEFAULT_MDX_CODE_LANGS,
-  DEFAULT_MDX_CODE_THEMES,
-  type MdxCodeLangs,
-  type MdxCodeThemes,
-} from '../mdx/highlight'
 import {
   buildNavigation,
   type NavigationTree,
@@ -29,26 +18,35 @@ import { themes } from '../style/themeOptions'
 import {
   copyStaticAsset,
   copyStaticAssets,
-  resolveStaticOutPath,
 } from './assets'
+import {
+  buildManifest,
+  countByExt,
+  isOutsideContentRoot,
+  ManifestContentIndex,
+  normalizeConcurrency,
+  normalizeUrlPath,
+  removeFile,
+  resolveMdxBuildOptions,
+  runWithConcurrency,
+  toAssetFile,
+  toContentFile,
+} from './incremental-support'
 import { prepareOutDir } from './io'
 import {
   type AssetManifestEntry,
-  type BuildManifest,
   type ContentManifestEntry,
   createEmptyManifest,
   type FileSignature,
   isCompatibleManifest,
-  manifestConfigFromSiteConfig,
   readManifest,
   readSignature,
   signatureEqual,
-  type StylesManifestEntry,
   writeManifest,
 } from './manifest'
-import { resolveOutPath, resolveRouteInfo } from './out-path'
+import { resolveOutPath } from './out-path'
 import { buildPage, renderPageFromFile, writePage } from './page'
-import type { BuildCountSummary, BuildInput, BuildResult } from './site'
+import type { BuildInput, BuildResult } from './site'
 import { writeStyles } from './styles'
 
 export interface IncrementalBuildResult {
@@ -97,57 +95,8 @@ export async function createIncrementalBuilder(
       : createEmptyManifest(config)
   const dirtyPages = new Set<string>()
   const renderInFlight = new Map<string, Promise<boolean>>()
-  const outPathToRelPath = new Map<string, string>()
-  const relPathToOutPath = new Map<string, string>()
-  const urlPathToRelPath = new Map<string, string>()
-  const relPathToUrlPath = new Map<string, string>()
-
-  const indexManifestContent = () => {
-    outPathToRelPath.clear()
-    relPathToOutPath.clear()
-    urlPathToRelPath.clear()
-    relPathToUrlPath.clear()
-    for (const entry of Object.values(manifest.content)) {
-      setContentIndex(entry.relPath, entry.outPath, entry.ext)
-    }
-  }
-
-  const setContentIndex = (relPath: string, outPath: string, ext?: string) => {
-    const prevOutPath = relPathToOutPath.get(relPath)
-    if (prevOutPath && prevOutPath !== outPath) {
-      outPathToRelPath.delete(prevOutPath)
-    }
-    const prevUrlPath = relPathToUrlPath.get(relPath)
-    if (prevUrlPath) {
-      urlPathToRelPath.delete(prevUrlPath)
-    }
-    relPathToOutPath.set(relPath, outPath)
-    outPathToRelPath.set(outPath, relPath)
-    const routeInfo = resolveRouteInfo(
-      toContentFile(config.contentDir, relPath, ext ?? path.extname(relPath)),
-    )
-    relPathToUrlPath.set(relPath, routeInfo.urlPath)
-    urlPathToRelPath.set(routeInfo.urlPath, relPath)
-  }
-
-  const removeContentIndex = (relPath: string) => {
-    const outPath = relPathToOutPath.get(relPath)
-    const urlPath = relPathToUrlPath.get(relPath)
-    if (outPath) outPathToRelPath.delete(outPath)
-    if (urlPath) urlPathToRelPath.delete(urlPath)
-    relPathToOutPath.delete(relPath)
-    relPathToUrlPath.delete(relPath)
-  }
-
-  const normalizeUrlPath = (urlPath: string) => {
-    if (!urlPath || urlPath === '/') return '/'
-    let normalized = urlPath.startsWith('/') ? urlPath : `/${urlPath}`
-    if (path.posix.extname(normalized)) return normalized
-    if (!normalized.endsWith('/')) normalized += '/'
-    return normalized
-  }
-
-  indexManifestContent()
+  const contentIndex = new ManifestContentIndex(config.contentDir)
+  contentIndex.rebuildFromManifest(manifest)
 
   const buildAll = async (reason: string) => {
     const buildStartMs = Date.now()
@@ -205,7 +154,7 @@ export async function createIncrementalBuilder(
     )
     manifest = nextManifest
     await writeManifest(config.outDir, nextManifest)
-    indexManifestContent()
+    contentIndex.rebuildFromManifest(manifest)
     dirtyPages.clear()
     await hooks.onBuildComplete?.(context, finalResult)
 
@@ -239,7 +188,7 @@ export async function createIncrementalBuilder(
       if (contentEntry) {
         await removeFile(contentEntry.outPath)
         delete manifest.content[relPath]
-        removeContentIndex(relPath)
+        contentIndex.remove(relPath)
         result.deletedPages += 1
       }
       return
@@ -257,7 +206,7 @@ export async function createIncrementalBuilder(
       outPath,
       ...signature,
     }
-    setContentIndex(relPath, outPath, contentFile.ext)
+    contentIndex.set(relPath, outPath, contentFile.ext)
     result.changedPages += 1
     dirtyPages.delete(relPath)
   }
@@ -328,7 +277,7 @@ export async function createIncrementalBuilder(
           if (entry) {
             await removeFile(entry.outPath)
             delete manifest.content[relPath]
-            removeContentIndex(relPath)
+            contentIndex.remove(relPath)
             await writeManifest(config.outDir, manifest)
           }
           dirtyPages.delete(relPath)
@@ -346,7 +295,7 @@ export async function createIncrementalBuilder(
           outPath: nextOutPath,
           ...signature,
         }
-        setContentIndex(relPath, nextOutPath, contentFile.ext)
+        contentIndex.set(relPath, nextOutPath, contentFile.ext)
         dirtyPages.delete(relPath)
         await writeManifest(config.outDir, manifest)
         return true
@@ -366,22 +315,18 @@ export async function createIncrementalBuilder(
   }
 
   const renderIfDirtyByOutPath = async (outPath: string) => {
-    const relPath = outPathToRelPath.get(outPath)
+    const relPath = contentIndex.getRelPathByOutPath(outPath)
     if (!relPath) return false
     return renderPageByRelPath(relPath, true)
   }
 
   const renderByUrlPath = async (urlPath: string) => {
     const normalized = normalizeUrlPath(urlPath)
-    let relPath = urlPathToRelPath.get(normalized)
+    let relPath = contentIndex.getRelPathByUrlPath(normalized)
     if (!relPath) {
       const contentFiles = await discoverContent(config.contentDir)
-      for (const file of contentFiles) {
-        const routeInfo = resolveRouteInfo(file)
-        relPathToUrlPath.set(file.relPath, routeInfo.urlPath)
-        urlPathToRelPath.set(routeInfo.urlPath, file.relPath)
-      }
-      relPath = urlPathToRelPath.get(normalized)
+      contentIndex.updateUrlPathMapFromFiles(contentFiles)
+      relPath = contentIndex.getRelPathByUrlPath(normalized)
       if (!relPath) return false
     }
     return renderPageByRelPath(relPath, false)
@@ -418,7 +363,7 @@ export async function createIncrementalBuilder(
     if (contentEntry) {
       await removeFile(contentEntry.outPath)
       delete manifest.content[relPath]
-      removeContentIndex(relPath)
+      contentIndex.remove(relPath)
       result.deletedPages += 1
     }
     if (assetEntry) {
@@ -458,7 +403,7 @@ export async function createIncrementalBuilder(
       outPath,
       ...signature,
     }
-    setContentIndex(relPath, outPath, ext)
+    contentIndex.set(relPath, outPath, ext)
     result.changedPages += 1
     await writeManifest(config.outDir, manifest)
   }
@@ -492,130 +437,4 @@ export async function createIncrementalBuilder(
   }
 
   return { buildAll, applyChange, renderIfDirtyByOutPath, renderByUrlPath }
-}
-
-async function resolveMdxBuildOptions(
-  mdx: BuildInput['mdx'] | undefined,
-): Promise<MdxRenderOptions> {
-  const mdxThemes: MdxCodeThemes = mdx?.themes ?? DEFAULT_MDX_CODE_THEMES
-  const mdxLangs: MdxCodeLangs = mdx?.langs ?? DEFAULT_MDX_CODE_LANGS
-  const highlighter = mdx?.disableHighlighter
-    ? undefined
-    : (mdx?.highlighter ?? (await createMdxHighlighter(mdxThemes, mdxLangs)))
-  return { highlighter }
-}
-
-function normalizeConcurrency(value?: number) {
-  if (typeof value !== 'number' || Number.isNaN(value)) return 1
-  return Math.max(1, Math.floor(value))
-}
-
-async function runWithConcurrency<T>(
-  items: T[],
-  concurrency: number,
-  worker: (item: T) => Promise<void>,
-) {
-  if (items.length === 0) return
-  const limit = Math.min(concurrency, items.length)
-  let index = 0
-  const workers = Array.from({ length: limit }, async () => {
-    while (true) {
-      const current = index
-      index += 1
-      if (current >= items.length) return
-      await worker(items[current])
-    }
-  })
-  await Promise.all(workers)
-}
-
-function toContentFile(
-  contentDir: string,
-  relPath: string,
-  ext: string,
-): ContentFile {
-  return {
-    absPath: path.join(contentDir, relPath),
-    relPath,
-    ext,
-  }
-}
-
-function toAssetFile(
-  contentDir: string,
-  relPath: string,
-  ext: string,
-): StaticAssetFile {
-  return {
-    absPath: path.join(contentDir, relPath),
-    relPath,
-    ext,
-  }
-}
-
-async function removeFile(filePath: string) {
-  try {
-    await fs.rm(filePath, { force: true })
-  } catch (error) {
-    const err = error as NodeJS.ErrnoException
-    if (err.code === 'ENOENT') return
-    throw error
-  }
-}
-
-async function buildManifest(
-  config: ReturnType<typeof resolveSiteConfig>,
-  contentFiles: ContentFile[],
-  assetFiles: StaticAssetFile[],
-  stylesResult: StylesManifestEntry,
-): Promise<BuildManifest> {
-  const content: Record<string, ContentManifestEntry> = {}
-  for (const file of contentFiles) {
-    const signature = await readSignature(file.absPath)
-    if (!signature) continue
-    const outPath = resolveOutPath(config.outDir, file)
-    content[file.relPath] = {
-      relPath: file.relPath,
-      ext: file.ext,
-      outPath,
-      ...signature,
-    }
-  }
-
-  const assets: Record<string, AssetManifestEntry> = {}
-  for (const asset of assetFiles) {
-    const signature = await readSignature(asset.absPath)
-    if (!signature) continue
-    const outPath = resolveStaticOutPath(config.outDir, asset)
-    assets[asset.relPath] = {
-      relPath: asset.relPath,
-      ext: asset.ext,
-      outPath,
-      ...signature,
-    }
-  }
-
-  return {
-    version: 1,
-    generatedAt: Date.now(),
-    config: manifestConfigFromSiteConfig(config),
-    content,
-    assets,
-    styles: stylesResult,
-  }
-}
-
-function isOutsideContentRoot(relPath: string) {
-  if (path.isAbsolute(relPath)) return true
-  const normalized = relPath.replaceAll('\\', '/')
-  return normalized === '..' || normalized.startsWith('../')
-}
-
-function countByExt(files: Array<{ ext: string }>): BuildCountSummary {
-  const byExt: Record<string, number> = {}
-  for (const file of files) {
-    const ext = file.ext || ''
-    byExt[ext] = (byExt[ext] ?? 0) + 1
-  }
-  return { total: files.length, byExt }
 }

@@ -1,7 +1,5 @@
-import fs from 'node:fs'
 import fsPromises from 'node:fs/promises'
 import http from 'node:http'
-import path from 'node:path'
 
 import { createLogger, getLogger, Logger } from 'logpot'
 
@@ -12,6 +10,19 @@ import {
 import type { BuildInput } from '../build/site'
 import { resolveSiteConfig } from '../config/config'
 import { logError } from '../util/logging'
+import {
+  broadcastJson,
+  injectLiveReload,
+  type LiveReloadClients,
+  registerLiveReloadClient,
+} from './live-reload'
+import {
+  isLikelyHtmlPath,
+  resolveStaticFile,
+  serveStaticStream,
+  writeHtmlResponse,
+} from './static-files'
+import { watchTree } from './watch-tree'
 
 export interface DevServerOptions {
   host?: string
@@ -30,8 +41,6 @@ const DEFAULT_HOST = '0.0.0.0'
 const DEFAULT_PORT = 4173
 const LIVE_RELOAD_PATH = '/__ts-ssg/events'
 const REQUEST_TIMEOUT_MS = 30000
-const LIVE_RELOAD_MAX_CLIENTS = 8
-const LIVE_RELOAD_MAX_PER_ADDRESS = 1
 const LOOPBACK_HOST = '127.0.0.1'
 
 type ResolvedDevServerOptions = {
@@ -58,10 +67,7 @@ export async function startDevServer(
 
   const { host, port, watch, liveReload } = resolveDevServerOptions(input)
 
-  const clients = new Map<
-    http.ServerResponse,
-    { createdAt: number; address?: string }
-  >()
+  const clients: LiveReloadClients = new Map()
   const backgroundRenderTasks = new Map<string, Promise<void>>()
   let liveReloadVersion = 0
   let initialBuildDone = false
@@ -455,360 +461,4 @@ function queueBackgroundRender(input: QueueBackgroundRenderInput) {
     })
   backgroundRenderTasks.set(filePath, task)
   void task
-}
-
-function serveStaticStream(
-  req: http.IncomingMessage,
-  res: http.ServerResponse,
-  filePath: string,
-  ext: string,
-  log: Logger,
-) {
-  const contentType = contentTypeForExt(ext)
-  if (contentType) {
-    res.writeHead(200, {
-      'Content-Type': contentType,
-      Connection: 'close',
-    })
-  } else {
-    res.writeHead(200, { Connection: 'close' })
-  }
-  const stream = fs.createReadStream(filePath)
-  let streamClosed = false
-  const closeStream = () => {
-    if (streamClosed) return
-    streamClosed = true
-    try {
-      stream.destroy()
-    } catch {
-      // ignore stream close errors
-    }
-  }
-  req.on('aborted', () => {
-    closeStream()
-  })
-  res.on('close', () => {
-    closeStream()
-  })
-  res.on('error', () => {
-    closeStream()
-  })
-  stream.on('error', (error) => {
-    logError(log, error, 'static stream failed')
-    if (!res.headersSent) {
-      res.writeHead(500)
-    }
-    res.end()
-  })
-  stream.pipe(res)
-}
-
-type LiveReloadClientMeta = { createdAt: number; address?: string }
-
-type LiveReloadClients = Map<http.ServerResponse, LiveReloadClientMeta>
-
-function registerLiveReloadClient(
-  clients: LiveReloadClients,
-  req: http.IncomingMessage,
-  res: http.ServerResponse,
-  version: number,
-) {
-  req.setTimeout(0)
-  res.setTimeout(0)
-  res.socket?.setTimeout(0)
-  res.writeHead(200, {
-    'Content-Type': 'text/event-stream',
-    'Cache-Control': 'no-cache',
-    Connection: 'keep-alive',
-    'X-Accel-Buffering': 'no',
-  })
-  writeSseEvent(res, 'ping', 'ready')
-  writeSseEvent(res, 'state', JSON.stringify({ version, reason: 'connect' }))
-  pruneLiveReloadClients(clients)
-  if (clients.size >= LIVE_RELOAD_MAX_CLIENTS) {
-    closeOldestLiveReloadClients(
-      clients,
-      clients.size - LIVE_RELOAD_MAX_CLIENTS + 1,
-    )
-  }
-  const address = req.socket.remoteAddress
-  if (address) {
-    closeLiveReloadClientsForAddress(
-      clients,
-      address,
-      LIVE_RELOAD_MAX_PER_ADDRESS,
-    )
-  }
-  clients.set(res, { createdAt: Date.now(), address })
-  req.on('close', () => {
-    clients.delete(res)
-  })
-  res.on('error', () => {
-    clients.delete(res)
-  })
-}
-
-function writeSseEvent(res: http.ServerResponse, event: string, data: string) {
-  res.write(`event: ${event}\n`)
-  res.write(`data: ${data}\n\n`)
-}
-
-function broadcast(clients: LiveReloadClients, event: string, data: string) {
-  for (const client of clients.keys()) {
-    if (!isLiveReloadClientAlive(client)) {
-      clients.delete(client)
-      continue
-    }
-    try {
-      writeSseEvent(client, event, data)
-    } catch {
-      clients.delete(client)
-      try {
-        client.end()
-      } catch {
-        // ignore secondary close errors
-      }
-    }
-  }
-}
-
-function broadcastJson(
-  clients: LiveReloadClients,
-  event: string,
-  payload: Record<string, unknown>,
-) {
-  broadcast(clients, event, JSON.stringify(payload))
-}
-
-function isLiveReloadClientAlive(client: http.ServerResponse) {
-  return client.writable && !client.writableEnded && !client.destroyed
-}
-
-function pruneLiveReloadClients(
-  clients: Map<http.ServerResponse, { createdAt: number; address?: string }>,
-) {
-  for (const client of clients.keys()) {
-    if (!isLiveReloadClientAlive(client)) {
-      clients.delete(client)
-    }
-  }
-}
-
-function closeOldestLiveReloadClients(
-  clients: Map<http.ServerResponse, { createdAt: number; address?: string }>,
-  count: number,
-) {
-  const entries = [...clients.entries()].sort(
-    (left, right) => left[1].createdAt - right[1].createdAt,
-  )
-  for (const [client] of entries.slice(0, count)) {
-    clients.delete(client)
-    try {
-      client.end()
-    } catch {
-      // ignore close errors
-    }
-  }
-}
-
-function closeLiveReloadClientsForAddress(
-  clients: Map<http.ServerResponse, { createdAt: number; address?: string }>,
-  address: string,
-  keepNewest: number,
-) {
-  const entries = [...clients.entries()]
-    .filter(([, meta]) => meta.address === address)
-    .sort((left, right) => left[1].createdAt - right[1].createdAt)
-  const toClose = Math.max(0, entries.length - keepNewest)
-  for (const [client] of entries.slice(0, toClose)) {
-    clients.delete(client)
-    try {
-      client.end()
-    } catch {
-      // ignore close errors
-    }
-  }
-}
-
-function injectLiveReload(html: string, endpoint: string, version: number) {
-  if (html.includes('data-ts-ssg-live-reload')) return html
-  const snippet =
-    `<script data-ts-ssg-live-reload>` +
-    `(() => {` +
-    `const pageVersion = __PAGE_VERSION__;` +
-    `const parseJSON = (value) => {` +
-    `try { return JSON.parse(value); } catch { return null; }` +
-    `};` +
-    `const normalize = (value) => {` +
-    `if (!value) return '/';` +
-    `let next = value.startsWith('/') ? value : '/' + value;` +
-    `if (next.length > 1 && next.endsWith('/')) next = next.slice(0, -1);` +
-    `return next;` +
-    `};` +
-    `const source = new EventSource('${endpoint}');` +
-    `source.addEventListener('state', (event) => {` +
-    `const payload = parseJSON(event.data);` +
-    `const next = Number(payload?.version);` +
-    `if (!Number.isFinite(next)) return;` +
-    `if (next > pageVersion) location.reload();` +
-    `});` +
-    `source.addEventListener('page-rendered', (event) => {` +
-    `const payload = parseJSON(event.data);` +
-    `if (normalize(payload?.path) === normalize(location.pathname)) location.reload();` +
-    `});` +
-    `})();` +
-    `</script>`
-  const withVersion = snippet.replace('__PAGE_VERSION__', String(version))
-
-  const bodyIndex = html.lastIndexOf('</body>')
-  if (bodyIndex !== -1) {
-    return html.slice(0, bodyIndex) + withVersion + html.slice(bodyIndex)
-  }
-
-  const headIndex = html.lastIndexOf('</head>')
-  if (headIndex !== -1) {
-    return html.slice(0, headIndex) + withVersion + html.slice(headIndex)
-  }
-
-  return html + withVersion
-}
-
-function isLikelyHtmlPath(pathname: string) {
-  return pathname.endsWith('/') || path.extname(pathname) === ''
-}
-
-function htmlNoCacheHeaders() {
-  return {
-    'Content-Type': 'text/html; charset=utf-8',
-    'Cache-Control': 'no-store, no-cache, must-revalidate',
-    Pragma: 'no-cache',
-    Expires: '0',
-    Connection: 'close',
-  }
-}
-
-function writeHtmlResponse(
-  res: http.ServerResponse,
-  statusCode: number,
-  body: string,
-) {
-  res.writeHead(statusCode, htmlNoCacheHeaders())
-  res.end(body)
-}
-
-async function resolveStaticFile(outDir: string, pathname: string) {
-  let safePath: string
-  try {
-    safePath = decodeURIComponent(pathname)
-  } catch {
-    return null
-  }
-  const normalized = path.normalize(safePath).replace(/^(\.\.[/\\])+/, '')
-  const root = path.resolve(outDir)
-  let candidate = path.resolve(root, `.${normalized}`)
-  if (!candidate.startsWith(root)) return null
-
-  try {
-    const stats = await fsPromises.stat(candidate)
-    if (stats.isDirectory()) {
-      candidate = path.join(candidate, 'index.html')
-    }
-  } catch {
-    // ignore missing; we will try index.html for extension-less routes below
-  }
-
-  if (!path.extname(candidate)) {
-    candidate = path.join(candidate, 'index.html')
-  }
-
-  try {
-    const finalStats = await fsPromises.stat(candidate)
-    if (!finalStats.isFile()) return null
-  } catch {
-    return null
-  }
-
-  return { filePath: candidate, ext: path.extname(candidate).toLowerCase() }
-}
-
-function contentTypeForExt(ext: string) {
-  switch (ext) {
-    case '.html':
-      return 'text/html; charset=utf-8'
-    case '.css':
-      return 'text/css; charset=utf-8'
-    case '.js':
-      return 'text/javascript; charset=utf-8'
-    case '.json':
-      return 'application/json; charset=utf-8'
-    case '.svg':
-      return 'image/svg+xml'
-    case '.png':
-      return 'image/png'
-    case '.jpg':
-    case '.jpeg':
-      return 'image/jpeg'
-    case '.gif':
-      return 'image/gif'
-    case '.ico':
-      return 'image/x-icon'
-    case '.txt':
-      return 'text/plain; charset=utf-8'
-    case '.xml':
-      return 'application/xml; charset=utf-8'
-    case '.webp':
-      return 'image/webp'
-    default:
-      return undefined
-  }
-}
-
-async function watchTree(root: string, onChange: (filePath: string) => void) {
-  const watchers: fs.FSWatcher[] = []
-  const supportsRecursive =
-    process.platform === 'win32' || process.platform === 'darwin'
-
-  if (supportsRecursive) {
-    const watcher = fs.watch(root, { recursive: true }, (_event, filename) => {
-      const label = filename ? path.join(root, filename.toString()) : root
-      onChange(label)
-    })
-    watchers.push(watcher)
-  } else {
-    const dirs = await collectDirs(root)
-    for (const dir of dirs) {
-      const watcher = fs.watch(dir, (_event, filename) => {
-        const label = filename ? path.join(dir, filename.toString()) : dir
-        onChange(label)
-      })
-      watchers.push(watcher)
-    }
-  }
-
-  return {
-    close() {
-      for (const watcher of watchers) {
-        watcher.close()
-      }
-    },
-  }
-}
-
-async function collectDirs(root: string) {
-  const result = [root]
-  const queue = [root]
-  while (queue.length > 0) {
-    const current = queue.pop()
-    if (!current) break
-    const entries = await fsPromises.readdir(current, {
-      withFileTypes: true,
-    })
-    for (const entry of entries) {
-      if (!entry.isDirectory()) continue
-      const next = path.join(current, entry.name)
-      result.push(next)
-      queue.push(next)
-    }
-  }
-  return result
 }
