@@ -2,7 +2,6 @@ import fs from 'node:fs'
 import fsPromises from 'node:fs/promises'
 import http from 'node:http'
 import path from 'node:path'
-import { performance } from 'node:perf_hooks'
 
 import { createLogger, getLogger, Logger } from 'logpot'
 
@@ -10,7 +9,7 @@ import {
   createIncrementalBuilder,
   type IncrementalBuilder,
 } from '../build/incremental'
-import type { BuildInput, BuildResult } from '../build/site'
+import type { BuildInput } from '../build/site'
 import { resolveSiteConfig } from '../config/config'
 import { logError } from '../util/logging'
 
@@ -53,7 +52,6 @@ type RebuildRequestState = {
 export async function startDevServer(
   input: DevServerInput = {},
 ): Promise<DevServerHandle> {
-  const startupStart = performance.now()
   const config = resolveSiteConfig(input)
   const logger = await createLogger()
   const log = getLogger()
@@ -122,35 +120,16 @@ export async function startDevServer(
     }
   }
 
+  const displayHost = host === '0.0.0.0' ? LOOPBACK_HOST : host
   const incremental = await createIncrementalBuilder(input)
-
-  const logInitialBuildMetrics = (result: BuildResult) => {
-    const startupMs = Math.round(performance.now() - startupStart)
-    const contentCounts = result.content
-    const assetCounts = result.assets
-    const displayHost = host === '0.0.0.0' ? LOOPBACK_HOST : host
-    log.info('initial build completed', {
-      reason: 'initial build',
-      url: `http://${displayHost}:${port}/`,
-      metrics: {
-        startupMs,
-        pages: result.pages ?? 0,
-        contentTotal: contentCounts?.total ?? 0,
-        contentMd: contentCounts?.byExt['.md'] ?? 0,
-        contentMdx: contentCounts?.byExt['.mdx'] ?? 0,
-        assetTotal: assetCounts?.total ?? 0,
-        assetByExt: assetCounts?.byExt ?? {},
-      },
-    })
-  }
 
   const rebuild = async (reason: string) => {
     try {
-      const result = await incremental.buildAll(reason)
+      await incremental.buildAll(reason)
       if (!initialBuildDone) {
-        logInitialBuildMetrics(result)
-      }
-      if (!initialBuildDone) {
+        log.info('serving at', {
+          url: `http://${displayHost}:${port}/`,
+        })
         initialBuildDone = true
       }
       notifyReload(reason)
@@ -222,9 +201,7 @@ export async function startDevServer(
   server.keepAliveTimeout = 1000
   server.headersTimeout = 5000
   server.listen(port, host, () => {
-    const displayHost = host === '0.0.0.0' ? LOOPBACK_HOST : host
     log.info('dev server listening', {
-      url: `http://${displayHost}:${port}/`,
       host,
       port,
       outDir: config.outDir,
