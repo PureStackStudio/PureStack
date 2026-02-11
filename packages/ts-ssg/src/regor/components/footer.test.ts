@@ -2,6 +2,7 @@ import type { Component } from 'regor'
 import { describe, expect, it } from 'vitest'
 
 import { resolveSiteConfig } from '../../config/config'
+import { parseHtml } from '../../dom/minidom'
 import { ensureDomGlobals } from '../registerDomGlobals'
 import { renderApp } from '../renderApp'
 import { createFooterComponents } from './footer'
@@ -56,5 +57,35 @@ describe('SiteFooter rendering', () => {
     expect(html).toContain('Terms')
     expect(html).toContain('GitHub')
     expect(html).toContain('/signup')
+  })
+
+  it('teleports to a custom host when teleport prop is provided', () => {
+    const cleanup = ensureDomGlobals()
+    const components = createFooterComponents() as Record<
+      string,
+      Component<unknown>
+    >
+    const site = resolveSiteConfig()
+    const html = renderApp(
+      `<div id="teleport-target"></div>
+      <SiteFooter
+        title="Custom target footer"
+        teleport="#teleport-target"
+        newsletter="false"
+      >
+        <p>Footer content</p>
+      </SiteFooter>`,
+      { components, context: { site, theme: site.theme } },
+    )
+    cleanup()
+
+    const parsed = parseHtml(`<!DOCTYPE html><html><body>${html}</body></html>`)
+    const target = parsed.document.querySelector('#teleport-target')
+    const teleportedFooter = target?.querySelector('.site-footer')
+
+    expect(target).toBeTruthy()
+    expect(teleportedFooter).toBeTruthy()
+    expect(target?.textContent).toContain('Custom target footer')
+    expect(html).toContain("teleported => '#teleport-target'")
   })
 })
