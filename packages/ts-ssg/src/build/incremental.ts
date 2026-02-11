@@ -13,6 +13,14 @@ import {
   isSiteConfigFile,
   type StaticAssetFile,
 } from '../discover/content'
+import { type MdxRenderOptions } from '../mdx/compile'
+import {
+  createMdxHighlighter,
+  DEFAULT_MDX_CODE_LANGS,
+  DEFAULT_MDX_CODE_THEMES,
+  type MdxCodeLangs,
+  type MdxCodeThemes,
+} from '../mdx/highlight'
 import {
   buildNavigation,
   type NavigationTree,
@@ -67,6 +75,7 @@ export async function createIncrementalBuilder(
   input: BuildInput = {},
 ): Promise<IncrementalBuilder> {
   const config = resolveSiteConfig(input)
+  const mdx = await resolveMdxBuildOptions(input.mdx)
   themes.setOptions(config.theme)
   initBuiltinComponents()
   const log = getLogger()
@@ -83,6 +92,7 @@ export async function createIncrementalBuilder(
     components: input.components,
     templates: input.templates,
     navigation,
+    mdx,
   }
   const existing = await readManifest(config.outDir)
   let manifest =
@@ -467,6 +477,17 @@ export async function createIncrementalBuilder(
   }
 
   return { buildAll, applyChange, renderIfDirtyByOutPath, renderByUrlPath }
+}
+
+async function resolveMdxBuildOptions(
+  mdx: BuildInput['mdx'] | undefined,
+): Promise<MdxRenderOptions> {
+  const mdxThemes: MdxCodeThemes = mdx?.themes ?? DEFAULT_MDX_CODE_THEMES
+  const mdxLangs: MdxCodeLangs = mdx?.langs ?? DEFAULT_MDX_CODE_LANGS
+  const highlighter = mdx?.disableHighlighter
+    ? undefined
+    : (mdx?.highlighter ?? (await createMdxHighlighter(mdxThemes, mdxLangs)))
+  return { highlighter }
 }
 
 function mergeHooks(
