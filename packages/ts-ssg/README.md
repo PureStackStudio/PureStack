@@ -9,6 +9,7 @@ static pages plus CSS generated via `@purestack/ts-css`.
 - Frontmatter-aware head config (title/description plus arbitrary head overrides).
 - Regor component rendering in MDX/HTML (server-side, using a custom minimal DOM).
 - CSS collected during render and emitted as static files.
+- Optional SEO files generation (`sitemap.xml` + `robots.txt`).
 - Simple, programmatic build API with sensible defaults.
 - Build hooks and optional concurrency for extensibility and speed.
 
@@ -40,6 +41,14 @@ Default values:
 - `siteTitle`: `ts-ssg`
 - `styleFileName`: `site.css`
 - `styleHref`: `/<styleFileName>`
+- `sitemap.enabled`: `false`
+- `sitemap.baseUrl`: `""`
+- `sitemap.fileName`: `sitemap.xml`
+- `sitemap.robots.enabled`: `true`
+- `sitemap.robots.fileName`: `robots.txt`
+- `sitemap.robots.userAgent`: `*`
+- `sitemap.robots.allow`: `["/"]`
+- `sitemap.robots.disallow`: `[]`
 
 ## Usage
 
@@ -51,6 +60,15 @@ await buildSite({
   contentDir: './content',
   outDir: './public',
   siteTitle: 'My Docs',
+  sitemap: {
+    enabled: true,
+    baseUrl: 'https://docs.example.com',
+    robots: {
+      userAgent: '*',
+      disallow: ['/drafts/'],
+      crawlDelay: 2,
+    },
+  },
   cleanOutDir: true,
   concurrency: 4,
 })

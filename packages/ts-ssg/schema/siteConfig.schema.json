@@ -66,6 +66,83 @@
         }
       }
     },
+    "sitemap": {
+      "type": "object",
+      "description": "Sitemap generation settings.",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether sitemap.xml is emitted during builds.",
+          "default": false
+        },
+        "baseUrl": {
+          "type": "string",
+          "description": "Absolute public base URL used to build full sitemap URLs.",
+          "default": ""
+        },
+        "fileName": {
+          "type": "string",
+          "description": "Output filename for the sitemap file.",
+          "default": "sitemap.xml"
+        },
+        "robots": {
+          "type": "object",
+          "description": "robots.txt generation settings.",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Whether robots.txt is emitted when sitemap is enabled.",
+              "default": true
+            },
+            "fileName": {
+              "type": "string",
+              "description": "Output filename for robots.txt.",
+              "default": "robots.txt"
+            },
+            "userAgent": {
+              "type": "string",
+              "description": "User-agent token for directives.",
+              "default": "*"
+            },
+            "allow": {
+              "type": "array",
+              "description": "Allowed path prefixes.",
+              "items": { "type": "string" },
+              "default": ["/"]
+            },
+            "disallow": {
+              "type": "array",
+              "description": "Disallowed path prefixes.",
+              "items": { "type": "string" },
+              "default": []
+            },
+            "crawlDelay": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Optional crawl-delay directive."
+            },
+            "host": {
+              "type": "string",
+              "description": "Optional host directive."
+            },
+            "additionalSitemaps": {
+              "type": "array",
+              "description": "Additional absolute sitemap URLs.",
+              "items": { "type": "string" },
+              "default": []
+            },
+            "customDirectives": {
+              "type": "array",
+              "description": "Raw extra robots.txt lines appended at the end.",
+              "items": { "type": "string" },
+              "default": []
+            }
+          }
+        }
+      }
+    },
     "outDir": {
       "type": "string",
       "description": "Output directory path. Relative paths are resolved from the project root.",

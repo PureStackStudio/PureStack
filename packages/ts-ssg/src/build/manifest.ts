@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto'
 import type { Stats } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
@@ -21,6 +22,7 @@ export interface ManifestConfig {
   styleFileName: string
   styleHref: string
   styleThemes: string[]
+  signature: string
 }
 
 export interface ContentManifestEntry extends FileSignature {
@@ -63,6 +65,7 @@ export function manifestConfigFromSiteConfig(
     styleFileName: config.styleFileName,
     styleHref: config.styleHref,
     styleThemes: config.styleThemes,
+    signature: createManifestConfigSignature(config),
   }
 }
 
@@ -137,8 +140,13 @@ function manifestConfigEqual(left: ManifestConfig, right: ManifestConfig) {
     left.styleFileName === right.styleFileName &&
     left.styleHref === right.styleHref &&
     Array.isArray(left.styleThemes) &&
-    left.styleThemes.join('|') === right.styleThemes.join('|')
+    left.styleThemes.join('|') === right.styleThemes.join('|') &&
+    left.signature === right.signature
   )
+}
+
+function createManifestConfigSignature(config: SiteConfig) {
+  return createHash('sha256').update(JSON.stringify(config)).digest('hex')
 }
 
 function parseManifestJson(raw: string): BuildManifest | null {

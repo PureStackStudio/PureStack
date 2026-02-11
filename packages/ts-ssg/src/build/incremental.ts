@@ -44,7 +44,7 @@ import {
   signatureEqual,
   writeManifest,
 } from './manifest'
-import { resolveOutPath } from './out-path'
+import { resolveOutPath, resolveRouteInfo } from './out-path'
 import {
   type BuildContext,
   buildPage,
@@ -53,6 +53,7 @@ import {
 } from './page'
 import { buildPagefindIndex } from './pagefind'
 import type { BuildHooks, BuildInput, BuildResult } from './site'
+import { writeSitemap } from './sitemap'
 import { type WriteStylesResult, writeStyles } from './styles'
 
 export interface IncrementalBuildResult {
@@ -321,7 +322,7 @@ class IncrementalRuntime {
       signature: styleResult.signature,
       outputs: styleResult.outputs,
     })
-    await writeManifest(this.config.outDir, this.manifest)
+    await this.persistManifest()
     this.contentIndex.rebuildFromManifest(this.manifest)
     this.dirtyPages.clear()
     await hooks.onBuildComplete?.(this.context, finalResult)
@@ -434,7 +435,7 @@ class IncrementalRuntime {
       await removeFile(entry.outPath)
       delete this.manifest.content[relPath]
       this.contentIndex.remove(relPath)
-      await writeManifest(this.config.outDir, this.manifest)
+      await this.persistManifest()
     }
     this.dirtyPages.delete(relPath)
     return false
@@ -449,7 +450,7 @@ class IncrementalRuntime {
     await buildPage(this.context, contentFile)
     this.upsertContentManifestEntry(relPath, contentFile.ext, signature)
     this.dirtyPages.delete(relPath)
-    await writeManifest(this.config.outDir, this.manifest)
+    await this.persistManifest()
     return true
   }
 
@@ -583,7 +584,7 @@ class IncrementalRuntime {
     const { relPath, ext, result, contentEntry, assetEntry } = input
     if (contentEntry && this.navigationConfig.mode !== 'none') {
       await this.rebuildNavigationForChange(relPath, ext, result, null)
-      await writeManifest(this.config.outDir, this.manifest)
+      await this.persistManifest()
       return
     }
     if (contentEntry) {
@@ -598,7 +599,7 @@ class IncrementalRuntime {
       result.deletedAssets += 1
     }
     if (contentEntry || assetEntry) {
-      await writeManifest(this.config.outDir, this.manifest)
+      await this.persistManifest()
     }
   }
 
@@ -608,7 +609,7 @@ class IncrementalRuntime {
 
     if (this.navigationConfig.mode !== 'none') {
       await this.rebuildNavigationForChange(relPath, ext, result, signature)
-      await writeManifest(this.config.outDir, this.manifest)
+      await this.persistManifest()
       return
     }
 
@@ -623,7 +624,7 @@ class IncrementalRuntime {
     }
     this.contentIndex.set(relPath, outPath, ext)
     result.changedPages += 1
-    await writeManifest(this.config.outDir, this.manifest)
+    await this.persistManifest()
   }
 
   private async handleAssetChange(input: HandleAssetChangeInput) {
@@ -641,6 +642,37 @@ class IncrementalRuntime {
       ...signature,
     }
     result.changedAssets += 1
+    await this.persistManifest()
+  }
+
+  private async persistManifest() {
     await writeManifest(this.config.outDir, this.manifest)
+    const sitemap = await this.writeSitemapFromManifest()
+    if (!sitemap) return
+    this.log.info('sitemap written', {
+      outPath: sitemap.outPath,
+      urls: sitemap.urls,
+    })
+    if (sitemap.robotsOutPath) {
+      this.log.info('robots written', {
+        outPath: sitemap.robotsOutPath,
+      })
+    }
+  }
+
+  private async writeSitemapFromManifest() {
+    const pages = Object.values(this.manifest.content).map((entry) => {
+      const file = toContentFile(
+        this.config.contentDir,
+        entry.relPath,
+        entry.ext,
+      )
+      const route = resolveRouteInfo(file)
+      return {
+        urlPath: route.urlPath,
+        lastModifiedMs: entry.mtimeMs,
+      }
+    })
+    return writeSitemap(this.config.outDir, this.config.sitemap, pages)
   }
 }
