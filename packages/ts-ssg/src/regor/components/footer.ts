@@ -9,6 +9,7 @@ import { resolveTsSsgContext } from '../resolveTsSsgContext'
 import type { TsSsgContext } from '../ts-ssg-context'
 
 interface SiteFooterProps {
+  teleport?: string
   eyebrow?: string
   title?: string
   tagline?: string
@@ -91,7 +92,7 @@ const siteFooterTemplate = html`<footer
   class="site-footer"
   :class="rootClass"
   :aria-label="ariaLabel"
-  r-teleport="body"
+  :r-teleport="teleport"
 >
   <div class="site-footer__inner">
     <div class="site-footer__top">
@@ -724,6 +725,7 @@ function applyFooterResponsiveStyles(theme: ThemeMode) {
 function createSiteFooterComponent() {
   return createComponent<SiteFooterContext>(siteFooterTemplate, {
     props: [
+      'teleport',
       'eyebrow',
       'title',
       'tagline',
@@ -802,6 +804,7 @@ function resolveSiteFooterContext(
   const showNewsletter = resolveBooleanFlag(props.newsletter, true)
   const ctaRel =
     props.ctaRel || (props.ctaTarget === '_blank' ? 'noopener noreferrer' : '')
+  if (!props.teleport) props.teleport = 'body'
   return {
     ...props,
     eyebrow: props.eyebrow || 'Engineered for ambitious teams',
