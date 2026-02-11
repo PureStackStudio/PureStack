@@ -195,7 +195,7 @@ function registerPageTocLayoutStyles(theme: ThemeMode) {
     .select('.doc-toc', theme)
     .position('fixed')
     .top('88px')
-    .right('calc((100vw - min(1200px, 100vw)) / 2 + 32px)')
+    .right('calc((100vw - min(1400px, 100vw)) / 2 + 32px)')
     .width('240px')
     .alignSelf('start')
     .height('calc(100vh - 112px)')

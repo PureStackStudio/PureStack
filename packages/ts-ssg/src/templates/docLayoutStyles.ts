@@ -33,7 +33,7 @@ function registerDocLayoutShellStyles(
     .display('grid')
     .gap('28px')
     .padding('32px')
-    .maxWidth('1200px')
+    .maxWidth('1400px')
     .margin('0 auto')
     .width('100%')
     .boxSizing('border-box')
