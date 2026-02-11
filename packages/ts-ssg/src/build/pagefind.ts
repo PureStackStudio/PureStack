@@ -7,6 +7,7 @@ export interface BuildPagefindResult {
   indexedPages: number
   outputPath: string
   errors: string[]
+  durationMs: number
 }
 
 const PAGEFIND_DIRNAME = 'pagefind'
@@ -15,6 +16,7 @@ export async function buildPagefindIndex(
   outDir: string,
 ): Promise<BuildPagefindResult> {
   const log = getLogger()
+  const startedAt = Date.now()
   const outputPath = path.join(outDir, PAGEFIND_DIRNAME)
 
   let index: pagefind.PagefindIndex | undefined
@@ -39,17 +41,21 @@ export async function buildPagefindIndex(
     await index.deleteIndex()
     index = undefined
 
+    const durationMs = Date.now() - startedAt
     if (errors.length > 0) {
       log.warn('pagefind index built with warnings', {
         outDir,
         outputPath,
         warnings: errors,
+        indexedPages,
+        durationMs,
       })
     } else {
       log.info('pagefind index built', {
         outDir,
         outputPath,
         indexedPages,
+        durationMs,
       })
     }
   } catch (error) {
@@ -59,6 +65,7 @@ export async function buildPagefindIndex(
       outDir,
       outputPath,
       error: message,
+      durationMs: Date.now() - startedAt,
     })
   } finally {
     if (index) {
@@ -71,5 +78,6 @@ export async function buildPagefindIndex(
     indexedPages,
     outputPath,
     errors,
+    durationMs: Date.now() - startedAt,
   }
 }
