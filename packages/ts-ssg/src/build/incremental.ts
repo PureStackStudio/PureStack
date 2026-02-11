@@ -1,4 +1,3 @@
-import crypto from 'node:crypto'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
@@ -8,7 +7,6 @@ import { resolveSiteConfig } from '../config/config'
 import {
   type ContentFile,
   discoverContent,
-  discoverStaticAssets,
   isContentFile,
   isSiteConfigFile,
   type StaticAssetFile,
@@ -27,11 +25,12 @@ import {
   resolveNavigationConfig,
 } from '../navigation/navigation'
 import { initBuiltinComponents } from '../regor/initBuiltinComponents'
-import { styleBuilder } from '../style/styles'
-import { orderThemes, resolveThemeFileName } from '../style/themeAssets'
 import { themes } from '../style/themeOptions'
-import { copyStaticAsset, resolveStaticOutPath } from './assets'
-import { copyStaticAssets } from './assets'
+import {
+  copyStaticAsset,
+  copyStaticAssets,
+  resolveStaticOutPath,
+} from './assets'
 import { prepareOutDir } from './io'
 import {
   type AssetManifestEntry,
@@ -151,12 +150,13 @@ export async function createIncrementalBuilder(
   indexManifestContent()
 
   const buildAll = async (reason: string) => {
+    const buildStartMs = Date.now()
     const hooks = input.hooks ?? {}
 
     log.info('build started', { reason })
     await hooks.onConfigResolved?.(context)
     await prepareOutDir(config.outDir, { clean: input.cleanOutDir })
-    await copyStaticAssets(config.contentDir, config.outDir)
+    const copiedAssets = await copyStaticAssets(config.contentDir, config.outDir)
 
     const contentFiles = await discoverContent(config.contentDir)
     await hooks.onContentDiscovered?.(context, contentFiles)
@@ -187,12 +187,15 @@ export async function createIncrementalBuilder(
     await hooks.onStylesWritten?.(context, styleResult)
 
     const result = { outDir: config.outDir, pages }
-    await hooks.onBuildComplete?.(context, result)
-
-    const assetFiles = await discoverStaticAssets(config.contentDir)
+    const assetFiles = copiedAssets.files
 
     const contentCounts = countByExt(contentFiles)
     const assetCounts = countByExt(assetFiles)
+    const finalResult = {
+      ...result,
+      content: contentCounts,
+      assets: assetCounts,
+    }
 
     const nextManifest = await buildManifest(
       config,
@@ -204,13 +207,13 @@ export async function createIncrementalBuilder(
     await writeManifest(config.outDir, nextManifest)
     indexManifestContent()
     dirtyPages.clear()
+    await hooks.onBuildComplete?.(context, finalResult)
 
-    log.info('build completed', { outDir: config.outDir })
-    return {
-      ...result,
-      content: contentCounts,
-      assets: assetCounts,
-    }
+    log.info('build completed', {
+      ...finalResult,
+      totalDurationMs: Date.now() - buildStartMs,
+    })
+    return finalResult
   }
 
   const rebuildNavigationForChange = async (
@@ -264,7 +267,7 @@ export async function createIncrementalBuilder(
     const reason = `content change: ${filePath}`
     const result = createIncrementalResult(reason)
 
-    if (relPath.startsWith('..') || relPath.startsWith('.\\..')) {
+    if (isOutsideContentRoot(relPath)) {
       return result
     }
 
@@ -564,7 +567,7 @@ async function buildManifest(
   config: ReturnType<typeof resolveSiteConfig>,
   contentFiles: ContentFile[],
   assetFiles: StaticAssetFile[],
-  stylesResult: StylesManifestEntry | undefined,
+  stylesResult: StylesManifestEntry,
 ): Promise<BuildManifest> {
   const content: Record<string, ContentManifestEntry> = {}
   for (const file of contentFiles) {
@@ -592,42 +595,20 @@ async function buildManifest(
     }
   }
 
-  const styles = stylesResult ?? (await computeStylesSignature(config))
-
   return {
     version: 1,
     generatedAt: Date.now(),
     config: manifestConfigFromSiteConfig(config),
     content,
     assets,
-    styles,
+    styles: stylesResult,
   }
 }
 
-async function computeStylesSignature(
-  config: ReturnType<typeof resolveSiteConfig>,
-): Promise<StylesManifestEntry> {
-  const orderedThemes = orderThemes(config.styleThemes)
-  styleBuilder.ensureThemes(orderedThemes)
-  const hash = crypto.createHash('sha256')
-  const outputs: string[] = []
-
-  for (const theme of orderedThemes) {
-    const cssName = resolveThemeFileName(config.styleFileName, theme)
-    const outPath = path.join(config.outDir, cssName)
-    outputs.push(outPath)
-    try {
-      const css = await fs.readFile(outPath, 'utf8')
-      hash.update(css)
-      hash.update('\0')
-    } catch (error) {
-      const err = error as NodeJS.ErrnoException
-      if (err.code === 'ENOENT') continue
-      throw error
-    }
-  }
-
-  return { signature: hash.digest('hex'), outputs }
+function isOutsideContentRoot(relPath: string) {
+  if (path.isAbsolute(relPath)) return true
+  const normalized = relPath.replaceAll('\\', '/')
+  return normalized === '..' || normalized.startsWith('../')
 }
 
 function countByExt(files: Array<{ ext: string }>): BuildCountSummary {

@@ -93,9 +93,7 @@ async function runCli() {
       return
     }
     logger = await createLogger()
-    const log = getLogger()
-    const result = await buildSite(cli.input)
-    log.info('build completed', { ...result })
+    await buildSite(cli.input)
   } catch (error) {
     const log = getLogger()
     logError(log, error, 'build failed')

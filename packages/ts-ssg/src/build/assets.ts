@@ -8,6 +8,7 @@ import { ensureDir } from '../util/fs'
 
 export interface CopyStaticAssetsResult {
   assets: number
+  files: StaticAssetFile[]
 }
 
 export interface CopyStaticAssetResult {
@@ -27,7 +28,7 @@ export async function copyStaticAssets(
     await fs.copyFile(asset.absPath, outPath)
   }
   log.info('static assets copied', { count: assets.length })
-  return { assets: assets.length }
+  return { assets: assets.length, files: assets }
 }
 
 export async function copyStaticAsset(

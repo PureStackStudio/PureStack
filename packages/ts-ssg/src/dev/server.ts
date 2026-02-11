@@ -230,7 +230,6 @@ export async function startDevServer(
       outDir: config.outDir,
       liveReload,
       watch,
-      incremental: true,
     })
   })
 

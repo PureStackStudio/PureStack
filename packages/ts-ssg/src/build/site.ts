@@ -2,7 +2,7 @@ import type { Component } from 'regor'
 
 import { type PartialSiteConfig } from '../config/config'
 import type { ContentFile } from '../discover/content'
-import {
+import type {
   MdxCodeHighlighter,
   MdxCodeLangs,
   MdxCodeThemes,

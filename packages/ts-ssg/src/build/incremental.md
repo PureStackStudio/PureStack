@@ -45,6 +45,8 @@ This is the canonical full build path:
 - Writes styles and captures style outputs/signature.
 - Discovers assets to build an authoritative manifest snapshot.
 - Writes the manifest to disk with `writeManifest`.
+- Emits `onBuildComplete` with the final result (including content/asset counts)
+  after manifest state is refreshed.
 
 The output is deterministic with `generatedAt` being the only volatile field.
 
