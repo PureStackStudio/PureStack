@@ -1,8 +1,8 @@
 import path from 'node:path'
 
-import { getLogger } from 'logpot'
+import { getLogger, type Logger } from 'logpot'
 
-import { resolveSiteConfig } from '../config/config'
+import { resolveSiteConfig, type SiteConfig } from '../config/config'
 import {
   discoverContent,
   isContentFile,
@@ -10,15 +10,12 @@ import {
 } from '../discover/content'
 import {
   buildNavigation,
-  type NavigationTree,
+  type NavigationConfig,
   resolveNavigationConfig,
 } from '../navigation/navigation'
 import { initBuiltinComponents } from '../regor/initBuiltinComponents'
 import { themes } from '../style/themeOptions'
-import {
-  copyStaticAsset,
-  copyStaticAssets,
-} from './assets'
+import { copyStaticAsset, copyStaticAssets } from './assets'
 import {
   buildManifest,
   countByExt,
@@ -35,6 +32,7 @@ import {
 import { prepareOutDir } from './io'
 import {
   type AssetManifestEntry,
+  type BuildManifest,
   type ContentManifestEntry,
   createEmptyManifest,
   type FileSignature,
@@ -45,7 +43,12 @@ import {
   writeManifest,
 } from './manifest'
 import { resolveOutPath } from './out-path'
-import { buildPage, renderPageFromFile, writePage } from './page'
+import {
+  type BuildContext,
+  buildPage,
+  renderPageFromFile,
+  writePage,
+} from './page'
 import type { BuildInput, BuildResult } from './site'
 import { writeStyles } from './styles'
 
@@ -68,6 +71,22 @@ export interface IncrementalBuilder {
 export async function createIncrementalBuilder(
   input: BuildInput = {},
 ): Promise<IncrementalBuilder> {
+  const runtime = await createIncrementalRuntime(input)
+  return runtime.toBuilder()
+}
+
+interface IncrementalRuntimeOptions {
+  input: BuildInput
+  config: SiteConfig
+  log: Logger
+  navigationConfig: NavigationConfig
+  context: BuildContext
+  manifest: BuildManifest
+}
+
+async function createIncrementalRuntime(
+  input: BuildInput,
+): Promise<IncrementalRuntime> {
   const config = resolveSiteConfig(input)
   const mdx = await resolveMdxBuildOptions(input.mdx)
   themes.setOptions(config.theme)
@@ -76,150 +95,179 @@ export async function createIncrementalBuilder(
   const navigationConfig = resolveNavigationConfig(
     input.navigation ?? config.navigation,
   )
-  let navigation: NavigationTree | undefined = await buildNavigation(
+  const discovered = await discoverContent(config.contentDir)
+  const navigation = await buildNavigation(
     config.contentDir,
-    await discoverContent(config.contentDir),
+    discovered,
     navigationConfig,
   )
-  const context = {
+  const context: BuildContext = {
     config,
     components: input.components,
     templates: input.templates,
     navigation,
     mdx,
   }
+
   const existing = await readManifest(config.outDir)
-  let manifest =
+  const manifest =
     existing && isCompatibleManifest(existing, config)
       ? existing
       : createEmptyManifest(config)
-  const dirtyPages = new Set<string>()
-  const renderInFlight = new Map<string, Promise<boolean>>()
-  const contentIndex = new ManifestContentIndex(config.contentDir)
-  contentIndex.rebuildFromManifest(manifest)
 
-  const buildAll = async (reason: string) => {
+  return new IncrementalRuntime({
+    input,
+    config,
+    log,
+    navigationConfig,
+    context,
+    manifest,
+  })
+}
+
+type HandleMissingSignatureChangeInput = {
+  relPath: string
+  ext: string
+  result: IncrementalBuildResult
+  contentEntry: ContentManifestEntry | undefined
+  assetEntry: AssetManifestEntry | undefined
+}
+
+type HandleContentChangeInput = {
+  relPath: string
+  ext: string
+  signature: FileSignature
+  contentEntry: ContentManifestEntry | undefined
+  result: IncrementalBuildResult
+}
+
+type HandleAssetChangeInput = {
+  relPath: string
+  ext: string
+  signature: FileSignature
+  assetEntry: AssetManifestEntry | undefined
+  result: IncrementalBuildResult
+}
+
+class IncrementalRuntime {
+  private readonly dirtyPages = new Set<string>()
+  private readonly renderInFlight = new Map<string, Promise<boolean>>()
+  private readonly contentIndex: ManifestContentIndex
+
+  constructor(private readonly options: IncrementalRuntimeOptions) {
+    this.contentIndex = new ManifestContentIndex(options.config.contentDir)
+    this.contentIndex.rebuildFromManifest(options.manifest)
+  }
+
+  toBuilder(): IncrementalBuilder {
+    return {
+      buildAll: this.buildAll,
+      applyChange: this.applyChange,
+      renderIfDirtyByOutPath: this.renderIfDirtyByOutPath,
+      renderByUrlPath: this.renderByUrlPath,
+    }
+  }
+
+  private get input() {
+    return this.options.input
+  }
+
+  private get config() {
+    return this.options.config
+  }
+
+  private get context() {
+    return this.options.context
+  }
+
+  private get log() {
+    return this.options.log
+  }
+
+  private get navigationConfig() {
+    return this.options.navigationConfig
+  }
+
+  private get manifest() {
+    return this.options.manifest
+  }
+
+  private set manifest(value: BuildManifest) {
+    this.options.manifest = value
+  }
+
+  buildAll = async (reason: string): Promise<BuildResult> => {
     const buildStartMs = Date.now()
-    const hooks = input.hooks ?? {}
+    const hooks = this.input.hooks ?? {}
 
-    log.info('build started', { reason })
-    await hooks.onConfigResolved?.(context)
-    await prepareOutDir(config.outDir, { clean: input.cleanOutDir })
-    const copiedAssets = await copyStaticAssets(config.contentDir, config.outDir)
-
-    const contentFiles = await discoverContent(config.contentDir)
-    await hooks.onContentDiscovered?.(context, contentFiles)
-    navigation = await buildNavigation(
-      config.contentDir,
-      contentFiles,
-      navigationConfig,
+    this.log.info('build started', { reason })
+    await hooks.onConfigResolved?.(this.context)
+    await prepareOutDir(this.config.outDir, { clean: this.input.cleanOutDir })
+    const copiedAssets = await copyStaticAssets(
+      this.config.contentDir,
+      this.config.outDir,
     )
-    context.navigation = navigation
-    await hooks.onNavigationBuilt?.(context, navigation)
 
-    const concurrency = normalizeConcurrency(input.concurrency)
+    const contentFiles = await discoverContent(this.config.contentDir)
+    await hooks.onContentDiscovered?.(this.context, contentFiles)
+    this.context.navigation = await buildNavigation(
+      this.config.contentDir,
+      contentFiles,
+      this.navigationConfig,
+    )
+    await hooks.onNavigationBuilt?.(this.context, this.context.navigation)
+
+    const concurrency = normalizeConcurrency(this.input.concurrency)
     let pages = 0
     await runWithConcurrency(contentFiles, concurrency, async (file) => {
-      await hooks.onPageStart?.(context, file)
-      const page = await renderPageFromFile(context, file)
-      await hooks.onPageRendered?.(context, page)
+      await hooks.onPageStart?.(this.context, file)
+      const page = await renderPageFromFile(this.context, file)
+      await hooks.onPageRendered?.(this.context, page)
       await writePage(page)
-      await hooks.onPageWritten?.(context, page)
+      await hooks.onPageWritten?.(this.context, page)
       pages += 1
     })
 
     const styleResult = await writeStyles(
-      config.outDir,
-      config.styleFileName,
-      config.styleThemes,
+      this.config.outDir,
+      this.config.styleFileName,
+      this.config.styleThemes,
     )
-    await hooks.onStylesWritten?.(context, styleResult)
+    await hooks.onStylesWritten?.(this.context, styleResult)
 
-    const result = { outDir: config.outDir, pages }
     const assetFiles = copiedAssets.files
-
-    const contentCounts = countByExt(contentFiles)
-    const assetCounts = countByExt(assetFiles)
     const finalResult = {
-      ...result,
-      content: contentCounts,
-      assets: assetCounts,
+      outDir: this.config.outDir,
+      pages,
+      content: countByExt(contentFiles),
+      assets: countByExt(assetFiles),
     }
 
     const nextManifest = await buildManifest(
-      config,
+      this.config,
       contentFiles,
       assetFiles,
       { signature: styleResult.signature, outputs: styleResult.outputs },
     )
-    manifest = nextManifest
-    await writeManifest(config.outDir, nextManifest)
-    contentIndex.rebuildFromManifest(manifest)
-    dirtyPages.clear()
-    await hooks.onBuildComplete?.(context, finalResult)
+    this.manifest = nextManifest
+    await writeManifest(this.config.outDir, nextManifest)
+    this.contentIndex.rebuildFromManifest(this.manifest)
+    this.dirtyPages.clear()
+    await hooks.onBuildComplete?.(this.context, finalResult)
 
-    log.info('build completed', {
+    this.log.info('build completed', {
       ...finalResult,
       totalDurationMs: Date.now() - buildStartMs,
     })
     return finalResult
   }
 
-  const rebuildNavigationForChange = async (
-    relPath: string,
-    ext: string,
-    result: IncrementalBuildResult,
-    signature: FileSignature | null,
-  ) => {
-    const contentFiles = await discoverContent(config.contentDir)
-    navigation = await buildNavigation(
-      config.contentDir,
-      contentFiles,
-      navigationConfig,
-    )
-    context.navigation = navigation
-    dirtyPages.clear()
-    for (const file of contentFiles) {
-      dirtyPages.add(file.relPath)
-    }
-
-    const contentEntry = manifest.content[relPath]
-    if (!signature) {
-      if (contentEntry) {
-        await removeFile(contentEntry.outPath)
-        delete manifest.content[relPath]
-        contentIndex.remove(relPath)
-        result.deletedPages += 1
-      }
-      return
-    }
-
-    const contentFile =
-      contentFiles.find((file) => file.relPath === relPath) ??
-      toContentFile(config.contentDir, relPath, ext)
-
-    await buildPage(context, contentFile)
-    const outPath = resolveOutPath(config.outDir, contentFile)
-    manifest.content[relPath] = {
-      relPath,
-      ext: contentFile.ext,
-      outPath,
-      ...signature,
-    }
-    contentIndex.set(relPath, outPath, contentFile.ext)
-    result.changedPages += 1
-    dirtyPages.delete(relPath)
-  }
-
-  const applyChange = async (filePath: string) => {
-    const relPath = path.relative(config.contentDir, filePath)
+  applyChange = async (filePath: string): Promise<IncrementalBuildResult> => {
+    const relPath = path.relative(this.config.contentDir, filePath)
     const reason = `content change: ${filePath}`
-    const result = createIncrementalResult(reason)
+    const result = this.createIncrementalResult(reason)
 
-    if (isOutsideContentRoot(relPath)) {
-      return result
-    }
-
+    if (isOutsideContentRoot(relPath)) return result
     if (isSiteConfigFile(relPath)) {
       result.fullRebuild = true
       return result
@@ -227,11 +275,11 @@ export async function createIncrementalBuilder(
 
     const ext = path.extname(relPath).toLowerCase()
     const signature = await readSignature(filePath)
-    const contentEntry = manifest.content[relPath]
-    const assetEntry = manifest.assets[relPath]
+    const contentEntry = this.manifest.content[relPath]
+    const assetEntry = this.manifest.assets[relPath]
 
     if (!signature) {
-      await handleMissingSignatureChange({
+      await this.handleMissingSignatureChange({
         relPath,
         ext,
         result,
@@ -243,7 +291,7 @@ export async function createIncrementalBuilder(
 
     const treatedAsContent = contentEntry || isContentFile(relPath, ext)
     if (treatedAsContent) {
-      await handleContentChange({
+      await this.handleContentChange({
         relPath,
         ext,
         signature,
@@ -253,7 +301,7 @@ export async function createIncrementalBuilder(
       return result
     }
 
-    await handleAssetChange({
+    await this.handleAssetChange({
       relPath,
       ext,
       signature,
@@ -263,76 +311,124 @@ export async function createIncrementalBuilder(
     return result
   }
 
-  const renderPageByRelPath = async (relPath: string, onlyIfDirty: boolean) => {
-    if (onlyIfDirty && !dirtyPages.has(relPath)) return false
-    const inFlight = renderInFlight.get(relPath)
+  renderIfDirtyByOutPath = async (outPath: string): Promise<boolean> => {
+    const relPath = this.contentIndex.getRelPathByOutPath(outPath)
+    if (!relPath) return false
+    return this.renderPageByRelPath(relPath, true)
+  }
+
+  renderByUrlPath = async (urlPath: string): Promise<boolean> => {
+    const normalized = normalizeUrlPath(urlPath)
+    let relPath = this.contentIndex.getRelPathByUrlPath(normalized)
+    if (!relPath) {
+      const contentFiles = await discoverContent(this.config.contentDir)
+      this.contentIndex.updateUrlPathMapFromFiles(contentFiles)
+      relPath = this.contentIndex.getRelPathByUrlPath(normalized)
+      if (!relPath) return false
+    }
+    return this.renderPageByRelPath(relPath, false)
+  }
+
+  private async rebuildNavigationForChange(
+    relPath: string,
+    ext: string,
+    result: IncrementalBuildResult,
+    signature: FileSignature | null,
+  ) {
+    const contentFiles = await discoverContent(this.config.contentDir)
+    this.context.navigation = await buildNavigation(
+      this.config.contentDir,
+      contentFiles,
+      this.navigationConfig,
+    )
+    this.dirtyPages.clear()
+    for (const file of contentFiles) {
+      this.dirtyPages.add(file.relPath)
+    }
+
+    const contentEntry = this.manifest.content[relPath]
+    if (!signature) {
+      if (contentEntry) {
+        await removeFile(contentEntry.outPath)
+        delete this.manifest.content[relPath]
+        this.contentIndex.remove(relPath)
+        result.deletedPages += 1
+      }
+      return
+    }
+
+    const contentFile =
+      contentFiles.find((file) => file.relPath === relPath) ??
+      toContentFile(this.config.contentDir, relPath, ext)
+
+    await buildPage(this.context, contentFile)
+    const outPath = resolveOutPath(this.config.outDir, contentFile)
+    this.manifest.content[relPath] = {
+      relPath,
+      ext: contentFile.ext,
+      outPath,
+      ...signature,
+    }
+    this.contentIndex.set(relPath, outPath, contentFile.ext)
+    result.changedPages += 1
+    this.dirtyPages.delete(relPath)
+  }
+
+  private async renderPageByRelPath(
+    relPath: string,
+    onlyIfDirty: boolean,
+  ): Promise<boolean> {
+    if (onlyIfDirty && !this.dirtyPages.has(relPath)) return false
+    const inFlight = this.renderInFlight.get(relPath)
     if (inFlight) return inFlight
 
     const task = (async () => {
       try {
-        const absPath = path.join(config.contentDir, relPath)
+        const absPath = path.join(this.config.contentDir, relPath)
         const signature = await readSignature(absPath)
         if (!signature) {
-          const entry = manifest.content[relPath]
+          const entry = this.manifest.content[relPath]
           if (entry) {
             await removeFile(entry.outPath)
-            delete manifest.content[relPath]
-            contentIndex.remove(relPath)
-            await writeManifest(config.outDir, manifest)
+            delete this.manifest.content[relPath]
+            this.contentIndex.remove(relPath)
+            await writeManifest(this.config.outDir, this.manifest)
           }
-          dirtyPages.delete(relPath)
+          this.dirtyPages.delete(relPath)
           return false
         }
 
-        const entry = manifest.content[relPath]
+        const entry = this.manifest.content[relPath]
         const ext = entry?.ext ?? path.extname(relPath)
-        const contentFile = toContentFile(config.contentDir, relPath, ext)
-        await buildPage(context, contentFile)
-        const nextOutPath = resolveOutPath(config.outDir, contentFile)
-        manifest.content[relPath] = {
+        const contentFile = toContentFile(this.config.contentDir, relPath, ext)
+        await buildPage(this.context, contentFile)
+        const nextOutPath = resolveOutPath(this.config.outDir, contentFile)
+        this.manifest.content[relPath] = {
           relPath,
           ext: contentFile.ext,
           outPath: nextOutPath,
           ...signature,
         }
-        contentIndex.set(relPath, nextOutPath, contentFile.ext)
-        dirtyPages.delete(relPath)
-        await writeManifest(config.outDir, manifest)
+        this.contentIndex.set(relPath, nextOutPath, contentFile.ext)
+        this.dirtyPages.delete(relPath)
+        await writeManifest(this.config.outDir, this.manifest)
         return true
       } catch (error) {
-        log.error('incremental render failed', {
+        this.log.error('incremental render failed', {
           relPath,
           error: error instanceof Error ? error.message : String(error),
         })
         return false
       } finally {
-        renderInFlight.delete(relPath)
+        this.renderInFlight.delete(relPath)
       }
     })()
 
-    renderInFlight.set(relPath, task)
+    this.renderInFlight.set(relPath, task)
     return task
   }
 
-  const renderIfDirtyByOutPath = async (outPath: string) => {
-    const relPath = contentIndex.getRelPathByOutPath(outPath)
-    if (!relPath) return false
-    return renderPageByRelPath(relPath, true)
-  }
-
-  const renderByUrlPath = async (urlPath: string) => {
-    const normalized = normalizeUrlPath(urlPath)
-    let relPath = contentIndex.getRelPathByUrlPath(normalized)
-    if (!relPath) {
-      const contentFiles = await discoverContent(config.contentDir)
-      contentIndex.updateUrlPathMapFromFiles(contentFiles)
-      relPath = contentIndex.getRelPathByUrlPath(normalized)
-      if (!relPath) return false
-    }
-    return renderPageByRelPath(relPath, false)
-  }
-
-  function createIncrementalResult(reason: string): IncrementalBuildResult {
+  private createIncrementalResult(reason: string): IncrementalBuildResult {
     return {
       fullRebuild: false,
       changedPages: 0,
@@ -343,98 +439,70 @@ export async function createIncrementalBuilder(
     }
   }
 
-  type HandleMissingSignatureChangeInput = {
-    relPath: string
-    ext: string
-    result: IncrementalBuildResult
-    contentEntry: ContentManifestEntry | undefined
-    assetEntry: AssetManifestEntry | undefined
-  }
-
-  const handleMissingSignatureChange = async (
+  private async handleMissingSignatureChange(
     input: HandleMissingSignatureChangeInput,
-  ) => {
+  ) {
     const { relPath, ext, result, contentEntry, assetEntry } = input
-    if (contentEntry && navigationConfig.mode !== 'none') {
-      await rebuildNavigationForChange(relPath, ext, result, null)
-      await writeManifest(config.outDir, manifest)
+    if (contentEntry && this.navigationConfig.mode !== 'none') {
+      await this.rebuildNavigationForChange(relPath, ext, result, null)
+      await writeManifest(this.config.outDir, this.manifest)
       return
     }
     if (contentEntry) {
       await removeFile(contentEntry.outPath)
-      delete manifest.content[relPath]
-      contentIndex.remove(relPath)
+      delete this.manifest.content[relPath]
+      this.contentIndex.remove(relPath)
       result.deletedPages += 1
     }
     if (assetEntry) {
       await removeFile(assetEntry.outPath)
-      delete manifest.assets[relPath]
+      delete this.manifest.assets[relPath]
       result.deletedAssets += 1
     }
     if (contentEntry || assetEntry) {
-      await writeManifest(config.outDir, manifest)
+      await writeManifest(this.config.outDir, this.manifest)
     }
   }
 
-  type HandleContentChangeInput = {
-    relPath: string
-    ext: string
-    signature: FileSignature
-    contentEntry: ContentManifestEntry | undefined
-    result: IncrementalBuildResult
-  }
-
-  const handleContentChange = async (input: HandleContentChangeInput) => {
+  private async handleContentChange(input: HandleContentChangeInput) {
     const { relPath, ext, signature, contentEntry, result } = input
-    if (signatureEqual(contentEntry, signature)) {
+    if (signatureEqual(contentEntry, signature)) return
+
+    if (this.navigationConfig.mode !== 'none') {
+      await this.rebuildNavigationForChange(relPath, ext, result, signature)
+      await writeManifest(this.config.outDir, this.manifest)
       return
     }
-    if (navigationConfig.mode !== 'none') {
-      await rebuildNavigationForChange(relPath, ext, result, signature)
-      await writeManifest(config.outDir, manifest)
-      return
-    }
-    const contentFile = toContentFile(config.contentDir, relPath, ext)
-    await buildPage(context, contentFile)
-    const outPath = resolveOutPath(config.outDir, contentFile)
-    manifest.content[relPath] = {
+
+    const contentFile = toContentFile(this.config.contentDir, relPath, ext)
+    await buildPage(this.context, contentFile)
+    const outPath = resolveOutPath(this.config.outDir, contentFile)
+    this.manifest.content[relPath] = {
       relPath,
       ext,
       outPath,
       ...signature,
     }
-    contentIndex.set(relPath, outPath, ext)
+    this.contentIndex.set(relPath, outPath, ext)
     result.changedPages += 1
-    await writeManifest(config.outDir, manifest)
+    await writeManifest(this.config.outDir, this.manifest)
   }
 
-  type HandleAssetChangeInput = {
-    relPath: string
-    ext: string
-    signature: FileSignature
-    assetEntry: AssetManifestEntry | undefined
-    result: IncrementalBuildResult
-  }
-
-  const handleAssetChange = async (input: HandleAssetChangeInput) => {
+  private async handleAssetChange(input: HandleAssetChangeInput) {
     const { relPath, ext, signature, assetEntry, result } = input
-    if (signatureEqual(assetEntry, signature)) {
-      return
-    }
-    const assetFile = toAssetFile(config.contentDir, relPath, ext)
-    const assetCopy = await copyStaticAsset(config.outDir, assetFile)
-    if (!assetCopy.copied) {
-      return
-    }
-    manifest.assets[relPath] = {
+    if (signatureEqual(assetEntry, signature)) return
+
+    const assetFile = toAssetFile(this.config.contentDir, relPath, ext)
+    const assetCopy = await copyStaticAsset(this.config.outDir, assetFile)
+    if (!assetCopy.copied) return
+
+    this.manifest.assets[relPath] = {
       relPath,
       ext,
       outPath: assetCopy.outPath,
       ...signature,
     }
     result.changedAssets += 1
-    await writeManifest(config.outDir, manifest)
+    await writeManifest(this.config.outDir, this.manifest)
   }
-
-  return { buildAll, applyChange, renderIfDirtyByOutPath, renderByUrlPath }
 }
