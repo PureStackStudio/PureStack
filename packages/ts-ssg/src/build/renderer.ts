@@ -5,6 +5,7 @@ import type { PageNavigation } from '../navigation/navigation'
 import type { ThemeStylesheetLink } from '../style/themeAssets'
 import { themes } from '../style/themeOptions'
 import { buildCodeCopyScript } from '../templates/buildCodeCopyScript'
+import { buildPagefindSearchScript } from '../templates/buildPagefindSearchScript'
 import { buildPageTocScript } from '../templates/buildPageTocScript'
 import { buildThemeSwitchScript } from '../templates/buildThemeSwitchScript'
 import {
@@ -32,6 +33,7 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
   appendStyleLinkTags(head, styleLinks)
   appendThemeSwitchScript(head, themes)
   appendCodeCopyScript(head)
+  appendPagefindSearchScript(head)
   const { pageTemplate, templateName } = resolvePageTemplate(
     template,
     templates,
@@ -108,6 +110,15 @@ function appendTocScript(
 function appendCodeCopyScript(head: ReturnType<typeof getHead>) {
   const script = buildCodeCopyScript()
   head.push(h('script').raw(script))
+}
+
+function appendPagefindSearchScript(head: ReturnType<typeof getHead>) {
+  const script = buildPagefindSearchScript()
+  head.push(
+    h('script')
+      .attr({ type: 'module' })
+      .raw(script),
+  )
 }
 
 function buildCriticalThemeStyle(hasThemeGate: boolean) {

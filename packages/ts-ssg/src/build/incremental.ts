@@ -51,6 +51,7 @@ import {
   renderPageFromFile,
   writePage,
 } from './page'
+import { buildPagefindIndex } from './pagefind'
 import type { BuildHooks, BuildInput, BuildResult } from './site'
 import { writeStyles, type WriteStylesResult } from './styles'
 
@@ -313,6 +314,8 @@ class IncrementalRuntime {
       assetFiles,
       pages,
     })
+
+    await buildPagefindIndex(this.config.outDir)
 
     this.manifest = await buildManifest(this.config, contentFiles, assetFiles, {
       signature: styleResult.signature,

@@ -21,13 +21,9 @@ const topBarTemplate = html`<input
   />
   <header class="topbar">
     <a class="topbar__logo" href="/">{{ brandLabel }}</a>
-    <div class="topbar__actions">
+    <site-search class="topbar__search"></site-search>
+    <div class="topbar__controls">
       <theme-switcher></theme-switcher>
-      <button
-        class="topbar__icon topbar__search"
-        type="button"
-        aria-label="Search"
-      ></button>
       <label
         class="topbar__icon topbar__toggle"
         for="doc-nav-toggle"
@@ -40,7 +36,7 @@ const topBarTemplate = html`<input
 function registerTopBarStyles() {
   themes.forEach((theme, palette, options) => {
     registerTopBarShellStyles(theme, palette, options)
-    registerTopBarSearchIconStyles(theme)
+    registerTopBarSearchStyles(theme)
     registerTopBarToggleStyles(theme, palette)
   })
 }
@@ -52,9 +48,9 @@ function registerTopBarShellStyles(
 ) {
   styleBuilder
     .select('.topbar', theme)
-    .display('flex')
+    .display('grid')
+    .gridTemplateColumns('minmax(0, 1fr) minmax(220px, 420px) minmax(0, 1fr)')
     .alignItems('center')
-    .justifyContent('space-between')
     .gap('16px')
     .padding('16px')
     .position('sticky')
@@ -69,11 +65,13 @@ function registerTopBarShellStyles(
     .fontSize('22px')
     .fontWeight('700')
     .textDecoration('none')
+    .justifySelf('start')
     .color(palette.text.accent)
   styleBuilder
-    .select('.topbar__actions', theme)
-    .display('flex')
+    .select('.topbar__controls', theme)
+    .display('inline-flex')
     .alignItems('center')
+    .justifySelf('end')
     .gap('10px')
   styleBuilder
     .select('.topbar__icon', theme)
@@ -90,28 +88,16 @@ function registerTopBarShellStyles(
     .color(palette.text.subtle)
 }
 
-function registerTopBarSearchIconStyles(theme: ThemeMode) {
-  styleBuilder.select('.topbar__search', theme).border('0').background('transparent')
+function registerTopBarSearchStyles(theme: ThemeMode) {
   styleBuilder
-    .select('.topbar__search::before', theme)
-    .content('""')
-    .width('16px')
-    .height('16px')
-    .border('2px solid currentColor')
-    .borderRadius('50%')
-    .position('absolute')
-    .top('11px')
-    .left('11px')
+    .select('.topbar__search', theme)
+    .display('block')
+    .width('100%')
+    .justifySelf('center')
   styleBuilder
-    .select('.topbar__search::after', theme)
-    .content('""')
-    .width('10px')
-    .height('2px')
-    .background('currentColor')
-    .position('absolute')
-    .right('9px')
-    .bottom('12px')
-    .transform('rotate(45deg)')
+    .select('.topbar__search .site-search', theme)
+    .width('100%')
+    .maxWidth('none')
 }
 
 function registerTopBarToggleStyles(theme: ThemeMode, palette: ThemePalette) {
@@ -161,6 +147,19 @@ function registerTopBarToggleStyles(theme: ThemeMode, palette: ThemePalette) {
     .select('.doc-nav-toggle:checked ~ .topbar .topbar__toggle::after', theme)
     .top('20px')
     .transform('rotate(-45deg)')
+
+  styleBuilder
+    .select('.topbar', theme)
+    .media('max-width: 900px')
+    .gridTemplateColumns('auto minmax(160px, 1fr) auto')
+  styleBuilder
+    .select('.topbar', theme)
+    .media('max-width: 720px')
+    .gap('10px')
+  styleBuilder
+    .select('.topbar__search .site-search', theme)
+    .media('max-width: 720px')
+    .width('min(100%, 240px)')
 }
 
 function createTopBarComponent() {

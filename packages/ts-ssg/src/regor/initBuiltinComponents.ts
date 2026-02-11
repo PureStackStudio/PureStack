@@ -8,6 +8,7 @@ import { createHeroComponents } from './components/hero'
 import { createNavigationComponents } from './components/navMenu'
 import { createPageTocComponents } from './components/pageToc'
 import { createPricingComponents } from './components/pricing'
+import { createSearchComponents } from './components/searchBox'
 import { createThemeSwitcherComponents } from './components/themeSwitcher'
 import { createTopBarComponents } from './components/topBar'
 import { ensureDomGlobals } from './registerDomGlobals'
@@ -31,4 +32,5 @@ export function initBuiltinComponents() {
   componentRegistry.registerMany(createNavigationComponents())
   componentRegistry.registerMany(createPageTocComponents())
   componentRegistry.registerMany(createPricingComponents())
+  componentRegistry.registerMany(createSearchComponents())
 }
