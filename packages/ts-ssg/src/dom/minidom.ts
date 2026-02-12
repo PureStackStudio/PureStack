@@ -331,6 +331,8 @@ class MiniElement extends MiniNode {
   tagName: string
   namespaceURI: string | null = null
   private attributes = new Map<string, string>()
+  private syncingStyleFromAttribute = false
+  private syncingStyleToAttribute = false
   classList: ClassList
   style: StyleDeclaration
   value: string = ''
@@ -339,7 +341,9 @@ class MiniElement extends MiniNode {
     super(NodeType.ELEMENT_NODE)
     this.tagName = tagName.toUpperCase()
     this.classList = new ClassList(this)
-    this.style = createStyleDeclaration()
+    this.style = createStyleDeclaration((cssText) =>
+      this.syncStyleAttribute(cssText),
+    ) as StyleDeclaration
   }
 
   getAttribute(name: string) {
@@ -351,12 +355,43 @@ class MiniElement extends MiniNode {
   setAttribute(name: string, value: string) {
     const key = name.toLowerCase()
     const normalized = value == null ? '' : String(value)
+    if (key === 'style') {
+      if (this.syncingStyleToAttribute) {
+        this.attributes.set(key, normalized)
+        return
+      }
+      this.syncingStyleFromAttribute = true
+      this.style.cssText = normalized
+      this.syncingStyleFromAttribute = false
+      return
+    }
     this.attributes.set(key, normalized)
   }
 
   removeAttribute(name: string) {
     const key = name.toLowerCase()
+    if (key === 'style') {
+      if (this.syncingStyleToAttribute) {
+        this.attributes.delete(key)
+        return
+      }
+      this.syncingStyleFromAttribute = true
+      this.style.cssText = ''
+      this.syncingStyleFromAttribute = false
+      return
+    }
     this.attributes.delete(key)
+  }
+
+  private syncStyleAttribute(cssText: string) {
+    if (this.syncingStyleFromAttribute) return
+    this.syncingStyleToAttribute = true
+    if (cssText.length > 0) {
+      this.attributes.set('style', cssText)
+    } else {
+      this.attributes.delete('style')
+    }
+    this.syncingStyleToAttribute = false
   }
 
   getAttributeNS(_ns: string, name: string) {
@@ -619,53 +654,159 @@ class ClassList {
 }
 
 type StyleMap = Record<string, string>
+type StyleDeclarationCore = {
+  cssText: string
+  readonly length: number
+  item(index: number): string
+  [Symbol.iterator](): IterableIterator<string>
+  setProperty(name: string, value: string, priority?: string): void
+  removeProperty(name: string): string
+  getPropertyValue(name: string): string
+}
 
-function createStyleDeclaration() {
+function createStyleDeclaration(onChange?: (cssText: string) => void) {
   const state: StyleMap = {}
-  const api = {
+  const notify = () => {
+    onChange?.(serializeStyleMap(state))
+  }
+  const api: StyleDeclarationCore = {
     get cssText() {
-      return Object.entries(state)
-        .map(([key, value]) => `${key}:${value}`)
-        .join(';')
+      return serializeStyleMap(state)
     },
     set cssText(value: string) {
-      for (const key of Object.keys(state)) delete state[key]
-      const parts = String(value ?? '').split(';')
-      for (const part of parts) {
-        const [prop, val] = part.split(':')
-        if (!prop) continue
-        state[prop.trim()] = (val ?? '').trim()
+      const next = parseStyleText(value)
+      if (!replaceStyleState(state, next)) return
+      notify()
+    },
+    get length() {
+      return Object.keys(state).length
+    },
+    item(index: number) {
+      if (!Number.isFinite(index) || index < 0) return ''
+      return Object.keys(state)[Math.floor(index)] ?? ''
+    },
+    [Symbol.iterator]() {
+      return Object.keys(state)[Symbol.iterator]()
+    },
+    setProperty(name: string, value: string, priority?: string) {
+      const key = normalizeStylePropertyName(name)
+      if (!key) return
+      const normalized = normalizeStyleValue(value, priority)
+      const previous = state[key] ?? ''
+      if (previous === normalized) return
+      if (normalized.length === 0) {
+        delete state[key]
+      } else {
+        state[key] = normalized
       }
+      notify()
     },
-    setProperty(key: string, value: string, priority?: string) {
-      void priority
-      state[key] = String(value ?? '')
-    },
-    removeProperty(key: string) {
+    removeProperty(name: string) {
+      const key = normalizeStylePropertyName(name)
+      if (!key) return ''
+      const previous = state[key] ?? ''
+      if (previous.length === 0) return ''
       delete state[key]
+      notify()
+      return previous
     },
-    getPropertyValue(key: string) {
+    getPropertyValue(name: string) {
+      const key = normalizeStylePropertyName(name)
+      if (!key) return ''
       return state[key] ?? ''
     },
   }
 
   return new Proxy(api, {
-    get(target, prop) {
-      if (typeof prop === 'string' && prop in state) return state[prop]
-      return (target as Record<string, unknown>)[prop as string]
+    get(target, prop, receiver) {
+      if (typeof prop === 'string') {
+        if (/^\d+$/.test(prop)) return target.item(Number.parseInt(prop, 10))
+        const key = normalizeStylePropertyName(prop)
+        if (key && key in state) return state[key]
+      }
+      return Reflect.get(target, prop, receiver)
     },
-    set(target, prop, value) {
-      if (typeof prop === 'string' && !(prop in target)) {
-        state[prop] = String(value ?? '')
+    set(target, prop, value, receiver) {
+      if (typeof prop === 'string') {
+        if (prop in target) {
+          return Reflect.set(target, prop, value, receiver)
+        }
+        if (/^\d+$/.test(prop)) return true
+        const key = normalizeStylePropertyName(prop)
+        if (!key) return true
+        const normalized = normalizeStyleValue(value)
+        if ((state[key] ?? '') === normalized) return true
+        if (normalized.length === 0) {
+          delete state[key]
+        } else {
+          state[key] = normalized
+        }
+        notify()
         return true
       }
-      ;(target as Record<string, unknown>)[prop as string] = value
-      return true
+      return Reflect.set(target, prop, value, receiver)
     },
   })
 }
 
-type StyleDeclaration = ReturnType<typeof createStyleDeclaration>
+function normalizeStylePropertyName(name: string): string {
+  const trimmed = String(name ?? '').trim()
+  if (trimmed.length === 0) return ''
+  if (trimmed.startsWith('--')) return trimmed
+  if (trimmed.includes('-')) return trimmed.toLowerCase()
+  return trimmed.replace(/[A-Z]/g, (char) => `-${char.toLowerCase()}`)
+}
+
+function normalizeStyleValue(value: unknown, priority?: string): string {
+  const normalized = value == null ? '' : String(value).trim()
+  if (normalized.length === 0) return ''
+  if (priority === 'important' && !/\s!important$/i.test(normalized)) {
+    return `${normalized} !important`
+  }
+  return normalized
+}
+
+function parseStyleText(value: string): StyleMap {
+  const next: StyleMap = {}
+  const parts = String(value ?? '').split(';')
+  for (const part of parts) {
+    const normalized = part.trim()
+    if (normalized.length === 0) continue
+    const separator = normalized.indexOf(':')
+    if (separator === -1) continue
+    const key = normalizeStylePropertyName(normalized.slice(0, separator))
+    if (!key) continue
+    next[key] = normalized.slice(separator + 1).trim()
+  }
+  return next
+}
+
+function serializeStyleMap(state: StyleMap): string {
+  const entries = Object.entries(state)
+  if (entries.length === 0) return ''
+  return entries.map(([key, value]) => `${key}: ${value}`).join('; ')
+}
+
+function replaceStyleState(state: StyleMap, next: StyleMap): boolean {
+  const currentKeys = Object.keys(state)
+  const nextKeys = Object.keys(next)
+  if (currentKeys.length === nextKeys.length) {
+    let same = true
+    for (const key of nextKeys) {
+      if (state[key] !== next[key]) {
+        same = false
+        break
+      }
+    }
+    if (same) return false
+  }
+  for (const key of currentKeys) delete state[key]
+  for (const key of nextKeys) state[key] = next[key]
+  return true
+}
+
+type StyleDeclaration = ReturnType<typeof createStyleDeclaration> &
+  HTMLElement['style']
 
 function cloneChildNodesTo(target: MiniNode, nodes: MiniNode[]) {
   for (const child of nodes) {

@@ -141,4 +141,35 @@ describe('regor + minidom compatibility', () => {
         expect(beforeHost).not.toContain('teleport-probe')
       },
     ))
+
+  it('applies :style object bindings to inline style attributes', () =>
+    withDom(
+      '<html><body><div id="app"><StyleProbe></StyleProbe></div></body></html>',
+      ({ document }) => {
+        const appRoot = document.querySelector('#app')
+        if (!appRoot) throw new Error('missing #app root')
+
+        const styleProbe = createComponent(
+          html`<p class="probe" :style="{ fontSize: '18px', lineHeight: '1.4' }">
+            Styled payload
+          </p>`,
+        )
+
+        createApp(
+          {
+            components: {
+              styleProbe,
+            },
+          },
+          {
+            element: appRoot as unknown as Node,
+          },
+        )
+
+        const probe = appRoot.querySelector('.probe')
+        const style = probe?.getAttribute('style') ?? ''
+        expect(style).toContain('font-size: 18px')
+        expect(style).toContain('line-height: 1.4')
+      },
+    ))
 })

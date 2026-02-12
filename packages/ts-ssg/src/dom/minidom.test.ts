@@ -168,6 +168,39 @@ describe('minidom parsing and serialization', () => {
     )
     expect(document.querySelector('p')?.textContent).toBe('\uFFFD and \uFFFD')
   })
+
+  it('synchronizes style attribute into the style declaration', () => {
+    const { document } = parseHtml(
+      '<html><body><div style="font-size: 20px; line-height: 1.4"></div></body></html>',
+    )
+    const div = document.querySelector('div')
+    expect(div?.style.fontSize).toBe('20px')
+    expect(div?.style.lineHeight).toBe('1.4')
+    expect(div?.style.getPropertyValue('font-size')).toBe('20px')
+  })
+
+  it('serializes style declaration updates back into style attribute', () => {
+    const { document } = parseHtml('<html><body><div></div></body></html>')
+    const div = document.querySelector('div')
+    if (!div) throw new Error('missing div')
+    div.style.fontSize = '22px'
+    div.style.setProperty('line-height', '1.5')
+
+    const style = div.getAttribute('style') ?? ''
+    expect(style).toContain('font-size: 22px')
+    expect(style).toContain('line-height: 1.5')
+    expect(div.outerHTML).toContain('style="')
+  })
+
+  it('removes style attribute when style declaration becomes empty', () => {
+    const { document } = parseHtml(
+      '<html><body><div style="color: red"></div></body></html>',
+    )
+    const div = document.querySelector('div')
+    if (!div) throw new Error('missing div')
+    div.style.removeProperty('color')
+    expect(div.getAttribute('style')).toBeNull()
+  })
 })
 
 describe('minidom cloning and tree safety', () => {
