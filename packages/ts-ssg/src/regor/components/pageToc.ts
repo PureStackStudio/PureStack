@@ -243,6 +243,8 @@ function registerPageTocLayoutStyles(
     .select('.template-doc--full-main .doc-toc', theme)
     .media('max-width: 1320px')
     .right('0')
+  // Responsive TOC contract: collapse into right-edge drawer at <=1320px,
+  // then switch to full-screen overlay at <=600px (same cutoff for tocCollapsed mode).
   styleBuilder
     .select('.template-doc:not(.template-doc--toc-collapsed) .doc-toc', theme)
     .media('max-width: 1320px')
