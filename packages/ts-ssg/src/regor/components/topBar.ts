@@ -93,18 +93,16 @@ function registerTopBarShellStyles(
     .display('inline-flex')
     .justifySelf('start')
   styleBuilder
-    .select('.topbar__logo .regor-logo__link', theme)
+    .select('.topbar__logo .site-logo__link', theme)
     .padding('8px 12px')
   styleBuilder
-    .select('.topbar__logo .regor-logo__glyph', theme)
+    .select('.topbar__logo .site-logo__glyph', theme)
     .width('30px')
     .height('30px')
+  styleBuilder.select('.topbar__logo .site-logo__word', theme).fontSize('20px')
   styleBuilder
-    .select('.topbar__logo .regor-logo__word', theme)
-    .fontSize('var(--regor-logo-word-size, 20px)')
-  styleBuilder
-    .select('.topbar__logo .regor-logo__subtitle', theme)
-    .fontSize('var(--regor-logo-subtitle-size, 8px)')
+    .select('.topbar__logo .site-logo__subtitle', theme)
+    .fontSize('8px')
   styleBuilder
     .select('.topbar__controls', theme)
     .display('inline-flex')
