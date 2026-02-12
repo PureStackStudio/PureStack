@@ -212,34 +212,6 @@ function registerTopBarToggleStyles(theme: ThemeMode, palette: ThemePalette) {
     .media('max-width: 720px')
     .display('none')
   styleBuilder
-    .select('.topbar__logo .site-logo__link', theme)
-    .media('max-width: 720px')
-    .width('100%')
-    .padding('8px 10px')
-    .gap('8px')
-  styleBuilder
-    .select('.topbar__logo .site-logo__stack', theme)
-    .media('max-width: 720px')
-    .set('min-width', '0')
-  styleBuilder
-    .select('.topbar__logo .site-logo__brand', theme)
-    .media('max-width: 720px')
-    .overflow('hidden')
-    .set('text-overflow', 'ellipsis')
-  styleBuilder
-    .select('.topbar__logo .site-logo__glyph', theme)
-    .media('max-width: 720px')
-    .width('28px')
-    .height('28px')
-  styleBuilder
-    .select('.topbar__logo .site-logo__word', theme)
-    .media('max-width: 720px')
-    .fontSize('clamp(14px, 4vw, 17px)')
-  styleBuilder
-    .select('.topbar__logo .site-logo__subtitle', theme)
-    .media('max-width: 720px')
-    .display('none')
-  styleBuilder
     .select('.doc-nav-toggle:checked ~ .topbar .topbar__search', theme)
     .media('max-width: 720px')
     .display('block')

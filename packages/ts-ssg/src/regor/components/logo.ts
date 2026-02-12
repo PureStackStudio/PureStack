@@ -56,7 +56,6 @@ function registerLogoStyles() {
     registerLogoShellStyles(theme, palette, options)
     registerLogoTextStyles(theme, palette, options)
     registerLogoInteractiveStyles(theme, palette)
-    registerLogoResponsiveStyles(theme)
   })
 }
 
@@ -198,30 +197,6 @@ function registerLogoInteractiveStyles(
     .select('.site-logo__link[href]:focus-visible', theme)
     .outline(`2px solid ${palette.border.focus}`)
     .outlineOffset('2px')
-}
-
-function registerLogoResponsiveStyles(theme: ThemeMode) {
-  styleBuilder
-    .select('.site-logo__link', theme)
-    .media('max-width: 640px')
-    .padding('9px 12px')
-    .gap('10px')
-
-  styleBuilder
-    .select('.site-logo__glyph', theme)
-    .media('max-width: 640px')
-    .width('32px')
-    .height('32px')
-
-  styleBuilder
-    .select('.site-logo__word', theme)
-    .media('max-width: 640px')
-    .fontSize('13px')
-
-  styleBuilder
-    .select('.site-logo__subtitle', theme)
-    .media('max-width: 640px')
-    .fontSize('8px')
 }
 
 function resolveLogoContext(props: SiteLogoProps): SiteLogoContext {
