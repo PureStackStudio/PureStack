@@ -26,6 +26,7 @@ const searchBoxTemplate = html`<div class="site-search" data-pagefind-search>
     <input
       class="site-search__input"
       type="search"
+      name="q"
       :placeholder="placeholder"
       autocomplete="off"
       spellcheck="false"

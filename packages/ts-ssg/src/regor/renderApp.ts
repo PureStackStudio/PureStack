@@ -12,11 +12,14 @@ export interface RenderAppOptions {
 }
 
 export const renderApp = (html: string, options: RenderAppOptions = {}) => {
+  const normalizedHtml = html.trimStart()
   const isDocument =
-    html.startsWith('<!DOCTYPE html>') || html.startsWith('<html')
+    normalizedHtml.startsWith('<!DOCTYPE html>') ||
+    normalizedHtml.startsWith('<!doctype html>') ||
+    normalizedHtml.startsWith('<html')
   const htmlToParse = isDocument
-    ? html
-    : `<!DOCTYPE html><html><body>${html}</body></html>`
+    ? normalizedHtml
+    : `<!DOCTYPE html>\n<html><body>${html}</body></html>`
   const { document, window } = parseHtml(htmlToParse)
   const cleanup = registerDomGlobals(window, document)
   const snapshot = componentRegistry.snapshot()
@@ -36,7 +39,10 @@ export const renderApp = (html: string, options: RenderAppOptions = {}) => {
         element: document.body as unknown as Node,
       },
     )
-    if (isDocument) return document.documentElement?.outerHTML ?? ''
+    if (isDocument) {
+      const documentHtml = document.documentElement?.outerHTML ?? ''
+      return `<!DOCTYPE html>\n${documentHtml}`
+    }
     return document.body?.innerHTML ?? ''
   } finally {
     componentRegistry.restore(snapshot)

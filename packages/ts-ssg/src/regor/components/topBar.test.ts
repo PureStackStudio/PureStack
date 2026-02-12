@@ -45,6 +45,7 @@ describe('TopBar rendering', () => {
     expect(html).toContain('backend-native engine')
     expect(html).toContain('href="/docs/"')
     expect(html).toContain('site-logo__glyph--custom')
+    expect(html).toContain('name="q"')
     expect(html).toContain('width: 26px')
     expect(html).toContain('height: 26px')
     expect(html).toContain('font-size: 22px')
