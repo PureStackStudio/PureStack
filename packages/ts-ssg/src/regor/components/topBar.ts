@@ -157,6 +157,10 @@ function registerTopBarToggleStyles(theme: ThemeMode, palette: ThemePalette) {
     .select('.template-doc--nav-drawer .topbar__toggle', theme)
     .display('grid')
   styleBuilder
+    .select('.template-doc--has-nav .topbar__toggle', theme)
+    .media('max-width: 1023px')
+    .display('grid')
+  styleBuilder
     .select('.topbar__toggle:focus-visible', theme)
     .outline(`2px solid ${palette.border.focus}`)
     .outlineOffset('2px')

@@ -259,6 +259,7 @@ function registerPageTocLayoutStyles(
     .media('max-width: 1023px')
     .background('transparent')
     .boxShadow('none')
+    .set('pointer-events', 'none')
 
   styleBuilder
     .select('.template-doc.doc-toc-open', theme)
@@ -271,12 +272,12 @@ function registerPageTocLayoutStyles(
     .position('absolute')
     .left('0')
     .right('auto')
-    .top('50%')
+    .top('85%')
     .transform('translateY(-50%) rotate(180deg)')
     .set('writing-mode', 'vertical-rl')
     .set('text-orientation', 'mixed')
-    .width('42px')
-    .height('172px')
+    .width('36px')
+    .height('146px')
     .display('flex')
     .alignItems('center')
     .justifyContent('center')
@@ -287,15 +288,19 @@ function registerPageTocLayoutStyles(
     .color(palette.text.subtle)
     .background(palette.background.raised)
     .border(`1px solid ${palette.border.default}`)
-    .set('border-right', 'none')
-    .set('border-radius', `${options.radii.md} 0 0 ${options.radii.md}`)
+    .set('border-left', 'none')
+    .set('border-radius', `0 ${options.radii.md} ${options.radii.md} 0`)
     .boxShadow(palette.effect.interactiveShadow)
     .set('user-select', 'none')
     .cursor('pointer')
+    .set('pointer-events', 'auto')
     .zIndex(2)
 
   styleBuilder
-    .select('.doc-toc:not(.doc-toc--open) .page-toc > :not(.page-toc__mobile-toggle)', theme)
+    .select(
+      '.doc-toc:not(.doc-toc--open) .page-toc > :not(.page-toc__mobile-toggle)',
+      theme,
+    )
     .media('max-width: 1023px')
     .display('none')
 
@@ -362,7 +367,6 @@ function registerPageTocLayoutStyles(
     .select('.doc-toc .page-toc__empty', theme)
     .media('max-width: 1023px')
     .paddingBottom('36px')
-
 }
 
 function createPageTocComponent() {

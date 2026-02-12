@@ -111,7 +111,7 @@ function resolveDocLayout(
   const layoutClass = resolveDocLayoutClass(frontmatter)
   const showNav = hasNavItems(navigation)
   const showToc = frontmatter.layout.showToc
-  const bodyClass = buildDocBodyClass(navMode, layoutClass)
+  const bodyClass = buildDocBodyClass(navMode, layoutClass, showNav)
   const shellClass = buildDocShellClass(showNav, showToc, navMode)
   return { bodyClass, shellClass, showNav, showToc }
 }
@@ -125,9 +125,13 @@ function hasNavItems(navigation: PageNavigation | undefined) {
 function buildDocBodyClass(
   navMode: PageFrontmatter['layout']['navMode'],
   layoutClass: string,
+  showNav: boolean,
 ) {
   const navClass = navMode === 'drawer' ? 'template-doc--nav-drawer' : ''
-  return ['template-doc', navClass, layoutClass].filter(Boolean).join(' ')
+  const hasNavClass = showNav ? 'template-doc--has-nav' : ''
+  return ['template-doc', navClass, hasNavClass, layoutClass]
+    .filter(Boolean)
+    .join(' ')
 }
 
 function buildDocShellClass(
