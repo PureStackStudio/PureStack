@@ -79,7 +79,10 @@ function registerDocLayoutSidebarStyles(
     .overflow('auto')
     .boxShadow(options.shadows.strong)
   styleBuilder
-    .select('.template-doc.template-doc--nav-ready.template-doc--nav-drawer .doc-sidebar', theme)
+    .select(
+      '.template-doc.template-doc--nav-ready.template-doc--nav-drawer .doc-sidebar',
+      theme,
+    )
     .transition('transform 220ms ease')
 }
 
@@ -147,12 +150,11 @@ function registerDocLayoutResponsiveStyles(
     .media('max-width: 1023px')
     .position('fixed')
     .top('72px')
-    .left('0')
+    .left('auto')
     .right('0')
     .bottom('0')
-    .width('100%')
     .height('calc(100dvh - 72px)')
-    .maxWidth('none')
+    .maxWidth('100vw')
     .maxHeight('none')
     .borderRadius('0')
     .background('inherit')
@@ -161,20 +163,25 @@ function registerDocLayoutResponsiveStyles(
     .zIndex(50)
     .boxShadow(options.shadows.strong)
   styleBuilder
-    .select('.template-doc.template-doc--nav-ready.template-doc--nav-drawer .doc-sidebar', theme)
+    .select(
+      '.template-doc.template-doc--nav-ready.template-doc--nav-drawer .doc-sidebar',
+      theme,
+    )
     .media('max-width: 1023px')
     .transition('transform 220ms ease')
   styleBuilder
-    .select('.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar', theme)
+    .select(
+      '.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
+      theme,
+    )
     .media('max-width: 1023px')
     .position('fixed')
     .top('72px')
-    .left('0')
+    .left('auto')
     .right('0')
     .bottom('0')
-    .width('100%')
     .height('calc(100dvh - 72px)')
-    .maxWidth('none')
+    .maxWidth('100vw')
     .maxHeight('none')
     .borderRadius('0')
     .background('inherit')
@@ -182,6 +189,23 @@ function registerDocLayoutResponsiveStyles(
     .transform('translateX(120%)')
     .zIndex(50)
     .boxShadow(options.shadows.strong)
+  styleBuilder
+    .select('.template-doc--nav-drawer .doc-sidebar', theme)
+    .media('max-width: 600px')
+    .left('0')
+    .right('0')
+    .width('100%')
+    .maxWidth('none')
+  styleBuilder
+    .select(
+      '.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
+      theme,
+    )
+    .media('max-width: 600px')
+    .left('0')
+    .right('0')
+    .width('100%')
+    .maxWidth('none')
   styleBuilder
     .select(
       '.template-doc.template-doc--nav-ready.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
