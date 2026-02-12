@@ -11,7 +11,7 @@ static pages plus CSS generated via `@purestack/ts-css`.
 - CSS collected during render and emitted as static files.
 - Optional SEO files generation (`sitemap.xml` + `robots.txt`).
 - Simple, programmatic build API with sensible defaults.
-- Build hooks and optional concurrency for extensibility and speed.
+- Build hooks for extensibility and speed.
 
 ## How it works
 1. **Discover content**: `discoverContent()` scans the content directory for `.md` and `.mdx`.
@@ -70,7 +70,6 @@ await buildSite({
     },
   },
   cleanOutDir: true,
-  concurrency: 4,
 })
 ```
 

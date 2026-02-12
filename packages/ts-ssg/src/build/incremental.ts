@@ -23,11 +23,9 @@ import {
   countByExt,
   isOutsideContentRoot,
   ManifestContentIndex,
-  normalizeConcurrency,
   normalizeUrlPath,
   removeFile,
   resolveMdxBuildOptions,
-  runWithConcurrency,
   toAssetFile,
   toContentFile,
 } from './incremental-support'
@@ -275,16 +273,15 @@ class IncrementalRuntime {
     contentFiles: ContentFile[],
     hooks: BuildHooks,
   ): Promise<number> {
-    const concurrency = normalizeConcurrency(this.input.concurrency)
     let pages = 0
-    await runWithConcurrency(contentFiles, concurrency, async (file) => {
+    for (const file of contentFiles) {
       await hooks.onPageStart?.(this.context, file)
       const page = await renderPageFromFile(this.context, file)
       await hooks.onPageRendered?.(this.context, page)
       await writePage(page)
       await hooks.onPageWritten?.(this.context, page)
       pages += 1
-    })
+    }
     return pages
   }
 

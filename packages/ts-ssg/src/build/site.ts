@@ -59,7 +59,6 @@ export interface BuildHooks {
 
 export interface BuildOptions {
   cleanOutDir?: boolean
-  concurrency?: number
   hooks?: BuildHooks
   components?: Record<string, Component<unknown>>
   templates?: PageTemplateMap

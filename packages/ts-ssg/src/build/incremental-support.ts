@@ -96,30 +96,6 @@ export async function resolveMdxBuildOptions(
   return { highlighter }
 }
 
-export function normalizeConcurrency(value?: number) {
-  if (typeof value !== 'number' || Number.isNaN(value)) return 1
-  return Math.max(1, Math.floor(value))
-}
-
-export async function runWithConcurrency<T>(
-  items: T[],
-  concurrency: number,
-  worker: (item: T) => Promise<void>,
-) {
-  if (items.length === 0) return
-  const limit = Math.min(concurrency, items.length)
-  let index = 0
-  const workers = Array.from({ length: limit }, async () => {
-    while (true) {
-      const current = index
-      index += 1
-      if (current >= items.length) return
-      await worker(items[current])
-    }
-  })
-  await Promise.all(workers)
-}
-
 export function normalizeUrlPath(urlPath: string) {
   if (!urlPath || urlPath === '/') return '/'
   let normalized = urlPath.startsWith('/') ? urlPath : `/${urlPath}`

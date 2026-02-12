@@ -41,7 +41,7 @@ This is the canonical full build path:
 - Resolves user hooks from `input.hooks`.
 - Prepares output directory and copies static assets.
 - Discovers content and rebuilds navigation.
-- Renders all pages with configured concurrency.
+- Renders all pages sequentially.
 - Writes styles and captures style outputs/signature.
 - Discovers assets to build an authoritative manifest snapshot.
 - Writes the manifest to disk with `writeManifest`.
@@ -115,8 +115,6 @@ even when the build inputs are the same.
 
 ## Utilities and decisions
 
-- `normalizeConcurrency` and `runWithConcurrency` keep full builds parallel but
-  bounded.
 - `collectAffectedFolders` computes folder scopes based on
   `navigationConfig.maxDepth` to decide what pages must be rebuilt.
 - `readSignature` + `signatureEqual` provide the cheap change detector for both
