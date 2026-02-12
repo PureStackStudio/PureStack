@@ -244,14 +244,14 @@ function registerPageTocLayoutStyles(
     .media('max-width: 1320px')
     .right('0')
   styleBuilder
-    .select('.doc-toc', theme)
+    .select('.template-doc:not(.template-doc--toc-collapsed) .doc-toc', theme)
     .media('max-width: 1320px')
     .position('fixed')
     .top('0')
-    .left('0')
     .right('0')
-    .width('auto')
-    .maxWidth('none')
+    .left('auto')
+    .width('max(400px, 34vw)')
+    .maxWidth('100vw')
     .height('100dvh')
     .zIndex(140)
     .overflow('hidden')
@@ -261,24 +261,46 @@ function registerPageTocLayoutStyles(
     .boxShadow(options.shadows.strong)
 
   styleBuilder
-    .select('.doc-toc.doc-toc--open', theme)
+    .select('.template-doc:not(.template-doc--toc-collapsed) .doc-toc', theme)
+    .media('max-width: 600px')
+    .top('0')
+    .left('0')
+    .right('0')
+    .width('auto')
+    .maxWidth('none')
+    .height('100dvh')
+
+  styleBuilder
+    .select(
+      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open',
+      theme,
+    )
     .media('max-width: 1320px')
     .transform('translateX(0)')
 
   styleBuilder
-    .select('.doc-toc:not(.doc-toc--open)', theme)
+    .select(
+      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc:not(.doc-toc--open)',
+      theme,
+    )
     .media('max-width: 1320px')
     .background('transparent')
     .boxShadow('none')
     .set('pointer-events', 'none')
 
   styleBuilder
-    .select('.template-doc.doc-toc-open', theme)
-    .media('max-width: 1320px')
+    .select(
+      '.template-doc:not(.template-doc--toc-collapsed).doc-toc-open',
+      theme,
+    )
+    .media('max-width: 600px')
     .overflow('hidden')
 
   styleBuilder
-    .select('.page-toc__mobile-toggle', theme)
+    .select(
+      '.template-doc:not(.template-doc--toc-collapsed) .page-toc__mobile-toggle',
+      theme,
+    )
     .media('max-width: 1320px')
     .position('absolute')
     .left('0')
@@ -308,12 +330,18 @@ function registerPageTocLayoutStyles(
     .zIndex(2)
 
   styleBuilder
-    .select('.page-toc__mobile-toggle-icon', theme)
+    .select(
+      '.template-doc:not(.template-doc--toc-collapsed) .page-toc__mobile-toggle-icon',
+      theme,
+    )
     .media('max-width: 1320px')
     .display('none')
 
   styleBuilder
-    .select('.page-toc__mobile-toggle-icon svg', theme)
+    .select(
+      '.template-doc:not(.template-doc--toc-collapsed) .page-toc__mobile-toggle-icon svg',
+      theme,
+    )
     .media('max-width: 1320px')
     .width('14px')
     .height('14px')
@@ -325,26 +353,35 @@ function registerPageTocLayoutStyles(
 
   styleBuilder
     .select(
-      '.doc-toc:not(.doc-toc--open) .page-toc > :not(.page-toc__mobile-toggle)',
+      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc:not(.doc-toc--open) .page-toc > :not(.page-toc__mobile-toggle)',
       theme,
     )
     .media('max-width: 1320px')
     .display('none')
 
   styleBuilder
-    .select('.doc-toc:not(.doc-toc--open) .page-toc', theme)
+    .select(
+      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc:not(.doc-toc--open) .page-toc',
+      theme,
+    )
     .media('max-width: 1320px')
     .background('transparent')
     .border('none')
 
   styleBuilder
-    .select('.page-toc__mobile-toggle:focus-visible', theme)
+    .select(
+      '.template-doc:not(.template-doc--toc-collapsed) .page-toc__mobile-toggle:focus-visible',
+      theme,
+    )
     .media('max-width: 1320px')
     .outline(`2px solid ${palette.border.focus}`)
     .outlineOffset('2px')
 
   styleBuilder
-    .select('.doc-toc.doc-toc--open .page-toc__mobile-toggle', theme)
+    .select(
+      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open .page-toc__mobile-toggle',
+      theme,
+    )
     .media('max-width: 1320px')
     .left('auto')
     .right('16px')
@@ -363,18 +400,27 @@ function registerPageTocLayoutStyles(
     .set('border-radius', options.radii.md)
 
   styleBuilder
-    .select('.doc-toc.doc-toc--open .page-toc__mobile-toggle-icon', theme)
+    .select(
+      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open .page-toc__mobile-toggle-icon',
+      theme,
+    )
     .media('max-width: 1320px')
     .display('inline-flex')
 
   styleBuilder
-    .select('.doc-toc.doc-toc--open .page-toc__mobile-toggle:hover', theme)
+    .select(
+      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open .page-toc__mobile-toggle:hover',
+      theme,
+    )
     .media('max-width: 1320px')
     .color(palette.text.accent)
     .background(palette.background.accentMuted)
 
   styleBuilder
-    .select('.doc-toc .page-toc', theme)
+    .select(
+      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc .page-toc',
+      theme,
+    )
     .media('max-width: 1320px')
     .height('100%')
     .overflow('visible')
@@ -383,24 +429,36 @@ function registerPageTocLayoutStyles(
     .set('-webkit-overflow-scrolling', 'touch')
 
   styleBuilder
-    .select('.doc-toc.doc-toc--open .page-toc', theme)
+    .select(
+      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open .page-toc',
+      theme,
+    )
     .media('max-width: 1320px')
     .padding('30px 16px 14px')
     .gap('2px')
     .overflow('auto')
 
   styleBuilder
-    .select('.doc-toc .page-toc__header', theme)
+    .select(
+      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc .page-toc__header',
+      theme,
+    )
     .media('max-width: 1320px')
     .paddingRight('104px')
 
   styleBuilder
-    .select('.doc-toc .page-toc > .page-toc__list', theme)
+    .select(
+      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc .page-toc > .page-toc__list',
+      theme,
+    )
     .media('max-width: 1320px')
     .paddingBottom('8px')
 
   styleBuilder
-    .select('.doc-toc .page-toc__empty', theme)
+    .select(
+      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc .page-toc__empty',
+      theme,
+    )
     .media('max-width: 1320px')
     .paddingBottom('8px')
 
@@ -411,17 +469,20 @@ function registerPageTocLayoutStyles(
     .select('.template-doc--toc-collapsed .doc-shell--toc-only', theme)
     .gridTemplateColumns('1fr')
   styleBuilder
-    .select('.template-doc--toc-collapsed .doc-shell--nav-drawer.doc-shell--toc', theme)
+    .select(
+      '.template-doc--toc-collapsed .doc-shell--nav-drawer.doc-shell--toc',
+      theme,
+    )
     .gridTemplateColumns('1fr')
 
   styleBuilder
     .select('.template-doc--toc-collapsed .doc-toc', theme)
     .position('fixed')
     .top('0')
-    .left('0')
     .right('0')
-    .width('auto')
-    .maxWidth('none')
+    .left('auto')
+    .width('max(400px, 34vw)')
+    .maxWidth('100vw')
     .height('100dvh')
     .zIndex(140)
     .overflow('hidden')
@@ -431,11 +492,22 @@ function registerPageTocLayoutStyles(
     .boxShadow(options.shadows.strong)
 
   styleBuilder
+    .select('.template-doc--toc-collapsed .doc-toc', theme)
+    .media('max-width: 600px')
+    .top('0')
+    .left('0')
+    .right('0')
+    .width('auto')
+    .maxWidth('none')
+    .height('100dvh')
+
+  styleBuilder
     .select('.template-doc--toc-collapsed .doc-toc.doc-toc--open', theme)
     .transform('translateX(0)')
 
   styleBuilder
     .select('.template-doc--toc-collapsed.doc-toc-open', theme)
+    .media('max-width: 600px')
     .overflow('hidden')
 
   styleBuilder
@@ -485,17 +557,26 @@ function registerPageTocLayoutStyles(
     .display('none')
 
   styleBuilder
-    .select('.template-doc--toc-collapsed .doc-toc:not(.doc-toc--open) .page-toc', theme)
+    .select(
+      '.template-doc--toc-collapsed .doc-toc:not(.doc-toc--open) .page-toc',
+      theme,
+    )
     .background('transparent')
     .border('none')
 
   styleBuilder
-    .select('.template-doc--toc-collapsed .page-toc__mobile-toggle:focus-visible', theme)
+    .select(
+      '.template-doc--toc-collapsed .page-toc__mobile-toggle:focus-visible',
+      theme,
+    )
     .outline(`2px solid ${palette.border.focus}`)
     .outlineOffset('2px')
 
   styleBuilder
-    .select('.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__mobile-toggle', theme)
+    .select(
+      '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__mobile-toggle',
+      theme,
+    )
     .left('auto')
     .right('16px')
     .top('16px')
@@ -513,11 +594,17 @@ function registerPageTocLayoutStyles(
     .set('border-radius', options.radii.md)
 
   styleBuilder
-    .select('.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__mobile-toggle-icon', theme)
+    .select(
+      '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__mobile-toggle-icon',
+      theme,
+    )
     .display('inline-flex')
 
   styleBuilder
-    .select('.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__mobile-toggle:hover', theme)
+    .select(
+      '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__mobile-toggle:hover',
+      theme,
+    )
     .color(palette.text.accent)
     .background(palette.background.accentMuted)
 
@@ -530,7 +617,10 @@ function registerPageTocLayoutStyles(
     .set('-webkit-overflow-scrolling', 'touch')
 
   styleBuilder
-    .select('.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc', theme)
+    .select(
+      '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc',
+      theme,
+    )
     .padding('30px 16px 14px')
     .gap('2px')
     .overflow('auto')
@@ -540,7 +630,10 @@ function registerPageTocLayoutStyles(
     .paddingRight('104px')
 
   styleBuilder
-    .select('.template-doc--toc-collapsed .doc-toc .page-toc > .page-toc__list', theme)
+    .select(
+      '.template-doc--toc-collapsed .doc-toc .page-toc > .page-toc__list',
+      theme,
+    )
     .paddingBottom('8px')
 
   styleBuilder
@@ -566,4 +659,3 @@ export function createPageTocComponents() {
   const pageToc = createPageTocComponent()
   return { pageToc }
 }
-
