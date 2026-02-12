@@ -304,6 +304,10 @@ function registerTableStyles(
     .borderCollapse('separate')
     .set('border-spacing', '0')
     .margin('0 0 1.4em')
+    .set('display', 'block')
+    .set('max-width', '100%')
+    .set('overflow-x', 'auto')
+    .set('-webkit-overflow-scrolling', 'touch')
     .background(palette.background.surface)
     .border(`1px solid ${palette.border.default}`)
     .borderRadius(options.radii.md)
@@ -374,14 +378,6 @@ function registerTableStyles(
     .borderRadius(options.radii.pill)
     .fontSize('0.84em')
     .opacity(0.9)
-
-  styleBuilder
-    .select('.doc-content :where(table)', theme)
-    .media('max-width: 900px')
-    .set('display', 'block')
-    .set('overflow-x', 'auto')
-    .set('-webkit-overflow-scrolling', 'touch')
-    .set('min-width', '680px')
 
   styleBuilder
     .select('.doc-content :where(th, td)', theme)
