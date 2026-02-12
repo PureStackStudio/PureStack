@@ -6,7 +6,7 @@ import { parseHtml } from '../../dom/minidom'
 import { normalizeFrontmatter } from '../../frontmatter/frontmatter'
 import { ensureDomGlobals } from '../registerDomGlobals'
 import { renderApp } from '../renderApp'
-import { createFooterComponents } from './footer'
+import { createFooterComponents } from './footer/footer'
 
 describe('SiteFooter rendering', () => {
   it('renders footer blocks with columns, links, legal actions, and socials', () => {

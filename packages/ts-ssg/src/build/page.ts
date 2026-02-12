@@ -142,7 +142,10 @@ type ParsedPageSource = {
   frontmatter: PageFrontmatter
 }
 
-function parsePageSource(source: string, sourceLabel?: string): ParsedPageSource {
+function parsePageSource(
+  source: string,
+  sourceLabel?: string,
+): ParsedPageSource {
   return parseFrontmatterSource(source, sourceLabel)
 }
 

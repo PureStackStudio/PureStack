@@ -5,9 +5,9 @@ import { resolveSiteConfig } from '../../config/config'
 import { normalizeFrontmatter } from '../../frontmatter/frontmatter'
 import { ensureDomGlobals } from '../registerDomGlobals'
 import { renderApp } from '../renderApp'
-import { createLogoComponents } from './logo'
-import { createSearchComponents } from './searchBox'
-import { createTopBarComponents } from './topBar'
+import { createLogoComponents } from './logo/logo'
+import { createSearchComponents } from './searchBox/searchBox'
+import { createTopBarComponents } from './topBar/topBar'
 
 describe('TopBar rendering', () => {
   it('applies logo values from site config', () => {

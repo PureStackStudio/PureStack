@@ -141,13 +141,7 @@ function buildDocBodyClass(
   const hasNavClass = showNav ? 'template-doc--has-nav' : ''
   const tocCollapsedClass =
     showToc && tocCollapsed ? 'template-doc--toc-collapsed' : ''
-  return [
-    'template-doc',
-    navClass,
-    hasNavClass,
-    tocCollapsedClass,
-    layoutClass,
-  ]
+  return ['template-doc', navClass, hasNavClass, tocCollapsedClass, layoutClass]
     .filter(Boolean)
     .join(' ')
 }
@@ -166,9 +160,7 @@ function buildDocShellClass(
   return classes.join(' ')
 }
 
-function resolveDocLayoutClass(
-  frontmatter: PageFrontmatter,
-) {
+function resolveDocLayoutClass(frontmatter: PageFrontmatter) {
   return frontmatter.layout.fullWidthMain ? 'template-doc--full-main' : ''
 }
 

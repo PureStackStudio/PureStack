@@ -1,210 +1,12 @@
-import { createComponent, html } from 'regor'
+import { styleBuilder } from '../../../style/styles'
+import {
+  type ThemeMode,
+  type ThemeOptions,
+  themes,
+} from '../../../style/themeOptions'
+import type { ThemePalette } from '../../../style/themePalette'
 
-import { getSvgIcon } from '../../style/icons'
-import { styleBuilder } from '../../style/styles'
-import type { ThemeMode, ThemeOptions } from '../../style/themeOptions'
-import { themes } from '../../style/themeOptions'
-import type { ThemePalette } from '../../style/themePalette'
-import { resolveTsSsgContext } from '../resolveTsSsgContext'
-import type { TsSsgContext } from '../ts-ssg-context'
-
-interface SiteFooterProps {
-  teleport?: string
-  eyebrow?: string
-  title?: string
-  tagline?: string
-  ariaLabel?: string
-  copyright?: string
-  legalLabel?: string
-  variant?: string
-  tone?: string
-  ctaLabel?: string
-  ctaHref?: string
-  ctaTarget?: string
-  ctaRel?: string
-  newsletter?: unknown
-  newsletterTitle?: string
-  newsletterBody?: string
-  newsletterAction?: string
-  newsletterMethod?: string
-  newsletterName?: string
-  newsletterPlaceholder?: string
-  newsletterButtonLabel?: string
-}
-
-interface SiteFooterContext extends SiteFooterProps {
-  rootClass: string
-  hasEyebrow: boolean
-  hasTitle: boolean
-  hasTagline: boolean
-  hasCtaHref: boolean
-  hasCtaTarget: boolean
-  hasCtaRel: boolean
-  showNewsletter: boolean
-}
-
-interface FooterColumnProps {
-  title?: string
-  description?: string
-  compact?: unknown
-}
-
-interface FooterColumnContext extends FooterColumnProps {
-  rootClass: string
-  hasTitle: boolean
-  hasDescription: boolean
-}
-
-interface FooterLinkProps {
-  href?: string
-  label?: string
-  target?: string
-  rel?: string
-  icon?: string
-  variant?: string
-}
-
-interface FooterLinkContext extends FooterLinkProps {
-  rootClass: string
-  hasHref: boolean
-  hasTarget: boolean
-  hasRel: boolean
-  hasLabel: boolean
-}
-
-interface FooterSocialProps {
-  href?: string
-  label?: string
-  icon?: string
-  target?: string
-  rel?: string
-}
-
-interface FooterSocialContext extends FooterSocialProps {
-  iconSvg: string
-  hasHref: boolean
-  hasTarget: boolean
-  hasRel: boolean
-  hasLabel: boolean
-}
-
-const siteFooterTemplate = html`<footer
-  class="site-footer"
-  :class="rootClass"
-  :aria-label="ariaLabel"
-  :r-teleport="teleport"
->
-  <div class="site-footer__inner">
-    <div class="site-footer__top">
-      <div class="site-footer__brand">
-        <p class="site-footer__eyebrow" r-if="hasEyebrow">{{ eyebrow }}</p>
-        <h2 class="site-footer__title" r-if="hasTitle">{{ title }}</h2>
-        <p class="site-footer__tagline" r-if="hasTagline">{{ tagline }}</p>
-      </div>
-      <div class="site-footer__top-actions">
-        <slot name="cta"></slot>
-        <a
-          class="site-footer__cta"
-          :href="ctaHref"
-          r-if="hasCtaHref"
-          :target="hasCtaTarget ? ctaTarget : null"
-          :rel="hasCtaRel ? ctaRel : null"
-        >
-          {{ ctaLabel }}
-        </a>
-      </div>
-    </div>
-
-    <div class="site-footer__main">
-      <section class="site-footer__primary">
-        <div class="site-footer__primary-content"><slot></slot></div>
-        <div class="site-footer__status"><slot name="status"></slot></div>
-      </section>
-      <div class="site-footer__columns"><slot name="columns"></slot></div>
-
-      <aside class="site-footer__newsletter" r-if="showNewsletter">
-        <h3 class="site-footer__newsletter-title">{{ newsletterTitle }}</h3>
-        <p class="site-footer__newsletter-body">{{ newsletterBody }}</p>
-        <form
-          class="site-footer__newsletter-form"
-          :action="newsletterAction"
-          :method="newsletterMethod"
-        >
-          <label class="site-footer__newsletter-label" for="site-footer-email"
-            >Email address</label
-          >
-          <div class="site-footer__newsletter-row">
-            <input
-              id="site-footer-email"
-              class="site-footer__newsletter-input"
-              type="email"
-              required
-              :name="newsletterName"
-              :placeholder="newsletterPlaceholder"
-              autocomplete="email"
-            />
-            <button class="site-footer__newsletter-button" type="submit">
-              {{ newsletterButtonLabel }}
-            </button>
-          </div>
-        </form>
-        <div class="site-footer__newsletter-extra">
-          <slot name="newsletter"></slot>
-        </div>
-      </aside>
-    </div>
-
-    <div class="site-footer__bottom">
-      <p class="site-footer__copyright">{{ copyright }}</p>
-      <nav class="site-footer__legal" :aria-label="legalLabel">
-        <slot name="legal"></slot>
-      </nav>
-      <div class="site-footer__social"><slot name="social"></slot></div>
-    </div>
-  </div>
-</footer>`
-
-const footerColumnTemplate = html`<section
-  class="footer-column"
-  :class="rootClass"
->
-  <h3 class="footer-column__title" r-if="hasTitle">{{ title }}</h3>
-  <p class="footer-column__description" r-if="hasDescription">
-    {{ description }}
-  </p>
-  <ul class="footer-column__list">
-    <slot></slot>
-  </ul>
-</section>`
-
-const footerLinkTemplate = html`<li class="footer-link-item">
-  <a
-    r-if="hasHref"
-    class="footer-link"
-    :class="rootClass"
-    :href="href"
-    :target="hasTarget ? target : null"
-    :rel="hasRel ? rel : null"
-    :data-icon="icon || null"
-  >
-    {{ label }}
-  </a>
-  <span r-else class="footer-link" :class="rootClass">{{ label }}</span>
-</li>`
-
-const footerSocialTemplate = html`<a
-  class="footer-social"
-  :href="href"
-  r-if="hasHref"
-  :target="hasTarget ? target : null"
-  :rel="hasRel ? rel : null"
-  :aria-label="label"
->
-  <span class="footer-social__icon" r-html="iconSvg"></span>
-  <span class="footer-social__label" r-if="hasLabel">{{ label }}</span>
-</a>`
-
-function registerFooterStyles() {
+export function registerFooterStyles() {
   themes.forEach((theme, palette, options) => {
     applyFooterShellStyles(theme, palette, options)
     applyFooterContentStyles(theme, palette, options)
@@ -216,7 +18,7 @@ function registerFooterStyles() {
   })
 }
 
-function applyFooterShellStyles(
+export function applyFooterShellStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -272,7 +74,7 @@ function applyFooterShellStyles(
     .gap('20px')
 }
 
-function applyFooterContentStyles(
+export function applyFooterContentStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -282,7 +84,10 @@ function applyFooterContentStyles(
   applyFooterStatusStyles(theme, palette, options)
 }
 
-function applyFooterHeadingStyles(theme: ThemeMode, palette: ThemePalette) {
+export function applyFooterHeadingStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+) {
   styleBuilder
     .select('.site-footer__eyebrow', theme)
     .margin('0')
@@ -307,7 +112,10 @@ function applyFooterHeadingStyles(theme: ThemeMode, palette: ThemePalette) {
     .color(palette.text.subtle)
 }
 
-function applyFooterPrimaryStyles(theme: ThemeMode, palette: ThemePalette) {
+export function applyFooterPrimaryStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+) {
   styleBuilder
     .select('.site-footer__primary', theme)
     .display('grid')
@@ -327,7 +135,7 @@ function applyFooterPrimaryStyles(theme: ThemeMode, palette: ThemePalette) {
     .fontWeight('600')
 }
 
-function applyFooterStatusStyles(
+export function applyFooterStatusStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -354,7 +162,7 @@ function applyFooterStatusStyles(
     .textDecoration('none')
 }
 
-function applyFooterActionStyles(
+export function applyFooterActionStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -363,7 +171,7 @@ function applyFooterActionStyles(
   applyFooterNewsletterStyles(theme, palette, options)
 }
 
-function applyFooterCtaStyles(
+export function applyFooterCtaStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -396,7 +204,7 @@ function applyFooterCtaStyles(
     .outlineOffset('2px')
 }
 
-function applyFooterNewsletterStyles(
+export function applyFooterNewsletterStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -407,7 +215,7 @@ function applyFooterNewsletterStyles(
   applyFooterNewsletterMetaStyles(theme, palette)
 }
 
-function applyFooterNewsletterShellStyles(
+export function applyFooterNewsletterShellStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -444,7 +252,7 @@ function applyFooterNewsletterShellStyles(
     .gap('8px')
 }
 
-function applyFooterNewsletterFieldStyles(
+export function applyFooterNewsletterFieldStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -477,7 +285,7 @@ function applyFooterNewsletterFieldStyles(
     .borderColor(palette.border.focus)
 }
 
-function applyFooterNewsletterButtonStyles(
+export function applyFooterNewsletterButtonStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -502,7 +310,7 @@ function applyFooterNewsletterButtonStyles(
     .outlineOffset('2px')
 }
 
-function applyFooterNewsletterMetaStyles(
+export function applyFooterNewsletterMetaStyles(
   theme: ThemeMode,
   palette: ThemePalette,
 ) {
@@ -516,7 +324,7 @@ function applyFooterNewsletterMetaStyles(
     .color(palette.text.subtle)
 }
 
-function applyFooterColumnStyles(
+export function applyFooterColumnStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -526,7 +334,7 @@ function applyFooterColumnStyles(
   applyFooterLinkStyles(theme, palette, options)
 }
 
-function applyFooterColumnShellStyles(
+export function applyFooterColumnShellStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -559,7 +367,7 @@ function applyFooterColumnShellStyles(
     .color(palette.text.soft)
 }
 
-function applyFooterColumnListStyles(theme: ThemeMode) {
+export function applyFooterColumnListStyles(theme: ThemeMode) {
   styleBuilder
     .select('.footer-column__list', theme)
     .listStyle('none')
@@ -570,7 +378,7 @@ function applyFooterColumnListStyles(theme: ThemeMode) {
   styleBuilder.select('.footer-link-item', theme).listStyle('none')
 }
 
-function applyFooterLinkStyles(
+export function applyFooterLinkStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -607,7 +415,7 @@ function applyFooterLinkStyles(
     .fontSize('12px')
 }
 
-function applyFooterBottomStyles(
+export function applyFooterBottomStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -617,7 +425,10 @@ function applyFooterBottomStyles(
   applyFooterBottomSocialStyles(theme, palette, options)
 }
 
-function applyFooterBottomShellStyles(theme: ThemeMode, palette: ThemePalette) {
+export function applyFooterBottomShellStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+) {
   styleBuilder
     .select('.site-footer__bottom', theme)
     .display('grid')
@@ -634,7 +445,7 @@ function applyFooterBottomShellStyles(theme: ThemeMode, palette: ThemePalette) {
     .color(palette.text.soft)
 }
 
-function applyFooterBottomLegalStyles(
+export function applyFooterBottomLegalStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -661,7 +472,7 @@ function applyFooterBottomLegalStyles(
     .borderRadius(options.radii.sm)
 }
 
-function applyFooterBottomSocialStyles(
+export function applyFooterBottomSocialStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -717,7 +528,7 @@ function applyFooterBottomSocialStyles(
     .set('stroke-width', '2')
 }
 
-function applyFooterToneStyles(theme: ThemeMode, palette: ThemePalette) {
+export function applyFooterToneStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.site-footer--tone-accent', theme)
     .background(palette.background.showcase)
@@ -741,7 +552,7 @@ function applyFooterToneStyles(theme: ThemeMode, palette: ThemePalette) {
     .background('transparent')
 }
 
-function applyFooterResponsiveStyles(theme: ThemeMode) {
+export function applyFooterResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.site-footer__main', theme)
     .media('max-width: 980px')
@@ -776,246 +587,4 @@ function applyFooterResponsiveStyles(theme: ThemeMode) {
     .select('.site-footer__social', theme)
     .media('max-width: 840px')
     .justifyContent('flex-start')
-}
-
-function createSiteFooterComponent() {
-  return createComponent<SiteFooterContext>(siteFooterTemplate, {
-    props: [
-      'teleport',
-      'eyebrow',
-      'title',
-      'tagline',
-      'ariaLabel',
-      'copyright',
-      'legalLabel',
-      'variant',
-      'tone',
-      'ctaLabel',
-      'ctaHref',
-      'ctaTarget',
-      'ctaRel',
-      'newsletter',
-      'newsletterTitle',
-      'newsletterBody',
-      'newsletterAction',
-      'newsletterMethod',
-      'newsletterName',
-      'newsletterPlaceholder',
-      'newsletterButtonLabel',
-    ],
-    context: (head) => {
-      return resolveSiteFooterContext(
-        head.props,
-        resolveSiteTitle(resolveTsSsgContext(head)),
-      )
-    },
-  })
-}
-
-function createFooterColumnComponent() {
-  return createComponent<FooterColumnContext>(footerColumnTemplate, {
-    props: ['title', 'description', 'compact'],
-    context: (head) => resolveFooterColumnContext(head.props),
-  })
-}
-
-function createFooterLinkComponent() {
-  return createComponent<FooterLinkContext>(footerLinkTemplate, {
-    props: ['href', 'label', 'target', 'rel', 'icon', 'variant'],
-    context: (head) => resolveFooterLinkContext(head.props),
-  })
-}
-
-function createFooterSocialComponent() {
-  return createComponent<FooterSocialContext>(footerSocialTemplate, {
-    props: ['href', 'label', 'icon', 'target', 'rel'],
-    context: (head) => resolveFooterSocialContext(head.props),
-  })
-}
-
-export function createFooterComponents() {
-  registerFooterStyles()
-  return {
-    siteFooter: createSiteFooterComponent(),
-    footerColumn: createFooterColumnComponent(),
-    footerLink: createFooterLinkComponent(),
-    footerSocial: createFooterSocialComponent(),
-  }
-}
-
-function resolveSiteTitle(context: TsSsgContext): string {
-  const siteTitle = context?.site?.siteTitle
-  if (typeof siteTitle !== 'string') return 'Your Site'
-  const trimmed = siteTitle.trim()
-  return trimmed.length > 0 ? trimmed : 'Your Site'
-}
-
-function resolveSiteFooterContext(
-  props: SiteFooterProps,
-  siteTitle: string,
-): SiteFooterContext {
-  const year = new Date().getFullYear()
-  const tone = resolveFooterTone(props.tone)
-  const variant = resolveFooterVariant(props.variant)
-  const showNewsletter = resolveBooleanFlag(props.newsletter, true)
-  const ctaRel =
-    props.ctaRel || (props.ctaTarget === '_blank' ? 'noopener noreferrer' : '')
-  if (!props.teleport) props.teleport = 'body'
-  return {
-    ...props,
-    eyebrow: props.eyebrow || 'Engineered for ambitious teams',
-    title: props.title || `${siteTitle} keeps shipping after launch`,
-    tagline:
-      props.tagline ||
-      'Use this footer for docs, product pages, blogs, marketplaces, and internal portals. It scales from simple links to conversion-focused layouts.',
-    ariaLabel: props.ariaLabel || 'Site footer',
-    legalLabel: props.legalLabel || 'Legal and policy links',
-    ctaLabel: props.ctaLabel || 'Start now',
-    ctaRel,
-    newsletterTitle: props.newsletterTitle || 'Stay in the loop',
-    newsletterBody:
-      props.newsletterBody ||
-      'Monthly release notes, practical guides, and zero-noise product updates.',
-    newsletterAction: props.newsletterAction || '#',
-    newsletterMethod: normalizeNewsletterMethod(props.newsletterMethod),
-    newsletterName: props.newsletterName || 'email',
-    newsletterPlaceholder: props.newsletterPlaceholder || 'name@company.com',
-    newsletterButtonLabel: props.newsletterButtonLabel || 'Subscribe',
-    copyright:
-      props.copyright || `© ${year} ${siteTitle}. All rights reserved.`,
-    rootClass: `site-footer--tone-${tone} site-footer--variant-${variant}`,
-    showNewsletter,
-    hasEyebrow: Boolean(props.eyebrow || true),
-    hasTitle: Boolean(props.title || true),
-    hasTagline: Boolean(props.tagline || true),
-    hasCtaHref: Boolean(props.ctaHref),
-    hasCtaTarget: Boolean(props.ctaTarget),
-    hasCtaRel: Boolean(ctaRel),
-  }
-}
-
-function resolveFooterColumnContext(
-  props: FooterColumnProps,
-): FooterColumnContext {
-  const compact = resolveBooleanFlag(props.compact, false)
-  return {
-    ...props,
-    rootClass: compact ? 'footer-column--compact' : '',
-    hasTitle: Boolean(props.title),
-    hasDescription: Boolean(props.description),
-  }
-}
-
-function resolveFooterLinkContext(props: FooterLinkProps): FooterLinkContext {
-  const variant = resolveFooterLinkVariant(props.variant)
-  const rel =
-    props.rel || (props.target === '_blank' ? 'noopener noreferrer' : '')
-  return {
-    ...props,
-    rootClass: `footer-link--${variant}`,
-    rel,
-    hasHref: Boolean(props.href),
-    hasTarget: Boolean(props.target),
-    hasRel: Boolean(rel),
-    hasLabel: Boolean(props.label),
-  }
-}
-
-function resolveFooterSocialContext(
-  props: FooterSocialProps,
-): FooterSocialContext {
-  const rel =
-    props.rel || (props.target === '_blank' ? 'noopener noreferrer' : '')
-  return {
-    ...props,
-    rel,
-    label: props.label || '',
-    iconSvg: getSvgIcon(
-      resolveFooterSocialIcon(props.icon, props.label),
-      'code',
-    ),
-    hasHref: Boolean(props.href),
-    hasTarget: Boolean(props.target),
-    hasRel: Boolean(rel),
-    hasLabel: Boolean(props.label),
-  }
-}
-
-function resolveFooterTone(value?: string) {
-  const normalized = value?.toLowerCase() || ''
-  if (
-    normalized === 'accent' ||
-    normalized === 'neutral' ||
-    normalized === 'default'
-  ) {
-    return normalized
-  }
-  return 'default'
-}
-
-function resolveFooterVariant(value?: string) {
-  const normalized = value?.toLowerCase() || ''
-  if (
-    normalized === 'default' ||
-    normalized === 'minimal' ||
-    normalized === 'feature'
-  ) {
-    return normalized
-  }
-  return 'feature'
-}
-
-function resolveFooterLinkVariant(value?: string) {
-  const normalized = value?.toLowerCase() || ''
-  if (
-    normalized === 'default' ||
-    normalized === 'muted' ||
-    normalized === 'strong'
-  ) {
-    return normalized
-  }
-  return 'default'
-}
-
-function resolveFooterSocialIcon(icon?: string, label?: string) {
-  const normalized = icon?.toLowerCase() || label?.toLowerCase() || ''
-  if (normalized.includes('github')) return 'code'
-  if (normalized.includes('discord')) return 'support'
-  if (normalized.includes('linkedin')) return 'building'
-  if (normalized.includes('x') || normalized.includes('twitter'))
-    return 'rocket'
-  if (normalized.includes('community') || normalized.includes('forum')) {
-    return 'stack'
-  }
-  if (normalized.includes('security')) return 'shield'
-  return 'code'
-}
-
-function normalizeNewsletterMethod(value?: string) {
-  const normalized = value?.toLowerCase() || ''
-  if (normalized === 'post') return 'post'
-  return 'get'
-}
-
-function resolveBooleanFlag(value: unknown, fallback: boolean) {
-  if (typeof value === 'boolean') return value
-  if (typeof value !== 'string') return fallback
-  const normalized = value.trim().toLowerCase()
-  if (
-    normalized === 'false' ||
-    normalized === '0' ||
-    normalized === 'no' ||
-    normalized === 'off'
-  ) {
-    return false
-  }
-  if (
-    normalized === 'true' ||
-    normalized === '1' ||
-    normalized === 'yes' ||
-    normalized === 'on'
-  ) {
-    return true
-  }
-  return fallback
 }

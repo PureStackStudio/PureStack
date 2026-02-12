@@ -1,47 +1,12 @@
-import { createComponent, html } from 'regor'
-
-import { styleBuilder } from '../../style/styles'
+import { styleBuilder } from '../../../style/styles'
 import {
   type ThemeMode,
   type ThemeOptions,
   themes,
-} from '../../style/themeOptions'
-import type { ThemePalette } from '../../style/themePalette'
-import { resolveTsSsgContext } from '../resolveTsSsgContext'
-import type { TsSsgContext } from '../ts-ssg-context'
+} from '../../../style/themeOptions'
+import type { ThemePalette } from '../../../style/themePalette'
 
-interface SearchBoxContext {
-  placeholder: string
-}
-
-const searchBoxTemplate = html`<div class="site-search" data-pagefind-search>
-  <label class="site-search__field">
-    <span class="site-search__sr-only">Search site</span>
-    <span class="site-search__icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24" focusable="false">
-        <circle cx="11" cy="11" r="6.5"></circle>
-        <path d="M16 16l4.25 4.25"></path>
-      </svg>
-    </span>
-    <input
-      class="site-search__input"
-      type="search"
-      name="q"
-      :placeholder="placeholder"
-      autocomplete="off"
-      spellcheck="false"
-      data-pagefind-input
-      aria-label="Search site content"
-    />
-  </label>
-  <div
-    class="site-search__results doc-content"
-    data-pagefind-results
-    hidden
-  ></div>
-</div>`
-
-function registerSearchBoxStyles() {
+export function registerSearchBoxStyles() {
   themes.forEach((theme, palette, options) => {
     registerSearchBoxShellStyles(theme, palette, options)
     registerSearchBoxResultStyles(theme, palette, options)
@@ -49,7 +14,7 @@ function registerSearchBoxStyles() {
   })
 }
 
-function registerSearchBoxShellStyles(
+export function registerSearchBoxShellStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -127,7 +92,7 @@ function registerSearchBoxShellStyles(
     .cursor('pointer')
 }
 
-function registerSearchBoxResultStyles(
+export function registerSearchBoxResultStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -243,7 +208,7 @@ function registerSearchBoxResultStyles(
     .color(palette.status.danger.text)
 }
 
-function registerSearchBoxResponsiveStyles(theme: ThemeMode) {
+export function registerSearchBoxResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.site-search', theme)
     .media('max-width: 720px')
@@ -255,25 +220,4 @@ function registerSearchBoxResponsiveStyles(theme: ThemeMode) {
     .left('0')
     .right('auto')
     .width('min(100vw - 32px, 520px)')
-}
-
-function createSearchBoxComponent() {
-  return createComponent<SearchBoxContext>(searchBoxTemplate, {
-    context: (head) => ({
-      placeholder: resolveSearchPlaceholder(resolveTsSsgContext(head)),
-    }),
-  })
-}
-
-export function createSearchComponents() {
-  registerSearchBoxStyles()
-  return { siteSearch: createSearchBoxComponent() }
-}
-
-function resolveSearchPlaceholder(context: TsSsgContext): string {
-  const title = context?.site?.siteTitle
-  if (typeof title !== 'string') return 'Search'
-  const trimmed = title.trim()
-  if (trimmed.length === 0) return 'Search'
-  return `Search ${trimmed}`
 }

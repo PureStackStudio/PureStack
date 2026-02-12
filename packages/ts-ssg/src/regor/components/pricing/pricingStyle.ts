@@ -1,97 +1,12 @@
-import { createComponent, html } from 'regor'
+import { styleBuilder } from '../../../style/styles'
+import {
+  type ThemeMode,
+  type ThemeOptions,
+  themes,
+} from '../../../style/themeOptions'
+import type { ThemePalette } from '../../../style/themePalette'
 
-import { getSvgIcon } from '../../style/icons'
-import { styleBuilder } from '../../style/styles'
-import type { ThemeMode, ThemeOptions } from '../../style/themeOptions'
-import { themes } from '../../style/themeOptions'
-import type { ThemePalette } from '../../style/themePalette'
-
-interface PricingTableProps {
-  eyebrow?: string
-  title?: string
-  subtitle?: string
-  footnote?: string
-}
-
-interface PricingTableContext extends PricingTableProps {
-  hasHeader: boolean
-  hasFootnote: boolean
-}
-
-interface PricingPlanProps {
-  title?: string
-  summary?: string
-  price?: string
-  period?: string
-  badge?: string
-  note?: string
-  variant?: string
-  icon?: string
-  ctaLabel?: string
-  ctaLink?: string
-}
-
-interface PricingPlanContext extends PricingPlanProps {
-  hasBadge: boolean
-  hasPrice: boolean
-  hasCta: boolean
-  hasIcon: boolean
-  iconSvg?: string
-}
-
-interface PricingFeatureProps {
-  icon?: string
-}
-
-interface PricingFeatureContext extends PricingFeatureProps {
-  iconSvg?: string
-}
-
-const pricingTableTemplate = html`<section class="pricing">
-  <div class="pricing__header" r-if="hasHeader">
-    <p class="pricing__eyebrow" r-if="eyebrow">{{ eyebrow }}</p>
-    <h2 class="pricing__title" r-if="title">{{ title }}</h2>
-    <p class="pricing__subtitle" r-if="subtitle">{{ subtitle }}</p>
-  </div>
-  <div class="pricing__grid">
-    <slot></slot>
-  </div>
-  <p class="pricing__footnote" r-if="hasFootnote">{{ footnote }}</p>
-</section>`
-
-const pricingPlanTemplate = html`<article
-  class="pricing-plan"
-  :class="{ 'pricing-plan--featured': variant === 'featured' }"
->
-  <div class="pricing-plan__head">
-    <div class="pricing-plan__meta">
-      <div class="pricing-plan__icon" r-if="hasIcon" r-html="iconSvg"></div>
-      <span class="pricing-plan__badge" r-if="hasBadge">{{ badge }}</span>
-    </div>
-    <div class="pricing-plan__title-row">
-      <h3 class="pricing-plan__title">{{ title }}</h3>
-    </div>
-    <p class="pricing-plan__summary" r-if="summary">{{ summary }}</p>
-  </div>
-  <div class="pricing-plan__price" r-if="hasPrice">
-    <span class="pricing-plan__amount">{{ price }}</span>
-    <span class="pricing-plan__period" r-if="period">{{ period }}</span>
-  </div>
-  <div class="pricing-plan__cta" r-if="hasCta">
-    <a class="pricing-plan__cta-link" :href="ctaLink">{{ ctaLabel }}</a>
-  </div>
-  <ul class="pricing-plan__features">
-    <slot></slot>
-  </ul>
-  <p class="pricing-plan__note" r-if="note">{{ note }}</p>
-</article>`
-
-const pricingFeatureTemplate = html`<li class="pricing-feature">
-  <span class="pricing-feature__icon" r-html="iconSvg"></span>
-  <span class="pricing-feature__text"><slot></slot></span>
-</li>`
-
-function registerPricingStyles() {
+export function registerPricingStyles() {
   themes.forEach((theme, palette, options) => {
     applyPricingShellStyles(theme, palette, options)
     applyPricingHeaderStyles(theme, palette)
@@ -102,7 +17,7 @@ function registerPricingStyles() {
   })
 }
 
-function applyPricingShellStyles(
+export function applyPricingShellStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -137,7 +52,10 @@ function applyPricingShellStyles(
     .alignItems('stretch')
 }
 
-function applyPricingHeaderStyles(theme: ThemeMode, palette: ThemePalette) {
+export function applyPricingHeaderStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+) {
   styleBuilder
     .select('.pricing__header', theme)
     .position('relative')
@@ -180,7 +98,7 @@ function applyPricingHeaderStyles(theme: ThemeMode, palette: ThemePalette) {
     .color(palette.text.subtle)
 }
 
-function applyPricingPlanStyles(
+export function applyPricingPlanStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -192,7 +110,7 @@ function applyPricingPlanStyles(
   applyPricingPlanNoteStyles(theme, palette)
 }
 
-function applyPricingPlanShellStyles(
+export function applyPricingPlanShellStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -212,7 +130,7 @@ function applyPricingPlanShellStyles(
   styleBuilder.select('.pricing-plan__head', theme).display('grid').gap('6px')
 }
 
-function applyPricingPlanHeaderStyles(
+export function applyPricingPlanHeaderStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -222,7 +140,10 @@ function applyPricingPlanHeaderStyles(
   applyPricingPlanTitleStyles(theme, palette, options)
 }
 
-function applyPricingPlanMetaStyles(theme: ThemeMode, _palette: ThemePalette) {
+export function applyPricingPlanMetaStyles(
+  theme: ThemeMode,
+  _palette: ThemePalette,
+) {
   styleBuilder
     .select('.pricing-plan__meta', theme)
     .display('flex')
@@ -231,7 +152,10 @@ function applyPricingPlanMetaStyles(theme: ThemeMode, _palette: ThemePalette) {
     .gap('12px')
 }
 
-function applyPricingPlanIconStyles(theme: ThemeMode, palette: ThemePalette) {
+export function applyPricingPlanIconStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+) {
   styleBuilder
     .select('.pricing-plan__icon', theme)
     .width('44px')
@@ -259,7 +183,7 @@ function applyPricingPlanIconStyles(theme: ThemeMode, palette: ThemePalette) {
     .set('stroke-width', '2.2')
 }
 
-function applyPricingPlanTitleStyles(
+export function applyPricingPlanTitleStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -298,7 +222,10 @@ function applyPricingPlanTitleStyles(
     .color(palette.text.subtle)
 }
 
-function applyPricingPlanPriceStyles(theme: ThemeMode, palette: ThemePalette) {
+export function applyPricingPlanPriceStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+) {
   styleBuilder
     .select('.pricing-plan__price', theme)
     .display('flex')
@@ -322,7 +249,7 @@ function applyPricingPlanPriceStyles(theme: ThemeMode, palette: ThemePalette) {
     .color(palette.text.subtle)
 }
 
-function applyPricingPlanCtaStyles(
+export function applyPricingPlanCtaStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -359,7 +286,10 @@ function applyPricingPlanCtaStyles(
     .outlineOffset('2px')
 }
 
-function applyPricingPlanNoteStyles(theme: ThemeMode, palette: ThemePalette) {
+export function applyPricingPlanNoteStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+) {
   styleBuilder
     .select('.pricing-plan__note', theme)
     .margin('0')
@@ -368,7 +298,10 @@ function applyPricingPlanNoteStyles(theme: ThemeMode, palette: ThemePalette) {
     .color(palette.text.subtle)
 }
 
-function applyPricingFeatureStyles(theme: ThemeMode, palette: ThemePalette) {
+export function applyPricingFeatureStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+) {
   styleBuilder
     .select('.pricing-plan__features', theme)
     .listStyle('none')
@@ -419,7 +352,7 @@ function applyPricingFeatureStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder.select('.pricing-feature__text', theme).display('block')
 }
 
-function applyPricingFeaturedStyles(
+export function applyPricingFeaturedStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -453,7 +386,7 @@ function applyPricingFeaturedStyles(
     .background(palette.action.accent.hover)
 }
 
-function applyPricingResponsiveStyles(theme: ThemeMode) {
+export function applyPricingResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.pricing__grid', theme)
     .media('min-width: 900px')
@@ -473,105 +406,4 @@ function applyPricingResponsiveStyles(theme: ThemeMode) {
     .select('.pricing-plan--featured', theme)
     .media('max-width: 720px')
     .transform('translateY(0)')
-}
-
-function createPricingTableComponent() {
-  return createComponent<PricingTableContext>(pricingTableTemplate, {
-    props: ['eyebrow', 'title', 'subtitle', 'footnote'],
-    context: (head) => resolvePricingTableContext(head.props),
-  })
-}
-
-function createPricingPlanComponent() {
-  return createComponent<PricingPlanContext>(pricingPlanTemplate, {
-    props: [
-      'title',
-      'summary',
-      'price',
-      'period',
-      'badge',
-      'note',
-      'variant',
-      'icon',
-      'ctaLabel',
-      'ctaLink',
-    ],
-    context: (head) => resolvePricingPlanContext(head.props),
-  })
-}
-
-function createPricingFeatureComponent() {
-  return createComponent<PricingFeatureContext>(pricingFeatureTemplate, {
-    props: ['icon'],
-    context: (head) => resolvePricingFeatureContext(head.props),
-  })
-}
-
-export function createPricingComponents() {
-  registerPricingStyles()
-  return {
-    pricingTable: createPricingTableComponent(),
-    pricingPlan: createPricingPlanComponent(),
-    pricingFeature: createPricingFeatureComponent(),
-  }
-}
-
-function resolvePricingTableContext(
-  props: PricingTableProps,
-): PricingTableContext {
-  const eyebrow = resolveString(props.eyebrow)
-  const title = resolveString(props.title)
-  const subtitle = resolveString(props.subtitle)
-  const footnote = resolveString(props.footnote)
-  return {
-    eyebrow,
-    title,
-    subtitle,
-    footnote,
-    hasHeader: Boolean(eyebrow || title || subtitle),
-    hasFootnote: Boolean(footnote),
-  }
-}
-
-function resolvePricingPlanContext(
-  props: PricingPlanProps,
-): PricingPlanContext {
-  const title = resolveString(props.title) || 'Plan'
-  const variant = resolveVariant(props.variant)
-  const ctaLabel = resolveString(props.ctaLabel)
-  const ctaLink = resolveString(props.ctaLink)
-  const hasCta = Boolean(ctaLabel && ctaLink)
-  return {
-    ...props,
-    title,
-    variant,
-    hasBadge: Boolean(props.badge),
-    hasPrice: Boolean(props.price),
-    hasCta,
-    hasIcon: Boolean(props.icon),
-    iconSvg: getSvgIcon(props.icon, 'code'),
-  }
-}
-
-function resolvePricingFeatureContext(
-  props: PricingFeatureProps,
-): PricingFeatureContext {
-  const icon = resolveString(props.icon)
-  return {
-    icon,
-    iconSvg: getSvgIcon(icon, 'check'),
-  }
-}
-
-function resolveVariant(value?: string) {
-  const normalized = resolveString(value).toLowerCase()
-  if (!normalized) return ''
-  if (normalized === 'featured' || normalized === 'primary') return 'featured'
-  return ''
-}
-
-function resolveString(value: unknown) {
-  return typeof value === 'string' && value.trim().length > 0
-    ? value.trim()
-    : ''
 }

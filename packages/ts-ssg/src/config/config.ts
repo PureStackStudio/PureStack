@@ -145,7 +145,9 @@ function resolveLogoConfig(
     wordOne: resolveString(input?.wordOne, file?.wordOne, 'Pure'),
     wordTwo: resolveString(input?.wordTwo, file?.wordTwo, 'Stack'),
     subtitle: resolveOptionalString(input?.subtitle ?? file?.subtitle),
-    subtitleAlign: resolveSubtitleAlign(input?.subtitleAlign ?? file?.subtitleAlign),
+    subtitleAlign: resolveSubtitleAlign(
+      input?.subtitleAlign ?? file?.subtitleAlign,
+    ),
     href: resolveString(input?.href, file?.href, '/'),
     iconSvg: resolveOptionalString(input?.iconSvg ?? file?.iconSvg),
     iconSize: resolveOptionalString(input?.iconSize ?? file?.iconSize),

@@ -27,8 +27,7 @@ describe('resolveSiteConfig sitemap', () => {
         subtitle: 'backend-native engine',
         subtitleAlign: 'end',
         href: '/home',
-        iconSvg:
-          '<svg viewBox="0 0 24 24"><path d="M4 12h16"/></svg>',
+        iconSvg: '<svg viewBox="0 0 24 24"><path d="M4 12h16"/></svg>',
         iconSize: '28px',
         wordFontSize: '22px',
         subtitleFontSize: '10px',

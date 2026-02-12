@@ -1,72 +1,12 @@
-import { createComponent, html } from 'regor'
-
-import { styleBuilder } from '../../style/styles'
+import { styleBuilder } from '../../../style/styles'
 import {
   type ThemeMode,
   type ThemeOptions,
   themes,
-} from '../../style/themeOptions'
-import type { ThemePalette } from '../../style/themePalette'
+} from '../../../style/themeOptions'
+import type { ThemePalette } from '../../../style/themePalette'
 
-const themeSwitcherTemplate = html`<button
-  class="theme-switcher"
-  type="button"
-  aria-label="Switch theme"
->
-  <span class="theme-switcher__track" aria-hidden="true"></span>
-  <span
-    class="theme-switcher__track-icon theme-switcher__track-icon--sun"
-    aria-hidden="true"
-  >
-    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <circle cx="12" cy="12" r="4"></circle>
-      <line x1="12" y1="1" x2="12" y2="3"></line>
-      <line x1="12" y1="21" x2="12" y2="23"></line>
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-      <line x1="1" y1="12" x2="3" y2="12"></line>
-      <line x1="21" y1="12" x2="23" y2="12"></line>
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-    </svg>
-  </span>
-  <span
-    class="theme-switcher__track-icon theme-switcher__track-icon--moon"
-    aria-hidden="true"
-  >
-    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-    </svg>
-  </span>
-  <span class="theme-switcher__thumb" aria-hidden="true">
-    <span
-      class="theme-switcher__icon theme-switcher__icon--sun"
-      aria-hidden="true"
-    >
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <circle cx="12" cy="12" r="4"></circle>
-        <line x1="12" y1="1" x2="12" y2="3"></line>
-        <line x1="12" y1="21" x2="12" y2="23"></line>
-        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-        <line x1="1" y1="12" x2="3" y2="12"></line>
-        <line x1="21" y1="12" x2="23" y2="12"></line>
-        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-      </svg>
-    </span>
-    <span
-      class="theme-switcher__icon theme-switcher__icon--moon"
-      aria-hidden="true"
-    >
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-      </svg>
-    </span>
-  </span>
-</button>`
-
-function registerThemeSwitcherStyles() {
+export function registerThemeSwitcherStyles() {
   themes.forEach((theme, palette, options) => {
     registerThemeSwitcherShellStyles(theme, palette, options)
     registerThemeSwitcherTrackStyles(theme, palette, options)
@@ -75,7 +15,7 @@ function registerThemeSwitcherStyles() {
   })
 }
 
-function registerThemeSwitcherShellStyles(
+export function registerThemeSwitcherShellStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -108,7 +48,7 @@ function registerThemeSwitcherShellStyles(
     .outlineOffset('2px')
 }
 
-function registerThemeSwitcherTrackStyles(
+export function registerThemeSwitcherTrackStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -162,7 +102,7 @@ function registerThemeSwitcherTrackStyles(
     .color(palette.text.subtle)
 }
 
-function registerThemeSwitcherIconStyles(
+export function registerThemeSwitcherIconStyles(
   theme: ThemeMode,
   palette: ThemePalette,
 ) {
@@ -216,7 +156,7 @@ function registerThemeSwitcherIconStyles(
     .transform('scale(0.6)')
 }
 
-function registerThemeSwitcherActiveStateStyles(theme: ThemeMode) {
+export function registerThemeSwitcherActiveStateStyles(theme: ThemeMode) {
   styleBuilder
     .select(
       `.theme-switcher[data-theme="${theme}"] .theme-switcher__track`,
@@ -240,13 +180,4 @@ function registerThemeSwitcherActiveStateStyles(theme: ThemeMode) {
     )
     .opacity(0)
     .transform('scale(0.6)')
-}
-
-function createThemeSwitcherComponent() {
-  return createComponent(themeSwitcherTemplate)
-}
-
-export function createThemeSwitcherComponents() {
-  registerThemeSwitcherStyles()
-  return { themeSwitcher: createThemeSwitcherComponent() }
 }

@@ -1,74 +1,12 @@
-import { createComponent, html } from 'regor'
-
-import { styleBuilder } from '../../style/styles'
+import { styleBuilder } from '../../../style/styles'
 import {
   type ThemeMode,
   type ThemeOptions,
   themes,
-} from '../../style/themeOptions'
-import type { ThemePalette } from '../../style/themePalette'
-import { resolveTsSsgContext } from '../resolveTsSsgContext'
-import type { TsSsgContext } from '../ts-ssg-context'
+} from '../../../style/themeOptions'
+import type { ThemePalette } from '../../../style/themePalette'
 
-interface TopBarBrandContext {
-  brandWordOne: string
-  brandWordTwo: string
-  brandSubtitle?: string
-  brandSubtitleAlign?: 'start' | 'center' | 'end' | 'justify'
-  brandHref: string
-  brandIconSvg?: string
-  brandIconSize?: string
-  brandWordFontSize?: string
-  brandSubtitleFontSize?: string
-}
-
-function resolveTopBarBrand(context: TsSsgContext): TopBarBrandContext {
-  return {
-    brandWordOne: context.site.logo.wordOne ?? 'Pure',
-    brandWordTwo: context.site.logo.wordTwo ?? 'Stack',
-    brandSubtitle: context.site.logo.subtitle,
-    brandSubtitleAlign: context.site.logo.subtitleAlign,
-    brandHref: context.site.logo.href ?? '/',
-    brandIconSvg: context.site.logo.iconSvg,
-    brandIconSize: context.site.logo.iconSize,
-    brandWordFontSize: context.site.logo.wordFontSize,
-    brandSubtitleFontSize: context.site.logo.subtitleFontSize,
-  }
-}
-
-const topBarTemplate = html`<input
-    class="doc-nav-toggle"
-    id="doc-nav-toggle"
-    type="checkbox"
-    autocomplete="off"
-    aria-hidden="true"
-  />
-  <header class="topbar">
-    <SiteLogo
-      class="topbar__logo"
-      :wordOne="brandWordOne"
-      :wordTwo="brandWordTwo"
-      :subtitle="brandSubtitle"
-      :subtitleAlign="brandSubtitleAlign"
-      :href="brandHref"
-      :iconSvg="brandIconSvg"
-      :iconSize="brandIconSize"
-      :wordFontSize="brandWordFontSize"
-      :subtitleFontSize="brandSubtitleFontSize"
-    />
-    <site-search class="topbar__search"></site-search>
-    <div class="topbar__controls">
-      <theme-switcher></theme-switcher>
-      <label
-        class="topbar__icon topbar__toggle"
-        for="doc-nav-toggle"
-        role="button"
-        aria-label="Toggle navigation"
-      ></label>
-    </div>
-  </header>`
-
-function registerTopBarStyles() {
+export function registerTopBarStyles() {
   themes.forEach((theme, palette, options) => {
     registerTopBarShellStyles(theme, palette, options)
     registerTopBarSearchStyles(theme)
@@ -76,7 +14,7 @@ function registerTopBarStyles() {
   })
 }
 
-function registerTopBarShellStyles(
+export function registerTopBarShellStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -134,7 +72,7 @@ function registerTopBarShellStyles(
     .color(palette.text.subtle)
 }
 
-function registerTopBarSearchStyles(theme: ThemeMode) {
+export function registerTopBarSearchStyles(theme: ThemeMode) {
   styleBuilder
     .select('.topbar__search', theme)
     .display('block')
@@ -147,7 +85,10 @@ function registerTopBarSearchStyles(theme: ThemeMode) {
     .maxWidth('none')
 }
 
-function registerTopBarToggleStyles(theme: ThemeMode, palette: ThemePalette) {
+export function registerTopBarToggleStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+) {
   styleBuilder
     .select('.topbar__toggle', theme)
     .background(palette.background.surface)
@@ -244,15 +185,4 @@ function registerTopBarToggleStyles(theme: ThemeMode, palette: ThemePalette) {
     .transform('translateX(-50%)')
     .width('min(560px, calc(100vw - 24px))')
     .zIndex('120')
-}
-
-function createTopBarComponent() {
-  return createComponent<TopBarBrandContext>(topBarTemplate, {
-    context: (head) => resolveTopBarBrand(resolveTsSsgContext(head)),
-  })
-}
-
-export function createTopBarComponents() {
-  registerTopBarStyles()
-  return { topBar: createTopBarComponent() }
 }

@@ -5,7 +5,7 @@ import { resolveSiteConfig } from '../../config/config'
 import { normalizeFrontmatter } from '../../frontmatter/frontmatter'
 import { ensureDomGlobals } from '../registerDomGlobals'
 import { renderApp } from '../renderApp'
-import { createNavigationComponents } from './navMenu'
+import { createNavigationComponents } from './navMenu/navMenu'
 
 describe('NavMenu rendering', () => {
   it('evaluates r-else branches for leaf items', () => {

@@ -1,90 +1,12 @@
-import { createComponent, html } from 'regor'
-
-import type { PageOutlineItem } from '../../mdx/mdx'
-import { styleBuilder } from '../../style/styles'
+import { styleBuilder } from '../../../style/styles'
 import {
   type ThemeMode,
   type ThemeOptions,
   themes,
-} from '../../style/themeOptions'
-import type { ThemePalette } from '../../style/themePalette'
-import { resolveTsSsgContext } from '../resolveTsSsgContext'
-import type { TsSsgContext } from '../ts-ssg-context'
+} from '../../../style/themeOptions'
+import type { ThemePalette } from '../../../style/themePalette'
 
-interface PageTocContext {
-  items?: PageOutlineItem[]
-  title?: string
-}
-
-interface PageTocItemContext extends PageOutlineItem {
-  href: string
-  children?: PageTocItemContext[]
-}
-
-const pageTocTemplate = html`<nav class="page-toc" aria-label="On this page">
-  <button
-    class="page-toc__mobile-toggle"
-    type="button"
-    aria-controls="doc-toc"
-    aria-expanded="false"
-  >
-    <span class="page-toc__mobile-toggle-icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24" focusable="false">
-        <path d="M7 7l10 10"></path>
-        <path d="M17 7L7 17"></path>
-      </svg>
-    </span>
-    <span class="page-toc__mobile-toggle-label">on this page</span>
-  </button>
-  <div class="page-toc__header">{{ title }}</div>
-  <ul class="page-toc__list" r-if="items.length > 0">
-    <li r-for="item in items" class="page-toc__item page-toc__item--h2">
-      <a class="page-toc__link" :href="item.href">{{ item.title }}</a>
-      <ul
-        r-if="item.children && item.children.length > 0"
-        class="page-toc__list page-toc__list--nested"
-      >
-        <li
-          r-for="child in item.children"
-          class="page-toc__item page-toc__item--h3"
-        >
-          <a class="page-toc__link page-toc__link--sub" :href="child.href"
-            >{{ child.title }}</a
-          >
-        </li>
-      </ul>
-    </li>
-  </ul>
-  <div class="page-toc__empty" r-else>No sections yet.</div>
-</nav>`
-
-function toPageTocItems(items: PageOutlineItem[]): PageTocItemContext[] {
-  return items.map((item) => {
-    const { children, ...rest } = item
-    const mappedChildren = children ? toPageTocItems(children) : undefined
-    return {
-      ...rest,
-      href: `#${item.id}`,
-      ...(mappedChildren ? { children: mappedChildren } : {}),
-    }
-  })
-}
-
-function resolveItems(
-  props: PageTocContext,
-  context: TsSsgContext | undefined,
-) {
-  const items = props.items ?? context?.outline ?? []
-  return toPageTocItems(items)
-}
-
-function resolveTitle(props: PageTocContext) {
-  return typeof props.title === 'string' && props.title.trim().length > 0
-    ? props.title.trim()
-    : 'On this page'
-}
-
-function registerPageTocStyles() {
+export function registerPageTocStyles() {
   themes.forEach((theme, palette, options) => {
     registerPageTocShellStyles(theme, palette, options)
     registerPageTocLinkStyles(theme, palette, options)
@@ -93,7 +15,7 @@ function registerPageTocStyles() {
   })
 }
 
-function registerPageTocShellStyles(
+export function registerPageTocShellStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -140,7 +62,7 @@ function registerPageTocShellStyles(
   styleBuilder.select('.page-toc__mobile-toggle', theme).display('none')
 }
 
-function registerPageTocLinkStyles(
+export function registerPageTocLinkStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -188,7 +110,10 @@ function registerPageTocLinkStyles(
     .color(palette.action.accent.text)
 }
 
-function registerPageTocTargetStyles(theme: ThemeMode, palette: ThemePalette) {
+export function registerPageTocTargetStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+) {
   styleBuilder
     .select('.doc-content .page-toc__target', theme)
     .scrollMarginTop('96px')
@@ -199,7 +124,7 @@ function registerPageTocTargetStyles(theme: ThemeMode, palette: ThemePalette) {
     .color(palette.text.accent)
 }
 
-function registerPageTocLayoutStyles(
+export function registerPageTocLayoutStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -495,7 +420,10 @@ function registerPageTocLayoutStyles(
     .boxShadow(options.shadows.strong)
 
   styleBuilder
-    .select('.template-doc.template-doc--nav-ready.template-doc--toc-collapsed .doc-toc', theme)
+    .select(
+      '.template-doc.template-doc--nav-ready.template-doc--toc-collapsed .doc-toc',
+      theme,
+    )
     .transition('transform 260ms ease')
 
   styleBuilder
@@ -646,23 +574,4 @@ function registerPageTocLayoutStyles(
   styleBuilder
     .select('.template-doc--toc-collapsed .doc-toc .page-toc__empty', theme)
     .paddingBottom('8px')
-}
-
-function createPageTocComponent() {
-  return createComponent<PageTocContext>(pageTocTemplate, {
-    props: ['items', 'title'],
-    context: (head) => {
-      const context = resolveTsSsgContext(head)
-      return {
-        title: resolveTitle(head.props),
-        items: resolveItems(head.props, context),
-      }
-    },
-  })
-}
-
-export function createPageTocComponents() {
-  registerPageTocStyles()
-  const pageToc = createPageTocComponent()
-  return { pageToc }
 }

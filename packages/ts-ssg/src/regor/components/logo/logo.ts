@@ -1,9 +1,6 @@
 import { createComponent, html } from 'regor'
 
-import { styleBuilder } from '../../style/styles'
-import type { ThemeMode, ThemeOptions } from '../../style/themeOptions'
-import { themes } from '../../style/themeOptions'
-import type { ThemePalette } from '../../style/themePalette'
+import { registerLogoStyles } from './logoStyle'
 
 const logoTemplate = html`<div class="site-logo">
   <a class="site-logo__link" :href="href" :aria-label="ariaLabel">
@@ -25,7 +22,7 @@ const logoTemplate = html`<div class="site-logo">
   </a>
 </div>`
 
-interface SiteLogoProps {
+export interface SiteLogoProps {
   wordOne?: string
   wordTwo?: string
   subtitle?: string
@@ -37,7 +34,7 @@ interface SiteLogoProps {
   subtitleFontSize?: string
 }
 
-interface SiteLogoContext {
+export interface SiteLogoContext {
   wordOne: string
   wordTwo: string
   subtitle: string
@@ -49,154 +46,6 @@ interface SiteLogoContext {
   subtitleStyle: Record<string, string>
   hasIconSvg: boolean
   hasSubtitle: boolean
-}
-
-function registerLogoStyles() {
-  themes.forEach((theme, palette, options) => {
-    registerLogoShellStyles(theme, palette, options)
-    registerLogoTextStyles(theme, palette, options)
-    registerLogoInteractiveStyles(theme, palette)
-  })
-}
-
-function registerLogoShellStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
-  styleBuilder.select('.site-logo', theme).display('inline-block')
-
-  styleBuilder
-    .select('.site-logo__link', theme)
-    .display('inline-flex')
-    .alignItems('center')
-    .gap('6px')
-    .padding('10px 14px')
-    .borderRadius(options.radii.pill)
-    .border(`1px solid ${palette.border.subtle}`)
-    .textDecoration('none')
-    .position('relative')
-    .overflow('hidden')
-    .background(palette.background.panel)
-    .boxShadow(palette.effect.panelShadow)
-
-  styleBuilder
-    .select('.site-logo__link::before', theme)
-    .content('""')
-    .position('absolute')
-    .inset('0')
-    .opacity('0.48')
-    .pointerEvents('none')
-    .background(
-      `linear-gradient(135deg, ${palette.icon.accent.gradient} 0%, ${palette.background.panel} 70%)`,
-    )
-
-  styleBuilder
-    .select('.site-logo__glyph', theme)
-    .width('36px')
-    .height('36px')
-    .borderRadius(options.radii.md)
-    .display('inline-block')
-    .position('relative')
-    .zIndex('1')
-    .background(palette.icon.accent.gradient)
-    .border(`1px solid ${palette.icon.accent.ring}`)
-    .boxShadow(palette.effect.interactiveShadow)
-
-  styleBuilder
-    .select('.site-logo__glyph--default::before', theme)
-    .content('""')
-    .position('absolute')
-    .inset('9px 10px')
-    .borderRadius('4px')
-    .background(palette.icon.accent.color)
-
-  styleBuilder
-    .select('.site-logo__glyph--custom', theme)
-    .display('grid')
-    .placeItems('center')
-    .color(palette.icon.accent.color)
-    .overflow('hidden')
-
-  styleBuilder
-    .select('.site-logo__glyph--custom svg', theme)
-    .width('70%')
-    .height('70%')
-    .display('block')
-}
-
-function registerLogoTextStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
-  styleBuilder
-    .select('.site-logo__stack', theme)
-    .display('grid')
-    .alignItems('center')
-    .gap('1px')
-    .position('relative')
-    .zIndex('1')
-
-  styleBuilder
-    .select('.site-logo__brand', theme)
-    .display('inline-flex')
-    .alignItems('baseline')
-    .gap('3px')
-    .whiteSpace('nowrap')
-
-  styleBuilder
-    .select('.site-logo__word', theme)
-    .fontFamily(options.typography.baseFamily)
-    .fontSize('15px')
-    .lineHeight('1')
-    .fontWeight('800')
-    .letterSpacing('0.03em')
-    .textTransform('uppercase')
-    .whiteSpace('nowrap')
-
-  styleBuilder
-    .select('.site-logo__word--primary', theme)
-    .color(palette.text.default)
-
-  styleBuilder
-    .select('.site-logo__word--accent', theme)
-    .color(palette.text.accent)
-
-  styleBuilder
-    .select('.site-logo__subtitle', theme)
-    .display('block')
-    .width('100%')
-    .fontSize('7.8px')
-    .lineHeight('1.2')
-    .fontWeight('700')
-    .letterSpacing('0.08em')
-    .textTransform('uppercase')
-    .color(palette.text.subtle)
-    .whiteSpace('nowrap')
-}
-
-function registerLogoInteractiveStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-) {
-  styleBuilder
-    .select('.site-logo__link[href]', theme)
-    .cursor('pointer')
-    .transition(
-      'transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease',
-    )
-
-  styleBuilder
-    .select('.site-logo__link[href]:hover', theme)
-    .transform('translateY(-1px)')
-    .borderColor(palette.border.accent)
-    .boxShadow(palette.effect.accentShadow)
-
-  styleBuilder
-    .select('.site-logo__link[href]:focus-visible', theme)
-    .outline(`2px solid ${palette.border.focus}`)
-    .outlineOffset('2px')
 }
 
 function resolveLogoContext(props: SiteLogoProps): SiteLogoContext {

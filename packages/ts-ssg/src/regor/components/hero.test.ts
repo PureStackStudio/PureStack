@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 
 import { ensureDomGlobals } from '../registerDomGlobals'
 import { renderApp } from '../renderApp'
-import { createHeroComponents } from './hero'
+import { createHeroComponents } from './hero/hero'
 
 describe('HeroBanner rendering', () => {
   it('renders named slot templates into hero sections', () => {
