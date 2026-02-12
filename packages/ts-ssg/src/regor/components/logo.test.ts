@@ -45,7 +45,9 @@ describe('SiteLogo rendering', () => {
         wordOne="Calc"
         wordTwo="Core"
         subtitle="backend-native engine"
+        subtitleAlign="end"
         iconSvg='<svg viewBox="0 0 24 24"><path d="M4 12h16"/></svg>'
+        iconSize="28px"
         wordFontSize="24px"
         subtitleFontSize="9px"
       />`,
@@ -55,7 +57,10 @@ describe('SiteLogo rendering', () => {
 
     expect(html).toContain('site-logo__glyph--custom')
     expect(html).toContain('<svg viewbox="0 0 24 24"><path d="M4 12h16"></path></svg>')
+    expect(html).toContain('width: 28px')
+    expect(html).toContain('height: 28px')
     expect(html).toContain('font-size: 24px')
     expect(html).toContain('font-size: 9px')
+    expect(html).toContain('text-align: end')
   })
 })

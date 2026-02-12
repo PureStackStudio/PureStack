@@ -31,8 +31,10 @@ export interface LogoConfig {
   wordOne: string
   wordTwo: string
   subtitle?: string
+  subtitleAlign?: 'start' | 'center' | 'end' | 'justify'
   href: string
   iconSvg?: string
+  iconSize?: string
   wordFontSize?: string
   subtitleFontSize?: string
 }
@@ -143,8 +145,10 @@ function resolveLogoConfig(
     wordOne: resolveString(input?.wordOne, file?.wordOne, 'Pure'),
     wordTwo: resolveString(input?.wordTwo, file?.wordTwo, 'Stack'),
     subtitle: resolveOptionalString(input?.subtitle ?? file?.subtitle),
+    subtitleAlign: resolveSubtitleAlign(input?.subtitleAlign ?? file?.subtitleAlign),
     href: resolveString(input?.href, file?.href, '/'),
     iconSvg: resolveOptionalString(input?.iconSvg ?? file?.iconSvg),
+    iconSize: resolveOptionalString(input?.iconSize ?? file?.iconSize),
     wordFontSize: resolveOptionalString(
       input?.wordFontSize ?? file?.wordFontSize,
     ),
@@ -152,6 +156,19 @@ function resolveLogoConfig(
       input?.subtitleFontSize ?? file?.subtitleFontSize,
     ),
   }
+}
+
+function resolveSubtitleAlign(
+  value: unknown,
+): 'start' | 'center' | 'end' | 'justify' | undefined {
+  if (
+    value === 'start' ||
+    value === 'center' ||
+    value === 'end' ||
+    value === 'justify'
+  )
+    return value
+  return undefined
 }
 
 function resolveString(...values: Array<string | undefined>) {

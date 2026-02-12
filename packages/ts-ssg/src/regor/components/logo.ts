@@ -9,11 +9,12 @@ const logoTemplate = html`<div class="site-logo">
   <a class="site-logo__link" :href="href" :aria-label="ariaLabel">
     <span
       class="site-logo__glyph site-logo__glyph--custom"
+      :style="glyphStyle"
       aria-hidden="true"
       r-if="hasIconSvg"
       r-html="iconSvg"
     ></span>
-    <span class="site-logo__glyph site-logo__glyph--default" aria-hidden="true" r-else></span>
+    <span class="site-logo__glyph site-logo__glyph--default" :style="glyphStyle" aria-hidden="true" r-else></span>
     <span class="site-logo__stack">
       <span class="site-logo__brand">
         <span class="site-logo__word site-logo__word--primary" :style="wordStyle">{{ wordOne }}</span>
@@ -28,8 +29,10 @@ interface SiteLogoProps {
   wordOne?: string
   wordTwo?: string
   subtitle?: string
+  subtitleAlign?: 'start' | 'center' | 'end' | 'justify'
   href?: string
   iconSvg?: string
+  iconSize?: string
   wordFontSize?: string
   subtitleFontSize?: string
 }
@@ -41,6 +44,7 @@ interface SiteLogoContext {
   href: string
   iconSvg: string
   ariaLabel: string
+  glyphStyle: Record<string, string>
   wordStyle: Record<string, string>
   subtitleStyle: Record<string, string>
   hasIconSvg: boolean
@@ -67,7 +71,7 @@ function registerLogoShellStyles(
     .select('.site-logo__link', theme)
     .display('inline-flex')
     .alignItems('center')
-    .gap('12px')
+    .gap('6px')
     .padding('10px 14px')
     .borderRadius(options.radii.pill)
     .border(`1px solid ${palette.border.subtle}`)
@@ -162,6 +166,8 @@ function registerLogoTextStyles(
 
   styleBuilder
     .select('.site-logo__subtitle', theme)
+    .display('block')
+    .width('100%')
     .fontSize('7.8px')
     .lineHeight('1.2')
     .fontWeight('700')
@@ -222,8 +228,10 @@ function resolveLogoContext(props: SiteLogoProps): SiteLogoContext {
   const wordOne = normalizeWord(props.wordOne, 'Pure')
   const wordTwo = normalizeWord(props.wordTwo, 'Stack')
   const subtitle = normalizeOptionalText(props.subtitle)
+  const subtitleAlign = normalizeSubtitleAlign(props.subtitleAlign)
   const href = normalizeOptionalText(props.href) || '/'
   const iconSvg = normalizeOptionalText(props.iconSvg)
+  const iconSize = normalizeCssSize(props.iconSize)
   const wordFontSize = normalizeCssSize(props.wordFontSize)
   const subtitleFontSize = normalizeCssSize(props.subtitleFontSize)
   const hasSubtitle = subtitle.length > 0
@@ -231,8 +239,9 @@ function resolveLogoContext(props: SiteLogoProps): SiteLogoContext {
   const ariaLabel = hasSubtitle
     ? `${wordOne} ${wordTwo}: ${subtitle}`
     : `${wordOne} ${wordTwo}`
+  const glyphStyle = buildGlyphSizeStyle(iconSize)
   const wordStyle = buildFontSizeStyle(wordFontSize)
-  const subtitleStyle = buildFontSizeStyle(subtitleFontSize)
+  const subtitleStyle = buildSubtitleStyle(subtitleFontSize, subtitleAlign)
   return {
     wordOne,
     wordTwo,
@@ -240,6 +249,7 @@ function resolveLogoContext(props: SiteLogoProps): SiteLogoContext {
     href,
     iconSvg,
     ariaLabel,
+    glyphStyle,
     wordStyle,
     subtitleStyle,
     hasIconSvg,
@@ -269,14 +279,39 @@ function buildFontSizeStyle(fontSize: string): Record<string, string> {
   return { fontSize }
 }
 
+function buildSubtitleStyle(
+  fontSize: string,
+  subtitleAlign: 'start' | 'center' | 'end' | 'justify',
+): Record<string, string> {
+  const style: Record<string, string> = {
+    textAlign: subtitleAlign,
+  }
+  if (fontSize) style.fontSize = fontSize
+  return style
+}
+
+function buildGlyphSizeStyle(size: string): Record<string, string> {
+  if (!size) return {}
+  return { width: size, height: size }
+}
+
+function normalizeSubtitleAlign(
+  value: 'start' | 'center' | 'end' | 'justify' | undefined,
+): 'start' | 'center' | 'end' | 'justify' {
+  if (value === 'center' || value === 'end' || value === 'justify') return value
+  return 'start'
+}
+
 function createSiteLogoComponent() {
   return createComponent<SiteLogoContext>(logoTemplate, {
     props: [
       'wordOne',
       'wordTwo',
       'subtitle',
+      'subtitleAlign',
       'href',
       'iconSvg',
+      'iconSize',
       'wordFontSize',
       'subtitleFontSize',
     ],

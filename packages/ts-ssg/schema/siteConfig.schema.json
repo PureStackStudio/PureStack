@@ -32,6 +32,12 @@
           "type": "string",
           "description": "Optional subtitle text shown below the brand name."
         },
+        "subtitleAlign": {
+          "type": "string",
+          "enum": ["start", "center", "end", "justify"],
+          "description": "Optional subtitle alignment relative to the brand words.",
+          "default": "start"
+        },
         "href": {
           "type": "string",
           "description": "Logo link target.",
@@ -40,6 +46,10 @@
         "iconSvg": {
           "type": "string",
           "description": "Optional embedded SVG markup rendered inside the logo glyph."
+        },
+        "iconSize": {
+          "type": "string",
+          "description": "Optional CSS size value applied to the logo glyph width and height."
         },
         "wordFontSize": {
           "type": "string",

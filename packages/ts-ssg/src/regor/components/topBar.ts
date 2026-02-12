@@ -14,8 +14,10 @@ interface TopBarBrandContext {
   brandWordOne: string
   brandWordTwo: string
   brandSubtitle?: string
+  brandSubtitleAlign?: 'start' | 'center' | 'end' | 'justify'
   brandHref: string
   brandIconSvg?: string
+  brandIconSize?: string
   brandWordFontSize?: string
   brandSubtitleFontSize?: string
 }
@@ -25,8 +27,10 @@ function resolveTopBarBrand(context: TsSsgContext): TopBarBrandContext {
     brandWordOne: context.site.logo.wordOne ?? 'Pure',
     brandWordTwo: context.site.logo.wordTwo ?? 'Stack',
     brandSubtitle: context.site.logo.subtitle,
+    brandSubtitleAlign: context.site.logo.subtitleAlign,
     brandHref: context.site.logo.href ?? '/',
     brandIconSvg: context.site.logo.iconSvg,
+    brandIconSize: context.site.logo.iconSize,
     brandWordFontSize: context.site.logo.wordFontSize,
     brandSubtitleFontSize: context.site.logo.subtitleFontSize,
   }
@@ -44,8 +48,10 @@ const topBarTemplate = html`<input
       :word-one="brandWordOne"
       :word-two="brandWordTwo"
       :subtitle="brandSubtitle"
+      :subtitle-align="brandSubtitleAlign"
       :href="brandHref"
       :icon-svg="brandIconSvg"
+      :icon-size="brandIconSize"
       :word-font-size="brandWordFontSize"
       :subtitle-font-size="brandSubtitleFontSize"
     />

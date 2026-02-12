@@ -20,9 +20,11 @@ describe('TopBar rendering', () => {
         wordOne: 'Calc',
         wordTwo: 'Core',
         subtitle: 'backend-native engine',
+        subtitleAlign: 'end',
         href: '/docs/',
         iconSvg:
           '<svg viewBox="0 0 24 24"><path d="M4 12h16" stroke="currentColor"/></svg>',
+        iconSize: '26px',
         wordFontSize: '22px',
         subtitleFontSize: '10px',
       },
@@ -43,8 +45,11 @@ describe('TopBar rendering', () => {
     expect(html).toContain('backend-native engine')
     expect(html).toContain('href="/docs/"')
     expect(html).toContain('site-logo__glyph--custom')
+    expect(html).toContain('width: 26px')
+    expect(html).toContain('height: 26px')
     expect(html).toContain('font-size: 22px')
     expect(html).toContain('font-size: 10px')
+    expect(html).toContain('text-align: end')
     expect(html).not.toContain('Pure')
     expect(html).not.toContain('Stack')
   })
