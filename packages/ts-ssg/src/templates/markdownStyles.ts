@@ -14,7 +14,7 @@ export function registerMarkdownStyles() {
     registerLinkStyles(theme, palette)
     registerCodeStyles(theme, palette, options)
     registerBlockquoteStyles(theme, palette, options)
-    registerTableStyles(theme, palette)
+    registerTableStyles(theme, palette, options)
     registerHrStyles(theme, palette)
     registerMediaStyles(theme, palette, options)
   })
@@ -293,21 +293,100 @@ function registerBlockquoteStyles(
     .borderRadius(options.radii.sm)
 }
 
-function registerTableStyles(theme: ThemeMode, palette: ThemePalette) {
+function registerTableStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.doc-content :where(table)', theme)
     .width('100%')
-    .borderCollapse('collapse')
+    .borderCollapse('separate')
+    .set('border-spacing', '0')
     .margin('0 0 1.4em')
+    .background(palette.background.surface)
+    .border(`1px solid ${palette.border.default}`)
+    .borderRadius(options.radii.md)
+    .boxShadow(palette.effect.panelShadow)
+
+  styleBuilder
+    .select('.doc-content :where(thead th)', theme)
+    .background(palette.background.raised)
+    .color(palette.text.strong)
+    .fontSize('0.79rem')
+    .set('text-transform', 'uppercase')
+    .set('letter-spacing', '0.055em')
+    .borderBottom(`1px solid ${palette.border.default}`)
+
+  styleBuilder
+    .select('.doc-content :where(thead th:first-child)', theme)
+    .set('border-top-left-radius', options.radii.md)
+
+  styleBuilder
+    .select('.doc-content :where(thead th:last-child)', theme)
+    .set('border-top-right-radius', options.radii.md)
+
+  styleBuilder
+    .select('.doc-content :where(tbody tr)', theme)
+    .transition('background-color 140ms ease')
+
+  styleBuilder
+    .select('.doc-content :where(tbody tr:nth-child(even))', theme)
+    .background(palette.background.surfaceAlt)
+
+  styleBuilder
+    .select('.doc-content :where(tbody tr:hover)', theme)
+    .background(palette.action.ghost.hover)
+
+  styleBuilder
+    .select('.doc-content :where(tbody tr:last-child td)', theme)
+    .borderBottom('none')
+
+  styleBuilder
+    .select('.doc-content :where(tbody tr:last-child td:first-child)', theme)
+    .set('border-bottom-left-radius', options.radii.md)
+
+  styleBuilder
+    .select('.doc-content :where(tbody tr:last-child td:last-child)', theme)
+    .set('border-bottom-right-radius', options.radii.md)
+
+  styleBuilder
+    .select('.doc-content :where(th + th, td + td)', theme)
+    .borderLeft(`1px solid ${palette.border.subtle}`)
+
+  styleBuilder
+    .select('.doc-content :where(tbody td:first-child)', theme)
+    .fontWeight('600')
+    .color(palette.text.strong)
+
   styleBuilder
     .select('.doc-content :where(th, td)', theme)
-    .border(`1px solid ${palette.border.subtle}`)
-    .padding('8px 10px')
+    .padding('11px 14px')
     .textAlign('left')
+    .set('vertical-align', 'top')
+    .borderBottom(`1px solid ${palette.border.subtle}`)
+
   styleBuilder
-    .select('.doc-content :where(th)', theme)
-    .background(palette.background.surfaceAlt)
-    .fontWeight('700')
+    .select('.doc-content :where(table code)', theme)
+    .background(palette.badge.strong.background)
+    .color(palette.badge.strong.text)
+    .border(`1px solid ${palette.border.default}`)
+    .borderRadius(options.radii.pill)
+    .fontSize('0.84em')
+    .opacity(0.9)
+
+  styleBuilder
+    .select('.doc-content :where(table)', theme)
+    .media('max-width: 900px')
+    .set('display', 'block')
+    .set('overflow-x', 'auto')
+    .set('-webkit-overflow-scrolling', 'touch')
+    .set('min-width', '680px')
+
+  styleBuilder
+    .select('.doc-content :where(th, td)', theme)
+    .media('max-width: 900px')
+    .padding('9px 11px')
 }
 
 function registerHrStyles(theme: ThemeMode, palette: ThemePalette) {
