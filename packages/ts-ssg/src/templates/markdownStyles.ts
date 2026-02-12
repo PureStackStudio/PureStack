@@ -40,7 +40,7 @@ function registerHeadingStyles(theme: ThemeMode, palette: ThemePalette) {
     .fontWeight('700')
     .letterSpacing('-0.015em')
     .lineHeight('1.15')
-    .margin('1.2em 0 0.6em')
+    .margin('0 0 0.6em')
     .scrollMarginTop('96px')
 
   styleBuilder
@@ -66,8 +66,11 @@ function registerHeadingStyles(theme: ThemeMode, palette: ThemePalette) {
     .color(palette.text.subtle)
 
   styleBuilder
-    .select('.doc-content :where(h1:first-child)', theme)
-    .marginTop('0')
+    .select(
+      '.doc-content :where(* + h1, * + h2, * + h3, * + h4, * + h5, * + h6)',
+      theme,
+    )
+    .marginTop('1.2em')
 }
 
 function registerListStyles(theme: ThemeMode) {
