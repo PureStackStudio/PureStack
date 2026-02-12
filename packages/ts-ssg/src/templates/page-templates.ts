@@ -101,6 +101,7 @@ type DocLayout = {
   shellClass: string
   showNav: boolean
   showToc: boolean
+  tocCollapsed: boolean
 }
 
 function resolveDocLayout(
@@ -111,9 +112,16 @@ function resolveDocLayout(
   const layoutClass = resolveDocLayoutClass(frontmatter)
   const showNav = hasNavItems(navigation)
   const showToc = frontmatter.layout.showToc
-  const bodyClass = buildDocBodyClass(navMode, layoutClass, showNav)
+  const tocCollapsed = frontmatter.layout.tocCollapsed === true
+  const bodyClass = buildDocBodyClass(
+    navMode,
+    layoutClass,
+    showNav,
+    showToc,
+    tocCollapsed,
+  )
   const shellClass = buildDocShellClass(showNav, showToc, navMode)
-  return { bodyClass, shellClass, showNav, showToc }
+  return { bodyClass, shellClass, showNav, showToc, tocCollapsed }
 }
 
 function hasNavItems(navigation: PageNavigation | undefined) {
@@ -126,10 +134,20 @@ function buildDocBodyClass(
   navMode: PageFrontmatter['layout']['navMode'],
   layoutClass: string,
   showNav: boolean,
+  showToc: boolean,
+  tocCollapsed: boolean,
 ) {
   const navClass = navMode === 'drawer' ? 'template-doc--nav-drawer' : ''
   const hasNavClass = showNav ? 'template-doc--has-nav' : ''
-  return ['template-doc', navClass, hasNavClass, layoutClass]
+  const tocCollapsedClass =
+    showToc && tocCollapsed ? 'template-doc--toc-collapsed' : ''
+  return [
+    'template-doc',
+    navClass,
+    hasNavClass,
+    tocCollapsedClass,
+    layoutClass,
+  ]
     .filter(Boolean)
     .join(' ')
 }

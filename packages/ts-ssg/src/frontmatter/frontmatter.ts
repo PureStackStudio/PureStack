@@ -19,6 +19,10 @@ export interface FrontmatterLayoutOptions {
    */
   showToc: boolean
   /**
+   * Keeps table-of-contents enabled but starts collapsed with toggle visible.
+   */
+  tocCollapsed?: boolean
+  /**
    * Enables the default footer.
    * Defaults to `true` when omitted.
    */
@@ -144,6 +148,7 @@ export function normalizeFrontmatter(
       navMode: resolveLayoutNavMode(rawLayout.navMode, sourceLabel),
       fullWidthMain: rawLayout.fullWidthMain === true,
       showToc: rawLayout.showToc === true,
+      tocCollapsed: rawLayout.tocCollapsed === true,
       showFooter:
         typeof rawLayout.showFooter === 'boolean' ? rawLayout.showFooter : true,
     },

@@ -403,6 +403,149 @@ function registerPageTocLayoutStyles(
     .select('.doc-toc .page-toc__empty', theme)
     .media('max-width: 1320px')
     .paddingBottom('8px')
+
+  styleBuilder
+    .select('.template-doc--toc-collapsed .doc-shell--toc', theme)
+    .gridTemplateColumns('260px minmax(0, 1fr)')
+  styleBuilder
+    .select('.template-doc--toc-collapsed .doc-shell--toc-only', theme)
+    .gridTemplateColumns('1fr')
+  styleBuilder
+    .select('.template-doc--toc-collapsed .doc-shell--nav-drawer.doc-shell--toc', theme)
+    .gridTemplateColumns('1fr')
+
+  styleBuilder
+    .select('.template-doc--toc-collapsed .doc-toc', theme)
+    .position('fixed')
+    .top('0')
+    .left('0')
+    .right('0')
+    .width('auto')
+    .maxWidth('none')
+    .height('100dvh')
+    .zIndex(140)
+    .overflow('hidden')
+    .transform('translateX(calc(100% - 26px))')
+    .transition('transform 260ms ease')
+    .background(palette.background.canvas)
+    .boxShadow(options.shadows.strong)
+
+  styleBuilder
+    .select('.template-doc--toc-collapsed .doc-toc.doc-toc--open', theme)
+    .transform('translateX(0)')
+
+  styleBuilder
+    .select('.template-doc--toc-collapsed.doc-toc-open', theme)
+    .overflow('hidden')
+
+  styleBuilder
+    .select('.template-doc--toc-collapsed .doc-toc:not(.doc-toc--open)', theme)
+    .background('transparent')
+    .boxShadow('none')
+    .set('pointer-events', 'none')
+
+  styleBuilder
+    .select('.template-doc--toc-collapsed .page-toc__mobile-toggle', theme)
+    .position('absolute')
+    .left('0')
+    .right('auto')
+    .top('85%')
+    .transform('translateY(-50%) rotate(180deg)')
+    .set('writing-mode', 'vertical-rl')
+    .set('text-orientation', 'mixed')
+    .width('26px')
+    .height('120px')
+    .display('flex')
+    .alignItems('center')
+    .justifyContent('center')
+    .fontSize('0.70rem')
+    .fontWeight('700')
+    .set('letter-spacing', '0.12em')
+    .set('text-transform', 'uppercase')
+    .color(palette.text.subtle)
+    .background(palette.background.raised)
+    .border(`1px solid ${palette.border.default}`)
+    .set('border-left', 'none')
+    .set('border-radius', `0 ${options.radii.md} ${options.radii.md} 0`)
+    .boxShadow('none')
+    .set('user-select', 'none')
+    .cursor('pointer')
+    .set('pointer-events', 'auto')
+    .zIndex(2)
+
+  styleBuilder
+    .select('.template-doc--toc-collapsed .page-toc__mobile-toggle-icon', theme)
+    .display('none')
+
+  styleBuilder
+    .select(
+      '.template-doc--toc-collapsed .doc-toc:not(.doc-toc--open) .page-toc > :not(.page-toc__mobile-toggle)',
+      theme,
+    )
+    .display('none')
+
+  styleBuilder
+    .select('.template-doc--toc-collapsed .doc-toc:not(.doc-toc--open) .page-toc', theme)
+    .background('transparent')
+    .border('none')
+
+  styleBuilder
+    .select('.template-doc--toc-collapsed .page-toc__mobile-toggle:focus-visible', theme)
+    .outline(`2px solid ${palette.border.focus}`)
+    .outlineOffset('2px')
+
+  styleBuilder
+    .select('.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__mobile-toggle', theme)
+    .left('auto')
+    .right('16px')
+    .top('16px')
+    .transform('none')
+    .set('writing-mode', 'horizontal-tb')
+    .width('auto')
+    .height('auto')
+    .padding('6px')
+    .display('inline-flex')
+    .alignItems('center')
+    .justifyContent('center')
+    .gap('3px')
+    .set('letter-spacing', '0.08em')
+    .border(`1px solid ${palette.border.default}`)
+    .set('border-radius', options.radii.md)
+
+  styleBuilder
+    .select('.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__mobile-toggle-icon', theme)
+    .display('inline-flex')
+
+  styleBuilder
+    .select('.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__mobile-toggle:hover', theme)
+    .color(palette.text.accent)
+    .background(palette.background.accentMuted)
+
+  styleBuilder
+    .select('.template-doc--toc-collapsed .doc-toc .page-toc', theme)
+    .height('100%')
+    .overflow('visible')
+    .padding('0')
+    .borderRadius('0')
+    .set('-webkit-overflow-scrolling', 'touch')
+
+  styleBuilder
+    .select('.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc', theme)
+    .padding('30px 16px 14px')
+    .gap('2px')
+    .overflow('auto')
+
+  styleBuilder
+    .select('.template-doc--toc-collapsed .doc-toc .page-toc__header', theme)
+    .paddingRight('104px')
+
+  styleBuilder
+    .select('.template-doc--toc-collapsed .doc-toc .page-toc > .page-toc__list', theme)
+    .paddingBottom('8px')
+
+  styleBuilder
+    .select('.template-doc--toc-collapsed .doc-toc .page-toc__empty', theme)
+    .paddingBottom('8px')
 }
 
 function createPageTocComponent() {
