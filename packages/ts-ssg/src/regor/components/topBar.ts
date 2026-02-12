@@ -46,15 +46,15 @@ const topBarTemplate = html`<input
   <header class="topbar">
     <SiteLogo
       class="topbar__logo"
-      :word-one="brandWordOne"
-      :word-two="brandWordTwo"
+      :wordOne="brandWordOne"
+      :wordTwo="brandWordTwo"
       :subtitle="brandSubtitle"
-      :subtitle-align="brandSubtitleAlign"
+      :subtitleAlign="brandSubtitleAlign"
       :href="brandHref"
-      :icon-svg="brandIconSvg"
-      :icon-size="brandIconSize"
-      :word-font-size="brandWordFontSize"
-      :subtitle-font-size="brandSubtitleFontSize"
+      :iconSvg="brandIconSvg"
+      :iconSize="brandIconSize"
+      :wordFontSize="brandWordFontSize"
+      :subtitleFontSize="brandSubtitleFontSize"
     />
     <site-search class="topbar__search"></site-search>
     <div class="topbar__controls">
@@ -226,7 +226,10 @@ function registerTopBarToggleStyles(theme: ThemeMode, palette: ThemePalette) {
     .media('max-width: 720px')
     .zIndex(90)
   styleBuilder
-    .select('.doc-nav-toggle:checked ~ .topbar .topbar__search .site-search', theme)
+    .select(
+      '.doc-nav-toggle:checked ~ .topbar .topbar__search .site-search',
+      theme,
+    )
     .media('max-width: 720px')
     .width('min(560px, calc(100vw - 24px))')
     .margin('0 auto')
