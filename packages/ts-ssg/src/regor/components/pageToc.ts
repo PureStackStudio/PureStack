@@ -231,18 +231,13 @@ function registerPageTocLayoutStyles(
     .gridTemplateColumns('1fr')
   styleBuilder
     .select('.doc-toc', theme)
-    .position('fixed')
+    .position('sticky')
     .top('88px')
-    .right('calc((100vw - min(1400px, 100vw)) / 2 + 32px)')
-    .width('240px')
+    .width('100%')
+    .zIndex(30)
     .alignSelf('start')
     .height('calc(100vh - 112px)')
     .overflow('auto')
-  styleBuilder.select('.template-doc--full-main .doc-toc', theme).right('32px')
-  styleBuilder
-    .select('.template-doc--full-main .doc-toc', theme)
-    .media('max-width: 1320px')
-    .right('0')
   // Responsive TOC contract: collapse into right-edge drawer at <=1320px,
   // then switch to full-screen overlay at <=600px (same cutoff for tocCollapsed mode).
   styleBuilder
