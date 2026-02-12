@@ -19,6 +19,13 @@ export function registerSearchBoxShellStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
+  registerSearchBoxShellContainerStyles(theme)
+  registerSearchBoxShellIconStyles(theme, palette)
+  registerSearchBoxShellAccessibilityStyles(theme)
+  registerSearchBoxShellInputStyles(theme, palette, options)
+}
+
+function registerSearchBoxShellContainerStyles(theme: ThemeMode) {
   styleBuilder
     .select('.site-search', theme)
     .position('relative')
@@ -26,7 +33,12 @@ export function registerSearchBoxShellStyles(
     .maxWidth('100%')
 
   styleBuilder.select('.site-search__field', theme).display('block')
+}
 
+function registerSearchBoxShellIconStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+) {
   styleBuilder
     .select('.site-search__icon', theme)
     .position('absolute')
@@ -48,7 +60,9 @@ export function registerSearchBoxShellStyles(
     .set('stroke-width', '2')
     .set('stroke-linecap', 'round')
     .set('stroke-linejoin', 'round')
+}
 
+function registerSearchBoxShellAccessibilityStyles(theme: ThemeMode) {
   styleBuilder
     .select('.site-search__sr-only', theme)
     .position('absolute')
@@ -60,7 +74,13 @@ export function registerSearchBoxShellStyles(
     .set('clip', 'rect(0, 0, 0, 0)')
     .set('white-space', 'nowrap')
     .border('0')
+}
 
+function registerSearchBoxShellInputStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.site-search__input', theme)
     .width('100%')
@@ -97,6 +117,17 @@ export function registerSearchBoxResultStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
+  registerSearchBoxResultContainerStyles(theme, palette, options)
+  registerSearchBoxResultTopBarOverlayStyles(theme)
+  registerSearchBoxResultListStyles(theme, palette, options)
+  registerSearchBoxResultContentStyles(theme, palette, options)
+}
+
+function registerSearchBoxResultContainerStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.site-search__results', theme)
     .position('absolute')
@@ -111,7 +142,9 @@ export function registerSearchBoxResultStyles(
     .background(palette.background.raised)
     .boxShadow(options.shadows.strong)
     .zIndex('60')
+}
 
+function registerSearchBoxResultTopBarOverlayStyles(theme: ThemeMode) {
   styleBuilder
     .select('.topbar .site-search__results', theme)
     .media('min-width: 721px')
@@ -122,7 +155,13 @@ export function registerSearchBoxResultStyles(
     .transform('translateX(-50%)')
     .width('min(720px, calc(100vw - 32px))')
     .zIndex('120')
+}
 
+function registerSearchBoxResultListStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.site-search__results ul.site-search__list', theme)
     .listStyle('none')
@@ -161,7 +200,13 @@ export function registerSearchBoxResultStyles(
     .select('.site-search__results .site-search__link:focus-visible', theme)
     .outline(`2px solid ${palette.border.focus}`)
     .outlineOffset('2px')
+}
 
+function registerSearchBoxResultContentStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.site-search__results .site-search__title', theme)
     .display('block')
@@ -211,13 +256,14 @@ export function registerSearchBoxResultStyles(
 export function registerSearchBoxResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.site-search', theme)
-    .media('max-width: 720px')
+    .media('max-width: 600px')
     .width('min(100%, 220px)')
 
   styleBuilder
     .select('.site-search__results', theme)
-    .media('max-width: 720px')
+    .media('max-width: 600px')
     .left('0')
     .right('auto')
     .width('min(100vw - 32px, 520px)')
 }
+

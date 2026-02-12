@@ -301,6 +301,19 @@ function registerTableStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
+  registerTableContainerStyles(theme, palette, options)
+  registerTableHeaderStyles(theme, palette, options)
+  registerTableBodyRowStyles(theme, palette, options)
+  registerTableCellStyles(theme, palette)
+  registerTableInlineCodeStyles(theme, palette, options)
+  registerTableResponsiveStyles(theme)
+}
+
+function registerTableContainerStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.doc-content :where(table)', theme)
     .width('100%')
@@ -315,7 +328,13 @@ function registerTableStyles(
     .border(`1px solid ${palette.border.default}`)
     .borderRadius(options.radii.md)
     .boxShadow(palette.effect.panelShadow)
+}
 
+function registerTableHeaderStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.doc-content :where(thead th)', theme)
     .background(palette.background.raised)
@@ -332,7 +351,13 @@ function registerTableStyles(
   styleBuilder
     .select('.doc-content :where(thead th:last-child)', theme)
     .set('border-top-right-radius', options.radii.md)
+}
 
+function registerTableBodyRowStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.doc-content :where(tbody tr)', theme)
     .transition('background-color 140ms ease')
@@ -356,7 +381,9 @@ function registerTableStyles(
   styleBuilder
     .select('.doc-content :where(tbody tr:last-child td:last-child)', theme)
     .set('border-bottom-right-radius', options.radii.md)
+}
 
+function registerTableCellStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.doc-content :where(th + th, td + td)', theme)
     .borderLeft(`1px solid ${palette.border.subtle}`)
@@ -372,7 +399,13 @@ function registerTableStyles(
     .textAlign('left')
     .set('vertical-align', 'top')
     .borderBottom(`1px solid ${palette.border.subtle}`)
+}
 
+function registerTableInlineCodeStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.doc-content :where(table code)', theme)
     .background(palette.badge.strong.background)
@@ -381,7 +414,9 @@ function registerTableStyles(
     .borderRadius(options.radii.pill)
     .fontSize('0.84em')
     .opacity(0.9)
+}
 
+function registerTableResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.doc-content :where(th, td)', theme)
     .media('max-width: 900px')

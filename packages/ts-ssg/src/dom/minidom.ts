@@ -661,6 +661,7 @@ class ClassList {
 }
 
 type StyleMap = Record<string, string>
+const STYLE_INDEX_PATTERN = /^\d+$/
 type StyleDeclarationCore = {
   cssText: string
   readonly length: number
@@ -696,16 +697,7 @@ function createStyleDeclaration(onChange?: (cssText: string) => void) {
       return Object.keys(state)[Symbol.iterator]()
     },
     setProperty(name: string, value: string, priority?: string) {
-      const key = normalizeStylePropertyName(name)
-      if (!key) return
-      const normalized = normalizeStyleValue(value, priority)
-      const previous = state[key] ?? ''
-      if (previous === normalized) return
-      if (normalized.length === 0) {
-        delete state[key]
-      } else {
-        state[key] = normalized
-      }
+      if (!setNormalizedStyleProperty(state, name, value, priority)) return
       notify()
     },
     removeProperty(name: string) {
@@ -727,7 +719,9 @@ function createStyleDeclaration(onChange?: (cssText: string) => void) {
   return new Proxy(api, {
     get(target, prop, receiver) {
       if (typeof prop === 'string') {
-        if (/^\d+$/.test(prop)) return target.item(Number.parseInt(prop, 10))
+        if (STYLE_INDEX_PATTERN.test(prop)) {
+          return target.item(Number.parseInt(prop, 10))
+        }
         const key = normalizeStylePropertyName(prop)
         if (key && key in state) return state[key]
       }
@@ -738,22 +732,32 @@ function createStyleDeclaration(onChange?: (cssText: string) => void) {
         if (prop in target) {
           return Reflect.set(target, prop, value, receiver)
         }
-        if (/^\d+$/.test(prop)) return true
-        const key = normalizeStylePropertyName(prop)
-        if (!key) return true
-        const normalized = normalizeStyleValue(value)
-        if ((state[key] ?? '') === normalized) return true
-        if (normalized.length === 0) {
-          delete state[key]
-        } else {
-          state[key] = normalized
-        }
+        if (STYLE_INDEX_PATTERN.test(prop)) return true
+        if (!setNormalizedStyleProperty(state, prop, value)) return true
         notify()
         return true
       }
       return Reflect.set(target, prop, value, receiver)
     },
   })
+}
+
+function setNormalizedStyleProperty(
+  state: StyleMap,
+  name: string,
+  value: unknown,
+  priority?: string,
+): boolean {
+  const key = normalizeStylePropertyName(name)
+  if (!key) return false
+  const normalized = normalizeStyleValue(value, priority)
+  if ((state[key] ?? '') === normalized) return false
+  if (normalized.length === 0) {
+    delete state[key]
+  } else {
+    state[key] = normalized
+  }
+  return true
 }
 
 function normalizeStylePropertyName(name: string): string {

@@ -89,6 +89,16 @@ export function registerTopBarToggleStyles(
   theme: ThemeMode,
   palette: ThemePalette,
 ) {
+  registerTopBarToggleVisibilityStyles(theme, palette)
+  registerTopBarToggleGlyphStyles(theme)
+  registerTopBarToggleCheckedStateStyles(theme)
+  registerTopBarResponsiveSearchStyles(theme)
+}
+
+function registerTopBarToggleVisibilityStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+) {
   styleBuilder
     .select('.topbar__toggle', theme)
     .background(palette.background.surface)
@@ -106,7 +116,9 @@ export function registerTopBarToggleStyles(
     .select('.topbar__toggle:focus-visible', theme)
     .outline(`2px solid ${palette.border.focus}`)
     .outlineOffset('2px')
+}
 
+function registerTopBarToggleGlyphStyles(theme: ThemeMode) {
   styleBuilder
     .select('.topbar__toggle::before', theme)
     .content('""')
@@ -128,7 +140,9 @@ export function registerTopBarToggleStyles(
     .top('26px')
     .left('12px')
     .transition('transform 200ms ease, top 200ms ease')
+}
 
+function registerTopBarToggleCheckedStateStyles(theme: ThemeMode) {
   styleBuilder.select('.doc-nav-toggle', theme).display('none')
   styleBuilder
     .select('.doc-nav-toggle:checked ~ .topbar .topbar__toggle::before', theme)
@@ -139,23 +153,25 @@ export function registerTopBarToggleStyles(
     .select('.doc-nav-toggle:checked ~ .topbar .topbar__toggle::after', theme)
     .top('20px')
     .transform('rotate(-45deg)')
+}
 
+function registerTopBarResponsiveSearchStyles(theme: ThemeMode) {
   styleBuilder
     .select('.topbar', theme)
     .media('max-width: 900px')
     .gridTemplateColumns('minmax(0, 1fr) minmax(180px, 360px) minmax(0, 1fr)')
   styleBuilder
     .select('.topbar', theme)
-    .media('max-width: 720px')
+    .media('max-width: 600px')
     .gridTemplateColumns('minmax(0, 1fr) auto')
     .gap('10px')
   styleBuilder
     .select('.topbar__search', theme)
-    .media('max-width: 720px')
+    .media('max-width: 600px')
     .display('none')
   styleBuilder
     .select('.doc-nav-toggle:checked ~ .topbar .topbar__search', theme)
-    .media('max-width: 720px')
+    .media('max-width: 600px')
     .display('block')
     .position('absolute')
     .top('calc(100% + 8px)')
@@ -164,14 +180,14 @@ export function registerTopBarToggleStyles(
     .zIndex('80')
   styleBuilder
     .select('.doc-nav-toggle:checked ~ .topbar', theme)
-    .media('max-width: 720px')
+    .media('max-width: 600px')
     .zIndex(90)
   styleBuilder
     .select(
       '.doc-nav-toggle:checked ~ .topbar .topbar__search .site-search',
       theme,
     )
-    .media('max-width: 720px')
+    .media('max-width: 600px')
     .width('min(560px, calc(100vw - 24px))')
     .margin('0 auto')
   styleBuilder
@@ -179,10 +195,11 @@ export function registerTopBarToggleStyles(
       '.doc-nav-toggle:checked ~ .topbar .topbar__search .site-search__results',
       theme,
     )
-    .media('max-width: 720px')
+    .media('max-width: 600px')
     .left('50%')
     .right('auto')
     .transform('translateX(-50%)')
     .width('min(560px, calc(100vw - 24px))')
     .zIndex('120')
 }
+
