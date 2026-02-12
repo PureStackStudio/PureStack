@@ -177,6 +177,19 @@ describe('minidom parsing and serialization', () => {
     expect(div?.style.fontSize).toBe('20px')
     expect(div?.style.lineHeight).toBe('1.4')
     expect(div?.style.getPropertyValue('font-size')).toBe('20px')
+    expect(div?.getAttribute('style')).toContain('font-size: 20px')
+    expect(div?.getAttribute('style')).toContain('line-height: 1.4')
+  })
+
+  it('preserves custom CSS properties in style attributes', () => {
+    const { document } = parseHtml(
+      '<html><body><span style="--shiki-light:#D73A49;--shiki-dark:#F97583">x</span></body></html>',
+    )
+    const span = document.querySelector('span')
+    expect(span?.style.getPropertyValue('--shiki-light')).toBe('#D73A49')
+    expect(span?.style.getPropertyValue('--shiki-dark')).toBe('#F97583')
+    expect(span?.getAttribute('style')).toContain('--shiki-light: #D73A49')
+    expect(span?.getAttribute('style')).toContain('--shiki-dark: #F97583')
   })
 
   it('serializes style declaration updates back into style attribute', () => {

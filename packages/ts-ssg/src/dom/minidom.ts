@@ -363,6 +363,12 @@ class MiniElement extends MiniNode {
       this.syncingStyleFromAttribute = true
       this.style.cssText = normalized
       this.syncingStyleFromAttribute = false
+      const cssText = this.style.cssText
+      if (cssText.length > 0) {
+        this.attributes.set('style', cssText)
+      } else {
+        this.attributes.delete('style')
+      }
       return
     }
     this.attributes.set(key, normalized)
@@ -378,6 +384,7 @@ class MiniElement extends MiniNode {
       this.syncingStyleFromAttribute = true
       this.style.cssText = ''
       this.syncingStyleFromAttribute = false
+      this.attributes.delete('style')
       return
     }
     this.attributes.delete(key)
