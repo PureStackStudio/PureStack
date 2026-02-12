@@ -83,7 +83,7 @@ function registerTopBarShellStyles(
   styleBuilder
     .select('.topbar', theme)
     .display('grid')
-    .gridTemplateColumns('minmax(0, 1fr) minmax(220px, 420px) minmax(0, 1fr)')
+    .gridTemplateColumns('minmax(0, 1fr) minmax(220px, 420px) auto')
     .alignItems('center')
     .gap('16px')
     .padding('16px')
@@ -98,9 +98,11 @@ function registerTopBarShellStyles(
     .select('.topbar__logo', theme)
     .display('inline-flex')
     .justifySelf('start')
+    .set('min-width', '0')
   styleBuilder
     .select('.topbar__logo .site-logo__link', theme)
     .padding('8px 12px')
+    .set('max-width', '100%')
   styleBuilder
     .select('.topbar__logo .site-logo__glyph', theme)
     .width('30px')
@@ -115,6 +117,7 @@ function registerTopBarShellStyles(
     .alignItems('center')
     .justifySelf('end')
     .gap('10px')
+    .set('min-width', '0')
   styleBuilder
     .select('.topbar__icon', theme)
     .width('42px')
@@ -136,6 +139,7 @@ function registerTopBarSearchStyles(theme: ThemeMode) {
     .display('block')
     .width('100%')
     .justifySelf('center')
+    .set('min-width', '0')
   styleBuilder
     .select('.topbar__search .site-search', theme)
     .width('100%')
@@ -193,12 +197,73 @@ function registerTopBarToggleStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.topbar', theme)
     .media('max-width: 900px')
-    .gridTemplateColumns('auto minmax(160px, 1fr) auto')
-  styleBuilder.select('.topbar', theme).media('max-width: 720px').gap('10px')
+    .gridTemplateColumns('minmax(0, 1fr) minmax(0, 1fr) auto')
   styleBuilder
-    .select('.topbar__search .site-search', theme)
+    .select('.topbar', theme)
     .media('max-width: 720px')
-    .width('min(100%, 240px)')
+    .gridTemplateColumns('minmax(0, 1fr) auto')
+    .gap('10px')
+  styleBuilder
+    .select('.topbar__search', theme)
+    .media('max-width: 720px')
+    .display('none')
+  styleBuilder
+    .select('.topbar__logo .site-logo__link', theme)
+    .media('max-width: 720px')
+    .width('100%')
+    .padding('8px 10px')
+    .gap('8px')
+  styleBuilder
+    .select('.topbar__logo .site-logo__stack', theme)
+    .media('max-width: 720px')
+    .set('min-width', '0')
+  styleBuilder
+    .select('.topbar__logo .site-logo__brand', theme)
+    .media('max-width: 720px')
+    .overflow('hidden')
+    .set('text-overflow', 'ellipsis')
+  styleBuilder
+    .select('.topbar__logo .site-logo__glyph', theme)
+    .media('max-width: 720px')
+    .width('28px')
+    .height('28px')
+  styleBuilder
+    .select('.topbar__logo .site-logo__word', theme)
+    .media('max-width: 720px')
+    .fontSize('clamp(14px, 4vw, 17px)')
+  styleBuilder
+    .select('.topbar__logo .site-logo__subtitle', theme)
+    .media('max-width: 720px')
+    .display('none')
+  styleBuilder
+    .select('.doc-nav-toggle:checked ~ .topbar .topbar__search', theme)
+    .media('max-width: 720px')
+    .display('block')
+    .position('absolute')
+    .top('calc(100% + 8px)')
+    .left('16px')
+    .right('16px')
+    .zIndex('80')
+  styleBuilder
+    .select('.doc-nav-toggle:checked ~ .topbar', theme)
+    .media('max-width: 720px')
+    .zIndex(90)
+  styleBuilder
+    .select('.doc-nav-toggle:checked ~ .topbar .topbar__search .site-search', theme)
+    .media('max-width: 720px')
+    .width('min(560px, calc(100vw - 24px))')
+    .margin('0 auto')
+  styleBuilder
+    .select(
+      '.doc-nav-toggle:checked ~ .topbar .topbar__search .site-search__results',
+      theme,
+    )
+    .media('max-width: 720px')
+    .left('50%')
+    .right('auto')
+    .transform('translateX(-50%)')
+    .width('min(560px, calc(100vw - 24px))')
+    .zIndex('120')
 }
 
 function createTopBarComponent() {

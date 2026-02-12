@@ -184,6 +184,18 @@ function registerNavShellStyles(
   styleBuilder.select('.nav__item', theme).display('grid').gap('4px')
   styleBuilder.select('.nav__leaf', theme).display('block')
   styleBuilder.select('.nav__group', theme).display('grid')
+  styleBuilder
+    .select('.template-doc--nav-drawer .doc-sidebar .nav__menu', theme)
+    .media('max-width: 1023px')
+    .width('100%')
+    .maxWidth('none')
+    .minHeight('calc(100dvh - 72px)')
+    .borderRadius('0')
+    .border('0')
+    .padding('60px 16px 20px')
+    .height('100%')
+    .overflow('auto')
+    .boxSizing('border-box')
 }
 
 function registerNavLinkStyles(
@@ -202,7 +214,7 @@ function registerNavLinkStyles(
     .color(palette.text.default)
   styleBuilder
     .select('.nav__link:hover', theme)
-    .background(palette.background.accentMuted)
+    .background(palette.action.ghost.hover)
   styleBuilder
     .select('.nav__link--active', theme)
     .background(palette.action.accent.background)

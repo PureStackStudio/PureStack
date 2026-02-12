@@ -77,7 +77,7 @@ export const neonDark: ThemePalette = {
     ghost: {
       background: 'rgba(0, 0, 0, 0)',
       text: '#FF2E48',
-      hover: 'rgba(255, 46, 72, 0.10)',
+      hover: 'rgba(255, 46, 72, 0.40)',
       active: 'rgba(255, 46, 72, 0.16)',
       disabled: 'rgba(255, 46, 72, 0.20)',
       focusRing: 'rgba(255, 46, 72, 0.52)',
