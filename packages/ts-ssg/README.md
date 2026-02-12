@@ -1,234 +1,398 @@
-# @purestack/ts-ssg
+# `@purestack/ts-ssg`
 
-TypeScript-first static site generator for Markdown and MDX, built on the PureStack toolchain.
-It converts `.md`/`.mdx` content to HTML, runs custom Regor components during render, and emits
-static pages plus CSS generated via `@purestack/ts-css`.
+Static site generator for Markdown/MDX content with:
 
-## Highlights
-- Markdown + MDX pipeline powered by Unified (remark/rehype).
-- Frontmatter-aware head config (title/description plus arbitrary head overrides).
-- Regor component rendering in MDX/HTML (server-side, using a custom minimal DOM).
-- CSS collected during render and emitted as static files.
-- Optional SEO files generation (`sitemap.xml` + `robots.txt`).
-- Simple, programmatic build API with sensible defaults.
-- Build hooks for extensibility and speed.
+- deterministic file-based routing,
+- built-in themed UI components (Regor),
+- incremental rebuilds with manifest tracking,
+- dev server with watch + live reload,
+- sitemap/robots generation,
+- Pagefind indexing.
 
-## How it works
-1. **Discover content**: `discoverContent()` scans the content directory for `.md` and `.mdx`.
-2. **Parse frontmatter**: `gray-matter` extracts frontmatter + body content.
-3. **Compile MDX**: `compileMdxToHtml()` uses remark/rehype and custom MDX JSX handlers.
-4. **Render components**: `renderApp()` boots a Regor app in the minimal DOM, mounts components, and
-   returns HTML.
-5. **Build page shell**: `renderPage()` creates `<html>`, `<head>`, and `<body>` using
-   `@purestack/ts-html`, injecting the stylesheet link.
-6. **Write output**: HTML pages are written to `dist/site`, plus generated CSS files.
-
-## Project layout
-- `src/build/`: build pipeline (page rendering, output paths, head resolution, IO).
-- `src/mdx.ts`: MDX/Markdown compiler and JSX handling.
-- `src/renderer.ts`: HTML shell renderer and stylesheet injection.
-- `src/regor/`: DOM globals + Regor component registry and built-ins.
-- `src/styles.ts`: CSS builder registry.
-- `sample-content/`: example MDX/Markdown content.
-
-## Configuration
-`resolveConfig()` builds a `SiteConfig` from defaults + overrides.
-
-Default values:
-- `rootDir`: package root (derived from `src` location).
-- `contentDir`: `<rootDir>/sample-content`
-- `outDir`: `<rootDir>/dist/site`
-- `siteTitle`: `ts-ssg`
-- `styleFileName`: `site.css`
-- `styleHref`: `/<styleFileName>`
-- `sitemap.enabled`: `false`
-- `sitemap.baseUrl`: `""`
-- `sitemap.fileName`: `sitemap.xml`
-- `sitemap.robots.enabled`: `true`
-- `sitemap.robots.fileName`: `robots.txt`
-- `sitemap.robots.userAgent`: `*`
-- `sitemap.robots.allow`: `["/"]`
-- `sitemap.robots.disallow`: `[]`
-
-## Usage
-
-### Programmatic build
-```ts
-import { buildSite } from '@purestack/ts-ssg'
-
-await buildSite({
-  contentDir: './content',
-  outDir: './public',
-  siteTitle: 'My Docs',
-  sitemap: {
-    enabled: true,
-    baseUrl: 'https://docs.example.com',
-    robots: {
-      userAgent: '*',
-      disallow: ['/drafts/'],
-      crawlDelay: 2,
-    },
-  },
-  cleanOutDir: true,
-})
-```
-
-### Running as a CLI entry
-When the package entry is executed directly, it runs `buildSite()` and logs a build summary.
-This is useful for scripted builds after `tsc` output is available.
-
-### Dev server (serve + watch + live reload)
-Run a fast static server that rebuilds on content changes and refreshes the browser.
+## Installation
 
 ```bash
-node ./dist/ts-ssg.js --serve --port 4173
+npm install @purestack/ts-ssg
+# or
+yarn add @purestack/ts-ssg
 ```
+
+## Quick Start (Programmatic)
+
+```ts
+import path from 'node:path'
+import { buildSite } from '@purestack/ts-ssg'
+
+const rootDir = process.cwd()
+const contentDir = path.join(rootDir, 'content')
+const outDir = path.join(rootDir, 'dist', 'site')
+
+await buildSite({
+  rootDir,
+  contentDir,
+  outDir,
+  siteTitle: 'My Docs',
+})
+```
+
+## Quick Start (Dev Server)
+
+```ts
+import path from 'node:path'
+import { startDevServer } from '@purestack/ts-ssg'
+
+await startDevServer({
+  rootDir: process.cwd(),
+  contentDir: path.join(process.cwd(), 'content'),
+  outDir: path.join(process.cwd(), 'dist', 'site'),
+  host: '127.0.0.1',
+  port: 4173,
+})
+```
+
+## CLI Usage
+
+`src/index.ts` includes a direct-run CLI mode:
+
+- `build` (default)
+- `serve` / `dev` / `--serve`
 
 Flags:
-- `--serve` (or `serve`/`dev`): start the dev server
-- `--port <number>`: port to bind (default 4173)
-- `--host <string>`: host to bind (default 127.0.0.1)
-- `--no-watch`: disable watching
-- `--no-reload`: disable live reload injection
-- `--clean`: clean output directory on each rebuild
 
-## Content and routes
-- Supported extensions: `.md` and `.mdx`
-- Output paths:
-  - `index.mdx` -> `<outDir>/index.html`
-  - `guide/overview.md` -> `<outDir>/guide/overview/index.html`
-  - `guide/index.mdx` -> `<outDir>/guide/index.html`
+- `--port 4173` or `--port=4173`
+- `--host 127.0.0.1` or `--host=127.0.0.1`
+- `--content ./content` or `--content=./content`
+- `--no-watch`
+- `--no-reload`
+- `--clean`
 
-## Frontmatter -> head config
-`resolveHeadConfig()` inspects frontmatter keys:
-- `title`: page title
-- `description`: meta description
-- `head`: object merged into the base head config
+Examples from this monorepo:
 
-If `siteTitle` is set, the page title is composed as `"<title> | <siteTitle>"`,
-or falls back to `siteTitle` when no page title is provided.
-
-The base head config is defined in `src/head.ts` and includes charset, viewport,
-Open Graph defaults, and a generator meta tag.
-
-## Page templates (layouts)
-Pages can select a template via frontmatter:
-
-```md
----
-title: API Reference
-template: api
----
+```bash
+yarn tsx packages/ts-ssg/src/index.ts
+yarn tsx packages/ts-ssg/src/index.ts serve --content ./packages/ts-ssg/sample-content --port 4173
 ```
 
-Built-in templates: `doc` (default) and `splash`.
+## Content Model
 
-You can provide custom templates when building:
+- Content files: `.md`, `.mdx`
+- Static assets: everything else in `contentDir` (except `siteConfig.json`)
+- Routes:
+  - `index.mdx` -> `/`
+  - `guide/index.md` -> `/guide/`
+  - `guide/intro.mdx` -> `/guide/intro/`
+- Output pages are always `index.html` in folder routes.
 
-```ts
-import { buildSite, type PageTemplate } from '@purestack/ts-ssg'
-import { h } from '@purestack/ts-html'
+## Config Resolution
 
-const apiTemplate: PageTemplate = ({ head, bodyHtml }) =>
-  h('html').push(
-    head,
-    h('body').push(h('main').attr({ class: 'api' }).raw(bodyHtml)),
-  )
+Config comes from:
 
-await buildSite({
-  templates: {
-    api: apiTemplate,
+1. defaults,
+2. `contentDir/siteConfig.json`,
+3. runtime input (`buildSite(...)` / `startDevServer(...)`) as highest priority.
+
+`siteConfig.json` schema: `schema/siteConfig.schema.json`.
+
+### `SiteConfig` Fields
+
+- `rootDir`: project root. Default is package root.
+- `contentDir`: default `rootDir/sample-content`.
+- `outDir`: default `rootDir/dist/site`.
+- `siteTitle`: default `"ts-ssg"`.
+- `logo`: brand fields for top bar.
+- `styleFileName`: default `"site.css"`.
+- `styleHref`: default `"/site.css"`.
+- `styleThemes`: must include `"light"` and `"dark"`.
+- `navigation`: auto/custom/hybrid/none behavior.
+- `theme`: palette/radii/spacing/typography/shadows.
+- `sitemap`: sitemap + robots settings.
+
+## `siteConfig.json` Example
+
+```json
+{
+  "$schema": "../schema/siteConfig.schema.json",
+  "siteTitle": "Acme Docs",
+  "outDir": "dist/site",
+  "styleThemes": ["light", "dark"],
+  "navigation": {
+    "mode": "auto",
+    "navFileName": "_nav.json",
+    "maxDepth": 3,
+    "includeIndex": true,
+    "sortBy": "order"
   },
-})
+  "sitemap": {
+    "enabled": true,
+    "baseUrl": "https://docs.acme.com",
+    "fileName": "sitemap.xml",
+    "robots": {
+      "enabled": true,
+      "fileName": "robots.txt",
+      "userAgent": "*",
+      "allow": ["/"],
+      "disallow": ["/private/"],
+      "additionalSitemaps": [],
+      "customDirectives": []
+    }
+  }
+}
 ```
 
-## Navigation menus
-`@purestack/ts-ssg` can build navigation trees from your content folders and/or
-custom menu files. Navigation data is exposed to page templates (but not
-rendered by default), letting you decide the final UI.
+## Frontmatter
 
-Quick start (auto menus):
+Known fields (custom fields are allowed):
 
-```ts
-import { buildSite } from '@purestack/ts-ssg'
-
-await buildSite({
-  navigation: { mode: 'auto', maxDepth: 2 },
-})
+```yaml
+---
+title: Getting Started
+description: First steps
+template: doc # doc | splash | custom template key
+order: 10
+hidden: false
+draft: false
+head:
+  canonicalUrl: https://docs.acme.com/getting-started/
+nav:
+  title: Start Here
+  order: 1
+  hidden: false
+layout:
+  navMode: sidebar # sidebar | drawer
+  fullWidthMain: false
+  showToc: true
+  tocCollapsed: false
+  showFooter: true
+---
 ```
-
-Custom per-folder menus:
-
-```
-content/
-  _nav.json
-  guide/
-    _nav.json
-    index.mdx
-    intro.mdx
-```
-
-See `NAVIGATION.md` for the full spec.
-
-## Regor components in MDX
-Custom components are registered via `componentRegistry` and rendered by `renderApp()`.
-
-```ts
-import { componentRegistry } from '@purestack/ts-ssg'
-import { createComponent, html } from 'regor'
-
-componentRegistry.register(
-  'banner',
-  createComponent(() => ({ title: 'Hello' }), html`<div>Banner</div>`),
-)
-```
-
-Built-in components are registered automatically:
-- `cardGrid`
-- `card`
 
 Notes:
-- MDX `import`/`export` lines are stripped during compilation.
-- Components must be available in the registry at build time.
 
-You can also pass components directly to `buildSite()`:
+- `layout.navMode` accepts only `sidebar` or `drawer` (invalid values throw).
+- `draft: true` hides page from generated navigation.
+- Title fallback order for nav: `nav.title` -> `title` -> first `# heading` -> filename.
 
-```ts
-import { buildSite } from '@purestack/ts-ssg'
-import { createComponent, html } from 'regor'
+## Navigation
 
-await buildSite({
-  components: {
-    banner: createComponent(html`<div>Banner</div>`, []),
-  },
-})
-```
+Types:
 
-## Styles
-Use `styleBuilder` to register CSS at build time. `writeStyles()` emits a CSS file for each
-named style builder, plus the default stylesheet.
+- `auto`: generated from content.
+- `custom`: from nav files only.
+- `hybrid`: auto + nav files (merge/override per folder).
+- `none`: disabled.
 
-```ts
-import { styleBuilder } from '@purestack/ts-ssg'
+Exact behavior by mode (from `buildNavigation` + `resolveBaseFolderItems`):
 
-styleBuilder.select('body').set('font-family', 'system-ui')
-```
+- `auto`: builds only automatic navigation from content frontmatter/headings. Custom nav files are not read.
+- `custom`: reads nav files and uses only their items.
+- `hybrid`: reads nav files and combines them with auto items.
+  - nav file with `mode: "override"` replaces auto items for that folder.
+  - nav file with `mode: "merge"` appends to auto items and re-sorts.
 
-## Build hooks
-`buildSite()` accepts a `hooks` object for extending the pipeline.
+Nav file name is configurable via `navigation.navFileName` and defaults to `_nav.json`.
+Nav files are discovered per folder only in `custom` and `hybrid` modes.
 
-```ts
-import { buildSite, type BuildHooks } from '@purestack/ts-ssg'
+Each nav file may be:
 
-const hooks: BuildHooks = {
-  onPageRendered(_context, page) {
-    console.log('rendered', page.urlPath)
-  },
+1. an array (treated as `override`), or
+2. an object:
+
+```json
+{
+  "mode": "merge",
+  "items": [
+    { "title": "Overview", "url": "/" },
+    {
+      "title": "Guide",
+      "url": "/guide/",
+      "children": [{ "title": "Install", "url": "/guide/install/" }]
+    }
+  ]
 }
-
-await buildSite({ hooks })
 ```
 
-## Development notes
-- Tests: `yarn workspace @purestack/ts-ssg test`
-- Build: `yarn workspace @purestack/ts-ssg build`
+For object form, `mode` accepts `merge` or `override` and defaults to `merge`.
+Supported nav item fields: `title`, `url|href|path`, `order`, `hidden`, `group`, `icon`, `children`.
+
+## Templates
+
+Built-in templates:
+
+- `doc` (default)
+- `splash`
+
+Provide custom templates via `buildSite({ templates })`:
+
+```ts
+import { h, type TSNode } from '@purestack/ts-html'
+import type { PageTemplateMap } from '@purestack/ts-ssg'
+
+const templates: PageTemplateMap = {
+  product: ({ head, bodyHtml }) =>
+    h('html').push(
+      head,
+      h('body').push(h('main').attr({ class: 'product' }).raw(bodyHtml)),
+    ) as TSNode<'html'>,
+}
+```
+
+## Components and MDX
+
+Built-in component sets are initialized automatically each build:
+
+- alert: `alertBox`
+- card grid: `card`, `cardGrid`
+- hero: `heroBanner`, `heroAction`, `heroMedia`
+- footer: `siteFooter`, `footerColumn`, `footerLink`, `footerSocial`
+- top bar: `topBar`
+- logo: `siteLogo`
+- navigation: `navMenu`, `navList`, `navItem`
+- page toc: `pageToc`
+- pricing: `pricingTable`, `pricingPlan`, `pricingFeature`
+- search: `siteSearch`
+- theme switcher: `themeSwitcher`
+
+Important rendering constraint: Regor components are rendered statically. Component state/events are not runtime-hydrated.
+
+## Theming
+
+Built-in skins export:
+
+- `ocean`
+- `evergreen`
+- `pastel`
+- `extrao`
+- `cyberpunk`
+- `neon`
+
+Theme utilities:
+
+- `builtInSkins`
+- `themes.resolve(...)`
+- `themes.setOptions(...)`
+- `themes.getOptions()`
+- `styleBuilder`
+
+`styleThemes` controls generated files:
+
+- `site.css` for `light`
+- `site.dark.css` for `dark`
+- `site.<theme>.css` for additional themes
+
+## Markdown/MDX Compilation
+
+- Markdown: `remark-parse` + `remark-gfm`
+- MDX: `remark-parse` + `remark-gfm` + `remark-mdx`
+- HTML output via HAST + rehype
+- H2/H3 outline extraction for page TOC
+- Optional Shiki highlighting
+
+`BuildInput.mdx` options:
+
+- `highlighter`: custom highlighter (`codeToHtml`)
+- `themes`: `{ light, dark }` for Shiki
+- `langs`: language list for Shiki
+- `disableHighlighter`: skip highlighting
+
+## Build Hooks
+
+Hook into build lifecycle with `BuildHooks`:
+
+- `onConfigResolved`
+- `onContentDiscovered`
+- `onNavigationBuilt`
+- `onPageStart`
+- `onPageRendered`
+- `onPageWritten`
+- `onStylesWritten`
+- `onBuildComplete`
+
+## Incremental Build and Manifest
+
+`ts-ssg` stores incremental metadata at:
+
+- `<outDir>/.ts-ssg/manifest.json`
+
+Tracked:
+
+- content file signatures (`mtimeMs`, `size`)
+- asset signatures
+- style signature
+- config compatibility signature
+
+In dev/watch mode:
+
+- file changes apply incrementally when safe,
+- site config changes trigger full rebuild,
+- lazy route render can happen on first request for missing HTML route,
+- live reload is served over SSE (`/__ts-ssg/events`).
+
+## Search and SEO
+
+### Pagefind
+
+Full builds run Pagefind indexing over `outDir` and write to:
+
+- `<outDir>/pagefind`
+
+### Sitemap / Robots
+
+If enabled:
+
+- sitemap written to `<outDir>/<sitemap.fileName>`
+- robots written to `<outDir>/<sitemap.robots.fileName>` when `robots.enabled`
+
+Validation:
+
+- sitemap requires non-empty absolute `sitemap.baseUrl` when enabled.
+
+## API Surface
+
+Primary exports:
+
+- `buildSite`
+- `startDevServer`
+- `resolveConfig` (`resolveSiteConfig`)
+- `normalizeFrontmatter`, `parseFrontmatterSource`
+- `buildNavigation`, `resolveNavigationConfig`, `resolvePageNavigation`
+- `createMdxHighlighter`
+- `componentRegistry`
+- `defaultTemplates`, `resolvePageTemplate`
+- `builtInSkins`, `themes`, `styleBuilder`
+
+Useful types:
+
+- `BuildInput`, `BuildResult`, `BuildHooks`
+- `SiteConfig`, `PartialConfig`
+- `DevServerInput`, `DevServerHandle`
+- `PageFrontmatter`
+- `NavigationConfig`, `NavigationTree`, `NavItem`
+- `ThemeOptions`, `ThemePalette`
+- `TsSsgContext`
+
+## Build Result Shape
+
+`buildSite(...)` returns:
+
+```ts
+type BuildResult = {
+  outDir: string
+  pages: number
+  content?: { total: number; byExt: Record<string, number> }
+  assets?: { total: number; byExt: Record<string, number> }
+}
+```
+
+## Development (Package)
+
+From repo root:
+
+```bash
+yarn workspace @purestack/ts-ssg build
+yarn workspace @purestack/ts-ssg lint
+yarn workspace @purestack/ts-ssg test
+```
+
+## License
+
+MIT
