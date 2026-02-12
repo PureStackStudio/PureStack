@@ -5,6 +5,7 @@ import { createAlertComponents } from './components/alert'
 import { createCardComponents } from './components/cardGrid'
 import { createFooterComponents } from './components/footer'
 import { createHeroComponents } from './components/hero'
+import { createLogoComponents } from './components/logo'
 import { createNavigationComponents } from './components/navMenu'
 import { createPageTocComponents } from './components/pageToc'
 import { createPricingComponents } from './components/pricing'
@@ -27,6 +28,7 @@ export function initBuiltinComponents() {
   componentRegistry.registerMany(createCardComponents())
   componentRegistry.registerMany(createFooterComponents())
   componentRegistry.registerMany(createHeroComponents())
+  componentRegistry.registerMany(createLogoComponents())
   componentRegistry.registerMany(createTopBarComponents())
   componentRegistry.registerMany(createThemeSwitcherComponents())
   componentRegistry.registerMany(createNavigationComponents())

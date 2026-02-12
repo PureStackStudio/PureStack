@@ -1,6 +1,12 @@
 {
   "$schema": "../schema/siteConfig.schema.json",
   "siteTitle": "ts-ssg",
+  "logo": {
+    "wordOne": "Calc",
+    "wordTwo": "Core",
+    "subtitle": "backend-native engine",
+    "href": "/"
+  },
   "styleFileName": "site.css",
   "styleHref": "/site.css",
   "styleThemes": ["light", "dark"],

@@ -13,6 +13,32 @@
       "description": "Default site title used by the head config when a page does not provide its own title.",
       "default": "ts-ssg"
     },
+    "logo": {
+      "type": "object",
+      "description": "Brand logo configuration used by the top bar RegorLogo component.",
+      "additionalProperties": false,
+      "properties": {
+        "wordOne": {
+          "type": "string",
+          "description": "First brand word.",
+          "default": "Pure"
+        },
+        "wordTwo": {
+          "type": "string",
+          "description": "Second brand word.",
+          "default": "Stack"
+        },
+        "subtitle": {
+          "type": "string",
+          "description": "Optional subtitle text shown below the brand name."
+        },
+        "href": {
+          "type": "string",
+          "description": "Logo link target.",
+          "default": "/"
+        }
+      }
+    },
     "styleFileName": {
       "type": "string",
       "description": "CSS file name written to the output directory.",

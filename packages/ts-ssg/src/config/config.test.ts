@@ -3,6 +3,34 @@ import { describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from './config'
 
 describe('resolveSiteConfig sitemap', () => {
+  it('provides logo defaults', () => {
+    const config = resolveSiteConfig({ rootDir: process.cwd() })
+    expect(config.logo).toEqual({
+      wordOne: 'Pure',
+      wordTwo: 'Stack',
+      subtitle: undefined,
+      href: '/',
+    })
+  })
+
+  it('resolves logo overrides from input config', () => {
+    const config = resolveSiteConfig({
+      rootDir: process.cwd(),
+      logo: {
+        wordOne: 'Calc',
+        wordTwo: 'Core',
+        subtitle: 'backend-native engine',
+        href: '/home',
+      },
+    })
+    expect(config.logo).toEqual({
+      wordOne: 'Calc',
+      wordTwo: 'Core',
+      subtitle: 'backend-native engine',
+      href: '/home',
+    })
+  })
+
   it('provides sitemap defaults', () => {
     const config = resolveSiteConfig({ rootDir: process.cwd() })
     expect(config.sitemap).toEqual({

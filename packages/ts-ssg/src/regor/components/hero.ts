@@ -98,7 +98,6 @@ function applyHeroShellStyles(
     .select('.hero__inner', theme)
     .display('grid')
     .gridTemplateColumns('minmax(0, 1.1fr) minmax(0, 0.9fr)')
-    .gap('32px')
     .alignItems('center')
     .position('relative')
     .zIndex('1')
@@ -256,7 +255,6 @@ function applyHeroMediaStyles(
 
   styleBuilder
     .select('.hero__logo', theme)
-    .maxWidth('360px')
     .width('100%')
     .height('auto')
     .display('block')

@@ -10,11 +10,20 @@ import type { ThemePalette } from '../../style/themePalette'
 import { resolveTsSsgContext } from '../resolveTsSsgContext'
 import type { TsSsgContext } from '../ts-ssg-context'
 
-function resolveBrandLabel(context: TsSsgContext): string {
-  const label = context?.site?.siteTitle
-  if (typeof label !== 'string') return 'Docs'
-  const trimmed = label.trim()
-  return trimmed.length > 0 ? trimmed : 'Docs'
+interface TopBarBrandContext {
+  brandWordOne: string
+  brandWordTwo: string
+  brandSubtitle?: string
+  brandHref: string
+}
+
+function resolveTopBarBrand(context: TsSsgContext): TopBarBrandContext {
+  return {
+    brandWordOne: context.site.logo.wordOne ?? 'Pure',
+    brandWordTwo: context.site.logo.wordTwo ?? 'Stack',
+    brandSubtitle: context.site.logo.subtitle,
+    brandHref: context.site.logo.href ?? '/',
+  }
 }
 
 const topBarTemplate = html`<input
@@ -24,7 +33,13 @@ const topBarTemplate = html`<input
     aria-hidden="true"
   />
   <header class="topbar">
-    <a class="topbar__logo" href="/">{{ brandLabel }}</a>
+    <RegorLogo
+      class="topbar__logo"
+      :word-one="brandWordOne"
+      :word-two="brandWordTwo"
+      :subtitle="brandSubtitle"
+      :href="brandHref"
+    />
     <site-search class="topbar__search"></site-search>
     <div class="topbar__controls">
       <theme-switcher></theme-switcher>
@@ -66,11 +81,16 @@ function registerTopBarShellStyles(
     .borderBottomColor(palette.border.subtle)
   styleBuilder
     .select('.topbar__logo', theme)
-    .fontSize('22px')
-    .fontWeight('700')
-    .textDecoration('none')
+    .display('inline-flex')
     .justifySelf('start')
-    .color(palette.text.accent)
+  styleBuilder
+    .select('.topbar__logo .regor-logo__link', theme)
+    .padding('8px 12px')
+  styleBuilder
+    .select('.topbar__logo .regor-logo__glyph', theme)
+    .width('30px')
+    .height('30px')
+  styleBuilder.select('.topbar__logo .regor-logo__word', theme).fontSize('20px')
   styleBuilder
     .select('.topbar__controls', theme)
     .display('inline-flex')
@@ -164,10 +184,8 @@ function registerTopBarToggleStyles(theme: ThemeMode, palette: ThemePalette) {
 }
 
 function createTopBarComponent() {
-  return createComponent(topBarTemplate, {
-    context: (head) => ({
-      brandLabel: resolveBrandLabel(resolveTsSsgContext(head)),
-    }),
+  return createComponent<TopBarBrandContext>(topBarTemplate, {
+    context: (head) => resolveTopBarBrand(resolveTsSsgContext(head)),
   })
 }
 

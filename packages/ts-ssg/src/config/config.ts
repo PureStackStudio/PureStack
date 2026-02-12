@@ -18,6 +18,7 @@ export interface SiteConfig {
   contentDir: string
   outDir: string
   siteTitle: string
+  logo: LogoConfig
   styleFileName: string
   styleHref: string
   styleThemes: string[]
@@ -25,6 +26,15 @@ export interface SiteConfig {
   theme: ThemeOptions
   sitemap: SitemapConfig
 }
+
+export interface LogoConfig {
+  wordOne: string
+  wordTwo: string
+  subtitle?: string
+  href: string
+}
+
+export type PartialLogoConfig = Partial<LogoConfig>
 
 export interface SitemapConfig {
   enabled: boolean
@@ -50,8 +60,9 @@ export type PartialSitemapConfig = Partial<Omit<SitemapConfig, 'robots'>> & {
 }
 
 export type PartialSiteConfig = Partial<
-  Omit<SiteConfig, 'theme' | 'sitemap'>
+  Omit<SiteConfig, 'theme' | 'sitemap' | 'logo'>
 > & {
+  logo?: PartialLogoConfig
   theme?: ThemeOptionsInput
   sitemap?: PartialSitemapConfig
 }
@@ -60,6 +71,7 @@ export type SiteConfigFile = Partial<
     SiteConfig,
     | 'outDir'
     | 'siteTitle'
+    | 'logo'
     | 'styleFileName'
     | 'styleHref'
     | 'styleThemes'
@@ -87,6 +99,7 @@ export function resolveSiteConfig(input: PartialSiteConfig = {}): SiteConfig {
     fileConfig.siteTitle,
     'ts-ssg',
   )
+  const logo = resolveLogoConfig(input.logo, fileConfig.logo)
   const styleFileName = resolveString(
     input.styleFileName,
     fileConfig.styleFileName,
@@ -109,12 +122,25 @@ export function resolveSiteConfig(input: PartialSiteConfig = {}): SiteConfig {
     contentDir,
     outDir,
     siteTitle,
+    logo,
     styleFileName,
     styleHref,
     styleThemes,
     navigation,
     theme,
     sitemap,
+  }
+}
+
+function resolveLogoConfig(
+  input?: PartialLogoConfig,
+  file?: PartialLogoConfig,
+): LogoConfig {
+  return {
+    wordOne: resolveString(input?.wordOne, file?.wordOne, 'Pure'),
+    wordTwo: resolveString(input?.wordTwo, file?.wordTwo, 'Stack'),
+    subtitle: resolveOptionalString(input?.subtitle ?? file?.subtitle),
+    href: resolveString(input?.href, file?.href, '/'),
   }
 }
 

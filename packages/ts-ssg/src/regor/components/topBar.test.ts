@@ -1,0 +1,45 @@
+import type { Component } from 'regor'
+import { describe, expect, it } from 'vitest'
+
+import { resolveSiteConfig } from '../../config/config'
+import { normalizeFrontmatter } from '../../frontmatter/frontmatter'
+import { ensureDomGlobals } from '../registerDomGlobals'
+import { renderApp } from '../renderApp'
+import { createLogoComponents } from './logo'
+import { createTopBarComponents } from './topBar'
+
+describe('TopBar rendering', () => {
+  it('applies logo values from site config', () => {
+    const cleanup = ensureDomGlobals()
+    const components = {
+      ...createLogoComponents(),
+      ...createTopBarComponents(),
+    } as Record<string, Component<unknown>>
+    const site = resolveSiteConfig({
+      logo: {
+        wordOne: 'Calc',
+        wordTwo: 'Core',
+        subtitle: 'backend-native engine',
+        href: '/docs/',
+      },
+    })
+    const pageInfo = {
+      relPath: 'index.md',
+      urlPath: '/',
+      frontmatter: normalizeFrontmatter({}),
+    }
+    const html = renderApp(`<TopBar />`, {
+      components,
+      context: { site, theme: site.theme, pageInfo },
+    })
+    cleanup()
+
+    expect(html).toContain('Calc')
+    expect(html).toContain('Core')
+    expect(html).toContain('backend-native engine')
+    expect(html).toContain('href="/docs/"')
+    expect(html).not.toContain('Pure')
+    expect(html).not.toContain('Stack')
+  })
+})
+
