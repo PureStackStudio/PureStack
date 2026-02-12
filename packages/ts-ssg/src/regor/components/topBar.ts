@@ -83,7 +83,7 @@ function registerTopBarShellStyles(
   styleBuilder
     .select('.topbar', theme)
     .display('grid')
-    .gridTemplateColumns('minmax(0, 1fr) minmax(220px, 420px) auto')
+    .gridTemplateColumns('minmax(0, 1fr) minmax(220px, 420px) minmax(0, 1fr)')
     .alignItems('center')
     .gap('16px')
     .padding('16px')
@@ -201,7 +201,7 @@ function registerTopBarToggleStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.topbar', theme)
     .media('max-width: 900px')
-    .gridTemplateColumns('minmax(0, 1fr) minmax(0, 1fr) auto')
+    .gridTemplateColumns('minmax(0, 1fr) minmax(180px, 360px) minmax(0, 1fr)')
   styleBuilder
     .select('.topbar', theme)
     .media('max-width: 720px')

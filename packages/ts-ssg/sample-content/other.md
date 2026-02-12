@@ -1,5 +1,7 @@
 ---
 title: 'Core Types'
+layout:
+  showToc: true
 sidebar:
   order: 7
 ---

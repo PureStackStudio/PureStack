@@ -148,6 +148,17 @@ function registerSearchBoxResultStyles(
     .zIndex('60')
 
   styleBuilder
+    .select('.topbar .site-search__results', theme)
+    .media('min-width: 721px')
+    .position('fixed')
+    .top('76px')
+    .left('50%')
+    .right('auto')
+    .transform('translateX(-50%)')
+    .width('min(720px, calc(100vw - 32px))')
+    .zIndex('120')
+
+  styleBuilder
     .select('.site-search__results ul.site-search__list', theme)
     .listStyle('none')
     .margin('0')

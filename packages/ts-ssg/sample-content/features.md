@@ -1,5 +1,7 @@
 ---
 title: 'Features'
+layout:
+  showToc: true
 sidebar:
   order: 4
 ---

@@ -1,5 +1,7 @@
 ---
 title: Overview
+layout:
+  showToc: true
 ---
 
 This is a simple Markdown page.

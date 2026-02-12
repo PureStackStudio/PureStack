@@ -1,5 +1,7 @@
 ---
 title: 'Formatting'
+layout:
+  showToc: true
 sidebar:
   order: 6
 ---
