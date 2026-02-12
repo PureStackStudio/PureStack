@@ -24,7 +24,7 @@ const logoTemplate = html`<div class="site-logo">
   </a>
 </div>`
 
-interface RegorLogoProps {
+interface SiteLogoProps {
   wordOne?: string
   wordTwo?: string
   subtitle?: string
@@ -34,7 +34,7 @@ interface RegorLogoProps {
   subtitleFontSize?: string
 }
 
-interface RegorLogoContext {
+interface SiteLogoContext {
   wordOne: string
   wordTwo: string
   subtitle: string
@@ -218,7 +218,7 @@ function registerLogoResponsiveStyles(theme: ThemeMode) {
     .fontSize('8px')
 }
 
-function resolveLogoContext(props: RegorLogoProps): RegorLogoContext {
+function resolveLogoContext(props: SiteLogoProps): SiteLogoContext {
   const wordOne = normalizeWord(props.wordOne, 'Pure')
   const wordTwo = normalizeWord(props.wordTwo, 'Stack')
   const subtitle = normalizeOptionalText(props.subtitle)
@@ -269,8 +269,8 @@ function buildFontSizeStyle(fontSize: string): Record<string, string> {
   return { fontSize }
 }
 
-function createRegorLogoComponent() {
-  return createComponent<RegorLogoContext>(logoTemplate, {
+function createSiteLogoComponent() {
+  return createComponent<SiteLogoContext>(logoTemplate, {
     props: [
       'wordOne',
       'wordTwo',
@@ -286,5 +286,5 @@ function createRegorLogoComponent() {
 
 export function createLogoComponents() {
   registerLogoStyles()
-  return { regorLogo: createRegorLogoComponent() }
+  return { siteLogo: createSiteLogoComponent() }
 }

@@ -5,12 +5,12 @@ import { ensureDomGlobals } from '../registerDomGlobals'
 import { renderApp } from '../renderApp'
 import { createLogoComponents } from './logo'
 
-describe('RegorLogo rendering', () => {
+describe('SiteLogo rendering', () => {
   it('renders two brand words and subtitle', () => {
     const cleanup = ensureDomGlobals()
     const components = createLogoComponents() as Record<string, Component<unknown>>
     const html = renderApp(
-      `<RegorLogo
+      `<SiteLogo
         wordOne="Calc"
         wordTwo="Core"
         subtitle="backend-native engine"
@@ -29,7 +29,7 @@ describe('RegorLogo rendering', () => {
   it('uses fallback words and omits subtitle when not provided', () => {
     const cleanup = ensureDomGlobals()
     const components = createLogoComponents() as Record<string, Component<unknown>>
-    const html = renderApp(`<RegorLogo />`, { components })
+    const html = renderApp(`<SiteLogo />`, { components })
     cleanup()
 
     expect(html).toContain('Pure')
@@ -41,7 +41,7 @@ describe('RegorLogo rendering', () => {
     const cleanup = ensureDomGlobals()
     const components = createLogoComponents() as Record<string, Component<unknown>>
     const html = renderApp(
-      `<RegorLogo
+      `<SiteLogo
         wordOne="Calc"
         wordTwo="Core"
         subtitle="backend-native engine"

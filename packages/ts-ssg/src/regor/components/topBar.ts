@@ -39,7 +39,7 @@ const topBarTemplate = html`<input
     aria-hidden="true"
   />
   <header class="topbar">
-    <RegorLogo
+    <SiteLogo
       class="topbar__logo"
       :word-one="brandWordOne"
       :word-two="brandWordTwo"
