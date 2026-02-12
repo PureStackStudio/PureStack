@@ -19,7 +19,7 @@ export const renderApp = (html: string, options: RenderAppOptions = {}) => {
     normalizedHtml.startsWith('<html')
   const htmlToParse = isDocument
     ? normalizedHtml
-    : `<!DOCTYPE html>\n<html><body>${html}</body></html>`
+    : `<!DOCTYPE html><html><body>${html}</body></html>`
   const { document, window } = parseHtml(htmlToParse)
   const cleanup = registerDomGlobals(window, document)
   const snapshot = componentRegistry.snapshot()
@@ -41,7 +41,7 @@ export const renderApp = (html: string, options: RenderAppOptions = {}) => {
     )
     if (isDocument) {
       const documentHtml = document.documentElement?.outerHTML ?? ''
-      return `<!DOCTYPE html>\n${documentHtml}`
+      return `<!DOCTYPE html>${documentHtml}`
     }
     return document.body?.innerHTML ?? ''
   } finally {

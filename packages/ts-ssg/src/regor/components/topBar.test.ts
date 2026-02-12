@@ -6,6 +6,7 @@ import { normalizeFrontmatter } from '../../frontmatter/frontmatter'
 import { ensureDomGlobals } from '../registerDomGlobals'
 import { renderApp } from '../renderApp'
 import { createLogoComponents } from './logo'
+import { createSearchComponents } from './searchBox'
 import { createTopBarComponents } from './topBar'
 
 describe('TopBar rendering', () => {
@@ -14,6 +15,7 @@ describe('TopBar rendering', () => {
     const components = {
       ...createLogoComponents(),
       ...createTopBarComponents(),
+      ...createSearchComponents(),
     } as Record<string, Component<unknown>>
     const site = resolveSiteConfig({
       logo: {
