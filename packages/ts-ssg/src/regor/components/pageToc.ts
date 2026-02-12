@@ -28,7 +28,13 @@ const pageTocTemplate = html`<nav class="page-toc" aria-label="On this page">
     aria-controls="doc-toc"
     aria-expanded="false"
   >
-    on this page
+    <span class="page-toc__mobile-toggle-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" focusable="false">
+        <path d="M7 7l10 10"></path>
+        <path d="M17 7L7 17"></path>
+      </svg>
+    </span>
+    <span class="page-toc__mobile-toggle-label">on this page</span>
   </button>
   <div class="page-toc__header">{{ title }}</div>
   <ul class="page-toc__list" r-if="items.length > 0">
@@ -95,6 +101,7 @@ function registerPageTocShellStyles(
   styleBuilder
     .select('.page-toc', theme)
     .display('grid')
+    .alignContent('start')
     .position('relative')
     .gap('12px')
     .padding('16px')
@@ -244,7 +251,7 @@ function registerPageTocLayoutStyles(
     .height('100dvh')
     .zIndex(140)
     .overflow('hidden')
-    .transform('translateX(calc(100% - 42px))')
+    .transform('translateX(calc(100% - 26px))')
     .transition('transform 260ms ease')
     .background(palette.background.canvas)
     .boxShadow(options.shadows.strong)
@@ -276,12 +283,12 @@ function registerPageTocLayoutStyles(
     .transform('translateY(-50%) rotate(180deg)')
     .set('writing-mode', 'vertical-rl')
     .set('text-orientation', 'mixed')
-    .width('36px')
-    .height('146px')
+    .width('26px')
+    .height('120px')
     .display('flex')
     .alignItems('center')
     .justifyContent('center')
-    .fontSize('0.68rem')
+    .fontSize('0.70rem')
     .fontWeight('700')
     .set('letter-spacing', '0.12em')
     .set('text-transform', 'uppercase')
@@ -290,11 +297,27 @@ function registerPageTocLayoutStyles(
     .border(`1px solid ${palette.border.default}`)
     .set('border-left', 'none')
     .set('border-radius', `0 ${options.radii.md} ${options.radii.md} 0`)
-    .boxShadow(palette.effect.interactiveShadow)
+    .boxShadow('none')
     .set('user-select', 'none')
     .cursor('pointer')
     .set('pointer-events', 'auto')
     .zIndex(2)
+
+  styleBuilder
+    .select('.page-toc__mobile-toggle-icon', theme)
+    .media('max-width: 1023px')
+    .display('none')
+
+  styleBuilder
+    .select('.page-toc__mobile-toggle-icon svg', theme)
+    .media('max-width: 1023px')
+    .width('14px')
+    .height('14px')
+    .display('block')
+    .fill('none')
+    .stroke('currentColor')
+    .set('stroke-width', '2.1')
+    .set('stroke-linecap', 'round')
 
   styleBuilder
     .select(
@@ -325,12 +348,20 @@ function registerPageTocLayoutStyles(
     .transform('none')
     .set('writing-mode', 'horizontal-tb')
     .width('auto')
-    .minWidth('92px')
-    .height('38px')
-    .padding('0 12px')
+    .height('auto')
+    .padding('6px')
+    .display('inline-flex')
+    .alignItems('center')
+    .justifyContent('center')
+    .gap('3px')
     .set('letter-spacing', '0.08em')
-    .set('border-right', `1px solid ${palette.border.default}`)
+    .border(`1px solid ${palette.border.default}`)
     .set('border-radius', options.radii.md)
+
+  styleBuilder
+    .select('.doc-toc.doc-toc--open .page-toc__mobile-toggle-icon', theme)
+    .media('max-width: 1023px')
+    .display('inline-flex')
 
   styleBuilder
     .select('.doc-toc.doc-toc--open .page-toc__mobile-toggle:hover', theme)
@@ -350,7 +381,8 @@ function registerPageTocLayoutStyles(
   styleBuilder
     .select('.doc-toc.doc-toc--open .page-toc', theme)
     .media('max-width: 1023px')
-    .padding('72px 16px 18px')
+    .padding('55px 16px 14px')
+    .gap('4px')
     .overflow('auto')
 
   styleBuilder
@@ -359,14 +391,14 @@ function registerPageTocLayoutStyles(
     .paddingRight('104px')
 
   styleBuilder
-    .select('.doc-toc .page-toc__list', theme)
+    .select('.doc-toc .page-toc > .page-toc__list', theme)
     .media('max-width: 1023px')
-    .paddingBottom('36px')
+    .paddingBottom('8px')
 
   styleBuilder
     .select('.doc-toc .page-toc__empty', theme)
     .media('max-width: 1023px')
-    .paddingBottom('36px')
+    .paddingBottom('8px')
 }
 
 function createPageTocComponent() {

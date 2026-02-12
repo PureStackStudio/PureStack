@@ -185,7 +185,7 @@ function registerNavShellStyles(
   styleBuilder.select('.nav__leaf', theme).display('block')
   styleBuilder.select('.nav__group', theme).display('grid')
   styleBuilder
-    .select('.template-doc--nav-drawer .doc-sidebar .nav__menu', theme)
+    .select('.template-doc--has-nav .doc-sidebar .nav__menu', theme)
     .media('max-width: 1023px')
     .width('100%')
     .maxWidth('none')
