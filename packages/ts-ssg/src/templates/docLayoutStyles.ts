@@ -137,6 +137,10 @@ function registerDocLayoutResponsiveStyles(
     .gridTemplateColumns('1fr')
     .padding('16px')
   styleBuilder
+    .select('.template-doc', theme)
+    .media('max-width: 1023px')
+    .set('overflow-x', 'hidden')
+  styleBuilder
     .select('.template-doc--nav-drawer .doc-sidebar', theme)
     .media('max-width: 1023px')
     .position('fixed')

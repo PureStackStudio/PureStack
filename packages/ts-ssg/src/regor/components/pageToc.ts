@@ -22,6 +22,14 @@ interface PageTocItemContext extends PageOutlineItem {
 }
 
 const pageTocTemplate = html`<nav class="page-toc" aria-label="On this page">
+  <button
+    class="page-toc__mobile-toggle"
+    type="button"
+    aria-controls="doc-toc"
+    aria-expanded="false"
+  >
+    on this page
+  </button>
   <div class="page-toc__header">{{ title }}</div>
   <ul class="page-toc__list" r-if="items.length > 0">
     <li r-for="item in items" class="page-toc__item page-toc__item--h2">
@@ -75,7 +83,7 @@ function registerPageTocStyles() {
     registerPageTocShellStyles(theme, palette, options)
     registerPageTocLinkStyles(theme, palette, options)
     registerPageTocTargetStyles(theme, palette)
-    registerPageTocLayoutStyles(theme)
+    registerPageTocLayoutStyles(theme, palette, options)
   })
 }
 
@@ -87,6 +95,7 @@ function registerPageTocShellStyles(
   styleBuilder
     .select('.page-toc', theme)
     .display('grid')
+    .position('relative')
     .gap('12px')
     .padding('16px')
     .borderRadius(options.radii.lg)
@@ -120,6 +129,8 @@ function registerPageTocShellStyles(
     .fontSize('0.9rem')
     .fontWeight('600')
     .color(palette.text.subtle)
+
+  styleBuilder.select('.page-toc__mobile-toggle', theme).display('none')
 }
 
 function registerPageTocLinkStyles(
@@ -181,7 +192,11 @@ function registerPageTocTargetStyles(theme: ThemeMode, palette: ThemePalette) {
     .color(palette.text.accent)
 }
 
-function registerPageTocLayoutStyles(theme: ThemeMode) {
+function registerPageTocLayoutStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.doc-shell--toc', theme)
     .gridTemplateColumns('260px minmax(0, 1fr) 240px')
@@ -191,6 +206,18 @@ function registerPageTocLayoutStyles(theme: ThemeMode) {
   styleBuilder
     .select('.doc-shell--nav-drawer.doc-shell--toc', theme)
     .gridTemplateColumns('minmax(0, 1fr) 240px')
+  styleBuilder
+    .select('.doc-shell--toc', theme)
+    .media('max-width: 1023px')
+    .gridTemplateColumns('1fr')
+  styleBuilder
+    .select('.doc-shell--toc-only', theme)
+    .media('max-width: 1023px')
+    .gridTemplateColumns('1fr')
+  styleBuilder
+    .select('.doc-shell--nav-drawer.doc-shell--toc', theme)
+    .media('max-width: 1023px')
+    .gridTemplateColumns('1fr')
   styleBuilder
     .select('.doc-toc', theme)
     .position('fixed')
@@ -202,13 +229,140 @@ function registerPageTocLayoutStyles(theme: ThemeMode) {
     .overflow('auto')
   styleBuilder.select('.template-doc--full-main .doc-toc', theme).right('32px')
   styleBuilder
+    .select('.template-doc--full-main .doc-toc', theme)
+    .media('max-width: 1023px')
+    .right('0')
+  styleBuilder
     .select('.doc-toc', theme)
     .media('max-width: 1023px')
-    .position('static')
-    .right('auto')
+    .position('fixed')
+    .top('0')
+    .left('0')
+    .right('0')
     .width('auto')
-    .top('auto')
-    .height('auto')
+    .maxWidth('none')
+    .height('100dvh')
+    .zIndex(140)
+    .overflow('hidden')
+    .transform('translateX(calc(100% - 42px))')
+    .transition('transform 260ms ease')
+    .background(palette.background.canvas)
+    .boxShadow(options.shadows.strong)
+
+  styleBuilder
+    .select('.doc-toc.doc-toc--open', theme)
+    .media('max-width: 1023px')
+    .transform('translateX(0)')
+
+  styleBuilder
+    .select('.doc-toc:not(.doc-toc--open)', theme)
+    .media('max-width: 1023px')
+    .background('transparent')
+    .boxShadow('none')
+
+  styleBuilder
+    .select('.template-doc.doc-toc-open', theme)
+    .media('max-width: 1023px')
+    .overflow('hidden')
+
+  styleBuilder
+    .select('.page-toc__mobile-toggle', theme)
+    .media('max-width: 1023px')
+    .position('absolute')
+    .left('0')
+    .right('auto')
+    .top('50%')
+    .transform('translateY(-50%) rotate(180deg)')
+    .set('writing-mode', 'vertical-rl')
+    .set('text-orientation', 'mixed')
+    .width('42px')
+    .height('172px')
+    .display('flex')
+    .alignItems('center')
+    .justifyContent('center')
+    .fontSize('0.68rem')
+    .fontWeight('700')
+    .set('letter-spacing', '0.12em')
+    .set('text-transform', 'uppercase')
+    .color(palette.text.subtle)
+    .background(palette.background.raised)
+    .border(`1px solid ${palette.border.default}`)
+    .set('border-right', 'none')
+    .set('border-radius', `${options.radii.md} 0 0 ${options.radii.md}`)
+    .boxShadow(palette.effect.interactiveShadow)
+    .set('user-select', 'none')
+    .cursor('pointer')
+    .zIndex(2)
+
+  styleBuilder
+    .select('.doc-toc:not(.doc-toc--open) .page-toc > :not(.page-toc__mobile-toggle)', theme)
+    .media('max-width: 1023px')
+    .display('none')
+
+  styleBuilder
+    .select('.doc-toc:not(.doc-toc--open) .page-toc', theme)
+    .media('max-width: 1023px')
+    .background('transparent')
+    .border('none')
+
+  styleBuilder
+    .select('.page-toc__mobile-toggle:focus-visible', theme)
+    .media('max-width: 1023px')
+    .outline(`2px solid ${palette.border.focus}`)
+    .outlineOffset('2px')
+
+  styleBuilder
+    .select('.doc-toc.doc-toc--open .page-toc__mobile-toggle', theme)
+    .media('max-width: 1023px')
+    .left('auto')
+    .right('16px')
+    .top('16px')
+    .transform('none')
+    .set('writing-mode', 'horizontal-tb')
+    .width('auto')
+    .minWidth('92px')
+    .height('38px')
+    .padding('0 12px')
+    .set('letter-spacing', '0.08em')
+    .set('border-right', `1px solid ${palette.border.default}`)
+    .set('border-radius', options.radii.md)
+
+  styleBuilder
+    .select('.doc-toc.doc-toc--open .page-toc__mobile-toggle:hover', theme)
+    .media('max-width: 1023px')
+    .color(palette.text.accent)
+    .background(palette.background.accentMuted)
+
+  styleBuilder
+    .select('.doc-toc .page-toc', theme)
+    .media('max-width: 1023px')
+    .height('100%')
+    .overflow('visible')
+    .padding('0')
+    .borderRadius('0')
+    .set('-webkit-overflow-scrolling', 'touch')
+
+  styleBuilder
+    .select('.doc-toc.doc-toc--open .page-toc', theme)
+    .media('max-width: 1023px')
+    .padding('72px 16px 18px')
+    .overflow('auto')
+
+  styleBuilder
+    .select('.doc-toc .page-toc__header', theme)
+    .media('max-width: 1023px')
+    .paddingRight('104px')
+
+  styleBuilder
+    .select('.doc-toc .page-toc__list', theme)
+    .media('max-width: 1023px')
+    .paddingBottom('36px')
+
+  styleBuilder
+    .select('.doc-toc .page-toc__empty', theme)
+    .media('max-width: 1023px')
+    .paddingBottom('36px')
+
 }
 
 function createPageTocComponent() {
