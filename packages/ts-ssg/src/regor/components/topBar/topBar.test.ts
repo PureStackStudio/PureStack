@@ -1,13 +1,13 @@
 import type { Component } from 'regor'
 import { describe, expect, it } from 'vitest'
 
-import { resolveSiteConfig } from '../../config/config'
-import { normalizeFrontmatter } from '../../frontmatter/frontmatter'
-import { ensureDomGlobals } from '../registerDomGlobals'
-import { renderApp } from '../renderApp'
-import { createLogoComponents } from './logo/logo'
-import { createSearchComponents } from './searchBox/searchBox'
-import { createTopBarComponents } from './topBar/topBar'
+import { resolveSiteConfig } from '../../../config/config'
+import { normalizeFrontmatter } from '../../../frontmatter/frontmatter'
+import { ensureDomGlobals } from '../../registerDomGlobals'
+import { renderApp } from '../../renderApp'
+import { createLogoComponents } from '../logo/logo'
+import { createSearchComponents } from '../searchBox/searchBox'
+import { createTopBarComponents } from '../topBar/topBar'
 
 describe('TopBar rendering', () => {
   it('applies logo values from site config', () => {

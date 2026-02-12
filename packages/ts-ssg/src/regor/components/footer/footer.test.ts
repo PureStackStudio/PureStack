@@ -1,12 +1,12 @@
 import type { Component } from 'regor'
 import { describe, expect, it } from 'vitest'
 
-import { resolveSiteConfig } from '../../config/config'
-import { parseHtml } from '../../dom/minidom'
-import { normalizeFrontmatter } from '../../frontmatter/frontmatter'
-import { ensureDomGlobals } from '../registerDomGlobals'
-import { renderApp } from '../renderApp'
-import { createFooterComponents } from './footer/footer'
+import { resolveSiteConfig } from '../../../config/config'
+import { parseHtml } from '../../../dom/minidom'
+import { normalizeFrontmatter } from '../../../frontmatter/frontmatter'
+import { ensureDomGlobals } from '../../registerDomGlobals'
+import { renderApp } from '../../renderApp'
+import { createFooterComponents } from './footer'
 
 describe('SiteFooter rendering', () => {
   it('renders footer blocks with columns, links, legal actions, and socials', () => {

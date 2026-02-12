@@ -1,9 +1,9 @@
 import type { Component } from 'regor'
 import { describe, expect, it } from 'vitest'
 
-import { ensureDomGlobals } from '../registerDomGlobals'
-import { renderApp } from '../renderApp'
-import { createHeroComponents } from './hero/hero'
+import { ensureDomGlobals } from '../../registerDomGlobals'
+import { renderApp } from '../../renderApp'
+import { createHeroComponents } from './hero'
 
 describe('HeroBanner rendering', () => {
   it('renders named slot templates into hero sections', () => {

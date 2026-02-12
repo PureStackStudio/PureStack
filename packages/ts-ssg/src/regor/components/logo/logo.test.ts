@@ -1,9 +1,9 @@
 import type { Component } from 'regor'
 import { describe, expect, it } from 'vitest'
 
-import { ensureDomGlobals } from '../registerDomGlobals'
-import { renderApp } from '../renderApp'
-import { createLogoComponents } from './logo/logo'
+import { ensureDomGlobals } from '../../registerDomGlobals'
+import { renderApp } from '../../renderApp'
+import { createLogoComponents } from './logo'
 
 describe('SiteLogo rendering', () => {
   it('renders two brand words and subtitle', () => {

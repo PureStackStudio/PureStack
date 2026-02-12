@@ -1,11 +1,11 @@
 import type { Component } from 'regor'
 import { describe, expect, it } from 'vitest'
 
-import { resolveSiteConfig } from '../../config/config'
-import { normalizeFrontmatter } from '../../frontmatter/frontmatter'
-import { ensureDomGlobals } from '../registerDomGlobals'
-import { renderApp } from '../renderApp'
-import { createNavigationComponents } from './navMenu/navMenu'
+import { resolveSiteConfig } from '../../../config/config'
+import { normalizeFrontmatter } from '../../../frontmatter/frontmatter'
+import { ensureDomGlobals } from '../../registerDomGlobals'
+import { renderApp } from '../../renderApp'
+import { createNavigationComponents } from './navMenu'
 
 describe('NavMenu rendering', () => {
   it('evaluates r-else branches for leaf items', () => {
