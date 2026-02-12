@@ -36,6 +36,18 @@
           "type": "string",
           "description": "Logo link target.",
           "default": "/"
+        },
+        "iconSvg": {
+          "type": "string",
+          "description": "Optional embedded SVG markup rendered inside the logo glyph."
+        },
+        "wordFontSize": {
+          "type": "string",
+          "description": "Optional CSS font-size value for logo brand words."
+        },
+        "subtitleFontSize": {
+          "type": "string",
+          "description": "Optional CSS font-size value for logo subtitle."
         }
       }
     },

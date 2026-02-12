@@ -21,6 +21,10 @@ describe('TopBar rendering', () => {
         wordTwo: 'Core',
         subtitle: 'backend-native engine',
         href: '/docs/',
+        iconSvg:
+          '<svg viewBox="0 0 24 24"><path d="M4 12h16" stroke="currentColor"/></svg>',
+        wordFontSize: '22px',
+        subtitleFontSize: '10px',
       },
     })
     const pageInfo = {
@@ -38,8 +42,10 @@ describe('TopBar rendering', () => {
     expect(html).toContain('Core')
     expect(html).toContain('backend-native engine')
     expect(html).toContain('href="/docs/"')
+    expect(html).toContain('regor-logo__glyph--custom')
+    expect(html).toContain('--regor-logo-word-size: 22px')
+    expect(html).toContain('--regor-logo-subtitle-size: 10px')
     expect(html).not.toContain('Pure')
     expect(html).not.toContain('Stack')
   })
 })
-

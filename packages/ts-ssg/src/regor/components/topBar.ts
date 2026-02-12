@@ -15,6 +15,9 @@ interface TopBarBrandContext {
   brandWordTwo: string
   brandSubtitle?: string
   brandHref: string
+  brandIconSvg?: string
+  brandWordFontSize?: string
+  brandSubtitleFontSize?: string
 }
 
 function resolveTopBarBrand(context: TsSsgContext): TopBarBrandContext {
@@ -23,6 +26,9 @@ function resolveTopBarBrand(context: TsSsgContext): TopBarBrandContext {
     brandWordTwo: context.site.logo.wordTwo ?? 'Stack',
     brandSubtitle: context.site.logo.subtitle,
     brandHref: context.site.logo.href ?? '/',
+    brandIconSvg: context.site.logo.iconSvg,
+    brandWordFontSize: context.site.logo.wordFontSize,
+    brandSubtitleFontSize: context.site.logo.subtitleFontSize,
   }
 }
 
@@ -39,6 +45,9 @@ const topBarTemplate = html`<input
       :word-two="brandWordTwo"
       :subtitle="brandSubtitle"
       :href="brandHref"
+      :icon-svg="brandIconSvg"
+      :word-font-size="brandWordFontSize"
+      :subtitle-font-size="brandSubtitleFontSize"
     />
     <site-search class="topbar__search"></site-search>
     <div class="topbar__controls">
@@ -90,7 +99,12 @@ function registerTopBarShellStyles(
     .select('.topbar__logo .regor-logo__glyph', theme)
     .width('30px')
     .height('30px')
-  styleBuilder.select('.topbar__logo .regor-logo__word', theme).fontSize('20px')
+  styleBuilder
+    .select('.topbar__logo .regor-logo__word', theme)
+    .fontSize('var(--regor-logo-word-size, 20px)')
+  styleBuilder
+    .select('.topbar__logo .regor-logo__subtitle', theme)
+    .fontSize('var(--regor-logo-subtitle-size, 8px)')
   styleBuilder
     .select('.topbar__controls', theme)
     .display('inline-flex')

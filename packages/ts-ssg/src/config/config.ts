@@ -32,6 +32,9 @@ export interface LogoConfig {
   wordTwo: string
   subtitle?: string
   href: string
+  iconSvg?: string
+  wordFontSize?: string
+  subtitleFontSize?: string
 }
 
 export type PartialLogoConfig = Partial<LogoConfig>
@@ -141,6 +144,13 @@ function resolveLogoConfig(
     wordTwo: resolveString(input?.wordTwo, file?.wordTwo, 'Stack'),
     subtitle: resolveOptionalString(input?.subtitle ?? file?.subtitle),
     href: resolveString(input?.href, file?.href, '/'),
+    iconSvg: resolveOptionalString(input?.iconSvg ?? file?.iconSvg),
+    wordFontSize: resolveOptionalString(
+      input?.wordFontSize ?? file?.wordFontSize,
+    ),
+    subtitleFontSize: resolveOptionalString(
+      input?.subtitleFontSize ?? file?.subtitleFontSize,
+    ),
   }
 }
 

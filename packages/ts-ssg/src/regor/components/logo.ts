@@ -6,8 +6,20 @@ import { themes } from '../../style/themeOptions'
 import type { ThemePalette } from '../../style/themePalette'
 
 const logoTemplate = html`<div class="regor-logo">
-  <a class="regor-logo__link" :href="href" :aria-label="ariaLabel" r-if="hasHref">
-    <span class="regor-logo__glyph" aria-hidden="true"></span>
+  <a
+    class="regor-logo__link"
+    :href="href"
+    :aria-label="ariaLabel"
+    :style="inlineStyle"
+    r-if="hasHref"
+  >
+    <span
+      class="regor-logo__glyph regor-logo__glyph--custom"
+      aria-hidden="true"
+      r-if="hasIconSvg"
+      r-html="iconSvg"
+    ></span>
+    <span class="regor-logo__glyph regor-logo__glyph--default" aria-hidden="true" r-else></span>
     <span class="regor-logo__stack">
       <span class="regor-logo__brand">
         <span class="regor-logo__word regor-logo__word--primary">{{ wordOne }}</span>
@@ -16,8 +28,14 @@ const logoTemplate = html`<div class="regor-logo">
       <span class="regor-logo__subtitle" r-if="hasSubtitle">{{ subtitle }}</span>
     </span>
   </a>
-  <div class="regor-logo__link" :aria-label="ariaLabel" r-else>
-    <span class="regor-logo__glyph" aria-hidden="true"></span>
+  <div class="regor-logo__link" :aria-label="ariaLabel" :style="inlineStyle" r-else>
+    <span
+      class="regor-logo__glyph regor-logo__glyph--custom"
+      aria-hidden="true"
+      r-if="hasIconSvg"
+      r-html="iconSvg"
+    ></span>
+    <span class="regor-logo__glyph regor-logo__glyph--default" aria-hidden="true" r-else></span>
     <span class="regor-logo__stack">
       <span class="regor-logo__brand">
         <span class="regor-logo__word regor-logo__word--primary">{{ wordOne }}</span>
@@ -33,6 +51,9 @@ interface RegorLogoProps {
   wordTwo?: string
   subtitle?: string
   href?: string
+  iconSvg?: string
+  wordFontSize?: string
+  subtitleFontSize?: string
 }
 
 interface RegorLogoContext {
@@ -40,7 +61,10 @@ interface RegorLogoContext {
   wordTwo: string
   subtitle: string
   href: string
+  iconSvg: string
   ariaLabel: string
+  inlineStyle: string
+  hasIconSvg: boolean
   hasSubtitle: boolean
   hasHref: boolean
 }
@@ -99,12 +123,25 @@ function registerLogoShellStyles(
     .boxShadow(palette.effect.interactiveShadow)
 
   styleBuilder
-    .select('.regor-logo__glyph::before', theme)
+    .select('.regor-logo__glyph--default::before', theme)
     .content('""')
     .position('absolute')
     .inset('9px 10px')
     .borderRadius('4px')
     .background(palette.icon.accent.color)
+
+  styleBuilder
+    .select('.regor-logo__glyph--custom', theme)
+    .display('grid')
+    .placeItems('center')
+    .color(palette.icon.accent.color)
+    .overflow('hidden')
+
+  styleBuilder
+    .select('.regor-logo__glyph--custom svg', theme)
+    .width('70%')
+    .height('70%')
+    .display('block')
 }
 
 function registerLogoTextStyles(
@@ -130,11 +167,12 @@ function registerLogoTextStyles(
   styleBuilder
     .select('.regor-logo__word', theme)
     .fontFamily(options.typography.baseFamily)
-    .fontSize('15px')
+    .fontSize('var(--regor-logo-word-size, 15px)')
     .lineHeight('1')
     .fontWeight('800')
     .letterSpacing('0.03em')
     .textTransform('uppercase')
+    .whiteSpace('nowrap')
 
   styleBuilder
     .select('.regor-logo__word--primary', theme)
@@ -146,12 +184,13 @@ function registerLogoTextStyles(
 
   styleBuilder
     .select('.regor-logo__subtitle', theme)
-    .fontSize('7.8px')
+    .fontSize('var(--regor-logo-subtitle-size, 7.8px)')
     .lineHeight('1.2')
     .fontWeight('700')
     .letterSpacing('0.08em')
     .textTransform('uppercase')
     .color(palette.text.subtle)
+    .whiteSpace('nowrap')
 }
 
 function registerLogoInteractiveStyles(
@@ -206,17 +245,25 @@ function resolveLogoContext(props: RegorLogoProps): RegorLogoContext {
   const wordTwo = normalizeWord(props.wordTwo, 'Stack')
   const subtitle = normalizeOptionalText(props.subtitle)
   const href = normalizeOptionalText(props.href)
+  const iconSvg = normalizeOptionalText(props.iconSvg)
+  const wordFontSize = normalizeCssSize(props.wordFontSize)
+  const subtitleFontSize = normalizeCssSize(props.subtitleFontSize)
   const hasSubtitle = subtitle.length > 0
   const hasHref = href.length > 0
+  const hasIconSvg = iconSvg.length > 0
   const ariaLabel = hasSubtitle
     ? `${wordOne} ${wordTwo}: ${subtitle}`
     : `${wordOne} ${wordTwo}`
+  const inlineStyle = buildInlineStyle(wordFontSize, subtitleFontSize)
   return {
     wordOne,
     wordTwo,
     subtitle,
     href,
+    iconSvg,
     ariaLabel,
+    inlineStyle,
+    hasIconSvg,
     hasSubtitle,
     hasHref,
   }
@@ -232,9 +279,36 @@ function normalizeOptionalText(value: string | undefined): string {
   return value.trim()
 }
 
+function normalizeCssSize(value: string | undefined): string {
+  const normalized = normalizeOptionalText(value)
+  if (normalized.length === 0) return ''
+  if (/[;{}]/.test(normalized)) return ''
+  return normalized
+}
+
+function buildInlineStyle(
+  wordFontSize: string,
+  subtitleFontSize: string,
+): string {
+  const declarations: string[] = []
+  if (wordFontSize) declarations.push(`--regor-logo-word-size: ${wordFontSize}`)
+  if (subtitleFontSize) {
+    declarations.push(`--regor-logo-subtitle-size: ${subtitleFontSize}`)
+  }
+  return declarations.join('; ')
+}
+
 function createRegorLogoComponent() {
   return createComponent<RegorLogoContext>(logoTemplate, {
-    props: ['wordOne', 'wordTwo', 'subtitle', 'href'],
+    props: [
+      'wordOne',
+      'wordTwo',
+      'subtitle',
+      'href',
+      'iconSvg',
+      'wordFontSize',
+      'subtitleFontSize',
+    ],
     context: (head) => resolveLogoContext(head.props),
   })
 }

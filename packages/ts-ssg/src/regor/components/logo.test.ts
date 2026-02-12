@@ -36,4 +36,25 @@ describe('RegorLogo rendering', () => {
     expect(html).toContain('Stack')
     expect(html).not.toContain('regor-logo__subtitle')
   })
+
+  it('renders embedded icon svg and custom font size variables', () => {
+    const cleanup = ensureDomGlobals()
+    const components = createLogoComponents() as Record<string, Component<unknown>>
+    const html = renderApp(
+      `<RegorLogo
+        wordOne="Calc"
+        wordTwo="Core"
+        iconSvg='<svg viewBox="0 0 24 24"><path d="M4 12h16"/></svg>'
+        wordFontSize="24px"
+        subtitleFontSize="9px"
+      />`,
+      { components },
+    )
+    cleanup()
+
+    expect(html).toContain('regor-logo__glyph--custom')
+    expect(html).toContain('<svg viewbox="0 0 24 24"><path d="M4 12h16"></path></svg>')
+    expect(html).toContain('--regor-logo-word-size: 24px')
+    expect(html).toContain('--regor-logo-subtitle-size: 9px')
+  })
 })

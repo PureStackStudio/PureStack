@@ -10,6 +10,9 @@ describe('resolveSiteConfig sitemap', () => {
       wordTwo: 'Stack',
       subtitle: undefined,
       href: '/',
+      iconSvg: undefined,
+      wordFontSize: undefined,
+      subtitleFontSize: undefined,
     })
   })
 
@@ -21,6 +24,10 @@ describe('resolveSiteConfig sitemap', () => {
         wordTwo: 'Core',
         subtitle: 'backend-native engine',
         href: '/home',
+        iconSvg:
+          '<svg viewBox="0 0 24 24"><path d="M4 12h16"/></svg>',
+        wordFontSize: '22px',
+        subtitleFontSize: '10px',
       },
     })
     expect(config.logo).toEqual({
@@ -28,6 +35,9 @@ describe('resolveSiteConfig sitemap', () => {
       wordTwo: 'Core',
       subtitle: 'backend-native engine',
       href: '/home',
+      iconSvg: '<svg viewBox="0 0 24 24"><path d="M4 12h16"/></svg>',
+      wordFontSize: '22px',
+      subtitleFontSize: '10px',
     })
   })
 
