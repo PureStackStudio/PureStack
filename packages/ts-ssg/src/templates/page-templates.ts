@@ -91,6 +91,7 @@ function renderDocTemplate({
                 ]
               : []),
           ),
+        h('consent'),
         ...(showFooter ? [buildDefaultFooter(siteTitle)] : []),
       ),
   )
@@ -172,6 +173,7 @@ function renderSplashTemplate({ head, bodyHtml, pageInfo }: PageTemplateInput) {
       .attr({ class: 'template-splash' })
       .push(
         h('main').push(h('section').attr({ class: 'splash' }).raw(bodyHtml)),
+        h('consent'),
         ...(showFooter ? [buildDefaultFooter()] : []),
       ),
   )

@@ -1,0 +1,188 @@
+import { createComponent, html } from 'regor'
+
+import { resolveTsSsgContext } from '../../resolveTsSsgContext'
+import type { TsSsgContext } from '../../ts-ssg-context'
+import { registerConsentStyles } from './consentStyle'
+
+interface ConsentCategoryContext {
+  id: string
+  label: string
+  description?: string
+  required: boolean
+  inputId: string
+}
+
+interface ConsentContext {
+  enabled: boolean
+  title: string
+  description: string
+  privacyPolicyUrl?: string
+  privacyPolicyLabel: string
+  acceptAllLabel: string
+  rejectAllLabel: string
+  manageLabel: string
+  saveLabel: string
+  settingsLabel: string
+  settingsTeleport: string
+  categories: ConsentCategoryContext[]
+}
+
+const consentTemplate = html`<section class="consent" data-consent-root r-if="enabled">
+  <aside
+    class="consent__banner"
+    data-consent-banner
+    role="dialog"
+    aria-live="polite"
+    aria-modal="false"
+    hidden
+    aria-hidden="true"
+  >
+    <div class="consent__title">{{ title }}</div>
+    <p class="consent__description">{{ description }}</p>
+    <a
+      class="consent__policy"
+      r-if="privacyPolicyUrl"
+      :href="privacyPolicyUrl"
+      >{{ privacyPolicyLabel }}</a
+    >
+    <div class="consent__actions">
+      <button
+        class="consent__button consent__button--primary"
+        type="button"
+        data-consent-action="accept-all"
+      >
+        {{ acceptAllLabel }}
+      </button>
+      <button
+        class="consent__button"
+        type="button"
+        data-consent-action="reject-all"
+      >
+        {{ rejectAllLabel }}
+      </button>
+      <button
+        class="consent__button consent__button--ghost"
+        type="button"
+        data-consent-action="open-panel"
+      >
+        {{ manageLabel }}
+      </button>
+    </div>
+  </aside>
+
+  <section
+    class="consent__panel"
+    data-consent-panel
+    role="dialog"
+    aria-modal="false"
+    hidden
+    aria-hidden="true"
+  >
+    <div class="consent__panel-header">
+      <h2 class="consent__panel-title">{{ manageLabel }}</h2>
+      <button
+        class="consent__panel-close"
+        type="button"
+        data-consent-action="close-panel"
+        aria-label="Close privacy settings"
+      >
+        <span aria-hidden="true">X</span>
+      </button>
+    </div>
+
+    <div class="consent__list">
+      <label r-for="category in categories" class="consent__item">
+        <span class="consent__item-main">
+          <input
+            class="consent__checkbox"
+            type="checkbox"
+            :id="category.inputId"
+            :checked="category.required"
+            :disabled="category.required"
+            :data-consent-category-id="category.id"
+          />
+          <span class="consent__item-label">{{ category.label }}</span>
+        </span>
+        <span
+          class="consent__item-description"
+          r-if="category.description"
+          :id="category.inputId + '-desc'"
+          >{{ category.description }}</span
+        >
+      </label>
+    </div>
+
+    <div class="consent__panel-actions">
+      <button
+        class="consent__button consent__button--primary"
+        type="button"
+        data-consent-action="save"
+      >
+        {{ saveLabel }}
+      </button>
+      <button
+        class="consent__button"
+        type="button"
+        data-consent-action="accept-all"
+      >
+        {{ acceptAllLabel }}
+      </button>
+      <button
+        class="consent__button"
+        type="button"
+        data-consent-action="reject-all"
+      >
+        {{ rejectAllLabel }}
+      </button>
+    </div>
+  </section>
+
+  <button
+    class="consent__settings"
+    data-consent-settings
+    type="button"
+    data-consent-action="open-panel"
+    :r-teleport="settingsTeleport"
+    hidden
+  >
+    {{ settingsLabel }}
+  </button>
+</section>`
+
+function createConsentComponent() {
+  return createComponent<ConsentContext>(consentTemplate, {
+    context: (head) => resolveConsentContext(resolveTsSsgContext(head)),
+  })
+}
+
+function resolveConsentContext(context: TsSsgContext): ConsentContext {
+  const consent = context.site.consent
+  const categories = consent.categories.map((category) => ({
+    id: category.id,
+    label: category.label,
+    description: category.description,
+    required: category.required === true || category.id === 'necessary',
+    inputId: `consent-category-${category.id}`,
+  }))
+  return {
+    enabled: consent.enabled,
+    title: consent.bannerTitle,
+    description: consent.bannerDescription,
+    privacyPolicyUrl: consent.privacyPolicyUrl,
+    privacyPolicyLabel: consent.privacyPolicyLabel,
+    acceptAllLabel: consent.acceptAllLabel,
+    rejectAllLabel: consent.rejectAllLabel,
+    manageLabel: consent.manageLabel,
+    saveLabel: consent.saveLabel,
+    settingsLabel: consent.settingsLabel,
+    settingsTeleport: context.pageInfo.frontmatter.layout.showFooter
+      ? '.site-footer__legal'
+      : 'body',
+    categories,
+  }
+}
+
+export function createConsentComponents() {
+  registerConsentStyles()
+  return { consent: createConsentComponent() }
+}

@@ -4,6 +4,7 @@ import { registerDocLayoutStyles } from '../templates/docLayoutStyles'
 import { registerMarkdownStyles } from '../templates/markdownStyles'
 import { createAlertComponents } from './components/alert/alert'
 import { createCardComponents } from './components/cardGrid/cardGrid'
+import { createConsentComponents } from './components/consent/consent'
 import { createFooterComponents } from './components/footer/footer'
 import { createHeroComponents } from './components/hero/hero'
 import { createLogoComponents } from './components/logo/logo'
@@ -25,6 +26,7 @@ export function initBuiltinComponents() {
   registerMarkdownStyles()
   componentRegistry.registerMany(createAlertComponents())
   componentRegistry.registerMany(createCardComponents())
+  componentRegistry.registerMany(createConsentComponents())
   componentRegistry.registerMany(createFooterComponents())
   componentRegistry.registerMany(createHeroComponents())
   componentRegistry.registerMany(createLogoComponents())

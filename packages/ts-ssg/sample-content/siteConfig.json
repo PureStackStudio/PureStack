@@ -37,7 +37,7 @@
   },
   "consent": {
     "enabled": true,
-    "policyVersion": "2026-02-13",
+    "policyVersion": "2023-02-16",
     "categories": [
       {
         "id": "necessary",
