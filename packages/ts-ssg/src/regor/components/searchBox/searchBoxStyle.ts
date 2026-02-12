@@ -266,4 +266,3 @@ export function registerSearchBoxResponsiveStyles(theme: ThemeMode) {
     .right('auto')
     .width('min(100vw - 32px, 520px)')
 }
-

@@ -371,5 +371,10 @@ export function registerPageTocLayoutStyles(
       theme,
     )
     .gridTemplateColumns('1fr')
-  registerPageTocDrawerStyles(theme, palette, options, COLLAPSED_TOC_DRAWER_CONFIG)
+  registerPageTocDrawerStyles(
+    theme,
+    palette,
+    options,
+    COLLAPSED_TOC_DRAWER_CONFIG,
+  )
 }

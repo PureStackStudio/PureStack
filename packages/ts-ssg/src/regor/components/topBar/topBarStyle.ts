@@ -202,4 +202,3 @@ function registerTopBarResponsiveSearchStyles(theme: ThemeMode) {
     .width('min(560px, calc(100vw - 24px))')
     .zIndex('120')
 }
-
