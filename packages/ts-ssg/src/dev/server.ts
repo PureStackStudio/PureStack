@@ -127,10 +127,16 @@ export async function startDevServer(
   }
 
   const displayHost = host === '0.0.0.0' ? LOOPBACK_HOST : host
-  const incremental = await createIncrementalBuilder(input)
+  let incremental = await createIncrementalBuilder(input)
 
-  const rebuild = async (reason: string) => {
+  const rebuild = async (
+    reason: string,
+    options?: { recreateBuilder?: boolean },
+  ) => {
     try {
+      if (options?.recreateBuilder) {
+        incremental = await createIncrementalBuilder(input)
+      }
       await incremental.buildAll(reason)
       if (!initialBuildDone) {
         log.info('serving at', {
@@ -176,7 +182,7 @@ export async function startDevServer(
         change.deletedAssets > 0
     }
     if (requiresFull) {
-      await rebuild(requestState.reason)
+      await rebuild(requestState.reason, { recreateBuilder: true })
       return
     }
     if (touched) {

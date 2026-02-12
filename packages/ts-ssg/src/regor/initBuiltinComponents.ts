@@ -1,4 +1,5 @@
 import { registerNormalizeStyles } from '../style/normalize.css'
+import { styleBuilder } from '../style/styles'
 import { registerDocLayoutStyles } from '../templates/docLayoutStyles'
 import { registerMarkdownStyles } from '../templates/markdownStyles'
 import { createAlertComponents } from './components/alert'
@@ -15,12 +16,10 @@ import { createTopBarComponents } from './components/topBar'
 import { ensureDomGlobals } from './registerDomGlobals'
 import { componentRegistry } from './registry'
 
-let initialized = false
-
 export function initBuiltinComponents() {
-  if (initialized) return
-  initialized = true
   ensureDomGlobals()
+  styleBuilder.reset()
+  componentRegistry.clear()
   registerNormalizeStyles()
   registerDocLayoutStyles()
   registerMarkdownStyles()

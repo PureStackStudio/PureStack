@@ -31,6 +31,9 @@ export const componentRegistry = {
       registry.set(name, component)
     }
   },
+  clear() {
+    registry.clear()
+  },
 }
 
 function hasComponentName(

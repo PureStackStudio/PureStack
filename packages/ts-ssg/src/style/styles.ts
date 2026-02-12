@@ -40,4 +40,7 @@ export const styleBuilder = {
     const style = styleBuilder.get(theme)
     return pretty ? style.toPrettyCSS() : style.toCSS()
   },
+  reset() {
+    styleBuilders.clear()
+  },
 }
