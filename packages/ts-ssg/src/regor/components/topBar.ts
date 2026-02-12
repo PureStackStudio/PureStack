@@ -40,6 +40,7 @@ const topBarTemplate = html`<input
     class="doc-nav-toggle"
     id="doc-nav-toggle"
     type="checkbox"
+    autocomplete="off"
     aria-hidden="true"
   />
   <header class="topbar">

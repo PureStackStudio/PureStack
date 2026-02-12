@@ -33,6 +33,7 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
   head.push(h('style').raw(buildCriticalThemeStyle(themes.length > 0)))
   appendStyleLinkTags(head, styleLinks)
   appendThemeSwitchScript(head, themes)
+  appendNavTransitionReadyScript(head)
   appendCodeCopyScript(head)
   appendPagefindSearchScript(head)
   const { pageTemplate, templateName } = resolvePageTemplate(
@@ -96,6 +97,12 @@ function appendThemeSwitchScript(
 ) {
   if (themes.length === 0) return
   const script = buildThemeSwitchScript(themes)
+  head.push(h('script').raw(script))
+}
+
+function appendNavTransitionReadyScript(head: ReturnType<typeof getHead>) {
+  const script =
+    "(function(){function ready(fn){if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',fn,{once:true});}else{fn();}}ready(function(){var navToggle=document.getElementById('doc-nav-toggle');if(navToggle&&'checked' in navToggle){navToggle.checked=false;}requestAnimationFrame(function(){if(document.body){document.body.classList.add('template-doc--nav-ready');}});});})();"
   head.push(h('script').raw(script))
 }
 

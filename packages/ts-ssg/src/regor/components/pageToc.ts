@@ -258,9 +258,16 @@ function registerPageTocLayoutStyles(
     .zIndex(140)
     .overflow('hidden')
     .transform('translateX(calc(100% - 26px))')
-    .transition('transform 260ms ease')
     .background(palette.background.canvas)
     .boxShadow(options.shadows.strong)
+
+  styleBuilder
+    .select(
+      '.template-doc.template-doc--nav-ready:not(.template-doc--toc-collapsed) .doc-toc',
+      theme,
+    )
+    .media('max-width: 1320px')
+    .transition('transform 260ms ease')
 
   styleBuilder
     .select('.template-doc:not(.template-doc--toc-collapsed) .doc-toc', theme)
@@ -489,9 +496,12 @@ function registerPageTocLayoutStyles(
     .zIndex(140)
     .overflow('hidden')
     .transform('translateX(calc(100% - 26px))')
-    .transition('transform 260ms ease')
     .background(palette.background.canvas)
     .boxShadow(options.shadows.strong)
+
+  styleBuilder
+    .select('.template-doc.template-doc--nav-ready.template-doc--toc-collapsed .doc-toc', theme)
+    .transition('transform 260ms ease')
 
   styleBuilder
     .select('.template-doc--toc-collapsed .doc-toc', theme)

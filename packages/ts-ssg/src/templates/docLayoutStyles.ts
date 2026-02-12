@@ -75,10 +75,12 @@ function registerDocLayoutSidebarStyles(
     .maxHeight('calc(100vh - 88px)')
     .height('auto')
     .transform('translateX(120%)')
-    .transition('transform 220ms ease')
     .zIndex(35)
     .overflow('auto')
     .boxShadow(options.shadows.strong)
+  styleBuilder
+    .select('.template-doc.template-doc--nav-ready.template-doc--nav-drawer .doc-sidebar', theme)
+    .transition('transform 220ms ease')
 }
 
 function registerDocLayoutNavStyles(
@@ -155,10 +157,13 @@ function registerDocLayoutResponsiveStyles(
     .borderRadius('0')
     .background('inherit')
     .overflow('hidden')
-    .transform('translateX(-120%)')
-    .transition('transform 220ms ease')
+    .transform('translateX(120%)')
     .zIndex(50)
     .boxShadow(options.shadows.strong)
+  styleBuilder
+    .select('.template-doc.template-doc--nav-ready.template-doc--nav-drawer .doc-sidebar', theme)
+    .media('max-width: 1023px')
+    .transition('transform 220ms ease')
   styleBuilder
     .select('.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar', theme)
     .media('max-width: 1023px')
@@ -174,10 +179,16 @@ function registerDocLayoutResponsiveStyles(
     .borderRadius('0')
     .background('inherit')
     .overflow('hidden')
-    .transform('translateX(-120%)')
-    .transition('transform 220ms ease')
+    .transform('translateX(120%)')
     .zIndex(50)
     .boxShadow(options.shadows.strong)
+  styleBuilder
+    .select(
+      '.template-doc.template-doc--nav-ready.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
+      theme,
+    )
+    .media('max-width: 1023px')
+    .transition('transform 220ms ease')
   styleBuilder
     .select('.doc-nav-toggle:checked ~ .doc-shell .doc-sidebar', theme)
     .transform('translateX(0)')
