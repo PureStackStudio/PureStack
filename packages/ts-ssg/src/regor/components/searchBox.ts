@@ -121,6 +121,10 @@ function registerSearchBoxShellStyles(
     .outline(`2px solid ${palette.border.focus}`)
     .outlineOffset('2px')
     .borderColor(palette.border.accent)
+
+  styleBuilder
+    .select('.site-search__input::-webkit-search-cancel-button', theme)
+    .cursor('pointer')
 }
 
 function registerSearchBoxResultStyles(

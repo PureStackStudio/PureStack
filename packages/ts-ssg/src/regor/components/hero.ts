@@ -265,6 +265,7 @@ function applyHeroResponsiveStyles(theme: ThemeMode) {
     .select('.hero__inner', theme)
     .media('max-width: 980px')
     .gridTemplateColumns('1fr')
+    .gap('24px')
 
   styleBuilder
     .select('.hero__content', theme)
