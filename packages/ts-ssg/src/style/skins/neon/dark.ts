@@ -41,7 +41,7 @@ export const neonDark: ThemePalette = {
 
   border: {
     soft: 'rgba(247, 238, 240, 0.08)',
-    subtle: 'rgba(247, 238, 240, 0.12)',
+    subtle: 'rgba(247, 238, 240, 0.24)',
     default: 'rgba(247, 238, 240, 0.18)',
     strong: 'rgba(247, 238, 240, 0.28)',
     hard: 'rgba(247, 238, 240, 0.42)',
