@@ -201,7 +201,7 @@ function registerSearchBoxResultStyles(
     .color(palette.text.subtle)
     .set('word-break', 'break-word')
     .set('display', '-webkit-box')
-    .set('-webkit-line-clamp', '3')
+    .set('line-clamp', '3')
     .set('-webkit-box-orient', 'vertical')
     .overflow('hidden')
 
