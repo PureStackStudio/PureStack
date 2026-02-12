@@ -40,7 +40,7 @@ function registerHeadingStyles(theme: ThemeMode, palette: ThemePalette) {
     .fontWeight('700')
     .letterSpacing('-0.015em')
     .lineHeight('1.15')
-    .margin('2.2em 0 0.6em')
+    .margin('1.2em 0 0.6em')
     .scrollMarginTop('96px')
 
   styleBuilder
