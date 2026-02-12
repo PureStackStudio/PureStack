@@ -1,7 +1,7 @@
 import fsPromises from 'node:fs/promises'
 import http from 'node:http'
 
-import { createLogger, getLogger, type Logger } from 'logpot'
+import { getLogger, type Logger } from 'logpot'
 
 import {
   createIncrementalBuilder,
@@ -61,8 +61,8 @@ type RebuildRequestState = {
 export async function startDevServer(
   input: DevServerInput = {},
 ): Promise<DevServerHandle> {
+  const logger = getLogger()
   const config = resolveSiteConfig(input)
-  const logger = await createLogger()
   const log = getLogger()
 
   const { host, port, watch, liveReload } = resolveDevServerOptions(input)

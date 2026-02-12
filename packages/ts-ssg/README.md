@@ -106,6 +106,7 @@ Config comes from:
 - `navigation`: auto/custom/hybrid/none behavior.
 - `theme`: palette/radii/spacing/typography/shadows.
 - `sitemap`: sitemap + robots settings.
+- `consent`: GDPR-style consent manager config for optional scripts.
 
 ## `siteConfig.json` Example
 
@@ -345,6 +346,47 @@ If enabled:
 Validation:
 
 - sitemap requires non-empty absolute `sitemap.baseUrl` when enabled.
+
+## Consent Manager
+
+`ts-ssg` can gate optional third-party scripts behind explicit consent.
+
+Key behavior:
+
+- no non-essential service scripts execute before consent,
+- reject is as easy as accept (`accept all` and `reject non-essential`),
+- users can reopen settings any time via a persistent privacy button,
+- `policyVersion` invalidates previous consent when policy changes.
+
+Example:
+
+```json
+{
+  "consent": {
+    "enabled": true,
+    "policyVersion": "2026-02-12",
+    "categories": [
+      { "id": "necessary", "label": "Necessary", "required": true },
+      { "id": "analytics", "label": "Analytics" }
+    ],
+    "services": [
+      {
+        "id": "ga4",
+        "category": "analytics",
+        "scripts": [
+          {
+            "src": "https://www.googletagmanager.com/gtag/js?id=G-XXXX",
+            "async": true
+          },
+          {
+            "content": "window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);}"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
 
 ## API Surface
 

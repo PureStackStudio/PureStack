@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-
+import { isPlainObject } from '@purestack/utils'
 import {
   type NavigationConfig,
   resolveNavigationConfig,
@@ -25,6 +25,7 @@ export interface SiteConfig {
   navigation: NavigationConfig
   theme: ThemeOptions
   sitemap: SitemapConfig
+  consent: ConsentConfig
 }
 
 export interface LogoConfig {
@@ -60,16 +61,75 @@ export interface RobotsConfig {
   customDirectives: string[]
 }
 
+export interface ConsentScriptConfig {
+  src?: string
+  content?: string
+  type?: string
+  async?: boolean
+  defer?: boolean
+  integrity?: string
+  nonce?: string
+  crossOrigin?: 'anonymous' | 'use-credentials'
+  referrerPolicy?: string
+}
+
+export interface ConsentServiceConfig {
+  id: string
+  category: string
+  label?: string
+  description?: string
+  scripts: ConsentScriptConfig[]
+}
+
+export interface ConsentCategoryConfig {
+  id: string
+  label: string
+  description?: string
+  required?: boolean
+}
+
+export interface ConsentConfig {
+  enabled: boolean
+  storageKey: string
+  policyVersion: string
+  bannerTitle: string
+  bannerDescription: string
+  privacyPolicyUrl?: string
+  privacyPolicyLabel: string
+  acceptAllLabel: string
+  rejectAllLabel: string
+  manageLabel: string
+  saveLabel: string
+  settingsLabel: string
+  categories: ConsentCategoryConfig[]
+  services: ConsentServiceConfig[]
+}
+
 export type PartialSitemapConfig = Partial<Omit<SitemapConfig, 'robots'>> & {
   robots?: Partial<RobotsConfig>
 }
 
+export type PartialConsentScriptConfig = Partial<ConsentScriptConfig>
+export type PartialConsentServiceConfig = Partial<
+  Omit<ConsentServiceConfig, 'scripts'>
+> & {
+  scripts?: PartialConsentScriptConfig[]
+}
+export type PartialConsentCategoryConfig = Partial<ConsentCategoryConfig>
+export type PartialConsentConfig = Partial<
+  Omit<ConsentConfig, 'categories' | 'services'>
+> & {
+  categories?: PartialConsentCategoryConfig[]
+  services?: PartialConsentServiceConfig[]
+}
+
 export type PartialSiteConfig = Partial<
-  Omit<SiteConfig, 'theme' | 'sitemap' | 'logo'>
+  Omit<SiteConfig, 'theme' | 'sitemap' | 'logo' | 'consent'>
 > & {
   logo?: PartialLogoConfig
   theme?: ThemeOptionsInput
   sitemap?: PartialSitemapConfig
+  consent?: PartialConsentConfig
 }
 export type SiteConfigFile = Partial<
   Pick<
@@ -81,6 +141,7 @@ export type SiteConfigFile = Partial<
     | 'styleHref'
     | 'styleThemes'
     | 'navigation'
+    | 'consent'
   >
 > & { theme?: ThemeOptionsInput; sitemap?: PartialSitemapConfig }
 
@@ -90,6 +151,29 @@ const DEFAULT_ROOT = path.resolve(
   '..',
 )
 export const SITE_CONFIG_FILENAME = 'siteConfig.json'
+const DEFAULT_CONSENT_CATEGORIES: ConsentCategoryConfig[] = [
+  {
+    id: 'necessary',
+    label: 'Necessary',
+    description: 'Required for core site functionality.',
+    required: true,
+  },
+  {
+    id: 'preferences',
+    label: 'Preferences',
+    description: 'Stores optional settings like personalized UX behavior.',
+  },
+  {
+    id: 'analytics',
+    label: 'Analytics',
+    description: 'Helps improve the site by measuring usage.',
+  },
+  {
+    id: 'marketing',
+    label: 'Marketing',
+    description: 'Used for advertising and campaign attribution.',
+  },
+]
 
 export function resolveSiteConfig(input: PartialSiteConfig = {}): SiteConfig {
   const rootDir = input.rootDir ?? DEFAULT_ROOT
@@ -122,6 +206,7 @@ export function resolveSiteConfig(input: PartialSiteConfig = {}): SiteConfig {
   )
   const theme = themes.resolve(input.theme, fileConfig.theme)
   const sitemap = resolveSitemapConfig(input.sitemap, fileConfig.sitemap)
+  const consent = resolveConsentConfig(input.consent, fileConfig.consent)
   return {
     rootDir,
     contentDir,
@@ -134,6 +219,7 @@ export function resolveSiteConfig(input: PartialSiteConfig = {}): SiteConfig {
     navigation,
     theme,
     sitemap,
+    consent,
   }
 }
 
@@ -212,6 +298,193 @@ function resolveSitemapConfig(
   }
 }
 
+function resolveConsentConfig(
+  input?: PartialConsentConfig,
+  file?: PartialConsentConfig,
+): ConsentConfig {
+  const categories = resolveConsentCategories(
+    input?.categories,
+    file?.categories,
+  )
+  const services = resolveConsentServices(
+    input?.services,
+    file?.services,
+    categories,
+  )
+  return {
+    enabled: input?.enabled ?? file?.enabled ?? false,
+    storageKey: resolveString(
+      input?.storageKey,
+      file?.storageKey,
+      'ts-ssg-consent',
+    ),
+    policyVersion: resolveString(
+      input?.policyVersion,
+      file?.policyVersion,
+      '1',
+    ),
+    bannerTitle: resolveString(
+      input?.bannerTitle,
+      file?.bannerTitle,
+      'Your privacy choices',
+    ),
+    bannerDescription: resolveString(
+      input?.bannerDescription,
+      file?.bannerDescription,
+      'We use cookies and similar technologies to improve your experience. You can accept all, reject non-essential, or manage preferences.',
+    ),
+    privacyPolicyUrl: resolveOptionalString(
+      input?.privacyPolicyUrl ?? file?.privacyPolicyUrl,
+    ),
+    privacyPolicyLabel: resolveString(
+      input?.privacyPolicyLabel,
+      file?.privacyPolicyLabel,
+      'Privacy Policy',
+    ),
+    acceptAllLabel: resolveString(
+      input?.acceptAllLabel,
+      file?.acceptAllLabel,
+      'Accept all',
+    ),
+    rejectAllLabel: resolveString(
+      input?.rejectAllLabel,
+      file?.rejectAllLabel,
+      'Reject non-essential',
+    ),
+    manageLabel: resolveString(
+      input?.manageLabel,
+      file?.manageLabel,
+      'Manage preferences',
+    ),
+    saveLabel: resolveString(input?.saveLabel, file?.saveLabel, 'Save choices'),
+    settingsLabel: resolveString(
+      input?.settingsLabel,
+      file?.settingsLabel,
+      'Privacy settings',
+    ),
+    categories,
+    services,
+  }
+}
+
+function resolveConsentCategories(
+  input: PartialConsentCategoryConfig[] | undefined,
+  file: PartialConsentCategoryConfig[] | undefined,
+) {
+  const source = Array.isArray(input)
+    ? input
+    : Array.isArray(file)
+      ? file
+      : DEFAULT_CONSENT_CATEGORIES
+  const categories: ConsentCategoryConfig[] = []
+  const seen = new Set<string>()
+  for (const entry of source) {
+    if (!isPlainObject(entry)) continue
+    const id = resolveOptionalString(entry.id)
+    if (!id) continue
+    if (seen.has(id)) {
+      throw new Error(`Duplicate consent category id "${id}".`)
+    }
+    const required = entry.required === true || id === 'necessary'
+    const label = resolveString(entry.label, toTitleCase(id))
+    categories.push({
+      id,
+      label,
+      description: resolveOptionalString(entry.description),
+      required,
+    })
+    seen.add(id)
+  }
+  if (!seen.has('necessary')) {
+    categories.unshift({
+      id: 'necessary',
+      label: 'Necessary',
+      description: 'Required for core site functionality.',
+      required: true,
+    })
+  }
+  return categories
+}
+
+function resolveConsentServices(
+  input: PartialConsentServiceConfig[] | undefined,
+  file: PartialConsentServiceConfig[] | undefined,
+  categories: ConsentCategoryConfig[],
+) {
+  const source = Array.isArray(input) ? input : Array.isArray(file) ? file : []
+  const categoryIds = new Set(categories.map((entry) => entry.id))
+  const services: ConsentServiceConfig[] = []
+  const seenServiceIds = new Set<string>()
+  for (const entry of source) {
+    if (!isPlainObject(entry)) continue
+    const id = resolveOptionalString(entry.id)
+    if (!id) continue
+    if (seenServiceIds.has(id)) {
+      throw new Error(`Duplicate consent service id "${id}".`)
+    }
+    const category = resolveOptionalString(entry.category)
+    if (!category || !categoryIds.has(category)) {
+      throw new Error(
+        `Consent service "${id}" references unknown category "${entry.category ?? ''}".`,
+      )
+    }
+    const scripts = resolveConsentServiceScripts(entry.scripts, id)
+    services.push({
+      id,
+      category,
+      label: resolveOptionalString(entry.label),
+      description: resolveOptionalString(entry.description),
+      scripts,
+    })
+    seenServiceIds.add(id)
+  }
+  return services
+}
+
+function resolveConsentServiceScripts(
+  scripts: PartialConsentScriptConfig[] | undefined,
+  serviceId: string,
+) {
+  if (!Array.isArray(scripts) || scripts.length === 0) {
+    throw new Error(
+      `Consent service "${serviceId}" must define at least one script.`,
+    )
+  }
+  const resolved: ConsentScriptConfig[] = []
+  for (const entry of scripts) {
+    if (!isPlainObject(entry)) continue
+    const src = resolveOptionalString(entry.src)
+    const content = resolveOptionalString(entry.content)
+    if (!src && !content) {
+      throw new Error(
+        `Consent service "${serviceId}" has a script without "src" or "content".`,
+      )
+    }
+    resolved.push({
+      src,
+      content,
+      type: resolveOptionalString(entry.type),
+      async: entry.async === true,
+      defer: entry.defer === true,
+      integrity: resolveOptionalString(entry.integrity),
+      nonce: resolveOptionalString(entry.nonce),
+      crossOrigin: resolveCrossOrigin(entry.crossOrigin),
+      referrerPolicy: resolveOptionalString(entry.referrerPolicy),
+    })
+  }
+  if (resolved.length === 0) {
+    throw new Error(`Consent service "${serviceId}" has no valid scripts.`)
+  }
+  return resolved
+}
+
+function resolveCrossOrigin(
+  value: unknown,
+): 'anonymous' | 'use-credentials' | undefined {
+  if (value === 'anonymous' || value === 'use-credentials') return value
+  return undefined
+}
+
 function normalizeBaseUrl(value: string): string {
   const normalized = value.trim()
   if (normalized.length === 0) return ''
@@ -260,6 +533,12 @@ function normalizeDirectiveList(value: unknown, fallback: string[]) {
     .map((entry) => entry.trim())
     .filter((entry) => entry.length > 0)
   return normalized.length > 0 ? normalized : fallback
+}
+
+function toTitleCase(value: string) {
+  const normalized = value.replaceAll(/[-_]+/g, ' ').trim()
+  if (normalized.length === 0) return 'Consent'
+  return normalized.replaceAll(/\b\w/g, (char) => char.toUpperCase())
 }
 
 function loadSiteConfigFile(contentDir: string): SiteConfigFile {

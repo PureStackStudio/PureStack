@@ -116,4 +116,66 @@ describe('resolveSiteConfig sitemap', () => {
       }),
     ).toThrowError(/baseUrl/)
   })
+
+  it('provides consent defaults', () => {
+    const config = resolveSiteConfig({ rootDir: process.cwd() })
+    expect(config.consent.enabled).toBe(false)
+    expect(config.consent.storageKey).toBe('ts-ssg-consent')
+    expect(config.consent.policyVersion).toBe('1')
+    expect(config.consent.categories[0]).toMatchObject({
+      id: 'necessary',
+      required: true,
+    })
+    expect(config.consent.services).toEqual([])
+  })
+
+  it('resolves consent overrides and validates service categories', () => {
+    const config = resolveSiteConfig({
+      rootDir: process.cwd(),
+      consent: {
+        enabled: true,
+        policyVersion: '2026-02-12',
+        categories: [
+          { id: 'necessary', label: 'Necessary', required: true },
+          { id: 'analytics', label: 'Analytics' },
+        ],
+        services: [
+          {
+            id: 'ga4',
+            category: 'analytics',
+            scripts: [
+              {
+                src: 'https://www.googletagmanager.com/gtag/js?id=G-TEST',
+                async: true,
+              },
+              { content: "window.dataLayer = window.dataLayer || [];" },
+            ],
+          },
+        ],
+      },
+    })
+    expect(config.consent.enabled).toBe(true)
+    expect(config.consent.policyVersion).toBe('2026-02-12')
+    expect(config.consent.services).toHaveLength(1)
+    expect(config.consent.services[0]?.category).toBe('analytics')
+    expect(config.consent.services[0]?.scripts).toHaveLength(2)
+  })
+
+  it('throws when consent service points to an unknown category', () => {
+    expect(() =>
+      resolveSiteConfig({
+        rootDir: process.cwd(),
+        consent: {
+          categories: [{ id: 'necessary', required: true }],
+          services: [
+            {
+              id: 'ga4',
+              category: 'analytics',
+              scripts: [{ src: 'https://example.com/a.js' }],
+            },
+          ],
+        },
+      }),
+    ).toThrowError(/unknown category/)
+  })
 })

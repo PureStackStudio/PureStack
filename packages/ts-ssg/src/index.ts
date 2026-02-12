@@ -16,8 +16,12 @@ export {
   type MdxOptions,
 } from './build/site'
 export {
+  type ConsentCategoryConfig,
+  type ConsentConfig,
+  type ConsentScriptConfig,
+  type ConsentServiceConfig,
   type PartialSiteConfig as PartialConfig,
-  resolveSiteConfig as resolveConfig,
+  resolveSiteConfig,
   type SiteConfig,
 } from './config/config'
 export {
@@ -93,22 +97,25 @@ if (isDirectRun) {
 }
 
 async function runCli() {
-  let logger: Awaited<ReturnType<typeof createLogger>> | undefined
+  let keepLoggerOpen = false
   try {
+    await createLogger()
     const cli = parseCliArgs(process.argv.slice(2))
     if (cli.command === 'serve') {
+      keepLoggerOpen = true
       await startDevServer(cli.input)
       return
     }
-    logger = await createLogger()
     await buildSite(cli.input)
   } catch (error) {
-    const log = getLogger()
-    logError(log, error, 'build failed')
+    logError(getLogger(), error, 'build failed')
     throw error
   } finally {
-    if (logger) {
-      await logger.close()
+    if (!keepLoggerOpen) {
+      const logger = getLogger()
+      if (logger) {
+        await logger.close()
+      }
     }
   }
 }

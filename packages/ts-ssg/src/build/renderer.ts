@@ -1,11 +1,13 @@
 import { type BasicHeadConfig, h } from '@purestack/ts-html'
 
+import type { ConsentConfig } from '../config/config'
 import { getHead } from '../config/head'
 import type { PageFrontmatter } from '../frontmatter/frontmatter'
 import type { PageNavigation } from '../navigation/navigation'
 import type { ThemeStylesheetLink } from '../style/themeAssets'
 import { themes } from '../style/themeOptions'
 import { buildCodeCopyScript } from '../templates/buildCodeCopyScript'
+import { buildConsentScript } from '../templates/buildConsentScript'
 import { buildPagefindSearchScript } from '../templates/buildPagefindSearchScript'
 import { buildPageTocScript } from '../templates/buildPageTocScript'
 import { buildThemeSwitchScript } from '../templates/buildThemeSwitchScript'
@@ -24,6 +26,7 @@ export interface RenderPageInput {
   navigation?: PageNavigation
   pageInfo: PageInfo
   siteTitle?: string
+  consent?: ConsentConfig
 }
 
 export async function renderPage(input: RenderPageInput): Promise<string> {
@@ -33,6 +36,7 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
   head.push(h('style').raw(buildCriticalThemeStyle(themes.length > 0)))
   appendStyleLinkTags(head, styleLinks)
   appendThemeSwitchScript(head, themes)
+  appendConsentScript(head, input.consent)
   appendNavTransitionReadyScript(head)
   appendCodeCopyScript(head)
   appendPagefindSearchScript(head)
@@ -98,6 +102,14 @@ function appendThemeSwitchScript(
   if (themes.length === 0) return
   const script = buildThemeSwitchScript(themes)
   head.push(h('script').raw(script))
+}
+
+function appendConsentScript(
+  head: ReturnType<typeof getHead>,
+  consent: ConsentConfig | undefined,
+) {
+  if (!consent?.enabled) return
+  head.push(h('script').raw(buildConsentScript(consent)))
 }
 
 function appendNavTransitionReadyScript(head: ReturnType<typeof getHead>) {

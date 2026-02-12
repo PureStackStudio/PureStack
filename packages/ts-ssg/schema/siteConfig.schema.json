@@ -191,6 +191,173 @@
         }
       }
     },
+    "consent": {
+      "type": "object",
+      "description": "Consent manager settings for optional scripts and cookies.",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enables consent runtime and script gating.",
+          "default": false
+        },
+        "storageKey": {
+          "type": "string",
+          "description": "localStorage key used to persist consent state.",
+          "default": "ts-ssg-consent"
+        },
+        "policyVersion": {
+          "type": "string",
+          "description": "Version string used to invalidate old consent after policy changes.",
+          "default": "1"
+        },
+        "bannerTitle": {
+          "type": "string",
+          "description": "Consent banner heading.",
+          "default": "Your privacy choices"
+        },
+        "bannerDescription": {
+          "type": "string",
+          "description": "Consent banner description text.",
+          "default": "We use cookies and similar technologies to improve your experience. You can accept all, reject non-essential, or manage preferences."
+        },
+        "privacyPolicyUrl": {
+          "type": "string",
+          "description": "Optional link target for privacy policy."
+        },
+        "privacyPolicyLabel": {
+          "type": "string",
+          "description": "Label for the privacy policy link.",
+          "default": "Privacy Policy"
+        },
+        "acceptAllLabel": {
+          "type": "string",
+          "description": "Label for the accept-all action.",
+          "default": "Accept all"
+        },
+        "rejectAllLabel": {
+          "type": "string",
+          "description": "Label for the reject-non-essential action.",
+          "default": "Reject non-essential"
+        },
+        "manageLabel": {
+          "type": "string",
+          "description": "Label for the manage-preferences action.",
+          "default": "Manage preferences"
+        },
+        "saveLabel": {
+          "type": "string",
+          "description": "Label for save-preferences action in settings dialog.",
+          "default": "Save choices"
+        },
+        "settingsLabel": {
+          "type": "string",
+          "description": "Label for always-available privacy settings trigger.",
+          "default": "Privacy settings"
+        },
+        "categories": {
+          "type": "array",
+          "description": "Consent categories. Include at least one required category (usually necessary).",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Stable category identifier."
+              },
+              "label": {
+                "type": "string",
+                "description": "User-facing category label."
+              },
+              "description": {
+                "type": "string",
+                "description": "Optional category description."
+              },
+              "required": {
+                "type": "boolean",
+                "description": "Marks category as always enabled and non-toggleable."
+              }
+            },
+            "required": ["id"]
+          }
+        },
+        "services": {
+          "type": "array",
+          "description": "Services that are loaded only when their consent category is granted.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Stable service identifier."
+              },
+              "category": {
+                "type": "string",
+                "description": "Category id controlling this service."
+              },
+              "label": {
+                "type": "string",
+                "description": "User-facing service label."
+              },
+              "description": {
+                "type": "string",
+                "description": "Optional service description."
+              },
+              "scripts": {
+                "type": "array",
+                "description": "Script descriptors for this service.",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "src": {
+                      "type": "string",
+                      "description": "External script URL."
+                    },
+                    "content": {
+                      "type": "string",
+                      "description": "Inline script source."
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "Script type attribute (for example module)."
+                    },
+                    "async": {
+                      "type": "boolean",
+                      "description": "Adds async attribute for external scripts."
+                    },
+                    "defer": {
+                      "type": "boolean",
+                      "description": "Adds defer attribute for external scripts."
+                    },
+                    "integrity": {
+                      "type": "string",
+                      "description": "Subresource integrity attribute."
+                    },
+                    "nonce": {
+                      "type": "string",
+                      "description": "Nonce attribute for CSP."
+                    },
+                    "crossOrigin": {
+                      "type": "string",
+                      "enum": ["anonymous", "use-credentials"],
+                      "description": "crossorigin attribute for external scripts."
+                    },
+                    "referrerPolicy": {
+                      "type": "string",
+                      "description": "referrerpolicy attribute for external scripts."
+                    }
+                  }
+                }
+              }
+            },
+            "required": ["id", "category", "scripts"]
+          }
+        }
+      }
+    },
     "outDir": {
       "type": "string",
       "description": "Output directory path. Relative paths are resolved from the project root.",
