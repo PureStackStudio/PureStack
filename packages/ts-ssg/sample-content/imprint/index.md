@@ -11,7 +11,7 @@ layout:
   showFooter: true
 ---
 
-# Impressum (Legal Notice)
+# Imprint (Legal Notice)
 
 Last updated: **February 12, 2026**
 

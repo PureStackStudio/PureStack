@@ -245,6 +245,7 @@ Built-in component sets are initialized automatically each build:
 - alert: `alertBox`
 - card grid: `card`, `cardGrid`
 - consent: `consent`
+- contact: `contactForm`
 - hero: `heroBanner`, `heroAction`, `heroMedia`
 - footer: `siteFooter`, `footerColumn`, `footerLink`, `footerSocial`
 - top bar: `topBar`

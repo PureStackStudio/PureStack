@@ -58,34 +58,11 @@ layout:
   We usually reply within one business day. Critical production issues should include environment, version, and reproduction steps.
 </AlertBox>
 
-<section class="contact-form">
-  <h3>Send a message</h3>
-  <form action="mailto:team@purestack.dev" method="post" enctype="text/plain">
-    <p>
-      <label for="contact-name">Name</label><br />
-      <input id="contact-name" name="name" type="text" required />
-    </p>
-    <p>
-      <label for="contact-email">Email</label><br />
-      <input id="contact-email" name="email" type="email" required />
-    </p>
-    <p>
-      <label for="contact-topic">Topic</label><br />
-      <select id="contact-topic" name="topic">
-        <option>General inquiry</option>
-        <option>Technical support</option>
-        <option>Partnership</option>
-      </select>
-    </p>
-    <p>
-      <label for="contact-message">Message</label><br />
-      <textarea id="contact-message" name="message" rows="6" required></textarea>
-    </p>
-    <p>
-      <button type="submit">Send Message</button>
-    </p>
-  </form>
-</section>
+<ContactForm
+  action="mailto:team@purestack.dev?subject=PureStack%20Inquiry"
+  description="Include your environment, version, and desired outcome so we can respond quickly."
+  submitLabel="Open Email Draft"
+/>
 
 ## Office and Availability
 
