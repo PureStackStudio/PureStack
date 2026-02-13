@@ -289,7 +289,7 @@ async function buildErrorPageResult(
   })
   await writeHtml(outPath, html)
   await writeRenderErrorLog(context.config.outDir, file.relPath, html)
-  getLogger().warn('page render error written', {
+  getLogger().error('page render error written', {
     file: file.relPath,
     outPath,
     urlPath,
@@ -304,8 +304,7 @@ async function buildErrorPageResult(
       showFooter: true,
     },
   })
-  const renderTimeMs =
-    Number(process.hrtime.bigint() - renderStart) / 1_000_000
+  const renderTimeMs = Number(process.hrtime.bigint() - renderStart) / 1_000_000
   return {
     file,
     frontmatter,
