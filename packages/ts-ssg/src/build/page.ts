@@ -92,7 +92,7 @@ export async function renderPageFromFile(
   const outPath = resolveOutPath(context.config.outDir, file)
   try {
     const source = await readSource(file.absPath)
-    const parsedContent = parsePageSource(source, file.relPath)
+    const parsedContent = parseFrontmatterSource(source, file.relPath)
     const navigation = resolvePageNavigation(context.navigation, file)
     const pageInfo = createPageTemplateInfo(
       file,
@@ -147,18 +147,6 @@ export async function renderPageFromFile(
     }
     throw errorWithContext
   }
-}
-
-type ParsedPageSource = {
-  body: string
-  frontmatter: PageFrontmatter
-}
-
-function parsePageSource(
-  source: string,
-  sourceLabel?: string,
-): ParsedPageSource {
-  return parseFrontmatterSource(source, sourceLabel)
 }
 
 function createPageTemplateInfo(
