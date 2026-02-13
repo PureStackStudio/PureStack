@@ -136,14 +136,6 @@ function registerDocLayoutResponsiveStyles(
   theme: ThemeMode,
   options: ThemeOptions,
 ) {
-  registerDocLayoutResponsiveShellStyles(theme)
-  registerDocLayoutResponsiveSidebarBaseStyles(theme, options)
-  registerDocLayoutResponsiveSidebarNarrowStyles(theme)
-  registerDocLayoutResponsiveSidebarTransitionStyles(theme)
-  registerDocLayoutResponsiveSidebarOpenStateStyles(theme)
-}
-
-function registerDocLayoutResponsiveShellStyles(theme: ThemeMode) {
   styleBuilder
     .select('.doc-shell', theme)
     .media('max-width: 1023px')
@@ -153,12 +145,6 @@ function registerDocLayoutResponsiveShellStyles(theme: ThemeMode) {
     .select('.template-doc', theme)
     .media('max-width: 1023px')
     .set('overflow-x', 'hidden')
-}
-
-function registerDocLayoutResponsiveSidebarBaseStyles(
-  theme: ThemeMode,
-  options: ThemeOptions,
-) {
   styleBuilder
     .select('.template-doc--nav-drawer .doc-sidebar', theme)
     .media('max-width: 1023px')
@@ -176,50 +162,6 @@ function registerDocLayoutResponsiveSidebarBaseStyles(
     .transform('translateX(120%)')
     .zIndex(50)
     .boxShadow(options.shadows.strong)
-
-  styleBuilder
-    .select(
-      '.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
-      theme,
-    )
-    .media('max-width: 1023px')
-    .position('fixed')
-    .top('72px')
-    .left('auto')
-    .right('0')
-    .bottom('0')
-    .height('calc(100dvh - 72px)')
-    .maxWidth('100vw')
-    .maxHeight('none')
-    .borderRadius('0')
-    .background('inherit')
-    .overflow('hidden')
-    .transform('translateX(120%)')
-    .zIndex(50)
-    .boxShadow(options.shadows.strong)
-}
-
-function registerDocLayoutResponsiveSidebarNarrowStyles(theme: ThemeMode) {
-  styleBuilder
-    .select('.template-doc--nav-drawer .doc-sidebar', theme)
-    .media('max-width: 600px')
-    .left('0')
-    .right('0')
-    .width('100%')
-    .maxWidth('none')
-  styleBuilder
-    .select(
-      '.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
-      theme,
-    )
-    .media('max-width: 600px')
-    .left('0')
-    .right('0')
-    .width('100%')
-    .maxWidth('none')
-}
-
-function registerDocLayoutResponsiveSidebarTransitionStyles(theme: ThemeMode) {
   styleBuilder
     .select(
       '.template-doc.template-doc--nav-ready.template-doc--nav-drawer .doc-sidebar',
@@ -227,7 +169,43 @@ function registerDocLayoutResponsiveSidebarTransitionStyles(theme: ThemeMode) {
     )
     .media('max-width: 1023px')
     .transition('transform 220ms ease')
-
+  styleBuilder
+    .select(
+      '.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
+      theme,
+    )
+    .media('max-width: 1023px')
+    .position('fixed')
+    .top('72px')
+    .left('auto')
+    .right('0')
+    .bottom('0')
+    .height('calc(100dvh - 72px)')
+    .maxWidth('100vw')
+    .maxHeight('none')
+    .borderRadius('0')
+    .background('inherit')
+    .overflow('hidden')
+    .transform('translateX(120%)')
+    .zIndex(50)
+    .boxShadow(options.shadows.strong)
+  styleBuilder
+    .select('.template-doc--nav-drawer .doc-sidebar', theme)
+    .media('max-width: 600px')
+    .left('0')
+    .right('0')
+    .width('100%')
+    .maxWidth('none')
+  styleBuilder
+    .select(
+      '.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
+      theme,
+    )
+    .media('max-width: 600px')
+    .left('0')
+    .right('0')
+    .width('100%')
+    .maxWidth('none')
   styleBuilder
     .select(
       '.template-doc.template-doc--nav-ready.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
@@ -235,9 +213,6 @@ function registerDocLayoutResponsiveSidebarTransitionStyles(theme: ThemeMode) {
     )
     .media('max-width: 1023px')
     .transition('transform 220ms ease')
-}
-
-function registerDocLayoutResponsiveSidebarOpenStateStyles(theme: ThemeMode) {
   styleBuilder
     .select('.doc-nav-toggle:checked ~ .doc-shell .doc-sidebar', theme)
     .transform('translateX(0)')
