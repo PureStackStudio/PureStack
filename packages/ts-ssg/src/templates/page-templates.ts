@@ -248,6 +248,8 @@ function buildDefaultFooterLegalSlot() {
   return h('template')
     .attr({ name: 'legal' })
     .push(
+      h('a').attr({ href: '/imprint/de/' }).raw('Impressum'),
+      h('a').attr({ href: '/imprint/' }).raw('Imprint'),
       h('a').attr({ href: '/privacy/' }).raw('Privacy'),
       h('a').attr({ href: '/terms/' }).raw('Terms'),
     )
