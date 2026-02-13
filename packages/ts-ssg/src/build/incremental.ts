@@ -105,6 +105,7 @@ async function createIncrementalRuntime(
   )
   const context: BuildContext = {
     config,
+    writeErrorPages: input.writeErrorPages === true,
     components: input.components,
     templates: input.templates,
     navigation,

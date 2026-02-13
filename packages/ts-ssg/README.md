@@ -310,6 +310,10 @@ Hook into build lifecycle with `BuildHooks`:
 - `onStylesWritten`
 - `onBuildComplete`
 
+Build option:
+
+- `writeErrorPages`: when true, render failures write an HTML error page to the target output path and an archive copy under `<outDir>/.ts-ssg/errors/`.
+
 ## Incremental Build and Manifest
 
 `ts-ssg` stores incremental metadata at:
@@ -329,6 +333,7 @@ In dev/watch mode:
 - site config changes trigger full rebuild,
 - lazy route render can happen on first request for missing HTML route,
 - live reload is served over SSE (`/__ts-ssg/events`).
+- dev server enables `writeErrorPages` automatically so template/MDX errors are visible immediately at the failing route.
 
 ## Search and SEO
 

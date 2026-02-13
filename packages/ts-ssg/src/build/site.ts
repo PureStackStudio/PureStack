@@ -59,6 +59,7 @@ export interface BuildHooks {
 
 export interface BuildOptions {
   cleanOutDir?: boolean
+  writeErrorPages?: boolean
   hooks?: BuildHooks
   components?: Record<string, Component<unknown>>
   templates?: PageTemplateMap

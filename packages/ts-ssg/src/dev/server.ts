@@ -62,6 +62,7 @@ export async function startDevServer(
   input: DevServerInput = {},
 ): Promise<DevServerHandle> {
   const logger = getLogger()
+  const buildInput: BuildInput = { ...input, writeErrorPages: true }
   const config = resolveSiteConfig(input)
   const log = getLogger()
 
@@ -127,7 +128,7 @@ export async function startDevServer(
   }
 
   const displayHost = host === '0.0.0.0' ? LOOPBACK_HOST : host
-  let incremental = await createIncrementalBuilder(input)
+  let incremental = await createIncrementalBuilder(buildInput)
 
   const rebuild = async (
     reason: string,
@@ -135,7 +136,7 @@ export async function startDevServer(
   ) => {
     try {
       if (options?.recreateBuilder) {
-        incremental = await createIncrementalBuilder(input)
+        incremental = await createIncrementalBuilder(buildInput)
       }
       await incremental.buildAll(reason)
       if (!initialBuildDone) {

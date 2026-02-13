@@ -1,0 +1,95 @@
+---
+title: Contact
+description: Get in touch about product questions, support, and partnerships.
+template: doc
+layout:
+  navMode: sidebar
+  fullWidthMain: true
+  showToc: false
+  showFooter: true
+---
+
+<HeroBanner
+  tone="default"
+  align="left"
+  eyebrow="Contact"
+  title="Talk to the team behind PureStack."
+  subtitle="Whether you need implementation guidance, support, or a partnership conversation, we will route you to the right person quickly."
+>
+  <template name="actions">
+    <HeroAction href="mailto:team@purestack.dev" variant="primary">Email Us</HeroAction>
+    <HeroAction href="/guide/" variant="ghost">Browse Documentation</HeroAction>
+  </template>
+</HeroBanner>
+
+## Choose Your Path
+
+<CardGrid columns="3" gap="14px">
+  <Card
+    title="General Inquiries"
+    description="Product questions, pricing direction, and onboarding discussions."
+    label="team@purestack.dev"
+    href="mailto:team@purestack.dev"
+    tone="default"
+  />
+  <Card
+    title="Technical Support"
+    description="Issue triage, debugging help, and architecture-level support requests."
+    label="support@purestack.dev"
+    href="mailto:support@purestack.dev"
+    tone="default"
+  />
+  <Card
+    title="Partnerships"
+    description="Integrations, reseller opportunities, and co-marketing conversations."
+    label="partners@purestack.dev"
+    href="mailto:partners@purestack.dev"
+    tone="default"
+  />
+</CardGrid>
+
+## Contact Form
+
+<AlertBox
+  title="Response time"
+  variant="info"
+  tone="default"
+>
+  We usually reply within one business day. Critical production issues should include environment, version, and reproduction steps.
+</AlertBox>
+
+<section class="contact-form">
+  <h3>Send a message</h3>
+  <form action="mailto:team@purestack.dev" method="post" enctype="text/plain">
+    <p>
+      <label for="contact-name">Name</label><br />
+      <input id="contact-name" name="name" type="text" required />
+    </p>
+    <p>
+      <label for="contact-email">Email</label><br />
+      <input id="contact-email" name="email" type="email" required />
+    </p>
+    <p>
+      <label for="contact-topic">Topic</label><br />
+      <select id="contact-topic" name="topic">
+        <option>General inquiry</option>
+        <option>Technical support</option>
+        <option>Partnership</option>
+      </select>
+    </p>
+    <p>
+      <label for="contact-message">Message</label><br />
+      <textarea id="contact-message" name="message" rows="6" required></textarea>
+    </p>
+    <p>
+      <button type="submit">Send Message</button>
+    </p>
+  </form>
+</section>
+
+## Office and Availability
+
+- Location: Berlin, Germany
+- Working hours: Monday-Friday, 09:00-18:00 CET
+- Public updates: https://github.com/purestack
+
