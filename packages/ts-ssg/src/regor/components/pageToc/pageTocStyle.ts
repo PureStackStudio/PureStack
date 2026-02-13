@@ -147,6 +147,11 @@ export function registerPageTocLayoutStyles(
     .media('max-width: 1023px')
     .gridTemplateColumns('1fr')
   styleBuilder
+    .select('.template-doc--toc-collapsed .doc-shell--toc', theme)
+    .media('max-width: 1023px')
+    .gridTemplateColumns('1fr')
+
+  styleBuilder
     .select('.doc-shell--toc-only', theme)
     .media('max-width: 1320px')
     .gridTemplateColumns('1fr')
