@@ -17,7 +17,7 @@
   },
   "exports": {
     ".": {
-      "require": "./dist/ts-html.cjs",
+      "require": "./dist/ts-html.mjs",
       "import": "./dist/ts-html.mjs"
     }
   },

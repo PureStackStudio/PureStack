@@ -17,7 +17,7 @@
   },
   "exports": {
     ".": {
-      "require": "./dist/ts-ssg.cjs",
+      "require": "./dist/ts-ssg.mjs",
       "import": "./dist/ts-ssg.mjs"
     }
   },

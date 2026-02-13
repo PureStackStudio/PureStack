@@ -17,7 +17,7 @@
   },
   "exports": {
     ".": {
-      "require": "./dist/utils.cjs",
+      "require": "./dist/utils.mjs",
       "import": "./dist/utils.mjs"
     }
   },

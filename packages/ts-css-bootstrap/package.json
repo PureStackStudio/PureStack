@@ -17,7 +17,7 @@
   },
   "exports": {
     ".": {
-      "require": "./dist/ts-css-bootstrap.cjs",
+      "require": "./dist/ts-css-bootstrap.mjs",
       "import": "./dist/ts-css-bootstrap.mjs"
     }
   },

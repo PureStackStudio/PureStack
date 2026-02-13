@@ -17,7 +17,7 @@
   },
   "exports": {
     ".": {
-      "require": "./dist/ts-css.cjs",
+      "require": "./dist/ts-css.mjs",
       "import": "./dist/ts-css.mjs"
     }
   },
