@@ -14,6 +14,7 @@ describe('compileMarkdown', () => {
     const html = renderApp(compileMarkdown(source).bodyHtml)
 
     expect(html).toContain('<table>')
+    expect(html).toContain('<div class="table-scroll">')
     expect(html).toContain('<thead>')
     expect(html).toContain('<tbody>')
     expect(html).toContain('<th>Option</th>')

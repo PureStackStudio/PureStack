@@ -315,19 +315,23 @@ function registerTableContainerStyles(
   options: ThemeOptions,
 ) {
   styleBuilder
-    .select('.doc-content :where(table)', theme)
-    .width('100%')
-    .borderCollapse('separate')
-    .borderSpacing('0')
+    .select('.doc-content :where(.table-scroll)', theme)
     .margin('0 0 1.4em')
     .maxWidth('100%')
     .overflowX('auto')
-    .tableLayout('auto')
-    .display('block')
     .background(palette.background.surface)
     .border(`1px solid ${palette.border.default}`)
     .borderRadius(options.radii.md)
     .boxShadow(palette.effect.panelShadow)
+
+  styleBuilder
+    .select('.doc-content :where(table)', theme)
+    .width('max-content')
+    .set('min-width', '100%')
+    .borderCollapse('separate')
+    .borderSpacing('0')
+    .tableLayout('auto')
+    .margin('0')
 }
 
 function registerTableHeaderStyles(

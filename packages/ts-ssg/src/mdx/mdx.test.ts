@@ -64,6 +64,7 @@ describe('compileMdxToHtml', () => {
     const html = renderApp(compileMdxToHtml(source))
 
     expect(html).toContain('<table>')
+    expect(html).toContain('<div class="table-scroll">')
     expect(html).toContain('<thead>')
     expect(html).toContain('<tbody>')
     expect(html).toContain('<td>Bus</td>')
