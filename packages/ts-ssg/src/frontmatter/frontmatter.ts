@@ -125,38 +125,58 @@ export function normalizeFrontmatter(
   sourceLabel?: string,
 ): PageFrontmatter {
   const raw = isPlainObject(data) ? data : {}
-  const rawLayout = isPlainObject(raw.layout) ? raw.layout : {}
-  const rawNav = isPlainObject(raw.nav) ? raw.nav : {}
+  const rawLayout = resolveObject(raw, 'layout') ?? {}
+  const rawNav = resolveObject(raw, 'nav') ?? {}
+  const showFooter = resolveKey(rawLayout, 'showFooter')
 
   return {
     ...raw,
-    title: resolveString(raw.title),
-    description: resolveString(raw.description),
-    head: isPlainObject(raw.head) ? raw.head : undefined,
-    template: resolveString(raw.template) ?? 'doc',
-    order: resolveNumber(raw.order),
-    hidden: raw.hidden === true,
-    draft: raw.draft === true,
+    title: resolveString(resolveKey(raw, 'title')),
+    description: resolveString(resolveKey(raw, 'description')),
+    head: resolveObject(raw, 'head'),
+    template: resolveString(resolveKey(raw, 'template')) ?? 'doc',
+    order: resolveNumber(resolveKey(raw, 'order')),
+    hidden: resolveKey(raw, 'hidden') === true,
+    draft: resolveKey(raw, 'draft') === true,
     nav: {
       ...rawNav,
-      title: resolveString(rawNav.title),
-      order: resolveNumber(rawNav.order),
-      hidden: rawNav.hidden === true,
+      title: resolveString(resolveKey(rawNav, 'title')),
+      order: resolveNumber(resolveKey(rawNav, 'order')),
+      hidden: resolveKey(rawNav, 'hidden') === true,
     },
     layout: {
       ...rawLayout,
-      navMode: resolveLayoutNavMode(rawLayout.navMode, sourceLabel),
-      fullWidth: rawLayout.fullWidth === true,
-      showToc: rawLayout.showToc === true,
-      tocCollapsed: rawLayout.tocCollapsed === true,
-      showFooter:
-        typeof rawLayout.showFooter === 'boolean' ? rawLayout.showFooter : true,
+      navMode: resolveLayoutNavMode(
+        resolveKey(rawLayout, 'navMode'),
+        sourceLabel,
+      ),
+      fullWidth: resolveKey(rawLayout, 'fullWidth') === true,
+      showToc: resolveKey(rawLayout, 'showToc') === true,
+      tocCollapsed: resolveKey(rawLayout, 'tocCollapsed') === true,
+      showFooter: typeof showFooter === 'boolean' ? showFooter : true,
     },
   }
 }
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+function resolveObject(
+  source: Record<string, unknown>,
+  key: string,
+): Record<string, unknown> | undefined {
+  const value = resolveKey(source, key)
+  return isPlainObject(value) ? value : undefined
+}
+
+function resolveKey(source: Record<string, unknown>, key: string): unknown {
+  if (Object.hasOwn(source, key)) return source[key]
+  const target = key.toLowerCase()
+  for (const [entryKey, entryValue] of Object.entries(source)) {
+    if (entryKey.toLowerCase() === target) return entryValue
+  }
+  return undefined
 }
 
 function resolveString(value: unknown): string | undefined {
