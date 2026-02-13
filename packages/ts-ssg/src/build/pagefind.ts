@@ -1,3 +1,4 @@
+import fs from 'node:fs/promises'
 import path from 'node:path'
 
 import { getLogger, type Logger } from 'logpot'
@@ -118,12 +119,58 @@ async function populateAndWritePagefindIndex(
   outDir: string,
   outputPath: string,
 ) {
-  const addResult = await index.addDirectory({ path: outDir })
+  const htmlFiles = await collectHtmlFiles(outDir)
+  const errors: string[] = []
+  let indexedPages = 0
+  for (const filePath of htmlFiles) {
+    const relPath = toPosixPath(path.relative(outDir, filePath))
+    if (shouldSkipPagefindPath(relPath)) continue
+    const content = await fs.readFile(filePath, 'utf8')
+    const response = await index.addHTMLFile({
+      sourcePath: relPath,
+      content,
+    })
+    errors.push(...response.errors)
+    if (response.file) indexedPages += 1
+  }
   const writeResult = await index.writeFiles({ outputPath })
   return {
-    indexedPages: addResult.page_count,
-    errors: [...addResult.errors, ...writeResult.errors],
+    indexedPages,
+    errors: [...errors, ...writeResult.errors],
   }
+}
+
+async function collectHtmlFiles(rootDir: string): Promise<string[]> {
+  const files: string[] = []
+  await walkDir(rootDir, files)
+  return files
+}
+
+async function walkDir(dirPath: string, output: string[]): Promise<void> {
+  const entries = await fs.readdir(dirPath, { withFileTypes: true })
+  for (const entry of entries) {
+    const absPath = path.join(dirPath, entry.name)
+    if (entry.isDirectory()) {
+      if (entry.name === PAGEFIND_DIRNAME || entry.name === '.ts-ssg') continue
+      await walkDir(absPath, output)
+      continue
+    }
+    if (entry.isFile() && absPath.toLowerCase().endsWith('.html')) {
+      output.push(absPath)
+    }
+  }
+}
+
+function shouldSkipPagefindPath(relPath: string): boolean {
+  return (
+    relPath.startsWith('privacy/') ||
+    relPath.startsWith('imprint/') ||
+    relPath.startsWith('terms/')
+  )
+}
+
+function toPosixPath(value: string) {
+  return value.replaceAll('\\', '/')
 }
 
 function logBuildPagefindOutcome(
