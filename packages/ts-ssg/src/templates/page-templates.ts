@@ -64,10 +64,16 @@ function renderDocTemplate({
   const frontmatter = pageInfo.frontmatter
   const layout = resolveDocLayout(frontmatter, navigation)
   const showFooter = frontmatter.layout.showFooter
+  const bodyAttrs = {
+    class: layout.bodyClass,
+    ...(shouldIgnoreInPagefind(pageInfo.urlPath)
+      ? { 'data-pagefind-ignore': 'all' }
+      : {}),
+  }
   return h('html').push(
     head,
     h('body')
-      .attr({ class: layout.bodyClass })
+      .attr(bodyAttrs)
       .push(
         h('top-bar'),
         h('div')
@@ -167,15 +173,29 @@ function resolveDocLayoutClass(frontmatter: PageFrontmatter) {
 
 function renderSplashTemplate({ head, bodyHtml, pageInfo }: PageTemplateInput) {
   const showFooter = pageInfo.frontmatter.layout.showFooter
+  const bodyAttrs = {
+    class: 'template-splash',
+    ...(shouldIgnoreInPagefind(pageInfo.urlPath)
+      ? { 'data-pagefind-ignore': 'all' }
+      : {}),
+  }
   return h('html').push(
     head,
     h('body')
-      .attr({ class: 'template-splash' })
+      .attr(bodyAttrs)
       .push(
         h('main').push(h('section').attr({ class: 'splash' }).raw(bodyHtml)),
         h('consent'),
         ...(showFooter ? [buildDefaultFooter()] : []),
       ),
+  )
+}
+
+function shouldIgnoreInPagefind(urlPath: string) {
+  return (
+    urlPath.startsWith('/privacy/') ||
+    urlPath.startsWith('/imprint/') ||
+    urlPath.startsWith('/terms/')
   )
 }
 
