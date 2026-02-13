@@ -30,10 +30,7 @@ function registerContactFormShellStyles(
     .background(palette.background.surface)
     .border(`1px solid ${palette.border.default}`)
     .boxShadow(palette.effect.panelShadow)
-  styleBuilder
-    .select('.contact-form__header', theme)
-    .display('grid')
-    .gap('6px')
+  styleBuilder.select('.contact-form__header', theme).display('grid').gap('6px')
   styleBuilder
     .select('.contact-form__title', theme)
     .margin('0')
@@ -47,10 +44,7 @@ function registerContactFormShellStyles(
     .fontSize('0.93rem')
     .lineHeight('1.6')
     .color(palette.text.subtle)
-  styleBuilder
-    .select('.contact-form__form', theme)
-    .display('grid')
-    .gap('10px')
+  styleBuilder.select('.contact-form__form', theme).display('grid').gap('10px')
 }
 
 function registerContactFormFieldStyles(
@@ -58,10 +52,7 @@ function registerContactFormFieldStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-  styleBuilder
-    .select('.contact-form__field', theme)
-    .display('grid')
-    .gap('6px')
+  styleBuilder.select('.contact-form__field', theme).display('grid').gap('6px')
   styleBuilder
     .select('.contact-form__label', theme)
     .fontSize('0.86rem')
@@ -142,4 +133,3 @@ function registerContactFormResponsiveStyles(theme: ThemeMode) {
     .media('max-width: 640px')
     .padding('14px')
 }
-

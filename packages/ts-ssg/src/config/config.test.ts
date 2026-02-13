@@ -148,7 +148,7 @@ describe('resolveSiteConfig sitemap', () => {
                 src: 'https://www.googletagmanager.com/gtag/js?id=G-TEST',
                 async: true,
               },
-              { content: "window.dataLayer = window.dataLayer || [];" },
+              { content: 'window.dataLayer = window.dataLayer || [];' },
             ],
           },
         ],

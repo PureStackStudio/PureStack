@@ -113,7 +113,9 @@ export function createContactFormComponents() {
   }
 }
 
-function resolveContactFormContext(props: ContactFormProps): ContactFormContext {
+function resolveContactFormContext(
+  props: ContactFormProps,
+): ContactFormContext {
   const normalizedMethod = props.method?.trim().toLowerCase()
   return {
     title: props.title || 'Send a message',
@@ -137,4 +139,3 @@ function resolveContactFormContext(props: ContactFormProps): ContactFormContext 
     topicPartnershipLabel: props.topicPartnershipLabel || 'Partnership',
   }
 }
-

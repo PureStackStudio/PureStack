@@ -34,4 +34,3 @@ describe('ContactForm rendering', () => {
     expect(html).toContain('Send it')
   })
 })
-

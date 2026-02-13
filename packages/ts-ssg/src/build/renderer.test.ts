@@ -37,10 +37,7 @@ describe('renderPage consent integration', () => {
       rootDir: process.cwd(),
       consent: {
         enabled: true,
-        categories: [
-          { id: 'necessary', required: true },
-          { id: 'analytics' },
-        ],
+        categories: [{ id: 'necessary', required: true }, { id: 'analytics' }],
         services: [
           {
             id: 'ga4',
