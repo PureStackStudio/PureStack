@@ -9,6 +9,7 @@ layout:
   navMode: sidebar
   showToc: true
   showFooter: true
+  fullWidth: true
 ---
 
 # Impressum
