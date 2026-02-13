@@ -162,7 +162,7 @@ function buildDocShellClass(
 }
 
 function resolveDocLayoutClass(frontmatter: PageFrontmatter) {
-  return frontmatter.layout.fullWidthMain ? 'template-doc--full-main' : ''
+  return frontmatter.layout.fullWidth ? 'template-doc--full-main' : ''
 }
 
 function renderSplashTemplate({ head, bodyHtml, pageInfo }: PageTemplateInput) {

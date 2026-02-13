@@ -161,7 +161,7 @@ nav:
   hidden: false
 layout:
   navMode: sidebar # sidebar | drawer
-  fullWidthMain: false
+  fullWidth: false
   showToc: true
   tocCollapsed: false
   showFooter: true

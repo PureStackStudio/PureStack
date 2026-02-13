@@ -13,7 +13,7 @@ export interface FrontmatterLayoutOptions {
   /**
    * Expands main content area to full available width.
    */
-  fullWidthMain: boolean
+  fullWidth: boolean
   /**
    * Enables the table-of-contents panel and related script.
    */
@@ -146,7 +146,7 @@ export function normalizeFrontmatter(
     layout: {
       ...rawLayout,
       navMode: resolveLayoutNavMode(rawLayout.navMode, sourceLabel),
-      fullWidthMain: rawLayout.fullWidthMain === true,
+      fullWidth: rawLayout.fullWidth === true,
       showToc: rawLayout.showToc === true,
       tocCollapsed: rawLayout.tocCollapsed === true,
       showFooter:
