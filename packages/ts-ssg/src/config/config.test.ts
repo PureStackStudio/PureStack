@@ -178,4 +178,18 @@ describe('resolveSiteConfig sitemap', () => {
       }),
     ).toThrowError(/unknown category/)
   })
+
+  it('normalizes pagefind exclude paths', () => {
+    const config = resolveSiteConfig({
+      rootDir: process.cwd(),
+      pagefind: {
+        excludePaths: ['privacy', '/imprint', '/terms/', ' /privacy/ '],
+      },
+    })
+    expect(config.pagefind.excludePaths).toEqual([
+      '/privacy/',
+      '/imprint/',
+      '/terms/',
+    ])
+  })
 })

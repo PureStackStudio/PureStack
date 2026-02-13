@@ -26,6 +26,7 @@ export interface SiteConfig {
   theme: ThemeOptions
   sitemap: SitemapConfig
   consent: ConsentConfig
+  pagefind: PagefindConfig
 }
 
 export interface LogoConfig {
@@ -105,6 +106,10 @@ export interface ConsentConfig {
   services: ConsentServiceConfig[]
 }
 
+export interface PagefindConfig {
+  excludePaths: string[]
+}
+
 export type PartialSitemapConfig = Partial<Omit<SitemapConfig, 'robots'>> & {
   robots?: Partial<RobotsConfig>
 }
@@ -124,12 +129,13 @@ export type PartialConsentConfig = Partial<
 }
 
 export type PartialSiteConfig = Partial<
-  Omit<SiteConfig, 'theme' | 'sitemap' | 'logo' | 'consent'>
+  Omit<SiteConfig, 'theme' | 'sitemap' | 'logo' | 'consent' | 'pagefind'>
 > & {
   logo?: PartialLogoConfig
   theme?: ThemeOptionsInput
   sitemap?: PartialSitemapConfig
   consent?: PartialConsentConfig
+  pagefind?: Partial<PagefindConfig>
 }
 export type SiteConfigFile = Partial<
   Pick<
@@ -142,6 +148,7 @@ export type SiteConfigFile = Partial<
     | 'styleThemes'
     | 'navigation'
     | 'consent'
+    | 'pagefind'
   >
 > & { theme?: ThemeOptionsInput; sitemap?: PartialSitemapConfig }
 
@@ -207,6 +214,7 @@ export function resolveSiteConfig(input: PartialSiteConfig = {}): SiteConfig {
   const theme = themes.resolve(input.theme, fileConfig.theme)
   const sitemap = resolveSitemapConfig(input.sitemap, fileConfig.sitemap)
   const consent = resolveConsentConfig(input.consent, fileConfig.consent)
+  const pagefind = resolvePagefindConfig(input.pagefind, fileConfig.pagefind)
   return {
     rootDir,
     contentDir,
@@ -220,6 +228,7 @@ export function resolveSiteConfig(input: PartialSiteConfig = {}): SiteConfig {
     theme,
     sitemap,
     consent,
+    pagefind,
   }
 }
 
@@ -364,6 +373,17 @@ function resolveConsentConfig(
     ),
     categories,
     services,
+  }
+}
+
+function resolvePagefindConfig(
+  input?: Partial<PagefindConfig>,
+  file?: Partial<PagefindConfig>,
+): PagefindConfig {
+  return {
+    excludePaths: normalizePagefindExcludePaths(
+      input?.excludePaths ?? file?.excludePaths,
+    ),
   }
 }
 
@@ -539,6 +559,26 @@ function toTitleCase(value: string) {
   const normalized = value.replaceAll(/[-_]+/g, ' ').trim()
   if (normalized.length === 0) return 'Consent'
   return normalized.replaceAll(/\b\w/g, (char) => char.toUpperCase())
+}
+
+function normalizePagefindExcludePaths(value: unknown): string[] {
+  if (!Array.isArray(value)) return []
+  const unique = new Set<string>()
+  for (const entry of value) {
+    if (typeof entry !== 'string') continue
+    const trimmed = entry.trim()
+    if (!trimmed) continue
+    const normalized = normalizeExcludePath(trimmed)
+    unique.add(normalized)
+  }
+  return [...unique]
+}
+
+function normalizeExcludePath(pathname: string): string {
+  const normalized = pathname.replaceAll('\\', '/').trim()
+  if (normalized === '/') return '/'
+  const withLeading = normalized.startsWith('/') ? normalized : `/${normalized}`
+  return withLeading.endsWith('/') ? withLeading : `${withLeading}/`
 }
 
 function loadSiteConfigFile(contentDir: string): SiteConfigFile {

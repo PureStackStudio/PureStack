@@ -313,7 +313,7 @@ class IncrementalRuntime {
       pages,
     })
 
-    await buildPagefindIndex(this.config.outDir)
+    await buildPagefindIndex(this.config.outDir, this.config.pagefind)
 
     this.manifest = await buildManifest(this.config, contentFiles, assetFiles, {
       signature: styleResult.signature,

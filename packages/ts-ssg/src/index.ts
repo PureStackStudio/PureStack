@@ -20,6 +20,7 @@ export {
   type ConsentConfig,
   type ConsentScriptConfig,
   type ConsentServiceConfig,
+  type PagefindConfig,
   type PartialSiteConfig as PartialConfig,
   resolveSiteConfig,
   type SiteConfig,

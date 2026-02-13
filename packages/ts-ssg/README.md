@@ -107,6 +107,7 @@ Config comes from:
 - `theme`: palette/radii/spacing/typography/shadows.
 - `sitemap`: sitemap + robots settings.
 - `consent`: GDPR-style consent manager config for optional scripts.
+- `pagefind`: search indexing options (for example excluded route prefixes).
 
 ## `siteConfig.json` Example
 
@@ -336,6 +337,12 @@ In dev/watch mode:
 Full builds run Pagefind indexing over `outDir` and write to:
 
 - `<outDir>/pagefind`
+
+Optional config:
+
+- `pagefind.excludePaths`: array of route prefixes excluded from indexing (e.g. `["/privacy/", "/imprint/", "/terms/"]`).
+
+Build logs include indexed page count and total indexed byte size.
 
 ### Sitemap / Robots
 

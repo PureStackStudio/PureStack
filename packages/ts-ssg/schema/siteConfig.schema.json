@@ -358,6 +358,21 @@
         }
       }
     },
+    "pagefind": {
+      "type": "object",
+      "description": "Pagefind indexing settings.",
+      "additionalProperties": false,
+      "properties": {
+        "excludePaths": {
+          "type": "array",
+          "description": "Route prefixes to exclude from search indexing (for example /privacy/).",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        }
+      }
+    },
     "outDir": {
       "type": "string",
       "description": "Output directory path. Relative paths are resolved from the project root.",

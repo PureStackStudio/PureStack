@@ -4,8 +4,11 @@ import path from 'node:path'
 import { getLogger, type Logger } from 'logpot'
 import * as pagefind from 'pagefind'
 
+import type { PagefindConfig } from '../config/config'
+
 export interface BuildPagefindResult {
   indexedPages: number
+  indexedBytes: number
   outputPath: string
   errors: string[]
   durationMs: number
@@ -15,9 +18,10 @@ const PAGEFIND_DIRNAME = 'pagefind'
 
 export async function buildPagefindIndex(
   outDir: string,
+  config: PagefindConfig,
 ): Promise<BuildPagefindResult> {
   const log = getLogger()
-  const state = createPagefindBuildState(outDir)
+  const state = createPagefindBuildState(outDir, config)
 
   try {
     await runPagefindBuild(state)
@@ -26,6 +30,7 @@ export async function buildPagefindIndex(
       outDir: state.outDir,
       outputPath: state.outputPath,
       indexedPages: state.indexedPages,
+      indexedBytes: state.indexedBytes,
       errors: state.errors,
       durationMs: elapsedSince(state.startedAt),
     })
@@ -56,17 +61,24 @@ type PagefindBuildState = {
   outputPath: string
   index: pagefind.PagefindIndex | undefined
   indexedPages: number
+  indexedBytes: number
   errors: string[]
+  excludePaths: string[]
 }
 
-function createPagefindBuildState(outDir: string): PagefindBuildState {
+function createPagefindBuildState(
+  outDir: string,
+  config: PagefindConfig,
+): PagefindBuildState {
   return {
     startedAt: now(),
     outDir,
     outputPath: path.join(outDir, PAGEFIND_DIRNAME),
     index: undefined,
     indexedPages: 0,
+    indexedBytes: 0,
     errors: [],
+    excludePaths: config.excludePaths,
   }
 }
 
@@ -78,8 +90,10 @@ async function runPagefindBuild(state: PagefindBuildState): Promise<void> {
     created.index,
     state.outDir,
     state.outputPath,
+    state.excludePaths,
   )
   state.indexedPages = indexed.indexedPages
+  state.indexedBytes = indexed.indexedBytes
   state.errors.push(...indexed.errors)
   await created.index.deleteIndex()
   state.index = undefined
@@ -97,6 +111,7 @@ function registerPagefindBuildError(
 function toBuildPagefindResult(state: PagefindBuildState): BuildPagefindResult {
   return {
     indexedPages: state.indexedPages,
+    indexedBytes: state.indexedBytes,
     outputPath: state.outputPath,
     errors: state.errors,
     durationMs: elapsedSince(state.startedAt),
@@ -118,24 +133,30 @@ async function populateAndWritePagefindIndex(
   index: pagefind.PagefindIndex,
   outDir: string,
   outputPath: string,
+  excludePaths: string[],
 ) {
   const htmlFiles = await collectHtmlFiles(outDir)
   const errors: string[] = []
   let indexedPages = 0
+  let indexedBytes = 0
   for (const filePath of htmlFiles) {
     const relPath = toPosixPath(path.relative(outDir, filePath))
-    if (shouldSkipPagefindPath(relPath)) continue
+    if (shouldSkipPagefindPath(relPath, excludePaths)) continue
     const content = await fs.readFile(filePath, 'utf8')
     const response = await index.addHTMLFile({
       sourcePath: relPath,
       content,
     })
     errors.push(...response.errors)
-    if (response.file) indexedPages += 1
+    if (response.file) {
+      indexedPages += 1
+      indexedBytes += Buffer.byteLength(content, 'utf8')
+    }
   }
   const writeResult = await index.writeFiles({ outputPath })
   return {
     indexedPages,
+    indexedBytes,
     errors: [...errors, ...writeResult.errors],
   }
 }
@@ -161,16 +182,28 @@ async function walkDir(dirPath: string, output: string[]): Promise<void> {
   }
 }
 
-function shouldSkipPagefindPath(relPath: string): boolean {
-  return (
-    relPath.startsWith('privacy/') ||
-    relPath.startsWith('imprint/') ||
-    relPath.startsWith('terms/')
-  )
+function shouldSkipPagefindPath(
+  relPath: string,
+  excludePaths: string[],
+): boolean {
+  const urlPath = toUrlPathFromOutputRelPath(relPath)
+  for (const excludePath of excludePaths) {
+    if (urlPath.startsWith(excludePath)) return true
+  }
+  return false
 }
 
 function toPosixPath(value: string) {
   return value.replaceAll('\\', '/')
+}
+
+function toUrlPathFromOutputRelPath(relPath: string): string {
+  const normalized = toPosixPath(relPath)
+  if (normalized === 'index.html') return '/'
+  if (normalized.endsWith('/index.html')) {
+    return `/${normalized.slice(0, -'index.html'.length)}`
+  }
+  return `/${normalized}`
 }
 
 function logBuildPagefindOutcome(
@@ -179,17 +212,21 @@ function logBuildPagefindOutcome(
     outDir: string
     outputPath: string
     indexedPages: number
+    indexedBytes: number
     errors: string[]
     durationMs: number
   },
 ) {
-  const { outDir, outputPath, indexedPages, errors, durationMs } = input
+  const { outDir, outputPath, indexedPages, indexedBytes, errors, durationMs } =
+    input
   if (errors.length > 0) {
     log.warn('pagefind index built with warnings', {
       outDir,
       outputPath,
       warnings: errors,
       indexedPages,
+      indexedBytes,
+      indexedSizeMb: formatMegabytes(indexedBytes),
       durationMs,
     })
     return
@@ -198,6 +235,8 @@ function logBuildPagefindOutcome(
     outDir,
     outputPath,
     indexedPages,
+    indexedBytes,
+    indexedSizeMb: formatMegabytes(indexedBytes),
     durationMs,
   })
 }
@@ -234,4 +273,9 @@ function now() {
 
 function elapsedSince(startedAt: number) {
   return Date.now() - startedAt
+}
+
+function formatMegabytes(bytes: number): string {
+  const mb = bytes / (1024 * 1024)
+  return `${mb.toFixed(2)} MB`
 }

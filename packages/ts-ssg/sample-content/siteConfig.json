@@ -51,5 +51,8 @@
     ],
     "services": []
   },
+  "pagefind": {
+    "excludePaths": ["/privacy/", "/imprint/", "/terms/"]
+  },
   "outDir": "dist/site"
 }
