@@ -8,6 +8,7 @@ const BODY_TOC_OPEN_CLASS = 'doc-toc-open'
 const BODY_FORCE_COLLAPSED_CLASS = 'template-doc--toc-collapsed'
 const TOC_COLLAPSED_STORAGE_KEY = 'ts-ssg:toc-collapsed'
 const EDGE_OPEN_THRESHOLD_PX = 26
+const EDGE_OPEN_POINTER_QUERY = '(hover: hover) and (pointer: fine)'
 const ACTIVE_SCROLL_OFFSET = 110
 const FLASH_DURATION_MS = 1400
 const MANUAL_ACTIVE_LOCK_MS = 900
@@ -36,6 +37,7 @@ function init() {
     '.page-toc__panel-toggle-label',
   )
   const media = window.matchMedia(MOBILE_BREAKPOINT_QUERY)
+  const edgeOpenMedia = window.matchMedia(EDGE_OPEN_POINTER_QUERY)
   const readStoredCollapsedPreference = () => {
     try {
       const value = localStorage.getItem(TOC_COLLAPSED_STORAGE_KEY)
@@ -138,12 +140,20 @@ function init() {
       setTocOpen(false)
     })
 
-    document.addEventListener('mousemove', (event) => {
+    const maybeOpenFromEdge = (event: MouseEvent | PointerEvent) => {
       if (!isCollapsible()) return
+      if (!edgeOpenMedia.matches) return
       if (tocShell.classList.contains(TOC_OPEN_CLASS)) return
+      if ('pointerType' in event && event.pointerType !== 'mouse') return
       if (event.clientX < window.innerWidth - EDGE_OPEN_THRESHOLD_PX) return
       setTocOpen(true)
-    })
+    }
+
+    if ('PointerEvent' in window) {
+      document.addEventListener('pointermove', maybeOpenFromEdge)
+    } else {
+      document.addEventListener('mousemove', maybeOpenFromEdge)
+    }
 
     if (typeof media.addEventListener === 'function') {
       media.addEventListener('change', () => {
