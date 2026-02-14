@@ -69,7 +69,10 @@ export function registerNavShellStyles(
     .background(palette.action.accent.hover)
     .color(palette.action.accent.text)
   styleBuilder
-    .select('.nav__panel-toggle:focus-visible', theme)
+    .select(
+      '.nav__panel-toggle:focus-visible, .nav__collapse-toggle:focus-visible',
+      theme,
+    )
     .outline(`2px solid ${palette.border.focus}`)
     .outlineOffset('2px')
   styleBuilder
@@ -90,10 +93,6 @@ export function registerNavShellStyles(
     .select('.nav__collapse-toggle:hover', theme)
     .background(palette.background.accentMuted)
     .color(palette.text.accent)
-  styleBuilder
-    .select('.nav__collapse-toggle:focus-visible', theme)
-    .outline(`2px solid ${palette.border.focus}`)
-    .outlineOffset('2px')
   styleBuilder
     .select('.nav__collapse-toggle-icon', theme)
     .display('inline-flex')
@@ -199,21 +198,7 @@ export function registerNavShellStyles(
     .gridTemplateColumns('1fr')
   styleBuilder
     .select(
-      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar:not(.doc-sidebar--open) .nav__header',
-      theme,
-    )
-    .media('min-width: 1024px')
-    .display('none')
-  styleBuilder
-    .select(
-      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar:not(.doc-sidebar--open) .nav__collapse-toggle',
-      theme,
-    )
-    .media('min-width: 1024px')
-    .display('none')
-  styleBuilder
-    .select(
-      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar:not(.doc-sidebar--open) .nav__list',
+      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar:not(.doc-sidebar--open) .nav__header, .template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar:not(.doc-sidebar--open) .nav__collapse-toggle, .template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar:not(.doc-sidebar--open) .nav__list',
       theme,
     )
     .media('min-width: 1024px')
@@ -272,18 +257,14 @@ export function registerNavShellStyles(
     .display('none')
 
   styleBuilder
-    .select('.nav__panel-toggle', theme)
+    .select('.nav__panel-toggle, .nav__collapse-toggle', theme)
     .media('max-width: 1023px')
     .display('none')
   styleBuilder
-    .select('.nav__collapse-toggle', theme)
-    .media('max-width: 1023px')
-    .display('none')
-  styleBuilder
-    .select('.template-doc--nav-drawer .nav__panel-toggle', theme)
-    .display('none')
-  styleBuilder
-    .select('.template-doc--nav-drawer .nav__collapse-toggle', theme)
+    .select(
+      '.template-doc--nav-drawer .nav__panel-toggle, .template-doc--nav-drawer .nav__collapse-toggle',
+      theme,
+    )
     .display('none')
   styleBuilder
     .select('.nav__list', theme)

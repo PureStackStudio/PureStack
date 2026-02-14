@@ -20,11 +20,13 @@ export async function writeStyles(
   const resultPaths: string[] = []
   const hash = crypto.createHash('sha256')
   const orderedThemes = orderThemes(themes)
+  const prettyCss = true
   styleBuilder.ensureThemes(orderedThemes)
   let lightOutPath: string | undefined
 
   for (const theme of orderedThemes) {
-    const css = await styleBuilder.render(theme, true)
+    const rendered = await styleBuilder.render(theme, prettyCss)
+    const css = prettyCss ? rendered : compactCss(rendered)
     const cssName = resolveThemeFileName(fileName, theme)
     const outPath = path.join(outDir, cssName)
     await ensureDir(outPath)
@@ -44,4 +46,12 @@ export async function writeStyles(
     outputs: resultPaths,
     signature: hash.digest('hex'),
   }
+}
+
+function compactCss(css: string) {
+  const lines = css
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0)
+  return lines.join('')
 }

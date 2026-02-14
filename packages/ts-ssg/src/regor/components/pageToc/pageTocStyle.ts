@@ -151,15 +151,10 @@ export function registerPageTocLinkStyles(
     .outlineOffset('2px')
 
   styleBuilder
-    .select('.page-toc__link--active', theme)
-    .background(palette.action.accent.background)
-    .color(palette.action.accent.text)
-  styleBuilder
-    .select('.page-toc__link--active:hover', theme)
-    .background(palette.action.accent.background)
-    .color(palette.action.accent.text)
-  styleBuilder
-    .select('.page-toc__link--sub.page-toc__link--active:hover', theme)
+    .select(
+      '.page-toc__link--active, .page-toc__link--active:hover, .page-toc__link--sub.page-toc__link--active, .page-toc__link--sub.page-toc__link--active:hover',
+      theme,
+    )
     .background(palette.action.accent.background)
     .color(palette.action.accent.text)
 
@@ -170,10 +165,6 @@ export function registerPageTocLinkStyles(
   styleBuilder
     .select('.page-toc__link--sub:not(.page-toc__link--active):hover', theme)
     .color(palette.text.subtle)
-  styleBuilder
-    .select('.page-toc__link--sub.page-toc__link--active', theme)
-    .background(palette.action.accent.background)
-    .color(palette.action.accent.text)
 }
 
 export function registerPageTocTargetStyles(
@@ -209,11 +200,7 @@ export function registerPageTocLayoutStyles(
     .media('max-width: 1320px')
     .gridTemplateColumns('260px minmax(0, 1fr)')
   styleBuilder
-    .select('.doc-shell--toc', theme)
-    .media('max-width: 1023px')
-    .gridTemplateColumns('1fr')
-  styleBuilder
-    .select('.template-doc--toc-collapsed .doc-shell--toc', theme)
+    .select('.doc-shell--toc, .template-doc--toc-collapsed .doc-shell--toc', theme)
     .media('max-width: 1023px')
     .gridTemplateColumns('1fr')
 
@@ -373,36 +360,6 @@ export function registerPageTocLayoutStyles(
       theme,
     )
     .media('max-width: 1320px')
-    .left('auto')
-    .right('16px')
-    .top('16px')
-    .transform('none')
-    .writingMode('horizontal-tb')
-    .width('auto')
-    .height('auto')
-    .padding('6px')
-    .display('inline-flex')
-    .alignItems('center')
-    .justifyContent('center')
-    .gap('3px')
-    .letterSpacing('0.08em')
-    .border(`1px solid ${palette.border.default}`)
-    .borderRadius(options.radii.md)
-
-  styleBuilder
-    .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open .page-toc__panel-toggle:hover',
-      theme,
-    )
-    .media('max-width: 1320px')
-    .color(palette.text.accent)
-    .background(palette.background.accentMuted)
-  styleBuilder
-    .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open .page-toc__panel-toggle',
-      theme,
-    )
-    .media('max-width: 1320px')
     .display('none')
 
   styleBuilder
@@ -440,15 +397,7 @@ export function registerPageTocLayoutStyles(
 
   styleBuilder
     .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc .page-toc > .page-toc__list',
-      theme,
-    )
-    .media('max-width: 1320px')
-    .paddingBottom('8px')
-
-  styleBuilder
-    .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc .page-toc__empty',
+      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc .page-toc > .page-toc__list, .template-doc:not(.template-doc--toc-collapsed) .doc-toc .page-toc__empty',
       theme,
     )
     .media('max-width: 1320px')
@@ -585,34 +534,6 @@ export function registerPageTocLayoutStyles(
       '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__panel-toggle',
       theme,
     )
-    .left('auto')
-    .right('16px')
-    .top('16px')
-    .transform('none')
-    .writingMode('horizontal-tb')
-    .width('auto')
-    .height('auto')
-    .padding('6px')
-    .display('inline-flex')
-    .alignItems('center')
-    .justifyContent('center')
-    .gap('3px')
-    .letterSpacing('0.08em')
-    .border(`1px solid ${palette.border.default}`)
-    .borderRadius(options.radii.md)
-
-  styleBuilder
-    .select(
-      '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__panel-toggle:hover',
-      theme,
-    )
-    .color(palette.text.accent)
-    .background(palette.background.accentMuted)
-  styleBuilder
-    .select(
-      '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__panel-toggle',
-      theme,
-    )
     .display('none')
 
   styleBuilder
@@ -641,12 +562,8 @@ export function registerPageTocLayoutStyles(
 
   styleBuilder
     .select(
-      '.template-doc--toc-collapsed .doc-toc .page-toc > .page-toc__list',
+      '.template-doc--toc-collapsed .doc-toc .page-toc > .page-toc__list, .template-doc--toc-collapsed .doc-toc .page-toc__empty',
       theme,
     )
-    .paddingBottom('8px')
-
-  styleBuilder
-    .select('.template-doc--toc-collapsed .doc-toc .page-toc__empty', theme)
     .paddingBottom('8px')
 }

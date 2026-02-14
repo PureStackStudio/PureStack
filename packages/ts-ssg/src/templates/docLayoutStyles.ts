@@ -152,32 +152,8 @@ function registerDocLayoutResponsiveStyles(
     .media('max-width: 1023px')
     .overflowX('hidden')
   styleBuilder
-    .select('.template-doc--nav-drawer .doc-sidebar', theme)
-    .media('max-width: 1023px')
-    .position('fixed')
-    .top('72px')
-    .left('auto')
-    .right('0')
-    .bottom('0')
-    .height('calc(100dvh - 72px)')
-    .maxWidth('100vw')
-    .maxHeight('none')
-    .borderRadius('0')
-    .background('inherit')
-    .overflow('hidden')
-    .transform('translateX(120%)')
-    .zIndex(50)
-    .boxShadow(options.shadows.strong)
-  styleBuilder
     .select(
-      '.template-doc.template-doc--nav-ready.template-doc--nav-drawer .doc-sidebar',
-      theme,
-    )
-    .media('max-width: 1023px')
-    .transition('transform 220ms ease')
-  styleBuilder
-    .select(
-      '.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
+      '.template-doc--nav-drawer .doc-sidebar, .template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
       theme,
     )
     .media('max-width: 1023px')
@@ -196,15 +172,8 @@ function registerDocLayoutResponsiveStyles(
     .zIndex(50)
     .boxShadow(options.shadows.strong)
   styleBuilder
-    .select('.template-doc--nav-drawer .doc-sidebar', theme)
-    .media('max-width: 600px')
-    .left('0')
-    .right('0')
-    .width('100%')
-    .maxWidth('none')
-  styleBuilder
     .select(
-      '.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
+      '.template-doc--nav-drawer .doc-sidebar, .template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
       theme,
     )
     .media('max-width: 600px')
