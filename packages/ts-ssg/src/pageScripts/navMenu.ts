@@ -19,9 +19,8 @@ function init() {
   const collapseToggle = menu.querySelector<HTMLElement>(
     '[data-nav-menu-collapse]',
   )
-  const panelToggle = menu.querySelector<HTMLElement>('[data-nav-menu-toggle]')
-  const restoreToggle = menu.querySelector<HTMLElement>(
-    '[data-nav-menu-restore]',
+  const panelToggles = Array.from(
+    menu.querySelectorAll<HTMLElement>('[data-nav-menu-toggle]'),
   )
   const media = window.matchMedia(DESKTOP_QUERY)
 
@@ -46,6 +45,16 @@ function init() {
   const setPanelOpen = (open: boolean) => {
     sidebar?.classList.toggle(NAV_OPEN_CLASS, open)
   }
+  const syncCollapseButton = () => {
+    if (!collapseToggle) return
+    if (document.body.classList.contains(NAV_COLLAPSED_CLASS)) {
+      collapseToggle.setAttribute('title', 'Restore navigation')
+      collapseToggle.setAttribute('aria-label', 'Restore navigation')
+      return
+    }
+    collapseToggle.setAttribute('title', 'Collapse navigation')
+    collapseToggle.setAttribute('aria-label', 'Collapse navigation')
+  }
 
   const readStored = () => {
     try {
@@ -69,10 +78,12 @@ function init() {
     if (stored === null) {
       setCollapsed(false)
       setPanelOpen(false)
+      syncCollapseButton()
       return
     }
     setCollapsed(stored)
     if (stored) setPanelOpen(false)
+    syncCollapseButton()
   }
 
   applyStoredPreference()
@@ -85,30 +96,25 @@ function init() {
     collapseToggle.addEventListener('click', (event) => {
       event.preventDefault()
       if (document.body.classList.contains(NAV_COLLAPSED_CLASS)) {
+        writeStored(false)
+        setCollapsed(false)
         setPanelOpen(false)
+        syncCollapseButton()
         return
       }
       writeStored(true)
       setCollapsed(true)
       setPanelOpen(false)
+      syncCollapseButton()
     })
   }
 
-  if (panelToggle) {
+  for (const panelToggle of panelToggles) {
     panelToggle.addEventListener('click', (event) => {
       event.preventDefault()
       if (!supportsDesktopCollapse()) return
       if (!document.body.classList.contains(NAV_COLLAPSED_CLASS)) return
       setPanelOpen(!sidebar?.classList.contains(NAV_OPEN_CLASS))
-    })
-  }
-
-  if (restoreToggle) {
-    restoreToggle.addEventListener('click', (event) => {
-      event.preventDefault()
-      writeStored(false)
-      setCollapsed(false)
-      setPanelOpen(false)
     })
   }
 

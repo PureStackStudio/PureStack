@@ -65,7 +65,7 @@ export function registerNavShellStyles(
     .select('.nav__restore-toggle-label', theme)
     .display('inline-block')
   styleBuilder
-    .select('.nav__restore-button', theme)
+    .select('.nav__close-button', theme)
     .display('none')
     .alignItems('center')
     .justifyContent('center')
@@ -82,11 +82,11 @@ export function registerNavShellStyles(
     .cursor('pointer')
     .transition('background 160ms ease, color 160ms ease')
   styleBuilder
-    .select('.nav__restore-button:hover', theme)
+    .select('.nav__close-button:hover', theme)
     .background(palette.background.accentMuted)
     .color(palette.text.accent)
   styleBuilder
-    .select('.nav__restore-button:focus-visible', theme)
+    .select('.nav__close-button:focus-visible', theme)
     .outline(`2px solid ${palette.border.focus}`)
     .outlineOffset('2px')
   styleBuilder
@@ -280,7 +280,7 @@ export function registerNavShellStyles(
     .display('none')
   styleBuilder
     .select(
-      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar.doc-sidebar--open .nav__restore-button',
+      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar.doc-sidebar--open .nav__close-button',
       theme,
     )
     .media('min-width: 1024px')
@@ -291,7 +291,7 @@ export function registerNavShellStyles(
     .media('max-width: 1023px')
     .display('none')
   styleBuilder
-    .select('.nav__restore-button', theme)
+    .select('.nav__close-button', theme)
     .media('max-width: 1023px')
     .display('none')
   styleBuilder
@@ -302,7 +302,7 @@ export function registerNavShellStyles(
     .select('.template-doc--nav-drawer .nav__restore-toggle', theme)
     .display('none')
   styleBuilder
-    .select('.template-doc--nav-drawer .nav__restore-button', theme)
+    .select('.template-doc--nav-drawer .nav__close-button', theme)
     .display('none')
   styleBuilder
     .select('.template-doc--nav-drawer .nav__collapse-toggle', theme)
