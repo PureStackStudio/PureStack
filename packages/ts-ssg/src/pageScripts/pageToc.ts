@@ -130,7 +130,7 @@ function init() {
       if (!tocShell.classList.contains(TOC_OPEN_CLASS)) return
       const target = event.target
       if (!(target instanceof Node)) return
-      if (tocShell.contains(target)) return
+      if (toc.contains(target)) return
       setTocOpen(false)
     })
 
