@@ -266,7 +266,7 @@ export function registerPageTocLayoutStyles(
     .top('0')
     .right('0')
     .left('auto')
-    .width('max(400px, 34vw)')
+    .width('auto')
     .maxWidth('100vw')
     .height('100dvh')
     .zIndex(140)
@@ -307,6 +307,7 @@ export function registerPageTocLayoutStyles(
       theme,
     )
     .media('max-width: 1320px')
+    .width('26px')
     .background('transparent')
     .boxShadow('none')
     .set('pointer-events', 'none')
@@ -511,7 +512,7 @@ export function registerPageTocLayoutStyles(
     .top('0')
     .right('0')
     .left('auto')
-    .width('max(400px, 34vw)')
+    .width('auto')
     .maxWidth('100vw')
     .height('100dvh')
     .zIndex(140)
@@ -548,6 +549,7 @@ export function registerPageTocLayoutStyles(
 
   styleBuilder
     .select('.template-doc--toc-collapsed .doc-toc:not(.doc-toc--open)', theme)
+    .width('26px')
     .background('transparent')
     .boxShadow('none')
     .set('pointer-events', 'none')
