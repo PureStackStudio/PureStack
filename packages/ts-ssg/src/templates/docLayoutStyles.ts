@@ -50,7 +50,11 @@ function registerDocLayoutShellStyles(
     .select('.doc-shell--nav-drawer', theme)
     .gridTemplateColumns('1fr')
   styleBuilder.select('.doc-main', theme).minWidth('0')
-  styleBuilder.select('.doc-content', theme).margin('0').padding('8px 0 80px')
+  styleBuilder
+    .select('.doc-content', theme)
+    .margin('0')
+    .padding('8px 0 80px')
+    .overflowX('hidden')
 }
 
 function registerDocLayoutSidebarStyles(

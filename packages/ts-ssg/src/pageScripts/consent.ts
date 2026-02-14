@@ -40,7 +40,7 @@ declare global {
   }
 }
 
-const INPUT_KEY = '__CONSENT_CONFIG__ '
+const INPUT_KEY = '__CONSENT_CONFIG__'
 const config = (globalThis as Record<string, unknown>)[
   INPUT_KEY
 ] as RuntimeConsentConfig
