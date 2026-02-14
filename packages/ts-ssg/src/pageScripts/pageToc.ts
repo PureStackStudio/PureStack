@@ -19,12 +19,18 @@ function ready(fn: () => void) {
 
 function init() {
   const toc = document.querySelector<HTMLElement>('.page-toc')
-  if (!toc) return
+  if (!toc) {
+    document.body.classList.remove(BODY_TOC_OPEN_CLASS)
+    return
+  }
 
   const tocShell = toc.closest<HTMLElement>('.doc-toc')
   const toggle = toc.querySelector<HTMLElement>('.page-toc__mobile-toggle')
   const collapseToggle = toc.querySelector<HTMLElement>(
     '[data-page-toc-collapse]',
+  )
+  const restoreToggle = toc.querySelector<HTMLElement>(
+    '[data-page-toc-restore]',
   )
   const toggleLabel = toc.querySelector<HTMLElement>(
     '.page-toc__mobile-toggle-label',
@@ -35,12 +41,23 @@ function init() {
   const isCollapsible = () => isForceCollapsed() || media.matches
 
   const setTocOpen = (open: boolean) => {
-    if (!tocShell || !toggle) return
-    tocShell.classList.toggle(TOC_OPEN_CLASS, open)
-    toggle.setAttribute('aria-expanded', open ? 'true' : 'false')
-    if (toggleLabel) toggleLabel.textContent = open ? OPEN_LABEL : CLOSED_LABEL
-    document.body.classList.toggle(BODY_TOC_OPEN_CLASS, open)
+    if (tocShell) {
+      tocShell.classList.toggle(TOC_OPEN_CLASS, open)
+    }
+    if (toggle) {
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false')
+    }
+    if (toggleLabel) {
+      toggleLabel.textContent = open ? OPEN_LABEL : CLOSED_LABEL
+    }
+    document.body.classList.toggle(
+      BODY_TOC_OPEN_CLASS,
+      Boolean(open && tocShell && isCollapsible()),
+    )
   }
+
+  // Ensure body class always reflects current TOC state for consistent styling.
+  setTocOpen(Boolean(tocShell?.classList.contains(TOC_OPEN_CLASS)))
 
   if (collapseToggle) {
     collapseToggle.addEventListener('click', (event) => {
@@ -49,6 +66,20 @@ function init() {
         document.body.classList.add(BODY_FORCE_COLLAPSED_CLASS)
       }
       setTocOpen(false)
+    })
+  }
+
+  if (restoreToggle) {
+    restoreToggle.addEventListener('click', (event) => {
+      event.preventDefault()
+      if (isForceCollapsed()) {
+        document.body.classList.remove(BODY_FORCE_COLLAPSED_CLASS)
+        window.requestAnimationFrame(() => {
+          setTocOpen(true)
+        })
+        return
+      }
+      setTocOpen(true)
     })
   }
 
@@ -77,7 +108,12 @@ function init() {
   const links = Array.from(
     toc.querySelectorAll<HTMLAnchorElement>('a.page-toc__link[href^="#"]'),
   )
-  if (links.length === 0) return
+  if (links.length === 0) {
+    if (!isCollapsible()) {
+      document.body.classList.remove(BODY_TOC_OPEN_CLASS)
+    }
+    return
+  }
 
   for (const link of links) {
     link.addEventListener('click', () => {

@@ -50,6 +50,41 @@ export function registerPageTocShellStyles(
     .textTransform('uppercase')
     .color(palette.text.subtle)
   styleBuilder
+    .select('.page-toc__restore-toggle', theme)
+    .display('none')
+    .alignItems('center')
+    .justifyContent('center')
+    .width('30px')
+    .height('30px')
+    .padding('0')
+    .border(`1px solid ${palette.border.default}`)
+    .borderRadius(options.radii.md)
+    .background(palette.background.raised)
+    .color(palette.text.subtle)
+    .cursor('pointer')
+    .transition('background 160ms ease, color 160ms ease')
+  styleBuilder
+    .select('.template-doc--toc-collapsed .page-toc__restore-toggle', theme)
+    .display('inline-flex')
+  styleBuilder
+    .select('.page-toc__restore-toggle:hover', theme)
+    .background(palette.background.accentMuted)
+    .color(palette.text.accent)
+  styleBuilder
+    .select('.page-toc__restore-toggle:focus-visible', theme)
+    .outline(`2px solid ${palette.border.focus}`)
+    .outlineOffset('2px')
+  styleBuilder
+    .select('.page-toc__restore-toggle svg', theme)
+    .width('16px')
+    .height('16px')
+    .display('block')
+    .fill('none')
+    .stroke('currentColor')
+    .set('stroke-width', '1.9')
+    .set('stroke-linecap', 'round')
+    .set('stroke-linejoin', 'round')
+  styleBuilder
     .select('.page-toc__collapse-toggle', theme)
     .display('inline-flex')
     .alignItems('center')
@@ -63,6 +98,8 @@ export function registerPageTocShellStyles(
     .color(palette.text.subtle)
     .cursor('pointer')
     .transition('background 160ms ease, color 160ms ease')
+    .position('absolute')
+    .right('16px')
   styleBuilder
     .select('.page-toc__collapse-toggle:hover', theme)
     .background(palette.background.accentMuted)
@@ -102,6 +139,10 @@ export function registerPageTocShellStyles(
   styleBuilder.select('.page-toc__mobile-toggle', theme).display('none')
   styleBuilder
     .select('.template-doc--toc-collapsed .page-toc__collapse-toggle', theme)
+    .display('none')
+  styleBuilder
+    .select('.page-toc__restore-toggle', theme)
+    .media('max-width: 1320px')
     .display('none')
   styleBuilder
     .select('.page-toc__collapse-toggle', theme)
@@ -582,10 +623,34 @@ export function registerPageTocLayoutStyles(
 
   styleBuilder
     .select(
+      '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__restore-toggle',
+      theme,
+    )
+    .position('absolute')
+    .top('16px')
+    .right('92px')
+    .zIndex(3)
+
+  styleBuilder
+    .select(
       '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__mobile-toggle-icon',
       theme,
     )
     .display('inline-flex')
+    .alignItems('center')
+
+  styleBuilder
+    .select(
+      '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__mobile-toggle-icon svg',
+      theme,
+    )
+    .width('14px')
+    .height('14px')
+    .display('block')
+    .fill('none')
+    .stroke('currentColor')
+    .set('stroke-width', '2.1')
+    .set('stroke-linecap', 'round')
 
   styleBuilder
     .select(

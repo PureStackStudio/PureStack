@@ -33,6 +33,21 @@ const pageTocTemplate = html`<nav class="page-toc" aria-label="On this page">
   <div class="page-toc__header-row">
     <div class="page-toc__header">{{ title }}</div>
     <button
+      class="page-toc__restore-toggle"
+      type="button"
+      title="Restore table of contents"
+      aria-label="Restore table of contents"
+      data-page-toc-restore
+    >
+      <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <path d="M8 6h10"></path>
+        <path d="M8 12h10"></path>
+        <path d="M8 18h10"></path>
+        <path d="M4 9l3-3"></path>
+        <path d="M4 15l3 3"></path>
+      </svg>
+    </button>
+    <button
       class="page-toc__collapse-toggle"
       type="button"
       title="Collapse table of contents"
