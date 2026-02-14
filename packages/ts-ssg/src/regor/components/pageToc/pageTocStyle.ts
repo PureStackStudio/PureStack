@@ -50,7 +50,7 @@ export function registerPageTocShellStyles(
     .color(palette.text.subtle)
   styleBuilder
     .select('.page-toc__restore-toggle', theme)
-    .display('none')
+    .display('inline-flex')
     .alignItems('center')
     .justifyContent('center')
     .width('30px')
@@ -62,9 +62,6 @@ export function registerPageTocShellStyles(
     .color(palette.text.subtle)
     .cursor('pointer')
     .transition('background 160ms ease, color 160ms ease')
-  styleBuilder
-    .select('.template-doc--toc-collapsed .page-toc__restore-toggle', theme)
-    .display('inline-flex')
   styleBuilder
     .select('.page-toc__restore-toggle:hover', theme)
     .background(palette.background.accentMuted)
@@ -74,41 +71,27 @@ export function registerPageTocShellStyles(
     .outline(`2px solid ${palette.border.focus}`)
     .outlineOffset('2px')
   styleBuilder
-    .select('.page-toc__restore-toggle svg', theme)
-    .width('16px')
-    .height('16px')
-    .display('block')
-    .fill('none')
-    .stroke('currentColor')
-    .set('stroke-width', '1.9')
-    .set('stroke-linecap', 'round')
-    .set('stroke-linejoin', 'round')
-  styleBuilder
-    .select('.page-toc__collapse-toggle', theme)
+    .select('.page-toc__header-toggle-icon', theme)
     .display('inline-flex')
     .alignItems('center')
     .justifyContent('center')
-    .width('30px')
-    .height('30px')
-    .padding('0')
-    .border(`1px solid ${palette.border.default}`)
-    .borderRadius(options.radii.md)
-    .background(palette.background.raised)
-    .color(palette.text.subtle)
-    .cursor('pointer')
-    .transition('background 160ms ease, color 160ms ease')
-    .position('absolute')
-    .right('16px')
   styleBuilder
-    .select('.page-toc__collapse-toggle:hover', theme)
-    .background(palette.background.accentMuted)
-    .color(palette.text.accent)
+    .select('.page-toc__header-toggle-icon--restore', theme)
+    .display('none')
   styleBuilder
-    .select('.page-toc__collapse-toggle:focus-visible', theme)
-    .outline(`2px solid ${palette.border.focus}`)
-    .outlineOffset('2px')
+    .select(
+      '.template-doc--toc-collapsed .page-toc__header-toggle-icon--collapse',
+      theme,
+    )
+    .display('none')
   styleBuilder
-    .select('.page-toc__collapse-toggle svg', theme)
+    .select(
+      '.template-doc--toc-collapsed .page-toc__header-toggle-icon--restore',
+      theme,
+    )
+    .display('inline-flex')
+  styleBuilder
+    .select('.page-toc__header-toggle-icon svg', theme)
     .width('16px')
     .height('16px')
     .display('block')
@@ -138,14 +121,7 @@ export function registerPageTocShellStyles(
 
   styleBuilder.select('.page-toc__mobile-toggle', theme).display('none')
   styleBuilder
-    .select('.template-doc--toc-collapsed .page-toc__collapse-toggle', theme)
-    .display('none')
-  styleBuilder
     .select('.page-toc__restore-toggle', theme)
-    .media('max-width: 1320px')
-    .display('none')
-  styleBuilder
-    .select('.page-toc__collapse-toggle', theme)
     .media('max-width: 1320px')
     .display('none')
 }
@@ -384,6 +360,48 @@ export function registerPageTocLayoutStyles(
     .stroke('currentColor')
     .set('stroke-width', '2.1')
     .set('stroke-linecap', 'round')
+  styleBuilder
+    .select(
+      '.template-doc:not(.template-doc--toc-collapsed) .page-toc__mobile-toggle-icon-open',
+      theme,
+    )
+    .media('max-width: 1320px')
+    .display('none')
+  styleBuilder
+    .select(
+      '.template-doc:not(.template-doc--toc-collapsed) .page-toc__mobile-toggle[aria-expanded="true"] .page-toc__mobile-toggle-icon-open',
+      theme,
+    )
+    .media('max-width: 1320px')
+    .display('inline-flex')
+  styleBuilder
+    .select(
+      '.template-doc:not(.template-doc--toc-collapsed) .page-toc__mobile-toggle[aria-expanded="true"] .page-toc__mobile-toggle-icon-closed',
+      theme,
+    )
+    .media('max-width: 1320px')
+    .display('none')
+  styleBuilder
+    .select(
+      '.template-doc:not(.template-doc--toc-collapsed) .page-toc__mobile-toggle-icon-open',
+      theme,
+    )
+    .media('max-width: 1320px')
+    .display('none')
+  styleBuilder
+    .select(
+      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open .page-toc__mobile-toggle-icon-open',
+      theme,
+    )
+    .media('max-width: 1320px')
+    .display('block')
+  styleBuilder
+    .select(
+      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open .page-toc__mobile-toggle-icon-closed',
+      theme,
+    )
+    .media('max-width: 1320px')
+    .display('none')
 
   styleBuilder
     .select(
@@ -682,6 +700,42 @@ export function registerPageTocLayoutStyles(
     .stroke('currentColor')
     .set('stroke-width', '2.1')
     .set('stroke-linecap', 'round')
+  styleBuilder
+    .select(
+      '.template-doc--toc-collapsed .page-toc__mobile-toggle-icon-open',
+      theme,
+    )
+    .display('none')
+  styleBuilder
+    .select(
+      '.template-doc--toc-collapsed .page-toc__mobile-toggle[aria-expanded="true"] .page-toc__mobile-toggle-icon-open',
+      theme,
+    )
+    .display('inline-flex')
+  styleBuilder
+    .select(
+      '.template-doc--toc-collapsed .page-toc__mobile-toggle[aria-expanded="true"] .page-toc__mobile-toggle-icon-closed',
+      theme,
+    )
+    .display('none')
+  styleBuilder
+    .select(
+      '.template-doc--toc-collapsed .page-toc__mobile-toggle-icon-open',
+      theme,
+    )
+    .display('none')
+  styleBuilder
+    .select(
+      '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__mobile-toggle-icon-open',
+      theme,
+    )
+    .display('block')
+  styleBuilder
+    .select(
+      '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__mobile-toggle-icon-closed',
+      theme,
+    )
+    .display('none')
 
   styleBuilder
     .select(

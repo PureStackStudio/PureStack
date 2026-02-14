@@ -28,9 +28,6 @@ function init() {
 
   const tocShell = toc.closest<HTMLElement>('.doc-toc')
   const toggle = toc.querySelector<HTMLElement>('.page-toc__mobile-toggle')
-  const collapseToggle = toc.querySelector<HTMLElement>(
-    '[data-page-toc-collapse]',
-  )
   const restoreToggle = toc.querySelector<HTMLElement>(
     '[data-page-toc-restore]',
   )
@@ -56,6 +53,16 @@ function init() {
   const isForceCollapsed = () =>
     document.body.classList.contains(BODY_FORCE_COLLAPSED_CLASS)
   const isCollapsible = () => isForceCollapsed() || media.matches
+  const syncHeaderToggle = () => {
+    if (!restoreToggle) return
+    if (isForceCollapsed()) {
+      restoreToggle.setAttribute('title', 'Restore table of contents')
+      restoreToggle.setAttribute('aria-label', 'Restore table of contents')
+      return
+    }
+    restoreToggle.setAttribute('title', 'Collapse table of contents')
+    restoreToggle.setAttribute('aria-label', 'Collapse table of contents')
+  }
 
   const setTocOpen = (open: boolean) => {
     if (tocShell) {
@@ -79,20 +86,10 @@ function init() {
   } else if (storedCollapsed === false) {
     document.body.classList.remove(BODY_FORCE_COLLAPSED_CLASS)
   }
+  syncHeaderToggle()
 
   // Ensure body class always reflects current TOC state for consistent styling.
   setTocOpen(Boolean(tocShell?.classList.contains(TOC_OPEN_CLASS)))
-
-  if (collapseToggle) {
-    collapseToggle.addEventListener('click', (event) => {
-      event.preventDefault()
-      if (!isForceCollapsed()) {
-        document.body.classList.add(BODY_FORCE_COLLAPSED_CLASS)
-      }
-      writeStoredCollapsedPreference(true)
-      setTocOpen(false)
-    })
-  }
 
   if (restoreToggle) {
     restoreToggle.addEventListener('click', (event) => {
@@ -100,13 +97,16 @@ function init() {
       if (isForceCollapsed()) {
         document.body.classList.remove(BODY_FORCE_COLLAPSED_CLASS)
         writeStoredCollapsedPreference(false)
+        syncHeaderToggle()
         window.requestAnimationFrame(() => {
           setTocOpen(true)
         })
         return
       }
-      writeStoredCollapsedPreference(false)
-      setTocOpen(true)
+      document.body.classList.add(BODY_FORCE_COLLAPSED_CLASS)
+      writeStoredCollapsedPreference(true)
+      syncHeaderToggle()
+      setTocOpen(false)
     })
   }
 

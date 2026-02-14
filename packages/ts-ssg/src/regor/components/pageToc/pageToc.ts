@@ -1,6 +1,7 @@
 import { createComponent, html } from 'regor'
 
 import type { PageOutlineItem } from '../../../mdx/mdx'
+import { getSvgIcon } from '../../../style/icons'
 import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 import type { TsSsgContext } from '../../ts-ssg-context'
 import { registerPageTocStyles } from './pageTocStyle'
@@ -8,6 +9,10 @@ import { registerPageTocStyles } from './pageTocStyle'
 interface PageTocContext {
   items?: PageOutlineItem[]
   title?: string
+  toggleClosedIconSvg: string
+  toggleOpenIconSvg: string
+  headerCollapseIconSvg: string
+  headerRestoreIconSvg: string
 }
 
 interface PageTocItemContext extends PageOutlineItem {
@@ -23,10 +28,14 @@ const pageTocTemplate = html`<nav class="page-toc" aria-label="On this page">
     aria-expanded="false"
   >
     <span class="page-toc__mobile-toggle-icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24" focusable="false">
-        <path d="M7 7l10 10"></path>
-        <path d="M17 7L7 17"></path>
-      </svg>
+      <span
+        class="page-toc__mobile-toggle-icon-closed"
+        r-html="toggleClosedIconSvg"
+      ></span>
+      <span
+        class="page-toc__mobile-toggle-icon-open"
+        r-html="toggleOpenIconSvg"
+      ></span>
     </span>
     <span class="page-toc__mobile-toggle-label">on this page</span>
   </button>
@@ -35,32 +44,16 @@ const pageTocTemplate = html`<nav class="page-toc" aria-label="On this page">
     <button
       class="page-toc__restore-toggle"
       type="button"
-      title="Restore table of contents"
-      aria-label="Restore table of contents"
-      data-page-toc-restore
-    >
-      <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-        <path d="M8 6h10"></path>
-        <path d="M8 12h10"></path>
-        <path d="M8 18h10"></path>
-        <path d="M4 9l3-3"></path>
-        <path d="M4 15l3 3"></path>
-      </svg>
-    </button>
-    <button
-      class="page-toc__collapse-toggle"
-      type="button"
       title="Collapse table of contents"
       aria-label="Collapse table of contents"
-      data-page-toc-collapse
+      data-page-toc-restore
     >
-      <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-        <path d="M8 6h10"></path>
-        <path d="M8 12h10"></path>
-        <path d="M8 18h10"></path>
-        <path d="M4 6l3 3"></path>
-        <path d="M4 18l3-3"></path>
-      </svg>
+      <span class="page-toc__header-toggle-icon page-toc__header-toggle-icon--collapse">
+        <span r-html="headerCollapseIconSvg"></span>
+      </span>
+      <span class="page-toc__header-toggle-icon page-toc__header-toggle-icon--restore">
+        <span r-html="headerRestoreIconSvg"></span>
+      </span>
     </button>
   </div>
   <ul class="page-toc__list" r-if="items.length > 0">
@@ -118,6 +111,10 @@ function createPageTocComponent() {
       return {
         title: resolveTitle(head.props),
         items: resolveItems(head.props, context),
+        toggleClosedIconSvg: getSvgIcon('tocToggleClosed'),
+        toggleOpenIconSvg: getSvgIcon('tocToggleOpen'),
+        headerCollapseIconSvg: getSvgIcon('tocPanelCollapse'),
+        headerRestoreIconSvg: getSvgIcon('tocPanelRestore'),
       }
     },
   })

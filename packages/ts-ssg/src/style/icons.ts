@@ -8,6 +8,10 @@ export type SvgIconName =
   | 'code'
   | 'rocket'
   | 'building'
+  | 'tocToggleClosed'
+  | 'tocToggleOpen'
+  | 'tocPanelCollapse'
+  | 'tocPanelRestore'
 
 const SVG_ICONS: Record<SvgIconName, string> = {
   check:
@@ -27,6 +31,14 @@ const SVG_ICONS: Record<SvgIconName, string> = {
     '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4c3 0 6 3 6 6-2 0-4 .7-5.5 2.2L11 16l-3-3 3.8-3.5A7.7 7.7 0 0 1 14 4Z"/><path d="M7 14l3 3M6 18c1.2 0 2.3-.5 3.1-1.3L10 16l-1.3-.9A4.4 4.4 0 0 0 6 18Z"/></svg>',
   building:
     '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21h16M7 21V6l5-3 5 3v15M10 10h.01M14 10h.01M10 14h.01M14 14h.01"/></svg>',
+  tocToggleClosed:
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5v14"/><path d="M8 7h12"/><path d="M8 12h12"/><path d="M8 17h8"/><circle cx="5" cy="7" r=".7"/><circle cx="5" cy="12" r=".7"/><circle cx="5" cy="17" r=".7"/></svg>',
+  tocToggleOpen:
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h13a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H4"/><path d="m12 9-3 3 3 3"/><path d="M4 3v18"/></svg>',
+  tocPanelCollapse:
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h10"/><path d="M8 12h10"/><path d="M8 18h10"/><path d="M4 6l3 3"/><path d="M4 18l3-3"/></svg>',
+  tocPanelRestore:
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h10"/><path d="M8 12h10"/><path d="M8 18h10"/><path d="M4 9l3-3"/><path d="M4 15l3 3"/></svg>',
 }
 
 export function getSvgIcon(
