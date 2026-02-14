@@ -14,7 +14,9 @@ declare global {
 
 const raw = (globalThis as Record<string, unknown>)[INPUT_KEY]
 delete (globalThis as Record<string, unknown>)[INPUT_KEY]
-const themes = Array.isArray(raw) ? raw.filter((x): x is string => typeof x === 'string') : []
+const themes = Array.isArray(raw)
+  ? raw.filter((x): x is string => typeof x === 'string')
+  : []
 
 if (themes.length > 0) {
   const storageKey = 'ts-ssg-theme'
@@ -61,7 +63,11 @@ if (themes.length > 0) {
     link.addEventListener('load', () => markReady(), { once: true })
   }
   function applyTheme(theme: string, deferDisable: boolean) {
-    if (!isValid(theme)) return { active: null as HTMLLinkElement | null, others: [] as HTMLLinkElement[] }
+    if (!isValid(theme))
+      return {
+        active: null as HTMLLinkElement | null,
+        others: [] as HTMLLinkElement[],
+      }
     const links = document.querySelectorAll<HTMLLinkElement>('link[data-theme]')
     let active: HTMLLinkElement | null = null
     const others: HTMLLinkElement[] = []

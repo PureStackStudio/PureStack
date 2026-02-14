@@ -74,14 +74,14 @@ if (
   function clone<T>(value: T): T {
     return JSON.parse(JSON.stringify(value))
   }
-  function safeParse(value: string) {
+  function safeParse(value: string): unknown {
     try {
       return JSON.parse(value)
     } catch {
       return null
     }
   }
-  function readStored() {
+  function readStored(): unknown {
     try {
       const raw = localStorage.getItem(storageKey)
       if (!raw) return null
@@ -120,9 +120,10 @@ if (
     }
     return state
   }
-  function normalizeCategoryState(source: Record<string, boolean>) {
+  function normalizeCategoryState(source: unknown) {
     const next = buildDefaultCategoryState()
     if (!source || typeof source !== 'object') return next
+    const sourceRecord = source as Record<string, unknown>
     for (let i = 0; i < categories.length; i += 1) {
       const id = categories[i]?.id
       if (!id) continue
@@ -130,18 +131,21 @@ if (
         next[id] = true
         continue
       }
-      next[id] = source[id] === true
+      next[id] = sourceRecord[id] === true
     }
     return next
   }
-  function normalizeStoredState(stored: any): ConsentState | null {
+  function normalizeStoredState(stored: unknown): ConsentState | null {
     if (!stored || typeof stored !== 'object') return null
-    if (String(stored.version || '') !== policyVersion) return null
+    const storedRecord = stored as Record<string, unknown>
+    if (String(storedRecord.version || '') !== policyVersion) return null
     return {
       version: policyVersion,
-      categories: normalizeCategoryState(stored.categories),
+      categories: normalizeCategoryState(storedRecord.categories),
       updatedAt:
-        typeof stored.updatedAt === 'number' ? stored.updatedAt : Date.now(),
+        typeof storedRecord.updatedAt === 'number'
+          ? storedRecord.updatedAt
+          : Date.now(),
     }
   }
   function isServiceAllowed(service: ConsentService, state: ConsentState) {
@@ -215,7 +219,9 @@ if (
     panel.hidden = false
     panel.setAttribute('aria-hidden', 'false')
     if (uiRoot) uiRoot.setAttribute('data-consent-panel-open', 'true')
-    const closeButton = panel.querySelector('[data-consent-action="close-panel"]')
+    const closeButton = panel.querySelector(
+      '[data-consent-action="close-panel"]',
+    )
     if (closeButton instanceof HTMLElement) closeButton.focus()
   }
   function setSettingsVisible() {
