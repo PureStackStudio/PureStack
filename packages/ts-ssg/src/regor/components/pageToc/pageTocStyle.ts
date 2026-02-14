@@ -438,6 +438,13 @@ export function registerPageTocLayoutStyles(
     .media('max-width: 1320px')
     .color(palette.text.accent)
     .background(palette.background.accentMuted)
+  styleBuilder
+    .select(
+      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open .page-toc__mobile-toggle',
+      theme,
+    )
+    .media('max-width: 1320px')
+    .display('none')
 
   styleBuilder
     .select(
@@ -629,7 +636,7 @@ export function registerPageTocLayoutStyles(
     )
     .position('absolute')
     .top('16px')
-    .right('92px')
+    .right('16px')
     .zIndex(3)
 
   styleBuilder
@@ -660,6 +667,12 @@ export function registerPageTocLayoutStyles(
     )
     .color(palette.text.accent)
     .background(palette.background.accentMuted)
+  styleBuilder
+    .select(
+      '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__mobile-toggle',
+      theme,
+    )
+    .display('none')
 
   styleBuilder
     .select('.template-doc--toc-collapsed .doc-toc .page-toc', theme)
