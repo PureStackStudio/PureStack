@@ -23,15 +23,16 @@ function init() {
 
   const tocShell = toc.closest<HTMLElement>('.doc-toc')
   const toggle = toc.querySelector<HTMLElement>('.page-toc__mobile-toggle')
+  const collapseToggle = toc.querySelector<HTMLElement>(
+    '[data-page-toc-collapse]',
+  )
   const toggleLabel = toc.querySelector<HTMLElement>(
     '.page-toc__mobile-toggle-label',
   )
   const media = window.matchMedia(MOBILE_BREAKPOINT_QUERY)
-  const forceCollapsed = document.body.classList.contains(
-    BODY_FORCE_COLLAPSED_CLASS,
-  )
-
-  const isCollapsible = () => forceCollapsed || media.matches
+  const isForceCollapsed = () =>
+    document.body.classList.contains(BODY_FORCE_COLLAPSED_CLASS)
+  const isCollapsible = () => isForceCollapsed() || media.matches
 
   const setTocOpen = (open: boolean) => {
     if (!tocShell || !toggle) return
@@ -39,6 +40,16 @@ function init() {
     toggle.setAttribute('aria-expanded', open ? 'true' : 'false')
     if (toggleLabel) toggleLabel.textContent = open ? OPEN_LABEL : CLOSED_LABEL
     document.body.classList.toggle(BODY_TOC_OPEN_CLASS, open)
+  }
+
+  if (collapseToggle) {
+    collapseToggle.addEventListener('click', (event) => {
+      event.preventDefault()
+      if (!isForceCollapsed()) {
+        document.body.classList.add(BODY_FORCE_COLLAPSED_CLASS)
+      }
+      setTocOpen(false)
+    })
   }
 
   if (toggle && tocShell) {

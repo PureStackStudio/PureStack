@@ -30,7 +30,24 @@ const pageTocTemplate = html`<nav class="page-toc" aria-label="On this page">
     </span>
     <span class="page-toc__mobile-toggle-label">on this page</span>
   </button>
-  <div class="page-toc__header">{{ title }}</div>
+  <div class="page-toc__header-row">
+    <div class="page-toc__header">{{ title }}</div>
+    <button
+      class="page-toc__collapse-toggle"
+      type="button"
+      title="Collapse table of contents"
+      aria-label="Collapse table of contents"
+      data-page-toc-collapse
+    >
+      <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <path d="M8 6h10"></path>
+        <path d="M8 12h10"></path>
+        <path d="M8 18h10"></path>
+        <path d="M4 6l3 3"></path>
+        <path d="M4 18l3-3"></path>
+      </svg>
+    </button>
+  </div>
   <ul class="page-toc__list" r-if="items.length > 0">
     <li r-for="item in items" class="page-toc__item page-toc__item--h2">
       <a class="page-toc__link" :href="item.href">{{ item.title }}</a>
