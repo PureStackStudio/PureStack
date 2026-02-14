@@ -37,11 +37,11 @@ export function registerTopBarShellStyles(
     .select('.topbar__logo', theme)
     .display('inline-flex')
     .justifySelf('start')
-    .set('min-width', '0')
+    .minWidth('0')
   styleBuilder
     .select('.topbar__logo .site-logo__link', theme)
     .padding('8px 12px')
-    .set('max-width', '100%')
+    .maxWidth('100%')
   styleBuilder
     .select('.topbar__logo .site-logo__glyph', theme)
     .width('30px')
@@ -56,7 +56,7 @@ export function registerTopBarShellStyles(
     .alignItems('center')
     .justifySelf('end')
     .gap('10px')
-    .set('min-width', '0')
+    .minWidth('0')
   styleBuilder
     .select('.topbar__icon', theme)
     .width('42px')
@@ -78,7 +78,7 @@ export function registerTopBarSearchStyles(theme: ThemeMode) {
     .display('block')
     .width('100%')
     .justifySelf('center')
-    .set('min-width', '0')
+    .minWidth('0')
   styleBuilder
     .select('.topbar__search .site-search', theme)
     .width('100%')

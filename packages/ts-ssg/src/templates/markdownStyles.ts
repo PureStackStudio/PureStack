@@ -327,7 +327,7 @@ function registerTableContainerStyles(
   styleBuilder
     .select('.doc-content :where(table)', theme)
     .width('max-content')
-    .set('min-width', '100%')
+    .minWidth('100%')
     .borderCollapse('separate')
     .borderSpacing('0')
     .tableLayout('auto')
@@ -344,17 +344,17 @@ function registerTableHeaderStyles(
     .background(palette.background.raised)
     .color(palette.text.strong)
     .fontSize('0.79rem')
-    .set('text-transform', 'uppercase')
-    .set('letter-spacing', '0.055em')
+    .textTransform('uppercase')
+    .letterSpacing('0.055em')
     .borderBottom(`1px solid ${palette.border.default}`)
 
   styleBuilder
     .select('.doc-content :where(thead th:first-child)', theme)
-    .set('border-top-left-radius', options.radii.md)
+    .borderTopLeftRadius(options.radii.md)
 
   styleBuilder
     .select('.doc-content :where(thead th:last-child)', theme)
-    .set('border-top-right-radius', options.radii.md)
+    .borderTopRightRadius(options.radii.md)
 }
 
 function registerTableBodyRowStyles(
@@ -380,11 +380,11 @@ function registerTableBodyRowStyles(
 
   styleBuilder
     .select('.doc-content :where(tbody tr:last-child td:first-child)', theme)
-    .set('border-bottom-left-radius', options.radii.md)
+    .borderBottomLeftRadius(options.radii.md)
 
   styleBuilder
     .select('.doc-content :where(tbody tr:last-child td:last-child)', theme)
-    .set('border-bottom-right-radius', options.radii.md)
+    .borderBottomRightRadius(options.radii.md)
 }
 
 function registerTableCellStyles(theme: ThemeMode, palette: ThemePalette) {
@@ -401,7 +401,7 @@ function registerTableCellStyles(theme: ThemeMode, palette: ThemePalette) {
     .select('.doc-content :where(th, td)', theme)
     .padding('11px 14px')
     .textAlign('left')
-    .set('vertical-align', 'top')
+    .verticalAlign('top')
     .borderBottom(`1px solid ${palette.border.subtle}`)
 }
 

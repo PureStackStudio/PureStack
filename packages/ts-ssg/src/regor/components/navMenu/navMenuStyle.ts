@@ -119,9 +119,9 @@ export function registerNavShellStyles(
     .display('block')
     .fill('none')
     .stroke('currentColor')
-    .set('stroke-width', '1.9')
-    .set('stroke-linecap', 'round')
-    .set('stroke-linejoin', 'round')
+    .strokeWidth('1.9')
+    .strokeLinecap('round')
+    .strokeLinejoin('round')
 
   styleBuilder
     .select(
@@ -129,10 +129,10 @@ export function registerNavShellStyles(
       theme,
     )
     .media('min-width: 1024px')
-    .set('overflow', 'visible')
-    .set('transform-origin', 'left center')
+    .overflow('visible')
+    .transformOrigin('left center')
     .transform('translateX(0)')
-    .set('will-change', 'transform')
+    .willChange('transform')
     .zIndex(30)
   styleBuilder
     .select(
@@ -251,18 +251,18 @@ export function registerNavShellStyles(
     .position('absolute')
     .alignItems('center')
     .justifyContent('center')
-    .set('writing-mode', 'vertical-rl')
-    .set('text-orientation', 'mixed')
+    .writingMode('vertical-rl')
+    .textOrientation('mixed')
     .width('26px')
     .height('118px')
     .fontSize('0.70rem')
     .fontWeight('700')
-    .set('letter-spacing', '0.12em')
-    .set('text-transform', 'uppercase')
-    .set('user-select', 'none')
+    .letterSpacing('0.12em')
+    .textTransform('uppercase')
+    .userSelect('none')
     .border(`1px solid ${palette.border.default}`)
-    .set('border-left', 'none')
-    .set('border-radius', `0 ${options.radii.md} ${options.radii.md} 0`)
+    .borderLeft('none')
+    .borderRadius(`0 ${options.radii.md} ${options.radii.md} 0`)
   styleBuilder
     .select(
       '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar.doc-sidebar--open .nav__panel-toggle',

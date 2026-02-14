@@ -165,7 +165,7 @@ export function applyPricingPlanIconStyles(
     .justifyContent('center')
     .borderRadius('12px')
     .background(palette.icon.accent.gradient)
-    .set('background-color', palette.icon.accent.background)
+    .backgroundColor(palette.icon.accent.background)
     .border(`1px solid ${palette.icon.accent.ring}`)
     .color(palette.icon.accent.color)
     .boxShadow(palette.effect.accentShadow)
@@ -178,9 +178,9 @@ export function applyPricingPlanIconStyles(
     .display('block')
     .stroke('currentColor')
     .fill('none')
-    .set('stroke-linecap', 'round')
-    .set('stroke-linejoin', 'round')
-    .set('stroke-width', '2.2')
+    .strokeLinecap('round')
+    .strokeLinejoin('round')
+    .strokeWidth('2.2')
 }
 
 export function applyPricingPlanTitleStyles(
@@ -231,7 +231,7 @@ export function applyPricingPlanPriceStyles(
     .display('flex')
     .gap('10px')
     .alignItems('baseline')
-    .set('min-height', '38px')
+    .minHeight('38px')
 
   styleBuilder
     .select('.pricing-plan__amount', theme)
@@ -308,12 +308,12 @@ export function applyPricingFeatureStyles(
     .padding('0')
     .margin('0')
     .display('block')
-    .set('column-gap', '18px')
-    .set('column-count', '1')
+    .columnGap('18px')
+    .columnCount('1')
 
   styleBuilder
     .select('.pricing-feature', theme)
-    .set('break-inside', 'avoid')
+    .breakInside('avoid')
     .display('grid')
     .gridTemplateColumns('18px minmax(0, 1fr)')
     .gap('8px')
@@ -332,7 +332,7 @@ export function applyPricingFeatureStyles(
     .justifyContent('center')
     .borderRadius('7px')
     .background(palette.icon.neutral.gradient)
-    .set('background-color', palette.icon.neutral.background)
+    .backgroundColor(palette.icon.neutral.background)
     .border(`1px solid ${palette.icon.neutral.ring}`)
     .color(palette.icon.neutral.color)
     .boxShadow(palette.effect.interactiveShadow)
@@ -345,9 +345,9 @@ export function applyPricingFeatureStyles(
     .display('block')
     .stroke('currentColor')
     .fill('none')
-    .set('stroke-linecap', 'round')
-    .set('stroke-linejoin', 'round')
-    .set('stroke-width', '2.2')
+    .strokeLinecap('round')
+    .strokeLinejoin('round')
+    .strokeWidth('2.2')
 
   styleBuilder.select('.pricing-feature__text', theme).display('block')
 }

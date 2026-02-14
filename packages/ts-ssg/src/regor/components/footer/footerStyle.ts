@@ -523,9 +523,9 @@ export function applyFooterBottomSocialStyles(
     .display('block')
     .stroke('currentColor')
     .fill('none')
-    .set('stroke-linecap', 'round')
-    .set('stroke-linejoin', 'round')
-    .set('stroke-width', '2')
+    .strokeLinecap('round')
+    .strokeLinejoin('round')
+    .strokeWidth('2')
 }
 
 export function applyFooterToneStyles(theme: ThemeMode, palette: ThemePalette) {

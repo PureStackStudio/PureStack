@@ -73,7 +73,7 @@ export function applyAlertIconStyles(
     .alignItems('center')
     .justifyContent('center')
     .background(palette.icon.neutral.gradient)
-    .set('background-color', palette.icon.neutral.background)
+    .backgroundColor(palette.icon.neutral.background)
     .border(`1px solid ${palette.icon.neutral.ring}`)
     .color(palette.icon.neutral.color)
     .boxShadow(palette.effect.interactiveShadow)
@@ -89,9 +89,9 @@ export function applyAlertIconStyles(
     .display('block')
     .stroke('currentColor')
     .fill('none')
-    .set('stroke-linecap', 'round')
-    .set('stroke-linejoin', 'round')
-    .set('stroke-width', '2.2')
+    .strokeLinecap('round')
+    .strokeLinejoin('round')
+    .strokeWidth('2.2')
 }
 
 export function applyAlertHeaderStyles(
@@ -365,7 +365,7 @@ export function applyAlertFeatureToneStyles(
     .color(palette.text.accent)
   styleBuilder
     .select('.alert--feature .alert__icon', theme)
-    .set('background-color', palette.icon.accent.background)
+    .backgroundColor(palette.icon.accent.background)
     .background(palette.icon.accent.gradient)
     .borderColor(palette.icon.accent.ring)
     .color(palette.icon.accent.color)

@@ -11933,4 +11933,16 @@ export class Style extends BaseStyle<Style> {
     this.set('appearance', value)
     return this
   }
+  accentColor(value: CSSProps['accentColor']) {
+    this.set('accent-color', value)
+    return this
+  }
+  breakInside(value: CSSProps['webkitBreakInside']) {
+    this.set('break-inside', value)
+    return this
+  }
+  lineClamp(value: string) {
+    this.set('line-clamp', value)
+    return this
+  }
 }

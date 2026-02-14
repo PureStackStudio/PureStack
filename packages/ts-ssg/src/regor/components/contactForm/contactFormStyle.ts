@@ -72,11 +72,11 @@ function registerContactFormFieldStyles(
     .fontSize('0.92rem')
     .lineHeight('1.45')
     .boxSizing('border-box')
-    .set('appearance', 'none')
+    .appearance('none')
   styleBuilder
     .select('.contact-form__textarea', theme)
-    .set('resize', 'vertical')
-    .set('min-height', '132px')
+    .resize('vertical')
+    .minHeight('132px')
   styleBuilder
     .select(
       '.contact-form__input::placeholder, .contact-form__textarea::placeholder',

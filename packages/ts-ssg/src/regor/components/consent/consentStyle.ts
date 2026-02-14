@@ -141,7 +141,7 @@ function registerConsentFormStyles(
     .select('.consent__checkbox', theme)
     .width('16px')
     .height('16px')
-    .set('accent-color', palette.action.accent.background)
+    .accentColor(palette.action.accent.background)
   styleBuilder
     .select('.consent__item-label', theme)
     .fontSize('14px')

@@ -57,9 +57,9 @@ function registerSearchBoxShellIconStyles(
     .display('block')
     .fill('none')
     .stroke('currentColor')
-    .set('stroke-width', '2')
-    .set('stroke-linecap', 'round')
-    .set('stroke-linejoin', 'round')
+    .strokeWidth('2')
+    .strokeLinecap('round')
+    .strokeLinejoin('round')
 }
 
 function registerSearchBoxShellAccessibilityStyles(theme: ThemeMode) {
@@ -71,8 +71,8 @@ function registerSearchBoxShellAccessibilityStyles(theme: ThemeMode) {
     .padding('0')
     .margin('-1px')
     .overflow('hidden')
-    .set('clip', 'rect(0, 0, 0, 0)')
-    .set('white-space', 'nowrap')
+    .clip('rect(0, 0, 0, 0)')
+    .whiteSpace('nowrap')
     .border('0')
 }
 
@@ -95,7 +95,7 @@ function registerSearchBoxShellInputStyles(
     .boxSizing('border-box')
     .boxShadow(palette.effect.interactiveShadow)
     .transition('border-color 160ms ease, box-shadow 160ms ease')
-    .set('appearance', 'none')
+    .appearance('none')
 
   styleBuilder
     .select('.site-search__input::placeholder', theme)
@@ -215,7 +215,7 @@ function registerSearchBoxResultContentStyles(
     .lineHeight('1.35')
     .letterSpacing('-0.01em')
     .color(palette.text.strong)
-    .set('word-break', 'break-word')
+    .wordBreak('break-word')
 
   styleBuilder
     .select('.site-search__results .site-search__excerpt', theme)
@@ -224,10 +224,10 @@ function registerSearchBoxResultContentStyles(
     .fontSize('0.9rem')
     .lineHeight('1.5')
     .color(palette.text.subtle)
-    .set('word-break', 'break-word')
-    .set('display', '-webkit-box')
-    .set('line-clamp', '3')
-    .set('-webkit-box-orient', 'vertical')
+    .wordBreak('break-word')
+    .display('-webkit-box')
+    .lineClamp('3')
+    .webkitBoxOrient('vertical')
     .overflow('hidden')
 
   styleBuilder

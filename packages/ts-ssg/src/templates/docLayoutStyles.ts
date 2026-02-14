@@ -150,7 +150,7 @@ function registerDocLayoutResponsiveStyles(
   styleBuilder
     .select('.template-doc', theme)
     .media('max-width: 1023px')
-    .set('overflow-x', 'hidden')
+    .overflowX('hidden')
   styleBuilder
     .select('.template-doc--nav-drawer .doc-sidebar', theme)
     .media('max-width: 1023px')

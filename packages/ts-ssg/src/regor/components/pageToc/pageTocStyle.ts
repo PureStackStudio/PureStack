@@ -99,9 +99,9 @@ export function registerPageTocShellStyles(
     .display('block')
     .fill('none')
     .stroke('currentColor')
-    .set('stroke-width', '1.9')
-    .set('stroke-linecap', 'round')
-    .set('stroke-linejoin', 'round')
+    .strokeWidth('1.9')
+    .strokeLinecap('round')
+    .strokeLinejoin('round')
   styleBuilder
     .select('.page-toc__list', theme)
     .listStyle('none')
@@ -279,7 +279,7 @@ export function registerPageTocLayoutStyles(
     .transform('translateX(0)')
     .overflowY('auto')
     .overflowX('hidden')
-    .set('-webkit-overflow-scrolling', 'touch')
+    .webkitOverflowScrolling('touch')
 
   styleBuilder
     .select(
@@ -290,7 +290,7 @@ export function registerPageTocLayoutStyles(
     .width('26px')
     .background('transparent')
     .boxShadow('none')
-    .set('pointer-events', 'none')
+    .pointerEvents('none')
   styleBuilder
     .select(
       '.template-doc:not(.template-doc--toc-collapsed) .doc-toc:not(.doc-toc--open)',
@@ -319,8 +319,8 @@ export function registerPageTocLayoutStyles(
     .right('auto')
     .top('85%')
     .transform('translateY(-50%) rotate(180deg)')
-    .set('writing-mode', 'vertical-rl')
-    .set('text-orientation', 'mixed')
+    .writingMode('vertical-rl')
+    .textOrientation('mixed')
     .width('26px')
     .height('120px')
     .display('flex')
@@ -328,17 +328,17 @@ export function registerPageTocLayoutStyles(
     .justifyContent('center')
     .fontSize('0.70rem')
     .fontWeight('700')
-    .set('letter-spacing', '0.12em')
-    .set('text-transform', 'uppercase')
+    .letterSpacing('0.12em')
+    .textTransform('uppercase')
     .color(palette.text.subtle)
     .background(palette.background.raised)
     .border(`1px solid ${palette.border.default}`)
-    .set('border-left', 'none')
-    .set('border-radius', `0 ${options.radii.md} ${options.radii.md} 0`)
+    .borderLeft('none')
+    .borderRadius(`0 ${options.radii.md} ${options.radii.md} 0`)
     .boxShadow('none')
-    .set('user-select', 'none')
+    .userSelect('none')
     .cursor('pointer')
-    .set('pointer-events', 'auto')
+    .pointerEvents('auto')
     .zIndex(2)
 
   styleBuilder
@@ -377,7 +377,7 @@ export function registerPageTocLayoutStyles(
     .right('16px')
     .top('16px')
     .transform('none')
-    .set('writing-mode', 'horizontal-tb')
+    .writingMode('horizontal-tb')
     .width('auto')
     .height('auto')
     .padding('6px')
@@ -385,9 +385,9 @@ export function registerPageTocLayoutStyles(
     .alignItems('center')
     .justifyContent('center')
     .gap('3px')
-    .set('letter-spacing', '0.08em')
+    .letterSpacing('0.08em')
     .border(`1px solid ${palette.border.default}`)
-    .set('border-radius', options.radii.md)
+    .borderRadius(options.radii.md)
 
   styleBuilder
     .select(
@@ -415,7 +415,7 @@ export function registerPageTocLayoutStyles(
     .overflow('visible')
     .padding('0')
     .borderRadius('0')
-    .set('-webkit-overflow-scrolling', 'touch')
+    .webkitOverflowScrolling('touch')
 
   styleBuilder
     .select(
@@ -504,7 +504,7 @@ export function registerPageTocLayoutStyles(
     .transform('translateX(0)')
     .overflowY('auto')
     .overflowX('hidden')
-    .set('-webkit-overflow-scrolling', 'touch')
+    .webkitOverflowScrolling('touch')
 
   styleBuilder
     .select('.template-doc--toc-collapsed.doc-toc-open', theme)
@@ -516,7 +516,7 @@ export function registerPageTocLayoutStyles(
     .width('26px')
     .background('transparent')
     .boxShadow('none')
-    .set('pointer-events', 'none')
+    .pointerEvents('none')
   styleBuilder
     .select('.template-doc--toc-collapsed .doc-toc:not(.doc-toc--open)', theme)
     .media('max-width: 600px')
@@ -530,8 +530,8 @@ export function registerPageTocLayoutStyles(
     .right('auto')
     .top('50%')
     .transform('translateY(-50%) rotate(180deg)')
-    .set('writing-mode', 'vertical-rl')
-    .set('text-orientation', 'mixed')
+    .writingMode('vertical-rl')
+    .textOrientation('mixed')
     .width('26px')
     .height('120px')
     .display('flex')
@@ -539,17 +539,17 @@ export function registerPageTocLayoutStyles(
     .justifyContent('center')
     .fontSize('0.70rem')
     .fontWeight('700')
-    .set('letter-spacing', '0.12em')
-    .set('text-transform', 'uppercase')
+    .letterSpacing('0.12em')
+    .textTransform('uppercase')
     .color(palette.text.subtle)
     .background(palette.background.raised)
     .border(`1px solid ${palette.border.default}`)
-    .set('border-left', 'none')
-    .set('border-radius', `0 ${options.radii.md} ${options.radii.md} 0`)
+    .borderLeft('none')
+    .borderRadius(`0 ${options.radii.md} ${options.radii.md} 0`)
     .boxShadow('none')
-    .set('user-select', 'none')
+    .userSelect('none')
     .cursor('pointer')
-    .set('pointer-events', 'auto')
+    .pointerEvents('auto')
     .zIndex(2)
 
   styleBuilder
@@ -589,7 +589,7 @@ export function registerPageTocLayoutStyles(
     .right('16px')
     .top('16px')
     .transform('none')
-    .set('writing-mode', 'horizontal-tb')
+    .writingMode('horizontal-tb')
     .width('auto')
     .height('auto')
     .padding('6px')
@@ -597,9 +597,9 @@ export function registerPageTocLayoutStyles(
     .alignItems('center')
     .justifyContent('center')
     .gap('3px')
-    .set('letter-spacing', '0.08em')
+    .letterSpacing('0.08em')
     .border(`1px solid ${palette.border.default}`)
-    .set('border-radius', options.radii.md)
+    .borderRadius(options.radii.md)
 
   styleBuilder
     .select(
@@ -621,7 +621,7 @@ export function registerPageTocLayoutStyles(
     .overflow('visible')
     .padding('0')
     .borderRadius('0')
-    .set('-webkit-overflow-scrolling', 'touch')
+    .webkitOverflowScrolling('touch')
 
   styleBuilder
     .select(
