@@ -124,6 +124,15 @@ function init() {
       }
     })
 
+    document.addEventListener('click', (event) => {
+      if (!isCollapsible()) return
+      if (!tocShell.classList.contains(TOC_OPEN_CLASS)) return
+      const target = event.target
+      if (!(target instanceof Node)) return
+      if (tocShell.contains(target)) return
+      setTocOpen(false)
+    })
+
     if (typeof media.addEventListener === 'function') {
       media.addEventListener('change', () => {
         if (!isCollapsible()) setTocOpen(false)

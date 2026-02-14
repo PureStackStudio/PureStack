@@ -80,15 +80,6 @@ const navMenuTemplate = html`<nav
       <span class="nav__restore-toggle-label">navigation</span>
     </button>
     <button
-      class="nav__close-button"
-      type="button"
-      title="Close navigation panel"
-      aria-label="Close navigation panel"
-      data-nav-menu-toggle
-    >
-      Close
-    </button>
-    <button
       class="nav__collapse-toggle"
       type="button"
       title="Collapse navigation"

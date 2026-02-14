@@ -123,6 +123,16 @@ function init() {
     if (!sidebar?.classList.contains(NAV_OPEN_CLASS)) return
     setPanelOpen(false)
   })
+
+  document.addEventListener('click', (event) => {
+    if (!supportsDesktopCollapse()) return
+    if (!document.body.classList.contains(NAV_COLLAPSED_CLASS)) return
+    if (!sidebar?.classList.contains(NAV_OPEN_CLASS)) return
+    const target = event.target
+    if (!(target instanceof Node)) return
+    if (sidebar.contains(target)) return
+    setPanelOpen(false)
+  })
 }
 
 ready(init)

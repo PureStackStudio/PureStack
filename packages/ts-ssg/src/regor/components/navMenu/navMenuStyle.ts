@@ -65,31 +65,6 @@ export function registerNavShellStyles(
     .select('.nav__restore-toggle-label', theme)
     .display('inline-block')
   styleBuilder
-    .select('.nav__close-button', theme)
-    .display('none')
-    .alignItems('center')
-    .justifyContent('center')
-    .height('30px')
-    .padding('0 10px')
-    .border(`1px solid ${palette.border.default}`)
-    .borderRadius(options.radii.md)
-    .background(palette.background.raised)
-    .color(palette.text.subtle)
-    .fontSize('0.74rem')
-    .fontWeight('700')
-    .letterSpacing('0.06em')
-    .textTransform('uppercase')
-    .cursor('pointer')
-    .transition('background 160ms ease, color 160ms ease')
-  styleBuilder
-    .select('.nav__close-button:hover', theme)
-    .background(palette.background.accentMuted)
-    .color(palette.text.accent)
-  styleBuilder
-    .select('.nav__close-button:focus-visible', theme)
-    .outline(`2px solid ${palette.border.focus}`)
-    .outlineOffset('2px')
-  styleBuilder
     .select('.nav__restore-toggle:hover', theme)
     .background(palette.background.accentMuted)
     .color(palette.text.accent)
@@ -173,8 +148,8 @@ export function registerNavShellStyles(
     )
     .media('min-width: 1024px')
     .width('260px')
-    .background(palette.background.canvas)
-    .boxShadow(options.shadows.strong)
+    .background('transparent')
+    .boxShadow('none')
     .transform('translateX(0)')
   styleBuilder
     .select(
@@ -278,20 +253,9 @@ export function registerNavShellStyles(
     )
     .media('min-width: 1024px')
     .display('none')
-  styleBuilder
-    .select(
-      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar.doc-sidebar--open .nav__close-button',
-      theme,
-    )
-    .media('min-width: 1024px')
-    .display('inline-flex')
 
   styleBuilder
     .select('.nav__restore-toggle', theme)
-    .media('max-width: 1023px')
-    .display('none')
-  styleBuilder
-    .select('.nav__close-button', theme)
     .media('max-width: 1023px')
     .display('none')
   styleBuilder
@@ -300,9 +264,6 @@ export function registerNavShellStyles(
     .display('none')
   styleBuilder
     .select('.template-doc--nav-drawer .nav__restore-toggle', theme)
-    .display('none')
-  styleBuilder
-    .select('.template-doc--nav-drawer .nav__close-button', theme)
     .display('none')
   styleBuilder
     .select('.template-doc--nav-drawer .nav__collapse-toggle', theme)
