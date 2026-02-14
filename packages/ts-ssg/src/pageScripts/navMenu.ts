@@ -2,7 +2,7 @@ const NAV_COLLAPSED_CLASS = 'template-doc--nav-collapsed'
 const NAV_COLLAPSED_STORAGE_KEY = 'ts-ssg:nav-collapsed'
 const NAV_OPEN_CLASS = 'doc-sidebar--open'
 const DESKTOP_QUERY = '(min-width: 1024px)'
-const EDGE_OPEN_THRESHOLD_PX = 8
+const EDGE_OPEN_THRESHOLD_PX = 26
 
 function ready(fn: () => void) {
   if (document.readyState === 'loading') {
