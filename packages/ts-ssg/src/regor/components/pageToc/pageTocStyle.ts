@@ -119,7 +119,7 @@ export function registerPageTocShellStyles(
     .fontWeight('600')
     .color(palette.text.subtle)
 
-  styleBuilder.select('.page-toc__edge-toggle', theme).display('none')
+  styleBuilder.select('.page-toc__panel-toggle', theme).display('none')
   styleBuilder
     .select('.page-toc__restore-toggle', theme)
     .media('max-width: 1320px')
@@ -308,7 +308,7 @@ export function registerPageTocLayoutStyles(
 
   styleBuilder
     .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .page-toc__edge-toggle',
+      '.template-doc:not(.template-doc--toc-collapsed) .page-toc__panel-toggle',
       theme,
     )
     .media('max-width: 1320px')
@@ -341,7 +341,7 @@ export function registerPageTocLayoutStyles(
 
   styleBuilder
     .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc:not(.doc-toc--open) .page-toc > :not(.page-toc__edge-toggle)',
+      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc:not(.doc-toc--open) .page-toc > :not(.page-toc__panel-toggle)',
       theme,
     )
     .media('max-width: 1320px')
@@ -358,7 +358,7 @@ export function registerPageTocLayoutStyles(
 
   styleBuilder
     .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .page-toc__edge-toggle:focus-visible',
+      '.template-doc:not(.template-doc--toc-collapsed) .page-toc__panel-toggle:focus-visible',
       theme,
     )
     .media('max-width: 1320px')
@@ -367,7 +367,7 @@ export function registerPageTocLayoutStyles(
 
   styleBuilder
     .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open .page-toc__edge-toggle',
+      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open .page-toc__panel-toggle',
       theme,
     )
     .media('max-width: 1320px')
@@ -389,7 +389,7 @@ export function registerPageTocLayoutStyles(
 
   styleBuilder
     .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open .page-toc__edge-toggle:hover',
+      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open .page-toc__panel-toggle:hover',
       theme,
     )
     .media('max-width: 1320px')
@@ -397,7 +397,7 @@ export function registerPageTocLayoutStyles(
     .background(palette.background.accentMuted)
   styleBuilder
     .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open .page-toc__edge-toggle',
+      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open .page-toc__panel-toggle',
       theme,
     )
     .media('max-width: 1320px')
@@ -522,7 +522,7 @@ export function registerPageTocLayoutStyles(
     .right('0')
 
   styleBuilder
-    .select('.template-doc--toc-collapsed .page-toc__edge-toggle', theme)
+    .select('.template-doc--toc-collapsed .page-toc__panel-toggle', theme)
     .position('absolute')
     .left('0')
     .right('auto')
@@ -552,7 +552,7 @@ export function registerPageTocLayoutStyles(
 
   styleBuilder
     .select(
-      '.template-doc--toc-collapsed .doc-toc:not(.doc-toc--open) .page-toc > :not(.page-toc__edge-toggle)',
+      '.template-doc--toc-collapsed .doc-toc:not(.doc-toc--open) .page-toc > :not(.page-toc__panel-toggle)',
       theme,
     )
     .display('none')
@@ -567,7 +567,7 @@ export function registerPageTocLayoutStyles(
 
   styleBuilder
     .select(
-      '.template-doc--toc-collapsed .page-toc__edge-toggle:focus-visible',
+      '.template-doc--toc-collapsed .page-toc__panel-toggle:focus-visible',
       theme,
     )
     .outline(`2px solid ${palette.border.focus}`)
@@ -575,7 +575,7 @@ export function registerPageTocLayoutStyles(
 
   styleBuilder
     .select(
-      '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__edge-toggle',
+      '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__panel-toggle',
       theme,
     )
     .left('auto')
@@ -606,14 +606,14 @@ export function registerPageTocLayoutStyles(
 
   styleBuilder
     .select(
-      '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__edge-toggle:hover',
+      '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__panel-toggle:hover',
       theme,
     )
     .color(palette.text.accent)
     .background(palette.background.accentMuted)
   styleBuilder
     .select(
-      '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__edge-toggle',
+      '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__panel-toggle',
       theme,
     )
     .display('none')
