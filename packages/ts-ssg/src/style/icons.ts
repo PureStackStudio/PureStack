@@ -10,6 +10,10 @@ export type SvgIconName =
   | 'building'
   | 'collapse'
   | 'open'
+  | 'slideLeft'
+  | 'slideRight'
+  | 'pin'
+  | 'unpin'
 
 const SVG_ICONS: Record<SvgIconName, string> = {
   check:
@@ -32,6 +36,13 @@ const SVG_ICONS: Record<SvgIconName, string> = {
   collapse:
     '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4" width="17" height="16" rx="2.5"/><path d="M14 4v16"/><path d="m8.5 9.5 3 2.5-3 2.5"/></svg>',
   open: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4" width="17" height="16" rx="2.5"/><path d="M14 4v16"/><path d="m11.5 9.5-3 2.5 3 2.5"/></svg>',
+  slideLeft:
+    '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
+  slideRight:
+    '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>',
+  pin: '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 9.5V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v7M9 15H5l2-2M15 15h4l-2-2M9 22v-3M15 22v-3M9 15h6"/></svg>',
+  unpin:
+    '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 9.5V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v7M9 22v-3M15 22v-3M3 3l18 18M9 15H5l2-2M15 15h4l-1.3-1.3"/></svg>',
 }
 
 export function getSvgIcon(

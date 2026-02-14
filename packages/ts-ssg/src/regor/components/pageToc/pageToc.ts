@@ -99,8 +99,8 @@ function createPageTocComponent() {
       return {
         title: resolveTitle(head.props),
         items: resolveItems(head.props, context),
-        headerCollapseIconSvg: getSvgIcon('collapse'),
-        headerRestoreIconSvg: getSvgIcon('open'),
+        headerCollapseIconSvg: getSvgIcon('unpin'),
+        headerRestoreIconSvg: getSvgIcon('pin'),
       }
     },
   })

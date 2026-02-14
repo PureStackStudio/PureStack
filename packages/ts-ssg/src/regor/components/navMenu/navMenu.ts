@@ -197,8 +197,8 @@ function createNavMenuComponent() {
           head.props.items ?? resolveNavItems(context),
           resolveCurrentPath(context),
         ),
-        collapseIconSvg: getSvgIcon('collapse'),
-        openIconSvg: getSvgIcon('open'),
+        collapseIconSvg: getSvgIcon('unpin'),
+        openIconSvg: getSvgIcon('pin'),
       }
     },
   })
