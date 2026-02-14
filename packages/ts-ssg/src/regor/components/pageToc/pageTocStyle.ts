@@ -24,7 +24,6 @@ export function registerPageTocShellStyles(
     .select('.page-toc', theme)
     .display('grid')
     .alignContent('start')
-    .position('relative')
     .gap('12px')
     .padding('16px')
     .borderRadius(options.radii.lg)
@@ -272,8 +271,8 @@ export function registerPageTocLayoutStyles(
     .zIndex(140)
     .overflow('hidden')
     .transform('translateX(calc(100% - 26px))')
-    .background(palette.background.canvas)
-    .boxShadow(options.shadows.strong)
+    .background('transparent')
+    .boxShadow('none')
 
   styleBuilder
     .select(
@@ -453,7 +452,7 @@ export function registerPageTocLayoutStyles(
       theme,
     )
     .media('max-width: 1320px')
-    .height('100%')
+    .height('auto')
     .overflow('visible')
     .padding('0')
     .borderRadius('0')
@@ -466,6 +465,7 @@ export function registerPageTocLayoutStyles(
     )
     .media('max-width: 1320px')
     .padding('30px 16px 14px')
+    .borderRadius(options.radii.lg)
     .gap('2px')
     .overflow('auto')
 
@@ -518,8 +518,8 @@ export function registerPageTocLayoutStyles(
     .zIndex(140)
     .overflow('hidden')
     .transform('translateX(calc(100% - 26px))')
-    .background(palette.background.canvas)
-    .boxShadow(options.shadows.strong)
+    .background('transparent')
+    .boxShadow('none')
 
   styleBuilder
     .select(
@@ -678,7 +678,7 @@ export function registerPageTocLayoutStyles(
 
   styleBuilder
     .select('.template-doc--toc-collapsed .doc-toc .page-toc', theme)
-    .height('100%')
+    .height('auto')
     .overflow('visible')
     .padding('0')
     .borderRadius('0')
@@ -690,6 +690,7 @@ export function registerPageTocLayoutStyles(
       theme,
     )
     .padding('30px 16px 14px')
+    .borderRadius(options.radii.lg)
     .gap('2px')
     .overflow('auto')
 

@@ -2,5 +2,5 @@
 /** biome-ignore-all lint/suspicious/noTemplateCurlyInString: 'auto-generated' */
 
 export function buildEmbeddedNavTransitionReadyScript() {
-  return '"use strict";(()=>{function t(e){if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",e,{once:!0});return}e()}t(()=>{let e=document.getElementById("doc-nav-toggle");e&&"checked"in e&&(e.checked=!1),globalThis.requestAnimationFrame(()=>{document.body&&document.body.classList.add("template-doc--nav-ready")})});})();'
+  return "\"use strict\";(()=>{function t(e){if(document.readyState===\"loading\"){document.addEventListener(\"DOMContentLoaded\",e,{once:!0});return}e()}t(()=>{let e=document.getElementById(\"doc-nav-toggle\");e&&\"checked\"in e&&(e.checked=!1),globalThis.requestAnimationFrame(()=>{document.body&&document.body.classList.add(\"template-doc--nav-ready\")})});})();"
 }

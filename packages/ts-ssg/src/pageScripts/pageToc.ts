@@ -7,6 +7,7 @@ const TOC_OPEN_CLASS = 'doc-toc--open'
 const BODY_TOC_OPEN_CLASS = 'doc-toc-open'
 const BODY_FORCE_COLLAPSED_CLASS = 'template-doc--toc-collapsed'
 const TOC_COLLAPSED_STORAGE_KEY = 'ts-ssg:toc-collapsed'
+const EDGE_OPEN_THRESHOLD_PX = 8
 const ACTIVE_SCROLL_OFFSET = 110
 const FLASH_DURATION_MS = 1400
 
@@ -131,6 +132,13 @@ function init() {
       if (!(target instanceof Node)) return
       if (tocShell.contains(target)) return
       setTocOpen(false)
+    })
+
+    document.addEventListener('mousemove', (event) => {
+      if (!isCollapsible()) return
+      if (tocShell.classList.contains(TOC_OPEN_CLASS)) return
+      if (event.clientX < window.innerWidth - EDGE_OPEN_THRESHOLD_PX) return
+      setTocOpen(true)
     })
 
     if (typeof media.addEventListener === 'function') {
