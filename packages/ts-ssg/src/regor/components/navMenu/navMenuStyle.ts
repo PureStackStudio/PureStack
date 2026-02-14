@@ -64,6 +64,7 @@ export function registerNavShellStyles(
   styleBuilder
     .select('.nav__restore-toggle-label', theme)
     .display('inline-block')
+  styleBuilder.select('.nav__restore-toggle-icon', theme).display('none')
   styleBuilder
     .select('.nav__restore-toggle:hover', theme)
     .background(palette.background.accentMuted)

@@ -341,70 +341,6 @@ export function registerPageTocLayoutStyles(
 
   styleBuilder
     .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .page-toc__mobile-toggle-icon',
-      theme,
-    )
-    .media('max-width: 1320px')
-    .display('none')
-
-  styleBuilder
-    .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .page-toc__mobile-toggle-icon svg',
-      theme,
-    )
-    .media('max-width: 1320px')
-    .width('14px')
-    .height('14px')
-    .display('block')
-    .fill('none')
-    .stroke('currentColor')
-    .set('stroke-width', '2.1')
-    .set('stroke-linecap', 'round')
-  styleBuilder
-    .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .page-toc__mobile-toggle-icon-open',
-      theme,
-    )
-    .media('max-width: 1320px')
-    .display('none')
-  styleBuilder
-    .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .page-toc__mobile-toggle[aria-expanded="true"] .page-toc__mobile-toggle-icon-open',
-      theme,
-    )
-    .media('max-width: 1320px')
-    .display('inline-flex')
-  styleBuilder
-    .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .page-toc__mobile-toggle[aria-expanded="true"] .page-toc__mobile-toggle-icon-closed',
-      theme,
-    )
-    .media('max-width: 1320px')
-    .display('none')
-  styleBuilder
-    .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .page-toc__mobile-toggle-icon-open',
-      theme,
-    )
-    .media('max-width: 1320px')
-    .display('none')
-  styleBuilder
-    .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open .page-toc__mobile-toggle-icon-open',
-      theme,
-    )
-    .media('max-width: 1320px')
-    .display('block')
-  styleBuilder
-    .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open .page-toc__mobile-toggle-icon-closed',
-      theme,
-    )
-    .media('max-width: 1320px')
-    .display('none')
-
-  styleBuilder
-    .select(
       '.template-doc:not(.template-doc--toc-collapsed) .doc-toc:not(.doc-toc--open) .page-toc > :not(.page-toc__mobile-toggle)',
       theme,
     )
@@ -450,14 +386,6 @@ export function registerPageTocLayoutStyles(
     .set('letter-spacing', '0.08em')
     .border(`1px solid ${palette.border.default}`)
     .set('border-radius', options.radii.md)
-
-  styleBuilder
-    .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open .page-toc__mobile-toggle-icon',
-      theme,
-    )
-    .media('max-width: 1320px')
-    .display('inline-flex')
 
   styleBuilder
     .select(
@@ -623,10 +551,6 @@ export function registerPageTocLayoutStyles(
     .zIndex(2)
 
   styleBuilder
-    .select('.template-doc--toc-collapsed .page-toc__mobile-toggle-icon', theme)
-    .display('none')
-
-  styleBuilder
     .select(
       '.template-doc--toc-collapsed .doc-toc:not(.doc-toc--open) .page-toc > :not(.page-toc__mobile-toggle)',
       theme,
@@ -679,63 +603,6 @@ export function registerPageTocLayoutStyles(
     .top('16px')
     .right('16px')
     .zIndex(3)
-
-  styleBuilder
-    .select(
-      '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__mobile-toggle-icon',
-      theme,
-    )
-    .display('inline-flex')
-    .alignItems('center')
-
-  styleBuilder
-    .select(
-      '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__mobile-toggle-icon svg',
-      theme,
-    )
-    .width('14px')
-    .height('14px')
-    .display('block')
-    .fill('none')
-    .stroke('currentColor')
-    .set('stroke-width', '2.1')
-    .set('stroke-linecap', 'round')
-  styleBuilder
-    .select(
-      '.template-doc--toc-collapsed .page-toc__mobile-toggle-icon-open',
-      theme,
-    )
-    .display('none')
-  styleBuilder
-    .select(
-      '.template-doc--toc-collapsed .page-toc__mobile-toggle[aria-expanded="true"] .page-toc__mobile-toggle-icon-open',
-      theme,
-    )
-    .display('inline-flex')
-  styleBuilder
-    .select(
-      '.template-doc--toc-collapsed .page-toc__mobile-toggle[aria-expanded="true"] .page-toc__mobile-toggle-icon-closed',
-      theme,
-    )
-    .display('none')
-  styleBuilder
-    .select(
-      '.template-doc--toc-collapsed .page-toc__mobile-toggle-icon-open',
-      theme,
-    )
-    .display('none')
-  styleBuilder
-    .select(
-      '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__mobile-toggle-icon-open',
-      theme,
-    )
-    .display('block')
-  styleBuilder
-    .select(
-      '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__mobile-toggle-icon-closed',
-      theme,
-    )
-    .display('none')
 
   styleBuilder
     .select(

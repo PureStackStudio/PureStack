@@ -1,12 +1,15 @@
 import { createComponent, html } from 'regor'
 
 import type { NavItem } from '../../../navigation/navigation'
+import { getSvgIcon } from '../../../style/icons'
 import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 import type { TsSsgContext } from '../../ts-ssg-context'
 import { registerNavStyles } from './navMenuStyle'
 
 interface NavMenuContext {
   items?: NavItem[]
+  collapseIconSvg: string
+  openIconSvg: string
 }
 
 interface NavListContext {
@@ -77,6 +80,9 @@ const navMenuTemplate = html`<nav
       aria-label="Toggle navigation panel"
       data-nav-menu-toggle
     >
+      <span class="nav__restore-toggle-icon" aria-hidden="true">
+        <span r-html="openIconSvg"></span>
+      </span>
       <span class="nav__restore-toggle-label">navigation</span>
     </button>
     <button
@@ -86,13 +92,9 @@ const navMenuTemplate = html`<nav
       aria-label="Collapse navigation"
       data-nav-menu-collapse
     >
-      <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-        <path d="M8 6h10"></path>
-        <path d="M8 12h10"></path>
-        <path d="M8 18h10"></path>
-        <path d="M4 6l3 3"></path>
-        <path d="M4 18l3-3"></path>
-      </svg>
+      <span class="nav__collapse-toggle-icon" aria-hidden="true">
+        <span r-html="collapseIconSvg"></span>
+      </span>
     </button>
   </div>
   <nav-list :items="items"></nav-list>
@@ -186,6 +188,8 @@ function createNavMenuComponent() {
           head.props.items ?? resolveNavItems(context),
           resolveCurrentPath(context),
         ),
+        collapseIconSvg: getSvgIcon('collapse'),
+        openIconSvg: getSvgIcon('open'),
       }
     },
   })

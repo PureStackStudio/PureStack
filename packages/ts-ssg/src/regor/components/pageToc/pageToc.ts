@@ -9,8 +9,6 @@ import { registerPageTocStyles } from './pageTocStyle'
 interface PageTocContext {
   items?: PageOutlineItem[]
   title?: string
-  toggleClosedIconSvg: string
-  toggleOpenIconSvg: string
   headerCollapseIconSvg: string
   headerRestoreIconSvg: string
 }
@@ -27,16 +25,6 @@ const pageTocTemplate = html`<nav class="page-toc" aria-label="On this page">
     aria-controls="doc-toc"
     aria-expanded="false"
   >
-    <span class="page-toc__mobile-toggle-icon" aria-hidden="true">
-      <span
-        class="page-toc__mobile-toggle-icon-closed"
-        r-html="toggleClosedIconSvg"
-      ></span>
-      <span
-        class="page-toc__mobile-toggle-icon-open"
-        r-html="toggleOpenIconSvg"
-      ></span>
-    </span>
     <span class="page-toc__mobile-toggle-label">on this page</span>
   </button>
   <div class="page-toc__header-row">
@@ -111,10 +99,8 @@ function createPageTocComponent() {
       return {
         title: resolveTitle(head.props),
         items: resolveItems(head.props, context),
-        toggleClosedIconSvg: getSvgIcon('tocToggleClosed'),
-        toggleOpenIconSvg: getSvgIcon('tocToggleOpen'),
-        headerCollapseIconSvg: getSvgIcon('tocPanelCollapse'),
-        headerRestoreIconSvg: getSvgIcon('tocPanelRestore'),
+        headerCollapseIconSvg: getSvgIcon('collapse'),
+        headerRestoreIconSvg: getSvgIcon('open'),
       }
     },
   })
