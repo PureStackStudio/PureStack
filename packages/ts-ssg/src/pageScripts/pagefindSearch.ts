@@ -2,6 +2,35 @@ const PAGEFIND_ROOT = '[data-pagefind-search]'
 const MIN_QUERY_LENGTH = 2
 const RESULT_LIMIT = 8
 
+type PagefindRecord = {
+  url?: string
+  excerpt?: string
+  meta?: {
+    title?: string
+  }
+}
+
+type PagefindSearchResult = {
+  data: () => Promise<PagefindRecord>
+}
+
+type PagefindSearchResponse = {
+  results?: PagefindSearchResult[]
+}
+
+type PagefindApi = {
+  search: (query: string) => Promise<PagefindSearchResponse>
+}
+
+function isPagefindApi(value: unknown): value is PagefindApi {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'search' in value &&
+    typeof (value as { search?: unknown }).search === 'function'
+  )
+}
+
 function ready(fn: () => void) {
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', fn, { once: true })
@@ -38,7 +67,10 @@ function decodeHtml(value: string) {
 }
 
 function stripHtml(value: string) {
-  return value.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+  return value
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
 }
 
 function extractTerms(query: string) {
@@ -83,7 +115,11 @@ function renderMessage(
 
 type SearchRecord = { url: string; title: string; excerpt: string }
 
-function renderResults(container: HTMLElement, results: SearchRecord[], query: string) {
+function renderResults(
+  container: HTMLElement,
+  results: SearchRecord[],
+  query: string,
+) {
   if (!results.length) {
     renderMessage(container, 'No results found.', 'site-search__message--empty')
     return
@@ -91,8 +127,7 @@ function renderResults(container: HTMLElement, results: SearchRecord[], query: s
   const terms = extractTerms(query)
   let html = '<ul class="site-search__list">'
   for (const result of results) {
-    const titleRaw =
-      result.title && result.title.trim() ? result.title.trim() : 'Untitled'
+    const titleRaw = result.title?.trim() ? result.title.trim() : 'Untitled'
     const title = decodeHtml(titleRaw)
     const excerptRaw = result.excerpt ? stripHtml(result.excerpt) : ''
     const excerpt = decodeHtml(excerptRaw)
@@ -106,21 +141,37 @@ function renderResults(container: HTMLElement, results: SearchRecord[], query: s
 async function setupSearch(root: HTMLElement) {
   const input = root.querySelector<HTMLInputElement>('[data-pagefind-input]')
   const output = root.querySelector<HTMLElement>('[data-pagefind-results]')
-  if (!(input instanceof HTMLInputElement) || !(output instanceof HTMLElement)) {
+  if (
+    !(input instanceof HTMLInputElement) ||
+    !(output instanceof HTMLElement)
+  ) {
     return
   }
   const searchInput = input
   const searchOutput = output
 
-  let loadPromise: Promise<any> | undefined
-  function loadPagefind() {
-    if (!loadPromise) {
-      const dynamicImport = new Function(
-        "return import('/pagefind/pagefind.js')",
-      ) as () => Promise<any>
-      loadPromise = dynamicImport().then((mod) => mod.default || mod)
-    }
-    return loadPromise
+  let loadPromise: Promise<PagefindApi> | undefined
+  function loadPagefind(): Promise<PagefindApi> {
+    const promise =
+      loadPromise ??
+      (() => {
+        const dynamicImport = new Function(
+          "return import('/pagefind/pagefind.js')",
+        ) as () => Promise<{
+          default?: PagefindApi
+          search?: PagefindApi['search']
+        }>
+        const next = dynamicImport().then((mod) => {
+          const candidate = mod.default ?? mod
+          if (!isPagefindApi(candidate)) {
+            throw new Error('Invalid pagefind module')
+          }
+          return candidate
+        })
+        loadPromise = next
+        return next
+      })()
+    return promise
   }
 
   let debounceTimer: ReturnType<typeof globalThis.setTimeout> | 0 = 0
@@ -139,7 +190,7 @@ async function setupSearch(root: HTMLElement) {
     }
 
     const currentRequest = ++requestId
-    let pagefind: any
+    let pagefind: PagefindApi
     try {
       pagefind = await loadPagefind()
     } catch {
@@ -151,7 +202,7 @@ async function setupSearch(root: HTMLElement) {
       return
     }
 
-    let response: any
+    let response: PagefindSearchResponse
     try {
       response = await pagefind.search(query)
     } catch {
@@ -173,10 +224,10 @@ async function setupSearch(root: HTMLElement) {
       return
     }
 
-    const records = await Promise.all(matches.map((match: any) => match.data()))
+    const records = await Promise.all(matches.map((match) => match.data()))
     if (currentRequest !== requestId) return
 
-    const mapped = records.map((record: any) => {
+    const mapped = records.map((record): SearchRecord => {
       const meta = record?.meta ?? {}
       return {
         url: record?.url || '/',
