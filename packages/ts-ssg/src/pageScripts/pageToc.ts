@@ -48,7 +48,10 @@ function init() {
     })
 
     window.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && tocShell.classList.contains(TOC_OPEN_CLASS)) {
+      if (
+        event.key === 'Escape' &&
+        tocShell.classList.contains(TOC_OPEN_CLASS)
+      ) {
         setTocOpen(false)
       }
     })
@@ -188,8 +191,8 @@ function init() {
         ticking = false
       })
     }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll)
+    globalThis.window.addEventListener('scroll', onScroll, { passive: true })
+    globalThis.window.addEventListener('resize', onScroll)
     pickByScroll()
   }
 
