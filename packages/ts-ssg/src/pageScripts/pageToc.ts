@@ -10,6 +10,7 @@ const TOC_COLLAPSED_STORAGE_KEY = 'ts-ssg:toc-collapsed'
 const EDGE_OPEN_THRESHOLD_PX = 8
 const ACTIVE_SCROLL_OFFSET = 110
 const FLASH_DURATION_MS = 1400
+const MANUAL_ACTIVE_LOCK_MS = 900
 
 function ready(fn: () => void) {
   if (document.readyState === 'loading') {
@@ -79,6 +80,9 @@ function init() {
       Boolean(open && tocShell && isCollapsible()),
     )
   }
+
+  const shouldHighlightTargets = () =>
+    !isCollapsible() || Boolean(tocShell?.classList.contains(TOC_OPEN_CLASS))
 
   const storedCollapsed = readStoredCollapsedPreference()
   if (storedCollapsed === true) {
@@ -160,6 +164,12 @@ function init() {
 
   for (const link of links) {
     link.addEventListener('click', () => {
+      const id = (link.getAttribute('href') ?? '').slice(1)
+      if (id) {
+        setActive(id)
+        flashTarget(id)
+        lockManualActive()
+      }
       if (isCollapsible()) setTocOpen(false)
     })
   }
@@ -180,8 +190,15 @@ function init() {
   if (headings.length === 0) return
 
   let activeId = ''
-  let activeHeading: HTMLElement | null = null
+  let highlightedHeading: HTMLElement | null = null
   let highlightTimer: number | null = null
+  let manualActiveUntil = 0
+
+  const lockManualActive = () => {
+    manualActiveUntil = Date.now() + MANUAL_ACTIVE_LOCK_MS
+  }
+
+  const shouldHoldManualActive = () => Date.now() < manualActiveUntil
 
   const setActive = (id: string) => {
     if (!id || id === activeId) return
@@ -198,31 +215,30 @@ function init() {
       next.setAttribute('aria-current', 'location')
       activeId = id
     }
-
-    if (activeHeading) {
-      activeHeading.classList.remove(ACTIVE_TARGET_CLASS)
-      activeHeading = null
-    }
-
-    const heading = document.getElementById(id)
-    if (heading) {
-      heading.classList.add(ACTIVE_TARGET_CLASS)
-      activeHeading = heading
-    }
   }
 
   const flashTarget = (id: string) => {
+    if (!shouldHighlightTargets()) return
     const heading = document.getElementById(id)
     if (!heading) return
+    if (highlightedHeading && highlightedHeading !== heading) {
+      highlightedHeading.classList.remove(ACTIVE_TARGET_CLASS)
+      highlightedHeading = null
+    }
     heading.classList.add(ACTIVE_TARGET_CLASS)
+    highlightedHeading = heading
     if (highlightTimer) window.clearTimeout(highlightTimer)
     highlightTimer = window.setTimeout(() => {
-      heading.classList.remove(ACTIVE_TARGET_CLASS)
+      if (highlightedHeading === heading) {
+        heading.classList.remove(ACTIVE_TARGET_CLASS)
+        highlightedHeading = null
+      }
       highlightTimer = null
     }, FLASH_DURATION_MS)
   }
 
   const pickByScroll = () => {
+    if (shouldHoldManualActive()) return
     let current = ''
     for (const heading of headings) {
       const rect = heading.getBoundingClientRect()
@@ -237,7 +253,6 @@ function init() {
     const id = (window.location.hash ?? '').slice(1)
     if (!id) return
     setActive(id)
-    flashTarget(id)
   }
 
   window.addEventListener('hashchange', handleHash)
@@ -252,6 +267,8 @@ function init() {
           if (entry.isIntersecting) visible.add(id)
           else visible.delete(id)
         }
+
+        if (shouldHoldManualActive()) return
 
         if (visible.size > 0) {
           for (let i = headings.length - 1; i >= 0; i -= 1) {
