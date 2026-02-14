@@ -777,7 +777,7 @@ __metadata:
     logpot: "npm:^1.0.7"
     mdast-util-to-hast: "npm:^13.2.1"
     pagefind: "npm:^1.4.0"
-    regor: "npm:^1.2.2"
+    regor: "npm:^1.2.3"
     rehype-raw: "npm:^7.0.0"
     rehype-stringify: "npm:^10.0.1"
     remark-gfm: "npm:^4.0.1"
@@ -785,7 +785,7 @@ __metadata:
     remark-parse: "npm:^11.0.0"
     remark-rehype: "npm:^11.1.2"
     shiki: "npm:^3.22.0"
-    tm-themes: "npm:^1.11.1"
+    tm-themes: "npm:^1.11.2"
     unified: "npm:^11.0.5"
   languageName: unknown
   linkType: soft
@@ -3475,10 +3475,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regor@npm:^1.2.2":
-  version: 1.2.2
-  resolution: "regor@npm:1.2.2"
-  checksum: 10c0/44e65207677477a2ff8119efedb8f9351dd5b1bf1a85d28427a8c7585493c17ae66472739b977e83f7403bfffc2f9c8f455c0278c03775b8854d2c985ede2f18
+"regor@npm:^1.2.3":
+  version: 1.2.3
+  resolution: "regor@npm:1.2.3"
+  checksum: 10c0/a4656388e19d64a6e58476e5771c459f1edab63e554c6528da161a7df62b662f62fee529a242e824d5e3e61c9c4b95ce952834faf416fe36617679be15723edb
   languageName: node
   linkType: hard
 
@@ -4024,10 +4024,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tm-themes@npm:^1.11.1":
-  version: 1.11.1
-  resolution: "tm-themes@npm:1.11.1"
-  checksum: 10c0/65e95f21e66723a67d62c04b697a22bac94eaccf61c6f75a0eb26816237ec68d5e507c770802253cccb2d1e0957a7f05f379e190edb32e346d19809dade3eaed
+"tm-themes@npm:^1.11.2":
+  version: 1.11.2
+  resolution: "tm-themes@npm:1.11.2"
+  checksum: 10c0/aee4e84770d7b2831e9e9210376907a1838e205679c17a8b9dea44a46a04caf06c38ba5d31aa0ea04ee1fe876049091617a20e1a0eb7c594cff2b631d9683ef3
   languageName: node
   linkType: hard
 

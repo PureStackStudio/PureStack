@@ -34,6 +34,29 @@ describe('HeroBanner rendering', () => {
     expect(html).toContain('CalcCore')
     expect(html).toContain('Deterministic calculations for SaaS backends.')
     expect(html).toContain('Get Started')
+    expect(html).toContain('href="/getting-started"')
     expect(html).toContain('logo.svg')
+  })
+
+  it('preserves external action links', () => {
+    const cleanup = ensureDomGlobals()
+    const components = createHeroComponents() as Record<
+      string,
+      Component<unknown>
+    >
+    const html = renderApp(
+      `<HeroBanner>
+        <template name="actions">
+          <HeroAction href="https://example.com/docs" target="_blank">
+            Docs
+          </HeroAction>
+        </template>
+      </HeroBanner>`,
+      { components },
+    )
+    cleanup()
+
+    expect(html).toContain('href="https://example.com/docs"')
+    expect(html).toContain('rel="noopener noreferrer"')
   })
 })

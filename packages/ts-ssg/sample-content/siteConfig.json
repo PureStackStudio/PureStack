@@ -54,6 +54,7 @@
   },
   "analytics": {
     "ga4": {
+      "enabled": false,
       "measurementId": "G-TEST1234"
     }
   },

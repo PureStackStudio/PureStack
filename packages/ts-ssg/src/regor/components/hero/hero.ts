@@ -1,5 +1,6 @@
 import { createComponent, html } from 'regor'
 
+import { urlNormalizer } from '../../../util/urlNormalizer'
 import { registerHeroStyles } from './heroStyle'
 
 const heroTemplate = html`<section class="hero">
@@ -88,13 +89,15 @@ function resolveHeroActionContext(props: HeroActionProps): HeroActionContext {
     normalizedVariant === 'primary'
       ? 'hero__action--primary'
       : 'hero__action--minimal'
+  const href = urlNormalizer.normalizeHref(props.href)
   const rel =
     props.rel || (props.target === '_blank' ? 'noopener noreferrer' : '')
   return {
     ...props,
+    href,
     className,
     rel,
-    hasHref: Boolean(props.href),
+    hasHref: Boolean(href),
     hasIcon: Boolean(props.icon),
     hasTarget: Boolean(props.target),
     hasRel: Boolean(rel),

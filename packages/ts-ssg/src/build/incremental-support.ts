@@ -11,6 +11,7 @@ import {
   type MdxCodeLangs,
   type MdxCodeThemes,
 } from '../mdx/highlight'
+import { urlNormalizer } from '../util/urlNormalizer'
 import { resolveStaticOutPath } from './assets'
 import {
   type AssetManifestEntry,
@@ -97,11 +98,7 @@ export async function resolveMdxBuildOptions(
 }
 
 export function normalizeUrlPath(urlPath: string) {
-  if (!urlPath || urlPath === '/') return '/'
-  let normalized = urlPath.startsWith('/') ? urlPath : `/${urlPath}`
-  if (path.posix.extname(normalized)) return normalized
-  if (!normalized.endsWith('/')) normalized += '/'
-  return normalized
+  return urlNormalizer.normalizeUrlPath(urlPath)
 }
 
 export function toContentFile(
