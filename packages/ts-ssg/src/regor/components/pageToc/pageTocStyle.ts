@@ -299,6 +299,9 @@ export function registerPageTocLayoutStyles(
     )
     .media('max-width: 1320px')
     .transform('translateX(0)')
+    .overflowY('auto')
+    .overflowX('hidden')
+    .set('-webkit-overflow-scrolling', 'touch')
 
   styleBuilder
     .select(
@@ -460,7 +463,7 @@ export function registerPageTocLayoutStyles(
       theme,
     )
     .media('max-width: 1320px')
-    .height('auto')
+    .height('100%')
     .overflow('visible')
     .padding('0')
     .borderRadius('0')
@@ -472,10 +475,12 @@ export function registerPageTocLayoutStyles(
       theme,
     )
     .media('max-width: 1320px')
+    .height('auto')
+    .maxHeight('none')
     .padding('30px 16px 14px')
     .borderRadius(options.radii.lg)
     .gap('2px')
-    .overflow('auto')
+    .overflow('visible')
 
   styleBuilder
     .select(
@@ -549,6 +554,9 @@ export function registerPageTocLayoutStyles(
   styleBuilder
     .select('.template-doc--toc-collapsed .doc-toc.doc-toc--open', theme)
     .transform('translateX(0)')
+    .overflowY('auto')
+    .overflowX('hidden')
+    .set('-webkit-overflow-scrolling', 'touch')
 
   styleBuilder
     .select('.template-doc--toc-collapsed.doc-toc-open', theme)
@@ -691,7 +699,7 @@ export function registerPageTocLayoutStyles(
 
   styleBuilder
     .select('.template-doc--toc-collapsed .doc-toc .page-toc', theme)
-    .height('auto')
+    .height('100%')
     .overflow('visible')
     .padding('0')
     .borderRadius('0')
@@ -702,10 +710,12 @@ export function registerPageTocLayoutStyles(
       '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc',
       theme,
     )
+    .height('auto')
+    .maxHeight('none')
     .padding('30px 16px 14px')
     .borderRadius(options.radii.lg)
     .gap('2px')
-    .overflow('auto')
+    .overflow('visible')
 
   styleBuilder
     .select('.template-doc--toc-collapsed .doc-toc .page-toc__header', theme)
