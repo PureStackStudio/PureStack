@@ -8,6 +8,7 @@ import type { ThemeStylesheetLink } from '../style/themeAssets'
 import { themes } from '../style/themeOptions'
 import { buildCodeCopyScript } from '../templates/buildCodeCopyScript'
 import { buildConsentScript } from '../templates/buildConsentScript'
+import { buildNavTransitionReadyScript } from '../templates/buildNavTransitionReadyScript'
 import { buildPagefindSearchScript } from '../templates/buildPagefindSearchScript'
 import { buildPageTocScript } from '../templates/buildPageTocScript'
 import { buildThemeSwitchScript } from '../templates/buildThemeSwitchScript'
@@ -113,8 +114,7 @@ function appendConsentScript(
 }
 
 function appendNavTransitionReadyScript(head: ReturnType<typeof getHead>) {
-  const script =
-    "(function(){function ready(fn){if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',fn,{once:true});}else{fn();}}ready(function(){var navToggle=document.getElementById('doc-nav-toggle');if(navToggle&&'checked' in navToggle){navToggle.checked=false;}requestAnimationFrame(function(){if(document.body){document.body.classList.add('template-doc--nav-ready');}});});})();"
+  const script = buildNavTransitionReadyScript()
   head.push(h('script').raw(script))
 }
 
