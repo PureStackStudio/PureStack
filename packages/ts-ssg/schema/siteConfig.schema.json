@@ -358,6 +358,39 @@
         }
       }
     },
+    "analytics": {
+      "type": "object",
+      "description": "Analytics integrations.",
+      "additionalProperties": false,
+      "properties": {
+        "ga4": {
+          "type": "object",
+          "description": "Google Analytics 4 integration settings.",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Enables GA4. Defaults to true when measurementId is set.",
+              "default": false
+            },
+            "measurementId": {
+              "type": "string",
+              "description": "GA4 measurement id like G-XXXXXXXX."
+            },
+            "serviceId": {
+              "type": "string",
+              "description": "Consent service id used when consent manager is enabled.",
+              "default": "ga4"
+            },
+            "consentCategory": {
+              "type": "string",
+              "description": "Consent category id required before GA4 scripts load.",
+              "default": "analytics"
+            }
+          }
+        }
+      }
+    },
     "pagefind": {
       "type": "object",
       "description": "Pagefind indexing settings.",

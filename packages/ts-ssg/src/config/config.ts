@@ -26,6 +26,7 @@ export interface SiteConfig {
   theme: ThemeOptions
   sitemap: SitemapConfig
   consent: ConsentConfig
+  analytics: AnalyticsConfig
   pagefind: PagefindConfig
 }
 
@@ -106,6 +107,17 @@ export interface ConsentConfig {
   services: ConsentServiceConfig[]
 }
 
+export interface Ga4Config {
+  enabled: boolean
+  measurementId?: string
+  serviceId: string
+  consentCategory: string
+}
+
+export interface AnalyticsConfig {
+  ga4: Ga4Config
+}
+
 export interface PagefindConfig {
   excludePaths: string[]
 }
@@ -127,14 +139,22 @@ export type PartialConsentConfig = Partial<
   categories?: PartialConsentCategoryConfig[]
   services?: PartialConsentServiceConfig[]
 }
+export type PartialGa4Config = Partial<Ga4Config>
+export type PartialAnalyticsConfig = Partial<AnalyticsConfig> & {
+  ga4?: PartialGa4Config
+}
 
 export type PartialSiteConfig = Partial<
-  Omit<SiteConfig, 'theme' | 'sitemap' | 'logo' | 'consent' | 'pagefind'>
+  Omit<
+    SiteConfig,
+    'theme' | 'sitemap' | 'logo' | 'consent' | 'analytics' | 'pagefind'
+  >
 > & {
   logo?: PartialLogoConfig
   theme?: ThemeOptionsInput
   sitemap?: PartialSitemapConfig
   consent?: PartialConsentConfig
+  analytics?: PartialAnalyticsConfig
   pagefind?: Partial<PagefindConfig>
 }
 export type SiteConfigFile = Partial<
@@ -148,6 +168,7 @@ export type SiteConfigFile = Partial<
     | 'styleThemes'
     | 'navigation'
     | 'consent'
+    | 'analytics'
     | 'pagefind'
   >
 > & { theme?: ThemeOptionsInput; sitemap?: PartialSitemapConfig }
@@ -213,7 +234,15 @@ export function resolveSiteConfig(input: PartialSiteConfig = {}): SiteConfig {
   )
   const theme = themes.resolve(input.theme, fileConfig.theme)
   const sitemap = resolveSitemapConfig(input.sitemap, fileConfig.sitemap)
-  const consent = resolveConsentConfig(input.consent, fileConfig.consent)
+  const analytics = resolveAnalyticsConfig(
+    input.analytics,
+    fileConfig.analytics,
+  )
+  const consent = resolveConsentConfig(
+    input.consent,
+    fileConfig.consent,
+    analytics.ga4,
+  )
   const pagefind = resolvePagefindConfig(input.pagefind, fileConfig.pagefind)
   return {
     rootDir,
@@ -228,6 +257,7 @@ export function resolveSiteConfig(input: PartialSiteConfig = {}): SiteConfig {
     theme,
     sitemap,
     consent,
+    analytics,
     pagefind,
   }
 }
@@ -310,18 +340,23 @@ function resolveSitemapConfig(
 function resolveConsentConfig(
   input?: PartialConsentConfig,
   file?: PartialConsentConfig,
+  ga4?: Ga4Config,
 ): ConsentConfig {
+  const enabled = input?.enabled ?? file?.enabled ?? false
   const categories = resolveConsentCategories(
     input?.categories,
     file?.categories,
   )
-  const services = resolveConsentServices(
+  let services = resolveConsentServices(
     input?.services,
     file?.services,
     categories,
   )
+  if (enabled) {
+    services = appendGa4ConsentService(services, categories, ga4)
+  }
   return {
-    enabled: input?.enabled ?? file?.enabled ?? false,
+    enabled,
     storageKey: resolveString(
       input?.storageKey,
       file?.storageKey,
@@ -374,6 +409,55 @@ function resolveConsentConfig(
     categories,
     services,
   }
+}
+
+function resolveAnalyticsConfig(
+  input?: PartialAnalyticsConfig,
+  file?: PartialAnalyticsConfig,
+): AnalyticsConfig {
+  const ga4 = resolveGa4Config(input?.ga4, file?.ga4)
+  return { ga4 }
+}
+
+function resolveGa4Config(
+  input?: PartialGa4Config,
+  file?: PartialGa4Config,
+): Ga4Config {
+  const measurementId = resolveGa4MeasurementId(
+    input?.measurementId,
+    file?.measurementId,
+  )
+  const enabled = input?.enabled ?? file?.enabled ?? Boolean(measurementId)
+  if (enabled && !measurementId) {
+    throw new Error(
+      'analytics.ga4.enabled is true but analytics.ga4.measurementId is missing.',
+    )
+  }
+  return {
+    enabled,
+    measurementId,
+    serviceId: resolveString(input?.serviceId, file?.serviceId, 'ga4'),
+    consentCategory: resolveString(
+      input?.consentCategory,
+      file?.consentCategory,
+      'analytics',
+    ),
+  }
+}
+
+function resolveGa4MeasurementId(...values: Array<string | undefined>) {
+  for (const value of values) {
+    const raw = resolveOptionalString(value)
+    if (!raw) continue
+    const normalized = raw.toUpperCase()
+    if (!/^G-[A-Z0-9]+$/.test(normalized)) {
+      throw new Error(
+        `analytics.ga4.measurementId must look like "G-XXXXXXXX" but got "${raw}".`,
+      )
+    }
+    return normalized
+  }
+  return undefined
 }
 
 function resolvePagefindConfig(
@@ -459,6 +543,51 @@ function resolveConsentServices(
     seenServiceIds.add(id)
   }
   return services
+}
+
+function appendGa4ConsentService(
+  services: ConsentServiceConfig[],
+  categories: ConsentCategoryConfig[],
+  ga4?: Ga4Config,
+) {
+  if (!ga4?.enabled || !ga4.measurementId) return services
+  const hasService = services.some((entry) => entry.id === ga4.serviceId)
+  if (hasService) return services
+  const hasCategory = categories.some(
+    (entry) => entry.id === ga4.consentCategory,
+  )
+  if (!hasCategory) {
+    throw new Error(
+      `analytics.ga4.consentCategory "${ga4.consentCategory}" does not exist in consent.categories.`,
+    )
+  }
+  return [
+    ...services,
+    {
+      id: ga4.serviceId,
+      category: ga4.consentCategory,
+      label: 'Google Analytics 4',
+      scripts: buildGa4ConsentScripts(ga4.measurementId),
+    },
+  ]
+}
+
+function buildGa4ConsentScripts(measurementId: string): ConsentScriptConfig[] {
+  const measurementIdLiteral = JSON.stringify(measurementId)
+  return [
+    {
+      src: `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`,
+      async: true,
+    },
+    {
+      content: [
+        'window.dataLayer = window.dataLayer || [];',
+        'function gtag(){dataLayer.push(arguments);}',
+        "gtag('js', new Date());",
+        `gtag('config', ${measurementIdLiteral});`,
+      ].join(' '),
+    },
+  ]
 }
 
 function resolveConsentServiceScripts(

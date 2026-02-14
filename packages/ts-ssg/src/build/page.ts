@@ -196,6 +196,7 @@ async function renderPageShell(input: RenderPageShellInput): Promise<string> {
     pageInfo,
     siteTitle: context.config.siteTitle,
     consent: context.config.consent,
+    analytics: context.config.analytics,
   })
 }
 

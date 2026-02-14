@@ -107,6 +107,7 @@ Config comes from:
 - `theme`: palette/radii/spacing/typography/shadows.
 - `sitemap`: sitemap + robots settings.
 - `consent`: GDPR-style consent manager config for optional scripts.
+- `analytics`: analytics integrations (GA4 supported out of the box).
 - `pagefind`: search indexing options (for example excluded route prefixes).
 
 ## `siteConfig.json` Example
@@ -136,6 +137,11 @@ Config comes from:
       "disallow": ["/private/"],
       "additionalSitemaps": [],
       "customDirectives": []
+    }
+  },
+  "analytics": {
+    "ga4": {
+      "measurementId": "G-XXXXXXXX"
     }
   }
 }
@@ -401,6 +407,26 @@ Example:
   }
 }
 ```
+
+## GA4 Integration
+
+Configure GA4 directly in `siteConfig.json`:
+
+```json
+{
+  "analytics": {
+    "ga4": {
+      "measurementId": "G-XXXXXXXX"
+    }
+  }
+}
+```
+
+Behavior:
+
+- if consent is disabled, GA4 is injected directly in page head,
+- if consent is enabled, GA4 is automatically added as a consent-gated service,
+- defaults: `serviceId: "ga4"`, `consentCategory: "analytics"`.
 
 ## API Surface
 

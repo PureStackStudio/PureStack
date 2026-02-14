@@ -28,6 +28,7 @@ describe('renderPage consent integration', () => {
       },
       siteTitle: site.siteTitle,
       consent: site.consent,
+      analytics: site.analytics,
     })
     expect(html).not.toContain('window.tsSsgConsent')
   })
@@ -56,6 +57,7 @@ describe('renderPage consent integration', () => {
       },
       siteTitle: site.siteTitle,
       consent: site.consent,
+      analytics: site.analytics,
     })
     expect(html).toContain('window.tsSsgConsent')
     expect(html).toContain('ga4')
@@ -79,7 +81,63 @@ describe('renderPage consent integration', () => {
       },
       siteTitle: site.siteTitle,
       consent: site.consent,
+      analytics: site.analytics,
     })
     expect(html).toContain('window.tsSsgConsent')
+  })
+
+  it('injects ga4 directly when consent is disabled', async () => {
+    const site = resolveSiteConfig({
+      rootDir: process.cwd(),
+      consent: {
+        enabled: false,
+      },
+      analytics: {
+        ga4: {
+          measurementId: 'G-TEST1234',
+        },
+      },
+    })
+    const html = await renderPage({
+      bodyHtml: '<p>Hello</p>',
+      pageInfo: {
+        relPath: 'index.md',
+        urlPath: '/',
+        frontmatter: normalizeFrontmatter({}),
+      },
+      siteTitle: site.siteTitle,
+      consent: site.consent,
+      analytics: site.analytics,
+    })
+    expect(html).toContain('googletagmanager.com/gtag/js?id=G-TEST1234')
+    expect(html).toContain('gtag(\'config\', "G-TEST1234")')
+  })
+
+  it('does not inject direct ga4 script when consent is enabled', async () => {
+    const site = resolveSiteConfig({
+      rootDir: process.cwd(),
+      consent: {
+        enabled: true,
+      },
+      analytics: {
+        ga4: {
+          measurementId: 'G-TEST1234',
+        },
+      },
+    })
+    const html = await renderPage({
+      bodyHtml: '<p>Hello</p>',
+      pageInfo: {
+        relPath: 'index.md',
+        urlPath: '/',
+        frontmatter: normalizeFrontmatter({}),
+      },
+      siteTitle: site.siteTitle,
+      consent: site.consent,
+      analytics: site.analytics,
+    })
+    expect(html).not.toContain('googletagmanager.com/gtag/js?id=G-TEST1234')
+    expect(html).toContain('window.tsSsgConsent')
+    expect(html).toContain('G-TEST1234')
   })
 })

@@ -37,7 +37,7 @@
   },
   "consent": {
     "enabled": true,
-    "policyVersion": "2023-02-16",
+    "policyVersion": "2023-02-17",
     "categories": [
       {
         "id": "necessary",
@@ -46,10 +46,16 @@
       },
       {
         "id": "analytics",
-        "label": "Analytics"
+        "label": "Analytics",
+        "required": true
       }
     ],
     "services": []
+  },
+  "analytics": {
+    "ga4": {
+      "measurementId": "G-TEST1234"
+    }
   },
   "pagefind": {
     "excludePaths": ["/privacy/", "/imprint/", "/terms/"]

@@ -192,4 +192,58 @@ describe('resolveSiteConfig sitemap', () => {
       '/terms/',
     ])
   })
+
+  it('provides analytics defaults', () => {
+    const config = resolveSiteConfig({ rootDir: process.cwd() })
+    expect(config.analytics.ga4.enabled).toBe(false)
+    expect(config.analytics.ga4.measurementId).toBeUndefined()
+    expect(config.analytics.ga4.serviceId).toBe('ga4')
+    expect(config.analytics.ga4.consentCategory).toBe('analytics')
+  })
+
+  it('enables ga4 when measurement id is configured', () => {
+    const config = resolveSiteConfig({
+      rootDir: process.cwd(),
+      analytics: {
+        ga4: {
+          measurementId: 'g-test1234',
+        },
+      },
+    })
+    expect(config.analytics.ga4.enabled).toBe(true)
+    expect(config.analytics.ga4.measurementId).toBe('G-TEST1234')
+  })
+
+  it('auto-registers ga4 as a consent service when consent is enabled', () => {
+    const config = resolveSiteConfig({
+      rootDir: process.cwd(),
+      consent: {
+        enabled: true,
+      },
+      analytics: {
+        ga4: {
+          measurementId: 'G-TEST1234',
+        },
+      },
+    })
+    const ga4Service = config.consent.services.find(
+      (entry) => entry.id === 'ga4',
+    )
+    expect(ga4Service).toBeDefined()
+    expect(ga4Service?.category).toBe('analytics')
+    expect(ga4Service?.scripts).toHaveLength(2)
+  })
+
+  it('throws when ga4 is enabled without measurement id', () => {
+    expect(() =>
+      resolveSiteConfig({
+        rootDir: process.cwd(),
+        analytics: {
+          ga4: {
+            enabled: true,
+          },
+        },
+      }),
+    ).toThrowError(/measurementId/)
+  })
 })

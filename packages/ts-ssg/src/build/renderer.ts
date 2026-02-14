@@ -1,6 +1,6 @@
 import { type BasicHeadConfig, h } from '@purestack/ts-html'
 
-import type { ConsentConfig } from '../config/config'
+import type { AnalyticsConfig, ConsentConfig } from '../config/config'
 import { getHead } from '../config/head'
 import type { PageFrontmatter } from '../frontmatter/frontmatter'
 import type { PageNavigation } from '../navigation/navigation'
@@ -8,6 +8,7 @@ import type { ThemeStylesheetLink } from '../style/themeAssets'
 import { themes } from '../style/themeOptions'
 import { buildCodeCopyScript } from '../templates/buildCodeCopyScript'
 import { buildConsentScript } from '../templates/buildConsentScript'
+import { buildGa4Script } from '../templates/buildGa4Script'
 import { buildNavTransitionReadyScript } from '../templates/buildNavTransitionReadyScript'
 import { buildPagefindSearchScript } from '../templates/buildPagefindSearchScript'
 import { buildPageTocScript } from '../templates/buildPageTocScript'
@@ -28,6 +29,7 @@ export interface RenderPageInput {
   pageInfo: PageInfo
   siteTitle?: string
   consent?: ConsentConfig
+  analytics?: AnalyticsConfig
 }
 
 export async function renderPage(input: RenderPageInput): Promise<string> {
@@ -38,6 +40,7 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
   appendStyleLinkTags(head, styleLinks)
   appendThemeSwitchScript(head, themes)
   appendConsentScript(head, input.consent)
+  appendGa4Script(head, input.analytics, input.consent)
   appendNavTransitionReadyScript(head)
   appendCodeCopyScript(head)
   appendPagefindSearchScript(head)
@@ -111,6 +114,21 @@ function appendConsentScript(
 ) {
   if (!consent?.enabled) return
   head.push(h('script').raw(buildConsentScript(consent)))
+}
+
+function appendGa4Script(
+  head: ReturnType<typeof getHead>,
+  analytics: AnalyticsConfig | undefined,
+  consent: ConsentConfig | undefined,
+) {
+  const ga4 = analytics?.ga4
+  if (!ga4?.enabled || !ga4.measurementId) return
+  if (consent?.enabled) return
+  const script = buildGa4Script(ga4)
+  head.push(
+    h('script').attr({ async: 'true', src: script.src }),
+    h('script').raw(script.init),
+  )
 }
 
 function appendNavTransitionReadyScript(head: ReturnType<typeof getHead>) {

@@ -16,10 +16,12 @@ export {
   type MdxOptions,
 } from './build/site'
 export {
+  type AnalyticsConfig,
   type ConsentCategoryConfig,
   type ConsentConfig,
   type ConsentScriptConfig,
   type ConsentServiceConfig,
+  type Ga4Config,
   type PagefindConfig,
   type PartialSiteConfig as PartialConfig,
   resolveSiteConfig,
