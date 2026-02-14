@@ -32,6 +32,7 @@
     "test": "vitest",
     "package": "yarn workspaces foreach --no-private --all --parallel pack",
     "longest": "yarn tsx ./scripts/longest-functions.ts",
-    "format": "biome format --write ."
+    "format": "biome format --write .",
+    "pre-commit": "yarn embed && yarn lint && yarn build && yarn test run"
   }
 }

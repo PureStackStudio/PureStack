@@ -39,15 +39,17 @@ export function registerPageTocShellStyles(
     .alignItems('center')
     .justifyContent('space-between')
     .gap('8px')
+    .marginBottom('8px')
   styleBuilder
     .select('.page-toc__header', theme)
     .flex('1')
     .minWidth('0')
     .fontWeight('700')
-    .fontSize('0.95rem')
-    .letterSpacing('0.02em')
+    .fontSize('0.78rem')
+    .letterSpacing('0.08em')
     .textTransform('uppercase')
     .color(palette.text.subtle)
+    .opacity('0.5')
   styleBuilder
     .select('.page-toc__restore-toggle', theme)
     .display('inline-flex')
@@ -315,7 +317,7 @@ export function registerPageTocLayoutStyles(
     .position('absolute')
     .left('0')
     .right('auto')
-    .top('20%')
+    .top('85%')
     .transform('translateY(-50%) rotate(180deg)')
     .set('writing-mode', 'vertical-rl')
     .set('text-orientation', 'mixed')
@@ -551,6 +553,11 @@ export function registerPageTocLayoutStyles(
     .zIndex(2)
 
   styleBuilder
+    .select('.template-doc--toc-collapsed .page-toc__panel-toggle', theme)
+    .media('max-width: 1320px')
+    .top('85%')
+
+  styleBuilder
     .select(
       '.template-doc--toc-collapsed .doc-toc:not(.doc-toc--open) .page-toc > :not(.page-toc__panel-toggle)',
       theme,
@@ -593,16 +600,6 @@ export function registerPageTocLayoutStyles(
     .set('letter-spacing', '0.08em')
     .border(`1px solid ${palette.border.default}`)
     .set('border-radius', options.radii.md)
-
-  styleBuilder
-    .select(
-      '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__restore-toggle',
-      theme,
-    )
-    .position('absolute')
-    .top('16px')
-    .right('16px')
-    .zIndex(3)
 
   styleBuilder
     .select(

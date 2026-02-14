@@ -131,7 +131,7 @@ function init() {
     if (!sidebar?.classList.contains(NAV_OPEN_CLASS)) return
     const target = event.target
     if (!(target instanceof Node)) return
-    if (sidebar.contains(target)) return
+    if (menu.contains(target)) return
     setPanelOpen(false)
   })
 

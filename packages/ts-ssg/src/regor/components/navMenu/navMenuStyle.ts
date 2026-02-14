@@ -44,10 +44,11 @@ export function registerNavShellStyles(
   styleBuilder
     .select('.nav__header', theme)
     .fontWeight('700')
-    .fontSize('0.82rem')
+    .fontSize('0.78rem')
     .letterSpacing('0.08em')
     .textTransform('uppercase')
     .color(palette.text.subtle)
+    .opacity('0.5')
   styleBuilder
     .select('.nav__panel-toggle', theme)
     .display('none')
