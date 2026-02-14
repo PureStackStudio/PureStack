@@ -143,6 +143,34 @@ export function registerNavShellStyles(
     .zIndex(140)
   styleBuilder
     .select(
+      '.template-doc.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-shell',
+      theme,
+    )
+    .media('min-width: 1024px')
+    .gridTemplateColumns('minmax(0, 1fr)')
+  styleBuilder
+    .select(
+      '.template-doc.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-shell--toc',
+      theme,
+    )
+    .media('min-width: 1321px')
+    .gridTemplateColumns('minmax(0, 1fr) 240px')
+  styleBuilder
+    .select(
+      '.template-doc.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-shell--toc',
+      theme,
+    )
+    .media('max-width: 1320px')
+    .gridTemplateColumns('1fr')
+  styleBuilder
+    .select(
+      '.template-doc.template-doc--nav-collapsed.template-doc--toc-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-shell--toc',
+      theme,
+    )
+    .media('min-width: 1024px')
+    .gridTemplateColumns('1fr')
+  styleBuilder
+    .select(
       '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .nav__header',
       theme,
     )
