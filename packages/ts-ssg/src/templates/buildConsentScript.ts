@@ -35,6 +35,6 @@ export function buildConsentScript(config: ConsentConfig) {
     services: config.services,
   }
   const serialized = JSON.stringify(runtimeConfig)
-  const payload = `globalThis.__PURESTACK_CONSENT_CONFIG__=${serialized};`
+  const payload = `globalThis.__CONSENT_CONFIG__ =${serialized};`
   return `(function(){${payload}})();${buildEmbeddedConsentScript()}`
 }

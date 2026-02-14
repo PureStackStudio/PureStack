@@ -6,6 +6,7 @@ const ACTIVE_LINK_CLASS = 'page-toc__link--active'
 const TOC_OPEN_CLASS = 'doc-toc--open'
 const BODY_TOC_OPEN_CLASS = 'doc-toc-open'
 const BODY_FORCE_COLLAPSED_CLASS = 'template-doc--toc-collapsed'
+const TOC_COLLAPSED_STORAGE_KEY = 'ts-ssg:toc-collapsed'
 const ACTIVE_SCROLL_OFFSET = 110
 const FLASH_DURATION_MS = 1400
 
@@ -36,6 +37,21 @@ function init() {
     '.page-toc__mobile-toggle-label',
   )
   const media = window.matchMedia(MOBILE_BREAKPOINT_QUERY)
+  const readStoredCollapsedPreference = () => {
+    try {
+      const value = localStorage.getItem(TOC_COLLAPSED_STORAGE_KEY)
+      if (value === '1') return true
+      if (value === '0') return false
+      return null
+    } catch {
+      return null
+    }
+  }
+  const writeStoredCollapsedPreference = (collapsed: boolean) => {
+    try {
+      localStorage.setItem(TOC_COLLAPSED_STORAGE_KEY, collapsed ? '1' : '0')
+    } catch {}
+  }
   const isForceCollapsed = () =>
     document.body.classList.contains(BODY_FORCE_COLLAPSED_CLASS)
   const isCollapsible = () => isForceCollapsed() || media.matches
@@ -56,6 +72,13 @@ function init() {
     )
   }
 
+  const storedCollapsed = readStoredCollapsedPreference()
+  if (storedCollapsed === true) {
+    document.body.classList.add(BODY_FORCE_COLLAPSED_CLASS)
+  } else if (storedCollapsed === false) {
+    document.body.classList.remove(BODY_FORCE_COLLAPSED_CLASS)
+  }
+
   // Ensure body class always reflects current TOC state for consistent styling.
   setTocOpen(Boolean(tocShell?.classList.contains(TOC_OPEN_CLASS)))
 
@@ -65,6 +88,7 @@ function init() {
       if (!isForceCollapsed()) {
         document.body.classList.add(BODY_FORCE_COLLAPSED_CLASS)
       }
+      writeStoredCollapsedPreference(true)
       setTocOpen(false)
     })
   }
@@ -74,11 +98,13 @@ function init() {
       event.preventDefault()
       if (isForceCollapsed()) {
         document.body.classList.remove(BODY_FORCE_COLLAPSED_CLASS)
+        writeStoredCollapsedPreference(false)
         window.requestAnimationFrame(() => {
           setTocOpen(true)
         })
         return
       }
+      writeStoredCollapsedPreference(false)
       setTocOpen(true)
     })
   }

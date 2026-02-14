@@ -2,6 +2,7 @@
 title: 'Transports'
 layout:
   showToc: true
+  fullWidth: true
 sidebar:
   order: 5
 ---

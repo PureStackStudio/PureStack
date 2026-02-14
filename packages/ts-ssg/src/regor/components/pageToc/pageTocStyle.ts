@@ -125,6 +125,7 @@ export function registerPageTocShellStyles(
     .padding('0')
     .display('grid')
     .gap('6px')
+    .overflow('hidden')
   styleBuilder
     .select('.page-toc__list--nested', theme)
     .paddingLeft('12px')
