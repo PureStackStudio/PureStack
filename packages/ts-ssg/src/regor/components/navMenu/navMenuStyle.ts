@@ -60,7 +60,7 @@ export function registerNavShellStyles(
     .color(palette.action.accent.text)
     .cursor('pointer')
     .transition('background 160ms ease, color 160ms ease')
-    .top('85%')
+    .top('49px')
   styleBuilder.select('.nav__panel-toggle-label', theme).display('inline-block')
   styleBuilder.select('.nav__panel-toggle-icon', theme).display('none')
   styleBuilder
@@ -262,7 +262,6 @@ export function registerNavShellStyles(
     .border(`1px solid ${palette.border.default}`)
     .set('border-left', 'none')
     .set('border-radius', `0 ${options.radii.md} ${options.radii.md} 0`)
-    .top('75%')
   styleBuilder
     .select(
       '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar.doc-sidebar--open .nav__panel-toggle',
