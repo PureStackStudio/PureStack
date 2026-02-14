@@ -2,6 +2,7 @@ const NAV_COLLAPSED_CLASS = 'template-doc--nav-collapsed'
 const NAV_COLLAPSED_STORAGE_KEY = 'ts-ssg:nav-collapsed'
 const NAV_OPEN_CLASS = 'doc-sidebar--open'
 const DESKTOP_QUERY = '(min-width: 1024px)'
+const EDGE_OPEN_THRESHOLD_PX = 8
 
 function ready(fn: () => void) {
   if (document.readyState === 'loading') {
@@ -132,6 +133,14 @@ function init() {
     if (!(target instanceof Node)) return
     if (sidebar.contains(target)) return
     setPanelOpen(false)
+  })
+
+  document.addEventListener('mousemove', (event) => {
+    if (!supportsDesktopCollapse()) return
+    if (!document.body.classList.contains(NAV_COLLAPSED_CLASS)) return
+    if (sidebar?.classList.contains(NAV_OPEN_CLASS)) return
+    if (event.clientX > EDGE_OPEN_THRESHOLD_PX) return
+    setPanelOpen(true)
   })
 }
 
