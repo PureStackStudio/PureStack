@@ -140,7 +140,7 @@ export type PartialConsentConfig = Partial<
   services?: PartialConsentServiceConfig[]
 }
 export type PartialGa4Config = Partial<Ga4Config>
-export type PartialAnalyticsConfig = Partial<AnalyticsConfig> & {
+export type PartialAnalyticsConfig = {
   ga4?: PartialGa4Config
 }
 

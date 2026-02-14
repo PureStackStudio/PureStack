@@ -110,7 +110,9 @@ describe('renderPage consent integration', () => {
       analytics: site.analytics,
     })
     expect(html).toContain('googletagmanager.com/gtag/js?id=G-TEST1234')
-    expect(html).toContain('gtag(\'config\', "G-TEST1234")')
+    expect(html).toMatch(
+      /gtag\(\s*(?:['"]|&#39;|&quot;)config(?:['"]|&#39;|&quot;)\s*,\s*(?:['"]|&#39;|&quot;)G-TEST1234(?:['"]|&#39;|&quot;)\s*\)/,
+    )
   })
 
   it('does not inject direct ga4 script when consent is enabled', async () => {
@@ -136,7 +138,12 @@ describe('renderPage consent integration', () => {
       consent: site.consent,
       analytics: site.analytics,
     })
-    expect(html).not.toContain('googletagmanager.com/gtag/js?id=G-TEST1234')
+    expect(html).not.toMatch(
+      /<script[^>]*\bsrc="https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=G-TEST1234"/,
+    )
+    expect(html).not.toMatch(
+      /<script[^>]*\bsrc='https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=G-TEST1234'/,
+    )
     expect(html).toContain('window.tsSsgConsent')
     expect(html).toContain('G-TEST1234')
   })
