@@ -113,6 +113,8 @@ export function registerNavShellStyles(
     .media('min-width: 1024px')
     .set('overflow', 'visible')
     .set('transform-origin', 'left center')
+    .transform('translateX(0)')
+    .set('will-change', 'transform')
     .zIndex(30)
   styleBuilder
     .select(
@@ -120,7 +122,7 @@ export function registerNavShellStyles(
       theme,
     )
     .media('min-width: 1024px')
-    .transition('transform 240ms ease')
+    .transition('transform 260ms ease')
   styleBuilder
     .select(
       '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
@@ -137,6 +139,7 @@ export function registerNavShellStyles(
     .background('transparent')
     .boxShadow('none')
     .overflow('visible')
+    .transform('translateX(calc(-100% + 26px))')
     .zIndex(140)
   styleBuilder
     .select(
