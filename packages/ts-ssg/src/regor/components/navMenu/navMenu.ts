@@ -92,8 +92,17 @@ const navMenuTemplate = html`<nav
       aria-label="Collapse navigation"
       data-nav-menu-collapse
     >
-      <span class="nav__collapse-toggle-icon" aria-hidden="true">
+      <span
+        class="nav__collapse-toggle-icon nav__collapse-toggle-icon--collapse"
+        aria-hidden="true"
+      >
         <span r-html="collapseIconSvg"></span>
+      </span>
+      <span
+        class="nav__collapse-toggle-icon nav__collapse-toggle-icon--open"
+        aria-hidden="true"
+      >
+        <span r-html="openIconSvg"></span>
       </span>
     </button>
   </div>

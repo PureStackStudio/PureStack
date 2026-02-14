@@ -94,7 +94,25 @@ export function registerNavShellStyles(
     .outline(`2px solid ${palette.border.focus}`)
     .outlineOffset('2px')
   styleBuilder
-    .select('.nav__collapse-toggle svg', theme)
+    .select('.nav__collapse-toggle-icon', theme)
+    .display('inline-flex')
+    .alignItems('center')
+    .justifyContent('center')
+  styleBuilder.select('.nav__collapse-toggle-icon--open', theme).display('none')
+  styleBuilder
+    .select(
+      '.template-doc--nav-collapsed .nav__collapse-toggle-icon--collapse',
+      theme,
+    )
+    .display('none')
+  styleBuilder
+    .select(
+      '.template-doc--nav-collapsed .nav__collapse-toggle-icon--open',
+      theme,
+    )
+    .display('inline-flex')
+  styleBuilder
+    .select('.nav__collapse-toggle-icon svg', theme)
     .width('16px')
     .height('16px')
     .display('block')
