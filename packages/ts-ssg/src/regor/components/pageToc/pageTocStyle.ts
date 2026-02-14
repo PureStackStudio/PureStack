@@ -285,12 +285,12 @@ export function registerPageTocLayoutStyles(
   styleBuilder
     .select('.template-doc:not(.template-doc--toc-collapsed) .doc-toc', theme)
     .media('max-width: 600px')
-    .top('0')
+    .top('72px')
     .left('0')
     .right('0')
     .width('auto')
     .maxWidth('none')
-    .height('100dvh')
+    .height('calc(100dvh - 72px)')
 
   styleBuilder
     .select(
@@ -310,6 +310,14 @@ export function registerPageTocLayoutStyles(
     .background('transparent')
     .boxShadow('none')
     .set('pointer-events', 'none')
+  styleBuilder
+    .select(
+      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc:not(.doc-toc--open)',
+      theme,
+    )
+    .media('max-width: 600px')
+    .left('auto')
+    .right('0')
 
   styleBuilder
     .select(
@@ -531,12 +539,12 @@ export function registerPageTocLayoutStyles(
   styleBuilder
     .select('.template-doc--toc-collapsed .doc-toc', theme)
     .media('max-width: 600px')
-    .top('0')
+    .top('72px')
     .left('0')
     .right('0')
     .width('auto')
     .maxWidth('none')
-    .height('100dvh')
+    .height('calc(100dvh - 72px)')
 
   styleBuilder
     .select('.template-doc--toc-collapsed .doc-toc.doc-toc--open', theme)
@@ -553,6 +561,11 @@ export function registerPageTocLayoutStyles(
     .background('transparent')
     .boxShadow('none')
     .set('pointer-events', 'none')
+  styleBuilder
+    .select('.template-doc--toc-collapsed .doc-toc:not(.doc-toc--open)', theme)
+    .media('max-width: 600px')
+    .left('auto')
+    .right('0')
 
   styleBuilder
     .select('.template-doc--toc-collapsed .page-toc__mobile-toggle', theme)
