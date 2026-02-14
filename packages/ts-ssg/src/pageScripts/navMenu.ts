@@ -1,5 +1,6 @@
 const NAV_COLLAPSED_CLASS = 'template-doc--nav-collapsed'
 const NAV_COLLAPSED_STORAGE_KEY = 'ts-ssg:nav-collapsed'
+const NAV_OPEN_CLASS = 'doc-sidebar--open'
 const DESKTOP_QUERY = '(min-width: 1024px)'
 
 function ready(fn: () => void) {
@@ -13,10 +14,12 @@ function ready(fn: () => void) {
 function init() {
   const menu = document.querySelector<HTMLElement>('.nav__menu')
   if (!menu) return
+  const sidebar = menu.closest<HTMLElement>('.doc-sidebar')
 
   const collapseToggle = menu.querySelector<HTMLElement>(
     '[data-nav-menu-collapse]',
   )
+  const panelToggle = menu.querySelector<HTMLElement>('[data-nav-menu-toggle]')
   const restoreToggle = menu.querySelector<HTMLElement>(
     '[data-nav-menu-restore]',
   )
@@ -34,9 +37,14 @@ function init() {
   const setCollapsed = (collapsed: boolean) => {
     if (!supportsDesktopCollapse()) {
       document.body.classList.remove(NAV_COLLAPSED_CLASS)
+      sidebar?.classList.remove(NAV_OPEN_CLASS)
       return
     }
     document.body.classList.toggle(NAV_COLLAPSED_CLASS, collapsed)
+    if (!collapsed) sidebar?.classList.remove(NAV_OPEN_CLASS)
+  }
+  const setPanelOpen = (open: boolean) => {
+    sidebar?.classList.toggle(NAV_OPEN_CLASS, open)
   }
 
   const readStored = () => {
@@ -60,9 +68,11 @@ function init() {
     const stored = readStored()
     if (stored === null) {
       setCollapsed(false)
+      setPanelOpen(false)
       return
     }
     setCollapsed(stored)
+    if (stored) setPanelOpen(false)
   }
 
   applyStoredPreference()
@@ -74,8 +84,22 @@ function init() {
   if (collapseToggle) {
     collapseToggle.addEventListener('click', (event) => {
       event.preventDefault()
+      if (document.body.classList.contains(NAV_COLLAPSED_CLASS)) {
+        setPanelOpen(false)
+        return
+      }
       writeStored(true)
       setCollapsed(true)
+      setPanelOpen(false)
+    })
+  }
+
+  if (panelToggle) {
+    panelToggle.addEventListener('click', (event) => {
+      event.preventDefault()
+      if (!supportsDesktopCollapse()) return
+      if (!document.body.classList.contains(NAV_COLLAPSED_CLASS)) return
+      setPanelOpen(!sidebar?.classList.contains(NAV_OPEN_CLASS))
     })
   }
 
@@ -84,8 +108,15 @@ function init() {
       event.preventDefault()
       writeStored(false)
       setCollapsed(false)
+      setPanelOpen(false)
     })
   }
+
+  window.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return
+    if (!sidebar?.classList.contains(NAV_OPEN_CLASS)) return
+    setPanelOpen(false)
+  })
 }
 
 ready(init)

@@ -73,11 +73,20 @@ const navMenuTemplate = html`<nav
     <button
       class="nav__restore-toggle"
       type="button"
+      title="Navigation"
+      aria-label="Toggle navigation panel"
+      data-nav-menu-toggle
+    >
+      <span class="nav__restore-toggle-label">navigation</span>
+    </button>
+    <button
+      class="nav__restore-button"
+      type="button"
       title="Restore navigation"
       aria-label="Restore navigation"
       data-nav-menu-restore
     >
-      <span class="nav__restore-toggle-label">navigation</span>
+      Restore
     </button>
     <button
       class="nav__collapse-toggle"

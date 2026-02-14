@@ -65,6 +65,31 @@ export function registerNavShellStyles(
     .select('.nav__restore-toggle-label', theme)
     .display('inline-block')
   styleBuilder
+    .select('.nav__restore-button', theme)
+    .display('none')
+    .alignItems('center')
+    .justifyContent('center')
+    .height('30px')
+    .padding('0 10px')
+    .border(`1px solid ${palette.border.default}`)
+    .borderRadius(options.radii.md)
+    .background(palette.background.raised)
+    .color(palette.text.subtle)
+    .fontSize('0.74rem')
+    .fontWeight('700')
+    .letterSpacing('0.06em')
+    .textTransform('uppercase')
+    .cursor('pointer')
+    .transition('background 160ms ease, color 160ms ease')
+  styleBuilder
+    .select('.nav__restore-button:hover', theme)
+    .background(palette.background.accentMuted)
+    .color(palette.text.accent)
+  styleBuilder
+    .select('.nav__restore-button:focus-visible', theme)
+    .outline(`2px solid ${palette.border.focus}`)
+    .outlineOffset('2px')
+  styleBuilder
     .select('.nav__restore-toggle:hover', theme)
     .background(palette.background.accentMuted)
     .color(palette.text.accent)
@@ -143,6 +168,16 @@ export function registerNavShellStyles(
     .zIndex(140)
   styleBuilder
     .select(
+      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar.doc-sidebar--open',
+      theme,
+    )
+    .media('min-width: 1024px')
+    .width('260px')
+    .background(palette.background.canvas)
+    .boxShadow(options.shadows.strong)
+    .transform('translateX(0)')
+  styleBuilder
+    .select(
       '.template-doc.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-shell',
       theme,
     )
@@ -171,28 +206,28 @@ export function registerNavShellStyles(
     .gridTemplateColumns('1fr')
   styleBuilder
     .select(
-      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .nav__header',
+      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar:not(.doc-sidebar--open) .nav__header',
       theme,
     )
     .media('min-width: 1024px')
     .display('none')
   styleBuilder
     .select(
-      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .nav__collapse-toggle',
+      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar:not(.doc-sidebar--open) .nav__collapse-toggle',
       theme,
     )
     .media('min-width: 1024px')
     .display('none')
   styleBuilder
     .select(
-      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .nav__list',
+      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar:not(.doc-sidebar--open) .nav__list',
       theme,
     )
     .media('min-width: 1024px')
     .display('none')
   styleBuilder
     .select(
-      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .nav__menu',
+      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar:not(.doc-sidebar--open) .nav__menu',
       theme,
     )
     .media('min-width: 1024px')
@@ -205,7 +240,7 @@ export function registerNavShellStyles(
     .overflow('visible')
   styleBuilder
     .select(
-      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .nav__header-row',
+      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar:not(.doc-sidebar--open) .nav__header-row',
       theme,
     )
     .media('min-width: 1024px')
@@ -215,7 +250,7 @@ export function registerNavShellStyles(
     .position('static')
   styleBuilder
     .select(
-      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .nav__restore-toggle',
+      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar:not(.doc-sidebar--open) .nav__restore-toggle',
       theme,
     )
     .media('min-width: 1024px')
@@ -236,9 +271,27 @@ export function registerNavShellStyles(
     .set('border-left', 'none')
     .set('border-radius', `0 ${options.radii.md} ${options.radii.md} 0`)
     .top('75%')
+  styleBuilder
+    .select(
+      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar.doc-sidebar--open .nav__restore-toggle',
+      theme,
+    )
+    .media('min-width: 1024px')
+    .display('none')
+  styleBuilder
+    .select(
+      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar.doc-sidebar--open .nav__restore-button',
+      theme,
+    )
+    .media('min-width: 1024px')
+    .display('inline-flex')
 
   styleBuilder
     .select('.nav__restore-toggle', theme)
+    .media('max-width: 1023px')
+    .display('none')
+  styleBuilder
+    .select('.nav__restore-button', theme)
     .media('max-width: 1023px')
     .display('none')
   styleBuilder
@@ -247,6 +300,9 @@ export function registerNavShellStyles(
     .display('none')
   styleBuilder
     .select('.template-doc--nav-drawer .nav__restore-toggle', theme)
+    .display('none')
+  styleBuilder
+    .select('.template-doc--nav-drawer .nav__restore-button', theme)
     .display('none')
   styleBuilder
     .select('.template-doc--nav-drawer .nav__collapse-toggle', theme)
