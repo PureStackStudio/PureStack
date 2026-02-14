@@ -68,6 +68,33 @@ const navMenuTemplate = html`<nav
   class="nav__menu"
   aria-label="Site navigation"
 >
+  <div class="nav__header-row">
+    <div class="nav__header">Navigation</div>
+    <button
+      class="nav__restore-toggle"
+      type="button"
+      title="Restore navigation"
+      aria-label="Restore navigation"
+      data-nav-menu-restore
+    >
+      <span class="nav__restore-toggle-label">navigation</span>
+    </button>
+    <button
+      class="nav__collapse-toggle"
+      type="button"
+      title="Collapse navigation"
+      aria-label="Collapse navigation"
+      data-nav-menu-collapse
+    >
+      <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <path d="M8 6h10"></path>
+        <path d="M8 12h10"></path>
+        <path d="M8 18h10"></path>
+        <path d="M4 6l3 3"></path>
+        <path d="M4 18l3-3"></path>
+      </svg>
+    </button>
+  </div>
   <nav-list :items="items"></nav-list>
 </nav>`
 

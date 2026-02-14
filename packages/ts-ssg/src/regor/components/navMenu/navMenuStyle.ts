@@ -32,6 +32,194 @@ export function registerNavShellStyles(
     .background(palette.background.surface)
     .borderColor(palette.border.subtle)
     .color(palette.text.default)
+    .overflowY('auto')
+    .overflowX('hidden')
+  styleBuilder
+    .select('.nav__header-row', theme)
+    .display('flex')
+    .alignItems('center')
+    .justifyContent('space-between')
+    .gap('8px')
+    .marginBottom('8px')
+  styleBuilder
+    .select('.nav__header', theme)
+    .fontWeight('700')
+    .fontSize('0.82rem')
+    .letterSpacing('0.08em')
+    .textTransform('uppercase')
+    .color(palette.text.subtle)
+  styleBuilder
+    .select('.nav__restore-toggle', theme)
+    .display('none')
+    .alignItems('center')
+    .justifyContent('center')
+    .padding('0')
+    .border(`1px solid ${palette.border.default}`)
+    .borderRadius(options.radii.md)
+    .background(palette.background.raised)
+    .color(palette.text.subtle)
+    .cursor('pointer')
+    .transition('background 160ms ease, color 160ms ease')
+    .top('85%')
+  styleBuilder
+    .select('.nav__restore-toggle-label', theme)
+    .display('inline-block')
+  styleBuilder
+    .select('.nav__restore-toggle:hover', theme)
+    .background(palette.background.accentMuted)
+    .color(palette.text.accent)
+  styleBuilder
+    .select('.nav__restore-toggle:focus-visible', theme)
+    .outline(`2px solid ${palette.border.focus}`)
+    .outlineOffset('2px')
+  styleBuilder
+    .select('.nav__collapse-toggle', theme)
+    .display('inline-flex')
+    .alignItems('center')
+    .justifyContent('center')
+    .width('30px')
+    .height('30px')
+    .padding('0')
+    .border(`1px solid ${palette.border.default}`)
+    .borderRadius(options.radii.md)
+    .background(palette.background.raised)
+    .color(palette.text.subtle)
+    .cursor('pointer')
+    .transition('background 160ms ease, color 160ms ease')
+  styleBuilder
+    .select('.nav__collapse-toggle:hover', theme)
+    .background(palette.background.accentMuted)
+    .color(palette.text.accent)
+  styleBuilder
+    .select('.nav__collapse-toggle:focus-visible', theme)
+    .outline(`2px solid ${palette.border.focus}`)
+    .outlineOffset('2px')
+  styleBuilder
+    .select('.nav__collapse-toggle svg', theme)
+    .width('16px')
+    .height('16px')
+    .display('block')
+    .fill('none')
+    .stroke('currentColor')
+    .set('stroke-width', '1.9')
+    .set('stroke-linecap', 'round')
+    .set('stroke-linejoin', 'round')
+
+  styleBuilder
+    .select(
+      '.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
+      theme,
+    )
+    .media('min-width: 1024px')
+    .set('overflow', 'visible')
+    .set('transform-origin', 'left center')
+    .zIndex(30)
+  styleBuilder
+    .select(
+      '.template-doc.template-doc--nav-ready.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
+      theme,
+    )
+    .media('min-width: 1024px')
+    .transition('transform 240ms ease')
+  styleBuilder
+    .select(
+      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
+      theme,
+    )
+    .media('min-width: 1024px')
+    .width('26px')
+    .position('fixed')
+    .left('0')
+    .right('auto')
+    .top('72px')
+    .height('calc(100dvh - 72px)')
+    .maxHeight('none')
+    .background('transparent')
+    .boxShadow('none')
+    .overflow('visible')
+    .zIndex(140)
+  styleBuilder
+    .select(
+      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .nav__header',
+      theme,
+    )
+    .media('min-width: 1024px')
+    .display('none')
+  styleBuilder
+    .select(
+      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .nav__collapse-toggle',
+      theme,
+    )
+    .media('min-width: 1024px')
+    .display('none')
+  styleBuilder
+    .select(
+      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .nav__list',
+      theme,
+    )
+    .media('min-width: 1024px')
+    .display('none')
+  styleBuilder
+    .select(
+      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .nav__menu',
+      theme,
+    )
+    .media('min-width: 1024px')
+    .width('26px')
+    .marginLeft('0')
+    .padding('0')
+    .background('transparent')
+    .border('none')
+    .borderRadius('0')
+    .overflow('visible')
+  styleBuilder
+    .select(
+      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .nav__header-row',
+      theme,
+    )
+    .media('min-width: 1024px')
+    .margin('0')
+    .width('26px')
+    .height('118px')
+    .position('static')
+  styleBuilder
+    .select(
+      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .nav__restore-toggle',
+      theme,
+    )
+    .media('min-width: 1024px')
+    .display('inline-flex')
+    .position('absolute')
+    .alignItems('center')
+    .justifyContent('center')
+    .set('writing-mode', 'vertical-rl')
+    .set('text-orientation', 'mixed')
+    .width('26px')
+    .height('118px')
+    .fontSize('0.70rem')
+    .fontWeight('700')
+    .set('letter-spacing', '0.12em')
+    .set('text-transform', 'uppercase')
+    .set('user-select', 'none')
+    .border(`1px solid ${palette.border.default}`)
+    .set('border-left', 'none')
+    .set('border-radius', `0 ${options.radii.md} ${options.radii.md} 0`)
+    .top('75%')
+
+  styleBuilder
+    .select('.nav__restore-toggle', theme)
+    .media('max-width: 1023px')
+    .display('none')
+  styleBuilder
+    .select('.nav__collapse-toggle', theme)
+    .media('max-width: 1023px')
+    .display('none')
+  styleBuilder
+    .select('.template-doc--nav-drawer .nav__restore-toggle', theme)
+    .display('none')
+  styleBuilder
+    .select('.template-doc--nav-drawer .nav__collapse-toggle', theme)
+    .display('none')
   styleBuilder
     .select('.nav__list', theme)
     .listStyle('none')

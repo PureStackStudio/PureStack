@@ -9,6 +9,7 @@ import { themes } from '../style/themeOptions'
 import { buildCodeCopyScript } from '../templates/buildCodeCopyScript'
 import { buildConsentScript } from '../templates/buildConsentScript'
 import { buildGa4Script } from '../templates/buildGa4Script'
+import { buildNavMenuScript } from '../templates/buildNavMenuScript'
 import { buildNavTransitionReadyScript } from '../templates/buildNavTransitionReadyScript'
 import { buildPagefindSearchScript } from '../templates/buildPagefindSearchScript'
 import { buildPageTocScript } from '../templates/buildPageTocScript'
@@ -42,6 +43,7 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
   appendConsentScript(head, input.consent)
   appendGa4Script(head, input.analytics, input.consent)
   appendNavTransitionReadyScript(head)
+  appendNavMenuScript(head)
   appendCodeCopyScript(head)
   appendPagefindSearchScript(head)
   const { pageTemplate, templateName } = resolvePageTemplate(
@@ -133,6 +135,11 @@ function appendGa4Script(
 
 function appendNavTransitionReadyScript(head: ReturnType<typeof getHead>) {
   const script = buildNavTransitionReadyScript()
+  head.push(h('script').raw(script))
+}
+
+function appendNavMenuScript(head: ReturnType<typeof getHead>) {
+  const script = buildNavMenuScript()
   head.push(h('script').raw(script))
 }
 

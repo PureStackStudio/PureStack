@@ -5,6 +5,18 @@ import { normalizeFrontmatter } from '../frontmatter/frontmatter'
 import { renderPage } from './renderer'
 
 describe('renderPage consent integration', () => {
+  it('injects nav menu runtime for doc pages', async () => {
+    const html = await renderPage({
+      bodyHtml: '<p>Hello</p>',
+      pageInfo: {
+        relPath: 'index.md',
+        urlPath: '/',
+        frontmatter: normalizeFrontmatter({}),
+      },
+    })
+    expect(html).toContain('ts-ssg:nav-collapsed')
+  })
+
   it('does not inject consent runtime when consent is disabled', async () => {
     const site = resolveSiteConfig({
       rootDir: process.cwd(),

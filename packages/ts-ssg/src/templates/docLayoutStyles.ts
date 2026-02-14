@@ -62,11 +62,13 @@ function registerDocLayoutSidebarStyles(
   options: ThemeOptions,
 ) {
   styleBuilder
-    .select('.doc-sidebar', theme)
+    .select('.doc-sidebar', theme) // sync this with '.doc-toc' to get same behavior on both sides.
     .position('sticky')
-    .top('24px')
+    .top('88px')
+    .width('100%')
+    .zIndex(30)
     .alignSelf('start')
-    .height('calc(100vh - 48px)')
+    .height('calc(100vh - 112px)')
     .overflow('auto')
   styleBuilder
     .select('.template-doc--nav-drawer .doc-sidebar', theme)
