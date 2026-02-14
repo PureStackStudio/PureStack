@@ -49,7 +49,7 @@ export function registerNavShellStyles(
     .textTransform('uppercase')
     .color(palette.text.subtle)
   styleBuilder
-    .select('.nav__restore-toggle', theme)
+    .select('.nav__edge-toggle', theme)
     .display('none')
     .alignItems('center')
     .justifyContent('center')
@@ -61,16 +61,14 @@ export function registerNavShellStyles(
     .cursor('pointer')
     .transition('background 160ms ease, color 160ms ease')
     .top('85%')
+  styleBuilder.select('.nav__edge-toggle-label', theme).display('inline-block')
+  styleBuilder.select('.nav__edge-toggle-icon', theme).display('none')
   styleBuilder
-    .select('.nav__restore-toggle-label', theme)
-    .display('inline-block')
-  styleBuilder.select('.nav__restore-toggle-icon', theme).display('none')
-  styleBuilder
-    .select('.nav__restore-toggle:hover', theme)
+    .select('.nav__edge-toggle:hover', theme)
     .background(palette.background.accentMuted)
     .color(palette.text.accent)
   styleBuilder
-    .select('.nav__restore-toggle:focus-visible', theme)
+    .select('.nav__edge-toggle:focus-visible', theme)
     .outline(`2px solid ${palette.border.focus}`)
     .outlineOffset('2px')
   styleBuilder
@@ -226,7 +224,7 @@ export function registerNavShellStyles(
     .position('static')
   styleBuilder
     .select(
-      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar:not(.doc-sidebar--open) .nav__restore-toggle',
+      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar:not(.doc-sidebar--open) .nav__edge-toggle',
       theme,
     )
     .media('min-width: 1024px')
@@ -249,14 +247,14 @@ export function registerNavShellStyles(
     .top('75%')
   styleBuilder
     .select(
-      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar.doc-sidebar--open .nav__restore-toggle',
+      '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar.doc-sidebar--open .nav__edge-toggle',
       theme,
     )
     .media('min-width: 1024px')
     .display('none')
 
   styleBuilder
-    .select('.nav__restore-toggle', theme)
+    .select('.nav__edge-toggle', theme)
     .media('max-width: 1023px')
     .display('none')
   styleBuilder
@@ -264,7 +262,7 @@ export function registerNavShellStyles(
     .media('max-width: 1023px')
     .display('none')
   styleBuilder
-    .select('.template-doc--nav-drawer .nav__restore-toggle', theme)
+    .select('.template-doc--nav-drawer .nav__edge-toggle', theme)
     .display('none')
   styleBuilder
     .select('.template-doc--nav-drawer .nav__collapse-toggle', theme)

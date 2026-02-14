@@ -20,12 +20,12 @@ interface PageTocItemContext extends PageOutlineItem {
 
 const pageTocTemplate = html`<nav class="page-toc" aria-label="On this page">
   <button
-    class="page-toc__mobile-toggle"
+    class="page-toc__edge-toggle"
     type="button"
     aria-controls="doc-toc"
     aria-expanded="false"
   >
-    <span class="page-toc__mobile-toggle-label">on this page</span>
+    <span class="page-toc__edge-toggle-label">on this page</span>
   </button>
   <div class="page-toc__header-row">
     <div class="page-toc__header">{{ title }}</div>

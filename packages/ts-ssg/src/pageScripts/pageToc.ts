@@ -27,12 +27,12 @@ function init() {
   }
 
   const tocShell = toc.closest<HTMLElement>('.doc-toc')
-  const toggle = toc.querySelector<HTMLElement>('.page-toc__mobile-toggle')
+  const toggle = toc.querySelector<HTMLElement>('.page-toc__edge-toggle')
   const restoreToggle = toc.querySelector<HTMLElement>(
     '[data-page-toc-restore]',
   )
   const toggleLabel = toc.querySelector<HTMLElement>(
-    '.page-toc__mobile-toggle-label',
+    '.page-toc__edge-toggle-label',
   )
   const media = window.matchMedia(MOBILE_BREAKPOINT_QUERY)
   const readStoredCollapsedPreference = () => {

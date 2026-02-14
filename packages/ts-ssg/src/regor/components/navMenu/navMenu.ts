@@ -74,16 +74,16 @@ const navMenuTemplate = html`<nav
   <div class="nav__header-row">
     <div class="nav__header">Navigation</div>
     <button
-      class="nav__restore-toggle"
+      class="nav__edge-toggle"
       type="button"
       title="Navigation"
       aria-label="Toggle navigation panel"
       data-nav-menu-toggle
     >
-      <span class="nav__restore-toggle-icon" aria-hidden="true">
+      <span class="nav__edge-toggle-icon" aria-hidden="true">
         <span r-html="openIconSvg"></span>
       </span>
-      <span class="nav__restore-toggle-label">navigation</span>
+      <span class="nav__edge-toggle-label">navigation</span>
     </button>
     <button
       class="nav__collapse-toggle"
