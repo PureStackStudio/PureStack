@@ -24,6 +24,7 @@
   "scripts": {
     "dev-css": "yarn tsx --watch packages/ts-css-bootstrap/src/index.ts",
     "dev": "yarn tsx --watch packages/ts-ssg/src/index.ts",
+    "embed": "yarn tsx scripts/embed.ts",
     "build": "yarn workspaces foreach --no-private --all --verbose --topological -- run build",
     "lint": "yarn workspaces foreach --no-private --all --verbose --topological -- run lint",
     "bundle": "yarn tsx --no-warnings scripts/bundle.ts && biome check --write \"packages/**/*.d.ts\"",
