@@ -34,14 +34,14 @@ const navListTemplate = html`<ul class="nav__list">
           }"
         >
           <span class="nav__summary-content">
-            <a
+            <!--<a
               r-if="item.url"
               class="nav__link"
               :class="{ 'nav__link--active': item.isActive }"
               :href="item.url"
               :aria-current="item.isActive ? 'page' : null"
               >{{ item.title }}</a
-            >
+            >-->
             <span r-else class="nav__text">{{ item.title }}</span>
             <span r-if="item.group" class="nav__badge">{{ item.group }}</span>
           </span>

@@ -116,7 +116,6 @@ export function registerNavSummaryStyles(
     .justifyContent('space-between')
     .gap('8px')
     .cursor('pointer')
-    .padding('4px')
     .borderRadius(options.radii.md)
   styleBuilder
     .select('.nav__summary:hover', theme)
