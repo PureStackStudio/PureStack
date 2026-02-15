@@ -2,6 +2,7 @@
 title: Overview
 layout:
   showToc: true
+  fullWidth: true
 ---
 
 This is a simple Markdown page.

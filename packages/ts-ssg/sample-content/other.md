@@ -2,6 +2,7 @@
 title: 'Core Types'
 layout:
   showToc: true
+  fullWidth: true
 sidebar:
   order: 7
 ---

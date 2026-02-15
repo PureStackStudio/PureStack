@@ -2,6 +2,7 @@
 title: 'Features'
 layout:
   showToc: true
+  fullWidth: true
 sidebar:
   order: 4
 ---

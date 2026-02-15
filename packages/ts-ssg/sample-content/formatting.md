@@ -2,6 +2,7 @@
 title: 'Formatting'
 layout:
   showToc: true
+  fullWidth: true
 sidebar:
   order: 6
 ---
