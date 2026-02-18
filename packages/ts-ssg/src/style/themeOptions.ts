@@ -1,6 +1,6 @@
 import { merge } from '@logpot/utils'
 
-import { builtInSkins } from './skins'
+import { builtInSkins, type BuiltInSkinName } from './skins'
 import { normalizeThemeName, type ThemeName } from './themeAssets'
 import type { ThemePalette } from './themePalette'
 
@@ -41,6 +41,7 @@ export interface ThemeOptions {
 }
 
 export type ThemeOptionsInput = {
+  skin?: BuiltInSkinName
   colors?: Partial<Record<ThemeMode, DeepPartial<ThemePalette>>>
   radii?: Partial<ThemeOptions['radii']>
   spacing?: Partial<ThemeOptions['spacing']>
@@ -83,7 +84,12 @@ function resolveThemeOptions(
 ): ThemeOptions {
   let merged = DEFAULT_THEME_OPTIONS
   for (const value of values) {
-    if (value) merged = mergeThemeOptions(merged, value)
+    if (!value) continue
+    const skin = resolveSkinName(value.skin)
+    if (skin) {
+      merged = mergeThemeOptions(merged, { colors: builtInSkins[skin] })
+    }
+    merged = mergeThemeOptions(merged, omitSkin(value))
   }
   return merged
 }
@@ -160,4 +166,18 @@ function mergeThemeOptions(
   override: ThemeOptionsInput,
 ): ThemeOptions {
   return merge(base, override)
+}
+
+function omitSkin(input: ThemeOptionsInput): ThemeOptionsInput {
+  const { skin: _skin, ...rest } = input
+  return rest
+}
+
+function resolveSkinName(value: unknown): BuiltInSkinName | undefined {
+  if (typeof value !== 'string') return undefined
+  const skin = value.trim() as BuiltInSkinName
+  if (skin in builtInSkins) return skin
+  throw new Error(
+    `Unknown theme skin "${value}". Expected one of: ${Object.keys(builtInSkins).join(', ')}.`,
+  )
 }

@@ -4,6 +4,7 @@ import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 
 import { resolveSiteConfig } from './config'
+import { builtInSkins } from '../style/skins'
 
 describe('resolveSiteConfig sitemap', () => {
   it('resolves siteConfig outDir relative to contentDir', () => {
@@ -19,6 +20,25 @@ describe('resolveSiteConfig sitemap', () => {
 
       const config = resolveSiteConfig({ rootDir, contentDir })
       expect(config.outDir).toBe(path.resolve(contentDir, '../dist'))
+    } finally {
+      fs.rmSync(tempRoot, { recursive: true, force: true })
+    }
+  })
+
+  it('applies theme skin from siteConfig.json', () => {
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'ts-ssg-config-'))
+    try {
+      const rootDir = path.join(tempRoot, 'repo-root')
+      const contentDir = path.join(rootDir, 'content')
+      fs.mkdirSync(contentDir, { recursive: true })
+      fs.writeFileSync(
+        path.join(contentDir, 'siteConfig.json'),
+        JSON.stringify({ theme: { skin: 'pastel' } }),
+      )
+
+      const config = resolveSiteConfig({ rootDir, contentDir })
+      expect(config.theme.colors.light).toEqual(builtInSkins.pastel.light)
+      expect(config.theme.colors.dark).toEqual(builtInSkins.pastel.dark)
     } finally {
       fs.rmSync(tempRoot, { recursive: true, force: true })
     }
@@ -266,5 +286,27 @@ describe('resolveSiteConfig sitemap', () => {
         },
       }),
     ).toThrowError(/measurementId/)
+  })
+
+  it('applies built-in theme skin from input', () => {
+    const config = resolveSiteConfig({
+      rootDir: process.cwd(),
+      theme: {
+        skin: 'ocean',
+      },
+    })
+    expect(config.theme.colors.light).toEqual(builtInSkins.ocean.light)
+    expect(config.theme.colors.dark).toEqual(builtInSkins.ocean.dark)
+  })
+
+  it('throws when theme skin is unknown', () => {
+    expect(() =>
+      resolveSiteConfig({
+        rootDir: process.cwd(),
+        theme: {
+          skin: 'unknown' as never,
+        },
+      }),
+    ).toThrowError(/Unknown theme skin/)
   })
 })
