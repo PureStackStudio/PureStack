@@ -33,6 +33,7 @@
     "package": "yarn workspaces foreach --no-private --all --parallel pack",
     "longest": "yarn tsx ./scripts/longest-functions.ts",
     "format": "biome format --write .",
-    "pre-commit": "yarn embed && yarn lint && yarn build && yarn test run"
+    "pre-commit": "yarn embed && yarn lint && yarn build && yarn test run",
+    "mygate": "yarn tsx packages/ts-ssg/src/index.ts --content MyGate/MyGateApp/admin-panel/content"
   }
 }
