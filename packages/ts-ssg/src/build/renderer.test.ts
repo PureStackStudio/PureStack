@@ -159,4 +159,23 @@ describe('renderPage consent integration', () => {
     expect(html).toContain('window.tsSsgConsent')
     expect(html).toContain('G-TEST1234')
   })
+
+  it('renders footer html when provided by content', async () => {
+    const site = resolveSiteConfig({ rootDir: process.cwd() })
+    const html = await renderPage({
+      bodyHtml: '<p>Hello</p>',
+      pageInfo: {
+        relPath: 'index.md',
+        urlPath: '/',
+        frontmatter: normalizeFrontmatter({}),
+      },
+      siteTitle: site.siteTitle,
+      footerHtml:
+        '<site-footer eyebrow="Ops"><template name="status"><span>Ready</span></template></site-footer>',
+      consent: site.consent,
+      analytics: site.analytics,
+    })
+    expect(html).toContain('<site-footer eyebrow="Ops"')
+    expect(html).toContain('<span>Ready</span>')
+  })
 })

@@ -5,7 +5,10 @@ import { getLogger } from 'logpot'
 import type { Component } from 'regor'
 
 import type { SiteConfig } from '../config/config'
-import type { ContentFile } from '../discover/content'
+import {
+  discoverDefaultFooter,
+  type ContentFile,
+} from '../discover/content'
 import {
   normalizeFrontmatter,
   type PageFrontmatter,
@@ -32,6 +35,7 @@ import { renderPage } from './renderer'
 
 export interface BuildContext {
   config: SiteConfig
+  defaultFooterHtml?: string
   writeErrorPages?: boolean
   components?: Record<string, Component<unknown>>
   templates?: PageTemplateMap
@@ -149,6 +153,18 @@ export async function renderPageFromFile(
   }
 }
 
+export async function resolveDefaultFooterHtml(
+  config: SiteConfig,
+  mdxOptions: MdxRenderOptions | undefined,
+): Promise<string | undefined> {
+  const footerFile = await discoverDefaultFooter(config.contentDir)
+  if (!footerFile) return undefined
+  const source = await readSource(footerFile.absPath)
+  const parsedContent = parseFrontmatterSource(source, footerFile.relPath)
+  const compiled = compilePageContent(footerFile, parsedContent.body, mdxOptions)
+  return compiled.bodyHtml
+}
+
 function createPageTemplateInfo(
   file: ContentFile,
   urlPath: string,
@@ -195,6 +211,7 @@ async function renderPageShell(input: RenderPageShellInput): Promise<string> {
     navigation,
     pageInfo,
     siteTitle: context.config.siteTitle,
+    footerHtml: context.defaultFooterHtml,
     consent: context.config.consent,
     analytics: context.config.analytics,
   })

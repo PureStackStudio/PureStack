@@ -408,7 +408,7 @@
     },
     "outDir": {
       "type": "string",
-      "description": "Output directory path. Relative paths are resolved from the project root.",
+      "description": "Output directory path. Relative paths are resolved from the content directory (siteConfig location).",
       "default": "dist/site"
     }
   }

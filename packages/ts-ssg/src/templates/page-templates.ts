@@ -19,6 +19,7 @@ export interface PageTemplateInput {
   navigation?: PageNavigation
   pageInfo: PageInfo
   siteTitle?: string
+  footerHtml?: string
 }
 
 export type PageTemplate = (
@@ -59,7 +60,7 @@ function renderDocTemplate({
   bodyHtml,
   navigation,
   pageInfo,
-  siteTitle,
+  footerHtml,
 }: PageTemplateInput) {
   const frontmatter = pageInfo.frontmatter
   const layout = resolveDocLayout(frontmatter, navigation)
@@ -92,7 +93,9 @@ function renderDocTemplate({
               : []),
           ),
         h('consent'),
-        ...(showFooter ? [buildDefaultFooter(siteTitle)] : []),
+        ...(showFooter && hasFooterHtml(footerHtml)
+          ? [h('div').raw(footerHtml)]
+          : []),
       ),
   )
 }
@@ -165,7 +168,12 @@ function resolveDocLayoutClass(frontmatter: PageFrontmatter) {
   return frontmatter.layout.fullWidth ? 'template-doc--full-main' : ''
 }
 
-function renderSplashTemplate({ head, bodyHtml, pageInfo }: PageTemplateInput) {
+function renderSplashTemplate({
+  head,
+  bodyHtml,
+  pageInfo,
+  footerHtml,
+}: PageTemplateInput) {
   const showFooter = pageInfo.frontmatter.layout.showFooter
   return h('html').push(
     head,
@@ -174,94 +182,13 @@ function renderSplashTemplate({ head, bodyHtml, pageInfo }: PageTemplateInput) {
       .push(
         h('main').push(h('section').attr({ class: 'splash' }).raw(bodyHtml)),
         h('consent'),
-        ...(showFooter ? [buildDefaultFooter()] : []),
+        ...(showFooter && hasFooterHtml(footerHtml)
+          ? [h('div').raw(footerHtml)]
+          : []),
       ),
   )
 }
 
-function buildDefaultFooter(siteTitle?: string) {
-  const title = `${siteTitle || 'Your Site'} keeps shipping after launch`
-  return h('site-footer')
-    .attr({
-      title,
-      ctaLabel: 'Get Started',
-      ctaHref: '/',
-      newsletterTitle: 'Stay in the loop',
-    })
-    .push(
-      h('p').raw(
-        'Ship docs, marketing pages, changelogs, and product hubs with one reusable architecture.',
-      ),
-      buildDefaultFooterStatusSlot(),
-      buildDefaultFooterColumnsSlot(),
-      buildDefaultFooterLegalSlot(),
-      buildDefaultFooterSocialSlot(),
-    )
-}
-
-function buildDefaultFooterStatusSlot() {
-  return h('template')
-    .attr({ name: 'status' })
-    .push(
-      h('span').raw('Performance-first'),
-      h('span').raw('Accessible by default'),
-      h('span').raw('SEO-ready output'),
-    )
-}
-
-function buildDefaultFooterColumnsSlot() {
-  return h('template')
-    .attr({ name: 'columns' })
-    .push(buildDefaultFooterProductColumn(), buildDefaultFooterCompanyColumn())
-}
-
-function buildDefaultFooterProductColumn() {
-  return h('footer-column')
-    .attr({ title: 'Product' })
-    .push(
-      h('footer-link').attr({ href: '/', label: 'Overview' }),
-      h('footer-link').attr({
-        href: '/guide/',
-        label: 'Documentation',
-      }),
-      h('footer-link').attr({
-        href: '/features/',
-        label: 'Features',
-      }),
-    )
-}
-
-function buildDefaultFooterCompanyColumn() {
-  return h('footer-column')
-    .attr({ title: 'Company' })
-    .push(
-      h('footer-link').attr({ href: '/about/', label: 'About' }),
-      h('footer-link').attr({ href: '/blog/', label: 'Blog' }),
-      h('footer-link').attr({
-        href: '/contact/',
-        label: 'Contact',
-      }),
-    )
-}
-
-function buildDefaultFooterLegalSlot() {
-  return h('template')
-    .attr({ name: 'legal' })
-    .push(
-      h('a').attr({ href: '/imprint/de/' }).raw('Impressum'),
-      h('a').attr({ href: '/privacy/' }).raw('Privacy'),
-      h('a').attr({ href: '/terms/' }).raw('Terms'),
-    )
-}
-
-function buildDefaultFooterSocialSlot() {
-  return h('template')
-    .attr({ name: 'social' })
-    .push(
-      h('footer-social').attr({
-        href: 'https://github.com',
-        label: 'GitHub',
-        target: '_blank',
-      }),
-    )
+function hasFooterHtml(footerHtml?: string) : footerHtml is string {
+  return typeof footerHtml === 'string' && footerHtml.trim().length > 0
 }

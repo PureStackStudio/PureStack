@@ -28,6 +28,7 @@ describe('discoverContent + discoverStaticAssets', () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-'))
     try {
       await writeFile(path.join(root, 'index.mdx'), '# Home')
+      await writeFile(path.join(root, 'footer.mdx'), '<SiteFooter />')
       await writeFile(path.join(root, 'guide', 'overview.md'), '# Guide')
       await writeFile(path.join(root, 'assets', 'logo.png'), 'png')
       await writeFile(path.join(root, 'siteConfig.json'), '{}')

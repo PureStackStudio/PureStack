@@ -6,6 +6,7 @@ import { resolveSiteConfig, type SiteConfig } from '../config/config'
 import {
   type ContentFile,
   discoverContent,
+  isDefaultFooterFile,
   isContentFile,
   isSiteConfigFile,
   type StaticAssetFile,
@@ -46,6 +47,7 @@ import { resolveOutPath, resolveRouteInfo } from './out-path'
 import {
   type BuildContext,
   buildPage,
+  resolveDefaultFooterHtml,
   renderPageFromFile,
   writePage,
 } from './page'
@@ -111,6 +113,7 @@ async function createIncrementalRuntime(
     navigation,
     mdx,
   }
+  context.defaultFooterHtml = await resolveDefaultFooterHtml(config, mdx)
 
   const existing = await readManifest(config.outDir)
   const manifest =
@@ -259,6 +262,10 @@ class IncrementalRuntime {
       this.config.contentDir,
       this.config.outDir,
     )
+    this.context.defaultFooterHtml = await resolveDefaultFooterHtml(
+      this.config,
+      this.context.mdx,
+    )
     const contentFiles = await discoverContent(this.config.contentDir)
     await hooks.onContentDiscovered?.(this.context, contentFiles)
     this.context.navigation = await buildNavigation(
@@ -332,6 +339,10 @@ class IncrementalRuntime {
     const result = this.createIncrementalResult(`content change: ${filePath}`)
     if (isOutsideContentRoot(relPath)) return result
     if (isSiteConfigFile(relPath)) {
+      result.fullRebuild = true
+      return result
+    }
+    if (isDefaultFooterFile(relPath)) {
       result.fullRebuild = true
       return result
     }
