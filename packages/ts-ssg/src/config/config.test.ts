@@ -1,8 +1,29 @@
+import fs from 'node:fs'
+import os from 'node:os'
+import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 
 import { resolveSiteConfig } from './config'
 
 describe('resolveSiteConfig sitemap', () => {
+  it('resolves siteConfig outDir relative to contentDir', () => {
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'ts-ssg-config-'))
+    try {
+      const rootDir = path.join(tempRoot, 'repo-root')
+      const contentDir = path.join(rootDir, 'apps', 'admin', 'content')
+      fs.mkdirSync(contentDir, { recursive: true })
+      fs.writeFileSync(
+        path.join(contentDir, 'siteConfig.json'),
+        JSON.stringify({ outDir: '../dist' }),
+      )
+
+      const config = resolveSiteConfig({ rootDir, contentDir })
+      expect(config.outDir).toBe(path.resolve(contentDir, '../dist'))
+    } finally {
+      fs.rmSync(tempRoot, { recursive: true, force: true })
+    }
+  })
+
   it('provides logo defaults', () => {
     const config = resolveSiteConfig({ rootDir: process.cwd() })
     expect(config.logo).toEqual({

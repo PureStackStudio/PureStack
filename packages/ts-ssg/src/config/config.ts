@@ -209,7 +209,7 @@ export function resolveSiteConfig(input: PartialSiteConfig = {}): SiteConfig {
   const fileConfig = loadSiteConfigFile(contentDir)
   const outDir =
     input.outDir ??
-    resolveOutDirFromFile(fileConfig.outDir, rootDir) ??
+    resolveOutDirFromFile(fileConfig.outDir, contentDir) ??
     path.join(rootDir, 'dist', 'site')
   const siteTitle = resolveString(
     input.siteTitle,
@@ -305,10 +305,10 @@ function resolveString(...values: Array<string | undefined>) {
   return ''
 }
 
-function resolveOutDirFromFile(value: unknown, rootDir: string) {
+function resolveOutDirFromFile(value: unknown, contentDir: string) {
   if (typeof value !== 'string' || value.length === 0) return undefined
   if (path.isAbsolute(value)) return value
-  return path.join(rootDir, value)
+  return path.resolve(contentDir, value)
 }
 
 function resolveSitemapConfig(
