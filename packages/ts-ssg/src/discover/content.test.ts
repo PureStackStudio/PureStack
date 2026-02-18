@@ -5,7 +5,11 @@ import path from 'node:path'
 import { disableLogger, getLogger, type Logger } from 'logpot'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
-import { discoverContent, discoverStaticAssets } from './content'
+import {
+  discoverContent,
+  discoverDefaultFooters,
+  discoverStaticAssets,
+} from './content'
 
 async function writeFile(filePath: string, contents = '') {
   await fs.mkdir(path.dirname(filePath), { recursive: true })
@@ -30,6 +34,7 @@ describe('discoverContent + discoverStaticAssets', () => {
       await writeFile(path.join(root, 'index.mdx'), '# Home')
       await writeFile(path.join(root, 'footer.mdx'), '<SiteFooter />')
       await writeFile(path.join(root, 'guide', 'overview.md'), '# Guide')
+      await writeFile(path.join(root, 'guide', 'footer.mdx'), '<SiteFooter />')
       await writeFile(path.join(root, 'assets', 'logo.png'), 'png')
       await writeFile(path.join(root, 'siteConfig.json'), '{}')
       await writeFile(path.join(root, 'notes.txt'), 'notes')
@@ -37,11 +42,18 @@ describe('discoverContent + discoverStaticAssets', () => {
 
       const content = await discoverContent(root)
       const assets = await discoverStaticAssets(root)
+      const footers = await discoverDefaultFooters(root)
 
       const contentRel = content.map((file) => file.relPath)
       expect(contentRel).toEqual([
         path.join('guide', 'overview.md'),
         'index.mdx',
+      ])
+
+      const footerRel = footers.map((file) => file.relPath)
+      expect(footerRel).toEqual([
+        'footer.mdx',
+        path.join('guide', 'footer.mdx'),
       ])
 
       const assetRel = assets.map((file) => file.relPath)

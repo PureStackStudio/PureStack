@@ -47,7 +47,7 @@ import { resolveOutPath, resolveRouteInfo } from './out-path'
 import {
   type BuildContext,
   buildPage,
-  resolveDefaultFooterHtml,
+  resolveFooterHtmlByDirectory,
   renderPageFromFile,
   writePage,
 } from './page'
@@ -113,7 +113,7 @@ async function createIncrementalRuntime(
     navigation,
     mdx,
   }
-  context.defaultFooterHtml = await resolveDefaultFooterHtml(config, mdx)
+  context.footerHtmlByDir = await resolveFooterHtmlByDirectory(config, mdx)
 
   const existing = await readManifest(config.outDir)
   const manifest =
@@ -262,7 +262,7 @@ class IncrementalRuntime {
       this.config.contentDir,
       this.config.outDir,
     )
-    this.context.defaultFooterHtml = await resolveDefaultFooterHtml(
+    this.context.footerHtmlByDir = await resolveFooterHtmlByDirectory(
       this.config,
       this.context.mdx,
     )

@@ -6,7 +6,7 @@ import type { Component } from 'regor'
 
 import type { SiteConfig } from '../config/config'
 import {
-  discoverDefaultFooter,
+  discoverDefaultFooters,
   type ContentFile,
 } from '../discover/content'
 import {
@@ -35,7 +35,7 @@ import { renderPage } from './renderer'
 
 export interface BuildContext {
   config: SiteConfig
-  defaultFooterHtml?: string
+  footerHtmlByDir?: Map<string, string>
   writeErrorPages?: boolean
   components?: Record<string, Component<unknown>>
   templates?: PageTemplateMap
@@ -153,16 +153,20 @@ export async function renderPageFromFile(
   }
 }
 
-export async function resolveDefaultFooterHtml(
+export async function resolveFooterHtmlByDirectory(
   config: SiteConfig,
   mdxOptions: MdxRenderOptions | undefined,
-): Promise<string | undefined> {
-  const footerFile = await discoverDefaultFooter(config.contentDir)
-  if (!footerFile) return undefined
-  const source = await readSource(footerFile.absPath)
-  const parsedContent = parseFrontmatterSource(source, footerFile.relPath)
-  const compiled = compilePageContent(footerFile, parsedContent.body, mdxOptions)
-  return compiled.bodyHtml
+): Promise<Map<string, string>> {
+  const footers = await discoverDefaultFooters(config.contentDir)
+  const htmlByDir = new Map<string, string>()
+  for (const footerFile of footers) {
+    const source = await readSource(footerFile.absPath)
+    const parsedContent = parseFrontmatterSource(source, footerFile.relPath)
+    const compiled = compilePageContent(footerFile, parsedContent.body, mdxOptions)
+    const dirKey = toFooterDirKey(footerFile.relPath)
+    htmlByDir.set(dirKey, compiled.bodyHtml)
+  }
+  return htmlByDir
 }
 
 function createPageTemplateInfo(
@@ -211,10 +215,43 @@ async function renderPageShell(input: RenderPageShellInput): Promise<string> {
     navigation,
     pageInfo,
     siteTitle: context.config.siteTitle,
-    footerHtml: context.defaultFooterHtml,
+    footerHtml: resolveFooterHtmlForPage(
+      pageInfo.relPath,
+      context.footerHtmlByDir,
+    ),
     consent: context.config.consent,
     analytics: context.config.analytics,
   })
+}
+
+function resolveFooterHtmlForPage(
+  pageRelPath: string,
+  footerHtmlByDir: Map<string, string> | undefined,
+): string | undefined {
+  if (!footerHtmlByDir || footerHtmlByDir.size === 0) return undefined
+  let dir = toFooterDirKey(pageRelPath)
+  while (true) {
+    const footerHtml = footerHtmlByDir.get(dir)
+    if (typeof footerHtml === 'string' && footerHtml.trim().length > 0) {
+      return footerHtml
+    }
+    if (dir.length === 0) {
+      return undefined
+    }
+    dir = toParentDirKey(dir)
+  }
+}
+
+function toFooterDirKey(relPath: string) {
+  const dir = path.dirname(relPath)
+  if (dir === '.') return ''
+  return dir.replaceAll('\\', '/')
+}
+
+function toParentDirKey(dirKey: string) {
+  const slashIndex = dirKey.lastIndexOf('/')
+  if (slashIndex < 0) return ''
+  return dirKey.slice(0, slashIndex)
 }
 
 type RenderAppContextInput = {

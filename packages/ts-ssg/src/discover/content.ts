@@ -29,7 +29,7 @@ export function isSiteConfigFile(relPath: string) {
 }
 
 export function isDefaultFooterFile(relPath: string) {
-  return relPath.replaceAll('\\', '/') === DEFAULT_FOOTER_FILENAME
+  return path.basename(relPath) === DEFAULT_FOOTER_FILENAME
 }
 
 export async function discoverContent(
@@ -58,22 +58,14 @@ export async function discoverStaticAssets(
   return assets.sort((a, b) => a.relPath.localeCompare(b.relPath))
 }
 
-export async function discoverDefaultFooter(
+export async function discoverDefaultFooters(
   contentDir: string,
-): Promise<ContentFile | undefined> {
-  const absPath = path.join(contentDir, DEFAULT_FOOTER_FILENAME)
-  try {
-    await fs.stat(absPath)
-    return {
-      absPath,
-      relPath: DEFAULT_FOOTER_FILENAME,
-      ext: '.mdx',
-    }
-  } catch (error) {
-    const err = error as NodeJS.ErrnoException
-    if (err?.code === 'ENOENT') return undefined
-    throw error
-  }
+): Promise<ContentFile[]> {
+  const files: ContentFile[] = []
+  await walkDir(contentDir, contentDir, files, (relPath, ext) => {
+    return ext === '.mdx' && isDefaultFooterFile(relPath)
+  })
+  return files.sort((a, b) => a.relPath.localeCompare(b.relPath))
 }
 
 type WalkPredicate = (relPath: string, ext: string) => boolean
