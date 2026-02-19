@@ -5,10 +5,7 @@ import { build as buildScript } from 'esbuild'
 import { getLogger } from 'logpot'
 
 import { discoverStaticAssets, type StaticAssetFile } from '../discover/content'
-import {
-  isTypeScriptAssetPath,
-  toOutputAssetRelPath,
-} from '../util/assetPath'
+import { isTypeScriptAssetPath, toOutputAssetRelPath } from '../util/assetPath'
 import { ensureDir } from '../util/fs'
 
 export interface CopyStaticAssetsResult {

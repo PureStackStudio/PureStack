@@ -1,8 +1,7 @@
-import { createComponent, html, type ComponentHead } from 'regor'
 import path from 'node:path'
-
-import { resolveTsSsgContext } from '../../resolveTsSsgContext'
+import { type ComponentHead, createComponent, html } from 'regor'
 import { toOutputAssetRelPath } from '../../../util/assetPath'
+import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 
 interface PageScriptProps {
   teleport?: string

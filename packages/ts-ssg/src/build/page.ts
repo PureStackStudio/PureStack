@@ -6,9 +6,9 @@ import type { Component } from 'regor'
 
 import type { SiteConfig } from '../config/config'
 import {
-  discoverDefaultHeaders,
-  discoverDefaultFooters,
   type ContentFile,
+  discoverDefaultFooters,
+  discoverDefaultHeaders,
 } from '../discover/content'
 import {
   normalizeFrontmatter,

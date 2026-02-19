@@ -42,10 +42,14 @@ export async function discoverContent(
 ): Promise<ContentFile[]> {
   const log = getLogger()
   const files: ContentFile[] = []
-  await walkDir(contentDir, contentDir, files, (relPath, ext) =>
-    isContentFile(relPath, ext) &&
-    !isDefaultFooterFile(relPath) &&
-    !isDefaultHeaderFile(relPath),
+  await walkDir(
+    contentDir,
+    contentDir,
+    files,
+    (relPath, ext) =>
+      isContentFile(relPath, ext) &&
+      !isDefaultFooterFile(relPath) &&
+      !isDefaultHeaderFile(relPath),
   )
   log.info('discover complete', { fileCount: files.length })
   return files.sort((a, b) => a.relPath.localeCompare(b.relPath))

@@ -1,12 +1,11 @@
 import fs from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
-
-import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { disableLogger, getLogger, type Logger } from 'logpot'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import { resolveSiteConfig } from '../config/config'
-import { type ContentFile } from '../discover/content'
+import type { ContentFile } from '../discover/content'
 import { renderPageFromFile, resolveFooterHtmlByDirectory } from './page'
 
 async function writeFile(filePath: string, contents = '') {
@@ -41,7 +40,10 @@ describe('footer hierarchy', () => {
       )
       await writeFile(path.join(contentDir, 'index.mdx'), '# Home')
       await writeFile(path.join(contentDir, 'guide', 'index.mdx'), '# Guide')
-      await writeFile(path.join(contentDir, 'guide', 'sub', 'page.mdx'), '# Sub')
+      await writeFile(
+        path.join(contentDir, 'guide', 'sub', 'page.mdx'),
+        '# Sub',
+      )
 
       const config = resolveSiteConfig({
         rootDir: root,

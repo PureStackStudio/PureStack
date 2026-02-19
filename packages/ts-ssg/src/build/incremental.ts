@@ -6,9 +6,9 @@ import { resolveSiteConfig, type SiteConfig } from '../config/config'
 import {
   type ContentFile,
   discoverContent,
-  isDefaultHeaderFile,
-  isDefaultFooterFile,
   isContentFile,
+  isDefaultFooterFile,
+  isDefaultHeaderFile,
   isSiteConfigFile,
   type StaticAssetFile,
 } from '../discover/content'
@@ -48,9 +48,9 @@ import { resolveOutPath, resolveRouteInfo } from './out-path'
 import {
   type BuildContext,
   buildPage,
-  resolveHeaderHtmlByDirectory,
-  resolveFooterHtmlByDirectory,
   renderPageFromFile,
+  resolveFooterHtmlByDirectory,
+  resolveHeaderHtmlByDirectory,
   writePage,
 } from './page'
 import { buildPagefindIndex } from './pagefind'

@@ -17,6 +17,9 @@
       "correctness": {
         "noUnusedImports": "error",
         "noUnusedVariables": "error"
+      },
+      "suspicious": {
+        "noEmptyInterface": "off"
       }
     }
   },

@@ -2,9 +2,8 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
-
-import { resolveSiteConfig } from './config'
 import { builtInSkins } from '../style/skins'
+import { resolveSiteConfig } from './config'
 
 describe('resolveSiteConfig sitemap', () => {
   it('resolves siteConfig outDir relative to contentDir', () => {

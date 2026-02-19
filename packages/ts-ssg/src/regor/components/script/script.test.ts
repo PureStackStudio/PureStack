@@ -54,9 +54,7 @@ describe('PageScript rendering', () => {
     )
     cleanup()
 
-    expect(html).toContain(
-      'src="/scripts/policies/policies.js?mode=prod#boot"',
-    )
+    expect(html).toContain('src="/scripts/policies/policies.js?mode=prod#boot"')
     expect(html).toContain('type="module"')
   })
 })

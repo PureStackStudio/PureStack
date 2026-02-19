@@ -121,7 +121,14 @@
       "properties": {
         "skin": {
           "type": "string",
-          "enum": ["ocean", "evergreen", "pastel", "extrao", "cyberpunk", "neon"],
+          "enum": [
+            "ocean",
+            "evergreen",
+            "pastel",
+            "extrao",
+            "cyberpunk",
+            "neon"
+          ],
           "description": "Built-in skin preset. Applies both light and dark palettes before any explicit theme token overrides."
         }
       }

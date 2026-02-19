@@ -147,12 +147,7 @@ export type PartialAnalyticsConfig = {
 export type PartialSiteConfig = Partial<
   Omit<
     SiteConfig,
-    | 'theme'
-    | 'sitemap'
-    | 'logo'
-    | 'consent'
-    | 'analytics'
-    | 'pagefind'
+    'theme' | 'sitemap' | 'logo' | 'consent' | 'analytics' | 'pagefind'
   >
 > & {
   logo?: PartialLogoConfig

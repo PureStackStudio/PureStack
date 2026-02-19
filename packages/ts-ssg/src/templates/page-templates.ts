@@ -95,7 +95,7 @@ function renderDocTemplate({
               : []),
           ),
         h('consent'),
-        buildFooter(showFooter, footerHtml)
+        buildFooter(showFooter, footerHtml),
       ),
   )
 }
@@ -184,7 +184,7 @@ function renderSplashTemplate({
         buildTopBar(headerHtml),
         h('main').push(h('section').attr({ class: 'splash' }).raw(bodyHtml)),
         h('consent'),
-        buildFooter(showFooter, footerHtml)
+        buildFooter(showFooter, footerHtml),
       ),
   )
 }
@@ -207,6 +207,6 @@ function hasHeaderHtml(headerHtml?: string): headerHtml is string {
   return typeof headerHtml === 'string' && headerHtml.trim().length > 0
 }
 
-function hasFooterHtml(footerHtml?: string) : footerHtml is string {
+function hasFooterHtml(footerHtml?: string): footerHtml is string {
   return typeof footerHtml === 'string' && footerHtml.trim().length > 0
 }

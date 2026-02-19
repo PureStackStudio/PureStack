@@ -239,7 +239,8 @@ function resolveFormAssistLinkContext(
   props: FormAssistLinkProps,
 ): FormAssistLinkContext {
   const href = urlNormalizer.normalizeHref(props.href)
-  const rel = props.rel || (props.target === '_blank' ? 'noopener noreferrer' : '')
+  const rel =
+    props.rel || (props.target === '_blank' ? 'noopener noreferrer' : '')
   return {
     href,
     label: props.label,

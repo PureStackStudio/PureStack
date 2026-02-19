@@ -94,7 +94,9 @@ export function createLoginComponents() {
   }
 }
 
-function resolveLoginHeaderContext(props: LoginHeaderProps): LoginHeaderContext {
+function resolveLoginHeaderContext(
+  props: LoginHeaderProps,
+): LoginHeaderContext {
   return {
     badge: props.badge,
     title: props.title,
@@ -104,7 +106,9 @@ function resolveLoginHeaderContext(props: LoginHeaderProps): LoginHeaderContext 
   }
 }
 
-function resolveLoginFooterContext(props: LoginFooterProps): LoginFooterContext {
+function resolveLoginFooterContext(
+  props: LoginFooterProps,
+): LoginFooterContext {
   const linkHref = urlNormalizer.normalizeHref(props.linkHref)
   return {
     text: props.text,

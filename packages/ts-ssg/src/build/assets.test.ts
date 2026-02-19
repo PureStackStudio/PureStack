@@ -6,9 +6,9 @@ import { disableLogger, getLogger, type Logger } from 'logpot'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import {
+  type CopyStaticAssetsResult,
   copyStaticAssets,
   resolveStaticOutPath,
-  type CopyStaticAssetsResult,
 } from './assets'
 
 async function writeFile(filePath: string, contents: string) {
@@ -21,7 +21,9 @@ function hasAsset(
   relPath: string,
   ext: string,
 ): boolean {
-  return result.files.some((file) => file.relPath === relPath && file.ext === ext)
+  return result.files.some(
+    (file) => file.relPath === relPath && file.ext === ext,
+  )
 }
 
 describe('static assets', () => {
@@ -57,7 +59,10 @@ describe('static assets', () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-assets-'))
     const outDir = path.join(root, 'dist')
     try {
-      await writeFile(path.join(root, 'login.ts'), 'const x: number = 7\nconsole.log(x)')
+      await writeFile(
+        path.join(root, 'login.ts'),
+        'const x: number = 7\nconsole.log(x)',
+      )
       await writeFile(path.join(root, 'notes.txt'), 'hello')
 
       const result = await copyStaticAssets(root, outDir)
