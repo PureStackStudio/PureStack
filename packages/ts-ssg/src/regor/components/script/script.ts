@@ -1,4 +1,8 @@
-import { createComponent, html } from 'regor'
+import { createComponent, html, type ComponentHead } from 'regor'
+import path from 'node:path'
+
+import { resolveTsSsgContext } from '../../resolveTsSsgContext'
+import { toOutputAssetRelPath } from '../../../util/assetPath'
 
 interface PageScriptProps {
   teleport?: string
@@ -40,7 +44,7 @@ function createPageScriptComponent() {
       'referrerPolicy',
       'noModule',
     ],
-    context: (head) => resolvePageScriptContext(head.props),
+    context: (head) => resolvePageScriptContext(head),
   })
 }
 
@@ -50,8 +54,12 @@ export function createScriptComponents() {
   }
 }
 
-function resolvePageScriptContext(props: PageScriptProps): PageScriptProps {
-  const src = resolveScriptSrc(props.src)
+function resolvePageScriptContext(
+  head: ComponentHead<PageScriptProps>,
+): PageScriptProps {
+  const props = head.props
+  const pageRelPath = resolvePageRelPath(head)
+  const src = resolveScriptSrc(props.src, pageRelPath)
   return {
     ...props,
     src,
@@ -60,13 +68,15 @@ function resolvePageScriptContext(props: PageScriptProps): PageScriptProps {
   }
 }
 
-function resolveScriptSrc(src: unknown) {
+function resolveScriptSrc(src: unknown, pageRelPath: string) {
   const normalized = toOptionalString(src)
   if (!normalized) {
     throw new Error('PageScript requires a non-empty "src" prop.')
   }
+  if (isExternalSrc(normalized)) return normalized
   const { base, suffix } = splitSuffix(normalized)
-  return `${replaceTsExt(base)}${suffix}`
+  const sourceRelPath = resolveSourceRelPath(base, pageRelPath)
+  return `/${toOutputAssetRelPath(sourceRelPath)}${suffix}`
 }
 
 function splitSuffix(src: string) {
@@ -85,8 +95,43 @@ function splitSuffix(src: string) {
   }
 }
 
-function replaceTsExt(value: string) {
-  return value.replace(/\.ts$/i, '.js')
+function resolveSourceRelPath(value: string, pageRelPath: string) {
+  if (value.startsWith('/')) {
+    return trimLeadingSlashes(value)
+  }
+  const sourceDir = path.posix.dirname(toPosixPath(pageRelPath))
+  const normalizedSourceDir = sourceDir === '.' ? '' : sourceDir
+  const resolved = path.posix.normalize(
+    path.posix.join(normalizedSourceDir, value),
+  )
+  if (resolved === '..' || resolved.startsWith('../')) {
+    throw new Error(`PageScript src resolves outside content root: "${value}"`)
+  }
+  return resolved
+}
+
+function isExternalSrc(value: string) {
+  return (
+    value.startsWith('//') ||
+    value.startsWith('http://') ||
+    value.startsWith('https://')
+  )
+}
+
+function trimLeadingSlashes(value: string) {
+  return value.replace(/^\/+/, '')
+}
+
+function resolvePageRelPath(head: unknown) {
+  try {
+    return resolveTsSsgContext(head as ComponentHead<unknown>).pageInfo.relPath
+  } catch {
+    return 'index.mdx'
+  }
+}
+
+function toPosixPath(filePath: string) {
+  return filePath.split(path.sep).join('/')
 }
 
 function toOptionalString(value: unknown) {

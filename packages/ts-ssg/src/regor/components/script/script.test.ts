@@ -28,7 +28,7 @@ describe('PageScript rendering', () => {
     cleanup()
 
     expect(html).toContain('<script')
-    expect(html).toContain('src="./login.js"')
+    expect(html).toContain('src="/login/login.js"')
     expect(html).toContain('type="module"')
   })
 
@@ -55,7 +55,7 @@ describe('PageScript rendering', () => {
     cleanup()
 
     expect(html).toContain(
-      'src="../scripts/policies.js?mode=prod#boot"',
+      'src="/scripts/policies/policies.js?mode=prod#boot"',
     )
     expect(html).toContain('type="module"')
   })
