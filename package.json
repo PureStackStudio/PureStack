@@ -26,14 +26,16 @@
     "dev": "yarn tsx --watch packages/ts-ssg/src/index.ts",
     "embed": "yarn tsx scripts/embed.ts && yarn format",
     "build": "yarn workspaces foreach --no-private --all --verbose --topological -- run build",
-    "lint": "yarn workspaces foreach --no-private --all --verbose --topological -- run lint",
+    "lint": "yarn workspaces foreach --no-private --all --verbose --topological -- run lint && yarn lint-mygate",
     "bundle": "yarn tsx --no-warnings scripts/bundle.ts && biome check --write \"packages/**/*.d.ts\"",
     "cleanup": "yarn tsx --no-warnings scripts/cleanup.ts",
     "test": "vitest",
     "package": "yarn workspaces foreach --no-private --all --parallel pack",
     "longest": "yarn tsx ./scripts/longest-functions.ts",
-    "format": "biome format --write .",
+    "format": "biome format --write",
     "pre-commit": "yarn embed && yarn lint && yarn build && yarn test run",
-    "mygate": "yarn tsx --watch packages/ts-ssg/src/index.ts --content MyGate/MyGateApp/admin-panel/content --serve"
+    "mygate": "yarn tsx --watch packages/ts-ssg/src/index.ts --content MyGate/MyGateApp/admin-panel/content --serve",
+    "lint-mygate": "biome check MyGate/MyGateApp/admin-panel/content --write --formatter-enabled=false",
+    "format-mygate": "biome format MyGate/MyGateApp/admin-panel/content --write"
   }
 }
