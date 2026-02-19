@@ -95,9 +95,7 @@ function renderDocTemplate({
               : []),
           ),
         h('consent'),
-        ...(showFooter && hasFooterHtml(footerHtml)
-          ? [h('div').raw(footerHtml)]
-          : []),
+        buildFooter(showFooter, footerHtml)
       ),
   )
 }
@@ -186,9 +184,7 @@ function renderSplashTemplate({
         buildTopBar(headerHtml),
         h('main').push(h('section').attr({ class: 'splash' }).raw(bodyHtml)),
         h('consent'),
-        ...(showFooter && hasFooterHtml(footerHtml)
-          ? [h('div').raw(footerHtml)]
-          : []),
+        buildFooter(showFooter, footerHtml)
       ),
   )
 }
@@ -196,6 +192,13 @@ function renderSplashTemplate({
 function buildTopBar(headerHtml?: string) {
   if (hasHeaderHtml(headerHtml)) {
     return h('').raw(headerHtml)
+  }
+  return h('')
+}
+
+function buildFooter(showFooter: boolean, footerHtml?: string) {
+  if (showFooter && hasFooterHtml(footerHtml)) {
+    return h('').raw(footerHtml)
   }
   return h('')
 }
