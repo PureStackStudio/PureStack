@@ -24,7 +24,6 @@ const pageScriptTemplate = html`<script
     :crossorigin="crossOrigin"
     :referrerpolicy="referrerPolicy"
     :nomodule="noModule"
-    r-if="src"
   ></script>`
 
 function createPageScriptComponent() {
@@ -52,21 +51,46 @@ export function createScriptComponents() {
 }
 
 function resolvePageScriptContext(props: PageScriptProps): PageScriptProps {
+  const src = resolveScriptSrc(props.src)
   return {
     ...props,
-    src: toRequiredString(props.src),
+    src,
     type: toOptionalString(props.type) ?? 'module',
     teleport: toOptionalString(props.teleport) ?? 'body',
   }
 }
 
-function toRequiredString(value: unknown) {
-  const parsed = toOptionalString(value)
-  return parsed ?? ''
+function resolveScriptSrc(src: unknown) {
+  const normalized = toOptionalString(src)
+  if (!normalized) {
+    throw new Error('PageScript requires a non-empty "src" prop.')
+  }
+  const { base, suffix } = splitSuffix(normalized)
+  return `${replaceTsExt(base)}${suffix}`
+}
+
+function splitSuffix(src: string) {
+  const hashIndex = src.indexOf('#')
+  const queryIndex = src.indexOf('?')
+  const index =
+    hashIndex === -1
+      ? queryIndex
+      : queryIndex === -1
+        ? hashIndex
+        : Math.min(hashIndex, queryIndex)
+  if (index < 0) return { base: src, suffix: '' }
+  return {
+    base: src.slice(0, index),
+    suffix: src.slice(index),
+  }
+}
+
+function replaceTsExt(value: string) {
+  return value.replace(/\.ts$/i, '.js')
 }
 
 function toOptionalString(value: unknown) {
-  if (typeof value !== 'string') return undefined
-  const trimmed = value.trim()
+  if (value === null || value === undefined) return undefined
+  const trimmed = String(value).trim()
   return trimmed.length > 0 ? trimmed : undefined
 }

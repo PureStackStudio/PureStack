@@ -1,9 +1,14 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
+import { build as buildScript } from 'esbuild'
 import { getLogger } from 'logpot'
 
 import { discoverStaticAssets, type StaticAssetFile } from '../discover/content'
+import {
+  isTypeScriptAssetPath,
+  toOutputAssetRelPath,
+} from '../util/assetPath'
 import { ensureDir } from '../util/fs'
 
 export interface CopyStaticAssetsResult {
@@ -25,7 +30,7 @@ export async function copyStaticAssets(
   for (const asset of assets) {
     const outPath = resolveStaticOutPath(outDir, asset)
     await ensureDir(outPath)
-    await fs.copyFile(asset.absPath, outPath)
+    await writeStaticAsset(asset, outPath)
   }
   log.info('static assets copied', { count: assets.length })
   return { assets: assets.length, files: assets }
@@ -39,7 +44,7 @@ export async function copyStaticAsset(
   const outPath = resolveStaticOutPath(outDir, asset)
   try {
     await ensureDir(outPath)
-    await fs.copyFile(asset.absPath, outPath)
+    await writeStaticAsset(asset, outPath)
     log.info('static asset copied', {
       assetPath: asset.absPath,
       outPath,
@@ -57,5 +62,21 @@ export async function copyStaticAsset(
 }
 
 export function resolveStaticOutPath(outDir: string, asset: StaticAssetFile) {
-  return path.join(outDir, asset.relPath)
+  return path.join(outDir, toOutputAssetRelPath(asset.relPath))
+}
+
+async function writeStaticAsset(asset: StaticAssetFile, outPath: string) {
+  if (isTypeScriptAssetPath(asset.relPath)) {
+    await buildScript({
+      entryPoints: [asset.absPath],
+      outfile: outPath,
+      bundle: true,
+      format: 'esm',
+      platform: 'browser',
+      target: 'es2020',
+      logLevel: 'silent',
+    })
+    return
+  }
+  await fs.copyFile(asset.absPath, outPath)
 }
