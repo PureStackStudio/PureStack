@@ -73,7 +73,7 @@ async function writeStaticAsset(asset: StaticAssetFile, outPath: string) {
       bundle: true,
       format: 'esm',
       platform: 'browser',
-      target: 'es2020',
+      target: 'esnext',
       logLevel: 'silent',
     })
     return
