@@ -11,7 +11,7 @@ export function registerBadgeStyles() {
 
 function registerBadgeBaseStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
-    .select('.status-badge', theme)
+    .select('.badge', theme)
     .display('inline-flex')
     .alignItems('center')
     .padding('2px 8px')
@@ -28,25 +28,25 @@ function registerBadgeBaseStyles(theme: ThemeMode, palette: ThemePalette) {
 
 function registerBadgeToneStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
-    .select('.status-badge--info', theme)
+    .select('.badge--info', theme)
     .borderColor(palette.status.info.border)
     .background(palette.status.info.background)
     .color(palette.status.info.text)
 
   styleBuilder
-    .select('.status-badge--success', theme)
+    .select('.badge--success', theme)
     .borderColor(palette.status.success.border)
     .background(palette.status.success.background)
     .color(palette.status.success.text)
 
   styleBuilder
-    .select('.status-badge--error', theme)
+    .select('.badge--error', theme)
     .borderColor(palette.status.danger.border)
     .background(palette.status.danger.background)
     .color(palette.status.danger.text)
 
   styleBuilder
-    .select('.status-badge--warning', theme)
+    .select('.badge--warning', theme)
     .borderColor(palette.status.warning.border)
     .background(palette.status.warning.background)
     .color(palette.status.warning.text)

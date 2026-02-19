@@ -12,15 +12,12 @@ describe('StatusBadge rendering', () => {
       string,
       Component<unknown>
     >
-    const html = renderApp(
-      '<StatusBadge variant="warning">pending</StatusBadge>',
-      {
-        components,
-      },
-    )
+    const html = renderApp('<Badge variant="warning">pending</Badge>', {
+      components,
+    })
     cleanup()
 
-    expect(html).toContain('class="status-badge status-badge--warning"')
+    expect(html).toContain('class="badge badge--warning"')
     expect(html).toContain('pending')
   })
 })

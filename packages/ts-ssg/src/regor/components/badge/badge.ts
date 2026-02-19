@@ -1,24 +1,24 @@
 import { createComponent, html } from 'regor'
 import { registerBadgeStyles } from './badgeStyle'
 
-interface StatusBadgeProps {
+interface BadgeProps {
   variant?: string
 }
 
-interface StatusBadgeContext extends StatusBadgeProps {
+interface BadgeContext extends BadgeProps {
   toneClass?: string
 }
 
-const statusBadgeTemplate = html`<span class="status-badge" :class="toneClass">
+const badgeTemplate = html`<span class="badge" :class="toneClass">
   <slot></slot>
 </span>`
 
-function createStatusBadgeComponent() {
-  return createComponent<StatusBadgeContext>(statusBadgeTemplate, {
+function createBadgeComponent() {
+  return createComponent<BadgeContext>(badgeTemplate, {
     props: ['variant'],
     context: (head) => ({
       variant: head.props.variant,
-      toneClass: resolveStatusBadgeToneClass(head.props.variant),
+      toneClass: resolveBadgeToneClass(head.props.variant),
     }),
   })
 }
@@ -26,11 +26,11 @@ function createStatusBadgeComponent() {
 export function createBadgeComponents() {
   registerBadgeStyles()
   return {
-    statusBadge: createStatusBadgeComponent(),
+    badge: createBadgeComponent(),
   }
 }
 
-function resolveStatusBadgeToneClass(value: string | undefined) {
+function resolveBadgeToneClass(value: string | undefined) {
   const normalized = value?.trim().toLowerCase()
   if (
     normalized === 'info' ||
@@ -38,7 +38,7 @@ function resolveStatusBadgeToneClass(value: string | undefined) {
     normalized === 'error' ||
     normalized === 'warning'
   ) {
-    return `status-badge--${normalized}`
+    return `badge--${normalized}`
   }
   return undefined
 }
