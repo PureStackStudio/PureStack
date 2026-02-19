@@ -63,6 +63,15 @@ interface FormDividerProps {
 
 interface FormDividerContext extends FormDividerProps {}
 
+interface FormStatusProps {
+  variant?: string
+  hidden?: unknown
+}
+
+interface FormStatusContext extends FormStatusProps {
+  toneClass?: string
+}
+
 const appFormTemplate = html`<form
   class="form-block"
   :action="action"
@@ -109,6 +118,16 @@ const formDividerTemplate = html`<div
   class="form-block__divider"
   :data-label="label"
 ></div>`
+
+const formStatusTemplate = html`<div
+  class="form-status"
+  :class="toneClass"
+  role="status"
+  aria-live="polite"
+  :hidden="hidden"
+>
+  <slot></slot>
+</div>`
 
 function createAppFormComponent() {
   return createComponent<AppFormContext>(appFormTemplate, {
@@ -165,6 +184,17 @@ function createFormDividerComponent() {
   })
 }
 
+function createFormStatusComponent() {
+  return createComponent<FormStatusContext>(formStatusTemplate, {
+    props: ['variant', 'hidden'],
+    context: (head) => ({
+      variant: head.props.variant,
+      hidden: head.props.hidden,
+      toneClass: resolveStatusToneClass(head.props.variant),
+    }),
+  })
+}
+
 export function createFormComponents() {
   registerFormStyles()
   return {
@@ -175,6 +205,7 @@ export function createFormComponents() {
     formAssistLink: createFormAssistLinkComponent(),
     formSubmit: createFormSubmitComponent(),
     formDivider: createFormDividerComponent(),
+    formStatus: createFormStatusComponent(),
   }
 }
 
@@ -229,6 +260,19 @@ function resolveInputType(value: string | undefined) {
     normalized === 'text'
   ) {
     return normalized
+  }
+  return undefined
+}
+
+function resolveStatusToneClass(value: string | undefined) {
+  const normalized = value?.trim().toLowerCase()
+  if (
+    normalized === 'info' ||
+    normalized === 'success' ||
+    normalized === 'error' ||
+    normalized === 'warning'
+  ) {
+    return `form-status--${normalized}`
   }
   return undefined
 }

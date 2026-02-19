@@ -12,6 +12,7 @@ export function registerFormStyles() {
     registerFormFieldStyles(theme, palette, options)
     registerFormMetaStyles(theme, palette)
     registerFormActionStyles(theme, palette, options)
+    registerFormStatusStyles(theme, palette, options)
     registerFormResponsiveStyles(theme)
   })
 }
@@ -127,6 +128,47 @@ function registerFormActionStyles(
     .select('.form-block__submit:focus-visible', theme)
     .outline(`2px solid ${palette.action.accent.focusRing}`)
     .outlineOffset('2px')
+}
+
+function registerFormStatusStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
+  styleBuilder
+    .select('.form-status', theme)
+    .marginTop('4px')
+    .padding('11px 12px')
+    .borderRadius(options.radii.md)
+    .border(`1px solid ${palette.border.default}`)
+    .background(palette.background.canvas)
+    .color(palette.text.default)
+    .fontSize('0.9rem')
+    .lineHeight('1.35')
+
+  styleBuilder
+    .select('.form-status--info', theme)
+    .borderColor(palette.status.info.border)
+    .background(palette.status.info.background)
+    .color(palette.status.info.text)
+
+  styleBuilder
+    .select('.form-status--success', theme)
+    .borderColor(palette.status.success.border)
+    .background(palette.status.success.background)
+    .color(palette.status.success.text)
+
+  styleBuilder
+    .select('.form-status--error', theme)
+    .borderColor(palette.status.danger.border)
+    .background(palette.status.danger.background)
+    .color(palette.status.danger.text)
+
+  styleBuilder
+    .select('.form-status--warning', theme)
+    .borderColor(palette.status.warning.border)
+    .background(palette.status.warning.background)
+    .color(palette.status.warning.text)
 }
 
 function registerFormResponsiveStyles(theme: ThemeMode) {
