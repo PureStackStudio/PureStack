@@ -14,6 +14,7 @@ import { createLogoComponents } from './components/logo/logo'
 import { createNavigationComponents } from './components/navMenu/navMenu'
 import { createPageTocComponents } from './components/pageToc/pageToc'
 import { createPricingComponents } from './components/pricing/pricing'
+import { createScriptComponents } from './components/script/script'
 import { createSearchComponents } from './components/searchBox/searchBox'
 import { createThemeSwitcherComponents } from './components/themeSwitcher/themeSwitcher'
 import { createTopBarComponents } from './components/topBar/topBar'
@@ -41,5 +42,6 @@ export function initBuiltinComponents() {
   componentRegistry.registerMany(createNavigationComponents())
   componentRegistry.registerMany(createPageTocComponents())
   componentRegistry.registerMany(createPricingComponents())
+  componentRegistry.registerMany(createScriptComponents())
   componentRegistry.registerMany(createSearchComponents())
 }
