@@ -3,6 +3,7 @@ import { styleBuilder } from '../style/styles'
 import { registerDocLayoutStyles } from '../templates/docLayoutStyles'
 import { registerMarkdownStyles } from '../templates/markdownStyles'
 import { createAlertComponents } from './components/alert/alert'
+import { createBadgeComponents } from './components/badge/badge'
 import { createCardComponents } from './components/cardGrid/cardGrid'
 import { createConsentComponents } from './components/consent/consent'
 import { createContactFormComponents } from './components/contactForm/contactForm'
@@ -29,6 +30,7 @@ export function initBuiltinComponents() {
   registerDocLayoutStyles()
   registerMarkdownStyles()
   componentRegistry.registerMany(createAlertComponents())
+  componentRegistry.registerMany(createBadgeComponents())
   componentRegistry.registerMany(createCardComponents())
   componentRegistry.registerMany(createConsentComponents())
   componentRegistry.registerMany(createContactFormComponents())
