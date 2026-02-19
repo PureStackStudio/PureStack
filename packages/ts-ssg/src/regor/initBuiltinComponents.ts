@@ -7,7 +7,9 @@ import { createCardComponents } from './components/cardGrid/cardGrid'
 import { createConsentComponents } from './components/consent/consent'
 import { createContactFormComponents } from './components/contactForm/contactForm'
 import { createFooterComponents } from './components/footer/footer'
+import { createFormComponents } from './components/form/form'
 import { createHeroComponents } from './components/hero/hero'
+import { createLoginComponents } from './components/login/login'
 import { createLogoComponents } from './components/logo/logo'
 import { createNavigationComponents } from './components/navMenu/navMenu'
 import { createPageTocComponents } from './components/pageToc/pageToc'
@@ -30,7 +32,9 @@ export function initBuiltinComponents() {
   componentRegistry.registerMany(createConsentComponents())
   componentRegistry.registerMany(createContactFormComponents())
   componentRegistry.registerMany(createFooterComponents())
+  componentRegistry.registerMany(createFormComponents())
   componentRegistry.registerMany(createHeroComponents())
+  componentRegistry.registerMany(createLoginComponents())
   componentRegistry.registerMany(createLogoComponents())
   componentRegistry.registerMany(createTopBarComponents())
   componentRegistry.registerMany(createThemeSwitcherComponents())

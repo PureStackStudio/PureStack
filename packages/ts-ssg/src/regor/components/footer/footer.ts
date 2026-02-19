@@ -280,7 +280,7 @@ function resolveSiteFooterContext(
   const year = new Date().getFullYear()
   const tone = resolveFooterTone(props.tone)
   const variant = resolveFooterVariant(props.variant)
-  const showNewsletter = resolveBooleanFlag(props.newsletter, true)
+  const showNewsletter = (props.newsletter ?? true) as boolean
   const ctaRel =
     props.ctaRel || (props.ctaTarget === '_blank' ? 'noopener noreferrer' : '')
   if (!props.teleport) props.teleport = 'body'
@@ -320,7 +320,7 @@ function resolveSiteFooterContext(
 function resolveFooterColumnContext(
   props: FooterColumnProps,
 ): FooterColumnContext {
-  const compact = resolveBooleanFlag(props.compact, false)
+  const compact = Boolean(props.compact)
   return {
     ...props,
     rootClass: compact ? 'footer-column--compact' : '',
@@ -364,6 +364,20 @@ function resolveFooterSocialContext(
   }
 }
 
+function resolveFooterSocialIcon(icon?: string, label?: string) {
+  const normalized = icon?.toLowerCase() || label?.toLowerCase() || ''
+  if (normalized.includes('github')) return 'code'
+  if (normalized.includes('discord')) return 'support'
+  if (normalized.includes('linkedin')) return 'building'
+  if (normalized.includes('x') || normalized.includes('twitter'))
+    return 'rocket'
+  if (normalized.includes('community') || normalized.includes('forum')) {
+    return 'stack'
+  }
+  if (normalized.includes('security')) return 'shield'
+  return 'code'
+}
+
 function resolveFooterTone(value?: string) {
   const normalized = value?.toLowerCase() || ''
   if (
@@ -400,45 +414,8 @@ function resolveFooterLinkVariant(value?: string) {
   return 'default'
 }
 
-function resolveFooterSocialIcon(icon?: string, label?: string) {
-  const normalized = icon?.toLowerCase() || label?.toLowerCase() || ''
-  if (normalized.includes('github')) return 'code'
-  if (normalized.includes('discord')) return 'support'
-  if (normalized.includes('linkedin')) return 'building'
-  if (normalized.includes('x') || normalized.includes('twitter'))
-    return 'rocket'
-  if (normalized.includes('community') || normalized.includes('forum')) {
-    return 'stack'
-  }
-  if (normalized.includes('security')) return 'shield'
-  return 'code'
-}
-
 function normalizeNewsletterMethod(value?: string) {
   const normalized = value?.toLowerCase() || ''
   if (normalized === 'post') return 'post'
   return 'get'
-}
-
-function resolveBooleanFlag(value: unknown, fallback: boolean) {
-  if (typeof value === 'boolean') return value
-  if (typeof value !== 'string') return fallback
-  const normalized = value.trim().toLowerCase()
-  if (
-    normalized === 'false' ||
-    normalized === '0' ||
-    normalized === 'no' ||
-    normalized === 'off'
-  ) {
-    return false
-  }
-  if (
-    normalized === 'true' ||
-    normalized === '1' ||
-    normalized === 'yes' ||
-    normalized === 'on'
-  ) {
-    return true
-  }
-  return fallback
 }

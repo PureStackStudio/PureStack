@@ -1,0 +1,115 @@
+import { createComponent, html } from 'regor'
+
+import { urlNormalizer } from '../../../util/urlNormalizer'
+import { registerLoginStyles } from './loginStyle'
+
+interface LoginHeaderProps {
+  badge?: string
+  title?: string
+  description?: string
+}
+
+interface LoginHeaderContext extends LoginHeaderProps {
+  hasBadge: boolean
+  hasDescription: boolean
+}
+
+interface LoginProviderProps {
+  label?: string
+}
+
+interface LoginProviderContext extends LoginProviderProps {}
+
+interface LoginFooterProps {
+  text?: string
+  linkLabel?: string
+  linkHref?: string
+}
+
+interface LoginFooterContext extends LoginFooterProps {
+  hasLink: boolean
+}
+
+const loginPanelTemplate = html`<section class="login-panel">
+  <div class="login-panel__shell">
+    <slot name="header"></slot>
+    <slot name="form"></slot>
+    <slot name="divider"></slot>
+    <div class="login-panel__providers">
+      <slot name="providers"></slot>
+    </div>
+    <slot name="footer"></slot>
+  </div>
+</section>`
+
+const loginHeaderTemplate = html`<header class="login-panel__header">
+  <p class="login-panel__badge" r-if="hasBadge">{{ badge }}</p>
+  <h1 class="login-panel__title">{{ title }}</h1>
+  <p class="login-panel__description" r-if="hasDescription">{{ description }}</p>
+</header>`
+
+const loginProviderTemplate = html`<button class="login-panel__provider" type="button">
+  {{ label }}
+</button>`
+
+const loginFooterTemplate = html`<p class="login-panel__footer">
+  <span>{{ text }}</span>
+  <a :href="linkHref" r-if="hasLink">{{ linkLabel }}</a>
+</p>`
+
+function createLoginPanelComponent() {
+  return createComponent<Record<string, never>>(loginPanelTemplate, {})
+}
+
+function createLoginHeaderComponent() {
+  return createComponent<LoginHeaderContext>(loginHeaderTemplate, {
+    props: ['badge', 'title', 'description'],
+    context: (head) => resolveLoginHeaderContext(head.props),
+  })
+}
+
+function createLoginProviderComponent() {
+  return createComponent<LoginProviderContext>(loginProviderTemplate, {
+    props: ['label'],
+    context: (head) => ({
+      label: head.props.label,
+    }),
+  })
+}
+
+function createLoginFooterComponent() {
+  return createComponent<LoginFooterContext>(loginFooterTemplate, {
+    props: ['text', 'linkLabel', 'linkHref'],
+    context: (head) => resolveLoginFooterContext(head.props),
+  })
+}
+
+export function createLoginComponents() {
+  registerLoginStyles()
+  return {
+    loginPanel: createLoginPanelComponent(),
+    loginHeader: createLoginHeaderComponent(),
+    loginProvider: createLoginProviderComponent(),
+    loginFooter: createLoginFooterComponent(),
+  }
+}
+
+function resolveLoginHeaderContext(props: LoginHeaderProps): LoginHeaderContext {
+  return {
+    badge: props.badge,
+    title: props.title,
+    description: props.description,
+    hasBadge: Boolean(props.badge),
+    hasDescription: Boolean(props.description),
+  }
+}
+
+function resolveLoginFooterContext(props: LoginFooterProps): LoginFooterContext {
+  const linkHref = urlNormalizer.normalizeHref(props.linkHref)
+  return {
+    text: props.text,
+    linkLabel: props.linkLabel,
+    linkHref,
+    hasLink: Boolean(linkHref),
+  }
+}
