@@ -57,4 +57,33 @@ describe('PageScript rendering', () => {
     expect(html).toContain('src="/scripts/policies/policies.js?mode=prod#boot"')
     expect(html).toContain('type="module"')
   })
+
+  it('renders RegorApp as app shell and reuses PageScript src mapping', () => {
+    const cleanup = ensureDomGlobals()
+    const components = createScriptComponents() as Record<
+      string,
+      Component<unknown>
+    >
+    const site = resolveSiteConfig()
+    const pageInfo = {
+      relPath: 'hosts.mdx',
+      urlPath: '/hosts/',
+      frontmatter: normalizeFrontmatter({}),
+    }
+
+    const html = renderApp(
+      '<RegorApp src="./hosts.ts" id="hosts-app" name="hosts-main"></RegorApp>',
+      {
+        components,
+        context: { site, theme: site.theme, pageInfo },
+      },
+    )
+    cleanup()
+
+    expect(html).toContain('<app')
+    expect(html).toContain('id="hosts-app"')
+    expect(html).toContain('name="hosts-main"')
+    expect(html).toContain('src="/hosts/hosts.js"')
+    expect(html).toContain('type="module"')
+  })
 })

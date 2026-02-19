@@ -16,6 +16,10 @@ interface PageScriptProps {
   noModule?: unknown
 }
 
+interface RegorAppProps {
+  src?: string
+}
+
 const pageScriptTemplate = html`<script
     :r-teleport="teleport"
     :src="src"
@@ -28,6 +32,8 @@ const pageScriptTemplate = html`<script
     :referrerpolicy="referrerPolicy"
     :nomodule="noModule"
   ></script>`
+
+const regorAppTemplate = html`<app><PageScript :src="src" /></app>`
 
 function createPageScriptComponent() {
   return createComponent<PageScriptProps>(pageScriptTemplate, {
@@ -47,9 +53,19 @@ function createPageScriptComponent() {
   })
 }
 
+function createRegorAppComponent() {
+  return createComponent<RegorAppProps>(regorAppTemplate, {
+    props: ['src'],
+    context: (head) => ({
+      src: head.props.src,
+    }),
+  })
+}
+
 export function createScriptComponents() {
   return {
     pageScript: createPageScriptComponent(),
+    regorApp: createRegorAppComponent(),
   }
 }
 
