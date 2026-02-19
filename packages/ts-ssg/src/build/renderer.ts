@@ -29,6 +29,7 @@ export interface RenderPageInput {
   navigation?: PageNavigation
   pageInfo: PageInfo
   siteTitle?: string
+  headerHtml?: string
   footerHtml?: string
   consent?: ConsentConfig
   analytics?: AnalyticsConfig
@@ -61,6 +62,7 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
     navigation: input.navigation,
     pageInfo: input.pageInfo,
     siteTitle: input.siteTitle,
+    headerHtml: input.headerHtml,
     footerHtml: input.footerHtml,
   })
   return await html.toPrettyHtml()

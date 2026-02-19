@@ -19,6 +19,7 @@ export interface StaticAssetFile {
 
 const CONTENT_EXTS = new Set(['.md', '.mdx'])
 export const DEFAULT_FOOTER_FILENAME = 'footer.mdx'
+export const DEFAULT_HEADER_FILENAME = 'header.mdx'
 
 export function isContentFile(_relPath: string, ext: string) {
   return CONTENT_EXTS.has(ext)
@@ -32,13 +33,19 @@ export function isDefaultFooterFile(relPath: string) {
   return path.basename(relPath) === DEFAULT_FOOTER_FILENAME
 }
 
+export function isDefaultHeaderFile(relPath: string) {
+  return path.basename(relPath) === DEFAULT_HEADER_FILENAME
+}
+
 export async function discoverContent(
   contentDir: string,
 ): Promise<ContentFile[]> {
   const log = getLogger()
   const files: ContentFile[] = []
   await walkDir(contentDir, contentDir, files, (relPath, ext) =>
-    isContentFile(relPath, ext) && !isDefaultFooterFile(relPath),
+    isContentFile(relPath, ext) &&
+    !isDefaultFooterFile(relPath) &&
+    !isDefaultHeaderFile(relPath),
   )
   log.info('discover complete', { fileCount: files.length })
   return files.sort((a, b) => a.relPath.localeCompare(b.relPath))
@@ -52,6 +59,7 @@ export async function discoverStaticAssets(
   await walkDir(contentDir, contentDir, assets, (relPath, ext) => {
     if (isSiteConfigFile(relPath)) return false
     if (isDefaultFooterFile(relPath)) return false
+    if (isDefaultHeaderFile(relPath)) return false
     return !isContentFile(relPath, ext)
   })
   log.info('static assets discovered', { assets })
@@ -64,6 +72,16 @@ export async function discoverDefaultFooters(
   const files: ContentFile[] = []
   await walkDir(contentDir, contentDir, files, (relPath, ext) => {
     return ext === '.mdx' && isDefaultFooterFile(relPath)
+  })
+  return files.sort((a, b) => a.relPath.localeCompare(b.relPath))
+}
+
+export async function discoverDefaultHeaders(
+  contentDir: string,
+): Promise<ContentFile[]> {
+  const files: ContentFile[] = []
+  await walkDir(contentDir, contentDir, files, (relPath, ext) => {
+    return ext === '.mdx' && isDefaultHeaderFile(relPath)
   })
   return files.sort((a, b) => a.relPath.localeCompare(b.relPath))
 }

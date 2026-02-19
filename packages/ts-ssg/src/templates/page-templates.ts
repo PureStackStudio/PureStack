@@ -19,6 +19,7 @@ export interface PageTemplateInput {
   navigation?: PageNavigation
   pageInfo: PageInfo
   siteTitle?: string
+  headerHtml?: string
   footerHtml?: string
 }
 
@@ -60,6 +61,7 @@ function renderDocTemplate({
   bodyHtml,
   navigation,
   pageInfo,
+  headerHtml,
   footerHtml,
 }: PageTemplateInput) {
   const frontmatter = pageInfo.frontmatter
@@ -70,7 +72,7 @@ function renderDocTemplate({
     h('body')
       .attr({ class: layout.bodyClass })
       .push(
-        h('top-bar'),
+        buildTopBar(headerHtml),
         h('div')
           .attr({ class: layout.shellClass })
           .push(
@@ -172,6 +174,7 @@ function renderSplashTemplate({
   head,
   bodyHtml,
   pageInfo,
+  headerHtml,
   footerHtml,
 }: PageTemplateInput) {
   const showFooter = pageInfo.frontmatter.layout.showFooter
@@ -180,6 +183,7 @@ function renderSplashTemplate({
     h('body')
       .attr({ class: 'template-splash' })
       .push(
+        buildTopBar(headerHtml),
         h('main').push(h('section').attr({ class: 'splash' }).raw(bodyHtml)),
         h('consent'),
         ...(showFooter && hasFooterHtml(footerHtml)
@@ -187,6 +191,17 @@ function renderSplashTemplate({
           : []),
       ),
   )
+}
+
+function buildTopBar(headerHtml?: string) {
+  if (hasHeaderHtml(headerHtml)) {
+    return h('').raw(headerHtml)
+  }
+  return h('')
+}
+
+function hasHeaderHtml(headerHtml?: string): headerHtml is string {
+  return typeof headerHtml === 'string' && headerHtml.trim().length > 0
 }
 
 function hasFooterHtml(footerHtml?: string) : footerHtml is string {

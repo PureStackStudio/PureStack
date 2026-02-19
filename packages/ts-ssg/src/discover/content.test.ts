@@ -8,6 +8,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import {
   discoverContent,
   discoverDefaultFooters,
+  discoverDefaultHeaders,
   discoverStaticAssets,
 } from './content'
 
@@ -32,8 +33,10 @@ describe('discoverContent + discoverStaticAssets', () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-'))
     try {
       await writeFile(path.join(root, 'index.mdx'), '# Home')
+      await writeFile(path.join(root, 'header.mdx'), '<TopBar />')
       await writeFile(path.join(root, 'footer.mdx'), '<SiteFooter />')
       await writeFile(path.join(root, 'guide', 'overview.md'), '# Guide')
+      await writeFile(path.join(root, 'guide', 'header.mdx'), '<TopBar />')
       await writeFile(path.join(root, 'guide', 'footer.mdx'), '<SiteFooter />')
       await writeFile(path.join(root, 'assets', 'logo.png'), 'png')
       await writeFile(path.join(root, 'siteConfig.json'), '{}')
@@ -43,6 +46,7 @@ describe('discoverContent + discoverStaticAssets', () => {
       const content = await discoverContent(root)
       const assets = await discoverStaticAssets(root)
       const footers = await discoverDefaultFooters(root)
+      const headers = await discoverDefaultHeaders(root)
 
       const contentRel = content.map((file) => file.relPath)
       expect(contentRel).toEqual([
@@ -55,6 +59,13 @@ describe('discoverContent + discoverStaticAssets', () => {
         'footer.mdx',
         path.join('guide', 'footer.mdx'),
       ])
+
+      const headerRel = headers.map((file) => file.relPath)
+      const expectedHeaders = [
+        'header.mdx',
+        path.join('guide', 'header.mdx'),
+      ].sort((a, b) => a.localeCompare(b))
+      expect(headerRel).toEqual(expectedHeaders)
 
       const assetRel = assets.map((file) => file.relPath)
       const expectedAssets = [

@@ -6,6 +6,7 @@ import type { Component } from 'regor'
 
 import type { SiteConfig } from '../config/config'
 import {
+  discoverDefaultHeaders,
   discoverDefaultFooters,
   type ContentFile,
 } from '../discover/content'
@@ -35,6 +36,7 @@ import { renderPage } from './renderer'
 
 export interface BuildContext {
   config: SiteConfig
+  headerHtmlByDir?: Map<string, string>
   footerHtmlByDir?: Map<string, string>
   writeErrorPages?: boolean
   components?: Record<string, Component<unknown>>
@@ -158,12 +160,27 @@ export async function resolveFooterHtmlByDirectory(
   mdxOptions: MdxRenderOptions | undefined,
 ): Promise<Map<string, string>> {
   const footers = await discoverDefaultFooters(config.contentDir)
+  return await resolveSpecialHtmlByDirectory(footers, mdxOptions)
+}
+
+export async function resolveHeaderHtmlByDirectory(
+  config: SiteConfig,
+  mdxOptions: MdxRenderOptions | undefined,
+): Promise<Map<string, string>> {
+  const headers = await discoverDefaultHeaders(config.contentDir)
+  return await resolveSpecialHtmlByDirectory(headers, mdxOptions)
+}
+
+async function resolveSpecialHtmlByDirectory(
+  files: ContentFile[],
+  mdxOptions: MdxRenderOptions | undefined,
+): Promise<Map<string, string>> {
   const htmlByDir = new Map<string, string>()
-  for (const footerFile of footers) {
-    const source = await readSource(footerFile.absPath)
-    const parsedContent = parseFrontmatterSource(source, footerFile.relPath)
-    const compiled = compilePageContent(footerFile, parsedContent.body, mdxOptions)
-    const dirKey = toFooterDirKey(footerFile.relPath)
+  for (const file of files) {
+    const source = await readSource(file.absPath)
+    const parsedContent = parseFrontmatterSource(source, file.relPath)
+    const compiled = compilePageContent(file, parsedContent.body, mdxOptions)
+    const dirKey = toDirKey(file.relPath)
     htmlByDir.set(dirKey, compiled.bodyHtml)
   }
   return htmlByDir
@@ -215,6 +232,10 @@ async function renderPageShell(input: RenderPageShellInput): Promise<string> {
     navigation,
     pageInfo,
     siteTitle: context.config.siteTitle,
+    headerHtml: resolveSpecialHtmlForPage(
+      pageInfo.relPath,
+      context.headerHtmlByDir,
+    ),
     footerHtml: resolveFooterHtmlForPage(
       pageInfo.relPath,
       context.footerHtmlByDir,
@@ -228,12 +249,19 @@ function resolveFooterHtmlForPage(
   pageRelPath: string,
   footerHtmlByDir: Map<string, string> | undefined,
 ): string | undefined {
-  if (!footerHtmlByDir || footerHtmlByDir.size === 0) return undefined
-  let dir = toFooterDirKey(pageRelPath)
+  return resolveSpecialHtmlForPage(pageRelPath, footerHtmlByDir)
+}
+
+function resolveSpecialHtmlForPage(
+  pageRelPath: string,
+  htmlByDir: Map<string, string> | undefined,
+): string | undefined {
+  if (!htmlByDir || htmlByDir.size === 0) return undefined
+  let dir = toDirKey(pageRelPath)
   while (true) {
-    const footerHtml = footerHtmlByDir.get(dir)
-    if (typeof footerHtml === 'string' && footerHtml.trim().length > 0) {
-      return footerHtml
+    const html = htmlByDir.get(dir)
+    if (typeof html === 'string' && html.trim().length > 0) {
+      return html
     }
     if (dir.length === 0) {
       return undefined
@@ -242,7 +270,7 @@ function resolveFooterHtmlForPage(
   }
 }
 
-function toFooterDirKey(relPath: string) {
+function toDirKey(relPath: string) {
   const dir = path.dirname(relPath)
   if (dir === '.') return ''
   return dir.replaceAll('\\', '/')

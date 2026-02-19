@@ -6,6 +6,7 @@ import { resolveSiteConfig, type SiteConfig } from '../config/config'
 import {
   type ContentFile,
   discoverContent,
+  isDefaultHeaderFile,
   isDefaultFooterFile,
   isContentFile,
   isSiteConfigFile,
@@ -47,6 +48,7 @@ import { resolveOutPath, resolveRouteInfo } from './out-path'
 import {
   type BuildContext,
   buildPage,
+  resolveHeaderHtmlByDirectory,
   resolveFooterHtmlByDirectory,
   renderPageFromFile,
   writePage,
@@ -113,6 +115,7 @@ async function createIncrementalRuntime(
     navigation,
     mdx,
   }
+  context.headerHtmlByDir = await resolveHeaderHtmlByDirectory(config, mdx)
   context.footerHtmlByDir = await resolveFooterHtmlByDirectory(config, mdx)
 
   const existing = await readManifest(config.outDir)
@@ -262,6 +265,10 @@ class IncrementalRuntime {
       this.config.contentDir,
       this.config.outDir,
     )
+    this.context.headerHtmlByDir = await resolveHeaderHtmlByDirectory(
+      this.config,
+      this.context.mdx,
+    )
     this.context.footerHtmlByDir = await resolveFooterHtmlByDirectory(
       this.config,
       this.context.mdx,
@@ -343,6 +350,10 @@ class IncrementalRuntime {
       return result
     }
     if (isDefaultFooterFile(relPath)) {
+      result.fullRebuild = true
+      return result
+    }
+    if (isDefaultHeaderFile(relPath)) {
       result.fullRebuild = true
       return result
     }
