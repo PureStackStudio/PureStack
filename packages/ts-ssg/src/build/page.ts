@@ -39,7 +39,7 @@ export interface BuildContext {
   headerHtmlByDir?: Map<string, string>
   footerHtmlByDir?: Map<string, string>
   writeErrorPages?: boolean
-  components?: Record<string, Component<unknown>>
+  components?: Record<string, Component>
   templates?: PageTemplateMap
   navigation?: NavigationTree
   mdx?: MdxRenderOptions

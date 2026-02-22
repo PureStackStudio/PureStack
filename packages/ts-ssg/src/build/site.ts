@@ -61,7 +61,7 @@ export interface BuildOptions {
   cleanOutDir?: boolean
   writeErrorPages?: boolean
   hooks?: BuildHooks
-  components?: Record<string, Component<unknown>>
+  components?: Record<string, Component>
   templates?: PageTemplateMap
   navigation?: NavigationConfig
   mdx?: MdxOptions

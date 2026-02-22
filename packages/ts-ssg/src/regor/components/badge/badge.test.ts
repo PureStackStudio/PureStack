@@ -1,4 +1,3 @@
-import type { Component } from 'regor'
 import { describe, expect, it } from 'vitest'
 
 import { ensureDomGlobals } from '../../registerDomGlobals'
@@ -8,10 +7,7 @@ import { createBadgeComponents } from './badge'
 describe('StatusBadge rendering', () => {
   it('renders badge with status variant class', () => {
     const cleanup = ensureDomGlobals()
-    const components = createBadgeComponents() as Record<
-      string,
-      Component<unknown>
-    >
+    const components = createBadgeComponents()
     const html = renderApp('<Badge variant="warning">pending</Badge>', {
       components,
     })

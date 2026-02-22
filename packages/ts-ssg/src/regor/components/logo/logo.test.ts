@@ -1,4 +1,3 @@
-import type { Component } from 'regor'
 import { describe, expect, it } from 'vitest'
 
 import { ensureDomGlobals } from '../../registerDomGlobals'
@@ -8,10 +7,7 @@ import { createLogoComponents } from './logo'
 describe('SiteLogo rendering', () => {
   it('renders two brand words and subtitle', () => {
     const cleanup = ensureDomGlobals()
-    const components = createLogoComponents() as Record<
-      string,
-      Component<unknown>
-    >
+    const components = createLogoComponents()
     const html = renderApp(
       `<SiteLogo
         wordOne="Calc"
@@ -31,10 +27,7 @@ describe('SiteLogo rendering', () => {
 
   it('uses fallback words and omits subtitle when not provided', () => {
     const cleanup = ensureDomGlobals()
-    const components = createLogoComponents() as Record<
-      string,
-      Component<unknown>
-    >
+    const components = createLogoComponents()
     const html = renderApp(`<SiteLogo />`, { components })
     cleanup()
 
@@ -45,10 +38,7 @@ describe('SiteLogo rendering', () => {
 
   it('renders embedded icon svg and custom font-size styles', () => {
     const cleanup = ensureDomGlobals()
-    const components = createLogoComponents() as Record<
-      string,
-      Component<unknown>
-    >
+    const components = createLogoComponents()
     const html = renderApp(
       `<SiteLogo
         wordOne="Calc"

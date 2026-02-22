@@ -1,4 +1,3 @@
-import type { Component } from 'regor'
 import { describe, expect, it } from 'vitest'
 
 import { resolveSiteConfig } from '../../../config/config'
@@ -16,7 +15,7 @@ describe('TopBar rendering', () => {
       ...createLogoComponents(),
       ...createTopBarComponents(),
       ...createSearchComponents(),
-    } as Record<string, Component<unknown>>
+    }
     const site = resolveSiteConfig({
       logo: {
         wordOne: 'Calc',

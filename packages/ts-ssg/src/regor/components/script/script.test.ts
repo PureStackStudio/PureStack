@@ -1,4 +1,3 @@
-import type { Component } from 'regor'
 import { describe, expect, it } from 'vitest'
 
 import { resolveSiteConfig } from '../../../config/config'
@@ -10,10 +9,7 @@ import { createScriptComponents } from './script'
 describe('PageScript rendering', () => {
   it('maps local .ts src to emitted .js path and defaults to module', () => {
     const cleanup = ensureDomGlobals()
-    const components = createScriptComponents() as Record<
-      string,
-      Component<unknown>
-    >
+    const components = createScriptComponents()
     const site = resolveSiteConfig()
     const pageInfo = {
       relPath: 'login.mdx',
@@ -34,10 +30,7 @@ describe('PageScript rendering', () => {
 
   it('resolves nested relative paths and keeps query/hash suffix', () => {
     const cleanup = ensureDomGlobals()
-    const components = createScriptComponents() as Record<
-      string,
-      Component<unknown>
-    >
+    const components = createScriptComponents()
     const site = resolveSiteConfig()
     const pageInfo = {
       relPath: 'security/policies.mdx',
@@ -60,10 +53,7 @@ describe('PageScript rendering', () => {
 
   it('renders RegorApp as app shell and reuses PageScript src mapping', () => {
     const cleanup = ensureDomGlobals()
-    const components = createScriptComponents() as Record<
-      string,
-      Component<unknown>
-    >
+    const components = createScriptComponents()
     const site = resolveSiteConfig()
     const pageInfo = {
       relPath: 'hosts.mdx',

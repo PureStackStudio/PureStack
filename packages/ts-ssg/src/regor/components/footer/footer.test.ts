@@ -1,4 +1,3 @@
-import type { Component } from 'regor'
 import { describe, expect, it } from 'vitest'
 
 import { resolveSiteConfig } from '../../../config/config'
@@ -11,10 +10,7 @@ import { createFooterComponents } from './footer'
 describe('SiteFooter rendering', () => {
   it('renders footer blocks with columns, links, legal actions, and socials', () => {
     const cleanup = ensureDomGlobals()
-    const components = createFooterComponents() as Record<
-      string,
-      Component<unknown>
-    >
+    const components = createFooterComponents()
     const site = resolveSiteConfig()
     const pageInfo = {
       relPath: 'index.md',
@@ -67,10 +63,7 @@ describe('SiteFooter rendering', () => {
 
   it('teleports to a custom host when teleport prop is provided', () => {
     const cleanup = ensureDomGlobals()
-    const components = createFooterComponents() as Record<
-      string,
-      Component<unknown>
-    >
+    const components = createFooterComponents()
     const site = resolveSiteConfig()
     const pageInfo = {
       relPath: 'index.md',

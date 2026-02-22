@@ -137,9 +137,9 @@ function trimLeadingSlashes(value: string) {
   return value.replace(/^\/+/, '')
 }
 
-function resolvePageRelPath(head: unknown) {
+function resolvePageRelPath(head: ComponentHead<PageScriptProps>) {
   try {
-    return resolveTsSsgContext(head as ComponentHead<unknown>).pageInfo.relPath
+    return resolveTsSsgContext(head).pageInfo.relPath
   } catch {
     return 'index.mdx'
   }

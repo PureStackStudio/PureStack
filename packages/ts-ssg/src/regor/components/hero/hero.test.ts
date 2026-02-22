@@ -1,4 +1,3 @@
-import type { Component } from 'regor'
 import { describe, expect, it } from 'vitest'
 
 import { ensureDomGlobals } from '../../registerDomGlobals'
@@ -8,10 +7,7 @@ import { createHeroComponents } from './hero'
 describe('HeroBanner rendering', () => {
   it('renders named slot templates into hero sections', () => {
     const cleanup = ensureDomGlobals()
-    const components = createHeroComponents() as Record<
-      string,
-      Component<unknown>
-    >
+    const components = createHeroComponents()
     const html = renderApp(
       `<HeroBanner>
         <template name="eyebrow"><span>Backend-native calculation engine</span></template>
@@ -40,10 +36,7 @@ describe('HeroBanner rendering', () => {
 
   it('preserves external action links', () => {
     const cleanup = ensureDomGlobals()
-    const components = createHeroComponents() as Record<
-      string,
-      Component<unknown>
-    >
+    const components = createHeroComponents()
     const html = renderApp(
       `<HeroBanner>
         <template name="actions">

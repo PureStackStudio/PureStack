@@ -1,4 +1,3 @@
-import type { Component } from 'regor'
 import { describe, expect, it } from 'vitest'
 
 import { resolveSiteConfig } from '../../../config/config'
@@ -12,7 +11,7 @@ describe('Consent component rendering', () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...createConsentComponents(),
-    } as Record<string, Component<unknown>>
+    }
     const site = resolveSiteConfig({
       consent: {
         enabled: true,
