@@ -1,5 +1,5 @@
 import { createApp } from 'regor'
-import { parseHtml } from '../dom/minidom'
+import { parseHtml } from '../minidom/minidom'
 import { registerDomGlobals } from '../minidom/registerDomGlobals'
 import { componentRegistry } from './registry'
 import type { TsSsgContext } from './ts-ssg-context'
