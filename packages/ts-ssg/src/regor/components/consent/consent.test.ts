@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { resolveSiteConfig } from '../../../config/config'
 import { normalizeFrontmatter } from '../../../frontmatter/frontmatter'
-import { ensureDomGlobals } from '../../registerDomGlobals'
+import { ensureDomGlobals } from '../../../minidom/registerDomGlobals'
 import { renderApp } from '../../renderApp'
 import { createConsentComponents } from './consent'
 

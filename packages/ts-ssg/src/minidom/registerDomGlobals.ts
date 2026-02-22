@@ -1,5 +1,5 @@
-import { parseHtml } from '../dom/minidom'
-import cssEscape from '../util/cssEscape'
+import cssEscape from './cssEscape'
+import { parseHtml } from './minidom'
 
 type GlobalKey =
   | 'window'
@@ -11,10 +11,13 @@ type GlobalKey =
   | 'DocumentFragment'
   | 'CustomEvent'
   | 'Event'
+  | 'MouseEvent'
   | 'Comment'
   | 'Text'
   | 'HTMLTemplateElement'
   | 'CSS'
+  | 'localStorage'
+  | 'sessionStorage'
 
 export function registerDomGlobals(
   window: unknown,
@@ -32,10 +35,13 @@ export function registerDomGlobals(
     'DocumentFragment',
     'CustomEvent',
     'Event',
+    'MouseEvent',
     'Comment',
     'Text',
     'HTMLTemplateElement',
     'CSS',
+    'localStorage',
+    'sessionStorage',
   ]
 
   for (const key of keys) original[key] = globals[key]
@@ -46,21 +52,14 @@ export function registerDomGlobals(
   assignGlobal(globals, 'Node', win.Node)
   assignGlobal(globals, 'Element', win.Element)
   assignGlobal(globals, 'HTMLElement', win.HTMLElement)
-  assignGlobal(
-    globals,
-    'HTMLSlotElement',
-    (document as Document).createElement('slot').constructor,
-  )
+  assignGlobal(globals, 'HTMLSlotElement', win.HTMLSlotElement)
   assignGlobal(globals, 'DocumentFragment', win.DocumentFragment)
   assignGlobal(globals, 'CustomEvent', win.CustomEvent)
   assignGlobal(globals, 'Event', win.Event)
-  assignGlobal(globals, 'Comment', createCommentConstructor(document))
+  assignGlobal(globals, 'MouseEvent', win.MouseEvent)
+  assignGlobal(globals, 'Comment', win.Comment)
   assignGlobal(globals, 'Text', win.Text)
-  assignGlobal(
-    globals,
-    'HTMLTemplateElement',
-    (document as Document).createElement('template').constructor,
-  )
+  assignGlobal(globals, 'HTMLTemplateElement', win.HTMLTemplateElement)
 
   const windowCss = win.CSS as { escape?: unknown } | undefined
   assignGlobal(
@@ -70,6 +69,8 @@ export function registerDomGlobals(
       ? windowCss
       : { escape: cssEscape },
   )
+  assignGlobal(globals, 'localStorage', win.localStorage)
+  assignGlobal(globals, 'sessionStorage', win.sessionStorage)
 
   return () => {
     for (const key of keys) globals[key] = original[key]
@@ -97,14 +98,4 @@ export function ensureDomGlobals(): () => void {
   if (globals.document && globals.window) return () => {}
   const { document, window } = parseHtml('<html><body></body></html>')
   return registerDomGlobals(window, document)
-}
-
-function createCommentConstructor(document: unknown): typeof Comment {
-  const doc = document as Document
-  const prototype = Object.getPrototypeOf(doc.createComment(''))
-  const CommentShim = function Comment(this: Comment, data?: string) {
-    return doc.createComment(data ?? '')
-  } as unknown as typeof Comment
-  CommentShim.prototype = prototype
-  return CommentShim
 }

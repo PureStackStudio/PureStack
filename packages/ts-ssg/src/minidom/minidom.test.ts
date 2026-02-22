@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import cssEscape from '../util/cssEscape'
+import cssEscape from './cssEscape'
 import {
   type MiniElement,
   type MiniHTMLTemplateElement,

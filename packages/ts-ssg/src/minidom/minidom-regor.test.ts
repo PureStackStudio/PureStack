@@ -1,6 +1,5 @@
 import { createApp, createComponent, html } from 'regor'
 import { describe, expect, it } from 'vitest'
-
 import {
   type MiniDocument,
   type MiniElement,
@@ -8,8 +7,8 @@ import {
   type MiniNode,
   type MiniWindow,
   parseHtml,
-} from '../../dom/minidom'
-import { registerDomGlobals } from '../registerDomGlobals'
+} from './minidom'
+import { registerDomGlobals } from './registerDomGlobals'
 
 type DomEnv = {
   document: MiniDocument
@@ -150,7 +149,10 @@ describe('regor + minidom compatibility', () => {
         if (!appRoot) throw new Error('missing #app root')
 
         const styleProbe = createComponent(
-          html`<p class="probe" :style="{ fontSize: '18px', lineHeight: '1.4' }">
+          html`<p
+            class="probe"
+            :style="{ fontSize: '18px', lineHeight: '1.4' }"
+          >
             Styled payload
           </p>`,
         )
@@ -170,6 +172,56 @@ describe('regor + minidom compatibility', () => {
         const style = probe?.getAttribute('style') ?? ''
         expect(style).toContain('font-size: 18px')
         expect(style).toContain('line-height: 1.4')
+      },
+    ))
+
+  it('renders default and named slots (abc + extra) without selector mis-resolution', () =>
+    withDom(
+      '<html><body><div id="app"><ShellComponent></ShellComponent></div></body></html>',
+      ({ document }) => {
+        const appRoot = document.querySelector('#app')
+        if (!appRoot) throw new Error('missing #app root')
+
+        const shellComponent = createComponent(
+          html`<section>
+            <slot></slot>
+            <slot name="abc"></slot>
+            <slot name="extra"></slot>
+          </section>`,
+          {
+            context: (head) => {
+              head.enableSwitch = true
+              return {}
+            },
+          },
+        )
+
+        createApp(
+          {
+            message: 'hello',
+            extra: 'x',
+            components: { shellComponent },
+          },
+          {
+            element: appRoot as unknown as Node,
+            template: html`<ShellComponent>
+              <p class="message">default slot {{ message }}</p>
+              <template name="abc"
+                ><p class="message">{{ message }}</p></template
+              >
+              <template name="extra"
+                ><em class="extra">{{ extra }}</em></template
+              >
+            </ShellComponent>`,
+          },
+        )
+
+        const messages = appRoot
+          .querySelectorAll('.message')
+          .map((x) => x.textContent?.trim())
+        expect(messages).toContain('default slot hello')
+        expect(messages).toContain('hello')
+        expect(appRoot.querySelector('.extra')?.textContent).toBe('x')
       },
     ))
 })

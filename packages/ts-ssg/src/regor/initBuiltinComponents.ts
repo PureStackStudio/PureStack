@@ -1,3 +1,4 @@
+import { ensureDomGlobals } from '../minidom/registerDomGlobals'
 import { registerNormalizeStyles } from '../style/normalize.css'
 import { styleBuilder } from '../style/styles'
 import { registerDocLayoutStyles } from '../templates/docLayoutStyles'
@@ -19,7 +20,6 @@ import { createScriptComponents } from './components/script/script'
 import { createSearchComponents } from './components/searchBox/searchBox'
 import { createThemeSwitcherComponents } from './components/themeSwitcher/themeSwitcher'
 import { createTopBarComponents } from './components/topBar/topBar'
-import { ensureDomGlobals } from './registerDomGlobals'
 import { componentRegistry } from './registry'
 
 export function initBuiltinComponents() {

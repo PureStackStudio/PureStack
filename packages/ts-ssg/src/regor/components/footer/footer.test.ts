@@ -1,9 +1,8 @@
 import { describe, expect, it } from 'vitest'
-
 import { resolveSiteConfig } from '../../../config/config'
-import { parseHtml } from '../../../dom/minidom'
 import { normalizeFrontmatter } from '../../../frontmatter/frontmatter'
-import { ensureDomGlobals } from '../../registerDomGlobals'
+import { parseHtml } from '../../../minidom/minidom'
+import { ensureDomGlobals } from '../../../minidom/registerDomGlobals'
 import { renderApp } from '../../renderApp'
 import { createFooterComponents } from './footer'
 
