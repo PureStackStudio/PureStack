@@ -1,22 +1,31 @@
 import { describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from '../../../config/config'
 import { normalizeFrontmatter } from '../../../frontmatter/frontmatter'
-import { createDom, ensureDomGlobals } from '../../../minidom/createDom'
+import { createDom } from '../../../minidom/createDom'
 import { renderApp } from '../../renderApp'
 import { createFooterComponents } from './footer'
 
+function withDom<T>(html: string, run: () => T): T {
+  const cleanup = createDom(html)
+  try {
+    return run()
+  } finally {
+    cleanup()
+  }
+}
+
 describe('SiteFooter rendering', () => {
   it('renders footer blocks with columns, links, legal actions, and socials', () => {
-    const cleanup = ensureDomGlobals()
-    const components = createFooterComponents()
-    const site = resolveSiteConfig()
-    const pageInfo = {
-      relPath: 'index.md',
-      urlPath: '/',
-      frontmatter: normalizeFrontmatter({}),
-    }
-    const html = renderApp(
-      `<SiteFooter title="Build with confidence" ctaLabel="Start free" ctaHref="/signup">
+    const html = withDom('<html><body></body></html>', () => {
+      const components = createFooterComponents()
+      const site = resolveSiteConfig()
+      const pageInfo = {
+        relPath: 'index.md',
+        urlPath: '/',
+        frontmatter: normalizeFrontmatter({}),
+      }
+      return renderApp(
+        `<SiteFooter title="Build with confidence" ctaLabel="Start free" ctaHref="/signup">
         <p>Everything your team needs to ship docs, pages, and growth loops from one stack.</p>
 
         <template name="status">
@@ -44,9 +53,9 @@ describe('SiteFooter rendering', () => {
           <FooterSocial href="https://github.com/purestack" label="GitHub" />
         </template>
       </SiteFooter>`,
-      { components, context: { site, theme: site.theme, pageInfo } },
-    )
-    cleanup()
+        { components, context: { site, theme: site.theme, pageInfo } },
+      )
+    })
 
     expect(html).toContain('Build with confidence')
     expect(html).toContain('Start free')
@@ -60,16 +69,16 @@ describe('SiteFooter rendering', () => {
   })
 
   it('teleports to a custom host when teleport prop is provided', () => {
-    const cleanup = ensureDomGlobals()
-    const components = createFooterComponents()
-    const site = resolveSiteConfig()
-    const pageInfo = {
-      relPath: 'index.md',
-      urlPath: '/',
-      frontmatter: normalizeFrontmatter({}),
-    }
-    const html = renderApp(
-      `<div id="teleport-target"></div>
+    const html = withDom('<html><body></body></html>', () => {
+      const components = createFooterComponents()
+      const site = resolveSiteConfig()
+      const pageInfo = {
+        relPath: 'index.md',
+        urlPath: '/',
+        frontmatter: normalizeFrontmatter({}),
+      }
+      return renderApp(
+        `<div id="teleport-target"></div>
       <SiteFooter
         title="Custom target footer"
         teleport="#teleport-target"
@@ -77,17 +86,19 @@ describe('SiteFooter rendering', () => {
       >
         <p>Footer content</p>
       </SiteFooter>`,
-      { components, context: { site, theme: site.theme, pageInfo } },
-    )
-    cleanup()
+        { components, context: { site, theme: site.theme, pageInfo } },
+      )
+    })
 
-    createDom(`<!DOCTYPE html><html><body>${html}</body></html>`)
-    const target = document.querySelector('#teleport-target')
-    const teleportedFooter = target?.querySelector('.site-footer')
+    withDom(`<!DOCTYPE html><html><body>${html}</body></html>`, () => {
+      const target = document.querySelector('#teleport-target')
+      const teleportedFooter = target?.querySelector('.site-footer')
 
-    expect(target).toBeTruthy()
-    expect(teleportedFooter).toBeTruthy()
-    expect(target?.textContent).toContain('Custom target footer')
+      expect(target).toBeTruthy()
+      expect(teleportedFooter).toBeTruthy()
+      expect(target?.textContent).toContain('Custom target footer')
+    })
+
     expect(html).toContain("teleported => '#teleport-target'")
   })
 })
