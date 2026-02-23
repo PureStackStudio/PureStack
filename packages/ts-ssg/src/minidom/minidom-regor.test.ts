@@ -42,7 +42,7 @@ describe('regor + minidom compatibility', () => {
         document,
       )
       const template = wrapper.querySelector('template')
-      const contentSpan = template?.content?.firstChild
+      const contentSpan = template?.content?.firstElementChild
       expect(contentSpan?.getAttribute('r-text')).toBe(' item.title ')
       expect(contentSpan?.textContent).toBe('')
     }))
@@ -74,7 +74,7 @@ describe('regor + minidom compatibility', () => {
       )
       const outer = wrapper.querySelector<HTMLTemplateElement>('template')
       const inner = outer?.content?.querySelector?.('template')
-      const span = inner?.content?.firstChild
+      const span = inner?.content?.firstElementChild
       expect(span?.getAttribute('r-text')).toBe(' x ')
     }))
 

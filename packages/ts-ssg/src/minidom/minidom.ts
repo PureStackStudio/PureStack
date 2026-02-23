@@ -128,8 +128,23 @@ class MiniNode {
     return this.childNodes[0] ?? null
   }
 
+  get firstElementChild(): MiniElement | null {
+    for (const child of this.childNodes) {
+      if (child instanceof MiniElement) return child
+    }
+    return null
+  }
+
   get lastChild(): MiniNode | null {
     return this.childNodes[this.childNodes.length - 1] ?? null
+  }
+
+  get lastElementChild(): MiniElement | null {
+    for (let i = this.childNodes.length - 1; i >= 0; i -= 1) {
+      const child = this.childNodes[i]
+      if (child instanceof MiniElement) return child
+    }
+    return null
   }
 
   get ownerDocument(): MiniDocument | null {
