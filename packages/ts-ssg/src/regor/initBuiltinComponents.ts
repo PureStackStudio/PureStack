@@ -1,4 +1,4 @@
-import { ensureDomGlobals } from '../minidom/registerDomGlobals'
+import { ensureDomGlobals } from '../minidom/createDom'
 import { registerNormalizeStyles } from '../style/normalize.css'
 import { styleBuilder } from '../style/styles'
 import { registerDocLayoutStyles } from '../templates/docLayoutStyles'

@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from '../../../config/config'
 import { normalizeFrontmatter } from '../../../frontmatter/frontmatter'
-import { parseHtml } from '../../../minidom/minidom'
-import { ensureDomGlobals } from '../../../minidom/registerDomGlobals'
+import { createDom, ensureDomGlobals } from '../../../minidom/createDom'
 import { renderApp } from '../../renderApp'
 import { createFooterComponents } from './footer'
 
@@ -82,8 +81,8 @@ describe('SiteFooter rendering', () => {
     )
     cleanup()
 
-    const parsed = parseHtml(`<!DOCTYPE html><html><body>${html}</body></html>`)
-    const target = parsed.document.querySelector('#teleport-target')
+    createDom(`<!DOCTYPE html><html><body>${html}</body></html>`)
+    const target = document.querySelector('#teleport-target')
     const teleportedFooter = target?.querySelector('.site-footer')
 
     expect(target).toBeTruthy()

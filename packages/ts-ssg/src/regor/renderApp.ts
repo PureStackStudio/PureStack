@@ -1,6 +1,5 @@
 import { createApp } from 'regor'
-import { parseHtml } from '../minidom/minidom'
-import { registerDomGlobals } from '../minidom/registerDomGlobals'
+import { createDom } from '../minidom/createDom'
 import { componentRegistry } from './registry'
 import type { TsSsgContext } from './ts-ssg-context'
 
@@ -18,8 +17,7 @@ export const renderApp = (html: string, options: RenderAppOptions = {}) => {
   const htmlToParse = isDocument
     ? normalizedHtml
     : `<!DOCTYPE html><html><body>${html}</body></html>`
-  const { document, window } = parseHtml(htmlToParse)
-  const cleanup = registerDomGlobals(window, document)
+  const cleanup = createDom(htmlToParse)
   const snapshot = componentRegistry.snapshot()
   try {
     if (options.components) {

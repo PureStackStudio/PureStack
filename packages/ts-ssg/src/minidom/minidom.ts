@@ -48,17 +48,26 @@ export type MiniWindow = {
 
 export function parseHtml(html: string) {
   const document = new MiniDocument()
-  const fragment = parseFragment(html, document)
+  const fragment = parseMiniDocumentFragment(html, document)
   document.appendChild(fragment)
   document.linkHtmlBody()
   const window = createWindow(document)
   return { document, window }
 }
+export function parseFragment(
+  html: string,
+  document?: Document,
+): DocumentFragment {
+  return parseMiniDocumentFragment(
+    html,
+    document as unknown as MiniDocument,
+  ) as unknown as DocumentFragment
+}
 
-export function parseFragment(html: string, document?: MiniDocument) {
+function parseMiniDocumentFragment(html: string, document?: MiniDocument) {
   const doc = document ?? new MiniDocument()
-  const fragment = doc.createDocumentFragment()
-  parseInto(html, doc, fragment)
+  const fragment = doc.createDocumentFragment() as MiniDocumentFragment
+  parseInto(html, doc as MiniDocument, fragment)
   return fragment
 }
 
@@ -335,7 +344,8 @@ class MiniDocument extends MiniNode {
       setEnd() {},
       collapse() {},
       selectNodeContents() {},
-      createContextualFragment: (html: string) => parseFragment(html, this),
+      createContextualFragment: (html: string) =>
+        parseMiniDocumentFragment(html, this),
     }
   }
 
@@ -610,7 +620,7 @@ class MiniElement extends MiniNode {
 
   set innerHTML(value: string) {
     const doc = this.ownerDocument ?? new MiniDocument()
-    const fragment = parseFragment(value, doc)
+    const fragment = parseMiniDocumentFragment(value, doc)
     this.replaceChildren(...fragment.childNodes)
   }
 
@@ -1113,7 +1123,10 @@ function insertNode(
     node.parentNode.removeChild(node)
   }
   const index = ref ? parent.childNodes.indexOf(ref) : -1
-  if (index === -1 || ref == null) {
+  if (ref != null && index === -1) {
+    throw new Error('Reference node is not a child of this parent')
+  }
+  if (ref == null) {
     parent.childNodes.push(node)
   } else {
     parent.childNodes.splice(index, 0, node)
@@ -1464,6 +1477,18 @@ type CompiledSelector = {
 }
 
 const selectorListCache = new Map<string, CompiledSelector[]>()
+
+export function resetMiniDomCaches() {
+  selectorListCache.clear()
+  const doc = globalThis.document as
+    | (Document & { head?: ParentNode | null; body?: ParentNode | null })
+    | undefined
+  doc?.head?.replaceChildren()
+  doc?.body?.replaceChildren()
+  globalThis.localStorage?.clear()
+  globalThis.sessionStorage?.clear()
+}
+
 function getCompiledSelectors(selector: string) {
   const key = selector.trim()
   const cached = selectorListCache.get(key)

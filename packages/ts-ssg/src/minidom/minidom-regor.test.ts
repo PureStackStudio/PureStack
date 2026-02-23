@@ -1,23 +1,14 @@
 import { createApp, createComponent, html } from 'regor'
 import { describe, expect, it } from 'vitest'
-import {
-  type MiniDocument,
-  type MiniElement,
-  type MiniHTMLTemplateElement,
-  type MiniNode,
-  type MiniWindow,
-  parseHtml,
-} from './minidom'
-import { registerDomGlobals } from './registerDomGlobals'
+import { createDom } from './createDom'
 
 type DomEnv = {
-  document: MiniDocument
-  window: MiniWindow
+  document: Document
+  window: Window
 }
 
 function withDom<T>(markup: string, run: (env: DomEnv) => T): T {
-  const { document, window } = parseHtml(markup)
-  const cleanup = registerDomGlobals(window, document)
+  const cleanup = createDom(markup)
   try {
     return run({ document, window })
   } finally {
@@ -25,10 +16,10 @@ function withDom<T>(markup: string, run: (env: DomEnv) => T): T {
   }
 }
 
-function mountTemplate(template: string, document: MiniDocument) {
+function mountTemplate(template: string, document: Document) {
   const component = createComponent(html`${template}`)
   const wrapper = document.createElement('div')
-  wrapper.appendChild(component.template.cloneNode(true) as unknown as MiniNode)
+  wrapper.appendChild(component.template.cloneNode(true))
   return wrapper
 }
 
@@ -50,10 +41,8 @@ describe('regor + minidom compatibility', () => {
         '<div><template #content><span>{{ item.title }}</span></template></div>',
         document,
       )
-      const template = wrapper.querySelector(
-        'template',
-      ) as MiniHTMLTemplateElement | null
-      const contentSpan = template?.content?.firstChild as MiniElement | null
+      const template = wrapper.querySelector('template')
+      const contentSpan = template?.content?.firstChild
       expect(contentSpan?.getAttribute('r-text')).toBe(' item.title ')
       expect(contentSpan?.textContent).toBe('')
     }))
@@ -83,13 +72,9 @@ describe('regor + minidom compatibility', () => {
         '<template><template><span>{{ x }}</span></template></template>',
         document,
       )
-      const outer = wrapper.querySelector(
-        'template',
-      ) as MiniHTMLTemplateElement | null
-      const inner = outer?.content?.querySelector?.(
-        'template',
-      ) as MiniHTMLTemplateElement | null
-      const span = inner?.content?.firstChild as MiniElement | null
+      const outer = wrapper.querySelector<HTMLTemplateElement>('template')
+      const inner = outer?.content?.querySelector?.('template')
+      const span = inner?.content?.firstChild
       expect(span?.getAttribute('r-text')).toBe(' x ')
     }))
 
@@ -97,9 +82,7 @@ describe('regor + minidom compatibility', () => {
     withDom(
       '<html><body><template><span>x</span></template></body></html>',
       ({ document }) => {
-        const template = document.querySelector(
-          'template',
-        ) as MiniHTMLTemplateElement | null
+        const template = document.querySelector('template')
         expect(template?.content).toBeTruthy()
         expect(template?.content?.childNodes.length).toBe(1)
       },
@@ -127,12 +110,12 @@ describe('regor + minidom compatibility', () => {
             },
           },
           {
-            element: appRoot as unknown as Node,
+            element: appRoot,
           },
         )
 
-        const appHtml = (appRoot as MiniElement).innerHTML
-        const hostHtml = (teleportHost as MiniElement).innerHTML
+        const appHtml = appRoot.innerHTML
+        const hostHtml = teleportHost.innerHTML
         expect(hostHtml).toContain('teleport-probe')
         expect(hostHtml).toContain('Teleported payload')
         expect(appHtml).toContain("teleported => '#teleport-host'")
@@ -164,7 +147,7 @@ describe('regor + minidom compatibility', () => {
             },
           },
           {
-            element: appRoot as unknown as Node,
+            element: appRoot,
           },
         )
 
@@ -203,7 +186,7 @@ describe('regor + minidom compatibility', () => {
             components: { shellComponent },
           },
           {
-            element: appRoot as unknown as Node,
+            element: appRoot,
             template: html`<ShellComponent>
               <p class="message">default slot {{ message }}</p>
               <template name="abc"
@@ -216,9 +199,9 @@ describe('regor + minidom compatibility', () => {
           },
         )
 
-        const messages = appRoot
-          .querySelectorAll('.message')
-          .map((x) => x.textContent?.trim())
+        const messages = [
+          ...appRoot.querySelectorAll<HTMLElement>('.message'),
+        ].map((x) => x.textContent?.trim())
         expect(messages).toContain('default slot hello')
         expect(messages).toContain('hello')
         expect(appRoot.querySelector('.extra')?.textContent).toBe('x')

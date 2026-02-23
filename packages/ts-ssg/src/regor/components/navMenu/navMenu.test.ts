@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { resolveSiteConfig } from '../../../config/config'
 import { normalizeFrontmatter } from '../../../frontmatter/frontmatter'
-import { ensureDomGlobals } from '../../../minidom/registerDomGlobals'
+import { ensureDomGlobals } from '../../../minidom/createDom'
 import { renderApp } from '../../renderApp'
 import { createNavigationComponents } from './navMenu'
 

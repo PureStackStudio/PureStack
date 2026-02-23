@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { ensureDomGlobals } from '../../../minidom/registerDomGlobals'
+import { ensureDomGlobals } from '../../../minidom/createDom'
 import { renderApp } from '../../renderApp'
 import { createBadgeComponents } from './badge'
 
