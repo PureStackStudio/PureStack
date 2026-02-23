@@ -2,15 +2,10 @@ import { createApp, createComponent, html } from 'regor'
 import { describe, expect, it } from 'vitest'
 import { createDom } from './createDom'
 
-type DomEnv = {
-  document: Document
-  window: Window
-}
-
-function withDom<T>(markup: string, run: (env: DomEnv) => T): T {
+function withDom<T>(markup: string, run: () => T): T {
   const cleanup = createDom(markup)
   try {
-    return run({ document, window })
+    return run()
   } finally {
     cleanup()
   }
@@ -25,7 +20,7 @@ function mountTemplate(template: string, document: Document) {
 
 describe('regor + minidom compatibility', () => {
   it('interpolates simple text nodes into r-text bindings', () =>
-    withDom('<html><body></body></html>', ({ document }) => {
+    withDom('<html><body></body></html>', () => {
       const wrapper = mountTemplate(
         '<div><span>{{ title }}</span></div>',
         document,
@@ -36,7 +31,7 @@ describe('regor + minidom compatibility', () => {
     }))
 
   it('interpolates inside template.content', () =>
-    withDom('<html><body></body></html>', ({ document }) => {
+    withDom('<html><body></body></html>', () => {
       const wrapper = mountTemplate(
         '<div><template #content><span>{{ item.title }}</span></template></div>',
         document,
@@ -48,7 +43,7 @@ describe('regor + minidom compatibility', () => {
     }))
 
   it('handles mixed text + interpolation', () =>
-    withDom('<html><body></body></html>', ({ document }) => {
+    withDom('<html><body></body></html>', () => {
       const wrapper = mountTemplate('<p>Hello {{ name }}!</p>', document)
       const span = wrapper.querySelector('p span')
       expect(span?.getAttribute('r-text')).toBe(' name ')
@@ -56,7 +51,7 @@ describe('regor + minidom compatibility', () => {
     }))
 
   it('skips interpolation under r-pre', () =>
-    withDom('<html><body></body></html>', ({ document }) => {
+    withDom('<html><body></body></html>', () => {
       const wrapper = mountTemplate(
         '<div r-pre><span>{{ skip }}</span></div>',
         document,
@@ -67,7 +62,7 @@ describe('regor + minidom compatibility', () => {
     }))
 
   it('supports nested templates inside template.content', () =>
-    withDom('<html><body></body></html>', ({ document }) => {
+    withDom('<html><body></body></html>', () => {
       const wrapper = mountTemplate(
         '<template><template><span>{{ x }}</span></template></template>',
         document,
@@ -81,7 +76,7 @@ describe('regor + minidom compatibility', () => {
   it('exposes template.content in minidom', () =>
     withDom(
       '<html><body><template><span>x</span></template></body></html>',
-      ({ document }) => {
+      () => {
         const template = document.querySelector('template')
         expect(template?.content).toBeTruthy()
         expect(template?.content?.childNodes.length).toBe(1)
@@ -91,7 +86,7 @@ describe('regor + minidom compatibility', () => {
   it('teleports component root to target element via r-teleport directive', () =>
     withDom(
       '<html><body><div id="app"><TeleportProbe></TeleportProbe><div id="teleport-host"></div></div></body></html>',
-      ({ document }) => {
+      () => {
         const appRoot = document.querySelector('#app')
         if (!appRoot) throw new Error('missing #app root')
         const teleportHost = document.querySelector('#teleport-host')
@@ -127,7 +122,7 @@ describe('regor + minidom compatibility', () => {
   it('applies :style object bindings to inline style attributes', () =>
     withDom(
       '<html><body><div id="app"><StyleProbe></StyleProbe></div></body></html>',
-      ({ document }) => {
+      () => {
         const appRoot = document.querySelector('#app')
         if (!appRoot) throw new Error('missing #app root')
 
@@ -161,7 +156,7 @@ describe('regor + minidom compatibility', () => {
   it('renders default and named slots (abc + extra) without selector mis-resolution', () =>
     withDom(
       '<html><body><div id="app"><ShellComponent></ShellComponent></div></body></html>',
-      ({ document }) => {
+      () => {
         const appRoot = document.querySelector('#app')
         if (!appRoot) throw new Error('missing #app root')
 
