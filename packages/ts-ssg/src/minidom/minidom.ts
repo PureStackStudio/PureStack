@@ -421,30 +421,102 @@ class MiniDocumentFragment extends MiniNode {
   }
 }
 
+type MiniAttr = {
+  name: string
+  value: string
+}
+
+type MiniNamedNodeMap = {
+  readonly length: number
+  item: (index: number) => MiniAttr | null
+  [Symbol.iterator]: () => Iterator<MiniAttr>
+}
+
+class MiniNamedNodeMapImpl implements MiniNamedNodeMap {
+  __map: Map<string, string>
+  __entries: MiniAttr[] = []
+  __dirty = true
+
+  constructor(attributeMap: Map<string, string>) {
+    this.__map = attributeMap
+  }
+
+  invalidate(): void {
+    this.__dirty = true
+  }
+
+  private refresh(): void {
+    if (!this.__dirty) return
+    this.__entries.length = 0
+    for (const [name, value] of this.__map.entries()) {
+      this.__entries.push({ name, value })
+    }
+    this.__dirty = false
+  }
+
+  get length() {
+    return this.__map.size
+  }
+
+  item(index: number): MiniAttr | null {
+    this.refresh()
+    return this.__entries[index] ?? null
+  }
+
+  *[Symbol.iterator](): Iterator<MiniAttr> {
+    this.refresh()
+    for (let i = 0; i < this.__entries.length; ++i) {
+      yield this.__entries[i]
+    }
+  }
+}
+
 class MiniElement extends MiniNode {
   tagName: string
   namespaceURI: string | null = null
-  private attributes = new Map<string, string>()
+  private attributeMap = new Map<string, string>()
+  private _attributes?: MiniNamedNodeMap
   private syncingStyleFromAttribute = false
   private syncingStyleToAttribute = false
   private internalValue = ''
   private internalChecked = false
   private internalSelected = false
-  classList: ClassList
-  style: StyleDeclaration
+  private _classList?: ClassList
+  private _style?: StyleDeclaration
 
   constructor(tagName: string) {
     super(NodeType.ELEMENT_NODE)
     this.tagName = tagName.toUpperCase()
-    this.classList = new ClassList(this)
-    this.style = createStyleDeclaration((cssText) =>
-      this.syncStyleAttribute(cssText),
-    ) as StyleDeclaration
+  }
+
+  get attributes(): MiniNamedNodeMap {
+    if (!this._attributes) {
+      this._attributes = new MiniNamedNodeMapImpl(this.attributeMap)
+    }
+    return this._attributes
+  }
+
+  private invalidateAttributes(): void {
+    ;(this._attributes as MiniNamedNodeMapImpl | undefined)?.invalidate()
+  }
+
+  get classList(): ClassList {
+    if (!this._classList) this._classList = new ClassList(this)
+    return this._classList
+  }
+
+  get style(): StyleDeclaration {
+    if (!this._style) {
+      this._style = createStyleDeclaration((cssText) =>
+        this.syncStyleAttribute(cssText),
+      ) as StyleDeclaration
+    }
+    return this._style
   }
 
   getAttribute(name: string) {
     const key = name.toLowerCase()
-    const value = this.attributes.get(key)
+    const value = this.attributeMap.get(key)
     return value === undefined ? null : value
   }
 
@@ -453,7 +525,10 @@ class MiniElement extends MiniNode {
     const normalized = value == null ? '' : String(value)
     if (key === 'style') {
       if (this.syncingStyleToAttribute) {
-        this.attributes.set(key, normalized)
+        const previous = this.attributeMap.get(key)
+        if (previous === normalized) return
+        this.attributeMap.set(key, normalized)
+        this.invalidateAttributes()
         return
       }
       this.syncingStyleFromAttribute = true
@@ -461,13 +536,20 @@ class MiniElement extends MiniNode {
       this.syncingStyleFromAttribute = false
       const cssText = this.style.cssText
       if (cssText.length > 0) {
-        this.attributes.set('style', cssText)
+        const previous = this.attributeMap.get('style')
+        if (previous !== cssText) {
+          this.attributeMap.set('style', cssText)
+          this.invalidateAttributes()
+        }
       } else {
-        this.attributes.delete('style')
+        if (this.attributeMap.delete('style')) this.invalidateAttributes()
       }
       return
     }
-    this.attributes.set(key, normalized)
+    const previous = this.attributeMap.get(key)
+    if (previous === normalized) return
+    this.attributeMap.set(key, normalized)
+    this.invalidateAttributes()
     if (key === 'value') this.internalValue = normalized
     if (key === 'checked') this.internalChecked = true
     if (key === 'selected') this.internalSelected = true
@@ -477,16 +559,16 @@ class MiniElement extends MiniNode {
     const key = name.toLowerCase()
     if (key === 'style') {
       if (this.syncingStyleToAttribute) {
-        this.attributes.delete(key)
+        if (this.attributeMap.delete(key)) this.invalidateAttributes()
         return
       }
       this.syncingStyleFromAttribute = true
       this.style.cssText = ''
       this.syncingStyleFromAttribute = false
-      this.attributes.delete('style')
+      if (this.attributeMap.delete('style')) this.invalidateAttributes()
       return
     }
-    this.attributes.delete(key)
+    if (this.attributeMap.delete(key)) this.invalidateAttributes()
     if (key === 'checked') this.internalChecked = false
     if (key === 'selected') this.internalSelected = false
   }
@@ -495,31 +577,49 @@ class MiniElement extends MiniNode {
     if (this.syncingStyleFromAttribute) return
     this.syncingStyleToAttribute = true
     if (cssText.length > 0) {
-      this.attributes.set('style', cssText)
+      const previous = this.attributeMap.get('style')
+      if (previous !== cssText) {
+        this.attributeMap.set('style', cssText)
+        this.invalidateAttributes()
+      }
     } else {
-      this.attributes.delete('style')
+      if (this.attributeMap.delete('style')) this.invalidateAttributes()
     }
     this.syncingStyleToAttribute = false
   }
 
-  getAttributeNS(_ns: string, name: string) {
+  private resolveNsAttributeName(ns: string, name: string): string {
+    const normalized = String(name ?? '').toLowerCase()
+    if (normalized.includes(':')) return normalized
+
+    // Minimal namespace support for SVG xlink usage.
+    if (ns === 'http://www.w3.org/1999/xlink') return `xlink:${normalized}`
+    return normalized
+  }
+
+  getAttributeNS(ns: string, name: string) {
+    const resolved = this.resolveNsAttributeName(ns, name)
+    const value = this.getAttribute(resolved)
+    if (value != null) return value
     return this.getAttribute(name)
   }
 
-  setAttributeNS(_ns: string, name: string, value: string) {
-    this.setAttribute(name, value)
+  setAttributeNS(ns: string, name: string, value: string) {
+    this.setAttribute(this.resolveNsAttributeName(ns, name), value)
   }
 
-  removeAttributeNS(_ns: string, name: string) {
-    this.removeAttribute(name)
+  removeAttributeNS(ns: string, name: string) {
+    const resolved = this.resolveNsAttributeName(ns, name)
+    this.removeAttribute(resolved)
+    if (resolved !== name) this.removeAttribute(name)
   }
 
   hasAttribute(name: string) {
-    return this.attributes.has(name.toLowerCase())
+    return this.attributeMap.has(name.toLowerCase())
   }
 
   getAttributeNames() {
-    return [...this.attributes.keys()]
+    return [...this.attributeMap.keys()]
   }
 
   get className() {
@@ -534,6 +634,18 @@ class MiniElement extends MiniNode {
     this.setAttribute('class', String(value))
   }
 
+  get id(): string {
+    return this.getAttribute('id') ?? ''
+  }
+
+  set id(value: string) {
+    if (!value) {
+      this.removeAttribute('id')
+      return
+    }
+    this.setAttribute('id', String(value))
+  }
+
   get type(): string {
     return this.getAttribute('type') ?? ''
   }
@@ -541,6 +653,21 @@ class MiniElement extends MiniNode {
   set type(value: string) {
     if (!value) this.removeAttribute('type')
     else this.setAttribute('type', String(value))
+  }
+
+  get width(): number {
+    const value = this.getAttribute('width')
+    if (value == null || value === '') return 0
+    const parsed = Number(value)
+    return Number.isFinite(parsed) ? parsed : 0
+  }
+
+  set width(value: number) {
+    if (value == null || Number.isNaN(value)) {
+      this.removeAttribute('width')
+      return
+    }
+    this.setAttribute('width', String(value))
   }
 
   get value(): string {
@@ -564,8 +691,8 @@ class MiniElement extends MiniNode {
 
   set checked(value: boolean) {
     this.internalChecked = !!value
-    if (this.internalChecked) this.attributes.set('checked', '')
-    else this.attributes.delete('checked')
+    if (this.internalChecked) this.attributeMap.set('checked', '')
+    else this.attributeMap.delete('checked')
   }
 
   get selected(): boolean {
@@ -574,8 +701,8 @@ class MiniElement extends MiniNode {
 
   set selected(value: boolean) {
     this.internalSelected = !!value
-    if (this.internalSelected) this.attributes.set('selected', '')
-    else this.attributes.delete('selected')
+    if (this.internalSelected) this.attributeMap.set('selected', '')
+    else this.attributeMap.delete('selected')
   }
 
   get multiple(): boolean {
@@ -661,6 +788,12 @@ class MiniElement extends MiniNode {
 
   querySelectorAll(selector: string): MiniElement[] {
     return querySelectorAllFrom(this, selector)
+  }
+
+  get children(): MiniElement[] {
+    return this.childNodes.filter(
+      (child): child is MiniElement => child instanceof MiniElement,
+    )
   }
 
   matches(selector: string) {
@@ -939,6 +1072,7 @@ class ClassList {
 
 type StyleMap = Record<string, string>
 const STYLE_INDEX_PATTERN = /^\d+$/
+const stylePropertyNameCache: Record<string, string> = Object.create(null)
 type StyleDeclarationCore = {
   cssText: string
   readonly length: number
@@ -1040,11 +1174,18 @@ function setNormalizedStyleProperty(
 }
 
 function normalizeStylePropertyName(name: string): string {
-  const trimmed = String(name ?? '').trim()
+  const key = String(name ?? '')
+  const cached = stylePropertyNameCache[key]
+  if (cached !== undefined) return cached
+  const trimmed = key.trim()
   if (trimmed.length === 0) return ''
-  if (trimmed.startsWith('--')) return trimmed
-  if (trimmed.includes('-')) return trimmed.toLowerCase()
-  return trimmed.replace(/[A-Z]/g, (char) => `-${char.toLowerCase()}`)
+  let normalized = ''
+  if (trimmed.startsWith('--')) normalized = trimmed
+  else if (trimmed.includes('-')) normalized = trimmed.toLowerCase()
+  else
+    normalized = trimmed.replace(/[A-Z]/g, (char) => `-${char.toLowerCase()}`)
+  stylePropertyNameCache[key] = normalized
+  return normalized
 }
 
 function normalizeStyleValue(value: unknown, priority?: string): string {
