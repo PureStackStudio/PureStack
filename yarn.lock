@@ -786,7 +786,6 @@ __metadata:
     remark-parse: "npm:^11.0.0"
     remark-rehype: "npm:^11.1.2"
     shiki: "npm:^3.22.0"
-    tm-themes: "npm:^1.12.0"
     unified: "npm:^11.0.5"
   languageName: unknown
   linkType: soft
@@ -4022,13 +4021,6 @@ __metadata:
   version: 3.0.3
   resolution: "tinyrainbow@npm:3.0.3"
   checksum: 10c0/1e799d35cd23cabe02e22550985a3051dc88814a979be02dc632a159c393a998628eacfc558e4c746b3006606d54b00bcdea0c39301133956d10a27aa27e988c
-  languageName: node
-  linkType: hard
-
-"tm-themes@npm:^1.12.0":
-  version: 1.12.0
-  resolution: "tm-themes@npm:1.12.0"
-  checksum: 10c0/2925a404fd0e5625c6fbbd67e150857e97ffe2013a382c6340ae0c64843927077dbb080b46635304cab7d1b0b65eb87a1e843353e4ff8ce31f581975916dd0e7
   languageName: node
   linkType: hard
 

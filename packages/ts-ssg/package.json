@@ -50,7 +50,6 @@
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
     "shiki": "^3.22.0",
-    "tm-themes": "^1.12.0",
     "unified": "^11.0.5"
   }
 }
