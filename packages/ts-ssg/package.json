@@ -39,6 +39,7 @@
     "gray-matter": "^4.0.3",
     "hast-util-from-html": "^2.0.3",
     "hast-util-to-html": "^9.0.5",
+    "highlight.js": "^11.11.1",
     "logpot": "^1.0.7",
     "mdast-util-to-hast": "^13.2.1",
     "pagefind": "^1.4.0",

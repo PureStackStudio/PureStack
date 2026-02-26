@@ -61,5 +61,8 @@
   "pagefind": {
     "excludePaths": ["/privacy/", "/imprint/", "/terms/"]
   },
+  "mdx": {
+    "highlighter": "highlightjs"
+  },
   "outDir": "../dist/site"
 }

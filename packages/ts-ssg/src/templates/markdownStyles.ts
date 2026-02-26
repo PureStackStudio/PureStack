@@ -6,13 +6,18 @@ import {
 } from '../style/themeOptions'
 import type { ThemePalette } from '../style/themePalette'
 
-export function registerMarkdownStyles() {
+export interface MarkdownStyleOptions {
+  includeShikiStyles?: boolean
+}
+
+export function registerMarkdownStyles(options: MarkdownStyleOptions = {}) {
+  const includeShikiStyles = options.includeShikiStyles !== false
   themes.forEach((theme, palette, options) => {
     registerBaseProseStyles(theme, palette, options)
     registerHeadingStyles(theme, palette)
     registerListStyles(theme)
     registerLinkStyles(theme, palette)
-    registerCodeStyles(theme, palette, options)
+    registerCodeStyles(theme, palette, options, includeShikiStyles)
     registerBlockquoteStyles(theme, palette, options)
     registerTableStyles(theme, palette, options)
     registerHrStyles(theme, palette)
@@ -101,10 +106,13 @@ function registerCodeStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
+  includeShikiStyles: boolean,
 ) {
   registerInlineCodeStyles(theme, palette, options)
   registerPreAndCopyButtonStyles(theme, palette, options)
-  registerShikiStyles(theme)
+  if (includeShikiStyles) {
+    registerShikiStyles(theme)
+  }
 }
 
 function registerInlineCodeStyles(

@@ -12,11 +12,7 @@ import {
   isSiteConfigFile,
   type StaticAssetFile,
 } from '../discover/content'
-import {
-  buildNavigation,
-  type NavigationConfig,
-  resolveNavigationConfig,
-} from '../navigation/navigation'
+import { buildNavigation } from '../navigation/navigation'
 import { initBuiltinComponents } from '../regor/initBuiltinComponents'
 import { themes } from '../style/themeOptions'
 import { copyStaticAsset, copyStaticAssets } from './assets'
@@ -82,10 +78,10 @@ export async function createIncrementalBuilder(
 }
 
 interface IncrementalRuntimeOptions {
-  input: BuildInput
   config: SiteConfig
+  hooks: BuildHooks
+  cleanOutDir: boolean
   log: Logger
-  navigationConfig: NavigationConfig
   context: BuildContext
   manifest: BuildManifest
 }
@@ -93,25 +89,26 @@ interface IncrementalRuntimeOptions {
 async function createIncrementalRuntime(
   input: BuildInput,
 ): Promise<IncrementalRuntime> {
-  const config = resolveSiteConfig(input)
-  const mdx = await resolveMdxBuildOptions(input.mdx)
+  const configInput = input.siteConfig ?? {}
+  const buildOptions = input.options ?? {}
+  const config = resolveSiteConfig(configInput)
+  const hooks = buildOptions.hooks ?? {}
+  const cleanOutDir = buildOptions.cleanOutDir === true
+  const mdx = await resolveMdxBuildOptions(config.mdx)
   themes.setOptions(config.theme)
-  initBuiltinComponents()
+  initBuiltinComponents({ includeShikiStyles: isShikiEnabled(config.mdx) })
   const log = getLogger()
-  const navigationConfig = resolveNavigationConfig(
-    input.navigation ?? config.navigation,
-  )
   const discovered = await discoverContent(config.contentDir)
   const navigation = await buildNavigation(
     config.contentDir,
     discovered,
-    navigationConfig,
+    config.navigation,
   )
   const context: BuildContext = {
     config,
-    writeErrorPages: input.writeErrorPages === true,
-    components: input.components,
-    templates: input.templates,
+    writeErrorPages: buildOptions.writeErrorPages === true,
+    components: buildOptions.components,
+    templates: buildOptions.templates,
     navigation,
     mdx,
   }
@@ -125,13 +122,21 @@ async function createIncrementalRuntime(
       : createEmptyManifest(config)
 
   return new IncrementalRuntime({
-    input,
     config,
+    hooks,
+    cleanOutDir,
     log,
-    navigationConfig,
     context,
     manifest,
   })
+}
+
+function isShikiEnabled(mdx: SiteConfig['mdx'] | undefined): boolean {
+  return mdx?.disableHighlighter !== true && mdx?.highlighter === 'shiki'
+}
+
+function isHighlightJsEnabled(mdx: SiteConfig['mdx'] | undefined): boolean {
+  return mdx?.disableHighlighter !== true && mdx?.highlighter === 'highlightjs'
 }
 
 type HandleMissingSignatureChangeInput = {
@@ -202,10 +207,6 @@ class IncrementalRuntime {
     }
   }
 
-  private get input() {
-    return this.options.input
-  }
-
   private get config() {
     return this.options.config
   }
@@ -216,10 +217,6 @@ class IncrementalRuntime {
 
   private get log() {
     return this.options.log
-  }
-
-  private get navigationConfig() {
-    return this.options.navigationConfig
   }
 
   private get manifest() {
@@ -253,14 +250,14 @@ class IncrementalRuntime {
   }
 
   private resolveBuildHooks(): BuildHooks {
-    return this.input.hooks ?? {}
+    return this.options.hooks
   }
 
   private async prepareBuild(
     hooks: BuildHooks,
   ): Promise<BuildPreparationResult> {
     await hooks.onConfigResolved?.(this.context)
-    await prepareOutDir(this.config.outDir, { clean: this.input.cleanOutDir })
+    await prepareOutDir(this.config.outDir, { clean: this.options.cleanOutDir })
     const copiedAssets = await copyStaticAssets(
       this.config.contentDir,
       this.config.outDir,
@@ -278,7 +275,7 @@ class IncrementalRuntime {
     this.context.navigation = await buildNavigation(
       this.config.contentDir,
       contentFiles,
-      this.navigationConfig,
+      this.config.navigation,
     )
     await hooks.onNavigationBuilt?.(this.context, this.context.navigation)
     return { contentFiles, assetFiles: copiedAssets.files }
@@ -301,11 +298,13 @@ class IncrementalRuntime {
   }
 
   private async writeStylesWithHooks(hooks: BuildHooks) {
-    const styleResult = await writeStyles(
-      this.config.outDir,
-      this.config.styleFileName,
-      this.config.styleThemes,
-    )
+    const { outDir, styleFileName: fileName, styleThemes: themes } = this.config
+    const styleResult = await writeStyles({
+      outDir,
+      fileName,
+      themes,
+      includeHljsTheme: isHighlightJsEnabled(this.config.mdx),
+    })
     await hooks.onStylesWritten?.(this.context, styleResult)
     return styleResult
   }
@@ -541,7 +540,7 @@ class IncrementalRuntime {
     this.context.navigation = await buildNavigation(
       this.config.contentDir,
       contentFiles,
-      this.navigationConfig,
+      this.config.navigation,
     )
     this.markAllPagesDirty(contentFiles)
     return contentFiles
@@ -602,7 +601,7 @@ class IncrementalRuntime {
     input: HandleMissingSignatureChangeInput,
   ) {
     const { relPath, ext, result, contentEntry, assetEntry } = input
-    if (contentEntry && this.navigationConfig.mode !== 'none') {
+    if (contentEntry && this.config.navigation.mode !== 'none') {
       await this.rebuildNavigationForChange(relPath, ext, result, null)
       await this.persistManifest()
       return
@@ -627,7 +626,7 @@ class IncrementalRuntime {
     const { relPath, ext, signature, contentEntry, result } = input
     if (signatureEqual(contentEntry, signature)) return
 
-    if (this.navigationConfig.mode !== 'none') {
+    if (this.config.navigation.mode !== 'none') {
       await this.rebuildNavigationForChange(relPath, ext, result, signature)
       await this.persistManifest()
       return

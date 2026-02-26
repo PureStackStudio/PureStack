@@ -308,4 +308,66 @@ describe('resolveSiteConfig sitemap', () => {
       }),
     ).toThrowError(/Unknown theme skin/)
   })
+
+  it('resolves mdx highlighter from siteConfig file', () => {
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'ts-ssg-config-'))
+    try {
+      const rootDir = path.join(tempRoot, 'repo-root')
+      const contentDir = path.join(rootDir, 'content')
+      fs.mkdirSync(contentDir, { recursive: true })
+      fs.writeFileSync(
+        path.join(contentDir, 'siteConfig.json'),
+        JSON.stringify({
+          mdx: {
+            highlighter: 'highlightjs',
+            disableHighlighter: false,
+          },
+        }),
+      )
+
+      const config = resolveSiteConfig({ rootDir, contentDir })
+      expect(config.mdx.highlighter).toBe('highlightjs')
+      expect(config.mdx.disableHighlighter).toBe(false)
+    } finally {
+      fs.rmSync(tempRoot, { recursive: true, force: true })
+    }
+  })
+
+  it('defaults mdx highlighter to highlightjs', () => {
+    const config = resolveSiteConfig({ rootDir: process.cwd() })
+    expect(config.mdx.highlighter).toBe('highlightjs')
+    expect(config.mdx.disableHighlighter).toBe(false)
+  })
+
+  it('prefers input mdx over siteConfig file', () => {
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'ts-ssg-config-'))
+    try {
+      const rootDir = path.join(tempRoot, 'repo-root')
+      const contentDir = path.join(rootDir, 'content')
+      fs.mkdirSync(contentDir, { recursive: true })
+      fs.writeFileSync(
+        path.join(contentDir, 'siteConfig.json'),
+        JSON.stringify({
+          mdx: {
+            highlighter: 'shiki',
+            disableHighlighter: true,
+          },
+        }),
+      )
+
+      const config = resolveSiteConfig({
+        rootDir,
+        contentDir,
+        mdx: {
+          highlighter: 'highlightjs',
+          disableHighlighter: false,
+        },
+      })
+
+      expect(config.mdx.highlighter).toBe('highlightjs')
+      expect(config.mdx.disableHighlighter).toBe(false)
+    } finally {
+      fs.rmSync(tempRoot, { recursive: true, force: true })
+    }
+  })
 })

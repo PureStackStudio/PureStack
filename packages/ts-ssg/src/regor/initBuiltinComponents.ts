@@ -22,13 +22,19 @@ import { createThemeSwitcherComponents } from './components/themeSwitcher/themeS
 import { createTopBarComponents } from './components/topBar/topBar'
 import { componentRegistry } from './registry'
 
-export function initBuiltinComponents() {
+export interface BuiltinComponentInitOptions {
+  includeShikiStyles?: boolean
+}
+
+export function initBuiltinComponents(
+  options: BuiltinComponentInitOptions = {},
+) {
   ensureDomGlobals()
   styleBuilder.reset()
   componentRegistry.clear()
   registerNormalizeStyles()
   registerDocLayoutStyles()
-  registerMarkdownStyles()
+  registerMarkdownStyles({ includeShikiStyles: options.includeShikiStyles })
   componentRegistry.registerMany(createAlertComponents())
   componentRegistry.registerMany(createBadgeComponents())
   componentRegistry.registerMany(createCardComponents())

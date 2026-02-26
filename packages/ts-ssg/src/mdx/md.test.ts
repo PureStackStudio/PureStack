@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
+import { resolveMdxBuildOptions } from '../build/incremental-support'
 import { renderApp } from '../regor/renderApp'
 import { compileMarkdown } from './md'
 
@@ -19,5 +20,16 @@ describe('compileMarkdown', () => {
     expect(html).toContain('<tbody>')
     expect(html).toContain('<th>Option</th>')
     expect(html).toContain('<td>TRACE</td>')
+  })
+
+  it('supports highlightjs backend', async () => {
+    const source = '```ts\nconst x = 1\n```'
+    const mdx = await resolveMdxBuildOptions({
+      highlighter: 'highlightjs',
+    })
+    const html = renderApp(compileMarkdown(source, mdx).bodyHtml)
+
+    expect(html).toContain('<pre class="hljs shiki">')
+    expect(html).toContain('<code class="hljs language-typescript">')
   })
 })

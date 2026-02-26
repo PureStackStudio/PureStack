@@ -425,6 +425,24 @@
         }
       }
     },
+    "mdx": {
+      "type": "object",
+      "description": "Markdown/MDX compiler settings.",
+      "additionalProperties": false,
+      "properties": {
+        "highlighter": {
+          "type": "string",
+          "enum": ["shiki", "highlightjs"],
+          "description": "Syntax highlighter backend. Use highlightjs for faster builds.",
+          "default": "highlightjs"
+        },
+        "disableHighlighter": {
+          "type": "boolean",
+          "description": "Disable syntax highlighting entirely.",
+          "default": false
+        }
+      }
+    },
     "outDir": {
       "type": "string",
       "description": "Output directory path. Relative paths are resolved from the content directory (siteConfig location).",

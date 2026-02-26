@@ -10,10 +10,8 @@ import { logError } from './util/logging'
 export {
   type BuildHooks,
   type BuildInput,
-  type BuildOptions,
   type BuildResult,
   buildSite,
-  type MdxOptions,
 } from './build/site'
 export {
   type AnalyticsConfig,
@@ -23,9 +21,10 @@ export {
   type ConsentServiceConfig,
   type Ga4Config,
   type PagefindConfig,
-  type PartialSiteConfig as PartialConfig,
   resolveSiteConfig,
   type SiteConfig,
+  type SiteConfigInput,
+  type SiteMdxConfig,
 } from './config/config'
 export {
   type DevServerHandle,
@@ -109,7 +108,7 @@ async function runCli() {
       await startDevServer(cli.input)
       return
     }
-    await buildSite(cli.input)
+    await buildSite(cli.input.build)
   } catch (error) {
     logError(getLogger(), error, 'build failed')
     throw error
@@ -160,7 +159,9 @@ function parseCliArgs(args: string[]): CliState {
   }
   const contentDir = readValue('--content')
   if (contentDir) {
-    state.input.contentDir = path.resolve(contentDir)
+    state.input.build ??= {}
+    state.input.build.siteConfig ??= {}
+    state.input.build.siteConfig.contentDir = path.resolve(contentDir)
   }
 
   if (args.includes('--no-watch')) {
@@ -170,7 +171,9 @@ function parseCliArgs(args: string[]): CliState {
     state.input.liveReload = false
   }
   if (args.includes('--clean')) {
-    state.input.cleanOutDir = true
+    state.input.build ??= {}
+    state.input.build.options ??= {}
+    state.input.build.options.cleanOutDir = true
   }
 
   return state

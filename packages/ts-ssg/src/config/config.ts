@@ -12,6 +12,7 @@ import {
   type ThemeOptionsInput,
   themes,
 } from '../style/themeOptions'
+import type { DeepPartial } from '../util/types'
 
 export interface SiteConfig {
   rootDir: string
@@ -28,6 +29,7 @@ export interface SiteConfig {
   consent: ConsentConfig
   analytics: AnalyticsConfig
   pagefind: PagefindConfig
+  mdx: SiteMdxConfig
 }
 
 export interface LogoConfig {
@@ -41,8 +43,6 @@ export interface LogoConfig {
   wordFontSize?: string
   subtitleFontSize?: string
 }
-
-export type PartialLogoConfig = Partial<LogoConfig>
 
 export interface SitemapConfig {
   enabled: boolean
@@ -122,56 +122,18 @@ export interface PagefindConfig {
   excludePaths: string[]
 }
 
-export type PartialSitemapConfig = Partial<Omit<SitemapConfig, 'robots'>> & {
-  robots?: Partial<RobotsConfig>
+export interface SiteMdxConfig {
+  highlighter: 'shiki' | 'highlightjs'
+  disableHighlighter: boolean
 }
 
-export type PartialConsentScriptConfig = Partial<ConsentScriptConfig>
-export type PartialConsentServiceConfig = Partial<
-  Omit<ConsentServiceConfig, 'scripts'>
-> & {
-  scripts?: PartialConsentScriptConfig[]
-}
-export type PartialConsentCategoryConfig = Partial<ConsentCategoryConfig>
-export type PartialConsentConfig = Partial<
-  Omit<ConsentConfig, 'categories' | 'services'>
-> & {
-  categories?: PartialConsentCategoryConfig[]
-  services?: PartialConsentServiceConfig[]
-}
-export type PartialGa4Config = Partial<Ga4Config>
-export type PartialAnalyticsConfig = {
-  ga4?: PartialGa4Config
-}
-
-export type PartialSiteConfig = Partial<
-  Omit<
-    SiteConfig,
-    'theme' | 'sitemap' | 'logo' | 'consent' | 'analytics' | 'pagefind'
-  >
-> & {
-  logo?: PartialLogoConfig
+/**
+ * Public config input shape for both `buildSite(...)` and `siteConfig.json`.
+ * All fields are optional; values are normalized by `resolveSiteConfig`.
+ */
+export type SiteConfigInput = DeepPartial<Omit<SiteConfig, 'theme'>> & {
   theme?: ThemeOptionsInput
-  sitemap?: PartialSitemapConfig
-  consent?: PartialConsentConfig
-  analytics?: PartialAnalyticsConfig
-  pagefind?: Partial<PagefindConfig>
 }
-export type SiteConfigFile = Partial<
-  Pick<
-    SiteConfig,
-    | 'outDir'
-    | 'siteTitle'
-    | 'logo'
-    | 'styleFileName'
-    | 'styleHref'
-    | 'styleThemes'
-    | 'navigation'
-    | 'consent'
-    | 'analytics'
-    | 'pagefind'
-  >
-> & { theme?: ThemeOptionsInput; sitemap?: PartialSitemapConfig }
 
 const DEFAULT_ROOT = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -203,7 +165,7 @@ const DEFAULT_CONSENT_CATEGORIES: ConsentCategoryConfig[] = [
   },
 ]
 
-export function resolveSiteConfig(input: PartialSiteConfig = {}): SiteConfig {
+export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
   const rootDir = input.rootDir ?? DEFAULT_ROOT
   const contentDir = input.contentDir ?? path.join(rootDir, 'sample-content')
   const fileConfig = loadSiteConfigFile(contentDir)
@@ -244,6 +206,7 @@ export function resolveSiteConfig(input: PartialSiteConfig = {}): SiteConfig {
     analytics.ga4,
   )
   const pagefind = resolvePagefindConfig(input.pagefind, fileConfig.pagefind)
+  const mdx = resolveMdxConfig(input.mdx, fileConfig.mdx)
   return {
     rootDir,
     contentDir,
@@ -259,12 +222,13 @@ export function resolveSiteConfig(input: PartialSiteConfig = {}): SiteConfig {
     consent,
     analytics,
     pagefind,
+    mdx,
   }
 }
 
 function resolveLogoConfig(
-  input?: PartialLogoConfig,
-  file?: PartialLogoConfig,
+  input?: DeepPartial<LogoConfig>,
+  file?: DeepPartial<LogoConfig>,
 ): LogoConfig {
   return {
     wordOne: resolveString(input?.wordOne, file?.wordOne, 'Pure'),
@@ -312,8 +276,8 @@ function resolveOutDirFromFile(value: unknown, contentDir: string) {
 }
 
 function resolveSitemapConfig(
-  input?: PartialSitemapConfig,
-  file?: PartialSitemapConfig,
+  input?: DeepPartial<SitemapConfig>,
+  file?: DeepPartial<SitemapConfig>,
 ): SitemapConfig {
   const baseUrl = normalizeBaseUrl(input?.baseUrl ?? file?.baseUrl ?? '')
   const enabled = input?.enabled ?? file?.enabled ?? false
@@ -338,8 +302,8 @@ function resolveSitemapConfig(
 }
 
 function resolveConsentConfig(
-  input?: PartialConsentConfig,
-  file?: PartialConsentConfig,
+  input?: DeepPartial<ConsentConfig>,
+  file?: DeepPartial<ConsentConfig>,
   ga4?: Ga4Config,
 ): ConsentConfig {
   const enabled = input?.enabled ?? file?.enabled ?? false
@@ -412,16 +376,16 @@ function resolveConsentConfig(
 }
 
 function resolveAnalyticsConfig(
-  input?: PartialAnalyticsConfig,
-  file?: PartialAnalyticsConfig,
+  input?: DeepPartial<AnalyticsConfig>,
+  file?: DeepPartial<AnalyticsConfig>,
 ): AnalyticsConfig {
   const ga4 = resolveGa4Config(input?.ga4, file?.ga4)
   return { ga4 }
 }
 
 function resolveGa4Config(
-  input?: PartialGa4Config,
-  file?: PartialGa4Config,
+  input?: DeepPartial<Ga4Config>,
+  file?: DeepPartial<Ga4Config>,
 ): Ga4Config {
   const measurementId = resolveGa4MeasurementId(
     input?.measurementId,
@@ -471,9 +435,30 @@ function resolvePagefindConfig(
   }
 }
 
+function resolveMdxConfig(
+  input?: Partial<SiteMdxConfig>,
+  file?: Partial<SiteMdxConfig>,
+): SiteMdxConfig {
+  return {
+    highlighter: resolveMdxHighlighter(input?.highlighter, file?.highlighter),
+    disableHighlighter:
+      input?.disableHighlighter ?? file?.disableHighlighter ?? false,
+  }
+}
+
+function resolveMdxHighlighter(
+  ...values: unknown[]
+): SiteMdxConfig['highlighter'] {
+  for (const value of values) {
+    if (value === 'highlightjs') return 'highlightjs'
+    if (value === 'shiki') return 'shiki'
+  }
+  return 'highlightjs'
+}
+
 function resolveConsentCategories(
-  input: PartialConsentCategoryConfig[] | undefined,
-  file: PartialConsentCategoryConfig[] | undefined,
+  input: Array<DeepPartial<ConsentCategoryConfig>> | undefined,
+  file: Array<DeepPartial<ConsentCategoryConfig>> | undefined,
 ) {
   const source = Array.isArray(input)
     ? input
@@ -511,8 +496,8 @@ function resolveConsentCategories(
 }
 
 function resolveConsentServices(
-  input: PartialConsentServiceConfig[] | undefined,
-  file: PartialConsentServiceConfig[] | undefined,
+  input: Array<DeepPartial<ConsentServiceConfig>> | undefined,
+  file: Array<DeepPartial<ConsentServiceConfig>> | undefined,
   categories: ConsentCategoryConfig[],
 ) {
   const source = Array.isArray(input) ? input : Array.isArray(file) ? file : []
@@ -591,7 +576,7 @@ function buildGa4ConsentScripts(measurementId: string): ConsentScriptConfig[] {
 }
 
 function resolveConsentServiceScripts(
-  scripts: PartialConsentScriptConfig[] | undefined,
+  scripts: Array<DeepPartial<ConsentScriptConfig>> | undefined,
   serviceId: string,
 ) {
   if (!Array.isArray(scripts) || scripts.length === 0) {
@@ -710,7 +695,7 @@ function normalizeExcludePath(pathname: string): string {
   return withLeading.endsWith('/') ? withLeading : `${withLeading}/`
 }
 
-function loadSiteConfigFile(contentDir: string): SiteConfigFile {
+function loadSiteConfigFile(contentDir: string): SiteConfigInput {
   const filePath = path.join(contentDir, SITE_CONFIG_FILENAME)
   try {
     const raw = fs.readFileSync(filePath, 'utf8')
@@ -718,7 +703,7 @@ function loadSiteConfigFile(contentDir: string): SiteConfigFile {
     if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
       throw new Error('siteConfig.json must contain a JSON object.')
     }
-    return parsed as SiteConfigFile
+    return parsed as SiteConfigInput
   } catch (error) {
     const err = error as NodeJS.ErrnoException
     if (err.code === 'ENOENT') return {}

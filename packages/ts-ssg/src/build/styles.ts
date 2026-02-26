@@ -1,5 +1,6 @@
 import crypto from 'node:crypto'
 import fs from 'node:fs/promises'
+import { createRequire } from 'node:module'
 import path from 'node:path'
 
 import { styleBuilder } from '../style/styles'
@@ -12,11 +13,17 @@ export interface WriteStylesResult {
   signature: string
 }
 
+export interface WriteStylesInput {
+  outDir: string
+  fileName: string
+  themes: string[]
+  includeHljsTheme?: boolean
+}
+
 export async function writeStyles(
-  outDir: string,
-  fileName: string,
-  themes: string[],
+  input: WriteStylesInput,
 ): Promise<WriteStylesResult> {
+  const { outDir, fileName, themes, includeHljsTheme = false } = input
   const resultPaths: string[] = []
   const hash = crypto.createHash('sha256')
   const orderedThemes = orderThemes(themes)
@@ -26,7 +33,12 @@ export async function writeStyles(
 
   for (const theme of orderedThemes) {
     const rendered = await styleBuilder.render(theme, prettyCss)
-    const css = prettyCss ? rendered : compactCss(rendered)
+    const css = await resolveOutputCss(
+      rendered,
+      theme,
+      prettyCss,
+      includeHljsTheme,
+    )
     const cssName = resolveThemeFileName(fileName, theme)
     const outPath = path.join(outDir, cssName)
     await ensureDir(outPath)
@@ -46,6 +58,30 @@ export async function writeStyles(
     outputs: resultPaths,
     signature: hash.digest('hex'),
   }
+}
+
+const require = createRequire(import.meta.url)
+
+async function resolveOutputCss(
+  rendered: string,
+  theme: string,
+  prettyCss: boolean,
+  includeHljsTheme: boolean,
+): Promise<string> {
+  const baseCss = prettyCss ? rendered : compactCss(rendered)
+  if (!includeHljsTheme) return baseCss
+  const highlightCss = await loadHighlightJsThemeCss(theme)
+  if (!highlightCss) return baseCss
+  return `${baseCss}\n\n${highlightCss}`
+}
+
+async function loadHighlightJsThemeCss(theme: string): Promise<string> {
+  const themeFile =
+    theme === 'dark'
+      ? 'highlight.js/styles/github-dark.css'
+      : 'highlight.js/styles/github.css'
+  const cssPath = require.resolve(themeFile)
+  return await fs.readFile(cssPath, 'utf8')
 }
 
 function compactCss(css: string) {

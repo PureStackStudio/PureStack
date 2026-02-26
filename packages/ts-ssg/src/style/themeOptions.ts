@@ -1,5 +1,5 @@
 import { merge } from '@logpot/utils'
-
+import type { DeepPartial } from '../util/types'
 import { type BuiltInSkinName, builtInSkins } from './skins'
 import { normalizeThemeName, type ThemeName } from './themeAssets'
 import type { ThemePalette } from './themePalette'
@@ -7,12 +7,6 @@ import type { ThemePalette } from './themePalette'
 const DEFAULT_SKIN = builtInSkins.neon
 export const THEME_MODES = ['light', 'dark'] as const
 export type ThemeMode = (typeof THEME_MODES)[number]
-
-type DeepPartial<T> = {
-  [K in keyof T]?: T[K] extends Record<string, unknown>
-    ? DeepPartial<T[K]>
-    : T[K]
-}
 
 export interface ThemeOptions {
   colors: Record<ThemeMode, ThemePalette>
@@ -40,13 +34,8 @@ export interface ThemeOptions {
   }
 }
 
-export type ThemeOptionsInput = {
+export type ThemeOptionsInput = DeepPartial<ThemeOptions> & {
   skin?: BuiltInSkinName
-  colors?: Partial<Record<ThemeMode, DeepPartial<ThemePalette>>>
-  radii?: Partial<ThemeOptions['radii']>
-  spacing?: Partial<ThemeOptions['spacing']>
-  typography?: Partial<ThemeOptions['typography']>
-  shadows?: Partial<ThemeOptions['shadows']>
 }
 
 export const DEFAULT_THEME_OPTIONS: ThemeOptions = {

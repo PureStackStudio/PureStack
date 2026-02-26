@@ -31,7 +31,9 @@ export interface DevServerOptions {
   liveReload?: boolean
 }
 
-export type DevServerInput = BuildInput & DevServerOptions
+export interface DevServerInput extends DevServerOptions {
+  build?: BuildInput
+}
 
 export interface DevServerHandle {
   close: () => Promise<void>
@@ -62,8 +64,15 @@ export async function startDevServer(
   input: DevServerInput = {},
 ): Promise<DevServerHandle> {
   const logger = getLogger()
-  const buildInput: BuildInput = { ...input, writeErrorPages: true }
-  const config = resolveSiteConfig(input)
+  const baseBuildInput = input.build ?? {}
+  const buildInput: BuildInput = {
+    ...baseBuildInput,
+    options: {
+      writeErrorPages: true,
+      ...(baseBuildInput.options ?? {}),
+    },
+  }
+  const config = resolveSiteConfig(buildInput.siteConfig)
   const log = getLogger()
 
   const { host, port, watch, liveReload } = resolveDevServerOptions(input)

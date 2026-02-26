@@ -1,16 +1,16 @@
 ﻿import fs from 'node:fs/promises'
 import path from 'node:path'
 
-import type { SiteConfig } from '../config/config'
+import type { SiteConfig, SiteMdxConfig } from '../config/config'
 import type { ContentFile, StaticAssetFile } from '../discover/content'
 import type { MdxRenderOptions } from '../mdx/compile'
 import {
   createMdxHighlighter,
   DEFAULT_MDX_CODE_LANGS,
   DEFAULT_MDX_CODE_THEMES,
-  type MdxCodeLangs,
-  type MdxCodeThemes,
+  type MdxCodeHighlighter,
 } from '../mdx/highlight'
+import { createHljsHighlighter } from '../mdx/highlightjs'
 import { urlNormalizer } from '../util/urlNormalizer'
 import { resolveStaticOutPath } from './assets'
 import {
@@ -22,7 +22,7 @@ import {
   type StylesManifestEntry,
 } from './manifest'
 import { resolveOutPath, resolveRouteInfo } from './out-path'
-import type { BuildCountSummary, BuildInput } from './site'
+import type { BuildCountSummary } from './site'
 
 export class ManifestContentIndex {
   private readonly outPathToRelPath = new Map<string, string>()
@@ -87,14 +87,23 @@ export class ManifestContentIndex {
 }
 
 export async function resolveMdxBuildOptions(
-  mdx: BuildInput['mdx'] | undefined,
+  mdx: Partial<SiteMdxConfig> | undefined,
 ): Promise<MdxRenderOptions> {
-  const mdxThemes: MdxCodeThemes = mdx?.themes ?? DEFAULT_MDX_CODE_THEMES
-  const mdxLangs: MdxCodeLangs = mdx?.langs ?? DEFAULT_MDX_CODE_LANGS
-  const highlighter = mdx?.disableHighlighter
-    ? undefined
-    : (mdx?.highlighter ?? (await createMdxHighlighter(mdxThemes, mdxLangs)))
+  const highlighter = await resolveHighlighter(mdx)
   return { highlighter }
+}
+
+async function resolveHighlighter(
+  mdx: Partial<SiteMdxConfig> | undefined,
+): Promise<MdxCodeHighlighter | undefined> {
+  if (mdx?.disableHighlighter) return undefined
+  if (mdx?.highlighter === 'highlightjs') {
+    return createHljsHighlighter()
+  }
+  return await createMdxHighlighter(
+    DEFAULT_MDX_CODE_THEMES,
+    DEFAULT_MDX_CODE_LANGS,
+  )
 }
 
 export function normalizeUrlPath(urlPath: string) {

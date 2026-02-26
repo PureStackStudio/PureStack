@@ -1,13 +1,8 @@
 import type { Component } from 'regor'
 
-import type { PartialSiteConfig } from '../config/config'
+import type { SiteConfigInput } from '../config/config'
 import type { ContentFile } from '../discover/content'
-import type {
-  MdxCodeHighlighter,
-  MdxCodeLangs,
-  MdxCodeThemes,
-} from '../mdx/highlight'
-import type { NavigationConfig, NavigationTree } from '../navigation/navigation'
+import type { NavigationTree } from '../navigation/navigation'
 import type { PageTemplateMap } from '../templates/page-templates'
 import { createIncrementalBuilder } from './incremental'
 import type { BuildContext, PageRenderResult } from './page'
@@ -63,17 +58,11 @@ export interface BuildOptions {
   hooks?: BuildHooks
   components?: Record<string, Component>
   templates?: PageTemplateMap
-  navigation?: NavigationConfig
-  mdx?: MdxOptions
 }
 
-export type BuildInput = PartialSiteConfig & BuildOptions
-
-export interface MdxOptions {
-  highlighter?: MdxCodeHighlighter
-  themes?: MdxCodeThemes
-  langs?: MdxCodeLangs
-  disableHighlighter?: boolean
+export interface BuildInput {
+  siteConfig?: SiteConfigInput
+  options?: BuildOptions
 }
 
 export async function buildSite(input: BuildInput = {}): Promise<BuildResult> {

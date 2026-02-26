@@ -70,12 +70,14 @@ describe('incremental builder', () => {
       await writeManifest(outDir, manifest)
 
       const builder = await createIncrementalBuilder({
-        rootDir: base,
-        contentDir,
-        outDir,
-        siteTitle: 'Test Site',
-        styleFileName: 'site.css',
-        styleHref: '/site.css',
+        siteConfig: {
+          rootDir: base,
+          contentDir,
+          outDir,
+          siteTitle: 'Test Site',
+          styleFileName: 'site.css',
+          styleHref: '/site.css',
+        },
       })
 
       const result = await builder.applyChange(
@@ -86,6 +88,47 @@ describe('incremental builder', () => {
 
       const next = await readManifest(outDir)
       expect(next?.content['index.md']).toBeUndefined()
+    })
+  })
+
+  it('does not emit shiki selectors when highlightjs is selected', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      const outDir = path.join(base, 'out')
+      await fs.mkdir(contentDir, { recursive: true })
+      await fs.mkdir(outDir, { recursive: true })
+      await fs.writeFile(
+        path.join(contentDir, 'index.md'),
+        '```ts\nconst x = 1\n```',
+        'utf8',
+      )
+
+      const builder = await createIncrementalBuilder({
+        siteConfig: {
+          rootDir: base,
+          contentDir,
+          outDir,
+          siteTitle: 'Test Site',
+          styleFileName: 'site.css',
+          styleHref: '/site.css',
+          mdx: {
+            highlighter: 'highlightjs',
+          },
+        },
+      })
+
+      await builder.buildAll('test highlightjs styles')
+
+      const lightCss = await fs.readFile(path.join(outDir, 'site.css'), 'utf8')
+      const darkCss = await fs.readFile(
+        path.join(outDir, 'site.dark.css'),
+        'utf8',
+      )
+
+      expect(lightCss).not.toContain('pre.shiki.shiki-themes')
+      expect(darkCss).not.toContain('pre.shiki.shiki-themes')
+      expect(lightCss).toContain('.hljs')
+      expect(darkCss).toContain('.hljs')
     })
   })
 })
