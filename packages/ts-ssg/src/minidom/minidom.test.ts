@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+
 import { createDom } from './createDom'
 import cssEscape from './cssEscape'
 import { parseFragment } from './minidom'

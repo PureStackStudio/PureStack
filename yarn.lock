@@ -778,7 +778,7 @@ __metadata:
     logpot: "npm:^1.0.7"
     mdast-util-to-hast: "npm:^13.2.1"
     pagefind: "npm:^1.4.0"
-    regor: "npm:^1.3.5"
+    regor: "npm:^1.3.6"
     rehype-raw: "npm:^7.0.0"
     rehype-stringify: "npm:^10.0.1"
     remark-gfm: "npm:^4.0.1"
@@ -1237,12 +1237,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^25.3.0":
-  version: 25.3.0
-  resolution: "@types/node@npm:25.3.0"
+"@types/node@npm:^25.3.1":
+  version: 25.3.1
+  resolution: "@types/node@npm:25.3.1"
   dependencies:
     undici-types: "npm:~7.18.0"
-  checksum: 10c0/7b2b18c9d68047157367fc2f786d4f166d22dc0ad9f82331ca02fb16f2f391854123dbe604dcb938cda119c87051e4bb71dcb9ece44a579f483a6f96d4bd41de
+  checksum: 10c0/f4714e3f2c393434cdefbf207f3fe470bcf4d6c5717298c3fc9239e362a57cd25e59603c60e9c956e7d5d0dfb97cf2e037b37cf6dc2f3876f6a963146f7adc6d
   languageName: node
   linkType: hard
 
@@ -3432,7 +3432,7 @@ __metadata:
   resolution: "purestack-repo@workspace:."
   dependencies:
     "@biomejs/biome": "npm:^2.4.4"
-    "@types/node": "npm:^25.3.0"
+    "@types/node": "npm:^25.3.1"
     esbuild: "npm:^0.27.3"
     tsdown: "npm:^0.20.3"
     tsx: "npm:^4.21.0"
@@ -3475,10 +3475,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regor@npm:^1.3.5":
-  version: 1.3.5
-  resolution: "regor@npm:1.3.5"
-  checksum: 10c0/0e51a8b481743800edc807b063ce1926a01eb662e57b93ae69538da6590b9338fd0172ca7d221fe113c5d9ec6f03eacf0aef2a3a0e470b10f6852aae7f773bc3
+"regor@npm:^1.3.6":
+  version: 1.3.6
+  resolution: "regor@npm:1.3.6"
+  checksum: 10c0/de3ff9a8953ab93675ed41250e56aabe569a9f993caa4bec872af2022e609fddb96ebbe148d9e749d41677e2b2d05bbc74aa44f4d5777909bd55db38c7954d26
   languageName: node
   linkType: hard
 
