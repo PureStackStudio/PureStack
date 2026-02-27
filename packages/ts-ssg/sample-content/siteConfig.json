@@ -15,6 +15,9 @@
     "themes": ["light", "dark"],
     "pretty": false
   },
+  "html": {
+    "minify": false
+  },
   "navigation": {
     "mode": "auto",
     "navFileName": "_nav.json",

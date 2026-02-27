@@ -21,6 +21,7 @@ export interface SiteConfig {
   siteTitle: string
   logo: LogoConfig
   style: SiteStyleConfig
+  html: SiteHtmlConfig
   navigation: NavigationConfig
   sitemap: SitemapConfig
   consent: ConsentConfig
@@ -35,6 +36,10 @@ export interface SiteStyleConfig {
   themes: string[]
   pretty: boolean
   theme: ThemeOptions
+}
+
+export interface SiteHtmlConfig {
+  minify: boolean
 }
 
 export interface LogoConfig {
@@ -193,6 +198,7 @@ export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
   )
   const logo = resolveLogoConfig(input.logo, fileConfig.logo)
   const style = resolveStyleConfig(input, fileConfig)
+  const html = resolveHtmlConfig(input.html, fileConfig.html)
   const navigation = resolveNavigationConfig(
     input.navigation,
     fileConfig.navigation,
@@ -216,12 +222,22 @@ export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
     siteTitle,
     logo,
     style,
+    html,
     navigation,
     sitemap,
     consent,
     analytics,
     pagefind,
     mdx,
+  }
+}
+
+function resolveHtmlConfig(
+  input?: DeepPartial<SiteHtmlConfig>,
+  file?: DeepPartial<SiteHtmlConfig>,
+): SiteHtmlConfig {
+  return {
+    minify: pickBoolean(input?.minify, file?.minify, false),
   }
 }
 

@@ -110,6 +110,18 @@
         }
       }
     },
+    "html": {
+      "type": "object",
+      "description": "HTML output settings.",
+      "additionalProperties": false,
+      "properties": {
+        "minify": {
+          "type": "boolean",
+          "description": "Minify generated HTML output files.",
+          "default": false
+        }
+      }
+    },
     "navigation": {
       "type": "object",
       "description": "Navigation menu configuration for auto/custom/hybrid menus.",

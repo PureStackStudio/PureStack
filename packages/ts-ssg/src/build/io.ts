@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises'
+import { htmlMinifier } from '@node-minify/html-minifier'
 
 import { ensureDir } from '../util/fs'
 
@@ -6,9 +7,17 @@ export async function readSource(absPath: string) {
   return fs.readFile(absPath, 'utf-8')
 }
 
-export async function writeHtml(outPath: string, html: string) {
+export interface WriteHtmlOptions {
+  outPath: string
+  html: string
+  minify: boolean
+}
+
+export async function writeHtml(options: WriteHtmlOptions) {
+  const { outPath, html } = options
+  const output = options.minify ? await minifyHtml(html) : html
   await ensureDir(outPath)
-  await fs.writeFile(outPath, html, 'utf-8')
+  await fs.writeFile(outPath, output, 'utf-8')
 }
 
 export async function prepareOutDir(
@@ -19,4 +28,14 @@ export async function prepareOutDir(
     await fs.rm(outDir, { recursive: true, force: true })
   }
   await fs.mkdir(outDir, { recursive: true })
+}
+
+async function minifyHtml(input: string): Promise<string> {
+  const result = await htmlMinifier({
+    content: input,
+    settings: {
+      compressor: async () => ({ code: '' }),
+    },
+  })
+  return result.code
 }

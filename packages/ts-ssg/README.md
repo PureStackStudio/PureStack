@@ -106,6 +106,7 @@ Config comes from:
 - `style.pretty`: default `false`. Set `true` to format generated CSS with Prettier.
 - `navigation`: auto/custom/hybrid/none behavior.
 - `style.theme`: palette/radii/spacing/typography/shadows.
+- `html.minify`: default `false`. Set `true` to minify generated HTML files.
 - `sitemap`: sitemap + robots settings.
 - `consent`: GDPR-style consent manager config for optional scripts.
 - `analytics`: analytics integrations (GA4 supported out of the box).
@@ -123,6 +124,9 @@ Config comes from:
     "href": "/site.css",
     "themes": ["light", "dark"],
     "pretty": false
+  },
+  "html": {
+    "minify": false
   },
   "navigation": {
     "mode": "auto",

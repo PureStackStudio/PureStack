@@ -66,12 +66,19 @@ export async function buildPage(
   file: ContentFile,
 ): Promise<PageRenderResult> {
   const page = await renderPageFromFile(context, file)
-  await writePage(page)
+  await writePage(page, context.config.html.minify)
   return page
 }
 
-export async function writePage(page: PageRenderResult): Promise<void> {
-  await writeHtml(page.outPath, page.html)
+export async function writePage(
+  page: PageRenderResult,
+  minify: boolean,
+): Promise<void> {
+  await writeHtml({
+    outPath: page.outPath,
+    html: page.html,
+    minify,
+  })
   const log = getLogger()
   const renderTimeMs = Math.round(page.renderTimeMs)
   log.info('page written', {
@@ -358,8 +365,17 @@ async function buildErrorPageResult(
     message,
     stack,
   })
-  await writeHtml(outPath, html)
-  await writeRenderErrorLog(context.config.outDir, file.relPath, html)
+  await writeHtml({
+    outPath,
+    html,
+    minify: context.config.html.minify,
+  })
+  await writeRenderErrorLog(
+    context.config,
+    context.config.outDir,
+    file.relPath,
+    html,
+  )
   getLogger().error('page render error written', {
     file: file.relPath,
     outPath,
@@ -463,6 +479,7 @@ function buildRenderErrorHtml(input: RenderErrorHtmlInput): string {
 }
 
 async function writeRenderErrorLog(
+  config: SiteConfig,
   outDir: string,
   relPath: string,
   html: string,
@@ -470,8 +487,17 @@ async function writeRenderErrorLog(
   const fileName = `${Date.now()}-${toSafeFilePart(relPath)}.html`
   const targetPath = path.join(outDir, '.ts-ssg', 'errors', fileName)
   const latestPath = path.join(outDir, '.ts-ssg', 'errors', 'latest.html')
-  await writeHtml(targetPath, html)
-  await writeHtml(latestPath, html)
+  const minify = config.html.minify
+  await writeHtml({
+    outPath: targetPath,
+    html,
+    minify,
+  })
+  await writeHtml({
+    outPath: latestPath,
+    html,
+    minify,
+  })
 }
 
 function toSafeFilePart(value: string): string {

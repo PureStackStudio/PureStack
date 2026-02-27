@@ -290,7 +290,7 @@ class IncrementalRuntime {
       await hooks.onPageStart?.(this.context, file)
       const page = await renderPageFromFile(this.context, file)
       await hooks.onPageRendered?.(this.context, page)
-      await writePage(page)
+      await writePage(page, this.config.html.minify)
       await hooks.onPageWritten?.(this.context, page)
       pages += 1
     }

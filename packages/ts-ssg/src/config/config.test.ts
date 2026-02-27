@@ -76,6 +76,21 @@ describe('resolveSiteConfig sitemap', () => {
     expect(config.style.pretty).toBe(true)
   })
 
+  it('provides html defaults', () => {
+    const config = resolveSiteConfig({ rootDir: process.cwd() })
+    expect(config.html.minify).toBe(false)
+  })
+
+  it('applies html minify override from input', () => {
+    const config = resolveSiteConfig({
+      rootDir: process.cwd(),
+      html: {
+        minify: true,
+      },
+    })
+    expect(config.html.minify).toBe(true)
+  })
+
   it('resolves logo overrides from input config', () => {
     const config = resolveSiteConfig({
       rootDir: process.cwd(),
