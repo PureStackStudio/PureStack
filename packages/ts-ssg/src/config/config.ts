@@ -20,16 +20,21 @@ export interface SiteConfig {
   outDir: string
   siteTitle: string
   logo: LogoConfig
-  styleFileName: string
-  styleHref: string
-  styleThemes: string[]
+  style: SiteStyleConfig
   navigation: NavigationConfig
-  theme: ThemeOptions
   sitemap: SitemapConfig
   consent: ConsentConfig
   analytics: AnalyticsConfig
   pagefind: PagefindConfig
   mdx: SiteMdxConfig
+}
+
+export interface SiteStyleConfig {
+  fileName: string
+  href: string
+  themes: string[]
+  pretty: boolean
+  theme: ThemeOptions
 }
 
 export interface LogoConfig {
@@ -127,12 +132,20 @@ export interface SiteMdxConfig {
   disableHighlighter: boolean
 }
 
+export type SiteStyleConfigInput = DeepPartial<
+  Omit<SiteStyleConfig, 'theme'>
+> & {
+  theme?: ThemeOptionsInput
+}
+
 /**
  * Public config input shape for both `buildSite(...)` and `siteConfig.json`.
  * All fields are optional; values are normalized by `resolveSiteConfig`.
  */
-export type SiteConfigInput = DeepPartial<Omit<SiteConfig, 'theme'>> & {
-  theme?: ThemeOptionsInput
+export type SiteConfigInput = DeepPartial<
+  Omit<SiteConfig, 'style'>
+> & {
+  style?: SiteStyleConfigInput
 }
 
 const DEFAULT_ROOT = path.resolve(
@@ -179,22 +192,11 @@ export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
     'ts-ssg',
   )
   const logo = resolveLogoConfig(input.logo, fileConfig.logo)
-  const styleFileName = resolveString(
-    input.styleFileName,
-    fileConfig.styleFileName,
-    'site.css',
-  )
-  const styleHref = resolveString(
-    input.styleHref,
-    fileConfig.styleHref,
-    `/${styleFileName}`,
-  )
-  const styleThemes = resolveThemes(input.styleThemes, fileConfig.styleThemes)
+  const style = resolveStyleConfig(input, fileConfig)
   const navigation = resolveNavigationConfig(
     input.navigation,
     fileConfig.navigation,
   )
-  const theme = themes.resolve(input.theme, fileConfig.theme)
   const sitemap = resolveSitemapConfig(input.sitemap, fileConfig.sitemap)
   const analytics = resolveAnalyticsConfig(
     input.analytics,
@@ -213,16 +215,37 @@ export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
     outDir,
     siteTitle,
     logo,
-    styleFileName,
-    styleHref,
-    styleThemes,
+    style,
     navigation,
-    theme,
     sitemap,
     consent,
     analytics,
     pagefind,
     mdx,
+  }
+}
+
+function resolveStyleConfig(
+  input: SiteConfigInput,
+  fileConfig: SiteConfigInput,
+): SiteStyleConfig {
+  const styleInput = input.style
+  const styleFile = fileConfig.style
+  const fileName = resolveString(
+    styleInput?.fileName,
+    styleFile?.fileName,
+    'site.css',
+  )
+  const href = resolveString(styleInput?.href, styleFile?.href, `/${fileName}`)
+  const themeNames = resolveThemes(styleInput?.themes, styleFile?.themes)
+  const pretty = pickBoolean(styleInput?.pretty, styleFile?.pretty, false)
+  const theme = themes.resolve(styleInput?.theme, styleFile?.theme)
+  return {
+    fileName,
+    href,
+    themes: themeNames,
+    pretty,
+    theme,
   }
 }
 
@@ -267,6 +290,13 @@ function resolveString(...values: Array<string | undefined>) {
     if (typeof value === 'string' && value.length > 0) return value
   }
   return ''
+}
+
+function pickBoolean(...values: Array<unknown>) {
+  for (const value of values) {
+    if (typeof value === 'boolean') return value
+  }
+  return false
 }
 
 function resolveOutDirFromFile(value: unknown, contentDir: string) {

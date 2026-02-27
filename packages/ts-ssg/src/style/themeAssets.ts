@@ -36,7 +36,7 @@ export function orderThemes(themes: ThemeName[]): ThemeName[] {
   const normalized = normalizeThemes(themes)
   const missing = REQUIRED_THEMES.filter((theme) => !normalized.includes(theme))
   if (missing.length > 0) {
-    throw new Error(`styleThemes must include ${REQUIRED_THEMES.join(', ')}.`)
+    throw new Error(`style.themes must include ${REQUIRED_THEMES.join(', ')}.`)
   }
   const extras = normalized.filter(
     (theme) => !REQUIRED_THEMES.includes(theme as RequiredTheme),

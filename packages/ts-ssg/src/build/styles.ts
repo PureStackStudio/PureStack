@@ -3,6 +3,7 @@ import fs from 'node:fs/promises'
 import { createRequire } from 'node:module'
 import path from 'node:path'
 
+import type { SiteStyleConfig } from '../config/config'
 import { styleBuilder } from '../style/styles'
 import { orderThemes, resolveThemeFileName } from '../style/themeAssets'
 import { ensureDir } from '../util/fs'
@@ -15,30 +16,24 @@ export interface WriteStylesResult {
 
 export interface WriteStylesInput {
   outDir: string
-  fileName: string
-  themes: string[]
   includeHljsTheme?: boolean
 }
 
 export async function writeStyles(
   input: WriteStylesInput,
+  style: SiteStyleConfig,
 ): Promise<WriteStylesResult> {
-  const { outDir, fileName, themes, includeHljsTheme = false } = input
+  const { outDir, includeHljsTheme = false } = input
+  const { fileName, themes, pretty } = style
   const resultPaths: string[] = []
   const hash = crypto.createHash('sha256')
   const orderedThemes = orderThemes(themes)
-  const prettyCss = true
   styleBuilder.ensureThemes(orderedThemes)
   let lightOutPath: string | undefined
 
   for (const theme of orderedThemes) {
-    const rendered = await styleBuilder.render(theme, prettyCss)
-    const css = await resolveOutputCss(
-      rendered,
-      theme,
-      prettyCss,
-      includeHljsTheme,
-    )
+    const rendered = await styleBuilder.render(theme, pretty)
+    const css = await resolveOutputCss(rendered, theme, !pretty, includeHljsTheme)
     const cssName = resolveThemeFileName(fileName, theme)
     const outPath = path.join(outDir, cssName)
     await ensureDir(outPath)
@@ -65,14 +60,17 @@ const require = createRequire(import.meta.url)
 async function resolveOutputCss(
   rendered: string,
   theme: string,
-  prettyCss: boolean,
+  compact: boolean,
   includeHljsTheme: boolean,
 ): Promise<string> {
-  const baseCss = prettyCss ? rendered : compactCss(rendered)
-  if (!includeHljsTheme) return baseCss
-  const highlightCss = await loadHighlightJsThemeCss(theme)
-  if (!highlightCss) return baseCss
-  return `${baseCss}\n\n${highlightCss}`
+  let mergedCss = rendered
+  if (includeHljsTheme) {
+    const highlightCss = await loadHighlightJsThemeCss(theme)
+    if (highlightCss) {
+      mergedCss = `${mergedCss}\n\n${highlightCss}`
+    }
+  }
+  return compact ? compactCss(mergedCss) : mergedCss
 }
 
 async function loadHighlightJsThemeCss(theme: string): Promise<string> {

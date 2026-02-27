@@ -53,7 +53,7 @@ describe('SiteFooter rendering', () => {
           <FooterSocial href="https://github.com/purestack" label="GitHub" />
         </template>
       </SiteFooter>`,
-        { components, context: { site, theme: site.theme, pageInfo } },
+        { components, context: { site, theme: site.style.theme, pageInfo } },
       )
     })
 
@@ -86,7 +86,7 @@ describe('SiteFooter rendering', () => {
       >
         <p>Footer content</p>
       </SiteFooter>`,
-        { components, context: { site, theme: site.theme, pageInfo } },
+        { components, context: { site, theme: site.style.theme, pageInfo } },
       )
     })
 

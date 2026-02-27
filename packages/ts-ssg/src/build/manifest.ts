@@ -19,9 +19,12 @@ export interface ManifestConfig {
   contentDir: string
   outDir: string
   siteTitle: string
-  styleFileName: string
-  styleHref: string
-  styleThemes: string[]
+  style: {
+    fileName: string
+    href: string
+    themes: string[]
+    pretty: boolean
+  }
   signature: string
 }
 
@@ -62,9 +65,12 @@ export function manifestConfigFromSiteConfig(
     contentDir: config.contentDir,
     outDir: config.outDir,
     siteTitle: config.siteTitle,
-    styleFileName: config.styleFileName,
-    styleHref: config.styleHref,
-    styleThemes: config.styleThemes,
+    style: {
+      fileName: config.style.fileName,
+      href: config.style.href,
+      themes: config.style.themes,
+      pretty: config.style.pretty,
+    },
     signature: createManifestConfigSignature(config),
   }
 }
@@ -137,10 +143,13 @@ function manifestConfigEqual(left: ManifestConfig, right: ManifestConfig) {
     left.contentDir === right.contentDir &&
     left.outDir === right.outDir &&
     left.siteTitle === right.siteTitle &&
-    left.styleFileName === right.styleFileName &&
-    left.styleHref === right.styleHref &&
-    Array.isArray(left.styleThemes) &&
-    left.styleThemes.join('|') === right.styleThemes.join('|') &&
+    isPlainObject(left.style) &&
+    isPlainObject(right.style) &&
+    left.style.fileName === right.style.fileName &&
+    left.style.href === right.style.href &&
+    Array.isArray(left.style.themes) &&
+    left.style.themes.join('|') === right.style.themes.join('|') &&
+    left.style.pretty === right.style.pretty &&
     left.signature === right.signature
   )
 }

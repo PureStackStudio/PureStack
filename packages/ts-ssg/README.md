@@ -100,11 +100,12 @@ Config comes from:
 - `outDir`: default `rootDir/dist/site`.
 - `siteTitle`: default `"ts-ssg"`.
 - `logo`: brand fields for top bar.
-- `styleFileName`: default `"site.css"`.
-- `styleHref`: default `"/site.css"`.
-- `styleThemes`: must include `"light"` and `"dark"`.
+- `style.fileName`: default `"site.css"`.
+- `style.href`: default `"/site.css"`.
+- `style.themes`: must include `"light"` and `"dark"`.
+- `style.pretty`: default `false`. Set `true` to format generated CSS with Prettier.
 - `navigation`: auto/custom/hybrid/none behavior.
-- `theme`: palette/radii/spacing/typography/shadows.
+- `style.theme`: palette/radii/spacing/typography/shadows.
 - `sitemap`: sitemap + robots settings.
 - `consent`: GDPR-style consent manager config for optional scripts.
 - `analytics`: analytics integrations (GA4 supported out of the box).
@@ -117,7 +118,12 @@ Config comes from:
   "$schema": "../schema/siteConfig.schema.json",
   "siteTitle": "Acme Docs",
   "outDir": "dist/site",
-  "styleThemes": ["light", "dark"],
+  "style": {
+    "fileName": "site.css",
+    "href": "/site.css",
+    "themes": ["light", "dark"],
+    "pretty": false
+  },
   "navigation": {
     "mode": "auto",
     "navFileName": "_nav.json",
@@ -283,7 +289,7 @@ Theme utilities:
 - `themes.getOptions()`
 - `styleBuilder`
 
-`styleThemes` controls generated files:
+`style.themes` controls generated files:
 
 - `site.css` for `light`
 - `site.dark.css` for `dark`

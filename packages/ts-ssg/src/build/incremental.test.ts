@@ -53,8 +53,10 @@ describe('incremental builder', () => {
         contentDir,
         outDir,
         siteTitle: 'Test Site',
-        styleFileName: 'site.css',
-        styleHref: '/site.css',
+        style: {
+          fileName: 'site.css',
+          href: '/site.css',
+        },
       })
 
       const manifest = createEmptyManifest(config)
@@ -75,8 +77,10 @@ describe('incremental builder', () => {
           contentDir,
           outDir,
           siteTitle: 'Test Site',
-          styleFileName: 'site.css',
-          styleHref: '/site.css',
+          style: {
+            fileName: 'site.css',
+            href: '/site.css',
+          },
         },
       })
 
@@ -109,8 +113,10 @@ describe('incremental builder', () => {
           contentDir,
           outDir,
           siteTitle: 'Test Site',
-          styleFileName: 'site.css',
-          styleHref: '/site.css',
+          style: {
+            fileName: 'site.css',
+            href: '/site.css',
+          },
           mdx: {
             highlighter: 'highlightjs',
           },

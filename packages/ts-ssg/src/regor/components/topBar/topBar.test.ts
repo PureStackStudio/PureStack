@@ -37,7 +37,7 @@ describe('TopBar rendering', () => {
     }
     const html = renderApp(`<TopBar />`, {
       components,
-      context: { site, theme: site.theme, pageInfo },
+      context: { site, theme: site.style.theme, pageInfo },
     })
     cleanup()
 

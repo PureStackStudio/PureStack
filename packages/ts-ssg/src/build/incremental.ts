@@ -95,7 +95,7 @@ async function createIncrementalRuntime(
   const hooks = buildOptions.hooks ?? {}
   const cleanOutDir = buildOptions.cleanOutDir === true
   const mdx = await resolveMdxBuildOptions(config.mdx)
-  themes.setOptions(config.theme)
+  themes.setOptions(config.style.theme)
   initBuiltinComponents({ includeShikiStyles: isShikiEnabled(config.mdx) })
   const log = getLogger()
   const discovered = await discoverContent(config.contentDir)
@@ -298,13 +298,14 @@ class IncrementalRuntime {
   }
 
   private async writeStylesWithHooks(hooks: BuildHooks) {
-    const { outDir, styleFileName: fileName, styleThemes: themes } = this.config
-    const styleResult = await writeStyles({
-      outDir,
-      fileName,
-      themes,
-      includeHljsTheme: isHighlightJsEnabled(this.config.mdx),
-    })
+    const { outDir, style } = this.config
+    const styleResult = await writeStyles(
+      {
+        outDir,
+        includeHljsTheme: isHighlightJsEnabled(this.config.mdx),
+      },
+      style,
+    )
     await hooks.onStylesWritten?.(this.context, styleResult)
     return styleResult
   }

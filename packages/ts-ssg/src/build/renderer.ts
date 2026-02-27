@@ -65,7 +65,7 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
     headerHtml: input.headerHtml,
     footerHtml: input.footerHtml,
   })
-  return await html.toPrettyHtml()
+  return html.toHtml()
 }
 
 function getStyleThemes(

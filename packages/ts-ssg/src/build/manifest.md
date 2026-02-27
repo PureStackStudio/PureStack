@@ -51,7 +51,7 @@ by build logic to decide if a file needs to be reprocessed.
 correctness:
 
 - `contentDir`, `outDir`, `siteTitle`
-- `styleFileName`, `styleHref`, `styleThemes`
+- `style.fileName`, `style.href`, `style.themes`, `style.pretty`
 
 This means unrelated config changes do not invalidate the manifest.
 
@@ -74,7 +74,7 @@ Guards incremental builds. It returns `false` when:
 
 - the manifest version differs from `MANIFEST_VERSION`, or
 - any of the config fields in the snapshot differ, or
-- the shape of `styleThemes` is not an array or differs by value order.
+- the shape of `style.themes` is not an array or differs by value order.
 
 This function is the compatibility gate that forces a full rebuild when the
 output would be incorrect.

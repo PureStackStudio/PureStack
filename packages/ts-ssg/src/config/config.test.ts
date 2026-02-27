@@ -32,12 +32,12 @@ describe('resolveSiteConfig sitemap', () => {
       fs.mkdirSync(contentDir, { recursive: true })
       fs.writeFileSync(
         path.join(contentDir, 'siteConfig.json'),
-        JSON.stringify({ theme: { skin: 'pastel' } }),
+        JSON.stringify({ style: { theme: { skin: 'pastel' } } }),
       )
 
       const config = resolveSiteConfig({ rootDir, contentDir })
-      expect(config.theme.colors.light).toEqual(builtInSkins.pastel.light)
-      expect(config.theme.colors.dark).toEqual(builtInSkins.pastel.dark)
+      expect(config.style.theme.colors.light).toEqual(builtInSkins.pastel.light)
+      expect(config.style.theme.colors.dark).toEqual(builtInSkins.pastel.dark)
     } finally {
       fs.rmSync(tempRoot, { recursive: true, force: true })
     }
@@ -56,6 +56,24 @@ describe('resolveSiteConfig sitemap', () => {
       wordFontSize: undefined,
       subtitleFontSize: undefined,
     })
+  })
+
+  it('provides style defaults', () => {
+    const config = resolveSiteConfig({ rootDir: process.cwd() })
+    expect(config.style.fileName).toBe('site.css')
+    expect(config.style.href).toBe('/site.css')
+    expect(config.style.themes).toEqual(['light', 'dark'])
+    expect(config.style.pretty).toBe(false)
+  })
+
+  it('applies style pretty override from input', () => {
+    const config = resolveSiteConfig({
+      rootDir: process.cwd(),
+      style: {
+        pretty: true,
+      },
+    })
+    expect(config.style.pretty).toBe(true)
   })
 
   it('resolves logo overrides from input config', () => {
@@ -290,20 +308,24 @@ describe('resolveSiteConfig sitemap', () => {
   it('applies built-in theme skin from input', () => {
     const config = resolveSiteConfig({
       rootDir: process.cwd(),
-      theme: {
-        skin: 'ocean',
+      style: {
+        theme: {
+          skin: 'ocean',
+        },
       },
     })
-    expect(config.theme.colors.light).toEqual(builtInSkins.ocean.light)
-    expect(config.theme.colors.dark).toEqual(builtInSkins.ocean.dark)
+    expect(config.style.theme.colors.light).toEqual(builtInSkins.ocean.light)
+    expect(config.style.theme.colors.dark).toEqual(builtInSkins.ocean.dark)
   })
 
   it('throws when theme skin is unknown', () => {
     expect(() =>
       resolveSiteConfig({
         rootDir: process.cwd(),
-        theme: {
-          skin: 'unknown' as never,
+        style: {
+          theme: {
+            skin: 'unknown' as never,
+          },
         },
       }),
     ).toThrowError(/Unknown theme skin/)

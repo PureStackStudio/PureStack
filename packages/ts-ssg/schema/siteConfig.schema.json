@@ -61,23 +61,54 @@
         }
       }
     },
-    "styleFileName": {
-      "type": "string",
-      "description": "CSS file name written to the output directory.",
-      "default": "site.css"
-    },
-    "styleHref": {
-      "type": "string",
-      "description": "Public href injected into rendered pages for the site stylesheet.",
-      "default": "/site.css"
-    },
-    "styleThemes": {
-      "type": "array",
-      "description": "Theme names to emit as stylesheets. Must include light and dark.",
-      "items": {
-        "type": "string"
-      },
-      "default": ["light", "dark"]
+    "style": {
+      "type": "object",
+      "description": "Stylesheet generation and theme settings.",
+      "additionalProperties": false,
+      "properties": {
+        "fileName": {
+          "type": "string",
+          "description": "CSS file name written to the output directory.",
+          "default": "site.css"
+        },
+        "href": {
+          "type": "string",
+          "description": "Public href injected into rendered pages for the site stylesheet.",
+          "default": "/site.css"
+        },
+        "themes": {
+          "type": "array",
+          "description": "Theme names to emit as stylesheets. Must include light and dark.",
+          "items": {
+            "type": "string"
+          },
+          "default": ["light", "dark"]
+        },
+        "pretty": {
+          "type": "boolean",
+          "description": "When true, format generated CSS with Prettier.",
+          "default": false
+        },
+        "theme": {
+          "type": "object",
+          "description": "Theme customization options.",
+          "additionalProperties": true,
+          "properties": {
+            "skin": {
+              "type": "string",
+              "enum": [
+                "ocean",
+                "evergreen",
+                "pastel",
+                "extrao",
+                "cyberpunk",
+                "neon"
+              ],
+              "description": "Built-in skin preset. Applies both light and dark palettes before any explicit theme token overrides."
+            }
+          }
+        }
+      }
     },
     "navigation": {
       "type": "object",
@@ -111,25 +142,6 @@
           "enum": ["order", "title", "path"],
           "description": "Sorting strategy for navigation items.",
           "default": "order"
-        }
-      }
-    },
-    "theme": {
-      "type": "object",
-      "description": "Theme customization options.",
-      "additionalProperties": true,
-      "properties": {
-        "skin": {
-          "type": "string",
-          "enum": [
-            "ocean",
-            "evergreen",
-            "pastel",
-            "extrao",
-            "cyberpunk",
-            "neon"
-          ],
-          "description": "Built-in skin preset. Applies both light and dark palettes before any explicit theme token overrides."
         }
       }
     },

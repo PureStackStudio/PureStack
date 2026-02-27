@@ -32,8 +32,10 @@ describe('manifest', () => {
         contentDir,
         outDir,
         siteTitle: 'Test Site',
-        styleFileName: 'site.css',
-        styleHref: '/site.css',
+        style: {
+          fileName: 'site.css',
+          href: '/site.css',
+        },
       })
       const manifest = createEmptyManifest(config)
       await writeManifest(outDir, manifest)

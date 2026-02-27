@@ -224,8 +224,8 @@ async function renderPageShell(input: RenderPageShellInput): Promise<string> {
     bodyHtml,
     headConfig,
     styleLinks: resolveThemeStyleLinks(
-      context.config.styleHref,
-      context.config.styleThemes,
+      context.config.style.href,
+      context.config.style.themes,
     ),
     template,
     templates: context.templates,
@@ -298,7 +298,7 @@ function renderPageApp(
     context: {
       site: context.config,
       ...appContext,
-      theme: context.config.theme,
+      theme: context.config.style.theme,
     },
   })
 }
