@@ -1,4 +1,4 @@
-import { createComponent, html } from 'regor'
+import { defineComponent, html } from 'regor'
 
 import { urlNormalizer } from '../../../util/urlNormalizer'
 import { registerLoginStyles } from './loginStyle'
@@ -58,18 +58,18 @@ const loginFooterTemplate = html`<p class="login-panel__footer">
 </p>`
 
 function createLoginPanelComponent() {
-  return createComponent<Record<string, never>>(loginPanelTemplate, {})
+  return defineComponent<Record<string, never>>(loginPanelTemplate, {})
 }
 
 function createLoginHeaderComponent() {
-  return createComponent<LoginHeaderContext>(loginHeaderTemplate, {
+  return defineComponent<LoginHeaderContext>(loginHeaderTemplate, {
     props: ['badge', 'title', 'description'],
     context: (head) => resolveLoginHeaderContext(head.props),
   })
 }
 
 function createLoginProviderComponent() {
-  return createComponent<LoginProviderContext>(loginProviderTemplate, {
+  return defineComponent<LoginProviderContext>(loginProviderTemplate, {
     props: ['label'],
     context: (head) => ({
       label: head.props.label,
@@ -78,7 +78,7 @@ function createLoginProviderComponent() {
 }
 
 function createLoginFooterComponent() {
-  return createComponent<LoginFooterContext>(loginFooterTemplate, {
+  return defineComponent<LoginFooterContext>(loginFooterTemplate, {
     props: ['text', 'linkLabel', 'linkHref'],
     context: (head) => resolveLoginFooterContext(head.props),
   })

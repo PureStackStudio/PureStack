@@ -1,4 +1,4 @@
-import { createComponent, html } from 'regor'
+import { defineComponent, html } from 'regor'
 
 import { registerContactFormStyles } from './contactFormStyle'
 
@@ -84,7 +84,7 @@ const contactFormTemplate = html`<section class="contact-form">
 </section>`
 
 function createContactFormComponent() {
-  return createComponent<ContactFormContext>(contactFormTemplate, {
+  return defineComponent<ContactFormContext>(contactFormTemplate, {
     props: [
       'title',
       'description',

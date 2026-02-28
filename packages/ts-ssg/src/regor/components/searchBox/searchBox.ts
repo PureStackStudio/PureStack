@@ -1,4 +1,4 @@
-import { createComponent, html } from 'regor'
+import { defineComponent, html } from 'regor'
 
 import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 import type { TsSsgContext } from '../../ts-ssg-context'
@@ -36,7 +36,7 @@ const searchBoxTemplate = html`<div class="site-search" data-pagefind-search>
 </div>`
 
 function createSearchBoxComponent() {
-  return createComponent<SearchBoxContext>(searchBoxTemplate, {
+  return defineComponent<SearchBoxContext>(searchBoxTemplate, {
     context: (head) => ({
       placeholder: resolveSearchPlaceholder(resolveTsSsgContext(head)),
     }),

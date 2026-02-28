@@ -1,4 +1,4 @@
-import { createComponent, html } from 'regor'
+import { defineComponent, html } from 'regor'
 
 import { urlNormalizer } from '../../../util/urlNormalizer'
 import { registerFormStyles } from './formStyle'
@@ -130,25 +130,25 @@ const formStatusTemplate = html`<div
 </div>`
 
 function createAppFormComponent() {
-  return createComponent<AppFormContext>(appFormTemplate, {
+  return defineComponent<AppFormContext>(appFormTemplate, {
     props: ['action', 'method'],
     context: (head) => resolveAppFormContext(head.props),
   })
 }
 
 function createFormFieldComponent() {
-  return createComponent<FormFieldContext>(formFieldTemplate, {
+  return defineComponent<FormFieldContext>(formFieldTemplate, {
     props: ['label', 'type', 'name', 'placeholder', 'autocomplete', 'required'],
     context: (head) => resolveFormFieldContext(head.props),
   })
 }
 
 function createFormMetaComponent() {
-  return createComponent<FormMetaContext>(formMetaTemplate, {})
+  return defineComponent<FormMetaContext>(formMetaTemplate, {})
 }
 
 function createFormCheckComponent() {
-  return createComponent<FormCheckContext>(formCheckTemplate, {
+  return defineComponent<FormCheckContext>(formCheckTemplate, {
     props: ['label', 'name', 'value', 'checked'],
     context: (head) => ({
       label: head.props.label,
@@ -160,14 +160,14 @@ function createFormCheckComponent() {
 }
 
 function createFormAssistLinkComponent() {
-  return createComponent<FormAssistLinkContext>(formAssistLinkTemplate, {
+  return defineComponent<FormAssistLinkContext>(formAssistLinkTemplate, {
     props: ['href', 'label', 'target', 'rel'],
     context: (head) => resolveFormAssistLinkContext(head.props),
   })
 }
 
 function createFormSubmitComponent() {
-  return createComponent<FormSubmitContext>(formSubmitTemplate, {
+  return defineComponent<FormSubmitContext>(formSubmitTemplate, {
     props: ['label'],
     context: (head) => ({
       label: head.props.label,
@@ -176,7 +176,7 @@ function createFormSubmitComponent() {
 }
 
 function createFormDividerComponent() {
-  return createComponent<FormDividerContext>(formDividerTemplate, {
+  return defineComponent<FormDividerContext>(formDividerTemplate, {
     props: ['label'],
     context: (head) => ({
       label: head.props.label,
@@ -185,7 +185,7 @@ function createFormDividerComponent() {
 }
 
 function createFormStatusComponent() {
-  return createComponent<FormStatusContext>(formStatusTemplate, {
+  return defineComponent<FormStatusContext>(formStatusTemplate, {
     props: ['variant', 'hidden'],
     context: (head) => ({
       variant: head.props.variant,

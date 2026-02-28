@@ -10,8 +10,8 @@ Principles
 
 Architecture & Registration
 
-- Create components with `createComponent` and `html` from `regor`.
-- Every component must expose a `createXComponents()` factory that registers styles and returns components in a map.
+- Define components with `defineComponent` and `html` from `regor`.
+- Every component must expose a `defineX()` factory that registers styles and returns components in a map.
 - New components must be registered in `initBuiltinComponents` using `componentRegistry.registerMany`.
 - If a component needs shared styles (layout or global), add a `registerXStyles` function rather than inline or ad-hoc styles.
 
@@ -32,8 +32,8 @@ Template Rules
 
 Props & Context
 
-- The generic in `createComponent<T>` is the template context type (`T`), not the props type and context callback provides calculated values to the component context.
-- List props in `createComponent` via `props: [...]` when they are used.
+- The generic in `defineComponent<T>` is the template context type (`T`), not the props type and context callback provides calculated values to the component context.
+- List props in `defineComponent` via `props: [...]` when they are used.
 - Use `context` to derive computed values, and keep it pure (no mutations or side-effects).
 - Treat the `context` callback return as runtime handoff to Regor; TypeScript guidance ends at that boundary.
 - Do not read from `window` or rely on runtime globals during render.

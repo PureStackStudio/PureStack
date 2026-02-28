@@ -1,4 +1,4 @@
-import { createComponent, html } from 'regor'
+import { defineComponent, html } from 'regor'
 
 import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 import type { TsSsgContext } from '../../ts-ssg-context'
@@ -150,7 +150,7 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
 </section>`
 
 function createConsentComponent() {
-  return createComponent<ConsentContext>(consentTemplate, {
+  return defineComponent<ConsentContext>(consentTemplate, {
     context: (head) => resolveConsentContext(resolveTsSsgContext(head)),
   })
 }

@@ -1,4 +1,4 @@
-import { createComponent, html } from 'regor'
+import { defineComponent, html } from 'regor'
 
 import { registerLogoStyles } from './logoStyle'
 
@@ -127,7 +127,7 @@ function normalizeSubtitleAlign(
 }
 
 function createSiteLogoComponent() {
-  return createComponent<SiteLogoContext>(logoTemplate, {
+  return defineComponent<SiteLogoContext>(logoTemplate, {
     props: [
       'wordOne',
       'wordTwo',

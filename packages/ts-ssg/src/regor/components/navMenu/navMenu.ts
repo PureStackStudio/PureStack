@@ -1,4 +1,4 @@
-import { createComponent, html } from 'regor'
+import { defineComponent, html } from 'regor'
 
 import type { NavItem } from '../../../navigation/navigation'
 import { getSvgIcon } from '../../../style/icons'
@@ -175,11 +175,11 @@ function buildNavState(
 }
 
 function createNavItemComponent() {
-  return createComponent<Record<string, never>>(navItemTemplate, {})
+  return defineComponent<Record<string, never>>(navItemTemplate, {})
 }
 
 function createNavListComponent() {
-  return createComponent<NavListContext>(navListTemplate, {
+  return defineComponent<NavListContext>(navListTemplate, {
     props: ['items'],
     context: (head) => ({
       items: head.props.items,
@@ -188,7 +188,7 @@ function createNavListComponent() {
 }
 
 function createNavMenuComponent() {
-  return createComponent<NavMenuContext>(navMenuTemplate, {
+  return defineComponent<NavMenuContext>(navMenuTemplate, {
     props: ['items'],
     context: (head) => {
       const context = resolveTsSsgContext(head)

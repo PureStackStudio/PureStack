@@ -1,4 +1,4 @@
-import { createComponent, html } from 'regor'
+import { defineComponent, html } from 'regor'
 import { registerBadgeStyles } from './badgeStyle'
 
 interface BadgeProps {
@@ -14,7 +14,7 @@ const badgeTemplate = html`<span class="badge" :class="toneClass">
 </span>`
 
 function createBadgeComponent() {
-  return createComponent<BadgeContext>(badgeTemplate, {
+  return defineComponent<BadgeContext>(badgeTemplate, {
     props: ['variant'],
     context: (head) => ({
       variant: head.props.variant,

@@ -1,4 +1,4 @@
-import { createComponent, html } from 'regor'
+import { defineComponent, html } from 'regor'
 
 import { getSvgIcon } from '../../../style/icons'
 import { resolveTsSsgContext } from '../../resolveTsSsgContext'
@@ -202,7 +202,7 @@ const footerSocialTemplate = html`<a
 </a>`
 
 function createSiteFooterComponent() {
-  return createComponent<SiteFooterContext>(siteFooterTemplate, {
+  return defineComponent<SiteFooterContext>(siteFooterTemplate, {
     props: [
       'teleport',
       'eyebrow',
@@ -236,21 +236,21 @@ function createSiteFooterComponent() {
 }
 
 function createFooterColumnComponent() {
-  return createComponent<FooterColumnContext>(footerColumnTemplate, {
+  return defineComponent<FooterColumnContext>(footerColumnTemplate, {
     props: ['title', 'description', 'compact'],
     context: (head) => resolveFooterColumnContext(head.props),
   })
 }
 
 function createFooterLinkComponent() {
-  return createComponent<FooterLinkContext>(footerLinkTemplate, {
+  return defineComponent<FooterLinkContext>(footerLinkTemplate, {
     props: ['href', 'label', 'target', 'rel', 'icon', 'variant'],
     context: (head) => resolveFooterLinkContext(head.props),
   })
 }
 
 function createFooterSocialComponent() {
-  return createComponent<FooterSocialContext>(footerSocialTemplate, {
+  return defineComponent<FooterSocialContext>(footerSocialTemplate, {
     props: ['href', 'label', 'icon', 'target', 'rel'],
     context: (head) => resolveFooterSocialContext(head.props),
   })

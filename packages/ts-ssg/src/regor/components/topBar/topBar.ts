@@ -1,4 +1,4 @@
-import { createComponent, html } from 'regor'
+import { defineComponent, html } from 'regor'
 
 import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 import type { TsSsgContext } from '../../ts-ssg-context'
@@ -63,7 +63,7 @@ const topBarTemplate = html`<input
   </header>`
 
 function createTopBarComponent() {
-  return createComponent<TopBarBrandContext>(topBarTemplate, {
+  return defineComponent<TopBarBrandContext>(topBarTemplate, {
     context: (head) => resolveTopBarBrand(resolveTsSsgContext(head)),
   })
 }

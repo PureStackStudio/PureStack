@@ -1,4 +1,4 @@
-import { createComponent, html } from 'regor'
+import { defineComponent, html } from 'regor'
 import { registerCardGridStyles, registerCardStyles } from './cardGridStyle'
 
 interface CardGrid {
@@ -11,7 +11,7 @@ const cardGridTemplate = html`<div class="card-grid">
 </div>`
 
 function createCardGridComponent() {
-  return createComponent<CardGrid>(cardGridTemplate, ['title'])
+  return defineComponent<CardGrid>(cardGridTemplate, ['title'])
 }
 
 interface Card {
@@ -26,7 +26,7 @@ const cardTemplate = html`<div class="card">
 </div>`
 
 function createCardComponent() {
-  return createComponent<Card>(cardTemplate, ['icon', 'title'])
+  return defineComponent<Card>(cardTemplate, ['icon', 'title'])
 }
 
 export function createCardComponents() {

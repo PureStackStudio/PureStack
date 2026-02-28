@@ -1,4 +1,4 @@
-import { createComponent, html } from 'regor'
+import { defineComponent, html } from 'regor'
 
 import { getSvgIcon } from '../../../style/icons'
 import { registerPricingStyles } from './pricingStyle'
@@ -89,14 +89,14 @@ const pricingFeatureTemplate = html`<li class="pricing-feature">
 </li>`
 
 function createPricingTableComponent() {
-  return createComponent<PricingTableContext>(pricingTableTemplate, {
+  return defineComponent<PricingTableContext>(pricingTableTemplate, {
     props: ['eyebrow', 'title', 'subtitle', 'footnote'],
     context: (head) => resolvePricingTableContext(head.props),
   })
 }
 
 function createPricingPlanComponent() {
-  return createComponent<PricingPlanContext>(pricingPlanTemplate, {
+  return defineComponent<PricingPlanContext>(pricingPlanTemplate, {
     props: [
       'title',
       'summary',
@@ -114,7 +114,7 @@ function createPricingPlanComponent() {
 }
 
 function createPricingFeatureComponent() {
-  return createComponent<PricingFeatureContext>(pricingFeatureTemplate, {
+  return defineComponent<PricingFeatureContext>(pricingFeatureTemplate, {
     props: ['icon'],
     context: (head) => resolvePricingFeatureContext(head.props),
   })

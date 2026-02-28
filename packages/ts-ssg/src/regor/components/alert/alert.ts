@@ -1,4 +1,4 @@
-import { createComponent, html } from 'regor'
+import { defineComponent, html } from 'regor'
 
 import { getSvgIcon } from '../../../style/icons'
 import { registerAlertStyles } from './alertStyle'
@@ -51,7 +51,7 @@ const alertBoxTemplate = html`<aside
 </aside>`
 
 function createAlertBoxComponent() {
-  return createComponent<AlertBoxContext>(alertBoxTemplate, {
+  return defineComponent<AlertBoxContext>(alertBoxTemplate, {
     props: [
       'title',
       'eyebrow',

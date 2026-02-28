@@ -1,5 +1,5 @@
 import path from 'node:path'
-import { type ComponentHead, createComponent, html } from 'regor'
+import { type ComponentHead, defineComponent, html } from 'regor'
 import { toOutputAssetRelPath } from '../../../util/assetPath'
 import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 
@@ -36,7 +36,7 @@ const pageScriptTemplate = html`<script
 const regorAppTemplate = html`<app><PageScript :src="src" /></app>`
 
 function createPageScriptComponent() {
-  return createComponent<PageScriptProps>(pageScriptTemplate, {
+  return defineComponent<PageScriptProps>(pageScriptTemplate, {
     props: [
       'teleport',
       'src',
@@ -54,7 +54,7 @@ function createPageScriptComponent() {
 }
 
 function createRegorAppComponent() {
-  return createComponent<RegorAppProps>(regorAppTemplate, {
+  return defineComponent<RegorAppProps>(regorAppTemplate, {
     props: ['src'],
     context: (head) => ({
       src: head.props.src,

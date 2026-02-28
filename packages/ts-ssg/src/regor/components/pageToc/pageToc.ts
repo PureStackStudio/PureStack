@@ -1,4 +1,4 @@
-import { createComponent, html } from 'regor'
+import { defineComponent, html } from 'regor'
 
 import type { PageOutlineItem } from '../../../mdx/mdx'
 import { getSvgIcon } from '../../../style/icons'
@@ -92,7 +92,7 @@ function resolveTitle(props: PageTocContext) {
 }
 
 function createPageTocComponent() {
-  return createComponent<PageTocContext>(pageTocTemplate, {
+  return defineComponent<PageTocContext>(pageTocTemplate, {
     props: ['items', 'title'],
     context: (head) => {
       const context = resolveTsSsgContext(head)

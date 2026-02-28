@@ -1,4 +1,4 @@
-import { createComponent, html } from 'regor'
+import { defineComponent, html } from 'regor'
 
 import { urlNormalizer } from '../../../util/urlNormalizer'
 import { registerHeroStyles } from './heroStyle'
@@ -57,18 +57,18 @@ interface HeroMediaContext extends HeroMediaProps {
 }
 
 function createHeroBannerComponent() {
-  return createComponent<Record<string, never>>(heroTemplate, {})
+  return defineComponent<Record<string, never>>(heroTemplate, {})
 }
 
 function createHeroActionComponent() {
-  return createComponent<HeroActionContext>(heroActionTemplate, {
+  return defineComponent<HeroActionContext>(heroActionTemplate, {
     props: ['href', 'variant', 'icon', 'target', 'rel'],
     context: (head) => resolveHeroActionContext(head.props),
   })
 }
 
 function createHeroMediaComponent() {
-  return createComponent<HeroMediaContext>(heroMediaTemplate, {
+  return defineComponent<HeroMediaContext>(heroMediaTemplate, {
     props: ['src', 'alt'],
     context: (head) => resolveHeroMediaContext(head.props),
   })
