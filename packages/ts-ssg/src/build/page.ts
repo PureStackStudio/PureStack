@@ -59,6 +59,7 @@ export interface PageRenderResult {
   navigation?: PageNavigation
   pageInfo: PageInfo
   outline?: PageOutlineItem[]
+  scriptEntrypoints: string[]
 }
 
 export async function buildPage(
@@ -117,6 +118,7 @@ export async function renderPageFromFile(
     })
     const compiled = compilePageContent(file, parsedContent.body, context.mdx)
     const template = parsedContent.frontmatter.template
+    const scriptEntrypoints = new Set<string>()
     const htmlShell = await renderPageShell({
       context,
       bodyHtml: compiled.bodyHtml,
@@ -129,6 +131,7 @@ export async function renderPageFromFile(
       pageInfo,
       navigation,
       outline: compiled.outline,
+      scriptEntrypoints,
     })
     const renderTimeMs =
       Number(process.hrtime.bigint() - renderStart) / 1_000_000
@@ -144,6 +147,9 @@ export async function renderPageFromFile(
       renderTimeMs,
       navigation,
       pageInfo,
+      scriptEntrypoints: [...scriptEntrypoints].sort((a, b) =>
+        a.localeCompare(b),
+      ),
     }
   } catch (error) {
     const errorWithContext = attachPageContext(error, {
@@ -293,6 +299,7 @@ type RenderAppContextInput = {
   pageInfo: PageInfo
   navigation: PageNavigation | undefined
   outline: PageOutlineItem[]
+  scriptEntrypoints: Set<string>
 }
 
 function renderPageApp(
@@ -300,12 +307,17 @@ function renderPageApp(
   htmlShell: string,
   appContext: RenderAppContextInput,
 ) {
+  const { scriptEntrypoints, ...baseContext } = appContext
   return renderApp(htmlShell, {
     components: context.components,
     context: {
       site: context.config,
-      ...appContext,
+      ...baseContext,
       theme: context.config.style.theme,
+      recordScriptEntrypoint: (sourceRelPath: string) => {
+        if (path.extname(sourceRelPath).toLowerCase() !== '.ts') return
+        scriptEntrypoints.add(sourceRelPath.replaceAll('\\', '/'))
+      },
     },
   })
 }
@@ -413,6 +425,7 @@ async function buildErrorPageResult(
       frontmatter,
     },
     outline: [],
+    scriptEntrypoints: [],
   }
 }
 

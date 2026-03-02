@@ -194,6 +194,7 @@ class IncrementalRuntime {
   private readonly contentIndex: ManifestContentIndex
   private readonly tsEntryDependencies = new Map<string, Set<string>>()
   private readonly tsDependentsByRelPath = new Map<string, Set<string>>()
+  private readonly pageScriptEntrypoints = new Map<string, Set<string>>()
 
   constructor(private readonly options: IncrementalRuntimeOptions) {
     this.contentIndex = new ManifestContentIndex(options.config.contentDir)
@@ -235,10 +236,17 @@ class IncrementalRuntime {
 
     this.log.info('build started', { reason })
     const prepared = await this.prepareBuild(hooks)
+    this.pageScriptEntrypoints.clear()
     const pages = await this.renderAllPages(prepared.contentFiles, hooks)
+    const scriptAssetFiles = await this.syncScriptEntrypointsState({
+      result: this.createIncrementalResult(reason),
+      persist: false,
+      rebuildAll: true,
+    })
     const styleResult = await this.writeStylesWithHooks(hooks)
     const finalResult = await this.finalizeBuild({
       ...prepared,
+      assetFiles: [...prepared.assetFiles, ...scriptAssetFiles],
       pages,
       styleResult,
       hooks,
@@ -292,6 +300,7 @@ class IncrementalRuntime {
     for (const file of contentFiles) {
       await hooks.onPageStart?.(this.context, file)
       const page = await renderPageFromFile(this.context, file)
+      this.setPageScriptEntrypoints(file.relPath, page.scriptEntrypoints)
       await hooks.onPageRendered?.(this.context, page)
       await writePage(page, this.config.html.minify)
       await hooks.onPageWritten?.(this.context, page)
@@ -363,6 +372,13 @@ class IncrementalRuntime {
 
     const state = await this.readChangeState(filePath, relPath, result)
     await this.applyChangeState(state)
+    if (isContentFile(relPath, state.ext) || state.ext === '.ts') {
+      await this.syncScriptEntrypointsState({
+        result,
+        persist: true,
+        rebuildAll: false,
+      })
+    }
     return result
   }
 
@@ -470,7 +486,8 @@ class IncrementalRuntime {
   ): Promise<boolean> {
     const ext = this.resolveContentExt(relPath)
     const contentFile = toContentFile(this.config.contentDir, relPath, ext)
-    await buildPage(this.context, contentFile)
+    const page = await buildPage(this.context, contentFile)
+    this.setPageScriptEntrypoints(contentFile.relPath, page.scriptEntrypoints)
     this.upsertContentManifestEntry(relPath, contentFile.ext, signature)
     this.dirtyPages.delete(relPath)
     await this.persistManifest()
@@ -566,6 +583,7 @@ class IncrementalRuntime {
     await removeFile(contentEntry.outPath)
     delete this.manifest.content[relPath]
     this.contentIndex.remove(relPath)
+    this.pageScriptEntrypoints.delete(this.normalizeRelPath(relPath))
     result.deletedPages += 1
   }
 
@@ -579,7 +597,8 @@ class IncrementalRuntime {
     const contentFile =
       contentFiles.find((file) => file.relPath === relPath) ??
       toContentFile(this.config.contentDir, relPath, ext)
-    await buildPage(this.context, contentFile)
+    const page = await buildPage(this.context, contentFile)
+    this.setPageScriptEntrypoints(contentFile.relPath, page.scriptEntrypoints)
     this.upsertContentManifestEntry(relPath, contentFile.ext, signature)
     result.changedPages += 1
     this.dirtyPages.delete(relPath)
@@ -614,6 +633,7 @@ class IncrementalRuntime {
       await removeFile(contentEntry.outPath)
       delete this.manifest.content[relPath]
       this.contentIndex.remove(relPath)
+      this.pageScriptEntrypoints.delete(this.normalizeRelPath(relPath))
       result.deletedPages += 1
     }
     if (assetEntry) {
@@ -641,7 +661,8 @@ class IncrementalRuntime {
     }
 
     const contentFile = toContentFile(this.config.contentDir, relPath, ext)
-    await buildPage(this.context, contentFile)
+    const page = await buildPage(this.context, contentFile)
+    this.setPageScriptEntrypoints(contentFile.relPath, page.scriptEntrypoints)
     const outPath = resolveOutPath(this.config.outDir, contentFile)
     this.manifest.content[relPath] = {
       relPath,
@@ -687,9 +708,7 @@ class IncrementalRuntime {
     result: IncrementalBuildResult,
   ) {
     const entries = this.resolveImpactedTsEntrypoints(changedRelPath)
-    if (entries.size === 0) {
-      entries.add(changedRelPath)
-    }
+    if (entries.size === 0) return
     for (const entryRelPath of entries) {
       await this.rebuildSingleTsEntrypoint(entryRelPath, result)
     }
@@ -710,7 +729,11 @@ class IncrementalRuntime {
   }
 
   private resolveImpactedTsEntrypoints(changedRelPath: string) {
-    const impacted = new Set<string>([changedRelPath])
+    const normalized = this.normalizeRelPath(changedRelPath)
+    const impacted = new Set<string>()
+    if (this.tsEntryDependencies.has(normalized)) {
+      impacted.add(normalized)
+    }
     const dependents = this.tsDependentsByRelPath.get(
       this.normalizeRelPath(changedRelPath),
     )
@@ -796,6 +819,64 @@ class IncrementalRuntime {
       }
     }
     this.tsEntryDependencies.delete(entryRelPath)
+  }
+
+  private async syncScriptEntrypointsState(input: {
+    result: IncrementalBuildResult
+    persist: boolean
+    rebuildAll: boolean
+  }): Promise<StaticAssetFile[]> {
+    const { result, persist, rebuildAll } = input
+    const nextEntries = this.collectDesiredScriptEntrypoints()
+    const currentEntries = new Set(this.tsEntryDependencies.keys())
+
+    for (const entryRelPath of currentEntries) {
+      if (nextEntries.has(entryRelPath)) continue
+      const priorEntry = this.manifest.assets[entryRelPath]
+      if (priorEntry) {
+        await removeFile(priorEntry.outPath)
+        delete this.manifest.assets[entryRelPath]
+        result.deletedAssets += 1
+      }
+      this.removeTsEntrypoint(entryRelPath)
+    }
+
+    for (const entryRelPath of nextEntries) {
+      if (!rebuildAll && currentEntries.has(entryRelPath)) continue
+      await this.rebuildSingleTsEntrypoint(entryRelPath, result)
+    }
+
+    if (persist && (result.changedAssets > 0 || result.deletedAssets > 0)) {
+      await this.persistManifest()
+    }
+    return this.getScriptEntrypointAssetFiles()
+  }
+
+  private collectDesiredScriptEntrypoints() {
+    const entries = new Set<string>()
+    for (const scriptEntrypoints of this.pageScriptEntrypoints.values()) {
+      for (const relPath of scriptEntrypoints) {
+        entries.add(this.normalizeRelPath(relPath))
+      }
+    }
+    return entries
+  }
+
+  private getScriptEntrypointAssetFiles(): StaticAssetFile[] {
+    const files: StaticAssetFile[] = []
+    for (const entryRelPath of this.tsEntryDependencies.keys()) {
+      files.push(
+        toAssetFile(this.config.contentDir, entryRelPath, path.extname(entryRelPath)),
+      )
+    }
+    return files
+  }
+
+  private setPageScriptEntrypoints(pageRelPath: string, scriptEntrypoints: string[]) {
+    this.pageScriptEntrypoints.set(
+      this.normalizeRelPath(pageRelPath),
+      new Set(scriptEntrypoints.map((entry) => this.normalizeRelPath(entry))),
+    )
   }
 
   private normalizeRelPath(relPath: string) {

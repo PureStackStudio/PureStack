@@ -23,7 +23,15 @@ describe('NavMenu rendering', () => {
           { title: 'Group', children: [{ title: 'Child', url: '/child/' }] }
         ]"
       ></NavMenu>`,
-      { components, context: { site, theme: site.style.theme, pageInfo } },
+      {
+        components,
+        context: {
+          site,
+          theme: site.style.theme,
+          pageInfo,
+          recordScriptEntrypoint: () => {},
+        },
+      },
     )
     cleanup()
 

@@ -39,6 +39,7 @@ describe('discoverContent + discoverStaticAssets', () => {
       await writeFile(path.join(root, 'guide', 'header.mdx'), '<TopBar />')
       await writeFile(path.join(root, 'guide', 'footer.mdx'), '<SiteFooter />')
       await writeFile(path.join(root, 'assets', 'logo.png'), 'png')
+      await writeFile(path.join(root, 'hosts.ts'), 'console.log("hosts")')
       await writeFile(path.join(root, 'siteConfig.json'), '{}')
       await writeFile(path.join(root, 'notes.txt'), 'notes')
       await writeFile(path.join(root, 'README'), 'readme')

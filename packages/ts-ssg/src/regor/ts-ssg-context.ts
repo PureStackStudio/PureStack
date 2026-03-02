@@ -10,4 +10,5 @@ export interface TsSsgContext {
   navigation?: PageNavigation
   outline?: PageOutlineItem[]
   theme: ThemeOptions
+  recordScriptEntrypoint: (sourceRelPath: string) => void
 }

@@ -33,7 +33,7 @@ const pageScriptTemplate = html`<script
     :nomodule="noModule"
   ></script>`
 
-const regorAppTemplate = html`<app><PageScript :src="src" /></app>`
+const regorAppTemplate = html`<App><PageScript :src="src" /></App>`
 
 function createPageScriptComponent() {
   return defineComponent<PageScriptProps>(pageScriptTemplate, {
@@ -73,8 +73,11 @@ function resolvePageScriptContext(
   head: ComponentHead<PageScriptProps>,
 ): PageScriptProps {
   const props = head.props
-  const pageRelPath = resolvePageRelPath(head)
-  const src = resolveScriptSrc(props.src, pageRelPath)
+  const tsSsgContext = resolveTsSsgContext(head)
+  const pageRelPath = tsSsgContext.pageInfo.relPath
+  const src = resolveScriptSrc(props.src, pageRelPath, (sourceRelPath) => {
+    tsSsgContext.recordScriptEntrypoint(sourceRelPath)
+  })
   return {
     ...props,
     src,
@@ -83,7 +86,11 @@ function resolvePageScriptContext(
   }
 }
 
-function resolveScriptSrc(src: unknown, pageRelPath: string) {
+function resolveScriptSrc(
+  src: unknown,
+  pageRelPath: string,
+  onSourceResolved?: (sourceRelPath: string) => void,
+) {
   const normalized = toOptionalString(src)
   if (!normalized) {
     throw new Error('PageScript requires a non-empty "src" prop.')
@@ -91,6 +98,7 @@ function resolveScriptSrc(src: unknown, pageRelPath: string) {
   if (isExternalSrc(normalized)) return normalized
   const { base, suffix } = splitSuffix(normalized)
   const sourceRelPath = resolveSourceRelPath(base, pageRelPath)
+  onSourceResolved?.(sourceRelPath)
   return `/${toOutputAssetRelPath(sourceRelPath)}${suffix}`
 }
 
@@ -135,14 +143,6 @@ function isExternalSrc(value: string) {
 
 function trimLeadingSlashes(value: string) {
   return value.replace(/^\/+/, '')
-}
-
-function resolvePageRelPath(head: ComponentHead<PageScriptProps>) {
-  try {
-    return resolveTsSsgContext(head).pageInfo.relPath
-  } catch {
-    return 'index.mdx'
-  }
 }
 
 function toPosixPath(filePath: string) {

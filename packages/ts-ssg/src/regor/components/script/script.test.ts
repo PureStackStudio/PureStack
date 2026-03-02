@@ -19,7 +19,12 @@ describe('PageScript rendering', () => {
 
     const html = renderApp('<PageScript src="./login.ts" />', {
       components,
-      context: { site, theme: site.style.theme, pageInfo },
+      context: {
+        site,
+        theme: site.style.theme,
+        pageInfo,
+        recordScriptEntrypoint: () => {},
+      },
     })
     cleanup()
 
@@ -42,7 +47,12 @@ describe('PageScript rendering', () => {
       '<PageScript src="../scripts/policies.ts?mode=prod#boot" />',
       {
         components,
-        context: { site, theme: site.style.theme, pageInfo },
+        context: {
+          site,
+          theme: site.style.theme,
+          pageInfo,
+          recordScriptEntrypoint: () => {},
+        },
       },
     )
     cleanup()
@@ -65,7 +75,12 @@ describe('PageScript rendering', () => {
       '<RegorApp src="./hosts.ts" id="hosts-app" name="hosts-main"></RegorApp>',
       {
         components,
-        context: { site, theme: site.style.theme, pageInfo },
+        context: {
+          site,
+          theme: site.style.theme,
+          pageInfo,
+          recordScriptEntrypoint: () => {},
+        },
       },
     )
     cleanup()

@@ -20,7 +20,15 @@ describe('ContactForm rendering', () => {
     }
     const html = renderApp(
       `<ContactForm action="mailto:support@example.com" submitLabel="Send it" />`,
-      { components, context: { site, theme: site.style.theme, pageInfo } },
+      {
+        components,
+        context: {
+          site,
+          theme: site.style.theme,
+          pageInfo,
+          recordScriptEntrypoint: () => {},
+        },
+      },
     )
     cleanup()
 

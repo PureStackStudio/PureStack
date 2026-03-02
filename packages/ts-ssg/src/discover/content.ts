@@ -18,6 +18,7 @@ export interface StaticAssetFile {
 }
 
 const CONTENT_EXTS = new Set(['.md', '.mdx'])
+const TS_EXT = '.ts'
 export const DEFAULT_FOOTER_FILENAME = 'footer.mdx'
 export const DEFAULT_HEADER_FILENAME = 'header.mdx'
 
@@ -64,6 +65,7 @@ export async function discoverStaticAssets(
     if (isSiteConfigFile(relPath)) return false
     if (isDefaultFooterFile(relPath)) return false
     if (isDefaultHeaderFile(relPath)) return false
+    if (isTypeScriptAssetFile(ext)) return false
     return !isContentFile(relPath, ext)
   })
   log.info('static assets discovered', { assets })
@@ -117,4 +119,8 @@ async function walkDir(
       ext,
     })
   }
+}
+
+function isTypeScriptAssetFile(ext: string) {
+  return ext.toLowerCase() === TS_EXT
 }

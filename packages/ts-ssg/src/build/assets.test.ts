@@ -55,7 +55,7 @@ describe('static assets', () => {
     expect(txtOut).toBe(path.join(outDir, 'notes.txt'))
   })
 
-  it('compiles .ts assets to .js and copies non-ts assets', async () => {
+  it('copies non-ts assets and skips .ts files during static discovery', async () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-assets-'))
     const outDir = path.join(root, 'dist')
     try {
@@ -67,20 +67,18 @@ describe('static assets', () => {
 
       const result = await copyStaticAssets(root, outDir)
 
-      expect(result.assets).toBe(2)
-      expect(hasAsset(result, 'login.ts', '.ts')).toBe(true)
+      expect(result.assets).toBe(1)
+      expect(hasAsset(result, 'login.ts', '.ts')).toBe(false)
       expect(hasAsset(result, 'notes.txt', '.txt')).toBe(true)
 
       const jsPath = path.join(outDir, 'login', 'login.js')
       const txtPath = path.join(outDir, 'notes.txt')
 
-      await expect(fs.stat(jsPath)).resolves.toBeTruthy()
+      await expect(fs.stat(jsPath)).rejects.toBeTruthy()
       await expect(fs.stat(txtPath)).resolves.toBeTruthy()
       await expect(fs.stat(path.join(outDir, 'login.ts'))).rejects.toBeTruthy()
 
-      const jsOutput = await fs.readFile(jsPath, 'utf8')
       const txtOutput = await fs.readFile(txtPath, 'utf8')
-      expect(jsOutput).toContain('console.log')
       expect(txtOutput).toBe('hello')
     } finally {
       await fs.rm(root, { recursive: true, force: true })

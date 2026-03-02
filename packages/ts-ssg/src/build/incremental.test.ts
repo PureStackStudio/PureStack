@@ -144,12 +144,12 @@ describe('incremental builder', () => {
       const outDir = path.join(base, 'out')
       await fs.mkdir(path.join(contentDir, 'common'), { recursive: true })
       await fs.mkdir(outDir, { recursive: true })
-
       await fs.writeFile(
         path.join(contentDir, 'hosts.mdx'),
         '<RegorApp src="./hosts.ts" id="hosts-admin-app" />',
         'utf8',
       )
+
       await fs.writeFile(
         path.join(contentDir, 'hosts.ts'),
         "import { message } from './common/message'\nconsole.log(message)\n",
@@ -171,10 +171,13 @@ describe('incremental builder', () => {
             fileName: 'site.css',
             href: '/site.css',
           },
+          mdx: {
+            disableHighlighter: true,
+          },
         },
       })
 
-      await builder.buildAll('initial build for ts dependency tracking')
+      await builder.applyChange(path.join(contentDir, 'hosts.mdx'))
 
       const hostsBundlePath = path.join(outDir, 'hosts', 'hosts.js')
       expect(await fs.readFile(hostsBundlePath, 'utf8')).toContain('before')

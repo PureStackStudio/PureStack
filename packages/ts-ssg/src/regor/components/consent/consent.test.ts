@@ -29,7 +29,12 @@ describe('Consent component rendering', () => {
     }
     const html = renderApp(`<Consent />`, {
       components,
-      context: { site, theme: site.style.theme, pageInfo },
+      context: {
+        site,
+        theme: site.style.theme,
+        pageInfo,
+        recordScriptEntrypoint: () => {},
+      },
     })
     cleanup()
 
