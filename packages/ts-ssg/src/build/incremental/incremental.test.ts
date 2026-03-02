@@ -195,4 +195,54 @@ describe('incremental builder', () => {
       expect(await fs.readFile(hostsBundlePath, 'utf8')).toContain('after')
     })
   })
+
+  it('removes ts entry bundle after deleting a scripted page with navigation enabled', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      const outDir = path.join(base, 'out')
+      await fs.mkdir(contentDir, { recursive: true })
+      await fs.mkdir(outDir, { recursive: true })
+      await fs.writeFile(
+        path.join(contentDir, 'hosts.mdx'),
+        '<RegorApp src="./hosts.ts" id="hosts-admin-app" />',
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'hosts.ts'),
+        "console.log('hello')\n",
+        'utf8',
+      )
+
+      const builder = await createIncrementalBuilder({
+        siteConfig: {
+          rootDir: base,
+          contentDir,
+          outDir,
+          siteTitle: 'Test Site',
+          style: {
+            fileName: 'site.css',
+            href: '/site.css',
+          },
+          navigation: {
+            mode: 'auto',
+          },
+          mdx: {
+            disableHighlighter: true,
+          },
+        },
+      })
+
+      await builder.applyChange(path.join(contentDir, 'hosts.mdx'))
+      const bundlePath = path.join(outDir, 'hosts', 'hosts.js')
+      expect(await fileExists(bundlePath)).toBe(true)
+
+      await fs.rm(path.join(contentDir, 'hosts.mdx'))
+      const result = await builder.applyChange(path.join(contentDir, 'hosts.mdx'))
+      expect(result.deletedPages).toBe(1)
+
+      const manifest = await readManifest(outDir)
+      expect(manifest?.assets['hosts.ts']).toBeUndefined()
+      expect(await fileExists(bundlePath)).toBe(false)
+    })
+  })
 })

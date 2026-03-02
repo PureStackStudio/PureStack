@@ -149,6 +149,7 @@ export class IncrementalChangeApplier {
     const { relPath, ext, result, contentEntry, assetEntry } = input
     if (contentEntry && this.input.config.navigation.mode !== 'none') {
       await this.rebuildNavigationForChange(relPath, ext, result, null)
+      this.input.scriptEntrypoints.removePage(relPath)
       await this.input.persistManifest()
       return
     }
