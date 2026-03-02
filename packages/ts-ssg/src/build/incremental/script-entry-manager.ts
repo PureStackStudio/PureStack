@@ -110,7 +110,11 @@ export class ScriptEntrypointManager {
     result: IncrementalBuildResult,
   ) {
     const ext = path.extname(entryRelPath).toLowerCase() || '.ts'
-    const assetFile = toAssetFile(this.input.config.contentDir, entryRelPath, ext)
+    const assetFile = toAssetFile(
+      this.input.config.contentDir,
+      entryRelPath,
+      ext,
+    )
     const signature = await readSignature(assetFile.absPath)
     if (!signature) {
       const priorEntry = this.input.assets[entryRelPath]

@@ -6,7 +6,6 @@ import { resolveSiteConfig, type SiteConfig } from '../../config/config'
 import {
   type ContentFile,
   discoverContent,
-  isContentFile,
   isDefaultFooterFile,
   isDefaultHeaderFile,
   isSiteConfigFile,
@@ -15,39 +14,38 @@ import {
 import { buildNavigation } from '../../navigation/navigation'
 import { initBuiltinComponents } from '../../regor/initBuiltinComponents'
 import { themes } from '../../style/themeOptions'
-import { copyStaticAsset, copyStaticAssets } from '../assets'
+import { copyStaticAssets } from '../assets'
 import { prepareOutDir } from '../io'
 import {
-  type AssetManifestEntry,
   type BuildManifest,
-  type ContentManifestEntry,
   createEmptyManifest,
-  type FileSignature,
   isCompatibleManifest,
   readManifest,
-  readSignature,
-  signatureEqual,
   writeManifest,
 } from '../manifest'
 import { resolveRouteInfo } from '../out-path'
-import { type BuildContext, buildPage, resolveFooterHtmlByDirectory, resolveHeaderHtmlByDirectory } from '../page'
+import {
+  type BuildContext,
+  resolveFooterHtmlByDirectory,
+  resolveHeaderHtmlByDirectory,
+} from '../page'
 import { buildPagefindIndex } from '../pagefind'
 import type { BuildHooks, BuildInput, BuildResult } from '../site'
 import { writeSitemap } from '../sitemap'
 import { type WriteStylesResult, writeStyles } from '../styles'
+import { IncrementalChangeApplier } from './change-applier'
 import { IncrementalContentState } from './content-state'
 import { ScriptEntrypointManager } from './script-entry-manager'
 import {
   buildManifest,
   countByExt,
   isOutsideContentRoot,
-  removeFile,
   resolveMdxBuildOptions,
-  toAssetFile,
   toContentFile,
 } from './support'
-import type { IncrementalBuildResult, IncrementalBuilder } from './types'
-export type { IncrementalBuildResult, IncrementalBuilder } from './types'
+import type { IncrementalBuilder, IncrementalBuildResult } from './types'
+
+export type { IncrementalBuilder, IncrementalBuildResult } from './types'
 
 export async function createIncrementalBuilder(
   input: BuildInput = {},
@@ -118,30 +116,6 @@ function isHighlightJsEnabled(mdx: SiteConfig['mdx'] | undefined): boolean {
   return mdx?.disableHighlighter !== true && mdx?.highlighter === 'highlightjs'
 }
 
-type HandleMissingSignatureChangeInput = {
-  relPath: string
-  ext: string
-  result: IncrementalBuildResult
-  contentEntry: ContentManifestEntry | undefined
-  assetEntry: AssetManifestEntry | undefined
-}
-
-type HandleContentChangeInput = {
-  relPath: string
-  ext: string
-  signature: FileSignature
-  contentEntry: ContentManifestEntry | undefined
-  result: IncrementalBuildResult
-}
-
-type HandleAssetChangeInput = {
-  relPath: string
-  ext: string
-  signature: FileSignature
-  assetEntry: AssetManifestEntry | undefined
-  result: IncrementalBuildResult
-}
-
 type BuildPreparationResult = {
   contentFiles: ContentFile[]
   assetFiles: StaticAssetFile[]
@@ -158,18 +132,10 @@ type FinalizeBuildInput = BuildSummaryInput & {
   hooks: BuildHooks
 }
 
-type ChangeState = {
-  relPath: string
-  ext: string
-  signature: FileSignature | null
-  result: IncrementalBuildResult
-  contentEntry: ContentManifestEntry | undefined
-  assetEntry: AssetManifestEntry | undefined
-}
-
 class IncrementalRuntime {
   private readonly contentState: IncrementalContentState
   private readonly scriptEntrypoints: ScriptEntrypointManager
+  private readonly changeApplier: IncrementalChangeApplier
 
   constructor(private readonly options: IncrementalRuntimeOptions) {
     this.scriptEntrypoints = new ScriptEntrypointManager({
@@ -188,6 +154,14 @@ class IncrementalRuntime {
         this.scriptEntrypoints.setPageEntrypoints(relPath, scriptEntrypoints),
       persistManifest: () => this.persistManifest(),
       getManifest: () => this.manifest,
+    })
+    this.changeApplier = new IncrementalChangeApplier({
+      config: options.config,
+      context: options.context,
+      getManifest: () => this.manifest,
+      contentState: this.contentState,
+      scriptEntrypoints: this.scriptEntrypoints,
+      persistManifest: () => this.persistManifest(),
     })
   }
 
@@ -232,7 +206,7 @@ class IncrementalRuntime {
       hooks,
     )
     const scriptAssetFiles = await this.scriptEntrypoints.syncState({
-      result: this.createIncrementalResult(reason),
+      result: this.changeApplier.createResult(reason),
       persist: false,
       rebuildAll: true,
     })
@@ -265,7 +239,9 @@ class IncrementalRuntime {
       this.config.contentDir,
       this.config.outDir,
     )
-    this.scriptEntrypoints.rebuildDependencyIndex(copiedAssets.tsDependencyIndex)
+    this.scriptEntrypoints.rebuildDependencyIndex(
+      copiedAssets.tsDependencyIndex,
+    )
     this.context.headerHtmlByDir = await resolveHeaderHtmlByDirectory(
       this.config,
       this.context.mdx,
@@ -331,7 +307,9 @@ class IncrementalRuntime {
 
   applyChange = async (filePath: string): Promise<IncrementalBuildResult> => {
     const relPath = path.relative(this.config.contentDir, filePath)
-    const result = this.createIncrementalResult(`content change: ${filePath}`)
+    const result = this.changeApplier.createResult(
+      `content change: ${filePath}`,
+    )
     if (isOutsideContentRoot(relPath)) return result
     if (isSiteConfigFile(relPath)) {
       result.fullRebuild = true
@@ -346,15 +324,7 @@ class IncrementalRuntime {
       return result
     }
 
-    const state = await this.readChangeState(filePath, relPath, result)
-    await this.applyChangeState(state)
-    if (isContentFile(relPath, state.ext) || state.ext === '.ts') {
-      await this.scriptEntrypoints.syncState({
-        result,
-        persist: true,
-        rebuildAll: false,
-      })
-    }
+    await this.changeApplier.applyFileChange(filePath, relPath, result)
     return result
   }
 
@@ -364,165 +334,6 @@ class IncrementalRuntime {
 
   renderByUrlPath = async (urlPath: string): Promise<boolean> => {
     return this.contentState.renderByUrlPath(urlPath)
-  }
-
-  private async rebuildNavigationForChange(
-    relPath: string,
-    ext: string,
-    result: IncrementalBuildResult,
-    signature: FileSignature | null,
-  ) {
-    if (!signature) {
-      await this.contentState.refreshNavigationAndMarkDirty()
-      await this.contentState.removeContentEntryForDeletedSource(relPath, result)
-      return
-    }
-
-    const contentFiles = await this.contentState.refreshNavigationAndMarkDirty()
-    await this.contentState.rebuildNavigatedContent({
-      contentFiles,
-      relPath,
-      ext,
-      signature,
-      result,
-    })
-  }
-
-  private createIncrementalResult(reason: string): IncrementalBuildResult {
-    return {
-      fullRebuild: false,
-      changedPages: 0,
-      changedAssets: 0,
-      deletedPages: 0,
-      deletedAssets: 0,
-      reason,
-    }
-  }
-
-  private async readChangeState(
-    filePath: string,
-    relPath: string,
-    result: IncrementalBuildResult,
-  ): Promise<ChangeState> {
-    const ext = path.extname(relPath).toLowerCase()
-    const signature = await readSignature(filePath)
-    return {
-      relPath,
-      ext,
-      signature,
-      result,
-      contentEntry: this.manifest.content[relPath],
-      assetEntry: this.manifest.assets[relPath],
-    }
-  }
-
-  private async applyChangeState(state: ChangeState): Promise<void> {
-    if (!state.signature) {
-      await this.handleMissingSignatureChange(state)
-      return
-    }
-    if (this.isContentChange(state)) {
-      await this.handleContentChange({
-        relPath: state.relPath,
-        ext: state.ext,
-        signature: state.signature,
-        contentEntry: state.contentEntry,
-        result: state.result,
-      })
-      return
-    }
-    await this.handleAssetChange({
-      relPath: state.relPath,
-      ext: state.ext,
-      signature: state.signature,
-      assetEntry: state.assetEntry,
-      result: state.result,
-    })
-  }
-
-  private isContentChange(state: ChangeState): boolean {
-    return (
-      Boolean(state.contentEntry) || isContentFile(state.relPath, state.ext)
-    )
-  }
-
-  private async handleMissingSignatureChange(
-    input: HandleMissingSignatureChangeInput,
-  ) {
-    const { relPath, ext, result, contentEntry, assetEntry } = input
-    if (contentEntry && this.config.navigation.mode !== 'none') {
-      await this.rebuildNavigationForChange(relPath, ext, result, null)
-      await this.persistManifest()
-      return
-    }
-    if (contentEntry) {
-      await removeFile(contentEntry.outPath)
-      delete this.manifest.content[relPath]
-      this.contentState.removeContentForDeletedRelPath(relPath)
-      this.scriptEntrypoints.removePage(relPath)
-      result.deletedPages += 1
-    }
-    if (assetEntry) {
-      await removeFile(assetEntry.outPath)
-      delete this.manifest.assets[relPath]
-      this.scriptEntrypoints.removeTrackedEntrypoint(relPath)
-      result.deletedAssets += 1
-    }
-    if (ext === '.ts') {
-      await this.scriptEntrypoints.rebuildDependents(relPath, result)
-    }
-    if (contentEntry || assetEntry) {
-      await this.persistManifest()
-    }
-  }
-
-  private async handleContentChange(input: HandleContentChangeInput) {
-    const { relPath, ext, signature, contentEntry, result } = input
-    if (signatureEqual(contentEntry, signature)) return
-
-    if (this.config.navigation.mode !== 'none') {
-      await this.rebuildNavigationForChange(relPath, ext, result, signature)
-      await this.persistManifest()
-      return
-    }
-
-    const contentFile = toContentFile(this.config.contentDir, relPath, ext)
-    const page = await buildPage(this.context, contentFile)
-    this.scriptEntrypoints.setPageEntrypoints(
-      contentFile.relPath,
-      page.scriptEntrypoints,
-    )
-    this.contentState.upsertContentManifestEntry(relPath, ext, signature)
-    result.changedPages += 1
-    await this.persistManifest()
-  }
-
-  private async handleAssetChange(input: HandleAssetChangeInput) {
-    const { relPath, ext, signature, assetEntry, result } = input
-    if (signatureEqual(assetEntry, signature)) return
-
-    if (ext === '.ts') {
-      await this.scriptEntrypoints.rebuildAssetGraph(relPath, result)
-      await this.persistManifest()
-      return
-    }
-
-    const assetFile = toAssetFile(this.config.contentDir, relPath, ext)
-    const assetCopy = await copyStaticAsset(
-      this.config.contentDir,
-      this.config.outDir,
-      assetFile,
-    )
-    if (!assetCopy.copied) return
-
-    this.manifest.assets[relPath] = {
-      relPath,
-      ext,
-      outPath: assetCopy.outPath,
-      ...signature,
-    }
-    result.changedAssets += 1
-    await this.persistManifest()
   }
 
   private async persistManifest() {

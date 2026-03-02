@@ -6,14 +6,18 @@ import type { SiteConfig } from '../../config/config'
 import { type ContentFile, discoverContent } from '../../discover/content'
 import { buildNavigation } from '../../navigation/navigation'
 import {
+  type BuildManifest,
+  type FileSignature,
+  readSignature,
+} from '../manifest'
+import { resolveOutPath } from '../out-path'
+import {
   type BuildContext,
   buildPage,
   renderPageFromFile,
   writePage,
 } from '../page'
-import { resolveOutPath } from '../out-path'
 import type { BuildHooks } from '../site'
-import { readSignature, type BuildManifest, type FileSignature } from '../manifest'
 import {
   ManifestContentIndex,
   normalizeUrlPath,
@@ -33,6 +37,13 @@ interface IncrementalContentStateInput {
 
 interface RebuildNavigatedContentInput {
   contentFiles: ContentFile[]
+  relPath: string
+  ext: string
+  signature: FileSignature
+  result: IncrementalBuildResult
+}
+
+interface RebuildSingleContentInput {
   relPath: string
   ext: string
   signature: FileSignature
@@ -125,9 +136,22 @@ export class IncrementalContentState {
     this.dirtyPages.delete(relPath)
   }
 
+  async rebuildSingleContent(input: RebuildSingleContentInput) {
+    const { relPath, ext, signature, result } = input
+    const contentFile = toContentFile(this.input.config.contentDir, relPath, ext)
+    const page = await buildPage(this.input.context, contentFile)
+    this.input.onPageBuilt(contentFile.relPath, page.scriptEntrypoints)
+    this.upsertContentManifestEntry(relPath, contentFile.ext, signature)
+    result.changedPages += 1
+  }
+
   async renderAndPersistRelPath(relPath: string, signature: FileSignature) {
     const ext = this.resolveContentExt(relPath)
-    const contentFile = toContentFile(this.input.config.contentDir, relPath, ext)
+    const contentFile = toContentFile(
+      this.input.config.contentDir,
+      relPath,
+      ext,
+    )
     const page = await buildPage(this.input.context, contentFile)
     this.input.onPageBuilt(contentFile.relPath, page.scriptEntrypoints)
     this.upsertContentManifestEntry(relPath, contentFile.ext, signature)
@@ -153,7 +177,11 @@ export class IncrementalContentState {
     ext: string,
     signature: FileSignature,
   ) {
-    const contentFile = toContentFile(this.input.config.contentDir, relPath, ext)
+    const contentFile = toContentFile(
+      this.input.config.contentDir,
+      relPath,
+      ext,
+    )
     const outPath = resolveOutPath(this.input.config.outDir, contentFile)
     this.input.getManifest().content[relPath] = {
       relPath,
@@ -164,13 +192,10 @@ export class IncrementalContentState {
     this.contentIndex.set(relPath, outPath, ext)
   }
 
-  removeContentForDeletedRelPath(relPath: string) {
-    this.contentIndex.remove(relPath)
-    this.dirtyPages.delete(relPath)
-  }
-
   private resolveContentExt(relPath: string) {
-    return this.input.getManifest().content[relPath]?.ext ?? path.extname(relPath)
+    return (
+      this.input.getManifest().content[relPath]?.ext ?? path.extname(relPath)
+    )
   }
 
   private markAllPagesDirty(contentFiles: ContentFile[]) {
