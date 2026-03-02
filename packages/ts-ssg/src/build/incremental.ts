@@ -192,6 +192,8 @@ class IncrementalRuntime {
   private readonly dirtyPages = new Set<string>()
   private readonly renderInFlight = new Map<string, Promise<boolean>>()
   private readonly contentIndex: ManifestContentIndex
+  private readonly tsEntryDependencies = new Map<string, Set<string>>()
+  private readonly tsDependentsByRelPath = new Map<string, Set<string>>()
 
   constructor(private readonly options: IncrementalRuntimeOptions) {
     this.contentIndex = new ManifestContentIndex(options.config.contentDir)
@@ -262,6 +264,7 @@ class IncrementalRuntime {
       this.config.contentDir,
       this.config.outDir,
     )
+    this.rebuildTsDependencyIndex(copiedAssets.tsDependencyIndex)
     this.context.headerHtmlByDir = await resolveHeaderHtmlByDirectory(
       this.config,
       this.context.mdx,
@@ -616,7 +619,11 @@ class IncrementalRuntime {
     if (assetEntry) {
       await removeFile(assetEntry.outPath)
       delete this.manifest.assets[relPath]
+      this.removeTsEntrypoint(relPath)
       result.deletedAssets += 1
+    }
+    if (ext === '.ts') {
+      await this.rebuildTsDependents(relPath, result)
     }
     if (contentEntry || assetEntry) {
       await this.persistManifest()
@@ -651,8 +658,18 @@ class IncrementalRuntime {
     const { relPath, ext, signature, assetEntry, result } = input
     if (signatureEqual(assetEntry, signature)) return
 
+    if (ext === '.ts') {
+      await this.rebuildTsAssetGraph(relPath, result)
+      await this.persistManifest()
+      return
+    }
+
     const assetFile = toAssetFile(this.config.contentDir, relPath, ext)
-    const assetCopy = await copyStaticAsset(this.config.outDir, assetFile)
+    const assetCopy = await copyStaticAsset(
+      this.config.contentDir,
+      this.config.outDir,
+      assetFile,
+    )
     if (!assetCopy.copied) return
 
     this.manifest.assets[relPath] = {
@@ -663,6 +680,126 @@ class IncrementalRuntime {
     }
     result.changedAssets += 1
     await this.persistManifest()
+  }
+
+  private async rebuildTsAssetGraph(
+    changedRelPath: string,
+    result: IncrementalBuildResult,
+  ) {
+    const entries = this.resolveImpactedTsEntrypoints(changedRelPath)
+    if (entries.size === 0) {
+      entries.add(changedRelPath)
+    }
+    for (const entryRelPath of entries) {
+      await this.rebuildSingleTsEntrypoint(entryRelPath, result)
+    }
+  }
+
+  private async rebuildTsDependents(
+    changedRelPath: string,
+    result: IncrementalBuildResult,
+  ) {
+    const dependents = this.tsDependentsByRelPath.get(
+      this.normalizeRelPath(changedRelPath),
+    )
+    if (!dependents || dependents.size === 0) return
+    for (const entryRelPath of dependents) {
+      if (entryRelPath === changedRelPath) continue
+      await this.rebuildSingleTsEntrypoint(entryRelPath, result)
+    }
+  }
+
+  private resolveImpactedTsEntrypoints(changedRelPath: string) {
+    const impacted = new Set<string>([changedRelPath])
+    const dependents = this.tsDependentsByRelPath.get(
+      this.normalizeRelPath(changedRelPath),
+    )
+    if (!dependents) return impacted
+    for (const entryRelPath of dependents) {
+      impacted.add(entryRelPath)
+    }
+    return impacted
+  }
+
+  private async rebuildSingleTsEntrypoint(
+    entryRelPath: string,
+    result: IncrementalBuildResult,
+  ) {
+    const ext = path.extname(entryRelPath).toLowerCase() || '.ts'
+    const assetFile = toAssetFile(this.config.contentDir, entryRelPath, ext)
+    const signature = await readSignature(assetFile.absPath)
+    if (!signature) {
+      const priorEntry = this.manifest.assets[entryRelPath]
+      if (priorEntry) {
+        await removeFile(priorEntry.outPath)
+        delete this.manifest.assets[entryRelPath]
+        result.deletedAssets += 1
+      }
+      this.removeTsEntrypoint(entryRelPath)
+      return
+    }
+
+    const assetCopy = await copyStaticAsset(
+      this.config.contentDir,
+      this.config.outDir,
+      assetFile,
+    )
+    if (!assetCopy.copied) return
+
+    this.manifest.assets[entryRelPath] = {
+      relPath: entryRelPath,
+      ext,
+      outPath: assetCopy.outPath,
+      ...signature,
+    }
+    result.changedAssets += 1
+    this.setTsEntrypointDependencies(
+      entryRelPath,
+      assetCopy.dependencyRelPaths.length > 0
+        ? assetCopy.dependencyRelPaths
+        : [entryRelPath],
+    )
+  }
+
+  private rebuildTsDependencyIndex(index: Record<string, string[]>) {
+    this.tsEntryDependencies.clear()
+    this.tsDependentsByRelPath.clear()
+    for (const [entryRelPath, deps] of Object.entries(index)) {
+      this.setTsEntrypointDependencies(entryRelPath, deps)
+    }
+  }
+
+  private setTsEntrypointDependencies(entryRelPath: string, deps: string[]) {
+    this.removeTsEntrypoint(entryRelPath)
+    const nextDeps = new Set<string>(
+      (deps.length > 0 ? deps : [entryRelPath]).map((depRelPath) =>
+        this.normalizeRelPath(depRelPath),
+      ),
+    )
+    this.tsEntryDependencies.set(entryRelPath, nextDeps)
+    for (const depRelPath of nextDeps) {
+      const dependents = this.tsDependentsByRelPath.get(depRelPath) ?? new Set()
+      dependents.add(entryRelPath)
+      this.tsDependentsByRelPath.set(depRelPath, dependents)
+    }
+  }
+
+  private removeTsEntrypoint(entryRelPath: string) {
+    const prevDeps = this.tsEntryDependencies.get(entryRelPath)
+    if (!prevDeps) return
+    for (const depRelPath of prevDeps) {
+      const dependents = this.tsDependentsByRelPath.get(depRelPath)
+      if (!dependents) continue
+      dependents.delete(entryRelPath)
+      if (dependents.size === 0) {
+        this.tsDependentsByRelPath.delete(depRelPath)
+      }
+    }
+    this.tsEntryDependencies.delete(entryRelPath)
+  }
+
+  private normalizeRelPath(relPath: string) {
+    return relPath.replaceAll('\\', '/')
   }
 
   private async persistManifest() {

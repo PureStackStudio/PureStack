@@ -137,4 +137,59 @@ describe('incremental builder', () => {
       expect(darkCss).toContain('.hljs')
     })
   })
+
+  it('rebuilds ts entry bundles when an imported ts dependency changes', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      const outDir = path.join(base, 'out')
+      await fs.mkdir(path.join(contentDir, 'common'), { recursive: true })
+      await fs.mkdir(outDir, { recursive: true })
+
+      await fs.writeFile(
+        path.join(contentDir, 'hosts.mdx'),
+        '<RegorApp src="./hosts.ts" id="hosts-admin-app" />',
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'hosts.ts'),
+        "import { message } from './common/message'\nconsole.log(message)\n",
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'common', 'message.ts'),
+        "export const message = 'before'\n",
+        'utf8',
+      )
+
+      const builder = await createIncrementalBuilder({
+        siteConfig: {
+          rootDir: base,
+          contentDir,
+          outDir,
+          siteTitle: 'Test Site',
+          style: {
+            fileName: 'site.css',
+            href: '/site.css',
+          },
+        },
+      })
+
+      await builder.buildAll('initial build for ts dependency tracking')
+
+      const hostsBundlePath = path.join(outDir, 'hosts', 'hosts.js')
+      expect(await fs.readFile(hostsBundlePath, 'utf8')).toContain('before')
+
+      await fs.writeFile(
+        path.join(contentDir, 'common', 'message.ts'),
+        "export const message = 'after'\n",
+        'utf8',
+      )
+      const result = await builder.applyChange(
+        path.join(contentDir, 'common', 'message.ts'),
+      )
+
+      expect(result.changedAssets).toBeGreaterThan(0)
+      expect(await fs.readFile(hostsBundlePath, 'utf8')).toContain('after')
+    })
+  })
 })
