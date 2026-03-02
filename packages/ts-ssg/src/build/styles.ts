@@ -33,7 +33,12 @@ export async function writeStyles(
 
   for (const theme of orderedThemes) {
     const rendered = await styleBuilder.render(theme, pretty)
-    const css = await resolveOutputCss(rendered, theme, !pretty, includeHljsTheme)
+    const css = await resolveOutputCss(
+      rendered,
+      theme,
+      !pretty,
+      includeHljsTheme,
+    )
     const cssName = resolveThemeFileName(fileName, theme)
     const outPath = path.join(outDir, cssName)
     await ensureDir(outPath)

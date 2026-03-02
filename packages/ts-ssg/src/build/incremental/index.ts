@@ -2,7 +2,7 @@ import path from 'node:path'
 
 import { getLogger, type Logger } from 'logpot'
 
-import { resolveSiteConfig, type SiteConfig } from '../config/config'
+import { resolveSiteConfig, type SiteConfig } from '../../config/config'
 import {
   type ContentFile,
   discoverContent,
@@ -11,23 +11,12 @@ import {
   isDefaultHeaderFile,
   isSiteConfigFile,
   type StaticAssetFile,
-} from '../discover/content'
-import { buildNavigation } from '../navigation/navigation'
-import { initBuiltinComponents } from '../regor/initBuiltinComponents'
-import { themes } from '../style/themeOptions'
-import { copyStaticAsset, copyStaticAssets } from './assets'
-import {
-  buildManifest,
-  countByExt,
-  isOutsideContentRoot,
-  ManifestContentIndex,
-  normalizeUrlPath,
-  removeFile,
-  resolveMdxBuildOptions,
-  toAssetFile,
-  toContentFile,
-} from './incremental-support'
-import { prepareOutDir } from './io'
+} from '../../discover/content'
+import { buildNavigation } from '../../navigation/navigation'
+import { initBuiltinComponents } from '../../regor/initBuiltinComponents'
+import { themes } from '../../style/themeOptions'
+import { copyStaticAsset, copyStaticAssets } from '../assets'
+import { prepareOutDir } from '../io'
 import {
   type AssetManifestEntry,
   type BuildManifest,
@@ -39,8 +28,8 @@ import {
   readSignature,
   signatureEqual,
   writeManifest,
-} from './manifest'
-import { resolveOutPath, resolveRouteInfo } from './out-path'
+} from '../manifest'
+import { resolveOutPath, resolveRouteInfo } from '../out-path'
 import {
   type BuildContext,
   buildPage,
@@ -48,11 +37,22 @@ import {
   resolveFooterHtmlByDirectory,
   resolveHeaderHtmlByDirectory,
   writePage,
-} from './page'
-import { buildPagefindIndex } from './pagefind'
-import type { BuildHooks, BuildInput, BuildResult } from './site'
-import { writeSitemap } from './sitemap'
-import { type WriteStylesResult, writeStyles } from './styles'
+} from '../page'
+import { buildPagefindIndex } from '../pagefind'
+import type { BuildHooks, BuildInput, BuildResult } from '../site'
+import { writeSitemap } from '../sitemap'
+import { type WriteStylesResult, writeStyles } from '../styles'
+import {
+  buildManifest,
+  countByExt,
+  isOutsideContentRoot,
+  ManifestContentIndex,
+  normalizeUrlPath,
+  removeFile,
+  resolveMdxBuildOptions,
+  toAssetFile,
+  toContentFile,
+} from './support'
 
 export interface IncrementalBuildResult {
   fullRebuild: boolean
@@ -866,13 +866,20 @@ class IncrementalRuntime {
     const files: StaticAssetFile[] = []
     for (const entryRelPath of this.tsEntryDependencies.keys()) {
       files.push(
-        toAssetFile(this.config.contentDir, entryRelPath, path.extname(entryRelPath)),
+        toAssetFile(
+          this.config.contentDir,
+          entryRelPath,
+          path.extname(entryRelPath),
+        ),
       )
     }
     return files
   }
 
-  private setPageScriptEntrypoints(pageRelPath: string, scriptEntrypoints: string[]) {
+  private setPageScriptEntrypoints(
+    pageRelPath: string,
+    scriptEntrypoints: string[],
+  ) {
     this.pageScriptEntrypoints.set(
       this.normalizeRelPath(pageRelPath),
       new Set(scriptEntrypoints.map((entry) => this.normalizeRelPath(entry))),

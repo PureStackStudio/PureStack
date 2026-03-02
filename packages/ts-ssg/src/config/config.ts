@@ -147,9 +147,7 @@ export type SiteStyleConfigInput = DeepPartial<
  * Public config input shape for both `buildSite(...)` and `siteConfig.json`.
  * All fields are optional; values are normalized by `resolveSiteConfig`.
  */
-export type SiteConfigInput = DeepPartial<
-  Omit<SiteConfig, 'style'>
-> & {
+export type SiteConfigInput = DeepPartial<Omit<SiteConfig, 'style'>> & {
   style?: SiteStyleConfigInput
 }
 

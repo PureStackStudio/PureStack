@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolveMdxBuildOptions } from '../build/incremental-support'
+import { resolveMdxBuildOptions } from '../build/incremental/support'
 import { renderApp } from '../regor/renderApp'
 import { compileMarkdown } from './md'
 

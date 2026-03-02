@@ -1,18 +1,18 @@
 ﻿import fs from 'node:fs/promises'
 import path from 'node:path'
 
-import type { SiteConfig, SiteMdxConfig } from '../config/config'
-import type { ContentFile, StaticAssetFile } from '../discover/content'
-import type { MdxRenderOptions } from '../mdx/compile'
+import type { SiteConfig, SiteMdxConfig } from '../../config/config'
+import type { ContentFile, StaticAssetFile } from '../../discover/content'
+import type { MdxRenderOptions } from '../../mdx/compile'
 import {
   createMdxHighlighter,
   DEFAULT_MDX_CODE_LANGS,
   DEFAULT_MDX_CODE_THEMES,
   type MdxCodeHighlighter,
-} from '../mdx/highlight'
-import { createHljsHighlighter } from '../mdx/highlightjs'
-import { urlNormalizer } from '../util/urlNormalizer'
-import { resolveStaticOutPath } from './assets'
+} from '../../mdx/highlight'
+import { createHljsHighlighter } from '../../mdx/highlightjs'
+import { urlNormalizer } from '../../util/urlNormalizer'
+import { resolveStaticOutPath } from '../assets'
 import {
   type AssetManifestEntry,
   type BuildManifest,
@@ -20,9 +20,9 @@ import {
   manifestConfigFromSiteConfig,
   readSignature,
   type StylesManifestEntry,
-} from './manifest'
-import { resolveOutPath, resolveRouteInfo } from './out-path'
-import type { BuildCountSummary } from './site'
+} from '../manifest'
+import { resolveOutPath, resolveRouteInfo } from '../out-path'
+import type { BuildCountSummary } from '../site'
 
 export class ManifestContentIndex {
   private readonly outPathToRelPath = new Map<string, string>()

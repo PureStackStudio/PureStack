@@ -5,9 +5,9 @@ import path from 'node:path'
 import { disableLogger, getLogger, type Logger } from 'logpot'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
-import { resolveSiteConfig } from '../config/config'
-import { createIncrementalBuilder } from './incremental'
-import { createEmptyManifest, readManifest, writeManifest } from './manifest'
+import { resolveSiteConfig } from '../../config/config'
+import { createEmptyManifest, readManifest, writeManifest } from '../manifest'
+import { createIncrementalBuilder } from './index'
 
 async function withTempDir<T>(worker: (dir: string) => Promise<T>) {
   const base = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-'))

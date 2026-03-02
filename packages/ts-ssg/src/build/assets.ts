@@ -30,7 +30,11 @@ export async function copyStaticAssets(
   for (const asset of assets) {
     const outPath = resolveStaticOutPath(outDir, asset)
     await ensureDir(outPath)
-    const dependencyRelPaths = await writeStaticAsset(contentDir, asset, outPath)
+    const dependencyRelPaths = await writeStaticAsset(
+      contentDir,
+      asset,
+      outPath,
+    )
     if (dependencyRelPaths.length > 0) {
       tsDependencyIndex[asset.relPath] = dependencyRelPaths
     }
@@ -48,7 +52,11 @@ export async function copyStaticAsset(
   const outPath = resolveStaticOutPath(outDir, asset)
   try {
     await ensureDir(outPath)
-    const dependencyRelPaths = await writeStaticAsset(contentDir, asset, outPath)
+    const dependencyRelPaths = await writeStaticAsset(
+      contentDir,
+      asset,
+      outPath,
+    )
     log.info('static asset copied', {
       assetPath: asset.absPath,
       outPath,
@@ -92,7 +100,10 @@ async function writeStaticAsset(
   return []
 }
 
-function collectDependencyRelPaths(metafile: Metafile | undefined, root: string) {
+function collectDependencyRelPaths(
+  metafile: Metafile | undefined,
+  root: string,
+) {
   const deps = new Set<string>()
   const inputs = metafile?.inputs ?? {}
   for (const inputPath of Object.keys(inputs)) {
