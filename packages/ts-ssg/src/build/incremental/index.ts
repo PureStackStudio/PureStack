@@ -29,46 +29,25 @@ import {
   signatureEqual,
   writeManifest,
 } from '../manifest'
-import { resolveOutPath, resolveRouteInfo } from '../out-path'
-import {
-  type BuildContext,
-  buildPage,
-  renderPageFromFile,
-  resolveFooterHtmlByDirectory,
-  resolveHeaderHtmlByDirectory,
-  writePage,
-} from '../page'
+import { resolveRouteInfo } from '../out-path'
+import { type BuildContext, buildPage, resolveFooterHtmlByDirectory, resolveHeaderHtmlByDirectory } from '../page'
 import { buildPagefindIndex } from '../pagefind'
 import type { BuildHooks, BuildInput, BuildResult } from '../site'
 import { writeSitemap } from '../sitemap'
 import { type WriteStylesResult, writeStyles } from '../styles'
+import { IncrementalContentState } from './content-state'
+import { ScriptEntrypointManager } from './script-entry-manager'
 import {
   buildManifest,
   countByExt,
   isOutsideContentRoot,
-  ManifestContentIndex,
-  normalizeUrlPath,
   removeFile,
   resolveMdxBuildOptions,
   toAssetFile,
   toContentFile,
 } from './support'
-
-export interface IncrementalBuildResult {
-  fullRebuild: boolean
-  changedPages: number
-  changedAssets: number
-  deletedPages: number
-  deletedAssets: number
-  reason: string
-}
-
-export interface IncrementalBuilder {
-  buildAll: (reason: string) => Promise<BuildResult>
-  applyChange: (filePath: string) => Promise<IncrementalBuildResult>
-  renderIfDirtyByOutPath: (outPath: string) => Promise<boolean>
-  renderByUrlPath: (urlPath: string) => Promise<boolean>
-}
+import type { IncrementalBuildResult, IncrementalBuilder } from './types'
+export type { IncrementalBuildResult, IncrementalBuilder } from './types'
 
 export async function createIncrementalBuilder(
   input: BuildInput = {},
@@ -189,16 +168,27 @@ type ChangeState = {
 }
 
 class IncrementalRuntime {
-  private readonly dirtyPages = new Set<string>()
-  private readonly renderInFlight = new Map<string, Promise<boolean>>()
-  private readonly contentIndex: ManifestContentIndex
-  private readonly tsEntryDependencies = new Map<string, Set<string>>()
-  private readonly tsDependentsByRelPath = new Map<string, Set<string>>()
-  private readonly pageScriptEntrypoints = new Map<string, Set<string>>()
+  private readonly contentState: IncrementalContentState
+  private readonly scriptEntrypoints: ScriptEntrypointManager
 
   constructor(private readonly options: IncrementalRuntimeOptions) {
-    this.contentIndex = new ManifestContentIndex(options.config.contentDir)
-    this.contentIndex.rebuildFromManifest(options.manifest)
+    this.scriptEntrypoints = new ScriptEntrypointManager({
+      config: {
+        contentDir: options.config.contentDir,
+        outDir: options.config.outDir,
+      },
+      assets: options.manifest.assets,
+      persistManifest: () => this.persistManifest(),
+    })
+    this.contentState = new IncrementalContentState({
+      config: options.config,
+      context: options.context,
+      log: options.log,
+      onPageBuilt: (relPath, scriptEntrypoints) =>
+        this.scriptEntrypoints.setPageEntrypoints(relPath, scriptEntrypoints),
+      persistManifest: () => this.persistManifest(),
+      getManifest: () => this.manifest,
+    })
   }
 
   toBuilder(): IncrementalBuilder {
@@ -236,9 +226,12 @@ class IncrementalRuntime {
 
     this.log.info('build started', { reason })
     const prepared = await this.prepareBuild(hooks)
-    this.pageScriptEntrypoints.clear()
-    const pages = await this.renderAllPages(prepared.contentFiles, hooks)
-    const scriptAssetFiles = await this.syncScriptEntrypointsState({
+    this.scriptEntrypoints.clearPageEntrypoints()
+    const pages = await this.contentState.renderAllPages(
+      prepared.contentFiles,
+      hooks,
+    )
+    const scriptAssetFiles = await this.scriptEntrypoints.syncState({
       result: this.createIncrementalResult(reason),
       persist: false,
       rebuildAll: true,
@@ -272,7 +265,7 @@ class IncrementalRuntime {
       this.config.contentDir,
       this.config.outDir,
     )
-    this.rebuildTsDependencyIndex(copiedAssets.tsDependencyIndex)
+    this.scriptEntrypoints.rebuildDependencyIndex(copiedAssets.tsDependencyIndex)
     this.context.headerHtmlByDir = await resolveHeaderHtmlByDirectory(
       this.config,
       this.context.mdx,
@@ -290,23 +283,6 @@ class IncrementalRuntime {
     )
     await hooks.onNavigationBuilt?.(this.context, this.context.navigation)
     return { contentFiles, assetFiles: copiedAssets.files }
-  }
-
-  private async renderAllPages(
-    contentFiles: ContentFile[],
-    hooks: BuildHooks,
-  ): Promise<number> {
-    let pages = 0
-    for (const file of contentFiles) {
-      await hooks.onPageStart?.(this.context, file)
-      const page = await renderPageFromFile(this.context, file)
-      this.setPageScriptEntrypoints(file.relPath, page.scriptEntrypoints)
-      await hooks.onPageRendered?.(this.context, page)
-      await writePage(page, this.config.html.minify)
-      await hooks.onPageWritten?.(this.context, page)
-      pages += 1
-    }
-    return pages
   }
 
   private async writeStylesWithHooks(hooks: BuildHooks) {
@@ -347,8 +323,8 @@ class IncrementalRuntime {
       outputs: styleResult.outputs,
     })
     await this.persistManifest()
-    this.contentIndex.rebuildFromManifest(this.manifest)
-    this.dirtyPages.clear()
+    this.contentState.rebuildIndexFromManifest()
+    this.contentState.clearDirtyPages()
     await hooks.onBuildComplete?.(this.context, finalResult)
     return finalResult
   }
@@ -373,7 +349,7 @@ class IncrementalRuntime {
     const state = await this.readChangeState(filePath, relPath, result)
     await this.applyChangeState(state)
     if (isContentFile(relPath, state.ext) || state.ext === '.ts') {
-      await this.syncScriptEntrypointsState({
+      await this.scriptEntrypoints.syncState({
         result,
         persist: true,
         rebuildAll: false,
@@ -383,21 +359,11 @@ class IncrementalRuntime {
   }
 
   renderIfDirtyByOutPath = async (outPath: string): Promise<boolean> => {
-    const relPath = this.contentIndex.getRelPathByOutPath(outPath)
-    if (!relPath) return false
-    return this.renderPageByRelPath(relPath, true)
+    return this.contentState.renderIfDirtyByOutPath(outPath)
   }
 
   renderByUrlPath = async (urlPath: string): Promise<boolean> => {
-    const normalized = normalizeUrlPath(urlPath)
-    let relPath = this.contentIndex.getRelPathByUrlPath(normalized)
-    if (!relPath) {
-      const contentFiles = await discoverContent(this.config.contentDir)
-      this.contentIndex.updateUrlPathMapFromFiles(contentFiles)
-      relPath = this.contentIndex.getRelPathByUrlPath(normalized)
-      if (!relPath) return false
-    }
-    return this.renderPageByRelPath(relPath, false)
+    return this.contentState.renderByUrlPath(urlPath)
   }
 
   private async rebuildNavigationForChange(
@@ -407,95 +373,19 @@ class IncrementalRuntime {
     signature: FileSignature | null,
   ) {
     if (!signature) {
-      await this.refreshNavigationAndMarkDirty()
-      await this.removeContentEntryForDeletedSource(relPath, result)
+      await this.contentState.refreshNavigationAndMarkDirty()
+      await this.contentState.removeContentEntryForDeletedSource(relPath, result)
       return
     }
 
-    const contentFiles = await this.refreshNavigationAndMarkDirty()
-    await this.rebuildNavigatedContent(
+    const contentFiles = await this.contentState.refreshNavigationAndMarkDirty()
+    await this.contentState.rebuildNavigatedContent({
       contentFiles,
       relPath,
       ext,
       signature,
       result,
-    )
-  }
-
-  private async renderPageByRelPath(
-    relPath: string,
-    onlyIfDirty: boolean,
-  ): Promise<boolean> {
-    if (this.shouldSkipDirtyRender(relPath, onlyIfDirty)) return false
-    const inFlight = this.renderInFlight.get(relPath)
-    if (inFlight) return inFlight
-
-    const task = this.createRenderTask(relPath)
-    this.renderInFlight.set(relPath, task)
-    return task
-  }
-
-  private shouldSkipDirtyRender(relPath: string, onlyIfDirty: boolean) {
-    return onlyIfDirty && !this.dirtyPages.has(relPath)
-  }
-
-  private createRenderTask(relPath: string): Promise<boolean> {
-    return (async () => {
-      try {
-        return await this.runRenderByRelPath(relPath)
-      } catch (error) {
-        this.log.error('incremental render failed', {
-          relPath,
-          error: error instanceof Error ? error.message : String(error),
-        })
-        return false
-      } finally {
-        this.renderInFlight.delete(relPath)
-      }
-    })()
-  }
-
-  private async runRenderByRelPath(relPath: string): Promise<boolean> {
-    const signature = await this.readRelPathSignature(relPath)
-    if (!signature) {
-      return this.handleMissingRelPathSource(relPath)
-    }
-    return this.renderAndPersistRelPath(relPath, signature)
-  }
-
-  private async readRelPathSignature(relPath: string) {
-    const absPath = path.join(this.config.contentDir, relPath)
-    return readSignature(absPath)
-  }
-
-  private async handleMissingRelPathSource(relPath: string): Promise<boolean> {
-    const entry = this.manifest.content[relPath]
-    if (entry) {
-      await removeFile(entry.outPath)
-      delete this.manifest.content[relPath]
-      this.contentIndex.remove(relPath)
-      await this.persistManifest()
-    }
-    this.dirtyPages.delete(relPath)
-    return false
-  }
-
-  private async renderAndPersistRelPath(
-    relPath: string,
-    signature: FileSignature,
-  ): Promise<boolean> {
-    const ext = this.resolveContentExt(relPath)
-    const contentFile = toContentFile(this.config.contentDir, relPath, ext)
-    const page = await buildPage(this.context, contentFile)
-    this.setPageScriptEntrypoints(contentFile.relPath, page.scriptEntrypoints)
-    this.upsertContentManifestEntry(relPath, contentFile.ext, signature)
-    this.dirtyPages.delete(relPath)
-    await this.persistManifest()
-    return true
-  }
-
-  private resolveContentExt(relPath: string): string {
-    return this.manifest.content[relPath]?.ext ?? path.extname(relPath)
+    })
   }
 
   private createIncrementalResult(reason: string): IncrementalBuildResult {
@@ -556,70 +446,6 @@ class IncrementalRuntime {
     )
   }
 
-  private async refreshNavigationAndMarkDirty(): Promise<ContentFile[]> {
-    const contentFiles = await discoverContent(this.config.contentDir)
-    this.context.navigation = await buildNavigation(
-      this.config.contentDir,
-      contentFiles,
-      this.config.navigation,
-    )
-    this.markAllPagesDirty(contentFiles)
-    return contentFiles
-  }
-
-  private markAllPagesDirty(contentFiles: ContentFile[]) {
-    this.dirtyPages.clear()
-    for (const file of contentFiles) {
-      this.dirtyPages.add(file.relPath)
-    }
-  }
-
-  private async removeContentEntryForDeletedSource(
-    relPath: string,
-    result: IncrementalBuildResult,
-  ) {
-    const contentEntry = this.manifest.content[relPath]
-    if (!contentEntry) return
-    await removeFile(contentEntry.outPath)
-    delete this.manifest.content[relPath]
-    this.contentIndex.remove(relPath)
-    this.pageScriptEntrypoints.delete(this.normalizeRelPath(relPath))
-    result.deletedPages += 1
-  }
-
-  private async rebuildNavigatedContent(
-    contentFiles: ContentFile[],
-    relPath: string,
-    ext: string,
-    signature: FileSignature,
-    result: IncrementalBuildResult,
-  ) {
-    const contentFile =
-      contentFiles.find((file) => file.relPath === relPath) ??
-      toContentFile(this.config.contentDir, relPath, ext)
-    const page = await buildPage(this.context, contentFile)
-    this.setPageScriptEntrypoints(contentFile.relPath, page.scriptEntrypoints)
-    this.upsertContentManifestEntry(relPath, contentFile.ext, signature)
-    result.changedPages += 1
-    this.dirtyPages.delete(relPath)
-  }
-
-  private upsertContentManifestEntry(
-    relPath: string,
-    ext: string,
-    signature: FileSignature,
-  ) {
-    const contentFile = toContentFile(this.config.contentDir, relPath, ext)
-    const outPath = resolveOutPath(this.config.outDir, contentFile)
-    this.manifest.content[relPath] = {
-      relPath,
-      ext,
-      outPath,
-      ...signature,
-    }
-    this.contentIndex.set(relPath, outPath, ext)
-  }
-
   private async handleMissingSignatureChange(
     input: HandleMissingSignatureChangeInput,
   ) {
@@ -632,18 +458,18 @@ class IncrementalRuntime {
     if (contentEntry) {
       await removeFile(contentEntry.outPath)
       delete this.manifest.content[relPath]
-      this.contentIndex.remove(relPath)
-      this.pageScriptEntrypoints.delete(this.normalizeRelPath(relPath))
+      this.contentState.removeContentForDeletedRelPath(relPath)
+      this.scriptEntrypoints.removePage(relPath)
       result.deletedPages += 1
     }
     if (assetEntry) {
       await removeFile(assetEntry.outPath)
       delete this.manifest.assets[relPath]
-      this.removeTsEntrypoint(relPath)
+      this.scriptEntrypoints.removeTrackedEntrypoint(relPath)
       result.deletedAssets += 1
     }
     if (ext === '.ts') {
-      await this.rebuildTsDependents(relPath, result)
+      await this.scriptEntrypoints.rebuildDependents(relPath, result)
     }
     if (contentEntry || assetEntry) {
       await this.persistManifest()
@@ -662,15 +488,11 @@ class IncrementalRuntime {
 
     const contentFile = toContentFile(this.config.contentDir, relPath, ext)
     const page = await buildPage(this.context, contentFile)
-    this.setPageScriptEntrypoints(contentFile.relPath, page.scriptEntrypoints)
-    const outPath = resolveOutPath(this.config.outDir, contentFile)
-    this.manifest.content[relPath] = {
-      relPath,
-      ext,
-      outPath,
-      ...signature,
-    }
-    this.contentIndex.set(relPath, outPath, ext)
+    this.scriptEntrypoints.setPageEntrypoints(
+      contentFile.relPath,
+      page.scriptEntrypoints,
+    )
+    this.contentState.upsertContentManifestEntry(relPath, ext, signature)
     result.changedPages += 1
     await this.persistManifest()
   }
@@ -680,7 +502,7 @@ class IncrementalRuntime {
     if (signatureEqual(assetEntry, signature)) return
 
     if (ext === '.ts') {
-      await this.rebuildTsAssetGraph(relPath, result)
+      await this.scriptEntrypoints.rebuildAssetGraph(relPath, result)
       await this.persistManifest()
       return
     }
@@ -701,193 +523,6 @@ class IncrementalRuntime {
     }
     result.changedAssets += 1
     await this.persistManifest()
-  }
-
-  private async rebuildTsAssetGraph(
-    changedRelPath: string,
-    result: IncrementalBuildResult,
-  ) {
-    const entries = this.resolveImpactedTsEntrypoints(changedRelPath)
-    if (entries.size === 0) return
-    for (const entryRelPath of entries) {
-      await this.rebuildSingleTsEntrypoint(entryRelPath, result)
-    }
-  }
-
-  private async rebuildTsDependents(
-    changedRelPath: string,
-    result: IncrementalBuildResult,
-  ) {
-    const dependents = this.tsDependentsByRelPath.get(
-      this.normalizeRelPath(changedRelPath),
-    )
-    if (!dependents || dependents.size === 0) return
-    for (const entryRelPath of dependents) {
-      if (entryRelPath === changedRelPath) continue
-      await this.rebuildSingleTsEntrypoint(entryRelPath, result)
-    }
-  }
-
-  private resolveImpactedTsEntrypoints(changedRelPath: string) {
-    const normalized = this.normalizeRelPath(changedRelPath)
-    const impacted = new Set<string>()
-    if (this.tsEntryDependencies.has(normalized)) {
-      impacted.add(normalized)
-    }
-    const dependents = this.tsDependentsByRelPath.get(
-      this.normalizeRelPath(changedRelPath),
-    )
-    if (!dependents) return impacted
-    for (const entryRelPath of dependents) {
-      impacted.add(entryRelPath)
-    }
-    return impacted
-  }
-
-  private async rebuildSingleTsEntrypoint(
-    entryRelPath: string,
-    result: IncrementalBuildResult,
-  ) {
-    const ext = path.extname(entryRelPath).toLowerCase() || '.ts'
-    const assetFile = toAssetFile(this.config.contentDir, entryRelPath, ext)
-    const signature = await readSignature(assetFile.absPath)
-    if (!signature) {
-      const priorEntry = this.manifest.assets[entryRelPath]
-      if (priorEntry) {
-        await removeFile(priorEntry.outPath)
-        delete this.manifest.assets[entryRelPath]
-        result.deletedAssets += 1
-      }
-      this.removeTsEntrypoint(entryRelPath)
-      return
-    }
-
-    const assetCopy = await copyStaticAsset(
-      this.config.contentDir,
-      this.config.outDir,
-      assetFile,
-    )
-    if (!assetCopy.copied) return
-
-    this.manifest.assets[entryRelPath] = {
-      relPath: entryRelPath,
-      ext,
-      outPath: assetCopy.outPath,
-      ...signature,
-    }
-    result.changedAssets += 1
-    this.setTsEntrypointDependencies(
-      entryRelPath,
-      assetCopy.dependencyRelPaths.length > 0
-        ? assetCopy.dependencyRelPaths
-        : [entryRelPath],
-    )
-  }
-
-  private rebuildTsDependencyIndex(index: Record<string, string[]>) {
-    this.tsEntryDependencies.clear()
-    this.tsDependentsByRelPath.clear()
-    for (const [entryRelPath, deps] of Object.entries(index)) {
-      this.setTsEntrypointDependencies(entryRelPath, deps)
-    }
-  }
-
-  private setTsEntrypointDependencies(entryRelPath: string, deps: string[]) {
-    this.removeTsEntrypoint(entryRelPath)
-    const nextDeps = new Set<string>(
-      (deps.length > 0 ? deps : [entryRelPath]).map((depRelPath) =>
-        this.normalizeRelPath(depRelPath),
-      ),
-    )
-    this.tsEntryDependencies.set(entryRelPath, nextDeps)
-    for (const depRelPath of nextDeps) {
-      const dependents = this.tsDependentsByRelPath.get(depRelPath) ?? new Set()
-      dependents.add(entryRelPath)
-      this.tsDependentsByRelPath.set(depRelPath, dependents)
-    }
-  }
-
-  private removeTsEntrypoint(entryRelPath: string) {
-    const prevDeps = this.tsEntryDependencies.get(entryRelPath)
-    if (!prevDeps) return
-    for (const depRelPath of prevDeps) {
-      const dependents = this.tsDependentsByRelPath.get(depRelPath)
-      if (!dependents) continue
-      dependents.delete(entryRelPath)
-      if (dependents.size === 0) {
-        this.tsDependentsByRelPath.delete(depRelPath)
-      }
-    }
-    this.tsEntryDependencies.delete(entryRelPath)
-  }
-
-  private async syncScriptEntrypointsState(input: {
-    result: IncrementalBuildResult
-    persist: boolean
-    rebuildAll: boolean
-  }): Promise<StaticAssetFile[]> {
-    const { result, persist, rebuildAll } = input
-    const nextEntries = this.collectDesiredScriptEntrypoints()
-    const currentEntries = new Set(this.tsEntryDependencies.keys())
-
-    for (const entryRelPath of currentEntries) {
-      if (nextEntries.has(entryRelPath)) continue
-      const priorEntry = this.manifest.assets[entryRelPath]
-      if (priorEntry) {
-        await removeFile(priorEntry.outPath)
-        delete this.manifest.assets[entryRelPath]
-        result.deletedAssets += 1
-      }
-      this.removeTsEntrypoint(entryRelPath)
-    }
-
-    for (const entryRelPath of nextEntries) {
-      if (!rebuildAll && currentEntries.has(entryRelPath)) continue
-      await this.rebuildSingleTsEntrypoint(entryRelPath, result)
-    }
-
-    if (persist && (result.changedAssets > 0 || result.deletedAssets > 0)) {
-      await this.persistManifest()
-    }
-    return this.getScriptEntrypointAssetFiles()
-  }
-
-  private collectDesiredScriptEntrypoints() {
-    const entries = new Set<string>()
-    for (const scriptEntrypoints of this.pageScriptEntrypoints.values()) {
-      for (const relPath of scriptEntrypoints) {
-        entries.add(this.normalizeRelPath(relPath))
-      }
-    }
-    return entries
-  }
-
-  private getScriptEntrypointAssetFiles(): StaticAssetFile[] {
-    const files: StaticAssetFile[] = []
-    for (const entryRelPath of this.tsEntryDependencies.keys()) {
-      files.push(
-        toAssetFile(
-          this.config.contentDir,
-          entryRelPath,
-          path.extname(entryRelPath),
-        ),
-      )
-    }
-    return files
-  }
-
-  private setPageScriptEntrypoints(
-    pageRelPath: string,
-    scriptEntrypoints: string[],
-  ) {
-    this.pageScriptEntrypoints.set(
-      this.normalizeRelPath(pageRelPath),
-      new Set(scriptEntrypoints.map((entry) => this.normalizeRelPath(entry))),
-    )
-  }
-
-  private normalizeRelPath(relPath: string) {
-    return relPath.replaceAll('\\', '/')
   }
 
   private async persistManifest() {
