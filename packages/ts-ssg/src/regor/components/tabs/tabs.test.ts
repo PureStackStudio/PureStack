@@ -38,7 +38,6 @@ describe('Tabs rendering', () => {
     )
     cleanup()
 
-    expect(html).toContain('tabs--underline')
     expect(html).toContain('Run npm install')
     expect(html).toContain('<h2>Quickstart</h2>')
     expect(html).toContain('<strong>Import buildSite</strong>')

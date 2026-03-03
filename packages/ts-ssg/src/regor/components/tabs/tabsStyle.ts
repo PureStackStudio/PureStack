@@ -11,7 +11,6 @@ export function registerTabsStyles() {
     registerTabsShellStyles(theme, palette, options)
     registerTabsControlStyles(theme, palette, options)
     registerTabsPanelStyles(theme, palette, options)
-    registerTabsVariantStyles(theme, palette, options)
     registerTabsResponsiveStyles(theme)
   })
 }
@@ -322,15 +321,6 @@ function registerTabsPanelStyles(
     .minWidth('0')
     .fontSize('0.95rem')
     .lineHeight('1.7')
-}
-
-function registerTabsVariantStyles(
-  _theme: ThemeMode,
-  _palette: ThemePalette,
-  _options: ThemeOptions,
-) {
-  // Variant currently shares the same button-style visuals for both
-  // static and enhanced controls to avoid appearance drift.
 }
 
 function registerTabsResponsiveStyles(theme: ThemeMode) {

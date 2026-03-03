@@ -10,12 +10,10 @@ class TabsScope {
 interface TabsProps {
   id?: string
   ariaLabel?: string
-  variant?: string
 }
 
 interface TabsContext extends TabsScope {
   ariaLabel: string
-  variantClass: string
 }
 
 interface TabsHeaderContext {}
@@ -40,7 +38,7 @@ interface TabPaneContext {
   isDisabled: boolean
 }
 
-const tabsTemplate = html`<section class="tabs" :class="variantClass">
+const tabsTemplate = html`<section class="tabs">
   <slot name="header"></slot>
   <div class="tabs__list" role="tablist" :aria-label="ariaLabel">
     <slot></slot>
@@ -81,7 +79,7 @@ const tabPaneTemplate = html`<div class="tabs__item">
 
 function createTabsComponent() {
   return defineComponent<TabsContext>(tabsTemplate, {
-    props: ['id', 'ariaLabel', 'variant'],
+    props: ['id', 'ariaLabel'],
     context: (head) => {
       markTabsRuntimeEmbed(head)
       return resolveTabsContext(head.props)
@@ -114,7 +112,6 @@ function resolveTabsContext(props: TabsProps): TabsContext {
   return Object.assign(new TabsScope(), {
     groupName,
     ariaLabel: resolveAriaLabel(props.ariaLabel),
-    variantClass: resolveVariantClass(props.variant),
   })
 }
 
@@ -143,12 +140,6 @@ function resolveAriaLabel(value: unknown) {
   const ariaLabel = resolveText(value)
   if (ariaLabel) return ariaLabel
   return 'Tabs'
-}
-
-function resolveVariantClass(value: unknown) {
-  const normalized = resolveText(value).toLowerCase()
-  if (normalized === 'underline') return 'tabs--underline'
-  return 'tabs--pills'
 }
 
 function resolveTabsId(value: unknown) {
