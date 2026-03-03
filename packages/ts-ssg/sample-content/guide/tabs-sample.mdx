@@ -12,21 +12,22 @@ sidebar:
 
 `Tabs`, `TabsHeader`, and `TabPane` are static-friendly components for showing grouped content.  
 Each `TabPane` accepts normal slotted MDX content, including fenced code blocks.
+Tab buttons can optionally show icons via the `icon` prop.
 
 ## 1. Installation walkthrough with code tabs
 
 <Tabs id="install-flow" variant="underline">
-  <TabPane id="npm" label="npm" active="true">
+  <TabPane id="npm" label="npm" icon="iconoir:code" active="true">
     ```bash
     npm install @purestack/ts-ssg
     ```
   </TabPane>
-  <TabPane id="yarn" label="yarn">
+  <TabPane id="yarn" label="yarn" icon="iconoir:check">
     ```bash
     yarn add @purestack/ts-ssg
     ```
   </TabPane>
-  <TabPane id="pnpm" label="pnpm">
+  <TabPane id="pnpm" label="pnpm" icon="iconoir:pin">
     ```bash
     pnpm add @purestack/ts-ssg
     ```
@@ -116,7 +117,7 @@ Each `TabPane` accepts normal slotted MDX content, including fenced code blocks.
 ## 2. Build configuration examples
 
 <Tabs id="config-samples">
-  <TabPane id="programmatic" label="Programmatic API" active="true">
+  <TabPane id="programmatic" label="Programmatic API" icon="iconoir:code" active="true">
     ```ts
     import path from 'node:path'
     import { buildSite } from '@purestack/ts-ssg'
@@ -129,7 +130,7 @@ Each `TabPane` accepts normal slotted MDX content, including fenced code blocks.
     })
     ```
   </TabPane>
-  <TabPane id="json-config" label="siteConfig.json">
+  <TabPane id="json-config" label="siteConfig.json" icon="iconoir:check">
     ```json
     {
       "siteTitle": "Acme Docs",
@@ -143,7 +144,7 @@ Each `TabPane` accepts normal slotted MDX content, including fenced code blocks.
     }
     ```
   </TabPane>
-  <TabPane id="cli" label="CLI">
+  <TabPane id="cli" label="CLI" icon="iconoir:pin">
     ```bash
     yarn tsx packages/ts-ssg/src/index.ts serve \
       --content ./packages/ts-ssg/sample-content \
@@ -155,20 +156,20 @@ Each `TabPane` accepts normal slotted MDX content, including fenced code blocks.
 ## 3. API integration sample with a disabled tab
 
 <Tabs id="api-samples" variant="underline">
-  <TabPane id="fetch" label="fetch" active="true">
+  <TabPane id="fetch" label="fetch" icon="iconoir:code" active="true">
     ```ts
     const response = await fetch('/api/rates?base=EUR')
     const data = await response.json()
     console.log(data)
     ```
   </TabPane>
-  <TabPane id="curl" label="curl">
+  <TabPane id="curl" label="curl" icon="iconoir:check">
     ```bash
     curl -X GET "https://api.example.com/rates?base=EUR" \
       -H "accept: application/json"
     ```
   </TabPane>
-  <TabPane id="sdk" label="SDK (Soon)" disabled="true">
+  <TabPane id="sdk" label="SDK (Soon)" icon="iconoir:headset-help" disabled="true">
     SDK helper package is being prepared.
   </TabPane>
 </Tabs>

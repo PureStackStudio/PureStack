@@ -118,7 +118,9 @@ function registerTabsShellStyles(
 
   styleBuilder
     .select('.tabs__overflow-option', theme)
-    .display('block')
+    .display('flex')
+    .alignItems('center')
+    .gap('0.5em')
     .width('100%')
     .padding('8px 10px')
     .border('none')
@@ -130,6 +132,21 @@ function registerTabsShellStyles(
     .fontWeight('600')
     .whiteSpace('nowrap')
     .cursor('pointer')
+
+  styleBuilder
+    .select('.tabs__overflow-option-icon', theme)
+    .display('inline-flex')
+    .alignItems('center')
+    .justifyContent('center')
+    .width('1.7em')
+    .height('1.7em')
+    .flexShrink('0')
+
+  styleBuilder
+    .select('.tabs__overflow-option-icon svg', theme)
+    .display('block')
+    .width('100%')
+    .height('100%')
 
   styleBuilder
     .select('.tabs__overflow-option:hover', theme)
@@ -204,11 +221,29 @@ function registerTabsControlStyles(
     .fontSize('0.88rem')
     .fontWeight('700')
     .lineHeight('1.2')
+    .gap('0.5em')
     .textAlign('center')
     .cursor('pointer')
     .transition(
       'background 160ms ease, color 160ms ease, border-color 160ms ease',
     )
+
+  styleBuilder
+    .select('.tabs__tab-icon', theme)
+    .display('inline-flex')
+    .alignItems('center')
+    .justifyContent('center')
+    .width('1.7em')
+    .height('1.7em')
+    .flexShrink('0')
+
+  styleBuilder
+    .select('.tabs__tab-icon svg', theme)
+    .display('block')
+    .width('100%')
+    .height('100%')
+
+  styleBuilder.select('.tabs__tab-label', theme).display('inline-block')
 
   styleBuilder
     .select('.tabs__tab:hover', theme)
@@ -257,9 +292,26 @@ function registerTabsControlStyles(
     .fontSize('0.88rem')
     .fontWeight('700')
     .lineHeight('1.2')
+    .gap('0.5em')
     .textAlign('center')
     .cursor('pointer')
     .whiteSpace('nowrap')
+
+  styleBuilder
+    .select('.tabs__tab-button-icon', theme)
+    .display('inline-flex')
+    .alignItems('center')
+    .justifyContent('center')
+    .width('1.7em')
+    .height('1.7em')
+    .flexShrink('0')
+
+  styleBuilder
+    .select('.tabs__tab-button-icon svg', theme)
+    .width('100%')
+    .height('100%')
+
+  styleBuilder.select('.tabs__tab-button-label', theme).display('inline-block')
 
   styleBuilder
     .select('.tabs__tab-button:hover', theme)

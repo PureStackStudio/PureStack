@@ -106,4 +106,35 @@ describe('Tabs rendering', () => {
     expect(html).toContain('name="manual-group"')
     expect(html).toContain('id="manual-group__control-a"')
   })
+
+  it('renders optional tab icons', () => {
+    const cleanup = ensureDomGlobals()
+    const components = createTabsComponents()
+    const site = resolveSiteConfig()
+    const pageInfo = {
+      relPath: 'tabs.mdx',
+      urlPath: '/tabs/',
+      frontmatter: normalizeFrontmatter({}),
+    }
+    const html = renderApp(
+      `<Tabs id="icon-tabs">
+        <TabPane id="install" label="Install" icon="iconoir:code">Run npm install</TabPane>
+      </Tabs>`,
+      {
+        components,
+        context: {
+          site,
+          theme: site.style.theme,
+          pageInfo,
+          recordScriptEntrypoint: () => {},
+          recordRuntimeEmbed: () => {},
+        },
+      },
+    )
+    cleanup()
+
+    expect(html).toContain('class="tabs__tab-icon"')
+    expect(html).toContain('<span class="tabs__tab-icon"><svg')
+    expect(html).toContain('<span class="tabs__tab-label">Install</span>')
+  })
 })

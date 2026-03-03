@@ -1,3 +1,4 @@
+import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { type ComponentHead, defineComponent, html } from 'regor'
 
 import { resolveTsSsgContext } from '../../resolveTsSsgContext'
@@ -23,6 +24,7 @@ interface TabsHeaderContext {}
 interface TabPaneProps {
   id?: string
   label?: string
+  icon?: string
   active?: boolean
   disabled?: boolean
   group?: string
@@ -33,6 +35,8 @@ interface TabPaneContext {
   tabId: string
   panelId: string
   label: string
+  iconSvg: string
+  hasIcon: boolean
   groupName: string
   isActive: boolean
   isDisabled: boolean
@@ -67,7 +71,8 @@ const tabPaneTemplate = html`<div class="tabs__item">
     :aria-controls="panelId"
     :aria-selected="isActive ? 'true' : null"
     :aria-disabled="isDisabled ? 'true' : null"
-    >{{ label }}</label
+    ><span class="tabs__tab-icon" r-if="hasIcon" r-html="iconSvg"></span
+    ><span class="tabs__tab-label">{{ label }}</span></label
   >
   <section class="tabs__panel" role="tabpanel" :id="panelId" :aria-labelledby="tabId">
     <div class="tabs__panel-body">
@@ -92,7 +97,7 @@ function createTabsHeaderComponent() {
 
 function createTabPaneComponent() {
   return defineComponent<TabPaneContext>(tabPaneTemplate, {
-    props: ['id', 'label', 'active', 'disabled', 'group'],
+    props: ['id', 'label', 'icon', 'active', 'disabled', 'group'],
     context: (head) => resolveTabPaneContext(head),
   })
 }
@@ -119,12 +124,15 @@ function resolveTabPaneContext(
   head: ComponentHead<TabPaneProps>,
 ): TabPaneContext {
   const label = resolveText(head.props.label) || 'Tab'
+  const icon = resolveText(head.props.icon)
   const fromParent = head.findContext(TabsScope)
   const groupName =
     resolveText(head.props.group) || fromParent?.groupName || 'tabs-default'
   const localId = resolveTabLocalId(head.props.id, label)
   return {
     label,
+    iconSvg: icon ? getSvgIcon(icon) : '',
+    hasIcon: icon.length > 0,
     inputId: `${groupName}__control-${localId}`,
     tabId: `${groupName}__tab-${localId}`,
     panelId: `${groupName}__panel-${localId}`,
