@@ -1,0 +1,271 @@
+---
+title: Tabs Component Samples
+description: Slotted Tabs and TabPane examples with practical code snippets.
+layout:
+  showToc: true
+  fullWidth: true
+sidebar:
+  order: 7
+---
+
+# Tabs Component Samples
+
+`Tabs` and `TabPane` are static-friendly components for showing grouped content.  
+Each `TabPane` accepts normal slotted MDX content, including fenced code blocks.
+
+## 1. Installation walkthrough with code tabs
+
+<Tabs id="install-flow" title="Install @purestack/ts-ssg" variant="underline">
+  <TabPane id="npm" label="npm" active="true">
+    ```bash
+    npm install @purestack/ts-ssg
+    ```
+  </TabPane>
+  <TabPane id="yarn" label="yarn">
+    ```bash
+    yarn add @purestack/ts-ssg
+    ```
+  </TabPane>
+  <TabPane id="pnpm" label="pnpm">
+    ```bash
+    pnpm add @purestack/ts-ssg
+    ```
+  </TabPane>
+</Tabs>
+
+## 6. Stress test with 15 tabs and large titles
+
+<Tabs id="fifteen-tabs-large-labels" title="15 Tab Large Label Overflow Test" variant="underline">
+  <TabPane id="large-tab-1" label="Installation and Environment Bootstrap" active="true">
+    ```ts
+    console.log('Large title tab 1 content')
+    ```
+  </TabPane>
+  <TabPane id="large-tab-2" label="Project Configuration and Defaults">
+    ```ts
+    console.log('Large title tab 2 content')
+    ```
+  </TabPane>
+  <TabPane id="large-tab-3" label="Routing and Page Discovery Strategy">
+    ```ts
+    console.log('Large title tab 3 content')
+    ```
+  </TabPane>
+  <TabPane id="large-tab-4" label="Markdown and MDX Rendering Pipeline">
+    ```ts
+    console.log('Large title tab 4 content')
+    ```
+  </TabPane>
+  <TabPane id="large-tab-5" label="Theme Tokens and Visual Customization">
+    ```ts
+    console.log('Large title tab 5 content')
+    ```
+  </TabPane>
+  <TabPane id="large-tab-6" label="Navigation, Sidebar, and TOC Layout">
+    ```ts
+    console.log('Large title tab 6 content')
+    ```
+  </TabPane>
+  <TabPane id="large-tab-7" label="Search Integration and Index Generation">
+    ```ts
+    console.log('Large title tab 7 content')
+    ```
+  </TabPane>
+  <TabPane id="large-tab-8" label="Asset Processing and File Hashing">
+    ```ts
+    console.log('Large title tab 8 content')
+    ```
+  </TabPane>
+  <TabPane id="large-tab-9" label="Code Blocks, Copy Buttons, and Highlighting">
+    ```ts
+    console.log('Large title tab 9 content')
+    ```
+  </TabPane>
+  <TabPane id="large-tab-10" label="Client Scripts and Progressive Enhancement">
+    ```ts
+    console.log('Large title tab 10 content')
+    ```
+  </TabPane>
+  <TabPane id="large-tab-11" label="Build Caching and Incremental Updates">
+    ```ts
+    console.log('Large title tab 11 content')
+    ```
+  </TabPane>
+  <TabPane id="large-tab-12" label="Static Export and Deployment Targets">
+    ```ts
+    console.log('Large title tab 12 content')
+    ```
+  </TabPane>
+  <TabPane id="large-tab-13" label="Internationalization and Locale Strategy">
+    ```ts
+    console.log('Large title tab 13 content')
+    ```
+  </TabPane>
+  <TabPane id="large-tab-14" label="Testing, Validation, and Diagnostics">
+    ```ts
+    console.log('Large title tab 14 content')
+    ```
+  </TabPane>
+  <TabPane id="large-tab-15" label="Performance Tuning and Runtime Observability">
+    ```ts
+    console.log('Large title tab 15 content')
+    ```
+  </TabPane>
+</Tabs>
+
+## 2. Build configuration examples
+
+<Tabs id="config-samples" title="Build Config Examples">
+  <TabPane id="programmatic" label="Programmatic API" active="true">
+    ```ts
+    import path from 'node:path'
+    import { buildSite } from '@purestack/ts-ssg'
+
+    await buildSite({
+      rootDir: process.cwd(),
+      contentDir: path.join(process.cwd(), 'content'),
+      outDir: path.join(process.cwd(), 'dist', 'site'),
+      siteTitle: 'Acme Docs',
+    })
+    ```
+  </TabPane>
+  <TabPane id="json-config" label="siteConfig.json">
+    ```json
+    {
+      "siteTitle": "Acme Docs",
+      "outDir": "dist/site",
+      "style": {
+        "themes": ["light", "dark"]
+      },
+      "navigation": {
+        "mode": "auto"
+      }
+    }
+    ```
+  </TabPane>
+  <TabPane id="cli" label="CLI">
+    ```bash
+    yarn tsx packages/ts-ssg/src/index.ts serve \
+      --content ./packages/ts-ssg/sample-content \
+      --port 4173
+    ```
+  </TabPane>
+</Tabs>
+
+## 3. API integration sample with a disabled tab
+
+<Tabs id="api-samples" title="API Examples" variant="underline">
+  <TabPane id="fetch" label="fetch" active="true">
+    ```ts
+    const response = await fetch('/api/rates?base=EUR')
+    const data = await response.json()
+    console.log(data)
+    ```
+  </TabPane>
+  <TabPane id="curl" label="curl">
+    ```bash
+    curl -X GET "https://api.example.com/rates?base=EUR" \
+      -H "accept: application/json"
+    ```
+  </TabPane>
+  <TabPane id="sdk" label="SDK (Soon)" disabled="true">
+    SDK helper package is being prepared.
+  </TabPane>
+</Tabs>
+
+## 4. Minimal markup reference
+
+~~~html
+<Tabs id="quickstart" title="Quickstart" variant="underline">
+  <TabPane id="install" label="Install" active="true">
+    ```bash
+    npm i @purestack/ts-ssg
+    ```
+  </TabPane>
+  <TabPane id="usage" label="Usage">
+    ```ts
+    import { buildSite } from '@purestack/ts-ssg'
+    ```
+  </TabPane>
+</Tabs>
+~~~
+
+## 5. Stress test with 15 tabs
+
+<Tabs id="fifteen-tabs" title="15 Tab Overflow Test" variant="underline">
+  <TabPane id="tab-1" label="Tab 1" active="true">
+    ```ts
+    console.log('Tab 1 content')
+    ```
+  </TabPane>
+  <TabPane id="tab-2" label="Tab 2">
+    ```ts
+    console.log('Tab 2 content')
+    ```
+  </TabPane>
+  <TabPane id="tab-3" label="Tab 3">
+    ```ts
+    console.log('Tab 3 content')
+    ```
+  </TabPane>
+  <TabPane id="tab-4" label="Tab 4">
+    ```ts
+    console.log('Tab 4 content')
+    ```
+  </TabPane>
+  <TabPane id="tab-5" label="Tab 5">
+    ```ts
+    console.log('Tab 5 content')
+    ```
+  </TabPane>
+  <TabPane id="tab-6" label="Tab 6">
+    ```ts
+    console.log('Tab 6 content')
+    ```
+  </TabPane>
+  <TabPane id="tab-7" label="Tab 7">
+    ```ts
+    console.log('Tab 7 content')
+    ```
+  </TabPane>
+  <TabPane id="tab-8" label="Tab 8">
+    ```ts
+    console.log('Tab 8 content')
+    ```
+  </TabPane>
+  <TabPane id="tab-9" label="Tab 9">
+    ```ts
+    console.log('Tab 9 content')
+    ```
+  </TabPane>
+  <TabPane id="tab-10" label="Tab 10">
+    ```ts
+    console.log('Tab 10 content')
+    ```
+  </TabPane>
+  <TabPane id="tab-11" label="Tab 11">
+    ```ts
+    console.log('Tab 11 content')
+    ```
+  </TabPane>
+  <TabPane id="tab-12" label="Tab 12">
+    ```ts
+    console.log('Tab 12 content')
+    ```
+  </TabPane>
+  <TabPane id="tab-13" label="Tab 13">
+    ```ts
+    console.log('Tab 13 content')
+    ```
+  </TabPane>
+  <TabPane id="tab-14" label="Tab 14">
+    ```ts
+    console.log('Tab 14 content')
+    ```
+  </TabPane>
+  <TabPane id="tab-15" label="Tab 15">
+    ```ts
+    console.log('Tab 15 content')
+    ```
+  </TabPane>
+</Tabs>

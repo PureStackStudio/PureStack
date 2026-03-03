@@ -138,7 +138,11 @@ export class IncrementalContentState {
 
   async rebuildSingleContent(input: RebuildSingleContentInput) {
     const { relPath, ext, signature, result } = input
-    const contentFile = toContentFile(this.input.config.contentDir, relPath, ext)
+    const contentFile = toContentFile(
+      this.input.config.contentDir,
+      relPath,
+      ext,
+    )
     const page = await buildPage(this.input.context, contentFile)
     this.input.onPageBuilt(contentFile.relPath, page.scriptEntrypoints)
     this.upsertContentManifestEntry(relPath, contentFile.ext, signature)

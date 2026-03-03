@@ -1,0 +1,60 @@
+import { describe, expect, it } from 'vitest'
+
+import { ensureDomGlobals } from '../../../minidom/createDom'
+import { renderApp } from '../../renderApp'
+import { createTabsComponents } from './tabs'
+
+describe('Tabs rendering', () => {
+  it('renders slotted tab content and active tab state', () => {
+    const cleanup = ensureDomGlobals()
+    const components = createTabsComponents()
+    const html = renderApp(
+      `<Tabs id="quickstart" title="Quickstart" variant="underline">
+        <TabPane id="install" label="Install">Run npm install</TabPane>
+        <TabPane id="usage" label="Usage" active="true">
+          <strong>Import buildSite</strong>
+        </TabPane>
+      </Tabs>`,
+      { components },
+    )
+    cleanup()
+
+    expect(html).toContain('tabs--underline')
+    expect(html).toContain('Run npm install')
+    expect(html).toContain('<strong>Import buildSite</strong>')
+    expect(html).toContain('name="tabs-quickstart"')
+    expect(html).toContain('aria-selected="true"')
+  })
+
+  it('inherits tab group from parent tabs and marks disabled panes', () => {
+    const cleanup = ensureDomGlobals()
+    const components = createTabsComponents()
+    const html = renderApp(
+      `<Tabs id="sdk-tabs">
+        <TabPane id="blocked" label="Blocked" disabled="true">blocked</TabPane>
+        <TabPane id="ready" label="Ready">ready</TabPane>
+      </Tabs>`,
+      { components },
+    )
+    cleanup()
+
+    expect(html).toContain('name="tabs-sdk-tabs"')
+    expect(html).toContain('aria-disabled="true"')
+    expect(html).toContain('>Ready<')
+  })
+
+  it('supports explicit group override on tab panes', () => {
+    const cleanup = ensureDomGlobals()
+    const components = createTabsComponents()
+    const html = renderApp(
+      `<Tabs id="outer">
+        <TabPane id="a" group="manual-group" label="Manual">content</TabPane>
+      </Tabs>`,
+      { components },
+    )
+    cleanup()
+
+    expect(html).toContain('name="manual-group"')
+    expect(html).toContain('id="manual-group__control-a"')
+  })
+})

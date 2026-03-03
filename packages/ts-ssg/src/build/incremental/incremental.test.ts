@@ -237,7 +237,9 @@ describe('incremental builder', () => {
       expect(await fileExists(bundlePath)).toBe(true)
 
       await fs.rm(path.join(contentDir, 'hosts.mdx'))
-      const result = await builder.applyChange(path.join(contentDir, 'hosts.mdx'))
+      const result = await builder.applyChange(
+        path.join(contentDir, 'hosts.mdx'),
+      )
       expect(result.deletedPages).toBe(1)
 
       const manifest = await readManifest(outDir)

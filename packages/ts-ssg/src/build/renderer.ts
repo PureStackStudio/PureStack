@@ -13,6 +13,7 @@ import { buildNavMenuScript } from '../templates/buildNavMenuScript'
 import { buildNavTransitionReadyScript } from '../templates/buildNavTransitionReadyScript'
 import { buildPagefindSearchScript } from '../templates/buildPagefindSearchScript'
 import { buildPageTocScript } from '../templates/buildPageTocScript'
+import { buildTabsScript } from '../templates/buildTabsScript'
 import { buildThemeSwitchScript } from '../templates/buildThemeSwitchScript'
 import {
   type PageInfo,
@@ -47,6 +48,7 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
   appendNavTransitionReadyScript(head)
   appendNavMenuScript(head)
   appendCodeCopyScript(head)
+  appendTabsScript(head)
   appendPagefindSearchScript(head)
   const { pageTemplate, templateName } = resolvePageTemplate(
     template,
@@ -158,6 +160,11 @@ function appendTocScript(
 
 function appendCodeCopyScript(head: ReturnType<typeof getHead>) {
   const script = buildCodeCopyScript()
+  head.push(h('script').raw(script))
+}
+
+function appendTabsScript(head: ReturnType<typeof getHead>) {
+  const script = buildTabsScript()
   head.push(h('script').raw(script))
 }
 

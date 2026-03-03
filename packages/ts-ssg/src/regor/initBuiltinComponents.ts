@@ -18,6 +18,7 @@ import { createPageTocComponents } from './components/pageToc/pageToc'
 import { createPricingComponents } from './components/pricing/pricing'
 import { createScriptComponents } from './components/script/script'
 import { createSearchComponents } from './components/searchBox/searchBox'
+import { createTabsComponents } from './components/tabs/tabs'
 import { createThemeSwitcherComponents } from './components/themeSwitcher/themeSwitcher'
 import { createTopBarComponents } from './components/topBar/topBar'
 import { componentRegistry } from './registry'
@@ -52,4 +53,5 @@ export function initBuiltinComponents(
   componentRegistry.registerMany(createPricingComponents())
   componentRegistry.registerMany(createScriptComponents())
   componentRegistry.registerMany(createSearchComponents())
+  componentRegistry.registerMany(createTabsComponents())
 }
