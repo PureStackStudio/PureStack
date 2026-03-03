@@ -281,6 +281,9 @@ function registerTabsControlStyles(
     .textAlign('center')
     .cursor('pointer')
     .whiteSpace('nowrap')
+    .transition(
+      'background 160ms ease, color 160ms ease, border-color 160ms ease',
+    )
 
   styleBuilder
     .select('.tabs__tab-button:hover', theme)
@@ -298,6 +301,11 @@ function registerTabsControlStyles(
     .background(palette.action.accent.background)
     .color(palette.action.accent.text)
     .boxShadow(palette.effect.interactiveShadow)
+
+  styleBuilder
+    .select('.tabs__tab-button:disabled', theme)
+    .opacity('0.45')
+    .cursor('not-allowed')
 
   styleBuilder.select('.tabs__tab-button--hidden', theme).display('none')
 }
@@ -351,11 +359,24 @@ function registerTabsVariantStyles(
     .background('transparent')
 
   styleBuilder
-    .select('.tabs--underline .tabs__tab:hover', theme)
+    .select('.tabs--underline .tabs__tab-button', theme)
+    .border('none')
+    .borderBottom(`2px solid ${palette.border.subtle}`)
+    .borderRadius(`${options.radii.sm} ${options.radii.sm} 0 0`)
+    .background('transparent')
+
+  styleBuilder
+    .select('.tabs--underline .tabs__tab:hover, .tabs--underline .tabs__tab-button:hover', theme)
     .background(palette.background.accentMuted)
 
   styleBuilder
     .select('.tabs--underline .tabs__control:checked + .tabs__tab', theme)
+    .borderBottomColor(palette.border.accent)
+    .background(palette.background.feature)
+    .color(palette.text.accent)
+
+  styleBuilder
+    .select('.tabs--underline .tabs__tab-button--active', theme)
     .borderBottomColor(palette.border.accent)
     .background(palette.background.feature)
     .color(palette.text.accent)
