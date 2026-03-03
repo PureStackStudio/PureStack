@@ -34,6 +34,7 @@ describe('Consent component rendering', () => {
         theme: site.style.theme,
         pageInfo,
         recordScriptEntrypoint: () => {},
+        recordRuntimeEmbed: () => {},
       },
     })
     cleanup()

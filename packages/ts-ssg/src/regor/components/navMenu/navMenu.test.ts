@@ -30,6 +30,7 @@ describe('NavMenu rendering', () => {
           theme: site.style.theme,
           pageInfo,
           recordScriptEntrypoint: () => {},
+          recordRuntimeEmbed: () => {},
         },
       },
     )

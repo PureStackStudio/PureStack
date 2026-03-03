@@ -61,4 +61,25 @@ describe('frontmatter', () => {
     expect(parsed.frontmatter.layout.showToc).toBe(true)
     expect(parsed.body).toContain('# Heading')
   })
+
+  it('normalizes embed.tabs as head/body', () => {
+    const head = normalizeFrontmatter({ embed: { tabs: 'head' } })
+    const body = normalizeFrontmatter({ embed: { tabs: 'body' } })
+
+    expect(head.embed?.tabs).toBe('head')
+    expect(body.embed?.tabs).toBe('body')
+  })
+
+  it('throws for invalid embed.tabs value', () => {
+    expect(() =>
+      normalizeFrontmatter(
+        {
+          embed: { tabs: true },
+        },
+        'index.mdx',
+      ),
+    ).toThrow(
+      'Invalid frontmatter.embed.tabs in index.mdx: expected "head" or "body"',
+    )
+  })
 })

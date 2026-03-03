@@ -27,6 +27,7 @@ describe('ContactForm rendering', () => {
           theme: site.style.theme,
           pageInfo,
           recordScriptEntrypoint: () => {},
+          recordRuntimeEmbed: () => {},
         },
       },
     )

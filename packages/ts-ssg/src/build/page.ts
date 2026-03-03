@@ -318,6 +318,7 @@ function renderPageApp(
         if (path.extname(sourceRelPath).toLowerCase() !== '.ts') return
         scriptEntrypoints.add(sourceRelPath.replaceAll('\\', '/'))
       },
+      recordRuntimeEmbed: () => {},
     },
   })
 }

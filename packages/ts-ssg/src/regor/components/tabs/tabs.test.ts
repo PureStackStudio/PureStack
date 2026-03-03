@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
+import { resolveSiteConfig } from '../../../config/config'
+import { normalizeFrontmatter } from '../../../frontmatter/frontmatter'
 import { ensureDomGlobals } from '../../../minidom/createDom'
 import { renderApp } from '../../renderApp'
 import { createTabsComponents } from './tabs'
@@ -8,6 +10,12 @@ describe('Tabs rendering', () => {
   it('renders slotted tab content and active tab state', () => {
     const cleanup = ensureDomGlobals()
     const components = createTabsComponents()
+    const site = resolveSiteConfig()
+    const pageInfo = {
+      relPath: 'tabs.mdx',
+      urlPath: '/tabs/',
+      frontmatter: normalizeFrontmatter({}),
+    }
     const html = renderApp(
       `<Tabs id="quickstart" variant="underline">
         <TabsHeader><h2>Quickstart</h2></TabsHeader>
@@ -16,7 +24,16 @@ describe('Tabs rendering', () => {
           <strong>Import buildSite</strong>
         </TabPane>
       </Tabs>`,
-      { components },
+      {
+        components,
+        context: {
+          site,
+          theme: site.style.theme,
+          pageInfo,
+          recordScriptEntrypoint: () => {},
+          recordRuntimeEmbed: () => {},
+        },
+      },
     )
     cleanup()
 
@@ -31,12 +48,27 @@ describe('Tabs rendering', () => {
   it('inherits tab group from parent tabs and marks disabled panes', () => {
     const cleanup = ensureDomGlobals()
     const components = createTabsComponents()
+    const site = resolveSiteConfig()
+    const pageInfo = {
+      relPath: 'tabs.mdx',
+      urlPath: '/tabs/',
+      frontmatter: normalizeFrontmatter({}),
+    }
     const html = renderApp(
       `<Tabs id="sdk-tabs">
         <TabPane id="blocked" label="Blocked" disabled="true">blocked</TabPane>
         <TabPane id="ready" label="Ready">ready</TabPane>
       </Tabs>`,
-      { components },
+      {
+        components,
+        context: {
+          site,
+          theme: site.style.theme,
+          pageInfo,
+          recordScriptEntrypoint: () => {},
+          recordRuntimeEmbed: () => {},
+        },
+      },
     )
     cleanup()
 
@@ -48,11 +80,26 @@ describe('Tabs rendering', () => {
   it('supports explicit group override on tab panes', () => {
     const cleanup = ensureDomGlobals()
     const components = createTabsComponents()
+    const site = resolveSiteConfig()
+    const pageInfo = {
+      relPath: 'tabs.mdx',
+      urlPath: '/tabs/',
+      frontmatter: normalizeFrontmatter({}),
+    }
     const html = renderApp(
       `<Tabs id="outer">
         <TabPane id="a" group="manual-group" label="Manual">content</TabPane>
       </Tabs>`,
-      { components },
+      {
+        components,
+        context: {
+          site,
+          theme: site.style.theme,
+          pageInfo,
+          recordScriptEntrypoint: () => {},
+          recordRuntimeEmbed: () => {},
+        },
+      },
     )
     cleanup()
 

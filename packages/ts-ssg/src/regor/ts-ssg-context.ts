@@ -11,4 +11,5 @@ export interface TsSsgContext {
   outline?: PageOutlineItem[]
   theme: ThemeOptions
   recordScriptEntrypoint: (sourceRelPath: string) => void
+  recordRuntimeEmbed: (name: string, position: 'body' | 'head') => void
 }

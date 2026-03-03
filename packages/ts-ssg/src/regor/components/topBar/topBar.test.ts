@@ -42,6 +42,7 @@ describe('TopBar rendering', () => {
         theme: site.style.theme,
         pageInfo,
         recordScriptEntrypoint: () => {},
+        recordRuntimeEmbed: () => {},
       },
     })
     cleanup()

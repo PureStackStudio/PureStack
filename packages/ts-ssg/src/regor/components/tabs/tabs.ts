@@ -1,5 +1,6 @@
 import { type ComponentHead, defineComponent, html } from 'regor'
 
+import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 import { registerTabsStyles } from './tabsStyle'
 
 class TabsScope {
@@ -78,7 +79,10 @@ const tabPaneTemplate = html`<div class="tabs__item">
 function createTabsComponent() {
   return defineComponent<TabsContext>(tabsTemplate, {
     props: ['id', 'ariaLabel', 'variant'],
-    context: (head) => resolveTabsContext(head.props),
+    context: (head) => {
+      markTabsRuntimeEmbed(head)
+      return resolveTabsContext(head.props)
+    },
   })
 }
 
@@ -173,4 +177,8 @@ function toSlug(value: string) {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
+}
+
+function markTabsRuntimeEmbed(head: ComponentHead<TabsProps>) {
+  resolveTsSsgContext(head).recordRuntimeEmbed('tabs', 'head')
 }

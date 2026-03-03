@@ -24,6 +24,7 @@ describe('PageScript rendering', () => {
         theme: site.style.theme,
         pageInfo,
         recordScriptEntrypoint: () => {},
+        recordRuntimeEmbed: () => {},
       },
     })
     cleanup()
@@ -52,6 +53,7 @@ describe('PageScript rendering', () => {
           theme: site.style.theme,
           pageInfo,
           recordScriptEntrypoint: () => {},
+          recordRuntimeEmbed: () => {},
         },
       },
     )
@@ -80,6 +82,7 @@ describe('PageScript rendering', () => {
           theme: site.style.theme,
           pageInfo,
           recordScriptEntrypoint: () => {},
+          recordRuntimeEmbed: () => {},
         },
       },
     )

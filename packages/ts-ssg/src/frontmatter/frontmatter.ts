@@ -55,6 +55,19 @@ export interface FrontmatterNavOptions {
   [key: string]: unknown
 }
 
+export interface FrontmatterEmbedOptions {
+  /**
+   * Tabs runtime embed target.
+   * - `body`: appends runtime script to the end of body
+   * - `head`: appends runtime script to document head
+   */
+  tabs?: 'head' | 'body'
+  /**
+   * Allows custom, project-specific embed fields.
+   */
+  [key: string]: unknown
+}
+
 /**
  * Canonical frontmatter schema used by ts-ssg.
  *
@@ -98,6 +111,10 @@ export interface PageFrontmatter {
    * Layout-specific rendering controls.
    */
   layout: FrontmatterLayoutOptions
+  /**
+   * Runtime embed controls.
+   */
+  embed?: FrontmatterEmbedOptions
   /**
    * Allows custom, project-specific frontmatter fields.
    */
@@ -155,6 +172,7 @@ export function normalizeFrontmatter(
       tocCollapsed: resolveKey(rawLayout, 'tocCollapsed') === true,
       showFooter: typeof showFooter === 'boolean' ? showFooter : true,
     },
+    embed: resolveEmbedOptions(raw, sourceLabel),
   }
 }
 
@@ -203,6 +221,33 @@ function resolveLayoutNavMode(
   const location = sourceLabel ? ` in ${sourceLabel}` : ''
   throw new Error(
     `Invalid frontmatter.layout.navMode${location}: expected "sidebar" or "drawer", received ${formatValue(value)}.`,
+  )
+}
+
+function resolveEmbedOptions(
+  source: Record<string, unknown>,
+  sourceLabel?: string,
+): FrontmatterEmbedOptions | undefined {
+  const rawEmbed = resolveObject(source, 'embed')
+  if (!rawEmbed) return undefined
+  return {
+    ...rawEmbed,
+    tabs: resolveEmbedTabsPosition(resolveKey(rawEmbed, 'tabs'), sourceLabel),
+  }
+}
+
+function resolveEmbedTabsPosition(
+  value: unknown,
+  sourceLabel?: string,
+): FrontmatterEmbedOptions['tabs'] {
+  if (value === undefined) return undefined
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase()
+    if (normalized === 'head' || normalized === 'body') return normalized
+  }
+  const location = sourceLabel ? ` in ${sourceLabel}` : ''
+  throw new Error(
+    `Invalid frontmatter.embed.tabs${location}: expected "head" or "body", received ${formatValue(value)}.`,
   )
 }
 

@@ -60,6 +60,7 @@ describe('SiteFooter rendering', () => {
             theme: site.style.theme,
             pageInfo,
             recordScriptEntrypoint: () => {},
+            recordRuntimeEmbed: () => {},
           },
         },
       )
@@ -101,6 +102,7 @@ describe('SiteFooter rendering', () => {
             theme: site.style.theme,
             pageInfo,
             recordScriptEntrypoint: () => {},
+            recordRuntimeEmbed: () => {},
           },
         },
       )
