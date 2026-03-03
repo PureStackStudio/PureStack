@@ -1,7 +1,6 @@
+import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { defineComponent, html } from 'regor'
-
 import type { PageOutlineItem } from '../../../mdx/mdx'
-import { getSvgIcon } from '../../../style/icons/getSvgIcon'
 import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 import type { TsSsgContext } from '../../ts-ssg-context'
 import { registerPageTocStyles } from './pageTocStyle'

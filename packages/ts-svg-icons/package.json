@@ -1,0 +1,39 @@
+{
+  "name": "@purestack/ts-svg-icons",
+  "version": "1.0.0",
+  "packageManager": "yarn@4.9.2",
+  "module": "./dist/ts-svg-icons.mjs",
+  "types": "./dist/ts-svg-icons.d.mts",
+  "type": "module",
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koculu/purestack.git",
+    "directory": "packages/ts-svg-icons"
+  },
+  "homepage": "https://tenray.io/purestack",
+  "bugs": {
+    "url": "https://github.com/koculu/purestack/issues"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/ts-svg-icons.mjs",
+      "import": "./dist/ts-svg-icons.mjs"
+    }
+  },
+  "license": "MIT",
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "lint": "biome check ./src --formatter-enabled=false",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "iconoir": "^7.11.0",
+    "lucide": "^0.576.0"
+  }
+}

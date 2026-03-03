@@ -26,20 +26,12 @@ interface ProviderChunkMeta {
 }
 
 const projectRoot = process.cwd()
-const iconsOutputDir = path.join(
-  projectRoot,
-  'packages',
-  'ts-ssg',
-  'src',
-  'style',
-  'icons',
-)
+const iconsOutputDir = path.join(projectRoot, 'packages', 'ts-svg-icons', 'src')
 const legacyOutputPath = path.join(
   projectRoot,
   'packages',
-  'ts-ssg',
+  'ts-svg-icons',
   'src',
-  'style',
   'icons.ts',
 )
 
@@ -407,7 +399,6 @@ async function main() {
     ),
     writeFile(getSvgIconPath, getSvgIconModule, 'utf8'),
     writeFile(clientPath, clientModule, 'utf8'),
-    rm(path.join(iconsOutputDir, 'index.ts'), { force: true }),
     rm(legacyOutputPath, { force: true }),
   ])
 

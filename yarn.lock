@@ -849,6 +849,7 @@ __metadata:
   dependencies:
     "@logpot/utils": "npm:^1.0.7"
     "@node-minify/html-minifier": "npm:^10.4.0"
+    "@purestack/ts-svg-icons": "workspace:^"
     esbuild: "npm:^0.27.3"
     gray-matter: "npm:^4.0.3"
     hast-util-from-html: "npm:^2.0.3"
@@ -866,6 +867,15 @@ __metadata:
     remark-rehype: "npm:^11.1.2"
     shiki: "npm:^3.22.0"
     unified: "npm:^11.0.5"
+  languageName: unknown
+  linkType: soft
+
+"@purestack/ts-svg-icons@workspace:^, @purestack/ts-svg-icons@workspace:packages/ts-svg-icons":
+  version: 0.0.0-use.local
+  resolution: "@purestack/ts-svg-icons@workspace:packages/ts-svg-icons"
+  dependencies:
+    iconoir: "npm:^7.11.0"
+    lucide: "npm:^0.576.0"
   languageName: unknown
   linkType: soft
 
@@ -3960,8 +3970,6 @@ __metadata:
     "@biomejs/biome": "npm:^2.4.4"
     "@types/node": "npm:^25.3.1"
     esbuild: "npm:^0.27.3"
-    iconoir: "npm:^7.11.0"
-    lucide: "npm:^0.576.0"
     tsdown: "npm:^0.20.3"
     tsx: "npm:^4.21.0"
     typescript: "npm:^5.9.3"

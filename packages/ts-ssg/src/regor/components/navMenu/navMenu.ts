@@ -1,7 +1,6 @@
+import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { defineComponent, html } from 'regor'
-
 import type { NavItem } from '../../../navigation/navigation'
-import { getSvgIcon } from '../../../style/icons/getSvgIcon'
 import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 import type { TsSsgContext } from '../../ts-ssg-context'
 import { registerNavStyles } from './navMenuStyle'
