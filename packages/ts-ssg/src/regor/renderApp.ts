@@ -5,11 +5,11 @@ import { componentRegistry } from './registry'
 import type { TsSsgContext } from './ts-ssg-context'
 
 export interface RenderAppOptions {
-  components?: unknown
-  context?: TsSsgContext
+  components: unknown
+  context: TsSsgContext
 }
 
-export const renderApp = (html: string, options: RenderAppOptions = {}) => {
+export const renderApp = (html: string, options: RenderAppOptions) => {
   const normalizedHtml = html.trimStart()
   const isDocument =
     normalizedHtml.startsWith('<!DOCTYPE html>') ||
@@ -21,22 +21,19 @@ export const renderApp = (html: string, options: RenderAppOptions = {}) => {
   const cleanup = createDom(htmlToParse)
   const snapshot = componentRegistry.snapshot()
   const runtimeEmbeds = new Map<string, 'body' | 'head'>()
-  const tsSsgContext = options.context
-    ? {
-        ...options.context,
-        recordRuntimeEmbed: (name: string, position: 'body' | 'head') => {
-          const normalized = name.trim().toLowerCase()
-          if (normalized.length > 0) {
-            runtimeEmbeds.set(normalized, position)
-          }
-          options.context?.recordRuntimeEmbed(name, position)
-        },
+  const baseContext = options.context
+  const tsSsgContext = {
+    ...baseContext,
+    recordRuntimeEmbed: (name: string, position: 'body' | 'head') => {
+      const normalized = name.trim().toLowerCase()
+      if (normalized.length > 0) {
+        runtimeEmbeds.set(normalized, position)
       }
-    : undefined
+      baseContext.recordRuntimeEmbed(name, position)
+    },
+  }
   try {
-    if (options.components) {
-      componentRegistry.registerMany(options.components)
-    }
+    if (options.components) componentRegistry.registerMany(options.components)
     const components = {
       ...componentRegistry.getAll(),
     }
@@ -63,7 +60,7 @@ export const renderApp = (html: string, options: RenderAppOptions = {}) => {
 
 function appendEmbeddedScriptsToDom(
   runtimeEmbeds: Map<string, 'body' | 'head'>,
-  context: TsSsgContext | undefined,
+  context: TsSsgContext,
 ) {
   const tabsPosition = resolveTabsEmbedPosition(runtimeEmbeds, context)
   if (tabsPosition) {
@@ -84,7 +81,7 @@ function ensureScriptParent(position: 'body' | 'head') {
 
 function resolveTabsEmbedPosition(
   runtimeEmbeds: Map<string, 'body' | 'head'>,
-  context: TsSsgContext | undefined,
+  context: TsSsgContext,
 ) {
   const runtimePosition = runtimeEmbeds.get('tabs')
   if (runtimePosition) return runtimePosition

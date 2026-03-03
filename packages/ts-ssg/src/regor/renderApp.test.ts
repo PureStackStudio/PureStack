@@ -10,7 +10,10 @@ import type { TsSsgContext } from './ts-ssg-context'
 
 describe('renderApp', () => {
   it('returns doctype-prefixed html for full document input', () => {
-    const output = renderApp('<html><body><main>ok</main></body></html>')
+    const output = renderApp('<html><body><main>ok</main></body></html>', {
+      components: {},
+      context: createTestContext(),
+    })
 
     expect(output.startsWith('<!DOCTYPE html><html')).toBe(true)
     expect(output).toContain('<main>ok</main>')
@@ -56,3 +59,18 @@ describe('renderApp', () => {
     }
   })
 })
+
+function createTestContext(): TsSsgContext {
+  const site = resolveSiteConfig({ rootDir: process.cwd() })
+  return {
+    site,
+    pageInfo: {
+      relPath: 'index.mdx',
+      urlPath: '/',
+      frontmatter: normalizeFrontmatter({}),
+    },
+    theme: site.style.theme,
+    recordScriptEntrypoint: () => {},
+    recordRuntimeEmbed: () => {},
+  }
+}

@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
 import { resolveMdxBuildOptions } from '../build/incremental/support'
+import { resolveSiteConfig } from '../config/config'
+import { normalizeFrontmatter } from '../frontmatter/frontmatter'
 import { renderApp } from '../regor/renderApp'
+import type { TsSsgContext } from '../regor/ts-ssg-context'
 import { compileMarkdown } from './md'
 
 describe('compileMarkdown', () => {
@@ -12,7 +15,10 @@ describe('compileMarkdown', () => {
       '| level  | TRACE   |',
       '| worker | false   |',
     ].join('\n')
-    const html = renderApp(compileMarkdown(source).bodyHtml)
+    const html = renderApp(compileMarkdown(source).bodyHtml, {
+      components: {},
+      context: createTestContext(),
+    })
 
     expect(html).toContain('<table>')
     expect(html).toContain('<div class="table-scroll">')
@@ -27,9 +33,27 @@ describe('compileMarkdown', () => {
     const mdx = await resolveMdxBuildOptions({
       highlighter: 'highlightjs',
     })
-    const html = renderApp(compileMarkdown(source, mdx).bodyHtml)
+    const html = renderApp(compileMarkdown(source, mdx).bodyHtml, {
+      components: {},
+      context: createTestContext(),
+    })
 
     expect(html).toContain('<pre class="hljs shiki">')
     expect(html).toContain('<code class="hljs language-typescript">')
   })
 })
+
+function createTestContext(): TsSsgContext {
+  const site = resolveSiteConfig({ rootDir: process.cwd() })
+  return {
+    site,
+    pageInfo: {
+      relPath: 'test.md',
+      urlPath: '/test',
+      frontmatter: normalizeFrontmatter({}),
+    },
+    theme: site.style.theme,
+    recordScriptEntrypoint: () => {},
+    recordRuntimeEmbed: () => {},
+  }
+}

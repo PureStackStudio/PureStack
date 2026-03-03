@@ -1,12 +1,18 @@
 import { describe, expect, it } from 'vitest'
 
+import { resolveSiteConfig } from '../config/config'
+import { normalizeFrontmatter } from '../frontmatter/frontmatter'
 import { renderApp } from '../regor/renderApp'
+import type { TsSsgContext } from '../regor/ts-ssg-context'
 import { compileMdxToHtml } from './mdx'
 
 describe('compileMdxToHtml', () => {
   it('renders a custom JSX component at root level', async () => {
     const source = '<CustomComponent data-id="x" />\n\nParagraph text.'
-    const html = renderApp(compileMdxToHtml(source))
+    const html = renderApp(compileMdxToHtml(source), {
+      components: {},
+      context: createTestContext(),
+    })
 
     expect(html).toContain('<customcomponent')
     expect(html).toContain('data-id="x"')
@@ -24,7 +30,10 @@ describe('compileMdxToHtml', () => {
       'Another paragraph',
       'spanning two lines.',
     ].join('\n')
-    const html = renderApp(compileMdxToHtml(source))
+    const html = renderApp(compileMdxToHtml(source), {
+      components: {},
+      context: createTestContext(),
+    })
     expect(html).toContain('<outercomponent')
     expect(html).toContain('<innercomponent')
     expect(html).toContain('data-flag="true"')
@@ -44,7 +53,10 @@ describe('compileMdxToHtml', () => {
       '',
       '<Footer />',
     ].join('\n')
-    const html = renderApp(compileMdxToHtml(source))
+    const html = renderApp(compileMdxToHtml(source), {
+      components: {},
+      context: createTestContext(),
+    })
 
     expect(html).toContain('<banner')
     expect(html).toContain('title="Hello"')
@@ -61,7 +73,10 @@ describe('compileMdxToHtml', () => {
       '| Bus  | Land |',
       '| Ship | Sea  |',
     ].join('\n')
-    const html = renderApp(compileMdxToHtml(source))
+    const html = renderApp(compileMdxToHtml(source), {
+      components: {},
+      context: createTestContext(),
+    })
 
     expect(html).toContain('<table>')
     expect(html).toContain('<div class="table-scroll">')
@@ -71,3 +86,18 @@ describe('compileMdxToHtml', () => {
     expect(html).toContain('<td>Sea</td>')
   })
 })
+
+function createTestContext(): TsSsgContext {
+  const site = resolveSiteConfig({ rootDir: process.cwd() })
+  return {
+    site,
+    pageInfo: {
+      relPath: 'test.mdx',
+      urlPath: '/test',
+      frontmatter: normalizeFrontmatter({}),
+    },
+    theme: site.style.theme,
+    recordScriptEntrypoint: () => {},
+    recordRuntimeEmbed: () => {},
+  }
+}

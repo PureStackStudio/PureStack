@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
+import { resolveSiteConfig } from '../../../config/config'
+import { normalizeFrontmatter } from '../../../frontmatter/frontmatter'
 import { ensureDomGlobals } from '../../../minidom/createDom'
 import { renderApp } from '../../renderApp'
+import type { TsSsgContext } from '../../ts-ssg-context'
 import { createHeroComponents } from './hero'
 
 describe('HeroBanner rendering', () => {
@@ -22,7 +25,7 @@ describe('HeroBanner rendering', () => {
           <HeroMedia src="../logo.svg" alt="CalcCore logo" />
         </template>
       </HeroBanner>`,
-      { components },
+      { components, context: createTestContext() },
     )
     cleanup()
 
@@ -45,7 +48,7 @@ describe('HeroBanner rendering', () => {
           </HeroAction>
         </template>
       </HeroBanner>`,
-      { components },
+      { components, context: createTestContext() },
     )
     cleanup()
 
@@ -53,3 +56,18 @@ describe('HeroBanner rendering', () => {
     expect(html).toContain('rel="noopener noreferrer"')
   })
 })
+
+function createTestContext(): TsSsgContext {
+  const site = resolveSiteConfig({ rootDir: process.cwd() })
+  return {
+    site,
+    pageInfo: {
+      relPath: 'hero.mdx',
+      urlPath: '/hero',
+      frontmatter: normalizeFrontmatter({}),
+    },
+    theme: site.style.theme,
+    recordScriptEntrypoint: () => {},
+    recordRuntimeEmbed: () => {},
+  }
+}

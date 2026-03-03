@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
+import { resolveSiteConfig } from '../../../config/config'
+import { normalizeFrontmatter } from '../../../frontmatter/frontmatter'
 import { ensureDomGlobals } from '../../../minidom/createDom'
 import { renderApp } from '../../renderApp'
+import type { TsSsgContext } from '../../ts-ssg-context'
 import { createLogoComponents } from './logo'
 
 describe('SiteLogo rendering', () => {
@@ -15,7 +18,7 @@ describe('SiteLogo rendering', () => {
         subtitle="backend-native engine"
         href="/"
       />`,
-      { components },
+      { components, context: createTestContext() },
     )
     cleanup()
 
@@ -28,7 +31,10 @@ describe('SiteLogo rendering', () => {
   it('uses fallback words and omits subtitle when not provided', () => {
     const cleanup = ensureDomGlobals()
     const components = createLogoComponents()
-    const html = renderApp(`<SiteLogo />`, { components })
+    const html = renderApp(`<SiteLogo />`, {
+      components,
+      context: createTestContext(),
+    })
     cleanup()
 
     expect(html).toContain('Pure')
@@ -50,7 +56,7 @@ describe('SiteLogo rendering', () => {
         wordFontSize="24px"
         subtitleFontSize="9px"
       />`,
-      { components },
+      { components, context: createTestContext() },
     )
     cleanup()
 
@@ -65,3 +71,18 @@ describe('SiteLogo rendering', () => {
     expect(html).toContain('text-align: end')
   })
 })
+
+function createTestContext(): TsSsgContext {
+  const site = resolveSiteConfig({ rootDir: process.cwd() })
+  return {
+    site,
+    pageInfo: {
+      relPath: 'logo.mdx',
+      urlPath: '/logo',
+      frontmatter: normalizeFrontmatter({}),
+    },
+    theme: site.style.theme,
+    recordScriptEntrypoint: () => {},
+    recordRuntimeEmbed: () => {},
+  }
+}

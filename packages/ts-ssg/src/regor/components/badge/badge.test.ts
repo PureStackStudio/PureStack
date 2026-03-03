@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
+import { resolveSiteConfig } from '../../../config/config'
+import { normalizeFrontmatter } from '../../../frontmatter/frontmatter'
 import { ensureDomGlobals } from '../../../minidom/createDom'
 import { renderApp } from '../../renderApp'
+import type { TsSsgContext } from '../../ts-ssg-context'
 import { createBadgeComponents } from './badge'
 
 describe('StatusBadge rendering', () => {
@@ -10,6 +13,7 @@ describe('StatusBadge rendering', () => {
     const components = createBadgeComponents()
     const html = renderApp('<Badge variant="warning">pending</Badge>', {
       components,
+      context: createTestContext(),
     })
     cleanup()
 
@@ -17,3 +21,18 @@ describe('StatusBadge rendering', () => {
     expect(html).toContain('pending')
   })
 })
+
+function createTestContext(): TsSsgContext {
+  const site = resolveSiteConfig({ rootDir: process.cwd() })
+  return {
+    site,
+    pageInfo: {
+      relPath: 'badge.mdx',
+      urlPath: '/badge',
+      frontmatter: normalizeFrontmatter({}),
+    },
+    theme: site.style.theme,
+    recordScriptEntrypoint: () => {},
+    recordRuntimeEmbed: () => {},
+  }
+}
