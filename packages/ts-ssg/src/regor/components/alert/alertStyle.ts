@@ -65,7 +65,7 @@ export function applyAlertIconStyles(
   options: ThemeOptions,
 ) {
   styleBuilder
-    .select('.alert__icon', theme)
+    .select('.alert .alert__icon', theme)
     .width('32px')
     .height('32px')
     .borderRadius(options.radii.sm)

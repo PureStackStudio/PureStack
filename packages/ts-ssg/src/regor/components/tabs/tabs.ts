@@ -35,7 +35,6 @@ interface TabPaneContext {
   panelId: string
   label: string
   icon: string
-  hasIcon: boolean
   groupName: string
   isActive: boolean
   isDisabled: boolean
@@ -70,7 +69,7 @@ const tabPaneTemplate = html`<div class="tabs__item">
     :aria-controls="panelId"
     :aria-selected="isActive ? 'true' : null"
     :aria-disabled="isDisabled ? 'true' : null"
-    ><Icon class="tabs__tab-icon" r-if="hasIcon" :name="icon" />
+    ><Icon class="tabs__tab-icon" :name="icon" />
     <span class="tabs__tab-label">{{ label }}</span></label
   >
   <section class="tabs__panel" role="tabpanel" :id="panelId" :aria-labelledby="tabId">
@@ -131,7 +130,6 @@ function resolveTabPaneContext(
   return {
     label,
     icon,
-    hasIcon: icon.length > 0,
     inputId: `${groupName}__control-${localId}`,
     tabId: `${groupName}__tab-${localId}`,
     panelId: `${groupName}__panel-${localId}`,

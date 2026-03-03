@@ -232,7 +232,7 @@ function registerTabsControlStyles(
 
   styleBuilder
     .select('.tabs__tab:hover', theme)
-    .background(palette.background.accentMuted)
+    .background(palette.action.ghost.hover)
     .color(palette.text.default)
 
   styleBuilder
@@ -284,7 +284,7 @@ function registerTabsControlStyles(
 
   styleBuilder
     .select('.tabs__tab-button:hover', theme)
-    .background(palette.background.accentMuted)
+    .background(palette.action.ghost.hover)
     .color(palette.text.default)
 
   styleBuilder

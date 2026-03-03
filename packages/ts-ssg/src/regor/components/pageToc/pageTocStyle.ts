@@ -205,7 +205,7 @@ export function registerPageTocLayoutStyles(
       theme,
     )
     .media('max-width: 1023px')
-    .gridTemplateColumns('1fr')
+    .gridTemplateColumns('1fr !important')
 
   styleBuilder
     .select('.doc-shell--toc-only', theme)
