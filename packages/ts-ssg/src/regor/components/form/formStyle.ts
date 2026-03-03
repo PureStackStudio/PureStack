@@ -19,6 +19,15 @@ export function registerFormStyles() {
 
 function registerFormShellStyles(theme: ThemeMode) {
   styleBuilder.select('.form-block', theme).display('grid').gap('12px')
+  styleBuilder
+    .select('.form-block__autofill-trap', theme)
+    .position('absolute')
+    .left('-10000px')
+    .top('auto')
+    .width('1px')
+    .height('1px')
+    .opacity('0')
+    .pointerEvents('none')
 }
 
 function registerFormFieldStyles(
@@ -53,6 +62,74 @@ function registerFormFieldStyles(
     .outline('none')
     .borderColor(palette.border.accent)
     .boxShadow(`0 0 0 3px ${palette.action.accent.focusRing}`)
+  styleBuilder
+    .select(
+      '.form-block__input[type="number"], .form-block__input--number',
+      theme,
+    )
+    .appearance('textfield')
+    .fontVariantNumeric('tabular-nums')
+    .fontWeight('680')
+    .letterSpacing('0.015em')
+  styleBuilder
+    .select('.form-block__number', theme)
+    .display('grid')
+    .gridTemplateColumns('minmax(0, 1fr) 40px')
+    .alignItems('stretch')
+    .borderRadius(options.radii.md)
+    .overflow('hidden')
+  styleBuilder
+    .select('.form-block__number .form-block__input--number', theme)
+    .borderRadius('0')
+    .borderRight(`1px solid ${palette.border.default}`)
+    .boxShadow('none')
+  styleBuilder
+    .select(
+      '.form-block__input[type="number"]:hover, .form-block__input--number:hover',
+      theme,
+    )
+    .borderColor(palette.border.strong)
+  styleBuilder
+    .select(
+      '.form-block__input[type="number"]::-webkit-outer-spin-button, .form-block__input[type="number"]::-webkit-inner-spin-button',
+      theme,
+    )
+    .appearance('none')
+    .margin('0')
+  styleBuilder
+    .select('.form-block__number-controls', theme)
+    .display('grid')
+    .gridTemplateRows('1fr 1fr')
+    .border(`1px solid ${palette.border.default}`)
+    .borderLeft('none')
+    .background(palette.background.surface)
+  styleBuilder
+    .select('.form-block__number-btn', theme)
+    .display('grid')
+    .placeItems('center')
+    .padding('0')
+    .border('none')
+    .background('transparent')
+    .color(palette.text.strong)
+    .fontSize('0.95rem')
+    .fontWeight('800')
+    .lineHeight('1')
+    .cursor('pointer')
+    .transition('background 140ms ease, color 140ms ease')
+  styleBuilder
+    .select('.form-block__number-btn--up', theme)
+    .borderBottom(`1px solid ${palette.border.default}`)
+  styleBuilder
+    .select('.form-block__number-btn:hover', theme)
+    .background(palette.background.accent)
+    .color(palette.text.default)
+  styleBuilder
+    .select('.form-block__number-btn:active', theme)
+    .background(palette.background.accentMuted)
+  styleBuilder
+    .select('.form-block__number-btn:focus-visible', theme)
+    .outline(`2px solid ${palette.border.focus}`)
+    .outlineOffset('-2px')
 }
 
 function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {

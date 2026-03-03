@@ -19,6 +19,10 @@ interface FormFieldProps {
   placeholder?: string
   autocomplete?: string
   required?: unknown
+  min?: string
+  max?: string
+  step?: string
+  value?: string
 }
 
 interface FormFieldContext extends FormFieldProps {
@@ -90,6 +94,10 @@ const formFieldTemplate = html`<label class="form-block__field">
     :placeholder="placeholder"
     :autocomplete="autocomplete"
     :required="required"
+    :min="min"
+    :max="max"
+    :step="step"
+    :value="value"
   />
 </label>`
 
@@ -138,7 +146,18 @@ function createAppFormComponent() {
 
 function createFormFieldComponent() {
   return defineComponent<FormFieldContext>(formFieldTemplate, {
-    props: ['label', 'type', 'name', 'placeholder', 'autocomplete', 'required'],
+    props: [
+      'label',
+      'type',
+      'name',
+      'placeholder',
+      'autocomplete',
+      'required',
+      'min',
+      'max',
+      'step',
+      'value',
+    ],
     context: (head) => resolveFormFieldContext(head.props),
   })
 }
@@ -224,6 +243,7 @@ function resolveAppFormContext(props: AppFormProps): AppFormContext {
 }
 
 function resolveFormFieldContext(props: FormFieldProps): FormFieldContext {
+  const resolvedType = resolveInputType(props.type)
   return {
     ...props,
     label: props.label,
@@ -231,7 +251,11 @@ function resolveFormFieldContext(props: FormFieldProps): FormFieldContext {
     placeholder: props.placeholder,
     autocomplete: props.autocomplete,
     required: props.required,
-    resolvedType: resolveInputType(props.type),
+    min: props.min,
+    max: props.max,
+    step: props.step,
+    value: props.value,
+    resolvedType,
   }
 }
 
@@ -257,6 +281,7 @@ function resolveInputType(value: string | undefined) {
   if (!normalized) return undefined
   if (
     normalized === 'email' ||
+    normalized === 'number' ||
     normalized === 'password' ||
     normalized === 'text'
   ) {
