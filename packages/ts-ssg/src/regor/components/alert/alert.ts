@@ -1,4 +1,3 @@
-import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { defineComponent, html } from 'regor'
 import { registerAlertStyles } from './alertStyle'
 
@@ -20,12 +19,10 @@ interface AlertBoxContext extends AlertBoxProps {
   rootClass: string
   role: string
   live: string
-  iconSvg: string
   hasTitle: boolean
   hasEyebrow: boolean
   hasBadge: boolean
   hasMeta: boolean
-  hasIcon: boolean
   hasHeader: boolean
   hasLive: boolean
 }
@@ -36,7 +33,7 @@ const alertBoxTemplate = html`<aside
   :role="role"
   :aria-live="hasLive ? live : null"
 >
-  <div class="alert__icon" r-if="hasIcon" r-html="iconSvg"></div>
+  <Icon class="alert__icon" :name="icon || 'iconoir:headset-help'" />
   <div class="alert__content">
     <div class="alert__header" r-if="hasHeader">
       <p class="alert__eyebrow" r-if="hasEyebrow">{{ eyebrow }}</p>
@@ -81,19 +78,16 @@ function resolveAlertBoxContext(props: AlertBoxProps): AlertBoxContext {
   const role = resolveRole(props.role, tone)
   const live = resolveLive(props.live)
   const hasLive = live.length > 0
-  const hasIcon = true
 
   return {
     ...props,
     role,
     live,
     hasLive,
-    iconSvg: getSvgIcon(props.icon || 'iconoir:headset-help'),
     hasTitle: Boolean(props.title),
     hasEyebrow: Boolean(props.eyebrow),
     hasBadge: Boolean(props.badge),
     hasMeta: Boolean(props.meta),
-    hasIcon,
     hasHeader: Boolean(props.title || props.eyebrow || props.badge),
     rootClass: [
       `alert--tone-${tone}`,

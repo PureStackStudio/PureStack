@@ -1,4 +1,3 @@
-import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { defineComponent, html } from 'regor'
 import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 import type { TsSsgContext } from '../../ts-ssg-context'
@@ -77,7 +76,6 @@ interface FooterSocialProps {
 }
 
 interface FooterSocialContext extends FooterSocialProps {
-  iconSvg: string
   hasHref: boolean
   hasTarget: boolean
   hasRel: boolean
@@ -196,7 +194,7 @@ const footerSocialTemplate = html`<a
   :rel="hasRel ? rel : null"
   :aria-label="label"
 >
-  <span class="footer-social__icon" r-html="iconSvg"></span>
+  <Icon class="footer-social__icon" :name="icon || 'iconoir:code'" />
   <span class="footer-social__label" r-if="hasLabel">{{ label }}</span>
 </a>`
 
@@ -352,7 +350,6 @@ function resolveFooterSocialContext(
     ...props,
     rel,
     label: props.label || '',
-    iconSvg: getSvgIcon(`${props.icon || 'iconoir:code'}`),
     hasHref: Boolean(props.href),
     hasTarget: Boolean(props.target),
     hasRel: Boolean(rel),

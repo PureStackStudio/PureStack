@@ -4,12 +4,13 @@ import { resolveSiteConfig } from '../../../config/config'
 import { normalizeFrontmatter } from '../../../frontmatter/frontmatter'
 import { ensureDomGlobals } from '../../../minidom/createDom'
 import { renderApp } from '../../renderApp'
+import { createIconComponents } from '../icon/icon'
 import { createTabsComponents } from './tabs'
 
 describe('Tabs rendering', () => {
   it('renders slotted tab content and active tab state', () => {
     const cleanup = ensureDomGlobals()
-    const components = createTabsComponents()
+    const components = { ...createIconComponents(), ...createTabsComponents() }
     const site = resolveSiteConfig()
     const pageInfo = {
       relPath: 'tabs.mdx',
@@ -47,7 +48,7 @@ describe('Tabs rendering', () => {
 
   it('inherits tab group from parent tabs and marks disabled panes', () => {
     const cleanup = ensureDomGlobals()
-    const components = createTabsComponents()
+    const components = { ...createIconComponents(), ...createTabsComponents() }
     const site = resolveSiteConfig()
     const pageInfo = {
       relPath: 'tabs.mdx',
@@ -79,7 +80,7 @@ describe('Tabs rendering', () => {
 
   it('supports explicit group override on tab panes', () => {
     const cleanup = ensureDomGlobals()
-    const components = createTabsComponents()
+    const components = { ...createIconComponents(), ...createTabsComponents() }
     const site = resolveSiteConfig()
     const pageInfo = {
       relPath: 'tabs.mdx',
@@ -109,7 +110,7 @@ describe('Tabs rendering', () => {
 
   it('renders optional tab icons', () => {
     const cleanup = ensureDomGlobals()
-    const components = createTabsComponents()
+    const components = { ...createIconComponents(), ...createTabsComponents() }
     const site = resolveSiteConfig()
     const pageInfo = {
       relPath: 'tabs.mdx',
@@ -133,8 +134,8 @@ describe('Tabs rendering', () => {
     )
     cleanup()
 
-    expect(html).toContain('class="tabs__tab-icon"')
-    expect(html).toContain('<span class="tabs__tab-icon"><svg')
+    expect(html).toContain('class="icon tabs__tab-icon"')
+    expect(html).toContain('<span class="icon tabs__tab-icon"')
     expect(html).toContain('<span class="tabs__tab-label">Install</span>')
   })
 })

@@ -76,7 +76,7 @@ function enhanceTabs(root: HTMLElement) {
     const btn = document.createElement('button')
     btn.type = 'button'
     btn.className = 'tabs__tab-button'
-    setButtonContent(btn, tabs[i].text, tabs[i].iconHtml, 'tabs__tab-button')
+    setButtonContent(btn, tabs[i].text, tabs[i].iconHtml)
     btn.disabled = tabs[i].control.disabled
     btn.setAttribute('aria-label', tabs[i].text)
     btn.addEventListener('click', () => selectTab(i, 'button'))
@@ -186,12 +186,7 @@ function enhanceTabs(root: HTMLElement) {
       const option = document.createElement('button')
       option.type = 'button'
       option.className = 'tabs__overflow-option'
-      setButtonContent(
-        option,
-        tabs[index].text,
-        tabs[index].iconHtml,
-        'tabs__overflow-option',
-      )
+      setButtonContent(option, tabs[index].text, tabs[index].iconHtml)
       option.disabled = tabs[index].control.disabled
       if (index === active)
         option.classList.add('tabs__overflow-option--active')
@@ -449,12 +444,7 @@ function resolveTabIconHtml(label: HTMLLabelElement) {
   return icon.innerHTML.trim()
 }
 
-function setButtonContent(
-  target: HTMLElement,
-  text: string,
-  iconHtml: string,
-  classPrefix: 'tabs__tab-button' | 'tabs__overflow-option',
-) {
+function setButtonContent(target: HTMLElement, text: string, iconHtml: string) {
   if (!iconHtml) {
     target.textContent = text
     return
@@ -463,12 +453,12 @@ function setButtonContent(
   target.innerHTML = ''
 
   const icon = document.createElement('span')
-  icon.className = `${classPrefix}-icon`
+  icon.className = 'tabs__tab-icon'
   icon.setAttribute('aria-hidden', 'true')
   icon.innerHTML = iconHtml
 
   const label = document.createElement('span')
-  label.className = `${classPrefix}-label`
+  label.className = 'tabs__tab-label'
   label.textContent = text
 
   target.appendChild(icon)

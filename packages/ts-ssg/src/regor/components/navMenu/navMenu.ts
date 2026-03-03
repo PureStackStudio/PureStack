@@ -1,4 +1,3 @@
-import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { defineComponent, html } from 'regor'
 import type { NavItem } from '../../../navigation/navigation'
 import { resolveTsSsgContext } from '../../resolveTsSsgContext'
@@ -7,8 +6,6 @@ import { registerNavStyles } from './navMenuStyle'
 
 interface NavMenuContext {
   items?: NavItem[]
-  collapseIconSvg: string
-  openIconSvg: string
 }
 
 interface NavListContext {
@@ -80,7 +77,7 @@ const navMenuTemplate = html`<nav
       data-nav-menu-toggle
     >
       <span class="nav__panel-toggle-icon" aria-hidden="true">
-        <span r-html="openIconSvg"></span>
+        <Icon name="iconoir:pin" />
       </span>
       <span class="nav__panel-toggle-label">navigation</span>
     </button>
@@ -95,13 +92,13 @@ const navMenuTemplate = html`<nav
         class="nav__collapse-toggle-icon nav__collapse-toggle-icon--collapse"
         aria-hidden="true"
       >
-        <span r-html="collapseIconSvg"></span>
+        <Icon name="iconoir:pin-slash" />
       </span>
       <span
         class="nav__collapse-toggle-icon nav__collapse-toggle-icon--open"
         aria-hidden="true"
       >
-        <span r-html="openIconSvg"></span>
+        <Icon name="iconoir:pin" />
       </span>
     </button>
   </div>
@@ -196,8 +193,6 @@ function createNavMenuComponent() {
           head.props.items ?? resolveNavItems(context),
           resolveCurrentPath(context),
         ),
-        collapseIconSvg: getSvgIcon('iconoir:pin-slash'),
-        openIconSvg: getSvgIcon('iconoir:pin'),
       }
     },
   })

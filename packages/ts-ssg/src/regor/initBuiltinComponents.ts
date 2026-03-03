@@ -11,6 +11,7 @@ import { createContactFormComponents } from './components/contactForm/contactFor
 import { createFooterComponents } from './components/footer/footer'
 import { createFormComponents } from './components/form/form'
 import { createHeroComponents } from './components/hero/hero'
+import { createIconComponents } from './components/icon/icon'
 import { createLoginComponents } from './components/login/login'
 import { createLogoComponents } from './components/logo/logo'
 import { createNavigationComponents } from './components/navMenu/navMenu'
@@ -44,6 +45,7 @@ export function initBuiltinComponents(
   componentRegistry.registerMany(createFooterComponents())
   componentRegistry.registerMany(createFormComponents())
   componentRegistry.registerMany(createHeroComponents())
+  componentRegistry.registerMany(createIconComponents())
   componentRegistry.registerMany(createLoginComponents())
   componentRegistry.registerMany(createLogoComponents())
   componentRegistry.registerMany(createTopBarComponents())

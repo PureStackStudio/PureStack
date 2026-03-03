@@ -9,6 +9,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from '../config/config'
 import type { ContentFile } from '../discover/content'
 import { ensureDomGlobals } from '../minidom/createDom'
+import { createIconComponents } from '../regor/components/icon/icon'
 import { createTabsComponents } from '../regor/components/tabs/tabs'
 import { renderPageFromFile } from './page'
 
@@ -46,10 +47,10 @@ describe('tabs runtime embedding', () => {
       const page = await renderPageFromFile(
         {
           config,
-          components: createTabsComponents() as unknown as Record<
-            string,
-            Component
-          >,
+          components: {
+            ...createIconComponents(),
+            ...createTabsComponents(),
+          } as unknown as Record<string, Component>,
         },
         toContentFile(contentDir, 'index.mdx'),
       )

@@ -1,4 +1,3 @@
-import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { type ComponentHead, defineComponent, html } from 'regor'
 
 import { resolveTsSsgContext } from '../../resolveTsSsgContext'
@@ -35,7 +34,7 @@ interface TabPaneContext {
   tabId: string
   panelId: string
   label: string
-  iconSvg: string
+  icon: string
   hasIcon: boolean
   groupName: string
   isActive: boolean
@@ -71,8 +70,8 @@ const tabPaneTemplate = html`<div class="tabs__item">
     :aria-controls="panelId"
     :aria-selected="isActive ? 'true' : null"
     :aria-disabled="isDisabled ? 'true' : null"
-    ><span class="tabs__tab-icon" r-if="hasIcon" r-html="iconSvg"></span
-    ><span class="tabs__tab-label">{{ label }}</span></label
+    ><Icon class="tabs__tab-icon" r-if="hasIcon" :name="icon" />
+    <span class="tabs__tab-label">{{ label }}</span></label
   >
   <section class="tabs__panel" role="tabpanel" :id="panelId" :aria-labelledby="tabId">
     <div class="tabs__panel-body">
@@ -131,7 +130,7 @@ function resolveTabPaneContext(
   const localId = resolveTabLocalId(head.props.id, label)
   return {
     label,
-    iconSvg: icon ? getSvgIcon(icon) : '',
+    icon,
     hasIcon: icon.length > 0,
     inputId: `${groupName}__control-${localId}`,
     tabId: `${groupName}__tab-${localId}`,

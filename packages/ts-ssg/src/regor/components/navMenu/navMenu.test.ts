@@ -4,12 +4,16 @@ import { resolveSiteConfig } from '../../../config/config'
 import { normalizeFrontmatter } from '../../../frontmatter/frontmatter'
 import { ensureDomGlobals } from '../../../minidom/createDom'
 import { renderApp } from '../../renderApp'
+import { createIconComponents } from '../icon/icon'
 import { createNavigationComponents } from './navMenu'
 
 describe('NavMenu rendering', () => {
   it('evaluates r-else branches for leaf items', () => {
     const cleanup = ensureDomGlobals()
-    const components = createNavigationComponents()
+    const components = {
+      ...createIconComponents(),
+      ...createNavigationComponents(),
+    }
     const site = resolveSiteConfig()
     const pageInfo = {
       relPath: 'index.md',

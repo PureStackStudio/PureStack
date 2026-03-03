@@ -1,4 +1,3 @@
-import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { defineComponent, html } from 'regor'
 import type { PageOutlineItem } from '../../../mdx/mdx'
 import { resolveTsSsgContext } from '../../resolveTsSsgContext'
@@ -8,8 +7,6 @@ import { registerPageTocStyles } from './pageTocStyle'
 interface PageTocContext {
   items?: PageOutlineItem[]
   title?: string
-  headerCollapseIconSvg: string
-  headerRestoreIconSvg: string
 }
 
 interface PageTocItemContext extends PageOutlineItem {
@@ -36,10 +33,10 @@ const pageTocTemplate = html`<nav class="page-toc" aria-label="On this page">
       data-page-toc-restore
     >
       <span class="page-toc__header-toggle-icon page-toc__header-toggle-icon--collapse">
-        <span r-html="headerCollapseIconSvg"></span>
+        <Icon name="iconoir:pin-slash" />
       </span>
       <span class="page-toc__header-toggle-icon page-toc__header-toggle-icon--restore">
-        <span r-html="headerRestoreIconSvg"></span>
+        <Icon name="iconoir:pin" />
       </span>
     </button>
   </div>
@@ -98,8 +95,6 @@ function createPageTocComponent() {
       return {
         title: resolveTitle(head.props),
         items: resolveItems(head.props, context),
-        headerCollapseIconSvg: getSvgIcon('iconoir:pin-slash'),
-        headerRestoreIconSvg: getSvgIcon('iconoir:pin'),
       }
     },
   })

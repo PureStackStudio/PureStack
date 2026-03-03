@@ -134,21 +134,6 @@ function registerTabsShellStyles(
     .cursor('pointer')
 
   styleBuilder
-    .select('.tabs__overflow-option-icon', theme)
-    .display('inline-flex')
-    .alignItems('center')
-    .justifyContent('center')
-    .width('1.7em')
-    .height('1.7em')
-    .flexShrink('0')
-
-  styleBuilder
-    .select('.tabs__overflow-option-icon svg', theme)
-    .display('block')
-    .width('100%')
-    .height('100%')
-
-  styleBuilder
     .select('.tabs__overflow-option:hover', theme)
     .background(palette.background.accentMuted)
 
@@ -296,22 +281,6 @@ function registerTabsControlStyles(
     .textAlign('center')
     .cursor('pointer')
     .whiteSpace('nowrap')
-
-  styleBuilder
-    .select('.tabs__tab-button-icon', theme)
-    .display('inline-flex')
-    .alignItems('center')
-    .justifyContent('center')
-    .width('1.7em')
-    .height('1.7em')
-    .flexShrink('0')
-
-  styleBuilder
-    .select('.tabs__tab-button-icon svg', theme)
-    .width('100%')
-    .height('100%')
-
-  styleBuilder.select('.tabs__tab-button-label', theme).display('inline-block')
 
   styleBuilder
     .select('.tabs__tab-button:hover', theme)

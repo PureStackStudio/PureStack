@@ -1,4 +1,3 @@
-import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { defineComponent, html } from 'regor'
 import { registerPricingStyles } from './pricingStyle'
 
@@ -32,16 +31,13 @@ interface PricingPlanContext extends PricingPlanProps {
   hasPrice: boolean
   hasCta: boolean
   hasIcon: boolean
-  iconSvg?: string
 }
 
 interface PricingFeatureProps {
   icon?: string
 }
 
-interface PricingFeatureContext extends PricingFeatureProps {
-  iconSvg?: string
-}
+interface PricingFeatureContext extends PricingFeatureProps {}
 
 const pricingTableTemplate = html`<section class="pricing">
   <div class="pricing__header" r-if="hasHeader">
@@ -61,7 +57,7 @@ const pricingPlanTemplate = html`<article
 >
   <div class="pricing-plan__head">
     <div class="pricing-plan__meta">
-      <div class="pricing-plan__icon" r-if="hasIcon" r-html="iconSvg"></div>
+      <Icon class="pricing-plan__icon" r-if="hasIcon" :name="icon || 'iconoir:code'" />
       <span class="pricing-plan__badge" r-if="hasBadge">{{ badge }}</span>
     </div>
     <div class="pricing-plan__title-row">
@@ -83,7 +79,7 @@ const pricingPlanTemplate = html`<article
 </article>`
 
 const pricingFeatureTemplate = html`<li class="pricing-feature">
-  <span class="pricing-feature__icon" r-html="iconSvg"></span>
+  <Icon class="pricing-feature__icon" :name="icon || 'iconoir:check'" />
   <span class="pricing-feature__text"><slot></slot></span>
 </li>`
 
@@ -161,7 +157,6 @@ function resolvePricingPlanContext(
     hasPrice: Boolean(props.price),
     hasCta,
     hasIcon: Boolean(props.icon),
-    iconSvg: getSvgIcon(props.icon || 'iconoir:code'),
   }
 }
 
@@ -171,7 +166,6 @@ function resolvePricingFeatureContext(
   const icon = resolveString(props.icon)
   return {
     icon,
-    iconSvg: getSvgIcon(icon || 'iconoir:check'),
   }
 }
 
