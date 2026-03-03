@@ -1,8 +1,7 @@
-import { describe, expect, it } from 'vitest'
 import { defineComponent, html } from 'regor'
-
-import { normalizeFrontmatter } from '../frontmatter/frontmatter'
+import { describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from '../config/config'
+import { normalizeFrontmatter } from '../frontmatter/frontmatter'
 import { ensureDomGlobals } from '../minidom/createDom'
 import { renderApp } from './renderApp'
 import { resolveTsSsgContext } from './resolveTsSsgContext'

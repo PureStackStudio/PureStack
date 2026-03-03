@@ -3,8 +3,8 @@ import os from 'node:os'
 import path from 'node:path'
 
 import { disableLogger, getLogger, type Logger } from 'logpot'
-import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import type { Component } from 'regor'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import { resolveSiteConfig } from '../config/config'
 import type { ContentFile } from '../discover/content'
