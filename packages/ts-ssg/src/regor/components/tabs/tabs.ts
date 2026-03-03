@@ -8,17 +8,16 @@ class TabsScope {
 
 interface TabsProps {
   id?: string
-  title?: string
   ariaLabel?: string
   variant?: string
 }
 
 interface TabsContext extends TabsScope {
-  title?: string
-  hasTitle: boolean
   ariaLabel: string
   variantClass: string
 }
+
+interface TabsHeaderContext {}
 
 interface TabPaneProps {
   id?: string
@@ -39,13 +38,15 @@ interface TabPaneContext {
 }
 
 const tabsTemplate = html`<section class="tabs" :class="variantClass">
-  <header class="tabs__header" r-if="hasTitle">
-    <h2 class="tabs__title">{{ title }}</h2>
-  </header>
+  <slot name="header"></slot>
   <div class="tabs__list" role="tablist" :aria-label="ariaLabel">
     <slot></slot>
   </div>
 </section>`
+
+const tabsHeaderTemplate = html`<template name="header">
+  <header class="tabs__header"><slot></slot></header>
+</template>`
 
 const tabPaneTemplate = html`<div class="tabs__item">
   <input
@@ -76,9 +77,13 @@ const tabPaneTemplate = html`<div class="tabs__item">
 
 function createTabsComponent() {
   return defineComponent<TabsContext>(tabsTemplate, {
-    props: ['id', 'title', 'ariaLabel', 'variant'],
+    props: ['id', 'ariaLabel', 'variant'],
     context: (head) => resolveTabsContext(head.props),
   })
+}
+
+function createTabsHeaderComponent() {
+  return defineComponent<TabsHeaderContext>(tabsHeaderTemplate, {})
 }
 
 function createTabPaneComponent() {
@@ -92,18 +97,16 @@ export function createTabsComponents() {
   registerTabsStyles()
   return {
     tabs: createTabsComponent(),
+    tabsHeader: createTabsHeaderComponent(),
     tabPane: createTabPaneComponent(),
   }
 }
 
 function resolveTabsContext(props: TabsProps): TabsContext {
-  const title = resolveText(props.title)
-  const groupName = resolveTabsId(props.id, title)
+  const groupName = resolveTabsId(props.id)
   return Object.assign(new TabsScope(), {
     groupName,
-    title,
-    hasTitle: Boolean(title),
-    ariaLabel: resolveAriaLabel(props.ariaLabel, title),
+    ariaLabel: resolveAriaLabel(props.ariaLabel),
     variantClass: resolveVariantClass(props.variant),
   })
 }
@@ -127,10 +130,9 @@ function resolveTabPaneContext(
   }
 }
 
-function resolveAriaLabel(value: unknown, title: string) {
+function resolveAriaLabel(value: unknown) {
   const ariaLabel = resolveText(value)
   if (ariaLabel) return ariaLabel
-  if (title) return title
   return 'Tabs'
 }
 
@@ -140,11 +142,9 @@ function resolveVariantClass(value: unknown) {
   return 'tabs--pills'
 }
 
-function resolveTabsId(value: unknown, title: string) {
+function resolveTabsId(value: unknown) {
   const fromId = toSlug(resolveText(value))
   if (fromId) return `tabs-${fromId}`
-  const fromTitle = toSlug(title)
-  if (fromTitle) return `tabs-${fromTitle}`
   return 'tabs-default'
 }
 

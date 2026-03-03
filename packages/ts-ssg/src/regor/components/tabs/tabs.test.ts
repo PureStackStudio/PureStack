@@ -9,7 +9,8 @@ describe('Tabs rendering', () => {
     const cleanup = ensureDomGlobals()
     const components = createTabsComponents()
     const html = renderApp(
-      `<Tabs id="quickstart" title="Quickstart" variant="underline">
+      `<Tabs id="quickstart" variant="underline">
+        <TabsHeader><h2>Quickstart</h2></TabsHeader>
         <TabPane id="install" label="Install">Run npm install</TabPane>
         <TabPane id="usage" label="Usage" active="true">
           <strong>Import buildSite</strong>
@@ -21,6 +22,7 @@ describe('Tabs rendering', () => {
 
     expect(html).toContain('tabs--underline')
     expect(html).toContain('Run npm install')
+    expect(html).toContain('<h2>Quickstart</h2>')
     expect(html).toContain('<strong>Import buildSite</strong>')
     expect(html).toContain('name="tabs-quickstart"')
     expect(html).toContain('aria-selected="true"')

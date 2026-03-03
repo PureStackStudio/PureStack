@@ -108,7 +108,16 @@ function enhanceTabs(root: HTMLElement) {
     list.getAttribute('aria-label') || 'Tabs',
   )
 
-  const header = root.querySelector(':scope > .tabs__header')
+  let header = root.querySelector(':scope > .tabs__header')
+  if (!(header instanceof HTMLElement)) {
+    const nestedHeader = root.querySelector('.tabs__header')
+    if (nestedHeader instanceof HTMLElement) {
+      header = nestedHeader
+      if (header.parentNode !== root) {
+        root.insertBefore(header, list)
+      }
+    }
+  }
   if (header instanceof HTMLElement && header.parentNode === root) {
     root.insertBefore(row, header.nextSibling)
     root.insertBefore(selectWrap, row.nextSibling)

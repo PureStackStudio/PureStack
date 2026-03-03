@@ -10,12 +10,12 @@ sidebar:
 
 # Tabs Component Samples
 
-`Tabs` and `TabPane` are static-friendly components for showing grouped content.  
+`Tabs`, `TabsHeader`, and `TabPane` are static-friendly components for showing grouped content.  
 Each `TabPane` accepts normal slotted MDX content, including fenced code blocks.
 
 ## 1. Installation walkthrough with code tabs
 
-<Tabs id="install-flow" title="Install @purestack/ts-ssg" variant="underline">
+<Tabs id="install-flow" variant="underline">
   <TabPane id="npm" label="npm" active="true">
     ```bash
     npm install @purestack/ts-ssg
@@ -35,7 +35,7 @@ Each `TabPane` accepts normal slotted MDX content, including fenced code blocks.
 
 ## 6. Stress test with 15 tabs and large titles
 
-<Tabs id="fifteen-tabs-large-labels" title="15 Tab Large Label Overflow Test" variant="underline">
+<Tabs id="fifteen-tabs-large-labels" variant="underline">
   <TabPane id="large-tab-1" label="Installation and Environment Bootstrap" active="true">
     ```ts
     console.log('Large title tab 1 content')
@@ -115,7 +115,7 @@ Each `TabPane` accepts normal slotted MDX content, including fenced code blocks.
 
 ## 2. Build configuration examples
 
-<Tabs id="config-samples" title="Build Config Examples">
+<Tabs id="config-samples">
   <TabPane id="programmatic" label="Programmatic API" active="true">
     ```ts
     import path from 'node:path'
@@ -154,7 +154,7 @@ Each `TabPane` accepts normal slotted MDX content, including fenced code blocks.
 
 ## 3. API integration sample with a disabled tab
 
-<Tabs id="api-samples" title="API Examples" variant="underline">
+<Tabs id="api-samples" variant="underline">
   <TabPane id="fetch" label="fetch" active="true">
     ```ts
     const response = await fetch('/api/rates?base=EUR')
@@ -176,7 +176,10 @@ Each `TabPane` accepts normal slotted MDX content, including fenced code blocks.
 ## 4. Minimal markup reference
 
 ~~~html
-<Tabs id="quickstart" title="Quickstart" variant="underline">
+<Tabs id="quickstart" variant="underline">
+  <TabsHeader>
+    <h4>Quickstart</h4>
+  </TabsHeader>
   <TabPane id="install" label="Install" active="true">
     ```bash
     npm i @purestack/ts-ssg
@@ -192,7 +195,7 @@ Each `TabPane` accepts normal slotted MDX content, including fenced code blocks.
 
 ## 5. Stress test with 15 tabs
 
-<Tabs id="fifteen-tabs" title="15 Tab Overflow Test" variant="underline">
+<Tabs id="fifteen-tabs" variant="underline">
   <TabPane id="tab-1" label="Tab 1" active="true">
     ```ts
     console.log('Tab 1 content')

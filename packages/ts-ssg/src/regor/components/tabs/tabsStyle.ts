@@ -39,15 +39,6 @@ function registerTabsShellStyles(
     .gap('12px')
 
   styleBuilder
-    .select('.tabs__title', theme)
-    .margin('0')
-    .fontSize('0.92rem')
-    .letterSpacing('0.08em')
-    .textTransform('uppercase')
-    .fontWeight('700')
-    .color(palette.text.subtle)
-
-  styleBuilder
     .select('.tabs__list', theme)
     .display('grid')
     .gridTemplateColumns('repeat(auto-fit, minmax(120px, 1fr))')
@@ -301,9 +292,9 @@ function registerTabsPanelStyles(
     .gridColumn('1 / -1')
     .display('none')
     .minWidth('0')
-    .padding('16px')
+    .padding('0')
     .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.border.default}`)
+    .border('none')
     .background(palette.background.panel)
     .color(palette.text.default)
 
