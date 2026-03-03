@@ -162,7 +162,7 @@ function resolvePricingPlanContext(
     hasPrice: Boolean(props.price),
     hasCta,
     hasIcon: Boolean(props.icon),
-    iconSvg: getSvgIcon(`iconoir:${props.icon || 'code'}`),
+    iconSvg: getSvgIcon(props.icon || 'iconoir:code'),
   }
 }
 
@@ -172,7 +172,7 @@ function resolvePricingFeatureContext(
   const icon = resolveString(props.icon)
   return {
     icon,
-    iconSvg: getSvgIcon(`iconoir:${icon || 'check'}`),
+    iconSvg: getSvgIcon(icon || 'iconoir:check'),
   }
 }
 

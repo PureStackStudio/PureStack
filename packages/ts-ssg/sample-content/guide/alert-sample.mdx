@@ -29,7 +29,7 @@ sidebar:
   title="Deployment completed"
   badge="Stable"
   eyebrow="Release"
-  icon="check"
+  icon="iconoir:check"
   meta="Build #1042 finished in 3m 12s"
 >
   Your production rollout passed smoke tests and latency checks. No regressions detected in core endpoints.
@@ -45,7 +45,7 @@ sidebar:
   tone="warning"
   variant="outline"
   title="Planned maintenance window"
-  icon="clock"
+  icon="iconoir:clock"
   meta="Sunday 01:00 - 02:00 UTC"
 >
   During maintenance, background job throughput may be reduced.
@@ -81,7 +81,7 @@ sidebar:
   eyebrow="New"
   title="Private beta: rule simulation"
   badge="Invite only"
-  icon="rocket"
+  icon="iconoir:rocket"
 >
   Simulate pricing and eligibility rules before publishing changes. Compare expected and computed outcomes side-by-side.
   <template name="actions">
@@ -91,17 +91,17 @@ sidebar:
 
 ## 6. Compact alerts for dense pages
 
-<AlertBox tone="neutral" compact="true" title="SDK note" icon="code">
+<AlertBox tone="neutral" compact="true" title="SDK note" icon="iconoir:code">
   `@purestack/ts-ssg` now exports `builtInSkins` directly from the package root.
 </AlertBox>
 
-<AlertBox tone="info" compact="true" title="Migration tip" icon="stack">
+<AlertBox tone="info" compact="true" title="Migration tip" icon="iconoir:book-stack">
   Keep component styles palette-driven. Avoid hardcoded color values in component files.
 </AlertBox>
 
 ## 7. Inline mode
 
-<AlertBox tone="info" inline="true" title="Inline guidance" icon="none">
+<AlertBox tone="info" inline="true" title="Inline guidance">
   Use inline alerts for short contextual guidance inside long documents.
 </AlertBox>
 
@@ -110,7 +110,7 @@ sidebar:
 <AlertBox
   tone="info"
   title="Recommended hardening steps"
-  icon="shield"
+  icon="iconoir:shield"
 >
   Before enabling public access:
   <ol>
@@ -132,7 +132,7 @@ sidebar:
   eyebrow="Optional eyebrow"
   badge="Optional badge"
   meta="Optional metadata line"
-  icon="check|clock|support|rocket|none"
+  icon="iconoir:check|iconoir:clock|iconoir:headset-help|iconoir:rocket"
   compact="true|false"
   inline="true|false"
   role="status|alert|note"
@@ -153,7 +153,7 @@ sidebar:
   eyebrow="Deprecation"
   title="Legacy webhook endpoint will be removed"
   badge="v1"
-  icon="clock"
+  icon="iconoir:clock"
   meta="Removal date: 2026-06-30"
 >
   The endpoint `/api/webhooks/v1/events` is deprecated and will be removed.
@@ -172,7 +172,7 @@ sidebar:
   eyebrow="Security"
   title="Rotate leaked token immediately"
   badge="Critical"
-  icon="shield"
+  icon="iconoir:shield"
   role="alert"
   live="assertive"
 >
@@ -191,7 +191,7 @@ sidebar:
   eyebrow="Incident"
   title="Queue processing delays in EU region"
   badge="Investigating"
-  icon="support"
+  icon="iconoir:headset-help"
   meta="INC-4381 • Last update 14:42 UTC"
 >
   We are seeing elevated queue latency for EU workloads. No data loss has been observed.
@@ -209,7 +209,7 @@ sidebar:
   title="New cache engine behind feature flag"
   eyebrow="Rollout"
   badge="Canary"
-  icon="rocket"
+  icon="iconoir:rocket"
 >
   Enable `runtime.cache.v2` for 5% traffic first. Measure p95 latency and error-rate before expanding rollout.
 </AlertBox>
@@ -221,7 +221,7 @@ sidebar:
   variant="outline"
   title="Data retention policy updated"
   eyebrow="Policy"
-  icon="stack"
+  icon="iconoir:book-stack"
   meta="Effective: next billing cycle"
 >
   Audit log retention changed from 30 to 90 days for all paid plans.
@@ -234,7 +234,7 @@ sidebar:
   tone="success"
   title="Maintenance completed successfully"
   badge="Resolved"
-  icon="check"
+  icon="iconoir:check"
   meta="Total downtime: 0 minutes"
 >
   Schema migration and index optimization are complete. Throughput improved by approximately 18%.
@@ -249,7 +249,6 @@ sidebar:
   tone="warning"
   inline="true"
   compact="true"
-  icon="none"
   title="Quota nearing limit"
 >
   Current usage is at 92% of your monthly allocation.
@@ -262,7 +261,7 @@ sidebar:
   variant="feature"
   eyebrow="Launch checklist"
   title="Before publishing your SDK"
-  icon="code"
+  icon="iconoir:code"
 >
   <ul>
     <li>Confirm semantic version and changelog entries.</li>
@@ -275,3 +274,4 @@ sidebar:
     <a href="#publish-runbook">Open publish runbook</a>
   </template>
 </AlertBox>
+

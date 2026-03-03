@@ -89,7 +89,7 @@ function resolveAlertBoxContext(props: AlertBoxProps): AlertBoxContext {
     role,
     live,
     hasLive,
-    iconSvg: getSvgIcon(`iconoir:${props.icon || 'headset-help'}`),
+    iconSvg: getSvgIcon(props.icon || 'iconoir:headset-help'),
     hasTitle: Boolean(props.title),
     hasEyebrow: Boolean(props.eyebrow),
     hasBadge: Boolean(props.badge),
