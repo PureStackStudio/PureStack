@@ -1,7 +1,7 @@
 import { defineComponent, html } from 'regor'
 
 import type { PageOutlineItem } from '../../../mdx/mdx'
-import { getSvgIcon } from '../../../style/icons'
+import { getSvgIcon } from '../../../style/icons/getSvgIcon'
 import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 import type { TsSsgContext } from '../../ts-ssg-context'
 import { registerPageTocStyles } from './pageTocStyle'
@@ -99,8 +99,8 @@ function createPageTocComponent() {
       return {
         title: resolveTitle(head.props),
         items: resolveItems(head.props, context),
-        headerCollapseIconSvg: getSvgIcon('unpin'),
-        headerRestoreIconSvg: getSvgIcon('pin'),
+        headerCollapseIconSvg: getSvgIcon('iconoir:pin-slash'),
+        headerRestoreIconSvg: getSvgIcon('iconoir:pin'),
       }
     },
   })

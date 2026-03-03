@@ -1,7 +1,7 @@
 import { defineComponent, html } from 'regor'
 
 import type { NavItem } from '../../../navigation/navigation'
-import { getSvgIcon } from '../../../style/icons'
+import { getSvgIcon } from '../../../style/icons/getSvgIcon'
 import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 import type { TsSsgContext } from '../../ts-ssg-context'
 import { registerNavStyles } from './navMenuStyle'
@@ -197,8 +197,8 @@ function createNavMenuComponent() {
           head.props.items ?? resolveNavItems(context),
           resolveCurrentPath(context),
         ),
-        collapseIconSvg: getSvgIcon('unpin'),
-        openIconSvg: getSvgIcon('pin'),
+        collapseIconSvg: getSvgIcon('iconoir:pin-slash'),
+        openIconSvg: getSvgIcon('iconoir:pin'),
       }
     },
   })

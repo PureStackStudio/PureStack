@@ -1,6 +1,6 @@
 import { defineComponent, html } from 'regor'
 
-import { getSvgIcon } from '../../../style/icons'
+import { getSvgIcon } from '../../../style/icons/getSvgIcon'
 import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 import type { TsSsgContext } from '../../ts-ssg-context'
 import { registerFooterStyles } from './footerStyle'
@@ -353,29 +353,12 @@ function resolveFooterSocialContext(
     ...props,
     rel,
     label: props.label || '',
-    iconSvg: getSvgIcon(
-      resolveFooterSocialIcon(props.icon, props.label),
-      'code',
-    ),
+    iconSvg: getSvgIcon(`${props.icon || 'iconoir:code'}`),
     hasHref: Boolean(props.href),
     hasTarget: Boolean(props.target),
     hasRel: Boolean(rel),
     hasLabel: Boolean(props.label),
   }
-}
-
-function resolveFooterSocialIcon(icon?: string, label?: string) {
-  const normalized = icon?.toLowerCase() || label?.toLowerCase() || ''
-  if (normalized.includes('github')) return 'code'
-  if (normalized.includes('discord')) return 'support'
-  if (normalized.includes('linkedin')) return 'building'
-  if (normalized.includes('x') || normalized.includes('twitter'))
-    return 'rocket'
-  if (normalized.includes('community') || normalized.includes('forum')) {
-    return 'stack'
-  }
-  if (normalized.includes('security')) return 'shield'
-  return 'code'
 }
 
 function resolveFooterTone(value?: string) {

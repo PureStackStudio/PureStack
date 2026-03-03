@@ -25,6 +25,7 @@
     "dev-css": "yarn tsx --watch packages/ts-css-bootstrap/src/index.ts",
     "dev": "yarn tsx --watch packages/ts-ssg/src/index.ts",
     "embed": "yarn tsx scripts/embed.ts && yarn format",
+    "gen-icons": "yarn tsx scripts/generate-icons.ts && yarn format",
     "build": "yarn workspaces foreach --no-private --all --verbose --topological -- run build",
     "lint": "yarn workspaces foreach --no-private --all --verbose --topological -- run lint && yarn lint-mygate",
     "bundle": "yarn tsx --no-warnings scripts/bundle.ts && biome check --write \"packages/**/*.d.ts\"",
@@ -37,5 +38,9 @@
     "mygate": "yarn tsx --watch packages/ts-ssg/src/index.ts --content MyGate/MyGateApp/admin-panel/content --serve",
     "lint-mygate": "biome check MyGate/MyGateApp/admin-panel/content --write --formatter-enabled=false",
     "format-mygate": "biome format MyGate/MyGateApp/admin-panel/content --write"
+  },
+  "dependencies": {
+    "iconoir": "^7.11.0",
+    "lucide": "^0.576.0"
   }
 }

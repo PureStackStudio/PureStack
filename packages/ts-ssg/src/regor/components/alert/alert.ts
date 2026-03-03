@@ -1,6 +1,6 @@
 import { defineComponent, html } from 'regor'
 
-import { getSvgIcon } from '../../../style/icons'
+import { getSvgIcon } from '../../../style/icons/getSvgIcon'
 import { registerAlertStyles } from './alertStyle'
 
 interface AlertBoxProps {
@@ -79,18 +79,17 @@ export function createAlertComponents() {
 function resolveAlertBoxContext(props: AlertBoxProps): AlertBoxContext {
   const tone = resolveTone(props.tone)
   const variant = resolveVariant(props.variant)
-  const iconName = resolveIconName(props.icon, tone)
   const role = resolveRole(props.role, tone)
   const live = resolveLive(props.live)
   const hasLive = live.length > 0
-  const hasIcon = iconName.length > 0
+  const hasIcon = true
 
   return {
     ...props,
     role,
     live,
     hasLive,
-    iconSvg: hasIcon ? getSvgIcon(iconName, 'support') : '',
+    iconSvg: getSvgIcon(`iconoir:${props.icon || 'headset-help'}`),
     hasTitle: Boolean(props.title),
     hasEyebrow: Boolean(props.eyebrow),
     hasBadge: Boolean(props.badge),
@@ -158,18 +157,4 @@ function resolveLive(value?: string) {
     return normalized
   }
   return ''
-}
-
-function resolveIconName(value?: string, tone?: string) {
-  const normalized = value?.toLowerCase() ?? ''
-  if (normalized === 'none' || normalized === 'off' || normalized === 'false') {
-    return ''
-  }
-  if (normalized) return normalized
-  if (tone === 'success') return 'check'
-  if (tone === 'warning') return 'clock'
-  if (tone === 'danger') return 'shield'
-  if (tone === 'accent') return 'rocket'
-  if (tone === 'neutral') return 'stack'
-  return 'support'
 }

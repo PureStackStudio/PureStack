@@ -2535,6 +2535,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"iconoir@npm:^7.11.0":
+  version: 7.11.0
+  resolution: "iconoir@npm:7.11.0"
+  checksum: 10c0/c5c6e70799d830ff3ec83da2355e4944fa8e66d63817d7e76b4fb769ccc3b529d1808806675a59e1441c374402bf776bbd5cf3350b68d355145fd37c9c0781fd
+  languageName: node
+  linkType: hard
+
 "iconv-lite@npm:^0.6.2":
   version: 0.6.3
   resolution: "iconv-lite@npm:0.6.3"
@@ -2855,6 +2862,13 @@ __metadata:
   version: 10.4.3
   resolution: "lru-cache@npm:10.4.3"
   checksum: 10c0/ebd04fbca961e6c1d6c0af3799adcc966a1babe798f685bb84e6599266599cd95d94630b10262f5424539bc4640107e8a33aa28585374abf561d30d16f4b39fb
+  languageName: node
+  linkType: hard
+
+"lucide@npm:^0.576.0":
+  version: 0.576.0
+  resolution: "lucide@npm:0.576.0"
+  checksum: 10c0/dee862a9311cab90bec310e89657f65b2cd1fd6a5d0aa11add51945dc9047c65aeff1b4c1ad8b53032b42aa070be06e8702074c1cafe00cb67bd1e3bb420e3d6
   languageName: node
   linkType: hard
 
@@ -3946,6 +3960,8 @@ __metadata:
     "@biomejs/biome": "npm:^2.4.4"
     "@types/node": "npm:^25.3.1"
     esbuild: "npm:^0.27.3"
+    iconoir: "npm:^7.11.0"
+    lucide: "npm:^0.576.0"
     tsdown: "npm:^0.20.3"
     tsx: "npm:^4.21.0"
     typescript: "npm:^5.9.3"

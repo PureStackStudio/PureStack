@@ -1,6 +1,6 @@
 import { defineComponent, html } from 'regor'
 
-import { getSvgIcon } from '../../../style/icons'
+import { getSvgIcon } from '../../../style/icons/getSvgIcon'
 import { registerPricingStyles } from './pricingStyle'
 
 interface PricingTableProps {
@@ -162,7 +162,7 @@ function resolvePricingPlanContext(
     hasPrice: Boolean(props.price),
     hasCta,
     hasIcon: Boolean(props.icon),
-    iconSvg: getSvgIcon(props.icon, 'code'),
+    iconSvg: getSvgIcon(`iconoir:${props.icon || 'code'}`),
   }
 }
 
@@ -172,7 +172,7 @@ function resolvePricingFeatureContext(
   const icon = resolveString(props.icon)
   return {
     icon,
-    iconSvg: getSvgIcon(icon, 'check'),
+    iconSvg: getSvgIcon(`iconoir:${icon || 'check'}`),
   }
 }
 
