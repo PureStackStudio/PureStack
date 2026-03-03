@@ -6,7 +6,7 @@ type TabsEntry = {
   control: HTMLInputElement
   label: HTMLLabelElement
   text: string
-  iconHtml: string
+  iconMarkup: string
 }
 
 type InteractionSource = 'button' | 'select' | 'overflow' | 'external'
@@ -45,7 +45,7 @@ function enhanceTabs(root: HTMLElement) {
       control,
       label,
       text: (label.textContent || '').trim() || 'Tab',
-      iconHtml: resolveTabIconHtml(label),
+      iconMarkup: resolveTabIconMarkup(label),
     })
   }
   if (tabs.length === 0) return
@@ -76,7 +76,7 @@ function enhanceTabs(root: HTMLElement) {
     const btn = document.createElement('button')
     btn.type = 'button'
     btn.className = 'tabs__tab-button'
-    setButtonContent(btn, tabs[i].text, tabs[i].iconHtml)
+    setButtonContent(btn, tabs[i].text, tabs[i].iconMarkup)
     btn.disabled = tabs[i].control.disabled
     btn.setAttribute('aria-label', tabs[i].text)
     btn.addEventListener('click', () => selectTab(i, 'button'))
@@ -186,7 +186,7 @@ function enhanceTabs(root: HTMLElement) {
       const option = document.createElement('button')
       option.type = 'button'
       option.className = 'tabs__overflow-option'
-      setButtonContent(option, tabs[index].text, tabs[index].iconHtml)
+      setButtonContent(option, tabs[index].text, tabs[index].iconMarkup)
       option.disabled = tabs[index].control.disabled
       if (index === active)
         option.classList.add('tabs__overflow-option--active')
@@ -438,30 +438,35 @@ function enhanceTabs(root: HTMLElement) {
   applyLayout()
 }
 
-function resolveTabIconHtml(label: HTMLLabelElement) {
+function resolveTabIconMarkup(label: HTMLLabelElement) {
   const icon = label.querySelector('.tabs__tab-icon')
   if (!(icon instanceof HTMLElement)) return ''
-  return icon.innerHTML.trim()
+  return icon.outerHTML.trim()
 }
 
-function setButtonContent(target: HTMLElement, text: string, iconHtml: string) {
-  if (!iconHtml) {
+function setButtonContent(
+  target: HTMLElement,
+  text: string,
+  iconMarkup: string,
+) {
+  if (!iconMarkup) {
     target.textContent = text
     return
   }
 
   target.innerHTML = ''
-
-  const icon = document.createElement('span')
-  icon.className = 'tabs__tab-icon'
-  icon.setAttribute('aria-hidden', 'true')
-  icon.innerHTML = iconHtml
+  const template = document.createElement('template')
+  template.innerHTML = iconMarkup
+  const icon = template.content.firstElementChild
+  if (icon instanceof HTMLElement) {
+    icon.setAttribute('aria-hidden', 'true')
+    target.appendChild(icon)
+  }
 
   const label = document.createElement('span')
   label.className = 'tabs__tab-label'
   label.textContent = text
 
-  target.appendChild(icon)
   target.appendChild(label)
 }
 
