@@ -192,8 +192,7 @@ function registerTabsControlStyles(
     .pointerEvents('none')
 
   styleBuilder
-    .select('.tabs__tab', theme)
-    .gridRow('1')
+    .select('.tabs__tab, .tabs__tab-button', theme)
     .display('inline-flex')
     .alignItems('center')
     .justifyContent('center')
@@ -207,11 +206,19 @@ function registerTabsControlStyles(
     .fontWeight('700')
     .lineHeight('1.2')
     .gap('0.5em')
+    .overflow('hidden')
     .textAlign('center')
     .cursor('pointer')
     .transition(
       'background 160ms ease, color 160ms ease, border-color 160ms ease',
     )
+
+  styleBuilder.select('.tabs__tab', theme).gridRow('1')
+
+  styleBuilder
+    .select('.tabs__tab-button', theme)
+    .flexShrink('0')
+    .whiteSpace('nowrap')
 
   styleBuilder
     .select('.tabs__tab-icon', theme)
@@ -229,9 +236,15 @@ function registerTabsControlStyles(
     .height('100%')
 
   styleBuilder.select('.tabs__tab-label', theme).display('inline-block')
+  styleBuilder
+    .select('.tabs__tab-label', theme)
+    .overflow('hidden')
+    .textOverflow('ellipsis')
+    .whiteSpace('nowrap')
+    .maxWidth('100%')
 
   styleBuilder
-    .select('.tabs__tab:hover', theme)
+    .select('.tabs__tab:hover, .tabs__tab-button:hover', theme)
     .background(palette.action.ghost.hover)
     .color(palette.text.default)
 
@@ -244,7 +257,7 @@ function registerTabsControlStyles(
 
   styleBuilder
     .select(
-      '.tabs__list:not(:has(.tabs__control:checked)) .tabs__item:first-child .tabs__tab',
+      '.tabs__list:not(:has(.tabs__control:checked)) .tabs__item:first-child .tabs__tab, .tabs__tab-button--active',
       theme,
     )
     .borderColor('transparent')
@@ -263,44 +276,9 @@ function registerTabsControlStyles(
     .cursor('not-allowed')
 
   styleBuilder
-    .select('.tabs__tab-button', theme)
-    .display('inline-flex')
-    .alignItems('center')
-    .justifyContent('center')
-    .flexShrink('0')
-    .minHeight('42px')
-    .padding('10px 14px')
-    .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.border.default}`)
-    .background(palette.background.panel)
-    .color(palette.text.subtle)
-    .fontSize('0.88rem')
-    .fontWeight('700')
-    .lineHeight('1.2')
-    .gap('0.5em')
-    .textAlign('center')
-    .cursor('pointer')
-    .whiteSpace('nowrap')
-    .transition(
-      'background 160ms ease, color 160ms ease, border-color 160ms ease',
-    )
-
-  styleBuilder
-    .select('.tabs__tab-button:hover', theme)
-    .background(palette.action.ghost.hover)
-    .color(palette.text.default)
-
-  styleBuilder
     .select('.tabs__tab-button:focus-visible', theme)
     .outline(`2px solid ${palette.border.focus}`)
     .outlineOffset('2px')
-
-  styleBuilder
-    .select('.tabs__tab-button--active', theme)
-    .borderColor('transparent')
-    .background(palette.action.accent.background)
-    .color(palette.action.accent.text)
-    .boxShadow(palette.effect.interactiveShadow)
 
   styleBuilder
     .select('.tabs__tab-button:disabled', theme)
@@ -347,39 +325,12 @@ function registerTabsPanelStyles(
 }
 
 function registerTabsVariantStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
+  _theme: ThemeMode,
+  _palette: ThemePalette,
+  _options: ThemeOptions,
 ) {
-  styleBuilder
-    .select('.tabs--underline .tabs__tab', theme)
-    .border('none')
-    .borderBottom(`2px solid ${palette.border.subtle}`)
-    .borderRadius(`${options.radii.sm} ${options.radii.sm} 0 0`)
-    .background('transparent')
-
-  styleBuilder
-    .select('.tabs--underline .tabs__tab-button', theme)
-    .border('none')
-    .borderBottom(`2px solid ${palette.border.subtle}`)
-    .borderRadius(`${options.radii.sm} ${options.radii.sm} 0 0`)
-    .background('transparent')
-
-  styleBuilder
-    .select('.tabs--underline .tabs__tab:hover, .tabs--underline .tabs__tab-button:hover', theme)
-    .background(palette.background.accentMuted)
-
-  styleBuilder
-    .select('.tabs--underline .tabs__control:checked + .tabs__tab', theme)
-    .borderBottomColor(palette.border.accent)
-    .background(palette.background.feature)
-    .color(palette.text.accent)
-
-  styleBuilder
-    .select('.tabs--underline .tabs__tab-button--active', theme)
-    .borderBottomColor(palette.border.accent)
-    .background(palette.background.feature)
-    .color(palette.text.accent)
+  // Variant currently shares the same button-style visuals for both
+  // static and enhanced controls to avoid appearance drift.
 }
 
 function registerTabsResponsiveStyles(theme: ThemeMode) {
