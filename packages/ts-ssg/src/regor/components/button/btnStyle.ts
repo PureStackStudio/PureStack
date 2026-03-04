@@ -14,6 +14,7 @@ function registerButtonBaseStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.btn', theme)
     .display('inline-flex')
+    .verticalAlign('middle')
     .alignItems('center')
     .justifyContent('center')
     .gap('8px')
