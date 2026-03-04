@@ -13,7 +13,10 @@
     "fileName": "site.css",
     "href": "/site.css",
     "themes": ["light", "dark"],
-    "pretty": false
+    "pretty": false,
+    "theme": {
+      "skin": "neon"
+    }
   },
   "html": {
     "minify": false

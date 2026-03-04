@@ -9,7 +9,7 @@ import {
   type MdxRenderOptions,
   type PageOutlineItem,
 } from './compile'
-import { normalizeTemplateMdxTree } from './normalizeTemplateMdxTree'
+import { normalizeMdxJsxParagraphs } from './normalizeMdxJsxParagraphs'
 
 export {
   DEFAULT_MDX_CODE_LANGS,
@@ -30,7 +30,7 @@ export function compileMdx(
     .use(remarkGfm)
     .use(remarkMdx)
     .parse(source)
-  normalizeTemplateMdxTree(file)
+  normalizeMdxJsxParagraphs(file)
   return compileAstToHtml(file, options, { stripMdxArtifacts: true })
 }
 

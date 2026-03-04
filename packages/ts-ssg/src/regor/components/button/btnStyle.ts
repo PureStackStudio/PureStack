@@ -28,9 +28,10 @@ function registerButtonBaseStyles(theme: ThemeMode, palette: ThemePalette) {
       'background 150ms ease, color 150ms ease, border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease',
     )
 
-  styleBuilder.select('.btn:focus-visible', theme).outline('none').boxShadow(
-    `0 0 0 2px ${palette.action.neutral.focusRing}`,
-  )
+  styleBuilder
+    .select('.btn:focus-visible', theme)
+    .outline('none')
+    .boxShadow(`0 0 0 2px ${palette.action.neutral.focusRing}`)
 
   styleBuilder
     .select('.btn:disabled', theme)
@@ -43,10 +44,7 @@ function registerButtonBaseStyles(theme: ThemeMode, palette: ThemePalette) {
     .display('inline-flex')
     .alignItems('center')
 
-  styleBuilder
-    .select('.btn__icon', theme)
-    .width('1.1em')
-    .height('1.1em')
+  styleBuilder.select('.btn__icon', theme).width('1.1em').height('1.1em')
 }
 
 function registerButtonSizeStyles(
@@ -215,4 +213,3 @@ function registerButtonVariantStyles(theme: ThemeMode, palette: ThemePalette) {
     .color(palette.status.warning.text)
     .opacity('0.72')
 }
-

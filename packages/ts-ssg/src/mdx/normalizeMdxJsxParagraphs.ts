@@ -5,6 +5,10 @@ type GenericNode = {
   value?: unknown
 }
 
+type ParentNode = {
+  children: unknown[]
+}
+
 type ParagraphNode = {
   type: 'paragraph'
   children: unknown[]
@@ -33,62 +37,53 @@ type MdxJsxFlowElementNode = {
   position?: unknown
 }
 
-export function normalizeTemplateMdxTree(root: unknown) {
-  visit(root, false)
+export function normalizeMdxJsxParagraphs(root: unknown) {
+  visit(root)
 }
 
-function visit(node: unknown, inTemplateTree: boolean) {
+function visit(node: unknown) {
   if (!isObject(node)) return
-  const isTemplate = isTemplateNode(node)
-  const nextInTemplateTree = inTemplateTree || isTemplate
   const children = getChildren(node)
   if (children.length === 0) return
-  if (nextInTemplateTree) {
-    node.children = normalizeTemplateChildren(children)
-    for (const child of getChildren(node)) {
-      visit(child, true)
-    }
-    return
-  }
-  for (const child of children) {
-    visit(child, false)
+  const normalized = normalizeChildList(children)
+  ;(node as ParentNode).children = normalized
+  for (const child of normalized) {
+    visit(child)
   }
 }
 
-function normalizeTemplateChildren(children: unknown[]) {
+function normalizeChildList(children: unknown[]) {
   const next: unknown[] = []
   for (const child of children) {
     if (isParagraphNode(child)) {
-      const unwrapped = unwrapTemplateParagraph(child)
-      if (unwrapped) {
-        next.push(...unwrapped)
+      const parts = splitParagraphAroundJsx(child)
+      if (parts) {
+        next.push(...parts)
         continue
       }
-      next.push(child)
-      continue
     }
     next.push(child)
   }
   return next
 }
 
-function unwrapTemplateParagraph(node: ParagraphNode): unknown[] | null {
-  const paragraphChildren = getChildren(node)
-  if (paragraphChildren.length === 0) return null
-  for (const child of paragraphChildren) {
+function splitParagraphAroundJsx(node: ParagraphNode): unknown[] | null {
+  const children = getChildren(node)
+  if (!children.some(isMdxJsxTextElementNode)) return null
+  for (const child of children) {
     if (isWhitespaceTextNode(child)) continue
     if (isMdxJsxTextElementNode(child)) continue
     return null
   }
-  const flowChildren: unknown[] = []
-  for (const child of paragraphChildren) {
-    if (isWhitespaceTextNode(child)) continue
+
+  const parts: unknown[] = []
+  for (const child of children) {
     if (isMdxJsxTextElementNode(child)) {
-      const flow = convertMdxJsxTextToFlow(child)
-      flowChildren.push(flow)
+      parts.push(convertMdxJsxTextToFlow(child))
     }
   }
-  return flowChildren
+
+  return parts
 }
 
 function convertMdxJsxTextToFlow(
@@ -110,19 +105,6 @@ function isObject(value: unknown): value is GenericNode {
 
 function getChildren(node: GenericNode): unknown[] {
   return Array.isArray(node.children) ? node.children : []
-}
-
-function isTemplateNode(node: GenericNode): node is GenericNode & {
-  type: 'mdxJsxFlowElement'
-  name: string
-  children: unknown[]
-} {
-  return (
-    node.type === 'mdxJsxFlowElement' &&
-    typeof node.name === 'string' &&
-    node.name.toLowerCase() === 'template' &&
-    Array.isArray(node.children)
-  )
 }
 
 function isParagraphNode(node: unknown): node is ParagraphNode {

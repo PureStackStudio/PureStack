@@ -158,10 +158,11 @@ function normalizeMdxJsxChildren(
 ) {
   if (!name) return children
   const normalized = name.toLowerCase()
-  if (
-    !INLINE_TAGS.has(normalized) &&
-    !componentRegistry.hasComponentName(name)
-  ) {
+  const shouldFlattenParagraphChildren =
+    normalized === 'p' ||
+    INLINE_TAGS.has(normalized) ||
+    componentRegistry.hasComponentName(name)
+  if (!shouldFlattenParagraphChildren) {
     return children
   }
   const next: Element['children'] = []

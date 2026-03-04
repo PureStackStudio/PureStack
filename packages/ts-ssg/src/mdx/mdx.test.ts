@@ -150,7 +150,7 @@ describe('compileMdxToHtml', () => {
     )
   })
 
-  it('keeps real mixed text paragraphs inside template slots', async () => {
+  it('keeps mixed text paragraphs wrapped as a single p in template slots', async () => {
     const source = [
       '<Modal id="mixed-template-paragraph">',
       '  <template name="footer">',
@@ -178,7 +178,7 @@ describe('compileMdxToHtml', () => {
     expect(compiledHtml).toContain('<p class="note">Keep me</p>')
   })
 
-  it('does not unwrap paragraphs that contain non-whitespace text before JSX', async () => {
+  it('keeps paragraphs that contain non-whitespace text before JSX', async () => {
     const source = [
       '<Modal id="text-before-jsx-template">',
       '  <template name="footer">',
@@ -209,6 +209,131 @@ describe('compileMdxToHtml', () => {
     expect(compiledHtml).toContain(
       '<section><h3>Quarterly launch checklist</h3><button type="button">Close</button></section>',
     )
+  })
+
+  it('keeps Btn variant component nodes unwrapped inside template slots', async () => {
+    const source = [
+      '<CardActions>',
+      '  <template name="actions">',
+      '    <Btn variant="primary" icon="iconoir:check">Create project</Btn>',
+      '    <Btn variant="secondary" icon="iconoir:code">View source</Btn>',
+      '    <Btn variant="ghost" icon="iconoir:pin-slash" iconPosition="end">',
+      '      Read more',
+      '    </Btn>',
+      '    <Btn variant="warning" icon="iconoir:headset-help">Review warning</Btn>',
+      '    <Btn variant="danger" icon="iconoir:pin" iconPosition="end">Delete item</Btn>',
+      '  </template>',
+      '</CardActions>',
+    ].join('\n')
+
+    const compiledHtml = compileMdxToHtml(source)
+    expect(compiledHtml).not.toContain('<p><Btn')
+    expect(compiledHtml).not.toContain('</Btn></p>')
+    expect(compiledHtml).toContain(
+      '<Btn variant="primary" icon="iconoir:check">Create project</Btn>',
+    )
+    expect(compiledHtml).toContain(
+      '<Btn variant="secondary" icon="iconoir:code">View source</Btn>',
+    )
+    expect(compiledHtml).toContain(
+      '<Btn variant="ghost" icon="iconoir:pin-slash" iconPosition="end">',
+    )
+    expect(compiledHtml).toContain(
+      '<Btn variant="warning" icon="iconoir:headset-help">Review warning</Btn>',
+    )
+    expect(compiledHtml).toContain(
+      '<Btn variant="danger" icon="iconoir:pin" iconPosition="end">Delete item</Btn>',
+    )
+  })
+
+  it('renders Btn variant component nodes as direct mdx content without paragraph wrappers', async () => {
+    const source = [
+      '## 10. Variants with icons',
+      '',
+      '<Btn variant="primary" icon="iconoir:check">Create project</Btn>',
+      '<Btn variant="secondary" icon="iconoir:code">View source</Btn>',
+      '<Btn variant="ghost" icon="iconoir:pin-slash" iconPosition="end">',
+      '  Read more',
+      '</Btn>',
+      '<Btn variant="warning" icon="iconoir:headset-help">Review warning</Btn>',
+      '<Btn variant="danger" icon="iconoir:pin" iconPosition="end">Delete item</Btn>',
+    ].join('\n')
+
+    const compiledHtml = compileMdxToHtml(source)
+    expect(compiledHtml).toContain(
+      '<h2 id="10-variants-with-icons">10. Variants with icons</h2>',
+    )
+    expect(compiledHtml).not.toContain('<p><Btn')
+    expect(compiledHtml).toContain(
+      '<Btn variant="primary" icon="iconoir:check">Create project</Btn>',
+    )
+    expect(compiledHtml).toContain(
+      '<Btn variant="secondary" icon="iconoir:code">View source</Btn>',
+    )
+    expect(compiledHtml).toContain(
+      '<Btn variant="ghost" icon="iconoir:pin-slash" iconPosition="end"><p>Read more</p></Btn>',
+    )
+    expect(compiledHtml).toContain(
+      '<Btn variant="warning" icon="iconoir:headset-help">Review warning</Btn>',
+    )
+    expect(compiledHtml).toContain(
+      '<Btn variant="danger" icon="iconoir:pin" iconPosition="end">Delete item</Btn>',
+    )
+    expect(compiledHtml).toContain(
+      '<Btn variant="primary" icon="iconoir:check">Create project</Btn>',
+    )
+    expect(compiledHtml).toContain(
+      '<Btn variant="secondary" icon="iconoir:code">View source</Btn>',
+    )
+    expect(compiledHtml).toContain(
+      '<Btn variant="ghost" icon="iconoir:pin-slash" iconPosition="end">',
+    )
+    expect(compiledHtml).toContain(
+      '<Btn variant="warning" icon="iconoir:headset-help">Review warning</Btn>',
+    )
+    expect(compiledHtml).toContain(
+      '<Btn variant="danger" icon="iconoir:pin" iconPosition="end">Delete item</Btn>',
+    )
+  })
+
+  it('does not inject empty paragraphs for full modal content template', async () => {
+    const cleanup = ensureDomGlobals()
+    const source = [
+      '<Modal id="full-content-modal" fade="false" slideFrom="left" size="md">',
+      '  <template name="content">',
+      '    <article class="modal__panel" role="document" tabindex="-1">',
+      '      <h2>Fully custom content slot</h2>',
+      '      <p>',
+      '        This replaces the default modal shell entirely when you need custom internal structure.',
+      '      </p>',
+      '      <Grid columns="1" gap="sm" justifyItems="center">',
+      '        <div>',
+      '          <button type="button" class="modal-trigger" data-modal-close>Approve</button>',
+      '          <button type="button" class="modal-trigger" data-modal-close>Cancel</button>',
+      '        </div>',
+      '      </Grid>',
+      '    </article>',
+      '  </template>',
+      '</Modal>',
+    ].join('\n')
+
+    try {
+      const compiledHtml = compileMdxToHtml(source)
+      expect(compiledHtml).not.toContain('<p></p>')
+      expect(compiledHtml).not.toContain('<p><p>')
+
+      const html = renderApp(compiledHtml, {
+        components: createModalComponents(),
+        context: createTestContext(),
+      })
+      expect(html).not.toContain('<p></p>')
+      expect(html).not.toContain('<p><p>')
+      expect(html).toContain(
+        '<article class="modal__panel" role="document" tabindex="-1">',
+      )
+    } finally {
+      cleanup()
+    }
   })
 })
 
