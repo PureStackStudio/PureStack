@@ -15,6 +15,7 @@ import { createHeroComponents } from './components/hero/hero'
 import { createIconComponents } from './components/icon/icon'
 import { createLoginComponents } from './components/login/login'
 import { createLogoComponents } from './components/logo/logo'
+import { createModalComponents } from './components/modal/modal'
 import { createNavigationComponents } from './components/navMenu/navMenu'
 import { createPageTocComponents } from './components/pageToc/pageToc'
 import { createPricingComponents } from './components/pricing/pricing'
@@ -50,6 +51,7 @@ export function initBuiltinComponents(
   componentRegistry.registerMany(createIconComponents())
   componentRegistry.registerMany(createLoginComponents())
   componentRegistry.registerMany(createLogoComponents())
+  componentRegistry.registerMany(createModalComponents())
   componentRegistry.registerMany(createTopBarComponents())
   componentRegistry.registerMany(createThemeSwitcherComponents())
   componentRegistry.registerMany(createNavigationComponents())

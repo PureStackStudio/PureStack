@@ -1,5 +1,6 @@
 import { createApp } from 'regor'
 import { createDom } from '../minidom/createDom'
+import { buildModalScript } from '../templates/buildModalScript'
 import { buildTabsScript } from '../templates/buildTabsScript'
 import { componentRegistry } from './registry'
 import type { TsSsgContext } from './ts-ssg-context'
@@ -62,14 +63,26 @@ function appendEmbeddedScriptsToDom(
   runtimeEmbeds: Map<string, 'body' | 'head'>,
   context: TsSsgContext,
 ) {
-  const tabsPosition = resolveTabsEmbedPosition(runtimeEmbeds, context)
-  if (tabsPosition) {
-    const targetParent = ensureScriptParent(tabsPosition)
-    if (!targetParent) return
-    const script = document.createElement('script')
-    script.textContent = buildTabsScript()
-    targetParent.appendChild(script)
-  }
+  appendRuntimeScript(
+    resolveTabsEmbedPosition(runtimeEmbeds, context),
+    buildTabsScript,
+  )
+  appendRuntimeScript(
+    resolveModalEmbedPosition(runtimeEmbeds, context),
+    buildModalScript,
+  )
+}
+
+function appendRuntimeScript(
+  position: 'body' | 'head' | undefined,
+  scriptBuilder: () => string,
+) {
+  if (!position) return
+  const targetParent = ensureScriptParent(position)
+  if (!targetParent) return
+  const script = document.createElement('script')
+  script.textContent = scriptBuilder()
+  targetParent.appendChild(script)
 }
 
 function ensureScriptParent(position: 'body' | 'head') {
@@ -86,4 +99,13 @@ function resolveTabsEmbedPosition(
   const runtimePosition = runtimeEmbeds.get('tabs')
   if (runtimePosition) return runtimePosition
   return context?.pageInfo?.frontmatter?.embed?.tabs
+}
+
+function resolveModalEmbedPosition(
+  runtimeEmbeds: Map<string, 'body' | 'head'>,
+  context: TsSsgContext,
+) {
+  const runtimePosition = runtimeEmbeds.get('modal')
+  if (runtimePosition) return runtimePosition
+  return context?.pageInfo?.frontmatter?.embed?.modal
 }

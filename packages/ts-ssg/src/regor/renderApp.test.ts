@@ -57,6 +57,46 @@ describe('renderApp', () => {
       cleanup()
     }
   })
+
+  it('supports modal runtime embed position set to head', () => {
+    const cleanup = ensureDomGlobals()
+    try {
+      const site = resolveSiteConfig({ rootDir: process.cwd() })
+      const context: TsSsgContext = {
+        site,
+        pageInfo: {
+          relPath: 'index.mdx',
+          urlPath: '/',
+          frontmatter: normalizeFrontmatter({}),
+        },
+        theme: site.style.theme,
+        recordScriptEntrypoint: () => {},
+        recordRuntimeEmbed: () => {},
+      }
+
+      const output = renderApp(
+        '<html><head></head><body><Marker /></body></html>',
+        {
+          components: {
+            marker: defineComponent(html`<div>marker</div>`, {
+              context: (head) => {
+                resolveTsSsgContext(head).recordRuntimeEmbed('modal', 'head')
+                return {}
+              },
+            }),
+          },
+          context,
+        },
+      )
+
+      const modalScriptIndex = output.indexOf('data-modal-trigger')
+      const headCloseIndex = output.indexOf('</head>')
+      expect(modalScriptIndex).toBeGreaterThan(0)
+      expect(modalScriptIndex).toBeLessThan(headCloseIndex)
+    } finally {
+      cleanup()
+    }
+  })
 })
 
 function createTestContext(): TsSsgContext {

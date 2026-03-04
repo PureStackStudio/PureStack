@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest'
 
 import { resolveSiteConfig } from '../config/config'
 import { normalizeFrontmatter } from '../frontmatter/frontmatter'
+import { ensureDomGlobals } from '../minidom/createDom'
+import { createModalComponents } from '../regor/components/modal/modal'
 import { renderApp } from '../regor/renderApp'
 import type { TsSsgContext } from '../regor/ts-ssg-context'
 import { compileMdxToHtml } from './mdx'
@@ -84,6 +86,39 @@ describe('compileMdxToHtml', () => {
     expect(html).toContain('<tbody>')
     expect(html).toContain('<td>Bus</td>')
     expect(html).toContain('<td>Sea</td>')
+  })
+
+  it('strips empty paragraphs around template slot content', async () => {
+    const cleanup = ensureDomGlobals()
+    const source = [
+      '<Modal id="custom-shell-modal" size="xl" fade="true" slideFrom="bottom">',
+      '  <template name="header">',
+      '    <div>',
+      '      <h2 id="custom-shell-modal-title">Quarterly launch checklist</h2>',
+      '      <p>Use a custom header slot when default title layout is not enough.</p>',
+      '    </div>',
+      '  </template>',
+      '</Modal>',
+    ].join('\n')
+
+    try {
+      const compiledHtml = compileMdxToHtml(source)
+      expect(compiledHtml).not.toContain('<p><h2')
+
+      const html = renderApp(compiledHtml, {
+        components: createModalComponents(),
+        context: createTestContext(),
+      })
+
+      expect(html).not.toContain('<p></p>')
+      expect(html).not.toContain('<p><h2')
+      expect(html).toContain('<h2 id="custom-shell-modal-title">')
+      expect(html).toContain(
+        '<p>Use a custom header slot when default title layout is not enough.</p>',
+      )
+    } finally {
+      cleanup()
+    }
   })
 })
 

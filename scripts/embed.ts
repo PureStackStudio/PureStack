@@ -17,6 +17,7 @@ const embedEntries = [
   { name: 'pageToc', fn: 'buildEmbeddedPageTocScript' },
   { name: 'navMenu', fn: 'buildEmbeddedNavMenuScript' },
   { name: 'tabs', fn: 'buildEmbeddedTabsScript' },
+  { name: 'modal', fn: 'buildEmbeddedModalScript' },
   { name: 'codeCopy', fn: 'buildEmbeddedCodeCopyScript' },
   { name: 'pagefindSearch', fn: 'buildEmbeddedPagefindSearchScript' },
   { name: 'navTransitionReady', fn: 'buildEmbeddedNavTransitionReadyScript' },

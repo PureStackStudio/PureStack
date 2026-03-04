@@ -70,6 +70,14 @@ describe('frontmatter', () => {
     expect(body.embed?.tabs).toBe('body')
   })
 
+  it('normalizes embed.modal as head/body', () => {
+    const head = normalizeFrontmatter({ embed: { modal: 'head' } })
+    const body = normalizeFrontmatter({ embed: { modal: 'body' } })
+
+    expect(head.embed?.modal).toBe('head')
+    expect(body.embed?.modal).toBe('body')
+  })
+
   it('throws for invalid embed.tabs value', () => {
     expect(() =>
       normalizeFrontmatter(
@@ -80,6 +88,19 @@ describe('frontmatter', () => {
       ),
     ).toThrow(
       'Invalid frontmatter.embed.tabs in index.mdx: expected "head" or "body"',
+    )
+  })
+
+  it('throws for invalid embed.modal value', () => {
+    expect(() =>
+      normalizeFrontmatter(
+        {
+          embed: { modal: true },
+        },
+        'index.mdx',
+      ),
+    ).toThrow(
+      'Invalid frontmatter.embed.modal in index.mdx: expected "head" or "body"',
     )
   })
 })

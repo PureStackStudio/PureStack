@@ -63,6 +63,12 @@ export interface FrontmatterEmbedOptions {
    */
   tabs?: 'head' | 'body'
   /**
+   * Modal runtime embed target.
+   * - `body`: appends runtime script to the end of body
+   * - `head`: appends runtime script to document head
+   */
+  modal?: 'head' | 'body'
+  /**
    * Allows custom, project-specific embed fields.
    */
   [key: string]: unknown
@@ -233,6 +239,10 @@ function resolveEmbedOptions(
   return {
     ...rawEmbed,
     tabs: resolveEmbedTabsPosition(resolveKey(rawEmbed, 'tabs'), sourceLabel),
+    modal: resolveEmbedModalPosition(
+      resolveKey(rawEmbed, 'modal'),
+      sourceLabel,
+    ),
   }
 }
 
@@ -248,6 +258,21 @@ function resolveEmbedTabsPosition(
   const location = sourceLabel ? ` in ${sourceLabel}` : ''
   throw new Error(
     `Invalid frontmatter.embed.tabs${location}: expected "head" or "body", received ${formatValue(value)}.`,
+  )
+}
+
+function resolveEmbedModalPosition(
+  value: unknown,
+  sourceLabel?: string,
+): FrontmatterEmbedOptions['modal'] {
+  if (value === undefined) return undefined
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase()
+    if (normalized === 'head' || normalized === 'body') return normalized
+  }
+  const location = sourceLabel ? ` in ${sourceLabel}` : ''
+  throw new Error(
+    `Invalid frontmatter.embed.modal${location}: expected "head" or "body", received ${formatValue(value)}.`,
   )
 }
 
