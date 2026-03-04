@@ -10,6 +10,7 @@ import { createConsentComponents } from './components/consent/consent'
 import { createContactFormComponents } from './components/contactForm/contactForm'
 import { createFooterComponents } from './components/footer/footer'
 import { createFormComponents } from './components/form/form'
+import { createGridComponents } from './components/grid/grid'
 import { createHeroComponents } from './components/hero/hero'
 import { createIconComponents } from './components/icon/icon'
 import { createLoginComponents } from './components/login/login'
@@ -44,6 +45,7 @@ export function initBuiltinComponents(
   componentRegistry.registerMany(createContactFormComponents())
   componentRegistry.registerMany(createFooterComponents())
   componentRegistry.registerMany(createFormComponents())
+  componentRegistry.registerMany(createGridComponents())
   componentRegistry.registerMany(createHeroComponents())
   componentRegistry.registerMany(createIconComponents())
   componentRegistry.registerMany(createLoginComponents())

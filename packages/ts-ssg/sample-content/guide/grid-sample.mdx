@@ -1,0 +1,170 @@
+---
+title: Grid Component Samples
+description: Responsive Grid examples with breakpoint columns, gap control, and dense layout.
+layout:
+  showToc: true
+  fullWidth: true
+sidebar:
+  order: 8
+---
+
+# Grid Component Samples
+
+`Grid` is a responsive layout primitive that stays static-render friendly and accepts breakpoint parameters.
+
+## 1. Basic responsive columns
+
+<Grid columns="1" columnsSm="2" columnsLg="4" gap="md">
+  <AlertBox tone="info" title="Alpha">First card</AlertBox>
+  <AlertBox tone="success" title="Beta">Second card</AlertBox>
+  <AlertBox tone="warning" title="Gamma">Third card</AlertBox>
+  <AlertBox tone="accent" title="Delta">Fourth card</AlertBox>
+</Grid>
+
+## 2. Gap scales by breakpoint
+
+<Grid columns="1" columnsMd="3" gap="sm" gapMd="lg" gapXl="2rem">
+  <AlertBox tone="neutral" title="Small gap on mobile">`gap="sm"`</AlertBox>
+  <AlertBox tone="neutral" title="Larger on medium">`gapMd="lg"`</AlertBox>
+  <AlertBox tone="neutral" title="Custom on xl">`gapXl="2rem"`</AlertBox>
+</Grid>
+
+## 3. Dense packing for uneven content
+
+<Grid columns="2" columnsLg="4" gap="md" dense="true">
+  <AlertBox tone="info" title="Short">One line</AlertBox>
+  <AlertBox tone="info" title="Taller">
+    This card intentionally has longer content to produce uneven heights across grid rows.
+  </AlertBox>
+  <AlertBox tone="info" title="Short">Two lines maybe.</AlertBox>
+  <AlertBox tone="info" title="Tallest">
+    Dense mode helps reduce visual gaps when cards have varying heights and content density.
+  </AlertBox>
+  <AlertBox tone="info" title="Short">Compact block.</AlertBox>
+  <AlertBox tone="info" title="Medium">
+    Balanced content length.
+  </AlertBox>
+</Grid>
+
+## 4. Item alignment controls
+
+<Grid
+  columns="2"
+  columnsMd="3"
+  gap="md"
+  alignItems="center"
+  justifyItems="center"
+>
+  <Badge variant="info">Center</Badge>
+  <Badge variant="success">Aligned</Badge>
+  <Badge variant="warning">Across</Badge>
+  <Badge variant="error">Grid</Badge>
+  <Badge variant="info">Cells</Badge>
+  <Badge variant="success">Visually</Badge>
+</Grid>
+
+## 5. Rich form layout with nested grids
+
+<AppForm action="/contact" method="post">
+  <Grid columns="1" columnsMd="2" gap="lg">
+    <FormField
+      label="First name"
+      type="text"
+      name="firstName"
+      placeholder="Ada"
+      autocomplete="given-name"
+      required="true"
+    />
+    <FormField
+      label="Last name"
+      type="text"
+      name="lastName"
+      placeholder="Lovelace"
+      autocomplete="family-name"
+      required="true"
+    />
+  </Grid>
+
+  <Grid columns="1" columnsLg="3" gap="md" gapLg="lg">
+    <FormField
+      label="Work email"
+      type="email"
+      name="email"
+      placeholder="ada@analytical.engine"
+      autocomplete="email"
+      required="true"
+    />
+    <FormField
+      label="Team size"
+      type="number"
+      name="teamSize"
+      min="1"
+      max="5000"
+      step="1"
+      value="12"
+    />
+    <FormField
+      label="Budget (EUR)"
+      type="number"
+      name="budget"
+      min="1000"
+      step="250"
+      value="5000"
+    />
+  </Grid>
+
+  <Grid columns="1" columnsMd="2" gap="md" alignItems="start">
+    <FormCheck
+      label="Send me platform updates and release notes"
+      name="updates"
+      value="yes"
+      checked="true"
+    />
+    <FormCheck
+      label="I agree to the terms and data processing policy"
+      name="terms"
+      value="accepted"
+      checked="true"
+    />
+  </Grid>
+
+  <FormMeta>
+    <Grid columns="1" columnsMd="2" gap="sm" alignItems="center">
+      <FormAssistLink href="/guide/pricing" label="Need pricing details first?" />
+      <FormAssistLink href="/contact" label="Talk to sales" />
+    </Grid>
+  </FormMeta>
+
+  <FormStatus variant="info">
+    This is a static sample. Submit action is shown for layout demonstration.
+  </FormStatus>
+
+  <Grid columns="1" justifyItems="start">
+    <div>
+      <FormSubmit label="Send request" />
+      <FormSubmit label="Save draft" />
+    </div>
+  </Grid>
+</AppForm>
+
+## 6. Props reference
+
+```html
+<Grid
+  columns="1..12"
+  columnsSm="1..12"
+  columnsMd="1..12"
+  columnsLg="1..12"
+  columnsXl="1..12"
+  gap="none|xxs|xs|sm|md|lg|xl|2xl|16px|1.25rem"
+  gapSm="..."
+  gapMd="..."
+  gapLg="..."
+  gapXl="..."
+  alignItems="stretch|start|center|end"
+  justifyItems="stretch|start|center|end"
+  dense="true|false"
+>
+  ...
+</Grid>
+```
