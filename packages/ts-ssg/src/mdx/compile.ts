@@ -158,9 +158,6 @@ function normalizeMdxJsxChildren(
 ) {
   if (!name) return children
   const normalized = name.toLowerCase()
-  if (normalized === 'template') {
-    return normalizeTemplateSlotChildren(children)
-  }
   if (
     !INLINE_TAGS.has(normalized) &&
     !componentRegistry.hasComponentName(name)
@@ -176,67 +173,6 @@ function normalizeMdxJsxChildren(
     next.push(child)
   }
   return next
-}
-
-function normalizeTemplateSlotChildren(children: Element['children']) {
-  return normalizeParagraphBlocksInNodeList(children)
-}
-
-function normalizeParagraphBlocksInNodeList(children: Element['children']) {
-  const next: Element['children'] = []
-  for (const child of children) {
-    if (child.type === 'element') {
-      child.children = normalizeParagraphBlocksInNodeList(child.children ?? [])
-      if (child.tagName === 'p' && paragraphContainsBlockElement(child)) {
-        next.push(...normalizeParagraphBlocksInNodeList(child.children ?? []))
-        continue
-      }
-    }
-    next.push(child)
-  }
-  return next
-}
-
-function paragraphContainsBlockElement(node: Element) {
-  const children = node.children ?? []
-  for (const child of children) {
-    if (child.type !== 'element') continue
-    if (isBlockElementTag(child.tagName)) return true
-  }
-  return false
-}
-
-function isBlockElementTag(tagName: string) {
-  return (
-    tagName === 'address' ||
-    tagName === 'article' ||
-    tagName === 'aside' ||
-    tagName === 'blockquote' ||
-    tagName === 'details' ||
-    tagName === 'dialog' ||
-    tagName === 'div' ||
-    tagName === 'dl' ||
-    tagName === 'fieldset' ||
-    tagName === 'figure' ||
-    tagName === 'footer' ||
-    tagName === 'form' ||
-    tagName === 'h1' ||
-    tagName === 'h2' ||
-    tagName === 'h3' ||
-    tagName === 'h4' ||
-    tagName === 'h5' ||
-    tagName === 'h6' ||
-    tagName === 'header' ||
-    tagName === 'hr' ||
-    tagName === 'main' ||
-    tagName === 'nav' ||
-    tagName === 'ol' ||
-    tagName === 'p' ||
-    tagName === 'pre' ||
-    tagName === 'section' ||
-    tagName === 'table' ||
-    tagName === 'ul'
-  )
 }
 
 function isHastRoot(node: ReturnType<typeof toHast>): node is Root {
