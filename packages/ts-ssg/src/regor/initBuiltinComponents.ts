@@ -5,6 +5,7 @@ import { registerDocLayoutStyles } from '../templates/docLayoutStyles'
 import { registerMarkdownStyles } from '../templates/markdownStyles'
 import { createAlertComponents } from './components/alert/alert'
 import { createBadgeComponents } from './components/badge/badge'
+import { createButtonComponents } from './components/button/btn'
 import { createCardComponents } from './components/cardGrid/cardGrid'
 import { createConsentComponents } from './components/consent/consent'
 import { createContactFormComponents } from './components/contactForm/contactForm'
@@ -41,6 +42,7 @@ export function initBuiltinComponents(
   registerMarkdownStyles({ includeShikiStyles: options.includeShikiStyles })
   componentRegistry.registerMany(createAlertComponents())
   componentRegistry.registerMany(createBadgeComponents())
+  componentRegistry.registerMany(createButtonComponents())
   componentRegistry.registerMany(createCardComponents())
   componentRegistry.registerMany(createConsentComponents())
   componentRegistry.registerMany(createContactFormComponents())

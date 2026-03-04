@@ -1,0 +1,99 @@
+---
+title: Button Component Samples
+description: Theme-aware button examples with variants, sizes, icons, and icon-only usage.
+layout:
+  showToc: true
+  fullWidth: true
+sidebar:
+  order: 10
+---
+
+# Button Component Samples
+
+`Btn` is a static-safe action component with built-in variants, size scales, and optional icon placement.
+
+## 1. Default button
+
+<Btn>Save changes</Btn>
+
+## 2. Variants
+
+<Btn variant="primary">Primary action</Btn>
+<Btn variant="secondary">Secondary action</Btn>
+<Btn variant="ghost">Ghost action</Btn>
+<Btn variant="warning">Warning action</Btn>
+<Btn variant="danger">Danger action</Btn>
+
+## 3. Sizes
+
+<Btn size="sm">Small</Btn>
+<Btn size="md">Medium</Btn>
+<Btn size="lg">Large</Btn>
+
+## 4. Leading icon
+
+<Btn icon="iconoir:code">Download report</Btn>
+
+## 5. Trailing icon
+
+<Btn icon="iconoir:pin-slash" iconPosition="end">Continue</Btn>
+
+## 6. Icon-only controls
+
+<Btn icon="iconoir:headset-help" iconOnly="true" ariaLabel="Search" />
+<Btn icon="iconoir:pin" iconOnly="true" ariaLabel="Pin item" />
+<Btn icon="iconoir:check" iconOnly="true" ariaLabel="Open settings" />
+
+## 7. Disabled state
+
+<Btn disabled="true">Disabled default</Btn>
+<Btn variant="secondary" disabled="true">Disabled secondary</Btn>
+<Btn variant="ghost" disabled="true">Disabled ghost</Btn>
+<Btn variant="warning" disabled="true">Disabled warning</Btn>
+<Btn variant="danger" disabled="true">Disabled danger</Btn>
+
+## 8. Form button types
+
+<Btn type="button">type=button</Btn>
+<Btn type="submit" variant="primary">type=submit</Btn>
+<Btn type="reset" variant="secondary">type=reset</Btn>
+
+## 9. Mixed examples
+
+<Btn variant="primary" size="lg" icon="iconoir:rocket">
+  Deploy now
+</Btn>
+<Btn variant="secondary" size="sm" icon="iconoir:pin-slash" iconPosition="end">
+  Edit
+</Btn>
+<Btn variant="ghost" size="md" icon="iconoir:pin-slash" iconPosition="end">
+  Open docs
+</Btn>
+
+## 10. Variants with icons
+
+<Btn variant="primary" icon="iconoir:check">Create project</Btn>
+<Btn variant="secondary" icon="iconoir:code">View source</Btn>
+<Btn variant="ghost" icon="iconoir:pin-slash" iconPosition="end">
+  Read more
+</Btn>
+<Btn variant="warning" icon="iconoir:headset-help">Review warning</Btn>
+<Btn variant="danger" icon="iconoir:pin" iconPosition="end">Delete item</Btn>
+
+## 11. Props reference
+
+```html
+<Btn
+  variant="primary|secondary|ghost|warning|danger"
+  size="sm|md|lg"
+  type="button|submit|reset"
+  icon="iconoir:code"
+  iconPosition="start|end"
+  iconOnly="true|false"
+  ariaLabel="Accessible label for icon-only buttons"
+  disabled="true|false"
+  class="custom-class-name"
+>
+  Label content
+</Btn>
+```
