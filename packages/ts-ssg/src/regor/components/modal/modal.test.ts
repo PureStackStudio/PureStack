@@ -5,7 +5,7 @@ import { normalizeFrontmatter } from '../../../frontmatter/frontmatter'
 import { ensureDomGlobals } from '../../../minidom/createDom'
 import { renderApp } from '../../renderApp'
 import type { TsSsgContext } from '../../ts-ssg-context'
-import { createButtonComponents } from '../button/btn'
+import { createButtonComponents } from '../btn/btn'
 import { createModalComponents } from './modal'
 
 describe('Modal rendering', () => {

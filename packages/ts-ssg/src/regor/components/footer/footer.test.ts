@@ -3,7 +3,7 @@ import { resolveSiteConfig } from '../../../config/config'
 import { normalizeFrontmatter } from '../../../frontmatter/frontmatter'
 import { createDom } from '../../../minidom/createDom'
 import { renderApp } from '../../renderApp'
-import { createButtonComponents } from '../button/btn'
+import { createButtonComponents } from '../btn/btn'
 import { createIconComponents } from '../icon/icon'
 import { createFooterComponents } from './footer'
 

@@ -4,7 +4,7 @@ import { resolveSiteConfig } from '../../../config/config'
 import { normalizeFrontmatter } from '../../../frontmatter/frontmatter'
 import { ensureDomGlobals } from '../../../minidom/createDom'
 import { renderApp } from '../../renderApp'
-import { createButtonComponents } from '../button/btn'
+import { createButtonComponents } from '../btn/btn'
 import { createConsentComponents } from './consent'
 
 describe('Consent component rendering', () => {
