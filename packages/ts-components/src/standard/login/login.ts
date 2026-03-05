@@ -1,6 +1,6 @@
 import { defineComponent, html } from 'regor'
 
-import { urlNormalizer } from '../../../util/urlNormalizer'
+import { urlNormalizer } from '@purestack/ts-util'
 import { registerLoginStyles } from './loginStyle'
 
 interface LoginHeaderProps {

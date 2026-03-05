@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { type ComponentHead, defineComponent, html } from 'regor'
-import { toOutputAssetRelPath } from '../../../util/assetPath'
+import { toOutputAssetRelPath } from '@purestack/ts-util'
 import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 
 interface PageScriptProps {

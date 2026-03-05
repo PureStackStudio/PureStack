@@ -1,5 +1,5 @@
 import { merge } from '@logpot/utils'
-import type { DeepPartial } from '../util/types'
+import type { DeepPartial } from '@purestack/ts-util'
 import { type BuiltInSkinName, builtInSkins } from './skins'
 import { normalizeThemeName, type ThemeName } from './themeAssets'
 import type { ThemePalette } from './themePalette'

@@ -33,6 +33,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@purestack/ts-minidom": "workspace:^"
+    "@purestack/ts-minidom": "workspace:^",
+    "@purestack/ts-util": "workspace:^"
   }
 }
