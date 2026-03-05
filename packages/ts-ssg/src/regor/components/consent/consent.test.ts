@@ -4,12 +4,14 @@ import { resolveSiteConfig } from '../../../config/config'
 import { normalizeFrontmatter } from '../../../frontmatter/frontmatter'
 import { ensureDomGlobals } from '../../../minidom/createDom'
 import { renderApp } from '../../renderApp'
+import { createButtonComponents } from '../button/btn'
 import { createConsentComponents } from './consent'
 
 describe('Consent component rendering', () => {
   it('renders consent shell and categories when enabled', () => {
     const cleanup = ensureDomGlobals()
     const components = {
+      ...createButtonComponents(),
       ...createConsentComponents(),
     }
     const site = resolveSiteConfig({

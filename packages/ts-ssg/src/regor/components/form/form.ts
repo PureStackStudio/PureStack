@@ -118,9 +118,9 @@ const formAssistLinkTemplate = html`<a
   {{ label }}
 </a>`
 
-const formSubmitTemplate = html`<button class="form-block__submit" type="submit">
+const formSubmitTemplate = html`<Btn type="submit">
   {{ label }}
-</button>`
+</Btn>`
 
 const formDividerTemplate = html`<div
   class="form-block__divider"

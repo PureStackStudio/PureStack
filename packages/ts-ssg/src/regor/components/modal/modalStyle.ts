@@ -11,7 +11,6 @@ export function registerModalStyles() {
     registerModalShellStyles(theme, palette, options)
     registerModalMotionStyles(theme)
     registerModalSizeStyles(theme)
-    registerModalTriggerStyles(theme, palette, options)
   })
 }
 
@@ -73,45 +72,19 @@ function registerModalShellStyles(
 
   styleBuilder
     .select('.modal__header', theme)
-    .position('relative')
-    .display('block')
-    .paddingRight('52px')
-    .minHeight('34px')
+    .display('flex')
+    .alignItems('flex-start')
+    .justifyContent('space-between')
+    .gap('10px')
 
   styleBuilder
     .select('.modal__title', theme)
     .margin('0')
+    .flex('1')
     .fontSize('1.2rem')
     .lineHeight('1.3')
     .fontWeight('700')
     .color(palette.text.default)
-
-  styleBuilder
-    .select('.modal__close', theme)
-    .position('absolute')
-    .top('0')
-    .right('0')
-    .display('inline-flex')
-    .alignItems('center')
-    .justifyContent('center')
-    .width('34px')
-    .height('34px')
-    .padding('0')
-    .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.border.default}`)
-    .background(palette.background.panel)
-    .color(palette.text.default)
-    .fontSize('1rem')
-    .cursor('pointer')
-
-  styleBuilder
-    .select('.modal__close:hover', theme)
-    .background(palette.background.accentMuted)
-
-  styleBuilder
-    .select('.modal__close:focus-visible', theme)
-    .outline(`2px solid ${palette.border.focus}`)
-    .outlineOffset('2px')
 
   styleBuilder.select('.modal__body', theme).minWidth('0').lineHeight('1.6')
 
@@ -209,35 +182,4 @@ function registerModalSizeStyles(theme: ThemeMode) {
   styleBuilder
     .select('.modal--size-xl .modal__panel', theme)
     .width('min(96vw, 1080px)')
-}
-
-function registerModalTriggerStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
-  styleBuilder
-    .select('.modal-trigger', theme)
-    .display('inline-flex')
-    .alignItems('center')
-    .justifyContent('center')
-    .padding('10px 14px')
-    .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.border.default}`)
-    .background(palette.action.neutral.background)
-    .color(palette.action.neutral.text)
-    .fontSize('0.9rem')
-    .fontWeight('650')
-    .cursor('pointer')
-    .transition('background 160ms ease, transform 160ms ease')
-
-  styleBuilder
-    .select('.modal-trigger:hover', theme)
-    .background(palette.action.neutral.hover)
-    .transform('translateY(-1px)')
-
-  styleBuilder
-    .select('.modal-trigger:focus-visible', theme)
-    .outline(`2px solid ${palette.border.focus}`)
-    .outlineOffset('2px')
 }

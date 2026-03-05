@@ -5,12 +5,16 @@ import { normalizeFrontmatter } from '../../../frontmatter/frontmatter'
 import { ensureDomGlobals } from '../../../minidom/createDom'
 import { renderApp } from '../../renderApp'
 import type { TsSsgContext } from '../../ts-ssg-context'
+import { createButtonComponents } from '../button/btn'
 import { createModalComponents } from './modal'
 
 describe('Modal rendering', () => {
   it('renders modal shell and trigger with configured motion classes', () => {
     const cleanup = ensureDomGlobals()
-    const components = createModalComponents()
+    const components = {
+      ...createButtonComponents(),
+      ...createModalComponents(),
+    }
     const html = renderApp(
       '<Modal id="checkout" title="Checkout" size="lg" fade="true" slideFrom="right"><p>Body</p><template name="footer"><button>Confirm</button></template></Modal><ModalTrigger target="checkout" label="Open checkout" />',
       {
@@ -33,7 +37,10 @@ describe('Modal rendering', () => {
 
   it('supports full shell override via content slot', () => {
     const cleanup = ensureDomGlobals()
-    const components = createModalComponents()
+    const components = {
+      ...createButtonComponents(),
+      ...createModalComponents(),
+    }
     const html = renderApp(
       '<Modal id="custom"><template name="content"><article class="modal__panel"><p>Custom shell</p></article></template></Modal>',
       {
@@ -49,7 +56,10 @@ describe('Modal rendering', () => {
 
   it('hides close button when showClose is false', () => {
     const cleanup = ensureDomGlobals()
-    const components = createModalComponents()
+    const components = {
+      ...createButtonComponents(),
+      ...createModalComponents(),
+    }
     const html = renderApp(
       '<Modal id="no-close" title="No close" showClose="false"><p>Body</p></Modal>',
       {

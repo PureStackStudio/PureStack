@@ -211,7 +211,6 @@ export function applyFooterNewsletterStyles(
 ) {
   applyFooterNewsletterShellStyles(theme, palette, options)
   applyFooterNewsletterFieldStyles(theme, palette, options)
-  applyFooterNewsletterButtonStyles(theme, palette, options)
   applyFooterNewsletterMetaStyles(theme, palette)
 }
 
@@ -283,31 +282,6 @@ export function applyFooterNewsletterFieldStyles(
     .outline(`2px solid ${palette.border.focus}`)
     .outlineOffset('2px')
     .borderColor(palette.border.focus)
-}
-
-export function applyFooterNewsletterButtonStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
-  styleBuilder
-    .select('.site-footer__newsletter-button', theme)
-    .padding('10px 14px')
-    .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.border.default}`)
-    .background(palette.action.neutral.background)
-    .color(palette.action.neutral.text)
-    .fontWeight('700')
-    .cursor('pointer')
-    .transition('background 170ms ease, transform 170ms ease')
-  styleBuilder
-    .select('.site-footer__newsletter-button:hover', theme)
-    .background(palette.action.neutral.hover)
-    .transform('translateY(-1px)')
-  styleBuilder
-    .select('.site-footer__newsletter-button:focus-visible', theme)
-    .outline(`2px solid ${palette.action.neutral.focusRing}`)
-    .outlineOffset('2px')
 }
 
 export function applyFooterNewsletterMetaStyles(

@@ -48,15 +48,16 @@ const modalTemplate = html`<dialog
         <slot name="header">
           <h2 class="modal__title" :id="titleId" r-if="hasTitle">{{ title }}</h2>
         </slot>
-        <button
+        <Btn
           r-if="showClose"
-          class="modal__close"
+          variant="ghost"
+          size="sm"
           type="button"
           data-modal-close
           aria-label="Close dialog"
         >
           <span aria-hidden="true">X</span>
-        </button>
+        </Btn>
       </header>
       <div class="modal__body">
         <slot name="body">
@@ -68,14 +69,9 @@ const modalTemplate = html`<dialog
   </slot>
 </dialog>`
 
-const modalTriggerTemplate = html`<button
-  class="modal-trigger"
-  type="button"
-  :data-modal-target="target"
-  data-modal-trigger
->
+const modalTriggerTemplate = html`<Btn type="button" :data-modal-target="target" data-modal-trigger>
   {{ label }}
-</button>`
+</Btn>`
 
 function createModalComponent() {
   return defineComponent<ModalContext>(modalTemplate, {

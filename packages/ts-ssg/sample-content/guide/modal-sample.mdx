@@ -88,8 +88,8 @@ sidebar:
       </p>
       <Grid columns="1" gap="sm" justifyItems="center">
         <div>
-          <button type="button" class="modal-trigger" data-modal-close>Approve</button>
-          <button type="button" class="modal-trigger" data-modal-close>Cancel</button>
+          <Btn type="button" class="modal-trigger" data-modal-close>Approve</Btn>
+          <Btn type="button" class="modal-trigger" data-modal-close>Cancel</Btn>
         </div>
       </Grid>
     </article>
@@ -105,8 +105,8 @@ sidebar:
     This modal hides the default top-right close button. Use custom actions in the footer instead.
   </p>
   <template name="footer">
-    <button type="button" class="modal-trigger" data-modal-close>Dismiss</button>
-    <button type="button" class="modal-trigger" data-modal-close>Accept policy</button>
+    <Btn type="button" class="modal-trigger" data-modal-close>Dismiss</Btn>
+    <Btn type="button" class="modal-trigger" data-modal-close>Accept policy</Btn>
   </template>
 </Modal>
 
@@ -125,7 +125,7 @@ sidebar:
     We detected higher p95 latency in one worker pool. Mitigation is in progress.
   </AlertBox>
   <template name="footer">
-    <button type="button" class="modal-trigger" data-modal-close>Acknowledge</button>
+    <Btn type="button" class="modal-trigger" data-modal-close>Acknowledge</Btn>
   </template>
 </Modal>
 
@@ -208,9 +208,9 @@ sidebar:
   </AppForm>
   <template name="footer">
     <Grid columns="1" columnsSm="3" gap="sm" justifyItems="start">
-      <button type="button" class="modal-trigger" data-modal-close>Cancel</button>
-      <button type="button" class="modal-trigger">Save draft</button>
-      <button type="button" class="modal-trigger">Submit request</button>
+      <Btn type="button" class="modal-trigger" data-modal-close>Cancel</Btn>
+      <Btn type="button" class="modal-trigger">Save draft</Btn>
+      <Btn type="button" class="modal-trigger">Submit request</Btn>
     </Grid>
   </template>
 </Modal>
@@ -230,7 +230,7 @@ sidebar:
     This primary modal can launch a secondary confirmation modal for destructive or high-risk actions.
   </p>
   <template name="footer">
-      <button type="button" class="modal-trigger" data-modal-close>Cancel</button>
+      <Btn type="button" class="modal-trigger" data-modal-close>Cancel</Btn>
       <ModalTrigger target="child-modal" label="Continue to confirmation" />
   </template>
 </Modal>
@@ -246,8 +246,8 @@ sidebar:
     You are about to apply changes to the production environment.
   </AlertBox>
   <template name="footer">
-    <button type="button" class="modal-trigger" data-modal-close>Back</button>
-    <button type="button" class="modal-trigger" data-modal-close>Confirm rollout</button>
+    <Btn type="button" class="modal-trigger" data-modal-close>Back</Btn>
+    <Btn type="button" class="modal-trigger" data-modal-close>Confirm rollout</Btn>
   </template>
 </Modal>
 

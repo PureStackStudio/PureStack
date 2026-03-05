@@ -4,12 +4,14 @@ import { resolveSiteConfig } from '../../../config/config'
 import { normalizeFrontmatter } from '../../../frontmatter/frontmatter'
 import { ensureDomGlobals } from '../../../minidom/createDom'
 import { renderApp } from '../../renderApp'
+import { createButtonComponents } from '../button/btn'
 import { createContactFormComponents } from './contactForm'
 
 describe('ContactForm rendering', () => {
   it('renders contact fields and action with configured labels', () => {
     const cleanup = ensureDomGlobals()
     const components = {
+      ...createButtonComponents(),
       ...createContactFormComponents(),
     }
     const site = resolveSiteConfig()

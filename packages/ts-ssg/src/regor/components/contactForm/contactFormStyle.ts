@@ -10,7 +10,7 @@ export function registerContactFormStyles() {
   themes.forEach((theme, palette, options) => {
     registerContactFormShellStyles(theme, palette, options)
     registerContactFormFieldStyles(theme, palette, options)
-    registerContactFormActionStyles(theme, palette, options)
+    registerContactFormActionStyles(theme)
     registerContactFormResponsiveStyles(theme)
   })
 }
@@ -93,38 +93,12 @@ function registerContactFormFieldStyles(
     .borderColor(palette.border.accent)
 }
 
-function registerContactFormActionStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+function registerContactFormActionStyles(theme: ThemeMode) {
   styleBuilder
     .select('.contact-form__actions', theme)
     .display('flex')
     .justifyContent('flex-start')
     .paddingTop('2px')
-  styleBuilder
-    .select('.contact-form__submit', theme)
-    .display('inline-flex')
-    .alignItems('center')
-    .justifyContent('center')
-    .padding('10px 16px')
-    .borderRadius(options.radii.pill)
-    .border(`1px solid ${palette.action.accent.background}`)
-    .background(palette.action.accent.background)
-    .color(palette.action.accent.text)
-    .fontWeight('740')
-    .fontSize('0.9rem')
-    .cursor('pointer')
-    .transition('background 160ms ease, transform 160ms ease')
-  styleBuilder
-    .select('.contact-form__submit:hover', theme)
-    .background(palette.action.accent.hover)
-    .transform('translateY(-1px)')
-  styleBuilder
-    .select('.contact-form__submit:focus-visible', theme)
-    .outline(`2px solid ${palette.action.accent.focusRing}`)
-    .outlineOffset('2px')
 }
 
 function registerContactFormResponsiveStyles(theme: ThemeMode) {

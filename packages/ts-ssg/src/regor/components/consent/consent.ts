@@ -46,27 +46,15 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
       >{{ privacyPolicyLabel }}</a
     >
     <div class="consent__actions">
-      <button
-        class="consent__button consent__button--primary"
-        type="button"
-        data-consent-action="accept-all"
-      >
+      <Btn type="button" data-consent-action="accept-all">
         {{ acceptAllLabel }}
-      </button>
-      <button
-        class="consent__button"
-        type="button"
-        data-consent-action="reject-all"
-      >
+      </Btn>
+      <Btn variant="secondary" type="button" data-consent-action="reject-all">
         {{ rejectAllLabel }}
-      </button>
-      <button
-        class="consent__button consent__button--ghost"
-        type="button"
-        data-consent-action="open-panel"
-      >
+      </Btn>
+      <Btn variant="ghost" type="button" data-consent-action="open-panel">
         {{ manageLabel }}
-      </button>
+      </Btn>
     </div>
   </aside>
 
@@ -80,14 +68,15 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
   >
     <div class="consent__panel-header">
       <h2 class="consent__panel-title">{{ manageLabel }}</h2>
-      <button
-        class="consent__panel-close"
+      <Btn
+        variant="ghost"
+        size="sm"
         type="button"
         data-consent-action="close-panel"
         aria-label="Close privacy settings"
       >
         <span aria-hidden="true">X</span>
-      </button>
+      </Btn>
     </div>
 
     <div class="consent__list">
@@ -113,32 +102,21 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
     </div>
 
     <div class="consent__panel-actions">
-      <button
-        class="consent__button consent__button--primary"
-        type="button"
-        data-consent-action="save"
-      >
+      <Btn type="button" data-consent-action="save">
         {{ saveLabel }}
-      </button>
-      <button
-        class="consent__button"
-        type="button"
-        data-consent-action="accept-all"
-      >
+      </Btn>
+      <Btn variant="secondary" type="button" data-consent-action="accept-all">
         {{ acceptAllLabel }}
-      </button>
-      <button
-        class="consent__button"
-        type="button"
-        data-consent-action="reject-all"
-      >
+      </Btn>
+      <Btn variant="secondary" type="button" data-consent-action="reject-all">
         {{ rejectAllLabel }}
-      </button>
+      </Btn>
     </div>
   </section>
 
-  <button
-    class="consent__settings"
+  <Btn
+    variant="ghost"
+    size="sm"
     data-consent-settings
     type="button"
     data-consent-action="open-panel"
@@ -146,7 +124,7 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
     hidden
   >
     {{ settingsLabel }}
-  </button>
+  </Btn>
 </section>`
 
 function createConsentComponent() {

@@ -858,7 +858,7 @@ __metadata:
     logpot: "npm:^1.0.7"
     mdast-util-to-hast: "npm:^13.2.1"
     pagefind: "npm:^1.4.0"
-    regor: "npm:^1.3.9"
+    regor: "npm:^1.4.1"
     rehype-raw: "npm:^7.0.0"
     rehype-stringify: "npm:^10.0.1"
     remark-gfm: "npm:^4.0.1"
@@ -4018,10 +4018,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regor@npm:^1.3.9":
-  version: 1.3.9
-  resolution: "regor@npm:1.3.9"
-  checksum: 10c0/cb4048116f90c762c977ea33e9840cbc25418f791d4e9e8ebbc6d1c1df02a750d355069656474a99e3c7248b93c77cd3e27260cda885470b2348b5f1f492fd95
+"regor@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "regor@npm:1.4.1"
+  checksum: 10c0/889be4cbc4db8ffd01b607938d72e19d9c1b04a219ff71a4db1d8337fb8544928f0adf433593102047001db247a587a76f9dadbbaced225d702078cb10a52d9a
   languageName: node
   linkType: hard
 

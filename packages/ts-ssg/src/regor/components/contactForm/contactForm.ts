@@ -76,9 +76,9 @@ const contactFormTemplate = html`<section class="contact-form">
       ></textarea>
     </label>
     <div class="contact-form__actions">
-      <button class="contact-form__submit" type="submit">
+      <Btn type="submit">
         {{ submitLabel }}
-      </button>
+      </Btn>
     </div>
   </form>
 </section>`

@@ -9,7 +9,6 @@ import type { ThemePalette } from '../../../style/themePalette'
 export function registerLoginStyles() {
   themes.forEach((theme, palette, options) => {
     registerLoginShellStyles(theme, palette, options)
-    registerLoginActionStyles(theme, palette, options)
     registerLoginMetaStyles(theme, palette, options)
     registerLoginResponsiveStyles(theme)
   })
@@ -62,36 +61,10 @@ function registerLoginShellStyles(
     .fontSize('0.95rem')
     .lineHeight('1.55')
     .color(palette.text.subtle)
-}
-
-function registerLoginActionStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
   styleBuilder
     .select('.login-panel__providers', theme)
     .display('grid')
     .gap('8px')
-  styleBuilder
-    .select('.login-panel__provider', theme)
-    .padding('10px 12px')
-    .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.border.default}`)
-    .background(palette.background.surfaceAlt)
-    .color(palette.text.default)
-    .fontSize('0.89rem')
-    .fontWeight('650')
-    .cursor('pointer')
-    .transition('border-color 140ms ease, transform 140ms ease')
-  styleBuilder
-    .select('.login-panel__provider:hover', theme)
-    .borderColor(palette.border.accent)
-    .transform('translateY(-1px)')
-  styleBuilder
-    .select('.login-panel__provider:focus-visible', theme)
-    .outline(`2px solid ${palette.border.focus}`)
-    .outlineOffset('2px')
 }
 
 function registerLoginMetaStyles(

@@ -11,7 +11,6 @@ export function registerFormStyles() {
     registerFormShellStyles(theme)
     registerFormFieldStyles(theme, palette, options)
     registerFormMetaStyles(theme, palette)
-    registerFormActionStyles(theme, palette, options)
     registerFormStatusStyles(theme, palette, options)
     registerFormResponsiveStyles(theme)
   })
@@ -178,33 +177,6 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .fontSize('0.78rem')
     .background(palette.background.surfaceAlt)
     .color(palette.text.soft)
-}
-
-function registerFormActionStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
-  styleBuilder
-    .select('.form-block__submit', theme)
-    .marginTop('4px')
-    .padding('11px 14px')
-    .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.action.accent.background}`)
-    .background(palette.action.accent.background)
-    .color(palette.action.accent.text)
-    .fontSize('0.92rem')
-    .fontWeight('760')
-    .cursor('pointer')
-    .transition('transform 140ms ease, background 140ms ease')
-  styleBuilder
-    .select('.form-block__submit:hover', theme)
-    .background(palette.action.accent.hover)
-    .transform('translateY(-1px)')
-  styleBuilder
-    .select('.form-block__submit:focus-visible', theme)
-    .outline(`2px solid ${palette.action.accent.focusRing}`)
-    .outlineOffset('2px')
 }
 
 function registerFormStatusStyles(

@@ -137,9 +137,9 @@ const siteFooterTemplate = html`<footer
               :placeholder="newsletterPlaceholder"
               autocomplete="email"
             />
-            <button class="site-footer__newsletter-button" type="submit">
+            <Btn variant="secondary" type="submit">
               {{ newsletterButtonLabel }}
-            </button>
+            </Btn>
           </div>
         </form>
         <div class="site-footer__newsletter-extra">

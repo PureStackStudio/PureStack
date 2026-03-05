@@ -3,6 +3,7 @@ import { resolveSiteConfig } from '../../../config/config'
 import { normalizeFrontmatter } from '../../../frontmatter/frontmatter'
 import { createDom } from '../../../minidom/createDom'
 import { renderApp } from '../../renderApp'
+import { createButtonComponents } from '../button/btn'
 import { createIconComponents } from '../icon/icon'
 import { createFooterComponents } from './footer'
 
@@ -19,6 +20,7 @@ describe('SiteFooter rendering', () => {
   it('renders footer blocks with columns, links, legal actions, and socials', () => {
     const html = withDom('<html><body></body></html>', () => {
       const components = {
+        ...createButtonComponents(),
         ...createIconComponents(),
         ...createFooterComponents(),
       }
@@ -84,6 +86,7 @@ describe('SiteFooter rendering', () => {
   it('teleports to a custom host when teleport prop is provided', () => {
     const html = withDom('<html><body></body></html>', () => {
       const components = {
+        ...createButtonComponents(),
         ...createIconComponents(),
         ...createFooterComponents(),
       }
