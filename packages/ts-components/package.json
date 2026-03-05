@@ -31,5 +31,8 @@
     "build": "tsc",
     "lint": "biome check ./src --formatter-enabled=false",
     "test": "vitest"
+  },
+  "dependencies": {
+    "@purestack/ts-minidom": "workspace:^"
   }
 }

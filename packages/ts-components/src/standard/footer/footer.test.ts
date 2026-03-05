@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from '../../../config/config'
 import { normalizeFrontmatter } from '../../../frontmatter/frontmatter'
-import { createDom } from '../../../minidom/createDom'
+import { createDom } from '@purestack/ts-minidom'
 import { renderApp } from '../../renderApp'
 import { createButtonComponents } from '../btn/btn'
 import { createIconComponents } from '../icon/icon'

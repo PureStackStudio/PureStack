@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { resolveSiteConfig } from '../../../config/config'
 import { normalizeFrontmatter } from '../../../frontmatter/frontmatter'
-import { ensureDomGlobals } from '../../../minidom/createDom'
+import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '../../renderApp'
 import { createButtonComponents } from '../btn/btn'
 import { createContactFormComponents } from './contactForm'
