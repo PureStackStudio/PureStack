@@ -818,6 +818,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@purestack/ts-components@workspace:packages/ts-components":
+  version: 0.0.0-use.local
+  resolution: "@purestack/ts-components@workspace:packages/ts-components"
+  languageName: unknown
+  linkType: soft
+
 "@purestack/ts-css-bootstrap@workspace:packages/ts-css-bootstrap":
   version: 0.0.0-use.local
   resolution: "@purestack/ts-css-bootstrap@workspace:packages/ts-css-bootstrap"

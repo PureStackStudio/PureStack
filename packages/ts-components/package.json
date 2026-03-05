@@ -1,0 +1,35 @@
+{
+  "name": "@purestack/ts-components",
+  "version": "1.0.0",
+  "packageManager": "yarn@4.9.2",
+  "module": "./dist/ts-components.mjs",
+  "types": "./dist/ts-components.d.mts",
+  "type": "module",
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koculu/purestack.git",
+    "directory": "packages/ts-components"
+  },
+  "homepage": "https://tenray.io/purestack",
+  "bugs": {
+    "url": "https://github.com/koculu/purestack/issues"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/ts-components.mjs",
+      "import": "./dist/ts-components.mjs"
+    }
+  },
+  "license": "MIT",
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "lint": "biome check ./src --formatter-enabled=false",
+    "test": "vitest"
+  }
+}
