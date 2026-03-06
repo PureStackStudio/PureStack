@@ -1,6 +1,5 @@
-import { defineComponent, html } from 'regor'
-
 import { urlNormalizer } from '@purestack/ts-util'
+import { defineComponent, html } from 'regor'
 import { registerHeroStyles } from './heroStyle'
 
 const heroTemplate = html`<section class="hero">

@@ -1,6 +1,5 @@
-import { defineComponent, html } from 'regor'
-
 import { urlNormalizer } from '@purestack/ts-util'
+import { defineComponent, html } from 'regor'
 import { registerFormStyles } from './formStyle'
 
 interface AppFormProps {
