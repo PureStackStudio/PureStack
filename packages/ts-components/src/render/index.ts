@@ -1,10 +1,9 @@
-export { componentRegistry } from './componentRegistry'
 export { buildModalScript } from './buildModalScript'
 export { buildTabsScript } from './buildTabsScript'
-export { renderApp, type RenderAppOptions } from './renderApp'
+export { componentRegistry } from './componentRegistry'
+export { type RenderAppOptions, renderApp } from './renderApp'
 export { resolveTsSsgContext } from './resolveTsSsgContext'
 export type {
-  NavItem,
   PageOutlineItem,
   TsSsgContext,
   TsSsgNavigation,

@@ -1,5 +1,5 @@
-import { createApp } from 'regor'
 import { createDom } from '@purestack/ts-minidom'
+import { createApp } from 'regor'
 import { buildModalScript } from './buildModalScript'
 import { buildTabsScript } from './buildTabsScript'
 import { componentRegistry } from './componentRegistry'

@@ -1,5 +1,4 @@
 export type {
-  NavItem,
   PageOutlineItem,
   TsSsgContext,
   TsSsgNavigation,

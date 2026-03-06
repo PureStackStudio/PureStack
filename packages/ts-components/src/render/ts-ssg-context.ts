@@ -1,11 +1,5 @@
+import type { NavItem } from '../standard/navMenu/navMenu'
 import type { ThemeOptions } from '../style/themeOptions'
-
-export interface NavItem {
-  title: string
-  url?: string
-  group?: string
-  children?: NavItem[]
-}
 
 export interface PageOutlineItem {
   id: string

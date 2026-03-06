@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest'
 import { createDom } from '@purestack/ts-minidom'
+import { describe, expect, it } from 'vitest'
 import { renderApp } from '../../renderApp'
 import { createTestContext } from '../../test/testContext'
 import { createButtonComponents } from '../btn/btn'

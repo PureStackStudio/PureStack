@@ -1,1 +1,1 @@
-export { renderApp, type RenderAppOptions } from './render'
+export { type RenderAppOptions, renderApp } from './render'
