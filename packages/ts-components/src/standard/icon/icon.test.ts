@@ -1,10 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolveSiteConfig } from '../../config/config'
-import { normalizeFrontmatter } from '../../frontmatter/frontmatter'
 import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '../../renderApp'
-import type { TsSsgContext } from '../../ts-ssg-context'
+import { createTestContext } from '../../test/testContext'
 import { createIconComponents } from './icon'
 
 describe('Icon rendering', () => {
@@ -54,18 +52,3 @@ describe('Icon rendering', () => {
     expect(html).not.toContain('class="icon"')
   })
 })
-
-function createTestContext(): TsSsgContext {
-  const site = resolveSiteConfig({ rootDir: process.cwd() })
-  return {
-    site,
-    pageInfo: {
-      relPath: 'icon.mdx',
-      urlPath: '/icon',
-      frontmatter: normalizeFrontmatter({}),
-    },
-    theme: site.style.theme,
-    recordScriptEntrypoint: () => {},
-    recordRuntimeEmbed: () => {},
-  }
-}

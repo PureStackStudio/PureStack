@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { resolveSiteConfig } from '../../config/config'
-import { normalizeFrontmatter } from '../../frontmatter/frontmatter'
 import { createDom } from '@purestack/ts-minidom'
 import { renderApp } from '../../renderApp'
+import { createTestContext } from '../../test/testContext'
 import { createButtonComponents } from '../btn/btn'
 import { createIconComponents } from '../icon/icon'
 import { createFooterComponents } from './footer'
@@ -23,12 +22,6 @@ describe('SiteFooter rendering', () => {
         ...createButtonComponents(),
         ...createIconComponents(),
         ...createFooterComponents(),
-      }
-      const site = resolveSiteConfig()
-      const pageInfo = {
-        relPath: 'index.md',
-        urlPath: '/',
-        frontmatter: normalizeFrontmatter({}),
       }
       return renderApp(
         `<SiteFooter title="Build with confidence" ctaLabel="Start free" ctaHref="/signup">
@@ -61,13 +54,7 @@ describe('SiteFooter rendering', () => {
       </SiteFooter>`,
         {
           components,
-          context: {
-            site,
-            theme: site.style.theme,
-            pageInfo,
-            recordScriptEntrypoint: () => {},
-            recordRuntimeEmbed: () => {},
-          },
+          context: createTestContext(),
         },
       )
     })
@@ -90,12 +77,6 @@ describe('SiteFooter rendering', () => {
         ...createIconComponents(),
         ...createFooterComponents(),
       }
-      const site = resolveSiteConfig()
-      const pageInfo = {
-        relPath: 'index.md',
-        urlPath: '/',
-        frontmatter: normalizeFrontmatter({}),
-      }
       return renderApp(
         `<div id="teleport-target"></div>
       <SiteFooter
@@ -107,13 +88,7 @@ describe('SiteFooter rendering', () => {
       </SiteFooter>`,
         {
           components,
-          context: {
-            site,
-            theme: site.style.theme,
-            pageInfo,
-            recordScriptEntrypoint: () => {},
-            recordRuntimeEmbed: () => {},
-          },
+          context: createTestContext(),
         },
       )
     })

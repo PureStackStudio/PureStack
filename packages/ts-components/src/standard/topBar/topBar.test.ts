@@ -1,9 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolveSiteConfig } from '../../config/config'
-import { normalizeFrontmatter } from '../../frontmatter/frontmatter'
 import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '../../renderApp'
+import { createTestContext } from '../../test/testContext'
 import { createLogoComponents } from '../logo/logo'
 import { createSearchComponents } from '../searchBox/searchBox'
 import { createTopBarComponents } from '../topBar/topBar'
@@ -16,34 +15,24 @@ describe('TopBar rendering', () => {
       ...createTopBarComponents(),
       ...createSearchComponents(),
     }
-    const site = resolveSiteConfig({
-      logo: {
-        wordOne: 'Calc',
-        wordTwo: 'Core',
-        subtitle: 'backend-native engine',
-        subtitleAlign: 'end',
-        href: '/docs/',
-        iconSvg:
-          '<svg viewBox="0 0 24 24"><path d="M4 12h16" stroke="currentColor"/></svg>',
-        iconSize: '26px',
-        wordFontSize: '22px',
-        subtitleFontSize: '10px',
-      },
-    })
-    const pageInfo = {
-      relPath: 'index.md',
-      urlPath: '/',
-      frontmatter: normalizeFrontmatter({}),
-    }
     const html = renderApp(`<TopBar />`, {
       components,
-      context: {
-        site,
-        theme: site.style.theme,
-        pageInfo,
-        recordScriptEntrypoint: () => {},
-        recordRuntimeEmbed: () => {},
-      },
+      context: createTestContext({
+        site: {
+          logo: {
+            wordOne: 'Calc',
+            wordTwo: 'Core',
+            subtitle: 'backend-native engine',
+            subtitleAlign: 'end',
+            href: '/docs/',
+            iconSvg:
+              '<svg viewBox="0 0 24 24"><path d="M4 12h16" stroke="currentColor"/></svg>',
+            iconSize: '26px',
+            wordFontSize: '22px',
+            subtitleFontSize: '10px',
+          },
+        },
+      }),
     })
     cleanup()
 

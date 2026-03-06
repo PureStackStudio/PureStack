@@ -1,9 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolveSiteConfig } from '../../config/config'
-import { normalizeFrontmatter } from '../../frontmatter/frontmatter'
 import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '../../renderApp'
+import { createTestContext } from '../../test/testContext'
 import { createIconComponents } from '../icon/icon'
 import { createTabsComponents } from './tabs'
 
@@ -11,12 +10,6 @@ describe('Tabs rendering', () => {
   it('renders slotted tab content and active tab state', () => {
     const cleanup = ensureDomGlobals()
     const components = { ...createIconComponents(), ...createTabsComponents() }
-    const site = resolveSiteConfig()
-    const pageInfo = {
-      relPath: 'tabs.mdx',
-      urlPath: '/tabs/',
-      frontmatter: normalizeFrontmatter({}),
-    }
     const html = renderApp(
       `<Tabs id="quickstart" variant="underline">
         <TabsHeader><h2>Quickstart</h2></TabsHeader>
@@ -27,13 +20,9 @@ describe('Tabs rendering', () => {
       </Tabs>`,
       {
         components,
-        context: {
-          site,
-          theme: site.style.theme,
-          pageInfo,
-          recordScriptEntrypoint: () => {},
-          recordRuntimeEmbed: () => {},
-        },
+        context: createTestContext({
+          pageInfo: { relPath: 'tabs.mdx', urlPath: '/tabs/' },
+        }),
       },
     )
     cleanup()
@@ -48,12 +37,6 @@ describe('Tabs rendering', () => {
   it('inherits tab group from parent tabs and marks disabled panes', () => {
     const cleanup = ensureDomGlobals()
     const components = { ...createIconComponents(), ...createTabsComponents() }
-    const site = resolveSiteConfig()
-    const pageInfo = {
-      relPath: 'tabs.mdx',
-      urlPath: '/tabs/',
-      frontmatter: normalizeFrontmatter({}),
-    }
     const html = renderApp(
       `<Tabs id="sdk-tabs">
         <TabPane id="blocked" label="Blocked" disabled="true">blocked</TabPane>
@@ -61,13 +44,9 @@ describe('Tabs rendering', () => {
       </Tabs>`,
       {
         components,
-        context: {
-          site,
-          theme: site.style.theme,
-          pageInfo,
-          recordScriptEntrypoint: () => {},
-          recordRuntimeEmbed: () => {},
-        },
+        context: createTestContext({
+          pageInfo: { relPath: 'tabs.mdx', urlPath: '/tabs/' },
+        }),
       },
     )
     cleanup()
@@ -80,25 +59,15 @@ describe('Tabs rendering', () => {
   it('supports explicit group override on tab panes', () => {
     const cleanup = ensureDomGlobals()
     const components = { ...createIconComponents(), ...createTabsComponents() }
-    const site = resolveSiteConfig()
-    const pageInfo = {
-      relPath: 'tabs.mdx',
-      urlPath: '/tabs/',
-      frontmatter: normalizeFrontmatter({}),
-    }
     const html = renderApp(
       `<Tabs id="outer">
         <TabPane id="a" group="manual-group" label="Manual">content</TabPane>
       </Tabs>`,
       {
         components,
-        context: {
-          site,
-          theme: site.style.theme,
-          pageInfo,
-          recordScriptEntrypoint: () => {},
-          recordRuntimeEmbed: () => {},
-        },
+        context: createTestContext({
+          pageInfo: { relPath: 'tabs.mdx', urlPath: '/tabs/' },
+        }),
       },
     )
     cleanup()
@@ -110,25 +79,15 @@ describe('Tabs rendering', () => {
   it('renders optional tab icons', () => {
     const cleanup = ensureDomGlobals()
     const components = { ...createIconComponents(), ...createTabsComponents() }
-    const site = resolveSiteConfig()
-    const pageInfo = {
-      relPath: 'tabs.mdx',
-      urlPath: '/tabs/',
-      frontmatter: normalizeFrontmatter({}),
-    }
     const html = renderApp(
       `<Tabs id="icon-tabs">
         <TabPane id="install" label="Install" icon="iconoir:code">Run npm install</TabPane>
       </Tabs>`,
       {
         components,
-        context: {
-          site,
-          theme: site.style.theme,
-          pageInfo,
-          recordScriptEntrypoint: () => {},
-          recordRuntimeEmbed: () => {},
-        },
+        context: createTestContext({
+          pageInfo: { relPath: 'tabs.mdx', urlPath: '/tabs/' },
+        }),
       },
     )
     cleanup()

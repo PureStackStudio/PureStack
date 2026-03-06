@@ -1,9 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolveSiteConfig } from '../../config/config'
-import { normalizeFrontmatter } from '../../frontmatter/frontmatter'
 import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '../../renderApp'
+import { createTestContext } from '../../test/testContext'
 import { createIconComponents } from '../icon/icon'
 import { createNavigationComponents } from './navMenu'
 
@@ -14,12 +13,6 @@ describe('NavMenu rendering', () => {
       ...createIconComponents(),
       ...createNavigationComponents(),
     }
-    const site = resolveSiteConfig()
-    const pageInfo = {
-      relPath: 'index.md',
-      urlPath: '/',
-      frontmatter: normalizeFrontmatter({}),
-    }
     const html = renderApp(
       `<NavMenu
         :items="[
@@ -29,13 +22,7 @@ describe('NavMenu rendering', () => {
       ></NavMenu>`,
       {
         components,
-        context: {
-          site,
-          theme: site.style.theme,
-          pageInfo,
-          recordScriptEntrypoint: () => {},
-          recordRuntimeEmbed: () => {},
-        },
+        context: createTestContext(),
       },
     )
     cleanup()

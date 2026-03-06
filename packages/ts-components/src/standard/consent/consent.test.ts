@@ -1,9 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolveSiteConfig } from '../../config/config'
-import { normalizeFrontmatter } from '../../frontmatter/frontmatter'
 import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '../../renderApp'
+import { createTestContext } from '../../test/testContext'
 import { createButtonComponents } from '../btn/btn'
 import { createConsentComponents } from './consent'
 
@@ -14,30 +13,26 @@ describe('Consent component rendering', () => {
       ...createButtonComponents(),
       ...createConsentComponents(),
     }
-    const site = resolveSiteConfig({
-      consent: {
-        enabled: true,
-        categories: [
-          { id: 'necessary', label: 'Necessary', required: true },
-          { id: 'analytics', label: 'Analytics' },
-        ],
-        services: [],
-      },
-    })
-    const pageInfo = {
-      relPath: 'index.md',
-      urlPath: '/',
-      frontmatter: normalizeFrontmatter({ layout: { showFooter: false } }),
-    }
     const html = renderApp(`<Consent />`, {
       components,
-      context: {
-        site,
-        theme: site.style.theme,
-        pageInfo,
-        recordScriptEntrypoint: () => {},
-        recordRuntimeEmbed: () => {},
-      },
+      context: createTestContext({
+        site: {
+          consent: {
+            enabled: true,
+            categories: [
+              { id: 'necessary', label: 'Necessary', required: true },
+              { id: 'analytics', label: 'Analytics' },
+            ],
+          },
+        },
+        pageInfo: {
+          frontmatter: {
+            layout: {
+              showFooter: false,
+            },
+          },
+        },
+      }),
     })
     cleanup()
 

@@ -1,9 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolveSiteConfig } from '../../config/config'
-import { normalizeFrontmatter } from '../../frontmatter/frontmatter'
 import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '../../renderApp'
+import { createTestContext } from '../../test/testContext'
 import { createButtonComponents } from '../btn/btn'
 import { createContactFormComponents } from './contactForm'
 
@@ -14,23 +13,16 @@ describe('ContactForm rendering', () => {
       ...createButtonComponents(),
       ...createContactFormComponents(),
     }
-    const site = resolveSiteConfig()
-    const pageInfo = {
-      relPath: 'contact/index.mdx',
-      urlPath: '/contact/',
-      frontmatter: normalizeFrontmatter({}),
-    }
     const html = renderApp(
       `<ContactForm action="mailto:support@example.com" submitLabel="Send it" />`,
       {
         components,
-        context: {
-          site,
-          theme: site.style.theme,
-          pageInfo,
-          recordScriptEntrypoint: () => {},
-          recordRuntimeEmbed: () => {},
-        },
+        context: createTestContext({
+          pageInfo: {
+            relPath: 'contact/index.mdx',
+            urlPath: '/contact/',
+          },
+        }),
       },
     )
     cleanup()

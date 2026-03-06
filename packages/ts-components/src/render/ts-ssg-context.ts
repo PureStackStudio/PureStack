@@ -22,6 +22,9 @@ export interface TsSsgPageInfo {
       tabs?: 'body' | 'head'
     }
     layout: {
+      navMode?: 'sidebar' | 'drawer'
+      fullWidth?: boolean
+      showToc?: boolean
       showFooter?: boolean
     }
   }

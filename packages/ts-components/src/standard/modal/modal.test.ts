@@ -1,10 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolveSiteConfig } from '../../config/config'
-import { normalizeFrontmatter } from '../../frontmatter/frontmatter'
 import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '../../renderApp'
-import type { TsSsgContext } from '../../ts-ssg-context'
+import { createTestContext } from '../../test/testContext'
 import { createButtonComponents } from '../btn/btn'
 import { createModalComponents } from './modal'
 
@@ -73,18 +71,3 @@ describe('Modal rendering', () => {
     expect(html).not.toContain('modal__close')
   })
 })
-
-function createTestContext(): TsSsgContext {
-  const site = resolveSiteConfig({ rootDir: process.cwd() })
-  return {
-    site,
-    pageInfo: {
-      relPath: 'modal.mdx',
-      urlPath: '/modal',
-      frontmatter: normalizeFrontmatter({}),
-    },
-    theme: site.style.theme,
-    recordScriptEntrypoint: () => {},
-    recordRuntimeEmbed: () => {},
-  }
-}

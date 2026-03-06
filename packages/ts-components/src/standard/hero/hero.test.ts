@@ -1,10 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolveSiteConfig } from '../../config/config'
-import { normalizeFrontmatter } from '../../frontmatter/frontmatter'
 import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '../../renderApp'
-import type { TsSsgContext } from '../../ts-ssg-context'
+import { createTestContext } from '../../test/testContext'
 import { createHeroComponents } from './hero'
 
 describe('HeroBanner rendering', () => {
@@ -56,18 +54,3 @@ describe('HeroBanner rendering', () => {
     expect(html).toContain('rel="noopener noreferrer"')
   })
 })
-
-function createTestContext(): TsSsgContext {
-  const site = resolveSiteConfig({ rootDir: process.cwd() })
-  return {
-    site,
-    pageInfo: {
-      relPath: 'hero.mdx',
-      urlPath: '/hero',
-      frontmatter: normalizeFrontmatter({}),
-    },
-    theme: site.style.theme,
-    recordScriptEntrypoint: () => {},
-    recordRuntimeEmbed: () => {},
-  }
-}

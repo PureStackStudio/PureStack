@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import type { DeepPartial } from '@purestack/ts-util'
 import { isPlainObject } from '@purestack/utils'
 import {
   type NavigationConfig,
@@ -12,7 +13,6 @@ import {
   type ThemeOptionsInput,
   themes,
 } from '../style/themeOptions'
-import type { DeepPartial } from '@purestack/ts-util'
 
 export interface SiteConfig {
   rootDir: string
