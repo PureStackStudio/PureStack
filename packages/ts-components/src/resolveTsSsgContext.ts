@@ -1,0 +1,1 @@
+export { resolveTsSsgContext } from './render'

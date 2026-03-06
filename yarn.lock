@@ -821,6 +821,11 @@ __metadata:
 "@purestack/ts-components@workspace:packages/ts-components":
   version: 0.0.0-use.local
   resolution: "@purestack/ts-components@workspace:packages/ts-components"
+  dependencies:
+    "@purestack/ts-minidom": "workspace:^"
+    "@purestack/ts-util": "workspace:^"
+    "@purestack/utils": "workspace:^"
+    gray-matter: "npm:^4.0.3"
   languageName: unknown
   linkType: soft
 
@@ -846,6 +851,12 @@ __metadata:
   dependencies:
     "@purestack/utils": "workspace:^"
     prettier: "npm:^3.8.1"
+  languageName: unknown
+  linkType: soft
+
+"@purestack/ts-minidom@workspace:^, @purestack/ts-minidom@workspace:packages/ts-minidom":
+  version: 0.0.0-use.local
+  resolution: "@purestack/ts-minidom@workspace:packages/ts-minidom"
   languageName: unknown
   linkType: soft
 
@@ -882,6 +893,12 @@ __metadata:
   dependencies:
     iconoir: "npm:^7.11.0"
     lucide: "npm:^0.576.0"
+  languageName: unknown
+  linkType: soft
+
+"@purestack/ts-util@workspace:^, @purestack/ts-util@workspace:packages/ts-util":
+  version: 0.0.0-use.local
+  resolution: "@purestack/ts-util@workspace:packages/ts-util"
   languageName: unknown
   linkType: soft
 

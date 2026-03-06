@@ -1,5 +1,5 @@
 import { defineComponent, html } from 'regor'
-import type { PageOutlineItem } from '../../../mdx/mdx'
+import type { PageOutlineItem } from '../../mdx/mdx'
 import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 import type { TsSsgContext } from '../../ts-ssg-context'
 import { registerPageTocStyles } from './pageTocStyle'

@@ -1,0 +1,79 @@
+import type { ThemeOptions } from '../style/themeOptions'
+
+export interface NavItem {
+  title: string
+  url?: string
+  group?: string
+  children?: NavItem[]
+}
+
+export interface PageOutlineItem {
+  id: string
+  title: string
+  children?: PageOutlineItem[]
+}
+
+export interface TsSsgPageInfo {
+  relPath: string
+  urlPath?: string
+  frontmatter: {
+    embed?: {
+      modal?: 'body' | 'head'
+      tabs?: 'body' | 'head'
+    }
+    layout: {
+      showFooter?: boolean
+    }
+  }
+}
+
+export interface TsSsgSiteConfig {
+  siteTitle?: string
+  style: {
+    theme: ThemeOptions
+  }
+  logo: {
+    wordOne?: string
+    wordTwo?: string
+    subtitle?: string
+    subtitleAlign?: 'start' | 'center' | 'end' | 'justify'
+    href?: string
+    iconSvg?: string
+    iconSize?: string
+    wordFontSize?: string
+    subtitleFontSize?: string
+  }
+  consent: {
+    enabled: boolean
+    bannerTitle: string
+    bannerDescription: string
+    privacyPolicyUrl?: string
+    privacyPolicyLabel: string
+    acceptAllLabel: string
+    rejectAllLabel: string
+    manageLabel: string
+    saveLabel: string
+    settingsLabel: string
+    categories: Array<{
+      id: string
+      label: string
+      description?: string
+      required?: boolean
+    }>
+  }
+}
+
+export interface TsSsgNavigation {
+  global?: NavItem[]
+  items?: NavItem[]
+}
+
+export interface TsSsgContext {
+  site: TsSsgSiteConfig
+  pageInfo: TsSsgPageInfo
+  navigation?: TsSsgNavigation
+  outline?: PageOutlineItem[]
+  theme: ThemeOptions
+  recordScriptEntrypoint: (sourceRelPath: string) => void
+  recordRuntimeEmbed: (name: string, position: 'body' | 'head') => void
+}

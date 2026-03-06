@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { resolveSiteConfig } from '../../../config/config'
-import { normalizeFrontmatter } from '../../../frontmatter/frontmatter'
+import { resolveSiteConfig } from '../../config/config'
+import { normalizeFrontmatter } from '../../frontmatter/frontmatter'
 import { createDom } from '@purestack/ts-minidom'
 import { renderApp } from '../../renderApp'
 import { createButtonComponents } from '../btn/btn'
