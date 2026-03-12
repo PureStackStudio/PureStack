@@ -30,10 +30,10 @@ export {
 } from './build/site'
 export {
   type AnalyticsConfig,
-  type ConsentCategoryConfig,
+  type ConsentCategory,
   type ConsentConfig,
-  type ConsentScriptConfig,
-  type ConsentServiceConfig,
+  type ConsentScript,
+  type ConsentService,
   type Ga4Config,
   type PagefindConfig,
   resolveSiteConfig,

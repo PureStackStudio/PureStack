@@ -1,30 +1,17 @@
 import { defineComponent, html } from 'regor'
 
+import type { ConsentCategory, ConsentConfig } from '../../consent/types'
 import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 import type { TsSsgContext } from '../../ts-ssg-context'
 import { registerConsentStyles } from './consentStyle'
 
-export interface ConsentCategory {
-  id: string
-  label: string
-  description?: string
-  required: boolean
-  inputId: string
+interface ConsentCategoryState extends ConsentCategory {
+  inputId?: string
 }
 
-export interface Consent {
-  enabled: boolean
-  title: string
-  description: string
-  privacyPolicyUrl?: string
-  privacyPolicyLabel: string
-  acceptAllLabel: string
-  rejectAllLabel: string
-  manageLabel: string
-  saveLabel: string
-  settingsLabel: string
-  settingsTeleport: string
-  categories: ConsentCategory[]
+export interface Consent extends ConsentConfig {
+  settingsTeleport?: string
+  categories: ConsentCategoryState[]
 }
 
 const consentTemplate = html`<section class="consent" data-consent-root r-if="enabled">
@@ -37,8 +24,8 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
     hidden
     aria-hidden="true"
   >
-    <div class="consent__title">{{ title }}</div>
-    <p class="consent__description">{{ description }}</p>
+    <div class="consent__title">{{ bannerTitle }}</div>
+    <p class="consent__description">{{ bannerDescription }}</p>
     <a
       class="consent__policy"
       r-if="privacyPolicyUrl"

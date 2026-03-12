@@ -1,4 +1,4 @@
-import { Consent } from '../standard/consent/consent'
+import type { ConsentConfig } from '../consent/types'
 import type { NavItem } from '../standard/navMenu/navMenu'
 import type { ThemeOptions } from '../style/themeOptions'
 
@@ -41,7 +41,7 @@ export interface TsSsgSiteConfig {
     wordFontSize?: string
     subtitleFontSize?: string
   }
-  consent: Consent
+  consent: ConsentConfig
 }
 
 export interface TsSsgNavigation {

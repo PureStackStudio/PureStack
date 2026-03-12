@@ -21,6 +21,8 @@ const DEFAULT_SITE: TsSsgSiteConfig = {
   },
   consent: {
     enabled: false,
+    storageKey: 'ts-ssg-consent',
+    policyVersion: '1',
     bannerTitle: 'Your privacy choices',
     bannerDescription:
       'We use cookies and similar technologies to improve your experience.',
@@ -31,6 +33,7 @@ const DEFAULT_SITE: TsSsgSiteConfig = {
     saveLabel: 'Save choices',
     settingsLabel: 'Privacy settings',
     categories: [],
+    services: [],
   },
 }
 

@@ -2,6 +2,10 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import {
+  type ConsentCategory,
+  type ConsentConfig,
+  type ConsentScript,
+  type ConsentService,
   resolveThemes,
   type ThemeOptions,
   type ThemeOptionsInput,
@@ -13,6 +17,13 @@ import {
   type NavigationConfig,
   resolveNavigationConfig,
 } from '../navigation/navigation'
+
+export type {
+  ConsentCategory,
+  ConsentConfig,
+  ConsentScript,
+  ConsentService,
+} from '@purestack/ts-components'
 
 export interface SiteConfig {
   rootDir: string
@@ -73,50 +84,6 @@ export interface RobotsConfig {
   customDirectives: string[]
 }
 
-export interface ConsentScriptConfig {
-  src?: string
-  content?: string
-  type?: string
-  async?: boolean
-  defer?: boolean
-  integrity?: string
-  nonce?: string
-  crossOrigin?: 'anonymous' | 'use-credentials'
-  referrerPolicy?: string
-}
-
-export interface ConsentServiceConfig {
-  id: string
-  category: string
-  label?: string
-  description?: string
-  scripts: ConsentScriptConfig[]
-}
-
-export interface ConsentCategoryConfig {
-  id: string
-  label: string
-  description?: string
-  required?: boolean
-}
-
-export interface ConsentConfig {
-  enabled: boolean
-  storageKey: string
-  policyVersion: string
-  bannerTitle: string
-  bannerDescription: string
-  privacyPolicyUrl?: string
-  privacyPolicyLabel: string
-  acceptAllLabel: string
-  rejectAllLabel: string
-  manageLabel: string
-  saveLabel: string
-  settingsLabel: string
-  categories: ConsentCategoryConfig[]
-  services: ConsentServiceConfig[]
-}
-
 export interface Ga4Config {
   enabled: boolean
   measurementId?: string
@@ -157,7 +124,7 @@ const DEFAULT_ROOT = path.resolve(
   '..',
 )
 export const SITE_CONFIG_FILENAME = 'siteConfig.json'
-const DEFAULT_CONSENT_CATEGORIES: ConsentCategoryConfig[] = [
+const DEFAULT_CONSENT_CATEGORIES: ConsentCategory[] = [
   {
     id: 'necessary',
     label: 'Necessary',
@@ -501,15 +468,15 @@ function resolveMdxHighlighter(
 }
 
 function resolveConsentCategories(
-  input: Array<DeepPartial<ConsentCategoryConfig>> | undefined,
-  file: Array<DeepPartial<ConsentCategoryConfig>> | undefined,
+  input: Array<DeepPartial<ConsentCategory>> | undefined,
+  file: Array<DeepPartial<ConsentCategory>> | undefined,
 ) {
   const source = Array.isArray(input)
     ? input
     : Array.isArray(file)
       ? file
       : DEFAULT_CONSENT_CATEGORIES
-  const categories: ConsentCategoryConfig[] = []
+  const categories: ConsentCategory[] = []
   const seen = new Set<string>()
   for (const entry of source) {
     if (!isPlainObject(entry)) continue
@@ -540,13 +507,13 @@ function resolveConsentCategories(
 }
 
 function resolveConsentServices(
-  input: Array<DeepPartial<ConsentServiceConfig>> | undefined,
-  file: Array<DeepPartial<ConsentServiceConfig>> | undefined,
-  categories: ConsentCategoryConfig[],
+  input: Array<DeepPartial<ConsentService>> | undefined,
+  file: Array<DeepPartial<ConsentService>> | undefined,
+  categories: ConsentCategory[],
 ) {
   const source = Array.isArray(input) ? input : Array.isArray(file) ? file : []
   const categoryIds = new Set(categories.map((entry) => entry.id))
-  const services: ConsentServiceConfig[] = []
+  const services: ConsentService[] = []
   const seenServiceIds = new Set<string>()
   for (const entry of source) {
     if (!isPlainObject(entry)) continue
@@ -575,8 +542,8 @@ function resolveConsentServices(
 }
 
 function appendGa4ConsentService(
-  services: ConsentServiceConfig[],
-  categories: ConsentCategoryConfig[],
+  services: ConsentService[],
+  categories: ConsentCategory[],
   ga4?: Ga4Config,
 ) {
   if (!ga4?.enabled || !ga4.measurementId) return services
@@ -601,7 +568,7 @@ function appendGa4ConsentService(
   ]
 }
 
-function buildGa4ConsentScripts(measurementId: string): ConsentScriptConfig[] {
+function buildGa4ConsentScripts(measurementId: string): ConsentScript[] {
   const measurementIdLiteral = JSON.stringify(measurementId)
   return [
     {
@@ -620,7 +587,7 @@ function buildGa4ConsentScripts(measurementId: string): ConsentScriptConfig[] {
 }
 
 function resolveConsentServiceScripts(
-  scripts: Array<DeepPartial<ConsentScriptConfig>> | undefined,
+  scripts: Array<DeepPartial<ConsentScript>> | undefined,
   serviceId: string,
 ) {
   if (!Array.isArray(scripts) || scripts.length === 0) {
@@ -628,7 +595,7 @@ function resolveConsentServiceScripts(
       `Consent service "${serviceId}" must define at least one script.`,
     )
   }
-  const resolved: ConsentScriptConfig[] = []
+  const resolved: ConsentScript[] = []
   for (const entry of scripts) {
     if (!isPlainObject(entry)) continue
     const src = resolveOptionalString(entry.src)

@@ -1,26 +1,9 @@
-type ConsentCategory = { id: string; required?: boolean }
-type ConsentScriptNode = {
-  src?: string
-  type?: string
-  async?: boolean
-  defer?: boolean
-  integrity?: string
-  nonce?: string
-  crossOrigin?: string
-  referrerPolicy?: string
-  content?: string
-}
-type ConsentService = {
-  id: string
-  category: string
-  scripts?: ConsentScriptNode[]
-}
-type RuntimeConsentConfig = {
-  storageKey?: string
-  policyVersion?: string
-  categories: ConsentCategory[]
-  services: ConsentService[]
-}
+import type {
+  ConsentConfig,
+  ConsentScript,
+  ConsentService,
+} from '@purestack/ts-components'
+
 type ConsentState = {
   version: string
   categories: Record<string, boolean>
@@ -43,7 +26,7 @@ declare global {
 const INPUT_KEY = '__CONSENT_CONFIG__'
 const config = (globalThis as Record<string, unknown>)[
   INPUT_KEY
-] as RuntimeConsentConfig
+] as ConsentConfig
 delete (globalThis as Record<string, unknown>)[INPUT_KEY]
 
 if (
@@ -163,7 +146,7 @@ if (
     }
     root.setAttribute('data-consent-ready', 'true')
   }
-  function loadScript(script: ConsentScriptNode, serviceId: string) {
+  function loadScript(script: ConsentScript, serviceId: string) {
     const node = document.createElement('script')
     if (script.src) node.src = script.src
     if (script.type) node.type = script.type
@@ -373,5 +356,3 @@ if (
     applyFromStored()
   })
 }
-
-export {}
