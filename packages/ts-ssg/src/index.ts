@@ -1,11 +1,9 @@
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
-
+import { logError } from '@purestack/ts-util'
 import { createLogger, getLogger } from 'logpot'
-
 import { buildSite } from './build/site'
 import { type DevServerInput, startDevServer } from './dev/server'
-import { logError } from './util/logging'
 
 export {
   type BuildHooks,

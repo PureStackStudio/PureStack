@@ -1,8 +1,7 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-
+import { ensureDir } from '@purestack/ts-util'
 import type { RobotsConfig, SitemapConfig } from '../config/config'
-import { ensureDir } from '../util/fs'
 
 export interface SitemapPageEntry {
   urlPath: string

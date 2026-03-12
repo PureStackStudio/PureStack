@@ -1,6 +1,6 @@
 ﻿import fs from 'node:fs/promises'
 import path from 'node:path'
-
+import { urlNormalizer } from '@purestack/ts-util'
 import type { SiteConfig, SiteMdxConfig } from '../../config/config'
 import type { ContentFile, StaticAssetFile } from '../../discover/content'
 import type { MdxRenderOptions } from '../../mdx/compile'
@@ -11,7 +11,6 @@ import {
   type MdxCodeHighlighter,
 } from '../../mdx/highlight'
 import { createHljsHighlighter } from '../../mdx/highlightjs'
-import { urlNormalizer } from '../../util/urlNormalizer'
 import { resolveStaticOutPath } from '../assets'
 import {
   type AssetManifestEntry,

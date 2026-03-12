@@ -1,12 +1,13 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-
+import {
+  ensureDir,
+  isTypeScriptAssetPath,
+  toOutputAssetRelPath,
+} from '@purestack/ts-util'
 import { build as buildScript, type Metafile } from 'esbuild'
 import { getLogger } from 'logpot'
-
 import { discoverStaticAssets, type StaticAssetFile } from '../discover/content'
-import { isTypeScriptAssetPath, toOutputAssetRelPath } from '../util/assetPath'
-import { ensureDir } from '../util/fs'
 
 export interface CopyStaticAssetsResult {
   assets: number

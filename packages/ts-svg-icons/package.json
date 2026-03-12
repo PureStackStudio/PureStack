@@ -29,7 +29,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "lint": "biome check ./src --formatter-enabled=false",
+    "lint": "biome check ./src --formatter-enabled=false --write",
     "test": "vitest"
   },
   "devDependencies": {

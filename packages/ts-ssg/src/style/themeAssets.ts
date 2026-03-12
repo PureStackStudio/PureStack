@@ -1,13 +1,13 @@
 export {
-  REQUIRED_THEMES,
   normalizeThemeName,
   normalizeThemes,
   orderThemes,
+  REQUIRED_THEMES,
+  type RequiredTheme,
   resolveThemeFileName,
   resolveThemeHref,
-  resolveThemes,
   resolveThemeStyleLinks,
-  type RequiredTheme,
+  resolveThemes,
   type ThemeName,
   type ThemeStylesheetLink,
 } from '@purestack/ts-components'

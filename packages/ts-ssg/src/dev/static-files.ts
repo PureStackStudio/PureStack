@@ -2,10 +2,8 @@
 import fsPromises from 'node:fs/promises'
 import type http from 'node:http'
 import path from 'node:path'
-
+import { logError } from '@purestack/ts-util'
 import type { Logger } from 'logpot'
-
-import { logError } from '../util/logging'
 
 export function isLikelyHtmlPath(pathname: string) {
   return pathname.endsWith('/') || path.extname(pathname) === ''

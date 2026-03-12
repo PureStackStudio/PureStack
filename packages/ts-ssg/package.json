@@ -30,13 +30,14 @@
   ],
   "scripts": {
     "build": "tsc",
-    "lint": "biome check ./src --formatter-enabled=false",
+    "lint": "biome check ./src --formatter-enabled=false --write",
     "test": "vitest"
   },
   "dependencies": {
     "@logpot/utils": "^1.0.7",
     "@node-minify/html-minifier": "^10.4.0",
     "@purestack/ts-components": "workspace:^",
+    "@purestack/ts-util": "workspace:^",
     "@purestack/ts-svg-icons": "workspace:^",
     "esbuild": "^0.27.3",
     "gray-matter": "^4.0.3",
