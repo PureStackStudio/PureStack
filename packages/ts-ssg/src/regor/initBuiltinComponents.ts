@@ -22,10 +22,10 @@ import {
   createTabsComponents,
   createThemeSwitcherComponents,
   createTopBarComponents,
+  registerNormalizeStyles,
+  styleBuilder,
 } from '@purestack/ts-components'
 import { ensureDomGlobals } from '@purestack/ts-minidom'
-import { registerNormalizeStyles } from '../style/normalize.css'
-import { styleBuilder } from '../style/styles'
 import { registerDocLayoutStyles } from '../templates/docLayoutStyles'
 import { registerMarkdownStyles } from '../templates/markdownStyles'
 

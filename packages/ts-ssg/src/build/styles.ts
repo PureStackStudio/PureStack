@@ -2,10 +2,13 @@ import crypto from 'node:crypto'
 import fs from 'node:fs/promises'
 import { createRequire } from 'node:module'
 import path from 'node:path'
+import {
+  orderThemes,
+  resolveThemeFileName,
+  styleBuilder,
+} from '@purestack/ts-components'
 import { ensureDir } from '@purestack/ts-util'
 import type { SiteStyleConfig } from '../config/config'
-import { styleBuilder } from '../style/styles'
-import { orderThemes, resolveThemeFileName } from '../style/themeAssets'
 
 export interface WriteStylesResult {
   outPath: string

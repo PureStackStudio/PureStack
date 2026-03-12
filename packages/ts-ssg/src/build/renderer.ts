@@ -1,11 +1,9 @@
+import { type ThemeStylesheetLink, themes } from '@purestack/ts-components'
 import { type BasicHeadConfig, h } from '@purestack/ts-html'
-
 import type { AnalyticsConfig, ConsentConfig } from '../config/config'
 import { getHead } from '../config/head'
 import type { PageFrontmatter } from '../frontmatter/frontmatter'
 import type { PageNavigation } from '../navigation/navigation'
-import type { ThemeStylesheetLink } from '../style/themeAssets'
-import { themes } from '../style/themeOptions'
 import { buildCodeCopyScript } from '../templates/buildCodeCopyScript'
 import { buildConsentScript } from '../templates/buildConsentScript'
 import { buildGa4Script } from '../templates/buildGa4Script'

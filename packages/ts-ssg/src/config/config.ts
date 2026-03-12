@@ -1,18 +1,16 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { resolveThemes, 
+  type ThemeOptions,
+  type ThemeOptionsInput,
+  themes,} from '@purestack/ts-components'
 import type { DeepPartial } from '@purestack/ts-util'
 import { isPlainObject } from '@purestack/utils'
 import {
   type NavigationConfig,
   resolveNavigationConfig,
 } from '../navigation/navigation'
-import { resolveThemes } from '../style/themeAssets'
-import {
-  type ThemeOptions,
-  type ThemeOptionsInput,
-  themes,
-} from '../style/themeOptions'
 
 export interface SiteConfig {
   rootDir: string

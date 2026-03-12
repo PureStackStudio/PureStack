@@ -1,7 +1,6 @@
 import path from 'node:path'
-
+import { themes } from '@purestack/ts-components'
 import { getLogger, type Logger } from 'logpot'
-
 import { resolveSiteConfig, type SiteConfig } from '../../config/config'
 import {
   type ContentFile,
@@ -13,7 +12,6 @@ import {
 } from '../../discover/content'
 import { buildNavigation } from '../../navigation/navigation'
 import { initBuiltinComponents } from '../../regor/initBuiltinComponents'
-import { themes } from '../../style/themeOptions'
 import { copyStaticAssets } from '../assets'
 import { prepareOutDir } from '../io'
 import {

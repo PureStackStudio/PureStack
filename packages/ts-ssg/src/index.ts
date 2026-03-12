@@ -5,6 +5,23 @@ import { createLogger, getLogger } from 'logpot'
 import { buildSite } from './build/site'
 import { type DevServerInput, startDevServer } from './dev/server'
 
+export type { ThemePalette } from '@purestack/ts-components'
+export {
+  type BuiltInSkinName,
+  type BuiltInSkinPair,
+  type BuiltInSkins,
+  builtInSkins,
+  componentRegistry,
+  DEFAULT_THEME_OPTIONS,
+  styleBuilder,
+  THEME_MODES,
+  type ThemeMode,
+  type ThemeOptions,
+  type ThemeOptionsInput,
+  type Themes,
+  type TsSsgContext,
+  themes,
+} from '@purestack/ts-components'
 export {
   type BuildHooks,
   type BuildInput,
@@ -57,25 +74,6 @@ export {
   resolveNavigationConfig,
   resolvePageNavigation,
 } from './navigation/navigation'
-export { componentRegistry } from './regor/registry'
-export type { TsSsgContext } from './regor/ts-ssg-context'
-export {
-  type BuiltInSkinName,
-  type BuiltInSkinPair,
-  type BuiltInSkins,
-  builtInSkins,
-} from './style/skins'
-export { styleBuilder } from './style/styles'
-export {
-  DEFAULT_THEME_OPTIONS,
-  THEME_MODES,
-  type ThemeMode,
-  type ThemeOptions,
-  type ThemeOptionsInput,
-  type Themes,
-  themes,
-} from './style/themeOptions'
-export type { ThemePalette } from './style/themePalette'
 export {
   defaultTemplates,
   type PageInfo,

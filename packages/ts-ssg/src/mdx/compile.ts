@@ -1,3 +1,4 @@
+import { componentRegistry } from '@purestack/ts-components'
 import type { Element, Properties, Root, Text } from 'hast'
 import type { Root as MdastRoot } from 'mdast'
 import type { Handler } from 'mdast-util-to-hast'
@@ -5,8 +6,6 @@ import { toHast } from 'mdast-util-to-hast'
 import rehypeRaw from 'rehype-raw'
 import rehypeStringify from 'rehype-stringify'
 import { unified } from 'unified'
-
-import { componentRegistry } from '../regor/registry'
 import type { MdxCodeHighlighter } from './highlight'
 import { applyShikiHighlighting } from './shikiHighlighting'
 

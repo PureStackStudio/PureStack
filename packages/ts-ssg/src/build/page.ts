@@ -1,9 +1,8 @@
 import path from 'node:path'
-
+import { renderApp, resolveThemeStyleLinks } from '@purestack/ts-components'
 import type { BasicHeadConfig } from '@purestack/ts-html'
 import { getLogger } from 'logpot'
 import type { Component } from 'regor'
-
 import type { SiteConfig } from '../config/config'
 import {
   type ContentFile,
@@ -26,8 +25,6 @@ import {
   type PageNavigation,
   resolvePageNavigation,
 } from '../navigation/navigation'
-import { renderApp } from '../regor/renderApp'
-import { resolveThemeStyleLinks } from '../style/themeAssets'
 import type { PageInfo, PageTemplateMap } from '../templates/page-templates'
 import { resolveHeadConfig } from './head-config'
 import { readSource, writeHtml } from './io'

@@ -1,10 +1,8 @@
-import { styleBuilder } from '../style/styles'
-import {
+import type { ThemePalette } from '@purestack/ts-components'
+import { styleBuilder, 
   type ThemeMode,
   type ThemeOptions,
-  themes,
-} from '../style/themeOptions'
-import type { ThemePalette } from '../style/themePalette'
+  themes,} from '@purestack/ts-components'
 
 export interface MarkdownStyleOptions {
   includeShikiStyles?: boolean

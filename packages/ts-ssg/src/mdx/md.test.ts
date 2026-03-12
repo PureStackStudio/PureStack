@@ -1,10 +1,8 @@
+import { renderApp, type TsSsgContext } from '@purestack/ts-components'
 import { describe, expect, it } from 'vitest'
-
 import { resolveMdxBuildOptions } from '../build/incremental/support'
 import { resolveSiteConfig } from '../config/config'
 import { normalizeFrontmatter } from '../frontmatter/frontmatter'
-import { renderApp } from '../regor/renderApp'
-import type { TsSsgContext } from '../regor/ts-ssg-context'
 import { compileMarkdown } from './md'
 
 describe('compileMarkdown', () => {
