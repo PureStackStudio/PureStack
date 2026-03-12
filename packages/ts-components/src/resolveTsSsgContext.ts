@@ -1,1 +1,1 @@
-export { resolveTsSsgContext } from './render'
+export { resolveTsSsgContext } from './render/resolveTsSsgContext'

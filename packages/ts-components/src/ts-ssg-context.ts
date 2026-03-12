@@ -4,4 +4,4 @@ export type {
   TsSsgNavigation,
   TsSsgPageInfo,
   TsSsgSiteConfig,
-} from './render'
+} from './render/ts-ssg-context'
