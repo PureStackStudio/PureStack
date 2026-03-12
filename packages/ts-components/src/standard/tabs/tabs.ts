@@ -4,38 +4,29 @@ import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 import { registerTabsStyles } from './tabsStyle'
 
 class TabsScope {
-  groupName = 'tabs-default'
+  groupName?: string = 'tabs-default'
 }
 
-interface TabsProps {
+interface TabsContext extends TabsScope {
   id?: string
   ariaLabel?: string
 }
 
-interface TabsContext extends TabsScope {
-  ariaLabel: string
-}
-
 interface TabsHeaderContext {}
 
-interface TabPaneProps {
+interface TabPaneContext {
   id?: string
   label?: string
   icon?: string
   active?: boolean
   disabled?: boolean
   group?: string
-}
-
-interface TabPaneContext {
-  inputId: string
-  tabId: string
-  panelId: string
-  label: string
-  icon: string
-  groupName: string
-  isActive: boolean
-  isDisabled: boolean
+  inputId?: string
+  tabId?: string
+  panelId?: string
+  groupName?: string
+  isActive?: boolean
+  isDisabled?: boolean
 }
 
 const tabsTemplate = html`<section class="tabs">
@@ -107,7 +98,7 @@ export function createTabsComponents() {
   }
 }
 
-function resolveTabsContext(props: TabsProps): TabsContext {
+function resolveTabsContext(props: TabsContext): TabsContext {
   const groupName = resolveTabsId(props.id)
   return Object.assign(new TabsScope(), {
     groupName,
@@ -116,7 +107,7 @@ function resolveTabsContext(props: TabsProps): TabsContext {
 }
 
 function resolveTabPaneContext(
-  head: ComponentHead<TabPaneProps>,
+  head: ComponentHead<TabPaneContext>,
 ): TabPaneContext {
   const label = resolveText(head.props.label) || 'Tab'
   const icon = resolveText(head.props.icon)
@@ -175,6 +166,6 @@ function toSlug(value: string) {
     .replace(/^-+|-+$/g, '')
 }
 
-function markTabsRuntimeEmbed(head: ComponentHead<TabsProps>) {
+function markTabsRuntimeEmbed(head: ComponentHead<TabsContext>) {
   resolveTsSsgContext(head).recordRuntimeEmbed('tabs', 'head')
 }

@@ -3,7 +3,7 @@ import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 import type { TsSsgContext } from '../../ts-ssg-context'
 import { registerFooterStyles } from './footerStyle'
 
-interface SiteFooterProps {
+interface SiteFooterContext {
   teleport?: string
   eyebrow?: string
   title?: string
@@ -25,61 +25,49 @@ interface SiteFooterProps {
   newsletterName?: string
   newsletterPlaceholder?: string
   newsletterButtonLabel?: string
+  rootClass?: string
+  hasEyebrow?: boolean
+  hasTitle?: boolean
+  hasTagline?: boolean
+  hasCtaHref?: boolean
+  hasCtaTarget?: boolean
+  hasCtaRel?: boolean
+  showNewsletter?: boolean
 }
 
-interface SiteFooterContext extends SiteFooterProps {
-  rootClass: string
-  hasEyebrow: boolean
-  hasTitle: boolean
-  hasTagline: boolean
-  hasCtaHref: boolean
-  hasCtaTarget: boolean
-  hasCtaRel: boolean
-  showNewsletter: boolean
-}
-
-interface FooterColumnProps {
+interface FooterColumnContext {
   title?: string
   description?: string
   compact?: unknown
+  rootClass?: string
+  hasTitle?: boolean
+  hasDescription?: boolean
 }
 
-interface FooterColumnContext extends FooterColumnProps {
-  rootClass: string
-  hasTitle: boolean
-  hasDescription: boolean
-}
-
-interface FooterLinkProps {
+interface FooterLinkContext {
   href?: string
   label?: string
   target?: string
   rel?: string
   icon?: string
   variant?: string
+  rootClass?: string
+  hasHref?: boolean
+  hasTarget?: boolean
+  hasRel?: boolean
+  hasLabel?: boolean
 }
 
-interface FooterLinkContext extends FooterLinkProps {
-  rootClass: string
-  hasHref: boolean
-  hasTarget: boolean
-  hasRel: boolean
-  hasLabel: boolean
-}
-
-interface FooterSocialProps {
+interface FooterSocialContext {
   href?: string
   label?: string
   icon?: string
   target?: string
   rel?: string
-}
-
-interface FooterSocialContext extends FooterSocialProps {
-  hasHref: boolean
-  hasTarget: boolean
-  hasRel: boolean
-  hasLabel: boolean
+  hasHref?: boolean
+  hasTarget?: boolean
+  hasRel?: boolean
+  hasLabel?: boolean
 }
 
 const siteFooterTemplate = html`<footer
@@ -271,7 +259,7 @@ function resolveSiteTitle(context: TsSsgContext): string {
 }
 
 function resolveSiteFooterContext(
-  props: SiteFooterProps,
+  props: SiteFooterContext,
   siteTitle: string,
 ): SiteFooterContext {
   const year = new Date().getFullYear()
@@ -315,7 +303,7 @@ function resolveSiteFooterContext(
 }
 
 function resolveFooterColumnContext(
-  props: FooterColumnProps,
+  props: FooterColumnContext,
 ): FooterColumnContext {
   const compact = Boolean(props.compact)
   return {
@@ -326,7 +314,7 @@ function resolveFooterColumnContext(
   }
 }
 
-function resolveFooterLinkContext(props: FooterLinkProps): FooterLinkContext {
+function resolveFooterLinkContext(props: FooterLinkContext): FooterLinkContext {
   const variant = resolveFooterLinkVariant(props.variant)
   const rel =
     props.rel || (props.target === '_blank' ? 'noopener noreferrer' : '')
@@ -342,7 +330,7 @@ function resolveFooterLinkContext(props: FooterLinkProps): FooterLinkContext {
 }
 
 function resolveFooterSocialContext(
-  props: FooterSocialProps,
+  props: FooterSocialContext,
 ): FooterSocialContext {
   const rel =
     props.rel || (props.target === '_blank' ? 'noopener noreferrer' : '')

@@ -7,7 +7,7 @@ type BtnSize = 'sm' | 'md' | 'lg'
 type BtnType = 'button' | 'submit' | 'reset'
 type BtnIconPosition = 'start' | 'end'
 
-interface BtnProps {
+interface BtnContext {
   variant?: string
   size?: string
   type?: string
@@ -17,16 +17,12 @@ interface BtnProps {
   ariaLabel?: string
   disabled?: boolean | string
   class?: string
-}
-
-interface BtnContext extends BtnProps {
-  className: string
-  buttonType: BtnType
-  icon: string
-  isDisabled: boolean
-  showStartIcon: boolean
-  showEndIcon: boolean
-  showLabel: boolean
+  className?: string
+  buttonType?: BtnType
+  isDisabled?: boolean
+  showStartIcon?: boolean
+  showEndIcon?: boolean
+  showLabel?: boolean
 }
 
 const buttonTemplate = html`<button
@@ -65,7 +61,7 @@ export function createButtonComponents() {
   }
 }
 
-function resolveButtonContext(props: BtnProps): BtnContext {
+function resolveButtonContext(props: BtnContext): BtnContext {
   const icon = resolveText(props.icon)
   const variant = resolveVariant(props.variant)
   const size = resolveSize(props.size)

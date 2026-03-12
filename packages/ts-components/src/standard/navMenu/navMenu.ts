@@ -13,12 +13,17 @@ export interface NavItem {
   icon?: string
 }
 
-interface NavMenuContext {
+export interface NavMenuContext {
   items?: NavItem[]
 }
 
-interface NavListContext {
+export interface NavListContext {
   items?: NavItemState[]
+}
+
+export interface NavItemState extends NavItem {
+  isActive: boolean
+  isOpen: boolean
 }
 
 const navItemTemplate = html`<li class="nav__item">
@@ -118,11 +123,6 @@ function resolveNavItems(context: TsSsgContext): NavItem[] {
   const globalItems = context?.navigation?.global ?? []
   if (globalItems.length > 0) return globalItems
   return context?.navigation?.items ?? []
-}
-
-interface NavItemState extends NavItem {
-  isActive: boolean
-  isOpen: boolean
 }
 
 function normalizePath(url: string | undefined): string | undefined {

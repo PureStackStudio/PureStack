@@ -2,7 +2,7 @@ import { defineComponent, html } from 'regor'
 
 import { registerContactFormStyles } from './contactFormStyle'
 
-interface ContactFormProps {
+interface ContactFormContext {
   title?: string
   description?: string
   action?: string
@@ -18,10 +18,7 @@ interface ContactFormProps {
   topicGeneralLabel?: string
   topicSupportLabel?: string
   topicPartnershipLabel?: string
-}
-
-interface ContactFormContext extends ContactFormProps {
-  resolvedMethod: 'post' | 'get'
+  resolvedMethod?: 'post' | 'get'
 }
 
 const contactFormTemplate = html`<section class="contact-form">
@@ -114,7 +111,7 @@ export function createContactFormComponents() {
 }
 
 function resolveContactFormContext(
-  props: ContactFormProps,
+  props: ContactFormContext,
 ): ContactFormContext {
   const normalizedMethod = props.method?.trim().toLowerCase()
   return {

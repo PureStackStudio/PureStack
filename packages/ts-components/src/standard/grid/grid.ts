@@ -2,7 +2,7 @@ import { defineComponent, html } from 'regor'
 
 import { registerGridStyles } from './gridStyle'
 
-interface GridProps {
+interface GridContext {
   columns?: number | string
   columnsSm?: number | string
   columnsMd?: number | string
@@ -16,11 +16,8 @@ interface GridProps {
   alignItems?: string
   justifyItems?: string
   dense?: boolean | string
-}
-
-interface GridContext extends GridProps {
-  className: string
-  gridStyle: Record<string, string>
+  className?: string
+  gridStyle?: Record<string, string>
 }
 
 const gridTemplate = html`<div class="grid" :class="className" :style="gridStyle">
@@ -55,7 +52,7 @@ export function createGridComponents() {
   }
 }
 
-function resolveGridContext(props: GridProps): GridContext {
+function resolveGridContext(props: GridContext): GridContext {
   const classNames = [
     resolveAlignClass(props.alignItems),
     resolveJustifyClass(props.justifyItems),
@@ -94,6 +91,7 @@ function resolveGridContext(props: GridProps): GridContext {
   addCssVarIfPresent(gridStyle, '--grid-gap-xl', resolveGap(props.gapXl))
 
   return {
+    ...props,
     className: classNames.join(' '),
     gridStyle,
   }

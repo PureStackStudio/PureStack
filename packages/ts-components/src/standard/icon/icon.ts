@@ -3,21 +3,18 @@ import { defineComponent, html } from 'regor'
 
 import { registerIconStyles } from './iconStyle'
 
-interface IconProps {
+interface IconContext {
   name?: string
   size?: string
   label?: string
   class?: string
-}
-
-interface IconContext extends IconProps {
-  svg: string
-  hasIcon: boolean
-  ariaLabel: string | null
-  ariaHidden: 'true' | null
-  role: 'img' | null
-  customClass: string
-  iconStyle: Record<string, string>
+  svg?: string
+  hasIcon?: boolean
+  ariaLabel?: string | null
+  ariaHidden?: 'true' | null
+  role?: 'img' | null
+  customClass?: string
+  iconStyle?: Record<string, string>
 }
 
 const iconTemplate = html`<span
@@ -45,7 +42,7 @@ export function createIconComponents() {
   }
 }
 
-function resolveIconContext(props: IconProps): IconContext {
+function resolveIconContext(props: IconContext): IconContext {
   const name = resolveText(props.name)
   const label = resolveText(props.label)
   const size = resolveCssSize(props.size)

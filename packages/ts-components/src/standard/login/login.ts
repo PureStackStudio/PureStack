@@ -2,31 +2,23 @@ import { urlNormalizer } from '@purestack/ts-util'
 import { defineComponent, html } from 'regor'
 import { registerLoginStyles } from './loginStyle'
 
-interface LoginHeaderProps {
+interface LoginHeaderContext {
   badge?: string
   title?: string
   description?: string
+  hasBadge?: boolean
+  hasDescription?: boolean
 }
 
-interface LoginHeaderContext extends LoginHeaderProps {
-  hasBadge: boolean
-  hasDescription: boolean
-}
-
-interface LoginProviderProps {
+interface LoginProviderContext {
   label?: string
 }
 
-interface LoginProviderContext extends LoginProviderProps {}
-
-interface LoginFooterProps {
+interface LoginFooterContext {
   text?: string
   linkLabel?: string
   linkHref?: string
-}
-
-interface LoginFooterContext extends LoginFooterProps {
-  hasLink: boolean
+  hasLink?: boolean
 }
 
 const loginPanelTemplate = html`<section class="login-panel">
@@ -94,7 +86,7 @@ export function createLoginComponents() {
 }
 
 function resolveLoginHeaderContext(
-  props: LoginHeaderProps,
+  props: LoginHeaderContext,
 ): LoginHeaderContext {
   return {
     badge: props.badge,
@@ -106,7 +98,7 @@ function resolveLoginHeaderContext(
 }
 
 function resolveLoginFooterContext(
-  props: LoginFooterProps,
+  props: LoginFooterContext,
 ): LoginFooterContext {
   const linkHref = urlNormalizer.normalizeHref(props.linkHref)
   return {

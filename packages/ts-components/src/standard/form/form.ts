@@ -2,16 +2,13 @@ import { urlNormalizer } from '@purestack/ts-util'
 import { defineComponent, html } from 'regor'
 import { registerFormStyles } from './formStyle'
 
-interface AppFormProps {
+interface AppFormContext {
   action?: string
   method?: string
-}
-
-interface AppFormContext extends AppFormProps {
   resolvedMethod?: 'post' | 'get'
 }
 
-interface FormFieldProps {
+interface FormFieldContext {
   label?: string
   type?: string
   name?: string
@@ -22,56 +19,39 @@ interface FormFieldProps {
   max?: string
   step?: string
   value?: string
-}
-
-interface FormFieldContext extends FormFieldProps {
   resolvedType?: string
 }
 
-interface FormMetaProps {}
+interface FormMetaContext {}
 
-interface FormMetaContext extends FormMetaProps {}
-
-interface FormCheckProps {
+interface FormCheckContext {
   label?: string
   name?: string
   value?: string
   checked?: unknown
 }
 
-interface FormCheckContext extends FormCheckProps {}
-
-interface FormAssistLinkProps {
+interface FormAssistLinkContext {
   href?: string
   label?: string
   target?: string
   rel?: string
+  hasHref?: boolean
+  hasRel?: boolean
+  hasTarget?: boolean
 }
 
-interface FormAssistLinkContext extends FormAssistLinkProps {
-  hasHref: boolean
-  hasRel: boolean
-  hasTarget: boolean
-}
-
-interface FormSubmitProps {
+interface FormSubmitContext {
   label?: string
 }
 
-interface FormSubmitContext extends FormSubmitProps {}
-
-interface FormDividerProps {
+interface FormDividerContext {
   label?: string
 }
 
-interface FormDividerContext extends FormDividerProps {}
-
-interface FormStatusProps {
+interface FormStatusContext {
   variant?: string
   hidden?: unknown
-}
-
-interface FormStatusContext extends FormStatusProps {
   toneClass?: string
 }
 
@@ -227,7 +207,7 @@ export function createFormComponents() {
   }
 }
 
-function resolveAppFormContext(props: AppFormProps): AppFormContext {
+function resolveAppFormContext(props: AppFormContext): AppFormContext {
   const normalizedMethod = props.method?.trim().toLowerCase() || ''
   return {
     action: props.action,
@@ -241,7 +221,7 @@ function resolveAppFormContext(props: AppFormProps): AppFormContext {
   }
 }
 
-function resolveFormFieldContext(props: FormFieldProps): FormFieldContext {
+function resolveFormFieldContext(props: FormFieldContext): FormFieldContext {
   const resolvedType = resolveInputType(props.type)
   return {
     ...props,
@@ -259,7 +239,7 @@ function resolveFormFieldContext(props: FormFieldProps): FormFieldContext {
 }
 
 function resolveFormAssistLinkContext(
-  props: FormAssistLinkProps,
+  props: FormAssistLinkContext,
 ): FormAssistLinkContext {
   const href = urlNormalizer.normalizeHref(props.href)
   const rel =

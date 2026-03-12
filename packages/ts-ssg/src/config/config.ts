@@ -1,10 +1,12 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { resolveThemes, 
+import {
+  resolveThemes,
   type ThemeOptions,
   type ThemeOptionsInput,
-  themes,} from '@purestack/ts-components'
+  themes,
+} from '@purestack/ts-components'
 import type { DeepPartial } from '@purestack/ts-util'
 import { isPlainObject } from '@purestack/utils'
 import {

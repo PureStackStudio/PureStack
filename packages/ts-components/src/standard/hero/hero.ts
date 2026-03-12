@@ -30,29 +30,23 @@ const heroMediaTemplate = html`<div class="hero__logo-frame" r-if="hasMedia">
   <img class="hero__logo" :src="src" :alt="alt" />
 </div>`
 
-interface HeroActionProps {
+interface HeroActionContext {
   href?: string
   variant?: string
   icon?: string
   target?: string
   rel?: string
+  className?: string
+  hasHref?: boolean
+  hasIcon?: boolean
+  hasTarget?: boolean
+  hasRel?: boolean
 }
 
-interface HeroActionContext extends HeroActionProps {
-  className: string
-  hasHref: boolean
-  hasIcon: boolean
-  hasTarget: boolean
-  hasRel: boolean
-}
-
-interface HeroMediaProps {
+interface HeroMediaContext {
   src?: string
   alt?: string
-}
-
-interface HeroMediaContext extends HeroMediaProps {
-  hasMedia: boolean
+  hasMedia?: boolean
 }
 
 function createHeroBannerComponent() {
@@ -82,7 +76,7 @@ export function createHeroComponents() {
   }
 }
 
-function resolveHeroActionContext(props: HeroActionProps): HeroActionContext {
+function resolveHeroActionContext(props: HeroActionContext): HeroActionContext {
   const normalizedVariant = props.variant?.toLowerCase()
   const className =
     normalizedVariant === 'primary'
@@ -103,7 +97,7 @@ function resolveHeroActionContext(props: HeroActionProps): HeroActionContext {
   }
 }
 
-function resolveHeroMediaContext(props: HeroMediaProps): HeroMediaContext {
+function resolveHeroMediaContext(props: HeroMediaContext): HeroMediaContext {
   return {
     ...props,
     alt: props.alt || 'Hero image',

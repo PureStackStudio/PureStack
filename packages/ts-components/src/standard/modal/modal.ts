@@ -3,32 +3,21 @@ import { type ComponentHead, defineComponent, html } from 'regor'
 import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 import { registerModalStyles } from './modalStyle'
 
-interface ModalProps {
+interface ModalContext {
   id?: string
   title?: string
   size?: string
   fade?: boolean | string
   slideFrom?: string
   showClose?: boolean | string
+  hasTitle?: boolean
+  titleId?: string
+  rootClass?: string
 }
 
-interface ModalContext extends ModalProps {
-  id: string
-  title: string
-  hasTitle: boolean
-  showClose: boolean
-  titleId: string
-  rootClass: string
-}
-
-interface ModalTriggerProps {
+interface ModalTriggerContext {
   target?: string
   label?: string
-}
-
-interface ModalTriggerContext extends ModalTriggerProps {
-  target: string
-  label: string
 }
 
 const modalTemplate = html`<dialog
@@ -98,7 +87,7 @@ export function createModalComponents() {
   }
 }
 
-function resolveModalContext(props: ModalProps): ModalContext {
+function resolveModalContext(props: ModalContext): ModalContext {
   const id = resolveModalId(props.id)
   const title = resolveText(props.title)
   const hasTitle = Boolean(title)
@@ -129,7 +118,7 @@ function resolveModalContext(props: ModalProps): ModalContext {
 }
 
 function resolveModalTriggerContext(
-  props: ModalTriggerProps,
+  props: ModalTriggerContext,
 ): ModalTriggerContext {
   return {
     target: resolveModalId(props.target),
@@ -193,6 +182,6 @@ function resolveBoolean(value: unknown, fallback: boolean) {
   return fallback
 }
 
-function markModalRuntimeEmbed(head: ComponentHead<ModalProps>) {
+function markModalRuntimeEmbed(head: ComponentHead<ModalContext>) {
   resolveTsSsgContext(head).recordRuntimeEmbed('modal', 'head')
 }

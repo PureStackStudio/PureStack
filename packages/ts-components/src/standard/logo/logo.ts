@@ -22,7 +22,7 @@ const logoTemplate = html`<div class="site-logo">
   </a>
 </div>`
 
-export interface SiteLogoProps {
+export interface SiteLogoContext {
   wordOne?: string
   wordTwo?: string
   subtitle?: string
@@ -32,23 +32,15 @@ export interface SiteLogoProps {
   iconSize?: string
   wordFontSize?: string
   subtitleFontSize?: string
+  ariaLabel?: string
+  glyphStyle?: Record<string, string>
+  wordStyle?: Record<string, string>
+  subtitleStyle?: Record<string, string>
+  hasIconSvg?: boolean
+  hasSubtitle?: boolean
 }
 
-export interface SiteLogoContext {
-  wordOne: string
-  wordTwo: string
-  subtitle: string
-  href: string
-  iconSvg: string
-  ariaLabel: string
-  glyphStyle: Record<string, string>
-  wordStyle: Record<string, string>
-  subtitleStyle: Record<string, string>
-  hasIconSvg: boolean
-  hasSubtitle: boolean
-}
-
-function resolveLogoContext(props: SiteLogoProps): SiteLogoContext {
+function resolveLogoContext(props: SiteLogoContext): SiteLogoContext {
   const wordOne = normalizeWord(props.wordOne, 'Pure')
   const wordTwo = normalizeWord(props.wordTwo, 'Stack')
   const subtitle = normalizeOptionalText(props.subtitle)

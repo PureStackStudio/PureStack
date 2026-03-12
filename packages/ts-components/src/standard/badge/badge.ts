@@ -1,11 +1,8 @@
 import { defineComponent, html } from 'regor'
 import { registerBadgeStyles } from './badgeStyle'
 
-interface BadgeProps {
+interface BadgeContext {
   variant?: string
-}
-
-interface BadgeContext extends BadgeProps {
   toneClass?: string
 }
 

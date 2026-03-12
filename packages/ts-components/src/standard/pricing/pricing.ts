@@ -1,19 +1,16 @@
 import { defineComponent, html } from 'regor'
 import { registerPricingStyles } from './pricingStyle'
 
-interface PricingTableProps {
+interface PricingTableContext {
   eyebrow?: string
   title?: string
   subtitle?: string
   footnote?: string
+  hasHeader?: boolean
+  hasFootnote?: boolean
 }
 
-interface PricingTableContext extends PricingTableProps {
-  hasHeader: boolean
-  hasFootnote: boolean
-}
-
-interface PricingPlanProps {
+interface PricingPlanContext {
   title?: string
   summary?: string
   price?: string
@@ -24,20 +21,15 @@ interface PricingPlanProps {
   icon?: string
   ctaLabel?: string
   ctaLink?: string
+  hasBadge?: boolean
+  hasPrice?: boolean
+  hasCta?: boolean
+  hasIcon?: boolean
 }
 
-interface PricingPlanContext extends PricingPlanProps {
-  hasBadge: boolean
-  hasPrice: boolean
-  hasCta: boolean
-  hasIcon: boolean
-}
-
-interface PricingFeatureProps {
+interface PricingFeatureContext {
   icon?: string
 }
-
-interface PricingFeatureContext extends PricingFeatureProps {}
 
 const pricingTableTemplate = html`<section class="pricing">
   <div class="pricing__header" r-if="hasHeader">
@@ -125,7 +117,7 @@ export function createPricingComponents() {
 }
 
 function resolvePricingTableContext(
-  props: PricingTableProps,
+  props: PricingTableContext,
 ): PricingTableContext {
   const eyebrow = resolveString(props.eyebrow)
   const title = resolveString(props.title)
@@ -142,7 +134,7 @@ function resolvePricingTableContext(
 }
 
 function resolvePricingPlanContext(
-  props: PricingPlanProps,
+  props: PricingPlanContext,
 ): PricingPlanContext {
   const title = resolveString(props.title) || 'Plan'
   const variant = resolveVariant(props.variant)
@@ -161,7 +153,7 @@ function resolvePricingPlanContext(
 }
 
 function resolvePricingFeatureContext(
-  props: PricingFeatureProps,
+  props: PricingFeatureContext,
 ): PricingFeatureContext {
   const icon = resolveString(props.icon)
   return {
