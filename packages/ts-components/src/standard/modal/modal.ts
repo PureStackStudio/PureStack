@@ -3,7 +3,7 @@ import { type ComponentHead, defineComponent, html } from 'regor'
 import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 import { registerModalStyles } from './modalStyle'
 
-interface ModalContext {
+export interface Modal {
   id?: string
   title?: string
   size?: string
@@ -15,7 +15,7 @@ interface ModalContext {
   rootClass?: string
 }
 
-interface ModalTriggerContext {
+export interface ModalTrigger {
   target?: string
   label?: string
 }
@@ -63,19 +63,19 @@ const modalTriggerTemplate = html`<Btn type="button" :data-modal-target="target"
 </Btn>`
 
 function createModalComponent() {
-  return defineComponent<ModalContext>(modalTemplate, {
+  return defineComponent<Modal>(modalTemplate, {
     props: ['id', 'title', 'size', 'fade', 'slideFrom', 'showClose'],
     context: (head) => {
       markModalRuntimeEmbed(head)
-      return resolveModalContext(head.props)
+      return resolveModal(head.props)
     },
   })
 }
 
 function createModalTriggerComponent() {
-  return defineComponent<ModalTriggerContext>(modalTriggerTemplate, {
+  return defineComponent<ModalTrigger>(modalTriggerTemplate, {
     props: ['target', 'label'],
-    context: (head) => resolveModalTriggerContext(head.props),
+    context: (head) => resolveModalTrigger(head.props),
   })
 }
 
@@ -87,7 +87,7 @@ export function createModalComponents() {
   }
 }
 
-function resolveModalContext(props: ModalContext): ModalContext {
+function resolveModal(props: Modal): Modal {
   const id = resolveModalId(props.id)
   const title = resolveText(props.title)
   const hasTitle = Boolean(title)
@@ -117,9 +117,7 @@ function resolveModalContext(props: ModalContext): ModalContext {
   }
 }
 
-function resolveModalTriggerContext(
-  props: ModalTriggerContext,
-): ModalTriggerContext {
+function resolveModalTrigger(props: ModalTrigger): ModalTrigger {
   return {
     target: resolveModalId(props.target),
     label: resolveText(props.label) || 'Open modal',
@@ -182,6 +180,6 @@ function resolveBoolean(value: unknown, fallback: boolean) {
   return fallback
 }
 
-function markModalRuntimeEmbed(head: ComponentHead<ModalContext>) {
+function markModalRuntimeEmbed(head: ComponentHead<Modal>) {
   resolveTsSsgContext(head).recordRuntimeEmbed('modal', 'head')
 }

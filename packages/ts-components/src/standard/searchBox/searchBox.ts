@@ -4,7 +4,7 @@ import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 import type { TsSsgContext } from '../../ts-ssg-context'
 import { registerSearchBoxStyles } from './searchBoxStyle'
 
-interface SearchBoxContext {
+export interface SearchBox {
   placeholder: string
 }
 
@@ -36,7 +36,7 @@ const searchBoxTemplate = html`<div class="site-search" data-pagefind-search>
 </div>`
 
 function createSearchBoxComponent() {
-  return defineComponent<SearchBoxContext>(searchBoxTemplate, {
+  return defineComponent<SearchBox>(searchBoxTemplate, {
     context: (head) => ({
       placeholder: resolveSearchPlaceholder(resolveTsSsgContext(head)),
     }),

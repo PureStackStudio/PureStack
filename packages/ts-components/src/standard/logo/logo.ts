@@ -22,7 +22,7 @@ const logoTemplate = html`<div class="site-logo">
   </a>
 </div>`
 
-export interface SiteLogoContext {
+export interface SiteLogo {
   wordOne?: string
   wordTwo?: string
   subtitle?: string
@@ -40,7 +40,7 @@ export interface SiteLogoContext {
   hasSubtitle?: boolean
 }
 
-function resolveLogoContext(props: SiteLogoContext): SiteLogoContext {
+function resolveSiteLogo(props: SiteLogo): SiteLogo {
   const wordOne = normalizeWord(props.wordOne, 'Pure')
   const wordTwo = normalizeWord(props.wordTwo, 'Stack')
   const subtitle = normalizeOptionalText(props.subtitle)
@@ -119,7 +119,7 @@ function normalizeSubtitleAlign(
 }
 
 function createSiteLogoComponent() {
-  return defineComponent<SiteLogoContext>(logoTemplate, {
+  return defineComponent<SiteLogo>(logoTemplate, {
     props: [
       'wordOne',
       'wordTwo',
@@ -131,7 +131,7 @@ function createSiteLogoComponent() {
       'wordFontSize',
       'subtitleFontSize',
     ],
-    context: (head) => resolveLogoContext(head.props),
+    context: (head) => resolveSiteLogo(head.props),
   })
 }
 

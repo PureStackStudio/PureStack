@@ -1,7 +1,7 @@
 import { defineComponent, html } from 'regor'
 import { registerAlertStyles } from './alertStyle'
 
-interface AlertBoxContext {
+export interface AlertBox {
   title?: string
   eyebrow?: string
   badge?: string
@@ -42,7 +42,7 @@ const alertBoxTemplate = html`<aside
 </aside>`
 
 function createAlertBoxComponent() {
-  return defineComponent<AlertBoxContext>(alertBoxTemplate, {
+  return defineComponent<AlertBox>(alertBoxTemplate, {
     props: [
       'title',
       'eyebrow',
@@ -56,7 +56,7 @@ function createAlertBoxComponent() {
       'role',
       'live',
     ],
-    context: (head) => resolveAlertBoxContext(head.props),
+    context: (head) => resolveAlertBox(head.props),
   })
 }
 
@@ -67,7 +67,7 @@ export function createAlertComponents() {
   }
 }
 
-function resolveAlertBoxContext(props: AlertBoxContext): AlertBoxContext {
+function resolveAlertBox(props: AlertBox): AlertBox {
   const tone = resolveTone(props.tone)
   const variant = resolveVariant(props.variant)
   const role = resolveRole(props.role, tone)

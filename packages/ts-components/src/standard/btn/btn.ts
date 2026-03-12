@@ -7,7 +7,7 @@ type BtnSize = 'sm' | 'md' | 'lg'
 type BtnType = 'button' | 'submit' | 'reset'
 type BtnIconPosition = 'start' | 'end'
 
-interface BtnContext {
+export interface Btn {
   variant?: string
   size?: string
   type?: string
@@ -38,7 +38,7 @@ const buttonTemplate = html`<button
 </button>`
 
 function createButtonComponent() {
-  return defineComponent<BtnContext>(buttonTemplate, {
+  return defineComponent<Btn>(buttonTemplate, {
     props: [
       'variant',
       'size',
@@ -50,7 +50,7 @@ function createButtonComponent() {
       'disabled',
       'class',
     ],
-    context: (head) => resolveButtonContext(head.props),
+    context: (head) => resolveBtn(head.props),
   })
 }
 
@@ -61,7 +61,7 @@ export function createButtonComponents() {
   }
 }
 
-function resolveButtonContext(props: BtnContext): BtnContext {
+function resolveBtn(props: Btn): Btn {
   const icon = resolveText(props.icon)
   const variant = resolveVariant(props.variant)
   const size = resolveSize(props.size)

@@ -2,7 +2,7 @@ import { urlNormalizer } from '@purestack/ts-util'
 import { defineComponent, html } from 'regor'
 import { registerLoginStyles } from './loginStyle'
 
-interface LoginHeaderContext {
+export interface LoginHeader {
   badge?: string
   title?: string
   description?: string
@@ -10,11 +10,11 @@ interface LoginHeaderContext {
   hasDescription?: boolean
 }
 
-interface LoginProviderContext {
+export interface LoginProvider {
   label?: string
 }
 
-interface LoginFooterContext {
+export interface LoginFooter {
   text?: string
   linkLabel?: string
   linkHref?: string
@@ -53,14 +53,14 @@ function createLoginPanelComponent() {
 }
 
 function createLoginHeaderComponent() {
-  return defineComponent<LoginHeaderContext>(loginHeaderTemplate, {
+  return defineComponent<LoginHeader>(loginHeaderTemplate, {
     props: ['badge', 'title', 'description'],
-    context: (head) => resolveLoginHeaderContext(head.props),
+    context: (head) => resolveLoginHeader(head.props),
   })
 }
 
 function createLoginProviderComponent() {
-  return defineComponent<LoginProviderContext>(loginProviderTemplate, {
+  return defineComponent<LoginProvider>(loginProviderTemplate, {
     props: ['label'],
     context: (head) => ({
       label: head.props.label,
@@ -69,9 +69,9 @@ function createLoginProviderComponent() {
 }
 
 function createLoginFooterComponent() {
-  return defineComponent<LoginFooterContext>(loginFooterTemplate, {
+  return defineComponent<LoginFooter>(loginFooterTemplate, {
     props: ['text', 'linkLabel', 'linkHref'],
-    context: (head) => resolveLoginFooterContext(head.props),
+    context: (head) => resolveLoginFooter(head.props),
   })
 }
 
@@ -85,9 +85,7 @@ export function createLoginComponents() {
   }
 }
 
-function resolveLoginHeaderContext(
-  props: LoginHeaderContext,
-): LoginHeaderContext {
+function resolveLoginHeader(props: LoginHeader): LoginHeader {
   return {
     badge: props.badge,
     title: props.title,
@@ -97,9 +95,7 @@ function resolveLoginHeaderContext(
   }
 }
 
-function resolveLoginFooterContext(
-  props: LoginFooterContext,
-): LoginFooterContext {
+function resolveLoginFooter(props: LoginFooter): LoginFooter {
   const linkHref = urlNormalizer.normalizeHref(props.linkHref)
   return {
     text: props.text,

@@ -13,11 +13,11 @@ export interface NavItem {
   icon?: string
 }
 
-export interface NavMenuContext {
+export interface NavMenu {
   items?: NavItem[]
 }
 
-export interface NavListContext {
+export interface NavList {
   items?: NavItemState[]
 }
 
@@ -184,7 +184,7 @@ function createNavItemComponent() {
 }
 
 function createNavListComponent() {
-  return defineComponent<NavListContext>(navListTemplate, {
+  return defineComponent<NavList>(navListTemplate, {
     props: ['items'],
     context: (head) => ({
       items: head.props.items,
@@ -193,7 +193,7 @@ function createNavListComponent() {
 }
 
 function createNavMenuComponent() {
-  return defineComponent<NavMenuContext>(navMenuTemplate, {
+  return defineComponent<NavMenu>(navMenuTemplate, {
     props: ['items'],
     context: (head) => {
       const context = resolveTsSsgContext(head)

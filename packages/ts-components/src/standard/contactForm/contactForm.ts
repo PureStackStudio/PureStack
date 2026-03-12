@@ -2,7 +2,7 @@ import { defineComponent, html } from 'regor'
 
 import { registerContactFormStyles } from './contactFormStyle'
 
-interface ContactFormContext {
+export interface ContactForm {
   title?: string
   description?: string
   action?: string
@@ -81,7 +81,7 @@ const contactFormTemplate = html`<section class="contact-form">
 </section>`
 
 function createContactFormComponent() {
-  return defineComponent<ContactFormContext>(contactFormTemplate, {
+  return defineComponent<ContactForm>(contactFormTemplate, {
     props: [
       'title',
       'description',
@@ -99,7 +99,7 @@ function createContactFormComponent() {
       'topicSupportLabel',
       'topicPartnershipLabel',
     ],
-    context: (head) => resolveContactFormContext(head.props),
+    context: (head) => resolveContactForm(head.props),
   })
 }
 
@@ -110,9 +110,7 @@ export function createContactFormComponents() {
   }
 }
 
-function resolveContactFormContext(
-  props: ContactFormContext,
-): ContactFormContext {
+function resolveContactForm(props: ContactForm): ContactForm {
   const normalizedMethod = props.method?.trim().toLowerCase()
   return {
     title: props.title || 'Send a message',

@@ -1,7 +1,7 @@
 import { defineComponent, html } from 'regor'
 import { registerBadgeStyles } from './badgeStyle'
 
-interface BadgeContext {
+export interface Badge {
   variant?: string
   toneClass?: string
 }
@@ -11,7 +11,7 @@ const badgeTemplate = html`<span class="badge" :class="toneClass">
 </span>`
 
 function createBadgeComponent() {
-  return defineComponent<BadgeContext>(badgeTemplate, {
+  return defineComponent<Badge>(badgeTemplate, {
     props: ['variant'],
     context: (head) => ({
       variant: head.props.variant,

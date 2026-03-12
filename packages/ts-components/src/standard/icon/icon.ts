@@ -3,7 +3,7 @@ import { defineComponent, html } from 'regor'
 
 import { registerIconStyles } from './iconStyle'
 
-interface IconContext {
+export interface Icon {
   name?: string
   size?: string
   label?: string
@@ -29,9 +29,9 @@ const iconTemplate = html`<span
 ></span>`
 
 function createIconComponent() {
-  return defineComponent<IconContext>(iconTemplate, {
+  return defineComponent<Icon>(iconTemplate, {
     props: ['name', 'size', 'label', 'class'],
-    context: (head) => resolveIconContext(head.props),
+    context: (head) => resolveIcon(head.props),
   })
 }
 
@@ -42,7 +42,7 @@ export function createIconComponents() {
   }
 }
 
-function resolveIconContext(props: IconContext): IconContext {
+function resolveIcon(props: Icon): Icon {
   const name = resolveText(props.name)
   const label = resolveText(props.label)
   const size = resolveCssSize(props.size)

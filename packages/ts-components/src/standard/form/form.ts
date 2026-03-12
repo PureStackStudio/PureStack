@@ -2,13 +2,13 @@ import { urlNormalizer } from '@purestack/ts-util'
 import { defineComponent, html } from 'regor'
 import { registerFormStyles } from './formStyle'
 
-interface AppFormContext {
+export interface AppForm {
   action?: string
   method?: string
   resolvedMethod?: 'post' | 'get'
 }
 
-interface FormFieldContext {
+export interface FormField {
   label?: string
   type?: string
   name?: string
@@ -22,16 +22,16 @@ interface FormFieldContext {
   resolvedType?: string
 }
 
-interface FormMetaContext {}
+export interface FormMeta {}
 
-interface FormCheckContext {
+export interface FormCheck {
   label?: string
   name?: string
   value?: string
   checked?: unknown
 }
 
-interface FormAssistLinkContext {
+export interface FormAssistLink {
   href?: string
   label?: string
   target?: string
@@ -41,15 +41,15 @@ interface FormAssistLinkContext {
   hasTarget?: boolean
 }
 
-interface FormSubmitContext {
+export interface FormSubmit {
   label?: string
 }
 
-interface FormDividerContext {
+export interface FormDivider {
   label?: string
 }
 
-interface FormStatusContext {
+export interface FormStatus {
   variant?: string
   hidden?: unknown
   toneClass?: string
@@ -117,14 +117,14 @@ const formStatusTemplate = html`<div
 </div>`
 
 function createAppFormComponent() {
-  return defineComponent<AppFormContext>(appFormTemplate, {
+  return defineComponent<AppForm>(appFormTemplate, {
     props: ['action', 'method'],
-    context: (head) => resolveAppFormContext(head.props),
+    context: (head) => resolveAppForm(head.props),
   })
 }
 
 function createFormFieldComponent() {
-  return defineComponent<FormFieldContext>(formFieldTemplate, {
+  return defineComponent<FormField>(formFieldTemplate, {
     props: [
       'label',
       'type',
@@ -137,16 +137,16 @@ function createFormFieldComponent() {
       'step',
       'value',
     ],
-    context: (head) => resolveFormFieldContext(head.props),
+    context: (head) => resolveFormField(head.props),
   })
 }
 
 function createFormMetaComponent() {
-  return defineComponent<FormMetaContext>(formMetaTemplate, {})
+  return defineComponent<FormMeta>(formMetaTemplate, {})
 }
 
 function createFormCheckComponent() {
-  return defineComponent<FormCheckContext>(formCheckTemplate, {
+  return defineComponent<FormCheck>(formCheckTemplate, {
     props: ['label', 'name', 'value', 'checked'],
     context: (head) => ({
       label: head.props.label,
@@ -158,14 +158,14 @@ function createFormCheckComponent() {
 }
 
 function createFormAssistLinkComponent() {
-  return defineComponent<FormAssistLinkContext>(formAssistLinkTemplate, {
+  return defineComponent<FormAssistLink>(formAssistLinkTemplate, {
     props: ['href', 'label', 'target', 'rel'],
-    context: (head) => resolveFormAssistLinkContext(head.props),
+    context: (head) => resolveFormAssistLink(head.props),
   })
 }
 
 function createFormSubmitComponent() {
-  return defineComponent<FormSubmitContext>(formSubmitTemplate, {
+  return defineComponent<FormSubmit>(formSubmitTemplate, {
     props: ['label'],
     context: (head) => ({
       label: head.props.label,
@@ -174,7 +174,7 @@ function createFormSubmitComponent() {
 }
 
 function createFormDividerComponent() {
-  return defineComponent<FormDividerContext>(formDividerTemplate, {
+  return defineComponent<FormDivider>(formDividerTemplate, {
     props: ['label'],
     context: (head) => ({
       label: head.props.label,
@@ -183,7 +183,7 @@ function createFormDividerComponent() {
 }
 
 function createFormStatusComponent() {
-  return defineComponent<FormStatusContext>(formStatusTemplate, {
+  return defineComponent<FormStatus>(formStatusTemplate, {
     props: ['variant', 'hidden'],
     context: (head) => ({
       variant: head.props.variant,
@@ -207,7 +207,7 @@ export function createFormComponents() {
   }
 }
 
-function resolveAppFormContext(props: AppFormContext): AppFormContext {
+function resolveAppForm(props: AppForm): AppForm {
   const normalizedMethod = props.method?.trim().toLowerCase() || ''
   return {
     action: props.action,
@@ -221,7 +221,7 @@ function resolveAppFormContext(props: AppFormContext): AppFormContext {
   }
 }
 
-function resolveFormFieldContext(props: FormFieldContext): FormFieldContext {
+function resolveFormField(props: FormField): FormField {
   const resolvedType = resolveInputType(props.type)
   return {
     ...props,
@@ -238,9 +238,7 @@ function resolveFormFieldContext(props: FormFieldContext): FormFieldContext {
   }
 }
 
-function resolveFormAssistLinkContext(
-  props: FormAssistLinkContext,
-): FormAssistLinkContext {
+function resolveFormAssistLink(props: FormAssistLink): FormAssistLink {
   const href = urlNormalizer.normalizeHref(props.href)
   const rel =
     props.rel || (props.target === '_blank' ? 'noopener noreferrer' : '')

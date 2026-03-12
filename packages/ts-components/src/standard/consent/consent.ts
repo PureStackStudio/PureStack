@@ -4,7 +4,7 @@ import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 import type { TsSsgContext } from '../../ts-ssg-context'
 import { registerConsentStyles } from './consentStyle'
 
-interface ConsentCategoryContext {
+export interface ConsentCategory {
   id: string
   label: string
   description?: string
@@ -12,7 +12,7 @@ interface ConsentCategoryContext {
   inputId: string
 }
 
-interface ConsentContext {
+export interface Consent {
   enabled: boolean
   title: string
   description: string
@@ -24,7 +24,7 @@ interface ConsentContext {
   saveLabel: string
   settingsLabel: string
   settingsTeleport: string
-  categories: ConsentCategoryContext[]
+  categories: ConsentCategory[]
 }
 
 const consentTemplate = html`<section class="consent" data-consent-root r-if="enabled">
@@ -128,12 +128,12 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
 </section>`
 
 function createConsentComponent() {
-  return defineComponent<ConsentContext>(consentTemplate, {
-    context: (head) => resolveConsentContext(resolveTsSsgContext(head)),
+  return defineComponent<Consent>(consentTemplate, {
+    context: (head) => resolveConsent(resolveTsSsgContext(head)),
   })
 }
 
-function resolveConsentContext(context: TsSsgContext): ConsentContext {
+function resolveConsent(context: TsSsgContext): Consent {
   const consent = context.site.consent
   const categories = consent.categories.map((category) => ({
     id: category.id,
@@ -143,16 +143,7 @@ function resolveConsentContext(context: TsSsgContext): ConsentContext {
     inputId: `consent-category-${category.id}`,
   }))
   return {
-    enabled: consent.enabled,
-    title: consent.bannerTitle,
-    description: consent.bannerDescription,
-    privacyPolicyUrl: consent.privacyPolicyUrl,
-    privacyPolicyLabel: consent.privacyPolicyLabel,
-    acceptAllLabel: consent.acceptAllLabel,
-    rejectAllLabel: consent.rejectAllLabel,
-    manageLabel: consent.manageLabel,
-    saveLabel: consent.saveLabel,
-    settingsLabel: consent.settingsLabel,
+    ...consent,
     settingsTeleport: context.pageInfo.frontmatter.layout.showFooter
       ? '.site-footer__legal'
       : 'body',

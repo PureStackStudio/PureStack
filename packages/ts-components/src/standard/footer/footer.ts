@@ -3,7 +3,7 @@ import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 import type { TsSsgContext } from '../../ts-ssg-context'
 import { registerFooterStyles } from './footerStyle'
 
-interface SiteFooterContext {
+export interface SiteFooter {
   teleport?: string
   eyebrow?: string
   title?: string
@@ -35,7 +35,7 @@ interface SiteFooterContext {
   showNewsletter?: boolean
 }
 
-interface FooterColumnContext {
+export interface FooterColumn {
   title?: string
   description?: string
   compact?: unknown
@@ -44,7 +44,7 @@ interface FooterColumnContext {
   hasDescription?: boolean
 }
 
-interface FooterLinkContext {
+export interface FooterLink {
   href?: string
   label?: string
   target?: string
@@ -58,7 +58,7 @@ interface FooterLinkContext {
   hasLabel?: boolean
 }
 
-interface FooterSocialContext {
+export interface FooterSocial {
   href?: string
   label?: string
   icon?: string
@@ -187,7 +187,7 @@ const footerSocialTemplate = html`<a
 </a>`
 
 function createSiteFooterComponent() {
-  return defineComponent<SiteFooterContext>(siteFooterTemplate, {
+  return defineComponent<SiteFooter>(siteFooterTemplate, {
     props: [
       'teleport',
       'eyebrow',
@@ -212,7 +212,7 @@ function createSiteFooterComponent() {
       'newsletterButtonLabel',
     ],
     context: (head) => {
-      return resolveSiteFooterContext(
+      return resolveSiteFooter(
         head.props,
         resolveSiteTitle(resolveTsSsgContext(head)),
       )
@@ -221,23 +221,23 @@ function createSiteFooterComponent() {
 }
 
 function createFooterColumnComponent() {
-  return defineComponent<FooterColumnContext>(footerColumnTemplate, {
+  return defineComponent<FooterColumn>(footerColumnTemplate, {
     props: ['title', 'description', 'compact'],
-    context: (head) => resolveFooterColumnContext(head.props),
+    context: (head) => resolveFooterColumn(head.props),
   })
 }
 
 function createFooterLinkComponent() {
-  return defineComponent<FooterLinkContext>(footerLinkTemplate, {
+  return defineComponent<FooterLink>(footerLinkTemplate, {
     props: ['href', 'label', 'target', 'rel', 'icon', 'variant'],
-    context: (head) => resolveFooterLinkContext(head.props),
+    context: (head) => resolveFooterLink(head.props),
   })
 }
 
 function createFooterSocialComponent() {
-  return defineComponent<FooterSocialContext>(footerSocialTemplate, {
+  return defineComponent<FooterSocial>(footerSocialTemplate, {
     props: ['href', 'label', 'icon', 'target', 'rel'],
-    context: (head) => resolveFooterSocialContext(head.props),
+    context: (head) => resolveFooterSocial(head.props),
   })
 }
 
@@ -258,10 +258,7 @@ function resolveSiteTitle(context: TsSsgContext): string {
   return trimmed.length > 0 ? trimmed : 'Your Site'
 }
 
-function resolveSiteFooterContext(
-  props: SiteFooterContext,
-  siteTitle: string,
-): SiteFooterContext {
+function resolveSiteFooter(props: SiteFooter, siteTitle: string): SiteFooter {
   const year = new Date().getFullYear()
   const tone = resolveFooterTone(props.tone)
   const variant = resolveFooterVariant(props.variant)
@@ -302,9 +299,7 @@ function resolveSiteFooterContext(
   }
 }
 
-function resolveFooterColumnContext(
-  props: FooterColumnContext,
-): FooterColumnContext {
+function resolveFooterColumn(props: FooterColumn): FooterColumn {
   const compact = Boolean(props.compact)
   return {
     ...props,
@@ -314,7 +309,7 @@ function resolveFooterColumnContext(
   }
 }
 
-function resolveFooterLinkContext(props: FooterLinkContext): FooterLinkContext {
+function resolveFooterLink(props: FooterLink): FooterLink {
   const variant = resolveFooterLinkVariant(props.variant)
   const rel =
     props.rel || (props.target === '_blank' ? 'noopener noreferrer' : '')
@@ -329,9 +324,7 @@ function resolveFooterLinkContext(props: FooterLinkContext): FooterLinkContext {
   }
 }
 
-function resolveFooterSocialContext(
-  props: FooterSocialContext,
-): FooterSocialContext {
+function resolveFooterSocial(props: FooterSocial): FooterSocial {
   const rel =
     props.rel || (props.target === '_blank' ? 'noopener noreferrer' : '')
   return {

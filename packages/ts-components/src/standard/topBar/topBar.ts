@@ -4,7 +4,7 @@ import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 import type { TsSsgContext } from '../../ts-ssg-context'
 import { registerTopBarStyles } from './topBarStyle'
 
-interface TopBarBrandContext {
+export interface TopBar {
   brandWordOne: string
   brandWordTwo: string
   brandSubtitle?: string
@@ -16,7 +16,7 @@ interface TopBarBrandContext {
   brandSubtitleFontSize?: string
 }
 
-function resolveTopBarBrand(context: TsSsgContext): TopBarBrandContext {
+function resolveTopBar(context: TsSsgContext): TopBar {
   return {
     brandWordOne: context.site.logo.wordOne ?? 'Pure',
     brandWordTwo: context.site.logo.wordTwo ?? 'Stack',
@@ -63,8 +63,8 @@ const topBarTemplate = html`<input
   </header>`
 
 function createTopBarComponent() {
-  return defineComponent<TopBarBrandContext>(topBarTemplate, {
-    context: (head) => resolveTopBarBrand(resolveTsSsgContext(head)),
+  return defineComponent<TopBar>(topBarTemplate, {
+    context: (head) => resolveTopBar(resolveTsSsgContext(head)),
   })
 }
 

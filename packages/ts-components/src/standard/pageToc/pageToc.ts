@@ -3,14 +3,14 @@ import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 import type { PageOutlineItem, TsSsgContext } from '../../ts-ssg-context'
 import { registerPageTocStyles } from './pageTocStyle'
 
-interface PageTocContext {
+export interface PageToc {
   items?: PageOutlineItem[]
   title?: string
 }
 
-interface PageTocItemContext extends PageOutlineItem {
+interface PageTocItem extends PageOutlineItem {
   href: string
-  children?: PageTocItemContext[]
+  children?: PageTocItem[]
 }
 
 const pageTocTemplate = html`<nav class="page-toc" aria-label="On this page">
@@ -60,7 +60,7 @@ const pageTocTemplate = html`<nav class="page-toc" aria-label="On this page">
   <div class="page-toc__empty" r-else>No sections yet.</div>
 </nav>`
 
-function toPageTocItems(items: PageOutlineItem[]): PageTocItemContext[] {
+function toPageTocItems(items: PageOutlineItem[]): PageTocItem[] {
   return items.map((item) => {
     const { children, ...rest } = item
     const mappedChildren = children ? toPageTocItems(children) : undefined
@@ -72,22 +72,19 @@ function toPageTocItems(items: PageOutlineItem[]): PageTocItemContext[] {
   })
 }
 
-function resolveItems(
-  props: PageTocContext,
-  context: TsSsgContext | undefined,
-) {
+function resolveItems(props: PageToc, context: TsSsgContext | undefined) {
   const items = props.items ?? context?.outline ?? []
   return toPageTocItems(items)
 }
 
-function resolveTitle(props: PageTocContext) {
+function resolveTitle(props: PageToc) {
   return typeof props.title === 'string' && props.title.trim().length > 0
     ? props.title.trim()
     : 'On this page'
 }
 
 function createPageTocComponent() {
-  return defineComponent<PageTocContext>(pageTocTemplate, {
+  return defineComponent<PageToc>(pageTocTemplate, {
     props: ['items', 'title'],
     context: (head) => {
       const context = resolveTsSsgContext(head)

@@ -2,7 +2,7 @@ import { defineComponent, html } from 'regor'
 
 import { registerGridStyles } from './gridStyle'
 
-interface GridContext {
+export interface Grid {
   columns?: number | string
   columnsSm?: number | string
   columnsMd?: number | string
@@ -25,7 +25,7 @@ const gridTemplate = html`<div class="grid" :class="className" :style="gridStyle
 </div>`
 
 function createGridComponent() {
-  return defineComponent<GridContext>(gridTemplate, {
+  return defineComponent<Grid>(gridTemplate, {
     props: [
       'columns',
       'columnsSm',
@@ -41,7 +41,7 @@ function createGridComponent() {
       'justifyItems',
       'dense',
     ],
-    context: (head) => resolveGridContext(head.props),
+    context: (head) => resolveGrid(head.props),
   })
 }
 
@@ -52,7 +52,7 @@ export function createGridComponents() {
   }
 }
 
-function resolveGridContext(props: GridContext): GridContext {
+function resolveGrid(props: Grid): Grid {
   const classNames = [
     resolveAlignClass(props.alignItems),
     resolveJustifyClass(props.justifyItems),

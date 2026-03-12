@@ -3,7 +3,7 @@ import { toOutputAssetRelPath } from '@purestack/ts-util'
 import { type ComponentHead, defineComponent, html } from 'regor'
 import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 
-interface PageScriptContext {
+export interface PageScript {
   teleport?: string
   src?: string
   type?: string
@@ -16,7 +16,7 @@ interface PageScriptContext {
   noModule?: unknown
 }
 
-interface RegorAppContext {
+export interface RegorApp {
   src?: string
 }
 
@@ -36,7 +36,7 @@ const pageScriptTemplate = html`<script
 const regorAppTemplate = html`<App><PageScript :src="src" /></App>`
 
 function createPageScriptComponent() {
-  return defineComponent<PageScriptContext>(pageScriptTemplate, {
+  return defineComponent<PageScript>(pageScriptTemplate, {
     props: [
       'teleport',
       'src',
@@ -49,12 +49,12 @@ function createPageScriptComponent() {
       'referrerPolicy',
       'noModule',
     ],
-    context: (head) => resolvePageScriptContext(head),
+    context: (head) => resolvePageScript(head),
   })
 }
 
 function createRegorAppComponent() {
-  return defineComponent<RegorAppContext>(regorAppTemplate, {
+  return defineComponent<RegorApp>(regorAppTemplate, {
     props: ['src'],
     context: (head) => ({
       src: head.props.src,
@@ -69,9 +69,7 @@ export function createScriptComponents() {
   }
 }
 
-function resolvePageScriptContext(
-  head: ComponentHead<PageScriptContext>,
-): PageScriptContext {
+function resolvePageScript(head: ComponentHead<PageScript>): PageScript {
   const props = head.props
   const tsSsgContext = resolveTsSsgContext(head)
   const pageRelPath = tsSsgContext.pageInfo.relPath

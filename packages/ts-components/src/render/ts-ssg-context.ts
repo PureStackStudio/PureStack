@@ -1,3 +1,4 @@
+import { Consent } from '../standard/consent/consent'
 import type { NavItem } from '../standard/navMenu/navMenu'
 import type { ThemeOptions } from '../style/themeOptions'
 
@@ -40,24 +41,7 @@ export interface TsSsgSiteConfig {
     wordFontSize?: string
     subtitleFontSize?: string
   }
-  consent: {
-    enabled: boolean
-    bannerTitle: string
-    bannerDescription: string
-    privacyPolicyUrl?: string
-    privacyPolicyLabel: string
-    acceptAllLabel: string
-    rejectAllLabel: string
-    manageLabel: string
-    saveLabel: string
-    settingsLabel: string
-    categories: Array<{
-      id: string
-      label: string
-      description?: string
-      required?: boolean
-    }>
-  }
+  consent: Consent
 }
 
 export interface TsSsgNavigation {

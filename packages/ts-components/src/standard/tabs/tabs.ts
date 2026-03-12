@@ -7,14 +7,14 @@ class TabsScope {
   groupName?: string = 'tabs-default'
 }
 
-interface TabsContext extends TabsScope {
+export interface Tabs extends TabsScope {
   id?: string
   ariaLabel?: string
 }
 
-interface TabsHeaderContext {}
+export interface TabsHeader {}
 
-interface TabPaneContext {
+export interface TabPane {
   id?: string
   label?: string
   icon?: string
@@ -69,23 +69,23 @@ const tabPaneTemplate = html`<div class="tabs__item">
 </div>`
 
 function createTabsComponent() {
-  return defineComponent<TabsContext>(tabsTemplate, {
+  return defineComponent<Tabs>(tabsTemplate, {
     props: ['id', 'ariaLabel'],
     context: (head) => {
       markTabsRuntimeEmbed(head)
-      return resolveTabsContext(head.props)
+      return resolveTabs(head.props)
     },
   })
 }
 
 function createTabsHeaderComponent() {
-  return defineComponent<TabsHeaderContext>(tabsHeaderTemplate, {})
+  return defineComponent<TabsHeader>(tabsHeaderTemplate, {})
 }
 
 function createTabPaneComponent() {
-  return defineComponent<TabPaneContext>(tabPaneTemplate, {
+  return defineComponent<TabPane>(tabPaneTemplate, {
     props: ['id', 'label', 'icon', 'active', 'disabled', 'group'],
-    context: (head) => resolveTabPaneContext(head),
+    context: (head) => resolveTabPane(head),
   })
 }
 
@@ -98,7 +98,7 @@ export function createTabsComponents() {
   }
 }
 
-function resolveTabsContext(props: TabsContext): TabsContext {
+function resolveTabs(props: Tabs): Tabs {
   const groupName = resolveTabsId(props.id)
   return Object.assign(new TabsScope(), {
     groupName,
@@ -106,9 +106,7 @@ function resolveTabsContext(props: TabsContext): TabsContext {
   })
 }
 
-function resolveTabPaneContext(
-  head: ComponentHead<TabPaneContext>,
-): TabPaneContext {
+function resolveTabPane(head: ComponentHead<TabPane>): TabPane {
   const label = resolveText(head.props.label) || 'Tab'
   const icon = resolveText(head.props.icon)
   const fromParent = head.findContext(TabsScope)
@@ -166,6 +164,6 @@ function toSlug(value: string) {
     .replace(/^-+|-+$/g, '')
 }
 
-function markTabsRuntimeEmbed(head: ComponentHead<TabsContext>) {
+function markTabsRuntimeEmbed(head: ComponentHead<Tabs>) {
   resolveTsSsgContext(head).recordRuntimeEmbed('tabs', 'head')
 }
