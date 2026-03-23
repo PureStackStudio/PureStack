@@ -1,7 +1,8 @@
 import path from 'node:path'
+import type { SiteConfig } from '@purestack/ts-common'
 import { themes } from '@purestack/ts-style'
 import { getLogger, type Logger } from 'logpot'
-import { resolveSiteConfig, type SiteConfig } from '../../config/config'
+import { resolveSiteConfig } from '../../config/config'
 import {
   type ContentFile,
   discoverContent,

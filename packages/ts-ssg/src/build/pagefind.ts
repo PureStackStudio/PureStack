@@ -1,10 +1,8 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-
+import type { PagefindConfig } from '@purestack/ts-common'
 import { getLogger, type Logger } from 'logpot'
 import * as pagefind from 'pagefind'
-
-import type { PagefindConfig } from '../config/config'
 
 export interface BuildPagefindResult {
   indexedPages: number

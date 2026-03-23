@@ -1,14 +1,14 @@
 import type {
   PageOutlineItem,
+  SiteConfig,
   TsSsgContext,
   TsSsgNavigation,
   TsSsgPageInfo,
-  TsSsgSiteConfig,
 } from '@purestack/ts-common'
 import { DEFAULT_THEME_OPTIONS } from '@purestack/ts-style'
 import type { DeepPartial } from '@purestack/ts-util'
 
-const DEFAULT_SITE: TsSsgSiteConfig = {
+const DEFAULT_SITE: DeepPartial<SiteConfig> = {
   siteTitle: 'Test Site',
   style: {
     theme: DEFAULT_THEME_OPTIONS,
@@ -50,16 +50,16 @@ const DEFAULT_PAGE_INFO: TsSsgPageInfo = {
 }
 
 interface TestContextOptions {
-  site?: DeepPartial<TsSsgSiteConfig>
+  site?: DeepPartial<SiteConfig>
   pageInfo?: DeepPartial<TsSsgPageInfo>
   navigation?: TsSsgNavigation
   outline?: PageOutlineItem[]
 }
 
 export function createTestSite(
-  overrides: DeepPartial<TsSsgSiteConfig> = {},
-): TsSsgSiteConfig {
-  return mergeValue(DEFAULT_SITE, overrides)
+  overrides: DeepPartial<SiteConfig> = {},
+): SiteConfig {
+  return mergeValue(DEFAULT_SITE, overrides) as SiteConfig
 }
 
 export function createTestPageInfo(

@@ -31,5 +31,4 @@ export type {
   TsSsgContext,
   TsSsgNavigation,
   TsSsgPageInfo,
-  TsSsgSiteConfig,
 } from './ts-ssg-context'

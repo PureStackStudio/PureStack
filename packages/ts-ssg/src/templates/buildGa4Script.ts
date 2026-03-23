@@ -1,4 +1,4 @@
-import type { Ga4Config } from '../config/config'
+import type { Ga4Config } from '@purestack/ts-common'
 
 export type Ga4ScriptPayload = {
   src: string

@@ -1,7 +1,7 @@
 ﻿import fs from 'node:fs/promises'
 import path from 'node:path'
+import type { SiteConfig, SiteMdxConfig } from '@purestack/ts-common'
 import { urlNormalizer } from '@purestack/ts-util'
-import type { SiteConfig, SiteMdxConfig } from '../../config/config'
 import type { ContentFile, StaticAssetFile } from '../../discover/content'
 import type { MdxRenderOptions } from '../../mdx/compile'
 import {

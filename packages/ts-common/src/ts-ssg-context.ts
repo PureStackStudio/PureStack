@@ -1,5 +1,5 @@
 import type { ThemeOptions } from '@purestack/ts-style'
-import type { ConsentConfig, NavItem } from './index'
+import type { NavItem, SiteConfig } from './index'
 
 export interface PageOutlineItem {
   id: string
@@ -24,32 +24,13 @@ export interface TsSsgPageInfo {
   }
 }
 
-export interface TsSsgSiteConfig {
-  siteTitle?: string
-  style: {
-    theme: ThemeOptions
-  }
-  logo: {
-    wordOne?: string
-    wordTwo?: string
-    subtitle?: string
-    subtitleAlign?: 'start' | 'center' | 'end' | 'justify'
-    href?: string
-    iconSvg?: string
-    iconSize?: string
-    wordFontSize?: string
-    subtitleFontSize?: string
-  }
-  consent: ConsentConfig
-}
-
 export interface TsSsgNavigation {
   global?: NavItem[]
   items?: NavItem[]
 }
 
 export interface TsSsgContext {
-  site: TsSsgSiteConfig
+  site: SiteConfig
   pageInfo: TsSsgPageInfo
   navigation?: TsSsgNavigation
   outline?: PageOutlineItem[]

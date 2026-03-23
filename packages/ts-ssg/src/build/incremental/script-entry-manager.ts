@@ -1,6 +1,6 @@
 import path from 'node:path'
 
-import type { SiteConfig } from '../../config/config'
+import type { SiteConfig } from '@purestack/ts-common'
 import type { StaticAssetFile } from '../../discover/content'
 import { copyStaticAsset } from '../assets'
 import type { AssetManifestEntry } from '../manifest'

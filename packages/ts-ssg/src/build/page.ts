@@ -1,10 +1,10 @@
 import path from 'node:path'
+import type { SiteConfig } from '@purestack/ts-common'
 import type { BasicHeadConfig } from '@purestack/ts-html'
 import { renderApp } from '@purestack/ts-render'
 import { resolveThemeStyleLinks } from '@purestack/ts-style'
 import { getLogger } from 'logpot'
 import type { Component } from 'regor'
-import type { SiteConfig } from '../config/config'
 import {
   type ContentFile,
   discoverDefaultFooters,

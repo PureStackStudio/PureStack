@@ -1,8 +1,6 @@
 import path from 'node:path'
-
+import type { SiteConfig } from '@purestack/ts-common'
 import type { Logger } from 'logpot'
-
-import type { SiteConfig } from '../../config/config'
 import { type ContentFile, discoverContent } from '../../discover/content'
 import { buildNavigation } from '../../navigation/navigation'
 import {

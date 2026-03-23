@@ -1,6 +1,5 @@
+import type { SiteConfigInput } from '@purestack/ts-common'
 import type { Component } from 'regor'
-
-import type { SiteConfigInput } from '../config/config'
 import type { ContentFile } from '../discover/content'
 import type { NavigationTree } from '../navigation/navigation'
 import type { PageTemplateMap } from '../templates/page-templates'

@@ -1,6 +1,6 @@
+import type { AnalyticsConfig, ConsentConfig } from '@purestack/ts-common'
 import { type BasicHeadConfig, h } from '@purestack/ts-html'
 import { type ThemeStylesheetLink, themes } from '@purestack/ts-style'
-import type { AnalyticsConfig, ConsentConfig } from '../config/config'
 import { getHead } from '../config/head'
 import type { PageFrontmatter } from '../frontmatter/frontmatter'
 import type { PageNavigation } from '../navigation/navigation'
