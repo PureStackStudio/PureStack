@@ -33,6 +33,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@purestack/ts-util": "workspace:^",
     "prettier": "^3.8.1"
   }
 }

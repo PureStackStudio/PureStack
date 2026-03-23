@@ -826,7 +826,6 @@ __metadata:
     "@purestack/ts-render": "workspace:^"
     "@purestack/ts-style": "workspace:^"
     "@purestack/ts-util": "workspace:^"
-    "@purestack/utils": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -842,6 +841,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@purestack/ts-css@workspace:packages/ts-css"
   dependencies:
+    "@purestack/ts-util": "workspace:^"
     prettier: "npm:^3.8.1"
   languageName: unknown
   linkType: soft
@@ -850,7 +850,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@purestack/ts-html@workspace:packages/ts-html"
   dependencies:
-    "@purestack/utils": "workspace:^"
+    "@purestack/ts-util": "workspace:^"
     prettier: "npm:^3.8.1"
   languageName: unknown
   linkType: soft
@@ -866,7 +866,7 @@ __metadata:
   resolution: "@purestack/ts-render@workspace:packages/ts-render"
   dependencies:
     "@purestack/ts-minidom": "workspace:^"
-    "@purestack/utils": "workspace:^"
+    "@purestack/ts-util": "workspace:^"
     regor: "npm:^1.4.1"
   languageName: unknown
   linkType: soft
@@ -924,12 +924,6 @@ __metadata:
 "@purestack/ts-util@workspace:^, @purestack/ts-util@workspace:packages/ts-util":
   version: 0.0.0-use.local
   resolution: "@purestack/ts-util@workspace:packages/ts-util"
-  languageName: unknown
-  linkType: soft
-
-"@purestack/utils@workspace:^, @purestack/utils@workspace:packages/utils":
-  version: 0.0.0-use.local
-  resolution: "@purestack/utils@workspace:packages/utils"
   languageName: unknown
   linkType: soft
 

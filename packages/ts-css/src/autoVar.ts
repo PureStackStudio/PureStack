@@ -1,4 +1,4 @@
-import { isString } from '@purestack/utils'
+import { isString } from '@purestack/ts-util'
 
 /**
  * Normalizes a CSS value by auto-expanding shorthand into `var(...)` when appropriate.

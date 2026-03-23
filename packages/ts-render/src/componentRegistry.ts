@@ -1,4 +1,4 @@
-import { isPlainObject } from '@purestack/utils'
+import { isPlainObject } from '@purestack/ts-util'
 import type { Component } from 'regor'
 
 const registry = new Map<string, Component<never>>()

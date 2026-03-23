@@ -14,7 +14,7 @@ import {
   themes,
 } from '@purestack/ts-style'
 import type { DeepPartial } from '@purestack/ts-util'
-import { isPlainObject } from '@purestack/utils'
+import { isPlainObject } from '@purestack/ts-util'
 import {
   type NavigationConfig,
   resolveNavigationConfig,

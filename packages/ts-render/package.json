@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@purestack/ts-minidom": "workspace:^",
-    "@purestack/utils": "workspace:^",
+    "@purestack/ts-util": "workspace:^",
     "regor": "^1.4.1"
   }
 }

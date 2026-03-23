@@ -1,4 +1,4 @@
-import { escapeHtml } from '@purestack/utils'
+import { escapeHtml } from '@purestack/ts-util'
 import prettier from 'prettier'
 
 import type {

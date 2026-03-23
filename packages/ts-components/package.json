@@ -38,7 +38,6 @@
   },
   "dependencies": {
     "@purestack/ts-style": "workspace:^",
-    "@purestack/ts-util": "workspace:^",
-    "@purestack/utils": "workspace:^"
+    "@purestack/ts-util": "workspace:^"
   }
 }
