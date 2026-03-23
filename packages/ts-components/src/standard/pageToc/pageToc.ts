@@ -1,5 +1,5 @@
 import type { PageOutlineItem, TsSsgContext } from '@purestack/ts-common'
-import { resolveTsSsgContext } from '@purestack/ts-render'
+import { resolveTsSsgContext } from '@purestack/ts-common'
 import { defineComponent, html } from 'regor'
 import { registerPageTocStyles } from './pageTocStyle'
 

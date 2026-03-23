@@ -11,6 +11,7 @@ export type {
   NavigationSort,
   PageNavigation,
 } from './navMenu-types'
+export { resolveTsSsgContext } from './resolveTsSsgContext'
 export type {
   PageOutlineItem,
   TsSsgContext,

@@ -1,4 +1,4 @@
-import { resolveTsSsgContext } from '@purestack/ts-render'
+import { resolveTsSsgContext } from '@purestack/ts-common'
 import { type ComponentHead, defineComponent, html } from 'regor'
 import { registerModalStyles } from './modalStyle'
 

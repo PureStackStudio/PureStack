@@ -1,5 +1,5 @@
 import path from 'node:path'
-import { resolveTsSsgContext } from '@purestack/ts-render'
+import { resolveTsSsgContext } from '@purestack/ts-common'
 import { toOutputAssetRelPath } from '@purestack/ts-util'
 import { type ComponentHead, defineComponent, html } from 'regor'
 

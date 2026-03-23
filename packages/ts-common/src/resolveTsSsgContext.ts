@@ -1,18 +1,23 @@
-import type { TsSsgContext } from '@purestack/ts-common'
-import type { ComponentHead, IRegorContext } from 'regor'
+import type { TsSsgContext } from './ts-ssg-context'
 
 type ContextCarrier = {
   tsSsgContext?: TsSsgContext
+}
+
+type HeadLike = {
+  ctx?: unknown[]
 }
 
 function hasTsSsgContext(value: unknown): value is ContextCarrier {
   return typeof value === 'object' && value !== null && 'tsSsgContext' in value
 }
 
-export function resolveTsSsgContext<
-  TContext extends IRegorContext | object = IRegorContext,
->(head?: ComponentHead<TContext>): TsSsgContext {
-  const stack = head?.ctx ?? []
+function hasContextStack(value: unknown): value is HeadLike {
+  return typeof value === 'object' && value !== null && 'ctx' in value
+}
+
+export function resolveTsSsgContext(head: unknown): TsSsgContext {
+  const stack = hasContextStack(head) && Array.isArray(head.ctx) ? head.ctx : []
   for (const ctx of stack) {
     if (!hasTsSsgContext(ctx)) continue
     if (ctx.tsSsgContext) return ctx.tsSsgContext

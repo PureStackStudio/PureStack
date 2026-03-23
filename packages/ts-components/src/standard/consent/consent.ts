@@ -1,5 +1,9 @@
-import type { ConsentCategory, ConsentConfig, TsSsgContext } from '@purestack/ts-common'
-import { resolveTsSsgContext } from '@purestack/ts-render'
+import type {
+  ConsentCategory,
+  ConsentConfig,
+  TsSsgContext,
+} from '@purestack/ts-common'
+import { resolveTsSsgContext } from '@purestack/ts-common'
 import { defineComponent, html } from 'regor'
 import { registerConsentStyles } from './consentStyle'
 
