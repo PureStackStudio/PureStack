@@ -22,7 +22,8 @@
     }
   },
   "dependencies": {
-    "@purestack/ts-style": "workspace:^"
+    "@purestack/ts-style": "workspace:^",
+    "@purestack/ts-util": "workspace:^"
   },
   "license": "MIT",
   "files": [

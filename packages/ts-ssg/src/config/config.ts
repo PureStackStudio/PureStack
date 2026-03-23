@@ -2,123 +2,26 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type {
+  AnalyticsConfig,
   ConsentCategory,
   ConsentConfig,
   ConsentScript,
   ConsentService,
+  Ga4Config,
+  LogoConfig,
+  PagefindConfig,
+  RobotsConfig,
+  SiteConfig,
+  SiteConfigInput,
+  SiteHtmlConfig,
+  SiteMdxConfig,
+  SitemapConfig,
+  SiteStyleConfig,
 } from '@purestack/ts-common'
-import {
-  resolveThemes,
-  type ThemeOptions,
-  type ThemeOptionsInput,
-  themes,
-} from '@purestack/ts-style'
+import { resolveThemes, themes } from '@purestack/ts-style'
 import type { DeepPartial } from '@purestack/ts-util'
 import { isPlainObject } from '@purestack/ts-util'
-import {
-  type NavigationConfig,
-  resolveNavigationConfig,
-} from '../navigation/navigation'
-
-export type {
-  ConsentCategory,
-  ConsentConfig,
-  ConsentScript,
-  ConsentService,
-} from '@purestack/ts-common'
-
-export interface SiteConfig {
-  rootDir: string
-  contentDir: string
-  outDir: string
-  siteTitle: string
-  logo: LogoConfig
-  style: SiteStyleConfig
-  html: SiteHtmlConfig
-  navigation: NavigationConfig
-  sitemap: SitemapConfig
-  consent: ConsentConfig
-  analytics: AnalyticsConfig
-  pagefind: PagefindConfig
-  mdx: SiteMdxConfig
-}
-
-export interface SiteStyleConfig {
-  fileName: string
-  href: string
-  themes: string[]
-  pretty: boolean
-  theme: ThemeOptions
-}
-
-export interface SiteHtmlConfig {
-  minify: boolean
-}
-
-export interface LogoConfig {
-  wordOne: string
-  wordTwo: string
-  subtitle?: string
-  subtitleAlign?: 'start' | 'center' | 'end' | 'justify'
-  href: string
-  iconSvg?: string
-  iconSize?: string
-  wordFontSize?: string
-  subtitleFontSize?: string
-}
-
-export interface SitemapConfig {
-  enabled: boolean
-  baseUrl: string
-  fileName: string
-  robots: RobotsConfig
-}
-
-export interface RobotsConfig {
-  enabled: boolean
-  fileName: string
-  userAgent: string
-  allow: string[]
-  disallow: string[]
-  crawlDelay?: number
-  host?: string
-  additionalSitemaps: string[]
-  customDirectives: string[]
-}
-
-export interface Ga4Config {
-  enabled: boolean
-  measurementId?: string
-  serviceId: string
-  consentCategory: string
-}
-
-export interface AnalyticsConfig {
-  ga4: Ga4Config
-}
-
-export interface PagefindConfig {
-  excludePaths: string[]
-}
-
-export interface SiteMdxConfig {
-  highlighter: 'shiki' | 'highlightjs'
-  disableHighlighter: boolean
-}
-
-export type SiteStyleConfigInput = DeepPartial<
-  Omit<SiteStyleConfig, 'theme'>
-> & {
-  theme?: ThemeOptionsInput
-}
-
-/**
- * Public config input shape for both `buildSite(...)` and `siteConfig.json`.
- * All fields are optional; values are normalized by `resolveSiteConfig`.
- */
-export type SiteConfigInput = DeepPartial<Omit<SiteConfig, 'style'>> & {
-  style?: SiteStyleConfigInput
-}
+import { resolveNavigationConfig } from '../navigation/navigation'
 
 const DEFAULT_ROOT = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),

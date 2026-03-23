@@ -1,0 +1,93 @@
+import type { ThemeOptions, ThemeOptionsInput } from '@purestack/ts-style'
+import type { DeepPartial } from '@purestack/ts-util'
+import type { ConsentConfig } from './consent-types'
+import type { NavigationConfig } from './navMenu-types'
+
+export interface SiteConfig {
+  rootDir: string
+  contentDir: string
+  outDir: string
+  siteTitle: string
+  logo: LogoConfig
+  style: SiteStyleConfig
+  html: SiteHtmlConfig
+  navigation: NavigationConfig
+  sitemap: SitemapConfig
+  consent: ConsentConfig
+  analytics: AnalyticsConfig
+  pagefind: PagefindConfig
+  mdx: SiteMdxConfig
+}
+
+export interface SiteStyleConfig {
+  fileName: string
+  href: string
+  themes: string[]
+  pretty: boolean
+  theme: ThemeOptions
+}
+
+export interface SiteHtmlConfig {
+  minify: boolean
+}
+
+export interface LogoConfig {
+  wordOne: string
+  wordTwo: string
+  subtitle?: string
+  subtitleAlign?: 'start' | 'center' | 'end' | 'justify'
+  href: string
+  iconSvg?: string
+  iconSize?: string
+  wordFontSize?: string
+  subtitleFontSize?: string
+}
+
+export interface SitemapConfig {
+  enabled: boolean
+  baseUrl: string
+  fileName: string
+  robots: RobotsConfig
+}
+
+export interface RobotsConfig {
+  enabled: boolean
+  fileName: string
+  userAgent: string
+  allow: string[]
+  disallow: string[]
+  crawlDelay?: number
+  host?: string
+  additionalSitemaps: string[]
+  customDirectives: string[]
+}
+
+export interface Ga4Config {
+  enabled: boolean
+  measurementId?: string
+  serviceId: string
+  consentCategory: string
+}
+
+export interface AnalyticsConfig {
+  ga4: Ga4Config
+}
+
+export interface PagefindConfig {
+  excludePaths: string[]
+}
+
+export interface SiteMdxConfig {
+  highlighter: 'shiki' | 'highlightjs'
+  disableHighlighter: boolean
+}
+
+export type SiteStyleConfigInput = DeepPartial<
+  Omit<SiteStyleConfig, 'theme'>
+> & {
+  theme?: ThemeOptionsInput
+}
+
+export type SiteConfigInput = DeepPartial<Omit<SiteConfig, 'style'>> & {
+  style?: SiteStyleConfigInput
+}

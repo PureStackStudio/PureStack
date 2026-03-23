@@ -47,19 +47,7 @@ export {
   type BuildResult,
   buildSite,
 } from './build/site'
-export {
-  type AnalyticsConfig,
-  type ConsentCategory,
-  type ConsentConfig,
-  type ConsentScript,
-  type ConsentService,
-  type Ga4Config,
-  type PagefindConfig,
-  resolveSiteConfig,
-  type SiteConfig,
-  type SiteConfigInput,
-  type SiteMdxConfig,
-} from './config/config'
+export { resolveSiteConfig } from './config/config'
 export {
   type DevServerHandle,
   type DevServerInput,

@@ -821,6 +821,9 @@ __metadata:
 "@purestack/ts-common@workspace:^, @purestack/ts-common@workspace:packages/ts-common":
   version: 0.0.0-use.local
   resolution: "@purestack/ts-common@workspace:packages/ts-common"
+  dependencies:
+    "@purestack/ts-style": "workspace:^"
+    "@purestack/ts-util": "workspace:^"
   languageName: unknown
   linkType: soft
 
