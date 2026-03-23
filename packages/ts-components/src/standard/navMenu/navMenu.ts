@@ -1,17 +1,8 @@
 import { defineComponent, html } from 'regor'
 import { resolveTsSsgContext } from '../../resolveTsSsgContext'
 import type { TsSsgContext } from '../../ts-ssg-context'
+import type { NavItem } from './navMenu-types'
 import { registerNavStyles } from './navMenuStyle'
-
-export interface NavItem {
-  title: string
-  url?: string
-  children?: NavItem[]
-  order?: number
-  hidden?: boolean
-  group?: string
-  icon?: string
-}
 
 export interface NavMenu {
   items?: NavItem[]

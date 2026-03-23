@@ -1,19 +1,23 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import type {
+  NavItem,
+  NavigationConfig,
+  NavigationMode,
+  NavigationSort,
+  PageNavigation,
+} from '@purestack/ts-components'
 import { resolveRouteInfo } from '../build/out-path'
 import type { ContentFile } from '../discover/content'
 import { parseFrontmatterSource } from '../frontmatter/frontmatter'
 
-export type NavigationMode = 'auto' | 'custom' | 'hybrid' | 'none'
-export type NavigationSort = 'order' | 'title' | 'path'
-
-export interface NavigationConfig {
-  mode?: NavigationMode
-  navFileName?: string
-  maxDepth?: number
-  includeIndex?: boolean
-  sortBy?: NavigationSort
-}
+export type {
+  NavItem,
+  NavigationConfig,
+  NavigationMode,
+  NavigationSort,
+  PageNavigation,
+} from '@purestack/ts-components'
 
 export interface ResolvedNavigationConfig {
   mode: NavigationMode
@@ -23,27 +27,10 @@ export interface ResolvedNavigationConfig {
   sortBy: NavigationSort
 }
 
-export interface NavItem {
-  title: string
-  url?: string
-  children?: NavItem[]
-  order?: number
-  hidden?: boolean
-  group?: string
-  icon?: string
-}
-
 export interface NavigationTree {
   mode: NavigationMode
   config: ResolvedNavigationConfig
   byFolder: Record<string, NavItem[]>
-  global: NavItem[]
-}
-
-export interface PageNavigation {
-  mode: NavigationMode
-  folder: string
-  items: NavItem[]
   global: NavItem[]
 }
 

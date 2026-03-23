@@ -1,5 +1,5 @@
-import type { ConsentConfig } from '../consent/types'
-import type { NavItem } from '../standard/navMenu/navMenu'
+import type { ConsentConfig } from '../standard/consent/consent-types'
+import type { NavItem } from '../standard/navMenu/navMenu-types'
 import type { ThemeOptions } from '../style/themeOptions'
 
 export interface PageOutlineItem {
