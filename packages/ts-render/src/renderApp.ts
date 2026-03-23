@@ -47,7 +47,7 @@ export const renderApp = <TContext extends TsSsgContext>(
         tsSsgContext,
       },
       {
-        element: document.body as unknown as Node,
+        element: document.body,
       },
     )
     appendEmbeddedScriptsToDom(runtimeEmbeds, tsSsgContext)
