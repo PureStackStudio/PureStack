@@ -1,6 +1,5 @@
-import { styleBuilder } from '../../style/styles'
-import { type ThemeMode, themes } from '../../style/themeOptions'
-import type { ThemePalette } from '../../style/themePalette'
+import type { ThemePalette } from '@purestack/ts-style'
+import { styleBuilder, type ThemeMode, themes } from '@purestack/ts-style'
 
 export function registerBadgeStyles() {
   themes.forEach((theme, palette) => {

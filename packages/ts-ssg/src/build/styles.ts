@@ -6,7 +6,7 @@ import {
   orderThemes,
   resolveThemeFileName,
   styleBuilder,
-} from '@purestack/ts-components'
+} from '@purestack/ts-style'
 import { ensureDir } from '@purestack/ts-util'
 import type { SiteStyleConfig } from '../config/config'
 

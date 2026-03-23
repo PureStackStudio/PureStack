@@ -823,6 +823,7 @@ __metadata:
   resolution: "@purestack/ts-components@workspace:packages/ts-components"
   dependencies:
     "@purestack/ts-minidom": "workspace:^"
+    "@purestack/ts-style": "workspace:^"
     "@purestack/ts-util": "workspace:^"
     "@purestack/utils": "workspace:^"
     gray-matter: "npm:^4.0.3"
@@ -867,7 +868,9 @@ __metadata:
     "@logpot/utils": "npm:^1.0.7"
     "@node-minify/html-minifier": "npm:^10.4.0"
     "@purestack/ts-components": "workspace:^"
+    "@purestack/ts-style": "workspace:^"
     "@purestack/ts-svg-icons": "workspace:^"
+    "@purestack/ts-util": "workspace:^"
     esbuild: "npm:^0.27.3"
     gray-matter: "npm:^4.0.3"
     hast-util-from-html: "npm:^2.0.3"
@@ -885,6 +888,16 @@ __metadata:
     remark-rehype: "npm:^11.1.2"
     shiki: "npm:^3.22.0"
     unified: "npm:^11.0.5"
+  languageName: unknown
+  linkType: soft
+
+"@purestack/ts-style@workspace:^, @purestack/ts-style@workspace:packages/ts-style":
+  version: 0.0.0-use.local
+  resolution: "@purestack/ts-style@workspace:packages/ts-style"
+  dependencies:
+    "@logpot/utils": "npm:^1.0.7"
+    "@purestack/ts-css": "workspace:^"
+    "@purestack/ts-util": "workspace:^"
   languageName: unknown
   linkType: soft
 

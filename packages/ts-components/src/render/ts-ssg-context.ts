@@ -1,6 +1,6 @@
+import type { ThemeOptions } from '@purestack/ts-style'
 import type { ConsentConfig } from '../standard/consent/consent-types'
 import type { NavItem } from '../standard/navMenu/navMenu-types'
-import type { ThemeOptions } from '../style/themeOptions'
 
 export interface PageOutlineItem {
   id: string

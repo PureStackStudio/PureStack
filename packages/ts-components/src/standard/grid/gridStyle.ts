@@ -1,5 +1,4 @@
-import { styleBuilder } from '../../style/styles'
-import { themes } from '../../style/themeOptions'
+import { styleBuilder, themes } from '@purestack/ts-style'
 
 export function registerGridStyles() {
   themes.forEach((theme) => {

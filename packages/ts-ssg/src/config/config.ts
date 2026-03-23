@@ -1,16 +1,18 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import type {
+  ConsentCategory,
+  ConsentConfig,
+  ConsentScript,
+  ConsentService,
+} from '@purestack/ts-components'
 import {
-  type ConsentCategory,
-  type ConsentConfig,
-  type ConsentScript,
-  type ConsentService,
   resolveThemes,
   type ThemeOptions,
   type ThemeOptionsInput,
   themes,
-} from '@purestack/ts-components'
+} from '@purestack/ts-style'
 import type { DeepPartial } from '@purestack/ts-util'
 import { isPlainObject } from '@purestack/utils'
 import {

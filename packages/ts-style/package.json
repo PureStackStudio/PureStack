@@ -1,0 +1,40 @@
+{
+  "name": "@purestack/ts-style",
+  "version": "1.0.0",
+  "packageManager": "yarn@4.9.2",
+  "module": "./dist/ts-style.mjs",
+  "types": "./dist/ts-style.d.mts",
+  "type": "module",
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koculu/purestack.git",
+    "directory": "packages/ts-style"
+  },
+  "homepage": "https://tenray.io/purestack",
+  "bugs": {
+    "url": "https://github.com/koculu/purestack/issues"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/ts-style.mjs",
+      "import": "./dist/ts-style.mjs"
+    }
+  },
+  "license": "MIT",
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "lint": "biome check ./src --formatter-enabled=false --write",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@logpot/utils": "^1.0.7",
+    "@purestack/ts-css": "workspace:^",
+    "@purestack/ts-util": "workspace:^"
+  }
+}

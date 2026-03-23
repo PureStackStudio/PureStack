@@ -1,5 +1,5 @@
 import path from 'node:path'
-import { themes } from '@purestack/ts-components'
+import { themes } from '@purestack/ts-style'
 import { getLogger, type Logger } from 'logpot'
 import { resolveSiteConfig, type SiteConfig } from '../../config/config'
 import {

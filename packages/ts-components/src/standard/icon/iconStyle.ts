@@ -1,5 +1,4 @@
-import { styleBuilder } from '../../style/styles'
-import { type ThemeMode, themes } from '../../style/themeOptions'
+import { styleBuilder, type ThemeMode, themes } from '@purestack/ts-style'
 
 export function registerIconStyles() {
   themes.forEach((theme) => {

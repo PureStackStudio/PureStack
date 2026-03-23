@@ -1,10 +1,10 @@
-import type { ThemePalette } from '@purestack/ts-components'
+import type { ThemePalette } from '@purestack/ts-style'
 import {
   styleBuilder,
   type ThemeMode,
   type ThemeOptions,
   themes,
-} from '@purestack/ts-components'
+} from '@purestack/ts-style'
 
 export function registerDocLayoutStyles() {
   themes.forEach((theme, palette, options) => {

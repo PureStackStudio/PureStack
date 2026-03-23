@@ -35,14 +35,3 @@ export { createSearchComponents } from './standard/searchBox/searchBox'
 export { createTabsComponents } from './standard/tabs/tabs'
 export { createThemeSwitcherComponents } from './standard/themeSwitcher/themeSwitcher'
 export { createTopBarComponents } from './standard/topBar/topBar'
-export * from './style/normalize.css'
-export {
-  type BuiltInSkinName,
-  type BuiltInSkinPair,
-  type BuiltInSkins,
-  builtInSkins,
-} from './style/skins'
-export * from './style/styles'
-export * from './style/themeAssets'
-export * from './style/themeOptions'
-export type { ThemePalette } from './style/themePalette'
