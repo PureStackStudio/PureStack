@@ -1,5 +1,5 @@
+import type { TsSsgContext } from '@purestack/ts-common'
 import type { ComponentHead, IRegorContext } from 'regor'
-import type { TsSsgContext } from './ts-ssg-context'
 
 type ContextCarrier = {
   tsSsgContext?: TsSsgContext

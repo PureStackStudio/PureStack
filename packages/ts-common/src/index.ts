@@ -11,3 +11,10 @@ export type {
   NavigationSort,
   PageNavigation,
 } from './navMenu-types'
+export type {
+  PageOutlineItem,
+  TsSsgContext,
+  TsSsgNavigation,
+  TsSsgPageInfo,
+  TsSsgSiteConfig,
+} from './ts-ssg-context'

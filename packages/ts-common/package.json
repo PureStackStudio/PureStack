@@ -21,6 +21,9 @@
       "import": "./dist/ts-common.mjs"
     }
   },
+  "dependencies": {
+    "@purestack/ts-style": "workspace:^"
+  },
   "license": "MIT",
   "files": [
     "dist/**/*",

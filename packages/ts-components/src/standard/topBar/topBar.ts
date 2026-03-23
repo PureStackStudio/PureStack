@@ -1,4 +1,4 @@
-import type { TsSsgContext } from '@purestack/ts-render'
+import type { TsSsgContext } from '@purestack/ts-common'
 
 import { resolveTsSsgContext } from '@purestack/ts-render'
 import { defineComponent, html } from 'regor'

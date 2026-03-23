@@ -4,7 +4,7 @@ import type {
   TsSsgNavigation,
   TsSsgPageInfo,
   TsSsgSiteConfig,
-} from '@purestack/ts-render'
+} from '@purestack/ts-common'
 import { DEFAULT_THEME_OPTIONS } from '@purestack/ts-style'
 import type { DeepPartial } from '@purestack/ts-util'
 

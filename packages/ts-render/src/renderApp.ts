@@ -1,9 +1,9 @@
+import type { TsSsgContext } from '@purestack/ts-common'
 import { createDom } from '@purestack/ts-minidom'
 import { createApp } from 'regor'
 import { buildModalScript } from './buildModalScript'
 import { buildTabsScript } from './buildTabsScript'
 import { componentRegistry } from './componentRegistry'
-import type { TsSsgContext } from './ts-ssg-context'
 
 export interface RenderAppOptions<TContext extends TsSsgContext> {
   components: unknown
