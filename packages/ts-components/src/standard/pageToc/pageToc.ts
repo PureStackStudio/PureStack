@@ -1,6 +1,6 @@
 import { defineComponent, html } from 'regor'
-import { resolveTsSsgContext } from '../../resolveTsSsgContext'
-import type { PageOutlineItem, TsSsgContext } from '../../ts-ssg-context'
+import { resolveTsSsgContext } from '../../render/resolveTsSsgContext'
+import type { PageOutlineItem, TsSsgContext } from '../../render/ts-ssg-context'
 import { registerPageTocStyles } from './pageTocStyle'
 
 export interface PageToc {

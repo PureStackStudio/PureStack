@@ -1,6 +1,6 @@
 import { type ComponentHead, defineComponent, html } from 'regor'
 
-import { resolveTsSsgContext } from '../../resolveTsSsgContext'
+import { resolveTsSsgContext } from '../../render/resolveTsSsgContext'
 import { registerTabsStyles } from './tabsStyle'
 
 class TabsScope {

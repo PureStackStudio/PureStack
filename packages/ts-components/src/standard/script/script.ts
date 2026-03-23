@@ -1,7 +1,7 @@
 import path from 'node:path'
 import { toOutputAssetRelPath } from '@purestack/ts-util'
 import { type ComponentHead, defineComponent, html } from 'regor'
-import { resolveTsSsgContext } from '../../resolveTsSsgContext'
+import { resolveTsSsgContext } from '../../render/resolveTsSsgContext'
 
 export interface PageScript {
   teleport?: string

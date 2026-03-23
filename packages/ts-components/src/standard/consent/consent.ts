@@ -1,6 +1,6 @@
 import { defineComponent, html } from 'regor'
-import { resolveTsSsgContext } from '../../resolveTsSsgContext'
-import type { TsSsgContext } from '../../ts-ssg-context'
+import { resolveTsSsgContext } from '../../render/resolveTsSsgContext'
+import type { TsSsgContext } from '../../render/ts-ssg-context'
 import type { ConsentCategory, ConsentConfig } from './consent-types'
 import { registerConsentStyles } from './consentStyle'
 

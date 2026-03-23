@@ -1,6 +1,6 @@
 import { defineComponent, html } from 'regor'
-import { resolveTsSsgContext } from '../../resolveTsSsgContext'
-import type { TsSsgContext } from '../../ts-ssg-context'
+import { resolveTsSsgContext } from '../../render/resolveTsSsgContext'
+import type { TsSsgContext } from '../../render/ts-ssg-context'
 import type { NavItem } from './navMenu-types'
 import { registerNavStyles } from './navMenuStyle'
 
