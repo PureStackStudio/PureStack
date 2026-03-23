@@ -1,5 +1,4 @@
 import {
-  componentRegistry,
   createAlertComponents,
   createBadgeComponents,
   createButtonComponents,
@@ -24,6 +23,7 @@ import {
   createTopBarComponents,
 } from '@purestack/ts-components'
 import { ensureDomGlobals } from '@purestack/ts-minidom'
+import { componentRegistry } from '@purestack/ts-render'
 import { registerNormalizeStyles, styleBuilder } from '@purestack/ts-style'
 import { registerDocLayoutStyles } from '../templates/docLayoutStyles'
 import { registerMarkdownStyles } from '../templates/markdownStyles'

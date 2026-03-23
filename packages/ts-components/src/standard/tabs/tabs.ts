@@ -1,6 +1,5 @@
+import { resolveTsSsgContext } from '@purestack/ts-render'
 import { type ComponentHead, defineComponent, html } from 'regor'
-
-import { resolveTsSsgContext } from '../../render/resolveTsSsgContext'
 import { registerTabsStyles } from './tabsStyle'
 
 class TabsScope {

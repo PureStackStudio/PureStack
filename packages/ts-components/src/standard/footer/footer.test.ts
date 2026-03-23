@@ -1,6 +1,6 @@
 import { createDom } from '@purestack/ts-minidom'
+import { renderApp } from '@purestack/ts-render'
 import { describe, expect, it } from 'vitest'
-import { renderApp } from '../../render/renderApp'
 import { createTestContext } from '../../test/testContext'
 import { createButtonComponents } from '../btn/btn'
 import { createIconComponents } from '../icon/icon'

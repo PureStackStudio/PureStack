@@ -1,6 +1,6 @@
 import { ensureDomGlobals } from '@purestack/ts-minidom'
+import { renderApp } from '@purestack/ts-render'
 import { describe, expect, it } from 'vitest'
-import { renderApp } from '../../render/renderApp'
 import { createTestContext } from '../../test/testContext'
 import { createBadgeComponents } from './badge'
 

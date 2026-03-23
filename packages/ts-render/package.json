@@ -1,15 +1,15 @@
 {
-  "name": "@purestack/ts-components",
+  "name": "@purestack/ts-render",
   "version": "1.0.0",
   "packageManager": "yarn@4.9.2",
-  "module": "./dist/ts-components.mjs",
-  "types": "./dist/ts-components.d.mts",
+  "module": "./dist/ts-render.mjs",
+  "types": "./dist/ts-render.d.mts",
   "type": "module",
   "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/koculu/purestack.git",
-    "directory": "packages/ts-components"
+    "directory": "packages/ts-render"
   },
   "homepage": "https://tenray.io/purestack",
   "bugs": {
@@ -17,8 +17,8 @@
   },
   "exports": {
     ".": {
-      "require": "./dist/ts-components.mjs",
-      "import": "./dist/ts-components.mjs"
+      "require": "./dist/ts-render.mjs",
+      "import": "./dist/ts-render.mjs"
     }
   },
   "license": "MIT",
@@ -32,13 +32,9 @@
     "lint": "biome check ./src --formatter-enabled=false --write",
     "test": "vitest"
   },
-  "devDependencies": {
-    "@purestack/ts-minidom": "workspace:^",
-    "@purestack/ts-render": "workspace:^"
-  },
   "dependencies": {
-    "@purestack/ts-style": "workspace:^",
-    "@purestack/ts-util": "workspace:^",
-    "@purestack/utils": "workspace:^"
+    "@purestack/ts-minidom": "workspace:^",
+    "@purestack/utils": "workspace:^",
+    "regor": "^1.4.1"
   }
 }

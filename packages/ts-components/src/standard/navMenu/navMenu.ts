@@ -1,6 +1,6 @@
+import type { TsSsgContext } from '@purestack/ts-render'
+import { resolveTsSsgContext } from '@purestack/ts-render'
 import { defineComponent, html } from 'regor'
-import { resolveTsSsgContext } from '../../render/resolveTsSsgContext'
-import type { TsSsgContext } from '../../render/ts-ssg-context'
 import type { NavItem } from './navMenu-types'
 import { registerNavStyles } from './navMenuStyle'
 

@@ -1,4 +1,4 @@
-import { renderApp, type TsSsgContext } from '@purestack/ts-components'
+import { renderApp, type TsSsgContext } from '@purestack/ts-render'
 import { describe, expect, it } from 'vitest'
 import { resolveMdxBuildOptions } from '../build/incremental/support'
 import { resolveSiteConfig } from '../config/config'

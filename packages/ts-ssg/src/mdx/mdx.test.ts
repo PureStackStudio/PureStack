@@ -1,9 +1,6 @@
-import {
-  createModalComponents,
-  renderApp,
-  type TsSsgContext,
-} from '@purestack/ts-components'
+import { createModalComponents } from '@purestack/ts-components'
 import { ensureDomGlobals } from '@purestack/ts-minidom'
+import { renderApp, type TsSsgContext } from '@purestack/ts-render'
 import { describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from '../config/config'
 import { normalizeFrontmatter } from '../frontmatter/frontmatter'

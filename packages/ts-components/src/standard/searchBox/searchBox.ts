@@ -1,7 +1,7 @@
-import { defineComponent, html } from 'regor'
+import type { TsSsgContext } from '@purestack/ts-render'
 
-import { resolveTsSsgContext } from '../../render/resolveTsSsgContext'
-import type { TsSsgContext } from '../../render/ts-ssg-context'
+import { resolveTsSsgContext } from '@purestack/ts-render'
+import { defineComponent, html } from 'regor'
 import { registerSearchBoxStyles } from './searchBoxStyle'
 
 export interface SearchBox {

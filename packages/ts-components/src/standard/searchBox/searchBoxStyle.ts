@@ -1,5 +1,10 @@
 import type { ThemePalette } from '@purestack/ts-style'
-import { styleBuilder, type ThemeMode, type ThemeOptions, themes } from '@purestack/ts-style'
+import {
+  styleBuilder,
+  type ThemeMode,
+  type ThemeOptions,
+  themes,
+} from '@purestack/ts-style'
 
 export function registerSearchBoxStyles() {
   themes.forEach((theme, palette, options) => {

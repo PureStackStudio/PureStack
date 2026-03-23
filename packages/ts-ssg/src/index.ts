@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { componentRegistry, type TsSsgContext } from '@purestack/ts-components'
+import { componentRegistry, type TsSsgContext } from '@purestack/ts-render'
 import {
   type BuiltInSkinName,
   type BuiltInSkinPair,

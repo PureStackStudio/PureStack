@@ -1,6 +1,6 @@
 import path from 'node:path'
-import { renderApp } from '@purestack/ts-components'
 import type { BasicHeadConfig } from '@purestack/ts-html'
+import { renderApp } from '@purestack/ts-render'
 import { resolveThemeStyleLinks } from '@purestack/ts-style'
 import { getLogger } from 'logpot'
 import type { Component } from 'regor'

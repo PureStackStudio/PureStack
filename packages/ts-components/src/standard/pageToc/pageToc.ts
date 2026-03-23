@@ -1,6 +1,6 @@
+import type { PageOutlineItem, TsSsgContext } from '@purestack/ts-render'
+import { resolveTsSsgContext } from '@purestack/ts-render'
 import { defineComponent, html } from 'regor'
-import { resolveTsSsgContext } from '../../render/resolveTsSsgContext'
-import type { PageOutlineItem, TsSsgContext } from '../../render/ts-ssg-context'
 import { registerPageTocStyles } from './pageTocStyle'
 
 export interface PageToc {

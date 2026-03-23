@@ -1,4 +1,3 @@
-export * from './render'
 export { createAlertComponents } from './standard/alert/alert'
 export { createBadgeComponents } from './standard/badge/badge'
 export { createButtonComponents } from './standard/btn/btn'

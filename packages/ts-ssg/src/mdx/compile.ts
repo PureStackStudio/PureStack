@@ -1,4 +1,4 @@
-import { componentRegistry } from '@purestack/ts-components'
+import { componentRegistry } from '@purestack/ts-render'
 import type { Element, Properties, Root, Text } from 'hast'
 import type { Root as MdastRoot } from 'mdast'
 import type { Handler } from 'mdast-util-to-hast'

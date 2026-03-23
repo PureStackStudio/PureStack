@@ -1,12 +1,12 @@
-import { DEFAULT_THEME_OPTIONS } from '@purestack/ts-style'
-import type { DeepPartial } from '@purestack/ts-util'
 import type {
   PageOutlineItem,
   TsSsgContext,
   TsSsgNavigation,
   TsSsgPageInfo,
   TsSsgSiteConfig,
-} from '../render/ts-ssg-context'
+} from '@purestack/ts-render'
+import { DEFAULT_THEME_OPTIONS } from '@purestack/ts-style'
+import type { DeepPartial } from '@purestack/ts-util'
 
 const DEFAULT_SITE: TsSsgSiteConfig = {
   siteTitle: 'Test Site',

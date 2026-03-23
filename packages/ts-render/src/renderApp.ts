@@ -5,12 +5,15 @@ import { buildTabsScript } from './buildTabsScript'
 import { componentRegistry } from './componentRegistry'
 import type { TsSsgContext } from './ts-ssg-context'
 
-export interface RenderAppOptions {
+export interface RenderAppOptions<TContext extends TsSsgContext> {
   components: unknown
-  context: TsSsgContext
+  context: TContext
 }
 
-export const renderApp = (html: string, options: RenderAppOptions) => {
+export const renderApp = <TContext extends TsSsgContext>(
+  html: string,
+  options: RenderAppOptions<TContext>,
+) => {
   const normalizedHtml = html.trimStart()
   const isDocument =
     normalizedHtml.startsWith('<!DOCTYPE html>') ||
