@@ -1,4 +1,4 @@
-import type { ConsentConfig } from '@purestack/ts-components'
+import type { ConsentConfig } from '@purestack/ts-common'
 import { buildEmbeddedConsentScript } from '../pageScripts/embed/consent.embed'
 
 export function buildConsentScript(config: ConsentConfig) {

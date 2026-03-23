@@ -6,7 +6,7 @@ import type {
   ConsentConfig,
   ConsentScript,
   ConsentService,
-} from '@purestack/ts-components'
+} from '@purestack/ts-common'
 import {
   resolveThemes,
   type ThemeOptions,
@@ -25,7 +25,7 @@ export type {
   ConsentConfig,
   ConsentScript,
   ConsentService,
-} from '@purestack/ts-components'
+} from '@purestack/ts-common'
 
 export interface SiteConfig {
   rootDir: string

@@ -1,15 +1,15 @@
 {
-  "name": "@purestack/ts-components",
+  "name": "@purestack/ts-common",
   "version": "1.0.0",
   "packageManager": "yarn@4.9.2",
-  "module": "./dist/ts-components.mjs",
-  "types": "./dist/ts-components.d.mts",
+  "module": "./dist/ts-common.mjs",
+  "types": "./dist/ts-common.d.mts",
   "type": "module",
   "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/koculu/purestack.git",
-    "directory": "packages/ts-components"
+    "directory": "packages/ts-common"
   },
   "homepage": "https://tenray.io/purestack",
   "bugs": {
@@ -17,8 +17,8 @@
   },
   "exports": {
     ".": {
-      "require": "./dist/ts-components.mjs",
-      "import": "./dist/ts-components.mjs"
+      "require": "./dist/ts-common.mjs",
+      "import": "./dist/ts-common.mjs"
     }
   },
   "license": "MIT",
@@ -31,14 +31,5 @@
     "build": "tsc",
     "lint": "biome check ./src --formatter-enabled=false --write",
     "test": "vitest"
-  },
-  "devDependencies": {
-    "@purestack/ts-minidom": "workspace:^",
-    "@purestack/ts-render": "workspace:^"
-  },
-  "dependencies": {
-    "@purestack/ts-common": "workspace:^",
-    "@purestack/ts-style": "workspace:^",
-    "@purestack/ts-util": "workspace:^"
   }
 }

@@ -6,7 +6,7 @@ import type {
   NavigationMode,
   NavigationSort,
   PageNavigation,
-} from '@purestack/ts-components'
+} from '@purestack/ts-common'
 import { resolveRouteInfo } from '../build/out-path'
 import type { ContentFile } from '../discover/content'
 import { parseFrontmatterSource } from '../frontmatter/frontmatter'
@@ -17,7 +17,7 @@ export type {
   NavigationMode,
   NavigationSort,
   PageNavigation,
-} from '@purestack/ts-components'
+} from '@purestack/ts-common'
 
 export interface ResolvedNavigationConfig {
   mode: NavigationMode

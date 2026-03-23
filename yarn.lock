@@ -818,10 +818,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@purestack/ts-common@workspace:^, @purestack/ts-common@workspace:packages/ts-common":
+  version: 0.0.0-use.local
+  resolution: "@purestack/ts-common@workspace:packages/ts-common"
+  languageName: unknown
+  linkType: soft
+
 "@purestack/ts-components@workspace:^, @purestack/ts-components@workspace:packages/ts-components":
   version: 0.0.0-use.local
   resolution: "@purestack/ts-components@workspace:packages/ts-components"
   dependencies:
+    "@purestack/ts-common": "workspace:^"
     "@purestack/ts-minidom": "workspace:^"
     "@purestack/ts-render": "workspace:^"
     "@purestack/ts-style": "workspace:^"
@@ -865,6 +872,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@purestack/ts-render@workspace:packages/ts-render"
   dependencies:
+    "@purestack/ts-common": "workspace:^"
     "@purestack/ts-minidom": "workspace:^"
     "@purestack/ts-util": "workspace:^"
     regor: "npm:^1.4.1"
@@ -877,6 +885,7 @@ __metadata:
   dependencies:
     "@logpot/utils": "npm:^1.0.7"
     "@node-minify/html-minifier": "npm:^10.4.0"
+    "@purestack/ts-common": "workspace:^"
     "@purestack/ts-components": "workspace:^"
     "@purestack/ts-render": "workspace:^"
     "@purestack/ts-style": "workspace:^"

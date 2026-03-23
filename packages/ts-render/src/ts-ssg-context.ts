@@ -1,4 +1,4 @@
-import type { ConsentConfig, NavItem } from '@purestack/ts-components'
+import type { ConsentConfig, NavItem } from '@purestack/ts-common'
 import type { ThemeOptions } from '@purestack/ts-style'
 
 export interface PageOutlineItem {

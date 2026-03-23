@@ -1,7 +1,7 @@
+import type { NavItem } from '@purestack/ts-common'
 import type { TsSsgContext } from '@purestack/ts-render'
 import { resolveTsSsgContext } from '@purestack/ts-render'
 import { defineComponent, html } from 'regor'
-import type { NavItem } from './navMenu-types'
 import { registerNavStyles } from './navMenuStyle'
 
 export interface NavMenu {

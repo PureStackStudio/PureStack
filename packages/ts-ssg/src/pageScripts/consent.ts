@@ -2,7 +2,7 @@ import type {
   ConsentConfig,
   ConsentScript,
   ConsentService,
-} from '@purestack/ts-components'
+} from '@purestack/ts-common'
 
 type ConsentState = {
   version: string

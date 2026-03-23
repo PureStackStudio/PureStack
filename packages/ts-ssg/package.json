@@ -36,6 +36,7 @@
   "dependencies": {
     "@logpot/utils": "^1.0.7",
     "@node-minify/html-minifier": "^10.4.0",
+    "@purestack/ts-common": "workspace:^",
     "@purestack/ts-components": "workspace:^",
     "@purestack/ts-render": "workspace:^",
     "@purestack/ts-style": "workspace:^",

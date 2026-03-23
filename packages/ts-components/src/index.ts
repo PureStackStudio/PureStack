@@ -4,12 +4,6 @@ export { createButtonComponents } from './standard/btn/btn'
 export { createCardComponents } from './standard/cardGrid/cardGrid'
 export type { Consent } from './standard/consent/consent'
 export { createConsentComponents } from './standard/consent/consent'
-export type {
-  ConsentCategory,
-  ConsentConfig,
-  ConsentScript,
-  ConsentService,
-} from './standard/consent/consent-types'
 export { createContactFormComponents } from './standard/contactForm/contactForm'
 export { createFooterComponents } from './standard/footer/footer'
 export { createFormComponents } from './standard/form/form'
@@ -20,13 +14,6 @@ export { createLoginComponents } from './standard/login/login'
 export { createLogoComponents } from './standard/logo/logo'
 export { createModalComponents } from './standard/modal/modal'
 export { createNavigationComponents } from './standard/navMenu/navMenu'
-export type {
-  NavItem,
-  NavigationConfig,
-  NavigationMode,
-  NavigationSort,
-  PageNavigation,
-} from './standard/navMenu/navMenu-types'
 export { createPageTocComponents } from './standard/pageToc/pageToc'
 export { createPricingComponents } from './standard/pricing/pricing'
 export { createScriptComponents } from './standard/script/script'
