@@ -1,44 +1,10 @@
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { componentRegistry } from '@purestack/ts-render'
-import {
-  type BuiltInSkinName,
-  type BuiltInSkinPair,
-  type BuiltInSkins,
-  builtInSkins,
-  DEFAULT_THEME_OPTIONS,
-  styleBuilder,
-  THEME_MODES,
-  type ThemeMode,
-  type ThemeOptions,
-  type ThemeOptionsInput,
-  type ThemePalette,
-  type Themes,
-  themes,
-} from '@purestack/ts-style'
 import { logError } from '@purestack/ts-util'
 import { createLogger, getLogger } from 'logpot'
 import { buildSite } from './build/site'
 import { type DevServerInput, startDevServer } from './dev/server'
 
-export {
-  builtInSkins,
-  componentRegistry,
-  DEFAULT_THEME_OPTIONS,
-  styleBuilder,
-  THEME_MODES,
-  themes,
-}
-export type {
-  BuiltInSkinName,
-  BuiltInSkinPair,
-  BuiltInSkins,
-  ThemeMode,
-  ThemeOptions,
-  ThemeOptionsInput,
-  ThemePalette,
-  Themes,
-}
 export {
   type BuildHooks,
   type BuildInput,
