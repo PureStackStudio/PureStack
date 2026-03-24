@@ -1,7 +1,6 @@
 import { merge } from '@logpot/utils'
+import type { PageFrontmatter } from '@purestack/ts-common'
 import type { BasicHeadConfig } from '@purestack/ts-html'
-
-import type { PageFrontmatter } from '../frontmatter/frontmatter'
 
 export interface HeadConfigOptions {
   siteTitle?: string

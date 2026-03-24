@@ -1,27 +1,10 @@
 import type { ThemeOptions } from '@purestack/ts-style'
-import type { NavItem, SiteConfig } from './index'
+import type { NavItem, PageInfo, SiteConfig } from './index'
 
 export interface PageOutlineItem {
   id: string
   title: string
   children?: PageOutlineItem[]
-}
-
-export interface TsSsgPageInfo {
-  relPath: string
-  urlPath?: string
-  frontmatter: {
-    embed?: {
-      modal?: 'body' | 'head'
-      tabs?: 'body' | 'head'
-    }
-    layout: {
-      navMode?: 'sidebar' | 'drawer'
-      fullWidth?: boolean
-      showToc?: boolean
-      showFooter?: boolean
-    }
-  }
 }
 
 export interface TsSsgNavigation {
@@ -31,7 +14,7 @@ export interface TsSsgNavigation {
 
 export interface TsSsgContext {
   site: SiteConfig
-  pageInfo: TsSsgPageInfo
+  pageInfo: PageInfo
   navigation?: TsSsgNavigation
   outline?: PageOutlineItem[]
   theme: ThemeOptions

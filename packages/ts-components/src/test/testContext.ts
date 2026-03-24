@@ -1,9 +1,9 @@
 import type {
+  PageInfo,
   PageOutlineItem,
   SiteConfig,
   TsSsgContext,
   TsSsgNavigation,
-  TsSsgPageInfo,
 } from '@purestack/ts-common'
 import { DEFAULT_THEME_OPTIONS } from '@purestack/ts-style'
 import type { DeepPartial } from '@purestack/ts-util'
@@ -36,7 +36,7 @@ const DEFAULT_SITE: DeepPartial<SiteConfig> = {
   },
 }
 
-const DEFAULT_PAGE_INFO: TsSsgPageInfo = {
+const DEFAULT_PAGE_INFO: PageInfo = {
   relPath: 'index.md',
   urlPath: '/',
   frontmatter: {
@@ -45,13 +45,18 @@ const DEFAULT_PAGE_INFO: TsSsgPageInfo = {
       fullWidth: false,
       showToc: false,
       showFooter: true,
+      tocCollapsed: false,
     },
+    template: 'doc',
+    hidden: false,
+    draft: false,
+    nav: { hidden: false },
   },
 }
 
 interface TestContextOptions {
   site?: DeepPartial<SiteConfig>
-  pageInfo?: DeepPartial<TsSsgPageInfo>
+  pageInfo?: DeepPartial<PageInfo>
   navigation?: TsSsgNavigation
   outline?: PageOutlineItem[]
 }
@@ -63,8 +68,8 @@ export function createTestSite(
 }
 
 export function createTestPageInfo(
-  overrides: DeepPartial<TsSsgPageInfo> = {},
-): TsSsgPageInfo {
+  overrides: DeepPartial<PageInfo> = {},
+): PageInfo {
   return mergeValue(DEFAULT_PAGE_INFO, overrides)
 }
 

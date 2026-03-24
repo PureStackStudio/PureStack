@@ -1,8 +1,13 @@
-import type { AnalyticsConfig, ConsentConfig } from '@purestack/ts-common'
+import type {
+  AnalyticsConfig,
+  ConsentConfig,
+  PageFrontmatter,
+  PageInfo,
+  PageTemplateMap,
+} from '@purestack/ts-common'
 import { type BasicHeadConfig, h } from '@purestack/ts-html'
 import { type ThemeStylesheetLink, themes } from '@purestack/ts-style'
 import { getHead } from '../config/head'
-import type { PageFrontmatter } from '../frontmatter/frontmatter'
 import type { PageNavigation } from '../navigation/navigation'
 import { buildCodeCopyScript } from '../templates/buildCodeCopyScript'
 import { buildConsentScript } from '../templates/buildConsentScript'
@@ -12,11 +17,7 @@ import { buildNavTransitionReadyScript } from '../templates/buildNavTransitionRe
 import { buildPagefindSearchScript } from '../templates/buildPagefindSearchScript'
 import { buildPageTocScript } from '../templates/buildPageTocScript'
 import { buildThemeSwitchScript } from '../templates/buildThemeSwitchScript'
-import {
-  type PageInfo,
-  type PageTemplateMap,
-  resolvePageTemplate,
-} from '../templates/page-templates'
+import { resolvePageTemplate } from '../templates/page-templates'
 
 export interface RenderPageInput {
   bodyHtml: string

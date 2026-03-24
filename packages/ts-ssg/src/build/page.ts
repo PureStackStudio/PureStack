@@ -1,5 +1,10 @@
 import path from 'node:path'
-import type { SiteConfig } from '@purestack/ts-common'
+import type {
+  PageFrontmatter,
+  PageInfo,
+  PageTemplateMap,
+  SiteConfig,
+} from '@purestack/ts-common'
 import type { BasicHeadConfig } from '@purestack/ts-html'
 import { renderApp } from '@purestack/ts-render'
 import { resolveThemeStyleLinks } from '@purestack/ts-style'
@@ -12,7 +17,6 @@ import {
 } from '../discover/content'
 import {
   normalizeFrontmatter,
-  type PageFrontmatter,
   parseFrontmatterSource,
 } from '../frontmatter/frontmatter'
 import { compileMarkdown } from '../mdx/md'
@@ -26,7 +30,6 @@ import {
   type PageNavigation,
   resolvePageNavigation,
 } from '../navigation/navigation'
-import type { PageInfo, PageTemplateMap } from '../templates/page-templates'
 import { resolveHeadConfig } from './head-config'
 import { readSource, writeHtml } from './io'
 import { resolveOutPath, resolveRouteInfo } from './out-path'

@@ -22,6 +22,7 @@
     }
   },
   "dependencies": {
+    "@purestack/ts-html": "workspace:^",
     "@purestack/ts-style": "workspace:^",
     "@purestack/ts-util": "workspace:^"
   },

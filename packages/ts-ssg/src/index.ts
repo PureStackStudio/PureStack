@@ -41,6 +41,17 @@ export type {
   Themes,
   TsSsgContext,
 }
+export type {
+  FrontmatterEmbedOptions,
+  FrontmatterLayoutOptions,
+  FrontmatterNavOptions,
+  PageFrontmatter,
+  PageInfo,
+  PageTemplate,
+  PageTemplateInput,
+  PageTemplateMap,
+  ParsedFrontmatterSource,
+} from '@purestack/ts-common'
 export {
   type BuildHooks,
   type BuildInput,
@@ -55,11 +66,7 @@ export {
   startDevServer,
 } from './dev/server'
 export {
-  type FrontmatterLayoutOptions,
-  type FrontmatterNavOptions,
   normalizeFrontmatter,
-  type PageFrontmatter,
-  type ParsedFrontmatterSource,
   parseFrontmatterSource,
 } from './frontmatter/frontmatter'
 export {
@@ -83,10 +90,6 @@ export {
 } from './navigation/navigation'
 export {
   defaultTemplates,
-  type PageInfo,
-  type PageTemplate,
-  type PageTemplateInput,
-  type PageTemplateMap,
   resolvePageTemplate,
 } from './templates/page-templates'
 

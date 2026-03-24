@@ -1,32 +1,10 @@
-import { type BasicHeadConfig, h, type TSNode } from '@purestack/ts-html'
-import type { ThemeStylesheetLink } from '@purestack/ts-style'
-import type { PageFrontmatter } from '../frontmatter/frontmatter'
-import type { PageNavigation } from '../navigation/navigation'
-
-export interface PageInfo {
-  relPath: string
-  urlPath: string
-  frontmatter: PageFrontmatter
-}
-
-export interface PageTemplateInput {
-  head: TSNode<'head'>
-  bodyHtml: string
-  headConfig?: BasicHeadConfig
-  styleLinks?: ThemeStylesheetLink[]
-  templateName: string
-  navigation?: PageNavigation
-  pageInfo: PageInfo
-  siteTitle?: string
-  headerHtml?: string
-  footerHtml?: string
-}
-
-export type PageTemplate = (
-  input: PageTemplateInput,
-) => TSNode<'html'> | Promise<TSNode<'html'>>
-
-export type PageTemplateMap = Record<string, PageTemplate>
+import type {
+  PageFrontmatter,
+  PageNavigation,
+  PageTemplateInput,
+  PageTemplateMap,
+} from '@purestack/ts-common'
+import { h } from '@purestack/ts-html'
 
 export const defaultTemplates: PageTemplateMap = {
   doc: renderDocTemplate,
