@@ -1,6 +1,5 @@
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
-import type { TsSsgContext } from '@purestack/ts-common'
 import { componentRegistry } from '@purestack/ts-render'
 import {
   type BuiltInSkinName,
@@ -39,19 +38,7 @@ export type {
   ThemeOptionsInput,
   ThemePalette,
   Themes,
-  TsSsgContext,
 }
-export type {
-  FrontmatterEmbedOptions,
-  FrontmatterLayoutOptions,
-  FrontmatterNavOptions,
-  PageFrontmatter,
-  PageInfo,
-  PageTemplate,
-  PageTemplateInput,
-  PageTemplateMap,
-  ParsedFrontmatterSource,
-} from '@purestack/ts-common'
 export {
   type BuildHooks,
   type BuildInput,
@@ -79,12 +66,7 @@ export {
 } from './mdx/highlight'
 export {
   buildNavigation,
-  type NavItem,
-  type NavigationConfig,
-  type NavigationMode,
-  type NavigationSort,
   type NavigationTree,
-  type PageNavigation,
   resolveNavigationConfig,
   resolvePageNavigation,
 } from './navigation/navigation'

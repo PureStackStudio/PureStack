@@ -3,12 +3,12 @@ import type {
   ConsentConfig,
   PageFrontmatter,
   PageInfo,
+  PageNavigation,
   PageTemplateMap,
 } from '@purestack/ts-common'
 import { type BasicHeadConfig, h } from '@purestack/ts-html'
 import { type ThemeStylesheetLink, themes } from '@purestack/ts-style'
 import { getHead } from '../config/head'
-import type { PageNavigation } from '../navigation/navigation'
 import { buildCodeCopyScript } from '../templates/buildCodeCopyScript'
 import { buildConsentScript } from '../templates/buildConsentScript'
 import { buildGa4Script } from '../templates/buildGa4Script'

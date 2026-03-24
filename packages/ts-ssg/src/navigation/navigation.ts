@@ -11,14 +11,6 @@ import { resolveRouteInfo } from '../build/out-path'
 import type { ContentFile } from '../discover/content'
 import { parseFrontmatterSource } from '../frontmatter/frontmatter'
 
-export type {
-  NavItem,
-  NavigationConfig,
-  NavigationMode,
-  NavigationSort,
-  PageNavigation,
-} from '@purestack/ts-common'
-
 export interface ResolvedNavigationConfig {
   mode: NavigationMode
   navFileName: string
