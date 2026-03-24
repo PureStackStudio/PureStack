@@ -1,7 +1,6 @@
 export { createAlertComponents } from './standard/alert/alert'
 export { createBadgeComponents } from './standard/badge/badge'
 export { createButtonComponents } from './standard/btn/btn'
-export { createCardComponents } from './standard/cardGrid/cardGrid'
 export type { Consent } from './standard/consent/consent'
 export { createConsentComponents } from './standard/consent/consent'
 export { createContactFormComponents } from './standard/contactForm/contactForm'

@@ -2,7 +2,6 @@ import {
   createAlertComponents,
   createBadgeComponents,
   createButtonComponents,
-  createCardComponents,
   createConsentComponents,
   createContactFormComponents,
   createFooterComponents,
@@ -44,7 +43,6 @@ export function initBuiltinComponents(
   componentRegistry.registerMany(createAlertComponents())
   componentRegistry.registerMany(createBadgeComponents())
   componentRegistry.registerMany(createButtonComponents())
-  componentRegistry.registerMany(createCardComponents())
   componentRegistry.registerMany(createConsentComponents())
   componentRegistry.registerMany(createContactFormComponents())
   componentRegistry.registerMany(createFooterComponents())
