@@ -2,10 +2,15 @@ import { defineComponent, html } from 'regor'
 
 import { registerButtonStyles } from './btnStyle'
 
-type BtnVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'warning'
-type BtnSize = 'sm' | 'md' | 'lg'
-type BtnType = 'button' | 'submit' | 'reset'
-type BtnIconPosition = 'start' | 'end'
+export type BtnVariant =
+  | 'primary'
+  | 'secondary'
+  | 'ghost'
+  | 'danger'
+  | 'warning'
+export type BtnSize = 'sm' | 'md' | 'lg'
+export type BtnType = 'button' | 'submit' | 'reset'
+export type BtnIconPosition = 'start' | 'end'
 
 export interface Btn {
   variant?: string

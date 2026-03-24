@@ -2,7 +2,7 @@ import { resolveTsSsgContext } from '@purestack/ts-common'
 import { type ComponentHead, defineComponent, html } from 'regor'
 import { registerTabsStyles } from './tabsStyle'
 
-class TabsScope {
+export class TabsScope {
   groupName?: string = 'tabs-default'
 }
 

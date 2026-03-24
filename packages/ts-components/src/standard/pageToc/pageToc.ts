@@ -8,7 +8,7 @@ export interface PageToc {
   title?: string
 }
 
-interface PageTocItem extends PageOutlineItem {
+export interface PageTocItem extends PageOutlineItem {
   href: string
   children?: PageTocItem[]
 }

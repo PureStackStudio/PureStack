@@ -7,7 +7,7 @@ import { resolveTsSsgContext } from '@purestack/ts-common'
 import { defineComponent, html } from 'regor'
 import { registerConsentStyles } from './consentStyle'
 
-interface ConsentCategoryState extends ConsentCategory {
+export interface ConsentCategoryState extends ConsentCategory {
   inputId?: string
 }
 
