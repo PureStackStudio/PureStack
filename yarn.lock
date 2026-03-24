@@ -822,6 +822,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@purestack/ts-common@workspace:packages/ts-common"
   dependencies:
+    "@purestack/ts-html": "workspace:^"
     "@purestack/ts-style": "workspace:^"
     "@purestack/ts-util": "workspace:^"
   languageName: unknown
@@ -856,7 +857,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@purestack/ts-html@workspace:packages/ts-html":
+"@purestack/ts-html@workspace:^, @purestack/ts-html@workspace:packages/ts-html":
   version: 0.0.0-use.local
   resolution: "@purestack/ts-html@workspace:packages/ts-html"
   dependencies:
@@ -871,12 +872,21 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@purestack/ts-page-scripts@workspace:^, @purestack/ts-page-scripts@workspace:packages/ts-page-scripts":
+  version: 0.0.0-use.local
+  resolution: "@purestack/ts-page-scripts@workspace:packages/ts-page-scripts"
+  dependencies:
+    "@purestack/ts-common": "workspace:^"
+  languageName: unknown
+  linkType: soft
+
 "@purestack/ts-render@workspace:^, @purestack/ts-render@workspace:packages/ts-render":
   version: 0.0.0-use.local
   resolution: "@purestack/ts-render@workspace:packages/ts-render"
   dependencies:
     "@purestack/ts-common": "workspace:^"
     "@purestack/ts-minidom": "workspace:^"
+    "@purestack/ts-page-scripts": "workspace:^"
     "@purestack/ts-util": "workspace:^"
     regor: "npm:^1.4.1"
   languageName: unknown
@@ -890,6 +900,7 @@ __metadata:
     "@node-minify/html-minifier": "npm:^10.4.0"
     "@purestack/ts-common": "workspace:^"
     "@purestack/ts-components": "workspace:^"
+    "@purestack/ts-page-scripts": "workspace:^"
     "@purestack/ts-render": "workspace:^"
     "@purestack/ts-style": "workspace:^"
     "@purestack/ts-svg-icons": "workspace:^"

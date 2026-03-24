@@ -1,15 +1,15 @@
 {
-  "name": "@purestack/ts-render",
+  "name": "@purestack/ts-page-scripts",
   "version": "1.0.0",
   "packageManager": "yarn@4.9.2",
-  "module": "./dist/ts-render.mjs",
-  "types": "./dist/ts-render.d.mts",
+  "module": "./dist/ts-page-scripts.mjs",
+  "types": "./dist/ts-page-scripts.d.mts",
   "type": "module",
   "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/koculu/purestack.git",
-    "directory": "packages/ts-render"
+    "directory": "packages/ts-page-scripts"
   },
   "homepage": "https://tenray.io/purestack",
   "bugs": {
@@ -17,8 +17,8 @@
   },
   "exports": {
     ".": {
-      "require": "./dist/ts-render.mjs",
-      "import": "./dist/ts-render.mjs"
+      "require": "./dist/ts-page-scripts.mjs",
+      "import": "./dist/ts-page-scripts.mjs"
     }
   },
   "license": "MIT",
@@ -33,10 +33,6 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@purestack/ts-common": "workspace:^",
-    "@purestack/ts-minidom": "workspace:^",
-    "@purestack/ts-page-scripts": "workspace:^",
-    "@purestack/ts-util": "workspace:^",
-    "regor": "^1.4.1"
+    "@purestack/ts-common": "workspace:^"
   }
 }

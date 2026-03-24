@@ -7,20 +7,19 @@ const projectRoot = process.cwd()
 const pageScriptsDir = path.join(
   projectRoot,
   'packages',
-  'ts-ssg',
+  'ts-page-scripts',
   'src',
-  'pageScripts',
 )
 const embedDir = path.join(pageScriptsDir, 'embed')
 
 const embedEntries = [
-  { name: 'pageToc', fn: 'buildEmbeddedPageTocScript' },
-  { name: 'navMenu', fn: 'buildEmbeddedNavMenuScript' },
-  { name: 'tabs', fn: 'buildEmbeddedTabsScript' },
-  { name: 'modal', fn: 'buildEmbeddedModalScript' },
-  { name: 'codeCopy', fn: 'buildEmbeddedCodeCopyScript' },
-  { name: 'pagefindSearch', fn: 'buildEmbeddedPagefindSearchScript' },
-  { name: 'navTransitionReady', fn: 'buildEmbeddedNavTransitionReadyScript' },
+  { name: 'pageToc', fn: 'buildPageTocScript' },
+  { name: 'navMenu', fn: 'buildNavMenuScript' },
+  { name: 'tabs', fn: 'buildTabsScript' },
+  { name: 'modal', fn: 'buildModalScript' },
+  { name: 'codeCopy', fn: 'buildCodeCopyScript' },
+  { name: 'pagefindSearch', fn: 'buildPagefindSearchScript' },
+  { name: 'navTransitionReady', fn: 'buildNavTransitionReadyScript' },
   { name: 'consent', fn: 'buildEmbeddedConsentScript' },
   { name: 'themeSwitch', fn: 'buildEmbeddedThemeSwitchScript' },
 ] as const

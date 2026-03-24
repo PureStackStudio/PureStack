@@ -1,4 +1,2 @@
-export { buildModalScript } from './buildModalScript'
-export { buildTabsScript } from './buildTabsScript'
 export { componentRegistry } from './componentRegistry'
 export { type RenderAppOptions, renderApp } from './renderApp'

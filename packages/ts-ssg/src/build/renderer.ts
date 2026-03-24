@@ -7,16 +7,18 @@ import type {
   PageTemplateMap,
 } from '@purestack/ts-common'
 import { type BasicHeadConfig, h } from '@purestack/ts-html'
+import {
+  buildCodeCopyScript,
+  buildConsentScript,
+  buildNavMenuScript,
+  buildNavTransitionReadyScript,
+  buildPagefindSearchScript,
+  buildPageTocScript,
+  buildThemeSwitchScript,
+} from '@purestack/ts-page-scripts'
 import { type ThemeStylesheetLink, themes } from '@purestack/ts-style'
 import { getHead } from '../config/head'
-import { buildCodeCopyScript } from '../templates/buildCodeCopyScript'
-import { buildConsentScript } from '../templates/buildConsentScript'
 import { buildGa4Script } from '../templates/buildGa4Script'
-import { buildNavMenuScript } from '../templates/buildNavMenuScript'
-import { buildNavTransitionReadyScript } from '../templates/buildNavTransitionReadyScript'
-import { buildPagefindSearchScript } from '../templates/buildPagefindSearchScript'
-import { buildPageTocScript } from '../templates/buildPageTocScript'
-import { buildThemeSwitchScript } from '../templates/buildThemeSwitchScript'
 import { resolvePageTemplate } from '../templates/page-templates'
 
 export interface RenderPageInput {

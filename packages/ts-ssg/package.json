@@ -38,6 +38,7 @@
     "@node-minify/html-minifier": "^10.4.0",
     "@purestack/ts-common": "workspace:^",
     "@purestack/ts-components": "workspace:^",
+    "@purestack/ts-page-scripts": "workspace:^",
     "@purestack/ts-render": "workspace:^",
     "@purestack/ts-style": "workspace:^",
     "@purestack/ts-svg-icons": "workspace:^",

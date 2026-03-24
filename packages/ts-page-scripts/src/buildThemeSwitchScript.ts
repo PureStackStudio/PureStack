@@ -1,4 +1,4 @@
-import { buildEmbeddedThemeSwitchScript } from '../pageScripts/embed/themeSwitch.embed'
+import { buildEmbeddedThemeSwitchScript } from './embed/themeSwitch.embed'
 
 /**
  * Builds the inline theme switcher runtime.
