@@ -32,6 +32,8 @@ export type {
   FormSubmit,
 } from './standard/form/form'
 export { createFormComponents } from './standard/form/form'
+export type { FormInputField } from './standard/form/form-input-field'
+export { defineFormInputField } from './standard/form/form-input-field'
 export type { Grid } from './standard/grid/grid'
 export { createGridComponents } from './standard/grid/grid'
 export type { HeroAction, HeroMedia } from './standard/hero/hero'
