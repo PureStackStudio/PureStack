@@ -1,7 +1,6 @@
 import fs from 'node:fs/promises'
 import { htmlMinifier } from '@node-minify/html-minifier'
-
-import { ensureDir } from '@purestack/ts-util'
+import { ensureDir } from 'packages/ts-util/src/fs'
 
 export async function readSource(absPath: string) {
   return fs.readFile(absPath, 'utf-8')

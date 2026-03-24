@@ -8,7 +8,7 @@ import {
   resolveThemeFileName,
   styleBuilder,
 } from '@purestack/ts-style'
-import { ensureDir } from '@purestack/ts-util'
+import { ensureDir } from 'packages/ts-util/src/fs'
 
 export interface WriteStylesResult {
   outPath: string

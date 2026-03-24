@@ -1,10 +1,10 @@
-import { merge } from '@logpot/utils'
 import {
   type BasicHeadConfig,
   createHead,
   getHeadConfig,
   h,
 } from '@purestack/ts-html'
+import { merge } from '@purestack/ts-util'
 
 const DEFAULTS: BasicHeadConfig = {
   charset: 'utf-8',

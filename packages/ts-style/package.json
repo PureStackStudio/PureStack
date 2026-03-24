@@ -33,7 +33,6 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@logpot/utils": "^1.0.7",
     "@purestack/ts-css": "workspace:^",
     "@purestack/ts-util": "workspace:^"
   }

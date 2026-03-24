@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import type { RobotsConfig, SitemapConfig } from '@purestack/ts-common'
-import { ensureDir } from '@purestack/ts-util'
+import { ensureDir } from 'packages/ts-util/src/fs'
 
 export interface SitemapPageEntry {
   urlPath: string

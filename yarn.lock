@@ -675,7 +675,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@logpot/utils@npm:1.0.7, @logpot/utils@npm:^1.0.7":
+"@logpot/utils@npm:1.0.7":
   version: 1.0.7
   resolution: "@logpot/utils@npm:1.0.7"
   checksum: 10c0/fdd1ac1c3d43c420538bd11475ab55e55fe791ba28d1b500408a0b4089e9fa72e051218f60c0d521765419cdef03d052c577dfdde69b057c5c222cfae8603b8a
@@ -896,7 +896,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@purestack/ts-ssg@workspace:packages/ts-ssg"
   dependencies:
-    "@logpot/utils": "npm:^1.0.7"
     "@node-minify/html-minifier": "npm:^10.4.0"
     "@purestack/ts-common": "workspace:^"
     "@purestack/ts-components": "workspace:^"
@@ -929,7 +928,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@purestack/ts-style@workspace:packages/ts-style"
   dependencies:
-    "@logpot/utils": "npm:^1.0.7"
     "@purestack/ts-css": "workspace:^"
     "@purestack/ts-util": "workspace:^"
   languageName: unknown

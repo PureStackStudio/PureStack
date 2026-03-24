@@ -1,8 +1,7 @@
-export { isTypeScriptAssetPath, toOutputAssetRelPath } from './assetPath'
 export { Cache, type CacheOptions } from './cache'
 export { escapeHtml } from './escapeHtml'
-export { ensureDir, replaceExt } from './fs'
 export { type LoggerLike, logError } from './logging'
+export { merge } from './merge'
 export {
   isAbortError,
   isEmptyPlainObject,

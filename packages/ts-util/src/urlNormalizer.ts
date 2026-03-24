@@ -1,5 +1,3 @@
-import path from 'node:path'
-
 type TrailingSlashMode = 'preserve' | 'always' | 'never'
 
 interface NormalizeHrefOptions {
@@ -45,7 +43,7 @@ export const urlNormalizer = {
       ? withoutDot
       : `/${withoutDot}`
     const trailingSlash = options.trailingSlash ?? 'preserve'
-    const hasExt = path.posix.extname(withLeadingSlash).length > 0
+    const hasExt = hasPathExtension(withLeadingSlash)
 
     if (hasExt || withLeadingSlash === '/') {
       return `${withLeadingSlash}${suffix}`
@@ -66,4 +64,12 @@ export const urlNormalizer = {
     })
     return normalized || '/'
   },
+}
+
+function hasPathExtension(value: string) {
+  const lastSlashIndex = value.lastIndexOf('/')
+  const segment = lastSlashIndex >= 0 ? value.slice(lastSlashIndex + 1) : value
+  if (!segment || segment === '.' || segment === '..') return false
+  const dotIndex = segment.lastIndexOf('.')
+  return dotIndex > 0 && dotIndex < segment.length - 1
 }

@@ -60,8 +60,6 @@ export type {
   PricingTable,
 } from './standard/pricing/pricing'
 export { createPricingComponents } from './standard/pricing/pricing'
-export type { PageScript, RegorApp } from './standard/script/script'
-export { createScriptComponents } from './standard/script/script'
 export type { SearchBox } from './standard/searchBox/searchBox'
 export { createSearchComponents } from './standard/searchBox/searchBox'
 export type { TabPane, Tabs, TabsHeader } from './standard/tabs/tabs'
