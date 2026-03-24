@@ -2,6 +2,7 @@ import path from 'node:path'
 import type {
   PageFrontmatter,
   PageInfo,
+  PageOutlineItem,
   PageTemplateMap,
   SiteConfig,
 } from '@purestack/ts-common'
@@ -20,11 +21,7 @@ import {
   parseFrontmatterSource,
 } from '../frontmatter/frontmatter'
 import { compileMarkdown } from '../mdx/md'
-import {
-  compileMdx,
-  type MdxRenderOptions,
-  type PageOutlineItem,
-} from '../mdx/mdx'
+import { compileMdx, type MdxRenderOptions } from '../mdx/mdx'
 import {
   type NavigationTree,
   type PageNavigation,

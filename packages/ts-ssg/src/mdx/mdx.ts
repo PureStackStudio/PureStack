@@ -7,7 +7,6 @@ import {
   compileAstToHtml,
   type MdxCompileResult,
   type MdxRenderOptions,
-  type PageOutlineItem,
 } from './compile'
 import { normalizeMdxJsxParagraphs } from './normalizeMdxJsxParagraphs'
 
@@ -19,7 +18,7 @@ export {
   type MdxCodeThemes,
 } from './highlight'
 
-export type { MdxCompileResult, MdxRenderOptions, PageOutlineItem }
+export type { MdxCompileResult, MdxRenderOptions }
 
 export function compileMdx(
   source: string,

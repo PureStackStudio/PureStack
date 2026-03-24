@@ -1,3 +1,4 @@
+import type { PageOutlineItem } from '@purestack/ts-common'
 import { componentRegistry } from '@purestack/ts-render'
 import type { Element, Properties, Root, Text } from 'hast'
 import type { Root as MdastRoot } from 'mdast'
@@ -8,13 +9,6 @@ import rehypeStringify from 'rehype-stringify'
 import { unified } from 'unified'
 import type { MdxCodeHighlighter } from './highlight'
 import { applyShikiHighlighting } from './shikiHighlighting'
-
-export interface PageOutlineItem {
-  id: string
-  title: string
-  depth: number
-  children?: PageOutlineItem[]
-}
 
 export interface MdxCompileResult {
   bodyHtml: string

@@ -4,6 +4,7 @@ import type { NavItem, PageInfo, SiteConfig } from './index'
 export interface PageOutlineItem {
   id: string
   title: string
+  depth?: number
   children?: PageOutlineItem[]
 }
 
