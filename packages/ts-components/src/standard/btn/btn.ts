@@ -24,21 +24,19 @@ export interface Btn {
   class?: string
   className?: string
   buttonType?: BtnType
-  isDisabled?: boolean
   showStartIcon?: boolean
   showEndIcon?: boolean
-  showLabel?: boolean
 }
 
 const buttonTemplate = html`<button
   class="btn"
   :class="className"
   :type="buttonType"
-  :disabled="isDisabled"
+  :disabled="disabled"
   :aria-label="ariaLabel"
 >
   <Icon class="btn__icon" :name="icon" r-if="showStartIcon" />
-  <span class="btn__label" r-if="showLabel"><slot></slot></span>
+  <span class="btn__label"><slot></slot></span>
   <Icon class="btn__icon" :name="icon" r-if="showEndIcon" />
 </button>`
 
@@ -74,7 +72,7 @@ function resolveBtn(props: Btn): Btn {
   const customClass = resolveText(props.class)
   const iconPosition = resolveIconPosition(props.iconPosition)
   const hasIcon = icon.length > 0
-  const isDisabled = resolveBoolean(props.disabled)
+  const disabled = resolveBoolean(props.disabled)
   const iconOnly = resolveBoolean(props.iconOnly) && hasIcon
   const explicitAriaLabel = resolveText(props.ariaLabel)
 
@@ -86,10 +84,9 @@ function resolveBtn(props: Btn): Btn {
     className: classTokens.join(' '),
     buttonType,
     icon,
-    isDisabled,
+    disabled,
     showStartIcon: hasIcon && iconPosition === 'start',
     showEndIcon: hasIcon && iconPosition === 'end',
-    showLabel: !iconOnly,
     ariaLabel: iconOnly
       ? explicitAriaLabel || 'Button'
       : explicitAriaLabel || undefined,
