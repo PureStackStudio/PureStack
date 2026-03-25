@@ -837,6 +837,7 @@ __metadata:
     "@purestack/ts-render": "workspace:^"
     "@purestack/ts-style": "workspace:^"
     "@purestack/ts-util": "workspace:^"
+    "@purestack/ts-util-node": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -904,6 +905,7 @@ __metadata:
     "@purestack/ts-style": "workspace:^"
     "@purestack/ts-svg-icons": "workspace:^"
     "@purestack/ts-util": "workspace:^"
+    "@purestack/ts-util-node": "workspace:^"
     esbuild: "npm:^0.27.3"
     gray-matter: "npm:^4.0.3"
     hast-util-from-html: "npm:^2.0.3"
@@ -939,6 +941,12 @@ __metadata:
   dependencies:
     iconoir: "npm:^7.11.0"
     lucide: "npm:^0.576.0"
+  languageName: unknown
+  linkType: soft
+
+"@purestack/ts-util-node@workspace:^, @purestack/ts-util-node@workspace:packages/ts-util-node":
+  version: 0.0.0-use.local
+  resolution: "@purestack/ts-util-node@workspace:packages/ts-util-node"
   languageName: unknown
   linkType: soft
 

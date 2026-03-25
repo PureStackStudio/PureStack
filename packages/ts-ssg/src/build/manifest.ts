@@ -3,7 +3,7 @@ import type { Stats } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import type { SiteConfig } from '@purestack/ts-common'
-import { ensureDir } from 'packages/ts-util/src/fs'
+import { ensureDir } from '@purestack/ts-util-node'
 
 export const MANIFEST_VERSION = 1
 export const MANIFEST_DIRNAME = '.ts-ssg'
