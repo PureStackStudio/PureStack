@@ -2,7 +2,7 @@ import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '@purestack/ts-render'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
-import { createScriptComponents } from './script'
+import { createScriptComponents } from './pageScript'
 
 describe('PageScript rendering', () => {
   it('maps local .ts src to emitted .js path and defaults to module', () => {
