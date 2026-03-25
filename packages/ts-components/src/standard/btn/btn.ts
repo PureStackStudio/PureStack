@@ -35,9 +35,9 @@ const buttonTemplate = html`<button
   :disabled="disabled"
   :aria-label="ariaLabel"
 >
-  <Icon class="btn__icon" :name="icon" r-if="showStartIcon" />
-  <span class="btn__label"><slot></slot></span>
-  <Icon class="btn__icon" :name="icon" r-if="showEndIcon" />
+  <Icon class="btn__icon" :name="icon" r-if="showStartIcon"/>
+  <span class="btn__label" r-if="!iconOnly"><slot></slot></span>
+  <Icon class="btn__icon" :name="icon" r-if="showEndIcon"/>
 </button>`
 
 function createButtonComponent() {
@@ -84,6 +84,7 @@ function resolveBtn(props: Btn): Btn {
     className: classTokens.join(' '),
     buttonType,
     icon,
+    iconOnly,
     disabled,
     showStartIcon: hasIcon && iconPosition === 'start',
     showEndIcon: hasIcon && iconPosition === 'end',

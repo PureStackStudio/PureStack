@@ -889,7 +889,7 @@ __metadata:
     "@purestack/ts-minidom": "workspace:^"
     "@purestack/ts-page-scripts": "workspace:^"
     "@purestack/ts-util": "workspace:^"
-    regor: "npm:^1.4.1"
+    regor: "npm:^1.4.2"
   languageName: unknown
   linkType: soft
 
@@ -914,7 +914,6 @@ __metadata:
     logpot: "npm:^1.0.7"
     mdast-util-to-hast: "npm:^13.2.1"
     pagefind: "npm:^1.4.0"
-    regor: "npm:^1.4.1"
     rehype-raw: "npm:^7.0.0"
     rehype-stringify: "npm:^10.0.1"
     remark-gfm: "npm:^4.0.1"
@@ -4089,10 +4088,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regor@npm:^1.4.1":
-  version: 1.4.1
-  resolution: "regor@npm:1.4.1"
-  checksum: 10c0/889be4cbc4db8ffd01b607938d72e19d9c1b04a219ff71a4db1d8337fb8544928f0adf433593102047001db247a587a76f9dadbbaced225d702078cb10a52d9a
+"regor@npm:^1.4.2":
+  version: 1.4.2
+  resolution: "regor@npm:1.4.2"
+  checksum: 10c0/98fa113a0fce4bb74bd68e74247f0828948f6ee11d18ad0ca1c9a403dc029e248b97fffd26e3c6edfa7d9fcc94b95deaaef299b56de9644d98dc8ceae5dd1bff
   languageName: node
   linkType: hard
 
