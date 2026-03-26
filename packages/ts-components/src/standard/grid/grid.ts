@@ -99,7 +99,10 @@ function resolveColumns(value: unknown, fallback?: number): number | undefined {
 }
 
 function resolveGridTemplateColumnsValue(value: unknown): string | undefined
-function resolveGridTemplateColumnsValue(value: unknown, fallback: number): string
+function resolveGridTemplateColumnsValue(
+  value: unknown,
+  fallback: number,
+): string
 function resolveGridTemplateColumnsValue(
   value: unknown,
   fallback?: number,
