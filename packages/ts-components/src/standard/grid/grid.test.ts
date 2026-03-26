@@ -9,7 +9,7 @@ describe('Grid rendering', () => {
     const cleanup = ensureDomGlobals()
     const components = createGridComponents()
     const html = renderApp(
-      '<Grid columns="2" columnsMd="3" gap="sm" gapLg="24px" alignItems="center" justifyItems="start" dense="true">item</Grid>',
+      '<Grid columns="2" columnsMd="3" alignItems="center" justifyItems="start" dense="true">item</Grid>',
       {
         components,
         context: createTestContext(),
@@ -20,10 +20,60 @@ describe('Grid rendering', () => {
     expect(html).toContain(
       'class="grid grid--align-center grid--justify-start grid--dense"',
     )
-    expect(html).toContain('--grid-cols: 2')
-    expect(html).toContain('--grid-cols-md: 3')
-    expect(html).toContain('--grid-gap: 0.75rem')
-    expect(html).toContain('--grid-gap-lg: 24px')
+    expect(html).toContain('--grid-template-columns: repeat(2, minmax(0, 1fr))')
+    expect(html).toContain('--grid-template-columns-md: repeat(3, minmax(0, 1fr))')
     expect(html).toContain('item')
+  })
+
+  it('renders custom template columns for base and responsive props', () => {
+    const cleanup = ensureDomGlobals()
+    const components = createGridComponents()
+    const html = renderApp(
+      '<Grid columns="minmax(0, 1fr) auto" columnsMd="200px 1fr">item</Grid>',
+      {
+        components,
+        context: createTestContext(),
+      },
+    )
+    cleanup()
+
+    expect(html).toContain('--grid-template-columns: minmax(0, 1fr) auto')
+    expect(html).toContain('--grid-template-columns-md: 200px 1fr')
+  })
+
+  it('keeps responsive numeric columns working when base columns use a template', () => {
+    const cleanup = ensureDomGlobals()
+    const components = createGridComponents()
+    const html = renderApp(
+      '<Grid columns="minmax(0, 1fr) auto" columnsMd="3">item</Grid>',
+      {
+        components,
+        context: createTestContext(),
+      },
+    )
+    cleanup()
+
+    expect(html).toContain('--grid-template-columns: minmax(0, 1fr) auto')
+    expect(html).toContain('--grid-template-columns-sm: minmax(0, 1fr) auto')
+    expect(html).toContain('--grid-template-columns-md: repeat(3, minmax(0, 1fr))')
+  })
+
+  it('keeps the base template across breakpoints when no responsive columns are set', () => {
+    const cleanup = ensureDomGlobals()
+    const components = createGridComponents()
+    const html = renderApp(
+      '<Grid columns="minmax(0, 1fr) auto">item</Grid>',
+      {
+        components,
+        context: createTestContext(),
+      },
+    )
+    cleanup()
+
+    expect(html).toContain('--grid-template-columns: minmax(0, 1fr) auto')
+    expect(html).toContain('--grid-template-columns-sm: minmax(0, 1fr) auto')
+    expect(html).toContain('--grid-template-columns-md: minmax(0, 1fr) auto')
+    expect(html).toContain('--grid-template-columns-lg: minmax(0, 1fr) auto')
+    expect(html).toContain('--grid-template-columns-xl: minmax(0, 1fr) auto')
   })
 })

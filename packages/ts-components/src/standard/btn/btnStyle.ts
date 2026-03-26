@@ -98,13 +98,11 @@ function registerButtonVariantStyles(theme: ThemeMode, palette: ThemePalette) {
     .select('.btn--primary:hover', theme)
     .background(palette.action.accent.hover)
     .borderColor(palette.action.accent.hover)
-    .transform('translateY(-1px)')
 
   styleBuilder
     .select('.btn--primary:active', theme)
     .background(palette.action.accent.active)
     .borderColor(palette.action.accent.active)
-    .transform('translateY(0)')
 
   styleBuilder
     .select('.btn--primary:disabled', theme)
@@ -123,13 +121,11 @@ function registerButtonVariantStyles(theme: ThemeMode, palette: ThemePalette) {
     .background(palette.background.raised)
     .borderColor(palette.border.hard)
     .boxShadow(palette.effect.interactiveShadow)
-    .transform('translateY(-2px)')
 
   styleBuilder
     .select('.btn--secondary:active', theme)
     .background(palette.action.neutral.active)
     .borderColor(palette.border.strong)
-    .transform('translateY(0)')
 
   styleBuilder
     .select('.btn--secondary:disabled', theme)
@@ -146,12 +142,10 @@ function registerButtonVariantStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.btn--ghost:hover', theme)
     .background(palette.action.ghost.hover)
-    .transform('translateY(-1px)')
 
   styleBuilder
     .select('.btn--ghost:active', theme)
     .background(palette.action.ghost.active)
-    .transform('translateY(0)')
 
   styleBuilder
     .select('.btn--ghost:disabled', theme)
@@ -170,13 +164,11 @@ function registerButtonVariantStyles(theme: ThemeMode, palette: ThemePalette) {
     .borderColor(palette.border.danger)
     .color(palette.text.inverse)
     .boxShadow(palette.effect.interactiveShadow)
-    .transform('translateY(-2px)')
 
   styleBuilder
     .select('.btn--danger:active', theme)
     .background(palette.background.dangerMuted)
     .borderColor(palette.border.danger)
-    .transform('translateY(0)')
 
   styleBuilder
     .select('.btn--danger:disabled', theme)
@@ -197,13 +189,11 @@ function registerButtonVariantStyles(theme: ThemeMode, palette: ThemePalette) {
     .borderColor(palette.status.warning.border)
     .color(palette.text.default)
     .boxShadow(palette.effect.interactiveShadow)
-    .transform('translateY(-2px)')
 
   styleBuilder
     .select('.btn--warning:active', theme)
     .background(palette.action.neutral.active)
     .borderColor(palette.status.warning.border)
-    .transform('translateY(0)')
 
   styleBuilder
     .select('.btn--warning:disabled', theme)

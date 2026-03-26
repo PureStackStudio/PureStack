@@ -5,6 +5,7 @@ export default defineConfig({
   plugins: [
     tsconfigPaths({
       skip: (dir) => dir.includes('docs'),
+      ignoreConfigErrors: true,
     }),
   ],
   test: {

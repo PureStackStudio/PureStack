@@ -8,11 +8,6 @@ export interface Grid {
   columnsMd?: number | string
   columnsLg?: number | string
   columnsXl?: number | string
-  gap?: string
-  gapSm?: string
-  gapMd?: string
-  gapLg?: string
-  gapXl?: string
   alignItems?: string
   justifyItems?: string
   dense?: boolean | string
@@ -32,11 +27,6 @@ function createGridComponent() {
       'columnsMd',
       'columnsLg',
       'columnsXl',
-      'gap',
-      'gapSm',
-      'gapMd',
-      'gapLg',
-      'gapXl',
       'alignItems',
       'justifyItems',
       'dense',
@@ -58,37 +48,15 @@ function resolveGrid(props: Grid): Grid {
     resolveJustifyClass(props.justifyItems),
     resolveDenseClass(props.dense),
   ].filter(Boolean)
+  const resolvedColumns = resolveResponsiveGridTemplateColumns(props)
 
   const gridStyle: Record<string, string> = {
-    '--grid-cols': String(resolveColumns(props.columns, 1)),
-    '--grid-gap': resolveGap(props.gap, '1rem'),
+    '--grid-template-columns': resolvedColumns.base,
+    '--grid-template-columns-sm': resolvedColumns.sm,
+    '--grid-template-columns-md': resolvedColumns.md,
+    '--grid-template-columns-lg': resolvedColumns.lg,
+    '--grid-template-columns-xl': resolvedColumns.xl,
   }
-
-  addCssVarIfPresent(
-    gridStyle,
-    '--grid-cols-sm',
-    resolveColumns(props.columnsSm),
-  )
-  addCssVarIfPresent(
-    gridStyle,
-    '--grid-cols-md',
-    resolveColumns(props.columnsMd),
-  )
-  addCssVarIfPresent(
-    gridStyle,
-    '--grid-cols-lg',
-    resolveColumns(props.columnsLg),
-  )
-  addCssVarIfPresent(
-    gridStyle,
-    '--grid-cols-xl',
-    resolveColumns(props.columnsXl),
-  )
-
-  addCssVarIfPresent(gridStyle, '--grid-gap-sm', resolveGap(props.gapSm))
-  addCssVarIfPresent(gridStyle, '--grid-gap-md', resolveGap(props.gapMd))
-  addCssVarIfPresent(gridStyle, '--grid-gap-lg', resolveGap(props.gapLg))
-  addCssVarIfPresent(gridStyle, '--grid-gap-xl', resolveGap(props.gapXl))
 
   return {
     ...props,
@@ -97,13 +65,24 @@ function resolveGrid(props: Grid): Grid {
   }
 }
 
-function addCssVarIfPresent(
-  target: Record<string, string>,
-  key: string,
-  value: number | string | undefined,
-) {
-  if (value === undefined || value === '') return
-  target[key] = String(value)
+type ResolvedGridTemplateColumns = {
+  base: string
+  sm: string
+  md: string
+  lg: string
+  xl: string
+}
+
+function resolveResponsiveGridTemplateColumns(
+  props: Grid,
+): ResolvedGridTemplateColumns {
+  const base = resolveGridTemplateColumnsValue(props.columns, 1)
+  const sm = resolveGridTemplateColumnsValue(props.columnsSm) ?? base
+  const md = resolveGridTemplateColumnsValue(props.columnsMd) ?? sm
+  const lg = resolveGridTemplateColumnsValue(props.columnsLg) ?? md
+  const xl = resolveGridTemplateColumnsValue(props.columnsXl) ?? lg
+
+  return { base, sm, md, lg, xl }
 }
 
 function resolveColumns(value: unknown, fallback?: number): number | undefined {
@@ -119,36 +98,33 @@ function resolveColumns(value: unknown, fallback?: number): number | undefined {
   return fallback
 }
 
+function resolveGridTemplateColumnsValue(value: unknown): string | undefined
+function resolveGridTemplateColumnsValue(value: unknown, fallback: number): string
+function resolveGridTemplateColumnsValue(
+  value: unknown,
+  fallback?: number,
+): string | undefined {
+  const template = resolveColumnTemplate(value)
+  if (template) return template
+
+  const columns = resolveColumns(value, fallback)
+  if (columns === undefined) return undefined
+  return `repeat(${columns}, minmax(0, 1fr))`
+}
+
+function resolveColumnTemplate(value: unknown): string | undefined {
+  if (typeof value !== 'string') return undefined
+  const normalized = value.trim()
+  if (!normalized) return undefined
+  if (/^\d+$/.test(normalized)) return undefined
+  if (/[;{}]/.test(normalized)) return undefined
+  return normalized
+}
+
 function clampColumns(value: number) {
   if (value < 1) return 1
   if (value > 12) return 12
   return value
-}
-
-const gapTokenMap: Record<string, string> = {
-  none: '0',
-  xxs: '0.25rem',
-  xs: '0.5rem',
-  sm: '0.75rem',
-  md: '1rem',
-  lg: '1.25rem',
-  xl: '1.5rem',
-  '2xl': '2rem',
-}
-
-function resolveGap(value: unknown): string | undefined
-function resolveGap(value: unknown, fallback: string): string
-function resolveGap(value: unknown, fallback?: string): string | undefined {
-  if (typeof value !== 'string') return fallback
-  const normalized = value.trim().toLowerCase()
-  if (!normalized) return fallback
-  if (/[;{}]/.test(normalized)) return fallback
-  if (normalized in gapTokenMap) return gapTokenMap[normalized]
-  if (/^\d+(\.\d+)?$/.test(normalized)) return `${normalized}px`
-  if (/^(0|\d*\.?\d+(px|rem|em|%|vw|vh|vmin|vmax|ch|ex))$/.test(normalized)) {
-    return normalized
-  }
-  return fallback
 }
 
 function resolveAlignClass(value: unknown) {

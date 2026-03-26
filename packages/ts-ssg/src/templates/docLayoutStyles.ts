@@ -54,7 +54,6 @@ function registerDocLayoutShellStyles(
     .select('.doc-content', theme)
     .margin('0')
     .padding('8px 0 80px')
-    .overflowX('hidden')
 }
 
 function registerDocLayoutSidebarStyles(

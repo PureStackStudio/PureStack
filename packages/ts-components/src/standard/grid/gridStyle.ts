@@ -6,8 +6,8 @@ export function registerGridStyles() {
       .select('.grid', theme)
       .display('grid')
       .minWidth('0')
-      .gap('var(--grid-gap)')
-      .gridTemplateColumns('repeat(var(--grid-cols), minmax(0, 1fr))')
+      .gap('1rem')
+      .gridTemplateColumns('var(--grid-template-columns)')
       .alignItems('stretch')
       .justifyItems('stretch')
 
@@ -26,37 +26,21 @@ export function registerGridStyles() {
     styleBuilder
       .select('.grid', theme)
       .media('min-width: 640px')
-      .gap('var(--grid-gap-sm, var(--grid-gap))')
-      .gridTemplateColumns(
-        'repeat(var(--grid-cols-sm, var(--grid-cols)), minmax(0, 1fr))',
-      )
+      .gridTemplateColumns('var(--grid-template-columns-sm)')
 
     styleBuilder
       .select('.grid', theme)
       .media('min-width: 768px')
-      .gap('var(--grid-gap-md, var(--grid-gap-sm, var(--grid-gap)))')
-      .gridTemplateColumns(
-        'repeat(var(--grid-cols-md, var(--grid-cols-sm, var(--grid-cols))), minmax(0, 1fr))',
-      )
+      .gridTemplateColumns('var(--grid-template-columns-md)')
 
     styleBuilder
       .select('.grid', theme)
       .media('min-width: 1024px')
-      .gap(
-        'var(--grid-gap-lg, var(--grid-gap-md, var(--grid-gap-sm, var(--grid-gap))))',
-      )
-      .gridTemplateColumns(
-        'repeat(var(--grid-cols-lg, var(--grid-cols-md, var(--grid-cols-sm, var(--grid-cols)))), minmax(0, 1fr))',
-      )
+      .gridTemplateColumns('var(--grid-template-columns-lg)')
 
     styleBuilder
       .select('.grid', theme)
       .media('min-width: 1280px')
-      .gap(
-        'var(--grid-gap-xl, var(--grid-gap-lg, var(--grid-gap-md, var(--grid-gap-sm, var(--grid-gap)))))',
-      )
-      .gridTemplateColumns(
-        'repeat(var(--grid-cols-xl, var(--grid-cols-lg, var(--grid-cols-md, var(--grid-cols-sm, var(--grid-cols))))), minmax(0, 1fr))',
-      )
+      .gridTemplateColumns('var(--grid-template-columns-xl)')
   })
 }

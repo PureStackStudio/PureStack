@@ -37,7 +37,7 @@ sidebar:
   fade="true"
   slideFrom="right"
 >
-  <Grid columns="1" columnsMd="2" gap="md">
+  <Grid columns="1" columnsMd="2">
     <AlertBox tone="info" title="Q2">
       Rules simulator, CLI diagnostics, and deploy previews.
     </AlertBox>
@@ -62,7 +62,7 @@ sidebar:
     </div>
   </template>
   <template name="body">
-    <Grid columns="1" columnsLg="3" gap="md" dense="true">
+    <Grid columns="1" columnsLg="3" dense="true">
       <AlertBox tone="accent" title="Docs">Finalize migration notes and snippets.</AlertBox>
       <AlertBox tone="warning" title="Ops">Run canary with rollback metrics enabled.</AlertBox>
       <AlertBox tone="success" title="Release">Sign off on release train and comms.</AlertBox>
@@ -86,7 +86,7 @@ sidebar:
       <p>
         This replaces the default modal shell entirely when you need custom internal structure.
       </p>
-      <Grid columns="1" gap="sm" justifyItems="center">
+      <Grid columns="1" justifyItems="center">
         <div>
           <Btn type="button" class="modal-trigger" data-modal-close>Approve</Btn>
           <Btn type="button" class="modal-trigger" data-modal-close>Cancel</Btn>
@@ -141,7 +141,7 @@ sidebar:
   slideFrom="right"
 >
   <AppForm action="/rollout/request" method="post">
-    <Grid columns="1" columnsMd="2" gap="md">
+    <Grid columns="1" columnsMd="2">
       <FormField
         label="Owner name"
         type="text"
@@ -160,7 +160,7 @@ sidebar:
       />
     </Grid>
 
-    <Grid columns="1" columnsLg="3" gap="md">
+    <Grid columns="1" columnsLg="3">
       <FormField
         label="Environment"
         type="text"
@@ -187,7 +187,7 @@ sidebar:
       />
     </Grid>
 
-    <Grid columns="1" columnsMd="2" gap="sm" alignItems="start">
+    <Grid columns="1" columnsMd="2" alignItems="start">
       <FormCheck
         label="Notify on-call channel when rollout starts"
         name="notifyOnCall"
@@ -207,7 +207,7 @@ sidebar:
     </FormStatus>
   </AppForm>
   <template name="footer">
-    <Grid columns="1" columnsSm="3" gap="sm" justifyItems="start">
+    <Grid columns="1" columnsSm="3" justifyItems="start">
       <Btn type="button" class="modal-trigger" data-modal-close>Cancel</Btn>
       <Btn type="button" class="modal-trigger">Save draft</Btn>
       <Btn type="button" class="modal-trigger">Submit request</Btn>

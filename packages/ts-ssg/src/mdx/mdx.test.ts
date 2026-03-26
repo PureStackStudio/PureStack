@@ -305,7 +305,7 @@ describe('compileMdxToHtml', () => {
       '      <p>',
       '        This replaces the default modal shell entirely when you need custom internal structure.',
       '      </p>',
-      '      <Grid columns="1" gap="sm" justifyItems="center">',
+      '      <Grid columns="1" justifyItems="center">',
       '        <div>',
       '          <button type="button" class="modal-trigger" data-modal-close>Approve</button>',
       '          <button type="button" class="modal-trigger" data-modal-close>Cancel</button>',
