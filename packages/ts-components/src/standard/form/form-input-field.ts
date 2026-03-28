@@ -83,7 +83,7 @@ export class FormInputField {
 }
 
 const formInputFieldTemplate = html`<label class="form-block__field">
-  <span class="form-block__label">{{ label }}</span>
+  <span class="form-block__label" r-if="label">{{ label }}</span>
   <div class="form-block__number" r-if="isNumberField">
     <input
       class="form-block__input form-block__input--number"
