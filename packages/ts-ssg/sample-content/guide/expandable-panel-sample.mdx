@@ -1,0 +1,147 @@
+---
+title: ExpandablePanel Samples
+description: Accessible disclosure panels for account summaries, dense settings lists, and rich account surfaces.
+layout:
+  showToc: true
+  fullWidth: true
+sidebar:
+  order: 7
+---
+
+# ExpandablePanel Samples
+
+`ExpandablePanel` is a disclosure-first card for settings pages, service summaries, and expandable account surfaces. It uses native `<details>` and `<summary>` semantics, so it works without client-side hydration.
+
+## 1. Accent account panel
+
+<ExpandablePanel
+  title="Microsoft 365"
+  description="Desktop versions of Microsoft 365 apps, AI-powered experiences, cloud storage, and more."
+  icon="iconoir:computer"
+  badge="Subscriptions"
+  meta="Expanded"
+  tone="accent"
+  open="true"
+>
+  <Grid columns="1" columnsLg="2" alignItems="center">
+    <div>
+      <h3>Achieve the extraordinary</h3>
+      <p>
+        Upgrade today to get extra cloud storage, advanced security, and AI-powered
+        features designed to make your day easier in one plan.
+      </p>
+      <p>
+        Three included services are ready immediately: premium desktop apps,
+        expanded storage, and advanced protection controls.
+      </p>
+      <div style="margin-top: 1rem; display:flex; gap:12px; flex-wrap:wrap;">
+        <Btn>Get Microsoft 365</Btn>
+        <Btn variant="ghost">Compare plans</Btn>
+      </div>
+    </div>
+    <div>
+      <img
+        src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80"
+        alt="Workspace with laptop, productivity apps, and soft blue lighting."
+      />
+    </div>
+  </Grid>
+</ExpandablePanel>
+
+## 2. Dense settings stack
+
+<ExpandablePanel
+  title="Microsoft storage"
+  description="Files, photos, attachments, and backups connected to your account."
+  icon="iconoir:cloud"
+  tone="info"
+>
+  <p>
+    Review what is using space, configure retention rules, and decide which folders stay synced across devices.
+  </p>
+  <p>
+    Recommended next step: archive large attachments and disable sync on inactive folders.
+  </p>
+</ExpandablePanel>
+
+<ExpandablePanel
+  title="Game Pass"
+  description="Play hundreds of games across desktop, console, and cloud streaming."
+  icon="iconoir:gamepad"
+  badge="Ultimate"
+  tone="success"
+>
+  <p>
+    Manage billing cadence, family sharing, and installation preferences for the devices linked to this subscription.
+  </p>
+  <Grid columns="1" columnsMd="2">
+    <div>
+      <strong>Included</strong>
+      <ul>
+        <li>Cloud streaming</li>
+        <li>EA Play access</li>
+        <li>Day-one releases</li>
+      </ul>
+    </div>
+    <div>
+      <strong>Suggested actions</strong>
+      <ul>
+        <li>Manage subscription</li>
+        <li>Browse catalog</li>
+        <li>Update family sharing</li>
+      </ul>
+    </div>
+  </Grid>
+</ExpandablePanel>
+
+## 3. Device summary
+
+<ExpandablePanel
+  title="Devices"
+  description="Find, repair, and manage your devices."
+  icon="iconoir:computer"
+  meta="3 active devices"
+  tone="neutral"
+  open="true"
+>
+  <p>
+    Your primary workstation and two standby devices are online. Firmware drift is within policy and no repair actions are currently required.
+  </p>
+  <Grid columns="1" columnsLg="3">
+    <div>
+      <strong>DEVICE21</strong>
+      <p>Healthy. Last sync 2 minutes ago.</p>
+      <a href="#details-21">View details</a>
+    </div>
+    <div>
+      <strong>DEVICE26</strong>
+      <p>Healthy. Last sync 9 minutes ago.</p>
+      <a href="#details-26">View details</a>
+    </div>
+    <div>
+      <strong>Studio-Air</strong>
+      <p>Needs reboot. Pending security patch.</p>
+      <a href="#details-air">View details</a>
+    </div>
+  </Grid>
+</ExpandablePanel>
+
+## 4. Compact usage pattern
+
+```html
+<ExpandablePanel
+  title="Panel title"
+  description="Short supporting description"
+  icon="iconoir:computer"
+  badge="Optional"
+  meta="Optional"
+  tone="neutral|accent|info|success|warning|danger"
+  open="true|false"
+>
+  Body content goes here.
+  <Grid columns="1" columnsMd="2">
+    <div>Use Grid or other components inside the default slot.</div>
+    <div>No named body template is required.</div>
+  </Grid>
+</ExpandablePanel>
+```
