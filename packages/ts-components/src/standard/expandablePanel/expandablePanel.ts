@@ -74,7 +74,7 @@ function resolveExpandablePanel(props: ExpandablePanel): ExpandablePanel {
   const meta = resolveText(props.meta)
   const badge = resolveText(props.badge)
   const iconName = resolveText(props.icon)
-  const tone = resolveSemanticTone(props.tone, 'neutral')
+  const tone = resolveSemanticTone(props.tone)
   const isOpen = resolveBoolean(props.open)
 
   return {

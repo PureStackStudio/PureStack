@@ -1,10 +1,16 @@
 import { resolveTsSsgContext } from '@purestack/ts-common'
+import {
+  getSemanticToneSurfaceClass,
+  getSemanticToneTextClass,
+  resolveSemanticTone,
+} from '@purestack/ts-style'
 import { type ComponentHead, defineComponent, html } from 'regor'
 import { registerModalStyles } from './modalStyle'
 
 export interface Modal {
   id?: string
   title?: string
+  tone?: string
   size?: string
   fade?: boolean | string
   slideFrom?: string
@@ -12,6 +18,8 @@ export interface Modal {
   hasTitle?: boolean
   titleId?: string
   rootClass?: string
+  panelToneClass?: string
+  titleToneClass?: string
 }
 
 export interface ModalTrigger {
@@ -32,27 +40,29 @@ const modalTemplate = html`<dialog
 >
   <slot name="content">
     <article class="modal__panel" role="document" tabindex="-1">
-      <header class="modal__header">
-        <slot name="header">
-          <h2 class="modal__title" :id="titleId" r-if="hasTitle">{{ title }}</h2>
-        </slot>
-        <Btn
-          r-if="showClose"
-          variant="ghost"
-          size="sm"
-          type="button"
-          data-modal-close
-          aria-label="Close dialog"
-        >
-          <span aria-hidden="true">X</span>
-        </Btn>
-      </header>
-      <div class="modal__body">
-        <slot name="body">
-          <slot></slot>
-        </slot>
+      <div class="modal__surface" :class="panelToneClass">
+        <header class="modal__header">
+          <slot name="header">
+            <h2 class="modal__title" :class="titleToneClass" :id="titleId" r-if="hasTitle">{{ title }}</h2>
+          </slot>
+          <Btn
+            r-if="showClose"
+            variant="ghost"
+            size="sm"
+            type="button"
+            data-modal-close
+            aria-label="Close dialog"
+          >
+            <span aria-hidden="true">X</span>
+          </Btn>
+        </header>
+        <div class="modal__body">
+          <slot name="body">
+            <slot></slot>
+          </slot>
+        </div>
+        <footer class="modal__footer"><slot name="footer"></slot></footer>
       </div>
-      <footer class="modal__footer"><slot name="footer"></slot></footer>
     </article>
   </slot>
 </dialog>`
@@ -63,7 +73,7 @@ const modalTriggerTemplate = html`<Btn type="button" :data-modal-target="target"
 
 function createModalComponent() {
   return defineComponent<Modal>(modalTemplate, {
-    props: ['id', 'title', 'size', 'fade', 'slideFrom', 'showClose'],
+    props: ['id', 'title', 'tone', 'size', 'fade', 'slideFrom', 'showClose'],
     context: (head) => {
       markModalRuntimeEmbed(head)
       return resolveModal(head.props)
@@ -89,6 +99,7 @@ export function createModalComponents() {
 function resolveModal(props: Modal): Modal {
   const id = resolveModalId(props.id)
   const title = resolveText(props.title)
+  const tone = resolveSemanticTone(props.tone)
   const hasTitle = Boolean(title)
   const size = resolveSize(props.size)
   const slideFrom = resolveSlideFrom(props.slideFrom)
@@ -112,6 +123,8 @@ function resolveModal(props: Modal): Modal {
     hasTitle,
     showClose,
     titleId: `${id}-title`,
+    panelToneClass: getSemanticToneSurfaceClass(tone),
+    titleToneClass: getSemanticToneTextClass(tone),
     rootClass,
   }
 }

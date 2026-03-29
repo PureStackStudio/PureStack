@@ -50,7 +50,40 @@ sidebar:
   </template>
 </Modal>
 
-## 3. Custom header/body/footer slot overrides
+## 3. Tone support
+
+<Grid columns="1" columnsMd="3">
+  <div>
+    <ModalTrigger target="tone-info-modal" label="Open info modal" />
+    <Modal id="tone-info-modal" title="Info modal" tone="info">
+      <p>
+        Use info tone for guidance, previews, and low-risk operational context.
+      </p>
+    </Modal>
+  </div>
+  <div>
+    <ModalTrigger target="tone-success-modal" label="Open success modal" />
+    <Modal id="tone-success-modal" title="Success modal" tone="success">
+      <p>
+        Use success tone when the modal confirms a completed flow or positive outcome.
+      </p>
+    </Modal>
+  </div>
+  <div>
+    <ModalTrigger target="tone-danger-modal" label="Open danger modal" />
+    <Modal id="tone-danger-modal" title="Danger modal" tone="danger">
+      <p>
+        Use danger tone for destructive decisions, irreversible actions, or incident response.
+      </p>
+      <template name="footer">
+        <Btn type="button" class="modal-trigger" data-modal-close>Cancel</Btn>
+        <Btn type="button" class="modal-trigger">Continue</Btn>
+      </template>
+    </Modal>
+  </div>
+</Grid>
+
+## 4. Custom header/body/footer slot overrides
 
 <ModalTrigger target="custom-shell-modal" label="Open custom-shell modal" />
 
@@ -75,7 +108,7 @@ sidebar:
   </template>
 </Modal>
 
-## 4. Full content override via content slot
+## 5. Full content override via content slot
 
 <ModalTrigger target="full-content-modal" label="Open full-content modal" />
 
@@ -96,7 +129,7 @@ sidebar:
   </template>
 </Modal>
 
-## 5. Hidden built-in close button (`showClose="false"`)
+## 6. Hidden built-in close button (`showClose="false"`)
 
 <ModalTrigger target="policy-modal" label="Open policy modal" />
 
@@ -110,7 +143,7 @@ sidebar:
   </template>
 </Modal>
 
-## 6. Slide from top with compact actions
+## 7. Slide from top with compact actions
 
 <ModalTrigger target="incident-modal" label="Open incident modal" />
 
@@ -129,7 +162,7 @@ sidebar:
   </template>
 </Modal>
 
-## 7. Advanced form modal (nested grids + status)
+## 8. Advanced form modal (nested grids + status)
 
 <ModalTrigger target="advanced-form-modal" label="Open advanced form modal" />
 
@@ -215,7 +248,7 @@ sidebar:
   </template>
 </Modal>
 
-## 8. Nested modal flow (modal opens another modal)
+## 9. Nested modal flow (modal opens another modal)
 
 <ModalTrigger target="parent-modal" label="Open parent modal" />
 
@@ -251,12 +284,13 @@ sidebar:
   </template>
 </Modal>
 
-## 9. Props reference
+## 10. Props reference
 
 ```html
 <Modal
   id="my-modal"
   title="Dialog title"
+  tone="neutral|accent|info|success|warning|danger"
   size="sm|md|lg|xl"
   showClose="true|false"
   fade="true|false"

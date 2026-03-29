@@ -14,9 +14,7 @@ export type { Consent, ConsentCategoryState } from './standard/consent/consent'
 export { createConsentComponents } from './standard/consent/consent'
 export type { ContactForm } from './standard/contactForm/contactForm'
 export { createContactFormComponents } from './standard/contactForm/contactForm'
-export type {
-  ExpandablePanel,
-} from './standard/expandablePanel/expandablePanel'
+export type { ExpandablePanel } from './standard/expandablePanel/expandablePanel'
 export { createExpandablePanelComponents } from './standard/expandablePanel/expandablePanel'
 export type {
   FooterColumn,

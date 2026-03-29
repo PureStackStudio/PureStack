@@ -21,7 +21,9 @@ describe('Grid rendering', () => {
       'class="grid grid--align-center grid--justify-start grid--dense"',
     )
     expect(html).toContain('--grid-template-columns: repeat(2, minmax(0, 1fr))')
-    expect(html).toContain('--grid-template-columns-md: repeat(3, minmax(0, 1fr))')
+    expect(html).toContain(
+      '--grid-template-columns-md: repeat(3, minmax(0, 1fr))',
+    )
     expect(html).toContain('item')
   })
 
@@ -55,19 +57,18 @@ describe('Grid rendering', () => {
 
     expect(html).toContain('--grid-template-columns: minmax(0, 1fr) auto')
     expect(html).toContain('--grid-template-columns-sm: minmax(0, 1fr) auto')
-    expect(html).toContain('--grid-template-columns-md: repeat(3, minmax(0, 1fr))')
+    expect(html).toContain(
+      '--grid-template-columns-md: repeat(3, minmax(0, 1fr))',
+    )
   })
 
   it('keeps the base template across breakpoints when no responsive columns are set', () => {
     const cleanup = ensureDomGlobals()
     const components = createGridComponents()
-    const html = renderApp(
-      '<Grid columns="minmax(0, 1fr) auto">item</Grid>',
-      {
-        components,
-        context: createTestContext(),
-      },
-    )
+    const html = renderApp('<Grid columns="minmax(0, 1fr) auto">item</Grid>', {
+      components,
+      context: createTestContext(),
+    })
     cleanup()
 
     expect(html).toContain('--grid-template-columns: minmax(0, 1fr) auto')

@@ -56,11 +56,9 @@ function registerModalShellStyles(
     .select('.modal__panel', theme)
     .position('relative')
     .display('grid')
-    .gap('14px')
     .width('min(92vw, 640px)')
     .maxHeight('min(86vh, 900px)')
     .overflow('auto')
-    .padding('18px')
     .borderRadius(options.radii.lg)
     .border(`1px solid ${palette.border.default}`)
     .background(palette.background.raised)
@@ -69,6 +67,14 @@ function registerModalShellStyles(
     .transform('translate3d(0, 0, 0)')
     .willChange('transform, opacity')
     .opacity('1')
+
+  styleBuilder
+    .select('.modal__surface', theme)
+    .display('grid')
+    .gap('14px')
+    .minHeight('100%')
+    .padding('18px')
+    .borderRadius(options.radii.lg)
 
   styleBuilder
     .select('.modal__header', theme)
