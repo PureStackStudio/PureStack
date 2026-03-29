@@ -25,7 +25,7 @@ sidebar:
 
 <Grid columns="minmax(0, 1fr) auto" columnsLg="240px minmax(0, 1fr) auto">
   <AlertBox tone="neutral" title="Flexible content">
-    Base layout uses `minmax(0, 1fr) auto`.
+    Base layout uses `minmax(0, 1fr) auto`
   </AlertBox>
   <AlertBox tone="neutral" title="Content-sized sidebar">
     The trailing column keeps its natural width.
@@ -144,11 +144,9 @@ sidebar:
     This is a static sample. Submit action is shown for layout demonstration.
   </FormStatus>
 
-  <Grid columns="1" justifyItems="start">
-    <div>
+  <Grid columns="auto auto 1fr" justifyItems="start">
       <FormSubmit label="Send request" />
       <FormSubmit label="Save draft" />
-    </div>
   </Grid>
 </AppForm>
 

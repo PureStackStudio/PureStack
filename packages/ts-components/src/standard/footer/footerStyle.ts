@@ -196,7 +196,6 @@ export function applyFooterCtaStyles(
   styleBuilder
     .select('.site-footer__cta:hover', theme)
     .background(palette.action.accent.hover)
-    .transform('translateY(-1px)')
 
   styleBuilder
     .select('.site-footer__cta:focus-visible', theme)
@@ -382,7 +381,6 @@ export function applyFooterLinkStyles(
     .height('8px')
     .borderTop('2px solid currentColor')
     .borderRight('2px solid currentColor')
-    .transform('translateY(-1px)')
   styleBuilder
     .select('.footer-link[data-icon="arrow"]::after', theme)
     .content('"->"')
@@ -478,7 +476,6 @@ export function applyFooterBottomSocialStyles(
     .select('.footer-social:hover', theme)
     .background(palette.background.accentMuted)
     .borderColor(palette.border.accent)
-    .transform('translateY(-1px)')
   styleBuilder
     .select('.footer-social:focus-visible', theme)
     .outline(`2px solid ${palette.border.focus}`)

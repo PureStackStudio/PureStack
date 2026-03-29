@@ -194,7 +194,6 @@ function registerSearchBoxResultListStyles(
     .select('.site-search__results .site-search__link:hover', theme)
     .background(palette.background.surfaceAlt)
     .borderColor(palette.border.default)
-    .transform('translateY(-1px)')
 
   styleBuilder
     .select('.site-search__results .site-search__link:focus-visible', theme)

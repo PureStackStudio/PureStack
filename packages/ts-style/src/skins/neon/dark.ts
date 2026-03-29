@@ -65,11 +65,10 @@ export const neonDark: ThemePalette = {
 
     // Neon red tube with a slight warm highlight (not purple/cyan).
     accent: {
-      background:
-        'linear-gradient(90deg, #FF2E48 0%, #FF3D5E 55%, #FF7A54 100%)',
+      background: 'linear-gradient(90deg, #FF2E48 0%, #FF3D5E 100%)',
       text: '#0B0608',
-      hover: 'linear-gradient(90deg, #FF1636 0%, #FF2E48 55%, #FF6A43 100%)',
-      active: 'linear-gradient(90deg, #E9002E 0%, #FF1F3F 55%, #F85B36 100%)',
+      hover: 'linear-gradient(90deg, #FF1636 0%, #FF2E48 100%)',
+      active: 'linear-gradient(90deg, #E9002E 0%, #FF1F3F 100%)',
       disabled: 'rgba(255, 46, 72, 0.18)',
       focusRing: 'rgba(255, 46, 72, 0.62)',
     },

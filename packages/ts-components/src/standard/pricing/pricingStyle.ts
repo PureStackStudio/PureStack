@@ -278,7 +278,6 @@ export function applyPricingPlanCtaStyles(
   styleBuilder
     .select('.pricing-plan__cta-link:hover', theme)
     .background(palette.action.neutral.hover)
-    .transform('translateY(-1px)')
 
   styleBuilder
     .select('.pricing-plan__cta-link:focus-visible', theme)

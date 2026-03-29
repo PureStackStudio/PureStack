@@ -150,7 +150,6 @@ export function applyHeroActionVariantStyles(
   styleBuilder
     .select('.hero__action--primary:hover', theme)
     .background(palette.action.accent.hover)
-    .transform('translateY(-1px)')
 
   styleBuilder
     .select('.hero__action--minimal', theme)
@@ -183,7 +182,6 @@ export function applyHeroActionIconStyles(theme: ThemeMode) {
     .marginLeft('8px')
     .borderTop('2px solid currentColor')
     .borderRight('2px solid currentColor')
-    .transform('translateY(-1px)')
 }
 
 export function applyHeroMediaStyles(

@@ -187,7 +187,6 @@ export function applyAlertActionStyles(
   styleBuilder
     .select('.alert__actions :where(a, button):hover', theme)
     .background(palette.action.neutral.hover)
-    .transform('translateY(-1px)')
   styleBuilder
     .select('.alert__actions :where(a, button):active', theme)
     .background(palette.action.neutral.active)

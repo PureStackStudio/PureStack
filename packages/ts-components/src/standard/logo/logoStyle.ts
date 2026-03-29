@@ -144,7 +144,6 @@ export function registerLogoInteractiveStyles(
 
   styleBuilder
     .select('.site-logo__link[href]:hover', theme)
-    .transform('translateY(-1px)')
     .borderColor(palette.border.accent)
     .boxShadow(palette.effect.accentShadow)
 
