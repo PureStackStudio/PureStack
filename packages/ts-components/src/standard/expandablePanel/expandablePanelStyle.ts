@@ -149,8 +149,6 @@ function registerExpandablePanelSummaryStyles(
     .justifyContent('center')
     .borderRadius(options.radii.pill)
     .border(`1px solid ${palette.border.subtle}`)
-    .background(palette.background.panel)
-    .color(palette.text.subtle)
     .transition(
       'transform 180ms ease, color 180ms ease, border-color 180ms ease, background 180ms ease',
     )
@@ -163,9 +161,6 @@ function registerExpandablePanelSummaryStyles(
   styleBuilder
     .select('.expandable-panel[open] .expandable-panel__chevron', theme)
     .transform('rotate(180deg)')
-    .borderColor(palette.border.accent)
-    .background(palette.background.accentMuted)
-    .color(palette.text.accent)
 }
 
 function registerExpandablePanelBodyStyles(

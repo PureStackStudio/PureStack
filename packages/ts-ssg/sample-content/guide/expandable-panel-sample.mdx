@@ -94,6 +94,66 @@ sidebar:
   </Grid>
 </ExpandablePanel>
 
+<ExpandablePanel
+  title="Payment issue"
+  description="Your last renewal attempt could not be completed."
+  icon="iconoir:warning-circle"
+  badge="Action needed"
+  tone="warning"
+>
+  <p>
+    Update the saved card, confirm billing address details, and retry the payment before the grace period ends.
+  </p>
+  <Grid columns="1" columnsMd="2">
+    <div>
+      <strong>Why this happened</strong>
+      <ul>
+        <li>Expired card</li>
+        <li>Address mismatch</li>
+        <li>Bank verification required</li>
+      </ul>
+    </div>
+    <div>
+      <strong>Recommended actions</strong>
+      <ul>
+        <li>Replace payment method</li>
+        <li>Retry renewal</li>
+        <li>Download current invoices</li>
+      </ul>
+    </div>
+  </Grid>
+</ExpandablePanel>
+
+<ExpandablePanel
+  title="Security alert"
+  description="A sign-in from a new device requires immediate review."
+  icon="iconoir:shield-alert"
+  meta="High risk"
+  tone="danger"
+>
+  <p>
+    We detected an unusual login attempt outside your normal device pattern. Review the session and revoke access if it was not you.
+  </p>
+  <Grid columns="1" columnsMd="2">
+    <div>
+      <strong>Event details</strong>
+      <ul>
+        <li>Unknown device fingerprint</li>
+        <li>New city and network</li>
+        <li>MFA challenge partially completed</li>
+      </ul>
+    </div>
+    <div>
+      <strong>Next steps</strong>
+      <ul>
+        <li>Review account activity</li>
+        <li>Reset password</li>
+        <li>Sign out all sessions</li>
+      </ul>
+    </div>
+  </Grid>
+</ExpandablePanel>
+
 ## 3. Device summary
 
 <ExpandablePanel

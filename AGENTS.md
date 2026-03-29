@@ -61,3 +61,9 @@ This framework is not released yet. Do not preserve backward compatibility just 
 Do not add deprecation layers, compatibility shims, migration helpers, fallback APIs, legacy class support, or dual-path behavior unless explicitly requested.
 
 When improving an API or internal pattern, prefer replacing the old approach outright and cleaning up the old code in the same change.
+
+Icon rule
+
+When using icon names, always verify them against the generated icon list in `packages/ts-svg-icons` first.
+
+Do not guess icon names. If an icon name does not exist in `packages/ts-svg-icons`, do not use it.

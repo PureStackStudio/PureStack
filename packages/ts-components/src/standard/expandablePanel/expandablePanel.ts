@@ -24,6 +24,7 @@ export interface ExpandablePanel {
   isOpen?: boolean
   iconName?: string
   iconToneClass?: string
+  chevronToneClass?: string
 }
 
 const expandablePanelTemplate = html`<details
@@ -43,7 +44,11 @@ const expandablePanelTemplate = html`<details
     <span class="expandable-panel__summary-side">
       <span class="expandable-panel__summary-meta" r-if="hasMeta">{{ meta }}</span>
       <slot name="summary"></slot>
-      <span class="expandable-panel__chevron" aria-hidden="true">
+      <span
+        class="expandable-panel__chevron"
+        :class="chevronToneClass"
+        aria-hidden="true"
+      >
         <Icon
           class="expandable-panel__chevron-icon"
           name="iconoir:nav-arrow-down"
@@ -92,6 +97,7 @@ function resolveExpandablePanel(props: ExpandablePanel): ExpandablePanel {
     hasIcon: Boolean(iconName),
     rootClass: getSemanticToneSurfaceClass(tone),
     iconToneClass: getSemanticToneIconClass(tone),
+    chevronToneClass: getSemanticToneIconClass(tone),
   }
 }
 
