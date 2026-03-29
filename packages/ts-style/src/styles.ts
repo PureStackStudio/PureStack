@@ -1,6 +1,8 @@
 import { Style } from '@purestack/ts-css'
 
 import { normalizeThemeName, type ThemeName } from './themeAssets'
+import { themes } from './themeOptions'
+import { buildThemePaletteVariableCss } from './themePaletteVars'
 
 const styleBuilders = new Map<ThemeName, Style>()
 
@@ -37,8 +39,14 @@ export const styleBuilder = {
     return [...styleBuilders.keys()]
   },
   async render(theme: ThemeName, pretty: boolean = true) {
-    const style = styleBuilder.get(theme)
-    return pretty ? style.toPrettyCSS() : style.toCSS()
+    const normalized = normalizeThemeName(theme)
+    const style = styleBuilder.get(normalized)
+    const rendered = pretty ? style.toPrettyCSS() : style.toCSS()
+    const paletteVars = buildThemePaletteVariableCss(
+      themes.rawPalette(normalized),
+      pretty,
+    )
+    return rendered ? `${paletteVars}\n\n${rendered}` : paletteVars
   },
   reset() {
     styleBuilders.clear()

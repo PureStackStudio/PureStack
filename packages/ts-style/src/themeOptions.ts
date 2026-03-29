@@ -2,6 +2,7 @@ import { type DeepPartial, merge } from '@purestack/ts-util'
 import { type BuiltInSkinName, builtInSkins } from './skins'
 import { normalizeThemeName, type ThemeName } from './themeAssets'
 import type { ThemePalette } from './themePalette'
+import { createThemePaletteVarBindings } from './themePaletteVars'
 
 const DEFAULT_SKIN = builtInSkins.neon
 export const THEME_MODES = ['light', 'dark'] as const
@@ -66,6 +67,7 @@ export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
 }
 
 let activeThemeOptions: ThemeOptions = DEFAULT_THEME_OPTIONS
+let activeThemePalettes = createThemePalettes(DEFAULT_THEME_OPTIONS)
 
 function resolveThemeOptions(
   ...values: Array<ThemeOptionsInput | undefined>
@@ -84,6 +86,7 @@ function resolveThemeOptions(
 
 function setThemeOptions(options: ThemeOptions) {
   activeThemeOptions = options
+  activeThemePalettes = createThemePalettes(options)
 }
 
 function getThemeOptions(): ThemeOptions {
@@ -91,6 +94,10 @@ function getThemeOptions(): ThemeOptions {
 }
 
 function getThemePalette(theme: ThemeName): ThemePalette {
+  return activeThemePalettes[resolveThemeMode(theme)]
+}
+
+function getRawThemePalette(theme: ThemeName): ThemePalette {
   const mode = resolveThemeMode(theme)
   return activeThemeOptions.colors[mode]
 }
@@ -118,7 +125,7 @@ function resolveThemeMode(theme: ThemeName): ThemeMode {
 
 function forEachTheme(run: (theme: ThemeMode, palette: ThemePalette) => void) {
   for (const theme of THEME_MODES) {
-    run(theme, activeThemeOptions.colors[theme])
+    run(theme, activeThemePalettes[theme])
   }
 }
 
@@ -129,6 +136,7 @@ export interface Themes {
   setOptions: (options: ThemeOptions) => void
   getOptions: () => ThemeOptions
   palette: (theme: ThemeName) => ThemePalette
+  rawPalette: (theme: ThemeName) => ThemePalette
   forEach: (
     run: (
       theme: ThemeMode,
@@ -145,6 +153,7 @@ export const themes: Themes = {
   setOptions: (options) => setThemeOptions(options),
   getOptions: () => getThemeOptions(),
   palette: (theme) => getThemePalette(theme),
+  rawPalette: (theme) => getRawThemePalette(theme),
   forEach: (run) =>
     forEachTheme((theme, palette) => run(theme, palette, activeThemeOptions)),
 }
@@ -168,4 +177,13 @@ function resolveSkinName(value: unknown): BuiltInSkinName | undefined {
   throw new Error(
     `Unknown theme skin "${value}". Expected one of: ${Object.keys(builtInSkins).join(', ')}.`,
   )
+}
+
+function createThemePalettes(
+  options: ThemeOptions,
+): Record<ThemeMode, ThemePalette> {
+  return {
+    light: createThemePaletteVarBindings(options.colors.light),
+    dark: createThemePaletteVarBindings(options.colors.dark),
+  }
 }
