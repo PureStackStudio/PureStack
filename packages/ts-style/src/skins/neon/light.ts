@@ -2,10 +2,9 @@ import type { ThemePalette } from '../../themePalette'
 
 export const neonLight: ThemePalette = {
   background: {
-    // Soft warm-gray with a red undertone (NOT white)
-    canvas: '#F4ECEE',
-    surface: '#EFE6E8',
-    surfaceAlt: '#E8DDE0',
+    canvas: 'radial-gradient(rgb(233 233 233) 0%, rgb(206 206 206) 100%)',
+    surface: '#dcdcdc',
+    surfaceAlt: '#d9d9d9',
     panel: '#F1E8EA',
     raised: '#F6EEF0',
     overlay: 'rgba(32, 10, 16, 0.22)',

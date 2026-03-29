@@ -2,9 +2,9 @@ import type { ThemePalette } from '../../themePalette'
 
 export const neonDark: ThemePalette = {
   background: {
-    canvas: '#0B0608', // warm near-black
-    surface: '#12090C',
-    surfaceAlt: '#181014',
+    canvas: 'radial-gradient(rgb(19 20 21) 0%, rgb(22 24 31) 100%)',
+    surface: 'radial-gradient(rgb(31 34 38) 0%, rgb(24 26 34) 100%)',
+    surfaceAlt: 'radial-gradient(rgb(15 17 19) 0%, rgb(23 25 33) 100%)',
     panel: '#140B0F',
     raised: '#1B1015',
     overlay: 'rgba(8, 4, 6, 0.76)',
@@ -27,8 +27,8 @@ export const neonDark: ThemePalette = {
   text: {
     default: '#F7EEF0',
     muted: '#D8BFC4',
-    subtle: '#B0929A',
-    soft: '#866A72',
+    subtle: '#7d7d85',
+    soft: '#7d7d85',
     strong: '#FFFFFF',
 
     // “Neon red ink” — for links and emphasized labels.
