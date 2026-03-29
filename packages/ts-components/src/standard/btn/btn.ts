@@ -88,9 +88,7 @@ function resolveBtn(props: Btn): Btn {
     disabled,
     showStartIcon: hasIcon && iconPosition === 'start',
     showEndIcon: hasIcon && iconPosition === 'end',
-    ariaLabel: iconOnly
-      ? explicitAriaLabel || 'Button'
-      : explicitAriaLabel || undefined,
+    ariaLabel: iconOnly ? explicitAriaLabel || 'Button' : explicitAriaLabel,
   }
 }
 

@@ -6,8 +6,6 @@ export interface PricingTable {
   title?: string
   subtitle?: string
   footnote?: string
-  hasHeader?: boolean
-  hasFootnote?: boolean
 }
 
 export interface PricingPlan {
@@ -21,10 +19,6 @@ export interface PricingPlan {
   icon?: string
   ctaLabel?: string
   ctaLink?: string
-  hasBadge?: boolean
-  hasPrice?: boolean
-  hasCta?: boolean
-  hasIcon?: boolean
 }
 
 export interface PricingFeature {
@@ -32,7 +26,7 @@ export interface PricingFeature {
 }
 
 const pricingTableTemplate = html`<section class="pricing">
-  <div class="pricing__header" r-if="hasHeader">
+  <div class="pricing__header" r-if="eyebrow || title || subtitle">
     <p class="pricing__eyebrow" r-if="eyebrow">{{ eyebrow }}</p>
     <h2 class="pricing__title" r-if="title">{{ title }}</h2>
     <p class="pricing__subtitle" r-if="subtitle">{{ subtitle }}</p>
@@ -40,7 +34,7 @@ const pricingTableTemplate = html`<section class="pricing">
   <div class="pricing__grid">
     <slot></slot>
   </div>
-  <p class="pricing__footnote" r-if="hasFootnote">{{ footnote }}</p>
+  <p class="pricing__footnote" r-if="footnote">{{ footnote }}</p>
 </section>`
 
 const pricingPlanTemplate = html`<article
@@ -49,19 +43,19 @@ const pricingPlanTemplate = html`<article
 >
   <div class="pricing-plan__head">
     <div class="pricing-plan__meta">
-      <Icon class="pricing-plan__icon" r-if="hasIcon" :name="icon || 'iconoir:code'" />
-      <span class="pricing-plan__badge" r-if="hasBadge">{{ badge }}</span>
+      <Icon class="pricing-plan__icon" r-if="icon" :name="icon || 'iconoir:code'" />
+      <span class="pricing-plan__badge" r-if="badge">{{ badge }}</span>
     </div>
     <div class="pricing-plan__title-row">
       <h3 class="pricing-plan__title">{{ title }}</h3>
     </div>
     <p class="pricing-plan__summary" r-if="summary">{{ summary }}</p>
   </div>
-  <div class="pricing-plan__price" r-if="hasPrice">
+  <div class="pricing-plan__price" r-if="price">
     <span class="pricing-plan__amount">{{ price }}</span>
     <span class="pricing-plan__period" r-if="period">{{ period }}</span>
   </div>
-  <div class="pricing-plan__cta" r-if="hasCta">
+  <div class="pricing-plan__cta" r-if="ctaLabel && ctaLink">
     <a class="pricing-plan__cta-link" :href="ctaLink">{{ ctaLabel }}</a>
   </div>
   <ul class="pricing-plan__features">
@@ -126,8 +120,6 @@ function resolvePricingTable(props: PricingTable): PricingTable {
     title,
     subtitle,
     footnote,
-    hasHeader: Boolean(eyebrow || title || subtitle),
-    hasFootnote: Boolean(footnote),
   }
 }
 
@@ -136,15 +128,12 @@ function resolvePricingPlan(props: PricingPlan): PricingPlan {
   const variant = resolveVariant(props.variant)
   const ctaLabel = resolveString(props.ctaLabel)
   const ctaLink = resolveString(props.ctaLink)
-  const hasCta = Boolean(ctaLabel && ctaLink)
   return {
     ...props,
     title,
     variant,
-    hasBadge: Boolean(props.badge),
-    hasPrice: Boolean(props.price),
-    hasCta,
-    hasIcon: Boolean(props.icon),
+    ctaLabel,
+    ctaLink,
   }
 }
 

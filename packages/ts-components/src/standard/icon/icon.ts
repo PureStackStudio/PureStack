@@ -9,10 +9,9 @@ export interface Icon {
   label?: string
   class?: string
   svg?: string
-  hasIcon?: boolean
-  ariaLabel?: string | null
-  ariaHidden?: 'true' | null
-  role?: 'img' | null
+  ariaLabel?: string
+  ariaHidden?: string
+  role?: string
   customClass?: string
   iconStyle?: Record<string, string>
 }
@@ -24,7 +23,7 @@ const iconTemplate = html`<span
   :role="role"
   :aria-label="ariaLabel"
   :aria-hidden="ariaHidden"
-  r-if="hasIcon"
+  r-if="svg"
   r-html="svg"
 ></span>`
 
@@ -46,14 +45,13 @@ function resolveIcon(props: Icon): Icon {
   const name = resolveText(props.name)
   const label = resolveText(props.label)
   const size = resolveCssSize(props.size)
-  const hasIcon = name.length > 0
+  const svg = name ? getSvgIcon(name) : ''
 
   return {
-    svg: hasIcon ? getSvgIcon(name) : '',
-    hasIcon,
-    ariaLabel: label || null,
-    ariaHidden: label ? null : 'true',
-    role: label ? 'img' : null,
+    svg,
+    ariaLabel: label,
+    ariaHidden: label ? undefined : 'true',
+    role: label ? 'img' : '',
     customClass: resolveText(props.class),
     iconStyle: buildIconStyle(size),
   }

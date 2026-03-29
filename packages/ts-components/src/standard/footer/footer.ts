@@ -26,12 +26,6 @@ export interface SiteFooter {
   newsletterPlaceholder?: string
   newsletterButtonLabel?: string
   rootClass?: string
-  hasEyebrow?: boolean
-  hasTitle?: boolean
-  hasTagline?: boolean
-  hasCtaHref?: boolean
-  hasCtaTarget?: boolean
-  hasCtaRel?: boolean
   showNewsletter?: boolean
 }
 
@@ -40,8 +34,6 @@ export interface FooterColumn {
   description?: string
   compact?: unknown
   rootClass?: string
-  hasTitle?: boolean
-  hasDescription?: boolean
 }
 
 export interface FooterLink {
@@ -52,10 +44,6 @@ export interface FooterLink {
   icon?: string
   variant?: string
   rootClass?: string
-  hasHref?: boolean
-  hasTarget?: boolean
-  hasRel?: boolean
-  hasLabel?: boolean
 }
 
 export interface FooterSocial {
@@ -64,10 +52,6 @@ export interface FooterSocial {
   icon?: string
   target?: string
   rel?: string
-  hasHref?: boolean
-  hasTarget?: boolean
-  hasRel?: boolean
-  hasLabel?: boolean
 }
 
 const siteFooterTemplate = html`<footer
@@ -79,18 +63,18 @@ const siteFooterTemplate = html`<footer
   <div class="site-footer__inner">
     <div class="site-footer__top">
       <div class="site-footer__brand">
-        <p class="site-footer__eyebrow" r-if="hasEyebrow">{{ eyebrow }}</p>
-        <h2 class="site-footer__title" r-if="hasTitle">{{ title }}</h2>
-        <p class="site-footer__tagline" r-if="hasTagline">{{ tagline }}</p>
+        <p class="site-footer__eyebrow" r-if="eyebrow">{{ eyebrow }}</p>
+        <h2 class="site-footer__title" r-if="title">{{ title }}</h2>
+        <p class="site-footer__tagline" r-if="tagline">{{ tagline }}</p>
       </div>
       <div class="site-footer__top-actions">
         <slot name="cta"></slot>
         <a
           class="site-footer__cta"
           :href="ctaHref"
-          r-if="hasCtaHref"
-          :target="hasCtaTarget ? ctaTarget : null"
-          :rel="hasCtaRel ? ctaRel : null"
+          r-if="ctaHref"
+          :target="ctaTarget"
+          :rel="ctaRel"
         >
           {{ ctaLabel }}
         </a>
@@ -150,8 +134,8 @@ const footerColumnTemplate = html`<section
   class="footer-column"
   :class="rootClass"
 >
-  <h3 class="footer-column__title" r-if="hasTitle">{{ title }}</h3>
-  <p class="footer-column__description" r-if="hasDescription">
+  <h3 class="footer-column__title" r-if="title">{{ title }}</h3>
+  <p class="footer-column__description" r-if="description">
     {{ description }}
   </p>
   <ul class="footer-column__list">
@@ -161,13 +145,13 @@ const footerColumnTemplate = html`<section
 
 const footerLinkTemplate = html`<li class="footer-link-item">
   <a
-    r-if="hasHref"
+    r-if="href"
     class="footer-link"
     :class="rootClass"
     :href="href"
-    :target="hasTarget ? target : null"
-    :rel="hasRel ? rel : null"
-    :data-icon="icon || null"
+    :target="target"
+    :rel="rel"
+    :data-icon="icon"
   >
     {{ label }}
   </a>
@@ -177,13 +161,13 @@ const footerLinkTemplate = html`<li class="footer-link-item">
 const footerSocialTemplate = html`<a
   class="footer-social"
   :href="href"
-  r-if="hasHref"
-  :target="hasTarget ? target : null"
-  :rel="hasRel ? rel : null"
+  r-if="href"
+  :target="target"
+  :rel="rel"
   :aria-label="label"
 >
   <Icon class="footer-social__icon" :name="icon || 'iconoir:code'" />
-  <span class="footer-social__label" r-if="hasLabel">{{ label }}</span>
+  <span class="footer-social__label" r-if="label">{{ label }}</span>
 </a>`
 
 function createSiteFooterComponent() {
@@ -290,12 +274,6 @@ function resolveSiteFooter(props: SiteFooter, siteTitle: string): SiteFooter {
       props.copyright || `© ${year} ${siteTitle}. All rights reserved.`,
     rootClass: `site-footer--tone-${tone} site-footer--variant-${variant}`,
     showNewsletter,
-    hasEyebrow: Boolean(props.eyebrow || true),
-    hasTitle: Boolean(props.title || true),
-    hasTagline: Boolean(props.tagline || true),
-    hasCtaHref: Boolean(props.ctaHref),
-    hasCtaTarget: Boolean(props.ctaTarget),
-    hasCtaRel: Boolean(ctaRel),
   }
 }
 
@@ -304,8 +282,6 @@ function resolveFooterColumn(props: FooterColumn): FooterColumn {
   return {
     ...props,
     rootClass: compact ? 'footer-column--compact' : '',
-    hasTitle: Boolean(props.title),
-    hasDescription: Boolean(props.description),
   }
 }
 
@@ -317,10 +293,6 @@ function resolveFooterLink(props: FooterLink): FooterLink {
     ...props,
     rootClass: `footer-link--${variant}`,
     rel,
-    hasHref: Boolean(props.href),
-    hasTarget: Boolean(props.target),
-    hasRel: Boolean(rel),
-    hasLabel: Boolean(props.label),
   }
 }
 
@@ -331,10 +303,6 @@ function resolveFooterSocial(props: FooterSocial): FooterSocial {
     ...props,
     rel,
     label: props.label || '',
-    hasHref: Boolean(props.href),
-    hasTarget: Boolean(props.target),
-    hasRel: Boolean(rel),
-    hasLabel: Boolean(props.label),
   }
 }
 

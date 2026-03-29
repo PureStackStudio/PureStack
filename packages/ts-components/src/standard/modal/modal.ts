@@ -15,7 +15,6 @@ export interface Modal {
   fade?: boolean | string
   slideFrom?: string
   showClose?: boolean | string
-  hasTitle?: boolean
   titleId?: string
   rootClass?: string
   panelToneClass?: string
@@ -35,15 +34,14 @@ const modalTemplate = html`<dialog
   data-modal-root
   role="dialog"
   aria-modal="true"
-  :aria-label="hasTitle ? title : null"
-  :aria-labelledby="hasTitle ? titleId : null"
+  :aria-labelledby="title ? titleId : undefined"
 >
   <slot name="content">
     <article class="modal__panel" role="document" tabindex="-1">
       <div class="modal__surface" :class="panelToneClass">
         <header class="modal__header">
           <slot name="header">
-            <h2 class="modal__title" :class="titleToneClass" :id="titleId" r-if="hasTitle">{{ title }}</h2>
+            <h2 class="modal__title" :class="titleToneClass" :id="titleId" r-if="title">{{ title }}</h2>
           </slot>
           <Btn
             r-if="showClose"
@@ -100,7 +98,6 @@ function resolveModal(props: Modal): Modal {
   const id = resolveModalId(props.id)
   const title = resolveText(props.title)
   const tone = resolveSemanticTone(props.tone)
-  const hasTitle = Boolean(title)
   const size = resolveSize(props.size)
   const slideFrom = resolveSlideFrom(props.slideFrom)
   const fade = resolveBoolean(props.fade, true)
@@ -120,7 +117,6 @@ function resolveModal(props: Modal): Modal {
     size,
     fade,
     slideFrom,
-    hasTitle,
     showClose,
     titleId: `${id}-title`,
     panelToneClass: getSemanticToneSurfaceClass(tone),

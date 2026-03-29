@@ -8,7 +8,7 @@ const logoTemplate = html`<div class="site-logo">
       class="site-logo__glyph site-logo__glyph--custom"
       :style="glyphStyle"
       aria-hidden="true"
-      r-if="hasIconSvg"
+      r-if="iconSvg"
       r-html="iconSvg"
     ></span>
     <span class="site-logo__glyph site-logo__glyph--default" :style="glyphStyle" aria-hidden="true" r-else></span>
@@ -17,7 +17,7 @@ const logoTemplate = html`<div class="site-logo">
         <span class="site-logo__word site-logo__word--primary" :style="wordStyle">{{ wordOne }}</span>
         <span class="site-logo__word site-logo__word--accent" :style="wordStyle">{{ wordTwo }}</span>
       </span>
-      <span class="site-logo__subtitle" :style="subtitleStyle" r-if="hasSubtitle">{{ subtitle }}</span>
+      <span class="site-logo__subtitle" :style="subtitleStyle" r-if="subtitle">{{ subtitle }}</span>
     </span>
   </a>
 </div>`
@@ -36,8 +36,6 @@ export interface SiteLogo {
   glyphStyle?: Record<string, string>
   wordStyle?: Record<string, string>
   subtitleStyle?: Record<string, string>
-  hasIconSvg?: boolean
-  hasSubtitle?: boolean
 }
 
 function resolveSiteLogo(props: SiteLogo): SiteLogo {
@@ -50,9 +48,7 @@ function resolveSiteLogo(props: SiteLogo): SiteLogo {
   const iconSize = normalizeCssSize(props.iconSize)
   const wordFontSize = normalizeCssSize(props.wordFontSize)
   const subtitleFontSize = normalizeCssSize(props.subtitleFontSize)
-  const hasSubtitle = subtitle.length > 0
-  const hasIconSvg = iconSvg.length > 0
-  const ariaLabel = hasSubtitle
+  const ariaLabel = subtitle
     ? `${wordOne} ${wordTwo}: ${subtitle}`
     : `${wordOne} ${wordTwo}`
   const glyphStyle = buildGlyphSizeStyle(iconSize)
@@ -68,8 +64,6 @@ function resolveSiteLogo(props: SiteLogo): SiteLogo {
     glyphStyle,
     wordStyle,
     subtitleStyle,
-    hasIconSvg,
-    hasSubtitle,
   }
 }
 
