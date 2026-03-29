@@ -9,7 +9,6 @@ import {
 export function registerAlertStyles() {
   themes.forEach((theme, palette, options) => {
     applyAlertShellStyles(theme, palette, options)
-    applyAlertToneStyles(theme, palette)
     applyAlertResponsiveStyles(theme)
   })
 }
@@ -25,12 +24,6 @@ export function applyAlertShellStyles(
   applyAlertBodyStyles(theme, palette, options)
   applyAlertActionStyles(theme, palette, options)
   applyAlertMetaStyles(theme, palette)
-}
-
-export function applyAlertToneStyles(theme: ThemeMode, palette: ThemePalette) {
-  applyAlertSoftToneStyles(theme, palette)
-  applyAlertOutlineToneStyles(theme, palette)
-  applyAlertFeatureToneStyles(theme, palette)
 }
 
 export function applyAlertContainerStyles(
@@ -51,12 +44,6 @@ export function applyAlertContainerStyles(
     .background(palette.background.panel)
     .color(palette.text.default)
     .boxShadow(palette.effect.panelShadow)
-
-  styleBuilder.select('.alert--compact', theme).padding('10px 12px').gap('10px')
-  styleBuilder
-    .select('.alert--inline', theme)
-    .gridTemplateColumns('1fr')
-    .gap('8px')
 }
 
 export function applyAlertIconStyles(
@@ -78,10 +65,6 @@ export function applyAlertIconStyles(
     .color(palette.icon.neutral.color)
     .boxShadow(palette.effect.interactiveShadow)
 
-  styleBuilder
-    .select('.alert--inline .alert__icon', theme)
-    .width('26px')
-    .height('26px')
   styleBuilder
     .select('.alert__icon svg', theme)
     .width('16px')
@@ -221,154 +204,6 @@ export function applyAlertMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .fontSize('12px')
     .lineHeight('1.5')
     .color(palette.text.subtle)
-}
-
-export function applyAlertSoftToneStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-) {
-  const tones = [
-    {
-      tone: 'info',
-      background: palette.status.info.background,
-      border: palette.status.info.border,
-      text: palette.status.info.text,
-    },
-    {
-      tone: 'success',
-      background: palette.status.success.background,
-      border: palette.status.success.border,
-      text: palette.status.success.text,
-    },
-    {
-      tone: 'warning',
-      background: palette.status.warning.background,
-      border: palette.status.warning.border,
-      text: palette.status.warning.text,
-    },
-    {
-      tone: 'danger',
-      background: palette.status.danger.background,
-      border: palette.status.danger.border,
-      text: palette.status.danger.text,
-    },
-    {
-      tone: 'accent',
-      background: palette.background.accentMuted,
-      border: palette.border.accent,
-      text: palette.text.accent,
-    },
-  ]
-
-  for (const tone of tones) {
-    applyAlertToneVariantStyles(
-      theme,
-      'soft',
-      tone.tone,
-      tone.background,
-      tone.border,
-      tone.text,
-    )
-  }
-
-  styleBuilder
-    .select('.alert--soft.alert--tone-neutral', theme)
-    .background(palette.background.surfaceAlt)
-    .borderColor(palette.border.default)
-}
-
-export function applyAlertOutlineToneStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-) {
-  styleBuilder
-    .select('.alert--outline', theme)
-    .background(palette.background.surface)
-
-  const tones = [
-    {
-      tone: 'info',
-      border: palette.status.info.border,
-      text: palette.status.info.text,
-    },
-    {
-      tone: 'success',
-      border: palette.status.success.border,
-      text: palette.status.success.text,
-    },
-    {
-      tone: 'warning',
-      border: palette.status.warning.border,
-      text: palette.status.warning.text,
-    },
-    {
-      tone: 'danger',
-      border: palette.status.danger.border,
-      text: palette.status.danger.text,
-    },
-    {
-      tone: 'accent',
-      border: palette.border.accent,
-      text: palette.text.accent,
-    },
-  ]
-
-  for (const tone of tones) {
-    applyAlertToneVariantStyles(
-      theme,
-      'outline',
-      tone.tone,
-      palette.background.surface,
-      tone.border,
-      tone.text,
-    )
-  }
-}
-
-export function applyAlertToneVariantStyles(
-  theme: ThemeMode,
-  variant: 'soft' | 'outline',
-  tone: string,
-  background: string,
-  borderColor: string,
-  textColor: string,
-) {
-  const baseSelector = `.alert--${variant}.alert--tone-${tone}`
-  styleBuilder
-    .select(baseSelector, theme)
-    .background(background)
-    .borderColor(borderColor)
-  if (variant === 'outline') {
-    styleBuilder
-      .select(baseSelector, theme)
-      .borderLeft(`4px solid ${borderColor}`)
-  }
-  styleBuilder
-    .select(
-      `${baseSelector} .alert__title, ${baseSelector} .alert__icon`,
-      theme,
-    )
-    .color(textColor)
-}
-
-export function applyAlertFeatureToneStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-) {
-  styleBuilder
-    .select('.alert--feature', theme)
-    .background(palette.background.feature)
-    .borderColor(palette.border.accent)
-    .boxShadow(palette.effect.panelShadowStrong)
-  styleBuilder
-    .select('.alert--feature .alert__title', theme)
-    .color(palette.text.accent)
-  styleBuilder
-    .select('.alert--feature .alert__icon', theme)
-    .backgroundColor(palette.icon.accent.background)
-    .background(palette.icon.accent.gradient)
-    .borderColor(palette.icon.accent.ring)
-    .color(palette.icon.accent.color)
 }
 
 export function applyAlertResponsiveStyles(theme: ThemeMode) {

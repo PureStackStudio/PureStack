@@ -53,3 +53,11 @@ When I say something seems impossible, that's your cue to ultrathink harder. The
 Now: What Are We Building Today?
 
 Don't just tell me how you'll solve it. Show me why this solution is the only solution that makes sense. Make me see the future you're creating.
+
+Pre-release rule
+
+This framework is not released yet. Do not preserve backward compatibility just because an older shape exists.
+
+Do not add deprecation layers, compatibility shims, migration helpers, fallback APIs, legacy class support, or dual-path behavior unless explicitly requested.
+
+When improving an API or internal pattern, prefer replacing the old approach outright and cleaning up the old code in the same change.

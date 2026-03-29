@@ -1,5 +1,5 @@
 import { styleBuilder } from './styles'
-import { type ThemeMode, themes } from './themeOptions'
+import { themes } from './themeOptions'
 import type { ThemePalette } from './themePalette'
 
 export type SemanticTone =
@@ -20,11 +20,6 @@ export interface SemanticToneTokens {
     color: string
     ring: string
   }
-}
-
-export interface SemanticToneStyleSelectors {
-  surfaceSelector?: (tone: SemanticTone) => string
-  iconSelector?: (tone: SemanticTone) => string
 }
 
 const SEMANTIC_TONES: SemanticTone[] = [
@@ -119,12 +114,6 @@ export function getSemanticToneTokens(
   }
 }
 
-export function forEachSemanticTone(iteratee: (tone: SemanticTone) => void) {
-  for (const tone of SEMANTIC_TONES) {
-    iteratee(tone)
-  }
-}
-
 export function getSemanticToneSurfaceClass(tone: SemanticTone) {
   return `tone-surface--${tone}`
 }
@@ -133,37 +122,38 @@ export function getSemanticToneIconClass(tone: SemanticTone) {
   return `tone-icon--${tone}`
 }
 
-export function applySemanticToneStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  selectors: SemanticToneStyleSelectors,
-) {
-  forEachSemanticTone((tone) => {
-    const tokens = getSemanticToneTokens(palette, tone)
+export function getSemanticToneBorderClass(tone: SemanticTone) {
+  return `tone-border--${tone}`
+}
 
-    if (selectors.surfaceSelector) {
+export function getSemanticToneTextClass(tone: SemanticTone) {
+  return `tone-text--${tone}`
+}
+
+export function registerSemanticToneUtilityStyles() {
+  themes.forEach((theme, palette) => {
+    for (const tone of SEMANTIC_TONES) {
+      const tokens = getSemanticToneTokens(palette, tone)
+
       styleBuilder
-        .select(selectors.surfaceSelector(tone), theme)
+        .select(`.${getSemanticToneSurfaceClass(tone)}`, theme)
         .background(tokens.background)
         .borderColor(tokens.border)
-    }
 
-    if (selectors.iconSelector) {
       styleBuilder
-        .select(selectors.iconSelector(tone), theme)
+        .select(`.${getSemanticToneBorderClass(tone)}`, theme)
+        .borderColor(tokens.border)
+
+      styleBuilder
+        .select(`.${getSemanticToneTextClass(tone)}`, theme)
+        .color(tokens.text)
+
+      styleBuilder
+        .select(`.${getSemanticToneIconClass(tone)}`, theme)
         .background(tokens.icon.gradient)
         .backgroundColor(tokens.icon.background)
         .borderColor(tokens.icon.ring)
         .color(tokens.icon.color)
     }
-  })
-}
-
-export function registerSemanticToneUtilityStyles() {
-  themes.forEach((theme, palette) => {
-    applySemanticToneStyles(theme, palette, {
-      surfaceSelector: (tone) => `.${getSemanticToneSurfaceClass(tone)}`,
-      iconSelector: (tone) => `.${getSemanticToneIconClass(tone)}`,
-    })
   })
 }

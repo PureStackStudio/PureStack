@@ -19,7 +19,7 @@ sidebar:
   title="Heads up: API contract update"
   meta="Updated 2 hours ago"
 >
-  The `v2` API response now includes `traceId` in every payload. Existing clients remain compatible.
+  The `v2` API response now includes `traceId` in every payload.
 </AlertBox>
 
 ## 2. Success alert with actions
@@ -39,11 +39,10 @@ sidebar:
   </template>
 </AlertBox>
 
-## 3. Warning alert in outline mode
+## 3. Warning alert
 
 <AlertBox
   tone="warning"
-  variant="outline"
   title="Planned maintenance window"
   icon="iconoir:clock"
   meta="Sunday 01:00 - 02:00 UTC"
@@ -56,14 +55,12 @@ sidebar:
   </ul>
 </AlertBox>
 
-## 4. Danger alert with assertive live region
+## 4. Danger alert
 
 <AlertBox
   tone="danger"
   title="Payment authorization failed"
   badge="Action required"
-  role="alert"
-  live="assertive"
   meta="Error code: BILLING-402"
 >
   We could not renew your subscription. Update the payment method to avoid service interruption.
@@ -73,11 +70,10 @@ sidebar:
   </template>
 </AlertBox>
 
-## 5. Accent feature callout
+## 5. Accent callout
 
 <AlertBox
   tone="accent"
-  variant="feature"
   eyebrow="New"
   title="Private beta: rule simulation"
   badge="Invite only"
@@ -89,23 +85,17 @@ sidebar:
   </template>
 </AlertBox>
 
-## 6. Compact alerts for dense pages
+## 6. Dense alert examples
 
-<AlertBox tone="neutral" compact="true" title="SDK note" icon="iconoir:code">
+<AlertBox tone="neutral" title="SDK note" icon="iconoir:code">
   `@purestack/ts-ssg` now exports `builtInSkins` directly from the package root.
 </AlertBox>
 
-<AlertBox tone="info" compact="true" title="Migration tip" icon="iconoir:book-stack">
+<AlertBox tone="info" title="Migration tip" icon="iconoir:book-stack">
   Keep component styles palette-driven. Avoid hardcoded color values in component files.
 </AlertBox>
 
-## 7. Inline mode
-
-<AlertBox tone="info" inline="true" title="Inline guidance">
-  Use inline alerts for short contextual guidance inside long documents.
-</AlertBox>
-
-## 8. Content-rich alert with code and list
+## 7. Content-rich alert with code and list
 
 <AlertBox
   tone="info"
@@ -122,21 +112,16 @@ sidebar:
   <p><code>security.csp.defaultSrc = 'self'</code></p>
 </AlertBox>
 
-## 9. Full prop showcase
+## 8. Full prop showcase
 
 ```html
 <AlertBox
   tone="info|success|warning|danger|accent|neutral"
-  variant="soft|outline|feature"
   title="Alert title"
   eyebrow="Optional eyebrow"
   badge="Optional badge"
   meta="Optional metadata line"
   icon="iconoir:check|iconoir:clock|iconoir:headset-help|iconoir:rocket"
-  compact="true|false"
-  inline="true|false"
-  role="status|alert|note"
-  live="off|polite|assertive"
 >
   Body content goes here.
   <template name="actions">
@@ -145,36 +130,32 @@ sidebar:
 </AlertBox>
 ```
 
-## 10. Deprecation notice
+## 9. Release planning notice
 
 <AlertBox
   tone="warning"
-  variant="outline"
-  eyebrow="Deprecation"
-  title="Legacy webhook endpoint will be removed"
-  badge="v1"
+  eyebrow="Release planning"
+  title="Webhook contract is changing before launch"
+  badge="Breaking change"
   icon="iconoir:clock"
-  meta="Removal date: 2026-06-30"
+  meta="Planned rollout: next milestone"
 >
-  The endpoint `/api/webhooks/v1/events` is deprecated and will be removed.
-  Migrate to `/api/webhooks/v2/events` to keep delivery guarantees.
+  The draft endpoint `/api/webhooks/events` will move to `/api/runtime/webhooks/events`
+  before the first public release. Update integration docs and internal references now.
   <template name="actions">
-    <a href="#migration-guide">Open migration guide</a>
-    <a href="#api-changelog">Read API changelog</a>
+    <a href="#integration-notes">Open integration notes</a>
+    <a href="#release-checklist">Read release checklist</a>
   </template>
 </AlertBox>
 
-## 11. Security advisory
+## 10. Security advisory
 
 <AlertBox
   tone="danger"
-  variant="feature"
   eyebrow="Security"
   title="Rotate leaked token immediately"
   badge="Critical"
   icon="iconoir:shield"
-  role="alert"
-  live="assertive"
 >
   A token with elevated privileges was exposed in build logs. Revoke all compromised keys and issue new scoped tokens.
   <template name="actions">
@@ -183,11 +164,10 @@ sidebar:
   </template>
 </AlertBox>
 
-## 12. Incident status update
+## 11. Incident status update
 
 <AlertBox
   tone="info"
-  variant="soft"
   eyebrow="Incident"
   title="Queue processing delays in EU region"
   badge="Investigating"
@@ -201,11 +181,10 @@ sidebar:
   </template>
 </AlertBox>
 
-## 13. Feature flag notice
+## 12. Feature flag notice
 
 <AlertBox
   tone="accent"
-  variant="outline"
   title="New cache engine behind feature flag"
   eyebrow="Rollout"
   badge="Canary"
@@ -214,11 +193,10 @@ sidebar:
   Enable `runtime.cache.v2` for 5% traffic first. Measure p95 latency and error-rate before expanding rollout.
 </AlertBox>
 
-## 14. Compliance policy alert
+## 13. Compliance policy alert
 
 <AlertBox
   tone="neutral"
-  variant="outline"
   title="Data retention policy updated"
   eyebrow="Policy"
   icon="iconoir:book-stack"
@@ -228,7 +206,7 @@ sidebar:
   Contact legal if your tenant requires a custom retention term.
 </AlertBox>
 
-## 15. Maintenance completed
+## 14. Maintenance completed
 
 <AlertBox
   tone="success"
@@ -243,22 +221,19 @@ sidebar:
   </template>
 </AlertBox>
 
-## 16. No-icon text-only inline alert
+## 15. No-icon text-only alert
 
 <AlertBox
   tone="warning"
-  inline="true"
-  compact="true"
   title="Quota nearing limit"
 >
   Current usage is at 92% of your monthly allocation.
 </AlertBox>
 
-## 17. Dense checklist alert
+## 16. Dense checklist alert
 
 <AlertBox
   tone="accent"
-  variant="feature"
   eyebrow="Launch checklist"
   title="Before publishing your SDK"
   icon="iconoir:code"
