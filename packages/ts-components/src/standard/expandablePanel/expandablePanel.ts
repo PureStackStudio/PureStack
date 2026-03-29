@@ -1,4 +1,8 @@
-import { resolveSemanticTone } from '@purestack/ts-style'
+import {
+  getSemanticToneIconClass,
+  getSemanticToneSurfaceClass,
+  resolveSemanticTone,
+} from '@purestack/ts-style'
 import { defineComponent, html } from 'regor'
 
 import { registerExpandablePanelStyles } from './expandablePanelStyle'
@@ -19,6 +23,7 @@ export interface ExpandablePanel {
   hasIcon?: boolean
   isOpen?: boolean
   iconName?: string
+  iconToneClass?: string
 }
 
 const expandablePanelTemplate = html`<details
@@ -27,7 +32,7 @@ const expandablePanelTemplate = html`<details
   :open="isOpen ? true : null"
 >
   <summary class="expandable-panel__summary">
-    <span class="expandable-panel__icon-wrap" r-if="hasIcon">
+    <span class="expandable-panel__icon-wrap" :class="iconToneClass" r-if="hasIcon">
       <Icon class="expandable-panel__icon" :name="iconName" />
     </span>
     <span class="expandable-panel__summary-copy">
@@ -85,7 +90,8 @@ function resolveExpandablePanel(props: ExpandablePanel): ExpandablePanel {
     hasMeta: Boolean(meta),
     hasBadge: Boolean(badge),
     hasIcon: Boolean(iconName),
-    rootClass: `expandable-panel--tone-${tone}`,
+    rootClass: getSemanticToneSurfaceClass(tone),
+    iconToneClass: getSemanticToneIconClass(tone),
   }
 }
 

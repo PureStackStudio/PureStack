@@ -1,5 +1,5 @@
 import { styleBuilder } from './styles'
-import type { ThemeMode } from './themeOptions'
+import { type ThemeMode, themes } from './themeOptions'
 import type { ThemePalette } from './themePalette'
 
 export type SemanticTone =
@@ -125,6 +125,14 @@ export function forEachSemanticTone(iteratee: (tone: SemanticTone) => void) {
   }
 }
 
+export function getSemanticToneSurfaceClass(tone: SemanticTone) {
+  return `tone-surface--${tone}`
+}
+
+export function getSemanticToneIconClass(tone: SemanticTone) {
+  return `tone-icon--${tone}`
+}
+
 export function applySemanticToneStyles(
   theme: ThemeMode,
   palette: ThemePalette,
@@ -148,5 +156,14 @@ export function applySemanticToneStyles(
         .borderColor(tokens.icon.ring)
         .color(tokens.icon.color)
     }
+  })
+}
+
+export function registerSemanticToneUtilityStyles() {
+  themes.forEach((theme, palette) => {
+    applySemanticToneStyles(theme, palette, {
+      surfaceSelector: (tone) => `.${getSemanticToneSurfaceClass(tone)}`,
+      iconSelector: (tone) => `.${getSemanticToneIconClass(tone)}`,
+    })
   })
 }

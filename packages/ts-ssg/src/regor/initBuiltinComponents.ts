@@ -23,7 +23,11 @@ import {
 } from '@purestack/ts-components'
 import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { componentRegistry } from '@purestack/ts-render'
-import { registerNormalizeStyles, styleBuilder } from '@purestack/ts-style'
+import {
+  registerNormalizeStyles,
+  registerSemanticToneUtilityStyles,
+  styleBuilder,
+} from '@purestack/ts-style'
 import { createScriptComponents } from 'packages/ts-components/src/standard/pageScript/pageScript'
 import { registerDocLayoutStyles } from '../templates/docLayoutStyles'
 import { registerMarkdownStyles } from '../templates/markdownStyles'
@@ -63,4 +67,5 @@ export function initBuiltinComponents(
   componentRegistry.registerMany(createScriptComponents())
   componentRegistry.registerMany(createSearchComponents())
   componentRegistry.registerMany(createTabsComponents())
+  registerSemanticToneUtilityStyles()
 }

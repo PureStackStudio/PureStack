@@ -1,5 +1,4 @@
 import {
-  applySemanticToneStyles,
   styleBuilder,
   type ThemeMode,
   type ThemeOptions,
@@ -39,10 +38,6 @@ function registerExpandablePanelShellStyles(
     .select('.expandable-panel[open]', theme)
     .borderColor(palette.border.strong)
     .boxShadow(palette.effect.panelShadowStrong)
-
-  applySemanticToneStyles(theme, palette, {
-    surfaceSelector: (tone) => `.expandable-panel--tone-${tone}`,
-  })
 }
 
 function registerExpandablePanelSummaryStyles(
@@ -87,11 +82,6 @@ function registerExpandablePanelSummaryStyles(
     .border(`1px solid ${palette.icon.accent.ring}`)
     .boxShadow(palette.effect.interactiveShadow)
     .color(palette.icon.accent.color)
-
-  applySemanticToneStyles(theme, palette, {
-    iconSelector: (tone) =>
-      `.expandable-panel--tone-${tone} .expandable-panel__icon-wrap`,
-  })
 
   styleBuilder
     .select('.expandable-panel__icon', theme)

@@ -35,7 +35,7 @@ describe('ExpandablePanel rendering', () => {
     )
     cleanup()
 
-    expect(html).toContain('<details class="expandable-panel expandable-panel--tone-accent" open')
+    expect(html).toContain('<details class="expandable-panel tone-surface--accent" open')
     expect(html).toContain('Microsoft 365')
     expect(html).toContain('class="icon expandable-panel__icon"')
     expect(html).toContain('Upgrade today to unlock richer collaboration')
@@ -54,11 +54,11 @@ describe('ExpandablePanel rendering', () => {
     cleanup()
 
     expect(html).toContain(
-      '<details class="expandable-panel expandable-panel--tone-neutral">',
+      '<details class="expandable-panel tone-surface--neutral">',
     )
     expect(html).toContain('Expandable panel')
     expect(html).not.toContain(
-      '<details class="expandable-panel expandable-panel--tone-neutral" open',
+      '<details class="expandable-panel tone-surface--neutral" open',
     )
   })
 })
