@@ -6,7 +6,7 @@ export function registerGridStyles() {
       .select('.grid', theme)
       .display('grid')
       .minWidth('0')
-      .gap('1rem')
+      .gap('0.75rem')
       .gridTemplateColumns('var(--grid-template-columns)')
       .alignItems('stretch')
       .justifyItems('stretch')
