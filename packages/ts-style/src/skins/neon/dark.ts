@@ -26,7 +26,7 @@ export const neonDark: ThemePalette = {
 
   text: {
     default: '#F7EEF0',
-    muted: '#D8BFC4',
+    muted: '#7d7d85',
     subtle: '#7d7d85',
     soft: '#7d7d85',
     strong: '#FFFFFF',
