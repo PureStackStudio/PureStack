@@ -1,4 +1,5 @@
 export * from './normalize.css'
+export * from './semanticTone'
 export {
   type BuiltInSkinName,
   type BuiltInSkinPair,

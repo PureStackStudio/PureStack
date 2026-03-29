@@ -1,8 +1,9 @@
-import type { ThemePalette } from '@purestack/ts-style'
 import {
+  applySemanticToneStyles,
   styleBuilder,
   type ThemeMode,
   type ThemeOptions,
+  type ThemePalette,
   themes,
 } from '@purestack/ts-style'
 
@@ -39,43 +40,9 @@ function registerExpandablePanelShellStyles(
     .borderColor(palette.border.strong)
     .boxShadow(palette.effect.panelShadowStrong)
 
-  styleBuilder
-    .select('.expandable-panel--tone-neutral', theme)
-    .background(palette.background.raised)
-    .borderColor(palette.border.default)
-
-  styleBuilder
-    .select('.expandable-panel--tone-neutral[open]', theme)
-    .background(palette.background.surface)
-
-  styleBuilder
-    .select('.expandable-panel--tone-accent', theme)
-    .background(palette.background.surface)
-    .borderColor(palette.border.accent)
-
-  styleBuilder
-    .select('.expandable-panel--tone-accent[open]', theme)
-    .background(palette.background.feature)
-
-  styleBuilder
-    .select('.expandable-panel--tone-info', theme)
-    .background(palette.status.info.background)
-    .borderColor(palette.status.info.border)
-
-  styleBuilder
-    .select('.expandable-panel--tone-success', theme)
-    .background(palette.status.success.background)
-    .borderColor(palette.status.success.border)
-
-  styleBuilder
-    .select('.expandable-panel--tone-warning', theme)
-    .background(palette.status.warning.background)
-    .borderColor(palette.status.warning.border)
-
-  styleBuilder
-    .select('.expandable-panel--tone-danger', theme)
-    .background(palette.status.danger.background)
-    .borderColor(palette.status.danger.border)
+  applySemanticToneStyles(theme, palette, {
+    surfaceSelector: (tone) => `.expandable-panel--tone-${tone}`,
+  })
 }
 
 function registerExpandablePanelSummaryStyles(
@@ -121,40 +88,10 @@ function registerExpandablePanelSummaryStyles(
     .boxShadow(palette.effect.interactiveShadow)
     .color(palette.icon.accent.color)
 
-  styleBuilder
-    .select('.expandable-panel--tone-neutral .expandable-panel__icon-wrap', theme)
-    .background(palette.icon.neutral.gradient)
-    .backgroundColor(palette.icon.neutral.background)
-    .borderColor(palette.icon.neutral.ring)
-    .color(palette.icon.neutral.color)
-
-  styleBuilder
-    .select('.expandable-panel--tone-info .expandable-panel__icon-wrap', theme)
-    .background(palette.icon.neutral.gradient)
-    .backgroundColor(palette.status.info.background)
-    .borderColor(palette.status.info.border)
-    .color(palette.status.info.text)
-
-  styleBuilder
-    .select('.expandable-panel--tone-success .expandable-panel__icon-wrap', theme)
-    .background(palette.icon.neutral.gradient)
-    .backgroundColor(palette.status.success.background)
-    .borderColor(palette.status.success.border)
-    .color(palette.status.success.text)
-
-  styleBuilder
-    .select('.expandable-panel--tone-warning .expandable-panel__icon-wrap', theme)
-    .background(palette.icon.neutral.gradient)
-    .backgroundColor(palette.status.warning.background)
-    .borderColor(palette.status.warning.border)
-    .color(palette.status.warning.text)
-
-  styleBuilder
-    .select('.expandable-panel--tone-danger .expandable-panel__icon-wrap', theme)
-    .background(palette.icon.neutral.gradient)
-    .backgroundColor(palette.status.danger.background)
-    .borderColor(palette.status.danger.border)
-    .color(palette.status.danger.text)
+  applySemanticToneStyles(theme, palette, {
+    iconSelector: (tone) =>
+      `.expandable-panel--tone-${tone} .expandable-panel__icon-wrap`,
+  })
 
   styleBuilder
     .select('.expandable-panel__icon', theme)

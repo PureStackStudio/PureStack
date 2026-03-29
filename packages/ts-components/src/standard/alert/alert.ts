@@ -1,3 +1,4 @@
+import { resolveSemanticTone } from '@purestack/ts-style'
 import { defineComponent, html } from 'regor'
 import { registerAlertStyles } from './alertStyle'
 
@@ -96,18 +97,7 @@ function resolveAlertBox(props: AlertBox): AlertBox {
 }
 
 function resolveTone(value?: string) {
-  const normalized = value?.toLowerCase() || ''
-  if (
-    normalized === 'info' ||
-    normalized === 'success' ||
-    normalized === 'warning' ||
-    normalized === 'danger' ||
-    normalized === 'accent' ||
-    normalized === 'neutral'
-  ) {
-    return normalized
-  }
-  return 'info'
+  return resolveSemanticTone(value, 'info')
 }
 
 function resolveVariant(value?: string) {

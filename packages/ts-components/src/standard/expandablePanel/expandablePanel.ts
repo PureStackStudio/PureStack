@@ -1,3 +1,4 @@
+import { resolveSemanticTone } from '@purestack/ts-style'
 import { defineComponent, html } from 'regor'
 
 import { registerExpandablePanelStyles } from './expandablePanelStyle'
@@ -50,15 +51,7 @@ const expandablePanelTemplate = html`<details
 
 function createExpandablePanelComponent() {
   return defineComponent<ExpandablePanel>(expandablePanelTemplate, {
-    props: [
-      'title',
-      'description',
-      'meta',
-      'badge',
-      'icon',
-      'tone',
-      'open',
-    ],
+    props: ['title', 'description', 'meta', 'badge', 'icon', 'tone', 'open'],
     context: (head) => resolveExpandablePanel(head.props),
   })
 }
@@ -76,7 +69,7 @@ function resolveExpandablePanel(props: ExpandablePanel): ExpandablePanel {
   const meta = resolveText(props.meta)
   const badge = resolveText(props.badge)
   const iconName = resolveText(props.icon)
-  const tone = resolveTone(props.tone)
+  const tone = resolveSemanticTone(props.tone, 'neutral')
   const isOpen = resolveBoolean(props.open)
 
   return {
@@ -94,21 +87,6 @@ function resolveExpandablePanel(props: ExpandablePanel): ExpandablePanel {
     hasIcon: Boolean(iconName),
     rootClass: `expandable-panel--tone-${tone}`,
   }
-}
-
-function resolveTone(value?: string) {
-  const normalized = value?.toLowerCase() || ''
-  if (
-    normalized === 'info' ||
-    normalized === 'success' ||
-    normalized === 'warning' ||
-    normalized === 'danger' ||
-    normalized === 'accent' ||
-    normalized === 'neutral'
-  ) {
-    return normalized
-  }
-  return 'neutral'
 }
 
 function resolveBoolean(value: unknown) {

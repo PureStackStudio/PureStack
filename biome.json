@@ -20,6 +20,9 @@
       },
       "suspicious": {
         "noEmptyInterface": "off"
+      },
+      "complexity": {
+        "noUselessSwitchCase": "off"
       }
     }
   },
