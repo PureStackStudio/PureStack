@@ -5,8 +5,8 @@ export const neonLight: ThemePalette = {
     canvas: 'radial-gradient(rgb(233 233 233) 0%, rgb(206 206 206) 100%)',
     surface: '#dcdcdc',
     surfaceAlt: '#d9d9d9',
-    panel: '#F1E8EA',
-    raised: '#F6EEF0',
+    panel: '#dcdcdc',
+    raised: '#dcdcdc',
     overlay: 'rgba(32, 10, 16, 0.22)',
 
     showcase:
