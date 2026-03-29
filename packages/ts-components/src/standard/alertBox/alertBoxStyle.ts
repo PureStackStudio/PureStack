@@ -6,7 +6,7 @@ import {
   themes,
 } from '@purestack/ts-style'
 
-export function registerAlertStyles() {
+export function registerAlertBoxStyles() {
   themes.forEach((theme, palette, options) => {
     applyAlertShellStyles(theme, palette, options)
     applyAlertResponsiveStyles(theme)

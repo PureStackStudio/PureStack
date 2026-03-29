@@ -1,5 +1,5 @@
-export type { AlertBox } from './standard/alert/alert'
-export { createAlertComponents } from './standard/alert/alert'
+export type { AlertBox } from './standard/alertBox/alertBox'
+export { createAlertComponents } from './standard/alertBox/alertBox'
 export type { Badge } from './standard/badge/badge'
 export { createBadgeComponents } from './standard/badge/badge'
 export type {

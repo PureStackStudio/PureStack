@@ -6,7 +6,7 @@ import {
   type SemanticTone,
 } from '@purestack/ts-style'
 import { defineComponent, html } from 'regor'
-import { registerAlertStyles } from './alertStyle'
+import { registerAlertBoxStyles } from './alertBoxStyle'
 
 export interface AlertBox {
   title?: string
@@ -50,7 +50,7 @@ function createAlertBoxComponent() {
 }
 
 export function createAlertComponents() {
-  registerAlertStyles()
+  registerAlertBoxStyles()
   return {
     alertBox: createAlertBoxComponent(),
   }
