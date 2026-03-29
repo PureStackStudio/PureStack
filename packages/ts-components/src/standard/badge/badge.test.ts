@@ -5,16 +5,18 @@ import { createTestContext } from '../../test/testContext'
 import { createBadgeComponents } from './badge'
 
 describe('StatusBadge rendering', () => {
-  it('renders badge with status variant class', () => {
+  it('renders badge with semantic tone classes', () => {
     const cleanup = ensureDomGlobals()
     const components = createBadgeComponents()
-    const html = renderApp('<Badge variant="warning">pending</Badge>', {
+    const html = renderApp('<Badge tone="warning">pending</Badge>', {
       components,
       context: createTestContext(),
     })
     cleanup()
 
-    expect(html).toContain('class="badge badge--warning"')
+    expect(html).toContain(
+      'class="badge tone-surface--warning tone-border--warning tone-text--warning"',
+    )
     expect(html).toContain('pending')
   })
 })

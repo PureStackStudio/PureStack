@@ -1,0 +1,69 @@
+---
+title: Badge Component Samples
+description: Semantic badge examples for status labels, release markers, and compact metadata chips.
+layout:
+  showToc: true
+  fullWidth: true
+sidebar:
+  order: 5
+---
+
+# Badge Samples
+
+`Badge` is a compact semantic label for status, metadata, and low-friction emphasis inside denser layouts.
+
+## 1. Core tones
+
+<Grid columns="2" columnsMd="3" columnsLg="6">
+  <Badge tone="neutral">Neutral</Badge>
+  <Badge tone="accent">Accent</Badge>
+  <Badge tone="info">Info</Badge>
+  <Badge tone="success">Success</Badge>
+  <Badge tone="warning">Warning</Badge>
+  <Badge tone="danger">Danger</Badge>
+</Grid>
+
+## 2. Inline with copy
+
+<p>
+  Release status:
+  <Badge tone="success">Stable</Badge>
+</p>
+
+<p>
+  Rollout state:
+  <Badge tone="warning">Canary</Badge>
+</p>
+
+<p>
+  Internal track:
+  <Badge tone="accent">Private beta</Badge>
+</p>
+
+## 3. Combined inside cards
+
+<Grid columns="1" columnsMd="2" columnsLg="3">
+  <AlertBox tone="info" title="Worker queue">
+    <p>
+      Throughput remains within expected range. <Badge tone="info">Monitoring</Badge>
+    </p>
+  </AlertBox>
+  <AlertBox tone="success" title="Release train">
+    <p>
+      Validation completed successfully. <Badge tone="success">Ready</Badge>
+    </p>
+  </AlertBox>
+  <AlertBox tone="danger" title="Security review">
+    <p>
+      One critical issue remains open. <Badge tone="danger">Blocked</Badge>
+    </p>
+  </AlertBox>
+</Grid>
+
+## 4. Usage
+
+```html
+<Badge tone="neutral|accent|info|success|warning|danger">
+  Label
+</Badge>
+```

@@ -1,8 +1,14 @@
+import {
+  getSemanticToneBorderClass,
+  getSemanticToneSurfaceClass,
+  getSemanticToneTextClass,
+  resolveSemanticTone,
+} from '@purestack/ts-style'
 import { defineComponent, html } from 'regor'
 import { registerBadgeStyles } from './badgeStyle'
 
 export interface Badge {
-  variant?: string
+  tone?: string
   toneClass?: string
 }
 
@@ -12,10 +18,10 @@ const badgeTemplate = html`<span class="badge" :class="toneClass">
 
 function createBadgeComponent() {
   return defineComponent<Badge>(badgeTemplate, {
-    props: ['variant'],
+    props: ['tone'],
     context: (head) => ({
-      variant: head.props.variant,
-      toneClass: resolveBadgeToneClass(head.props.variant),
+      tone: head.props.tone,
+      toneClass: resolveBadgeToneClass(head.props.tone),
     }),
   })
 }
@@ -28,14 +34,10 @@ export function createBadgeComponents() {
 }
 
 function resolveBadgeToneClass(value: string | undefined) {
-  const normalized = value?.trim().toLowerCase()
-  if (
-    normalized === 'info' ||
-    normalized === 'success' ||
-    normalized === 'error' ||
-    normalized === 'warning'
-  ) {
-    return `badge--${normalized}`
-  }
-  return undefined
+  const tone = resolveSemanticTone(value, 'neutral')
+  return [
+    getSemanticToneSurfaceClass(tone),
+    getSemanticToneBorderClass(tone),
+    getSemanticToneTextClass(tone),
+  ].join(' ')
 }
