@@ -16,11 +16,6 @@ export interface ExpandablePanel {
   tone?: string
   open?: boolean | string
   rootClass?: string
-  hasTitle?: boolean
-  hasDescription?: boolean
-  hasMeta?: boolean
-  hasBadge?: boolean
-  hasIcon?: boolean
   isOpen?: boolean
   iconName?: string
   iconToneClass?: string
@@ -33,16 +28,16 @@ const expandablePanelTemplate = html`<details
   :open="isOpen ? true : null"
 >
   <summary class="expandable-panel__summary">
-    <span class="expandable-panel__icon-wrap" :class="iconToneClass" r-if="hasIcon">
+    <span class="expandable-panel__icon-wrap" :class="iconToneClass" r-if="iconName">
       <Icon class="expandable-panel__icon" :name="iconName" />
     </span>
     <span class="expandable-panel__summary-copy">
-      <span class="expandable-panel__title" r-if="hasTitle">{{ title }}</span>
-      <span class="expandable-panel__badge" r-if="hasBadge">{{ badge }}</span>
-      <span class="expandable-panel__description" r-if="hasDescription">{{ description }}</span>
+      <span class="expandable-panel__title" r-if="title">{{ title }}</span>
+      <span class="expandable-panel__badge" r-if="badge">{{ badge }}</span>
+      <span class="expandable-panel__description" r-if="description">{{ description }}</span>
     </span>
     <span class="expandable-panel__summary-side">
-      <span class="expandable-panel__summary-meta" r-if="hasMeta">{{ meta }}</span>
+      <span class="expandable-panel__summary-meta" r-if="meta">{{ meta }}</span>
       <slot name="summary"></slot>
       <span
         class="expandable-panel__chevron"
@@ -90,11 +85,6 @@ function resolveExpandablePanel(props: ExpandablePanel): ExpandablePanel {
     badge,
     iconName,
     isOpen,
-    hasTitle: Boolean(title),
-    hasDescription: Boolean(description),
-    hasMeta: Boolean(meta),
-    hasBadge: Boolean(badge),
-    hasIcon: Boolean(iconName),
     rootClass: getSemanticToneSurfaceClass(tone),
     iconToneClass: getSemanticToneIconClass(tone),
     chevronToneClass: getSemanticToneIconClass(tone),

@@ -36,9 +36,6 @@ export interface FormAssistLink {
   label?: string
   target?: string
   rel?: string
-  hasHref?: boolean
-  hasRel?: boolean
-  hasTarget?: boolean
 }
 
 export interface FormSubmit {
@@ -90,9 +87,9 @@ const formCheckTemplate = html`<label class="form-block__check">
 const formAssistLinkTemplate = html`<a
   class="form-block__assist-link"
   :href="href"
-  r-if="hasHref"
-  :target="hasTarget ? target : null"
-  :rel="hasRel ? rel : null"
+  r-if="href"
+  :target="target"
+  :rel="rel"
 >
   {{ label }}
 </a>`
@@ -247,9 +244,6 @@ function resolveFormAssistLink(props: FormAssistLink): FormAssistLink {
     label: props.label,
     target: props.target,
     rel,
-    hasHref: Boolean(href),
-    hasRel: Boolean(rel),
-    hasTarget: Boolean(props.target),
   }
 }
 

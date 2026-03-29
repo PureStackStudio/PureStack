@@ -16,11 +16,6 @@ export interface AlertBox {
   tone?: string
   icon?: string
   rootClass?: string
-  hasTitle?: boolean
-  hasEyebrow?: boolean
-  hasBadge?: boolean
-  hasMeta?: boolean
-  hasHeader?: boolean
   titleToneClass?: string
   iconToneClass?: string
 }
@@ -31,14 +26,14 @@ const alertBoxTemplate = html`<aside
 >
   <Icon class="alert__icon" :class="iconToneClass" :name="icon || 'iconoir:headset-help'" />
   <div class="alert__content">
-    <div class="alert__header" r-if="hasHeader">
-      <p class="alert__eyebrow" r-if="hasEyebrow">{{ eyebrow }}</p>
-      <h3 class="alert__title" :class="titleToneClass" r-if="hasTitle">{{ title }}</h3>
-      <span class="alert__badge" r-if="hasBadge">{{ badge }}</span>
+    <div class="alert__header" r-if="title || eyebrow || badge">
+      <p class="alert__eyebrow" r-if="eyebrow">{{ eyebrow }}</p>
+      <h3 class="alert__title" :class="titleToneClass" r-if="title">{{ title }}</h3>
+      <span class="alert__badge" r-if="badge">{{ badge }}</span>
     </div>
     <div class="alert__body"><slot></slot></div>
     <div class="alert__actions"><slot name="actions"></slot></div>
-    <p class="alert__meta" r-if="hasMeta">{{ meta }}</p>
+    <p class="alert__meta" r-if="meta">{{ meta }}</p>
   </div>
 </aside>`
 
@@ -63,11 +58,6 @@ function resolveAlertBox(props: AlertBox): AlertBox {
     ...props,
     titleToneClass: getSemanticToneTextClass(tone),
     iconToneClass: getSemanticToneIconClass(tone),
-    hasTitle: Boolean(props.title),
-    hasEyebrow: Boolean(props.eyebrow),
-    hasBadge: Boolean(props.badge),
-    hasMeta: Boolean(props.meta),
-    hasHeader: Boolean(props.title || props.eyebrow || props.badge),
     rootClass: getSemanticToneSurfaceClass(tone),
   }
 }

@@ -18,15 +18,15 @@ const heroActionTemplate = html`<a
   class="hero__action"
   :class="className"
   :href="href"
-  r-if="hasHref"
-  :data-icon="hasIcon ? icon : null"
-  :target="hasTarget ? target : null"
-  :rel="hasRel ? rel : null"
+  r-if="href"
+  :data-icon="icon"
+  :target="target"
+  :rel="rel"
 >
   <slot></slot>
 </a>`
 
-const heroMediaTemplate = html`<div class="hero__logo-frame" r-if="hasMedia">
+const heroMediaTemplate = html`<div class="hero__logo-frame" r-if="src">
   <img class="hero__logo" :src="src" :alt="alt" />
 </div>`
 
@@ -37,16 +37,11 @@ export interface HeroAction {
   target?: string
   rel?: string
   className?: string
-  hasHref?: boolean
-  hasIcon?: boolean
-  hasTarget?: boolean
-  hasRel?: boolean
 }
 
 export interface HeroMedia {
   src?: string
   alt?: string
-  hasMedia?: boolean
 }
 
 function createHeroBannerComponent() {
@@ -90,10 +85,6 @@ function resolveHeroAction(props: HeroAction): HeroAction {
     href,
     className,
     rel,
-    hasHref: Boolean(href),
-    hasIcon: Boolean(props.icon),
-    hasTarget: Boolean(props.target),
-    hasRel: Boolean(rel),
   }
 }
 
@@ -101,6 +92,5 @@ function resolveHeroMedia(props: HeroMedia): HeroMedia {
   return {
     ...props,
     alt: props.alt || 'Hero image',
-    hasMedia: Boolean(props.src),
   }
 }

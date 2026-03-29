@@ -6,8 +6,6 @@ export interface LoginHeader {
   badge?: string
   title?: string
   description?: string
-  hasBadge?: boolean
-  hasDescription?: boolean
 }
 
 export interface LoginProvider {
@@ -18,7 +16,6 @@ export interface LoginFooter {
   text?: string
   linkLabel?: string
   linkHref?: string
-  hasLink?: boolean
 }
 
 const loginPanelTemplate = html`<section class="login-panel">
@@ -34,9 +31,9 @@ const loginPanelTemplate = html`<section class="login-panel">
 </section>`
 
 const loginHeaderTemplate = html`<header class="login-panel__header">
-  <p class="login-panel__badge" r-if="hasBadge">{{ badge }}</p>
+  <p class="login-panel__badge" r-if="badge">{{ badge }}</p>
   <h1 class="login-panel__title">{{ title }}</h1>
-  <p class="login-panel__description" r-if="hasDescription">{{ description }}</p>
+  <p class="login-panel__description" r-if="description">{{ description }}</p>
 </header>`
 
 const loginProviderTemplate = html`<Btn variant="secondary" type="button">
@@ -45,7 +42,7 @@ const loginProviderTemplate = html`<Btn variant="secondary" type="button">
 
 const loginFooterTemplate = html`<p class="login-panel__footer">
   <span>{{ text }}</span>
-  <a :href="linkHref" r-if="hasLink">{{ linkLabel }}</a>
+  <a :href="linkHref" r-if="linkHref">{{ linkLabel }}</a>
 </p>`
 
 function createLoginPanelComponent() {
@@ -90,8 +87,6 @@ function resolveLoginHeader(props: LoginHeader): LoginHeader {
     badge: props.badge,
     title: props.title,
     description: props.description,
-    hasBadge: Boolean(props.badge),
-    hasDescription: Boolean(props.description),
   }
 }
 
@@ -101,6 +96,5 @@ function resolveLoginFooter(props: LoginFooter): LoginFooter {
     text: props.text,
     linkLabel: props.linkLabel,
     linkHref,
-    hasLink: Boolean(linkHref),
   }
 }
