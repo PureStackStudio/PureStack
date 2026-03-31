@@ -89,7 +89,7 @@ function registerExpandablePanelSummaryStyles(
     .height('22px')
 
   styleBuilder
-    .select('.expandable-panel__summary-copy', theme)
+    .select('.expandable-panel__header', theme)
     .display('flex')
     .alignItems('center')
     .gap('10px')
@@ -126,7 +126,7 @@ function registerExpandablePanelSummaryStyles(
     .color(palette.text.muted)
 
   styleBuilder
-    .select('.expandable-panel__summary-side', theme)
+    .select('.expandable-panel__header-side', theme)
     .display('flex')
     .alignItems('center')
     .justifyContent('flex-end')
@@ -135,7 +135,7 @@ function registerExpandablePanelSummaryStyles(
     .color(palette.text.subtle)
 
   styleBuilder
-    .select('.expandable-panel__summary-meta', theme)
+    .select('.expandable-panel__header-meta', theme)
     .fontSize('0.95rem')
     .fontWeight('600')
     .color(palette.text.accent)
@@ -218,7 +218,7 @@ function registerExpandablePanelResponsiveStyles(theme: ThemeMode) {
     .alignItems('stretch')
 
   styleBuilder
-    .select('.expandable-panel__summary-side', theme)
+    .select('.expandable-panel__header-side', theme)
     .media('max-width: 760px')
     .justifyContent('space-between')
 }

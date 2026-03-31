@@ -31,13 +31,13 @@ const expandablePanelTemplate = html`<details
     <span class="expandable-panel__icon-wrap" :class="iconToneClass" r-if="iconName">
       <Icon class="expandable-panel__icon" :name="iconName" />
     </span>
-    <span class="expandable-panel__summary-copy">
+    <span class="expandable-panel__header">
       <span class="expandable-panel__title" r-if="title">{{ title }}</span>
       <span class="expandable-panel__badge" r-if="badge">{{ badge }}</span>
       <span class="expandable-panel__description" r-if="description">{{ description }}</span>
     </span>
-    <span class="expandable-panel__summary-side">
-      <span class="expandable-panel__summary-meta" r-if="meta">{{ meta }}</span>
+    <span class="expandable-panel__header-side">
+      <span class="expandable-panel__header-meta" r-if="meta">{{ meta }}</span>
       <slot name="summary"></slot>
       <span
         class="expandable-panel__chevron"

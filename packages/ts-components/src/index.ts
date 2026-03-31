@@ -56,6 +56,8 @@ export type { NavItemState, NavList, NavMenu } from './standard/navMenu/navMenu'
 export { createNavigationComponents } from './standard/navMenu/navMenu'
 export type { PageToc, PageTocItem } from './standard/pageToc/pageToc'
 export { createPageTocComponents } from './standard/pageToc/pageToc'
+export type { Panel } from './standard/panel/panel'
+export { createPanelComponents } from './standard/panel/panel'
 export type {
   PricingFeature,
   PricingPlan,

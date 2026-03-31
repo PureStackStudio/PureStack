@@ -1,0 +1,20 @@
+import { styleBuilder, themes } from '@purestack/ts-style'
+
+export function registerPanelStyles() {
+  themes.forEach((theme, palette, options) => {
+    styleBuilder
+      .select('.panel', theme)
+      .display('grid')
+      .margin('0 0 16px')
+      .border(`1px solid ${palette.border.default}`)
+      .borderRadius(options.radii.lg)
+      .background(palette.background.raised)
+      .boxShadow(palette.effect.panelShadow)
+      .overflow('hidden')
+      .transition(
+        'border-color 180ms ease, box-shadow 180ms ease, background 180ms ease',
+      )
+
+    styleBuilder.select('.panel__body', theme).padding('24px')
+  })
+}

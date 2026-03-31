@@ -263,6 +263,7 @@ Built-in component sets are initialized automatically each build:
 - consent: `consent`
 - contact: `contactForm`
 - expandable panel: `expandablePanel`
+- panel: `panel`
 - hero: `heroBanner`, `heroAction`, `heroMedia`
 - footer: `siteFooter`, `footerColumn`, `footerLink`, `footerSocial`
 - top bar: `topBar`

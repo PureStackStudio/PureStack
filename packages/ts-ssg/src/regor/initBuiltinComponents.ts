@@ -15,6 +15,7 @@ import {
   createModalComponents,
   createNavigationComponents,
   createPageTocComponents,
+  createPanelComponents,
   createPricingComponents,
   createSearchComponents,
   createTabsComponents,
@@ -62,6 +63,7 @@ export function initBuiltinComponents(
   componentRegistry.registerMany(createTopBarComponents())
   componentRegistry.registerMany(createThemeSwitcherComponents())
   componentRegistry.registerMany(createNavigationComponents())
+  componentRegistry.registerMany(createPanelComponents())
   componentRegistry.registerMany(createPageTocComponents())
   componentRegistry.registerMany(createPricingComponents())
   componentRegistry.registerMany(createScriptComponents())

@@ -1,0 +1,108 @@
+---
+title: Panel Samples
+description: Static panels for always-visible content blocks, grouped summaries, and custom layouts.
+layout:
+  showToc: true
+  fullWidth: true
+sidebar:
+  order: 7
+---
+
+# Panel Samples
+
+`Panel` is the static surface primitive. It has one job: provide the same framed container language without any built-in header or disclosure behavior.
+
+## 1. Rich content surface
+
+<Panel tone="accent">
+  <Grid columns="1" columnsLg="1fr auto" alignItems="center">
+    <div>
+      <p style="margin-bottom:0.75rem; font-size:0.85rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;">
+        Included workspace
+      </p>
+      <h2 style="margin-bottom:1rem;">PureStack Workspace</h2>
+      <p>
+        Use `Panel` when content should always stay visible and scannable without
+        any expandable chrome around it.
+      </p>
+      <p>
+        It works well for dashboard summaries, supporting account context, static
+        marketing sections, and custom layouts that do not fit a predefined header API.
+      </p>
+      <div style="margin-top: 2rem; display:flex; gap:0.25rem; flex-wrap:wrap;">
+        <Btn>Open workspace</Btn>
+        <Btn variant="ghost">Invite team</Btn>
+      </div>
+    </div>
+    <div>
+      <img
+        style="max-width:400px;"
+        src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80"
+        alt="Workspace with laptop, notebook, and soft desk lighting."
+      />
+    </div>
+  </Grid>
+</Panel>
+
+## 2. Tone examples
+
+<Grid columns="1" columnsLg="2">
+  <Panel tone="info">
+    <h3>Storage overview</h3>
+    <p>
+      71% of allocated space is currently used. Archive old build artifacts and large attachments first.
+    </p>
+  </Panel>
+
+  <Panel tone="success">
+    <h3>Security healthy</h3>
+    <p>
+      No outstanding security actions are required. The last full policy sync completed 8 minutes ago.
+    </p>
+  </Panel>
+
+  <Panel tone="warning">
+    <h3>Billing follow-up</h3>
+    <p>
+      One invoice needs review before the next renewal. Update the saved payment details before April 5.
+    </p>
+  </Panel>
+
+  <Panel tone="danger">
+    <h3>Risk event detected</h3>
+    <p>
+      A new device session triggered a security review. Confirm device ownership and rotate credentials if needed.
+    </p>
+  </Panel>
+</Grid>
+
+## 3. Custom composition
+
+<Panel tone="neutral">
+  <Grid columns="1" columnsLg="3">
+    <div>
+      <strong>DEVICE21</strong>
+      <p>Healthy. Last sync 2 minutes ago.</p>
+    </div>
+    <div>
+      <strong>DEVICE26</strong>
+      <p>Healthy. Last sync 9 minutes ago.</p>
+    </div>
+    <div>
+      <strong>Studio-Air</strong>
+      <p>Needs reboot. Pending security patch.</p>
+    </div>
+  </Grid>
+</Panel>
+
+## 4. Usage pattern
+
+```html
+<Panel tone="neutral|accent|info|success|warning|danger">
+  Any content goes here.
+  <Grid columns="1" columnsMd="2">
+    <div>Use your own headings, actions, images, and layout.</div>
+    <div>Panel intentionally does not impose a predefined header structure.</div>
+  </Grid>
+</Panel>
+```

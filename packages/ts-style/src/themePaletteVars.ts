@@ -36,7 +36,9 @@ export interface ThemePaletteVarEntry {
   value: string
 }
 
-export function createThemePaletteVarBindings(palette: ThemePalette): ThemePalette {
+export function createThemePaletteVarBindings(
+  palette: ThemePalette,
+): ThemePalette {
   return mapThemePaletteLeaves(palette, (path) => getThemePaletteVar(path))
 }
 
