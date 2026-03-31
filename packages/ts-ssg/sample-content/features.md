@@ -3,7 +3,7 @@ title: 'Features'
 layout:
   showToc: true
   fullWidth: true
-sidebar:
+nav:
   order: 4
 ---
 

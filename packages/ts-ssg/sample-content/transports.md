@@ -4,7 +4,7 @@ layout:
   showToc: true
   tocCollapsed: true
   fullWidth: true
-sidebar:
+nav:
   order: 5
 ---
 

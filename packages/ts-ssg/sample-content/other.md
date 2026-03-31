@@ -3,7 +3,7 @@ title: 'Core Types'
 layout:
   showToc: true
   fullWidth: true
-sidebar:
+nav:
   order: 7
 ---
 

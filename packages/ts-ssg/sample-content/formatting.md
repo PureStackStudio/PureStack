@@ -3,7 +3,7 @@ title: 'Formatting'
 layout:
   showToc: true
   fullWidth: true
-sidebar:
+nav:
   order: 6
 ---
 
