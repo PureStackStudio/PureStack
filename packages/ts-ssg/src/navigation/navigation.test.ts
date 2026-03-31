@@ -98,4 +98,42 @@ describe('navigation', () => {
       expect(rootItems.map((item) => item.title)).toEqual(['Start', 'Docs'])
     })
   })
+
+  it('treats missing order as zero so negatives rise and positives sink', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      await fs.mkdir(contentDir, { recursive: true })
+      await fs.writeFile(
+        path.join(contentDir, 'top.mdx'),
+        `---\ntitle: Top\nnav:\n  order: -1\n---\n# Top\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'middle-a.mdx'),
+        `---\ntitle: Middle A\n---\n# Middle A\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'middle-b.mdx'),
+        `---\ntitle: Middle B\n---\n# Middle B\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'bottom.mdx'),
+        `---\ntitle: Bottom\nnav:\n  order: 1\n---\n# Bottom\n`,
+        'utf8',
+      )
+
+      const files = await discoverContent(contentDir)
+      const nav = await buildNavigation(contentDir, files)
+      const rootItems = nav?.byFolder[''] ?? []
+
+      expect(rootItems.map((item) => item.title)).toEqual([
+        'Top',
+        'Middle A',
+        'Middle B',
+        'Bottom',
+      ])
+    })
+  })
 })

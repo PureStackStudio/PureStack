@@ -474,10 +474,8 @@ function isExternalUrl(url: string) {
 
 function sortNavItems(items: NavItem[], sortBy: NavigationSort): NavItem[] {
   const sorted = [...items].sort((a, b) => {
-    const orderA =
-      typeof a.order === 'number' ? a.order : Number.POSITIVE_INFINITY
-    const orderB =
-      typeof b.order === 'number' ? b.order : Number.POSITIVE_INFINITY
+    const orderA = typeof a.order === 'number' ? a.order : 0
+    const orderB = typeof b.order === 'number' ? b.order : 0
     if (orderA !== orderB) return orderA - orderB
     if (sortBy === 'path') {
       return (a.url ?? '').localeCompare(b.url ?? '')
