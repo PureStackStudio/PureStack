@@ -155,7 +155,55 @@ sidebar:
   </Grid>
 </ExpandablePanel>
 
-## 3. Device summary
+## 3. Custom summary slot
+
+<ExpandablePanel tone="neutral" open="true">
+  <template name="summary">
+    <div style="grid-column:1 / -1; width:100%; min-width:0; display:grid; grid-template-columns:minmax(0, 1fr) auto; align-items:center; gap:1rem;">
+      <div>
+        <strong style="display:block; font-size:1.06rem;">Production rollout</strong>
+        <span style="display:block; margin-top:0.35rem;">
+          Release 2026.03 is staged, QA is complete, and the deployment window is ready.
+        </span>
+      </div>
+      <div style="display:flex; align-items:center; justify-self:end; gap:0.75rem;">
+        <Badge tone="success">Ready</Badge>
+        <span class="expandable-panel__chevron" aria-hidden="true">
+          <Icon
+            class="expandable-panel__chevron-icon"
+            name="iconoir:nav-arrow-down"
+          />
+        </span>
+      </div>
+    </div>
+  </template>
+  <p>
+    This panel uses a fully custom summary slot. The default title, description, badge, meta, and chevron layout are all replaced.
+  </p>
+  <p>
+    Use this pattern when you need dashboard-style summaries, rollout status rows, or denser operational headers that do not fit the built-in summary arrangement.
+  </p>
+  <Grid columns="1" columnsMd="2">
+    <div>
+      <strong>Included checks</strong>
+      <ul>
+        <li>QA sign-off complete</li>
+        <li>Migration scripts verified</li>
+        <li>Rollback plan prepared</li>
+      </ul>
+    </div>
+    <div>
+      <strong>Next actions</strong>
+      <ul>
+        <li>Open deployment window</li>
+        <li>Notify on-call channel</li>
+        <li>Monitor first 15 minutes</li>
+      </ul>
+    </div>
+  </Grid>
+</ExpandablePanel>
+
+## 4. Device summary
 
 <ExpandablePanel
   title="Devices"
@@ -187,7 +235,7 @@ sidebar:
   </Grid>
 </ExpandablePanel>
 
-## 4. Compact usage pattern
+## 5. Usage pattern
 
 ```html
 <ExpandablePanel
@@ -204,5 +252,12 @@ sidebar:
     <div>Use Grid or other components inside the default slot.</div>
     <div>No named body template is required.</div>
   </Grid>
+</ExpandablePanel>
+
+<ExpandablePanel tone="accent">
+  <template name="summary">
+    Replace the whole summary area here.
+  </template>
+  Body content goes here.
 </ExpandablePanel>
 ```
