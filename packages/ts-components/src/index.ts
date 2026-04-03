@@ -66,7 +66,7 @@ export type {
 export { createPricingComponents } from './standard/pricing/pricing'
 export type { SearchBox } from './standard/searchBox/searchBox'
 export { createSearchComponents } from './standard/searchBox/searchBox'
-export type { TabPane, Tabs, TabsHeader } from './standard/tabs/tabs'
+export type { TabPane, Tabs } from './standard/tabs/tabs'
 export { createTabsComponents, TabsScope } from './standard/tabs/tabs'
 export { createThemeSwitcherComponents } from './standard/themeSwitcher/themeSwitcher'
 export type { TopBar } from './standard/topBar/topBar'

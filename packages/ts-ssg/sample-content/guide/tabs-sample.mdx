@@ -10,7 +10,7 @@ nav:
 
 # Tabs Component Samples
 
-`Tabs`, `TabsHeader`, and `TabPane` are static-friendly components for showing grouped content.  
+`Tabs`, and `TabPane` are static-friendly components for showing grouped content.  
 Each `TabPane` accepts normal slotted MDX content, including fenced code blocks.
 Tab buttons can optionally show icons via the `icon` prop.
 
@@ -178,9 +178,9 @@ Tab buttons can optionally show icons via the `icon` prop.
 
 ~~~html
 <Tabs id="quickstart">
-  <TabsHeader>
+  <template #header>
     <h4>Quickstart</h4>
-  </TabsHeader>
+  </template>
   <TabPane id="install" label="Install" active="true">
     ```bash
     npm i @purestack/ts-ssg

@@ -31,13 +31,6 @@ function registerTabsShellStyles(
     .boxShadow(options.shadows.soft)
 
   styleBuilder
-    .select('.tabs__header', theme)
-    .display('flex')
-    .alignItems('center')
-    .justifyContent('space-between')
-    .gap('12px')
-
-  styleBuilder
     .select('.tabs__list', theme)
     .display('grid')
     .gridTemplateColumns('repeat(auto-fit, minmax(120px, 1fr))')

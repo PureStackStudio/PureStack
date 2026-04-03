@@ -11,8 +11,6 @@ export interface Tabs extends TabsScope {
   ariaLabel?: string
 }
 
-export interface TabsHeader {}
-
 export interface TabPane {
   id?: string
   label?: string
@@ -29,15 +27,10 @@ export interface TabPane {
 }
 
 const tabsTemplate = html`<section class="tabs">
-  <slot name="header"></slot>
   <div class="tabs__list" role="tablist" :aria-label="ariaLabel">
     <slot></slot>
   </div>
 </section>`
-
-const tabsHeaderTemplate = html`<template name="header">
-  <header class="tabs__header"><slot></slot></header>
-</template>`
 
 const tabPaneTemplate = html`<div class="tabs__item">
   <input
@@ -77,10 +70,6 @@ function createTabsComponent() {
   })
 }
 
-function createTabsHeaderComponent() {
-  return defineComponent<TabsHeader>(tabsHeaderTemplate, {})
-}
-
 function createTabPaneComponent() {
   return defineComponent<TabPane>(tabPaneTemplate, {
     props: ['id', 'label', 'icon', 'active', 'disabled', 'group'],
@@ -92,7 +81,6 @@ export function createTabsComponents() {
   registerTabsStyles()
   return {
     tabs: createTabsComponent(),
-    tabsHeader: createTabsHeaderComponent(),
     tabPane: createTabPaneComponent(),
   }
 }
