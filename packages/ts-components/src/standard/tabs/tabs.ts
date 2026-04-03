@@ -2,11 +2,10 @@ import { tryResolveTsSsgContext } from 'packages/ts-common/src/resolveTsSsgConte
 import { type ComponentHead, defineComponent, html } from 'regor'
 import { registerTabsStyles } from './tabsStyle'
 
-export class TabsScope {
-  groupName?: string = 'tabs-default'
-}
+const defaultGroupName = 'tabs-default'
 
-export interface Tabs extends TabsScope {
+export class Tabs {
+  groupName: string = defaultGroupName
   id?: string
   ariaLabel?: string
 }
@@ -22,11 +21,10 @@ export interface TabPane {
   tabId?: string
   panelId?: string
   groupName?: string
-  isActive?: boolean
-  isDisabled?: boolean
 }
 
 const tabsTemplate = html`<section class="tabs">
+  <slot name="header"></slot>
   <div class="tabs__list" role="tablist" :aria-label="ariaLabel">
     <slot></slot>
   </div>
@@ -38,18 +36,18 @@ const tabPaneTemplate = html`<div class="tabs__item">
     type="radio"
     :name="groupName"
     :id="inputId"
-    :checked="isActive"
-    :disabled="isDisabled"
+    :checked="active"
+    :disabled="disabled"
   />
   <label
     class="tabs__tab"
-    :class="{ 'tabs__tab--disabled': isDisabled }"
+    :class="{ 'tabs__tab--disabled': disabled }"
     role="tab"
     :id="tabId"
     :for="inputId"
     :aria-controls="panelId"
-    :aria-selected="isActive ? 'true' : null"
-    :aria-disabled="isDisabled ? 'true' : null"
+    :aria-selected="active ? 'true' : null"
+    :aria-disabled="disabled ? 'true' : null"
     ><Icon class="tabs__tab-icon" :name="icon" />
     <span class="tabs__tab-label">{{ label }}</span></label
   >
@@ -86,8 +84,8 @@ export function createTabsComponents() {
 }
 
 function resolveTabs(props: Tabs): Tabs {
-  const groupName = resolveTabsId(props.id)
-  return Object.assign(new TabsScope(), {
+  const groupName = props.groupName ?? defaultGroupName
+  return Object.assign(new Tabs(), {
     groupName,
     ariaLabel: resolveAriaLabel(props.ariaLabel),
   })
@@ -96,19 +94,17 @@ function resolveTabs(props: Tabs): Tabs {
 function resolveTabPane(head: ComponentHead<TabPane>): TabPane {
   const label = resolveText(head.props.label) || 'Tab'
   const icon = resolveText(head.props.icon)
-  const fromParent = head.findContext(TabsScope)
-  const groupName =
-    resolveText(head.props.group) || fromParent?.groupName || 'tabs-default'
+  const fromParent = head.findContext(Tabs)
+  const groupName = fromParent?.groupName || defaultGroupName
   const localId = resolveTabLocalId(head.props.id, label)
   return {
+    ...head.props,
     label,
     icon,
     inputId: `${groupName}__control-${localId}`,
     tabId: `${groupName}__tab-${localId}`,
     panelId: `${groupName}__panel-${localId}`,
     groupName,
-    isActive: resolveBoolean(head.props.active),
-    isDisabled: resolveBoolean(head.props.disabled),
   }
 }
 
@@ -116,12 +112,6 @@ function resolveAriaLabel(value: unknown) {
   const ariaLabel = resolveText(value)
   if (ariaLabel) return ariaLabel
   return 'Tabs'
-}
-
-function resolveTabsId(value: unknown) {
-  const fromId = toSlug(resolveText(value))
-  if (fromId) return `tabs-${fromId}`
-  return 'tabs-default'
 }
 
 function resolveTabLocalId(value: unknown, label: string) {
@@ -136,12 +126,6 @@ function resolveText(value: unknown) {
   return typeof value === 'string' && value.trim().length > 0
     ? value.trim()
     : ''
-}
-
-function resolveBoolean(value: unknown) {
-  if (typeof value === 'boolean') return value
-  if (typeof value === 'string') return value.toLowerCase().trim() === 'true'
-  return false
 }
 
 function toSlug(value: string) {
