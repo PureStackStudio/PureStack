@@ -10,7 +10,7 @@ describe('Tabs rendering', () => {
     const cleanup = ensureDomGlobals()
     const components = { ...createIconComponents(), ...createTabsComponents() }
     const html = renderApp(
-      `<Tabs id="quickstart">
+      `<Tabs group="quickstart">
         <TabPane id="install" label="Install">Run npm install</TabPane>
         <TabPane id="usage" label="Usage" active="true">
           <strong>Import buildSite</strong>
@@ -27,7 +27,7 @@ describe('Tabs rendering', () => {
 
     expect(html).toContain('Run npm install')
     expect(html).toContain('<strong>Import buildSite</strong>')
-    expect(html).toContain('name="tabs-quickstart"')
+    expect(html).toContain('name="quickstart"')
     expect(html).toContain('aria-selected="true"')
   })
 
@@ -35,7 +35,7 @@ describe('Tabs rendering', () => {
     const cleanup = ensureDomGlobals()
     const components = { ...createIconComponents(), ...createTabsComponents() }
     const html = renderApp(
-      `<Tabs id="sdk-tabs">
+      `<Tabs group="sdk-tabs">
         <TabPane id="blocked" label="Blocked" disabled="true">blocked</TabPane>
         <TabPane id="ready" label="Ready">ready</TabPane>
       </Tabs>`,
@@ -48,29 +48,9 @@ describe('Tabs rendering', () => {
     )
     cleanup()
 
-    expect(html).toContain('name="tabs-sdk-tabs"')
+    expect(html).toContain('name="sdk-tabs"')
     expect(html).toContain('aria-disabled="true"')
     expect(html).toContain('>Ready<')
-  })
-
-  it('supports explicit group override on tab panes', () => {
-    const cleanup = ensureDomGlobals()
-    const components = { ...createIconComponents(), ...createTabsComponents() }
-    const html = renderApp(
-      `<Tabs id="outer">
-        <TabPane id="a" group="manual-group" label="Manual">content</TabPane>
-      </Tabs>`,
-      {
-        components,
-        context: createTestContext({
-          pageInfo: { relPath: 'tabs.mdx', urlPath: '/tabs/' },
-        }),
-      },
-    )
-    cleanup()
-
-    expect(html).toContain('name="manual-group"')
-    expect(html).toContain('id="manual-group__control-a"')
   })
 
   it('renders optional tab icons', () => {

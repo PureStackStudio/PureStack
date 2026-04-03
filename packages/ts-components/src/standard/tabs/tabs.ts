@@ -2,10 +2,10 @@ import { tryResolveTsSsgContext } from 'packages/ts-common/src/resolveTsSsgConte
 import { type ComponentHead, defineComponent, html } from 'regor'
 import { registerTabsStyles } from './tabsStyle'
 
-const defaultGroupName = 'tabs-default'
+const defaultGroup = 'tabs-default'
 
 export class Tabs {
-  groupName: string = defaultGroupName
+  group: string = defaultGroup
   id?: string
   ariaLabel?: string
 }
@@ -20,7 +20,6 @@ export interface TabPane {
   inputId?: string
   tabId?: string
   panelId?: string
-  groupName?: string
 }
 
 const tabsTemplate = html`<section class="tabs">
@@ -34,7 +33,7 @@ const tabPaneTemplate = html`<div class="tabs__item">
   <input
     class="tabs__control"
     type="radio"
-    :name="groupName"
+    :name="group"
     :id="inputId"
     :checked="active"
     :disabled="disabled"
@@ -60,7 +59,7 @@ const tabPaneTemplate = html`<div class="tabs__item">
 
 function createTabsComponent() {
   return defineComponent<Tabs>(tabsTemplate, {
-    props: ['id', 'ariaLabel'],
+    props: ['id', 'ariaLabel', 'group'],
     context: (head) => {
       markTabsRuntimeEmbed(head)
       return resolveTabs(head.props)
@@ -84,9 +83,9 @@ export function createTabsComponents() {
 }
 
 function resolveTabs(props: Tabs): Tabs {
-  const groupName = props.groupName ?? defaultGroupName
+  const group = props.group ?? defaultGroup
   return Object.assign(new Tabs(), {
-    groupName,
+    group,
     ariaLabel: resolveAriaLabel(props.ariaLabel),
   })
 }
@@ -95,16 +94,16 @@ function resolveTabPane(head: ComponentHead<TabPane>): TabPane {
   const label = resolveText(head.props.label) || 'Tab'
   const icon = resolveText(head.props.icon)
   const fromParent = head.findContext(Tabs)
-  const groupName = fromParent?.groupName || defaultGroupName
+  const group = fromParent?.group || defaultGroup
   const localId = resolveTabLocalId(head.props.id, label)
   return {
     ...head.props,
     label,
     icon,
-    inputId: `${groupName}__control-${localId}`,
-    tabId: `${groupName}__tab-${localId}`,
-    panelId: `${groupName}__panel-${localId}`,
-    groupName,
+    inputId: `${group}__control-${localId}`,
+    tabId: `${group}__tab-${localId}`,
+    panelId: `${group}__panel-${localId}`,
+    group,
   }
 }
 

@@ -1,6 +1,10 @@
 const MOBILE_QUERY = '(max-width: 760px)'
 const OVERFLOW_BUTTON_WIDTH = 42
 
+type TabsApi = {
+  refresh: (target?: string) => void
+}
+
 type TabsEntry = {
   item: HTMLElement
   control: HTMLInputElement
@@ -11,20 +15,33 @@ type TabsEntry = {
 
 type InteractionSource = 'button' | 'select' | 'overflow' | 'external'
 
+declare global {
+  interface Window {
+    tsSsgTabs: TabsApi
+  }
+}
+
+const cleanupByRoot = new WeakMap<HTMLElement, () => void>()
+
 function ready(fn: () => void) {
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', fn, { once: true })
+    document.addEventListener('DOMContentLoaded', () => fn(), { once: true })
     return
   }
   fn()
 }
 
-function initTabs() {
-  const roots = Array.from(document.querySelectorAll('.tabs'))
-  for (const root of roots) {
-    if (!(root instanceof HTMLElement)) continue
-    enhanceTabs(root)
-  }
+function resolveTabsRoots(target?: string) {
+  return [...document.querySelectorAll<HTMLElement>(target ?? '.tabs')]
+}
+
+function initTabs(target?: string) {
+  for (const root of resolveTabsRoots(target)) refreshTabs(root)
+}
+
+function refreshTabs(root: HTMLElement) {
+  cleanupByRoot.get(root)?.()
+  enhanceTabs(root)
 }
 
 function enhanceTabs(root: HTMLElement) {
@@ -137,6 +154,7 @@ function enhanceTabs(root: HTMLElement) {
   let windowStart = 0
   let lastInteraction: { source: InteractionSource; index: number } | null =
     null
+  const controlChangeHandlers = new Map<HTMLInputElement, () => void>()
 
   function getActiveIndex() {
     for (let i = 0; i < tabs.length; i += 1) {
@@ -393,15 +411,16 @@ function enhanceTabs(root: HTMLElement) {
     openOverflow()
   })
 
-  document.addEventListener('click', (event) => {
+  const onDocumentClick = (event: Event) => {
     const target = event.target
     if (!(target instanceof Node)) return
     if (overflow.contains(target)) return
     closeOverflow()
-  })
+  }
+  document.addEventListener('click', onDocumentClick)
 
   for (let i = 0; i < tabs.length; i += 1) {
-    tabs[i].control.addEventListener('change', () => {
+    const onControlChange = () => {
       const active = getActiveIndex()
       if (!lastInteraction && active !== -1) {
         lastInteraction = { source: 'external', index: active }
@@ -410,7 +429,9 @@ function enhanceTabs(root: HTMLElement) {
       if (!root.classList.contains('tabs--compact')) {
         computeHiddenIndexes()
       }
-    })
+    }
+    tabs[i].control.addEventListener('change', onControlChange)
+    controlChangeHandlers.set(tabs[i].control, onControlChange)
   }
 
   const onResize = () => {
@@ -436,6 +457,26 @@ function enhanceTabs(root: HTMLElement) {
 
   syncSelect()
   applyLayout()
+
+  cleanupByRoot.set(root, () => {
+    if (raf) {
+      window.cancelAnimationFrame(raf)
+      raf = 0
+    }
+    window.removeEventListener('resize', onResize)
+    if (typeof media.removeEventListener === 'function') {
+      media.removeEventListener('change', applyLayout)
+    }
+    resizeObserver?.disconnect()
+    document.removeEventListener('click', onDocumentClick)
+    for (const [control, onControlChange] of controlChangeHandlers) {
+      control.removeEventListener('change', onControlChange)
+    }
+    row.remove()
+    if (selectWrap.parentNode === root) selectWrap.remove()
+    root.classList.remove('tabs--enhanced', 'tabs--compact')
+    cleanupByRoot.delete(root)
+  })
 }
 
 function resolveTabIconMarkup(label: HTMLLabelElement) {
@@ -471,5 +512,11 @@ function setButtonContent(
 }
 
 ready(initTabs)
+
+globalThis.window.tsSsgTabs = {
+  refresh(target?: string) {
+    initTabs(target)
+  },
+}
 
 export {}
