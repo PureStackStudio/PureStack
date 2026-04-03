@@ -24,3 +24,14 @@ export function resolveTsSsgContext(head: unknown): TsSsgContext {
   }
   throw new Error('tsSsgContext is not available in the Regor context stack.')
 }
+
+export function tryResolveTsSsgContext(
+  head: unknown,
+): TsSsgContext | undefined {
+  const stack = hasContextStack(head) && Array.isArray(head.ctx) ? head.ctx : []
+  for (const ctx of stack) {
+    if (!hasTsSsgContext(ctx)) continue
+    if (ctx.tsSsgContext) return ctx.tsSsgContext
+  }
+  return undefined
+}

@@ -1,4 +1,4 @@
-import { resolveTsSsgContext } from '@purestack/ts-common'
+import { tryResolveTsSsgContext } from 'packages/ts-common/src/resolveTsSsgContext'
 import { type ComponentHead, defineComponent, html } from 'regor'
 import { registerTabsStyles } from './tabsStyle'
 
@@ -164,5 +164,5 @@ function toSlug(value: string) {
 }
 
 function markTabsRuntimeEmbed(head: ComponentHead<Tabs>) {
-  resolveTsSsgContext(head).recordRuntimeEmbed('tabs', 'head')
+  tryResolveTsSsgContext(head)?.recordRuntimeEmbed('tabs', 'head')
 }
