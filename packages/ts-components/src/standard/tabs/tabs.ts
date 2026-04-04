@@ -1,25 +1,22 @@
 import { tryResolveTsSsgContext } from 'packages/ts-common/src/resolveTsSsgContext'
-import { type ComponentHead, defineComponent, html } from 'regor'
+import { type ComponentHead, defineComponent, html, type Ref, ref } from 'regor'
 import { registerTabsStyles } from './tabsStyle'
 
 const defaultGroup = 'tabs-default'
+let nextAutoTabId = 1
 
 export class Tabs {
   group: string = defaultGroup
-  id?: string
   ariaLabel?: string
+  selectedTab?: Ref<string>
 }
 
 export interface TabPane {
   id?: string
   label?: string
   icon?: string
-  active?: boolean
   disabled?: boolean
   group?: string
-  inputId?: string
-  tabId?: string
-  panelId?: string
 }
 
 const tabsTemplate = html`<section class="tabs">
@@ -34,23 +31,29 @@ const tabPaneTemplate = html`<div class="tabs__item">
     class="tabs__control"
     type="radio"
     :name="group"
-    :id="inputId"
-    :checked="active"
+    :id="id"
+    :value="id"
+    r-model="selectedTab"
     :disabled="disabled"
   />
   <label
     class="tabs__tab"
     :class="{ 'tabs__tab--disabled': disabled }"
     role="tab"
-    :id="tabId"
-    :for="inputId"
-    :aria-controls="panelId"
-    :aria-selected="active ? 'true' : null"
-    :aria-disabled="disabled ? 'true' : null"
+    :id="id+'-label'"
+    :for="id"
+    :aria-controls="id+'-panel'"
+    :aria-selected="selectedTab === id"
+    :aria-disabled="disabled"
     ><Icon class="tabs__tab-icon" :name="icon" />
     <span class="tabs__tab-label">{{ label }}</span></label
   >
-  <section class="tabs__panel" role="tabpanel" :id="panelId" :aria-labelledby="tabId">
+  <section
+    class="tabs__panel"
+    role="tabpanel"
+    :id="id+'-panel'"
+    :aria-labelledby="id+'-label'"
+  >
     <div class="tabs__panel-body">
       <slot></slot>
     </div>
@@ -59,7 +62,7 @@ const tabPaneTemplate = html`<div class="tabs__item">
 
 function createTabsComponent() {
   return defineComponent<Tabs>(tabsTemplate, {
-    props: ['id', 'ariaLabel', 'group'],
+    props: ['ariaLabel', 'group', 'selectedTab'],
     context: (head) => {
       markTabsRuntimeEmbed(head)
       return resolveTabs(head.props)
@@ -69,7 +72,7 @@ function createTabsComponent() {
 
 function createTabPaneComponent() {
   return defineComponent<TabPane>(tabPaneTemplate, {
-    props: ['id', 'label', 'icon', 'active', 'disabled', 'group'],
+    props: ['id', 'label', 'icon', 'disabled', 'group'],
     context: (head) => resolveTabPane(head),
   })
 }
@@ -84,25 +87,26 @@ export function createTabsComponents() {
 
 function resolveTabs(props: Tabs): Tabs {
   const group = props.group ?? defaultGroup
-  return Object.assign(new Tabs(), {
+  const tabs = new Tabs()
+  const selectedTab = ref(props.selectedTab ?? tabs.selectedTab ?? '')
+  return Object.assign(tabs, {
     group,
     ariaLabel: resolveAriaLabel(props.ariaLabel),
+    selectedTab,
   })
 }
 
 function resolveTabPane(head: ComponentHead<TabPane>): TabPane {
-  const label = resolveText(head.props.label) || 'Tab'
   const icon = resolveText(head.props.icon)
   const fromParent = head.findContext(Tabs)
   const group = fromParent?.group || defaultGroup
-  const localId = resolveTabLocalId(head.props.id, label)
+  const id = resolveTabId(head.props.id)
+  const label = resolveText(head.props.label) || id
   return {
     ...head.props,
+    id,
     label,
     icon,
-    inputId: `${group}__control-${localId}`,
-    tabId: `${group}__tab-${localId}`,
-    panelId: `${group}__panel-${localId}`,
     group,
   }
 }
@@ -113,25 +117,19 @@ function resolveAriaLabel(value: unknown) {
   return 'Tabs'
 }
 
-function resolveTabLocalId(value: unknown, label: string) {
-  const fromValue = toSlug(resolveText(value))
-  if (fromValue) return fromValue
-  const fromLabel = toSlug(label)
-  if (fromLabel) return fromLabel
-  return 'item'
+function resolveTabId(id?: string) {
+  const fromId = resolveText(id)
+  if (fromId) return fromId
+
+  const nextId = `tab-${nextAutoTabId}`
+  nextAutoTabId += 1
+  return nextId
 }
 
 function resolveText(value: unknown) {
   return typeof value === 'string' && value.trim().length > 0
     ? value.trim()
     : ''
-}
-
-function toSlug(value: string) {
-  return value
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
 }
 
 function markTabsRuntimeEmbed(head: ComponentHead<Tabs>) {

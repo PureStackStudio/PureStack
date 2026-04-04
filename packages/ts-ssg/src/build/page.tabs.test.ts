@@ -39,7 +39,7 @@ describe('tabs runtime embedding', () => {
       await writeFile(
         path.join(contentDir, 'index.mdx'),
         `<Tabs id="demo">
-  <TabPane id="a" label="A" active="true">A</TabPane>
+  <TabPane id="a" label="A">A</TabPane>
   <TabPane id="b" label="B">B</TabPane>
 </Tabs>`,
       )

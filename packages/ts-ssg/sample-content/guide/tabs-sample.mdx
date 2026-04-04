@@ -16,8 +16,8 @@ Tab buttons can optionally show icons via the `icon` prop.
 
 ## 1. Installation walkthrough with code tabs
 
-<Tabs id="install-flow">
-  <TabPane id="npm" label="npm" icon="iconoir:code" active="true">
+<Tabs id="install-flow" selected-tab="yarn">
+  <TabPane id="npm" label="npm" icon="iconoir:code">
     ```bash
     npm install @purestack/ts-ssg
     ```
@@ -37,7 +37,7 @@ Tab buttons can optionally show icons via the `icon` prop.
 ## 6. Stress test with 15 tabs and large titles
 
 <Tabs id="fifteen-tabs-large-labels">
-  <TabPane id="large-tab-1" label="Installation and Environment Bootstrap" active="true">
+  <TabPane id="large-tab-1" label="Installation and Environment Bootstrap">
     ```ts
     console.log('Large title tab 1 content')
     ```
@@ -117,7 +117,7 @@ Tab buttons can optionally show icons via the `icon` prop.
 ## 2. Build configuration examples
 
 <Tabs id="config-samples">
-  <TabPane id="programmatic" label="Programmatic API" icon="iconoir:code" active="true">
+  <TabPane id="programmatic" label="Programmatic API" icon="iconoir:code">
     ```ts
     import path from 'node:path'
     import { buildSite } from '@purestack/ts-ssg'
@@ -156,7 +156,7 @@ Tab buttons can optionally show icons via the `icon` prop.
 ## 3. API integration sample with a disabled tab
 
 <Tabs id="api-samples">
-  <TabPane id="fetch" label="fetch" icon="iconoir:code" active="true">
+  <TabPane id="fetch" label="fetch" icon="iconoir:code">
     ```ts
     const response = await fetch('/api/rates?base=EUR')
     const data = await response.json()
@@ -177,11 +177,11 @@ Tab buttons can optionally show icons via the `icon` prop.
 ## 4. Minimal markup reference
 
 ~~~html
-<Tabs id="quickstart">
+<Tabs id="quickstart" selected-tab="install">
   <template #header>
     <h4>Quickstart</h4>
   </template>
-  <TabPane id="install" label="Install" active="true">
+  <TabPane id="install" label="Install">
     ```bash
     npm i @purestack/ts-ssg
     ```
@@ -197,7 +197,7 @@ Tab buttons can optionally show icons via the `icon` prop.
 ## 5. Stress test with 15 tabs
 
 <Tabs id="fifteen-tabs">
-  <TabPane id="tab-1" label="Tab 1" icon="iconoir:code" active="true">
+  <TabPane id="tab-1" label="Tab 1" icon="iconoir:code">
     ```ts
     console.log('Tab 1 content')
     ```
