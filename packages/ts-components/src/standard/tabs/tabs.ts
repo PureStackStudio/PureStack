@@ -1,14 +1,22 @@
 import { tryResolveTsSsgContext } from 'packages/ts-common/src/resolveTsSsgContext'
-import { type ComponentHead, defineComponent, html, type Ref, ref } from 'regor'
+import {
+  type ComponentHead,
+  defineComponent,
+  html,
+  isRef,
+  type Ref,
+  ref,
+} from 'regor'
 import { registerTabsStyles } from './tabsStyle'
 
 const defaultGroup = 'tabs-default'
+let nextAutoGroupId = 1
 let nextAutoTabId = 1
 
 export class Tabs {
   group: string = defaultGroup
   ariaLabel?: string
-  selectedTab?: Ref<string>
+  selectedTab?: Ref<string> | string
 }
 
 export interface TabPane {
@@ -86,14 +94,24 @@ export function createTabsComponents() {
 }
 
 function resolveTabs(props: Tabs): Tabs {
-  const group = props.group ?? defaultGroup
+  const group = resolveTabGroup(props.group)
   const tabs = new Tabs()
-  const selectedTab = ref(props.selectedTab ?? tabs.selectedTab ?? '')
+  let selectedTab = props.selectedTab ?? tabs.selectedTab ?? ''
+  if (!isRef(selectedTab)) selectedTab = ref(selectedTab)
   return Object.assign(tabs, {
     group,
     ariaLabel: resolveAriaLabel(props.ariaLabel),
     selectedTab,
   })
+}
+
+function resolveTabGroup(value: unknown) {
+  const explicitGroup = resolveText(value)
+  if (explicitGroup) return explicitGroup
+
+  const nextGroup = `${defaultGroup}-${nextAutoGroupId}`
+  nextAutoGroupId += 1
+  return nextGroup
 }
 
 function resolveTabPane(head: ComponentHead<TabPane>): TabPane {
