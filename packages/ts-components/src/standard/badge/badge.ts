@@ -4,12 +4,19 @@ import {
   getSemanticToneTextClass,
   resolveSemanticTone,
 } from '@purestack/ts-style'
-import { defineComponent, html } from 'regor'
+import {
+  type ComputedRef,
+  computed,
+  defineComponent,
+  html,
+  type Ref,
+  unref,
+} from 'regor'
 import { registerBadgeStyles } from './badgeStyle'
 
 export interface Badge {
-  tone?: string
-  toneClass?: string
+  tone?: Ref<string> | string
+  toneClass?: ComputedRef<string>
 }
 
 const badgeTemplate = html`<span class="badge" :class="toneClass">
@@ -21,7 +28,7 @@ function createBadgeComponent() {
     props: ['tone'],
     context: (head) => ({
       tone: head.props.tone,
-      toneClass: resolveBadgeToneClass(head.props.tone),
+      toneClass: computed(() => resolveBadgeToneClass(unref(head.props.tone))),
     }),
   })
 }
