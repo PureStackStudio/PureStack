@@ -26,6 +26,10 @@ export function isContentFile(_relPath: string, ext: string) {
   return CONTENT_EXTS.has(ext)
 }
 
+export function isAgentsFile(relPath: string) {
+  return path.basename(relPath).toUpperCase() === 'AGENTS.MD'
+}
+
 export function isSiteConfigFile(relPath: string) {
   return path.basename(relPath) === SITE_CONFIG_FILENAME
 }
@@ -50,7 +54,8 @@ export async function discoverContent(
     (relPath, ext) =>
       isContentFile(relPath, ext) &&
       !isDefaultFooterFile(relPath) &&
-      !isDefaultHeaderFile(relPath),
+      !isDefaultHeaderFile(relPath) &&
+      !isAgentsFile(relPath),
   )
   log.info('discover complete', { fileCount: files.length })
   return files.sort((a, b) => a.relPath.localeCompare(b.relPath))
@@ -62,6 +67,7 @@ export async function discoverStaticAssets(
   const log = getLogger()
   const assets: StaticAssetFile[] = []
   await walkDir(contentDir, contentDir, assets, (relPath, ext) => {
+    if (isAgentsFile(relPath)) return false
     if (isSiteConfigFile(relPath)) return false
     if (isDefaultFooterFile(relPath)) return false
     if (isDefaultHeaderFile(relPath)) return false
