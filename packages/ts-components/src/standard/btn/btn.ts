@@ -72,10 +72,9 @@ function resolveBtn(props: Btn): Btn {
   const customClass = resolveText(props.class)
   const iconPosition = resolveIconPosition(props.iconPosition)
   const hasIcon = icon.length > 0
-  const disabled = resolveBoolean(props.disabled)
+  const disabled = props.disabled
   const iconOnly = resolveBoolean(props.iconOnly) && hasIcon
   const explicitAriaLabel = resolveText(props.ariaLabel)
-
   const classTokens = [`btn--${variant}`, `btn--${size}`]
   if (iconOnly) classTokens.push('btn--icon-only')
   if (customClass) classTokens.push(customClass)

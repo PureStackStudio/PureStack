@@ -4,7 +4,7 @@ import {
   resolveSemanticTone,
 } from '@purestack/ts-style'
 import { tryResolveTsSsgContext } from 'packages/ts-common/src/resolveTsSsgContext'
-import { type ComponentHead, defineComponent, html } from 'regor'
+import { type ComponentHead, defineComponent, html, isRef, unref } from 'regor'
 import { registerModalStyles } from './modalStyle'
 
 export interface Modal {
@@ -142,6 +142,7 @@ function resolveModalId(value: unknown) {
 }
 
 function resolveText(value: unknown) {
+  if (isRef(value)) value = unref(value)
   return typeof value === 'string' && value.trim().length > 0
     ? value.trim()
     : ''
@@ -175,6 +176,7 @@ function resolveSlideFrom(value: unknown) {
 }
 
 function resolveBoolean(value: unknown, fallback: boolean) {
+  if (isRef(value)) value = unref(value)
   if (typeof value === 'boolean') return value
   if (typeof value === 'string') {
     const normalized = value.trim().toLowerCase()

@@ -1,10 +1,6 @@
 const MOBILE_QUERY = '(max-width: 760px)'
 const OVERFLOW_BUTTON_WIDTH = 42
 
-type TabsApi = {
-  refresh: (target?: string) => void
-}
-
 type TabsEntry = {
   item: HTMLElement
   control: HTMLInputElement
@@ -14,12 +10,6 @@ type TabsEntry = {
 }
 
 type InteractionSource = 'button' | 'select' | 'overflow' | 'external'
-
-declare global {
-  interface Window {
-    tsSsgTabs: TabsApi
-  }
-}
 
 const cleanupByRoot = new WeakMap<HTMLElement, () => void>()
 

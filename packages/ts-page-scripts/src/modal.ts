@@ -23,55 +23,64 @@ function ready(run: () => void) {
 }
 
 function initModalRuntime() {
-  bindTriggers()
-  bindModalContainers()
+  refreshModalRuntime()
 }
 
-function bindTriggers() {
-  const triggers = document.querySelectorAll<HTMLElement>(
-    '[data-modal-trigger]',
-  )
+function refreshModalRuntime(target?: string) {
+  bindTriggers(target)
+  bindModalContainers(target)
+}
+
+function bindTriggers(target?: string) {
+  const triggers = queryScoped<HTMLElement>(target, '[data-modal-trigger]')
   triggers.forEach((trigger) => {
-    if (trigger.getAttribute('data-modal-bound') === 'true') return
-    trigger.setAttribute('data-modal-bound', 'true')
-    trigger.addEventListener('click', (event) => {
-      event.preventDefault()
-      const targetId = trigger.getAttribute('data-modal-target')?.trim()
-      if (!targetId) return
-      openModalById(targetId, trigger)
-    })
+    bindTrigger(trigger)
   })
 }
 
-function bindModalContainers() {
-  const dialogs =
-    document.querySelectorAll<HTMLDialogElement>('[data-modal-root]')
-  dialogs.forEach((dialog) => {
-    if (dialog.getAttribute('data-modal-runtime') === 'true') return
-    dialog.setAttribute('data-modal-runtime', 'true')
+function bindTrigger(trigger: HTMLElement) {
+  if (trigger.getAttribute('data-modal-bound') === 'true') return
+  trigger.setAttribute('data-modal-bound', 'true')
+  trigger.addEventListener('click', (event) => {
+    event.preventDefault()
+    const targetId = trigger.getAttribute('data-modal-target')?.trim()
+    if (!targetId) return
+    openModalById(targetId, trigger)
+  })
+}
 
-    dialog.addEventListener('cancel', (event) => {
+function bindModalContainers(target?: string) {
+  const dialogs = queryScoped<HTMLDialogElement>(target, '[data-modal-root]')
+  dialogs.forEach((dialog) => {
+    bindModalContainer(dialog)
+  })
+}
+
+function bindModalContainer(dialog: HTMLDialogElement) {
+  if (dialog.getAttribute('data-modal-runtime') === 'true') return
+  dialog.setAttribute('data-modal-runtime', 'true')
+
+  dialog.addEventListener('cancel', (event) => {
+    event.preventDefault()
+    closeModal(dialog)
+  })
+
+  dialog.addEventListener('click', (event) => {
+    if (event.target !== dialog) return
+    closeModal(dialog)
+  })
+
+  dialog.addEventListener('keydown', (event) => {
+    if (event.key !== 'Tab') return
+    trapFocus(event, dialog)
+  })
+
+  const closeButtons =
+    dialog.querySelectorAll<HTMLElement>('[data-modal-close]')
+  closeButtons.forEach((button) => {
+    button.addEventListener('click', (event) => {
       event.preventDefault()
       closeModal(dialog)
-    })
-
-    dialog.addEventListener('click', (event) => {
-      if (event.target !== dialog) return
-      closeModal(dialog)
-    })
-
-    dialog.addEventListener('keydown', (event) => {
-      if (event.key !== 'Tab') return
-      trapFocus(event, dialog)
-    })
-
-    const closeButtons =
-      dialog.querySelectorAll<HTMLElement>('[data-modal-close]')
-    closeButtons.forEach((button) => {
-      button.addEventListener('click', (event) => {
-        event.preventDefault()
-        closeModal(dialog)
-      })
     })
   })
 }
@@ -79,7 +88,15 @@ function bindModalContainers() {
 function openModalById(id: string, trigger: HTMLElement | null) {
   const dialog = document.getElementById(id)
   if (!(dialog instanceof HTMLDialogElement)) return
+  bindModalContainer(dialog)
   openModal(dialog, trigger)
+}
+
+function closeModalById(id: string) {
+  const dialog = document.getElementById(id)
+  if (!(dialog instanceof HTMLDialogElement)) return
+  bindModalContainer(dialog)
+  closeModal(dialog)
 }
 
 function openModal(dialog: HTMLDialogElement, trigger: HTMLElement | null) {
@@ -262,6 +279,48 @@ function getFocusable(root: ParentNode) {
   )
 }
 
+function queryScoped<T extends Element>(
+  target: string | undefined,
+  selector: string,
+) {
+  if (!target) {
+    return Array.from(document.querySelectorAll<T>(selector))
+  }
+
+  const roots = Array.from(document.querySelectorAll<HTMLElement>(target))
+  if (roots.length === 0) return []
+
+  const matches: T[] = []
+  const seen = new Set<Element>()
+
+  for (const root of roots) {
+    if (root.matches(selector) && !seen.has(root)) {
+      matches.push(root as unknown as T)
+      seen.add(root)
+    }
+
+    for (const match of root.querySelectorAll<T>(selector)) {
+      if (seen.has(match)) continue
+      matches.push(match)
+      seen.add(match)
+    }
+  }
+
+  return matches
+}
+
 ready(initModalRuntime)
+
+globalThis.window.tsSsgModal = {
+  refresh(target?: string) {
+    refreshModalRuntime(target)
+  },
+  open(id: string, trigger?: HTMLElement | null) {
+    openModalById(id, trigger ?? null)
+  },
+  close(id: string) {
+    closeModalById(id)
+  },
+}
 
 export {}
