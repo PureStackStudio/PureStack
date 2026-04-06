@@ -45,7 +45,7 @@ const modalTemplate = html`<dialog
           </slot>
           <Btn
             r-if="showClose"
-            variant="ghost"
+            tone="neutral"
             size="sm"
             type="button"
             data-modal-close

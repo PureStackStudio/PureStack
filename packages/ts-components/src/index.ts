@@ -7,7 +7,6 @@ export type {
   BtnIconPosition,
   BtnSize,
   BtnType,
-  BtnVariant,
 } from './standard/btn/btn'
 export { createButtonComponents } from './standard/btn/btn'
 export type { Consent, ConsentCategoryState } from './standard/consent/consent'

@@ -214,13 +214,13 @@ describe('compileMdxToHtml', () => {
     const source = [
       '<CardActions>',
       '  <template name="actions">',
-      '    <Btn variant="primary" icon="iconoir:check">Create project</Btn>',
-      '    <Btn variant="secondary" icon="iconoir:code">View source</Btn>',
-      '    <Btn variant="ghost" icon="iconoir:pin-slash" iconPosition="end">',
+      '    <Btn tone="accent" icon="iconoir:check">Create project</Btn>',
+      '    <Btn tone="neutral" icon="iconoir:code">View source</Btn>',
+      '    <Btn tone="ghost" icon="iconoir:pin-slash" iconPosition="end">',
       '      Read more',
       '    </Btn>',
-      '    <Btn variant="warning" icon="iconoir:headset-help">Review warning</Btn>',
-      '    <Btn variant="danger" icon="iconoir:pin" iconPosition="end">Delete item</Btn>',
+      '    <Btn tone="warning" icon="iconoir:headset-help">Review warning</Btn>',
+      '    <Btn tone="danger" icon="iconoir:pin" iconPosition="end">Delete item</Btn>',
       '  </template>',
       '</CardActions>',
     ].join('\n')
@@ -229,19 +229,19 @@ describe('compileMdxToHtml', () => {
     expect(compiledHtml).not.toContain('<p><Btn')
     expect(compiledHtml).not.toContain('</Btn></p>')
     expect(compiledHtml).toContain(
-      '<Btn variant="primary" icon="iconoir:check">Create project</Btn>',
+      '<Btn tone="accent" icon="iconoir:check">Create project</Btn>',
     )
     expect(compiledHtml).toContain(
-      '<Btn variant="secondary" icon="iconoir:code">View source</Btn>',
+      '<Btn tone="neutral" icon="iconoir:code">View source</Btn>',
     )
     expect(compiledHtml).toContain(
-      '<Btn variant="ghost" icon="iconoir:pin-slash" iconPosition="end">',
+      '<Btn tone="ghost" icon="iconoir:pin-slash" iconPosition="end">',
     )
     expect(compiledHtml).toContain(
-      '<Btn variant="warning" icon="iconoir:headset-help">Review warning</Btn>',
+      '<Btn tone="warning" icon="iconoir:headset-help">Review warning</Btn>',
     )
     expect(compiledHtml).toContain(
-      '<Btn variant="danger" icon="iconoir:pin" iconPosition="end">Delete item</Btn>',
+      '<Btn tone="danger" icon="iconoir:pin" iconPosition="end">Delete item</Btn>',
     )
   })
 
@@ -249,13 +249,13 @@ describe('compileMdxToHtml', () => {
     const source = [
       '## 10. Variants with icons',
       '',
-      '<Btn variant="primary" icon="iconoir:check">Create project</Btn>',
-      '<Btn variant="secondary" icon="iconoir:code">View source</Btn>',
-      '<Btn variant="ghost" icon="iconoir:pin-slash" iconPosition="end">',
+      '<Btn tone="accent" icon="iconoir:check">Create project</Btn>',
+      '<Btn tone="neutral" icon="iconoir:code">View source</Btn>',
+      '<Btn tone="ghost" icon="iconoir:pin-slash" iconPosition="end">',
       '  Read more',
       '</Btn>',
-      '<Btn variant="warning" icon="iconoir:headset-help">Review warning</Btn>',
-      '<Btn variant="danger" icon="iconoir:pin" iconPosition="end">Delete item</Btn>',
+      '<Btn tone="warning" icon="iconoir:headset-help">Review warning</Btn>',
+      '<Btn tone="danger" icon="iconoir:pin" iconPosition="end">Delete item</Btn>',
     ].join('\n')
 
     const compiledHtml = compileMdxToHtml(source)
@@ -264,34 +264,34 @@ describe('compileMdxToHtml', () => {
     )
     expect(compiledHtml).not.toContain('<p><Btn')
     expect(compiledHtml).toContain(
-      '<Btn variant="primary" icon="iconoir:check">Create project</Btn>',
+      '<Btn tone="accent" icon="iconoir:check">Create project</Btn>',
     )
     expect(compiledHtml).toContain(
-      '<Btn variant="secondary" icon="iconoir:code">View source</Btn>',
+      '<Btn tone="neutral" icon="iconoir:code">View source</Btn>',
     )
     expect(compiledHtml).toContain(
-      '<Btn variant="ghost" icon="iconoir:pin-slash" iconPosition="end"><p>Read more</p></Btn>',
+      '<Btn tone="ghost" icon="iconoir:pin-slash" iconPosition="end"><p>Read more</p></Btn>',
     )
     expect(compiledHtml).toContain(
-      '<Btn variant="warning" icon="iconoir:headset-help">Review warning</Btn>',
+      '<Btn tone="warning" icon="iconoir:headset-help">Review warning</Btn>',
     )
     expect(compiledHtml).toContain(
-      '<Btn variant="danger" icon="iconoir:pin" iconPosition="end">Delete item</Btn>',
+      '<Btn tone="danger" icon="iconoir:pin" iconPosition="end">Delete item</Btn>',
     )
     expect(compiledHtml).toContain(
-      '<Btn variant="primary" icon="iconoir:check">Create project</Btn>',
+      '<Btn tone="accent" icon="iconoir:check">Create project</Btn>',
     )
     expect(compiledHtml).toContain(
-      '<Btn variant="secondary" icon="iconoir:code">View source</Btn>',
+      '<Btn tone="neutral" icon="iconoir:code">View source</Btn>',
     )
     expect(compiledHtml).toContain(
-      '<Btn variant="ghost" icon="iconoir:pin-slash" iconPosition="end">',
+      '<Btn tone="ghost" icon="iconoir:pin-slash" iconPosition="end">',
     )
     expect(compiledHtml).toContain(
-      '<Btn variant="warning" icon="iconoir:headset-help">Review warning</Btn>',
+      '<Btn tone="warning" icon="iconoir:headset-help">Review warning</Btn>',
     )
     expect(compiledHtml).toContain(
-      '<Btn variant="danger" icon="iconoir:pin" iconPosition="end">Delete item</Btn>',
+      '<Btn tone="danger" icon="iconoir:pin" iconPosition="end">Delete item</Btn>',
     )
   })
 

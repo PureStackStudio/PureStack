@@ -1,6 +1,6 @@
 ---
 title: Button Component Samples
-description: Theme-aware button examples with variants, sizes, icons, and icon-only usage.
+description: Theme-aware button examples with tones, sizes, icons, and icon-only usage.
 layout:
   showToc: true
   fullWidth: true
@@ -8,19 +8,21 @@ layout:
 
 # Button Component Samples
 
-`Btn` is a static-safe action component with built-in variants, size scales, and optional icon placement.
+`Btn` is a static-safe action component with built-in tones, size scales, and optional icon placement.
 
 ## 1. Default button
 
 <Btn>Save changes</Btn>
 
-## 2. Variants
+## 2. Tones
 
-<Btn variant="primary">Primary action</Btn>
-<Btn variant="secondary">Secondary action</Btn>
-<Btn variant="ghost">Ghost action</Btn>
-<Btn variant="warning">Warning action</Btn>
-<Btn variant="danger">Danger action</Btn>
+<Btn tone="accent">Accent action</Btn>
+<Btn tone="neutral">Neutral action</Btn>
+<Btn tone="ghost">Ghost action</Btn>
+<Btn tone="info">Info action</Btn>
+<Btn tone="success">Success action</Btn>
+<Btn tone="warning">Warning action</Btn>
+<Btn tone="danger">Danger action</Btn>
 
 ## 3. Sizes
 
@@ -44,45 +46,49 @@ layout:
 
 ## 7. Disabled state
 
-<Btn disabled="true">Disabled default</Btn>
-<Btn variant="secondary" disabled="true">Disabled secondary</Btn>
-<Btn variant="ghost" disabled="true">Disabled ghost</Btn>
-<Btn variant="warning" disabled="true">Disabled warning</Btn>
-<Btn variant="danger" disabled="true">Disabled danger</Btn>
+<Btn disabled="true">Disabled accent</Btn>
+<Btn tone="neutral" disabled="true">Disabled neutral</Btn>
+<Btn tone="ghost" disabled="true">Disabled ghost</Btn>
+<Btn tone="info" disabled="true">Disabled info</Btn>
+<Btn tone="success" disabled="true">Disabled success</Btn>
+<Btn tone="warning" disabled="true">Disabled warning</Btn>
+<Btn tone="danger" disabled="true">Disabled danger</Btn>
 
 ## 8. Form button types
 
 <Btn type="button">type=button</Btn>
-<Btn type="submit" variant="primary">type=submit</Btn>
-<Btn type="reset" variant="secondary">type=reset</Btn>
+<Btn type="submit" tone="accent">type=submit</Btn>
+<Btn type="reset" tone="neutral">type=reset</Btn>
 
 ## 9. Mixed examples
 
-<Btn variant="primary" size="lg" icon="iconoir:rocket">
+<Btn tone="accent" size="lg" icon="iconoir:rocket">
   Deploy now
 </Btn>
-<Btn variant="secondary" size="sm" icon="iconoir:pin-slash" iconPosition="end">
+<Btn tone="neutral" size="sm" icon="iconoir:pin-slash" iconPosition="end">
   Edit
 </Btn>
-<Btn variant="ghost" size="md" icon="iconoir:pin-slash" iconPosition="end">
+<Btn tone="ghost" size="md" icon="iconoir:pin-slash" iconPosition="end">
   Open docs
 </Btn>
 
-## 10. Variants with icons
+## 10. Tones with icons
 
-<Btn variant="primary" icon="iconoir:check">Create project</Btn>
-<Btn variant="secondary" icon="iconoir:code">View source</Btn>
-<Btn variant="ghost" icon="iconoir:pin-slash" iconPosition="end">
+<Btn tone="accent" icon="iconoir:check">Create project</Btn>
+<Btn tone="neutral" icon="iconoir:code">View source</Btn>
+<Btn tone="ghost" icon="iconoir:pin-slash" iconPosition="end">
   Read more
 </Btn>
-<Btn variant="warning" icon="iconoir:headset-help">Review warning</Btn>
-<Btn variant="danger" icon="iconoir:pin" iconPosition="end">Delete item</Btn>
+<Btn tone="info" icon="iconoir:headset-help">Review info</Btn>
+<Btn tone="success" icon="iconoir:check">Confirm success</Btn>
+<Btn tone="warning" icon="iconoir:headset-help">Review warning</Btn>
+<Btn tone="danger" icon="iconoir:pin" iconPosition="end">Delete item</Btn>
 
 ## 11. Props reference
 
 ```html
 <Btn
-  variant="primary|secondary|ghost|warning|danger"
+  tone="accent|neutral|ghost|info|success|warning|danger"
   size="sm|md|lg"
   type="button|submit|reset"
   icon="iconoir:code"

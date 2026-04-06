@@ -5,6 +5,7 @@ import type { ThemePalette } from './themePalette'
 export type SemanticTone =
   | 'neutral'
   | 'accent'
+  | 'ghost'
   | 'info'
   | 'success'
   | 'warning'
@@ -25,6 +26,7 @@ export interface SemanticToneTokens {
 const SEMANTIC_TONES: SemanticTone[] = [
   'neutral',
   'accent',
+  'ghost',
   'info',
   'success',
   'warning',
@@ -54,6 +56,13 @@ export function getSemanticToneTokens(
         border: palette.border.accent,
         text: palette.text.accent,
         icon: palette.icon.accent,
+      }
+    case 'ghost':
+      return {
+        background: palette.action.ghost.background,
+        border: 'transparent',
+        text: palette.action.ghost.text,
+        icon: palette.icon.subtle,
       }
     case 'info':
       return {

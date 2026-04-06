@@ -1,15 +1,19 @@
-import type { ThemePalette } from '@purestack/ts-style'
+import type { ThemeOptions, ThemePalette } from '@purestack/ts-style'
 import { styleBuilder, type ThemeMode, themes } from '@purestack/ts-style'
 
 export function registerButtonStyles() {
   themes.forEach((theme, palette, options) => {
-    registerButtonBaseStyles(theme, palette)
+    registerButtonBaseStyles(theme, palette, options)
     registerButtonSizeStyles(theme, options.radii)
-    registerButtonVariantStyles(theme, palette)
+    registerButtonToneStyles(theme, palette)
   })
 }
 
-function registerButtonBaseStyles(theme: ThemeMode, palette: ThemePalette) {
+function registerButtonBaseStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.btn', theme)
     .display('inline-flex')
@@ -26,6 +30,9 @@ function registerButtonBaseStyles(theme: ThemeMode, palette: ThemePalette) {
     .transition(
       'background 150ms ease, color 150ms ease, border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease',
     )
+    .padding('10px 16px')
+    .fontSize('0.95rem')
+    .borderRadius(options.radii.md)
 
   styleBuilder
     .select('.btn:focus-visible', theme)
@@ -56,11 +63,7 @@ function registerButtonSizeStyles(
     .fontSize('0.86rem')
     .borderRadius(radii.sm)
 
-  styleBuilder
-    .select('.btn--md', theme)
-    .padding('10px 16px')
-    .fontSize('0.95rem')
-    .borderRadius(radii.md)
+  /*- The default size (md) is defined in the .btn for simplicity. */
 
   styleBuilder
     .select('.btn--lg', theme)
@@ -86,117 +89,143 @@ function registerButtonSizeStyles(
   styleBuilder.select('.btn--icon-only .btn__label', theme).display('none')
 }
 
-function registerButtonVariantStyles(theme: ThemeMode, palette: ThemePalette) {
+function registerButtonToneStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
-    .select('.btn--primary', theme)
-    .background(palette.action.accent.background)
-    .borderColor(palette.action.accent.background)
-    .color(palette.action.accent.text)
+    .select('.btn.tone-surface--accent', theme)
     .boxShadow(palette.effect.interactiveShadow)
 
   styleBuilder
-    .select('.btn--primary:hover', theme)
+    .select('.btn.tone-surface--accent:hover', theme)
     .background(palette.action.accent.hover)
-    .borderColor(palette.action.accent.hover)
+    .borderColor(palette.action.accent.background)
+    .color(palette.action.accent.text)
 
   styleBuilder
-    .select('.btn--primary:active', theme)
+    .select('.btn.tone-surface--accent:active', theme)
     .background(palette.action.accent.active)
     .borderColor(palette.action.accent.active)
 
   styleBuilder
-    .select('.btn--primary:disabled', theme)
+    .select('.btn.tone-surface--accent:disabled', theme)
     .background(palette.action.accent.disabled)
     .borderColor(palette.action.accent.disabled)
     .color(palette.text.strong)
 
-  styleBuilder
-    .select('.btn--secondary', theme)
-    .background(palette.action.neutral.background)
-    .borderColor(palette.border.default)
-    .color(palette.action.neutral.text)
+  styleBuilder.select('.btn.tone-surface--neutral', theme).boxShadow('none')
 
   styleBuilder
-    .select('.btn--secondary:hover', theme)
+    .select('.btn.tone-surface--neutral:hover', theme)
     .background(palette.background.raised)
     .borderColor(palette.border.hard)
     .boxShadow(palette.effect.interactiveShadow)
 
   styleBuilder
-    .select('.btn--secondary:active', theme)
+    .select('.btn.tone-surface--neutral:active', theme)
     .background(palette.action.neutral.active)
     .borderColor(palette.border.strong)
 
   styleBuilder
-    .select('.btn--secondary:disabled', theme)
+    .select('.btn.tone-surface--neutral:disabled', theme)
     .background(palette.action.neutral.disabled)
     .borderColor(palette.border.default)
     .color(palette.text.muted)
 
+  styleBuilder.select('.btn.tone-surface--ghost', theme).boxShadow('none')
+
   styleBuilder
-    .select('.btn--ghost', theme)
-    .background(palette.action.ghost.background)
+    .select('.btn.tone-surface--ghost:hover', theme)
+    .background(palette.action.ghost.hover)
     .borderColor('transparent')
     .color(palette.action.ghost.text)
 
   styleBuilder
-    .select('.btn--ghost:hover', theme)
-    .background(palette.action.ghost.hover)
-
-  styleBuilder
-    .select('.btn--ghost:active', theme)
+    .select('.btn.tone-surface--ghost:active', theme)
     .background(palette.action.ghost.active)
+    .borderColor('transparent')
 
   styleBuilder
-    .select('.btn--ghost:disabled', theme)
-    .background(palette.action.ghost.disabled)
-    .color(palette.text.muted)
+    .select('.btn.tone-surface--ghost:disabled', theme)
+    .opacity('0.72')
+
+  styleBuilder.select('.btn.tone-surface--info', theme).boxShadow('none')
 
   styleBuilder
-    .select('.btn--danger', theme)
-    .background(palette.status.danger.background)
-    .borderColor(palette.status.danger.border)
-    .color(palette.status.danger.text)
+    .select('.btn.tone-surface--info:hover', theme)
+    .background(palette.status.info.border)
+    .borderColor(palette.status.info.border)
+    .color(palette.text.inverse)
+    .boxShadow(palette.effect.interactiveShadow)
 
   styleBuilder
-    .select('.btn--danger:hover', theme)
+    .select('.btn.tone-surface--info:active', theme)
+    .background(palette.background.accentMuted)
+    .borderColor(palette.status.info.border)
+
+  styleBuilder
+    .select('.btn.tone-surface--info:disabled', theme)
+    .background(palette.status.info.background)
+    .borderColor(palette.status.info.border)
+    .color(palette.status.info.text)
+    .opacity('0.72')
+
+  styleBuilder.select('.btn.tone-surface--success', theme).boxShadow('none')
+
+  styleBuilder
+    .select('.btn.tone-surface--success:hover', theme)
+    .background(palette.status.success.border)
+    .borderColor(palette.status.success.border)
+    .color(palette.text.inverse)
+    .boxShadow(palette.effect.interactiveShadow)
+
+  styleBuilder
+    .select('.btn.tone-surface--success:active', theme)
+    .background(palette.background.successMuted)
+    .borderColor(palette.status.success.border)
+
+  styleBuilder
+    .select('.btn.tone-surface--success:disabled', theme)
+    .background(palette.status.success.background)
+    .borderColor(palette.status.success.border)
+    .color(palette.status.success.text)
+    .opacity('0.72')
+
+  styleBuilder.select('.btn.tone-surface--danger', theme).boxShadow('none')
+
+  styleBuilder
+    .select('.btn.tone-surface--danger:hover', theme)
     .background(palette.border.danger)
     .borderColor(palette.border.danger)
     .color(palette.text.inverse)
     .boxShadow(palette.effect.interactiveShadow)
 
   styleBuilder
-    .select('.btn--danger:active', theme)
+    .select('.btn.tone-surface--danger:active', theme)
     .background(palette.background.dangerMuted)
     .borderColor(palette.border.danger)
 
   styleBuilder
-    .select('.btn--danger:disabled', theme)
+    .select('.btn.tone-surface--danger:disabled', theme)
     .background(palette.status.danger.background)
     .borderColor(palette.status.danger.border)
     .color(palette.status.danger.text)
     .opacity('0.72')
 
-  styleBuilder
-    .select('.btn--warning', theme)
-    .background(palette.status.warning.background)
-    .borderColor(palette.status.warning.border)
-    .color(palette.status.warning.text)
+  styleBuilder.select('.btn.tone-surface--warning', theme).boxShadow('none')
 
   styleBuilder
-    .select('.btn--warning:hover', theme)
+    .select('.btn.tone-surface--warning:hover', theme)
     .background(palette.status.warning.border)
     .borderColor(palette.status.warning.border)
     .color(palette.text.default)
     .boxShadow(palette.effect.interactiveShadow)
 
   styleBuilder
-    .select('.btn--warning:active', theme)
+    .select('.btn.tone-surface--warning:active', theme)
     .background(palette.action.neutral.active)
     .borderColor(palette.status.warning.border)
 
   styleBuilder
-    .select('.btn--warning:disabled', theme)
+    .select('.btn.tone-surface--warning:disabled', theme)
     .background(palette.status.warning.background)
     .borderColor(palette.status.warning.border)
     .color(palette.status.warning.text)

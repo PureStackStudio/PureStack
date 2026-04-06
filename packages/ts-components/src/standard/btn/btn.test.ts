@@ -18,7 +18,9 @@ describe('Button rendering', () => {
     })
     cleanup()
 
-    expect(html).toContain('class="btn btn--primary btn--md"')
+    expect(html).toContain(
+      'class="btn tone-surface--accent tone-border--accent tone-text--accent"',
+    )
     expect(html).toContain('type="button"')
     expect(html).toContain('<span class="btn__label">Save</span>')
     expect(html).not.toContain('btn__icon')
@@ -74,14 +76,14 @@ describe('Button rendering', () => {
     expect(html).not.toContain('btn__label')
   })
 
-  it('applies variant, size, type, disabled, and custom class', () => {
+  it('applies tone, size, type, disabled, and custom class', () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...createIconComponents(),
       ...createButtonComponents(),
     }
     const html = renderApp(
-      `<Btn variant="ghost" size="lg" type="submit" disabled="true" class="u-grow">Deploy</Btn>`,
+      `<Btn tone="neutral" size="lg" type="submit" disabled="true" class="u-grow">Deploy</Btn>`,
       {
         components,
         context: createTestContext(),
@@ -89,31 +91,31 @@ describe('Button rendering', () => {
     )
     cleanup()
 
-    expect(html).toContain('btn--ghost')
+    expect(html).toContain('tone-surface--neutral')
     expect(html).toContain('btn--lg')
     expect(html).toContain('u-grow')
     expect(html).toContain('type="submit"')
     expect(html).toContain('disabled')
   })
 
-  it('supports warning and danger variants', () => {
+  it('supports warning and danger tones', () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...createIconComponents(),
       ...createButtonComponents(),
     }
-    const warningHtml = renderApp(`<Btn variant="warning">Warn</Btn>`, {
+    const warningHtml = renderApp(`<Btn tone="warning">Warn</Btn>`, {
       components,
       context: createTestContext(),
     })
-    const dangerHtml = renderApp(`<Btn variant="danger">Delete</Btn>`, {
+    const dangerHtml = renderApp(`<Btn tone="danger">Delete</Btn>`, {
       components,
       context: createTestContext(),
     })
     cleanup()
 
-    expect(warningHtml).toContain('btn--warning')
-    expect(dangerHtml).toContain('btn--danger')
+    expect(warningHtml).toContain('tone-surface--warning')
+    expect(dangerHtml).toContain('tone-surface--danger')
   })
 
   it('renders empty label span when button has no slot and no icon', () => {
