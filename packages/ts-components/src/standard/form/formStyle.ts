@@ -78,7 +78,10 @@ function registerFormFieldStyles(
     .transition('border-color 160ms ease, box-shadow 160ms ease')
     .overflow('hidden')
   styleBuilder
-    .select('.form-block__number:has(.form-block__input--number:focus-visible)', theme)
+    .select(
+      '.form-block__number:has(.form-block__input--number:focus-visible)',
+      theme,
+    )
     .borderColor(palette.border.accent)
     .boxShadow(`0 0 0 3px ${palette.action.accent.focusRing}`)
   styleBuilder
