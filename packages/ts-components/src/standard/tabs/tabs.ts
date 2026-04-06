@@ -130,7 +130,7 @@ function resolveTabPane(head: ComponentHead<TabPane>): TabPane {
 }
 
 function resolveTabId(id?: string) {
-  id = unref(id)?.trim?.()
+  id = id?.trim?.()
   if (id) return id.trim()
 
   const nextId = `tab-${nextAutoTabId}`

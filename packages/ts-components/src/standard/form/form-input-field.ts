@@ -1,6 +1,9 @@
 import { defineComponent, html, type Ref, type RefOrValue, unref } from 'regor'
 
+let nextAutoInputId = 1
+
 export class FormInputField {
+  declare readonly id: string
   declare readonly label?: RefOrValue<string>
   declare readonly model: Ref<string | number>
   declare readonly type?: RefOrValue<string>
@@ -11,6 +14,7 @@ export class FormInputField {
   declare readonly placeholder?: RefOrValue<string>
 
   constructor(props: {
+    id?: string
     label?: RefOrValue<string>
     model: Ref<string | number>
     type?: RefOrValue<string>
@@ -20,7 +24,10 @@ export class FormInputField {
     step?: RefOrValue<number | string>
     placeholder?: RefOrValue<string>
   }) {
-    Object.assign(this, props)
+    Object.assign(this, {
+      ...props,
+      id: resolveInputId(unref(props.id)),
+    })
   }
 
   get isNumberField() {
@@ -69,10 +76,11 @@ export class FormInputField {
   }
 }
 
-const formInputFieldTemplate = html`<label class="form-block__field">
+const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
   <span class="form-block__label" r-if="label">{{ label }}</span>
   <div class="form-block__number" r-if="isNumberField">
     <input
+      :id="id"
       class="form-block__input form-block__input--number"
       type="number"
       :name="name"
@@ -103,6 +111,7 @@ const formInputFieldTemplate = html`<label class="form-block__field">
   </div>
   <input
     r-else
+    :id="id"
     class="form-block__input"
     :type="type || 'text'"
     :name="name"
@@ -118,6 +127,7 @@ export function defineFormInputField() {
   return {
     formInputField: defineComponent<FormInputField>(formInputFieldTemplate, {
       props: [
+        'id',
         'label',
         'model',
         'type',
@@ -130,4 +140,11 @@ export function defineFormInputField() {
       context: (head) => new FormInputField(head.props),
     }),
   }
+}
+
+function resolveInputId(id?: string) {
+  if (id) return id
+  const nextId = `form-input-${nextAutoInputId}`
+  nextAutoInputId += 1
+  return nextId
 }

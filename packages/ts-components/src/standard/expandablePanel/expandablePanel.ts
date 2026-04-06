@@ -30,7 +30,7 @@ export interface ExpandablePanel {
 const expandablePanelTemplate = html`<details
   class="expandable-panel"
   :class="rootClass"
-  :open="open ? true : null"
+  :open="open"
 >
   <summary class="expandable-panel__summary">
     <slot name="summary">

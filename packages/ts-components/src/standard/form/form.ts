@@ -1,61 +1,68 @@
 import { urlNormalizer } from '@purestack/ts-util'
-import { defineComponent, html } from 'regor'
+import {
+  type ComputedRef,
+  computed,
+  defineComponent,
+  html,
+  type RefOrValue,
+  unref,
+} from 'regor'
 import { registerFormStyles } from './formStyle'
 
 export interface AppForm {
-  action?: string
-  method?: string
-  resolvedMethod?: 'post' | 'get'
+  action?: RefOrValue<string>
+  method?: RefOrValue<string>
 }
 
 export interface FormField {
-  label?: string
-  type?: string
-  name?: string
-  placeholder?: string
-  autocomplete?: string
-  required?: unknown
-  min?: string
-  max?: string
-  step?: string
-  value?: string
-  resolvedType?: string
+  label?: RefOrValue<string>
+  type?: RefOrValue<string>
+  name?: RefOrValue<string>
+  placeholder?: RefOrValue<string>
+  autocomplete?: RefOrValue<string>
+  required?: RefOrValue<boolean>
+  min?: RefOrValue<string>
+  max?: RefOrValue<string>
+  step?: RefOrValue<string>
+  value?: RefOrValue<string>
 }
 
 export interface FormMeta {}
 
 export interface FormCheck {
-  label?: string
-  name?: string
-  value?: string
-  checked?: unknown
+  label?: RefOrValue<string>
+  name?: RefOrValue<string>
+  value?: RefOrValue<string>
+  checked?: RefOrValue<boolean>
 }
 
 export interface FormAssistLink {
-  href?: string
-  label?: string
-  target?: string
-  rel?: string
+  href?: RefOrValue<string>
+  label?: RefOrValue<string>
+  target?: RefOrValue<string>
+  rel?: RefOrValue<string>
+  normalizedHref?: ComputedRef<string | undefined>
+  resolvedRel?: ComputedRef<string | undefined>
 }
 
 export interface FormSubmit {
-  label?: string
+  label?: RefOrValue<string>
 }
 
 export interface FormDivider {
-  label?: string
+  label?: RefOrValue<string>
 }
 
 export interface FormStatus {
-  variant?: string
-  hidden?: unknown
-  toneClass?: string
+  variant?: RefOrValue<string>
+  hidden?: RefOrValue<boolean>
+  toneClass?: ComputedRef<string | undefined>
 }
 
 const appFormTemplate = html`<form
   class="form-block"
   :action="action"
-  :method="resolvedMethod"
+  :method="method"
   novalidate
 >
   <slot></slot>
@@ -65,7 +72,7 @@ const formFieldTemplate = html`<label class="form-block__field">
   <span class="form-block__label">{{ label }}</span>
   <input
     class="form-block__input"
-    :type="resolvedType"
+    :type="type"
     :name="name"
     :placeholder="placeholder"
     :autocomplete="autocomplete"
@@ -86,10 +93,10 @@ const formCheckTemplate = html`<label class="form-block__check">
 
 const formAssistLinkTemplate = html`<a
   class="form-block__assist-link"
-  :href="href"
-  r-if="href"
+  :href="normalizedHref"
+  r-if="normalizedHref"
   :target="target"
-  :rel="rel"
+  :rel="resolvedRel"
 >
   {{ label }}
 </a>`
@@ -145,12 +152,7 @@ function createFormMetaComponent() {
 function createFormCheckComponent() {
   return defineComponent<FormCheck>(formCheckTemplate, {
     props: ['label', 'name', 'value', 'checked'],
-    context: (head) => ({
-      label: head.props.label,
-      name: head.props.name,
-      value: head.props.value,
-      checked: head.props.checked,
-    }),
+    context: (head) => head.props,
   })
 }
 
@@ -164,29 +166,21 @@ function createFormAssistLinkComponent() {
 function createFormSubmitComponent() {
   return defineComponent<FormSubmit>(formSubmitTemplate, {
     props: ['label'],
-    context: (head) => ({
-      label: head.props.label,
-    }),
+    context: (head) => head.props,
   })
 }
 
 function createFormDividerComponent() {
   return defineComponent<FormDivider>(formDividerTemplate, {
     props: ['label'],
-    context: (head) => ({
-      label: head.props.label,
-    }),
+    context: (head) => head.props,
   })
 }
 
 function createFormStatusComponent() {
   return defineComponent<FormStatus>(formStatusTemplate, {
     props: ['variant', 'hidden'],
-    context: (head) => ({
-      variant: head.props.variant,
-      hidden: head.props.hidden,
-      toneClass: resolveStatusToneClass(head.props.variant),
-    }),
+    context: (head) => resolveFormStatus(head.props),
   })
 }
 
@@ -205,60 +199,32 @@ export function createFormComponents() {
 }
 
 function resolveAppForm(props: AppForm): AppForm {
-  const normalizedMethod = props.method?.trim().toLowerCase() || ''
-  return {
-    action: props.action,
-    method: props.method,
-    resolvedMethod:
-      normalizedMethod === 'get'
-        ? 'get'
-        : normalizedMethod === 'post'
-          ? 'post'
-          : undefined,
-  }
+  return props
 }
 
 function resolveFormField(props: FormField): FormField {
-  const resolvedType = resolveInputType(props.type)
-  return {
-    ...props,
-    label: props.label,
-    name: props.name,
-    placeholder: props.placeholder,
-    autocomplete: props.autocomplete,
-    required: props.required,
-    min: props.min,
-    max: props.max,
-    step: props.step,
-    value: props.value,
-    resolvedType,
-  }
+  return props
 }
 
 function resolveFormAssistLink(props: FormAssistLink): FormAssistLink {
-  const href = urlNormalizer.normalizeHref(props.href)
-  const rel =
-    props.rel || (props.target === '_blank' ? 'noopener noreferrer' : '')
   return {
-    href,
-    label: props.label,
-    target: props.target,
-    rel,
+    ...props,
+    normalizedHref: computed(() =>
+      urlNormalizer.normalizeHref(unref(props.href)),
+    ),
+    resolvedRel: computed(
+      () =>
+        unref(props.rel) ||
+        (unref(props.target) === '_blank' ? 'noopener noreferrer' : ''),
+    ),
   }
 }
 
-function resolveInputType(value: string | undefined) {
-  const normalized = value?.trim().toLowerCase()
-  if (!normalized) return undefined
-  if (
-    normalized === 'email' ||
-    normalized === 'number' ||
-    normalized === 'password' ||
-    normalized === 'text'
-  ) {
-    return normalized
+function resolveFormStatus(props: FormStatus): FormStatus {
+  return {
+    ...props,
+    toneClass: computed(() => resolveStatusToneClass(unref(props.variant))),
   }
-  return undefined
 }
 
 function resolveStatusToneClass(value: string | undefined) {

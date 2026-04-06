@@ -1,5 +1,6 @@
 const MOBILE_QUERY = '(max-width: 760px)'
 const OVERFLOW_BUTTON_WIDTH = 42
+let nextAutoTabsSelectId = 1
 
 type TabsEntry = {
   item: HTMLElement
@@ -112,6 +113,9 @@ function enhanceTabs(root: HTMLElement) {
   }
   if (!select) return
   const tabSelect = select
+  if (!tabSelect.id) {
+    tabSelect.id = resolveTabsSelectId(root)
+  }
   tabSelect.setAttribute(
     'aria-label',
     list.getAttribute('aria-label') || 'Tabs',
@@ -499,6 +503,15 @@ function setButtonContent(
   label.textContent = text
 
   target.appendChild(label)
+}
+
+function resolveTabsSelectId(root: HTMLElement) {
+  const rootId = root.id?.trim()
+  if (rootId) return `${rootId}-select`
+
+  const nextId = `tabs-select-${nextAutoTabsSelectId}`
+  nextAutoTabsSelectId += 1
+  return nextId
 }
 
 ready(initTabs)

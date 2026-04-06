@@ -3,21 +3,27 @@ import {
   getSemanticToneSurfaceClass,
   getSemanticToneTextClass,
   resolveSemanticTone,
-  type SemanticTone,
 } from '@purestack/ts-style'
-import { defineComponent, html } from 'regor'
+import {
+  type ComputedRef,
+  computed,
+  defineComponent,
+  html,
+  type RefOrValue,
+  unref,
+} from 'regor'
 import { registerAlertBoxStyles } from './alertBoxStyle'
 
 export interface AlertBox {
-  title?: string
-  eyebrow?: string
-  badge?: string
-  meta?: string
-  tone?: string
-  icon?: string
-  rootClass?: string
-  titleToneClass?: string
-  iconToneClass?: string
+  title?: RefOrValue<string>
+  eyebrow?: RefOrValue<string>
+  badge?: RefOrValue<string>
+  meta?: RefOrValue<string>
+  tone?: RefOrValue<string>
+  icon?: RefOrValue<string>
+  rootClass?: ComputedRef<string>
+  titleToneClass?: ComputedRef<string>
+  iconToneClass?: ComputedRef<string>
 }
 
 const alertBoxTemplate = html`<aside
@@ -52,16 +58,18 @@ export function createAlertComponents() {
 }
 
 function resolveAlertBox(props: AlertBox): AlertBox {
-  const tone = resolveTone(props.tone)
-
   return {
     ...props,
-    titleToneClass: getSemanticToneTextClass(tone),
-    iconToneClass: getSemanticToneIconClass(tone),
-    rootClass: getSemanticToneSurfaceClass(tone),
+    titleToneClass: computed(() =>
+      getSemanticToneTextClass(resolveSemanticTone(unref(props.tone), 'info')),
+    ),
+    iconToneClass: computed(() =>
+      getSemanticToneIconClass(resolveSemanticTone(unref(props.tone), 'info')),
+    ),
+    rootClass: computed(() =>
+      getSemanticToneSurfaceClass(
+        resolveSemanticTone(unref(props.tone), 'info'),
+      ),
+    ),
   }
-}
-
-function resolveTone(value?: string): SemanticTone {
-  return resolveSemanticTone(value, 'info')
 }
