@@ -47,14 +47,14 @@ function registerDocLayoutShellStyles(
 
   styleBuilder
     .select(
-      '.template-doc--full-main.template-doc--nav-collapsed .doc-shell.doc-shell--toc',
+      '.template-doc--full-main.template-doc--nav-collapsed .doc-shell',
       theme,
     )
     .paddingLeft('3rem')
 
   styleBuilder
     .select(
-      '.template-doc--full-main.template-doc--toc-collapsed .doc-shell.doc-shell--toc',
+      '.template-doc--full-main.template-doc--toc-collapsed .doc-shell',
       theme,
     )
     .paddingRight('3rem')
