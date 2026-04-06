@@ -43,7 +43,7 @@ describe('ExpandablePanel rendering', () => {
     expect(html).toContain('Upgrade today to unlock richer collaboration')
   })
 
-  it('falls back to a stable title and closed state', () => {
+  it('renders a closed neutral panel when optional content is omitted', () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...createIconComponents(),
@@ -58,7 +58,6 @@ describe('ExpandablePanel rendering', () => {
     expect(html).toContain(
       '<details class="expandable-panel tone-surface--neutral">',
     )
-    expect(html).toContain('Expandable panel')
     expect(html).not.toContain(
       '<details class="expandable-panel tone-surface--neutral" open',
     )

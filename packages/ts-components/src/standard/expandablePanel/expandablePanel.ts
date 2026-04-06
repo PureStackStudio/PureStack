@@ -3,34 +3,39 @@ import {
   getSemanticToneSurfaceClass,
   resolveSemanticTone,
 } from '@purestack/ts-style'
-import { defineComponent, html } from 'regor'
+import {
+  type ComputedRef,
+  computed,
+  defineComponent,
+  html,
+  type RefOrValue,
+  unref,
+} from 'regor'
 
 import { registerExpandablePanelStyles } from './expandablePanelStyle'
 
 export interface ExpandablePanel {
-  title?: string
-  description?: string
-  meta?: string
-  badge?: string
-  icon?: string
-  tone?: string
-  open?: boolean | string
-  rootClass?: string
-  isOpen?: boolean
-  iconName?: string
-  iconToneClass?: string
-  chevronToneClass?: string
+  title?: RefOrValue<string>
+  description?: RefOrValue<string>
+  meta?: RefOrValue<string>
+  badge?: RefOrValue<string>
+  icon?: RefOrValue<string>
+  tone?: RefOrValue<string>
+  open?: RefOrValue<boolean>
+  rootClass?: ComputedRef<string>
+  iconToneClass?: ComputedRef<string>
+  chevronToneClass?: ComputedRef<string>
 }
 
 const expandablePanelTemplate = html`<details
   class="expandable-panel"
   :class="rootClass"
-  :open="isOpen ? true : null"
+  :open="open ? true : null"
 >
   <summary class="expandable-panel__summary">
     <slot name="summary">
-      <span class="expandable-panel__icon-wrap" :class="iconToneClass" r-if="iconName">
-        <Icon class="expandable-panel__icon" :name="iconName" />
+      <span class="expandable-panel__icon-wrap" :class="iconToneClass" r-if="icon">
+        <Icon class="expandable-panel__icon" :name="icon" />
       </span>
       <span class="expandable-panel__header">
         <span class="expandable-panel__title" r-if="title">{{ title }}</span>
@@ -70,39 +75,16 @@ export function createExpandablePanelComponents() {
 }
 
 function resolveExpandablePanel(props: ExpandablePanel): ExpandablePanel {
-  const title = resolveText(props.title) || 'Expandable panel'
-  const description = resolveText(props.description)
-  const meta = resolveText(props.meta)
-  const badge = resolveText(props.badge)
-  const iconName = resolveText(props.icon)
-  const tone = resolveSemanticTone(props.tone)
-  const isOpen = resolveBoolean(props.open)
-
   return {
     ...props,
-    title,
-    description,
-    meta,
-    badge,
-    iconName,
-    isOpen,
-    rootClass: getSemanticToneSurfaceClass(tone),
-    iconToneClass: getSemanticToneIconClass(tone),
-    chevronToneClass: getSemanticToneIconClass(tone),
+    rootClass: computed(() =>
+      getSemanticToneSurfaceClass(resolveSemanticTone(unref(props.tone))),
+    ),
+    iconToneClass: computed(() =>
+      getSemanticToneIconClass(resolveSemanticTone(unref(props.tone))),
+    ),
+    chevronToneClass: computed(() =>
+      getSemanticToneIconClass(resolveSemanticTone(unref(props.tone))),
+    ),
   }
-}
-
-function resolveBoolean(value: unknown) {
-  if (typeof value === 'boolean') return value
-  if (typeof value === 'string') {
-    const normalized = value.trim().toLowerCase()
-    return normalized === 'true' || normalized === '1' || normalized === 'yes'
-  }
-  return false
-}
-
-function resolveText(value: unknown) {
-  return typeof value === 'string' && value.trim().length > 0
-    ? value.trim()
-    : ''
 }

@@ -2,13 +2,20 @@ import {
   getSemanticToneSurfaceClass,
   resolveSemanticTone,
 } from '@purestack/ts-style'
-import { defineComponent, html } from 'regor'
+import {
+  type ComputedRef,
+  computed,
+  defineComponent,
+  html,
+  type RefOrValue,
+  unref,
+} from 'regor'
 
 import { registerPanelStyles } from './panelStyle'
 
 export interface Panel {
-  tone?: string
-  rootClass?: string
+  tone?: RefOrValue<string>
+  rootClass?: ComputedRef<string>
 }
 
 const panelTemplate = html`<section class="panel" :class="rootClass">
@@ -30,9 +37,10 @@ export function createPanelComponents() {
 }
 
 function resolvePanel(props: Panel): Panel {
-  const tone = resolveSemanticTone(props.tone)
-
   return {
-    rootClass: getSemanticToneSurfaceClass(tone),
+    ...props,
+    rootClass: computed(() =>
+      getSemanticToneSurfaceClass(resolveSemanticTone(unref(props.tone))),
+    ),
   }
 }

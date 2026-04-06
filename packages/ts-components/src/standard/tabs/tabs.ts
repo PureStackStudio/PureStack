@@ -3,9 +3,7 @@ import {
   type ComponentHead,
   defineComponent,
   html,
-  isRef,
-  type Ref,
-  ref,
+  type RefOrValue,
   unref,
 } from 'regor'
 import { registerTabsStyles } from './tabsStyle'
@@ -16,21 +14,21 @@ let nextAutoTabId = 1
 
 export class Tabs {
   group: string = defaultGroup
-  ariaLabel?: string
-  selectedTab?: Ref<string> | string
+  ariaLabel?: RefOrValue<string>
+  selectedTab?: RefOrValue<string>
 }
 
 export interface TabPane {
   id?: string
-  label?: string
-  icon?: string
-  disabled?: boolean
+  label?: RefOrValue<string>
+  icon?: RefOrValue<string>
+  disabled?: RefOrValue<boolean>
   group?: string
 }
 
 const tabsTemplate = html`<section class="tabs">
   <slot name="header"></slot>
-  <div class="tabs__list" role="tablist" :aria-label="ariaLabel">
+  <div class="tabs__list" role="tablist" :aria-label="ariaLabel || 'Tabs'">
     <slot></slot>
   </div>
 </section>`
@@ -55,7 +53,7 @@ const tabPaneTemplate = html`<div class="tabs__item">
     :aria-selected="selectedTab === id"
     :aria-disabled="disabled"
     ><Icon class="tabs__tab-icon" :name="icon" />
-    <span class="tabs__tab-label">{{ label }}</span></label
+    <span class="tabs__tab-label">{{ label || id }}</span></label
   >
   <section
     class="tabs__panel"
@@ -95,20 +93,17 @@ export function createTabsComponents() {
 }
 
 function resolveTabs(props: Tabs): Tabs {
-  const group = resolveTabGroup(props.group)
+  const group = resolveTabGroup(unref(props.group))
   const tabs = new Tabs()
-  let selectedTab = props.selectedTab ?? tabs.selectedTab ?? ''
-  if (!isRef(selectedTab)) selectedTab = ref(selectedTab)
   return Object.assign(tabs, {
+    ...props,
     group,
-    ariaLabel: resolveAriaLabel(props.ariaLabel),
-    selectedTab,
   })
 }
 
-function resolveTabGroup(value: unknown) {
-  const explicitGroup = resolveText(value)
-  if (explicitGroup) return explicitGroup
+function resolveTabGroup(group: string) {
+  group = group?.trim?.()
+  if (group) return group
 
   const nextGroup = `${defaultGroup}-${nextAutoGroupId}`
   nextAutoGroupId += 1
@@ -116,40 +111,23 @@ function resolveTabGroup(value: unknown) {
 }
 
 function resolveTabPane(head: ComponentHead<TabPane>): TabPane {
-  const icon = resolveText(head.props.icon)
   const fromParent = head.findContext(Tabs)
-  const group = fromParent?.group || defaultGroup
-  const id = resolveTabId(head.props.id)
-  const label = head.props.label ?? id
+  const group = head.props.group || fromParent?.group || defaultGroup
+  const id = resolveTabId(unref(head.props.id))
   return {
     ...head.props,
     id,
-    label,
-    icon,
     group,
   }
 }
 
-function resolveAriaLabel(value: unknown) {
-  const ariaLabel = resolveText(value)
-  if (ariaLabel) return ariaLabel
-  return 'Tabs'
-}
-
 function resolveTabId(id?: string) {
-  const fromId = resolveText(id)
-  if (fromId) return fromId
+  id = unref(id)?.trim?.()
+  if (id) return id.trim()
 
   const nextId = `tab-${nextAutoTabId}`
   nextAutoTabId += 1
   return nextId
-}
-
-function resolveText(value: unknown) {
-  if (isRef(value)) value = unref(value)
-  return typeof value === 'string' && value.trim().length > 0
-    ? value.trim()
-    : ''
 }
 
 function markTabsRuntimeEmbed(head: ComponentHead<Tabs>) {
