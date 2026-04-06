@@ -4,26 +4,37 @@ import {
   resolveSemanticTone,
 } from '@purestack/ts-style'
 import { tryResolveTsSsgContext } from 'packages/ts-common/src/resolveTsSsgContext'
-import { type ComponentHead, defineComponent, html, isRef, unref } from 'regor'
+import {
+  type ComponentHead,
+  type ComputedRef,
+  computed,
+  defineComponent,
+  html,
+  type RefOrValue,
+  unref,
+} from 'regor'
 import { registerModalStyles } from './modalStyle'
+
+export type ModalSize = 'sm' | 'md' | 'lg' | 'xl'
+export type ModalSlideFrom = 'none' | 'top' | 'right' | 'bottom' | 'left'
 
 export interface Modal {
   id?: string
-  title?: string
-  tone?: string
-  size?: string
-  fade?: boolean | string
-  slideFrom?: string
-  showClose?: boolean | string
+  title?: RefOrValue<string>
+  tone?: RefOrValue<string>
+  size?: RefOrValue<ModalSize>
+  fade?: RefOrValue<boolean>
+  slideFrom?: RefOrValue<ModalSlideFrom>
+  showClose?: RefOrValue<boolean>
   titleId?: string
-  rootClass?: string
-  panelToneClass?: string
-  titleToneClass?: string
+  rootClass?: ComputedRef<string>
+  panelToneClass?: ComputedRef<string>
+  titleToneClass?: ComputedRef<string>
 }
 
 export interface ModalTrigger {
   target?: string
-  label?: string
+  label?: RefOrValue<string>
 }
 
 const modalTemplate = html`<dialog
@@ -34,7 +45,7 @@ const modalTemplate = html`<dialog
   data-modal-root
   role="dialog"
   aria-modal="true"
-  :aria-labelledby="title ? titleId : undefined"
+  :aria-labelledby="titleId"
 >
   <slot name="content">
     <article class="modal__panel" role="document" tabindex="-1">
@@ -95,14 +106,31 @@ export function createModalComponents() {
 }
 
 function resolveModal(props: Modal): Modal {
-  const id = resolveModalId(props.id)
-  const title = resolveText(props.title)
-  const tone = resolveSemanticTone(props.tone)
-  const size = resolveSize(props.size)
-  const slideFrom = resolveSlideFrom(props.slideFrom)
-  const fade = resolveBoolean(props.fade, true)
-  const showClose = resolveBoolean(props.showClose, true)
-  const rootClass = [
+  return {
+    ...props,
+    titleId: `${unref(props.id)}-title`,
+    panelToneClass: computed(() =>
+      getSemanticToneSurfaceClass(resolveSemanticTone(unref(props.tone))),
+    ),
+    titleToneClass: computed(() =>
+      getSemanticToneTextClass(resolveSemanticTone(unref(props.tone))),
+    ),
+    rootClass: computed(() => resolveModalRootClass(props)),
+  }
+}
+
+function resolveModalTrigger(props: ModalTrigger): ModalTrigger {
+  return {
+    target: props.target,
+    label: props.label,
+  }
+}
+
+function resolveModalRootClass(props: Modal) {
+  const size = unref(props.size) || 'md'
+  const slideFrom = unref(props.slideFrom) || 'none'
+  const fade = unref(props.fade) ?? true
+  return [
     `modal--size-${size}`,
     fade ? 'modal--fade' : '',
     slideFrom !== 'none' ? `modal--slide-${slideFrom}` : '',
@@ -110,84 +138,6 @@ function resolveModal(props: Modal): Modal {
   ]
     .filter(Boolean)
     .join(' ')
-
-  return {
-    id,
-    title,
-    size,
-    fade,
-    slideFrom,
-    showClose,
-    titleId: `${id}-title`,
-    panelToneClass: getSemanticToneSurfaceClass(tone),
-    titleToneClass: getSemanticToneTextClass(tone),
-    rootClass,
-  }
-}
-
-function resolveModalTrigger(props: ModalTrigger): ModalTrigger {
-  return {
-    target: resolveModalId(props.target),
-    label: resolveText(props.label) || 'Open modal',
-  }
-}
-
-function resolveModalId(value: unknown) {
-  const normalized = resolveText(value)
-    .toLowerCase()
-    .replace(/[^a-z0-9_-]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-  if (normalized) return normalized
-  return 'modal-default'
-}
-
-function resolveText(value: unknown) {
-  if (isRef(value)) value = unref(value)
-  return typeof value === 'string' && value.trim().length > 0
-    ? value.trim()
-    : ''
-}
-
-function resolveSize(value: unknown) {
-  const normalized = resolveText(value).toLowerCase()
-  if (
-    normalized === 'sm' ||
-    normalized === 'md' ||
-    normalized === 'lg' ||
-    normalized === 'xl'
-  ) {
-    return normalized
-  }
-  return 'md'
-}
-
-function resolveSlideFrom(value: unknown) {
-  const normalized = resolveText(value).toLowerCase()
-  if (
-    normalized === 'none' ||
-    normalized === 'top' ||
-    normalized === 'right' ||
-    normalized === 'bottom' ||
-    normalized === 'left'
-  ) {
-    return normalized
-  }
-  return 'none'
-}
-
-function resolveBoolean(value: unknown, fallback: boolean) {
-  if (isRef(value)) value = unref(value)
-  if (typeof value === 'boolean') return value
-  if (typeof value === 'string') {
-    const normalized = value.trim().toLowerCase()
-    if (normalized === 'true' || normalized === '1' || normalized === 'yes') {
-      return true
-    }
-    if (normalized === 'false' || normalized === '0' || normalized === 'no') {
-      return false
-    }
-  }
-  return fallback
 }
 
 function markModalRuntimeEmbed(head: ComponentHead<Modal>) {

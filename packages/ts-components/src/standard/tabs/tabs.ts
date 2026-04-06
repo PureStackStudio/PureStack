@@ -3,7 +3,9 @@ import {
   type ComponentHead,
   defineComponent,
   html,
+  isRef,
   type RefOrValue,
+  ref,
   unref,
 } from 'regor'
 import { registerTabsStyles } from './tabsStyle'
@@ -95,10 +97,16 @@ export function createTabsComponents() {
 function resolveTabs(props: Tabs): Tabs {
   const group = resolveTabGroup(unref(props.group))
   const tabs = new Tabs()
+  const selectedTab = ensureSelectedTabIsRef(props.selectedTab)
   return Object.assign(tabs, {
     ...props,
     group,
+    selectedTab,
   })
+}
+
+function ensureSelectedTabIsRef(selectedTab?: RefOrValue<string>) {
+  return isRef(selectedTab) ? selectedTab : ref(selectedTab)
 }
 
 function resolveTabGroup(group: string) {

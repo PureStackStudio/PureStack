@@ -99,5 +99,5 @@ function resolveButtonClassName(props: Btn) {
     unref(props.class) || '',
   ]
   if (hasIcon && unref(props.iconOnly)) classTokens.push('btn--icon-only')
-  return classTokens.filter((x) => !!x).join(' ')
+  return classTokens.filter(Boolean).join(' ')
 }
