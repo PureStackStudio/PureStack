@@ -67,9 +67,6 @@ function registerFormFieldStyles(
       theme,
     )
     .appearance('textfield')
-    .fontVariantNumeric('tabular-nums')
-    .fontWeight('680')
-    .letterSpacing('0.015em')
   styleBuilder
     .select('.form-block__number', theme)
     .display('grid')
@@ -81,7 +78,7 @@ function registerFormFieldStyles(
     .transition('border-color 160ms ease, box-shadow 160ms ease')
     .overflow('hidden')
   styleBuilder
-    .select('.form-block__number:focus-within', theme)
+    .select('.form-block__number:has(.form-block__input--number:focus-visible)', theme)
     .borderColor(palette.border.accent)
     .boxShadow(`0 0 0 3px ${palette.action.accent.focusRing}`)
   styleBuilder
@@ -89,9 +86,6 @@ function registerFormFieldStyles(
     .borderRadius('0')
     .border('none')
     .boxShadow('none')
-  styleBuilder.select('.form-block__number:hover', theme).borderColor(
-    palette.border.strong,
-  )
   styleBuilder
     .select(
       '.form-block__input[type="number"]::-webkit-outer-spin-button, .form-block__input[type="number"]::-webkit-inner-spin-button',
@@ -104,7 +98,7 @@ function registerFormFieldStyles(
     .display('grid')
     .gridTemplateRows('1fr 1fr')
     .borderLeft(`1px solid ${palette.border.default}`)
-    .background(palette.background.surface)
+    .background(palette.background.canvas)
   styleBuilder
     .select('.form-block__number-btn', theme)
     .display('grid')
