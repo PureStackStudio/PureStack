@@ -1,5 +1,5 @@
 import { getSvgIcon } from '@purestack/ts-svg-icons'
-import { defineComponent, html } from 'regor'
+import { defineComponent, html, unref } from 'regor'
 
 import { registerIconStyles } from './iconStyle'
 
@@ -42,9 +42,9 @@ export function createIconComponents() {
 }
 
 function resolveIcon(props: Icon): Icon {
-  const name = resolveText(props.name)
-  const label = resolveText(props.label)
-  const size = resolveCssSize(props.size)
+  const name = resolveText(unref(props.name))
+  const label = resolveText(unref(props.label))
+  const size = resolveCssSize(unref(props.size))
   const svg = name ? getSvgIcon(name) : ''
 
   return {
@@ -52,7 +52,7 @@ function resolveIcon(props: Icon): Icon {
     ariaLabel: label,
     ariaHidden: label ? undefined : 'true',
     role: label ? 'img' : '',
-    customClass: resolveText(props.class),
+    customClass: props.class,
     iconStyle: buildIconStyle(size),
   }
 }
