@@ -6,6 +6,7 @@ import {
   isRef,
   type Ref,
   ref,
+  unref,
 } from 'regor'
 import { registerTabsStyles } from './tabsStyle'
 
@@ -119,7 +120,7 @@ function resolveTabPane(head: ComponentHead<TabPane>): TabPane {
   const fromParent = head.findContext(Tabs)
   const group = fromParent?.group || defaultGroup
   const id = resolveTabId(head.props.id)
-  const label = resolveText(head.props.label) || id
+  const label = head.props.label ?? id
   return {
     ...head.props,
     id,
@@ -145,6 +146,7 @@ function resolveTabId(id?: string) {
 }
 
 function resolveText(value: unknown) {
+  if (isRef(value)) value = unref(value)
   return typeof value === 'string' && value.trim().length > 0
     ? value.trim()
     : ''

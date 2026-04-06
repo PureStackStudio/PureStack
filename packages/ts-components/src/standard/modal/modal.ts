@@ -1,9 +1,9 @@
-import { resolveTsSsgContext } from '@purestack/ts-common'
 import {
   getSemanticToneSurfaceClass,
   getSemanticToneTextClass,
   resolveSemanticTone,
 } from '@purestack/ts-style'
+import { tryResolveTsSsgContext } from 'packages/ts-common/src/resolveTsSsgContext'
 import { type ComponentHead, defineComponent, html } from 'regor'
 import { registerModalStyles } from './modalStyle'
 
@@ -189,5 +189,5 @@ function resolveBoolean(value: unknown, fallback: boolean) {
 }
 
 function markModalRuntimeEmbed(head: ComponentHead<Modal>) {
-  resolveTsSsgContext(head).recordRuntimeEmbed('modal', 'head')
+  tryResolveTsSsgContext(head)?.recordRuntimeEmbed('modal', 'head')
 }
