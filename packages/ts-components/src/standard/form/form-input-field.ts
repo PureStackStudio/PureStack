@@ -1,37 +1,30 @@
-import { type AnyRef, defineComponent, html, isRef } from 'regor'
+import { defineComponent, html, type Ref, type RefOrValue, unref } from 'regor'
 
 export class FormInputField {
-  label: string
-  model: unknown
-  type?: string
-  name?: string
-  autocomplete?: string
-  min?: number | string
-  step?: number | string
-  placeholder?: string
+  declare readonly label?: RefOrValue<string>
+  declare readonly model: Ref<string | number>
+  declare readonly type?: RefOrValue<string>
+  declare readonly name?: RefOrValue<string>
+  declare readonly autocomplete?: RefOrValue<string>
+  declare readonly min?: RefOrValue<number | string>
+  declare readonly step?: RefOrValue<number | string>
+  declare readonly placeholder?: RefOrValue<string>
 
   constructor(props: {
-    label: string
-    model: unknown
-    type?: string
-    name?: string
-    autocomplete?: string
-    min?: number | string
-    step?: number | string
-    placeholder?: string
+    label?: RefOrValue<string>
+    model: Ref<string | number>
+    type?: RefOrValue<string>
+    name?: RefOrValue<string>
+    autocomplete?: RefOrValue<string>
+    min?: RefOrValue<number | string>
+    step?: RefOrValue<number | string>
+    placeholder?: RefOrValue<string>
   }) {
-    this.label = props.label
-    this.model = props.model
-    this.type = props.type
-    this.name = props.name
-    this.autocomplete = props.autocomplete
-    this.min = props.min
-    this.step = props.step
-    this.placeholder = props.placeholder
+    Object.assign(this, props)
   }
 
   get isNumberField() {
-    return this.type === 'number'
+    return unref(this.type) === 'number'
   }
 
   increment = () => {
@@ -50,34 +43,28 @@ export class FormInputField {
     if (min !== undefined && next < min) {
       next = min
     }
-    const modelRef = this.getModelRef()
+    const modelRef = this.model
     if (modelRef) modelRef(next)
   }
 
   private readCurrentNumber() {
-    const modelRef = this.getModelRef()
-    if (!modelRef) return 0
-    const raw = modelRef()
+    const raw = unref(this.model)
     const numeric =
       typeof raw === 'number' ? raw : Number.parseFloat(String(raw ?? '0'))
     return Number.isFinite(numeric) ? numeric : 0
   }
 
-  private getModelRef(): AnyRef | null {
-    return isRef(this.model) ? this.model : null
-  }
-
   private readMin() {
-    if (this.min === undefined) return undefined
-    const value =
-      typeof this.min === 'number' ? this.min : Number.parseFloat(this.min)
+    const min = unref(this.min)
+    if (min === undefined) return undefined
+    const value = typeof min === 'number' ? min : Number.parseFloat(min)
     return Number.isFinite(value) ? value : undefined
   }
 
   private readStep() {
-    if (this.step === undefined) return 1
-    const value =
-      typeof this.step === 'number' ? this.step : Number.parseFloat(this.step)
+    const step = unref(this.step)
+    if (step === undefined) return 1
+    const value = typeof step === 'number' ? step : Number.parseFloat(step)
     return Number.isFinite(value) && value > 0 ? value : 1
   }
 }
