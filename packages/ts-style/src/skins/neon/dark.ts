@@ -22,15 +22,15 @@ type ToneOverrides = {
 }
 
 const core = {
-  ink: '#07070B',
-  abyss: '#0B0D14',
-  panel: '#1B2230',
+  ink: '#1c1c2c',
+  abyss: '#181c2c',
+  panel: '#232c3f',
   frost: '#F6EEF6',
-  accent: '#FF2F88',
+  accent: '#832222',
   info: '#FF8A5B',
-  success: '#1EE6A0',
+  success: '#179a3a',
   warning: '#FFC54D',
-  danger: '#FF4D6D',
+  danger: '#e2310a',
 } as const
 
 function rgba(hex: string, alphaValue: number) {
