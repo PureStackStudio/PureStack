@@ -1,18 +1,25 @@
-import { defineComponent, html } from 'regor'
+import {
+  type ComputedRef,
+  computed,
+  defineComponent,
+  html,
+  type RefOrValue,
+  unref,
+} from 'regor'
 
 import { registerGridStyles } from './gridStyle'
 
 export interface Grid {
-  columns?: number | string
-  columnsSm?: number | string
-  columnsMd?: number | string
-  columnsLg?: number | string
-  columnsXl?: number | string
-  alignItems?: string
-  justifyItems?: string
-  dense?: boolean | string
-  className?: string
-  gridStyle?: Record<string, string>
+  columns?: RefOrValue<number | string>
+  columnsSm?: RefOrValue<number | string>
+  columnsMd?: RefOrValue<number | string>
+  columnsLg?: RefOrValue<number | string>
+  columnsXl?: RefOrValue<number | string>
+  alignItems?: RefOrValue<string>
+  justifyItems?: RefOrValue<string>
+  dense?: RefOrValue<boolean | string>
+  className?: ComputedRef<string>
+  gridStyle?: ComputedRef<Record<string, string>>
 }
 
 const gridTemplate = html`<div class="grid" :class="className" :style="gridStyle">
@@ -43,24 +50,30 @@ export function createGridComponents() {
 }
 
 function resolveGrid(props: Grid): Grid {
-  const classNames = [
-    resolveAlignClass(props.alignItems),
-    resolveJustifyClass(props.justifyItems),
-    resolveDenseClass(props.dense),
-  ].filter(Boolean)
-  const resolvedColumns = resolveResponsiveGridTemplateColumns(props)
+  const className = computed(() => {
+    return [
+      resolveAlignClass(props.alignItems),
+      resolveJustifyClass(props.justifyItems),
+      resolveDenseClass(props.dense),
+    ]
+      .filter(Boolean)
+      .join(' ')
+  })
+  const gridStyle = computed(() => {
+    const resolvedColumns = resolveResponsiveGridTemplateColumns(props)
 
-  const gridStyle: Record<string, string> = {
-    '--grid-template-columns': resolvedColumns.base,
-    '--grid-template-columns-sm': resolvedColumns.sm,
-    '--grid-template-columns-md': resolvedColumns.md,
-    '--grid-template-columns-lg': resolvedColumns.lg,
-    '--grid-template-columns-xl': resolvedColumns.xl,
-  }
+    return {
+      '--grid-template-columns': resolvedColumns.base,
+      '--grid-template-columns-sm': resolvedColumns.sm,
+      '--grid-template-columns-md': resolvedColumns.md,
+      '--grid-template-columns-lg': resolvedColumns.lg,
+      '--grid-template-columns-xl': resolvedColumns.xl,
+    } as Record<string, string>
+  })
 
   return {
     ...props,
-    className: classNames.join(' '),
+    className,
     gridStyle,
   }
 }
@@ -107,6 +120,7 @@ function resolveGridTemplateColumnsValue(
   value: unknown,
   fallback?: number,
 ): string | undefined {
+  value = unref(value)
   const template = resolveColumnTemplate(value)
   if (template) return template
 
@@ -130,8 +144,9 @@ function clampColumns(value: number) {
   return value
 }
 
-function resolveAlignClass(value: unknown) {
-  const normalized = resolveText(value).toLowerCase()
+function resolveAlignClass(value?: RefOrValue<string>) {
+  if (!value) return ''
+  const normalized = unref(value).toLowerCase()
   if (
     normalized === 'start' ||
     normalized === 'center' ||
@@ -142,8 +157,9 @@ function resolveAlignClass(value: unknown) {
   return ''
 }
 
-function resolveJustifyClass(value: unknown) {
-  const normalized = resolveText(value).toLowerCase()
+function resolveJustifyClass(value?: RefOrValue<string>) {
+  if (!value) return ''
+  const normalized = unref(value).toLowerCase()
   if (
     normalized === 'start' ||
     normalized === 'center' ||
@@ -154,21 +170,7 @@ function resolveJustifyClass(value: unknown) {
   return ''
 }
 
-function resolveDenseClass(value: unknown) {
-  return resolveBoolean(value) ? 'grid--dense' : ''
-}
-
-function resolveText(value: unknown) {
-  return typeof value === 'string' && value.trim().length > 0
-    ? value.trim()
-    : ''
-}
-
-function resolveBoolean(value: unknown) {
-  if (typeof value === 'boolean') return value
-  if (typeof value === 'string') {
-    const normalized = value.trim().toLowerCase()
-    return normalized === 'true' || normalized === '1' || normalized === 'yes'
-  }
-  return false
+function resolveDenseClass(value?: RefOrValue<boolean | string>) {
+  if (!value) return ''
+  return unref(value) ? 'grid--dense' : ''
 }
