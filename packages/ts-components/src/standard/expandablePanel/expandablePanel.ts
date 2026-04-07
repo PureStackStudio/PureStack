@@ -1,6 +1,7 @@
 import {
   getSemanticToneIconClass,
   getSemanticToneSurfaceClass,
+  getSemanticToneTextClass,
   resolveSemanticTone,
 } from '@purestack/ts-style'
 import {
@@ -24,7 +25,6 @@ export interface ExpandablePanel {
   open?: RefOrValue<boolean>
   rootClass?: ComputedRef<string>
   iconToneClass?: ComputedRef<string>
-  chevronToneClass?: ComputedRef<string>
 }
 
 const expandablePanelTemplate = html`<details
@@ -34,7 +34,7 @@ const expandablePanelTemplate = html`<details
 >
   <summary class="expandable-panel__summary">
     <slot name="summary">
-      <Icon class="expandable-panel__icon" :name="icon" r-if="icon" :wrap="true"/>
+      <Icon class="expandable-panel__icon" :name="icon" :class="iconToneClass" r-if="icon" :wrap="true"/>
       <span class="expandable-panel__header">
         <span class="expandable-panel__title" r-if="title">{{ title }}</span>
         <span class="expandable-panel__badge" r-if="badge">{{ badge }}</span>
@@ -44,7 +44,7 @@ const expandablePanelTemplate = html`<details
         <span class="expandable-panel__header-meta" r-if="meta">{{ meta }}</span>
         <span
           class="expandable-panel__chevron"
-          :class="chevronToneClass"
+          :class="iconToneClass"
           aria-hidden="true"
         >
           <Icon
@@ -75,13 +75,13 @@ export function createExpandablePanelComponents() {
 function resolveExpandablePanel(props: ExpandablePanel): ExpandablePanel {
   return {
     ...props,
-    rootClass: computed(() =>
-      getSemanticToneSurfaceClass(resolveSemanticTone(unref(props.tone))),
-    ),
+    rootClass: computed(() => {
+      const tone = resolveSemanticTone(unref(props.tone))
+      return `${getSemanticToneSurfaceClass(tone)} ${getSemanticToneTextClass(
+        tone,
+      )}`
+    }),
     iconToneClass: computed(() =>
-      getSemanticToneIconClass(resolveSemanticTone(unref(props.tone))),
-    ),
-    chevronToneClass: computed(() =>
       getSemanticToneIconClass(resolveSemanticTone(unref(props.tone))),
     ),
   }

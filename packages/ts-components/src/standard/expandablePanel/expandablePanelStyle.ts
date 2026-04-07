@@ -28,7 +28,6 @@ function registerExpandablePanelShellStyles(
     .borderRadius(options.radii.lg)
     .background(palette.semanticTone.neutral.background.raised)
     .boxShadow(palette.effect.panelShadow)
-    .color(palette.semanticTone.neutral.text.default)
     .overflow('hidden')
     .transition(
       'border-color 180ms ease, box-shadow 180ms ease, background 180ms ease',
@@ -45,6 +44,8 @@ function registerExpandablePanelSummaryStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
+  registerExpandablePanelToneHoverStyles(theme, palette)
+
   styleBuilder
     .select('.expandable-panel__summary', theme)
     .listStyle('none')
@@ -59,10 +60,6 @@ function registerExpandablePanelSummaryStyles(
   styleBuilder
     .select('.expandable-panel__summary::-webkit-details-marker', theme)
     .display('none')
-
-  styleBuilder
-    .select('.expandable-panel__summary:hover', theme)
-    .background(palette.semanticTone.ghost.hover)
 
   styleBuilder
     .select('.expandable-panel__summary:focus-visible', theme)
@@ -89,7 +86,6 @@ function registerExpandablePanelSummaryStyles(
     .fontWeight('700')
     .lineHeight('1.3')
     .letterSpacing('-0.02em')
-    .color(palette.semanticTone.neutral.text.strong)
 
   styleBuilder
     .select('.expandable-panel__badge', theme)
@@ -109,7 +105,6 @@ function registerExpandablePanelSummaryStyles(
     .minWidth('100%')
     .fontSize('0.97rem')
     .lineHeight('1.55')
-    .color(palette.semanticTone.neutral.text.muted)
 
   styleBuilder
     .select('.expandable-panel__header-side', theme)
@@ -118,13 +113,11 @@ function registerExpandablePanelSummaryStyles(
     .justifyContent('flex-end')
     .gap('12px')
     .minWidth('0')
-    .color(palette.semanticTone.neutral.text.subtle)
 
   styleBuilder
     .select('.expandable-panel__header-meta', theme)
     .fontSize('0.95rem')
     .fontWeight('600')
-    .color(palette.semanticTone.accent.text.default)
 
   styleBuilder
     .select('.expandable-panel__chevron', theme)
@@ -147,6 +140,39 @@ function registerExpandablePanelSummaryStyles(
   styleBuilder
     .select('.expandable-panel[open] .expandable-panel__chevron', theme)
     .transform('rotate(180deg)')
+}
+
+function registerExpandablePanelToneHoverStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+) {
+  styleBuilder
+    .select('.expandable-panel.tone-surface--neutral .expandable-panel__summary:hover', theme)
+    .background(palette.semanticTone.neutral.hover)
+
+  styleBuilder
+    .select('.expandable-panel.tone-surface--accent .expandable-panel__summary:hover', theme)
+    .background(palette.semanticTone.accent.hover)
+
+  styleBuilder
+    .select('.expandable-panel.tone-surface--ghost .expandable-panel__summary:hover', theme)
+    .background(palette.semanticTone.ghost.hover)
+
+  styleBuilder
+    .select('.expandable-panel.tone-surface--info .expandable-panel__summary:hover', theme)
+    .background(palette.semanticTone.info.hover)
+
+  styleBuilder
+    .select('.expandable-panel.tone-surface--success .expandable-panel__summary:hover', theme)
+    .background(palette.semanticTone.success.hover)
+
+  styleBuilder
+    .select('.expandable-panel.tone-surface--warning .expandable-panel__summary:hover', theme)
+    .background(palette.semanticTone.warning.hover)
+
+  styleBuilder
+    .select('.expandable-panel.tone-surface--danger .expandable-panel__summary:hover', theme)
+    .background(palette.semanticTone.danger.hover)
 }
 
 function registerExpandablePanelBodyStyles(
@@ -172,7 +198,6 @@ function registerExpandablePanelBodyStyles(
   styleBuilder
     .select('.expandable-panel__body :where(p, li)', theme)
     .lineHeight('1.7')
-    .color(palette.semanticTone.neutral.text.default)
 
   styleBuilder
     .select('.expandable-panel__body :where(ul, ol)', theme)
@@ -180,7 +205,7 @@ function registerExpandablePanelBodyStyles(
 
   styleBuilder
     .select('.expandable-panel__body :where(strong)', theme)
-    .color(palette.semanticTone.neutral.text.strong)
+    .fontWeight('700')
 
   styleBuilder
     .select('.expandable-panel__body :where(a)', theme)

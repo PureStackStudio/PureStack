@@ -32,7 +32,7 @@ export function registerThemeSwitcherShellStyles(
     .borderRadius(options.radii.pill)
     .border('1px solid transparent')
     .background(palette.semanticTone.accent.button.hover.background)
-    .borderColor(palette.semanticTone.accent.button.hover.border)
+    .borderColor(palette.semanticTone.accent.button.hover.background)
     .color(palette.semanticTone.accent.button.hover.text)
     .cursor('pointer')
     .fontSize('0')
@@ -56,7 +56,6 @@ export function registerThemeSwitcherTrackStyles(
   styleBuilder
     .select('.theme-switcher__track', theme)
     .position('absolute')
-    .inset('6px')
     .borderRadius(options.radii.pill)
     .background(palette.semanticTone.accent.button.hover.background)
     .boxShadow(palette.effect.trackShadow)

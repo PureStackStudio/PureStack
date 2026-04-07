@@ -55,6 +55,12 @@ function applyNormalizeTextRules(theme: string) {
 function applyNormalizeFormRules(theme: string) {
   styleBuilder.select('img', theme).borderStyle('none')
   styleBuilder
+    .select(
+      'a, button, summary, [role="button"], input, label, select, textarea',
+      theme,
+    )
+    .webkitTapHighlightColor('transparent')
+  styleBuilder
     .select('button, input, optgroup, select, textarea', theme)
     .fontFamily('inherit')
     .fontSize('100%')
