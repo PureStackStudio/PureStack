@@ -89,7 +89,8 @@ type ResolvedGridTemplateColumns = {
 function resolveResponsiveGridTemplateColumns(
   props: Grid,
 ): ResolvedGridTemplateColumns {
-  const base = resolveGridTemplateColumnsValue(props.columns, 1)
+  const base =
+    resolveGridTemplateColumnsValue(props.columns) ?? toRepeatTemplate(1)
   const sm = resolveGridTemplateColumnsValue(props.columnsSm) ?? base
   const md = resolveGridTemplateColumnsValue(props.columnsMd) ?? sm
   const lg = resolveGridTemplateColumnsValue(props.columnsLg) ?? md
@@ -98,44 +99,37 @@ function resolveResponsiveGridTemplateColumns(
   return { base, sm, md, lg, xl }
 }
 
-function resolveColumns(value: unknown, fallback?: number): number | undefined {
-  if (typeof value === 'number' && Number.isInteger(value)) {
-    return clampColumns(value)
-  }
-  if (typeof value === 'string') {
-    const normalized = value.trim()
-    if (/^\d+$/.test(normalized)) {
-      return clampColumns(Number.parseInt(normalized, 10))
-    }
-  }
-  return fallback
-}
-
-function resolveGridTemplateColumnsValue(value: unknown): string | undefined
 function resolveGridTemplateColumnsValue(
-  value: unknown,
-  fallback: number,
-): string
-function resolveGridTemplateColumnsValue(
-  value: unknown,
-  fallback?: number,
+  value?: RefOrValue<number | string>,
 ): string | undefined {
-  value = unref(value)
-  const template = resolveColumnTemplate(value)
-  if (template) return template
+  const resolvedValue = unref(value)
 
-  const columns = resolveColumns(value, fallback)
-  if (columns === undefined) return undefined
-  return `repeat(${columns}, minmax(0, 1fr))`
+  if (typeof resolvedValue === 'number' && Number.isInteger(resolvedValue)) {
+    return toRepeatTemplate(clampColumns(resolvedValue))
+  }
+
+  if (typeof resolvedValue !== 'string') return undefined
+
+  const normalized = resolvedValue.trim()
+  if (!normalized) return undefined
+
+  const columnCount = tryParseColumnCount(normalized)
+  if (columnCount !== undefined) return toRepeatTemplate(columnCount)
+
+  return normalized
 }
 
-function resolveColumnTemplate(value: unknown): string | undefined {
-  if (typeof value !== 'string') return undefined
-  const normalized = value.trim()
-  if (!normalized) return undefined
-  if (/^\d+$/.test(normalized)) return undefined
-  if (/[;{}]/.test(normalized)) return undefined
-  return normalized
+function tryParseColumnCount(value: string): number | undefined {
+  if (!/^\d+$/.test(value)) return undefined
+
+  const parsed = Number.parseInt(value, 10)
+  if (!Number.isInteger(parsed)) return undefined
+
+  return clampColumns(parsed)
+}
+
+function toRepeatTemplate(columns: number) {
+  return `repeat(${columns}, minmax(0, 1fr))`
 }
 
 function clampColumns(value: number) {
