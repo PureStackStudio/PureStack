@@ -39,10 +39,10 @@ export function applyAlertContainerStyles(
     .alignItems('start')
     .padding('14px 16px')
     .margin('0 0 14px')
-    .border(`1px solid ${palette.border.default}`)
+    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
     .borderRadius(options.radii.md)
-    .background(palette.background.panel)
-    .color(palette.text.default)
+    .background(palette.semanticTone.neutral.background.panel)
+    .color(palette.semanticTone.neutral.text.default)
     .boxShadow(palette.effect.panelShadow)
 }
 
@@ -101,7 +101,7 @@ export function applyAlertHeaderStyles(
     .fontWeight('700')
     .textTransform('uppercase')
     .letterSpacing('0.12em')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
 
   styleBuilder
     .select('.alert__title', theme)
@@ -109,7 +109,7 @@ export function applyAlertHeaderStyles(
     .fontSize('15px')
     .fontWeight('700')
     .letterSpacing('-0.01em')
-    .color(palette.text.strong)
+    .color(palette.semanticTone.neutral.text.strong)
 
   styleBuilder
     .select('.alert__badge', theme)
@@ -121,8 +121,8 @@ export function applyAlertHeaderStyles(
     .fontWeight('700')
     .textTransform('uppercase')
     .letterSpacing('0.08em')
-    .background(palette.semanticTone.neutral.background)
-    .color(palette.semanticTone.neutral.text)
+    .background(palette.semanticTone.neutral.background.default)
+    .color(palette.semanticTone.neutral.text.default)
 }
 
 export function applyAlertBodyStyles(
@@ -137,18 +137,18 @@ export function applyAlertBodyStyles(
     .lineHeight('1.6')
   styleBuilder
     .select('.alert__body :where(strong)', theme)
-    .color(palette.text.strong)
+    .color(palette.semanticTone.neutral.text.strong)
   styleBuilder
     .select('.alert__body :where(a)', theme)
-    .color(palette.text.accent)
+    .color(palette.semanticTone.accent.text.default)
     .fontWeight('600')
     .textDecoration('underline')
   styleBuilder
     .select('.alert__body :where(code)', theme)
     .fontFamily("'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace")
     .fontSize('0.9em')
-    .background(palette.background.surfaceAlt)
-    .border(`1px solid ${palette.border.subtle}`)
+    .background(palette.semanticTone.neutral.background.surfaceAlt)
+    .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
     .borderRadius(options.radii.sm)
     .padding('0.1em 0.35em')
 }
@@ -173,9 +173,9 @@ export function applyAlertActionStyles(
     .justifyContent('center')
     .padding('6px 11px')
     .borderRadius(options.radii.pill)
-    .border(`1px solid ${palette.border.default}`)
-    .background(palette.semanticTone.neutral.background)
-    .color(palette.semanticTone.neutral.text)
+    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .background(palette.semanticTone.neutral.background.default)
+    .color(palette.semanticTone.neutral.text.default)
     .fontSize('12px')
     .fontWeight('600')
     .textDecoration('none')
@@ -202,7 +202,7 @@ export function applyAlertMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .margin('0')
     .fontSize('12px')
     .lineHeight('1.5')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
 }
 
 export function applyAlertResponsiveStyles(theme: ThemeMode) {

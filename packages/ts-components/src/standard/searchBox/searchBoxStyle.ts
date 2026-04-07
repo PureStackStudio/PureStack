@@ -47,7 +47,7 @@ function registerSearchBoxShellIconStyles(
     .width('18px')
     .height('18px')
     .transform('translateY(-50%)')
-    .color(palette.text.soft)
+    .color(palette.semanticTone.neutral.text.soft)
     .pointerEvents('none')
 
   styleBuilder
@@ -87,9 +87,9 @@ function registerSearchBoxShellInputStyles(
     .height('42px')
     .padding('0 14px 0 42px')
     .borderRadius(options.radii.pill)
-    .border(`1px solid ${palette.border.default}`)
-    .background(palette.background.surface)
-    .color(palette.text.default)
+    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .background(palette.semanticTone.neutral.background.surface)
+    .color(palette.semanticTone.neutral.text.default)
     .fontSize('14px')
     .lineHeight('1.3')
     .boxSizing('border-box')
@@ -99,13 +99,13 @@ function registerSearchBoxShellInputStyles(
 
   styleBuilder
     .select('.site-search__input::placeholder', theme)
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
 
   styleBuilder
     .select('.site-search__input:focus-visible', theme)
-    .outline(`2px solid ${palette.border.focus}`)
+    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
     .outlineOffset('2px')
-    .borderColor(palette.border.accent)
+    .borderColor(palette.semanticTone.accent.border.default)
 
   styleBuilder
     .select('.site-search__input::-webkit-search-cancel-button', theme)
@@ -138,8 +138,8 @@ function registerSearchBoxResultContainerStyles(
     .overflow('auto')
     .padding('8px')
     .borderRadius(options.radii.lg)
-    .border(`1px solid ${palette.border.default}`)
-    .background(palette.background.raised)
+    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .background(palette.semanticTone.neutral.background.raised)
     .boxShadow(options.shadows.strong)
     .zIndex('60')
 }
@@ -181,10 +181,10 @@ function registerSearchBoxResultListStyles(
     .gap('6px')
     .padding('12px 14px')
     .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.border.subtle}`)
-    .background(palette.background.surface)
+    .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
+    .background(palette.semanticTone.neutral.background.surface)
     .textDecoration('none')
-    .color(palette.text.default)
+    .color(palette.semanticTone.neutral.text.default)
     .boxShadow(palette.effect.interactiveShadow)
     .transition(
       'border-color 160ms ease, background-color 160ms ease, transform 160ms ease',
@@ -192,12 +192,12 @@ function registerSearchBoxResultListStyles(
 
   styleBuilder
     .select('.site-search__results .site-search__link:hover', theme)
-    .background(palette.background.surfaceAlt)
-    .borderColor(palette.border.default)
+    .background(palette.semanticTone.neutral.background.surfaceAlt)
+    .borderColor(palette.semanticTone.neutral.border.default)
 
   styleBuilder
     .select('.site-search__results .site-search__link:focus-visible', theme)
-    .outline(`2px solid ${palette.border.focus}`)
+    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
     .outlineOffset('2px')
 }
 
@@ -213,7 +213,7 @@ function registerSearchBoxResultContentStyles(
     .fontSize('0.98rem')
     .lineHeight('1.35')
     .letterSpacing('-0.01em')
-    .color(palette.text.strong)
+    .color(palette.semanticTone.neutral.text.strong)
     .wordBreak('break-word')
 
   styleBuilder
@@ -222,7 +222,7 @@ function registerSearchBoxResultContentStyles(
     .margin('0')
     .fontSize('0.9rem')
     .lineHeight('1.5')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
     .wordBreak('break-word')
     .display('-webkit-box')
     .lineClamp('3')
@@ -233,23 +233,23 @@ function registerSearchBoxResultContentStyles(
     .select('.site-search__results mark.site-search__highlight', theme)
     .padding('0 3px')
     .borderRadius('5px')
-    .background(palette.semanticTone.accent.background)
-    .color(palette.semanticTone.accent.text)
+    .background(palette.semanticTone.accent.background.default)
+    .color(palette.semanticTone.accent.text.default)
 
   styleBuilder
     .select('.site-search__results .site-search__message', theme)
     .margin('0')
     .padding('10px 12px')
     .borderRadius(options.radii.md)
-    .border(`1px dashed ${palette.border.default}`)
-    .background(palette.background.surface)
-    .color(palette.text.subtle)
+    .border(`1px dashed ${palette.semanticTone.neutral.border.default}`)
+    .background(palette.semanticTone.neutral.background.surface)
+    .color(palette.semanticTone.neutral.text.subtle)
 
   styleBuilder
     .select('.site-search__results .site-search__message--error', theme)
-    .border(`1px solid ${palette.semanticTone.danger.border}`)
-    .background(palette.semanticTone.danger.background)
-    .color(palette.semanticTone.danger.text)
+    .border(`1px solid ${palette.semanticTone.danger.border.default}`)
+    .background(palette.semanticTone.danger.background.default)
+    .color(palette.semanticTone.danger.text.default)
 }
 
 export function registerSearchBoxResponsiveStyles(theme: ThemeMode) {

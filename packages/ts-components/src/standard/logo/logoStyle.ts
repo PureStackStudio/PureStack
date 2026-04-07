@@ -28,11 +28,11 @@ export function registerLogoShellStyles(
     .gap('6px')
     .padding('10px 14px')
     .borderRadius(options.radii.pill)
-    .border(`1px solid ${palette.border.subtle}`)
+    .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
     .textDecoration('none')
     .position('relative')
     .overflow('hidden')
-    .background(palette.background.panel)
+    .background(palette.semanticTone.neutral.background.panel)
     .boxShadow(palette.effect.panelShadow)
 
   styleBuilder
@@ -43,7 +43,7 @@ export function registerLogoShellStyles(
     .opacity('0.48')
     .pointerEvents('none')
     .background(
-      `linear-gradient(135deg, ${palette.semanticTone.accent.icon.gradient} 0%, ${palette.background.panel} 70%)`,
+      `linear-gradient(135deg, ${palette.semanticTone.accent.icon.gradient} 0%, ${palette.semanticTone.neutral.background.panel} 70%)`,
     )
 
   styleBuilder
@@ -112,11 +112,11 @@ export function registerLogoTextStyles(
 
   styleBuilder
     .select('.site-logo__word--primary', theme)
-    .color(palette.text.default)
+    .color(palette.semanticTone.neutral.text.default)
 
   styleBuilder
     .select('.site-logo__word--accent', theme)
-    .color(palette.text.accent)
+    .color(palette.semanticTone.accent.text.default)
 
   styleBuilder
     .select('.site-logo__subtitle', theme)
@@ -127,7 +127,7 @@ export function registerLogoTextStyles(
     .fontWeight('700')
     .letterSpacing('0.08em')
     .textTransform('uppercase')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
     .whiteSpace('nowrap')
 }
 
@@ -144,12 +144,12 @@ export function registerLogoInteractiveStyles(
 
   styleBuilder
     .select('.site-logo__link[href]:hover', theme)
-    .borderColor(palette.border.accent)
+    .borderColor(palette.semanticTone.accent.border.default)
     .boxShadow(palette.effect.accentShadow)
 
   styleBuilder
     .select('.site-logo__link[href]:focus-visible', theme)
-    .outline(`2px solid ${palette.border.focus}`)
+    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
     .outlineOffset('2px')
 }
 

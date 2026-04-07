@@ -24,11 +24,11 @@ function registerExpandablePanelShellStyles(
     .select('.expandable-panel', theme)
     .display('grid')
     .margin('0 0 16px')
-    .border(`1px solid ${palette.border.default}`)
+    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
     .borderRadius(options.radii.lg)
-    .background(palette.background.raised)
+    .background(palette.semanticTone.neutral.background.raised)
     .boxShadow(palette.effect.panelShadow)
-    .color(palette.text.default)
+    .color(palette.semanticTone.neutral.text.default)
     .overflow('hidden')
     .transition(
       'border-color 180ms ease, box-shadow 180ms ease, background 180ms ease',
@@ -36,7 +36,7 @@ function registerExpandablePanelShellStyles(
 
   styleBuilder
     .select('.expandable-panel[open]', theme)
-    .borderColor(palette.border.strong)
+    .borderColor(palette.semanticTone.neutral.border.strong)
     .boxShadow(palette.effect.panelShadowStrong)
 }
 
@@ -66,7 +66,7 @@ function registerExpandablePanelSummaryStyles(
 
   styleBuilder
     .select('.expandable-panel__summary:focus-visible', theme)
-    .outline(`2px solid ${palette.border.focus}`)
+    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
     .outlineOffset('-2px')
 
   styleBuilder
@@ -103,7 +103,7 @@ function registerExpandablePanelSummaryStyles(
     .fontWeight('700')
     .lineHeight('1.3')
     .letterSpacing('-0.02em')
-    .color(palette.text.strong)
+    .color(palette.semanticTone.neutral.text.strong)
 
   styleBuilder
     .select('.expandable-panel__badge', theme)
@@ -111,8 +111,8 @@ function registerExpandablePanelSummaryStyles(
     .alignItems('center')
     .padding('4px 9px')
     .borderRadius(options.radii.pill)
-    .background(palette.semanticTone.neutral.background)
-    .color(palette.semanticTone.neutral.text)
+    .background(palette.semanticTone.neutral.background.default)
+    .color(palette.semanticTone.neutral.text.default)
     .fontSize('11px')
     .fontWeight('700')
     .letterSpacing('0.08em')
@@ -123,7 +123,7 @@ function registerExpandablePanelSummaryStyles(
     .minWidth('100%')
     .fontSize('0.97rem')
     .lineHeight('1.55')
-    .color(palette.text.muted)
+    .color(palette.semanticTone.neutral.text.muted)
 
   styleBuilder
     .select('.expandable-panel__header-side', theme)
@@ -132,13 +132,13 @@ function registerExpandablePanelSummaryStyles(
     .justifyContent('flex-end')
     .gap('12px')
     .minWidth('0')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
 
   styleBuilder
     .select('.expandable-panel__header-meta', theme)
     .fontSize('0.95rem')
     .fontWeight('600')
-    .color(palette.text.accent)
+    .color(palette.semanticTone.accent.text.default)
 
   styleBuilder
     .select('.expandable-panel__chevron', theme)
@@ -148,7 +148,7 @@ function registerExpandablePanelSummaryStyles(
     .alignItems('center')
     .justifyContent('center')
     .borderRadius(options.radii.pill)
-    .border(`1px solid ${palette.border.subtle}`)
+    .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
     .transition(
       'transform 180ms ease, color 180ms ease, border-color 180ms ease, background 180ms ease',
     )
@@ -173,7 +173,7 @@ function registerExpandablePanelBodyStyles(
     .display('grid')
     .gap('16px')
     .padding('24px')
-    .borderTop(`1px solid ${palette.border.subtle}`)
+    .borderTop(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
 
   styleBuilder
     .select('.expandable-panel:not([open]) .expandable-panel__body', theme)
@@ -186,7 +186,7 @@ function registerExpandablePanelBodyStyles(
   styleBuilder
     .select('.expandable-panel__body :where(p, li)', theme)
     .lineHeight('1.7')
-    .color(palette.text.default)
+    .color(palette.semanticTone.neutral.text.default)
 
   styleBuilder
     .select('.expandable-panel__body :where(ul, ol)', theme)
@@ -194,11 +194,11 @@ function registerExpandablePanelBodyStyles(
 
   styleBuilder
     .select('.expandable-panel__body :where(strong)', theme)
-    .color(palette.text.strong)
+    .color(palette.semanticTone.neutral.text.strong)
 
   styleBuilder
     .select('.expandable-panel__body :where(a)', theme)
-    .color(palette.text.accent)
+    .color(palette.semanticTone.accent.text.default)
     .fontWeight('600')
     .textDecoration('underline')
 

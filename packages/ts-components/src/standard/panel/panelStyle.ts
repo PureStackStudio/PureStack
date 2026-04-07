@@ -6,9 +6,9 @@ export function registerPanelStyles() {
       .select('.panel', theme)
       .display('grid')
       .margin('0 0 16px')
-      .border(`1px solid ${palette.border.default}`)
+      .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
       .borderRadius(options.radii.lg)
-      .background(palette.background.raised)
+      .background(palette.semanticTone.neutral.background.raised)
       .boxShadow(palette.effect.panelShadow)
       .overflow('hidden')
       .transition(

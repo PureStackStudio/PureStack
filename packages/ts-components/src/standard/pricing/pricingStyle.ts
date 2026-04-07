@@ -28,8 +28,8 @@ export function applyPricingShellStyles(
     .overflow('hidden')
     .padding('28px')
     .borderRadius(options.radii.lg)
-    .border(`1px solid ${palette.border.subtle}`)
-    .background(palette.background.showcaseAlt)
+    .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
+    .background(palette.semanticTone.neutral.background.showcaseAlt)
     .boxShadow(options.shadows.soft)
     .margin('0 0 32px')
 
@@ -71,7 +71,7 @@ export function applyPricingHeaderStyles(
     .fontSize('11px')
     .fontWeight('700')
     .margin('0')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
 
   styleBuilder
     .select('.pricing__title', theme)
@@ -79,7 +79,7 @@ export function applyPricingHeaderStyles(
     .fontSize('clamp(24px, 3.2vw, 34px)')
     .fontWeight('700')
     .letterSpacing('-0.02em')
-    .color(palette.text.default)
+    .color(palette.semanticTone.neutral.text.default)
 
   styleBuilder
     .select('.pricing__subtitle', theme)
@@ -87,7 +87,7 @@ export function applyPricingHeaderStyles(
     .fontSize('14px')
     .lineHeight('1.6')
     .maxWidth('680px')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
 
   styleBuilder
     .select('.pricing__footnote', theme)
@@ -95,7 +95,7 @@ export function applyPricingHeaderStyles(
     .zIndex('1')
     .margin('5px 0 0 !important;')
     .fontSize('12px')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
 }
 
 export function applyPricingPlanStyles(
@@ -122,8 +122,8 @@ export function applyPricingPlanShellStyles(
     .gap('12px')
     .padding('18px')
     .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.border.default}`)
-    .background(palette.background.panel)
+    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .background(palette.semanticTone.neutral.background.panel)
     .boxShadow(palette.effect.panelShadow)
     .height('100%')
 
@@ -201,7 +201,7 @@ export function applyPricingPlanTitleStyles(
     .margin('0')
     .fontSize('18px')
     .fontWeight('700')
-    .color(palette.text.default)
+    .color(palette.semanticTone.neutral.text.default)
 
   styleBuilder
     .select('.pricing-plan__badge', theme)
@@ -211,15 +211,15 @@ export function applyPricingPlanTitleStyles(
     .fontWeight('700')
     .textTransform('uppercase')
     .letterSpacing('0.1em')
-    .background(palette.semanticTone.accent.background)
-    .color(palette.semanticTone.accent.text)
+    .background(palette.semanticTone.accent.background.default)
+    .color(palette.semanticTone.accent.text.default)
 
   styleBuilder
     .select('.pricing-plan__summary', theme)
     .margin('0')
     .fontSize('13px')
     .lineHeight('1.5')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
 }
 
 export function applyPricingPlanPriceStyles(
@@ -238,7 +238,7 @@ export function applyPricingPlanPriceStyles(
     .fontSize('24px')
     .fontWeight('700')
     .letterSpacing('-0.02em')
-    .color(palette.text.default)
+    .color(palette.semanticTone.neutral.text.default)
 
   styleBuilder
     .select('.pricing-plan__period', theme)
@@ -246,7 +246,7 @@ export function applyPricingPlanPriceStyles(
     .textTransform('uppercase')
     .letterSpacing('0.12em')
     .fontWeight('600')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
 }
 
 export function applyPricingPlanCtaStyles(
@@ -267,9 +267,9 @@ export function applyPricingPlanCtaStyles(
     .fontWeight('600')
     .fontSize('13px')
     .textDecoration('none')
-    .border(`1px solid ${palette.border.default}`)
-    .background(palette.semanticTone.neutral.background)
-    .color(palette.semanticTone.neutral.text)
+    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .background(palette.semanticTone.neutral.background.default)
+    .color(palette.semanticTone.neutral.text.default)
     .boxShadow(palette.effect.interactiveShadow)
     .transition(
       'transform 180ms ease, box-shadow 180ms ease, background 180ms ease',
@@ -281,7 +281,7 @@ export function applyPricingPlanCtaStyles(
 
   styleBuilder
     .select('.pricing-plan__cta-link:focus-visible', theme)
-    .outline(`2px solid ${palette.border.focus}`)
+    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
     .outlineOffset('2px')
 }
 
@@ -294,7 +294,7 @@ export function applyPricingPlanNoteStyles(
     .margin('0')
     .fontSize('11px')
     .lineHeight('1.5')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
 }
 
 export function applyPricingFeatureStyles(
@@ -320,7 +320,7 @@ export function applyPricingFeatureStyles(
     .fontSize('13px')
     .lineHeight('1.5')
     .marginBottom('8px')
-    .color(palette.text.default)
+    .color(palette.semanticTone.neutral.text.default)
 
   styleBuilder
     .select('.pricing-feature__icon', theme)
@@ -360,8 +360,8 @@ export function applyPricingFeaturedStyles(
     .select('.pricing-plan--featured', theme)
     .position('relative')
     .transform('translateY(-4px)')
-    .background(palette.background.feature)
-    .border(`1px solid ${palette.border.accent}`)
+    .background(palette.semanticTone.neutral.background.feature)
+    .border(`1px solid ${palette.semanticTone.accent.border.default}`)
     .boxShadow(palette.effect.panelShadowStrong)
 
   styleBuilder
@@ -370,14 +370,14 @@ export function applyPricingFeaturedStyles(
     .position('absolute')
     .inset('0')
     .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.border.accent}`)
+    .border(`1px solid ${palette.semanticTone.accent.border.default}`)
     .opacity('0.5')
     .pointerEvents('none')
 
   styleBuilder
     .select('.pricing-plan--featured .pricing-plan__cta-link', theme)
-    .background(palette.semanticTone.accent.background)
-    .color(palette.semanticTone.accent.text)
+    .background(palette.semanticTone.accent.background.default)
+    .color(palette.semanticTone.accent.text.default)
     .borderColor('transparent')
 
   styleBuilder

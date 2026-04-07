@@ -40,26 +40,26 @@ function registerFormFieldStyles(
     .fontSize('0.83rem')
     .fontWeight('700')
     .letterSpacing('0.02em')
-    .color(palette.text.default)
+    .color(palette.semanticTone.neutral.text.default)
   styleBuilder
     .select('.form-block__input', theme)
     .width('100%')
     .boxSizing('border-box')
     .padding('11px 12px')
     .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.border.default}`)
-    .background(palette.background.canvas)
-    .color(palette.text.default)
+    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .background(palette.semanticTone.neutral.background.canvas)
+    .color(palette.semanticTone.neutral.text.default)
     .fontSize('0.94rem')
     .lineHeight('1.35')
     .transition('border-color 160ms ease, box-shadow 160ms ease')
   styleBuilder
     .select('.form-block__input::placeholder', theme)
-    .color(palette.text.soft)
+    .color(palette.semanticTone.neutral.text.soft)
   styleBuilder
     .select('.form-block__input:focus-visible', theme)
     .outline('none')
-    .borderColor(palette.border.accent)
+    .borderColor(palette.semanticTone.accent.border.default)
     .boxShadow(`0 0 0 3px ${palette.semanticTone.accent.focusRing}`)
   styleBuilder
     .select(
@@ -72,9 +72,9 @@ function registerFormFieldStyles(
     .display('grid')
     .gridTemplateColumns('minmax(0, 1fr) 40px')
     .alignItems('stretch')
-    .border(`1px solid ${palette.border.default}`)
+    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
     .borderRadius(options.radii.md)
-    .background(palette.background.canvas)
+    .background(palette.semanticTone.neutral.background.canvas)
     .transition('border-color 160ms ease, box-shadow 160ms ease')
     .overflow('hidden')
   styleBuilder
@@ -82,7 +82,7 @@ function registerFormFieldStyles(
       '.form-block__number:has(.form-block__input--number:focus-visible)',
       theme,
     )
-    .borderColor(palette.border.accent)
+    .borderColor(palette.semanticTone.accent.border.default)
     .boxShadow(`0 0 0 3px ${palette.semanticTone.accent.focusRing}`)
   styleBuilder
     .select('.form-block__number .form-block__input--number', theme)
@@ -100,8 +100,8 @@ function registerFormFieldStyles(
     .select('.form-block__number-controls', theme)
     .display('grid')
     .gridTemplateRows('1fr 1fr')
-    .borderLeft(`1px solid ${palette.border.default}`)
-    .background(palette.background.canvas)
+    .borderLeft(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .background(palette.semanticTone.neutral.background.canvas)
   styleBuilder
     .select('.form-block__number-btn', theme)
     .display('grid')
@@ -109,7 +109,7 @@ function registerFormFieldStyles(
     .padding('0')
     .border('none')
     .background('transparent')
-    .color(palette.text.strong)
+    .color(palette.semanticTone.neutral.text.strong)
     .fontSize('0.95rem')
     .fontWeight('800')
     .lineHeight('1')
@@ -117,17 +117,17 @@ function registerFormFieldStyles(
     .transition('background 140ms ease, color 140ms ease')
   styleBuilder
     .select('.form-block__number-btn--up', theme)
-    .borderBottom(`1px solid ${palette.border.default}`)
+    .borderBottom(`1px solid ${palette.semanticTone.neutral.border.default}`)
   styleBuilder
     .select('.form-block__number-btn:hover', theme)
-    .background(palette.background.accent)
-    .color(palette.text.default)
+    .background(palette.semanticTone.accent.background.default)
+    .color(palette.semanticTone.neutral.text.default)
   styleBuilder
     .select('.form-block__number-btn:active', theme)
-    .background(palette.background.accentMuted)
+    .background(palette.semanticTone.accent.background.muted)
   styleBuilder
     .select('.form-block__number-btn:focus-visible', theme)
-    .outline(`2px solid ${palette.border.focus}`)
+    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
     .outlineOffset('-2px')
 }
 
@@ -144,27 +144,27 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .alignItems('center')
     .gap('8px')
     .fontSize('0.84rem')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
   styleBuilder
     .select('.form-block__check input', theme)
     .width('16px')
     .height('16px')
-    .accentColor(palette.semanticTone.accent.background)
+    .accentColor(palette.semanticTone.accent.background.default)
   styleBuilder
     .select('.form-block__assist-link', theme)
     .fontSize('0.84rem')
     .fontWeight('650')
-    .color(palette.text.accent)
+    .color(palette.semanticTone.accent.text.default)
     .textDecoration('none')
   styleBuilder
     .select('.form-block__assist-link:hover', theme)
-    .color(palette.text.strong)
+    .color(palette.semanticTone.neutral.text.strong)
     .textDecoration('underline')
   styleBuilder
     .select('.form-block__divider', theme)
     .position('relative')
     .height('1px')
-    .background(palette.border.default)
+    .background(palette.semanticTone.neutral.border.default)
     .margin('2px 0')
   styleBuilder
     .select('.form-block__divider::after', theme)
@@ -175,8 +175,8 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .transform('translate(-50%, -50%)')
     .padding('0 8px')
     .fontSize('0.78rem')
-    .background(palette.background.surfaceAlt)
-    .color(palette.text.soft)
+    .background(palette.semanticTone.neutral.background.surfaceAlt)
+    .color(palette.semanticTone.neutral.text.soft)
 }
 
 function registerFormStatusStyles(
@@ -189,35 +189,35 @@ function registerFormStatusStyles(
     .marginTop('4px')
     .padding('11px 12px')
     .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.border.default}`)
-    .background(palette.background.canvas)
-    .color(palette.text.default)
+    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .background(palette.semanticTone.neutral.background.canvas)
+    .color(palette.semanticTone.neutral.text.default)
     .fontSize('0.9rem')
     .lineHeight('1.35')
 
   styleBuilder
     .select('.form-status--info', theme)
-    .borderColor(palette.semanticTone.info.border)
-    .background(palette.semanticTone.info.background)
-    .color(palette.semanticTone.info.text)
+    .borderColor(palette.semanticTone.info.border.default)
+    .background(palette.semanticTone.info.background.default)
+    .color(palette.semanticTone.info.text.default)
 
   styleBuilder
     .select('.form-status--success', theme)
-    .borderColor(palette.semanticTone.success.border)
-    .background(palette.semanticTone.success.background)
-    .color(palette.semanticTone.success.text)
+    .borderColor(palette.semanticTone.success.border.default)
+    .background(palette.semanticTone.success.background.default)
+    .color(palette.semanticTone.success.text.default)
 
   styleBuilder
     .select('.form-status--error', theme)
-    .borderColor(palette.semanticTone.danger.border)
-    .background(palette.semanticTone.danger.background)
-    .color(palette.semanticTone.danger.text)
+    .borderColor(palette.semanticTone.danger.border.default)
+    .background(palette.semanticTone.danger.background.default)
+    .color(palette.semanticTone.danger.text.default)
 
   styleBuilder
     .select('.form-status--warning', theme)
-    .borderColor(palette.semanticTone.warning.border)
-    .background(palette.semanticTone.warning.background)
-    .color(palette.semanticTone.warning.text)
+    .borderColor(palette.semanticTone.warning.border.default)
+    .background(palette.semanticTone.warning.background.default)
+    .color(palette.semanticTone.warning.text.default)
 }
 
 function registerFormResponsiveStyles(theme: ThemeMode) {

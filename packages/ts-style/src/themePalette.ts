@@ -3,7 +3,7 @@
  *
  * What this is:
  * - A role-based palette, not a brand palette.
- * - Components should read from these semantic roles (`semanticTone`, `text`, etc.)
+ * - Components should read from these semantic roles (`semanticTone`, etc.)
  *   instead of hard-coding color intent locally.
  *
  * Why this exists:
@@ -14,18 +14,18 @@
  * How to use:
  * - Component code should pick colors by UI intent.
  * - Example:
- *   - primary CTA background: `palette.semanticTone.accent.background`
+ *   - primary CTA background: `palette.semanticTone.accent.background.default`
  *   - primary CTA hover: `palette.semanticTone.accent.hover`
- *   - semantic callout surface: `palette.semanticTone.info.background`
- *   - secondary text: `palette.text.subtle`
- *   - active/focus border: `palette.border.focus`
+ *   - semantic callout surface: `palette.semanticTone.info.background.panel`
+ *   - secondary text: `palette.semanticTone.neutral.text.subtle`
+ *   - active/focus border: `palette.semanticTone.neutral.border.focus`
  *
  * Example (in a component):
  * ```ts
  * styleBuilder
  *   .select('.btn--primary', theme)
- *   .background(palette.semanticTone.accent.background)
- *   .color(palette.semanticTone.accent.text)
+ *   .background(palette.semanticTone.accent.background.default)
+ *   .color(palette.semanticTone.accent.text.default)
  *
  * styleBuilder
  *   .select('.btn--primary:hover', theme)
@@ -45,9 +45,35 @@ export interface SemanticToneIconTokens {
 }
 
 export interface SemanticToneTokens {
-  background: string
-  border: string
-  text: string
+  background: {
+    default: string
+    canvas: string
+    surface: string
+    surfaceAlt: string
+    panel: string
+    raised: string
+    overlay: string
+    showcase: string
+    showcaseAlt: string
+    muted: string
+    feature: string
+  }
+  border: {
+    soft: string
+    subtle: string
+    default: string
+    strong: string
+    hard: string
+    focus: string
+  }
+  text: {
+    default: string
+    muted: string
+    subtle: string
+    soft: string
+    strong: string
+    inverse: string
+  }
   hover: string
   active: string
   disabled: string
@@ -56,74 +82,6 @@ export interface SemanticToneTokens {
 }
 
 export interface ThemePalette {
-  background: {
-    /** Page-level app canvas. */
-    canvas: string
-    /** Default container surface. */
-    surface: string
-    /** Alternate surface for subtle contrast separation. */
-    surfaceAlt: string
-    /** Standard panel/card background. */
-    panel: string
-    /** Elevated panel surface for stronger layering. */
-    raised: string
-    /** Scrim/overlay color for modal/backdrop contexts. */
-    overlay: string
-    /** Decorative large-surface gradient (hero/section). */
-    showcase: string
-    /** Secondary decorative gradient for variation. */
-    showcaseAlt: string
-    /** Soft accent-tinted background. */
-    accentMuted: string
-    /** Stronger accent-tinted background. */
-    accent: string
-    /** Feature-highlight background (active section/callout). */
-    feature: string
-    /** Success-toned muted background. */
-    successMuted: string
-    /** Danger-toned muted background. */
-    dangerMuted: string
-  }
-  text: {
-    /** Default body text color. */
-    default: string
-    /** Secondary supportive text. */
-    muted: string
-    /** Tertiary low-emphasis text. */
-    subtle: string
-    /** Extra-low emphasis text for dense/quiet UI. */
-    soft: string
-    /** High-emphasis text for prominent labels. */
-    strong: string
-    /** Accent text (links/emphasized labels). */
-    accent: string
-    /** Text placed on strong/accent backgrounds. */
-    inverse: string
-    /** Semantic success text. */
-    success: string
-    /** Semantic danger text. */
-    danger: string
-  }
-  border: {
-    /** Lowest emphasis border. */
-    soft: string
-    /** Standard subtle divider/border. */
-    subtle: string
-    /** Default control/card border. */
-    default: string
-    /** Strong border for active blocks or hierarchy edges. */
-    strong: string
-    /** Extra-strong border for highly prominent outlines. */
-    hard: string
-    /** Accent border for highlighted states. */
-    accent: string
-    /** Focus-visible outline color. */
-    focus: string
-    /** Semantic success border. */
-    success: string
-    /** Semantic danger border. */
-    danger: string
-  }
   semanticTone: {
     neutral: SemanticToneTokens
     accent: SemanticToneTokens

@@ -25,8 +25,8 @@ function registerDocLayoutShellStyles(
     .margin('0')
     .minHeight('100vh')
     .fontFamily(options.typography.baseFamily)
-    .background(palette.background.canvas)
-    .color(palette.text.default)
+    .background(palette.semanticTone.neutral.background.canvas)
+    .color(palette.semanticTone.neutral.text.default)
 
   styleBuilder
     .select('.doc-shell', theme)
@@ -109,8 +109,8 @@ function registerDocLayoutNavStyles(
 ) {
   styleBuilder
     .select('.doc-nav', theme)
-    .background(palette.background.surface)
-    .border(`1px solid ${palette.border.subtle}`)
+    .background(palette.semanticTone.neutral.background.surface)
+    .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
     .borderRadius(options.radii.lg)
     .padding('16px')
     .height('100%')
@@ -125,7 +125,7 @@ function registerDocLayoutNavStyles(
   styleBuilder
     .select('.doc-nav__list .doc-nav__list', theme)
     .paddingLeft('12px')
-    .borderLeft(`1px solid ${palette.border.default}`)
+    .borderLeft(`1px solid ${palette.semanticTone.neutral.border.default}`)
   styleBuilder.select('.doc-nav__item', theme).display('grid')
   styleBuilder
     .select('.doc-nav__item a', theme)
@@ -135,17 +135,17 @@ function registerDocLayoutNavStyles(
     .textDecoration('none')
     .fontWeight('600')
     .transition('background 160ms ease, color 160ms ease')
-    .color(palette.text.default)
+    .color(palette.semanticTone.neutral.text.default)
   styleBuilder
     .select('.doc-nav__item a:hover', theme)
-    .background(palette.background.accentMuted)
+    .background(palette.semanticTone.accent.background.muted)
   styleBuilder
     .select('.doc-nav__item span', theme)
     .display('block')
     .padding('8px 12px')
     .borderRadius('10px')
     .fontWeight('600')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
 }
 
 function registerDocLayoutResponsiveStyles(

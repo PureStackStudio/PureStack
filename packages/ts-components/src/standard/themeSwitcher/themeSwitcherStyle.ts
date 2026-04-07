@@ -31,9 +31,9 @@ export function registerThemeSwitcherShellStyles(
     .padding('0')
     .borderRadius(options.radii.pill)
     .border('1px solid transparent')
-    .background(palette.background.surface)
-    .borderColor(palette.border.default)
-    .color(palette.text.subtle)
+    .background(palette.semanticTone.neutral.background.surface)
+    .borderColor(palette.semanticTone.neutral.border.default)
+    .color(palette.semanticTone.neutral.text.subtle)
     .cursor('pointer')
     .fontSize('0')
     .position('relative')
@@ -41,10 +41,10 @@ export function registerThemeSwitcherShellStyles(
 
   styleBuilder
     .select('.theme-switcher:hover', theme)
-    .background(palette.background.surfaceAlt)
+    .background(palette.semanticTone.neutral.background.surfaceAlt)
   styleBuilder
     .select('.theme-switcher:focus-visible', theme)
-    .outline(`2px solid ${palette.border.focus}`)
+    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
     .outlineOffset('2px')
 }
 
@@ -58,7 +58,7 @@ export function registerThemeSwitcherTrackStyles(
     .position('absolute')
     .inset('6px')
     .borderRadius(options.radii.pill)
-    .background(palette.border.default)
+    .background(palette.semanticTone.neutral.border.default)
     .boxShadow(palette.effect.trackShadow)
     .transition('opacity 180ms ease, transform 220ms ease')
 
@@ -70,7 +70,7 @@ export function registerThemeSwitcherTrackStyles(
     .width('36px')
     .height('36px')
     .borderRadius('50%')
-    .background(palette.semanticTone.accent.background)
+    .background(palette.semanticTone.accent.background.default)
     .boxShadow(palette.effect.thumbShadow)
     .backdropFilter('blur(8px)')
     .transform('translateY(-50%) translateX(0)')
@@ -99,7 +99,7 @@ export function registerThemeSwitcherTrackStyles(
   styleBuilder
     .select('.theme-switcher__track-icon--moon', theme)
     .right('18px')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
 }
 
 export function registerThemeSwitcherIconStyles(
@@ -146,12 +146,12 @@ export function registerThemeSwitcherIconStyles(
 
   styleBuilder
     .select('.theme-switcher__icon--sun', theme)
-    .color(palette.text.inverse)
+    .color(palette.semanticTone.neutral.text.inverse)
     .opacity(0)
     .transform('scale(0.6)')
   styleBuilder
     .select('.theme-switcher__icon--moon', theme)
-    .color(palette.text.inverse)
+    .color(palette.semanticTone.neutral.text.inverse)
     .opacity(0)
     .transform('scale(0.6)')
 }

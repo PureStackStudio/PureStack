@@ -30,7 +30,7 @@ export function applyFooterShellStyles(
     .margin('36px 0 0')
     .padding('1px')
     .borderRadius(options.radii.lg)
-    .background(palette.background.showcaseAlt)
+    .background(palette.semanticTone.neutral.background.showcaseAlt)
     .boxShadow(palette.effect.panelShadowStrong)
 
   styleBuilder
@@ -41,8 +41,8 @@ export function applyFooterShellStyles(
     .gap('28px')
     .padding('28px')
     .borderRadius(`calc(${options.radii.lg} - 1px)`)
-    .background(palette.background.raised)
-    .border(`1px solid ${palette.border.subtle}`)
+    .background(palette.semanticTone.neutral.background.raised)
+    .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
 
   styleBuilder
     .select('.site-footer__top', theme)
@@ -95,21 +95,21 @@ export function applyFooterHeadingStyles(
     .fontWeight('700')
     .textTransform('uppercase')
     .letterSpacing('0.14em')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
   styleBuilder
     .select('.site-footer__title', theme)
     .margin('0')
     .fontSize('clamp(24px, 3.4vw, 34px)')
     .lineHeight('1.12')
     .letterSpacing('-0.02em')
-    .color(palette.text.strong)
+    .color(palette.semanticTone.neutral.text.strong)
   styleBuilder
     .select('.site-footer__tagline', theme)
     .margin('0')
     .fontSize('16px')
     .lineHeight('1.6')
     .whiteSpace('pre-line')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
 }
 
 export function applyFooterPrimaryStyles(
@@ -128,10 +128,10 @@ export function applyFooterPrimaryStyles(
     .select('.site-footer__primary-content :where(p)', theme)
     .margin('0')
     .lineHeight('1.7')
-    .color(palette.text.muted)
+    .color(palette.semanticTone.neutral.text.muted)
   styleBuilder
     .select('.site-footer__primary-content :where(a)', theme)
-    .color(palette.text.accent)
+    .color(palette.semanticTone.accent.text.default)
     .fontWeight('600')
 }
 
@@ -153,8 +153,8 @@ export function applyFooterStatusStyles(
     .alignItems('center')
     .padding('5px 10px')
     .borderRadius(options.radii.pill)
-    .background(palette.semanticTone.neutral.background)
-    .color(palette.semanticTone.neutral.text)
+    .background(palette.semanticTone.neutral.background.default)
+    .color(palette.semanticTone.neutral.text.default)
     .fontSize('11px')
     .fontWeight('700')
     .letterSpacing('0.06em')
@@ -186,9 +186,9 @@ export function applyFooterCtaStyles(
     .borderRadius(options.radii.pill)
     .textDecoration('none')
     .fontWeight('700')
-    .border(`1px solid ${palette.border.accent}`)
-    .background(palette.semanticTone.accent.background)
-    .color(palette.semanticTone.accent.text)
+    .border(`1px solid ${palette.semanticTone.accent.border.default}`)
+    .background(palette.semanticTone.accent.background.default)
+    .color(palette.semanticTone.accent.text.default)
     .transition(
       'background 170ms ease, border-color 170ms ease, transform 170ms ease',
     )
@@ -229,21 +229,21 @@ export function applyFooterNewsletterShellStyles(
     .gap('10px')
     .padding('14px')
     .borderRadius(options.radii.md)
-    .background(palette.background.surface)
-    .border(`1px solid ${palette.border.default}`)
+    .background(palette.semanticTone.neutral.background.surface)
+    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
   styleBuilder
     .select('.site-footer__newsletter-title', theme)
     .margin('0')
     .fontSize('16px')
     .fontWeight('700')
     .letterSpacing('-0.01em')
-    .color(palette.text.strong)
+    .color(palette.semanticTone.neutral.text.strong)
   styleBuilder
     .select('.site-footer__newsletter-body', theme)
     .margin('0')
     .fontSize('14px')
     .lineHeight('1.6')
-    .color(palette.text.muted)
+    .color(palette.semanticTone.neutral.text.muted)
   styleBuilder
     .select('.site-footer__newsletter-form', theme)
     .display('grid')
@@ -259,7 +259,7 @@ export function applyFooterNewsletterFieldStyles(
     .select('.site-footer__newsletter-label', theme)
     .fontSize('12px')
     .fontWeight('600')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
   styleBuilder
     .select('.site-footer__newsletter-row', theme)
     .display('grid')
@@ -270,17 +270,17 @@ export function applyFooterNewsletterFieldStyles(
     .width('100%')
     .padding('10px 12px')
     .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.border.default}`)
-    .background(palette.background.surfaceAlt)
-    .color(palette.text.default)
+    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .background(palette.semanticTone.neutral.background.surfaceAlt)
+    .color(palette.semanticTone.neutral.text.default)
   styleBuilder
     .select('.site-footer__newsletter-input::placeholder', theme)
-    .color(palette.text.soft)
+    .color(palette.semanticTone.neutral.text.soft)
   styleBuilder
     .select('.site-footer__newsletter-input:focus-visible', theme)
-    .outline(`2px solid ${palette.border.focus}`)
+    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
     .outlineOffset('2px')
-    .borderColor(palette.border.focus)
+    .borderColor(palette.semanticTone.neutral.border.focus)
 }
 
 export function applyFooterNewsletterMetaStyles(
@@ -294,7 +294,7 @@ export function applyFooterNewsletterMetaStyles(
     .select('.site-footer__newsletter-extra', theme)
     .fontSize('12px')
     .lineHeight('1.5')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
 }
 
 export function applyFooterColumnStyles(
@@ -318,8 +318,8 @@ export function applyFooterColumnShellStyles(
     .gap('9px')
     .padding('12px')
     .borderRadius(options.radii.md)
-    .background(palette.background.surface)
-    .border(`1px solid ${palette.border.subtle}`)
+    .background(palette.semanticTone.neutral.background.surface)
+    .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
   styleBuilder
     .select('.footer-column--compact', theme)
     .gap('6px')
@@ -331,13 +331,13 @@ export function applyFooterColumnShellStyles(
     .fontWeight('800')
     .textTransform('uppercase')
     .letterSpacing('0.08em')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
   styleBuilder
     .select('.footer-column__description', theme)
     .margin('0')
     .fontSize('13px')
     .lineHeight('1.5')
-    .color(palette.text.soft)
+    .color(palette.semanticTone.neutral.text.soft)
 }
 
 export function applyFooterColumnListStyles(theme: ThemeMode) {
@@ -364,14 +364,14 @@ export function applyFooterLinkStyles(
     .textDecoration('none')
     .fontSize('14px')
     .lineHeight('1.6')
-    .color(palette.text.default)
+    .color(palette.semanticTone.neutral.text.default)
     .transition('color 150ms ease')
-  styleBuilder.select('.footer-link--muted', theme).color(palette.text.subtle)
+  styleBuilder.select('.footer-link--muted', theme).color(palette.semanticTone.neutral.text.subtle)
   styleBuilder.select('.footer-link--strong', theme).fontWeight('700')
-  styleBuilder.select('.footer-link:hover', theme).color(palette.text.accent)
+  styleBuilder.select('.footer-link:hover', theme).color(palette.semanticTone.accent.text.default)
   styleBuilder
     .select('.footer-link:focus-visible', theme)
-    .outline(`2px solid ${palette.border.focus}`)
+    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
     .outlineOffset('2px')
     .borderRadius(options.radii.sm)
   styleBuilder
@@ -408,13 +408,13 @@ export function applyFooterBottomShellStyles(
     .gap('12px')
     .alignItems('center')
     .paddingTop('8px')
-    .borderTop(`1px solid ${palette.border.subtle}`)
+    .borderTop(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
   styleBuilder
     .select('.site-footer__copyright', theme)
     .margin('0')
     .fontSize('13px')
     .lineHeight('1.5')
-    .color(palette.text.soft)
+    .color(palette.semanticTone.neutral.text.soft)
 }
 
 export function applyFooterBottomLegalStyles(
@@ -433,13 +433,13 @@ export function applyFooterBottomLegalStyles(
     .fontSize('13px')
     .fontWeight('600')
     .textDecoration('none')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
   styleBuilder
     .select('.site-footer__legal :where(a:hover)', theme)
-    .color(palette.text.accent)
+    .color(palette.semanticTone.accent.text.default)
   styleBuilder
     .select('.site-footer__legal :where(a:focus-visible)', theme)
-    .outline(`2px solid ${palette.border.focus}`)
+    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
     .outlineOffset('2px')
     .borderRadius(options.radii.sm)
 }
@@ -463,22 +463,22 @@ export function applyFooterBottomSocialStyles(
     .gap('8px')
     .padding('7px 10px')
     .borderRadius(options.radii.pill)
-    .border(`1px solid ${palette.border.default}`)
-    .background(palette.background.surfaceAlt)
+    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .background(palette.semanticTone.neutral.background.surfaceAlt)
     .textDecoration('none')
     .fontSize('13px')
     .fontWeight('700')
-    .color(palette.text.default)
+    .color(palette.semanticTone.neutral.text.default)
     .transition(
       'background 160ms ease, border-color 160ms ease, transform 160ms ease',
     )
   styleBuilder
     .select('.footer-social:hover', theme)
-    .background(palette.background.accentMuted)
-    .borderColor(palette.border.accent)
+    .background(palette.semanticTone.accent.background.muted)
+    .borderColor(palette.semanticTone.accent.border.default)
   styleBuilder
     .select('.footer-social:focus-visible', theme)
-    .outline(`2px solid ${palette.border.focus}`)
+    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
     .outlineOffset('2px')
   styleBuilder
     .select('.footer-social__icon', theme)
@@ -502,16 +502,16 @@ export function applyFooterBottomSocialStyles(
 export function applyFooterToneStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.site-footer--tone-accent', theme)
-    .background(palette.background.showcase)
+    .background(palette.semanticTone.neutral.background.showcase)
 
   styleBuilder
     .select('.site-footer--tone-accent .site-footer__inner', theme)
-    .background(palette.background.feature)
-    .borderColor(palette.border.accent)
+    .background(palette.semanticTone.neutral.background.feature)
+    .borderColor(palette.semanticTone.accent.border.default)
 
   styleBuilder
     .select('.site-footer--tone-neutral .site-footer__inner', theme)
-    .background(palette.background.surface)
+    .background(palette.semanticTone.neutral.background.surface)
 
   styleBuilder
     .select('.site-footer--variant-minimal', theme)

@@ -63,16 +63,16 @@ export function registerSemanticToneUtilityStyles() {
 
       styleBuilder
         .select(`.${getSemanticToneSurfaceClass(tone)}`, theme)
-        .background(tokens.background)
-        .borderColor(tokens.border)
+        .background(tokens.background.surface)
+        .borderColor(tokens.border.default)
 
       styleBuilder
         .select(`.${getSemanticToneBorderClass(tone)}`, theme)
-        .borderColor(tokens.border)
+        .borderColor(tokens.border.default)
 
       styleBuilder
         .select(`.${getSemanticToneTextClass(tone)}`, theme)
-        .color(tokens.text)
+        .color(tokens.text.default)
 
       styleBuilder
         .select(`.${getSemanticToneIconClass(tone)}`, theme)

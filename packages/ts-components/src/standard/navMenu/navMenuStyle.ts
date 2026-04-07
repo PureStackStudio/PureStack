@@ -29,9 +29,9 @@ export function registerNavShellStyles(
     .fontSize(options.typography.baseSize)
     .lineHeight(options.typography.baseLineHeight)
     .maxHeight('100%')
-    .background(palette.background.surface)
-    .borderColor(palette.border.subtle)
-    .color(palette.text.default)
+    .background(palette.semanticTone.neutral.background.surface)
+    .borderColor(palette.semanticTone.neutral.border.subtle)
+    .color(palette.semanticTone.neutral.text.default)
     .overflowY('auto')
     .overflowX('hidden')
   styleBuilder
@@ -47,7 +47,7 @@ export function registerNavShellStyles(
     .fontSize('0.78rem')
     .letterSpacing('0.08em')
     .textTransform('uppercase')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
     .opacity('0.5')
   styleBuilder
     .select('.nav__panel-toggle', theme)
@@ -55,10 +55,10 @@ export function registerNavShellStyles(
     .alignItems('center')
     .justifyContent('center')
     .padding('0')
-    .border(`1px solid ${palette.semanticTone.accent.background}`)
+    .border(`1px solid ${palette.semanticTone.accent.background.default}`)
     .borderRadius(options.radii.md)
-    .background(palette.semanticTone.accent.background)
-    .color(palette.semanticTone.accent.text)
+    .background(palette.semanticTone.accent.background.default)
+    .color(palette.semanticTone.accent.text.default)
     .cursor('pointer')
     .transition('background 160ms ease, color 160ms ease')
     .top('49px')
@@ -67,13 +67,13 @@ export function registerNavShellStyles(
   styleBuilder
     .select('.nav__panel-toggle:hover', theme)
     .background(palette.semanticTone.accent.hover)
-    .color(palette.semanticTone.accent.text)
+    .color(palette.semanticTone.accent.text.default)
   styleBuilder
     .select(
       '.nav__panel-toggle:focus-visible, .nav__collapse-toggle:focus-visible',
       theme,
     )
-    .outline(`2px solid ${palette.border.focus}`)
+    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
     .outlineOffset('2px')
   styleBuilder
     .select('.nav__collapse-toggle', theme)
@@ -83,16 +83,16 @@ export function registerNavShellStyles(
     .width('30px')
     .height('30px')
     .padding('0')
-    .border(`1px solid ${palette.border.default}`)
+    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
     .borderRadius(options.radii.md)
-    .background(palette.background.raised)
-    .color(palette.text.subtle)
+    .background(palette.semanticTone.neutral.background.raised)
+    .color(palette.semanticTone.neutral.text.subtle)
     .cursor('pointer')
     .transition('background 160ms ease, color 160ms ease')
   styleBuilder
     .select('.nav__collapse-toggle:hover', theme)
-    .background(palette.background.accentMuted)
-    .color(palette.text.accent)
+    .background(palette.semanticTone.accent.background.muted)
+    .color(palette.semanticTone.accent.text.default)
   styleBuilder
     .select('.nav__collapse-toggle-icon', theme)
     .display('inline-flex')
@@ -245,7 +245,7 @@ export function registerNavShellStyles(
     .letterSpacing('0.12em')
     .textTransform('uppercase')
     .userSelect('none')
-    .border(`1px solid ${palette.border.default}`)
+    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
     .borderLeft('none')
     .borderRadius(`0 ${options.radii.md} ${options.radii.md} 0`)
   styleBuilder
@@ -278,7 +278,7 @@ export function registerNavShellStyles(
     .marginTop('6px')
     .paddingLeft('12px')
     .borderLeft('1px solid transparent')
-    .borderLeftColor(palette.border.default)
+    .borderLeftColor(palette.semanticTone.neutral.border.default)
   styleBuilder.select('.nav__item', theme).display('grid').gap('4px')
   styleBuilder.select('.nav__leaf', theme).display('block')
   styleBuilder.select('.nav__group', theme).display('grid')
@@ -317,17 +317,17 @@ export function registerNavLinkStyles(
     .textDecoration('none')
     .fontWeight('600')
     .transition('background 160ms ease, color 160ms ease')
-    .color(palette.text.default)
+    .color(palette.semanticTone.neutral.text.default)
   styleBuilder
     .select('.nav__link:hover', theme)
     .background(palette.semanticTone.ghost.hover)
   styleBuilder
     .select('.nav__link--active', theme)
-    .background(palette.semanticTone.accent.background)
-    .color(palette.semanticTone.accent.text)
+    .background(palette.semanticTone.accent.background.default)
+    .color(palette.semanticTone.accent.text.default)
   styleBuilder
     .select('.nav__link:focus-visible', theme)
-    .outline(`2px solid ${palette.border.focus}`)
+    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
     .outlineOffset('2px')
   styleBuilder
     .select('.nav__text', theme)
@@ -335,7 +335,7 @@ export function registerNavLinkStyles(
     .padding('8px 12px')
     .borderRadius(options.radii.md)
     .fontWeight('600')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
 }
 
 export function registerNavSummaryStyles(
@@ -353,17 +353,17 @@ export function registerNavSummaryStyles(
     .borderRadius(options.radii.md)
   styleBuilder
     .select('.nav__summary:hover', theme)
-    .background(palette.background.surfaceAlt)
+    .background(palette.semanticTone.neutral.background.surfaceAlt)
   styleBuilder
     .select('.nav__summary:focus-visible', theme)
-    .outline(`2px solid ${palette.border.focus}`)
+    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
     .outlineOffset('2px')
   styleBuilder
     .select('.nav__summary--active', theme)
-    .background(palette.semanticTone.accent.background)
+    .background(palette.semanticTone.accent.background.default)
   styleBuilder
     .select('.nav__summary--active .nav__text', theme)
-    .color(palette.semanticTone.accent.text)
+    .color(palette.semanticTone.accent.text.default)
   styleBuilder
     .select('.nav__summary-content', theme)
     .display('flex')
@@ -378,7 +378,7 @@ export function registerNavSummaryStyles(
     .borderBottom('2px solid currentColor')
     .transform('rotate(-45deg)')
     .transition('transform 160ms ease')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
   styleBuilder
     .select('.nav__group[open] > .nav__summary .nav__chevron', theme)
     .transform('rotate(45deg)')
@@ -401,6 +401,6 @@ export function registerNavBadgeStyles(
     .fontWeight('700')
     .letterSpacing('0.02em')
     .textTransform('uppercase')
-    .background(palette.semanticTone.accent.background)
-    .color(palette.semanticTone.accent.text)
+    .background(palette.semanticTone.accent.background.default)
+    .color(palette.semanticTone.accent.text.default)
 }

@@ -30,9 +30,9 @@ function registerLoginShellStyles(
     .gap('16px')
     .padding('26px')
     .borderRadius(options.radii.lg)
-    .border(`1px solid ${palette.border.default}`)
+    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
     .background(
-      `linear-gradient(165deg, ${palette.background.surface} 0%, ${palette.background.surfaceAlt} 100%)`,
+      `linear-gradient(165deg, ${palette.semanticTone.neutral.background.surface} 0%, ${palette.semanticTone.neutral.background.surfaceAlt} 100%)`,
     )
     .boxShadow(palette.effect.panelShadow)
   styleBuilder
@@ -47,20 +47,20 @@ function registerLoginShellStyles(
     .fontWeight('750')
     .letterSpacing('0.08em')
     .textTransform('uppercase')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
   styleBuilder
     .select('.login-panel__title', theme)
     .margin('0')
     .fontSize('1.65rem')
     .lineHeight('1.1')
     .fontWeight('820')
-    .color(palette.text.strong)
+    .color(palette.semanticTone.neutral.text.strong)
   styleBuilder
     .select('.login-panel__description', theme)
     .margin('0')
     .fontSize('0.95rem')
     .lineHeight('1.55')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
   styleBuilder
     .select('.login-panel__providers', theme)
     .display('grid')
@@ -76,18 +76,18 @@ function registerLoginMetaStyles(
     .select('.login-panel__footer', theme)
     .margin('4px 0 0')
     .fontSize('0.84rem')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
     .display('flex')
     .alignItems('center')
     .gap('6px')
   styleBuilder
     .select('.login-panel__footer a', theme)
-    .color(palette.text.accent)
+    .color(palette.semanticTone.accent.text.default)
     .fontWeight('650')
     .textDecoration('none')
   styleBuilder
     .select('.login-panel__footer a:hover', theme)
-    .color(palette.text.strong)
+    .color(palette.semanticTone.neutral.text.strong)
     .textDecoration('underline')
   styleBuilder
     .select('.login-panel__shell', theme)

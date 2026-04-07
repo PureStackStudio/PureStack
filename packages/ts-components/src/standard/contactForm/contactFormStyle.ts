@@ -27,8 +27,8 @@ function registerContactFormShellStyles(
     .display('grid')
     .gap('14px')
     .borderRadius(options.radii.lg)
-    .background(palette.background.surface)
-    .border(`1px solid ${palette.border.default}`)
+    .background(palette.semanticTone.neutral.background.surface)
+    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
     .boxShadow(palette.effect.panelShadow)
   styleBuilder.select('.contact-form__header', theme).display('grid').gap('6px')
   styleBuilder
@@ -37,13 +37,13 @@ function registerContactFormShellStyles(
     .fontSize('1.05rem')
     .fontWeight('760')
     .letterSpacing('-0.01em')
-    .color(palette.text.strong)
+    .color(palette.semanticTone.neutral.text.strong)
   styleBuilder
     .select('.contact-form__description', theme)
     .margin('0')
     .fontSize('0.93rem')
     .lineHeight('1.6')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
   styleBuilder.select('.contact-form__form', theme).display('grid').gap('10px')
 }
 
@@ -57,7 +57,7 @@ function registerContactFormFieldStyles(
     .select('.contact-form__label', theme)
     .fontSize('0.86rem')
     .fontWeight('700')
-    .color(palette.text.default)
+    .color(palette.semanticTone.neutral.text.default)
   styleBuilder
     .select(
       '.contact-form__input, .contact-form__select, .contact-form__textarea',
@@ -66,9 +66,9 @@ function registerContactFormFieldStyles(
     .width('100%')
     .padding('10px 12px')
     .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.border.default}`)
-    .background(palette.background.surfaceAlt)
-    .color(palette.text.default)
+    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .background(palette.semanticTone.neutral.background.surfaceAlt)
+    .color(palette.semanticTone.neutral.text.default)
     .fontSize('0.92rem')
     .lineHeight('1.45')
     .boxSizing('border-box')
@@ -82,15 +82,15 @@ function registerContactFormFieldStyles(
       '.contact-form__input::placeholder, .contact-form__textarea::placeholder',
       theme,
     )
-    .color(palette.text.soft)
+    .color(palette.semanticTone.neutral.text.soft)
   styleBuilder
     .select(
       '.contact-form__input:focus-visible, .contact-form__select:focus-visible, .contact-form__textarea:focus-visible',
       theme,
     )
-    .outline(`2px solid ${palette.border.focus}`)
+    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
     .outlineOffset('2px')
-    .borderColor(palette.border.accent)
+    .borderColor(palette.semanticTone.accent.border.default)
 }
 
 function registerContactFormActionStyles(theme: ThemeMode) {

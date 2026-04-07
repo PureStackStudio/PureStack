@@ -27,11 +27,11 @@ export function applyHeroShellStyles(
     .overflow('hidden')
     .padding('28px')
     .borderRadius(options.radii.lg)
-    .border(`1px solid ${palette.border.subtle}`)
-    .background(palette.background.showcase)
+    .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
+    .background(palette.semanticTone.neutral.background.showcase)
     .boxShadow(options.shadows.soft)
     .margin('0 0 32px')
-    .color(palette.text.default)
+    .color(palette.semanticTone.neutral.text.default)
 
   styleBuilder
     .select('.hero::before', theme)
@@ -67,7 +67,7 @@ export function applyHeroContentStyles(
     .letterSpacing('0.12em')
     .fontSize('11px')
     .fontWeight('700')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
 
   styleBuilder
     .select('.hero__title', theme)
@@ -76,7 +76,7 @@ export function applyHeroContentStyles(
     .lineHeight('1.05')
     .letterSpacing('-0.02em')
     .fontWeight('700')
-    .color(palette.text.default)
+    .color(palette.semanticTone.neutral.text.default)
 
   styleBuilder.select('.hero__title:empty', theme).display('none')
 
@@ -86,7 +86,7 @@ export function applyHeroContentStyles(
     .fontSize('17px')
     .lineHeight('1.6')
     .whiteSpace('pre-line')
-    .color(palette.text.subtle)
+    .color(palette.semanticTone.neutral.text.subtle)
 
   styleBuilder.select('.hero__tagline:empty', theme).display('none')
   styleBuilder.select('.hero__eyebrow:empty', theme).display('none')
@@ -133,7 +133,7 @@ export function applyHeroActionShellStyles(
 
   styleBuilder
     .select('.hero__action:focus-visible', theme)
-    .outline(`2px solid ${palette.border.focus}`)
+    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
     .outlineOffset('2px')
 }
 
@@ -143,8 +143,8 @@ export function applyHeroActionVariantStyles(
 ) {
   styleBuilder
     .select('.hero__action--primary', theme)
-    .background(palette.semanticTone.accent.background)
-    .color(palette.semanticTone.accent.text)
+    .background(palette.semanticTone.accent.background.default)
+    .color(palette.semanticTone.accent.text.default)
     .boxShadow(palette.effect.accentShadow)
 
   styleBuilder
@@ -153,8 +153,8 @@ export function applyHeroActionVariantStyles(
 
   styleBuilder
     .select('.hero__action--minimal', theme)
-    .color(palette.semanticTone.neutral.text)
-    .borderColor(palette.border.strong)
+    .color(palette.semanticTone.neutral.text.default)
+    .borderColor(palette.semanticTone.neutral.border.strong)
 
   styleBuilder
     .select('.hero__action--minimal:hover', theme)
@@ -201,8 +201,8 @@ export function applyHeroMediaStyles(
     .select('.hero__logo-frame', theme)
     .padding('18px 22px')
     .borderRadius(options.radii.lg)
-    .background(palette.background.panel)
-    .border(`1px solid ${palette.border.subtle}`)
+    .background(palette.semanticTone.neutral.background.panel)
+    .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
     .boxShadow(palette.effect.floatingShadow)
 
   styleBuilder
