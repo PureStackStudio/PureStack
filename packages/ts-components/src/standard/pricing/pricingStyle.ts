@@ -164,10 +164,10 @@ export function applyPricingPlanIconStyles(
     .alignItems('center')
     .justifyContent('center')
     .borderRadius('12px')
-    .background(palette.icon.accent.gradient)
-    .backgroundColor(palette.icon.accent.background)
-    .border(`1px solid ${palette.icon.accent.ring}`)
-    .color(palette.icon.accent.color)
+    .background(palette.semanticTone.accent.icon.gradient)
+    .backgroundColor(palette.semanticTone.accent.icon.background)
+    .border(`1px solid ${palette.semanticTone.accent.icon.ring}`)
+    .color(palette.semanticTone.accent.icon.color)
     .boxShadow(palette.effect.accentShadow)
     .marginBottom('4px')
 
@@ -211,8 +211,8 @@ export function applyPricingPlanTitleStyles(
     .fontWeight('700')
     .textTransform('uppercase')
     .letterSpacing('0.1em')
-    .background(palette.badge.accent.background)
-    .color(palette.badge.accent.text)
+    .background(palette.semanticTone.accent.background)
+    .color(palette.semanticTone.accent.text)
 
   styleBuilder
     .select('.pricing-plan__summary', theme)
@@ -268,8 +268,8 @@ export function applyPricingPlanCtaStyles(
     .fontSize('13px')
     .textDecoration('none')
     .border(`1px solid ${palette.border.default}`)
-    .background(palette.action.neutral.background)
-    .color(palette.action.neutral.text)
+    .background(palette.semanticTone.neutral.background)
+    .color(palette.semanticTone.neutral.text)
     .boxShadow(palette.effect.interactiveShadow)
     .transition(
       'transform 180ms ease, box-shadow 180ms ease, background 180ms ease',
@@ -277,7 +277,7 @@ export function applyPricingPlanCtaStyles(
 
   styleBuilder
     .select('.pricing-plan__cta-link:hover', theme)
-    .background(palette.action.neutral.hover)
+    .background(palette.semanticTone.neutral.hover)
 
   styleBuilder
     .select('.pricing-plan__cta-link:focus-visible', theme)
@@ -330,10 +330,10 @@ export function applyPricingFeatureStyles(
     .alignItems('center')
     .justifyContent('center')
     .borderRadius('7px')
-    .background(palette.icon.neutral.gradient)
-    .backgroundColor(palette.icon.neutral.background)
-    .border(`1px solid ${palette.icon.neutral.ring}`)
-    .color(palette.icon.neutral.color)
+    .background(palette.semanticTone.neutral.icon.gradient)
+    .backgroundColor(palette.semanticTone.neutral.icon.background)
+    .border(`1px solid ${palette.semanticTone.neutral.icon.ring}`)
+    .color(palette.semanticTone.neutral.icon.color)
     .boxShadow(palette.effect.interactiveShadow)
     .marginTop('0')
 
@@ -376,13 +376,13 @@ export function applyPricingFeaturedStyles(
 
   styleBuilder
     .select('.pricing-plan--featured .pricing-plan__cta-link', theme)
-    .background(palette.action.accent.background)
-    .color(palette.action.accent.text)
+    .background(palette.semanticTone.accent.background)
+    .color(palette.semanticTone.accent.text)
     .borderColor('transparent')
 
   styleBuilder
     .select('.pricing-plan--featured .pricing-plan__cta-link:hover', theme)
-    .background(palette.action.accent.hover)
+    .background(palette.semanticTone.accent.hover)
 }
 
 export function applyPricingResponsiveStyles(theme: ThemeMode) {

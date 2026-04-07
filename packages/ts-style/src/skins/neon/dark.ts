@@ -53,95 +53,118 @@ export const neonDark: ThemePalette = {
     danger: 'rgba(255, 46, 72, 0.55)',
   },
 
-  action: {
+  semanticTone: {
     neutral: {
-      background: '#1B1015',
+      background: 'radial-gradient(rgb(31 34 38) 0%, rgb(24 26 34) 100%)',
+      border: 'rgba(247, 238, 240, 0.18)',
       text: '#F7EEF0',
-      hover: '#22141A',
+      hover: 'radial-gradient(rgb(35 38 42) 0%, rgb(27 29 37) 100%)',
       active: '#2A1820',
       disabled: 'rgba(247, 238, 240, 0.10)',
       focusRing: 'rgba(255, 46, 72, 0.46)',
+      icon: {
+        background: 'rgba(247, 238, 240, 0.10)',
+        gradient:
+          'linear-gradient(135deg, rgba(247, 238, 240, 0.22) 0%, rgba(255, 46, 72, 0.10) 70%, rgba(255, 198, 168, 0.10) 100%)',
+        color: '#F7EEF0',
+        ring: 'rgba(247, 238, 240, 0.18)',
+      },
     },
-
-    // Neon red tube with a slight warm highlight (not purple/cyan).
     accent: {
-      background: 'linear-gradient(90deg, #FF2E48 0%, #FF3D5E 100%)',
-      text: '#0B0608',
+      background: 'rgba(255, 46, 72, 0.16)',
+      border: 'rgba(255, 46, 72, 0.52)',
+      text: '#FF2E48',
       hover: 'linear-gradient(90deg, #FF1636 0%, #FF2E48 100%)',
       active: 'linear-gradient(90deg, #E9002E 0%, #FF1F3F 100%)',
       disabled: 'rgba(255, 46, 72, 0.18)',
       focusRing: 'rgba(255, 46, 72, 0.62)',
+      icon: {
+        background: 'rgba(255, 46, 72, 0.14)',
+        gradient:
+          'linear-gradient(135deg, rgba(255, 46, 72, 0.98) 0%, rgba(255, 61, 94, 0.98) 55%, rgba(255, 122, 84, 0.98) 100%)',
+        color: '#0B0608',
+        ring: 'rgba(255, 46, 72, 0.52)',
+      },
     },
-
     ghost: {
       background: 'rgba(0, 0, 0, 0)',
+      border: 'transparent',
       text: '#FF2E48',
       hover: 'rgba(255, 46, 72, 0.40)',
       active: 'rgba(255, 46, 72, 0.16)',
       disabled: 'rgba(255, 46, 72, 0.20)',
       focusRing: 'rgba(255, 46, 72, 0.52)',
-    },
-  },
-
-  status: {
-    success: {
-      background: 'rgba(0, 210, 120, 0.12)',
-      border: 'rgba(0, 210, 120, 0.40)',
-      text: '#00D278',
-    },
-    danger: {
-      background: 'rgba(255, 46, 72, 0.12)',
-      border: 'rgba(255, 46, 72, 0.44)',
-      text: '#FF2E48',
+      icon: {
+        background: 'rgba(247, 238, 240, 0.06)',
+        gradient:
+          'linear-gradient(135deg, rgba(247, 238, 240, 0.14) 0%, rgba(247, 238, 240, 0.06) 100%)',
+        color: '#D8BFC4',
+        ring: 'rgba(247, 238, 240, 0.12)',
+      },
     },
     info: {
       background: 'rgba(255, 122, 84, 0.12)',
       border: 'rgba(255, 122, 84, 0.38)',
       text: '#FF7A54',
+      hover: 'rgba(255, 122, 84, 0.38)',
+      active: 'rgba(255, 122, 84, 0.12)',
+      disabled: 'rgba(255, 122, 84, 0.12)',
+      focusRing: 'rgba(255, 122, 84, 0.42)',
+      icon: {
+        background: 'rgba(255, 122, 84, 0.12)',
+        gradient:
+          'linear-gradient(135deg, rgba(247, 238, 240, 0.22) 0%, rgba(255, 46, 72, 0.10) 70%, rgba(255, 198, 168, 0.10) 100%)',
+        color: '#FF7A54',
+        ring: 'rgba(255, 122, 84, 0.38)',
+      },
+    },
+    success: {
+      background: 'rgba(0, 210, 120, 0.12)',
+      border: 'rgba(0, 210, 120, 0.40)',
+      text: '#00D278',
+      hover: 'rgba(0, 210, 120, 0.40)',
+      active: 'rgba(0, 210, 120, 0.12)',
+      disabled: 'rgba(0, 210, 120, 0.12)',
+      focusRing: 'rgba(0, 210, 120, 0.44)',
+      icon: {
+        background: 'rgba(0, 210, 120, 0.12)',
+        gradient:
+          'linear-gradient(135deg, rgba(247, 238, 240, 0.22) 0%, rgba(255, 46, 72, 0.10) 70%, rgba(255, 198, 168, 0.10) 100%)',
+        color: '#00D278',
+        ring: 'rgba(0, 210, 120, 0.40)',
+      },
     },
     warning: {
       background: 'rgba(255, 184, 0, 0.14)',
       border: 'rgba(255, 184, 0, 0.42)',
       text: '#FFB800',
+      hover: 'rgba(255, 184, 0, 0.42)',
+      active: '#2A1820',
+      disabled: 'rgba(255, 184, 0, 0.14)',
+      focusRing: 'rgba(255, 184, 0, 0.46)',
+      icon: {
+        background: 'rgba(255, 184, 0, 0.14)',
+        gradient:
+          'linear-gradient(135deg, rgba(247, 238, 240, 0.22) 0%, rgba(255, 46, 72, 0.10) 70%, rgba(255, 198, 168, 0.10) 100%)',
+        color: '#FFB800',
+        ring: 'rgba(255, 184, 0, 0.42)',
+      },
     },
-  },
-
-  badge: {
-    accent: {
-      background: 'rgba(255, 46, 72, 0.16)',
+    danger: {
+      background: 'rgba(255, 46, 72, 0.12)',
+      border: 'rgba(255, 46, 72, 0.44)',
       text: '#FF2E48',
-    },
-    muted: {
-      background: 'rgba(247, 238, 240, 0.10)',
-      text: '#D8BFC4',
-    },
-    strong: {
-      background: 'rgba(255, 0, 60, 0.18)',
-      text: '#FF003C',
-    },
-  },
-
-  icon: {
-    accent: {
-      background: 'rgba(255, 46, 72, 0.14)',
-      gradient:
-        'linear-gradient(135deg, rgba(255, 46, 72, 0.98) 0%, rgba(255, 61, 94, 0.98) 55%, rgba(255, 122, 84, 0.98) 100%)',
-      color: '#0B0608',
-      ring: 'rgba(255, 46, 72, 0.52)',
-    },
-    neutral: {
-      background: 'rgba(247, 238, 240, 0.10)',
-      gradient:
-        'linear-gradient(135deg, rgba(247, 238, 240, 0.22) 0%, rgba(255, 46, 72, 0.10) 70%, rgba(255, 198, 168, 0.10) 100%)',
-      color: '#F7EEF0',
-      ring: 'rgba(247, 238, 240, 0.18)',
-    },
-    subtle: {
-      background: 'rgba(247, 238, 240, 0.06)',
-      gradient:
-        'linear-gradient(135deg, rgba(247, 238, 240, 0.14) 0%, rgba(247, 238, 240, 0.06) 100%)',
-      color: '#D8BFC4',
-      ring: 'rgba(247, 238, 240, 0.12)',
+      hover: 'rgba(255, 46, 72, 0.44)',
+      active: 'rgba(255, 46, 72, 0.12)',
+      disabled: 'rgba(255, 46, 72, 0.12)',
+      focusRing: 'rgba(255, 46, 72, 0.48)',
+      icon: {
+        background: 'rgba(255, 46, 72, 0.12)',
+        gradient:
+          'linear-gradient(135deg, rgba(247, 238, 240, 0.22) 0%, rgba(255, 46, 72, 0.10) 70%, rgba(255, 198, 168, 0.10) 100%)',
+        color: '#FF2E48',
+        ring: 'rgba(255, 46, 72, 0.44)',
+      },
     },
   },
 

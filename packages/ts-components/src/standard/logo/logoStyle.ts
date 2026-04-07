@@ -43,7 +43,7 @@ export function registerLogoShellStyles(
     .opacity('0.48')
     .pointerEvents('none')
     .background(
-      `linear-gradient(135deg, ${palette.icon.accent.gradient} 0%, ${palette.background.panel} 70%)`,
+      `linear-gradient(135deg, ${palette.semanticTone.accent.icon.gradient} 0%, ${palette.background.panel} 70%)`,
     )
 
   styleBuilder
@@ -54,8 +54,8 @@ export function registerLogoShellStyles(
     .display('inline-block')
     .position('relative')
     .zIndex('1')
-    .background(palette.icon.accent.gradient)
-    .border(`1px solid ${palette.icon.accent.ring}`)
+    .background(palette.semanticTone.accent.icon.gradient)
+    .border(`1px solid ${palette.semanticTone.accent.icon.ring}`)
     .boxShadow(palette.effect.interactiveShadow)
 
   styleBuilder
@@ -64,13 +64,13 @@ export function registerLogoShellStyles(
     .position('absolute')
     .inset('9px 10px')
     .borderRadius('4px')
-    .background(palette.icon.accent.color)
+    .background(palette.semanticTone.accent.icon.color)
 
   styleBuilder
     .select('.site-logo__glyph--custom', theme)
     .display('grid')
     .placeItems('center')
-    .color(palette.icon.accent.color)
+    .color(palette.semanticTone.accent.icon.color)
     .overflow('hidden')
 
   styleBuilder

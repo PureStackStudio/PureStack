@@ -51,95 +51,118 @@ export const neonLight: ThemePalette = {
     danger: 'rgba(217, 4, 41, 0.42)',
   },
 
-  action: {
+  semanticTone: {
     neutral: {
-      background: '#E8DDE0',
+      background: '#f4f4f4',
+      border: 'rgba(42, 20, 25, 0.18)',
       text: '#2A1419',
       hover: '#E1D3D7',
       active: '#D9C9CE',
       disabled: 'rgba(42, 20, 25, 0.08)',
       focusRing: 'rgba(217, 4, 41, 0.40)',
+      icon: {
+        background: 'rgba(42, 20, 25, 0.06)',
+        gradient:
+          'linear-gradient(135deg, rgba(42, 20, 25, 0.10) 0%, rgba(217, 4, 41, 0.08) 70%, rgba(255, 198, 168, 0.08) 100%)',
+        color: '#2A1419',
+        ring: 'rgba(42, 20, 25, 0.14)',
+      },
     },
-
     accent: {
-      background:
-        'linear-gradient(90deg, #FF2E48 0%, #FF3D5E 55%, #FF7A54 100%)',
-      text: '#14080C',
+      background: 'rgba(255, 46, 72, 0.18)',
+      border: 'rgba(217, 4, 41, 0.45)',
+      text: '#D90429',
       hover: 'linear-gradient(90deg, #F61C3B 0%, #FF2E48 55%, #F96A45 100%)',
       active: 'linear-gradient(90deg, #D90429 0%, #F61C3B 55%, #E85A36 100%)',
       disabled: 'rgba(255, 46, 72, 0.20)',
       focusRing: 'rgba(217, 4, 41, 0.52)',
+      icon: {
+        background: 'rgba(217, 4, 41, 0.14)',
+        gradient:
+          'linear-gradient(135deg, rgba(255, 46, 72, 0.98) 0%, rgba(255, 61, 94, 0.98) 55%, rgba(255, 122, 84, 0.98) 100%)',
+        color: '#14080C',
+        ring: 'rgba(217, 4, 41, 0.40)',
+      },
     },
-
     ghost: {
       background: 'rgba(0, 0, 0, 0)',
+      border: 'transparent',
       text: '#D90429',
       hover: 'rgba(217, 4, 41, 0.10)',
       active: 'rgba(217, 4, 41, 0.16)',
       disabled: 'rgba(217, 4, 41, 0.22)',
       focusRing: 'rgba(217, 4, 41, 0.44)',
-    },
-  },
-
-  status: {
-    success: {
-      background: 'rgba(0, 180, 110, 0.12)',
-      border: 'rgba(0, 127, 82, 0.30)',
-      text: '#007F52',
-    },
-    danger: {
-      background: 'rgba(217, 4, 41, 0.12)',
-      border: 'rgba(217, 4, 41, 0.30)',
-      text: '#B00020',
+      icon: {
+        background: 'rgba(42, 20, 25, 0.04)',
+        gradient:
+          'linear-gradient(135deg, rgba(42, 20, 25, 0.08) 0%, rgba(42, 20, 25, 0.03) 100%)',
+        color: '#6A474F',
+        ring: 'rgba(42, 20, 25, 0.10)',
+      },
     },
     info: {
       background: 'rgba(255, 122, 84, 0.12)',
       border: 'rgba(255, 122, 84, 0.28)',
       text: '#C2482E',
+      hover: 'rgba(255, 122, 84, 0.28)',
+      active: 'rgba(255, 122, 84, 0.12)',
+      disabled: 'rgba(255, 122, 84, 0.12)',
+      focusRing: 'rgba(255, 122, 84, 0.36)',
+      icon: {
+        background: 'rgba(255, 122, 84, 0.12)',
+        gradient:
+          'linear-gradient(135deg, rgba(42, 20, 25, 0.10) 0%, rgba(217, 4, 41, 0.08) 70%, rgba(255, 198, 168, 0.08) 100%)',
+        color: '#C2482E',
+        ring: 'rgba(255, 122, 84, 0.28)',
+      },
+    },
+    success: {
+      background: 'rgba(0, 180, 110, 0.12)',
+      border: 'rgba(0, 127, 82, 0.30)',
+      text: '#007F52',
+      hover: 'rgba(0, 127, 82, 0.30)',
+      active: 'rgba(0, 180, 110, 0.12)',
+      disabled: 'rgba(0, 180, 110, 0.12)',
+      focusRing: 'rgba(0, 127, 82, 0.38)',
+      icon: {
+        background: 'rgba(0, 180, 110, 0.12)',
+        gradient:
+          'linear-gradient(135deg, rgba(42, 20, 25, 0.10) 0%, rgba(217, 4, 41, 0.08) 70%, rgba(255, 198, 168, 0.08) 100%)',
+        color: '#007F52',
+        ring: 'rgba(0, 127, 82, 0.30)',
+      },
     },
     warning: {
       background: 'rgba(255, 184, 0, 0.14)',
       border: 'rgba(255, 184, 0, 0.30)',
       text: '#A66A00',
+      hover: 'rgba(255, 184, 0, 0.30)',
+      active: '#D9C9CE',
+      disabled: 'rgba(255, 184, 0, 0.14)',
+      focusRing: 'rgba(255, 184, 0, 0.36)',
+      icon: {
+        background: 'rgba(255, 184, 0, 0.14)',
+        gradient:
+          'linear-gradient(135deg, rgba(42, 20, 25, 0.10) 0%, rgba(217, 4, 41, 0.08) 70%, rgba(255, 198, 168, 0.08) 100%)',
+        color: '#A66A00',
+        ring: 'rgba(255, 184, 0, 0.30)',
+      },
     },
-  },
-
-  badge: {
-    accent: {
-      background: 'rgba(217, 4, 41, 0.14)',
+    danger: {
+      background: 'rgba(217, 4, 41, 0.12)',
+      border: 'rgba(217, 4, 41, 0.30)',
       text: '#B00020',
-    },
-    muted: {
-      background: 'rgba(42, 20, 25, 0.08)',
-      text: '#4A2A30',
-    },
-    strong: {
-      background: 'rgba(255, 0, 60, 0.16)',
-      text: '#A80028',
-    },
-  },
-
-  icon: {
-    accent: {
-      background: 'rgba(217, 4, 41, 0.14)',
-      gradient:
-        'linear-gradient(135deg, rgba(255, 46, 72, 0.98) 0%, rgba(255, 61, 94, 0.98) 55%, rgba(255, 122, 84, 0.98) 100%)',
-      color: '#14080C',
-      ring: 'rgba(217, 4, 41, 0.40)',
-    },
-    neutral: {
-      background: 'rgba(42, 20, 25, 0.06)',
-      gradient:
-        'linear-gradient(135deg, rgba(42, 20, 25, 0.10) 0%, rgba(217, 4, 41, 0.08) 70%, rgba(255, 198, 168, 0.08) 100%)',
-      color: '#2A1419',
-      ring: 'rgba(42, 20, 25, 0.14)',
-    },
-    subtle: {
-      background: 'rgba(42, 20, 25, 0.04)',
-      gradient:
-        'linear-gradient(135deg, rgba(42, 20, 25, 0.08) 0%, rgba(42, 20, 25, 0.03) 100%)',
-      color: '#6A474F',
-      ring: 'rgba(42, 20, 25, 0.10)',
+      hover: 'rgba(217, 4, 41, 0.30)',
+      active: 'rgba(217, 4, 41, 0.12)',
+      disabled: 'rgba(217, 4, 41, 0.12)',
+      focusRing: 'rgba(217, 4, 41, 0.40)',
+      icon: {
+        background: 'rgba(217, 4, 41, 0.12)',
+        gradient:
+          'linear-gradient(135deg, rgba(42, 20, 25, 0.10) 0%, rgba(217, 4, 41, 0.08) 70%, rgba(255, 198, 168, 0.08) 100%)',
+        color: '#B00020',
+        ring: 'rgba(217, 4, 41, 0.30)',
+      },
     },
   },
 

@@ -172,8 +172,8 @@ function registerCopyButtonBaseStyles(
     .right('12px')
     .zIndex(2)
     .border(`1px solid ${palette.border.default}`)
-    .background(palette.action.neutral.background)
-    .color(palette.action.neutral.text)
+    .background(palette.semanticTone.neutral.background)
+    .color(palette.semanticTone.neutral.text)
     .width('2.15rem')
     .height('2.15rem')
     .padding('0')
@@ -212,12 +212,12 @@ function registerCopyButtonInteractionStyles(
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button:hover)', theme)
-    .background(palette.action.neutral.hover)
+    .background(palette.semanticTone.neutral.hover)
     .borderColor(palette.border.strong)
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button:active)', theme)
-    .background(palette.action.neutral.active)
+    .background(palette.semanticTone.neutral.active)
     .borderColor(palette.border.strong)
 }
 
@@ -230,12 +230,12 @@ function registerCopyButtonStateStyles(
     .opacity(1)
     .transform('translateY(0)')
     .pointerEvents('auto')
-    .outline(`2px solid ${palette.action.neutral.focusRing}`)
+    .outline(`2px solid ${palette.semanticTone.neutral.focusRing}`)
     .outlineOffset('2px')
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button:disabled)', theme)
-    .background(palette.action.neutral.disabled)
+    .background(palette.semanticTone.neutral.disabled)
     .color(palette.text.soft)
     .borderColor(palette.border.subtle)
     .cursor('not-allowed')
@@ -249,15 +249,15 @@ function registerCopyButtonStateStyles(
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button.is-copied)', theme)
-    .background(palette.badge.accent.background)
+    .background(palette.semanticTone.accent.background)
     .borderColor(palette.border.accent)
-    .color(palette.badge.accent.text)
+    .color(palette.semanticTone.accent.text)
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button.is-error)', theme)
-    .background(palette.status.danger.background)
-    .borderColor(palette.status.danger.border)
-    .color(palette.status.danger.text)
+    .background(palette.semanticTone.danger.background)
+    .borderColor(palette.semanticTone.danger.border)
+    .color(palette.semanticTone.danger.text)
 }
 
 function registerPreCodeResetStyles(theme: ThemeMode) {
@@ -380,7 +380,7 @@ function registerTableBodyRowStyles(
 
   styleBuilder
     .select('.doc-content :where(tbody tr:hover)', theme)
-    .background(palette.action.ghost.hover)
+    .background(palette.semanticTone.ghost.hover)
 
   styleBuilder
     .select('.doc-content :where(tbody tr:last-child td)', theme)
@@ -420,8 +420,8 @@ function registerTableInlineCodeStyles(
 ) {
   styleBuilder
     .select('.doc-content :where(table code)', theme)
-    .background(palette.badge.strong.background)
-    .color(palette.badge.strong.text)
+    .background(palette.semanticTone.danger.background)
+    .color(palette.semanticTone.danger.text)
     .border(`1px solid ${palette.border.default}`)
     .borderRadius(options.radii.pill)
     .fontSize('0.84em')

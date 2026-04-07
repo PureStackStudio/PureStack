@@ -60,7 +60,7 @@ function registerFormFieldStyles(
     .select('.form-block__input:focus-visible', theme)
     .outline('none')
     .borderColor(palette.border.accent)
-    .boxShadow(`0 0 0 3px ${palette.action.accent.focusRing}`)
+    .boxShadow(`0 0 0 3px ${palette.semanticTone.accent.focusRing}`)
   styleBuilder
     .select(
       '.form-block__input[type="number"], .form-block__input--number',
@@ -83,7 +83,7 @@ function registerFormFieldStyles(
       theme,
     )
     .borderColor(palette.border.accent)
-    .boxShadow(`0 0 0 3px ${palette.action.accent.focusRing}`)
+    .boxShadow(`0 0 0 3px ${palette.semanticTone.accent.focusRing}`)
   styleBuilder
     .select('.form-block__number .form-block__input--number', theme)
     .borderRadius('0')
@@ -149,7 +149,7 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .select('.form-block__check input', theme)
     .width('16px')
     .height('16px')
-    .accentColor(palette.action.accent.background)
+    .accentColor(palette.semanticTone.accent.background)
   styleBuilder
     .select('.form-block__assist-link', theme)
     .fontSize('0.84rem')
@@ -197,27 +197,27 @@ function registerFormStatusStyles(
 
   styleBuilder
     .select('.form-status--info', theme)
-    .borderColor(palette.status.info.border)
-    .background(palette.status.info.background)
-    .color(palette.status.info.text)
+    .borderColor(palette.semanticTone.info.border)
+    .background(palette.semanticTone.info.background)
+    .color(palette.semanticTone.info.text)
 
   styleBuilder
     .select('.form-status--success', theme)
-    .borderColor(palette.status.success.border)
-    .background(palette.status.success.background)
-    .color(palette.status.success.text)
+    .borderColor(palette.semanticTone.success.border)
+    .background(palette.semanticTone.success.background)
+    .color(palette.semanticTone.success.text)
 
   styleBuilder
     .select('.form-status--error', theme)
-    .borderColor(palette.status.danger.border)
-    .background(palette.status.danger.background)
-    .color(palette.status.danger.text)
+    .borderColor(palette.semanticTone.danger.border)
+    .background(palette.semanticTone.danger.background)
+    .color(palette.semanticTone.danger.text)
 
   styleBuilder
     .select('.form-status--warning', theme)
-    .borderColor(palette.status.warning.border)
-    .background(palette.status.warning.background)
-    .color(palette.status.warning.text)
+    .borderColor(palette.semanticTone.warning.border)
+    .background(palette.semanticTone.warning.background)
+    .color(palette.semanticTone.warning.text)
 }
 
 function registerFormResponsiveStyles(theme: ThemeMode) {

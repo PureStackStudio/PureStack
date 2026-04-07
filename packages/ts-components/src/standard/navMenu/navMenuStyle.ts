@@ -55,10 +55,10 @@ export function registerNavShellStyles(
     .alignItems('center')
     .justifyContent('center')
     .padding('0')
-    .border(`1px solid ${palette.action.accent.background}`)
+    .border(`1px solid ${palette.semanticTone.accent.background}`)
     .borderRadius(options.radii.md)
-    .background(palette.action.accent.background)
-    .color(palette.action.accent.text)
+    .background(palette.semanticTone.accent.background)
+    .color(palette.semanticTone.accent.text)
     .cursor('pointer')
     .transition('background 160ms ease, color 160ms ease')
     .top('49px')
@@ -66,8 +66,8 @@ export function registerNavShellStyles(
   styleBuilder.select('.nav__panel-toggle-icon', theme).display('none')
   styleBuilder
     .select('.nav__panel-toggle:hover', theme)
-    .background(palette.action.accent.hover)
-    .color(palette.action.accent.text)
+    .background(palette.semanticTone.accent.hover)
+    .color(palette.semanticTone.accent.text)
   styleBuilder
     .select(
       '.nav__panel-toggle:focus-visible, .nav__collapse-toggle:focus-visible',
@@ -320,11 +320,11 @@ export function registerNavLinkStyles(
     .color(palette.text.default)
   styleBuilder
     .select('.nav__link:hover', theme)
-    .background(palette.action.ghost.hover)
+    .background(palette.semanticTone.ghost.hover)
   styleBuilder
     .select('.nav__link--active', theme)
-    .background(palette.action.accent.background)
-    .color(palette.action.accent.text)
+    .background(palette.semanticTone.accent.background)
+    .color(palette.semanticTone.accent.text)
   styleBuilder
     .select('.nav__link:focus-visible', theme)
     .outline(`2px solid ${palette.border.focus}`)
@@ -360,10 +360,10 @@ export function registerNavSummaryStyles(
     .outlineOffset('2px')
   styleBuilder
     .select('.nav__summary--active', theme)
-    .background(palette.action.accent.background)
+    .background(palette.semanticTone.accent.background)
   styleBuilder
     .select('.nav__summary--active .nav__text', theme)
-    .color(palette.action.accent.text)
+    .color(palette.semanticTone.accent.text)
   styleBuilder
     .select('.nav__summary-content', theme)
     .display('flex')
@@ -401,6 +401,6 @@ export function registerNavBadgeStyles(
     .fontWeight('700')
     .letterSpacing('0.02em')
     .textTransform('uppercase')
-    .background(palette.badge.accent.background)
-    .color(palette.badge.accent.text)
+    .background(palette.semanticTone.accent.background)
+    .color(palette.semanticTone.accent.text)
 }

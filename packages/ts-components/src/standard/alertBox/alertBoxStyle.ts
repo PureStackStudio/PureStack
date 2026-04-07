@@ -59,10 +59,10 @@ export function applyAlertIconStyles(
     .display('inline-flex')
     .alignItems('center')
     .justifyContent('center')
-    .background(palette.icon.neutral.gradient)
-    .backgroundColor(palette.icon.neutral.background)
-    .border(`1px solid ${palette.icon.neutral.ring}`)
-    .color(palette.icon.neutral.color)
+    .background(palette.semanticTone.neutral.icon.gradient)
+    .backgroundColor(palette.semanticTone.neutral.icon.background)
+    .border(`1px solid ${palette.semanticTone.neutral.icon.ring}`)
+    .color(palette.semanticTone.neutral.icon.color)
     .boxShadow(palette.effect.interactiveShadow)
 
   styleBuilder
@@ -121,8 +121,8 @@ export function applyAlertHeaderStyles(
     .fontWeight('700')
     .textTransform('uppercase')
     .letterSpacing('0.08em')
-    .background(palette.badge.muted.background)
-    .color(palette.badge.muted.text)
+    .background(palette.semanticTone.neutral.background)
+    .color(palette.semanticTone.neutral.text)
 }
 
 export function applyAlertBodyStyles(
@@ -174,8 +174,8 @@ export function applyAlertActionStyles(
     .padding('6px 11px')
     .borderRadius(options.radii.pill)
     .border(`1px solid ${palette.border.default}`)
-    .background(palette.action.neutral.background)
-    .color(palette.action.neutral.text)
+    .background(palette.semanticTone.neutral.background)
+    .color(palette.semanticTone.neutral.text)
     .fontSize('12px')
     .fontWeight('600')
     .textDecoration('none')
@@ -186,13 +186,13 @@ export function applyAlertActionStyles(
 
   styleBuilder
     .select('.alert__actions :where(a, button):hover', theme)
-    .background(palette.action.neutral.hover)
+    .background(palette.semanticTone.neutral.hover)
   styleBuilder
     .select('.alert__actions :where(a, button):active', theme)
-    .background(palette.action.neutral.active)
+    .background(palette.semanticTone.neutral.active)
   styleBuilder
     .select('.alert__actions :where(a, button):focus-visible', theme)
-    .outline(`2px solid ${palette.action.neutral.focusRing}`)
+    .outline(`2px solid ${palette.semanticTone.neutral.focusRing}`)
     .outlineOffset('2px')
 }
 

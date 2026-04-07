@@ -237,14 +237,14 @@ function registerTabsControlStyles(
 
   styleBuilder
     .select('.tabs__tab:hover, .tabs__tab-button:hover', theme)
-    .background(palette.action.ghost.hover)
+    .background(palette.semanticTone.ghost.hover)
     .color(palette.text.default)
 
   styleBuilder
     .select('.tabs__control:checked + .tabs__tab', theme)
     .borderColor('transparent')
-    .background(palette.action.accent.background)
-    .color(palette.action.accent.text)
+    .background(palette.semanticTone.accent.background)
+    .color(palette.semanticTone.accent.text)
     .boxShadow(palette.effect.interactiveShadow)
 
   styleBuilder
@@ -253,8 +253,8 @@ function registerTabsControlStyles(
       theme,
     )
     .borderColor('transparent')
-    .background(palette.action.accent.background)
-    .color(palette.action.accent.text)
+    .background(palette.semanticTone.accent.background)
+    .color(palette.semanticTone.accent.text)
     .boxShadow(palette.effect.interactiveShadow)
 
   styleBuilder

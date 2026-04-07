@@ -37,7 +37,7 @@ function registerButtonBaseStyles(
   styleBuilder
     .select('.btn:focus-visible', theme)
     .outline('none')
-    .boxShadow(`0 0 0 2px ${palette.action.neutral.focusRing}`)
+    .boxShadow(`0 0 0 2px ${palette.semanticTone.neutral.focusRing}`)
 
   styleBuilder
     .select('.btn:disabled', theme)
@@ -96,19 +96,19 @@ function registerButtonToneStyles(theme: ThemeMode, palette: ThemePalette) {
 
   styleBuilder
     .select('.btn.tone-surface--accent:hover', theme)
-    .background(palette.action.accent.hover)
-    .borderColor(palette.action.accent.background)
-    .color(palette.action.accent.text)
+    .background(palette.semanticTone.accent.hover)
+    .borderColor(palette.semanticTone.accent.background)
+    .color(palette.semanticTone.accent.text)
 
   styleBuilder
     .select('.btn.tone-surface--accent:active', theme)
-    .background(palette.action.accent.active)
-    .borderColor(palette.action.accent.active)
+    .background(palette.semanticTone.accent.active)
+    .borderColor(palette.semanticTone.accent.active)
 
   styleBuilder
     .select('.btn.tone-surface--accent:disabled', theme)
-    .background(palette.action.accent.disabled)
-    .borderColor(palette.action.accent.disabled)
+    .background(palette.semanticTone.accent.disabled)
+    .borderColor(palette.semanticTone.accent.disabled)
     .color(palette.text.strong)
 
   styleBuilder.select('.btn.tone-surface--neutral', theme).boxShadow('none')
@@ -121,12 +121,12 @@ function registerButtonToneStyles(theme: ThemeMode, palette: ThemePalette) {
 
   styleBuilder
     .select('.btn.tone-surface--neutral:active', theme)
-    .background(palette.action.neutral.active)
+    .background(palette.semanticTone.neutral.active)
     .borderColor(palette.border.strong)
 
   styleBuilder
     .select('.btn.tone-surface--neutral:disabled', theme)
-    .background(palette.action.neutral.disabled)
+    .background(palette.semanticTone.neutral.disabled)
     .borderColor(palette.border.default)
     .color(palette.text.muted)
 
@@ -134,13 +134,13 @@ function registerButtonToneStyles(theme: ThemeMode, palette: ThemePalette) {
 
   styleBuilder
     .select('.btn.tone-surface--ghost:hover', theme)
-    .background(palette.action.ghost.hover)
+    .background(palette.semanticTone.ghost.hover)
     .borderColor('transparent')
-    .color(palette.action.ghost.text)
+    .color(palette.semanticTone.ghost.text)
 
   styleBuilder
     .select('.btn.tone-surface--ghost:active', theme)
-    .background(palette.action.ghost.active)
+    .background(palette.semanticTone.ghost.active)
     .borderColor('transparent')
 
   styleBuilder
@@ -151,83 +151,83 @@ function registerButtonToneStyles(theme: ThemeMode, palette: ThemePalette) {
 
   styleBuilder
     .select('.btn.tone-surface--info:hover', theme)
-    .background(palette.status.info.border)
-    .borderColor(palette.status.info.border)
+    .background(palette.semanticTone.info.border)
+    .borderColor(palette.semanticTone.info.border)
     .color(palette.text.inverse)
     .boxShadow(palette.effect.interactiveShadow)
 
   styleBuilder
     .select('.btn.tone-surface--info:active', theme)
-    .background(palette.background.accentMuted)
-    .borderColor(palette.status.info.border)
+    .background(palette.semanticTone.info.background)
+    .borderColor(palette.semanticTone.info.border)
 
   styleBuilder
     .select('.btn.tone-surface--info:disabled', theme)
-    .background(palette.status.info.background)
-    .borderColor(palette.status.info.border)
-    .color(palette.status.info.text)
+    .background(palette.semanticTone.info.background)
+    .borderColor(palette.semanticTone.info.border)
+    .color(palette.semanticTone.info.text)
     .opacity('0.72')
 
   styleBuilder.select('.btn.tone-surface--success', theme).boxShadow('none')
 
   styleBuilder
     .select('.btn.tone-surface--success:hover', theme)
-    .background(palette.status.success.border)
-    .borderColor(palette.status.success.border)
+    .background(palette.semanticTone.success.border)
+    .borderColor(palette.semanticTone.success.border)
     .color(palette.text.inverse)
     .boxShadow(palette.effect.interactiveShadow)
 
   styleBuilder
     .select('.btn.tone-surface--success:active', theme)
-    .background(palette.background.successMuted)
-    .borderColor(palette.status.success.border)
+    .background(palette.semanticTone.success.background)
+    .borderColor(palette.semanticTone.success.border)
 
   styleBuilder
     .select('.btn.tone-surface--success:disabled', theme)
-    .background(palette.status.success.background)
-    .borderColor(palette.status.success.border)
-    .color(palette.status.success.text)
+    .background(palette.semanticTone.success.background)
+    .borderColor(palette.semanticTone.success.border)
+    .color(palette.semanticTone.success.text)
     .opacity('0.72')
 
   styleBuilder.select('.btn.tone-surface--danger', theme).boxShadow('none')
 
   styleBuilder
     .select('.btn.tone-surface--danger:hover', theme)
-    .background(palette.border.danger)
-    .borderColor(palette.border.danger)
+    .background(palette.semanticTone.danger.border)
+    .borderColor(palette.semanticTone.danger.border)
     .color(palette.text.inverse)
     .boxShadow(palette.effect.interactiveShadow)
 
   styleBuilder
     .select('.btn.tone-surface--danger:active', theme)
-    .background(palette.background.dangerMuted)
-    .borderColor(palette.border.danger)
+    .background(palette.semanticTone.danger.background)
+    .borderColor(palette.semanticTone.danger.border)
 
   styleBuilder
     .select('.btn.tone-surface--danger:disabled', theme)
-    .background(palette.status.danger.background)
-    .borderColor(palette.status.danger.border)
-    .color(palette.status.danger.text)
+    .background(palette.semanticTone.danger.background)
+    .borderColor(palette.semanticTone.danger.border)
+    .color(palette.semanticTone.danger.text)
     .opacity('0.72')
 
   styleBuilder.select('.btn.tone-surface--warning', theme).boxShadow('none')
 
   styleBuilder
     .select('.btn.tone-surface--warning:hover', theme)
-    .background(palette.status.warning.border)
-    .borderColor(palette.status.warning.border)
+    .background(palette.semanticTone.warning.border)
+    .borderColor(palette.semanticTone.warning.border)
     .color(palette.text.default)
     .boxShadow(palette.effect.interactiveShadow)
 
   styleBuilder
     .select('.btn.tone-surface--warning:active', theme)
-    .background(palette.action.neutral.active)
-    .borderColor(palette.status.warning.border)
+    .background(palette.semanticTone.neutral.active)
+    .borderColor(palette.semanticTone.warning.border)
 
   styleBuilder
     .select('.btn.tone-surface--warning:disabled', theme)
-    .background(palette.status.warning.background)
-    .borderColor(palette.status.warning.border)
-    .color(palette.status.warning.text)
+    .background(palette.semanticTone.warning.background)
+    .borderColor(palette.semanticTone.warning.border)
+    .color(palette.semanticTone.warning.text)
     .opacity('0.72')
 }

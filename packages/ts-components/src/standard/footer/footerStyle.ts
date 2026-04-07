@@ -153,8 +153,8 @@ export function applyFooterStatusStyles(
     .alignItems('center')
     .padding('5px 10px')
     .borderRadius(options.radii.pill)
-    .background(palette.badge.muted.background)
-    .color(palette.badge.muted.text)
+    .background(palette.semanticTone.neutral.background)
+    .color(palette.semanticTone.neutral.text)
     .fontSize('11px')
     .fontWeight('700')
     .letterSpacing('0.06em')
@@ -187,19 +187,19 @@ export function applyFooterCtaStyles(
     .textDecoration('none')
     .fontWeight('700')
     .border(`1px solid ${palette.border.accent}`)
-    .background(palette.action.accent.background)
-    .color(palette.action.accent.text)
+    .background(palette.semanticTone.accent.background)
+    .color(palette.semanticTone.accent.text)
     .transition(
       'background 170ms ease, border-color 170ms ease, transform 170ms ease',
     )
 
   styleBuilder
     .select('.site-footer__cta:hover', theme)
-    .background(palette.action.accent.hover)
+    .background(palette.semanticTone.accent.hover)
 
   styleBuilder
     .select('.site-footer__cta:focus-visible', theme)
-    .outline(`2px solid ${palette.action.accent.focusRing}`)
+    .outline(`2px solid ${palette.semanticTone.accent.focusRing}`)
     .outlineOffset('2px')
 }
 

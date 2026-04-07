@@ -3,7 +3,7 @@
  *
  * What this is:
  * - A role-based palette, not a brand palette.
- * - Components should read from these semantic roles (`action`, `status`, `text`, etc.)
+ * - Components should read from these semantic roles (`semanticTone`, `text`, etc.)
  *   instead of hard-coding color intent locally.
  *
  * Why this exists:
@@ -14,8 +14,9 @@
  * How to use:
  * - Component code should pick colors by UI intent.
  * - Example:
- *   - primary CTA background: `palette.action.accent.background`
- *   - primary CTA hover: `palette.action.accent.hover`
+ *   - primary CTA background: `palette.semanticTone.accent.background`
+ *   - primary CTA hover: `palette.semanticTone.accent.hover`
+ *   - semantic callout surface: `palette.semanticTone.info.background`
  *   - secondary text: `palette.text.subtle`
  *   - active/focus border: `palette.border.focus`
  *
@@ -23,18 +24,36 @@
  * ```ts
  * styleBuilder
  *   .select('.btn--primary', theme)
- *   .background(palette.action.accent.background)
- *   .color(palette.action.accent.text)
+ *   .background(palette.semanticTone.accent.background)
+ *   .color(palette.semanticTone.accent.text)
  *
  * styleBuilder
  *   .select('.btn--primary:hover', theme)
- *   .background(palette.action.accent.active)
+ *   .background(palette.semanticTone.accent.active)
  *
  * styleBuilder
  *   .select('.btn--primary:focus-visible', theme)
- *   .outline(`2px solid ${palette.action.accent.focusRing}`)
+ *   .outline(`2px solid ${palette.semanticTone.accent.focusRing}`)
  * ```
  */
+
+export interface SemanticToneIconTokens {
+  background: string
+  gradient: string
+  color: string
+  ring: string
+}
+
+export interface SemanticToneTokens {
+  background: string
+  border: string
+  text: string
+  hover: string
+  active: string
+  disabled: string
+  focusRing: string
+  icon: SemanticToneIconTokens
+}
 
 export interface ThemePalette {
   background: {
@@ -105,106 +124,14 @@ export interface ThemePalette {
     /** Semantic danger border. */
     danger: string
   }
-  action: {
-    /** Neutral action family (secondary buttons, less dominant controls). */
-    neutral: {
-      background: string
-      text: string
-      hover: string
-      /** Pressed/active state. */
-      active: string
-      /** Disabled state background. */
-      disabled: string
-      /** Focus ring override for neutral actions. */
-      focusRing: string
-    }
-    /** Accent action family (primary CTAs). */
-    accent: {
-      background: string
-      text: string
-      hover: string
-      /** Pressed/active state. */
-      active: string
-      /** Disabled state background. */
-      disabled: string
-      /** Focus ring override for accent actions. */
-      focusRing: string
-    }
-    /** Ghost action family (minimal chrome, text-forward controls). */
-    ghost: {
-      background: string
-      text: string
-      hover: string
-      active: string
-      disabled: string
-      focusRing: string
-    }
-  }
-  status: {
-    /** Positive feedback colors. */
-    success: {
-      background: string
-      border: string
-      text: string
-    }
-    /** Negative feedback colors. */
-    danger: {
-      background: string
-      border: string
-      text: string
-    }
-    /** Informational feedback colors. */
-    info: {
-      background: string
-      border: string
-      text: string
-    }
-    /** Warning/caution feedback colors. */
-    warning: {
-      background: string
-      border: string
-      text: string
-    }
-  }
-  badge: {
-    /** Primary/accent badge colors. */
-    accent: {
-      background: string
-      text: string
-    }
-    /** Muted badge style for low emphasis tags. */
-    muted: {
-      background: string
-      text: string
-    }
-    /** Strong badge style for urgent/pinned tags. */
-    strong: {
-      background: string
-      text: string
-    }
-  }
-  icon: {
-    /** Accent icon treatment for featured/important glyphs. */
-    accent: {
-      background: string
-      gradient: string
-      color: string
-      ring: string
-    }
-    /** Neutral icon treatment for standard glyphs. */
-    neutral: {
-      background: string
-      gradient: string
-      color: string
-      ring: string
-    }
-    /** Subtle icon treatment for very low emphasis iconography. */
-    subtle: {
-      background: string
-      gradient: string
-      color: string
-      ring: string
-    }
+  semanticTone: {
+    neutral: SemanticToneTokens
+    accent: SemanticToneTokens
+    ghost: SemanticToneTokens
+    info: SemanticToneTokens
+    success: SemanticToneTokens
+    warning: SemanticToneTokens
+    danger: SemanticToneTokens
   }
   effect: {
     /** Primary atmospheric glow used in hero/section effects. */

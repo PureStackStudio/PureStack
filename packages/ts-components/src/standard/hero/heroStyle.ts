@@ -143,22 +143,22 @@ export function applyHeroActionVariantStyles(
 ) {
   styleBuilder
     .select('.hero__action--primary', theme)
-    .background(palette.action.accent.background)
-    .color(palette.action.accent.text)
+    .background(palette.semanticTone.accent.background)
+    .color(palette.semanticTone.accent.text)
     .boxShadow(palette.effect.accentShadow)
 
   styleBuilder
     .select('.hero__action--primary:hover', theme)
-    .background(palette.action.accent.hover)
+    .background(palette.semanticTone.accent.hover)
 
   styleBuilder
     .select('.hero__action--minimal', theme)
-    .color(palette.action.neutral.text)
+    .color(palette.semanticTone.neutral.text)
     .borderColor(palette.border.strong)
 
   styleBuilder
     .select('.hero__action--minimal:hover', theme)
-    .background(palette.action.neutral.hover)
+    .background(palette.semanticTone.neutral.hover)
 }
 
 export function applyHeroActionIconStyles(theme: ThemeMode) {

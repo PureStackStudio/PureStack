@@ -32,12 +32,12 @@ describe('resolveSiteConfig sitemap', () => {
       fs.mkdirSync(contentDir, { recursive: true })
       fs.writeFileSync(
         path.join(contentDir, 'siteConfig.json'),
-        JSON.stringify({ style: { theme: { skin: 'pastel' } } }),
+        JSON.stringify({ style: { theme: { skin: 'neon' } } }),
       )
 
       const config = resolveSiteConfig({ rootDir, contentDir })
-      expect(config.style.theme.colors.light).toEqual(builtInSkins.pastel.light)
-      expect(config.style.theme.colors.dark).toEqual(builtInSkins.pastel.dark)
+      expect(config.style.theme.colors.light).toEqual(builtInSkins.neon.light)
+      expect(config.style.theme.colors.dark).toEqual(builtInSkins.neon.dark)
     } finally {
       fs.rmSync(tempRoot, { recursive: true, force: true })
     }
@@ -325,12 +325,12 @@ describe('resolveSiteConfig sitemap', () => {
       rootDir: process.cwd(),
       style: {
         theme: {
-          skin: 'ocean',
+          skin: 'neon',
         },
       },
     })
-    expect(config.style.theme.colors.light).toEqual(builtInSkins.ocean.light)
-    expect(config.style.theme.colors.dark).toEqual(builtInSkins.ocean.dark)
+    expect(config.style.theme.colors.light).toEqual(builtInSkins.neon.light)
+    expect(config.style.theme.colors.dark).toEqual(builtInSkins.neon.dark)
   })
 
   it('throws when theme skin is unknown', () => {

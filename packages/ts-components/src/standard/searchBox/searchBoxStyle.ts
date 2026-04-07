@@ -233,8 +233,8 @@ function registerSearchBoxResultContentStyles(
     .select('.site-search__results mark.site-search__highlight', theme)
     .padding('0 3px')
     .borderRadius('5px')
-    .background(palette.badge.accent.background)
-    .color(palette.badge.accent.text)
+    .background(palette.semanticTone.accent.background)
+    .color(palette.semanticTone.accent.text)
 
   styleBuilder
     .select('.site-search__results .site-search__message', theme)
@@ -247,9 +247,9 @@ function registerSearchBoxResultContentStyles(
 
   styleBuilder
     .select('.site-search__results .site-search__message--error', theme)
-    .border(`1px solid ${palette.status.danger.border}`)
-    .background(palette.status.danger.background)
-    .color(palette.status.danger.text)
+    .border(`1px solid ${palette.semanticTone.danger.border}`)
+    .background(palette.semanticTone.danger.background)
+    .color(palette.semanticTone.danger.text)
 }
 
 export function registerSearchBoxResponsiveStyles(theme: ThemeMode) {

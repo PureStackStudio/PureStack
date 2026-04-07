@@ -155,8 +155,8 @@ export function registerPageTocLinkStyles(
       '.page-toc__link--active, .page-toc__link--active:hover, .page-toc__link--sub.page-toc__link--active, .page-toc__link--sub.page-toc__link--active:hover',
       theme,
     )
-    .background(palette.action.accent.background)
-    .color(palette.action.accent.text)
+    .background(palette.semanticTone.accent.background)
+    .color(palette.semanticTone.accent.text)
 
   styleBuilder
     .select('.page-toc__link--sub', theme)

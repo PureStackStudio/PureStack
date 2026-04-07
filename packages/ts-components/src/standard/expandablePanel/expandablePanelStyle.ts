@@ -62,7 +62,7 @@ function registerExpandablePanelSummaryStyles(
 
   styleBuilder
     .select('.expandable-panel__summary:hover', theme)
-    .background(palette.action.ghost.hover)
+    .background(palette.semanticTone.ghost.hover)
 
   styleBuilder
     .select('.expandable-panel__summary:focus-visible', theme)
@@ -77,11 +77,11 @@ function registerExpandablePanelSummaryStyles(
     .alignItems('center')
     .justifyContent('center')
     .borderRadius(options.radii.md)
-    .background(palette.icon.accent.gradient)
-    .backgroundColor(palette.icon.accent.background)
-    .border(`1px solid ${palette.icon.accent.ring}`)
+    .background(palette.semanticTone.accent.icon.gradient)
+    .backgroundColor(palette.semanticTone.accent.icon.background)
+    .border(`1px solid ${palette.semanticTone.accent.icon.ring}`)
     .boxShadow(palette.effect.interactiveShadow)
-    .color(palette.icon.accent.color)
+    .color(palette.semanticTone.accent.icon.color)
 
   styleBuilder
     .select('.expandable-panel__icon', theme)
@@ -111,8 +111,8 @@ function registerExpandablePanelSummaryStyles(
     .alignItems('center')
     .padding('4px 9px')
     .borderRadius(options.radii.pill)
-    .background(palette.badge.muted.background)
-    .color(palette.badge.muted.text)
+    .background(palette.semanticTone.neutral.background)
+    .color(palette.semanticTone.neutral.text)
     .fontSize('11px')
     .fontWeight('700')
     .letterSpacing('0.08em')

@@ -70,7 +70,7 @@ export function registerThemeSwitcherTrackStyles(
     .width('36px')
     .height('36px')
     .borderRadius('50%')
-    .background(palette.action.accent.background)
+    .background(palette.semanticTone.accent.background)
     .boxShadow(palette.effect.thumbShadow)
     .backdropFilter('blur(8px)')
     .transform('translateY(-50%) translateX(0)')
@@ -95,7 +95,7 @@ export function registerThemeSwitcherTrackStyles(
   styleBuilder
     .select('.theme-switcher__track-icon--sun', theme)
     .left('18px')
-    .color(palette.action.accent.hover)
+    .color(palette.semanticTone.accent.hover)
   styleBuilder
     .select('.theme-switcher__track-icon--moon', theme)
     .right('18px')
