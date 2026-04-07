@@ -45,12 +45,26 @@ export const neonLight: ThemePalette = {
       disabled: 'rgba(42, 20, 25, 0.08)',
       focusRing: 'rgba(217, 4, 41, 0.40)',
       button: {
-        background: neutralBackground.surface,
-        border: neutralBorder.default,
-        text: neutralText.default,
-        hover: '#E1D3D7',
-        active: '#D9C9CE',
-        disabled: 'rgba(42, 20, 25, 0.08)',
+        rest: {
+          background: neutralBackground.surface,
+          border: neutralBorder.default,
+          text: neutralText.default,
+        },
+        hover: {
+          background: '#E1D3D7',
+          border: neutralBorder.hard,
+          text: neutralText.strong,
+        },
+        active: {
+          background: '#D9C9CE',
+          border: neutralBorder.strong,
+          text: neutralText.strong,
+        },
+        disabled: {
+          background: 'rgba(42, 20, 25, 0.08)',
+          border: neutralBorder.default,
+          text: neutralText.muted,
+        },
         focusRing: 'rgba(217, 4, 41, 0.40)',
       },
       icon: {
@@ -89,12 +103,28 @@ export const neonLight: ThemePalette = {
       disabled: 'rgba(255, 46, 72, 0.20)',
       focusRing: 'rgba(217, 4, 41, 0.52)',
       button: {
-        background: 'rgba(255, 46, 72, 0.18)',
-        border: 'rgba(217, 4, 41, 0.45)',
-        text: '#D90429',
-        hover: 'linear-gradient(90deg, #F61C3B 0%, #FF2E48 55%, #F96A45 100%)',
-        active: 'linear-gradient(90deg, #D90429 0%, #F61C3B 55%, #E85A36 100%)',
-        disabled: 'rgba(255, 46, 72, 0.20)',
+        rest: {
+          background: 'rgba(255, 46, 72, 0.18)',
+          border: 'rgba(217, 4, 41, 0.45)',
+          text: '#D90429',
+        },
+        hover: {
+          background:
+            'linear-gradient(90deg, #F61C3B 0%, #FF2E48 55%, #F96A45 100%)',
+          border: 'rgba(217, 4, 41, 0.52)',
+          text: '#14080C',
+        },
+        active: {
+          background:
+            'linear-gradient(90deg, #D90429 0%, #F61C3B 55%, #E85A36 100%)',
+          border: 'rgba(217, 4, 41, 0.58)',
+          text: '#F4ECEE',
+        },
+        disabled: {
+          background: 'rgba(255, 46, 72, 0.20)',
+          border: 'rgba(255, 46, 72, 0.20)',
+          text: '#7A0016',
+        },
         focusRing: 'rgba(217, 4, 41, 0.52)',
       },
       icon: {
@@ -134,12 +164,26 @@ export const neonLight: ThemePalette = {
       disabled: 'rgba(217, 4, 41, 0.22)',
       focusRing: 'rgba(217, 4, 41, 0.44)',
       button: {
-        background: 'rgba(0, 0, 0, 0)',
-        border: 'transparent',
-        text: '#D90429',
-        hover: 'rgba(217, 4, 41, 0.10)',
-        active: 'rgba(217, 4, 41, 0.16)',
-        disabled: 'rgba(217, 4, 41, 0.22)',
+        rest: {
+          background: 'rgba(0, 0, 0, 0)',
+          border: 'transparent',
+          text: '#D90429',
+        },
+        hover: {
+          background: 'rgba(217, 4, 41, 0.10)',
+          border: 'transparent',
+          text: '#B00020',
+        },
+        active: {
+          background: 'rgba(217, 4, 41, 0.16)',
+          border: 'transparent',
+          text: '#7A0016',
+        },
+        disabled: {
+          background: 'rgba(217, 4, 41, 0.22)',
+          border: 'transparent',
+          text: '#A66A75',
+        },
         focusRing: 'rgba(217, 4, 41, 0.44)',
       },
       icon: {
@@ -178,12 +222,26 @@ export const neonLight: ThemePalette = {
       disabled: 'rgba(255, 122, 84, 0.12)',
       focusRing: 'rgba(255, 122, 84, 0.36)',
       button: {
-        background: 'rgba(255, 122, 84, 0.12)',
-        border: 'rgba(255, 122, 84, 0.28)',
-        text: '#C2482E',
-        hover: 'rgba(255, 122, 84, 0.28)',
-        active: 'rgba(255, 122, 84, 0.12)',
-        disabled: 'rgba(255, 122, 84, 0.12)',
+        rest: {
+          background: 'rgba(255, 122, 84, 0.12)',
+          border: 'rgba(255, 122, 84, 0.28)',
+          text: '#C2482E',
+        },
+        hover: {
+          background: 'rgba(255, 122, 84, 0.28)',
+          border: 'rgba(255, 122, 84, 0.28)',
+          text: '#14080C',
+        },
+        active: {
+          background: 'rgba(255, 122, 84, 0.12)',
+          border: 'rgba(255, 122, 84, 0.28)',
+          text: '#8E2E1B',
+        },
+        disabled: {
+          background: 'rgba(255, 122, 84, 0.12)',
+          border: 'rgba(255, 122, 84, 0.28)',
+          text: '#C2482E',
+        },
         focusRing: 'rgba(255, 122, 84, 0.36)',
       },
       icon: {
@@ -222,12 +280,26 @@ export const neonLight: ThemePalette = {
       disabled: 'rgba(0, 180, 110, 0.12)',
       focusRing: 'rgba(0, 127, 82, 0.38)',
       button: {
-        background: 'rgba(0, 180, 110, 0.12)',
-        border: 'rgba(0, 127, 82, 0.30)',
-        text: '#007F52',
-        hover: 'rgba(0, 127, 82, 0.30)',
-        active: 'rgba(0, 180, 110, 0.12)',
-        disabled: 'rgba(0, 180, 110, 0.12)',
+        rest: {
+          background: 'rgba(0, 180, 110, 0.12)',
+          border: 'rgba(0, 127, 82, 0.30)',
+          text: '#007F52',
+        },
+        hover: {
+          background: 'rgba(0, 127, 82, 0.30)',
+          border: 'rgba(0, 127, 82, 0.30)',
+          text: '#14080C',
+        },
+        active: {
+          background: 'rgba(0, 180, 110, 0.12)',
+          border: 'rgba(0, 127, 82, 0.30)',
+          text: '#005236',
+        },
+        disabled: {
+          background: 'rgba(0, 180, 110, 0.12)',
+          border: 'rgba(0, 127, 82, 0.30)',
+          text: '#007F52',
+        },
         focusRing: 'rgba(0, 127, 82, 0.38)',
       },
       icon: {
@@ -266,12 +338,26 @@ export const neonLight: ThemePalette = {
       disabled: 'rgba(255, 184, 0, 0.14)',
       focusRing: 'rgba(255, 184, 0, 0.36)',
       button: {
-        background: 'rgba(255, 184, 0, 0.14)',
-        border: 'rgba(255, 184, 0, 0.30)',
-        text: '#A66A00',
-        hover: 'rgba(255, 184, 0, 0.30)',
-        active: '#D9C9CE',
-        disabled: 'rgba(255, 184, 0, 0.14)',
+        rest: {
+          background: 'rgba(255, 184, 0, 0.14)',
+          border: 'rgba(255, 184, 0, 0.30)',
+          text: '#A66A00',
+        },
+        hover: {
+          background: 'rgba(255, 184, 0, 0.30)',
+          border: 'rgba(255, 184, 0, 0.30)',
+          text: '#14080C',
+        },
+        active: {
+          background: '#D9C9CE',
+          border: 'rgba(255, 184, 0, 0.30)',
+          text: '#714700',
+        },
+        disabled: {
+          background: 'rgba(255, 184, 0, 0.14)',
+          border: 'rgba(255, 184, 0, 0.30)',
+          text: '#A66A00',
+        },
         focusRing: 'rgba(255, 184, 0, 0.36)',
       },
       icon: {
@@ -310,12 +396,26 @@ export const neonLight: ThemePalette = {
       disabled: 'rgba(217, 4, 41, 0.12)',
       focusRing: 'rgba(217, 4, 41, 0.40)',
       button: {
-        background: 'rgba(217, 4, 41, 0.12)',
-        border: 'rgba(217, 4, 41, 0.30)',
-        text: '#B00020',
-        hover: 'rgba(217, 4, 41, 0.30)',
-        active: 'rgba(217, 4, 41, 0.12)',
-        disabled: 'rgba(217, 4, 41, 0.12)',
+        rest: {
+          background: 'rgba(217, 4, 41, 0.12)',
+          border: 'rgba(217, 4, 41, 0.30)',
+          text: '#B00020',
+        },
+        hover: {
+          background: 'rgba(217, 4, 41, 0.30)',
+          border: 'rgba(217, 4, 41, 0.30)',
+          text: '#14080C',
+        },
+        active: {
+          background: 'rgba(217, 4, 41, 0.12)',
+          border: 'rgba(217, 4, 41, 0.30)',
+          text: '#7A0016',
+        },
+        disabled: {
+          background: 'rgba(217, 4, 41, 0.12)',
+          border: 'rgba(217, 4, 41, 0.30)',
+          text: '#B00020',
+        },
         focusRing: 'rgba(217, 4, 41, 0.40)',
       },
       icon: {

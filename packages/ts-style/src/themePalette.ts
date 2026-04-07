@@ -14,8 +14,8 @@
  * How to use:
  * - Component code should pick colors by UI intent.
  * - Example:
- *   - primary CTA background: `palette.semanticTone.accent.button.background`
- *   - primary CTA hover: `palette.semanticTone.accent.button.hover`
+ *   - primary CTA background: `palette.semanticTone.accent.button.rest.background`
+ *   - primary CTA hover: `palette.semanticTone.accent.button.hover.background`
  *   - semantic callout surface: `palette.semanticTone.info.background.panel`
  *   - secondary text: `palette.semanticTone.neutral.text.subtle`
  *   - active/focus border: `palette.semanticTone.neutral.border.focus`
@@ -24,12 +24,13 @@
  * ```ts
  * styleBuilder
  *   .select('.btn--primary', theme)
- *   .background(palette.semanticTone.accent.button.background)
- *   .color(palette.semanticTone.accent.button.text)
+ *   .background(palette.semanticTone.accent.button.rest.background)
+ *   .color(palette.semanticTone.accent.button.rest.text)
  *
  * styleBuilder
  *   .select('.btn--primary:hover', theme)
- *   .background(palette.semanticTone.accent.button.hover)
+ *   .background(palette.semanticTone.accent.button.hover.background)
+ *   .color(palette.semanticTone.accent.button.hover.text)
  *
  * styleBuilder
  *   .select('.btn--primary:focus-visible', theme)
@@ -68,12 +69,26 @@ export interface SemanticToneTokens {
     inverse: string
   }
   button: {
-    background: string
-    border: string
-    text: string
-    hover: string
-    active: string
-    disabled: string
+    rest: {
+      background: string
+      border: string
+      text: string
+    }
+    hover: {
+      background: string
+      border: string
+      text: string
+    }
+    active: {
+      background: string
+      border: string
+      text: string
+    }
+    disabled: {
+      background: string
+      border: string
+      text: string
+    }
     focusRing: string
   }
   icon: {
