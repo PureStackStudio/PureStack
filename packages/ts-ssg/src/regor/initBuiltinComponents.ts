@@ -5,6 +5,7 @@ import {
   createConsentComponents,
   createContactFormComponents,
   createExpandablePanelComponents,
+  createFlexComponents,
   createFooterComponents,
   createFormComponents,
   createGridComponents,
@@ -52,6 +53,7 @@ export function initBuiltinComponents(
   componentRegistry.registerMany(createConsentComponents())
   componentRegistry.registerMany(createContactFormComponents())
   componentRegistry.registerMany(createExpandablePanelComponents())
+  componentRegistry.registerMany(createFlexComponents())
   componentRegistry.registerMany(createFooterComponents())
   componentRegistry.registerMany(createFormComponents())
   componentRegistry.registerMany(createGridComponents())

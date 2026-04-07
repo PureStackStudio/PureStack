@@ -1,0 +1,127 @@
+---
+title: Flex Component Samples
+description: One-dimensional Flex layout examples for stacking, alignment, wrapping, and inline groups.
+layout:
+  showToc: true
+  fullWidth: true
+---
+
+# Flex Component Samples
+
+`Flex` is the one-dimensional layout primitive for rows, stacks, action groups, and wrapping clusters.
+
+## 1. Simple action row
+
+<Flex justify="end">
+  <Btn tone="neutral">Cancel</Btn>
+  <Btn tone="accent">Save changes</Btn>
+</Flex>
+
+## 2. Vertical stack
+
+<Flex direction="column" align="start">
+  <Badge tone="info">Reliable</Badge>
+  <Badge tone="success">Typed</Badge>
+  <Badge tone="warning">Composable</Badge>
+</Flex>
+
+## 3. Wrapping badge cluster
+
+<Flex wrap="wrap" align="center">
+  <Badge tone="neutral">Static rendering</Badge>
+  <Badge tone="info">SSR friendly</Badge>
+  <Badge tone="success">Minimal API</Badge>
+  <Badge tone="warning">Theme aware</Badge>
+  <Badge tone="accent">Layout primitive</Badge>
+</Flex>
+
+## 4. Inline icon and label
+
+<Flex inline="true" align="center">
+  <Icon name="iconoir:check" size="1rem" wrap="true"/>
+  <span>Ready to publish</span>
+</Flex>
+
+## 5. Space-between toolbar
+
+<Flex justify="between" align="center">
+  <SiteLogo />
+  <Flex align="center" wrap="wrap">
+    <Badge tone="info">vNext</Badge>
+    <ThemeSwitcher />
+  </Flex>
+</Flex>
+
+## 6. Product summary panel
+
+<Panel tone="neutral">
+  <Flex direction="column">
+    <Flex justify="between" align="start">
+      <Flex direction="column" align="start">
+        <Badge tone="info">Deployment</Badge>
+        <strong>Production rollout</strong>
+      </Flex>
+      <Flex inline="true" align="center">
+        <Icon name="iconoir:clock" size="1rem" />
+        <span>Updated 2 minutes ago</span>
+      </Flex>
+    </Flex>
+
+    <span>
+      Flex works well for panel internals when the content is linear but still
+      needs alignment, grouping, and small action clusters.
+    </span>
+
+    <Flex wrap="wrap" align="center">
+      <Badge tone="success">Healthy</Badge>
+      <Badge tone="neutral">12 services</Badge>
+      <Badge tone="warning">3 pending migrations</Badge>
+    </Flex>
+  </Flex>
+</Panel>
+
+## 7. Responsive-feeling action cluster with wrapping
+
+<Panel tone="neutral">
+  <Flex justify="between" align="center" wrap="wrap">
+    <Flex direction="column" align="start">
+      <strong>Workspace members</strong>
+      <span>Invite collaborators, review access, and confirm environment roles.</span>
+    </Flex>
+    <Flex wrap="wrap" align="center">
+      <Btn tone="neutral" icon="iconoir:code">Export</Btn>
+      <Btn tone="neutral" icon="iconoir:pin">Pin team</Btn>
+      <Btn tone="accent" icon="iconoir:user-plus">Invite member</Btn>
+    </Flex>
+  </Flex>
+</Panel>
+
+## 8. Media-style alert header
+
+<AlertBox tone="info" title="Release note" icon="iconoir:rocket">
+  <Flex direction="column" align="start">
+    <span>
+      The new Flex primitive is ideal for toolbars, inline groups, action bars,
+      and stacked metadata blocks.
+    </span>
+    <Flex wrap="wrap" align="center">
+      <Badge tone="info">Small API</Badge>
+      <Badge tone="success">Uniform spacing</Badge>
+      <Badge tone="accent">Composable</Badge>
+    </Flex>
+  </Flex>
+</AlertBox>
+
+## 9. Props reference
+
+```html
+<Flex
+  direction="row|column"
+  align="stretch|start|center|end|baseline"
+  justify="start|center|end|between|around|evenly"
+  wrap="true|false|wrap|nowrap|reverse"
+  inline="true|false"
+>
+  ...
+</Flex>
+```
