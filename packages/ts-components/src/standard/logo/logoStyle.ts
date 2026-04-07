@@ -54,7 +54,7 @@ export function registerLogoShellStyles(
     .display('inline-block')
     .position('relative')
     .zIndex('1')
-    .background(palette.semanticTone.accent.icon.gradient)
+    .background(palette.semanticTone.accent.button.hover.background)
     .border(`1px solid ${palette.semanticTone.accent.icon.ring}`)
     .boxShadow(palette.effect.interactiveShadow)
 
@@ -70,7 +70,6 @@ export function registerLogoShellStyles(
     .select('.site-logo__glyph--custom', theme)
     .display('grid')
     .placeItems('center')
-    .color(palette.semanticTone.accent.icon.color)
     .overflow('hidden')
 
   styleBuilder
@@ -78,6 +77,7 @@ export function registerLogoShellStyles(
     .width('70%')
     .height('70%')
     .display('block')
+    .color(palette.semanticTone.accent.icon.color)
 }
 
 export function registerLogoTextStyles(
@@ -116,7 +116,12 @@ export function registerLogoTextStyles(
 
   styleBuilder
     .select('.site-logo__word--accent', theme)
-    .color(palette.semanticTone.accent.button.rest.text)
+    .display('inline-block')
+    .background(palette.semanticTone.accent.button.hover.background)
+    .webkitBackgroundClip('text')
+    .backgroundClip('text')
+    .color('transparent')
+    .webkitTextFillColor('transparent')
 
   styleBuilder
     .select('.site-logo__subtitle', theme)
