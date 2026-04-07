@@ -143,13 +143,14 @@ export function applyHeroActionVariantStyles(
 ) {
   styleBuilder
     .select('.hero__action--primary', theme)
-    .background(palette.semanticTone.accent.background.default)
-    .color(palette.semanticTone.accent.text.default)
+    .background(palette.semanticTone.accent.button.rest.background)
+    .color(palette.semanticTone.accent.button.rest.text)
     .boxShadow(palette.effect.accentShadow)
 
   styleBuilder
     .select('.hero__action--primary:hover', theme)
-    .background(palette.semanticTone.accent.hover)
+    .background(palette.semanticTone.accent.button.hover.background)
+    .color(palette.semanticTone.accent.button.hover.text)
 
   styleBuilder
     .select('.hero__action--minimal', theme)

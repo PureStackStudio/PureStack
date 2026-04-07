@@ -24,18 +24,18 @@ type ToneOverrides = {
 }
 
 const core = {
-  ink: '#171A23',
-  abyss: '#10131B',
-  panel: '#232A38',
-  frost: '#F4F0F4',
-  accent: '#832222',
-  info: '#1789b2',
-  success: '#1F7A43',
-  warning: '#A06E16',
-  danger: '#A63A24',
+  ink: '#231717',
+  abyss: '#352323',
+  panel: '#2e2121',
+  frost: '#e4e4e4',
+  accent: '#b72727',
+  info: '#16bad4',
+  success: '#259740',
+  warning: '#cfa320',
+  danger: '#DC3545',
 } as const
 
-const borderAlpha = 0.21
+const borderAlpha = 0.33
 
 function rgba(hex: string, alphaValue: number) {
   const normalized = hex.replace('#', '')
@@ -227,7 +227,7 @@ const accentTone = createTone(accent, neutralTone, {
     hover: {
       background: gradient('135deg', [accent.glow, accent.base]),
       border: borderTone(accent.bright),
-      text: neutralTone.text.inverse,
+      text: text.glow,
     },
     active: {
       background: gradient('135deg', [accent.bright, accent.deep]),

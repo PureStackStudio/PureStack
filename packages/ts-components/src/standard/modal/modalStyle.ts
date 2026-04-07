@@ -50,7 +50,7 @@ function registerModalShellStyles(
     .opacity('0')
     .transition('opacity 420ms ease')
 
-  styleBuilder.select('.modal--fade[open]::backdrop', theme).opacity('1')
+  styleBuilder.select('.modal--fade[open]::backdrop', theme).opacity('0.8')
 
   styleBuilder
     .select('.modal__panel', theme)
