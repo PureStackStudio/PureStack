@@ -35,12 +35,18 @@ const core = {
   danger: '#A63A24',
 } as const
 
+const borderAlpha = 0.21
+
 function rgba(hex: string, alphaValue: number) {
   const normalized = hex.replace('#', '')
   const r = Number.parseInt(normalized.slice(0, 2), 16)
   const g = Number.parseInt(normalized.slice(2, 4), 16)
   const b = Number.parseInt(normalized.slice(4, 6), 16)
   return `rgba(${r}, ${g}, ${b}, ${alphaValue.toFixed(2)})`
+}
+
+function borderTone(hex: string) {
+  return rgba(hex, borderAlpha)
 }
 
 function gradient(angle: string, colors: string[]) {
@@ -85,9 +91,9 @@ function createTone(
     },
     border: {
       ...neutral.border,
-      default: scale.base,
-      strong: scale.bright,
-      hard: scale.glow,
+      default: borderTone(scale.base),
+      strong: borderTone(scale.bright),
+      hard: borderTone(scale.glow),
       focus: scale.glow,
       ...(overrides.border || {}),
     },
@@ -100,22 +106,22 @@ function createTone(
     button: {
       rest: {
         background: scale.shadow,
-        border: scale.base,
+        border: borderTone(scale.base),
         text: scale.glow,
       },
       hover: {
         background: scale.base,
-        border: scale.bright,
+        border: borderTone(scale.bright),
         text: neutral.text.inverse,
       },
       active: {
         background: scale.deep,
-        border: scale.glow,
+        border: borderTone(scale.glow),
         text: neutral.text.strong,
       },
       disabled: {
         background: scale.deep,
-        border: scale.deep,
+        border: borderTone(scale.deep),
         text: scale.base,
       },
       focusRing: scale.glow,
@@ -159,10 +165,10 @@ const neutralTone: Tone = {
   },
   border: {
     soft: surface.deep,
-    subtle: surface.base,
-    default: text.shadow,
-    strong: text.deep,
-    hard: text.base,
+    subtle: borderTone(surface.base),
+    default: borderTone(text.shadow),
+    strong: borderTone(text.deep),
+    hard: borderTone(text.base),
     focus: accent.glow,
   },
   text: {
@@ -176,22 +182,22 @@ const neutralTone: Tone = {
   button: {
     rest: {
       background: radial(surface.base, surface.deep),
-      border: text.shadow,
+      border: borderTone(text.shadow),
       text: text.base,
     },
     hover: {
       background: radial(surface.bright, surface.deep),
-      border: text.base,
+      border: borderTone(text.base),
       text: text.glow,
     },
     active: {
       background: accent.shadow,
-      border: text.deep,
+      border: borderTone(text.deep),
       text: text.glow,
     },
     disabled: {
       background: surface.deep,
-      border: surface.deep,
+      border: borderTone(surface.deep),
       text: text.deep,
     },
     focusRing: accent.base,
@@ -215,22 +221,22 @@ const accentTone = createTone(accent, neutralTone, {
   button: {
     rest: {
       background: accent.shadow,
-      border: accent.base,
+      border: borderTone(accent.base),
       text: accent.glow,
     },
     hover: {
       background: gradient('135deg', [accent.glow, accent.base]),
-      border: accent.bright,
+      border: borderTone(accent.bright),
       text: neutralTone.text.inverse,
     },
     active: {
       background: gradient('135deg', [accent.bright, accent.deep]),
-      border: accent.glow,
+      border: borderTone(accent.glow),
       text: neutralTone.text.strong,
     },
     disabled: {
       background: accent.deep,
-      border: accent.deep,
+      border: borderTone(accent.deep),
       text: accent.base,
     },
     focusRing: accent.glow,
@@ -270,22 +276,22 @@ const ghostTone = createTone(accent, neutralTone, {
   button: {
     rest: {
       background: neutralTone.background.surface,
-      border: neutralTone.border.soft,
+      border: borderTone(surface.deep),
       text: accent.glow,
     },
     hover: {
       background: accent.shadow,
-      border: accent.base,
+      border: borderTone(accent.base),
       text: accent.glow,
     },
     active: {
       background: accent.deep,
-      border: accent.bright,
+      border: borderTone(accent.bright),
       text: neutralTone.text.strong,
     },
     disabled: {
       background: surface.deep,
-      border: surface.deep,
+      border: borderTone(surface.deep),
       text: accent.base,
     },
     focusRing: accent.glow,
