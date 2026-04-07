@@ -13,7 +13,7 @@ const core = {
   ink: '#231717',
   abyss: '#352323',
   panel: '#2E2121',
-  frost: '#E4E4E4',
+  frost: '#E1E1E1',
   accent: '#B72727',
   info: '#16BAD4',
   success: '#259740',
