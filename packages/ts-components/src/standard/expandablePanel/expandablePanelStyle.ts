@@ -70,20 +70,6 @@ function registerExpandablePanelSummaryStyles(
     .outlineOffset('-2px')
 
   styleBuilder
-    .select('.expandable-panel__icon-wrap', theme)
-    .width('44px')
-    .height('44px')
-    .display('inline-flex')
-    .alignItems('center')
-    .justifyContent('center')
-    .borderRadius(options.radii.md)
-    .background(palette.semanticTone.accent.icon.gradient)
-    .backgroundColor(palette.semanticTone.accent.icon.background)
-    .border(`1px solid ${palette.semanticTone.accent.icon.ring}`)
-    .boxShadow(palette.effect.interactiveShadow)
-    .color(palette.semanticTone.accent.icon.color)
-
-  styleBuilder
     .select('.expandable-panel__icon', theme)
     .width('22px')
     .height('22px')

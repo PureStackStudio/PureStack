@@ -9,6 +9,7 @@ export interface Icon {
   label?: string
   class?: string
   svg?: string
+  wrap?: boolean
   ariaLabel?: string
   ariaHidden?: string
   role?: string
@@ -16,7 +17,19 @@ export interface Icon {
   iconStyle?: Record<string, string>
 }
 
-const iconTemplate = html`<span
+const iconTemplate = html`
+<span class="icon-wrap" :class="customClass" r-if="wrap">
+  <span
+    class="icon"
+    :class="customClass"
+    :style="iconStyle"
+    :role="role"
+    :aria-label="ariaLabel"
+    :aria-hidden="ariaHidden"
+    r-if="svg"
+    r-html="svg"></span>
+</span>
+<span r-else
   class="icon"
   :class="customClass"
   :style="iconStyle"
@@ -29,7 +42,7 @@ const iconTemplate = html`<span
 
 function createIconComponent() {
   return defineComponent<Icon>(iconTemplate, {
-    props: ['name', 'size', 'label', 'class'],
+    props: ['name', 'size', 'label', 'class', 'wrap'],
     context: (head) => resolveIcon(head.props),
   })
 }

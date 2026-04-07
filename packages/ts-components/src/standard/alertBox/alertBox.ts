@@ -30,7 +30,7 @@ const alertBoxTemplate = html`<aside
   class="alert"
   :class="rootClass"
 >
-  <Icon class="alert__icon" :class="iconToneClass" :name="icon || 'iconoir:headset-help'" />
+  <Icon class="expandable-panel__icon" :name="icon" :class="iconToneClass" r-if="icon" :wrap="true"/>
   <div class="alert__content">
     <div class="alert__header" r-if="title || eyebrow || badge">
       <p class="alert__eyebrow" r-if="eyebrow">{{ eyebrow }}</p>

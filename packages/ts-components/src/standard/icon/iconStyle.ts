@@ -1,12 +1,21 @@
-import { styleBuilder, type ThemeMode, themes } from '@purestack/ts-style'
+import {
+  styleBuilder,
+  type ThemeOptions,
+  type ThemePalette,
+  themes,
+} from '@purestack/ts-style'
 
 export function registerIconStyles() {
-  themes.forEach((theme) => {
-    registerIconBaseStyles(theme)
+  themes.forEach((theme, palette, options) => {
+    registerIconBaseStyles(theme, palette, options)
   })
 }
 
-function registerIconBaseStyles(theme: ThemeMode) {
+function registerIconBaseStyles(
+  theme: string,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.icon', theme)
     .display('inline-flex')
@@ -23,4 +32,18 @@ function registerIconBaseStyles(theme: ThemeMode) {
     .display('block')
     .width('100%')
     .height('100%')
+
+  styleBuilder
+    .select('.icon-wrap', theme)
+    .width('44px')
+    .height('44px')
+    .display('inline-flex')
+    .alignItems('center')
+    .justifyContent('center')
+    .borderRadius(options.radii.md)
+    .background(palette.semanticTone.accent.icon.gradient)
+    .backgroundColor(palette.semanticTone.accent.icon.background)
+    .border(`1px solid ${palette.semanticTone.accent.icon.ring}`)
+    .boxShadow(palette.effect.interactiveShadow)
+    .color(palette.semanticTone.accent.icon.color)
 }

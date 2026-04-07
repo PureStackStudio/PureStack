@@ -13,10 +13,10 @@ layout:
 ## 1. Basic responsive columns
 
 <Grid columns="1" columnsSm="2" columnsLg="4">
-  <AlertBox tone="info" title="Alpha">First card</AlertBox>
-  <AlertBox tone="success" title="Beta">Second card</AlertBox>
-  <AlertBox tone="warning" title="Gamma">Third card</AlertBox>
-  <AlertBox tone="accent" title="Delta">Fourth card</AlertBox>
+  <AlertBox tone="info" title="Alpha"  icon="iconoir:sphere">First card</AlertBox>
+  <AlertBox tone="success" title="Beta" icon="iconoir:check">Second card</AlertBox>
+  <AlertBox tone="warning" title="Gamma" icon="iconoir:x">Third card</AlertBox>
+  <AlertBox tone="accent" title="Delta" icon="iconoir:star">Fourth card</AlertBox>
 </Grid>
 
 ## 2. Custom template columns
@@ -36,7 +36,9 @@ layout:
 ## 3. Dense packing for uneven content
 
 <Grid columns="2" columnsLg="4" dense="true">
-  <AlertBox tone="info" title="Short">One line</AlertBox>
+  <AlertBox tone="info" title="Short">
+    One line
+  </AlertBox>
   <AlertBox tone="info" title="Taller">
     This card intentionally has longer content to produce uneven heights across grid rows.
   </AlertBox>

@@ -34,9 +34,7 @@ const expandablePanelTemplate = html`<details
 >
   <summary class="expandable-panel__summary">
     <slot name="summary">
-      <span class="expandable-panel__icon-wrap" :class="iconToneClass" r-if="icon">
-        <Icon class="expandable-panel__icon" :name="icon" />
-      </span>
+      <Icon class="expandable-panel__icon" :name="icon" r-if="icon" :wrap="true"/>
       <span class="expandable-panel__header">
         <span class="expandable-panel__title" r-if="title">{{ title }}</span>
         <span class="expandable-panel__badge" r-if="badge">{{ badge }}</span>
