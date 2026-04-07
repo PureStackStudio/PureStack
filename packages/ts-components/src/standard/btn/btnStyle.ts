@@ -102,7 +102,8 @@ function registerButtonToneStyles(theme: ThemeMode, palette: ThemePalette) {
     .select('.btn.tone-surface--accent:focus-visible', theme)
     .boxShadow(`0 0 0 2px ${palette.semanticTone.accent.button.focusRing}`)
 
-  styleBuilder.select('.btn.tone-surface--accent:hover', theme)
+  styleBuilder
+    .select('.btn.tone-surface--accent:hover', theme)
     .background(palette.semanticTone.accent.button.hover.background)
     .borderColor(palette.semanticTone.accent.button.hover.border)
     .color(palette.semanticTone.accent.button.hover.text)

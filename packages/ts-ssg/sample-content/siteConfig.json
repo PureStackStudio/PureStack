@@ -71,7 +71,7 @@
     "excludePaths": ["/privacy/", "/imprint/", "/terms/"]
   },
   "mdx": {
-    "highlighter": "highlightjs"
+    "highlighter": "shiki"
   },
   "outDir": "../dist/site"
 }

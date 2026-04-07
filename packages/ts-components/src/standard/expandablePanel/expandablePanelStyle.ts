@@ -147,31 +147,52 @@ function registerExpandablePanelToneHoverStyles(
   palette: ThemePalette,
 ) {
   styleBuilder
-    .select('.expandable-panel.tone-surface--neutral .expandable-panel__summary:hover', theme)
+    .select(
+      '.expandable-panel.tone-surface--neutral .expandable-panel__summary:hover',
+      theme,
+    )
     .background(palette.semanticTone.neutral.hover)
 
   styleBuilder
-    .select('.expandable-panel.tone-surface--accent .expandable-panel__summary:hover', theme)
+    .select(
+      '.expandable-panel.tone-surface--accent .expandable-panel__summary:hover',
+      theme,
+    )
     .background(palette.semanticTone.accent.hover)
 
   styleBuilder
-    .select('.expandable-panel.tone-surface--ghost .expandable-panel__summary:hover', theme)
+    .select(
+      '.expandable-panel.tone-surface--ghost .expandable-panel__summary:hover',
+      theme,
+    )
     .background(palette.semanticTone.ghost.hover)
 
   styleBuilder
-    .select('.expandable-panel.tone-surface--info .expandable-panel__summary:hover', theme)
+    .select(
+      '.expandable-panel.tone-surface--info .expandable-panel__summary:hover',
+      theme,
+    )
     .background(palette.semanticTone.info.hover)
 
   styleBuilder
-    .select('.expandable-panel.tone-surface--success .expandable-panel__summary:hover', theme)
+    .select(
+      '.expandable-panel.tone-surface--success .expandable-panel__summary:hover',
+      theme,
+    )
     .background(palette.semanticTone.success.hover)
 
   styleBuilder
-    .select('.expandable-panel.tone-surface--warning .expandable-panel__summary:hover', theme)
+    .select(
+      '.expandable-panel.tone-surface--warning .expandable-panel__summary:hover',
+      theme,
+    )
     .background(palette.semanticTone.warning.hover)
 
   styleBuilder
-    .select('.expandable-panel.tone-surface--danger .expandable-panel__summary:hover', theme)
+    .select(
+      '.expandable-panel.tone-surface--danger .expandable-panel__summary:hover',
+      theme,
+    )
     .background(palette.semanticTone.danger.hover)
 }
 

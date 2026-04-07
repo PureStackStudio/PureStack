@@ -366,9 +366,13 @@ export function applyFooterLinkStyles(
     .lineHeight('1.6')
     .color(palette.semanticTone.neutral.text.default)
     .transition('color 150ms ease')
-  styleBuilder.select('.footer-link--muted', theme).color(palette.semanticTone.neutral.text.subtle)
+  styleBuilder
+    .select('.footer-link--muted', theme)
+    .color(palette.semanticTone.neutral.text.subtle)
   styleBuilder.select('.footer-link--strong', theme).fontWeight('700')
-  styleBuilder.select('.footer-link:hover', theme).color(palette.semanticTone.accent.text.default)
+  styleBuilder
+    .select('.footer-link:hover', theme)
+    .color(palette.semanticTone.accent.text.default)
   styleBuilder
     .select('.footer-link:focus-visible', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
