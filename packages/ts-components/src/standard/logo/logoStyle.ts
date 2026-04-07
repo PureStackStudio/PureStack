@@ -116,7 +116,7 @@ export function registerLogoTextStyles(
 
   styleBuilder
     .select('.site-logo__word--accent', theme)
-    .color(palette.semanticTone.accent.text.default)
+    .color(palette.semanticTone.accent.button.rest.text)
 
   styleBuilder
     .select('.site-logo__subtitle', theme)

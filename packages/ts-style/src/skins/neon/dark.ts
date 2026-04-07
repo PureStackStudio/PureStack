@@ -1,145 +1,28 @@
-import { getColors, getGradient } from '@purestack/ts-css'
-
-import type { SemanticToneTokens, ThemePalette } from '../../themePalette'
-
-type ToneScale = {
-  shadow: string
-  deep: string
-  base: string
-  bright: string
-  glow: string
-}
-
-type Tone = SemanticToneTokens
-type ToneOverrides = {
-  background?: Partial<Tone['background']>
-  border?: Partial<Tone['border']>
-  text?: Partial<Tone['text']>
-  button?: Partial<Tone['button']>
-  icon?: Partial<Tone['icon']>
-  hover?: Tone['hover']
-  active?: Tone['active']
-  disabled?: Tone['disabled']
-  focusRing?: Tone['focusRing']
-}
+import type { ThemePalette } from '../../themePalette'
+import {
+  createBorderTone,
+  createScale,
+  createTone,
+  gradient,
+  radial,
+  rgba,
+  type Tone,
+} from './shared'
 
 const core = {
   ink: '#231717',
   abyss: '#352323',
-  panel: '#2e2121',
-  frost: '#e4e4e4',
-  accent: '#b72727',
-  info: '#16bad4',
+  panel: '#2E2121',
+  frost: '#E4E4E4',
+  accent: '#B72727',
+  info: '#16BAD4',
   success: '#259740',
-  warning: '#cfa320',
+  warning: '#CFA320',
   danger: '#DC3545',
 } as const
 
 const borderAlpha = 0.33
-
-function rgba(hex: string, alphaValue: number) {
-  const normalized = hex.replace('#', '')
-  const r = Number.parseInt(normalized.slice(0, 2), 16)
-  const g = Number.parseInt(normalized.slice(2, 4), 16)
-  const b = Number.parseInt(normalized.slice(4, 6), 16)
-  return `rgba(${r}, ${g}, ${b}, ${alphaValue.toFixed(2)})`
-}
-
-function borderTone(hex: string) {
-  return rgba(hex, borderAlpha)
-}
-
-function gradient(angle: string, colors: string[]) {
-  if (colors.length === 2) {
-    const stops = getGradient(colors[0], colors[1], 4)
-    return `linear-gradient(${angle}, ${stops
-      .map((stop) => `${stop.color} ${stop.offset}%`)
-      .join(', ')})`
-  }
-
-  const step = 100 / (colors.length - 1)
-  return `linear-gradient(${angle}, ${colors
-    .map((color, index) => `${color} ${Math.round(index * step)}%`)
-    .join(', ')})`
-}
-
-function radial(top: string, bottom: string) {
-  return `radial-gradient(${top} 0%, ${bottom} 100%)`
-}
-
-function createScale(hex: string, delta = 20): ToneScale {
-  const [shadow, deep, base, bright, glow] = getColors(hex, delta, delta, 5)
-  return { shadow, deep, base, bright, glow }
-}
-
-function createTone(
-  scale: ToneScale,
-  neutral: Tone,
-  overrides: ToneOverrides = {},
-): Tone {
-  return {
-    background: {
-      ...neutral.background,
-      default: scale.shadow,
-      surface: scale.shadow,
-      surfaceAlt: scale.deep,
-      panel: scale.shadow,
-      raised: scale.base,
-      muted: scale.deep,
-      feature: scale.base,
-      ...(overrides.background || {}),
-    },
-    border: {
-      ...neutral.border,
-      default: borderTone(scale.base),
-      strong: borderTone(scale.bright),
-      hard: borderTone(scale.glow),
-      focus: scale.glow,
-      ...(overrides.border || {}),
-    },
-    text: {
-      ...neutral.text,
-      default: scale.glow,
-      strong: scale.glow,
-      ...(overrides.text || {}),
-    },
-    button: {
-      rest: {
-        background: scale.shadow,
-        border: borderTone(scale.base),
-        text: scale.glow,
-      },
-      hover: {
-        background: scale.base,
-        border: borderTone(scale.bright),
-        text: neutral.text.inverse,
-      },
-      active: {
-        background: scale.deep,
-        border: borderTone(scale.glow),
-        text: neutral.text.strong,
-      },
-      disabled: {
-        background: scale.deep,
-        border: borderTone(scale.deep),
-        text: scale.base,
-      },
-      focusRing: scale.glow,
-      ...(overrides.button || {}),
-    },
-    icon: {
-      background: scale.glow,
-      gradient: gradient('135deg', [scale.glow, scale.bright]),
-      color: neutral.text.inverse,
-      ring: scale.bright,
-      ...(overrides.icon || {}),
-    },
-    hover: overrides.hover ?? scale.base,
-    active: overrides.active ?? scale.deep,
-    disabled: overrides.disabled ?? scale.deep,
-    focusRing: overrides.focusRing ?? scale.glow,
-  }
-}
+const borderTone = createBorderTone(borderAlpha)
 
 const surface = createScale(core.panel, 10)
 const text = createScale(core.frost, 18)
@@ -214,7 +97,7 @@ const neutralTone: Tone = {
   focusRing: accent.base,
 }
 
-const accentTone = createTone(accent, neutralTone, {
+const accentTone = createTone(accent, neutralTone, borderTone, {
   background: {
     feature: accent.bright,
   },
@@ -253,7 +136,7 @@ const accentTone = createTone(accent, neutralTone, {
   focusRing: accent.glow,
 })
 
-const ghostTone = createTone(accent, neutralTone, {
+const ghostTone = createTone(accent, neutralTone, borderTone, {
   background: {
     default: neutralTone.background.surface,
     surface: neutralTone.background.surface,
@@ -308,10 +191,10 @@ const ghostTone = createTone(accent, neutralTone, {
   focusRing: accent.glow,
 })
 
-const infoTone = createTone(info, neutralTone)
-const successTone = createTone(success, neutralTone)
-const warningTone = createTone(warning, neutralTone)
-const dangerTone = createTone(danger, neutralTone)
+const infoTone = createTone(info, neutralTone, borderTone)
+const successTone = createTone(success, neutralTone, borderTone)
+const warningTone = createTone(warning, neutralTone, borderTone)
+const dangerTone = createTone(danger, neutralTone, borderTone)
 
 export const neonDark: ThemePalette = {
   semanticTone: {
