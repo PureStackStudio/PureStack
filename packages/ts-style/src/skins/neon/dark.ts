@@ -44,6 +44,15 @@ export const neonDark: ThemePalette = {
       active: '#2A1820',
       disabled: 'rgba(247, 238, 240, 0.10)',
       focusRing: 'rgba(255, 46, 72, 0.46)',
+      button: {
+        background: neutralBackground.surface,
+        border: neutralBorder.default,
+        text: neutralText.default,
+        hover: neutralBackground.raised,
+        active: '#2A1820',
+        disabled: 'rgba(247, 238, 240, 0.10)',
+        focusRing: 'rgba(255, 46, 72, 0.46)',
+      },
       icon: {
         background: 'rgba(247, 238, 240, 0.10)',
         gradient:
@@ -79,6 +88,15 @@ export const neonDark: ThemePalette = {
       active: 'linear-gradient(90deg, #E9002E 0%, #FF1F3F 100%)',
       disabled: 'rgba(255, 46, 72, 0.18)',
       focusRing: 'rgba(255, 46, 72, 0.62)',
+      button: {
+        background: 'rgba(255, 46, 72, 0.16)',
+        border: 'rgba(255, 46, 72, 0.52)',
+        text: '#FF2E48',
+        hover: 'linear-gradient(90deg, #FF1636 0%, #FF2E48 100%)',
+        active: 'linear-gradient(90deg, #E9002E 0%, #FF1F3F 100%)',
+        disabled: 'rgba(255, 46, 72, 0.18)',
+        focusRing: 'rgba(255, 46, 72, 0.62)',
+      },
       icon: {
         background: 'rgba(255, 46, 72, 0.14)',
         gradient:
@@ -115,6 +133,15 @@ export const neonDark: ThemePalette = {
       active: 'rgba(255, 46, 72, 0.16)',
       disabled: 'rgba(255, 46, 72, 0.20)',
       focusRing: 'rgba(255, 46, 72, 0.52)',
+      button: {
+        background: 'rgba(0, 0, 0, 0)',
+        border: 'transparent',
+        text: '#FF2E48',
+        hover: 'rgba(255, 46, 72, 0.40)',
+        active: 'rgba(255, 46, 72, 0.16)',
+        disabled: 'rgba(255, 46, 72, 0.20)',
+        focusRing: 'rgba(255, 46, 72, 0.52)',
+      },
       icon: {
         background: 'rgba(247, 238, 240, 0.06)',
         gradient:
@@ -150,6 +177,15 @@ export const neonDark: ThemePalette = {
       active: 'rgba(255, 122, 84, 0.12)',
       disabled: 'rgba(255, 122, 84, 0.12)',
       focusRing: 'rgba(255, 122, 84, 0.42)',
+      button: {
+        background: 'rgba(255, 122, 84, 0.12)',
+        border: 'rgba(255, 122, 84, 0.38)',
+        text: '#FF7A54',
+        hover: 'rgba(255, 122, 84, 0.38)',
+        active: 'rgba(255, 122, 84, 0.12)',
+        disabled: 'rgba(255, 122, 84, 0.12)',
+        focusRing: 'rgba(255, 122, 84, 0.42)',
+      },
       icon: {
         background: 'rgba(255, 122, 84, 0.12)',
         gradient:
@@ -185,6 +221,15 @@ export const neonDark: ThemePalette = {
       active: 'rgba(0, 210, 120, 0.12)',
       disabled: 'rgba(0, 210, 120, 0.12)',
       focusRing: 'rgba(0, 210, 120, 0.44)',
+      button: {
+        background: 'rgba(0, 210, 120, 0.12)',
+        border: 'rgba(0, 210, 120, 0.40)',
+        text: '#00D278',
+        hover: 'rgba(0, 210, 120, 0.40)',
+        active: 'rgba(0, 210, 120, 0.12)',
+        disabled: 'rgba(0, 210, 120, 0.12)',
+        focusRing: 'rgba(0, 210, 120, 0.44)',
+      },
       icon: {
         background: 'rgba(0, 210, 120, 0.12)',
         gradient:
@@ -220,6 +265,15 @@ export const neonDark: ThemePalette = {
       active: '#2A1820',
       disabled: 'rgba(255, 184, 0, 0.14)',
       focusRing: 'rgba(255, 184, 0, 0.46)',
+      button: {
+        background: 'rgba(255, 184, 0, 0.14)',
+        border: 'rgba(255, 184, 0, 0.42)',
+        text: '#FFB800',
+        hover: 'rgba(255, 184, 0, 0.42)',
+        active: '#2A1820',
+        disabled: 'rgba(255, 184, 0, 0.14)',
+        focusRing: 'rgba(255, 184, 0, 0.46)',
+      },
       icon: {
         background: 'rgba(255, 184, 0, 0.14)',
         gradient:
@@ -255,6 +309,15 @@ export const neonDark: ThemePalette = {
       active: 'rgba(255, 46, 72, 0.12)',
       disabled: 'rgba(255, 46, 72, 0.12)',
       focusRing: 'rgba(255, 46, 72, 0.48)',
+      button: {
+        background: 'rgba(255, 46, 72, 0.12)',
+        border: 'rgba(255, 46, 72, 0.44)',
+        text: '#FF2E48',
+        hover: 'rgba(255, 46, 72, 0.44)',
+        active: 'rgba(255, 46, 72, 0.12)',
+        disabled: 'rgba(255, 46, 72, 0.12)',
+        focusRing: 'rgba(255, 46, 72, 0.48)',
+      },
       icon: {
         background: 'rgba(255, 46, 72, 0.12)',
         gradient:

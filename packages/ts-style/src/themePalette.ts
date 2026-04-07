@@ -14,8 +14,8 @@
  * How to use:
  * - Component code should pick colors by UI intent.
  * - Example:
- *   - primary CTA background: `palette.semanticTone.accent.background.default`
- *   - primary CTA hover: `palette.semanticTone.accent.hover`
+ *   - primary CTA background: `palette.semanticTone.accent.button.background`
+ *   - primary CTA hover: `palette.semanticTone.accent.button.hover`
  *   - semantic callout surface: `palette.semanticTone.info.background.panel`
  *   - secondary text: `palette.semanticTone.neutral.text.subtle`
  *   - active/focus border: `palette.semanticTone.neutral.border.focus`
@@ -24,25 +24,18 @@
  * ```ts
  * styleBuilder
  *   .select('.btn--primary', theme)
- *   .background(palette.semanticTone.accent.background.default)
- *   .color(palette.semanticTone.accent.text.default)
+ *   .background(palette.semanticTone.accent.button.background)
+ *   .color(palette.semanticTone.accent.button.text)
  *
  * styleBuilder
  *   .select('.btn--primary:hover', theme)
- *   .background(palette.semanticTone.accent.active)
+ *   .background(palette.semanticTone.accent.button.hover)
  *
  * styleBuilder
  *   .select('.btn--primary:focus-visible', theme)
- *   .outline(`2px solid ${palette.semanticTone.accent.focusRing}`)
+ *   .outline(`2px solid ${palette.semanticTone.accent.button.focusRing}`)
  * ```
  */
-
-export interface SemanticToneIconTokens {
-  background: string
-  gradient: string
-  color: string
-  ring: string
-}
 
 export interface SemanticToneTokens {
   background: {
@@ -74,11 +67,25 @@ export interface SemanticToneTokens {
     strong: string
     inverse: string
   }
+  button: {
+    background: string
+    border: string
+    text: string
+    hover: string
+    active: string
+    disabled: string
+    focusRing: string
+  }
+  icon: {
+    background: string
+    gradient: string
+    color: string
+    ring: string
+  }
   hover: string
   active: string
   disabled: string
   focusRing: string
-  icon: SemanticToneIconTokens
 }
 
 export interface ThemePalette {
