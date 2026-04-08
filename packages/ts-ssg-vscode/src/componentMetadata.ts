@@ -417,7 +417,7 @@ function getEntityNameText(name: ts.EntityName): string {
 function getJsDocText(node: ts.Node, sourceFile: ts.SourceFile) {
   const leadingText = sourceFile.text.slice(
     node.getFullStart(),
-    node.getStart(),
+    node.getStart(sourceFile),
   )
   const matches = leadingText.match(/\/\*\*([\s\S]*?)\*\//g)
   if (!matches || matches.length === 0) return undefined
@@ -446,3 +446,4 @@ function toKebabCase(value: string) {
 function normalizeComponentName(value: string) {
   return value.replace(/[-_\s]+/g, '').toLowerCase()
 }
+
