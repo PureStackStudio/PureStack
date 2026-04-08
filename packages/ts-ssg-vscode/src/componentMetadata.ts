@@ -4,14 +4,21 @@ import ts from 'typescript'
 export type ComponentPropInfo = {
   propName: string
   attributeName: string
+  documentation?: string
   valueKind: 'string' | 'boolean' | 'number' | 'union' | 'unknown'
   literalValues?: string[]
 }
 
 export type ComponentMetadata = {
   componentName: string
+  documentation?: string
   props: ComponentPropInfo[]
 }
+
+type TypeDeclaration =
+  | ts.InterfaceDeclaration
+  | ts.TypeAliasDeclaration
+  | ts.ClassDeclaration
 
 type CachedComponentMetadata = {
   metadataByNormalizedName: Map<string, ComponentMetadata>
@@ -64,7 +71,11 @@ function extractComponentMetadata(sourceFile: ts.SourceFile) {
 
   function visitNode(node: ts.Node) {
     if (ts.isCallExpression(node) && isDefineComponentCall(node)) {
-      const componentMetadata = createComponentMetadata(node, typeDeclarations)
+      const componentMetadata = createComponentMetadata(
+        node,
+        typeDeclarations,
+        sourceFile,
+      )
       if (componentMetadata) {
         metadataByNormalizedName.set(
           normalizeComponentName(componentMetadata.componentName),
@@ -78,7 +89,7 @@ function extractComponentMetadata(sourceFile: ts.SourceFile) {
 }
 
 function collectTypeDeclarations(sourceFile: ts.SourceFile) {
-  const declarations = new Map<string, ts.InterfaceDeclaration | ts.TypeAliasDeclaration | ts.ClassDeclaration>()
+  const declarations = new Map<string, TypeDeclaration>()
 
   sourceFile.forEachChild((node) => {
     if (
@@ -101,7 +112,8 @@ function collectTypeDeclarations(sourceFile: ts.SourceFile) {
 
 function createComponentMetadata(
   defineComponentCall: ts.CallExpression,
-  typeDeclarations: Map<string, ts.InterfaceDeclaration | ts.TypeAliasDeclaration | ts.ClassDeclaration>,
+  typeDeclarations: Map<string, TypeDeclaration>,
+  sourceFile: ts.SourceFile,
 ): ComponentMetadata | undefined {
   const componentTypeName = getDefineComponentTypeName(defineComponentCall)
   if (!componentTypeName) return undefined
@@ -114,8 +126,14 @@ function createComponentMetadata(
 
   return {
     componentName: componentTypeName,
+    documentation: getJsDocText(typeDeclaration, sourceFile),
     props: propNames.map((propName) =>
-      createComponentPropInfo(propName, typeDeclaration, typeDeclarations),
+      createComponentPropInfo(
+        propName,
+        typeDeclaration,
+        typeDeclarations,
+        sourceFile,
+      ),
     ),
   }
 }
@@ -158,39 +176,40 @@ function getDefineComponentPropNames(node: ts.CallExpression) {
 
 function createComponentPropInfo(
   propName: string,
-  typeDeclaration: ts.InterfaceDeclaration | ts.TypeAliasDeclaration | ts.ClassDeclaration,
-  typeDeclarations: Map<string, ts.InterfaceDeclaration | ts.TypeAliasDeclaration | ts.ClassDeclaration>,
+  typeDeclaration: TypeDeclaration,
+  typeDeclarations: Map<string, TypeDeclaration>,
+  sourceFile: ts.SourceFile,
 ): ComponentPropInfo {
-  const typeNode = findPropTypeNode(typeDeclaration, propName)
+  const propDeclaration = findPropDeclaration(typeDeclaration, propName)
+  const typeNode = getPropTypeNode(propDeclaration)
   const typeInfo = analyzeTypeNode(typeNode, typeDeclarations, new Set())
 
   return {
     propName,
     attributeName: toKebabCase(propName),
+    documentation: propDeclaration
+      ? getJsDocText(propDeclaration, sourceFile)
+      : undefined,
     valueKind: typeInfo.valueKind,
     literalValues: typeInfo.literalValues,
   }
 }
 
-function findPropTypeNode(
-  typeDeclaration: ts.InterfaceDeclaration | ts.TypeAliasDeclaration | ts.ClassDeclaration,
-  propName: string,
-): ts.TypeNode | undefined {
+function findPropDeclaration(typeDeclaration: TypeDeclaration, propName: string) {
   if (ts.isInterfaceDeclaration(typeDeclaration)) {
     for (const member of typeDeclaration.members) {
       if (!ts.isPropertySignature(member)) continue
-      if (!member.type) continue
       if (!isNamedProperty(member.name, propName)) continue
-      return member.type
+      return member
     }
   }
 
   if (ts.isClassDeclaration(typeDeclaration)) {
     for (const member of typeDeclaration.members) {
       if (!ts.isPropertyDeclaration(member)) continue
-      if (!member.type || !member.name) continue
+      if (!member.name) continue
       if (!isNamedProperty(member.name, propName)) continue
-      return member.type
+      return member
     }
   }
 
@@ -199,13 +218,21 @@ function findPropTypeNode(
 
     for (const member of typeDeclaration.type.members) {
       if (!ts.isPropertySignature(member)) continue
-      if (!member.type) continue
       if (!isNamedProperty(member.name, propName)) continue
-      return member.type
+      return member
     }
   }
 
   return undefined
+}
+
+function getPropTypeNode(
+  propDeclaration:
+    | ts.PropertySignature
+    | ts.PropertyDeclaration
+    | undefined,
+): ts.TypeNode | undefined {
+  return propDeclaration?.type
 }
 
 type AnalyzedTypeInfo = {
@@ -215,7 +242,7 @@ type AnalyzedTypeInfo = {
 
 function analyzeTypeNode(
   typeNode: ts.TypeNode | undefined,
-  typeDeclarations: Map<string, ts.InterfaceDeclaration | ts.TypeAliasDeclaration | ts.ClassDeclaration>,
+  typeDeclarations: Map<string, TypeDeclaration>,
   seenTypeNames: Set<string>,
 ): AnalyzedTypeInfo {
   if (!typeNode) return { valueKind: 'unknown' }
@@ -228,7 +255,11 @@ function analyzeTypeNode(
     const typeName = getEntityNameText(typeNode.typeName)
 
     if (typeName === 'RefOrValue' || typeName === 'ComputedRef') {
-      return analyzeTypeNode(typeNode.typeArguments?.[0], typeDeclarations, seenTypeNames)
+      return analyzeTypeNode(
+        typeNode.typeArguments?.[0],
+        typeDeclarations,
+        seenTypeNames,
+      )
     }
 
     if (seenTypeNames.has(typeName)) return { valueKind: 'unknown' }
@@ -251,7 +282,11 @@ function analyzeTypeNode(
     )
 
     if (normalizedTypeNodes.length === 1) {
-      return analyzeTypeNode(normalizedTypeNodes[0], typeDeclarations, seenTypeNames)
+      return analyzeTypeNode(
+        normalizedTypeNodes[0],
+        typeDeclarations,
+        seenTypeNames,
+      )
     }
 
     const literalValues: string[] = []
@@ -344,13 +379,16 @@ function getStringLiteralValues(node: ts.ArrayLiteralExpression) {
 
 function isNamedProperty(name: ts.PropertyName, expectedName: string) {
   return (
-    ts.isIdentifier(name) || ts.isStringLiteral(name) || ts.isNoSubstitutionTemplateLiteral(name)
+    ts.isIdentifier(name) ||
+    ts.isStringLiteral(name) ||
+    ts.isNoSubstitutionTemplateLiteral(name)
   ) && name.text === expectedName
 }
 
 function hasExportModifier(node: ts.Node) {
   return ts.canHaveModifiers(node) && !!ts.getModifiers(node)?.some(
-    (modifier: ts.ModifierLike) => modifier.kind === ts.SyntaxKind.ExportKeyword,
+    (modifier: ts.ModifierLike) =>
+      modifier.kind === ts.SyntaxKind.ExportKeyword,
   )
 }
 
@@ -358,6 +396,24 @@ function getEntityNameText(name: ts.EntityName): string {
   if (ts.isIdentifier(name)) return name.text
   return name.right.text
 }
+
+function getJsDocText(node: ts.Node, sourceFile: ts.SourceFile) {
+  const leadingText = sourceFile.text.slice(node.getFullStart(), node.getStart())
+  const matches = leadingText.match(/\/\*\*([\s\S]*?)\*\//g)
+  if (!matches || matches.length === 0) return undefined
+
+  const lastComment = matches[matches.length - 1]
+  const normalized = lastComment
+    .replace(/^\/\*\*/, '')
+    .replace(/\*\/$/, '')
+    .split(/\r?\n/)
+    .map((line) => line.replace(/^\s*\*\s?/, '').trimEnd())
+    .join('\n')
+    .trim()
+
+  return normalized || undefined
+}
+
 function toKebabCase(value: string) {
   return value.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
 }
@@ -365,6 +421,3 @@ function toKebabCase(value: string) {
 function normalizeComponentName(value: string) {
   return value.replace(/[-_\s]+/g, '').toLowerCase()
 }
-
-
-

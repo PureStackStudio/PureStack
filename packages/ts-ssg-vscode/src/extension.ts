@@ -5,6 +5,7 @@ import { resolveComponentTarget } from './componentResolver'
 
 const COMPONENT_TAG_PATTERN = /[A-Za-z][A-Za-z0-9-]*/
 const COMPONENT_NAME_PATTERN = /^[A-Za-z][A-Za-z0-9-]*$/
+const ATTRIBUTE_NAME_PATTERN = /[@.:]?[A-Za-z][A-Za-z0-9:-]*/
 
 const SUPPORTED_SELECTORS: vscode.DocumentSelector = [
   { language: 'markdown', scheme: 'file' },
@@ -26,6 +27,10 @@ export function activate(context: vscode.ExtensionContext) {
       '"',
       "'",
       '=',
+    ),
+    vscode.languages.registerHoverProvider(
+      SUPPORTED_SELECTORS,
+      new ComponentHoverProvider(),
     ),
   )
 }
@@ -61,17 +66,16 @@ class ComponentCompletionProvider implements vscode.CompletionProvider {
     const tagContext = getComponentTagContextAtPosition(document, position)
     if (!tagContext) return undefined
 
-    const workspaceRoot = resolveWorkspaceRoot(document.uri.fsPath)
-    if (!workspaceRoot) return undefined
-
-    const target = resolveComponentTarget(workspaceRoot, tagContext.componentName)
-    if (!target) return undefined
-
-    const metadata = getComponentMetadata(target.filePath, tagContext.componentName)
+    const metadata = resolveComponentMetadataForTag(
+      document,
+      tagContext.componentName,
+    )
     if (!metadata) return undefined
 
     if (tagContext.activeAttributeName) {
-      const activeAttributeName = normalizeAttributeName(tagContext.activeAttributeName)
+      const activeAttributeName = normalizeAttributeName(
+        tagContext.activeAttributeName,
+      )
       const prop = metadata.props.find(
         (item) => normalizeAttributeName(item.attributeName) === activeAttributeName,
       )
@@ -84,6 +88,7 @@ class ComponentCompletionProvider implements vscode.CompletionProvider {
         )
         item.insertText = value
         item.detail = `${metadata.componentName}.${prop.propName}`
+        item.documentation = prop.documentation
         return item
       })
     }
@@ -93,7 +98,10 @@ class ComponentCompletionProvider implements vscode.CompletionProvider {
     )
 
     return metadata.props
-      .filter((prop) => !existingAttributeNames.has(normalizeAttributeName(prop.attributeName)))
+      .filter(
+        (prop) =>
+          !existingAttributeNames.has(normalizeAttributeName(prop.attributeName)),
+      )
       .map((prop) => {
         const item = new vscode.CompletionItem(
           prop.attributeName,
@@ -101,9 +109,53 @@ class ComponentCompletionProvider implements vscode.CompletionProvider {
         )
         item.insertText = `${prop.attributeName}=""`
         item.detail = `${metadata.componentName}.${prop.propName}`
+        item.documentation = prop.documentation
         return item
       })
   }
+}
+
+class ComponentHoverProvider implements vscode.HoverProvider {
+  provideHover(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+  ): vscode.Hover | undefined {
+    const tagContext = getComponentTagContextAtPosition(document, position)
+    if (!tagContext) return undefined
+
+    const metadata = resolveComponentMetadataForTag(document, tagContext.componentName)
+    if (!metadata) return undefined
+
+    const componentName = getComponentNameAtPosition(document, position)
+    if (componentName && normalizeComponentName(componentName) === normalizeComponentName(tagContext.componentName)) {
+      if (!metadata.documentation) return undefined
+      return new vscode.Hover(metadata.documentation)
+    }
+
+    const attributeName = getAttributeNameAtPosition(document, position)
+    if (!attributeName) return undefined
+
+    const normalizedAttributeName = normalizeAttributeName(stripAttributePrefix(attributeName))
+    const prop = metadata.props.find(
+      (item) => normalizeAttributeName(item.attributeName) === normalizedAttributeName,
+    )
+    if (!prop?.documentation) return undefined
+
+    return new vscode.Hover(prop.documentation)
+  }
+}
+
+function resolveComponentMetadataForTag(
+  document: vscode.TextDocument,
+  componentName: string,
+) {
+  const workspaceRoot = resolveWorkspaceRoot(document.uri.fsPath)
+  if (!workspaceRoot) return undefined
+
+  const target = resolveComponentTarget(workspaceRoot, componentName)
+  if (!target) return undefined
+
+  return getComponentMetadata(target.filePath, componentName)
 }
 
 function getComponentNameAtPosition(
@@ -118,6 +170,22 @@ function getComponentNameAtPosition(
   if (!isSupportedComponentTagRange(document, position, range)) return undefined
 
   return word
+}
+
+function getAttributeNameAtPosition(
+  document: vscode.TextDocument,
+  position: vscode.Position,
+): string | undefined {
+  const range = document.getWordRangeAtPosition(position, ATTRIBUTE_NAME_PATTERN)
+  if (!range) return undefined
+
+  const tagContext = getComponentTagContextAtPosition(document, position)
+  if (!tagContext) return undefined
+
+  const value = document.getText(range)
+  if (!value) return undefined
+
+  return value
 }
 
 type ComponentTagContext = {
@@ -200,6 +268,10 @@ function stripAttributePrefix(value: string) {
 }
 
 function normalizeAttributeName(value: string) {
+  return value.replace(/[-_\s]+/g, '').toLowerCase()
+}
+
+function normalizeComponentName(value: string) {
   return value.replace(/[-_\s]+/g, '').toLowerCase()
 }
 

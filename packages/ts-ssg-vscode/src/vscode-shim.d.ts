@@ -32,6 +32,11 @@ declare module 'vscode' {
     readonly range: Range
   }
 
+  export class Hover {
+    constructor(contents: string | string[])
+    readonly contents: string | string[]
+  }
+
   export interface TextLine {
     readonly text: string
   }
@@ -67,11 +72,20 @@ declare module 'vscode' {
     ): ProviderResult<CompletionItem[]>
   }
 
+  export interface HoverProvider {
+    provideHover(
+      document: TextDocument,
+      position: Position,
+      token: CancellationToken,
+    ): ProviderResult<Hover>
+  }
+
   export interface CompletionContext {}
 
   export class CompletionItem {
     constructor(label: string, kind?: CompletionItemKind)
     detail?: string
+    documentation?: string
     insertText?: string
     label: string
     kind?: CompletionItemKind
@@ -105,6 +119,11 @@ declare module 'vscode' {
       selector: DocumentSelector,
       provider: CompletionProvider,
       ...triggerCharacters: string[]
+    ): Disposable
+
+    function registerHoverProvider(
+      selector: DocumentSelector,
+      provider: HoverProvider,
     ): Disposable
   }
 
