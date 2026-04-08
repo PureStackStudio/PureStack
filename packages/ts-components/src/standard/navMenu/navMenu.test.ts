@@ -1,5 +1,6 @@
 import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '@purestack/ts-render'
+import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
 import { createIconComponents } from '../icon/icon'
@@ -9,7 +10,7 @@ describe('NavMenu rendering', () => {
   it('evaluates r-else branches for leaf items', () => {
     const cleanup = ensureDomGlobals()
     const components = {
-      ...createIconComponents(),
+      ...createIconComponents(getSvgIcon),
       ...createNavigationComponents(),
     }
     const html = renderApp(

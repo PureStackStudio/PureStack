@@ -1,5 +1,6 @@
 import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '@purestack/ts-render'
+import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
 import { createIconComponents } from '../icon/icon'
@@ -9,7 +10,7 @@ describe('Button rendering', () => {
   it('renders default label button with default classes and type', () => {
     const cleanup = ensureDomGlobals()
     const components = {
-      ...createIconComponents(),
+      ...createIconComponents(getSvgIcon),
       ...createButtonComponents(),
     }
     const html = renderApp(`<Btn>Save</Btn>`, {
@@ -29,7 +30,7 @@ describe('Button rendering', () => {
   it('renders icon at start and end based on iconPosition', () => {
     const cleanup = ensureDomGlobals()
     const components = {
-      ...createIconComponents(),
+      ...createIconComponents(getSvgIcon),
       ...createButtonComponents(),
     }
     const startHtml = renderApp(`<Btn icon="iconoir:code">Code</Btn>`, {
@@ -58,7 +59,7 @@ describe('Button rendering', () => {
   it('renders icon-only button with aria label and icon-only class', () => {
     const cleanup = ensureDomGlobals()
     const components = {
-      ...createIconComponents(),
+      ...createIconComponents(getSvgIcon),
       ...createButtonComponents(),
     }
     const html = renderApp(
@@ -79,7 +80,7 @@ describe('Button rendering', () => {
   it('applies tone, size, type, disabled, and custom class', () => {
     const cleanup = ensureDomGlobals()
     const components = {
-      ...createIconComponents(),
+      ...createIconComponents(getSvgIcon),
       ...createButtonComponents(),
     }
     const html = renderApp(
@@ -101,7 +102,7 @@ describe('Button rendering', () => {
   it('supports warning and danger tones', () => {
     const cleanup = ensureDomGlobals()
     const components = {
-      ...createIconComponents(),
+      ...createIconComponents(getSvgIcon),
       ...createButtonComponents(),
     }
     const warningHtml = renderApp(`<Btn tone="warning">Warn</Btn>`, {
@@ -121,7 +122,7 @@ describe('Button rendering', () => {
   it('renders empty label span when button has no slot and no icon', () => {
     const cleanup = ensureDomGlobals()
     const components = {
-      ...createIconComponents(),
+      ...createIconComponents(getSvgIcon),
       ...createButtonComponents(),
     }
     const html = renderApp(`<Btn />`, {

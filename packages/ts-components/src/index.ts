@@ -47,7 +47,7 @@ export type { Grid } from './standard/grid/grid'
 export { createGridComponents } from './standard/grid/grid'
 export type { HeroAction, HeroMedia } from './standard/hero/hero'
 export { createHeroComponents } from './standard/hero/hero'
-export type { Icon } from './standard/icon/icon'
+export type { GetSvgIcon, Icon } from './standard/icon/icon'
 export { createIconComponents } from './standard/icon/icon'
 export type {
   LoginFooter,

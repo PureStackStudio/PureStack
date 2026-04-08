@@ -1,4 +1,3 @@
-import { getSvgIcon } from '@purestack/ts-svg-icons'
 import {
   type ComputedRef,
   computed,
@@ -9,6 +8,8 @@ import {
 } from 'regor'
 
 import { registerIconStyles } from './iconStyle'
+
+export type GetSvgIcon = (name: string) => string
 
 export interface Icon {
   name?: RefOrValue<string>
@@ -41,21 +42,21 @@ const iconTemplate = html`
   r-html="svg"
 ></span>`
 
-function createIconComponent() {
+function createIconComponent(getSvgIcon: GetSvgIcon) {
   return defineComponent<Icon>(iconTemplate, {
     props: ['name', 'ariaLabel', 'class', 'wrap'],
-    context: (head) => resolveIcon(head.props),
+    context: (head) => resolveIcon(head.props, getSvgIcon),
   })
 }
 
-export function createIconComponents() {
+export function createIconComponents(getSvgIcon: GetSvgIcon) {
   registerIconStyles()
   return {
-    icon: createIconComponent(),
+    icon: createIconComponent(getSvgIcon),
   }
 }
 
-function resolveIcon(props: Icon): Icon {
+function resolveIcon(props: Icon, getSvgIcon: GetSvgIcon): Icon {
   const svg = computed(() => {
     const name = unref(props.name)
     return name ? getSvgIcon(name) : ''

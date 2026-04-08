@@ -1,5 +1,6 @@
 import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '@purestack/ts-render'
+import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
 import { createIconComponents } from './icon'
@@ -7,7 +8,7 @@ import { createIconComponents } from './icon'
 describe('Icon rendering', () => {
   it('renders svg content by icon name', () => {
     const cleanup = ensureDomGlobals()
-    const components = createIconComponents()
+    const components = createIconComponents(getSvgIcon)
     const html = renderApp(`<Icon name="iconoir:code" />`, {
       components,
       context: createTestContext(),
@@ -22,7 +23,7 @@ describe('Icon rendering', () => {
 
   it('applies accessible label', () => {
     const cleanup = ensureDomGlobals()
-    const components = createIconComponents()
+    const components = createIconComponents(getSvgIcon)
     const html = renderApp(`<Icon name="iconoir:pin" aria-label="Pinned" />`, {
       components,
       context: createTestContext(),
@@ -36,7 +37,7 @@ describe('Icon rendering', () => {
 
   it('renders nothing when icon name is missing', () => {
     const cleanup = ensureDomGlobals()
-    const components = createIconComponents()
+    const components = createIconComponents(getSvgIcon)
     const html = renderApp(`<Icon />`, {
       components,
       context: createTestContext(),

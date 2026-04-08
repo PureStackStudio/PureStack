@@ -1,5 +1,6 @@
 import { createDom, ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '@purestack/ts-render'
+import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { createApp, ref } from 'regor'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
@@ -9,7 +10,10 @@ import { createTabsComponents } from './tabs'
 describe('Tabs rendering', () => {
   it('renders slotted tab content and active tab state', () => {
     const cleanup = ensureDomGlobals()
-    const components = { ...createIconComponents(), ...createTabsComponents() }
+    const components = {
+      ...createIconComponents(getSvgIcon),
+      ...createTabsComponents(),
+    }
     const html = renderApp(
       `<Tabs group="quickstart" selected-tab="usage">
         <TabPane id="install" label="Install">Run npm install</TabPane>
@@ -37,7 +41,10 @@ describe('Tabs rendering', () => {
 
   it('inherits tab group from parent tabs and marks disabled panes', () => {
     const cleanup = ensureDomGlobals()
-    const components = { ...createIconComponents(), ...createTabsComponents() }
+    const components = {
+      ...createIconComponents(getSvgIcon),
+      ...createTabsComponents(),
+    }
     const html = renderApp(
       `<Tabs group="sdk-tabs">
         <TabPane id="blocked" label="Blocked" disabled="true">blocked</TabPane>
@@ -59,7 +66,10 @@ describe('Tabs rendering', () => {
 
   it('renders optional tab icons', () => {
     const cleanup = ensureDomGlobals()
-    const components = { ...createIconComponents(), ...createTabsComponents() }
+    const components = {
+      ...createIconComponents(getSvgIcon),
+      ...createTabsComponents(),
+    }
     const html = renderApp(
       `<Tabs id="icon-tabs">
         <TabPane id="install" label="Install" icon="iconoir:code">Run npm install</TabPane>
@@ -83,7 +93,10 @@ describe('Tabs rendering', () => {
     const cleanupDom = createDom(
       '<!DOCTYPE html><html><body><div id="app"></div></body></html>',
     )
-    const components = { ...createIconComponents(), ...createTabsComponents() }
+    const components = {
+      ...createIconComponents(getSvgIcon),
+      ...createTabsComponents(),
+    }
     const selectedTab = ref('usage')
     const app = createApp(
       {

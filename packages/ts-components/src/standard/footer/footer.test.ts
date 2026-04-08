@@ -1,5 +1,6 @@
 import { createDom } from '@purestack/ts-minidom'
 import { renderApp } from '@purestack/ts-render'
+import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
 import { createButtonComponents } from '../btn/btn'
@@ -20,7 +21,7 @@ describe('SiteFooter rendering', () => {
     const html = withDom('<html><body></body></html>', () => {
       const components = {
         ...createButtonComponents(),
-        ...createIconComponents(),
+        ...createIconComponents(getSvgIcon),
         ...createFooterComponents(),
       }
       return renderApp(
@@ -74,7 +75,7 @@ describe('SiteFooter rendering', () => {
     const html = withDom('<html><body></body></html>', () => {
       const components = {
         ...createButtonComponents(),
-        ...createIconComponents(),
+        ...createIconComponents(getSvgIcon),
         ...createFooterComponents(),
       }
       return renderApp(

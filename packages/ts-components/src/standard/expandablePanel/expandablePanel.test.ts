@@ -1,5 +1,6 @@
 import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '@purestack/ts-render'
+import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { describe, expect, it } from 'vitest'
 
 import { createTestContext } from '../../test/testContext'
@@ -10,7 +11,7 @@ describe('ExpandablePanel rendering', () => {
   it('renders an accent tone open panel with summary and body content', () => {
     const cleanup = ensureDomGlobals()
     const components = {
-      ...createIconComponents(),
+      ...createIconComponents(getSvgIcon),
       ...createExpandablePanelComponents(),
     }
     const html = renderApp(
@@ -46,7 +47,7 @@ describe('ExpandablePanel rendering', () => {
   it('renders a closed neutral panel when optional content is omitted', () => {
     const cleanup = ensureDomGlobals()
     const components = {
-      ...createIconComponents(),
+      ...createIconComponents(getSvgIcon),
       ...createExpandablePanelComponents(),
     }
     const html = renderApp('<ExpandablePanel />', {

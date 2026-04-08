@@ -30,6 +30,7 @@ import {
   registerSemanticToneUtilityStyles,
   styleBuilder,
 } from '@purestack/ts-style'
+import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { createScriptComponents } from '../../../ts-components/src/standard/pageScript/pageScript'
 import { registerDocLayoutStyles } from '../templates/docLayoutStyles'
 import { registerMarkdownStyles } from '../templates/markdownStyles'
@@ -58,7 +59,7 @@ export function initBuiltinComponents(
   componentRegistry.registerMany(createFormComponents())
   componentRegistry.registerMany(createGridComponents())
   componentRegistry.registerMany(createHeroComponents())
-  componentRegistry.registerMany(createIconComponents())
+  componentRegistry.registerMany(createIconComponents(getSvgIcon))
   componentRegistry.registerMany(createLoginComponents())
   componentRegistry.registerMany(createLogoComponents())
   componentRegistry.registerMany(createModalComponents())
