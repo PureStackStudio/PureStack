@@ -17,31 +17,21 @@ export type FormInputFieldType =
   | 'week'
 
 export class FormInputField {
-  declare readonly id: string
-  declare readonly label?: RefOrValue<string>
+  readonly id: string
+  readonly label?: RefOrValue<string>
   declare readonly model: Ref<string | number>
-  declare readonly type?: RefOrValue<FormInputFieldType>
-  declare readonly name?: RefOrValue<string>
-  declare readonly autocomplete?: RefOrValue<string>
-  declare readonly min?: RefOrValue<number | string>
-  declare readonly step?: RefOrValue<number | string>
-  declare readonly placeholder?: RefOrValue<string>
+  readonly type?: RefOrValue<FormInputFieldType>
+  readonly name?: RefOrValue<string>
+  readonly autocomplete?: RefOrValue<string>
+  readonly min?: RefOrValue<number | string>
+  readonly step?: RefOrValue<number | string>
+  readonly placeholder?: RefOrValue<string>
 
-  constructor(props: {
-    id?: string
-    label?: RefOrValue<string>
-    model: Ref<string | number>
-    type?: RefOrValue<FormInputFieldType>
-    name?: RefOrValue<string>
-    autocomplete?: RefOrValue<string>
-    min?: RefOrValue<number | string>
-    step?: RefOrValue<number | string>
-    placeholder?: RefOrValue<string>
-  }) {
+  constructor(props: FormInputField) {
     Object.assign(this, {
       ...props,
-      id: resolveInputId(unref(props.id)),
     })
+    this.id = resolveInputId(unref(props.id))
   }
 
   get isNumberField() {
