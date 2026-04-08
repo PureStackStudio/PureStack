@@ -9,14 +9,17 @@ import {
 
 import { registerGridStyles } from './gridStyle'
 
+export type GridAlignItems = 'start' | 'center' | 'end'
+export type GridJustifyItems = 'start' | 'center' | 'end'
+
 export interface Grid {
   columns?: RefOrValue<number | string>
   columnsSm?: RefOrValue<number | string>
   columnsMd?: RefOrValue<number | string>
   columnsLg?: RefOrValue<number | string>
   columnsXl?: RefOrValue<number | string>
-  alignItems?: RefOrValue<string>
-  justifyItems?: RefOrValue<string>
+  alignItems?: RefOrValue<GridAlignItems>
+  justifyItems?: RefOrValue<GridJustifyItems>
   dense?: RefOrValue<boolean | string>
   className?: ComputedRef<string>
   gridStyle?: ComputedRef<Record<string, string>>
@@ -138,7 +141,7 @@ function clampColumns(value: number) {
   return value
 }
 
-function resolveAlignClass(value?: RefOrValue<string>) {
+function resolveAlignClass(value?: RefOrValue<GridAlignItems>) {
   if (!value) return ''
   const normalized = unref(value).toLowerCase()
   if (
@@ -151,7 +154,7 @@ function resolveAlignClass(value?: RefOrValue<string>) {
   return ''
 }
 
-function resolveJustifyClass(value?: RefOrValue<string>) {
+function resolveJustifyClass(value?: RefOrValue<GridJustifyItems>) {
   if (!value) return ''
   const normalized = unref(value).toLowerCase()
   if (
@@ -166,5 +169,8 @@ function resolveJustifyClass(value?: RefOrValue<string>) {
 
 function resolveDenseClass(value?: RefOrValue<boolean | string>) {
   if (!value) return ''
-  return unref(value) ? 'grid--dense' : ''
+  const normalized = unref(value)
+  if (normalized === true || normalized === 'true') return 'grid--dense'
+
+  return ''
 }
