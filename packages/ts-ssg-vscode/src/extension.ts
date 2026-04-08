@@ -48,10 +48,16 @@ class ComponentDefinitionProvider implements vscode.DefinitionProvider {
     const workspaceRoot = resolveWorkspaceRoot(document.uri.fsPath)
     if (!workspaceRoot) return undefined
 
-    const target = resolveComponentTarget(workspaceRoot, tagContext.componentName)
+    const target = resolveComponentTarget(
+      workspaceRoot,
+      tagContext.componentName,
+    )
     if (!target) return undefined
 
-    const metadata = getComponentMetadata(target.filePath, tagContext.componentName)
+    const metadata = getComponentMetadata(
+      target.filePath,
+      tagContext.componentName,
+    )
     if (!metadata) {
       return new vscode.Location(
         vscode.Uri.file(target.filePath),
@@ -65,7 +71,9 @@ class ComponentDefinitionProvider implements vscode.DefinitionProvider {
         stripAttributePrefix(attributeName),
       )
       const prop = metadata.props.find(
-        (item) => normalizeAttributeName(item.attributeName) === normalizedAttributeName,
+        (item) =>
+          normalizeAttributeName(item.attributeName) ===
+          normalizedAttributeName,
       )
       if (prop) {
         return new vscode.Location(
@@ -104,9 +112,11 @@ class ComponentCompletionProvider implements vscode.CompletionProvider {
         tagContext.activeAttributeName,
       )
       const prop = metadata.props.find(
-        (item) => normalizeAttributeName(item.attributeName) === activeAttributeName,
+        (item) =>
+          normalizeAttributeName(item.attributeName) === activeAttributeName,
       )
-      if (!prop?.literalValues || prop.literalValues.length === 0) return undefined
+      if (!prop?.literalValues || prop.literalValues.length === 0)
+        return undefined
 
       return prop.literalValues.map((value) => {
         const item = new vscode.CompletionItem(
@@ -127,7 +137,9 @@ class ComponentCompletionProvider implements vscode.CompletionProvider {
     return metadata.props
       .filter(
         (prop) =>
-          !existingAttributeNames.has(normalizeAttributeName(prop.attributeName)),
+          !existingAttributeNames.has(
+            normalizeAttributeName(prop.attributeName),
+          ),
       )
       .map((prop) => {
         const item = new vscode.CompletionItem(
@@ -150,7 +162,10 @@ class ComponentHoverProvider implements vscode.HoverProvider {
     const tagContext = getComponentTagContextAtPosition(document, position)
     if (!tagContext) return undefined
 
-    const metadata = resolveComponentMetadataForTag(document, tagContext.componentName)
+    const metadata = resolveComponentMetadataForTag(
+      document,
+      tagContext.componentName,
+    )
     if (!metadata) return undefined
 
     const componentName = getComponentNameAtPosition(document, position)
@@ -170,7 +185,8 @@ class ComponentHoverProvider implements vscode.HoverProvider {
       stripAttributePrefix(attributeName),
     )
     const prop = metadata.props.find(
-      (item) => normalizeAttributeName(item.attributeName) === normalizedAttributeName,
+      (item) =>
+        normalizeAttributeName(item.attributeName) === normalizedAttributeName,
     )
     if (!prop?.documentation) return undefined
 
@@ -209,7 +225,10 @@ function getAttributeNameAtPosition(
   document: vscode.TextDocument,
   position: vscode.Position,
 ): string | undefined {
-  const range = document.getWordRangeAtPosition(position, ATTRIBUTE_NAME_PATTERN)
+  const range = document.getWordRangeAtPosition(
+    position,
+    ATTRIBUTE_NAME_PATTERN,
+  )
   if (!range) return undefined
 
   const tagContext = getComponentTagContextAtPosition(document, position)
@@ -217,7 +236,10 @@ function getAttributeNameAtPosition(
 
   const value = document.getText(range)
   if (!value) return undefined
-  if (normalizeComponentName(value) === normalizeComponentName(tagContext.componentName)) {
+  if (
+    normalizeComponentName(value) ===
+    normalizeComponentName(tagContext.componentName)
+  ) {
     return undefined
   }
 
@@ -256,7 +278,10 @@ function getComponentTagContextAtPosition(
   if (cursorRelativeOffset <= tagNameMatch[0].length) return undefined
 
   const attributeNames = getAttributeNames(tagText)
-  const activeAttributeName = getActiveAttributeName(tagText, cursorRelativeOffset)
+  const activeAttributeName = getActiveAttributeName(
+    tagText,
+    cursorRelativeOffset,
+  )
 
   return {
     activeAttributeName,
@@ -277,7 +302,8 @@ function findTagStart(documentText: string, offset: number) {
 
 function getAttributeNames(tagText: string) {
   const attributeNames = new Set<string>()
-  const pattern = /([:@.]?[A-Za-z][A-Za-z0-9:-]*)\s*=\s*(?:"[^"]*"|'[^']*'|\{[^}]*\}|[^\s>]+)/g
+  const pattern =
+    /([:@.]?[A-Za-z][A-Za-z0-9:-]*)\s*=\s*(?:"[^"]*"|'[^']*'|\{[^}]*\}|[^\s>]+)/g
 
   for (;;) {
     const match = pattern.exec(tagText)
@@ -289,9 +315,10 @@ function getAttributeNames(tagText: string) {
 
 function getActiveAttributeName(tagText: string, cursorRelativeOffset: number) {
   const textBeforeCursor = tagText.slice(0, cursorRelativeOffset)
-  const quotedValueMatch = /([:@.]?[A-Za-z][A-Za-z0-9:-]*)\s*=\s*(?:"[^"]*$|'[^']*$)/.exec(
-    textBeforeCursor,
-  )
+  const quotedValueMatch =
+    /([:@.]?[A-Za-z][A-Za-z0-9:-]*)\s*=\s*(?:"[^"]*$|'[^']*$)/.exec(
+      textBeforeCursor,
+    )
   if (quotedValueMatch) return stripAttributePrefix(quotedValueMatch[1])
 
   return undefined

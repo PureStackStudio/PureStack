@@ -143,7 +143,8 @@ function createComponentMetadata(
 
 function isDefineComponentCall(node: ts.CallExpression) {
   return (
-    ts.isIdentifier(node.expression) && node.expression.text === 'defineComponent'
+    ts.isIdentifier(node.expression) &&
+    node.expression.text === 'defineComponent'
   )
 }
 
@@ -192,7 +193,9 @@ function createComponentPropInfo(
   return {
     propName,
     attributeName: toKebabCase(propName),
-    declarationLine: propDeclaration ? getLineNumber(sourceFile, propDeclaration) : 0,
+    declarationLine: propDeclaration
+      ? getLineNumber(sourceFile, propDeclaration)
+      : 0,
     documentation: propDeclaration
       ? getJsDocText(propDeclaration, sourceFile)
       : undefined,
@@ -201,7 +204,10 @@ function createComponentPropInfo(
   }
 }
 
-function findPropDeclaration(typeDeclaration: TypeDeclaration, propName: string) {
+function findPropDeclaration(
+  typeDeclaration: TypeDeclaration,
+  propName: string,
+) {
   if (ts.isInterfaceDeclaration(typeDeclaration)) {
     for (const member of typeDeclaration.members) {
       if (!ts.isPropertySignature(member)) continue
@@ -274,7 +280,11 @@ function analyzeTypeNode(
 
     const nextSeenTypeNames = new Set(seenTypeNames)
     nextSeenTypeNames.add(typeName)
-    return analyzeTypeNode(declaration.type, typeDeclarations, nextSeenTypeNames)
+    return analyzeTypeNode(
+      declaration.type,
+      typeDeclarations,
+      nextSeenTypeNames,
+    )
   }
 
   if (ts.isUnionTypeNode(typeNode)) {
@@ -375,23 +385,27 @@ function analyzeTypeNode(
 }
 
 function getStringLiteralValues(node: ts.ArrayLiteralExpression) {
-  return node.elements
-    .filter(ts.isStringLiteral)
-    .map((element) => element.text)
+  return node.elements.filter(ts.isStringLiteral).map((element) => element.text)
 }
 
 function isNamedProperty(name: ts.PropertyName, expectedName: string) {
   return (
-    ts.isIdentifier(name) ||
-    ts.isStringLiteral(name) ||
-    ts.isNoSubstitutionTemplateLiteral(name)
-  ) && name.text === expectedName
+    (ts.isIdentifier(name) ||
+      ts.isStringLiteral(name) ||
+      ts.isNoSubstitutionTemplateLiteral(name)) &&
+    name.text === expectedName
+  )
 }
 
 function hasExportModifier(node: ts.Node) {
-  return ts.canHaveModifiers(node) && !!ts.getModifiers(node)?.some(
-    (modifier: ts.ModifierLike) =>
-      modifier.kind === ts.SyntaxKind.ExportKeyword,
+  return (
+    ts.canHaveModifiers(node) &&
+    !!ts
+      .getModifiers(node)
+      ?.some(
+        (modifier: ts.ModifierLike) =>
+          modifier.kind === ts.SyntaxKind.ExportKeyword,
+      )
   )
 }
 
@@ -401,7 +415,10 @@ function getEntityNameText(name: ts.EntityName): string {
 }
 
 function getJsDocText(node: ts.Node, sourceFile: ts.SourceFile) {
-  const leadingText = sourceFile.text.slice(node.getFullStart(), node.getStart())
+  const leadingText = sourceFile.text.slice(
+    node.getFullStart(),
+    node.getStart(),
+  )
   const matches = leadingText.match(/\/\*\*([\s\S]*?)\*\//g)
   if (!matches || matches.length === 0) return undefined
 
@@ -418,7 +435,8 @@ function getJsDocText(node: ts.Node, sourceFile: ts.SourceFile) {
 }
 
 function getLineNumber(sourceFile: ts.SourceFile, node: ts.Node) {
-  return sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile)).line
+  return sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile))
+    .line
 }
 
 function toKebabCase(value: string) {
