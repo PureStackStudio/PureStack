@@ -66,7 +66,7 @@ class ComponentDefinitionProvider implements vscode.DefinitionProvider {
     }
 
     const attributeName = getAttributeNameAtPosition(document, position)
-    if (attributeName) {
+    if (attributeName && !tagContext.isClosingTag) {
       const normalizedAttributeName = normalizeAttributeName(
         stripAttributePrefix(attributeName),
       )
@@ -99,7 +99,7 @@ class ComponentCompletionProvider implements vscode.CompletionProvider {
     position: vscode.Position,
   ): vscode.CompletionItem[] | undefined {
     const tagContext = getComponentTagContextAtPosition(document, position)
-    if (!tagContext) return undefined
+    if (!tagContext || tagContext.isClosingTag) return undefined
 
     const metadata = resolveComponentMetadataForTag(
       document,
@@ -125,7 +125,10 @@ class ComponentCompletionProvider implements vscode.CompletionProvider {
         )
         item.insertText = value
         item.detail = `${metadata.componentName}.${prop.propName}`
-        item.documentation = prop.documentation
+        item.documentation = createDocumentationText(
+          prop.signature,
+          prop.documentation,
+        )
         return item
       })
     }
@@ -148,7 +151,10 @@ class ComponentCompletionProvider implements vscode.CompletionProvider {
         )
         item.insertText = `${prop.attributeName}=""`
         item.detail = `${metadata.componentName}.${prop.propName}`
-        item.documentation = prop.documentation
+        item.documentation = createDocumentationText(
+          prop.signature,
+          prop.documentation,
+        )
         return item
       })
   }
@@ -174,9 +180,12 @@ class ComponentHoverProvider implements vscode.HoverProvider {
       normalizeComponentName(componentName) ===
         normalizeComponentName(tagContext.componentName)
     ) {
-      if (!metadata.documentation) return undefined
-      return new vscode.Hover(metadata.documentation)
+      return new vscode.Hover(
+        createHoverContents(metadata.signature, metadata.documentation),
+      )
     }
+
+    if (tagContext.isClosingTag) return undefined
 
     const attributeName = getAttributeNameAtPosition(document, position)
     if (!attributeName) return undefined
@@ -188,9 +197,11 @@ class ComponentHoverProvider implements vscode.HoverProvider {
       (item) =>
         normalizeAttributeName(item.attributeName) === normalizedAttributeName,
     )
-    if (!prop?.documentation) return undefined
+    if (!prop) return undefined
 
-    return new vscode.Hover(prop.documentation)
+    return new vscode.Hover(
+      createHoverContents(prop.signature, prop.documentation),
+    )
   }
 }
 
@@ -232,7 +243,7 @@ function getAttributeNameAtPosition(
   if (!range) return undefined
 
   const tagContext = getComponentTagContextAtPosition(document, position)
-  if (!tagContext) return undefined
+  if (!tagContext || tagContext.isClosingTag) return undefined
 
   const value = document.getText(range)
   if (!value) return undefined
@@ -250,6 +261,7 @@ type ComponentTagContext = {
   activeAttributeName?: string
   attributeNames: Set<string>
   componentName: string
+  isClosingTag: boolean
 }
 
 function getComponentTagContextAtPosition(
@@ -268,24 +280,20 @@ function getComponentTagContextAtPosition(
   if (documentText.slice(tagStart, offset).includes('>')) return undefined
 
   const tagText = documentText.slice(tagStart, tagEnd + 1)
-  if (/^<\s*\//.test(tagText)) return undefined
-
-  const tagNameMatch = /^<\s*([A-Za-z][A-Za-z0-9-]*)/.exec(tagText)
+  const isClosingTag = /^<\s*\//.test(tagText)
+  const tagNameMatch = /^<\s*\/?\s*([A-Za-z][A-Za-z0-9-]*)/.exec(tagText)
   if (!tagNameMatch) return undefined
 
   const componentName = tagNameMatch[1]
   const cursorRelativeOffset = offset - tagStart
 
-  const attributeNames = getAttributeNames(tagText)
-  const activeAttributeName = getActiveAttributeName(
-    tagText,
-    cursorRelativeOffset,
-  )
-
   return {
-    activeAttributeName,
-    attributeNames,
+    activeAttributeName: isClosingTag
+      ? undefined
+      : getActiveAttributeName(tagText, cursorRelativeOffset),
+    attributeNames: isClosingTag ? new Set() : getAttributeNames(tagText),
     componentName,
+    isClosingTag,
   }
 }
 
@@ -335,6 +343,24 @@ function normalizeAttributeName(value: string) {
 
 function normalizeComponentName(value: string) {
   return value.replace(/[-_\s]+/g, '').toLowerCase()
+}
+
+function createDocumentationText(signature?: string, documentation?: string) {
+  const parts = createHoverContents(signature, documentation)
+  return parts.join('\n\n')
+}
+
+function createHoverContents(signature?: string, documentation?: string) {
+  const contents: string[] = []
+  if (signature) {
+    contents.push(`\`\`\`ts\n${signature}\n\`\`\``)
+  }
+
+  if (documentation) {
+    contents.push(documentation)
+  }
+
+  return contents.length > 0 ? contents : ['Component']
 }
 
 function isSupportedTemplateContext(
@@ -443,6 +469,3 @@ function resolveWorkspaceRoot(documentPath: string): string | undefined {
 
   return folders[0]?.uri.fsPath
 }
-
-
-

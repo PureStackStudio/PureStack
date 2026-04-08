@@ -6,6 +6,7 @@ export type ComponentPropInfo = {
   attributeName: string
   declarationLine: number
   documentation?: string
+  signature?: string
   valueKind: 'string' | 'boolean' | 'number' | 'union' | 'unknown'
   literalValues?: string[]
 }
@@ -14,6 +15,7 @@ export type ComponentMetadata = {
   componentName: string
   declarationLine: number
   documentation?: string
+  signature: string
   props: ComponentPropInfo[]
 }
 
@@ -21,6 +23,8 @@ type TypeDeclaration =
   | ts.InterfaceDeclaration
   | ts.TypeAliasDeclaration
   | ts.ClassDeclaration
+
+type PropDeclaration = ts.PropertySignature | ts.PropertyDeclaration
 
 type CachedComponentMetadata = {
   metadataByNormalizedName: Map<string, ComponentMetadata>
@@ -130,6 +134,7 @@ function createComponentMetadata(
     componentName: componentTypeName,
     declarationLine: getLineNumber(sourceFile, typeDeclaration),
     documentation: getJsDocText(typeDeclaration, sourceFile),
+    signature: getTypeDeclarationSignature(typeDeclaration, sourceFile),
     props: propNames.map((propName) =>
       createComponentPropInfo(
         propName,
@@ -199,6 +204,9 @@ function createComponentPropInfo(
     documentation: propDeclaration
       ? getJsDocText(propDeclaration, sourceFile)
       : undefined,
+    signature: propDeclaration
+      ? getPropDeclarationSignature(propDeclaration, sourceFile)
+      : undefined,
     valueKind: typeInfo.valueKind,
     literalValues: typeInfo.literalValues,
   }
@@ -238,9 +246,7 @@ function findPropDeclaration(
   return undefined
 }
 
-function getPropTypeNode(
-  propDeclaration: ts.PropertySignature | ts.PropertyDeclaration | undefined,
-): ts.TypeNode | undefined {
+function getPropTypeNode(propDeclaration: PropDeclaration | undefined): ts.TypeNode | undefined {
   return propDeclaration?.type
 }
 
@@ -304,10 +310,22 @@ function analyzeTypeNode(
 
     const literalValues: string[] = []
     let includesBoolean = false
+    let includesBroadString = false
+    let includesBroadNumber = false
 
     for (const member of normalizedTypeNodes) {
       if (member.kind === ts.SyntaxKind.BooleanKeyword) {
         includesBoolean = true
+        continue
+      }
+
+      if (member.kind === ts.SyntaxKind.StringKeyword) {
+        includesBroadString = true
+        continue
+      }
+
+      if (member.kind === ts.SyntaxKind.NumberKeyword) {
+        includesBroadNumber = true
         continue
       }
 
@@ -331,18 +349,30 @@ function analyzeTypeNode(
       return { valueKind: 'unknown' }
     }
 
-    if (literalValues.length > 0 && !includesBoolean) {
+    if (literalValues.length > 0) {
+      const completionValues = includesBoolean
+        ? [...literalValues, 'true', 'false']
+        : literalValues
+
       return {
         valueKind: 'union',
-        literalValues,
+        literalValues: Array.from(new Set(completionValues)),
       }
     }
 
-    if (literalValues.length === 0 && includesBoolean) {
+    if (includesBoolean) {
       return {
         valueKind: 'boolean',
         literalValues: ['true', 'false'],
       }
+    }
+
+    if (includesBroadString) {
+      return { valueKind: 'string' }
+    }
+
+    if (includesBroadNumber) {
+      return { valueKind: 'number' }
     }
 
     return { valueKind: 'unknown' }
@@ -386,6 +416,33 @@ function analyzeTypeNode(
 
 function getStringLiteralValues(node: ts.ArrayLiteralExpression) {
   return node.elements.filter(ts.isStringLiteral).map((element) => element.text)
+}
+
+function getTypeDeclarationSignature(
+  declaration: TypeDeclaration,
+  sourceFile: ts.SourceFile,
+) {
+  if (ts.isInterfaceDeclaration(declaration)) {
+    return `interface ${declaration.name.text}`
+  }
+
+  if (ts.isClassDeclaration(declaration)) {
+    return `class ${declaration.name?.text ?? declaration.getText(sourceFile)}`
+  }
+
+  return `type ${declaration.name.text} = ${declaration.type.getText(sourceFile)}`
+}
+
+function getPropDeclarationSignature(
+  declaration: PropDeclaration,
+  sourceFile: ts.SourceFile,
+) {
+  const name = declaration.name.getText(sourceFile)
+  const optional = declaration.questionToken ? '?' : ''
+  const typeText = declaration.type?.getText(sourceFile)
+
+  if (!typeText) return `${name}${optional}`
+  return `${name}${optional}: ${typeText}`
 }
 
 function isNamedProperty(name: ts.PropertyName, expectedName: string) {
@@ -446,4 +503,5 @@ function toKebabCase(value: string) {
 function normalizeComponentName(value: string) {
   return value.replace(/[-_\s]+/g, '').toLowerCase()
 }
+
 
