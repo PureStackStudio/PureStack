@@ -1,6 +1,8 @@
 import { defineComponent, html } from 'regor'
 import { registerPricingStyles } from './pricingStyle'
 
+export type PricingPlanVariant = 'featured' | 'primary'
+
 export interface PricingTable {
   eyebrow?: string
   title?: string
@@ -15,7 +17,7 @@ export interface PricingPlan {
   period?: string
   badge?: string
   note?: string
-  variant?: string
+  variant?: PricingPlanVariant
   icon?: string
   ctaLabel?: string
   ctaLink?: string
@@ -146,9 +148,9 @@ function resolvePricingFeature(props: PricingFeature): PricingFeature {
 
 function resolveVariant(value?: string) {
   const normalized = resolveString(value).toLowerCase()
-  if (!normalized) return ''
+  if (!normalized) return undefined
   if (normalized === 'featured' || normalized === 'primary') return 'featured'
-  return ''
+  return undefined
 }
 
 function resolveString(value: unknown) {

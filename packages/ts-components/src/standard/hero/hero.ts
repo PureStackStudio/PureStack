@@ -2,6 +2,8 @@ import { urlNormalizer } from '@purestack/ts-util'
 import { defineComponent, html } from 'regor'
 import { registerHeroStyles } from './heroStyle'
 
+export type HeroActionVariant = 'primary' | 'minimal'
+
 const heroTemplate = html`<section class="hero">
   <div class="hero__inner">
     <div class="hero__content">
@@ -32,7 +34,7 @@ const heroMediaTemplate = html`<div class="hero__logo-frame" r-if="src">
 
 export interface HeroAction {
   href?: string
-  variant?: string
+  variant?: HeroActionVariant
   icon?: string
   target?: string
   rel?: string

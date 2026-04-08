@@ -2,11 +2,13 @@ import { defineComponent, html } from 'regor'
 
 import { registerContactFormStyles } from './contactFormStyle'
 
+export type ContactFormMethod = 'get' | 'post'
+
 export interface ContactForm {
   title?: string
   description?: string
   action?: string
-  method?: string
+  method?: ContactFormMethod
   submitLabel?: string
   nameLabel?: string
   emailLabel?: string
@@ -18,7 +20,7 @@ export interface ContactForm {
   topicGeneralLabel?: string
   topicSupportLabel?: string
   topicPartnershipLabel?: string
-  resolvedMethod?: 'post' | 'get'
+  resolvedMethod?: ContactFormMethod
 }
 
 const contactFormTemplate = html`<section class="contact-form">

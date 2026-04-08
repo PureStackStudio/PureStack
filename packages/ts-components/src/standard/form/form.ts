@@ -9,6 +9,8 @@ import {
 } from 'regor'
 import { registerFormStyles } from './formStyle'
 
+export type FormStatusVariant = 'info' | 'success' | 'error' | 'warning'
+
 export interface AppForm {
   action?: RefOrValue<string>
   method?: RefOrValue<string>
@@ -54,7 +56,7 @@ export interface FormDivider {
 }
 
 export interface FormStatus {
-  variant?: RefOrValue<string>
+  variant?: RefOrValue<FormStatusVariant>
   hidden?: RefOrValue<boolean>
   toneClass?: ComputedRef<string | undefined>
 }

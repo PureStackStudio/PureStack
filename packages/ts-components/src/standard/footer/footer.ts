@@ -3,6 +3,10 @@ import { resolveTsSsgContext } from '@purestack/ts-common'
 import { defineComponent, html } from 'regor'
 import { registerFooterStyles } from './footerStyle'
 
+export type SiteFooterVariant = 'default' | 'minimal' | 'feature'
+export type FooterNewsletterMethod = 'get' | 'post'
+export type FooterLinkVariant = 'default' | 'muted' | 'strong'
+
 export interface SiteFooter {
   teleport?: string
   eyebrow?: string
@@ -11,7 +15,7 @@ export interface SiteFooter {
   ariaLabel?: string
   copyright?: string
   legalLabel?: string
-  variant?: string
+  variant?: SiteFooterVariant
   tone?: string
   ctaLabel?: string
   ctaHref?: string
@@ -21,7 +25,7 @@ export interface SiteFooter {
   newsletterTitle?: string
   newsletterBody?: string
   newsletterAction?: string
-  newsletterMethod?: string
+  newsletterMethod?: FooterNewsletterMethod
   newsletterName?: string
   newsletterPlaceholder?: string
   newsletterButtonLabel?: string
@@ -42,7 +46,7 @@ export interface FooterLink {
   target?: string
   rel?: string
   icon?: string
-  variant?: string
+  variant?: FooterLinkVariant
   rootClass?: string
 }
 

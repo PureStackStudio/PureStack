@@ -246,7 +246,9 @@ function findPropDeclaration(
   return undefined
 }
 
-function getPropTypeNode(propDeclaration: PropDeclaration | undefined): ts.TypeNode | undefined {
+function getPropTypeNode(
+  propDeclaration: PropDeclaration | undefined,
+): ts.TypeNode | undefined {
   return propDeclaration?.type
 }
 
@@ -503,5 +505,3 @@ function toKebabCase(value: string) {
 function normalizeComponentName(value: string) {
   return value.replace(/[-_\s]+/g, '').toLowerCase()
 }
-
-
