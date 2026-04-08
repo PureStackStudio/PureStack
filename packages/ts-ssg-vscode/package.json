@@ -1,11 +1,16 @@
 {
-  "name": "@purestack/ts-ssg-vscode",
-  "displayName": "PureStack MDX Component Navigation",
-  "description": "Ctrl+Click MDX and Markdown component tags to open the matching ts-components source file.",
-  "version": "0.0.1",
+  "name": "purestack-component-navigation",
+  "displayName": "PureStack Component Navigation",
+  "description": "Ctrl+Click MDX, Markdown, and Regor html template component tags to open the matching source file.",
+  "version": "1.0.0",
   "private": true,
   "publisher": "purestack-local",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koculu/purestack.git",
+    "directory": "packages/ts-ssg-vscode"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -14,18 +19,18 @@
   ],
   "activationEvents": [
     "onLanguage:markdown",
-    "onLanguage:mdx"
+    "onLanguage:mdx",
+    "onLanguage:typescript"
   ],
   "main": "./dist/extension.js",
-  "files": [
-    "dist/**/*",
-    "README.md"
-  ],
   "scripts": {
-    "build": "tsc -p .",
-    "watch": "tsc -p . --watch"
+    "build": "tsc -p . --noEmit && esbuild src/extension.ts --bundle --platform=node --format=cjs --outfile=dist/extension.js --external:vscode",
+    "watch": "tsc -p . --watch",
+    "package": "vsce package --no-dependencies"
   },
   "devDependencies": {
+    "@vscode/vsce": "^3.6.2",
+    "esbuild": "^0.27.3",
     "typescript": "^5.9.3"
   },
   "contributes": {

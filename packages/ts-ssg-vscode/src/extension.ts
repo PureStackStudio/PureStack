@@ -1,18 +1,20 @@
+import ts from 'typescript'
 import * as vscode from 'vscode'
 import { resolveComponentTarget } from './componentResolver'
 
-const COMPONENT_TAG_PATTERN = /[A-Za-z][A-Za-z0-9]*/
-const COMPONENT_NAME_PATTERN = /^[A-Z][A-Za-z0-9]*$/
+const COMPONENT_TAG_PATTERN = /[A-Za-z][A-Za-z0-9-]*/
+const COMPONENT_NAME_PATTERN = /^[A-Za-z][A-Za-z0-9-]*$/
 
-const MARKDOWN_SELECTORS: vscode.DocumentSelector = [
+const SUPPORTED_SELECTORS: vscode.DocumentSelector = [
   { language: 'markdown', scheme: 'file' },
   { language: 'mdx', scheme: 'file' },
+  { language: 'typescript', scheme: 'file' },
 ]
 
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.languages.registerDefinitionProvider(
-      MARKDOWN_SELECTORS,
+      SUPPORTED_SELECTORS,
       new ComponentDefinitionProvider(),
     ),
   )
@@ -50,9 +52,21 @@ function getComponentNameAtPosition(
 
   const word = document.getText(range)
   if (!COMPONENT_NAME_PATTERN.test(word)) return undefined
-  if (!isComponentTagRange(document, range)) return undefined
+  if (!isSupportedComponentTagRange(document, position, range)) return undefined
 
   return word
+}
+
+function isSupportedComponentTagRange(
+  document: vscode.TextDocument,
+  position: vscode.Position,
+  range: vscode.Range,
+): boolean {
+  if (document.languageId === 'typescript') {
+    return isHtmlTemplateComponentTagRange(document, position, range)
+  }
+
+  return isComponentTagRange(document, range)
 }
 
 function isComponentTagRange(
@@ -69,6 +83,56 @@ function isComponentTagRange(
   const endsLikeTag = after.length === 0 || /[\s/>]/.test(after)
 
   return startsLikeTag && endsLikeTag
+}
+
+function isHtmlTemplateComponentTagRange(
+  document: vscode.TextDocument,
+  position: vscode.Position,
+  range: vscode.Range,
+): boolean {
+  if (!isComponentTagRange(document, range)) return false
+
+  const offset = document.offsetAt(position)
+  const sourceFile = ts.createSourceFile(
+    document.uri.fsPath,
+    document.getText(),
+    ts.ScriptTarget.Latest,
+    false,
+    ts.ScriptKind.TS,
+  )
+
+  return isOffsetInsideHtmlTaggedTemplate(sourceFile, offset)
+}
+
+function isOffsetInsideHtmlTaggedTemplate(
+  sourceFile: ts.SourceFile,
+  offset: number,
+): boolean {
+  let isInsideTemplate = false
+
+  visitNode(sourceFile)
+  return isInsideTemplate
+
+  function visitNode(node: ts.Node) {
+    if (isInsideTemplate) return
+    if (offset < node.getStart(sourceFile) || offset >= node.getEnd()) return
+
+    if (
+      ts.isTaggedTemplateExpression(node) &&
+      node.tag.getText(sourceFile) === 'html'
+    ) {
+      const template = node.template
+      if (
+        offset >= template.getStart(sourceFile) &&
+        offset < template.getEnd()
+      ) {
+        isInsideTemplate = true
+        return
+      }
+    }
+
+    ts.forEachChild(node, visitNode)
+  }
 }
 
 function resolveWorkspaceRoot(documentPath: string): string | undefined {

@@ -38,12 +38,14 @@ declare module 'vscode' {
 
   export interface TextDocument {
     readonly uri: Uri
+    readonly languageId: string
     getWordRangeAtPosition(
       position: Position,
       regex?: RegExp,
     ): Range | undefined
     getText(range?: Range): string
     lineAt(line: number): TextLine
+    offsetAt(position: Position): number
   }
 
   export interface CancellationToken {}

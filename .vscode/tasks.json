@@ -4,7 +4,7 @@
     {
       "label": "PureStack VSCode: Build Extension",
       "type": "shell",
-      "command": ".\\node_modules\\.bin\\tsc.cmd -p packages/ts-ssg-vscode",
+      "command": "yarn.cmd --cwd packages/ts-ssg-vscode build",
       "options": {
         "cwd": "${workspaceFolder}"
       },

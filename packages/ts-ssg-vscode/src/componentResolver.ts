@@ -25,14 +25,19 @@ export function resolveComponentTarget(
   componentName: string,
 ): ResolvedComponentTarget | undefined {
   const candidateFiles = getWorkspaceComponentFiles(workspaceRoot)
+  const normalizedComponentName = normalizeComponentName(componentName)
 
   for (const filePath of candidateFiles) {
     const source = fs.readFileSync(filePath, 'utf8')
-    if (!hasExportedComponentDefinition(source, componentName)) continue
+    const exportedDefinition = findExportedComponentDefinition(
+      source,
+      normalizedComponentName,
+    )
+    if (!exportedDefinition) continue
 
     return {
       filePath,
-      line: findComponentLine(source, componentName),
+      line: exportedDefinition.line,
     }
   }
 
@@ -75,23 +80,30 @@ function collectComponentFiles(
   }
 }
 
-function hasExportedComponentDefinition(source: string, componentName: string) {
-  return getExportedComponentDefinitionPattern(componentName).test(source)
-}
-
-function findComponentLine(source: string, componentName: string): number {
+function findExportedComponentDefinition(
+  source: string,
+  normalizedComponentName: string,
+) {
   const lines = source.split(/\r?\n/)
-  const exportedDefinitionPattern =
-    getExportedComponentDefinitionPattern(componentName)
+  const pattern =
+    /export\s+(?:interface|type|class)\s+([A-Za-z][A-Za-z0-9]*)\b/g
 
-  const exportedDefinitionLineIndex = lines.findIndex((line) =>
-    exportedDefinitionPattern.test(line),
-  )
-  if (exportedDefinitionLineIndex >= 0) return exportedDefinitionLineIndex
+  for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+    const line = lines[lineIndex]
+    const match = pattern.exec(line)
+    pattern.lastIndex = 0
 
-  return 0
+    if (!match) continue
+    if (normalizeComponentName(match[1]) !== normalizedComponentName) continue
+
+    return {
+      line: lineIndex,
+    }
+  }
+
+  return undefined
 }
 
-function getExportedComponentDefinitionPattern(componentName: string) {
-  return new RegExp(`export\\s+(?:interface|type|class)\\s+${componentName}\\b`)
+function normalizeComponentName(value: string) {
+  return value.replace(/[-_\s]+/g, '').toLowerCase()
 }
