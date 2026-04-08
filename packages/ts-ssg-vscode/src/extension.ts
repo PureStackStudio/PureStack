@@ -275,7 +275,6 @@ function getComponentTagContextAtPosition(
 
   const componentName = tagNameMatch[1]
   const cursorRelativeOffset = offset - tagStart
-  if (cursorRelativeOffset <= tagNameMatch[0].length) return undefined
 
   const attributeNames = getAttributeNames(tagText)
   const activeAttributeName = getActiveAttributeName(
@@ -444,3 +443,6 @@ function resolveWorkspaceRoot(documentPath: string): string | undefined {
 
   return folders[0]?.uri.fsPath
 }
+
+
+
