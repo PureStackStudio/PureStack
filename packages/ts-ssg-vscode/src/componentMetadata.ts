@@ -1,9 +1,11 @@
 import * as fs from 'node:fs'
+import * as path from 'node:path'
 import ts from 'typescript'
 
 export type ComponentPropInfo = {
   propName: string
   attributeName: string
+  declarationFilePath: string
   declarationLine: number
   documentation?: string
   signature?: string
@@ -13,75 +15,152 @@ export type ComponentPropInfo = {
 
 export type ComponentMetadata = {
   componentName: string
+  declarationFilePath: string
   declarationLine: number
   documentation?: string
   signature: string
   props: ComponentPropInfo[]
 }
 
-type TypeDeclaration =
-  | ts.InterfaceDeclaration
-  | ts.TypeAliasDeclaration
-  | ts.ClassDeclaration
-
-type PropDeclaration = ts.PropertySignature | ts.PropertyDeclaration
-
-type CachedComponentMetadata = {
-  metadataByNormalizedName: Map<string, ComponentMetadata>
-  mtimeMs: number
+type CachedProjectService = {
+  configMtimeMs: number
+  languageService: ts.LanguageService
 }
 
-const componentMetadataCache = new Map<string, CachedComponentMetadata>()
+type AnalyzedTypeInfo = {
+  valueKind: 'string' | 'boolean' | 'number' | 'union' | 'unknown'
+  literalValues?: string[]
+}
+
+const projectServiceCache = new Map<string, CachedProjectService>()
 
 export function getComponentMetadata(
   filePath: string,
   componentName: string,
 ): ComponentMetadata | undefined {
-  const normalizedComponentName = normalizeComponentName(componentName)
-  const cachedMetadata = readCachedComponentMetadata(filePath)
+  const languageService = getProjectLanguageService(filePath)
+  const program = languageService.getProgram()
+  if (!program) return undefined
 
-  return cachedMetadata.metadataByNormalizedName.get(normalizedComponentName)
-}
+  const sourceFile = program.getSourceFile(filePath)
+  if (!sourceFile) return undefined
 
-function readCachedComponentMetadata(filePath: string) {
-  const fileStat = fs.statSync(filePath)
-  const cachedMetadata = componentMetadataCache.get(filePath)
-  if (cachedMetadata && cachedMetadata.mtimeMs === fileStat.mtimeMs) {
-    return cachedMetadata
-  }
-
-  const source = fs.readFileSync(filePath, 'utf8')
-  const sourceFile = ts.createSourceFile(
-    filePath,
-    source,
-    ts.ScriptTarget.Latest,
-    false,
-    ts.ScriptKind.TS,
+  const metadataByNormalizedName = extractComponentMetadata(
+    sourceFile,
+    program.getTypeChecker(),
   )
-  const metadataByNormalizedName = extractComponentMetadata(sourceFile)
-  const nextCachedMetadata = {
-    metadataByNormalizedName,
-    mtimeMs: fileStat.mtimeMs,
-  }
-  componentMetadataCache.set(filePath, nextCachedMetadata)
 
-  return nextCachedMetadata
+  return metadataByNormalizedName.get(normalizeComponentName(componentName))
 }
 
-function extractComponentMetadata(sourceFile: ts.SourceFile) {
+function getProjectLanguageService(filePath: string) {
+  const configPath = ts.findConfigFile(
+    path.dirname(filePath),
+    ts.sys.fileExists,
+  )
+  const cacheKey = configPath ?? `__single__:${filePath}`
+  const configMtimeMs = configPath ? fs.statSync(configPath).mtimeMs : -1
+  const cachedService = projectServiceCache.get(cacheKey)
+
+  if (cachedService && cachedService.configMtimeMs === configMtimeMs) {
+    return cachedService.languageService
+  }
+
+  const languageService = createProjectLanguageService(filePath, configPath)
+  projectServiceCache.set(cacheKey, {
+    configMtimeMs,
+    languageService,
+  })
+
+  return languageService
+}
+
+function createProjectLanguageService(filePath: string, configPath?: string) {
+  const { compilerOptions, fileNames, currentDirectory } = configPath
+    ? readProjectConfiguration(filePath, configPath)
+    : createSingleFileProject(filePath)
+
+  const host: ts.LanguageServiceHost = {
+    directoryExists: ts.sys.directoryExists?.bind(ts.sys),
+    fileExists: ts.sys.fileExists,
+    getCompilationSettings: () => compilerOptions,
+    getCurrentDirectory: () => currentDirectory,
+    getDefaultLibFileName: (options) => ts.getDefaultLibFilePath(options),
+    getDirectories: ts.sys.getDirectories?.bind(ts.sys),
+    getScriptFileNames: () => fileNames,
+    getScriptSnapshot: (scriptFileName) => {
+      if (!ts.sys.fileExists(scriptFileName)) return undefined
+
+      const text = ts.sys.readFile(scriptFileName)
+      if (text === undefined) return undefined
+
+      return ts.ScriptSnapshot.fromString(text)
+    },
+    getScriptVersion: (scriptFileName) => {
+      try {
+        return fs.statSync(scriptFileName).mtimeMs.toString()
+      } catch {
+        return '0'
+      }
+    },
+    readDirectory: ts.sys.readDirectory,
+    readFile: ts.sys.readFile,
+    useCaseSensitiveFileNames: () => ts.sys.useCaseSensitiveFileNames,
+  }
+
+  return ts.createLanguageService(host)
+}
+
+function readProjectConfiguration(filePath: string, configPath: string) {
+  const configDirectory = path.dirname(configPath)
+  const configFile = ts.readConfigFile(configPath, ts.sys.readFile)
+  if (configFile.error) {
+    return createSingleFileProject(filePath)
+  }
+
+  const parsedConfig = ts.parseJsonConfigFileContent(
+    configFile.config,
+    ts.sys,
+    configDirectory,
+  )
+
+  const fileNames = parsedConfig.fileNames.includes(filePath)
+    ? parsedConfig.fileNames
+    : [...parsedConfig.fileNames, filePath]
+
+  return {
+    compilerOptions: parsedConfig.options,
+    currentDirectory: configDirectory,
+    fileNames,
+  }
+}
+
+function createSingleFileProject(filePath: string) {
+  return {
+    compilerOptions: {
+      allowSyntheticDefaultImports: true,
+      esModuleInterop: true,
+      module: ts.ModuleKind.NodeNext,
+      moduleResolution: ts.ModuleResolutionKind.NodeNext,
+      target: ts.ScriptTarget.ESNext,
+    },
+    currentDirectory: path.dirname(filePath),
+    fileNames: [filePath],
+  }
+}
+
+function extractComponentMetadata(
+  sourceFile: ts.SourceFile,
+  checker: ts.TypeChecker,
+) {
   const metadataByNormalizedName = new Map<string, ComponentMetadata>()
-  const typeDeclarations = collectTypeDeclarations(sourceFile)
 
   visitNode(sourceFile)
   return metadataByNormalizedName
 
   function visitNode(node: ts.Node) {
     if (ts.isCallExpression(node) && isDefineComponentCall(node)) {
-      const componentMetadata = createComponentMetadata(
-        node,
-        typeDeclarations,
-        sourceFile,
-      )
+      const componentMetadata = createComponentMetadata(node, checker)
       if (componentMetadata) {
         metadataByNormalizedName.set(
           normalizeComponentName(componentMetadata.componentName),
@@ -94,55 +173,73 @@ function extractComponentMetadata(sourceFile: ts.SourceFile) {
   }
 }
 
-function collectTypeDeclarations(sourceFile: ts.SourceFile) {
-  const declarations = new Map<string, TypeDeclaration>()
-
-  sourceFile.forEachChild((node) => {
-    if (
-      (ts.isInterfaceDeclaration(node) ||
-        ts.isTypeAliasDeclaration(node) ||
-        ts.isClassDeclaration(node)) &&
-      node.name &&
-      hasExportModifier(node)
-    ) {
-      declarations.set(node.name.text, node)
-    }
-
-    if (ts.isTypeAliasDeclaration(node) && node.name) {
-      declarations.set(node.name.text, node)
-    }
-  })
-
-  return declarations
-}
-
 function createComponentMetadata(
   defineComponentCall: ts.CallExpression,
-  typeDeclarations: Map<string, TypeDeclaration>,
-  sourceFile: ts.SourceFile,
+  checker: ts.TypeChecker,
 ): ComponentMetadata | undefined {
-  const componentTypeName = getDefineComponentTypeName(defineComponentCall)
+  const typeArgument = getDefineComponentTypeArgument(defineComponentCall)
+  if (!typeArgument) return undefined
+
+  const componentTypeName = getDefineComponentTypeName(typeArgument)
   if (!componentTypeName) return undefined
 
   const propNames = getDefineComponentPropNames(defineComponentCall)
   if (propNames.length === 0) return undefined
 
-  const typeDeclaration = typeDeclarations.get(componentTypeName)
-  if (!typeDeclaration) return undefined
+  const componentType = checker.getTypeFromTypeNode(typeArgument)
+  const componentSymbol = getPreferredTypeSymbol(
+    checker,
+    typeArgument,
+    componentType,
+  )
+  const componentDeclaration = getPreferredDeclaration(componentSymbol)
 
   return {
     componentName: componentTypeName,
-    declarationLine: getLineNumber(sourceFile, typeDeclaration),
-    documentation: getJsDocText(typeDeclaration, sourceFile),
-    signature: getTypeDeclarationSignature(typeDeclaration, sourceFile),
-    props: propNames.map((propName) =>
-      createComponentPropInfo(
-        propName,
-        typeDeclaration,
-        typeDeclarations,
-        sourceFile,
-      ),
+    declarationFilePath:
+      componentDeclaration?.getSourceFile().fileName ??
+      defineComponentCall.getSourceFile().fileName,
+    declarationLine: componentDeclaration
+      ? getLineNumber(componentDeclaration)
+      : 0,
+    documentation: getSymbolDocumentation(checker, componentSymbol),
+    signature: getComponentSignature(
+      checker,
+      componentTypeName,
+      componentType,
+      componentDeclaration,
     ),
+    props: propNames.map((propName) =>
+      createComponentPropInfo(propName, componentType, checker),
+    ),
+  }
+}
+
+function createComponentPropInfo(
+  propName: string,
+  componentType: ts.Type,
+  checker: ts.TypeChecker,
+): ComponentPropInfo {
+  const apparentComponentType = checker.getApparentType(componentType)
+  const propSymbol =
+    checker.getPropertyOfType(apparentComponentType, propName) ??
+    checker.getPropertyOfType(componentType, propName)
+  const declaration = getPreferredPropertyDeclaration(propSymbol)
+  const propType = getPropValueType(checker, propSymbol, declaration)
+  const typeInfo = analyzeType(checker, propType)
+
+  return {
+    propName,
+    attributeName: toKebabCase(propName),
+    declarationFilePath:
+      declaration?.getSourceFile().fileName ??
+      componentType.symbol?.declarations?.[0]?.getSourceFile().fileName ??
+      '',
+    declarationLine: declaration ? getLineNumber(declaration) : 0,
+    documentation: getSymbolDocumentation(checker, propSymbol),
+    signature: getPropSignature(checker, propName, propSymbol, declaration),
+    valueKind: typeInfo.valueKind,
+    literalValues: typeInfo.literalValues,
   }
 }
 
@@ -153,15 +250,14 @@ function isDefineComponentCall(node: ts.CallExpression) {
   )
 }
 
-function getDefineComponentTypeName(node: ts.CallExpression) {
+function getDefineComponentTypeArgument(node: ts.CallExpression) {
   const typeArgument = node.typeArguments?.[0]
-  if (!typeArgument) return undefined
+  if (!typeArgument || !ts.isTypeReferenceNode(typeArgument)) return undefined
+  return typeArgument
+}
 
-  if (ts.isTypeReferenceNode(typeArgument)) {
-    return getEntityNameText(typeArgument.typeName)
-  }
-
-  return undefined
+function getDefineComponentTypeName(typeArgument: ts.TypeReferenceNode) {
+  return getEntityNameText(typeArgument.typeName)
 }
 
 function getDefineComponentPropNames(node: ts.CallExpression) {
@@ -185,170 +281,132 @@ function getDefineComponentPropNames(node: ts.CallExpression) {
   return []
 }
 
-function createComponentPropInfo(
-  propName: string,
-  typeDeclaration: TypeDeclaration,
-  typeDeclarations: Map<string, TypeDeclaration>,
-  sourceFile: ts.SourceFile,
-): ComponentPropInfo {
-  const propDeclaration = findPropDeclaration(typeDeclaration, propName)
-  const typeNode = getPropTypeNode(propDeclaration)
-  const typeInfo = analyzeTypeNode(typeNode, typeDeclarations, new Set())
-
-  return {
-    propName,
-    attributeName: toKebabCase(propName),
-    declarationLine: propDeclaration
-      ? getLineNumber(sourceFile, propDeclaration)
-      : 0,
-    documentation: propDeclaration
-      ? getJsDocText(propDeclaration, sourceFile)
-      : undefined,
-    signature: propDeclaration
-      ? getPropDeclarationSignature(propDeclaration, sourceFile)
-      : undefined,
-    valueKind: typeInfo.valueKind,
-    literalValues: typeInfo.literalValues,
-  }
-}
-
-function findPropDeclaration(
-  typeDeclaration: TypeDeclaration,
-  propName: string,
+function getPreferredTypeSymbol(
+  checker: ts.TypeChecker,
+  typeNode: ts.TypeReferenceNode,
+  type: ts.Type,
 ) {
-  if (ts.isInterfaceDeclaration(typeDeclaration)) {
-    for (const member of typeDeclaration.members) {
-      if (!ts.isPropertySignature(member)) continue
-      if (!isNamedProperty(member.name, propName)) continue
-      return member
-    }
-  }
+  const symbolFromNode = checker.getSymbolAtLocation(typeNode.typeName)
+  const resolvedNodeSymbol = resolveAliasedSymbol(checker, symbolFromNode)
+  if (resolvedNodeSymbol) return resolvedNodeSymbol
 
-  if (ts.isClassDeclaration(typeDeclaration)) {
-    for (const member of typeDeclaration.members) {
-      if (!ts.isPropertyDeclaration(member)) continue
-      if (!member.name) continue
-      if (!isNamedProperty(member.name, propName)) continue
-      return member
-    }
-  }
-
-  if (ts.isTypeAliasDeclaration(typeDeclaration)) {
-    if (!ts.isTypeLiteralNode(typeDeclaration.type)) return undefined
-
-    for (const member of typeDeclaration.type.members) {
-      if (!ts.isPropertySignature(member)) continue
-      if (!isNamedProperty(member.name, propName)) continue
-      return member
-    }
-  }
-
-  return undefined
+  return resolveAliasedSymbol(checker, type.aliasSymbol) ?? type.symbol
 }
 
-function getPropTypeNode(
-  propDeclaration: PropDeclaration | undefined,
-): ts.TypeNode | undefined {
-  return propDeclaration?.type
+function getPreferredDeclaration(symbol?: ts.Symbol) {
+  if (!symbol?.declarations || symbol.declarations.length === 0) {
+    return undefined
+  }
+
+  return (
+    symbol.declarations.find(
+      (declaration) =>
+        ts.isInterfaceDeclaration(declaration) ||
+        ts.isTypeAliasDeclaration(declaration) ||
+        ts.isClassDeclaration(declaration),
+    ) ?? symbol.declarations[0]
+  )
 }
 
-type AnalyzedTypeInfo = {
-  valueKind: 'string' | 'boolean' | 'number' | 'union' | 'unknown'
-  literalValues?: string[]
+function getPreferredPropertyDeclaration(symbol?: ts.Symbol) {
+  if (!symbol?.declarations || symbol.declarations.length === 0) {
+    return undefined
+  }
+
+  return (
+    symbol.declarations.find(
+      (declaration) =>
+        ts.isPropertySignature(declaration) ||
+        ts.isPropertyDeclaration(declaration),
+    ) ?? symbol.declarations[0]
+  )
 }
 
-function analyzeTypeNode(
-  typeNode: ts.TypeNode | undefined,
-  typeDeclarations: Map<string, TypeDeclaration>,
-  seenTypeNames: Set<string>,
-): AnalyzedTypeInfo {
-  if (!typeNode) return { valueKind: 'unknown' }
+function getPropValueType(
+  checker: ts.TypeChecker,
+  propSymbol: ts.Symbol | undefined,
+  declaration?: ts.Declaration,
+) {
+  if (
+    declaration &&
+    (ts.isPropertySignature(declaration) ||
+      ts.isPropertyDeclaration(declaration)) &&
+    declaration.type
+  ) {
+    const unwrappedTypeNode = unwrapComponentPropTypeNode(declaration.type)
+    return checker.getTypeFromTypeNode(unwrappedTypeNode)
+  }
 
+  if (!propSymbol) return undefined
+
+  const location =
+    declaration ?? propSymbol.valueDeclaration ?? propSymbol.declarations?.[0]
+  if (!location) return undefined
+
+  return checker.getTypeOfSymbolAtLocation(propSymbol, location)
+}
+
+function unwrapComponentPropTypeNode(typeNode: ts.TypeNode): ts.TypeNode {
   if (ts.isParenthesizedTypeNode(typeNode)) {
-    return analyzeTypeNode(typeNode.type, typeDeclarations, seenTypeNames)
+    return unwrapComponentPropTypeNode(typeNode.type)
   }
 
   if (ts.isTypeReferenceNode(typeNode)) {
     const typeName = getEntityNameText(typeNode.typeName)
-
-    if (typeName === 'RefOrValue' || typeName === 'ComputedRef') {
-      return analyzeTypeNode(
-        typeNode.typeArguments?.[0],
-        typeDeclarations,
-        seenTypeNames,
-      )
+    if (
+      (typeName === 'RefOrValue' || typeName === 'ComputedRef') &&
+      typeNode.typeArguments?.[0]
+    ) {
+      return unwrapComponentPropTypeNode(typeNode.typeArguments[0])
     }
-
-    if (seenTypeNames.has(typeName)) return { valueKind: 'unknown' }
-
-    const declaration = typeDeclarations.get(typeName)
-    if (!declaration || !ts.isTypeAliasDeclaration(declaration)) {
-      return { valueKind: 'unknown' }
-    }
-
-    const nextSeenTypeNames = new Set(seenTypeNames)
-    nextSeenTypeNames.add(typeName)
-    return analyzeTypeNode(
-      declaration.type,
-      typeDeclarations,
-      nextSeenTypeNames,
-    )
   }
 
-  if (ts.isUnionTypeNode(typeNode)) {
-    const normalizedTypeNodes = typeNode.types.filter(
-      (member) =>
-        member.kind !== ts.SyntaxKind.UndefinedKeyword &&
-        member.kind !== ts.SyntaxKind.NullKeyword,
-    )
+  return typeNode
+}
 
-    if (normalizedTypeNodes.length === 1) {
-      return analyzeTypeNode(
-        normalizedTypeNodes[0],
-        typeDeclarations,
-        seenTypeNames,
-      )
-    }
+function analyzeType(
+  checker: ts.TypeChecker,
+  type: ts.Type | undefined,
+): AnalyzedTypeInfo {
+  if (!type) return { valueKind: 'unknown' }
 
+  const normalizedType = checker.getNonNullableType(type)
+
+  if (normalizedType.isUnion()) {
     const literalValues: string[] = []
     let includesBoolean = false
     let includesBroadString = false
     let includesBroadNumber = false
 
-    for (const member of normalizedTypeNodes) {
-      if (member.kind === ts.SyntaxKind.BooleanKeyword) {
+    for (const member of normalizedType.types) {
+      const memberType = checker.getNonNullableType(member)
+
+      if (isBooleanType(memberType)) {
         includesBoolean = true
         continue
       }
 
-      if (member.kind === ts.SyntaxKind.StringKeyword) {
+      if (isStringType(memberType)) {
         includesBroadString = true
         continue
       }
 
-      if (member.kind === ts.SyntaxKind.NumberKeyword) {
+      if (isNumberType(memberType)) {
         includesBroadNumber = true
         continue
       }
 
-      if (!ts.isLiteralTypeNode(member)) {
+      const literalValue = getLiteralCompletionValue(memberType, checker)
+      if (literalValue === undefined) {
         return { valueKind: 'unknown' }
       }
 
-      if (ts.isStringLiteral(member.literal)) {
-        literalValues.push(member.literal.text)
-        continue
-      }
-
-      if (
-        member.literal.kind === ts.SyntaxKind.TrueKeyword ||
-        member.literal.kind === ts.SyntaxKind.FalseKeyword
-      ) {
+      if (literalValue === 'true' || literalValue === 'false') {
         includesBoolean = true
         continue
       }
 
-      return { valueKind: 'unknown' }
+      literalValues.push(literalValue)
     }
 
     if (literalValues.length > 0) {
@@ -369,82 +427,145 @@ function analyzeTypeNode(
       }
     }
 
-    if (includesBroadString) {
-      return { valueKind: 'string' }
-    }
-
-    if (includesBroadNumber) {
-      return { valueKind: 'number' }
-    }
+    if (includesBroadString) return { valueKind: 'string' }
+    if (includesBroadNumber) return { valueKind: 'number' }
 
     return { valueKind: 'unknown' }
   }
 
-  if (typeNode.kind === ts.SyntaxKind.StringKeyword) {
+  if (isBooleanType(normalizedType)) {
+    return {
+      valueKind: 'boolean',
+      literalValues: ['true', 'false'],
+    }
+  }
+
+  if (isStringType(normalizedType)) {
     return { valueKind: 'string' }
   }
 
-  if (typeNode.kind === ts.SyntaxKind.NumberKeyword) {
+  if (isNumberType(normalizedType)) {
     return { valueKind: 'number' }
   }
 
-  if (typeNode.kind === ts.SyntaxKind.BooleanKeyword) {
+  const literalValue = getLiteralCompletionValue(normalizedType, checker)
+  if (literalValue === 'true' || literalValue === 'false') {
     return {
       valueKind: 'boolean',
       literalValues: ['true', 'false'],
     }
   }
 
-  if (ts.isLiteralTypeNode(typeNode) && ts.isStringLiteral(typeNode.literal)) {
+  if (literalValue !== undefined) {
     return {
       valueKind: 'union',
-      literalValues: [typeNode.literal.text],
-    }
-  }
-
-  if (
-    ts.isLiteralTypeNode(typeNode) &&
-    (typeNode.literal.kind === ts.SyntaxKind.TrueKeyword ||
-      typeNode.literal.kind === ts.SyntaxKind.FalseKeyword)
-  ) {
-    return {
-      valueKind: 'boolean',
-      literalValues: ['true', 'false'],
+      literalValues: [literalValue],
     }
   }
 
   return { valueKind: 'unknown' }
 }
 
-function getStringLiteralValues(node: ts.ArrayLiteralExpression) {
-  return node.elements.filter(ts.isStringLiteral).map((element) => element.text)
+function isBooleanType(type: ts.Type) {
+  return (type.flags & ts.TypeFlags.Boolean) !== 0
 }
 
-function getTypeDeclarationSignature(
-  declaration: TypeDeclaration,
-  sourceFile: ts.SourceFile,
+function isStringType(type: ts.Type) {
+  return (type.flags & ts.TypeFlags.String) !== 0
+}
+
+function isNumberType(type: ts.Type) {
+  return (type.flags & ts.TypeFlags.Number) !== 0
+}
+
+function getLiteralCompletionValue(type: ts.Type, checker: ts.TypeChecker) {
+  if ((type.flags & ts.TypeFlags.StringLiteral) !== 0) {
+    return (type as ts.StringLiteralType).value
+  }
+
+  if ((type.flags & ts.TypeFlags.BooleanLiteral) !== 0) {
+    const typeText = checker.typeToString(type)
+    return typeText === 'true' || typeText === 'false' ? typeText : undefined
+  }
+
+  return undefined
+}
+
+function getComponentSignature(
+  checker: ts.TypeChecker,
+  componentName: string,
+  componentType: ts.Type,
+  declaration?: ts.Declaration,
 ) {
-  if (ts.isInterfaceDeclaration(declaration)) {
+  if (declaration && ts.isInterfaceDeclaration(declaration)) {
     return `interface ${declaration.name.text}`
   }
 
-  if (ts.isClassDeclaration(declaration)) {
-    return `class ${declaration.name?.text ?? declaration.getText(sourceFile)}`
+  if (declaration && ts.isClassDeclaration(declaration)) {
+    return `class ${declaration.name?.text ?? componentName}`
   }
 
-  return `type ${declaration.name.text} = ${declaration.type.getText(sourceFile)}`
+  if (declaration && ts.isTypeAliasDeclaration(declaration)) {
+    return `type ${declaration.name.text} = ${declaration.type.getText(declaration.getSourceFile())}`
+  }
+
+  return `type ${componentName} = ${checker.typeToString(componentType)}`
 }
 
-function getPropDeclarationSignature(
-  declaration: PropDeclaration,
-  sourceFile: ts.SourceFile,
+function getPropSignature(
+  checker: ts.TypeChecker,
+  propName: string,
+  propSymbol: ts.Symbol | undefined,
+  declaration?: ts.Declaration,
 ) {
-  const name = declaration.name.getText(sourceFile)
-  const optional = declaration.questionToken ? '?' : ''
-  const typeText = declaration.type?.getText(sourceFile)
+  if (
+    declaration &&
+    (ts.isPropertySignature(declaration) ||
+      ts.isPropertyDeclaration(declaration))
+  ) {
+    const sourceFile = declaration.getSourceFile()
+    const name = declaration.name.getText(sourceFile)
+    const optional = declaration.questionToken ? '?' : ''
+    const typeText = declaration.type?.getText(sourceFile)
 
-  if (!typeText) return `${name}${optional}`
-  return `${name}${optional}: ${typeText}`
+    if (!typeText) return `${name}${optional}`
+    return `${name}${optional}: ${typeText}`
+  }
+
+  if (!propSymbol) return propName
+
+  const location =
+    declaration ?? propSymbol.valueDeclaration ?? propSymbol.declarations?.[0]
+  if (!location) return propName
+
+  const propType = checker.getTypeOfSymbolAtLocation(propSymbol, location)
+  return `${propName}: ${checker.typeToString(propType)}`
+}
+
+function getSymbolDocumentation(checker: ts.TypeChecker, symbol?: ts.Symbol) {
+  const resolvedSymbol = resolveAliasedSymbol(checker, symbol) ?? symbol
+  if (!resolvedSymbol) return undefined
+
+  const documentation = ts.displayPartsToString(
+    resolvedSymbol.getDocumentationComment(checker),
+  )
+
+  return documentation || undefined
+}
+
+function resolveAliasedSymbol(checker: ts.TypeChecker, symbol?: ts.Symbol) {
+  if (!symbol) return undefined
+  if ((symbol.flags & ts.SymbolFlags.Alias) === 0) return symbol
+
+  try {
+    return checker.getAliasedSymbol(symbol)
+  } catch {
+    return symbol
+  }
+}
+
+function getStringLiteralValues(node: ts.ArrayLiteralExpression) {
+  return node.elements.filter(ts.isStringLiteral).map((element) => element.text)
 }
 
 function isNamedProperty(name: ts.PropertyName, expectedName: string) {
@@ -456,45 +577,13 @@ function isNamedProperty(name: ts.PropertyName, expectedName: string) {
   )
 }
 
-function hasExportModifier(node: ts.Node) {
-  return (
-    ts.canHaveModifiers(node) &&
-    !!ts
-      .getModifiers(node)
-      ?.some(
-        (modifier: ts.ModifierLike) =>
-          modifier.kind === ts.SyntaxKind.ExportKeyword,
-      )
-  )
-}
-
 function getEntityNameText(name: ts.EntityName): string {
   if (ts.isIdentifier(name)) return name.text
   return name.right.text
 }
 
-function getJsDocText(node: ts.Node, sourceFile: ts.SourceFile) {
-  const leadingText = sourceFile.text.slice(
-    node.getFullStart(),
-    node.getStart(sourceFile),
-  )
-  const matches = leadingText.match(/\/\*\*([\s\S]*?)\*\//g)
-  if (!matches || matches.length === 0) return undefined
-
-  const lastComment = matches[matches.length - 1]
-  const normalized = lastComment
-    .replace(/^\/\*\*/, '')
-    .replace(/\*\/$/, '')
-    .split(/\r?\n/)
-    .map((line) => line.replace(/^\s*\*\s?/, '').trimEnd())
-    .join('\n')
-    .trim()
-
-  return normalized || undefined
-}
-
-function getLineNumber(sourceFile: ts.SourceFile, node: ts.Node) {
-  return sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile))
+function getLineNumber(node: ts.Node) {
+  return node.getSourceFile().getLineAndCharacterOfPosition(node.getStart())
     .line
 }
 
