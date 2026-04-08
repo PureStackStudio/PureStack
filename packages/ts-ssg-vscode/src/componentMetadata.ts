@@ -4,6 +4,7 @@ import ts from 'typescript'
 export type ComponentPropInfo = {
   propName: string
   attributeName: string
+  declarationLine: number
   documentation?: string
   valueKind: 'string' | 'boolean' | 'number' | 'union' | 'unknown'
   literalValues?: string[]
@@ -11,6 +12,7 @@ export type ComponentPropInfo = {
 
 export type ComponentMetadata = {
   componentName: string
+  declarationLine: number
   documentation?: string
   props: ComponentPropInfo[]
 }
@@ -126,6 +128,7 @@ function createComponentMetadata(
 
   return {
     componentName: componentTypeName,
+    declarationLine: getLineNumber(sourceFile, typeDeclaration),
     documentation: getJsDocText(typeDeclaration, sourceFile),
     props: propNames.map((propName) =>
       createComponentPropInfo(
@@ -139,7 +142,9 @@ function createComponentMetadata(
 }
 
 function isDefineComponentCall(node: ts.CallExpression) {
-  return ts.isIdentifier(node.expression) && node.expression.text === 'defineComponent'
+  return (
+    ts.isIdentifier(node.expression) && node.expression.text === 'defineComponent'
+  )
 }
 
 function getDefineComponentTypeName(node: ts.CallExpression) {
@@ -187,6 +192,7 @@ function createComponentPropInfo(
   return {
     propName,
     attributeName: toKebabCase(propName),
+    declarationLine: propDeclaration ? getLineNumber(sourceFile, propDeclaration) : 0,
     documentation: propDeclaration
       ? getJsDocText(propDeclaration, sourceFile)
       : undefined,
@@ -227,10 +233,7 @@ function findPropDeclaration(typeDeclaration: TypeDeclaration, propName: string)
 }
 
 function getPropTypeNode(
-  propDeclaration:
-    | ts.PropertySignature
-    | ts.PropertyDeclaration
-    | undefined,
+  propDeclaration: ts.PropertySignature | ts.PropertyDeclaration | undefined,
 ): ts.TypeNode | undefined {
   return propDeclaration?.type
 }
@@ -412,6 +415,10 @@ function getJsDocText(node: ts.Node, sourceFile: ts.SourceFile) {
     .trim()
 
   return normalized || undefined
+}
+
+function getLineNumber(sourceFile: ts.SourceFile, node: ts.Node) {
+  return sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile)).line
 }
 
 function toKebabCase(value: string) {

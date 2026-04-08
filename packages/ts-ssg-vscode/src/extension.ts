@@ -42,18 +42,45 @@ class ComponentDefinitionProvider implements vscode.DefinitionProvider {
     document: vscode.TextDocument,
     position: vscode.Position,
   ): vscode.Location | undefined {
-    const componentName = getComponentNameAtPosition(document, position)
-    if (!componentName) return undefined
+    const tagContext = getComponentTagContextAtPosition(document, position)
+    if (!tagContext) return undefined
 
     const workspaceRoot = resolveWorkspaceRoot(document.uri.fsPath)
     if (!workspaceRoot) return undefined
 
-    const target = resolveComponentTarget(workspaceRoot, componentName)
+    const target = resolveComponentTarget(workspaceRoot, tagContext.componentName)
     if (!target) return undefined
+
+    const metadata = getComponentMetadata(target.filePath, tagContext.componentName)
+    if (!metadata) {
+      return new vscode.Location(
+        vscode.Uri.file(target.filePath),
+        new vscode.Position(target.line, 0),
+      )
+    }
+
+    const attributeName = getAttributeNameAtPosition(document, position)
+    if (attributeName) {
+      const normalizedAttributeName = normalizeAttributeName(
+        stripAttributePrefix(attributeName),
+      )
+      const prop = metadata.props.find(
+        (item) => normalizeAttributeName(item.attributeName) === normalizedAttributeName,
+      )
+      if (prop) {
+        return new vscode.Location(
+          vscode.Uri.file(target.filePath),
+          new vscode.Position(prop.declarationLine, 0),
+        )
+      }
+    }
+
+    const componentName = getComponentNameAtPosition(document, position)
+    if (!componentName) return undefined
 
     return new vscode.Location(
       vscode.Uri.file(target.filePath),
-      new vscode.Position(target.line, 0),
+      new vscode.Position(metadata.declarationLine, 0),
     )
   }
 }
@@ -127,7 +154,11 @@ class ComponentHoverProvider implements vscode.HoverProvider {
     if (!metadata) return undefined
 
     const componentName = getComponentNameAtPosition(document, position)
-    if (componentName && normalizeComponentName(componentName) === normalizeComponentName(tagContext.componentName)) {
+    if (
+      componentName &&
+      normalizeComponentName(componentName) ===
+        normalizeComponentName(tagContext.componentName)
+    ) {
       if (!metadata.documentation) return undefined
       return new vscode.Hover(metadata.documentation)
     }
@@ -135,7 +166,9 @@ class ComponentHoverProvider implements vscode.HoverProvider {
     const attributeName = getAttributeNameAtPosition(document, position)
     if (!attributeName) return undefined
 
-    const normalizedAttributeName = normalizeAttributeName(stripAttributePrefix(attributeName))
+    const normalizedAttributeName = normalizeAttributeName(
+      stripAttributePrefix(attributeName),
+    )
     const prop = metadata.props.find(
       (item) => normalizeAttributeName(item.attributeName) === normalizedAttributeName,
     )
@@ -184,6 +217,9 @@ function getAttributeNameAtPosition(
 
   const value = document.getText(range)
   if (!value) return undefined
+  if (normalizeComponentName(value) === normalizeComponentName(tagContext.componentName)) {
+    return undefined
+  }
 
   return value
 }
