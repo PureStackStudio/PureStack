@@ -1,9 +1,9 @@
-import type { SemanticTone } from '@purestack/ts-common'
 import {
   getSemanticToneBorderClass,
   getSemanticToneSurfaceClass,
   getSemanticToneTextClass,
   resolveSemanticTone,
+  type SemanticTone,
 } from '@purestack/ts-style'
 import {
   type ComputedRef,

@@ -21,6 +21,14 @@ When you implement, every function name should sing. Every abstraction should fe
 Iterate Relentlessly
 The first version is never good enough. Take screenshots. Run tests. Compare results. Refine until it's not just working, but insanely great.
 
+Watch mode rule
+
+Do not automatically run tests after every change.
+
+Assume the user may already be running tests in watch mode unless they explicitly ask for a test run.
+
+Only run tests when the user requests it, when verification is necessary to resolve uncertainty that cannot be checked another way, or when the user is clearly not already handling test feedback manually.
+
 Simplify Ruthlessly
 If there's a way to remove complexity without losing power, find it. Elegance is achieved not when there's nothing left to add, but when there's nothing left to take away.
 

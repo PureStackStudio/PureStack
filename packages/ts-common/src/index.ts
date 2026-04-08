@@ -28,7 +28,6 @@ export {
   resolveTsSsgContext,
   tryResolveTsSsgContext,
 } from './resolveTsSsgContext'
-export type { SemanticTone } from './semantic-tone'
 export type {
   AnalyticsConfig,
   Ga4Config,
