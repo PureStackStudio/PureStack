@@ -893,6 +893,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@purestack/ts-ssg-vscode@workspace:packages/ts-ssg-vscode":
+  version: 0.0.0-use.local
+  resolution: "@purestack/ts-ssg-vscode@workspace:packages/ts-ssg-vscode"
+  dependencies:
+    typescript: "npm:^5.9.3"
+  languageName: unknown
+  linkType: soft
+
 "@purestack/ts-ssg@workspace:packages/ts-ssg":
   version: 0.0.0-use.local
   resolution: "@purestack/ts-ssg@workspace:packages/ts-ssg"

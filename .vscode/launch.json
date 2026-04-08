@@ -10,9 +10,7 @@
         "--extensionDevelopmentPath=${workspaceFolder}/packages/ts-ssg-vscode",
         "${workspaceFolder}"
       ],
-      "outFiles": [
-        "${workspaceFolder}/packages/ts-ssg-vscode/dist/**/*.js"
-      ],
+      "outFiles": ["${workspaceFolder}/packages/ts-ssg-vscode/dist/**/*.js"],
       "preLaunchTask": "PureStack VSCode: Build Extension"
     }
   ]

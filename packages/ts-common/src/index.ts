@@ -24,7 +24,10 @@ export type {
   PageTemplateInput,
   PageTemplateMap,
 } from './page-template-types'
-export { resolveTsSsgContext } from './resolveTsSsgContext'
+export {
+  resolveTsSsgContext,
+  tryResolveTsSsgContext,
+} from './resolveTsSsgContext'
 export type {
   AnalyticsConfig,
   Ga4Config,

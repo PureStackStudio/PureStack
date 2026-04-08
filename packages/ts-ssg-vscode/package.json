@@ -9,10 +9,18 @@
   "engines": {
     "vscode": "^1.85.0"
   },
-  "categories": ["Other"],
-  "activationEvents": ["onLanguage:markdown", "onLanguage:mdx"],
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:markdown",
+    "onLanguage:mdx"
+  ],
   "main": "./dist/extension.js",
-  "files": ["dist/**/*", "README.md"],
+  "files": [
+    "dist/**/*",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc -p .",
     "watch": "tsc -p . --watch"
@@ -24,7 +32,9 @@
     "languages": [
       {
         "id": "mdx",
-        "extensions": [".mdx"]
+        "extensions": [
+          ".mdx"
+        ]
       }
     ]
   }

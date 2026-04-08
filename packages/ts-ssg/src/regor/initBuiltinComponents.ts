@@ -30,7 +30,7 @@ import {
   registerSemanticToneUtilityStyles,
   styleBuilder,
 } from '@purestack/ts-style'
-import { createScriptComponents } from 'packages/ts-components/src/standard/pageScript/pageScript'
+import { createScriptComponents } from '../../../ts-components/src/standard/pageScript/pageScript'
 import { registerDocLayoutStyles } from '../templates/docLayoutStyles'
 import { registerMarkdownStyles } from '../templates/markdownStyles'
 

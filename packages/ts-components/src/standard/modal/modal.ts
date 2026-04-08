@@ -1,9 +1,9 @@
+import { tryResolveTsSsgContext } from '@purestack/ts-common'
 import {
   getSemanticToneSurfaceClass,
   getSemanticToneTextClass,
   resolveSemanticTone,
 } from '@purestack/ts-style'
-import { tryResolveTsSsgContext } from 'packages/ts-common/src/resolveTsSsgContext'
 import {
   type ComponentHead,
   type ComputedRef,

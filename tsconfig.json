@@ -18,9 +18,8 @@
     "composite": true,
     "rootDir": "./",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "baseUrl": ".",
     "paths": {
-      "@purestack/*": ["packages/*/src"]
+      "@purestack/*": ["./packages/*/src"]
     }
   },
   "include": ["./packages/*/src"]

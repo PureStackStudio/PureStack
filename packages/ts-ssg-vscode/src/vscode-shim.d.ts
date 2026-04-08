@@ -1,3 +1,5 @@
+type Thenable<T> = PromiseLike<T>
+
 declare module 'vscode' {
   export interface Disposable {
     dispose(): void
@@ -36,7 +38,10 @@ declare module 'vscode' {
 
   export interface TextDocument {
     readonly uri: Uri
-    getWordRangeAtPosition(position: Position, regex?: RegExp): Range | undefined
+    getWordRangeAtPosition(
+      position: Position,
+      regex?: RegExp,
+    ): Range | undefined
     getText(range?: Range): string
     lineAt(line: number): TextLine
   }
@@ -58,7 +63,11 @@ declare module 'vscode' {
     readonly scheme?: string
   }
 
-  export type ProviderResult<T> = T | undefined | null | Thenable<T | undefined | null>
+  export type ProviderResult<T> =
+    | T
+    | undefined
+    | null
+    | Thenable<T | undefined | null>
 
   export namespace languages {
     function registerDefinitionProvider(

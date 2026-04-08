@@ -1,4 +1,4 @@
-import { tryResolveTsSsgContext } from 'packages/ts-common/src/resolveTsSsgContext'
+import { tryResolveTsSsgContext } from '@purestack/ts-common'
 import {
   type ComponentHead,
   defineComponent,

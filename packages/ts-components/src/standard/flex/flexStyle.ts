@@ -23,7 +23,9 @@ export function registerFlexStyles() {
     styleBuilder.select('.flex--align-end', theme).alignItems('flex-end')
     styleBuilder.select('.flex--align-baseline', theme).alignItems('baseline')
 
-    styleBuilder.select('.flex--justify-start', theme).justifyContent('flex-start')
+    styleBuilder
+      .select('.flex--justify-start', theme)
+      .justifyContent('flex-start')
     styleBuilder.select('.flex--justify-center', theme).justifyContent('center')
     styleBuilder.select('.flex--justify-end', theme).justifyContent('flex-end')
     styleBuilder
