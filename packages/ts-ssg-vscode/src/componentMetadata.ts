@@ -67,6 +67,7 @@ function getProjectLanguageService(filePath: string) {
   }
 
   const languageService = createProjectLanguageService(filePath, configPath)
+  cachedService?.languageService.dispose()
   projectServiceCache.set(cacheKey, {
     configMtimeMs,
     languageService,
