@@ -1,28 +1,30 @@
 import { getSvgIcon } from '@purestack/ts-svg-icons'
-import { defineComponent, html, unref } from 'regor'
+import {
+  type ComputedRef,
+  computed,
+  defineComponent,
+  html,
+  type RefOrValue,
+  unref,
+} from 'regor'
 
 import { registerIconStyles } from './iconStyle'
 
 export interface Icon {
-  name?: string
-  size?: string
-  label?: string
-  class?: string
-  svg?: string
-  wrap?: boolean
-  ariaLabel?: string
-  ariaHidden?: string
-  role?: string
-  customClass?: string
-  iconStyle?: Record<string, string>
+  name?: RefOrValue<string>
+  ariaLabel?: RefOrValue<string>
+  class?: RefOrValue<string>
+  wrap?: RefOrValue<boolean>
+  svg?: ComputedRef<string>
+  ariaHidden?: ComputedRef<boolean>
+  role?: ComputedRef<string>
 }
 
 const iconTemplate = html`
-<span class="icon-wrap" :class="customClass" r-if="wrap">
+<span class="icon-wrap" :class="class" r-if="wrap">
   <span
     class="icon"
-    :class="customClass"
-    :style="iconStyle"
+    :class="class"
     :role="role"
     :aria-label="ariaLabel"
     :aria-hidden="ariaHidden"
@@ -31,8 +33,7 @@ const iconTemplate = html`
 </span>
 <span r-else
   class="icon"
-  :class="customClass"
-  :style="iconStyle"
+  :class="class"
   :role="role"
   :aria-label="ariaLabel"
   :aria-hidden="ariaHidden"
@@ -42,7 +43,7 @@ const iconTemplate = html`
 
 function createIconComponent() {
   return defineComponent<Icon>(iconTemplate, {
-    props: ['name', 'size', 'label', 'class', 'wrap'],
+    props: ['name', 'ariaLabel', 'class', 'wrap'],
     context: (head) => resolveIcon(head.props),
   })
 }
@@ -55,38 +56,17 @@ export function createIconComponents() {
 }
 
 function resolveIcon(props: Icon): Icon {
-  const name = resolveText(unref(props.name))
-  const label = resolveText(unref(props.label))
-  const size = resolveCssSize(unref(props.size))
-  const svg = name ? getSvgIcon(name) : ''
+  const svg = computed(() => {
+    const name = unref(props.name)
+    return name ? getSvgIcon(name) : ''
+  })
+  const ariaHidden = computed(() => !unref(props.ariaLabel))
+  const role = computed<string>(() => (unref(props.ariaLabel) ? 'img' : ''))
 
   return {
+    ...props,
     svg,
-    ariaLabel: label,
-    ariaHidden: label ? undefined : 'true',
-    role: label ? 'img' : '',
-    customClass: props.class,
-    iconStyle: buildIconStyle(size),
+    ariaHidden,
+    role,
   }
-}
-
-function buildIconStyle(size: string): Record<string, string> {
-  if (!size) return {}
-  return {
-    width: size,
-    height: size,
-  }
-}
-
-function resolveText(value: unknown) {
-  return typeof value === 'string' && value.trim().length > 0
-    ? value.trim()
-    : ''
-}
-
-function resolveCssSize(value: unknown) {
-  const normalized = resolveText(value)
-  if (!normalized) return ''
-  if (/[;{}]/.test(normalized)) return ''
-  return normalized
 }

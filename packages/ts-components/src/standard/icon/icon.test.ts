@@ -20,20 +20,15 @@ describe('Icon rendering', () => {
     expect(html).toContain('aria-hidden="true"')
   })
 
-  it('applies size style and accessible label', () => {
+  it('applies accessible label', () => {
     const cleanup = ensureDomGlobals()
     const components = createIconComponents()
-    const html = renderApp(
-      `<Icon name="iconoir:pin" size="28px" label="Pinned" />`,
-      {
-        components,
-        context: createTestContext(),
-      },
-    )
+    const html = renderApp(`<Icon name="iconoir:pin" aria-label="Pinned" />`, {
+      components,
+      context: createTestContext(),
+    })
     cleanup()
 
-    expect(html).toContain('width: 28px')
-    expect(html).toContain('height: 28px')
     expect(html).toContain('role="img"')
     expect(html).toContain('aria-label="Pinned"')
     expect(html).not.toMatch(/<span class="icon"[^>]*aria-hidden="true"/)
