@@ -58,6 +58,30 @@ declare module 'vscode' {
     ): ProviderResult<Location | Location[]>
   }
 
+  export interface CompletionProvider {
+    provideCompletionItems(
+      document: TextDocument,
+      position: Position,
+      token: CancellationToken,
+      context: CompletionContext,
+    ): ProviderResult<CompletionItem[]>
+  }
+
+  export interface CompletionContext {}
+
+  export class CompletionItem {
+    constructor(label: string, kind?: CompletionItemKind)
+    detail?: string
+    insertText?: string
+    label: string
+    kind?: CompletionItemKind
+  }
+
+  export enum CompletionItemKind {
+    Property = 10,
+    Value = 12,
+  }
+
   export type DocumentSelector = ReadonlyArray<DocumentFilter | string>
 
   export interface DocumentFilter {
@@ -75,6 +99,12 @@ declare module 'vscode' {
     function registerDefinitionProvider(
       selector: DocumentSelector,
       provider: DefinitionProvider,
+    ): Disposable
+
+    function registerCompletionItemProvider(
+      selector: DocumentSelector,
+      provider: CompletionProvider,
+      ...triggerCharacters: string[]
     ): Disposable
   }
 

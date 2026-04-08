@@ -1,5 +1,6 @@
 import ts from 'typescript'
 import * as vscode from 'vscode'
+import { getComponentMetadata } from './componentMetadata'
 import { resolveComponentTarget } from './componentResolver'
 
 const COMPONENT_TAG_PATTERN = /[A-Za-z][A-Za-z0-9-]*/
@@ -16,6 +17,15 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.languages.registerDefinitionProvider(
       SUPPORTED_SELECTORS,
       new ComponentDefinitionProvider(),
+    ),
+    vscode.languages.registerCompletionItemProvider(
+      SUPPORTED_SELECTORS,
+      new ComponentCompletionProvider(),
+      ' ',
+      '-',
+      '"',
+      "'",
+      '=',
     ),
   )
 }
@@ -43,6 +53,59 @@ class ComponentDefinitionProvider implements vscode.DefinitionProvider {
   }
 }
 
+class ComponentCompletionProvider implements vscode.CompletionProvider {
+  provideCompletionItems(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+  ): vscode.CompletionItem[] | undefined {
+    const tagContext = getComponentTagContextAtPosition(document, position)
+    if (!tagContext) return undefined
+
+    const workspaceRoot = resolveWorkspaceRoot(document.uri.fsPath)
+    if (!workspaceRoot) return undefined
+
+    const target = resolveComponentTarget(workspaceRoot, tagContext.componentName)
+    if (!target) return undefined
+
+    const metadata = getComponentMetadata(target.filePath, tagContext.componentName)
+    if (!metadata) return undefined
+
+    if (tagContext.activeAttributeName) {
+      const activeAttributeName = normalizeAttributeName(tagContext.activeAttributeName)
+      const prop = metadata.props.find(
+        (item) => normalizeAttributeName(item.attributeName) === activeAttributeName,
+      )
+      if (!prop?.literalValues || prop.literalValues.length === 0) return undefined
+
+      return prop.literalValues.map((value) => {
+        const item = new vscode.CompletionItem(
+          value,
+          vscode.CompletionItemKind.Value,
+        )
+        item.insertText = value
+        item.detail = `${metadata.componentName}.${prop.propName}`
+        return item
+      })
+    }
+
+    const existingAttributeNames = new Set(
+      Array.from(tagContext.attributeNames).map(normalizeAttributeName),
+    )
+
+    return metadata.props
+      .filter((prop) => !existingAttributeNames.has(normalizeAttributeName(prop.attributeName)))
+      .map((prop) => {
+        const item = new vscode.CompletionItem(
+          prop.attributeName,
+          vscode.CompletionItemKind.Property,
+        )
+        item.insertText = `${prop.attributeName}=""`
+        item.detail = `${metadata.componentName}.${prop.propName}`
+        return item
+      })
+  }
+}
+
 function getComponentNameAtPosition(
   document: vscode.TextDocument,
   position: vscode.Position,
@@ -55,6 +118,100 @@ function getComponentNameAtPosition(
   if (!isSupportedComponentTagRange(document, position, range)) return undefined
 
   return word
+}
+
+type ComponentTagContext = {
+  activeAttributeName?: string
+  attributeNames: Set<string>
+  componentName: string
+}
+
+function getComponentTagContextAtPosition(
+  document: vscode.TextDocument,
+  position: vscode.Position,
+): ComponentTagContext | undefined {
+  if (!isSupportedTemplateContext(document, position)) return undefined
+
+  const offset = document.offsetAt(position)
+  const documentText = document.getText()
+  const tagStart = findTagStart(documentText, offset)
+  if (tagStart < 0) return undefined
+
+  const tagEnd = documentText.indexOf('>', offset)
+  if (tagEnd < 0) return undefined
+  if (documentText.slice(tagStart, offset).includes('>')) return undefined
+
+  const tagText = documentText.slice(tagStart, tagEnd + 1)
+  if (/^<\s*\//.test(tagText)) return undefined
+
+  const tagNameMatch = /^<\s*([A-Za-z][A-Za-z0-9-]*)/.exec(tagText)
+  if (!tagNameMatch) return undefined
+
+  const componentName = tagNameMatch[1]
+  const cursorRelativeOffset = offset - tagStart
+  if (cursorRelativeOffset <= tagNameMatch[0].length) return undefined
+
+  const attributeNames = getAttributeNames(tagText)
+  const activeAttributeName = getActiveAttributeName(tagText, cursorRelativeOffset)
+
+  return {
+    activeAttributeName,
+    attributeNames,
+    componentName,
+  }
+}
+
+function findTagStart(documentText: string, offset: number) {
+  for (let index = offset - 1; index >= 0; index--) {
+    const currentCharacter = documentText[index]
+    if (currentCharacter === '<') return index
+    if (currentCharacter === '>') return -1
+  }
+
+  return -1
+}
+
+function getAttributeNames(tagText: string) {
+  const attributeNames = new Set<string>()
+  const pattern = /([:@.]?[A-Za-z][A-Za-z0-9:-]*)\s*=\s*(?:"[^"]*"|'[^']*'|\{[^}]*\}|[^\s>]+)/g
+
+  for (;;) {
+    const match = pattern.exec(tagText)
+    if (!match) return attributeNames
+
+    attributeNames.add(stripAttributePrefix(match[1]))
+  }
+}
+
+function getActiveAttributeName(tagText: string, cursorRelativeOffset: number) {
+  const textBeforeCursor = tagText.slice(0, cursorRelativeOffset)
+  const quotedValueMatch = /([:@.]?[A-Za-z][A-Za-z0-9:-]*)\s*=\s*(?:"[^"]*$|'[^']*$)/.exec(
+    textBeforeCursor,
+  )
+  if (quotedValueMatch) return stripAttributePrefix(quotedValueMatch[1])
+
+  return undefined
+}
+
+function stripAttributePrefix(value: string) {
+  if (value.startsWith('r-bind:')) return value.slice('r-bind:'.length)
+  if (value.startsWith(':') || value.startsWith('.')) return value.slice(1)
+  return value
+}
+
+function normalizeAttributeName(value: string) {
+  return value.replace(/[-_\s]+/g, '').toLowerCase()
+}
+
+function isSupportedTemplateContext(
+  document: vscode.TextDocument,
+  position: vscode.Position,
+): boolean {
+  if (document.languageId === 'typescript') {
+    return isHtmlTemplatePosition(document, position)
+  }
+
+  return document.languageId === 'markdown' || document.languageId === 'mdx'
 }
 
 function isSupportedComponentTagRange(
@@ -92,6 +249,13 @@ function isHtmlTemplateComponentTagRange(
 ): boolean {
   if (!isComponentTagRange(document, range)) return false
 
+  return isHtmlTemplatePosition(document, position)
+}
+
+function isHtmlTemplatePosition(
+  document: vscode.TextDocument,
+  position: vscode.Position,
+): boolean {
   const offset = document.offsetAt(position)
   const sourceFile = ts.createSourceFile(
     document.uri.fsPath,
