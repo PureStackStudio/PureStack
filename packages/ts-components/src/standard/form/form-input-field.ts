@@ -2,11 +2,25 @@ import { defineComponent, html, type Ref, type RefOrValue, unref } from 'regor'
 
 let nextAutoInputId = 1
 
+export type FormInputFieldType =
+  | 'text'
+  | 'email'
+  | 'password'
+  | 'number'
+  | 'tel'
+  | 'url'
+  | 'search'
+  | 'date'
+  | 'time'
+  | 'datetime-local'
+  | 'month'
+  | 'week'
+
 export class FormInputField {
   declare readonly id: string
   declare readonly label?: RefOrValue<string>
   declare readonly model: Ref<string | number>
-  declare readonly type?: RefOrValue<string>
+  declare readonly type?: RefOrValue<FormInputFieldType>
   declare readonly name?: RefOrValue<string>
   declare readonly autocomplete?: RefOrValue<string>
   declare readonly min?: RefOrValue<number | string>
@@ -17,7 +31,7 @@ export class FormInputField {
     id?: string
     label?: RefOrValue<string>
     model: Ref<string | number>
-    type?: RefOrValue<string>
+    type?: RefOrValue<FormInputFieldType>
     name?: RefOrValue<string>
     autocomplete?: RefOrValue<string>
     min?: RefOrValue<number | string>
