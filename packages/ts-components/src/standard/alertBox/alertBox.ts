@@ -1,3 +1,4 @@
+import type { SemanticTone } from '@purestack/ts-common'
 import {
   getSemanticToneIconClass,
   getSemanticToneSurfaceClass,
@@ -19,7 +20,7 @@ export interface AlertBox {
   eyebrow?: RefOrValue<string>
   badge?: RefOrValue<string>
   meta?: RefOrValue<string>
-  tone?: RefOrValue<string>
+  tone?: RefOrValue<SemanticTone>
   icon?: RefOrValue<string>
   rootClass?: ComputedRef<string>
   titleToneClass?: ComputedRef<string>

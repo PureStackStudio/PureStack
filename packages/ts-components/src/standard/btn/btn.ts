@@ -1,3 +1,4 @@
+import type { SemanticTone } from '@purestack/ts-common'
 import {
   getSemanticToneBorderClass,
   getSemanticToneSurfaceClass,
@@ -20,7 +21,7 @@ export type BtnType = 'button' | 'submit' | 'reset'
 export type BtnIconPosition = 'start' | 'end'
 
 export interface Btn {
-  tone?: RefOrValue<string>
+  tone?: RefOrValue<SemanticTone>
   size?: RefOrValue<BtnSize>
   type?: RefOrValue<BtnType>
   icon?: RefOrValue<string>

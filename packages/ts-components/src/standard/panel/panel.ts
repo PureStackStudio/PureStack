@@ -1,3 +1,4 @@
+import type { SemanticTone } from '@purestack/ts-common'
 import {
   getSemanticToneSurfaceClass,
   getSemanticToneTextClass,
@@ -15,7 +16,7 @@ import {
 import { registerPanelStyles } from './panelStyle'
 
 export interface Panel {
-  tone?: RefOrValue<string>
+  tone?: RefOrValue<SemanticTone>
   rootClass?: ComputedRef<string>
 }
 

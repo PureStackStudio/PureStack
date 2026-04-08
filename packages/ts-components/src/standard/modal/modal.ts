@@ -1,4 +1,7 @@
-import { tryResolveTsSsgContext } from '@purestack/ts-common'
+import {
+  type SemanticTone,
+  tryResolveTsSsgContext,
+} from '@purestack/ts-common'
 import {
   getSemanticToneSurfaceClass,
   getSemanticToneTextClass,
@@ -21,7 +24,7 @@ export type ModalSlideFrom = 'none' | 'top' | 'right' | 'bottom' | 'left'
 export interface Modal {
   id?: string
   title?: RefOrValue<string>
-  tone?: RefOrValue<string>
+  tone?: RefOrValue<SemanticTone>
   size?: RefOrValue<ModalSize>
   fade?: RefOrValue<boolean>
   slideFrom?: RefOrValue<ModalSlideFrom>

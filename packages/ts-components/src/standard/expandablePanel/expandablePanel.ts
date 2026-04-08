@@ -1,3 +1,4 @@
+import type { SemanticTone } from '@purestack/ts-common'
 import {
   getSemanticToneIconClass,
   getSemanticToneSurfaceClass,
@@ -21,7 +22,7 @@ export interface ExpandablePanel {
   meta?: RefOrValue<string>
   badge?: RefOrValue<string>
   icon?: RefOrValue<string>
-  tone?: RefOrValue<string>
+  tone?: RefOrValue<SemanticTone>
   open?: RefOrValue<boolean>
   rootClass?: ComputedRef<string>
   iconToneClass?: ComputedRef<string>
