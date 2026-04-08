@@ -42,7 +42,6 @@ export class FormInputField {
       ...props,
       id: resolveInputId(unref(props.id)),
     })
-    this.label = props.label
   }
 
   get isNumberField() {
