@@ -1,0 +1,31 @@
+{
+  "name": "@purestack/ts-ssg-vscode",
+  "displayName": "PureStack MDX Component Navigation",
+  "description": "Ctrl+Click MDX and Markdown component tags to open the matching ts-components source file.",
+  "version": "0.0.1",
+  "private": true,
+  "publisher": "purestack-local",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": ["onLanguage:markdown", "onLanguage:mdx"],
+  "main": "./dist/extension.js",
+  "files": ["dist/**/*", "README.md"],
+  "scripts": {
+    "build": "tsc -p .",
+    "watch": "tsc -p . --watch"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "mdx",
+        "extensions": [".mdx"]
+      }
+    ]
+  }
+}

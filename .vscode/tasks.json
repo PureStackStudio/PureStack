@@ -1,0 +1,14 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "PureStack VSCode: Build Extension",
+      "type": "shell",
+      "command": ".\\node_modules\\.bin\\tsc.cmd -p packages/ts-ssg-vscode",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": "$tsc"
+    }
+  ]
+}

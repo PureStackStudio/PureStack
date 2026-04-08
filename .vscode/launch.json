@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "PureStack VSCode: Launch Extension",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "args": [
+        "--extensionDevelopmentPath=${workspaceFolder}/packages/ts-ssg-vscode",
+        "${workspaceFolder}"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/packages/ts-ssg-vscode/dist/**/*.js"
+      ],
+      "preLaunchTask": "PureStack VSCode: Build Extension"
+    }
+  ]
+}
