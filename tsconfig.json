@@ -17,21 +17,11 @@
     "forceConsistentCasingInFileNames": true,
     "composite": true,
     "rootDir": "./",
-    "types": [
-      "node"
-    ],
-    "lib": [
-      "ESNext",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "types": ["node"],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "paths": {
-      "@purestack/*": [
-        "./packages/*/src"
-      ]
+      "@purestack/*": ["./packages/*/src"]
     }
   },
-  "include": [
-    "./packages/*/src"
-  ]
+  "include": ["./packages/*/src"]
 }
