@@ -192,7 +192,11 @@ function getTypeScriptTemplateContextAtOffset(
     if (matchedContext) return
     if (offset < node.getStart(sourceFile) || offset > node.getEnd()) return
 
-    const templateContext = getSupportedTemplateContext(sourceFile, node, offset)
+    const templateContext = getSupportedTemplateContext(
+      sourceFile,
+      node,
+      offset,
+    )
     if (templateContext) {
       matchedContext = templateContext
       return
@@ -268,7 +272,9 @@ function getSupportedTemplateContext(
 ): MarkupContext | undefined {
   if (!ts.isTaggedTemplateExpression(node)) return undefined
 
-  const tagName = normalizeSupportedTemplateTagName(node.tag.getText(sourceFile))
+  const tagName = normalizeSupportedTemplateTagName(
+    node.tag.getText(sourceFile),
+  )
   if (!tagName) return undefined
 
   const template = node.template
@@ -304,7 +310,9 @@ function startFrontmatter(
   if (lineIndex !== 0 || trimmed !== '---') return false
 
   state.inFrontmatter = true
-  state.frontmatterStartOffset = document.offsetAt(document.lineAt(0).range.start)
+  state.frontmatterStartOffset = document.offsetAt(
+    document.lineAt(0).range.start,
+  )
   return true
 }
 
@@ -320,7 +328,9 @@ function closeFrontmatter(
 
   ignoredRanges.push({
     start: state.frontmatterStartOffset ?? 0,
-    end: document.offsetAt(document.lineAt(lineIndex).rangeIncludingLineBreak.end),
+    end: document.offsetAt(
+      document.lineAt(lineIndex).rangeIncludingLineBreak.end,
+    ),
   })
   state.inFrontmatter = false
   state.frontmatterStartOffset = undefined

@@ -111,7 +111,14 @@ export function getMdxMarkupBlocks(
       continue
     }
 
-    collectActiveMarkupBlock(blocks, document, lineIndex, lineText, trimmed, state)
+    collectActiveMarkupBlock(
+      blocks,
+      document,
+      lineIndex,
+      lineText,
+      trimmed,
+      state,
+    )
   }
 
   if (
