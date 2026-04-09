@@ -8,7 +8,7 @@ import {
   shouldFormatOnSave,
 } from './htmlFormatting'
 
-export type SupportedTemplateTagName = 'html' | 'raw' | 'svg'
+export type SupportedTemplateTagName = 'html' | 'svg'
 
 export interface SupportedTaggedTemplate {
   content: string
@@ -24,11 +24,7 @@ interface TemplateExpressionPlaceholder {
   source: string
 }
 
-const SUPPORTED_TEMPLATE_TAG_NAMES: SupportedTemplateTagName[] = [
-  'html',
-  'raw',
-  'svg',
-]
+const SUPPORTED_TEMPLATE_TAG_NAMES: SupportedTemplateTagName[] = ['html', 'svg']
 
 interface TemplateFormattingRequest {
   onlyWithinRange?: vscode.Range

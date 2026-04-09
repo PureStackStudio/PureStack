@@ -1,7 +1,7 @@
 import ts from 'typescript'
 import * as vscode from 'vscode'
 
-const SUPPORTED_TEMPLATE_TAG_NAMES = new Set(['html', 'raw', 'svg'])
+const SUPPORTED_TEMPLATE_TAG_NAMES = new Set(['html', 'svg'])
 
 export const VOID_HTML_TAG_NAMES = new Set([
   'area',

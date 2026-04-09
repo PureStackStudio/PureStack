@@ -39,6 +39,32 @@
           "include": "source.ts#template-substitution-element"
         },
         {
+          "begin": "(</?)([A-Z][A-Za-z0-9._$-]*)(?=\\s|/?>)",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.definition.tag.begin.html"
+            },
+            "2": {
+              "name": "support.class.component.html"
+            }
+          },
+          "end": "((?: ?/)?>)",
+          "endCaptures": {
+            "1": {
+              "name": "punctuation.definition.tag.end.html"
+            }
+          },
+          "name": "meta.tag.component.html",
+          "patterns": [
+            {
+              "include": "text.xml#attribute"
+            },
+            {
+              "include": "source.ts#template-substitution-element"
+            }
+          ]
+        },
+        {
           "include": "text.xml"
         }
       ]

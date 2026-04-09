@@ -2,7 +2,7 @@
 
 PureStack Component Tools turns VS Code into a real authoring environment for PureStack and Regor.
 
-It understands component tags in Markdown and MDX, understands Regor markup inside TypeScript `html`, `raw`, and `svg` tagged templates, and adds the editing behavior that makes those files feel first-class instead of “HTML inside a string”.
+It understands component tags in Markdown and MDX, understands Regor markup inside TypeScript `html` and `svg` tagged templates, and adds the editing behavior that makes those files feel first-class instead of “HTML inside a string”.
 
 This extension is built for the PureStack workflow:
 
@@ -44,10 +44,9 @@ This extension is built for the PureStack workflow:
 
 ### TypeScript
 
-The extension understands Regor markup inside these tagged templates:
+The extension understands Regor markup editing inside these tagged templates:
 
 - `html`
-- `raw`
 - `svg`
 
 That means a TypeScript file like this gets real editor support inside the template body:
@@ -109,7 +108,7 @@ The extension formats only the markup-aware regions it owns.
 
 In TypeScript:
 
-- only the content of `html`, `raw`, and `svg` tagged templates is reformatted
+- only the content of `html` and `svg` tagged templates is reformatted
 - surrounding TypeScript stays untouched
 
 In MDX:
@@ -220,12 +219,17 @@ For value completion, the extension currently does best when the final unwrapped
 
 ### TypeScript templates
 
-Inside `html`, `raw`, and `svg` tagged templates, the extension provides:
+Inside TypeScript tagged templates, the extension provides:
 
 - HTML or SVG highlighting
 - CSS highlighting in style regions
 - TypeScript highlighting inside `${...}`
 - TypeScript highlighting inside Regor `{{ ... }}` interpolation
+
+Behavior split:
+
+- `html` and `svg` receive the full editing pipeline: formatting, diagnostics, auto-close, and linked editing
+- `raw` remains syntax-highlighted, but is intentionally excluded from formatting and tag-editing behavior
 
 ### MDX
 
