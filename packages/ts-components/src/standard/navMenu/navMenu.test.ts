@@ -3,15 +3,15 @@ import { renderApp } from '@purestack/ts-render'
 import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
-import { createIconComponents } from '../icon/icon'
-import { createNavigationComponents } from './navMenu'
+import { defineIconComponents } from '../icon/icon'
+import { defineNavigationComponents } from './navMenu'
 
 describe('NavMenu rendering', () => {
   it('evaluates r-else branches for leaf items', () => {
     const cleanup = ensureDomGlobals()
     const components = {
-      ...createIconComponents(getSvgIcon),
-      ...createNavigationComponents(),
+      ...defineIconComponents(getSvgIcon),
+      ...defineNavigationComponents(),
     }
     const html = renderApp(
       `<NavMenu

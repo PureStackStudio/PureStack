@@ -127,6 +127,6 @@ function createSiteLogoComponent() {
   })
 }
 
-export function createLogoComponents() {
+export function defineLogoComponents() {
   return { siteLogo: createSiteLogoComponent() }
 }

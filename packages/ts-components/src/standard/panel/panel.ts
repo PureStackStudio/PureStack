@@ -29,7 +29,7 @@ function createPanelComponent() {
   })
 }
 
-export function createPanelComponents() {
+export function definePanelComponents() {
   return {
     panel: createPanelComponent(),
   }

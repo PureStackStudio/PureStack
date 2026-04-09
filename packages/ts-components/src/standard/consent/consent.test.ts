@@ -2,15 +2,15 @@ import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '@purestack/ts-render'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
-import { createButtonComponents } from '../btn/btn'
-import { createConsentComponents } from './consent'
+import { defineButtonComponents } from '../btn/btn'
+import { defineConsentComponents } from './consent'
 
 describe('Consent component rendering', () => {
   it('renders consent shell and categories when enabled', () => {
     const cleanup = ensureDomGlobals()
     const components = {
-      ...createButtonComponents(),
-      ...createConsentComponents(),
+      ...defineButtonComponents(),
+      ...defineConsentComponents(),
     }
     const html = renderApp(`<Consent />`, {
       components,

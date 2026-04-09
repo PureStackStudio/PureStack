@@ -62,6 +62,6 @@ function createThemeSwitcherComponent() {
   return defineComponent(themeSwitcherTemplate)
 }
 
-export function createThemeSwitcherComponents() {
+export function defineThemeSwitcherComponents() {
   return { themeSwitcher: createThemeSwitcherComponent() }
 }

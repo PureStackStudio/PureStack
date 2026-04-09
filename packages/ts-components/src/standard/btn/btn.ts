@@ -63,7 +63,7 @@ function createButtonComponent() {
   })
 }
 
-export function createButtonComponents() {
+export function defineButtonComponents() {
   return {
     btn: createButtonComponent(),
   }

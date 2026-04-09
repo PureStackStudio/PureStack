@@ -36,7 +36,7 @@ function createFlexComponent() {
   })
 }
 
-export function createFlexComponents() {
+export function defineFlexComponents() {
   return {
     flex: createFlexComponent(),
   }

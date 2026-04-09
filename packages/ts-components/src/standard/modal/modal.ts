@@ -97,7 +97,7 @@ function createModalTriggerComponent() {
   })
 }
 
-export function createModalComponents() {
+export function defineModalComponents() {
   return {
     modal: createModalComponent(),
     modalTrigger: createModalTriggerComponent(),

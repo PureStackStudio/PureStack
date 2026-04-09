@@ -67,6 +67,6 @@ function createTopBarComponent() {
   })
 }
 
-export function createTopBarComponents() {
+export function defineTopBarComponents() {
   return { topBar: createTopBarComponent() }
 }

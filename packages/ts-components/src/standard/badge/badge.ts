@@ -32,7 +32,7 @@ function createBadgeComponent() {
   })
 }
 
-export function createBadgeComponents() {
+export function defineBadgeComponents() {
   return {
     badge: createBadgeComponent(),
   }

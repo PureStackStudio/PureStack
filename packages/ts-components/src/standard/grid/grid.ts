@@ -43,7 +43,7 @@ function createGridComponent() {
   })
 }
 
-export function createGridComponents() {
+export function defineGridComponents() {
   return {
     grid: createGridComponent(),
   }

@@ -64,7 +64,7 @@ function createExpandablePanelComponent() {
   })
 }
 
-export function createExpandablePanelComponents() {
+export function defineExpandablePanelComponents() {
   return {
     expandablePanel: createExpandablePanelComponent(),
   }

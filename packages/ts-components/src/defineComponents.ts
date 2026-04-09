@@ -1,53 +1,53 @@
-import { createAlertComponents } from './standard/alertBox/alertBox'
-import { createBadgeComponents } from './standard/badge/badge'
-import { createButtonComponents } from './standard/btn/btn'
-import { createConsentComponents } from './standard/consent/consent'
-import { createContactFormComponents } from './standard/contactForm/contactForm'
-import { createExpandablePanelComponents } from './standard/expandablePanel/expandablePanel'
-import { createFlexComponents } from './standard/flex/flex'
-import { createFooterComponents } from './standard/footer/footer'
-import { createFormComponents } from './standard/form/form'
-import { createGridComponents } from './standard/grid/grid'
-import { createHeroComponents } from './standard/hero/hero'
-import { createIconComponents, type GetSvgIcon } from './standard/icon/icon'
-import { createLoginComponents } from './standard/login/login'
-import { createLogoComponents } from './standard/logo/logo'
-import { createModalComponents } from './standard/modal/modal'
-import { createNavigationComponents } from './standard/navMenu/navMenu'
-import { createScriptComponents } from './standard/pageScript/pageScript'
-import { createPageTocComponents } from './standard/pageToc/pageToc'
-import { createPanelComponents } from './standard/panel/panel'
-import { createPricingComponents } from './standard/pricing/pricing'
-import { createSearchComponents } from './standard/searchBox/searchBox'
-import { createTabsComponents } from './standard/tabs/tabs'
-import { createThemeSwitcherComponents } from './standard/themeSwitcher/themeSwitcher'
-import { createTopBarComponents } from './standard/topBar/topBar'
+import { defineAlertComponents } from './standard/alertBox/alertBox'
+import { defineBadgeComponents } from './standard/badge/badge'
+import { defineButtonComponents } from './standard/btn/btn'
+import { defineConsentComponents } from './standard/consent/consent'
+import { defineContactFormComponents } from './standard/contactForm/contactForm'
+import { defineExpandablePanelComponents } from './standard/expandablePanel/expandablePanel'
+import { defineFlexComponents } from './standard/flex/flex'
+import { defineFooterComponents } from './standard/footer/footer'
+import { defineFormComponents } from './standard/form/form'
+import { defineGridComponents } from './standard/grid/grid'
+import { defineHeroComponents } from './standard/hero/hero'
+import { defineIconComponents, type GetSvgIcon } from './standard/icon/icon'
+import { defineLoginComponents } from './standard/login/login'
+import { defineLogoComponents } from './standard/logo/logo'
+import { defineModalComponents } from './standard/modal/modal'
+import { defineNavigationComponents } from './standard/navMenu/navMenu'
+import { defineScriptComponents } from './standard/pageScript/pageScript'
+import { definePageTocComponents } from './standard/pageToc/pageToc'
+import { definePanelComponents } from './standard/panel/panel'
+import { definePricingComponents } from './standard/pricing/pricing'
+import { defineSearchComponents } from './standard/searchBox/searchBox'
+import { defineTabsComponents } from './standard/tabs/tabs'
+import { defineThemeSwitcherComponents } from './standard/themeSwitcher/themeSwitcher'
+import { defineTopBarComponents } from './standard/topBar/topBar'
 
 export function defineComponents(getSvgIcon: GetSvgIcon) {
   return {
-    ...createAlertComponents(),
-    ...createBadgeComponents(),
-    ...createButtonComponents(),
-    ...createConsentComponents(),
-    ...createContactFormComponents(),
-    ...createExpandablePanelComponents(),
-    ...createFlexComponents(),
-    ...createFooterComponents(),
-    ...createFormComponents(),
-    ...createGridComponents(),
-    ...createHeroComponents(),
-    ...createIconComponents(getSvgIcon),
-    ...createLoginComponents(),
-    ...createLogoComponents(),
-    ...createModalComponents(),
-    ...createTopBarComponents(),
-    ...createThemeSwitcherComponents(),
-    ...createNavigationComponents(),
-    ...createPanelComponents(),
-    ...createPageTocComponents(),
-    ...createPricingComponents(),
-    ...createScriptComponents(),
-    ...createSearchComponents(),
-    ...createTabsComponents(),
+    ...defineAlertComponents(),
+    ...defineBadgeComponents(),
+    ...defineButtonComponents(),
+    ...defineConsentComponents(),
+    ...defineContactFormComponents(),
+    ...defineExpandablePanelComponents(),
+    ...defineFlexComponents(),
+    ...defineFooterComponents(),
+    ...defineFormComponents(),
+    ...defineGridComponents(),
+    ...defineHeroComponents(),
+    ...defineIconComponents(getSvgIcon),
+    ...defineLoginComponents(),
+    ...defineLogoComponents(),
+    ...defineModalComponents(),
+    ...defineTopBarComponents(),
+    ...defineThemeSwitcherComponents(),
+    ...defineNavigationComponents(),
+    ...definePanelComponents(),
+    ...definePageTocComponents(),
+    ...definePricingComponents(),
+    ...defineScriptComponents(),
+    ...defineSearchComponents(),
+    ...defineTabsComponents(),
   }
 }

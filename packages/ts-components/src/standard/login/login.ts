@@ -71,7 +71,7 @@ function createLoginFooterComponent() {
   })
 }
 
-export function createLoginComponents() {
+export function defineLoginComponents() {
   return {
     loginPanel: createLoginPanelComponent(),
     loginHeader: createLoginHeaderComponent(),

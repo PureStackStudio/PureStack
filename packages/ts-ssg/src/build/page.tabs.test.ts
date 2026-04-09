@@ -2,8 +2,8 @@ import fs from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
 import {
-  createIconComponents,
-  createTabsComponents,
+  defineIconComponents,
+  defineTabsComponents,
 } from '@purestack/ts-components'
 import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { getSvgIcon } from '@purestack/ts-svg-icons'
@@ -49,8 +49,8 @@ describe('tabs runtime embedding', () => {
         {
           config,
           components: {
-            ...createIconComponents(getSvgIcon),
-            ...createTabsComponents(),
+            ...defineIconComponents(getSvgIcon),
+            ...defineTabsComponents(),
           } as unknown as Record<string, Component>,
         },
         toContentFile(contentDir, 'index.mdx'),

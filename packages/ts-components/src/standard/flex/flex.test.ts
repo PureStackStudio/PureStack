@@ -2,12 +2,12 @@ import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '@purestack/ts-render'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
-import { createFlexComponents } from './flex'
+import { defineFlexComponents } from './flex'
 
 describe('Flex rendering', () => {
   it('renders modifier classes for direction, alignment, justification, wrapping, and inline mode', () => {
     const cleanup = ensureDomGlobals()
-    const components = createFlexComponents()
+    const components = defineFlexComponents()
     const html = renderApp(
       '<Flex direction="column" align="center" justify="between" wrap="reverse" inline="true">item</Flex>',
       {
@@ -25,7 +25,7 @@ describe('Flex rendering', () => {
 
   it('supports wrap as a boolean prop', () => {
     const cleanup = ensureDomGlobals()
-    const components = createFlexComponents()
+    const components = defineFlexComponents()
     const html = renderApp('<Flex wrap="true">item</Flex>', {
       components,
       context: createTestContext(),
@@ -37,7 +37,7 @@ describe('Flex rendering', () => {
 
   it('omits classes for default row direction and invalid values', () => {
     const cleanup = ensureDomGlobals()
-    const components = createFlexComponents()
+    const components = defineFlexComponents()
     const html = renderApp(
       '<Flex direction="row" align="invalid" justify="invalid" wrap="nowrap" inline="false">item</Flex>',
       {

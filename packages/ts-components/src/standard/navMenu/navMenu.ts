@@ -196,7 +196,7 @@ function createNavMenuComponent() {
   })
 }
 
-export function createNavigationComponents() {
+export function defineNavigationComponents() {
   const navItem = createNavItemComponent()
   const navList = createNavListComponent()
   const navMenu = createNavMenuComponent()

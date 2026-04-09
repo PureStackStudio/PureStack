@@ -63,7 +63,7 @@ function createHeroMediaComponent() {
   })
 }
 
-export function createHeroComponents() {
+export function defineHeroComponents() {
   return {
     heroBanner: createHeroBannerComponent(),
     heroAction: createHeroActionComponent(),

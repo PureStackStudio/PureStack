@@ -2,12 +2,12 @@ import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '@purestack/ts-render'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
-import { createScriptComponents } from './pageScript'
+import { defineScriptComponents } from './pageScript'
 
 describe('PageScript rendering', () => {
   it('maps local .ts src to emitted .js path and defaults to module', () => {
     const cleanup = ensureDomGlobals()
-    const components = createScriptComponents()
+    const components = defineScriptComponents()
     const html = renderApp('<PageScript src="./login.ts" />', {
       components,
       context: createTestContext({
@@ -26,7 +26,7 @@ describe('PageScript rendering', () => {
 
   it('resolves nested relative paths and keeps query/hash suffix', () => {
     const cleanup = ensureDomGlobals()
-    const components = createScriptComponents()
+    const components = defineScriptComponents()
     const html = renderApp(
       '<PageScript src="../scripts/policies.ts?mode=prod#boot" />',
       {
@@ -47,7 +47,7 @@ describe('PageScript rendering', () => {
 
   it('renders RegorApp as app shell and reuses PageScript src mapping', () => {
     const cleanup = ensureDomGlobals()
-    const components = createScriptComponents()
+    const components = defineScriptComponents()
     const html = renderApp(
       '<RegorApp src="./hosts.ts" id="hosts-app" name="hosts-main"></RegorApp>',
       {

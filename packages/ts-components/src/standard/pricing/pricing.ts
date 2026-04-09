@@ -102,7 +102,7 @@ function createPricingFeatureComponent() {
   })
 }
 
-export function createPricingComponents() {
+export function definePricingComponents() {
   return {
     pricingTable: createPricingTableComponent(),
     pricingPlan: createPricingPlanComponent(),

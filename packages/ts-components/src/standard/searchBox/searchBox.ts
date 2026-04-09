@@ -42,7 +42,7 @@ function createSearchBoxComponent() {
   })
 }
 
-export function createSearchComponents() {
+export function defineSearchComponents() {
   return { siteSearch: createSearchBoxComponent() }
 }
 

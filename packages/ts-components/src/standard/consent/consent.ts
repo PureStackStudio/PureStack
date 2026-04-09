@@ -139,6 +139,6 @@ function resolveConsent(context: TsSsgContext): Consent {
   }
 }
 
-export function createConsentComponents() {
+export function defineConsentComponents() {
   return { consent: createConsentComponent() }
 }

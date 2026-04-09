@@ -85,7 +85,7 @@ function createTabPaneComponent() {
   })
 }
 
-export function createTabsComponents() {
+export function defineTabsComponents() {
   return {
     tabs: createTabsComponent(),
     tabPane: createTabPaneComponent(),

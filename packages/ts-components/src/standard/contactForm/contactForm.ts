@@ -103,7 +103,7 @@ function createContactFormComponent() {
   })
 }
 
-export function createContactFormComponents() {
+export function defineContactFormComponents() {
   return {
     contactForm: createContactFormComponent(),
   }

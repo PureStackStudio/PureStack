@@ -2,12 +2,12 @@ import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '@purestack/ts-render'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
-import { createLogoComponents } from './logo'
+import { defineLogoComponents } from './logo'
 
 describe('SiteLogo rendering', () => {
   it('renders two brand words and subtitle', () => {
     const cleanup = ensureDomGlobals()
-    const components = createLogoComponents()
+    const components = defineLogoComponents()
     const html = renderApp(
       `<SiteLogo
         wordOne="Calc"
@@ -27,7 +27,7 @@ describe('SiteLogo rendering', () => {
 
   it('uses fallback words and omits subtitle when not provided', () => {
     const cleanup = ensureDomGlobals()
-    const components = createLogoComponents()
+    const components = defineLogoComponents()
     const html = renderApp(`<SiteLogo />`, {
       components,
       context: createTestContext(),
@@ -41,7 +41,7 @@ describe('SiteLogo rendering', () => {
 
   it('renders embedded icon svg and custom font-size styles', () => {
     const cleanup = ensureDomGlobals()
-    const components = createLogoComponents()
+    const components = defineLogoComponents()
     const html = renderApp(
       `<SiteLogo
         wordOne="Calc"

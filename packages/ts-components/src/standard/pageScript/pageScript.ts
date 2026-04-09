@@ -62,7 +62,7 @@ function createRegorAppComponent() {
   })
 }
 
-export function createScriptComponents() {
+export function defineScriptComponents() {
   return {
     pageScript: createPageScriptComponent(),
     regorApp: createRegorAppComponent(),

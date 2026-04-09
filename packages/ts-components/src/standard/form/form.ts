@@ -185,7 +185,7 @@ function createFormStatusComponent() {
   })
 }
 
-export function createFormComponents() {
+export function defineFormComponents() {
   return {
     appForm: createAppFormComponent(),
     formField: createFormFieldComponent(),

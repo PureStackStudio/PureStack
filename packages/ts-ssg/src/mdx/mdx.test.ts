@@ -1,5 +1,5 @@
 import type { TsSsgContext } from '@purestack/ts-common'
-import { createModalComponents } from '@purestack/ts-components'
+import { defineModalComponents } from '@purestack/ts-components'
 import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '@purestack/ts-render'
 import { describe, expect, it } from 'vitest'
@@ -113,7 +113,7 @@ describe('compileMdxToHtml', () => {
       expect(compiledHtml).not.toContain('<p><h2')
 
       const html = renderApp(compiledHtml, {
-        components: createModalComponents(),
+        components: defineModalComponents(),
         context: createTestContext(),
       })
 
@@ -322,7 +322,7 @@ describe('compileMdxToHtml', () => {
       expect(compiledHtml).not.toContain('<p><p>')
 
       const html = renderApp(compiledHtml, {
-        components: createModalComponents(),
+        components: defineModalComponents(),
         context: createTestContext(),
       })
       expect(html).not.toContain('<p></p>')

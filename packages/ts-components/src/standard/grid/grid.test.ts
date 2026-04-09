@@ -2,12 +2,12 @@ import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '@purestack/ts-render'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
-import { createGridComponents } from './grid'
+import { defineGridComponents } from './grid'
 
 describe('Grid rendering', () => {
   it('renders responsive grid variables and modifier classes', () => {
     const cleanup = ensureDomGlobals()
-    const components = createGridComponents()
+    const components = defineGridComponents()
     const html = renderApp(
       '<Grid columns="2" columnsMd="3" alignItems="center" justifyItems="start" dense="true">item</Grid>',
       {
@@ -29,7 +29,7 @@ describe('Grid rendering', () => {
 
   it('renders custom template columns for base and responsive props', () => {
     const cleanup = ensureDomGlobals()
-    const components = createGridComponents()
+    const components = defineGridComponents()
     const html = renderApp(
       '<Grid columns="minmax(0, 1fr) auto" columnsMd="200px 1fr">item</Grid>',
       {
@@ -45,7 +45,7 @@ describe('Grid rendering', () => {
 
   it('keeps responsive numeric columns working when base columns use a template', () => {
     const cleanup = ensureDomGlobals()
-    const components = createGridComponents()
+    const components = defineGridComponents()
     const html = renderApp(
       '<Grid columns="minmax(0, 1fr) auto" columnsMd="3">item</Grid>',
       {
@@ -64,7 +64,7 @@ describe('Grid rendering', () => {
 
   it('keeps the base template across breakpoints when no responsive columns are set', () => {
     const cleanup = ensureDomGlobals()
-    const components = createGridComponents()
+    const components = defineGridComponents()
     const html = renderApp('<Grid columns="minmax(0, 1fr) auto">item</Grid>', {
       components,
       context: createTestContext(),

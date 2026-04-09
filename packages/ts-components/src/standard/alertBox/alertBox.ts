@@ -50,7 +50,7 @@ function createAlertBoxComponent() {
   })
 }
 
-export function createAlertComponents() {
+export function defineAlertComponents() {
   return {
     alertBox: createAlertBoxComponent(),
   }

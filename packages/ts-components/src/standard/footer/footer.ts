@@ -228,7 +228,7 @@ function createFooterSocialComponent() {
   })
 }
 
-export function createFooterComponents() {
+export function defineFooterComponents() {
   return {
     siteFooter: createSiteFooterComponent(),
     footerColumn: createFooterColumnComponent(),

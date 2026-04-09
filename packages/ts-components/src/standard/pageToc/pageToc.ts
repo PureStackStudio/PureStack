@@ -95,7 +95,7 @@ function createPageTocComponent() {
   })
 }
 
-export function createPageTocComponents() {
+export function definePageTocComponents() {
   const pageToc = createPageTocComponent()
   return { pageToc }
 }

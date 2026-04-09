@@ -4,15 +4,15 @@ import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { describe, expect, it } from 'vitest'
 
 import { createTestContext } from '../../test/testContext'
-import { createIconComponents } from '../icon/icon'
-import { createExpandablePanelComponents } from './expandablePanel'
+import { defineIconComponents } from '../icon/icon'
+import { defineExpandablePanelComponents } from './expandablePanel'
 
 describe('ExpandablePanel rendering', () => {
   it('renders an accent tone open panel with summary and body content', () => {
     const cleanup = ensureDomGlobals()
     const components = {
-      ...createIconComponents(getSvgIcon),
-      ...createExpandablePanelComponents(),
+      ...defineIconComponents(getSvgIcon),
+      ...defineExpandablePanelComponents(),
     }
     const html = renderApp(
       `<ExpandablePanel
@@ -47,8 +47,8 @@ describe('ExpandablePanel rendering', () => {
   it('renders a closed neutral panel when optional content is omitted', () => {
     const cleanup = ensureDomGlobals()
     const components = {
-      ...createIconComponents(getSvgIcon),
-      ...createExpandablePanelComponents(),
+      ...defineIconComponents(getSvgIcon),
+      ...defineExpandablePanelComponents(),
     }
     const html = renderApp('<ExpandablePanel />', {
       components,

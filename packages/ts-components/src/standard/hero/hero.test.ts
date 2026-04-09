@@ -2,12 +2,12 @@ import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '@purestack/ts-render'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
-import { createHeroComponents } from './hero'
+import { defineHeroComponents } from './hero'
 
 describe('HeroBanner rendering', () => {
   it('renders named slot templates into hero sections', () => {
     const cleanup = ensureDomGlobals()
-    const components = createHeroComponents()
+    const components = defineHeroComponents()
     const html = renderApp(
       `<HeroBanner>
         <template name="eyebrow"><span>Backend-native calculation engine</span></template>
@@ -36,7 +36,7 @@ describe('HeroBanner rendering', () => {
 
   it('preserves external action links', () => {
     const cleanup = ensureDomGlobals()
-    const components = createHeroComponents()
+    const components = defineHeroComponents()
     const html = renderApp(
       `<HeroBanner>
         <template name="actions">

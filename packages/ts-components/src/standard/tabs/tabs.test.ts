@@ -4,15 +4,15 @@ import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { createApp, ref } from 'regor'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
-import { createIconComponents } from '../icon/icon'
-import { createTabsComponents } from './tabs'
+import { defineIconComponents } from '../icon/icon'
+import { defineTabsComponents } from './tabs'
 
 describe('Tabs rendering', () => {
   it('renders slotted tab content and active tab state', () => {
     const cleanup = ensureDomGlobals()
     const components = {
-      ...createIconComponents(getSvgIcon),
-      ...createTabsComponents(),
+      ...defineIconComponents(getSvgIcon),
+      ...defineTabsComponents(),
     }
     const html = renderApp(
       `<Tabs group="quickstart" selected-tab="usage">
@@ -42,8 +42,8 @@ describe('Tabs rendering', () => {
   it('inherits tab group from parent tabs and marks disabled panes', () => {
     const cleanup = ensureDomGlobals()
     const components = {
-      ...createIconComponents(getSvgIcon),
-      ...createTabsComponents(),
+      ...defineIconComponents(getSvgIcon),
+      ...defineTabsComponents(),
     }
     const html = renderApp(
       `<Tabs group="sdk-tabs">
@@ -67,8 +67,8 @@ describe('Tabs rendering', () => {
   it('renders optional tab icons', () => {
     const cleanup = ensureDomGlobals()
     const components = {
-      ...createIconComponents(getSvgIcon),
-      ...createTabsComponents(),
+      ...defineIconComponents(getSvgIcon),
+      ...defineTabsComponents(),
     }
     const html = renderApp(
       `<Tabs id="icon-tabs">
@@ -94,8 +94,8 @@ describe('Tabs rendering', () => {
       '<!DOCTYPE html><html><body><div id="app"></div></body></html>',
     )
     const components = {
-      ...createIconComponents(getSvgIcon),
-      ...createTabsComponents(),
+      ...defineIconComponents(getSvgIcon),
+      ...defineTabsComponents(),
     }
     const selectedTab = ref('usage')
     const app = createApp(

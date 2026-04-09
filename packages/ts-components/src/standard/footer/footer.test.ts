@@ -3,9 +3,9 @@ import { renderApp } from '@purestack/ts-render'
 import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
-import { createButtonComponents } from '../btn/btn'
-import { createIconComponents } from '../icon/icon'
-import { createFooterComponents } from './footer'
+import { defineButtonComponents } from '../btn/btn'
+import { defineIconComponents } from '../icon/icon'
+import { defineFooterComponents } from './footer'
 
 function withDom<T>(html: string, run: () => T): T {
   const cleanup = createDom(html)
@@ -20,9 +20,9 @@ describe('SiteFooter rendering', () => {
   it('renders footer blocks with columns, links, legal actions, and socials', () => {
     const html = withDom('<html><body></body></html>', () => {
       const components = {
-        ...createButtonComponents(),
-        ...createIconComponents(getSvgIcon),
-        ...createFooterComponents(),
+        ...defineButtonComponents(),
+        ...defineIconComponents(getSvgIcon),
+        ...defineFooterComponents(),
       }
       return renderApp(
         `<SiteFooter title="Build with confidence" ctaLabel="Start free" ctaHref="/signup">
@@ -74,9 +74,9 @@ describe('SiteFooter rendering', () => {
   it('teleports to a custom host when teleport prop is provided', () => {
     const html = withDom('<html><body></body></html>', () => {
       const components = {
-        ...createButtonComponents(),
-        ...createIconComponents(getSvgIcon),
-        ...createFooterComponents(),
+        ...defineButtonComponents(),
+        ...defineIconComponents(getSvgIcon),
+        ...defineFooterComponents(),
       }
       return renderApp(
         `<div id="teleport-target"></div>

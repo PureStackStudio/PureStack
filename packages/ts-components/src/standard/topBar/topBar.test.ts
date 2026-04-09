@@ -2,17 +2,17 @@ import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '@purestack/ts-render'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
-import { createLogoComponents } from '../logo/logo'
-import { createSearchComponents } from '../searchBox/searchBox'
-import { createTopBarComponents } from '../topBar/topBar'
+import { defineLogoComponents } from '../logo/logo'
+import { defineSearchComponents } from '../searchBox/searchBox'
+import { defineTopBarComponents } from '../topBar/topBar'
 
 describe('TopBar rendering', () => {
   it('applies logo values from site config', () => {
     const cleanup = ensureDomGlobals()
     const components = {
-      ...createLogoComponents(),
-      ...createTopBarComponents(),
-      ...createSearchComponents(),
+      ...defineLogoComponents(),
+      ...defineTopBarComponents(),
+      ...defineSearchComponents(),
     }
     const html = renderApp(`<TopBar />`, {
       components,

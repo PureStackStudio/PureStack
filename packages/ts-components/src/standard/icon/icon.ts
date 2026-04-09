@@ -47,7 +47,7 @@ function createIconComponent(getSvgIcon: GetSvgIcon) {
   })
 }
 
-export function createIconComponents(getSvgIcon: GetSvgIcon) {
+export function defineIconComponents(getSvgIcon: GetSvgIcon) {
   return {
     icon: createIconComponent(getSvgIcon),
   }
