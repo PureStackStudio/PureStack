@@ -93,7 +93,7 @@ class ComponentDefinitionProvider implements vscode.DefinitionProvider {
   }
 }
 
-class ComponentCompletionProvider implements vscode.CompletionProvider {
+class ComponentCompletionProvider implements vscode.CompletionItemProvider {
   provideCompletionItems(
     document: vscode.TextDocument,
     position: vscode.Position,

@@ -1792,6 +1792,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/vscode@npm:^1.85.0":
+  version: 1.115.0
+  resolution: "@types/vscode@npm:1.115.0"
+  checksum: 10c0/ba60ff2707c3b5f472432dddd072c99ddc67af83614051f5f07872a5d1184ded406107f2f05c1ae3b9f2b9b3ab29688210eea3f80c230332d355f804832d1e67
+  languageName: node
+  linkType: hard
+
 "@typespec/ts-http-runtime@npm:^0.3.0, @typespec/ts-http-runtime@npm:^0.3.4":
   version: 0.3.4
   resolution: "@typespec/ts-http-runtime@npm:0.3.4"
@@ -5840,6 +5847,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "purestack-component-navigation@workspace:packages/ts-ssg-vscode"
   dependencies:
+    "@types/vscode": "npm:^1.85.0"
     "@vscode/vsce": "npm:^3.6.2"
     esbuild: "npm:^0.27.3"
     typescript: "npm:^5.9.3"
