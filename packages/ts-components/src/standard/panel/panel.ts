@@ -22,7 +22,7 @@ const panelTemplate = html`<section class="panel" :class="rootClass">
   <div class="panel__body"><slot></slot></div>
 </section>`
 
-function createPanelComponent() {
+function definePanelComponent() {
   return defineComponent<Panel>(panelTemplate, {
     props: ['tone'],
     context: (head) => resolvePanel(head.props),
@@ -31,7 +31,7 @@ function createPanelComponent() {
 
 export function definePanelComponents() {
   return {
-    panel: createPanelComponent(),
+    panel: definePanelComponent(),
   }
 }
 

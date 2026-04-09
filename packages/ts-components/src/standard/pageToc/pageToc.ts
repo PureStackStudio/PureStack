@@ -82,7 +82,7 @@ function resolveTitle(props: PageToc) {
     : 'On this page'
 }
 
-function createPageTocComponent() {
+function definePageTocComponent() {
   return defineComponent<PageToc>(pageTocTemplate, {
     props: ['items', 'title'],
     context: (head) => {
@@ -96,6 +96,6 @@ function createPageTocComponent() {
 }
 
 export function definePageTocComponents() {
-  const pageToc = createPageTocComponent()
+  const pageToc = definePageTocComponent()
   return { pageToc }
 }

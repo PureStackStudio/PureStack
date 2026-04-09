@@ -43,7 +43,7 @@ const alertBoxTemplate = html`<aside
   </div>
 </aside>`
 
-function createAlertBoxComponent() {
+function defineAlertBoxComponent() {
   return defineComponent<AlertBox>(alertBoxTemplate, {
     props: ['title', 'eyebrow', 'badge', 'meta', 'tone', 'icon'],
     context: (head) => resolveAlertBox(head.props),
@@ -52,7 +52,7 @@ function createAlertBoxComponent() {
 
 export function defineAlertComponents() {
   return {
-    alertBox: createAlertBoxComponent(),
+    alertBox: defineAlertBoxComponent(),
   }
 }
 

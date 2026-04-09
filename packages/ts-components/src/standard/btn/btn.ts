@@ -46,7 +46,7 @@ const buttonTemplate = html`<button
   <Icon class="btn__icon" :name="icon" r-if="showEndIcon"/>
 </button>`
 
-function createButtonComponent() {
+function defineButtonComponent() {
   return defineComponent<Btn>(buttonTemplate, {
     props: [
       'tone',
@@ -65,7 +65,7 @@ function createButtonComponent() {
 
 export function defineButtonComponents() {
   return {
-    btn: createButtonComponent(),
+    btn: defineButtonComponent(),
   }
 }
 

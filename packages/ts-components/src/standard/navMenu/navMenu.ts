@@ -168,11 +168,11 @@ function buildNavState(
   })
 }
 
-function createNavItemComponent() {
+function defineNavItemComponent() {
   return defineComponent<Record<string, never>>(navItemTemplate, {})
 }
 
-function createNavListComponent() {
+function defineNavListComponent() {
   return defineComponent<NavList>(navListTemplate, {
     props: ['items'],
     context: (head) => ({
@@ -181,7 +181,7 @@ function createNavListComponent() {
   })
 }
 
-function createNavMenuComponent() {
+function defineNavMenuComponent() {
   return defineComponent<NavMenu>(navMenuTemplate, {
     props: ['items'],
     context: (head) => {
@@ -197,9 +197,9 @@ function createNavMenuComponent() {
 }
 
 export function defineNavigationComponents() {
-  const navItem = createNavItemComponent()
-  const navList = createNavListComponent()
-  const navMenu = createNavMenuComponent()
+  const navItem = defineNavItemComponent()
+  const navList = defineNavListComponent()
+  const navMenu = defineNavMenuComponent()
   return {
     navItem,
     navList,

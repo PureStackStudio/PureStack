@@ -44,18 +44,18 @@ const loginFooterTemplate = html`<p class="login-panel__footer">
   <a :href="linkHref" r-if="linkHref">{{ linkLabel }}</a>
 </p>`
 
-function createLoginPanelComponent() {
+function defineLoginPanelComponent() {
   return defineComponent<Record<string, never>>(loginPanelTemplate, {})
 }
 
-function createLoginHeaderComponent() {
+function defineLoginHeaderComponent() {
   return defineComponent<LoginHeader>(loginHeaderTemplate, {
     props: ['badge', 'title', 'description'],
     context: (head) => resolveLoginHeader(head.props),
   })
 }
 
-function createLoginProviderComponent() {
+function defineLoginProviderComponent() {
   return defineComponent<LoginProvider>(loginProviderTemplate, {
     props: ['label'],
     context: (head) => ({
@@ -64,7 +64,7 @@ function createLoginProviderComponent() {
   })
 }
 
-function createLoginFooterComponent() {
+function defineLoginFooterComponent() {
   return defineComponent<LoginFooter>(loginFooterTemplate, {
     props: ['text', 'linkLabel', 'linkHref'],
     context: (head) => resolveLoginFooter(head.props),
@@ -73,10 +73,10 @@ function createLoginFooterComponent() {
 
 export function defineLoginComponents() {
   return {
-    loginPanel: createLoginPanelComponent(),
-    loginHeader: createLoginHeaderComponent(),
-    loginProvider: createLoginProviderComponent(),
-    loginFooter: createLoginFooterComponent(),
+    loginPanel: defineLoginPanelComponent(),
+    loginHeader: defineLoginHeaderComponent(),
+    loginProvider: defineLoginProviderComponent(),
+    loginFooter: defineLoginFooterComponent(),
   }
 }
 

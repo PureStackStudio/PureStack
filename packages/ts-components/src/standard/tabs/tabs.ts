@@ -68,7 +68,7 @@ const tabPaneTemplate = html`<div class="tabs__item">
   </section>
 </div>`
 
-function createTabsComponent() {
+function defineTabsComponent() {
   return defineComponent<Tabs>(tabsTemplate, {
     props: ['ariaLabel', 'group', 'selectedTab'],
     context: (head) => {
@@ -78,7 +78,7 @@ function createTabsComponent() {
   })
 }
 
-function createTabPaneComponent() {
+function defineTabPaneComponent() {
   return defineComponent<TabPane>(tabPaneTemplate, {
     props: ['id', 'label', 'icon', 'disabled', 'group'],
     context: (head) => resolveTabPane(head),
@@ -87,8 +87,8 @@ function createTabPaneComponent() {
 
 export function defineTabsComponents() {
   return {
-    tabs: createTabsComponent(),
-    tabPane: createTabPaneComponent(),
+    tabs: defineTabsComponent(),
+    tabPane: defineTabPaneComponent(),
   }
 }
 

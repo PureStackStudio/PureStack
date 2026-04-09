@@ -61,12 +61,12 @@ const topBarTemplate = html`<input
     </div>
   </header>`
 
-function createTopBarComponent() {
+function defineTopBarComponent() {
   return defineComponent<TopBar>(topBarTemplate, {
     context: (head) => resolveTopBar(resolveTsSsgContext(head)),
   })
 }
 
 export function defineTopBarComponents() {
-  return { topBar: createTopBarComponent() }
+  return { topBar: defineTopBarComponent() }
 }

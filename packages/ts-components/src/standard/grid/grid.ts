@@ -27,7 +27,7 @@ const gridTemplate = html`<div class="grid" :class="className" :style="gridStyle
   <slot></slot>
 </div>`
 
-function createGridComponent() {
+function defineGridComponent() {
   return defineComponent<Grid>(gridTemplate, {
     props: [
       'columns',
@@ -45,7 +45,7 @@ function createGridComponent() {
 
 export function defineGridComponents() {
   return {
-    grid: createGridComponent(),
+    grid: defineGridComponent(),
   }
 }
 

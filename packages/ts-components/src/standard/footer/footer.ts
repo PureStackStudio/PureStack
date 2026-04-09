@@ -173,7 +173,7 @@ const footerSocialTemplate = html`<a
   <span class="footer-social__label" r-if="label">{{ label }}</span>
 </a>`
 
-function createSiteFooterComponent() {
+function defineSiteFooterComponent() {
   return defineComponent<SiteFooter>(siteFooterTemplate, {
     props: [
       'teleport',
@@ -207,21 +207,21 @@ function createSiteFooterComponent() {
   })
 }
 
-function createFooterColumnComponent() {
+function defineFooterColumnComponent() {
   return defineComponent<FooterColumn>(footerColumnTemplate, {
     props: ['title', 'description', 'compact'],
     context: (head) => resolveFooterColumn(head.props),
   })
 }
 
-function createFooterLinkComponent() {
+function defineFooterLinkComponent() {
   return defineComponent<FooterLink>(footerLinkTemplate, {
     props: ['href', 'label', 'target', 'rel', 'icon', 'variant'],
     context: (head) => resolveFooterLink(head.props),
   })
 }
 
-function createFooterSocialComponent() {
+function defineFooterSocialComponent() {
   return defineComponent<FooterSocial>(footerSocialTemplate, {
     props: ['href', 'label', 'icon', 'target', 'rel'],
     context: (head) => resolveFooterSocial(head.props),
@@ -230,10 +230,10 @@ function createFooterSocialComponent() {
 
 export function defineFooterComponents() {
   return {
-    siteFooter: createSiteFooterComponent(),
-    footerColumn: createFooterColumnComponent(),
-    footerLink: createFooterLinkComponent(),
-    footerSocial: createFooterSocialComponent(),
+    siteFooter: defineSiteFooterComponent(),
+    footerColumn: defineFooterColumnComponent(),
+    footerLink: defineFooterLinkComponent(),
+    footerSocial: defineFooterSocialComponent(),
   }
 }
 

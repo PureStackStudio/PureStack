@@ -80,7 +80,7 @@ const contactFormTemplate = html`<section class="contact-form">
   </form>
 </section>`
 
-function createContactFormComponent() {
+function defineContactFormComponent() {
   return defineComponent<ContactForm>(contactFormTemplate, {
     props: [
       'title',
@@ -105,7 +105,7 @@ function createContactFormComponent() {
 
 export function defineContactFormComponents() {
   return {
-    contactForm: createContactFormComponent(),
+    contactForm: defineContactFormComponent(),
   }
 }
 

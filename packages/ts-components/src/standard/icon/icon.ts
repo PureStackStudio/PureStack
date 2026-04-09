@@ -40,7 +40,7 @@ const iconTemplate = html`
   r-html="svg"
 ></span>`
 
-function createIconComponent(getSvgIcon: GetSvgIcon) {
+function defineIconComponent(getSvgIcon: GetSvgIcon) {
   return defineComponent<Icon>(iconTemplate, {
     props: ['name', 'ariaLabel', 'class', 'wrap'],
     context: (head) => resolveIcon(head.props, getSvgIcon),
@@ -49,7 +49,7 @@ function createIconComponent(getSvgIcon: GetSvgIcon) {
 
 export function defineIconComponents(getSvgIcon: GetSvgIcon) {
   return {
-    icon: createIconComponent(getSvgIcon),
+    icon: defineIconComponent(getSvgIcon),
   }
 }
 

@@ -34,7 +34,7 @@ const searchBoxTemplate = html`<div class="site-search" data-pagefind-search>
   ></div>
 </div>`
 
-function createSearchBoxComponent() {
+function defineSearchBoxComponent() {
   return defineComponent<SearchBox>(searchBoxTemplate, {
     context: (head) => ({
       placeholder: resolveSearchPlaceholder(resolveTsSsgContext(head)),
@@ -43,7 +43,7 @@ function createSearchBoxComponent() {
 }
 
 export function defineSearchComponents() {
-  return { siteSearch: createSearchBoxComponent() }
+  return { siteSearch: defineSearchBoxComponent() }
 }
 
 function resolveSearchPlaceholder(context: TsSsgContext): string {

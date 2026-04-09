@@ -58,10 +58,10 @@ const themeSwitcherTemplate = html`<button
   </span>
 </button>`
 
-function createThemeSwitcherComponent() {
+function defineThemeSwitcherComponent() {
   return defineComponent(themeSwitcherTemplate)
 }
 
 export function defineThemeSwitcherComponents() {
-  return { themeSwitcher: createThemeSwitcherComponent() }
+  return { themeSwitcher: defineThemeSwitcherComponent() }
 }

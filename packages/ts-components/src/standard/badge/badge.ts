@@ -22,7 +22,7 @@ const badgeTemplate = html`<span class="badge" :class="toneClass">
   <slot></slot>
 </span>`
 
-function createBadgeComponent() {
+function defineBadgeComponent() {
   return defineComponent<Badge>(badgeTemplate, {
     props: ['tone'],
     context: (head) => ({
@@ -34,7 +34,7 @@ function createBadgeComponent() {
 
 export function defineBadgeComponents() {
   return {
-    badge: createBadgeComponent(),
+    badge: defineBadgeComponent(),
   }
 }
 

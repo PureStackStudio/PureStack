@@ -45,18 +45,18 @@ export interface HeroMedia {
   alt?: string
 }
 
-function createHeroBannerComponent() {
+function defineHeroBannerComponent() {
   return defineComponent<Record<string, never>>(heroTemplate, {})
 }
 
-function createHeroActionComponent() {
+function defineHeroActionComponent() {
   return defineComponent<HeroAction>(heroActionTemplate, {
     props: ['href', 'variant', 'icon', 'target', 'rel'],
     context: (head) => resolveHeroAction(head.props),
   })
 }
 
-function createHeroMediaComponent() {
+function defineHeroMediaComponent() {
   return defineComponent<HeroMedia>(heroMediaTemplate, {
     props: ['src', 'alt'],
     context: (head) => resolveHeroMedia(head.props),
@@ -65,9 +65,9 @@ function createHeroMediaComponent() {
 
 export function defineHeroComponents() {
   return {
-    heroBanner: createHeroBannerComponent(),
-    heroAction: createHeroActionComponent(),
-    heroMedia: createHeroMediaComponent(),
+    heroBanner: defineHeroBannerComponent(),
+    heroAction: defineHeroActionComponent(),
+    heroMedia: defineHeroMediaComponent(),
   }
 }
 

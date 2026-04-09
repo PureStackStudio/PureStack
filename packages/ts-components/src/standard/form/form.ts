@@ -121,14 +121,14 @@ const formStatusTemplate = html`<div
   <slot></slot>
 </div>`
 
-function createAppFormComponent() {
+function defineAppFormComponent() {
   return defineComponent<AppForm>(appFormTemplate, {
     props: ['action', 'method'],
     context: (head) => resolveAppForm(head.props),
   })
 }
 
-function createFormFieldComponent() {
+function defineFormFieldComponent() {
   return defineComponent<FormField>(formFieldTemplate, {
     props: [
       'label',
@@ -146,39 +146,39 @@ function createFormFieldComponent() {
   })
 }
 
-function createFormMetaComponent() {
+function defineFormMetaComponent() {
   return defineComponent<FormMeta>(formMetaTemplate, {})
 }
 
-function createFormCheckComponent() {
+function defineFormCheckComponent() {
   return defineComponent<FormCheck>(formCheckTemplate, {
     props: ['label', 'name', 'value', 'checked'],
     context: (head) => head.props,
   })
 }
 
-function createFormAssistLinkComponent() {
+function defineFormAssistLinkComponent() {
   return defineComponent<FormAssistLink>(formAssistLinkTemplate, {
     props: ['href', 'label', 'target', 'rel'],
     context: (head) => resolveFormAssistLink(head.props),
   })
 }
 
-function createFormSubmitComponent() {
+function defineFormSubmitComponent() {
   return defineComponent<FormSubmit>(formSubmitTemplate, {
     props: ['label'],
     context: (head) => head.props,
   })
 }
 
-function createFormDividerComponent() {
+function defineFormDividerComponent() {
   return defineComponent<FormDivider>(formDividerTemplate, {
     props: ['label'],
     context: (head) => head.props,
   })
 }
 
-function createFormStatusComponent() {
+function defineFormStatusComponent() {
   return defineComponent<FormStatus>(formStatusTemplate, {
     props: ['variant', 'hidden'],
     context: (head) => resolveFormStatus(head.props),
@@ -187,14 +187,14 @@ function createFormStatusComponent() {
 
 export function defineFormComponents() {
   return {
-    appForm: createAppFormComponent(),
-    formField: createFormFieldComponent(),
-    formMeta: createFormMetaComponent(),
-    formCheck: createFormCheckComponent(),
-    formAssistLink: createFormAssistLinkComponent(),
-    formSubmit: createFormSubmitComponent(),
-    formDivider: createFormDividerComponent(),
-    formStatus: createFormStatusComponent(),
+    appForm: defineAppFormComponent(),
+    formField: defineFormFieldComponent(),
+    formMeta: defineFormMetaComponent(),
+    formCheck: defineFormCheckComponent(),
+    formAssistLink: defineFormAssistLinkComponent(),
+    formSubmit: defineFormSubmitComponent(),
+    formDivider: defineFormDividerComponent(),
+    formStatus: defineFormStatusComponent(),
   }
 }
 

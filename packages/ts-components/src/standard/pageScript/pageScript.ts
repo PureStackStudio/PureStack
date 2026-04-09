@@ -35,7 +35,7 @@ const pageScriptTemplate = html`<script
 
 const regorAppTemplate = html`<App><PageScript :src="src" /></App>`
 
-function createPageScriptComponent() {
+function definePageScriptComponent() {
   return defineComponent<PageScript>(pageScriptTemplate, {
     props: [
       'teleport',
@@ -53,7 +53,7 @@ function createPageScriptComponent() {
   })
 }
 
-function createRegorAppComponent() {
+function defineRegorAppComponent() {
   return defineComponent<RegorApp>(regorAppTemplate, {
     props: ['src'],
     context: (head) => ({
@@ -64,8 +64,8 @@ function createRegorAppComponent() {
 
 export function defineScriptComponents() {
   return {
-    pageScript: createPageScriptComponent(),
-    regorApp: createRegorAppComponent(),
+    pageScript: definePageScriptComponent(),
+    regorApp: defineRegorAppComponent(),
   }
 }
 

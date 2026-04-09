@@ -57,7 +57,7 @@ const expandablePanelTemplate = html`<details
   <div class="expandable-panel__body"><slot></slot></div>
 </details>`
 
-function createExpandablePanelComponent() {
+function defineExpandablePanelComponent() {
   return defineComponent<ExpandablePanel>(expandablePanelTemplate, {
     props: ['title', 'description', 'meta', 'badge', 'icon', 'tone', 'open'],
     context: (head) => resolveExpandablePanel(head.props),
@@ -66,7 +66,7 @@ function createExpandablePanelComponent() {
 
 export function defineExpandablePanelComponents() {
   return {
-    expandablePanel: createExpandablePanelComponent(),
+    expandablePanel: defineExpandablePanelComponent(),
   }
 }
 

@@ -80,7 +80,7 @@ const modalTriggerTemplate = html`<Btn type="button" :data-modal-target="target"
   {{ label }}
 </Btn>`
 
-function createModalComponent() {
+function defineModalComponent() {
   return defineComponent<Modal>(modalTemplate, {
     props: ['id', 'title', 'tone', 'size', 'fade', 'slideFrom', 'showClose'],
     context: (head) => {
@@ -90,7 +90,7 @@ function createModalComponent() {
   })
 }
 
-function createModalTriggerComponent() {
+function defineModalTriggerComponent() {
   return defineComponent<ModalTrigger>(modalTriggerTemplate, {
     props: ['target', 'label'],
     context: (head) => resolveModalTrigger(head.props),
@@ -99,8 +99,8 @@ function createModalTriggerComponent() {
 
 export function defineModalComponents() {
   return {
-    modal: createModalComponent(),
-    modalTrigger: createModalTriggerComponent(),
+    modal: defineModalComponent(),
+    modalTrigger: defineModalTriggerComponent(),
   }
 }
 

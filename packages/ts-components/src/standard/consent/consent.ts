@@ -115,7 +115,7 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
   </Btn>
 </section>`
 
-function createConsentComponent() {
+function defineConsentComponent() {
   return defineComponent<Consent>(consentTemplate, {
     context: (head) => resolveConsent(resolveTsSsgContext(head)),
   })
@@ -140,5 +140,5 @@ function resolveConsent(context: TsSsgContext): Consent {
 }
 
 export function defineConsentComponents() {
-  return { consent: createConsentComponent() }
+  return { consent: defineConsentComponent() }
 }

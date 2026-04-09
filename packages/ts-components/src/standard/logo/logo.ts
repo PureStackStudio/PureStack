@@ -110,7 +110,7 @@ function normalizeSubtitleAlign(
   return 'start'
 }
 
-function createSiteLogoComponent() {
+function defineSiteLogoComponent() {
   return defineComponent<SiteLogo>(logoTemplate, {
     props: [
       'wordOne',
@@ -128,5 +128,5 @@ function createSiteLogoComponent() {
 }
 
 export function defineLogoComponents() {
-  return { siteLogo: createSiteLogoComponent() }
+  return { siteLogo: defineSiteLogoComponent() }
 }

@@ -7,6 +7,7 @@ import {
   styleBuilder,
 } from '@purestack/ts-style'
 import { getSvgIcon } from '@purestack/ts-svg-icons'
+import { defineScriptComponents } from '../../../ts-components/src/standard/pageScript/pageScript'
 import { registerDocLayoutStyles } from '../templates/docLayoutStyles'
 import { registerMarkdownStyles } from '../templates/markdownStyles'
 
@@ -24,6 +25,9 @@ export function initBuiltinComponents(
   registerDocLayoutStyles()
   registerMarkdownStyles({ includeShikiStyles: options.includeShikiStyles })
   registerStyles()
-  componentRegistry.registerMany(defineComponents(getSvgIcon))
+  componentRegistry.registerMany(
+    defineComponents(getSvgIcon),
+    defineScriptComponents(),
+  )
   registerSemanticToneUtilityStyles()
 }

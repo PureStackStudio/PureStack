@@ -7,10 +7,12 @@ export const componentRegistry = {
   register(name: string, component: Component<never>) {
     registry.set(name, component)
   },
-  registerMany<TComponents>(components: TComponents) {
-    if (!isPlainObject(components)) return
-    for (const [name, component] of Object.entries(components)) {
-      registry.set(name, component as Component<never>)
+  registerMany<TComponents>(...components: (TComponents | object)[]) {
+    for (const compSet of components) {
+      if (!isPlainObject(compSet)) continue
+      for (const [name, component] of Object.entries(compSet)) {
+        registry.set(name, component as Component<never>)
+      }
     }
   },
   getAll(): Record<string, Component> {

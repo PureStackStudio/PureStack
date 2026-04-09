@@ -70,14 +70,14 @@ const pricingFeatureTemplate = html`<li class="pricing-feature">
   <span class="pricing-feature__text"><slot></slot></span>
 </li>`
 
-function createPricingTableComponent() {
+function definePricingTableComponent() {
   return defineComponent<PricingTable>(pricingTableTemplate, {
     props: ['eyebrow', 'title', 'subtitle', 'footnote'],
     context: (head) => resolvePricingTable(head.props),
   })
 }
 
-function createPricingPlanComponent() {
+function definePricingPlanComponent() {
   return defineComponent<PricingPlan>(pricingPlanTemplate, {
     props: [
       'title',
@@ -95,7 +95,7 @@ function createPricingPlanComponent() {
   })
 }
 
-function createPricingFeatureComponent() {
+function definePricingFeatureComponent() {
   return defineComponent<PricingFeature>(pricingFeatureTemplate, {
     props: ['icon'],
     context: (head) => resolvePricingFeature(head.props),
@@ -104,9 +104,9 @@ function createPricingFeatureComponent() {
 
 export function definePricingComponents() {
   return {
-    pricingTable: createPricingTableComponent(),
-    pricingPlan: createPricingPlanComponent(),
-    pricingFeature: createPricingFeatureComponent(),
+    pricingTable: definePricingTableComponent(),
+    pricingPlan: definePricingPlanComponent(),
+    pricingFeature: definePricingFeatureComponent(),
   }
 }
 

@@ -29,7 +29,7 @@ export interface Flex {
 
 const flexTemplate = html`<div class="flex" :class="className"><slot></slot></div>`
 
-function createFlexComponent() {
+function defineFlexComponent() {
   return defineComponent<Flex>(flexTemplate, {
     props: ['direction', 'align', 'justify', 'wrap', 'inline'],
     context: (head) => resolveFlex(head.props),
@@ -38,7 +38,7 @@ function createFlexComponent() {
 
 export function defineFlexComponents() {
   return {
-    flex: createFlexComponent(),
+    flex: defineFlexComponent(),
   }
 }
 
