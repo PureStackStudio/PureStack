@@ -3,6 +3,7 @@ import * as vscode from 'vscode'
 import { getComponentMetadata } from './componentMetadata'
 import { resolveComponentTarget } from './componentResolver'
 import { registerTemplateAutoClose } from './templateAutoClose'
+import { registerTemplateDiagnostics } from './templateDiagnostics'
 import {
   buildTemplateFormattingEdits,
   formatActiveEditorTemplates,
@@ -67,6 +68,7 @@ export function activate(context: vscode.ExtensionContext) {
       },
     ),
     registerTemplateAutoClose(),
+    registerTemplateDiagnostics(),
   )
 }
 

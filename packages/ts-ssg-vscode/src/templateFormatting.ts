@@ -9,6 +9,7 @@ export interface SupportedTaggedTemplate {
   content: string
   contentRange: vscode.Range
   expressions: TemplateExpressionPlaceholder[]
+  interpolationRanges: Array<{ start: number; end: number }>
   placeholderContent: string
   tagName: SupportedTemplateTagName
 }
@@ -143,16 +144,21 @@ function createSupportedTaggedTemplate(
       content,
       contentRange,
       expressions: [],
+      interpolationRanges: [],
       placeholderContent: content,
       tagName,
     }
   }
 
   const expressions: TemplateExpressionPlaceholder[] = []
+  const interpolationRanges: Array<{ start: number; end: number }> = []
   let placeholderContent = sliceTemplateHeadContent(template.head, sourceFile)
+  let currentContentOffset = placeholderContent.length
 
   template.templateSpans.forEach((span, index) => {
     const placeholder = `PURESTACK_EXPR_${index}_${tagName.toUpperCase()}`
+    const interpolationEnd =
+      span.literal.getStart(sourceFile) - innerStart + 1
     expressions.push({
       placeholder,
       source: sourceFile.text.slice(
@@ -160,17 +166,24 @@ function createSupportedTaggedTemplate(
         span.expression.getEnd(),
       ),
     })
+    interpolationRanges.push({
+      start: currentContentOffset,
+      end: interpolationEnd,
+    })
     placeholderContent += placeholder
-    placeholderContent += sliceTemplateSpanLiteralContent(
+    const literalContent = sliceTemplateSpanLiteralContent(
       span.literal,
       sourceFile,
     )
+    placeholderContent += literalContent
+    currentContentOffset = interpolationEnd + literalContent.length
   })
 
   return {
     content: sourceFile.text.slice(innerStart, innerEnd),
     contentRange,
     expressions,
+    interpolationRanges,
     placeholderContent,
     tagName,
   }

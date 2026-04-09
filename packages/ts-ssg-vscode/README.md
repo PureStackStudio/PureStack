@@ -17,6 +17,7 @@ Examples:
 - inside `<Btn size="...">` it suggests literal values like `sm`, `md`, and `lg`
 - inside ``html`...``` it highlights HTML tags, component tags, CSS property values, and embedded TypeScript expressions
 - Regor `{{ ... }}` interpolations inside `html` templates are highlighted as TypeScript expressions
+- invalid embedded HTML inside supported TypeScript templates is surfaced as editor diagnostics
 - when `editor.formatOnSave` is enabled, it formats supported tagged template markup on save
 - while typing in supported TypeScript templates, opening tags auto-insert closing tags and `/>` can auto-complete
 - it adds `PureStack: Format HTML Templates` and `PureStack: Format Document With HTML Templates` commands
@@ -75,6 +76,11 @@ This version is intentionally simple and generic:
 - template boundaries are detected with the TypeScript AST, so only embedded markup is rewritten
 - the formatter currently uses Prettier's HTML parser inside the extension bundle
 - `${...}` expressions are preserved while the surrounding markup is reformatted
+
+## How diagnostics work
+
+- invalid HTML structure inside `html`, `raw`, and `svg` tagged templates is underlined with diagnostics
+- `${...}` expressions are masked during validation so diagnostics target the surrounding markup
 
 ## How Auto-Close Works
 
