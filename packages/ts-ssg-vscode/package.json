@@ -51,12 +51,33 @@
     "languages": [
       {
         "id": "mdx",
+        "aliases": [
+          "MDX"
+        ],
         "extensions": [
           ".mdx"
-        ]
+        ],
+        "scopeName": "source.mdx",
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "dark": "./assets/file-icon.svg",
+          "light": "./assets/file-icon.svg"
+        }
       }
     ],
     "grammars": [
+      {
+        "language": "mdx",
+        "scopeName": "source.mdx",
+        "path": "./syntaxes/source.mdx.tmLanguage"
+      },
+      {
+        "injectTo": [
+          "text.html.markdown"
+        ],
+        "scopeName": "source.markdown.mdx.codeblock",
+        "path": "./syntaxes/mdx.markdown.tmLanguage.json"
+      },
       {
         "injectTo": [
           "source.ts",
