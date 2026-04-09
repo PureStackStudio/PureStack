@@ -1,5 +1,4 @@
 import { defineComponent, html } from 'regor'
-import { registerPricingStyles } from './pricingStyle'
 
 export type PricingPlanVariant = 'featured' | 'primary'
 
@@ -104,7 +103,6 @@ function createPricingFeatureComponent() {
 }
 
 export function createPricingComponents() {
-  registerPricingStyles()
   return {
     pricingTable: createPricingTableComponent(),
     pricingPlan: createPricingPlanComponent(),

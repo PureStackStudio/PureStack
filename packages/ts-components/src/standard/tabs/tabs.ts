@@ -8,7 +8,6 @@ import {
   ref,
   unref,
 } from 'regor'
-import { registerTabsStyles } from './tabsStyle'
 
 const defaultGroup = 'tabs-default'
 let nextAutoGroupId = 1
@@ -87,7 +86,6 @@ function createTabPaneComponent() {
 }
 
 export function createTabsComponents() {
-  registerTabsStyles()
   return {
     tabs: createTabsComponent(),
     tabPane: createTabPaneComponent(),

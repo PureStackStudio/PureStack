@@ -14,8 +14,6 @@ import {
   unref,
 } from 'regor'
 
-import { registerExpandablePanelStyles } from './expandablePanelStyle'
-
 export interface ExpandablePanel {
   title?: RefOrValue<string>
   description?: RefOrValue<string>
@@ -67,7 +65,6 @@ function createExpandablePanelComponent() {
 }
 
 export function createExpandablePanelComponents() {
-  registerExpandablePanelStyles()
   return {
     expandablePanel: createExpandablePanelComponent(),
   }

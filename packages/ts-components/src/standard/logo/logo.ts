@@ -1,7 +1,5 @@
 import { defineComponent, html } from 'regor'
 
-import { registerLogoStyles } from './logoStyle'
-
 const logoTemplate = html`<div class="site-logo">
   <a class="site-logo__link" :href="href" :aria-label="ariaLabel">
     <span
@@ -130,6 +128,5 @@ function createSiteLogoComponent() {
 }
 
 export function createLogoComponents() {
-  registerLogoStyles()
   return { siteLogo: createSiteLogoComponent() }
 }

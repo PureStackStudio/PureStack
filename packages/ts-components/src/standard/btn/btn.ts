@@ -14,8 +14,6 @@ import {
   unref,
 } from 'regor'
 
-import { registerButtonStyles } from './btnStyle'
-
 export type BtnSize = 'sm' | 'md' | 'lg'
 export type BtnType = 'button' | 'submit' | 'reset'
 export type BtnIconPosition = 'start' | 'end'
@@ -66,7 +64,6 @@ function createButtonComponent() {
 }
 
 export function createButtonComponents() {
-  registerButtonStyles()
   return {
     btn: createButtonComponent(),
   }

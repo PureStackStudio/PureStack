@@ -1,7 +1,6 @@
 import type { TsSsgContext } from '@purestack/ts-common'
 import { resolveTsSsgContext } from '@purestack/ts-common'
 import { defineComponent, html } from 'regor'
-import { registerFooterStyles } from './footerStyle'
 
 export type SiteFooterVariant = 'default' | 'minimal' | 'feature'
 export type FooterNewsletterMethod = 'get' | 'post'
@@ -230,7 +229,6 @@ function createFooterSocialComponent() {
 }
 
 export function createFooterComponents() {
-  registerFooterStyles()
   return {
     siteFooter: createSiteFooterComponent(),
     footerColumn: createFooterColumnComponent(),

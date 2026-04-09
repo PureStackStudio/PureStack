@@ -7,8 +7,6 @@ import {
   unref,
 } from 'regor'
 
-import { registerIconStyles } from './iconStyle'
-
 export type GetSvgIcon = (name: string) => string
 
 export interface Icon {
@@ -50,7 +48,6 @@ function createIconComponent(getSvgIcon: GetSvgIcon) {
 }
 
 export function createIconComponents(getSvgIcon: GetSvgIcon) {
-  registerIconStyles()
   return {
     icon: createIconComponent(getSvgIcon),
   }

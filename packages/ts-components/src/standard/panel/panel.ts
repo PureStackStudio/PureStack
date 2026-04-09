@@ -13,8 +13,6 @@ import {
   unref,
 } from 'regor'
 
-import { registerPanelStyles } from './panelStyle'
-
 export interface Panel {
   tone?: RefOrValue<SemanticTone>
   rootClass?: ComputedRef<string>
@@ -32,7 +30,6 @@ function createPanelComponent() {
 }
 
 export function createPanelComponents() {
-  registerPanelStyles()
   return {
     panel: createPanelComponent(),
   }

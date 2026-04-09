@@ -1,6 +1,6 @@
 # Component Navigation
 
-This VS Code extension adds `Go to Definition` and prop IntelliSense support for component tags inside `.md`, `.mdx`, and Regor `html\`...\`` templates in `.ts` files.
+This VS Code extension adds `Go to Definition` and prop IntelliSense support for component tags inside `.md`, `.mdx`, and Regor `html` tagged templates in `.ts` files.
 
 Examples:
 
@@ -30,7 +30,7 @@ Examples:
 This version is intentionally simple and generic:
 
 - it handles JSX-like component tags in Markdown and MDX
-- it handles component tags inside `html\`...\`` tagged templates in TypeScript files
+- it handles component markup inside `html` tagged templates in TypeScript files
 - it scans workspace `.ts` files for `defineComponent`
 - it keeps only files that contain `defineComponent`
 - when you click a component name, it only accepts files that also export an exact `interface`, `type`, or `class` with that component name
@@ -45,4 +45,3 @@ This version is intentionally simple and generic:
 - `RefOrValue<T>` and simple exported type aliases are unwrapped for completion
 - literal union values and booleans are suggested when they can be resolved
 
-It does not depend on PureStack barrel exports or naming conventions.

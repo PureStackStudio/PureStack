@@ -6,8 +6,8 @@ import {
   createTabsComponents,
 } from '@purestack/ts-components'
 import { ensureDomGlobals } from '@purestack/ts-minidom'
-import { disableLogger, getLogger, type Logger } from 'logpot'
 import { getSvgIcon } from '@purestack/ts-svg-icons'
+import { disableLogger, getLogger, type Logger } from 'logpot'
 import type { Component } from 'regor'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from '../config/config'

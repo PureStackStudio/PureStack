@@ -1,7 +1,5 @@
 import { defineComponent, html } from 'regor'
 
-import { registerContactFormStyles } from './contactFormStyle'
-
 export type ContactFormMethod = 'get' | 'post'
 
 export interface ContactForm {
@@ -106,7 +104,6 @@ function createContactFormComponent() {
 }
 
 export function createContactFormComponents() {
-  registerContactFormStyles()
   return {
     contactForm: createContactFormComponent(),
   }

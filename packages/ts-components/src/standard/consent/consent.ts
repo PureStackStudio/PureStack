@@ -5,7 +5,6 @@ import type {
 } from '@purestack/ts-common'
 import { resolveTsSsgContext } from '@purestack/ts-common'
 import { defineComponent, html } from 'regor'
-import { registerConsentStyles } from './consentStyle'
 
 export interface ConsentCategoryState extends ConsentCategory {
   inputId?: string
@@ -141,6 +140,5 @@ function resolveConsent(context: TsSsgContext): Consent {
 }
 
 export function createConsentComponents() {
-  registerConsentStyles()
   return { consent: createConsentComponent() }
 }

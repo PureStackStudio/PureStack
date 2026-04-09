@@ -7,8 +7,6 @@ import {
   unref,
 } from 'regor'
 
-import { registerFlexStyles } from './flexStyle'
-
 export type FlexDirection = 'row' | 'column'
 export type FlexAlign = 'stretch' | 'start' | 'center' | 'end' | 'baseline'
 export type FlexJustify =
@@ -39,7 +37,6 @@ function createFlexComponent() {
 }
 
 export function createFlexComponents() {
-  registerFlexStyles()
   return {
     flex: createFlexComponent(),
   }

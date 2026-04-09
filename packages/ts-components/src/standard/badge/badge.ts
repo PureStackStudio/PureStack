@@ -12,7 +12,6 @@ import {
   type Ref,
   unref,
 } from 'regor'
-import { registerBadgeStyles } from './badgeStyle'
 
 export interface Badge {
   tone?: Ref<string> | string
@@ -34,7 +33,6 @@ function createBadgeComponent() {
 }
 
 export function createBadgeComponents() {
-  registerBadgeStyles()
   return {
     badge: createBadgeComponent(),
   }

@@ -7,8 +7,6 @@ import {
   unref,
 } from 'regor'
 
-import { registerGridStyles } from './gridStyle'
-
 export type GridAlignItems = 'start' | 'center' | 'end'
 export type GridJustifyItems = 'start' | 'center' | 'end'
 
@@ -46,7 +44,6 @@ function createGridComponent() {
 }
 
 export function createGridComponents() {
-  registerGridStyles()
   return {
     grid: createGridComponent(),
   }

@@ -7,7 +7,6 @@ import {
   type RefOrValue,
   unref,
 } from 'regor'
-import { registerFormStyles } from './formStyle'
 
 export type FormStatusVariant = 'info' | 'success' | 'error' | 'warning'
 
@@ -187,7 +186,6 @@ function createFormStatusComponent() {
 }
 
 export function createFormComponents() {
-  registerFormStyles()
   return {
     appForm: createAppFormComponent(),
     formField: createFormFieldComponent(),

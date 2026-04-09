@@ -1,7 +1,6 @@
 import type { PageOutlineItem, TsSsgContext } from '@purestack/ts-common'
 import { resolveTsSsgContext } from '@purestack/ts-common'
 import { defineComponent, html } from 'regor'
-import { registerPageTocStyles } from './pageTocStyle'
 
 export interface PageToc {
   items?: PageOutlineItem[]
@@ -97,7 +96,6 @@ function createPageTocComponent() {
 }
 
 export function createPageTocComponents() {
-  registerPageTocStyles()
   const pageToc = createPageTocComponent()
   return { pageToc }
 }

@@ -2,7 +2,6 @@ import type { TsSsgContext } from '@purestack/ts-common'
 
 import { resolveTsSsgContext } from '@purestack/ts-common'
 import { defineComponent, html } from 'regor'
-import { registerSearchBoxStyles } from './searchBoxStyle'
 
 export interface SearchBox {
   placeholder: string
@@ -44,7 +43,6 @@ function createSearchBoxComponent() {
 }
 
 export function createSearchComponents() {
-  registerSearchBoxStyles()
   return { siteSearch: createSearchBoxComponent() }
 }
 

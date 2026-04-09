@@ -2,7 +2,6 @@ import type { TsSsgContext } from '@purestack/ts-common'
 
 import { resolveTsSsgContext } from '@purestack/ts-common'
 import { defineComponent, html } from 'regor'
-import { registerTopBarStyles } from './topBarStyle'
 
 export interface TopBar {
   brandWordOne: string
@@ -69,6 +68,5 @@ function createTopBarComponent() {
 }
 
 export function createTopBarComponents() {
-  registerTopBarStyles()
   return { topBar: createTopBarComponent() }
 }

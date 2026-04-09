@@ -1,7 +1,6 @@
 import type { NavItem, TsSsgContext } from '@purestack/ts-common'
 import { resolveTsSsgContext } from '@purestack/ts-common'
 import { defineComponent, html } from 'regor'
-import { registerNavStyles } from './navMenuStyle'
 
 export interface NavMenu {
   items?: NavItem[]
@@ -198,7 +197,6 @@ function createNavMenuComponent() {
 }
 
 export function createNavigationComponents() {
-  registerNavStyles()
   const navItem = createNavItemComponent()
   const navList = createNavListComponent()
   const navMenu = createNavMenuComponent()

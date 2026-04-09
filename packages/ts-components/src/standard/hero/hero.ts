@@ -1,6 +1,5 @@
 import { urlNormalizer } from '@purestack/ts-util'
 import { defineComponent, html } from 'regor'
-import { registerHeroStyles } from './heroStyle'
 
 export type HeroActionVariant = 'primary' | 'minimal'
 
@@ -65,7 +64,6 @@ function createHeroMediaComponent() {
 }
 
 export function createHeroComponents() {
-  registerHeroStyles()
   return {
     heroBanner: createHeroBannerComponent(),
     heroAction: createHeroActionComponent(),

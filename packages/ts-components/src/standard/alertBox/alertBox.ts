@@ -13,7 +13,6 @@ import {
   type RefOrValue,
   unref,
 } from 'regor'
-import { registerAlertBoxStyles } from './alertBoxStyle'
 
 export interface AlertBox {
   title?: RefOrValue<string>
@@ -52,7 +51,6 @@ function createAlertBoxComponent() {
 }
 
 export function createAlertComponents() {
-  registerAlertBoxStyles()
   return {
     alertBox: createAlertBoxComponent(),
   }

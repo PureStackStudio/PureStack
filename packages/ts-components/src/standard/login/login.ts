@@ -1,6 +1,5 @@
 import { urlNormalizer } from '@purestack/ts-util'
 import { defineComponent, html } from 'regor'
-import { registerLoginStyles } from './loginStyle'
 
 export interface LoginHeader {
   badge?: string
@@ -73,7 +72,6 @@ function createLoginFooterComponent() {
 }
 
 export function createLoginComponents() {
-  registerLoginStyles()
   return {
     loginPanel: createLoginPanelComponent(),
     loginHeader: createLoginHeaderComponent(),

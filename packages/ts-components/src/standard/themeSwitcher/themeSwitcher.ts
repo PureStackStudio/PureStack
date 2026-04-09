@@ -1,5 +1,4 @@
 import { defineComponent, html } from 'regor'
-import { registerThemeSwitcherStyles } from './themeSwitcherStyle'
 
 const themeSwitcherTemplate = html`<button
   class="theme-switcher"
@@ -64,6 +63,5 @@ function createThemeSwitcherComponent() {
 }
 
 export function createThemeSwitcherComponents() {
-  registerThemeSwitcherStyles()
   return { themeSwitcher: createThemeSwitcherComponent() }
 }

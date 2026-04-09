@@ -14,7 +14,6 @@ import {
   type RefOrValue,
   unref,
 } from 'regor'
-import { registerModalStyles } from './modalStyle'
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl'
 export type ModalSlideFrom = 'none' | 'top' | 'right' | 'bottom' | 'left'
@@ -99,7 +98,6 @@ function createModalTriggerComponent() {
 }
 
 export function createModalComponents() {
-  registerModalStyles()
   return {
     modal: createModalComponent(),
     modalTrigger: createModalTriggerComponent(),
