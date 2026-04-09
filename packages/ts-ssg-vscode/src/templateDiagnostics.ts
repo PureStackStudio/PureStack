@@ -79,7 +79,7 @@ async function buildTemplateDiagnostics(document: vscode.TextDocument) {
 }
 
 async function buildMdxDiagnostics(document: vscode.TextDocument) {
-  const blocks = getMdxMarkupBlocks(document)
+  const blocks = getMdxMarkupBlocks(document, { includeIncomplete: true })
   const diagnostics: vscode.Diagnostic[] = []
 
   for (const block of blocks) {

@@ -2441,6 +2441,23 @@
         <key>patterns</key>
         <array>
           <dict>
+            <key>match</key>
+            <string>([:@#])((?:[_$[:alpha:]][-_$[:alnum:]]*))(?=\s*(?:=|\/?\&gt;|\s))</string>
+            <key>captures</key>
+            <dict>
+              <key>1</key>
+              <dict>
+                <key>name</key>
+                <string>punctuation.definition.attribute.regor.mdx</string>
+              </dict>
+              <key>2</key>
+              <dict>
+                <key>name</key>
+                <string>entity.other.attribute-name.jsx</string>
+              </dict>
+            </dict>
+          </dict>
+          <dict>
             <key>include</key>
             <string>source.tsx#jsx-tag-attribute-name</string>
           </dict>
@@ -2530,6 +2547,23 @@
         </dict>
         <key>patterns</key>
         <array>
+          <dict>
+            <key>match</key>
+            <string>([:@#])((?:[_$[:alpha:]][-_$[:alnum:]]*))(?=\s*(?:=|\/?\&gt;|\s))</string>
+            <key>captures</key>
+            <dict>
+              <key>1</key>
+              <dict>
+                <key>name</key>
+                <string>punctuation.definition.attribute.regor.mdx</string>
+              </dict>
+              <key>2</key>
+              <dict>
+                <key>name</key>
+                <string>entity.other.attribute-name.jsx</string>
+              </dict>
+            </dict>
+          </dict>
           <dict>
             <key>include</key>
             <string>source.tsx#jsx-tag-attribute-name</string>

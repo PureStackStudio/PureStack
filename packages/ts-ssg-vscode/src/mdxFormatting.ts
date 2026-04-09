@@ -21,6 +21,10 @@ interface MdxFormattingRequest {
   requireFormatOnSave?: boolean
 }
 
+interface MdxMarkupBlockOptions {
+  includeIncomplete?: boolean
+}
+
 const VOID_HTML_TAG_NAMES = new Set([
   'area',
   'base',
@@ -80,7 +84,10 @@ export async function formatActiveEditorMdxMarkup(
   })
 }
 
-export function getMdxMarkupBlocks(document: vscode.TextDocument) {
+export function getMdxMarkupBlocks(
+  document: vscode.TextDocument,
+  options: MdxMarkupBlockOptions = {},
+) {
   const blocks: MdxMarkupBlock[] = []
   let inFence = false
   let fenceMarker: string | undefined
@@ -129,17 +136,34 @@ export function getMdxMarkupBlocks(document: vscode.TextDocument) {
 
     if (!isCompleteMarkupBlock(activeLines.join('\n'))) continue
 
-    const start = new vscode.Position(activeStartLine, 0)
-    const end = document.lineAt(lineIndex).range.end
-    blocks.push({
-      content: activeLines.join('\n'),
-      range: new vscode.Range(start, end),
-    })
+    pushActiveBlock(blocks, document, activeStartLine, activeLines)
     activeStartLine = undefined
     activeLines = []
   }
 
+  if (
+    options.includeIncomplete &&
+    activeStartLine !== undefined &&
+    activeLines.length > 0
+  ) {
+    pushActiveBlock(blocks, document, activeStartLine, activeLines)
+  }
+
   return blocks
+}
+
+function pushActiveBlock(
+  blocks: MdxMarkupBlock[],
+  document: vscode.TextDocument,
+  startLine: number,
+  lines: string[],
+) {
+  const start = new vscode.Position(startLine, 0)
+  const end = document.lineAt(startLine + lines.length - 1).range.end
+  blocks.push({
+    content: lines.join('\n'),
+    range: new vscode.Range(start, end),
+  })
 }
 
 function looksLikeMarkupBlockStart(trimmedLine: string) {

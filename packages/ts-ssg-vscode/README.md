@@ -68,6 +68,7 @@ This version is intentionally simple and generic:
 - component tags beginning with an uppercase letter receive a dedicated component tag scope
 - `${...}` expressions inside template content and CSS property values are tokenized as TypeScript
 - `{{ ... }}` interpolations inside embedded HTML are tokenized as TypeScript expressions
+- Regor-style MDX attributes beginning with `:`, `@`, and `#` are highlighted inside MDX markup
 - the grammar currently targets TypeScript templates, not JavaScript files
 
 ## How formatting works
