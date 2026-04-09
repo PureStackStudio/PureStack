@@ -5,7 +5,13 @@ import {
   normalizeSelfClosingTagSpacing,
   shouldFormatOnSave,
 } from './htmlFormatting'
-import { scanTagTokens, VOID_HTML_TAG_NAMES } from './markupSupport'
+import {
+  findMdxExpressionEnd,
+  findTagEnd,
+  isMdxExpressionStart,
+  scanTagTokens,
+  VOID_HTML_TAG_NAMES,
+} from './markupSupport'
 
 export interface MdxMarkupBlock {
   content: string
@@ -217,7 +223,7 @@ export function maskMdxExpressions(source: string) {
   let placeholderContent = ''
 
   for (let index = 0; index < source.length; ) {
-    if (!startsMdxExpression(source, index)) {
+    if (!isMdxExpressionStart(source, index)) {
       placeholderContent += source[index]
       index++
       continue
@@ -240,57 +246,6 @@ export function maskMdxExpressions(source: string) {
   }
 
   return { expressions, placeholderContent }
-}
-
-function startsMdxExpression(source: string, index: number) {
-  return (
-    source[index] === '{' &&
-    source[index - 1] !== '{' &&
-    source[index + 1] !== '{'
-  )
-}
-
-function findMdxExpressionEnd(source: string, startIndex: number) {
-  let braceDepth = 0
-  let quote: '"' | "'" | '`' | undefined
-
-  for (let index = startIndex; index < source.length; index++) {
-    const current = source[index]
-    const previous = source[index - 1]
-
-    if (quote) {
-      if (current === quote && previous !== '\\') {
-        quote = undefined
-      } else if (
-        quote === '`' &&
-        current === '$' &&
-        source[index + 1] === '{'
-      ) {
-        const templateExpressionEnd = findMdxExpressionEnd(source, index + 1)
-        if (templateExpressionEnd === -1) return -1
-        index = templateExpressionEnd - 1
-      }
-      continue
-    }
-
-    if (current === '"' || current === "'" || current === '`') {
-      quote = current
-      continue
-    }
-
-    if (current === '{') {
-      braceDepth++
-      continue
-    }
-
-    if (current !== '}') continue
-
-    braceDepth--
-    if (braceDepth === 0) return index + 1
-    if (braceDepth < 0) return -1
-  }
-
-  return -1
 }
 
 function restoreMdxExpressions(
@@ -317,7 +272,7 @@ function hasUnterminatedTag(markup: string) {
       continue
     }
 
-    const nextTagEnd = markup.indexOf('>', index + 1)
+    const nextTagEnd = findTagEnd(markup, index + 1)
     if (nextTagEnd === -1) return true
     index = nextTagEnd
   }

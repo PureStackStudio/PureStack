@@ -4,10 +4,10 @@ import {
   getPendingOpeningTagAtEnd,
   hasImmediateClosingTag,
   isOffsetInsideIgnoredRange,
+  type MarkupContext,
   sanitizeMarkup,
   scanTagTokens,
   VOID_HTML_TAG_NAMES,
-  type MarkupContext,
 } from './markupSupport'
 
 let isApplyingAutoCloseEdit = false

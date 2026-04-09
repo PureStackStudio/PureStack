@@ -226,7 +226,7 @@ function getMdxContextAtOffset(
   const contentEndOffset = document.getText().length
   if (offset < 0 || offset > contentEndOffset) return undefined
   if (
-    ignoredRanges.some((range) => offset >= range.start && offset <= range.end)
+    ignoredRanges.some((range) => offset >= range.start && offset < range.end)
   ) {
     return undefined
   }
@@ -314,12 +314,12 @@ function getMdxIgnoredRanges(document: vscode.TextDocument) {
   return ignoredRanges.concat(getMdxExpressionRanges(document))
 }
 
-function getMdxExpressionRanges(document: vscode.TextDocument) {
+export function getMdxExpressionRanges(document: vscode.TextDocument) {
   const text = document.getText()
   const ranges: Array<{ start: number; end: number }> = []
 
   for (let index = 0; index < text.length; index++) {
-    if (!startsMdxExpression(text, index)) continue
+    if (!isMdxExpressionStart(text, index)) continue
 
     const end = findMdxExpressionEnd(text, index)
     if (end === -1) continue
@@ -331,7 +331,7 @@ function getMdxExpressionRanges(document: vscode.TextDocument) {
   return ranges
 }
 
-function startsMdxExpression(source: string, index: number) {
+export function isMdxExpressionStart(source: string, index: number) {
   return (
     source[index] === '{' &&
     source[index - 1] !== '{' &&
@@ -339,7 +339,7 @@ function startsMdxExpression(source: string, index: number) {
   )
 }
 
-function findMdxExpressionEnd(source: string, startIndex: number) {
+export function findMdxExpressionEnd(source: string, startIndex: number) {
   let braceDepth = 0
   let quote: '"' | "'" | '`' | undefined
 
@@ -404,7 +404,7 @@ function isTagTailBalanced(tagTail: string) {
   return !quote
 }
 
-function findTagEnd(markup: string, startIndex: number) {
+export function findTagEnd(markup: string, startIndex: number) {
   let quote: '"' | "'" | undefined
 
   for (let index = startIndex; index < markup.length; index++) {
