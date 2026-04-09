@@ -353,11 +353,7 @@ function unwrapComponentPropTypeNode(typeNode: ts.TypeNode): ts.TypeNode {
   }
 
   if (ts.isTypeReferenceNode(typeNode)) {
-    const typeName = getEntityNameText(typeNode.typeName)
-    if (
-      (typeName === 'RefOrValue' || typeName === 'ComputedRef') &&
-      typeNode.typeArguments?.[0]
-    ) {
+    if (typeNode.typeArguments?.[0]) {
       return unwrapComponentPropTypeNode(typeNode.typeArguments[0])
     }
   }

@@ -32,6 +32,15 @@ interface MdxMarkupBlockOptions {
   includeIncomplete?: boolean
 }
 
+interface MdxBlockScanState {
+  activeLines: string[]
+  activeStartLine?: number
+  fenceMarker?: string
+  frontmatterHandled: boolean
+  inFence: boolean
+  inFrontmatter: boolean
+}
+
 export async function buildMdxFormattingEdits(
   document: vscode.TextDocument,
   request: MdxFormattingRequest = {},
@@ -79,64 +88,38 @@ export function getMdxMarkupBlocks(
   options: MdxMarkupBlockOptions = {},
 ) {
   const blocks: MdxMarkupBlock[] = []
-  let inFence = false
-  let fenceMarker: string | undefined
-  let inFrontmatter = false
-  let frontmatterHandled = false
-  let activeStartLine: number | undefined
-  let activeLines: string[] = []
+  const state: MdxBlockScanState = {
+    activeLines: [],
+    frontmatterHandled: false,
+    inFence: false,
+    inFrontmatter: false,
+  }
 
   for (let lineIndex = 0; lineIndex < document.lineCount; lineIndex++) {
     const lineText = document.lineAt(lineIndex).text
     const trimmed = lineText.trim()
 
-    if (!frontmatterHandled && lineIndex === 0 && trimmed === '---') {
-      inFrontmatter = true
-      frontmatterHandled = true
+    if (startMdxFrontmatter(lineIndex, trimmed, state)) {
       continue
     }
 
-    if (inFrontmatter) {
-      if (trimmed === '---') inFrontmatter = false
+    if (closeMdxFrontmatter(trimmed, state)) {
       continue
     }
 
-    const fenceMatch = /^(```+|~~~+)/.exec(trimmed)
-    if (fenceMatch) {
-      if (!inFence) {
-        inFence = true
-        fenceMarker = fenceMatch[1][0]
-      } else if (fenceMarker && trimmed.startsWith(fenceMarker.repeat(3))) {
-        inFence = false
-        fenceMarker = undefined
-      }
+    if (updateMdxFenceState(trimmed, state)) {
       continue
     }
 
-    if (inFence) continue
-
-    if (activeStartLine === undefined) {
-      if (!looksLikeMarkupBlockStart(trimmed)) continue
-
-      activeStartLine = lineIndex
-      activeLines = [lineText]
-    } else {
-      activeLines.push(lineText)
-    }
-
-    if (!isCompleteMarkupBlock(activeLines.join('\n'))) continue
-
-    pushActiveBlock(blocks, document, activeStartLine, activeLines)
-    activeStartLine = undefined
-    activeLines = []
+    collectActiveMarkupBlock(blocks, document, lineIndex, lineText, trimmed, state)
   }
 
   if (
     options.includeIncomplete &&
-    activeStartLine !== undefined &&
-    activeLines.length > 0
+    state.activeStartLine !== undefined &&
+    state.activeLines.length > 0
   ) {
-    pushActiveBlock(blocks, document, activeStartLine, activeLines)
+    pushActiveBlock(blocks, document, state.activeStartLine, state.activeLines)
   }
 
   return blocks
@@ -164,29 +147,7 @@ function isCompleteMarkupBlock(markup: string) {
   if (!markup.includes('<')) return false
   if (hasUnterminatedTag(markup)) return false
 
-  const stack: string[] = []
-
-  for (const token of scanTagTokens(markup)) {
-    if (token.kind === 'opening') {
-      if (
-        token.selfClosing ||
-        VOID_HTML_TAG_NAMES.has(token.name.toLowerCase())
-      ) {
-        continue
-      }
-
-      stack.push(token.name)
-      continue
-    }
-
-    for (let index = stack.length - 1; index >= 0; index--) {
-      if (stack[index] !== token.name) continue
-      stack.splice(index)
-      break
-    }
-  }
-
-  return stack.length === 0
+  return getUnclosedTagNames(markup).length === 0
 }
 
 async function formatMdxMarkupBlock(
@@ -282,4 +243,101 @@ function hasUnterminatedTag(markup: string) {
 
 function shouldFormatMarkupOnSave(document: vscode.TextDocument) {
   return shouldFormatOnSave(document)
+}
+
+function startMdxFrontmatter(
+  lineIndex: number,
+  trimmed: string,
+  state: MdxBlockScanState,
+) {
+  if (state.frontmatterHandled || lineIndex !== 0 || trimmed !== '---') {
+    return false
+  }
+
+  state.inFrontmatter = true
+  state.frontmatterHandled = true
+  return true
+}
+
+function closeMdxFrontmatter(trimmed: string, state: MdxBlockScanState) {
+  if (!state.inFrontmatter) return false
+
+  if (trimmed === '---') {
+    state.inFrontmatter = false
+  }
+
+  return true
+}
+
+function updateMdxFenceState(trimmed: string, state: MdxBlockScanState) {
+  const fenceMatch = /^(```+|~~~+)/.exec(trimmed)
+  if (!fenceMatch) return state.inFence
+
+  if (!state.inFence) {
+    state.inFence = true
+    state.fenceMarker = fenceMatch[1][0]
+    return true
+  }
+
+  if (state.fenceMarker && trimmed.startsWith(state.fenceMarker.repeat(3))) {
+    state.inFence = false
+    state.fenceMarker = undefined
+  }
+
+  return true
+}
+
+function collectActiveMarkupBlock(
+  blocks: MdxMarkupBlock[],
+  document: vscode.TextDocument,
+  lineIndex: number,
+  lineText: string,
+  trimmed: string,
+  state: MdxBlockScanState,
+) {
+  if (state.inFence) return
+
+  if (state.activeStartLine === undefined) {
+    if (!looksLikeMarkupBlockStart(trimmed)) return
+
+    state.activeStartLine = lineIndex
+    state.activeLines = [lineText]
+  } else {
+    state.activeLines.push(lineText)
+  }
+
+  if (!isCompleteMarkupBlock(state.activeLines.join('\n'))) return
+
+  pushActiveBlock(blocks, document, state.activeStartLine, state.activeLines)
+  state.activeStartLine = undefined
+  state.activeLines = []
+}
+
+function getUnclosedTagNames(markup: string) {
+  const stack: string[] = []
+
+  for (const token of scanTagTokens(markup)) {
+    if (token.kind === 'opening') {
+      if (isSelfContainedTag(token.name, token.selfClosing)) continue
+
+      stack.push(token.name)
+      continue
+    }
+
+    closeMatchingTag(stack, token.name)
+  }
+
+  return stack
+}
+
+function isSelfContainedTag(tagName: string, selfClosing: boolean) {
+  return selfClosing || VOID_HTML_TAG_NAMES.has(tagName.toLowerCase())
+}
+
+function closeMatchingTag(stack: string[], tagName: string) {
+  for (let index = stack.length - 1; index >= 0; index--) {
+    if (stack[index] !== tagName) continue
+    stack.splice(index)
+    return
+  }
 }

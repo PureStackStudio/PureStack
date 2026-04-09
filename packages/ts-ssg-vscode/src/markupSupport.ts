@@ -36,6 +36,14 @@ export interface TagToken {
   start: number
 }
 
+interface MdxIgnoreScanState {
+  fenceMarker?: string
+  fenceStartOffset?: number
+  frontmatterStartOffset?: number
+  inFence: boolean
+  inFrontmatter: boolean
+}
+
 export function getMarkupContextAtOffset(
   document: vscode.TextDocument,
   offset: number,
@@ -184,33 +192,9 @@ function getTypeScriptTemplateContextAtOffset(
     if (matchedContext) return
     if (offset < node.getStart(sourceFile) || offset > node.getEnd()) return
 
-    if (ts.isTaggedTemplateExpression(node)) {
-      const tagName = normalizeSupportedTemplateTagName(
-        node.tag.getText(sourceFile),
-      )
-      if (!tagName) {
-        ts.forEachChild(node, visitNode)
-        return
-      }
-
-      const template = node.template
-      const contentStartOffset = template.getStart(sourceFile) + 1
-      const contentEndOffset = template.getEnd() - 1
-      if (offset < contentStartOffset || offset > contentEndOffset) {
-        ts.forEachChild(node, visitNode)
-        return
-      }
-
-      matchedContext = {
-        contentEndOffset,
-        contentStartOffset,
-        ignoredRanges: ts.isTemplateExpression(template)
-          ? template.templateSpans.map((span) => ({
-              start: span.expression.getStart(sourceFile),
-              end: span.expression.getEnd(),
-            }))
-          : [],
-      }
+    const templateContext = getSupportedTemplateContext(sourceFile, node, offset)
+    if (templateContext) {
+      matchedContext = templateContext
       return
     }
 
@@ -252,66 +236,145 @@ function normalizeSupportedTemplateTagName(tagText: string) {
 
 function getMdxIgnoredRanges(document: vscode.TextDocument) {
   const ignoredRanges: Array<{ start: number; end: number }> = []
-  let inFence = false
-  let fenceMarker: string | undefined
-  let fenceStartOffset: number | undefined
-  let inFrontmatter = false
-  let frontmatterStartOffset: number | undefined
+  const state: MdxIgnoreScanState = {
+    inFence: false,
+    inFrontmatter: false,
+  }
 
   for (let lineIndex = 0; lineIndex < document.lineCount; lineIndex++) {
     const line = document.lineAt(lineIndex)
     const trimmed = line.text.trim()
 
-    if (lineIndex === 0 && trimmed === '---') {
-      inFrontmatter = true
-      frontmatterStartOffset = document.offsetAt(line.range.start)
+    if (startFrontmatter(document, lineIndex, trimmed, state)) {
       continue
     }
 
-    if (inFrontmatter) {
-      if (trimmed === '---' && lineIndex > 0) {
-        ignoredRanges.push({
-          start: frontmatterStartOffset ?? 0,
-          end: document.offsetAt(line.rangeIncludingLineBreak.end),
-        })
-        inFrontmatter = false
-        frontmatterStartOffset = undefined
-      }
-    } else {
-      const fenceMatch = /^(```+|~~~+)/.exec(trimmed)
-      if (fenceMatch) {
-        if (!inFence) {
-          inFence = true
-          fenceMarker = fenceMatch[1][0]
-          fenceStartOffset = document.offsetAt(line.range.start)
-        } else if (fenceMarker && trimmed.startsWith(fenceMarker.repeat(3))) {
-          ignoredRanges.push({
-            start: fenceStartOffset ?? document.offsetAt(line.range.start),
-            end: document.offsetAt(line.rangeIncludingLineBreak.end),
-          })
-          inFence = false
-          fenceMarker = undefined
-          fenceStartOffset = undefined
-        }
-      }
+    if (closeFrontmatter(document, lineIndex, trimmed, state, ignoredRanges)) {
+      continue
     }
+
+    updateFenceState(document, trimmed, line, state, ignoredRanges)
   }
 
-  if (inFrontmatter && frontmatterStartOffset !== undefined) {
-    ignoredRanges.push({
-      start: frontmatterStartOffset,
-      end: document.getText().length,
-    })
-  }
-
-  if (inFence && fenceStartOffset !== undefined) {
-    ignoredRanges.push({
-      start: fenceStartOffset,
-      end: document.getText().length,
-    })
-  }
+  pushTrailingIgnoredRange(document, ignoredRanges, state)
 
   return ignoredRanges.concat(getMdxExpressionRanges(document))
+}
+
+function getSupportedTemplateContext(
+  sourceFile: ts.SourceFile,
+  node: ts.Node,
+  offset: number,
+): MarkupContext | undefined {
+  if (!ts.isTaggedTemplateExpression(node)) return undefined
+
+  const tagName = normalizeSupportedTemplateTagName(node.tag.getText(sourceFile))
+  if (!tagName) return undefined
+
+  const template = node.template
+  const contentStartOffset = template.getStart(sourceFile) + 1
+  const contentEndOffset = template.getEnd() - 1
+  if (offset < contentStartOffset || offset > contentEndOffset) return undefined
+
+  return {
+    contentEndOffset,
+    contentStartOffset,
+    ignoredRanges: getTemplateIgnoredRanges(sourceFile, template),
+  }
+}
+
+function getTemplateIgnoredRanges(
+  sourceFile: ts.SourceFile,
+  template: ts.TemplateLiteral,
+) {
+  if (!ts.isTemplateExpression(template)) return []
+
+  return template.templateSpans.map((span) => ({
+    start: span.expression.getStart(sourceFile),
+    end: span.expression.getEnd(),
+  }))
+}
+
+function startFrontmatter(
+  document: vscode.TextDocument,
+  lineIndex: number,
+  trimmed: string,
+  state: MdxIgnoreScanState,
+) {
+  if (lineIndex !== 0 || trimmed !== '---') return false
+
+  state.inFrontmatter = true
+  state.frontmatterStartOffset = document.offsetAt(document.lineAt(0).range.start)
+  return true
+}
+
+function closeFrontmatter(
+  document: vscode.TextDocument,
+  lineIndex: number,
+  trimmed: string,
+  state: MdxIgnoreScanState,
+  ignoredRanges: Array<{ start: number; end: number }>,
+) {
+  if (!state.inFrontmatter) return false
+  if (trimmed !== '---' || lineIndex === 0) return true
+
+  ignoredRanges.push({
+    start: state.frontmatterStartOffset ?? 0,
+    end: document.offsetAt(document.lineAt(lineIndex).rangeIncludingLineBreak.end),
+  })
+  state.inFrontmatter = false
+  state.frontmatterStartOffset = undefined
+  return true
+}
+
+function updateFenceState(
+  document: vscode.TextDocument,
+  trimmed: string,
+  line: vscode.TextLine,
+  state: MdxIgnoreScanState,
+  ignoredRanges: Array<{ start: number; end: number }>,
+) {
+  const fenceMatch = /^(```+|~~~+)/.exec(trimmed)
+  if (!fenceMatch) return
+
+  if (!state.inFence) {
+    state.inFence = true
+    state.fenceMarker = fenceMatch[1][0]
+    state.fenceStartOffset = document.offsetAt(line.range.start)
+    return
+  }
+
+  if (!state.fenceMarker || !trimmed.startsWith(state.fenceMarker.repeat(3))) {
+    return
+  }
+
+  ignoredRanges.push({
+    start: state.fenceStartOffset ?? document.offsetAt(line.range.start),
+    end: document.offsetAt(line.rangeIncludingLineBreak.end),
+  })
+  state.inFence = false
+  state.fenceMarker = undefined
+  state.fenceStartOffset = undefined
+}
+
+function pushTrailingIgnoredRange(
+  document: vscode.TextDocument,
+  ignoredRanges: Array<{ start: number; end: number }>,
+  state: MdxIgnoreScanState,
+) {
+  if (state.inFrontmatter && state.frontmatterStartOffset !== undefined) {
+    ignoredRanges.push({
+      start: state.frontmatterStartOffset,
+      end: document.getText().length,
+    })
+  }
+
+  if (state.inFence && state.fenceStartOffset !== undefined) {
+    ignoredRanges.push({
+      start: state.fenceStartOffset,
+      end: document.getText().length,
+    })
+  }
 }
 
 export function getMdxExpressionRanges(document: vscode.TextDocument) {
