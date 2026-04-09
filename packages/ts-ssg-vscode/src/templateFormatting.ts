@@ -240,7 +240,7 @@ async function formatTaggedTemplate(
   }
 
   const restored = restoreTemplateExpressions(
-    formatted.trim(),
+    normalizeSelfClosingTagSpacing(formatted.trim()),
     template.expressions,
   )
 
@@ -272,6 +272,10 @@ function restoreTemplateExpressions(
   }
 
   return restored
+}
+
+function normalizeSelfClosingTagSpacing(formatted: string) {
+  return formatted.replace(/\s+\/>/g, '/>')
 }
 
 function getLineIndent(line: string) {
