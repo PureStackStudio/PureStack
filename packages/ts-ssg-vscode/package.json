@@ -1,7 +1,7 @@
 {
   "name": "purestack-component-navigation",
-  "displayName": "PureStack Component Navigation",
-  "description": "Ctrl+Click MDX, Markdown, and Regor html template component tags to open the matching source file.",
+  "displayName": "PureStack Component Tools",
+  "description": "Component navigation, prop IntelliSense, and lit-html syntax highlighting for Markdown, MDX, and TypeScript templates.",
   "version": "1.0.0",
   "private": true,
   "publisher": "purestack-local",
@@ -46,7 +46,6 @@
     "grammars": [
       {
         "injectTo": [
-          "source.js",
           "source.ts",
           "text.html.basic"
         ],
@@ -60,7 +59,6 @@
       },
       {
         "injectTo": [
-          "source.js",
           "source.ts",
           "text.html.basic"
         ],
@@ -72,7 +70,6 @@
       },
       {
         "injectTo": [
-          "source.js",
           "source.ts",
           "text.html.basic"
         ],
@@ -84,7 +81,6 @@
       },
       {
         "injectTo": [
-          "source.js",
           "source.ts",
           "text.html.basic"
         ],

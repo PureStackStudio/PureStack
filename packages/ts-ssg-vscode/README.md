@@ -1,6 +1,12 @@
-# Component Navigation
+# PureStack Component Tools
 
-This VS Code extension adds `Go to Definition` and prop IntelliSense support for component tags inside `.md`, `.mdx`, and Regor `html` tagged templates in `.ts` files.
+This VS Code extension adds component-aware `Go to Definition`, prop IntelliSense, and `lit-html` syntax highlighting for PureStack authoring.
+
+It supports:
+
+- component tags inside `.md` and `.mdx`
+- Regor `html`, `raw`, and `svg` tagged templates in `.ts` files
+- embedded HTML, CSS, SVG, and `${...}` TypeScript expressions inside those templates
 
 Examples:
 
@@ -9,6 +15,7 @@ Examples:
 - `Ctrl+Click` on `<TabPane>` opens the shared `.ts` file that exports `TabPane`
 - inside `<Btn ...>` it suggests only public Regor props declared in `defineComponent(..., { props: [...] })`
 - inside `<Btn size="...">` it suggests literal values like `sm`, `md`, and `lg`
+- inside ``html`...``` it highlights HTML tags, component tags, CSS property values, and embedded TypeScript expressions
 
 ## Local testing
 
@@ -18,6 +25,7 @@ Examples:
 4. In the Extension Development Host window, open any `.md`, `.mdx`, or `.ts` file in this repo.
 5. Hold `Ctrl` and click a component tag such as `<Flex>` or press `F12` on it.
 6. Trigger completion inside a component tag to see prop and value suggestions.
+7. Open a TypeScript file containing an `html`, `raw`, or `svg` tagged template and confirm syntax highlighting is applied inside the template body.
 
 ## Build a VSIX
 
@@ -45,3 +53,10 @@ This version is intentionally simple and generic:
 - `RefOrValue<T>` and simple exported type aliases are unwrapped for completion
 - literal union values and booleans are suggested when they can be resolved
 
+## How syntax highlighting works
+
+- `html` and `raw` tagged templates are highlighted as embedded HTML inside TypeScript files
+- `svg` tagged templates are highlighted as embedded SVG
+- component tags beginning with an uppercase letter receive a dedicated component tag scope
+- `${...}` expressions inside template content and CSS property values are tokenized as TypeScript
+- the grammar currently targets TypeScript templates, not JavaScript files
