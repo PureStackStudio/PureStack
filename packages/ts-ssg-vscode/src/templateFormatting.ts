@@ -157,8 +157,7 @@ function createSupportedTaggedTemplate(
 
   template.templateSpans.forEach((span, index) => {
     const placeholder = `PURESTACK_EXPR_${index}_${tagName.toUpperCase()}`
-    const interpolationEnd =
-      span.literal.getStart(sourceFile) - innerStart + 1
+    const interpolationEnd = span.literal.getStart(sourceFile) - innerStart + 1
     expressions.push({
       placeholder,
       source: sourceFile.text.slice(
@@ -224,7 +223,7 @@ async function formatTaggedTemplate(
   template: SupportedTaggedTemplate,
 ) {
   const editorConfig = vscode.workspace.getConfiguration('editor', document.uri)
-  const tabSize = 1
+  const tabSize = 2
   const insertSpaces = true
   const configuredWordWrap = Number(
     editorConfig.get<number>('wordWrapColumn', 80),
