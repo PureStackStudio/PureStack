@@ -1,7 +1,6 @@
 import * as vscode from 'vscode'
 import {
   formatHtmlFragment,
-  getBlockIndent,
   getHtmlFormattingOptions,
   normalizeSelfClosingTagSpacing,
   shouldFormatOnSave,
@@ -197,16 +196,12 @@ async function formatMdxMarkupBlock(
     return undefined
   }
 
-  const baseIndent = getBlockIndent(block.content)
   const restored = restoreMdxExpressions(
     normalizeSelfClosingTagSpacing(formatted.trim()),
     expressions,
   )
 
   return restored
-    .split(/\r?\n/)
-    .map((line) => (line.length === 0 ? '' : `${baseIndent}${line}`))
-    .join('\n')
 }
 
 function maskMdxExpressions(source: string) {

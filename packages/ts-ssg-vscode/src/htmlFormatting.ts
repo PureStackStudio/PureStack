@@ -50,21 +50,9 @@ export function getHtmlFormattingOptions(document: vscode.TextDocument) {
   }
 }
 
-export function getIndentUnit(options: HtmlFormattingOptions) {
-  return options.useTabs ? '\t' : ' '.repeat(options.tabSize)
-}
-
 export function getLineIndent(line: string) {
   const match = /^\s*/.exec(line)
   return match?.[0] ?? ''
-}
-
-export function getBlockIndent(blockContent: string) {
-  const firstNonEmptyLine = blockContent
-    .split(/\r?\n/)
-    .find((line) => line.trim().length > 0)
-
-  return firstNonEmptyLine ? getLineIndent(firstNonEmptyLine) : ''
 }
 
 export function normalizeSelfClosingTagSpacing(formatted: string) {
