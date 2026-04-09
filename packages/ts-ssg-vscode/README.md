@@ -1,6 +1,6 @@
 # PureStack Component Tools
 
-This VS Code extension adds component-aware `Go to Definition`, prop IntelliSense, `lit-html` syntax highlighting, and save-time template formatting for PureStack authoring.
+This VS Code extension adds component-aware `Go to Definition`, prop IntelliSense, `lit-html` syntax highlighting, and Regor markup formatting for PureStack authoring.
 
 It supports:
 
@@ -19,6 +19,7 @@ Examples:
 - Regor `{{ ... }}` interpolations inside `html` templates are highlighted as TypeScript expressions
 - invalid embedded HTML inside supported TypeScript templates is surfaced as editor diagnostics
 - when `editor.formatOnSave` is enabled, it formats supported tagged template markup on save
+- when `editor.formatOnSave` is enabled, it also formats MDX component and HTML markup blocks on save
 - while typing in supported TypeScript templates, opening tags auto-insert closing tags and `/>` can auto-complete
 - it adds `PureStack: Format HTML Templates` and `PureStack: Format Document With HTML Templates` commands
 
@@ -31,8 +32,8 @@ Examples:
 5. Hold `Ctrl` and click a component tag such as `<Flex>` or press `F12` on it.
 6. Trigger completion inside a component tag to see prop and value suggestions.
 7. Open a TypeScript file containing an `html`, `raw`, or `svg` tagged template and confirm syntax highlighting is applied inside the template body.
-8. Enable `editor.formatOnSave`, save the file, and confirm the template markup is reformatted.
-9. Run `PureStack: Format HTML Templates` or `PureStack: Format Document With HTML Templates` from the command palette.
+8. Enable `editor.formatOnSave`, save a `.ts` or `.mdx` file, and confirm the Regor markup is reformatted.
+9. Run `PureStack: Format HTML Templates` or `PureStack: Format Document With HTML Templates` from the command palette in `.ts` or `.mdx`.
 
 ## Build a VSIX
 
@@ -72,8 +73,10 @@ This version is intentionally simple and generic:
 ## How formatting works
 
 - on TypeScript saves, the extension formats `html`, `raw`, and `svg` tagged template bodies when `editor.formatOnSave` is enabled
-- it also exposes document formatting, range formatting, and dedicated VS Code commands for template formatting
+- on MDX saves, the extension formats standalone component and HTML markup blocks while leaving Markdown prose and fenced code alone
+- it also exposes dedicated VS Code commands for template and MDX markup formatting
 - template boundaries are detected with the TypeScript AST, so only embedded markup is rewritten
+- MDX markup formatting skips frontmatter and fenced code blocks and applies the same HTML indentation and self-closing rules
 - the formatter currently uses Prettier's HTML parser inside the extension bundle
 - `${...}` expressions are preserved while the surrounding markup is reformatted
 

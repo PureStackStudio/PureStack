@@ -41,7 +41,10 @@ export function registerTemplateAutoClose() {
     if (event.contentChanges.length !== 1) return
 
     const editor = vscode.window.activeTextEditor
-    if (!editor || editor.document.uri.toString() !== event.document.uri.toString())
+    if (
+      !editor ||
+      editor.document.uri.toString() !== event.document.uri.toString()
+    )
       return
     if (editor.selections.length !== 1 || !editor.selection.isEmpty) return
 
@@ -53,7 +56,10 @@ export function registerTemplateAutoClose() {
       event.document.offsetAt(change.range.start) + change.text.length
     const cursorPosition = event.document.positionAt(cursorOffset)
     const changedOffset = cursorOffset - change.text.length
-    const templateContext = getTemplateContextAtOffset(event.document, cursorOffset)
+    const templateContext = getTemplateContextAtOffset(
+      event.document,
+      cursorOffset,
+    )
     if (!templateContext) return
     if (isOffsetInsideExpression(templateContext, changedOffset)) return
 
@@ -142,7 +148,10 @@ function normalizeSupportedTemplateTagName(tagText: string) {
   return undefined
 }
 
-function isOffsetInsideExpression(templateContext: TemplateContext, offset: number) {
+function isOffsetInsideExpression(
+  templateContext: TemplateContext,
+  offset: number,
+) {
   return templateContext.expressionRanges.some(
     (range) => offset >= range.start && offset < range.end,
   )
@@ -170,17 +179,13 @@ async function maybeAutoInsertClosingTag(
     VOID_HTML_TAG_NAMES.has(lastToken.name.toLowerCase()) ||
     /^[A-Z]/.test(lastToken.name)
   ) {
-    await applyAutoCloseEdit(
-      editor,
-      cursorPosition.translate(0, -1),
-      '/',
-      {
-        position: cursorPosition,
-      },
-    )
+    await applyAutoCloseEdit(editor, cursorPosition.translate(0, -1), '/', {
+      position: cursorPosition,
+    })
     return
   }
-  if (hasImmediateClosingTag(editor.document, cursorOffset, lastToken.name)) return
+  if (hasImmediateClosingTag(editor.document, cursorOffset, lastToken.name))
+    return
 
   await applyAutoCloseEdit(editor, cursorPosition, `</${lastToken.name}>`, {
     position: cursorPosition,
@@ -198,7 +203,9 @@ async function maybeCompleteSelfClosingTag(
   const nextCharacter = editor.document.getText(
     new vscode.Range(
       editor.document.positionAt(cursorOffset),
-      editor.document.positionAt(Math.min(cursorOffset + 1, editor.document.getText().length)),
+      editor.document.positionAt(
+        Math.min(cursorOffset + 1, editor.document.getText().length),
+      ),
     ),
   )
   if (nextCharacter === '>') return
@@ -225,7 +232,10 @@ function sanitizeTemplateMarkup(
   endOffset: number,
 ) {
   const source = document.getText(
-    new vscode.Range(document.positionAt(startOffset), document.positionAt(endOffset)),
+    new vscode.Range(
+      document.positionAt(startOffset),
+      document.positionAt(endOffset),
+    ),
   )
   const chars = source.split('')
 
@@ -276,7 +286,11 @@ function scanTagTokens(markup: string) {
 }
 
 function getPendingOpeningTagAtEnd(markup: string) {
-  for (let index = markup.lastIndexOf('<'); index >= 0; index = markup.lastIndexOf('<', index - 1)) {
+  for (
+    let index = markup.lastIndexOf('<');
+    index >= 0;
+    index = markup.lastIndexOf('<', index - 1)
+  ) {
     const candidate = markup.slice(index)
     if (candidate.includes('>')) continue
     if (/^<\s*\//.test(candidate)) return undefined
@@ -359,10 +373,14 @@ function hasImmediateClosingTag(
   const trailingText = document.getText(
     new vscode.Range(
       document.positionAt(cursorOffset),
-      document.positionAt(Math.min(cursorOffset + 200, document.getText().length)),
+      document.positionAt(
+        Math.min(cursorOffset + 200, document.getText().length),
+      ),
     ),
   )
-  return new RegExp(`^\\s*</\\s*${escapeRegExp(tagName)}\\s*>`).test(trailingText)
+  return new RegExp(`^\\s*</\\s*${escapeRegExp(tagName)}\\s*>`).test(
+    trailingText,
+  )
 }
 
 function escapeRegExp(value: string) {
@@ -382,7 +400,10 @@ async function applyAutoCloseEdit(
     })
     if (!applied) return
 
-    editor.selection = new vscode.Selection(selection.position, selection.position)
+    editor.selection = new vscode.Selection(
+      selection.position,
+      selection.position,
+    )
   } finally {
     isApplyingAutoCloseEdit = false
   }

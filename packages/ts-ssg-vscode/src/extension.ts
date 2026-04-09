@@ -2,6 +2,10 @@ import ts from 'typescript'
 import * as vscode from 'vscode'
 import { getComponentMetadata } from './componentMetadata'
 import { resolveComponentTarget } from './componentResolver'
+import {
+  buildMdxFormattingEdits,
+  formatActiveEditorMdxMarkup,
+} from './mdxFormatting'
 import { registerTemplateAutoClose } from './templateAutoClose'
 import { registerTemplateDiagnostics } from './templateDiagnostics'
 import {
@@ -40,10 +44,19 @@ export function activate(context: vscode.ExtensionContext) {
       new ComponentHoverProvider(),
     ),
     vscode.workspace.onWillSaveTextDocument((event) => {
-      if (event.document.languageId !== 'typescript') return
+      if (event.document.languageId === 'typescript') {
+        event.waitUntil(
+          buildTemplateFormattingEdits(event.document, {
+            requireFormatOnSave: true,
+          }),
+        )
+        return
+      }
+
+      if (event.document.languageId !== 'mdx') return
 
       event.waitUntil(
-        buildTemplateFormattingEdits(event.document, {
+        buildMdxFormattingEdits(event.document, {
           requireFormatOnSave: true,
         }),
       )
@@ -52,19 +65,37 @@ export function activate(context: vscode.ExtensionContext) {
       'purestackComponentTools.formatHtmlTemplates',
       async () => {
         const editor = vscode.window.activeTextEditor
-        if (!editor || editor.document.languageId !== 'typescript') return
+        if (!editor) return
 
-        await formatActiveEditorTemplates(editor)
+        if (editor.document.languageId === 'typescript') {
+          await formatActiveEditorTemplates(editor)
+          return
+        }
+
+        if (editor.document.languageId === 'mdx') {
+          await formatActiveEditorMdxMarkup(editor)
+        }
       },
     ),
     vscode.commands.registerCommand(
       'purestackComponentTools.formatDocumentWithHtmlTemplates',
       async () => {
         const editor = vscode.window.activeTextEditor
-        if (!editor || editor.document.languageId !== 'typescript') return
+        if (!editor) return
+        if (
+          editor.document.languageId !== 'typescript' &&
+          editor.document.languageId !== 'mdx'
+        ) {
+          return
+        }
 
         await vscode.commands.executeCommand('editor.action.formatDocument')
-        await formatActiveEditorTemplates(editor)
+        if (editor.document.languageId === 'typescript') {
+          await formatActiveEditorTemplates(editor)
+          return
+        }
+
+        await formatActiveEditorMdxMarkup(editor)
       },
     ),
     registerTemplateAutoClose(),

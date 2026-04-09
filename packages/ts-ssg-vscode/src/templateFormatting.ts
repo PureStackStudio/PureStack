@@ -1,7 +1,13 @@
-import htmlPlugin from 'prettier/plugins/html'
-import prettier from 'prettier/standalone'
 import ts from 'typescript'
 import * as vscode from 'vscode'
+import {
+  formatHtmlFragment,
+  getHtmlFormattingOptions,
+  getIndentUnit,
+  getLineIndent,
+  normalizeSelfClosingTagSpacing,
+  shouldFormatOnSave,
+} from './htmlFormatting'
 
 export type SupportedTemplateTagName = 'html' | 'raw' | 'svg'
 
@@ -222,27 +228,14 @@ async function formatTaggedTemplate(
   document: vscode.TextDocument,
   template: SupportedTaggedTemplate,
 ) {
-  const editorConfig = vscode.workspace.getConfiguration('editor', document.uri)
-  const tabSize = 2
-  const insertSpaces = true
-  const configuredWordWrap = Number(
-    editorConfig.get<number>('wordWrapColumn', 80),
-  )
-  const lineWidth = configuredWordWrap > 0 ? configuredWordWrap : 80
+  const formattingOptions = getHtmlFormattingOptions(document)
   const source = template.placeholderContent.trim()
 
   if (!source.includes('<')) return undefined
 
   let formatted: string
   try {
-    formatted = await prettier.format(source, {
-      htmlWhitespaceSensitivity: 'ignore',
-      parser: 'html',
-      plugins: [htmlPlugin],
-      printWidth: lineWidth,
-      tabWidth: tabSize,
-      useTabs: !insertSpaces,
-    })
+    formatted = await formatHtmlFragment(source, formattingOptions)
   } catch (error) {
     console.warn(
       `[PureStack] Skipping template formatting for ${document.uri.fsPath}:`,
@@ -261,7 +254,7 @@ async function formatTaggedTemplate(
   const baseIndent = getLineIndent(
     document.lineAt(template.contentRange.start.line).text,
   )
-  const indentUnit = insertSpaces ? ' '.repeat(tabSize) : '\t'
+  const indentUnit = getIndentUnit(formattingOptions)
   const indentedLines = restored
     .split(/\r?\n/)
     .map((line) =>
@@ -286,18 +279,8 @@ function restoreTemplateExpressions(
   return restored
 }
 
-function normalizeSelfClosingTagSpacing(formatted: string) {
-  return formatted.replace(/\s+\/>/g, '/>')
-}
-
-function getLineIndent(line: string) {
-  const match = /^\s*/.exec(line)
-  return match?.[0] ?? ''
-}
-
 function shouldFormatTemplatesOnSave(document: vscode.TextDocument) {
-  const editorConfig = vscode.workspace.getConfiguration('editor', document.uri)
-  return editorConfig.get<boolean>('formatOnSave', false)
+  return shouldFormatOnSave(document)
 }
 
 export async function formatActiveEditorTemplates(

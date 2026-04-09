@@ -1,6 +1,5 @@
-import htmlPlugin from 'prettier/plugins/html'
-import prettier from 'prettier/standalone'
 import * as vscode from 'vscode'
+import { formatHtmlFragment, getHtmlFormattingOptions } from './htmlFormatting'
 import {
   getSupportedTaggedTemplates,
   type SupportedTaggedTemplate,
@@ -9,8 +8,9 @@ import {
 const TEMPLATE_DIAGNOSTIC_SOURCE = 'PureStack HTML'
 
 export function registerTemplateDiagnostics() {
-  const collection =
-    vscode.languages.createDiagnosticCollection('purestack-html-templates')
+  const collection = vscode.languages.createDiagnosticCollection(
+    'purestack-html-templates',
+  )
 
   const refreshDocumentDiagnostics = async (document: vscode.TextDocument) => {
     if (document.languageId !== 'typescript') {
@@ -25,15 +25,21 @@ export function registerTemplateDiagnostics() {
     void refreshDocumentDiagnostics(document)
   }
 
-  const changeSubscription = vscode.workspace.onDidChangeTextDocument((event) => {
-    void refreshDocumentDiagnostics(event.document)
-  })
-  const openSubscription = vscode.workspace.onDidOpenTextDocument((document) => {
-    void refreshDocumentDiagnostics(document)
-  })
-  const closeSubscription = vscode.workspace.onDidCloseTextDocument((document) => {
-    collection.delete(document.uri)
-  })
+  const changeSubscription = vscode.workspace.onDidChangeTextDocument(
+    (event) => {
+      void refreshDocumentDiagnostics(event.document)
+    },
+  )
+  const openSubscription = vscode.workspace.onDidOpenTextDocument(
+    (document) => {
+      void refreshDocumentDiagnostics(document)
+    },
+  )
+  const closeSubscription = vscode.workspace.onDidCloseTextDocument(
+    (document) => {
+      collection.delete(document.uri)
+    },
+  )
 
   return vscode.Disposable.from(
     collection,
@@ -63,14 +69,7 @@ async function buildTemplateDiagnostic(
   if (!source.includes('<')) return undefined
 
   try {
-    await prettier.format(source, {
-      htmlWhitespaceSensitivity: 'ignore',
-      parser: 'html',
-      plugins: [htmlPlugin],
-      printWidth: 80,
-      tabWidth: 1,
-      useTabs: false,
-    })
+    await formatHtmlFragment(source, getHtmlFormattingOptions(document))
     return undefined
   } catch (error) {
     if (!isPrettierSyntaxError(error)) return undefined
@@ -149,7 +148,11 @@ function getOffsetFromLineAndColumn(
   const lines = text.split('\n')
   let offset = 0
 
-  for (let index = 0; index < Math.max(0, lineNumber - 1) && index < lines.length; index++) {
+  for (
+    let index = 0;
+    index < Math.max(0, lineNumber - 1) && index < lines.length;
+    index++
+  ) {
     offset += lines[index].length + 1
   }
 
