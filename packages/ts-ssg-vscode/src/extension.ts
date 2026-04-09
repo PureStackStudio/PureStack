@@ -2,6 +2,7 @@ import ts from 'typescript'
 import * as vscode from 'vscode'
 import { getComponentMetadata } from './componentMetadata'
 import { resolveComponentTarget } from './componentResolver'
+import { registerLinkedEditingProvider } from './linkedEditing'
 import {
   buildMdxFormattingEdits,
   formatActiveEditorMdxMarkup,
@@ -43,6 +44,7 @@ export function activate(context: vscode.ExtensionContext) {
       SUPPORTED_SELECTORS,
       new ComponentHoverProvider(),
     ),
+    registerLinkedEditingProvider(),
     vscode.workspace.onWillSaveTextDocument((event) => {
       if (event.document.languageId === 'typescript') {
         event.waitUntil(

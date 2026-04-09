@@ -21,6 +21,7 @@ Examples:
 - when `editor.formatOnSave` is enabled, it formats supported tagged template markup on save
 - when `editor.formatOnSave` is enabled, it also formats MDX component and HTML markup blocks on save
 - while typing in supported TypeScript templates and MDX markup, opening tags auto-insert closing tags and `/>` can auto-complete
+- editing a tag name keeps the matching opening and closing tag names linked in supported TypeScript templates and MDX markup
 - it adds `PureStack: Format HTML Templates` and `PureStack: Format Document With HTML Templates` commands
 
 ## Local testing
@@ -96,3 +97,8 @@ This version is intentionally simple and generic:
 - void HTML elements such as `input` and `img` are not given closing tags
 - uppercase component tags are auto-self-closed in both contexts
 - auto-close ignores `${...}` in TypeScript templates and `{...}` expressions, frontmatter, and fenced code in MDX
+
+## How Linked Editing Works
+
+- when the cursor is on an opening or closing tag name, editing it updates the matching tag name too
+- linked editing works in `html`, `raw`, and `svg` tagged templates and in MDX markup

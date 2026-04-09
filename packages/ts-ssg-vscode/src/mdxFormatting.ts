@@ -5,6 +5,7 @@ import {
   normalizeSelfClosingTagSpacing,
   shouldFormatOnSave,
 } from './htmlFormatting'
+import { scanTagTokens, VOID_HTML_TAG_NAMES } from './markupSupport'
 
 export interface MdxMarkupBlock {
   content: string
@@ -24,23 +25,6 @@ interface MdxFormattingRequest {
 interface MdxMarkupBlockOptions {
   includeIncomplete?: boolean
 }
-
-const VOID_HTML_TAG_NAMES = new Set([
-  'area',
-  'base',
-  'br',
-  'col',
-  'embed',
-  'hr',
-  'img',
-  'input',
-  'link',
-  'meta',
-  'param',
-  'source',
-  'track',
-  'wbr',
-])
 
 export async function buildMdxFormattingEdits(
   document: vscode.TextDocument,
@@ -333,85 +317,12 @@ function hasUnterminatedTag(markup: string) {
       continue
     }
 
-    const tagEnd = findTagEnd(markup, index + 1)
-    if (tagEnd === -1) return true
-    index = tagEnd
+    const nextTagEnd = markup.indexOf('>', index + 1)
+    if (nextTagEnd === -1) return true
+    index = nextTagEnd
   }
 
   return false
-}
-
-function scanTagTokens(markup: string) {
-  const tokens: Array<{
-    kind: 'closing' | 'opening'
-    name: string
-    selfClosing: boolean
-  }> = []
-
-  for (let index = 0; index < markup.length; index++) {
-    if (markup[index] !== '<') continue
-
-    if (markup.startsWith('<!--', index)) {
-      const commentEnd = markup.indexOf('-->', index + 4)
-      if (commentEnd === -1) break
-      index = commentEnd + 2
-      continue
-    }
-
-    const isClosing = markup[index + 1] === '/'
-    const nameStart = skipWhitespace(markup, index + (isClosing ? 2 : 1))
-    const nameEnd = readTagNameEnd(markup, nameStart)
-    if (nameEnd === nameStart) continue
-
-    const tagEnd = findTagEnd(markup, nameEnd)
-    if (tagEnd === -1) break
-
-    const name = markup.slice(nameStart, nameEnd)
-    const trailing = markup.slice(nameEnd, tagEnd)
-    tokens.push({
-      kind: isClosing ? 'closing' : 'opening',
-      name,
-      selfClosing: !isClosing && /\/\s*$/.test(trailing),
-    })
-    index = tagEnd
-  }
-
-  return tokens
-}
-
-function findTagEnd(markup: string, startIndex: number) {
-  let quote: '"' | "'" | undefined
-
-  for (let index = startIndex; index < markup.length; index++) {
-    const current = markup[index]
-    if (quote) {
-      if (current === quote && markup[index - 1] !== '\\') quote = undefined
-      continue
-    }
-
-    if (current === '"' || current === "'") {
-      quote = current
-      continue
-    }
-
-    if (current === '>') return index
-  }
-
-  return -1
-}
-
-function skipWhitespace(markup: string, startIndex: number) {
-  let index = startIndex
-  while (index < markup.length && /\s/.test(markup[index])) index++
-  return index
-}
-
-function readTagNameEnd(markup: string, startIndex: number) {
-  let index = startIndex
-  while (index < markup.length && /[A-Za-z0-9._:$-]/.test(markup[index])) {
-    index++
-  }
-  return index
 }
 
 function shouldFormatMarkupOnSave(document: vscode.TextDocument) {
