@@ -19,7 +19,6 @@
   ],
   "activationEvents": [
     "onLanguage:markdown",
-    "onLanguage:mdx",
     "onLanguage:typescript"
   ],
   "main": "./dist/extension.js",
