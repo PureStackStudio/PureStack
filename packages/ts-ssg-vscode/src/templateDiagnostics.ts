@@ -1,6 +1,11 @@
 import * as vscode from 'vscode'
 import { formatHtmlFragment, getHtmlFormattingOptions } from './htmlFormatting'
 import {
+  getMdxMarkupBlocks,
+  type MdxMarkupBlock,
+  maskMdxExpressions,
+} from './mdxFormatting'
+import {
   getSupportedTaggedTemplates,
   type SupportedTaggedTemplate,
 } from './templateFormatting'
@@ -13,12 +18,12 @@ export function registerTemplateDiagnostics() {
   )
 
   const refreshDocumentDiagnostics = async (document: vscode.TextDocument) => {
-    if (document.languageId !== 'typescript') {
+    if (document.languageId !== 'typescript' && document.languageId !== 'mdx') {
       collection.delete(document.uri)
       return
     }
 
-    collection.set(document.uri, await buildTemplateDiagnostics(document))
+    collection.set(document.uri, await buildDocumentDiagnostics(document))
   }
 
   for (const document of vscode.workspace.textDocuments) {
@@ -49,12 +54,36 @@ export function registerTemplateDiagnostics() {
   )
 }
 
+async function buildDocumentDiagnostics(document: vscode.TextDocument) {
+  if (document.languageId === 'typescript') {
+    return buildTemplateDiagnostics(document)
+  }
+
+  if (document.languageId === 'mdx') {
+    return buildMdxDiagnostics(document)
+  }
+
+  return []
+}
+
 async function buildTemplateDiagnostics(document: vscode.TextDocument) {
   const templates = getSupportedTaggedTemplates(document)
   const diagnostics: vscode.Diagnostic[] = []
 
   for (const template of templates) {
     const diagnostic = await buildTemplateDiagnostic(document, template)
+    if (diagnostic) diagnostics.push(diagnostic)
+  }
+
+  return diagnostics
+}
+
+async function buildMdxDiagnostics(document: vscode.TextDocument) {
+  const blocks = getMdxMarkupBlocks(document)
+  const diagnostics: vscode.Diagnostic[] = []
+
+  for (const block of blocks) {
+    const diagnostic = await buildMdxDiagnostic(document, block)
     if (diagnostic) diagnostics.push(diagnostic)
   }
 
@@ -85,6 +114,35 @@ async function buildTemplateDiagnostic(
   }
 }
 
+async function buildMdxDiagnostic(
+  document: vscode.TextDocument,
+  block: MdxMarkupBlock,
+) {
+  const source = sanitizeMdxBlockForDiagnostics(block)
+  if (!source.includes('<')) return undefined
+
+  try {
+    await formatHtmlFragment(source, getHtmlFormattingOptions(document))
+    return undefined
+  } catch (error) {
+    if (!isPrettierSyntaxError(error)) return undefined
+
+    const range = resolveDocumentDiagnosticRange(
+      document,
+      block.range.start,
+      block.content,
+      error,
+    )
+    const diagnostic = new vscode.Diagnostic(
+      range,
+      error.message.split('\n')[0],
+      vscode.DiagnosticSeverity.Error,
+    )
+    diagnostic.source = TEMPLATE_DIAGNOSTIC_SOURCE
+    return diagnostic
+  }
+}
+
 function sanitizeTemplateForDiagnostics(template: SupportedTaggedTemplate) {
   const chars = template.content.split('')
 
@@ -96,6 +154,10 @@ function sanitizeTemplateForDiagnostics(template: SupportedTaggedTemplate) {
   }
 
   return chars.join('')
+}
+
+function sanitizeMdxBlockForDiagnostics(block: MdxMarkupBlock) {
+  return maskMdxExpressions(block.content).placeholderContent
 }
 
 function isPrettierSyntaxError(error: unknown): error is {
@@ -118,18 +180,37 @@ function resolveDiagnosticRange(
     }
   },
 ) {
-  const templateStartOffset = document.offsetAt(template.contentRange.start)
+  return resolveDocumentDiagnosticRange(
+    document,
+    template.contentRange.start,
+    template.content,
+    error,
+  )
+}
+
+function resolveDocumentDiagnosticRange(
+  document: vscode.TextDocument,
+  blockStart: vscode.Position,
+  content: string,
+  error: {
+    loc?: {
+      start?: { line?: number; column?: number }
+      end?: { line?: number; column?: number }
+    }
+  },
+) {
+  const blockStartOffset = document.offsetAt(blockStart)
   const startOffset =
-    templateStartOffset +
+    blockStartOffset +
     getOffsetFromLineAndColumn(
-      template.content,
+      content,
       error.loc?.start?.line ?? 1,
       error.loc?.start?.column ?? 1,
     )
   const endOffset =
-    templateStartOffset +
+    blockStartOffset +
     getOffsetFromLineAndColumn(
-      template.content,
+      content,
       error.loc?.end?.line ?? error.loc?.start?.line ?? 1,
       error.loc?.end?.column ??
         (error.loc?.start?.column ? error.loc.start.column + 1 : 2),

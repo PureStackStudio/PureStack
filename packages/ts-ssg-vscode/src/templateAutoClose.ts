@@ -61,7 +61,10 @@ export function registerTemplateAutoClose() {
       event.document.offsetAt(change.range.start) + change.text.length
     const cursorPosition = event.document.positionAt(cursorOffset)
     const changedOffset = cursorOffset - change.text.length
-    const autoCloseContext = getAutoCloseContextAtOffset(event.document, cursorOffset)
+    const autoCloseContext = getAutoCloseContextAtOffset(
+      event.document,
+      cursorOffset,
+    )
     if (!autoCloseContext) return
     if (isOffsetInsideIgnoredRange(autoCloseContext, changedOffset)) return
 

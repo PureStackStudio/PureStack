@@ -17,7 +17,7 @@ Examples:
 - inside `<Btn size="...">` it suggests literal values like `sm`, `md`, and `lg`
 - inside ``html`...``` it highlights HTML tags, component tags, CSS property values, and embedded TypeScript expressions
 - Regor `{{ ... }}` interpolations inside `html` templates are highlighted as TypeScript expressions
-- invalid embedded HTML inside supported TypeScript templates is surfaced as editor diagnostics
+- invalid embedded HTML inside supported TypeScript templates and MDX markup blocks is surfaced as editor diagnostics
 - when `editor.formatOnSave` is enabled, it formats supported tagged template markup on save
 - when `editor.formatOnSave` is enabled, it also formats MDX component and HTML markup blocks on save
 - while typing in supported TypeScript templates and MDX markup, opening tags auto-insert closing tags and `/>` can auto-complete
@@ -83,7 +83,9 @@ This version is intentionally simple and generic:
 ## How diagnostics work
 
 - invalid HTML structure inside `html`, `raw`, and `svg` tagged templates is underlined with diagnostics
+- invalid HTML structure inside standalone MDX markup blocks is also underlined with diagnostics
 - `${...}` expressions are masked during validation so diagnostics target the surrounding markup
+- `{...}` expressions in MDX are masked during validation so diagnostics target the surrounding markup
 
 ## How Auto-Close Works
 

@@ -6,7 +6,7 @@ import {
   shouldFormatOnSave,
 } from './htmlFormatting'
 
-interface MdxMarkupBlock {
+export interface MdxMarkupBlock {
   content: string
   range: vscode.Range
 }
@@ -80,7 +80,7 @@ export async function formatActiveEditorMdxMarkup(
   })
 }
 
-function getMdxMarkupBlocks(document: vscode.TextDocument) {
+export function getMdxMarkupBlocks(document: vscode.TextDocument) {
   const blocks: MdxMarkupBlock[] = []
   let inFence = false
   let fenceMarker: string | undefined
@@ -204,7 +204,7 @@ async function formatMdxMarkupBlock(
   return restored
 }
 
-function maskMdxExpressions(source: string) {
+export function maskMdxExpressions(source: string) {
   const expressions: MdxExpressionPlaceholder[] = []
   let placeholderContent = ''
 
