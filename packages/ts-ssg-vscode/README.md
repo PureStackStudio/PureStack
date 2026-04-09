@@ -20,7 +20,7 @@ Examples:
 - invalid embedded HTML inside supported TypeScript templates is surfaced as editor diagnostics
 - when `editor.formatOnSave` is enabled, it formats supported tagged template markup on save
 - when `editor.formatOnSave` is enabled, it also formats MDX component and HTML markup blocks on save
-- while typing in supported TypeScript templates, opening tags auto-insert closing tags and `/>` can auto-complete
+- while typing in supported TypeScript templates and MDX markup, opening tags auto-insert closing tags and `/>` can auto-complete
 - it adds `PureStack: Format HTML Templates` and `PureStack: Format Document With HTML Templates` commands
 
 ## Local testing
@@ -88,6 +88,8 @@ This version is intentionally simple and generic:
 ## How Auto-Close Works
 
 - in `html`, `raw`, and `svg` tagged templates, typing `>` after an opening tag inserts the matching closing tag
+- in `.mdx` markup, typing `>` after an opening tag inserts the matching closing tag
 - typing `/` at the end of an opening tag completes the tag as `/>`
 - void HTML elements such as `input` and `img` are not given closing tags
-- auto-close only runs inside TypeScript tagged templates and ignores `${...}` expressions
+- uppercase component tags are auto-self-closed in both contexts
+- auto-close ignores `${...}` in TypeScript templates and `{...}` expressions, frontmatter, and fenced code in MDX

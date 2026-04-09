@@ -19,10 +19,10 @@ const VOID_HTML_TAG_NAMES = new Set([
   'wbr',
 ])
 
-interface TemplateContext {
+interface AutoCloseContext {
   contentEndOffset: number
   contentStartOffset: number
-  expressionRanges: Array<{ end: number; start: number }>
+  ignoredRanges: Array<{ end: number; start: number }>
 }
 
 interface TagToken {
@@ -37,7 +37,12 @@ let isApplyingAutoCloseEdit = false
 export function registerTemplateAutoClose() {
   return vscode.workspace.onDidChangeTextDocument(async (event) => {
     if (isApplyingAutoCloseEdit) return
-    if (event.document.languageId !== 'typescript') return
+    if (
+      event.document.languageId !== 'typescript' &&
+      event.document.languageId !== 'mdx'
+    ) {
+      return
+    }
     if (event.contentChanges.length !== 1) return
 
     const editor = vscode.window.activeTextEditor
@@ -56,17 +61,14 @@ export function registerTemplateAutoClose() {
       event.document.offsetAt(change.range.start) + change.text.length
     const cursorPosition = event.document.positionAt(cursorOffset)
     const changedOffset = cursorOffset - change.text.length
-    const templateContext = getTemplateContextAtOffset(
-      event.document,
-      cursorOffset,
-    )
-    if (!templateContext) return
-    if (isOffsetInsideExpression(templateContext, changedOffset)) return
+    const autoCloseContext = getAutoCloseContextAtOffset(event.document, cursorOffset)
+    if (!autoCloseContext) return
+    if (isOffsetInsideIgnoredRange(autoCloseContext, changedOffset)) return
 
     if (change.text === '>') {
       await maybeAutoInsertClosingTag(
         editor,
-        templateContext,
+        autoCloseContext,
         cursorOffset,
         cursorPosition,
       )
@@ -75,17 +77,32 @@ export function registerTemplateAutoClose() {
 
     await maybeCompleteSelfClosingTag(
       editor,
-      templateContext,
+      autoCloseContext,
       cursorOffset,
       cursorPosition,
     )
   })
 }
 
-function getTemplateContextAtOffset(
+function getAutoCloseContextAtOffset(
   document: vscode.TextDocument,
   offset: number,
-): TemplateContext | undefined {
+): AutoCloseContext | undefined {
+  if (document.languageId === 'typescript') {
+    return getTypeScriptTemplateContextAtOffset(document, offset)
+  }
+
+  if (document.languageId === 'mdx') {
+    return getMdxContextAtOffset(document, offset)
+  }
+
+  return undefined
+}
+
+function getTypeScriptTemplateContextAtOffset(
+  document: vscode.TextDocument,
+  offset: number,
+): AutoCloseContext | undefined {
   const sourceFile = ts.createSourceFile(
     document.uri.fsPath,
     document.getText(),
@@ -93,7 +110,7 @@ function getTemplateContextAtOffset(
     false,
     ts.ScriptKind.TS,
   )
-  let matchedContext: TemplateContext | undefined
+  let matchedContext: AutoCloseContext | undefined
 
   visitNode(sourceFile)
   return matchedContext
@@ -122,7 +139,7 @@ function getTemplateContextAtOffset(
       matchedContext = {
         contentEndOffset,
         contentStartOffset,
-        expressionRanges: ts.isTemplateExpression(template)
+        ignoredRanges: ts.isTemplateExpression(template)
           ? template.templateSpans.map((span) => ({
               start: span.expression.getStart(sourceFile),
               end: span.expression.getEnd(),
@@ -133,6 +150,26 @@ function getTemplateContextAtOffset(
     }
 
     ts.forEachChild(node, visitNode)
+  }
+}
+
+function getMdxContextAtOffset(
+  document: vscode.TextDocument,
+  offset: number,
+): AutoCloseContext | undefined {
+  const ignoredRanges = getMdxIgnoredRanges(document)
+  const contentEndOffset = document.getText().length
+  if (offset < 0 || offset > contentEndOffset) return undefined
+  if (
+    ignoredRanges.some((range) => offset >= range.start && offset <= range.end)
+  ) {
+    return undefined
+  }
+
+  return {
+    contentStartOffset: 0,
+    contentEndOffset,
+    ignoredRanges,
   }
 }
 
@@ -148,18 +185,18 @@ function normalizeSupportedTemplateTagName(tagText: string) {
   return undefined
 }
 
-function isOffsetInsideExpression(
-  templateContext: TemplateContext,
+function isOffsetInsideIgnoredRange(
+  templateContext: AutoCloseContext,
   offset: number,
 ) {
-  return templateContext.expressionRanges.some(
+  return templateContext.ignoredRanges.some(
     (range) => offset >= range.start && offset < range.end,
   )
 }
 
 async function maybeAutoInsertClosingTag(
   editor: vscode.TextEditor,
-  templateContext: TemplateContext,
+  templateContext: AutoCloseContext,
   cursorOffset: number,
   cursorPosition: vscode.Position,
 ) {
@@ -194,7 +231,7 @@ async function maybeAutoInsertClosingTag(
 
 async function maybeCompleteSelfClosingTag(
   editor: vscode.TextEditor,
-  templateContext: TemplateContext,
+  templateContext: AutoCloseContext,
   cursorOffset: number,
   cursorPosition: vscode.Position,
 ) {
@@ -227,7 +264,7 @@ async function maybeCompleteSelfClosingTag(
 
 function sanitizeTemplateMarkup(
   document: vscode.TextDocument,
-  templateContext: TemplateContext,
+  templateContext: AutoCloseContext,
   startOffset: number,
   endOffset: number,
 ) {
@@ -239,7 +276,7 @@ function sanitizeTemplateMarkup(
   )
   const chars = source.split('')
 
-  for (const range of templateContext.expressionRanges) {
+  for (const range of templateContext.ignoredRanges) {
     const localStart = Math.max(0, range.start - startOffset)
     const localEnd = Math.min(chars.length, range.end - startOffset)
     for (let index = localStart; index < localEnd; index++) {
@@ -248,6 +285,138 @@ function sanitizeTemplateMarkup(
   }
 
   return chars.join('')
+}
+
+function getMdxIgnoredRanges(document: vscode.TextDocument) {
+  const ignoredRanges: Array<{ start: number; end: number }> = []
+  let inFence = false
+  let fenceMarker: string | undefined
+  let fenceStartOffset: number | undefined
+  let inFrontmatter = false
+  let frontmatterStartOffset: number | undefined
+
+  for (let lineIndex = 0; lineIndex < document.lineCount; lineIndex++) {
+    const line = document.lineAt(lineIndex)
+    const trimmed = line.text.trim()
+
+    if (lineIndex === 0 && trimmed === '---') {
+      inFrontmatter = true
+      frontmatterStartOffset = document.offsetAt(line.range.start)
+      continue
+    }
+
+    if (inFrontmatter) {
+      if (trimmed === '---' && lineIndex > 0) {
+        ignoredRanges.push({
+          start: frontmatterStartOffset ?? 0,
+          end: document.offsetAt(line.rangeIncludingLineBreak.end),
+        })
+        inFrontmatter = false
+        frontmatterStartOffset = undefined
+      }
+    } else {
+      const fenceMatch = /^(```+|~~~+)/.exec(trimmed)
+      if (fenceMatch) {
+        if (!inFence) {
+          inFence = true
+          fenceMarker = fenceMatch[1][0]
+          fenceStartOffset = document.offsetAt(line.range.start)
+        } else if (fenceMarker && trimmed.startsWith(fenceMarker.repeat(3))) {
+          ignoredRanges.push({
+            start: fenceStartOffset ?? document.offsetAt(line.range.start),
+            end: document.offsetAt(line.rangeIncludingLineBreak.end),
+          })
+          inFence = false
+          fenceMarker = undefined
+          fenceStartOffset = undefined
+        }
+      }
+    }
+  }
+
+  if (inFrontmatter && frontmatterStartOffset !== undefined) {
+    ignoredRanges.push({
+      start: frontmatterStartOffset,
+      end: document.getText().length,
+    })
+  }
+
+  if (inFence && fenceStartOffset !== undefined) {
+    ignoredRanges.push({
+      start: fenceStartOffset,
+      end: document.getText().length,
+    })
+  }
+
+  return ignoredRanges.concat(getMdxExpressionRanges(document))
+}
+
+function getMdxExpressionRanges(document: vscode.TextDocument) {
+  const text = document.getText()
+  const ranges: Array<{ start: number; end: number }> = []
+
+  for (let index = 0; index < text.length; index++) {
+    if (!startsMdxExpression(text, index)) continue
+
+    const end = findMdxExpressionEnd(text, index)
+    if (end === -1) continue
+
+    ranges.push({ start: index, end })
+    index = end - 1
+  }
+
+  return ranges
+}
+
+function startsMdxExpression(source: string, index: number) {
+  return (
+    source[index] === '{' &&
+    source[index - 1] !== '{' &&
+    source[index + 1] !== '{'
+  )
+}
+
+function findMdxExpressionEnd(source: string, startIndex: number) {
+  let braceDepth = 0
+  let quote: '"' | "'" | '`' | undefined
+
+  for (let index = startIndex; index < source.length; index++) {
+    const current = source[index]
+    const previous = source[index - 1]
+
+    if (quote) {
+      if (current === quote && previous !== '\\') {
+        quote = undefined
+      } else if (
+        quote === '`' &&
+        current === '$' &&
+        source[index + 1] === '{'
+      ) {
+        const templateExpressionEnd = findMdxExpressionEnd(source, index + 1)
+        if (templateExpressionEnd === -1) return -1
+        index = templateExpressionEnd - 1
+      }
+      continue
+    }
+
+    if (current === '"' || current === "'" || current === '`') {
+      quote = current
+      continue
+    }
+
+    if (current === '{') {
+      braceDepth++
+      continue
+    }
+
+    if (current !== '}') continue
+
+    braceDepth--
+    if (braceDepth === 0) return index + 1
+    if (braceDepth < 0) return -1
+  }
+
+  return -1
 }
 
 function scanTagTokens(markup: string) {
