@@ -16,7 +16,9 @@ Examples:
 - inside `<Btn ...>` it suggests only public Regor props declared in `defineComponent(..., { props: [...] })`
 - inside `<Btn size="...">` it suggests literal values like `sm`, `md`, and `lg`
 - inside ``html`...``` it highlights HTML tags, component tags, CSS property values, and embedded TypeScript expressions
+- Regor `{{ ... }}` interpolations inside `html` templates are highlighted as TypeScript expressions
 - when `editor.formatOnSave` is enabled, it formats supported tagged template markup on save
+- while typing in supported TypeScript templates, opening tags auto-insert closing tags and `/>` can auto-complete
 - it adds `PureStack: Format HTML Templates` and `PureStack: Format Document With HTML Templates` commands
 
 ## Local testing
@@ -63,6 +65,7 @@ This version is intentionally simple and generic:
 - `svg` tagged templates are highlighted as embedded SVG
 - component tags beginning with an uppercase letter receive a dedicated component tag scope
 - `${...}` expressions inside template content and CSS property values are tokenized as TypeScript
+- `{{ ... }}` interpolations inside embedded HTML are tokenized as TypeScript expressions
 - the grammar currently targets TypeScript templates, not JavaScript files
 
 ## How formatting works
@@ -72,3 +75,10 @@ This version is intentionally simple and generic:
 - template boundaries are detected with the TypeScript AST, so only embedded markup is rewritten
 - the formatter currently uses Prettier's HTML parser inside the extension bundle
 - `${...}` expressions are preserved while the surrounding markup is reformatted
+
+## How Auto-Close Works
+
+- in `html`, `raw`, and `svg` tagged templates, typing `>` after an opening tag inserts the matching closing tag
+- typing `/` at the end of an opening tag completes the tag as `/>`
+- void HTML elements such as `input` and `img` are not given closing tags
+- auto-close only runs inside TypeScript tagged templates and ignores `${...}` expressions

@@ -86,6 +86,17 @@
           "source.ts",
           "text.html.basic"
         ],
+        "scopeName": "inline.lit-html.interpolation.injection",
+        "path": "./syntaxes/lit-html-interpolation-injection.json",
+        "embeddedLanguages": {
+          "meta.embedded.expression.ts": "typescript"
+        }
+      },
+      {
+        "injectTo": [
+          "source.ts",
+          "text.html.basic"
+        ],
         "scopeName": "inline.lit-html.style.injection",
         "path": "./syntaxes/lit-html-style-injection.json",
         "embeddedLanguages": {

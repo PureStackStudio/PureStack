@@ -1,0 +1,28 @@
+{
+  "fileTypes": [],
+  "injectionSelector": "L:meta.embedded.block.html -meta.tag -meta.attribute-with-value",
+  "patterns": [
+    {
+      "name": "meta.interpolation.regor.html",
+      "begin": "\\{\\{",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.section.embedded.begin.regor"
+        }
+      },
+      "end": "\\}\\}",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.section.embedded.end.regor"
+        }
+      },
+      "contentName": "meta.embedded.expression.ts",
+      "patterns": [
+        {
+          "include": "source.ts"
+        }
+      ]
+    }
+  ],
+  "scopeName": "inline.lit-html.interpolation.injection"
+}

@@ -2,6 +2,7 @@ import ts from 'typescript'
 import * as vscode from 'vscode'
 import { getComponentMetadata } from './componentMetadata'
 import { resolveComponentTarget } from './componentResolver'
+import { registerTemplateAutoClose } from './templateAutoClose'
 import {
   buildTemplateFormattingEdits,
   formatActiveEditorTemplates,
@@ -65,6 +66,7 @@ export function activate(context: vscode.ExtensionContext) {
         await formatActiveEditorTemplates(editor)
       },
     ),
+    registerTemplateAutoClose(),
   )
 }
 
