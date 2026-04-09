@@ -1,6 +1,6 @@
 # PureStack Component Tools
 
-This VS Code extension adds component-aware `Go to Definition`, prop IntelliSense, and `lit-html` syntax highlighting for PureStack authoring.
+This VS Code extension adds component-aware `Go to Definition`, prop IntelliSense, `lit-html` syntax highlighting, and save-time template formatting for PureStack authoring.
 
 It supports:
 
@@ -16,6 +16,8 @@ Examples:
 - inside `<Btn ...>` it suggests only public Regor props declared in `defineComponent(..., { props: [...] })`
 - inside `<Btn size="...">` it suggests literal values like `sm`, `md`, and `lg`
 - inside ``html`...``` it highlights HTML tags, component tags, CSS property values, and embedded TypeScript expressions
+- when `editor.formatOnSave` is enabled, it formats supported tagged template markup on save
+- it adds `PureStack: Format HTML Templates` and `PureStack: Format Document With HTML Templates` commands
 
 ## Local testing
 
@@ -26,6 +28,8 @@ Examples:
 5. Hold `Ctrl` and click a component tag such as `<Flex>` or press `F12` on it.
 6. Trigger completion inside a component tag to see prop and value suggestions.
 7. Open a TypeScript file containing an `html`, `raw`, or `svg` tagged template and confirm syntax highlighting is applied inside the template body.
+8. Enable `editor.formatOnSave`, save the file, and confirm the template markup is reformatted.
+9. Run `PureStack: Format HTML Templates` or `PureStack: Format Document With HTML Templates` from the command palette.
 
 ## Build a VSIX
 
@@ -60,3 +64,11 @@ This version is intentionally simple and generic:
 - component tags beginning with an uppercase letter receive a dedicated component tag scope
 - `${...}` expressions inside template content and CSS property values are tokenized as TypeScript
 - the grammar currently targets TypeScript templates, not JavaScript files
+
+## How formatting works
+
+- on TypeScript saves, the extension formats `html`, `raw`, and `svg` tagged template bodies when `editor.formatOnSave` is enabled
+- it also exposes document formatting, range formatting, and dedicated VS Code commands for template formatting
+- template boundaries are detected with the TypeScript AST, so only embedded markup is rewritten
+- the formatter currently uses Prettier's HTML parser inside the extension bundle
+- `${...}` expressions are preserved while the surrounding markup is reformatted

@@ -2,6 +2,11 @@ import ts from 'typescript'
 import * as vscode from 'vscode'
 import { getComponentMetadata } from './componentMetadata'
 import { resolveComponentTarget } from './componentResolver'
+import {
+  buildTemplateFormattingEdits,
+  formatActiveEditorTemplates,
+  isOffsetInsideSupportedTaggedTemplate,
+} from './templateFormatting'
 
 const COMPONENT_TAG_PATTERN = /[A-Za-z][A-Za-z0-9-]*/
 const COMPONENT_NAME_PATTERN = /^[A-Za-z][A-Za-z0-9-]*$/
@@ -31,6 +36,34 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.languages.registerHoverProvider(
       SUPPORTED_SELECTORS,
       new ComponentHoverProvider(),
+    ),
+    vscode.workspace.onWillSaveTextDocument((event) => {
+      if (event.document.languageId !== 'typescript') return
+
+      event.waitUntil(
+        buildTemplateFormattingEdits(event.document, {
+          requireFormatOnSave: true,
+        }),
+      )
+    }),
+    vscode.commands.registerCommand(
+      'purestackComponentTools.formatHtmlTemplates',
+      async () => {
+        const editor = vscode.window.activeTextEditor
+        if (!editor || editor.document.languageId !== 'typescript') return
+
+        await formatActiveEditorTemplates(editor)
+      },
+    ),
+    vscode.commands.registerCommand(
+      'purestackComponentTools.formatDocumentWithHtmlTemplates',
+      async () => {
+        const editor = vscode.window.activeTextEditor
+        if (!editor || editor.document.languageId !== 'typescript') return
+
+        await vscode.commands.executeCommand('editor.action.formatDocument')
+        await formatActiveEditorTemplates(editor)
+      },
     ),
   )
 }
@@ -425,38 +458,7 @@ function isHtmlTemplatePosition(
     ts.ScriptKind.TS,
   )
 
-  return isOffsetInsideHtmlTaggedTemplate(sourceFile, offset)
-}
-
-function isOffsetInsideHtmlTaggedTemplate(
-  sourceFile: ts.SourceFile,
-  offset: number,
-): boolean {
-  let isInsideTemplate = false
-
-  visitNode(sourceFile)
-  return isInsideTemplate
-
-  function visitNode(node: ts.Node) {
-    if (isInsideTemplate) return
-    if (offset < node.getStart(sourceFile) || offset >= node.getEnd()) return
-
-    if (
-      ts.isTaggedTemplateExpression(node) &&
-      node.tag.getText(sourceFile) === 'html'
-    ) {
-      const template = node.template
-      if (
-        offset >= template.getStart(sourceFile) &&
-        offset < template.getEnd()
-      ) {
-        isInsideTemplate = true
-        return
-      }
-    }
-
-    ts.forEachChild(node, visitNode)
-  }
+  return isOffsetInsideSupportedTaggedTemplate(sourceFile, offset)
 }
 
 function resolveWorkspaceRoot(documentPath: string): string | undefined {

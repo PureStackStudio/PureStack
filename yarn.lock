@@ -5850,6 +5850,7 @@ __metadata:
     "@types/vscode": "npm:^1.85.0"
     "@vscode/vsce": "npm:^3.6.2"
     esbuild: "npm:^0.27.3"
+    prettier: "npm:^3.8.1"
     typescript: "npm:^5.9.3"
   languageName: unknown
   linkType: soft

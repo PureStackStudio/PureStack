@@ -1,7 +1,7 @@
 {
   "name": "purestack-component-navigation",
   "displayName": "PureStack Component Tools",
-  "description": "Component navigation, prop IntelliSense, and lit-html syntax highlighting for Markdown, MDX, and TypeScript templates.",
+  "description": "Component navigation, prop IntelliSense, lit-html syntax highlighting, and template formatting for Markdown, MDX, and TypeScript templates.",
   "version": "1.0.0",
   "private": true,
   "publisher": "purestack-local",
@@ -34,7 +34,20 @@
     "esbuild": "^0.27.3",
     "typescript": "^5.9.3"
   },
+  "dependencies": {
+    "prettier": "^3.8.1"
+  },
   "contributes": {
+    "commands": [
+      {
+        "command": "purestackComponentTools.formatHtmlTemplates",
+        "title": "PureStack: Format HTML Templates"
+      },
+      {
+        "command": "purestackComponentTools.formatDocumentWithHtmlTemplates",
+        "title": "PureStack: Format Document With HTML Templates"
+      }
+    ],
     "languages": [
       {
         "id": "mdx",
