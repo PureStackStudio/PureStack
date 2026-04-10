@@ -85,6 +85,11 @@ Place the cursor on a component tag such as `<Flex>` or `<Btn>` and use:
 
 If the cursor is on an attribute, the extension will try to jump to the prop declaration instead of only the component type.
 
+Resolution works for both:
+
+- components defined inside the current workspace
+- Regor component libraries installed in `node_modules` that declare `regorComponents` in their `package.json`
+
 ## Complete Props And Values
 
 Inside a supported component tag, the extension suggests public props declared through `defineComponent`.
@@ -182,15 +187,18 @@ Component resolution is intentionally simple and predictable.
 The extension:
 
 - scans workspace `.ts` files
-- keeps files that contain `defineComponent`
+- keeps workspace files that contain `defineComponent`
 - looks for exported `interface`, `type`, or `class` names matching the component tag
+- if the workspace lookup does not resolve a match, scans dependency packages in `node_modules`
+- keeps only dependency packages whose `package.json` declares `regorComponents`
+- searches that dependency package's `.ts` files for exported `interface`, `type`, or `class` names matching the component tag
 - normalizes naming so PascalCase, kebab-case, and case differences resolve the same way
 
 This gives PureStack authoring a clean convention:
 
 - markup stays ergonomic
 - component source stays easy to locate
-- navigation works without a full custom language server
+- shared component libraries can participate in navigation
 
 ## How Prop IntelliSense Works
 

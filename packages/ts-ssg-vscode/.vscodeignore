@@ -1,5 +1,8 @@
 *
-!dist/**
+dist/**
+src/**
+test/**
+!dist/extension.js
 !package.json
 !README.md
 !LICENSE
