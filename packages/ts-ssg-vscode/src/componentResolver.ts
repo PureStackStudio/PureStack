@@ -46,6 +46,17 @@ export function resolveComponentTarget(
   )
 }
 
+export function clearComponentResolverCaches(workspaceRoot?: string) {
+  if (!workspaceRoot) {
+    workspaceComponentFilesCache.clear()
+    dependencyPackageCache.clear()
+    return
+  }
+
+  workspaceComponentFilesCache.delete(workspaceRoot)
+  dependencyPackageCache.delete(workspaceRoot)
+}
+
 function resolveWorkspaceComponentTarget(
   workspaceRoot: string,
   normalizedComponentName: string,
@@ -112,7 +123,7 @@ function collectComponentFiles(
   for (const entry of fs.readdirSync(directoryPath, { withFileTypes: true })) {
     const entryPath = path.join(directoryPath, entry.name)
 
-    if (entry.isDirectory()) {
+    if (isTraversableDirectoryEntry(entry, entryPath)) {
       if (IGNORED_DIRECTORY_NAMES.has(entry.name)) continue
       if (entry.name === NODE_MODULES_DIRECTORY_NAME) continue
 
@@ -154,9 +165,9 @@ function collectDependencyComponentPackages(
   for (const entry of fs.readdirSync(nodeModulesPath, {
     withFileTypes: true,
   })) {
-    if (!entry.isDirectory()) continue
-
     const entryPath = path.join(nodeModulesPath, entry.name)
+    if (!isTraversableDirectoryEntry(entry, entryPath)) continue
+
     if (entry.name.startsWith('@')) {
       collectDependencyComponentPackages(entryPath, dependencyPackages)
       continue
@@ -220,7 +231,7 @@ function collectDependencyComponentFiles(
   for (const entry of fs.readdirSync(directoryPath, { withFileTypes: true })) {
     const entryPath = path.join(directoryPath, entry.name)
 
-    if (entry.isDirectory()) {
+    if (isTraversableDirectoryEntry(entry, entryPath)) {
       if (
         IGNORED_DIRECTORY_NAMES.has(entry.name) &&
         entry.name !== NODE_MODULES_DIRECTORY_NAME
@@ -268,4 +279,15 @@ function findExportedComponentDefinitionInFile(
 
 function normalizeComponentName(value: string) {
   return value.replace(/[-_\s]+/g, '').toLowerCase()
+}
+
+function isTraversableDirectoryEntry(entry: fs.Dirent, entryPath: string) {
+  if (entry.isDirectory()) return true
+  if (!entry.isSymbolicLink()) return false
+
+  try {
+    return fs.statSync(entryPath).isDirectory()
+  } catch {
+    return false
+  }
 }

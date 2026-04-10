@@ -1,7 +1,13 @@
 import ts from 'typescript'
 import * as vscode from 'vscode'
-import { getComponentMetadata } from './componentMetadata'
-import { resolveComponentTarget } from './componentResolver'
+import {
+  clearComponentMetadataCache,
+  getComponentMetadata,
+} from './componentMetadata'
+import {
+  clearComponentResolverCaches,
+  resolveComponentTarget,
+} from './componentResolver'
 import { registerLinkedEditingProvider } from './linkedEditing'
 import {
   buildMdxFormattingEdits,
@@ -100,12 +106,50 @@ export function activate(context: vscode.ExtensionContext) {
         await formatActiveEditorMdxMarkup(editor)
       },
     ),
+    ...registerComponentResolverWatchers(),
     registerTemplateAutoClose(),
     registerTemplateDiagnostics(),
   )
 }
 
 export function deactivate() {}
+
+function registerComponentResolverWatchers() {
+  const subscriptions: vscode.Disposable[] = []
+
+  for (const folder of vscode.workspace.workspaceFolders ?? []) {
+    const workspaceRoot = folder.uri.fsPath
+    const invalidateResolverCaches = () => {
+      clearComponentResolverCaches(workspaceRoot)
+      clearComponentMetadataCache()
+    }
+
+    const sourceWatcher = vscode.workspace.createFileSystemWatcher(
+      new vscode.RelativePattern(folder, '**/*.ts'),
+    )
+    sourceWatcher.onDidCreate(invalidateResolverCaches)
+    sourceWatcher.onDidChange(invalidateResolverCaches)
+    sourceWatcher.onDidDelete(invalidateResolverCaches)
+
+    const dependencyManifestWatcher = vscode.workspace.createFileSystemWatcher(
+      new vscode.RelativePattern(folder, '**/node_modules/**/package.json'),
+    )
+    dependencyManifestWatcher.onDidCreate(invalidateResolverCaches)
+    dependencyManifestWatcher.onDidChange(invalidateResolverCaches)
+    dependencyManifestWatcher.onDidDelete(invalidateResolverCaches)
+
+    subscriptions.push(sourceWatcher, dependencyManifestWatcher)
+  }
+
+  subscriptions.push(
+    vscode.workspace.onDidChangeWorkspaceFolders(() => {
+      clearComponentResolverCaches()
+      clearComponentMetadataCache()
+    }),
+  )
+
+  return subscriptions
+}
 
 class ComponentDefinitionProvider implements vscode.DefinitionProvider {
   provideDefinition(

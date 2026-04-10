@@ -34,6 +34,27 @@ type AnalyzedTypeInfo = {
 
 const projectServiceCache = new Map<string, CachedProjectService>()
 
+export function clearComponentMetadataCache(filePath?: string) {
+  if (!filePath) {
+    for (const cachedService of projectServiceCache.values()) {
+      cachedService.languageService.dispose()
+    }
+    projectServiceCache.clear()
+    return
+  }
+
+  const configPath = ts.findConfigFile(
+    path.dirname(filePath),
+    ts.sys.fileExists,
+  )
+  const cacheKey = configPath ?? `__single__:${filePath}`
+  const cachedService = projectServiceCache.get(cacheKey)
+  if (!cachedService) return
+
+  cachedService.languageService.dispose()
+  projectServiceCache.delete(cacheKey)
+}
+
 export function getComponentMetadata(
   filePath: string,
   componentName: string,
