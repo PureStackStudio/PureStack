@@ -3,11 +3,11 @@ import { getColors, getGradient } from '@purestack/ts-css'
 import type { SemanticToneTokens } from '../../themePalette'
 
 export type ToneScale = {
-  shadow: string
-  deep: string
-  base: string
-  bright: string
-  glow: string
+  level1: string
+  level2: string
+  level3: string
+  level4: string
+  level5: string
 }
 
 export type Tone = SemanticToneTokens
@@ -55,8 +55,8 @@ export function radial(top: string, bottom: string) {
 }
 
 export function createScale(hex: string, delta = 20): ToneScale {
-  const [shadow, deep, base, bright, glow] = getColors(hex, delta, delta, 5)
-  return { shadow, deep, base, bright, glow }
+  const [level1, level2, level3, level4, level5] = getColors(hex, delta, delta, 5)
+  return { level1, level2, level3, level4, level5 }
 }
 
 export function createTone(
@@ -68,63 +68,63 @@ export function createTone(
   return {
     background: {
       ...neutral.background,
-      default: scale.shadow,
-      surface: scale.shadow,
-      surfaceAlt: scale.deep,
-      panel: scale.shadow,
-      raised: scale.base,
-      muted: scale.deep,
-      feature: scale.base,
+      default: scale.level1,
+      surface: scale.level1,
+      surfaceAlt: scale.level2,
+      panel: scale.level1,
+      raised: scale.level3,
+      muted: scale.level2,
+      feature: scale.level3,
       ...(overrides.background || {}),
     },
     border: {
       ...neutral.border,
-      default: borderTone(scale.base),
-      strong: borderTone(scale.bright),
-      hard: borderTone(scale.glow),
-      focus: scale.glow,
+      default: borderTone(scale.level3),
+      strong: borderTone(scale.level4),
+      hard: borderTone(scale.level5),
+      focus: scale.level5,
       ...(overrides.border || {}),
     },
     text: {
       ...neutral.text,
-      default: scale.glow,
-      strong: scale.glow,
+      default: scale.level5,
+      strong: scale.level5,
       ...(overrides.text || {}),
     },
     button: {
       rest: {
-        background: scale.shadow,
-        border: borderTone(scale.base),
-        text: scale.glow,
+        background: scale.level1,
+        border: borderTone(scale.level3),
+        text: scale.level5,
       },
       hover: {
-        background: scale.base,
-        border: borderTone(scale.bright),
+        background: scale.level3,
+        border: borderTone(scale.level4),
         text: neutral.text.inverse,
       },
       active: {
-        background: scale.deep,
-        border: borderTone(scale.glow),
+        background: scale.level2,
+        border: borderTone(scale.level5),
         text: neutral.text.strong,
       },
       disabled: {
-        background: scale.deep,
-        border: borderTone(scale.deep),
-        text: scale.base,
+        background: scale.level2,
+        border: borderTone(scale.level2),
+        text: scale.level3,
       },
-      focusRing: scale.glow,
+      focusRing: scale.level5,
       ...(overrides.button || {}),
     },
     icon: {
-      background: scale.glow,
-      gradient: gradient('135deg', [scale.glow, scale.bright]),
+      background: scale.level5,
+      gradient: gradient('135deg', [scale.level5, scale.level4]),
       color: neutral.text.inverse,
-      ring: scale.bright,
+      ring: scale.level4,
       ...(overrides.icon || {}),
     },
-    hover: overrides.hover ?? scale.base,
-    active: overrides.active ?? scale.deep,
-    disabled: overrides.disabled ?? scale.deep,
-    focusRing: overrides.focusRing ?? scale.glow,
+    hover: overrides.hover ?? scale.level3,
+    active: overrides.active ?? scale.level2,
+    disabled: overrides.disabled ?? scale.level2,
+    focusRing: overrides.focusRing ?? scale.level5,
   }
 }
