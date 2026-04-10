@@ -1,10 +1,9 @@
 import { defineComponent, html } from 'regor'
 
-const themeSwitcherTemplate = html`<button
-  class="theme-switcher"
-  type="button"
-  aria-label="Switch theme"
->
+export interface ThemeSwitcher {}
+
+const themeSwitcherTemplate = html`
+<button class="theme-switcher" type="button" aria-label="Switch theme">
   <span class="theme-switcher__track" aria-hidden="true"></span>
   <span
     class="theme-switcher__track-icon theme-switcher__track-icon--sun"
@@ -56,10 +55,11 @@ const themeSwitcherTemplate = html`<button
       </svg>
     </span>
   </span>
-</button>`
+</button>
+`
 
 function defineThemeSwitcherComponent() {
-  return defineComponent(themeSwitcherTemplate)
+  return defineComponent<ThemeSwitcher>(themeSwitcherTemplate)
 }
 
 export function defineThemeSwitcherComponents() {
