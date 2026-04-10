@@ -11,6 +11,7 @@ import {
 } from './shared'
 
 type NeonCore = {
+  baseWhite: string
   baseBlack: string
   canvas: string
   surface: string
@@ -46,7 +47,7 @@ export function createNeonPalette({
   const warning = createScale(core.warning, 18)
   const danger = createScale(core.danger, 18)
 
-  const neutralBase: Tone = {
+  const neutralTone: Tone = {
     background: {
       default: radial(surface.level3, surface.level2),
       canvas: radial(surface.level1, core.canvas),
@@ -111,61 +112,6 @@ export function createNeonPalette({
     focusRing: accent.level3,
   }
 
-  const neutralTone: Tone = isLight
-    ? {
-        ...neutralBase,
-        background: {
-          ...neutralBase.background,
-          default: radial(surface.level1, surface.level2),
-          canvas: radial(core.surface, core.canvas),
-          surface: radial(surface.level1, surface.level2),
-          surfaceAlt: radial(surface.level3, surface.level1),
-          panel: radial(surface.level1, surface.level2),
-          raised: radial(surface.level5, surface.level3),
-          overlay: core.foreground,
-          showcase: gradient('180deg', [core.foreground, core.canvas]),
-          muted: surface.level3,
-        },
-        border: {
-          ...neutralBase.border,
-          soft: borderTone(surface.level3),
-          subtle: borderTone(surface.level4),
-          focus: accent.level3,
-        },
-        text: {
-          ...neutralBase.text,
-          muted: text.level2,
-          subtle: text.level2,
-          soft: text.level4,
-          inverse: core.foreground,
-        },
-        button: {
-          ...neutralBase.button,
-          rest: {
-            ...neutralBase.button.rest,
-            background: radial(surface.level1, surface.level2),
-          },
-          hover: {
-            ...neutralBase.button.hover,
-            background: radial(surface.level5, surface.level3),
-          },
-          disabled: {
-            ...neutralBase.button.disabled,
-            background: surface.level3,
-            border: borderTone(surface.level3),
-          },
-          focusRing: accent.level3,
-        },
-        icon: {
-          ...neutralBase.icon,
-          color: core.foreground,
-        },
-        hover: radial(surface.level5, surface.level3),
-        disabled: surface.level3,
-        focusRing: accent.level3,
-      }
-    : neutralBase
-
   const accentOverrides: ToneOverrides = {
     background: {
       feature: accent.level4,
@@ -174,22 +120,22 @@ export function createNeonPalette({
       rest: {
         background: accent.level1,
         border: borderTone(accent.level3),
-        text: accent.level5,
+        text: core.baseWhite,
       },
       hover: {
         background: gradient('135deg', [accent.level5, accent.level3]),
         border: borderTone(accent.level4),
-        text: text.level5,
+        text: core.baseWhite,
       },
       active: {
         background: gradient('135deg', [accent.level4, accent.level2]),
         border: borderTone(accent.level5),
-        text: neutralTone.text.strong,
+        text: core.baseWhite,
       },
       disabled: {
         background: accent.level2,
         border: borderTone(accent.level2),
-        text: accent.level3,
+        text: core.baseWhite,
       },
       focusRing: accent.level5,
     },

@@ -1,6 +1,7 @@
 import { createNeonPalette } from './base'
 
 const core = {
+  baseWhite: '#E1E1E1',
   baseBlack: '#231717',
   canvas: '#352323',
   surface: '#2E2121',

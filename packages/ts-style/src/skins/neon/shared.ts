@@ -63,7 +63,12 @@ export function radial(top: string, bottom: string) {
 }
 
 export function createScale(hex: string, delta = 20): ToneScale {
-  const [level1, level2, level3, level4, level5] = getColors(hex, delta, delta, 5)
+  const [level1, level2, level3, level4, level5] = getColors(
+    hex,
+    delta,
+    delta,
+    5,
+  )
   return { level1, level2, level3, level4, level5 }
 }
 
