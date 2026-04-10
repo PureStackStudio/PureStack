@@ -12,11 +12,19 @@ export type ToneScale = {
 
 export type Tone = SemanticToneTokens
 
+type ToneButtonOverrides = {
+  rest?: Partial<Tone['button']['rest']>
+  hover?: Partial<Tone['button']['hover']>
+  active?: Partial<Tone['button']['active']>
+  disabled?: Partial<Tone['button']['disabled']>
+  focusRing?: Tone['button']['focusRing']
+}
+
 export type ToneOverrides = {
   background?: Partial<Tone['background']>
   border?: Partial<Tone['border']>
   text?: Partial<Tone['text']>
-  button?: Partial<Tone['button']>
+  button?: ToneButtonOverrides
   icon?: Partial<Tone['icon']>
   hover?: Tone['hover']
   active?: Tone['active']
@@ -65,6 +73,34 @@ export function createTone(
   borderTone: (hex: string) => string,
   overrides: ToneOverrides = {},
 ): Tone {
+  const button = {
+    rest: {
+      background: scale.level1,
+      border: borderTone(scale.level3),
+      text: scale.level5,
+      ...(overrides.button?.rest || {}),
+    },
+    hover: {
+      background: scale.level3,
+      border: borderTone(scale.level4),
+      text: neutral.text.inverse,
+      ...(overrides.button?.hover || {}),
+    },
+    active: {
+      background: scale.level2,
+      border: borderTone(scale.level5),
+      text: neutral.text.strong,
+      ...(overrides.button?.active || {}),
+    },
+    disabled: {
+      background: scale.level2,
+      border: borderTone(scale.level2),
+      text: scale.level3,
+      ...(overrides.button?.disabled || {}),
+    },
+    focusRing: overrides.button?.focusRing ?? scale.level5,
+  }
+
   return {
     background: {
       ...neutral.background,
@@ -91,30 +127,7 @@ export function createTone(
       strong: scale.level5,
       ...(overrides.text || {}),
     },
-    button: {
-      rest: {
-        background: scale.level1,
-        border: borderTone(scale.level3),
-        text: scale.level5,
-      },
-      hover: {
-        background: scale.level3,
-        border: borderTone(scale.level4),
-        text: neutral.text.inverse,
-      },
-      active: {
-        background: scale.level2,
-        border: borderTone(scale.level5),
-        text: neutral.text.strong,
-      },
-      disabled: {
-        background: scale.level2,
-        border: borderTone(scale.level2),
-        text: scale.level3,
-      },
-      focusRing: scale.level5,
-      ...(overrides.button || {}),
-    },
+    button,
     icon: {
       background: scale.level5,
       gradient: gradient('135deg', [scale.level5, scale.level4]),
