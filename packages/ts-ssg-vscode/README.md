@@ -303,16 +303,3 @@ Useful settings:
 1. Run `yarn --cwd packages/ts-ssg-vscode build`.
 2. Run `yarn --cwd packages/ts-ssg-vscode package`.
 3. Install the generated `.vsix` with `Extensions: Install from VSIX...`.
-
-## Design Principles
-
-PureStack Component Tools is not trying to be a giant framework IDE.
-
-It is trying to be something better for this ecosystem:
-
-- small enough to stay understandable
-- smart enough to feel native
-- strict enough to protect authoring quality
-- focused enough to match the way PureStack is actually built
-
-When it works well, markup stops feeling like a second-class citizen. It feels connected to the component model, connected to the content pipeline, and connected to the rest of the codebase.
