@@ -182,7 +182,6 @@ export function createNeonPalette({
     neutralTone,
     borderTone,
     accentOverrides,
-    core.accent.foreground,
   )
 
   const ghostOverrides: ToneOverrides = {
@@ -240,13 +239,7 @@ export function createNeonPalette({
     focusRing: accent.level5,
   }
 
-  const ghostTone = createTone(
-    accent,
-    neutralTone,
-    borderTone,
-    ghostOverrides,
-    core.ghost.foreground,
-  )
+  const ghostTone = createTone(accent, neutralTone, borderTone, ghostOverrides)
 
   const effect: ThemePalette['effect'] = {
     glowPrimary: `0 0 28px ${rgba(accent.level3, 0.22)}`,
@@ -268,58 +261,34 @@ export function createNeonPalette({
       neutral: neutralTone,
       accent: accentTone,
       ghost: ghostTone,
-      info: createTone(
-        info,
-        neutralTone,
-        borderTone,
-        {
-          border: {
-            default: borderTone(core.info.border),
-            strong: borderTone(core.info.border),
-            hard: borderTone(core.info.border),
-          },
+      info: createTone(info, neutralTone, borderTone, {
+        border: {
+          default: borderTone(core.info.border),
+          strong: borderTone(core.info.border),
+          hard: borderTone(core.info.border),
         },
-        core.info.foreground,
-      ),
-      success: createTone(
-        success,
-        neutralTone,
-        borderTone,
-        {
-          border: {
-            default: borderTone(core.success.border),
-            strong: borderTone(core.success.border),
-            hard: borderTone(core.success.border),
-          },
+      }),
+      success: createTone(success, neutralTone, borderTone, {
+        border: {
+          default: borderTone(core.success.border),
+          strong: borderTone(core.success.border),
+          hard: borderTone(core.success.border),
         },
-        core.success.foreground,
-      ),
-      warning: createTone(
-        warning,
-        neutralTone,
-        borderTone,
-        {
-          border: {
-            default: borderTone(core.warning.border),
-            strong: borderTone(core.warning.border),
-            hard: borderTone(core.warning.border),
-          },
+      }),
+      warning: createTone(warning, neutralTone, borderTone, {
+        border: {
+          default: borderTone(core.warning.border),
+          strong: borderTone(core.warning.border),
+          hard: borderTone(core.warning.border),
         },
-        core.warning.foreground,
-      ),
-      danger: createTone(
-        danger,
-        neutralTone,
-        borderTone,
-        {
-          border: {
-            default: borderTone(core.danger.border),
-            strong: borderTone(core.danger.border),
-            hard: borderTone(core.danger.border),
-          },
+      }),
+      danger: createTone(danger, neutralTone, borderTone, {
+        border: {
+          default: borderTone(core.danger.border),
+          strong: borderTone(core.danger.border),
+          hard: borderTone(core.danger.border),
         },
-        core.danger.foreground,
-      ),
+      }),
     },
     effect,
   }

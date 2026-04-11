@@ -70,7 +70,6 @@ export function createTone(
   neutral: Tone,
   borderTone: (hex: string) => string,
   overrides: ToneOverrides = {},
-  inverseTextColor = neutral.text.inverse,
 ): Tone {
   const button = {
     rest: {
@@ -82,7 +81,7 @@ export function createTone(
     hover: {
       background: scale.level3,
       border: borderTone(scale.level4),
-      text: inverseTextColor,
+      text: neutral.button.hover.text,
       ...(overrides.button?.hover || {}),
     },
     active: {
@@ -124,14 +123,14 @@ export function createTone(
       ...neutral.text,
       default: scale.level5,
       strong: scale.level5,
-      inverse: inverseTextColor,
+      inverse: neutral.text.inverse,
       ...(overrides.text || {}),
     },
     button,
     icon: {
       background: scale.level5,
       gradient: gradient('135deg', [scale.level5, scale.level4]),
-      color: inverseTextColor,
+      color: neutral.icon.color,
       ring: scale.level4,
       ...(overrides.icon || {}),
     },
