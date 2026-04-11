@@ -114,17 +114,12 @@ export function createTone(
 
   return {
     background: {
-      default: radial(background.level3, background.level2),
-      canvas: radial(background.level3, background.level2),
-      surface: radial(background.level3, background.level2),
-      surfaceAlt: radial(background.level2, background.level1),
-      panel: radial(background.level3, background.level2),
-      raised: radial(background.level4, background.level2),
+      canvas: radial(background.level1, background.level2),
+      surface: radial(background.level2, background.level3),
+      surfaceAlt: radial(background.level3, background.level4),
       overlay: background.level1,
       showcase: gradient('180deg', [background.level3, background.level5]),
       showcaseAlt: gradient('180deg', [background.level1, background.level5]),
-      muted: background.level1,
-      feature: background.level5,
       ...(overrides.background || {}),
     },
     border: {
@@ -153,8 +148,8 @@ export function createTone(
       ring: border.level5,
       ...(overrides.icon || {}),
     },
-    hover: overrides.hover ?? background.level5,
-    active: overrides.active ?? background.level5,
+    hover: overrides.hover ?? background.level3,
+    active: overrides.active ?? background.level3,
     disabled: overrides.disabled ?? background.level1,
     focusRing: overrides.focusRing ?? border.level5,
   }

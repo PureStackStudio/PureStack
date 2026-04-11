@@ -120,11 +120,11 @@ function registerFormFieldStyles(
     .borderBottom(`1px solid ${palette.semanticTone.neutral.border.default}`)
   styleBuilder
     .select('.form-block__number-btn:hover', theme)
-    .background(palette.semanticTone.accent.background.default)
+    .background(palette.semanticTone.accent.background.canvas)
     .color(palette.semanticTone.neutral.text.default)
   styleBuilder
     .select('.form-block__number-btn:active', theme)
-    .background(palette.semanticTone.accent.background.muted)
+    .background(palette.semanticTone.accent.background.canvas)
   styleBuilder
     .select('.form-block__number-btn:focus-visible', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
@@ -149,7 +149,7 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .select('.form-block__check input', theme)
     .width('16px')
     .height('16px')
-    .accentColor(palette.semanticTone.accent.background.default)
+    .accentColor(palette.semanticTone.accent.background.canvas)
   styleBuilder
     .select('.form-block__assist-link', theme)
     .fontSize('0.84rem')
@@ -198,25 +198,25 @@ function registerFormStatusStyles(
   styleBuilder
     .select('.form-status--info', theme)
     .borderColor(palette.semanticTone.info.border.default)
-    .background(palette.semanticTone.info.background.default)
+    .background(palette.semanticTone.info.background.canvas)
     .color(palette.semanticTone.info.text.default)
 
   styleBuilder
     .select('.form-status--success', theme)
     .borderColor(palette.semanticTone.success.border.default)
-    .background(palette.semanticTone.success.background.default)
+    .background(palette.semanticTone.success.background.canvas)
     .color(palette.semanticTone.success.text.default)
 
   styleBuilder
     .select('.form-status--error', theme)
     .borderColor(palette.semanticTone.danger.border.default)
-    .background(palette.semanticTone.danger.background.default)
+    .background(palette.semanticTone.danger.background.canvas)
     .color(palette.semanticTone.danger.text.default)
 
   styleBuilder
     .select('.form-status--warning', theme)
     .borderColor(palette.semanticTone.warning.border.default)
-    .background(palette.semanticTone.warning.background.default)
+    .background(palette.semanticTone.warning.background.canvas)
     .color(palette.semanticTone.warning.text.default)
 }
 

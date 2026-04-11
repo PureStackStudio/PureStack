@@ -138,7 +138,7 @@ function registerDocLayoutNavStyles(
     .color(palette.semanticTone.neutral.text.default)
   styleBuilder
     .select('.doc-nav__item a:hover', theme)
-    .background(palette.semanticTone.accent.background.muted)
+    .background(palette.semanticTone.accent.background.canvas)
   styleBuilder
     .select('.doc-nav__item span', theme)
     .display('block')

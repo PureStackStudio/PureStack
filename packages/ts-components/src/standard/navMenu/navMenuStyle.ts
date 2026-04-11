@@ -55,9 +55,9 @@ export function registerNavShellStyles(
     .alignItems('center')
     .justifyContent('center')
     .padding('0')
-    .border(`1px solid ${palette.semanticTone.accent.background.default}`)
+    .border(`1px solid ${palette.semanticTone.accent.background.canvas}`)
     .borderRadius(options.radii.md)
-    .background(palette.semanticTone.accent.background.default)
+    .background(palette.semanticTone.accent.background.canvas)
     .color(palette.semanticTone.accent.text.default)
     .cursor('pointer')
     .transition('background 160ms ease, color 160ms ease')
@@ -85,13 +85,13 @@ export function registerNavShellStyles(
     .padding('0')
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
     .borderRadius(options.radii.md)
-    .background(palette.semanticTone.neutral.background.raised)
+    .background(palette.semanticTone.neutral.background.surface)
     .color(palette.semanticTone.neutral.text.subtle)
     .cursor('pointer')
     .transition('background 160ms ease, color 160ms ease')
   styleBuilder
     .select('.nav__collapse-toggle:hover', theme)
-    .background(palette.semanticTone.accent.background.muted)
+    .background(palette.semanticTone.accent.background.canvas)
     .color(palette.semanticTone.accent.text.default)
   styleBuilder
     .select('.nav__collapse-toggle-icon', theme)
@@ -351,6 +351,7 @@ export function registerNavSummaryStyles(
     .justifyContent('space-between')
     .gap('8px')
     .cursor('pointer')
+    .paddingRight('8px')
     .borderRadius(options.radii.md)
   styleBuilder
     .select('.nav__summary:hover', theme)
@@ -361,7 +362,7 @@ export function registerNavSummaryStyles(
     .outlineOffset('2px')
   styleBuilder
     .select('.nav__summary--active', theme)
-    .background(palette.semanticTone.accent.background.default)
+    .background(palette.semanticTone.accent.background.canvas)
   styleBuilder
     .select('.nav__summary--active .nav__text', theme)
     .color(palette.semanticTone.accent.text.default)
@@ -402,6 +403,6 @@ export function registerNavBadgeStyles(
     .fontWeight('700')
     .letterSpacing('0.02em')
     .textTransform('uppercase')
-    .background(palette.semanticTone.accent.background.default)
+    .background(palette.semanticTone.accent.background.canvas)
     .color(palette.semanticTone.accent.text.default)
 }

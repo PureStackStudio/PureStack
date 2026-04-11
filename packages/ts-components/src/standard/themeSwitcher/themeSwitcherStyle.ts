@@ -69,7 +69,7 @@ export function registerThemeSwitcherTrackStyles(
     .width('36px')
     .height('36px')
     .borderRadius('50%')
-    .background(palette.semanticTone.accent.background.default)
+    .background(palette.semanticTone.accent.background.canvas)
     .boxShadow(palette.effect.thumbShadow)
     .backdropFilter('blur(8px)')
     .transform('translateY(-50%) translateX(0)')

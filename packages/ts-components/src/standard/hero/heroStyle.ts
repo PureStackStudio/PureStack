@@ -202,7 +202,7 @@ export function applyHeroMediaStyles(
     .select('.hero__logo-frame', theme)
     .padding('18px 22px')
     .borderRadius(options.radii.lg)
-    .background(palette.semanticTone.neutral.background.panel)
+    .background(palette.semanticTone.neutral.background.surface)
     .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
     .boxShadow(palette.effect.floatingShadow)
 

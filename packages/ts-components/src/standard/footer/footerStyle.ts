@@ -41,7 +41,7 @@ export function applyFooterShellStyles(
     .gap('28px')
     .padding('28px')
     .borderRadius(`calc(${options.radii.lg} - 1px)`)
-    .background(palette.semanticTone.neutral.background.raised)
+    .background(palette.semanticTone.neutral.background.surface)
     .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
 
   styleBuilder
@@ -153,7 +153,7 @@ export function applyFooterStatusStyles(
     .alignItems('center')
     .padding('5px 10px')
     .borderRadius(options.radii.pill)
-    .background(palette.semanticTone.neutral.background.default)
+    .background(palette.semanticTone.neutral.background.canvas)
     .color(palette.semanticTone.neutral.text.default)
     .fontSize('11px')
     .fontWeight('700')
@@ -187,7 +187,7 @@ export function applyFooterCtaStyles(
     .textDecoration('none')
     .fontWeight('700')
     .border(`1px solid ${palette.semanticTone.accent.border.default}`)
-    .background(palette.semanticTone.accent.background.default)
+    .background(palette.semanticTone.accent.background.canvas)
     .color(palette.semanticTone.accent.text.default)
     .transition(
       'background 170ms ease, border-color 170ms ease, transform 170ms ease',
@@ -478,7 +478,7 @@ export function applyFooterBottomSocialStyles(
     )
   styleBuilder
     .select('.footer-social:hover', theme)
-    .background(palette.semanticTone.accent.background.muted)
+    .background(palette.semanticTone.accent.background.canvas)
     .borderColor(palette.semanticTone.accent.border.default)
   styleBuilder
     .select('.footer-social:focus-visible', theme)
@@ -510,7 +510,7 @@ export function applyFooterToneStyles(theme: ThemeMode, palette: ThemePalette) {
 
   styleBuilder
     .select('.site-footer--tone-accent .site-footer__inner', theme)
-    .background(palette.semanticTone.neutral.background.feature)
+    .background(palette.semanticTone.neutral.background.canvas)
     .borderColor(palette.semanticTone.accent.border.default)
 
   styleBuilder

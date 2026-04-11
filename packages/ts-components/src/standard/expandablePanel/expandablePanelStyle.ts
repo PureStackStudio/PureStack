@@ -26,7 +26,7 @@ function registerExpandablePanelShellStyles(
     .margin('0 0 16px')
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
     .borderRadius(options.radii.lg)
-    .background(palette.semanticTone.neutral.background.raised)
+    .background(palette.semanticTone.neutral.background.surface)
     .boxShadow(palette.effect.panelShadow)
     .overflow('hidden')
     .transition(
@@ -93,7 +93,7 @@ function registerExpandablePanelSummaryStyles(
     .alignItems('center')
     .padding('4px 9px')
     .borderRadius(options.radii.pill)
-    .background(palette.semanticTone.neutral.background.default)
+    .background(palette.semanticTone.neutral.background.canvas)
     .color(palette.semanticTone.neutral.text.default)
     .fontSize('11px')
     .fontWeight('700')

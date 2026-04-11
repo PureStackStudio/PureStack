@@ -172,7 +172,7 @@ function registerCopyButtonBaseStyles(
     .right('12px')
     .zIndex(2)
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
-    .background(palette.semanticTone.neutral.background.default)
+    .background(palette.semanticTone.neutral.background.canvas)
     .color(palette.semanticTone.neutral.text.default)
     .width('2.15rem')
     .height('2.15rem')
@@ -249,13 +249,13 @@ function registerCopyButtonStateStyles(
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button.is-copied)', theme)
-    .background(palette.semanticTone.accent.background.default)
+    .background(palette.semanticTone.accent.background.canvas)
     .borderColor(palette.semanticTone.accent.border.default)
     .color(palette.semanticTone.accent.text.default)
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button.is-error)', theme)
-    .background(palette.semanticTone.danger.background.default)
+    .background(palette.semanticTone.danger.background.canvas)
     .borderColor(palette.semanticTone.danger.border.default)
     .color(palette.semanticTone.danger.text.default)
 }
@@ -349,7 +349,7 @@ function registerTableHeaderStyles(
 ) {
   styleBuilder
     .select('.doc-content :where(thead th)', theme)
-    .background(palette.semanticTone.neutral.background.raised)
+    .background(palette.semanticTone.neutral.background.surface)
     .color(palette.semanticTone.neutral.text.strong)
     .fontSize('0.79rem')
     .textTransform('uppercase')
@@ -380,7 +380,8 @@ function registerTableBodyRowStyles(
 
   styleBuilder
     .select('.doc-content :where(tbody tr:hover)', theme)
-    .background(palette.semanticTone.ghost.hover)
+    .background(palette.semanticTone.accent.background.canvas)
+    .color(palette.semanticTone.accent.text.default)
 
   styleBuilder
     .select('.doc-content :where(tbody tr:last-child td)', theme)
@@ -401,11 +402,6 @@ function registerTableCellStyles(theme: ThemeMode, palette: ThemePalette) {
     .borderLeft(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
 
   styleBuilder
-    .select('.doc-content :where(tbody td:first-child)', theme)
-    .fontWeight('600')
-    .color(palette.semanticTone.neutral.text.strong)
-
-  styleBuilder
     .select('.doc-content :where(th, td)', theme)
     .padding('11px 14px')
     .textAlign('left')
@@ -420,7 +416,7 @@ function registerTableInlineCodeStyles(
 ) {
   styleBuilder
     .select('.doc-content :where(table code)', theme)
-    .background(palette.semanticTone.danger.background.default)
+    .background(palette.semanticTone.danger.background.canvas)
     .color(palette.semanticTone.danger.text.default)
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
     .borderRadius(options.radii.pill)

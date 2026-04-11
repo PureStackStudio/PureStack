@@ -139,7 +139,7 @@ function registerSearchBoxResultContainerStyles(
     .padding('8px')
     .borderRadius(options.radii.lg)
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
-    .background(palette.semanticTone.neutral.background.raised)
+    .background(palette.semanticTone.neutral.background.surface)
     .boxShadow(options.shadows.strong)
     .zIndex('60')
 }
@@ -233,7 +233,7 @@ function registerSearchBoxResultContentStyles(
     .select('.site-search__results mark.site-search__highlight', theme)
     .padding('0 3px')
     .borderRadius('5px')
-    .background(palette.semanticTone.accent.background.default)
+    .background(palette.semanticTone.accent.background.canvas)
     .color(palette.semanticTone.accent.text.default)
 
   styleBuilder
@@ -248,7 +248,7 @@ function registerSearchBoxResultContentStyles(
   styleBuilder
     .select('.site-search__results .site-search__message--error', theme)
     .border(`1px solid ${palette.semanticTone.danger.border.default}`)
-    .background(palette.semanticTone.danger.background.default)
+    .background(palette.semanticTone.danger.background.canvas)
     .color(palette.semanticTone.danger.text.default)
 }
 

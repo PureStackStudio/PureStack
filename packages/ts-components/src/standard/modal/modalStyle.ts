@@ -61,7 +61,7 @@ function registerModalShellStyles(
     .overflow('auto')
     .borderRadius(options.radii.lg)
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
-    .background(palette.semanticTone.neutral.background.raised)
+    .background(palette.semanticTone.neutral.background.surface)
     .boxShadow(options.shadows.soft)
     .color(palette.semanticTone.neutral.text.default)
     .transform('translate3d(0, 0, 0)')

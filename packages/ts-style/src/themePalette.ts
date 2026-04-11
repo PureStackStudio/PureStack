@@ -40,17 +40,12 @@
 
 export interface SemanticToneTokens {
   background: {
-    default: string
     canvas: string
     surface: string
     surfaceAlt: string
-    panel: string
-    raised: string
     overlay: string
     showcase: string
     showcaseAlt: string
-    muted: string
-    feature: string
   }
   border: {
     soft: string

@@ -8,7 +8,7 @@ export function registerPanelStyles() {
       .margin('0 0 16px')
       .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
       .borderRadius(options.radii.lg)
-      .background(palette.semanticTone.neutral.background.raised)
+      .background(palette.semanticTone.neutral.background.surface)
       .boxShadow(palette.effect.panelShadow)
       .overflow('hidden')
       .transition(
