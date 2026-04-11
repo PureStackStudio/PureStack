@@ -112,7 +112,7 @@ export function registerLogoTextStyles(
 
   styleBuilder
     .select('.site-logo__word--primary', theme)
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.semanticTone.accent.button.hover.text)
 
   styleBuilder
     .select('.site-logo__word--accent', theme)
@@ -132,7 +132,7 @@ export function registerLogoTextStyles(
     .fontWeight('700')
     .letterSpacing('0.08em')
     .textTransform('uppercase')
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.semanticTone.accent.button.hover.text)
     .whiteSpace('nowrap')
 }
 

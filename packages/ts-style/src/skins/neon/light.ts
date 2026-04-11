@@ -1,23 +1,25 @@
 import { createNeonPalette, type NeonCore } from './base'
 import type { ToneColors } from './shared'
 
+const white = '#e8f3f8'
+const accent = '#2771b7'
 const baseTone: ToneColors = {
-  background: '#e1d3d3',
-  foreground: '#343030',
-  border: '#343030',
-  surface: '#c4b1b1',
-  surfaceAlt: '#af9c9c',
+  background: '#dfebfc',
+  foreground: '#052b3d',
+  border: white,
+  surface: '#1b82cb',
+  surfaceAlt: '#1f629e',
 }
-
 const core: NeonCore = {
-  baseBlack: '#2c1a1e',
+  baseBlack: '#171c23',
   neutral: baseTone,
   accent: {
-    background: '#C73838',
-    foreground: '#E1E1E1',
-    border: '#C73838',
-    surface: '#C73838',
-    surfaceAlt: '#C73838',
+    ...baseTone,
+    background: accent,
+    foreground: white,
+    border: accent,
+    surface: accent,
+    surfaceAlt: accent,
   },
   ghost: {
     ...baseTone,
@@ -26,32 +28,32 @@ const core: NeonCore = {
     border: 'transparent',
   },
   info: {
-    background: '#1B9ED0',
-    foreground: '#E1E1E1',
-    border: '#1B9ED0',
-    surface: '#1B9ED0',
-    surfaceAlt: '#1B9ED0',
+    background: '#15a9c0',
+    foreground: white,
+    border: '#16BAD4',
+    surface: '#1292a6',
+    surfaceAlt: '#15a9c0',
   },
   success: {
-    background: '#2E9A4D',
-    foreground: '#E1E1E1',
-    border: '#2E9A4D',
-    surface: '#2E9A4D',
-    surfaceAlt: '#2E9A4D',
+    background: '#259740',
+    foreground: white,
+    border: '#259740',
+    surface: '#259740',
+    surfaceAlt: '#259740',
   },
   warning: {
-    background: '#da9d23',
-    foreground: '#E1E1E1',
-    border: '#B88319',
-    surface: '#da9d23',
-    surfaceAlt: '#da9d23',
+    background: '#c49a1c',
+    foreground: white,
+    border: '#c49a1c',
+    surface: '#c49a1c',
+    surfaceAlt: '#c49a1c',
   },
   danger: {
-    background: '#D6493E',
-    foreground: '#E1E1E1',
-    border: '#D6493E',
-    surface: '#D6493E',
-    surfaceAlt: '#D6493E',
+    background: '#a92a37',
+    foreground: white,
+    border: '#a92a37',
+    surface: '#a92a37',
+    surfaceAlt: '#a92a37',
   },
 }
 
