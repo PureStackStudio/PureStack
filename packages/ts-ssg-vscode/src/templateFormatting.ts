@@ -3,7 +3,6 @@ import * as vscode from 'vscode'
 import {
   formatHtmlFragment,
   getHtmlFormattingOptions,
-  getLineIndent,
   normalizeSelfClosingTagSpacing,
   shouldFormatOnSave,
 } from './htmlFormatting'
@@ -244,16 +243,7 @@ async function formatTaggedTemplate(
     template.expressions,
   )
 
-  if (!restored.includes('\n')) return restored
-
-  const baseIndent = getLineIndent(
-    document.lineAt(template.contentRange.start.line).text,
-  )
-  const indentedLines = restored
-    .split(/\r?\n/)
-    .map((line) => (line.length === 0 ? '' : `${baseIndent}${line}`))
-
-  return `\n${indentedLines.join('\n')}\n${baseIndent}`
+  return restored
 }
 
 function restoreTemplateExpressions(
