@@ -37,8 +37,7 @@ export interface ModalTrigger {
   label?: RefOrValue<string>
 }
 
-const modalTemplate = html`
-<dialog
+const modalTemplate = html`<dialog
   class="modal"
   :class="rootClass"
   :id="id"
@@ -82,14 +81,11 @@ const modalTemplate = html`
       </div>
     </article>
   </slot>
-</dialog>
-`
+</dialog>`
 
-const modalTriggerTemplate = html`
-<Btn type="button" :data-modal-target="target" data-modal-trigger>
+const modalTriggerTemplate = html`<Btn type="button" :data-modal-target="target" data-modal-trigger>
   {{ label }}
-</Btn>
-`
+</Btn>`
 
 function defineModalComponent() {
   return defineComponent<Modal>(modalTemplate, {

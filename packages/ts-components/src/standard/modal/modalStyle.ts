@@ -78,27 +78,41 @@ function registerModalShellStyles(
 
   styleBuilder
     .select('.modal__header', theme)
-    .display('flex')
-    .alignItems('flex-start')
-    .justifyContent('space-between')
+    .display('grid')
+    .gridTemplateColumns('minmax(0, 1fr) auto minmax(0, 1fr)')
+    .alignItems('center')
     .gap('10px')
 
   styleBuilder
     .select('.modal__title', theme)
+    .gridColumn('2')
+    .justifySelf('center')
     .margin('0')
-    .flex('1')
     .fontSize('1.2rem')
     .lineHeight('1.3')
     .fontWeight('700')
+    .textAlign('center')
     .color(palette.semanticTone.neutral.text.default)
 
-  styleBuilder.select('.modal__body', theme).minWidth('0').lineHeight('1.6')
+  styleBuilder
+    .select('.modal__header [data-modal-close]', theme)
+    .gridColumn('3')
+    .justifySelf('end')
+
+  styleBuilder
+    .select('.modal__body', theme)
+    .display('grid')
+    .minWidth('0')
+    .lineHeight('1.6')
+    .justifyItems('center')
+    .textAlign('center')
 
   styleBuilder
     .select('.modal__footer', theme)
     .display('flex')
     .flexWrap('wrap')
     .alignItems('center')
+    .justifyContent('center')
     .gap('10px')
 
   styleBuilder.select('.modal__footer:empty', theme).display('none')
