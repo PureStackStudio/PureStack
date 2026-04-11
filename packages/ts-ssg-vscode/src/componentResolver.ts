@@ -14,7 +14,9 @@ const IGNORED_DIRECTORY_NAMES = new Set([
   'dist',
 ])
 const EXPORTED_COMPONENT_PATTERN =
-  /export\s+(?:declare\s+)?(?:abstract\s+)?(?:interface|type|class)\s+([A-Za-z][A-Za-z0-9]*)\b/g
+  /^\s*export\s+(?:declare\s+)?(?:abstract\s+)?(?:interface|type|class)\s+([A-Za-z][A-Za-z0-9]*)\b/g
+const LOCAL_COMPONENT_PATTERN =
+  /^\s*(?:export\s+)?(?:declare\s+)?(?:abstract\s+)?(?:interface|type|class)\s+([A-Za-z][A-Za-z0-9]*)\b/g
 
 const workspaceComponentFilesCache = new Map<string, string[]>()
 const dependencyPackageCache = new Map<string, DependencyComponentPackage[]>()
@@ -32,11 +34,13 @@ type DependencyComponentPackage = {
 export function resolveComponentTarget(
   workspaceRoot: string,
   componentName: string,
+  preferredLocalFilePath?: string,
 ): ResolvedComponentTarget | undefined {
   const normalizedComponentName = normalizeComponentName(componentName)
   const workspaceTarget = resolveWorkspaceComponentTarget(
     workspaceRoot,
     normalizedComponentName,
+    preferredLocalFilePath,
   )
   if (workspaceTarget) return workspaceTarget
 
@@ -60,19 +64,24 @@ export function clearComponentResolverCaches(workspaceRoot?: string) {
 function resolveWorkspaceComponentTarget(
   workspaceRoot: string,
   normalizedComponentName: string,
+  preferredLocalFilePath?: string,
 ) {
-  const candidateFiles = getWorkspaceComponentFiles(workspaceRoot)
+  const candidateFiles = prioritizePreferredFile(
+    getWorkspaceComponentFiles(workspaceRoot),
+    preferredLocalFilePath,
+  )
 
   for (const filePath of candidateFiles) {
-    const exportedDefinition = findExportedComponentDefinitionInFile(
+    const definition = findComponentDefinitionInFile(
       filePath,
       normalizedComponentName,
+      filePath === preferredLocalFilePath,
     )
-    if (!exportedDefinition) continue
+    if (!definition) continue
 
     return {
       filePath,
-      line: exportedDefinition.line,
+      line: definition.line,
     }
   }
 
@@ -89,7 +98,7 @@ function resolveDependencyComponentTarget(
     if (!dependencyPackage.componentNames.has(normalizedComponentName)) continue
 
     for (const filePath of dependencyPackage.files) {
-      const exportedDefinition = findExportedComponentDefinitionInFile(
+      const exportedDefinition = findComponentDefinitionInFile(
         filePath,
         normalizedComponentName,
       )
@@ -254,17 +263,21 @@ function collectDependencyComponentFiles(
   }
 }
 
-function findExportedComponentDefinitionInFile(
+function findComponentDefinitionInFile(
   filePath: string,
   normalizedComponentName: string,
+  includeLocalDefinitions = false,
 ) {
   const source = fs.readFileSync(filePath, 'utf8')
   const lines = source.split(/\r?\n/)
+  const pattern = includeLocalDefinitions
+    ? LOCAL_COMPONENT_PATTERN
+    : EXPORTED_COMPONENT_PATTERN
 
   for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
     const line = lines[lineIndex]
-    const match = EXPORTED_COMPONENT_PATTERN.exec(line)
-    EXPORTED_COMPONENT_PATTERN.lastIndex = 0
+    const match = pattern.exec(line)
+    pattern.lastIndex = 0
 
     if (!match) continue
     if (normalizeComponentName(match[1]) !== normalizedComponentName) continue
@@ -275,6 +288,23 @@ function findExportedComponentDefinitionInFile(
   }
 
   return undefined
+}
+
+function prioritizePreferredFile(
+  candidateFiles: string[],
+  preferredLocalFilePath?: string,
+) {
+  if (!preferredLocalFilePath) return candidateFiles
+
+  const matchingFiles = candidateFiles.filter(
+    (filePath) => filePath === preferredLocalFilePath,
+  )
+  if (matchingFiles.length === 0) return candidateFiles
+
+  return [
+    ...matchingFiles,
+    ...candidateFiles.filter((filePath) => filePath !== preferredLocalFilePath),
+  ]
 }
 
 function normalizeComponentName(value: string) {

@@ -151,6 +151,100 @@ describe('resolveComponentTarget cache invalidation', () => {
   })
 })
 
+describe('resolveComponentTarget local same-file fallback', () => {
+  let isolatedWorkspaceRoot = ''
+  let localComponentPath = ''
+
+  beforeAll(() => {
+    isolatedWorkspaceRoot = fs.mkdtempSync(
+      path.join(os.tmpdir(), 'purestack-component-resolver-local-'),
+    )
+
+    localComponentPath = path.join(
+      isolatedWorkspaceRoot,
+      'src',
+      'localComponent.ts',
+    )
+
+    fs.mkdirSync(path.dirname(localComponentPath), { recursive: true })
+    fs.writeFileSync(
+      localComponentPath,
+      [
+        "import { defineComponent, html } from 'regor'",
+        '',
+        'interface LocalComponent {}',
+        '',
+        'export function defineLocalComponents() {',
+        '  return {',
+        '    localComponent: defineComponent<LocalComponent>(html`<div/>`, {}),',
+        '  }',
+        '}',
+        '',
+      ].join('\n'),
+    )
+  })
+
+  afterAll(() => {
+    if (!isolatedWorkspaceRoot) return
+
+    clearComponentResolverCaches(isolatedWorkspaceRoot)
+    fs.rmSync(isolatedWorkspaceRoot, { force: true, recursive: true })
+  })
+
+  it('resolves a non-exported component type when the active file matches', () => {
+    const target = resolveComponentTarget(
+      isolatedWorkspaceRoot,
+      'LocalComponent',
+      localComponentPath,
+    )
+
+    expect(target).toBeDefined()
+    expect(target?.filePath).toBe(localComponentPath)
+    expect(getResolvedLineText(target?.filePath, target?.line)).toMatch(
+      /interface\s+LocalComponent\b/,
+    )
+  })
+
+  it('keeps non-exported component types hidden from other files', () => {
+    const target = resolveComponentTarget(
+      isolatedWorkspaceRoot,
+      'LocalComponent',
+      path.join(isolatedWorkspaceRoot, 'src', 'otherFile.ts'),
+    )
+
+    expect(target).toBeUndefined()
+  })
+
+  it('does not treat imported type specifiers as local declarations', () => {
+    const importedComponentPath = path.join(
+      isolatedWorkspaceRoot,
+      'src',
+      'importedComponent.ts',
+    )
+    fs.writeFileSync(
+      importedComponentPath,
+      [
+        "import { type ImportedComponent } from './other'",
+        '',
+        'export function defineImportedComponents() {',
+        '  return {',
+        '    importedComponent: defineComponent<ImportedComponent>(html`<div/>`, {}),',
+        '  }',
+        '}',
+        '',
+      ].join('\n'),
+    )
+
+    const target = resolveComponentTarget(
+      isolatedWorkspaceRoot,
+      'ImportedComponent',
+      importedComponentPath,
+    )
+
+    expect(target).toBeUndefined()
+  })
+})
+
 function getResolvedLineText(filePath?: string, line?: number) {
   if (!filePath || line === undefined) return ''
 

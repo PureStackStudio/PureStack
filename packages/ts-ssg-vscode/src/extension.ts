@@ -165,6 +165,7 @@ class ComponentDefinitionProvider implements vscode.DefinitionProvider {
     const target = resolveComponentTarget(
       workspaceRoot,
       tagContext.componentName,
+      document.uri.fsPath,
     )
     if (!target) return undefined
 
@@ -326,7 +327,11 @@ function resolveComponentMetadataForTag(
   const workspaceRoot = resolveWorkspaceRoot(document.uri.fsPath)
   if (!workspaceRoot) return undefined
 
-  const target = resolveComponentTarget(workspaceRoot, componentName)
+  const target = resolveComponentTarget(
+    workspaceRoot,
+    componentName,
+    document.uri.fsPath,
+  )
   if (!target) return undefined
 
   return getComponentMetadata(target.filePath, componentName)
