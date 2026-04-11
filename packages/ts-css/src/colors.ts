@@ -18,6 +18,8 @@ export type HSL = {
  * @throws Will throw an error if the hex format is invalid.
  */
 export function hexToRgba(input: string): RGBA {
+  if (input === 'transparent') return { r: 0, g: 0, b: 0, a: 0 }
+
   // Strip leading '#' if present
   let hex = input.startsWith('#') ? input.slice(1) : input
 

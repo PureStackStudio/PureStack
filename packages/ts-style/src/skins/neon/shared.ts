@@ -1,5 +1,5 @@
 import { getColors, getGradient } from '@purestack/ts-css'
-
+import { hexToRgba } from '../../../../ts-css/src/colors'
 import type { SemanticToneTokens } from '../../themePalette'
 
 export type ToneScale = {
@@ -33,15 +33,8 @@ export type ToneOverrides = {
 }
 
 export function rgba(hex: string, alphaValue: number) {
-  const normalized = hex.replace('#', '')
-  const r = Number.parseInt(normalized.slice(0, 2), 16)
-  const g = Number.parseInt(normalized.slice(2, 4), 16)
-  const b = Number.parseInt(normalized.slice(4, 6), 16)
-  return `rgba(${r}, ${g}, ${b}, ${alphaValue.toFixed(2)})`
-}
-
-export function createBorderTone(borderAlpha: number) {
-  return (hex: string) => rgba(hex, borderAlpha)
+  const { r, g, b, a } = hexToRgba(hex)
+  return `rgba(${r}, ${g}, ${b}, ${(a ?? alphaValue).toFixed(2)})`
 }
 
 export function gradient(angle: string, colors: string[]) {
@@ -77,6 +70,7 @@ export function createTone(
   neutral: Tone,
   borderTone: (hex: string) => string,
   overrides: ToneOverrides = {},
+  inverseTextColor = neutral.text.inverse,
 ): Tone {
   const button = {
     rest: {
@@ -88,7 +82,7 @@ export function createTone(
     hover: {
       background: scale.level3,
       border: borderTone(scale.level4),
-      text: neutral.text.inverse,
+      text: inverseTextColor,
       ...(overrides.button?.hover || {}),
     },
     active: {
@@ -130,13 +124,14 @@ export function createTone(
       ...neutral.text,
       default: scale.level5,
       strong: scale.level5,
+      inverse: inverseTextColor,
       ...(overrides.text || {}),
     },
     button,
     icon: {
       background: scale.level5,
       gradient: gradient('135deg', [scale.level5, scale.level4]),
-      color: neutral.text.inverse,
+      color: inverseTextColor,
       ring: scale.level4,
       ...(overrides.icon || {}),
     },

@@ -6,15 +6,20 @@ const core = {
   canvas: '#e7dbdb',
   surface: '#e1d3d3',
   foreground: '#343030',
-  accent: '#C73838',
-  info: '#1B9ED0',
-  success: '#2E9A4D',
-  warning: '#B88319',
-  danger: '#D6493E',
+  neutral: { background: '#e1d3d3', foreground: '#343030', border: '#343030' },
+  accent: { background: '#C73838', foreground: '#E1E1E1', border: '#C73838' },
+  ghost: {
+    background: 'transparent',
+    foreground: '#343030',
+    border: 'transparent',
+  },
+  info: { background: '#1B9ED0', foreground: '#E1E1E1', border: '#1B9ED0' },
+  success: { background: '#2E9A4D', foreground: '#E1E1E1', border: '#2E9A4D' },
+  warning: { background: '#B88319', foreground: '#E1E1E1', border: '#B88319' },
+  danger: { background: '#D6493E', foreground: '#E1E1E1', border: '#D6493E' },
 } as const
 
 export const neonLight = createNeonPalette({
-  mode: 'light',
   core,
   showcaseAlt: '#F2E7EA',
 })

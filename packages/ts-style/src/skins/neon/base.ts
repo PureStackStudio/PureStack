@@ -1,6 +1,5 @@
 import type { ThemePalette } from '../../themePalette'
 import {
-  createBorderTone,
   createScale,
   createTone,
   gradient,
@@ -16,36 +15,63 @@ type NeonCore = {
   canvas: string
   surface: string
   foreground: string
-  accent: string
-  info: string
-  success: string
-  warning: string
-  danger: string
+  neutral: {
+    background: string
+    foreground: string
+    border: string
+  }
+  accent: {
+    background: string
+    foreground: string
+    border: string
+  }
+  ghost: {
+    background: string
+    foreground: string
+    border: string
+  }
+  info: {
+    background: string
+    foreground: string
+    border: string
+  }
+  success: {
+    background: string
+    foreground: string
+    border: string
+  }
+  warning: {
+    background: string
+    foreground: string
+    border: string
+  }
+  danger: {
+    background: string
+    foreground: string
+    border: string
+  }
 }
 
 type NeonPaletteOptions = {
-  mode: 'dark' | 'light'
   core: NeonCore
   showcaseAlt: string
   borderAlpha?: number
 }
 
 export function createNeonPalette({
-  mode,
   core,
   showcaseAlt,
   borderAlpha = 0.33,
 }: NeonPaletteOptions): ThemePalette {
-  const isLight = mode === 'light'
-  const borderTone = createBorderTone(borderAlpha)
+  const borderTone = (hex: string) => rgba(hex, borderAlpha)
 
-  const surface = createScale(core.surface, 10)
-  const text = createScale(core.foreground, 18)
-  const accent = createScale(core.accent, 20)
-  const info = createScale(core.info, 18)
-  const success = createScale(core.success, 18)
-  const warning = createScale(core.warning, 18)
-  const danger = createScale(core.danger, 18)
+  const surface = createScale(core.neutral.background, 10)
+  const text = createScale(core.neutral.foreground, 18)
+  const accent = createScale(core.accent.background, 20)
+  const info = createScale(core.info.background, 18)
+  const success = createScale(core.success.background, 18)
+  const warning = createScale(core.warning.background, 18)
+  const danger = createScale(core.danger.background, 18)
 
   const neutralTone: Tone = {
     background: {
@@ -63,8 +89,8 @@ export function createNeonPalette({
     },
     border: {
       soft: surface.level2,
-      subtle: borderTone(surface.level3),
-      default: borderTone(text.level1),
+      subtle: borderTone(core.neutral.border),
+      default: borderTone(core.neutral.border),
       strong: borderTone(text.level2),
       hard: borderTone(text.level3),
       focus: accent.level5,
@@ -119,23 +145,23 @@ export function createNeonPalette({
     button: {
       rest: {
         background: accent.level1,
-        border: borderTone(accent.level3),
-        text: core.baseWhite,
+        border: borderTone(core.accent.border),
+        text: core.accent.foreground,
       },
       hover: {
         background: gradient('135deg', [accent.level5, accent.level3]),
-        border: borderTone(accent.level4),
-        text: core.baseWhite,
+        border: borderTone(core.accent.border),
+        text: core.accent.foreground,
       },
       active: {
         background: gradient('135deg', [accent.level4, accent.level2]),
-        border: borderTone(accent.level5),
-        text: core.baseWhite,
+        border: borderTone(core.accent.border),
+        text: core.accent.foreground,
       },
       disabled: {
         background: accent.level2,
-        border: borderTone(accent.level2),
-        text: core.baseWhite,
+        border: borderTone(core.accent.border),
+        text: core.accent.foreground,
       },
       focusRing: accent.level5,
     },
@@ -156,6 +182,7 @@ export function createNeonPalette({
     neutralTone,
     borderTone,
     accentOverrides,
+    core.accent.foreground,
   )
 
   const ghostOverrides: ToneOverrides = {
@@ -166,54 +193,60 @@ export function createNeonPalette({
       panel: neutralTone.background.panel,
       raised: neutralTone.background.raised,
       muted: surface.level2,
-      feature: accent.level1,
+      feature: core.ghost.background,
     },
     border: {
-      default: neutralTone.border.soft,
-      subtle: neutralTone.border.soft,
-      strong: neutralTone.border.soft,
-      hard: neutralTone.border.soft,
+      default: borderTone(core.ghost.border),
+      subtle: borderTone(core.ghost.border),
+      strong: borderTone(core.ghost.border),
+      hard: borderTone(core.ghost.border),
     },
     text: {
-      default: accent.level5,
-      strong: accent.level5,
+      default: core.ghost.foreground,
+      strong: core.ghost.foreground,
     },
     button: {
       rest: {
-        background: neutralTone.background.surface,
-        border: borderTone(surface.level2),
-        text: accent.level5,
+        background: core.ghost.background,
+        border: borderTone(core.ghost.border),
+        text: core.ghost.foreground,
       },
       hover: {
-        background: accent.level1,
-        border: borderTone(accent.level3),
-        text: accent.level5,
+        background: core.ghost.background,
+        border: borderTone(core.ghost.border),
+        text: core.ghost.foreground,
       },
       active: {
         background: accent.level2,
-        border: borderTone(accent.level4),
+        border: borderTone(core.ghost.border),
         text: neutralTone.text.strong,
       },
       disabled: {
         background: surface.level2,
-        border: borderTone(surface.level2),
-        text: accent.level3,
+        border: borderTone(core.ghost.border),
+        text: core.ghost.foreground,
       },
       focusRing: accent.level5,
     },
     icon: {
       background: text.level3,
-      gradient: gradient('135deg', [text.level5, accent.level3]),
+      gradient: gradient('135deg', [text.level5, core.ghost.background]),
       color: neutralTone.text.inverse,
-      ring: accent.level3,
+      ring: core.ghost.border,
     },
-    hover: accent.level1,
+    hover: core.ghost.background,
     active: accent.level2,
     disabled: surface.level2,
     focusRing: accent.level5,
   }
 
-  const ghostTone = createTone(accent, neutralTone, borderTone, ghostOverrides)
+  const ghostTone = createTone(
+    accent,
+    neutralTone,
+    borderTone,
+    ghostOverrides,
+    core.ghost.foreground,
+  )
 
   const effect: ThemePalette['effect'] = {
     glowPrimary: `0 0 28px ${rgba(accent.level3, 0.22)}`,
@@ -235,10 +268,58 @@ export function createNeonPalette({
       neutral: neutralTone,
       accent: accentTone,
       ghost: ghostTone,
-      info: createTone(info, neutralTone, borderTone),
-      success: createTone(success, neutralTone, borderTone),
-      warning: createTone(warning, neutralTone, borderTone),
-      danger: createTone(danger, neutralTone, borderTone),
+      info: createTone(
+        info,
+        neutralTone,
+        borderTone,
+        {
+          border: {
+            default: borderTone(core.info.border),
+            strong: borderTone(core.info.border),
+            hard: borderTone(core.info.border),
+          },
+        },
+        core.info.foreground,
+      ),
+      success: createTone(
+        success,
+        neutralTone,
+        borderTone,
+        {
+          border: {
+            default: borderTone(core.success.border),
+            strong: borderTone(core.success.border),
+            hard: borderTone(core.success.border),
+          },
+        },
+        core.success.foreground,
+      ),
+      warning: createTone(
+        warning,
+        neutralTone,
+        borderTone,
+        {
+          border: {
+            default: borderTone(core.warning.border),
+            strong: borderTone(core.warning.border),
+            hard: borderTone(core.warning.border),
+          },
+        },
+        core.warning.foreground,
+      ),
+      danger: createTone(
+        danger,
+        neutralTone,
+        borderTone,
+        {
+          border: {
+            default: borderTone(core.danger.border),
+            strong: borderTone(core.danger.border),
+            hard: borderTone(core.danger.border),
+          },
+        },
+        core.danger.foreground,
+      ),
     },
     effect,
   }
