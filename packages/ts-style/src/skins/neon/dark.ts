@@ -1,6 +1,6 @@
-import { createNeonPalette } from './base'
+import { createNeonPalette, type NeonCore } from './base'
 
-const core = {
+const core: NeonCore = {
   baseWhite: '#E1E1E1',
   baseBlack: '#231717',
   canvas: '#352323',
@@ -17,7 +17,7 @@ const core = {
   success: { background: '#259740', foreground: '#E1E1E1', border: '#259740' },
   warning: { background: '#CFA320', foreground: '#231717', border: '#CFA320' },
   danger: { background: '#DC3545', foreground: '#E1E1E1', border: '#DC3545' },
-} as const
+}
 
 export const neonDark = createNeonPalette({
   core,

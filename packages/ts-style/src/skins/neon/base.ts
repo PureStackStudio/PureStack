@@ -9,7 +9,7 @@ import {
   type ToneOverrides,
 } from './shared'
 
-type NeonCore = {
+export type NeonCore = {
   baseWhite: string
   baseBlack: string
   canvas: string
