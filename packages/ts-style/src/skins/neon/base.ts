@@ -2,11 +2,7 @@ import type { ThemePalette } from '../../themePalette'
 import { createScale, createTone, rgba } from './shared'
 
 export type NeonCore = {
-  baseWhite: string
   baseBlack: string
-  canvas: string
-  surface: string
-  foreground: string
   neutral: {
     background: string
     foreground: string
