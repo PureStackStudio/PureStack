@@ -19,6 +19,7 @@ export type HSL = {
  */
 export function hexToRgba(input: string): RGBA {
   if (input === 'transparent') return { r: 0, g: 0, b: 0, a: 0 }
+  if (input === 'currentColor') return { r: 0, g: 0, b: 0, a: 0 }
 
   // Strip leading '#' if present
   let hex = input.startsWith('#') ? input.slice(1) : input

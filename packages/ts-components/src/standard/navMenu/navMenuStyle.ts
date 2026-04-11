@@ -317,13 +317,14 @@ export function registerNavLinkStyles(
     .textDecoration('none')
     .fontWeight('600')
     .transition('background 160ms ease, color 160ms ease')
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.semanticTone.neutral.button.rest.text)
   styleBuilder
     .select('.nav__link:hover', theme)
-    .background(palette.semanticTone.ghost.hover)
+    .background(palette.semanticTone.accent.button.hover.background)
+    .color(palette.semanticTone.accent.button.hover.text)
   styleBuilder
     .select('.nav__link--active', theme)
-    .background(palette.semanticTone.accent.background.default)
+    .background(palette.semanticTone.accent.button.active.background)
     .color(palette.semanticTone.accent.text.default)
   styleBuilder
     .select('.nav__link:focus-visible', theme)

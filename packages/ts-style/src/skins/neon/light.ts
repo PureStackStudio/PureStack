@@ -10,7 +10,7 @@ const core: NeonCore = {
   accent: { background: '#C73838', foreground: '#E1E1E1', border: '#C73838' },
   ghost: {
     background: 'transparent',
-    foreground: '#343030',
+    foreground: 'currentColor',
     border: 'transparent',
   },
   info: { background: '#1B9ED0', foreground: '#E1E1E1', border: '#1B9ED0' },

@@ -12,6 +12,12 @@ export type ToneScale = {
 
 export type Tone = SemanticToneTokens
 
+export type ToneColors = {
+  background: string
+  foreground: string
+  border: string
+}
+
 type ToneButtonOverrides = {
   rest?: Partial<Tone['button']['rest']>
   hover?: Partial<Tone['button']['hover']>
@@ -38,6 +44,8 @@ export function rgba(hex: string, alphaValue: number) {
 }
 
 export function gradient(angle: string, colors: string[]) {
+  if (colors.every((v) => v === 'transparent')) return 'transparent'
+  if (colors.every((v) => v === 'currentColor')) return 'currentColor'
   if (colors.length === 2) {
     const stops = getGradient(colors[0], colors[1], 4)
     return `linear-gradient(${angle}, ${stops
@@ -56,6 +64,8 @@ export function radial(top: string, bottom: string) {
 }
 
 export function createScale(hex: string, delta = 20): ToneScale {
+  if (hex === 'transparent' || hex === 'currentColor')
+    return { level1: hex, level2: hex, level3: hex, level4: hex, level5: hex }
   const [level1, level2, level3, level4, level5] = getColors(
     hex,
     delta,
@@ -66,77 +76,81 @@ export function createScale(hex: string, delta = 20): ToneScale {
 }
 
 export function createTone(
-  scale: ToneScale,
+  colors: ToneColors,
   neutral: Tone,
   borderTone: (hex: string) => string,
   overrides: ToneOverrides = {},
 ): Tone {
+  const background = createScale(colors.background, 10)
+  const foreground = createScale(colors.foreground, 1)
+  const border = createScale(colors.border, 1)
+
   const button = {
     rest: {
-      background: scale.level1,
-      border: borderTone(scale.level3),
-      text: scale.level5,
+      background: background.level2,
+      border: borderTone(border.level2),
+      text: foreground.level2,
       ...(overrides.button?.rest || {}),
     },
     hover: {
-      background: scale.level3,
-      border: borderTone(scale.level4),
-      text: neutral.button.hover.text,
+      background: gradient('135deg', [background.level5, background.level3]),
+      border: borderTone(border.level4),
+      text: foreground.level5,
       ...(overrides.button?.hover || {}),
     },
     active: {
-      background: scale.level2,
-      border: borderTone(scale.level5),
-      text: neutral.text.strong,
+      background: gradient('135deg', [background.level4, background.level2]),
+      border: borderTone(border.level5),
+      text: foreground.level5,
       ...(overrides.button?.active || {}),
     },
     disabled: {
-      background: scale.level2,
-      border: borderTone(scale.level2),
-      text: scale.level3,
+      background: background.level1,
+      border: borderTone(border.level1),
+      text: foreground.level1,
       ...(overrides.button?.disabled || {}),
     },
-    focusRing: overrides.button?.focusRing ?? scale.level5,
+    focusRing: overrides.button?.focusRing ?? border.level5,
   }
 
   return {
     background: {
       ...neutral.background,
-      default: scale.level1,
-      surface: scale.level1,
-      surfaceAlt: scale.level2,
-      panel: scale.level1,
-      raised: scale.level3,
-      muted: scale.level2,
-      feature: scale.level3,
+      default: background.level1,
+      surface: background.level1,
+      surfaceAlt: background.level2,
+      panel: background.level1,
+      raised: background.level3,
+      muted: background.level2,
+      feature: background.level3,
       ...(overrides.background || {}),
     },
     border: {
       ...neutral.border,
-      default: borderTone(scale.level3),
-      strong: borderTone(scale.level4),
-      hard: borderTone(scale.level5),
-      focus: scale.level5,
+      default: borderTone(border.level3),
+      strong: borderTone(border.level4),
+      hard: borderTone(border.level5),
+      focus: border.level5,
       ...(overrides.border || {}),
     },
     text: {
       ...neutral.text,
-      default: scale.level5,
-      strong: scale.level5,
+      default: foreground.level5,
+      strong: foreground.level5,
       inverse: neutral.text.inverse,
       ...(overrides.text || {}),
     },
     button,
     icon: {
-      background: scale.level5,
-      gradient: gradient('135deg', [scale.level5, scale.level4]),
-      color: neutral.icon.color,
-      ring: scale.level4,
+      background: background.level5,
+      gradient: gradient('135deg', [background.level5, background.level4]),
+      color: foreground.level5,
+      ring: border.level5,
       ...(overrides.icon || {}),
     },
-    hover: overrides.hover ?? scale.level3,
-    active: overrides.active ?? scale.level2,
-    disabled: overrides.disabled ?? scale.level2,
-    focusRing: overrides.focusRing ?? scale.level5,
+    hover: overrides.hover ?? background.level3,
+    active: overrides.active ?? background.level2,
+    disabled: overrides.disabled ?? background.level2,
+    focusRing: overrides.focusRing ?? border.level5,
   }
 }
