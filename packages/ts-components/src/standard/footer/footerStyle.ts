@@ -128,7 +128,7 @@ export function applyFooterPrimaryStyles(
     .select('.site-footer__primary-content :where(p)', theme)
     .margin('0')
     .lineHeight('1.7')
-    .color(palette.semanticTone.neutral.text.muted)
+    .color(palette.semanticTone.neutral.text.subtle)
   styleBuilder
     .select('.site-footer__primary-content :where(a)', theme)
     .color(palette.semanticTone.accent.text.default)
@@ -243,7 +243,7 @@ export function applyFooterNewsletterShellStyles(
     .margin('0')
     .fontSize('14px')
     .lineHeight('1.6')
-    .color(palette.semanticTone.neutral.text.muted)
+    .color(palette.semanticTone.neutral.text.subtle)
   styleBuilder
     .select('.site-footer__newsletter-form', theme)
     .display('grid')

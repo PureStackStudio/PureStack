@@ -57,7 +57,6 @@ export interface SemanticToneTokens {
   }
   text: {
     default: string
-    muted: string
     subtle: string
     soft: string
     strong: string

@@ -16,6 +16,8 @@ export type ToneColors = {
   background: string
   foreground: string
   border: string
+  surface: string
+  surfaceAlt: string
 }
 
 type ToneButtonOverrides = {
@@ -83,6 +85,8 @@ export function createTone(
   const background = createScale(colors.background, 10)
   const foreground = createScale(colors.foreground, 1)
   const border = createScale(colors.border, 1)
+  const surface = createScale(colors.surface, 10)
+  const surfaceAlt = createScale(colors.surfaceAlt, 10)
 
   const button = {
     rest: {
@@ -115,8 +119,8 @@ export function createTone(
   return {
     background: {
       canvas: radial(background.level1, background.level2),
-      surface: radial(background.level2, background.level3),
-      surfaceAlt: radial(background.level3, background.level4),
+      surface: radial(surface.level2, surface.level3),
+      surfaceAlt: radial(surfaceAlt.level3, surfaceAlt.level4),
       overlay: background.level1,
       showcase: gradient('180deg', [background.level3, background.level5]),
       showcaseAlt: gradient('180deg', [background.level1, background.level5]),
@@ -133,7 +137,6 @@ export function createTone(
     },
     text: {
       default: foreground.level3,
-      muted: foreground.level1,
       subtle: foreground.level1,
       soft: foreground.level2,
       strong: foreground.level5,

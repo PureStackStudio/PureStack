@@ -1,43 +1,15 @@
 import type { ThemePalette } from '../../themePalette'
-import { createScale, createTone, rgba } from './shared'
+import { createScale, createTone, rgba, type ToneColors } from './shared'
 
 export type NeonCore = {
   baseBlack: string
-  neutral: {
-    background: string
-    foreground: string
-    border: string
-  }
-  accent: {
-    background: string
-    foreground: string
-    border: string
-  }
-  ghost: {
-    background: string
-    foreground: string
-    border: string
-  }
-  info: {
-    background: string
-    foreground: string
-    border: string
-  }
-  success: {
-    background: string
-    foreground: string
-    border: string
-  }
-  warning: {
-    background: string
-    foreground: string
-    border: string
-  }
-  danger: {
-    background: string
-    foreground: string
-    border: string
-  }
+  neutral: ToneColors
+  accent: ToneColors
+  ghost: ToneColors
+  info: ToneColors
+  success: ToneColors
+  warning: ToneColors
+  danger: ToneColors
 }
 
 type NeonPaletteOptions = {

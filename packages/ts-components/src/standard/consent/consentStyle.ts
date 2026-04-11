@@ -57,7 +57,7 @@ function registerConsentBannerStyles(
     .margin('0')
     .fontSize('14px')
     .lineHeight('1.6')
-    .color(palette.semanticTone.neutral.text.muted)
+    .color(palette.semanticTone.neutral.text.subtle)
   styleBuilder
     .select('.consent__policy', theme)
     .color(palette.semanticTone.accent.text.default)
