@@ -132,7 +132,7 @@ export function createTone(
       default: borderTone(border.level3),
       strong: borderTone(border.level4),
       hard: borderTone(border.level5),
-      focus: border.level5,
+      focus: borderTone(border.level5),
       ...(overrides.border || {}),
     },
     text: {
@@ -151,7 +151,7 @@ export function createTone(
       ring: border.level5,
       ...(overrides.icon || {}),
     },
-    hover: overrides.hover ?? background.level3,
+    hover: overrides.hover ?? surfaceAlt.level3,
     active: overrides.active ?? background.level3,
     disabled: overrides.disabled ?? background.level1,
     focusRing: overrides.focusRing ?? border.level5,

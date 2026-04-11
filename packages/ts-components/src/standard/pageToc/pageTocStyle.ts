@@ -177,8 +177,7 @@ export function registerPageTocTargetStyles(
     .padding('0')
     .borderRadius('0')
     .transition('background 200ms ease, color 200ms ease')
-    .background(palette.semanticTone.neutral.background.canvas)
-    .color(palette.semanticTone.accent.text.default)
+    .color(palette.semanticTone.accent.hover)
 }
 
 export function registerPageTocLayoutStyles(

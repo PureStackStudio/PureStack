@@ -200,7 +200,6 @@ export function applyFooterCtaStyles(
   styleBuilder
     .select('.site-footer__cta:focus-visible', theme)
     .outline(`2px solid ${palette.semanticTone.accent.focusRing}`)
-    .outlineOffset('2px')
 }
 
 export function applyFooterNewsletterStyles(
@@ -279,7 +278,6 @@ export function applyFooterNewsletterFieldStyles(
   styleBuilder
     .select('.site-footer__newsletter-input:focus-visible', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
-    .outlineOffset('2px')
     .borderColor(palette.semanticTone.neutral.border.focus)
 }
 
@@ -372,11 +370,10 @@ export function applyFooterLinkStyles(
   styleBuilder.select('.footer-link--strong', theme).fontWeight('700')
   styleBuilder
     .select('.footer-link:hover', theme)
-    .color(palette.semanticTone.accent.text.default)
+    .color(palette.semanticTone.accent.hover)
   styleBuilder
     .select('.footer-link:focus-visible', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
-    .outlineOffset('2px')
     .borderRadius(options.radii.sm)
   styleBuilder
     .select('.footer-link[data-icon="external"]::after', theme)
@@ -444,7 +441,6 @@ export function applyFooterBottomLegalStyles(
   styleBuilder
     .select('.site-footer__legal :where(a:focus-visible)', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
-    .outlineOffset('2px')
     .borderRadius(options.radii.sm)
 }
 
@@ -483,7 +479,6 @@ export function applyFooterBottomSocialStyles(
   styleBuilder
     .select('.footer-social:focus-visible', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
-    .outlineOffset('2px')
   styleBuilder
     .select('.footer-social__icon', theme)
     .width('16px')
