@@ -193,7 +193,6 @@ export function applyAlertActionStyles(
   styleBuilder
     .select('.alert__actions :where(a, button):focus-visible', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.focusRing}`)
-    .outlineOffset('2px')
 }
 
 export function applyAlertMetaStyles(theme: ThemeMode, palette: ThemePalette) {

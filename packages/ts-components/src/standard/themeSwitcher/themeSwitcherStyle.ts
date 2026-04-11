@@ -31,9 +31,9 @@ export function registerThemeSwitcherShellStyles(
     .padding('0')
     .borderRadius(options.radii.pill)
     .border('1px solid transparent')
-    .background(palette.semanticTone.accent.button.hover.background)
-    .borderColor(palette.semanticTone.accent.button.hover.background)
-    .color(palette.semanticTone.accent.button.hover.text)
+    .background(palette.semanticTone.accent.button.rest.background)
+    .borderColor(palette.semanticTone.accent.button.rest.text)
+    .color(palette.semanticTone.accent.button.rest.text)
     .cursor('pointer')
     .fontSize('0')
     .position('relative')
@@ -44,8 +44,7 @@ export function registerThemeSwitcherShellStyles(
     .background(palette.semanticTone.accent.button.hover.background)
   styleBuilder
     .select('.theme-switcher:focus-visible', theme)
-    .outline(`2px solid ${palette.semanticTone.accent.button.hover.border}`)
-    .outlineOffset('2px')
+    .outline(`2px solid ${palette.semanticTone.accent.button.hover.text}`)
 }
 
 export function registerThemeSwitcherTrackStyles(

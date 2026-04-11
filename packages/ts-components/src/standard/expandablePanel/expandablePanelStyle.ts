@@ -56,6 +56,11 @@ function registerExpandablePanelSummaryStyles(
     .padding('18px 22px')
     .cursor('pointer')
     .minWidth('0')
+    .borderRadius('16px')
+
+  styleBuilder
+    .select('.expandable-panel[open] .expandable-panel__summary', theme)
+    .borderRadius('16px 16px 0 0')
 
   styleBuilder
     .select('.expandable-panel__summary::-webkit-details-marker', theme)

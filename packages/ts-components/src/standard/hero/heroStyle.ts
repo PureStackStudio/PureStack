@@ -134,7 +134,6 @@ export function applyHeroActionShellStyles(
   styleBuilder
     .select('.hero__action:focus-visible', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
-    .outlineOffset('2px')
 }
 
 export function applyHeroActionVariantStyles(

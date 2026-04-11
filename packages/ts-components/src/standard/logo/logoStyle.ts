@@ -155,7 +155,7 @@ export function registerLogoInteractiveStyles(
   styleBuilder
     .select('.site-logo__link[href]:focus-visible', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
-    .outlineOffset('2px')
+    .outlineOffset('0')
 }
 
 export function normalizeWord(

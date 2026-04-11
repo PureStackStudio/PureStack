@@ -99,7 +99,6 @@ function registerLinkStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.doc-content :where(a:focus-visible)', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
-    .outlineOffset('2px')
 }
 
 function registerCodeStyles(
@@ -231,7 +230,6 @@ function registerCopyButtonStateStyles(
     .transform('translateY(0)')
     .pointerEvents('auto')
     .outline(`2px solid ${palette.semanticTone.neutral.focusRing}`)
-    .outlineOffset('2px')
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button:disabled)', theme)

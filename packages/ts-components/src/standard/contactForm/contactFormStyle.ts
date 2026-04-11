@@ -89,7 +89,6 @@ function registerContactFormFieldStyles(
       theme,
     )
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
-    .outlineOffset('2px')
     .borderColor(palette.semanticTone.accent.border.default)
 }
 

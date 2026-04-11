@@ -104,7 +104,6 @@ function registerSearchBoxShellInputStyles(
   styleBuilder
     .select('.site-search__input:focus-visible', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
-    .outlineOffset('2px')
     .borderColor(palette.semanticTone.accent.border.default)
 
   styleBuilder
@@ -198,7 +197,6 @@ function registerSearchBoxResultListStyles(
   styleBuilder
     .select('.site-search__results .site-search__link:focus-visible', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
-    .outlineOffset('2px')
 }
 
 function registerSearchBoxResultContentStyles(

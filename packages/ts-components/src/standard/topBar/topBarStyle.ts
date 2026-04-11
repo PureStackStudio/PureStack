@@ -115,7 +115,6 @@ function registerTopBarToggleVisibilityStyles(
   styleBuilder
     .select('.topbar__toggle:focus-visible', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
-    .outlineOffset('2px')
 }
 
 function registerTopBarToggleGlyphStyles(theme: ThemeMode) {

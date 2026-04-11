@@ -85,7 +85,6 @@ function registerTabsShellStyles(
   styleBuilder
     .select('.tabs__overflow-toggle:focus-visible', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
-    .outlineOffset('2px')
 
   styleBuilder
     .select('.tabs__overflow-menu', theme)
@@ -167,7 +166,6 @@ function registerTabsShellStyles(
   styleBuilder
     .select('.tabs__select:focus-visible', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
-    .outlineOffset('2px')
 }
 
 function registerTabsControlStyles(
@@ -258,7 +256,6 @@ function registerTabsControlStyles(
   styleBuilder
     .select('.tabs__control:focus-visible + .tabs__tab', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
-    .outlineOffset('2px')
 
   styleBuilder
     .select('.tabs__control:disabled + .tabs__tab, .tabs__tab--disabled', theme)
@@ -268,7 +265,7 @@ function registerTabsControlStyles(
   styleBuilder
     .select('.tabs__tab-button:focus-visible', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
-    .outlineOffset('2px')
+    .outlineOffset('-2px')
 
   styleBuilder
     .select('.tabs__tab-button:disabled', theme)

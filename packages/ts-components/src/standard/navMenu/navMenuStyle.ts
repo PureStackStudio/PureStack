@@ -74,7 +74,6 @@ export function registerNavShellStyles(
       theme,
     )
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
-    .outlineOffset('2px')
   styleBuilder
     .select('.nav__collapse-toggle', theme)
     .display('inline-flex')
@@ -329,7 +328,6 @@ export function registerNavLinkStyles(
   styleBuilder
     .select('.nav__link:focus-visible', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
-    .outlineOffset('2px')
   styleBuilder
     .select('.nav__text', theme)
     .display('block')
@@ -359,7 +357,6 @@ export function registerNavSummaryStyles(
   styleBuilder
     .select('.nav__summary:focus-visible', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
-    .outlineOffset('2px')
   styleBuilder
     .select('.nav__summary--active', theme)
     .background(palette.semanticTone.accent.background.canvas)

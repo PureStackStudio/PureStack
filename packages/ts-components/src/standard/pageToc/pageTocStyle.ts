@@ -71,7 +71,6 @@ export function registerPageTocShellStyles(
   styleBuilder
     .select('.page-toc__restore-toggle:focus-visible', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
-    .outlineOffset('2px')
   styleBuilder
     .select('.page-toc__header-toggle-icon', theme)
     .display('inline-flex')
@@ -148,7 +147,7 @@ export function registerPageTocLinkStyles(
   styleBuilder
     .select('.page-toc__link:focus-visible', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
-    .outlineOffset('2px')
+    .outlineOffset('-2px')
 
   styleBuilder
     .select(
@@ -354,7 +353,6 @@ export function registerPageTocLayoutStyles(
     )
     .media('max-width: 1320px')
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
-    .outlineOffset('2px')
 
   styleBuilder
     .select(
@@ -529,7 +527,6 @@ export function registerPageTocLayoutStyles(
       theme,
     )
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
-    .outlineOffset('2px')
 
   styleBuilder
     .select(
