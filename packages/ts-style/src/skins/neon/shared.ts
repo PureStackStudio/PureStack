@@ -77,7 +77,6 @@ export function createScale(hex: string, delta = 20): ToneScale {
 
 export function createTone(
   colors: ToneColors,
-  neutral: Tone,
   borderTone: (hex: string) => string,
   overrides: ToneOverrides = {},
 ): Tone {
@@ -115,18 +114,22 @@ export function createTone(
 
   return {
     background: {
-      ...neutral.background,
-      default: background.level1,
-      surface: background.level1,
-      surfaceAlt: background.level2,
-      panel: background.level1,
-      raised: background.level3,
-      muted: background.level2,
-      feature: background.level3,
+      default: radial(background.level3, background.level2),
+      canvas: radial(background.level3, background.level2),
+      surface: radial(background.level3, background.level2),
+      surfaceAlt: radial(background.level2, background.level1),
+      panel: radial(background.level3, background.level2),
+      raised: radial(background.level4, background.level2),
+      overlay: background.level1,
+      showcase: gradient('180deg', [background.level3, background.level5]),
+      showcaseAlt: gradient('180deg', [background.level1, background.level5]),
+      muted: background.level1,
+      feature: background.level5,
       ...(overrides.background || {}),
     },
     border: {
-      ...neutral.border,
+      soft: borderTone(border.level1),
+      subtle: borderTone(border.level2),
       default: borderTone(border.level3),
       strong: borderTone(border.level4),
       hard: borderTone(border.level5),
@@ -134,10 +137,12 @@ export function createTone(
       ...(overrides.border || {}),
     },
     text: {
-      ...neutral.text,
-      default: foreground.level5,
+      default: foreground.level3,
+      muted: foreground.level1,
+      subtle: foreground.level1,
+      soft: foreground.level2,
       strong: foreground.level5,
-      inverse: neutral.text.inverse,
+      inverse: background.level3,
       ...(overrides.text || {}),
     },
     button,
@@ -148,9 +153,9 @@ export function createTone(
       ring: border.level5,
       ...(overrides.icon || {}),
     },
-    hover: overrides.hover ?? background.level3,
-    active: overrides.active ?? background.level2,
-    disabled: overrides.disabled ?? background.level2,
+    hover: overrides.hover ?? background.level5,
+    active: overrides.active ?? background.level5,
+    disabled: overrides.disabled ?? background.level1,
     focusRing: overrides.focusRing ?? border.level5,
   }
 }

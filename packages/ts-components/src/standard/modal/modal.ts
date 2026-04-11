@@ -1,6 +1,6 @@
 import { tryResolveTsSsgContext } from '@purestack/ts-common'
 import {
-  getSemanticToneSurfaceClass,
+  getSemanticToneSurfaceTextBorderClasses,
   getSemanticToneTextClass,
   resolveSemanticTone,
   type SemanticTone,
@@ -37,7 +37,8 @@ export interface ModalTrigger {
   label?: RefOrValue<string>
 }
 
-const modalTemplate = html`<dialog
+const modalTemplate = html`
+<dialog
   class="modal"
   :class="rootClass"
   :id="id"
@@ -52,7 +53,14 @@ const modalTemplate = html`<dialog
       <div class="modal__surface" :class="panelToneClass">
         <header class="modal__header">
           <slot name="header">
-            <h2 class="modal__title" :class="titleToneClass" :id="titleId" r-if="title">{{ title }}</h2>
+            <h2
+              class="modal__title"
+              :class="titleToneClass"
+              :id="titleId"
+              r-if="title"
+            >
+              {{ title }}
+            </h2>
           </slot>
           <Btn
             r-if="showClose"
@@ -74,11 +82,14 @@ const modalTemplate = html`<dialog
       </div>
     </article>
   </slot>
-</dialog>`
+</dialog>
+`
 
-const modalTriggerTemplate = html`<Btn type="button" :data-modal-target="target" data-modal-trigger>
+const modalTriggerTemplate = html`
+<Btn type="button" :data-modal-target="target" data-modal-trigger>
   {{ label }}
-</Btn>`
+</Btn>
+`
 
 function defineModalComponent() {
   return defineComponent<Modal>(modalTemplate, {
@@ -109,7 +120,9 @@ function resolveModal(props: Modal): Modal {
     ...props,
     titleId: `${unref(props.id)}-title`,
     panelToneClass: computed(() =>
-      getSemanticToneSurfaceClass(resolveSemanticTone(unref(props.tone))),
+      getSemanticToneSurfaceTextBorderClasses(
+        resolveSemanticTone(unref(props.tone)),
+      ),
     ),
     titleToneClass: computed(() =>
       getSemanticToneTextClass(resolveSemanticTone(unref(props.tone))),

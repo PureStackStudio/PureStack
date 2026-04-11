@@ -40,19 +40,28 @@ export function getSemanticToneTokens(
   return palette.semanticTone[tone]
 }
 
+export function getSemanticToneSurfaceTextBorderClasses(tone: SemanticTone) {
+  if (!tone) tone = 'neutral'
+  return `tone-surface--${tone} tone-border--${tone} tone-text--${tone}`
+}
+
 export function getSemanticToneSurfaceClass(tone: SemanticTone) {
+  if (!tone) tone = 'neutral'
   return `tone-surface--${tone}`
 }
 
 export function getSemanticToneIconClass(tone: SemanticTone) {
+  if (!tone) tone = 'neutral'
   return `tone-icon--${tone}`
 }
 
 export function getSemanticToneBorderClass(tone: SemanticTone) {
+  if (!tone) tone = 'neutral'
   return `tone-border--${tone}`
 }
 
 export function getSemanticToneTextClass(tone: SemanticTone) {
+  if (!tone) tone = 'neutral'
   return `tone-text--${tone}`
 }
 

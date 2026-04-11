@@ -1,12 +1,5 @@
 import type { ThemePalette } from '../../themePalette'
-import {
-  createScale,
-  createTone,
-  gradient,
-  radial,
-  rgba,
-  type Tone,
-} from './shared'
+import { createScale, createTone, rgba } from './shared'
 
 export type NeonCore = {
   baseWhite: string
@@ -53,86 +46,35 @@ export type NeonCore = {
 
 type NeonPaletteOptions = {
   core: NeonCore
-  showcaseAlt: string
   borderAlpha?: number
 }
 
 export function createNeonPalette({
   core,
-  showcaseAlt,
   borderAlpha = 0.33,
 }: NeonPaletteOptions): ThemePalette {
   const borderTone = (hex: string) => rgba(hex, borderAlpha)
 
-  const surface = createScale(core.neutral.background, 10)
+  const effect: ThemePalette['effect'] = createEffect(core)
+
+  return {
+    semanticTone: {
+      neutral: createTone(core.neutral, borderTone),
+      accent: createTone(core.accent, borderTone),
+      ghost: createTone(core.ghost, borderTone),
+      info: createTone(core.info, borderTone),
+      success: createTone(core.success, borderTone),
+      warning: createTone(core.warning, borderTone),
+      danger: createTone(core.danger, borderTone),
+    },
+    effect,
+  }
+}
+
+function createEffect(core: NeonCore) {
   const text = createScale(core.neutral.foreground, 18)
   const accent = createScale(core.accent.background, 20)
   const info = createScale(core.info.background, 18)
-
-  const neutralTone: Tone = {
-    background: {
-      default: radial(surface.level3, surface.level2),
-      canvas: radial(surface.level1, core.canvas),
-      surface: radial(surface.level3, surface.level2),
-      surfaceAlt: radial(surface.level2, surface.level1),
-      panel: radial(surface.level3, surface.level2),
-      raised: radial(surface.level4, surface.level2),
-      overlay: core.baseBlack,
-      showcase: gradient('180deg', [core.baseBlack, core.canvas]),
-      showcaseAlt: gradient('180deg', [core.canvas, showcaseAlt]),
-      muted: surface.level2,
-      feature: accent.level1,
-    },
-    border: {
-      soft: surface.level2,
-      subtle: borderTone(core.neutral.border),
-      default: borderTone(core.neutral.border),
-      strong: borderTone(text.level2),
-      hard: borderTone(text.level3),
-      focus: accent.level5,
-    },
-    text: {
-      default: text.level3,
-      muted: text.level1,
-      subtle: text.level1,
-      soft: text.level2,
-      strong: text.level5,
-      inverse: core.baseBlack,
-    },
-    button: {
-      rest: {
-        background: radial(surface.level3, surface.level2),
-        border: borderTone(text.level1),
-        text: text.level3,
-      },
-      hover: {
-        background: radial(surface.level4, surface.level2),
-        border: borderTone(text.level3),
-        text: text.level5,
-      },
-      active: {
-        background: accent.level1,
-        border: borderTone(text.level2),
-        text: text.level5,
-      },
-      disabled: {
-        background: surface.level2,
-        border: borderTone(surface.level2),
-        text: text.level2,
-      },
-      focusRing: accent.level3,
-    },
-    icon: {
-      background: text.level5,
-      gradient: gradient('135deg', [text.level5, text.level3]),
-      color: core.baseBlack,
-      ring: text.level3,
-    },
-    hover: radial(surface.level4, surface.level2),
-    active: accent.level1,
-    disabled: surface.level2,
-    focusRing: accent.level3,
-  }
 
   const effect: ThemePalette['effect'] = {
     glowPrimary: `0 0 28px ${rgba(accent.level3, 0.22)}`,
@@ -148,17 +90,5 @@ export function createNeonPalette({
     focusGlow: `0 0 0 2px ${rgba(accent.level3, 0.42)}, 0 0 24px ${rgba(accent.level3, 0.18)}`,
     insetShadow: `inset 0 10px 28px ${rgba(core.baseBlack, 0.34)}`,
   }
-
-  return {
-    semanticTone: {
-      neutral: neutralTone,
-      accent: createTone(core.accent, neutralTone, borderTone),
-      ghost: createTone(core.ghost, neutralTone, borderTone),
-      info: createTone(core.info, neutralTone, borderTone),
-      success: createTone(core.success, neutralTone, borderTone),
-      warning: createTone(core.warning, neutralTone, borderTone),
-      danger: createTone(core.danger, neutralTone, borderTone),
-    },
-    effect,
-  }
+  return effect
 }

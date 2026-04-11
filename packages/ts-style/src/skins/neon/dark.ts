@@ -21,5 +21,4 @@ const core: NeonCore = {
 
 export const neonDark = createNeonPalette({
   core,
-  showcaseAlt: '#151927',
 })
