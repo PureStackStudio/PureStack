@@ -1,4 +1,86 @@
 /**
+ * Normalized frontmatter for a content page.
+ *
+ * This shape is produced from MD/MDX frontmatter and is consumed by template
+ * rendering, navigation building, head generation, and page-level runtime
+ * embedding.
+ *
+ * Known keys are normalized case-insensitively. Custom keys are preserved.
+ */
+export interface PageFrontmatter {
+  /**
+   * Primary page title.
+   *
+   * Used by templates, head generation, and as a fallback for navigation
+   * titles when `nav.title` is not provided.
+   */
+  title?: string
+
+  /**
+   * Short page summary for metadata and presentation surfaces such as
+   * `<meta name="description">`.
+   */
+  description?: string
+
+  /**
+   * Arbitrary head-related metadata.
+   *
+   * This is intentionally open-ended so projects can attach custom values such
+   * as canonical URLs or downstream head configuration inputs.
+   */
+  head?: Record<string, unknown>
+
+  /**
+   * Page template key.
+   *
+   * Built-in templates include `doc` and `splash`. Custom template names can
+   * also be provided by the host application.
+   *
+   * Defaults to `doc`.
+   */
+  template: string
+
+  /**
+   * Page sort order.
+   *
+   * Used by generated navigation unless overridden by `nav.order`.
+   */
+  order?: number
+
+  /**
+   * Hides the page from generated navigation when set to `true`.
+   */
+  hidden: boolean
+
+  /**
+   * Marks the page as draft content.
+   *
+   * Draft pages are excluded from generated navigation.
+   */
+  draft: boolean
+
+  /**
+   * Navigation-specific overrides for this page.
+   */
+  nav: FrontmatterNavOptions
+
+  /**
+   * Layout and template presentation controls.
+   */
+  layout: FrontmatterLayoutOptions
+
+  /**
+   * Page-level runtime embedding switches for supported MDX features.
+   */
+  embed?: FrontmatterEmbedOptions
+
+  /**
+   * Preserves additional custom frontmatter keys.
+   */
+  [key: string]: unknown
+}
+
+/**
  * Layout controls for the built-in page templates.
  *
  * These options are normalized from MD/MDX frontmatter and primarily affect
@@ -118,88 +200,6 @@ export interface FrontmatterEmbedOptions {
 
   /**
    * Allows future or project-specific embed flags.
-   */
-  [key: string]: unknown
-}
-
-/**
- * Normalized frontmatter for a content page.
- *
- * This shape is produced from MD/MDX frontmatter and is consumed by template
- * rendering, navigation building, head generation, and page-level runtime
- * embedding.
- *
- * Known keys are normalized case-insensitively. Custom keys are preserved.
- */
-export interface PageFrontmatter {
-  /**
-   * Primary page title.
-   *
-   * Used by templates, head generation, and as a fallback for navigation
-   * titles when `nav.title` is not provided.
-   */
-  title?: string
-
-  /**
-   * Short page summary for metadata and presentation surfaces such as
-   * `<meta name="description">`.
-   */
-  description?: string
-
-  /**
-   * Arbitrary head-related metadata.
-   *
-   * This is intentionally open-ended so projects can attach custom values such
-   * as canonical URLs or downstream head configuration inputs.
-   */
-  head?: Record<string, unknown>
-
-  /**
-   * Page template key.
-   *
-   * Built-in templates include `doc` and `splash`. Custom template names can
-   * also be provided by the host application.
-   *
-   * Defaults to `doc`.
-   */
-  template: string
-
-  /**
-   * Page sort order.
-   *
-   * Used by generated navigation unless overridden by `nav.order`.
-   */
-  order?: number
-
-  /**
-   * Hides the page from generated navigation when set to `true`.
-   */
-  hidden: boolean
-
-  /**
-   * Marks the page as draft content.
-   *
-   * Draft pages are excluded from generated navigation.
-   */
-  draft: boolean
-
-  /**
-   * Navigation-specific overrides for this page.
-   */
-  nav: FrontmatterNavOptions
-
-  /**
-   * Layout and template presentation controls.
-   */
-  layout: FrontmatterLayoutOptions
-
-  /**
-   * Page-level runtime embedding switches for supported MDX features.
-   */
-  embed?: FrontmatterEmbedOptions
-
-  /**
-   * Preserves additional custom frontmatter keys.
    */
   [key: string]: unknown
 }
