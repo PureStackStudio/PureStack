@@ -9,6 +9,7 @@ export { registerBadgeStyles } from './standard/badge/badgeStyle'
 export type {
   Btn,
   BtnIconPosition,
+  BtnLink,
   BtnSize,
   BtnType,
 } from './standard/btn/btn'

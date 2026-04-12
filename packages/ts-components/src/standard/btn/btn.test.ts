@@ -99,6 +99,50 @@ describe('Button rendering', () => {
     expect(html).toContain('disabled')
   })
 
+  it('renders BtnLink as an anchor with the same visual classes', () => {
+    const cleanup = ensureDomGlobals()
+    const components = {
+      ...defineIconComponents(getSvgIcon),
+      ...defineButtonComponents(),
+    }
+    const html = renderApp(
+      `<BtnLink href="./getting-started" tone="neutral" size="lg">Read docs</BtnLink>`,
+      {
+        components,
+        context: createTestContext(),
+      },
+    )
+    cleanup()
+
+    expect(html).toContain('<a')
+    expect(html).toContain('href="/getting-started"')
+    expect(html).toContain('tone-surface--neutral')
+    expect(html).toContain('btn--lg')
+    expect(html).toContain('<span class="btn__label">Read docs</span>')
+    expect(html).not.toContain('type="button"')
+  })
+
+  it('renders BtnLink icons and resolves rel for external targets', () => {
+    const cleanup = ensureDomGlobals()
+    const components = {
+      ...defineIconComponents(getSvgIcon),
+      ...defineButtonComponents(),
+    }
+    const html = renderApp(
+      `<BtnLink href="https://example.com/docs" target="_blank" icon="iconoir:code" iconPosition="end">Docs</BtnLink>`,
+      {
+        components,
+        context: createTestContext(),
+      },
+    )
+    cleanup()
+
+    expect(html).toContain('href="https://example.com/docs"')
+    expect(html).toContain('target="_blank"')
+    expect(html).toContain('rel="noopener noreferrer"')
+    expect(html).toContain('class="icon btn__icon"')
+  })
+
   it('supports warning and danger tones', () => {
     const cleanup = ensureDomGlobals()
     const components = {

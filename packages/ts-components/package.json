@@ -46,6 +46,7 @@
     "AppForm",
     "Badge",
     "Btn",
+    "BtnLink",
     "Consent",
     "ContactForm",
     "ExpandablePanel",
