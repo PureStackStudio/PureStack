@@ -26,6 +26,41 @@
       }
     }
   },
+  "overrides": [
+    {
+      "includes": [
+        "packages/ts-css/src/**",
+        "!packages/ts-css/src/meta/**",
+        "packages/ts-common/src/**",
+        "packages/ts-components/src/**",
+        "packages/ts-html/src/**",
+        "!packages/ts-html/src/meta/**",
+        "packages/ts-minidom/src/**",
+        "packages/ts-page-scripts/src/**",
+        "packages/ts-render/src/**",
+        "packages/ts-style/src/**",
+        "packages/ts-svg-icons/src/**",
+        "packages/ts-util/src/**"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["node:*"],
+                    "message": "This package must stay browser-safe. Move Node-only code to a Node-specific package or script."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
   "assist": {
     "actions": {
       "source": {
