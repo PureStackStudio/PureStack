@@ -23,6 +23,7 @@ interface FrontmatterKeyContext {
 }
 
 interface FrontmatterValueContext {
+  currentValueText: string
   key: string
   kind: 'value'
   parentPath: string[]
@@ -92,6 +93,8 @@ class FrontmatterCompletionProvider implements vscode.CompletionItemProvider {
   provideCompletionItems(
     document: vscode.TextDocument,
     position: vscode.Position,
+    _token: vscode.CancellationToken,
+    completionContext: vscode.CompletionContext,
   ) {
     const context = getFrontmatterContext(document, position)
     if (!context) return undefined
@@ -100,7 +103,11 @@ class FrontmatterCompletionProvider implements vscode.CompletionItemProvider {
     if (!metadataRoot) return undefined
 
     if (context.kind === 'value') {
-      return buildValueCompletionItems(metadataRoot.properties, context)
+      return buildValueCompletionItems(
+        metadataRoot.properties,
+        context,
+        completionContext,
+      )
     }
 
     return buildKeyCompletionItems(document, metadataRoot.properties, context)
@@ -268,6 +275,7 @@ function buildKeyCompletionItems(
 function buildValueCompletionItems(
   properties: FrontmatterPropertyMetadata[],
   context: FrontmatterValueContext,
+  completionContext: vscode.CompletionContext,
 ) {
   const property = findPropertyMetadata(properties, [
     ...context.parentPath,
@@ -277,13 +285,13 @@ function buildValueCompletionItems(
 
   if (property.kind === 'boolean') {
     return ['true', 'false'].map((value) =>
-      createValueCompletionItem(context, property, value),
+      createValueCompletionItem(context, property, value, completionContext),
     )
   }
 
   if (property.kind === 'enum' && property.values) {
     return property.values.map((value) =>
-      createValueCompletionItem(context, property, value),
+      createValueCompletionItem(context, property, value, completionContext),
     )
   }
 
@@ -294,12 +302,19 @@ function createValueCompletionItem(
   context: FrontmatterValueContext,
   property: FrontmatterPropertyMetadata,
   value: string,
+  completionContext: vscode.CompletionContext,
 ) {
   const item = new vscode.CompletionItem(value, vscode.CompletionItemKind.Value)
   item.range = context.valueRange
   item.insertText = ` ${value}`
   item.detail = property.fullPath.join('.')
   item.documentation = createDocumentationText(property)
+  if (
+    completionContext.triggerKind === vscode.CompletionTriggerKind.Invoke &&
+    context.currentValueText.length > 0
+  ) {
+    item.filterText = context.currentValueText
+  }
   return item
 }
 
@@ -406,7 +421,7 @@ function getFrontmatterContext(
     }
   }
 
-  if (position.character <= parsedLine.valueStartCharacter) {
+  if (position.character < parsedLine.valueStartCharacter) {
     const keyEnd = parsedLine.keyStartCharacter + parsedLine.key.length
     return {
       indent: parsedLine.indent,
@@ -420,6 +435,7 @@ function getFrontmatterContext(
   }
 
   return {
+    currentValueText: lineText.slice(parsedLine.valueStartCharacter).trim(),
     key: parsedLine.key,
     kind: 'value',
     parentPath,
