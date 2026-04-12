@@ -8,15 +8,15 @@ import {
 
 export function registerHeroStyles() {
   themes.forEach((theme, palette, options) => {
-    applyHeroShellStyles(theme, palette, options)
-    applyHeroContentStyles(theme, palette)
-    applyHeroActionStyles(theme, palette, options)
-    applyHeroMediaStyles(theme, palette, options)
-    applyHeroResponsiveStyles(theme)
+    registerHeroShellStyles(theme, palette, options)
+    registerHeroContentStyles(theme, palette)
+    registerHeroCtaStyles(theme, options)
+    registerHeroMediaStyles(theme, palette, options)
+    registerHeroResponsiveStyles(theme)
   })
 }
 
-export function applyHeroShellStyles(
+function registerHeroShellStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -51,10 +51,7 @@ export function applyHeroShellStyles(
     .zIndex('1')
 }
 
-export function applyHeroContentStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-) {
+function registerHeroContentStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.hero__content', theme)
     .display('grid')
@@ -92,21 +89,7 @@ export function applyHeroContentStyles(
   styleBuilder.select('.hero__eyebrow:empty', theme).display('none')
 }
 
-export function applyHeroActionStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
-  applyHeroActionShellStyles(theme, palette, options)
-  applyHeroActionVariantStyles(theme, palette)
-  applyHeroActionIconStyles(theme)
-}
-
-export function applyHeroActionShellStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+function registerHeroCtaStyles(theme: ThemeMode, options: ThemeOptions) {
   styleBuilder
     .select('.hero__actions', theme)
     .display('flex')
@@ -117,74 +100,11 @@ export function applyHeroActionShellStyles(
   styleBuilder.select('.hero__actions:empty', theme).display('none')
 
   styleBuilder
-    .select('.hero__action', theme)
-    .display('inline-flex')
-    .alignItems('center')
-    .gap('8px')
-    .padding('12px 22px')
+    .select('.hero__actions .btn', theme)
     .borderRadius(options.radii.pill)
-    .border('1px solid transparent')
-    .fontWeight('600')
-    .textDecoration('none')
-    .cursor('pointer')
-    .transition(
-      'transform 180ms ease, box-shadow 180ms ease, background 180ms ease, color 180ms ease, border-color 180ms ease',
-    )
-
-  styleBuilder
-    .select('.hero__action:focus-visible', theme)
-    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
 }
 
-export function applyHeroActionVariantStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-) {
-  styleBuilder
-    .select('.hero__action--primary', theme)
-    .background(palette.semanticTone.accent.button.rest.background)
-    .color(palette.semanticTone.accent.button.rest.text)
-    .boxShadow(palette.effect.accentShadow)
-
-  styleBuilder
-    .select('.hero__action--primary:hover', theme)
-    .background(palette.semanticTone.accent.button.hover.background)
-    .color(palette.semanticTone.accent.button.hover.text)
-
-  styleBuilder
-    .select('.hero__action--minimal', theme)
-    .color(palette.semanticTone.neutral.text.default)
-    .borderColor(palette.semanticTone.neutral.border.strong)
-
-  styleBuilder
-    .select('.hero__action--minimal:hover', theme)
-    .background(palette.semanticTone.neutral.hover)
-}
-
-export function applyHeroActionIconStyles(theme: ThemeMode) {
-  styleBuilder
-    .select('.hero__action[data-icon="right-arrow"]::after', theme)
-    .content('""')
-    .display('inline-block')
-    .width('10px')
-    .height('10px')
-    .marginLeft('6px')
-    .borderTop('2px solid currentColor')
-    .borderRight('2px solid currentColor')
-    .transform('rotate(45deg)')
-
-  styleBuilder
-    .select('.hero__action[data-icon="external"]::after', theme)
-    .content('""')
-    .display('inline-block')
-    .width('10px')
-    .height('10px')
-    .marginLeft('8px')
-    .borderTop('2px solid currentColor')
-    .borderRight('2px solid currentColor')
-}
-
-export function applyHeroMediaStyles(
+function registerHeroMediaStyles(
   theme: ThemeMode,
   palette: ThemePalette,
   options: ThemeOptions,
@@ -212,7 +132,7 @@ export function applyHeroMediaStyles(
     .display('block')
 }
 
-export function applyHeroResponsiveStyles(theme: ThemeMode) {
+function registerHeroResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.hero__inner', theme)
     .media('max-width: 980px')
@@ -231,7 +151,7 @@ export function applyHeroResponsiveStyles(theme: ThemeMode) {
     .alignItems('stretch')
 
   styleBuilder
-    .select('.hero__action', theme)
+    .select('.hero__actions .btn', theme)
     .media('max-width: 600px')
     .justifyContent('center')
 }

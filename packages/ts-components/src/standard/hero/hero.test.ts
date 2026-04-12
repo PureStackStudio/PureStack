@@ -1,22 +1,29 @@
 import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '@purestack/ts-render'
+import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
+import { defineButtonComponents } from '../btn/btn'
+import { defineIconComponents } from '../icon/icon'
 import { defineHeroComponents } from './hero'
 
 describe('HeroBanner rendering', () => {
   it('renders named slot templates into hero sections', () => {
     const cleanup = ensureDomGlobals()
-    const components = defineHeroComponents()
+    const components = {
+      ...defineIconComponents(getSvgIcon),
+      ...defineButtonComponents(),
+      ...defineHeroComponents(),
+    }
     const html = renderApp(
       `<HeroBanner>
         <template name="eyebrow"><span>Backend-native calculation engine</span></template>
         <template name="title"><span>CalcCore</span></template>
         <template name="tagline"><span>Deterministic calculations for SaaS backends.</span></template>
         <template name="actions">
-          <HeroAction href="./getting-started" icon="right-arrow" variant="primary">
+          <BtnLink href="./getting-started" icon="iconoir:arrow-right" tone="accent">
             Get Started
-          </HeroAction>
+          </BtnLink>
         </template>
         <template name="media">
           <HeroMedia src="../logo.svg" alt="CalcCore logo" />
@@ -31,18 +38,23 @@ describe('HeroBanner rendering', () => {
     expect(html).toContain('Deterministic calculations for SaaS backends.')
     expect(html).toContain('Get Started')
     expect(html).toContain('href="/getting-started"')
+    expect(html).toContain('tone-surface--accent')
     expect(html).toContain('logo.svg')
   })
 
   it('preserves external action links', () => {
     const cleanup = ensureDomGlobals()
-    const components = defineHeroComponents()
+    const components = {
+      ...defineIconComponents(getSvgIcon),
+      ...defineButtonComponents(),
+      ...defineHeroComponents(),
+    }
     const html = renderApp(
       `<HeroBanner>
         <template name="actions">
-          <HeroAction href="https://example.com/docs" target="_blank">
+          <BtnLink href="https://example.com/docs" target="_blank" tone="ghost">
             Docs
-          </HeroAction>
+          </BtnLink>
         </template>
       </HeroBanner>`,
       { components, context: createTestContext() },
