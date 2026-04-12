@@ -39,8 +39,7 @@
   "dependencies": {
     "@purestack/ts-common": "workspace:^",
     "@purestack/ts-style": "workspace:^",
-    "@purestack/ts-util": "workspace:^",
-    "@purestack/ts-util-node": "workspace:^"
+    "@purestack/ts-util": "workspace:^"
   },
   "regorComponents": [
     "AlertBox",

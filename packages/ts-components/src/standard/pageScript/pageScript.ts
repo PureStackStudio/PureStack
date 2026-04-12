@@ -1,6 +1,11 @@
-import path from 'node:path'
 import { resolveTsSsgContext } from '@purestack/ts-common'
-import { toOutputAssetRelPath } from '@purestack/ts-util-node'
+import {
+  dirnamePosix,
+  joinPosix,
+  normalizePosixPath,
+  toOutputAssetRelPath,
+  toPosixPath,
+} from '@purestack/ts-util'
 import { type ComponentHead, defineComponent, html } from 'regor'
 
 export interface PageScript {
@@ -120,11 +125,9 @@ function resolveSourceRelPath(value: string, pageRelPath: string) {
   if (value.startsWith('/')) {
     return trimLeadingSlashes(value)
   }
-  const sourceDir = path.posix.dirname(toPosixPath(pageRelPath))
+  const sourceDir = dirnamePosix(toPosixPath(pageRelPath))
   const normalizedSourceDir = sourceDir === '.' ? '' : sourceDir
-  const resolved = path.posix.normalize(
-    path.posix.join(normalizedSourceDir, value),
-  )
+  const resolved = normalizePosixPath(joinPosix(normalizedSourceDir, value))
   if (resolved === '..' || resolved.startsWith('../')) {
     throw new Error(`PageScript src resolves outside content root: "${value}"`)
   }
@@ -141,10 +144,6 @@ function isExternalSrc(value: string) {
 
 function trimLeadingSlashes(value: string) {
   return value.replace(/^\/+/, '')
-}
-
-function toPosixPath(filePath: string) {
-  return filePath.split(path.sep).join('/')
 }
 
 function toOptionalString(value: unknown) {

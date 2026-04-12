@@ -14,6 +14,7 @@ import { defineLoginComponents } from './standard/login/login'
 import { defineLogoComponents } from './standard/logo/logo'
 import { defineModalComponents } from './standard/modal/modal'
 import { defineNavigationComponents } from './standard/navMenu/navMenu'
+import { defineScriptComponents } from './standard/pageScript/pageScript'
 import { definePageTocComponents } from './standard/pageToc/pageToc'
 import { definePanelComponents } from './standard/panel/panel'
 import { definePricingComponents } from './standard/pricing/pricing'
@@ -47,5 +48,6 @@ export function defineComponents(getSvgIcon: GetSvgIcon) {
     ...definePricingComponents(),
     ...defineSearchComponents(),
     ...defineTabsComponents(),
+    ...defineScriptComponents(),
   }
 }

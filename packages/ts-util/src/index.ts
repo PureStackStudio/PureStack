@@ -1,3 +1,11 @@
+export {
+  dirnamePosix,
+  isTypeScriptAssetPath,
+  joinPosix,
+  normalizePosixPath,
+  toOutputAssetRelPath,
+  toPosixPath,
+} from './assetPath'
 export { Cache, type CacheOptions } from './cache'
 export { escapeHtml } from './escapeHtml'
 export { type LoggerLike, logError } from './logging'
