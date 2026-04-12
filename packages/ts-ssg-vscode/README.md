@@ -34,6 +34,13 @@ This extension is built for the PureStack workflow:
 - red-squiggle diagnostics for invalid HTML structure in both places
 - self-closing tags normalized to PureStack style such as `<Component/>`
 
+### MDX frontmatter IntelliSense
+
+- key completion for MDX YAML frontmatter based on `PageFrontmatter`
+- nested completion for `nav`, `layout`, and `embed`
+- value suggestions for booleans and constrained unions such as `layout.navMode`
+- hover information for known frontmatter fields
+
 ### Editing ergonomics
 
 - auto-close tags while typing in TypeScript templates and MDX markup
@@ -69,6 +76,7 @@ In `.mdx`, the extension also adds:
 
 - official MDX syntax highlighting
 - Regor-aware attribute highlighting
+- `PageFrontmatter`-aware YAML frontmatter IntelliSense
 - markup formatting
 - markup diagnostics
 - tag auto-close and linked editing

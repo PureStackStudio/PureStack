@@ -8,6 +8,7 @@ import {
   clearComponentResolverCaches,
   resolveComponentTarget,
 } from './componentResolver'
+import { registerFrontmatterSupport } from './frontmatterSupport'
 import { registerLinkedEditingProvider } from './linkedEditing'
 import {
   buildMdxFormattingEdits,
@@ -50,6 +51,7 @@ export function activate(context: vscode.ExtensionContext) {
       SUPPORTED_SELECTORS,
       new ComponentHoverProvider(),
     ),
+    registerFrontmatterSupport(),
     registerLinkedEditingProvider(),
     vscode.workspace.onWillSaveTextDocument((event) => {
       if (event.document.languageId === 'typescript') {
