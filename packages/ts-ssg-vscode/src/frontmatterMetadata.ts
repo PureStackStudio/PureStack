@@ -24,10 +24,17 @@ type FrontmatterMetadataRoot = {
   signature: string
 }
 
-type BuildContext = {
-  declarationLookup: Map<string, ts.Declaration>
-  sourceFile: ts.SourceFile
+type CachedProjectService = {
+  configMtimeMs: number
+  languageService: ts.LanguageService
+  metadataVersion: string
+  root: FrontmatterMetadataRoot
 }
+
+type AnalyzedFrontmatterType = Pick<
+  FrontmatterPropertyMetadata,
+  'allowUnknownKeys' | 'kind' | 'nestedProperties' | 'values'
+>
 
 const NODE_MODULES_FRONTMATTER_TYPES_FILE = path.join(
   'node_modules',
@@ -43,26 +50,60 @@ const WORKSPACE_FRONTMATTER_TYPES_FILE = path.join(
   'frontmatter-types.ts',
 )
 
-const frontmatterMetadataCache = new Map<string, FrontmatterMetadataRoot>()
+const frontmatterMetadataCache = new Map<string, CachedProjectService>()
 
-export function clearFrontmatterMetadataCache() {
-  frontmatterMetadataCache.clear()
+export function clearFrontmatterMetadataCache(filePath?: string) {
+  if (!filePath) {
+    for (const cachedService of frontmatterMetadataCache.values()) {
+      cachedService.languageService.dispose()
+    }
+    frontmatterMetadataCache.clear()
+    return
+  }
+
+  const configPath = ts.findConfigFile(
+    path.dirname(filePath),
+    ts.sys.fileExists,
+  )
+  const cacheKey = configPath ?? `__single__:${filePath}`
+  const cachedService = frontmatterMetadataCache.get(cacheKey)
+  if (!cachedService) return
+
+  cachedService.languageService.dispose()
+  frontmatterMetadataCache.delete(cacheKey)
 }
 
 export function getPageFrontmatterMetadata(workspaceRoot: string) {
   const frontmatterFilePath = resolveFrontmatterTypesFile(workspaceRoot)
   if (!frontmatterFilePath) return undefined
 
-  const cacheKey = `${frontmatterFilePath}:${getFileVersion(frontmatterFilePath)}`
-  const cached = frontmatterMetadataCache.get(cacheKey)
-  if (cached) return cached
+  const languageService = getProjectLanguageService(frontmatterFilePath)
+  const program = languageService.getProgram()
+  if (!program) return undefined
 
-  clearStaleFrontmatterMetadata(frontmatterFilePath)
-  const metadata = buildPageFrontmatterMetadata(frontmatterFilePath)
-  if (!metadata) return undefined
+  const sourceFile = program.getSourceFile(frontmatterFilePath)
+  if (!sourceFile) return undefined
 
-  frontmatterMetadataCache.set(cacheKey, metadata)
-  return metadata
+  const cacheKey = getProjectCacheKey(frontmatterFilePath)
+  const metadataVersion = getMetadataVersion(frontmatterFilePath)
+  const cachedService = frontmatterMetadataCache.get(cacheKey)
+  if (cachedService && cachedService.metadataVersion === metadataVersion) {
+    return cachedService.root
+  }
+
+  const root = buildPageFrontmatterMetadata(
+    sourceFile,
+    program.getTypeChecker(),
+  )
+  if (!root) return undefined
+
+  if (cachedService) {
+    cachedService.root = root
+    cachedService.metadataVersion = metadataVersion
+    return root
+  }
+
+  return root
 }
 
 function resolveFrontmatterTypesFile(workspaceRoot: string) {
@@ -81,166 +122,266 @@ function resolveFrontmatterTypesFile(workspaceRoot: string) {
   return undefined
 }
 
-function clearStaleFrontmatterMetadata(frontmatterFilePath: string) {
-  for (const cacheKey of frontmatterMetadataCache.keys()) {
-    if (!cacheKey.startsWith(`${frontmatterFilePath}:`)) continue
-    frontmatterMetadataCache.delete(cacheKey)
+function getProjectLanguageService(filePath: string) {
+  const configPath = ts.findConfigFile(
+    path.dirname(filePath),
+    ts.sys.fileExists,
+  )
+  const cacheKey = configPath ?? `__single__:${filePath}`
+  const configMtimeMs = configPath ? fs.statSync(configPath).mtimeMs : -1
+  const cachedService = frontmatterMetadataCache.get(cacheKey)
+
+  if (cachedService && cachedService.configMtimeMs === configMtimeMs) {
+    return cachedService.languageService
   }
+
+  const languageService = createProjectLanguageService(filePath, configPath)
+  if (cachedService) {
+    cachedService.languageService.dispose()
+  }
+  frontmatterMetadataCache.set(cacheKey, {
+    configMtimeMs,
+    languageService,
+    metadataVersion: '',
+    root: {
+      declarationFilePath: filePath,
+      declarationLine: 0,
+      properties: [],
+      signature: 'interface PageFrontmatter',
+    },
+  })
+
+  return languageService
 }
 
-function buildPageFrontmatterMetadata(filePath: string) {
-  const sourceText = fs.readFileSync(filePath, 'utf8')
-  const sourceFile = ts.createSourceFile(
-    filePath,
-    sourceText,
-    ts.ScriptTarget.Latest,
-    true,
-    ts.ScriptKind.TS,
-  )
-  const declarationLookup = collectInterfaceDeclarations(sourceFile)
-  const pageFrontmatterDeclaration = declarationLookup.get('PageFrontmatter')
-  if (
-    !pageFrontmatterDeclaration ||
-    !ts.isInterfaceDeclaration(pageFrontmatterDeclaration)
-  ) {
-    return undefined
+function createProjectLanguageService(filePath: string, configPath?: string) {
+  const { compilerOptions, fileNames, currentDirectory } = configPath
+    ? readProjectConfiguration(filePath, configPath)
+    : createSingleFileProject(filePath)
+
+  const host: ts.LanguageServiceHost = {
+    directoryExists: ts.sys.directoryExists?.bind(ts.sys),
+    fileExists: ts.sys.fileExists,
+    getCompilationSettings: () => compilerOptions,
+    getCurrentDirectory: () => currentDirectory,
+    getDefaultLibFileName: (options) => ts.getDefaultLibFilePath(options),
+    getDirectories: ts.sys.getDirectories?.bind(ts.sys),
+    getScriptFileNames: () => fileNames,
+    getScriptSnapshot: (scriptFileName) => {
+      if (!ts.sys.fileExists(scriptFileName)) return undefined
+
+      const text = ts.sys.readFile(scriptFileName)
+      if (text === undefined) return undefined
+
+      return ts.ScriptSnapshot.fromString(text)
+    },
+    getScriptVersion: (scriptFileName) => {
+      try {
+        return fs.statSync(scriptFileName).mtimeMs.toString()
+      } catch {
+        return '0'
+      }
+    },
+    readDirectory: ts.sys.readDirectory,
+    readFile: ts.sys.readFile,
+    useCaseSensitiveFileNames: () => ts.sys.useCaseSensitiveFileNames,
   }
 
-  const context: BuildContext = {
-    declarationLookup,
-    sourceFile,
+  return ts.createLanguageService(host)
+}
+
+function readProjectConfiguration(filePath: string, configPath: string) {
+  const configDirectory = path.dirname(configPath)
+  const configFile = ts.readConfigFile(configPath, ts.sys.readFile)
+  if (configFile.error) {
+    return createSingleFileProject(filePath)
   }
+
+  const parsedConfig = ts.parseJsonConfigFileContent(
+    configFile.config,
+    ts.sys,
+    configDirectory,
+  )
+
+  const fileNames = parsedConfig.fileNames.includes(filePath)
+    ? parsedConfig.fileNames
+    : [...parsedConfig.fileNames, filePath]
 
   return {
-    declarationFilePath: filePath,
-    declarationLine: getLineNumber(pageFrontmatterDeclaration),
-    description: getNodeDocumentation(pageFrontmatterDeclaration),
-    properties: buildInterfaceProperties(
-      pageFrontmatterDeclaration,
-      ['PageFrontmatter'],
-      context,
-    ),
-    signature: `interface ${pageFrontmatterDeclaration.name.text}`,
+    compilerOptions: parsedConfig.options,
+    currentDirectory: configDirectory,
+    fileNames,
   }
 }
 
-function collectInterfaceDeclarations(sourceFile: ts.SourceFile) {
-  const declarations = new Map<string, ts.Declaration>()
-
-  for (const statement of sourceFile.statements) {
-    if (!ts.isInterfaceDeclaration(statement)) continue
-    declarations.set(statement.name.text, statement)
+function createSingleFileProject(filePath: string) {
+  return {
+    compilerOptions: {
+      allowSyntheticDefaultImports: true,
+      esModuleInterop: true,
+      module: ts.ModuleKind.NodeNext,
+      moduleResolution: ts.ModuleResolutionKind.NodeNext,
+      target: ts.ScriptTarget.ESNext,
+    },
+    currentDirectory: path.dirname(filePath),
+    fileNames: [filePath],
   }
-
-  return declarations
 }
 
-function buildInterfaceProperties(
-  declaration: ts.InterfaceDeclaration,
-  parentPath: string[],
-  context: BuildContext,
+function buildPageFrontmatterMetadata(
+  sourceFile: ts.SourceFile,
+  checker: ts.TypeChecker,
 ) {
-  const allowUnknownKeys = declaration.members.some(
-    ts.isIndexSignatureDeclaration,
-  )
+  const declaration = findNamedTypeDeclaration(sourceFile, 'PageFrontmatter')
+  if (!declaration) return undefined
+
+  const declarationName = declaration.name
+  if (!declarationName) return undefined
+
+  const declarationSymbol = checker.getSymbolAtLocation(declarationName)
+  const resolvedSymbol = resolveAliasedSymbol(checker, declarationSymbol)
+  if (!resolvedSymbol) return undefined
+
+  const type = checker.getTypeAtLocation(declarationName)
+
+  return {
+    declarationFilePath: declaration.getSourceFile().fileName,
+    declarationLine: getLineNumber(declaration),
+    description: getSymbolDocumentation(checker, resolvedSymbol),
+    properties: buildTypeProperties(
+      type,
+      ['PageFrontmatter'],
+      checker,
+      new Set<string>(),
+    ),
+    signature: getTypeSignature(checker, resolvedSymbol, type, declaration),
+  }
+}
+
+function buildTypeProperties(
+  type: ts.Type,
+  parentPath: string[],
+  checker: ts.TypeChecker,
+  visitedTypes: Set<string>,
+) {
+  const apparentType = checker.getApparentType(type)
   const properties: FrontmatterPropertyMetadata[] = []
+  const allowUnknownKeys = hasStringIndexSignature(apparentType, checker)
 
-  for (const member of declaration.members) {
-    if (!ts.isPropertySignature(member)) continue
+  for (const propertySymbol of checker.getPropertiesOfType(apparentType)) {
+    const propertyName = propertySymbol.getName()
+    const declaration = getPreferredPropertyDeclaration(propertySymbol)
+    if (!declaration) continue
 
-    const propertyName = getPropertyName(member.name)
-    if (!propertyName) continue
-
-    const propertyMetadata = buildPropertyMetadata(
-      propertyName,
-      member,
-      parentPath,
-      allowUnknownKeys,
-      context,
+    const propertyType = checker.getTypeOfSymbolAtLocation(
+      propertySymbol,
+      declaration,
     )
-    properties.push(propertyMetadata)
+    const propertyPath = [...parentPath, propertyName]
+    const typeInfo = analyzeType(
+      checker,
+      propertyType,
+      propertyPath,
+      visitedTypes,
+    )
+
+    properties.push({
+      allowUnknownKeys:
+        typeInfo.kind === 'object'
+          ? typeInfo.allowUnknownKeys
+          : allowUnknownKeys,
+      declarationFilePath: declaration.getSourceFile().fileName,
+      declarationLine: getLineNumber(declaration),
+      description: getSymbolDocumentation(checker, propertySymbol),
+      fullPath: propertyPath,
+      kind: typeInfo.kind,
+      name: propertyName,
+      nestedProperties: typeInfo.nestedProperties,
+      optional: isOptionalPropertySymbol(propertySymbol),
+      signature: getPropertySignature(
+        checker,
+        propertyName,
+        propertySymbol,
+        declaration,
+      ),
+      values: typeInfo.values,
+    })
   }
 
   return properties
 }
 
-function buildPropertyMetadata(
-  propertyName: string,
-  declaration: ts.PropertySignature,
-  parentPath: string[],
-  inheritedUnknownKeys: boolean,
-  context: BuildContext,
-): FrontmatterPropertyMetadata {
-  const typeNode = declaration.type
-  const propertyPath = [...parentPath, propertyName]
-  const propertyInfo = analyzeTypeNode(typeNode, propertyPath, context)
-
-  return {
-    allowUnknownKeys:
-      propertyInfo.kind === 'object'
-        ? propertyInfo.allowUnknownKeys
-        : inheritedUnknownKeys,
-    declarationFilePath: declaration.getSourceFile().fileName,
-    declarationLine: getLineNumber(declaration),
-    description: getNodeDocumentation(declaration),
-    fullPath: propertyPath,
-    kind: propertyInfo.kind,
-    name: propertyName,
-    nestedProperties: propertyInfo.nestedProperties,
-    optional: Boolean(declaration.questionToken),
-    signature: buildPropertySignature(declaration, context.sourceFile),
-    values: propertyInfo.values,
-  }
-}
-
-function analyzeTypeNode(
-  typeNode: ts.TypeNode | undefined,
+function analyzeType(
+  checker: ts.TypeChecker,
+  type: ts.Type,
   propertyPath: string[],
-  context: BuildContext,
-): Pick<
-  FrontmatterPropertyMetadata,
-  'allowUnknownKeys' | 'kind' | 'nestedProperties' | 'values'
-> {
-  if (!typeNode) {
-    return {
-      allowUnknownKeys: false,
-      kind: 'unknown',
+  visitedTypes: Set<string>,
+): AnalyzedFrontmatterType {
+  const normalizedType = checker.getNonNullableType(type)
+
+  if (normalizedType.isUnion()) {
+    const literalValues: string[] = []
+    let includesBoolean = false
+    let includesBroadString = false
+    let includesBroadNumber = false
+    const objectMembers: ts.Type[] = []
+
+    for (const member of normalizedType.types) {
+      const memberType = checker.getNonNullableType(member)
+
+      if (isBooleanType(memberType)) {
+        includesBoolean = true
+        continue
+      }
+
+      if (isStringType(memberType)) {
+        includesBroadString = true
+        continue
+      }
+
+      if (isNumberType(memberType)) {
+        includesBroadNumber = true
+        continue
+      }
+
+      const literalValue = getLiteralCompletionValue(memberType, checker)
+      if (literalValue !== undefined) {
+        if (literalValue === 'true' || literalValue === 'false') {
+          includesBoolean = true
+          continue
+        }
+
+        literalValues.push(literalValue)
+        continue
+      }
+
+      if (isObjectLikeType(memberType)) {
+        objectMembers.push(memberType)
+        continue
+      }
+
+      return { allowUnknownKeys: false, kind: 'unknown' }
     }
-  }
 
-  if (ts.isParenthesizedTypeNode(typeNode)) {
-    return analyzeTypeNode(typeNode.type, propertyPath, context)
-  }
-
-  if (ts.isUnionTypeNode(typeNode)) {
-    const literalValues = typeNode.types
-      .map(getStringLiteralTypeValue)
-      .filter((value): value is string => value !== undefined)
-
-    if (
-      literalValues.length === typeNode.types.length &&
-      literalValues.length > 0
-    ) {
+    if (literalValues.length > 0) {
       return {
         allowUnknownKeys: false,
         kind: 'enum',
-        values: literalValues,
+        values: Array.from(
+          new Set(
+            includesBoolean
+              ? [...literalValues, 'true', 'false']
+              : literalValues,
+          ),
+        ),
       }
     }
 
-    const hasBooleanKeyword = typeNode.types.some(
-      (member) => member.kind === ts.SyntaxKind.BooleanKeyword,
-    )
-    const booleanLiteralValues = typeNode.types
-      .map(getBooleanLiteralTypeValue)
-      .filter(
-        (value): value is 'true' | 'false' =>
-          value === 'true' || value === 'false',
-      )
-
     if (
-      hasBooleanKeyword ||
-      booleanLiteralValues.length === typeNode.types.length
+      includesBoolean &&
+      !includesBroadString &&
+      !includesBroadNumber &&
+      objectMembers.length === 0
     ) {
       return {
         allowUnknownKeys: false,
@@ -249,27 +390,28 @@ function analyzeTypeNode(
       }
     }
 
-    return {
-      allowUnknownKeys: false,
-      kind: 'unknown',
+    if (
+      objectMembers.length > 0 &&
+      !includesBroadString &&
+      !includesBroadNumber &&
+      !includesBoolean
+    ) {
+      const objectMember = objectMembers[0]
+      return analyzeObjectType(
+        checker,
+        objectMember,
+        propertyPath,
+        visitedTypes,
+      )
     }
+
+    if (includesBroadString) return { allowUnknownKeys: false, kind: 'string' }
+    if (includesBroadNumber) return { allowUnknownKeys: false, kind: 'number' }
+
+    return { allowUnknownKeys: false, kind: 'unknown' }
   }
 
-  if (typeNode.kind === ts.SyntaxKind.StringKeyword) {
-    return {
-      allowUnknownKeys: false,
-      kind: 'string',
-    }
-  }
-
-  if (typeNode.kind === ts.SyntaxKind.NumberKeyword) {
-    return {
-      allowUnknownKeys: false,
-      kind: 'number',
-    }
-  }
-
-  if (typeNode.kind === ts.SyntaxKind.BooleanKeyword) {
+  if (isBooleanType(normalizedType)) {
     return {
       allowUnknownKeys: false,
       kind: 'boolean',
@@ -277,132 +419,237 @@ function analyzeTypeNode(
     }
   }
 
-  if (ts.isTypeLiteralNode(typeNode)) {
+  if (isStringType(normalizedType)) {
+    return { allowUnknownKeys: false, kind: 'string' }
+  }
+
+  if (isNumberType(normalizedType)) {
+    return { allowUnknownKeys: false, kind: 'number' }
+  }
+
+  const literalValue = getLiteralCompletionValue(normalizedType, checker)
+  if (literalValue === 'true' || literalValue === 'false') {
     return {
-      allowUnknownKeys: typeNode.members.some(ts.isIndexSignatureDeclaration),
-      kind: 'object',
-      nestedProperties: buildTypeLiteralProperties(
-        typeNode,
-        propertyPath,
-        context,
-      ),
+      allowUnknownKeys: false,
+      kind: 'boolean',
+      values: ['true', 'false'],
     }
   }
 
-  if (ts.isTypeReferenceNode(typeNode)) {
-    if (isRecordTypeReference(typeNode)) {
-      return {
-        allowUnknownKeys: true,
-        kind: 'object',
-        nestedProperties: [],
-      }
-    }
-
-    const referenceName = getEntityNameText(typeNode.typeName)
-    const referencedDeclaration = context.declarationLookup.get(referenceName)
-    if (
-      referencedDeclaration &&
-      ts.isInterfaceDeclaration(referencedDeclaration)
-    ) {
-      return {
-        allowUnknownKeys: referencedDeclaration.members.some(
-          ts.isIndexSignatureDeclaration,
-        ),
-        kind: 'object',
-        nestedProperties: buildInterfaceProperties(
-          referencedDeclaration,
-          propertyPath,
-          context,
-        ),
-      }
+  if (literalValue !== undefined) {
+    return {
+      allowUnknownKeys: false,
+      kind: 'enum',
+      values: [literalValue],
     }
   }
 
-  return {
-    allowUnknownKeys: false,
-    kind: 'unknown',
-  }
-}
-
-function buildTypeLiteralProperties(
-  typeNode: ts.TypeLiteralNode,
-  parentPath: string[],
-  context: BuildContext,
-) {
-  const properties: FrontmatterPropertyMetadata[] = []
-
-  for (const member of typeNode.members) {
-    if (!ts.isPropertySignature(member)) continue
-
-    const propertyName = getPropertyName(member.name)
-    if (!propertyName) continue
-
-    properties.push(
-      buildPropertyMetadata(propertyName, member, parentPath, false, context),
+  if (isObjectLikeType(normalizedType)) {
+    return analyzeObjectType(
+      checker,
+      normalizedType,
+      propertyPath,
+      visitedTypes,
     )
   }
 
-  return properties
+  return { allowUnknownKeys: false, kind: 'unknown' }
 }
 
-function buildPropertySignature(
-  declaration: ts.PropertySignature,
+function analyzeObjectType(
+  checker: ts.TypeChecker,
+  type: ts.Type,
+  propertyPath: string[],
+  visitedTypes: Set<string>,
+): AnalyzedFrontmatterType {
+  const typeKey = checker.typeToString(type)
+  if (visitedTypes.has(typeKey)) {
+    return {
+      allowUnknownKeys: hasStringIndexSignature(type, checker),
+      kind: 'object',
+      nestedProperties: [],
+    }
+  }
+
+  const nextVisitedTypes = new Set(visitedTypes)
+  nextVisitedTypes.add(typeKey)
+
+  return {
+    allowUnknownKeys: hasStringIndexSignature(type, checker),
+    kind: 'object',
+    nestedProperties: buildTypeProperties(
+      type,
+      propertyPath,
+      checker,
+      nextVisitedTypes,
+    ),
+  }
+}
+
+function findNamedTypeDeclaration(
   sourceFile: ts.SourceFile,
+  typeName: string,
 ) {
-  const name = declaration.name.getText(sourceFile)
-  const optional = declaration.questionToken ? '?' : ''
-  const typeText = declaration.type?.getText(sourceFile) ?? 'unknown'
-  return `${name}${optional}: ${typeText}`
-}
-
-function getPropertyName(name: ts.PropertyName) {
-  if (ts.isIdentifier(name) || ts.isStringLiteral(name)) {
-    return name.text
+  for (const statement of sourceFile.statements) {
+    if (
+      (ts.isInterfaceDeclaration(statement) ||
+        ts.isTypeAliasDeclaration(statement) ||
+        ts.isClassDeclaration(statement)) &&
+      statement.name?.text === typeName
+    ) {
+      return statement
+    }
   }
 
   return undefined
 }
 
-function getNodeDocumentation(node: ts.Node) {
-  const jsDoc = ts
-    .getJSDocCommentsAndTags(node)
-    .map((item) => item.getText())
-    .join('\n')
-    .trim()
+function getPreferredPropertyDeclaration(symbol?: ts.Symbol) {
+  if (!symbol?.declarations || symbol.declarations.length === 0) {
+    return undefined
+  }
 
-  return jsDoc.length > 0 ? jsDoc : undefined
+  return (
+    symbol.declarations.find(
+      (declaration) =>
+        ts.isPropertySignature(declaration) ||
+        ts.isPropertyDeclaration(declaration),
+    ) ?? symbol.declarations[0]
+  )
 }
 
-function getStringLiteralTypeValue(typeNode: ts.TypeNode) {
-  return ts.isLiteralTypeNode(typeNode) && ts.isStringLiteral(typeNode.literal)
-    ? typeNode.literal.text
-    : undefined
+function getTypeSignature(
+  checker: ts.TypeChecker,
+  symbol: ts.Symbol,
+  type: ts.Type,
+  declaration?: ts.Declaration,
+) {
+  if (declaration && ts.isInterfaceDeclaration(declaration)) {
+    return `interface ${declaration.name.text}`
+  }
+
+  if (declaration && ts.isTypeAliasDeclaration(declaration)) {
+    return `type ${declaration.name.text} = ${declaration.type.getText(declaration.getSourceFile())}`
+  }
+
+  if (declaration && ts.isClassDeclaration(declaration)) {
+    return `class ${declaration.name?.text ?? symbol.getName()}`
+  }
+
+  return `type ${symbol.getName()} = ${checker.typeToString(type)}`
 }
 
-function getBooleanLiteralTypeValue(typeNode: ts.TypeNode) {
-  if (!ts.isLiteralTypeNode(typeNode)) return undefined
-  if (typeNode.literal.kind === ts.SyntaxKind.TrueKeyword) return 'true'
-  if (typeNode.literal.kind === ts.SyntaxKind.FalseKeyword) return 'false'
+function getPropertySignature(
+  checker: ts.TypeChecker,
+  propertyName: string,
+  propertySymbol: ts.Symbol,
+  declaration?: ts.Declaration,
+) {
+  if (
+    declaration &&
+    (ts.isPropertySignature(declaration) ||
+      ts.isPropertyDeclaration(declaration))
+  ) {
+    const sourceFile = declaration.getSourceFile()
+    const name = declaration.name.getText(sourceFile)
+    const optional = declaration.questionToken ? '?' : ''
+    const typeText = declaration.type?.getText(sourceFile)
+
+    if (!typeText) return `${name}${optional}`
+    return `${name}${optional}: ${typeText}`
+  }
+
+  const location =
+    declaration ??
+    propertySymbol.valueDeclaration ??
+    propertySymbol.declarations?.[0]
+  if (!location) return propertyName
+
+  const propertyType = checker.getTypeOfSymbolAtLocation(
+    propertySymbol,
+    location,
+  )
+  return `${propertyName}: ${checker.typeToString(propertyType)}`
+}
+
+function getSymbolDocumentation(checker: ts.TypeChecker, symbol?: ts.Symbol) {
+  const resolvedSymbol = resolveAliasedSymbol(checker, symbol) ?? symbol
+  if (!resolvedSymbol) return undefined
+
+  const documentation = ts.displayPartsToString(
+    resolvedSymbol.getDocumentationComment(checker),
+  )
+
+  return documentation || undefined
+}
+
+function resolveAliasedSymbol(checker: ts.TypeChecker, symbol?: ts.Symbol) {
+  if (!symbol) return undefined
+  if ((symbol.flags & ts.SymbolFlags.Alias) === 0) return symbol
+
+  try {
+    return checker.getAliasedSymbol(symbol)
+  } catch {
+    return symbol
+  }
+}
+
+function isOptionalPropertySymbol(symbol: ts.Symbol) {
+  return (symbol.flags & ts.SymbolFlags.Optional) !== 0
+}
+
+function hasStringIndexSignature(type: ts.Type, checker: ts.TypeChecker) {
+  return checker.getIndexTypeOfType(type, ts.IndexKind.String) !== undefined
+}
+
+function isObjectLikeType(type: ts.Type) {
+  return (
+    (type.flags & ts.TypeFlags.Object) !== 0 ||
+    (type.flags & ts.TypeFlags.NonPrimitive) !== 0
+  )
+}
+
+function isBooleanType(type: ts.Type) {
+  return (type.flags & ts.TypeFlags.Boolean) !== 0
+}
+
+function isStringType(type: ts.Type) {
+  return (type.flags & ts.TypeFlags.String) !== 0
+}
+
+function isNumberType(type: ts.Type) {
+  return (type.flags & ts.TypeFlags.Number) !== 0
+}
+
+function getLiteralCompletionValue(type: ts.Type, checker: ts.TypeChecker) {
+  if ((type.flags & ts.TypeFlags.StringLiteral) !== 0) {
+    return (type as ts.StringLiteralType).value
+  }
+
+  if ((type.flags & ts.TypeFlags.BooleanLiteral) !== 0) {
+    const typeText = checker.typeToString(type)
+    return typeText === 'true' || typeText === 'false' ? typeText : undefined
+  }
+
   return undefined
 }
 
-function isRecordTypeReference(typeNode: ts.TypeReferenceNode) {
-  if (getEntityNameText(typeNode.typeName) !== 'Record') return false
-  if (!typeNode.typeArguments || typeNode.typeArguments.length !== 2)
-    return false
-
-  const [keyType] = typeNode.typeArguments
-  return keyType.kind === ts.SyntaxKind.StringKeyword
-}
-
-function getEntityNameText(name: ts.EntityName): string {
-  if (ts.isIdentifier(name)) return name.text
-  return name.right.text
-}
-
 function getLineNumber(node: ts.Node) {
-  return node.getSourceFile().getLineAndCharacterOfPosition(node.getStart())
+  const sourceFile = node.getSourceFile()
+  return sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile))
     .line
+}
+
+function getProjectCacheKey(filePath: string) {
+  const configPath = ts.findConfigFile(
+    path.dirname(filePath),
+    ts.sys.fileExists,
+  )
+  return configPath ?? `__single__:${filePath}`
+}
+
+function getMetadataVersion(filePath: string) {
+  return getFileVersion(filePath)
 }
 
 function getFileVersion(filePath: string) {

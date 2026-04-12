@@ -589,5 +589,5 @@ function resolveWorkspaceRoot(documentPath: string): string | undefined {
     if (documentPath.startsWith(folder.uri.fsPath)) return folder.uri.fsPath
   }
 
-  return folders[0]?.uri.fsPath
+  return folders[0].uri.fsPath
 }
