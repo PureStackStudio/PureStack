@@ -195,4 +195,27 @@ describe('renderPage consent integration', () => {
     })
     expect(html).toContain('<top-bar></top-bar>')
   })
+
+  it('does not render toc shell when toc is enabled but outline is empty', async () => {
+    const site = resolveSiteConfig({ rootDir: process.cwd() })
+    const html = await renderPage({
+      bodyHtml: '<p>Hello</p>',
+      pageInfo: {
+        relPath: 'index.md',
+        urlPath: '/',
+        frontmatter: normalizeFrontmatter({
+          layout: {
+            showToc: true,
+          },
+        }),
+      },
+      outline: [],
+      siteTitle: site.siteTitle,
+      consent: site.consent,
+      analytics: site.analytics,
+    })
+    expect(html).not.toContain('class="doc-toc"')
+    expect(html).not.toContain('doc-shell--toc')
+    expect(html).not.toContain('page-toc')
+  })
 })

@@ -123,6 +123,7 @@ export async function renderPageFromFile(
       headConfig,
       template,
       navigation,
+      outline: compiled.outline,
       pageInfo,
     })
     const html = renderPageApp(context, htmlShell, {
@@ -225,12 +226,20 @@ type RenderPageShellInput = {
   headConfig: BasicHeadConfig
   template: string | undefined
   navigation: PageNavigation | undefined
+  outline: PageOutlineItem[]
   pageInfo: PageInfo
 }
 
 async function renderPageShell(input: RenderPageShellInput): Promise<string> {
-  const { context, bodyHtml, headConfig, template, navigation, pageInfo } =
-    input
+  const {
+    context,
+    bodyHtml,
+    headConfig,
+    template,
+    navigation,
+    outline,
+    pageInfo,
+  } = input
   return await renderPage({
     bodyHtml,
     headConfig,
@@ -241,6 +250,7 @@ async function renderPageShell(input: RenderPageShellInput): Promise<string> {
     template,
     templates: context.templates,
     navigation,
+    outline,
     pageInfo,
     siteTitle: context.config.siteTitle,
     headerHtml: resolveSpecialHtmlForPage(

@@ -4,6 +4,7 @@ import type {
   PageFrontmatter,
   PageInfo,
   PageNavigation,
+  PageOutlineItem,
   PageTemplateMap,
 } from '@purestack/ts-common'
 import { type BasicHeadConfig, h } from '@purestack/ts-html'
@@ -20,6 +21,7 @@ import { type ThemeStylesheetLink, themes } from '@purestack/ts-style'
 import { getHead } from '../config/head'
 import { buildGa4Script } from '../templates/buildGa4Script'
 import { resolvePageTemplate } from '../templates/page-templates'
+import { isTocEnabled } from '../toc/isTocEnabled'
 
 export interface RenderPageInput {
   bodyHtml: string
@@ -28,6 +30,7 @@ export interface RenderPageInput {
   template?: string
   templates?: PageTemplateMap
   navigation?: PageNavigation
+  outline?: PageOutlineItem[]
   pageInfo: PageInfo
   siteTitle?: string
   headerHtml?: string
@@ -53,7 +56,7 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
     template,
     templates,
   )
-  appendTocScript(head, input.pageInfo.frontmatter)
+  appendTocScript(head, input.pageInfo.frontmatter, input.outline)
   const html = await pageTemplate({
     head,
     bodyHtml,
@@ -61,6 +64,7 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
     styleLinks,
     templateName,
     navigation: input.navigation,
+    outline: input.outline,
     pageInfo: input.pageInfo,
     siteTitle: input.siteTitle,
     headerHtml: input.headerHtml,
@@ -151,8 +155,9 @@ function appendNavMenuScript(head: ReturnType<typeof getHead>) {
 function appendTocScript(
   head: ReturnType<typeof getHead>,
   frontmatter: PageFrontmatter,
+  outline: PageOutlineItem[] | undefined,
 ) {
-  if (!frontmatter.layout.showToc) return
+  if (!isTocEnabled(frontmatter, outline)) return
   const script = buildPageTocScript()
   head.push(h('script').raw(script))
 }

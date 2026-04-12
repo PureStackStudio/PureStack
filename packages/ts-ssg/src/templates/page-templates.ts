@@ -1,10 +1,12 @@
 import type {
   PageFrontmatter,
   PageNavigation,
+  PageOutlineItem,
   PageTemplateInput,
   PageTemplateMap,
 } from '@purestack/ts-common'
 import { h } from '@purestack/ts-html'
+import { isTocEnabled } from '../toc/isTocEnabled'
 
 export const defaultTemplates: PageTemplateMap = {
   doc: renderDocTemplate,
@@ -37,12 +39,13 @@ function renderDocTemplate({
   head,
   bodyHtml,
   navigation,
+  outline,
   pageInfo,
   headerHtml,
   footerHtml,
 }: PageTemplateInput) {
   const frontmatter = pageInfo.frontmatter
-  const layout = resolveDocLayout(frontmatter, navigation)
+  const layout = resolveDocLayout(frontmatter, navigation, outline)
   const showFooter = frontmatter.layout.showFooter
   return h('html').push(
     head,
@@ -88,11 +91,12 @@ type DocLayout = {
 function resolveDocLayout(
   frontmatter: PageFrontmatter,
   navigation: PageNavigation | undefined,
+  outline: PageOutlineItem[] | undefined,
 ): DocLayout {
   const navMode = frontmatter.layout.navMode
   const layoutClass = resolveDocLayoutClass(frontmatter)
   const showNav = hasNavItems(navigation)
-  const showToc = frontmatter.layout.showToc
+  const showToc = isTocEnabled(frontmatter, outline)
   const tocCollapsed = frontmatter.layout.tocCollapsed === true
   const bodyClass = buildDocBodyClass(
     navMode,
