@@ -135,15 +135,16 @@ export function registerPageTocLinkStyles(
   styleBuilder
     .select('.page-toc__link', theme)
     .display('block')
-    .padding('6px 10px')
+    .padding('8px 12px')
     .borderRadius(options.radii.md)
     .textDecoration('none')
     .fontWeight('600')
     .transition('background 160ms ease, color 160ms ease')
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.semanticTone.neutral.button.rest.text)
   styleBuilder
     .select('.page-toc__link:hover', theme)
-    .background(palette.semanticTone.accent.background.canvas)
+    .background(palette.semanticTone.accent.button.hover.background)
+    .color(palette.semanticTone.accent.button.hover.text)
   styleBuilder
     .select('.page-toc__link:focus-visible', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
@@ -154,7 +155,7 @@ export function registerPageTocLinkStyles(
       '.page-toc__link--active, .page-toc__link--active:hover, .page-toc__link--sub.page-toc__link--active, .page-toc__link--sub.page-toc__link--active:hover',
       theme,
     )
-    .background(palette.semanticTone.accent.background.canvas)
+    .background(palette.semanticTone.accent.button.active.background)
     .color(palette.semanticTone.accent.text.default)
 
   styleBuilder
