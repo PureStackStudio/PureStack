@@ -486,10 +486,7 @@ function analyzeObjectType(
   }
 }
 
-function findNamedTypeDeclaration(
-  sourceFile: ts.SourceFile,
-  typeName: string,
-) {
+function findNamedTypeDeclaration(sourceFile: ts.SourceFile, typeName: string) {
   for (const statement of sourceFile.statements) {
     if (
       (ts.isInterfaceDeclaration(statement) ||
