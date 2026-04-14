@@ -90,7 +90,6 @@ function registerSearchBoxShellInputStyles(
     .fontSize('14px')
     .lineHeight('1.3')
     .boxSizing('border-box')
-    .boxShadow(palette.effect.interactiveShadow)
     .transition('border-color 160ms ease, box-shadow 160ms ease')
     .appearance('none')
 
@@ -181,7 +180,6 @@ function registerSearchBoxResultListStyles(
     .background(palette.semanticTone.neutral.surface.rest.background)
     .textDecoration('none')
     .color(palette.semanticTone.neutral.text.default)
-    .boxShadow(palette.effect.interactiveShadow)
     .transition(
       'border-color 160ms ease, background-color 160ms ease, transform 160ms ease',
     )

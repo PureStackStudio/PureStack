@@ -133,6 +133,7 @@ function createInteractiveGroup(
 export function createTone(
   colors: ToneColors,
   borderTone: (hex: string) => string,
+  subtleTone: (hex: string) => string,
   overrides: ToneOverrides = {},
   isGhost = false,
   chrome: ToneChromeOptions = {},
@@ -144,7 +145,7 @@ export function createTone(
   const surface = createScale(colors.surface, 10)
   const surfaceAlt = createScale(colors.surfaceAlt, 10)
   const defaultText = foreground.level3
-  const subtleText = borderTone(foreground.level1)
+  const subtleText = subtleTone(foreground.level1)
   const defaultBorder = borderTone(border.level3)
   const subtleBorder = borderTone(border.level2)
   const focusBorder = borderTone(border.level5)

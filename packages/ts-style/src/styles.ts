@@ -7,7 +7,7 @@ import { buildThemePaletteVariableCss } from './themePaletteVars'
 const styleBuilders = new Map<ThemeName, Style>()
 
 export const styleBuilder = {
-  get(theme?: ThemeName) {
+  get(theme: ThemeName) {
     if (!theme) {
       throw new Error(
         'Theme name is required. Create both light and dark themes.',
@@ -20,7 +20,7 @@ export const styleBuilder = {
     styleBuilders.set(normalized, created)
     return created
   },
-  select(selector: string, theme?: ThemeName) {
+  select(selector: string, theme: ThemeName) {
     return styleBuilder.get(theme).select(selector)
   },
   has(theme: ThemeName) {

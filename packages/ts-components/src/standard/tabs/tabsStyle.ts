@@ -106,6 +106,9 @@ function registerTabsShellStyles(theme: ThemeMode, options: ThemeOptions) {
     .fontWeight('600')
     .whiteSpace('nowrap')
     .cursor('pointer')
+    .opacity(0.5)
+
+  styleBuilder.select('.tabs__overflow-option:hover', theme).opacity(1)
 
   styleBuilder
     .select('.tabs__select-wrap', theme)

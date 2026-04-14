@@ -33,7 +33,6 @@ export function registerLogoShellStyles(
     .position('relative')
     .overflow('hidden')
     .background(palette.semanticTone.neutral.surface.rest.background)
-    .boxShadow(palette.effect.panelShadow)
 
   styleBuilder
     .select('.site-logo__link::before', theme)
