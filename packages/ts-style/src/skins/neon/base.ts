@@ -15,25 +15,28 @@ export type NeonCore = {
 type NeonPaletteOptions = {
   core: NeonCore
   borderAlpha?: number
+  chromeLighting?: number
 }
 
 export function createNeonPalette({
   core,
   borderAlpha = 0.33,
+  chromeLighting = 0.22,
 }: NeonPaletteOptions): ThemePalette {
   const borderTone = (hex: string) => rgba(hex, borderAlpha)
+  const chrome = { lighting: chromeLighting }
 
   const effect: ThemePalette['effect'] = createEffect(core)
 
   return {
     semanticTone: {
-      neutral: createTone(core.neutral, borderTone),
-      accent: createTone(core.accent, borderTone),
-      ghost: createTone(core.ghost, borderTone, {}, true),
-      info: createTone(core.info, borderTone),
-      success: createTone(core.success, borderTone),
-      warning: createTone(core.warning, borderTone),
-      danger: createTone(core.danger, borderTone),
+      neutral: createTone(core.neutral, borderTone, {}, false, chrome),
+      accent: createTone(core.accent, borderTone, {}, false, chrome),
+      ghost: createTone(core.ghost, borderTone, {}, true, chrome),
+      info: createTone(core.info, borderTone, {}, false, chrome),
+      success: createTone(core.success, borderTone, {}, false, chrome),
+      warning: createTone(core.warning, borderTone, {}, false, chrome),
+      danger: createTone(core.danger, borderTone, {}, false, chrome),
     },
     effect,
   }

@@ -48,6 +48,10 @@ export type ToneOverrides = {
   icon?: Partial<Tone['icon']>
 }
 
+type ToneChromeOptions = {
+  lighting?: number
+}
+
 export function rgba(hex: string, alphaValue: number) {
   const { r, g, b, a } = hexToRgba(hex)
   return `rgba(${r}, ${g}, ${b}, ${(a ?? alphaValue).toFixed(2)})`
@@ -95,28 +99,29 @@ function createInteractiveGroup(
   groupOverrides: ToneSurfaceOverrides | undefined,
   isGhost: boolean,
   kind: 'surface' | 'surfaceAlt',
+  chrome: ToneChromeOptions,
 ): Tone['surface'] {
   return {
     rest: {
-      background: createChrome(kind, scale, 'rest', isGhost),
+      background: createChrome(kind, scale, 'rest', isGhost, chrome),
       border: isGhost ? 'transparent' : defaultBorder,
       text: isGhost ? 'currentColor' : defaultText,
       ...(groupOverrides?.rest || {}),
     },
     hover: {
-      background: createChrome(kind, scale, 'hover', isGhost),
+      background: createChrome(kind, scale, 'hover', isGhost, chrome),
       border: defaultBorder,
       text: defaultText,
       ...(groupOverrides?.hover || {}),
     },
     active: {
-      background: createChrome(kind, scale, 'active', isGhost),
+      background: createChrome(kind, scale, 'active', isGhost, chrome),
       border: defaultBorder,
       text: defaultText,
       ...(groupOverrides?.active || {}),
     },
     disabled: {
-      background: createChrome(kind, scale, 'disabled', isGhost),
+      background: createChrome(kind, scale, 'disabled', isGhost, chrome),
       border: subtleBorder,
       text: subtleText,
       ...(groupOverrides?.disabled || {}),
@@ -130,6 +135,7 @@ export function createTone(
   borderTone: (hex: string) => string,
   overrides: ToneOverrides = {},
   isGhost = false,
+  chrome: ToneChromeOptions = {},
 ): Tone {
   const canvas = createScale(colors.canvas, 10)
   const background = createScale(colors.button, 10)
@@ -145,25 +151,31 @@ export function createTone(
 
   const button = {
     rest: {
-      background: createChrome('button', background, 'rest', isGhost),
+      background: createChrome('button', background, 'rest', isGhost, chrome),
       border: isGhost ? 'transparent' : borderTone(border.level2),
       text: isGhost ? 'currentColor' : foreground.level2,
       ...(overrides.button?.rest || {}),
     },
     hover: {
-      background: createChrome('button', background, 'hover', isGhost),
+      background: createChrome('button', background, 'hover', isGhost, chrome),
       border: borderTone(border.level4),
       text: foreground.level5,
       ...(overrides.button?.hover || {}),
     },
     active: {
-      background: createChrome('button', background, 'active', isGhost),
+      background: createChrome('button', background, 'active', isGhost, chrome),
       border: borderTone(border.level5),
       text: foreground.level5,
       ...(overrides.button?.active || {}),
     },
     disabled: {
-      background: createChrome('button', background, 'disabled', isGhost),
+      background: createChrome(
+        'button',
+        background,
+        'disabled',
+        isGhost,
+        chrome,
+      ),
       border: borderTone(border.level1),
       text: foreground.level1,
       ...(overrides.button?.disabled || {}),
@@ -182,6 +194,7 @@ export function createTone(
       overrides.surface,
       isGhost,
       'surface',
+      chrome,
     ),
     surfaceAlt: createInteractiveGroup(
       surfaceAlt,
@@ -193,8 +206,9 @@ export function createTone(
       overrides.surfaceAlt,
       isGhost,
       'surfaceAlt',
+      chrome,
     ),
-    canvas: overrides.canvas ?? createChrome('canvas', canvas, 'rest'),
+    canvas: overrides.canvas ?? createChrome('canvas', canvas, 'rest', false, chrome),
     overlay: overrides.overlay ?? canvas.level1,
     border: {
       subtle: subtleBorder,
@@ -210,7 +224,7 @@ export function createTone(
     button,
     icon: {
       background: background.level5,
-      gradient: createChrome('icon', background, 'rest'),
+      gradient: createChrome('icon', background, 'rest', false, chrome),
       color: foreground.level5,
       border: defaultBorder,
       ...(overrides.icon || {}),

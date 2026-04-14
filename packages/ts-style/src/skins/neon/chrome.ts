@@ -3,6 +3,9 @@ import type { ToneScale } from './shared'
 
 export type ChromeState = 'rest' | 'hover' | 'active' | 'disabled'
 export type ChromeKind = 'button' | 'surface' | 'surfaceAlt' | 'canvas' | 'icon'
+export type ChromeOptions = {
+  lighting?: number
+}
 
 function rgba(hex: string, alphaValue: number) {
   const { r, g, b, a } = hexToRgba(hex)
@@ -30,7 +33,10 @@ export function createChrome(
   scale: ToneScale,
   state: ChromeState,
   isGhost = false,
+  options: ChromeOptions = {},
 ) {
+  const lighting = clamp(options.lighting ?? 0.72, 0, 1.5)
+
   if (
     isGhost &&
     (kind === 'button' || kind === 'surface' || kind === 'surfaceAlt')
@@ -102,16 +108,16 @@ export function createChrome(
   ])
 
   const gloss = linear('180deg', [
-    [rgba('#ffffff', glossAlphaByState[state]), '0%'],
-    [rgba('#ffffff', glossAlphaByState[state] * 0.55), '14%'],
-    [rgba('#ffffff', glossAlphaByState[state] * 0.18), '24%'],
+    [rgba('#ffffff', glossAlphaByState[state] * lighting), '0%'],
+    [rgba('#ffffff', glossAlphaByState[state] * 0.55 * lighting), '14%'],
+    [rgba('#ffffff', glossAlphaByState[state] * 0.18 * lighting), '24%'],
     ['transparent', kind === 'button' ? '44%' : '38%'],
   ])
 
   const hotspot = radialAt(hotspotPosition, [
-    [rgba('#ffffff', hotspotAlphaByState[state]), '0%'],
-    [rgba(scale.level1, hotspotAlphaByState[state] * 0.75), '18%'],
-    [rgba(scale.level2, hotspotAlphaByState[state] * 0.28), '38%'],
+    [rgba('#ffffff', hotspotAlphaByState[state] * lighting), '0%'],
+    [rgba(scale.level1, hotspotAlphaByState[state] * 0.75 * lighting), '18%'],
+    [rgba(scale.level2, hotspotAlphaByState[state] * 0.28 * lighting), '38%'],
     ['transparent', '68%'],
   ])
 
@@ -125,7 +131,7 @@ export function createChrome(
   const rim =
     kind === 'button' || kind === 'icon'
       ? linear('90deg', [
-          [rgba('#ffffff', edgeAlphaByState[state] * 0.55), '0%'],
+          [rgba('#ffffff', edgeAlphaByState[state] * 0.55 * lighting), '0%'],
           ['transparent', '14%'],
           ['transparent', '86%'],
           [rgba('#000000', edgeAlphaByState[state] * 0.6), '100%'],
@@ -135,8 +141,8 @@ export function createChrome(
   if (kind === 'canvas') {
     return layered([
       radialAt('16% 12%', [
-        [rgba('#ffffff', 0.12), '0%'],
-        [rgba(scale.level1, 0.08), '18%'],
+        [rgba('#ffffff', 0.12 * lighting), '0%'],
+        [rgba(scale.level1, 0.08 * lighting), '18%'],
         ['transparent', '56%'],
       ]),
       linear('165deg', [
@@ -152,4 +158,8 @@ export function createChrome(
   }
 
   return layered([gloss, hotspot, rim, edgeShade, body])
+}
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max)
 }
