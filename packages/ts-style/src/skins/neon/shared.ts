@@ -148,23 +148,27 @@ export function createTone(
   const defaultBorder = borderTone(border.level3)
   const subtleBorder = borderTone(border.level2)
   const focusBorder = borderTone(border.level5)
+  const buttonBorderRest = borderTone(background.level1)
+  const buttonBorderHover = borderTone(background.level2)
+  const buttonBorderActive = borderTone(background.level1)
+  const buttonBorderDisabled = borderTone(background.level1)
 
   const button = {
     rest: {
       background: createChrome('button', background, 'rest', isGhost, chrome),
-      border: isGhost ? 'transparent' : borderTone(border.level2),
+      border: isGhost ? 'transparent' : buttonBorderRest,
       text: isGhost ? 'currentColor' : foreground.level2,
       ...(overrides.button?.rest || {}),
     },
     hover: {
       background: createChrome('button', background, 'hover', isGhost, chrome),
-      border: borderTone(border.level4),
+      border: buttonBorderHover,
       text: foreground.level5,
       ...(overrides.button?.hover || {}),
     },
     active: {
       background: createChrome('button', background, 'active', isGhost, chrome),
-      border: borderTone(border.level5),
+      border: buttonBorderActive,
       text: foreground.level5,
       ...(overrides.button?.active || {}),
     },
@@ -176,7 +180,7 @@ export function createTone(
         isGhost,
         chrome,
       ),
-      border: borderTone(border.level1),
+      border: buttonBorderDisabled,
       text: foreground.level1,
       ...(overrides.button?.disabled || {}),
     },
