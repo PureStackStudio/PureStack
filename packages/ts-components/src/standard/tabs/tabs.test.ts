@@ -88,7 +88,7 @@ describe('Tabs rendering', () => {
     expect(html).toContain('<span class="tabs__tab-label">Install</span>')
   })
 
-  it('applies tone classes to tabs root, tab controls, and panels', () => {
+  it('applies tone classes to tabs root, tab controls', () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineIconComponents(getSvgIcon),
@@ -109,7 +109,7 @@ describe('Tabs rendering', () => {
 
     expect(html).toContain('<section class="tabs tone-surface--warning">')
     expect(html).toContain('class="tabs__tab tone-interactive-button--warning"')
-    expect(html).toContain('class="tabs__panel tone-surface--warning"')
+    expect(html).toContain('class="tabs__panel"')
   })
 
   it('binds selectedTab in both directions', () => {

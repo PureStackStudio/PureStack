@@ -212,7 +212,8 @@ export function createTone(
       'surfaceAlt',
       chrome,
     ),
-    canvas: overrides.canvas ?? createChrome('canvas', canvas, 'rest', false, chrome),
+    canvas:
+      overrides.canvas ?? createChrome('canvas', canvas, 'rest', false, chrome),
     overlay: overrides.overlay ?? canvas.level1,
     border: {
       subtle: subtleBorder,
