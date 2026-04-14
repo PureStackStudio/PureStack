@@ -48,11 +48,8 @@ export interface SemanticToneTokens {
     showcaseAlt: string
   }
   border: {
-    soft: string
     subtle: string
     default: string
-    strong: string
-    hard: string
     focus: string
   }
   text: {

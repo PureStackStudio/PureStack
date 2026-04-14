@@ -35,7 +35,7 @@ function registerExpandablePanelShellStyles(
 
   styleBuilder
     .select('.expandable-panel[open]', theme)
-    .borderColor(palette.semanticTone.neutral.border.strong)
+    .borderColor(palette.semanticTone.neutral.border.default)
     .boxShadow(palette.effect.panelShadowStrong)
 }
 

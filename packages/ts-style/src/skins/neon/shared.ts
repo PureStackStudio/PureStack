@@ -129,11 +129,8 @@ export function createTone(
       ...(overrides.background || {}),
     },
     border: {
-      soft: borderTone(border.level1),
       subtle: borderTone(border.level2),
       default: borderTone(border.level3),
-      strong: borderTone(border.level4),
-      hard: borderTone(border.level5),
       focus: borderTone(border.level5),
       ...(overrides.border || {}),
     },

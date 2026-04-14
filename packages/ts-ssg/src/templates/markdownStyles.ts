@@ -212,12 +212,12 @@ function registerCopyButtonInteractionStyles(
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button:hover)', theme)
     .background(palette.semanticTone.neutral.hover)
-    .borderColor(palette.semanticTone.neutral.border.strong)
+    .borderColor(palette.semanticTone.neutral.border.default)
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button:active)', theme)
     .background(palette.semanticTone.neutral.active)
-    .borderColor(palette.semanticTone.neutral.border.strong)
+    .borderColor(palette.semanticTone.neutral.border.default)
 }
 
 function registerCopyButtonStateStyles(
