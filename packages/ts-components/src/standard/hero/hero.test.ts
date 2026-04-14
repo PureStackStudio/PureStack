@@ -38,7 +38,7 @@ describe('HeroBanner rendering', () => {
     expect(html).toContain('Deterministic calculations for SaaS backends.')
     expect(html).toContain('Get Started')
     expect(html).toContain('href="/getting-started"')
-    expect(html).toContain('tone-button--accent')
+    expect(html).toContain('tone-interactive-button--accent')
     expect(html).toContain('logo.svg')
   })
 

@@ -11,6 +11,8 @@ export type SemanticTone =
   | 'warning'
   | 'danger'
 
+export type SemanticToneMode = 'static' | 'interactive'
+
 const SEMANTIC_TONES: SemanticTone[] = [
   'neutral',
   'accent',
@@ -40,19 +42,32 @@ export function getSemanticToneTokens(
   return palette.semanticTone[tone]
 }
 
-export function getSemanticToneSurfaceClass(tone: SemanticTone) {
-  if (!tone) tone = 'neutral'
-  return `tone-surface--${tone}`
+function getSemanticToneModePrefix(mode: SemanticToneMode = 'static') {
+  return mode === 'interactive' ? 'tone-interactive-' : 'tone-'
 }
 
-export function getSemanticToneSurfaceAltClass(tone: SemanticTone) {
+export function getSemanticToneSurfaceClass(
+  tone: SemanticTone,
+  mode: SemanticToneMode = 'static',
+) {
   if (!tone) tone = 'neutral'
-  return `tone-surface-alt--${tone}`
+  return `${getSemanticToneModePrefix(mode)}surface--${tone}`
 }
 
-export function getSemanticToneButtonClass(tone: SemanticTone) {
+export function getSemanticToneSurfaceAltClass(
+  tone: SemanticTone,
+  mode: SemanticToneMode = 'static',
+) {
   if (!tone) tone = 'neutral'
-  return `tone-button--${tone}`
+  return `${getSemanticToneModePrefix(mode)}surface-alt--${tone}`
+}
+
+export function getSemanticToneButtonClass(
+  tone: SemanticTone,
+  mode: SemanticToneMode = 'static',
+) {
+  if (!tone) tone = 'neutral'
+  return `${getSemanticToneModePrefix(mode)}button--${tone}`
 }
 
 export function getSemanticToneIconClass(tone: SemanticTone) {
@@ -74,45 +89,106 @@ export function registerSemanticToneUtilityStyles() {
   themes.forEach((theme, palette) => {
     for (const tone of SEMANTIC_TONES) {
       const tokens = getSemanticToneTokens(palette, tone)
+      const surfaceClass = getSemanticToneSurfaceClass(tone)
+      const interactiveSurfaceClass = getSemanticToneSurfaceClass(
+        tone,
+        'interactive',
+      )
+      const surfaceAltClass = getSemanticToneSurfaceAltClass(tone)
+      const interactiveSurfaceAltClass = getSemanticToneSurfaceAltClass(
+        tone,
+        'interactive',
+      )
+      const buttonClass = getSemanticToneButtonClass(tone)
+      const interactiveButtonClass = getSemanticToneButtonClass(
+        tone,
+        'interactive',
+      )
 
       styleBuilder
-        .select(`.${getSemanticToneSurfaceClass(tone)}`, theme)
+        .select(`.${surfaceClass}, .${interactiveSurfaceClass}`, theme)
         .background(tokens.surface.rest.background)
         .borderColor(tokens.surface.rest.border)
         .color(tokens.surface.rest.text)
 
       styleBuilder
-        .select(`.${getSemanticToneSurfaceAltClass(tone)}`, theme)
+        .select(`.${interactiveSurfaceClass}:hover`, theme)
+        .background(tokens.surface.hover.background)
+        .borderColor(tokens.surface.hover.border)
+        .color(tokens.surface.hover.text)
+
+      styleBuilder
+        .select(`.${interactiveSurfaceClass}:active`, theme)
+        .background(tokens.surface.active.background)
+        .borderColor(tokens.surface.active.border)
+        .color(tokens.surface.active.text)
+
+      styleBuilder
+        .select(`.${interactiveSurfaceClass}:disabled`, theme)
+        .background(tokens.surface.disabled.background)
+        .borderColor(tokens.surface.disabled.border)
+        .color(tokens.surface.disabled.text)
+
+      styleBuilder
+        .select(`.${interactiveSurfaceClass}:focus-visible`, theme)
+        .outline('none')
+        .boxShadow(`0 0 0 2px ${tokens.surface.focusRing}`)
+
+      styleBuilder
+        .select(`.${surfaceAltClass}, .${interactiveSurfaceAltClass}`, theme)
         .background(tokens.surfaceAlt.rest.background)
         .borderColor(tokens.surfaceAlt.rest.border)
         .color(tokens.surfaceAlt.rest.text)
 
       styleBuilder
-        .select(`.${getSemanticToneButtonClass(tone)}`, theme)
+        .select(`.${interactiveSurfaceAltClass}:hover`, theme)
+        .background(tokens.surfaceAlt.hover.background)
+        .borderColor(tokens.surfaceAlt.hover.border)
+        .color(tokens.surfaceAlt.hover.text)
+
+      styleBuilder
+        .select(`.${interactiveSurfaceAltClass}:active`, theme)
+        .background(tokens.surfaceAlt.active.background)
+        .borderColor(tokens.surfaceAlt.active.border)
+        .color(tokens.surfaceAlt.active.text)
+
+      styleBuilder
+        .select(`.${interactiveSurfaceAltClass}:disabled`, theme)
+        .background(tokens.surfaceAlt.disabled.background)
+        .borderColor(tokens.surfaceAlt.disabled.border)
+        .color(tokens.surfaceAlt.disabled.text)
+
+      styleBuilder
+        .select(`.${interactiveSurfaceAltClass}:focus-visible`, theme)
+        .outline('none')
+        .boxShadow(`0 0 0 2px ${tokens.surfaceAlt.focusRing}`)
+
+      styleBuilder
+        .select(`.${buttonClass}, .${interactiveButtonClass}`, theme)
         .background(tokens.button.rest.background)
         .borderColor(tokens.button.rest.border)
         .color(tokens.button.rest.text)
 
       styleBuilder
-        .select(`.${getSemanticToneButtonClass(tone)}:hover`, theme)
+        .select(`.${interactiveButtonClass}:hover`, theme)
         .background(tokens.button.hover.background)
         .borderColor(tokens.button.hover.border)
         .color(tokens.button.hover.text)
 
       styleBuilder
-        .select(`.${getSemanticToneButtonClass(tone)}:active`, theme)
+        .select(`.${interactiveButtonClass}:active`, theme)
         .background(tokens.button.active.background)
         .borderColor(tokens.button.active.border)
         .color(tokens.button.active.text)
 
       styleBuilder
-        .select(`.${getSemanticToneButtonClass(tone)}:disabled`, theme)
+        .select(`.${interactiveButtonClass}:disabled`, theme)
         .background(tokens.button.disabled.background)
         .borderColor(tokens.button.disabled.border)
         .color(tokens.button.disabled.text)
 
       styleBuilder
-        .select(`.${getSemanticToneButtonClass(tone)}:focus-visible`, theme)
+        .select(`.${interactiveButtonClass}:focus-visible`, theme)
         .outline('none')
         .boxShadow(`0 0 0 2px ${tokens.button.focusRing}`)
 
