@@ -36,7 +36,6 @@ export interface TabPane {
   disabled?: RefOrValue<boolean>
   group?: string
   tabClass?: ComputedRef<string>
-  panelClass?: ComputedRef<string>
 }
 
 const tabsTemplate = html`<section class="tabs" :class="rootClass">
@@ -54,8 +53,7 @@ const tabPaneTemplate = html`<div class="tabs__item">
     :id="id"
     :value="id"
     r-model="selectedTab"
-    :disabled="disabled"
-  />
+    :disabled="disabled"/>
   <label
     class="tabs__tab"
     :class="[tabClass, { 'tabs__tab--disabled': disabled }]"
@@ -65,12 +63,12 @@ const tabPaneTemplate = html`<div class="tabs__item">
     :aria-controls="id+'-panel'"
     :aria-selected="selectedTab === id"
     :aria-disabled="disabled"
-    ><Icon class="tabs__tab-icon" :name="icon" />
-    <span class="tabs__tab-label">{{ label || id }}</span></label
   >
+    <Icon class="tabs__tab-icon" :name="icon"/>
+    <span class="tabs__tab-label">{{ label || id }}</span>
+  </label>
   <section
     class="tabs__panel"
-    :class="panelClass"
     role="tabpanel"
     :id="id+'-panel'"
     :aria-labelledby="id+'-label'"
@@ -142,7 +140,6 @@ function resolveTabPane(head: ComponentHead<TabPane>): TabPane {
     id,
     group,
     tabClass: computed(() => getSemanticToneButtonClass(tone, 'interactive')),
-    panelClass: computed(() => getSemanticToneSurfaceClass(tone)),
   }
 }
 

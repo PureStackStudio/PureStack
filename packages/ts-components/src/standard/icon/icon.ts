@@ -19,18 +19,18 @@ export interface Icon {
   role?: ComputedRef<string>
 }
 
-const iconTemplate = html`
-<span class="icon-wrap" :class="class" r-if="wrap">
+const iconTemplate = html`<span class="icon-wrap" :class="class" r-if="wrap">
   <span
     class="icon"
-    :class="class"
     :role="role"
     :aria-label="ariaLabel"
     :aria-hidden="ariaHidden"
     r-if="svg"
-    r-html="svg"></span>
+    r-html="svg"
+  ></span>
 </span>
-<span r-else
+<span
+  r-else
   class="icon"
   :class="class"
   :role="role"

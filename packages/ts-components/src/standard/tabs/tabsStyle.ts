@@ -171,6 +171,11 @@ function registerTabsControlStyles(theme: ThemeMode, options: ThemeOptions) {
     .select('.tabs__tab-button', theme)
     .flexShrink('0')
     .whiteSpace('nowrap')
+    .opacity(0.5)
+
+  styleBuilder.select('.tabs__tab-button:hover', theme).opacity(1)
+
+  styleBuilder.select('.tabs__tab-button--active', theme).opacity(1)
 
   styleBuilder
     .select('.tabs__tab-icon', theme)
