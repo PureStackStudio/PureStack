@@ -135,7 +135,7 @@ function registerSearchBoxResultContainerStyles(
     .padding('8px')
     .borderRadius(options.radii.lg)
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
-    .background(palette.semanticTone.neutral.background.surface)
+    .background(palette.semanticTone.neutral.surface.rest.background)
     .boxShadow(options.shadows.strong)
     .zIndex('60')
 }
@@ -178,7 +178,7 @@ function registerSearchBoxResultListStyles(
     .padding('12px 14px')
     .borderRadius(options.radii.md)
     .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
-    .background(palette.semanticTone.neutral.background.surface)
+    .background(palette.semanticTone.neutral.surface.rest.background)
     .textDecoration('none')
     .color(palette.semanticTone.neutral.text.default)
     .boxShadow(palette.effect.interactiveShadow)
@@ -188,7 +188,7 @@ function registerSearchBoxResultListStyles(
 
   styleBuilder
     .select('.site-search__results .site-search__link:hover', theme)
-    .background(palette.semanticTone.neutral.background.surfaceAlt)
+    .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
     .borderColor(palette.semanticTone.neutral.border.default)
 
   styleBuilder
@@ -228,7 +228,7 @@ function registerSearchBoxResultContentStyles(
     .select('.site-search__results mark.site-search__highlight', theme)
     .padding('0 3px')
     .borderRadius('5px')
-    .background(palette.semanticTone.accent.background.canvas)
+    .background(palette.semanticTone.accent.canvas)
     .color(palette.semanticTone.accent.text.default)
 
   styleBuilder
@@ -237,13 +237,13 @@ function registerSearchBoxResultContentStyles(
     .padding('10px 12px')
     .borderRadius(options.radii.md)
     .border(`1px dashed ${palette.semanticTone.neutral.border.default}`)
-    .background(palette.semanticTone.neutral.background.surface)
+    .background(palette.semanticTone.neutral.surface.rest.background)
     .color(palette.semanticTone.neutral.text.subtle)
 
   styleBuilder
     .select('.site-search__results .site-search__message--error', theme)
     .border(`1px solid ${palette.semanticTone.danger.border.default}`)
-    .background(palette.semanticTone.danger.background.canvas)
+    .background(palette.semanticTone.danger.canvas)
     .color(palette.semanticTone.danger.text.default)
 }
 

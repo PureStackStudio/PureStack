@@ -15,7 +15,7 @@ function registerBadgeBaseStyles(theme: ThemeMode, palette: ThemePalette) {
     .padding('2px 8px')
     .borderRadius('999px')
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
-    .background(palette.semanticTone.neutral.background.surfaceAlt)
+    .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
     .color(palette.semanticTone.neutral.text.default)
     .fontSize('0.72rem')
     .fontWeight('700')

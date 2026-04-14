@@ -25,7 +25,7 @@ function registerDocLayoutShellStyles(
     .margin('0')
     .minHeight('100vh')
     .fontFamily(options.typography.baseFamily)
-    .background(palette.semanticTone.neutral.background.canvas)
+    .background(palette.semanticTone.neutral.canvas)
     .color(palette.semanticTone.neutral.text.default)
 
   styleBuilder
@@ -109,7 +109,7 @@ function registerDocLayoutNavStyles(
 ) {
   styleBuilder
     .select('.doc-nav', theme)
-    .background(palette.semanticTone.neutral.background.surface)
+    .background(palette.semanticTone.neutral.surface.rest.background)
     .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
     .borderRadius(options.radii.lg)
     .padding('16px')
@@ -138,7 +138,7 @@ function registerDocLayoutNavStyles(
     .color(palette.semanticTone.neutral.text.default)
   styleBuilder
     .select('.doc-nav__item a:hover', theme)
-    .background(palette.semanticTone.accent.background.canvas)
+    .background(palette.semanticTone.accent.canvas)
   styleBuilder
     .select('.doc-nav__item span', theme)
     .display('block')

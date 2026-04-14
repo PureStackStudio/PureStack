@@ -8,17 +8,17 @@ const THEME_PALETTE_VAR_PREFIX = '--ps'
  * Algorithm:
  * 1. Traverse the palette recursively and treat every string leaf as one token.
  *    Example paths:
- *    - `background.canvas`
+ *    - `canvas`
  *    - `text.default`
- *    - `status.info.border`
+ *    - `semanticTone.info.surface.rest.background`
  * 2. Convert each path into a stable CSS variable name by:
  *    - splitting the path into segments
  *    - converting each segment from camelCase to kebab-case
  *    - joining with `-`
  *    - prefixing with `--ps-`
  *    Example:
- *    - `background.canvas` -> `--ps-background-canvas`
- *    - `status.info.border` -> `--ps-status-info-border`
+ *    - `canvas` -> `--ps-canvas`
+ *    - `semanticTone.info.surface.rest.background` -> `--ps-semantic-tone-info-surface-rest-background`
  * 3. Support two outputs from the same source palette:
  *    - declaration output:
  *      `buildThemePaletteVariableCss(...)` emits a `:root` block assigning raw values

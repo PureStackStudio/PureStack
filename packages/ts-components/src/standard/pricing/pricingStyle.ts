@@ -29,7 +29,7 @@ export function applyPricingShellStyles(
     .padding('28px')
     .borderRadius(options.radii.lg)
     .border(`1px solid ${palette.semanticTone.accent.border.subtle}`)
-    .background(palette.semanticTone.accent.background.surface)
+    .background(palette.semanticTone.accent.surface.rest.background)
     .boxShadow(options.shadows.soft)
     .margin('0 0 32px')
 
@@ -123,7 +123,7 @@ export function applyPricingPlanShellStyles(
     .padding('18px')
     .borderRadius(options.radii.md)
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
-    .background(palette.semanticTone.neutral.background.surface)
+    .background(palette.semanticTone.neutral.surface.rest.background)
     .boxShadow(palette.effect.panelShadow)
     .height('100%')
 
@@ -211,7 +211,7 @@ export function applyPricingPlanTitleStyles(
     .fontWeight('700')
     .textTransform('uppercase')
     .letterSpacing('0.1em')
-    .background(palette.semanticTone.accent.background.canvas)
+    .background(palette.semanticTone.accent.canvas)
     .color(palette.semanticTone.accent.text.default)
 
   styleBuilder
@@ -268,7 +268,7 @@ export function applyPricingPlanCtaStyles(
     .fontSize('13px')
     .textDecoration('none')
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
-    .background(palette.semanticTone.neutral.background.canvas)
+    .background(palette.semanticTone.neutral.canvas)
     .color(palette.semanticTone.neutral.text.default)
     .boxShadow(palette.effect.interactiveShadow)
     .transition(
@@ -277,7 +277,7 @@ export function applyPricingPlanCtaStyles(
 
   styleBuilder
     .select('.pricing-plan__cta-link:hover', theme)
-    .background(palette.semanticTone.neutral.hover)
+    .background(palette.semanticTone.neutral.surface.hover.background)
 
   styleBuilder
     .select('.pricing-plan__cta-link:focus-visible', theme)
@@ -359,7 +359,7 @@ export function applyPricingFeaturedStyles(
     .select('.pricing-plan--featured', theme)
     .position('relative')
     .transform('translateY(-4px)')
-    .background(palette.semanticTone.accent.background.canvas)
+    .background(palette.semanticTone.accent.canvas)
     .border(`1px solid ${palette.semanticTone.accent.border.default}`)
     .boxShadow(palette.effect.panelShadowStrong)
 
@@ -375,13 +375,13 @@ export function applyPricingFeaturedStyles(
 
   styleBuilder
     .select('.pricing-plan--featured .pricing-plan__cta-link', theme)
-    .background(palette.semanticTone.accent.background.canvas)
+    .background(palette.semanticTone.accent.canvas)
     .color(palette.semanticTone.accent.text.default)
     .borderColor('transparent')
 
   styleBuilder
     .select('.pricing-plan--featured .pricing-plan__cta-link:hover', theme)
-    .background(palette.semanticTone.accent.hover)
+    .background(palette.semanticTone.accent.surface.hover.background)
 }
 
 export function applyPricingResponsiveStyles(theme: ThemeMode) {

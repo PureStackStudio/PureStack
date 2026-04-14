@@ -123,7 +123,7 @@ function registerInlineCodeStyles(
     .select('.doc-content :where(code)', theme)
     .fontFamily("'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace")
     .fontSize('0.9em')
-    .background(palette.semanticTone.neutral.background.surfaceAlt)
+    .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
     .borderRadius(options.radii.sm)
     .padding('0.15em 0.35em')
@@ -150,7 +150,7 @@ function registerPreShellStyles(
     .select('.doc-content :where(pre)', theme)
     .margin('0 0 1.4em')
     .padding('18px 20px')
-    .background(palette.semanticTone.neutral.background.surfaceAlt)
+    .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
     .borderRadius(options.radii.md)
     .position('relative')
@@ -171,7 +171,7 @@ function registerCopyButtonBaseStyles(
     .right('12px')
     .zIndex(2)
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
-    .background(palette.semanticTone.neutral.background.canvas)
+    .background(palette.semanticTone.neutral.canvas)
     .color(palette.semanticTone.neutral.text.default)
     .width('2.15rem')
     .height('2.15rem')
@@ -211,12 +211,12 @@ function registerCopyButtonInteractionStyles(
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button:hover)', theme)
-    .background(palette.semanticTone.neutral.hover)
+    .background(palette.semanticTone.neutral.surface.hover.background)
     .borderColor(palette.semanticTone.neutral.border.default)
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button:active)', theme)
-    .background(palette.semanticTone.neutral.active)
+    .background(palette.semanticTone.neutral.surface.active.background)
     .borderColor(palette.semanticTone.neutral.border.default)
 }
 
@@ -229,11 +229,11 @@ function registerCopyButtonStateStyles(
     .opacity(1)
     .transform('translateY(0)')
     .pointerEvents('auto')
-    .outline(`2px solid ${palette.semanticTone.neutral.focusRing}`)
+    .outline(`2px solid ${palette.semanticTone.neutral.button.focusRing}`)
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button:disabled)', theme)
-    .background(palette.semanticTone.neutral.disabled)
+    .background(palette.semanticTone.neutral.surface.disabled.background)
     .color(palette.semanticTone.neutral.text.subtle)
     .borderColor(palette.semanticTone.neutral.border.subtle)
     .cursor('not-allowed')
@@ -247,13 +247,13 @@ function registerCopyButtonStateStyles(
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button.is-copied)', theme)
-    .background(palette.semanticTone.accent.background.canvas)
+    .background(palette.semanticTone.accent.canvas)
     .borderColor(palette.semanticTone.accent.border.default)
     .color(palette.semanticTone.accent.text.default)
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button.is-error)', theme)
-    .background(palette.semanticTone.danger.background.canvas)
+    .background(palette.semanticTone.danger.canvas)
     .borderColor(palette.semanticTone.danger.border.default)
     .color(palette.semanticTone.danger.text.default)
 }
@@ -298,7 +298,7 @@ function registerBlockquoteStyles(
     .margin('0 0 1.4em')
     .padding('0.65em 1.1em')
     .borderLeft(`3px solid ${palette.semanticTone.neutral.border.subtle}`)
-    .background(palette.semanticTone.neutral.background.surfaceAlt)
+    .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
     .borderRadius(options.radii.sm)
 }
 
@@ -325,7 +325,7 @@ function registerTableContainerStyles(
     .margin('0 0 1.4em')
     .maxWidth('100%')
     .overflowX('auto')
-    .background(palette.semanticTone.neutral.background.surface)
+    .background(palette.semanticTone.neutral.surface.rest.background)
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
     .borderRadius(options.radii.md)
     .boxShadow(palette.effect.panelShadow)
@@ -347,7 +347,7 @@ function registerTableHeaderStyles(
 ) {
   styleBuilder
     .select('.doc-content :where(thead th)', theme)
-    .background(palette.semanticTone.neutral.background.surface)
+    .background(palette.semanticTone.neutral.surface.rest.background)
     .color(palette.semanticTone.neutral.text.default)
     .fontSize('0.79rem')
     .textTransform('uppercase')
@@ -374,11 +374,11 @@ function registerTableBodyRowStyles(
 
   styleBuilder
     .select('.doc-content :where(tbody tr:nth-child(even))', theme)
-    .background(palette.semanticTone.neutral.background.surfaceAlt)
+    .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
 
   styleBuilder
     .select('.doc-content :where(tbody tr:hover)', theme)
-    .background(palette.semanticTone.accent.background.canvas)
+    .background(palette.semanticTone.accent.canvas)
     .color(palette.semanticTone.accent.text.default)
 
   styleBuilder
@@ -414,7 +414,7 @@ function registerTableInlineCodeStyles(
 ) {
   styleBuilder
     .select('.doc-content :where(table code)', theme)
-    .background(palette.semanticTone.danger.background.canvas)
+    .background(palette.semanticTone.danger.canvas)
     .color(palette.semanticTone.danger.text.default)
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
     .borderRadius(options.radii.pill)

@@ -41,7 +41,7 @@ export function applyAlertContainerStyles(
     .margin('0 0 14px')
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
     .borderRadius(options.radii.md)
-    .background(palette.semanticTone.neutral.background.surface)
+    .background(palette.semanticTone.neutral.surface.rest.background)
     .color(palette.semanticTone.neutral.text.default)
     .boxShadow(palette.effect.panelShadow)
 }
@@ -121,7 +121,7 @@ export function applyAlertHeaderStyles(
     .fontWeight('700')
     .textTransform('uppercase')
     .letterSpacing('0.08em')
-    .background(palette.semanticTone.neutral.background.canvas)
+    .background(palette.semanticTone.neutral.canvas)
     .color(palette.semanticTone.neutral.text.default)
 }
 
@@ -147,7 +147,7 @@ export function applyAlertBodyStyles(
     .select('.alert__body :where(code)', theme)
     .fontFamily("'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace")
     .fontSize('0.9em')
-    .background(palette.semanticTone.neutral.background.surfaceAlt)
+    .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
     .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
     .borderRadius(options.radii.sm)
     .padding('0.1em 0.35em')
@@ -174,7 +174,7 @@ export function applyAlertActionStyles(
     .padding('6px 11px')
     .borderRadius(options.radii.pill)
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
-    .background(palette.semanticTone.neutral.background.canvas)
+    .background(palette.semanticTone.neutral.canvas)
     .color(palette.semanticTone.neutral.text.default)
     .fontSize('12px')
     .fontWeight('600')
@@ -186,13 +186,13 @@ export function applyAlertActionStyles(
 
   styleBuilder
     .select('.alert__actions :where(a, button):hover', theme)
-    .background(palette.semanticTone.neutral.hover)
+    .background(palette.semanticTone.neutral.surface.hover.background)
   styleBuilder
     .select('.alert__actions :where(a, button):active', theme)
-    .background(palette.semanticTone.neutral.active)
+    .background(palette.semanticTone.neutral.surface.active.background)
   styleBuilder
     .select('.alert__actions :where(a, button):focus-visible', theme)
-    .outline(`2px solid ${palette.semanticTone.neutral.focusRing}`)
+    .outline(`2px solid ${palette.semanticTone.neutral.button.focusRing}`)
 }
 
 export function applyAlertMetaStyles(theme: ThemeMode, palette: ThemePalette) {

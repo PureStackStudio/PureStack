@@ -26,7 +26,7 @@ function registerExpandablePanelShellStyles(
     .margin('0 0 16px')
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
     .borderRadius(options.radii.lg)
-    .background(palette.semanticTone.neutral.background.surface)
+    .background(palette.semanticTone.neutral.surface.rest.background)
     .boxShadow(palette.effect.panelShadow)
     .overflow('hidden')
     .transition(
@@ -156,49 +156,49 @@ function registerExpandablePanelToneHoverStyles(
       '.expandable-panel.tone-surface--neutral .expandable-panel__summary:hover',
       theme,
     )
-    .background(palette.semanticTone.neutral.hover)
+    .background(palette.semanticTone.neutral.surface.hover.background)
 
   styleBuilder
     .select(
       '.expandable-panel.tone-surface--accent .expandable-panel__summary:hover',
       theme,
     )
-    .background(palette.semanticTone.accent.hover)
+    .background(palette.semanticTone.accent.surface.hover.background)
 
   styleBuilder
     .select(
       '.expandable-panel.tone-surface--ghost .expandable-panel__summary:hover',
       theme,
     )
-    .background(palette.semanticTone.ghost.hover)
+    .background(palette.semanticTone.ghost.surface.hover.background)
 
   styleBuilder
     .select(
       '.expandable-panel.tone-surface--info .expandable-panel__summary:hover',
       theme,
     )
-    .background(palette.semanticTone.info.hover)
+    .background(palette.semanticTone.info.surface.hover.background)
 
   styleBuilder
     .select(
       '.expandable-panel.tone-surface--success .expandable-panel__summary:hover',
       theme,
     )
-    .background(palette.semanticTone.success.hover)
+    .background(palette.semanticTone.success.surface.hover.background)
 
   styleBuilder
     .select(
       '.expandable-panel.tone-surface--warning .expandable-panel__summary:hover',
       theme,
     )
-    .background(palette.semanticTone.warning.hover)
+    .background(palette.semanticTone.warning.surface.hover.background)
 
   styleBuilder
     .select(
       '.expandable-panel.tone-surface--danger .expandable-panel__summary:hover',
       theme,
     )
-    .background(palette.semanticTone.danger.hover)
+    .background(palette.semanticTone.danger.surface.hover.background)
 }
 
 function registerExpandablePanelBodyStyles(

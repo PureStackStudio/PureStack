@@ -72,8 +72,8 @@ export function registerSemanticToneUtilityStyles() {
 
       styleBuilder
         .select(`.${getSemanticToneSurfaceClass(tone)}`, theme)
-        .background(tokens.background.surface)
-        .borderColor(tokens.border.default)
+        .background(tokens.surface.rest.background)
+        .borderColor(tokens.surface.rest.border)
 
       styleBuilder
         .select(`.${getSemanticToneBorderClass(tone)}`, theme)

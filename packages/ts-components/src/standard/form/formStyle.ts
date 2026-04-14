@@ -48,7 +48,7 @@ function registerFormFieldStyles(
     .padding('11px 12px')
     .borderRadius(options.radii.md)
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
-    .background(palette.semanticTone.neutral.background.surface)
+    .background(palette.semanticTone.neutral.surface.rest.background)
     .color(palette.semanticTone.neutral.text.default)
     .fontSize('0.94rem')
     .lineHeight('1.35')
@@ -60,7 +60,7 @@ function registerFormFieldStyles(
     .select('.form-block__input:focus-visible', theme)
     .outline('none')
     .borderColor(palette.semanticTone.accent.border.default)
-    .boxShadow(`0 0 0 3px ${palette.semanticTone.accent.focusRing}`)
+    .boxShadow(`0 0 0 3px ${palette.semanticTone.accent.surface.focusRing}`)
   styleBuilder
     .select(
       '.form-block__input[type="number"], .form-block__input--number',
@@ -74,7 +74,7 @@ function registerFormFieldStyles(
     .alignItems('stretch')
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
     .borderRadius(options.radii.md)
-    .background(palette.semanticTone.neutral.background.surface)
+    .background(palette.semanticTone.neutral.surface.rest.background)
     .transition('border-color 160ms ease, box-shadow 160ms ease')
     .overflow('hidden')
   styleBuilder
@@ -83,7 +83,7 @@ function registerFormFieldStyles(
       theme,
     )
     .borderColor(palette.semanticTone.accent.border.default)
-    .boxShadow(`0 0 0 3px ${palette.semanticTone.accent.focusRing}`)
+    .boxShadow(`0 0 0 3px ${palette.semanticTone.accent.surface.focusRing}`)
   styleBuilder
     .select('.form-block__number .form-block__input--number', theme)
     .borderRadius('0')
@@ -101,7 +101,7 @@ function registerFormFieldStyles(
     .display('grid')
     .gridTemplateRows('1fr 1fr')
     .borderLeft(`1px solid ${palette.semanticTone.neutral.border.default}`)
-    .background(palette.semanticTone.neutral.background.surface)
+    .background(palette.semanticTone.neutral.surface.rest.background)
   styleBuilder
     .select('.form-block__number-btn', theme)
     .display('grid')
@@ -120,11 +120,11 @@ function registerFormFieldStyles(
     .borderBottom(`1px solid ${palette.semanticTone.neutral.border.default}`)
   styleBuilder
     .select('.form-block__number-btn:hover', theme)
-    .background(palette.semanticTone.accent.background.surface)
+    .background(palette.semanticTone.accent.surface.rest.background)
     .color(palette.semanticTone.neutral.text.default)
   styleBuilder
     .select('.form-block__number-btn:active', theme)
-    .background(palette.semanticTone.accent.background.surface)
+    .background(palette.semanticTone.accent.surface.rest.background)
   styleBuilder
     .select('.form-block__number-btn:focus-visible', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
@@ -149,7 +149,7 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .select('.form-block__check input', theme)
     .width('16px')
     .height('16px')
-    .accentColor(palette.semanticTone.accent.background.canvas)
+    .accentColor(palette.semanticTone.accent.canvas)
   styleBuilder
     .select('.form-block__assist-link', theme)
     .fontSize('0.84rem')
@@ -175,7 +175,7 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .transform('translate(-50%, -50%)')
     .padding('0 8px')
     .fontSize('0.78rem')
-    .background(palette.semanticTone.neutral.background.surfaceAlt)
+    .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
     .color(palette.semanticTone.neutral.text.subtle)
 }
 
@@ -190,7 +190,7 @@ function registerFormStatusStyles(
     .padding('11px 12px')
     .borderRadius(options.radii.md)
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
-    .background(palette.semanticTone.neutral.background.canvas)
+    .background(palette.semanticTone.neutral.canvas)
     .color(palette.semanticTone.neutral.text.default)
     .fontSize('0.9rem')
     .lineHeight('1.35')
@@ -198,25 +198,25 @@ function registerFormStatusStyles(
   styleBuilder
     .select('.form-status--info', theme)
     .borderColor(palette.semanticTone.info.border.default)
-    .background(palette.semanticTone.info.background.canvas)
+    .background(palette.semanticTone.info.canvas)
     .color(palette.semanticTone.info.text.default)
 
   styleBuilder
     .select('.form-status--success', theme)
     .borderColor(palette.semanticTone.success.border.default)
-    .background(palette.semanticTone.success.background.canvas)
+    .background(palette.semanticTone.success.canvas)
     .color(palette.semanticTone.success.text.default)
 
   styleBuilder
     .select('.form-status--error', theme)
     .borderColor(palette.semanticTone.danger.border.default)
-    .background(palette.semanticTone.danger.background.canvas)
+    .background(palette.semanticTone.danger.canvas)
     .color(palette.semanticTone.danger.text.default)
 
   styleBuilder
     .select('.form-status--warning', theme)
     .borderColor(palette.semanticTone.warning.border.default)
-    .background(palette.semanticTone.warning.background.canvas)
+    .background(palette.semanticTone.warning.canvas)
     .color(palette.semanticTone.warning.text.default)
 }
 

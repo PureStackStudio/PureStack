@@ -177,11 +177,11 @@ function buildCriticalThemeStyle(hasThemeGate: boolean) {
   const lightPalette = options.colors.light
   const darkPalette = options.colors.dark
   const light = {
-    background: lightPalette.semanticTone.neutral.background.canvas,
+    background: lightPalette.semanticTone.neutral.canvas,
     text: lightPalette.semanticTone.neutral.text.default,
   }
   const dark = {
-    background: darkPalette.semanticTone.neutral.background.canvas,
+    background: darkPalette.semanticTone.neutral.canvas,
     text: darkPalette.semanticTone.neutral.text.default,
   }
   const css = [

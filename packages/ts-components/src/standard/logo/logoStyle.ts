@@ -32,7 +32,7 @@ export function registerLogoShellStyles(
     .textDecoration('none')
     .position('relative')
     .overflow('hidden')
-    .background(palette.semanticTone.neutral.background.surface)
+    .background(palette.semanticTone.neutral.surface.rest.background)
     .boxShadow(palette.effect.panelShadow)
 
   styleBuilder
@@ -43,7 +43,7 @@ export function registerLogoShellStyles(
     .opacity('0.48')
     .pointerEvents('none')
     .background(
-      `linear-gradient(135deg, ${palette.semanticTone.accent.icon.gradient} 0%, ${palette.semanticTone.neutral.background.surface} 70%)`,
+      `linear-gradient(135deg, ${palette.semanticTone.accent.icon.gradient} 0%, ${palette.semanticTone.neutral.surface.rest.background} 70%)`,
     )
 
   styleBuilder

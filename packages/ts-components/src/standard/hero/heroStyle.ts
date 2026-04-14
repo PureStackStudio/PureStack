@@ -28,7 +28,7 @@ function registerHeroShellStyles(
     .padding('28px')
     .borderRadius(options.radii.lg)
     .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
-    .background(palette.semanticTone.neutral.background.surface)
+    .background(palette.semanticTone.neutral.surface.rest.background)
     .boxShadow(options.shadows.soft)
     .margin('0 0 32px')
     .color(palette.semanticTone.neutral.text.default)
@@ -121,7 +121,7 @@ function registerHeroMediaStyles(
     .select('.hero__logo-frame', theme)
     .padding('18px 22px')
     .borderRadius(options.radii.lg)
-    .background(palette.semanticTone.neutral.background.surface)
+    .background(palette.semanticTone.neutral.surface.rest.background)
     .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
     .boxShadow(palette.effect.floatingShadow)
 

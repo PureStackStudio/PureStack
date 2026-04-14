@@ -30,7 +30,7 @@ export function registerPageTocShellStyles(
     .border('1px solid transparent')
     .fontSize('0.95rem')
     .lineHeight('1.5')
-    .background(palette.semanticTone.neutral.background.surface)
+    .background(palette.semanticTone.neutral.surface.rest.background)
     .borderColor(palette.semanticTone.neutral.border.subtle)
     .color(palette.semanticTone.neutral.text.default)
   styleBuilder
@@ -60,13 +60,13 @@ export function registerPageTocShellStyles(
     .padding('0')
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
     .borderRadius(options.radii.md)
-    .background(palette.semanticTone.neutral.background.surface)
+    .background(palette.semanticTone.neutral.surface.rest.background)
     .color(palette.semanticTone.neutral.text.subtle)
     .cursor('pointer')
     .transition('background 160ms ease, color 160ms ease')
   styleBuilder
     .select('.page-toc__restore-toggle:hover', theme)
-    .background(palette.semanticTone.accent.background.canvas)
+    .background(palette.semanticTone.accent.canvas)
     .color(palette.semanticTone.accent.text.default)
   styleBuilder
     .select('.page-toc__restore-toggle:focus-visible', theme)
@@ -177,7 +177,7 @@ export function registerPageTocTargetStyles(
     .padding('0')
     .borderRadius('0')
     .transition('background 200ms ease, color 200ms ease')
-    .color(palette.semanticTone.accent.hover)
+    .color(palette.semanticTone.accent.text.default)
 }
 
 export function registerPageTocLayoutStyles(
@@ -320,7 +320,7 @@ export function registerPageTocLayoutStyles(
     .letterSpacing('0.12em')
     .textTransform('uppercase')
     .color(palette.semanticTone.neutral.text.subtle)
-    .background(palette.semanticTone.neutral.background.surface)
+    .background(palette.semanticTone.neutral.surface.rest.background)
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
     .borderLeft('none')
     .borderRadius(`0 ${options.radii.md} ${options.radii.md} 0`)
@@ -492,7 +492,7 @@ export function registerPageTocLayoutStyles(
     .letterSpacing('0.12em')
     .textTransform('uppercase')
     .color(palette.semanticTone.neutral.text.subtle)
-    .background(palette.semanticTone.neutral.background.surface)
+    .background(palette.semanticTone.neutral.surface.rest.background)
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
     .borderLeft('none')
     .borderRadius(`0 ${options.radii.md} ${options.radii.md} 0`)

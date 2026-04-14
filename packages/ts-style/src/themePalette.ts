@@ -16,7 +16,7 @@
  * - Example:
  *   - primary CTA background: `palette.semanticTone.accent.button.rest.background`
  *   - primary CTA hover: `palette.semanticTone.accent.button.hover.background`
- *   - semantic callout surface: `palette.semanticTone.info.background.panel`
+ *   - semantic callout surface: `palette.semanticTone.info.surface.rest.background`
  *   - secondary text: `palette.semanticTone.neutral.text.subtle`
  *   - active/focus border: `palette.semanticTone.neutral.border.focus`
  *
@@ -39,12 +39,54 @@
  */
 
 export interface SemanticToneTokens {
-  background: {
-    canvas: string
-    surface: string
-    surfaceAlt: string
-    overlay: string
+  surface: {
+    rest: {
+      background: string
+      border: string
+      text: string
+    }
+    hover: {
+      background: string
+      border: string
+      text: string
+    }
+    active: {
+      background: string
+      border: string
+      text: string
+    }
+    disabled: {
+      background: string
+      border: string
+      text: string
+    }
+    focusRing: string
   }
+  surfaceAlt: {
+    rest: {
+      background: string
+      border: string
+      text: string
+    }
+    hover: {
+      background: string
+      border: string
+      text: string
+    }
+    active: {
+      background: string
+      border: string
+      text: string
+    }
+    disabled: {
+      background: string
+      border: string
+      text: string
+    }
+    focusRing: string
+  }
+  canvas: string
+  overlay: string
   border: {
     subtle: string
     default: string
@@ -83,10 +125,6 @@ export interface SemanticToneTokens {
     color: string
     border: string
   }
-  hover: string
-  active: string
-  disabled: string
-  focusRing: string
 }
 
 export interface ThemePalette {

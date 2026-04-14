@@ -29,16 +29,23 @@ type ToneButtonOverrides = {
   focusRing?: Tone['button']['focusRing']
 }
 
+type ToneSurfaceOverrides = {
+  rest?: Partial<Tone['surface']['rest']>
+  hover?: Partial<Tone['surface']['hover']>
+  active?: Partial<Tone['surface']['active']>
+  disabled?: Partial<Tone['surface']['disabled']>
+  focusRing?: Tone['surface']['focusRing']
+}
+
 export type ToneOverrides = {
-  background?: Partial<Tone['button']>
+  surface?: ToneSurfaceOverrides
+  surfaceAlt?: ToneSurfaceOverrides
+  canvas?: Tone['canvas']
+  overlay?: Tone['overlay']
   border?: Partial<Tone['border']>
   text?: Partial<Tone['text']>
   button?: ToneButtonOverrides
   icon?: Partial<Tone['icon']>
-  hover?: Tone['hover']
-  active?: Tone['active']
-  disabled?: Tone['disabled']
-  focusRing?: Tone['focusRing']
 }
 
 export function rgba(hex: string, alphaValue: number) {
@@ -78,6 +85,44 @@ export function createScale(hex: string, delta = 20): ToneScale {
   return { level1, level2, level3, level4, level5 }
 }
 
+function createInteractiveGroup(
+  scale: ToneScale,
+  defaultBorder: string,
+  subtleBorder: string,
+  focusBorder: string,
+  defaultText: string,
+  subtleText: string,
+  groupOverrides: ToneSurfaceOverrides | undefined,
+): Tone['surface'] {
+  return {
+    rest: {
+      background: radial(scale.level2, scale.level3),
+      border: defaultBorder,
+      text: defaultText,
+      ...(groupOverrides?.rest || {}),
+    },
+    hover: {
+      background: radial(scale.level3, scale.level4),
+      border: defaultBorder,
+      text: defaultText,
+      ...(groupOverrides?.hover || {}),
+    },
+    active: {
+      background: radial(scale.level4, scale.level5),
+      border: defaultBorder,
+      text: defaultText,
+      ...(groupOverrides?.active || {}),
+    },
+    disabled: {
+      background: scale.level1,
+      border: subtleBorder,
+      text: subtleText,
+      ...(groupOverrides?.disabled || {}),
+    },
+    focusRing: groupOverrides?.focusRing ?? focusBorder,
+  }
+}
+
 export function createTone(
   colors: ToneColors,
   borderTone: (hex: string) => string,
@@ -89,6 +134,11 @@ export function createTone(
   const border = createScale(colors.border, 1)
   const surface = createScale(colors.surface, 10)
   const surfaceAlt = createScale(colors.surfaceAlt, 10)
+  const defaultText = foreground.level3
+  const subtleText = foreground.level1
+  const defaultBorder = borderTone(border.level3)
+  const subtleBorder = borderTone(border.level2)
+  const focusBorder = borderTone(border.level5)
 
   const button = {
     rest: {
@@ -119,22 +169,35 @@ export function createTone(
   }
 
   return {
-    background: {
-      canvas: radial(canvas.level2, canvas.level3),
-      surface: radial(surface.level2, surface.level3),
-      surfaceAlt: radial(surfaceAlt.level3, surfaceAlt.level4),
-      overlay: canvas.level1,
-      ...(overrides.background || {}),
-    },
+    surface: createInteractiveGroup(
+      surface,
+      defaultBorder,
+      subtleBorder,
+      focusBorder,
+      defaultText,
+      subtleText,
+      overrides.surface,
+    ),
+    surfaceAlt: createInteractiveGroup(
+      surfaceAlt,
+      defaultBorder,
+      subtleBorder,
+      focusBorder,
+      defaultText,
+      subtleText,
+      overrides.surfaceAlt,
+    ),
+    canvas: overrides.canvas ?? radial(canvas.level2, canvas.level3),
+    overlay: overrides.overlay ?? canvas.level1,
     border: {
-      subtle: borderTone(border.level2),
-      default: borderTone(border.level3),
-      focus: borderTone(border.level5),
+      subtle: subtleBorder,
+      default: defaultBorder,
+      focus: focusBorder,
       ...(overrides.border || {}),
     },
     text: {
-      default: foreground.level3,
-      subtle: foreground.level1,
+      default: defaultText,
+      subtle: subtleText,
       ...(overrides.text || {}),
     },
     button,
@@ -142,12 +205,8 @@ export function createTone(
       background: background.level5,
       gradient: gradient('135deg', [background.level5, background.level4]),
       color: foreground.level5,
-      border: borderTone(border.level3),
+      border: defaultBorder,
       ...(overrides.icon || {}),
     },
-    hover: overrides.hover ?? surfaceAlt.level3,
-    active: overrides.active ?? background.level3,
-    disabled: overrides.disabled ?? background.level1,
-    focusRing: overrides.focusRing ?? border.level5,
   }
 }
