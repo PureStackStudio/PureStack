@@ -14,9 +14,7 @@ describe('StatusBadge rendering', () => {
     })
     cleanup()
 
-    expect(html).toContain(
-      'class="badge tone-surface--warning tone-border--warning tone-text--warning"',
-    )
+    expect(html).toContain('class="badge tone-button--warning"')
     expect(html).toContain('pending')
   })
 })

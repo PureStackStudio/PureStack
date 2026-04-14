@@ -19,9 +19,7 @@ describe('Button rendering', () => {
     })
     cleanup()
 
-    expect(html).toContain(
-      'class="btn tone-surface--accent tone-border--accent tone-text--accent"',
-    )
+    expect(html).toContain('class="btn tone-button--accent"')
     expect(html).toContain('type="button"')
     expect(html).toContain('<span class="btn__label">Save</span>')
     expect(html).not.toContain('btn__icon')
@@ -92,7 +90,7 @@ describe('Button rendering', () => {
     )
     cleanup()
 
-    expect(html).toContain('tone-surface--neutral')
+    expect(html).toContain('tone-button--neutral')
     expect(html).toContain('btn--lg')
     expect(html).toContain('u-grow')
     expect(html).toContain('type="submit"')
@@ -116,7 +114,7 @@ describe('Button rendering', () => {
 
     expect(html).toContain('<a')
     expect(html).toContain('href="/getting-started"')
-    expect(html).toContain('tone-surface--neutral')
+    expect(html).toContain('tone-button--neutral')
     expect(html).toContain('btn--lg')
     expect(html).toContain('<span class="btn__label">Read docs</span>')
     expect(html).not.toContain('type="button"')
@@ -159,8 +157,8 @@ describe('Button rendering', () => {
     })
     cleanup()
 
-    expect(warningHtml).toContain('tone-surface--warning')
-    expect(dangerHtml).toContain('tone-surface--danger')
+    expect(warningHtml).toContain('tone-button--warning')
+    expect(dangerHtml).toContain('tone-button--danger')
   })
 
   it('renders empty label span when button has no slot and no icon', () => {

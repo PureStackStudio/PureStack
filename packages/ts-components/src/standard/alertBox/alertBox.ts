@@ -65,11 +65,8 @@ function resolveAlertBox(props: AlertBox): AlertBox {
     iconToneClass: computed(() =>
       getSemanticToneIconClass(resolveSemanticTone(unref(props.tone), 'info')),
     ),
-    rootClass: computed(() => {
-      const tone = resolveSemanticTone(unref(props.tone), 'info')
-      return `${getSemanticToneSurfaceClass(tone)} ${getSemanticToneTextClass(
-        tone,
-      )}`
-    }),
+    rootClass: computed(() =>
+      getSemanticToneSurfaceClass(resolveSemanticTone(unref(props.tone), 'info')),
+    ),
   }
 }

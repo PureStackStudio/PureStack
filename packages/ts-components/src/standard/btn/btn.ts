@@ -1,7 +1,5 @@
 import {
-  getSemanticToneBorderClass,
-  getSemanticToneSurfaceClass,
-  getSemanticToneTextClass,
+  getSemanticToneButtonClass,
   resolveSemanticTone,
   type SemanticTone,
 } from '@purestack/ts-style'
@@ -140,9 +138,7 @@ function resolveButtonClassName(props: BtnBase) {
   const hasIcon = !!unref(props.icon)
   const classTokens = [
     size ? `btn--${size}` : '',
-    getSemanticToneSurfaceClass(tone),
-    getSemanticToneBorderClass(tone),
-    getSemanticToneTextClass(tone),
+    getSemanticToneButtonClass(tone),
     unref(props.class) || '',
   ]
   if (hasIcon && unref(props.iconOnly)) classTokens.push('btn--icon-only')

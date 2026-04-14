@@ -40,14 +40,19 @@ export function getSemanticToneTokens(
   return palette.semanticTone[tone]
 }
 
-export function getSemanticToneSurfaceTextBorderClasses(tone: SemanticTone) {
-  if (!tone) tone = 'neutral'
-  return `tone-surface--${tone} tone-border--${tone} tone-text--${tone}`
-}
-
 export function getSemanticToneSurfaceClass(tone: SemanticTone) {
   if (!tone) tone = 'neutral'
   return `tone-surface--${tone}`
+}
+
+export function getSemanticToneSurfaceAltClass(tone: SemanticTone) {
+  if (!tone) tone = 'neutral'
+  return `tone-surface-alt--${tone}`
+}
+
+export function getSemanticToneButtonClass(tone: SemanticTone) {
+  if (!tone) tone = 'neutral'
+  return `tone-button--${tone}`
 }
 
 export function getSemanticToneIconClass(tone: SemanticTone) {
@@ -74,6 +79,19 @@ export function registerSemanticToneUtilityStyles() {
         .select(`.${getSemanticToneSurfaceClass(tone)}`, theme)
         .background(tokens.surface.rest.background)
         .borderColor(tokens.surface.rest.border)
+        .color(tokens.surface.rest.text)
+
+      styleBuilder
+        .select(`.${getSemanticToneSurfaceAltClass(tone)}`, theme)
+        .background(tokens.surfaceAlt.rest.background)
+        .borderColor(tokens.surfaceAlt.rest.border)
+        .color(tokens.surfaceAlt.rest.text)
+
+      styleBuilder
+        .select(`.${getSemanticToneButtonClass(tone)}`, theme)
+        .background(tokens.button.rest.background)
+        .borderColor(tokens.button.rest.border)
+        .color(tokens.button.rest.text)
 
       styleBuilder
         .select(`.${getSemanticToneBorderClass(tone)}`, theme)

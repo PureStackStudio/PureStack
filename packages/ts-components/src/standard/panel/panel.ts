@@ -1,5 +1,5 @@
 import {
-  getSemanticToneSurfaceTextBorderClasses,
+  getSemanticToneSurfaceClass,
   resolveSemanticTone,
   type SemanticTone,
 } from '@purestack/ts-style'
@@ -40,9 +40,7 @@ function resolvePanel(props: Panel): Panel {
   return {
     ...props,
     rootClass: computed(() =>
-      getSemanticToneSurfaceTextBorderClasses(
-        resolveSemanticTone(unref(props.tone)),
-      ),
+      getSemanticToneSurfaceClass(resolveSemanticTone(unref(props.tone))),
     ),
   }
 }

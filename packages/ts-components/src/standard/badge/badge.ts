@@ -1,5 +1,5 @@
 import {
-  getSemanticToneSurfaceTextBorderClasses,
+  getSemanticToneButtonClass,
   resolveSemanticTone,
 } from '@purestack/ts-style'
 import {
@@ -28,9 +28,7 @@ function defineBadgeComponent() {
     context: (head) => ({
       tone: head.props.tone,
       toneClass: computed(() =>
-        getSemanticToneSurfaceTextBorderClasses(
-          resolveSemanticTone(unref(head.props.tone)),
-        ),
+        getSemanticToneButtonClass(resolveSemanticTone(unref(head.props.tone))),
       ),
     }),
   })
