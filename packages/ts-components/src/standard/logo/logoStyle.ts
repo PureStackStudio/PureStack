@@ -112,12 +112,12 @@ export function registerLogoTextStyles(
 
   styleBuilder
     .select('.site-logo__word--primary', theme)
-    .color(palette.semanticTone.accent.button.hover.text)
+    .color(palette.semanticTone.neutral.text.default)
 
   styleBuilder
     .select('.site-logo__word--accent', theme)
     .display('inline-block')
-    .background(palette.semanticTone.accent.button.hover.background)
+    .background(palette.semanticTone.accent.button.rest.background)
     .webkitBackgroundClip('text')
     .backgroundClip('text')
     .color('transparent')
@@ -132,7 +132,7 @@ export function registerLogoTextStyles(
     .fontWeight('700')
     .letterSpacing('0.08em')
     .textTransform('uppercase')
-    .color(palette.semanticTone.accent.button.hover.text)
+    .color(palette.semanticTone.neutral.text.default)
     .whiteSpace('nowrap')
 }
 

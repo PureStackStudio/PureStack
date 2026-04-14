@@ -20,7 +20,7 @@ export function registerSearchBoxShellStyles(
   options: ThemeOptions,
 ) {
   registerSearchBoxShellContainerStyles(theme)
-  registerSearchBoxShellIconStyles(theme, palette)
+  registerSearchBoxShellIconStyles(theme)
   registerSearchBoxShellAccessibilityStyles(theme)
   registerSearchBoxShellInputStyles(theme, palette, options)
 }
@@ -35,10 +35,7 @@ function registerSearchBoxShellContainerStyles(theme: ThemeMode) {
   styleBuilder.select('.site-search__field', theme).display('block')
 }
 
-function registerSearchBoxShellIconStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-) {
+function registerSearchBoxShellIconStyles(theme: ThemeMode) {
   styleBuilder
     .select('.site-search__icon', theme)
     .position('absolute')
@@ -47,7 +44,7 @@ function registerSearchBoxShellIconStyles(
     .width('18px')
     .height('18px')
     .transform('translateY(-50%)')
-    .color(palette.semanticTone.neutral.text.soft)
+    .color('currentColor')
     .pointerEvents('none')
 
   styleBuilder
@@ -88,8 +85,8 @@ function registerSearchBoxShellInputStyles(
     .padding('0 14px 0 42px')
     .borderRadius(options.radii.pill)
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
-    .background(palette.semanticTone.neutral.background.surface)
-    .color(palette.semanticTone.neutral.text.default)
+    .background('transparent')
+    .color('currentColor')
     .fontSize('14px')
     .lineHeight('1.3')
     .boxSizing('border-box')

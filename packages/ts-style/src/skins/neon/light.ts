@@ -2,19 +2,21 @@ import { createNeonPalette, type NeonCore } from './base'
 import type { ToneColors } from './shared'
 
 const white = '#e8f3f8'
-const accent = '#2771b7'
+const accent = '#307fca'
 const baseTone: ToneColors = {
-  background: '#dfebfc',
+  canvas: '#f3f9ff',
+  background: '#9bc7ff',
   foreground: '#052b3d',
-  border: white,
-  surface: '#1b82cb',
-  surfaceAlt: '#1f629e',
+  border: '#323e44',
+  surface: '#f1f9ff',
+  surfaceAlt: '#b9ddf7',
 }
 const core: NeonCore = {
   baseBlack: '#171c23',
   neutral: baseTone,
   accent: {
     ...baseTone,
+    canvas: accent,
     background: accent,
     foreground: white,
     border: accent,
@@ -28,6 +30,7 @@ const core: NeonCore = {
     border: 'transparent',
   },
   info: {
+    canvas: '#15a9c0',
     background: '#15a9c0',
     foreground: white,
     border: '#16BAD4',
@@ -35,6 +38,7 @@ const core: NeonCore = {
     surfaceAlt: '#15a9c0',
   },
   success: {
+    canvas: '#259740',
     background: '#259740',
     foreground: white,
     border: '#259740',
@@ -42,6 +46,7 @@ const core: NeonCore = {
     surfaceAlt: '#259740',
   },
   warning: {
+    canvas: '#c49a1c',
     background: '#c49a1c',
     foreground: white,
     border: '#c49a1c',
@@ -49,6 +54,7 @@ const core: NeonCore = {
     surfaceAlt: '#c49a1c',
   },
   danger: {
+    canvas: '#a92a37',
     background: '#a92a37',
     foreground: white,
     border: '#a92a37',

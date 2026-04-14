@@ -13,6 +13,7 @@ export type ToneScale = {
 export type Tone = SemanticToneTokens
 
 export type ToneColors = {
+  canvas: string
   background: string
   foreground: string
   border: string
@@ -82,6 +83,7 @@ export function createTone(
   borderTone: (hex: string) => string,
   overrides: ToneOverrides = {},
 ): Tone {
+  const canvas = createScale(colors.canvas, 10)
   const background = createScale(colors.background, 10)
   const foreground = createScale(colors.foreground, 1)
   const border = createScale(colors.border, 1)
@@ -90,19 +92,19 @@ export function createTone(
 
   const button = {
     rest: {
-      background: background.level2,
+      background: gradient('135deg', [background.level2, background.level3]),
       border: borderTone(border.level2),
       text: foreground.level2,
       ...(overrides.button?.rest || {}),
     },
     hover: {
-      background: gradient('135deg', [background.level5, background.level3]),
+      background: gradient('135deg', [background.level3, background.level4]),
       border: borderTone(border.level4),
       text: foreground.level5,
       ...(overrides.button?.hover || {}),
     },
     active: {
-      background: gradient('135deg', [background.level4, background.level2]),
+      background: gradient('135deg', [background.level3, background.level4]),
       border: borderTone(border.level5),
       text: foreground.level5,
       ...(overrides.button?.active || {}),
@@ -118,10 +120,10 @@ export function createTone(
 
   return {
     background: {
-      canvas: radial(background.level1, background.level2),
+      canvas: radial(canvas.level2, canvas.level3),
       surface: radial(surface.level2, surface.level3),
       surfaceAlt: radial(surfaceAlt.level3, surfaceAlt.level4),
-      overlay: background.level1,
+      overlay: canvas.level1,
       showcase: gradient('180deg', [background.level3, background.level5]),
       showcaseAlt: gradient('180deg', [background.level1, background.level5]),
       ...(overrides.background || {}),
@@ -140,7 +142,7 @@ export function createTone(
       subtle: foreground.level1,
       soft: foreground.level2,
       strong: foreground.level5,
-      inverse: background.level3,
+      inverse: canvas.level3,
       ...(overrides.text || {}),
     },
     button,

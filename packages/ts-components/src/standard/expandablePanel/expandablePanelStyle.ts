@@ -98,7 +98,7 @@ function registerExpandablePanelSummaryStyles(
     .alignItems('center')
     .padding('4px 9px')
     .borderRadius(options.radii.pill)
-    .background(palette.semanticTone.neutral.background.canvas)
+    .background(palette.semanticTone.neutral.button.rest.background)
     .color(palette.semanticTone.neutral.text.default)
     .fontSize('11px')
     .fontWeight('700')

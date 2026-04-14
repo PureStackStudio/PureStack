@@ -4,7 +4,8 @@ import type { ToneColors } from './shared'
 const white = '#c9c9c9'
 const accent = '#2771b7'
 const baseTone: ToneColors = {
-  background: '#021a3e',
+  canvas: '#010a10',
+  background: '#3b4760',
   foreground: white,
   border: white,
   surface: '#0b3655',
@@ -15,6 +16,7 @@ const core: NeonCore = {
   neutral: baseTone,
   accent: {
     ...baseTone,
+    canvas: accent,
     background: accent,
     foreground: white,
     border: accent,
@@ -28,6 +30,7 @@ const core: NeonCore = {
     border: 'transparent',
   },
   info: {
+    canvas: '#15a9c0',
     background: '#15a9c0',
     foreground: white,
     border: '#16BAD4',
@@ -35,6 +38,7 @@ const core: NeonCore = {
     surfaceAlt: '#15a9c0',
   },
   success: {
+    canvas: '#259740',
     background: '#259740',
     foreground: white,
     border: '#259740',
@@ -42,6 +46,7 @@ const core: NeonCore = {
     surfaceAlt: '#259740',
   },
   warning: {
+    canvas: '#c49a1c',
     background: '#c49a1c',
     foreground: white,
     border: '#c49a1c',
@@ -49,6 +54,7 @@ const core: NeonCore = {
     surfaceAlt: '#c49a1c',
   },
   danger: {
+    canvas: '#a92a37',
     background: '#a92a37',
     foreground: white,
     border: '#a92a37',

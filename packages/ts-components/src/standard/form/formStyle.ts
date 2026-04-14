@@ -48,7 +48,7 @@ function registerFormFieldStyles(
     .padding('11px 12px')
     .borderRadius(options.radii.md)
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
-    .background(palette.semanticTone.neutral.background.canvas)
+    .background(palette.semanticTone.neutral.background.surface)
     .color(palette.semanticTone.neutral.text.default)
     .fontSize('0.94rem')
     .lineHeight('1.35')
@@ -74,7 +74,7 @@ function registerFormFieldStyles(
     .alignItems('stretch')
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
     .borderRadius(options.radii.md)
-    .background(palette.semanticTone.neutral.background.canvas)
+    .background(palette.semanticTone.neutral.background.surface)
     .transition('border-color 160ms ease, box-shadow 160ms ease')
     .overflow('hidden')
   styleBuilder
@@ -101,7 +101,7 @@ function registerFormFieldStyles(
     .display('grid')
     .gridTemplateRows('1fr 1fr')
     .borderLeft(`1px solid ${palette.semanticTone.neutral.border.default}`)
-    .background(palette.semanticTone.neutral.background.canvas)
+    .background(palette.semanticTone.neutral.background.surface)
   styleBuilder
     .select('.form-block__number-btn', theme)
     .display('grid')
@@ -120,11 +120,11 @@ function registerFormFieldStyles(
     .borderBottom(`1px solid ${palette.semanticTone.neutral.border.default}`)
   styleBuilder
     .select('.form-block__number-btn:hover', theme)
-    .background(palette.semanticTone.accent.background.canvas)
+    .background(palette.semanticTone.accent.background.surface)
     .color(palette.semanticTone.neutral.text.default)
   styleBuilder
     .select('.form-block__number-btn:active', theme)
-    .background(palette.semanticTone.accent.background.canvas)
+    .background(palette.semanticTone.accent.background.surface)
   styleBuilder
     .select('.form-block__number-btn:focus-visible', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
