@@ -8,10 +8,7 @@ export function registerButtonStyles() {
   })
 }
 
-function registerButtonBaseStyles(
-  theme: ThemeMode,
-  options: ThemeOptions,
-) {
+function registerButtonBaseStyles(theme: ThemeMode, options: ThemeOptions) {
   styleBuilder
     .select('.btn', theme)
     .display('inline-flex')
