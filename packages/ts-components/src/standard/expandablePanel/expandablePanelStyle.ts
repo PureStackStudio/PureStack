@@ -44,8 +44,6 @@ function registerExpandablePanelSummaryStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-  registerExpandablePanelToneHoverStyles(theme, palette)
-
   styleBuilder
     .select('.expandable-panel__summary', theme)
     .listStyle('none')
@@ -145,60 +143,6 @@ function registerExpandablePanelSummaryStyles(
   styleBuilder
     .select('.expandable-panel[open] .expandable-panel__chevron', theme)
     .transform('rotate(180deg)')
-}
-
-function registerExpandablePanelToneHoverStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-) {
-  styleBuilder
-    .select(
-      '.expandable-panel.tone-surface--neutral .expandable-panel__summary:hover',
-      theme,
-    )
-    .background(palette.semanticTone.neutral.surface.hover.background)
-
-  styleBuilder
-    .select(
-      '.expandable-panel.tone-surface--accent .expandable-panel__summary:hover',
-      theme,
-    )
-    .background(palette.semanticTone.accent.surface.hover.background)
-
-  styleBuilder
-    .select(
-      '.expandable-panel.tone-surface--ghost .expandable-panel__summary:hover',
-      theme,
-    )
-    .background(palette.semanticTone.ghost.surface.hover.background)
-
-  styleBuilder
-    .select(
-      '.expandable-panel.tone-surface--info .expandable-panel__summary:hover',
-      theme,
-    )
-    .background(palette.semanticTone.info.surface.hover.background)
-
-  styleBuilder
-    .select(
-      '.expandable-panel.tone-surface--success .expandable-panel__summary:hover',
-      theme,
-    )
-    .background(palette.semanticTone.success.surface.hover.background)
-
-  styleBuilder
-    .select(
-      '.expandable-panel.tone-surface--warning .expandable-panel__summary:hover',
-      theme,
-    )
-    .background(palette.semanticTone.warning.surface.hover.background)
-
-  styleBuilder
-    .select(
-      '.expandable-panel.tone-surface--danger .expandable-panel__summary:hover',
-      theme,
-    )
-    .background(palette.semanticTone.danger.surface.hover.background)
 }
 
 function registerExpandablePanelBodyStyles(

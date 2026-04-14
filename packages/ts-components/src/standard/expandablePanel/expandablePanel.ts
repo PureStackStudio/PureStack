@@ -22,12 +22,13 @@ export interface ExpandablePanel {
   tone?: RefOrValue<SemanticTone>
   open?: RefOrValue<boolean>
   rootClass?: ComputedRef<string>
+  summaryClass?: ComputedRef<string>
   iconToneClass?: ComputedRef<string>
 }
 
 const expandablePanelTemplate = html`
 <details class="expandable-panel" :class="rootClass" :open="open">
-  <summary class="expandable-panel__summary">
+  <summary class="expandable-panel__summary" :class="summaryClass">
     <slot name="summary">
       <Icon
         class="expandable-panel__icon"
@@ -80,6 +81,12 @@ function resolveExpandablePanel(props: ExpandablePanel): ExpandablePanel {
     ...props,
     rootClass: computed(() =>
       getSemanticToneSurfaceClass(resolveSemanticTone(unref(props.tone))),
+    ),
+    summaryClass: computed(() =>
+      getSemanticToneSurfaceClass(
+        resolveSemanticTone(unref(props.tone)),
+        'interactive',
+      ),
     ),
     iconToneClass: computed(() =>
       getSemanticToneIconClass(resolveSemanticTone(unref(props.tone))),
