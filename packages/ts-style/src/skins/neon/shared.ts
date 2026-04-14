@@ -142,7 +142,7 @@ export function createTone(
       background: background.level5,
       gradient: gradient('135deg', [background.level5, background.level4]),
       color: foreground.level5,
-      ring: border.level5,
+      border: borderTone(border.level3),
       ...(overrides.icon || {}),
     },
     hover: overrides.hover ?? surfaceAlt.level3,

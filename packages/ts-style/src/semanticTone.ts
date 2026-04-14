@@ -87,7 +87,7 @@ export function registerSemanticToneUtilityStyles() {
         .select(`.${getSemanticToneIconClass(tone)}`, theme)
         .background(tokens.icon.gradient)
         .backgroundColor(tokens.icon.background)
-        .borderColor(tokens.icon.ring)
+        .borderColor(tokens.icon.border)
         .color(tokens.icon.color)
     }
   })

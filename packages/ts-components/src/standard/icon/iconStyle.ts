@@ -43,7 +43,7 @@ function registerIconBaseStyles(
     .borderRadius(options.radii.md)
     .background(palette.semanticTone.accent.icon.gradient)
     .backgroundColor(palette.semanticTone.accent.icon.background)
-    .border(`1px solid ${palette.semanticTone.accent.icon.ring}`)
+    .border(`1px solid ${palette.semanticTone.accent.icon.border}`)
     .boxShadow(palette.effect.interactiveShadow)
     .color(palette.semanticTone.accent.icon.color)
 }

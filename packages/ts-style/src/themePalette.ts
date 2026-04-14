@@ -81,7 +81,7 @@ export interface SemanticToneTokens {
     background: string
     gradient: string
     color: string
-    ring: string
+    border: string
   }
   hover: string
   active: string

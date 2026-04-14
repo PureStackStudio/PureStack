@@ -61,7 +61,7 @@ export function applyAlertIconStyles(
     .justifyContent('center')
     .background(palette.semanticTone.neutral.icon.gradient)
     .backgroundColor(palette.semanticTone.neutral.icon.background)
-    .border(`1px solid ${palette.semanticTone.neutral.icon.ring}`)
+    .border(`1px solid ${palette.semanticTone.neutral.icon.border}`)
     .color(palette.semanticTone.neutral.icon.color)
     .boxShadow(palette.effect.interactiveShadow)
 

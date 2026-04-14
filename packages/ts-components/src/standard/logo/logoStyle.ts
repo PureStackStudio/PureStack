@@ -55,7 +55,7 @@ export function registerLogoShellStyles(
     .position('relative')
     .zIndex('1')
     .background(palette.semanticTone.accent.button.hover.background)
-    .border(`1px solid ${palette.semanticTone.accent.icon.ring}`)
+    .border(`1px solid ${palette.semanticTone.accent.icon.border}`)
     .boxShadow(palette.effect.interactiveShadow)
 
   styleBuilder
