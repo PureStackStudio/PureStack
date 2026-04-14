@@ -107,25 +107,25 @@ export function registerSemanticToneUtilityStyles() {
 
       styleBuilder
         .select(`.${surfaceClass}, .${interactiveSurfaceClass}`, theme)
-        .background(tokens.surface.rest.background)
+        .backgroundImage(tokens.surface.rest.background)
         .borderColor(tokens.surface.rest.border)
         .color(tokens.surface.rest.text)
 
       styleBuilder
         .select(`.${interactiveSurfaceClass}:hover`, theme)
-        .background(tokens.surface.hover.background)
+        .backgroundImage(tokens.surface.hover.background)
         .borderColor(tokens.surface.hover.border)
         .color(tokens.surface.hover.text)
 
       styleBuilder
         .select(`.${interactiveSurfaceClass}:active`, theme)
-        .background(tokens.surface.active.background)
+        .backgroundImage(tokens.surface.active.background)
         .borderColor(tokens.surface.active.border)
         .color(tokens.surface.active.text)
 
       styleBuilder
         .select(`.${interactiveSurfaceClass}:disabled`, theme)
-        .background(tokens.surface.disabled.background)
+        .backgroundImage(tokens.surface.disabled.background)
         .borderColor(tokens.surface.disabled.border)
         .color(tokens.surface.disabled.text)
 
@@ -136,25 +136,25 @@ export function registerSemanticToneUtilityStyles() {
 
       styleBuilder
         .select(`.${surfaceAltClass}, .${interactiveSurfaceAltClass}`, theme)
-        .background(tokens.surfaceAlt.rest.background)
+        .backgroundImage(tokens.surfaceAlt.rest.background)
         .borderColor(tokens.surfaceAlt.rest.border)
         .color(tokens.surfaceAlt.rest.text)
 
       styleBuilder
         .select(`.${interactiveSurfaceAltClass}:hover`, theme)
-        .background(tokens.surfaceAlt.hover.background)
+        .backgroundImage(tokens.surfaceAlt.hover.background)
         .borderColor(tokens.surfaceAlt.hover.border)
         .color(tokens.surfaceAlt.hover.text)
 
       styleBuilder
         .select(`.${interactiveSurfaceAltClass}:active`, theme)
-        .background(tokens.surfaceAlt.active.background)
+        .backgroundImage(tokens.surfaceAlt.active.background)
         .borderColor(tokens.surfaceAlt.active.border)
         .color(tokens.surfaceAlt.active.text)
 
       styleBuilder
         .select(`.${interactiveSurfaceAltClass}:disabled`, theme)
-        .background(tokens.surfaceAlt.disabled.background)
+        .backgroundImage(tokens.surfaceAlt.disabled.background)
         .borderColor(tokens.surfaceAlt.disabled.border)
         .color(tokens.surfaceAlt.disabled.text)
 
@@ -165,19 +165,21 @@ export function registerSemanticToneUtilityStyles() {
 
       styleBuilder
         .select(`.${buttonClass}, .${interactiveButtonClass}`, theme)
-        .background(tokens.button.rest.background)
+        .backgroundImage(tokens.button.rest.background)
         .borderColor(tokens.button.rest.border)
         .color(tokens.button.rest.text)
+        .backgroundSize('calc(100% + 10px) calc(100% + 10px)')
+        .backgroundPosition('center')
 
       styleBuilder
         .select(`.${interactiveButtonClass}:hover`, theme)
-        .background(tokens.button.hover.background)
+        .backgroundImage(tokens.button.hover.background)
         .borderColor(tokens.button.hover.border)
         .color(tokens.button.hover.text)
 
       styleBuilder
         .select(`.${interactiveButtonClass}:active`, theme)
-        .background(tokens.button.active.background)
+        .backgroundImage(tokens.button.active.background)
         .borderColor(tokens.button.active.border)
         .color(tokens.button.active.text)
 
@@ -186,13 +188,13 @@ export function registerSemanticToneUtilityStyles() {
           `.${interactiveButtonClass}[aria-selected="true"], .${interactiveButtonClass}[aria-pressed="true"], .${interactiveButtonClass}[aria-current="true"], .${interactiveButtonClass}.is-active`,
           theme,
         )
-        .background(tokens.button.active.background)
+        .backgroundImage(tokens.button.active.background)
         .borderColor(tokens.button.active.border)
         .color(tokens.button.active.text)
 
       styleBuilder
         .select(`.${interactiveButtonClass}:disabled`, theme)
-        .background(tokens.button.disabled.background)
+        .backgroundImage(tokens.button.disabled.background)
         .borderColor(tokens.button.disabled.border)
         .color(tokens.button.disabled.text)
 
@@ -211,7 +213,7 @@ export function registerSemanticToneUtilityStyles() {
 
       styleBuilder
         .select(`.${getSemanticToneIconClass(tone)}`, theme)
-        .background(tokens.icon.gradient)
+        .backgroundImage(tokens.icon.gradient)
         .backgroundColor(tokens.icon.background)
         .borderColor(tokens.icon.border)
         .color(tokens.icon.color)

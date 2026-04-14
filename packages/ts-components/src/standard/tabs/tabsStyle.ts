@@ -126,14 +126,6 @@ function registerTabsShellStyles(theme: ThemeMode, options: ThemeOptions) {
     .appearance('none')
     .webkitAppearance('none')
     .mozAppearance('none')
-    .backgroundImage(
-      'linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%)',
-    )
-    .backgroundPosition(
-      'calc(100% - 20px) calc(50% - 2px), calc(100% - 14px) calc(50% - 2px)',
-    )
-    .backgroundSize('6px 6px, 6px 6px')
-    .backgroundRepeat('no-repeat')
 }
 
 function registerTabsControlStyles(theme: ThemeMode, options: ThemeOptions) {
