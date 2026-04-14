@@ -28,8 +28,8 @@ export function applyPricingShellStyles(
     .overflow('hidden')
     .padding('28px')
     .borderRadius(options.radii.lg)
-    .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
-    .background(palette.semanticTone.neutral.background.showcaseAlt)
+    .border(`1px solid ${palette.semanticTone.accent.border.subtle}`)
+    .background(palette.semanticTone.accent.background.surface)
     .boxShadow(options.shadows.soft)
     .margin('0 0 32px')
 

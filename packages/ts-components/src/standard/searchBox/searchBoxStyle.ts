@@ -208,7 +208,7 @@ function registerSearchBoxResultContentStyles(
     .fontSize('0.98rem')
     .lineHeight('1.35')
     .letterSpacing('-0.01em')
-    .color(palette.semanticTone.neutral.text.strong)
+    .color(palette.semanticTone.neutral.text.default)
     .wordBreak('break-word')
 
   styleBuilder

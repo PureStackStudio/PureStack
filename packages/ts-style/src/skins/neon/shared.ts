@@ -124,8 +124,6 @@ export function createTone(
       surface: radial(surface.level2, surface.level3),
       surfaceAlt: radial(surfaceAlt.level3, surfaceAlt.level4),
       overlay: canvas.level1,
-      showcase: gradient('180deg', [background.level3, background.level5]),
-      showcaseAlt: gradient('180deg', [background.level1, background.level5]),
       ...(overrides.background || {}),
     },
     border: {
@@ -137,9 +135,6 @@ export function createTone(
     text: {
       default: foreground.level3,
       subtle: foreground.level1,
-      soft: foreground.level2,
-      strong: foreground.level5,
-      inverse: canvas.level3,
       ...(overrides.text || {}),
     },
     button,

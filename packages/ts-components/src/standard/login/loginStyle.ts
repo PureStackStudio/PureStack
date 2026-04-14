@@ -54,7 +54,7 @@ function registerLoginShellStyles(
     .fontSize('1.65rem')
     .lineHeight('1.1')
     .fontWeight('820')
-    .color(palette.semanticTone.neutral.text.strong)
+    .color(palette.semanticTone.neutral.text.default)
   styleBuilder
     .select('.login-panel__description', theme)
     .margin('0')
@@ -87,7 +87,7 @@ function registerLoginMetaStyles(
     .textDecoration('none')
   styleBuilder
     .select('.login-panel__footer a:hover', theme)
-    .color(palette.semanticTone.neutral.text.strong)
+    .color(palette.semanticTone.neutral.text.default)
     .textDecoration('underline')
   styleBuilder
     .select('.login-panel__shell', theme)

@@ -51,7 +51,7 @@ function registerConsentBannerStyles(
     .fontSize('18px')
     .fontWeight('750')
     .letterSpacing('-0.01em')
-    .color(palette.semanticTone.neutral.text.strong)
+    .color(palette.semanticTone.neutral.text.default)
   styleBuilder
     .select('.consent__description', theme)
     .margin('0')
@@ -102,7 +102,7 @@ function registerConsentPanelStyles(
     .fontSize('17px')
     .fontWeight('750')
     .letterSpacing('-0.01em')
-    .color(palette.semanticTone.neutral.text.strong)
+    .color(palette.semanticTone.neutral.text.default)
 }
 
 function registerConsentFormStyles(

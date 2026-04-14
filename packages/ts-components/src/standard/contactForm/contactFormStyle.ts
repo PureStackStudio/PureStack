@@ -37,7 +37,7 @@ function registerContactFormShellStyles(
     .fontSize('1.05rem')
     .fontWeight('760')
     .letterSpacing('-0.01em')
-    .color(palette.semanticTone.neutral.text.strong)
+    .color(palette.semanticTone.neutral.text.default)
   styleBuilder
     .select('.contact-form__description', theme)
     .margin('0')
@@ -82,7 +82,7 @@ function registerContactFormFieldStyles(
       '.contact-form__input::placeholder, .contact-form__textarea::placeholder',
       theme,
     )
-    .color(palette.semanticTone.neutral.text.soft)
+    .color(palette.semanticTone.neutral.text.subtle)
   styleBuilder
     .select(
       '.contact-form__input:focus-visible, .contact-form__select:focus-visible, .contact-form__textarea:focus-visible',

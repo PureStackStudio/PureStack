@@ -44,8 +44,6 @@ export interface SemanticToneTokens {
     surface: string
     surfaceAlt: string
     overlay: string
-    showcase: string
-    showcaseAlt: string
   }
   border: {
     subtle: string
@@ -55,9 +53,6 @@ export interface SemanticToneTokens {
   text: {
     default: string
     subtle: string
-    soft: string
-    strong: string
-    inverse: string
   }
   button: {
     rest: {

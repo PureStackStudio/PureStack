@@ -234,7 +234,7 @@ function registerCopyButtonStateStyles(
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button:disabled)', theme)
     .background(palette.semanticTone.neutral.disabled)
-    .color(palette.semanticTone.neutral.text.soft)
+    .color(palette.semanticTone.neutral.text.subtle)
     .borderColor(palette.semanticTone.neutral.border.subtle)
     .cursor('not-allowed')
 
@@ -348,7 +348,7 @@ function registerTableHeaderStyles(
   styleBuilder
     .select('.doc-content :where(thead th)', theme)
     .background(palette.semanticTone.neutral.background.surface)
-    .color(palette.semanticTone.neutral.text.strong)
+    .color(palette.semanticTone.neutral.text.default)
     .fontSize('0.79rem')
     .textTransform('uppercase')
     .letterSpacing('0.055em')

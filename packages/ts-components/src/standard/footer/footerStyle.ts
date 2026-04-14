@@ -30,7 +30,7 @@ export function applyFooterShellStyles(
     .margin('36px 0 0')
     .padding('1px')
     .borderRadius(options.radii.lg)
-    .background(palette.semanticTone.neutral.background.showcaseAlt)
+    .background(palette.semanticTone.accent.background.surface)
     .boxShadow(palette.effect.panelShadowStrong)
 
   styleBuilder
@@ -102,7 +102,7 @@ export function applyFooterHeadingStyles(
     .fontSize('clamp(24px, 3.4vw, 34px)')
     .lineHeight('1.12')
     .letterSpacing('-0.02em')
-    .color(palette.semanticTone.neutral.text.strong)
+    .color(palette.semanticTone.neutral.text.default)
   styleBuilder
     .select('.site-footer__tagline', theme)
     .margin('0')
@@ -236,7 +236,7 @@ export function applyFooterNewsletterShellStyles(
     .fontSize('16px')
     .fontWeight('700')
     .letterSpacing('-0.01em')
-    .color(palette.semanticTone.neutral.text.strong)
+    .color(palette.semanticTone.neutral.text.default)
   styleBuilder
     .select('.site-footer__newsletter-body', theme)
     .margin('0')
@@ -274,7 +274,7 @@ export function applyFooterNewsletterFieldStyles(
     .color(palette.semanticTone.neutral.text.default)
   styleBuilder
     .select('.site-footer__newsletter-input::placeholder', theme)
-    .color(palette.semanticTone.neutral.text.soft)
+    .color(palette.semanticTone.neutral.text.subtle)
   styleBuilder
     .select('.site-footer__newsletter-input:focus-visible', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
@@ -335,7 +335,7 @@ export function applyFooterColumnShellStyles(
     .margin('0')
     .fontSize('13px')
     .lineHeight('1.5')
-    .color(palette.semanticTone.neutral.text.soft)
+    .color(palette.semanticTone.neutral.text.subtle)
 }
 
 export function applyFooterColumnListStyles(theme: ThemeMode) {
@@ -415,7 +415,7 @@ export function applyFooterBottomShellStyles(
     .margin('0')
     .fontSize('13px')
     .lineHeight('1.5')
-    .color(palette.semanticTone.neutral.text.soft)
+    .color(palette.semanticTone.neutral.text.subtle)
 }
 
 export function applyFooterBottomLegalStyles(
@@ -501,12 +501,12 @@ export function applyFooterBottomSocialStyles(
 export function applyFooterToneStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.site-footer--tone-accent', theme)
-    .background(palette.semanticTone.neutral.background.showcase)
+    .background(palette.semanticTone.neutral.background.surface)
 
   styleBuilder
     .select('.site-footer--tone-accent .site-footer__inner', theme)
-    .background(palette.semanticTone.neutral.background.canvas)
-    .borderColor(palette.semanticTone.accent.border.default)
+    .background(palette.semanticTone.neutral.background.surface)
+    .borderColor(palette.semanticTone.neutral.border.default)
 
   styleBuilder
     .select('.site-footer--tone-neutral .site-footer__inner', theme)

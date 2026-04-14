@@ -55,7 +55,7 @@ function registerFormFieldStyles(
     .transition('border-color 160ms ease, box-shadow 160ms ease')
   styleBuilder
     .select('.form-block__input::placeholder', theme)
-    .color(palette.semanticTone.neutral.text.soft)
+    .color(palette.semanticTone.neutral.text.subtle)
   styleBuilder
     .select('.form-block__input:focus-visible', theme)
     .outline('none')
@@ -109,7 +109,7 @@ function registerFormFieldStyles(
     .padding('0')
     .border('none')
     .background('transparent')
-    .color(palette.semanticTone.neutral.text.strong)
+    .color(palette.semanticTone.neutral.text.default)
     .fontSize('0.95rem')
     .fontWeight('800')
     .lineHeight('1')
@@ -158,7 +158,7 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .textDecoration('none')
   styleBuilder
     .select('.form-block__assist-link:hover', theme)
-    .color(palette.semanticTone.neutral.text.strong)
+    .color(palette.semanticTone.neutral.text.default)
     .textDecoration('underline')
   styleBuilder
     .select('.form-block__divider', theme)
@@ -176,7 +176,7 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .padding('0 8px')
     .fontSize('0.78rem')
     .background(palette.semanticTone.neutral.background.surfaceAlt)
-    .color(palette.semanticTone.neutral.text.soft)
+    .color(palette.semanticTone.neutral.text.subtle)
 }
 
 function registerFormStatusStyles(

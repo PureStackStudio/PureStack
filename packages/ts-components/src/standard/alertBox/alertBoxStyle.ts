@@ -109,7 +109,7 @@ export function applyAlertHeaderStyles(
     .fontSize('15px')
     .fontWeight('700')
     .letterSpacing('-0.01em')
-    .color(palette.semanticTone.neutral.text.strong)
+    .color(palette.semanticTone.neutral.text.default)
 
   styleBuilder
     .select('.alert__badge', theme)
@@ -137,7 +137,7 @@ export function applyAlertBodyStyles(
     .lineHeight('1.6')
   styleBuilder
     .select('.alert__body :where(strong)', theme)
-    .color(palette.semanticTone.neutral.text.strong)
+    .color(palette.semanticTone.neutral.text.default)
   styleBuilder
     .select('.alert__body :where(a)', theme)
     .color(palette.semanticTone.accent.text.default)

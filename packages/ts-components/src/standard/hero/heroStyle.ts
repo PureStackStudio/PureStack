@@ -28,7 +28,7 @@ function registerHeroShellStyles(
     .padding('28px')
     .borderRadius(options.radii.lg)
     .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
-    .background(palette.semanticTone.neutral.background.showcase)
+    .background(palette.semanticTone.neutral.background.surface)
     .boxShadow(options.shadows.soft)
     .margin('0 0 32px')
     .color(palette.semanticTone.neutral.text.default)
