@@ -32,7 +32,7 @@ function registerLoginShellStyles(
     .borderRadius(options.radii.lg)
     .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
     .background(
-      `linear-gradient(165deg, ${palette.semanticTone.neutral.surface.rest.background} 0%, ${palette.semanticTone.neutral.surfaceAlt.rest.background} 100%)`,
+      `${palette.semanticTone.neutral.surfaceAlt.rest.background}, ${palette.semanticTone.neutral.surface.rest.background}`,
     )
     .boxShadow(palette.effect.panelShadow)
   styleBuilder

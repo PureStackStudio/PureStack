@@ -69,6 +69,22 @@ export function gradient(angle: string, colors: string[]) {
     .join(', ')})`
 }
 
+function linear(angle: string, stops: Array<[string, string]>) {
+  return `linear-gradient(${angle}, ${stops
+    .map(([color, offset]) => `${color} ${offset}`)
+    .join(', ')})`
+}
+
+function radialAt(position: string, stops: Array<[string, string]>) {
+  return `radial-gradient(circle at ${position}, ${stops
+    .map(([color, offset]) => `${color} ${offset}`)
+    .join(', ')})`
+}
+
+function layered(layers: string[]) {
+  return layers.filter(Boolean).join(', ')
+}
+
 export function radial(top: string, bottom: string) {
   return `radial-gradient(${top} 0%, ${bottom} 100%)`
 }
@@ -85,6 +101,135 @@ export function createScale(hex: string, delta = 20): ToneScale {
   return { level1, level2, level3, level4, level5 }
 }
 
+type ChromeState = 'rest' | 'hover' | 'active' | 'disabled'
+type ChromeKind = 'button' | 'surface' | 'surfaceAlt' | 'canvas' | 'icon'
+
+function createChrome(
+  kind: ChromeKind,
+  scale: ToneScale,
+  state: ChromeState,
+  isGhost = false,
+) {
+  if (isGhost && (kind === 'button' || kind === 'surface' || kind === 'surfaceAlt')) {
+    if (state === 'rest') return 'transparent'
+    if (state === 'disabled') return rgba(scale.level1, 0.12)
+  }
+
+  const glossAlphaByState: Record<ChromeState, number> = {
+    rest: kind === 'button' ? 0.26 : 0.18,
+    hover: kind === 'button' ? 0.34 : 0.22,
+    active: kind === 'button' ? 0.18 : 0.14,
+    disabled: 0.1,
+  }
+
+  const hotspotAlphaByState: Record<ChromeState, number> = {
+    rest: kind === 'button' ? 0.24 : 0.16,
+    hover: kind === 'button' ? 0.32 : 0.2,
+    active: kind === 'button' ? 0.16 : 0.12,
+    disabled: 0.08,
+  }
+
+  const bottomShadeByState: Record<ChromeState, number> = {
+    rest: kind === 'button' ? 0.2 : 0.14,
+    hover: kind === 'button' ? 0.24 : 0.18,
+    active: kind === 'button' ? 0.28 : 0.22,
+    disabled: 0.12,
+  }
+
+  const edgeAlphaByState: Record<ChromeState, number> = {
+    rest: 0.12,
+    hover: 0.16,
+    active: 0.2,
+    disabled: 0.08,
+  }
+
+  const hotspotPosition =
+    kind === 'button' ? '20% 18%' : kind === 'icon' ? '24% 18%' : '18% 14%'
+  const baseStart =
+    state === 'active'
+      ? scale.level3
+      : state === 'disabled'
+        ? scale.level1
+        : scale.level2
+  const baseMid =
+    state === 'hover'
+      ? scale.level4
+      : state === 'active'
+        ? scale.level4
+        : state === 'disabled'
+          ? scale.level2
+          : scale.level3
+  const baseEnd =
+    state === 'hover'
+      ? scale.level5
+      : state === 'active'
+        ? scale.level5
+        : state === 'disabled'
+          ? scale.level3
+          : scale.level4
+
+  const bodyAngle =
+    kind === 'button' ? '145deg' : kind === 'icon' ? '150deg' : '160deg'
+
+  const body = linear(bodyAngle, [
+    [baseStart, '0%'],
+    [baseMid, '46%'],
+    [baseEnd, '100%'],
+  ])
+
+  const gloss = linear('180deg', [
+    [rgba('#ffffff', glossAlphaByState[state]), '0%'],
+    [rgba('#ffffff', glossAlphaByState[state] * 0.55), '14%'],
+    [rgba('#ffffff', glossAlphaByState[state] * 0.18), '24%'],
+    ['transparent', kind === 'button' ? '44%' : '38%'],
+  ])
+
+  const hotspot = radialAt(hotspotPosition, [
+    [rgba('#ffffff', hotspotAlphaByState[state]), '0%'],
+    [rgba(scale.level1, hotspotAlphaByState[state] * 0.75), '18%'],
+    [rgba(scale.level2, hotspotAlphaByState[state] * 0.28), '38%'],
+    ['transparent', '68%'],
+  ])
+
+  const edgeShade = linear('180deg', [
+    [rgba('#000000', edgeAlphaByState[state] * 0.1), '0%'],
+    ['transparent', '18%'],
+    ['transparent', '72%'],
+    [rgba('#000000', bottomShadeByState[state]), '100%'],
+  ])
+
+  const rim =
+    kind === 'button' || kind === 'icon'
+      ? linear('90deg', [
+          [rgba('#ffffff', edgeAlphaByState[state] * 0.55), '0%'],
+          ['transparent', '14%'],
+          ['transparent', '86%'],
+          [rgba('#000000', edgeAlphaByState[state] * 0.6), '100%'],
+        ])
+      : ''
+
+  if (kind === 'canvas') {
+    return layered([
+      radialAt('16% 12%', [
+        [rgba('#ffffff', 0.12), '0%'],
+        [rgba(scale.level1, 0.08), '18%'],
+        ['transparent', '56%'],
+      ]),
+      linear('165deg', [
+        [scale.level2, '0%'],
+        [scale.level3, '52%'],
+        [scale.level4, '100%'],
+      ]),
+      linear('180deg', [
+        ['transparent', '0%'],
+        [rgba('#000000', 0.08), '100%'],
+      ]),
+    ])
+  }
+
+  return layered([gloss, hotspot, rim, edgeShade, body])
+}
+
 function createInteractiveGroup(
   scale: ToneScale,
   defaultBorder: string,
@@ -94,28 +239,29 @@ function createInteractiveGroup(
   subtleText: string,
   groupOverrides: ToneSurfaceOverrides | undefined,
   isGhost: boolean,
+  kind: 'surface' | 'surfaceAlt',
 ): Tone['surface'] {
   return {
     rest: {
-      background: isGhost ? 'transparent' : radial(scale.level2, scale.level3),
+      background: createChrome(kind, scale, 'rest', isGhost),
       border: isGhost ? 'transparent' : defaultBorder,
       text: isGhost ? 'currentColor' : defaultText,
       ...(groupOverrides?.rest || {}),
     },
     hover: {
-      background: radial(scale.level3, scale.level4),
+      background: createChrome(kind, scale, 'hover', isGhost),
       border: defaultBorder,
       text: defaultText,
       ...(groupOverrides?.hover || {}),
     },
     active: {
-      background: radial(scale.level4, scale.level5),
+      background: createChrome(kind, scale, 'active', isGhost),
       border: defaultBorder,
       text: defaultText,
       ...(groupOverrides?.active || {}),
     },
     disabled: {
-      background: scale.level1,
+      background: createChrome(kind, scale, 'disabled', isGhost),
       border: subtleBorder,
       text: subtleText,
       ...(groupOverrides?.disabled || {}),
@@ -144,27 +290,25 @@ export function createTone(
 
   const button = {
     rest: {
-      background: isGhost
-        ? 'transparent'
-        : gradient('135deg', [background.level2, background.level3]),
+      background: createChrome('button', background, 'rest', isGhost),
       border: isGhost ? 'transparent' : borderTone(border.level2),
       text: isGhost ? 'currentColor' : foreground.level2,
       ...(overrides.button?.rest || {}),
     },
     hover: {
-      background: gradient('135deg', [background.level4, background.level5]),
+      background: createChrome('button', background, 'hover', isGhost),
       border: borderTone(border.level4),
       text: foreground.level5,
       ...(overrides.button?.hover || {}),
     },
     active: {
-      background: gradient('135deg', [background.level4, background.level5]),
+      background: createChrome('button', background, 'active', isGhost),
       border: borderTone(border.level5),
       text: foreground.level5,
       ...(overrides.button?.active || {}),
     },
     disabled: {
-      background: background.level1,
+      background: createChrome('button', background, 'disabled', isGhost),
       border: borderTone(border.level1),
       text: foreground.level1,
       ...(overrides.button?.disabled || {}),
@@ -182,6 +326,7 @@ export function createTone(
       subtleText,
       overrides.surface,
       isGhost,
+      'surface',
     ),
     surfaceAlt: createInteractiveGroup(
       surfaceAlt,
@@ -192,8 +337,9 @@ export function createTone(
       subtleText,
       overrides.surfaceAlt,
       isGhost,
+      'surfaceAlt',
     ),
-    canvas: overrides.canvas ?? radial(canvas.level2, canvas.level3),
+    canvas: overrides.canvas ?? createChrome('canvas', canvas, 'rest'),
     overlay: overrides.overlay ?? canvas.level1,
     border: {
       subtle: subtleBorder,
@@ -209,7 +355,7 @@ export function createTone(
     button,
     icon: {
       background: background.level5,
-      gradient: gradient('135deg', [background.level5, background.level4]),
+      gradient: createChrome('icon', background, 'rest'),
       color: foreground.level5,
       border: defaultBorder,
       ...(overrides.icon || {}),
