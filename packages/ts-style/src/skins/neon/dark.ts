@@ -25,9 +25,6 @@ const core: NeonCore = {
   },
   ghost: {
     ...baseTone,
-    button: 'transparent',
-    foreground: 'currentColor',
-    border: 'transparent',
   },
   info: {
     canvas: '#15a9c0',

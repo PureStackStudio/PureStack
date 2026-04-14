@@ -19,6 +19,7 @@ function registerTabsShellStyles(theme: ThemeMode, options: ThemeOptions) {
     .select('.tabs', theme)
     .display('grid')
     .gap('12px')
+    .alignContent('start')
     .padding('16px')
     .borderRadius(options.radii.lg)
     .border('1px solid transparent')
@@ -30,6 +31,7 @@ function registerTabsShellStyles(theme: ThemeMode, options: ThemeOptions) {
     .gridTemplateColumns('repeat(auto-fit, minmax(120px, 1fr))')
     .gap('12px 8px')
     .alignItems('stretch')
+    .alignContent('start')
     .minWidth('0')
 
   styleBuilder.select('.tabs__item', theme).display('contents')

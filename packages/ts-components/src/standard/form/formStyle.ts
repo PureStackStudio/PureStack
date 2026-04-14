@@ -144,7 +144,7 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .alignItems('center')
     .gap('8px')
     .fontSize('0.84rem')
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.semanticTone.neutral.text.default)
   styleBuilder
     .select('.form-block__check input', theme)
     .width('16px')

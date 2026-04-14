@@ -29,7 +29,7 @@ export function createNeonPalette({
     semanticTone: {
       neutral: createTone(core.neutral, borderTone),
       accent: createTone(core.accent, borderTone),
-      ghost: createTone(core.ghost, borderTone),
+      ghost: createTone(core.ghost, borderTone, {}, true),
       info: createTone(core.info, borderTone),
       success: createTone(core.success, borderTone),
       warning: createTone(core.warning, borderTone),

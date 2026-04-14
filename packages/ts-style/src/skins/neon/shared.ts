@@ -93,12 +93,13 @@ function createInteractiveGroup(
   defaultText: string,
   subtleText: string,
   groupOverrides: ToneSurfaceOverrides | undefined,
+  isGhost: boolean,
 ): Tone['surface'] {
   return {
     rest: {
-      background: radial(scale.level2, scale.level3),
-      border: defaultBorder,
-      text: defaultText,
+      background: isGhost ? 'transparent' : radial(scale.level2, scale.level3),
+      border: isGhost ? 'transparent' : defaultBorder,
+      text: isGhost ? 'currentColor' : defaultText,
       ...(groupOverrides?.rest || {}),
     },
     hover: {
@@ -127,6 +128,7 @@ export function createTone(
   colors: ToneColors,
   borderTone: (hex: string) => string,
   overrides: ToneOverrides = {},
+  isGhost = false,
 ): Tone {
   const canvas = createScale(colors.canvas, 10)
   const background = createScale(colors.button, 10)
@@ -135,26 +137,28 @@ export function createTone(
   const surface = createScale(colors.surface, 10)
   const surfaceAlt = createScale(colors.surfaceAlt, 10)
   const defaultText = foreground.level3
-  const subtleText = foreground.level1
+  const subtleText = borderTone(foreground.level1)
   const defaultBorder = borderTone(border.level3)
   const subtleBorder = borderTone(border.level2)
   const focusBorder = borderTone(border.level5)
 
   const button = {
     rest: {
-      background: gradient('135deg', [background.level2, background.level3]),
-      border: borderTone(border.level2),
-      text: foreground.level2,
+      background: isGhost
+        ? 'transparent'
+        : gradient('135deg', [background.level2, background.level3]),
+      border: isGhost ? 'transparent' : borderTone(border.level2),
+      text: isGhost ? 'currentColor' : foreground.level2,
       ...(overrides.button?.rest || {}),
     },
     hover: {
-      background: gradient('135deg', [background.level3, background.level4]),
+      background: gradient('135deg', [background.level4, background.level5]),
       border: borderTone(border.level4),
       text: foreground.level5,
       ...(overrides.button?.hover || {}),
     },
     active: {
-      background: gradient('135deg', [background.level3, background.level4]),
+      background: gradient('135deg', [background.level4, background.level5]),
       border: borderTone(border.level5),
       text: foreground.level5,
       ...(overrides.button?.active || {}),
@@ -177,6 +181,7 @@ export function createTone(
       defaultText,
       subtleText,
       overrides.surface,
+      isGhost,
     ),
     surfaceAlt: createInteractiveGroup(
       surfaceAlt,
@@ -186,6 +191,7 @@ export function createTone(
       defaultText,
       subtleText,
       overrides.surfaceAlt,
+      isGhost,
     ),
     canvas: overrides.canvas ?? radial(canvas.level2, canvas.level3),
     overlay: overrides.overlay ?? canvas.level1,

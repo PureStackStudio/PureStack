@@ -259,7 +259,400 @@ Each tab combines existing components so the tabs feel like a complete surface r
   </TabPane>
 </Tabs>
 
-## 3. Pattern
+## 3. Tone gallery
+
+<Grid columns="1" columnsMd="2" columnsLg="3" gap="1rem">
+  <Tabs id="accent-launch-tabs" tone="accent" selected-tab="launch">
+    <template name="header">
+      <div>
+        <h3 style="margin:0;">Accent launch</h3>
+        <p style="margin:0.4rem 0 0;">
+          A brighter treatment for product moments and primary actions.
+        </p>
+      </div>
+    </template>
+
+    <TabPane id="launch" label="Launch" icon="iconoir:rocket">
+      <AlertBox
+        tone="accent"
+        title="Feature spotlight ready"
+        badge="New"
+        icon="iconoir:rocket"
+      >
+        Campaign copy, onboarding, and release assets are all lined up for
+        launch.
+      </AlertBox>
+    </TabPane>
+
+    <TabPane id="cta" label="CTA" icon="iconoir:check">
+      <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+        <Btn tone="accent">Publish update</Btn>
+        <Btn tone="ghost">Preview page</Btn>
+      </div>
+    </TabPane>
+  </Tabs>
+
+  <Tabs id="info-monitoring-tabs" tone="info" selected-tab="health">
+    <template name="header">
+      <div>
+        <h3 style="margin:0;">Info monitoring</h3>
+        <p style="margin:0.4rem 0 0;">
+          A calm tone for dashboards, telemetry, and status views.
+        </p>
+      </div>
+    </template>
+
+    <TabPane id="health" label="Health" icon="iconoir:check">
+      <AlertBox
+        tone="info"
+        title="Monitoring is nominal"
+        badge="Live"
+        icon="iconoir:check"
+      >
+        Request latency, queue depth, and worker throughput remain within normal
+        range.
+      </AlertBox>
+    </TabPane>
+
+    <TabPane id="signals" label="Signals" icon="iconoir:code">
+      <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
+        <Badge tone="info">Latency stable</Badge>
+        <Badge tone="success">Error rate low</Badge>
+      </div>
+    </TabPane>
+  </Tabs>
+
+  <Tabs id="ops-neutral-tabs" tone="neutral" selected-tab="summary">
+    <template name="header">
+      <div>
+        <h3 style="margin:0;">Neutral operations</h3>
+        <p style="margin:0.4rem 0 0;">
+          Balanced surfaces for routine admin flows.
+        </p>
+      </div>
+    </template>
+
+    <TabPane id="summary" label="Summary" icon="iconoir:computer">
+      <AlertBox tone="neutral" title="Cluster stable" icon="iconoir:check">
+        Routine maintenance completed and all background jobs are on schedule.
+      </AlertBox>
+    </TabPane>
+
+    <TabPane id="actions" label="Actions" icon="iconoir:code">
+      <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+        <Btn tone="neutral">Review logs</Btn>
+        <Btn tone="ghost">Open dashboard</Btn>
+      </div>
+    </TabPane>
+  </Tabs>
+
+  <Tabs id="ghost-editorial-tabs" tone="ghost" selected-tab="notes">
+    <template name="header">
+      <div>
+        <h3 style="margin:0;">Ghost editorial</h3>
+        <p style="margin:0.4rem 0 0;">
+          Low-contrast navigation for lighter reading flows.
+        </p>
+      </div>
+    </template>
+
+    <TabPane id="notes" label="Notes" icon="iconoir:book-stack">
+      <AlertBox
+        tone="ghost"
+        title="Draft review in progress"
+        icon="iconoir:book-stack"
+      >
+        Copy edits are complete and illustration captions are waiting on final
+        approval.
+      </AlertBox>
+    </TabPane>
+
+    <TabPane id="publish" label="Publish" icon="iconoir:rocket">
+      <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
+        <Badge tone="ghost">Editorial</Badge>
+        <Badge tone="info">Scheduled</Badge>
+      </div>
+    </TabPane>
+  </Tabs>
+
+  <Tabs id="warning-incident-tabs" tone="warning" selected-tab="status">
+    <template name="header">
+      <div>
+        <h3 style="margin:0;">Warning incident</h3>
+        <p style="margin:0.4rem 0 0;">
+          A stronger tab treatment for active response work.
+        </p>
+      </div>
+    </template>
+
+    <TabPane id="status" label="Status" icon="iconoir:warning-circle">
+      <AlertBox
+        tone="warning"
+        title="Ingress latency elevated"
+        badge="Investigating"
+        icon="iconoir:warning-circle"
+      >
+        Traffic remains available, but response times are above the target
+        budget for a subset of requests.
+      </AlertBox>
+    </TabPane>
+
+    <TabPane id="playbook" label="Playbook" icon="iconoir:headset-help">
+      <Btn tone="warning" icon="iconoir:headset-help">
+        Open incident playbook
+      </Btn>
+    </TabPane>
+  </Tabs>
+
+  <Tabs id="success-milestone-tabs" tone="success" selected-tab="wins">
+    <template name="header">
+      <div>
+        <h3 style="margin:0;">Success milestone</h3>
+        <p style="margin:0.4rem 0 0;">
+          Celebratory but still useful for release recaps.
+        </p>
+      </div>
+    </template>
+
+    <TabPane id="wins" label="Wins" icon="iconoir:check">
+      <AlertBox
+        tone="success"
+        title="Migration complete"
+        badge="Resolved"
+        icon="iconoir:check"
+      >
+        All tenants have been moved to the new storage engine and validation has
+        finished cleanly.
+      </AlertBox>
+    </TabPane>
+
+    <TabPane id="next" label="Next" icon="iconoir:rocket">
+      <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
+        <Badge tone="success">Complete</Badge>
+        <Badge tone="accent">Share recap</Badge>
+      </div>
+    </TabPane>
+  </Tabs>
+
+  <Tabs id="danger-security-tabs" tone="danger" selected-tab="review">
+    <template name="header">
+      <div>
+        <h3 style="margin:0;">Danger security</h3>
+        <p style="margin:0.4rem 0 0;">
+          High-signal tabs for urgent remediation steps.
+        </p>
+      </div>
+    </template>
+
+    <TabPane id="review" label="Review" icon="iconoir:shield-alert">
+      <AlertBox
+        tone="danger"
+        title="Credential leak requires immediate rotation"
+        badge="Critical"
+        icon="iconoir:shield-alert"
+      >
+        One automation token appeared in logs during a failed deploy and must be
+        revoked now.
+      </AlertBox>
+    </TabPane>
+
+    <TabPane id="response" label="Response" icon="iconoir:shield">
+      <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+        <Btn tone="danger">Rotate secrets</Btn>
+        <Btn tone="neutral">Open incident room</Btn>
+      </div>
+    </TabPane>
+  </Tabs>
+</Grid>
+
+## 4. Advanced form flows
+
+<Tabs id="advanced-form-tabs" tone="accent" selected-tab="workspace">
+  <template name="header">
+    <div>
+      <h2 style="margin:0;">Advanced form flows</h2>
+      <p style="margin:0.5rem 0 0;">
+        Tabs also work well for denser setup experiences where fields, guidance,
+        status, and submission actions need to stay grouped.
+      </p>
+    </div>
+  </template>
+
+  <TabPane id="workspace" label="Workspace setup" icon="iconoir:computer">
+    <AppForm action="/contact" method="post">
+      <Grid columns="1" columnsMd="2">
+        <FormField
+          label="Workspace name"
+          type="text"
+          name="workspaceName"
+          placeholder="PureStack Labs"
+          autocomplete="organization"
+          required="true"/>
+        <FormField
+          label="Primary domain"
+          type="url"
+          name="primaryDomain"
+          placeholder="https://labs.purestack.dev"
+          autocomplete="url"
+          required="true"/>
+      </Grid>
+
+      <Grid columns="1" columnsLg="3">
+        <FormField
+          label="Admin email"
+          type="email"
+          name="adminEmail"
+          placeholder="owner@purestack.dev"
+          autocomplete="email"
+          required="true"/>
+        <FormField
+          label="Team size"
+          type="number"
+          name="teamSize"
+          min="1"
+          max="5000"
+          step="1"
+          value="24"/>
+        <FormField
+          label="Projected monthly traffic"
+          type="number"
+          name="traffic"
+          min="1000"
+          step="500"
+          value="15000"/>
+      </Grid>
+
+      <Grid columns="1" columnsMd="2" alignItems="start">
+        <FormCheck
+          label="Enable weekly release summaries for administrators"
+          name="weeklyDigest"
+          value="yes"
+          checked="true"/>
+        <FormCheck
+          label="Require SSO before inviting external collaborators"
+          name="requireSso"
+          value="yes"/>
+      </Grid>
+
+      <FormMeta>
+        <Grid columns="1" columnsMd="2" alignItems="center">
+          <FormAssistLink href="/guide/pricing" label="Compare plans"/>
+          <FormAssistLink href="/contact" label="Talk to implementation team"/>
+        </Grid>
+      </FormMeta>
+
+      <FormStatus variant="info">
+        This setup draft is static sample content, but it shows how multi-step
+        account provisioning can live inside tabs.
+      </FormStatus>
+
+      <Grid columns="auto auto 1fr" justifyItems="start">
+        <FormSubmit label="Create workspace"/>
+        <FormSubmit label="Save draft"/>
+      </Grid>
+    </AppForm>
+  </TabPane>
+
+  <TabPane id="security-policy" label="Security policy" icon="iconoir:shield">
+    <AppForm action="/security" method="post">
+      <Grid columns="1" columnsMd="2">
+        <FormField
+          label="Session timeout (minutes)"
+          type="number"
+          name="sessionTimeout"
+          min="5"
+          step="5"
+          value="30"/>
+        <FormField
+          label="Allowed domains"
+          type="text"
+          name="allowedDomains"
+          placeholder="purestack.dev, partner.example"/>
+      </Grid>
+
+      <Grid columns="1" columnsMd="2" alignItems="start">
+        <FormCheck
+          label="Require MFA for all administrators"
+          name="requireMfa"
+          value="yes"
+          checked="true"/>
+        <FormCheck
+          label="Notify security team on high-risk logins"
+          name="securityAlerts"
+          value="yes"
+          checked="true"/>
+      </Grid>
+
+      <FormDivider label="Operational guidance"/>
+
+      <AlertBox
+        tone="warning"
+        title="Policy changes affect active sessions"
+        badge="Heads up"
+        icon="iconoir:warning-circle"
+      >
+        Increasing login strictness can force re-authentication for existing
+        users.
+      </AlertBox>
+
+      <Grid columns="auto auto 1fr" justifyItems="start">
+        <FormSubmit label="Apply policy"/>
+        <Btn tone="ghost">Preview impact</Btn>
+      </Grid>
+    </AppForm>
+  </TabPane>
+
+  <TabPane id="billing-rules" label="Billing rules" icon="iconoir:wallet">
+    <AppForm action="/billing" method="post">
+      <Grid columns="1" columnsMd="2" columnsLg="3">
+        <FormField
+          label="Default seat limit"
+          type="number"
+          name="seatLimit"
+          min="1"
+          step="1"
+          value="50"/>
+        <FormField
+          label="Soft budget threshold"
+          type="number"
+          name="softBudget"
+          min="100"
+          step="100"
+          value="2500"/>
+        <FormField
+          label="Hard budget threshold"
+          type="number"
+          name="hardBudget"
+          min="100"
+          step="100"
+          value="4000"/>
+      </Grid>
+
+      <Grid columns="1" columnsMd="2" alignItems="start">
+        <FormCheck
+          label="Send billing alerts to finance"
+          name="financeAlerts"
+          value="yes"
+          checked="true"/>
+        <FormCheck
+          label="Block seat expansion above hard threshold"
+          name="blockExpansion"
+          value="yes"/>
+      </Grid>
+
+      <FormStatus variant="success">
+        Current plan rules are valid and budget thresholds do not conflict.
+      </FormStatus>
+
+      <Grid columns="auto auto 1fr" justifyItems="start">
+        <FormSubmit label="Save billing rules"/>
+        <Btn tone="neutral">Export policy</Btn>
+      </Grid>
+    </AppForm>
+  </TabPane>
+</Tabs>
+
+## 5. Pattern
 
 ```html
 <Tabs id="example" tone="accent" selected-tab="overview">
