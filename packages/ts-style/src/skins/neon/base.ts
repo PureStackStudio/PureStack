@@ -41,8 +41,8 @@ export function createNeonPalette({
 
 function createEffect(core: NeonCore) {
   const text = createScale(core.neutral.foreground, 18)
-  const accent = createScale(core.accent.background, 20)
-  const info = createScale(core.info.background, 18)
+  const accent = createScale(core.accent.button, 20)
+  const info = createScale(core.info.button, 18)
 
   const effect: ThemePalette['effect'] = {
     glowPrimary: `0 0 28px ${rgba(accent.level3, 0.22)}`,

@@ -5,7 +5,7 @@ const white = '#e8f3f8'
 const accent = '#307fca'
 const baseTone: ToneColors = {
   canvas: '#f3f9ff',
-  background: '#9bc7ff',
+  button: '#9bc7ff',
   foreground: '#052b3d',
   border: '#323e44',
   surface: '#f1f9ff',
@@ -17,7 +17,7 @@ const core: NeonCore = {
   accent: {
     ...baseTone,
     canvas: accent,
-    background: accent,
+    button: accent,
     foreground: white,
     border: accent,
     surface: accent,
@@ -25,13 +25,13 @@ const core: NeonCore = {
   },
   ghost: {
     ...baseTone,
-    background: 'transparent',
+    button: 'transparent',
     foreground: 'currentColor',
     border: 'transparent',
   },
   info: {
     canvas: '#15a9c0',
-    background: '#15a9c0',
+    button: '#15a9c0',
     foreground: white,
     border: '#16BAD4',
     surface: '#1292a6',
@@ -39,7 +39,7 @@ const core: NeonCore = {
   },
   success: {
     canvas: '#259740',
-    background: '#259740',
+    button: '#259740',
     foreground: white,
     border: '#259740',
     surface: '#259740',
@@ -47,7 +47,7 @@ const core: NeonCore = {
   },
   warning: {
     canvas: '#c49a1c',
-    background: '#c49a1c',
+    button: '#c49a1c',
     foreground: white,
     border: '#c49a1c',
     surface: '#c49a1c',
@@ -55,7 +55,7 @@ const core: NeonCore = {
   },
   danger: {
     canvas: '#a92a37',
-    background: '#a92a37',
+    button: '#a92a37',
     foreground: white,
     border: '#a92a37',
     surface: '#a92a37',

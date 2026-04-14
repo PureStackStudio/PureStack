@@ -14,11 +14,11 @@ export type Tone = SemanticToneTokens
 
 export type ToneColors = {
   canvas: string
-  background: string
-  foreground: string
-  border: string
+  button: string
   surface: string
   surfaceAlt: string
+  foreground: string
+  border: string
 }
 
 type ToneButtonOverrides = {
@@ -30,7 +30,7 @@ type ToneButtonOverrides = {
 }
 
 export type ToneOverrides = {
-  background?: Partial<Tone['background']>
+  background?: Partial<Tone['button']>
   border?: Partial<Tone['border']>
   text?: Partial<Tone['text']>
   button?: ToneButtonOverrides
@@ -84,7 +84,7 @@ export function createTone(
   overrides: ToneOverrides = {},
 ): Tone {
   const canvas = createScale(colors.canvas, 10)
-  const background = createScale(colors.background, 10)
+  const background = createScale(colors.button, 10)
   const foreground = createScale(colors.foreground, 1)
   const border = createScale(colors.border, 1)
   const surface = createScale(colors.surface, 10)
