@@ -94,6 +94,29 @@ export function registerSemanticToneUtilityStyles() {
         .color(tokens.button.rest.text)
 
       styleBuilder
+        .select(`.${getSemanticToneButtonClass(tone)}:hover`, theme)
+        .background(tokens.button.hover.background)
+        .borderColor(tokens.button.hover.border)
+        .color(tokens.button.hover.text)
+
+      styleBuilder
+        .select(`.${getSemanticToneButtonClass(tone)}:active`, theme)
+        .background(tokens.button.active.background)
+        .borderColor(tokens.button.active.border)
+        .color(tokens.button.active.text)
+
+      styleBuilder
+        .select(`.${getSemanticToneButtonClass(tone)}:disabled`, theme)
+        .background(tokens.button.disabled.background)
+        .borderColor(tokens.button.disabled.border)
+        .color(tokens.button.disabled.text)
+
+      styleBuilder
+        .select(`.${getSemanticToneButtonClass(tone)}:focus-visible`, theme)
+        .outline('none')
+        .boxShadow(`0 0 0 2px ${tokens.button.focusRing}`)
+
+      styleBuilder
         .select(`.${getSemanticToneBorderClass(tone)}`, theme)
         .borderColor(tokens.border.default)
 
