@@ -182,6 +182,15 @@ export function registerSemanticToneUtilityStyles() {
         .color(tokens.button.active.text)
 
       styleBuilder
+        .select(
+          `.${interactiveButtonClass}[aria-selected="true"], .${interactiveButtonClass}[aria-pressed="true"], .${interactiveButtonClass}[aria-current="true"], .${interactiveButtonClass}.is-active`,
+          theme,
+        )
+        .background(tokens.button.active.background)
+        .borderColor(tokens.button.active.border)
+        .color(tokens.button.active.text)
+
+      styleBuilder
         .select(`.${interactiveButtonClass}:disabled`, theme)
         .background(tokens.button.disabled.background)
         .borderColor(tokens.button.disabled.border)

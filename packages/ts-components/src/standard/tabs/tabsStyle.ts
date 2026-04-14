@@ -1,4 +1,3 @@
-import type { ThemePalette } from '@purestack/ts-style'
 import {
   styleBuilder,
   type ThemeMode,
@@ -7,27 +6,22 @@ import {
 } from '@purestack/ts-style'
 
 export function registerTabsStyles() {
-  themes.forEach((theme, palette, options) => {
-    registerTabsShellStyles(theme, palette, options)
-    registerTabsControlStyles(theme, palette, options)
-    registerTabsPanelStyles(theme, palette, options)
+  themes.forEach((theme, _, options) => {
+    registerTabsShellStyles(theme, options)
+    registerTabsControlStyles(theme, options)
+    registerTabsPanelStyles(theme, options)
     registerTabsResponsiveStyles(theme)
   })
 }
 
-function registerTabsShellStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+function registerTabsShellStyles(theme: ThemeMode, options: ThemeOptions) {
   styleBuilder
     .select('.tabs', theme)
     .display('grid')
     .gap('12px')
     .padding('16px')
     .borderRadius(options.radii.lg)
-    .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
-    .background(palette.semanticTone.neutral.surface.rest.background)
+    .border('1px solid transparent')
     .boxShadow(options.shadows.soft)
 
   styleBuilder
@@ -73,18 +67,8 @@ function registerTabsShellStyles(
     .height('34px')
     .padding('0')
     .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
-    .background(palette.semanticTone.neutral.surface.rest.background)
-    .color(palette.semanticTone.neutral.text.default)
+    .border('1px solid transparent')
     .cursor('pointer')
-
-  styleBuilder
-    .select('.tabs__overflow-toggle:hover', theme)
-    .background(palette.semanticTone.accent.canvas)
-
-  styleBuilder
-    .select('.tabs__overflow-toggle:focus-visible', theme)
-    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
 
   styleBuilder
     .select('.tabs__overflow-menu', theme)
@@ -98,8 +82,7 @@ function registerTabsShellStyles(
     .maxWidth('min(92vw, 460px)')
     .padding('6px')
     .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
-    .background(palette.semanticTone.neutral.surface.rest.background)
+    .border('1px solid transparent')
     .boxShadow(options.shadows.soft)
 
   styleBuilder
@@ -114,24 +97,13 @@ function registerTabsShellStyles(
     .gap('0.5em')
     .width('100%')
     .padding('8px 10px')
-    .border('none')
+    .border('1px solid transparent')
     .borderRadius(options.radii.sm)
-    .background('transparent')
-    .color(palette.semanticTone.neutral.text.default)
     .textAlign('left')
     .fontSize('0.88rem')
     .fontWeight('600')
     .whiteSpace('nowrap')
     .cursor('pointer')
-
-  styleBuilder
-    .select('.tabs__overflow-option:hover', theme)
-    .background(palette.semanticTone.accent.canvas)
-
-  styleBuilder
-    .select('.tabs__overflow-option--active', theme)
-    .background(palette.semanticTone.accent.canvas)
-    .color(palette.semanticTone.accent.text.default)
 
   styleBuilder
     .select('.tabs__select-wrap', theme)
@@ -145,9 +117,7 @@ function registerTabsShellStyles(
     .minHeight('42px')
     .padding('10px 40px 10px 12px')
     .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
-    .background(palette.semanticTone.neutral.surface.rest.background)
-    .color(palette.semanticTone.neutral.text.default)
+    .border('1px solid transparent')
     .fontSize('0.92rem')
     .fontWeight('600')
     .lineHeight('1.2')
@@ -162,17 +132,9 @@ function registerTabsShellStyles(
     )
     .backgroundSize('6px 6px, 6px 6px')
     .backgroundRepeat('no-repeat')
-
-  styleBuilder
-    .select('.tabs__select:focus-visible', theme)
-    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
 }
 
-function registerTabsControlStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+function registerTabsControlStyles(theme: ThemeMode, options: ThemeOptions) {
   styleBuilder
     .select('.tabs__control', theme)
     .position('absolute')
@@ -189,9 +151,7 @@ function registerTabsControlStyles(
     .minHeight('42px')
     .padding('10px 14px')
     .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
-    .background(palette.semanticTone.neutral.surface.rest.background)
-    .color(palette.semanticTone.neutral.text.subtle)
+    .border('1px solid transparent')
     .fontSize('0.88rem')
     .fontWeight('700')
     .lineHeight('1.2')
@@ -234,52 +194,24 @@ function registerTabsControlStyles(
     .maxWidth('100%')
 
   styleBuilder
-    .select('.tabs__tab:hover, .tabs__tab-button:hover', theme)
-    .background(palette.semanticTone.accent.surface.hover.background)
-    .color(palette.semanticTone.accent.text.default)
-
-  styleBuilder
-    .select('.tabs__control:checked + .tabs__tab', theme)
-    .borderColor('transparent')
-    .background(palette.semanticTone.accent.canvas)
-    .color(palette.semanticTone.accent.text.default)
-
-  styleBuilder
-    .select(
-      '.tabs__list:not(:has(.tabs__control:checked)) .tabs__item:first-child .tabs__tab, .tabs__tab-button--active',
-      theme,
-    )
-    .borderColor('transparent')
-    .background(palette.semanticTone.accent.canvas)
-    .color(palette.semanticTone.accent.text.default)
-
-  styleBuilder
-    .select('.tabs__control:focus-visible + .tabs__tab', theme)
-    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
-
-  styleBuilder
     .select('.tabs__control:disabled + .tabs__tab, .tabs__tab--disabled', theme)
     .opacity('0.45')
     .cursor('not-allowed')
-
-  styleBuilder
-    .select('.tabs__tab-button:focus-visible', theme)
-    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
-    .outlineOffset('-2px')
 
   styleBuilder
     .select('.tabs__tab-button:disabled', theme)
     .opacity('0.45')
     .cursor('not-allowed')
 
+  styleBuilder
+    .select('.tabs__control:focus-visible + .tabs__tab', theme)
+    .outline('2px solid currentColor')
+    .outlineOffset('2px')
+
   styleBuilder.select('.tabs__tab-button--hidden', theme).display('none')
 }
 
-function registerTabsPanelStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+function registerTabsPanelStyles(theme: ThemeMode, options: ThemeOptions) {
   styleBuilder
     .select('.tabs__panel', theme)
     .gridRow('2')
@@ -289,8 +221,6 @@ function registerTabsPanelStyles(
     .padding('0')
     .borderRadius(options.radii.md)
     .border('none')
-    .background(palette.semanticTone.neutral.surface.rest.background)
-    .color(palette.semanticTone.neutral.text.default)
 
   styleBuilder
     .select('.tabs__control:checked + .tabs__tab + .tabs__panel', theme)

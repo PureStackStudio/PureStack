@@ -1,0 +1,286 @@
+---
+title: Enriched Tabs Samples
+description: Rich tabs compositions that combine alerts, badges, buttons, grids, and expandable panels.
+layout:
+  showToc: true
+  fullWidth: true
+---
+
+# Enriched Tabs Samples
+
+This page keeps the original tabs sample intact and focuses on richer, more editorial compositions.
+Each tab combines existing components so the tabs feel like a complete surface rather than a code-only switcher.
+
+## 1. Release command center
+
+<Tabs id="release-command-center" tone="accent" selected-tab="overview">
+  <template name="header">
+    <div>
+      <h2 style="margin:0;">Release command center</h2>
+      <p style="margin:0.5rem 0 0;">
+        A single tabbed workspace for rollout status, readiness checks,
+        operational risks, and launch assets.
+      </p>
+    </div>
+  </template>
+
+  <TabPane id="overview" label="Overview" icon="iconoir:rocket">
+    <Grid columns="1" columnsLg="1.2fr 0.8fr" gap="1rem">
+      <div>
+        <AlertBox
+          tone="accent"
+          eyebrow="Launch"
+          title="PureStack Cloud 2.1 is staged for rollout"
+          badge="Go / No-go"
+          icon="iconoir:rocket"
+          meta="Window opens at 18:30 UTC"
+        >
+          Final smoke tests are green, release notes are locked, and support
+          routing is ready for external traffic.
+          <template name="actions">
+            <a href="#release-runbook">Open runbook</a>
+            <a href="#launch-checklist">Review checklist</a>
+          </template>
+        </AlertBox>
+
+        <div style="margin-top:1rem; display:flex; flex-wrap:wrap; gap:0.5rem;">
+          <Badge tone="success">QA approved</Badge>
+          <Badge tone="info">Observability ready</Badge>
+          <Badge tone="warning">One migration pending</Badge>
+          <Badge tone="accent">Docs synced</Badge>
+        </div>
+
+        <div
+          style="margin-top:1rem; display:flex; flex-wrap:wrap; gap:0.75rem;"
+        >
+          <Btn tone="accent" icon="iconoir:rocket">Start rollout</Btn>
+          <Btn tone="ghost" icon="iconoir:code">View changelog</Btn>
+          <Btn tone="neutral" icon="iconoir:headset-help">Notify support</Btn>
+        </div>
+      </div>
+
+      <AlertBox
+        tone="info"
+        title="Deployment snapshot"
+        badge="Live telemetry"
+        icon="iconoir:code"
+      >
+        <ul>
+          <li>14 services prepared for restart</li>
+          <li>2 schema migrations in the preflight queue</li>
+          <li>0 blocking regressions in the validation suite</li>
+        </ul>
+      </AlertBox>
+    </Grid>
+  </TabPane>
+
+  <TabPane id="readiness" label="Readiness" icon="iconoir:check">
+    <ExpandablePanel
+      title="Service health"
+      description="Traffic shaping, error budgets, and canary thresholds."
+      icon="iconoir:check"
+      badge="Healthy"
+      tone="success"
+      open="true"
+    >
+      <Grid columns="1" columnsMd="2" gap="1rem">
+        <div>
+          <strong>Completed checks</strong>
+          <ul>
+            <li>Canary environment verified</li>
+            <li>Background workers drained</li>
+            <li>Rollback snapshots captured</li>
+          </ul>
+        </div>
+        <div>
+          <strong>Ready actions</strong>
+          <ul>
+            <li>Open rollout window</li>
+            <li>Pin deploy channel</li>
+            <li>Broadcast release notes</li>
+          </ul>
+        </div>
+      </Grid>
+    </ExpandablePanel>
+
+    <ExpandablePanel
+      title="Migration gate"
+      description="One data migration still needs sign-off from operations."
+      icon="iconoir:warning-circle"
+      badge="Review needed"
+      tone="warning"
+    >
+      <p>
+        The customer-events backfill is complete in staging, but production
+        approval is still waiting on the final storage estimate.
+      </p>
+      <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+        <Btn tone="warning" icon="iconoir:headset-help">Request approval</Btn>
+        <Btn tone="ghost" icon="iconoir:code">Open migration diff</Btn>
+      </div>
+    </ExpandablePanel>
+  </TabPane>
+
+  <TabPane id="risks" label="Risks" icon="iconoir:shield-alert">
+    <Grid columns="1" columnsLg="2" gap="1rem">
+      <AlertBox
+        tone="warning"
+        title="Rate-limit spike possible during warmup"
+        badge="Mitigation ready"
+        icon="iconoir:clock"
+      >
+        First-wave tenants may trigger higher-than-usual cache miss traffic for
+        3 to 5 minutes after release.
+      </AlertBox>
+
+      <AlertBox
+        tone="danger"
+        title="Fallback path not yet exercised in production"
+        badge="Monitor closely"
+        icon="iconoir:shield"
+      >
+        Keep rollback operators online until the first batch completes and
+        error-rate remains below threshold.
+      </AlertBox>
+    </Grid>
+
+    <div style="margin-top:1rem; display:flex; flex-wrap:wrap; gap:0.5rem;">
+      <Badge tone="warning">Canary only</Badge>
+      <Badge tone="danger">Rollback staffed</Badge>
+      <Badge tone="info">Status page draft ready</Badge>
+    </div>
+  </TabPane>
+
+  <TabPane id="assets" label="Assets" icon="iconoir:code">
+    <AlertBox
+      tone="neutral"
+      title="Launch kit"
+      icon="iconoir:book-stack"
+      meta="Everything needed for the first 30 minutes"
+    >
+      <Grid columns="1" columnsMd="2" columnsLg="4" gap="0.75rem">
+        <Btn tone="accent" icon="iconoir:rocket">Launch notes</Btn>
+        <Btn tone="neutral" icon="iconoir:code">Release diff</Btn>
+        <Btn tone="info" icon="iconoir:headset-help">Support brief</Btn>
+        <Btn tone="ghost" icon="iconoir:pin-slash">Rollback steps</Btn>
+      </Grid>
+    </AlertBox>
+  </TabPane>
+</Tabs>
+
+## 2. Customer workspace
+
+<Tabs id="customer-workspace" tone="info" selected-tab="account">
+  <template name="header">
+    <div>
+      <h2 style="margin:0;">Customer workspace</h2>
+      <p style="margin:0.5rem 0 0;">
+        A more product-shaped example with account health, billing, security,
+        and support grouped into a single interface.
+      </p>
+    </div>
+  </template>
+
+  <TabPane id="account" label="Account" icon="iconoir:computer">
+    <Grid columns="1" columnsLg="2" gap="1rem">
+      <AlertBox
+        tone="info"
+        title="Workspace health is stable"
+        badge="Monitoring"
+        icon="iconoir:check"
+      >
+        Sync, search, and document previews are operating within expected
+        response budgets.
+      </AlertBox>
+
+      <AlertBox
+        tone="success"
+        title="Latest backup verified"
+        badge="Ready"
+        icon="iconoir:cloud"
+      >
+        Recovery snapshot completed 12 minutes ago and integrity checks passed.
+      </AlertBox>
+    </Grid>
+  </TabPane>
+
+  <TabPane id="billing" label="Billing" icon="iconoir:wallet">
+    <ExpandablePanel
+      title="Billing summary"
+      description="Monthly plan, invoice status, and payment posture."
+      icon="iconoir:wallet"
+      badge="Current"
+      tone="neutral"
+      open="true"
+    >
+      <div
+        style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1rem;"
+      >
+        <Badge tone="success">Paid</Badge>
+        <Badge tone="accent">Annual</Badge>
+        <Badge tone="info">42 seats</Badge>
+      </div>
+      <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+        <Btn tone="accent">Manage plan</Btn>
+        <Btn tone="ghost">Download invoices</Btn>
+      </div>
+    </ExpandablePanel>
+  </TabPane>
+
+  <TabPane id="security" label="Security" icon="iconoir:shield">
+    <AlertBox
+      tone="warning"
+      title="Two users still need MFA enrollment"
+      badge="Action recommended"
+      icon="iconoir:shield"
+    >
+      Enforce MFA before enabling external sharing for your finance and
+      operations spaces.
+      <template name="actions">
+        <a href="#review-users">Review users</a>
+      </template>
+    </AlertBox>
+  </TabPane>
+
+  <TabPane id="support" label="Support" icon="iconoir:headset-help">
+    <AlertBox
+      tone="accent"
+      title="Priority support channel available"
+      badge="Business plan"
+      icon="iconoir:headset-help"
+    >
+      Reach a product specialist directly for migration planning, rollout help,
+      and incident review.
+    </AlertBox>
+    <div style="margin-top:1rem; display:flex; flex-wrap:wrap; gap:0.75rem;">
+      <Btn tone="accent" icon="iconoir:headset-help">Open support chat</Btn>
+      <Btn tone="neutral" icon="iconoir:book-stack">Read help center</Btn>
+    </div>
+  </TabPane>
+</Tabs>
+
+## 3. Pattern
+
+```html
+<Tabs id="example" tone="accent" selected-tab="overview">
+  <template name="header">
+    <h2>Section heading</h2>
+  </template>
+
+  <TabPane id="overview" label="Overview" icon="iconoir:rocket">
+    <AlertBox tone="accent" title="Launch ready">
+      Rich content works well inside tabs.
+    </AlertBox>
+  </TabPane>
+
+  <TabPane id="details" label="Details" icon="iconoir:code">
+    <ExpandablePanel
+      title="More detail"
+      description="Panels, grids, badges, and buttons can all be composed here."
+      tone="info"
+    >
+      Content goes here.
+    </ExpandablePanel>
+  </TabPane>
+</Tabs>
+```

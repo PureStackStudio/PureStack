@@ -1,6 +1,14 @@
 import { tryResolveTsSsgContext } from '@purestack/ts-common'
 import {
+  getSemanticToneButtonClass,
+  getSemanticToneSurfaceClass,
+  resolveSemanticTone,
+  type SemanticTone,
+} from '@purestack/ts-style'
+import {
   type ComponentHead,
+  type ComputedRef,
+  computed,
   defineComponent,
   html,
   isRef,
@@ -17,6 +25,8 @@ export class Tabs {
   group: string = defaultGroup
   ariaLabel?: RefOrValue<string>
   selectedTab?: RefOrValue<string>
+  tone?: RefOrValue<SemanticTone>
+  rootClass?: ComputedRef<string>
 }
 
 export interface TabPane {
@@ -25,9 +35,11 @@ export interface TabPane {
   icon?: RefOrValue<string>
   disabled?: RefOrValue<boolean>
   group?: string
+  tabClass?: ComputedRef<string>
+  panelClass?: ComputedRef<string>
 }
 
-const tabsTemplate = html`<section class="tabs">
+const tabsTemplate = html`<section class="tabs" :class="rootClass">
   <slot name="header"></slot>
   <div class="tabs__list" role="tablist" :aria-label="ariaLabel || 'Tabs'">
     <slot></slot>
@@ -46,7 +58,7 @@ const tabPaneTemplate = html`<div class="tabs__item">
   />
   <label
     class="tabs__tab"
-    :class="{ 'tabs__tab--disabled': disabled }"
+    :class="[tabClass, { 'tabs__tab--disabled': disabled }]"
     role="tab"
     :id="id+'-label'"
     :for="id"
@@ -58,6 +70,7 @@ const tabPaneTemplate = html`<div class="tabs__item">
   >
   <section
     class="tabs__panel"
+    :class="panelClass"
     role="tabpanel"
     :id="id+'-panel'"
     :aria-labelledby="id+'-label'"
@@ -70,7 +83,7 @@ const tabPaneTemplate = html`<div class="tabs__item">
 
 function defineTabsComponent() {
   return defineComponent<Tabs>(tabsTemplate, {
-    props: ['ariaLabel', 'group', 'selectedTab'],
+    props: ['ariaLabel', 'group', 'selectedTab', 'tone'],
     context: (head) => {
       markTabsRuntimeEmbed(head)
       return resolveTabs(head.props)
@@ -94,11 +107,14 @@ export function defineTabsComponents() {
 
 function resolveTabs(props: Tabs): Tabs {
   const group = resolveTabGroup(unref(props.group))
+  const tone = resolveSemanticTone(unref(props.tone))
   const tabs = new Tabs()
   const selectedTab = ensureSelectedTabIsRef(props.selectedTab)
   return Object.assign(tabs, {
     ...props,
     group,
+    tone,
+    rootClass: computed(() => getSemanticToneSurfaceClass(tone)),
     selectedTab,
   })
 }
@@ -120,10 +136,13 @@ function resolveTabPane(head: ComponentHead<TabPane>): TabPane {
   const fromParent = head.findContext(Tabs)
   const group = head.props.group || fromParent?.group || defaultGroup
   const id = resolveTabId(unref(head.props.id))
+  const tone = resolveSemanticTone(unref(fromParent?.tone))
   return {
     ...head.props,
     id,
     group,
+    tabClass: computed(() => getSemanticToneButtonClass(tone, 'interactive')),
+    panelClass: computed(() => getSemanticToneSurfaceClass(tone)),
   }
 }
 

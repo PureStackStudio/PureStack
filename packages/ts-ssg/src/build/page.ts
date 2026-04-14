@@ -10,6 +10,7 @@ import type {
 import type { BasicHeadConfig } from '@purestack/ts-html'
 import { renderApp } from '@purestack/ts-render'
 import { resolveThemeStyleLinks } from '@purestack/ts-style'
+import { isError } from '@purestack/ts-util'
 import { getLogger } from 'logpot'
 import type { Component } from 'regor'
 import {
@@ -151,6 +152,7 @@ export async function renderPageFromFile(
       ),
     }
   } catch (error) {
+    if (isError(error)) getLogger().warn(error as Error)
     const errorWithContext = attachPageContext(error, {
       relPath: file.relPath,
       urlPath,
