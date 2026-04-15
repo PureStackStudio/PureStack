@@ -1,5 +1,11 @@
+import {
+  getSemanticToneSurfaceClass,
+  getSemanticToneTextClass,
+  type SemanticTone,
+} from '@purestack/ts-style'
 import { urlNormalizer } from '@purestack/ts-util'
 import {
+  type ComponentHead,
   type ComputedRef,
   computed,
   defineComponent,
@@ -13,10 +19,12 @@ export type FormStatusVariant = 'info' | 'success' | 'error' | 'warning'
 export interface AppForm {
   action?: RefOrValue<string>
   method?: RefOrValue<string>
+  tone?: RefOrValue<SemanticTone>
 }
 
 export interface FormField {
   label?: RefOrValue<string>
+  tone?: RefOrValue<SemanticTone>
   type?: RefOrValue<string>
   name?: RefOrValue<string>
   placeholder?: RefOrValue<string>
@@ -26,28 +34,36 @@ export interface FormField {
   max?: RefOrValue<string>
   step?: RefOrValue<string>
   value?: RefOrValue<string>
+  labelToneClass?: ComputedRef<string>
+  inputToneClass?: ComputedRef<string>
 }
 
 export interface FormMeta {}
 
 export interface FormCheck {
   label?: RefOrValue<string>
+  tone?: RefOrValue<SemanticTone>
   name?: RefOrValue<string>
   value?: RefOrValue<string>
   checked?: RefOrValue<boolean>
+  toneClass?: ComputedRef<string>
 }
 
 export interface FormAssistLink {
   href?: RefOrValue<string>
   label?: RefOrValue<string>
+  tone?: RefOrValue<SemanticTone>
   target?: RefOrValue<string>
   rel?: RefOrValue<string>
   normalizedHref?: ComputedRef<string | undefined>
   resolvedRel?: ComputedRef<string | undefined>
+  toneClass?: ComputedRef<string>
 }
 
 export interface FormSubmit {
   label?: RefOrValue<string>
+  tone?: RefOrValue<SemanticTone>
+  resolvedTone?: ComputedRef<SemanticTone>
 }
 
 export interface FormDivider {
@@ -56,23 +72,24 @@ export interface FormDivider {
 
 export interface FormStatus {
   variant?: RefOrValue<FormStatusVariant>
+  tone?: RefOrValue<SemanticTone>
   hidden?: RefOrValue<boolean>
-  toneClass?: ComputedRef<string | undefined>
+  rootClass?: ComputedRef<string>
 }
 
-const appFormTemplate = html`<form
-  class="form-block"
-  :action="action"
-  :method="method"
-  novalidate
->
+export class FormToneContext {
+  tone?: RefOrValue<SemanticTone>
+}
+
+const appFormTemplate = html`<form class="form-block" :action="action" :method="method" novalidate>
   <slot></slot>
 </form>`
 
 const formFieldTemplate = html`<label class="form-block__field">
-  <span class="form-block__label">{{ label }}</span>
+  <span class="form-block__label" :class="labelToneClass">{{ label }}</span>
   <input
     class="form-block__input"
+    :class="inputToneClass"
     :type="type"
     :name="name"
     :placeholder="placeholder"
@@ -81,19 +98,19 @@ const formFieldTemplate = html`<label class="form-block__field">
     :min="min"
     :max="max"
     :step="step"
-    :value="value"
-  />
+    :value="value"/>
 </label>`
 
 const formMetaTemplate = html`<div class="form-block__meta"><slot></slot></div>`
 
-const formCheckTemplate = html`<label class="form-block__check">
-  <input type="checkbox" :name="name" :value="value" :checked="checked" />
+const formCheckTemplate = html`<label class="form-block__check" :class="toneClass">
+  <input type="checkbox" :name="name" :value="value" :checked="checked"/>
   <span>{{ label }}</span>
 </label>`
 
 const formAssistLinkTemplate = html`<a
   class="form-block__assist-link"
+  :class="toneClass"
   :href="normalizedHref"
   r-if="normalizedHref"
   :target="target"
@@ -102,18 +119,13 @@ const formAssistLinkTemplate = html`<a
   {{ label }}
 </a>`
 
-const formSubmitTemplate = html`<Btn type="submit">
-  {{ label }}
-</Btn>`
+const formSubmitTemplate = html`<Btn type="submit" :tone="resolvedTone">{{ label }}</Btn>`
 
-const formDividerTemplate = html`<div
-  class="form-block__divider"
-  :data-label="label"
-></div>`
+const formDividerTemplate = html`<div class="form-block__divider" :data-label="label"></div>`
 
 const formStatusTemplate = html`<div
   class="form-status"
-  :class="toneClass"
+  :class="rootClass"
   role="status"
   aria-live="polite"
   :hidden="hidden"
@@ -123,7 +135,7 @@ const formStatusTemplate = html`<div
 
 function defineAppFormComponent() {
   return defineComponent<AppForm>(appFormTemplate, {
-    props: ['action', 'method'],
+    props: ['action', 'method', 'tone'],
     context: (head) => resolveAppForm(head.props),
   })
 }
@@ -132,6 +144,7 @@ function defineFormFieldComponent() {
   return defineComponent<FormField>(formFieldTemplate, {
     props: [
       'label',
+      'tone',
       'type',
       'name',
       'placeholder',
@@ -142,7 +155,7 @@ function defineFormFieldComponent() {
       'step',
       'value',
     ],
-    context: (head) => resolveFormField(head.props),
+    context: (head) => resolveFormField(head),
   })
 }
 
@@ -152,22 +165,22 @@ function defineFormMetaComponent() {
 
 function defineFormCheckComponent() {
   return defineComponent<FormCheck>(formCheckTemplate, {
-    props: ['label', 'name', 'value', 'checked'],
-    context: (head) => head.props,
+    props: ['label', 'tone', 'name', 'value', 'checked'],
+    context: (head) => resolveFormCheck(head),
   })
 }
 
 function defineFormAssistLinkComponent() {
   return defineComponent<FormAssistLink>(formAssistLinkTemplate, {
-    props: ['href', 'label', 'target', 'rel'],
-    context: (head) => resolveFormAssistLink(head.props),
+    props: ['href', 'label', 'tone', 'target', 'rel'],
+    context: (head) => resolveFormAssistLink(head),
   })
 }
 
 function defineFormSubmitComponent() {
   return defineComponent<FormSubmit>(formSubmitTemplate, {
-    props: ['label'],
-    context: (head) => head.props,
+    props: ['label', 'tone'],
+    context: (head) => resolveFormSubmit(head),
   })
 }
 
@@ -180,8 +193,8 @@ function defineFormDividerComponent() {
 
 function defineFormStatusComponent() {
   return defineComponent<FormStatus>(formStatusTemplate, {
-    props: ['variant', 'hidden'],
-    context: (head) => resolveFormStatus(head.props),
+    props: ['variant', 'tone', 'hidden'],
+    context: (head) => resolveFormStatus(head),
   })
 }
 
@@ -199,43 +212,92 @@ export function defineFormComponents() {
 }
 
 function resolveAppForm(props: AppForm): AppForm {
-  return props
+  const form = new FormToneContext()
+  return Object.assign(form, props)
 }
 
-function resolveFormField(props: FormField): FormField {
-  return props
-}
-
-function resolveFormAssistLink(props: FormAssistLink): FormAssistLink {
+function resolveFormField(head: ComponentHead<FormField>): FormField {
+  const inheritedTone = head.findContext(FormToneContext)?.tone
   return {
-    ...props,
+    ...head.props,
+    labelToneClass: computed(() =>
+      getSemanticToneTextClass(unref(head.props.tone) || unref(inheritedTone)),
+    ),
+    inputToneClass: computed(() =>
+      getSemanticToneSurfaceClass(
+        unref(head.props.tone) || unref(inheritedTone),
+      ),
+    ),
+  }
+}
+
+function resolveFormAssistLink(
+  head: ComponentHead<FormAssistLink>,
+): FormAssistLink {
+  const inheritedTone = head.findContext(FormToneContext)?.tone
+  return {
+    ...head.props,
     normalizedHref: computed(() =>
-      urlNormalizer.normalizeHref(unref(props.href)),
+      urlNormalizer.normalizeHref(unref(head.props.href)),
     ),
     resolvedRel: computed(
       () =>
-        unref(props.rel) ||
-        (unref(props.target) === '_blank' ? 'noopener noreferrer' : ''),
+        unref(head.props.rel) ||
+        (unref(head.props.target) === '_blank' ? 'noopener noreferrer' : ''),
+    ),
+    toneClass: computed(() =>
+      getSemanticToneTextClass(unref(head.props.tone) || unref(inheritedTone)),
     ),
   }
 }
 
-function resolveFormStatus(props: FormStatus): FormStatus {
+function resolveFormCheck(head: ComponentHead<FormCheck>): FormCheck {
+  const inheritedTone = head.findContext(FormToneContext)?.tone
   return {
-    ...props,
-    toneClass: computed(() => resolveStatusToneClass(unref(props.variant))),
+    ...head.props,
+    toneClass: computed(() =>
+      getSemanticToneTextClass(unref(head.props.tone) || unref(inheritedTone)),
+    ),
   }
 }
 
-function resolveStatusToneClass(value: string | undefined) {
-  const normalized = value?.trim().toLowerCase()
+function resolveFormSubmit(head: ComponentHead<FormSubmit>): FormSubmit {
+  const inheritedTone = head.findContext(FormToneContext)?.tone
+  return {
+    ...head.props,
+    resolvedTone: computed(
+      () =>
+        (unref(head.props.tone) ||
+          unref(inheritedTone) ||
+          'accent') as SemanticTone,
+    ),
+  }
+}
+
+function resolveFormStatus(head: ComponentHead<FormStatus>): FormStatus {
+  const inheritedTone = head.findContext(FormToneContext)?.tone
+  return {
+    ...head.props,
+    rootClass: computed(() =>
+      getSemanticToneSurfaceClass(
+        unref(head.props.tone) ||
+          unref(inheritedTone) ||
+          resolveStatusTone(head.props.variant),
+      ),
+    ),
+  }
+}
+
+function resolveStatusTone(value: RefOrValue<FormStatusVariant> | undefined) {
+  const normalized = unref(value)?.trim().toLowerCase()
+  if (normalized === 'error') return 'danger'
   if (
     normalized === 'info' ||
     normalized === 'success' ||
-    normalized === 'error' ||
+    normalized === 'danger' ||
     normalized === 'warning'
   ) {
-    return `form-status--${normalized}`
+    return normalized as SemanticTone
   }
-  return undefined
+  return 'neutral'
 }

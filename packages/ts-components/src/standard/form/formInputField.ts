@@ -1,4 +1,19 @@
-import { defineComponent, html, type Ref, type RefOrValue, unref } from 'regor'
+import {
+  getSemanticToneSurfaceClass,
+  getSemanticToneTextClass,
+  type SemanticTone,
+} from '@purestack/ts-style'
+import {
+  type ComponentHead,
+  type ComputedRef,
+  computed,
+  defineComponent,
+  html,
+  type Ref,
+  type RefOrValue,
+  unref,
+} from 'regor'
+import { FormToneContext } from './form'
 
 let nextAutoInputId = 1
 
@@ -19,6 +34,7 @@ export type FormInputFieldType =
 export class FormInputField {
   readonly id: string
   readonly label?: RefOrValue<string>
+  readonly tone?: RefOrValue<SemanticTone>
   declare readonly model: Ref<string | number>
   readonly type?: RefOrValue<FormInputFieldType>
   readonly name?: RefOrValue<string>
@@ -26,6 +42,8 @@ export class FormInputField {
   readonly min?: RefOrValue<number | string>
   readonly step?: RefOrValue<number | string>
   readonly placeholder?: RefOrValue<string>
+  labelToneClass?: ComputedRef<string>
+  inputToneClass?: ComputedRef<string>
 
   constructor(props: FormInputField) {
     Object.assign(this, {
@@ -81,8 +99,10 @@ export class FormInputField {
 }
 
 const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
-  <span class="form-block__label" r-if="label">{{ label }}</span>
-  <div class="form-block__number" r-if="isNumberField">
+  <span class="form-block__label" :class="labelToneClass" r-if="label">
+    {{ label }}
+  </span>
+  <div class="form-block__number" :class="inputToneClass" r-if="isNumberField">
     <input
       :id="id"
       class="form-block__input form-block__input--number"
@@ -92,8 +112,7 @@ const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
       :min="min"
       :step="step"
       :placeholder="placeholder"
-      r-model="model"
-    />
+      r-model="model"/>
     <div class="form-block__number-controls">
       <button
         class="form-block__number-btn form-block__number-btn--up"
@@ -117,14 +136,14 @@ const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
     r-else
     :id="id"
     class="form-block__input"
+    :class="inputToneClass"
     :type="type || 'text'"
     :name="name"
     :autocomplete="autocomplete || 'off'"
     :min="min"
     :step="step"
     :placeholder="placeholder"
-    r-model="model"
-  />
+    r-model="model"/>
 </label>`
 
 export function defineFormInputField() {
@@ -133,6 +152,7 @@ export function defineFormInputField() {
       props: [
         'id',
         'label',
+        'tone',
         'model',
         'type',
         'name',
@@ -141,9 +161,21 @@ export function defineFormInputField() {
         'step',
         'placeholder',
       ],
-      context: (head) => new FormInputField(head.props),
+      context: (head) => resolveFormInputField(head),
     }),
   }
+}
+
+function resolveFormInputField(head: ComponentHead<FormInputField>) {
+  const inheritedTone = head.findContext(FormToneContext)?.tone
+  const field = new FormInputField(head.props)
+  field.labelToneClass = computed(() =>
+    getSemanticToneTextClass(unref(head.props.tone) || unref(inheritedTone)),
+  )
+  field.inputToneClass = computed(() =>
+    getSemanticToneSurfaceClass(unref(head.props.tone) || unref(inheritedTone)),
+  )
+  return field
 }
 
 function resolveInputId(id?: string) {

@@ -11,7 +11,7 @@ export function registerFormStyles() {
     registerFormShellStyles(theme)
     registerFormFieldStyles(theme, palette, options)
     registerFormMetaStyles(theme, palette)
-    registerFormStatusStyles(theme, palette, options)
+    registerFormStatusStyles(theme, options)
     registerFormResponsiveStyles(theme)
   })
 }
@@ -40,16 +40,12 @@ function registerFormFieldStyles(
     .fontSize('0.83rem')
     .fontWeight('700')
     .letterSpacing('0.02em')
-    .color(palette.semanticTone.neutral.text.default)
   styleBuilder
     .select('.form-block__input', theme)
     .width('100%')
     .boxSizing('border-box')
     .padding('11px 12px')
     .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
-    .background(palette.semanticTone.neutral.surface.rest.background)
-    .color(palette.semanticTone.neutral.text.default)
     .fontSize('0.94rem')
     .lineHeight('1.35')
     .transition('border-color 160ms ease, box-shadow 160ms ease')
@@ -72,11 +68,12 @@ function registerFormFieldStyles(
     .display('grid')
     .gridTemplateColumns('minmax(0, 1fr) 40px')
     .alignItems('stretch')
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
-    .borderRadius(options.radii.md)
-    .background(palette.semanticTone.neutral.surface.rest.background)
+    .width('100%')
+    .boxSizing('border-box')
+    .padding('0')
     .transition('border-color 160ms ease, box-shadow 160ms ease')
     .overflow('hidden')
+    .borderRadius(options.radii.md)
   styleBuilder
     .select(
       '.form-block__number:has(.form-block__input--number:focus-visible)',
@@ -89,6 +86,7 @@ function registerFormFieldStyles(
     .borderRadius('0')
     .border('none')
     .boxShadow('none')
+    .background('transparent')
   styleBuilder
     .select(
       '.form-block__input[type="number"]::-webkit-outer-spin-button, .form-block__input[type="number"]::-webkit-inner-spin-button',
@@ -100,8 +98,8 @@ function registerFormFieldStyles(
     .select('.form-block__number-controls', theme)
     .display('grid')
     .gridTemplateRows('1fr 1fr')
-    .borderLeft(`1px solid ${palette.semanticTone.neutral.border.default}`)
-    .background(palette.semanticTone.neutral.surface.rest.background)
+    .borderLeft('1px solid currentColor')
+    .background('transparent')
   styleBuilder
     .select('.form-block__number-btn', theme)
     .display('grid')
@@ -109,25 +107,20 @@ function registerFormFieldStyles(
     .padding('0')
     .border('none')
     .background('transparent')
-    .color(palette.semanticTone.neutral.text.default)
+    .color('inherit')
     .fontSize('0.95rem')
     .fontWeight('800')
     .lineHeight('1')
     .cursor('pointer')
-    .transition('background 140ms ease, color 140ms ease')
+    .transition('opacity 140ms ease')
   styleBuilder
     .select('.form-block__number-btn--up', theme)
-    .borderBottom(`1px solid ${palette.semanticTone.neutral.border.default}`)
-  styleBuilder
-    .select('.form-block__number-btn:hover', theme)
-    .background(palette.semanticTone.accent.surface.rest.background)
-    .color(palette.semanticTone.neutral.text.default)
-  styleBuilder
-    .select('.form-block__number-btn:active', theme)
-    .background(palette.semanticTone.accent.surface.rest.background)
+    .borderBottom('1px solid currentColor')
+  styleBuilder.select('.form-block__number-btn:hover', theme).opacity('0.82')
+  styleBuilder.select('.form-block__number-btn:active', theme).opacity('0.64')
   styleBuilder
     .select('.form-block__number-btn:focus-visible', theme)
-    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
+    .outline(`2px solid ${palette.semanticTone.accent.border.focus}`)
     .outlineOffset('-2px')
 }
 
@@ -144,7 +137,6 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .alignItems('center')
     .gap('8px')
     .fontSize('0.84rem')
-    .color(palette.semanticTone.neutral.text.default)
   styleBuilder
     .select('.form-block__check input', theme)
     .width('16px')
@@ -154,11 +146,9 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .select('.form-block__assist-link', theme)
     .fontSize('0.84rem')
     .fontWeight('650')
-    .color(palette.semanticTone.accent.text.default)
     .textDecoration('none')
   styleBuilder
     .select('.form-block__assist-link:hover', theme)
-    .color(palette.semanticTone.neutral.text.default)
     .textDecoration('underline')
   styleBuilder
     .select('.form-block__divider', theme)
@@ -179,45 +169,14 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .color(palette.semanticTone.neutral.text.subtle)
 }
 
-function registerFormStatusStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+function registerFormStatusStyles(theme: ThemeMode, options: ThemeOptions) {
   styleBuilder
     .select('.form-status', theme)
     .marginTop('4px')
     .padding('11px 12px')
     .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
-    .background(palette.semanticTone.neutral.canvas)
-    .color(palette.semanticTone.neutral.text.default)
     .fontSize('0.9rem')
     .lineHeight('1.35')
-
-  styleBuilder
-    .select('.form-status--info', theme)
-    .borderColor(palette.semanticTone.info.border.default)
-    .background(palette.semanticTone.info.canvas)
-    .color(palette.semanticTone.info.text.default)
-
-  styleBuilder
-    .select('.form-status--success', theme)
-    .borderColor(palette.semanticTone.success.border.default)
-    .background(palette.semanticTone.success.canvas)
-    .color(palette.semanticTone.success.text.default)
-
-  styleBuilder
-    .select('.form-status--error', theme)
-    .borderColor(palette.semanticTone.danger.border.default)
-    .background(palette.semanticTone.danger.canvas)
-    .color(palette.semanticTone.danger.text.default)
-
-  styleBuilder
-    .select('.form-status--warning', theme)
-    .borderColor(palette.semanticTone.warning.border.default)
-    .background(palette.semanticTone.warning.canvas)
-    .color(palette.semanticTone.warning.text.default)
 }
 
 function registerFormResponsiveStyles(theme: ThemeMode) {
