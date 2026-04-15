@@ -2,7 +2,7 @@ import { createDom, ensureDomGlobals } from '@purestack/ts-minidom'
 import { createApp, ref } from 'regor'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
-import { defineFormInputField } from './form-input-field'
+import { defineFormInputField } from './formInputField'
 
 describe('FormInputField', () => {
   it('keeps the autocomplete attribute reactive', () => {

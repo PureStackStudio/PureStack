@@ -52,8 +52,8 @@ export type {
   FormSubmit,
 } from './standard/form/form'
 export { defineFormComponents } from './standard/form/form'
-export type { FormInputField } from './standard/form/form-input-field'
-export { defineFormInputField } from './standard/form/form-input-field'
+export type { FormInputField } from './standard/form/formInputField'
+export { defineFormInputField } from './standard/form/formInputField'
 export { registerFormStyles } from './standard/form/formStyle'
 export type { Grid } from './standard/grid/grid'
 export { defineGridComponents } from './standard/grid/grid'
