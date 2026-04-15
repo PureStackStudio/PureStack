@@ -1,18 +1,19 @@
+import { getColors } from '@purestack/ts-css'
 import { createNeonPalette, type NeonCore } from './base'
 import type { ToneColors } from './shared'
 
 const white = '#c9c9c9'
-const accent = '#2771b7'
+export const accent = '#3d4f69'
+const accentScale = getColors(accent, 40, 0, 20)
 const baseTone: ToneColors = {
-  canvas: '#010a10',
-  button: '#3b4760',
+  canvas: accentScale[0],
+  button: accentScale[15],
   foreground: white,
   border: white,
-  surface: '#0b3655',
-  surfaceAlt: '#0d2e4b',
+  surface: accentScale[10],
+  surfaceAlt: accentScale[5],
 }
 const core: NeonCore = {
-  baseBlack: '#171c23',
   neutral: baseTone,
   accent: {
     ...baseTone,

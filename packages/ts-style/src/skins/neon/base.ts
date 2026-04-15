@@ -2,7 +2,6 @@ import type { ThemePalette } from '../../themePalette'
 import { createScale, createTone, rgba, type ToneColors } from './shared'
 
 export type NeonCore = {
-  baseBlack: string
   neutral: ToneColors
   accent: ToneColors
   ghost: ToneColors
@@ -88,7 +87,7 @@ function createEffect(core: NeonCore) {
   const effect: ThemePalette['effect'] = {
     glowPrimary: `0 0 28px ${rgba(accent.level3, 0.22)}`,
     glowSecondary: `0 0 28px ${rgba(info.level3, 0.18)}`,
-    floatingShadow: `0 18px 56px ${rgba(shadowColor, 0.64)}`,
+    floatingShadow: `0 9px 23px ${rgba(shadowColor, 0.24)}`,
     panelShadow: `0 7px 20px ${rgba(shadowColor, 0.11)}`,
     panelShadowStrong: `0 11px 33px ${rgba(shadowColor, 0.22)}`,
     accentShadow: `0 16px 48px ${rgba(accent.level3, 0.22)}`,
