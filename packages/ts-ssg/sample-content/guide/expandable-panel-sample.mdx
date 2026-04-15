@@ -12,7 +12,7 @@ nav:
 
 `ExpandablePanel` is a disclosure-first card for settings pages, service summaries, and expandable account surfaces. It uses native `<details>` and `<summary>` semantics, so it works without client-side hydration.
 
-## 1. Accent account panel
+## 1. Neutral account panel
 
 <ExpandablePanel
   title="PureStack 365"
@@ -27,8 +27,8 @@ nav:
     <div>
       <h3 style="margin-bottom:2rem">Achieve the extraordinary</h3>
       <p>
-        Upgrade today to get extra cloud storage, advanced security, and AI-powered
-        features designed to make your day easier in one plan.
+        Upgrade today to get extra cloud storage, advanced security, and
+        AI-powered features designed to make your day easier in one plan.
       </p>
       <p>
         Three included services are ready immediately: premium desktop apps,
@@ -43,8 +43,7 @@ nav:
       <img
         style="max-width:400px;"
         src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80"
-        alt="Workspace with laptop, productivity apps, and soft blue lighting."
-      />
+        alt="Workspace with laptop, productivity apps, and soft blue lighting."/>
     </div>
   </Grid>
 </ExpandablePanel>
@@ -58,10 +57,12 @@ nav:
   tone="info"
 >
   <p>
-    Review what is using space, configure retention rules, and decide which folders stay synced across devices.
+    Review what is using space, configure retention rules, and decide which
+    folders stay synced across devices.
   </p>
   <p>
-    Recommended next step: archive large attachments and disable sync on inactive folders.
+    Recommended next step: archive large attachments and disable sync on
+    inactive folders.
   </p>
 </ExpandablePanel>
 
@@ -73,7 +74,8 @@ nav:
   tone="success"
 >
   <p>
-    Manage billing cadence, family sharing, and installation preferences for the devices linked to this subscription.
+    Manage billing cadence, family sharing, and installation preferences for the
+    devices linked to this subscription.
   </p>
   <Grid columns="1" columnsMd="2">
     <div>
@@ -103,7 +105,8 @@ nav:
   tone="warning"
 >
   <p>
-    Update the saved card, confirm billing address details, and retry the payment before the grace period ends.
+    Update the saved card, confirm billing address details, and retry the
+    payment before the grace period ends.
   </p>
   <Grid columns="1" columnsMd="2">
     <div>
@@ -133,7 +136,8 @@ nav:
   tone="danger"
 >
   <p>
-    We detected an unusual login attempt outside your normal device pattern. Review the session and revoke access if it was not you.
+    We detected an unusual login attempt outside your normal device pattern.
+    Review the session and revoke access if it was not you.
   </p>
   <Grid columns="1" columnsMd="2">
     <div>
@@ -159,29 +163,38 @@ nav:
 
 <ExpandablePanel tone="neutral" open="true">
   <template name="summary">
-    <div style="grid-column:1 / -1; width:100%; min-width:0; display:grid; grid-template-columns:minmax(0, 1fr) auto; align-items:center; gap:1rem;">
+    <div
+      style="grid-column:1 / -1; width:100%; min-width:0; display:grid; grid-template-columns:minmax(0, 1fr) auto; align-items:center; gap:1rem;"
+    >
       <div>
-        <strong style="display:block; font-size:1.06rem;">Production rollout</strong>
+        <strong style="display:block; font-size:1.06rem;">
+          Production rollout
+        </strong>
         <span style="display:block; margin-top:0.35rem;">
-          Release 2026.03 is staged, QA is complete, and the deployment window is ready.
+          Release 2026.03 is staged, QA is complete, and the deployment window
+          is ready.
         </span>
       </div>
-      <div style="display:flex; align-items:center; justify-self:end; gap:0.75rem;">
+      <div
+        style="display:flex; align-items:center; justify-self:end; gap:0.75rem;"
+      >
         <Badge tone="success">Ready</Badge>
         <span class="expandable-panel__chevron" aria-hidden="true">
           <Icon
             class="expandable-panel__chevron-icon"
-            name="iconoir:nav-arrow-down"
-          />
+            name="iconoir:nav-arrow-down"/>
         </span>
       </div>
     </div>
   </template>
   <p>
-    This panel uses a fully custom summary slot. The default title, description, badge, meta, and chevron layout are all replaced.
+    This panel uses a fully custom summary slot. The default title, description,
+    badge, meta, and chevron layout are all replaced.
   </p>
   <p>
-    Use this pattern when you need dashboard-style summaries, rollout status rows, or denser operational headers that do not fit the built-in summary arrangement.
+    Use this pattern when you need dashboard-style summaries, rollout status
+    rows, or denser operational headers that do not fit the built-in summary
+    arrangement.
   </p>
   <Grid columns="1" columnsMd="2">
     <div>
@@ -210,11 +223,12 @@ nav:
   description="Find, repair, and manage your devices."
   icon="iconoir:computer"
   meta="3 active devices"
-  tone="neutral"
+  tone="accent"
   open="true"
 >
   <p>
-    Your primary workstation and two standby devices are online. Firmware drift is within policy and no repair actions are currently required.
+    Your primary workstation and two standby devices are online. Firmware drift
+    is within policy and no repair actions are currently required.
   </p>
   <Grid columns="1" columnsLg="3">
     <div>
