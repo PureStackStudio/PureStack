@@ -36,6 +36,7 @@ export class FormInputField {
   readonly id: string
   readonly label?: RefOrValue<string>
   readonly tone?: RefOrValue<SemanticTone>
+  readonly labelTone?: RefOrValue<SemanticTone>
   declare readonly model: Ref<string | number>
   readonly type?: RefOrValue<FormInputFieldType>
   readonly name?: RefOrValue<string>
@@ -156,6 +157,7 @@ export function defineFormInputField() {
         'id',
         'label',
         'tone',
+        'labelTone',
         'model',
         'type',
         'name',
@@ -172,9 +174,10 @@ export function defineFormInputField() {
 function resolveFormInputField(head: ComponentHead<FormInputField>) {
   const inheritedTone = head.findContext(FormToneContext)?.tone
   const resolvedTone = () => unref(head.props.tone) || unref(inheritedTone)
+  const resolvedLabelTone = () => unref(head.props.labelTone) || resolvedTone()
   const field = new FormInputField(head.props)
   field.labelToneClass = computed(() =>
-    getSemanticToneTextClass(resolvedTone()),
+    getSemanticToneTextClass(resolvedLabelTone()),
   )
   field.inputToneClass = computed(() =>
     getSemanticToneSurfaceClass(resolvedTone(), false),
