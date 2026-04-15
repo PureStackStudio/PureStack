@@ -20,22 +20,6 @@ export interface AppForm {
   tone?: RefOrValue<SemanticTone>
 }
 
-export interface FormField {
-  label?: RefOrValue<string>
-  tone?: RefOrValue<SemanticTone>
-  type?: RefOrValue<string>
-  name?: RefOrValue<string>
-  placeholder?: RefOrValue<string>
-  autocomplete?: RefOrValue<string>
-  required?: RefOrValue<boolean>
-  min?: RefOrValue<string>
-  max?: RefOrValue<string>
-  step?: RefOrValue<string>
-  value?: RefOrValue<string>
-  labelToneClass?: ComputedRef<string>
-  inputToneClass?: ComputedRef<string>
-}
-
 export interface FormMeta {}
 
 export interface FormCheck {
@@ -82,22 +66,6 @@ const appFormTemplate = html`<form class="form-block" :action="action" :method="
   <slot></slot>
 </form>`
 
-const formFieldTemplate = html`<label class="form-block__field">
-  <span class="form-block__label" :class="labelToneClass">{{ label }}</span>
-  <input
-    class="form-block__input"
-    :class="inputToneClass"
-    :type="type"
-    :name="name"
-    :placeholder="placeholder"
-    :autocomplete="autocomplete"
-    :required="required"
-    :min="min"
-    :max="max"
-    :step="step"
-    :value="value"/>
-</label>`
-
 const formMetaTemplate = html`<div class="form-block__meta"><slot></slot></div>`
 
 const formCheckTemplate = html`<label class="form-block__check" :class="toneClass">
@@ -134,25 +102,6 @@ function defineAppFormComponent() {
   return defineComponent<AppForm>(appFormTemplate, {
     props: ['action', 'method', 'tone'],
     context: (head) => resolveAppForm(head.props),
-  })
-}
-
-function defineFormFieldComponent() {
-  return defineComponent<FormField>(formFieldTemplate, {
-    props: [
-      'label',
-      'tone',
-      'type',
-      'name',
-      'placeholder',
-      'autocomplete',
-      'required',
-      'min',
-      'max',
-      'step',
-      'value',
-    ],
-    context: (head) => resolveFormField(head),
   })
 }
 
@@ -198,7 +147,6 @@ function defineFormStatusComponent() {
 export function defineFormComponents() {
   return {
     appForm: defineAppFormComponent(),
-    formField: defineFormFieldComponent(),
     formMeta: defineFormMetaComponent(),
     formCheck: defineFormCheckComponent(),
     formAssistLink: defineFormAssistLinkComponent(),
@@ -211,21 +159,6 @@ export function defineFormComponents() {
 function resolveAppForm(props: AppForm): AppForm {
   const form = new FormToneContext()
   return Object.assign(form, props)
-}
-
-function resolveFormField(head: ComponentHead<FormField>): FormField {
-  const inheritedTone = head.findContext(FormToneContext)?.tone
-  return {
-    ...head.props,
-    labelToneClass: computed(() =>
-      getSemanticToneTextClass(unref(head.props.tone) || unref(inheritedTone)),
-    ),
-    inputToneClass: computed(() =>
-      getSemanticToneSurfaceClass(
-        unref(head.props.tone) || unref(inheritedTone),
-      ),
-    ),
-  }
 }
 
 function resolveFormAssistLink(

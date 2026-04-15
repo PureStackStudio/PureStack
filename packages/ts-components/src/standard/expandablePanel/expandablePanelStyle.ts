@@ -28,6 +28,7 @@ function registerExpandablePanelShellStyles(
     .borderRadius(options.radii.lg)
     .background(palette.semanticTone.neutral.surface.rest.background)
     .boxShadow(palette.effect.panelShadow)
+    .alignContent('start')
     .overflow('hidden')
     .transition(
       'border-color 180ms ease, box-shadow 180ms ease, background 180ms ease',
@@ -50,8 +51,8 @@ function registerExpandablePanelSummaryStyles(
     .display('grid')
     .gridTemplateColumns('auto minmax(0, 1fr) auto')
     .alignItems('center')
-    .gap('16px')
-    .padding('18px 22px')
+    .gap('0.75rem')
+    .padding('1rem')
     .cursor('pointer')
     .minWidth('0')
     .borderRadius('16px')
@@ -113,7 +114,7 @@ function registerExpandablePanelSummaryStyles(
     .select('.expandable-panel__header-side', theme)
     .display('flex')
     .alignItems('center')
-    .justifyContent('flex-end')
+    .justifyContent('center')
     .gap('12px')
     .minWidth('0')
 
@@ -126,6 +127,8 @@ function registerExpandablePanelSummaryStyles(
     .select('.expandable-panel__chevron', theme)
     .width('34px')
     .height('34px')
+    .minWidth('34px')
+    .minHeight('34px')
     .display('inline-flex')
     .alignItems('center')
     .justifyContent('center')
@@ -153,8 +156,8 @@ function registerExpandablePanelBodyStyles(
   styleBuilder
     .select('.expandable-panel__body', theme)
     .display('grid')
-    .gap('16px')
-    .padding('24px')
+    .gap('0.75rem')
+    .padding('1rem')
     .borderTop(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
 
   styleBuilder

@@ -149,7 +149,6 @@ const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
     :placeholder="placeholder"
     r-model="model"/>
 </label>`
-
 export function defineFormInputField() {
   return {
     formInputField: defineComponent<FormInputField>(formInputFieldTemplate, {

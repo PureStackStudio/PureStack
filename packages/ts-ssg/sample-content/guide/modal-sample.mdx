@@ -217,14 +217,14 @@ layout:
 >
   <AppForm action="/rollout/request" method="post">
     <Grid columns="1" columnsMd="2">
-      <FormField
+      <FormInputField
         label="Owner name"
         type="text"
         name="ownerName"
         placeholder="Ada Lovelace"
         autocomplete="name"
         required="true"/>
-      <FormField
+      <FormInputField
         label="Owner email"
         type="email"
         name="ownerEmail"
@@ -234,13 +234,13 @@ layout:
     </Grid>
 
     <Grid columns="1" columnsLg="3">
-      <FormField
+      <FormInputField
         label="Environment"
         type="text"
         name="environment"
         placeholder="production-eu"
         required="true"/>
-      <FormField
+      <FormInputField
         label="Canary percent"
         type="number"
         name="canaryPercent"
@@ -248,7 +248,7 @@ layout:
         max="100"
         step="1"
         value="10"/>
-      <FormField
+      <FormInputField
         label="Expected duration (minutes)"
         type="number"
         name="durationMinutes"

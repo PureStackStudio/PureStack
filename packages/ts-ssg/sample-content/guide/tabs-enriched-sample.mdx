@@ -481,14 +481,14 @@ Each tab combines existing components so the tabs feel like a complete surface r
   <TabPane id="workspace" label="Workspace setup" icon="iconoir:computer">
     <AppForm action="/contact" method="post">
       <Grid columns="1" columnsMd="2">
-        <FormField
+        <FormInputField
           label="Workspace name"
           type="text"
           name="workspaceName"
           placeholder="PureStack Labs"
           autocomplete="organization"
           required="true"/>
-        <FormField
+        <FormInputField
           label="Primary domain"
           type="url"
           name="primaryDomain"
@@ -498,14 +498,14 @@ Each tab combines existing components so the tabs feel like a complete surface r
       </Grid>
 
       <Grid columns="1" columnsLg="3">
-        <FormField
+        <FormInputField
           label="Admin email"
           type="email"
           name="adminEmail"
           placeholder="owner@purestack.dev"
           autocomplete="email"
           required="true"/>
-        <FormField
+        <FormInputField
           label="Team size"
           type="number"
           name="teamSize"
@@ -513,7 +513,7 @@ Each tab combines existing components so the tabs feel like a complete surface r
           max="5000"
           step="1"
           value="24"/>
-        <FormField
+        <FormInputField
           label="Projected monthly traffic"
           type="number"
           name="traffic"
@@ -556,14 +556,14 @@ Each tab combines existing components so the tabs feel like a complete surface r
   <TabPane id="security-policy" label="Security policy" icon="iconoir:shield">
     <AppForm action="/security" method="post">
       <Grid columns="1" columnsMd="2">
-        <FormField
+        <FormInputField
           label="Session timeout (minutes)"
           type="number"
           name="sessionTimeout"
           min="5"
           step="5"
           value="30"/>
-        <FormField
+        <FormInputField
           label="Allowed domains"
           type="text"
           name="allowedDomains"
@@ -605,21 +605,21 @@ Each tab combines existing components so the tabs feel like a complete surface r
   <TabPane id="billing-rules" label="Billing rules" icon="iconoir:wallet">
     <AppForm action="/billing" method="post">
       <Grid columns="1" columnsMd="2" columnsLg="3">
-        <FormField
+        <FormInputField
           label="Default seat limit"
           type="number"
           name="seatLimit"
           min="1"
           step="1"
           value="50"/>
-        <FormField
+        <FormInputField
           label="Soft budget threshold"
           type="number"
           name="softBudget"
           min="100"
           step="100"
           value="2500"/>
-        <FormField
+        <FormInputField
           label="Hard budget threshold"
           type="number"
           name="hardBudget"

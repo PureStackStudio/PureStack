@@ -72,7 +72,7 @@ layout:
 
 <AppForm action="/contact" method="post">
   <Grid columns="1" columnsMd="2">
-    <FormField
+    <FormInputField
       label="First name"
       type="text"
       name="firstName"
@@ -80,7 +80,7 @@ layout:
       autocomplete="given-name"
       required="true"
     />
-    <FormField
+    <FormInputField
       label="Last name"
       type="text"
       name="lastName"
@@ -91,7 +91,7 @@ layout:
   </Grid>
 
   <Grid columns="1" columnsLg="3">
-    <FormField
+    <FormInputField
       label="Work email"
       type="email"
       name="email"
@@ -99,7 +99,7 @@ layout:
       autocomplete="email"
       required="true"
     />
-    <FormField
+    <FormInputField
       label="Team size"
       type="number"
       name="teamSize"
@@ -108,7 +108,7 @@ layout:
       step="1"
       value="12"
     />
-    <FormField
+    <FormInputField
       label="Budget (EUR)"
       type="number"
       name="budget"

@@ -46,7 +46,6 @@ export type {
   FormAssistLink,
   FormCheck,
   FormDivider,
-  FormField,
   FormMeta,
   FormStatus,
   FormSubmit,
