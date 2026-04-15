@@ -12,21 +12,28 @@ layout:
 
 ## 1. Basic modal
 
-<ModalTrigger target="contact-modal" label="Open contact modal" />
+<ModalTrigger
+  target="contact-modal"
+  label="Open contact modal"
+  showClose="true"/>
 
-<Modal id="contact-modal" title="Contact sales">
+<Modal id="contact-modal" title="Contact sales" showClose="true">
   <p>
-    Share your use case and expected traffic profile. We can recommend the right plan and rollout path.
+    Share your use case and expected traffic profile. We can recommend the right
+    plan and rollout path.
   </p>
   <template name="footer">
-    <FormSubmit label="Book a call" />
-    <FormSubmit label="Send details" />
+    <FormSubmit label="Book a call"/>
+    <FormSubmit label="Send details"/>
   </template>
 </Modal>
 
 ## 2. Slide animation from right
 
-<ModalTrigger target="roadmap-modal" label="Open roadmap modal" />
+<ModalTrigger
+  target="roadmap-modal"
+  label="Open roadmap modal"
+  showClose="true"/>
 
 <Modal
   id="roadmap-modal"
@@ -34,6 +41,7 @@ layout:
   size="lg"
   fade="true"
   slideFrom="right"
+  show-close="true"
 >
   <Grid columns="1" columnsMd="2">
     <AlertBox tone="info" title="Q2">
@@ -44,7 +52,7 @@ layout:
     </AlertBox>
   </Grid>
   <template name="footer">
-    <ModalTrigger target="contact-modal" label="Request early access" />
+    <ModalTrigger target="contact-modal" label="Request early access"/>
   </template>
 </Modal>
 
@@ -52,26 +60,41 @@ layout:
 
 <Grid columns="1" columnsMd="3">
   <div>
-    <ModalTrigger target="tone-info-modal" label="Open info modal" />
-    <Modal id="tone-info-modal" title="Info modal" tone="info">
+    <ModalTrigger
+      target="tone-info-modal"
+      label="Open info modal"
+      showClose="true"/>
+    <Modal id="tone-info-modal" title="Info modal" tone="info" showClose="true">
       <p>
         Use info tone for guidance, previews, and low-risk operational context.
       </p>
     </Modal>
   </div>
   <div>
-    <ModalTrigger target="tone-success-modal" label="Open success modal" />
-    <Modal id="tone-success-modal" title="Success modal" tone="success">
+    <ModalTrigger target="tone-success-modal" label="Open success modal"/>
+    <Modal
+      id="tone-success-modal"
+      title="Success modal"
+      tone="success"
+      showClose="true"
+    >
       <p>
-        Use success tone when the modal confirms a completed flow or positive outcome.
+        Use success tone when the modal confirms a completed flow or positive
+        outcome.
       </p>
     </Modal>
   </div>
   <div>
-    <ModalTrigger target="tone-danger-modal" label="Open danger modal" />
-    <Modal id="tone-danger-modal" title="Danger modal" tone="danger">
+    <ModalTrigger target="tone-danger-modal" label="Open danger modal"/>
+    <Modal
+      id="tone-danger-modal"
+      title="Danger modal"
+      tone="danger"
+      showClose="true"
+    >
       <p>
-        Use danger tone for destructive decisions, irreversible actions, or incident response.
+        Use danger tone for destructive decisions, irreversible actions, or
+        incident response.
       </p>
       <template name="footer">
         <Btn type="button" class="modal-trigger" data-modal-close>Cancel</Btn>
@@ -83,9 +106,15 @@ layout:
 
 ## 4. Custom header/body/footer slot overrides
 
-<ModalTrigger target="custom-shell-modal" label="Open custom-shell modal" />
+<ModalTrigger target="custom-shell-modal" label="Open custom-shell modal"/>
 
-<Modal id="custom-shell-modal" size="xl" fade="true" slideFrom="bottom">
+<Modal
+  id="custom-shell-modal"
+  size="xl"
+  fade="true"
+  slideFrom="bottom"
+  show-close="true"
+>
   <template name="header">
     <div>
       <h2 id="custom-shell-modal-title">Quarterly launch checklist</h2>
@@ -94,32 +123,41 @@ layout:
   </template>
   <template name="body">
     <Grid columns="1" columnsLg="3" dense="true">
-      <AlertBox tone="accent" title="Docs">Finalize migration notes and snippets.</AlertBox>
-      <AlertBox tone="warning" title="Ops">Run canary with rollback metrics enabled.</AlertBox>
-      <AlertBox tone="success" title="Release">Sign off on release train and comms.</AlertBox>
+      <AlertBox tone="accent" title="Docs">
+        Finalize migration notes and snippets.
+      </AlertBox>
+      <AlertBox tone="warning" title="Ops">
+        Run canary with rollback metrics enabled.
+      </AlertBox>
+      <AlertBox tone="success" title="Release">
+        Sign off on release train and comms.
+      </AlertBox>
     </Grid>
   </template>
 
   <template name="footer">
-    <FormAssistLink href="/guide/alert-sample" label="Review alert patterns" />
-    <FormAssistLink href="/guide/grid-sample" label="Review grid patterns" />
+    <FormAssistLink href="/guide/alert-sample" label="Review alert patterns"/>
+    <FormAssistLink href="/guide/grid-sample" label="Review grid patterns"/>
   </template>
 </Modal>
 
 ## 5. Full content override via content slot
 
-<ModalTrigger target="full-content-modal" label="Open full-content modal" />
+<ModalTrigger target="full-content-modal" label="Open full-content modal"/>
 
 <Modal id="full-content-modal" fade="false" slideFrom="left" size="md">
   <template name="content">
     <article class="modal__panel" role="document" tabindex="-1">
       <h2>Fully custom content slot</h2>
       <p>
-        This replaces the default modal shell entirely when you need custom internal structure.
+        This replaces the default modal shell entirely when you need custom
+        internal structure.
       </p>
       <Grid columns="1" justifyItems="center">
         <div>
-          <Btn type="button" class="modal-trigger" data-modal-close>Approve</Btn>
+          <Btn type="button" class="modal-trigger" data-modal-close>
+            Approve
+          </Btn>
           <Btn type="button" class="modal-trigger" data-modal-close>Cancel</Btn>
         </div>
       </Grid>
@@ -129,21 +167,24 @@ layout:
 
 ## 6. Hidden built-in close button (`showClose="false"`)
 
-<ModalTrigger target="policy-modal" label="Open policy modal" />
+<ModalTrigger target="policy-modal" label="Open policy modal"/>
 
 <Modal id="policy-modal" title="Policy update" size="lg" showClose="false">
   <p>
-    This modal hides the default top-right close button. Use custom actions in the footer instead.
+    This modal hides the default top-right close button. Use custom actions in
+    the footer instead.
   </p>
   <template name="footer">
     <Btn type="button" class="modal-trigger" data-modal-close>Dismiss</Btn>
-    <Btn type="button" class="modal-trigger" data-modal-close>Accept policy</Btn>
+    <Btn type="button" class="modal-trigger" data-modal-close>
+      Accept policy
+    </Btn>
   </template>
 </Modal>
 
 ## 7. Slide from top with compact actions
 
-<ModalTrigger target="incident-modal" label="Open incident modal" />
+<ModalTrigger target="incident-modal" label="Open incident modal"/>
 
 <Modal
   id="incident-modal"
@@ -151,9 +192,11 @@ layout:
   size="md"
   fade="true"
   slideFrom="top"
+  showClose="true"
 >
   <AlertBox tone="warning" title="Queue latency elevated">
-    We detected higher p95 latency in one worker pool. Mitigation is in progress.
+    We detected higher p95 latency in one worker pool. Mitigation is in
+    progress.
   </AlertBox>
   <template name="footer">
     <Btn type="button" class="modal-trigger" data-modal-close>Acknowledge</Btn>
@@ -162,7 +205,7 @@ layout:
 
 ## 8. Advanced form modal (nested grids + status)
 
-<ModalTrigger target="advanced-form-modal" label="Open advanced form modal" />
+<ModalTrigger target="advanced-form-modal" label="Open advanced form modal"/>
 
 <Modal
   id="advanced-form-modal"
@@ -170,6 +213,7 @@ layout:
   size="xl"
   fade="true"
   slideFrom="right"
+  showClose="true"
 >
   <AppForm action="/rollout/request" method="post">
     <Grid columns="1" columnsMd="2">
@@ -179,16 +223,14 @@ layout:
         name="ownerName"
         placeholder="Ada Lovelace"
         autocomplete="name"
-        required="true"
-      />
+        required="true"/>
       <FormField
         label="Owner email"
         type="email"
         name="ownerEmail"
         placeholder="ada@analytical.engine"
         autocomplete="email"
-        required="true"
-      />
+        required="true"/>
     </Grid>
 
     <Grid columns="1" columnsLg="3">
@@ -197,8 +239,7 @@ layout:
         type="text"
         name="environment"
         placeholder="production-eu"
-        required="true"
-      />
+        required="true"/>
       <FormField
         label="Canary percent"
         type="number"
@@ -206,16 +247,14 @@ layout:
         min="1"
         max="100"
         step="1"
-        value="10"
-      />
+        value="10"/>
       <FormField
         label="Expected duration (minutes)"
         type="number"
         name="durationMinutes"
         min="5"
         step="5"
-        value="30"
-      />
+        value="30"/>
     </Grid>
 
     <Grid columns="1" columnsMd="2" alignItems="start">
@@ -223,14 +262,12 @@ layout:
         label="Notify on-call channel when rollout starts"
         name="notifyOnCall"
         value="yes"
-        checked="true"
-      />
+        checked="true"/>
       <FormCheck
         label="I confirm rollback plan is documented"
         name="rollbackConfirmed"
         value="true"
-        checked="true"
-      />
+        checked="true"/>
     </Grid>
 
     <FormStatus variant="info">
@@ -248,7 +285,7 @@ layout:
 
 ## 9. Nested modal flow (modal opens another modal)
 
-<ModalTrigger target="parent-modal" label="Open parent modal" />
+<ModalTrigger target="parent-modal" label="Open parent modal"/>
 
 <Modal
   id="parent-modal"
@@ -256,13 +293,15 @@ layout:
   size="lg"
   fade="true"
   slideFrom="right"
+  showClose="true"
 >
   <p>
-    This primary modal can launch a secondary confirmation modal for destructive or high-risk actions.
+    This primary modal can launch a secondary confirmation modal for destructive
+    or high-risk actions.
   </p>
   <template name="footer">
-      <Btn type="button" class="modal-trigger" data-modal-close>Cancel</Btn>
-      <ModalTrigger target="child-modal" label="Continue to confirmation" />
+    <Btn type="button" class="modal-trigger" data-modal-close>Cancel</Btn>
+    <ModalTrigger target="child-modal" label="Continue to confirmation"/>
   </template>
 </Modal>
 
@@ -272,13 +311,16 @@ layout:
   size="md"
   fade="true"
   slideFrom="bottom"
+  showClose="true"
 >
   <AlertBox tone="warning" title="Final confirmation required">
     You are about to apply changes to the production environment.
   </AlertBox>
   <template name="footer">
     <Btn type="button" class="modal-trigger" data-modal-close>Back</Btn>
-    <Btn type="button" class="modal-trigger" data-modal-close>Confirm rollout</Btn>
+    <Btn type="button" class="modal-trigger" data-modal-close>
+      Confirm rollout
+    </Btn>
   </template>
 </Modal>
 
