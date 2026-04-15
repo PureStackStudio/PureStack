@@ -2,7 +2,6 @@ import {
   getSemanticToneIconClass,
   getSemanticToneSurfaceClass,
   getSemanticToneTextClass,
-  resolveSemanticTone,
   type SemanticTone,
 } from '@purestack/ts-style'
 import {
@@ -60,15 +59,13 @@ function resolveAlertBox(props: AlertBox): AlertBox {
   return {
     ...props,
     titleToneClass: computed(() =>
-      getSemanticToneTextClass(resolveSemanticTone(unref(props.tone), 'info')),
+      getSemanticToneTextClass(unref(props.tone), 'info'),
     ),
     iconToneClass: computed(() =>
-      getSemanticToneIconClass(resolveSemanticTone(unref(props.tone), 'info')),
+      getSemanticToneIconClass(unref(props.tone), 'info'),
     ),
     rootClass: computed(() =>
-      getSemanticToneSurfaceClass(
-        resolveSemanticTone(unref(props.tone), 'info'),
-      ),
+      getSemanticToneSurfaceClass(unref(props.tone), 'static', 'info'),
     ),
   }
 }

@@ -87,6 +87,7 @@ async function writeStaticAsset(
       bundle: true,
       format: 'esm',
       minify: false,
+      treeShaking: true,
       platform: 'browser',
       target: 'esnext',
       logLevel: 'silent',

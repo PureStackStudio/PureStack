@@ -2,7 +2,6 @@ import { tryResolveTsSsgContext } from '@purestack/ts-common'
 import {
   getSemanticToneButtonClass,
   getSemanticToneSurfaceClass,
-  resolveSemanticTone,
   type SemanticTone,
 } from '@purestack/ts-style'
 import {
@@ -105,14 +104,12 @@ export function defineTabsComponents() {
 
 function resolveTabs(props: Tabs): Tabs {
   const group = resolveTabGroup(unref(props.group))
-  const tone = resolveSemanticTone(unref(props.tone))
   const tabs = new Tabs()
   const selectedTab = ensureSelectedTabIsRef(props.selectedTab)
   return Object.assign(tabs, {
     ...props,
     group,
-    tone,
-    rootClass: computed(() => getSemanticToneSurfaceClass(tone)),
+    rootClass: computed(() => getSemanticToneSurfaceClass(unref(props.tone))),
     selectedTab,
   })
 }
@@ -134,12 +131,13 @@ function resolveTabPane(head: ComponentHead<TabPane>): TabPane {
   const fromParent = head.findContext(Tabs)
   const group = head.props.group || fromParent?.group || defaultGroup
   const id = resolveTabId(unref(head.props.id))
-  const tone = resolveSemanticTone(unref(fromParent?.tone))
   return {
     ...head.props,
     id,
     group,
-    tabClass: computed(() => getSemanticToneButtonClass(tone, 'interactive')),
+    tabClass: computed(() =>
+      getSemanticToneButtonClass(unref(fromParent?.tone), 'interactive'),
+    ),
   }
 }
 

@@ -23,7 +23,7 @@ const SEMANTIC_TONES: SemanticTone[] = [
   'danger',
 ]
 
-export function resolveSemanticTone(
+function resolveSemanticTone(
   value: string | undefined,
   fallback: SemanticTone = 'neutral',
 ): SemanticTone {
@@ -47,36 +47,48 @@ function getSemanticToneModePrefix(mode: SemanticToneMode = 'static') {
 }
 
 export function getSemanticToneSurfaceClass(
-  tone: SemanticTone,
+  tone: SemanticTone | undefined,
   mode: SemanticToneMode = 'static',
+  fallback: SemanticTone = 'neutral',
 ) {
-  return `${getSemanticToneModePrefix(mode)}surface--${resolveSemanticTone(tone)}`
+  return `${getSemanticToneModePrefix(mode)}surface--${resolveSemanticTone(tone, fallback)}`
 }
 
 export function getSemanticToneSurfaceAltClass(
-  tone: SemanticTone,
+  tone: SemanticTone | undefined,
   mode: SemanticToneMode = 'static',
+  fallback: SemanticTone = 'neutral',
 ) {
-  return `${getSemanticToneModePrefix(mode)}surface-alt--${resolveSemanticTone(tone)}`
+  return `${getSemanticToneModePrefix(mode)}surface-alt--${resolveSemanticTone(tone, fallback)}`
 }
 
 export function getSemanticToneButtonClass(
-  tone: SemanticTone,
+  tone: SemanticTone | undefined,
   mode: SemanticToneMode = 'static',
+  fallback: SemanticTone = 'neutral',
 ) {
-  return `${getSemanticToneModePrefix(mode)}button--${resolveSemanticTone(tone)}`
+  return `${getSemanticToneModePrefix(mode)}button--${resolveSemanticTone(tone, fallback)}`
 }
 
-export function getSemanticToneIconClass(tone: SemanticTone) {
-  return `tone-icon--${resolveSemanticTone(tone)}`
+export function getSemanticToneIconClass(
+  tone: SemanticTone | undefined,
+  fallback: SemanticTone = 'neutral',
+) {
+  return `tone-icon--${resolveSemanticTone(tone, fallback)}`
 }
 
-export function getSemanticToneBorderClass(tone: SemanticTone) {
-  return `tone-border--${resolveSemanticTone(tone)}`
+export function getSemanticToneBorderClass(
+  tone: SemanticTone | undefined,
+  fallback: SemanticTone = 'neutral',
+) {
+  return `tone-border--${resolveSemanticTone(tone, fallback)}`
 }
 
-export function getSemanticToneTextClass(tone: SemanticTone) {
-  return `tone-text--${resolveSemanticTone(tone)}`
+export function getSemanticToneTextClass(
+  tone: SemanticTone | undefined,
+  fallback: SemanticTone = 'neutral',
+) {
+  return `tone-text--${resolveSemanticTone(tone, fallback)}`
 }
 
 export function registerSemanticToneUtilityStyles() {

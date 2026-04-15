@@ -2,7 +2,6 @@ import { tryResolveTsSsgContext } from '@purestack/ts-common'
 import {
   getSemanticToneSurfaceClass,
   getSemanticToneTextClass,
-  resolveSemanticTone,
   type SemanticTone,
 } from '@purestack/ts-style'
 import {
@@ -116,11 +115,9 @@ function resolveModal(props: Modal): Modal {
     ...props,
     titleId: `${unref(props.id)}-title`,
     panelToneClass: computed(() =>
-      getSemanticToneSurfaceClass(resolveSemanticTone(unref(props.tone))),
+      getSemanticToneSurfaceClass(unref(props.tone)),
     ),
-    titleToneClass: computed(() =>
-      getSemanticToneTextClass(resolveSemanticTone(unref(props.tone))),
-    ),
+    titleToneClass: computed(() => getSemanticToneTextClass(unref(props.tone))),
     rootClass: computed(() => resolveModalRootClass(props)),
   }
 }

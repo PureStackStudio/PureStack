@@ -1,6 +1,5 @@
 import {
   getSemanticToneSurfaceClass,
-  resolveSemanticTone,
   type SemanticTone,
 } from '@purestack/ts-style'
 import {
@@ -39,8 +38,6 @@ export function definePanelComponents() {
 function resolvePanel(props: Panel): Panel {
   return {
     ...props,
-    rootClass: computed(() =>
-      getSemanticToneSurfaceClass(resolveSemanticTone(unref(props.tone))),
-    ),
+    rootClass: computed(() => getSemanticToneSurfaceClass(unref(props.tone))),
   }
 }

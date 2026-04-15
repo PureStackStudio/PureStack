@@ -1,7 +1,6 @@
 import {
   getSemanticToneIconClass,
   getSemanticToneSurfaceClass,
-  resolveSemanticTone,
   type SemanticTone,
 } from '@purestack/ts-style'
 import {
@@ -79,17 +78,10 @@ export function defineExpandablePanelComponents() {
 function resolveExpandablePanel(props: ExpandablePanel): ExpandablePanel {
   return {
     ...props,
-    rootClass: computed(() =>
-      getSemanticToneSurfaceClass(resolveSemanticTone(unref(props.tone))),
-    ),
+    rootClass: computed(() => getSemanticToneSurfaceClass(unref(props.tone))),
     summaryClass: computed(() =>
-      getSemanticToneSurfaceClass(
-        resolveSemanticTone(unref(props.tone)),
-        'interactive',
-      ),
+      getSemanticToneSurfaceClass(unref(props.tone), 'interactive'),
     ),
-    iconToneClass: computed(() =>
-      getSemanticToneIconClass(resolveSemanticTone(unref(props.tone))),
-    ),
+    iconToneClass: computed(() => getSemanticToneIconClass(unref(props.tone))),
   }
 }
