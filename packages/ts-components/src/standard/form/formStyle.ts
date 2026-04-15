@@ -98,7 +98,6 @@ function registerFormFieldStyles(
     .select('.form-block__number-controls', theme)
     .display('grid')
     .gridTemplateRows('1fr 1fr')
-    .borderLeft('1px solid currentColor')
     .background('transparent')
   styleBuilder
     .select('.form-block__number-btn', theme)
@@ -106,22 +105,10 @@ function registerFormFieldStyles(
     .placeItems('center')
     .padding('0')
     .border('none')
-    .background('transparent')
-    .color('inherit')
     .fontSize('0.95rem')
     .fontWeight('800')
     .lineHeight('1')
     .cursor('pointer')
-    .transition('opacity 140ms ease')
-  styleBuilder
-    .select('.form-block__number-btn--up', theme)
-    .borderBottom('1px solid currentColor')
-  styleBuilder.select('.form-block__number-btn:hover', theme).opacity('0.82')
-  styleBuilder.select('.form-block__number-btn:active', theme).opacity('0.64')
-  styleBuilder
-    .select('.form-block__number-btn:focus-visible', theme)
-    .outline(`2px solid ${palette.semanticTone.accent.border.focus}`)
-    .outlineOffset('-2px')
 }
 
 function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {

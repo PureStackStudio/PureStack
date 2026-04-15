@@ -1,4 +1,5 @@
 import {
+  getSemanticToneButtonClass,
   getSemanticToneSurfaceClass,
   getSemanticToneTextClass,
   type SemanticTone,
@@ -44,6 +45,7 @@ export class FormInputField {
   readonly placeholder?: RefOrValue<string>
   labelToneClass?: ComputedRef<string>
   inputToneClass?: ComputedRef<string>
+  buttonToneClass?: ComputedRef<string>
 
   constructor(props: FormInputField) {
     Object.assign(this, {
@@ -116,6 +118,7 @@ const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
     <div class="form-block__number-controls">
       <button
         class="form-block__number-btn form-block__number-btn--up"
+        :class="buttonToneClass"
         type="button"
         aria-label="Increase value"
         @click="increment"
@@ -124,6 +127,7 @@ const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
       </button>
       <button
         class="form-block__number-btn form-block__number-btn--down"
+        :class="buttonToneClass"
         type="button"
         aria-label="Decrease value"
         @click="decrement"
@@ -168,12 +172,16 @@ export function defineFormInputField() {
 
 function resolveFormInputField(head: ComponentHead<FormInputField>) {
   const inheritedTone = head.findContext(FormToneContext)?.tone
+  const resolvedTone = () => unref(head.props.tone) || unref(inheritedTone)
   const field = new FormInputField(head.props)
   field.labelToneClass = computed(() =>
-    getSemanticToneTextClass(unref(head.props.tone) || unref(inheritedTone)),
+    getSemanticToneTextClass(resolvedTone()),
   )
   field.inputToneClass = computed(() =>
-    getSemanticToneSurfaceClass(unref(head.props.tone) || unref(inheritedTone)),
+    getSemanticToneSurfaceClass(resolvedTone(), false),
+  )
+  field.buttonToneClass = computed(() =>
+    getSemanticToneButtonClass(resolvedTone(), true),
   )
   return field
 }
