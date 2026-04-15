@@ -14,8 +14,6 @@ import {
   unref,
 } from 'regor'
 
-export type FormStatusVariant = 'info' | 'success' | 'error' | 'warning'
-
 export interface AppForm {
   action?: RefOrValue<string>
   method?: RefOrValue<string>
@@ -71,7 +69,6 @@ export interface FormDivider {
 }
 
 export interface FormStatus {
-  variant?: RefOrValue<FormStatusVariant>
   tone?: RefOrValue<SemanticTone>
   hidden?: RefOrValue<boolean>
   rootClass?: ComputedRef<string>
@@ -193,7 +190,7 @@ function defineFormDividerComponent() {
 
 function defineFormStatusComponent() {
   return defineComponent<FormStatus>(formStatusTemplate, {
-    props: ['variant', 'tone', 'hidden'],
+    props: ['tone', 'hidden'],
     context: (head) => resolveFormStatus(head),
   })
 }
@@ -280,24 +277,8 @@ function resolveFormStatus(head: ComponentHead<FormStatus>): FormStatus {
     ...head.props,
     rootClass: computed(() =>
       getSemanticToneSurfaceClass(
-        unref(head.props.tone) ||
-          unref(inheritedTone) ||
-          resolveStatusTone(head.props.variant),
+        unref(head.props.tone) || unref(inheritedTone),
       ),
     ),
   }
-}
-
-function resolveStatusTone(value: RefOrValue<FormStatusVariant> | undefined) {
-  const normalized = unref(value)?.trim().toLowerCase()
-  if (normalized === 'error') return 'danger'
-  if (
-    normalized === 'info' ||
-    normalized === 'success' ||
-    normalized === 'danger' ||
-    normalized === 'warning'
-  ) {
-    return normalized as SemanticTone
-  }
-  return 'neutral'
 }
