@@ -3,10 +3,10 @@ import { createNeonPalette, type NeonCore } from './base'
 import type { ToneColors } from './shared'
 
 const white = '#c9c9c9'
-export const accent = '#3d4f69'
-const accentScale = getColors(accent, 40, 0, 20)
+export const accent = '#247ab8'
+const accentScale = getColors(accent, 80, 0, 20)
 const baseTone: ToneColors = {
-  canvas: accentScale[0],
+  canvas: accentScale[3],
   button: accentScale[15],
   foreground: white,
   border: white,

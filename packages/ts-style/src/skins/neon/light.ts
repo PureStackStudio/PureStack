@@ -9,7 +9,7 @@ const accentScaleDark = getColors(accent, 40, 0, 20)
 const baseTone: ToneColors = {
   canvas: accentScale[0],
   button: accentScale[12],
-  foreground: accentScaleDark[3],
+  foreground: accentScaleDark[13],
   border: accentScaleDark[17],
   surface: accentScale[6],
   surfaceAlt: accentScale[9],
