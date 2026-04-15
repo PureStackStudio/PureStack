@@ -50,39 +50,33 @@ export function getSemanticToneSurfaceClass(
   tone: SemanticTone,
   mode: SemanticToneMode = 'static',
 ) {
-  if (!tone) tone = 'neutral'
-  return `${getSemanticToneModePrefix(mode)}surface--${tone}`
+  return `${getSemanticToneModePrefix(mode)}surface--${resolveSemanticTone(tone)}`
 }
 
 export function getSemanticToneSurfaceAltClass(
   tone: SemanticTone,
   mode: SemanticToneMode = 'static',
 ) {
-  if (!tone) tone = 'neutral'
-  return `${getSemanticToneModePrefix(mode)}surface-alt--${tone}`
+  return `${getSemanticToneModePrefix(mode)}surface-alt--${resolveSemanticTone(tone)}`
 }
 
 export function getSemanticToneButtonClass(
   tone: SemanticTone,
   mode: SemanticToneMode = 'static',
 ) {
-  if (!tone) tone = 'neutral'
-  return `${getSemanticToneModePrefix(mode)}button--${tone}`
+  return `${getSemanticToneModePrefix(mode)}button--${resolveSemanticTone(tone)}`
 }
 
 export function getSemanticToneIconClass(tone: SemanticTone) {
-  if (!tone) tone = 'neutral'
-  return `tone-icon--${tone}`
+  return `tone-icon--${resolveSemanticTone(tone)}`
 }
 
 export function getSemanticToneBorderClass(tone: SemanticTone) {
-  if (!tone) tone = 'neutral'
-  return `tone-border--${tone}`
+  return `tone-border--${resolveSemanticTone(tone)}`
 }
 
 export function getSemanticToneTextClass(tone: SemanticTone) {
-  if (!tone) tone = 'neutral'
-  return `tone-text--${tone}`
+  return `tone-text--${resolveSemanticTone(tone)}`
 }
 
 export function registerSemanticToneUtilityStyles() {
