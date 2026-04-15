@@ -11,8 +11,6 @@ export type SemanticTone =
   | 'warning'
   | 'danger'
 
-export type SemanticToneMode = 'static' | 'interactive'
-
 const SEMANTIC_TONES: SemanticTone[] = [
   'neutral',
   'accent',
@@ -42,32 +40,32 @@ export function getSemanticToneTokens(
   return palette.semanticTone[tone]
 }
 
-function getSemanticToneModePrefix(mode: SemanticToneMode = 'static') {
-  return mode === 'interactive' ? 'tone-interactive-' : 'tone-'
+function getSemanticTonePrefix(isInteractive = false) {
+  return isInteractive ? 'tone-interactive-' : 'tone-'
 }
 
 export function getSemanticToneSurfaceClass(
   tone: SemanticTone | undefined,
-  mode: SemanticToneMode = 'static',
+  isInteractive = false,
   fallback: SemanticTone = 'neutral',
 ) {
-  return `${getSemanticToneModePrefix(mode)}surface--${resolveSemanticTone(tone, fallback)}`
+  return `${getSemanticTonePrefix(isInteractive)}surface--${resolveSemanticTone(tone, fallback)}`
 }
 
 export function getSemanticToneSurfaceAltClass(
   tone: SemanticTone | undefined,
-  mode: SemanticToneMode = 'static',
+  isInteractive = false,
   fallback: SemanticTone = 'neutral',
 ) {
-  return `${getSemanticToneModePrefix(mode)}surface-alt--${resolveSemanticTone(tone, fallback)}`
+  return `${getSemanticTonePrefix(isInteractive)}surface-alt--${resolveSemanticTone(tone, fallback)}`
 }
 
 export function getSemanticToneButtonClass(
   tone: SemanticTone | undefined,
-  mode: SemanticToneMode = 'static',
+  isInteractive = false,
   fallback: SemanticTone = 'neutral',
 ) {
-  return `${getSemanticToneModePrefix(mode)}button--${resolveSemanticTone(tone, fallback)}`
+  return `${getSemanticTonePrefix(isInteractive)}button--${resolveSemanticTone(tone, fallback)}`
 }
 
 export function getSemanticToneIconClass(
@@ -96,20 +94,14 @@ export function registerSemanticToneUtilityStyles() {
     for (const tone of SEMANTIC_TONES) {
       const tokens = getSemanticToneTokens(palette, tone)
       const surfaceClass = getSemanticToneSurfaceClass(tone)
-      const interactiveSurfaceClass = getSemanticToneSurfaceClass(
-        tone,
-        'interactive',
-      )
+      const interactiveSurfaceClass = getSemanticToneSurfaceClass(tone, true)
       const surfaceAltClass = getSemanticToneSurfaceAltClass(tone)
       const interactiveSurfaceAltClass = getSemanticToneSurfaceAltClass(
         tone,
-        'interactive',
+        true,
       )
       const buttonClass = getSemanticToneButtonClass(tone)
-      const interactiveButtonClass = getSemanticToneButtonClass(
-        tone,
-        'interactive',
-      )
+      const interactiveButtonClass = getSemanticToneButtonClass(tone, true)
 
       styleBuilder
         .select(`.${surfaceClass}, .${interactiveSurfaceClass}`, theme)

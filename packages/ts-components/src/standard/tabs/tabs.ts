@@ -136,7 +136,7 @@ function resolveTabPane(head: ComponentHead<TabPane>): TabPane {
     id,
     group,
     tabClass: computed(() =>
-      getSemanticToneButtonClass(unref(fromParent?.tone), 'interactive'),
+      getSemanticToneButtonClass(unref(fromParent?.tone), true),
     ),
   }
 }

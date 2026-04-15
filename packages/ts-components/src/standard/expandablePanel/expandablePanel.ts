@@ -80,7 +80,7 @@ function resolveExpandablePanel(props: ExpandablePanel): ExpandablePanel {
     ...props,
     rootClass: computed(() => getSemanticToneSurfaceClass(unref(props.tone))),
     summaryClass: computed(() =>
-      getSemanticToneSurfaceClass(unref(props.tone), 'interactive'),
+      getSemanticToneSurfaceClass(unref(props.tone), true),
     ),
     iconToneClass: computed(() => getSemanticToneIconClass(unref(props.tone))),
   }
