@@ -139,7 +139,7 @@ export function createTone(
   chrome: ToneChromeOptions = {},
 ): Tone {
   const canvas = createScale(colors.canvas, 10)
-  const background = createScale(colors.button, 10)
+  const buttonBg = createScale(colors.button, 10)
   const foreground = createScale(colors.foreground, 1)
   const border = createScale(colors.border, 1)
   const surface = createScale(colors.surface, 10)
@@ -149,38 +149,32 @@ export function createTone(
   const defaultBorder = borderTone(border.level3)
   const subtleBorder = borderTone(border.level2)
   const focusBorder = borderTone(border.level5)
-  const buttonBorderRest = borderTone(background.level1)
-  const buttonBorderHover = borderTone(background.level2)
-  const buttonBorderActive = borderTone(background.level1)
-  const buttonBorderDisabled = borderTone(background.level1)
+  const buttonBorderRest = borderTone(buttonBg.level1)
+  const buttonBorderHover = borderTone(buttonBg.level2)
+  const buttonBorderActive = borderTone(buttonBg.level1)
+  const buttonBorderDisabled = borderTone(buttonBg.level1)
 
   const button = {
     rest: {
-      background: createChrome('button', background, 'rest', isGhost, chrome),
+      background: createChrome('button', buttonBg, 'rest', isGhost, chrome),
       border: isGhost ? 'transparent' : buttonBorderRest,
       text: isGhost ? 'currentColor' : foreground.level2,
       ...(overrides.button?.rest || {}),
     },
     hover: {
-      background: createChrome('button', background, 'hover', isGhost, chrome),
+      background: createChrome('button', buttonBg, 'hover', isGhost, chrome),
       border: buttonBorderHover,
       text: foreground.level5,
       ...(overrides.button?.hover || {}),
     },
     active: {
-      background: createChrome('button', background, 'active', isGhost, chrome),
+      background: createChrome('button', buttonBg, 'active', isGhost, chrome),
       border: buttonBorderActive,
       text: foreground.level5,
       ...(overrides.button?.active || {}),
     },
     disabled: {
-      background: createChrome(
-        'button',
-        background,
-        'disabled',
-        isGhost,
-        chrome,
-      ),
+      background: createChrome('button', buttonBg, 'disabled', isGhost, chrome),
       border: buttonBorderDisabled,
       text: foreground.level1,
       ...(overrides.button?.disabled || {}),
@@ -229,8 +223,8 @@ export function createTone(
     },
     button,
     icon: {
-      background: background.level5,
-      gradient: createChrome('icon', background, 'rest', false, chrome),
+      background: buttonBg.level5,
+      gradient: createChrome('icon', buttonBg, 'rest', false, chrome),
       color: foreground.level5,
       border: defaultBorder,
       ...(overrides.icon || {}),

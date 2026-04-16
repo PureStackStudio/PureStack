@@ -75,29 +75,29 @@ export function createChrome(
 
   const hotspotPosition =
     kind === 'button' ? '20% 18%' : kind === 'icon' ? '24% 18%' : '18% 14%'
-  const baseStart =
-    state === 'active'
-      ? scale.level3
-      : state === 'disabled'
-        ? scale.level1
-        : scale.level2
-  const baseMid =
-    state === 'hover'
-      ? scale.level4
-      : state === 'active'
-        ? scale.level4
-        : state === 'disabled'
-          ? scale.level2
-          : scale.level3
-  const baseEnd =
-    state === 'hover'
-      ? scale.level5
-      : state === 'active'
-        ? scale.level5
-        : state === 'disabled'
-          ? scale.level3
-          : scale.level4
-
+  const bases = {
+    hover: {
+      baseStart: scale.level4,
+      baseMid: scale.level5,
+      baseEnd: scale.level4,
+    },
+    active: {
+      baseStart: scale.level4,
+      baseMid: scale.level5,
+      baseEnd: scale.level4,
+    },
+    disabled: {
+      baseStart: scale.level1,
+      baseMid: scale.level2,
+      baseEnd: scale.level1,
+    },
+    rest: {
+      baseStart: scale.level3,
+      baseMid: scale.level4,
+      baseEnd: scale.level3,
+    },
+  }
+  const { baseStart, baseMid, baseEnd } = bases[state]
   const bodyAngle =
     kind === 'button' ? '145deg' : kind === 'icon' ? '150deg' : '160deg'
 
@@ -116,7 +116,7 @@ export function createChrome(
 
   const hotspot = radialAt(hotspotPosition, [
     [rgba('#ffffff', hotspotAlphaByState[state] * lighting), '0%'],
-    [rgba(scale.level1, hotspotAlphaByState[state] * 0.75 * lighting), '18%'],
+    [rgba(scale.level4, hotspotAlphaByState[state] * 0.75 * lighting), '18%'],
     [rgba(scale.level2, hotspotAlphaByState[state] * 0.28 * lighting), '38%'],
     ['transparent', '68%'],
   ])
@@ -146,9 +146,9 @@ export function createChrome(
         ['transparent', '56%'],
       ]),
       linear('165deg', [
-        [scale.level2, '0%'],
+        [scale.level1, '0%'],
         [scale.level3, '52%'],
-        [scale.level4, '100%'],
+        [scale.level5, '100%'],
       ]),
       linear('180deg', [
         ['transparent', '0%'],

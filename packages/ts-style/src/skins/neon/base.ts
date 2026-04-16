@@ -21,9 +21,9 @@ type NeonPaletteOptions = {
 
 export function createNeonPalette({
   core,
+  chromeLighting = 0.22,
   borderAlpha = 0.33,
   subtleAlpha = 0.5,
-  chromeLighting = 0.22,
 }: NeonPaletteOptions): ThemePalette {
   const borderTone = (hex: string) => rgba(hex, borderAlpha)
   const subtleTone = (hex: string) => rgba(hex, subtleAlpha)

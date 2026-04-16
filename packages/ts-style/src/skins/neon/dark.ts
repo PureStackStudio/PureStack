@@ -3,23 +3,25 @@ import { createNeonPalette, type NeonCore } from './base'
 import type { ToneColors } from './shared'
 
 const white = '#c9c9c9'
-export const accent = '#3f7eab'
+export const accent = '#3c7cb1'
+export const neutral = '#33373d'
 export const info = '#15a9c0'
 export const success = '#259740'
 export const warning = '#c49a1c'
 export const danger = '#a92a37'
 const accentScale = getColors(accent, 80, 0, 20)
+const neutralScale = getColors(neutral, 80, 0, 20)
 const infoScale = getColors(info, 80, 0, 20)
 const successScale = getColors(success, 80, 0, 20)
 const warningScale = getColors(warning, 80, 0, 20)
 const dangerScale = getColors(danger, 80, 0, 20)
 const baseTone: ToneColors = {
-  canvas: accentScale[3],
-  button: accentScale[15],
+  canvas: neutralScale[3],
+  button: neutralScale[15],
   foreground: white,
   border: white,
-  surface: accentScale[7],
-  surfaceAlt: accentScale[4],
+  surface: neutralScale[12],
+  surfaceAlt: neutralScale[7],
 }
 const core: NeonCore = {
   neutral: baseTone,
