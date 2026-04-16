@@ -17,6 +17,7 @@ export interface NavItem {
   hidden?: boolean
   group?: string
   icon?: string
+  tone?: string
 }
 
 export interface PageNavigation {

@@ -1,9 +1,11 @@
 import type { NavItem, TsSsgContext } from '@purestack/ts-common'
 import { resolveTsSsgContext } from '@purestack/ts-common'
-import { defineComponent, html } from 'regor'
+import { type ComputedRef, defineComponent, html } from 'regor'
 
 export interface NavMenu {
   items?: NavItem[]
+  tone: string
+  toneClass?: ComputedRef<string>
 }
 
 export interface NavList {
@@ -13,6 +15,7 @@ export interface NavList {
 export interface NavItemState extends NavItem {
   isActive: boolean
   isOpen: boolean
+  toneClass?: ComputedRef<string>
 }
 
 const navItemTemplate = html`<li class="nav__item">
@@ -21,7 +24,7 @@ const navItemTemplate = html`<li class="nav__item">
 </li>`
 
 const navListTemplate = html`<ul class="nav__list">
-  <nav-item r-for="item in items">
+  <NavItem r-for="item in items">
     <template #content>
       <details
         r-if="item.children && item.children.length > 0"
@@ -49,7 +52,7 @@ const navListTemplate = html`<ul class="nav__list">
           </span>
           <span class="nav__chevron" aria-hidden="true"></span>
         </summary>
-        <nav-list :items="item.children"></nav-list>
+        <NavList :items="item.children"></NavList>
       </details>
       <div r-else class="nav__leaf">
         <a
@@ -58,18 +61,16 @@ const navListTemplate = html`<ul class="nav__list">
           :class="{ 'nav__link--active': item.isActive }"
           :href="item.url"
           :aria-current="item.isActive ? 'page' : null"
-          >{{ item.title }}</a
         >
+          {{ item.title }}
+        </a>
         <span r-else class="nav__text">{{ item.title }}</span>
       </div>
     </template>
-  </nav-item>
+  </NavItem>
 </ul>`
 
-const navMenuTemplate = html`<nav
-  class="nav__menu"
-  aria-label="Site navigation"
->
+const navMenuTemplate = html`<nav class="nav__menu" aria-label="Site navigation">
   <div class="nav__header-row">
     <div class="nav__header">Navigation</div>
     <button
@@ -80,7 +81,7 @@ const navMenuTemplate = html`<nav
       data-nav-menu-toggle
     >
       <span class="nav__panel-toggle-icon" aria-hidden="true">
-        <Icon name="iconoir:pin" />
+        <Icon name="iconoir:pin"/>
       </span>
       <span class="nav__panel-toggle-label">navigation</span>
     </button>
@@ -95,17 +96,17 @@ const navMenuTemplate = html`<nav
         class="nav__collapse-toggle-icon nav__collapse-toggle-icon--collapse"
         aria-hidden="true"
       >
-        <Icon name="iconoir:pin-slash" />
+        <Icon name="iconoir:pin-slash"/>
       </span>
       <span
         class="nav__collapse-toggle-icon nav__collapse-toggle-icon--open"
         aria-hidden="true"
       >
-        <Icon name="iconoir:pin" />
+        <Icon name="iconoir:pin"/>
       </span>
     </button>
   </div>
-  <nav-list :items="items"></nav-list>
+  <NavList :items="items"></NavList>
 </nav>`
 
 function resolveNavItems(context: TsSsgContext): NavItem[] {
@@ -183,10 +184,11 @@ function defineNavListComponent() {
 
 function defineNavMenuComponent() {
   return defineComponent<NavMenu>(navMenuTemplate, {
-    props: ['items'],
+    props: ['items', 'tone'],
     context: (head) => {
       const context = resolveTsSsgContext(head)
       return {
+        ...head.props,
         items: buildNavState(
           head.props.items ?? resolveNavItems(context),
           resolveCurrentPath(context),
