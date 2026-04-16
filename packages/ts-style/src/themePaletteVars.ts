@@ -1,4 +1,4 @@
-import type { ThemePalette } from './themePalette'
+import type { ThemePalette, ThemePaletteCurrent } from './themePalette'
 
 const THEME_PALETTE_VAR_PREFIX = '--ps'
 
@@ -39,7 +39,10 @@ export interface ThemePaletteVarEntry {
 export function createThemePaletteVarBindings(
   palette: ThemePalette,
 ): ThemePalette {
-  return mapThemePaletteLeaves(palette, (path) => getThemePaletteVar(path))
+  return {
+    ...mapThemePaletteLeaves(palette, (path) => getThemePaletteVar(path)),
+    current: getCurrentThemePalette(),
+  }
 }
 
 export function getThemePaletteVar(path: string | string[]) {
@@ -110,6 +113,20 @@ function mapThemePaletteLeaves(
   path: string[] = [],
 ): ThemePalette {
   return mapThemePaletteValue(value, mapLeaf, path)
+}
+
+export function getCurrentThemePalette(): ThemePaletteCurrent {
+  return {
+    text: {
+      default: 'var(--ps-tone-text-default)',
+      subtle: 'var(--ps-tone-text-subtle)',
+    },
+    border: {
+      subtle: 'var(--ps-tone-border-subtle)',
+      default: 'var(--ps-tone-border-default)',
+      focus: 'var(--ps-tone-border-focus)',
+    },
+  }
 }
 
 function mapThemePaletteValue<T>(

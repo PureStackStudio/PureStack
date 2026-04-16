@@ -1,4 +1,5 @@
 import type { ThemePalette } from '../../themePalette'
+import { getCurrentThemePalette } from '../../themePaletteVars'
 import { createScale, createTone, rgba, type ToneColors } from './shared'
 
 export type NeonCore = {
@@ -31,6 +32,7 @@ export function createNeonPalette({
   const effect: ThemePalette['effect'] = createEffect(core)
 
   return {
+    current: getCurrentThemePalette(),
     semanticTone: {
       neutral: createTone(
         core.neutral,

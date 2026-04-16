@@ -95,7 +95,7 @@ function registerSearchBoxShellInputStyles(
 
   styleBuilder
     .select('.site-search__input::placeholder', theme)
-    .color('var(--ps-tone-text-subtle)')
+    .color(palette.current.text.subtle)
 
   styleBuilder
     .select('.site-search__input:focus-visible', theme)

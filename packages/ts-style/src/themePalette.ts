@@ -127,7 +127,20 @@ export interface SemanticToneTokens {
   }
 }
 
+export interface ThemePaletteCurrent {
+  text: {
+    default: string
+    subtle: string
+  }
+  border: {
+    subtle: string
+    default: string
+    focus: string
+  }
+}
+
 export interface ThemePalette {
+  current: ThemePaletteCurrent
   semanticTone: {
     neutral: SemanticToneTokens
     accent: SemanticToneTokens
