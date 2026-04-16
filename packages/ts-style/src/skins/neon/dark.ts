@@ -3,61 +3,69 @@ import { createNeonPalette, type NeonCore } from './base'
 import type { ToneColors } from './shared'
 
 const white = '#c9c9c9'
-export const accent = '#247ab8'
+export const accent = '#3f7eab'
+export const info = '#15a9c0'
+export const success = '#259740'
+export const warning = '#c49a1c'
+export const danger = '#a92a37'
 const accentScale = getColors(accent, 80, 0, 20)
+const infoScale = getColors(info, 80, 0, 20)
+const successScale = getColors(success, 80, 0, 20)
+const warningScale = getColors(warning, 80, 0, 20)
+const dangerScale = getColors(danger, 80, 0, 20)
 const baseTone: ToneColors = {
   canvas: accentScale[3],
   button: accentScale[15],
   foreground: white,
   border: white,
-  surface: accentScale[10],
-  surfaceAlt: accentScale[5],
+  surface: accentScale[7],
+  surfaceAlt: accentScale[4],
 }
 const core: NeonCore = {
   neutral: baseTone,
   accent: {
     ...baseTone,
-    canvas: accent,
+    canvas: accentScale[3],
     button: accent,
     foreground: white,
     border: accent,
-    surface: accent,
-    surfaceAlt: accent,
+    surface: accentScale[12],
+    surfaceAlt: accentScale[7],
   },
   ghost: {
     ...baseTone,
   },
   info: {
-    canvas: '#15a9c0',
-    button: '#15a9c0',
+    canvas: infoScale[3],
+    button: info,
     foreground: white,
-    border: '#16BAD4',
-    surface: '#1292a6',
-    surfaceAlt: '#15a9c0',
+    border: info,
+    surface: infoScale[12],
+    surfaceAlt: infoScale[7],
   },
   success: {
-    canvas: '#259740',
-    button: '#259740',
+    canvas: successScale[3],
+    button: success,
     foreground: white,
-    border: '#259740',
-    surface: '#259740',
-    surfaceAlt: '#259740',
+    border: success,
+    surface: successScale[12],
+    surfaceAlt: successScale[7],
   },
   warning: {
-    canvas: '#c49a1c',
-    button: '#c49a1c',
+    canvas: warningScale[3],
+    button: warning,
     foreground: white,
-    border: '#c49a1c',
-    surface: '#c49a1c',
-    surfaceAlt: '#c49a1c',
+    border: warning,
+    surface: warningScale[12],
+    surfaceAlt: warningScale[7],
   },
   danger: {
-    canvas: '#a92a37',
-    button: '#a92a37',
+    canvas: dangerScale[3],
+    button: danger,
     foreground: white,
-    border: '#a92a37',
-    surface: '#a92a37',
-    surfaceAlt: '#a92a37',
+    border: danger,
+    surface: dangerScale[12],
+    surfaceAlt: dangerScale[7],
   },
 }
 

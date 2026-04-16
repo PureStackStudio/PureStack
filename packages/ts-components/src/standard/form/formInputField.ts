@@ -11,6 +11,7 @@ import {
   html,
   type Ref,
   type RefOrValue,
+  ref,
   unref,
 } from 'regor'
 import { FormToneContext } from './form'
@@ -50,6 +51,7 @@ export class FormInputField {
       ...props,
     })
     this.id = resolveInputId(unref(props.id))
+    if (!this.model) this.model = ref<string | number>('')
   }
 
   get isNumberField() {
@@ -99,9 +101,7 @@ export class FormInputField {
 }
 
 const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
-  <span class="form-block__label" r-if="label">
-    {{ label }}
-  </span>
+  <span class="form-block__label" r-if="label">{{ label }}</span>
   <div class="form-block__number" :class="inputToneClass" r-if="isNumberField">
     <input
       :id="id"
