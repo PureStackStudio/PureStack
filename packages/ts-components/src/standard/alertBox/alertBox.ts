@@ -34,7 +34,7 @@ const alertBoxTemplate = html`<aside
     <div class="alert__header" r-if="title || eyebrow || badge">
       <p class="alert__eyebrow" r-if="eyebrow">{{ eyebrow }}</p>
       <h3 class="alert__title" :class="titleToneClass" r-if="title">{{ title }}</h3>
-      <span class="alert__badge" r-if="badge">{{ badge }}</span>
+      <Badge tone="neutral" r-if="badge">{{ badge }}</Badge>
     </div>
     <div class="alert__body"><slot></slot></div>
     <div class="alert__actions"><slot name="actions"></slot></div>
@@ -44,7 +44,14 @@ const alertBoxTemplate = html`<aside
 
 function defineAlertBoxComponent() {
   return defineComponent<AlertBox>(alertBoxTemplate, {
-    props: ['title', 'eyebrow', 'badge', 'meta', 'tone', 'icon'],
+    props: [
+      'title',
+      'eyebrow',
+      'badge',
+      'meta',
+      'tone',
+      'icon',
+    ],
     context: (head) => resolveAlertBox(head.props),
   })
 }

@@ -1,4 +1,10 @@
-import { defineComponent, html } from 'regor'
+import {
+  type ComputedRef,
+  computed,
+  defineComponent,
+  html,
+  type RefOrValue,
+} from 'regor'
 
 export type PricingPlanVariant = 'featured' | 'primary'
 
@@ -7,6 +13,7 @@ export interface PricingTable {
   title?: string
   subtitle?: string
   footnote?: string
+  tone?: RefOrValue<string>
 }
 
 export interface PricingPlan {
@@ -20,13 +27,15 @@ export interface PricingPlan {
   icon?: string
   ctaLabel?: string
   ctaLink?: string
+  tone?: string
+  panelClass?: ComputedRef<string>
 }
 
 export interface PricingFeature {
   icon?: string
 }
 
-const pricingTableTemplate = html`<section class="pricing">
+const pricingTableTemplate = html`<Panel :tone="tone" class="pricing">
   <div class="pricing__header" r-if="eyebrow || title || subtitle">
     <p class="pricing__eyebrow" r-if="eyebrow">{{ eyebrow }}</p>
     <h2 class="pricing__title" r-if="title">{{ title }}</h2>
@@ -36,16 +45,13 @@ const pricingTableTemplate = html`<section class="pricing">
     <slot></slot>
   </div>
   <p class="pricing__footnote" r-if="footnote">{{ footnote }}</p>
-</section>`
+</Panel>`
 
-const pricingPlanTemplate = html`<article
-  class="pricing-plan"
-  :class="{ 'pricing-plan--featured': variant === 'featured' }"
->
+const pricingPlanTemplate = html`<Panel :tone="tone" :class="panelClass">
   <div class="pricing-plan__head">
     <div class="pricing-plan__meta">
-      <Icon class="pricing-plan__icon" r-if="icon" :name="icon || 'iconoir:code'" />
-      <span class="pricing-plan__badge" r-if="badge">{{ badge }}</span>
+      <Icon class="pricing-plan__icon" r-if="icon" :name="icon"/>
+      <Badge tone="neutral" r-if="badge">{{ badge }}</Badge>
     </div>
     <div class="pricing-plan__title-row">
       <h3 class="pricing-plan__title">{{ title }}</h3>
@@ -57,16 +63,16 @@ const pricingPlanTemplate = html`<article
     <span class="pricing-plan__period" r-if="period">{{ period }}</span>
   </div>
   <div class="pricing-plan__cta" r-if="ctaLabel && ctaLink">
-    <a class="pricing-plan__cta-link" :href="ctaLink">{{ ctaLabel }}</a>
+    <BtnLink tone="neutral" :href="ctaLink">{{ ctaLabel }}</BtnLink>
   </div>
   <ul class="pricing-plan__features">
     <slot></slot>
   </ul>
   <p class="pricing-plan__note" r-if="note">{{ note }}</p>
-</article>`
+</Panel>`
 
 const pricingFeatureTemplate = html`<li class="pricing-feature">
-  <Icon class="pricing-feature__icon" :name="icon || 'iconoir:check'" />
+  <Icon class="pricing-feature__icon" :name="icon || 'iconoir:check'"/>
   <span class="pricing-feature__text"><slot></slot></span>
 </li>`
 
@@ -90,6 +96,7 @@ function definePricingPlanComponent() {
       'icon',
       'ctaLabel',
       'ctaLink',
+      'tone',
     ],
     context: (head) => resolvePricingPlan(head.props),
   })
@@ -111,15 +118,8 @@ export function definePricingComponents() {
 }
 
 function resolvePricingTable(props: PricingTable): PricingTable {
-  const eyebrow = resolveString(props.eyebrow)
-  const title = resolveString(props.title)
-  const subtitle = resolveString(props.subtitle)
-  const footnote = resolveString(props.footnote)
   return {
-    eyebrow,
-    title,
-    subtitle,
-    footnote,
+    ...props,
   }
 }
 
@@ -134,6 +134,11 @@ function resolvePricingPlan(props: PricingPlan): PricingPlan {
     variant,
     ctaLabel,
     ctaLink,
+    panelClass: computed(() =>
+      ['pricing-plan', variant === 'featured' ? 'pricing-plan--featured' : '']
+        .filter(Boolean)
+        .join(' '),
+    ),
   }
 }
 

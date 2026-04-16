@@ -20,18 +20,15 @@ export function registerPricingStyles() {
 export function applyPricingShellStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
+  _options: ThemeOptions,
 ) {
   styleBuilder
-    .select('.pricing', theme)
+    .select('.pricing.panel', theme)
     .position('relative')
     .overflow('hidden')
-    .padding('28px')
-    .borderRadius(options.radii.lg)
-    .border(`1px solid ${palette.semanticTone.accent.border.subtle}`)
-    .background(palette.semanticTone.accent.surface.rest.background)
-    .boxShadow(options.shadows.soft)
     .margin('0 0 32px')
+
+  styleBuilder.select('.pricing .panel__body', theme).padding('28px')
 
   styleBuilder
     .select('.pricing::before', theme)
@@ -104,7 +101,7 @@ export function applyPricingPlanStyles(
   options: ThemeOptions,
 ) {
   applyPricingPlanShellStyles(theme, palette, options)
-  applyPricingPlanHeaderStyles(theme, palette, options)
+  applyPricingPlanHeaderStyles(theme, palette)
   applyPricingPlanPriceStyles(theme, palette)
   applyPricingPlanCtaStyles(theme, palette, options)
   applyPricingPlanNoteStyles(theme, palette)
@@ -112,19 +109,17 @@ export function applyPricingPlanStyles(
 
 export function applyPricingPlanShellStyles(
   theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
+  _palette: ThemePalette,
+  _options: ThemeOptions,
 ) {
+  styleBuilder.select('.pricing-plan.panel', theme).margin('0').height('100%')
+
   styleBuilder
-    .select('.pricing-plan', theme)
+    .select('.pricing-plan .panel__body', theme)
     .display('flex')
     .flexDirection('column')
     .gap('12px')
     .padding('18px')
-    .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.current.border.default}`)
-    .background(palette.semanticTone.neutral.surface.rest.background)
-    .boxShadow(palette.effect.panelShadow)
     .height('100%')
 
   styleBuilder.select('.pricing-plan__head', theme).display('grid').gap('6px')
@@ -133,11 +128,10 @@ export function applyPricingPlanShellStyles(
 export function applyPricingPlanHeaderStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
   applyPricingPlanMetaStyles(theme, palette)
   applyPricingPlanIconStyles(theme, palette)
-  applyPricingPlanTitleStyles(theme, palette, options)
+  applyPricingPlanTitleStyles(theme, palette)
 }
 
 export function applyPricingPlanMetaStyles(
@@ -186,7 +180,6 @@ export function applyPricingPlanIconStyles(
 export function applyPricingPlanTitleStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
   styleBuilder
     .select('.pricing-plan__title-row', theme)
@@ -202,17 +195,6 @@ export function applyPricingPlanTitleStyles(
     .fontSize('18px')
     .fontWeight('700')
     .color(palette.current.text.default)
-
-  styleBuilder
-    .select('.pricing-plan__badge', theme)
-    .padding('4px 10px')
-    .borderRadius(options.radii.pill)
-    .fontSize('11px')
-    .fontWeight('700')
-    .textTransform('uppercase')
-    .letterSpacing('0.1em')
-    .background(palette.semanticTone.accent.canvas)
-    .color(palette.semanticTone.accent.text.default)
 
   styleBuilder
     .select('.pricing-plan__summary', theme)
@@ -251,37 +233,10 @@ export function applyPricingPlanPriceStyles(
 
 export function applyPricingPlanCtaStyles(
   theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
+  _palette: ThemePalette,
+  _options: ThemeOptions,
 ) {
   styleBuilder.select('.pricing-plan__cta', theme).margin('0')
-
-  styleBuilder
-    .select('.pricing-plan__cta-link', theme)
-    .display('inline-flex')
-    .alignItems('center')
-    .justifyContent('center')
-    .gap('8px')
-    .padding('9px 14px')
-    .borderRadius(options.radii.pill)
-    .fontWeight('600')
-    .fontSize('13px')
-    .textDecoration('none')
-    .border(`1px solid ${palette.current.border.default}`)
-    .background(palette.semanticTone.neutral.canvas)
-    .color(palette.current.text.default)
-    .boxShadow(palette.effect.interactiveShadow)
-    .transition(
-      'transform 180ms ease, box-shadow 180ms ease, background 180ms ease',
-    )
-
-  styleBuilder
-    .select('.pricing-plan__cta-link:hover', theme)
-    .background(palette.semanticTone.neutral.surface.hover.background)
-
-  styleBuilder
-    .select('.pricing-plan__cta-link:focus-visible', theme)
-    .outline(`2px solid ${palette.current.border.focus}`)
 }
 
 export function applyPricingPlanNoteStyles(
@@ -353,35 +308,13 @@ export function applyPricingFeatureStyles(
 export function applyPricingFeaturedStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
+  _options: ThemeOptions,
 ) {
   styleBuilder
     .select('.pricing-plan--featured', theme)
     .position('relative')
     .transform('translateY(-4px)')
-    .background(palette.semanticTone.accent.canvas)
-    .border(`1px solid ${palette.semanticTone.accent.border.default}`)
     .boxShadow(palette.effect.panelShadowStrong)
-
-  styleBuilder
-    .select('.pricing-plan--featured::before', theme)
-    .content('""')
-    .position('absolute')
-    .inset('0')
-    .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.semanticTone.accent.border.default}`)
-    .opacity('0.5')
-    .pointerEvents('none')
-
-  styleBuilder
-    .select('.pricing-plan--featured .pricing-plan__cta-link', theme)
-    .background(palette.semanticTone.accent.canvas)
-    .color(palette.semanticTone.accent.text.default)
-    .borderColor('transparent')
-
-  styleBuilder
-    .select('.pricing-plan--featured .pricing-plan__cta-link:hover', theme)
-    .background(palette.semanticTone.accent.surface.hover.background)
 }
 
 export function applyPricingResponsiveStyles(theme: ThemeMode) {
@@ -395,8 +328,10 @@ export function applyPricingResponsiveStyles(theme: ThemeMode) {
     .media('min-width: 1400px')
     .gridTemplateColumns('repeat(4, minmax(0, 1fr))')
 
+  styleBuilder.select('.pricing', theme).media('max-width: 720px').padding('0')
+
   styleBuilder
-    .select('.pricing', theme)
+    .select('.pricing .panel__body', theme)
     .media('max-width: 720px')
     .padding('22px')
 

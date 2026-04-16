@@ -25,8 +25,7 @@ export interface ExpandablePanel {
   iconToneClass?: ComputedRef<string>
 }
 
-const expandablePanelTemplate = html`
-<details class="expandable-panel" :class="rootClass" :open="open">
+const expandablePanelTemplate = html`<details class="expandable-panel" :class="rootClass" :open="open">
   <summary class="expandable-panel__summary" :class="summaryClass">
     <slot name="summary">
       <Icon
@@ -37,7 +36,7 @@ const expandablePanelTemplate = html`
         :wrap="true"/>
       <span class="expandable-panel__header">
         <span class="expandable-panel__title" r-if="title">{{ title }}</span>
-        <span class="expandable-panel__badge" r-if="badge">{{ badge }}</span>
+        <Badge tone="neutral" r-if="badge">{{ badge }}</Badge>
         <span class="expandable-panel__description" r-if="description">
           {{ description }}
         </span>
@@ -59,8 +58,7 @@ const expandablePanelTemplate = html`
     </slot>
   </summary>
   <div class="expandable-panel__body"><slot></slot></div>
-</details>
-`
+</details>`
 
 function defineExpandablePanelComponent() {
   return defineComponent<ExpandablePanel>(expandablePanelTemplate, {

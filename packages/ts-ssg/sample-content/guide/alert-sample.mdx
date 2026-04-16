@@ -1,6 +1,6 @@
 ---
 title: Alert Component Samples
-description: Rich examples for AlertBox with tone, variant, icon, and action slot usage.
+description: Rich examples for AlertBox with tone, icon, badge, and BtnLink actions via the actions slot.
 layout:
   showToc: true
   fullWidth: true
@@ -32,8 +32,8 @@ layout:
 >
   Your production rollout passed smoke tests and latency checks. No regressions detected in core endpoints.
   <template name="actions">
-    <a href="#release-notes">View release notes</a>
-    <a href="#observability">Open observability dashboard</a>
+    <BtnLink tone="neutral" href="#release-notes">View release notes</BtnLink>
+    <BtnLink tone="neutral" href="#observability">Open observability dashboard</BtnLink>
   </template>
 </AlertBox>
 
@@ -63,8 +63,8 @@ layout:
 >
   We could not renew your subscription. Update the payment method to avoid service interruption.
   <template name="actions">
-    <a href="#retry-payment">Retry payment</a>
-    <a href="#billing-settings">Open billing settings</a>
+    <BtnLink tone="neutral" href="#retry-payment">Retry payment</BtnLink>
+    <BtnLink tone="neutral" href="#billing-settings">Open billing settings</BtnLink>
   </template>
 </AlertBox>
 
@@ -79,7 +79,7 @@ layout:
 >
   Simulate pricing and eligibility rules before publishing changes. Compare expected and computed outcomes side-by-side.
   <template name="actions">
-    <a href="#join-beta">Request beta access</a>
+    <BtnLink tone="neutral" href="#join-beta">Request beta access</BtnLink>
   </template>
 </AlertBox>
 
@@ -123,7 +123,8 @@ layout:
 >
   Body content goes here.
   <template name="actions">
-    <a href="#">Action</a>
+    <BtnLink tone="neutral" href="#">Primary action</BtnLink>
+    <BtnLink tone="neutral" href="#">Secondary action</BtnLink>
   </template>
 </AlertBox>
 ```
@@ -141,8 +142,8 @@ layout:
   The draft endpoint `/api/webhooks/events` will move to `/api/runtime/webhooks/events`
   before the first public release. Update integration docs and internal references now.
   <template name="actions">
-    <a href="#integration-notes">Open integration notes</a>
-    <a href="#release-checklist">Read release checklist</a>
+    <BtnLink tone="neutral" href="#integration-notes">Open integration notes</BtnLink>
+    <BtnLink tone="neutral" href="#release-checklist">Read release checklist</BtnLink>
   </template>
 </AlertBox>
 
@@ -157,8 +158,8 @@ layout:
 >
   A token with elevated privileges was exposed in build logs. Revoke all compromised keys and issue new scoped tokens.
   <template name="actions">
-    <a href="#rotate-keys">Rotate keys now</a>
-    <a href="#security-runbook">Open incident runbook</a>
+    <BtnLink tone="neutral" href="#rotate-keys">Rotate keys now</BtnLink>
+    <BtnLink tone="neutral" href="#security-runbook">Open incident runbook</BtnLink>
   </template>
 </AlertBox>
 
@@ -174,8 +175,8 @@ layout:
 >
   We are seeing elevated queue latency for EU workloads. No data loss has been observed.
   <template name="actions">
-    <a href="#status-page">View public status page</a>
-    <a href="#subscribe-updates">Subscribe to updates</a>
+    <BtnLink tone="neutral" href="#status-page">View public status page</BtnLink>
+    <BtnLink tone="neutral" href="#subscribe-updates">Subscribe to updates</BtnLink>
   </template>
 </AlertBox>
 
@@ -215,7 +216,7 @@ layout:
 >
   Schema migration and index optimization are complete. Throughput improved by approximately 18%.
   <template name="actions">
-    <a href="#postmortem">Read maintenance summary</a>
+    <BtnLink tone="neutral" href="#postmortem">Read maintenance summary</BtnLink>
   </template>
 </AlertBox>
 
@@ -243,8 +244,7 @@ layout:
     <li>Smoke-test install on a clean environment.</li>
   </ul>
   <template name="actions">
-    <a href="#release-checklist">Open full checklist</a>
-    <a href="#publish-runbook">Open publish runbook</a>
+    <BtnLink tone="neutral" href="#release-checklist">Open full checklist</BtnLink>
+    <BtnLink tone="neutral" href="#publish-runbook">Open publish runbook</BtnLink>
   </template>
 </AlertBox>
-

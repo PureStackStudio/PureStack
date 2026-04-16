@@ -92,19 +92,6 @@ function registerExpandablePanelSummaryStyles(
     .letterSpacing('-0.02em')
 
   styleBuilder
-    .select('.expandable-panel__badge', theme)
-    .display('inline-flex')
-    .alignItems('center')
-    .padding('4px 9px')
-    .borderRadius(options.radii.pill)
-    .background(palette.semanticTone.neutral.button.rest.background)
-    .color(palette.current.text.default)
-    .fontSize('11px')
-    .fontWeight('700')
-    .letterSpacing('0.08em')
-    .textTransform('uppercase')
-
-  styleBuilder
     .select('.expandable-panel__description', theme)
     .minWidth('100%')
     .fontSize('0.97rem')

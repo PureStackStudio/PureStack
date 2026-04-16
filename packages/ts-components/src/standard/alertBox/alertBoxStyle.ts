@@ -20,7 +20,7 @@ export function applyAlertShellStyles(
 ) {
   applyAlertContainerStyles(theme, palette, options)
   applyAlertIconStyles(theme, palette, options)
-  applyAlertHeaderStyles(theme, palette, options)
+  applyAlertHeaderStyles(theme, palette)
   applyAlertBodyStyles(theme, palette, options)
   applyAlertActionStyles(theme, palette, options)
   applyAlertMetaStyles(theme, palette)
@@ -80,7 +80,6 @@ export function applyAlertIconStyles(
 export function applyAlertHeaderStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
   styleBuilder
     .select('.alert__content', theme)
@@ -109,19 +108,6 @@ export function applyAlertHeaderStyles(
     .fontSize('15px')
     .fontWeight('700')
     .letterSpacing('-0.01em')
-    .color(palette.current.text.default)
-
-  styleBuilder
-    .select('.alert__badge', theme)
-    .display('inline-flex')
-    .alignItems('center')
-    .padding('3px 8px')
-    .borderRadius(options.radii.pill)
-    .fontSize('11px')
-    .fontWeight('700')
-    .textTransform('uppercase')
-    .letterSpacing('0.08em')
-    .background(palette.semanticTone.neutral.canvas)
     .color(palette.current.text.default)
 }
 
@@ -155,8 +141,8 @@ export function applyAlertBodyStyles(
 
 export function applyAlertActionStyles(
   theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
+  _palette: ThemePalette,
+  _options: ThemeOptions,
 ) {
   styleBuilder
     .select('.alert__actions', theme)
@@ -164,35 +150,6 @@ export function applyAlertActionStyles(
     .alignItems('center')
     .flexWrap('wrap')
     .gap('8px')
-  styleBuilder.select('.alert__actions:empty', theme).display('none')
-
-  styleBuilder
-    .select('.alert__actions :where(a, button)', theme)
-    .display('inline-flex')
-    .alignItems('center')
-    .justifyContent('center')
-    .padding('6px 11px')
-    .borderRadius(options.radii.pill)
-    .border(`1px solid ${palette.current.border.default}`)
-    .background(palette.semanticTone.neutral.canvas)
-    .color(palette.current.text.default)
-    .fontSize('12px')
-    .fontWeight('600')
-    .textDecoration('none')
-    .cursor('pointer')
-    .transition(
-      'background 160ms ease, color 160ms ease, border-color 160ms ease, transform 160ms ease',
-    )
-
-  styleBuilder
-    .select('.alert__actions :where(a, button):hover', theme)
-    .background(palette.semanticTone.neutral.surface.hover.background)
-  styleBuilder
-    .select('.alert__actions :where(a, button):active', theme)
-    .background(palette.semanticTone.neutral.surface.active.background)
-  styleBuilder
-    .select('.alert__actions :where(a, button):focus-visible', theme)
-    .outline(`2px solid ${palette.semanticTone.neutral.button.focusRing}`)
 }
 
 export function applyAlertMetaStyles(theme: ThemeMode, palette: ThemePalette) {

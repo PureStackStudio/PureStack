@@ -13,18 +13,16 @@ import {
 
 export interface Panel {
   tone?: RefOrValue<SemanticTone>
-  rootClass?: ComputedRef<string>
+  className?: ComputedRef<string>
 }
 
-const panelTemplate = html`
-<section class="panel" :class="rootClass">
+const panelTemplate = html`<section class="panel" :class="className">
   <div class="panel__body"><slot></slot></div>
-</section>
-`
+</section>`
 
 function definePanelComponent() {
   return defineComponent<Panel>(panelTemplate, {
-    props: ['tone'],
+    props: ['tone', 'class'],
     context: (head) => resolvePanel(head.props),
   })
 }
@@ -38,6 +36,6 @@ export function definePanelComponents() {
 function resolvePanel(props: Panel): Panel {
   return {
     ...props,
-    rootClass: computed(() => getSemanticToneSurfaceClass(unref(props.tone))),
+    className: computed(() => getSemanticToneSurfaceClass(unref(props.tone))),
   }
 }
