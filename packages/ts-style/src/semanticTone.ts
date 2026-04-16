@@ -43,11 +43,11 @@ export function getSemanticToneTokens(
 
 function applySemanticToneVars(style: Style, tokens: SemanticToneTokens) {
   return style
-    .set('--ps-tone-text-default', tokens.text.default)
-    .set('--ps-tone-text-subtle', tokens.text.subtle)
-    .set('--ps-tone-border-subtle', tokens.border.subtle)
-    .set('--ps-tone-border-default', tokens.border.default)
-    .set('--ps-tone-border-focus', tokens.border.focus)
+    .set('--ps-current-text-default', tokens.text.default)
+    .set('--ps-current-text-subtle', tokens.text.subtle)
+    .set('--ps-current-border-subtle', tokens.border.subtle)
+    .set('--ps-current-border-default', tokens.border.default)
+    .set('--ps-current-border-focus', tokens.border.focus)
 }
 
 function getSemanticTonePrefix(isInteractive = false) {

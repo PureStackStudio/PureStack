@@ -7,6 +7,9 @@ const THEME_PALETTE_VAR_PREFIX = '--ps'
  *
  * Algorithm:
  * 1. Traverse the palette recursively and treat every string leaf as one token.
+ *    Exception:
+ *    - `current` is a special runtime alias surface and is not part of generated
+ *      theme variable declarations.
  *    Example paths:
  *    - `canvas`
  *    - `text.default`
@@ -103,6 +106,7 @@ function collectThemePaletteEntries(
   }
 
   for (const [key, child] of Object.entries(value)) {
+    if (isCurrentPaletteKey(path, key)) continue
     collectThemePaletteEntries(child, [...path, key], entries)
   }
 }
@@ -118,13 +122,13 @@ function mapThemePaletteLeaves(
 export function getCurrentThemePalette(): ThemePaletteCurrent {
   return {
     text: {
-      default: 'var(--ps-tone-text-default)',
-      subtle: 'var(--ps-tone-text-subtle)',
+      default: 'var(--ps-current-text-default)',
+      subtle: 'var(--ps-current-text-subtle)',
     },
     border: {
-      subtle: 'var(--ps-tone-border-subtle)',
-      default: 'var(--ps-tone-border-default)',
-      focus: 'var(--ps-tone-border-focus)',
+      subtle: 'var(--ps-current-border-subtle)',
+      default: 'var(--ps-current-border-default)',
+      focus: 'var(--ps-current-border-focus)',
     },
   }
 }
@@ -140,9 +144,17 @@ function mapThemePaletteValue<T>(
 
   const out: Record<string, unknown> = {}
   for (const [key, child] of Object.entries(value as Record<string, unknown>)) {
+    if (isCurrentPaletteKey(path, key)) {
+      out[key] = child
+      continue
+    }
     out[key] = mapThemePaletteValue(child, mapLeaf, [...path, key])
   }
   return out as T
+}
+
+function isCurrentPaletteKey(path: string[], key: string) {
+  return path.length === 0 && key === 'current'
 }
 
 function toKebabCase(value: string) {
