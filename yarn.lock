@@ -1004,15 +1004,6 @@ __metadata:
     "@purestack/ts-render": "workspace:^"
     "@purestack/ts-style": "workspace:^"
     "@purestack/ts-util": "workspace:^"
-    "@purestack/ts-util-node": "workspace:^"
-  languageName: unknown
-  linkType: soft
-
-"@purestack/ts-css-bootstrap@workspace:packages/ts-css-bootstrap":
-  version: 0.0.0-use.local
-  resolution: "@purestack/ts-css-bootstrap@workspace:packages/ts-css-bootstrap"
-  dependencies:
-    "@purestack/ts-css": "workspace:^"
   languageName: unknown
   linkType: soft
 

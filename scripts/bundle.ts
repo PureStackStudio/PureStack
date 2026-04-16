@@ -1,7 +1,7 @@
-import { globSync, readFileSync } from 'fs'
-import { rm } from 'fs/promises'
-import path from 'path'
-import { build, InlineConfig } from 'tsdown'
+import { globSync, readFileSync } from 'node:fs'
+import { rm } from 'node:fs/promises'
+import path from 'node:path'
+import { build, type InlineConfig } from 'tsdown'
 
 import { fixDtsExports } from './fixDtsExports'
 import { timeIt } from './timeIt'
@@ -9,7 +9,6 @@ import { timeIt } from './timeIt'
 const emojis: Record<string, string> = {
   '@purestack/ts-html': '⚙️',
   '@purestack/ts-css': '⚙️',
-  '@purestack/ts-css-bootstrap': '⚙️',
   '@purestack/ts-ssg': '⚙️',
   '@purestack/utils': '⚙️',
 }

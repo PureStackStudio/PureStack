@@ -22,7 +22,6 @@
   },
   "files": [],
   "scripts": {
-    "dev-css": "yarn tsx --watch packages/ts-css-bootstrap/src/index.ts",
     "dev": "yarn tsx --watch packages/ts-ssg/src/index.ts",
     "embed": "yarn tsx scripts/embed.ts && yarn format",
     "gen-icons": "yarn tsx scripts/generate-icons.ts",
