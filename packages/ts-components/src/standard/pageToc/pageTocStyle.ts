@@ -9,7 +9,7 @@ import {
 export function registerPageTocStyles() {
   themes.forEach((theme, palette, options) => {
     registerPageTocShellStyles(theme, palette, options)
-    registerPageTocLinkStyles(theme, palette, options)
+    registerPageTocLinkStyles(theme, options)
     registerPageTocTargetStyles(theme, palette)
     registerPageTocLayoutStyles(theme, palette, options)
   })
@@ -30,9 +30,6 @@ export function registerPageTocShellStyles(
     .border('1px solid transparent')
     .fontSize('0.95rem')
     .lineHeight('1.5')
-    .background(palette.semanticTone.neutral.surface.rest.background)
-    .borderColor(palette.current.border.subtle)
-    .color(palette.current.text.default)
   styleBuilder
     .select('.page-toc__header-row', theme)
     .display('flex')
@@ -58,19 +55,11 @@ export function registerPageTocShellStyles(
     .width('30px')
     .height('30px')
     .padding('0')
-    .border(`1px solid ${palette.current.border.default}`)
+    .background('transparent')
+    .border('transparent')
     .borderRadius(options.radii.md)
-    .background(palette.semanticTone.neutral.surface.rest.background)
-    .color(palette.current.text.subtle)
     .cursor('pointer')
     .transition('background 160ms ease, color 160ms ease')
-  styleBuilder
-    .select('.page-toc__restore-toggle:hover', theme)
-    .background(palette.semanticTone.accent.canvas)
-    .color(palette.semanticTone.accent.text.default)
-  styleBuilder
-    .select('.page-toc__restore-toggle:focus-visible', theme)
-    .outline(`2px solid ${palette.current.border.focus}`)
   styleBuilder
     .select('.page-toc__header-toggle-icon', theme)
     .display('inline-flex')
@@ -129,7 +118,6 @@ export function registerPageTocShellStyles(
 
 export function registerPageTocLinkStyles(
   theme: ThemeMode,
-  palette: ThemePalette,
   options: ThemeOptions,
 ) {
   styleBuilder
@@ -140,31 +128,8 @@ export function registerPageTocLinkStyles(
     .textDecoration('none')
     .fontWeight('600')
     .transition('background 160ms ease, color 160ms ease')
-    .color(palette.semanticTone.neutral.button.rest.text)
-  styleBuilder
-    .select('.page-toc__link:hover', theme)
-    .background(palette.semanticTone.accent.button.hover.background)
-    .color(palette.semanticTone.accent.button.hover.text)
-  styleBuilder
-    .select('.page-toc__link:focus-visible', theme)
-    .outline(`2px solid ${palette.current.border.focus}`)
-    .outlineOffset('-2px')
 
-  styleBuilder
-    .select(
-      '.page-toc__link--active, .page-toc__link--active:hover, .page-toc__link--sub.page-toc__link--active, .page-toc__link--sub.page-toc__link--active:hover',
-      theme,
-    )
-    .background(palette.semanticTone.accent.button.active.background)
-    .color(palette.semanticTone.accent.text.default)
-
-  styleBuilder
-    .select('.page-toc__link--sub', theme)
-    .fontWeight('500')
-    .color(palette.current.text.subtle)
-  styleBuilder
-    .select('.page-toc__link--sub:not(.page-toc__link--active):hover', theme)
-    .color(palette.current.text.subtle)
+  styleBuilder.select('.page-toc__link--sub', theme).fontWeight('500')
 }
 
 export function registerPageTocTargetStyles(
@@ -320,8 +285,7 @@ export function registerPageTocLayoutStyles(
     .letterSpacing('0.12em')
     .textTransform('uppercase')
     .color(palette.current.text.subtle)
-    .background(palette.semanticTone.neutral.surface.rest.background)
-    .border(`1px solid ${palette.current.border.default}`)
+    .border('1px solid transparent')
     .borderLeft('none')
     .borderRadius(`0 ${options.radii.md} ${options.radii.md} 0`)
     .boxShadow('none')
@@ -353,7 +317,6 @@ export function registerPageTocLayoutStyles(
       theme,
     )
     .media('max-width: 1320px')
-    .outline(`2px solid ${palette.current.border.focus}`)
 
   styleBuilder
     .select(
@@ -491,12 +454,9 @@ export function registerPageTocLayoutStyles(
     .fontWeight('700')
     .letterSpacing('0.12em')
     .textTransform('uppercase')
-    .color(palette.current.text.subtle)
-    .background(palette.semanticTone.neutral.surface.rest.background)
-    .border(`1px solid ${palette.current.border.default}`)
+    .border('1px solid var(--ps-current-border-default)')
     .borderLeft('none')
     .borderRadius(`0 ${options.radii.md} ${options.radii.md} 0`)
-    .boxShadow('none')
     .userSelect('none')
     .cursor('pointer')
     .pointerEvents('auto')
@@ -522,12 +482,10 @@ export function registerPageTocLayoutStyles(
     .background('transparent')
     .border('none')
 
-  styleBuilder
-    .select(
-      '.template-doc--toc-collapsed .page-toc__panel-toggle:focus-visible',
-      theme,
-    )
-    .outline(`2px solid ${palette.current.border.focus}`)
+  styleBuilder.select(
+    '.template-doc--toc-collapsed .page-toc__panel-toggle:focus-visible',
+    theme,
+  )
 
   styleBuilder
     .select(

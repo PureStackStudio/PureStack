@@ -70,7 +70,7 @@ function renderDocTemplate({
               ? [
                   h('aside')
                     .attr({ class: 'doc-toc', id: 'doc-toc' })
-                    .push(h('page-toc')),
+                    .push(h('page-toc').attr({ tone: navigation?.tone })),
                 ]
               : []),
           ),
