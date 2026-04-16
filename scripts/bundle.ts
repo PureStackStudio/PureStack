@@ -64,7 +64,7 @@ function getEntries(pkg: PackageJson) {
   const pkgName = unscope(pkg.name)
   const result = [{ [pkg.name]: `./packages/${pkgName}/src/index.ts` }]
   for (const [key] of Object.entries(pkg.exports)) {
-    if (key == '.') continue
+    if (key === '.') continue
     if (!key.startsWith('./'))
       throw new Error(
         `${pkg.name} package additional export keys should start with ./`,
@@ -80,7 +80,7 @@ async function bundlePackage(pkg: PackageJson) {
   const entries = getEntries(pkg)
   for (const entry of entries) {
     const name = Object.keys(entry)[0]
-    const input = entry[name]!
+    const input = entry[name]
     // Select emoji based on entry
     const emoji = emojis[name] ?? 'XXX'
     const banner = getBanner(pkg)
@@ -97,7 +97,7 @@ async function bundlePackage(pkg: PackageJson) {
         external: [
           'esbuild',
           'prettier',
-          ...packages.filter((x) => x != pkg).map((x) => x.name),
+          ...packages.filter((x) => x !== pkg).map((x) => x.name),
         ],
         noExternal: [],
         // banner is set empty here, bcs of a bug in d.ts bundler.
@@ -128,7 +128,7 @@ function replaceVersion(version: string) {
       return {
         code: code.replace(
           /\bversion = PURESTACK_VERSION\b/g,
-          'version = ' + JSON.stringify(version),
+          `version = ${JSON.stringify(version)}`,
         ),
         map: null,
       }
