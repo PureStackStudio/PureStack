@@ -106,7 +106,11 @@ export async function renderPageFromFile(
   try {
     const source = await readSource(file.absPath)
     const parsedContent = parseFrontmatterSource(source, file.relPath)
-    const navigation = resolvePageNavigation(context.navigation, file)
+    const navigation = resolvePageNavigation(
+      context.navigation,
+      file,
+      parsedContent.frontmatter,
+    )
     const pageInfo = createPageTemplateInfo(
       file,
       urlPath,
@@ -429,7 +433,7 @@ async function buildErrorPageResult(
     outPath,
     urlPath,
     renderTimeMs,
-    navigation: resolvePageNavigation(context.navigation, file),
+    navigation: resolvePageNavigation(context.navigation, file, frontmatter),
     pageInfo: {
       relPath: file.relPath,
       urlPath,

@@ -5,9 +5,10 @@ import type {
   NavigationConfig,
   NavigationMode,
   NavigationSort,
+  PageFrontmatter,
   PageNavigation,
 } from '@purestack/ts-common'
-import type { SemanticTone } from '@purestack/ts-style'
+import { pickSemanticTone, type SemanticTone } from '@purestack/ts-style'
 import { resolveRouteInfo } from '../build/out-path'
 import type { ContentFile } from '../discover/content'
 import { parseFrontmatterSource } from '../frontmatter/frontmatter'
@@ -80,7 +81,7 @@ export function resolveNavigationConfig(
       ? merged.includeIndex
       : DEFAULT_NAV_CONFIG.includeIndex
   const sortBy = resolveSort(merged.sortBy)
-  const tone = resolveTone(merged.tone)
+  const tone = pickSemanticTone(merged.tone) ?? DEFAULT_NAV_CONFIG.tone
   return { mode, navFileName, maxDepth, includeIndex, sortBy, tone }
 }
 
@@ -158,6 +159,7 @@ function resolveBaseFolderItems(
 export function resolvePageNavigation(
   tree: NavigationTree | undefined,
   file: ContentFile,
+  frontmatter?: PageFrontmatter,
 ): PageNavigation | undefined {
   if (!tree) return undefined
   const folder = resolveFolderKey(file.relPath)
@@ -167,7 +169,7 @@ export function resolvePageNavigation(
     folder,
     items,
     global: tree.global,
-    tone: tree.config.tone,
+    tone: pickSemanticTone(frontmatter?.nav?.tone) ?? tree.config.tone,
   }
 }
 
@@ -544,20 +546,6 @@ function resolveMaxDepth(value: number | undefined) {
 function resolveSort(value: NavigationSort | undefined): NavigationSort {
   if (value === 'order' || value === 'title' || value === 'path') return value
   return DEFAULT_NAV_CONFIG.sortBy
-}
-
-function resolveTone(value: SemanticTone | undefined): SemanticTone {
-  if (
-    value === 'neutral' ||
-    value === 'accent' ||
-    value === 'info' ||
-    value === 'success' ||
-    value === 'warning' ||
-    value === 'danger' ||
-    value === 'ghost'
-  )
-    return value
-  return DEFAULT_NAV_CONFIG.tone
 }
 
 function resolveString(value: unknown) {

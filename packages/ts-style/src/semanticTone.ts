@@ -12,7 +12,7 @@ export type SemanticTone =
   | 'warning'
   | 'danger'
 
-const SEMANTIC_TONES: SemanticTone[] = [
+export const SEMANTIC_TONES: SemanticTone[] = [
   'neutral',
   'accent',
   'ghost',
@@ -22,12 +22,22 @@ const SEMANTIC_TONES: SemanticTone[] = [
   'danger',
 ]
 
-function resolveSemanticTone(
-  value: string | undefined,
+export function pickSemanticTone(
+  ...values: Array<unknown>
+): SemanticTone | undefined {
+  for (const value of values) {
+    if (typeof value !== 'string') continue
+    const normalized = value.toLowerCase()
+    if (isSemanticTone(normalized)) return normalized
+  }
+  return undefined
+}
+
+export function resolveSemanticTone(
+  value: unknown,
   fallback: SemanticTone = 'neutral',
 ): SemanticTone {
-  const normalized = value?.toLowerCase() || ''
-  return isSemanticTone(normalized) ? normalized : fallback
+  return pickSemanticTone(value) ?? fallback
 }
 
 export function isSemanticTone(value: string): value is SemanticTone {

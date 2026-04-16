@@ -4,6 +4,7 @@ import type {
   PageFrontmatter,
   ParsedFrontmatterSource,
 } from '@purestack/ts-common'
+import { pickSemanticTone } from '@purestack/ts-style'
 import matter from 'gray-matter'
 
 export function parseFrontmatterSource(
@@ -39,6 +40,7 @@ export function normalizeFrontmatter(
       ...rawNav,
       title: resolveString(resolveKey(rawNav, 'title')),
       order: resolveNumber(resolveKey(rawNav, 'order')),
+      tone: pickSemanticTone(resolveKey(rawNav, 'tone')),
       hidden: resolveKey(rawNav, 'hidden') === true,
     },
     layout: {
@@ -49,6 +51,7 @@ export function normalizeFrontmatter(
       ),
       fullWidth: resolveKey(rawLayout, 'fullWidth') === true,
       showToc: resolveKey(rawLayout, 'showToc') === true,
+      tocTone: pickSemanticTone(resolveKey(rawLayout, 'tocTone')),
       tocCollapsed: resolveKey(rawLayout, 'tocCollapsed') === true,
       showFooter: typeof showFooter === 'boolean' ? showFooter : true,
     },

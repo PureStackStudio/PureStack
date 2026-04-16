@@ -1,3 +1,5 @@
+import type { SemanticTone } from '@purestack/ts-style'
+
 /**
  * Normalized frontmatter for a content page.
  *
@@ -129,6 +131,14 @@ export interface FrontmatterLayoutOptions {
   tocCollapsed?: boolean
 
   /**
+   * Overrides the page TOC tone for this page.
+   *
+   * When present, this takes precedence over the resolved site TOC tone for
+   * the current page render only.
+   */
+  tocTone?: SemanticTone
+
+  /**
    * Controls whether the resolved page footer is rendered.
    *
    * Defaults to `true`.
@@ -163,6 +173,14 @@ export interface FrontmatterNavOptions {
    * When present, this takes precedence over the page-level `order` field.
    */
   order?: number
+
+  /**
+   * Overrides the navigation menu tone for this page.
+   *
+   * When present, this takes precedence over the resolved site navigation tone
+   * for the current page render only.
+   */
+  tone?: SemanticTone
 
   /**
    * Excludes the page from generated navigation when set to `true`.

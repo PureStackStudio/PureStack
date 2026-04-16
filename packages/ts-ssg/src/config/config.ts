@@ -19,7 +19,7 @@ import type {
   SitemapConfig,
   SiteStyleConfig,
 } from '@purestack/ts-common'
-import { resolveThemes, themes } from '@purestack/ts-style'
+import { pickSemanticTone, resolveThemes, themes } from '@purestack/ts-style'
 import type { DeepPartial } from '@purestack/ts-util'
 import { isPlainObject } from '@purestack/ts-util'
 import { resolveNavigationConfig } from '../navigation/navigation'
@@ -110,7 +110,7 @@ function resolvePageTocConfig(
   file?: DeepPartial<PageTocConfig>,
 ): PageTocConfig {
   return {
-    tone: resolveSemanticTone(input?.tone, file?.tone, 'neutral'),
+    tone: pickSemanticTone(input?.tone, file?.tone) ?? 'neutral',
   }
 }
 
@@ -195,22 +195,6 @@ function pickBoolean(...values: Array<unknown>) {
     if (typeof value === 'boolean') return value
   }
   return false
-}
-
-function resolveSemanticTone(...values: Array<unknown>): PageTocConfig['tone'] {
-  for (const value of values) {
-    if (
-      value === 'neutral' ||
-      value === 'accent' ||
-      value === 'info' ||
-      value === 'success' ||
-      value === 'warning' ||
-      value === 'danger' ||
-      value === 'ghost'
-    )
-      return value
-  }
-  return 'neutral'
 }
 
 function resolveOutDirFromFile(value: unknown, contentDir: string) {

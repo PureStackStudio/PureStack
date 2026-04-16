@@ -71,7 +71,11 @@ function renderDocTemplate({
               ? [
                   h('aside')
                     .attr({ class: 'doc-toc', id: 'doc-toc' })
-                    .push(h('page-toc').attr({ tone: site.pageToc.tone })),
+                    .push(
+                      h('page-toc').attr({
+                        tone: frontmatter.layout.tocTone ?? site.pageToc.tone,
+                      }),
+                    ),
                 ]
               : []),
           ),
