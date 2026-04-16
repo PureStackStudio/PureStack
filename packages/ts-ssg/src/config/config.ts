@@ -10,6 +10,7 @@ import type {
   Ga4Config,
   LogoConfig,
   PagefindConfig,
+  PageTocConfig,
   RobotsConfig,
   SiteConfig,
   SiteConfigInput,
@@ -73,6 +74,7 @@ export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
     input.navigation,
     fileConfig.navigation,
   )
+  const pageToc = resolvePageTocConfig(input.pageToc, fileConfig.pageToc)
   const sitemap = resolveSitemapConfig(input.sitemap, fileConfig.sitemap)
   const analytics = resolveAnalyticsConfig(
     input.analytics,
@@ -94,11 +96,21 @@ export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
     style,
     html,
     navigation,
+    pageToc,
     sitemap,
     consent,
     analytics,
     pagefind,
     mdx,
+  }
+}
+
+function resolvePageTocConfig(
+  input?: DeepPartial<PageTocConfig>,
+  file?: DeepPartial<PageTocConfig>,
+): PageTocConfig {
+  return {
+    tone: resolveSemanticTone(input?.tone, file?.tone, 'neutral'),
   }
 }
 
@@ -183,6 +195,22 @@ function pickBoolean(...values: Array<unknown>) {
     if (typeof value === 'boolean') return value
   }
   return false
+}
+
+function resolveSemanticTone(...values: Array<unknown>): PageTocConfig['tone'] {
+  for (const value of values) {
+    if (
+      value === 'neutral' ||
+      value === 'accent' ||
+      value === 'info' ||
+      value === 'success' ||
+      value === 'warning' ||
+      value === 'danger' ||
+      value === 'ghost'
+    )
+      return value
+  }
+  return 'neutral'
 }
 
 function resolveOutDirFromFile(value: unknown, contentDir: string) {

@@ -251,10 +251,10 @@ async function renderPageShell(input: RenderPageShellInput): Promise<string> {
     ),
     template,
     templates: context.templates,
+    site: context.config,
     navigation,
     outline,
     pageInfo,
-    siteTitle: context.config.siteTitle,
     headerHtml: resolveSpecialHtmlForPage(
       pageInfo.relPath,
       context.headerHtmlByDir,

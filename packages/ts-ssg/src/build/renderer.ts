@@ -6,6 +6,7 @@ import type {
   PageNavigation,
   PageOutlineItem,
   PageTemplateMap,
+  SiteConfig,
 } from '@purestack/ts-common'
 import { type BasicHeadConfig, h } from '@purestack/ts-html'
 import {
@@ -29,10 +30,10 @@ export interface RenderPageInput {
   styleLinks?: ThemeStylesheetLink[]
   template?: string
   templates?: PageTemplateMap
+  site: SiteConfig
   navigation?: PageNavigation
   outline?: PageOutlineItem[]
   pageInfo: PageInfo
-  siteTitle?: string
   headerHtml?: string
   footerHtml?: string
   consent?: ConsentConfig
@@ -63,10 +64,10 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
     headConfig,
     styleLinks,
     templateName,
+    site: input.site,
     navigation: input.navigation,
     outline: input.outline,
     pageInfo: input.pageInfo,
-    siteTitle: input.siteTitle,
     headerHtml: input.headerHtml,
     footerHtml: input.footerHtml,
   })

@@ -29,6 +29,9 @@
     "sortBy": "order",
     "tone": "neutral"
   },
+  "pageToc": {
+    "tone": "neutral"
+  },
   "sitemap": {
     "enabled": true,
     "baseUrl": "https://example.com",

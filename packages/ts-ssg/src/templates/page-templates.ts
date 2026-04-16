@@ -38,6 +38,7 @@ function normalizeTemplateName(name: string | undefined) {
 function renderDocTemplate({
   head,
   bodyHtml,
+  site,
   navigation,
   outline,
   pageInfo,
@@ -70,7 +71,7 @@ function renderDocTemplate({
               ? [
                   h('aside')
                     .attr({ class: 'doc-toc', id: 'doc-toc' })
-                    .push(h('page-toc').attr({ tone: navigation?.tone })),
+                    .push(h('page-toc').attr({ tone: site.pageToc.tone })),
                 ]
               : []),
           ),

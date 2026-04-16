@@ -1,4 +1,8 @@
-import type { ThemeOptions, ThemeOptionsInput } from '@purestack/ts-style'
+import type {
+  SemanticTone,
+  ThemeOptions,
+  ThemeOptionsInput,
+} from '@purestack/ts-style'
 import type { DeepPartial } from '@purestack/ts-util'
 import type { ConsentConfig } from './consent-types'
 import type { NavigationConfig } from './navMenu-types'
@@ -12,11 +16,16 @@ export interface SiteConfig {
   style: SiteStyleConfig
   html: SiteHtmlConfig
   navigation: NavigationConfig
+  pageToc: PageTocConfig
   sitemap: SitemapConfig
   consent: ConsentConfig
   analytics: AnalyticsConfig
   pagefind: PagefindConfig
   mdx: SiteMdxConfig
+}
+
+export interface PageTocConfig {
+  tone: SemanticTone
 }
 
 export interface SiteStyleConfig {

@@ -2,6 +2,7 @@ import type { BasicHeadConfig, TSNode } from '@purestack/ts-html'
 import type { ThemeStylesheetLink } from '@purestack/ts-style'
 import type { PageFrontmatter } from './frontmatter-types'
 import type { PageNavigation } from './navMenu-types'
+import type { SiteConfig } from './site-config-types'
 import type { PageOutlineItem } from './ts-ssg-context'
 
 export interface PageInfo {
@@ -16,10 +17,10 @@ export interface PageTemplateInput {
   headConfig?: BasicHeadConfig
   styleLinks?: ThemeStylesheetLink[]
   templateName: string
+  site: SiteConfig
   navigation?: PageNavigation
   outline?: PageOutlineItem[]
   pageInfo: PageInfo
-  siteTitle?: string
   headerHtml?: string
   footerHtml?: string
 }

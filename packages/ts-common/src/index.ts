@@ -33,6 +33,7 @@ export type {
   Ga4Config,
   LogoConfig,
   PagefindConfig,
+  PageTocConfig,
   RobotsConfig,
   SiteConfig,
   SiteConfigInput,

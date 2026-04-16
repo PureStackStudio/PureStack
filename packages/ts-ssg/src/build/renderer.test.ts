@@ -6,6 +6,7 @@ import { renderPage } from './renderer'
 
 describe('renderPage consent integration', () => {
   it('injects nav menu runtime for doc pages', async () => {
+    const site = resolveSiteConfig({ rootDir: process.cwd() })
     const html = await renderPage({
       bodyHtml: '<p>Hello</p>',
       pageInfo: {
@@ -13,6 +14,7 @@ describe('renderPage consent integration', () => {
         urlPath: '/',
         frontmatter: normalizeFrontmatter({}),
       },
+      site,
     })
     expect(html).toContain('ts-ssg:nav-collapsed')
   })
@@ -38,7 +40,7 @@ describe('renderPage consent integration', () => {
         urlPath: '/',
         frontmatter: normalizeFrontmatter({}),
       },
-      siteTitle: site.siteTitle,
+      site,
       consent: site.consent,
       analytics: site.analytics,
     })
@@ -67,7 +69,7 @@ describe('renderPage consent integration', () => {
         urlPath: '/',
         frontmatter: normalizeFrontmatter({}),
       },
-      siteTitle: site.siteTitle,
+      site,
       consent: site.consent,
       analytics: site.analytics,
     })
@@ -91,7 +93,7 @@ describe('renderPage consent integration', () => {
         urlPath: '/',
         frontmatter: normalizeFrontmatter({}),
       },
-      siteTitle: site.siteTitle,
+      site,
       consent: site.consent,
       analytics: site.analytics,
     })
@@ -117,7 +119,7 @@ describe('renderPage consent integration', () => {
         urlPath: '/',
         frontmatter: normalizeFrontmatter({}),
       },
-      siteTitle: site.siteTitle,
+      site,
       consent: site.consent,
       analytics: site.analytics,
     })
@@ -146,7 +148,7 @@ describe('renderPage consent integration', () => {
         urlPath: '/',
         frontmatter: normalizeFrontmatter({}),
       },
-      siteTitle: site.siteTitle,
+      site,
       consent: site.consent,
       analytics: site.analytics,
     })
@@ -169,7 +171,7 @@ describe('renderPage consent integration', () => {
         urlPath: '/',
         frontmatter: normalizeFrontmatter({}),
       },
-      siteTitle: site.siteTitle,
+      site,
       footerHtml:
         '<site-footer eyebrow="Ops"><template name="status"><span>Ready</span></template></site-footer>',
       consent: site.consent,
@@ -188,7 +190,7 @@ describe('renderPage consent integration', () => {
         urlPath: '/',
         frontmatter: normalizeFrontmatter({}),
       },
-      siteTitle: site.siteTitle,
+      site,
       headerHtml: '<top-bar></top-bar>',
       consent: site.consent,
       analytics: site.analytics,
@@ -210,7 +212,7 @@ describe('renderPage consent integration', () => {
         }),
       },
       outline: [],
-      siteTitle: site.siteTitle,
+      site,
       consent: site.consent,
       analytics: site.analytics,
     })
