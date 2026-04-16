@@ -24,7 +24,7 @@ function registerExpandablePanelShellStyles(
     .select('.expandable-panel', theme)
     .display('grid')
     .margin('0 0 16px')
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .border(`1px solid ${palette.current.border.default}`)
     .borderRadius(options.radii.lg)
     .background(palette.semanticTone.neutral.surface.rest.background)
     .boxShadow(palette.effect.panelShadow)
@@ -36,7 +36,7 @@ function registerExpandablePanelShellStyles(
 
   styleBuilder
     .select('.expandable-panel[open]', theme)
-    .borderColor(palette.semanticTone.neutral.border.default)
+    .borderColor(palette.current.border.default)
     .boxShadow(palette.effect.panelShadowStrong)
 }
 
@@ -67,7 +67,7 @@ function registerExpandablePanelSummaryStyles(
 
   styleBuilder
     .select('.expandable-panel__summary:focus-visible', theme)
-    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
+    .outline(`2px solid ${palette.current.border.focus}`)
     .outlineOffset('-2px')
 
   styleBuilder
@@ -98,7 +98,7 @@ function registerExpandablePanelSummaryStyles(
     .padding('4px 9px')
     .borderRadius(options.radii.pill)
     .background(palette.semanticTone.neutral.button.rest.background)
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
     .fontSize('11px')
     .fontWeight('700')
     .letterSpacing('0.08em')
@@ -133,7 +133,7 @@ function registerExpandablePanelSummaryStyles(
     .alignItems('center')
     .justifyContent('center')
     .borderRadius(options.radii.pill)
-    .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
+    .border(`1px solid ${palette.current.border.subtle}`)
     .transition(
       'transform 180ms ease, color 180ms ease, border-color 180ms ease, background 180ms ease',
     )
@@ -158,7 +158,7 @@ function registerExpandablePanelBodyStyles(
     .display('grid')
     .gap('0.75rem')
     .padding('1rem')
-    .borderTop(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
+    .borderTop(`1px solid ${palette.current.border.subtle}`)
 
   styleBuilder
     .select('.expandable-panel:not([open]) .expandable-panel__body', theme)

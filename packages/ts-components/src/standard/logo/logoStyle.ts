@@ -28,7 +28,7 @@ export function registerLogoShellStyles(
     .gap('6px')
     .padding('10px 14px')
     .borderRadius(options.radii.pill)
-    .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
+    .border(`1px solid ${palette.current.border.subtle}`)
     .textDecoration('none')
     .position('relative')
     .overflow('hidden')
@@ -111,7 +111,7 @@ export function registerLogoTextStyles(
 
   styleBuilder
     .select('.site-logo__word--primary', theme)
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
 
   styleBuilder
     .select('.site-logo__word--accent', theme)
@@ -131,7 +131,7 @@ export function registerLogoTextStyles(
     .fontWeight('700')
     .letterSpacing('0.08em')
     .textTransform('uppercase')
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
     .whiteSpace('nowrap')
 }
 
@@ -153,7 +153,7 @@ export function registerLogoInteractiveStyles(
 
   styleBuilder
     .select('.site-logo__link[href]:focus-visible', theme)
-    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
+    .outline(`2px solid ${palette.current.border.focus}`)
     .outlineOffset('0')
 }
 

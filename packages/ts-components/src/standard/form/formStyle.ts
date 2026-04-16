@@ -144,7 +144,7 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .select('.form-block__divider', theme)
     .position('relative')
     .height('1px')
-    .background(palette.semanticTone.neutral.border.default)
+    .background(palette.current.border.default)
     .margin('2px 0')
   styleBuilder
     .select('.form-block__divider::after', theme)
@@ -156,7 +156,7 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .padding('0 8px')
     .fontSize('0.78rem')
     .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.current.text.subtle)
 }
 
 function registerFormStatusStyles(theme: ThemeMode, options: ThemeOptions) {

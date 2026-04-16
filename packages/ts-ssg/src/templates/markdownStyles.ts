@@ -34,7 +34,7 @@ function registerBaseProseStyles(
     .select('.doc-content', theme)
     .fontSize(options.typography.baseSize)
     .lineHeight('1.7')
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
 
   styleBuilder.select('.doc-content :where(p)', theme).margin('0 0 1em')
 }
@@ -68,7 +68,7 @@ function registerHeadingStyles(theme: ThemeMode, palette: ThemePalette) {
     .select('.doc-content :where(h6)', theme)
     .fontSize('0.95rem')
     .letterSpacing('0.06em')
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.current.text.subtle)
 
   styleBuilder
     .select(
@@ -98,7 +98,7 @@ function registerLinkStyles(theme: ThemeMode, palette: ThemePalette) {
     .textDecoration('underline')
   styleBuilder
     .select('.doc-content :where(a:focus-visible)', theme)
-    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
+    .outline(`2px solid ${palette.current.border.focus}`)
 }
 
 function registerCodeStyles(
@@ -124,7 +124,7 @@ function registerInlineCodeStyles(
     .fontFamily("'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace")
     .fontSize('0.9em')
     .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .border(`1px solid ${palette.current.border.default}`)
     .borderRadius(options.radii.sm)
     .padding('0.15em 0.35em')
 }
@@ -151,7 +151,7 @@ function registerPreShellStyles(
     .margin('0 0 1.4em')
     .padding('18px 20px')
     .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .border(`1px solid ${palette.current.border.default}`)
     .borderRadius(options.radii.md)
     .position('relative')
     .overflow('auto')
@@ -170,9 +170,9 @@ function registerCopyButtonBaseStyles(
     .top('12px')
     .right('12px')
     .zIndex(2)
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .border(`1px solid ${palette.current.border.default}`)
     .background(palette.semanticTone.neutral.canvas)
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
     .width('2.15rem')
     .height('2.15rem')
     .padding('0')
@@ -212,12 +212,12 @@ function registerCopyButtonInteractionStyles(
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button:hover)', theme)
     .background(palette.semanticTone.neutral.surface.hover.background)
-    .borderColor(palette.semanticTone.neutral.border.default)
+    .borderColor(palette.current.border.default)
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button:active)', theme)
     .background(palette.semanticTone.neutral.surface.active.background)
-    .borderColor(palette.semanticTone.neutral.border.default)
+    .borderColor(palette.current.border.default)
 }
 
 function registerCopyButtonStateStyles(
@@ -234,8 +234,8 @@ function registerCopyButtonStateStyles(
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button:disabled)', theme)
     .background(palette.semanticTone.neutral.surface.disabled.background)
-    .color(palette.semanticTone.neutral.text.subtle)
-    .borderColor(palette.semanticTone.neutral.border.subtle)
+    .color(palette.current.text.subtle)
+    .borderColor(palette.current.border.subtle)
     .cursor('not-allowed')
 
   styleBuilder
@@ -297,7 +297,7 @@ function registerBlockquoteStyles(
     .select('.doc-content :where(blockquote)', theme)
     .margin('0 0 1.4em')
     .padding('0.65em 1.1em')
-    .borderLeft(`3px solid ${palette.semanticTone.neutral.border.subtle}`)
+    .borderLeft(`3px solid ${palette.current.border.subtle}`)
     .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
     .borderRadius(options.radii.sm)
 }
@@ -326,7 +326,7 @@ function registerTableContainerStyles(
     .maxWidth('100%')
     .overflowX('auto')
     .background(palette.semanticTone.neutral.surface.rest.background)
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .border(`1px solid ${palette.current.border.default}`)
     .borderRadius(options.radii.md)
     .boxShadow(palette.effect.panelShadow)
 
@@ -348,11 +348,11 @@ function registerTableHeaderStyles(
   styleBuilder
     .select('.doc-content :where(thead th)', theme)
     .background(palette.semanticTone.neutral.surface.rest.background)
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
     .fontSize('0.79rem')
     .textTransform('uppercase')
     .letterSpacing('0.055em')
-    .borderBottom(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .borderBottom(`1px solid ${palette.current.border.default}`)
 
   styleBuilder
     .select('.doc-content :where(thead th:first-child)', theme)
@@ -397,14 +397,14 @@ function registerTableBodyRowStyles(
 function registerTableCellStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.doc-content :where(th + th, td + td)', theme)
-    .borderLeft(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
+    .borderLeft(`1px solid ${palette.current.border.subtle}`)
 
   styleBuilder
     .select('.doc-content :where(th, td)', theme)
     .padding('11px 14px')
     .textAlign('left')
     .verticalAlign('top')
-    .borderBottom(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
+    .borderBottom(`1px solid ${palette.current.border.subtle}`)
 }
 
 function registerTableInlineCodeStyles(
@@ -416,7 +416,7 @@ function registerTableInlineCodeStyles(
     .select('.doc-content :where(table code)', theme)
     .background(palette.semanticTone.danger.canvas)
     .color(palette.semanticTone.danger.text.default)
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .border(`1px solid ${palette.current.border.default}`)
     .borderRadius(options.radii.pill)
     .fontSize('0.84em')
     .opacity(0.9)
@@ -433,7 +433,7 @@ function registerHrStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.doc-content :where(hr)', theme)
     .border('none')
-    .borderTop(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
+    .borderTop(`1px solid ${palette.current.border.subtle}`)
     .margin('2em 0')
 }
 
@@ -447,7 +447,7 @@ function registerMediaStyles(
     .maxWidth('100%')
     .height('auto')
     .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
+    .border(`1px solid ${palette.current.border.subtle}`)
 
   styleBuilder.select('.doc-content :where(figure)', theme).margin('0 0 1.4em')
 
@@ -455,5 +455,5 @@ function registerMediaStyles(
     .select('.doc-content :where(figcaption)', theme)
     .marginTop('0.6em')
     .fontSize('0.9em')
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.current.text.subtle)
 }

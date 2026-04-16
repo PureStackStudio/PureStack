@@ -60,10 +60,10 @@ function registerModalShellStyles(
     .maxHeight('min(86vh, 900px)')
     .overflow('auto')
     .borderRadius(options.radii.lg)
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .border(`1px solid ${palette.current.border.default}`)
     .background(palette.semanticTone.neutral.surface.rest.background)
     .boxShadow(options.shadows.soft)
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
     .transform('translate3d(0, 0, 0)')
     .willChange('transform, opacity')
     .opacity('1')
@@ -92,7 +92,7 @@ function registerModalShellStyles(
     .lineHeight('1.3')
     .fontWeight('700')
     .textAlign('center')
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
 
   styleBuilder
     .select('.modal__header [data-modal-close]', theme)

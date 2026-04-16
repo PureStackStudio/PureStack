@@ -84,7 +84,7 @@ function registerSearchBoxShellInputStyles(
     .height('42px')
     .padding('0 14px 0 42px')
     .borderRadius(options.radii.pill)
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .border(`1px solid ${palette.current.border.default}`)
     .background('transparent')
     .color('currentColor')
     .fontSize('14px')
@@ -99,7 +99,7 @@ function registerSearchBoxShellInputStyles(
 
   styleBuilder
     .select('.site-search__input:focus-visible', theme)
-    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
+    .outline(`2px solid ${palette.current.border.focus}`)
     .borderColor(palette.semanticTone.accent.border.default)
 
   styleBuilder
@@ -133,7 +133,7 @@ function registerSearchBoxResultContainerStyles(
     .overflow('auto')
     .padding('8px')
     .borderRadius(options.radii.lg)
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .border(`1px solid ${palette.current.border.default}`)
     .background(palette.semanticTone.neutral.surface.rest.background)
     .boxShadow(options.shadows.strong)
     .zIndex('60')
@@ -176,10 +176,10 @@ function registerSearchBoxResultListStyles(
     .gap('6px')
     .padding('12px 14px')
     .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
+    .border(`1px solid ${palette.current.border.subtle}`)
     .background(palette.semanticTone.neutral.surface.rest.background)
     .textDecoration('none')
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
     .transition(
       'border-color 160ms ease, background-color 160ms ease, transform 160ms ease',
     )
@@ -187,11 +187,11 @@ function registerSearchBoxResultListStyles(
   styleBuilder
     .select('.site-search__results .site-search__link:hover', theme)
     .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
-    .borderColor(palette.semanticTone.neutral.border.default)
+    .borderColor(palette.current.border.default)
 
   styleBuilder
     .select('.site-search__results .site-search__link:focus-visible', theme)
-    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
+    .outline(`2px solid ${palette.current.border.focus}`)
 }
 
 function registerSearchBoxResultContentStyles(
@@ -206,7 +206,7 @@ function registerSearchBoxResultContentStyles(
     .fontSize('0.98rem')
     .lineHeight('1.35')
     .letterSpacing('-0.01em')
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
     .wordBreak('break-word')
 
   styleBuilder
@@ -215,7 +215,7 @@ function registerSearchBoxResultContentStyles(
     .margin('0')
     .fontSize('0.9rem')
     .lineHeight('1.5')
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.current.text.subtle)
     .wordBreak('break-word')
     .display('-webkit-box')
     .lineClamp('3')
@@ -234,9 +234,9 @@ function registerSearchBoxResultContentStyles(
     .margin('0')
     .padding('10px 12px')
     .borderRadius(options.radii.md)
-    .border(`1px dashed ${palette.semanticTone.neutral.border.default}`)
+    .border(`1px dashed ${palette.current.border.default}`)
     .background(palette.semanticTone.neutral.surface.rest.background)
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.current.text.subtle)
 
   styleBuilder
     .select('.site-search__results .site-search__message--error', theme)

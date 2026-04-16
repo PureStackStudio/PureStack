@@ -27,11 +27,11 @@ function registerHeroShellStyles(
     .overflow('hidden')
     .padding('28px')
     .borderRadius(options.radii.lg)
-    .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
+    .border(`1px solid ${palette.current.border.subtle}`)
     .background(palette.semanticTone.neutral.surface.rest.background)
     .boxShadow(options.shadows.soft)
     .margin('0 0 32px')
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
 
   styleBuilder
     .select('.hero::before', theme)
@@ -64,7 +64,7 @@ function registerHeroContentStyles(theme: ThemeMode, palette: ThemePalette) {
     .letterSpacing('0.12em')
     .fontSize('11px')
     .fontWeight('700')
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.current.text.subtle)
 
   styleBuilder
     .select('.hero__title', theme)
@@ -73,7 +73,7 @@ function registerHeroContentStyles(theme: ThemeMode, palette: ThemePalette) {
     .lineHeight('1.05')
     .letterSpacing('-0.02em')
     .fontWeight('700')
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
 
   styleBuilder.select('.hero__title:empty', theme).display('none')
 
@@ -83,7 +83,7 @@ function registerHeroContentStyles(theme: ThemeMode, palette: ThemePalette) {
     .fontSize('17px')
     .lineHeight('1.6')
     .whiteSpace('pre-line')
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.current.text.subtle)
 
   styleBuilder.select('.hero__tagline:empty', theme).display('none')
   styleBuilder.select('.hero__eyebrow:empty', theme).display('none')
@@ -122,7 +122,7 @@ function registerHeroMediaStyles(
     .padding('18px 22px')
     .borderRadius(options.radii.lg)
     .background(palette.semanticTone.neutral.surface.rest.background)
-    .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
+    .border(`1px solid ${palette.current.border.subtle}`)
     .boxShadow(palette.effect.floatingShadow)
 
   styleBuilder

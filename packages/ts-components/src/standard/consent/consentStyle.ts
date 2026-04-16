@@ -40,7 +40,7 @@ function registerConsentBannerStyles(
     .padding('18px')
     .borderRadius(options.radii.lg)
     .background(palette.semanticTone.neutral.surface.rest.background)
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .border(`1px solid ${palette.current.border.default}`)
     .boxShadow(palette.effect.panelShadowStrong)
     .display('grid')
     .gap('10px')
@@ -51,13 +51,13 @@ function registerConsentBannerStyles(
     .fontSize('18px')
     .fontWeight('750')
     .letterSpacing('-0.01em')
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
   styleBuilder
     .select('.consent__description', theme)
     .margin('0')
     .fontSize('14px')
     .lineHeight('1.6')
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.current.text.subtle)
   styleBuilder
     .select('.consent__policy', theme)
     .color(palette.semanticTone.accent.text.default)
@@ -87,7 +87,7 @@ function registerConsentPanelStyles(
     .gap('14px')
     .borderRadius(options.radii.lg)
     .background(palette.semanticTone.neutral.surface.rest.background)
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .border(`1px solid ${palette.current.border.default}`)
     .boxShadow(palette.effect.panelShadowStrong)
   styleBuilder.select('.consent__panel[hidden]', theme).display('none')
   styleBuilder
@@ -102,7 +102,7 @@ function registerConsentPanelStyles(
     .fontSize('17px')
     .fontWeight('750')
     .letterSpacing('-0.01em')
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
 }
 
 function registerConsentFormStyles(
@@ -117,7 +117,7 @@ function registerConsentFormStyles(
     .gap('6px')
     .padding('10px')
     .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.semanticTone.neutral.border.subtle}`)
+    .border(`1px solid ${palette.current.border.subtle}`)
     .background(palette.semanticTone.neutral.surface.rest.background)
   styleBuilder
     .select('.consent__item-main', theme)
@@ -133,12 +133,12 @@ function registerConsentFormStyles(
     .select('.consent__item-label', theme)
     .fontSize('14px')
     .fontWeight('700')
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
   styleBuilder
     .select('.consent__item-description', theme)
     .fontSize('13px')
     .lineHeight('1.5')
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.current.text.subtle)
   styleBuilder
     .select('.consent__panel-actions', theme)
     .display('flex')

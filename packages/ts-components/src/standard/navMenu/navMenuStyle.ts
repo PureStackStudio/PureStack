@@ -30,8 +30,8 @@ export function registerNavShellStyles(
     .lineHeight(options.typography.baseLineHeight)
     .maxHeight('100%')
     .background(palette.semanticTone.neutral.surface.rest.background)
-    .borderColor(palette.semanticTone.neutral.border.subtle)
-    .color(palette.semanticTone.neutral.text.default)
+    .borderColor(palette.current.border.subtle)
+    .color(palette.current.text.default)
     .overflowY('auto')
     .overflowX('hidden')
   styleBuilder
@@ -47,7 +47,7 @@ export function registerNavShellStyles(
     .fontSize('0.78rem')
     .letterSpacing('0.08em')
     .textTransform('uppercase')
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.current.text.subtle)
     .opacity('0.5')
   styleBuilder
     .select('.nav__panel-toggle', theme)
@@ -73,7 +73,7 @@ export function registerNavShellStyles(
       '.nav__panel-toggle:focus-visible, .nav__collapse-toggle:focus-visible',
       theme,
     )
-    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
+    .outline(`2px solid ${palette.current.border.focus}`)
   styleBuilder
     .select('.nav__collapse-toggle', theme)
     .display('inline-flex')
@@ -82,10 +82,10 @@ export function registerNavShellStyles(
     .width('30px')
     .height('30px')
     .padding('0')
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .border(`1px solid ${palette.current.border.default}`)
     .borderRadius(options.radii.md)
     .background(palette.semanticTone.neutral.surface.rest.background)
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.current.text.subtle)
     .cursor('pointer')
     .transition('background 160ms ease, color 160ms ease')
   styleBuilder
@@ -244,7 +244,7 @@ export function registerNavShellStyles(
     .letterSpacing('0.12em')
     .textTransform('uppercase')
     .userSelect('none')
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .border(`1px solid ${palette.current.border.default}`)
     .borderLeft('none')
     .borderRadius(`0 ${options.radii.md} ${options.radii.md} 0`)
   styleBuilder
@@ -277,7 +277,7 @@ export function registerNavShellStyles(
     .marginTop('6px')
     .paddingLeft('12px')
     .borderLeft('1px solid transparent')
-    .borderLeftColor(palette.semanticTone.neutral.border.default)
+    .borderLeftColor(palette.current.border.default)
   styleBuilder.select('.nav__item', theme).display('grid').gap('4px')
   styleBuilder.select('.nav__leaf', theme).display('block')
   styleBuilder.select('.nav__group', theme).display('grid')
@@ -327,14 +327,14 @@ export function registerNavLinkStyles(
     .color(palette.semanticTone.accent.text.default)
   styleBuilder
     .select('.nav__link:focus-visible', theme)
-    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
+    .outline(`2px solid ${palette.current.border.focus}`)
   styleBuilder
     .select('.nav__text', theme)
     .display('block')
     .padding('8px 12px')
     .borderRadius(options.radii.md)
     .fontWeight('600')
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.current.text.subtle)
 }
 
 export function registerNavSummaryStyles(
@@ -356,7 +356,7 @@ export function registerNavSummaryStyles(
     .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
   styleBuilder
     .select('.nav__summary:focus-visible', theme)
-    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
+    .outline(`2px solid ${palette.current.border.focus}`)
   styleBuilder
     .select('.nav__summary--active', theme)
     .background(palette.semanticTone.accent.canvas)
@@ -377,7 +377,7 @@ export function registerNavSummaryStyles(
     .borderBottom('2px solid currentColor')
     .transform('rotate(-45deg)')
     .transition('transform 160ms ease')
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.current.text.subtle)
   styleBuilder
     .select('.nav__group[open] > .nav__summary .nav__chevron', theme)
     .transform('rotate(45deg)')

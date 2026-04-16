@@ -17,8 +17,8 @@
  *   - primary CTA background: `palette.semanticTone.accent.button.rest.background`
  *   - primary CTA hover: `palette.semanticTone.accent.button.hover.background`
  *   - semantic callout surface: `palette.semanticTone.info.surface.rest.background`
- *   - secondary text: `palette.semanticTone.neutral.text.subtle`
- *   - active/focus border: `palette.semanticTone.neutral.border.focus`
+ *   - secondary text: `palette.current.text.subtle`
+ *   - active/focus border: `palette.current.border.focus`
  *
  * Example (in a component):
  * ```ts

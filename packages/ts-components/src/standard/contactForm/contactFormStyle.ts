@@ -28,7 +28,7 @@ function registerContactFormShellStyles(
     .gap('14px')
     .borderRadius(options.radii.lg)
     .background(palette.semanticTone.neutral.surface.rest.background)
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .border(`1px solid ${palette.current.border.default}`)
     .boxShadow(palette.effect.panelShadow)
   styleBuilder.select('.contact-form__header', theme).display('grid').gap('6px')
   styleBuilder
@@ -37,13 +37,13 @@ function registerContactFormShellStyles(
     .fontSize('1.05rem')
     .fontWeight('760')
     .letterSpacing('-0.01em')
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
   styleBuilder
     .select('.contact-form__description', theme)
     .margin('0')
     .fontSize('0.93rem')
     .lineHeight('1.6')
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.current.text.subtle)
   styleBuilder.select('.contact-form__form', theme).display('grid').gap('10px')
 }
 
@@ -57,7 +57,7 @@ function registerContactFormFieldStyles(
     .select('.contact-form__label', theme)
     .fontSize('0.86rem')
     .fontWeight('700')
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
   styleBuilder
     .select(
       '.contact-form__input, .contact-form__select, .contact-form__textarea',
@@ -66,9 +66,9 @@ function registerContactFormFieldStyles(
     .width('100%')
     .padding('10px 12px')
     .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .border(`1px solid ${palette.current.border.default}`)
     .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
     .fontSize('0.92rem')
     .lineHeight('1.45')
     .boxSizing('border-box')
@@ -88,7 +88,7 @@ function registerContactFormFieldStyles(
       '.contact-form__input:focus-visible, .contact-form__select:focus-visible, .contact-form__textarea:focus-visible',
       theme,
     )
-    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
+    .outline(`2px solid ${palette.current.border.focus}`)
     .borderColor(palette.semanticTone.accent.border.default)
 }
 

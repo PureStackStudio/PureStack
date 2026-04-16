@@ -71,7 +71,7 @@ export function applyPricingHeaderStyles(
     .fontSize('11px')
     .fontWeight('700')
     .margin('0')
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.current.text.subtle)
 
   styleBuilder
     .select('.pricing__title', theme)
@@ -79,7 +79,7 @@ export function applyPricingHeaderStyles(
     .fontSize('clamp(24px, 3.2vw, 34px)')
     .fontWeight('700')
     .letterSpacing('-0.02em')
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
 
   styleBuilder
     .select('.pricing__subtitle', theme)
@@ -87,7 +87,7 @@ export function applyPricingHeaderStyles(
     .fontSize('14px')
     .lineHeight('1.6')
     .maxWidth('680px')
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.current.text.subtle)
 
   styleBuilder
     .select('.pricing__footnote', theme)
@@ -95,7 +95,7 @@ export function applyPricingHeaderStyles(
     .zIndex('1')
     .margin('5px 0 0 !important;')
     .fontSize('12px')
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.current.text.subtle)
 }
 
 export function applyPricingPlanStyles(
@@ -122,7 +122,7 @@ export function applyPricingPlanShellStyles(
     .gap('12px')
     .padding('18px')
     .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .border(`1px solid ${palette.current.border.default}`)
     .background(palette.semanticTone.neutral.surface.rest.background)
     .boxShadow(palette.effect.panelShadow)
     .height('100%')
@@ -201,7 +201,7 @@ export function applyPricingPlanTitleStyles(
     .margin('0')
     .fontSize('18px')
     .fontWeight('700')
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
 
   styleBuilder
     .select('.pricing-plan__badge', theme)
@@ -219,7 +219,7 @@ export function applyPricingPlanTitleStyles(
     .margin('0')
     .fontSize('13px')
     .lineHeight('1.5')
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.current.text.subtle)
 }
 
 export function applyPricingPlanPriceStyles(
@@ -238,7 +238,7 @@ export function applyPricingPlanPriceStyles(
     .fontSize('24px')
     .fontWeight('700')
     .letterSpacing('-0.02em')
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
 
   styleBuilder
     .select('.pricing-plan__period', theme)
@@ -246,7 +246,7 @@ export function applyPricingPlanPriceStyles(
     .textTransform('uppercase')
     .letterSpacing('0.12em')
     .fontWeight('600')
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.current.text.subtle)
 }
 
 export function applyPricingPlanCtaStyles(
@@ -267,9 +267,9 @@ export function applyPricingPlanCtaStyles(
     .fontWeight('600')
     .fontSize('13px')
     .textDecoration('none')
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .border(`1px solid ${palette.current.border.default}`)
     .background(palette.semanticTone.neutral.canvas)
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
     .boxShadow(palette.effect.interactiveShadow)
     .transition(
       'transform 180ms ease, box-shadow 180ms ease, background 180ms ease',
@@ -281,7 +281,7 @@ export function applyPricingPlanCtaStyles(
 
   styleBuilder
     .select('.pricing-plan__cta-link:focus-visible', theme)
-    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
+    .outline(`2px solid ${palette.current.border.focus}`)
 }
 
 export function applyPricingPlanNoteStyles(
@@ -293,7 +293,7 @@ export function applyPricingPlanNoteStyles(
     .margin('0')
     .fontSize('11px')
     .lineHeight('1.5')
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.current.text.subtle)
 }
 
 export function applyPricingFeatureStyles(
@@ -319,7 +319,7 @@ export function applyPricingFeatureStyles(
     .fontSize('13px')
     .lineHeight('1.5')
     .marginBottom('8px')
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
 
   styleBuilder
     .select('.pricing-feature__icon', theme)

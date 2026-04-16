@@ -30,7 +30,7 @@ function registerLoginShellStyles(
     .gap('16px')
     .padding('26px')
     .borderRadius(options.radii.lg)
-    .border(`1px solid ${palette.semanticTone.neutral.border.default}`)
+    .border(`1px solid ${palette.current.border.default}`)
     .background(
       `${palette.semanticTone.neutral.surfaceAlt.rest.background}, ${palette.semanticTone.neutral.surface.rest.background}`,
     )
@@ -47,20 +47,20 @@ function registerLoginShellStyles(
     .fontWeight('750')
     .letterSpacing('0.08em')
     .textTransform('uppercase')
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.current.text.subtle)
   styleBuilder
     .select('.login-panel__title', theme)
     .margin('0')
     .fontSize('1.65rem')
     .lineHeight('1.1')
     .fontWeight('820')
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
   styleBuilder
     .select('.login-panel__description', theme)
     .margin('0')
     .fontSize('0.95rem')
     .lineHeight('1.55')
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.current.text.subtle)
   styleBuilder
     .select('.login-panel__providers', theme)
     .display('grid')
@@ -76,7 +76,7 @@ function registerLoginMetaStyles(
     .select('.login-panel__footer', theme)
     .margin('4px 0 0')
     .fontSize('0.84rem')
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.current.text.subtle)
     .display('flex')
     .alignItems('center')
     .gap('6px')
@@ -87,7 +87,7 @@ function registerLoginMetaStyles(
     .textDecoration('none')
   styleBuilder
     .select('.login-panel__footer a:hover', theme)
-    .color(palette.semanticTone.neutral.text.default)
+    .color(palette.current.text.default)
     .textDecoration('underline')
   styleBuilder
     .select('.login-panel__shell', theme)

@@ -32,7 +32,7 @@ export function registerTopBarShellStyles(
     .backdropFilter('blur(10px)')
     .borderBottom('1px solid transparent')
     .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
-    .borderBottomColor(palette.semanticTone.neutral.border.subtle)
+    .borderBottomColor(palette.current.border.subtle)
   styleBuilder
     .select('.topbar__logo', theme)
     .display('inline-flex')
@@ -69,7 +69,7 @@ export function registerTopBarShellStyles(
     .cursor('pointer')
     .position('relative')
     .padding('0')
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color(palette.current.text.subtle)
 }
 
 export function registerTopBarSearchStyles(theme: ThemeMode) {
@@ -102,8 +102,8 @@ function registerTopBarToggleVisibilityStyles(
   styleBuilder
     .select('.topbar__toggle', theme)
     .background(palette.semanticTone.neutral.surface.rest.background)
-    .borderColor(palette.semanticTone.neutral.border.default)
-    .color(palette.semanticTone.neutral.text.subtle)
+    .borderColor(palette.current.border.default)
+    .color(palette.current.text.subtle)
     .display('none')
   styleBuilder
     .select('.template-doc--nav-drawer .topbar__toggle', theme)
@@ -114,7 +114,7 @@ function registerTopBarToggleVisibilityStyles(
     .display('grid')
   styleBuilder
     .select('.topbar__toggle:focus-visible', theme)
-    .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
+    .outline(`2px solid ${palette.current.border.focus}`)
 }
 
 function registerTopBarToggleGlyphStyles(theme: ThemeMode) {
