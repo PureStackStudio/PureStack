@@ -1,7 +1,6 @@
 import {
   getSemanticToneButtonClass,
   getSemanticToneSurfaceClass,
-  getSemanticToneTextClass,
   type SemanticTone,
 } from '@purestack/ts-style'
 import {
@@ -36,7 +35,6 @@ export class FormInputField {
   readonly id: string
   readonly label?: RefOrValue<string>
   readonly tone?: RefOrValue<SemanticTone>
-  readonly labelTone?: RefOrValue<SemanticTone>
   declare readonly model: Ref<string | number>
   readonly type?: RefOrValue<FormInputFieldType>
   readonly name?: RefOrValue<string>
@@ -44,7 +42,6 @@ export class FormInputField {
   readonly min?: RefOrValue<number | string>
   readonly step?: RefOrValue<number | string>
   readonly placeholder?: RefOrValue<string>
-  labelToneClass?: ComputedRef<string>
   inputToneClass?: ComputedRef<string>
   buttonToneClass?: ComputedRef<string>
 
@@ -102,7 +99,7 @@ export class FormInputField {
 }
 
 const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
-  <span class="form-block__label" :class="labelToneClass" r-if="label">
+  <span class="form-block__label" r-if="label">
     {{ label }}
   </span>
   <div class="form-block__number" :class="inputToneClass" r-if="isNumberField">
@@ -157,7 +154,6 @@ export function defineFormInputField() {
         'id',
         'label',
         'tone',
-        'labelTone',
         'model',
         'type',
         'name',
@@ -174,11 +170,7 @@ export function defineFormInputField() {
 function resolveFormInputField(head: ComponentHead<FormInputField>) {
   const inheritedTone = head.findContext(FormToneContext)?.tone
   const resolvedTone = () => unref(head.props.tone) || unref(inheritedTone)
-  const resolvedLabelTone = () => unref(head.props.labelTone) || resolvedTone()
   const field = new FormInputField(head.props)
-  field.labelToneClass = computed(() =>
-    getSemanticToneTextClass(resolvedLabelTone()),
-  )
   field.inputToneClass = computed(() =>
     getSemanticToneSurfaceClass(resolvedTone(), false),
   )

@@ -14,7 +14,6 @@ layout:
 
 <AppForm action="/contact" method="post" tone="accent">
   <FormInputField
-    label-tone="neutral"
     label="Full name"
     type="text"
     name="fullName"
@@ -22,7 +21,6 @@ layout:
     autocomplete="name"
     required="true"/>
   <FormInputField
-    label-tone="neutral"
     label="Email address"
     type="email"
     name="email"
@@ -30,7 +28,6 @@ layout:
     autocomplete="email"
     required="true"/>
   <FormInputField
-    label-tone="neutral"
     label="Company"
     type="text"
     name="company"
@@ -44,14 +41,12 @@ layout:
 <AppForm action="/workspace/create" method="post" tone="info">
   <Grid columns="1" columnsMd="2">
     <FormInputField
-      label-tone="neutral"
       label="Workspace name"
       type="text"
       name="workspaceName"
       placeholder="Northwind Docs"
       required="true"/>
     <FormInputField
-      label-tone="neutral"
       label="Primary URL"
       type="url"
       name="primaryUrl"
@@ -62,14 +57,12 @@ layout:
 
   <Grid columns="1" columnsMd="2">
     <FormInputField
-      label-tone="neutral"
       label="Owner email"
       type="email"
       name="ownerEmail"
       placeholder="owner@northwind.dev"
       autocomplete="email"/>
     <FormInputField
-      label-tone="neutral"
       label="Support email"
       type="email"
       name="supportEmail"
@@ -125,18 +118,15 @@ layout:
   </AlertBox>
 
   <FormCheck
-    tone="neutral"
     label="Require multi-factor authentication for administrators"
     name="requireMfa"
     value="yes"
     checked="true"/>
   <FormCheck
-    tone="neutral"
     label="Notify security team on suspicious sign-ins"
     name="notifySecurity"
     value="yes"/>
   <FormCheck
-    tone="neutral"
     label="I confirm the rollback plan has been documented"
     name="rollbackConfirmed"
     value="yes"/>
@@ -148,14 +138,12 @@ layout:
 
 <AppForm action="/help" method="post" tone="accent">
   <FormInputField
-    label-tone="neutral"
     label="Topic"
     type="text"
     name="topic"
     placeholder="Migration, billing, rollout, support"
     required="true"/>
   <FormInputField
-    label-tone="neutral"
     label="Message"
     type="text"
     name="message"
@@ -164,14 +152,10 @@ layout:
 
   <FormMeta>
     <Grid columns="1" columnsMd="2" alignItems="center">
-      <FormAssistLink
-        href="/guide/grid-sample"
-        label="See grid patterns"
-        tone="neutral"/>
+      <FormAssistLink href="/guide/grid-sample" label="See grid patterns"/>
       <FormAssistLink
         href="/guide/tabs-enriched-sample"
-        label="See advanced tabs flows"
-        tone="neutral"/>
+        label="See advanced tabs flows"/>
     </Grid>
   </FormMeta>
 
@@ -185,14 +169,12 @@ layout:
 
 <AppForm action="/application" method="post" tone="success">
   <FormInputField
-    label-tone="neutral"
     label="Candidate name"
     type="text"
     name="candidateName"
     placeholder="Ada Lovelace"
     autocomplete="name"/>
   <FormInputField
-    label-tone="neutral"
     label="Portfolio URL"
     type="url"
     name="portfolioUrl"
@@ -202,13 +184,8 @@ layout:
   <FormDivider label="Availability"/>
 
   <Grid columns="1" columnsMd="2">
+    <FormInputField label="Start date" type="date" name="startDate"/>
     <FormInputField
-      label-tone="neutral"
-      label="Start date"
-      type="date"
-      name="startDate"/>
-    <FormInputField
-      label-tone="neutral"
       label="Expected weekly hours"
       type="number"
       name="weeklyHours"
@@ -229,13 +206,11 @@ layout:
 <AppForm action="/account" method="post" tone="info">
   <Grid columns="1" columnsMd="2">
     <FormInputField
-      label-tone="neutral"
       label="Account name"
       type="text"
       name="accountName"
       placeholder="PureStack Enterprise"/>
     <FormInputField
-      label-tone="neutral"
       label="Primary region"
       type="text"
       name="region"
@@ -316,7 +291,6 @@ layout:
 
   <Grid columns="1" columnsMd="2">
     <FormInputField
-      label-tone="neutral"
       label="Owner name"
       type="text"
       name="ownerName"
@@ -324,7 +298,6 @@ layout:
       autocomplete="name"
       required="true"/>
     <FormInputField
-      label-tone="neutral"
       label="Owner email"
       type="email"
       name="ownerEmail"
@@ -335,14 +308,12 @@ layout:
 
   <Grid columns="1" columnsLg="3">
     <FormInputField
-      label-tone="neutral"
       label="Environment"
       type="text"
       name="environment"
       placeholder="production-eu"
       required="true"/>
     <FormInputField
-      label-tone="neutral"
       label="Canary percent"
       type="number"
       name="canaryPercent"
@@ -351,7 +322,6 @@ layout:
       step="1"
       value="10"/>
     <FormInputField
-      label-tone="neutral"
       label="Expected duration (minutes)"
       type="number"
       name="durationMinutes"
@@ -364,13 +334,11 @@ layout:
 
   <Grid columns="1" columnsMd="2" alignItems="start">
     <FormCheck
-      tone="neutral"
       label="Notify support when rollout starts"
       name="notifySupport"
       value="yes"
       checked="true"/>
     <FormCheck
-      tone="neutral"
       label="Rollback runbook has been reviewed"
       name="rollbackReady"
       value="yes"
@@ -380,11 +348,9 @@ layout:
   <FormMeta>
     <Grid columns="1" columnsMd="2" alignItems="center">
       <FormAssistLink
-        tone="neutral"
         href="/guide/alert-sample"
         label="Review alert guidance"/>
       <FormAssistLink
-        tone="neutral"
         href="/guide/modal-sample"
         label="Review modal workflow"/>
     </Grid>

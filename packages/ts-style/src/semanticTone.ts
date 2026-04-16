@@ -1,3 +1,4 @@
+import type { Style } from '@purestack/ts-css'
 import { styleBuilder } from './styles'
 import { themes } from './themeOptions'
 import type { SemanticToneTokens, ThemePalette } from './themePalette'
@@ -38,6 +39,15 @@ export function getSemanticToneTokens(
   tone: SemanticTone,
 ): SemanticToneTokens {
   return palette.semanticTone[tone]
+}
+
+function applySemanticToneVars(style: Style, tokens: SemanticToneTokens) {
+  return style
+    .set('--ps-tone-text-default', tokens.text.default)
+    .set('--ps-tone-text-subtle', tokens.text.subtle)
+    .set('--ps-tone-border-subtle', tokens.border.subtle)
+    .set('--ps-tone-border-default', tokens.border.default)
+    .set('--ps-tone-border-focus', tokens.border.focus)
 }
 
 function getSemanticTonePrefix(isInteractive = false) {
@@ -91,6 +101,11 @@ export function getSemanticToneTextClass(
 
 export function registerSemanticToneUtilityStyles() {
   themes.forEach((theme, palette) => {
+    applySemanticToneVars(
+      styleBuilder.select(':root', theme),
+      getSemanticToneTokens(palette, 'neutral'),
+    )
+
     for (const tone of SEMANTIC_TONES) {
       const tokens = getSemanticToneTokens(palette, tone)
       const surfaceClass = getSemanticToneSurfaceClass(tone)
@@ -103,8 +118,13 @@ export function registerSemanticToneUtilityStyles() {
       const buttonClass = getSemanticToneButtonClass(tone)
       const interactiveButtonClass = getSemanticToneButtonClass(tone, true)
 
-      styleBuilder
-        .select(`.${surfaceClass}, .${interactiveSurfaceClass}`, theme)
+      applySemanticToneVars(
+        styleBuilder.select(
+          `.${surfaceClass}, .${interactiveSurfaceClass}`,
+          theme,
+        ),
+        tokens,
+      )
         .background(tokens.surface.rest.background)
         .borderColor(tokens.surface.rest.border)
         .color(tokens.surface.rest.text)
@@ -134,8 +154,13 @@ export function registerSemanticToneUtilityStyles() {
         .outline('none')
         .boxShadow(`0 0 0 2px ${tokens.surface.focusRing}`)
 
-      styleBuilder
-        .select(`.${surfaceAltClass}, .${interactiveSurfaceAltClass}`, theme)
+      applySemanticToneVars(
+        styleBuilder.select(
+          `.${surfaceAltClass}, .${interactiveSurfaceAltClass}`,
+          theme,
+        ),
+        tokens,
+      )
         .background(tokens.surfaceAlt.rest.background)
         .borderColor(tokens.surfaceAlt.rest.border)
         .color(tokens.surfaceAlt.rest.text)
@@ -165,8 +190,13 @@ export function registerSemanticToneUtilityStyles() {
         .outline('none')
         .boxShadow(`0 0 0 2px ${tokens.surfaceAlt.focusRing}`)
 
-      styleBuilder
-        .select(`.${buttonClass}, .${interactiveButtonClass}`, theme)
+      applySemanticToneVars(
+        styleBuilder.select(
+          `.${buttonClass}, .${interactiveButtonClass}`,
+          theme,
+        ),
+        tokens,
+      )
         .background(tokens.button.rest.background)
         .borderColor(tokens.button.rest.border)
         .color(tokens.button.rest.text)
@@ -205,16 +235,20 @@ export function registerSemanticToneUtilityStyles() {
         .outline('none')
         .boxShadow(`0 0 0 2px ${tokens.button.focusRing}`)
 
-      styleBuilder
-        .select(`.${getSemanticToneBorderClass(tone)}`, theme)
-        .borderColor(tokens.border.default)
+      applySemanticToneVars(
+        styleBuilder.select(`.${getSemanticToneBorderClass(tone)}`, theme),
+        tokens,
+      ).borderColor(tokens.border.default)
 
-      styleBuilder
-        .select(`.${getSemanticToneTextClass(tone)}`, theme)
-        .color(tokens.text.default)
+      applySemanticToneVars(
+        styleBuilder.select(`.${getSemanticToneTextClass(tone)}`, theme),
+        tokens,
+      ).color(tokens.text.default)
 
-      styleBuilder
-        .select(`.${getSemanticToneIconClass(tone)}`, theme)
+      applySemanticToneVars(
+        styleBuilder.select(`.${getSemanticToneIconClass(tone)}`, theme),
+        tokens,
+      )
         .background(tokens.icon.gradient)
         .backgroundColor(tokens.icon.background)
         .borderColor(tokens.icon.border)

@@ -82,7 +82,7 @@ function registerContactFormFieldStyles(
       '.contact-form__input::placeholder, .contact-form__textarea::placeholder',
       theme,
     )
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color('var(--ps-tone-text-subtle)')
   styleBuilder
     .select(
       '.contact-form__input:focus-visible, .contact-form__select:focus-visible, .contact-form__textarea:focus-visible',

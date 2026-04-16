@@ -1,6 +1,5 @@
 import {
   getSemanticToneSurfaceClass,
-  getSemanticToneTextClass,
   type SemanticTone,
 } from '@purestack/ts-style'
 import { urlNormalizer } from '@purestack/ts-util'
@@ -24,22 +23,18 @@ export interface FormMeta {}
 
 export interface FormCheck {
   label?: RefOrValue<string>
-  tone?: RefOrValue<SemanticTone>
   name?: RefOrValue<string>
   value?: RefOrValue<string>
   checked?: RefOrValue<boolean>
-  toneClass?: ComputedRef<string>
 }
 
 export interface FormAssistLink {
   href?: RefOrValue<string>
   label?: RefOrValue<string>
-  tone?: RefOrValue<SemanticTone>
   target?: RefOrValue<string>
   rel?: RefOrValue<string>
   normalizedHref?: ComputedRef<string | undefined>
   resolvedRel?: ComputedRef<string | undefined>
-  toneClass?: ComputedRef<string>
 }
 
 export interface FormSubmit {
@@ -68,14 +63,13 @@ const appFormTemplate = html`<form class="form-block" :action="action" :method="
 
 const formMetaTemplate = html`<div class="form-block__meta"><slot></slot></div>`
 
-const formCheckTemplate = html`<label class="form-block__check" :class="toneClass">
+const formCheckTemplate = html`<label class="form-block__check">
   <input type="checkbox" :name="name" :value="value" :checked="checked"/>
   <span>{{ label }}</span>
 </label>`
 
 const formAssistLinkTemplate = html`<a
   class="form-block__assist-link"
-  :class="toneClass"
   :href="normalizedHref"
   r-if="normalizedHref"
   :target="target"
@@ -111,14 +105,14 @@ function defineFormMetaComponent() {
 
 function defineFormCheckComponent() {
   return defineComponent<FormCheck>(formCheckTemplate, {
-    props: ['label', 'tone', 'name', 'value', 'checked'],
-    context: (head) => resolveFormCheck(head),
+    props: ['label', 'name', 'value', 'checked'],
+    context: (head) => head.props,
   })
 }
 
 function defineFormAssistLinkComponent() {
   return defineComponent<FormAssistLink>(formAssistLinkTemplate, {
-    props: ['href', 'label', 'tone', 'target', 'rel'],
+    props: ['href', 'label', 'target', 'rel'],
     context: (head) => resolveFormAssistLink(head),
   })
 }
@@ -164,7 +158,6 @@ function resolveAppForm(props: AppForm): AppForm {
 function resolveFormAssistLink(
   head: ComponentHead<FormAssistLink>,
 ): FormAssistLink {
-  const inheritedTone = head.findContext(FormToneContext)?.tone
   return {
     ...head.props,
     normalizedHref: computed(() =>
@@ -174,19 +167,6 @@ function resolveFormAssistLink(
       () =>
         unref(head.props.rel) ||
         (unref(head.props.target) === '_blank' ? 'noopener noreferrer' : ''),
-    ),
-    toneClass: computed(() =>
-      getSemanticToneTextClass(unref(head.props.tone) || unref(inheritedTone)),
-    ),
-  }
-}
-
-function resolveFormCheck(head: ComponentHead<FormCheck>): FormCheck {
-  const inheritedTone = head.findContext(FormToneContext)?.tone
-  return {
-    ...head.props,
-    toneClass: computed(() =>
-      getSemanticToneTextClass(unref(head.props.tone) || unref(inheritedTone)),
     ),
   }
 }

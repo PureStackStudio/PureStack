@@ -40,6 +40,7 @@ function registerFormFieldStyles(
     .fontSize('0.83rem')
     .fontWeight('700')
     .letterSpacing('0.02em')
+    .color('var(--ps-tone-text-default)')
   styleBuilder
     .select('.form-block__input', theme)
     .width('100%')
@@ -51,7 +52,7 @@ function registerFormFieldStyles(
     .transition('border-color 160ms ease, box-shadow 160ms ease')
   styleBuilder
     .select('.form-block__input::placeholder', theme)
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color('var(--ps-tone-text-subtle)')
   styleBuilder
     .select('.form-block__input:focus-visible', theme)
     .outline('none')
@@ -124,6 +125,7 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .alignItems('center')
     .gap('8px')
     .fontSize('0.84rem')
+    .color('var(--ps-tone-text-default)')
   styleBuilder
     .select('.form-block__check input', theme)
     .width('16px')
@@ -134,6 +136,7 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .fontSize('0.84rem')
     .fontWeight('650')
     .textDecoration('none')
+    .color('var(--ps-tone-text-default)')
   styleBuilder
     .select('.form-block__assist-link:hover', theme)
     .textDecoration('underline')

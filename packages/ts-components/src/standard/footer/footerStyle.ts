@@ -274,7 +274,7 @@ export function applyFooterNewsletterFieldStyles(
     .color(palette.semanticTone.neutral.text.default)
   styleBuilder
     .select('.site-footer__newsletter-input::placeholder', theme)
-    .color(palette.semanticTone.neutral.text.subtle)
+    .color('var(--ps-tone-text-subtle)')
   styleBuilder
     .select('.site-footer__newsletter-input:focus-visible', theme)
     .outline(`2px solid ${palette.semanticTone.neutral.border.focus}`)
