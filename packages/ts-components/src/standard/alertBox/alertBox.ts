@@ -25,15 +25,19 @@ export interface AlertBox {
   iconToneClass?: ComputedRef<string>
 }
 
-const alertBoxTemplate = html`<aside
-  class="alert"
-  :class="rootClass"
->
-  <Icon class="expandable-panel__icon" :name="icon" :class="iconToneClass" r-if="icon" :wrap="true"/>
+const alertBoxTemplate = html`<aside class="alert" :class="rootClass">
+  <Icon
+    class="expandable-panel__icon"
+    :name="icon"
+    :class="iconToneClass"
+    r-if="icon"
+    :wrap="true"/>
   <div class="alert__content">
     <div class="alert__header" r-if="title || eyebrow || badge">
       <p class="alert__eyebrow" r-if="eyebrow">{{ eyebrow }}</p>
-      <h3 class="alert__title" :class="titleToneClass" r-if="title">{{ title }}</h3>
+      <h3 class="alert__title" :class="titleToneClass" r-if="title">
+        {{ title }}
+      </h3>
       <Badge tone="neutral" r-if="badge">{{ badge }}</Badge>
     </div>
     <div class="alert__body"><slot></slot></div>
@@ -44,14 +48,7 @@ const alertBoxTemplate = html`<aside
 
 function defineAlertBoxComponent() {
   return defineComponent<AlertBox>(alertBoxTemplate, {
-    props: [
-      'title',
-      'eyebrow',
-      'badge',
-      'meta',
-      'tone',
-      'icon',
-    ],
+    props: ['title', 'eyebrow', 'badge', 'meta', 'tone', 'icon'],
     context: (head) => resolveAlertBox(head.props),
   })
 }
