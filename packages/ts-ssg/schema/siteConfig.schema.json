@@ -154,6 +154,20 @@
           "enum": ["order", "title", "path"],
           "description": "Sorting strategy for navigation items.",
           "default": "order"
+        },
+        "tone": {
+          "type": "string",
+          "enum": [
+            "neutral",
+            "accent",
+            "info",
+            "success",
+            "warning",
+            "danger",
+            "ghost"
+          ],
+          "description": "Navigation menu semantic tone.",
+          "default": "neutral"
         }
       }
     },

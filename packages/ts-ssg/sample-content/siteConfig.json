@@ -26,7 +26,8 @@
     "navFileName": "_nav.json",
     "maxDepth": 20,
     "includeIndex": true,
-    "sortBy": "order"
+    "sortBy": "order",
+    "tone": "neutral"
   },
   "sitemap": {
     "enabled": true,

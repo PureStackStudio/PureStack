@@ -29,9 +29,6 @@ export function registerNavShellStyles(
     .fontSize(options.typography.baseSize)
     .lineHeight(options.typography.baseLineHeight)
     .maxHeight('100%')
-    .background(palette.semanticTone.neutral.surface.rest.background)
-    .borderColor(palette.current.border.subtle)
-    .color(palette.current.text.default)
     .overflowY('auto')
     .overflowX('hidden')
   styleBuilder
@@ -55,19 +52,12 @@ export function registerNavShellStyles(
     .alignItems('center')
     .justifyContent('center')
     .padding('0')
-    .border(`1px solid ${palette.semanticTone.accent.canvas}`)
     .borderRadius(options.radii.md)
-    .background(palette.semanticTone.accent.canvas)
-    .color(palette.semanticTone.accent.text.default)
     .cursor('pointer')
     .transition('background 160ms ease, color 160ms ease')
     .top('49px')
   styleBuilder.select('.nav__panel-toggle-label', theme).display('inline-block')
   styleBuilder.select('.nav__panel-toggle-icon', theme).display('none')
-  styleBuilder
-    .select('.nav__panel-toggle:hover', theme)
-    .background(palette.semanticTone.accent.surface.hover.background)
-    .color(palette.semanticTone.accent.text.default)
   styleBuilder
     .select(
       '.nav__panel-toggle:focus-visible, .nav__collapse-toggle:focus-visible',
@@ -82,16 +72,11 @@ export function registerNavShellStyles(
     .width('30px')
     .height('30px')
     .padding('0')
-    .border(`1px solid ${palette.current.border.default}`)
+    .border(`transparent`)
     .borderRadius(options.radii.md)
-    .background(palette.semanticTone.neutral.surface.rest.background)
-    .color(palette.current.text.subtle)
+    .background('transparent')
     .cursor('pointer')
     .transition('background 160ms ease, color 160ms ease')
-  styleBuilder
-    .select('.nav__collapse-toggle:hover', theme)
-    .background(palette.semanticTone.accent.canvas)
-    .color(palette.semanticTone.accent.text.default)
   styleBuilder
     .select('.nav__collapse-toggle-icon', theme)
     .display('inline-flex')
@@ -315,19 +300,8 @@ export function registerNavLinkStyles(
     .borderRadius(options.radii.md)
     .textDecoration('none')
     .fontWeight('600')
+    .background('transparent')
     .transition('background 160ms ease, color 160ms ease')
-    .color(palette.semanticTone.neutral.button.rest.text)
-  styleBuilder
-    .select('.nav__link:hover', theme)
-    .background(palette.semanticTone.accent.button.hover.background)
-    .color(palette.semanticTone.accent.button.hover.text)
-  styleBuilder
-    .select('.nav__link--active', theme)
-    .background(palette.semanticTone.accent.button.active.background)
-    .color(palette.semanticTone.accent.text.default)
-  styleBuilder
-    .select('.nav__link:focus-visible', theme)
-    .outline(`2px solid ${palette.current.border.focus}`)
   styleBuilder
     .select('.nav__text', theme)
     .display('block')
@@ -351,18 +325,6 @@ export function registerNavSummaryStyles(
     .cursor('pointer')
     .paddingRight('8px')
     .borderRadius(options.radii.md)
-  styleBuilder
-    .select('.nav__summary:hover', theme)
-    .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
-  styleBuilder
-    .select('.nav__summary:focus-visible', theme)
-    .outline(`2px solid ${palette.current.border.focus}`)
-  styleBuilder
-    .select('.nav__summary--active', theme)
-    .background(palette.semanticTone.accent.canvas)
-  styleBuilder
-    .select('.nav__summary--active .nav__text', theme)
-    .color(palette.semanticTone.accent.text.default)
   styleBuilder
     .select('.nav__summary-content', theme)
     .display('flex')

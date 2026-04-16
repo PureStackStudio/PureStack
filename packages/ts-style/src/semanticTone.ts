@@ -54,6 +54,13 @@ function getSemanticTonePrefix(isInteractive = false) {
   return isInteractive ? 'tone-interactive-' : 'tone-'
 }
 
+export function getSemanticToneInteractiveClass(
+  tone: SemanticTone | undefined,
+  fallback: SemanticTone = 'neutral',
+) {
+  return `${getSemanticTonePrefix(true)}-${resolveSemanticTone(tone, fallback)}`
+}
+
 export function getSemanticToneSurfaceClass(
   tone: SemanticTone | undefined,
   isInteractive = false,
@@ -108,6 +115,7 @@ export function registerSemanticToneUtilityStyles() {
 
     for (const tone of SEMANTIC_TONES) {
       const tokens = getSemanticToneTokens(palette, tone)
+      const interactiveClass = getSemanticToneInteractiveClass(tone)
       const surfaceClass = getSemanticToneSurfaceClass(tone)
       const interactiveSurfaceClass = getSemanticToneSurfaceClass(tone, true)
       const surfaceAltClass = getSemanticToneSurfaceAltClass(tone)
@@ -138,7 +146,10 @@ export function registerSemanticToneUtilityStyles() {
         .color(tokens.surface.hover.text)
 
       styleBuilder
-        .select(`.${interactiveSurfaceClass}:active`, theme)
+        .select(
+          `.${interactiveSurfaceClass}:active, .${interactiveSurfaceClass}.active`,
+          theme,
+        )
         .backgroundImage(tokens.surface.active.background)
         .borderColor(tokens.surface.active.border)
         .color(tokens.surface.active.text)
@@ -174,7 +185,10 @@ export function registerSemanticToneUtilityStyles() {
         .color(tokens.surfaceAlt.hover.text)
 
       styleBuilder
-        .select(`.${interactiveSurfaceAltClass}:active`, theme)
+        .select(
+          `.${interactiveSurfaceAltClass}:active, .${interactiveSurfaceAltClass}.active`,
+          theme,
+        )
         .backgroundImage(tokens.surfaceAlt.active.background)
         .borderColor(tokens.surfaceAlt.active.border)
         .color(tokens.surfaceAlt.active.text)
@@ -204,13 +218,25 @@ export function registerSemanticToneUtilityStyles() {
         .backgroundPosition('center')
 
       styleBuilder
-        .select(`.${interactiveButtonClass}:hover`, theme)
+        .select(`.${interactiveClass}`, theme)
+        .color(tokens.button.rest.text)
+        .backgroundSize('calc(100% + 10px) calc(100% + 10px)')
+        .backgroundPosition('center')
+
+      styleBuilder
+        .select(
+          `.${interactiveButtonClass}:hover, .${interactiveClass}:hover`,
+          theme,
+        )
         .backgroundImage(tokens.button.hover.background)
         .borderColor(tokens.button.hover.border)
         .color(tokens.button.hover.text)
 
       styleBuilder
-        .select(`.${interactiveButtonClass}:active`, theme)
+        .select(
+          `.${interactiveButtonClass}:active, .${interactiveButtonClass}.active, .${interactiveClass}:active, .${interactiveClass}.active`,
+          theme,
+        )
         .backgroundImage(tokens.button.active.background)
         .borderColor(tokens.button.active.border)
         .color(tokens.button.active.text)
@@ -225,13 +251,19 @@ export function registerSemanticToneUtilityStyles() {
         .color(tokens.button.active.text)
 
       styleBuilder
-        .select(`.${interactiveButtonClass}:disabled`, theme)
+        .select(
+          `.${interactiveButtonClass}:disabled, .${interactiveClass}:disabled`,
+          theme,
+        )
         .backgroundImage(tokens.button.disabled.background)
         .borderColor(tokens.button.disabled.border)
         .color(tokens.button.disabled.text)
 
       styleBuilder
-        .select(`.${interactiveButtonClass}:focus-visible`, theme)
+        .select(
+          `.${interactiveButtonClass}:focus-visible, .${interactiveClass}:focus-visible`,
+          theme,
+        )
         .outline('none')
         .boxShadow(`0 0 0 2px ${tokens.button.focusRing}`)
 

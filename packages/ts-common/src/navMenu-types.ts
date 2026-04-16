@@ -1,3 +1,5 @@
+import type { SemanticTone } from '@purestack/ts-style'
+
 export type NavigationMode = 'auto' | 'custom' | 'hybrid' | 'none'
 export type NavigationSort = 'order' | 'title' | 'path'
 
@@ -7,6 +9,7 @@ export interface NavigationConfig {
   maxDepth?: number
   includeIndex?: boolean
   sortBy?: NavigationSort
+  tone?: SemanticTone
 }
 
 export interface NavItem {
@@ -17,7 +20,7 @@ export interface NavItem {
   hidden?: boolean
   group?: string
   icon?: string
-  tone?: string
+  tone?: SemanticTone
 }
 
 export interface PageNavigation {
@@ -25,4 +28,5 @@ export interface PageNavigation {
   folder: string
   items: NavItem[]
   global: NavItem[]
+  tone: SemanticTone
 }

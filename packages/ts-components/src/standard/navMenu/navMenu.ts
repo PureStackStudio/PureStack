@@ -1,80 +1,78 @@
 import type { NavItem, TsSsgContext } from '@purestack/ts-common'
 import { resolveTsSsgContext } from '@purestack/ts-common'
-import { type ComputedRef, defineComponent, html } from 'regor'
+import {
+  getSemanticToneButtonClass,
+  getSemanticToneInteractiveClass,
+  getSemanticToneSurfaceClass,
+  type SemanticTone,
+} from '@purestack/ts-style'
+import { type ComputedRef, computed, defineComponent, html } from 'regor'
 
 export interface NavMenu {
   items?: NavItem[]
-  tone: string
+  tone?: SemanticTone
   toneClass?: ComputedRef<string>
+  interactiveToneClass?: ComputedRef<string>
+  buttonToneClass?: ComputedRef<string>
 }
 
 export interface NavList {
   items?: NavItemState[]
+  tone?: SemanticTone
 }
 
 export interface NavItemState extends NavItem {
   isActive: boolean
   isOpen: boolean
-  toneClass?: ComputedRef<string>
+  toneClass?: string
 }
 
 const navItemTemplate = html`<li class="nav__item">
-  <slot name="content"></slot>
-  <slot name="children"></slot>
+  <details
+    r-if="item.children && item.children.length > 0"
+    class="nav__group"
+    :open="item.isOpen"
+  >
+    <summary
+      class="nav__summary"
+      :class="{
+            [item.toneClass]: true,
+            'active': item.isActive,
+            'nav__summary--open': item.isOpen,
+          }"
+    >
+      <span class="nav__summary-content">
+        <span class="nav__text">{{ item.title }}</span>
+        <span r-if="item.group" class="nav__badge">{{ item.group }}</span>
+      </span>
+      <span class="nav__chevron" aria-hidden="true"></span>
+    </summary>
+    <NavList :items="item.children" :tone="item.tone"></NavList>
+  </details>
+  <div r-else class="nav__leaf">
+    <a
+      r-if="item.url"
+      class="nav__link"
+      :class="{ 'active': item.isActive, [item.toneClass]: true }"
+      :href="item.url"
+      :aria-current="item.isActive ? 'page' : null"
+    >
+      {{ item.title }}
+    </a>
+    <span r-else class="nav__text">{{ item.title }}</span>
+  </div>
 </li>`
 
 const navListTemplate = html`<ul class="nav__list">
-  <NavItem r-for="item in items">
-    <template #content>
-      <details
-        r-if="item.children && item.children.length > 0"
-        class="nav__group"
-        :open="item.isOpen"
-      >
-        <summary
-          class="nav__summary"
-          :class="{
-            'nav__summary--active': item.isActive,
-            'nav__summary--open': item.isOpen,
-          }"
-        >
-          <span class="nav__summary-content">
-            <!--<a
-              r-if="item.url"
-              class="nav__link"
-              :class="{ 'nav__link--active': item.isActive }"
-              :href="item.url"
-              :aria-current="item.isActive ? 'page' : null"
-              >{{ item.title }}</a
-            >-->
-            <span r-else class="nav__text">{{ item.title }}</span>
-            <span r-if="item.group" class="nav__badge">{{ item.group }}</span>
-          </span>
-          <span class="nav__chevron" aria-hidden="true"></span>
-        </summary>
-        <NavList :items="item.children"></NavList>
-      </details>
-      <div r-else class="nav__leaf">
-        <a
-          r-if="item.url"
-          class="nav__link"
-          :class="{ 'nav__link--active': item.isActive }"
-          :href="item.url"
-          :aria-current="item.isActive ? 'page' : null"
-        >
-          {{ item.title }}
-        </a>
-        <span r-else class="nav__text">{{ item.title }}</span>
-      </div>
-    </template>
-  </NavItem>
+  <NavItem r-for="item in items"/>
 </ul>`
 
-const navMenuTemplate = html`<nav class="nav__menu" aria-label="Site navigation">
+const navMenuTemplate = html`<nav class="nav__menu" :class="toneClass" aria-label="Site navigation">
   <div class="nav__header-row">
     <div class="nav__header">Navigation</div>
     <button
       class="nav__panel-toggle"
+      :class="buttonToneClass"
       type="button"
       title="Navigation"
       aria-label="Toggle navigation panel"
@@ -87,6 +85,7 @@ const navMenuTemplate = html`<nav class="nav__menu" aria-label="Site navigation"
     </button>
     <button
       class="nav__collapse-toggle"
+      :class="interactiveToneClass"
       type="button"
       title="Collapse navigation"
       aria-label="Collapse navigation"
@@ -106,7 +105,7 @@ const navMenuTemplate = html`<nav class="nav__menu" aria-label="Site navigation"
       </span>
     </button>
   </div>
-  <NavList :items="items"></NavList>
+  <NavList :items="items" :tone="tone"></NavList>
 </nav>`
 
 function resolveNavItems(context: TsSsgContext): NavItem[] {
@@ -148,10 +147,12 @@ function resolveCurrentPath(context: TsSsgContext): string | undefined {
 function buildNavState(
   items: NavItem[],
   currentPath: string | undefined,
+  parentTone: SemanticTone | undefined,
 ): NavItemState[] {
   return items.map((item) => {
+    const tone = item.tone ?? parentTone
     const childStates = item.children
-      ? buildNavState(item.children, currentPath)
+      ? buildNavState(item.children, currentPath, parentTone)
       : []
     const itemPath = normalizePath(item.url)
     const isActive = Boolean(
@@ -162,22 +163,25 @@ function buildNavState(
     )
     return {
       ...item,
+      tone,
       ...(childStates.length > 0 ? { children: childStates } : {}),
       isActive,
       isOpen: isActive || hasActiveChild,
+      toneClass: getSemanticToneInteractiveClass(tone),
     }
   })
 }
 
 function defineNavItemComponent() {
-  return defineComponent<Record<string, never>>(navItemTemplate, {})
+  return defineComponent<{ item: NavItemState }>(navItemTemplate, {})
 }
 
 function defineNavListComponent() {
   return defineComponent<NavList>(navListTemplate, {
-    props: ['items'],
+    props: ['items', 'tone'],
     context: (head) => ({
       items: head.props.items,
+      tone: head.props.tone,
     }),
   })
 }
@@ -187,11 +191,22 @@ function defineNavMenuComponent() {
     props: ['items', 'tone'],
     context: (head) => {
       const context = resolveTsSsgContext(head)
+      const tone = head.props.tone
       return {
-        ...head.props,
+        tone,
+        toneClass: computed(() =>
+          getSemanticToneSurfaceClass(head.props.tone, false),
+        ),
+        interactiveToneClass: computed(() =>
+          getSemanticToneInteractiveClass(head.props.tone),
+        ),
+        buttonToneClass: computed(() =>
+          getSemanticToneButtonClass(head.props.tone),
+        ),
         items: buildNavState(
           head.props.items ?? resolveNavItems(context),
           resolveCurrentPath(context),
+          tone,
         ),
       }
     },

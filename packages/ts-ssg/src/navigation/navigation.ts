@@ -7,6 +7,7 @@ import type {
   NavigationSort,
   PageNavigation,
 } from '@purestack/ts-common'
+import type { SemanticTone } from '@purestack/ts-style'
 import { resolveRouteInfo } from '../build/out-path'
 import type { ContentFile } from '../discover/content'
 import { parseFrontmatterSource } from '../frontmatter/frontmatter'
@@ -17,6 +18,7 @@ export interface ResolvedNavigationConfig {
   maxDepth: number
   includeIndex: boolean
   sortBy: NavigationSort
+  tone: SemanticTone
 }
 
 export interface NavigationTree {
@@ -54,6 +56,7 @@ const DEFAULT_NAV_CONFIG: ResolvedNavigationConfig = {
   maxDepth: 1,
   includeIndex: true,
   sortBy: 'order',
+  tone: 'neutral',
 }
 
 export function resolveNavigationConfig(
@@ -77,7 +80,8 @@ export function resolveNavigationConfig(
       ? merged.includeIndex
       : DEFAULT_NAV_CONFIG.includeIndex
   const sortBy = resolveSort(merged.sortBy)
-  return { mode, navFileName, maxDepth, includeIndex, sortBy }
+  const tone = resolveTone(merged.tone)
+  return { mode, navFileName, maxDepth, includeIndex, sortBy, tone }
 }
 
 export async function buildNavigation(
@@ -158,7 +162,13 @@ export function resolvePageNavigation(
   if (!tree) return undefined
   const folder = resolveFolderKey(file.relPath)
   const items = tree.byFolder[folder] ?? []
-  return { mode: tree.mode, folder, items, global: tree.global }
+  return {
+    mode: tree.mode,
+    folder,
+    items,
+    global: tree.global,
+    tone: tree.config.tone,
+  }
 }
 
 export function resolveFolderKey(relPath: string) {
@@ -534,6 +544,20 @@ function resolveMaxDepth(value: number | undefined) {
 function resolveSort(value: NavigationSort | undefined): NavigationSort {
   if (value === 'order' || value === 'title' || value === 'path') return value
   return DEFAULT_NAV_CONFIG.sortBy
+}
+
+function resolveTone(value: SemanticTone | undefined): SemanticTone {
+  if (
+    value === 'neutral' ||
+    value === 'accent' ||
+    value === 'info' ||
+    value === 'success' ||
+    value === 'warning' ||
+    value === 'danger' ||
+    value === 'ghost'
+  )
+    return value
+  return DEFAULT_NAV_CONFIG.tone
 }
 
 function resolveString(value: unknown) {

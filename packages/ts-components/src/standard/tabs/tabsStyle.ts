@@ -107,6 +107,7 @@ function registerTabsShellStyles(theme: ThemeMode, options: ThemeOptions) {
     .whiteSpace('nowrap')
     .cursor('pointer')
     .opacity(0.5)
+    .background('transparent')
 
   styleBuilder.select('.tabs__overflow-option:hover', theme).opacity(1)
 

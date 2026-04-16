@@ -204,7 +204,7 @@ function enhanceTabs(root: HTMLElement) {
       const option = document.createElement('button')
       option.type = 'button'
       option.className = 'tabs__overflow-option'
-      option.classList.add(getInteractiveButtonToneClass(tone))
+      option.classList.add(getInteractiveToneClass(tone))
       setButtonContent(option, tabs[index].text, tabs[index].iconMarkup)
       option.disabled = tabs[index].control.disabled
       option.setAttribute('aria-pressed', index === active ? 'true' : 'false')
@@ -527,6 +527,10 @@ function resolveTabsTone(root: HTMLElement) {
     }
   }
   return 'neutral'
+}
+
+function getInteractiveToneClass(tone: string) {
+  return `tone-interactive--${tone}`
 }
 
 function getInteractiveButtonToneClass(tone: string) {
