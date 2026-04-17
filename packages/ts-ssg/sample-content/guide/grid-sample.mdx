@@ -13,15 +13,25 @@ layout:
 ## 1. Basic responsive columns
 
 <Grid columns="1" columnsSm="2" columnsLg="4">
-  <AlertBox tone="info" title="Alpha"  icon="iconoir:sphere">First card</AlertBox>
-  <AlertBox tone="success" title="Beta" icon="iconoir:check">Second card</AlertBox>
+  <AlertBox tone="info" title="Alpha" icon="iconoir:sphere">
+    First card
+  </AlertBox>
+  <AlertBox tone="success" title="Beta" icon="iconoir:check">
+    Second card
+  </AlertBox>
   <AlertBox tone="warning" title="Gamma" icon="iconoir:x">Third card</AlertBox>
-  <AlertBox tone="accent" title="Delta" icon="iconoir:star">Fourth card</AlertBox>
+  <AlertBox tone="accent" title="Delta" icon="iconoir:star">
+    Fourth card
+  </AlertBox>
 </Grid>
 
 ## 2. Custom template columns
 
-<Grid columns="minmax(0, 1fr) auto" columnsLg="240px minmax(0, 1fr) auto">
+<Grid
+  columns="1"
+  columns-sm="minmax(0, 1fr) auto"
+  columnsLg="240px minmax(0, 1fr) auto"
+>
   <AlertBox tone="neutral" title="Flexible content">
     Base layout uses `minmax(0, 1fr) auto`
   </AlertBox>
@@ -36,30 +46,23 @@ layout:
 ## 3. Dense packing for uneven content
 
 <Grid columns="2" columnsLg="4" dense="true">
-  <AlertBox tone="info" title="Short">
-    One line
-  </AlertBox>
+  <AlertBox tone="info" title="Short">One line</AlertBox>
   <AlertBox tone="info" title="Taller">
-    This card intentionally has longer content to produce uneven heights across grid rows.
+    This card intentionally has longer content to produce uneven heights across
+    grid rows.
   </AlertBox>
   <AlertBox tone="info" title="Short">Two lines maybe.</AlertBox>
   <AlertBox tone="info" title="Tallest">
-    Dense mode helps reduce visual gaps when cards have varying heights and content density.
+    Dense mode helps reduce visual gaps when cards have varying heights and
+    content density.
   </AlertBox>
   <AlertBox tone="info" title="Short">Compact block.</AlertBox>
-  <AlertBox tone="info" title="Medium">
-    Balanced content length.
-  </AlertBox>
+  <AlertBox tone="info" title="Medium">Balanced content length.</AlertBox>
 </Grid>
 
 ## 4. Item alignment controls
 
-<Grid
-  columns="2"
-  columnsMd="3"
-  alignItems="center"
-  justifyItems="center"
->
+<Grid columns="2" columnsMd="3" alignItems="center" justifyItems="center">
   <Badge variant="info">Center</Badge>
   <Badge variant="success">Aligned</Badge>
   <Badge variant="warning">Across</Badge>
@@ -78,16 +81,14 @@ layout:
       name="firstName"
       placeholder="Ada"
       autocomplete="given-name"
-      required="true"
-    />
+      required="true"/>
     <FormInputField
       label="Last name"
       type="text"
       name="lastName"
       placeholder="Lovelace"
       autocomplete="family-name"
-      required="true"
-    />
+      required="true"/>
   </Grid>
 
   <Grid columns="1" columnsLg="3">
@@ -97,8 +98,7 @@ layout:
       name="email"
       placeholder="ada@analytical.engine"
       autocomplete="email"
-      required="true"
-    />
+      required="true"/>
     <FormInputField
       label="Team size"
       type="number"
@@ -106,16 +106,14 @@ layout:
       min="1"
       max="5000"
       step="1"
-      value="12"
-    />
+      value="12"/>
     <FormInputField
       label="Budget (EUR)"
       type="number"
       name="budget"
       min="1000"
       step="250"
-      value="5000"
-    />
+      value="5000"/>
   </Grid>
 
   <Grid columns="1" columnsMd="2" alignItems="start">
@@ -123,20 +121,20 @@ layout:
       label="Send me platform updates and release notes"
       name="updates"
       value="yes"
-      checked="true"
-    />
+      checked="true"/>
     <FormCheck
       label="I agree to the terms and data processing policy"
       name="terms"
       value="accepted"
-      checked="true"
-    />
+      checked="true"/>
   </Grid>
 
   <FormMeta>
     <Grid columns="1" columnsMd="2" alignItems="center">
-      <FormAssistLink href="/guide/pricing" label="Need pricing details first?" />
-      <FormAssistLink href="/contact" label="Talk to sales" />
+      <FormAssistLink
+        href="/guide/pricing"
+        label="Need pricing details first?"/>
+      <FormAssistLink href="/contact" label="Talk to sales"/>
     </Grid>
   </FormMeta>
 
@@ -145,8 +143,8 @@ layout:
   </FormStatus>
 
   <Grid columns="auto auto 1fr" justifyItems="start">
-      <FormSubmit label="Send request" />
-      <FormSubmit label="Save draft" />
+    <FormSubmit label="Send request"/>
+    <FormSubmit label="Save draft"/>
   </Grid>
 </AppForm>
 

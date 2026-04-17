@@ -16,19 +16,23 @@ layout:
 
 ## 2. Tones
 
-<Btn tone="accent">Accent action</Btn>
-<Btn tone="neutral">Neutral action</Btn>
-<Btn tone="ghost">Ghost action</Btn>
-<Btn tone="info">Info action</Btn>
-<Btn tone="success">Success action</Btn>
-<Btn tone="warning">Warning action</Btn>
-<Btn tone="danger">Danger action</Btn>
+<Flex wrap="true">
+  <Btn tone="accent">Accent action</Btn>
+  <Btn tone="neutral">Neutral action</Btn>
+  <Btn tone="ghost">Ghost action</Btn>
+  <Btn tone="info">Info action</Btn>
+  <Btn tone="success">Success action</Btn>
+  <Btn tone="warning">Warning action</Btn>
+  <Btn tone="danger">Danger action</Btn>
+</Flex>
 
 ## 3. Sizes
 
-<Btn size="sm">Small</Btn>
-<Btn size="md">Medium</Btn>
-<Btn size="lg">Large</Btn>
+<Flex wrap="true">
+  <Btn size="sm">Small</Btn>
+  <Btn size="md">Medium</Btn>
+  <Btn size="lg">Large</Btn>
+</Flex>
 
 ## 4. Leading icon
 
@@ -40,49 +44,54 @@ layout:
 
 ## 6. Icon-only controls
 
-<Btn icon="iconoir:headset-help" iconOnly="true" ariaLabel="Search" />
-<Btn icon="iconoir:pin" iconOnly="true" ariaLabel="Pin item" />
-<Btn icon="iconoir:check" iconOnly="true" ariaLabel="Open settings" />
+<Flex wrap="true">
+  <Btn icon="iconoir:headset-help" iconOnly="true" ariaLabel="Search"/>
+  <Btn icon="iconoir:pin" iconOnly="true" ariaLabel="Pin item"/>
+  <Btn icon="iconoir:check" iconOnly="true" ariaLabel="Open settings"/>
+</Flex>
 
 ## 7. Disabled state
 
-<Btn disabled="true">Disabled accent</Btn>
-<Btn tone="neutral" disabled="true">Disabled neutral</Btn>
-<Btn tone="ghost" disabled="true">Disabled ghost</Btn>
-<Btn tone="info" disabled="true">Disabled info</Btn>
-<Btn tone="success" disabled="true">Disabled success</Btn>
-<Btn tone="warning" disabled="true">Disabled warning</Btn>
-<Btn tone="danger" disabled="true">Disabled danger</Btn>
-
+<Flex wrap="true">
+  <Btn disabled="true" tone="accent">Disabled accent</Btn>
+  <Btn tone="neutral" disabled="true">Disabled neutral</Btn>
+  <Btn tone="ghost" disabled="true">Disabled ghost</Btn>
+  <Btn tone="info" disabled="true">Disabled info</Btn>
+  <Btn tone="success" disabled="true">Disabled success</Btn>
+  <Btn tone="warning" disabled="true">Disabled warning</Btn>
+  <Btn tone="danger" disabled="true">Disabled danger</Btn>
+</Flex>
 ## 8. Form button types
 
-<Btn type="button">type=button</Btn>
-<Btn type="submit" tone="accent">type=submit</Btn>
-<Btn type="reset" tone="neutral">type=reset</Btn>
+<Flex wrap="true">
+  <Btn type="button">type=button</Btn>
+  <Btn type="submit" tone="accent">type=submit</Btn>
+  <Btn type="reset" tone="neutral">type=reset</Btn>
+</Flex>
 
 ## 9. Mixed examples
 
-<Btn tone="accent" size="lg" icon="iconoir:rocket">
-  Deploy now
-</Btn>
-<Btn tone="neutral" size="sm" icon="iconoir:pin-slash" iconPosition="end">
-  Edit
-</Btn>
-<Btn tone="ghost" size="md" icon="iconoir:pin-slash" iconPosition="end">
-  Open docs
-</Btn>
+<Flex wrap="true">
+  <Btn tone="accent" size="lg" icon="iconoir:rocket">Deploy now</Btn>
+  <Btn tone="neutral" size="sm" icon="iconoir:pin-slash" iconPosition="end">
+    Edit
+  </Btn>
+  <Btn tone="ghost" size="md" icon="iconoir:pin-slash" iconPosition="end">
+    Open docs
+  </Btn>
+</Flex>
 
 ## 10. Tones with icons
 
-<Btn tone="accent" icon="iconoir:check">Create project</Btn>
-<Btn tone="neutral" icon="iconoir:code">View source</Btn>
-<Btn tone="ghost" icon="iconoir:pin-slash" iconPosition="end">
-  Read more
-</Btn>
-<Btn tone="info" icon="iconoir:headset-help">Review info</Btn>
-<Btn tone="success" icon="iconoir:check">Confirm success</Btn>
-<Btn tone="warning" icon="iconoir:headset-help">Review warning</Btn>
-<Btn tone="danger" icon="iconoir:pin" iconPosition="end">Delete item</Btn>
+<Flex wrap="true">
+  <Btn tone="accent" icon="iconoir:check">Create project</Btn>
+  <Btn tone="neutral" icon="iconoir:code">View source</Btn>
+  <Btn tone="ghost" icon="iconoir:pin-slash" iconPosition="end">Read more</Btn>
+  <Btn tone="info" icon="iconoir:headset-help">Review info</Btn>
+  <Btn tone="success" icon="iconoir:check">Confirm success</Btn>
+  <Btn tone="warning" icon="iconoir:headset-help">Review warning</Btn>
+  <Btn tone="danger" icon="iconoir:pin" iconPosition="end">Delete item</Btn>
+</Flex>
 
 ## 11. Props reference
 

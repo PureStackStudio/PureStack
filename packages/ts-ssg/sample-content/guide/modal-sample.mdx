@@ -23,8 +23,10 @@ layout:
     plan and rollout path.
   </p>
   <template name="footer">
-    <FormSubmit label="Book a call"/>
-    <FormSubmit label="Send details"/>
+    <Flex wrap="true">
+      <FormSubmit label="Book a call"/>
+      <FormSubmit label="Send details"/>
+    </Flex>
   </template>
 </Modal>
 
@@ -52,7 +54,9 @@ layout:
     </AlertBox>
   </Grid>
   <template name="footer">
-    <ModalTrigger target="contact-modal" label="Request early access"/>
+    <Flex wrap="true">
+      <ModalTrigger target="contact-modal" label="Request early access"/>
+    </Flex>
   </template>
 </Modal>
 
@@ -97,8 +101,10 @@ layout:
         incident response.
       </p>
       <template name="footer">
-        <Btn type="button" class="modal-trigger" data-modal-close>Cancel</Btn>
-        <Btn type="button" class="modal-trigger">Continue</Btn>
+        <Flex wrap="true">
+          <Btn type="button" class="modal-trigger" data-modal-close>Cancel</Btn>
+          <Btn type="button" class="modal-trigger">Continue</Btn>
+        </Flex>
       </template>
     </Modal>
   </div>
@@ -136,8 +142,12 @@ layout:
   </template>
 
   <template name="footer">
-    <FormAssistLink href="/guide/alert-sample" label="Review alert patterns"/>
-    <FormAssistLink href="/guide/grid-sample" label="Review grid patterns"/>
+    <Flex wrap="true">
+      <FormAssistLink
+        href="/guide/alert-sample"
+        label="Review alert patterns"/>
+      <FormAssistLink href="/guide/grid-sample" label="Review grid patterns"/>
+    </Flex>
   </template>
 </Modal>
 
@@ -154,12 +164,12 @@ layout:
         internal structure.
       </p>
       <Grid columns="1" justifyItems="center">
-        <div>
+        <Flex wrap="true">
           <Btn type="button" class="modal-trigger" data-modal-close>
             Approve
           </Btn>
           <Btn type="button" class="modal-trigger" data-modal-close>Cancel</Btn>
-        </div>
+        </Flex>
       </Grid>
     </article>
   </template>
@@ -175,10 +185,12 @@ layout:
     the footer instead.
   </p>
   <template name="footer">
-    <Btn type="button" class="modal-trigger" data-modal-close>Dismiss</Btn>
-    <Btn type="button" class="modal-trigger" data-modal-close>
-      Accept policy
-    </Btn>
+    <Flex wrap="true">
+      <Btn type="button" class="modal-trigger" data-modal-close>Dismiss</Btn>
+      <Btn type="button" class="modal-trigger" data-modal-close>
+        Accept policy
+      </Btn>
+    </Flex>
   </template>
 </Modal>
 
@@ -199,7 +211,11 @@ layout:
     progress.
   </AlertBox>
   <template name="footer">
-    <Btn type="button" class="modal-trigger" data-modal-close>Acknowledge</Btn>
+    <Flex wrap="true">
+      <Btn type="button" class="modal-trigger" data-modal-close>
+        Acknowledge
+      </Btn>
+    </Flex>
   </template>
 </Modal>
 
@@ -275,11 +291,11 @@ layout:
     </FormStatus>
   </AppForm>
   <template name="footer">
-    <Grid columns="1" columnsSm="3" justifyItems="start">
+    <Flex wrap="true">
       <Btn type="button" class="modal-trigger" data-modal-close>Cancel</Btn>
       <Btn type="button" class="modal-trigger">Save draft</Btn>
       <Btn type="button" class="modal-trigger">Submit request</Btn>
-    </Grid>
+    </Flex>
   </template>
 </Modal>
 
@@ -300,8 +316,10 @@ layout:
     or high-risk actions.
   </p>
   <template name="footer">
-    <Btn type="button" class="modal-trigger" data-modal-close>Cancel</Btn>
-    <ModalTrigger target="child-modal" label="Continue to confirmation"/>
+    <Flex wrap="true">
+      <Btn type="button" class="modal-trigger" data-modal-close>Cancel</Btn>
+      <ModalTrigger target="child-modal" label="Continue to confirmation"/>
+    </Flex>
   </template>
 </Modal>
 
@@ -317,10 +335,12 @@ layout:
     You are about to apply changes to the production environment.
   </AlertBox>
   <template name="footer">
-    <Btn type="button" class="modal-trigger" data-modal-close>Back</Btn>
-    <Btn type="button" class="modal-trigger" data-modal-close>
-      Confirm rollout
-    </Btn>
+    <Flex wrap="true">
+      <Btn type="button" class="modal-trigger" data-modal-close>Back</Btn>
+      <Btn type="button" class="modal-trigger" data-modal-close>
+        Confirm rollout
+      </Btn>
+    </Flex>
   </template>
 </Modal>
 
