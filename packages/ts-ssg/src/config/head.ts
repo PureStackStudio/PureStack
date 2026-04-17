@@ -42,8 +42,8 @@ export function getHead(config?: BasicHeadConfig) {
 
 function buildThemeColorMetaTags() {
   const options = themes.getOptions()
-  const lightColor = options.colors.light.semanticTone.accent.icon.background
-  const darkColor = options.colors.dark.semanticTone.accent.icon.background
+  const lightColor = options.colors.light.accent
+  const darkColor = options.colors.dark.accent
 
   return [
     h('meta').attr({

@@ -140,6 +140,7 @@ export interface ThemePaletteCurrent {
 }
 
 export interface ThemePalette {
+  accent: string
   current: ThemePaletteCurrent
   semanticTone: {
     neutral: SemanticToneTokens

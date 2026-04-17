@@ -17,10 +17,7 @@ export async function writeGeneratedFavicon(config: SiteConfig): Promise<void> {
 function buildFaviconSvg(config: SiteConfig, iconSvg: string) {
   const viewBox = extractViewBox(iconSvg) ?? '0 0 24 24'
   const body = extractSvgBody(iconSvg)
-    .replaceAll(
-      'currentColor',
-      config.style.theme.colors.dark.semanticTone.accent.button.hover.text,
-    )
+    .replaceAll('currentColor', config.style.theme.colors.dark.accent)
     .replaceAll('stroke-width="1.5"', 'stroke-width="1.8"')
 
   return [

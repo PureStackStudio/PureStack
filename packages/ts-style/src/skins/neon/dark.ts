@@ -71,4 +71,6 @@ export function createToneColors(
 export const neonDark = createNeonPalette({
   mode: 'dark',
   core,
+  accent,
+  chromeLighting: 0.22,
 })

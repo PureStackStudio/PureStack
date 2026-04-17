@@ -19,11 +19,13 @@ type NeonPaletteOptions = {
   borderAlpha?: number
   subtleAlpha?: number
   chromeLighting?: number
+  accent: string
 }
 
 export function createNeonPalette({
   mode,
   core,
+  accent,
   chromeLighting = 0.22,
   borderAlpha = 0.33,
   subtleAlpha = 0.5,
@@ -33,6 +35,7 @@ export function createNeonPalette({
   const chrome = { lighting: chromeLighting }
 
   return {
+    accent,
     current: getCurrentThemePalette(),
     semanticTone: {
       neutral: createTone(
