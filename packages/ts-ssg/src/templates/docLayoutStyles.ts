@@ -10,7 +10,6 @@ export function registerDocLayoutStyles() {
   themes.forEach((theme, palette, options) => {
     registerDocLayoutShellStyles(theme, palette, options)
     registerDocLayoutSidebarStyles(theme, options)
-    registerDocLayoutNavStyles(theme, palette, options)
     registerDocLayoutResponsiveStyles(theme, options)
   })
 }
@@ -100,52 +99,6 @@ function registerDocLayoutSidebarStyles(
       theme,
     )
     .transition('transform 220ms ease')
-}
-
-function registerDocLayoutNavStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
-  styleBuilder
-    .select('.doc-nav', theme)
-    .background(palette.semanticTone.neutral.surface.rest.background)
-    .border(`1px solid ${palette.current.border.subtle}`)
-    .borderRadius(options.radii.lg)
-    .padding('16px')
-    .height('100%')
-    .boxSizing('border-box')
-  styleBuilder
-    .select('.doc-nav__list', theme)
-    .listStyle('none')
-    .margin('0')
-    .padding('0')
-    .display('grid')
-    .gap('6px')
-  styleBuilder
-    .select('.doc-nav__list .doc-nav__list', theme)
-    .paddingLeft('12px')
-    .borderLeft(`1px solid ${palette.current.border.default}`)
-  styleBuilder.select('.doc-nav__item', theme).display('grid')
-  styleBuilder
-    .select('.doc-nav__item a', theme)
-    .display('block')
-    .padding('8px 12px')
-    .borderRadius('10px')
-    .textDecoration('none')
-    .fontWeight('600')
-    .transition('background 160ms ease, color 160ms ease')
-    .color(palette.current.text.default)
-  styleBuilder
-    .select('.doc-nav__item a:hover', theme)
-    .background(palette.semanticTone.accent.canvas)
-  styleBuilder
-    .select('.doc-nav__item span', theme)
-    .display('block')
-    .padding('8px 12px')
-    .borderRadius('10px')
-    .fontWeight('600')
-    .color(palette.current.text.subtle)
 }
 
 function registerDocLayoutResponsiveStyles(
