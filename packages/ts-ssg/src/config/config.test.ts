@@ -45,6 +45,7 @@ describe('resolveSiteConfig sitemap', () => {
 
   it('provides logo defaults', () => {
     const config = resolveSiteConfig({ rootDir: process.cwd() })
+    expect(config.favicon).toBeUndefined()
     expect(config.logo).toEqual({
       wordOne: 'Pure',
       wordTwo: 'Stack',
@@ -117,6 +118,14 @@ describe('resolveSiteConfig sitemap', () => {
       wordFontSize: '22px',
       subtitleFontSize: '10px',
     })
+  })
+
+  it('resolves favicon icon names from config', () => {
+    const config = resolveSiteConfig({
+      rootDir: process.cwd(),
+      favicon: 'iconoir:cube',
+    })
+    expect(config.favicon).toBe('iconoir:cube')
   })
 
   it('provides sitemap defaults', () => {

@@ -13,6 +13,10 @@
       "description": "Default site title used by the head config when a page does not provide its own title.",
       "default": "ts-ssg"
     },
+    "favicon": {
+      "type": "string",
+      "description": "SVG icon name from ts-svg-icons used to generate /favicon.svg during the build."
+    },
     "logo": {
       "type": "object",
       "description": "Brand logo configuration used by the top bar RegorLogo component.",

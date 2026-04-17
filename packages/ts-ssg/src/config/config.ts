@@ -92,6 +92,7 @@ export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
     contentDir,
     outDir,
     siteTitle,
+    favicon: resolveFavicon(input.favicon, fileConfig.favicon),
     logo,
     style,
     html,
@@ -168,6 +169,14 @@ function resolveLogoConfig(
       input?.subtitleFontSize ?? file?.subtitleFontSize,
     ),
   }
+}
+
+function resolveFavicon(...values: Array<unknown>): string | undefined {
+  for (const value of values) {
+    const favicon = resolveOptionalString(value)
+    if (favicon) return favicon
+  }
+  return undefined
 }
 
 function resolveSubtitleAlign(

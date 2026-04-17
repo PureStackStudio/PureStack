@@ -14,6 +14,7 @@ import {
 import { buildNavigation } from '../../navigation/navigation'
 import { initBuiltinComponents } from '../../regor/initBuiltinComponents'
 import { copyStaticAssets } from '../assets'
+import { writeGeneratedFavicon } from '../favicon'
 import { prepareOutDir } from '../io'
 import {
   type BuildManifest,
@@ -234,6 +235,7 @@ class IncrementalRuntime {
   ): Promise<BuildPreparationResult> {
     await hooks.onConfigResolved?.(this.context)
     await prepareOutDir(this.config.outDir, { clean: this.options.cleanOutDir })
+    await writeGeneratedFavicon(this.config)
     const copiedAssets = await copyStaticAssets(
       this.config.contentDir,
       this.config.outDir,

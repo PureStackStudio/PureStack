@@ -1,6 +1,7 @@
 {
   "$schema": "../schema/siteConfig.schema.json",
   "siteTitle": "ts-ssg",
+  "favicon": "iconoir:cube",
   "logo": {
     "wordOne": "Calc",
     "wordTwo": "Core",

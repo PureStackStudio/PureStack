@@ -12,6 +12,7 @@ export interface SiteConfig {
   contentDir: string
   outDir: string
   siteTitle: string
+  favicon?: string
   logo: LogoConfig
   style: SiteStyleConfig
   html: SiteHtmlConfig

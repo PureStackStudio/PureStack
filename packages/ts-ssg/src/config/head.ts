@@ -4,6 +4,7 @@ import {
   getHeadConfig,
   h,
 } from '@purestack/ts-html'
+import { themes } from '@purestack/ts-style'
 import { merge } from '@purestack/ts-util'
 
 const DEFAULTS: BasicHeadConfig = {
@@ -18,19 +19,42 @@ const DEFAULTS: BasicHeadConfig = {
     url: 'https://tenray.io/purestack',
   },
   favIcon: {
-    rel: 'shortcut icon',
-    href: '/purestack/favicon.svg',
+    rel: 'icon',
+    href: '/favicon.svg',
     type: 'image/svg+xml',
   },
 }
 
 export function getHead(config?: BasicHeadConfig) {
-  const meta = h('meta')
   const head = createHead(getHeadConfig(merge(DEFAULTS, config))).push(
-    meta.attr({
+    h('meta').attr({
       name: 'generator',
       content: 'ts-ssg v1.0.0',
     }),
+    h('meta').attr({
+      name: 'color-scheme',
+      content: 'dark light',
+    }),
+    ...buildThemeColorMetaTags(),
   )
   return head
+}
+
+function buildThemeColorMetaTags() {
+  const options = themes.getOptions()
+  const lightColor = options.colors.light.semanticTone.accent.icon.background
+  const darkColor = options.colors.dark.semanticTone.accent.icon.background
+
+  return [
+    h('meta').attr({
+      name: 'theme-color',
+      media: '(prefers-color-scheme: light)',
+      content: lightColor,
+    }),
+    h('meta').attr({
+      name: 'theme-color',
+      media: '(prefers-color-scheme: dark)',
+      content: darkColor,
+    }),
+  ]
 }
