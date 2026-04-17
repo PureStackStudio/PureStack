@@ -73,6 +73,7 @@ const core: NeonCore = {
 }
 
 export const neonLight = createNeonPalette({
+  mode: 'light',
   core,
   chromeLighting: 0.33,
 })

@@ -3,8 +3,8 @@ import { createNeonPalette, type NeonCore } from './base'
 import type { ToneColors } from './shared'
 
 const white = '#c9c9c9'
-export const accent = '#188dd0'
-export const neutral = '#44565e'
+export const accent = '#1b7ad2'
+export const neutral = '#232c38'
 export const info = '#15a9c0'
 export const success = '#259740'
 export const warning = '#c49a1c'
@@ -72,5 +72,6 @@ const core: NeonCore = {
 }
 
 export const neonDark = createNeonPalette({
+  mode: 'dark',
   core,
 })

@@ -1,4 +1,5 @@
 import { getColors, getGradient, hexToRgba } from '@purestack/ts-css'
+import type { ThemeMode } from '../../themeOptions'
 import type { SemanticToneTokens } from '../../themePalette'
 import { createChrome } from './chrome'
 
@@ -77,7 +78,11 @@ export function radial(top: string, bottom: string) {
   return `radial-gradient(${top} 0%, ${bottom} 100%)`
 }
 
-export function createScale(hex: string, delta = 20): ToneScale {
+export function createScale(
+  hex: string,
+  delta = 20,
+  mode: ThemeMode,
+): ToneScale {
   if (hex === 'transparent' || hex === 'currentColor')
     return { level1: hex, level2: hex, level3: hex, level4: hex, level5: hex }
   const [level1, level2, level3, level4, level5] = getColors(
@@ -85,6 +90,7 @@ export function createScale(hex: string, delta = 20): ToneScale {
     delta,
     delta,
     5,
+    mode === 'light',
   )
   return { level1, level2, level3, level4, level5 }
 }
@@ -132,18 +138,19 @@ function createInteractiveGroup(
 
 export function createTone(
   colors: ToneColors,
+  mode: ThemeMode,
   borderTone: (hex: string) => string,
   subtleTone: (hex: string) => string,
   overrides: ToneOverrides = {},
   isGhost = false,
   chrome: ToneChromeOptions = {},
 ): Tone {
-  const canvas = createScale(colors.canvas, 10)
-  const buttonBg = createScale(colors.button, 10)
-  const foreground = createScale(colors.foreground, 1)
-  const border = createScale(colors.border, 1)
-  const surface = createScale(colors.surface, 10)
-  const surfaceAlt = createScale(colors.surfaceAlt, 10)
+  const canvas = createScale(colors.canvas, 10, mode)
+  const buttonBg = createScale(colors.button, 10, mode)
+  const foreground = createScale(colors.foreground, 1, mode)
+  const border = createScale(colors.border, 1, mode)
+  const surface = createScale(colors.surface, 10, mode)
+  const surfaceAlt = createScale(colors.surfaceAlt, 10, mode)
   const defaultText = foreground.level3
   const subtleText = subtleTone(foreground.level1)
   const defaultBorder = borderTone(border.level3)

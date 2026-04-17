@@ -1,3 +1,4 @@
+import type { ThemeMode } from '../../themeOptions'
 import type { ThemePalette } from '../../themePalette'
 import { getCurrentThemePalette } from '../../themePaletteVars'
 import { createScale, createTone, rgba, type ToneColors } from './shared'
@@ -13,6 +14,7 @@ export type NeonCore = {
 }
 
 type NeonPaletteOptions = {
+  mode: ThemeMode
   core: NeonCore
   borderAlpha?: number
   subtleAlpha?: number
@@ -20,6 +22,7 @@ type NeonPaletteOptions = {
 }
 
 export function createNeonPalette({
+  mode,
   core,
   chromeLighting = 0.22,
   borderAlpha = 0.33,
@@ -29,13 +32,12 @@ export function createNeonPalette({
   const subtleTone = (hex: string) => rgba(hex, subtleAlpha)
   const chrome = { lighting: chromeLighting }
 
-  const effect: ThemePalette['effect'] = createEffect(core)
-
   return {
     current: getCurrentThemePalette(),
     semanticTone: {
       neutral: createTone(
         core.neutral,
+        mode,
         borderTone,
         subtleTone,
         {},
@@ -44,16 +46,34 @@ export function createNeonPalette({
       ),
       accent: createTone(
         core.accent,
+        mode,
         borderTone,
         subtleTone,
         {},
         false,
         chrome,
       ),
-      ghost: createTone(core.ghost, borderTone, subtleTone, {}, true, chrome),
-      info: createTone(core.info, borderTone, subtleTone, {}, false, chrome),
+      ghost: createTone(
+        core.ghost,
+        mode,
+        borderTone,
+        subtleTone,
+        {},
+        true,
+        chrome,
+      ),
+      info: createTone(
+        core.info,
+        mode,
+        borderTone,
+        subtleTone,
+        {},
+        false,
+        chrome,
+      ),
       success: createTone(
         core.success,
+        mode,
         borderTone,
         subtleTone,
         {},
@@ -62,6 +82,7 @@ export function createNeonPalette({
       ),
       warning: createTone(
         core.warning,
+        mode,
         borderTone,
         subtleTone,
         {},
@@ -70,6 +91,7 @@ export function createNeonPalette({
       ),
       danger: createTone(
         core.danger,
+        mode,
         borderTone,
         subtleTone,
         {},
@@ -77,14 +99,14 @@ export function createNeonPalette({
         chrome,
       ),
     },
-    effect,
+    effect: createEffect(core, mode),
   }
 }
 
-function createEffect(core: NeonCore) {
-  const text = createScale(core.neutral.foreground, 18)
-  const accent = createScale(core.accent.button, 20)
-  const info = createScale(core.info.button, 18)
+function createEffect(core: NeonCore, mode: ThemeMode) {
+  const text = createScale(core.neutral.foreground, 18, mode)
+  const accent = createScale(core.accent.button, 20, mode)
+  const info = createScale(core.info.button, 18, mode)
   const shadowColor = core.neutral.foreground
   const effect: ThemePalette['effect'] = {
     glowPrimary: `0 0 28px ${rgba(accent.level3, 0.22)}`,
