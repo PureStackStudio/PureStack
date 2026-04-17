@@ -21,7 +21,7 @@ export function applyAlertShellStyles(
   applyAlertContainerStyles(theme, palette, options)
   applyAlertIconStyles(theme, palette, options)
   applyAlertHeaderStyles(theme, palette)
-  applyAlertBodyStyles(theme, palette, options)
+  applyAlertBodyStyles(theme, palette)
   applyAlertActionStyles(theme, palette, options)
   applyAlertMetaStyles(theme, palette)
 }
@@ -111,11 +111,7 @@ export function applyAlertHeaderStyles(
     .color(palette.current.text.default)
 }
 
-export function applyAlertBodyStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+export function applyAlertBodyStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder.select('.alert__body', theme).display('grid').gap('8px')
   styleBuilder
     .select('.alert__body :where(p, ul, ol)', theme)
@@ -129,14 +125,6 @@ export function applyAlertBodyStyles(
     .color(palette.semanticTone.accent.text.default)
     .fontWeight('600')
     .textDecoration('underline')
-  styleBuilder
-    .select('.alert__body :where(code)', theme)
-    .fontFamily("'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace")
-    .fontSize('0.9em')
-    .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
-    .border(`1px solid ${palette.current.border.subtle}`)
-    .borderRadius(options.radii.sm)
-    .padding('0.1em 0.35em')
 }
 
 export function applyAlertActionStyles(
