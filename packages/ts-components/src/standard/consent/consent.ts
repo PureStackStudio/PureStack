@@ -27,12 +27,9 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
   >
     <div class="consent__title">{{ bannerTitle }}</div>
     <p class="consent__description">{{ bannerDescription }}</p>
-    <a
-      class="consent__policy"
-      r-if="privacyPolicyUrl"
-      :href="privacyPolicyUrl"
-      >{{ privacyPolicyLabel }}</a
-    >
+    <a class="consent__policy" r-if="privacyPolicyUrl" :href="privacyPolicyUrl">
+      {{ privacyPolicyLabel }}
+    </a>
     <div class="consent__actions">
       <Btn type="button" data-consent-action="accept-all">
         {{ acceptAllLabel }}
@@ -57,7 +54,7 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
     <div class="consent__panel-header">
       <h2 class="consent__panel-title">{{ manageLabel }}</h2>
       <Btn
-        variant="ghost"
+        tone="ghost"
         size="sm"
         type="button"
         data-consent-action="close-panel"
@@ -76,23 +73,21 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
             :id="category.inputId"
             :checked="category.required"
             :disabled="category.required"
-            :data-consent-category-id="category.id"
-          />
+            :data-consent-category-id="category.id"/>
           <span class="consent__item-label">{{ category.label }}</span>
         </span>
         <span
           class="consent__item-description"
           r-if="category.description"
           :id="category.inputId + '-desc'"
-          >{{ category.description }}</span
         >
+          {{ category.description }}
+        </span>
       </label>
     </div>
 
     <div class="consent__panel-actions">
-      <Btn type="button" data-consent-action="save">
-        {{ saveLabel }}
-      </Btn>
+      <Btn type="button" data-consent-action="save">{{ saveLabel }}</Btn>
       <Btn tone="neutral" type="button" data-consent-action="accept-all">
         {{ acceptAllLabel }}
       </Btn>
@@ -103,7 +98,7 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
   </section>
 
   <Btn
-    variant="ghost"
+    tone="ghost"
     size="sm"
     data-consent-settings
     type="button"

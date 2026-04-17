@@ -39,6 +39,7 @@ export class FormInputField {
   declare readonly model: Ref<string | number>
   readonly type?: RefOrValue<FormInputFieldType>
   readonly name?: RefOrValue<string>
+  readonly required?: RefOrValue<boolean>
   readonly autocomplete?: RefOrValue<string>
   readonly min?: RefOrValue<number | string>
   readonly step?: RefOrValue<number | string>
@@ -108,6 +109,7 @@ const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
       class="form-block__input form-block__input--number"
       type="number"
       :name="name"
+      :required="required"
       :autocomplete="autocomplete || 'off'"
       :min="min"
       :step="step"
@@ -141,6 +143,7 @@ const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
     :class="inputToneClass"
     :type="type || 'text'"
     :name="name"
+    :required="required"
     :autocomplete="autocomplete || 'off'"
     :min="min"
     :step="step"
@@ -157,6 +160,7 @@ export function defineFormInputField() {
         'model',
         'type',
         'name',
+        'required',
         'autocomplete',
         'min',
         'step',

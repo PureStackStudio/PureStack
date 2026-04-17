@@ -72,15 +72,16 @@ const siteFooterTemplate = html`<footer
       </div>
       <div class="site-footer__top-actions">
         <slot name="cta"></slot>
-        <a
-          class="site-footer__cta"
-          :href="ctaHref"
+        <BtnLink
           r-if="ctaHref"
+          class="site-footer__cta"
+          tone="accent"
+          :href="ctaHref"
           :target="ctaTarget"
           :rel="ctaRel"
         >
           {{ ctaLabel }}
-        </a>
+        </BtnLink>
       </div>
     </div>
 
@@ -99,13 +100,11 @@ const siteFooterTemplate = html`<footer
           :action="newsletterAction"
           :method="newsletterMethod"
         >
-          <label class="site-footer__newsletter-label" for="site-footer-email"
-            >Email address</label
-          >
           <div class="site-footer__newsletter-row">
-            <input
+            <FormInputField
               id="site-footer-email"
-              class="site-footer__newsletter-input"
+              label="Email address"
+              tone="neutral"
               type="email"
               required
               :name="newsletterName"

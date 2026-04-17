@@ -30,8 +30,7 @@ export function applyFooterShellStyles(
     .margin('36px 0 0')
     .padding('1px')
     .borderRadius(options.radii.lg)
-    .background(palette.semanticTone.accent.surface.rest.background)
-    .boxShadow(palette.effect.panelShadowStrong)
+    .boxShadow(palette.effect.panelShadow)
 
   styleBuilder
     .select('.site-footer__inner', theme)
@@ -167,39 +166,12 @@ export function applyFooterActionStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-  applyFooterCtaStyles(theme, palette, options)
+  applyFooterCtaStyles(theme)
   applyFooterNewsletterStyles(theme, palette, options)
 }
 
-export function applyFooterCtaStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
-  styleBuilder
-    .select('.site-footer__cta', theme)
-    .display('inline-flex')
-    .alignItems('center')
-    .justifyContent('center')
-    .gap('8px')
-    .padding('10px 18px')
-    .borderRadius(options.radii.pill)
-    .textDecoration('none')
-    .fontWeight('700')
-    .border(`1px solid ${palette.semanticTone.accent.border.default}`)
-    .background(palette.semanticTone.accent.canvas)
-    .color(palette.semanticTone.accent.text.default)
-    .transition(
-      'background 170ms ease, border-color 170ms ease, transform 170ms ease',
-    )
-
-  styleBuilder
-    .select('.site-footer__cta:hover', theme)
-    .background(palette.semanticTone.accent.surface.hover.background)
-
-  styleBuilder
-    .select('.site-footer__cta:focus-visible', theme)
-    .outline(`2px solid ${palette.semanticTone.accent.button.focusRing}`)
+export function applyFooterCtaStyles(theme: ThemeMode) {
+  styleBuilder.select('.site-footer__cta', theme).textDecoration('none')
 }
 
 export function applyFooterNewsletterStyles(
@@ -208,7 +180,7 @@ export function applyFooterNewsletterStyles(
   options: ThemeOptions,
 ) {
   applyFooterNewsletterShellStyles(theme, palette, options)
-  applyFooterNewsletterFieldStyles(theme, palette, options)
+  applyFooterNewsletterFieldStyles(theme, palette)
   applyFooterNewsletterMetaStyles(theme, palette)
 }
 
@@ -252,33 +224,27 @@ export function applyFooterNewsletterShellStyles(
 export function applyFooterNewsletterFieldStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
-  styleBuilder
-    .select('.site-footer__newsletter-label', theme)
-    .fontSize('12px')
-    .fontWeight('600')
-    .color(palette.current.text.subtle)
   styleBuilder
     .select('.site-footer__newsletter-row', theme)
     .display('grid')
     .gridTemplateColumns('minmax(0, 1fr) auto')
     .gap('8px')
+    .alignItems('end')
   styleBuilder
-    .select('.site-footer__newsletter-input', theme)
-    .width('100%')
-    .padding('10px 12px')
-    .borderRadius(options.radii.md)
-    .border(`1px solid ${palette.current.border.default}`)
-    .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
-    .color(palette.current.text.default)
+    .select('.site-footer__newsletter-row .form-block__field', theme)
+    .minWidth('0')
   styleBuilder
-    .select('.site-footer__newsletter-input::placeholder', theme)
+    .select('.site-footer__newsletter-row .form-block__label', theme)
+    .fontSize('12px')
+    .fontWeight('600')
     .color(palette.current.text.subtle)
   styleBuilder
-    .select('.site-footer__newsletter-input:focus-visible', theme)
-    .outline(`2px solid ${palette.current.border.focus}`)
-    .borderColor(palette.current.border.focus)
+    .select('.site-footer__newsletter-row .form-block__input', theme)
+    .width('100%')
+  styleBuilder
+    .select('.site-footer__newsletter-row .btn', theme)
+    .alignSelf('end')
 }
 
 export function applyFooterNewsletterMetaStyles(

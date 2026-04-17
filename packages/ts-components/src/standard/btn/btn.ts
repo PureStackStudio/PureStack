@@ -136,7 +136,7 @@ function resolveButtonClassName(props: BtnBase) {
   const hasIcon = !!unref(props.icon)
   const classTokens = [
     size ? `btn--${size}` : '',
-    getSemanticToneButtonClass(unref(props.tone), true, 'accent'),
+    getSemanticToneButtonClass(unref(props.tone), true),
     unref(props.class) || '',
   ]
   if (hasIcon && unref(props.iconOnly)) classTokens.push('btn--icon-only')
