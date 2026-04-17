@@ -1,74 +1,71 @@
 import { getColors } from '@purestack/ts-css'
+import type { ThemeMode } from '../../themeOptions'
 import { createNeonPalette, type NeonCore } from './base'
 import type { ToneColors } from './shared'
 
-const white = '#c9c9c9'
-export const accent = '#1b7ad2'
+export const accent = '#1788f1'
 export const neutral = '#232c38'
 export const info = '#15a9c0'
 export const success = '#259740'
 export const warning = '#c49a1c'
 export const danger = '#a92a37'
-const accentScale = getColors(accent, 80, 0, 20)
-const neutralScale = getColors(neutral, 80, 0, 20)
-const infoScale = getColors(info, 80, 0, 20)
-const successScale = getColors(success, 80, 0, 20)
-const warningScale = getColors(warning, 80, 0, 20)
-const dangerScale = getColors(danger, 80, 0, 20)
-const baseTone: ToneColors = {
-  canvas: neutralScale[3],
-  button: neutralScale[15],
-  foreground: white,
-  border: white,
-  surface: neutralScale[12],
-  surfaceAlt: neutralScale[7],
+
+export interface DeltaToneColors {
+  canvas: number
+  button: number
+  foreground: number
+  border: number
+  surface: number
+  surfaceAlt: number
 }
+
+const delta: DeltaToneColors = {
+  canvas: 0,
+  button: 0,
+  foreground: 0,
+  border: 0,
+  surface: 0,
+  surfaceAlt: 0,
+}
+
+const mode: ThemeMode = 'dark'
+const scaleLength = 101
+export function createColorScale(hex: string, mode: ThemeMode) {
+  return getColors(hex, 80, 80, scaleLength, mode === 'light')
+}
+
+const accentScale = createColorScale(accent, mode)
+const neutralScale = createColorScale(neutral, mode)
+const infoScale = createColorScale(info, mode)
+const successScale = createColorScale(success, mode)
+const warningScale = createColorScale(warning, mode)
+const dangerScale = createColorScale(danger, mode)
 const core: NeonCore = {
-  neutral: baseTone,
-  accent: {
-    ...baseTone,
-    canvas: accentScale[3],
-    button: accent,
-    foreground: white,
-    border: accent,
-    surface: accentScale[12],
-    surfaceAlt: accentScale[7],
-  },
-  ghost: {
-    ...baseTone,
-  },
-  info: {
-    canvas: infoScale[3],
-    button: info,
-    foreground: white,
-    border: info,
-    surface: infoScale[12],
-    surfaceAlt: infoScale[7],
-  },
-  success: {
-    canvas: successScale[3],
-    button: success,
-    foreground: white,
-    border: success,
-    surface: successScale[12],
-    surfaceAlt: successScale[7],
-  },
-  warning: {
-    canvas: warningScale[3],
-    button: warning,
-    foreground: white,
-    border: warning,
-    surface: warningScale[12],
-    surfaceAlt: warningScale[7],
-  },
-  danger: {
-    canvas: dangerScale[3],
-    button: danger,
-    foreground: white,
-    border: danger,
-    surface: dangerScale[12],
-    surfaceAlt: dangerScale[7],
-  },
+  neutral: createToneColors(neutralScale, delta),
+  accent: createToneColors(accentScale, delta),
+  ghost: createToneColors(neutralScale, delta),
+  info: createToneColors(infoScale, delta),
+  success: createToneColors(successScale, delta),
+  warning: createToneColors(warningScale, delta),
+  danger: createToneColors(dangerScale, delta),
+}
+
+function resolveScaleIndex(value: number) {
+  return Math.min(Math.max(value, 0), scaleLength - 1)
+}
+
+export function createToneColors(
+  scale: string[],
+  delta: DeltaToneColors,
+): ToneColors {
+  return {
+    canvas: scale[resolveScaleIndex(12 + delta.canvas)],
+    button: scale[resolveScaleIndex(40 + delta.button)],
+    foreground: scale[resolveScaleIndex(80 + delta.foreground)],
+    border: scale[resolveScaleIndex(30 + delta.border)],
+    surface: scale[resolveScaleIndex(14 + delta.surface)],
+    surfaceAlt: scale[resolveScaleIndex(8 + delta.surfaceAlt)],
+  }
 }
 
 export const neonDark = createNeonPalette({

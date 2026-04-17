@@ -19,7 +19,7 @@ describe('Button rendering', () => {
     })
     cleanup()
 
-    expect(html).toContain('class="btn tone-interactive-button--accent"')
+    expect(html).toContain('class="btn tone-interactive-button--neutral"')
     expect(html).toContain('type="button"')
     expect(html).toContain('<span class="btn__label">Save</span>')
     expect(html).not.toContain('btn__icon')
