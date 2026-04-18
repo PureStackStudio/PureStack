@@ -15,18 +15,18 @@ const LOGO_BREAKPOINTS = {
 
 const LOGO_DEFAULTS = {
   brandSize: {
-    base: '1.25rem',
-    sm: '1.25rem',
+    base: '1.5rem',
+    sm: '1.5rem',
     md: '1.75rem',
     lg: '2rem',
     xl: '2rem',
   },
   subtitleSize: {
-    base: '0.5rem',
-    sm: '0.5rem',
-    md: '0.87rem',
-    lg: '1rem',
-    xl: '1rem',
+    base: '0.7rem',
+    sm: '0.7rem',
+    md: '0.74rem',
+    lg: '0.77rem',
+    xl: '0.77rem',
   },
   iconSize: {
     base: '2rem',
