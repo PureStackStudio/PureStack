@@ -35,7 +35,8 @@ interface LogoLetter {
   style?: Record<string, string>
 }
 
-const DEFAULT_BRAND_FILL = 'var(--ps-semantic-tone-accent-button-rest-background)'
+const DEFAULT_BRAND_FILL =
+  'var(--ps-semantic-tone-accent-button-rest-background)'
 const DEFAULT_SUBTITLE_FILL = 'var(--ps-current-text-subtle)'
 
 export interface SiteLogo {

@@ -37,19 +37,22 @@ describe('TopBar rendering', () => {
     expect((html.match(/site-logo__brand-letter/g) ?? []).length).toBe(
       'Calc Core'.length,
     )
-    expect(html).toContain('background-image: #111111; background-color: #111111')
+    expect(html).toContain(
+      'background-image: #111111; background-color: #111111',
+    )
     expect(html).toContain('class="site-logo__glyph"')
     expect(html).toContain('--ps-logo-glyph-background: #ff0066')
     expect(html).toContain('--ps-logo-glyph-foreground: #111111')
-    expect(html).toContain('background-image: #ff0066; background-color: #ff0066')
+    expect(html).toContain(
+      'background-image: #ff0066; background-color: #ff0066',
+    )
     expect((html.match(/site-logo__subtitle-letter/g) ?? []).length).toBe(
       'backend-native engine'.length,
     )
     expect(
       (
-        html.match(
-          /background-image: #ff0066; background-color: #ff0066/g,
-        ) ?? []
+        html.match(/background-image: #ff0066; background-color: #ff0066/g) ??
+        []
       ).length,
     ).toBeGreaterThan(1)
     expect(html).toContain('href="/docs/"')

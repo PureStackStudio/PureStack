@@ -9,7 +9,7 @@ import {
 export function registerLogoStyles() {
   themes.forEach((theme, palette, options) => {
     registerLogoShellStyles(theme, palette, options)
-    registerLogoTextStyles(theme, palette, options)
+    registerLogoTextStyles(theme, palette)
     registerLogoInteractiveStyles(theme, palette)
   })
 }
@@ -77,34 +77,28 @@ export function registerLogoShellStyles(
 export function registerLogoTextStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
   styleBuilder
     .select('.site-logo__stack', theme)
     .display('inline-grid')
-    .gridTemplateColumns('max-content')
     .justifyItems('stretch')
-    .alignItems('start')
-    .gap('0.125rem')
+    .gap('0')
     .minWidth('0')
+    .textTransform('uppercase')
+    .letterSpacing('0')
+    .lineHeight('1')
+    .whiteSpace('nowrap')
 
   styleBuilder
     .select('.site-logo__brand', theme)
     .display('flex')
     .alignItems('center')
     .justifyContent('space-between')
-    .width('100%')
+    .fontSize('1.25rem')
+    .fontWeight('800')
 
   styleBuilder
     .select('.site-logo__brand-letter', theme)
-    .display('block')
-    .flexShrink('0')
-    .fontFamily(options.typography.baseFamily)
-    .fontSize('1.25rem')
-    .lineHeight('0.95')
-    .fontWeight('800')
-    .letterSpacing('0.03em')
-    .textTransform('uppercase')
     .whiteSpace('nowrap')
     .backgroundClip('text')
     .webkitBackgroundClip('text')
@@ -114,20 +108,15 @@ export function registerLogoTextStyles(
   styleBuilder
     .select('.site-logo__subtitle', theme)
     .display('flex')
-    .alignItems('center')
     .justifyContent('space-between')
-    .width('100%')
     .fontSize('0.5rem')
-    .lineHeight('1')
     .fontWeight('700')
-    .textTransform('uppercase')
     .color(palette.current.text.subtle)
-    .whiteSpace('nowrap')
+    .marginLeft('0.5px')
+    .marginRight('0.5px')
 
   styleBuilder
     .select('.site-logo__subtitle-letter', theme)
-    .display('block')
-    .flexShrink('0')
     .backgroundClip('text')
     .webkitBackgroundClip('text')
     .color('transparent')
