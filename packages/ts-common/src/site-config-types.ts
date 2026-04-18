@@ -45,12 +45,8 @@ export interface LogoConfig {
   wordOne: string
   wordTwo: string
   subtitle?: string
-  subtitleAlign?: 'start' | 'center' | 'end' | 'justify'
   href: string
-  iconSvg?: string
-  iconSize?: string
-  wordFontSize?: string
-  subtitleFontSize?: string
+  icon?: string
 }
 
 export interface SitemapConfig {

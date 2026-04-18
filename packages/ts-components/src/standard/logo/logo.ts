@@ -1,38 +1,27 @@
-import type { GetSvgIcon } from '@purestack/ts-components'
 import { defineComponent, html } from 'regor'
 
 const logoTemplate = html`<div class="site-logo">
-  <a class="site-logo__link" :href="href" :aria-label="ariaLabel">
-    <span
-      class="site-logo__glyph site-logo__glyph--custom"
-      :style="glyphStyle"
-      aria-hidden="true"
-      r-if="iconSvg"
-      r-html="iconSvg"
-    ></span>
-    <span
-      class="site-logo__glyph site-logo__glyph--default"
-      :style="glyphStyle"
-      aria-hidden="true"
-      r-else
-    ></span>
+  <a class="site-logo__link" :href="href ?? '/'" :aria-label="ariaLabel">
+    <span class="site-logo__glyph" aria-hidden="true">
+      <Icon class="site-logo__icon" :name="icon" r-if="icon"/>
+      <span class="site-logo__glyph-mark" r-else></span>
+    </span>
     <span class="site-logo__stack">
       <span class="site-logo__brand">
-        <span
-          class="site-logo__word site-logo__word--primary"
-          :style="wordStyle"
-        >
+        <span class="site-logo__word site-logo__word--primary">
           {{ wordOne }}
         </span>
-        <span
-          class="site-logo__word site-logo__word--accent"
-          :style="wordStyle"
-        >
+        <span class="site-logo__word site-logo__word--accent">
           {{ wordTwo }}
         </span>
       </span>
-      <span class="site-logo__subtitle" :style="subtitleStyle" r-if="subtitle">
-        {{ subtitle }}
+      <span class="site-logo__subtitle" r-if="subtitle">
+        <span
+          r-for="subtitleLetter in subtitleLetters"
+          class="site-logo__subtitle-letter"
+        >
+          {{ subtitleLetter }}
+        </span>
       </span>
     </span>
   </a>
@@ -42,109 +31,45 @@ export interface SiteLogo {
   wordOne?: string
   wordTwo?: string
   subtitle?: string
-  subtitleAlign?: 'start' | 'center' | 'end' | 'justify'
+  subtitleLetters?: string[]
   href?: string
-  iconSvg?: string
-  iconSize?: string
-  wordFontSize?: string
-  subtitleFontSize?: string
+  icon?: string
   ariaLabel?: string
-  glyphStyle?: Record<string, string>
-  wordStyle?: Record<string, string>
-  subtitleStyle?: Record<string, string>
 }
 
-function resolveSiteLogo(props: SiteLogo, getSvgIcon: GetSvgIcon): SiteLogo {
-  const wordOne = normalizeWord(props.wordOne, 'Pure')
-  const wordTwo = normalizeWord(props.wordTwo, 'Stack')
-  const subtitle = normalizeOptionalText(props.subtitle)
-  const subtitleAlign = normalizeSubtitleAlign(props.subtitleAlign)
-  const href = normalizeOptionalText(props.href) || '/'
-  const iconSvg = props.iconSvg ? getSvgIcon(props.iconSvg) : ''
-  const iconSize = normalizeCssSize(props.iconSize)
-  const wordFontSize = normalizeCssSize(props.wordFontSize)
-  const subtitleFontSize = normalizeCssSize(props.subtitleFontSize)
-  const ariaLabel = subtitle
-    ? `${wordOne} ${wordTwo}: ${subtitle}`
-    : `${wordOne} ${wordTwo}`
-  const glyphStyle = buildGlyphSizeStyle(iconSize)
-  const wordStyle = buildFontSizeStyle(wordFontSize)
-  const subtitleStyle = buildSubtitleStyle(subtitleFontSize, subtitleAlign)
+function resolveSiteLogo(props: SiteLogo): SiteLogo {
+  const wordOne = props.wordOne
+  const wordTwo = props.wordTwo
+  const subtitle = props.subtitle
+  const subtitleLetters = subtitle
+    ? [...subtitle].map((character) =>
+        character === ' ' ? '\u00A0' : character,
+      )
+    : undefined
+  const href = props.href
+  const icon = props.icon
+  const ariaLabel = props.ariaLabel
+
   return {
     wordOne,
     wordTwo,
     subtitle,
+    subtitleLetters,
     href,
-    iconSvg,
+    icon,
     ariaLabel,
-    glyphStyle,
-    wordStyle,
-    subtitleStyle,
   }
 }
 
-function normalizeWord(value: string | undefined, fallback: string): string {
-  const trimmed = normalizeOptionalText(value)
-  return trimmed.length > 0 ? trimmed : fallback
-}
-
-function normalizeOptionalText(value: string | undefined): string {
-  if (typeof value !== 'string') return ''
-  return value.trim()
-}
-
-function normalizeCssSize(value: string | undefined): string {
-  const normalized = normalizeOptionalText(value)
-  if (normalized.length === 0) return ''
-  if (/[;{}]/.test(normalized)) return ''
-  return normalized
-}
-
-function buildFontSizeStyle(fontSize: string): Record<string, string> {
-  if (!fontSize) return {}
-  return { fontSize }
-}
-
-function buildSubtitleStyle(
-  fontSize: string,
-  subtitleAlign: 'start' | 'center' | 'end' | 'justify',
-): Record<string, string> {
-  const style: Record<string, string> = {
-    textAlign: subtitleAlign,
-  }
-  if (fontSize) style.fontSize = fontSize
-  return style
-}
-
-function buildGlyphSizeStyle(size: string): Record<string, string> {
-  if (!size) return {}
-  return { width: size, height: size }
-}
-
-function normalizeSubtitleAlign(
-  value: 'start' | 'center' | 'end' | 'justify' | undefined,
-): 'start' | 'center' | 'end' | 'justify' {
-  if (value === 'center' || value === 'end' || value === 'justify') return value
-  return 'start'
-}
-
-function defineSiteLogoComponent(getSvgIcon: GetSvgIcon) {
+function defineSiteLogoComponent() {
   return defineComponent<SiteLogo>(logoTemplate, {
-    props: [
-      'wordOne',
-      'wordTwo',
-      'subtitle',
-      'subtitleAlign',
-      'href',
-      'iconSvg',
-      'iconSize',
-      'wordFontSize',
-      'subtitleFontSize',
-    ],
-    context: (head) => resolveSiteLogo(head.props, getSvgIcon),
+    props: ['wordOne', 'wordTwo', 'subtitle', 'href', 'icon'],
+    context: (head) => resolveSiteLogo(head.props),
   })
 }
 
-export function defineLogoComponents(getSvgIcon: GetSvgIcon) {
-  return { siteLogo: defineSiteLogoComponent(getSvgIcon) }
+export function defineLogoComponents() {
+  return {
+    siteLogo: defineSiteLogoComponent(),
+  }
 }

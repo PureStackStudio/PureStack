@@ -17,6 +17,7 @@ const DEFAULT_SITE: DeepPartial<SiteConfig> = {
     wordOne: 'Pure',
     wordTwo: 'Stack',
     href: '/',
+    icon: 'iconoir:cube',
   },
   consent: {
     enabled: false,

@@ -25,58 +25,43 @@ export function registerLogoShellStyles(
     .select('.site-logo__link', theme)
     .display('inline-flex')
     .alignItems('center')
-    .gap('6px')
-    .padding('10px 14px')
+    .gap('0.5rem')
+    .padding('8px 12px')
     .borderRadius(options.radii.pill)
     .border(`1px solid ${palette.current.border.subtle}`)
     .textDecoration('none')
-    .position('relative')
-    .overflow('hidden')
+    .maxWidth('100%')
     .background(palette.semanticTone.neutral.surface.rest.background)
 
   styleBuilder
-    .select('.site-logo__link::before', theme)
-    .content('""')
-    .position('absolute')
-    .inset('0')
-    .opacity('0.48')
-    .pointerEvents('none')
-    .background(
-      `linear-gradient(135deg, ${palette.semanticTone.accent.icon.gradient} 0%, ${palette.semanticTone.neutral.surface.rest.background} 70%)`,
-    )
-
-  styleBuilder
-    .select('.site-logo__glyph', theme)
-    .width('36px')
-    .height('36px')
-    .borderRadius(options.radii.md)
-    .display('inline-block')
-    .position('relative')
-    .zIndex('1')
-    .background(palette.semanticTone.accent.button.hover.background)
-    .border(`1px solid ${palette.semanticTone.accent.icon.border}`)
+    .select('.site-logo__link:hover', theme)
     .boxShadow(palette.effect.interactiveShadow)
 
   styleBuilder
-    .select('.site-logo__glyph--default::before', theme)
-    .content('""')
-    .position('absolute')
-    .inset('9px 10px')
-    .borderRadius('4px')
-    .background(palette.semanticTone.accent.icon.color)
-
-  styleBuilder
-    .select('.site-logo__glyph--custom', theme)
+    .select('.site-logo__glyph', theme)
+    .width('2rem')
+    .height('2rem')
+    .minWidth('2rem')
+    .minHeight('2rem')
+    .borderRadius(options.radii.md)
     .display('grid')
     .placeItems('center')
-    .overflow('hidden')
+    .position('relative')
+    .background(palette.semanticTone.accent.icon.background)
+    .border(`1px solid ${palette.semanticTone.accent.icon.border}`)
 
   styleBuilder
-    .select('.site-logo__glyph--custom svg', theme)
+    .select('.site-logo__icon', theme)
     .width('70%')
     .height('70%')
-    .display('block')
     .color(palette.semanticTone.accent.icon.color)
+
+  styleBuilder
+    .select('.site-logo__glyph-mark', theme)
+    .position('absolute')
+    .inset('30%')
+    .borderRadius('4px')
+    .background(palette.semanticTone.accent.icon.color)
 }
 
 export function registerLogoTextStyles(
@@ -86,24 +71,25 @@ export function registerLogoTextStyles(
 ) {
   styleBuilder
     .select('.site-logo__stack', theme)
-    .display('grid')
-    .alignItems('center')
-    .gap('1px')
-    .position('relative')
-    .zIndex('1')
+    .display('inline-grid')
+    .gridTemplateColumns('max-content')
+    .justifyItems('stretch')
+    .alignItems('start')
+    .gap('0.125rem')
+    .minWidth('0')
 
   styleBuilder
     .select('.site-logo__brand', theme)
-    .display('inline-flex')
-    .alignItems('baseline')
-    .gap('3px')
-    .whiteSpace('nowrap')
+    .display('flex')
+    .alignItems('end')
+    .justifyContent('space-between')
+    .width('100%')
 
   styleBuilder
     .select('.site-logo__word', theme)
     .fontFamily(options.typography.baseFamily)
-    .fontSize('15px')
-    .lineHeight('1')
+    .fontSize('1.25rem')
+    .lineHeight('0.95')
     .fontWeight('800')
     .letterSpacing('0.03em')
     .textTransform('uppercase')
@@ -124,15 +110,21 @@ export function registerLogoTextStyles(
 
   styleBuilder
     .select('.site-logo__subtitle', theme)
-    .display('block')
+    .display('flex')
+    .alignItems('center')
+    .justifyContent('space-between')
     .width('100%')
-    .fontSize('7.8px')
-    .lineHeight('1.2')
+    .fontSize('0.5rem')
+    .lineHeight('1')
     .fontWeight('700')
-    .letterSpacing('0.08em')
     .textTransform('uppercase')
-    .color(palette.current.text.default)
+    .color(palette.current.text.subtle)
     .whiteSpace('nowrap')
+
+  styleBuilder
+    .select('.site-logo__subtitle-letter', theme)
+    .display('block')
+    .flexShrink('0')
 }
 
 export function registerLogoInteractiveStyles(
@@ -142,65 +134,14 @@ export function registerLogoInteractiveStyles(
   styleBuilder
     .select('.site-logo__link[href]', theme)
     .cursor('pointer')
-    .transition(
-      'transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease',
-    )
+    .transition('border-color 180ms ease')
 
   styleBuilder
     .select('.site-logo__link[href]:hover', theme)
     .borderColor(palette.semanticTone.accent.border.default)
-    .boxShadow(palette.effect.accentShadow)
 
   styleBuilder
     .select('.site-logo__link[href]:focus-visible', theme)
     .outline(`2px solid ${palette.current.border.focus}`)
     .outlineOffset('0')
-}
-
-export function normalizeWord(
-  value: string | undefined,
-  fallback: string,
-): string {
-  const trimmed = normalizeOptionalText(value)
-  return trimmed.length > 0 ? trimmed : fallback
-}
-
-export function normalizeOptionalText(value: string | undefined): string {
-  if (typeof value !== 'string') return ''
-  return value.trim()
-}
-
-export function normalizeCssSize(value: string | undefined): string {
-  const normalized = normalizeOptionalText(value)
-  if (normalized.length === 0) return ''
-  if (/[;{}]/.test(normalized)) return ''
-  return normalized
-}
-
-export function buildFontSizeStyle(fontSize: string): Record<string, string> {
-  if (!fontSize) return {}
-  return { fontSize }
-}
-
-export function buildSubtitleStyle(
-  fontSize: string,
-  subtitleAlign: 'start' | 'center' | 'end' | 'justify',
-): Record<string, string> {
-  const style: Record<string, string> = {
-    textAlign: subtitleAlign,
-  }
-  if (fontSize) style.fontSize = fontSize
-  return style
-}
-
-export function buildGlyphSizeStyle(size: string): Record<string, string> {
-  if (!size) return {}
-  return { width: size, height: size }
-}
-
-export function normalizeSubtitleAlign(
-  value: 'start' | 'center' | 'end' | 'justify' | undefined,
-): 'start' | 'center' | 'end' | 'justify' {
-  if (value === 'center' || value === 'end' || value === 'justify') return value
-  return 'start'
 }

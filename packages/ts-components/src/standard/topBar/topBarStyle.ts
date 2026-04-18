@@ -39,18 +39,6 @@ export function registerTopBarShellStyles(
     .justifySelf('start')
     .minWidth('0')
   styleBuilder
-    .select('.topbar__logo .site-logo__link', theme)
-    .padding('8px 12px')
-    .maxWidth('100%')
-  styleBuilder
-    .select('.topbar__logo .site-logo__glyph', theme)
-    .width('30px')
-    .height('30px')
-  styleBuilder.select('.topbar__logo .site-logo__word', theme).fontSize('20px')
-  styleBuilder
-    .select('.topbar__logo .site-logo__subtitle', theme)
-    .fontSize('8px')
-  styleBuilder
     .select('.topbar__controls', theme)
     .display('inline-flex')
     .alignItems('center')

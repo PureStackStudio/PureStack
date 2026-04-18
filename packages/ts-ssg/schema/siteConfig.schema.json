@@ -36,32 +36,14 @@
           "type": "string",
           "description": "Optional subtitle text shown below the brand name."
         },
-        "subtitleAlign": {
-          "type": "string",
-          "enum": ["start", "center", "end", "justify"],
-          "description": "Optional subtitle alignment relative to the brand words.",
-          "default": "start"
-        },
         "href": {
           "type": "string",
           "description": "Logo link target.",
           "default": "/"
         },
-        "iconSvg": {
+        "icon": {
           "type": "string",
-          "description": "SVG icon name from ts-svg-icons used to to be used in logo component."
-        },
-        "iconSize": {
-          "type": "string",
-          "description": "Optional CSS size value applied to the logo glyph width and height."
-        },
-        "wordFontSize": {
-          "type": "string",
-          "description": "Optional CSS font-size value for logo brand words."
-        },
-        "subtitleFontSize": {
-          "type": "string",
-          "description": "Optional CSS font-size value for logo subtitle."
+          "description": "SVG icon name from ts-svg-icons used in the logo component."
         }
       }
     },

@@ -156,18 +156,8 @@ function resolveLogoConfig(
     wordOne: resolveString(input?.wordOne, file?.wordOne, 'Pure'),
     wordTwo: resolveString(input?.wordTwo, file?.wordTwo, 'Stack'),
     subtitle: resolveOptionalString(input?.subtitle ?? file?.subtitle),
-    subtitleAlign: resolveSubtitleAlign(
-      input?.subtitleAlign ?? file?.subtitleAlign,
-    ),
     href: resolveString(input?.href, file?.href, '/'),
-    iconSvg: resolveOptionalString(input?.iconSvg ?? file?.iconSvg),
-    iconSize: resolveOptionalString(input?.iconSize ?? file?.iconSize),
-    wordFontSize: resolveOptionalString(
-      input?.wordFontSize ?? file?.wordFontSize,
-    ),
-    subtitleFontSize: resolveOptionalString(
-      input?.subtitleFontSize ?? file?.subtitleFontSize,
-    ),
+    icon: resolveOptionalString(input?.icon ?? file?.icon),
   }
 }
 
@@ -176,19 +166,6 @@ function resolveFavicon(...values: Array<unknown>): string | undefined {
     const favicon = resolveOptionalString(value)
     if (favicon) return favicon
   }
-  return undefined
-}
-
-function resolveSubtitleAlign(
-  value: unknown,
-): 'start' | 'center' | 'end' | 'justify' | undefined {
-  if (
-    value === 'start' ||
-    value === 'center' ||
-    value === 'end' ||
-    value === 'justify'
-  )
-    return value
   return undefined
 }
 

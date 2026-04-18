@@ -50,12 +50,8 @@ describe('resolveSiteConfig sitemap', () => {
       wordOne: 'Pure',
       wordTwo: 'Stack',
       subtitle: undefined,
-      subtitleAlign: undefined,
       href: '/',
-      iconSvg: undefined,
-      iconSize: undefined,
-      wordFontSize: undefined,
-      subtitleFontSize: undefined,
+      icon: undefined,
     })
   })
 
@@ -99,24 +95,16 @@ describe('resolveSiteConfig sitemap', () => {
         wordOne: 'Calc',
         wordTwo: 'Core',
         subtitle: 'backend-native engine',
-        subtitleAlign: 'end',
         href: '/home',
-        iconSvg: '<svg viewBox="0 0 24 24"><path d="M4 12h16"/></svg>',
-        iconSize: '28px',
-        wordFontSize: '22px',
-        subtitleFontSize: '10px',
+        icon: 'iconoir:cube',
       },
     })
     expect(config.logo).toEqual({
       wordOne: 'Calc',
       wordTwo: 'Core',
       subtitle: 'backend-native engine',
-      subtitleAlign: 'end',
       href: '/home',
-      iconSvg: '<svg viewBox="0 0 24 24"><path d="M4 12h16"/></svg>',
-      iconSize: '28px',
-      wordFontSize: '22px',
-      subtitleFontSize: '10px',
+      icon: 'iconoir:cube',
     })
   })
 

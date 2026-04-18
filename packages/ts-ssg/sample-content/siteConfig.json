@@ -6,9 +6,8 @@
     "wordOne": "Calc",
     "wordTwo": "Core",
     "subtitle": "backend-native engine",
-    "subtitleAlign": "center",
     "href": "/",
-    "iconSvg": "iconoir:cube"
+    "icon": "iconoir:cube"
   },
   "style": {
     "fileName": "site.css",
