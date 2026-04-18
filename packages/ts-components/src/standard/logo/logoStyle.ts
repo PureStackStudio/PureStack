@@ -6,6 +6,52 @@ import {
   themes,
 } from '@purestack/ts-style'
 
+const LOGO_BREAKPOINTS = {
+  sm: '640px',
+  md: '768px',
+  lg: '1024px',
+  xl: '1280px',
+} as const
+
+const LOGO_DEFAULTS = {
+  brandSize: {
+    base: '1.25rem',
+    sm: '1.25rem',
+    md: '2rem',
+    lg: '2.5rem',
+    xl: '2.5rem',
+  },
+  subtitleSize: {
+    base: '0.5rem',
+    sm: '0.5rem',
+    md: '0.8rem',
+    lg: '1rem',
+    xl: '1rem',
+  },
+  iconSize: {
+    base: '2rem',
+    sm: '2rem',
+    md: '3.2rem',
+    lg: '4rem',
+    xl: '4rem',
+  },
+  subtitleInset: {
+    base: '0.5px',
+    sm: '0.5px',
+    md: '2px',
+    lg: '2px',
+    xl: '2px',
+  },
+} as const
+
+type LogoResponsiveToken =
+  | 'brand-size'
+  | 'subtitle-size'
+  | 'icon-size'
+  | 'subtitle-inset'
+
+type LogoBreakpoint = 'sm' | 'md' | 'lg' | 'xl'
+
 export function registerLogoStyles() {
   themes.forEach((theme, palette, options) => {
     registerLogoShellStyles(theme, palette, options)
@@ -43,10 +89,10 @@ export function registerLogoShellStyles(
 
   styleBuilder
     .select('.site-logo__glyph', theme)
-    .width('var(--ps-logo-icon-size, 2rem)')
-    .height('var(--ps-logo-icon-size, 2rem)')
-    .minWidth('var(--ps-logo-icon-size, 2rem)')
-    .minHeight('var(--ps-logo-icon-size, 2rem)')
+    .width(resolveLogoVar('icon-size'))
+    .height(resolveLogoVar('icon-size'))
+    .minWidth(resolveLogoVar('icon-size'))
+    .minHeight(resolveLogoVar('icon-size'))
     .borderRadius(options.radii.md)
     .display('grid')
     .placeItems('center')
@@ -95,7 +141,7 @@ export function registerLogoTextStyles(
     .display('flex')
     .alignItems('center')
     .justifyContent('space-between')
-    .fontSize('var(--ps-logo-brand-size, 1.25rem)')
+    .fontSize(resolveLogoVar('brand-size'))
     .fontWeight('800')
 
   styleBuilder
@@ -110,11 +156,11 @@ export function registerLogoTextStyles(
     .select('.site-logo__subtitle', theme)
     .display('flex')
     .justifyContent('space-between')
-    .fontSize('var(--ps-logo-subtitle-size, 0.5rem)')
+    .fontSize(resolveLogoVar('subtitle-size'))
     .fontWeight('700')
     .color(palette.current.text.subtle)
-    .marginLeft('var(--ps-logo-subtitle-inset, 0.5px)')
-    .marginRight('var(--ps-logo-subtitle-inset, 0.5px)')
+    .marginLeft(resolveLogoVar('subtitle-inset'))
+    .marginRight(resolveLogoVar('subtitle-inset'))
 
   styleBuilder
     .select('.site-logo__subtitle-letter', theme)
@@ -127,139 +173,110 @@ export function registerLogoTextStyles(
 export function registerLogoResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.site-logo__glyph', theme)
-    .media('min-width: 640px')
-    .width('var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem))')
-    .height('var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem))')
-    .minWidth('var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem))')
-    .minHeight('var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem))')
+    .media(`min-width: ${LOGO_BREAKPOINTS.sm}`)
+    .width(resolveLogoVar('icon-size', 'sm'))
+    .height(resolveLogoVar('icon-size', 'sm'))
+    .minWidth(resolveLogoVar('icon-size', 'sm'))
+    .minHeight(resolveLogoVar('icon-size', 'sm'))
 
   styleBuilder
     .select('.site-logo__glyph', theme)
-    .media('min-width: 768px')
-    .width(
-      'var(--ps-logo-icon-size-md, var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem)))',
-    )
-    .height(
-      'var(--ps-logo-icon-size-md, var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem)))',
-    )
-    .minWidth(
-      'var(--ps-logo-icon-size-md, var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem)))',
-    )
-    .minHeight(
-      'var(--ps-logo-icon-size-md, var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem)))',
-    )
+    .media(`min-width: ${LOGO_BREAKPOINTS.md}`)
+    .width(resolveLogoVar('icon-size', 'md'))
+    .height(resolveLogoVar('icon-size', 'md'))
+    .minWidth(resolveLogoVar('icon-size', 'md'))
+    .minHeight(resolveLogoVar('icon-size', 'md'))
 
   styleBuilder
     .select('.site-logo__glyph', theme)
-    .media('min-width: 1024px')
-    .width(
-      'var(--ps-logo-icon-size-lg, var(--ps-logo-icon-size-md, var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem))))',
-    )
-    .height(
-      'var(--ps-logo-icon-size-lg, var(--ps-logo-icon-size-md, var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem))))',
-    )
-    .minWidth(
-      'var(--ps-logo-icon-size-lg, var(--ps-logo-icon-size-md, var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem))))',
-    )
-    .minHeight(
-      'var(--ps-logo-icon-size-lg, var(--ps-logo-icon-size-md, var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem))))',
-    )
+    .media(`min-width: ${LOGO_BREAKPOINTS.lg}`)
+    .width(resolveLogoVar('icon-size', 'lg'))
+    .height(resolveLogoVar('icon-size', 'lg'))
+    .minWidth(resolveLogoVar('icon-size', 'lg'))
+    .minHeight(resolveLogoVar('icon-size', 'lg'))
 
   styleBuilder
     .select('.site-logo__glyph', theme)
-    .media('min-width: 1280px')
-    .width(
-      'var(--ps-logo-icon-size-xl, var(--ps-logo-icon-size-lg, var(--ps-logo-icon-size-md, var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem)))))',
-    )
-    .height(
-      'var(--ps-logo-icon-size-xl, var(--ps-logo-icon-size-lg, var(--ps-logo-icon-size-md, var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem)))))',
-    )
-    .minWidth(
-      'var(--ps-logo-icon-size-xl, var(--ps-logo-icon-size-lg, var(--ps-logo-icon-size-md, var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem)))))',
-    )
-    .minHeight(
-      'var(--ps-logo-icon-size-xl, var(--ps-logo-icon-size-lg, var(--ps-logo-icon-size-md, var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem)))))',
-    )
+    .media(`min-width: ${LOGO_BREAKPOINTS.xl}`)
+    .width(resolveLogoVar('icon-size', 'xl'))
+    .height(resolveLogoVar('icon-size', 'xl'))
+    .minWidth(resolveLogoVar('icon-size', 'xl'))
+    .minHeight(resolveLogoVar('icon-size', 'xl'))
 
   styleBuilder
     .select('.site-logo__brand', theme)
-    .media('min-width: 640px')
-    .fontSize(
-      'var(--ps-logo-brand-size-sm, var(--ps-logo-brand-size, 1.25rem))',
-    )
+    .media(`min-width: ${LOGO_BREAKPOINTS.sm}`)
+    .fontSize(resolveLogoVar('brand-size', 'sm'))
 
   styleBuilder
     .select('.site-logo__brand', theme)
-    .media('min-width: 768px')
-    .fontSize(
-      'var(--ps-logo-brand-size-md, var(--ps-logo-brand-size-sm, var(--ps-logo-brand-size, 1.25rem)))',
-    )
+    .media(`min-width: ${LOGO_BREAKPOINTS.md}`)
+    .fontSize(resolveLogoVar('brand-size', 'md'))
 
   styleBuilder
     .select('.site-logo__brand', theme)
-    .media('min-width: 1024px')
-    .fontSize(
-      'var(--ps-logo-brand-size-lg, var(--ps-logo-brand-size-md, var(--ps-logo-brand-size-sm, var(--ps-logo-brand-size, 1.25rem))))',
-    )
+    .media(`min-width: ${LOGO_BREAKPOINTS.lg}`)
+    .fontSize(resolveLogoVar('brand-size', 'lg'))
 
   styleBuilder
     .select('.site-logo__brand', theme)
-    .media('min-width: 1280px')
-    .fontSize(
-      'var(--ps-logo-brand-size-xl, var(--ps-logo-brand-size-lg, var(--ps-logo-brand-size-md, var(--ps-logo-brand-size-sm, var(--ps-logo-brand-size, 1.25rem)))))',
-    )
+    .media(`min-width: ${LOGO_BREAKPOINTS.xl}`)
+    .fontSize(resolveLogoVar('brand-size', 'xl'))
 
   styleBuilder
     .select('.site-logo__subtitle', theme)
-    .media('min-width: 640px')
-    .fontSize(
-      'var(--ps-logo-subtitle-size-sm, var(--ps-logo-subtitle-size, 0.5rem))',
-    )
-    .marginLeft(
-      'var(--ps-logo-subtitle-inset-sm, var(--ps-logo-subtitle-inset, 0.5px))',
-    )
-    .marginRight(
-      'var(--ps-logo-subtitle-inset-sm, var(--ps-logo-subtitle-inset, 0.5px))',
-    )
+    .media(`min-width: ${LOGO_BREAKPOINTS.sm}`)
+    .fontSize(resolveLogoVar('subtitle-size', 'sm'))
+    .marginLeft(resolveLogoVar('subtitle-inset', 'sm'))
+    .marginRight(resolveLogoVar('subtitle-inset', 'sm'))
 
   styleBuilder
     .select('.site-logo__subtitle', theme)
-    .media('min-width: 768px')
-    .fontSize(
-      'var(--ps-logo-subtitle-size-md, var(--ps-logo-subtitle-size-sm, var(--ps-logo-subtitle-size, 0.5rem)))',
-    )
-    .marginLeft(
-      'var(--ps-logo-subtitle-inset-md, var(--ps-logo-subtitle-inset-sm, var(--ps-logo-subtitle-inset, 0.5px)))',
-    )
-    .marginRight(
-      'var(--ps-logo-subtitle-inset-md, var(--ps-logo-subtitle-inset-sm, var(--ps-logo-subtitle-inset, 0.5px)))',
-    )
+    .media(`min-width: ${LOGO_BREAKPOINTS.md}`)
+    .fontSize(resolveLogoVar('subtitle-size', 'md'))
+    .marginLeft(resolveLogoVar('subtitle-inset', 'md'))
+    .marginRight(resolveLogoVar('subtitle-inset', 'md'))
 
   styleBuilder
     .select('.site-logo__subtitle', theme)
-    .media('min-width: 1024px')
-    .fontSize(
-      'var(--ps-logo-subtitle-size-lg, var(--ps-logo-subtitle-size-md, var(--ps-logo-subtitle-size-sm, var(--ps-logo-subtitle-size, 0.5rem))))',
-    )
-    .marginLeft(
-      'var(--ps-logo-subtitle-inset-lg, var(--ps-logo-subtitle-inset-md, var(--ps-logo-subtitle-inset-sm, var(--ps-logo-subtitle-inset, 0.5px))))',
-    )
-    .marginRight(
-      'var(--ps-logo-subtitle-inset-lg, var(--ps-logo-subtitle-inset-md, var(--ps-logo-subtitle-inset-sm, var(--ps-logo-subtitle-inset, 0.5px))))',
-    )
+    .media(`min-width: ${LOGO_BREAKPOINTS.lg}`)
+    .fontSize(resolveLogoVar('subtitle-size', 'lg'))
+    .marginLeft(resolveLogoVar('subtitle-inset', 'lg'))
+    .marginRight(resolveLogoVar('subtitle-inset', 'lg'))
 
   styleBuilder
     .select('.site-logo__subtitle', theme)
-    .media('min-width: 1280px')
-    .fontSize(
-      'var(--ps-logo-subtitle-size-xl, var(--ps-logo-subtitle-size-lg, var(--ps-logo-subtitle-size-md, var(--ps-logo-subtitle-size-sm, var(--ps-logo-subtitle-size, 0.5rem)))))',
-    )
-    .marginLeft(
-      'var(--ps-logo-subtitle-inset-xl, var(--ps-logo-subtitle-inset-lg, var(--ps-logo-subtitle-inset-md, var(--ps-logo-subtitle-inset-sm, var(--ps-logo-subtitle-inset, 0.5px)))))',
-    )
-    .marginRight(
-      'var(--ps-logo-subtitle-inset-xl, var(--ps-logo-subtitle-inset-lg, var(--ps-logo-subtitle-inset-md, var(--ps-logo-subtitle-inset-sm, var(--ps-logo-subtitle-inset, 0.5px)))))',
-    )
+    .media(`min-width: ${LOGO_BREAKPOINTS.xl}`)
+    .fontSize(resolveLogoVar('subtitle-size', 'xl'))
+    .marginLeft(resolveLogoVar('subtitle-inset', 'xl'))
+    .marginRight(resolveLogoVar('subtitle-inset', 'xl'))
+}
+
+function resolveLogoVar(
+  token: LogoResponsiveToken,
+  breakpoint?: LogoBreakpoint,
+): string {
+  if (!breakpoint) {
+    return `var(--ps-logo-${token}, ${getLogoDefaultValue(token, 'base')})`
+  }
+
+  return `var(--ps-logo-${token}-${breakpoint}, ${getLogoDefaultValue(token, breakpoint)})`
+}
+
+function getLogoDefaultValue(
+  token: LogoResponsiveToken,
+  breakpoint: 'base' | LogoBreakpoint,
+): string {
+  switch (token) {
+    case 'brand-size':
+      return LOGO_DEFAULTS.brandSize[breakpoint]
+    case 'subtitle-size':
+      return LOGO_DEFAULTS.subtitleSize[breakpoint]
+    case 'icon-size':
+      return LOGO_DEFAULTS.iconSize[breakpoint]
+    case 'subtitle-inset':
+      return LOGO_DEFAULTS.subtitleInset[breakpoint]
+  }
 }
 
 export function registerLogoInteractiveStyles(
