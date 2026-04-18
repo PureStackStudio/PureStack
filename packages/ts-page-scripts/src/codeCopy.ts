@@ -4,6 +4,7 @@ const ICON_OK =
   '<svg viewBox="0 0 24 24" fill="none"><path d="M5.5 12.5l4.2 4.2L18.5 8" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"></path></svg>'
 const ICON_ERROR =
   '<svg viewBox="0 0 24 24" fill="none"><path d="M8 8l8 8M16 8l-8 8" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"></path></svg>'
+const COPY_BUTTON_INSET = 12
 
 type CopyTimer = ReturnType<typeof globalThis.setTimeout>
 type CopyButton = HTMLButtonElement & { _copyTimer?: CopyTimer | 0 }
@@ -79,6 +80,16 @@ function showState(button: CopyButton, ok: boolean) {
   }, 1700)
 }
 
+function syncButtonPosition(pre: HTMLElement, button: CopyButton) {
+  const buttonWidth = button.offsetWidth || 0
+  const left =
+    pre.scrollLeft + pre.clientWidth - buttonWidth - COPY_BUTTON_INSET
+  const top = pre.scrollTop + COPY_BUTTON_INSET
+  button.style.left = `${left}px`
+  button.style.top = `${top}px`
+  button.style.right = 'auto'
+}
+
 function createButton(pre: HTMLElement, code: HTMLElement) {
   if (pre.querySelector(':scope > .code-copy-button')) return
   const button = document.createElement('button') as CopyButton
@@ -103,6 +114,10 @@ function createButton(pre: HTMLElement, code: HTMLElement) {
   })
   pre.classList.add('code-copy-ready')
   pre.appendChild(button)
+  const sync = () => syncButtonPosition(pre, button)
+  sync()
+  pre.addEventListener('scroll', sync, { passive: true })
+  globalThis.addEventListener('resize', sync)
 }
 
 function init() {
