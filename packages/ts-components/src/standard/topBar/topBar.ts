@@ -52,9 +52,9 @@ const topBarTemplate = html`<input
       :subtitle="siteLogo.subtitle"
       :href="siteLogo.href"
       :icon="siteLogo.icon"/>
-    <Searchbox class="topbar__search flex-auto"></Searchbox>
+    <SearchBox class="topbar__search flex-auto"/>
     <Flex class="topbar__controls flex-none" align="center" justify="end">
-      <ThemeSwitcher></ThemeSwitcher>
+      <ThemeSwitcher/>
       <label
         class="topbar__icon topbar__toggle"
         for="doc-nav-toggle"
