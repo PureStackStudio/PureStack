@@ -170,9 +170,6 @@ function registerCopyButtonBaseStyles(
     .top('12px')
     .right('12px')
     .zIndex(2)
-    .border(`1px solid ${palette.current.border.default}`)
-    .background(palette.semanticTone.neutral.canvas)
-    .color(palette.current.text.default)
     .width('2.15rem')
     .height('2.15rem')
     .padding('0')
@@ -246,14 +243,14 @@ function registerCopyButtonStateStyles(
     .pointerEvents('auto')
 
   styleBuilder
-    .select('.doc-content :where(pre > .code-copy-button.is-copied)', theme)
-    .background(palette.semanticTone.accent.canvas)
-    .borderColor(palette.semanticTone.accent.border.default)
-    .color(palette.semanticTone.accent.text.default)
+    .select('.doc-content pre > .code-copy-button.is-copied', theme)
+    .background(palette.semanticTone.success.button.rest.background)
+    .borderColor(palette.semanticTone.success.border.default)
+    .color(palette.semanticTone.success.text.default)
 
   styleBuilder
-    .select('.doc-content :where(pre > .code-copy-button.is-error)', theme)
-    .background(palette.semanticTone.danger.canvas)
+    .select('.doc-content pre > .code-copy-button.is-error', theme)
+    .background(palette.semanticTone.danger.button.rest.background)
     .borderColor(palette.semanticTone.danger.border.default)
     .color(palette.semanticTone.danger.text.default)
 }
