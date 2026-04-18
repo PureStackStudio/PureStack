@@ -22,15 +22,25 @@
       "description": "Brand logo configuration used by the top bar RegorLogo component.",
       "additionalProperties": false,
       "properties": {
-        "wordOne": {
+        "brand": {
           "type": "string",
-          "description": "First brand word.",
-          "default": "Pure"
+          "description": "Brand string rendered as a single justified letter stream.",
+          "default": "Pure Stack"
         },
-        "wordTwo": {
+        "letterColors": {
           "type": "string",
-          "description": "Second brand word.",
-          "default": "Stack"
+          "description": "Per-letter color index map. Each digit selects an entry from logo.colors and applies it to the next non-space letter."
+        },
+        "subtitleLetterColors": {
+          "type": "string",
+          "description": "Per-letter color index map for the subtitle. Each digit selects an entry from logo.colors and applies it to the next non-space letter."
+        },
+        "colors": {
+          "type": "array",
+          "description": "Palette of CSS color values used by logo.letterColors.",
+          "items": {
+            "type": "string"
+          }
         },
         "subtitle": {
           "type": "string",

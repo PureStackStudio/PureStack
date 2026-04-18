@@ -153,8 +153,14 @@ function resolveLogoConfig(
   file?: DeepPartial<LogoConfig>,
 ): LogoConfig {
   return {
-    wordOne: resolveString(input?.wordOne, file?.wordOne, ''),
-    wordTwo: resolveString(input?.wordTwo, file?.wordTwo, ''),
+    brand: resolveString(input?.brand, file?.brand, 'Pure Stack'),
+    letterColors: resolveOptionalString(
+      input?.letterColors ?? file?.letterColors,
+    ),
+    subtitleLetterColors: resolveOptionalString(
+      input?.subtitleLetterColors ?? file?.subtitleLetterColors,
+    ),
+    colors: resolveStringList(input?.colors ?? file?.colors),
     subtitle: resolveOptionalString(input?.subtitle ?? file?.subtitle),
     href: resolveString(input?.href, file?.href, '/'),
     icon: resolveOptionalString(input?.icon ?? file?.icon),
@@ -565,6 +571,15 @@ function resolveRobotsConfig(
 function resolveOptionalString(value: unknown) {
   if (typeof value !== 'string') return undefined
   const normalized = value.trim()
+  return normalized.length > 0 ? normalized : undefined
+}
+
+function resolveStringList(value: unknown): string[] | undefined {
+  if (!Array.isArray(value)) return undefined
+  const normalized = value
+    .filter((entry): entry is string => typeof entry === 'string')
+    .map((entry) => entry.trim())
+    .filter((entry) => entry.length > 0)
   return normalized.length > 0 ? normalized : undefined
 }
 

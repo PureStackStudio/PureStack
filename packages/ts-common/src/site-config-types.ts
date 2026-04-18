@@ -42,8 +42,10 @@ export interface SiteHtmlConfig {
 }
 
 export interface LogoConfig {
-  wordOne: string
-  wordTwo: string
+  brand: string
+  letterColors?: string
+  subtitleLetterColors?: string
+  colors?: string[]
   subtitle?: string
   href: string
   icon?: string

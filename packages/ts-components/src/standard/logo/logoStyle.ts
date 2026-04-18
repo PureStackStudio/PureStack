@@ -19,7 +19,10 @@ export function registerLogoShellStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-  styleBuilder.select('.site-logo', theme).display('inline-block')
+  styleBuilder
+    .select('.site-logo', theme)
+    .display('inline-block')
+    .width('fit-content')
 
   styleBuilder
     .select('.site-logo__link', theme)
@@ -96,24 +99,10 @@ export function registerLogoTextStyles(
     .letterSpacing('0.03em')
     .textTransform('uppercase')
     .whiteSpace('nowrap')
-
-  styleBuilder
-    .select('.site-logo__brand-letter--primary', theme)
-    .color(palette.current.text.default)
-
-  styleBuilder
-    .select('.site-logo__brand-letter--accent', theme)
-    .background(palette.semanticTone.accent.button.rest.background)
-    .webkitBackgroundClip('text')
     .backgroundClip('text')
+    .webkitBackgroundClip('text')
     .color('transparent')
     .webkitTextFillColor('transparent')
-
-  styleBuilder
-    .select('.site-logo__brand-letter--space', theme)
-    .width('0')
-    .minWidth('0')
-    .fontSize('0')
 
   styleBuilder
     .select('.site-logo__subtitle', theme)
@@ -132,6 +121,10 @@ export function registerLogoTextStyles(
     .select('.site-logo__subtitle-letter', theme)
     .display('block')
     .flexShrink('0')
+    .backgroundClip('text')
+    .webkitBackgroundClip('text')
+    .color('transparent')
+    .webkitTextFillColor('transparent')
 }
 
 export function registerLogoInteractiveStyles(

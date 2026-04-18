@@ -19,8 +19,10 @@ describe('SiteLogo rendering', () => {
     }
     const html = renderApp(
       `<SiteLogo
-        wordOne="Calc"
-        wordTwo="Core"
+        brand="Calc Core"
+        letterColors="00001111"
+        subtitleLetterColors="1111111111111111111"
+        :colors="['#111111', '#ff0066']"
         subtitle="backend-native engine"
         href="/"
       />`,
@@ -31,9 +33,22 @@ describe('SiteLogo rendering', () => {
     expect((html.match(/site-logo__brand-letter/g) ?? []).length).toBe(
       'Calc Core'.length,
     )
+    expect(html).toContain(
+      'style="background-image: #111111; background-color: #111111;"',
+    )
+    expect(html).toContain(
+      'style="background-image: #ff0066; background-color: #ff0066;"',
+    )
     expect((html.match(/site-logo__subtitle-letter/g) ?? []).length).toBe(
       'backend-native engine'.length,
     )
+    expect(
+      (
+        html.match(
+          /style="background-image: #ff0066; background-color: #ff0066;"/g,
+        ) ?? []
+      ).length,
+    ).toBeGreaterThan(1)
     expect(html).toContain('href="/"')
   })
 
@@ -57,8 +72,10 @@ describe('SiteLogo rendering', () => {
     }
     const html = renderApp(
       `<SiteLogo
-        wordOne="Calc"
-        wordTwo="Core"
+        brand="Calc Core"
+        letterColors="00001111"
+        subtitleLetterColors="1111111111111111111"
+        :colors="['#111111', '#ff0066']"
         subtitle="backend-native engine"
         icon="iconoir:cube"
       />`,

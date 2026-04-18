@@ -11,11 +11,7 @@ const logoTemplate = html`<div class="site-logo">
         <span
           r-for="brandLetter in brandLetters"
           class="site-logo__brand-letter"
-          :class="{
-            'site-logo__brand-letter--primary': brandLetter.tone === 'primary',
-            'site-logo__brand-letter--accent': brandLetter.tone === 'accent',
-            'site-logo__brand-letter--space': brandLetter.isSpace,
-          }"
+          :style="brandLetter.style"
         >
           {{ brandLetter.value }}
         </span>
@@ -24,8 +20,9 @@ const logoTemplate = html`<div class="site-logo">
         <span
           r-for="subtitleLetter in subtitleLetters"
           class="site-logo__subtitle-letter"
+          :style="subtitleLetter.style"
         >
-          {{ subtitleLetter }}
+          {{ subtitleLetter.value }}
         </span>
       </span>
     </span>
@@ -34,38 +31,44 @@ const logoTemplate = html`<div class="site-logo">
 
 interface LogoLetter {
   value: string
-  tone: 'primary' | 'accent'
   isSpace?: boolean
+  style?: Record<string, string>
 }
 
 export interface SiteLogo {
-  wordOne?: string
-  wordTwo?: string
+  brand?: string
+  letterColors?: string
+  subtitleLetterColors?: string
+  colors?: string[]
   brandLetters?: LogoLetter[]
   subtitle?: string
-  subtitleLetters?: string[]
+  subtitleLetters?: LogoLetter[]
   href?: string
   icon?: string
   ariaLabel?: string
 }
 
 function resolveSiteLogo(props: SiteLogo): SiteLogo {
-  const wordOne = props.wordOne
-  const wordTwo = props.wordTwo
-  const brandLetters = buildBrandLetters(wordOne, wordTwo)
+  const brand = props.brand
+  const letterColors = props.letterColors
+  const subtitleLetterColors = props.subtitleLetterColors
+  const colors = props.colors
+  const brandLetters = buildBrandLetters(brand, letterColors, colors)
   const subtitle = props.subtitle
-  const subtitleLetters = subtitle
-    ? [...subtitle].map((character) =>
-        character === ' ' ? '\u00A0' : character,
-      )
-    : undefined
+  const subtitleLetters = buildLogoLetters(
+    subtitle,
+    subtitleLetterColors,
+    colors,
+  )
   const href = props.href
   const icon = props.icon
   const ariaLabel = props.ariaLabel
 
   return {
-    wordOne,
-    wordTwo,
+    brand,
+    letterColors,
+    subtitleLetterColors,
+    colors,
     brandLetters,
     subtitle,
     subtitleLetters,
@@ -76,45 +79,74 @@ function resolveSiteLogo(props: SiteLogo): SiteLogo {
 }
 
 function buildBrandLetters(
-  wordOne: string | undefined,
-  wordTwo: string | undefined,
+  brand: string | undefined,
+  letterColors: string | undefined,
+  colors: string[] | undefined,
+): LogoLetter[] | undefined {
+  return buildLogoLetters(brand, letterColors, colors)
+}
+
+function buildLogoLetters(
+  text: string | undefined,
+  letterColors: string | undefined,
+  colors: string[] | undefined,
 ): LogoLetter[] | undefined {
   const letters: LogoLetter[] = []
+  let colorCursor = 0
 
-  if (wordOne) {
-    letters.push(
-      ...[...wordOne].map((character) => ({
-        value: character === ' ' ? '\u00A0' : character,
-        tone: 'primary' as const,
-        isSpace: character === ' ',
-      })),
-    )
-  }
-
-  if (wordOne && wordTwo) {
-    letters.push({
-      value: '\u00A0',
-      tone: 'primary',
-      isSpace: true,
-    })
-  }
-
-  if (wordTwo) {
-    letters.push(
-      ...[...wordTwo].map((character) => ({
-        value: character === ' ' ? '\u00A0' : character,
-        tone: 'accent' as const,
-        isSpace: character === ' ',
-      })),
-    )
+  if (text) {
+    for (const character of [...text]) {
+      if (character === ' ') {
+        letters.push({
+          value: '\u00A0',
+          isSpace: true,
+        })
+        continue
+      }
+      letters.push({
+        value: character,
+        style: resolveBrandLetterStyle(letterColors, colors, colorCursor),
+      })
+      colorCursor += 1
+    }
   }
 
   return letters.length > 0 ? letters : undefined
 }
 
+function resolveBrandLetterStyle(
+  letterColors: string | undefined,
+  colors: string[] | undefined,
+  letterIndex: number,
+): Record<string, string> | undefined {
+  const colorIndexLiteral =
+    letterColors?.[letterIndex] ??
+    (letterColors && letterColors.length > 0
+      ? letterColors[letterColors.length - 1]
+      : undefined)
+  if (colorIndexLiteral === undefined) return undefined
+  const colorIndex = Number.parseInt(colorIndexLiteral, 10)
+  if (Number.isNaN(colorIndex) || colorIndex < 0) return undefined
+  const color = colors?.[colorIndex]
+  if (!color) return undefined
+  return {
+    backgroundImage: color,
+    backgroundColor: color,
+  }
+}
+
 function defineSiteLogoComponent() {
   return defineComponent<SiteLogo>(logoTemplate, {
-    props: ['wordOne', 'wordTwo', 'subtitle', 'href', 'icon'],
+    props: [
+      'brand',
+      'letterColors',
+      'subtitleLetterColors',
+      'colors',
+      'subtitle',
+      'href',
+      'icon',
+      'ariaLabel',
+    ],
     context: (head) => resolveSiteLogo(head.props),
   })
 }

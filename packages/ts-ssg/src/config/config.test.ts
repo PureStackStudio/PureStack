@@ -47,8 +47,10 @@ describe('resolveSiteConfig sitemap', () => {
     const config = resolveSiteConfig({ rootDir: process.cwd() })
     expect(config.favicon).toBeUndefined()
     expect(config.logo).toEqual({
-      wordOne: 'Pure',
-      wordTwo: 'Stack',
+      brand: 'Pure Stack',
+      letterColors: undefined,
+      subtitleLetterColors: undefined,
+      colors: undefined,
       subtitle: undefined,
       href: '/',
       icon: undefined,
@@ -92,16 +94,20 @@ describe('resolveSiteConfig sitemap', () => {
     const config = resolveSiteConfig({
       rootDir: process.cwd(),
       logo: {
-        wordOne: 'Calc',
-        wordTwo: 'Core',
+        brand: 'Calc Core',
+        letterColors: '00001111',
+        subtitleLetterColors: '1111111111111111111',
+        colors: ['#111111', '#ff0066'],
         subtitle: 'backend-native engine',
         href: '/home',
         icon: 'iconoir:cube',
       },
     })
     expect(config.logo).toEqual({
-      wordOne: 'Calc',
-      wordTwo: 'Core',
+      brand: 'Calc Core',
+      letterColors: '00001111',
+      subtitleLetterColors: '1111111111111111111',
+      colors: ['#111111', '#ff0066'],
       subtitle: 'backend-native engine',
       href: '/home',
       icon: 'iconoir:cube',

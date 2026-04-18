@@ -4,8 +4,10 @@ import { resolveTsSsgContext } from '@purestack/ts-common'
 import { defineComponent, html } from 'regor'
 
 export interface TopBar {
-  brandWordOne: string
-  brandWordTwo: string
+  brand: string
+  brandLetterColors?: string
+  brandSubtitleLetterColors?: string
+  brandColors?: string[]
   brandSubtitle?: string
   brandHref: string
   brandIcon?: string
@@ -13,8 +15,10 @@ export interface TopBar {
 
 function resolveTopBar(context: TsSsgContext): TopBar {
   return {
-    brandWordOne: context.site.logo.wordOne ?? 'Pure',
-    brandWordTwo: context.site.logo.wordTwo ?? 'Stack',
+    brand: context.site.logo.brand ?? 'Pure Stack',
+    brandLetterColors: context.site.logo.letterColors,
+    brandSubtitleLetterColors: context.site.logo.subtitleLetterColors,
+    brandColors: context.site.logo.colors,
     brandSubtitle: context.site.logo.subtitle,
     brandHref: context.site.logo.href ?? '/',
     brandIcon: context.site.logo.icon,
@@ -29,8 +33,10 @@ const topBarTemplate = html`<input
   aria-hidden="true"/>
 <header class="topbar">
   <SiteLogo
-    :wordOne="brandWordOne"
-    :wordTwo="brandWordTwo"
+    :brand="brand"
+    :letterColors="brandLetterColors"
+    :subtitleLetterColors="brandSubtitleLetterColors"
+    :colors="brandColors"
     :subtitle="brandSubtitle"
     :href="brandHref"
     :icon="brandIcon"/>

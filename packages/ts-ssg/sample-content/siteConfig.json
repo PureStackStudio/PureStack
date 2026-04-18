@@ -3,8 +3,14 @@
   "siteTitle": "ts-ssg",
   "favicon": "iconoir:cube",
   "logo": {
-    "wordOne": "Calc",
-    "wordTwo": "Core",
+    "brand": "CalcCore",
+    "letterColors": "11112",
+    "subtitleLetterColors": "0",
+    "colors": [
+      "var(--ps-current-text-subtle)",
+      "var(--ps-current-text-default)",
+      "var(--ps-semantic-tone-accent-button-rest-background)"
+    ],
     "subtitle": "backend-native engine",
     "href": "/",
     "icon": "iconoir:cube"

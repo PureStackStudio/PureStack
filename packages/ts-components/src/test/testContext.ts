@@ -14,8 +14,10 @@ const DEFAULT_SITE: DeepPartial<SiteConfig> = {
     theme: DEFAULT_THEME_OPTIONS,
   },
   logo: {
-    wordOne: 'Pure',
-    wordTwo: 'Stack',
+    brand: 'Pure Stack',
+    letterColors: '000011111',
+    subtitleLetterColors: '111111111111111111111',
+    colors: ['var(--ps-current-text-default)', 'var(--ps-current-text-subtle)'],
     href: '/',
     icon: 'iconoir:cube',
   },
