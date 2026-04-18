@@ -2,15 +2,21 @@
 
 import { ICONOIR_ICONS, type IconoirIconName } from './iconoir.generated'
 import { LUCIDE_ICONS, type LucideIconName } from './lucide.generated'
+import { PHOSPHOR_ICONS, type PhosphorIconName } from './phosphor.generated'
+import { TABLER_ICONS, type TablerIconName } from './tabler.generated'
 
 export type AvailableIconNames =
   | IconoirIconName
   | LucideIconName
+  | PhosphorIconName
+  | TablerIconName
   | (string & {})
 
 const SVG_ICONS: Record<AvailableIconNames, string> = {
   ...ICONOIR_ICONS,
   ...LUCIDE_ICONS,
+  ...PHOSPHOR_ICONS,
+  ...TABLER_ICONS,
 }
 
 export function getSvgIcon(name: AvailableIconNames): string {

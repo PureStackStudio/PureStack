@@ -16,12 +16,17 @@ export async function writeGeneratedFavicon(config: SiteConfig): Promise<void> {
 
 function buildFaviconSvg(config: SiteConfig, iconSvg: string) {
   const viewBox = extractViewBox(iconSvg) ?? '0 0 24 24'
-  const body = extractSvgBody(iconSvg)
-    .replaceAll('currentColor', config.style.theme.colors.dark.accent)
-    .replaceAll('stroke-width="1.5"', 'stroke-width="1.8"')
+  const rootAttributesSource = extractSvgRootAttributes(iconSvg)
+  const rootAttributes = rootAttributesSource
+    ? ` ${normalizeSvgContent(rootAttributesSource, config.style.theme.colors.dark.accent)}`
+    : ''
+  const body = normalizeSvgContent(
+    extractSvgBody(iconSvg),
+    config.style.theme.colors.dark.accent,
+  )
 
   return [
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}" fill="none">`,
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}"${rootAttributes}>`,
     `<rect width="24" height="24" rx="6" fill="none"/>`,
     body,
     '</svg>',
@@ -33,6 +38,25 @@ function extractViewBox(svg: string) {
   return match?.[1]
 }
 
+function extractSvgRootAttributes(svg: string) {
+  const match = svg.match(/<svg\b([^>]*)>/i)
+  if (!match?.[1]) return ''
+
+  return match[1]
+    .replace(/\s+xmlns="[^"]*"/gi, '')
+    .replace(/\s+viewBox="[^"]*"/gi, '')
+    .replace(/\s+width="[^"]*"/gi, '')
+    .replace(/\s+height="[^"]*"/gi, '')
+    .replace(/\s+aria-hidden="[^"]*"/gi, '')
+    .trim()
+}
+
 function extractSvgBody(svg: string) {
   return svg.replace(/^[\s\S]*?<svg[^>]*>/i, '').replace(/<\/svg>\s*$/i, '')
+}
+
+function normalizeSvgContent(svg: string, accentColor: string) {
+  return svg
+    .replaceAll('currentColor', accentColor)
+    .replaceAll('stroke-width="1.5"', 'stroke-width="1.8"')
 }

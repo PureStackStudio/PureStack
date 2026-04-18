@@ -2,3 +2,5 @@
 
 export * from './iconoir.client.generated'
 export * from './lucide.client.generated'
+export * from './phosphor.client.generated'
+export * from './tabler.client.generated'

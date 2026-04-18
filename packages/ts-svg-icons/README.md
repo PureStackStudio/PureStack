@@ -5,10 +5,23 @@ SVG icon utilities for PureStack.
 This package contains generated icon data from:
 - `iconoir`
 - `lucide`
+- `@phosphor-icons/core` (`regular` icons only)
+- `@tabler/icons` (`outline` icons only)
 
 It is designed for two usage patterns:
 - `getSvgIcon(...)` for SSG/server rendering (easy lookup by string key).
 - direct icon constant imports for client bundles (tree-shake friendly).
+
+<!--
+Token usage hint for AI/code assistants:
+- Prefer looking up icon names in:
+  - src/iconoir.generated.ts
+  - src/lucide.generated.ts
+  - src/phosphor.generated.ts
+  - src/tabler.generated.ts
+- Avoid opening *.client.chunk-*.generated.ts unless you truly need the raw SVG string.
+- The chunk files are large and mostly low-signal for icon-name discovery.
+-->
 
 ## Install
 
@@ -27,15 +40,27 @@ const svg = getSvgIcon('iconoir:code')
 ```
 
 - Input format: `provider:icon-name`
-- Supported providers: `iconoir`, `lucide`
+- Supported providers: `iconoir`, `lucide`, `phosphor`, `tabler`
 - Returns: raw SVG string
 - Throws if icon does not exist
+
+Examples:
+- `iconoir:code`
+- `lucide:check`
+- `phosphor:acorn`
+- `tabler:activity`
 
 ### Types
 
 ```ts
 import type { AvailableIconNames } from '@purestack/ts-svg-icons'
 ```
+
+<!--
+Name lookup hint:
+- Use the generated provider maps for name discovery.
+- Do not inspect the raw SVG chunks when all you need is whether an icon exists.
+-->
 
 ## SSG/Server usage (recommended for full lookup)
 
@@ -56,14 +81,21 @@ export function renderFeature(iconName: string) {
 For client code, import only the icons you need as named exports.
 
 ```ts
-import { iconoir_code, lucide_check } from '@purestack/ts-svg-icons'
+import {
+  iconoir_code,
+  lucide_check,
+  phosphor_acorn,
+  tabler_activity,
+} from '@purestack/ts-svg-icons'
 
 const codeSvg = iconoir_code
 const checkSvg = lucide_check
+const acornSvg = phosphor_acorn
+const activitySvg = tabler_activity
 ```
 
 How export names are generated:
-- prefix with provider: `iconoir_` or `lucide_`
+- prefix with provider: `iconoir_`, `lucide_`, `phosphor_`, or `tabler_`
 - replace non-alphanumeric characters with `_`
 - solid Iconoir variants end with `_solid`
 
@@ -71,6 +103,23 @@ Examples:
 - `iconoir:code` -> `iconoir_code`
 - `iconoir:adobe-after-effects-solid` -> `iconoir_adobe_after_effects_solid`
 - `lucide:check` -> `lucide_check`
+- `phosphor:acorn` -> `phosphor_acorn`
+- `phosphor:address-book-tabs` -> `phosphor_address_book_tabs`
+- `tabler:activity` -> `tabler_activity`
+- `tabler:address-book-off` -> `tabler_address_book_off`
+
+## Name lookup
+
+Use these files when you only need to find valid icon names:
+- `src/iconoir.generated.ts`
+- `src/lucide.generated.ts`
+- `src/phosphor.generated.ts`
+- `src/tabler.generated.ts`
+
+Avoid these files for simple lookup:
+- `src/*.client.chunk-*.generated.ts`
+
+Those chunk files contain large raw SVG payloads and are intended for generated exports, not human-friendly name discovery.
 
 ## Generated files
 

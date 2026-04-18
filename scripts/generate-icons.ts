@@ -3,7 +3,7 @@ import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 
-type IconProviderName = 'iconoir' | 'lucide'
+type IconProviderName = 'iconoir' | 'lucide' | 'phosphor' | 'tabler'
 const CHUNK_SIZE = 1000
 
 interface SvgRoot {
@@ -226,15 +226,21 @@ function renderGetSvgIconModule() {
     '',
     "import { ICONOIR_ICONS, type IconoirIconName } from './iconoir.generated'",
     "import { LUCIDE_ICONS, type LucideIconName } from './lucide.generated'",
+    "import { PHOSPHOR_ICONS, type PhosphorIconName } from './phosphor.generated'",
+    "import { TABLER_ICONS, type TablerIconName } from './tabler.generated'",
     '',
     'export type AvailableIconNames =',
     '  | IconoirIconName',
     '  | LucideIconName',
+    '  | PhosphorIconName',
+    '  | TablerIconName',
     '  | (string & {})',
     '',
     'const SVG_ICONS: Record<AvailableIconNames, string> = {',
     '  ...ICONOIR_ICONS,',
     '  ...LUCIDE_ICONS,',
+    '  ...PHOSPHOR_ICONS,',
+    '  ...TABLER_ICONS,',
     '}',
     '',
     'export function getSvgIcon(name: AvailableIconNames): string {',
@@ -252,6 +258,8 @@ function renderIconsClientModule() {
     '',
     "export * from './iconoir.client.generated'",
     "export * from './lucide.client.generated'",
+    "export * from './phosphor.client.generated'",
+    "export * from './tabler.client.generated'",
     '',
   ].join('\n')
 }
@@ -321,11 +329,70 @@ async function readLucideIcons(): Promise<GeneratedIcon[]> {
   return icons
 }
 
+async function readPhosphorIcons(): Promise<GeneratedIcon[]> {
+  const iconsDir = path.join(
+    projectRoot,
+    'node_modules',
+    '@phosphor-icons',
+    'core',
+    'assets',
+    'regular',
+  )
+  const files = await readdir(iconsDir, { withFileTypes: true })
+  const svgFiles = files
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.svg'))
+    .map((entry) => entry.name)
+    .sort()
+  const icons: GeneratedIcon[] = []
+  for (const fileName of svgFiles) {
+    const sourceName = fileName.replace(/\.svg$/i, '')
+    const svgPath = path.join(iconsDir, fileName)
+    const rawSvg = await readFile(svgPath, 'utf8')
+    const parsed = parseSvg(rawSvg, svgPath)
+    icons.push({
+      name: sourceName,
+      svg: buildSvgString(parsed.attributes, parsed.innerSvg),
+    })
+  }
+  return icons
+}
+
+async function readTablerIcons(): Promise<GeneratedIcon[]> {
+  const iconsDir = path.join(
+    projectRoot,
+    'node_modules',
+    '@tabler',
+    'icons',
+    'icons',
+    'outline',
+  )
+  const files = await readdir(iconsDir, { withFileTypes: true })
+  const svgFiles = files
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.svg'))
+    .map((entry) => entry.name)
+    .sort()
+  const icons: GeneratedIcon[] = []
+  for (const fileName of svgFiles) {
+    const sourceName = fileName.replace(/\.svg$/i, '')
+    const svgPath = path.join(iconsDir, fileName)
+    const rawSvg = await readFile(svgPath, 'utf8')
+    const parsed = parseSvg(rawSvg, svgPath)
+    icons.push({
+      name: sourceName,
+      svg: buildSvgString(parsed.attributes, parsed.innerSvg),
+    })
+  }
+  return icons
+}
+
 async function main() {
-  const [iconoirIcons, lucideIcons] = await Promise.all([
-    readIconoirIcons(),
-    readLucideIcons(),
-  ])
+  const [iconoirIcons, lucideIcons, phosphorIcons, tablerIcons] =
+    await Promise.all([
+      readIconoirIcons(),
+      readLucideIcons(),
+      readPhosphorIcons(),
+      readTablerIcons(),
+    ])
   await mkdir(iconsOutputDir, { recursive: true })
 
   const cleanupTargets = await readdir(iconsOutputDir, { withFileTypes: true })
@@ -351,6 +418,20 @@ async function main() {
     'lucide',
     lucideIcons,
   )
+  const phosphorClientOutput = renderProviderChunks(
+    iconsOutputDir,
+    'phosphor',
+    'PhosphorIconName',
+    'phosphor',
+    phosphorIcons,
+  )
+  const tablerClientOutput = renderProviderChunks(
+    iconsOutputDir,
+    'tabler',
+    'TablerIconName',
+    'tabler',
+    tablerIcons,
+  )
   const iconoirOutput = renderProviderModule(
     'ICONOIR_ICONS',
     'IconoirIconName',
@@ -361,19 +442,40 @@ async function main() {
     'LucideIconName',
     lucideClientOutput.providerChunks,
   )
+  const phosphorOutput = renderProviderModule(
+    'PHOSPHOR_ICONS',
+    'PhosphorIconName',
+    phosphorClientOutput.providerChunks,
+  )
+  const tablerOutput = renderProviderModule(
+    'TABLER_ICONS',
+    'TablerIconName',
+    tablerClientOutput.providerChunks,
+  )
   const getSvgIconModule = renderGetSvgIconModule()
   const clientModule = renderIconsClientModule()
   const iconoirGeneratedPath = path.join(iconsOutputDir, 'iconoir.generated.ts')
   const lucideGeneratedPath = path.join(iconsOutputDir, 'lucide.generated.ts')
+  const phosphorGeneratedPath = path.join(
+    iconsOutputDir,
+    'phosphor.generated.ts',
+  )
+  const tablerGeneratedPath = path.join(iconsOutputDir, 'tabler.generated.ts')
   const getSvgIconPath = path.join(iconsOutputDir, 'getSvgIcon.ts')
   const clientPath = path.join(iconsOutputDir, 'client.ts')
   const generatedPaths = [
     iconoirGeneratedPath,
     lucideGeneratedPath,
+    phosphorGeneratedPath,
+    tablerGeneratedPath,
     iconoirClientOutput.providerFile.path,
     lucideClientOutput.providerFile.path,
+    phosphorClientOutput.providerFile.path,
+    tablerClientOutput.providerFile.path,
     ...iconoirClientOutput.chunkFiles.map((file) => file.path),
     ...lucideClientOutput.chunkFiles.map((file) => file.path),
+    ...phosphorClientOutput.chunkFiles.map((file) => file.path),
+    ...tablerClientOutput.chunkFiles.map((file) => file.path),
     getSvgIconPath,
     clientPath,
   ]
@@ -381,6 +483,8 @@ async function main() {
   await Promise.all([
     writeFile(iconoirGeneratedPath, iconoirOutput, 'utf8'),
     writeFile(lucideGeneratedPath, lucideOutput, 'utf8'),
+    writeFile(phosphorGeneratedPath, phosphorOutput, 'utf8'),
+    writeFile(tablerGeneratedPath, tablerOutput, 'utf8'),
     writeFile(
       iconoirClientOutput.providerFile.path,
       iconoirClientOutput.providerFile.source,
@@ -391,10 +495,26 @@ async function main() {
       lucideClientOutput.providerFile.source,
       'utf8',
     ),
+    writeFile(
+      phosphorClientOutput.providerFile.path,
+      phosphorClientOutput.providerFile.source,
+      'utf8',
+    ),
+    writeFile(
+      tablerClientOutput.providerFile.path,
+      tablerClientOutput.providerFile.source,
+      'utf8',
+    ),
     ...iconoirClientOutput.chunkFiles.map((file) =>
       writeFile(file.path, file.source, 'utf8'),
     ),
     ...lucideClientOutput.chunkFiles.map((file) =>
+      writeFile(file.path, file.source, 'utf8'),
+    ),
+    ...phosphorClientOutput.chunkFiles.map((file) =>
+      writeFile(file.path, file.source, 'utf8'),
+    ),
+    ...tablerClientOutput.chunkFiles.map((file) =>
       writeFile(file.path, file.source, 'utf8'),
     ),
     writeFile(getSvgIconPath, getSvgIconModule, 'utf8'),
@@ -405,7 +525,7 @@ async function main() {
   runBiomeFormat(generatedPaths)
 
   console.log(
-    `Generated icons modules at ${iconsOutputDir} (iconoir=${iconoirIcons.length}, lucide=${lucideIcons.length})`,
+    `Generated icons modules at ${iconsOutputDir} (iconoir=${iconoirIcons.length}, lucide=${lucideIcons.length}, phosphor=${phosphorIcons.length}, tabler=${tablerIcons.length})`,
   )
 }
 
