@@ -271,7 +271,7 @@ Built-in component sets are initialized automatically each build:
 - navigation: `navMenu`, `navList`, `navItem`
 - page toc: `pageToc`
 - pricing: `pricingTable`, `pricingPlan`, `pricingFeature`
-- search: `siteSearch`
+- search: `searchBox`
 - tabs: `tabs`, `tabPane`
 - theme switcher: `themeSwitcher`
 

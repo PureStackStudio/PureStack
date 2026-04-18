@@ -24,8 +24,7 @@ const searchBoxTemplate = html`<div class="site-search" data-pagefind-search>
       autocomplete="off"
       spellcheck="false"
       data-pagefind-input
-      aria-label="Search site content"
-    />
+      aria-label="Search site content"/>
   </label>
   <div
     class="site-search__results doc-content"
@@ -43,7 +42,7 @@ function defineSearchBoxComponent() {
 }
 
 export function defineSearchComponents() {
-  return { siteSearch: defineSearchBoxComponent() }
+  return { searchBox: defineSearchBoxComponent() }
 }
 
 function resolveSearchPlaceholder(context: TsSsgContext): string {

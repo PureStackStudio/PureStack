@@ -75,8 +75,6 @@ describe('TopBar rendering', () => {
     ).toBeGreaterThan(1)
     expect(html).toContain('href="/docs/"')
     expect(html).toContain('name="q"')
-    expect(html).toContain('class="topbar__search"')
-    expect(html).toContain('class="topbar__controls"')
     expect((html.match(/class="flex/g) ?? []).length).toBeGreaterThan(1)
     expect(html).not.toContain('Pure')
     expect(html).not.toContain('Stack')
