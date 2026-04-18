@@ -49,7 +49,7 @@
         },
         "iconSvg": {
           "type": "string",
-          "description": "Optional embedded SVG markup rendered inside the logo glyph."
+          "description": "SVG icon name from ts-svg-icons used to to be used in logo component."
         },
         "iconSize": {
           "type": "string",

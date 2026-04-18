@@ -1,3 +1,4 @@
+import type { GetSvgIcon } from '@purestack/ts-components'
 import { defineComponent, html } from 'regor'
 
 const logoTemplate = html`<div class="site-logo">
@@ -9,13 +10,30 @@ const logoTemplate = html`<div class="site-logo">
       r-if="iconSvg"
       r-html="iconSvg"
     ></span>
-    <span class="site-logo__glyph site-logo__glyph--default" :style="glyphStyle" aria-hidden="true" r-else></span>
+    <span
+      class="site-logo__glyph site-logo__glyph--default"
+      :style="glyphStyle"
+      aria-hidden="true"
+      r-else
+    ></span>
     <span class="site-logo__stack">
       <span class="site-logo__brand">
-        <span class="site-logo__word site-logo__word--primary" :style="wordStyle">{{ wordOne }}</span>
-        <span class="site-logo__word site-logo__word--accent" :style="wordStyle">{{ wordTwo }}</span>
+        <span
+          class="site-logo__word site-logo__word--primary"
+          :style="wordStyle"
+        >
+          {{ wordOne }}
+        </span>
+        <span
+          class="site-logo__word site-logo__word--accent"
+          :style="wordStyle"
+        >
+          {{ wordTwo }}
+        </span>
       </span>
-      <span class="site-logo__subtitle" :style="subtitleStyle" r-if="subtitle">{{ subtitle }}</span>
+      <span class="site-logo__subtitle" :style="subtitleStyle" r-if="subtitle">
+        {{ subtitle }}
+      </span>
     </span>
   </a>
 </div>`
@@ -36,13 +54,13 @@ export interface SiteLogo {
   subtitleStyle?: Record<string, string>
 }
 
-function resolveSiteLogo(props: SiteLogo): SiteLogo {
+function resolveSiteLogo(props: SiteLogo, getSvgIcon: GetSvgIcon): SiteLogo {
   const wordOne = normalizeWord(props.wordOne, 'Pure')
   const wordTwo = normalizeWord(props.wordTwo, 'Stack')
   const subtitle = normalizeOptionalText(props.subtitle)
   const subtitleAlign = normalizeSubtitleAlign(props.subtitleAlign)
   const href = normalizeOptionalText(props.href) || '/'
-  const iconSvg = normalizeOptionalText(props.iconSvg)
+  const iconSvg = props.iconSvg ? getSvgIcon(props.iconSvg) : ''
   const iconSize = normalizeCssSize(props.iconSize)
   const wordFontSize = normalizeCssSize(props.wordFontSize)
   const subtitleFontSize = normalizeCssSize(props.subtitleFontSize)
@@ -110,7 +128,7 @@ function normalizeSubtitleAlign(
   return 'start'
 }
 
-function defineSiteLogoComponent() {
+function defineSiteLogoComponent(getSvgIcon: GetSvgIcon) {
   return defineComponent<SiteLogo>(logoTemplate, {
     props: [
       'wordOne',
@@ -123,10 +141,10 @@ function defineSiteLogoComponent() {
       'wordFontSize',
       'subtitleFontSize',
     ],
-    context: (head) => resolveSiteLogo(head.props),
+    context: (head) => resolveSiteLogo(head.props, getSvgIcon),
   })
 }
 
-export function defineLogoComponents() {
-  return { siteLogo: defineSiteLogoComponent() }
+export function defineLogoComponents(getSvgIcon: GetSvgIcon) {
+  return { siteLogo: defineSiteLogoComponent(getSvgIcon) }
 }

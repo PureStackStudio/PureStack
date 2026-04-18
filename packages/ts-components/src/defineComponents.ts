@@ -40,7 +40,7 @@ export function defineComponents(getSvgIcon: GetSvgIcon) {
     ...defineHeroComponents(),
     ...defineIconComponents(getSvgIcon),
     ...defineLoginComponents(),
-    ...defineLogoComponents(),
+    ...defineLogoComponents(getSvgIcon),
     ...defineModalComponents(),
     ...defineTopBarComponents(),
     ...defineThemeSwitcherComponents(),
