@@ -127,6 +127,58 @@ export interface SemanticToneTokens {
   }
 }
 
+/*export interface TypographyToken {
+  fontFamily?: string
+  fontSize: string
+  fontWeight: string
+  lineHeight: string
+  letterSpacing?: string
+  textTransform?: 'none' | 'uppercase' | 'lowercase' | 'capitalize'
+}*/
+/**
+ * 
+ *   styleBuilder
+     .select('.doc-content :where(h1, h2, h3, h4, h5, h6)', theme)
+     .fontWeight('700')
+     .letterSpacing('-0.015em')
+     .lineHeight('1.15')
+     .margin('0 0 0.6em')
+     .scrollMarginTop('96px')
+ 
+   styleBuilder
+     .select('.doc-content :where(h1)', theme)
+     .fontSize('2.4rem')
+     .margin('0 0 0.5em')
+   styleBuilder.select('.doc-content :where(h2)', theme).fontSize('1.9rem')
+   styleBuilder.select('.doc-content :where(h3)', theme).fontSize('1.5rem')
+   styleBuilder.select('.doc-content :where(h4)', theme).fontSize('1.25rem')
+ 
+   styleBuilder
+     .select('.doc-content :where(h5, h6)', theme)
+     .textTransform('uppercase')
+ 
+   styleBuilder
+     .select('.doc-content :where(h5)', theme)
+     .fontSize('1.05rem')
+     .letterSpacing('0.04em')
+   styleBuilder
+     .select('.doc-content :where(h6)', theme)
+     .fontSize('0.95rem')
+     .letterSpacing('0.06em')
+     .color(palette.current.text.subtle)
+ */
+export interface ThemeTypography {
+  fontSize: {
+    body: string
+    h1: string
+    h2: string
+    h3: string
+    h4: string
+    h5: string
+    h6: string
+  }
+}
+
 export interface ThemePaletteCurrent {
   text: {
     default: string
@@ -142,6 +194,7 @@ export interface ThemePaletteCurrent {
 export interface ThemePalette {
   accent: string
   current: ThemePaletteCurrent
+  typography: ThemeTypography
   semanticTone: {
     neutral: SemanticToneTokens
     accent: SemanticToneTokens

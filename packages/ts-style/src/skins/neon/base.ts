@@ -1,5 +1,5 @@
 import type { ThemeMode } from '../../themeOptions'
-import type { ThemePalette } from '../../themePalette'
+import type { ThemePalette, ThemeTypography } from '../../themePalette'
 import { getCurrentThemePalette } from '../../themePaletteVars'
 import { createScale, createTone, rgba, type ToneColors } from './shared'
 
@@ -37,6 +37,7 @@ export function createNeonPalette({
   return {
     accent,
     current: getCurrentThemePalette(),
+    typography: createTypography(),
     semanticTone: {
       neutral: createTone(
         core.neutral,
@@ -105,6 +106,52 @@ export function createNeonPalette({
     effect: createEffect(core, mode),
   }
 }
+/*
+function createTypography(): ThemePalette['typography'] {
+  return {
+    eyebrow: {
+      fontSize: '0.6875rem',
+      fontWeight: '700',
+      lineHeight: '1.25',
+      letterSpacing: '0.14em',
+      textTransform: 'uppercase',
+    },
+    label: {
+      fontSize: '0.95rem',
+      fontWeight: '600',
+      lineHeight: '1.3',
+    },
+    body: {
+      fontSize: '0.9375rem',
+      fontWeight: '400',
+      lineHeight: '1.65',
+    },
+    meta: {
+      fontSize: '0.8125rem',
+      fontWeight: '400',
+      lineHeight: '1.45',
+    },
+    title: {
+      fontSize: '1.125rem',
+      fontWeight: '700',
+      lineHeight: '1.2',
+      letterSpacing: '-0.015em',
+    },
+    display: {
+      fontSize: '2.5rem',
+      fontWeight: '700',
+      lineHeight: '0.34em',
+      letterSpacing: '-0.03em',
+    },
+    brand: {
+      fontSize: '0.9375rem',
+      fontWeight: '800',
+      lineHeight: '1',
+      letterSpacing: '0.04em',
+      textTransform: 'uppercase',
+    },
+  }
+}*/
 
 function createEffect(core: NeonCore, mode: ThemeMode) {
   const text = createScale(core.neutral.foreground, 18, mode)
@@ -126,4 +173,17 @@ function createEffect(core: NeonCore, mode: ThemeMode) {
     insetShadow: `inset 0 10px 28px ${rgba(shadowColor, 0.34)}`,
   }
   return effect
+}
+function createTypography(): ThemeTypography {
+  return {
+    fontSize: {
+      body: '0.90rem',
+      h1: '2.4rem',
+      h2: '1.9rem',
+      h3: '1.5rem',
+      h4: '1.25rem',
+      h5: '1.05rem',
+      h6: '0.95rem',
+    },
+  }
 }
