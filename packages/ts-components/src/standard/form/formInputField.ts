@@ -126,6 +126,7 @@ const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
         type="button"
         aria-label="Increase value"
         @click="increment"
+        tabindex="-1"
       >
         +
       </button>
@@ -135,6 +136,7 @@ const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
         type="button"
         aria-label="Decrease value"
         @click="decrement"
+        tabindex="-1"
       >
         -
       </button>

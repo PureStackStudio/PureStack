@@ -38,6 +38,11 @@ export function registerNavShellStyles(
     .justifyContent('space-between')
     .gap('8px')
     .marginBottom('8px')
+  styleBuilder.select('.nav__search', theme).display('none').width('100%')
+  styleBuilder
+    .select('.nav__search', theme)
+    .media('max-width: 600px')
+    .display('block')
   styleBuilder
     .select('.nav__header', theme)
     .fontWeight('700')
@@ -278,14 +283,6 @@ export function registerNavShellStyles(
     .height('100%')
     .overflow('auto')
     .boxSizing('border-box')
-
-  styleBuilder
-    .select(
-      '.doc-nav-toggle:checked ~ .doc-shell .doc-sidebar .nav__menu',
-      theme,
-    )
-    .media('max-width: 720px')
-    .padding('60px 16px 20px')
 }
 
 export function registerNavLinkStyles(

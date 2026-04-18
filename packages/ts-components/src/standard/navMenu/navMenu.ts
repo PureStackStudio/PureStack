@@ -105,6 +105,7 @@ const navMenuTemplate = html`<nav class="nav__menu" :class="toneClass" aria-labe
       </span>
     </button>
   </div>
+  <SearchBox class="nav__search"/>
   <NavList :items="items" :tone="tone"></NavList>
 </nav>`
 

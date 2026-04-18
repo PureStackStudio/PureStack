@@ -120,33 +120,4 @@ function registerTopBarResponsiveSearchStyles(theme: ThemeMode) {
     .select('.topbar__search', theme)
     .media('max-width: 600px')
     .display('none')
-  styleBuilder
-    .select('.doc-nav-toggle:checked ~ .topbar .topbar__search', theme)
-    .media('max-width: 600px')
-    .display('block')
-    .position('absolute')
-    .top('calc(100% + 8px)')
-    .left('16px')
-    .right('16px')
-    .zIndex('80')
-  styleBuilder
-    .select('.doc-nav-toggle:checked ~ .topbar', theme)
-    .media('max-width: 600px')
-    .zIndex(90)
-  styleBuilder
-    .select('.doc-nav-toggle:checked ~ .topbar .topbar__search', theme)
-    .media('max-width: 600px')
-    .width('min(560px, calc(100vw - 24px))')
-    .margin('0 auto')
-  styleBuilder
-    .select(
-      '.doc-nav-toggle:checked ~ .topbar .topbar__search .site-search__results',
-      theme,
-    )
-    .media('max-width: 600px')
-    .left('50%')
-    .right('auto')
-    .transform('translateX(-50%)')
-    .width('min(560px, calc(100vw - 24px))')
-    .zIndex('120')
 }

@@ -10,7 +10,6 @@ export function registerSearchBoxStyles() {
   themes.forEach((theme, palette, options) => {
     registerSearchBoxShellStyles(theme)
     registerSearchBoxResultStyles(theme, palette, options)
-    registerSearchBoxResponsiveStyles(theme)
   })
 }
 
@@ -184,18 +183,4 @@ function registerSearchBoxResultContentStyles(
     .border(`1px solid ${palette.semanticTone.warning.surface.rest.border}`)
     .background(palette.semanticTone.warning.surface.rest.background)
     .color(palette.semanticTone.warning.surface.rest.text)
-}
-
-export function registerSearchBoxResponsiveStyles(theme: ThemeMode) {
-  styleBuilder
-    .select('.site-search', theme)
-    .media('max-width: 600px')
-    .width('min(100%, 220px)')
-
-  styleBuilder
-    .select('.site-search__results', theme)
-    .media('max-width: 600px')
-    .left('0')
-    .right('auto')
-    .width('min(100vw - 32px, 520px)')
 }
