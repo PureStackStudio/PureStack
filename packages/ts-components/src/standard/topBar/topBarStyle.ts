@@ -21,10 +21,6 @@ export function registerTopBarShellStyles(
 ) {
   styleBuilder
     .select('.topbar', theme)
-    .display('grid')
-    .gridTemplateColumns('minmax(0, 1fr) minmax(220px, 420px) minmax(0, 1fr)')
-    .alignItems('center')
-    .gap('16px')
     .padding('16px')
     .position('sticky')
     .top('0')
@@ -33,18 +29,23 @@ export function registerTopBarShellStyles(
     .borderBottom('1px solid transparent')
     .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
     .borderBottomColor(palette.current.border.subtle)
+
   styleBuilder
     .select('.topbar__logo', theme)
-    .display('inline-flex')
-    .justifySelf('start')
+    .flex('0 0 auto')
     .minWidth('0')
+
+  styleBuilder
+    .select('.topbar__search', theme)
+    .flex('1 1 auto')
+    .minWidth('0')
+
   styleBuilder
     .select('.topbar__controls', theme)
-    .display('inline-flex')
-    .alignItems('center')
-    .justifySelf('end')
-    .gap('10px')
+    .flex('0 0 auto')
+    .marginLeft('auto')
     .minWidth('0')
+
   styleBuilder
     .select('.topbar__icon', theme)
     .width('42px')
@@ -61,12 +62,6 @@ export function registerTopBarShellStyles(
 }
 
 export function registerTopBarSearchStyles(theme: ThemeMode) {
-  styleBuilder
-    .select('.topbar__search', theme)
-    .display('block')
-    .width('100%')
-    .justifySelf('center')
-    .minWidth('0')
   styleBuilder
     .select('.topbar__search .site-search', theme)
     .width('100%')
@@ -143,15 +138,6 @@ function registerTopBarToggleCheckedStateStyles(theme: ThemeMode) {
 }
 
 function registerTopBarResponsiveSearchStyles(theme: ThemeMode) {
-  styleBuilder
-    .select('.topbar', theme)
-    .media('max-width: 900px')
-    .gridTemplateColumns('minmax(0, 1fr) minmax(180px, 360px) minmax(0, 1fr)')
-  styleBuilder
-    .select('.topbar', theme)
-    .media('max-width: 600px')
-    .gridTemplateColumns('minmax(0, 1fr) auto')
-    .gap('10px')
   styleBuilder
     .select('.topbar__search', theme)
     .media('max-width: 600px')

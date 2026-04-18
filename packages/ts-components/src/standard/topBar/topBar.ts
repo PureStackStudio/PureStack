@@ -76,46 +76,54 @@ const topBarTemplate = html`<input
   autocomplete="off"
   aria-hidden="true"/>
 <header class="topbar">
-  <SiteLogo
-    :brand="brand"
-    :letterColors="brandLetterColors"
-    :subtitleLetterColors="brandSubtitleLetterColors"
-    :colors="brandColors"
-    :logoBackground="brandLogoBackground"
-    :logoForeground="brandLogoForeground"
-    :brandSize="brandSize"
-    :brandSizeSm="brandSizeSm"
-    :brandSizeMd="brandSizeMd"
-    :brandSizeLg="brandSizeLg"
-    :brandSizeXl="brandSizeXl"
-    :subtitleSize="brandSubtitleSize"
-    :subtitleSizeSm="brandSubtitleSizeSm"
-    :subtitleSizeMd="brandSubtitleSizeMd"
-    :subtitleSizeLg="brandSubtitleSizeLg"
-    :subtitleSizeXl="brandSubtitleSizeXl"
-    :iconSize="brandIconSize"
-    :iconSizeSm="brandIconSizeSm"
-    :iconSizeMd="brandIconSizeMd"
-    :iconSizeLg="brandIconSizeLg"
-    :iconSizeXl="brandIconSizeXl"
-    :subtitleInset="brandSubtitleInset"
-    :subtitleInsetSm="brandSubtitleInsetSm"
-    :subtitleInsetMd="brandSubtitleInsetMd"
-    :subtitleInsetLg="brandSubtitleInsetLg"
-    :subtitleInsetXl="brandSubtitleInsetXl"
-    :subtitle="brandSubtitle"
-    :href="brandHref"
-    :icon="brandIcon"/>
-  <site-search class="topbar__search"></site-search>
-  <div class="topbar__controls">
-    <theme-switcher></theme-switcher>
-    <label
-      class="topbar__icon topbar__toggle"
-      for="doc-nav-toggle"
-      role="button"
-      aria-label="Toggle navigation"
-    ></label>
-  </div>
+  <Flex align="center">
+    <div class="topbar__logo">
+      <SiteLogo
+        :brand="brand"
+        :letterColors="brandLetterColors"
+        :subtitleLetterColors="brandSubtitleLetterColors"
+        :colors="brandColors"
+        :logoBackground="brandLogoBackground"
+        :logoForeground="brandLogoForeground"
+        :brandSize="brandSize"
+        :brandSizeSm="brandSizeSm"
+        :brandSizeMd="brandSizeMd"
+        :brandSizeLg="brandSizeLg"
+        :brandSizeXl="brandSizeXl"
+        :subtitleSize="brandSubtitleSize"
+        :subtitleSizeSm="brandSubtitleSizeSm"
+        :subtitleSizeMd="brandSubtitleSizeMd"
+        :subtitleSizeLg="brandSubtitleSizeLg"
+        :subtitleSizeXl="brandSubtitleSizeXl"
+        :iconSize="brandIconSize"
+        :iconSizeSm="brandIconSizeSm"
+        :iconSizeMd="brandIconSizeMd"
+        :iconSizeLg="brandIconSizeLg"
+        :iconSizeXl="brandIconSizeXl"
+        :subtitleInset="brandSubtitleInset"
+        :subtitleInsetSm="brandSubtitleInsetSm"
+        :subtitleInsetMd="brandSubtitleInsetMd"
+        :subtitleInsetLg="brandSubtitleInsetLg"
+        :subtitleInsetXl="brandSubtitleInsetXl"
+        :subtitle="brandSubtitle"
+        :href="brandHref"
+        :icon="brandIcon"/>
+    </div>
+    <div class="topbar__search">
+      <site-search></site-search>
+    </div>
+    <div class="topbar__controls">
+      <Flex align="center" justify="end">
+        <theme-switcher></theme-switcher>
+        <label
+          class="topbar__icon topbar__toggle"
+          for="doc-nav-toggle"
+          role="button"
+          aria-label="Toggle navigation"
+        ></label>
+      </Flex>
+    </div>
+  </Flex>
 </header>`
 
 function defineTopBarComponent() {

@@ -2,6 +2,7 @@ import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '@purestack/ts-render'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
+import { defineFlexComponents } from '../flex/flex'
 import { defineLogoComponents } from '../logo/logo'
 import { defineSearchComponents } from '../searchBox/searchBox'
 import { defineTopBarComponents } from '../topBar/topBar'
@@ -10,6 +11,7 @@ describe('TopBar rendering', () => {
   it('applies logo values from site config', () => {
     const cleanup = ensureDomGlobals()
     const components = {
+      ...defineFlexComponents(),
       ...defineLogoComponents(),
       ...defineTopBarComponents(),
       ...defineSearchComponents(),
@@ -73,6 +75,10 @@ describe('TopBar rendering', () => {
     ).toBeGreaterThan(1)
     expect(html).toContain('href="/docs/"')
     expect(html).toContain('name="q"')
+    expect(html).toContain('class="topbar__logo"')
+    expect(html).toContain('class="topbar__search"')
+    expect(html).toContain('class="topbar__controls"')
+    expect((html.match(/class="flex/g) ?? []).length).toBeGreaterThan(1)
     expect(html).not.toContain('Pure')
     expect(html).not.toContain('Stack')
   })
