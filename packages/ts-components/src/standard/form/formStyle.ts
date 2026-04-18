@@ -84,11 +84,17 @@ function registerFormFieldStyles(
     .flexShrink('0')
     .color(palette.current.text.subtle)
   styleBuilder
-    .select('.form-block__input-shell > .form-block__input-icon:first-child', theme)
+    .select(
+      '.form-block__input-shell > .form-block__input-icon:first-child',
+      theme,
+    )
     .marginLeft('12px')
     .marginRight('0')
   styleBuilder
-    .select('.form-block__input-shell > .form-block__input-icon:last-child', theme)
+    .select(
+      '.form-block__input-shell > .form-block__input-icon:last-child',
+      theme,
+    )
     .marginLeft('0')
     .marginRight('12px')
   styleBuilder
