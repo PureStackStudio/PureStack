@@ -314,7 +314,9 @@ function resolveResponsiveLogoLength(
   return { base, sm, md, lg, xl }
 }
 
-function resolveOptionalCssLength(value: string | undefined): string | undefined {
+function resolveOptionalCssLength(
+  value: string | undefined,
+): string | undefined {
   if (typeof value !== 'string') return undefined
   const normalized = value.trim()
   return normalized.length > 0 ? normalized : undefined
