@@ -10,6 +10,7 @@ export function registerLogoStyles() {
   themes.forEach((theme, palette, options) => {
     registerLogoShellStyles(theme, palette, options)
     registerLogoTextStyles(theme, palette)
+    registerLogoResponsiveStyles(theme)
     registerLogoInteractiveStyles(theme, palette)
   })
 }
@@ -29,8 +30,8 @@ export function registerLogoShellStyles(
     .display('inline-flex')
     .alignItems('center')
     .gap('0.5rem')
-    .padding('8px 12px')
-    .borderRadius(options.radii.pill)
+    .padding('0.25rem 0.75rem')
+    .borderRadius(options.radii.sm)
     .border(`1px solid ${palette.current.border.subtle}`)
     .textDecoration('none')
     .maxWidth('100%')
@@ -42,10 +43,10 @@ export function registerLogoShellStyles(
 
   styleBuilder
     .select('.site-logo__glyph', theme)
-    .width('2rem')
-    .height('2rem')
-    .minWidth('2rem')
-    .minHeight('2rem')
+    .width('var(--ps-logo-icon-size, 2rem)')
+    .height('var(--ps-logo-icon-size, 2rem)')
+    .minWidth('var(--ps-logo-icon-size, 2rem)')
+    .minHeight('var(--ps-logo-icon-size, 2rem)')
     .borderRadius(options.radii.md)
     .display('grid')
     .placeItems('center')
@@ -94,7 +95,7 @@ export function registerLogoTextStyles(
     .display('flex')
     .alignItems('center')
     .justifyContent('space-between')
-    .fontSize('1.25rem')
+    .fontSize('var(--ps-logo-brand-size, 1.25rem)')
     .fontWeight('800')
 
   styleBuilder
@@ -109,11 +110,11 @@ export function registerLogoTextStyles(
     .select('.site-logo__subtitle', theme)
     .display('flex')
     .justifyContent('space-between')
-    .fontSize('0.5rem')
+    .fontSize('var(--ps-logo-subtitle-size, 0.5rem)')
     .fontWeight('700')
     .color(palette.current.text.subtle)
-    .marginLeft('0.5px')
-    .marginRight('0.5px')
+    .marginLeft('var(--ps-logo-subtitle-inset, 0.5px)')
+    .marginRight('var(--ps-logo-subtitle-inset, 0.5px)')
 
   styleBuilder
     .select('.site-logo__subtitle-letter', theme)
@@ -121,6 +122,144 @@ export function registerLogoTextStyles(
     .webkitBackgroundClip('text')
     .color('transparent')
     .webkitTextFillColor('transparent')
+}
+
+export function registerLogoResponsiveStyles(theme: ThemeMode) {
+  styleBuilder
+    .select('.site-logo__glyph', theme)
+    .media('min-width: 640px')
+    .width('var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem))')
+    .height('var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem))')
+    .minWidth('var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem))')
+    .minHeight('var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem))')
+
+  styleBuilder
+    .select('.site-logo__glyph', theme)
+    .media('min-width: 768px')
+    .width(
+      'var(--ps-logo-icon-size-md, var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem)))',
+    )
+    .height(
+      'var(--ps-logo-icon-size-md, var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem)))',
+    )
+    .minWidth(
+      'var(--ps-logo-icon-size-md, var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem)))',
+    )
+    .minHeight(
+      'var(--ps-logo-icon-size-md, var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem)))',
+    )
+
+  styleBuilder
+    .select('.site-logo__glyph', theme)
+    .media('min-width: 1024px')
+    .width(
+      'var(--ps-logo-icon-size-lg, var(--ps-logo-icon-size-md, var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem))))',
+    )
+    .height(
+      'var(--ps-logo-icon-size-lg, var(--ps-logo-icon-size-md, var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem))))',
+    )
+    .minWidth(
+      'var(--ps-logo-icon-size-lg, var(--ps-logo-icon-size-md, var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem))))',
+    )
+    .minHeight(
+      'var(--ps-logo-icon-size-lg, var(--ps-logo-icon-size-md, var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem))))',
+    )
+
+  styleBuilder
+    .select('.site-logo__glyph', theme)
+    .media('min-width: 1280px')
+    .width(
+      'var(--ps-logo-icon-size-xl, var(--ps-logo-icon-size-lg, var(--ps-logo-icon-size-md, var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem)))))',
+    )
+    .height(
+      'var(--ps-logo-icon-size-xl, var(--ps-logo-icon-size-lg, var(--ps-logo-icon-size-md, var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem)))))',
+    )
+    .minWidth(
+      'var(--ps-logo-icon-size-xl, var(--ps-logo-icon-size-lg, var(--ps-logo-icon-size-md, var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem)))))',
+    )
+    .minHeight(
+      'var(--ps-logo-icon-size-xl, var(--ps-logo-icon-size-lg, var(--ps-logo-icon-size-md, var(--ps-logo-icon-size-sm, var(--ps-logo-icon-size, 2rem)))))',
+    )
+
+  styleBuilder
+    .select('.site-logo__brand', theme)
+    .media('min-width: 640px')
+    .fontSize(
+      'var(--ps-logo-brand-size-sm, var(--ps-logo-brand-size, 1.25rem))',
+    )
+
+  styleBuilder
+    .select('.site-logo__brand', theme)
+    .media('min-width: 768px')
+    .fontSize(
+      'var(--ps-logo-brand-size-md, var(--ps-logo-brand-size-sm, var(--ps-logo-brand-size, 1.25rem)))',
+    )
+
+  styleBuilder
+    .select('.site-logo__brand', theme)
+    .media('min-width: 1024px')
+    .fontSize(
+      'var(--ps-logo-brand-size-lg, var(--ps-logo-brand-size-md, var(--ps-logo-brand-size-sm, var(--ps-logo-brand-size, 1.25rem))))',
+    )
+
+  styleBuilder
+    .select('.site-logo__brand', theme)
+    .media('min-width: 1280px')
+    .fontSize(
+      'var(--ps-logo-brand-size-xl, var(--ps-logo-brand-size-lg, var(--ps-logo-brand-size-md, var(--ps-logo-brand-size-sm, var(--ps-logo-brand-size, 1.25rem)))))',
+    )
+
+  styleBuilder
+    .select('.site-logo__subtitle', theme)
+    .media('min-width: 640px')
+    .fontSize(
+      'var(--ps-logo-subtitle-size-sm, var(--ps-logo-subtitle-size, 0.5rem))',
+    )
+    .marginLeft(
+      'var(--ps-logo-subtitle-inset-sm, var(--ps-logo-subtitle-inset, 0.5px))',
+    )
+    .marginRight(
+      'var(--ps-logo-subtitle-inset-sm, var(--ps-logo-subtitle-inset, 0.5px))',
+    )
+
+  styleBuilder
+    .select('.site-logo__subtitle', theme)
+    .media('min-width: 768px')
+    .fontSize(
+      'var(--ps-logo-subtitle-size-md, var(--ps-logo-subtitle-size-sm, var(--ps-logo-subtitle-size, 0.5rem)))',
+    )
+    .marginLeft(
+      'var(--ps-logo-subtitle-inset-md, var(--ps-logo-subtitle-inset-sm, var(--ps-logo-subtitle-inset, 0.5px)))',
+    )
+    .marginRight(
+      'var(--ps-logo-subtitle-inset-md, var(--ps-logo-subtitle-inset-sm, var(--ps-logo-subtitle-inset, 0.5px)))',
+    )
+
+  styleBuilder
+    .select('.site-logo__subtitle', theme)
+    .media('min-width: 1024px')
+    .fontSize(
+      'var(--ps-logo-subtitle-size-lg, var(--ps-logo-subtitle-size-md, var(--ps-logo-subtitle-size-sm, var(--ps-logo-subtitle-size, 0.5rem))))',
+    )
+    .marginLeft(
+      'var(--ps-logo-subtitle-inset-lg, var(--ps-logo-subtitle-inset-md, var(--ps-logo-subtitle-inset-sm, var(--ps-logo-subtitle-inset, 0.5px))))',
+    )
+    .marginRight(
+      'var(--ps-logo-subtitle-inset-lg, var(--ps-logo-subtitle-inset-md, var(--ps-logo-subtitle-inset-sm, var(--ps-logo-subtitle-inset, 0.5px))))',
+    )
+
+  styleBuilder
+    .select('.site-logo__subtitle', theme)
+    .media('min-width: 1280px')
+    .fontSize(
+      'var(--ps-logo-subtitle-size-xl, var(--ps-logo-subtitle-size-lg, var(--ps-logo-subtitle-size-md, var(--ps-logo-subtitle-size-sm, var(--ps-logo-subtitle-size, 0.5rem)))))',
+    )
+    .marginLeft(
+      'var(--ps-logo-subtitle-inset-xl, var(--ps-logo-subtitle-inset-lg, var(--ps-logo-subtitle-inset-md, var(--ps-logo-subtitle-inset-sm, var(--ps-logo-subtitle-inset, 0.5px)))))',
+    )
+    .marginRight(
+      'var(--ps-logo-subtitle-inset-xl, var(--ps-logo-subtitle-inset-lg, var(--ps-logo-subtitle-inset-md, var(--ps-logo-subtitle-inset-sm, var(--ps-logo-subtitle-inset, 0.5px)))))',
+    )
 }
 
 export function registerLogoInteractiveStyles(

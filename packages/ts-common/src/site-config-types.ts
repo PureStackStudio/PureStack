@@ -48,6 +48,26 @@ export interface LogoConfig {
   colors?: string[]
   logoBackground?: number
   logoForeground?: number
+  brandSize?: string
+  brandSizeSm?: string
+  brandSizeMd?: string
+  brandSizeLg?: string
+  brandSizeXl?: string
+  subtitleSize?: string
+  subtitleSizeSm?: string
+  subtitleSizeMd?: string
+  subtitleSizeLg?: string
+  subtitleSizeXl?: string
+  iconSize?: string
+  iconSizeSm?: string
+  iconSizeMd?: string
+  iconSizeLg?: string
+  iconSizeXl?: string
+  subtitleInset?: string
+  subtitleInsetSm?: string
+  subtitleInsetMd?: string
+  subtitleInsetLg?: string
+  subtitleInsetXl?: string
   subtitle?: string
   href: string
   icon?: string

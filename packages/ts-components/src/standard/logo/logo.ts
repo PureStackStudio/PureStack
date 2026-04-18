@@ -1,6 +1,6 @@
 import { defineComponent, html } from 'regor'
 
-const logoTemplate = html`<div class="site-logo">
+const logoTemplate = html`<div class="site-logo" :style="layoutStyle">
   <a class="site-logo__link" :href="href ?? '/'" :aria-label="ariaLabel">
     <span class="site-logo__glyph" :style="glyphStyle" aria-hidden="true">
       <Icon :name="icon" r-if="icon"/>
@@ -35,6 +35,14 @@ interface LogoLetter {
   style?: Record<string, string>
 }
 
+type LogoResponsiveLength = {
+  base?: string
+  sm?: string
+  md?: string
+  lg?: string
+  xl?: string
+}
+
 const DEFAULT_BRAND_FILL =
   'var(--ps-semantic-tone-accent-button-rest-background)'
 const DEFAULT_SUBTITLE_FILL = 'var(--ps-current-text-subtle)'
@@ -50,6 +58,27 @@ export interface SiteLogo {
   subtitle?: string
   subtitleLetters?: LogoLetter[]
   glyphStyle?: Record<string, string>
+  layoutStyle?: Record<string, string>
+  brandSize?: string
+  brandSizeSm?: string
+  brandSizeMd?: string
+  brandSizeLg?: string
+  brandSizeXl?: string
+  subtitleSize?: string
+  subtitleSizeSm?: string
+  subtitleSizeMd?: string
+  subtitleSizeLg?: string
+  subtitleSizeXl?: string
+  iconSize?: string
+  iconSizeSm?: string
+  iconSizeMd?: string
+  iconSizeLg?: string
+  iconSizeXl?: string
+  subtitleInset?: string
+  subtitleInsetSm?: string
+  subtitleInsetMd?: string
+  subtitleInsetLg?: string
+  subtitleInsetXl?: string
   href?: string
   icon?: string
   ariaLabel?: string
@@ -71,6 +100,7 @@ function resolveSiteLogo(props: SiteLogo): SiteLogo {
     DEFAULT_SUBTITLE_FILL,
   )
   const glyphStyle = resolveGlyphStyle(colors, logoBackground, logoForeground)
+  const layoutStyle = resolveLogoLayoutStyle(props)
   const href = props.href
   const icon = props.icon
   const ariaLabel = props.ariaLabel
@@ -86,6 +116,27 @@ function resolveSiteLogo(props: SiteLogo): SiteLogo {
     subtitle,
     subtitleLetters,
     glyphStyle,
+    layoutStyle,
+    brandSize: props.brandSize,
+    brandSizeSm: props.brandSizeSm,
+    brandSizeMd: props.brandSizeMd,
+    brandSizeLg: props.brandSizeLg,
+    brandSizeXl: props.brandSizeXl,
+    subtitleSize: props.subtitleSize,
+    subtitleSizeSm: props.subtitleSizeSm,
+    subtitleSizeMd: props.subtitleSizeMd,
+    subtitleSizeLg: props.subtitleSizeLg,
+    subtitleSizeXl: props.subtitleSizeXl,
+    iconSize: props.iconSize,
+    iconSizeSm: props.iconSizeSm,
+    iconSizeMd: props.iconSizeMd,
+    iconSizeLg: props.iconSizeLg,
+    iconSizeXl: props.iconSizeXl,
+    subtitleInset: props.subtitleInset,
+    subtitleInsetSm: props.subtitleInsetSm,
+    subtitleInsetMd: props.subtitleInsetMd,
+    subtitleInsetLg: props.subtitleInsetLg,
+    subtitleInsetXl: props.subtitleInsetXl,
     href,
     icon,
     ariaLabel,
@@ -196,6 +247,92 @@ function resolveIndexedLogoColor(
   return colors?.[colorIndex]
 }
 
+function resolveLogoLayoutStyle(
+  props: SiteLogo,
+): Record<string, string> | undefined {
+  const style: Record<string, string> = {}
+
+  assignResponsiveLengthVars(
+    style,
+    '--ps-logo-brand-size',
+    resolveResponsiveLogoLength({
+      base: props.brandSize,
+      sm: props.brandSizeSm,
+      md: props.brandSizeMd,
+      lg: props.brandSizeLg,
+      xl: props.brandSizeXl,
+    }),
+  )
+  assignResponsiveLengthVars(
+    style,
+    '--ps-logo-subtitle-size',
+    resolveResponsiveLogoLength({
+      base: props.subtitleSize,
+      sm: props.subtitleSizeSm,
+      md: props.subtitleSizeMd,
+      lg: props.subtitleSizeLg,
+      xl: props.subtitleSizeXl,
+    }),
+  )
+  assignResponsiveLengthVars(
+    style,
+    '--ps-logo-icon-size',
+    resolveResponsiveLogoLength({
+      base: props.iconSize,
+      sm: props.iconSizeSm,
+      md: props.iconSizeMd,
+      lg: props.iconSizeLg,
+      xl: props.iconSizeXl,
+    }),
+  )
+  assignResponsiveLengthVars(
+    style,
+    '--ps-logo-subtitle-inset',
+    resolveResponsiveLogoLength({
+      base: props.subtitleInset,
+      sm: props.subtitleInsetSm,
+      md: props.subtitleInsetMd,
+      lg: props.subtitleInsetLg,
+      xl: props.subtitleInsetXl,
+    }),
+  )
+
+  return Object.keys(style).length > 0 ? style : undefined
+}
+
+function resolveResponsiveLogoLength(
+  value: LogoResponsiveLength,
+): LogoResponsiveLength | undefined {
+  const base = resolveOptionalCssLength(value.base)
+  const sm = resolveOptionalCssLength(value.sm) ?? base
+  const md = resolveOptionalCssLength(value.md) ?? sm
+  const lg = resolveOptionalCssLength(value.lg) ?? md
+  const xl = resolveOptionalCssLength(value.xl) ?? lg
+
+  if (!base && !sm && !md && !lg && !xl) return undefined
+
+  return { base, sm, md, lg, xl }
+}
+
+function resolveOptionalCssLength(value: string | undefined): string | undefined {
+  if (typeof value !== 'string') return undefined
+  const normalized = value.trim()
+  return normalized.length > 0 ? normalized : undefined
+}
+
+function assignResponsiveLengthVars(
+  style: Record<string, string>,
+  variableName: string,
+  value: LogoResponsiveLength | undefined,
+) {
+  if (!value) return
+  if (value.base) style[variableName] = value.base
+  if (value.sm) style[`${variableName}-sm`] = value.sm
+  if (value.md) style[`${variableName}-md`] = value.md
+  if (value.lg) style[`${variableName}-lg`] = value.lg
+  if (value.xl) style[`${variableName}-xl`] = value.xl
+}
+
 function defineSiteLogoComponent() {
   return defineComponent<SiteLogo>(logoTemplate, {
     props: [
@@ -205,6 +342,26 @@ function defineSiteLogoComponent() {
       'colors',
       'logoBackground',
       'logoForeground',
+      'brandSize',
+      'brandSizeSm',
+      'brandSizeMd',
+      'brandSizeLg',
+      'brandSizeXl',
+      'subtitleSize',
+      'subtitleSizeSm',
+      'subtitleSizeMd',
+      'subtitleSizeLg',
+      'subtitleSizeXl',
+      'iconSize',
+      'iconSizeSm',
+      'iconSizeMd',
+      'iconSizeLg',
+      'iconSizeXl',
+      'subtitleInset',
+      'subtitleInsetSm',
+      'subtitleInsetMd',
+      'subtitleInsetLg',
+      'subtitleInsetXl',
       'subtitle',
       'href',
       'icon',

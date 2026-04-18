@@ -52,6 +52,86 @@
           "minimum": 0,
           "description": "Optional index into logo.colors used for the logo icon and fallback mark foreground. Keeps the built-in foreground when omitted."
         },
+        "brandSize": {
+          "type": "string",
+          "description": "Base brand font size."
+        },
+        "brandSizeSm": {
+          "type": "string",
+          "description": "Brand font size from the small breakpoint upward."
+        },
+        "brandSizeMd": {
+          "type": "string",
+          "description": "Brand font size from the medium breakpoint upward."
+        },
+        "brandSizeLg": {
+          "type": "string",
+          "description": "Brand font size from the large breakpoint upward."
+        },
+        "brandSizeXl": {
+          "type": "string",
+          "description": "Brand font size from the extra-large breakpoint upward."
+        },
+        "subtitleSize": {
+          "type": "string",
+          "description": "Base subtitle font size."
+        },
+        "subtitleSizeSm": {
+          "type": "string",
+          "description": "Subtitle font size from the small breakpoint upward."
+        },
+        "subtitleSizeMd": {
+          "type": "string",
+          "description": "Subtitle font size from the medium breakpoint upward."
+        },
+        "subtitleSizeLg": {
+          "type": "string",
+          "description": "Subtitle font size from the large breakpoint upward."
+        },
+        "subtitleSizeXl": {
+          "type": "string",
+          "description": "Subtitle font size from the extra-large breakpoint upward."
+        },
+        "iconSize": {
+          "type": "string",
+          "description": "Base logo glyph size."
+        },
+        "iconSizeSm": {
+          "type": "string",
+          "description": "Logo glyph size from the small breakpoint upward."
+        },
+        "iconSizeMd": {
+          "type": "string",
+          "description": "Logo glyph size from the medium breakpoint upward."
+        },
+        "iconSizeLg": {
+          "type": "string",
+          "description": "Logo glyph size from the large breakpoint upward."
+        },
+        "iconSizeXl": {
+          "type": "string",
+          "description": "Logo glyph size from the extra-large breakpoint upward."
+        },
+        "subtitleInset": {
+          "type": "string",
+          "description": "Base left and right inset applied to the subtitle row."
+        },
+        "subtitleInsetSm": {
+          "type": "string",
+          "description": "Subtitle inset from the small breakpoint upward."
+        },
+        "subtitleInsetMd": {
+          "type": "string",
+          "description": "Subtitle inset from the medium breakpoint upward."
+        },
+        "subtitleInsetLg": {
+          "type": "string",
+          "description": "Subtitle inset from the large breakpoint upward."
+        },
+        "subtitleInsetXl": {
+          "type": "string",
+          "description": "Subtitle inset from the extra-large breakpoint upward."
+        },
         "subtitle": {
           "type": "string",
           "description": "Optional subtitle text shown below the brand name."

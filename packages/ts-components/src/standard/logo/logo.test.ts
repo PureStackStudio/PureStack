@@ -25,6 +25,14 @@ describe('SiteLogo rendering', () => {
         :colors="['#111111', '#ff0066']"
         :logoBackground="1"
         :logoForeground="0"
+        brandSize="3rem"
+        brandSizeMd="4rem"
+        subtitleSize="0.5rem"
+        subtitleSizeLg="0.65rem"
+        iconSize="2.25rem"
+        iconSizeSm="2.5rem"
+        subtitleInset="1px"
+        subtitleInsetXl="2px"
         subtitle="backend-native engine"
         href="/"
       />`,
@@ -41,6 +49,14 @@ describe('SiteLogo rendering', () => {
     expect(html).toContain('class="site-logo__glyph"')
     expect(html).toContain('--ps-logo-glyph-background: #ff0066')
     expect(html).toContain('--ps-logo-glyph-foreground: #111111')
+    expect(html).toContain('--ps-logo-brand-size: 3rem')
+    expect(html).toContain('--ps-logo-brand-size-md: 4rem')
+    expect(html).toContain('--ps-logo-subtitle-size: 0.5rem')
+    expect(html).toContain('--ps-logo-subtitle-size-lg: 0.65rem')
+    expect(html).toContain('--ps-logo-icon-size: 2.25rem')
+    expect(html).toContain('--ps-logo-icon-size-sm: 2.5rem')
+    expect(html).toContain('--ps-logo-subtitle-inset: 1px')
+    expect(html).toContain('--ps-logo-subtitle-inset-xl: 2px')
     expect(html).toContain(
       'background-image: #ff0066; background-color: #ff0066',
     )
@@ -102,6 +118,7 @@ describe('SiteLogo rendering', () => {
         :colors="['#111111', '#ff0066']"
         :logoBackground="1"
         :logoForeground="0"
+        brandSize="3rem"
         subtitle="backend-native engine"
         icon="iconoir:cube"
       />`,
@@ -112,6 +129,7 @@ describe('SiteLogo rendering', () => {
     expect(html).toContain('class="site-logo__glyph"')
     expect(html).toContain('--ps-logo-glyph-background: #ff0066')
     expect(html).toContain('--ps-logo-glyph-foreground: #111111')
+    expect(html).toContain('--ps-logo-brand-size: 3rem')
     expect(html).toContain(
       '<svg viewbox="0 0 24 24"><path d="M4 12h16"></path></svg>',
     )

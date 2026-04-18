@@ -167,6 +167,46 @@ function resolveLogoConfig(
     logoForeground: normalizeOptionalNumber(
       input?.logoForeground ?? file?.logoForeground,
     ),
+    brandSize: resolveOptionalString(input?.brandSize ?? file?.brandSize),
+    brandSizeSm: resolveOptionalString(input?.brandSizeSm ?? file?.brandSizeSm),
+    brandSizeMd: resolveOptionalString(input?.brandSizeMd ?? file?.brandSizeMd),
+    brandSizeLg: resolveOptionalString(input?.brandSizeLg ?? file?.brandSizeLg),
+    brandSizeXl: resolveOptionalString(input?.brandSizeXl ?? file?.brandSizeXl),
+    subtitleSize: resolveOptionalString(
+      input?.subtitleSize ?? file?.subtitleSize,
+    ),
+    subtitleSizeSm: resolveOptionalString(
+      input?.subtitleSizeSm ?? file?.subtitleSizeSm,
+    ),
+    subtitleSizeMd: resolveOptionalString(
+      input?.subtitleSizeMd ?? file?.subtitleSizeMd,
+    ),
+    subtitleSizeLg: resolveOptionalString(
+      input?.subtitleSizeLg ?? file?.subtitleSizeLg,
+    ),
+    subtitleSizeXl: resolveOptionalString(
+      input?.subtitleSizeXl ?? file?.subtitleSizeXl,
+    ),
+    iconSize: resolveOptionalString(input?.iconSize ?? file?.iconSize),
+    iconSizeSm: resolveOptionalString(input?.iconSizeSm ?? file?.iconSizeSm),
+    iconSizeMd: resolveOptionalString(input?.iconSizeMd ?? file?.iconSizeMd),
+    iconSizeLg: resolveOptionalString(input?.iconSizeLg ?? file?.iconSizeLg),
+    iconSizeXl: resolveOptionalString(input?.iconSizeXl ?? file?.iconSizeXl),
+    subtitleInset: resolveOptionalString(
+      input?.subtitleInset ?? file?.subtitleInset,
+    ),
+    subtitleInsetSm: resolveOptionalString(
+      input?.subtitleInsetSm ?? file?.subtitleInsetSm,
+    ),
+    subtitleInsetMd: resolveOptionalString(
+      input?.subtitleInsetMd ?? file?.subtitleInsetMd,
+    ),
+    subtitleInsetLg: resolveOptionalString(
+      input?.subtitleInsetLg ?? file?.subtitleInsetLg,
+    ),
+    subtitleInsetXl: resolveOptionalString(
+      input?.subtitleInsetXl ?? file?.subtitleInsetXl,
+    ),
     subtitle: resolveOptionalString(input?.subtitle ?? file?.subtitle),
     href: resolveString(input?.href, file?.href, '/'),
     icon: resolveOptionalString(input?.icon ?? file?.icon),
