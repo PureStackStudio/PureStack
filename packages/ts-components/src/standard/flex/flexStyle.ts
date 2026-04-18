@@ -40,5 +40,10 @@ export function registerFlexStyles() {
 
     styleBuilder.select('.flex--wrap', theme).flexWrap('wrap')
     styleBuilder.select('.flex--wrap-reverse', theme).flexWrap('wrap-reverse')
+
+    styleBuilder.select('.flex-auto', theme).flex('1 1 auto').minWidth('0')
+    styleBuilder.select('.flex-none', theme).flex('0 0 auto')
+    styleBuilder.select('.flex-fill', theme).flex('1 1 0%')
+    styleBuilder.select('.flex-1', theme).flex('1 1 0%').minWidth('0')
   })
 }

@@ -29,7 +29,6 @@ function registerSearchBoxShellContainerStyles(theme: ThemeMode) {
   styleBuilder
     .select('.site-search', theme)
     .position('relative')
-    .width('clamp(170px, 28vw, 340px)')
     .maxWidth('100%')
 
   styleBuilder.select('.site-search__field', theme).display('block')
@@ -240,9 +239,15 @@ function registerSearchBoxResultContentStyles(
 
   styleBuilder
     .select('.site-search__results .site-search__message--error', theme)
-    .border(`1px solid ${palette.semanticTone.danger.border.default}`)
-    .background(palette.semanticTone.danger.canvas)
-    .color(palette.semanticTone.danger.text.default)
+    .border(`1px solid ${palette.semanticTone.danger.surface.rest.border}`)
+    .background(palette.semanticTone.danger.surface.rest.background)
+    .color(palette.semanticTone.danger.surface.rest.text)
+
+  styleBuilder
+    .select('.site-search__results .site-search__message--empty', theme)
+    .border(`1px solid ${palette.semanticTone.warning.surface.rest.border}`)
+    .background(palette.semanticTone.warning.surface.rest.background)
+    .color(palette.semanticTone.warning.surface.rest.text)
 }
 
 export function registerSearchBoxResponsiveStyles(theme: ThemeMode) {

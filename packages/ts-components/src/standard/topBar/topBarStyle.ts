@@ -9,7 +9,6 @@ import {
 export function registerTopBarStyles() {
   themes.forEach((theme, palette, options) => {
     registerTopBarShellStyles(theme, palette, options)
-    registerTopBarSearchStyles(theme)
     registerTopBarToggleStyles(theme, palette)
   })
 }
@@ -30,21 +29,7 @@ export function registerTopBarShellStyles(
     .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
     .borderBottomColor(palette.current.border.subtle)
 
-  styleBuilder
-    .select('.topbar__logo', theme)
-    .flex('0 0 auto')
-    .minWidth('0')
-
-  styleBuilder
-    .select('.topbar__search', theme)
-    .flex('1 1 auto')
-    .minWidth('0')
-
-  styleBuilder
-    .select('.topbar__controls', theme)
-    .flex('0 0 auto')
-    .marginLeft('auto')
-    .minWidth('0')
+  styleBuilder.select('.topbar__controls', theme).marginLeft('auto')
 
   styleBuilder
     .select('.topbar__icon', theme)
@@ -59,13 +44,6 @@ export function registerTopBarShellStyles(
     .position('relative')
     .padding('0')
     .color(palette.current.text.subtle)
-}
-
-export function registerTopBarSearchStyles(theme: ThemeMode) {
-  styleBuilder
-    .select('.topbar__search .site-search', theme)
-    .width('100%')
-    .maxWidth('none')
 }
 
 export function registerTopBarToggleStyles(
@@ -156,10 +134,7 @@ function registerTopBarResponsiveSearchStyles(theme: ThemeMode) {
     .media('max-width: 600px')
     .zIndex(90)
   styleBuilder
-    .select(
-      '.doc-nav-toggle:checked ~ .topbar .topbar__search .site-search',
-      theme,
-    )
+    .select('.doc-nav-toggle:checked ~ .topbar .topbar__search', theme)
     .media('max-width: 600px')
     .width('min(560px, calc(100vw - 24px))')
     .margin('0 auto')
