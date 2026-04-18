@@ -281,7 +281,50 @@ layout:
   </Grid>
 </AppForm>
 
-## 10. Rich rollout request form
+## 10. Input icons at the start or end
+
+<AppForm action="/profile" method="post" tone="info">
+  <Grid columns="1" columnsMd="2">
+    <FormInputField
+      label="Full name"
+      type="text"
+      name="profileName"
+      placeholder="Ada Lovelace"
+      autocomplete="name"
+      icon="iconoir:user"/>
+    <FormInputField
+      label="Email address"
+      type="email"
+      name="profileEmail"
+      placeholder="ada@analytical.engine"
+      autocomplete="email"
+      icon="iconoir:mail"/>
+  </Grid>
+
+  <Grid columns="1" columnsMd="2">
+    <FormInputField
+      label="Phone number"
+      type="tel"
+      name="profilePhone"
+      placeholder="+49 30 1234 5678"
+      autocomplete="tel"
+      icon="iconoir:phone"/>
+    <FormInputField
+      label="Workspace search"
+      type="search"
+      name="workspaceSearch"
+      placeholder="Search launch docs"
+      icon="iconoir:search"
+      iconEnd="iconoir:search"/>
+  </Grid>
+
+  <FormStatus tone="info">
+    Use `icon` for leading context and `iconEnd` for trailing affordances like
+    search, lookup, or action cues.
+  </FormStatus>
+</AppForm>
+
+## 11. Rich rollout request form
 
 <AppForm action="/rollout/request" method="post" tone="accent">
   <AlertBox tone="accent" title="Rollout request" badge="Launch ops">
@@ -368,7 +411,7 @@ layout:
   </Grid>
 </AppForm>
 
-## 11. Forms inside expandable panels
+## 12. Forms inside expandable panels
 
 <Grid columns="1" columnsMd="2" columnsLg="3" gap="1rem">
   <ExpandablePanel
@@ -515,7 +558,7 @@ layout:
   </ExpandablePanel>
 </Grid>
 
-## 12. Props reference
+## 13. Props reference
 
 ```html
 <AppForm action="/submit" method="post" tone="accent|neutral|info|success|warning|danger|ghost">
@@ -531,6 +574,8 @@ layout:
     max="..."
     step="..."
     value="..."
+    icon="iconoir:user"
+    iconEnd="iconoir:search"
   />
 
   <FormCheck label="Accept terms" name="terms" value="yes" checked="true|false" />

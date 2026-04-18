@@ -44,7 +44,9 @@ export class FormInputField {
   readonly min?: RefOrValue<number | string>
   readonly step?: RefOrValue<number | string>
   readonly placeholder?: RefOrValue<string>
-  inputToneClass?: ComputedRef<string>
+  readonly icon?: RefOrValue<string>
+  readonly iconEnd?: RefOrValue<string>
+  shellClass?: ComputedRef<string>
   buttonToneClass?: ComputedRef<string>
 
   constructor(props: FormInputField) {
@@ -103,11 +105,13 @@ export class FormInputField {
 
 const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
   <span class="form-block__label" r-if="label">{{ label }}</span>
-  <div class="form-block__number" :class="inputToneClass" r-if="isNumberField">
+  <div class="form-block__input-shell" :class="shellClass">
+    <Icon class="form-block__input-icon" :name="icon" r-if="icon"/>
     <input
       :id="id"
-      class="form-block__input form-block__input--number"
-      type="number"
+      class="form-block__input"
+      :class="{ 'form-block__input--number': isNumberField }"
+      :type="isNumberField ? 'number' : type || 'text'"
       :name="name"
       :required="required"
       :autocomplete="autocomplete || 'off'"
@@ -115,7 +119,7 @@ const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
       :step="step"
       :placeholder="placeholder"
       r-model="model"/>
-    <div class="form-block__number-controls">
+    <div class="form-block__number-controls" r-if="isNumberField">
       <button
         class="form-block__number-btn form-block__number-btn--up"
         :class="buttonToneClass"
@@ -135,20 +139,8 @@ const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
         -
       </button>
     </div>
+    <Icon class="form-block__input-icon" :name="iconEnd" r-if="iconEnd"/>
   </div>
-  <input
-    r-else
-    :id="id"
-    class="form-block__input"
-    :class="inputToneClass"
-    :type="type || 'text'"
-    :name="name"
-    :required="required"
-    :autocomplete="autocomplete || 'off'"
-    :min="min"
-    :step="step"
-    :placeholder="placeholder"
-    r-model="model"/>
 </label>`
 export function defineFormInputField() {
   return {
@@ -165,6 +157,8 @@ export function defineFormInputField() {
         'min',
         'step',
         'placeholder',
+        'icon',
+        'iconEnd',
       ],
       context: (head) => resolveFormInputField(head),
     }),
@@ -175,7 +169,7 @@ function resolveFormInputField(head: ComponentHead<FormInputField>) {
   const inheritedTone = head.findContext(FormToneContext)?.tone
   const resolvedTone = () => unref(head.props.tone) || unref(inheritedTone)
   const field = new FormInputField(head.props)
-  field.inputToneClass = computed(() =>
+  field.shellClass = computed(() =>
     getSemanticToneSurfaceClass(resolvedTone(), false),
   )
   field.buttonToneClass = computed(() =>

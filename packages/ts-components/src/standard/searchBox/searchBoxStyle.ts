@@ -8,21 +8,15 @@ import {
 
 export function registerSearchBoxStyles() {
   themes.forEach((theme, palette, options) => {
-    registerSearchBoxShellStyles(theme, palette, options)
+    registerSearchBoxShellStyles(theme)
     registerSearchBoxResultStyles(theme, palette, options)
     registerSearchBoxResponsiveStyles(theme)
   })
 }
 
-export function registerSearchBoxShellStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+export function registerSearchBoxShellStyles(theme: ThemeMode) {
   registerSearchBoxShellContainerStyles(theme)
-  registerSearchBoxShellIconStyles(theme)
   registerSearchBoxShellAccessibilityStyles(theme)
-  registerSearchBoxShellInputStyles(theme, palette, options)
 }
 
 function registerSearchBoxShellContainerStyles(theme: ThemeMode) {
@@ -32,36 +26,6 @@ function registerSearchBoxShellContainerStyles(theme: ThemeMode) {
     .maxWidth('100%')
 
   styleBuilder.select('.site-search__field', theme).display('block')
-}
-
-function registerSearchBoxShellIconStyles(theme: ThemeMode) {
-  styleBuilder
-    .select('.site-search__icon', theme)
-    .position('absolute')
-    .left('12px')
-    .top('50%')
-    .width('18px')
-    .height('18px')
-    .transform('translateY(-50%)')
-    .color('currentColor')
-    .pointerEvents('none')
-
-  styleBuilder
-    .select('.site-search__icon .icon', theme)
-    .position('absolute')
-    .width('18px')
-    .height('18px')
-
-  styleBuilder
-    .select('.site-search__icon span svg', theme)
-    .width('100%')
-    .height('100%')
-    .display('block')
-    .fill('none')
-    .stroke('currentColor')
-    .strokeWidth('2')
-    .strokeLinecap('round')
-    .strokeLinejoin('round')
 }
 
 function registerSearchBoxShellAccessibilityStyles(theme: ThemeMode) {
@@ -76,40 +40,6 @@ function registerSearchBoxShellAccessibilityStyles(theme: ThemeMode) {
     .clip('rect(0, 0, 0, 0)')
     .whiteSpace('nowrap')
     .border('0')
-}
-
-function registerSearchBoxShellInputStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
-  styleBuilder
-    .select('.site-search__input', theme)
-    .width('100%')
-    .height('42px')
-    .padding('0 14px 0 42px')
-    .borderRadius(options.radii.pill)
-    .border(`1px solid ${palette.current.border.default}`)
-    .background('transparent')
-    .color('currentColor')
-    .fontSize('14px')
-    .lineHeight('1.3')
-    .boxSizing('border-box')
-    .transition('border-color 160ms ease, box-shadow 160ms ease')
-    .appearance('none')
-
-  styleBuilder
-    .select('.site-search__input::placeholder', theme)
-    .color(palette.current.text.subtle)
-
-  styleBuilder
-    .select('.site-search__input:focus-visible', theme)
-    .outline(`2px solid ${palette.current.border.focus}`)
-    .borderColor(palette.semanticTone.accent.border.default)
-
-  styleBuilder
-    .select('.site-search__input::-webkit-search-cancel-button', theme)
-    .cursor('pointer')
 }
 
 export function registerSearchBoxResultStyles(

@@ -138,8 +138,15 @@ function renderResults(
   container.hidden = false
 }
 
+function resolveSearchInput(root: HTMLElement): HTMLInputElement | null {
+  const target = root.querySelector('[data-pagefind-input]')
+  if (target instanceof HTMLInputElement) return target
+  if (!(target instanceof HTMLElement)) return null
+  return target.querySelector('input')
+}
+
 async function setupSearch(root: HTMLElement) {
-  const input = root.querySelector<HTMLInputElement>('[data-pagefind-input]')
+  const input = resolveSearchInput(root)
   const output = root.querySelector<HTMLElement>('[data-pagefind-results]')
   if (
     !(input instanceof HTMLInputElement) ||

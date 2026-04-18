@@ -18,15 +18,6 @@ export function registerFormStyles() {
 
 function registerFormShellStyles(theme: ThemeMode) {
   styleBuilder.select('.form-block', theme).display('grid').gap('12px')
-  styleBuilder
-    .select('.form-block__autofill-trap', theme)
-    .position('absolute')
-    .left('-10000px')
-    .top('auto')
-    .width('1px')
-    .height('1px')
-    .opacity('0')
-    .pointerEvents('none')
 }
 
 function registerFormFieldStyles(
@@ -42,52 +33,39 @@ function registerFormFieldStyles(
     .letterSpacing('0.02em')
     .color(palette.current.text.default)
   styleBuilder
-    .select('.form-block__input', theme)
+    .select('.form-block__input-shell', theme)
     .width('100%')
     .boxSizing('border-box')
-    .padding('11px 12px')
     .borderRadius(options.radii.md)
-    .fontSize('0.94rem')
-    .lineHeight('1.35')
     .transition('border-color 160ms ease, box-shadow 160ms ease')
+    .display('flex')
+    .alignItems('stretch')
+    .overflow('hidden')
   styleBuilder
-    .select('.form-block__input::placeholder', theme)
-    .color(palette.current.text.subtle)
-  styleBuilder
-    .select('.form-block__input:focus-visible', theme)
+    .select(
+      '.form-block__input-shell:has(.form-block__input:focus-visible)',
+      theme,
+    )
     .outline('none')
     .borderColor(palette.semanticTone.accent.border.default)
     .boxShadow(`0 0 0 3px ${palette.semanticTone.accent.surface.focusRing}`)
   styleBuilder
-    .select(
-      '.form-block__input[type="number"], .form-block__input--number',
-      theme,
-    )
-    .appearance('textfield')
-  styleBuilder
-    .select('.form-block__number', theme)
-    .display('grid')
-    .gridTemplateColumns('minmax(0, 1fr) 40px')
-    .alignItems('stretch')
+    .select('.form-block__input', theme)
     .width('100%')
+    .minWidth('0')
     .boxSizing('border-box')
-    .padding('0')
-    .transition('border-color 160ms ease, box-shadow 160ms ease')
-    .overflow('hidden')
-    .borderRadius(options.radii.md)
-  styleBuilder
-    .select(
-      '.form-block__number:has(.form-block__input--number:focus-visible)',
-      theme,
-    )
-    .borderColor(palette.semanticTone.accent.border.default)
-    .boxShadow(`0 0 0 3px ${palette.semanticTone.accent.surface.focusRing}`)
-  styleBuilder
-    .select('.form-block__number .form-block__input--number', theme)
-    .borderRadius('0')
+    .padding('11px 12px')
     .border('none')
-    .boxShadow('none')
+    .borderRadius('0')
+    .fontSize('0.94rem')
+    .lineHeight('1.35')
     .background('transparent')
+    .boxShadow('none')
+    .flex('1 1 auto')
+  styleBuilder
+    .select('.form-block__input::placeholder', theme)
+    .color(palette.current.text.subtle)
+  styleBuilder.select('.form-block__input:focus-visible', theme).outline('none')
   styleBuilder
     .select(
       '.form-block__input[type="number"]::-webkit-outer-spin-button, .form-block__input[type="number"]::-webkit-inner-spin-button',
@@ -96,9 +74,29 @@ function registerFormFieldStyles(
     .appearance('none')
     .margin('0')
   styleBuilder
+    .select('.form-block__input[type="number"]', theme)
+    .appearance('textfield')
+  styleBuilder
+    .select('.form-block__input-icon', theme)
+    .width('18px')
+    .height('18px')
+    .alignSelf('center')
+    .flexShrink('0')
+    .color(palette.current.text.subtle)
+  styleBuilder
+    .select('.form-block__input-shell > .form-block__input-icon:first-child', theme)
+    .marginLeft('12px')
+    .marginRight('0')
+  styleBuilder
+    .select('.form-block__input-shell > .form-block__input-icon:last-child', theme)
+    .marginLeft('0')
+    .marginRight('12px')
+  styleBuilder
     .select('.form-block__number-controls', theme)
     .display('grid')
     .gridTemplateRows('1fr 1fr')
+    .width('40px')
+    .flex('0 0 auto')
     .background('transparent')
   styleBuilder
     .select('.form-block__number-btn', theme)

@@ -8,21 +8,16 @@ export interface SearchBox {
 }
 
 const searchBoxTemplate = html`<div class="site-search" data-pagefind-search>
-  <label class="site-search__field">
-    <span class="site-search__sr-only">Search site</span>
-    <span class="site-search__icon" aria-hidden="true">
-      <Icon name="tabler:search"/>
-    </span>
-    <input
-      class="site-search__input"
-      type="search"
-      name="q"
-      :placeholder="placeholder"
-      autocomplete="off"
-      spellcheck="false"
-      data-pagefind-input
-      aria-label="Search site content"/>
-  </label>
+  <FormInputField
+    icon="tabler:search"
+    tone="ghost"
+    type="search"
+    name="q"
+    :placeholder="placeholder"
+    autocomplete="off"
+    spellcheck="false"
+    data-pagefind-input
+    aria-label="Search site content"/>
   <div
     class="site-search__results doc-content"
     data-pagefind-results
