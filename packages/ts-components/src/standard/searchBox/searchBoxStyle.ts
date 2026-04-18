@@ -47,7 +47,13 @@ function registerSearchBoxShellIconStyles(theme: ThemeMode) {
     .pointerEvents('none')
 
   styleBuilder
-    .select('.site-search__icon svg', theme)
+    .select('.site-search__icon .icon', theme)
+    .position('absolute')
+    .width('18px')
+    .height('18px')
+
+  styleBuilder
+    .select('.site-search__icon span svg', theme)
     .width('100%')
     .height('100%')
     .display('block')

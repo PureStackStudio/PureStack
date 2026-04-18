@@ -11,10 +11,7 @@ const searchBoxTemplate = html`<div class="site-search" data-pagefind-search>
   <label class="site-search__field">
     <span class="site-search__sr-only">Search site</span>
     <span class="site-search__icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24" focusable="false">
-        <circle cx="11" cy="11" r="6.5"></circle>
-        <path d="M16 16l4.25 4.25"></path>
-      </svg>
+      <Icon name="tabler:search"/>
     </span>
     <input
       class="site-search__input"
