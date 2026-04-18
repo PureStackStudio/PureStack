@@ -13,7 +13,7 @@ export interface MarkdownStyleOptions {
 export function registerMarkdownStyles(options: MarkdownStyleOptions = {}) {
   const includeShikiStyles = options.includeShikiStyles !== false
   themes.forEach((theme, palette, options) => {
-    registerBaseProseStyles(theme, palette)
+    registerBaseProseStyles(theme, palette, options)
     registerHeadingStyles(theme, palette)
     registerListStyles(theme)
     registerLinkStyles(theme, palette)
@@ -25,10 +25,14 @@ export function registerMarkdownStyles(options: MarkdownStyleOptions = {}) {
   })
 }
 
-function registerBaseProseStyles(theme: ThemeMode, palette: ThemePalette) {
+function registerBaseProseStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.doc-content', theme)
-    .fontSize(palette.typography.fontSize.body)
+    .fontSize(options.typography.baseSize)
     .lineHeight('1.7')
     .color(palette.current.text.default)
 
