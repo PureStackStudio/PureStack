@@ -19,7 +19,19 @@ const SVG_ICONS: Record<AvailableIconNames, string> = {
   ...TABLER_ICONS,
 }
 
+/**
+ * Returns an SVG string for a generated icon name or passes through raw SVG input.
+ *
+ * Supported lookup names use the `provider:icon-name` format, such as
+ * `iconoir:code`, `lucide:check`, `phosphor:acorn`, or `tabler:activity-filled`.
+ *
+ * If `name` already contains `<svg`, it is returned unchanged. This is useful
+ * when callers accept either a registered icon name or an inline SVG string.
+ *
+ * @throws {Error} If the value is not raw SVG and no generated icon matches it.
+ */
 export function getSvgIcon(name: AvailableIconNames): string {
+  if (name?.includes('<svg')) return name
   const icon = SVG_ICONS[name]
   if (!icon) throw new Error(`Unknown icon: ${name}`)
   return icon

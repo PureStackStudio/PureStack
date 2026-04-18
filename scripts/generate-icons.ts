@@ -244,6 +244,7 @@ function renderGetSvgIconModule() {
     '}',
     '',
     'export function getSvgIcon(name: AvailableIconNames): string {',
+    "  if (name.includes('<svg')) return name",
     '  const icon = SVG_ICONS[name]',
     `  if (!icon) throw new Error(\`Unknown icon: \${name}\`)`,
     '  return icon',
@@ -358,31 +359,38 @@ async function readPhosphorIcons(): Promise<GeneratedIcon[]> {
 }
 
 async function readTablerIcons(): Promise<GeneratedIcon[]> {
-  const iconsDir = path.join(
-    projectRoot,
-    'node_modules',
-    '@tabler',
-    'icons',
-    'icons',
-    'outline',
-  )
-  const files = await readdir(iconsDir, { withFileTypes: true })
-  const svgFiles = files
-    .filter((entry) => entry.isFile() && entry.name.endsWith('.svg'))
-    .map((entry) => entry.name)
-    .sort()
+  const variants = [
+    { folder: 'outline', suffix: '' },
+    { folder: 'filled', suffix: '-filled' },
+  ] as const
   const icons: GeneratedIcon[] = []
-  for (const fileName of svgFiles) {
-    const sourceName = fileName.replace(/\.svg$/i, '')
-    const svgPath = path.join(iconsDir, fileName)
-    const rawSvg = await readFile(svgPath, 'utf8')
-    const parsed = parseSvg(rawSvg, svgPath)
-    icons.push({
-      name: sourceName,
-      svg: buildSvgString(parsed.attributes, parsed.innerSvg),
-    })
+  for (const variant of variants) {
+    const iconsDir = path.join(
+      projectRoot,
+      'node_modules',
+      '@tabler',
+      'icons',
+      'icons',
+      variant.folder,
+    )
+    const files = await readdir(iconsDir, { withFileTypes: true })
+    const svgFiles = files
+      .filter((entry) => entry.isFile() && entry.name.endsWith('.svg'))
+      .map((entry) => entry.name)
+      .sort()
+    for (const fileName of svgFiles) {
+      const sourceName = fileName.replace(/\.svg$/i, '')
+      const publicName = `${sourceName}${variant.suffix}`
+      const svgPath = path.join(iconsDir, fileName)
+      const rawSvg = await readFile(svgPath, 'utf8')
+      const parsed = parseSvg(rawSvg, svgPath)
+      icons.push({
+        name: publicName,
+        svg: buildSvgString(parsed.attributes, parsed.innerSvg),
+      })
+    }
   }
-  return icons
+  return icons.sort((a, b) => a.name.localeCompare(b.name))
 }
 
 async function main() {

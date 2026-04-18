@@ -6,7 +6,7 @@ This package contains generated icon data from:
 - `iconoir`
 - `lucide`
 - `@phosphor-icons/core` (`regular` icons only)
-- `@tabler/icons` (`outline` icons only)
+- `@tabler/icons` (`outline` and `filled`)
 
 It is designed for two usage patterns:
 - `getSvgIcon(...)` for SSG/server rendering (easy lookup by string key).
@@ -42,6 +42,7 @@ const svg = getSvgIcon('iconoir:code')
 - Input format: `provider:icon-name`
 - Supported providers: `iconoir`, `lucide`, `phosphor`, `tabler`
 - Returns: raw SVG string
+- If the input already contains `<svg`, it is returned unchanged
 - Throws if icon does not exist
 
 Examples:
@@ -49,6 +50,13 @@ Examples:
 - `lucide:check`
 - `phosphor:acorn`
 - `tabler:activity`
+- `tabler:activity-filled`
+
+Raw SVG passthrough:
+
+```ts
+const svg = getSvgIcon('<svg viewBox="0 0 24 24">...</svg>')
+```
 
 ### Types
 
@@ -86,18 +94,21 @@ import {
   lucide_check,
   phosphor_acorn,
   tabler_activity,
+  tabler_activity_filled,
 } from '@purestack/ts-svg-icons'
 
 const codeSvg = iconoir_code
 const checkSvg = lucide_check
 const acornSvg = phosphor_acorn
 const activitySvg = tabler_activity
+const activityFilledSvg = tabler_activity_filled
 ```
 
 How export names are generated:
 - prefix with provider: `iconoir_`, `lucide_`, `phosphor_`, or `tabler_`
 - replace non-alphanumeric characters with `_`
 - solid Iconoir variants end with `_solid`
+- filled Tabler variants end with `_filled`
 
 Examples:
 - `iconoir:code` -> `iconoir_code`
@@ -107,6 +118,7 @@ Examples:
 - `phosphor:address-book-tabs` -> `phosphor_address_book_tabs`
 - `tabler:activity` -> `tabler_activity`
 - `tabler:address-book-off` -> `tabler_address_book_off`
+- `tabler:activity-filled` -> `tabler_activity_filled`
 
 ## Name lookup
 
