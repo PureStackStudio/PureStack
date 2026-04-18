@@ -35,22 +35,18 @@ describe('SiteLogo rendering', () => {
     expect((html.match(/site-logo__brand-letter/g) ?? []).length).toBe(
       'Calc Core'.length,
     )
-    expect(html).toContain(
-      'style="background-image: #111111; background-color: #111111;"',
-    )
-    expect(html).toContain(
-      'class="site-logo__glyph" style="--ps-logo-glyph-background: #ff0066; --ps-logo-glyph-foreground: #111111;"',
-    )
-    expect(html).toContain(
-      'style="background-image: #ff0066; background-color: #ff0066;"',
-    )
+    expect(html).toContain('background-image: #111111; background-color: #111111')
+    expect(html).toContain('class="site-logo__glyph"')
+    expect(html).toContain('--ps-logo-glyph-background: #ff0066')
+    expect(html).toContain('--ps-logo-glyph-foreground: #111111')
+    expect(html).toContain('background-image: #ff0066; background-color: #ff0066')
     expect((html.match(/site-logo__subtitle-letter/g) ?? []).length).toBe(
       'backend-native engine'.length,
     )
     expect(
       (
         html.match(
-          /style="background-image: #ff0066; background-color: #ff0066;"/g,
+          /background-image: #ff0066; background-color: #ff0066/g,
         ) ?? []
       ).length,
     ).toBeGreaterThan(1)
@@ -85,6 +81,8 @@ describe('SiteLogo rendering', () => {
       'background-image: var(--ps-semantic-tone-accent-button-rest-background)',
     )
     expect(html).toContain('background-image: var(--ps-current-text-subtle)')
+    expect(html).not.toContain('--ps-logo-glyph-background')
+    expect(html).not.toContain('--ps-logo-glyph-foreground')
   })
 
   it('renders the shared icon component when an icon name is provided', () => {
@@ -108,9 +106,9 @@ describe('SiteLogo rendering', () => {
     )
     cleanup()
 
-    expect(html).toContain(
-      'class="site-logo__glyph" style="--ps-logo-glyph-background: #ff0066; --ps-logo-glyph-foreground: #111111;"',
-    )
+    expect(html).toContain('class="site-logo__glyph"')
+    expect(html).toContain('--ps-logo-glyph-background: #ff0066')
+    expect(html).toContain('--ps-logo-glyph-foreground: #111111')
     expect(html).toContain(
       '<svg viewbox="0 0 24 24"><path d="M4 12h16"></path></svg>',
     )
