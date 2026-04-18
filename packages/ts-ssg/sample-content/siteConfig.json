@@ -11,6 +11,8 @@
       "var(--ps-current-text-default)",
       "var(--ps-semantic-tone-accent-button-rest-background)"
     ],
+    "logoBackground": 2,
+    "logoForeground": 1,
     "subtitle": "backend-native engine",
     "href": "/",
     "icon": "iconoir:cube"

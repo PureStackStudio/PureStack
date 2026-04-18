@@ -8,6 +8,8 @@ export interface TopBar {
   brandLetterColors?: string
   brandSubtitleLetterColors?: string
   brandColors?: string[]
+  brandLogoBackground?: number
+  brandLogoForeground?: number
   brandSubtitle?: string
   brandHref: string
   brandIcon?: string
@@ -19,6 +21,8 @@ function resolveTopBar(context: TsSsgContext): TopBar {
     brandLetterColors: context.site.logo.letterColors,
     brandSubtitleLetterColors: context.site.logo.subtitleLetterColors,
     brandColors: context.site.logo.colors,
+    brandLogoBackground: context.site.logo.logoBackground,
+    brandLogoForeground: context.site.logo.logoForeground,
     brandSubtitle: context.site.logo.subtitle,
     brandHref: context.site.logo.href ?? '/',
     brandIcon: context.site.logo.icon,
@@ -37,6 +41,8 @@ const topBarTemplate = html`<input
     :letterColors="brandLetterColors"
     :subtitleLetterColors="brandSubtitleLetterColors"
     :colors="brandColors"
+    :logoBackground="brandLogoBackground"
+    :logoForeground="brandLogoForeground"
     :subtitle="brandSubtitle"
     :href="brandHref"
     :icon="brandIcon"/>

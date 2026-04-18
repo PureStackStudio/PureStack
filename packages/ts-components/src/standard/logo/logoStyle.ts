@@ -50,21 +50,28 @@ export function registerLogoShellStyles(
     .display('grid')
     .placeItems('center')
     .position('relative')
-    .background(palette.semanticTone.accent.icon.background)
+    .background(
+      `var(--ps-logo-glyph-background, ${palette.semanticTone.accent.icon.background})`,
+    )
+    .backgroundColor(
+      `var(--ps-logo-glyph-background, ${palette.semanticTone.accent.icon.background})`,
+    )
     .border(`1px solid ${palette.semanticTone.accent.icon.border}`)
+    .color(
+      `var(--ps-logo-glyph-foreground, ${palette.semanticTone.accent.icon.color})`,
+    )
 
   styleBuilder
-    .select('.site-logo__icon', theme)
-    .width('70%')
-    .height('70%')
-    .color(palette.semanticTone.accent.icon.color)
+    .select('.site-logo__glyph > .icon', theme)
+    .width('80%')
+    .height('80%')
 
   styleBuilder
     .select('.site-logo__glyph-mark', theme)
     .position('absolute')
     .inset('30%')
     .borderRadius('4px')
-    .background(palette.semanticTone.accent.icon.color)
+    .backgroundColor('currentColor')
 }
 
 export function registerLogoTextStyles(

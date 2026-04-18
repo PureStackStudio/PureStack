@@ -18,6 +18,8 @@ const DEFAULT_SITE: DeepPartial<SiteConfig> = {
     letterColors: '000011111',
     subtitleLetterColors: '111111111111111111111',
     colors: ['var(--ps-current-text-default)', 'var(--ps-current-text-subtle)'],
+    logoBackground: 1,
+    logoForeground: 0,
     href: '/',
     icon: 'iconoir:cube',
   },

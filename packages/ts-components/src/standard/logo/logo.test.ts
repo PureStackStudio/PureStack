@@ -23,6 +23,8 @@ describe('SiteLogo rendering', () => {
         letterColors="00001111"
         subtitleLetterColors="1111111111111111111"
         :colors="['#111111', '#ff0066']"
+        :logoBackground="1"
+        :logoForeground="0"
         subtitle="backend-native engine"
         href="/"
       />`,
@@ -35,6 +37,9 @@ describe('SiteLogo rendering', () => {
     )
     expect(html).toContain(
       'style="background-image: #111111; background-color: #111111;"',
+    )
+    expect(html).toContain(
+      'class="site-logo__glyph" style="--ps-logo-glyph-background: #ff0066; --ps-logo-glyph-foreground: #111111;"',
     )
     expect(html).toContain(
       'style="background-image: #ff0066; background-color: #ff0066;"',
@@ -64,6 +69,24 @@ describe('SiteLogo rendering', () => {
     expect(html).not.toContain('site-logo__subtitle')
   })
 
+  it('uses default fills when letter color maps are not provided', () => {
+    const cleanup = ensureDomGlobals()
+    const components = defineLogoComponents()
+    const html = renderApp(
+      `<SiteLogo brand="Calc Core" subtitle="backend-native engine" />`,
+      {
+        components,
+        context: createTestContext(),
+      },
+    )
+    cleanup()
+
+    expect(html).toContain(
+      'background-image: var(--ps-semantic-tone-accent-button-rest-background)',
+    )
+    expect(html).toContain('background-image: var(--ps-current-text-subtle)')
+  })
+
   it('renders the shared icon component when an icon name is provided', () => {
     const cleanup = ensureDomGlobals()
     const components = {
@@ -76,6 +99,8 @@ describe('SiteLogo rendering', () => {
         letterColors="00001111"
         subtitleLetterColors="1111111111111111111"
         :colors="['#111111', '#ff0066']"
+        :logoBackground="1"
+        :logoForeground="0"
         subtitle="backend-native engine"
         icon="iconoir:cube"
       />`,
@@ -83,7 +108,9 @@ describe('SiteLogo rendering', () => {
     )
     cleanup()
 
-    expect(html).toContain('site-logo__icon')
+    expect(html).toContain(
+      'class="site-logo__glyph" style="--ps-logo-glyph-background: #ff0066; --ps-logo-glyph-foreground: #111111;"',
+    )
     expect(html).toContain(
       '<svg viewbox="0 0 24 24"><path d="M4 12h16"></path></svg>',
     )

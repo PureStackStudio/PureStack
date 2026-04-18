@@ -29,11 +29,11 @@
         },
         "letterColors": {
           "type": "string",
-          "description": "Per-letter color index map. Each digit selects an entry from logo.colors and applies it to the next non-space letter."
+          "description": "Optional per-letter color index map. Each digit selects an entry from logo.colors and applies it to the next non-space letter."
         },
         "subtitleLetterColors": {
           "type": "string",
-          "description": "Per-letter color index map for the subtitle. Each digit selects an entry from logo.colors and applies it to the next non-space letter."
+          "description": "Optional per-letter color index map for the subtitle. Each digit selects an entry from logo.colors and applies it to the next non-space letter."
         },
         "colors": {
           "type": "array",
@@ -41,6 +41,16 @@
           "items": {
             "type": "string"
           }
+        },
+        "logoBackground": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Optional index into logo.colors used for the logo glyph background. Keeps the built-in background when omitted."
+        },
+        "logoForeground": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Optional index into logo.colors used for the logo icon and fallback mark foreground. Keeps the built-in foreground when omitted."
         },
         "subtitle": {
           "type": "string",

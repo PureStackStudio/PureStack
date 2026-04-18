@@ -161,6 +161,12 @@ function resolveLogoConfig(
       input?.subtitleLetterColors ?? file?.subtitleLetterColors,
     ),
     colors: resolveStringList(input?.colors ?? file?.colors),
+    logoBackground: normalizeOptionalNumber(
+      input?.logoBackground ?? file?.logoBackground,
+    ),
+    logoForeground: normalizeOptionalNumber(
+      input?.logoForeground ?? file?.logoForeground,
+    ),
     subtitle: resolveOptionalString(input?.subtitle ?? file?.subtitle),
     href: resolveString(input?.href, file?.href, '/'),
     icon: resolveOptionalString(input?.icon ?? file?.icon),

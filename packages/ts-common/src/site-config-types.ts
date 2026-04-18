@@ -46,6 +46,8 @@ export interface LogoConfig {
   letterColors?: string
   subtitleLetterColors?: string
   colors?: string[]
+  logoBackground?: number
+  logoForeground?: number
   subtitle?: string
   href: string
   icon?: string
