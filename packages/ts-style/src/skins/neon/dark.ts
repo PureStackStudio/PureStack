@@ -3,8 +3,21 @@ import type { ThemeMode } from '../../themeOptions'
 import { createNeonPalette, type NeonCore } from './base'
 import type { ToneColors } from './shared'
 
-export const accent = '#1788f1'
-export const neutral = '#232c38'
+const bestColors = {
+  standardBlue: {
+    accent: '#1788f1',
+    neutral: '#232c38',
+  },
+  orangeBlue: {
+    accent: '#c7690a',
+    neutral: '#2a5b68',
+  },
+  orangeDarkBlue: {
+    accent: '#c7690a',
+    neutral: '#232c38',
+  },
+}
+export const { accent, neutral } = bestColors.orangeBlue
 export const info = '#15a9c0'
 export const success = '#259740'
 export const warning = '#c49a1c'
