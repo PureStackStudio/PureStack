@@ -30,8 +30,9 @@ describe('TopBar rendering', () => {
     })
     cleanup()
 
-    expect(html).toContain('Calc')
-    expect(html).toContain('Core')
+    expect((html.match(/site-logo__brand-letter/g) ?? []).length).toBe(
+      'Calc Core'.length,
+    )
     expect((html.match(/site-logo__subtitle-letter/g) ?? []).length).toBe(
       'backend-native engine'.length,
     )

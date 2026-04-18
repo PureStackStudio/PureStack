@@ -81,12 +81,14 @@ export function registerLogoTextStyles(
   styleBuilder
     .select('.site-logo__brand', theme)
     .display('flex')
-    .alignItems('end')
+    .alignItems('center')
     .justifyContent('space-between')
     .width('100%')
 
   styleBuilder
-    .select('.site-logo__word', theme)
+    .select('.site-logo__brand-letter', theme)
+    .display('block')
+    .flexShrink('0')
     .fontFamily(options.typography.baseFamily)
     .fontSize('1.25rem')
     .lineHeight('0.95')
@@ -96,17 +98,22 @@ export function registerLogoTextStyles(
     .whiteSpace('nowrap')
 
   styleBuilder
-    .select('.site-logo__word--primary', theme)
+    .select('.site-logo__brand-letter--primary', theme)
     .color(palette.current.text.default)
 
   styleBuilder
-    .select('.site-logo__word--accent', theme)
-    .display('inline-block')
+    .select('.site-logo__brand-letter--accent', theme)
     .background(palette.semanticTone.accent.button.rest.background)
     .webkitBackgroundClip('text')
     .backgroundClip('text')
     .color('transparent')
     .webkitTextFillColor('transparent')
+
+  styleBuilder
+    .select('.site-logo__brand-letter--space', theme)
+    .width('0')
+    .minWidth('0')
+    .fontSize('0')
 
   styleBuilder
     .select('.site-logo__subtitle', theme)

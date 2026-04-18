@@ -153,8 +153,8 @@ function resolveLogoConfig(
   file?: DeepPartial<LogoConfig>,
 ): LogoConfig {
   return {
-    wordOne: resolveString(input?.wordOne, file?.wordOne, 'Pure'),
-    wordTwo: resolveString(input?.wordTwo, file?.wordTwo, 'Stack'),
+    wordOne: resolveString(input?.wordOne, file?.wordOne, ''),
+    wordTwo: resolveString(input?.wordTwo, file?.wordTwo, ''),
     subtitle: resolveOptionalString(input?.subtitle ?? file?.subtitle),
     href: resolveString(input?.href, file?.href, '/'),
     icon: resolveOptionalString(input?.icon ?? file?.icon),
