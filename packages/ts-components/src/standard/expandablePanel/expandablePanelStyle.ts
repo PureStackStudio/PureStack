@@ -10,7 +10,7 @@ export function registerExpandablePanelStyles() {
   themes.forEach((theme, palette, options) => {
     registerExpandablePanelShellStyles(theme, palette, options)
     registerExpandablePanelSummaryStyles(theme, palette, options)
-    registerExpandablePanelBodyStyles(theme, palette, options)
+    registerExpandablePanelBodyStyles(theme, palette)
     registerExpandablePanelResponsiveStyles(theme)
   })
 }
@@ -71,11 +71,6 @@ function registerExpandablePanelSummaryStyles(
     .outlineOffset('-2px')
 
   styleBuilder
-    .select('.expandable-panel__icon', theme)
-    .width('22px')
-    .height('22px')
-
-  styleBuilder
     .select('.expandable-panel__header', theme)
     .display('flex')
     .alignItems('center')
@@ -126,11 +121,6 @@ function registerExpandablePanelSummaryStyles(
     )
 
   styleBuilder
-    .select('.expandable-panel__chevron-icon', theme)
-    .width('16px')
-    .height('16px')
-
-  styleBuilder
     .select('.expandable-panel[open] .expandable-panel__chevron', theme)
     .transform('rotate(180deg)')
 }
@@ -138,7 +128,6 @@ function registerExpandablePanelSummaryStyles(
 function registerExpandablePanelBodyStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
   styleBuilder
     .select('.expandable-panel__body', theme)
@@ -150,35 +139,6 @@ function registerExpandablePanelBodyStyles(
   styleBuilder
     .select('.expandable-panel:not([open]) .expandable-panel__body', theme)
     .display('none')
-
-  styleBuilder
-    .select('.expandable-panel__body :where(h2, h3, h4, p, ul, ol)', theme)
-    .margin('0')
-
-  styleBuilder
-    .select('.expandable-panel__body :where(p, li)', theme)
-    .lineHeight('1.7')
-
-  styleBuilder
-    .select('.expandable-panel__body :where(ul, ol)', theme)
-    .paddingLeft('1.2rem')
-
-  styleBuilder
-    .select('.expandable-panel__body :where(strong)', theme)
-    .fontWeight('700')
-
-  styleBuilder
-    .select('.expandable-panel__body :where(a)', theme)
-    .color(palette.semanticTone.accent.text.default)
-    .fontWeight('600')
-    .textDecoration('underline')
-
-  styleBuilder
-    .select('.expandable-panel__body :where(img)', theme)
-    .display('block')
-    .width('100%')
-    .height('auto')
-    .borderRadius(options.radii.sm)
 }
 
 function registerExpandablePanelResponsiveStyles(theme: ThemeMode) {
