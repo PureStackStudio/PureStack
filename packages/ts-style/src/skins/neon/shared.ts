@@ -42,6 +42,7 @@ export type ToneOverrides = {
   surface?: ToneSurfaceOverrides
   surfaceAlt?: ToneSurfaceOverrides
   canvas?: Tone['canvas']
+  root?: Tone['root']
   overlay?: Tone['overlay']
   border?: Partial<Tone['border']>
   text?: Partial<Tone['text']>
@@ -148,6 +149,8 @@ export function createTone(
   const canvas = createScale(colors.canvas, 10, mode)
   const buttonBg = createScale(colors.button, 10, mode)
   const foreground = createScale(colors.foreground, 1, mode)
+  const rootForeground = createScale(colors.foreground, 7, mode)
+  const rootBorder = createScale(colors.border, 7, mode)
   const border = createScale(colors.border, 1, mode)
   const surface = createScale(colors.surface, 10, mode)
   const surfaceAlt = createScale(colors.surfaceAlt, 10, mode)
@@ -216,6 +219,19 @@ export function createTone(
     ),
     canvas:
       overrides.canvas ?? createChrome('canvas', canvas, 'rest', false, chrome),
+    root: {
+      text: {
+        default: rootForeground.level5,
+        subtle: subtleTone(rootForeground.level4),
+        ...(overrides.root?.text || {}),
+      },
+      border: {
+        subtle: borderTone(rootBorder.level2),
+        default: borderTone(rootBorder.level5),
+        focus: borderTone(rootBorder.level5),
+        ...(overrides.root?.border || {}),
+      },
+    },
     overlay: overrides.overlay ?? canvas.level1,
     border: {
       subtle: subtleBorder,

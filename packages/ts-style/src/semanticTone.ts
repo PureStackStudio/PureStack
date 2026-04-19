@@ -118,10 +118,14 @@ export function getSemanticToneTextClass(
 
 export function registerSemanticToneUtilityStyles() {
   themes.forEach((theme, palette) => {
-    applySemanticToneVars(
-      styleBuilder.select(':root', theme),
-      getSemanticToneTokens(palette, 'neutral'),
-    )
+    const root = getSemanticToneTokens(palette, 'neutral')
+    styleBuilder
+      .select(':root', theme)
+      .set('--ps-current-text-default', root.root.text.default)
+      .set('--ps-current-text-subtle', root.root.text.subtle)
+      .set('--ps-current-border-subtle', root.root.border.subtle)
+      .set('--ps-current-border-default', root.root.border.default)
+      .set('--ps-current-border-focus', root.root.border.focus)
 
     for (const tone of SEMANTIC_TONES) {
       const tokens = getSemanticToneTokens(palette, tone)

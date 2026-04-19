@@ -21,7 +21,7 @@ const bestColors = {
     neutral: '#6d6626',
   },
 }
-export const { accent, neutral } = bestColors.yellow
+export const { accent, neutral } = bestColors.orangeBlue
 export const info = '#15a9c0'
 export const success = '#259740'
 export const warning = '#c49a1c'

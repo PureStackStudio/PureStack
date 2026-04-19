@@ -86,6 +86,17 @@ export interface SemanticToneTokens {
     focusRing: string
   }
   canvas: string
+  root: {
+    border: {
+      subtle: string
+      default: string
+      focus: string
+    }
+    text: {
+      default: string
+      subtle: string
+    }
+  }
   overlay: string
   border: {
     subtle: string
