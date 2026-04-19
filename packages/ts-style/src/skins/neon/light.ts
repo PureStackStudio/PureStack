@@ -13,7 +13,7 @@ import {
 } from './dark'
 
 const delta1: DeltaToneColors = {
-  canvas: 5,
+  canvas: 0,
   button: -10,
   foreground: 0,
   border: 0,
@@ -21,7 +21,7 @@ const delta1: DeltaToneColors = {
   surfaceAlt: 0,
 }
 const delta2: DeltaToneColors = {
-  canvas: 5,
+  canvas: 0,
   button: -10,
   foreground: 0,
   border: 0,

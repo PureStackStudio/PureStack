@@ -146,7 +146,7 @@ export function createTone(
   isGhost = false,
   chrome: ToneChromeOptions = {},
 ): Tone {
-  const canvas = createScale(colors.canvas, 10, mode)
+  const canvas = createScale(colors.canvas, 3, mode)
   const buttonBg = createScale(colors.button, 10, mode)
   const foreground = createScale(colors.foreground, 1, mode)
   const rootForeground = createScale(colors.foreground, 7, mode)
