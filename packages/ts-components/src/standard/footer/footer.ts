@@ -58,7 +58,7 @@ export interface FooterSocial {
 }
 
 const siteFooterTemplate = html`<footer
-  class="site-footer"
+  class="site-footer doc-content"
   :class="rootClass"
   :aria-label="ariaLabel"
   :r-teleport="teleport"
@@ -109,11 +109,8 @@ const siteFooterTemplate = html`<footer
               required
               :name="newsletterName"
               :placeholder="newsletterPlaceholder"
-              autocomplete="email"
-            />
-            <Btn tone="neutral" type="submit">
-              {{ newsletterButtonLabel }}
-            </Btn>
+              autocomplete="email"/>
+            <Btn tone="neutral" type="submit">{{ newsletterButtonLabel }}</Btn>
           </div>
         </form>
         <div class="site-footer__newsletter-extra">
@@ -132,14 +129,9 @@ const siteFooterTemplate = html`<footer
   </div>
 </footer>`
 
-const footerColumnTemplate = html`<section
-  class="footer-column"
-  :class="rootClass"
->
+const footerColumnTemplate = html`<section class="footer-column" :class="rootClass">
   <h3 class="footer-column__title" r-if="title">{{ title }}</h3>
-  <p class="footer-column__description" r-if="description">
-    {{ description }}
-  </p>
+  <p class="footer-column__description" r-if="description">{{ description }}</p>
   <ul class="footer-column__list">
     <slot></slot>
   </ul>
@@ -168,7 +160,7 @@ const footerSocialTemplate = html`<a
   :rel="rel"
   :aria-label="label"
 >
-  <Icon class="footer-social__icon" :name="icon || 'iconoir:code'" />
+  <Icon class="footer-social__icon" :name="icon || 'iconoir:code'"/>
   <span class="footer-social__label" r-if="label">{{ label }}</span>
 </a>`
 
