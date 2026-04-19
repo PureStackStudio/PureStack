@@ -90,6 +90,15 @@ function syncButtonPosition(pre: HTMLElement, button: CopyButton) {
   button.style.right = 'auto'
 }
 
+function schedulePositionSync(pre: HTMLElement, button: CopyButton) {
+  const sync = () => syncButtonPosition(pre, button)
+  sync()
+  globalThis.requestAnimationFrame(() => {
+    sync()
+    globalThis.requestAnimationFrame(sync)
+  })
+}
+
 function createButton(pre: HTMLElement, code: HTMLElement) {
   if (pre.querySelector(':scope > .code-copy-button')) return
   const button = document.createElement('button') as CopyButton
@@ -115,9 +124,13 @@ function createButton(pre: HTMLElement, code: HTMLElement) {
   pre.classList.add('code-copy-ready')
   pre.appendChild(button)
   const sync = () => syncButtonPosition(pre, button)
-  sync()
+  schedulePositionSync(pre, button)
   pre.addEventListener('scroll', sync, { passive: true })
   globalThis.addEventListener('resize', sync)
+  if (typeof ResizeObserver !== 'undefined') {
+    const observer = new ResizeObserver(sync)
+    observer.observe(pre)
+  }
 }
 
 function init() {
