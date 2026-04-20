@@ -16,17 +16,8 @@ export interface ThemeOptions {
     lg: string
     pill: string
   }
-  spacing: {
-    xs: string
-    sm: string
-    md: string
-    lg: string
-    xl: string
-  }
   typography: {
     baseFamily: string
-    baseSize: string
-    baseLineHeight: string
   }
   shadows: {
     soft: string
@@ -48,17 +39,8 @@ export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
     lg: '16px',
     pill: '999px',
   },
-  spacing: {
-    xs: '4px',
-    sm: '8px',
-    md: '16px',
-    lg: '24px',
-    xl: '32px',
-  },
   typography: {
     baseFamily: "'Manrope', 'Segoe UI', system-ui, sans-serif",
-    baseSize: '15px',
-    baseLineHeight: '1.4',
   },
   shadows: {
     soft: '0 10px 18px rgba(0, 0, 0, 0.18)',
