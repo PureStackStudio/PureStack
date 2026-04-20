@@ -28,7 +28,7 @@ function registerButtonBaseStyles(
       'background 150ms ease, color 150ms ease, border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease',
     )
     .webkitTapHighlightColor('transparent')
-    .padding('0.25em 0.75em')
+    .padding('0.5em 0.75em')
     .apply(palette.applyFont(palette.font.size.body, palette.font.weight.w500))
     .borderRadius(options.radii.md)
 
