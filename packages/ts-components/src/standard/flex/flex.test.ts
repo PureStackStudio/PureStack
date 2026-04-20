@@ -35,6 +35,26 @@ describe('Flex rendering', () => {
     expect(html).toContain('class="flex flex--wrap"')
   })
 
+  it('renders responsive modifier classes for breakpoint-specific layout props', () => {
+    const cleanup = ensureDomGlobals()
+    const components = defineFlexComponents()
+    const html = renderApp(
+      '<Flex justify="center" justifyMd="end" alignSm="center" directionLg="column" wrapXl="nowrap">item</Flex>',
+      {
+        components,
+        context: createTestContext(),
+      },
+    )
+    cleanup()
+
+    expect(html).toContain('class="flex ')
+    expect(html).toContain('flex--direction-lg-column')
+    expect(html).toContain('flex--align-sm-center')
+    expect(html).toContain('flex--justify-center')
+    expect(html).toContain('flex--justify-md-end')
+    expect(html).toContain('flex--nowrap-xl')
+  })
+
   it('omits classes for default row direction and invalid values', () => {
     const cleanup = ensureDomGlobals()
     const components = defineFlexComponents()

@@ -43,6 +43,20 @@ describe('Grid rendering', () => {
     expect(html).toContain('--grid-template-columns-md: 200px 1fr')
   })
 
+  it('supports container as a semantic element override', () => {
+    const cleanup = ensureDomGlobals()
+    const components = defineGridComponents()
+    const html = renderApp('<Grid container="section" columns="2">item</Grid>', {
+      components,
+      context: createTestContext(),
+    })
+    cleanup()
+
+    expect(html).toContain('<section')
+    expect(html).toContain('class="grid"')
+    expect(html).toContain('--grid-template-columns: repeat(2, minmax(0, 1fr))')
+  })
+
   it('keeps responsive numeric columns working when base columns use a template', () => {
     const cleanup = ensureDomGlobals()
     const components = defineGridComponents()

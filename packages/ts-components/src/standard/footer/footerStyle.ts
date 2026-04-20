@@ -42,11 +42,10 @@ export function applyFooterBottomShellStyles(
   styleBuilder
     .select('.site-footer__bottom', theme)
     .apply(palette.applyFont(palette.font.size.xxs))
-    .padding('0.5em 1em 0 1em')
+    .padding('0.5em 1em 0.5em 1em')
     .color(palette.current.text.subtle)
     .borderTop(`1px solid ${palette.current.border.subtle}`)
   styleBuilder
     .select('.site-footer__bottom :where(a)', theme)
     .color(palette.current.text.subtle)
-  styleBuilder.select('.site-footer__copyright', theme).whiteSpace('nowrap')
 }

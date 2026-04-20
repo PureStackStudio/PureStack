@@ -11,6 +11,7 @@ export type GridAlignItems = 'start' | 'center' | 'end'
 export type GridJustifyItems = 'start' | 'center' | 'end'
 
 export interface Grid {
+  container?: RefOrValue<string>
   columns?: RefOrValue<number | string>
   columnsSm?: RefOrValue<number | string>
   columnsMd?: RefOrValue<number | string>
@@ -23,13 +24,19 @@ export interface Grid {
   gridStyle?: ComputedRef<Record<string, string>>
 }
 
-const gridTemplate = html`<div class="grid" :class="className" :style="gridStyle">
+const gridTemplate = html`<div
+  :is="container ?? 'div'"
+  class="grid"
+  :class="className"
+  :style="gridStyle"
+>
   <slot></slot>
 </div>`
 
 function defineGridComponent() {
   return defineComponent<Grid>(gridTemplate, {
     props: [
+      'container',
       'columns',
       'columnsSm',
       'columnsMd',

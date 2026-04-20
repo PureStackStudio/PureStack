@@ -29,23 +29,25 @@ const siteFooterTemplate = html`<footer
   <div class="site-footer__inner"><slot></slot></div>
   <Grid
     columns="1"
-    columnsMd="2"
+    columnsMd="minmax(0, 1fr) auto"
     class="site-footer__bottom"
-    wrap="true"
-    align-items="center"
-    justify-items="start"
+    alignItems="center"
   >
-    <Flex class="site-footer__copyright">{{ copyright }}</Flex>
+    <Flex justify="center" justifyMd="start" class="site-footer__copyright">
+      {{ copyright }}
+    </Flex>
     <Flex
+      container="nav"
       class="site-footer__legal"
       wrap="true"
       align="center"
-      justify="end"
+      justify="center"
+      justifyMd="end"
       :aria-label="legalLabel"
     >
       <slot name="legal"></slot>
       <span class="consent-settings-teleport-area"></span>
-      <Flex wrap="nowrap"><slot name="social"></slot></Flex>
+      <Flex><slot name="social"></slot></Flex>
     </Flex>
   </Grid>
 </footer>`
