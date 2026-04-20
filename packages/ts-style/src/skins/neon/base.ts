@@ -153,7 +153,7 @@ function createTypography(): ThemeTypography {
       h3: '1.25rem',
       h2: '1.5rem',
       h1: '2rem',
-      display: '3.545rem', //display
+      display: '3.545rem',
     },
     weight: {
       w400: '400',
