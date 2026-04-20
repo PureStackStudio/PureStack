@@ -101,7 +101,6 @@ function registerModalShellStyles(
     .select('.modal__body', theme)
     .display('grid')
     .minWidth('0')
-    .lineHeight('1.6')
     .justifyItems('center')
     .textAlign('center')
 
