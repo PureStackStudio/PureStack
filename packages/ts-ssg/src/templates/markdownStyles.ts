@@ -42,23 +42,24 @@ function registerHeadingStyles(theme: ThemeMode, palette: ThemePalette) {
 
   styleBuilder
     .select('.doc-content :where(h1)', theme)
-    .apply(palette.applyFont(palette.font.size.xxl, palette.font.weight.w700))
+    .apply(palette.applyFont(palette.font.size.h1, palette.font.weight.w700))
     .margin('0 0 0.5em')
   styleBuilder
     .select('.doc-content :where(h2)', theme)
-    .apply(palette.applyFont(palette.font.size.xl, palette.font.weight.w700))
+    .apply(palette.applyFont(palette.font.size.h2, palette.font.weight.w700))
 
   styleBuilder
     .select('.doc-content :where(h3)', theme)
-    .apply(palette.applyFont(palette.font.size.lg, palette.font.weight.w600))
+    .apply(palette.applyFont(palette.font.size.h3, palette.font.weight.w600))
   styleBuilder
     .select('.doc-content :where(h4)', theme)
-    .apply(palette.applyFont(palette.font.size.lg, palette.font.weight.w600))
-
+    .apply(palette.applyFont(palette.font.size.h4, palette.font.weight.w600))
   styleBuilder
-    .select('.doc-content :where(h5, h6)', theme)
-    .textTransform('uppercase')
-    .apply(palette.applyFont(palette.font.size.md, palette.font.weight.w600))
+    .select('.doc-content :where(h5)', theme)
+    .apply(palette.applyFont(palette.font.size.h5, palette.font.weight.w600))
+  styleBuilder
+    .select('.doc-content :where(h6)', theme)
+    .apply(palette.applyFont(palette.font.size.h6, palette.font.weight.w600))
 
   styleBuilder
     .select(

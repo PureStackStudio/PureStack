@@ -141,29 +141,19 @@ export interface SemanticToneTokens {
 }
 
 export interface ThemeTypography {
-  /**
-   *  xxxs: '0.72rem',
-      xxs: '0.85rem',
-      xs: '0.9rem',
-      sm: '0.94rem',
-      body: '1rem', // body, h6
-      md: '1.06rem', // captions, h5
-      lg: '1.309rem', // h3 h4
-      xl: '2.118rem', //h2
-      xxl: '3.427rem', //h1
-      xxxl: '5.545rem', //display
-   */
   size: {
     xxxs: string
     xxs: string
     xs: string
     sm: string
     body: string
-    md: string
-    lg: string
-    xl: string
-    xxl: string
-    xxxl: string
+    h6: string
+    h5: string
+    h4: string
+    h3: string
+    h2: string
+    h1: string
+    display: string
   }
   weight: {
     w400: CSSProps['fontWeight']

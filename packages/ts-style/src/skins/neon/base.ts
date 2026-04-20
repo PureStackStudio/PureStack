@@ -146,12 +146,14 @@ function createTypography(): ThemeTypography {
       xxs: '0.85rem',
       xs: '0.9rem',
       sm: '0.94rem',
-      body: '1rem', // body, h6
-      md: '1.06rem', // captions, h5
-      lg: '1.309rem', // h3 h4
-      xl: '2.118rem', //h2
-      xxl: '3.427rem', //h1
-      xxxl: '5.545rem', //display
+      body: '1rem',
+      h6: '1rem',
+      h5: '1rem',
+      h4: '1rem',
+      h3: '1.25rem',
+      h2: '1.5rem',
+      h1: '2rem',
+      display: '3.545rem', //display
     },
     weight: {
       w400: '400',

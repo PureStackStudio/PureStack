@@ -60,7 +60,7 @@ function registerButtonSizeStyles(
 
   styleBuilder
     .select('.btn--lg', theme)
-    .apply(palette.applyFont(palette.font.size.xl, palette.font.weight.w500))
+    .apply(palette.applyFont(palette.font.size.h2, palette.font.weight.w500))
     .borderRadius(radii.md)
   styleBuilder.select('.btn--icon-only', theme).padding('0.25em')
   styleBuilder.select('.btn--icon-only .btn__label', theme).display('none')

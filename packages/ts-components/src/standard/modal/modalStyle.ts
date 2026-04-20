@@ -88,7 +88,7 @@ function registerModalShellStyles(
     .gridColumn('2')
     .justifySelf('center')
     .margin('0')
-    .apply(palette.applyFont(palette.font.size.lg, palette.font.weight.w700))
+    .apply(palette.applyFont(palette.font.size.h3, palette.font.weight.w700))
     .textAlign('center')
     .color(palette.current.text.default)
 
