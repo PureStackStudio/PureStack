@@ -71,9 +71,9 @@ function registerModalShellStyles(
   styleBuilder
     .select('.modal__surface', theme)
     .display('grid')
-    .gap('14px')
+    .gap('1em')
     .minHeight('100%')
-    .padding('18px')
+    .padding('1em')
     .borderRadius(options.radii.lg)
 
   styleBuilder
@@ -81,16 +81,14 @@ function registerModalShellStyles(
     .display('grid')
     .gridTemplateColumns('minmax(0, 1fr) auto minmax(0, 1fr)')
     .alignItems('center')
-    .gap('10px')
+    .gap('0.6em')
 
   styleBuilder
     .select('.modal__title', theme)
     .gridColumn('2')
     .justifySelf('center')
     .margin('0')
-    .fontSize('1.2rem')
-    .lineHeight('1.3')
-    .fontWeight('700')
+    .apply(palette.applyFont(palette.font.size.lg, palette.font.weight.w700))
     .textAlign('center')
     .color(palette.current.text.default)
 
@@ -113,7 +111,7 @@ function registerModalShellStyles(
     .flexWrap('wrap')
     .alignItems('center')
     .justifyContent('center')
-    .gap('10px')
+    .gap('0.6em')
 
   styleBuilder.select('.modal__footer:empty', theme).display('none')
 

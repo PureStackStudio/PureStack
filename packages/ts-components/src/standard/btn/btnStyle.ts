@@ -32,9 +32,6 @@ function registerButtonBaseStyles(
     .apply(palette.applyFont(palette.font.size.body, palette.font.weight.w500))
     .borderRadius(options.radii.md)
 
-  styleBuilder.select('.btn--icon-start', theme).paddingLeft('0.25em')
-  styleBuilder.select('.btn--icon-end', theme).paddingRight('0.25em')
-
   styleBuilder
     .select('.btn:disabled', theme)
     .cursor('not-allowed')

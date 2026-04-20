@@ -52,7 +52,7 @@ function registerExpandablePanelSummaryStyles(
     .gridTemplateColumns('auto minmax(0, 1fr) auto')
     .alignItems('center')
     .gap('0.75rem')
-    .padding('1rem')
+    .padding('1em')
     .cursor('pointer')
     .minWidth('0')
     .borderRadius('16px')
@@ -133,7 +133,7 @@ function registerExpandablePanelBodyStyles(
     .select('.expandable-panel__body', theme)
     .display('grid')
     .gap('0.75rem')
-    .padding('1rem')
+    .padding('1em')
     .borderTop(`1px solid ${palette.current.border.subtle}`)
 
   styleBuilder

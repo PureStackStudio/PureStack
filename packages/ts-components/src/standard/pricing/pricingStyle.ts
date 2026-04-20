@@ -269,11 +269,11 @@ export function applyPricingFeatureStyles(
     .breakInside('avoid')
     .display('grid')
     .gridTemplateColumns('18px minmax(0, 1fr)')
-    .gap('8px')
+    .gap('0.5em')
     .alignItems('start')
     .fontSize('13px')
     .lineHeight('1.5')
-    .marginBottom('8px')
+    .marginBottom('0.5em')
     .color(palette.current.text.default)
 
   styleBuilder

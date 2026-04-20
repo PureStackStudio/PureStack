@@ -43,17 +43,23 @@ const pageTocTemplate = html`<nav class="page-toc" :class="toneClass" aria-label
       aria-label="Collapse table of contents"
       data-page-toc-restore
     >
-      <span class="page-toc__header-toggle-icon page-toc__header-toggle-icon--collapse">
-        <Icon name="iconoir:pin-slash" />
+      <span
+        class="page-toc__header-toggle-icon page-toc__header-toggle-icon--collapse"
+      >
+        <Icon wrap="true" name="iconoir:pin-slash"/>
       </span>
-      <span class="page-toc__header-toggle-icon page-toc__header-toggle-icon--restore">
-        <Icon name="iconoir:pin" />
+      <span
+        class="page-toc__header-toggle-icon page-toc__header-toggle-icon--restore"
+      >
+        <Icon wrap="true" name="iconoir:pin"/>
       </span>
     </button>
   </div>
   <ul class="page-toc__list" r-if="items.length > 0">
     <li r-for="item in items" class="page-toc__item page-toc__item--h2">
-      <a class="page-toc__link" :class="item.toneClass" :href="item.href">{{ item.title }}</a>
+      <a class="page-toc__link" :class="item.toneClass" :href="item.href">
+        {{ item.title }}
+      </a>
       <ul
         r-if="item.children && item.children.length > 0"
         class="page-toc__list page-toc__list--nested"
@@ -66,7 +72,9 @@ const pageTocTemplate = html`<nav class="page-toc" :class="toneClass" aria-label
             class="page-toc__link page-toc__link--sub"
             :class="child.toneClass"
             :href="child.href"
-          >{{ child.title }}</a>
+          >
+            {{ child.title }}
+          </a>
         </li>
       </ul>
     </li>

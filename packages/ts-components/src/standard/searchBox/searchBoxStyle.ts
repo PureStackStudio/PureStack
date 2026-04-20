@@ -97,7 +97,7 @@ function registerSearchBoxResultListStyles(
     .margin('0')
     .padding('0')
     .display('grid')
-    .gap('8px')
+    .gap('0.5em')
 
   styleBuilder
     .select('.site-search__results .site-search__item', theme)
@@ -136,10 +136,7 @@ function registerSearchBoxResultContentStyles(
   styleBuilder
     .select('.site-search__results .site-search__title', theme)
     .display('block')
-    .fontWeight('700')
-    .fontSize('0.98rem')
-    .lineHeight('1.35')
-    .letterSpacing('-0.01em')
+    .apply(palette.applyFont(palette.font.size.body, palette.font.weight.w700))
     .color(palette.current.text.default)
     .wordBreak('break-word')
 
@@ -147,8 +144,7 @@ function registerSearchBoxResultContentStyles(
     .select('.site-search__results .site-search__excerpt', theme)
     .display('block')
     .margin('0')
-    .fontSize('0.9rem')
-    .lineHeight('1.5')
+    .apply(palette.applyFont(palette.font.size.sm))
     .color(palette.current.text.subtle)
     .wordBreak('break-word')
     .display('-webkit-box')

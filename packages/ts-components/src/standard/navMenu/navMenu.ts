@@ -95,13 +95,13 @@ const navMenuTemplate = html`<nav class="nav__menu" :class="toneClass" aria-labe
         class="nav__collapse-toggle-icon nav__collapse-toggle-icon--collapse"
         aria-hidden="true"
       >
-        <Icon name="iconoir:pin-slash"/>
+        <Icon wrap="true" name="iconoir:pin-slash"/>
       </span>
       <span
         class="nav__collapse-toggle-icon nav__collapse-toggle-icon--open"
         aria-hidden="true"
       >
-        <Icon name="iconoir:pin"/>
+        <Icon wrap="true" name="iconoir:pin"/>
       </span>
     </button>
   </div>

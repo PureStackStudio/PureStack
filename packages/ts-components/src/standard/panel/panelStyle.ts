@@ -15,6 +15,6 @@ export function registerPanelStyles() {
         'border-color 180ms ease, box-shadow 180ms ease, background 180ms ease',
       )
 
-    styleBuilder.select('.panel__body', theme).padding('1rem')
+    styleBuilder.select('.panel__body', theme).padding('1em')
   })
 }

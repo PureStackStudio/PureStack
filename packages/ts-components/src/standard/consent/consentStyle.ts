@@ -48,20 +48,17 @@ function registerConsentBannerStyles(
   styleBuilder
     .select('.consent__title', theme)
     .margin('0')
-    .fontSize('18px')
-    .fontWeight('750')
-    .letterSpacing('-0.01em')
+    .apply(palette.applyFont(palette.font.size.xs, palette.font.weight.w700))
     .color(palette.current.text.default)
   styleBuilder
     .select('.consent__description', theme)
     .margin('0')
-    .fontSize('14px')
-    .lineHeight('1.6')
+    .apply(palette.applyFont(palette.font.size.xs))
     .color(palette.current.text.subtle)
   styleBuilder
     .select('.consent__policy', theme)
     .color(palette.semanticTone.accent.text.default)
-    .fontWeight('650')
+    .fontWeight(palette.font.weight.w700)
     .textDecoration('none')
   styleBuilder
     .select('.consent__policy:hover', theme)
@@ -99,9 +96,7 @@ function registerConsentPanelStyles(
   styleBuilder
     .select('.consent__panel-title', theme)
     .margin('0')
-    .fontSize('17px')
-    .fontWeight('750')
-    .letterSpacing('-0.01em')
+    .apply(palette.applyFont(palette.font.size.xs, palette.font.weight.w700))
     .color(palette.current.text.default)
 }
 
@@ -123,32 +118,30 @@ function registerConsentFormStyles(
     .select('.consent__item-main', theme)
     .display('inline-flex')
     .alignItems('center')
-    .gap('8px')
+    .gap('0.5em')
   styleBuilder
     .select('.consent__checkbox', theme)
-    .width('16px')
-    .height('16px')
+    .width('1.1em')
+    .height('1.1em')
     .accentColor(palette.semanticTone.accent.canvas)
   styleBuilder
     .select('.consent__item-label', theme)
-    .fontSize('14px')
-    .fontWeight('700')
+    .apply(palette.applyFont(palette.font.size.xxs, palette.font.weight.w700))
     .color(palette.current.text.default)
   styleBuilder
     .select('.consent__item-description', theme)
-    .fontSize('13px')
-    .lineHeight('1.5')
+    .apply(palette.applyFont(palette.font.size.xxs))
     .color(palette.current.text.subtle)
   styleBuilder
     .select('.consent__panel-actions', theme)
     .display('flex')
-    .gap('8px')
+    .gap('0.5em')
     .flexWrap('wrap')
   styleBuilder
     .select('.consent__actions', theme)
     .display('flex')
     .alignItems('center')
-    .gap('8px')
+    .gap('0.5em')
     .flexWrap('wrap')
 }
 

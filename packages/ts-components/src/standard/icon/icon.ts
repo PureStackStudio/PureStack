@@ -1,4 +1,8 @@
 import {
+  getSemanticToneIconClass,
+  type SemanticTone,
+} from '@purestack/ts-style'
+import {
   type ComputedRef,
   computed,
   defineComponent,
@@ -11,15 +15,17 @@ export type GetSvgIcon = (name: string) => string
 
 export interface Icon {
   name?: RefOrValue<string>
-  ariaLabel?: RefOrValue<string>
   class?: RefOrValue<string>
+  ariaLabel?: RefOrValue<string>
   wrap?: RefOrValue<boolean>
+  tone?: RefOrValue<SemanticTone>
   svg?: ComputedRef<string>
   ariaHidden?: ComputedRef<boolean>
   role?: ComputedRef<string>
+  toneClass?: ComputedRef<string>
 }
 
-const iconTemplate = html`<span class="icon-wrap" :class="class" r-if="wrap">
+const iconTemplate = html`<span class="icon-wrap" :class="[class, toneClass]" r-if="wrap">
   <span
     class="icon"
     :role="role"
@@ -32,7 +38,7 @@ const iconTemplate = html`<span class="icon-wrap" :class="class" r-if="wrap">
 <span
   r-else
   class="icon"
-  :class="class"
+  :class="[class, toneClass]"
   :role="role"
   :aria-label="ariaLabel"
   :aria-hidden="ariaHidden"
@@ -42,7 +48,7 @@ const iconTemplate = html`<span class="icon-wrap" :class="class" r-if="wrap">
 
 function defineIconComponent(getSvgIcon: GetSvgIcon) {
   return defineComponent<Icon>(iconTemplate, {
-    props: ['name', 'ariaLabel', 'class', 'wrap'],
+    props: ['name', 'class', 'ariaLabel', 'wrap', 'tone'],
     context: (head) => resolveIcon(head.props, getSvgIcon),
   })
 }
@@ -60,11 +66,14 @@ function resolveIcon(props: Icon, getSvgIcon: GetSvgIcon): Icon {
   })
   const ariaHidden = computed(() => !unref(props.ariaLabel))
   const role = computed<string>(() => (unref(props.ariaLabel) ? 'img' : ''))
+  const tone = unref(props.tone)
+  const toneClass = computed(() => (tone ? getSemanticToneIconClass(tone) : ''))
 
   return {
     ...props,
     svg,
     ariaHidden,
     role,
+    toneClass,
   }
 }

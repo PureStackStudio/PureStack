@@ -42,7 +42,7 @@ function registerDocLayoutShellStyles(
     .select('.template-doc--full-main .doc-shell', theme)
     .maxWidth('none')
     .margin('0')
-    .padding('1rem')
+    .padding('1em')
 
   styleBuilder
     .select(

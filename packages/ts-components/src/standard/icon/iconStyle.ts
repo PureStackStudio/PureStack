@@ -26,6 +26,7 @@ function registerIconBaseStyles(
     .lineHeight('0')
     .verticalAlign('middle')
     .flexShrink('0')
+    .alignSelf('center')
 
   styleBuilder
     .select('.icon svg', theme)
@@ -35,15 +36,10 @@ function registerIconBaseStyles(
 
   styleBuilder
     .select('.icon-wrap', theme)
-    .width('44px')
-    .height('44px')
+    .padding('0.25em')
     .display('inline-flex')
     .alignItems('center')
     .justifyContent('center')
     .borderRadius(options.radii.md)
-    .background(palette.semanticTone.accent.icon.gradient)
-    .backgroundColor(palette.semanticTone.accent.icon.background)
-    .border(`1px solid ${palette.semanticTone.accent.icon.border}`)
-    .boxShadow(palette.effect.interactiveShadow)
-    .color(palette.semanticTone.accent.icon.color)
+    .color(palette.current.text.default)
 }

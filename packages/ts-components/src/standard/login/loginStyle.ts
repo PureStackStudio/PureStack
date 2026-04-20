@@ -38,7 +38,7 @@ function registerLoginShellStyles(
   styleBuilder
     .select('.login-panel__header', theme)
     .display('grid')
-    .gap('8px')
+    .gap('0.5em')
     .margin('0 0 4px')
   styleBuilder
     .select('.login-panel__badge', theme)
@@ -64,7 +64,7 @@ function registerLoginShellStyles(
   styleBuilder
     .select('.login-panel__providers', theme)
     .display('grid')
-    .gap('8px')
+    .gap('0.5em')
 }
 
 function registerLoginMetaStyles(

@@ -143,7 +143,7 @@ export function applyFooterStatusStyles(
     .select('.site-footer__status', theme)
     .display('flex')
     .alignItems('center')
-    .gap('8px')
+    .gap('0.5em')
     .flexWrap('wrap')
   styleBuilder.select('.site-footer__status:empty', theme).display('none')
   styleBuilder
@@ -218,7 +218,7 @@ export function applyFooterNewsletterShellStyles(
   styleBuilder
     .select('.site-footer__newsletter-form', theme)
     .display('grid')
-    .gap('8px')
+    .gap('0.5em')
 }
 
 export function applyFooterNewsletterFieldStyles(
@@ -229,7 +229,7 @@ export function applyFooterNewsletterFieldStyles(
     .select('.site-footer__newsletter-row', theme)
     .display('grid')
     .gridTemplateColumns('minmax(0, 1fr) auto')
-    .gap('8px')
+    .gap('0.5em')
     .alignItems('end')
   styleBuilder
     .select('.site-footer__newsletter-row .form-block__field', theme)
@@ -419,14 +419,14 @@ export function applyFooterBottomSocialStyles(
     .select('.site-footer__social', theme)
     .display('flex')
     .alignItems('center')
-    .gap('8px')
+    .gap('0.5em')
     .justifyContent('flex-end')
     .flexWrap('wrap')
   styleBuilder
     .select('.footer-social', theme)
     .display('inline-flex')
     .alignItems('center')
-    .gap('8px')
+    .gap('0.5em')
     .padding('7px 10px')
     .borderRadius(options.radii.pill)
     .border(`1px solid ${palette.current.border.default}`)

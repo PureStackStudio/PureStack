@@ -11,7 +11,7 @@ export function registerFormStyles() {
     registerFormShellStyles(theme)
     registerFormFieldStyles(theme, palette, options)
     registerFormMetaStyles(theme, palette)
-    registerFormStatusStyles(theme, options)
+    registerFormStatusStyles(theme, palette, options)
     registerFormResponsiveStyles(theme)
   })
 }
@@ -25,13 +25,12 @@ function registerFormFieldStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-  styleBuilder.select('.form-block__field', theme).display('grid').gap('6px')
+  styleBuilder.select('.form-block__field', theme).display('grid').gap('0.6em')
   styleBuilder
     .select('.form-block__label', theme)
-    .fontSize('0.83rem')
-    .fontWeight('700')
-    .letterSpacing('0.02em')
+    .apply(palette.applyFont(palette.font.size.xxs, palette.font.weight.w700))
     .color(palette.current.text.default)
+    .lineHeight('1')
   styleBuilder
     .select('.form-block__input-shell', theme)
     .width('100%')
@@ -54,11 +53,10 @@ function registerFormFieldStyles(
     .width('100%')
     .minWidth('0')
     .boxSizing('border-box')
-    .padding('11px 12px')
+    .padding('0.5em 0.6em')
     .border('none')
     .borderRadius('0')
-    .fontSize('0.94rem')
-    .lineHeight('1.35')
+    .apply(palette.applyFont(palette.font.size.sm))
     .background('transparent')
     .boxShadow('none')
     .flex('1 1 auto')
@@ -78,17 +76,13 @@ function registerFormFieldStyles(
     .appearance('textfield')
   styleBuilder
     .select('.form-block__input-icon', theme)
-    .width('18px')
-    .height('18px')
-    .alignSelf('center')
-    .flexShrink('0')
     .color(palette.current.text.subtle)
   styleBuilder
     .select(
       '.form-block__input-shell > .form-block__input-icon:first-child',
       theme,
     )
-    .marginLeft('12px')
+    .marginLeft('0.6em')
     .marginRight('0')
   styleBuilder
     .select(
@@ -96,12 +90,12 @@ function registerFormFieldStyles(
       theme,
     )
     .marginLeft('0')
-    .marginRight('12px')
+    .marginRight('0.6em')
   styleBuilder
     .select('.form-block__number-controls', theme)
     .display('grid')
     .gridTemplateRows('1fr 1fr')
-    .width('40px')
+    .width('2em')
     .flex('0 0 auto')
     .background('transparent')
   styleBuilder
@@ -110,8 +104,7 @@ function registerFormFieldStyles(
     .placeItems('center')
     .padding('0')
     .border('none')
-    .fontSize('0.95rem')
-    .fontWeight('800')
+    .apply(palette.applyFont(palette.font.size.sm, palette.font.weight.w700))
     .lineHeight('1')
     .cursor('pointer')
 }
@@ -127,18 +120,17 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .select('.form-block__check', theme)
     .display('inline-flex')
     .alignItems('center')
-    .gap('8px')
-    .fontSize('0.84rem')
+    .gap('0.5em')
+    .apply(palette.applyFont(palette.font.size.xxs))
     .color(palette.current.text.default)
   styleBuilder
     .select('.form-block__check input', theme)
-    .width('16px')
-    .height('16px')
-    .accentColor(palette.semanticTone.accent.canvas)
+    .width('1.5em')
+    .height('1.5em')
+    .accentColor(palette.accent) // todo: implement current var to get current surface tone as color but not gradient.
   styleBuilder
     .select('.form-block__assist-link', theme)
-    .fontSize('0.84rem')
-    .fontWeight('650')
+    .apply(palette.applyFont(palette.font.size.xxs, palette.font.weight.w700))
     .textDecoration('none')
     .color(palette.current.text.default)
   styleBuilder
@@ -157,20 +149,23 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .left('50%')
     .top('50%')
     .transform('translate(-50%, -50%)')
-    .padding('0 8px')
-    .fontSize('0.78rem')
+    .padding('0 0.5em')
+    .apply(palette.applyFont(palette.font.size.xxxs, palette.font.weight.w700))
     .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
     .color(palette.current.text.subtle)
 }
 
-function registerFormStatusStyles(theme: ThemeMode, options: ThemeOptions) {
+function registerFormStatusStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.form-status', theme)
     .marginTop('4px')
-    .padding('11px 12px')
+    .padding('0.5em 0.6em')
     .borderRadius(options.radii.md)
-    .fontSize('0.9rem')
-    .lineHeight('1.35')
+    .apply(palette.applyFont(palette.font.size.sm))
 }
 
 function registerFormResponsiveStyles(theme: ThemeMode) {

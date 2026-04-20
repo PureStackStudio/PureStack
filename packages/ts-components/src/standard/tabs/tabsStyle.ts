@@ -2,19 +2,24 @@ import {
   styleBuilder,
   type ThemeMode,
   type ThemeOptions,
+  type ThemePalette,
   themes,
 } from '@purestack/ts-style'
 
 export function registerTabsStyles() {
-  themes.forEach((theme, _, options) => {
-    registerTabsShellStyles(theme, options)
-    registerTabsControlStyles(theme, options)
+  themes.forEach((theme, palette, options) => {
+    registerTabsShellStyles(theme, palette, options)
+    registerTabsControlStyles(theme, palette, options)
     registerTabsPanelStyles(theme, options)
     registerTabsResponsiveStyles(theme)
   })
 }
 
-function registerTabsShellStyles(theme: ThemeMode, options: ThemeOptions) {
+function registerTabsShellStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.tabs', theme)
     .display('grid')
@@ -40,14 +45,14 @@ function registerTabsShellStyles(theme: ThemeMode, options: ThemeOptions) {
     .select('.tabs__tabs-row', theme)
     .display('none')
     .alignItems('center')
-    .gap('8px')
+    .gap('0.5em')
     .minWidth('0')
 
   styleBuilder
     .select('.tabs__tab-buttons', theme)
     .display('flex')
     .alignItems('center')
-    .gap('8px')
+    .gap('0.5em')
     .minWidth('0')
     .flex('1')
     .overflow('hidden')
@@ -98,13 +103,12 @@ function registerTabsShellStyles(theme: ThemeMode, options: ThemeOptions) {
     .alignItems('center')
     .gap('0.5em')
     .width('100%')
-    .padding('8px 10px')
+    .padding('0.4em 0.6em')
     .border('1px solid transparent')
     .borderRadius(options.radii.sm)
     .textAlign('left')
-    .fontSize('0.88rem')
-    .fontWeight('600')
     .whiteSpace('nowrap')
+    .apply(palette.applyFont(palette.font.size.xxs, palette.font.weight.w600))
     .cursor('pointer')
     .opacity(0.5)
     .background('transparent')
@@ -124,15 +128,17 @@ function registerTabsShellStyles(theme: ThemeMode, options: ThemeOptions) {
     .padding('10px 40px 10px 12px')
     .borderRadius(options.radii.md)
     .border('1px solid transparent')
-    .fontSize('0.92rem')
-    .fontWeight('600')
-    .lineHeight('1.2')
+    .apply(palette.applyFont(palette.font.size.xs, palette.font.weight.w600))
     .appearance('none')
     .webkitAppearance('none')
     .mozAppearance('none')
 }
 
-function registerTabsControlStyles(theme: ThemeMode, options: ThemeOptions) {
+function registerTabsControlStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.tabs__control', theme)
     .position('absolute')
@@ -146,13 +152,10 @@ function registerTabsControlStyles(theme: ThemeMode, options: ThemeOptions) {
     .display('inline-flex')
     .alignItems('center')
     .justifyContent('center')
-    .minHeight('42px')
-    .padding('10px 14px')
+    .padding('0.75em 0.75em')
     .borderRadius(options.radii.md)
     .border('1px solid transparent')
-    .fontSize('0.88rem')
-    .fontWeight('700')
-    .lineHeight('1.2')
+    .apply(palette.applyFont(palette.font.size.xxs, palette.font.weight.w700))
     .gap('0.5em')
     .overflow('hidden')
     .textAlign('center')
@@ -236,12 +239,7 @@ function registerTabsPanelStyles(theme: ThemeMode, options: ThemeOptions) {
     )
     .display('block')
 
-  styleBuilder
-    .select('.tabs__panel-body', theme)
-    .margin('0')
-    .minWidth('0')
-    .fontSize('0.95rem')
-    .lineHeight('1.7')
+  styleBuilder.select('.tabs__panel-body', theme)
 }
 
 function registerTabsResponsiveStyles(theme: ThemeMode) {

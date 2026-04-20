@@ -90,7 +90,7 @@ export function applyAlertHeaderStyles(
     .select('.alert__header', theme)
     .display('flex')
     .alignItems('center')
-    .gap('8px')
+    .gap('0.5em')
     .flexWrap('wrap')
 
   styleBuilder
@@ -112,7 +112,7 @@ export function applyAlertHeaderStyles(
 }
 
 export function applyAlertBodyStyles(theme: ThemeMode, palette: ThemePalette) {
-  styleBuilder.select('.alert__body', theme).display('grid').gap('8px')
+  styleBuilder.select('.alert__body', theme).display('grid').gap('0.5em')
   styleBuilder
     .select('.alert__body :where(p, ul, ol)', theme)
     .margin('0')
@@ -137,7 +137,7 @@ export function applyAlertActionStyles(
     .display('flex')
     .alignItems('center')
     .flexWrap('wrap')
-    .gap('8px')
+    .gap('0.5em')
 }
 
 export function applyAlertMetaStyles(theme: ThemeMode, palette: ThemePalette) {
