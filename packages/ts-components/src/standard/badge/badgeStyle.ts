@@ -16,8 +16,8 @@ function registerBadgeBaseStyles(theme: ThemeMode, palette: ThemePalette) {
     .select('.badge', theme)
     .display('inline-flex')
     .alignItems('center')
-    .padding('0.12em 0.5em')
+    .padding('0.12em 0.75em')
     .borderRadius('999px')
-    .apply(palette.applyFont(palette.font.size.xxxs, palette.font.weight.w700))
+    .apply(palette.applyFont(palette.font.size.xxs, palette.font.weight.w700))
     .textTransform('uppercase')
 }

@@ -45,7 +45,11 @@ layout:
 ## 5. Space-between toolbar
 
 <Flex justify="between" align="center">
-  <SiteLogo/>
+  <SiteLogo
+    brand="PureStack"
+    icon="tabler:table"
+    letter-colors="123123123"
+    r-bind:colors="['red','green','orange']"/>
   <Flex align="center" wrap="wrap">
     <Badge tone="info">vNext</Badge>
     <ThemeSwitcher/>

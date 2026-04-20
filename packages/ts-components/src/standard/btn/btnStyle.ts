@@ -1,14 +1,18 @@
-import type { ThemeOptions } from '@purestack/ts-style'
+import type { ThemeOptions, ThemePalette } from '@purestack/ts-style'
 import { styleBuilder, type ThemeMode, themes } from '@purestack/ts-style'
 
 export function registerButtonStyles() {
-  themes.forEach((theme, _, options) => {
-    registerButtonBaseStyles(theme, options)
-    registerButtonSizeStyles(theme, options.radii)
+  themes.forEach((theme, palette, options) => {
+    registerButtonBaseStyles(theme, palette, options)
+    registerButtonSizeStyles(theme, palette, options.radii)
   })
 }
 
-function registerButtonBaseStyles(theme: ThemeMode, options: ThemeOptions) {
+function registerButtonBaseStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.btn', theme)
     .display('inline-flex')
@@ -17,8 +21,6 @@ function registerButtonBaseStyles(theme: ThemeMode, options: ThemeOptions) {
     .justifyContent('center')
     .gap('8px')
     .border('1px solid transparent')
-    .fontWeight('600')
-    .lineHeight('1')
     .cursor('pointer')
     .textDecoration('none')
     .whiteSpace('nowrap')
@@ -26,8 +28,8 @@ function registerButtonBaseStyles(theme: ThemeMode, options: ThemeOptions) {
       'background 150ms ease, color 150ms ease, border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease',
     )
     .webkitTapHighlightColor('transparent')
-    .padding('10px 16px')
-    .fontSize('0.95rem')
+    .padding('0.25em 0.75em')
+    .apply(palette.applyFont(palette.font.size.body, palette.font.weight.w500))
     .borderRadius(options.radii.md)
 
   styleBuilder
@@ -46,36 +48,20 @@ function registerButtonBaseStyles(theme: ThemeMode, options: ThemeOptions) {
 
 function registerButtonSizeStyles(
   theme: ThemeMode,
+  palette: ThemePalette,
   radii: { sm: string; md: string; lg: string },
 ) {
   styleBuilder
     .select('.btn--sm', theme)
-    .padding('8px 12px')
-    .fontSize('0.86rem')
+    .apply(palette.applyFont(palette.font.size.xs, palette.font.weight.w500))
     .borderRadius(radii.sm)
 
   /*- The default size (md) is defined in the .btn for simplicity. */
 
   styleBuilder
     .select('.btn--lg', theme)
-    .padding('12px 20px')
-    .fontSize('1rem')
+    .apply(palette.applyFont(palette.font.size.xl, palette.font.weight.w500))
     .borderRadius(radii.md)
-
-  styleBuilder
-    .select('.btn--icon-only.btn--sm', theme)
-    .padding('8px')
-    .width('34px')
-
-  styleBuilder
-    .select('.btn--icon-only.btn--md', theme)
-    .padding('10px')
-    .width('40px')
-
-  styleBuilder
-    .select('.btn--icon-only.btn--lg', theme)
-    .padding('12px')
-    .width('46px')
-
+  styleBuilder.select('.btn--icon-only', theme).padding('0.25em')
   styleBuilder.select('.btn--icon-only .btn__label', theme).display('none')
 }

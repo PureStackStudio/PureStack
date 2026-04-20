@@ -22,8 +22,8 @@ export function getLetterSpacing(
 const TRACKING_ORIGIN_FONT_SIZE_REM = 1
 const TRACKING_ORIGIN_VALUE_EM = 0
 const LEFT_TRACKING_BOUNDARY = {
-  fontSize: 0.72,
-  value: 0.2,
+  fontSize: 0.5,
+  value: 0.12,
 }
 const RIGHT_TRACKING_BOUNDARY = {
   fontSize: 3,
@@ -64,9 +64,9 @@ function getTrackingBySize(fontSize: number): number {
 
 function getTrackingByWeight(fontWeight: number): number {
   const rules = [
-    { min: 700, value: -0.003 },
-    { min: 600, value: -0.002 },
-    { min: 500, value: -0.001 },
+    { min: 700, value: -0.0 },
+    { min: 600, value: -0.0 },
+    { min: 500, value: -0.0 },
     { min: 0, value: 0 },
   ]
 
