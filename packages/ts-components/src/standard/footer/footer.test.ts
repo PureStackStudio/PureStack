@@ -3,6 +3,7 @@ import { renderApp } from '@purestack/ts-render'
 import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
+import { defineButtonComponents } from '../btn/btn'
 import { defineIconComponents } from '../icon/icon'
 import { defineFooterComponents } from './footer'
 
@@ -19,6 +20,7 @@ describe('SiteFooter rendering', () => {
   it('renders body content with legal links and socials in footer bottom', () => {
     const html = withDom('<html><body></body></html>', () => {
       const components = {
+        ...defineButtonComponents(),
         ...defineIconComponents(getSvgIcon),
         ...defineFooterComponents(),
       }
@@ -33,7 +35,9 @@ describe('SiteFooter rendering', () => {
           </template>
 
           <template name="social">
-            <FooterSocial href="https://github.com/purestack" label="GitHub" />
+            <BtnLink href="https://github.com/purestack" icon="tabler:brand-github">
+              GitHub
+            </BtnLink>
           </template>
         </SiteFooter>`,
         {
@@ -54,6 +58,7 @@ describe('SiteFooter rendering', () => {
   it('teleports to a custom host when teleport prop is provided', () => {
     const html = withDom('<html><body></body></html>', () => {
       const components = {
+        ...defineButtonComponents(),
         ...defineIconComponents(getSvgIcon),
         ...defineFooterComponents(),
       }

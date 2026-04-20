@@ -53,10 +53,14 @@
 
         <h3>Follow</h3>
         <Flex wrap="true">
-          <FooterSocial
+          <BtnLink
             href="https://github.com"
-            label="GitHub"
-            target="_blank"/>
+            target="_blank"
+            tone="info"
+            icon="tabler:brand-github"
+          >
+            GitHub
+          </BtnLink>
         </Flex>
       </Panel>
     </Grid>
@@ -66,5 +70,27 @@
     <a href="/imprint/de/">Impressum</a>
     <a href="/privacy/">Privacy</a>
     <a href="/terms/">Terms</a>
+  </template>
+  <template name="social">
+    <BtnLink
+      href="https://github.com"
+      target="_blank"
+      tone="info"
+      iconOnly="true"
+      size="sm"
+      icon="tabler:brand-github"
+    >
+      GitHub
+    </BtnLink>
+    <BtnLink
+      href="https://npmjs.com"
+      target="_blank"
+      tone="info"
+      iconOnly="true"
+      size="sm"
+      icon="tabler:brand-npm"
+    >
+      Npm
+    </BtnLink>
   </template>
 </SiteFooter>

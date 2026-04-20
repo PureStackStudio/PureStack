@@ -130,7 +130,7 @@ function resolveConsent(context: TsSsgContext): Consent {
   return {
     ...consent,
     settingsTeleport: context.pageInfo.frontmatter.layout.showFooter
-      ? '.site-footer__legal'
+      ? '.consent-settings-teleport-area'
       : 'body',
     categories,
   }

@@ -60,7 +60,7 @@ describe('compileMdxToHtml', () => {
       '  Callout content.',
       '</Callout>',
       '',
-      '<Footer />',
+      '<SiteFooter />',
     ].join('\n')
     const html = renderApp(compileMdxToHtml(source), {
       components: {},
@@ -72,7 +72,7 @@ describe('compileMdxToHtml', () => {
     expect(html).toContain('<p>Intro text.</p>')
     expect(html).toContain('<callout kind="info">')
     expect(html).toContain('Callout content.')
-    expect(html).toContain('<footer')
+    expect(html).toContain('<sitefooter')
   })
 
   it('renders GFM tables as table elements', async () => {

@@ -1,52 +1,54 @@
-import { defineComponent, html } from 'regor'
+import {
+  getSemanticToneSurfaceClass,
+  type SemanticTone,
+} from '@purestack/ts-style'
+import {
+  type ComputedRef,
+  computed,
+  defineComponent,
+  html,
+  type RefOrValue,
+  unref,
+} from 'regor'
 
 export interface SiteFooter {
   teleport?: string
   ariaLabel?: string
   copyright?: string
   legalLabel?: string
-  tone?: string
-  rootClass?: string
-}
-
-export interface FooterSocial {
-  href?: string
-  label?: string
-  icon?: string
-  target?: string
-  rel?: string
+  tone?: RefOrValue<SemanticTone>
+  className?: ComputedRef<string>
 }
 
 const siteFooterTemplate = html`<footer
   class="site-footer doc-content"
-  :class="rootClass"
+  :class="className"
   :aria-label="ariaLabel"
   :r-teleport="teleport"
 >
-  <div class="site-footer__inner">
-    <slot></slot>
-
-    <div class="site-footer__bottom">
-      <p class="site-footer__copyright">{{ copyright }}</p>
-      <nav class="site-footer__legal" :aria-label="legalLabel">
-        <slot name="legal"></slot>
-      </nav>
-      <div class="site-footer__social"><slot name="social"></slot></div>
-    </div>
-  </div>
+  <div class="site-footer__inner"><slot></slot></div>
+  <Grid
+    columns="1"
+    columnsMd="2"
+    class="site-footer__bottom"
+    wrap="true"
+    align-items="center"
+    justify-items="start"
+  >
+    <Flex class="site-footer__copyright">{{ copyright }}</Flex>
+    <Flex
+      class="site-footer__legal"
+      wrap="true"
+      align="center"
+      justify="end"
+      :aria-label="legalLabel"
+    >
+      <slot name="legal"></slot>
+      <span class="consent-settings-teleport-area"></span>
+      <Flex wrap="nowrap"><slot name="social"></slot></Flex>
+    </Flex>
+  </Grid>
 </footer>`
-
-const footerSocialTemplate = html`<a
-  class="footer-social"
-  :href="href"
-  r-if="href"
-  :target="target"
-  :rel="rel"
-  :aria-label="label"
->
-  <Icon class="footer-social__icon" :name="icon || 'iconoir:code'"/>
-  <span class="footer-social__label" r-if="label">{{ label }}</span>
-</a>`
 
 function defineSiteFooterComponent() {
   return defineComponent<SiteFooter>(siteFooterTemplate, {
@@ -55,51 +57,20 @@ function defineSiteFooterComponent() {
   })
 }
 
-function defineFooterSocialComponent() {
-  return defineComponent<FooterSocial>(footerSocialTemplate, {
-    props: ['href', 'label', 'icon', 'target', 'rel'],
-    context: (head) => resolveFooterSocial(head.props),
-  })
-}
-
 export function defineFooterComponents() {
   return {
     siteFooter: defineSiteFooterComponent(),
-    footerSocial: defineFooterSocialComponent(),
   }
 }
 
 function resolveSiteFooter(props: SiteFooter): SiteFooter {
   const year = new Date().getFullYear()
-  const tone = resolveFooterTone(props.tone)
   if (!props.teleport) props.teleport = 'body'
   return {
     ...props,
     ariaLabel: props.ariaLabel || 'Site footer',
     legalLabel: props.legalLabel || 'Legal and policy links',
     copyright: props.copyright || `(c) ${year}. All rights reserved.`,
-    rootClass: `site-footer--tone-${tone}`,
+    className: computed(() => getSemanticToneSurfaceClass(unref(props.tone))),
   }
-}
-
-function resolveFooterSocial(props: FooterSocial): FooterSocial {
-  const rel =
-    props.rel || (props.target === '_blank' ? 'noopener noreferrer' : '')
-  return {
-    ...props,
-    rel,
-    label: props.label || '',
-  }
-}
-
-function resolveFooterTone(value?: string) {
-  const normalized = value?.toLowerCase() || ''
-  if (
-    normalized === 'accent' ||
-    normalized === 'neutral' ||
-    normalized === 'default'
-  ) {
-    return normalized
-  }
-  return 'default'
 }

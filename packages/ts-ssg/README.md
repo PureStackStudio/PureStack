@@ -265,7 +265,7 @@ Built-in component sets are initialized automatically each build:
 - expandable panel: `expandablePanel`
 - panel: `panel`
 - hero: `heroBanner`, `heroMedia`
-- footer: `siteFooter`, `footerColumn`, `footerLink`, `footerSocial`
+- footer: `siteFooter`
 - top bar: `topBar`
 - logo: `siteLogo`
 - navigation: `navMenu`, `navList`, `navItem`
