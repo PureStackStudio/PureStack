@@ -134,13 +134,22 @@ function resolveBtnLink(props: BtnLink): BtnLink {
 function resolveButtonClassName(props: BtnBase) {
   const size = unref(props.size)
   const hasIcon = !!unref(props.icon)
+  const iconPosition = unref(props.iconPosition)
+  const iconOnly = unref(props.iconOnly)
   const classTokens = [
     size ? `btn--${size}` : '',
     getSemanticToneButtonClass(unref(props.tone), true),
     unref(props.class) || '',
-  ]
-  if (hasIcon && unref(props.iconOnly)) classTokens.push('btn--icon-only')
-  return classTokens.filter(Boolean).join(' ')
+  ].filter(Boolean)
+  if (!hasIcon) return classTokens.join(' ')
+  classTokens.push(
+    iconOnly
+      ? 'btn--icon-only'
+      : iconPosition === 'end'
+        ? 'btn--icon-end'
+        : 'btn--icon-start',
+  )
+  return classTokens.join(' ')
 }
 
 function resolveShowStartIcon(props: BtnBase) {
