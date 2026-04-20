@@ -23,7 +23,6 @@ function registerExpandablePanelShellStyles(
   styleBuilder
     .select('.expandable-panel', theme)
     .display('grid')
-    .margin('0 0 16px')
     .border(`1px solid ${palette.current.border.default}`)
     .borderRadius(options.radii.lg)
     .background(palette.semanticTone.neutral.surface.rest.background)

@@ -81,7 +81,7 @@ function registerListStyles(theme: ThemeMode) {
 function registerLinkStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.doc-content :where(a)', theme)
-    .color(palette.current.tone)
+    .color(palette.current.text.default)
     .textDecoration('none')
     .fontWeight(palette.font.weight.w600)
   styleBuilder

@@ -34,8 +34,6 @@ export type {
 export { defineFlexComponents } from './standard/flex/flex'
 export { registerFlexStyles } from './standard/flex/flexStyle'
 export type {
-  FooterColumn,
-  FooterLink,
   FooterSocial,
   SiteFooter,
 } from './standard/footer/footer'

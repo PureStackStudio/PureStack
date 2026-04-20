@@ -50,115 +50,116 @@ nav:
 
 ## 2. Dense settings stack
 
-<ExpandablePanel
-  title="NVME storage"
-  description="Files, photos, attachments, and backups connected to your account."
-  icon="iconoir:cloud"
-  tone="info"
->
-  <p>
-    Review what is using space, configure retention rules, and decide which
-    folders stay synced across devices.
-  </p>
-  <p>
-    Recommended next step: archive large attachments and disable sync on
-    inactive folders.
-  </p>
-</ExpandablePanel>
+<Flex direction="column">
+  <ExpandablePanel
+    title="NVME storage"
+    description="Files, photos, attachments, and backups connected to your account."
+    icon="iconoir:cloud"
+    tone="info"
+  >
+    <p>
+      Review what is using space, configure retention rules, and decide which
+      folders stay synced across devices.
+    </p>
+    <p>
+      Recommended next step: archive large attachments and disable sync on
+      inactive folders.
+    </p>
+  </ExpandablePanel>
 
-<ExpandablePanel
-  title="Game Pass"
-  description="Play hundreds of games across desktop, console, and cloud streaming."
-  icon="iconoir:gamepad"
-  badge="Ultimate"
-  tone="success"
->
-  <p>
-    Manage billing cadence, family sharing, and installation preferences for the
-    devices linked to this subscription.
-  </p>
-  <Grid columns="1" columnsMd="2">
-    <div>
-      <strong>Included</strong>
-      <ul>
-        <li>Cloud streaming</li>
-        <li>EA Play access</li>
-        <li>Day-one releases</li>
-      </ul>
-    </div>
-    <div>
-      <strong>Suggested actions</strong>
-      <ul>
-        <li>Manage subscription</li>
-        <li>Browse catalog</li>
-        <li>Update family sharing</li>
-      </ul>
-    </div>
-  </Grid>
-</ExpandablePanel>
+  <ExpandablePanel
+    title="Game Pass"
+    description="Play hundreds of games across desktop, console, and cloud streaming."
+    icon="iconoir:gamepad"
+    badge="Ultimate"
+    tone="success"
+  >
+    <p>
+      Manage billing cadence, family sharing, and installation preferences for
+      the devices linked to this subscription.
+    </p>
+    <Grid columns="1" columnsMd="2">
+      <div>
+        <strong>Included</strong>
+        <ul>
+          <li>Cloud streaming</li>
+          <li>EA Play access</li>
+          <li>Day-one releases</li>
+        </ul>
+      </div>
+      <div>
+        <strong>Suggested actions</strong>
+        <ul>
+          <li>Manage subscription</li>
+          <li>Browse catalog</li>
+          <li>Update family sharing</li>
+        </ul>
+      </div>
+    </Grid>
+  </ExpandablePanel>
 
-<ExpandablePanel
-  title="Payment issue"
-  description="Your last renewal attempt could not be completed."
-  icon="iconoir:warning-circle"
-  badge="Action needed"
-  tone="warning"
->
-  <p>
-    Update the saved card, confirm billing address details, and retry the
-    payment before the grace period ends.
-  </p>
-  <Grid columns="1" columnsMd="2">
-    <div>
-      <strong>Why this happened</strong>
-      <ul>
-        <li>Expired card</li>
-        <li>Address mismatch</li>
-        <li>Bank verification required</li>
-      </ul>
-    </div>
-    <div>
-      <strong>Recommended actions</strong>
-      <ul>
-        <li>Replace payment method</li>
-        <li>Retry renewal</li>
-        <li>Download current invoices</li>
-      </ul>
-    </div>
-  </Grid>
-</ExpandablePanel>
+  <ExpandablePanel
+    title="Payment issue"
+    description="Your last renewal attempt could not be completed."
+    icon="iconoir:warning-circle"
+    badge="Action needed"
+    tone="warning"
+  >
+    <p>
+      Update the saved card, confirm billing address details, and retry the
+      payment before the grace period ends.
+    </p>
+    <Grid columns="1" columnsMd="2">
+      <div>
+        <strong>Why this happened</strong>
+        <ul>
+          <li>Expired card</li>
+          <li>Address mismatch</li>
+          <li>Bank verification required</li>
+        </ul>
+      </div>
+      <div>
+        <strong>Recommended actions</strong>
+        <ul>
+          <li>Replace payment method</li>
+          <li>Retry renewal</li>
+          <li>Download current invoices</li>
+        </ul>
+      </div>
+    </Grid>
+  </ExpandablePanel>
 
-<ExpandablePanel
-  title="Security alert"
-  description="A sign-in from a new device requires immediate review."
-  icon="iconoir:shield-alert"
-  meta="High risk"
-  tone="danger"
->
-  <p>
-    We detected an unusual login attempt outside your normal device pattern.
-    Review the session and revoke access if it was not you.
-  </p>
-  <Grid columns="1" columnsMd="2">
-    <div>
-      <strong>Event details</strong>
-      <ul>
-        <li>Unknown device fingerprint</li>
-        <li>New city and network</li>
-        <li>MFA challenge partially completed</li>
-      </ul>
-    </div>
-    <div>
-      <strong>Next steps</strong>
-      <ul>
-        <li>Review account activity</li>
-        <li>Reset password</li>
-        <li>Sign out all sessions</li>
-      </ul>
-    </div>
-  </Grid>
-</ExpandablePanel>
-
+  <ExpandablePanel
+    title="Security alert"
+    description="A sign-in from a new device requires immediate review."
+    icon="iconoir:shield-alert"
+    meta="High risk"
+    tone="danger"
+  >
+    <p>
+      We detected an unusual login attempt outside your normal device pattern.
+      Review the session and revoke access if it was not you.
+    </p>
+    <Grid columns="1" columnsMd="2">
+      <div>
+        <strong>Event details</strong>
+        <ul>
+          <li>Unknown device fingerprint</li>
+          <li>New city and network</li>
+          <li>MFA challenge partially completed</li>
+        </ul>
+      </div>
+      <div>
+        <strong>Next steps</strong>
+        <ul>
+          <li>Review account activity</li>
+          <li>Reset password</li>
+          <li>Sign out all sessions</li>
+        </ul>
+      </div>
+    </Grid>
+  </ExpandablePanel>
+</Flex>
 ## 3. Custom summary slot
 
 <ExpandablePanel tone="neutral" open="true">

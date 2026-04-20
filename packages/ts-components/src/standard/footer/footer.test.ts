@@ -3,7 +3,6 @@ import { renderApp } from '@purestack/ts-render'
 import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
-import { defineButtonComponents } from '../btn/btn'
 import { defineIconComponents } from '../icon/icon'
 import { defineFooterComponents } from './footer'
 
@@ -17,42 +16,26 @@ function withDom<T>(html: string, run: () => T): T {
 }
 
 describe('SiteFooter rendering', () => {
-  it('renders footer blocks with columns, links, legal actions, and socials', () => {
+  it('renders body content with legal links and socials in footer bottom', () => {
     const html = withDom('<html><body></body></html>', () => {
       const components = {
-        ...defineButtonComponents(),
         ...defineIconComponents(getSvgIcon),
         ...defineFooterComponents(),
       }
       return renderApp(
-        `<SiteFooter title="Build with confidence" ctaLabel="Start free" ctaHref="/signup">
-        <p>Everything your team needs to ship docs, pages, and growth loops from one stack.</p>
+        `<SiteFooter copyright="(c) 2026 PureStack">
+          <h2>Build with confidence</h2>
+          <p>Everything your team needs to ship docs, pages, and growth loops from one stack.</p>
 
-        <template name="status">
-          <span>99.99% uptime</span>
-          <span>24/7 support</span>
-        </template>
+          <template name="legal">
+            <a href="/privacy">Privacy</a>
+            <a href="/terms">Terms</a>
+          </template>
 
-        <template name="columns">
-          <FooterColumn title="Product">
-            <FooterLink href="/features" label="Features" />
-            <FooterLink href="/pricing" label="Pricing" />
-          </FooterColumn>
-          <FooterColumn title="Company">
-            <FooterLink href="/about" label="About" />
-            <FooterLink href="/careers" label="Careers" />
-          </FooterColumn>
-        </template>
-
-        <template name="legal">
-          <a href="/privacy">Privacy</a>
-          <a href="/terms">Terms</a>
-        </template>
-
-        <template name="social">
-          <FooterSocial href="https://github.com/purestack" label="GitHub" />
-        </template>
-      </SiteFooter>`,
+          <template name="social">
+            <FooterSocial href="https://github.com/purestack" label="GitHub" />
+          </template>
+        </SiteFooter>`,
         {
           components,
           context: createTestContext(),
@@ -61,29 +44,24 @@ describe('SiteFooter rendering', () => {
     })
 
     expect(html).toContain('Build with confidence')
-    expect(html).toContain('Start free')
-    expect(html).toContain('99.99% uptime')
-    expect(html).toContain('Features')
-    expect(html).toContain('Pricing')
+    expect(html).toContain('Everything your team needs')
+    expect(html).toContain('(c) 2026 PureStack')
     expect(html).toContain('Privacy')
     expect(html).toContain('Terms')
     expect(html).toContain('GitHub')
-    expect(html).toContain('/signup')
   })
 
   it('teleports to a custom host when teleport prop is provided', () => {
     const html = withDom('<html><body></body></html>', () => {
       const components = {
-        ...defineButtonComponents(),
         ...defineIconComponents(getSvgIcon),
         ...defineFooterComponents(),
       }
       return renderApp(
         `<div id="teleport-target"></div>
       <SiteFooter
-        title="Custom target footer"
         teleport="#teleport-target"
-        newsletter="false"
+        copyright="(c) 2026 PureStack"
       >
         <p>Footer content</p>
       </SiteFooter>`,
@@ -100,7 +78,7 @@ describe('SiteFooter rendering', () => {
 
       expect(target).toBeTruthy()
       expect(teleportedFooter).toBeTruthy()
-      expect(target?.textContent).toContain('Custom target footer')
+      expect(target?.textContent).toContain('Footer content')
     })
 
     expect(html).toContain("teleported => '#teleport-target'")
