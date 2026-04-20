@@ -154,10 +154,10 @@ export interface ThemeTypography {
     xxxl: string
   }
   weight: {
-    regular: CSSProps['fontWeight']
-    medium: CSSProps['fontWeight']
-    semibold: CSSProps['fontWeight']
-    bold: CSSProps['fontWeight']
+    w400: CSSProps['fontWeight']
+    w500: CSSProps['fontWeight']
+    w600: CSSProps['fontWeight']
+    w700: CSSProps['fontWeight']
   }
 }
 

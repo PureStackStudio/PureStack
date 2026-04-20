@@ -42,29 +42,23 @@ function registerHeadingStyles(theme: ThemeMode, palette: ThemePalette) {
 
   styleBuilder
     .select('.doc-content :where(h1)', theme)
-    .apply(palette.applyFont(palette.font.size.xxl, palette.font.weight.bold))
+    .apply(palette.applyFont(palette.font.size.xxl, palette.font.weight.w700))
     .margin('0 0 0.5em')
   styleBuilder
     .select('.doc-content :where(h2)', theme)
-    .apply(palette.applyFont(palette.font.size.xl, palette.font.weight.bold))
+    .apply(palette.applyFont(palette.font.size.xl, palette.font.weight.w700))
 
   styleBuilder
     .select('.doc-content :where(h3)', theme)
-    .apply(
-      palette.applyFont(palette.font.size.lg, palette.font.weight.semibold),
-    )
+    .apply(palette.applyFont(palette.font.size.lg, palette.font.weight.w600))
   styleBuilder
     .select('.doc-content :where(h4)', theme)
-    .apply(
-      palette.applyFont(palette.font.size.lg, palette.font.weight.semibold),
-    )
+    .apply(palette.applyFont(palette.font.size.lg, palette.font.weight.w600))
 
   styleBuilder
     .select('.doc-content :where(h5, h6)', theme)
     .textTransform('uppercase')
-    .apply(
-      palette.applyFont(palette.font.size.md, palette.font.weight.semibold),
-    )
+    .apply(palette.applyFont(palette.font.size.md, palette.font.weight.w600))
 
   styleBuilder
     .select(
@@ -88,7 +82,7 @@ function registerLinkStyles(theme: ThemeMode, palette: ThemePalette) {
     .select('.doc-content :where(a)', theme)
     .color(palette.semanticTone.accent.text.default)
     .textDecoration('none')
-    .fontWeight(palette.font.weight.semibold)
+    .fontWeight(palette.font.weight.w600)
   styleBuilder
     .select('.doc-content :where(a:hover)', theme)
     .textDecoration('underline')

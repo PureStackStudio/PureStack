@@ -1,21 +1,23 @@
-import { styleBuilder, type ThemeMode, themes } from '@purestack/ts-style'
+import {
+  styleBuilder,
+  type ThemeMode,
+  type ThemePalette,
+  themes,
+} from '@purestack/ts-style'
 
 export function registerBadgeStyles() {
-  themes.forEach((theme) => {
-    registerBadgeBaseStyles(theme)
+  themes.forEach((theme, palette) => {
+    registerBadgeBaseStyles(theme, palette)
   })
 }
 
-function registerBadgeBaseStyles(theme: ThemeMode) {
+function registerBadgeBaseStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.badge', theme)
     .display('inline-flex')
     .alignItems('center')
-    .padding('0.5em 1em')
+    .padding('0.12em 0.5em')
     .borderRadius('999px')
-    .fontSize('0.72rem')
-    .fontWeight('700')
-    .lineHeight('1.2')
-    .letterSpacing('0.08em')
+    .apply(palette.applyFont(palette.font.size.xxxs, palette.font.weight.w700))
     .textTransform('uppercase')
 }
