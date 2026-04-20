@@ -19,7 +19,7 @@ function registerButtonBaseStyles(
     .verticalAlign('middle')
     .alignItems('center')
     .justifyContent('center')
-    .gap('8px')
+    .gap('0.25em')
     .border('1px solid transparent')
     .cursor('pointer')
     .textDecoration('none')
