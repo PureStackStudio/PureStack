@@ -133,7 +133,9 @@ export function registerPageTocTargetStyles(
     .padding('0')
     .borderRadius('0')
     .transition('background 200ms ease, color 200ms ease')
-    .color(palette.semanticTone.accent.text.default)
+  styleBuilder
+    .select('.doc-content .page-toc__target', theme)
+    .boxShadow(`0 2px 0 0 ${palette.current.tone}`)
 }
 
 export function registerPageTocLayoutStyles(

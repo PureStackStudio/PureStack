@@ -46,8 +46,8 @@ function registerFormFieldStyles(
       theme,
     )
     .outline('none')
-    .borderColor(palette.semanticTone.accent.border.default)
-    .boxShadow(`0 0 0 3px ${palette.semanticTone.accent.surface.focusRing}`)
+    .borderColor(palette.current.border.default)
+    .boxShadow(`0 0 0 3px ${palette.current.border.focus}`)
   styleBuilder
     .select('.form-block__input', theme)
     .width('100%')
@@ -127,7 +127,7 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .select('.form-block__check input', theme)
     .width('1.5em')
     .height('1.5em')
-    .accentColor(palette.accent) // todo: implement current var to get current surface tone as color but not gradient.
+    .accentColor(palette.current.tone)
   styleBuilder
     .select('.form-block__assist-link', theme)
     .apply(palette.applyFont(palette.font.size.xxs, palette.font.weight.w700))

@@ -41,6 +41,7 @@
 import type { CSSProps } from '@purestack/ts-css'
 
 export interface SemanticToneTokens {
+  tone: string
   surface: {
     rest: {
       background: string
@@ -164,6 +165,7 @@ export interface ThemeTypography {
 }
 
 export interface ThemePaletteCurrent {
+  tone: string
   text: {
     default: string
     subtle: string

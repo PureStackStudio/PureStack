@@ -36,13 +36,13 @@ const successScale = createColorScale(success, mode)
 const warningScale = createColorScale(warning, mode)
 const dangerScale = createColorScale(danger, mode)
 const core: NeonCore = {
-  neutral: createToneColors(neutralScale, delta1),
-  accent: createToneColors(accentScale, delta2),
-  ghost: createToneColors(neutralScale, delta1),
-  info: createToneColors(infoScale, delta2),
-  success: createToneColors(successScale, delta2),
-  warning: createToneColors(warningScale, delta2),
-  danger: createToneColors(dangerScale, delta2),
+  neutral: createToneColors(neutral, neutralScale, delta1),
+  accent: createToneColors(accent, accentScale, delta2),
+  ghost: createToneColors(neutral, neutralScale, delta1),
+  info: createToneColors(info, infoScale, delta2),
+  success: createToneColors(success, successScale, delta2),
+  warning: createToneColors(warning, warningScale, delta2),
+  danger: createToneColors(danger, dangerScale, delta2),
 }
 
 export const neonLight = createNeonPalette({

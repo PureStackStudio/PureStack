@@ -81,7 +81,7 @@ function registerListStyles(theme: ThemeMode) {
 function registerLinkStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.doc-content :where(a)', theme)
-    .color(palette.semanticTone.accent.text.default)
+    .color(palette.current.tone)
     .textDecoration('none')
     .fontWeight(palette.font.weight.w600)
   styleBuilder
@@ -363,8 +363,8 @@ function registerTableBodyRowStyles(
 
   styleBuilder
     .select('.doc-content :where(tbody tr:hover)', theme)
-    .background(palette.semanticTone.accent.canvas)
-    .color(palette.semanticTone.accent.text.default)
+    .background(palette.current.tone)
+    .color(palette.current.text.default)
 
   styleBuilder
     .select('.doc-content :where(tbody tr:last-child td)', theme)

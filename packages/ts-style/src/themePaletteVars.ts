@@ -121,6 +121,7 @@ function mapThemePaletteLeaves(
 
 export function getCurrentThemePalette(): ThemePaletteCurrent {
   return {
+    tone: 'var(--ps-current-tone)',
     text: {
       default: 'var(--ps-current-text-default)',
       subtle: 'var(--ps-current-text-subtle)',

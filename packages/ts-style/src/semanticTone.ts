@@ -53,6 +53,7 @@ export function getSemanticToneTokens(
 
 function applySemanticToneVars(style: Style, tokens: SemanticToneTokens) {
   return style
+    .set('--ps-current-tone', tokens.tone)
     .set('--ps-current-text-default', tokens.text.default)
     .set('--ps-current-text-subtle', tokens.text.subtle)
     .set('--ps-current-border-subtle', tokens.border.subtle)
@@ -121,6 +122,7 @@ export function registerSemanticToneUtilityStyles() {
     const root = getSemanticToneTokens(palette, 'neutral')
     styleBuilder
       .select(':root', theme)
+      .set('--ps-current-tone', root.tone)
       .set('--ps-current-text-default', root.root.text.default)
       .set('--ps-current-text-subtle', root.root.text.subtle)
       .set('--ps-current-border-subtle', root.root.border.subtle)

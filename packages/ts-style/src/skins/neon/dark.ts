@@ -58,13 +58,13 @@ const successScale = createColorScale(success, mode)
 const warningScale = createColorScale(warning, mode)
 const dangerScale = createColorScale(danger, mode)
 const core: NeonCore = {
-  neutral: createToneColors(neutralScale, delta),
-  accent: createToneColors(accentScale, delta),
-  ghost: createToneColors(neutralScale, delta),
-  info: createToneColors(infoScale, delta),
-  success: createToneColors(successScale, delta),
-  warning: createToneColors(warningScale, delta),
-  danger: createToneColors(dangerScale, delta),
+  neutral: createToneColors(neutral, neutralScale, delta),
+  accent: createToneColors(accent, accentScale, delta),
+  ghost: createToneColors(neutral, neutralScale, delta),
+  info: createToneColors(info, infoScale, delta),
+  success: createToneColors(success, successScale, delta),
+  warning: createToneColors(warning, warningScale, delta),
+  danger: createToneColors(danger, dangerScale, delta),
 }
 
 function resolveScaleIndex(value: number) {
@@ -72,10 +72,12 @@ function resolveScaleIndex(value: number) {
 }
 
 export function createToneColors(
+  tone: string,
   scale: string[],
   delta: DeltaToneColors,
 ): ToneColors {
   return {
+    tone,
     canvas: scale[resolveScaleIndex(12 + delta.canvas)],
     button: scale[resolveScaleIndex(40 + delta.button)],
     foreground: scale[resolveScaleIndex(80 + delta.foreground)],

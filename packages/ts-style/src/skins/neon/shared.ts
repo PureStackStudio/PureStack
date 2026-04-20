@@ -14,6 +14,7 @@ export type ToneScale = {
 export type Tone = SemanticToneTokens
 
 export type ToneColors = {
+  tone: string
   canvas: string
   button: string
   surface: string
@@ -158,7 +159,7 @@ export function createTone(
   const subtleText = subtleTone(foreground.level1)
   const defaultBorder = borderTone(border.level3)
   const subtleBorder = borderTone(border.level2)
-  const focusBorder = borderTone(border.level5)
+  const focusBorder = border.level5
   const buttonBorderRest = borderTone(buttonBg.level1)
   const buttonBorderHover = borderTone(buttonBg.level2)
   const buttonBorderActive = borderTone(buttonBg.level1)
@@ -193,6 +194,7 @@ export function createTone(
   }
 
   return {
+    tone: colors.tone,
     surface: createInteractiveGroup(
       surface,
       defaultBorder,

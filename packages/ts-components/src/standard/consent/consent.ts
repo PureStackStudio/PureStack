@@ -31,7 +31,7 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
       {{ privacyPolicyLabel }}
     </a>
     <div class="consent__actions">
-      <Btn type="button" data-consent-action="accept-all">
+      <Btn type="button" tone="success" data-consent-action="accept-all">
         {{ acceptAllLabel }}
       </Btn>
       <Btn tone="neutral" type="button" data-consent-action="reject-all">
@@ -87,8 +87,10 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
     </div>
 
     <div class="consent__panel-actions">
-      <Btn type="button" data-consent-action="save">{{ saveLabel }}</Btn>
-      <Btn tone="neutral" type="button" data-consent-action="accept-all">
+      <Btn type="button" tone="success" data-consent-action="save">
+        {{ saveLabel }}
+      </Btn>
+      <Btn tone="success" type="button" data-consent-action="accept-all">
         {{ acceptAllLabel }}
       </Btn>
       <Btn tone="neutral" type="button" data-consent-action="reject-all">
