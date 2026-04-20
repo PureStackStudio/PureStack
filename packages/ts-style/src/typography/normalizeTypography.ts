@@ -22,7 +22,9 @@ export function normalizeFontSize(fontSize: string): number {
   return value
 }
 
-export function normalizeFontWeight(fontWeight: CSSProps['fontWeight']): number {
+export function normalizeFontWeight(
+  fontWeight: CSSProps['fontWeight'],
+): number {
   const normalized = fontWeight.trim().toLowerCase()
 
   if (!normalized) {
