@@ -38,6 +38,8 @@
  * ```
  */
 
+import type { CSSProps } from '@purestack/ts-css'
+
 export interface SemanticToneTokens {
   surface: {
     rest: {
@@ -138,6 +140,27 @@ export interface SemanticToneTokens {
   }
 }
 
+export interface ThemeTypography {
+  size: {
+    xxxs: string
+    xxs: string
+    xs: string
+    sm: string
+    body: string
+    md: string
+    lg: string
+    xl: string
+    xxl: string
+    xxxl: string
+  }
+  weight: {
+    regular: CSSProps['fontWeight']
+    medium: CSSProps['fontWeight']
+    semibold: CSSProps['fontWeight']
+    bold: CSSProps['fontWeight']
+  }
+}
+
 export interface ThemePaletteCurrent {
   text: {
     default: string
@@ -153,6 +176,11 @@ export interface ThemePaletteCurrent {
 export interface ThemePalette {
   accent: string
   current: ThemePaletteCurrent
+  font: ThemeTypography
+  applyFont: (
+    fontSize: string,
+    fontWeight?: CSSProps['fontWeight'],
+  ) => () => Partial<CSSProps>
   semanticTone: {
     neutral: SemanticToneTokens
     accent: SemanticToneTokens

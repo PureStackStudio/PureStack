@@ -106,7 +106,7 @@ function collectThemePaletteEntries(
   }
 
   for (const [key, child] of Object.entries(value)) {
-    if (isCurrentPaletteKey(path, key)) continue
+    if (isCurrentPaletteKey(path, key) || isFontPaletteKey(path, key)) continue
     collectThemePaletteEntries(child, [...path, key], entries)
   }
 }
@@ -142,9 +142,17 @@ function mapThemePaletteValue<T>(
     return mapLeaf(path) as T
   }
 
+  if (typeof value === 'function') {
+    return value
+  }
+
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    return value
+  }
+
   const out: Record<string, unknown> = {}
   for (const [key, child] of Object.entries(value as Record<string, unknown>)) {
-    if (isCurrentPaletteKey(path, key)) {
+    if (isCurrentPaletteKey(path, key) || isFontPaletteKey(path, key)) {
       out[key] = child
       continue
     }
@@ -155,6 +163,10 @@ function mapThemePaletteValue<T>(
 
 function isCurrentPaletteKey(path: string[], key: string) {
   return path.length === 0 && key === 'current'
+}
+
+function isFontPaletteKey(path: string[], key: string) {
+  return path.length === 0 && key === 'font'
 }
 
 function toKebabCase(value: string) {

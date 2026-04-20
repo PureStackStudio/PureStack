@@ -7,6 +7,7 @@ export {
   toPosixPath,
 } from './assetPath'
 export { Cache, type CacheOptions } from './cache'
+export { clamp } from './clamp'
 export { escapeHtml } from './escapeHtml'
 export { type LoggerLike, logError } from './logging'
 export { merge } from './merge'

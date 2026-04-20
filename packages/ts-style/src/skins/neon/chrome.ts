@@ -1,4 +1,5 @@
 import { hexToRgba } from '@purestack/ts-css'
+import { clamp } from '@purestack/ts-util'
 import type { ToneScale } from './shared'
 
 export type ChromeState = 'rest' | 'hover' | 'active' | 'disabled'
@@ -158,8 +159,4 @@ export function createChrome(
   }
 
   return layered([gloss, hotspot, rim, edgeShade, body])
-}
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(Math.max(value, min), max)
 }

@@ -1,6 +1,9 @@
+import type { CSSProps } from '@purestack/ts-css'
 import type { ThemeMode } from '../../themeOptions'
-import type { ThemePalette } from '../../themePalette'
+import type { ThemePalette, ThemeTypography } from '../../themePalette'
 import { getCurrentThemePalette } from '../../themePaletteVars'
+import { getLetterSpacing } from '../../typography/getLetterSpacing'
+import { getLineHeight } from '../../typography/getLineHeight'
 import { createScale, createTone, rgba, type ToneColors } from './shared'
 
 export type NeonCore = {
@@ -37,6 +40,14 @@ export function createNeonPalette({
   return {
     accent,
     current: getCurrentThemePalette(),
+    font: createTypography(),
+    applyFont:
+      (fontSize: string, fontWeight?: CSSProps['fontWeight']) => () => ({
+        fontSize,
+        fontWeight,
+        letterSpacing: getLetterSpacing(fontSize, fontWeight),
+        lineHeight: getLineHeight(fontSize, fontWeight),
+      }),
     semanticTone: {
       neutral: createTone(
         core.neutral,
@@ -126,4 +137,27 @@ function createEffect(core: NeonCore, mode: ThemeMode) {
     insetShadow: `inset 0 10px 28px ${rgba(shadowColor, 0.34)}`,
   }
   return effect
+}
+
+function createTypography(): ThemeTypography {
+  return {
+    size: {
+      xxxs: '0.72rem',
+      xxs: '0.85rem',
+      xs: '0.9rem',
+      sm: '0.94rem',
+      body: '1rem', // body, h6
+      md: '1.06rem', // captions, h5
+      lg: '1.309rem', // h3 h4
+      xl: '2.118rem', //h2
+      xxl: '3.427rem', //h1
+      xxxl: '5.545rem', //display
+    },
+    weight: {
+      regular: '400',
+      medium: '500',
+      semibold: '600',
+      bold: '700',
+    },
+  }
 }

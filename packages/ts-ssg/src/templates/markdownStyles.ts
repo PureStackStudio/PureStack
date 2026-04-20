@@ -13,7 +13,7 @@ export interface MarkdownStyleOptions {
 export function registerMarkdownStyles(options: MarkdownStyleOptions = {}) {
   const includeShikiStyles = options.includeShikiStyles !== false
   themes.forEach((theme, palette, options) => {
-    registerBaseProseStyles(theme, palette, options)
+    registerBaseProseStyles(theme, palette)
     registerHeadingStyles(theme, palette)
     registerListStyles(theme)
     registerLinkStyles(theme, palette)
@@ -25,15 +25,10 @@ export function registerMarkdownStyles(options: MarkdownStyleOptions = {}) {
   })
 }
 
-function registerBaseProseStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+function registerBaseProseStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.doc-content', theme)
-    .fontSize(options.typography.baseSize)
-    .lineHeight('1.7')
+    .apply(palette.applyFont(palette.font.size.body))
     .color(palette.current.text.default)
 
   styleBuilder.select('.doc-content :where(p)', theme).margin('0 0 1em')
@@ -42,33 +37,34 @@ function registerBaseProseStyles(
 function registerHeadingStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.doc-content :where(h1, h2, h3, h4, h5, h6)', theme)
-    .fontWeight('700')
-    .letterSpacing('-0.015em')
-    .lineHeight('1.15')
     .margin('0 0 0.6em')
     .scrollMarginTop('96px')
 
   styleBuilder
     .select('.doc-content :where(h1)', theme)
-    .fontSize('2.4rem')
+    .apply(palette.applyFont(palette.font.size.xxl, palette.font.weight.bold))
     .margin('0 0 0.5em')
-  styleBuilder.select('.doc-content :where(h2)', theme).fontSize('1.9rem')
-  styleBuilder.select('.doc-content :where(h3)', theme).fontSize('1.5rem')
-  styleBuilder.select('.doc-content :where(h4)', theme).fontSize('1.25rem')
+  styleBuilder
+    .select('.doc-content :where(h2)', theme)
+    .apply(palette.applyFont(palette.font.size.xl, palette.font.weight.bold))
+
+  styleBuilder
+    .select('.doc-content :where(h3)', theme)
+    .apply(
+      palette.applyFont(palette.font.size.lg, palette.font.weight.semibold),
+    )
+  styleBuilder
+    .select('.doc-content :where(h4)', theme)
+    .apply(
+      palette.applyFont(palette.font.size.lg, palette.font.weight.semibold),
+    )
 
   styleBuilder
     .select('.doc-content :where(h5, h6)', theme)
     .textTransform('uppercase')
-
-  styleBuilder
-    .select('.doc-content :where(h5)', theme)
-    .fontSize('1.05rem')
-    .letterSpacing('0.04em')
-  styleBuilder
-    .select('.doc-content :where(h6)', theme)
-    .fontSize('0.95rem')
-    .letterSpacing('0.06em')
-    .color(palette.current.text.subtle)
+    .apply(
+      palette.applyFont(palette.font.size.md, palette.font.weight.semibold),
+    )
 
   styleBuilder
     .select(
@@ -92,7 +88,7 @@ function registerLinkStyles(theme: ThemeMode, palette: ThemePalette) {
     .select('.doc-content :where(a)', theme)
     .color(palette.semanticTone.accent.text.default)
     .textDecoration('none')
-    .fontWeight('600')
+    .fontWeight(palette.font.weight.semibold)
   styleBuilder
     .select('.doc-content :where(a:hover)', theme)
     .textDecoration('underline')
@@ -122,7 +118,7 @@ function registerInlineCodeStyles(
   styleBuilder
     .select('.doc-content :where(code)', theme)
     .fontFamily("'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace")
-    .fontSize('0.9em')
+    .apply(palette.applyFont(palette.font.size.xs))
     .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
     .border(`1px solid ${palette.current.border.default}`)
     .borderRadius(options.radii.sm)
@@ -155,8 +151,7 @@ function registerPreShellStyles(
     .borderRadius(options.radii.md)
     .position('relative')
     .overflow('auto')
-    .lineHeight('1.6')
-    .fontSize('0.9em')
+    .apply(palette.applyFont(palette.font.size.xs))
 }
 
 function registerCopyButtonBaseStyles(
@@ -261,7 +256,6 @@ function registerPreCodeResetStyles(theme: ThemeMode) {
     .background('transparent')
     .border('none')
     .padding('0')
-    .fontSize('inherit')
 }
 
 function registerShikiStyles(theme: ThemeMode) {
@@ -346,9 +340,8 @@ function registerTableHeaderStyles(
     .select('.doc-content :where(thead th)', theme)
     .background(palette.semanticTone.neutral.surface.rest.background)
     .color(palette.current.text.default)
-    .fontSize('0.79rem')
+    .apply(palette.applyFont(palette.font.size.xxs))
     .textTransform('uppercase')
-    .letterSpacing('0.055em')
     .borderBottom(`1px solid ${palette.current.border.default}`)
 
   styleBuilder
@@ -411,11 +404,10 @@ function registerTableInlineCodeStyles(
 ) {
   styleBuilder
     .select('.doc-content :where(table code)', theme)
-    .background(palette.semanticTone.danger.canvas)
-    .color(palette.semanticTone.danger.text.default)
-    .border(`1px solid ${palette.current.border.default}`)
+    .background(palette.semanticTone.neutral.surface.rest.background)
+    .color(palette.semanticTone.neutral.surface.rest.text)
+    .border(`1px solid ${palette.semanticTone.neutral.surface.rest.border}`)
     .borderRadius(options.radii.pill)
-    .fontSize('0.84em')
     .opacity(0.9)
 }
 
@@ -451,6 +443,6 @@ function registerMediaStyles(
   styleBuilder
     .select('.doc-content :where(figcaption)', theme)
     .marginTop('0.6em')
-    .fontSize('0.9em')
+    .apply(palette.applyFont(palette.font.size.sm))
     .color(palette.current.text.subtle)
 }

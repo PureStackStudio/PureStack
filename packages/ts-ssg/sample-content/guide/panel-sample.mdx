@@ -17,29 +17,27 @@ nav:
 <Panel tone="accent">
   <Grid columns="1" columnsLg="1fr auto" alignItems="center">
     <div>
-      <p style="margin-bottom:0.75rem; font-size:0.85rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;">
-        Included workspace
-      </p>
-      <h2 style="margin-bottom:1rem;">PureStack Workspace</h2>
+      <Badge tone="success">Included workspace</Badge>
+      <h2 style="margin-top: 0.2em">PureStack Workspace</h2>
       <p>
-        Use `Panel` when content should always stay visible and scannable without
-        any expandable chrome around it.
+        Use `Panel` when content should always stay visible and scannable
+        without any expandable chrome around it.
       </p>
       <p>
-        It works well for dashboard summaries, supporting account context, static
-        marketing sections, and custom layouts that do not fit a predefined header API.
+        It works well for dashboard summaries, supporting account context,
+        static marketing sections, and custom layouts that do not fit a
+        predefined header API.
       </p>
-      <div style="margin-top: 2rem; display:flex; gap:0.25rem; flex-wrap:wrap;">
+      <div>
         <Btn>Open workspace</Btn>
         <Btn tone="ghost">Invite team</Btn>
       </div>
     </div>
     <div>
       <img
-        style="max-width:400px;"
+        style="max-width:350px;"
         src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80"
-        alt="Workspace with laptop, notebook, and soft desk lighting."
-      />
+        alt="Workspace with laptop, notebook, and soft desk lighting."/>
     </div>
   </Grid>
 </Panel>
@@ -50,28 +48,32 @@ nav:
   <Panel tone="info">
     <h3>Storage overview</h3>
     <p>
-      71% of allocated space is currently used. Archive old build artifacts and large attachments first.
+      71% of allocated space is currently used. Archive old build artifacts and
+      large attachments first.
     </p>
   </Panel>
 
   <Panel tone="success">
     <h3>Security healthy</h3>
     <p>
-      No outstanding security actions are required. The last full policy sync completed 8 minutes ago.
+      No outstanding security actions are required. The last full policy sync
+      completed 8 minutes ago.
     </p>
   </Panel>
 
   <Panel tone="warning">
     <h3>Billing follow-up</h3>
     <p>
-      One invoice needs review before the next renewal. Update the saved payment details before April 5.
+      One invoice needs review before the next renewal. Update the saved payment
+      details before April 5.
     </p>
   </Panel>
 
   <Panel tone="danger">
     <h3>Risk event detected</h3>
     <p>
-      A new device session triggered a security review. Confirm device ownership and rotate credentials if needed.
+      A new device session triggered a security review. Confirm device ownership
+      and rotate credentials if needed.
     </p>
   </Panel>
 </Grid>

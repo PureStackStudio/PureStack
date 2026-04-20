@@ -9,5 +9,8 @@ export {
 export * from './styles'
 export * from './themeAssets'
 export * from './themeOptions'
-export type { ThemePalette } from './themePalette'
+export type {
+  ThemePalette,
+  ThemeTypography,
+} from './themePalette'
 export * from './themePaletteVars'

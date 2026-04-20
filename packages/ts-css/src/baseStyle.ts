@@ -31,9 +31,15 @@ export class BaseStyle<T extends RootStyle> extends RootStyle {
 
   css(css: Partial<CSSProps>) {
     for (const [key, value] of Object.entries(css)) {
+      if (value === undefined) continue
       this.set(key, value as string)
     }
     return this
+  }
+
+  apply(callback: () => Partial<CSSProps>) {
+    const css = callback()
+    return this.css(css)
   }
 
   /** Select a child element with the given selector.
