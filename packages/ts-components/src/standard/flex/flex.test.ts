@@ -23,6 +23,23 @@ describe('Flex rendering', () => {
     expect(html).toContain('item')
   })
 
+  it('supports reverse directions for base and responsive layouts', () => {
+    const cleanup = ensureDomGlobals()
+    const components = defineFlexComponents()
+    const html = renderApp(
+      '<Flex direction="column-reverse" directionMd="row-reverse">item</Flex>',
+      {
+        components,
+        context: createTestContext(),
+      },
+    )
+    cleanup()
+
+    expect(html).toContain('class="flex ')
+    expect(html).toContain('flex--column-reverse')
+    expect(html).toContain('flex--direction-md-row-reverse')
+  })
+
   it('supports wrap as a boolean prop', () => {
     const cleanup = ensureDomGlobals()
     const components = defineFlexComponents()

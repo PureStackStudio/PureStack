@@ -17,6 +17,10 @@ export function registerFlexStyles() {
 
     styleBuilder.select('.flex--inline', theme).display('inline-flex')
     styleBuilder.select('.flex--column', theme).flexDirection('column')
+    styleBuilder
+      .select('.flex--column-reverse', theme)
+      .flexDirection('column-reverse')
+    styleBuilder.select('.flex--row-reverse', theme).flexDirection('row-reverse')
 
     styleBuilder.select('.flex--align-stretch', theme).alignItems('stretch')
     styleBuilder.select('.flex--align-start', theme).alignItems('flex-start')
@@ -73,6 +77,18 @@ function applyResponsiveFlexDirectionStyles(theme: string) {
   )
   applyResponsiveFlexStyle(
     theme,
+    '.flex--direction-sm-column-reverse',
+    'min-width: 640px',
+    (style) => style.flexDirection('column-reverse'),
+  )
+  applyResponsiveFlexStyle(
+    theme,
+    '.flex--direction-sm-row-reverse',
+    'min-width: 640px',
+    (style) => style.flexDirection('row-reverse'),
+  )
+  applyResponsiveFlexStyle(
+    theme,
     '.flex--direction-md-row',
     'min-width: 768px',
     (style) => style.flexDirection('row'),
@@ -82,6 +98,18 @@ function applyResponsiveFlexDirectionStyles(theme: string) {
     '.flex--direction-md-column',
     'min-width: 768px',
     (style) => style.flexDirection('column'),
+  )
+  applyResponsiveFlexStyle(
+    theme,
+    '.flex--direction-md-column-reverse',
+    'min-width: 768px',
+    (style) => style.flexDirection('column-reverse'),
+  )
+  applyResponsiveFlexStyle(
+    theme,
+    '.flex--direction-md-row-reverse',
+    'min-width: 768px',
+    (style) => style.flexDirection('row-reverse'),
   )
   applyResponsiveFlexStyle(
     theme,
@@ -97,6 +125,18 @@ function applyResponsiveFlexDirectionStyles(theme: string) {
   )
   applyResponsiveFlexStyle(
     theme,
+    '.flex--direction-lg-column-reverse',
+    'min-width: 1024px',
+    (style) => style.flexDirection('column-reverse'),
+  )
+  applyResponsiveFlexStyle(
+    theme,
+    '.flex--direction-lg-row-reverse',
+    'min-width: 1024px',
+    (style) => style.flexDirection('row-reverse'),
+  )
+  applyResponsiveFlexStyle(
+    theme,
     '.flex--direction-xl-row',
     'min-width: 1280px',
     (style) => style.flexDirection('row'),
@@ -106,6 +146,18 @@ function applyResponsiveFlexDirectionStyles(theme: string) {
     '.flex--direction-xl-column',
     'min-width: 1280px',
     (style) => style.flexDirection('column'),
+  )
+  applyResponsiveFlexStyle(
+    theme,
+    '.flex--direction-xl-column-reverse',
+    'min-width: 1280px',
+    (style) => style.flexDirection('column-reverse'),
+  )
+  applyResponsiveFlexStyle(
+    theme,
+    '.flex--direction-xl-row-reverse',
+    'min-width: 1280px',
+    (style) => style.flexDirection('row-reverse'),
   )
 }
 

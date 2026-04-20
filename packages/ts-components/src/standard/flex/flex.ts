@@ -7,7 +7,11 @@ import {
   unref,
 } from 'regor'
 
-export type FlexDirection = 'row' | 'column'
+export type FlexDirection =
+  | 'row'
+  | 'row-reverse'
+  | 'column'
+  | 'column-reverse'
 export type FlexAlign = 'stretch' | 'start' | 'center' | 'end' | 'baseline'
 export type FlexJustify =
   | 'start'
@@ -124,6 +128,8 @@ function resolveDirectionClass(value?: RefOrValue<FlexDirection>) {
 
   const normalized = unref(value)
   if (normalized === 'column') return 'flex--column'
+  if (normalized === 'column-reverse') return 'flex--column-reverse'
+  if (normalized === 'row-reverse') return 'flex--row-reverse'
   if (normalized === 'row') return ''
 
   return ''
@@ -137,7 +143,13 @@ function resolveResponsiveDirectionClass(
 
   const normalized = unref(value)
   if (normalized === 'column') return `flex--direction-${breakpoint}-column`
+  if (normalized === 'column-reverse') {
+    return `flex--direction-${breakpoint}-column-reverse`
+  }
   if (normalized === 'row') return `flex--direction-${breakpoint}-row`
+  if (normalized === 'row-reverse') {
+    return `flex--direction-${breakpoint}-row-reverse`
+  }
 
   return ''
 }

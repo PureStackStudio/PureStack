@@ -27,11 +27,14 @@ const siteFooterTemplate = html`<footer
   :r-teleport="teleport"
 >
   <div class="site-footer__inner"><slot></slot></div>
-  <Grid
-    columns="1"
-    columnsMd="minmax(0, 1fr) auto"
+  <Flex
     class="site-footer__bottom"
-    alignItems="center"
+    direction="column-reverse"
+    directionMd="row"
+    align="center"
+    justify="center"
+    justifyMd="between"
+    wrap="true"
   >
     <Flex justify="center" justifyMd="start" class="site-footer__copyright">
       {{ copyright }}
@@ -49,7 +52,7 @@ const siteFooterTemplate = html`<footer
       <span class="consent-settings-teleport-area"></span>
       <Flex><slot name="social"></slot></Flex>
     </Flex>
-  </Grid>
+  </Flex>
 </footer>`
 
 function defineSiteFooterComponent() {
