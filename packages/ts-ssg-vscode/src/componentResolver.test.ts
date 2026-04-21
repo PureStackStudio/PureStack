@@ -243,6 +243,37 @@ describe('resolveComponentTarget local same-file fallback', () => {
 
     expect(target).toBeUndefined()
   })
+
+  it('does not treat multiline imported type specifiers as local declarations', () => {
+    const importedComponentPath = path.join(
+      isolatedWorkspaceRoot,
+      'src',
+      'importedComponentMultiline.ts',
+    )
+    fs.writeFileSync(
+      importedComponentPath,
+      [
+        "import {",
+        '  type ImportedComponent,',
+        "} from './other'",
+        '',
+        'export function defineImportedComponents() {',
+        '  return {',
+        '    importedComponent: defineComponent<ImportedComponent>(html`<div/>`, {}),',
+        '  }',
+        '}',
+        '',
+      ].join('\n'),
+    )
+
+    const target = resolveComponentTarget(
+      isolatedWorkspaceRoot,
+      'ImportedComponent',
+      importedComponentPath,
+    )
+
+    expect(target).toBeUndefined()
+  })
 })
 
 function getResolvedLineText(filePath?: string, line?: number) {

@@ -14,9 +14,9 @@ const IGNORED_DIRECTORY_NAMES = new Set([
   'dist',
 ])
 const EXPORTED_COMPONENT_PATTERN =
-  /^\s*export\s+(?:declare\s+)?(?:abstract\s+)?(?:interface|type|class)\s+([A-Za-z][A-Za-z0-9]*)\b/g
+  /^\s*export\s+(?:declare\s+)?(?:abstract\s+)?(interface|type|class)\s+([A-Za-z][A-Za-z0-9]*)\b/
 const LOCAL_COMPONENT_PATTERN =
-  /^\s*(?:export\s+)?(?:declare\s+)?(?:abstract\s+)?(?:interface|type|class)\s+([A-Za-z][A-Za-z0-9]*)\b/g
+  /^\s*(?:export\s+)?(?:declare\s+)?(?:abstract\s+)?(interface|type|class)\s+([A-Za-z][A-Za-z0-9]*)\b/
 
 const workspaceComponentFilesCache = new Map<string, string[]>()
 const dependencyPackageCache = new Map<string, DependencyComponentPackage[]>()
@@ -275,12 +275,11 @@ function findComponentDefinitionInFile(
     : EXPORTED_COMPONENT_PATTERN
 
   for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
-    const line = lines[lineIndex]
-    const match = pattern.exec(line)
-    pattern.lastIndex = 0
-
-    if (!match) continue
-    if (normalizeComponentName(match[1]) !== normalizedComponentName) continue
+    const declaration = getComponentDeclarationFromLine(lines[lineIndex], pattern)
+    if (!declaration) continue
+    if (normalizeComponentName(declaration.name) !== normalizedComponentName) {
+      continue
+    }
 
     return {
       line: lineIndex,
@@ -288,6 +287,37 @@ function findComponentDefinitionInFile(
   }
 
   return undefined
+}
+
+function getComponentDeclarationFromLine(line: string, pattern: RegExp) {
+  const match = pattern.exec(line)
+  if (!match) return undefined
+
+  const kind = match[1]
+  const name = match[2]
+  const suffix = line.slice(match[0].length).trimStart()
+  if (!hasValidDeclarationSuffix(kind, suffix)) return undefined
+
+  return { kind, name }
+}
+
+function hasValidDeclarationSuffix(kind: string, suffix: string) {
+  if (suffix.startsWith('<')) return true
+
+  switch (kind) {
+    case 'interface':
+      return suffix.startsWith('{') || suffix.startsWith('extends ')
+    case 'type':
+      return suffix.startsWith('=')
+    case 'class':
+      return (
+        suffix.startsWith('{') ||
+        suffix.startsWith('extends ') ||
+        suffix.startsWith('implements ')
+      )
+    default:
+      return false
+  }
 }
 
 function prioritizePreferredFile(
