@@ -56,7 +56,7 @@
           "name": "meta.tag.component.html",
           "patterns": [
             {
-              "include": "text.html.basic#attribute"
+              "include": "#relaxed-component-attribute"
             },
             {
               "include": "source.ts#template-substitution-element"
@@ -69,5 +69,83 @@
       ]
     }
   ],
+  "repository": {
+    "relaxed-component-attribute": {
+      "patterns": [
+        {
+          "begin": "([^\\s=/>]+)(?=\\s|=|/?>)",
+          "beginCaptures": {
+            "1": {
+              "name": "entity.other.attribute-name.html"
+            }
+          },
+          "end": "(?=\\s+[^\\s=/>]|/?>)",
+          "name": "meta.attribute.custom.$1.html",
+          "patterns": [
+            {
+              "include": "#relaxed-component-attribute-interior"
+            }
+          ]
+        },
+        {
+          "match": "[^\\s>]+",
+          "name": "invalid.illegal.character-not-allowed-here.html"
+        }
+      ]
+    },
+    "relaxed-component-attribute-interior": {
+      "patterns": [
+        {
+          "begin": "=",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.separator.key-value.html"
+            }
+          },
+          "end": "(?<=[^\\s=])(?!\\s*=)|(?=/?>)",
+          "patterns": [
+            {
+              "match": "([^\\s\"'=<>`/]|/(?!>))+",
+              "name": "string.unquoted.html"
+            },
+            {
+              "begin": "\"",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.begin.html"
+                }
+              },
+              "end": "\"",
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.end.html"
+                }
+              },
+              "name": "string.quoted.double.html"
+            },
+            {
+              "begin": "'",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.begin.html"
+                }
+              },
+              "end": "'",
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.end.html"
+                }
+              },
+              "name": "string.quoted.single.html"
+            },
+            {
+              "match": "=",
+              "name": "invalid.illegal.unexpected-equals-sign.html"
+            }
+          ]
+        }
+      ]
+    }
+  },
   "scopeName": "inline.lit-html"
 }
