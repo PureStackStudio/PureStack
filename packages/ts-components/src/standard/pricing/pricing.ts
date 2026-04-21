@@ -36,45 +36,65 @@ export interface PricingFeature {
 }
 
 const pricingTableTemplate = html`<Panel :tone="tone" class="pricing">
-  <div class="pricing__header" r-if="eyebrow || title || subtitle">
-    <p class="pricing__eyebrow" r-if="eyebrow">{{ eyebrow }}</p>
-    <h2 class="pricing__title" r-if="title">{{ title }}</h2>
-    <p class="pricing__subtitle" r-if="subtitle">{{ subtitle }}</p>
-  </div>
-  <div class="pricing__grid">
-    <slot></slot>
-  </div>
-  <p class="pricing__footnote" r-if="footnote">{{ footnote }}</p>
+  <Flex direction="column" align="start" class="pricing__stack gap-4">
+    <div r-if="eyebrow || title || subtitle">
+      <div class="text-eyebrow" r-if="eyebrow">{{ eyebrow }}</div>
+      <h2 class="text-title" r-if="title">{{ title }}</h2>
+      <p class="text-tagline mb-0" r-if="subtitle">{{ subtitle }}</p>
+    </div>
+    <Grid
+      class="pricing__grid gap-4"
+      columns="1"
+      columnsLg="2"
+      columnsXl="4"
+      alignItems="start"
+    >
+      <slot></slot>
+    </Grid>
+    <p class="prose-meta mb-0" r-if="footnote">{{ footnote }}</p>
+  </Flex>
 </Panel>`
 
 const pricingPlanTemplate = html`<Panel :tone="tone" :class="panelClass">
-  <div class="pricing-plan__head">
-    <div class="pricing-plan__meta">
+  <Flex direction="column" align="start" class="pricing-plan__stack gap-3">
+    <Flex
+      justify="between"
+      align="center"
+      class="pricing-plan__meta"
+      r-if="icon || badge"
+    >
       <Icon class="pricing-plan__icon" r-if="icon" :name="icon"/>
       <Badge tone="neutral" r-if="badge">{{ badge }}</Badge>
+    </Flex>
+    <div>
+      <h3 class="pricing-plan__title fs-xl mb-0">{{ title }}</h3>
+      <p class="pricing-plan__summary text-tagline mb-0" r-if="summary">
+        {{ summary }}
+      </p>
     </div>
-    <div class="pricing-plan__title-row">
-      <h3 class="pricing-plan__title">{{ title }}</h3>
-    </div>
-    <p class="pricing-plan__summary" r-if="summary">{{ summary }}</p>
-  </div>
-  <div class="pricing-plan__price" r-if="price">
+    <Flex class="pricing-plan__price" align="baseline" r-if="price">
     <span class="pricing-plan__amount">{{ price }}</span>
     <span class="pricing-plan__period" r-if="period">{{ period }}</span>
-  </div>
-  <div class="pricing-plan__cta" r-if="ctaLabel && ctaLink">
-    <BtnLink tone="neutral" :href="ctaLink">{{ ctaLabel }}</BtnLink>
-  </div>
-  <ul class="pricing-plan__features">
-    <slot></slot>
-  </ul>
-  <p class="pricing-plan__note" r-if="note">{{ note }}</p>
+    </Flex>
+    <BtnLink
+      class="mt-auto"
+      tone="neutral"
+      :href="ctaLink"
+      r-if="ctaLabel && ctaLink"
+    >
+      {{ ctaLabel }}
+    </BtnLink>
+    <ul class="pricing-plan__features">
+      <slot></slot>
+    </ul>
+    <p class="pricing-plan__note text-subtle mb-0" r-if="note">{{ note }}</p>
+  </Flex>
 </Panel>`
 
-const pricingFeatureTemplate = html`<li class="pricing-feature">
+const pricingFeatureTemplate = html`<Flex container="li" align="start" class="pricing-feature gap-2">
   <Icon class="pricing-feature__icon" :name="icon || 'iconoir:check'"/>
-  <span class="pricing-feature__text"><slot></slot></span>
-</li>`
+  <slot></slot>
+</Flex>`
 
 function definePricingTableComponent() {
   return defineComponent<PricingTable>(pricingTableTemplate, {
