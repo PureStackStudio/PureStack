@@ -1,64 +1,68 @@
 import type { ThemePalette, ThemePaletteCurrent } from './themePalette'
 
 const THEME_PALETTE_VAR_PREFIX = '--ps'
-export const MINIFY_THEME_VARIABLE_NAMES = false
+export const MINIFY_THEME_VARIABLE_NAMES = true
+const SEMANTIC_TONE_NAMES = [
+  'neutral',
+  'accent',
+  'ghost',
+  'info',
+  'success',
+  'warning',
+  'danger',
+] as const
+const INTERACTIVE_STATES = ['rest', 'hover', 'active', 'disabled'] as const
+const CURRENT_INTERACTIVE_STATES = ['rest', 'hover', 'active'] as const
+const INTERACTIVE_PROPS = ['background', 'border', 'text'] as const
+const BORDER_PROPS = ['subtle', 'default', 'focus'] as const
+const TEXT_PROPS = ['default', 'subtle'] as const
+const ICON_PROPS = ['background', 'gradient', 'color', 'border'] as const
+const EFFECT_PROPS = [
+  'glowPrimary',
+  'glowSecondary',
+  'floatingShadow',
+  'panelShadow',
+  'panelShadowStrong',
+  'accentShadow',
+  'interactiveShadow',
+  'trackShadow',
+  'thumbShadow',
+  'overlayScrim',
+  'focusGlow',
+  'insetShadow',
+] as const
 
-const CURRENT_THEME_PALETTE_VAR_PATHS = {
+type PathLeaf = readonly string[]
+type PathTree = {
+  readonly [key: string]: PathLeaf | PathTree
+}
+type PropertyPathTree<TProps extends readonly string[]> = {
+  readonly [K in TProps[number]]: readonly [...string[], K]
+}
+type InteractivePathTree<TStates extends readonly string[]> = {
+  readonly [K in TStates[number]]: PropertyPathTree<typeof INTERACTIVE_PROPS>
+}
+
+const CURRENT_THEME_PALETTE_PATHS = {
   tone: ['tone'],
   canvas: ['canvas'],
   overlay: ['overlay'],
-  surfaceRestBackground: ['surface', 'rest', 'background'],
-  surfaceRestBorder: ['surface', 'rest', 'border'],
-  surfaceRestText: ['surface', 'rest', 'text'],
-  surfaceHoverBackground: ['surface', 'hover', 'background'],
-  surfaceHoverBorder: ['surface', 'hover', 'border'],
-  surfaceHoverText: ['surface', 'hover', 'text'],
-  surfaceActiveBackground: ['surface', 'active', 'background'],
-  surfaceActiveBorder: ['surface', 'active', 'border'],
-  surfaceActiveText: ['surface', 'active', 'text'],
-  surfaceAltRestBackground: ['surfaceAlt', 'rest', 'background'],
-  surfaceAltRestBorder: ['surfaceAlt', 'rest', 'border'],
-  surfaceAltRestText: ['surfaceAlt', 'rest', 'text'],
-  surfaceAltHoverBackground: ['surfaceAlt', 'hover', 'background'],
-  surfaceAltHoverBorder: ['surfaceAlt', 'hover', 'border'],
-  surfaceAltHoverText: ['surfaceAlt', 'hover', 'text'],
-  surfaceAltActiveBackground: ['surfaceAlt', 'active', 'background'],
-  surfaceAltActiveBorder: ['surfaceAlt', 'active', 'border'],
-  surfaceAltActiveText: ['surfaceAlt', 'active', 'text'],
-  textDefault: ['text', 'default'],
-  textSubtle: ['text', 'subtle'],
-  borderSubtle: ['border', 'subtle'],
-  borderDefault: ['border', 'default'],
-  borderFocus: ['border', 'focus'],
-  buttonRestBackground: ['button', 'rest', 'background'],
-  buttonRestBorder: ['button', 'rest', 'border'],
-  buttonRestText: ['button', 'rest', 'text'],
-  buttonHoverBackground: ['button', 'hover', 'background'],
-  buttonHoverBorder: ['button', 'hover', 'border'],
-  buttonHoverText: ['button', 'hover', 'text'],
-  buttonActiveBackground: ['button', 'active', 'background'],
-  buttonActiveBorder: ['button', 'active', 'border'],
-  buttonActiveText: ['button', 'active', 'text'],
-  iconBackground: ['icon', 'background'],
-  iconGradient: ['icon', 'gradient'],
-  iconColor: ['icon', 'color'],
-  iconBorder: ['icon', 'border'],
-} as const
+  surface: createInteractivePathTree('surface', CURRENT_INTERACTIVE_STATES),
+  surfaceAlt: createInteractivePathTree('surfaceAlt', CURRENT_INTERACTIVE_STATES),
+  text: createPropertyPathTree('text', TEXT_PROPS),
+  border: createPropertyPathTree('border', BORDER_PROPS),
+  button: createInteractivePathTree('button', CURRENT_INTERACTIVE_STATES),
+  icon: createPropertyPathTree('icon', ICON_PROPS),
+} as const satisfies PathTree
 
-type CurrentThemePaletteVarPathKey =
-  keyof typeof CURRENT_THEME_PALETTE_VAR_PATHS
-const CURRENT_THEME_PALETTE_VAR_PATH_ENTRIES = Object.entries(
-  CURRENT_THEME_PALETTE_VAR_PATHS,
-) as Array<[CurrentThemePaletteVarPathKey, readonly string[]]>
-const LEGACY_THEME_VARIABLE_NAME_ALIASES: Record<string, string[]> = {
-  '--ps-semantic-tone-accent-button-rest-background': [
-    'semanticTone',
-    'accent',
-    'button',
-    'rest',
-    'background',
-  ],
-}
+const THEME_PALETTE_VAR_PATHS = buildThemePaletteVarPaths()
+const THEME_PALETTE_VAR_PATH_ENTRIES = THEME_PALETTE_VAR_PATHS.map((path) => [
+  buildReadableThemeVariableName('theme', path),
+  path,
+] as const)
+const CURRENT_THEME_PALETTE_VAR_PATH_ENTRIES = flattenPathTree(
+  CURRENT_THEME_PALETTE_PATHS,
+).map((path) => [buildReadableThemeVariableName('current', path), path] as const)
 
 /**
  * Utilities for turning a semantic {@link ThemePalette} into a CSS custom-property contract.
@@ -106,42 +110,29 @@ export function createThemePaletteVarBindings(
   }
 }
 
-export function getThemePaletteVar(path: string | string[]) {
+export function getThemePaletteVar(path: string | readonly string[]) {
   return `var(${getThemePaletteVarName(path)})`
 }
 
-export function getThemePaletteVarName(path: string | string[]) {
-  const parts = Array.isArray(path) ? path : path.split('.')
-  return buildThemeVariableName('theme', parts)
+export function getThemePaletteVarName(path: string | readonly string[]) {
+  return buildThemeVariableName('theme', normalizePath(path))
 }
 
-export function getCurrentThemePaletteVar(
-  path: CurrentThemePaletteVarPathKey | readonly string[] | string[],
-) {
+export function getCurrentThemePaletteVar(path: string | readonly string[]) {
   return `var(${getCurrentThemePaletteVarName(path)})`
 }
 
-export function getCurrentThemePaletteVarName(
-  path: CurrentThemePaletteVarPathKey | readonly string[] | string[],
-) {
-  const parts =
-    typeof path === 'string' && path in CURRENT_THEME_PALETTE_VAR_PATHS
-      ? [
-          ...CURRENT_THEME_PALETTE_VAR_PATHS[
-            path as CurrentThemePaletteVarPathKey
-          ],
-        ]
-      : [...path]
-  return buildThemeVariableName('current', parts)
+export function getCurrentThemePaletteVarName(path: string | readonly string[]) {
+  return buildThemeVariableName('current', normalizePath(path))
 }
 
 export function normalizeThemeVariableReference(value: string) {
   return value.replace(
     /var\((--ps-[A-Za-z0-9-]+)\)/g,
     (match, variableName: string) => {
-      const normalizedTheme = normalizeLegacyThemeVariableName(variableName)
+      const normalizedTheme = normalizeReadableThemeVariableName(variableName)
       if (normalizedTheme) return `var(${normalizedTheme})`
-      const normalizedCurrent = normalizeCurrentThemeVariableName(variableName)
+      const normalizedCurrent = normalizeReadableCurrentVariableName(variableName)
       if (normalizedCurrent) return `var(${normalizedCurrent})`
       return match
     },
@@ -153,6 +144,14 @@ export function listThemePaletteVarEntries(
 ): ThemePaletteVarEntry[] {
   const entries: ThemePaletteVarEntry[] = []
   collectThemePaletteEntries(palette, [], entries)
+  return entries
+}
+
+export function listCurrentThemePaletteVarEntries(
+  palette: ThemePaletteCurrent,
+): ThemePaletteVarEntry[] {
+  const entries: ThemePaletteVarEntry[] = []
+  collectCurrentThemePaletteEntries(palette, [], entries)
   return entries
 }
 
@@ -202,6 +201,29 @@ function collectThemePaletteEntries(
   }
 }
 
+function collectCurrentThemePaletteEntries(
+  value: unknown,
+  path: string[],
+  entries: ThemePaletteVarEntry[],
+) {
+  if (typeof value === 'string') {
+    entries.push({
+      name: getCurrentThemePaletteVarName(path),
+      path,
+      value,
+    })
+    return
+  }
+
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    return
+  }
+
+  for (const [key, child] of Object.entries(value)) {
+    collectCurrentThemePaletteEntries(child, [...path, key], entries)
+  }
+}
+
 function mapThemePaletteLeaves(
   value: ThemePalette,
   mapLeaf: (path: string[]) => string,
@@ -211,77 +233,9 @@ function mapThemePaletteLeaves(
 }
 
 export function getCurrentThemePalette(): ThemePaletteCurrent {
-  return {
-    tone: getCurrentThemePaletteVar('tone'),
-    canvas: getCurrentThemePaletteVar('canvas'),
-    overlay: getCurrentThemePaletteVar('overlay'),
-    surface: {
-      rest: {
-        background: getCurrentThemePaletteVar('surfaceRestBackground'),
-        border: getCurrentThemePaletteVar('surfaceRestBorder'),
-        text: getCurrentThemePaletteVar('surfaceRestText'),
-      },
-      hover: {
-        background: getCurrentThemePaletteVar('surfaceHoverBackground'),
-        border: getCurrentThemePaletteVar('surfaceHoverBorder'),
-        text: getCurrentThemePaletteVar('surfaceHoverText'),
-      },
-      active: {
-        background: getCurrentThemePaletteVar('surfaceActiveBackground'),
-        border: getCurrentThemePaletteVar('surfaceActiveBorder'),
-        text: getCurrentThemePaletteVar('surfaceActiveText'),
-      },
-    },
-    surfaceAlt: {
-      rest: {
-        background: getCurrentThemePaletteVar('surfaceAltRestBackground'),
-        border: getCurrentThemePaletteVar('surfaceAltRestBorder'),
-        text: getCurrentThemePaletteVar('surfaceAltRestText'),
-      },
-      hover: {
-        background: getCurrentThemePaletteVar('surfaceAltHoverBackground'),
-        border: getCurrentThemePaletteVar('surfaceAltHoverBorder'),
-        text: getCurrentThemePaletteVar('surfaceAltHoverText'),
-      },
-      active: {
-        background: getCurrentThemePaletteVar('surfaceAltActiveBackground'),
-        border: getCurrentThemePaletteVar('surfaceAltActiveBorder'),
-        text: getCurrentThemePaletteVar('surfaceAltActiveText'),
-      },
-    },
-    text: {
-      default: getCurrentThemePaletteVar('textDefault'),
-      subtle: getCurrentThemePaletteVar('textSubtle'),
-    },
-    border: {
-      subtle: getCurrentThemePaletteVar('borderSubtle'),
-      default: getCurrentThemePaletteVar('borderDefault'),
-      focus: getCurrentThemePaletteVar('borderFocus'),
-    },
-    button: {
-      rest: {
-        background: getCurrentThemePaletteVar('buttonRestBackground'),
-        border: getCurrentThemePaletteVar('buttonRestBorder'),
-        text: getCurrentThemePaletteVar('buttonRestText'),
-      },
-      hover: {
-        background: getCurrentThemePaletteVar('buttonHoverBackground'),
-        border: getCurrentThemePaletteVar('buttonHoverBorder'),
-        text: getCurrentThemePaletteVar('buttonHoverText'),
-      },
-      active: {
-        background: getCurrentThemePaletteVar('buttonActiveBackground'),
-        border: getCurrentThemePaletteVar('buttonActiveBorder'),
-        text: getCurrentThemePaletteVar('buttonActiveText'),
-      },
-    },
-    icon: {
-      background: getCurrentThemePaletteVar('iconBackground'),
-      gradient: getCurrentThemePaletteVar('iconGradient'),
-      color: getCurrentThemePaletteVar('iconColor'),
-      border: getCurrentThemePaletteVar('iconBorder'),
-    },
-  }
+  return mapPathTreeLeaves(CURRENT_THEME_PALETTE_PATHS, (path) =>
+    getCurrentThemePaletteVar(path),
+  )
 }
 
 function mapThemePaletteValue<T>(
@@ -320,6 +274,10 @@ function isFontPaletteKey(path: string[], key: string) {
   return path.length === 0 && key === 'font'
 }
 
+function normalizePath(path: string | readonly string[]) {
+  return [...(typeof path === 'string' ? path.split('.') : path)]
+}
+
 function toKebabCase(value: string) {
   return value.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`)
 }
@@ -332,19 +290,22 @@ function buildThemeVariableName(scope: 'theme' | 'current', parts: string[]) {
   return `${THEME_PALETTE_VAR_PREFIX}-${scope === 'current' ? 'c' : 't'}-${hashThemeVariablePath(normalized)}`
 }
 
-function normalizeCurrentThemeVariableName(variableName: string) {
-  for (const [key, parts] of CURRENT_THEME_PALETTE_VAR_PATH_ENTRIES) {
-    const readableName = buildReadableThemeVariableName('current', [...parts])
+function normalizeReadableCurrentVariableName(variableName: string) {
+  for (const [readableName, path] of CURRENT_THEME_PALETTE_VAR_PATH_ENTRIES) {
     if (variableName === readableName) {
-      return getCurrentThemePaletteVarName(key)
+      return getCurrentThemePaletteVarName(path)
     }
   }
   return ''
 }
 
-function normalizeLegacyThemeVariableName(variableName: string) {
-  const path = LEGACY_THEME_VARIABLE_NAME_ALIASES[variableName]
-  return path ? getThemePaletteVarName(path) : ''
+function normalizeReadableThemeVariableName(variableName: string) {
+  for (const [readableName, path] of THEME_PALETTE_VAR_PATH_ENTRIES) {
+    if (variableName === readableName) {
+      return getThemePaletteVarName(path)
+    }
+  }
+  return ''
 }
 
 function buildReadableThemeVariableName(
@@ -362,4 +323,103 @@ function hashThemeVariablePath(parts: string[]) {
     hash = Math.imul(hash, 16777619)
   }
   return (hash >>> 0).toString(36)
+}
+
+function buildThemePaletteVarPaths() {
+  const paths: string[][] = [['accent']]
+
+  for (const tone of SEMANTIC_TONE_NAMES) {
+    paths.push(['semanticTone', tone, 'tone'])
+    paths.push(['semanticTone', tone, 'canvas'])
+    paths.push(['semanticTone', tone, 'overlay'])
+
+    for (const prop of BORDER_PROPS) {
+      paths.push(['semanticTone', tone, 'root', 'border', prop])
+      paths.push(['semanticTone', tone, 'border', prop])
+    }
+
+    for (const prop of TEXT_PROPS) {
+      paths.push(['semanticTone', tone, 'root', 'text', prop])
+      paths.push(['semanticTone', tone, 'text', prop])
+    }
+
+    for (const prop of ICON_PROPS) {
+      paths.push(['semanticTone', tone, 'icon', prop])
+    }
+
+    for (const group of ['surface', 'surfaceAlt', 'button'] as const) {
+      paths.push(['semanticTone', tone, group, 'focusRing'])
+      for (const state of INTERACTIVE_STATES) {
+        for (const prop of INTERACTIVE_PROPS) {
+          paths.push(['semanticTone', tone, group, state, prop])
+        }
+      }
+    }
+  }
+
+  for (const prop of EFFECT_PROPS) {
+    paths.push(['effect', prop])
+  }
+
+  return paths
+}
+
+function createInteractivePathTree<const TStates extends readonly string[]>(
+  group: string,
+  states: TStates,
+): InteractivePathTree<TStates> {
+  const out: Record<string, PathLeaf | PathTree> = {}
+  for (const state of states) {
+    out[state] = createPropertyPathTree([group, state], INTERACTIVE_PROPS)
+  }
+  return out as InteractivePathTree<TStates>
+}
+
+function createPropertyPathTree<const TProps extends readonly string[]>(
+  prefix: string | readonly string[],
+  props: TProps,
+): PropertyPathTree<TProps> {
+  const parts = typeof prefix === 'string' ? [prefix] : [...prefix]
+  const out: Record<string, PathLeaf> = {}
+  for (const prop of props) {
+    out[prop] = [...parts, prop]
+  }
+  return out as PropertyPathTree<TProps>
+}
+
+function flattenPathTree(tree: PathTree): string[][] {
+  const paths: string[][] = []
+  for (const value of Object.values(tree)) {
+    if (isPathLeaf(value)) {
+      paths.push([...value])
+      continue
+    }
+    paths.push(...flattenPathTree(value))
+  }
+  return paths
+}
+
+function mapPathTreeLeaves<T extends PathTree>(
+  tree: T,
+  mapLeaf: (path: string[]) => string,
+): MapPathTreeLeaves<T> {
+  const out: Record<string, unknown> = {}
+  for (const [key, value] of Object.entries(tree)) {
+    out[key] = isPathLeaf(value)
+      ? mapLeaf([...value])
+      : mapPathTreeLeaves(value, mapLeaf)
+  }
+  return out as MapPathTreeLeaves<T>
+}
+
+type MapPathTreeLeaves<T extends PathTree> = {
+  [K in keyof T]: T[K] extends PathLeaf
+    ? string
+    : T[K] extends PathTree
+      ? MapPathTreeLeaves<T[K]>
+      : never
+}
+
+function isPathLeaf(value: PathTree | PathLeaf): value is PathLeaf {
+  return Array.isArray(value)
 }

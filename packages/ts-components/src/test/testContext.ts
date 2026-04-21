@@ -21,8 +21,8 @@ const DEFAULT_SITE: DeepPartial<SiteConfig> = {
     letterColors: '000011111',
     subtitleLetterColors: '111111111111111111111',
     colors: [
-      getCurrentThemePaletteVar('textDefault'),
-      getCurrentThemePaletteVar('textSubtle'),
+      getCurrentThemePaletteVar('text.default'),
+      getCurrentThemePaletteVar('text.subtle'),
     ],
     logoBackground: 1,
     logoForeground: 0,

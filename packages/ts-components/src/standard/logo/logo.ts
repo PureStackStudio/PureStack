@@ -51,7 +51,7 @@ type LogoResponsiveLength = {
 const DEFAULT_BRAND_FILL = getThemePaletteVar(
   'semanticTone.accent.button.rest.background',
 )
-const DEFAULT_SUBTITLE_FILL = getCurrentThemePaletteVar('textSubtle')
+const DEFAULT_SUBTITLE_FILL = getCurrentThemePaletteVar('text.subtle')
 
 export interface SiteLogo {
   brand?: string

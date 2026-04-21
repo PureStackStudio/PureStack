@@ -104,7 +104,7 @@ describe('SiteLogo rendering', () => {
       `background-image: ${getThemePaletteVar('semanticTone.accent.button.rest.background')}`,
     )
     expect(html).toContain(
-      `background-image: ${getCurrentThemePaletteVar('textSubtle')}`,
+      `background-image: ${getCurrentThemePaletteVar('text.subtle')}`,
     )
     expect(html).not.toContain('--ps-logo-glyph-background')
     expect(html).not.toContain('--ps-logo-glyph-foreground')
