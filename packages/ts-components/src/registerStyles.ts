@@ -1,3 +1,4 @@
+import { registerUtilityStyles } from '@purestack/ts-style'
 import { registerAlertBoxStyles } from './standard/alertBox/alertBoxStyle'
 import { registerBadgeStyles } from './standard/badge/badgeStyle'
 import { registerButtonStyles } from './standard/btn/btnStyle'
@@ -23,6 +24,7 @@ import { registerThemeSwitcherStyles } from './standard/themeSwitcher/themeSwitc
 import { registerTopBarStyles } from './standard/topBar/topBarStyle'
 
 export function registerStyles() {
+  registerUtilityStyles()
   registerAlertBoxStyles()
   registerBadgeStyles()
   registerButtonStyles()

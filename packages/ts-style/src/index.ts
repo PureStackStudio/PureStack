@@ -15,3 +15,4 @@ export type {
   ThemeTypography,
 } from './themePalette'
 export * from './themePaletteVars'
+export * from './utilities'
