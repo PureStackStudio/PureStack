@@ -8,6 +8,40 @@ import { normalizeFrontmatter } from '../frontmatter/frontmatter'
 import { compileMdxToHtml } from './mdx'
 
 describe('compileMdxToHtml', () => {
+  it('preserves regor directive attributes as raw markup', () => {
+    const source = [
+      '<Flex wrap="true">',
+      '  <Btn :tone="\'accent\'" .size="buttonSize" @click="save" #icon="props">',
+      '    Save',
+      '  </Btn>',
+      '</Flex>',
+    ].join('\n')
+
+    const compiledHtml = compileMdxToHtml(source)
+    expect(compiledHtml).toContain('<Flex wrap="true">')
+    expect(compiledHtml).toContain(':tone="&#x27;accent&#x27;"')
+    expect(compiledHtml).toContain('.size="buttonSize"')
+    expect(compiledHtml).toContain('@click="save"')
+    expect(compiledHtml).toContain('#icon="props"')
+    expect(compiledHtml).not.toContain('<p><Flex')
+  })
+
+  it('does not treat code spans or fenced code as regor markup', () => {
+    const source = [
+      '`<Btn .size="buttonSize">`',
+      '',
+      '```html',
+      '<Btn @click="save">',
+      '```',
+    ].join('\n')
+
+    const compiledHtml = compileMdxToHtml(source)
+    expect(compiledHtml).toContain(
+      '<code>&lt;Btn .size="buttonSize"&gt;</code>',
+    )
+    expect(compiledHtml).toContain('&lt;Btn @click="save"&gt;')
+  })
+
   it('renders a custom JSX component at root level', async () => {
     const source = '<CustomComponent data-id="x" />\n\nParagraph text.'
     const html = renderApp(compileMdxToHtml(source), {

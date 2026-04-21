@@ -1,8 +1,6 @@
 import type { PageOutlineItem } from '@purestack/ts-common'
-import { componentRegistry } from '@purestack/ts-render'
-import type { Element, Properties, Root, Text } from 'hast'
+import type { Element, Root, Text } from 'hast'
 import type { Root as MdastRoot } from 'mdast'
-import type { Handler } from 'mdast-util-to-hast'
 import { toHast } from 'mdast-util-to-hast'
 import rehypeRaw from 'rehype-raw'
 import rehypeStringify from 'rehype-stringify'
@@ -22,27 +20,10 @@ export interface MdxRenderOptions {
 export function compileAstToHtml(
   file: MdastRoot,
   options: MdxRenderOptions,
-  settings: { stripMdxArtifacts?: boolean } = {},
 ): MdxCompileResult {
-  const tree = toHast(file, {
-    allowDangerousHtml: true,
-    handlers: {
-      mdxJsxFlowElement: mdxJsxHandler,
-      mdxJsxTextElement: mdxJsxHandler,
-    },
-    passThrough: [
-      'mdxjsEsm',
-      'mdxFlowExpression',
-      'mdxTextExpression',
-      'mdxJsxFlowElement',
-      'mdxJsxTextElement',
-    ],
-  })
+  const tree = toHast(file, { allowDangerousHtml: true })
   if (!isHastRoot(tree)) {
     throw new Error('Content compilation did not produce a HAST root node.')
-  }
-  if (settings.stripMdxArtifacts) {
-    stripMdxArtifacts(tree)
   }
   wrapTablesInScrollContainers(tree)
   const outline = collectOutline(tree)
@@ -58,135 +39,8 @@ export function compileAstToHtml(
   return { bodyHtml, outline }
 }
 
-const mdxJsxHandler: Handler = (state, node) => {
-  const jsxNode = getMdxJsxNode(node)
-  const props = extractMdxJsxProps(jsxNode)
-  const children = normalizeMdxJsxChildren(jsxNode.name, state.all(node) ?? [])
-  return buildMdxJsxElement(jsxNode.name, props, children)
-}
-
-type MdxJsxNode = {
-  name?: string
-  attributes?: Array<{ type: string; name: string; value: unknown }>
-}
-
-function getMdxJsxNode(node: unknown): MdxJsxNode {
-  return node as MdxJsxNode
-}
-
-function extractMdxJsxProps(jsxNode: MdxJsxNode): Properties {
-  const props: Properties = {}
-  const attributes = jsxNode.attributes ?? []
-  for (const attr of attributes) {
-    if (attr.type !== 'mdxJsxAttribute') continue
-    if (typeof attr.value === 'string') {
-      props[attr.name] = attr.value
-      continue
-    }
-    if (attr.value == null) props[attr.name] = ''
-  }
-  return props
-}
-
-function buildMdxJsxElement(
-  name: string | undefined,
-  props: Properties,
-  children: Element['children'],
-): Element {
-  if (name && name.toLowerCase() === 'template') {
-    return {
-      type: 'element',
-      tagName: 'template',
-      properties: props,
-      children: [],
-      content: { type: 'root', children },
-    } as Element
-  }
-  return {
-    type: 'element',
-    tagName: name ?? 'div',
-    properties: props,
-    children,
-  }
-}
-
-const INLINE_TAGS = new Set([
-  'a',
-  'span',
-  'strong',
-  'em',
-  'b',
-  'i',
-  'u',
-  's',
-  'small',
-  'code',
-  'kbd',
-  'mark',
-  'q',
-  'sub',
-  'sup',
-  'time',
-  'abbr',
-  'cite',
-  'data',
-  'dfn',
-  'samp',
-  'var',
-  'del',
-  'ins',
-  'label',
-  'ruby',
-  'rt',
-  'rp',
-  'bdi',
-  'bdo',
-  'wbr',
-  'br',
-])
-
-function normalizeMdxJsxChildren(
-  name: string | undefined,
-  children: Element['children'],
-) {
-  if (!name) return children
-  const normalized = name.toLowerCase()
-  const shouldFlattenParagraphChildren =
-    normalized === 'p' ||
-    INLINE_TAGS.has(normalized) ||
-    componentRegistry.hasComponentName(name)
-  if (!shouldFlattenParagraphChildren) {
-    return children
-  }
-  const next: Element['children'] = []
-  for (const child of children) {
-    if (child.type === 'element' && child.tagName === 'p') {
-      next.push(...(child.children ?? []))
-      continue
-    }
-    next.push(child)
-  }
-  return next
-}
-
 function isHastRoot(node: ReturnType<typeof toHast>): node is Root {
   return Boolean(node && node.type === 'root')
-}
-
-function stripMdxArtifacts(root: Root) {
-  const visit = (node: Root | Element) => {
-    if (!node.children) return
-    node.children = node.children.filter((child) => {
-      if (child.type === 'element') {
-        visit(child)
-      }
-      if (child.type === 'mdxjsEsm') return false
-      if (child.type === 'mdxFlowExpression') return false
-      if (child.type === 'mdxTextExpression') return false
-      return true
-    })
-  }
-  visit(root)
 }
 
 function wrapTablesInScrollContainers(root: Root) {
