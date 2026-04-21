@@ -11,7 +11,6 @@ export function registerPricingStyles() {
   themes.forEach((theme, palette) => {
     applyPricingShellStyles(theme, palette)
     applyPricingPlanStyles(theme, palette)
-    applyPricingFeatureStyles(theme, palette)
     applyPricingFeaturedStyles(theme, palette)
     applyPricingResponsiveStyles(theme)
   })
@@ -57,42 +56,13 @@ export function applyPricingPlanStyles(
     .height('100%')
     .padding('18px')
 
-  styleBuilder
-    .select('.pricing-plan__meta', theme)
-    .width('100%')
+  styleBuilder.select('.pricing-plan__stack', theme).height('100%')
 
   styleBuilder
-    .select('.pricing-plan__icon', theme)
-    .width('44px')
-    .height('44px')
-    .display('inline-flex')
-    .alignItems('center')
-    .justifyContent('center')
-    .borderRadius('12px')
-    .background(palette.current.icon.gradient)
-    .backgroundColor(palette.current.icon.background)
-    .border(`1px solid ${palette.current.icon.border}`)
-    .color(palette.current.icon.color)
+    .select('.pricing-plan__icon.icon-wrap', theme)
     .boxShadow(palette.effect.accentShadow)
 
-  styleBuilder
-    .select('.pricing-plan__icon svg', theme)
-    .width('24px')
-    .height('24px')
-    .display('block')
-    .stroke('currentColor')
-    .fill('none')
-    .strokeLinecap('round')
-    .strokeLinejoin('round')
-    .strokeWidth('2.2')
-
-  styleBuilder
-    .select('.pricing-plan__title', theme)
-    .color(palette.current.text.default)
-
-  styleBuilder
-    .select('.pricing-plan__price', theme)
-    .minHeight('38px')
+  styleBuilder.select('.pricing-plan__price', theme).minHeight('38px')
 
   styleBuilder
     .select('.pricing-plan__amount', theme)
@@ -111,49 +81,14 @@ export function applyPricingPlanStyles(
 
   styleBuilder
     .select('.pricing-plan__features', theme)
-    .listStyle('none')
-    .padding('0')
     .margin('0')
-    .display('grid')
-    .gap('0.5em')
-}
+    .width('100%')
 
-export function applyPricingFeatureStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-) {
   styleBuilder
     .select('.pricing-feature', theme)
-    .fontSize('13px')
+    .apply(palette.applyFont(palette.font.size.xs))
     .lineHeight('1.5')
     .color(palette.current.text.default)
-
-  styleBuilder
-    .select('.pricing-feature__icon', theme)
-    .width('22px')
-    .height('22px')
-    .display('inline-flex')
-    .alignItems('center')
-    .justifyContent('center')
-    .flex('0 0 auto')
-    .borderRadius('7px')
-    .background(palette.current.icon.gradient)
-    .backgroundColor(palette.current.icon.background)
-    .border(`1px solid ${palette.current.icon.border}`)
-    .color(palette.current.icon.color)
-    .boxShadow(palette.effect.interactiveShadow)
-    .marginTop('0.1em')
-
-  styleBuilder
-    .select('.pricing-feature__icon svg', theme)
-    .width('14px')
-    .height('14px')
-    .display('block')
-    .stroke('currentColor')
-    .fill('none')
-    .strokeLinecap('round')
-    .strokeLinejoin('round')
-    .strokeWidth('2.2')
 }
 
 export function applyPricingFeaturedStyles(

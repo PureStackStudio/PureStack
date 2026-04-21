@@ -19,6 +19,7 @@ export function registerUtilityStyles() {
     applyMarginUtilities(theme)
     applyPaddingUtilities(theme)
     applyGapUtilities(theme)
+    applyLayoutUtilities(theme)
     applyTextUtilities(theme, palette)
     applyFontSizeUtilities(theme, palette)
     applyShadowUtilities(theme)
@@ -66,6 +67,13 @@ function applyGapUtilities(theme: string) {
     styleBuilder.select(`.gap-x-${name}`, theme).columnGap(value)
     styleBuilder.select(`.gap-y-${name}`, theme).set('row-gap', value)
   }
+}
+
+function applyLayoutUtilities(theme: string) {
+  styleBuilder.select('.w-full', theme).width('100%')
+  styleBuilder.select('.h-full', theme).height('100%')
+  styleBuilder.select('.min-w-0', theme).minWidth('0')
+  styleBuilder.select('.list-none', theme).listStyle('none').padding('0')
 }
 
 function applyShadowUtilities(theme: string) {

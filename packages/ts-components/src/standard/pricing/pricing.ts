@@ -1,3 +1,4 @@
+import type { SemanticTone } from '@purestack/ts-style'
 import {
   type ComputedRef,
   computed,
@@ -13,7 +14,7 @@ export interface PricingTable {
   title?: string
   subtitle?: string
   footnote?: string
-  tone?: RefOrValue<string>
+  tone?: RefOrValue<SemanticTone>
 }
 
 export interface PricingPlan {
@@ -27,7 +28,7 @@ export interface PricingPlan {
   icon?: string
   ctaLabel?: string
   ctaLink?: string
-  tone?: string
+  tone?: RefOrValue<SemanticTone>
   panelClass?: ComputedRef<string>
 }
 
@@ -37,11 +38,16 @@ export interface PricingFeature {
 
 const pricingTableTemplate = html`<Panel :tone="tone" class="pricing">
   <Flex direction="column" align="start" class="pricing__stack gap-4">
-    <div r-if="eyebrow || title || subtitle">
-      <div class="text-eyebrow" r-if="eyebrow">{{ eyebrow }}</div>
-      <h2 class="text-title" r-if="title">{{ title }}</h2>
-      <p class="text-tagline mb-0" r-if="subtitle">{{ subtitle }}</p>
-    </div>
+    <SectionHeader
+      r-if="eyebrow || title || subtitle || footnote"
+      :eyebrow="eyebrow"
+      :title="title"
+      :subtitle="subtitle"
+      :footnote="footnote"
+      titleTag="h2"
+      subtitleClass="mb-0"
+      footnoteClass="mb-0"
+    />
     <Grid
       class="pricing__grid gap-4"
       columns="1"
@@ -51,30 +57,31 @@ const pricingTableTemplate = html`<Panel :tone="tone" class="pricing">
     >
       <slot></slot>
     </Grid>
-    <p class="prose-meta mb-0" r-if="footnote">{{ footnote }}</p>
   </Flex>
 </Panel>`
 
 const pricingPlanTemplate = html`<Panel :tone="tone" :class="panelClass">
   <Flex direction="column" align="start" class="pricing-plan__stack gap-3">
-    <Flex
-      justify="between"
-      align="center"
-      class="pricing-plan__meta"
-      r-if="icon || badge"
-    >
-      <Icon class="pricing-plan__icon" r-if="icon" :name="icon"/>
+    <Flex justify="between" align="center" class="w-full" r-if="icon || badge">
+      <Icon
+        r-if="icon"
+        :name="icon"
+        :tone="tone"
+        wrap="true"
+        class="pricing-plan__icon icon-wrap--tile icon-wrap--tile-lg"
+      />
       <Badge tone="neutral" r-if="badge">{{ badge }}</Badge>
     </Flex>
-    <div>
-      <h3 class="pricing-plan__title fs-xl mb-0">{{ title }}</h3>
-      <p class="pricing-plan__summary text-tagline mb-0" r-if="summary">
-        {{ summary }}
-      </p>
-    </div>
+    <SectionHeader
+      :title="title"
+      :subtitle="summary"
+      titleTag="h3"
+      titleClass="fs-xl mb-0"
+      subtitleClass="mb-0"
+    />
     <Flex class="pricing-plan__price" align="baseline" r-if="price">
-    <span class="pricing-plan__amount">{{ price }}</span>
-    <span class="pricing-plan__period" r-if="period">{{ period }}</span>
+      <span class="pricing-plan__amount">{{ price }}</span>
+      <span class="pricing-plan__period" r-if="period">{{ period }}</span>
     </Flex>
     <BtnLink
       class="mt-auto"
@@ -84,16 +91,29 @@ const pricingPlanTemplate = html`<Panel :tone="tone" :class="panelClass">
     >
       {{ ctaLabel }}
     </BtnLink>
-    <ul class="pricing-plan__features">
+    <Flex
+      container="ul"
+      direction="column"
+      align="start"
+      class="pricing-plan__features list-none gap-2"
+    >
       <slot></slot>
-    </ul>
+    </Flex>
     <p class="pricing-plan__note text-subtle mb-0" r-if="note">{{ note }}</p>
   </Flex>
 </Panel>`
 
-const pricingFeatureTemplate = html`<Flex container="li" align="start" class="pricing-feature gap-2">
-  <Icon class="pricing-feature__icon" :name="icon || 'iconoir:check'"/>
-  <slot></slot>
+const pricingFeatureTemplate = html`<Flex
+  container="li"
+  align="start"
+  class="pricing-feature gap-2 w-full"
+>
+  <Icon
+    :name="icon || 'iconoir:check'"
+    wrap="true"
+    class="pricing-feature__icon icon-wrap--tile icon-wrap--tile-sm"
+  />
+  <span class="min-w-0"><slot></slot></span>
 </Flex>`
 
 function definePricingTableComponent() {
