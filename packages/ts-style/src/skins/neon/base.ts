@@ -156,6 +156,7 @@ function createTypography(): ThemeTypography {
       display: '3.545rem',
     },
     weight: {
+      w100: '100',
       w400: '400',
       w500: '500',
       w600: '600',

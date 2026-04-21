@@ -157,6 +157,7 @@ export interface ThemeTypography {
     display: string
   }
   weight: {
+    w100: CSSProps['fontWeight']
     w400: CSSProps['fontWeight']
     w500: CSSProps['fontWeight']
     w600: CSSProps['fontWeight']

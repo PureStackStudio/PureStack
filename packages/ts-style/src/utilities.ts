@@ -1,5 +1,6 @@
 import { styleBuilder } from './styles'
 import { themes } from './themeOptions'
+import type { ThemePalette } from './themePalette'
 
 export const SPACING_UTILITIES = {
   0: '0',
@@ -14,10 +15,12 @@ export const SPACING_UTILITIES = {
 type SpacingUtilityName = keyof typeof SPACING_UTILITIES
 
 export function registerUtilityStyles() {
-  themes.forEach((theme) => {
+  themes.forEach((theme, palette) => {
     applyMarginUtilities(theme)
     applyPaddingUtilities(theme)
     applyGapUtilities(theme)
+    applyTextUtilities(theme, palette)
+    applyFontSizeUtilities(theme, palette)
   })
 }
 
@@ -62,6 +65,102 @@ function applyGapUtilities(theme: string) {
     styleBuilder.select(`.gap-x-${name}`, theme).columnGap(value)
     styleBuilder.select(`.gap-y-${name}`, theme).set('row-gap', value)
   }
+}
+
+function applyFontSizeUtilities(theme: string, palette: ThemePalette) {
+  const fontSizes = palette.font.size
+
+  styleBuilder.select('.fs-xxxs', theme).fontSize(fontSizes.xxxs)
+  styleBuilder.select('.fs-xxs', theme).fontSize(fontSizes.xxs)
+  styleBuilder.select('.fs-xs', theme).fontSize(fontSizes.xs)
+  styleBuilder.select('.fs-sm', theme).fontSize(fontSizes.sm)
+  styleBuilder.select('.fs-body', theme).fontSize(fontSizes.body)
+  styleBuilder.select('.fs-h6', theme).fontSize(fontSizes.h6)
+  styleBuilder.select('.fs-h5', theme).fontSize(fontSizes.h5)
+  styleBuilder.select('.fs-h4', theme).fontSize(fontSizes.h4)
+  styleBuilder.select('.fs-h3', theme).fontSize(fontSizes.h3)
+  styleBuilder.select('.fs-h2', theme).fontSize(fontSizes.h2)
+  styleBuilder.select('.fs-h1', theme).fontSize(fontSizes.h1)
+  styleBuilder.select('.fs-display', theme).fontSize(fontSizes.display)
+
+  styleBuilder.select('.fs-base', theme).fontSize(fontSizes.body)
+  styleBuilder.select('.fs-md', theme).fontSize(fontSizes.body)
+  styleBuilder.select('.fs-lg', theme).fontSize(fontSizes.h6)
+  styleBuilder.select('.fs-xl', theme).fontSize(fontSizes.h5)
+  styleBuilder.select('.fs-2xl', theme).fontSize(fontSizes.h4)
+  styleBuilder.select('.fs-3xl', theme).fontSize(fontSizes.h3)
+  styleBuilder.select('.fs-4xl', theme).fontSize(fontSizes.h2)
+  styleBuilder.select('.fs-5xl', theme).fontSize(fontSizes.h1)
+}
+
+function applyTextUtilities(theme: string, palette: ThemePalette) {
+  styleBuilder
+    .select(
+      '.text-subtle, .prose-meta, .text-caption, .text-attribution',
+      theme,
+    )
+    .color('var(--ps-current-text-subtle)')
+    .margin('0 0 0.8em')
+
+  styleBuilder
+    .select('.text-eyebrow', theme)
+    .apply(palette.applyFont(palette.font.size.xs, palette.font.weight.w700))
+    .color('var(--ps-current-text-subtle)')
+    .letterSpacing('0.18em')
+    .textTransform('uppercase')
+    .margin('0 0 0.55em')
+
+  styleBuilder
+    .select('.text-title', theme)
+    .apply(palette.applyFont(palette.font.size.h2, palette.font.weight.w700))
+    .lineHeight('1.1')
+    .margin('0 0 0.45em')
+
+  styleBuilder
+    .select('.text-tagline', theme)
+    .apply(palette.applyFont(palette.font.size.sm))
+    .color('var(--ps-current-text-subtle)')
+    .lineHeight('1.6')
+    .margin('0 0 1em')
+
+  styleBuilder
+    .select('.text-lead', theme)
+    .apply(palette.applyFont(palette.font.size.h4))
+    .lineHeight('1.6')
+    .margin('0 0 1em')
+
+  styleBuilder
+    .select('.text-caption', theme)
+    .apply(palette.applyFont(palette.font.size.h3))
+    .lineHeight('1.5')
+    .margin('0 0 0.8em')
+
+  styleBuilder
+    .select('.text-quote', theme)
+    .apply(palette.applyFont(palette.font.size.h5, palette.font.weight.w600))
+    .fontStyle('italic')
+    .lineHeight('1.5')
+    .margin('0 0 0.65em')
+
+  styleBuilder
+    .select('.text-attribution', theme)
+    .apply(palette.applyFont(palette.font.size.xxs, palette.font.weight.w600))
+    .letterSpacing('0.08em')
+    .textTransform('uppercase')
+    .margin('0 0 0.75em')
+
+  styleBuilder
+    .select('.prose-pullquote', theme)
+    .apply(palette.applyFont(palette.font.size.h3, palette.font.weight.w100))
+    .fontStyle('italic')
+    .margin('0 0 1em')
+
+  styleBuilder
+    .select('.prose-meta', theme)
+    .apply(palette.applyFont(palette.font.size.xxs, palette.font.weight.w600))
+    .letterSpacing('0.08em')
+    .textTransform('uppercase')
+    .margin('0 0 0.7em')
 }
 
 function getSpacingUtilityNames(): SpacingUtilityName[] {

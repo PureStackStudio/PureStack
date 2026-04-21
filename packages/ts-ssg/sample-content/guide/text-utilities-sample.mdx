@@ -1,0 +1,197 @@
+---
+title: Text Utility Samples
+description: Theme-aware text roles for editorial sections, taglines, pull quotes, and polished content composition.
+layout:
+  showToc: true
+  fullWidth: true
+---
+
+# Text Utility Samples
+
+These text utilities are meant to unify voice across the site while staying
+theme-aware. They read from the current semantic tone, so they compose nicely
+with `Panel` and other tone-aware surfaces.
+
+## 1. Editorial section header
+
+<Panel tone="accent">
+  <Flex direction="column" align="start">
+    <span class="text-eyebrow">Launch story</span>
+    <h2 class="text-title">Ship pages that feel designed, not assembled</h2>
+    <p class="text-tagline">
+      The new text roles give us a shared editorial voice for product pages,
+      docs, marketing sections, and all the small moments between components.
+    </p>
+  </Flex>
+</Panel>
+
+## 2. Grid of reusable roles
+
+<Grid columns="1" columnsMd="2" columnsLg="3">
+  <Panel tone="neutral">
+    <span class="text-eyebrow">Eyebrow</span>
+    <h3 class="text-title">Small label, big intent</h3>
+    <p class="text-tagline">
+      Great for section intros, feature groups, and category framing.
+    </p>
+  </Panel>
+
+  <Panel tone="info">
+    <div class="text-caption">Lead paragraph</div>
+    <p class="text-lead">
+      Use `text-lead` when the opening sentence should carry confidence and
+      breathe more than regular body copy.
+    </p>
+  </Panel>
+
+  <Panel tone="success">
+    <span class="text-caption">Metadata</span>
+    <div class="prose-meta">Updated April 21, 2026</div>
+    <p class="text-tagline">
+      Small supporting information can stay elegant instead of looking like an
+      afterthought.
+    </p>
+  </Panel>
+</Grid>
+
+## 3. Pull quote composition
+
+<Panel tone="ghost">
+  <Grid columns="1" columnsLg="minmax(0, 2fr) minmax(0, 1fr)">
+    <div>
+      <blockquote class="prose-pullquote">
+        The best utility classes do not make the page look generic. They make
+        good typography the default, so custom styling becomes the exception.
+      </blockquote>
+      <div class="text-attribution">Design systems team</div>
+    </div>
+
+    <div>
+      <div class="text-eyebrow">Why it matters</div>
+      <p class="text-tagline">
+        Pull quotes, commentary blocks, and editorial emphasis can now reuse a
+        single visual language across the site.
+      </p>
+    </div>
+  </Grid>
+</Panel>
+
+## 4. Marketing-style split layout
+
+<Grid columns="1" columnsLg="minmax(0, 1.4fr) minmax(0, 1fr)">
+  <div>
+    <span class="text-eyebrow">Unified storytelling</span>
+    <h2 class="text-title">
+      Build rich landing-page sections with primitives, not bespoke CSS
+    </h2>
+    <p class="text-lead">
+      These utilities are intentionally role-based. They help content feel
+      polished while still leaving layout to `Flex` and `Grid`.
+    </p>
+    <p>
+      That means a heading can stay a heading, a quote can stay a quote, and
+      layout decisions do not leak into typography decisions.
+    </p>
+    <Flex align="center" wrap="wrap">
+      <Badge tone="accent">Theme aware</Badge>
+      <Badge tone="info">Composable</Badge>
+      <Badge tone="success">Editorial</Badge>
+    </Flex>
+  </div>
+
+  <Panel tone="neutral">
+    <div class="text-eyebrow">Included roles</div>
+    <Flex direction="column" align="start">
+      <div class="text-title">text-title</div>
+      <div class="text-tagline">Strong section and card heading language.</div>
+      <div class="text-quote">
+        "Short expressive quote treatment for highlights."
+      </div>
+      <div class="text-caption">
+        text-caption and prose-meta for supporting copy.
+      </div>
+    </Flex>
+  </Panel>
+</Grid>
+
+## 5. Quote and attribution row
+
+<Panel tone="warning">
+  <Flex direction="column" align="start">
+    <div class="text-quote">
+      Fancy tools are only useful when they create consistency instead of
+      encouraging random styling.
+    </div>
+    <div class="text-attribution">PureStack typography principle</div>
+    <p class="text-caption">
+      The quote and attribution utilities are designed to work inside any
+      current semantic tone.
+    </p>
+  </Flex>
+</Panel>
+
+## 6. Raw editorial flow
+
+<span class="text-eyebrow">Editorial rhythm</span>
+<h2 class="text-title">This section uses only normal document flow</h2>
+<p class="text-tagline">
+  No `Flex`, no `Grid`, and no spacing helpers. This is the baseline spacing
+  behavior of the text utilities when they are dropped into content directly.
+</p>
+<p>
+  That makes this section the best place to judge whether the defaults feel
+  balanced. If something feels too tight or too loose here, we should fix the
+  utility itself instead of compensating in every page.
+</p>
+<p>
+  The goal is to make rich content feel polished by default, so authors can
+  focus on hierarchy and meaning instead of local spacing corrections.
+</p>
+
+## 7. Raw quote flow
+
+<div class="prose-meta">Field note</div>
+<blockquote class="prose-pullquote">
+  Good text utilities should make an ordinary MDX page feel intentional before
+  any layout component gets involved.
+</blockquote>
+<div class="text-attribution">PureStack content system</div>
+<p class="text-caption">
+  This example is deliberately simple so the quote spacing can be judged on its
+  own terms.
+</p>
+
+## 8. Mixed article excerpt
+
+<span class="text-eyebrow">Story fragment</span>
+<h3 class="text-title">A compact article opening with supporting copy</h3>
+<p class="text-lead">
+  The lead should establish confidence immediately and still leave enough room
+  for the rest of the article to breathe.
+</p>
+<p>
+  After the lead, the regular text should settle into a calmer rhythm. That is
+  where default text matters: it should feel natural in long-form content, not
+  just in isolated hero sections.
+</p>
+<p class="text-tagline">
+  Taglines can also be reused later in the flow when a section needs a softer
+  editorial transition instead of a hard heading break.
+</p>
+
+## 9. Suggested class set
+
+```html
+<span class="text-eyebrow">Section label</span>
+<h2 class="text-title">Section title</h2>
+<p class="text-tagline">Supporting tagline</p>
+
+<p class="text-lead">Intro paragraph with more presence.</p>
+<p class="text-caption">Small supporting note.</p>
+
+<blockquote class="prose-pullquote">
+  Designed to feel editorial and tone-aware.
+</blockquote>
+<div class="text-attribution">Source or speaker</div>
+<div class="prose-meta">Updated April 21, 2026</div>
+```

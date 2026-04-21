@@ -285,9 +285,15 @@ function registerBlockquoteStyles(
     .select('.doc-content :where(blockquote)', theme)
     .margin('0 0 1.4em')
     .padding('0.65em 1.1em')
-    .borderLeft(`3px solid ${palette.current.border.subtle}`)
+    .set('border-inline-start', `0.5em solid ${palette.current.tone}`)
+    .set('padding-inline-start', '0.5em')
     .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
     .borderRadius(options.radii.sm)
+
+  styleBuilder
+    .select('.doc-content blockquote :where(p)', theme)
+    .margin('0')
+    .padding('0')
 }
 
 function registerTableStyles(
