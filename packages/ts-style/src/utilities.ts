@@ -21,6 +21,7 @@ export function registerUtilityStyles() {
     applyGapUtilities(theme)
     applyTextUtilities(theme, palette)
     applyFontSizeUtilities(theme, palette)
+    applyShadowUtilities(theme)
   })
 }
 
@@ -65,6 +66,10 @@ function applyGapUtilities(theme: string) {
     styleBuilder.select(`.gap-x-${name}`, theme).columnGap(value)
     styleBuilder.select(`.gap-y-${name}`, theme).set('row-gap', value)
   }
+}
+
+function applyShadowUtilities(theme: string) {
+  styleBuilder.select('.no-box-shadow', theme).boxShadow('none !important')
 }
 
 function applyFontSizeUtilities(theme: string, palette: ThemePalette) {

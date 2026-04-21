@@ -1,66 +1,72 @@
 <SiteFooter copyright="(c) 2026 PureStack. All rights reserved.">
-  <Grid columns="1" columnsXl="1fr auto">
-    <Panel tone="accent">
-      <Flex direction="column">
-        <Badge tone="accent">PureStack</Badge>
-        <h2>PureStack keeps shipping after launch</h2>
-        <p>
-          Ship docs, marketing pages, changelogs, and product hubs with one
-          reusable architecture.
+  <Grid columns="1" columnsLg="minmax(0, 1.25fr) minmax(0, 1fr)">
+    <Panel tone="ghost" class="no-box-shadow">
+      <Flex direction="column" align="start">
+        <div class="text-eyebrow">Ship beyond launch</div>
+        <h2 class="text-title">
+          One system for docs, marketing, and product pages
+        </h2>
+        <p class="text-tagline">
+          Ship polished public pages with reusable primitives instead of
+          rebuilding layout, tone, and navigation page by page.
         </p>
         <Flex wrap="true">
-          <Badge tone="info">Performance-first</Badge>
-          <Badge tone="success">Accessible by default</Badge>
-          <Badge tone="warning">SEO-ready output</Badge>
+          <Badge tone="accent">Docs and marketing</Badge>
+          <Badge tone="info">Theme-aware primitives</Badge>
+          <Badge tone="success">Accessible defaults</Badge>
         </Flex>
-        <div>
+        <Flex wrap="true">
           <BtnLink href="/" tone="accent" icon="tabler:rocket">
-            Get Started
+            Start building
           </BtnLink>
-        </div>
+          <BtnLink href="/guide/" tone="ghost" icon="tabler:book-2">
+            Read the guide
+          </BtnLink>
+        </Flex>
       </Flex>
     </Panel>
 
-    <Grid columns="1" columnsLg="auto auto">
+    <Grid columns="1" columnsMd="2">
       <Panel tone="success">
-        <h3>Product</h3>
         <Flex direction="column" align="start">
-          <BtnLink href="/" tone="ghost" icon="tabler:layout-dashboard">
-            Overview
-          </BtnLink>
-          <BtnLink href="/guide/" tone="ghost" icon="tabler:book-2">
-            Documentation
-          </BtnLink>
-          <BtnLink href="/features/" tone="ghost" icon="tabler:sparkles">
-            Features
-          </BtnLink>
+          <div class="text-eyebrow">Community</div>
+          <h3 class="text-title">Build in public</h3>
+          <p class="text-tagline">
+            Follow the work and stay close to the system as it evolves.
+          </p>
+          <Flex wrap="true">
+            <BtnLink
+              href="https://github.com"
+              target="_blank"
+              tone="success"
+              icon="tabler:brand-github"
+            >
+              GitHub
+            </BtnLink>
+            <BtnLink
+              href="https://npmjs.com"
+              target="_blank"
+              tone="ghost"
+              icon="tabler:brand-npm"
+            >
+              Packages
+            </BtnLink>
+          </Flex>
         </Flex>
       </Panel>
 
-      <Panel tone="info">
-        <h3>Company</h3>
+      <Panel tone="warning">
         <Flex direction="column" align="start">
-          <BtnLink href="/about/" tone="ghost" icon="tabler:building-community">
-            About
-          </BtnLink>
-          <BtnLink href="/blog/" tone="ghost" icon="tabler:article">
-            Blog
-          </BtnLink>
-          <BtnLink href="/contact/" tone="ghost" icon="tabler:address-book">
-            Contact
-          </BtnLink>
-        </Flex>
-
-        <h3>Follow</h3>
-        <Flex wrap="true">
-          <BtnLink
-            href="https://github.com"
-            target="_blank"
-            tone="info"
-            icon="tabler:brand-github"
-          >
-            GitHub
-          </BtnLink>
+          <div class="text-eyebrow">Why teams stay</div>
+          <h3 class="text-title">Why it works</h3>
+          <p class="text-tagline">
+            Reusable content blocks keep pages consistent without bespoke CSS.
+          </p>
+          <Flex wrap="true">
+            <Badge tone="warning">Reusable content blocks</Badge>
+            <Badge tone="accent">Shared visual rhythm</Badge>
+            <Badge tone="info">Less bespoke CSS</Badge>
+          </Flex>
         </Flex>
       </Panel>
     </Grid>
@@ -71,6 +77,7 @@
     <a href="/privacy/">Privacy</a>
     <a href="/terms/">Terms</a>
   </template>
+
   <template name="social">
     <BtnLink
       href="https://github.com"
