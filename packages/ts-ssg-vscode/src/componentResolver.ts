@@ -275,7 +275,10 @@ function findComponentDefinitionInFile(
     : EXPORTED_COMPONENT_PATTERN
 
   for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
-    const declaration = getComponentDeclarationFromLine(lines[lineIndex], pattern)
+    const declaration = getComponentDeclarationFromLine(
+      lines[lineIndex],
+      pattern,
+    )
     if (!declaration) continue
     if (normalizeComponentName(declaration.name) !== normalizedComponentName) {
       continue

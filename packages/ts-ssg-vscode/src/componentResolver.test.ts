@@ -253,7 +253,7 @@ describe('resolveComponentTarget local same-file fallback', () => {
     fs.writeFileSync(
       importedComponentPath,
       [
-        "import {",
+        'import {',
         '  type ImportedComponent,',
         "} from './other'",
         '',
