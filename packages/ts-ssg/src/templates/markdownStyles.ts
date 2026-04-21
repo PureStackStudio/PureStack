@@ -1,5 +1,6 @@
 import type { ThemePalette } from '@purestack/ts-style'
 import {
+  mediaMax,
   styleBuilder,
   type ThemeMode,
   type ThemeOptions,
@@ -409,7 +410,7 @@ function registerTableInlineCodeStyles(
 function registerTableResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.doc-content :where(th, td)', theme)
-    .media('max-width: 900px')
+    .media(mediaMax('content'))
     .padding('9px 11px')
 }
 

@@ -1,5 +1,6 @@
 import type { ThemePalette } from '@purestack/ts-style'
 import {
+  mediaMax,
   styleBuilder,
   type ThemeMode,
   type ThemeOptions,
@@ -103,6 +104,6 @@ function registerContactFormActionStyles(theme: ThemeMode) {
 function registerContactFormResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.contact-form', theme)
-    .media('max-width: 640px')
+    .media(mediaMax('sm'))
     .padding('14px')
 }

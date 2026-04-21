@@ -46,10 +46,13 @@ describe('Grid rendering', () => {
   it('supports container as a semantic element override', () => {
     const cleanup = ensureDomGlobals()
     const components = defineGridComponents()
-    const html = renderApp('<Grid container="section" columns="2">item</Grid>', {
-      components,
-      context: createTestContext(),
-    })
+    const html = renderApp(
+      '<Grid container="section" columns="2">item</Grid>',
+      {
+        components,
+        context: createTestContext(),
+      },
+    )
     cleanup()
 
     expect(html).toContain('<section')

@@ -1,5 +1,7 @@
 import type { ThemePalette } from '@purestack/ts-style'
 import {
+  getBreakpoint,
+  mediaMax,
   styleBuilder,
   type ThemeMode,
   type ThemeOptions,
@@ -36,7 +38,7 @@ function registerConsentBannerStyles(
     .select('.consent__banner', theme)
     .pointerEvents('auto')
     .margin('0 auto 16px')
-    .width('min(980px, calc(100vw - 24px))')
+    .width(`min(${getBreakpoint('hero')}, calc(100vw - 24px))`)
     .padding('18px')
     .borderRadius(options.radii.lg)
     .background(palette.semanticTone.neutral.surface.rest.background)
@@ -77,7 +79,7 @@ function registerConsentPanelStyles(
     .right('12px')
     .bottom('66px')
     .left('12px')
-    .width('min(720px, calc(100vw - 24px))')
+    .width(`min(${getBreakpoint('compact')}, calc(100vw - 24px))`)
     .marginLeft('auto')
     .padding('16px')
     .display('grid')
@@ -148,15 +150,15 @@ function registerConsentFormStyles(
 function registerConsentResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.consent__banner', theme)
-    .media('max-width: 720px')
+    .media(mediaMax('compact'))
     .padding('14px')
   styleBuilder
     .select('.consent__actions', theme)
-    .media('max-width: 720px')
+    .media(mediaMax('compact'))
     .display('grid')
     .gridTemplateColumns('1fr')
   styleBuilder
     .select('.consent__panel', theme)
-    .media('max-width: 720px')
+    .media(mediaMax('compact'))
     .bottom('58px')
 }

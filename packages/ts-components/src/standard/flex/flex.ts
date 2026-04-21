@@ -7,11 +7,7 @@ import {
   unref,
 } from 'regor'
 
-export type FlexDirection =
-  | 'row'
-  | 'row-reverse'
-  | 'column'
-  | 'column-reverse'
+export type FlexDirection = 'row' | 'row-reverse' | 'column' | 'column-reverse'
 export type FlexAlign = 'stretch' | 'start' | 'center' | 'end' | 'baseline'
 export type FlexJustify =
   | 'start'

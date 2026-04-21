@@ -1,5 +1,7 @@
 import type { ThemePalette } from '@purestack/ts-style'
 import {
+  mediaBelow,
+  mediaMax,
   styleBuilder,
   type ThemeMode,
   type ThemeOptions,
@@ -71,7 +73,7 @@ function registerTopBarToggleVisibilityStyles(
     .display('grid')
   styleBuilder
     .select('.template-doc--has-nav .topbar__toggle', theme)
-    .media('max-width: 1023px')
+    .media(mediaBelow('lg'))
     .display('grid')
   styleBuilder
     .select('.topbar__toggle:focus-visible', theme)
@@ -118,6 +120,6 @@ function registerTopBarToggleCheckedStateStyles(theme: ThemeMode) {
 function registerTopBarResponsiveSearchStyles(theme: ThemeMode) {
   styleBuilder
     .select('.topbar__search', theme)
-    .media('max-width: 600px')
+    .media(mediaMax('phone'))
     .display('none')
 }

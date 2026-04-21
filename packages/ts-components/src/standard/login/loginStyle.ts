@@ -1,5 +1,6 @@
 import type { ThemePalette } from '@purestack/ts-style'
 import {
+  mediaMax,
   styleBuilder,
   type ThemeMode,
   type ThemeOptions,
@@ -98,11 +99,11 @@ function registerLoginMetaStyles(
 function registerLoginResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.login-panel', theme)
-    .media('max-width: 640px')
+    .media(mediaMax('sm'))
     .maxWidth('100%')
     .margin('18px 0')
   styleBuilder
     .select('.login-panel__shell', theme)
-    .media('max-width: 640px')
+    .media(mediaMax('sm'))
     .padding('18px')
 }

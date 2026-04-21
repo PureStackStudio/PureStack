@@ -1,7 +1,8 @@
+import { matchMediaMin } from '../../ts-style/src/breakpoints'
+
 const NAV_COLLAPSED_CLASS = 'template-doc--nav-collapsed'
 const NAV_COLLAPSED_STORAGE_KEY = 'ts-ssg:nav-collapsed'
 const NAV_OPEN_CLASS = 'doc-sidebar--open'
-const DESKTOP_QUERY = '(min-width: 1024px)'
 const EDGE_OPEN_THRESHOLD_PX = 26
 
 function ready(fn: () => void) {
@@ -23,7 +24,7 @@ function init() {
   const panelToggles = Array.from(
     menu.querySelectorAll<HTMLElement>('[data-nav-menu-toggle]'),
   )
-  const media = window.matchMedia(DESKTOP_QUERY)
+  const media = window.matchMedia(matchMediaMin('lg'))
 
   const supportsDesktopCollapse = () => {
     const body = document.body
@@ -145,5 +146,3 @@ function init() {
 }
 
 ready(init)
-
-export {}

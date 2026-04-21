@@ -1,5 +1,7 @@
 import type { ThemePalette } from '@purestack/ts-style'
 import {
+  getBreakpoint,
+  mediaAbove,
   styleBuilder,
   type ThemeMode,
   type ThemeOptions,
@@ -76,13 +78,13 @@ function registerSearchBoxResultContainerStyles(
 function registerSearchBoxResultTopBarOverlayStyles(theme: ThemeMode) {
   styleBuilder
     .select('.topbar .site-search__results', theme)
-    .media('min-width: 721px')
+    .media(mediaAbove('compact'))
     .position('fixed')
     .top('76px')
     .left('50%')
     .right('auto')
     .transform('translateX(-50%)')
-    .width('min(720px, calc(100vw - 32px))')
+    .width(`min(${getBreakpoint('compact')}, calc(100vw - 32px))`)
     .zIndex('120')
 }
 

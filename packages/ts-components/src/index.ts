@@ -33,9 +33,7 @@ export type {
 } from './standard/flex/flex'
 export { defineFlexComponents } from './standard/flex/flex'
 export { registerFlexStyles } from './standard/flex/flexStyle'
-export type {
-  SiteFooter,
-} from './standard/footer/footer'
+export type { SiteFooter } from './standard/footer/footer'
 export { defineFooterComponents } from './standard/footer/footer'
 export { registerFooterStyles } from './standard/footer/footerStyle'
 export type {

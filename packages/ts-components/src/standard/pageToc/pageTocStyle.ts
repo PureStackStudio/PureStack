@@ -1,5 +1,7 @@
 import type { ThemePalette } from '@purestack/ts-style'
 import {
+  mediaBelow,
+  mediaMax,
   styleBuilder,
   type ThemeMode,
   type ThemeOptions,
@@ -103,7 +105,7 @@ export function registerPageTocShellStyles(
   styleBuilder.select('.page-toc__panel-toggle', theme).display('none')
   styleBuilder
     .select('.page-toc__restore-toggle', theme)
-    .media('max-width: 1320px')
+    .media(mediaMax('toc'))
     .display('none')
 }
 
@@ -154,23 +156,23 @@ export function registerPageTocLayoutStyles(
     .gridTemplateColumns('minmax(0, 1fr) 240px')
   styleBuilder
     .select('.doc-shell--toc', theme)
-    .media('max-width: 1320px')
+    .media(mediaMax('toc'))
     .gridTemplateColumns('260px minmax(0, 1fr)')
   styleBuilder
     .select(
       '.doc-shell--toc, .template-doc--toc-collapsed .doc-shell--toc',
       theme,
     )
-    .media('max-width: 1023px')
+    .media(mediaBelow('lg'))
     .gridTemplateColumns('1fr !important')
 
   styleBuilder
     .select('.doc-shell--toc-only', theme)
-    .media('max-width: 1320px')
+    .media(mediaMax('toc'))
     .gridTemplateColumns('1fr')
   styleBuilder
     .select('.doc-shell--nav-drawer.doc-shell--toc', theme)
-    .media('max-width: 1320px')
+    .media(mediaMax('toc'))
     .gridTemplateColumns('1fr')
   styleBuilder
     .select('.doc-toc', theme)
@@ -181,11 +183,11 @@ export function registerPageTocLayoutStyles(
     .alignSelf('start')
     .height('calc(100vh - 112px)')
     .overflow('auto')
-  // Responsive TOC contract: collapse into right-edge drawer at <=1320px,
-  // then switch to full-screen overlay at <=600px (same cutoff for tocCollapsed mode).
+  // Responsive TOC contract: collapse at the shared `toc` breakpoint,
+  // then switch to full-screen overlay at the shared `phone` breakpoint.
   styleBuilder
     .select('.template-doc:not(.template-doc--toc-collapsed) .doc-toc', theme)
-    .media('max-width: 1320px')
+    .media(mediaMax('toc'))
     .position('fixed')
     .top('72px')
     .right('0')
@@ -204,12 +206,12 @@ export function registerPageTocLayoutStyles(
       '.template-doc.template-doc--nav-ready:not(.template-doc--toc-collapsed) .doc-toc',
       theme,
     )
-    .media('max-width: 1320px')
+    .media(mediaMax('toc'))
     .transition('transform 260ms ease')
 
   styleBuilder
     .select('.template-doc:not(.template-doc--toc-collapsed) .doc-toc', theme)
-    .media('max-width: 600px')
+    .media(mediaMax('phone'))
     .top('72px')
     .left('0')
     .right('0')
@@ -222,7 +224,7 @@ export function registerPageTocLayoutStyles(
       '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open',
       theme,
     )
-    .media('max-width: 1320px')
+    .media(mediaMax('toc'))
     .transform('translateX(0)')
     .overflowY('auto')
     .overflowX('hidden')
@@ -233,7 +235,7 @@ export function registerPageTocLayoutStyles(
       '.template-doc:not(.template-doc--toc-collapsed) .doc-toc:not(.doc-toc--open)',
       theme,
     )
-    .media('max-width: 1320px')
+    .media(mediaMax('toc'))
     .width('26px')
     .background('transparent')
     .boxShadow('none')
@@ -243,7 +245,7 @@ export function registerPageTocLayoutStyles(
       '.template-doc:not(.template-doc--toc-collapsed) .doc-toc:not(.doc-toc--open)',
       theme,
     )
-    .media('max-width: 600px')
+    .media(mediaMax('phone'))
     .left('auto')
     .right('0')
 
@@ -252,7 +254,7 @@ export function registerPageTocLayoutStyles(
       '.template-doc:not(.template-doc--toc-collapsed).doc-toc-open',
       theme,
     )
-    .media('max-width: 600px')
+    .media(mediaMax('phone'))
     .overflow('hidden')
 
   styleBuilder
@@ -260,7 +262,7 @@ export function registerPageTocLayoutStyles(
       '.template-doc:not(.template-doc--toc-collapsed) .page-toc__panel-toggle',
       theme,
     )
-    .media('max-width: 1320px')
+    .media(mediaMax('toc'))
     .position('absolute')
     .left('0')
     .right('auto')
@@ -290,7 +292,7 @@ export function registerPageTocLayoutStyles(
       '.template-doc:not(.template-doc--toc-collapsed) .doc-toc:not(.doc-toc--open) .page-toc > :not(.page-toc__panel-toggle)',
       theme,
     )
-    .media('max-width: 1320px')
+    .media(mediaMax('toc'))
     .display('none')
 
   styleBuilder
@@ -298,7 +300,7 @@ export function registerPageTocLayoutStyles(
       '.template-doc:not(.template-doc--toc-collapsed) .doc-toc:not(.doc-toc--open) .page-toc',
       theme,
     )
-    .media('max-width: 1320px')
+    .media(mediaMax('toc'))
     .background('transparent')
     .border('none')
 
@@ -307,14 +309,14 @@ export function registerPageTocLayoutStyles(
       '.template-doc:not(.template-doc--toc-collapsed) .page-toc__panel-toggle:focus-visible',
       theme,
     )
-    .media('max-width: 1320px')
+    .media(mediaMax('toc'))
 
   styleBuilder
     .select(
       '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open .page-toc__panel-toggle',
       theme,
     )
-    .media('max-width: 1320px')
+    .media(mediaMax('toc'))
     .display('none')
 
   styleBuilder
@@ -322,7 +324,7 @@ export function registerPageTocLayoutStyles(
       '.template-doc:not(.template-doc--toc-collapsed) .doc-toc .page-toc',
       theme,
     )
-    .media('max-width: 1320px')
+    .media(mediaMax('toc'))
     .height('100%')
     .overflow('visible')
     .padding('0')
@@ -334,7 +336,7 @@ export function registerPageTocLayoutStyles(
       '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open .page-toc',
       theme,
     )
-    .media('max-width: 1320px')
+    .media(mediaMax('toc'))
     .height('auto')
     .maxHeight('none')
     .padding('30px 16px 14px')
@@ -347,7 +349,7 @@ export function registerPageTocLayoutStyles(
       '.template-doc:not(.template-doc--toc-collapsed) .doc-toc .page-toc__header',
       theme,
     )
-    .media('max-width: 1320px')
+    .media(mediaMax('toc'))
     .paddingRight('104px')
 
   styleBuilder
@@ -355,7 +357,7 @@ export function registerPageTocLayoutStyles(
       '.template-doc:not(.template-doc--toc-collapsed) .doc-toc .page-toc > .page-toc__list, .template-doc:not(.template-doc--toc-collapsed) .doc-toc .page-toc__empty',
       theme,
     )
-    .media('max-width: 1320px')
+    .media(mediaMax('toc'))
     .paddingBottom('8px')
 
   styleBuilder
@@ -395,7 +397,7 @@ export function registerPageTocLayoutStyles(
 
   styleBuilder
     .select('.template-doc--toc-collapsed .doc-toc', theme)
-    .media('max-width: 600px')
+    .media(mediaMax('phone'))
     .top('72px')
     .left('0')
     .right('0')
@@ -412,7 +414,7 @@ export function registerPageTocLayoutStyles(
 
   styleBuilder
     .select('.template-doc--toc-collapsed.doc-toc-open', theme)
-    .media('max-width: 600px')
+    .media(mediaMax('phone'))
     .overflow('hidden')
 
   styleBuilder
@@ -423,7 +425,7 @@ export function registerPageTocLayoutStyles(
     .pointerEvents('none')
   styleBuilder
     .select('.template-doc--toc-collapsed .doc-toc:not(.doc-toc--open)', theme)
-    .media('max-width: 600px')
+    .media(mediaMax('phone'))
     .left('auto')
     .right('0')
 
@@ -453,7 +455,7 @@ export function registerPageTocLayoutStyles(
 
   styleBuilder
     .select('.template-doc--toc-collapsed .page-toc__panel-toggle', theme)
-    .media('max-width: 1320px')
+    .media(mediaMax('toc'))
     .top('85%')
 
   styleBuilder

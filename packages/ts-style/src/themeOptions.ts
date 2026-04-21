@@ -4,6 +4,20 @@ import { normalizeThemeName, type ThemeName } from './themeAssets'
 import type { ThemePalette } from './themePalette'
 import { createThemePaletteVarBindings } from './themePaletteVars'
 
+export {
+  BREAKPOINTS,
+  getBreakpoint,
+  matchMediaAbove,
+  matchMediaBelow,
+  matchMediaMax,
+  matchMediaMin,
+  mediaAbove,
+  mediaBelow,
+  mediaMax,
+  mediaMin,
+  type ThemeBreakpointName,
+} from './breakpoints'
+
 const DEFAULT_SKIN = builtInSkins.neon
 export const THEME_MODES = ['light', 'dark'] as const
 export type ThemeMode = (typeof THEME_MODES)[number]

@@ -1,5 +1,6 @@
 import type { ThemePalette } from '@purestack/ts-style'
 import {
+  mediaMax,
   styleBuilder,
   type ThemeMode,
   type ThemeOptions,
@@ -171,7 +172,7 @@ function registerFormStatusStyles(
 function registerFormResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.form-block__meta', theme)
-    .media('max-width: 640px')
+    .media(mediaMax('sm'))
     .flexDirection('column')
     .alignItems('flex-start')
 }

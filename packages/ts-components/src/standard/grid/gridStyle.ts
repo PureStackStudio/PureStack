@@ -1,7 +1,7 @@
-import { styleBuilder, themes } from '@purestack/ts-style'
+import { mediaMin, styleBuilder, themes } from '@purestack/ts-style'
 
 export function registerGridStyles() {
-  themes.forEach((theme) => {
+  themes.forEach((theme, _palette) => {
     styleBuilder
       .select('.grid', theme)
       .display('grid')
@@ -25,22 +25,22 @@ export function registerGridStyles() {
 
     styleBuilder
       .select('.grid', theme)
-      .media('min-width: 640px')
+      .media(mediaMin('sm'))
       .gridTemplateColumns('var(--grid-template-columns-sm)')
 
     styleBuilder
       .select('.grid', theme)
-      .media('min-width: 768px')
+      .media(mediaMin('md'))
       .gridTemplateColumns('var(--grid-template-columns-md)')
 
     styleBuilder
       .select('.grid', theme)
-      .media('min-width: 1024px')
+      .media(mediaMin('lg'))
       .gridTemplateColumns('var(--grid-template-columns-lg)')
 
     styleBuilder
       .select('.grid', theme)
-      .media('min-width: 1280px')
+      .media(mediaMin('xl'))
       .gridTemplateColumns('var(--grid-template-columns-xl)')
   })
 }

@@ -1,4 +1,5 @@
 import {
+  mediaMax,
   styleBuilder,
   type ThemeMode,
   type ThemeOptions,
@@ -143,12 +144,12 @@ function registerExpandablePanelBodyStyles(
 function registerExpandablePanelResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.expandable-panel__summary', theme)
-    .media('max-width: 760px')
+    .media(mediaMax('tabs'))
     .gridTemplateColumns('1fr')
     .alignItems('stretch')
 
   styleBuilder
     .select('.expandable-panel__header-side', theme)
-    .media('max-width: 760px')
+    .media(mediaMax('tabs'))
     .justifyContent('space-between')
 }

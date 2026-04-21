@@ -1,5 +1,6 @@
 import type { ThemePalette } from '@purestack/ts-style'
 import {
+  mediaMax,
   styleBuilder,
   type ThemeMode,
   type ThemeOptions,
@@ -150,10 +151,13 @@ export function applyAlertMetaStyles(theme: ThemeMode, palette: ThemePalette) {
 }
 
 export function applyAlertResponsiveStyles(theme: ThemeMode) {
-  styleBuilder.select('.alert', theme).media('max-width: 720px').padding('12px')
+  styleBuilder
+    .select('.alert', theme)
+    .media(mediaMax('compact'))
+    .padding('12px')
 
   styleBuilder
     .select('.alert__actions', theme)
-    .media('max-width: 720px')
+    .media(mediaMax('compact'))
     .gap('6px')
 }

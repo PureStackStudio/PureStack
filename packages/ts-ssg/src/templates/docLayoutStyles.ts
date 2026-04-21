@@ -1,5 +1,8 @@
 import type { ThemePalette } from '@purestack/ts-style'
 import {
+  getBreakpoint,
+  mediaBelow,
+  mediaMax,
   styleBuilder,
   type ThemeMode,
   type ThemeOptions,
@@ -32,7 +35,7 @@ function registerDocLayoutShellStyles(
     .display('grid')
     .gap('28px')
     .padding('32px')
-    .maxWidth('1400px')
+    .maxWidth(getBreakpoint('wide'))
     .margin('0 auto')
     .width('100%')
     .boxSizing('border-box')
@@ -107,19 +110,19 @@ function registerDocLayoutResponsiveStyles(
 ) {
   styleBuilder
     .select('.doc-shell', theme)
-    .media('max-width: 1023px')
+    .media(mediaBelow('lg'))
     .gridTemplateColumns('1fr')
     .padding('16px')
   styleBuilder
     .select('.template-doc', theme)
-    .media('max-width: 1023px')
+    .media(mediaBelow('lg'))
     .overflowX('hidden')
   styleBuilder
     .select(
       '.template-doc--nav-drawer .doc-sidebar, .template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
       theme,
     )
-    .media('max-width: 1023px')
+    .media(mediaBelow('lg'))
     .position('fixed')
     .top('72px')
     .left('auto')
@@ -139,7 +142,7 @@ function registerDocLayoutResponsiveStyles(
       '.template-doc--nav-drawer .doc-sidebar, .template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
       theme,
     )
-    .media('max-width: 600px')
+    .media(mediaMax('phone'))
     .left('0')
     .right('0')
     .width('100%')
@@ -149,7 +152,7 @@ function registerDocLayoutResponsiveStyles(
       '.template-doc.template-doc--nav-ready.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
       theme,
     )
-    .media('max-width: 1023px')
+    .media(mediaBelow('lg'))
     .transition('transform 220ms ease')
   styleBuilder
     .select('.doc-nav-toggle:checked ~ .doc-shell .doc-sidebar', theme)

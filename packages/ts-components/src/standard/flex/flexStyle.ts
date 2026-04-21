@@ -1,5 +1,5 @@
 import type { Style } from '@purestack/ts-css'
-import { styleBuilder, themes } from '@purestack/ts-style'
+import { mediaMin, styleBuilder, themes } from '@purestack/ts-style'
 
 export function registerFlexStyles() {
   themes.forEach((theme) => {
@@ -20,7 +20,9 @@ export function registerFlexStyles() {
     styleBuilder
       .select('.flex--column-reverse', theme)
       .flexDirection('column-reverse')
-    styleBuilder.select('.flex--row-reverse', theme).flexDirection('row-reverse')
+    styleBuilder
+      .select('.flex--row-reverse', theme)
+      .flexDirection('row-reverse')
 
     styleBuilder.select('.flex--align-stretch', theme).alignItems('stretch')
     styleBuilder.select('.flex--align-start', theme).alignItems('flex-start')
@@ -66,97 +68,97 @@ function applyResponsiveFlexDirectionStyles(theme: string) {
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-sm-row',
-    'min-width: 640px',
+    mediaMin('sm'),
     (style) => style.flexDirection('row'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-sm-column',
-    'min-width: 640px',
+    mediaMin('sm'),
     (style) => style.flexDirection('column'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-sm-column-reverse',
-    'min-width: 640px',
+    mediaMin('sm'),
     (style) => style.flexDirection('column-reverse'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-sm-row-reverse',
-    'min-width: 640px',
+    mediaMin('sm'),
     (style) => style.flexDirection('row-reverse'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-md-row',
-    'min-width: 768px',
+    mediaMin('md'),
     (style) => style.flexDirection('row'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-md-column',
-    'min-width: 768px',
+    mediaMin('md'),
     (style) => style.flexDirection('column'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-md-column-reverse',
-    'min-width: 768px',
+    mediaMin('md'),
     (style) => style.flexDirection('column-reverse'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-md-row-reverse',
-    'min-width: 768px',
+    mediaMin('md'),
     (style) => style.flexDirection('row-reverse'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-lg-row',
-    'min-width: 1024px',
+    mediaMin('lg'),
     (style) => style.flexDirection('row'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-lg-column',
-    'min-width: 1024px',
+    mediaMin('lg'),
     (style) => style.flexDirection('column'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-lg-column-reverse',
-    'min-width: 1024px',
+    mediaMin('lg'),
     (style) => style.flexDirection('column-reverse'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-lg-row-reverse',
-    'min-width: 1024px',
+    mediaMin('lg'),
     (style) => style.flexDirection('row-reverse'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-xl-row',
-    'min-width: 1280px',
+    mediaMin('xl'),
     (style) => style.flexDirection('row'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-xl-column',
-    'min-width: 1280px',
+    mediaMin('xl'),
     (style) => style.flexDirection('column'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-xl-column-reverse',
-    'min-width: 1280px',
+    mediaMin('xl'),
     (style) => style.flexDirection('column-reverse'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-xl-row-reverse',
-    'min-width: 1280px',
+    mediaMin('xl'),
     (style) => style.flexDirection('row-reverse'),
   )
 }
@@ -165,124 +167,124 @@ function applyResponsiveFlexAlignStyles(theme: string) {
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-sm-stretch',
-    'min-width: 640px',
+    mediaMin('sm'),
     (style) => style.alignItems('stretch'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-sm-start',
-    'min-width: 640px',
+    mediaMin('sm'),
     (style) => style.alignItems('flex-start'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-sm-center',
-    'min-width: 640px',
+    mediaMin('sm'),
     (style) => style.alignItems('center'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-sm-end',
-    'min-width: 640px',
+    mediaMin('sm'),
     (style) => style.alignItems('flex-end'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-sm-baseline',
-    'min-width: 640px',
+    mediaMin('sm'),
     (style) => style.alignItems('baseline'),
   )
 
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-md-stretch',
-    'min-width: 768px',
+    mediaMin('md'),
     (style) => style.alignItems('stretch'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-md-start',
-    'min-width: 768px',
+    mediaMin('md'),
     (style) => style.alignItems('flex-start'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-md-center',
-    'min-width: 768px',
+    mediaMin('md'),
     (style) => style.alignItems('center'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-md-end',
-    'min-width: 768px',
+    mediaMin('md'),
     (style) => style.alignItems('flex-end'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-md-baseline',
-    'min-width: 768px',
+    mediaMin('md'),
     (style) => style.alignItems('baseline'),
   )
 
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-lg-stretch',
-    'min-width: 1024px',
+    mediaMin('lg'),
     (style) => style.alignItems('stretch'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-lg-start',
-    'min-width: 1024px',
+    mediaMin('lg'),
     (style) => style.alignItems('flex-start'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-lg-center',
-    'min-width: 1024px',
+    mediaMin('lg'),
     (style) => style.alignItems('center'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-lg-end',
-    'min-width: 1024px',
+    mediaMin('lg'),
     (style) => style.alignItems('flex-end'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-lg-baseline',
-    'min-width: 1024px',
+    mediaMin('lg'),
     (style) => style.alignItems('baseline'),
   )
 
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-xl-stretch',
-    'min-width: 1280px',
+    mediaMin('xl'),
     (style) => style.alignItems('stretch'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-xl-start',
-    'min-width: 1280px',
+    mediaMin('xl'),
     (style) => style.alignItems('flex-start'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-xl-center',
-    'min-width: 1280px',
+    mediaMin('xl'),
     (style) => style.alignItems('center'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-xl-end',
-    'min-width: 1280px',
+    mediaMin('xl'),
     (style) => style.alignItems('flex-end'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-xl-baseline',
-    'min-width: 1280px',
+    mediaMin('xl'),
     (style) => style.alignItems('baseline'),
   )
 }
@@ -291,226 +293,202 @@ function applyResponsiveFlexJustifyStyles(theme: string) {
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-sm-start',
-    'min-width: 640px',
+    mediaMin('sm'),
     (style) => style.justifyContent('flex-start'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-sm-center',
-    'min-width: 640px',
+    mediaMin('sm'),
     (style) => style.justifyContent('center'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-sm-end',
-    'min-width: 640px',
+    mediaMin('sm'),
     (style) => style.justifyContent('flex-end'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-sm-between',
-    'min-width: 640px',
+    mediaMin('sm'),
     (style) => style.justifyContent('space-between'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-sm-around',
-    'min-width: 640px',
+    mediaMin('sm'),
     (style) => style.justifyContent('space-around'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-sm-evenly',
-    'min-width: 640px',
+    mediaMin('sm'),
     (style) => style.justifyContent('space-evenly'),
   )
 
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-md-start',
-    'min-width: 768px',
+    mediaMin('md'),
     (style) => style.justifyContent('flex-start'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-md-center',
-    'min-width: 768px',
+    mediaMin('md'),
     (style) => style.justifyContent('center'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-md-end',
-    'min-width: 768px',
+    mediaMin('md'),
     (style) => style.justifyContent('flex-end'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-md-between',
-    'min-width: 768px',
+    mediaMin('md'),
     (style) => style.justifyContent('space-between'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-md-around',
-    'min-width: 768px',
+    mediaMin('md'),
     (style) => style.justifyContent('space-around'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-md-evenly',
-    'min-width: 768px',
+    mediaMin('md'),
     (style) => style.justifyContent('space-evenly'),
   )
 
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-lg-start',
-    'min-width: 1024px',
+    mediaMin('lg'),
     (style) => style.justifyContent('flex-start'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-lg-center',
-    'min-width: 1024px',
+    mediaMin('lg'),
     (style) => style.justifyContent('center'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-lg-end',
-    'min-width: 1024px',
+    mediaMin('lg'),
     (style) => style.justifyContent('flex-end'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-lg-between',
-    'min-width: 1024px',
+    mediaMin('lg'),
     (style) => style.justifyContent('space-between'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-lg-around',
-    'min-width: 1024px',
+    mediaMin('lg'),
     (style) => style.justifyContent('space-around'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-lg-evenly',
-    'min-width: 1024px',
+    mediaMin('lg'),
     (style) => style.justifyContent('space-evenly'),
   )
 
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-xl-start',
-    'min-width: 1280px',
+    mediaMin('xl'),
     (style) => style.justifyContent('flex-start'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-xl-center',
-    'min-width: 1280px',
+    mediaMin('xl'),
     (style) => style.justifyContent('center'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-xl-end',
-    'min-width: 1280px',
+    mediaMin('xl'),
     (style) => style.justifyContent('flex-end'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-xl-between',
-    'min-width: 1280px',
+    mediaMin('xl'),
     (style) => style.justifyContent('space-between'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-xl-around',
-    'min-width: 1280px',
+    mediaMin('xl'),
     (style) => style.justifyContent('space-around'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-xl-evenly',
-    'min-width: 1280px',
+    mediaMin('xl'),
     (style) => style.justifyContent('space-evenly'),
   )
 }
 
 function applyResponsiveFlexWrapStyles(theme: string) {
-  applyResponsiveFlexStyle(
-    theme,
-    '.flex--wrap-sm',
-    'min-width: 640px',
-    (style) => style.flexWrap('wrap'),
+  applyResponsiveFlexStyle(theme, '.flex--wrap-sm', mediaMin('sm'), (style) =>
+    style.flexWrap('wrap'),
   )
-  applyResponsiveFlexStyle(
-    theme,
-    '.flex--nowrap-sm',
-    'min-width: 640px',
-    (style) => style.flexWrap('nowrap'),
+  applyResponsiveFlexStyle(theme, '.flex--nowrap-sm', mediaMin('sm'), (style) =>
+    style.flexWrap('nowrap'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--wrap-sm-reverse',
-    'min-width: 640px',
+    mediaMin('sm'),
     (style) => style.flexWrap('wrap-reverse'),
   )
 
-  applyResponsiveFlexStyle(
-    theme,
-    '.flex--wrap-md',
-    'min-width: 768px',
-    (style) => style.flexWrap('wrap'),
+  applyResponsiveFlexStyle(theme, '.flex--wrap-md', mediaMin('md'), (style) =>
+    style.flexWrap('wrap'),
   )
-  applyResponsiveFlexStyle(
-    theme,
-    '.flex--nowrap-md',
-    'min-width: 768px',
-    (style) => style.flexWrap('nowrap'),
+  applyResponsiveFlexStyle(theme, '.flex--nowrap-md', mediaMin('md'), (style) =>
+    style.flexWrap('nowrap'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--wrap-md-reverse',
-    'min-width: 768px',
+    mediaMin('md'),
     (style) => style.flexWrap('wrap-reverse'),
   )
 
-  applyResponsiveFlexStyle(
-    theme,
-    '.flex--wrap-lg',
-    'min-width: 1024px',
-    (style) => style.flexWrap('wrap'),
+  applyResponsiveFlexStyle(theme, '.flex--wrap-lg', mediaMin('lg'), (style) =>
+    style.flexWrap('wrap'),
   )
-  applyResponsiveFlexStyle(
-    theme,
-    '.flex--nowrap-lg',
-    'min-width: 1024px',
-    (style) => style.flexWrap('nowrap'),
+  applyResponsiveFlexStyle(theme, '.flex--nowrap-lg', mediaMin('lg'), (style) =>
+    style.flexWrap('nowrap'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--wrap-lg-reverse',
-    'min-width: 1024px',
+    mediaMin('lg'),
     (style) => style.flexWrap('wrap-reverse'),
   )
 
-  applyResponsiveFlexStyle(
-    theme,
-    '.flex--wrap-xl',
-    'min-width: 1280px',
-    (style) => style.flexWrap('wrap'),
+  applyResponsiveFlexStyle(theme, '.flex--wrap-xl', mediaMin('xl'), (style) =>
+    style.flexWrap('wrap'),
   )
-  applyResponsiveFlexStyle(
-    theme,
-    '.flex--nowrap-xl',
-    'min-width: 1280px',
-    (style) => style.flexWrap('nowrap'),
+  applyResponsiveFlexStyle(theme, '.flex--nowrap-xl', mediaMin('xl'), (style) =>
+    style.flexWrap('nowrap'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--wrap-xl-reverse',
-    'min-width: 1280px',
+    mediaMin('xl'),
     (style) => style.flexWrap('wrap-reverse'),
   )
 }

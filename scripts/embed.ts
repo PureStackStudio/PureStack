@@ -46,6 +46,7 @@ async function main() {
       entryPoints: [inputPath],
       bundle: true,
       minify: true,
+      treeShaking: true,
       format: 'iife',
       platform: 'browser',
       target: 'es2018',
