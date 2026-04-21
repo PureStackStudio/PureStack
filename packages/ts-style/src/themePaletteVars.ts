@@ -5,6 +5,9 @@ export const MINIFY_THEME_VARIABLE_NAMES = true
 const SEMANTIC_TONE_NAMES = [
   'neutral',
   'accent',
+  'feature',
+  'secondary',
+  'custom',
   'ghost',
   'info',
   'success',

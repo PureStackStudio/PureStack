@@ -248,6 +248,9 @@ export interface ThemePalette {
   semanticTone: {
     neutral: SemanticToneTokens
     accent: SemanticToneTokens
+    feature: SemanticToneTokens
+    secondary: SemanticToneTokens
+    custom: SemanticToneTokens
     ghost: SemanticToneTokens
     info: SemanticToneTokens
     success: SemanticToneTokens

@@ -26,6 +26,9 @@ const bestColors = {
   },
 }
 export const { accent, neutral } = bestColors.red
+export const feature = '#cb166e'
+export const secondary = '#116db4'
+export const custom = '#241002'
 export const info = '#15a9c0'
 export const success = '#259740'
 export const warning = '#c49a1c'
@@ -57,6 +60,9 @@ export function createColorScale(hex: string, mode: ThemeMode) {
 
 const accentScale = createColorScale(accent, mode)
 const neutralScale = createColorScale(neutral, mode)
+const featureScale = createColorScale(feature, mode)
+const secondaryScale = createColorScale(secondary, mode)
+const customScale = createColorScale(custom, mode)
 const infoScale = createColorScale(info, mode)
 const successScale = createColorScale(success, mode)
 const warningScale = createColorScale(warning, mode)
@@ -64,6 +70,9 @@ const dangerScale = createColorScale(danger, mode)
 const core: NeonCore = {
   neutral: createToneColors(neutral, neutralScale, delta),
   accent: createToneColors(accent, accentScale, delta),
+  feature: createToneColors(feature, featureScale, delta),
+  secondary: createToneColors(secondary, secondaryScale, delta),
+  custom: createToneColors(custom, customScale, delta),
   ghost: createToneColors(neutral, neutralScale, delta),
   info: createToneColors(info, infoScale, delta),
   success: createToneColors(success, successScale, delta),

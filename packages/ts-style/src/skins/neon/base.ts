@@ -9,6 +9,9 @@ import { createScale, createTone, rgba, type ToneColors } from './shared'
 export type NeonCore = {
   neutral: ToneColors
   accent: ToneColors
+  feature: ToneColors
+  secondary: ToneColors
+  custom: ToneColors
   ghost: ToneColors
   info: ToneColors
   success: ToneColors
@@ -30,7 +33,7 @@ export function createNeonPalette({
   core,
   accent,
   chromeLighting = 0.22,
-  borderAlpha = 0.33,
+  borderAlpha = 0.66,
   subtleAlpha = 0.5,
 }: NeonPaletteOptions): ThemePalette {
   const borderTone = (hex: string) => rgba(hex, borderAlpha)
@@ -60,6 +63,33 @@ export function createNeonPalette({
       ),
       accent: createTone(
         core.accent,
+        mode,
+        borderTone,
+        subtleTone,
+        {},
+        false,
+        chrome,
+      ),
+      feature: createTone(
+        core.feature,
+        mode,
+        borderTone,
+        subtleTone,
+        {},
+        false,
+        chrome,
+      ),
+      secondary: createTone(
+        core.secondary,
+        mode,
+        borderTone,
+        subtleTone,
+        {},
+        false,
+        chrome,
+      ),
+      custom: createTone(
+        core.custom,
         mode,
         borderTone,
         subtleTone,

@@ -7,6 +7,9 @@ import { listCurrentThemePaletteVarEntries } from './themePaletteVars'
 export type SemanticTone =
   | 'neutral'
   | 'accent'
+  | 'feature'
+  | 'secondary'
+  | 'custom'
   | 'ghost'
   | 'info'
   | 'success'
@@ -16,6 +19,9 @@ export type SemanticTone =
 export const SEMANTIC_TONES: SemanticTone[] = [
   'neutral',
   'accent',
+  'feature',
+  'secondary',
+  'custom',
   'ghost',
   'info',
   'success',
