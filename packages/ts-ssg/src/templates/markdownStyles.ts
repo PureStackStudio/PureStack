@@ -287,7 +287,8 @@ function registerBlockquoteStyles(
     .padding('0.65em 1.1em')
     .set('border-inline-start', `0.5em solid ${palette.current.tone}`)
     .set('padding-inline-start', '0.5em')
-    .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
+    .background(palette.current.button.rest.background)
+    .color(palette.current.button.rest.text)
     .borderRadius(options.radii.sm)
 
   styleBuilder
@@ -319,7 +320,7 @@ function registerTableContainerStyles(
     .margin('0 0 1.4em')
     .maxWidth('100%')
     .overflowX('auto')
-    .background(palette.semanticTone.neutral.surface.rest.background)
+    .background(palette.current.surface.rest.background)
     .border(`1px solid ${palette.current.border.default}`)
     .borderRadius(options.radii.md)
     .boxShadow(palette.effect.panelShadow)
@@ -341,7 +342,7 @@ function registerTableHeaderStyles(
 ) {
   styleBuilder
     .select('.doc-content :where(thead th)', theme)
-    .background(palette.semanticTone.neutral.surface.rest.background)
+    .background(palette.current.surface.rest.background)
     .color(palette.current.text.default)
     .apply(palette.applyFont(palette.font.size.xxs))
     .textTransform('uppercase')
@@ -367,7 +368,7 @@ function registerTableBodyRowStyles(
 
   styleBuilder
     .select('.doc-content :where(tbody tr:nth-child(even))', theme)
-    .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
+    .background(palette.current.surfaceAlt.rest.background)
 
   styleBuilder
     .select('.doc-content :where(tbody tr:hover)', theme)

@@ -122,6 +122,42 @@ function mapThemePaletteLeaves(
 export function getCurrentThemePalette(): ThemePaletteCurrent {
   return {
     tone: 'var(--ps-current-tone)',
+    canvas: 'var(--ps-current-canvas)',
+    overlay: 'var(--ps-current-overlay)',
+    surface: {
+      rest: {
+        background: 'var(--ps-current-surface-rest-background)',
+        border: 'var(--ps-current-surface-rest-border)',
+        text: 'var(--ps-current-surface-rest-text)',
+      },
+      hover: {
+        background: 'var(--ps-current-surface-hover-background)',
+        border: 'var(--ps-current-surface-hover-border)',
+        text: 'var(--ps-current-surface-hover-text)',
+      },
+      active: {
+        background: 'var(--ps-current-surface-active-background)',
+        border: 'var(--ps-current-surface-active-border)',
+        text: 'var(--ps-current-surface-active-text)',
+      },
+    },
+    surfaceAlt: {
+      rest: {
+        background: 'var(--ps-current-surface-alt-rest-background)',
+        border: 'var(--ps-current-surface-alt-rest-border)',
+        text: 'var(--ps-current-surface-alt-rest-text)',
+      },
+      hover: {
+        background: 'var(--ps-current-surface-alt-hover-background)',
+        border: 'var(--ps-current-surface-alt-hover-border)',
+        text: 'var(--ps-current-surface-alt-hover-text)',
+      },
+      active: {
+        background: 'var(--ps-current-surface-alt-active-background)',
+        border: 'var(--ps-current-surface-alt-active-border)',
+        text: 'var(--ps-current-surface-alt-active-text)',
+      },
+    },
     text: {
       default: 'var(--ps-current-text-default)',
       subtle: 'var(--ps-current-text-subtle)',
@@ -130,6 +166,29 @@ export function getCurrentThemePalette(): ThemePaletteCurrent {
       subtle: 'var(--ps-current-border-subtle)',
       default: 'var(--ps-current-border-default)',
       focus: 'var(--ps-current-border-focus)',
+    },
+    button: {
+      rest: {
+        background: 'var(--ps-current-button-rest-background)',
+        border: 'var(--ps-current-button-rest-border)',
+        text: 'var(--ps-current-button-rest-text)',
+      },
+      hover: {
+        background: 'var(--ps-current-button-hover-background)',
+        border: 'var(--ps-current-button-hover-border)',
+        text: 'var(--ps-current-button-hover-text)',
+      },
+      active: {
+        background: 'var(--ps-current-button-active-background)',
+        border: 'var(--ps-current-button-active-border)',
+        text: 'var(--ps-current-button-active-text)',
+      },
+    },
+    icon: {
+      background: 'var(--ps-current-icon-background)',
+      gradient: 'var(--ps-current-icon-gradient)',
+      color: 'var(--ps-current-icon-color)',
+      border: 'var(--ps-current-icon-border)',
     },
   }
 }

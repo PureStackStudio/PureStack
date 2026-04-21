@@ -54,11 +54,68 @@ export function getSemanticToneTokens(
 function applySemanticToneVars(style: Style, tokens: SemanticToneTokens) {
   return style
     .set('--ps-current-tone', tokens.tone)
+    .set('--ps-current-canvas', tokens.canvas)
+    .set('--ps-current-overlay', tokens.overlay)
+    .set('--ps-current-surface-rest-background', tokens.surface.rest.background)
+    .set('--ps-current-surface-rest-border', tokens.surface.rest.border)
+    .set('--ps-current-surface-rest-text', tokens.surface.rest.text)
+    .set(
+      '--ps-current-surface-hover-background',
+      tokens.surface.hover.background,
+    )
+    .set('--ps-current-surface-hover-border', tokens.surface.hover.border)
+    .set('--ps-current-surface-hover-text', tokens.surface.hover.text)
+    .set(
+      '--ps-current-surface-active-background',
+      tokens.surface.active.background,
+    )
+    .set('--ps-current-surface-active-border', tokens.surface.active.border)
+    .set('--ps-current-surface-active-text', tokens.surface.active.text)
+    .set(
+      '--ps-current-surface-alt-rest-background',
+      tokens.surfaceAlt.rest.background,
+    )
+    .set('--ps-current-surface-alt-rest-border', tokens.surfaceAlt.rest.border)
+    .set('--ps-current-surface-alt-rest-text', tokens.surfaceAlt.rest.text)
+    .set(
+      '--ps-current-surface-alt-hover-background',
+      tokens.surfaceAlt.hover.background,
+    )
+    .set(
+      '--ps-current-surface-alt-hover-border',
+      tokens.surfaceAlt.hover.border,
+    )
+    .set('--ps-current-surface-alt-hover-text', tokens.surfaceAlt.hover.text)
+    .set(
+      '--ps-current-surface-alt-active-background',
+      tokens.surfaceAlt.active.background,
+    )
+    .set(
+      '--ps-current-surface-alt-active-border',
+      tokens.surfaceAlt.active.border,
+    )
+    .set('--ps-current-surface-alt-active-text', tokens.surfaceAlt.active.text)
     .set('--ps-current-text-default', tokens.text.default)
     .set('--ps-current-text-subtle', tokens.text.subtle)
     .set('--ps-current-border-subtle', tokens.border.subtle)
     .set('--ps-current-border-default', tokens.border.default)
     .set('--ps-current-border-focus', tokens.border.focus)
+    .set('--ps-current-button-rest-background', tokens.button.rest.background)
+    .set('--ps-current-button-rest-border', tokens.button.rest.border)
+    .set('--ps-current-button-rest-text', tokens.button.rest.text)
+    .set('--ps-current-button-hover-background', tokens.button.hover.background)
+    .set('--ps-current-button-hover-border', tokens.button.hover.border)
+    .set('--ps-current-button-hover-text', tokens.button.hover.text)
+    .set(
+      '--ps-current-button-active-background',
+      tokens.button.active.background,
+    )
+    .set('--ps-current-button-active-border', tokens.button.active.border)
+    .set('--ps-current-button-active-text', tokens.button.active.text)
+    .set('--ps-current-icon-background', tokens.icon.background)
+    .set('--ps-current-icon-gradient', tokens.icon.gradient)
+    .set('--ps-current-icon-color', tokens.icon.color)
+    .set('--ps-current-icon-border', tokens.icon.border)
 }
 
 function getSemanticTonePrefix(isInteractive = false) {
@@ -123,11 +180,68 @@ export function registerSemanticToneUtilityStyles() {
     styleBuilder
       .select(':root', theme)
       .set('--ps-current-tone', root.tone)
+      .set('--ps-current-canvas', root.canvas)
+      .set('--ps-current-overlay', root.overlay)
+      .set('--ps-current-surface-rest-background', root.surface.rest.background)
+      .set('--ps-current-surface-rest-border', root.surface.rest.border)
+      .set('--ps-current-surface-rest-text', root.surface.rest.text)
+      .set(
+        '--ps-current-surface-hover-background',
+        root.surface.hover.background,
+      )
+      .set('--ps-current-surface-hover-border', root.surface.hover.border)
+      .set('--ps-current-surface-hover-text', root.surface.hover.text)
+      .set(
+        '--ps-current-surface-active-background',
+        root.surface.active.background,
+      )
+      .set('--ps-current-surface-active-border', root.surface.active.border)
+      .set('--ps-current-surface-active-text', root.surface.active.text)
+      .set(
+        '--ps-current-surface-alt-rest-background',
+        root.surfaceAlt.rest.background,
+      )
+      .set('--ps-current-surface-alt-rest-border', root.surfaceAlt.rest.border)
+      .set('--ps-current-surface-alt-rest-text', root.surfaceAlt.rest.text)
+      .set(
+        '--ps-current-surface-alt-hover-background',
+        root.surfaceAlt.hover.background,
+      )
+      .set(
+        '--ps-current-surface-alt-hover-border',
+        root.surfaceAlt.hover.border,
+      )
+      .set('--ps-current-surface-alt-hover-text', root.surfaceAlt.hover.text)
+      .set(
+        '--ps-current-surface-alt-active-background',
+        root.surfaceAlt.active.background,
+      )
+      .set(
+        '--ps-current-surface-alt-active-border',
+        root.surfaceAlt.active.border,
+      )
+      .set('--ps-current-surface-alt-active-text', root.surfaceAlt.active.text)
       .set('--ps-current-text-default', root.root.text.default)
       .set('--ps-current-text-subtle', root.root.text.subtle)
       .set('--ps-current-border-subtle', root.root.border.subtle)
       .set('--ps-current-border-default', root.root.border.default)
       .set('--ps-current-border-focus', root.root.border.focus)
+      .set('--ps-current-button-rest-background', root.button.rest.background)
+      .set('--ps-current-button-rest-border', root.button.rest.border)
+      .set('--ps-current-button-rest-text', root.button.rest.text)
+      .set('--ps-current-button-hover-background', root.button.hover.background)
+      .set('--ps-current-button-hover-border', root.button.hover.border)
+      .set('--ps-current-button-hover-text', root.button.hover.text)
+      .set(
+        '--ps-current-button-active-background',
+        root.button.active.background,
+      )
+      .set('--ps-current-button-active-border', root.button.active.border)
+      .set('--ps-current-button-active-text', root.button.active.text)
+      .set('--ps-current-icon-background', root.icon.background)
+      .set('--ps-current-icon-gradient', root.icon.gradient)
+      .set('--ps-current-icon-color', root.icon.color)
+      .set('--ps-current-icon-border', root.icon.border)
 
     for (const tone of SEMANTIC_TONES) {
       const tokens = getSemanticToneTokens(palette, tone)

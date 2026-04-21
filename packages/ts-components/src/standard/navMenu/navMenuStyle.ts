@@ -355,6 +355,6 @@ export function registerNavBadgeStyles(
     .borderRadius(options.radii.pill)
     .apply(palette.applyFont(palette.font.size.xs, palette.font.weight.w700))
     .textTransform('uppercase')
-    .background(palette.semanticTone.accent.canvas)
-    .color(palette.semanticTone.accent.text.default)
+    .background(palette.current.button.hover.background)
+    .color(palette.current.button.hover.text)
 }

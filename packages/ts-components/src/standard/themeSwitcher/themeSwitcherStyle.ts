@@ -31,9 +31,9 @@ export function registerThemeSwitcherShellStyles(
     .padding('0')
     .borderRadius(options.radii.pill)
     .border('1px solid transparent')
-    .background(palette.semanticTone.accent.button.rest.background)
-    .borderColor(palette.semanticTone.accent.button.rest.text)
-    .color(palette.semanticTone.accent.button.rest.text)
+    .background(palette.current.button.rest.background)
+    .borderColor(palette.current.button.rest.text)
+    .color(palette.current.button.rest.text)
     .cursor('pointer')
     .fontSize('0')
     .position('relative')
@@ -41,10 +41,10 @@ export function registerThemeSwitcherShellStyles(
 
   styleBuilder
     .select('.theme-switcher:hover', theme)
-    .background(palette.semanticTone.accent.button.hover.background)
+    .background(palette.current.button.hover.background)
   styleBuilder
     .select('.theme-switcher:focus-visible', theme)
-    .outline(`2px solid ${palette.semanticTone.accent.button.hover.text}`)
+    .outline(`2px solid ${palette.current.button.hover.text}`)
 }
 
 export function registerThemeSwitcherTrackStyles(
@@ -56,7 +56,7 @@ export function registerThemeSwitcherTrackStyles(
     .select('.theme-switcher__track', theme)
     .position('absolute')
     .borderRadius(options.radii.pill)
-    .background(palette.semanticTone.accent.button.hover.background)
+    .background(palette.current.button.hover.background)
     .boxShadow(palette.effect.trackShadow)
     .transition('opacity 180ms ease, transform 220ms ease')
 
@@ -68,7 +68,7 @@ export function registerThemeSwitcherTrackStyles(
     .width('36px')
     .height('36px')
     .borderRadius('50%')
-    .background(palette.semanticTone.accent.surface.rest.background)
+    .background(palette.current.surface.rest.background)
     .boxShadow(palette.effect.thumbShadow)
     .backdropFilter('blur(8px)')
     .transform('translateY(-50%) translateX(0)')
@@ -93,11 +93,11 @@ export function registerThemeSwitcherTrackStyles(
   styleBuilder
     .select('.theme-switcher__track-icon--sun', theme)
     .left('18px')
-    .color(palette.semanticTone.accent.button.hover.text)
+    .color(palette.current.button.hover.text)
   styleBuilder
     .select('.theme-switcher__track-icon--moon', theme)
     .right('18px')
-    .color(palette.semanticTone.accent.button.hover.text)
+    .color(palette.current.button.hover.text)
 }
 
 export function registerThemeSwitcherIconStyles(
@@ -144,12 +144,12 @@ export function registerThemeSwitcherIconStyles(
 
   styleBuilder
     .select('.theme-switcher__icon--sun', theme)
-    .color(palette.semanticTone.accent.button.hover.text)
+    .color(palette.current.button.hover.text)
     .opacity(0)
     .transform('scale(0.6)')
   styleBuilder
     .select('.theme-switcher__icon--moon', theme)
-    .color(palette.semanticTone.accent.button.hover.text)
+    .color(palette.current.button.hover.text)
     .opacity(0)
     .transform('scale(0.6)')
 }

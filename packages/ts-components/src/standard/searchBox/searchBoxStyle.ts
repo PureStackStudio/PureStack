@@ -71,7 +71,7 @@ function registerSearchBoxResultContainerStyles(
     .padding('8px')
     .borderRadius(options.radii.lg)
     .border(`1px solid ${palette.current.border.default}`)
-    .background(palette.semanticTone.neutral.surface.rest.background)
+    .background(palette.current.surface.rest.background)
     .boxShadow(options.shadows.strong)
     .zIndex('60')
 }
@@ -114,7 +114,7 @@ function registerSearchBoxResultListStyles(
     .padding('12px 14px')
     .borderRadius(options.radii.md)
     .border(`1px solid ${palette.current.border.subtle}`)
-    .background(palette.semanticTone.neutral.surface.rest.background)
+    .background(palette.current.surface.rest.background)
     .textDecoration('none')
     .color(palette.current.text.default)
     .transition(
@@ -123,7 +123,7 @@ function registerSearchBoxResultListStyles(
 
   styleBuilder
     .select('.site-search__results .site-search__link:hover', theme)
-    .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
+    .background(palette.current.surfaceAlt.rest.background)
     .borderColor(palette.current.border.default)
 
   styleBuilder
@@ -159,8 +159,8 @@ function registerSearchBoxResultContentStyles(
     .select('.site-search__results mark.site-search__highlight', theme)
     .padding('0 3px')
     .borderRadius('5px')
-    .background(palette.semanticTone.accent.canvas)
-    .color(palette.semanticTone.accent.text.default)
+    .background(palette.current.button.hover.background)
+    .color(palette.current.button.hover.text)
 
   styleBuilder
     .select('.site-search__results .site-search__message', theme)
@@ -168,7 +168,7 @@ function registerSearchBoxResultContentStyles(
     .padding('10px 12px')
     .borderRadius(options.radii.md)
     .border(`1px dashed ${palette.current.border.default}`)
-    .background(palette.semanticTone.neutral.surface.rest.background)
+    .background(palette.current.surface.rest.background)
     .color(palette.current.text.subtle)
 
   styleBuilder

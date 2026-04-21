@@ -76,7 +76,7 @@ export function registerLogoShellStyles(
     .border(`1px solid ${palette.current.border.subtle}`)
     .textDecoration('none')
     .maxWidth('100%')
-    .background(palette.semanticTone.neutral.surface.rest.background)
+    .background(palette.current.surface.rest.background)
 
   styleBuilder
     .select('.site-logo__link:hover', theme)
@@ -93,15 +93,13 @@ export function registerLogoShellStyles(
     .placeItems('center')
     .position('relative')
     .background(
-      `var(--ps-logo-glyph-background, ${palette.semanticTone.accent.icon.background})`,
+      `var(--ps-logo-glyph-background, ${palette.current.icon.background})`,
     )
     .backgroundColor(
-      `var(--ps-logo-glyph-background, ${palette.semanticTone.accent.icon.background})`,
+      `var(--ps-logo-glyph-background, ${palette.current.icon.background})`,
     )
-    .border(`1px solid ${palette.semanticTone.accent.icon.border}`)
-    .color(
-      `var(--ps-logo-glyph-foreground, ${palette.semanticTone.accent.icon.color})`,
-    )
+    .border(`1px solid ${palette.current.icon.border}`)
+    .color(`var(--ps-logo-glyph-foreground, ${palette.current.icon.color})`)
 
   styleBuilder
     .select('.site-logo__glyph > .icon', theme)
@@ -285,7 +283,7 @@ export function registerLogoInteractiveStyles(
 
   styleBuilder
     .select('.site-logo__link[href]:hover', theme)
-    .borderColor(palette.semanticTone.accent.border.default)
+    .borderColor(palette.current.border.default)
 
   styleBuilder
     .select('.site-logo__link[href]:focus-visible', theme)

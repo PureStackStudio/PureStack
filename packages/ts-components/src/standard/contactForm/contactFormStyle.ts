@@ -29,7 +29,7 @@ function registerContactFormShellStyles(
     .display('grid')
     .gap('14px')
     .borderRadius(options.radii.lg)
-    .background(palette.semanticTone.neutral.surface.rest.background)
+    .background(palette.current.surface.rest.background)
     .border(`1px solid ${palette.current.border.default}`)
     .boxShadow(palette.effect.panelShadow)
   styleBuilder.select('.contact-form__header', theme).display('grid').gap('6px')
@@ -69,7 +69,7 @@ function registerContactFormFieldStyles(
     .padding('10px 12px')
     .borderRadius(options.radii.md)
     .border(`1px solid ${palette.current.border.default}`)
-    .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
+    .background(palette.current.surfaceAlt.rest.background)
     .color(palette.current.text.default)
     .fontSize('0.92rem')
     .lineHeight('1.45')
@@ -91,7 +91,7 @@ function registerContactFormFieldStyles(
       theme,
     )
     .outline(`2px solid ${palette.current.border.focus}`)
-    .borderColor(palette.semanticTone.accent.border.default)
+    .borderColor(palette.current.border.default)
 }
 
 function registerContactFormActionStyles(theme: ThemeMode) {

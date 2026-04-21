@@ -27,7 +27,7 @@ function registerExpandablePanelShellStyles(
     .display('grid')
     .border(`1px solid ${palette.current.border.default}`)
     .borderRadius(options.radii.lg)
-    .background(palette.semanticTone.neutral.surface.rest.background)
+    .background(palette.current.surface.rest.background)
     .boxShadow(palette.effect.panelShadow)
     .alignContent('start')
     .overflow('hidden')

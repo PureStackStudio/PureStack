@@ -153,7 +153,7 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .transform('translate(-50%, -50%)')
     .padding('0 0.5em')
     .apply(palette.applyFont(palette.font.size.xxxs, palette.font.weight.w700))
-    .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
+    .background(palette.current.surfaceAlt.rest.background)
     .color(palette.current.text.subtle)
 }
 

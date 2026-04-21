@@ -43,7 +43,7 @@ export function applyAlertContainerStyles(
     .margin('0 0 14px')
     .border(`1px solid ${palette.current.border.default}`)
     .borderRadius(options.radii.md)
-    .background(palette.semanticTone.neutral.surface.rest.background)
+    .background(palette.current.surface.rest.background)
     .color(palette.current.text.default)
     .boxShadow(palette.effect.panelShadow)
 }
@@ -61,10 +61,10 @@ export function applyAlertIconStyles(
     .display('inline-flex')
     .alignItems('center')
     .justifyContent('center')
-    .background(palette.semanticTone.neutral.icon.gradient)
-    .backgroundColor(palette.semanticTone.neutral.icon.background)
-    .border(`1px solid ${palette.semanticTone.neutral.icon.border}`)
-    .color(palette.semanticTone.neutral.icon.color)
+    .background(palette.current.icon.gradient)
+    .backgroundColor(palette.current.icon.background)
+    .border(`1px solid ${palette.current.icon.border}`)
+    .color(palette.current.icon.color)
     .boxShadow(palette.effect.interactiveShadow)
 
   styleBuilder
@@ -124,7 +124,7 @@ export function applyAlertBodyStyles(theme: ThemeMode, palette: ThemePalette) {
     .color(palette.current.text.default)
   styleBuilder
     .select('.alert__body :where(a)', theme)
-    .color(palette.semanticTone.accent.text.default)
+    .color(palette.current.text.default)
     .fontWeight('600')
     .textDecoration('underline')
 }

@@ -34,7 +34,7 @@ function registerLoginShellStyles(
     .borderRadius(options.radii.lg)
     .border(`1px solid ${palette.current.border.default}`)
     .background(
-      `${palette.semanticTone.neutral.surfaceAlt.rest.background}, ${palette.semanticTone.neutral.surface.rest.background}`,
+      `${palette.current.surfaceAlt.rest.background}, ${palette.current.surface.rest.background}`,
     )
     .boxShadow(palette.effect.panelShadow)
   styleBuilder
@@ -84,7 +84,7 @@ function registerLoginMetaStyles(
     .gap('6px')
   styleBuilder
     .select('.login-panel__footer a', theme)
-    .color(palette.semanticTone.accent.text.default)
+    .color(palette.current.text.default)
     .fontWeight('650')
     .textDecoration('none')
   styleBuilder

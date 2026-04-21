@@ -29,7 +29,7 @@ export function registerTopBarShellStyles(
     .zIndex(40)
     .backdropFilter('blur(10px)')
     .borderBottom('1px solid transparent')
-    .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
+    .background(palette.current.surfaceAlt.rest.background)
     .borderBottomColor(palette.current.border.subtle)
 
   styleBuilder.select('.topbar__controls', theme).marginLeft('auto')
@@ -65,7 +65,7 @@ function registerTopBarToggleVisibilityStyles(
 ) {
   styleBuilder
     .select('.topbar__toggle', theme)
-    .background(palette.semanticTone.neutral.surface.rest.background)
+    .background(palette.current.surface.rest.background)
     .borderColor(palette.current.border.default)
     .color(palette.current.text.subtle)
     .display('none')

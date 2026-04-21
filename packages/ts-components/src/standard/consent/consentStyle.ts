@@ -42,7 +42,7 @@ function registerConsentBannerStyles(
     .width(`min(${getBreakpoint(BREAKPOINTS.lg)}, calc(100vw - 24px))`)
     .padding('18px')
     .borderRadius(options.radii.lg)
-    .background(palette.semanticTone.neutral.surface.rest.background)
+    .background(palette.current.surface.rest.background)
     .border(`1px solid ${palette.current.border.default}`)
     .boxShadow(palette.effect.panelShadowStrong)
     .display('grid')
@@ -60,7 +60,7 @@ function registerConsentBannerStyles(
     .color(palette.current.text.subtle)
   styleBuilder
     .select('.consent__policy', theme)
-    .color(palette.semanticTone.accent.text.default)
+    .color(palette.current.text.default)
     .fontWeight(palette.font.weight.w700)
     .textDecoration('none')
   styleBuilder
@@ -86,7 +86,7 @@ function registerConsentPanelStyles(
     .display('grid')
     .gap('14px')
     .borderRadius(options.radii.lg)
-    .background(palette.semanticTone.neutral.surface.rest.background)
+    .background(palette.current.surface.rest.background)
     .border(`1px solid ${palette.current.border.default}`)
     .boxShadow(palette.effect.panelShadowStrong)
   styleBuilder.select('.consent__panel[hidden]', theme).display('none')
@@ -116,7 +116,7 @@ function registerConsentFormStyles(
     .padding('10px')
     .borderRadius(options.radii.md)
     .border(`1px solid ${palette.current.border.subtle}`)
-    .background(palette.semanticTone.neutral.surface.rest.background)
+    .background(palette.current.surface.rest.background)
   styleBuilder
     .select('.consent__item-main', theme)
     .display('inline-flex')
@@ -126,7 +126,7 @@ function registerConsentFormStyles(
     .select('.consent__checkbox', theme)
     .width('1.1em')
     .height('1.1em')
-    .accentColor(palette.semanticTone.accent.canvas)
+    .accentColor(palette.current.canvas)
   styleBuilder
     .select('.consent__item-label', theme)
     .apply(palette.applyFont(palette.font.size.xxs, palette.font.weight.w700))

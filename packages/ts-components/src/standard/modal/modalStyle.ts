@@ -42,7 +42,7 @@ function registerModalShellStyles(
 
   styleBuilder
     .select('.modal::backdrop', theme)
-    .background(palette.semanticTone.neutral.overlay)
+    .background(palette.current.overlay)
     .opacity('1')
 
   styleBuilder
@@ -60,8 +60,8 @@ function registerModalShellStyles(
     .maxHeight('min(86vh, 900px)')
     .overflow('auto')
     .borderRadius(options.radii.lg)
-    .border(`1px solid ${palette.current.border.default}`)
-    .background(palette.semanticTone.neutral.surface.rest.background)
+    .border(`1px solid ${palette.current.surface.rest.border}`)
+    .background(palette.current.surface.rest.background)
     .boxShadow(options.shadows.soft)
     .color(palette.current.text.default)
     .transform('translate3d(0, 0, 0)')

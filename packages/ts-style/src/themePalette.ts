@@ -167,6 +167,42 @@ export interface ThemeTypography {
 
 export interface ThemePaletteCurrent {
   tone: string
+  canvas: string
+  overlay: string
+  surface: {
+    rest: {
+      background: string
+      border: string
+      text: string
+    }
+    hover: {
+      background: string
+      border: string
+      text: string
+    }
+    active: {
+      background: string
+      border: string
+      text: string
+    }
+  }
+  surfaceAlt: {
+    rest: {
+      background: string
+      border: string
+      text: string
+    }
+    hover: {
+      background: string
+      border: string
+      text: string
+    }
+    active: {
+      background: string
+      border: string
+      text: string
+    }
+  }
   text: {
     default: string
     subtle: string
@@ -175,6 +211,29 @@ export interface ThemePaletteCurrent {
     subtle: string
     default: string
     focus: string
+  }
+  button: {
+    rest: {
+      background: string
+      border: string
+      text: string
+    }
+    hover: {
+      background: string
+      border: string
+      text: string
+    }
+    active: {
+      background: string
+      border: string
+      text: string
+    }
+  }
+  icon: {
+    background: string
+    gradient: string
+    color: string
+    border: string
   }
 }
 

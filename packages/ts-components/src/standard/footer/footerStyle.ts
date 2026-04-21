@@ -17,7 +17,7 @@ export function applyFooterShellStyles(
     .position('relative')
     .overflow('hidden')
     .border(`0px solid ${palette.current.border.default}`)
-    .background(palette.semanticTone.neutral.surface.rest.background)
+    .background(palette.current.surface.rest.background)
     .padding('0')
 
   styleBuilder
