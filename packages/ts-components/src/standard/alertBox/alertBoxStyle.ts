@@ -154,11 +154,11 @@ export function applyAlertMetaStyles(theme: ThemeMode, palette: ThemePalette) {
 export function applyAlertResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.alert', theme)
-    .media(mediaMax(BREAKPOINTS.compact))
+    .media(mediaMax(BREAKPOINTS.sm))
     .padding('12px')
 
   styleBuilder
     .select('.alert__actions', theme)
-    .media(mediaMax(BREAKPOINTS.compact))
+    .media(mediaMax(BREAKPOINTS.sm))
     .gap('6px')
 }

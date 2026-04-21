@@ -148,7 +148,7 @@ function enhanceTabs(root: HTMLElement) {
 
   root.classList.add('tabs--enhanced')
 
-  const media = window.matchMedia(matchMediaMax(BREAKPOINTS.tabs))
+  const media = window.matchMedia(matchMediaMax(BREAKPOINTS.sm))
   let hiddenIndexes: number[] = []
   let raf = 0
   let resizeObserver: ResizeObserver | null = null

@@ -323,7 +323,7 @@ export function applyPricingFeaturedStyles(
 export function applyPricingResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.pricing__grid', theme)
-    .media(mediaMin(BREAKPOINTS.content))
+    .media(mediaMin(BREAKPOINTS.lg))
     .gridTemplateColumns('repeat(2, minmax(0, 1fr))')
 
   styleBuilder
@@ -333,16 +333,16 @@ export function applyPricingResponsiveStyles(theme: ThemeMode) {
 
   styleBuilder
     .select('.pricing', theme)
-    .media(mediaMax(BREAKPOINTS.compact))
+    .media(mediaMax(BREAKPOINTS.sm))
     .padding('0')
 
   styleBuilder
     .select('.pricing .panel__body', theme)
-    .media(mediaMax(BREAKPOINTS.compact))
+    .media(mediaMax(BREAKPOINTS.sm))
     .padding('22px')
 
   styleBuilder
     .select('.pricing-plan--featured', theme)
-    .media(mediaMax(BREAKPOINTS.compact))
+    .media(mediaMax(BREAKPOINTS.sm))
     .transform('translateY(0)')
 }

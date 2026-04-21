@@ -121,6 +121,6 @@ function registerTopBarToggleCheckedStateStyles(theme: ThemeMode) {
 function registerTopBarResponsiveSearchStyles(theme: ThemeMode) {
   styleBuilder
     .select('.topbar__search', theme)
-    .media(mediaMax(BREAKPOINTS.phone))
+    .media(mediaMax(BREAKPOINTS.sm))
     .display('none')
 }

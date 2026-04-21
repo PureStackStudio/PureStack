@@ -45,7 +45,7 @@ export function registerNavShellStyles(
   styleBuilder.select('.nav__search', theme).display('none').width('100%')
   styleBuilder
     .select('.nav__search', theme)
-    .media(mediaMax(BREAKPOINTS.phone))
+    .media(mediaMax(BREAKPOINTS.sm))
     .display('block')
   styleBuilder
     .select('.nav__header', theme)

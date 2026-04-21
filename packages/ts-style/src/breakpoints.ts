@@ -6,13 +6,8 @@ function defineBreakpoint<Name extends string>(
 }
 
 export const BREAKPOINTS = {
-  phone: defineBreakpoint('phone', '600px'),
   sm: defineBreakpoint('sm', '640px'),
-  compact: defineBreakpoint('compact', '720px'),
-  tabs: defineBreakpoint('tabs', '760px'),
   md: defineBreakpoint('md', '768px'),
-  content: defineBreakpoint('content', '900px'),
-  hero: defineBreakpoint('hero', '980px'),
   lg: defineBreakpoint('lg', '1024px'),
   xl: defineBreakpoint('xl', '1280px'),
   toc: defineBreakpoint('toc', '1320px'),

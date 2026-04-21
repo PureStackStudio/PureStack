@@ -138,23 +138,23 @@ function registerHeroMediaStyles(
 function registerHeroResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.hero__inner', theme)
-    .media(mediaMax(BREAKPOINTS.hero))
+    .media(mediaMax(BREAKPOINTS.lg))
     .gridTemplateColumns('1fr')
     .gap('24px')
 
   styleBuilder
     .select('.hero__content', theme)
-    .media(mediaMax(BREAKPOINTS.hero))
+    .media(mediaMax(BREAKPOINTS.lg))
     .maxWidth('100%')
 
   styleBuilder
     .select('.hero__actions', theme)
-    .media(mediaMax(BREAKPOINTS.phone))
+    .media(mediaMax(BREAKPOINTS.sm))
     .flexDirection('column')
     .alignItems('stretch')
 
   styleBuilder
     .select('.hero__actions .btn', theme)
-    .media(mediaMax(BREAKPOINTS.phone))
+    .media(mediaMax(BREAKPOINTS.sm))
     .justifyContent('center')
 }

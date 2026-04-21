@@ -143,7 +143,7 @@ function registerDocLayoutResponsiveStyles(
       '.template-doc--nav-drawer .doc-sidebar, .template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
       theme,
     )
-    .media(mediaMax(BREAKPOINTS.phone))
+    .media(mediaMax(BREAKPOINTS.sm))
     .left('0')
     .right('0')
     .width('100%')

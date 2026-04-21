@@ -411,7 +411,7 @@ function registerTableInlineCodeStyles(
 function registerTableResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.doc-content :where(th, td)', theme)
-    .media(mediaMax(BREAKPOINTS.content))
+    .media(mediaMax(BREAKPOINTS.lg))
     .padding('9px 11px')
 }
 

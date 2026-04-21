@@ -79,13 +79,13 @@ function registerSearchBoxResultContainerStyles(
 function registerSearchBoxResultTopBarOverlayStyles(theme: ThemeMode) {
   styleBuilder
     .select('.topbar .site-search__results', theme)
-    .media(mediaAbove(BREAKPOINTS.compact))
+    .media(mediaAbove(BREAKPOINTS.sm))
     .position('fixed')
     .top('76px')
     .left('50%')
     .right('auto')
     .transform('translateX(-50%)')
-    .width(`min(${getBreakpoint(BREAKPOINTS.compact)}, calc(100vw - 32px))`)
+    .width(`min(${getBreakpoint(BREAKPOINTS.sm)}, calc(100vw - 32px))`)
     .zIndex('120')
 }
 
