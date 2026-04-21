@@ -252,7 +252,7 @@ function createComponentPropInfo(
 
   return {
     propName,
-    attributeName: toKebabCase(propName),
+    attributeName: propName,
     declarationFilePath:
       declaration?.getSourceFile().fileName ??
       componentType.symbol?.declarations?.[0]?.getSourceFile().fileName ??
@@ -603,10 +603,6 @@ function getEntityNameText(name: ts.EntityName): string {
 function getLineNumber(node: ts.Node) {
   return node.getSourceFile().getLineAndCharacterOfPosition(node.getStart())
     .line
-}
-
-function toKebabCase(value: string) {
-  return value.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
 }
 
 function normalizeComponentName(value: string) {
