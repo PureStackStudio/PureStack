@@ -15,7 +15,6 @@ export {
   mediaBelow,
   mediaMax,
   mediaMin,
-  type ThemeBreakpointName,
 } from './breakpoints'
 
 const DEFAULT_SKIN = builtInSkins.neon

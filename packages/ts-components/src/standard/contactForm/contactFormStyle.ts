@@ -1,5 +1,6 @@
 import type { ThemePalette } from '@purestack/ts-style'
 import {
+  BREAKPOINTS,
   mediaMax,
   styleBuilder,
   type ThemeMode,
@@ -104,6 +105,6 @@ function registerContactFormActionStyles(theme: ThemeMode) {
 function registerContactFormResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.contact-form', theme)
-    .media(mediaMax('sm'))
+    .media(mediaMax(BREAKPOINTS.sm))
     .padding('14px')
 }

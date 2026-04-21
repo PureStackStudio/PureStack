@@ -1,4 +1,4 @@
-import { matchMediaMin } from '../../ts-style/src/breakpoints'
+import { BREAKPOINTS, matchMediaMin } from '../../ts-style/src/breakpoints'
 
 const NAV_COLLAPSED_CLASS = 'template-doc--nav-collapsed'
 const NAV_COLLAPSED_STORAGE_KEY = 'ts-ssg:nav-collapsed'
@@ -24,7 +24,7 @@ function init() {
   const panelToggles = Array.from(
     menu.querySelectorAll<HTMLElement>('[data-nav-menu-toggle]'),
   )
-  const media = window.matchMedia(matchMediaMin('lg'))
+  const media = window.matchMedia(matchMediaMin(BREAKPOINTS.lg))
 
   const supportsDesktopCollapse = () => {
     const body = document.body

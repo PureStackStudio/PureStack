@@ -1,5 +1,6 @@
 import type { ThemePalette } from '@purestack/ts-style'
 import {
+  BREAKPOINTS,
   mediaMax,
   styleBuilder,
   type ThemeMode,
@@ -172,7 +173,7 @@ function registerFormStatusStyles(
 function registerFormResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.form-block__meta', theme)
-    .media(mediaMax('sm'))
+    .media(mediaMax(BREAKPOINTS.sm))
     .flexDirection('column')
     .alignItems('flex-start')
 }

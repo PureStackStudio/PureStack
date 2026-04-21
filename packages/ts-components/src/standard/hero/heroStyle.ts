@@ -1,5 +1,6 @@
 import type { ThemePalette } from '@purestack/ts-style'
 import {
+  BREAKPOINTS,
   getBreakpoint,
   mediaMax,
   styleBuilder,
@@ -58,7 +59,7 @@ function registerHeroContentStyles(theme: ThemeMode, palette: ThemePalette) {
     .select('.hero__content', theme)
     .display('grid')
     .gap('16px')
-    .maxWidth(getBreakpoint('sm'))
+    .maxWidth(getBreakpoint(BREAKPOINTS.sm))
 
   styleBuilder
     .select('.hero__eyebrow', theme)
@@ -137,23 +138,23 @@ function registerHeroMediaStyles(
 function registerHeroResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.hero__inner', theme)
-    .media(mediaMax('hero'))
+    .media(mediaMax(BREAKPOINTS.hero))
     .gridTemplateColumns('1fr')
     .gap('24px')
 
   styleBuilder
     .select('.hero__content', theme)
-    .media(mediaMax('hero'))
+    .media(mediaMax(BREAKPOINTS.hero))
     .maxWidth('100%')
 
   styleBuilder
     .select('.hero__actions', theme)
-    .media(mediaMax('phone'))
+    .media(mediaMax(BREAKPOINTS.phone))
     .flexDirection('column')
     .alignItems('stretch')
 
   styleBuilder
     .select('.hero__actions .btn', theme)
-    .media(mediaMax('phone'))
+    .media(mediaMax(BREAKPOINTS.phone))
     .justifyContent('center')
 }

@@ -1,5 +1,6 @@
 import type { ThemePalette } from '@purestack/ts-style'
 import {
+  BREAKPOINTS,
   mediaMin,
   styleBuilder,
   type ThemeMode,
@@ -167,7 +168,7 @@ export function registerLogoTextStyles(
 export function registerLogoResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.site-logo__glyph', theme)
-    .media(mediaMin('sm'))
+    .media(mediaMin(BREAKPOINTS.sm))
     .width(resolveLogoVar('icon-size', 'sm'))
     .height(resolveLogoVar('icon-size', 'sm'))
     .minWidth(resolveLogoVar('icon-size', 'sm'))
@@ -175,7 +176,7 @@ export function registerLogoResponsiveStyles(theme: ThemeMode) {
 
   styleBuilder
     .select('.site-logo__glyph', theme)
-    .media(mediaMin('md'))
+    .media(mediaMin(BREAKPOINTS.md))
     .width(resolveLogoVar('icon-size', 'md'))
     .height(resolveLogoVar('icon-size', 'md'))
     .minWidth(resolveLogoVar('icon-size', 'md'))
@@ -183,7 +184,7 @@ export function registerLogoResponsiveStyles(theme: ThemeMode) {
 
   styleBuilder
     .select('.site-logo__glyph', theme)
-    .media(mediaMin('lg'))
+    .media(mediaMin(BREAKPOINTS.lg))
     .width(resolveLogoVar('icon-size', 'lg'))
     .height(resolveLogoVar('icon-size', 'lg'))
     .minWidth(resolveLogoVar('icon-size', 'lg'))
@@ -191,7 +192,7 @@ export function registerLogoResponsiveStyles(theme: ThemeMode) {
 
   styleBuilder
     .select('.site-logo__glyph', theme)
-    .media(mediaMin('xl'))
+    .media(mediaMin(BREAKPOINTS.xl))
     .width(resolveLogoVar('icon-size', 'xl'))
     .height(resolveLogoVar('icon-size', 'xl'))
     .minWidth(resolveLogoVar('icon-size', 'xl'))
@@ -199,48 +200,48 @@ export function registerLogoResponsiveStyles(theme: ThemeMode) {
 
   styleBuilder
     .select('.site-logo__brand', theme)
-    .media(mediaMin('sm'))
+    .media(mediaMin(BREAKPOINTS.sm))
     .fontSize(resolveLogoVar('brand-size', 'sm'))
 
   styleBuilder
     .select('.site-logo__brand', theme)
-    .media(mediaMin('md'))
+    .media(mediaMin(BREAKPOINTS.md))
     .fontSize(resolveLogoVar('brand-size', 'md'))
 
   styleBuilder
     .select('.site-logo__brand', theme)
-    .media(mediaMin('lg'))
+    .media(mediaMin(BREAKPOINTS.lg))
     .fontSize(resolveLogoVar('brand-size', 'lg'))
 
   styleBuilder
     .select('.site-logo__brand', theme)
-    .media(mediaMin('xl'))
+    .media(mediaMin(BREAKPOINTS.xl))
     .fontSize(resolveLogoVar('brand-size', 'xl'))
 
   styleBuilder
     .select('.site-logo__subtitle', theme)
-    .media(mediaMin('sm'))
+    .media(mediaMin(BREAKPOINTS.sm))
     .fontSize(resolveLogoVar('subtitle-size', 'sm'))
     .marginLeft(resolveLogoVar('subtitle-inset', 'sm'))
     .marginRight(resolveLogoVar('subtitle-inset', 'sm'))
 
   styleBuilder
     .select('.site-logo__subtitle', theme)
-    .media(mediaMin('md'))
+    .media(mediaMin(BREAKPOINTS.md))
     .fontSize(resolveLogoVar('subtitle-size', 'md'))
     .marginLeft(resolveLogoVar('subtitle-inset', 'md'))
     .marginRight(resolveLogoVar('subtitle-inset', 'md'))
 
   styleBuilder
     .select('.site-logo__subtitle', theme)
-    .media(mediaMin('lg'))
+    .media(mediaMin(BREAKPOINTS.lg))
     .fontSize(resolveLogoVar('subtitle-size', 'lg'))
     .marginLeft(resolveLogoVar('subtitle-inset', 'lg'))
     .marginRight(resolveLogoVar('subtitle-inset', 'lg'))
 
   styleBuilder
     .select('.site-logo__subtitle', theme)
-    .media(mediaMin('xl'))
+    .media(mediaMin(BREAKPOINTS.xl))
     .fontSize(resolveLogoVar('subtitle-size', 'xl'))
     .marginLeft(resolveLogoVar('subtitle-inset', 'xl'))
     .marginRight(resolveLogoVar('subtitle-inset', 'xl'))

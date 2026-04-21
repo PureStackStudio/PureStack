@@ -1,4 +1,4 @@
-import { matchMediaMax } from '../../ts-style/src/breakpoints'
+import { BREAKPOINTS, matchMediaMax } from '../../ts-style/src/breakpoints'
 
 const OPEN_LABEL = 'close'
 const CLOSED_LABEL = 'on this page'
@@ -37,7 +37,7 @@ function init() {
   const toggleLabel = toc.querySelector<HTMLElement>(
     '.page-toc__panel-toggle-label',
   )
-  const media = window.matchMedia(matchMediaMax('toc'))
+  const media = window.matchMedia(matchMediaMax(BREAKPOINTS.toc))
   const edgeOpenMedia = window.matchMedia(EDGE_OPEN_POINTER_QUERY)
   const readStoredCollapsedPreference = () => {
     try {

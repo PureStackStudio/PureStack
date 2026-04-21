@@ -1,5 +1,10 @@
 import type { Style } from '@purestack/ts-css'
-import { mediaMin, styleBuilder, themes } from '@purestack/ts-style'
+import {
+  BREAKPOINTS,
+  mediaMin,
+  styleBuilder,
+  themes,
+} from '@purestack/ts-style'
 
 export function registerFlexStyles() {
   themes.forEach((theme) => {
@@ -68,97 +73,97 @@ function applyResponsiveFlexDirectionStyles(theme: string) {
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-sm-row',
-    mediaMin('sm'),
+    mediaMin(BREAKPOINTS.sm),
     (style) => style.flexDirection('row'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-sm-column',
-    mediaMin('sm'),
+    mediaMin(BREAKPOINTS.sm),
     (style) => style.flexDirection('column'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-sm-column-reverse',
-    mediaMin('sm'),
+    mediaMin(BREAKPOINTS.sm),
     (style) => style.flexDirection('column-reverse'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-sm-row-reverse',
-    mediaMin('sm'),
+    mediaMin(BREAKPOINTS.sm),
     (style) => style.flexDirection('row-reverse'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-md-row',
-    mediaMin('md'),
+    mediaMin(BREAKPOINTS.md),
     (style) => style.flexDirection('row'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-md-column',
-    mediaMin('md'),
+    mediaMin(BREAKPOINTS.md),
     (style) => style.flexDirection('column'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-md-column-reverse',
-    mediaMin('md'),
+    mediaMin(BREAKPOINTS.md),
     (style) => style.flexDirection('column-reverse'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-md-row-reverse',
-    mediaMin('md'),
+    mediaMin(BREAKPOINTS.md),
     (style) => style.flexDirection('row-reverse'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-lg-row',
-    mediaMin('lg'),
+    mediaMin(BREAKPOINTS.lg),
     (style) => style.flexDirection('row'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-lg-column',
-    mediaMin('lg'),
+    mediaMin(BREAKPOINTS.lg),
     (style) => style.flexDirection('column'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-lg-column-reverse',
-    mediaMin('lg'),
+    mediaMin(BREAKPOINTS.lg),
     (style) => style.flexDirection('column-reverse'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-lg-row-reverse',
-    mediaMin('lg'),
+    mediaMin(BREAKPOINTS.lg),
     (style) => style.flexDirection('row-reverse'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-xl-row',
-    mediaMin('xl'),
+    mediaMin(BREAKPOINTS.xl),
     (style) => style.flexDirection('row'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-xl-column',
-    mediaMin('xl'),
+    mediaMin(BREAKPOINTS.xl),
     (style) => style.flexDirection('column'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-xl-column-reverse',
-    mediaMin('xl'),
+    mediaMin(BREAKPOINTS.xl),
     (style) => style.flexDirection('column-reverse'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--direction-xl-row-reverse',
-    mediaMin('xl'),
+    mediaMin(BREAKPOINTS.xl),
     (style) => style.flexDirection('row-reverse'),
   )
 }
@@ -167,124 +172,124 @@ function applyResponsiveFlexAlignStyles(theme: string) {
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-sm-stretch',
-    mediaMin('sm'),
+    mediaMin(BREAKPOINTS.sm),
     (style) => style.alignItems('stretch'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-sm-start',
-    mediaMin('sm'),
+    mediaMin(BREAKPOINTS.sm),
     (style) => style.alignItems('flex-start'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-sm-center',
-    mediaMin('sm'),
+    mediaMin(BREAKPOINTS.sm),
     (style) => style.alignItems('center'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-sm-end',
-    mediaMin('sm'),
+    mediaMin(BREAKPOINTS.sm),
     (style) => style.alignItems('flex-end'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-sm-baseline',
-    mediaMin('sm'),
+    mediaMin(BREAKPOINTS.sm),
     (style) => style.alignItems('baseline'),
   )
 
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-md-stretch',
-    mediaMin('md'),
+    mediaMin(BREAKPOINTS.md),
     (style) => style.alignItems('stretch'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-md-start',
-    mediaMin('md'),
+    mediaMin(BREAKPOINTS.md),
     (style) => style.alignItems('flex-start'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-md-center',
-    mediaMin('md'),
+    mediaMin(BREAKPOINTS.md),
     (style) => style.alignItems('center'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-md-end',
-    mediaMin('md'),
+    mediaMin(BREAKPOINTS.md),
     (style) => style.alignItems('flex-end'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-md-baseline',
-    mediaMin('md'),
+    mediaMin(BREAKPOINTS.md),
     (style) => style.alignItems('baseline'),
   )
 
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-lg-stretch',
-    mediaMin('lg'),
+    mediaMin(BREAKPOINTS.lg),
     (style) => style.alignItems('stretch'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-lg-start',
-    mediaMin('lg'),
+    mediaMin(BREAKPOINTS.lg),
     (style) => style.alignItems('flex-start'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-lg-center',
-    mediaMin('lg'),
+    mediaMin(BREAKPOINTS.lg),
     (style) => style.alignItems('center'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-lg-end',
-    mediaMin('lg'),
+    mediaMin(BREAKPOINTS.lg),
     (style) => style.alignItems('flex-end'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-lg-baseline',
-    mediaMin('lg'),
+    mediaMin(BREAKPOINTS.lg),
     (style) => style.alignItems('baseline'),
   )
 
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-xl-stretch',
-    mediaMin('xl'),
+    mediaMin(BREAKPOINTS.xl),
     (style) => style.alignItems('stretch'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-xl-start',
-    mediaMin('xl'),
+    mediaMin(BREAKPOINTS.xl),
     (style) => style.alignItems('flex-start'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-xl-center',
-    mediaMin('xl'),
+    mediaMin(BREAKPOINTS.xl),
     (style) => style.alignItems('center'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-xl-end',
-    mediaMin('xl'),
+    mediaMin(BREAKPOINTS.xl),
     (style) => style.alignItems('flex-end'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--align-xl-baseline',
-    mediaMin('xl'),
+    mediaMin(BREAKPOINTS.xl),
     (style) => style.alignItems('baseline'),
   )
 }
@@ -293,202 +298,226 @@ function applyResponsiveFlexJustifyStyles(theme: string) {
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-sm-start',
-    mediaMin('sm'),
+    mediaMin(BREAKPOINTS.sm),
     (style) => style.justifyContent('flex-start'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-sm-center',
-    mediaMin('sm'),
+    mediaMin(BREAKPOINTS.sm),
     (style) => style.justifyContent('center'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-sm-end',
-    mediaMin('sm'),
+    mediaMin(BREAKPOINTS.sm),
     (style) => style.justifyContent('flex-end'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-sm-between',
-    mediaMin('sm'),
+    mediaMin(BREAKPOINTS.sm),
     (style) => style.justifyContent('space-between'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-sm-around',
-    mediaMin('sm'),
+    mediaMin(BREAKPOINTS.sm),
     (style) => style.justifyContent('space-around'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-sm-evenly',
-    mediaMin('sm'),
+    mediaMin(BREAKPOINTS.sm),
     (style) => style.justifyContent('space-evenly'),
   )
 
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-md-start',
-    mediaMin('md'),
+    mediaMin(BREAKPOINTS.md),
     (style) => style.justifyContent('flex-start'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-md-center',
-    mediaMin('md'),
+    mediaMin(BREAKPOINTS.md),
     (style) => style.justifyContent('center'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-md-end',
-    mediaMin('md'),
+    mediaMin(BREAKPOINTS.md),
     (style) => style.justifyContent('flex-end'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-md-between',
-    mediaMin('md'),
+    mediaMin(BREAKPOINTS.md),
     (style) => style.justifyContent('space-between'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-md-around',
-    mediaMin('md'),
+    mediaMin(BREAKPOINTS.md),
     (style) => style.justifyContent('space-around'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-md-evenly',
-    mediaMin('md'),
+    mediaMin(BREAKPOINTS.md),
     (style) => style.justifyContent('space-evenly'),
   )
 
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-lg-start',
-    mediaMin('lg'),
+    mediaMin(BREAKPOINTS.lg),
     (style) => style.justifyContent('flex-start'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-lg-center',
-    mediaMin('lg'),
+    mediaMin(BREAKPOINTS.lg),
     (style) => style.justifyContent('center'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-lg-end',
-    mediaMin('lg'),
+    mediaMin(BREAKPOINTS.lg),
     (style) => style.justifyContent('flex-end'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-lg-between',
-    mediaMin('lg'),
+    mediaMin(BREAKPOINTS.lg),
     (style) => style.justifyContent('space-between'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-lg-around',
-    mediaMin('lg'),
+    mediaMin(BREAKPOINTS.lg),
     (style) => style.justifyContent('space-around'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-lg-evenly',
-    mediaMin('lg'),
+    mediaMin(BREAKPOINTS.lg),
     (style) => style.justifyContent('space-evenly'),
   )
 
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-xl-start',
-    mediaMin('xl'),
+    mediaMin(BREAKPOINTS.xl),
     (style) => style.justifyContent('flex-start'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-xl-center',
-    mediaMin('xl'),
+    mediaMin(BREAKPOINTS.xl),
     (style) => style.justifyContent('center'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-xl-end',
-    mediaMin('xl'),
+    mediaMin(BREAKPOINTS.xl),
     (style) => style.justifyContent('flex-end'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-xl-between',
-    mediaMin('xl'),
+    mediaMin(BREAKPOINTS.xl),
     (style) => style.justifyContent('space-between'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-xl-around',
-    mediaMin('xl'),
+    mediaMin(BREAKPOINTS.xl),
     (style) => style.justifyContent('space-around'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--justify-xl-evenly',
-    mediaMin('xl'),
+    mediaMin(BREAKPOINTS.xl),
     (style) => style.justifyContent('space-evenly'),
   )
 }
 
 function applyResponsiveFlexWrapStyles(theme: string) {
-  applyResponsiveFlexStyle(theme, '.flex--wrap-sm', mediaMin('sm'), (style) =>
-    style.flexWrap('wrap'),
+  applyResponsiveFlexStyle(
+    theme,
+    '.flex--wrap-sm',
+    mediaMin(BREAKPOINTS.sm),
+    (style) => style.flexWrap('wrap'),
   )
-  applyResponsiveFlexStyle(theme, '.flex--nowrap-sm', mediaMin('sm'), (style) =>
-    style.flexWrap('nowrap'),
+  applyResponsiveFlexStyle(
+    theme,
+    '.flex--nowrap-sm',
+    mediaMin(BREAKPOINTS.sm),
+    (style) => style.flexWrap('nowrap'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--wrap-sm-reverse',
-    mediaMin('sm'),
+    mediaMin(BREAKPOINTS.sm),
     (style) => style.flexWrap('wrap-reverse'),
   )
 
-  applyResponsiveFlexStyle(theme, '.flex--wrap-md', mediaMin('md'), (style) =>
-    style.flexWrap('wrap'),
+  applyResponsiveFlexStyle(
+    theme,
+    '.flex--wrap-md',
+    mediaMin(BREAKPOINTS.md),
+    (style) => style.flexWrap('wrap'),
   )
-  applyResponsiveFlexStyle(theme, '.flex--nowrap-md', mediaMin('md'), (style) =>
-    style.flexWrap('nowrap'),
+  applyResponsiveFlexStyle(
+    theme,
+    '.flex--nowrap-md',
+    mediaMin(BREAKPOINTS.md),
+    (style) => style.flexWrap('nowrap'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--wrap-md-reverse',
-    mediaMin('md'),
+    mediaMin(BREAKPOINTS.md),
     (style) => style.flexWrap('wrap-reverse'),
   )
 
-  applyResponsiveFlexStyle(theme, '.flex--wrap-lg', mediaMin('lg'), (style) =>
-    style.flexWrap('wrap'),
+  applyResponsiveFlexStyle(
+    theme,
+    '.flex--wrap-lg',
+    mediaMin(BREAKPOINTS.lg),
+    (style) => style.flexWrap('wrap'),
   )
-  applyResponsiveFlexStyle(theme, '.flex--nowrap-lg', mediaMin('lg'), (style) =>
-    style.flexWrap('nowrap'),
+  applyResponsiveFlexStyle(
+    theme,
+    '.flex--nowrap-lg',
+    mediaMin(BREAKPOINTS.lg),
+    (style) => style.flexWrap('nowrap'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--wrap-lg-reverse',
-    mediaMin('lg'),
+    mediaMin(BREAKPOINTS.lg),
     (style) => style.flexWrap('wrap-reverse'),
   )
 
-  applyResponsiveFlexStyle(theme, '.flex--wrap-xl', mediaMin('xl'), (style) =>
-    style.flexWrap('wrap'),
+  applyResponsiveFlexStyle(
+    theme,
+    '.flex--wrap-xl',
+    mediaMin(BREAKPOINTS.xl),
+    (style) => style.flexWrap('wrap'),
   )
-  applyResponsiveFlexStyle(theme, '.flex--nowrap-xl', mediaMin('xl'), (style) =>
-    style.flexWrap('nowrap'),
+  applyResponsiveFlexStyle(
+    theme,
+    '.flex--nowrap-xl',
+    mediaMin(BREAKPOINTS.xl),
+    (style) => style.flexWrap('nowrap'),
   )
   applyResponsiveFlexStyle(
     theme,
     '.flex--wrap-xl-reverse',
-    mediaMin('xl'),
+    mediaMin(BREAKPOINTS.xl),
     (style) => style.flexWrap('wrap-reverse'),
   )
 }

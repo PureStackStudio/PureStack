@@ -1,5 +1,6 @@
 import type { ThemePalette } from '@purestack/ts-style'
 import {
+  BREAKPOINTS,
   mediaBelow,
   mediaMax,
   styleBuilder,
@@ -105,7 +106,7 @@ export function registerPageTocShellStyles(
   styleBuilder.select('.page-toc__panel-toggle', theme).display('none')
   styleBuilder
     .select('.page-toc__restore-toggle', theme)
-    .media(mediaMax('toc'))
+    .media(mediaMax(BREAKPOINTS.toc))
     .display('none')
 }
 
@@ -156,23 +157,23 @@ export function registerPageTocLayoutStyles(
     .gridTemplateColumns('minmax(0, 1fr) 240px')
   styleBuilder
     .select('.doc-shell--toc', theme)
-    .media(mediaMax('toc'))
+    .media(mediaMax(BREAKPOINTS.toc))
     .gridTemplateColumns('260px minmax(0, 1fr)')
   styleBuilder
     .select(
       '.doc-shell--toc, .template-doc--toc-collapsed .doc-shell--toc',
       theme,
     )
-    .media(mediaBelow('lg'))
+    .media(mediaBelow(BREAKPOINTS.lg))
     .gridTemplateColumns('1fr !important')
 
   styleBuilder
     .select('.doc-shell--toc-only', theme)
-    .media(mediaMax('toc'))
+    .media(mediaMax(BREAKPOINTS.toc))
     .gridTemplateColumns('1fr')
   styleBuilder
     .select('.doc-shell--nav-drawer.doc-shell--toc', theme)
-    .media(mediaMax('toc'))
+    .media(mediaMax(BREAKPOINTS.toc))
     .gridTemplateColumns('1fr')
   styleBuilder
     .select('.doc-toc', theme)
@@ -187,7 +188,7 @@ export function registerPageTocLayoutStyles(
   // then switch to full-screen overlay at the shared `phone` breakpoint.
   styleBuilder
     .select('.template-doc:not(.template-doc--toc-collapsed) .doc-toc', theme)
-    .media(mediaMax('toc'))
+    .media(mediaMax(BREAKPOINTS.toc))
     .position('fixed')
     .top('72px')
     .right('0')
@@ -206,12 +207,12 @@ export function registerPageTocLayoutStyles(
       '.template-doc.template-doc--nav-ready:not(.template-doc--toc-collapsed) .doc-toc',
       theme,
     )
-    .media(mediaMax('toc'))
+    .media(mediaMax(BREAKPOINTS.toc))
     .transition('transform 260ms ease')
 
   styleBuilder
     .select('.template-doc:not(.template-doc--toc-collapsed) .doc-toc', theme)
-    .media(mediaMax('phone'))
+    .media(mediaMax(BREAKPOINTS.phone))
     .top('72px')
     .left('0')
     .right('0')
@@ -224,7 +225,7 @@ export function registerPageTocLayoutStyles(
       '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open',
       theme,
     )
-    .media(mediaMax('toc'))
+    .media(mediaMax(BREAKPOINTS.toc))
     .transform('translateX(0)')
     .overflowY('auto')
     .overflowX('hidden')
@@ -235,7 +236,7 @@ export function registerPageTocLayoutStyles(
       '.template-doc:not(.template-doc--toc-collapsed) .doc-toc:not(.doc-toc--open)',
       theme,
     )
-    .media(mediaMax('toc'))
+    .media(mediaMax(BREAKPOINTS.toc))
     .width('26px')
     .background('transparent')
     .boxShadow('none')
@@ -245,7 +246,7 @@ export function registerPageTocLayoutStyles(
       '.template-doc:not(.template-doc--toc-collapsed) .doc-toc:not(.doc-toc--open)',
       theme,
     )
-    .media(mediaMax('phone'))
+    .media(mediaMax(BREAKPOINTS.phone))
     .left('auto')
     .right('0')
 
@@ -254,7 +255,7 @@ export function registerPageTocLayoutStyles(
       '.template-doc:not(.template-doc--toc-collapsed).doc-toc-open',
       theme,
     )
-    .media(mediaMax('phone'))
+    .media(mediaMax(BREAKPOINTS.phone))
     .overflow('hidden')
 
   styleBuilder
@@ -262,7 +263,7 @@ export function registerPageTocLayoutStyles(
       '.template-doc:not(.template-doc--toc-collapsed) .page-toc__panel-toggle',
       theme,
     )
-    .media(mediaMax('toc'))
+    .media(mediaMax(BREAKPOINTS.toc))
     .position('absolute')
     .left('0')
     .right('auto')
@@ -292,7 +293,7 @@ export function registerPageTocLayoutStyles(
       '.template-doc:not(.template-doc--toc-collapsed) .doc-toc:not(.doc-toc--open) .page-toc > :not(.page-toc__panel-toggle)',
       theme,
     )
-    .media(mediaMax('toc'))
+    .media(mediaMax(BREAKPOINTS.toc))
     .display('none')
 
   styleBuilder
@@ -300,7 +301,7 @@ export function registerPageTocLayoutStyles(
       '.template-doc:not(.template-doc--toc-collapsed) .doc-toc:not(.doc-toc--open) .page-toc',
       theme,
     )
-    .media(mediaMax('toc'))
+    .media(mediaMax(BREAKPOINTS.toc))
     .background('transparent')
     .border('none')
 
@@ -309,14 +310,14 @@ export function registerPageTocLayoutStyles(
       '.template-doc:not(.template-doc--toc-collapsed) .page-toc__panel-toggle:focus-visible',
       theme,
     )
-    .media(mediaMax('toc'))
+    .media(mediaMax(BREAKPOINTS.toc))
 
   styleBuilder
     .select(
       '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open .page-toc__panel-toggle',
       theme,
     )
-    .media(mediaMax('toc'))
+    .media(mediaMax(BREAKPOINTS.toc))
     .display('none')
 
   styleBuilder
@@ -324,7 +325,7 @@ export function registerPageTocLayoutStyles(
       '.template-doc:not(.template-doc--toc-collapsed) .doc-toc .page-toc',
       theme,
     )
-    .media(mediaMax('toc'))
+    .media(mediaMax(BREAKPOINTS.toc))
     .height('100%')
     .overflow('visible')
     .padding('0')
@@ -336,7 +337,7 @@ export function registerPageTocLayoutStyles(
       '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open .page-toc',
       theme,
     )
-    .media(mediaMax('toc'))
+    .media(mediaMax(BREAKPOINTS.toc))
     .height('auto')
     .maxHeight('none')
     .padding('30px 16px 14px')
@@ -349,7 +350,7 @@ export function registerPageTocLayoutStyles(
       '.template-doc:not(.template-doc--toc-collapsed) .doc-toc .page-toc__header',
       theme,
     )
-    .media(mediaMax('toc'))
+    .media(mediaMax(BREAKPOINTS.toc))
     .paddingRight('104px')
 
   styleBuilder
@@ -357,7 +358,7 @@ export function registerPageTocLayoutStyles(
       '.template-doc:not(.template-doc--toc-collapsed) .doc-toc .page-toc > .page-toc__list, .template-doc:not(.template-doc--toc-collapsed) .doc-toc .page-toc__empty',
       theme,
     )
-    .media(mediaMax('toc'))
+    .media(mediaMax(BREAKPOINTS.toc))
     .paddingBottom('8px')
 
   styleBuilder
@@ -397,7 +398,7 @@ export function registerPageTocLayoutStyles(
 
   styleBuilder
     .select('.template-doc--toc-collapsed .doc-toc', theme)
-    .media(mediaMax('phone'))
+    .media(mediaMax(BREAKPOINTS.phone))
     .top('72px')
     .left('0')
     .right('0')
@@ -414,7 +415,7 @@ export function registerPageTocLayoutStyles(
 
   styleBuilder
     .select('.template-doc--toc-collapsed.doc-toc-open', theme)
-    .media(mediaMax('phone'))
+    .media(mediaMax(BREAKPOINTS.phone))
     .overflow('hidden')
 
   styleBuilder
@@ -425,7 +426,7 @@ export function registerPageTocLayoutStyles(
     .pointerEvents('none')
   styleBuilder
     .select('.template-doc--toc-collapsed .doc-toc:not(.doc-toc--open)', theme)
-    .media(mediaMax('phone'))
+    .media(mediaMax(BREAKPOINTS.phone))
     .left('auto')
     .right('0')
 
@@ -455,7 +456,7 @@ export function registerPageTocLayoutStyles(
 
   styleBuilder
     .select('.template-doc--toc-collapsed .page-toc__panel-toggle', theme)
-    .media(mediaMax('toc'))
+    .media(mediaMax(BREAKPOINTS.toc))
     .top('85%')
 
   styleBuilder

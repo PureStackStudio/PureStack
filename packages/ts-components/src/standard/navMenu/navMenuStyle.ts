@@ -1,5 +1,6 @@
 import type { ThemePalette } from '@purestack/ts-style'
 import {
+  BREAKPOINTS,
   mediaAbove,
   mediaBelow,
   mediaMax,
@@ -44,7 +45,7 @@ export function registerNavShellStyles(
   styleBuilder.select('.nav__search', theme).display('none').width('100%')
   styleBuilder
     .select('.nav__search', theme)
-    .media(mediaMax('phone'))
+    .media(mediaMax(BREAKPOINTS.phone))
     .display('block')
   styleBuilder
     .select('.nav__header', theme)
@@ -114,7 +115,7 @@ export function registerNavShellStyles(
       '.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
       theme,
     )
-    .media(mediaMin('lg'))
+    .media(mediaMin(BREAKPOINTS.lg))
     .overflow('visible')
     .transformOrigin('left center')
     .transform('translateX(0)')
@@ -125,14 +126,14 @@ export function registerNavShellStyles(
       '.template-doc.template-doc--nav-ready.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
       theme,
     )
-    .media(mediaMin('lg'))
+    .media(mediaMin(BREAKPOINTS.lg))
     .transition('transform 260ms ease')
   styleBuilder
     .select(
       '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
       theme,
     )
-    .media(mediaMin('lg'))
+    .media(mediaMin(BREAKPOINTS.lg))
     .width('26px')
     .position('fixed')
     .left('0')
@@ -150,7 +151,7 @@ export function registerNavShellStyles(
       '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar.doc-sidebar--open',
       theme,
     )
-    .media(mediaMin('lg'))
+    .media(mediaMin(BREAKPOINTS.lg))
     .width('260px')
     .background('transparent')
     .boxShadow('none')
@@ -160,42 +161,42 @@ export function registerNavShellStyles(
       '.template-doc.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-shell',
       theme,
     )
-    .media(mediaMin('lg'))
+    .media(mediaMin(BREAKPOINTS.lg))
     .gridTemplateColumns('minmax(0, 1fr)')
   styleBuilder
     .select(
       '.template-doc.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-shell--toc',
       theme,
     )
-    .media(mediaAbove('toc'))
+    .media(mediaAbove(BREAKPOINTS.toc))
     .gridTemplateColumns('minmax(0, 1fr) 240px')
   styleBuilder
     .select(
       '.template-doc.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-shell--toc',
       theme,
     )
-    .media(mediaMax('toc'))
+    .media(mediaMax(BREAKPOINTS.toc))
     .gridTemplateColumns('1fr')
   styleBuilder
     .select(
       '.template-doc.template-doc--nav-collapsed.template-doc--toc-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-shell--toc',
       theme,
     )
-    .media(mediaMin('lg'))
+    .media(mediaMin(BREAKPOINTS.lg))
     .gridTemplateColumns('1fr')
   styleBuilder
     .select(
       '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar:not(.doc-sidebar--open) .nav__header, .template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar:not(.doc-sidebar--open) .nav__collapse-toggle, .template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar:not(.doc-sidebar--open) .nav__list',
       theme,
     )
-    .media(mediaMin('lg'))
+    .media(mediaMin(BREAKPOINTS.lg))
     .display('none')
   styleBuilder
     .select(
       '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar:not(.doc-sidebar--open) .nav__menu',
       theme,
     )
-    .media(mediaMin('lg'))
+    .media(mediaMin(BREAKPOINTS.lg))
     .width('26px')
     .marginLeft('0')
     .padding('0')
@@ -208,7 +209,7 @@ export function registerNavShellStyles(
       '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar:not(.doc-sidebar--open) .nav__header-row',
       theme,
     )
-    .media(mediaMin('lg'))
+    .media(mediaMin(BREAKPOINTS.lg))
     .margin('0')
     .width('26px')
     .height('118px')
@@ -218,7 +219,7 @@ export function registerNavShellStyles(
       '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar:not(.doc-sidebar--open) .nav__panel-toggle',
       theme,
     )
-    .media(mediaMin('lg'))
+    .media(mediaMin(BREAKPOINTS.lg))
     .display('inline-flex')
     .position('absolute')
     .alignItems('center')
@@ -239,12 +240,12 @@ export function registerNavShellStyles(
       '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar.doc-sidebar--open .nav__panel-toggle',
       theme,
     )
-    .media(mediaMin('lg'))
+    .media(mediaMin(BREAKPOINTS.lg))
     .display('none')
 
   styleBuilder
     .select('.nav__panel-toggle, .nav__collapse-toggle', theme)
-    .media(mediaBelow('lg'))
+    .media(mediaBelow(BREAKPOINTS.lg))
     .display('none')
   styleBuilder
     .select(
@@ -270,7 +271,7 @@ export function registerNavShellStyles(
   styleBuilder.select('.nav__group', theme).display('grid')
   styleBuilder
     .select('.template-doc--has-nav .doc-sidebar .nav__menu', theme)
-    .media(mediaBelow('lg'))
+    .media(mediaBelow(BREAKPOINTS.lg))
     .width('100%')
     .maxWidth('none')
     .minHeight('calc(100dvh - 72px)')

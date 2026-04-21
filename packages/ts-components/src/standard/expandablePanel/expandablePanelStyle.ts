@@ -1,4 +1,5 @@
 import {
+  BREAKPOINTS,
   mediaMax,
   styleBuilder,
   type ThemeMode,
@@ -144,12 +145,12 @@ function registerExpandablePanelBodyStyles(
 function registerExpandablePanelResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.expandable-panel__summary', theme)
-    .media(mediaMax('tabs'))
+    .media(mediaMax(BREAKPOINTS.tabs))
     .gridTemplateColumns('1fr')
     .alignItems('stretch')
 
   styleBuilder
     .select('.expandable-panel__header-side', theme)
-    .media(mediaMax('tabs'))
+    .media(mediaMax(BREAKPOINTS.tabs))
     .justifyContent('space-between')
 }

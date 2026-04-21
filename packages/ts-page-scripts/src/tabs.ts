@@ -1,4 +1,4 @@
-import { matchMediaMax } from '../../ts-style/src/breakpoints'
+import { BREAKPOINTS, matchMediaMax } from '../../ts-style/src/breakpoints'
 
 const OVERFLOW_BUTTON_WIDTH = 42
 let nextAutoTabsSelectId = 1
@@ -148,7 +148,7 @@ function enhanceTabs(root: HTMLElement) {
 
   root.classList.add('tabs--enhanced')
 
-  const media = window.matchMedia(matchMediaMax('tabs'))
+  const media = window.matchMedia(matchMediaMax(BREAKPOINTS.tabs))
   let hiddenIndexes: number[] = []
   let raf = 0
   let resizeObserver: ResizeObserver | null = null

@@ -1,5 +1,6 @@
 import type { ThemePalette } from '@purestack/ts-style'
 import {
+  BREAKPOINTS,
   getBreakpoint,
   mediaBelow,
   mediaMax,
@@ -35,7 +36,7 @@ function registerDocLayoutShellStyles(
     .display('grid')
     .gap('28px')
     .padding('32px')
-    .maxWidth(getBreakpoint('wide'))
+    .maxWidth(getBreakpoint(BREAKPOINTS.wide))
     .margin('0 auto')
     .width('100%')
     .boxSizing('border-box')
@@ -110,19 +111,19 @@ function registerDocLayoutResponsiveStyles(
 ) {
   styleBuilder
     .select('.doc-shell', theme)
-    .media(mediaBelow('lg'))
+    .media(mediaBelow(BREAKPOINTS.lg))
     .gridTemplateColumns('1fr')
     .padding('16px')
   styleBuilder
     .select('.template-doc', theme)
-    .media(mediaBelow('lg'))
+    .media(mediaBelow(BREAKPOINTS.lg))
     .overflowX('hidden')
   styleBuilder
     .select(
       '.template-doc--nav-drawer .doc-sidebar, .template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
       theme,
     )
-    .media(mediaBelow('lg'))
+    .media(mediaBelow(BREAKPOINTS.lg))
     .position('fixed')
     .top('72px')
     .left('auto')
@@ -142,7 +143,7 @@ function registerDocLayoutResponsiveStyles(
       '.template-doc--nav-drawer .doc-sidebar, .template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
       theme,
     )
-    .media(mediaMax('phone'))
+    .media(mediaMax(BREAKPOINTS.phone))
     .left('0')
     .right('0')
     .width('100%')
@@ -152,7 +153,7 @@ function registerDocLayoutResponsiveStyles(
       '.template-doc.template-doc--nav-ready.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',
       theme,
     )
-    .media(mediaBelow('lg'))
+    .media(mediaBelow(BREAKPOINTS.lg))
     .transition('transform 220ms ease')
   styleBuilder
     .select('.doc-nav-toggle:checked ~ .doc-shell .doc-sidebar', theme)

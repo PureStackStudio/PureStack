@@ -1,5 +1,6 @@
 import type { ThemePalette } from '@purestack/ts-style'
 import {
+  BREAKPOINTS,
   mediaMax,
   styleBuilder,
   type ThemeMode,
@@ -153,11 +154,11 @@ export function applyAlertMetaStyles(theme: ThemeMode, palette: ThemePalette) {
 export function applyAlertResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.alert', theme)
-    .media(mediaMax('compact'))
+    .media(mediaMax(BREAKPOINTS.compact))
     .padding('12px')
 
   styleBuilder
     .select('.alert__actions', theme)
-    .media(mediaMax('compact'))
+    .media(mediaMax(BREAKPOINTS.compact))
     .gap('6px')
 }

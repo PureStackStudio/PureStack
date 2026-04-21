@@ -1,4 +1,9 @@
-import { mediaMin, styleBuilder, themes } from '@purestack/ts-style'
+import {
+  BREAKPOINTS,
+  mediaMin,
+  styleBuilder,
+  themes,
+} from '@purestack/ts-style'
 
 export function registerGridStyles() {
   themes.forEach((theme, _palette) => {
@@ -25,22 +30,22 @@ export function registerGridStyles() {
 
     styleBuilder
       .select('.grid', theme)
-      .media(mediaMin('sm'))
+      .media(mediaMin(BREAKPOINTS.sm))
       .gridTemplateColumns('var(--grid-template-columns-sm)')
 
     styleBuilder
       .select('.grid', theme)
-      .media(mediaMin('md'))
+      .media(mediaMin(BREAKPOINTS.md))
       .gridTemplateColumns('var(--grid-template-columns-md)')
 
     styleBuilder
       .select('.grid', theme)
-      .media(mediaMin('lg'))
+      .media(mediaMin(BREAKPOINTS.lg))
       .gridTemplateColumns('var(--grid-template-columns-lg)')
 
     styleBuilder
       .select('.grid', theme)
-      .media(mediaMin('xl'))
+      .media(mediaMin(BREAKPOINTS.xl))
       .gridTemplateColumns('var(--grid-template-columns-xl)')
   })
 }

@@ -1,5 +1,6 @@
 import type { ThemePalette } from '@purestack/ts-style'
 import {
+  BREAKPOINTS,
   mediaMax,
   styleBuilder,
   type ThemeMode,
@@ -410,7 +411,7 @@ function registerTableInlineCodeStyles(
 function registerTableResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.doc-content :where(th, td)', theme)
-    .media(mediaMax('content'))
+    .media(mediaMax(BREAKPOINTS.content))
     .padding('9px 11px')
 }
 

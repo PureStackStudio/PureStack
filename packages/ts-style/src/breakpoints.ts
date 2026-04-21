@@ -1,53 +1,60 @@
+function defineBreakpoint<Name extends string>(
+  name: Name,
+  value: `${number}px`,
+) {
+  return { name, value } as const
+}
+
 export const BREAKPOINTS = {
-  phone: '600px',
-  sm: '640px',
-  compact: '720px',
-  tabs: '760px',
-  md: '768px',
-  content: '900px',
-  hero: '980px',
-  lg: '1024px',
-  xl: '1280px',
-  toc: '1320px',
-  wide: '1400px',
+  phone: defineBreakpoint('phone', '600px'),
+  sm: defineBreakpoint('sm', '640px'),
+  compact: defineBreakpoint('compact', '720px'),
+  tabs: defineBreakpoint('tabs', '760px'),
+  md: defineBreakpoint('md', '768px'),
+  content: defineBreakpoint('content', '900px'),
+  hero: defineBreakpoint('hero', '980px'),
+  lg: defineBreakpoint('lg', '1024px'),
+  xl: defineBreakpoint('xl', '1280px'),
+  toc: defineBreakpoint('toc', '1320px'),
+  wide: defineBreakpoint('wide', '1400px'),
 } as const
 
-export type ThemeBreakpointName = keyof typeof BREAKPOINTS
+export type BreakpointToken = (typeof BREAKPOINTS)[keyof typeof BREAKPOINTS]
 
-export function getBreakpoint(name: ThemeBreakpointName): string {
-  return BREAKPOINTS[name]
+export function getBreakpoint(breakpoint: BreakpointToken): string {
+  return breakpoint.value
 }
 
-export function mediaMin(name: ThemeBreakpointName): string {
-  return `min-width: ${getBreakpoint(name)}`
+export function mediaMin(breakpoint: BreakpointToken): string {
+  return `min-width: ${getBreakpoint(breakpoint)}`
 }
 
-export function mediaMax(name: ThemeBreakpointName): string {
-  return `max-width: ${getBreakpoint(name)}`
+export function mediaMax(breakpoint: BreakpointToken): string {
+  return `max-width: ${getBreakpoint(breakpoint)}`
 }
 
-export function mediaAbove(name: ThemeBreakpointName): string {
-  return `min-width: ${shiftBreakpoint(getBreakpoint(name), 1)}`
+export function mediaAbove(breakpoint: BreakpointToken): string {
+  return `min-width: ${shiftBreakpoint(getBreakpoint(breakpoint), 1)}`
 }
 
-export function mediaBelow(name: ThemeBreakpointName): string {
-  return `max-width: ${shiftBreakpoint(getBreakpoint(name), -1)}`
+export function mediaBelow(breakpoint: BreakpointToken): string {
+  return `max-width: ${shiftBreakpoint(getBreakpoint(breakpoint), -1)}`
 }
 
-export function matchMediaMin(name: ThemeBreakpointName): string {
-  return `(${mediaMin(name)})`
+export function matchMediaMin(breakpoint: BreakpointToken): string {
+  return `(${mediaMin(breakpoint)})`
 }
 
-export function matchMediaMax(name: ThemeBreakpointName): string {
-  return `(${mediaMax(name)})`
+export function matchMediaMax(breakpoint: BreakpointToken): string {
+  return `(${mediaMax(breakpoint)})`
 }
 
-export function matchMediaAbove(name: ThemeBreakpointName): string {
-  return `(${mediaAbove(name)})`
+export function matchMediaAbove(breakpoint: BreakpointToken): string {
+  return `(${mediaAbove(breakpoint)})`
 }
 
-export function matchMediaBelow(name: ThemeBreakpointName): string {
-  return `(${mediaBelow(name)})`
+export function matchMediaBelow(breakpoint: BreakpointToken): string {
+  return `(${mediaBelow(breakpoint)})`
 }
 
 function shiftBreakpoint(value: string, delta: number): string {

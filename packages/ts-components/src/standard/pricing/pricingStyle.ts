@@ -1,5 +1,6 @@
 import type { ThemePalette } from '@purestack/ts-style'
 import {
+  BREAKPOINTS,
   mediaMax,
   mediaMin,
   styleBuilder,
@@ -322,23 +323,26 @@ export function applyPricingFeaturedStyles(
 export function applyPricingResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.pricing__grid', theme)
-    .media(mediaMin('content'))
+    .media(mediaMin(BREAKPOINTS.content))
     .gridTemplateColumns('repeat(2, minmax(0, 1fr))')
 
   styleBuilder
     .select('.pricing__grid', theme)
-    .media(mediaMin('wide'))
+    .media(mediaMin(BREAKPOINTS.wide))
     .gridTemplateColumns('repeat(4, minmax(0, 1fr))')
 
-  styleBuilder.select('.pricing', theme).media(mediaMax('compact')).padding('0')
+  styleBuilder
+    .select('.pricing', theme)
+    .media(mediaMax(BREAKPOINTS.compact))
+    .padding('0')
 
   styleBuilder
     .select('.pricing .panel__body', theme)
-    .media(mediaMax('compact'))
+    .media(mediaMax(BREAKPOINTS.compact))
     .padding('22px')
 
   styleBuilder
     .select('.pricing-plan--featured', theme)
-    .media(mediaMax('compact'))
+    .media(mediaMax(BREAKPOINTS.compact))
     .transform('translateY(0)')
 }
