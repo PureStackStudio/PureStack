@@ -296,7 +296,10 @@ export function registerSemanticToneUtilityStyles() {
   })
 }
 
-function applyCurrentPaletteVars(style: Style, current: ThemePalette['current']) {
+function applyCurrentPaletteVars(
+  style: Style,
+  current: ThemePalette['current'],
+) {
   for (const entry of listCurrentThemePaletteVarEntries(current)) {
     style.set(entry.name, entry.value)
   }

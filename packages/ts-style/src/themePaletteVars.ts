@@ -48,7 +48,10 @@ const CURRENT_THEME_PALETTE_PATHS = {
   canvas: ['canvas'],
   overlay: ['overlay'],
   surface: createInteractivePathTree('surface', CURRENT_INTERACTIVE_STATES),
-  surfaceAlt: createInteractivePathTree('surfaceAlt', CURRENT_INTERACTIVE_STATES),
+  surfaceAlt: createInteractivePathTree(
+    'surfaceAlt',
+    CURRENT_INTERACTIVE_STATES,
+  ),
   text: createPropertyPathTree('text', TEXT_PROPS),
   border: createPropertyPathTree('border', BORDER_PROPS),
   button: createInteractivePathTree('button', CURRENT_INTERACTIVE_STATES),
@@ -56,13 +59,14 @@ const CURRENT_THEME_PALETTE_PATHS = {
 } as const satisfies PathTree
 
 const THEME_PALETTE_VAR_PATHS = buildThemePaletteVarPaths()
-const THEME_PALETTE_VAR_PATH_ENTRIES = THEME_PALETTE_VAR_PATHS.map((path) => [
-  buildReadableThemeVariableName('theme', path),
-  path,
-] as const)
+const THEME_PALETTE_VAR_PATH_ENTRIES = THEME_PALETTE_VAR_PATHS.map(
+  (path) => [buildReadableThemeVariableName('theme', path), path] as const,
+)
 const CURRENT_THEME_PALETTE_VAR_PATH_ENTRIES = flattenPathTree(
   CURRENT_THEME_PALETTE_PATHS,
-).map((path) => [buildReadableThemeVariableName('current', path), path] as const)
+).map(
+  (path) => [buildReadableThemeVariableName('current', path), path] as const,
+)
 
 /**
  * Utilities for turning a semantic {@link ThemePalette} into a CSS custom-property contract.
@@ -122,7 +126,9 @@ export function getCurrentThemePaletteVar(path: string | readonly string[]) {
   return `var(${getCurrentThemePaletteVarName(path)})`
 }
 
-export function getCurrentThemePaletteVarName(path: string | readonly string[]) {
+export function getCurrentThemePaletteVarName(
+  path: string | readonly string[],
+) {
   return buildThemeVariableName('current', normalizePath(path))
 }
 
@@ -132,7 +138,8 @@ export function normalizeThemeVariableReference(value: string) {
     (match, variableName: string) => {
       const normalizedTheme = normalizeReadableThemeVariableName(variableName)
       if (normalizedTheme) return `var(${normalizedTheme})`
-      const normalizedCurrent = normalizeReadableCurrentVariableName(variableName)
+      const normalizedCurrent =
+        normalizeReadableCurrentVariableName(variableName)
       if (normalizedCurrent) return `var(${normalizedCurrent})`
       return match
     },
