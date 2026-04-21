@@ -1,3 +1,8 @@
+import {
+  getCurrentThemePaletteVar,
+  getThemePaletteVar,
+  normalizeThemeVariableReference,
+} from '@purestack/ts-style'
 import { defineComponent, html } from 'regor'
 
 const logoTemplate = html`<div class="site-logo" :style="layoutStyle">
@@ -43,9 +48,10 @@ type LogoResponsiveLength = {
   xl?: string
 }
 
-const DEFAULT_BRAND_FILL =
-  'var(--ps-semantic-tone-accent-button-rest-background)'
-const DEFAULT_SUBTITLE_FILL = 'var(--ps-current-text-subtle)'
+const DEFAULT_BRAND_FILL = getThemePaletteVar(
+  'semanticTone.accent.button.rest.background',
+)
+const DEFAULT_SUBTITLE_FILL = getCurrentThemePaletteVar('textSubtle')
 
 export interface SiteLogo {
   brand?: string
@@ -88,7 +94,7 @@ function resolveSiteLogo(props: SiteLogo): SiteLogo {
   const brand = props.brand
   const letterColors = props.letterColors
   const subtitleLetterColors = props.subtitleLetterColors
-  const colors = props.colors
+  const colors = normalizeLogoColors(props.colors)
   const logoBackground = props.logoBackground
   const logoForeground = props.logoForeground
   const brandLetters = buildBrandLetters(brand, letterColors, colors)
@@ -141,6 +147,10 @@ function resolveSiteLogo(props: SiteLogo): SiteLogo {
     icon,
     ariaLabel,
   }
+}
+
+function normalizeLogoColors(colors: string[] | undefined) {
+  return colors?.map((color) => normalizeThemeVariableReference(color))
 }
 
 function buildBrandLetters(

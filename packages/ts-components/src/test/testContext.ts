@@ -5,7 +5,10 @@ import type {
   TsSsgContext,
   TsSsgNavigation,
 } from '@purestack/ts-common'
-import { DEFAULT_THEME_OPTIONS } from '@purestack/ts-style'
+import {
+  DEFAULT_THEME_OPTIONS,
+  getCurrentThemePaletteVar,
+} from '@purestack/ts-style'
 import type { DeepPartial } from '@purestack/ts-util'
 
 const DEFAULT_SITE: DeepPartial<SiteConfig> = {
@@ -17,7 +20,10 @@ const DEFAULT_SITE: DeepPartial<SiteConfig> = {
     brand: 'Pure Stack',
     letterColors: '000011111',
     subtitleLetterColors: '111111111111111111111',
-    colors: ['var(--ps-current-text-default)', 'var(--ps-current-text-subtle)'],
+    colors: [
+      getCurrentThemePaletteVar('textDefault'),
+      getCurrentThemePaletteVar('textSubtle'),
+    ],
     logoBackground: 1,
     logoForeground: 0,
     brandSize: '3.70rem',

@@ -1,7 +1,7 @@
 import { styleBuilder, themes } from '@purestack/ts-style'
 
 export function registerSectionHeaderStyles() {
-  themes.forEach((theme) => {
+  themes.forEach((theme, palette) => {
     styleBuilder
       .select('.section-header', theme)
       .display('grid')
@@ -10,7 +10,7 @@ export function registerSectionHeaderStyles() {
 
     styleBuilder
       .select('.section-header .text-title', theme)
-      .color('var(--ps-current-text-default)')
+      .color(palette.current.text.default)
 
     styleBuilder
       .select('.section-header > :last-child', theme)

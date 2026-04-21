@@ -112,13 +112,13 @@ function applyTextUtilities(theme: string, palette: ThemePalette) {
       '.text-subtle, .prose-meta, .text-caption, .text-attribution',
       theme,
     )
-    .color('var(--ps-current-text-subtle)')
+    .color(palette.current.text.subtle)
     .margin('0 0 0.8em')
 
   styleBuilder
     .select('.text-eyebrow', theme)
     .apply(palette.applyFont(palette.font.size.xs, palette.font.weight.w700))
-    .color('var(--ps-current-text-subtle)')
+    .color(palette.current.text.subtle)
     .letterSpacing('0.18em')
     .textTransform('uppercase')
     .margin('0 0 0.55em')
@@ -132,7 +132,7 @@ function applyTextUtilities(theme: string, palette: ThemePalette) {
   styleBuilder
     .select('.text-tagline', theme)
     .apply(palette.applyFont(palette.font.size.sm))
-    .color('var(--ps-current-text-subtle)')
+    .color(palette.current.text.subtle)
     .lineHeight('1.6')
     .margin('0 0 1em')
 

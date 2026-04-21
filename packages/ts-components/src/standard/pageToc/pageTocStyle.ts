@@ -446,7 +446,7 @@ export function registerPageTocLayoutStyles(
     .justifyContent('center')
     .apply(palette.applyFont(palette.font.size.xxxs, palette.font.weight.w700))
     .textTransform('uppercase')
-    .border('1px solid var(--ps-current-border-default)')
+    .border(`1px solid ${palette.current.border.default}`)
     .borderLeft('none')
     .borderRadius(`0 ${options.radii.md} ${options.radii.md} 0`)
     .userSelect('none')

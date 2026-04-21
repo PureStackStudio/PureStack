@@ -2,6 +2,7 @@ import type { Style } from '@purestack/ts-css'
 import { styleBuilder } from './styles'
 import { themes } from './themeOptions'
 import type { SemanticToneTokens, ThemePalette } from './themePalette'
+import { getCurrentThemePaletteVarName } from './themePaletteVars'
 
 export type SemanticTone =
   | 'neutral'
@@ -53,69 +54,129 @@ export function getSemanticToneTokens(
 
 function applySemanticToneVars(style: Style, tokens: SemanticToneTokens) {
   return style
-    .set('--ps-current-tone', tokens.tone)
-    .set('--ps-current-canvas', tokens.canvas)
-    .set('--ps-current-overlay', tokens.overlay)
-    .set('--ps-current-surface-rest-background', tokens.surface.rest.background)
-    .set('--ps-current-surface-rest-border', tokens.surface.rest.border)
-    .set('--ps-current-surface-rest-text', tokens.surface.rest.text)
+    .set(getCurrentThemePaletteVarName('tone'), tokens.tone)
+    .set(getCurrentThemePaletteVarName('canvas'), tokens.canvas)
+    .set(getCurrentThemePaletteVarName('overlay'), tokens.overlay)
     .set(
-      '--ps-current-surface-hover-background',
+      getCurrentThemePaletteVarName('surfaceRestBackground'),
+      tokens.surface.rest.background,
+    )
+    .set(
+      getCurrentThemePaletteVarName('surfaceRestBorder'),
+      tokens.surface.rest.border,
+    )
+    .set(
+      getCurrentThemePaletteVarName('surfaceRestText'),
+      tokens.surface.rest.text,
+    )
+    .set(
+      getCurrentThemePaletteVarName('surfaceHoverBackground'),
       tokens.surface.hover.background,
     )
-    .set('--ps-current-surface-hover-border', tokens.surface.hover.border)
-    .set('--ps-current-surface-hover-text', tokens.surface.hover.text)
     .set(
-      '--ps-current-surface-active-background',
+      getCurrentThemePaletteVarName('surfaceHoverBorder'),
+      tokens.surface.hover.border,
+    )
+    .set(
+      getCurrentThemePaletteVarName('surfaceHoverText'),
+      tokens.surface.hover.text,
+    )
+    .set(
+      getCurrentThemePaletteVarName('surfaceActiveBackground'),
       tokens.surface.active.background,
     )
-    .set('--ps-current-surface-active-border', tokens.surface.active.border)
-    .set('--ps-current-surface-active-text', tokens.surface.active.text)
     .set(
-      '--ps-current-surface-alt-rest-background',
+      getCurrentThemePaletteVarName('surfaceActiveBorder'),
+      tokens.surface.active.border,
+    )
+    .set(
+      getCurrentThemePaletteVarName('surfaceActiveText'),
+      tokens.surface.active.text,
+    )
+    .set(
+      getCurrentThemePaletteVarName('surfaceAltRestBackground'),
       tokens.surfaceAlt.rest.background,
     )
-    .set('--ps-current-surface-alt-rest-border', tokens.surfaceAlt.rest.border)
-    .set('--ps-current-surface-alt-rest-text', tokens.surfaceAlt.rest.text)
     .set(
-      '--ps-current-surface-alt-hover-background',
+      getCurrentThemePaletteVarName('surfaceAltRestBorder'),
+      tokens.surfaceAlt.rest.border,
+    )
+    .set(
+      getCurrentThemePaletteVarName('surfaceAltRestText'),
+      tokens.surfaceAlt.rest.text,
+    )
+    .set(
+      getCurrentThemePaletteVarName('surfaceAltHoverBackground'),
       tokens.surfaceAlt.hover.background,
     )
     .set(
-      '--ps-current-surface-alt-hover-border',
+      getCurrentThemePaletteVarName('surfaceAltHoverBorder'),
       tokens.surfaceAlt.hover.border,
     )
-    .set('--ps-current-surface-alt-hover-text', tokens.surfaceAlt.hover.text)
     .set(
-      '--ps-current-surface-alt-active-background',
+      getCurrentThemePaletteVarName('surfaceAltHoverText'),
+      tokens.surfaceAlt.hover.text,
+    )
+    .set(
+      getCurrentThemePaletteVarName('surfaceAltActiveBackground'),
       tokens.surfaceAlt.active.background,
     )
     .set(
-      '--ps-current-surface-alt-active-border',
+      getCurrentThemePaletteVarName('surfaceAltActiveBorder'),
       tokens.surfaceAlt.active.border,
     )
-    .set('--ps-current-surface-alt-active-text', tokens.surfaceAlt.active.text)
-    .set('--ps-current-text-default', tokens.text.default)
-    .set('--ps-current-text-subtle', tokens.text.subtle)
-    .set('--ps-current-border-subtle', tokens.border.subtle)
-    .set('--ps-current-border-default', tokens.border.default)
-    .set('--ps-current-border-focus', tokens.border.focus)
-    .set('--ps-current-button-rest-background', tokens.button.rest.background)
-    .set('--ps-current-button-rest-border', tokens.button.rest.border)
-    .set('--ps-current-button-rest-text', tokens.button.rest.text)
-    .set('--ps-current-button-hover-background', tokens.button.hover.background)
-    .set('--ps-current-button-hover-border', tokens.button.hover.border)
-    .set('--ps-current-button-hover-text', tokens.button.hover.text)
     .set(
-      '--ps-current-button-active-background',
+      getCurrentThemePaletteVarName('surfaceAltActiveText'),
+      tokens.surfaceAlt.active.text,
+    )
+    .set(getCurrentThemePaletteVarName('textDefault'), tokens.text.default)
+    .set(getCurrentThemePaletteVarName('textSubtle'), tokens.text.subtle)
+    .set(getCurrentThemePaletteVarName('borderSubtle'), tokens.border.subtle)
+    .set(getCurrentThemePaletteVarName('borderDefault'), tokens.border.default)
+    .set(getCurrentThemePaletteVarName('borderFocus'), tokens.border.focus)
+    .set(
+      getCurrentThemePaletteVarName('buttonRestBackground'),
+      tokens.button.rest.background,
+    )
+    .set(
+      getCurrentThemePaletteVarName('buttonRestBorder'),
+      tokens.button.rest.border,
+    )
+    .set(
+      getCurrentThemePaletteVarName('buttonRestText'),
+      tokens.button.rest.text,
+    )
+    .set(
+      getCurrentThemePaletteVarName('buttonHoverBackground'),
+      tokens.button.hover.background,
+    )
+    .set(
+      getCurrentThemePaletteVarName('buttonHoverBorder'),
+      tokens.button.hover.border,
+    )
+    .set(
+      getCurrentThemePaletteVarName('buttonHoverText'),
+      tokens.button.hover.text,
+    )
+    .set(
+      getCurrentThemePaletteVarName('buttonActiveBackground'),
       tokens.button.active.background,
     )
-    .set('--ps-current-button-active-border', tokens.button.active.border)
-    .set('--ps-current-button-active-text', tokens.button.active.text)
-    .set('--ps-current-icon-background', tokens.icon.background)
-    .set('--ps-current-icon-gradient', tokens.icon.gradient)
-    .set('--ps-current-icon-color', tokens.icon.color)
-    .set('--ps-current-icon-border', tokens.icon.border)
+    .set(
+      getCurrentThemePaletteVarName('buttonActiveBorder'),
+      tokens.button.active.border,
+    )
+    .set(
+      getCurrentThemePaletteVarName('buttonActiveText'),
+      tokens.button.active.text,
+    )
+    .set(
+      getCurrentThemePaletteVarName('iconBackground'),
+      tokens.icon.background,
+    )
+    .set(getCurrentThemePaletteVarName('iconGradient'), tokens.icon.gradient)
+    .set(getCurrentThemePaletteVarName('iconColor'), tokens.icon.color)
+    .set(getCurrentThemePaletteVarName('iconBorder'), tokens.icon.border)
 }
 
 function getSemanticTonePrefix(isInteractive = false) {
@@ -179,69 +240,135 @@ export function registerSemanticToneUtilityStyles() {
     const root = getSemanticToneTokens(palette, 'neutral')
     styleBuilder
       .select(':root', theme)
-      .set('--ps-current-tone', root.tone)
-      .set('--ps-current-canvas', root.canvas)
-      .set('--ps-current-overlay', root.overlay)
-      .set('--ps-current-surface-rest-background', root.surface.rest.background)
-      .set('--ps-current-surface-rest-border', root.surface.rest.border)
-      .set('--ps-current-surface-rest-text', root.surface.rest.text)
+      .set(getCurrentThemePaletteVarName('tone'), root.tone)
+      .set(getCurrentThemePaletteVarName('canvas'), root.canvas)
+      .set(getCurrentThemePaletteVarName('overlay'), root.overlay)
       .set(
-        '--ps-current-surface-hover-background',
+        getCurrentThemePaletteVarName('surfaceRestBackground'),
+        root.surface.rest.background,
+      )
+      .set(
+        getCurrentThemePaletteVarName('surfaceRestBorder'),
+        root.surface.rest.border,
+      )
+      .set(
+        getCurrentThemePaletteVarName('surfaceRestText'),
+        root.surface.rest.text,
+      )
+      .set(
+        getCurrentThemePaletteVarName('surfaceHoverBackground'),
         root.surface.hover.background,
       )
-      .set('--ps-current-surface-hover-border', root.surface.hover.border)
-      .set('--ps-current-surface-hover-text', root.surface.hover.text)
       .set(
-        '--ps-current-surface-active-background',
+        getCurrentThemePaletteVarName('surfaceHoverBorder'),
+        root.surface.hover.border,
+      )
+      .set(
+        getCurrentThemePaletteVarName('surfaceHoverText'),
+        root.surface.hover.text,
+      )
+      .set(
+        getCurrentThemePaletteVarName('surfaceActiveBackground'),
         root.surface.active.background,
       )
-      .set('--ps-current-surface-active-border', root.surface.active.border)
-      .set('--ps-current-surface-active-text', root.surface.active.text)
       .set(
-        '--ps-current-surface-alt-rest-background',
+        getCurrentThemePaletteVarName('surfaceActiveBorder'),
+        root.surface.active.border,
+      )
+      .set(
+        getCurrentThemePaletteVarName('surfaceActiveText'),
+        root.surface.active.text,
+      )
+      .set(
+        getCurrentThemePaletteVarName('surfaceAltRestBackground'),
         root.surfaceAlt.rest.background,
       )
-      .set('--ps-current-surface-alt-rest-border', root.surfaceAlt.rest.border)
-      .set('--ps-current-surface-alt-rest-text', root.surfaceAlt.rest.text)
       .set(
-        '--ps-current-surface-alt-hover-background',
+        getCurrentThemePaletteVarName('surfaceAltRestBorder'),
+        root.surfaceAlt.rest.border,
+      )
+      .set(
+        getCurrentThemePaletteVarName('surfaceAltRestText'),
+        root.surfaceAlt.rest.text,
+      )
+      .set(
+        getCurrentThemePaletteVarName('surfaceAltHoverBackground'),
         root.surfaceAlt.hover.background,
       )
       .set(
-        '--ps-current-surface-alt-hover-border',
+        getCurrentThemePaletteVarName('surfaceAltHoverBorder'),
         root.surfaceAlt.hover.border,
       )
-      .set('--ps-current-surface-alt-hover-text', root.surfaceAlt.hover.text)
       .set(
-        '--ps-current-surface-alt-active-background',
+        getCurrentThemePaletteVarName('surfaceAltHoverText'),
+        root.surfaceAlt.hover.text,
+      )
+      .set(
+        getCurrentThemePaletteVarName('surfaceAltActiveBackground'),
         root.surfaceAlt.active.background,
       )
       .set(
-        '--ps-current-surface-alt-active-border',
+        getCurrentThemePaletteVarName('surfaceAltActiveBorder'),
         root.surfaceAlt.active.border,
       )
-      .set('--ps-current-surface-alt-active-text', root.surfaceAlt.active.text)
-      .set('--ps-current-text-default', root.root.text.default)
-      .set('--ps-current-text-subtle', root.root.text.subtle)
-      .set('--ps-current-border-subtle', root.root.border.subtle)
-      .set('--ps-current-border-default', root.root.border.default)
-      .set('--ps-current-border-focus', root.root.border.focus)
-      .set('--ps-current-button-rest-background', root.button.rest.background)
-      .set('--ps-current-button-rest-border', root.button.rest.border)
-      .set('--ps-current-button-rest-text', root.button.rest.text)
-      .set('--ps-current-button-hover-background', root.button.hover.background)
-      .set('--ps-current-button-hover-border', root.button.hover.border)
-      .set('--ps-current-button-hover-text', root.button.hover.text)
       .set(
-        '--ps-current-button-active-background',
+        getCurrentThemePaletteVarName('surfaceAltActiveText'),
+        root.surfaceAlt.active.text,
+      )
+      .set(getCurrentThemePaletteVarName('textDefault'), root.root.text.default)
+      .set(getCurrentThemePaletteVarName('textSubtle'), root.root.text.subtle)
+      .set(
+        getCurrentThemePaletteVarName('borderSubtle'),
+        root.root.border.subtle,
+      )
+      .set(
+        getCurrentThemePaletteVarName('borderDefault'),
+        root.root.border.default,
+      )
+      .set(getCurrentThemePaletteVarName('borderFocus'), root.root.border.focus)
+      .set(
+        getCurrentThemePaletteVarName('buttonRestBackground'),
+        root.button.rest.background,
+      )
+      .set(
+        getCurrentThemePaletteVarName('buttonRestBorder'),
+        root.button.rest.border,
+      )
+      .set(
+        getCurrentThemePaletteVarName('buttonRestText'),
+        root.button.rest.text,
+      )
+      .set(
+        getCurrentThemePaletteVarName('buttonHoverBackground'),
+        root.button.hover.background,
+      )
+      .set(
+        getCurrentThemePaletteVarName('buttonHoverBorder'),
+        root.button.hover.border,
+      )
+      .set(
+        getCurrentThemePaletteVarName('buttonHoverText'),
+        root.button.hover.text,
+      )
+      .set(
+        getCurrentThemePaletteVarName('buttonActiveBackground'),
         root.button.active.background,
       )
-      .set('--ps-current-button-active-border', root.button.active.border)
-      .set('--ps-current-button-active-text', root.button.active.text)
-      .set('--ps-current-icon-background', root.icon.background)
-      .set('--ps-current-icon-gradient', root.icon.gradient)
-      .set('--ps-current-icon-color', root.icon.color)
-      .set('--ps-current-icon-border', root.icon.border)
+      .set(
+        getCurrentThemePaletteVarName('buttonActiveBorder'),
+        root.button.active.border,
+      )
+      .set(
+        getCurrentThemePaletteVarName('buttonActiveText'),
+        root.button.active.text,
+      )
+      .set(
+        getCurrentThemePaletteVarName('iconBackground'),
+        root.icon.background,
+      )
+      .set(getCurrentThemePaletteVarName('iconGradient'), root.icon.gradient)
+      .set(getCurrentThemePaletteVarName('iconColor'), root.icon.color)
+      .set(getCurrentThemePaletteVarName('iconBorder'), root.icon.border)
 
     for (const tone of SEMANTIC_TONES) {
       const tokens = getSemanticToneTokens(palette, tone)

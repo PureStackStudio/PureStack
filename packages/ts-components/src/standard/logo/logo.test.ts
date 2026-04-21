@@ -1,5 +1,9 @@
 import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '@purestack/ts-render'
+import {
+  getCurrentThemePaletteVar,
+  getThemePaletteVar,
+} from '@purestack/ts-style'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
 import { defineIconComponents } from '../icon/icon'
@@ -97,9 +101,11 @@ describe('SiteLogo rendering', () => {
     cleanup()
 
     expect(html).toContain(
-      'background-image: var(--ps-semantic-tone-accent-button-rest-background)',
+      `background-image: ${getThemePaletteVar('semanticTone.accent.button.rest.background')}`,
     )
-    expect(html).toContain('background-image: var(--ps-current-text-subtle)')
+    expect(html).toContain(
+      `background-image: ${getCurrentThemePaletteVar('textSubtle')}`,
+    )
     expect(html).not.toContain('--ps-logo-glyph-background')
     expect(html).not.toContain('--ps-logo-glyph-foreground')
   })

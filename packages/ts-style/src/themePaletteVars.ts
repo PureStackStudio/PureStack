@@ -1,6 +1,64 @@
 import type { ThemePalette, ThemePaletteCurrent } from './themePalette'
 
 const THEME_PALETTE_VAR_PREFIX = '--ps'
+export const MINIFY_THEME_VARIABLE_NAMES = false
+
+const CURRENT_THEME_PALETTE_VAR_PATHS = {
+  tone: ['tone'],
+  canvas: ['canvas'],
+  overlay: ['overlay'],
+  surfaceRestBackground: ['surface', 'rest', 'background'],
+  surfaceRestBorder: ['surface', 'rest', 'border'],
+  surfaceRestText: ['surface', 'rest', 'text'],
+  surfaceHoverBackground: ['surface', 'hover', 'background'],
+  surfaceHoverBorder: ['surface', 'hover', 'border'],
+  surfaceHoverText: ['surface', 'hover', 'text'],
+  surfaceActiveBackground: ['surface', 'active', 'background'],
+  surfaceActiveBorder: ['surface', 'active', 'border'],
+  surfaceActiveText: ['surface', 'active', 'text'],
+  surfaceAltRestBackground: ['surfaceAlt', 'rest', 'background'],
+  surfaceAltRestBorder: ['surfaceAlt', 'rest', 'border'],
+  surfaceAltRestText: ['surfaceAlt', 'rest', 'text'],
+  surfaceAltHoverBackground: ['surfaceAlt', 'hover', 'background'],
+  surfaceAltHoverBorder: ['surfaceAlt', 'hover', 'border'],
+  surfaceAltHoverText: ['surfaceAlt', 'hover', 'text'],
+  surfaceAltActiveBackground: ['surfaceAlt', 'active', 'background'],
+  surfaceAltActiveBorder: ['surfaceAlt', 'active', 'border'],
+  surfaceAltActiveText: ['surfaceAlt', 'active', 'text'],
+  textDefault: ['text', 'default'],
+  textSubtle: ['text', 'subtle'],
+  borderSubtle: ['border', 'subtle'],
+  borderDefault: ['border', 'default'],
+  borderFocus: ['border', 'focus'],
+  buttonRestBackground: ['button', 'rest', 'background'],
+  buttonRestBorder: ['button', 'rest', 'border'],
+  buttonRestText: ['button', 'rest', 'text'],
+  buttonHoverBackground: ['button', 'hover', 'background'],
+  buttonHoverBorder: ['button', 'hover', 'border'],
+  buttonHoverText: ['button', 'hover', 'text'],
+  buttonActiveBackground: ['button', 'active', 'background'],
+  buttonActiveBorder: ['button', 'active', 'border'],
+  buttonActiveText: ['button', 'active', 'text'],
+  iconBackground: ['icon', 'background'],
+  iconGradient: ['icon', 'gradient'],
+  iconColor: ['icon', 'color'],
+  iconBorder: ['icon', 'border'],
+} as const
+
+type CurrentThemePaletteVarPathKey =
+  keyof typeof CURRENT_THEME_PALETTE_VAR_PATHS
+const CURRENT_THEME_PALETTE_VAR_PATH_ENTRIES = Object.entries(
+  CURRENT_THEME_PALETTE_VAR_PATHS,
+) as Array<[CurrentThemePaletteVarPathKey, readonly string[]]>
+const LEGACY_THEME_VARIABLE_NAME_ALIASES: Record<string, string[]> = {
+  '--ps-semantic-tone-accent-button-rest-background': [
+    'semanticTone',
+    'accent',
+    'button',
+    'rest',
+    'background',
+  ],
+}
 
 /**
  * Utilities for turning a semantic {@link ThemePalette} into a CSS custom-property contract.
@@ -54,7 +112,40 @@ export function getThemePaletteVar(path: string | string[]) {
 
 export function getThemePaletteVarName(path: string | string[]) {
   const parts = Array.isArray(path) ? path : path.split('.')
-  return `${THEME_PALETTE_VAR_PREFIX}-${parts.map(toKebabCase).join('-')}`
+  return buildThemeVariableName('theme', parts)
+}
+
+export function getCurrentThemePaletteVar(
+  path: CurrentThemePaletteVarPathKey | readonly string[] | string[],
+) {
+  return `var(${getCurrentThemePaletteVarName(path)})`
+}
+
+export function getCurrentThemePaletteVarName(
+  path: CurrentThemePaletteVarPathKey | readonly string[] | string[],
+) {
+  const parts =
+    typeof path === 'string' && path in CURRENT_THEME_PALETTE_VAR_PATHS
+      ? [
+          ...CURRENT_THEME_PALETTE_VAR_PATHS[
+            path as CurrentThemePaletteVarPathKey
+          ],
+        ]
+      : [...path]
+  return buildThemeVariableName('current', parts)
+}
+
+export function normalizeThemeVariableReference(value: string) {
+  return value.replace(
+    /var\((--ps-[A-Za-z0-9-]+)\)/g,
+    (match, variableName: string) => {
+      const normalizedTheme = normalizeLegacyThemeVariableName(variableName)
+      if (normalizedTheme) return `var(${normalizedTheme})`
+      const normalizedCurrent = normalizeCurrentThemeVariableName(variableName)
+      if (normalizedCurrent) return `var(${normalizedCurrent})`
+      return match
+    },
+  )
 }
 
 export function listThemePaletteVarEntries(
@@ -121,74 +212,74 @@ function mapThemePaletteLeaves(
 
 export function getCurrentThemePalette(): ThemePaletteCurrent {
   return {
-    tone: 'var(--ps-current-tone)',
-    canvas: 'var(--ps-current-canvas)',
-    overlay: 'var(--ps-current-overlay)',
+    tone: getCurrentThemePaletteVar('tone'),
+    canvas: getCurrentThemePaletteVar('canvas'),
+    overlay: getCurrentThemePaletteVar('overlay'),
     surface: {
       rest: {
-        background: 'var(--ps-current-surface-rest-background)',
-        border: 'var(--ps-current-surface-rest-border)',
-        text: 'var(--ps-current-surface-rest-text)',
+        background: getCurrentThemePaletteVar('surfaceRestBackground'),
+        border: getCurrentThemePaletteVar('surfaceRestBorder'),
+        text: getCurrentThemePaletteVar('surfaceRestText'),
       },
       hover: {
-        background: 'var(--ps-current-surface-hover-background)',
-        border: 'var(--ps-current-surface-hover-border)',
-        text: 'var(--ps-current-surface-hover-text)',
+        background: getCurrentThemePaletteVar('surfaceHoverBackground'),
+        border: getCurrentThemePaletteVar('surfaceHoverBorder'),
+        text: getCurrentThemePaletteVar('surfaceHoverText'),
       },
       active: {
-        background: 'var(--ps-current-surface-active-background)',
-        border: 'var(--ps-current-surface-active-border)',
-        text: 'var(--ps-current-surface-active-text)',
+        background: getCurrentThemePaletteVar('surfaceActiveBackground'),
+        border: getCurrentThemePaletteVar('surfaceActiveBorder'),
+        text: getCurrentThemePaletteVar('surfaceActiveText'),
       },
     },
     surfaceAlt: {
       rest: {
-        background: 'var(--ps-current-surface-alt-rest-background)',
-        border: 'var(--ps-current-surface-alt-rest-border)',
-        text: 'var(--ps-current-surface-alt-rest-text)',
+        background: getCurrentThemePaletteVar('surfaceAltRestBackground'),
+        border: getCurrentThemePaletteVar('surfaceAltRestBorder'),
+        text: getCurrentThemePaletteVar('surfaceAltRestText'),
       },
       hover: {
-        background: 'var(--ps-current-surface-alt-hover-background)',
-        border: 'var(--ps-current-surface-alt-hover-border)',
-        text: 'var(--ps-current-surface-alt-hover-text)',
+        background: getCurrentThemePaletteVar('surfaceAltHoverBackground'),
+        border: getCurrentThemePaletteVar('surfaceAltHoverBorder'),
+        text: getCurrentThemePaletteVar('surfaceAltHoverText'),
       },
       active: {
-        background: 'var(--ps-current-surface-alt-active-background)',
-        border: 'var(--ps-current-surface-alt-active-border)',
-        text: 'var(--ps-current-surface-alt-active-text)',
+        background: getCurrentThemePaletteVar('surfaceAltActiveBackground'),
+        border: getCurrentThemePaletteVar('surfaceAltActiveBorder'),
+        text: getCurrentThemePaletteVar('surfaceAltActiveText'),
       },
     },
     text: {
-      default: 'var(--ps-current-text-default)',
-      subtle: 'var(--ps-current-text-subtle)',
+      default: getCurrentThemePaletteVar('textDefault'),
+      subtle: getCurrentThemePaletteVar('textSubtle'),
     },
     border: {
-      subtle: 'var(--ps-current-border-subtle)',
-      default: 'var(--ps-current-border-default)',
-      focus: 'var(--ps-current-border-focus)',
+      subtle: getCurrentThemePaletteVar('borderSubtle'),
+      default: getCurrentThemePaletteVar('borderDefault'),
+      focus: getCurrentThemePaletteVar('borderFocus'),
     },
     button: {
       rest: {
-        background: 'var(--ps-current-button-rest-background)',
-        border: 'var(--ps-current-button-rest-border)',
-        text: 'var(--ps-current-button-rest-text)',
+        background: getCurrentThemePaletteVar('buttonRestBackground'),
+        border: getCurrentThemePaletteVar('buttonRestBorder'),
+        text: getCurrentThemePaletteVar('buttonRestText'),
       },
       hover: {
-        background: 'var(--ps-current-button-hover-background)',
-        border: 'var(--ps-current-button-hover-border)',
-        text: 'var(--ps-current-button-hover-text)',
+        background: getCurrentThemePaletteVar('buttonHoverBackground'),
+        border: getCurrentThemePaletteVar('buttonHoverBorder'),
+        text: getCurrentThemePaletteVar('buttonHoverText'),
       },
       active: {
-        background: 'var(--ps-current-button-active-background)',
-        border: 'var(--ps-current-button-active-border)',
-        text: 'var(--ps-current-button-active-text)',
+        background: getCurrentThemePaletteVar('buttonActiveBackground'),
+        border: getCurrentThemePaletteVar('buttonActiveBorder'),
+        text: getCurrentThemePaletteVar('buttonActiveText'),
       },
     },
     icon: {
-      background: 'var(--ps-current-icon-background)',
-      gradient: 'var(--ps-current-icon-gradient)',
-      color: 'var(--ps-current-icon-color)',
-      border: 'var(--ps-current-icon-border)',
+      background: getCurrentThemePaletteVar('iconBackground'),
+      gradient: getCurrentThemePaletteVar('iconGradient'),
+      color: getCurrentThemePaletteVar('iconColor'),
+      border: getCurrentThemePaletteVar('iconBorder'),
     },
   }
 }
@@ -231,4 +322,44 @@ function isFontPaletteKey(path: string[], key: string) {
 
 function toKebabCase(value: string) {
   return value.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`)
+}
+
+function buildThemeVariableName(scope: 'theme' | 'current', parts: string[]) {
+  const normalized = parts.map(toKebabCase)
+  if (!MINIFY_THEME_VARIABLE_NAMES) {
+    return buildReadableThemeVariableName(scope, parts)
+  }
+  return `${THEME_PALETTE_VAR_PREFIX}-${scope === 'current' ? 'c' : 't'}-${hashThemeVariablePath(normalized)}`
+}
+
+function normalizeCurrentThemeVariableName(variableName: string) {
+  for (const [key, parts] of CURRENT_THEME_PALETTE_VAR_PATH_ENTRIES) {
+    const readableName = buildReadableThemeVariableName('current', [...parts])
+    if (variableName === readableName) {
+      return getCurrentThemePaletteVarName(key)
+    }
+  }
+  return ''
+}
+
+function normalizeLegacyThemeVariableName(variableName: string) {
+  const path = LEGACY_THEME_VARIABLE_NAME_ALIASES[variableName]
+  return path ? getThemePaletteVarName(path) : ''
+}
+
+function buildReadableThemeVariableName(
+  scope: 'theme' | 'current',
+  parts: string[],
+) {
+  const normalized = parts.map(toKebabCase)
+  return `${THEME_PALETTE_VAR_PREFIX}-${scope === 'current' ? 'current-' : ''}${normalized.join('-')}`
+}
+
+function hashThemeVariablePath(parts: string[]) {
+  let hash = 2166136261
+  for (const char of parts.join('.')) {
+    hash ^= char.charCodeAt(0)
+    hash = Math.imul(hash, 16777619)
+  }
+  return (hash >>> 0).toString(36)
 }
