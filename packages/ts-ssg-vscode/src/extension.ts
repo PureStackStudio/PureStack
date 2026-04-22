@@ -99,8 +99,8 @@ export function activate(context: vscode.ExtensionContext) {
           return
         }
 
-        await vscode.commands.executeCommand('editor.action.formatDocument')
         if (editor.document.languageId === 'typescript') {
+          await vscode.commands.executeCommand('editor.action.formatDocument')
           await formatActiveEditorTemplates(editor)
           return
         }
