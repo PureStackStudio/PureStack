@@ -16,7 +16,7 @@ layout:
   title="Built for teams who care about fast docs and clean architecture."
   subtitle="PureStack ts-ssg is a static site generator focused on deterministic output, great defaults, and composable UI primitives."
 >
-  <template name="actions">
+  <template #actions>
     <BtnLink href="/getting-started/" tone="accent">Get Started</BtnLink>
     <BtnLink href="/guide/" tone="ghost">Read the Guide</BtnLink>
   </template>
@@ -30,22 +30,19 @@ layout:
     description="Predictable build output, clean routing, and SEO-friendly pages without hydration complexity."
     href="/overview/"
     label="Architecture"
-    tone="default"
-  />
+    tone="default"/>
   <Card
     title="Developer Ergonomics"
     description="Simple configuration, useful defaults, and build hooks where teams need extension points."
     href="/guide/overview/"
     label="Developer Guide"
-    tone="default"
-  />
+    tone="default"/>
   <Card
     title="Design Consistency"
     description="Reusable themed components, typography tokens, and practical patterns that scale with content."
     href="/guide/footer-sample/"
     label="UI Components"
-    tone="default"
-  />
+    tone="default"/>
 </CardGrid>
 
 ## What We Build
@@ -57,12 +54,9 @@ We build tooling for docs, product pages, and knowledge portals that need:
 - straightforward customization,
 - clean separation between content and runtime behavior.
 
-<AlertBox
-  title="Our practical rule"
-  variant="info"
-  tone="default"
->
-  If a feature adds complexity, it must clearly improve maintainability or user outcomes. Otherwise, it does not ship.
+<AlertBox title="Our practical rule" variant="info" tone="default">
+  If a feature adds complexity, it must clearly improve maintainability or user
+  outcomes. Otherwise, it does not ship.
 </AlertBox>
 
 ## Team Style

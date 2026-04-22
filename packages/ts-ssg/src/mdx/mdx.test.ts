@@ -154,7 +154,7 @@ describe('compileMdxToHtml', () => {
     const cleanup = ensureDomGlobals()
     const source = [
       '<Modal id="custom-shell-modal" size="xl" fade="true" slideFrom="bottom">',
-      '  <template name="header">',
+      '  <template #header>',
       '    <div>',
       '      <h2 id="custom-shell-modal-title">Quarterly launch checklist</h2>',
       '      <p>Use a custom header slot when default title layout is not enough.</p>',
@@ -186,7 +186,7 @@ describe('compileMdxToHtml', () => {
   it('does not wrap native element before flow JSX in template slots', async () => {
     const source = [
       '<Modal id="child-modal">',
-      '  <template name="footer">',
+      '  <template #footer>',
       '      <button type="button" class="modal-trigger" data-modal-close>Cancel</button>',
       '      <ModalTrigger target="child-modal" label="Continue to confirmation" />',
       '  </template>',
@@ -195,7 +195,7 @@ describe('compileMdxToHtml', () => {
 
     const compiledHtml = compileMdxToHtml(source)
     expect(compiledHtml).not.toContain('<p><button')
-    expect(compiledHtml).toContain('<template name="footer">')
+    expect(compiledHtml).toContain('<template #footer>')
     expect(compiledHtml).toContain(
       '<button type="button" class="modal-trigger" data-modal-close>Cancel</button>',
     )
@@ -208,7 +208,7 @@ describe('compileMdxToHtml', () => {
   it('preserves mixed text inside opaque template slots without markdown p injection', async () => {
     const source = [
       '<Modal id="mixed-template-paragraph">',
-      '  <template name="footer">',
+      '  <template #footer>',
       '    Paragraph start <Badge>now</Badge> end.',
       '  </template>',
       '</Modal>',
@@ -226,7 +226,7 @@ describe('compileMdxToHtml', () => {
   it('keeps explicit p JSX inside template slots', async () => {
     const source = [
       '<Modal id="explicit-p-template">',
-      '  <template name="footer">',
+      '  <template #footer>',
       '    <p class="note">Keep me</p>',
       '  </template>',
       '</Modal>',
@@ -239,7 +239,7 @@ describe('compileMdxToHtml', () => {
   it('preserves text before markup inside opaque template slots without paragraph injection', async () => {
     const source = [
       '<Modal id="text-before-jsx-template">',
-      '  <template name="footer">',
+      '  <template #footer>',
       '    Prefix <Badge>now</Badge>',
       '  </template>',
       '</Modal>',
@@ -253,7 +253,7 @@ describe('compileMdxToHtml', () => {
   it('preserves nested template subtree markup without synthetic paragraph wrappers', async () => {
     const source = [
       '<Modal id="nested-template-unwrapping">',
-      '  <template name="header">',
+      '  <template #header>',
       '    <section>',
       '      <h3>Quarterly launch checklist</h3>',
       '      <button type="button">Close</button>',
@@ -273,7 +273,7 @@ describe('compileMdxToHtml', () => {
   it('keeps Btn variant component nodes unwrapped inside template slots', async () => {
     const source = [
       '<CardActions>',
-      '  <template name="actions">',
+      '  <template #actions>',
       '    <Btn tone="accent" icon="iconoir:check">Create project</Btn>',
       '    <Btn tone="neutral" icon="iconoir:code">View source</Btn>',
       '    <Btn tone="ghost" icon="iconoir:pin-slash" iconPosition="end">',
@@ -359,7 +359,7 @@ describe('compileMdxToHtml', () => {
     const cleanup = ensureDomGlobals()
     const source = [
       '<Modal id="full-content-modal" fade="false" slideFrom="left" size="md">',
-      '  <template name="content">',
+      '  <template #content>',
       '    <article class="modal__panel" role="document" tabindex="-1">',
       '      <h2>Fully custom content slot</h2>',
       '      <p>',

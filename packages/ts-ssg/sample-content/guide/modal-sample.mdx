@@ -22,7 +22,7 @@ layout:
     Share your use case and expected traffic profile. We can recommend the right
     plan and rollout path.
   </p>
-  <template name="footer">
+  <template #footer>
     <Flex wrap="true">
       <FormSubmit label="Book a call"/>
       <FormSubmit label="Send details"/>
@@ -53,7 +53,7 @@ layout:
       Multi-region config sync and expanded search indexing.
     </AlertBox>
   </Grid>
-  <template name="footer">
+  <template #footer>
     <Flex wrap="true">
       <ModalTrigger target="contact-modal" label="Request early access"/>
     </Flex>
@@ -100,7 +100,7 @@ layout:
         Use danger tone for destructive decisions, irreversible actions, or
         incident response.
       </p>
-      <template name="footer">
+      <template #footer>
         <Flex wrap="true">
           <Btn type="button" class="modal-trigger" data-modal-close>Cancel</Btn>
           <Btn type="button" class="modal-trigger">Continue</Btn>
@@ -121,13 +121,13 @@ layout:
   slideFrom="bottom"
   show-close="true"
 >
-  <template name="header">
+  <template #header>
     <div>
       <h2 id="custom-shell-modal-title">Quarterly launch checklist</h2>
       <p>Use a custom header slot when default title layout is not enough.</p>
     </div>
   </template>
-  <template name="body">
+  <template #body>
     <Grid columns="1" columnsLg="3" dense="true">
       <AlertBox tone="accent" title="Docs">
         Finalize migration notes and snippets.
@@ -141,7 +141,7 @@ layout:
     </Grid>
   </template>
 
-  <template name="footer">
+  <template #footer>
     <Flex wrap="true">
       <FormAssistLink
         href="/guide/alert-sample"
@@ -156,7 +156,7 @@ layout:
 <ModalTrigger target="full-content-modal" label="Open full-content modal"/>
 
 <Modal id="full-content-modal" fade="false" slideFrom="left" size="md">
-  <template name="content">
+  <template #content>
     <article class="modal__panel" role="document" tabindex="-1">
       <h2>Fully custom content slot</h2>
       <p>
@@ -184,7 +184,7 @@ layout:
     This modal hides the default top-right close button. Use custom actions in
     the footer instead.
   </p>
-  <template name="footer">
+  <template #footer>
     <Flex wrap="true">
       <Btn type="button" class="modal-trigger" data-modal-close>Dismiss</Btn>
       <Btn type="button" class="modal-trigger" data-modal-close>
@@ -210,7 +210,7 @@ layout:
     We detected higher p95 latency in one worker pool. Mitigation is in
     progress.
   </AlertBox>
-  <template name="footer">
+  <template #footer>
     <Flex wrap="true">
       <Btn type="button" class="modal-trigger" data-modal-close>
         Acknowledge
@@ -290,7 +290,7 @@ layout:
       Static demo: submission is for layout and interaction preview only.
     </FormStatus>
   </AppForm>
-  <template name="footer">
+  <template #footer>
     <Flex wrap="true">
       <Btn type="button" class="modal-trigger" data-modal-close>Cancel</Btn>
       <Btn type="button" class="modal-trigger">Save draft</Btn>
@@ -315,7 +315,7 @@ layout:
     This primary modal can launch a secondary confirmation modal for destructive
     or high-risk actions.
   </p>
-  <template name="footer">
+  <template #footer>
     <Flex wrap="true">
       <Btn type="button" class="modal-trigger" data-modal-close>Cancel</Btn>
       <ModalTrigger target="child-modal" label="Continue to confirmation"/>
@@ -334,7 +334,7 @@ layout:
   <AlertBox tone="warning" title="Final confirmation required">
     You are about to apply changes to the production environment.
   </AlertBox>
-  <template name="footer">
+  <template #footer>
     <Flex wrap="true">
       <Btn type="button" class="modal-trigger" data-modal-close>Back</Btn>
       <Btn type="button" class="modal-trigger" data-modal-close>
@@ -358,10 +358,10 @@ layout:
 >
   default body content
 
-  <template name="header">...</template>
-  <template name="body">...</template>
-  <template name="footer">...</template>
-  <template name="content">...</template>
+  <template #header>...</template>
+  <template #body>...</template>
+  <template #footer>...</template>
+  <template #content>...</template>
 </Modal>
 
 <ModalTrigger target="my-modal" label="Open" />

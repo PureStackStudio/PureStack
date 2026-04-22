@@ -16,7 +16,7 @@ layout:
   title="Talk to the team behind PureStack."
   subtitle="Whether you need implementation guidance, support, or a partnership conversation, we will route you to the right person quickly."
 >
-  <template name="actions">
+  <template #actions>
     <BtnLink href="mailto:team@purestack.dev" tone="accent">Email Us</BtnLink>
     <BtnLink href="/guide/" tone="ghost">Browse Documentation</BtnLink>
   </template>
@@ -30,39 +30,32 @@ layout:
     description="Product questions, pricing direction, and onboarding discussions."
     label="team@purestack.dev"
     href="mailto:team@purestack.dev"
-    tone="default"
-  />
+    tone="default"/>
   <Card
     title="Technical Support"
     description="Issue triage, debugging help, and architecture-level support requests."
     label="support@purestack.dev"
     href="mailto:support@purestack.dev"
-    tone="default"
-  />
+    tone="default"/>
   <Card
     title="Partnerships"
     description="Integrations, reseller opportunities, and co-marketing conversations."
     label="partners@purestack.dev"
     href="mailto:partners@purestack.dev"
-    tone="default"
-  />
+    tone="default"/>
 </CardGrid>
 
 ## Contact Form
 
-<AlertBox
-  title="Response time"
-  variant="info"
-  tone="default"
->
-  We usually reply within one business day. Critical production issues should include environment, version, and reproduction steps.
+<AlertBox title="Response time" variant="info" tone="default">
+  We usually reply within one business day. Critical production issues should
+  include environment, version, and reproduction steps.
 </AlertBox>
 
 <ContactForm
   action="mailto:team@purestack.dev?subject=PureStack%20Inquiry"
   description="Include your environment, version, and desired outcome so we can respond quickly."
-  submitLabel="Open Email Draft"
-/>
+  submitLabel="Open Email Draft"/>
 
 ## Office and Availability
 

@@ -13,7 +13,7 @@ describe('Modal rendering', () => {
       ...defineModalComponents(),
     }
     const html = renderApp(
-      '<Modal id="checkout" title="Checkout" size="lg" fade="true" slideFrom="right"><p>Body</p><template name="footer"><button>Confirm</button></template></Modal><ModalTrigger target="checkout" label="Open checkout" />',
+      '<Modal id="checkout" title="Checkout" size="lg" fade="true" slideFrom="right"><p>Body</p><template #footer><button>Confirm</button></template></Modal><ModalTrigger target="checkout" label="Open checkout" />',
       {
         components,
         context: createTestContext(),
@@ -39,7 +39,7 @@ describe('Modal rendering', () => {
       ...defineModalComponents(),
     }
     const html = renderApp(
-      '<Modal id="custom"><template name="content"><article class="modal__panel"><p>Custom shell</p></article></template></Modal>',
+      '<Modal id="custom"><template #content><article class="modal__panel"><p>Custom shell</p></article></template></Modal>',
       {
         components,
         context: createTestContext(),

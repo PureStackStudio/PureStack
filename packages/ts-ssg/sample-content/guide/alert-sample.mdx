@@ -30,10 +30,13 @@ layout:
   icon="iconoir:check"
   meta="Build #1042 finished in 3m 12s"
 >
-  Your production rollout passed smoke tests and latency checks. No regressions detected in core endpoints.
-  <template name="actions">
+  Your production rollout passed smoke tests and latency checks. No regressions
+  detected in core endpoints.
+  <template #actions>
     <BtnLink tone="neutral" href="#release-notes">View release notes</BtnLink>
-    <BtnLink tone="neutral" href="#observability">Open observability dashboard</BtnLink>
+    <BtnLink tone="neutral" href="#observability"
+      >Open observability dashboard</BtnLink
+    >
   </template>
 </AlertBox>
 
@@ -61,10 +64,13 @@ layout:
   badge="Action required"
   meta="Error code: BILLING-402"
 >
-  We could not renew your subscription. Update the payment method to avoid service interruption.
-  <template name="actions">
+  We could not renew your subscription. Update the payment method to avoid
+  service interruption.
+  <template #actions>
     <BtnLink tone="neutral" href="#retry-payment">Retry payment</BtnLink>
-    <BtnLink tone="neutral" href="#billing-settings">Open billing settings</BtnLink>
+    <BtnLink tone="neutral" href="#billing-settings"
+      >Open billing settings</BtnLink
+    >
   </template>
 </AlertBox>
 
@@ -77,8 +83,9 @@ layout:
   badge="Invite only"
   icon="iconoir:rocket"
 >
-  Simulate pricing and eligibility rules before publishing changes. Compare expected and computed outcomes side-by-side.
-  <template name="actions">
+  Simulate pricing and eligibility rules before publishing changes. Compare
+  expected and computed outcomes side-by-side.
+  <template #actions>
     <BtnLink tone="neutral" href="#join-beta">Request beta access</BtnLink>
   </template>
 </AlertBox>
@@ -90,16 +97,13 @@ layout:
 </AlertBox>
 
 <AlertBox tone="info" title="Migration tip" icon="iconoir:book-stack">
-  Keep component styles palette-driven. Avoid hardcoded color values in component files.
+  Keep component styles palette-driven. Avoid hardcoded color values in
+  component files.
 </AlertBox>
 
 ## 7. Content-rich alert with code and list
 
-<AlertBox
-  tone="info"
-  title="Recommended hardening steps"
-  icon="iconoir:shield"
->
+<AlertBox tone="info" title="Recommended hardening steps" icon="iconoir:shield">
   Before enabling public access:
   <ol>
     <li>Set strict `Content-Security-Policy` headers.</li>
@@ -122,7 +126,7 @@ layout:
   icon="iconoir:check|iconoir:clock|iconoir:headset-help|iconoir:rocket"
 >
   Body content goes here.
-  <template name="actions">
+  <template #actions>
     <BtnLink tone="neutral" href="#">Primary action</BtnLink>
     <BtnLink tone="neutral" href="#">Secondary action</BtnLink>
   </template>
@@ -139,11 +143,16 @@ layout:
   icon="iconoir:clock"
   meta="Planned rollout: next milestone"
 >
-  The draft endpoint `/api/webhooks/events` will move to `/api/runtime/webhooks/events`
-  before the first public release. Update integration docs and internal references now.
-  <template name="actions">
-    <BtnLink tone="neutral" href="#integration-notes">Open integration notes</BtnLink>
-    <BtnLink tone="neutral" href="#release-checklist">Read release checklist</BtnLink>
+  The draft endpoint `/api/webhooks/events` will move to
+  `/api/runtime/webhooks/events` before the first public release. Update
+  integration docs and internal references now.
+  <template #actions>
+    <BtnLink tone="neutral" href="#integration-notes"
+      >Open integration notes</BtnLink
+    >
+    <BtnLink tone="neutral" href="#release-checklist"
+      >Read release checklist</BtnLink
+    >
   </template>
 </AlertBox>
 
@@ -156,10 +165,13 @@ layout:
   badge="Critical"
   icon="iconoir:shield"
 >
-  A token with elevated privileges was exposed in build logs. Revoke all compromised keys and issue new scoped tokens.
-  <template name="actions">
+  A token with elevated privileges was exposed in build logs. Revoke all
+  compromised keys and issue new scoped tokens.
+  <template #actions>
     <BtnLink tone="neutral" href="#rotate-keys">Rotate keys now</BtnLink>
-    <BtnLink tone="neutral" href="#security-runbook">Open incident runbook</BtnLink>
+    <BtnLink tone="neutral" href="#security-runbook"
+      >Open incident runbook</BtnLink
+    >
   </template>
 </AlertBox>
 
@@ -173,10 +185,15 @@ layout:
   icon="iconoir:headset-help"
   meta="INC-4381 • Last update 14:42 UTC"
 >
-  We are seeing elevated queue latency for EU workloads. No data loss has been observed.
-  <template name="actions">
-    <BtnLink tone="neutral" href="#status-page">View public status page</BtnLink>
-    <BtnLink tone="neutral" href="#subscribe-updates">Subscribe to updates</BtnLink>
+  We are seeing elevated queue latency for EU workloads. No data loss has been
+  observed.
+  <template #actions>
+    <BtnLink tone="neutral" href="#status-page"
+      >View public status page</BtnLink
+    >
+    <BtnLink tone="neutral" href="#subscribe-updates"
+      >Subscribe to updates</BtnLink
+    >
   </template>
 </AlertBox>
 
@@ -189,7 +206,8 @@ layout:
   badge="Canary"
   icon="iconoir:rocket"
 >
-  Enable `runtime.cache.v2` for 5% traffic first. Measure p95 latency and error-rate before expanding rollout.
+  Enable `runtime.cache.v2` for 5% traffic first. Measure p95 latency and
+  error-rate before expanding rollout.
 </AlertBox>
 
 ## 13. Compliance policy alert
@@ -201,8 +219,8 @@ layout:
   icon="iconoir:book-stack"
   meta="Effective: next billing cycle"
 >
-  Audit log retention changed from 30 to 90 days for all paid plans.
-  Contact legal if your tenant requires a custom retention term.
+  Audit log retention changed from 30 to 90 days for all paid plans. Contact
+  legal if your tenant requires a custom retention term.
 </AlertBox>
 
 ## 14. Maintenance completed
@@ -214,18 +232,18 @@ layout:
   icon="iconoir:check"
   meta="Total downtime: 0 minutes"
 >
-  Schema migration and index optimization are complete. Throughput improved by approximately 18%.
-  <template name="actions">
-    <BtnLink tone="neutral" href="#postmortem">Read maintenance summary</BtnLink>
+  Schema migration and index optimization are complete. Throughput improved by
+  approximately 18%.
+  <template #actions>
+    <BtnLink tone="neutral" href="#postmortem"
+      >Read maintenance summary</BtnLink
+    >
   </template>
 </AlertBox>
 
 ## 15. No-icon text-only alert
 
-<AlertBox
-  tone="warning"
-  title="Quota nearing limit"
->
+<AlertBox tone="warning" title="Quota nearing limit">
   Current usage is at 92% of your monthly allocation.
 </AlertBox>
 
@@ -243,8 +261,12 @@ layout:
     <li>Validate package export map in Node ESM and CJS projects.</li>
     <li>Smoke-test install on a clean environment.</li>
   </ul>
-  <template name="actions">
-    <BtnLink tone="neutral" href="#release-checklist">Open full checklist</BtnLink>
-    <BtnLink tone="neutral" href="#publish-runbook">Open publish runbook</BtnLink>
+  <template #actions>
+    <BtnLink tone="neutral" href="#release-checklist"
+      >Open full checklist</BtnLink
+    >
+    <BtnLink tone="neutral" href="#publish-runbook"
+      >Open publish runbook</BtnLink
+    >
   </template>
 </AlertBox>

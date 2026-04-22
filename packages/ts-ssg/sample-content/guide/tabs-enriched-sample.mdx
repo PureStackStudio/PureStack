@@ -14,7 +14,7 @@ Each tab combines existing components so the tabs feel like a complete surface r
 ## 1. Release command center
 
 <Tabs id="release-command-center" tone="accent" selected-tab="overview">
-  <template name="header">
+  <template #header>
     <div>
       <h2 style="margin:0;">Release command center</h2>
       <p style="margin:0.5rem 0 0;">
@@ -37,7 +37,7 @@ Each tab combines existing components so the tabs feel like a complete surface r
         >
           Final smoke tests are green, release notes are locked, and support
           routing is ready for external traffic.
-          <template name="actions">
+          <template #actions>
             <a href="#release-runbook">Open runbook</a>
             <a href="#launch-checklist">Review checklist</a>
           </template>
@@ -171,7 +171,7 @@ Each tab combines existing components so the tabs feel like a complete surface r
 ## 2. Customer workspace
 
 <Tabs id="customer-workspace" tone="info" selected-tab="account">
-  <template name="header">
+  <template #header>
     <div>
       <h2 style="margin:0;">Customer workspace</h2>
       <p style="margin:0.5rem 0 0;">
@@ -236,7 +236,7 @@ Each tab combines existing components so the tabs feel like a complete surface r
     >
       Enforce MFA before enabling external sharing for your finance and
       operations spaces.
-      <template name="actions">
+      <template #actions>
         <a href="#review-users">Review users</a>
       </template>
     </AlertBox>
@@ -263,7 +263,7 @@ Each tab combines existing components so the tabs feel like a complete surface r
 
 <Grid columns="1" columnsMd="2" columnsLg="3" gap="1rem">
   <Tabs id="accent-launch-tabs" tone="accent" selected-tab="launch">
-    <template name="header">
+    <template #header>
       <div>
         <h3 style="margin:0;">Accent launch</h3>
         <p style="margin:0.4rem 0 0;">
@@ -293,7 +293,7 @@ Each tab combines existing components so the tabs feel like a complete surface r
   </Tabs>
 
   <Tabs id="info-monitoring-tabs" tone="info" selected-tab="health">
-    <template name="header">
+    <template #header>
       <div>
         <h3 style="margin:0;">Info monitoring</h3>
         <p style="margin:0.4rem 0 0;">
@@ -323,7 +323,7 @@ Each tab combines existing components so the tabs feel like a complete surface r
   </Tabs>
 
   <Tabs id="ops-neutral-tabs" tone="neutral" selected-tab="summary">
-    <template name="header">
+    <template #header>
       <div>
         <h3 style="margin:0;">Neutral operations</h3>
         <p style="margin:0.4rem 0 0;">
@@ -347,7 +347,7 @@ Each tab combines existing components so the tabs feel like a complete surface r
   </Tabs>
 
   <Tabs id="ghost-editorial-tabs" tone="ghost" selected-tab="notes">
-    <template name="header">
+    <template #header>
       <div>
         <h3 style="margin:0;">Ghost editorial</h3>
         <p style="margin:0.4rem 0 0;">
@@ -376,7 +376,7 @@ Each tab combines existing components so the tabs feel like a complete surface r
   </Tabs>
 
   <Tabs id="warning-incident-tabs" tone="warning" selected-tab="status">
-    <template name="header">
+    <template #header>
       <div>
         <h3 style="margin:0;">Warning incident</h3>
         <p style="margin:0.4rem 0 0;">
@@ -405,7 +405,7 @@ Each tab combines existing components so the tabs feel like a complete surface r
   </Tabs>
 
   <Tabs id="success-milestone-tabs" tone="success" selected-tab="wins">
-    <template name="header">
+    <template #header>
       <div>
         <h3 style="margin:0;">Success milestone</h3>
         <p style="margin:0.4rem 0 0;">
@@ -435,7 +435,7 @@ Each tab combines existing components so the tabs feel like a complete surface r
   </Tabs>
 
   <Tabs id="danger-security-tabs" tone="danger" selected-tab="review">
-    <template name="header">
+    <template #header>
       <div>
         <h3 style="margin:0;">Danger security</h3>
         <p style="margin:0.4rem 0 0;">
@@ -468,7 +468,7 @@ Each tab combines existing components so the tabs feel like a complete surface r
 ## 4. Advanced form flows
 
 <Tabs id="advanced-form-tabs" tone="accent" selected-tab="workspace">
-  <template name="header">
+  <template #header>
     <div>
       <h2 style="margin:0;">Advanced form flows</h2>
       <p style="margin:0.5rem 0 0;">
@@ -656,7 +656,7 @@ Each tab combines existing components so the tabs feel like a complete surface r
 
 ```html
 <Tabs id="example" tone="accent" selected-tab="overview">
-  <template name="header">
+  <template #header>
     <h2>Section heading</h2>
   </template>
 

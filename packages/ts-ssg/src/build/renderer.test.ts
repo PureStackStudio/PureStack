@@ -173,7 +173,7 @@ describe('renderPage consent integration', () => {
       },
       site,
       footerHtml:
-        '<site-footer eyebrow="Ops"><template name="status"><span>Ready</span></template></site-footer>',
+        '<site-footer eyebrow="Ops"><template #status><span>Ready</span></template></site-footer>',
       consent: site.consent,
       analytics: site.analytics,
     })

@@ -17,15 +17,15 @@ describe('HeroBanner rendering', () => {
     }
     const html = renderApp(
       `<HeroBanner>
-        <template name="eyebrow"><span>Backend-native calculation engine</span></template>
-        <template name="title"><span>CalcCore</span></template>
-        <template name="tagline"><span>Deterministic calculations for SaaS backends.</span></template>
-        <template name="actions">
+        <template #eyebrow><span>Backend-native calculation engine</span></template>
+        <template #title><span>CalcCore</span></template>
+        <template #tagline><span>Deterministic calculations for SaaS backends.</span></template>
+        <template #actions>
           <BtnLink href="./getting-started" icon="iconoir:arrow-right" tone="accent">
             Get Started
           </BtnLink>
         </template>
-        <template name="media">
+        <template #media>
           <HeroMedia src="../logo.svg" alt="CalcCore logo" />
         </template>
       </HeroBanner>`,
@@ -51,7 +51,7 @@ describe('HeroBanner rendering', () => {
     }
     const html = renderApp(
       `<HeroBanner>
-        <template name="actions">
+        <template #actions>
           <BtnLink href="https://example.com/docs" target="_blank" tone="ghost">
             Docs
           </BtnLink>

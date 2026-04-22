@@ -29,12 +29,12 @@ describe('SiteFooter rendering', () => {
           <h2>Build with confidence</h2>
           <p>Everything your team needs to ship docs, pages, and growth loops from one stack.</p>
 
-          <template name="legal">
+          <template #legal>
             <a href="/privacy">Privacy</a>
             <a href="/terms">Terms</a>
           </template>
 
-          <template name="social">
+          <template #social>
             <BtnLink href="https://github.com/purestack" icon="tabler:brand-github">
               GitHub
             </BtnLink>
