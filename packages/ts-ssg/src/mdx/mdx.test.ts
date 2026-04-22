@@ -19,11 +19,33 @@ describe('compileMdxToHtml', () => {
 
     const compiledHtml = compileMdxToHtml(source)
     expect(compiledHtml).toContain('<Flex wrap="true">')
-    expect(compiledHtml).toContain(':tone="&#x27;accent&#x27;"')
+    expect(compiledHtml).toContain(':tone="\'accent\'"')
     expect(compiledHtml).toContain('.size="buttonSize"')
     expect(compiledHtml).toContain('@click="save"')
     expect(compiledHtml).toContain('#icon="props"')
     expect(compiledHtml).not.toContain('<p><Flex')
+  })
+
+  it('unwraps standalone opaque markup paragraphs created by markdown parsing', () => {
+    const source = ['<Badge icon="iconoir:check" />', '', 'Afterward.'].join(
+      '\n',
+    )
+
+    const compiledHtml = compileMdxToHtml(source)
+    expect(compiledHtml).toContain('<Badge icon="iconoir:check" />')
+    expect(compiledHtml).not.toContain('<p><Badge icon="iconoir:check" /></p>')
+    expect(compiledHtml).toContain('<p>Afterward.</p>')
+  })
+
+  it('unwraps a standalone inline markup island when it is the only paragraph content', () => {
+    const compiledHtml = compileMdxToHtml('<span>inline</span>')
+    expect(compiledHtml).toContain('<span>inline</span>')
+    expect(compiledHtml).not.toContain('<p><span>inline</span></p>')
+  })
+
+  it('keeps mixed paragraph text around inline markup islands', () => {
+    const compiledHtml = compileMdxToHtml('Prefix <span>inline</span> suffix')
+    expect(compiledHtml).toContain('<p>Prefix <span>inline</span> suffix</p>')
   })
 
   it('does not treat code spans or fenced code as regor markup', () => {
@@ -36,13 +58,11 @@ describe('compileMdxToHtml', () => {
     ].join('\n')
 
     const compiledHtml = compileMdxToHtml(source)
-    expect(compiledHtml).toContain(
-      '<code>&lt;Btn .size="buttonSize"&gt;</code>',
-    )
-    expect(compiledHtml).toContain('&lt;Btn @click="save"&gt;')
+    expect(compiledHtml).toContain('<code>&#x3C;Btn .size="buttonSize"></code>')
+    expect(compiledHtml).toContain('&#x3C;Btn @click="save">')
   })
 
-  it('renders a custom JSX component at root level', async () => {
+  it('renders a custom markup component at root level', async () => {
     const source = '<CustomComponent data-id="x" />\n\nParagraph text.'
     const html = renderApp(compileMdxToHtml(source), {
       components: {},
@@ -54,11 +74,11 @@ describe('compileMdxToHtml', () => {
     expect(html).toContain('<p>Paragraph text.</p>')
   })
 
-  it('flattens markdown paragraph wrappers inside inline JSX elements', async () => {
+  it('preserves whitespace inside opaque inline markup blocks', async () => {
     const source = ['<span>', '  Inline text', '</span>'].join('\n')
     const compiledHtml = compileMdxToHtml(source)
 
-    expect(compiledHtml).toContain('<span>Inline text</span>')
+    expect(compiledHtml).toContain('<span>\n  Inline text\n</span>')
     expect(compiledHtml).not.toContain('<span><p>')
   })
 
@@ -80,7 +100,7 @@ describe('compileMdxToHtml', () => {
     expect(html).toContain('<outercomponent')
     expect(html).toContain('<innercomponent')
     expect(html).toContain('data-flag="true"')
-    expect(html).toContain('Multi-line\ntext content.')
+    expect(html).toContain('  Multi-line\n  text content.')
     expect(html).toContain('<p>Another paragraph\nspanning two lines.</p>')
   })
 
@@ -174,16 +194,17 @@ describe('compileMdxToHtml', () => {
 
     const compiledHtml = compileMdxToHtml(source)
     expect(compiledHtml).not.toContain('<p><button')
+    expect(compiledHtml).toContain('<template name="footer">')
     expect(compiledHtml).toContain(
-      '<button type="button" class="modal-trigger" data-modal-close=',
+      '<button type="button" class="modal-trigger" data-modal-close>Cancel</button>',
     )
     expect(compiledHtml).toContain('>Cancel</button>')
     expect(compiledHtml).toContain(
-      '<ModalTrigger target="child-modal" label="Continue to confirmation"></ModalTrigger>',
+      '<ModalTrigger target="child-modal" label="Continue to confirmation" />',
     )
   })
 
-  it('keeps mixed text paragraphs wrapped as a single p in template slots', async () => {
+  it('preserves mixed text inside opaque template slots without markdown p injection', async () => {
     const source = [
       '<Modal id="mixed-template-paragraph">',
       '  <template name="footer">',
@@ -194,6 +215,9 @@ describe('compileMdxToHtml', () => {
 
     const compiledHtml = compileMdxToHtml(source)
     expect(compiledHtml).toContain(
+      '    Paragraph start <Badge>now</Badge> end.',
+    )
+    expect(compiledHtml).not.toContain(
       '<p>Paragraph start <Badge>now</Badge> end.</p>',
     )
   })
@@ -211,7 +235,7 @@ describe('compileMdxToHtml', () => {
     expect(compiledHtml).toContain('<p class="note">Keep me</p>')
   })
 
-  it('keeps paragraphs that contain non-whitespace text before JSX', async () => {
+  it('preserves text before markup inside opaque template slots without paragraph injection', async () => {
     const source = [
       '<Modal id="text-before-jsx-template">',
       '  <template name="footer">',
@@ -221,10 +245,11 @@ describe('compileMdxToHtml', () => {
     ].join('\n')
 
     const compiledHtml = compileMdxToHtml(source)
-    expect(compiledHtml).toContain('<p>Prefix <Badge>now</Badge></p>')
+    expect(compiledHtml).toContain('    Prefix <Badge>now</Badge>')
+    expect(compiledHtml).not.toContain('<p>Prefix <Badge>now</Badge></p>')
   })
 
-  it('unwraps synthetic paragraph wrappers in nested template subtree nodes', async () => {
+  it('preserves nested template subtree markup without synthetic paragraph wrappers', async () => {
     const source = [
       '<Modal id="nested-template-unwrapping">',
       '  <template name="header">',
@@ -240,7 +265,7 @@ describe('compileMdxToHtml', () => {
     expect(compiledHtml).not.toContain('<p><h3')
     expect(compiledHtml).not.toContain('<p><button')
     expect(compiledHtml).toContain(
-      '<section><h3>Quarterly launch checklist</h3><button type="button">Close</button></section>',
+      '<section>\n      <h3>Quarterly launch checklist</h3>\n      <button type="button">Close</button>\n    </section>',
     )
   })
 
@@ -279,7 +304,7 @@ describe('compileMdxToHtml', () => {
     )
   })
 
-  it('renders Btn variant component nodes as direct mdx content without paragraph wrappers', async () => {
+  it('renders Btn variant component nodes as opaque mdx content without paragraph wrappers', async () => {
     const source = [
       '## 10. Variants with icons',
       '',
@@ -304,7 +329,7 @@ describe('compileMdxToHtml', () => {
       '<Btn tone="neutral" icon="iconoir:code">View source</Btn>',
     )
     expect(compiledHtml).toContain(
-      '<Btn tone="ghost" icon="iconoir:pin-slash" iconPosition="end"><p>Read more</p></Btn>',
+      '<Btn tone="ghost" icon="iconoir:pin-slash" iconPosition="end">\n  Read more\n</Btn>',
     )
     expect(compiledHtml).toContain(
       '<Btn tone="warning" icon="iconoir:headset-help">Review warning</Btn>',

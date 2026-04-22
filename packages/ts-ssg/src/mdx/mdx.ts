@@ -32,7 +32,7 @@ export function compileMdx(
   const masked = maskRegorMarkup(source, roughFile)
   const file = parser.parse(masked.source)
   restoreRegorMarkup(file, masked.segments)
-  //normalizeMarkupParagraphs(file)
+  normalizeMarkupParagraphs(file)
   return compileAstToHtml(file, options)
 }
 

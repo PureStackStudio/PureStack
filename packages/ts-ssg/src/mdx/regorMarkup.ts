@@ -128,7 +128,7 @@ export function normalizeMarkupParagraphs(root: unknown) {
     const next: unknown[] = []
     for (const child of children) {
       if (isParagraphNode(child) && containsOnlyMarkupAndWhitespace(child)) {
-        next.push(...getChildren(child))
+        next.push(...child.children)
         continue
       }
       next.push(child)
@@ -173,9 +173,7 @@ function findNextPlaceholder(
   startIndex: number,
   byPlaceholder: Map<string, string>,
 ) {
-  let best:
-    | { index: number; placeholder: string; source: string }
-    | undefined
+  let best: { index: number; placeholder: string; source: string } | undefined
 
   for (const [placeholder, source] of byPlaceholder) {
     const index = value.indexOf(placeholder, startIndex)
@@ -225,12 +223,18 @@ function collectMarkupRanges(
   for (const token of tokens) {
     if (token.kind === 'opening') {
       if (stack.length === 0) {
-        if (token.selfClosing || VOID_HTML_TAG_NAMES.has(token.name.toLowerCase())) {
+        if (
+          token.selfClosing ||
+          VOID_HTML_TAG_NAMES.has(token.name.toLowerCase())
+        ) {
           ranges.push({ start: token.start, end: token.end })
           continue
         }
       }
-      if (token.selfClosing || VOID_HTML_TAG_NAMES.has(token.name.toLowerCase())) {
+      if (
+        token.selfClosing ||
+        VOID_HTML_TAG_NAMES.has(token.name.toLowerCase())
+      ) {
         continue
       }
       stack.push(token)
@@ -390,9 +394,7 @@ function isObject(value: unknown): value is MarkdownNode {
   return typeof value === 'object' && value !== null
 }
 
-function isNodeWithPosition(
-  node: MarkdownNode,
-): node is MarkdownNode & {
+function isNodeWithPosition(node: MarkdownNode): node is MarkdownNode & {
   position: { start: { offset: number }; end: { offset: number } }
 } {
   return (
@@ -406,7 +408,9 @@ function getChildren(node: MarkdownNode): unknown[] | null {
 }
 
 function isTextNode(node: unknown): node is TextNode {
-  return isObject(node) && node.type === 'text' && typeof node.value === 'string'
+  return (
+    isObject(node) && node.type === 'text' && typeof node.value === 'string'
+  )
 }
 
 function isWhitespaceTextNode(node: unknown): node is TextNode {
@@ -414,9 +418,13 @@ function isWhitespaceTextNode(node: unknown): node is TextNode {
 }
 
 function isHtmlNode(node: unknown): node is HtmlNode {
-  return isObject(node) && node.type === 'html' && typeof node.value === 'string'
+  return (
+    isObject(node) && node.type === 'html' && typeof node.value === 'string'
+  )
 }
 
 function isParagraphNode(node: unknown): node is ParagraphNode {
-  return isObject(node) && node.type === 'paragraph' && Array.isArray(node.children)
+  return (
+    isObject(node) && node.type === 'paragraph' && Array.isArray(node.children)
+  )
 }
