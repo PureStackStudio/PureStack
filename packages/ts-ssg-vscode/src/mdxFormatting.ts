@@ -23,6 +23,11 @@ interface MdxExpressionPlaceholder {
   source: string
 }
 
+interface MdxFencePlaceholder {
+  placeholder: string
+  source: string
+}
+
 interface MdxFormattingRequest {
   onlyWithinRange?: vscode.Range
   requireFormatOnSave?: boolean
@@ -107,7 +112,10 @@ export function getMdxMarkupBlocks(
       continue
     }
 
-    if (updateMdxFenceState(trimmed, state)) {
+    if (
+      state.activeStartLine === undefined &&
+      updateMdxFenceState(trimmed, state)
+    ) {
       continue
     }
 
@@ -151,10 +159,11 @@ function looksLikeMarkupBlockStart(trimmedLine: string) {
 }
 
 function isCompleteMarkupBlock(markup: string) {
-  if (!markup.includes('<')) return false
-  if (hasUnterminatedTag(markup)) return false
+  const { placeholderContent: maskedMarkup } = maskMdxFormattingContent(markup)
+  if (!maskedMarkup.includes('<')) return false
+  if (hasUnterminatedTag(maskedMarkup)) return false
 
-  return getUnclosedTagNames(markup).length === 0
+  return getUnclosedTagNames(maskedMarkup).length === 0
 }
 
 async function formatMdxMarkupBlock(
@@ -162,7 +171,7 @@ async function formatMdxMarkupBlock(
   block: MdxMarkupBlock,
 ) {
   const formattingOptions = getHtmlFormattingOptions(document)
-  const { expressions, placeholderContent } = maskMdxExpressions(
+  const { expressions, fences, placeholderContent } = maskMdxFormattingContent(
     block.content.trim(),
   )
   if (!placeholderContent.includes('<')) return undefined
@@ -179,11 +188,28 @@ async function formatMdxMarkupBlock(
   }
 
   const restored = restoreMdxExpressions(
-    normalizeSelfClosingTagSpacing(formatted.trim()),
+    restoreMdxFencedCodeBlocks(
+      normalizeSelfClosingTagSpacing(formatted.trim()),
+      fences,
+    ),
     expressions,
   )
 
   return restored
+}
+
+function maskMdxFormattingContent(source: string) {
+  const { expressions, placeholderContent: expressionMaskedContent } =
+    maskMdxExpressions(source)
+  const { fences, placeholderContent } = maskMdxFencedCodeBlocks(
+    expressionMaskedContent,
+  )
+
+  return {
+    expressions,
+    fences,
+    placeholderContent,
+  }
 }
 
 export function maskMdxExpressions(source: string) {
@@ -204,7 +230,7 @@ export function maskMdxExpressions(source: string) {
       continue
     }
 
-    const placeholder = `PURESTACK_MDX_EXPR_${expressions.length}`
+    const placeholder = createMdxPlaceholder('EXPR', expressions.length)
     expressions.push({
       placeholder,
       source: source.slice(index, expressionEnd),
@@ -214,6 +240,64 @@ export function maskMdxExpressions(source: string) {
   }
 
   return { expressions, placeholderContent }
+}
+
+function maskMdxFencedCodeBlocks(source: string) {
+  const fences: MdxFencePlaceholder[] = []
+  const lines = source.split('\n')
+  const nextLines: string[] = []
+
+  for (let index = 0; index < lines.length; index++) {
+    const trimmed = lines[index].trim()
+    const openingFenceMatch = /^(```+|~~~+)/.exec(trimmed)
+    if (!openingFenceMatch) {
+      nextLines.push(lines[index])
+      continue
+    }
+
+    const marker = openingFenceMatch[1][0]
+    const fencedLines = [lines[index]]
+    let endIndex = index
+
+    for (let scanIndex = index + 1; scanIndex < lines.length; scanIndex++) {
+      fencedLines.push(lines[scanIndex])
+      endIndex = scanIndex
+      if (lines[scanIndex].trim().startsWith(marker.repeat(3))) {
+        break
+      }
+    }
+
+    const placeholder = createMdxPlaceholder('FENCE', fences.length)
+    fences.push({
+      placeholder,
+      source: fencedLines.join('\n'),
+    })
+    nextLines.push(placeholder)
+    index = endIndex
+  }
+
+  return {
+    fences,
+    placeholderContent: nextLines.join('\n'),
+  }
+}
+
+function restoreMdxFencedCodeBlocks(
+  formatted: string,
+  fences: MdxFencePlaceholder[],
+) {
+  let restored = formatted
+
+  for (const fence of fences) {
+    const placeholderLinePattern = new RegExp(
+      `^[ \\t]*${fence.placeholder}[ \\t]*$`,
+      'gm',
+    )
+    restored = restored.replace(placeholderLinePattern, fence.source)
+    restored = restored.split(fence.placeholder).join(fence.source)
+  }
+
+  return restored
 }
 
 function restoreMdxExpressions(
@@ -227,6 +311,10 @@ function restoreMdxExpressions(
   }
 
   return restored
+}
+
+function createMdxPlaceholder(kind: 'EXPR' | 'FENCE', index: number) {
+  return `PURESTACK_MDX_${kind}_BLOCK_${index}_PURESTACK`
 }
 
 function hasUnterminatedTag(markup: string) {
