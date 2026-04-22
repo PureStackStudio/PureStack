@@ -171,9 +171,8 @@ async function formatMdxMarkupBlock(
   block: MdxMarkupBlock,
 ) {
   const formattingOptions = getHtmlFormattingOptions(document)
-  const normalizedBlockContent = normalizeMdxFenceLayout(block.content.trim())
   const { expressions, fences, placeholderContent } = maskMdxFormattingContent(
-    normalizedBlockContent,
+    block.content.trim(),
   )
   if (!placeholderContent.includes('<')) return undefined
 
@@ -211,27 +210,6 @@ function maskMdxFormattingContent(source: string) {
     fences,
     placeholderContent,
   }
-}
-
-function normalizeMdxFenceLayout(source: string) {
-  const lines = source.split('\n')
-  const normalizedLines: string[] = []
-  let activeFenceMarker: string | undefined
-
-  for (const line of lines) {
-    if (!activeFenceMarker) {
-      normalizeFenceOpeningLine(line, normalizedLines, (marker) => {
-        activeFenceMarker = marker
-      })
-      continue
-    }
-
-    normalizeFenceBodyLine(line, activeFenceMarker, normalizedLines, () => {
-      activeFenceMarker = undefined
-    })
-  }
-
-  return normalizedLines.join('\n')
 }
 
 export function maskMdxExpressions(source: string) {
@@ -312,12 +290,10 @@ function restoreMdxFencedCodeBlocks(
 
   for (const fence of fences) {
     const placeholderLinePattern = new RegExp(
-      `^([ \\t]*)${fence.placeholder}[ \\t]*$`,
+      `^[ \\t]*${fence.placeholder}[ \\t]*$`,
       'gm',
     )
-    restored = restored.replace(placeholderLinePattern, (_match, indent) =>
-      alignFenceBlock(fence.source, indent),
-    )
+    restored = restored.replace(placeholderLinePattern, fence.source)
     restored = restored.split(fence.placeholder).join(fence.source)
   }
 
@@ -339,120 +315,6 @@ function restoreMdxExpressions(
 
 function createMdxPlaceholder(kind: 'EXPR' | 'FENCE', index: number) {
   return `PURESTACK_MDX_${kind}_BLOCK_${index}_PURESTACK`
-}
-
-function normalizeFenceOpeningLine(
-  line: string,
-  normalizedLines: string[],
-  onOpenFence: (marker: string) => void,
-) {
-  const fenceMatch = /(```+|~~~+)/.exec(line)
-  if (!fenceMatch) {
-    normalizedLines.push(line)
-    return
-  }
-
-  const fenceIndex = fenceMatch.index
-  const marker = fenceMatch[1]
-  const beforeFence = line.slice(0, fenceIndex).trimEnd()
-  const afterFence = line.slice(fenceIndex + marker.length)
-  const closingIndex = afterFence.lastIndexOf(marker)
-
-  if (beforeFence) {
-    normalizedLines.push(beforeFence)
-  }
-
-  if (closingIndex >= 0) {
-    const inlineContent = afterFence.slice(0, closingIndex).trim()
-    const afterClosing = afterFence.slice(closingIndex + marker.length).trim()
-    const [infoString = '', ...contentParts] =
-      inlineContent.length > 0 ? inlineContent.split(/\s+/) : []
-    normalizedLines.push(`${marker}${infoString}`)
-    const inlineCode = contentParts.join(' ').trim()
-    if (inlineCode) {
-      normalizedLines.push(inlineCode)
-    }
-    normalizedLines.push(marker)
-    if (afterClosing) {
-      normalizedLines.push(afterClosing)
-    }
-    return
-  }
-
-  normalizedLines.push(`${marker}${afterFence.trim()}`)
-  onOpenFence(marker[0])
-}
-
-function normalizeFenceBodyLine(
-  line: string,
-  activeFenceMarker: string,
-  normalizedLines: string[],
-  onCloseFence: () => void,
-) {
-  const closingMarker = activeFenceMarker.repeat(3)
-  const closingIndex = line.indexOf(closingMarker)
-  if (closingIndex === -1) {
-    normalizedLines.push(line)
-    return
-  }
-
-  const beforeClosing = line.slice(0, closingIndex).trimEnd()
-  const afterClosing = line.slice(closingIndex + closingMarker.length).trim()
-
-  if (beforeClosing) {
-    normalizedLines.push(beforeClosing)
-  }
-
-  normalizedLines.push(closingMarker)
-
-  if (afterClosing) {
-    normalizedLines.push(afterClosing)
-  }
-
-  onCloseFence()
-}
-
-function alignFenceBlock(source: string, indent: string) {
-  const lines = source.split('\n')
-  if (lines.length === 0) return source
-
-  const openingLine = `${indent}${lines[0].trim()}`
-  if (lines.length === 1) return openingLine
-
-  const closingLine = `${indent}${lines[lines.length - 1]?.trim() ?? ''}`
-  const bodyLines = lines.slice(1, -1)
-  const commonIndent = getCommonBodyIndent(bodyLines)
-  const normalizedBodyLines = bodyLines.map((line) => {
-    if (line.trim().length === 0) return indent
-
-    if (commonIndent && line.startsWith(commonIndent)) {
-      return `${indent}${line.slice(commonIndent.length)}`
-    }
-
-    return `${indent}${line.trimStart()}`
-  })
-
-  return [openingLine, ...normalizedBodyLines, closingLine].join('\n')
-}
-
-function getCommonBodyIndent(lines: string[]) {
-  let commonIndent: string | undefined
-
-  for (const line of lines) {
-    if (line.trim().length === 0) continue
-
-    const indent = /^\s*/.exec(line)?.[0] ?? ''
-    if (commonIndent === undefined) {
-      commonIndent = indent
-      continue
-    }
-
-    while (!indent.startsWith(commonIndent) && commonIndent.length > 0) {
-      commonIndent = commonIndent.slice(0, -1)
-    }
-  }
-
-  return commonIndent
 }
 
 function hasUnterminatedTag(markup: string) {
