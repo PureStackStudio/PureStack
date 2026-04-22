@@ -23,6 +23,11 @@ interface MdxExpressionPlaceholder {
   source: string
 }
 
+interface MdxFencePlaceholder {
+  placeholder: string
+  source: string
+}
+
 interface MdxFormattingRequest {
   onlyWithinRange?: vscode.Range
   requireFormatOnSave?: boolean
@@ -33,9 +38,11 @@ interface MdxMarkupBlockOptions {
 }
 
 interface MdxBlockScanState {
+  activeEndLine?: number
   activeLines: string[]
   activeStartLine?: number
-  fenceMarker?: string
+  fenceLength?: number
+  fenceMarker?: '`' | '~'
   frontmatterHandled: boolean
   inFence: boolean
   inFrontmatter: boolean
@@ -89,6 +96,7 @@ export function getMdxMarkupBlocks(
 ) {
   const blocks: MdxMarkupBlock[] = []
   const state: MdxBlockScanState = {
+    activeEndLine: undefined,
     activeLines: [],
     frontmatterHandled: false,
     inFence: false,
@@ -107,10 +115,6 @@ export function getMdxMarkupBlocks(
       continue
     }
 
-    if (updateMdxFenceState(trimmed, state)) {
-      continue
-    }
-
     collectActiveMarkupBlock(
       blocks,
       document,
@@ -124,9 +128,15 @@ export function getMdxMarkupBlocks(
   if (
     options.includeIncomplete &&
     state.activeStartLine !== undefined &&
-    state.activeLines.length > 0
+    state.activeEndLine !== undefined
   ) {
-    pushActiveBlock(blocks, document, state.activeStartLine, state.activeLines)
+    pushActiveBlock(
+      blocks,
+      document,
+      state.activeStartLine,
+      state.activeEndLine,
+      state.activeLines,
+    )
   }
 
   return blocks
@@ -136,10 +146,11 @@ function pushActiveBlock(
   blocks: MdxMarkupBlock[],
   document: vscode.TextDocument,
   startLine: number,
+  endLine: number,
   lines: string[],
 ) {
   const start = new vscode.Position(startLine, 0)
-  const end = document.lineAt(startLine + lines.length - 1).range.end
+  const end = document.lineAt(endLine).range.end
   blocks.push({
     content: lines.join('\n'),
     range: new vscode.Range(start, end),
@@ -151,10 +162,11 @@ function looksLikeMarkupBlockStart(trimmedLine: string) {
 }
 
 function isCompleteMarkupBlock(markup: string) {
-  if (!markup.includes('<')) return false
-  if (hasUnterminatedTag(markup)) return false
+  const { placeholderContent } = maskMdxFencedRegions(markup)
+  if (!placeholderContent.includes('<')) return false
+  if (hasUnterminatedTag(placeholderContent)) return false
 
-  return getUnclosedTagNames(markup).length === 0
+  return getUnclosedTagNames(placeholderContent).length === 0
 }
 
 async function formatMdxMarkupBlock(
@@ -162,8 +174,10 @@ async function formatMdxMarkupBlock(
   block: MdxMarkupBlock,
 ) {
   const formattingOptions = getHtmlFormattingOptions(document)
+  const { fences, placeholderContent: fencePlaceholderContent } =
+    maskMdxFencedRegions(block.content.trim())
   const { expressions, placeholderContent } = maskMdxExpressions(
-    block.content.trim(),
+    fencePlaceholderContent,
   )
   if (!placeholderContent.includes('<')) return undefined
 
@@ -183,7 +197,7 @@ async function formatMdxMarkupBlock(
     expressions,
   )
 
-  return restored
+  return restoreMdxFencedRegions(restored, fences)
 }
 
 export function maskMdxExpressions(source: string) {
@@ -216,6 +230,53 @@ export function maskMdxExpressions(source: string) {
   return { expressions, placeholderContent }
 }
 
+export function maskMdxFencedRegions(source: string) {
+  const fences: MdxFencePlaceholder[] = []
+  const lines = source.split('\n')
+  const placeholderLines: string[] = []
+
+  for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+    const openingDelimiter = parseFenceDelimiter(lines[lineIndex].trim())
+    if (!openingDelimiter) {
+      placeholderLines.push(lines[lineIndex])
+      continue
+    }
+
+    let closingLineIndex = -1
+    for (
+      let candidateLineIndex = lineIndex + 1;
+      candidateLineIndex < lines.length;
+      candidateLineIndex++
+    ) {
+      const closingDelimiter = parseFenceDelimiter(
+        lines[candidateLineIndex].trim(),
+      )
+      if (
+        closingDelimiter &&
+        isFenceClosingDelimiter(closingDelimiter, openingDelimiter)
+      ) {
+        closingLineIndex = candidateLineIndex
+        break
+      }
+    }
+
+    if (closingLineIndex === -1) {
+      placeholderLines.push(lines[lineIndex])
+      continue
+    }
+
+    const placeholder = `PURESTACK_MDX_FENCE_${fences.length}`
+    fences.push({
+      placeholder,
+      source: lines.slice(lineIndex, closingLineIndex + 1).join('\n'),
+    })
+    placeholderLines.push(placeholder)
+    lineIndex = closingLineIndex
+  }
+
+  return { fences, placeholderContent: placeholderLines.join('\n') }
+}
+
 function restoreMdxExpressions(
   formatted: string,
   expressions: MdxExpressionPlaceholder[],
@@ -224,6 +285,28 @@ function restoreMdxExpressions(
 
   for (const expression of expressions) {
     restored = restored.split(expression.placeholder).join(expression.source)
+  }
+
+  return restored
+}
+
+function restoreMdxFencedRegions(
+  formatted: string,
+  fences: MdxFencePlaceholder[],
+) {
+  let restored = formatted
+
+  for (const fence of fences) {
+    const standalonePlaceholderPattern = new RegExp(
+      `^[\\t ]*${escapeRegExp(fence.placeholder)}$`,
+      'gm',
+    )
+    if (standalonePlaceholderPattern.test(restored)) {
+      restored = restored.replace(standalonePlaceholderPattern, fence.source)
+      continue
+    }
+
+    restored = restored.split(fence.placeholder).join(fence.source)
   }
 
   return restored
@@ -277,17 +360,26 @@ function closeMdxFrontmatter(trimmed: string, state: MdxBlockScanState) {
 }
 
 function updateMdxFenceState(trimmed: string, state: MdxBlockScanState) {
-  const fenceMatch = /^(```+|~~~+)/.exec(trimmed)
-  if (!fenceMatch) return state.inFence
+  const delimiter = parseFenceDelimiter(trimmed)
+  if (!delimiter) return state.inFence
 
   if (!state.inFence) {
     state.inFence = true
-    state.fenceMarker = fenceMatch[1][0]
+    state.fenceLength = delimiter.length
+    state.fenceMarker = delimiter.marker
     return true
   }
 
-  if (state.fenceMarker && trimmed.startsWith(state.fenceMarker.repeat(3))) {
+  if (
+    state.fenceMarker &&
+    state.fenceLength &&
+    isFenceClosingDelimiter(delimiter, {
+      length: state.fenceLength,
+      marker: state.fenceMarker,
+    })
+  ) {
     state.inFence = false
+    state.fenceLength = undefined
     state.fenceMarker = undefined
   }
 
@@ -302,20 +394,30 @@ function collectActiveMarkupBlock(
   trimmed: string,
   state: MdxBlockScanState,
 ) {
-  if (state.inFence) return
-
   if (state.activeStartLine === undefined) {
+    if (updateMdxFenceState(trimmed, state)) return
     if (!looksLikeMarkupBlockStart(trimmed)) return
 
     state.activeStartLine = lineIndex
+    state.activeEndLine = lineIndex
     state.activeLines = [lineText]
   } else {
+    state.activeEndLine = lineIndex
     state.activeLines.push(lineText)
   }
 
+  updateMdxFenceState(trimmed, state)
+  if (state.inFence) return
   if (!isCompleteMarkupBlock(state.activeLines.join('\n'))) return
 
-  pushActiveBlock(blocks, document, state.activeStartLine, state.activeLines)
+  pushActiveBlock(
+    blocks,
+    document,
+    state.activeStartLine,
+    state.activeEndLine ?? lineIndex,
+    state.activeLines,
+  )
+  state.activeEndLine = undefined
   state.activeStartLine = undefined
   state.activeLines = []
 }
@@ -347,4 +449,30 @@ function closeMatchingTag(stack: string[], tagName: string) {
     stack.splice(index)
     return
   }
+}
+
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+function parseFenceDelimiter(trimmed: string) {
+  const match = /^(`{3,}|~{3,})(.*)$/.exec(trimmed)
+  if (!match) return undefined
+
+  return {
+    length: match[1].length,
+    marker: match[1][0] as '`' | '~',
+    suffix: match[2],
+  }
+}
+
+function isFenceClosingDelimiter(
+  delimiter: { length: number; marker: '`' | '~'; suffix: string },
+  activeFence: { length: number; marker: '`' | '~' },
+) {
+  return (
+    delimiter.marker === activeFence.marker &&
+    delimiter.length >= activeFence.length &&
+    delimiter.suffix.trim().length === 0
+  )
 }

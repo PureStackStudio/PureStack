@@ -4,6 +4,7 @@ import {
   getMdxMarkupBlocks,
   type MdxMarkupBlock,
   maskMdxExpressions,
+  maskMdxFencedRegions,
 } from './mdxFormatting'
 import {
   getSupportedTaggedTemplates,
@@ -157,7 +158,10 @@ function sanitizeTemplateForDiagnostics(template: SupportedTaggedTemplate) {
 }
 
 function sanitizeMdxBlockForDiagnostics(block: MdxMarkupBlock) {
-  return maskMdxExpressions(block.content).placeholderContent
+  const { placeholderContent: fencePlaceholderContent } = maskMdxFencedRegions(
+    block.content,
+  )
+  return maskMdxExpressions(fencePlaceholderContent).placeholderContent
 }
 
 function isPrettierSyntaxError(error: unknown): error is {
