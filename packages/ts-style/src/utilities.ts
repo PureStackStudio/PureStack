@@ -77,7 +77,7 @@ function applyLayoutUtilities(theme: string) {
 }
 
 function applyShadowUtilities(theme: string) {
-  styleBuilder.select('.no-box-shadow', theme).boxShadow('none !important')
+  styleBuilder.select('.box-shadow-none', theme).boxShadow('none !important')
 }
 
 function applyFontSizeUtilities(theme: string, palette: ThemePalette) {
