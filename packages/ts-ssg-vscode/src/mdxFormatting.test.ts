@@ -308,7 +308,9 @@ After tabs.
     expect(edits[0]?.newText).toContain('    ```bash')
     expect(edits[0]?.newText).toContain('    npm install @purestack/ts-ssg')
     expect(edits[0]?.newText).toContain('    ```')
-    expect(edits[0]?.newText).not.toContain('<TabPane id="npm" label="npm">```bash')
+    expect(edits[0]?.newText).not.toContain(
+      '<TabPane id="npm" label="npm">```bash',
+    )
   })
 
   it('aligns misindented opening and closing fences to the current tab depth', async () => {
