@@ -1,3 +1,45 @@
+/**
+ * `regorMarkup.ts` is the adapter that makes “Regor-style MDX” work with a plain markdown parser.
+
+In this codebase, MDX isn’t parsed with a real JSX/MDX parser first. Instead, [mdx.ts](/d:/code/modern/mygit/PureStack/packages/ts-ssg/src/mdx/mdx.ts:28) uses `regorMarkup.ts` to temporarily hide component markup like `<Tabs>`, `<Btn>`, directive attrs like `:tone`, `@click`, `#slot`, and then restore it afterward.
+
+The file does four main jobs:
+
+1. `maskRegorMarkup(...)`
+[regorMarkup.ts](/d:/code/modern/mygit/PureStack/packages/ts-ssg/src/mdx/regorMarkup.ts:72)
+It scans the raw source, finds top-level markup islands, and replaces them with placeholders like `PURESTACK_REGOR_MARKUP_0_`.
+This prevents `remark-parse` from mangling Regor component markup.
+
+2. `restoreRegorMarkup(...)`
+[regorMarkup.ts](/d:/code/modern/mygit/PureStack/packages/ts-ssg/src/mdx/regorMarkup.ts:98)
+After markdown parsing, it walks the mdast tree and swaps those placeholders back into `html` nodes so the original markup is preserved.
+
+3. `normalizeMarkupParagraphs(...)`
+[regorMarkup.ts](/d:/code/modern/mygit/PureStack/packages/ts-ssg/src/mdx/regorMarkup.ts:137)
+Markdown likes to wrap standalone raw HTML in paragraphs. This function removes those synthetic `<p>...</p>` wrappers when a paragraph contains only markup and whitespace.
+
+4. Code handling inside opaque Regor markup
+[regorMarkup.ts](/d:/code/modern/mygit/PureStack/packages/ts-ssg/src/mdx/regorMarkup.ts:126)
+[regorMarkup.ts](/d:/code/modern/mygit/PureStack/packages/ts-ssg/src/mdx/regorMarkup.ts:449)
+Because masked Regor markup is opaque to the markdown parser, fenced blocks and inline backticks inside components would otherwise be missed. The file now post-processes restored markup segments to turn:
+- fenced blocks into `<pre><code>...`
+- inline backticks into `<code>...`
+and, if a highlighter exists, it renders them with the same highlighting path as normal markdown code.
+
+Internally, the interesting helpers are:
+- `collectIgnoredRanges(...)`: skips real markdown code spans/fences so `<Btn>` inside code samples is not mistaken for markup
+- `collectMarkupRanges(...)` + `scanTagTokens(...)`: lightweight tag scanner to find markup islands in raw text
+- `splitTextByPlaceholders(...)`: turns placeholder text back into real html nodes
+
+So the short version is: `regorMarkup.ts` is the compatibility layer that lets this project support Regor component syntax inside `.mdx` files while still using a mostly markdown-first pipeline.
+ */
+
+import type { MdxCodeHighlighter } from './highlight'
+import {
+  renderHighlightedInlineCodeHtml,
+  renderHighlightedPreHtml,
+} from './shikiHighlighting'
+
 type MarkdownNode = {
   type?: unknown
   value?: unknown
@@ -115,6 +157,17 @@ export function restoreRegorMarkup(root: unknown, segments: MarkupSegment[]) {
       visit(child)
     }
   }
+}
+
+export function renderRegorMarkupCodeFences(
+  segments: MarkupSegment[],
+  highlighter?: MdxCodeHighlighter,
+) {
+  if (segments.length === 0) return segments
+  return segments.map((segment) => ({
+    ...segment,
+    source: replaceMarkupCodeFences(segment.source, highlighter),
+  }))
 }
 
 export function normalizeMarkupParagraphs(root: unknown) {
@@ -427,4 +480,182 @@ function isParagraphNode(node: unknown): node is ParagraphNode {
   return (
     isObject(node) && node.type === 'paragraph' && Array.isArray(node.children)
   )
+}
+
+function replaceMarkupCodeFences(
+  source: string,
+  highlighter?: MdxCodeHighlighter,
+) {
+  const lines = source.split('\n')
+  const next: string[] = []
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const fence = parseFenceStart(lines[index])
+    if (!fence) {
+      next.push(lines[index])
+      continue
+    }
+
+    const body: string[] = []
+    let closeIndex = index + 1
+    for (; closeIndex < lines.length; closeIndex += 1) {
+      if (isFenceEnd(lines[closeIndex], fence.marker, fence.length)) break
+      body.push(stripFenceIndent(lines[closeIndex], fence.indent))
+    }
+    if (closeIndex >= lines.length) {
+      next.push(lines[index])
+      continue
+    }
+
+    next.push(
+      renderCodeFenceBlock(body.join('\n'), fence.language, highlighter),
+    )
+    index = closeIndex
+  }
+
+  return replaceMarkupInlineCode(next.join('\n'), highlighter)
+}
+
+function parseFenceStart(line: string) {
+  const match = /^([ \t]*)(`{3,}|~{3,})([^\n]*)$/.exec(line)
+  if (!match) return undefined
+  const marker = match[2][0]
+  const language = normalizeFenceLanguage(match[3])
+  return {
+    indent: match[1],
+    length: match[2].length,
+    language,
+    marker,
+  }
+}
+
+function normalizeFenceLanguage(info: string) {
+  const value = info.trim()
+  if (!value) return undefined
+  const [language] = value.split(/\s+/g)
+  return language || undefined
+}
+
+function isFenceEnd(line: string, marker: string, length: number) {
+  const trimmed = line.trim()
+  if (!trimmed) return false
+  if (trimmed[0] !== marker) return false
+  if (trimmed.length < length) return false
+  for (let index = 0; index < trimmed.length; index += 1) {
+    if (trimmed[index] !== marker) {
+      return /^\s*$/.test(trimmed.slice(index))
+    }
+  }
+  return true
+}
+
+function stripFenceIndent(line: string, indent: string) {
+  return indent && line.startsWith(indent) ? line.slice(indent.length) : line
+}
+
+function renderCodeFenceBlock(
+  code: string,
+  language: string | undefined,
+  highlighter?: MdxCodeHighlighter,
+) {
+  if (highlighter) {
+    const highlighted = renderHighlightedPreHtml(code, language, highlighter)
+    if (highlighted) return highlighted
+  }
+
+  const languageClass = language
+    ? ` class="language-${escapeHtmlAttribute(language)}"`
+    : ''
+  return `<pre><code${languageClass}>${escapeHtml(code)}</code></pre>`
+}
+
+function replaceMarkupInlineCode(
+  source: string,
+  highlighter?: MdxCodeHighlighter,
+) {
+  const parts = source.split(/(<[^>]+>)/g)
+  for (let index = 0; index < parts.length; index += 1) {
+    const part = parts[index]
+    if (!part || looksLikeTag(part)) continue
+    parts[index] = replaceInlineCodeInText(part, highlighter)
+  }
+  return parts.join('')
+}
+
+function replaceInlineCodeInText(
+  value: string,
+  highlighter?: MdxCodeHighlighter,
+) {
+  let next = ''
+  let index = 0
+
+  while (index < value.length) {
+    const start = value.indexOf('`', index)
+    if (start === -1) {
+      next += value.slice(index)
+      break
+    }
+
+    const tickCount = countRepeatedChar(value, start, '`')
+    if (tickCount !== 1) {
+      next += value.slice(index, start + tickCount)
+      index = start + tickCount
+      continue
+    }
+
+    const end = findInlineCodeEnd(value, start + 1)
+    if (end === -1) {
+      next += value.slice(index)
+      break
+    }
+
+    next += value.slice(index, start)
+    next += renderInlineCodeSpan(value.slice(start + 1, end), highlighter)
+    index = end + 1
+  }
+
+  return next
+}
+
+function findInlineCodeEnd(value: string, startIndex: number) {
+  for (let index = startIndex; index < value.length; index += 1) {
+    if (value[index] === '`') return index
+  }
+  return -1
+}
+
+function renderInlineCodeSpan(code: string, highlighter?: MdxCodeHighlighter) {
+  if (highlighter) {
+    const highlighted = renderHighlightedInlineCodeHtml(
+      code,
+      undefined,
+      highlighter,
+    )
+    if (highlighted) return highlighted
+  }
+
+  return `<code>${escapeHtml(code)}</code>`
+}
+
+function looksLikeTag(value: string) {
+  return value.startsWith('<') && value.endsWith('>')
+}
+
+function countRepeatedChar(value: string, start: number, char: string) {
+  let count = 0
+  while (value[start + count] === char) {
+    count += 1
+  }
+  return count
+}
+
+function escapeHtml(value: string) {
+  return value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+}
+
+function escapeHtmlAttribute(value: string) {
+  return escapeHtml(value).replaceAll('"', '&quot;')
 }

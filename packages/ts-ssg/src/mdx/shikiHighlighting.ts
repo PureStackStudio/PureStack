@@ -1,5 +1,6 @@
 import type { Element, Root, Text } from 'hast'
 import { fromHtml } from 'hast-util-from-html'
+import { toHtml } from 'hast-util-to-html'
 
 import type { MdxCodeHighlighter } from './highlight'
 
@@ -98,6 +99,50 @@ function renderHighlightedPre(
   if (!replacement) return undefined
   normalizeShikiPre(replacement)
   return replacement
+}
+
+export function renderHighlightedPreHtml(
+  text: string,
+  language: string | undefined,
+  highlighter: MdxCodeHighlighter,
+): string | undefined {
+  const replacement = renderHighlightedPre(text, language, highlighter)
+  if (!replacement) return undefined
+  return toHtml(replacement, { allowDangerousHtml: true })
+}
+
+export function renderHighlightedInlineCodeHtml(
+  text: string,
+  language: string | undefined,
+  highlighter: MdxCodeHighlighter,
+): string | undefined {
+  const html = highlighter.codeToHtml(text, language)
+  const parsed = fromHtml(html, { fragment: true })
+  const replacement = parsed.children?.find(
+    (child) => child.type === 'element' && child.tagName === 'pre',
+  ) as Element | undefined
+  if (!replacement) return undefined
+  const highlightedCode = replacement.children?.find(
+    (child) => child.type === 'element' && child.tagName === 'code',
+  ) as Element | undefined
+  if (!highlightedCode) return undefined
+  if (!highlightedCode.properties) highlightedCode.properties = {}
+  highlightedCode.properties.className = mergeClassNames(
+    highlightedCode.properties.className,
+    'shiki',
+    'shiki-inline',
+    'shiki-themes',
+  )
+  const style =
+    typeof replacement.properties?.style === 'string'
+      ? replacement.properties.style
+      : ''
+  highlightedCode.properties.style = stripStyle(style, [
+    'background',
+    'background-color',
+    'color',
+  ])
+  return toHtml(highlightedCode, { allowDangerousHtml: true })
 }
 
 function resolveLanguage(node: Element): string | undefined {

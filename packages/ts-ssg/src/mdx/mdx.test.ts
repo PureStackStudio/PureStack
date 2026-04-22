@@ -5,7 +5,8 @@ import { renderApp } from '@purestack/ts-render'
 import { describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from '../config/config'
 import { normalizeFrontmatter } from '../frontmatter/frontmatter'
-import { compileMdxToHtml } from './mdx'
+import { createHljsHighlighter } from './highlightjs'
+import { compileMdx, compileMdxToHtml } from './mdx'
 
 describe('compileMdxToHtml', () => {
   it('preserves regor directive attributes as raw markup', () => {
@@ -392,6 +393,81 @@ describe('compileMdxToHtml', () => {
     } finally {
       cleanup()
     }
+  })
+
+  it('renders fenced code blocks inside Regor component markup without a highlighter', async () => {
+    const source = [
+      '<Tabs id="install-flow">',
+      '  <TabPane id="npm" label="npm">',
+      '    ```bash',
+      '    npm install @purestack/ts-ssg',
+      '    ```',
+      '  </TabPane>',
+      '</Tabs>',
+    ].join('\n')
+
+    const html = compileMdx(source).bodyHtml
+
+    expect(html).toContain('<Tabs id="install-flow">')
+    expect(html).toContain('<TabPane id="npm" label="npm">')
+    expect(html).toContain('<pre><code class="language-bash">')
+    expect(html).toContain('npm install @purestack/ts-ssg')
+    expect(html).toContain('</TabPane>')
+  })
+
+  it('highlights fenced code blocks inside Regor component markup', async () => {
+    const source = [
+      '<Tabs id="install-flow">',
+      '  <TabPane id="npm" label="npm">',
+      '    ```ts',
+      '    const answer = 42',
+      '    ```',
+      '  </TabPane>',
+      '</Tabs>',
+    ].join('\n')
+
+    const html = compileMdx(source, {
+      highlighter: createHljsHighlighter(),
+    }).bodyHtml
+
+    expect(html).toContain('<pre class="hljs shiki"')
+    expect(html).toContain('<code class="hljs language-typescript">')
+    expect(html).toContain('const')
+    expect(html).toContain('answer')
+  })
+
+  it('renders inline code inside Regor component markup without a highlighter', async () => {
+    const source = [
+      '<Tabs id="install-flow">',
+      '  <TabPane id="npm" label="npm">',
+      '    Use `npm install @purestack/ts-ssg` to add the package.',
+      '  </TabPane>',
+      '</Tabs>',
+    ].join('\n')
+
+    const html = compileMdx(source).bodyHtml
+
+    expect(html).toContain('<TabPane id="npm" label="npm">')
+    expect(html).toContain(
+      'Use <code>npm install @purestack/ts-ssg</code> to add the package.',
+    )
+  })
+
+  it('highlights inline code inside Regor component markup', async () => {
+    const source = [
+      '<Tabs id="install-flow">',
+      '  <TabPane id="npm" label="npm">',
+      '    Use `const answer = 42` here.',
+      '  </TabPane>',
+      '</Tabs>',
+    ].join('\n')
+
+    const html = compileMdx(source, {
+      highlighter: createHljsHighlighter(),
+    }).bodyHtml
+
+    expect(html).toContain('<code class="hljs shiki shiki-inline shiki-themes"')
+    expect(html).toContain('answer')
   })
 })
 

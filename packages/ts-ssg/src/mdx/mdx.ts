@@ -10,6 +10,7 @@ import {
 import {
   maskRegorMarkup,
   normalizeMarkupParagraphs,
+  renderRegorMarkupCodeFences,
   restoreRegorMarkup,
 } from './regorMarkup'
 
@@ -31,7 +32,10 @@ export function compileMdx(
   const roughFile = parser.parse(source)
   const masked = maskRegorMarkup(source, roughFile)
   const file = parser.parse(masked.source)
-  restoreRegorMarkup(file, masked.segments)
+  restoreRegorMarkup(
+    file,
+    renderRegorMarkupCodeFences(masked.segments, options.highlighter),
+  )
   normalizeMarkupParagraphs(file)
   return compileAstToHtml(file, options)
 }
