@@ -290,6 +290,47 @@ After tabs.
     )
     expect(blocks[0]?.content).toContain('</Tabs>')
   })
+
+  it('moves an opening fence onto its own indented line when it is attached to a tag', async () => {
+    const source = [
+      '<Tabs id="demo">',
+      '  <TabPane id="npm" label="npm">```bash',
+      '    npm install @purestack/ts-ssg',
+      '  ```',
+      '  </TabPane>',
+      '</Tabs>',
+    ].join('\n')
+
+    const edits = await buildMdxFormattingEdits(createTextDocument(source))
+
+    expect(edits).toHaveLength(1)
+    expect(edits[0]?.newText).toContain('  <TabPane id="npm" label="npm">')
+    expect(edits[0]?.newText).toContain('    ```bash')
+    expect(edits[0]?.newText).toContain('    npm install @purestack/ts-ssg')
+    expect(edits[0]?.newText).toContain('    ```')
+    expect(edits[0]?.newText).not.toContain('<TabPane id="npm" label="npm">```bash')
+  })
+
+  it('aligns misindented opening and closing fences to the current tab depth', async () => {
+    const source = [
+      '<Tabs id="demo">',
+      '  <TabPane id="yarn" label="yarn">',
+      '       ```bash',
+      '    yarn add @purestack/ts-ssg',
+      '           ```',
+      '  </TabPane>',
+      '</Tabs>',
+    ].join('\n')
+
+    const edits = await buildMdxFormattingEdits(createTextDocument(source))
+
+    expect(edits).toHaveLength(1)
+    expect(edits[0]?.newText).toContain('    ```bash')
+    expect(edits[0]?.newText).toContain('    yarn add @purestack/ts-ssg')
+    expect(edits[0]?.newText).toContain('    ```')
+    expect(edits[0]?.newText).not.toContain('       ```bash')
+    expect(edits[0]?.newText).not.toContain('           ```')
+  })
 })
 
 function createTextDocument(text: string) {
