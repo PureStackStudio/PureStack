@@ -16,7 +16,7 @@ export async function formatHtmlFragment(
   options: HtmlFormattingOptions,
 ) {
   return prettier.format(source, {
-    htmlWhitespaceSensitivity: 'ignore',
+    htmlWhitespaceSensitivity: 'css',
     parser: 'html',
     plugins: [htmlPlugin],
     printWidth: options.printWidth,
