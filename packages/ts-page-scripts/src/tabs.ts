@@ -68,7 +68,7 @@ function enhanceTabs(root: HTMLElement) {
   const overflowToggle = document.createElement('button')
   overflowToggle.type = 'button'
   overflowToggle.className = 'tabs__overflow-toggle'
-  overflowToggle.classList.add(getInteractiveButtonToneClass(tone))
+  addClassNames(overflowToggle, getInteractiveButtonToneClass(tone))
   overflowToggle.setAttribute('aria-label', 'More tabs')
   overflowToggle.setAttribute('title', 'More tabs')
   overflowToggle.setAttribute('aria-haspopup', 'true')
@@ -76,7 +76,7 @@ function enhanceTabs(root: HTMLElement) {
   overflowToggle.innerHTML = '<span aria-hidden="true">&#8942;</span>'
   const overflowMenu = document.createElement('div')
   overflowMenu.className = 'tabs__overflow-menu'
-  overflowMenu.classList.add(getSurfaceToneClass(tone))
+  addClassNames(overflowMenu, getSurfaceToneClass(tone))
   overflow.appendChild(overflowToggle)
   overflow.appendChild(overflowMenu)
 
@@ -88,7 +88,7 @@ function enhanceTabs(root: HTMLElement) {
     const btn = document.createElement('button')
     btn.type = 'button'
     btn.className = 'tabs__tab-button'
-    btn.classList.add(getInteractiveButtonToneClass(tone))
+    addClassNames(btn, getInteractiveButtonToneClass(tone))
     setButtonContent(btn, tabs[i].text, tabs[i].iconMarkup)
     btn.disabled = tabs[i].control.disabled
     btn.setAttribute('aria-label', tabs[i].text)
@@ -114,12 +114,12 @@ function enhanceTabs(root: HTMLElement) {
     selectWrap.className = 'tabs__select-wrap'
     select = document.createElement('select')
     select.className = 'tabs__select'
-    select.classList.add(getSurfaceToneClass(tone))
+    addClassNames(select, getSurfaceToneClass(tone))
     selectWrap.appendChild(select)
   }
   if (!select) return
   const tabSelect = select
-  tabSelect.classList.add(getSurfaceToneClass(tone))
+  addClassNames(tabSelect, getSurfaceToneClass(tone))
   if (!tabSelect.id) {
     tabSelect.id = resolveTabsSelectId(root)
   }
@@ -205,7 +205,7 @@ function enhanceTabs(root: HTMLElement) {
       const option = document.createElement('button')
       option.type = 'button'
       option.className = 'tabs__overflow-option'
-      option.classList.add(getInteractiveToneClass(tone))
+      addClassNames(option, getInteractiveToneClass(tone))
       setButtonContent(option, tabs[index].text, tabs[index].iconMarkup)
       option.disabled = tabs[index].control.disabled
       option.setAttribute('aria-pressed', index === active ? 'true' : 'false')
@@ -519,6 +519,12 @@ function resolveTabsSelectId(root: HTMLElement) {
   const nextId = `tabs-select-${nextAutoTabsSelectId}`
   nextAutoTabsSelectId += 1
   return nextId
+}
+
+function addClassNames(element: HTMLElement, className: string) {
+  const tokens = className.split(/\s+/).filter(Boolean)
+  if (tokens.length === 0) return
+  element.classList.add(...tokens)
 }
 
 function resolveTabsTone(root: HTMLElement) {
