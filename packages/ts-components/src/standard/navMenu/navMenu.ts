@@ -1,19 +1,15 @@
-import type { NavItem, TsSsgContext } from '@purestack/ts-common'
-import { resolveTsSsgContext } from '@purestack/ts-common'
 import {
-  getSemanticToneButtonClass,
-  getSemanticToneInteractiveClass,
-  getSemanticToneSurfaceClass,
-  type SemanticTone,
-} from '@purestack/ts-style'
+  type NavItem,
+  type TsSsgContext,
+  tryResolveTsSsgContext,
+} from '@purestack/ts-common'
+import { getSemanticToneClass, type SemanticTone } from '@purestack/ts-style'
 import { type ComputedRef, computed, defineComponent, html } from 'regor'
 
 export interface NavMenu {
   items?: NavItem[]
   tone?: SemanticTone
   toneClass?: ComputedRef<string>
-  interactiveToneClass?: ComputedRef<string>
-  buttonToneClass?: ComputedRef<string>
 }
 
 export interface NavList {
@@ -34,9 +30,8 @@ const navItemTemplate = html`<li class="nav__item">
     :open="item.isOpen"
   >
     <summary
-      class="nav__summary"
+      class="nav__summary tone-interactive"
       :class="{
-            [item.toneClass]: true,
             'active': item.isActive,
             'nav__summary--open': item.isOpen,
           }"
@@ -52,7 +47,7 @@ const navItemTemplate = html`<li class="nav__item">
   <div r-else class="nav__leaf">
     <a
       r-if="item.url"
-      class="nav__link"
+      class="nav__link tone-interactive"
       :class="{ 'active': item.isActive, [item.toneClass]: true }"
       :href="item.url"
       :aria-current="item.isActive ? 'page' : null"
@@ -67,12 +62,15 @@ const navListTemplate = html`<ul class="nav__list">
   <NavItem r-for="item in items"/>
 </ul>`
 
-const navMenuTemplate = html`<nav class="nav__menu" :class="toneClass" aria-label="Site navigation">
+const navMenuTemplate = html`<nav
+  class="nav__menu tone-surface"
+  :class="toneClass"
+  aria-label="Site navigation"
+>
   <div class="nav__header-row">
     <div class="nav__header">Navigation</div>
     <button
-      class="nav__panel-toggle"
-      :class="buttonToneClass"
+      class="nav__panel-toggle tone-button-interactive"
       type="button"
       title="Navigation"
       aria-label="Toggle navigation panel"
@@ -84,8 +82,7 @@ const navMenuTemplate = html`<nav class="nav__menu" :class="toneClass" aria-labe
       <span class="nav__panel-toggle-label">navigation</span>
     </button>
     <button
-      class="nav__collapse-toggle"
-      :class="interactiveToneClass"
+      class="nav__collapse-toggle tone-interactive"
       type="button"
       title="Collapse navigation"
       aria-label="Collapse navigation"
@@ -106,10 +103,10 @@ const navMenuTemplate = html`<nav class="nav__menu" :class="toneClass" aria-labe
     </button>
   </div>
   <SearchBox class="nav__search"/>
-  <NavList :items="items" :tone="tone"></NavList>
+  <NavList :items="items"></NavList>
 </nav>`
 
-function resolveNavItems(context: TsSsgContext): NavItem[] {
+function resolveNavItems(context?: TsSsgContext): NavItem[] {
   const globalItems = context?.navigation?.global ?? []
   if (globalItems.length > 0) return globalItems
   return context?.navigation?.items ?? []
@@ -136,7 +133,7 @@ function normalizePath(url: string | undefined): string | undefined {
   return withSlash.endsWith('/') ? withSlash : `${withSlash}/`
 }
 
-function resolveCurrentPath(context: TsSsgContext): string | undefined {
+function resolveCurrentPath(context?: TsSsgContext): string | undefined {
   const fromContext = normalizePath(context?.pageInfo?.urlPath)
   if (fromContext) return fromContext
   if (typeof window !== 'undefined' && window.location?.pathname) {
@@ -148,12 +145,11 @@ function resolveCurrentPath(context: TsSsgContext): string | undefined {
 function buildNavState(
   items: NavItem[],
   currentPath: string | undefined,
-  parentTone: SemanticTone | undefined,
 ): NavItemState[] {
   return items.map((item) => {
-    const tone = item.tone ?? parentTone
+    const tone = item.tone
     const childStates = item.children
-      ? buildNavState(item.children, currentPath, parentTone)
+      ? buildNavState(item.children, currentPath)
       : []
     const itemPath = normalizePath(item.url)
     const isActive = Boolean(
@@ -168,7 +164,7 @@ function buildNavState(
       ...(childStates.length > 0 ? { children: childStates } : {}),
       isActive,
       isOpen: isActive || hasActiveChild,
-      toneClass: getSemanticToneInteractiveClass(tone),
+      toneClass: getSemanticToneClass(tone),
     }
   })
 }
@@ -181,6 +177,7 @@ function defineNavListComponent() {
   return defineComponent<NavList>(navListTemplate, {
     props: ['items', 'tone'],
     context: (head) => ({
+      ...head.props,
       items: head.props.items,
       tone: head.props.tone,
     }),
@@ -191,23 +188,13 @@ function defineNavMenuComponent() {
   return defineComponent<NavMenu>(navMenuTemplate, {
     props: ['items', 'tone'],
     context: (head) => {
-      const context = resolveTsSsgContext(head)
-      const tone = head.props.tone
+      const context = tryResolveTsSsgContext(head)
       return {
-        tone,
-        toneClass: computed(() =>
-          getSemanticToneSurfaceClass(head.props.tone, false),
-        ),
-        interactiveToneClass: computed(() =>
-          getSemanticToneInteractiveClass(head.props.tone),
-        ),
-        buttonToneClass: computed(() =>
-          getSemanticToneButtonClass(head.props.tone, true),
-        ),
+        ...head.props,
+        toneClass: computed(() => getSemanticToneClass(head.props.tone)),
         items: buildNavState(
           head.props.items ?? resolveNavItems(context),
           resolveCurrentPath(context),
-          tone,
         ),
       }
     },

@@ -1,7 +1,4 @@
-import {
-  getSemanticToneSurfaceClass,
-  type SemanticTone,
-} from '@purestack/ts-style'
+import { getSemanticToneClass, type SemanticTone } from '@purestack/ts-style'
 import { urlNormalizer } from '@purestack/ts-util'
 import {
   type ComponentHead,
@@ -17,6 +14,7 @@ export interface AppForm {
   action?: RefOrValue<string>
   method?: RefOrValue<string>
   tone?: RefOrValue<SemanticTone>
+  toneClass?: ComputedRef<string>
 }
 
 export interface FormMeta {}
@@ -40,7 +38,6 @@ export interface FormAssistLink {
 export interface FormSubmit {
   label?: RefOrValue<string>
   tone?: RefOrValue<SemanticTone>
-  resolvedTone?: ComputedRef<SemanticTone>
 }
 
 export interface FormDivider {
@@ -50,14 +47,16 @@ export interface FormDivider {
 export interface FormStatus {
   tone?: RefOrValue<SemanticTone>
   hidden?: RefOrValue<boolean>
-  rootClass?: ComputedRef<string>
+  toneClass?: ComputedRef<string>
 }
 
-export class FormToneContext {
-  tone?: RefOrValue<SemanticTone>
-}
-
-const appFormTemplate = html`<form class="form-block" :action="action" :method="method" novalidate>
+const appFormTemplate = html`<form
+  class="form-block"
+  :class="toneClass"
+  :action="action"
+  :method="method"
+  novalidate
+>
   <slot></slot>
 </form>`
 
@@ -78,13 +77,13 @@ const formAssistLinkTemplate = html`<a
   {{ label }}
 </a>`
 
-const formSubmitTemplate = html`<Btn type="submit" :tone="resolvedTone">{{ label }}</Btn>`
+const formSubmitTemplate = html`<Btn type="submit" :tone="tone">{{ label }}</Btn>`
 
 const formDividerTemplate = html`<div class="form-block__divider" :data-label="label"></div>`
 
 const formStatusTemplate = html`<div
-  class="form-status"
-  :class="rootClass"
+  class="form-status tone-surface"
+  :class="toneClass"
   role="status"
   aria-live="polite"
   :hidden="hidden"
@@ -151,8 +150,10 @@ export function defineFormComponents() {
 }
 
 function resolveAppForm(props: AppForm): AppForm {
-  const form = new FormToneContext()
-  return Object.assign(form, props)
+  return {
+    ...props,
+    toneClass: computed(() => getSemanticToneClass(unref(props.tone))),
+  }
 }
 
 function resolveFormAssistLink(
@@ -172,26 +173,14 @@ function resolveFormAssistLink(
 }
 
 function resolveFormSubmit(head: ComponentHead<FormSubmit>): FormSubmit {
-  const inheritedTone = head.findContext(FormToneContext)?.tone
   return {
     ...head.props,
-    resolvedTone: computed(
-      () =>
-        (unref(head.props.tone) ||
-          unref(inheritedTone) ||
-          'accent') as SemanticTone,
-    ),
   }
 }
 
 function resolveFormStatus(head: ComponentHead<FormStatus>): FormStatus {
-  const inheritedTone = head.findContext(FormToneContext)?.tone
   return {
     ...head.props,
-    rootClass: computed(() =>
-      getSemanticToneSurfaceClass(
-        unref(head.props.tone) || unref(inheritedTone),
-      ),
-    ),
+    toneClass: computed(() => getSemanticToneClass(unref(head.props.tone))),
   }
 }

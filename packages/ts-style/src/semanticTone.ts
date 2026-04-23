@@ -43,13 +43,6 @@ export function pickSemanticTone(
   return undefined
 }
 
-export function resolveSemanticTone(
-  value: unknown,
-  fallback: SemanticTone = 'neutral',
-): SemanticTone {
-  return pickSemanticTone(value) ?? fallback
-}
-
 export function isSemanticTone(value: string): value is SemanticTone {
   return SEMANTIC_TONES.includes(value as SemanticTone)
 }
@@ -67,73 +60,11 @@ function applySemanticToneVars(style: Style, tokens: SemanticToneTokens) {
 
 export function getSemanticToneClass(
   tone: SemanticTone | undefined,
-  fallback: SemanticTone = 'neutral',
+  fallback?: SemanticTone,
 ) {
-  return `tone--${resolveSemanticTone(tone, fallback)}`
-}
-
-export function getSemanticToneInteractiveClass(
-  tone: SemanticTone | undefined,
-  fallback: SemanticTone = 'neutral',
-) {
-  return joinSemanticToneClasses(tone, ['tone-interactive'], fallback)
-}
-
-export function getSemanticToneSurfaceClass(
-  tone: SemanticTone | undefined,
-  isInteractive = false,
-  fallback: SemanticTone = 'neutral',
-) {
-  return joinSemanticToneClasses(
-    tone,
-    [isInteractive ? 'tone-surface-interactive' : 'tone-surface'],
-    fallback,
-  )
-}
-
-export function getSemanticToneSurfaceAltClass(
-  tone: SemanticTone | undefined,
-  isInteractive = false,
-  fallback: SemanticTone = 'neutral',
-) {
-  return joinSemanticToneClasses(
-    tone,
-    [isInteractive ? 'tone-surface-alt-interactive' : 'tone-surface-alt'],
-    fallback,
-  )
-}
-
-export function getSemanticToneButtonClass(
-  tone: SemanticTone | undefined,
-  isInteractive = false,
-  fallback: SemanticTone = 'neutral',
-) {
-  return joinSemanticToneClasses(
-    tone,
-    [isInteractive ? 'tone-button-interactive' : 'tone-button'],
-    fallback,
-  )
-}
-
-export function getSemanticToneIconClass(
-  tone: SemanticTone | undefined,
-  fallback: SemanticTone = 'neutral',
-) {
-  return joinSemanticToneClasses(tone, ['tone-icon'], fallback)
-}
-
-export function getSemanticToneBorderClass(
-  tone: SemanticTone | undefined,
-  fallback: SemanticTone = 'neutral',
-) {
-  return joinSemanticToneClasses(tone, ['tone-border'], fallback)
-}
-
-export function getSemanticToneTextClass(
-  tone: SemanticTone | undefined,
-  fallback: SemanticTone = 'neutral',
-) {
-  return joinSemanticToneClasses(tone, ['tone-text'], fallback)
+  tone = pickSemanticTone(tone)
+  if (!tone) return fallback ?? ''
+  return `tone--${tone}`
 }
 
 export function registerSemanticToneUtilityStyles() {
@@ -300,16 +231,6 @@ function applyCurrentPaletteVars(
     style.set(entry.name, entry.value)
   }
   return style
-}
-
-function joinSemanticToneClasses(
-  tone: SemanticTone | undefined,
-  classes: string[],
-  fallback: SemanticTone,
-) {
-  return [getSemanticToneClass(tone, fallback), ...classes]
-    .filter(Boolean)
-    .join(' ')
 }
 
 function createCurrentPalette(

@@ -37,14 +37,14 @@ describe('ExpandablePanel rendering', () => {
     cleanup()
 
     expect(html).toContain(
-      '<details class="expandable-panel tone--accent tone-surface" open',
+      '<details class="expandable-panel tone-surface tone--accent" open',
     )
     expect(html).toContain('Microsoft 365')
-    expect(html).toContain('class="icon-wrap tone--accent tone-icon"')
+    expect(html).toContain('class="icon-wrap tone-icon')
     expect(html).toContain('Upgrade today to unlock richer collaboration')
   })
 
-  it('renders a closed neutral panel when optional content is omitted', () => {
+  it('renders a closed panel when optional content is omitted', () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineIconComponents(getSvgIcon),
@@ -56,11 +56,9 @@ describe('ExpandablePanel rendering', () => {
     })
     cleanup()
 
-    expect(html).toContain(
-      '<details class="expandable-panel tone--neutral tone-surface">',
-    )
+    expect(html).toContain('<details class="expandable-panel tone-surface">')
     expect(html).not.toContain(
-      '<details class="expandable-panel tone--neutral tone-surface" open',
+      '<details class="expandable-panel tone-surface" open',
     )
   })
 })

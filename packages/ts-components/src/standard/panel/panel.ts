@@ -1,7 +1,4 @@
-import {
-  getSemanticToneSurfaceClass,
-  type SemanticTone,
-} from '@purestack/ts-style'
+import { getSemanticToneClass, type SemanticTone } from '@purestack/ts-style'
 import {
   type ComputedRef,
   computed,
@@ -17,7 +14,7 @@ export interface Panel {
   class?: RefOrValue<string>
 }
 
-const panelTemplate = html`<section class="panel" :class="[class, toneClass]">
+const panelTemplate = html`<section class="panel tone-surface" :class="[class, toneClass]">
   <div class="panel__body"><slot></slot></div>
 </section>`
 
@@ -37,6 +34,6 @@ export function definePanelComponents() {
 function resolvePanel(props: Panel): Panel {
   return {
     ...props,
-    toneClass: computed(() => getSemanticToneSurfaceClass(unref(props.tone))),
+    toneClass: computed(() => getSemanticToneClass(unref(props.tone))),
   }
 }

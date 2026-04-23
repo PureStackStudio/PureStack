@@ -1,8 +1,4 @@
-import {
-  getSemanticToneIconClass,
-  getSemanticToneSurfaceClass,
-  type SemanticTone,
-} from '@purestack/ts-style'
+import { getSemanticToneClass, type SemanticTone } from '@purestack/ts-style'
 import {
   type ComputedRef,
   computed,
@@ -20,23 +16,20 @@ export interface ExpandablePanel {
   icon?: RefOrValue<string>
   tone?: RefOrValue<SemanticTone>
   open?: RefOrValue<boolean>
-  rootClass?: ComputedRef<string>
-  summaryClass?: ComputedRef<string>
-  iconToneClass?: ComputedRef<string>
+  toneClass?: ComputedRef<string>
 }
 
-const expandablePanelTemplate = html`<details class="expandable-panel" :class="rootClass" :open="open">
-  <summary class="expandable-panel__summary" :class="summaryClass">
+const expandablePanelTemplate = html`<details class="expandable-panel tone-surface" :class="toneClass" :open="open">
+  <summary class="expandable-panel__summary tone-surface-interactive">
     <slot name="summary">
       <Icon
-        class="expandable-panel__icon"
+        class="expandable-panel__icon tone-icon"
         :name="icon"
-        :class="iconToneClass"
         r-if="icon"
         :wrap="true"/>
       <span class="expandable-panel__header">
         <span class="expandable-panel__title" r-if="title">{{ title }}</span>
-        <Badge tone="neutral" r-if="badge">{{ badge }}</Badge>
+        <Badge :tone="tone" r-if="badge">{{ badge }}</Badge>
         <span class="expandable-panel__description" r-if="description">
           {{ description }}
         </span>
@@ -45,11 +38,7 @@ const expandablePanelTemplate = html`<details class="expandable-panel" :class="r
         <span class="expandable-panel__header-meta" r-if="meta">
           {{ meta }}
         </span>
-        <span
-          class="expandable-panel__chevron"
-          :class="iconToneClass"
-          aria-hidden="true"
-        >
+        <span class="expandable-panel__chevron tone-icon" aria-hidden="true">
           <Icon
             class="expandable-panel__chevron-icon"
             name="iconoir:nav-arrow-down"/>
@@ -76,10 +65,6 @@ export function defineExpandablePanelComponents() {
 function resolveExpandablePanel(props: ExpandablePanel): ExpandablePanel {
   return {
     ...props,
-    rootClass: computed(() => getSemanticToneSurfaceClass(unref(props.tone))),
-    summaryClass: computed(() =>
-      getSemanticToneSurfaceClass(unref(props.tone), true),
-    ),
-    iconToneClass: computed(() => getSemanticToneIconClass(unref(props.tone))),
+    toneClass: computed(() => getSemanticToneClass(unref(props.tone))),
   }
 }

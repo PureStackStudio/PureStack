@@ -3,13 +3,13 @@ import { themes } from './themeOptions'
 import type { ThemePalette } from './themePalette'
 
 export const SPACING_UTILITIES = {
-  0: '0',
-  1: '0.25em',
-  2: '0.5em',
-  3: '0.75em',
-  4: '1em',
-  5: '1.5em',
-  6: '2em',
+  0: '0 !important',
+  1: '0.25em !important',
+  2: '0.5em !important',
+  3: '0.75em !important',
+  4: '1em !important',
+  5: '1.5em !important',
+  6: '2em !important',
 } as const
 
 type SpacingUtilityName = keyof typeof SPACING_UTILITIES
@@ -38,13 +38,13 @@ function applyMarginUtilities(theme: string) {
     styleBuilder.select(`.my-${name}`, theme).set('margin-block', value)
   }
 
-  styleBuilder.select('.m-auto', theme).margin('auto')
-  styleBuilder.select('.mt-auto', theme).marginTop('auto')
-  styleBuilder.select('.mr-auto', theme).marginRight('auto')
-  styleBuilder.select('.mb-auto', theme).marginBottom('auto')
-  styleBuilder.select('.ml-auto', theme).marginLeft('auto')
-  styleBuilder.select('.mx-auto', theme).set('margin-inline', 'auto')
-  styleBuilder.select('.my-auto', theme).set('margin-block', 'auto')
+  styleBuilder.select('.m-auto', theme).margin('auto !important')
+  styleBuilder.select('.mt-auto', theme).marginTop('auto !important')
+  styleBuilder.select('.mr-auto', theme).marginRight('auto !important')
+  styleBuilder.select('.mb-auto', theme).marginBottom('auto !important')
+  styleBuilder.select('.ml-auto', theme).marginLeft('auto !important')
+  styleBuilder.select('.mx-auto', theme).set('margin-inline', 'auto !important')
+  styleBuilder.select('.my-auto', theme).set('margin-block', 'auto !important')
 }
 
 function applyPaddingUtilities(theme: string) {
@@ -70,10 +70,13 @@ function applyGapUtilities(theme: string) {
 }
 
 function applyLayoutUtilities(theme: string) {
-  styleBuilder.select('.w-full', theme).width('100%')
-  styleBuilder.select('.h-full', theme).height('100%')
-  styleBuilder.select('.min-w-0', theme).minWidth('0')
-  styleBuilder.select('.list-none', theme).listStyle('none').padding('0')
+  styleBuilder.select('.w-full', theme).width('100% !important')
+  styleBuilder.select('.h-full', theme).height('100% !important')
+  styleBuilder.select('.min-w-0', theme).minWidth('0 !important')
+  styleBuilder
+    .select('.list-none', theme)
+    .listStyle('none')
+    .padding('0 !important')
 }
 
 function applyShadowUtilities(theme: string) {

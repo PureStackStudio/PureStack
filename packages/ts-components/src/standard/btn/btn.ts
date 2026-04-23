@@ -1,7 +1,4 @@
-import {
-  getSemanticToneButtonClass,
-  type SemanticTone,
-} from '@purestack/ts-style'
+import { getSemanticToneClass, type SemanticTone } from '@purestack/ts-style'
 import { urlNormalizer } from '@purestack/ts-util'
 import {
   type ComputedRef,
@@ -44,7 +41,7 @@ export interface BtnLink extends BtnBase {
 }
 
 const buttonTemplate = html`<button
-  class="btn"
+  class="btn tone-button-interactive"
   :class="className"
   :type="buttonType"
   :disabled="disabled"
@@ -56,7 +53,7 @@ const buttonTemplate = html`<button
 </button>`
 
 const buttonLinkTemplate = html`<a
-  class="btn"
+  class="btn tone-button-interactive"
   :class="className"
   :href="resolvedHref"
   :target="target"
@@ -138,7 +135,7 @@ function resolveButtonClassName(props: BtnBase) {
   const iconOnly = unref(props.iconOnly)
   const classTokens = [
     size ? `btn--${size}` : '',
-    getSemanticToneButtonClass(unref(props.tone), true),
+    getSemanticToneClass(unref(props.tone)),
     unref(props.class) || '',
   ].filter(Boolean)
   if (!hasIcon) return classTokens.join(' ')

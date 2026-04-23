@@ -1,7 +1,4 @@
-import {
-  getSemanticToneSurfaceClass,
-  type SemanticTone,
-} from '@purestack/ts-style'
+import { getSemanticToneClass, type SemanticTone } from '@purestack/ts-style'
 import {
   type ComputedRef,
   computed,
@@ -17,12 +14,12 @@ export interface SiteFooter {
   copyright?: string
   legalLabel?: string
   tone?: RefOrValue<SemanticTone>
-  className?: ComputedRef<string>
+  toneClass?: ComputedRef<string>
 }
 
 const siteFooterTemplate = html`<footer
-  class="site-footer doc-content"
-  :class="className"
+  class="site-footer doc-content tone-surface"
+  :class="toneClass"
   :aria-label="ariaLabel"
   :r-teleport="teleport"
 >
@@ -76,6 +73,6 @@ function resolveSiteFooter(props: SiteFooter): SiteFooter {
     ariaLabel: props.ariaLabel || 'Site footer',
     legalLabel: props.legalLabel || 'Legal and policy links',
     copyright: props.copyright || `(c) ${year}. All rights reserved.`,
-    className: computed(() => getSemanticToneSurfaceClass(unref(props.tone))),
+    toneClass: computed(() => getSemanticToneClass(unref(props.tone))),
   }
 }

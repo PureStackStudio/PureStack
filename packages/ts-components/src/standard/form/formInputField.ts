@@ -1,8 +1,4 @@
-import {
-  getSemanticToneButtonClass,
-  getSemanticToneSurfaceClass,
-  type SemanticTone,
-} from '@purestack/ts-style'
+import { getSemanticToneClass, type SemanticTone } from '@purestack/ts-style'
 import {
   type ComponentHead,
   type ComputedRef,
@@ -14,7 +10,6 @@ import {
   ref,
   unref,
 } from 'regor'
-import { FormToneContext } from './form'
 
 let nextAutoInputId = 1
 
@@ -46,8 +41,7 @@ export class FormInputField {
   readonly placeholder?: RefOrValue<string>
   readonly icon?: RefOrValue<string>
   readonly iconEnd?: RefOrValue<string>
-  shellClass?: ComputedRef<string>
-  buttonToneClass?: ComputedRef<string>
+  toneClass?: ComputedRef<string>
 
   constructor(props: FormInputField) {
     Object.assign(this, {
@@ -105,7 +99,7 @@ export class FormInputField {
 
 const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
   <span class="form-block__label" r-if="label">{{ label }}</span>
-  <div class="form-block__input-shell" :class="shellClass">
+  <div class="form-block__input-shell tone-surface" :class="toneClass">
     <Icon class="form-block__input-icon" :name="icon" r-if="icon"/>
     <input
       :id="id"
@@ -121,8 +115,7 @@ const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
       r-model="model"/>
     <div class="form-block__number-controls" r-if="isNumberField">
       <button
-        class="form-block__number-btn form-block__number-btn--up"
-        :class="buttonToneClass"
+        class="form-block__number-btn form-block__number-btn--up tone-button-interactive"
         type="button"
         aria-label="Increase value"
         @click="increment"
@@ -131,8 +124,7 @@ const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
         +
       </button>
       <button
-        class="form-block__number-btn form-block__number-btn--down"
-        :class="buttonToneClass"
+        class="form-block__number-btn form-block__number-btn--down tone-button-interactive"
         type="button"
         aria-label="Decrease value"
         @click="decrement"
@@ -168,15 +160,8 @@ export function defineFormInputField() {
 }
 
 function resolveFormInputField(head: ComponentHead<FormInputField>) {
-  const inheritedTone = head.findContext(FormToneContext)?.tone
-  const resolvedTone = () => unref(head.props.tone) || unref(inheritedTone)
   const field = new FormInputField(head.props)
-  field.shellClass = computed(() =>
-    getSemanticToneSurfaceClass(resolvedTone(), false),
-  )
-  field.buttonToneClass = computed(() =>
-    getSemanticToneButtonClass(resolvedTone(), true),
-  )
+  field.toneClass = computed(() => getSemanticToneClass(unref(head.props.tone)))
   return field
 }
 

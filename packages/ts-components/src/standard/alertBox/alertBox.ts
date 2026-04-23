@@ -1,9 +1,4 @@
-import {
-  getSemanticToneIconClass,
-  getSemanticToneSurfaceClass,
-  getSemanticToneTextClass,
-  type SemanticTone,
-} from '@purestack/ts-style'
+import { getSemanticToneClass, type SemanticTone } from '@purestack/ts-style'
 import {
   type ComputedRef,
   computed,
@@ -20,25 +15,22 @@ export interface AlertBox {
   meta?: RefOrValue<string>
   tone?: RefOrValue<SemanticTone>
   icon?: RefOrValue<string>
-  rootClass?: ComputedRef<string>
-  titleToneClass?: ComputedRef<string>
-  iconToneClass?: ComputedRef<string>
+  toneClass?: ComputedRef<string>
 }
 
-const alertBoxTemplate = html`<aside class="alert" :class="rootClass">
+const alertBoxTemplate = html`<aside class="alert tone-surface" :class="toneClass">
   <Icon
-    class="expandable-panel__icon"
+    class="expandable-panel__icon tone-icon"
     :name="icon"
-    :class="iconToneClass"
     r-if="icon"
     :wrap="true"/>
   <div class="alert__content">
     <div class="alert__header" r-if="title || eyebrow || badge">
       <p class="alert__eyebrow" r-if="eyebrow">{{ eyebrow }}</p>
-      <h3 class="alert__title" :class="titleToneClass" r-if="title">
+      <h3 class="alert__title tone-text" r-if="title">
         {{ title }}
       </h3>
-      <Badge tone="neutral" r-if="badge">{{ badge }}</Badge>
+      <Badge :tone="tone" r-if="badge">{{ badge }}</Badge>
     </div>
     <div class="alert__body"><slot></slot></div>
     <div class="alert__actions"><slot name="actions"></slot></div>
@@ -62,14 +54,6 @@ export function defineAlertComponents() {
 function resolveAlertBox(props: AlertBox): AlertBox {
   return {
     ...props,
-    titleToneClass: computed(() =>
-      getSemanticToneTextClass(unref(props.tone), 'info'),
-    ),
-    iconToneClass: computed(() =>
-      getSemanticToneIconClass(unref(props.tone), 'info'),
-    ),
-    rootClass: computed(() =>
-      getSemanticToneSurfaceClass(unref(props.tone), false, 'info'),
-    ),
+    toneClass: computed(() => getSemanticToneClass(unref(props.tone), 'info')),
   }
 }

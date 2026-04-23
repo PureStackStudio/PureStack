@@ -107,11 +107,9 @@ describe('Tabs rendering', () => {
     )
     cleanup()
 
-    expect(html).toContain('<section class="tabs tone--warning tone-surface">')
-    expect(html).toContain(
-      'class="tabs__tab tone--warning tone-button-interactive"',
-    )
-    expect(html).toContain('class="tabs__panel"')
+    expect(html).toContain('<section class="tabs tone-surface tone--warning">')
+    expect(html).toContain('class="tabs__tab tone-button-interactive"')
+    expect(html).toContain('class="tabs__panel tone-surface"')
   })
 
   it('binds selectedTab in both directions', () => {
