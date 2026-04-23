@@ -46,8 +46,7 @@ const pricingTableTemplate = html`<Panel :tone="tone" class="pricing">
       :footnote="footnote"
       titleTag="h2"
       subtitleClass="mb-0"
-      footnoteClass="mb-0"
-    />
+      footnoteClass="mb-0"/>
     <Grid
       class="pricing__grid gap-4"
       columns="1"
@@ -68,27 +67,20 @@ const pricingPlanTemplate = html`<Panel :tone="tone" :class="panelClass">
         :name="icon"
         :tone="tone"
         wrap="true"
-        class="pricing-plan__icon icon-wrap--tile icon-wrap--tile-lg"
-      />
-      <Badge tone="neutral" r-if="badge">{{ badge }}</Badge>
+        class="pricing-plan__icon icon-wrap--tile icon-wrap--tile-lg"/>
+      <Badge r-if="badge">{{ badge }}</Badge>
     </Flex>
     <SectionHeader
       :title="title"
       :subtitle="summary"
       titleTag="h3"
       titleClass="fs-xl mb-0"
-      subtitleClass="mb-0"
-    />
+      subtitleClass="mb-0"/>
     <Flex class="pricing-plan__price" align="baseline" r-if="price">
       <span class="pricing-plan__amount">{{ price }}</span>
       <span class="pricing-plan__period" r-if="period">{{ period }}</span>
     </Flex>
-    <BtnLink
-      class="mt-auto"
-      tone="neutral"
-      :href="ctaLink"
-      r-if="ctaLabel && ctaLink"
-    >
+    <BtnLink class="mt-auto" :href="ctaLink" r-if="ctaLabel && ctaLink">
       {{ ctaLabel }}
     </BtnLink>
     <Flex
@@ -103,16 +95,11 @@ const pricingPlanTemplate = html`<Panel :tone="tone" :class="panelClass">
   </Flex>
 </Panel>`
 
-const pricingFeatureTemplate = html`<Flex
-  container="li"
-  align="start"
-  class="pricing-feature gap-2 w-full"
->
+const pricingFeatureTemplate = html`<Flex container="li" align="start" class="pricing-feature gap-2 w-full">
   <Icon
     :name="icon || 'iconoir:check'"
     wrap="true"
-    class="pricing-feature__icon icon-wrap--tile icon-wrap--tile-sm"
-  />
+    class="pricing-feature__icon icon-wrap--tile icon-wrap--tile-sm"/>
   <span class="min-w-0"><slot></slot></span>
 </Flex>`
 
