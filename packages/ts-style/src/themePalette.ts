@@ -185,6 +185,12 @@ export interface ThemePaletteCurrent {
       border: string
       text: string
     }
+    disabled: {
+      background: string
+      border: string
+      text: string
+    }
+    focusRing: string
   }
   surfaceAlt: {
     rest: {
@@ -202,6 +208,12 @@ export interface ThemePaletteCurrent {
       border: string
       text: string
     }
+    disabled: {
+      background: string
+      border: string
+      text: string
+    }
+    focusRing: string
   }
   text: {
     default: string
@@ -228,6 +240,12 @@ export interface ThemePaletteCurrent {
       border: string
       text: string
     }
+    disabled: {
+      background: string
+      border: string
+      text: string
+    }
+    focusRing: string
   }
   icon: {
     background: string

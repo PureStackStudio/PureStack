@@ -125,7 +125,7 @@ function definePageTocComponent() {
         interactiveToneClass: computed(() =>
           getSemanticToneInteractiveClass(tone),
         ),
-        buttonToneClass: computed(() => getSemanticToneButtonClass(tone)),
+        buttonToneClass: computed(() => getSemanticToneButtonClass(tone, true)),
         items: resolveItems(head.props, context, tone),
       }
     },

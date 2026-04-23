@@ -107,8 +107,10 @@ describe('Tabs rendering', () => {
     )
     cleanup()
 
-    expect(html).toContain('<section class="tabs tone-surface--warning">')
-    expect(html).toContain('class="tabs__tab tone-interactive-button--warning"')
+    expect(html).toContain('<section class="tabs tone--warning tone-surface">')
+    expect(html).toContain(
+      'class="tabs__tab tone--warning tone-button-interactive"',
+    )
     expect(html).toContain('class="tabs__panel"')
   })
 

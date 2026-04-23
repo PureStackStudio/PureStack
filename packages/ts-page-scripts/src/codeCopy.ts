@@ -103,7 +103,7 @@ function createButton(pre: HTMLElement, code: HTMLElement) {
   if (pre.querySelector(':scope > .code-copy-button')) return
   const button = document.createElement('button') as CopyButton
   button.type = 'button'
-  button.className = 'code-copy-button tone-interactive-button--neutral'
+  button.className = 'code-copy-button tone--neutral tone-button-interactive'
   button.setAttribute('aria-live', 'polite')
   const copyLabel = labelFor(pre)
   button.setAttribute('aria-label', copyLabel)

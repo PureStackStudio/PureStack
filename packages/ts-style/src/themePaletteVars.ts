@@ -15,7 +15,12 @@ const SEMANTIC_TONE_NAMES = [
   'danger',
 ] as const
 const INTERACTIVE_STATES = ['rest', 'hover', 'active', 'disabled'] as const
-const CURRENT_INTERACTIVE_STATES = ['rest', 'hover', 'active'] as const
+const CURRENT_INTERACTIVE_STATES = [
+  'rest',
+  'hover',
+  'active',
+  'disabled',
+] as const
 const INTERACTIVE_PROPS = ['background', 'border', 'text'] as const
 const BORDER_PROPS = ['subtle', 'default', 'focus'] as const
 const TEXT_PROPS = ['default', 'subtle'] as const
@@ -50,14 +55,17 @@ const CURRENT_THEME_PALETTE_PATHS = {
   tone: ['tone'],
   canvas: ['canvas'],
   overlay: ['overlay'],
-  surface: createInteractivePathTree('surface', CURRENT_INTERACTIVE_STATES),
-  surfaceAlt: createInteractivePathTree(
+  surface: createInteractiveGroupPathTree(
+    'surface',
+    CURRENT_INTERACTIVE_STATES,
+  ),
+  surfaceAlt: createInteractiveGroupPathTree(
     'surfaceAlt',
     CURRENT_INTERACTIVE_STATES,
   ),
   text: createPropertyPathTree('text', TEXT_PROPS),
   border: createPropertyPathTree('border', BORDER_PROPS),
-  button: createInteractivePathTree('button', CURRENT_INTERACTIVE_STATES),
+  button: createInteractiveGroupPathTree('button', CURRENT_INTERACTIVE_STATES),
   icon: createPropertyPathTree('icon', ICON_PROPS),
 } as const satisfies PathTree
 
@@ -383,6 +391,15 @@ function createInteractivePathTree<const TStates extends readonly string[]>(
     out[state] = createPropertyPathTree([group, state], INTERACTIVE_PROPS)
   }
   return out as InteractivePathTree<TStates>
+}
+
+function createInteractiveGroupPathTree<
+  const TStates extends readonly string[],
+>(group: string, states: TStates) {
+  return {
+    ...createInteractivePathTree(group, states),
+    focusRing: [group, 'focusRing'],
+  } as const
 }
 
 function createPropertyPathTree<const TProps extends readonly string[]>(

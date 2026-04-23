@@ -202,7 +202,7 @@ function defineNavMenuComponent() {
           getSemanticToneInteractiveClass(head.props.tone),
         ),
         buttonToneClass: computed(() =>
-          getSemanticToneButtonClass(head.props.tone),
+          getSemanticToneButtonClass(head.props.tone, true),
         ),
         items: buildNavState(
           head.props.items ?? resolveNavItems(context),

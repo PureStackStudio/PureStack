@@ -169,10 +169,10 @@ These examples use the low-level semantic tone utility classes directly.
 
 <Grid columns="1" columnsLg="2">
   <div
-    class="tone-surface--feature"
+    class="tone--feature tone-surface"
     style="padding:1rem; border:1px solid; border-radius:1rem;"
   >
-    <div class="text-eyebrow">tone-surface--feature</div>
+    <div class="text-eyebrow">tone--feature + tone-surface</div>
     <h3 class="text-title">Surface utility</h3>
     <p class="text-tagline">
       This block is tinted by the semantic surface token set and the text roles
@@ -181,10 +181,10 @@ These examples use the low-level semantic tone utility classes directly.
   </div>
 
   <div
-    class="tone-surface-alt--secondary"
+    class="tone--secondary tone-surface-alt"
     style="padding:1rem; border:1px solid; border-radius:1rem;"
   >
-    <div class="text-eyebrow">tone-surface-alt--secondary</div>
+    <div class="text-eyebrow">tone--secondary + tone-surface-alt</div>
     <h3 class="text-title">Alternate surface utility</h3>
     <p class="text-tagline">
       Use this when the secondary surface treatment should feel distinct from
@@ -193,10 +193,10 @@ These examples use the low-level semantic tone utility classes directly.
   </div>
 
   <div
-    class="tone-text--custom tone-border--custom"
+    class="tone--custom tone-text tone-border"
     style="padding:1rem; border:1px solid; border-radius:1rem;"
   >
-    <div class="text-eyebrow">tone-text--custom + tone-border--custom</div>
+    <div class="text-eyebrow">tone--custom + tone-text + tone-border</div>
     <h3 style="margin-top:0.25rem;">Text and border utility</h3>
     <p>
       This pattern is useful when you want semantic emphasis without switching
@@ -205,37 +205,37 @@ These examples use the low-level semantic tone utility classes directly.
   </div>
 
   <div
-    class="tone-surface--neutral"
+    class="tone--neutral tone-surface"
     style="padding:1rem; border:1px solid; border-radius:1rem;"
   >
     <Flex align="center">
       <div
-        class="tone-icon--accent"
+        class="tone--accent tone-icon"
         style="width:2.5rem; height:2.5rem; border:1px solid; border-radius:999px; display:flex; align-items:center; justify-content:center; font-weight:700;"
       >
         A
       </div>
       <div
-        class="tone-icon--feature"
+        class="tone--feature tone-icon"
         style="width:2.5rem; height:2.5rem; border:1px solid; border-radius:999px; display:flex; align-items:center; justify-content:center; font-weight:700;"
       >
         F
       </div>
       <div
-        class="tone-icon--secondary"
+        class="tone--secondary tone-icon"
         style="width:2.5rem; height:2.5rem; border:1px solid; border-radius:999px; display:flex; align-items:center; justify-content:center; font-weight:700;"
       >
         S
       </div>
       <div
-        class="tone-icon--custom"
+        class="tone--custom tone-icon"
         style="width:2.5rem; height:2.5rem; border:1px solid; border-radius:999px; display:flex; align-items:center; justify-content:center; font-weight:700;"
       >
         C
       </div>
     </Flex>
     <p class="text-caption">
-      `tone-icon--*` applies the icon token contract directly to small
+      `tone--*` + `tone-icon` applies the icon token contract directly to small
       badge-like primitives.
     </p>
   </div>
@@ -247,7 +247,7 @@ Everything inside these surfaces reads from the active current palette rather th
 
 <Grid columns="1" columnsLg="3">
   <div
-    class="tone-surface--accent"
+    class="tone--accent tone-surface"
     style="padding:1.1rem; border:1px solid; border-radius:1rem;"
   >
     <div class="text-eyebrow">Current palette</div>
@@ -257,7 +257,7 @@ Everything inside these surfaces reads from the active current palette rather th
   </div>
 
   <div
-    class="tone-surface--feature"
+    class="tone--feature tone-surface"
     style="padding:1.1rem; border:1px solid; border-radius:1rem;"
   >
     <div class="text-eyebrow">Current palette</div>
@@ -269,7 +269,7 @@ Everything inside these surfaces reads from the active current palette rather th
   </div>
 
   <div
-    class="tone-surface--danger"
+    class="tone--danger tone-surface"
     style="padding:1.1rem; border:1px solid; border-radius:1rem;"
   >
     <div class="text-eyebrow">Current palette</div>
@@ -284,11 +284,11 @@ Everything inside these surfaces reads from the active current palette rather th
 ## 6. Suggested utility set
 
 ```html
-<div class="tone-surface--feature">Base surface treatment</div>
-<div class="tone-surface-alt--secondary">Alternate surface treatment</div>
-<div class="tone-text--custom">Semantic text emphasis</div>
-<div class="tone-border--warning">Semantic border emphasis</div>
-<div class="tone-icon--accent">Icon token treatment</div>
+<div class="tone--feature tone-surface">Base surface treatment</div>
+<div class="tone--secondary tone-surface-alt">Alternate surface treatment</div>
+<div class="tone--custom tone-text">Semantic text emphasis</div>
+<div class="tone--warning tone-border">Semantic border emphasis</div>
+<div class="tone--accent tone-icon">Icon token treatment</div>
 
 <Btn tone="feature">Feature CTA</Btn>
 <Btn tone="secondary">Secondary CTA</Btn>

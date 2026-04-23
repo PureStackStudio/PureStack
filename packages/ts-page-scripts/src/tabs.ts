@@ -523,23 +523,23 @@ function resolveTabsSelectId(root: HTMLElement) {
 
 function resolveTabsTone(root: HTMLElement) {
   for (const className of root.classList) {
-    if (className.startsWith('tone-surface--')) {
-      return className.slice('tone-surface--'.length) || 'neutral'
+    if (className.startsWith('tone--')) {
+      return className.slice('tone--'.length) || 'neutral'
     }
   }
   return 'neutral'
 }
 
 function getInteractiveToneClass(tone: string) {
-  return `tone-interactive--${tone}`
+  return `tone--${tone} tone-interactive`
 }
 
 function getInteractiveButtonToneClass(tone: string) {
-  return `tone-interactive-button--${tone}`
+  return `tone--${tone} tone-button-interactive`
 }
 
 function getSurfaceToneClass(tone: string) {
-  return `tone-surface--${tone}`
+  return `tone--${tone} tone-surface`
 }
 
 ready(initTabs)
