@@ -1,4 +1,5 @@
 import type { Style } from '@purestack/ts-css'
+import { createPresets } from './semanticPresets'
 import { styleBuilder } from './styles'
 import { themes } from './themeOptions'
 import type { SemanticToneTokens, ThemePalette } from './themePalette'
@@ -209,17 +210,13 @@ export function registerSemanticToneUtilityStyles() {
       .boxShadow(`0 0 0 2px ${current.button.focusRing}`)
 
     styleBuilder
-      .select('.tone-border', theme)
-      .borderColor(current.border.default)
-
-    styleBuilder.select('.tone-text', theme).color(current.text.default)
-
-    styleBuilder
       .select('.tone-icon', theme)
       .background(current.icon.gradient)
       .backgroundColor(current.icon.background)
       .borderColor(current.icon.border)
       .color(current.icon.color)
+
+    createPresets(styleBuilder, current, theme)
   })
 }
 
