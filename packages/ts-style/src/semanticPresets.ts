@@ -219,58 +219,58 @@ function createText(
   const text: Preset = {
     'tone-text': {
       rest: {
-        borderColor: current.tone,
+        color: current.tone,
       },
       hover: {
-        borderColor: current.tone,
+        color: current.tone,
       },
       active: {
-        borderColor: current.tone,
+        color: current.tone,
       },
     },
     'tone-text-surface': {
       all: true,
       rest: {
-        borderColor: current.surface.rest.text,
+        color: current.surface.rest.text,
       },
       hover: {
-        borderColor: current.surface.hover.text,
+        color: current.surface.hover.text,
       },
       active: {
-        borderColor: current.surface.active.text,
+        color: current.surface.active.text,
       },
       disabled: {
-        borderColor: current.surface.disabled.text,
+        color: current.surface.disabled.text,
       },
     },
     'tone-text-surface-alt': {
       all: true,
       rest: {
-        borderColor: current.surfaceAlt.rest.text,
+        color: current.surfaceAlt.rest.text,
       },
       hover: {
-        borderColor: current.surfaceAlt.hover.text,
+        color: current.surfaceAlt.hover.text,
       },
       active: {
-        borderColor: current.surfaceAlt.active.text,
+        color: current.surfaceAlt.active.text,
       },
       disabled: {
-        borderColor: current.surfaceAlt.disabled.text,
+        color: current.surfaceAlt.disabled.text,
       },
     },
     'tone-text-button': {
       all: true,
       rest: {
-        borderColor: current.button.rest.text,
+        color: current.button.rest.text,
       },
       hover: {
-        borderColor: current.button.hover.text,
+        color: current.button.hover.text,
       },
       active: {
-        borderColor: current.button.active.text,
+        color: current.button.active.text,
       },
       disabled: {
-        borderColor: current.button.disabled.text,
+        color: current.button.disabled.text,
       },
     },
   }
@@ -374,9 +374,10 @@ function createInsetString(
   size: string = '0.75em',
   color: string = 'red',
 ): string {
+  const negativeSize = `calc(${size} * -1)`
   const top = `inset 0 ${size} 0 0 ${color}`
-  const right = `inset -${size} 0 0 0 ${color}`
-  const bottom = `inset 0 -${size} 0 0 ${color}`
+  const right = `inset ${negativeSize} 0 0 0 ${color}`
+  const bottom = `inset 0 ${negativeSize} 0 0 ${color}`
   const left = `inset ${size} 0 0 0 ${color}`
   const all = `inset 0 0 0 ${size} ${color}`
 
@@ -429,22 +430,22 @@ function createInset(
       hover: insetY,
       active: insetY,
     },
-    'tone-inset-left': {
+    'tone-inset-l': {
       rest: insetLeft,
       hover: insetLeft,
       active: insetLeft,
     },
-    'tone-inset-right': {
+    'tone-inset-r': {
       rest: insetRight,
       hover: insetRight,
       active: insetRight,
     },
-    'tone-inset-top': {
+    'tone-inset-t': {
       rest: insetTop,
       hover: insetTop,
       active: insetTop,
     },
-    'tone-inset-bottom': {
+    'tone-inset-b': {
       rest: insetBottom,
       hover: insetBottom,
       active: insetBottom,

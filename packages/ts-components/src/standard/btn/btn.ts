@@ -41,7 +41,7 @@ export interface BtnLink extends BtnBase {
 }
 
 const buttonTemplate = html`<button
-  class="btn tone-button-interactive"
+  class="btn tone-inset-b-hover tone-border-button-all tone-text"
   :class="className"
   :type="buttonType"
   :disabled="disabled"
@@ -53,7 +53,7 @@ const buttonTemplate = html`<button
 </button>`
 
 const buttonLinkTemplate = html`<a
-  class="btn tone-button-interactive"
+  class="btn tone-inset-b-hover tone-border-button-all tone-text"
   :class="className"
   :href="resolvedHref"
   :target="target"
