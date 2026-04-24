@@ -34,14 +34,14 @@ const pageTocTemplate = html`<nav class="page-toc tone-surface" :class="toneClas
       data-page-toc-restore
     >
       <span
-        class="page-toc__header-toggle-icon page-toc__header-toggle-icon--collapse"
+        class="page-toc__header-toggle-icon page-toc__header-toggle-icon--collapse pad-1"
       >
-        <Icon wrap="true" name="iconoir:pin-slash"/>
+        <Icon name="iconoir:pin-slash"/>
       </span>
       <span
-        class="page-toc__header-toggle-icon page-toc__header-toggle-icon--restore"
+        class="page-toc__header-toggle-icon page-toc__header-toggle-icon--restore pad-1"
       >
-        <Icon wrap="true" name="iconoir:pin"/>
+        <Icon name="iconoir:pin"/>
       </span>
     </button>
   </div>
