@@ -40,7 +40,7 @@ describe('ExpandablePanel rendering', () => {
       '<details class="expandable-panel tone-surface tone--accent" open',
     )
     expect(html).toContain('Microsoft 365')
-    expect(html).toContain('class="icon-wrap tone-icon')
+    expect(html).toContain('class="icon-framed tone-icon')
     expect(html).toContain('Upgrade today to unlock richer collaboration')
   })
 

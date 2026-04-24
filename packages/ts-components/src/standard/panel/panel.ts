@@ -14,7 +14,7 @@ export interface Panel {
   class?: RefOrValue<string>
 }
 
-const panelTemplate = html`<section class="panel tone-surface" :class="[class, toneClass]">
+const panelTemplate = html`<section class="panel" :class="[class, toneClass]">
   <div class="panel__body"><slot></slot></div>
 </section>`
 

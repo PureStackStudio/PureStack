@@ -26,7 +26,7 @@ const expandablePanelTemplate = html`<details class="expandable-panel tone-surfa
         class="expandable-panel__icon tone-icon"
         :name="icon"
         r-if="icon"
-        :wrap="true"/>
+        :framed="true"/>
       <span class="expandable-panel__header">
         <span class="expandable-panel__title" r-if="title">{{ title }}</span>
         <Badge :tone="tone" r-if="badge">{{ badge }}</Badge>

@@ -35,7 +35,7 @@ function registerIconBaseStyles(
     .height('100%')
 
   styleBuilder
-    .select('.icon-wrap', theme)
+    .select('.icon-framed', theme)
     .padding('0.25em')
     .display('inline-flex')
     .alignItems('center')
@@ -46,7 +46,7 @@ function registerIconBaseStyles(
     .color(palette.current.text.default)
 
   styleBuilder
-    .select('.icon-wrap--tile', theme)
+    .select('.icon-framed--tile', theme)
     .padding('0.5em')
     .border(`1px solid ${palette.current.icon.border}`)
     .background(palette.current.icon.gradient)
@@ -54,13 +54,13 @@ function registerIconBaseStyles(
     .color(palette.current.icon.color)
 
   styleBuilder
-    .select('.icon-wrap--tile-sm', theme)
+    .select('.icon-framed--tile-sm', theme)
     .borderRadius(options.radii.sm)
     .padding('0.25em')
     .fontSize('0.82rem')
 
   styleBuilder
-    .select('.icon-wrap--tile-lg', theme)
+    .select('.icon-framed--tile-lg', theme)
     .borderRadius('0.75rem')
     .fontSize('1.12rem')
 }

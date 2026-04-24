@@ -23,7 +23,7 @@ const alertBoxTemplate = html`<aside class="alert tone-surface" :class="toneClas
     class="expandable-panel__icon tone-icon"
     :name="icon"
     r-if="icon"
-    :wrap="true"/>
+    :framed="true"/>
   <div class="alert__content">
     <div class="alert__header" r-if="title || eyebrow || badge">
       <p class="alert__eyebrow" r-if="eyebrow">{{ eyebrow }}</p>

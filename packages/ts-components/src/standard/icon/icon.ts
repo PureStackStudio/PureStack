@@ -14,7 +14,7 @@ export interface Icon {
   name?: RefOrValue<string>
   class?: RefOrValue<string>
   ariaLabel?: RefOrValue<string>
-  wrap?: RefOrValue<boolean>
+  framed?: RefOrValue<boolean>
   tone?: RefOrValue<SemanticTone>
   svg?: ComputedRef<string>
   ariaHidden?: ComputedRef<boolean>
@@ -22,7 +22,7 @@ export interface Icon {
   toneClass?: ComputedRef<string>
 }
 
-const iconTemplate = html`<span class="icon-wrap tone-icon" :class="[class, toneClass]" r-if="wrap">
+const iconTemplate = html`<span class="icon-framed tone-icon" :class="[class, toneClass]" r-if="framed">
   <span
     class="icon"
     :role="role"
@@ -45,7 +45,7 @@ const iconTemplate = html`<span class="icon-wrap tone-icon" :class="[class, tone
 
 function defineIconComponent(getSvgIcon: GetSvgIcon) {
   return defineComponent<Icon>(iconTemplate, {
-    props: ['name', 'class', 'ariaLabel', 'wrap', 'tone'],
+    props: ['name', 'class', 'ariaLabel', 'framed', 'tone'],
     context: (head) => resolveIcon(head.props, getSvgIcon),
   })
 }

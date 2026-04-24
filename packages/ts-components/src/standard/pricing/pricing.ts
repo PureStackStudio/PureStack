@@ -66,8 +66,8 @@ const pricingPlanTemplate = html`<Panel :tone="tone" :class="panelClass">
         r-if="icon"
         :name="icon"
         :tone="tone"
-        wrap="true"
-        class="pricing-plan__icon icon-wrap--tile icon-wrap--tile-lg"/>
+        framed="true"
+        class="pricing-plan__icon icon-framed--tile icon-framed--tile-lg"/>
       <Badge r-if="badge">{{ badge }}</Badge>
     </Flex>
     <SectionHeader
@@ -98,8 +98,8 @@ const pricingPlanTemplate = html`<Panel :tone="tone" :class="panelClass">
 const pricingFeatureTemplate = html`<Flex container="li" align="start" class="pricing-feature gap-2 w-full">
   <Icon
     :name="icon || 'iconoir:check'"
-    wrap="true"
-    class="pricing-feature__icon icon-wrap--tile icon-wrap--tile-sm"/>
+    framed="true"
+    class="pricing-feature__icon icon-framed--tile icon-framed--tile-sm"/>
   <span class="min-w-0"><slot></slot></span>
 </Flex>`
 

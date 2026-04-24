@@ -59,7 +59,7 @@ export function applyPricingPlanStyles(
   styleBuilder.select('.pricing-plan__stack', theme).height('100%')
 
   styleBuilder
-    .select('.pricing-plan__icon.icon-wrap', theme)
+    .select('.pricing-plan__icon.icon-framed', theme)
     .boxShadow(palette.effect.accentShadow)
 
   styleBuilder.select('.pricing-plan__price', theme).minHeight('38px')
