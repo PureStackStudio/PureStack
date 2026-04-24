@@ -1,5 +1,5 @@
 import { styleBuilder } from './styles'
-import { themes } from './themeOptions'
+import { type ThemeOptions, themes } from './themeOptions'
 import type { ThemePalette } from './themePalette'
 
 export const SPACING_UTILITIES = {
@@ -15,11 +15,12 @@ export const SPACING_UTILITIES = {
 type SpacingUtilityName = keyof typeof SPACING_UTILITIES
 
 export function registerUtilityStyles() {
-  themes.forEach((theme, palette) => {
+  themes.forEach((theme, palette, options) => {
     applyMarginUtilities(theme)
     applyPaddingUtilities(theme)
     applyGapUtilities(theme)
     applyLayoutUtilities(theme)
+    applyBorderUtilities(theme, palette, options.radii)
     applyTextUtilities(theme, palette)
     applyFontSizeUtilities(theme, palette)
     applyShadowUtilities(theme)
@@ -77,6 +78,84 @@ function applyLayoutUtilities(theme: string) {
     .select('.list-none', theme)
     .listStyle(force('none'))
     .padding(force('0'))
+}
+
+function applyBorderUtilities(
+  theme: string,
+  palette: ThemePalette,
+  radii: ThemeOptions['radii'],
+) {
+  styleBuilder
+    .select('.b', theme)
+    .borderStyle(force('solid'))
+    .borderWidth(force('1px'))
+
+  styleBuilder.select('.b-0', theme).borderWidth(force('0'))
+  styleBuilder.select('.b-none', theme).borderStyle(force('none'))
+  styleBuilder.select('.b-solid', theme).borderStyle(force('solid'))
+  styleBuilder.select('.b-dashed', theme).borderStyle(force('dashed'))
+  styleBuilder.select('.b-dotted', theme).borderStyle(force('dotted'))
+
+  styleBuilder
+    .select('.bx', theme)
+    .borderLeftWidth(force('1px'))
+    .borderRightWidth(force('1px'))
+    .borderLeftStyle(force('solid'))
+    .borderRightStyle(force('solid'))
+  styleBuilder
+    .select('.by', theme)
+    .borderTopWidth(force('1px'))
+    .borderBottomWidth(force('1px'))
+    .borderTopStyle(force('solid'))
+    .borderBottomStyle(force('solid'))
+  styleBuilder
+    .select('.bt', theme)
+    .borderTopWidth(force('1px'))
+    .borderTopStyle(force('solid'))
+  styleBuilder
+    .select('.br', theme)
+    .borderRightWidth(force('1px'))
+    .borderRightStyle(force('solid'))
+  styleBuilder
+    .select('.bb', theme)
+    .borderBottomWidth(force('1px'))
+    .borderBottomStyle(force('solid'))
+  styleBuilder
+    .select('.bl', theme)
+    .borderLeftWidth(force('1px'))
+    .borderLeftStyle(force('solid'))
+
+  styleBuilder
+    .select('.bx-0', theme)
+    .borderLeftWidth(force('0'))
+    .borderRightWidth(force('0'))
+  styleBuilder
+    .select('.by-0', theme)
+    .borderTopWidth(force('0'))
+    .borderBottomWidth(force('0'))
+  styleBuilder.select('.bt-0', theme).borderTopWidth(force('0'))
+  styleBuilder.select('.br-0', theme).borderRightWidth(force('0'))
+  styleBuilder.select('.bb-0', theme).borderBottomWidth(force('0'))
+  styleBuilder.select('.bl-0', theme).borderLeftWidth(force('0'))
+
+  styleBuilder
+    .select('.b-subtle', theme)
+    .borderColor(force(palette.current.border.subtle))
+  styleBuilder
+    .select('.b-default', theme)
+    .borderColor(force(palette.current.border.default))
+  styleBuilder
+    .select('.b-focus', theme)
+    .borderColor(force(palette.current.border.focus))
+  styleBuilder.select('.b-tone', theme).borderColor(force(palette.current.tone))
+  styleBuilder.select('.b-transparent', theme).borderColor(force('transparent'))
+  styleBuilder.select('.b-current', theme).borderColor(force('currentColor'))
+
+  styleBuilder.select('.rounded-none', theme).borderRadius(force('0'))
+  styleBuilder.select('.rounded-sm', theme).borderRadius(force(radii.sm))
+  styleBuilder.select('.rounded-md', theme).borderRadius(force(radii.md))
+  styleBuilder.select('.rounded-lg', theme).borderRadius(force(radii.lg))
+  styleBuilder.select('.rounded-pill', theme).borderRadius(force(radii.pill))
 }
 
 function applyShadowUtilities(theme: string) {
