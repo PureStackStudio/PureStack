@@ -12,10 +12,21 @@ import {
 export type BtnSize = 'sm' | 'md' | 'lg'
 export type BtnType = 'button' | 'submit' | 'reset'
 export type BtnIconPosition = 'start' | 'end'
+export type BtnVariant =
+  | 'solid'
+  | 'soft'
+  | 'outline'
+  | 'subtle'
+  | 'link'
+  | 'sheen'
+  | 'underline'
+  | 'rail'
+  | 'bracket'
 
 export interface BtnBase {
   tone?: RefOrValue<SemanticTone>
   size?: RefOrValue<BtnSize>
+  variant?: RefOrValue<BtnVariant>
   icon?: RefOrValue<string>
   iconPosition?: RefOrValue<BtnIconPosition>
   iconOnly?: RefOrValue<boolean>
@@ -40,8 +51,22 @@ export interface BtnLink extends BtnBase {
   resolvedRel?: ComputedRef<string>
 }
 
+const DEFAULT_BUTTON_VARIANT: BtnVariant = 'solid'
+const BUTTON_VARIANT_CLASSES: Record<BtnVariant, string> = {
+  solid: 'tone-fill-button-all tone-border-button-all tone-text-button-all',
+  soft: 'tone-fill-surface-alt-all tone-border-surface-alt-all tone-text',
+  outline:
+    'tone-border-button-all tone-text tone-fill-button-hover tone-text-button-hover tone-fill-button-active tone-text-button-active',
+  subtle: 'tone-text tone-fill-surface-hover tone-fill-surface-active',
+  link: 'tone-text',
+  sheen: 'tone-text-bg-button-all',
+  underline: 'tone-inset-b-hover tone-border-button-all tone-text',
+  rail: 'tone-inset-l-hover tone-border-button-all tone-text',
+  bracket: 'tone-inset-y-hover tone-border-button-all tone-text',
+}
+
 const buttonTemplate = html`<button
-  class="btn tone-inset-b-hover tone-border-button-all tone-text"
+  class="btn"
   :class="className"
   :type="buttonType"
   :disabled="disabled"
@@ -53,7 +78,7 @@ const buttonTemplate = html`<button
 </button>`
 
 const buttonLinkTemplate = html`<a
-  class="btn tone-inset-b-hover tone-border-button-all tone-text"
+  class="btn"
   :class="className"
   :href="resolvedHref"
   :target="target"
@@ -70,6 +95,7 @@ function defineButtonComponent() {
     props: [
       'tone',
       'size',
+      'variant',
       'type',
       'icon',
       'iconPosition',
@@ -90,6 +116,7 @@ function defineButtonLinkComponent() {
       'rel',
       'tone',
       'size',
+      'variant',
       'icon',
       'iconPosition',
       'iconOnly',
@@ -134,6 +161,7 @@ function resolveButtonClassName(props: BtnBase) {
   const iconPosition = unref(props.iconPosition)
   const iconOnly = unref(props.iconOnly)
   const classTokens = [
+    resolveButtonVariantClassName(props),
     size ? `btn--${size}` : '',
     getSemanticToneClass(unref(props.tone)),
     unref(props.class) || '',
@@ -147,6 +175,11 @@ function resolveButtonClassName(props: BtnBase) {
         : 'btn--icon-start',
   )
   return classTokens.join(' ')
+}
+
+function resolveButtonVariantClassName(props: BtnBase) {
+  const variant = unref(props.variant) || DEFAULT_BUTTON_VARIANT
+  return BUTTON_VARIANT_CLASSES[variant]
 }
 
 function resolveShowStartIcon(props: BtnBase) {

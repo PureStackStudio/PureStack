@@ -31,7 +31,6 @@ function registerButtonBaseStyles(
     .webkitTapHighlightColor('transparent')
     .padding('0.5em 0.75em')
     .apply(palette.applyFont(palette.font.size.body, palette.font.weight.w500))
-    .borderRadius(`${options.radii.md} ${options.radii.md} 0 0`)
 
   styleBuilder
     .select('.btn:disabled', theme)
@@ -50,19 +49,17 @@ function registerButtonBaseStyles(
 function registerButtonSizeStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  radii: { sm: string; md: string; lg: string },
+  _radii: { sm: string; md: string; lg: string },
 ) {
   styleBuilder
     .select('.btn--sm', theme)
     .apply(palette.applyFont(palette.font.size.xs, palette.font.weight.w500))
-    .borderRadius(`${radii.sm} ${radii.sm} 0 0`)
 
   /*- The default size (md) is defined in the .btn for simplicity. */
 
   styleBuilder
     .select('.btn--lg', theme)
     .apply(palette.applyFont(palette.font.size.h2, palette.font.weight.w500))
-    .borderRadius(`${radii.md} ${radii.md} 0 0`)
   styleBuilder.select('.btn--icon-only', theme).padding('0.25em')
   styleBuilder.select('.btn--icon-only .btn__label', theme).display('none')
 }

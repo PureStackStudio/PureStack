@@ -151,11 +151,32 @@ function applyBorderUtilities(
   styleBuilder.select('.b-transparent', theme).borderColor(force('transparent'))
   styleBuilder.select('.b-current', theme).borderColor(force('currentColor'))
 
-  styleBuilder.select('.rounded-none', theme).borderRadius(force('0'))
-  styleBuilder.select('.rounded-sm', theme).borderRadius(force(radii.sm))
-  styleBuilder.select('.rounded-md', theme).borderRadius(force(radii.md))
-  styleBuilder.select('.rounded-lg', theme).borderRadius(force(radii.lg))
-  styleBuilder.select('.rounded-pill', theme).borderRadius(force(radii.pill))
+  applyRadiusUtility(theme, 'none', '0')
+  applyRadiusUtility(theme, 'sm', radii.sm)
+  applyRadiusUtility(theme, 'md', radii.md)
+  applyRadiusUtility(theme, 'lg', radii.lg)
+  applyRadiusUtility(theme, 'pill', radii.pill)
+}
+
+function applyRadiusUtility(theme: string, name: string, value: string) {
+  const radius = force(value)
+  styleBuilder.select(`.rounded-${name}`, theme).borderRadius(radius)
+  styleBuilder
+    .select(`.rounded-t-${name}`, theme)
+    .borderTopLeftRadius(radius)
+    .borderTopRightRadius(radius)
+  styleBuilder
+    .select(`.rounded-r-${name}`, theme)
+    .borderTopRightRadius(radius)
+    .borderBottomRightRadius(radius)
+  styleBuilder
+    .select(`.rounded-b-${name}`, theme)
+    .borderBottomRightRadius(radius)
+    .borderBottomLeftRadius(radius)
+  styleBuilder
+    .select(`.rounded-l-${name}`, theme)
+    .borderTopLeftRadius(radius)
+    .borderBottomLeftRadius(radius)
 }
 
 function applyShadowUtilities(theme: string) {
@@ -183,6 +204,11 @@ function applyFontSizeUtilities(theme: string, palette: ThemePalette) {
 }
 
 function applyTextUtilities(theme: string, palette: ThemePalette) {
+  styleBuilder
+    .select('.underline-hover:hover', theme)
+    .textDecoration('underline !important')
+  styleBuilder.select('.uppercase', theme).textTransform('uppercase !important')
+
   styleBuilder
     .select(
       '.text-subtle, .prose-meta, .text-caption, .text-attribution',
