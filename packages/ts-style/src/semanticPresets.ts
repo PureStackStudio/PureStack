@@ -39,27 +39,31 @@ function createStates(
   theme: string,
   states: States,
 ) {
-  // TODO: add all if hasAll true
   const hasAll = !!states.all
+  const allKey = hasAll ? `, .${key}-all` : ''
+  const allHoverKey = hasAll ? `, .${key}-all:hover` : ''
+  const allActiveKey = hasAll ? `, .${key}-all:active, .${key}-all.active` : ''
+  const allDisabledKey = hasAll ? `, .${key}-all:disabled` : ''
+
   if (states.rest)
-    styleBuilder.select(`.${key}, .${key}-all`, theme).css(states.rest)
+    styleBuilder.select(`.${key}${allKey}`, theme).css(states.rest)
 
   if (states.hover)
     styleBuilder
-      .select(`.${key}-hover:hover, .${key}-all:hover`, theme)
+      .select(`.${key}-hover:hover${allHoverKey}`, theme)
       .css(states.hover)
 
   if (states.active)
     styleBuilder
       .select(
-        `.${key}-active:active, .${key}-active.active, .${key}-all:active, .${key}-all.active`,
+        `.${key}-active:active, .${key}-active.active${allActiveKey}`,
         theme,
       )
       .css(states.active)
 
   if (states.disabled)
     styleBuilder
-      .select(`.${key}-disabled:disabled, .${key}-all:disabled`, theme)
+      .select(`.${key}-disabled:disabled${allDisabledKey}`, theme)
       .css(states.disabled)
 }
 
@@ -145,6 +149,17 @@ function createFills(
       },
       active: {
         background: current.tone,
+      },
+    },
+    'tone-fill-canvas': {
+      rest: {
+        background: current.canvas,
+      },
+      hover: {
+        background: current.canvas,
+      },
+      active: {
+        background: current.canvas,
       },
     },
     'tone-fill-surface': {
@@ -384,7 +399,7 @@ function createInset(
   styleBuilder: StyleBuilder,
   theme: string,
 ) {
-  const size = '0.25em' // TODO: add optional css variable --inset-size
+  const size = 'var(--tone-inset-size, 0.25em)'
   const insetX: Partial<CSSProps> = {
     boxShadow: createInsetString('x', size, current.tone),
   }
