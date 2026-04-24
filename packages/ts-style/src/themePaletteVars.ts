@@ -1,7 +1,7 @@
 import type { ThemePalette, ThemePaletteCurrent } from './themePalette'
 
 const THEME_PALETTE_VAR_PREFIX = '--ps'
-export const MINIFY_THEME_VARIABLE_NAMES = true
+export const MINIFY_THEME_VARIABLE_NAMES = false
 const SEMANTIC_TONE_NAMES = [
   'neutral',
   'accent',

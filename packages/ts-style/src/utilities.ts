@@ -70,43 +70,37 @@ function applyGapUtilities(theme: string) {
 }
 
 function applyLayoutUtilities(theme: string) {
-  styleBuilder.select('.w-full', theme).width('100% !important')
-  styleBuilder.select('.h-full', theme).height('100% !important')
-  styleBuilder.select('.min-w-0', theme).minWidth('0 !important')
+  styleBuilder.select('.w-full', theme).width(force('100%'))
+  styleBuilder.select('.h-full', theme).height(force('100%'))
+  styleBuilder.select('.min-w-0', theme).minWidth(force('0'))
   styleBuilder
     .select('.list-none', theme)
-    .listStyle('none')
-    .padding('0 !important')
+    .listStyle(force('none'))
+    .padding(force('0'))
 }
 
 function applyShadowUtilities(theme: string) {
-  styleBuilder.select('.box-shadow-none', theme).boxShadow('none !important')
+  styleBuilder.select('.box-shadow-none', theme).boxShadow(force('none'))
+}
+
+function force(val: string) {
+  return `${val} !important`
 }
 
 function applyFontSizeUtilities(theme: string, palette: ThemePalette) {
   const fontSizes = palette.font.size
-
-  styleBuilder.select('.fs-xxxs', theme).fontSize(fontSizes.xxxs)
-  styleBuilder.select('.fs-xxs', theme).fontSize(fontSizes.xxs)
-  styleBuilder.select('.fs-xs', theme).fontSize(fontSizes.xs)
-  styleBuilder.select('.fs-sm', theme).fontSize(fontSizes.sm)
-  styleBuilder.select('.fs-body', theme).fontSize(fontSizes.body)
-  styleBuilder.select('.fs-h6', theme).fontSize(fontSizes.h6)
-  styleBuilder.select('.fs-h5', theme).fontSize(fontSizes.h5)
-  styleBuilder.select('.fs-h4', theme).fontSize(fontSizes.h4)
-  styleBuilder.select('.fs-h3', theme).fontSize(fontSizes.h3)
-  styleBuilder.select('.fs-h2', theme).fontSize(fontSizes.h2)
-  styleBuilder.select('.fs-h1', theme).fontSize(fontSizes.h1)
-  styleBuilder.select('.fs-display', theme).fontSize(fontSizes.display)
-
-  styleBuilder.select('.fs-base', theme).fontSize(fontSizes.body)
-  styleBuilder.select('.fs-md', theme).fontSize(fontSizes.body)
-  styleBuilder.select('.fs-lg', theme).fontSize(fontSizes.h6)
-  styleBuilder.select('.fs-xl', theme).fontSize(fontSizes.h5)
-  styleBuilder.select('.fs-2xl', theme).fontSize(fontSizes.h4)
-  styleBuilder.select('.fs-3xl', theme).fontSize(fontSizes.h3)
-  styleBuilder.select('.fs-4xl', theme).fontSize(fontSizes.h2)
-  styleBuilder.select('.fs-5xl', theme).fontSize(fontSizes.h1)
+  styleBuilder.select('.fs-xxxs', theme).fontSize(force(fontSizes.xxxs))
+  styleBuilder.select('.fs-xxs', theme).fontSize(force(fontSizes.xxs))
+  styleBuilder.select('.fs-xs', theme).fontSize(force(fontSizes.xs))
+  styleBuilder.select('.fs-sm', theme).fontSize(force(fontSizes.sm))
+  styleBuilder.select('.fs-body', theme).fontSize(force(fontSizes.body))
+  styleBuilder.select('.fs-h6', theme).fontSize(force(fontSizes.h6))
+  styleBuilder.select('.fs-h5', theme).fontSize(force(fontSizes.h5))
+  styleBuilder.select('.fs-h4', theme).fontSize(force(fontSizes.h4))
+  styleBuilder.select('.fs-h3', theme).fontSize(force(fontSizes.h3))
+  styleBuilder.select('.fs-h2', theme).fontSize(force(fontSizes.h2))
+  styleBuilder.select('.fs-h1', theme).fontSize(force(fontSizes.h1))
+  styleBuilder.select('.fs-display', theme).fontSize(force(fontSizes.display))
 }
 
 function applyTextUtilities(theme: string, palette: ThemePalette) {

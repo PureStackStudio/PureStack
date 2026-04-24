@@ -5,7 +5,7 @@ import { themes } from './themeOptions'
 import { buildThemePaletteVariableCss } from './themePaletteVars'
 
 const styleBuilders = new Map<ThemeName, Style>()
-
+export type StyleBuilder = typeof styleBuilder
 export const styleBuilder = {
   get(theme: ThemeName) {
     if (!theme) {
