@@ -67,17 +67,18 @@ const infoScale = createColorScale(info, mode)
 const successScale = createColorScale(success, mode)
 const warningScale = createColorScale(warning, mode)
 const dangerScale = createColorScale(danger, mode)
+const toneIndex = 50
 const core: NeonCore = {
-  neutral: createToneColors(neutralScale[77], neutralScale, delta),
-  accent: createToneColors(accent, accentScale, delta),
-  feature: createToneColors(feature, featureScale, delta),
-  secondary: createToneColors(secondary, secondaryScale, delta),
-  custom: createToneColors(custom, customScale, delta),
-  ghost: createToneColors(neutralScale[77], neutralScale, delta),
-  info: createToneColors(info, infoScale, delta),
-  success: createToneColors(success, successScale, delta),
-  warning: createToneColors(warning, warningScale, delta),
-  danger: createToneColors(danger, dangerScale, delta),
+  neutral: createToneColors(neutralScale[toneIndex], neutralScale, delta),
+  accent: createToneColors(accentScale[toneIndex], accentScale, delta),
+  feature: createToneColors(featureScale[toneIndex], featureScale, delta),
+  secondary: createToneColors(secondaryScale[toneIndex], secondaryScale, delta),
+  custom: createToneColors(customScale[toneIndex], customScale, delta),
+  ghost: createToneColors(neutralScale[toneIndex], neutralScale, delta),
+  info: createToneColors(info[toneIndex], infoScale, delta),
+  success: createToneColors(success[toneIndex], successScale, delta),
+  warning: createToneColors(warning[toneIndex], warningScale, delta),
+  danger: createToneColors(danger[toneIndex], dangerScale, delta),
 }
 
 function resolveScaleIndex(value: number) {
