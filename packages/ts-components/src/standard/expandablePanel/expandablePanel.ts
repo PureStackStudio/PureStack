@@ -26,34 +26,30 @@ export interface ExpandablePanel {
   summaryClasses?: ComputedRef<string>
 }
 
-const expandablePanelTemplate = html`<details class="expandable-panel" :class="classes" :open="open">
-  <summary class="expandable-panel__summary" :class="summaryClasses">
+const expandablePanelTemplate = html`<details class="expandable-panel gap-0" :class="classes" :open="open">
+  <Flex
+    container="summary"
+    align="center"
+    class="expandable-panel__summary pad-4"
+    :class="summaryClasses"
+  >
     <slot name="summary">
-      <Icon
-        class="expandable-panel__icon tone-icon"
-        :name="icon"
-        r-if="icon"
-        :framed="true"/>
-      <span class="expandable-panel__header">
-        <span class="expandable-panel__title" r-if="title">{{ title }}</span>
+      <Icon class="tone-icon" :name="icon" r-if="icon" :framed="true"/>
+      <Flex align="center" wrap="true" class="flex-1">
+        <span class="fw-700 min-w-0" r-if="title">{{ title }}</span>
         <Badge :tone="tone" r-if="badge">{{ badge }}</Badge>
-        <span class="expandable-panel__description" r-if="description">
-          {{ description }}
-        </span>
-      </span>
-      <span class="expandable-panel__header-side">
-        <span class="expandable-panel__header-meta" r-if="meta">
-          {{ meta }}
-        </span>
-        <span class="expandable-panel__chevron tone-icon" aria-hidden="true">
-          <Icon
-            class="expandable-panel__chevron-icon"
-            name="iconoir:nav-arrow-down"/>
-        </span>
-      </span>
+        <span class="fs-sm w-full" r-if="description"> {{ description }} </span>
+      </Flex>
+      <Flex align="center" justify="center" class="flex-none">
+        <span class="fw-600" r-if="meta"> {{ meta }} </span>
+        <Icon
+          class="expandable-panel__chevron rounded-pill b-1 b-subtle tone-icon"
+          name="iconoir:nav-arrow-down"
+          :framed="true"/>
+      </Flex>
     </slot>
-  </summary>
-  <div class="expandable-panel__body bt-0"><slot></slot></div>
+  </Flex>
+  <div class="expandable-panel__body pad-4 bt-0"><slot></slot></div>
 </details>`
 
 function defineExpandablePanelComponent() {

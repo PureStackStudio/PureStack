@@ -39,6 +39,7 @@ function registerIconBaseStyles(
     .padding('0.25em')
     .display('inline-flex')
     .alignItems('center')
+    .alignSelf('center')
     .justifyContent('center')
     .lineHeight('0')
     .flexShrink('0')
