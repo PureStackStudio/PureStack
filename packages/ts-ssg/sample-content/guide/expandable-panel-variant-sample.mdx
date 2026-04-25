@@ -1,0 +1,227 @@
+---
+title: ExpandablePanel Variant Matrix
+description: A matrix of expandable panel surface and summary variants.
+layout:
+  showToc: true
+  fullWidth: true
+---
+
+# ExpandablePanel Variant Matrix
+
+`ExpandablePanel.variant` controls the outer expanded surface in stateless mode.
+`ExpandablePanel.summaryVariant` controls the clickable summary in stateful mode.
+
+## Panel Surface Variants
+
+<Grid columns="1" columnsLg="2" alignItems="start">
+  <ExpandablePanel
+    title="Solid surface"
+    description="Outer panel uses the solid variant while the summary remains stateful."
+    badge="Solid"
+    icon="iconoir:code"
+    tone="accent"
+    variant="solid"
+    summaryVariant="surface"
+    open="true"
+  >
+    <p>Use this when the expanded content needs maximum emphasis.</p>
+  </ExpandablePanel>
+
+  <ExpandablePanel
+    title="Surface"
+    description="Default stateless panel surface with a stateful summary."
+    badge="Default"
+    icon="iconoir:check"
+    tone="info"
+    variant="surface"
+    summaryVariant="surfaceAlt"
+    open="true"
+  >
+    <p>This is the steady everyday disclosure treatment.</p>
+  </ExpandablePanel>
+
+  <ExpandablePanel
+    title="Surface alt"
+    description="Alternate expanded surface for stronger separation."
+    badge="Alt"
+    icon="iconoir:pin"
+    tone="feature"
+    variant="surfaceAlt"
+    summaryVariant="outline"
+    open="true"
+  >
+    <p>Good for panels sitting inside other surfaces.</p>
+  </ExpandablePanel>
+
+  <ExpandablePanel
+    title="Outline"
+    description="Border-led expanded surface for lighter layouts."
+    badge="Outline"
+    icon="iconoir:code"
+    tone="warning"
+    variant="outline"
+    summaryVariant="outlineFill"
+    open="true"
+  >
+    <p>Useful when the summary should carry more of the visual weight.</p>
+  </ExpandablePanel>
+</Grid>
+
+## Summary Variants
+
+<Flex direction="column">
+  <ExpandablePanel
+    title="Solid summary"
+    description="The summary behaves like a stateful solid control."
+    badge="Summary"
+    icon="iconoir:check"
+    tone="success"
+    variant="surface"
+    summaryVariant="solid"
+  >
+    <p>The summary gets hover and active affordances.</p>
+  </ExpandablePanel>
+
+  <ExpandablePanel
+    title="Outline summary"
+    description="The expanded body remains stateless while the summary is interactive."
+    badge="Summary"
+    icon="iconoir:code"
+    tone="secondary"
+    variant="surfaceAlt"
+    summaryVariant="outline"
+  >
+    <p>Outline summaries work well in dense settings lists.</p>
+  </ExpandablePanel>
+
+  <ExpandablePanel
+    title="Rail summary"
+    description="Inset variants can highlight the disclosure action."
+    badge="Summary"
+    icon="iconoir:pin"
+    tone="accent"
+    variant="outline"
+    summaryVariant="rail"
+  >
+    <p>The rail treatment is stateful on the summary only.</p>
+  </ExpandablePanel>
+
+  <ExpandablePanel
+    title="Bracket summary"
+    description="A compact editorial treatment for grouped content."
+    badge="Summary"
+    icon="iconoir:check"
+    tone="ghost"
+    variant="surface"
+    summaryVariant="bracket"
+  >
+    <p>Good for quieter content where the panel should not feel like a card.</p>
+  </ExpandablePanel>
+</Flex>
+
+## Semantic Tones
+
+<Grid columns="1" columnsLg="2" alignItems="start">
+  <ExpandablePanel
+    title="Neutral"
+    badge="neutral"
+    tone="neutral"
+    variant="surface"
+    summaryVariant="surfaceAlt"
+  >
+    <p>Neutral tone.</p>
+  </ExpandablePanel>
+  <ExpandablePanel
+    title="Accent"
+    badge="accent"
+    tone="accent"
+    variant="surface"
+    summaryVariant="surfaceAlt"
+  >
+    <p>Accent tone.</p>
+  </ExpandablePanel>
+  <ExpandablePanel
+    title="Feature"
+    badge="feature"
+    tone="feature"
+    variant="surface"
+    summaryVariant="surfaceAlt"
+  >
+    <p>Feature tone.</p>
+  </ExpandablePanel>
+  <ExpandablePanel
+    title="Secondary"
+    badge="secondary"
+    tone="secondary"
+    variant="surface"
+    summaryVariant="surfaceAlt"
+  >
+    <p>Secondary tone.</p>
+  </ExpandablePanel>
+  <ExpandablePanel
+    title="Info"
+    badge="info"
+    tone="info"
+    variant="surface"
+    summaryVariant="surfaceAlt"
+  >
+    <p>Info tone.</p>
+  </ExpandablePanel>
+  <ExpandablePanel
+    title="Success"
+    badge="success"
+    tone="success"
+    variant="surface"
+    summaryVariant="surfaceAlt"
+  >
+    <p>Success tone.</p>
+  </ExpandablePanel>
+  <ExpandablePanel
+    title="Warning"
+    badge="warning"
+    tone="warning"
+    variant="surface"
+    summaryVariant="surfaceAlt"
+  >
+    <p>Warning tone.</p>
+  </ExpandablePanel>
+  <ExpandablePanel
+    title="Danger"
+    badge="danger"
+    tone="danger"
+    variant="surface"
+    summaryVariant="surfaceAlt"
+  >
+    <p>Danger tone.</p>
+  </ExpandablePanel>
+</Grid>
+
+## Custom
+
+<ExpandablePanel
+  title="Custom shell"
+  description="Variant-free outer shell with a stateful summary."
+  badge="Custom"
+  tone="custom"
+  variant="none"
+  summaryVariant="outlineFill"
+  class="b-2 rounded-lg b-tone"
+  open="true"
+>
+  <p class="pad-3">
+    The root shell uses utility classes, while the summary still gets the shared
+    stateful variant treatment.
+  </p>
+</ExpandablePanel>
+
+## Props Reference
+
+```html
+<ExpandablePanel
+  variant="none|solid|surface|surfaceAlt|outlineFill|outline|subtle|link|sheen|underline|rail|bracket"
+  summaryVariant="none|solid|surface|surfaceAlt|outlineFill|outline|subtle|link|sheen|underline|rail|bracket"
+  tone="neutral|accent|feature|secondary|custom|ghost|info|success|warning|danger"
+>
+  Content
+</ExpandablePanel>
+```

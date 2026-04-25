@@ -1,12 +1,15 @@
-import { getSemanticToneClass, type SemanticTone } from '@purestack/ts-style'
+import type { SemanticTone } from '@purestack/ts-style'
 import {
   type ComputedRef,
   computed,
   defineComponent,
   html,
   type RefOrValue,
-  unref,
 } from 'regor'
+import {
+  type ComponentVariant,
+  resolveComponentClasses,
+} from '../componentVariant'
 
 export interface ExpandablePanel {
   title?: RefOrValue<string>
@@ -15,12 +18,16 @@ export interface ExpandablePanel {
   badge?: RefOrValue<string>
   icon?: RefOrValue<string>
   tone?: RefOrValue<SemanticTone>
+  variant?: RefOrValue<ComponentVariant>
+  summaryVariant?: RefOrValue<ComponentVariant>
+  class?: RefOrValue<string>
   open?: RefOrValue<boolean>
-  toneClass?: ComputedRef<string>
+  classes?: ComputedRef<string>
+  summaryClasses?: ComputedRef<string>
 }
 
-const expandablePanelTemplate = html`<details class="expandable-panel tone-surface" :class="toneClass" :open="open">
-  <summary class="expandable-panel__summary tone-surface-interactive">
+const expandablePanelTemplate = html`<details class="expandable-panel" :class="classes" :open="open">
+  <summary class="expandable-panel__summary" :class="summaryClasses">
     <slot name="summary">
       <Icon
         class="expandable-panel__icon tone-icon"
@@ -51,7 +58,18 @@ const expandablePanelTemplate = html`<details class="expandable-panel tone-surfa
 
 function defineExpandablePanelComponent() {
   return defineComponent<ExpandablePanel>(expandablePanelTemplate, {
-    props: ['title', 'description', 'meta', 'badge', 'icon', 'tone', 'open'],
+    props: [
+      'title',
+      'description',
+      'meta',
+      'badge',
+      'icon',
+      'tone',
+      'variant',
+      'summaryVariant',
+      'class',
+      'open',
+    ],
     context: (head) => resolveExpandablePanel(head.props),
   })
 }
@@ -65,6 +83,23 @@ export function defineExpandablePanelComponents() {
 function resolveExpandablePanel(props: ExpandablePanel): ExpandablePanel {
   return {
     ...props,
-    toneClass: computed(() => getSemanticToneClass(unref(props.tone))),
+    classes: computed(() =>
+      resolveComponentClasses(props, {
+        defaultVariant: 'surface',
+        defaultVariantMode: 'stateless',
+      }),
+    ),
+    summaryClasses: computed(() =>
+      resolveComponentClasses(
+        {
+          tone: props.tone,
+          variant: props.summaryVariant,
+        },
+        {
+          defaultVariant: 'surface',
+          defaultVariantMode: 'stateful',
+        },
+      ),
+    ),
   }
 }

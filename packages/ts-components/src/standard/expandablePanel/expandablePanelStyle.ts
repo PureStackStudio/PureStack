@@ -20,14 +20,11 @@ export function registerExpandablePanelStyles() {
 function registerExpandablePanelShellStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
+  _options: ThemeOptions,
 ) {
   styleBuilder
     .select('.expandable-panel', theme)
     .display('grid')
-    .border(`1px solid ${palette.current.border.default}`)
-    .borderRadius(options.radii.lg)
-    .background(palette.current.surface.rest.background)
     .boxShadow(palette.effect.panelShadow)
     .alignContent('start')
     .overflow('hidden')
@@ -37,7 +34,6 @@ function registerExpandablePanelShellStyles(
 
   styleBuilder
     .select('.expandable-panel[open]', theme)
-    .borderColor(palette.current.border.default)
     .boxShadow(palette.effect.panelShadowStrong)
 }
 
@@ -56,11 +52,11 @@ function registerExpandablePanelSummaryStyles(
     .padding('1em')
     .cursor('pointer')
     .minWidth('0')
-    .borderRadius('16px')
 
   styleBuilder
     .select('.expandable-panel[open] .expandable-panel__summary', theme)
-    .borderRadius('16px 16px 0 0')
+    .borderBottomLeftRadius('0')
+    .borderBottomRightRadius('0')
 
   styleBuilder
     .select('.expandable-panel__summary::-webkit-details-marker', theme)

@@ -141,7 +141,7 @@ function registerPreShellStyles(
 ) {
   styleBuilder
     .select('.doc-content :where(pre)', theme)
-    .margin('0 0 1.4em')
+    .margin('0')
     .padding('18px 20px')
     .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
     .border(`1px solid ${palette.current.border.default}`)
