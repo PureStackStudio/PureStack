@@ -77,7 +77,6 @@ function registerExpandablePanelSummaryStyles(
     .gridColumn('2')
     .display('flex')
     .alignItems('center')
-    .gap('10px')
     .flexWrap('wrap')
     .minWidth('0')
 
@@ -91,16 +90,14 @@ function registerExpandablePanelSummaryStyles(
   styleBuilder
     .select('.expandable-panel__title', theme)
     .minWidth('0')
-    .fontSize('1.06rem')
-    .fontWeight('700')
-    .lineHeight('1.3')
-    .letterSpacing('-0.02em')
+    .apply(palette.applyFont(palette.font.size.body, palette.font.weight.w700))
+    .lineHeight('1')
 
   styleBuilder
     .select('.expandable-panel__description', theme)
     .minWidth('100%')
-    .fontSize('0.97rem')
-    .lineHeight('1.55')
+    .apply(palette.applyFont(palette.font.size.sm))
+    .lineHeight('1')
 
   styleBuilder
     .select('.expandable-panel__header-side', theme)
@@ -108,7 +105,7 @@ function registerExpandablePanelSummaryStyles(
     .display('flex')
     .alignItems('center')
     .justifyContent('center')
-    .gap('12px')
+    .gap('0.75em')
     .minWidth('0')
 
   styleBuilder
