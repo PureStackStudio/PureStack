@@ -10,7 +10,7 @@ export function registerTabsStyles() {
   themes.forEach((theme, palette, options) => {
     registerTabsShellStyles(theme, palette, options)
     registerTabsControlStyles(theme, palette, options)
-    registerTabsPanelStyles(theme, options)
+    registerTabsPanelStyles(theme)
     registerTabsResponsiveStyles(theme)
   })
 }
@@ -26,8 +26,6 @@ function registerTabsShellStyles(
     .gap('0.6em')
     .alignContent('start')
     .padding('1em')
-    .borderRadius(options.radii.lg)
-    .border('1px solid transparent')
     .boxShadow(options.shadows.soft)
 
   styleBuilder
@@ -153,8 +151,6 @@ function registerTabsControlStyles(
     .alignItems('center')
     .justifyContent('center')
     .padding('0.5em 0.75em')
-    .borderRadius(options.radii.md)
-    .border('1px solid transparent')
     .apply(palette.applyFont(palette.font.size.xxs, palette.font.weight.w700))
     .gap('0.5em')
     .overflow('hidden')
@@ -217,7 +213,7 @@ function registerTabsControlStyles(
   styleBuilder.select('.tabs__tab-button--hidden', theme).display('none')
 }
 
-function registerTabsPanelStyles(theme: ThemeMode, options: ThemeOptions) {
+function registerTabsPanelStyles(theme: ThemeMode) {
   styleBuilder
     .select('.tabs__panel', theme)
     .gridRow('2')
@@ -225,8 +221,6 @@ function registerTabsPanelStyles(theme: ThemeMode, options: ThemeOptions) {
     .display('none')
     .minWidth('0')
     .padding('0')
-    .borderRadius(options.radii.md)
-    .border('none')
 
   styleBuilder
     .select('.tabs__control:checked + .tabs__tab + .tabs__panel', theme)

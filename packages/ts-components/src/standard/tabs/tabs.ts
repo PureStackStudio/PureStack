@@ -1,5 +1,5 @@
 import { tryResolveTsSsgContext } from '@purestack/ts-common'
-import { getSemanticToneClass, type SemanticTone } from '@purestack/ts-style'
+import type { SemanticTone } from '@purestack/ts-style'
 import {
   type ComponentHead,
   type ComputedRef,
@@ -11,6 +11,10 @@ import {
   ref,
   unref,
 } from 'regor'
+import {
+  type ComponentVariant,
+  resolveComponentClasses,
+} from '../componentVariant'
 
 const defaultGroup = 'tabs-default'
 let nextAutoGroupId = 1
@@ -22,7 +26,9 @@ export class Tabs {
   ariaLabel?: RefOrValue<string>
   selectedTab?: RefOrValue<string>
   tone?: RefOrValue<SemanticTone>
-  toneClass?: ComputedRef<string>
+  variant?: RefOrValue<ComponentVariant>
+  tabVariant?: RefOrValue<ComponentVariant>
+  classes?: ComputedRef<string>
 }
 
 export interface TabPane {
@@ -33,17 +39,20 @@ export interface TabPane {
   group?: string
   class?: RefOrValue<string>
   tone?: RefOrValue<SemanticTone>
-  toneClass?: ComputedRef<string>
+  variant?: RefOrValue<ComponentVariant>
+  tabVariant?: RefOrValue<ComponentVariant>
+  classes?: ComputedRef<string>
+  tabClasses?: ComputedRef<string>
 }
 
-const tabsTemplate = html`<section class="tabs tone-surface" :class="[toneClass, class]">
+const tabsTemplate = html`<section class="tabs" :class="classes">
   <slot name="header"></slot>
   <div class="tabs__list" role="tablist" :aria-label="ariaLabel || 'Tabs'">
     <slot></slot>
   </div>
 </section>`
 
-const tabPaneTemplate = html`<div class="tabs__item" :class="toneClass">
+const tabPaneTemplate = html`<div class="tabs__item">
   <input
     class="tabs__control"
     type="radio"
@@ -53,8 +62,8 @@ const tabPaneTemplate = html`<div class="tabs__item" :class="toneClass">
     r-model="selectedTab"
     :disabled="disabled"/>
   <label
-    class="tabs__tab tone-button-interactive"
-    :class="[{ 'tabs__tab--disabled': disabled }]"
+    class="tabs__tab"
+    :class="tabClasses"
     role="tab"
     :id="id+'-label'"
     :for="id"
@@ -66,7 +75,8 @@ const tabPaneTemplate = html`<div class="tabs__item" :class="toneClass">
     <span class="tabs__tab-label">{{ label || id }}</span>
   </label>
   <section
-    class="tabs__panel tone-surface"
+    class="tabs__panel"
+    :class="classes"
     role="tabpanel"
     :id="id+'-panel'"
     :aria-labelledby="id+'-label'"
@@ -79,7 +89,15 @@ const tabPaneTemplate = html`<div class="tabs__item" :class="toneClass">
 
 function defineTabsComponent() {
   return defineComponent<Tabs>(tabsTemplate, {
-    props: ['class', 'ariaLabel', 'group', 'selectedTab', 'tone'],
+    props: [
+      'class',
+      'ariaLabel',
+      'group',
+      'selectedTab',
+      'tone',
+      'variant',
+      'tabVariant',
+    ],
     context: (head) => {
       markTabsRuntimeEmbed(head)
       return resolveTabs(head.props)
@@ -89,7 +107,17 @@ function defineTabsComponent() {
 
 function defineTabPaneComponent() {
   return defineComponent<TabPane>(tabPaneTemplate, {
-    props: ['id', 'class', 'label', 'icon', 'disabled', 'group', 'tone'],
+    props: [
+      'id',
+      'class',
+      'label',
+      'icon',
+      'disabled',
+      'group',
+      'tone',
+      'variant',
+      'tabVariant',
+    ],
     context: (head) => resolveTabPane(head),
   })
 }
@@ -109,7 +137,11 @@ function resolveTabs(props: Tabs): Tabs {
     ...props,
     group,
     selectedTab,
-    toneClass: computed(() => getSemanticToneClass(unref(props.tone))),
+    classes: computed(() =>
+      resolveComponentClasses(props, {
+        defaultVariant: 'surface',
+      }),
+    ),
   })
 }
 
@@ -130,11 +162,31 @@ function resolveTabPane(head: ComponentHead<TabPane>): TabPane {
   const fromParent = head.findContext(Tabs)
   const group = head.props.group || fromParent?.group || defaultGroup
   const id = resolveTabId(unref(head.props.id))
+  const tone = head.props.tone || fromParent?.tone
+  const tabVariant = head.props.tabVariant || fromParent?.tabVariant
   return {
     ...head.props,
     id,
     group,
-    toneClass: computed(() => getSemanticToneClass(unref(head.props.tone))),
+    tone,
+    tabVariant,
+    classes: computed(() =>
+      resolveComponentClasses(
+        { tone, variant: head.props.variant },
+        {
+          defaultVariant: 'none',
+        },
+      ),
+    ),
+    tabClasses: computed(() =>
+      resolveComponentClasses(
+        { tone, variant: tabVariant },
+        {
+          defaultVariant: 'underline',
+          classes: [unref(head.props.disabled) ? 'tabs__tab--disabled' : ''],
+        },
+      ),
+    ),
   }
 }
 
