@@ -30,15 +30,17 @@ const expandablePanelTemplate = html`<details class="expandable-panel gap-0" :cl
   <Flex
     container="summary"
     align="center"
-    class="expandable-panel__summary pad-4"
+    class="expandable-panel__summary cursor-pointer pad-4"
     :class="summaryClasses"
   >
     <slot name="summary">
       <Icon class="tone-icon" :name="icon" r-if="icon" :framed="true"/>
-      <Flex align="center" wrap="true" class="flex-1">
-        <span class="fw-700 min-w-0" r-if="title">{{ title }}</span>
+      <Flex align="center" wrap="true" class="flex-1 gap-2">
+        <span class="fw-700 min-w-0 lh-0" r-if="title">{{ title }}</span>
         <Badge :tone="tone" r-if="badge">{{ badge }}</Badge>
-        <span class="fs-sm w-full" r-if="description"> {{ description }} </span>
+        <span class="fs-sm w-full lh-0" r-if="description">
+          {{ description }}
+        </span>
       </Flex>
       <Flex align="center" justify="center" class="flex-none">
         <span class="fw-600" r-if="meta"> {{ meta }} </span>

@@ -9,7 +9,6 @@ export function registerExpandablePanelStyles() {
   themes.forEach((theme, palette) => {
     registerExpandablePanelShellStyles(theme, palette)
     registerExpandablePanelSummaryStyles(theme, palette)
-    registerExpandablePanelBodyStyles(theme, palette)
   })
 }
 
@@ -20,7 +19,6 @@ function registerExpandablePanelShellStyles(
   styleBuilder
     .select('.expandable-panel', theme)
     .boxShadow(palette.effect.panelShadow)
-    .alignContent('start')
     .overflow('hidden')
     .transition(
       'border-color 180ms ease, box-shadow 180ms ease, background 180ms ease',
@@ -36,14 +34,9 @@ function registerExpandablePanelSummaryStyles(
   palette: ThemePalette,
 ) {
   styleBuilder
-    .select('.expandable-panel__summary', theme)
-    .listStyle('none')
-    .cursor('pointer')
-
-  styleBuilder
     .select('.expandable-panel[open] .expandable-panel__summary', theme)
-    .borderBottomLeftRadius('0')
-    .borderBottomRightRadius('0')
+    .borderBottomLeftRadius('0 !important')
+    .borderBottomRightRadius('0 !important')
 
   styleBuilder
     .select('.expandable-panel__summary::-webkit-details-marker', theme)
@@ -63,17 +56,4 @@ function registerExpandablePanelSummaryStyles(
   styleBuilder
     .select('.expandable-panel[open] .expandable-panel__chevron', theme)
     .transform('rotate(180deg)')
-}
-
-function registerExpandablePanelBodyStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-) {
-  styleBuilder
-    .select('.expandable-panel__body', theme)
-    .borderTop(`1px solid ${palette.current.border.subtle}`)
-
-  styleBuilder
-    .select('.expandable-panel:not([open]) .expandable-panel__body', theme)
-    .display('none')
 }

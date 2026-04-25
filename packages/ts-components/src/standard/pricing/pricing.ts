@@ -87,7 +87,7 @@ const pricingPlanTemplate = html`<Panel :tone="tone" :class="panelClass">
       container="ul"
       direction="column"
       align="start"
-      class="pricing-plan__features list-none gap-2"
+      class="pricing-plan__features gap-2"
     >
       <slot></slot>
     </Flex>

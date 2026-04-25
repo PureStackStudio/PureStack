@@ -26,6 +26,7 @@ export function registerUtilityStyles() {
     applyTextUtilities(theme, palette)
     applyFontSizeUtilities(theme, palette)
     applyFontWeightUtilities(theme)
+    applyLineHeightUtilities(theme)
     applyShadowUtilities(theme)
   })
 }
@@ -77,10 +78,7 @@ function applyLayoutUtilities(theme: string) {
   styleBuilder.select('.w-full', theme).width(force('100%'))
   styleBuilder.select('.h-full', theme).height(force('100%'))
   styleBuilder.select('.min-w-0', theme).minWidth(force('0'))
-  styleBuilder
-    .select('.list-none', theme)
-    .listStyle(force('none'))
-    .padding(force('0'))
+  styleBuilder.select('.cursor-pointer', theme).cursor(force('pointer'))
 }
 
 function applyBorderUtilities(
@@ -249,6 +247,14 @@ function applyFontWeightUtilities(theme: string) {
   styleBuilder.select('.fw-700', theme).fontWeight(force('700'))
   styleBuilder.select('.fw-800', theme).fontWeight(force('800'))
   styleBuilder.select('.fw-900', theme).fontWeight(force('900'))
+}
+
+function applyLineHeightUtilities(theme: string) {
+  for (let index = 0; index <= 7; index += 1) {
+    styleBuilder
+      .select(`.lh-${index}`, theme)
+      .lineHeight(force((1 + index * 0.1).toFixed(1)))
+  }
 }
 
 function applyTextUtilities(theme: string, palette: ThemePalette) {
