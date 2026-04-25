@@ -1,4 +1,4 @@
-import { getSemanticToneClass, type SemanticTone } from '@purestack/ts-style'
+import type { SemanticTone } from '@purestack/ts-style'
 import {
   type ComponentHead,
   type ComputedRef,
@@ -10,6 +10,10 @@ import {
   ref,
   unref,
 } from 'regor'
+import {
+  type ComponentVariant,
+  resolveComponentClasses,
+} from '../componentVariant'
 
 let nextAutoInputId = 1
 
@@ -31,6 +35,7 @@ export class FormInputField {
   readonly id: string
   readonly label?: RefOrValue<string>
   readonly tone?: RefOrValue<SemanticTone>
+  readonly variant?: RefOrValue<ComponentVariant>
   declare readonly model: Ref<string | number>
   readonly type?: RefOrValue<FormInputFieldType>
   readonly name?: RefOrValue<string>
@@ -41,7 +46,8 @@ export class FormInputField {
   readonly placeholder?: RefOrValue<string>
   readonly icon?: RefOrValue<string>
   readonly iconEnd?: RefOrValue<string>
-  toneClass?: ComputedRef<string>
+  readonly class?: RefOrValue<string>
+  classes?: ComputedRef<string>
 
   constructor(props: FormInputField) {
     Object.assign(this, {
@@ -99,7 +105,7 @@ export class FormInputField {
 
 const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
   <span class="form-block__label" r-if="label">{{ label }}</span>
-  <div class="form-block__input-shell tone-surface" :class="toneClass">
+  <div class="form-block__input-shell" :class="classes">
     <Icon class="form-block__input-icon" :name="icon" r-if="icon"/>
     <input
       :id="id"
@@ -115,7 +121,7 @@ const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
       r-model="model"/>
     <div class="form-block__number-controls" r-if="isNumberField">
       <button
-        class="form-block__number-btn form-block__number-btn--up tone-button-interactive"
+        class="form-block__number-btn form-block__number-btn--up tone-fill-button-all"
         type="button"
         aria-label="Increase value"
         @click="increment"
@@ -124,7 +130,7 @@ const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
         +
       </button>
       <button
-        class="form-block__number-btn form-block__number-btn--down tone-button-interactive"
+        class="form-block__number-btn form-block__number-btn--down tone-fill-button-all"
         type="button"
         aria-label="Decrease value"
         @click="decrement"
@@ -143,6 +149,7 @@ export function defineFormInputField() {
         'id',
         'label',
         'tone',
+        'variant',
         'model',
         'type',
         'name',
@@ -153,6 +160,7 @@ export function defineFormInputField() {
         'placeholder',
         'icon',
         'iconEnd',
+        'class',
       ],
       context: (head) => resolveFormInputField(head),
     }),
@@ -161,7 +169,11 @@ export function defineFormInputField() {
 
 function resolveFormInputField(head: ComponentHead<FormInputField>) {
   const field = new FormInputField(head.props)
-  field.toneClass = computed(() => getSemanticToneClass(unref(head.props.tone)))
+  field.classes = computed(() =>
+    resolveComponentClasses(head.props, {
+      defaultVariant: 'surfaceAlt',
+    }),
+  )
   return field
 }
 
