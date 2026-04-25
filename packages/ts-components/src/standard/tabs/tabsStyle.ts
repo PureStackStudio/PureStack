@@ -9,7 +9,7 @@ import {
 export function registerTabsStyles() {
   themes.forEach((theme, palette, options) => {
     registerTabsShellStyles(theme, palette, options)
-    registerTabsControlStyles(theme, palette, options)
+    registerTabsControlStyles(theme, palette)
     registerTabsPanelStyles(theme)
     registerTabsResponsiveStyles(theme)
   })
@@ -65,15 +65,9 @@ function registerTabsShellStyles(
 
   styleBuilder
     .select('.tabs__overflow-toggle', theme)
-    .display('inline-flex')
-    .alignItems('center')
-    .justifyContent('center')
     .width('2.3em')
     .height('2.3em')
     .padding('0')
-    .borderRadius(options.radii.md)
-    .border('1px solid transparent')
-    .cursor('pointer')
 
   styleBuilder
     .select('.tabs__overflow-menu', theme)
@@ -97,19 +91,12 @@ function registerTabsShellStyles(
 
   styleBuilder
     .select('.tabs__overflow-option', theme)
-    .display('flex')
-    .alignItems('center')
-    .gap('0.5em')
     .width('100%')
     .padding('0.4em 0.6em')
-    .border('1px solid transparent')
-    .borderRadius(options.radii.sm)
     .textAlign('left')
     .whiteSpace('nowrap')
     .apply(palette.applyFont(palette.font.size.xxs, palette.font.weight.w600))
-    .cursor('pointer')
     .opacity(0.5)
-    .background('transparent')
 
   styleBuilder.select('.tabs__overflow-option:hover', theme).opacity(1)
 
@@ -132,11 +119,7 @@ function registerTabsShellStyles(
     .mozAppearance('none')
 }
 
-function registerTabsControlStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+function registerTabsControlStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.tabs__control', theme)
     .position('absolute')
@@ -146,7 +129,7 @@ function registerTabsControlStyles(
     .pointerEvents('none')
 
   styleBuilder
-    .select('.tabs__tab, .tabs__tab-button', theme)
+    .select('.tabs__tab, .tabs__tab-buttons > .btn', theme)
     .display('inline-flex')
     .alignItems('center')
     .justifyContent('center')
@@ -163,14 +146,14 @@ function registerTabsControlStyles(
   styleBuilder.select('.tabs__tab', theme).gridRow('1')
 
   styleBuilder
-    .select('.tabs__tab-button', theme)
+    .select('.tabs__tab-buttons > .btn', theme)
     .flexShrink('0')
     .whiteSpace('nowrap')
     .opacity(0.5)
 
-  styleBuilder.select('.tabs__tab-button:hover', theme).opacity(1)
+  styleBuilder.select('.tabs__tab-buttons > .btn:hover', theme).opacity(1)
 
-  styleBuilder.select('.tabs__tab-button--active', theme).opacity(1)
+  styleBuilder.select('.tabs__tab-buttons > .btn.active', theme).opacity(1)
 
   styleBuilder
     .select('.tabs__tab-icon', theme)
@@ -201,7 +184,7 @@ function registerTabsControlStyles(
     .cursor('not-allowed')
 
   styleBuilder
-    .select('.tabs__tab-button:disabled', theme)
+    .select('.tabs__tab-buttons > .btn:disabled', theme)
     .opacity('0.45')
     .cursor('not-allowed')
 
@@ -210,7 +193,9 @@ function registerTabsControlStyles(
     .outline('2px solid currentColor')
     .outlineOffset('2px')
 
-  styleBuilder.select('.tabs__tab-button--hidden', theme).display('none')
+  styleBuilder
+    .select('.tabs__tab-buttons > .btn[hidden]', theme)
+    .display('none')
 }
 
 function registerTabsPanelStyles(theme: ThemeMode) {

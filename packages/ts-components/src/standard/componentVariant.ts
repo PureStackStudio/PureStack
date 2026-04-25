@@ -39,7 +39,7 @@ const COMPONENT_VARIANT_CLASSES: Record<ComponentVariant, string> = {
   outlineFill:
     'b-2 rounded-md tone-border-button-all tone-text tone-fill-button-hover tone-text-button-hover tone-fill-button-active tone-text-button-active',
   outline:
-    'b-2 b-2-hover rounded-md tone-border-button-hover tone-fill-button-active tone-text tone-text-button-hover tone-fill-button-active tone-text-button-active',
+    'b-2 b-2-hover rounded-md tone-border-button-hover tone-border-button-active tone-fill-button-active tone-text tone-text-button-hover tone-text-button-active',
   subtle:
     'b-0 rounded-md tone-text tone-fill-surface-hover tone-fill-surface-active',
   link: 'underline-hover tone-text',

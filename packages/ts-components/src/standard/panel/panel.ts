@@ -6,7 +6,10 @@ import {
   html,
   type RefOrValue,
 } from 'regor'
-import { type ComponentVariant, resolveComponentClasses } from '../componentVariant'
+import {
+  type ComponentVariant,
+  resolveComponentClasses,
+} from '../componentVariant'
 
 export interface Panel {
   tone?: RefOrValue<SemanticTone>

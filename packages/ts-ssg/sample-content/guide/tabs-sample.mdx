@@ -16,18 +16,24 @@ Tab buttons can optionally show icons via the `icon` prop.
 
 ## 1. Installation walkthrough with code tabs
 
-<Tabs id="install-flow" selected-tab="yarn">
-  <TabPane id="npm" label="npm" icon="iconoir:code">
+<Tabs
+  id="install-flow"
+  tone="accent"
+  variant="outlineFill"
+  tabVariant="solid"
+  selected-tab="yarn"
+>
+  <TabPane id="npm" label="npm" icon="iconoir:code" variant="surface">
     ```bash
     npm install @purestack/ts-ssg
     ```
   </TabPane>
-  <TabPane id="yarn" label="yarn" icon="iconoir:check">
+  <TabPane id="yarn" label="yarn" icon="iconoir:check" variant="surfaceAlt">
     ```bash
     yarn add @purestack/ts-ssg
     ```
   </TabPane>
-  <TabPane id="pnpm" label="pnpm" icon="iconoir:pin">
+  <TabPane id="pnpm" label="pnpm" icon="iconoir:pin" variant="outline">
     ```bash
     pnpm add @purestack/ts-ssg
     ```
@@ -36,7 +42,12 @@ Tab buttons can optionally show icons via the `icon` prop.
 
 ## 6. Stress test with 15 tabs and large titles
 
-<Tabs id="fifteen-tabs-large-labels">
+<Tabs
+  id="fifteen-tabs-large-labels"
+  tone="feature"
+  variant="surfaceAlt"
+  tabVariant="rail"
+>
   <TabPane id="large-tab-1" label="Installation and Environment Bootstrap">
     ```ts
     console.log('Large title tab 1 content')
@@ -119,8 +130,13 @@ Tab buttons can optionally show icons via the `icon` prop.
 
 ## 2. Build configuration examples
 
-<Tabs id="config-samples">
-  <TabPane id="programmatic" label="Programmatic API" icon="iconoir:code">
+<Tabs id="config-samples" tone="info" variant="surface" tabVariant="outline">
+  <TabPane
+    id="programmatic"
+    label="Programmatic API"
+    icon="iconoir:code"
+    variant="surfaceAlt"
+  >
     ```ts
     import path from 'node:path'
     import { buildSite } from '@purestack/ts-ssg'
@@ -133,7 +149,13 @@ Tab buttons can optionally show icons via the `icon` prop.
     })
     ```
   </TabPane>
-  <TabPane id="json-config" label="siteConfig.json" icon="iconoir:check">
+  <TabPane
+    id="json-config"
+    label="siteConfig.json"
+    icon="iconoir:check"
+    variant="surface"
+    tabVariant="solid"
+  >
     ```json
     {
       "siteTitle": "Acme Docs",
@@ -147,7 +169,14 @@ Tab buttons can optionally show icons via the `icon` prop.
     }
     ```
   </TabPane>
-  <TabPane id="cli" label="CLI" icon="iconoir:pin">
+  <TabPane
+    id="cli"
+    label="CLI"
+    icon="iconoir:pin"
+    tone="success"
+    variant="outlineFill"
+    tabVariant="rail"
+  >
     ```bash
     yarn tsx packages/ts-ssg/src/index.ts serve \
       --content ./packages/ts-ssg/sample-content \
@@ -158,15 +187,22 @@ Tab buttons can optionally show icons via the `icon` prop.
 
 ## 3. API integration sample with a disabled tab
 
-<Tabs id="api-samples">
-  <TabPane id="fetch" label="fetch" icon="iconoir:code">
+<Tabs id="api-samples" tone="warning" variant="outline" tabVariant="surfaceAlt">
+  <TabPane id="fetch" label="fetch" icon="iconoir:code" variant="surface">
     ```ts
     const response = await fetch('/api/rates?base=EUR')
     const data = await response.json()
     console.log(data)
     ```
   </TabPane>
-  <TabPane id="curl" label="curl" icon="iconoir:check">
+  <TabPane
+    id="curl"
+    label="curl"
+    icon="iconoir:check"
+    tone="accent"
+    variant="surfaceAlt"
+    tabVariant="outlineFill"
+  >
     ```bash
     curl -X GET "https://api.example.com/rates?base=EUR" \
       -H "accept: application/json"
@@ -176,6 +212,8 @@ Tab buttons can optionally show icons via the `icon` prop.
     id="sdk"
     label="SDK (Soon)"
     icon="iconoir:headset-help"
+    variant="subtle"
+    tabVariant="subtle"
     disabled="true"
   >
     SDK helper package is being prepared.
@@ -184,27 +222,32 @@ Tab buttons can optionally show icons via the `icon` prop.
 
 ## 4. Minimal markup reference
 
-~~~html
-<Tabs id="quickstart" selected-tab="install">
+<Tabs
+  id="quickstart-live"
+  tone="success"
+  variant="none"
+  tabVariant="underline"
+  class="b-2 rounded-md b-tone pad-3"
+  selected-tab="install"
+>
   <template #header>
     <h4>Quickstart</h4>
   </template>
-  <TabPane id="install" label="Install">
+  <TabPane id="install" label="Install" variant="none">
     ```bash
     npm i @purestack/ts-ssg
     ```
   </TabPane>
-  <TabPane id="usage" label="Usage">
+  <TabPane id="usage" label="Usage" tone="feature" variant="none">
     ```ts
     import { buildSite } from '@purestack/ts-ssg'
     ```
   </TabPane>
 </Tabs>
-~~~
 
 ## 5. Stress test with 15 tabs
 
-<Tabs id="fifteen-tabs">
+<Tabs id="fifteen-tabs" tone="info" variant="surfaceAlt" tabVariant="bracket">
   <TabPane id="tab-1" label="Tab 1" icon="iconoir:code">
     ```ts
     console.log('Tab 1 content')
@@ -281,3 +324,35 @@ Tab buttons can optionally show icons via the `icon` prop.
     ```
   </TabPane>
 </Tabs>
+
+
+~~~html
+<Tabs
+  id="quickstart"
+  tone="success"
+  variant="none"
+  tabVariant="link"
+  class="b-2 rounded-md b-tone pad-3"
+  selected-tab="install"
+>
+  <template #header>
+    <h4>Quickstart</h4>
+  </template>
+  <TabPane id="install" label="Install" variant="surfaceAlt">
+    ```bash
+    npm i @purestack/ts-ssg
+    ```
+  </TabPane>
+  <TabPane
+    id="usage"
+    label="Usage"
+    tone="feature"
+    variant="outlineFill"
+    tabVariant="solid"
+  >
+    ```ts
+    import { buildSite } from '@purestack/ts-ssg'
+    ```
+  </TabPane>
+</Tabs>
+~~~

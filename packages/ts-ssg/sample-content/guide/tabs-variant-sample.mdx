@@ -1,0 +1,164 @@
+---
+title: Tabs Variant Matrix
+description: A matrix of Tabs, TabPane, and tab button variants.
+layout:
+  showToc: true
+  fullWidth: true
+---
+
+# Tabs Variant Matrix
+
+Use this page to compare how the shared component variants behave when applied
+to the tabs shell, individual tab panels, and generated tab buttons.
+
+## Tabs Shell Variants
+
+<Grid columns="1" columnsLg="2">
+  <Tabs tone="accent" variant="surfaceAlt" selected-tab="overview">
+    <TabPane id="overview" label="Overview" icon="iconoir:code">
+      Solid shell with default tab and panel treatments.
+    </TabPane>
+    <TabPane id="details" label="Details" icon="iconoir:check">
+      The shell variant is controlled by `Tabs.variant`.
+    </TabPane>
+  </Tabs>
+
+  <Tabs tone="info" variant="surface" selected-tab="overview">
+    <TabPane id="overview" label="Overview" icon="iconoir:code">
+      Surface shell with default tab and panel treatments.
+    </TabPane>
+    <TabPane id="details" label="Details" icon="iconoir:check">
+      Useful for regular grouped content.
+    </TabPane>
+  </Tabs>
+
+  <Tabs tone="feature" variant="surfaceAlt" selected-tab="overview">
+    <TabPane id="overview" label="Overview" icon="iconoir:code">
+      Surface-alt shell treatment.
+    </TabPane>
+    <TabPane id="details" label="Details" icon="iconoir:check">
+      Useful when the tabs need stronger separation.
+    </TabPane>
+  </Tabs>
+
+  <Tabs tone="warning" variant="outline" selected-tab="overview">
+    <TabPane id="overview" label="Overview" icon="iconoir:code">
+      Outline shell treatment.
+    </TabPane>
+    <TabPane id="details" label="Details" icon="iconoir:check">
+      Good for lighter layouts.
+    </TabPane>
+  </Tabs>
+</Grid>
+
+## Tab Button Variants
+
+<Grid columns="1" columnsLg="2">
+  <Tabs tone="accent" tabVariant="solid" selected-tab="alpha">
+    <TabPane id="alpha" label="Alpha" icon="iconoir:code">
+      Solid tab buttons.
+    </TabPane>
+    <TabPane id="beta" label="Beta" icon="iconoir:check">
+      `Tabs.tabVariant` controls the generated tab buttons.
+    </TabPane>
+  </Tabs>
+
+  <Tabs tone="info" tabVariant="outline" selected-tab="alpha">
+    <TabPane id="alpha" label="Alpha" icon="iconoir:code">
+      Outline tab buttons.
+    </TabPane>
+    <TabPane id="beta" label="Beta" icon="iconoir:check">
+      The enhanced page script copies these classes too.
+    </TabPane>
+  </Tabs>
+
+  <Tabs tone="secondary" tabVariant="link" selected-tab="alpha">
+    <TabPane id="alpha" label="Alpha" icon="iconoir:code">
+      Link-like tab buttons.
+    </TabPane>
+    <TabPane id="beta" label="Beta" icon="iconoir:check">
+      Useful for quiet navigation clusters.
+    </TabPane>
+  </Tabs>
+
+  <Tabs tone="success" tabVariant="rail" selected-tab="alpha">
+    <TabPane id="alpha" label="Alpha" icon="iconoir:code">
+      Rail tab buttons.
+    </TabPane>
+    <TabPane id="beta" label="Beta" icon="iconoir:check">
+      Inset variants are inherited by generated buttons.
+    </TabPane>
+  </Tabs>
+</Grid>
+
+## Panel Variants
+
+<Grid columns="1" columnsLg="2">
+  <Tabs id="tabs-panel-surface" tone="neutral" selected-tab="one">
+    <TabPane id="one" label="Surface" variant="surface">
+      Surface panel.
+    </TabPane>
+    <TabPane id="two" label="Surface Alt" variant="surfaceAlt">
+      Surface-alt panel.
+    </TabPane>
+  </Tabs>
+
+  <Tabs id="tabs-panel-outline" tone="danger" selected-tab="one">
+    <TabPane id="one" label="Outline" variant="outline">
+      Outline panel.
+    </TabPane>
+    <TabPane id="two" label="Subtle" variant="subtle"> Subtle panel. </TabPane>
+  </Tabs>
+</Grid>
+
+## Mixed Overrides
+
+<Tabs
+  tone="accent"
+  variant="subtle"
+  tabVariant="surfaceAlt"
+  selected-tab="global"
+>
+  <TabPane id="global" label="Global" icon="iconoir:code">
+    Uses the shared shell and tab button variants from `Tabs`.
+  </TabPane>
+  <TabPane
+    id="override"
+    label="Override"
+    icon="iconoir:check"
+    tone="warning"
+    variant="none"
+    tabVariant="bracket"
+  >
+    Overrides tone, panel variant, and tab button variant at the pane level.
+  </TabPane>
+  <TabPane
+    id="custom"
+    label="Custom"
+    icon="iconoir:pin"
+    variant="none"
+    tone="success"
+    tabVariant="link"
+    class="b-2 rounded-md b-tone pad-3"
+  >
+    Uses `variant="none"` for a custom panel body class.
+  </TabPane>
+</Tabs>
+
+## Props Reference
+
+```html
+<Tabs
+  variant="none|solid|surface|surfaceAlt|outlineFill|outline|subtle|link|sheen|underline|rail|bracket"
+  tabVariant="none|solid|surface|surfaceAlt|outlineFill|outline|subtle|link|sheen|underline|rail|bracket"
+  tone="neutral|accent|feature|secondary|custom|ghost|info|success|warning|danger"
+>
+  <TabPane
+    variant="none|solid|surface|surfaceAlt|outlineFill|outline|subtle|link|sheen|underline|rail|bracket"
+    tabVariant="none|solid|surface|surfaceAlt|outlineFill|outline|subtle|link|sheen|underline|rail|bracket"
+    tone="neutral|accent|feature|secondary|custom|ghost|info|success|warning|danger"
+  >
+    Content
+  </TabPane>
+</Tabs>
+```

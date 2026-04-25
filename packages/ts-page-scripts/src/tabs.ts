@@ -9,6 +9,7 @@ type TabsEntry = {
   label: HTMLLabelElement
   text: string
   iconMarkup: string
+  tabClassName: string
 }
 
 type InteractionSource = 'button' | 'select' | 'overflow' | 'external'
@@ -39,7 +40,7 @@ function refreshTabs(root: HTMLElement) {
 function enhanceTabs(root: HTMLElement) {
   const list = root.querySelector(':scope > .tabs__list')
   if (!(list instanceof HTMLElement)) return
-  const tone = resolveTabsTone(root)
+  const surfaceClassName = resolveTabsSurfaceClassName(root)
 
   const items = Array.from(
     list.querySelectorAll<HTMLElement>(':scope > .tabs__item'),
@@ -56,9 +57,11 @@ function enhanceTabs(root: HTMLElement) {
       label,
       text: (label.textContent || '').trim() || 'Tab',
       iconMarkup: resolveTabIconMarkup(label),
+      tabClassName: resolveTabButtonClassName(label),
     })
   }
   if (tabs.length === 0) return
+  const defaultTabClassName = tabs[0]?.tabClassName || ''
 
   const row = document.createElement('div')
   row.className = 'tabs__tabs-row'
@@ -67,8 +70,8 @@ function enhanceTabs(root: HTMLElement) {
   overflow.className = 'tabs__overflow'
   const overflowToggle = document.createElement('button')
   overflowToggle.type = 'button'
-  overflowToggle.className = 'tabs__overflow-toggle'
-  addClassNames(overflowToggle, getInteractiveButtonToneClass(tone))
+  overflowToggle.className = 'btn tabs__overflow-toggle'
+  addClassNames(overflowToggle, defaultTabClassName)
   overflowToggle.setAttribute('aria-label', 'More tabs')
   overflowToggle.setAttribute('title', 'More tabs')
   overflowToggle.setAttribute('aria-haspopup', 'true')
@@ -76,7 +79,7 @@ function enhanceTabs(root: HTMLElement) {
   overflowToggle.innerHTML = '<span aria-hidden="true">&#8942;</span>'
   const overflowMenu = document.createElement('div')
   overflowMenu.className = 'tabs__overflow-menu'
-  addClassNames(overflowMenu, getSurfaceToneClass(tone))
+  addClassNames(overflowMenu, surfaceClassName)
   overflow.appendChild(overflowToggle)
   overflow.appendChild(overflowMenu)
 
@@ -87,8 +90,8 @@ function enhanceTabs(root: HTMLElement) {
   for (let i = 0; i < tabs.length; i += 1) {
     const btn = document.createElement('button')
     btn.type = 'button'
-    btn.className = 'tabs__tab-button'
-    addClassNames(btn, getInteractiveButtonToneClass(tone))
+    btn.className = 'btn'
+    addClassNames(btn, tabs[i].tabClassName)
     setButtonContent(btn, tabs[i].text, tabs[i].iconMarkup)
     btn.disabled = tabs[i].control.disabled
     btn.setAttribute('aria-label', tabs[i].text)
@@ -114,12 +117,12 @@ function enhanceTabs(root: HTMLElement) {
     selectWrap.className = 'tabs__select-wrap'
     select = document.createElement('select')
     select.className = 'tabs__select'
-    addClassNames(select, getSurfaceToneClass(tone))
+    addClassNames(select, surfaceClassName)
     selectWrap.appendChild(select)
   }
   if (!select) return
   const tabSelect = select
-  addClassNames(tabSelect, getSurfaceToneClass(tone))
+  addClassNames(tabSelect, surfaceClassName)
   if (!tabSelect.id) {
     tabSelect.id = resolveTabsSelectId(root)
   }
@@ -204,8 +207,8 @@ function enhanceTabs(root: HTMLElement) {
     for (const index of hiddenIndexes) {
       const option = document.createElement('button')
       option.type = 'button'
-      option.className = 'tabs__overflow-option'
-      addClassNames(option, getInteractiveToneClass(tone))
+      option.className = 'btn tabs__overflow-option'
+      addClassNames(option, tabs[index].tabClassName)
       setButtonContent(option, tabs[index].text, tabs[index].iconMarkup)
       option.disabled = tabs[index].control.disabled
       option.setAttribute('aria-pressed', index === active ? 'true' : 'false')
@@ -238,7 +241,7 @@ function enhanceTabs(root: HTMLElement) {
   function computeHiddenIndexes() {
     hiddenIndexes = []
     for (const [index, btn] of buttonMap) {
-      btn.classList.remove('tabs__tab-button--hidden')
+      btn.hidden = false
       btn.style.order = String(index)
     }
 
@@ -370,7 +373,7 @@ function enhanceTabs(root: HTMLElement) {
     for (const index of hiddenIndexes) {
       const btn = buttonMap.get(index)
       if (!btn) continue
-      btn.classList.add('tabs__tab-button--hidden')
+      btn.hidden = true
       btn.style.order = String(index + tabs.length)
     }
 
@@ -380,7 +383,7 @@ function enhanceTabs(root: HTMLElement) {
   function syncState() {
     const active = ensureActive()
     for (const [index, btn] of buttonMap) {
-      btn.classList.toggle('tabs__tab-button--active', index === active)
+      btn.classList.toggle('active', index === active)
       btn.setAttribute('aria-selected', index === active ? 'true' : 'false')
     }
     if (active !== -1) tabSelect.value = String(active)
@@ -486,6 +489,10 @@ function resolveTabIconMarkup(label: HTMLLabelElement) {
   return icon.outerHTML.trim()
 }
 
+function resolveTabButtonClassName(label: HTMLLabelElement) {
+  return getClassNamesExcept(label, ['tabs__tab', 'tabs__tab--disabled'])
+}
+
 function setButtonContent(
   target: HTMLElement,
   text: string,
@@ -502,11 +509,12 @@ function setButtonContent(
   const icon = template.content.firstElementChild
   if (icon instanceof HTMLElement) {
     icon.setAttribute('aria-hidden', 'true')
+    icon.classList.add('btn__icon')
     target.appendChild(icon)
   }
 
   const label = document.createElement('span')
-  label.className = 'tabs__tab-label'
+  label.className = 'btn__label tabs__tab-label'
   label.textContent = text
 
   target.appendChild(label)
@@ -527,25 +535,15 @@ function addClassNames(element: HTMLElement, className: string) {
   element.classList.add(...tokens)
 }
 
-function resolveTabsTone(root: HTMLElement) {
-  for (const className of root.classList) {
-    if (className.startsWith('tone--')) {
-      return className.slice('tone--'.length) || 'neutral'
-    }
-  }
-  return 'neutral'
+function resolveTabsSurfaceClassName(root: HTMLElement) {
+  return getClassNamesExcept(root, ['tabs', 'tabs--enhanced', 'tabs--compact'])
 }
 
-function getInteractiveToneClass(tone: string) {
-  return `tone--${tone} tone-interactive`
-}
-
-function getInteractiveButtonToneClass(tone: string) {
-  return `tone--${tone} tone-button-interactive`
-}
-
-function getSurfaceToneClass(tone: string) {
-  return `tone--${tone} tone-surface`
+function getClassNamesExcept(element: HTMLElement, excluded: string[]) {
+  const excludedSet = new Set(excluded)
+  return [...element.classList]
+    .filter((className) => !excludedSet.has(className))
+    .join(' ')
 }
 
 ready(initTabs)
