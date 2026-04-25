@@ -1,26 +1,29 @@
-import { getSemanticToneClass, type SemanticTone } from '@purestack/ts-style'
+import type { SemanticTone } from '@purestack/ts-style'
 import {
   type ComputedRef,
   computed,
   defineComponent,
   html,
   type RefOrValue,
-  unref,
 } from 'regor'
+import { type ComponentVariant, resolveComponentClasses } from '../componentVariant'
 
 export interface Panel {
   tone?: RefOrValue<SemanticTone>
-  toneClass?: ComputedRef<string>
+  variant?: RefOrValue<ComponentVariant>
+  classes?: ComputedRef<string>
   class?: RefOrValue<string>
 }
 
-const panelTemplate = html`<section class="panel" :class="[class, toneClass]">
+const DEFAULT_PANEL_VARIANT: ComponentVariant = 'surface'
+
+const panelTemplate = html`<section class="panel" :class="classes">
   <div class="panel__body"><slot></slot></div>
 </section>`
 
 function definePanelComponent() {
   return defineComponent<Panel>(panelTemplate, {
-    props: ['tone', 'class'],
+    props: ['tone', 'variant', 'class'],
     context: (head) => resolvePanel(head.props),
   })
 }
@@ -34,6 +37,10 @@ export function definePanelComponents() {
 function resolvePanel(props: Panel): Panel {
   return {
     ...props,
-    toneClass: computed(() => getSemanticToneClass(unref(props.tone))),
+    classes: computed(() =>
+      resolveComponentClasses(props, {
+        defaultVariant: DEFAULT_PANEL_VARIANT,
+      }),
+    ),
   }
 }

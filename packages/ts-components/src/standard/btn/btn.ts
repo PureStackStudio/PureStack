@@ -1,4 +1,4 @@
-import { getSemanticToneClass, type SemanticTone } from '@purestack/ts-style'
+import type { SemanticTone } from '@purestack/ts-style'
 import { urlNormalizer } from '@purestack/ts-util'
 import {
   type ComputedRef,
@@ -8,34 +8,25 @@ import {
   type RefOrValue,
   unref,
 } from 'regor'
+import {
+  type ComponentVariant,
+  resolveComponentClasses,
+} from '../componentVariant'
 
 export type BtnSize = 'sm' | 'md' | 'lg'
 export type BtnType = 'button' | 'submit' | 'reset'
 export type BtnIconPosition = 'start' | 'end'
-export type BtnVariant =
-  | 'none'
-  | 'solid'
-  | 'surface'
-  | 'surfaceAlt'
-  | 'outlineFill'
-  | 'outline'
-  | 'subtle'
-  | 'link'
-  | 'sheen'
-  | 'underline'
-  | 'rail'
-  | 'bracket'
 
 export interface BtnBase {
   tone?: RefOrValue<SemanticTone>
   size?: RefOrValue<BtnSize>
-  variant?: RefOrValue<BtnVariant>
+  variant?: RefOrValue<ComponentVariant>
   icon?: RefOrValue<string>
   iconPosition?: RefOrValue<BtnIconPosition>
   iconOnly?: RefOrValue<boolean>
   ariaLabel?: RefOrValue<string>
   class?: RefOrValue<string>
-  className?: ComputedRef<string>
+  classes?: ComputedRef<string>
   showStartIcon?: ComputedRef<boolean>
   showEndIcon?: ComputedRef<boolean>
 }
@@ -54,32 +45,11 @@ export interface BtnLink extends BtnBase {
   resolvedRel?: ComputedRef<string>
 }
 
-const DEFAULT_BUTTON_VARIANT: BtnVariant = 'solid'
-const BUTTON_VARIANT_CLASSES: Record<BtnVariant, string> = {
-  none: '',
-  solid:
-    'b-1 rounded-md tone-fill-button-all tone-border-button-all tone-text-button-all',
-  surface:
-    'b-1 rounded-md tone-fill-surface-all tone-border-surface-all tone-text',
-  surfaceAlt:
-    'b-1 rounded-md tone-fill-surface-alt-all tone-border-surface-alt-all tone-text',
-  outlineFill:
-    'b-2 rounded-md tone-border-button-all tone-text tone-fill-button-hover tone-text-button-hover tone-fill-button-active tone-text-button-active',
-  outline:
-    'b-2 b-2-hover rounded-md tone-border-button-hover tone-fill-button-active tone-text tone-text-button-hover tone-fill-button-active tone-text-button-active',
-  subtle:
-    'b-0 rounded-md tone-text tone-fill-surface-hover tone-fill-surface-active',
-  link: 'underline-hover tone-text',
-  sheen: 'tone-text-bg-button-all fs-h1 pad-1 fw-900 uppercase',
-  underline: 'tone-inset-b-hover tone-inset-b-active tone-text',
-  rail: 'bl-1 inset-size-4 padl-4 padr-3 tone-inset-l-hover tone-border-button-all tone-text tone-fill-active tone-text-button-active',
-  bracket:
-    'tone-inset-y-hover tone-inset-y-active tone-text tone-fill-active tone-text-button-active',
-}
+const DEFAULT_BUTTON_VARIANT: ComponentVariant = 'solid'
 
 const buttonTemplate = html`<button
   class="btn"
-  :class="className"
+  :class="classes"
   :type="buttonType"
   :disabled="disabled"
   :aria-label="ariaLabel"
@@ -91,7 +61,7 @@ const buttonTemplate = html`<button
 
 const buttonLinkTemplate = html`<a
   class="btn"
-  :class="className"
+  :class="classes"
   :href="resolvedHref"
   :target="target"
   :rel="resolvedRel"
@@ -149,7 +119,12 @@ export function defineButtonComponents() {
 function resolveBtn(props: Btn): Btn {
   return {
     ...props,
-    className: computed(() => resolveButtonClassName(props)),
+    classes: computed(() =>
+      resolveComponentClasses(props, {
+        defaultVariant: DEFAULT_BUTTON_VARIANT,
+        classes: resolveButtonStateClasses(props),
+      }),
+    ),
     buttonType: computed(() => unref(props.type) || 'button'),
     showStartIcon: computed(() => resolveShowStartIcon(props)),
     showEndIcon: computed(() => resolveShowEndIcon(props)),
@@ -159,7 +134,12 @@ function resolveBtn(props: Btn): Btn {
 function resolveBtnLink(props: BtnLink): BtnLink {
   return {
     ...props,
-    className: computed(() => resolveButtonClassName(props)),
+    classes: computed(() =>
+      resolveComponentClasses(props, {
+        defaultVariant: DEFAULT_BUTTON_VARIANT,
+        classes: resolveButtonStateClasses(props),
+      }),
+    ),
     resolvedHref: computed(() => resolveButtonHref(props)),
     resolvedRel: computed(() => resolveButtonRel(props)),
     showStartIcon: computed(() => resolveShowStartIcon(props)),
@@ -167,31 +147,21 @@ function resolveBtnLink(props: BtnLink): BtnLink {
   }
 }
 
-function resolveButtonClassName(props: BtnBase) {
+function resolveButtonStateClasses(props: BtnBase) {
   const size = unref(props.size)
   const hasIcon = !!unref(props.icon)
   const iconPosition = unref(props.iconPosition)
   const iconOnly = unref(props.iconOnly)
-  const classTokens = [
-    resolveButtonVariantClassName(props),
-    size ? `btn--${size}` : '',
-    getSemanticToneClass(unref(props.tone)),
-    unref(props.class) || '',
-  ].filter(Boolean)
-  if (!hasIcon) return classTokens.join(' ')
-  classTokens.push(
+  const classes = [size ? `btn--${size}` : '']
+  if (!hasIcon) return classes
+  classes.push(
     iconOnly
       ? 'btn--icon-only'
       : iconPosition === 'end'
         ? 'btn--icon-end'
         : 'btn--icon-start',
   )
-  return classTokens.join(' ')
-}
-
-function resolveButtonVariantClassName(props: BtnBase) {
-  const variant = unref(props.variant) || DEFAULT_BUTTON_VARIANT
-  return BUTTON_VARIANT_CLASSES[variant]
+  return classes
 }
 
 function resolveShowStartIcon(props: BtnBase) {

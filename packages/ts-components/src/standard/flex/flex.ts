@@ -41,10 +41,10 @@ export interface Flex {
   wrapLg?: RefOrValue<FlexWrap>
   wrapXl?: RefOrValue<FlexWrap>
   inline?: RefOrValue<boolean | string>
-  className?: ComputedRef<string>
+  classes?: ComputedRef<string>
 }
 
-const flexTemplate = html`<div :is="container ?? 'div'" class="flex" :class="className">
+const flexTemplate = html`<div :is="container ?? 'div'" class="flex" :class="classes">
   <slot></slot>
 </div>`
 
@@ -85,7 +85,7 @@ export function defineFlexComponents() {
 }
 
 function resolveFlex(props: Flex): Flex {
-  const className = computed(() => {
+  const classes = computed(() => {
     return [
       resolveDirectionClass(props.direction),
       resolveResponsiveDirectionClass('sm', props.directionSm),
@@ -115,7 +115,7 @@ function resolveFlex(props: Flex): Flex {
 
   return {
     ...props,
-    className,
+    classes,
   }
 }
 

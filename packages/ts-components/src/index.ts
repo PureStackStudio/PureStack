@@ -15,6 +15,7 @@ export type {
 } from './standard/btn/btn'
 export { defineButtonComponents } from './standard/btn/btn'
 export { registerButtonStyles } from './standard/btn/btnStyle'
+export type { ComponentVariant } from './standard/componentVariant'
 export type { Consent, ConsentCategoryState } from './standard/consent/consent'
 export { defineConsentComponents } from './standard/consent/consent'
 export { registerConsentStyles } from './standard/consent/consentStyle'

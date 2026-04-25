@@ -97,10 +97,42 @@ nav:
   </Grid>
 </Panel>
 
-## 4. Usage pattern
+## 4. Variants
+
+<Grid columns="1" columnsLg="2">
+  <Panel variant="surface" tone="accent">
+    <h3>Surface</h3>
+    <p>Default framed surface treatment for general content.</p>
+  </Panel>
+
+  <Panel variant="surfaceAlt" tone="feature">
+    <h3>Surface Alt</h3>
+    <p>Alternate material treatment when the panel needs more separation.</p>
+  </Panel>
+
+  <Panel variant="outline" tone="info">
+    <h3>Outline</h3>
+    <p>Border-led treatment for quieter grouped content.</p>
+  </Panel>
+
+  <Panel variant="rail" tone="secondary">
+    <h3>Rail</h3>
+    <p>Shared variant recipes can be applied beyond buttons.</p>
+  </Panel>
+
+  <Panel variant="none" class="b-2 rounded-md b-tone pad-3">
+    <h3>None</h3>
+    <p>Variant-free panel shell with custom utility classes.</p>
+  </Panel>
+</Grid>
+
+## 5. Usage pattern
 
 ```html
-<Panel tone="neutral|accent|info|success|warning|danger|ghost|feature|secondary|custom">
+<Panel
+  variant="none|solid|surface|surfaceAlt|outlineFill|outline|subtle|link|sheen|underline|rail|bracket"
+  tone="neutral|accent|info|success|warning|danger|ghost|feature|secondary|custom"
+>
   Any content goes here.
   <Grid columns="1" columnsMd="2">
     <div>Use your own headings, actions, images, and layout.</div>

@@ -1,12 +1,10 @@
 import { styleBuilder, themes } from '@purestack/ts-style'
 
 export function registerPanelStyles() {
-  themes.forEach((theme, palette, options) => {
+  themes.forEach((theme, palette) => {
     styleBuilder
       .select('.panel', theme)
       .display('grid')
-      .border(`1px solid ${palette.current.border.default}`)
-      .borderRadius(options.radii.lg)
       .boxShadow(palette.effect.panelShadow)
       .overflow('hidden')
       .transition(
