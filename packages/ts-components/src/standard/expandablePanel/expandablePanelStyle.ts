@@ -69,11 +69,19 @@ function registerExpandablePanelSummaryStyles(
 
   styleBuilder
     .select('.expandable-panel__header', theme)
+    .gridColumn('2')
     .display('flex')
     .alignItems('center')
     .gap('10px')
     .flexWrap('wrap')
     .minWidth('0')
+
+  styleBuilder
+    .select(
+      '.expandable-panel__summary:not(:has(.expandable-panel__icon)) .expandable-panel__header',
+      theme,
+    )
+    .gridColumn('1 / 3')
 
   styleBuilder
     .select('.expandable-panel__title', theme)
@@ -91,6 +99,7 @@ function registerExpandablePanelSummaryStyles(
 
   styleBuilder
     .select('.expandable-panel__header-side', theme)
+    .gridColumn('3')
     .display('flex')
     .alignItems('center')
     .justifyContent('center')
