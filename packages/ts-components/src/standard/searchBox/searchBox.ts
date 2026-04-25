@@ -1,16 +1,21 @@
 import type { TsSsgContext } from '@purestack/ts-common'
 
 import { resolveTsSsgContext } from '@purestack/ts-common'
-import { defineComponent, html } from 'regor'
+import type { SemanticTone } from '@purestack/ts-style'
+import { defineComponent, html, type RefOrValue } from 'regor'
+import type { ComponentVariant } from '../componentVariant'
 
 export interface SearchBox {
-  placeholder: string
+  placeholder?: RefOrValue<string>
+  tone?: RefOrValue<SemanticTone>
+  variant?: RefOrValue<ComponentVariant>
 }
 
 const searchBoxTemplate = html`<div class="site-search" data-pagefind-search>
   <FormInputField
     icon="tabler:search"
-    tone="ghost"
+    :tone="tone ?? 'ghost'"
+    :variant="variant"
     type="search"
     name="q"
     :placeholder="placeholder"
@@ -27,7 +32,10 @@ const searchBoxTemplate = html`<div class="site-search" data-pagefind-search>
 
 function defineSearchBoxComponent() {
   return defineComponent<SearchBox>(searchBoxTemplate, {
+    props: ['tone', 'variant', 'placeholder'],
     context: (head) => ({
+      tone: head.props.tone,
+      variant: head.props.variant,
       placeholder: resolveSearchPlaceholder(resolveTsSsgContext(head)),
     }),
   })
