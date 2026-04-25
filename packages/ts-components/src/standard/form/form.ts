@@ -1,4 +1,4 @@
-import { getSemanticToneClass, type SemanticTone } from '@purestack/ts-style'
+import type { SemanticTone } from '@purestack/ts-style'
 import { urlNormalizer } from '@purestack/ts-util'
 import {
   type ComponentHead,
@@ -9,12 +9,18 @@ import {
   type RefOrValue,
   unref,
 } from 'regor'
+import {
+  type ComponentVariant,
+  resolveComponentClasses,
+} from '../componentVariant'
 
 export interface AppForm {
   action?: RefOrValue<string>
   method?: RefOrValue<string>
   tone?: RefOrValue<SemanticTone>
-  toneClass?: ComputedRef<string>
+  variant?: RefOrValue<ComponentVariant>
+  class?: RefOrValue<string>
+  classes?: ComputedRef<string>
 }
 
 export interface FormMeta {}
@@ -38,6 +44,8 @@ export interface FormAssistLink {
 export interface FormSubmit {
   label?: RefOrValue<string>
   tone?: RefOrValue<SemanticTone>
+  variant?: RefOrValue<ComponentVariant>
+  class?: RefOrValue<string>
 }
 
 export interface FormDivider {
@@ -46,13 +54,15 @@ export interface FormDivider {
 
 export interface FormStatus {
   tone?: RefOrValue<SemanticTone>
+  variant?: RefOrValue<ComponentVariant>
+  class?: RefOrValue<string>
   hidden?: RefOrValue<boolean>
-  toneClass?: ComputedRef<string>
+  classes?: ComputedRef<string>
 }
 
 const appFormTemplate = html`<form
   class="form-block"
-  :class="toneClass"
+  :class="classes"
   :action="action"
   :method="method"
   novalidate
@@ -77,13 +87,18 @@ const formAssistLinkTemplate = html`<a
   {{ label }}
 </a>`
 
-const formSubmitTemplate = html`<Btn type="submit" :tone="tone">{{ label }}</Btn>`
+const formSubmitTemplate = html`<Btn
+  type="submit"
+  :tone="tone"
+  :variant="variant"
+  :class="class"
+>{{ label }}</Btn>`
 
 const formDividerTemplate = html`<div class="form-block__divider" :data-label="label"></div>`
 
 const formStatusTemplate = html`<div
-  class="form-status tone-surface"
-  :class="toneClass"
+  class="form-status"
+  :class="classes"
   role="status"
   aria-live="polite"
   :hidden="hidden"
@@ -93,7 +108,7 @@ const formStatusTemplate = html`<div
 
 function defineAppFormComponent() {
   return defineComponent<AppForm>(appFormTemplate, {
-    props: ['action', 'method', 'tone'],
+    props: ['action', 'method', 'tone', 'variant', 'class'],
     context: (head) => resolveAppForm(head.props),
   })
 }
@@ -118,7 +133,7 @@ function defineFormAssistLinkComponent() {
 
 function defineFormSubmitComponent() {
   return defineComponent<FormSubmit>(formSubmitTemplate, {
-    props: ['label', 'tone'],
+    props: ['label', 'tone', 'variant', 'class'],
     context: (head) => resolveFormSubmit(head),
   })
 }
@@ -132,7 +147,7 @@ function defineFormDividerComponent() {
 
 function defineFormStatusComponent() {
   return defineComponent<FormStatus>(formStatusTemplate, {
-    props: ['tone', 'hidden'],
+    props: ['tone', 'variant', 'class', 'hidden'],
     context: (head) => resolveFormStatus(head),
   })
 }
@@ -152,7 +167,11 @@ export function defineFormComponents() {
 function resolveAppForm(props: AppForm): AppForm {
   return {
     ...props,
-    toneClass: computed(() => getSemanticToneClass(unref(props.tone))),
+    classes: computed(() =>
+      resolveComponentClasses(props, {
+        defaultVariant: 'none',
+      }),
+    ),
   }
 }
 
@@ -181,6 +200,10 @@ function resolveFormSubmit(head: ComponentHead<FormSubmit>): FormSubmit {
 function resolveFormStatus(head: ComponentHead<FormStatus>): FormStatus {
   return {
     ...head.props,
-    toneClass: computed(() => getSemanticToneClass(unref(head.props.tone))),
+    classes: computed(() =>
+      resolveComponentClasses(head.props, {
+        defaultVariant: 'surface',
+      }),
+    ),
   }
 }
