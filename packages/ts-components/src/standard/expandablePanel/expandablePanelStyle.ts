@@ -68,6 +68,11 @@ function registerExpandablePanelSummaryStyles(
     .outlineOffset('-2px')
 
   styleBuilder
+    .select('.expandable-panel__icon', theme)
+    .alignSelf('center')
+    .justifySelf('start')
+
+  styleBuilder
     .select('.expandable-panel__header', theme)
     .gridColumn('2')
     .display('flex')
