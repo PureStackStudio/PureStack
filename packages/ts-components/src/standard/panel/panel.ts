@@ -8,17 +8,20 @@ import {
 } from 'regor'
 import {
   type ComponentVariant,
+  type ComponentVariantMode,
   resolveComponentClasses,
 } from '../componentVariant'
 
 export interface Panel {
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
+  variantMode?: RefOrValue<ComponentVariantMode>
   classes?: ComputedRef<string>
   class?: RefOrValue<string>
 }
 
 const DEFAULT_PANEL_VARIANT: ComponentVariant = 'surface'
+const DEFAULT_PANEL_VARIANT_MODE: ComponentVariantMode = 'stateless'
 
 const panelTemplate = html`<section class="panel" :class="classes">
   <div class="panel__body"><slot></slot></div>
@@ -26,7 +29,7 @@ const panelTemplate = html`<section class="panel" :class="classes">
 
 function definePanelComponent() {
   return defineComponent<Panel>(panelTemplate, {
-    props: ['tone', 'variant', 'class'],
+    props: ['tone', 'variant', 'variantMode', 'class'],
     context: (head) => resolvePanel(head.props),
   })
 }
@@ -43,6 +46,7 @@ function resolvePanel(props: Panel): Panel {
     classes: computed(() =>
       resolveComponentClasses(props, {
         defaultVariant: DEFAULT_PANEL_VARIANT,
+        defaultVariantMode: DEFAULT_PANEL_VARIANT_MODE,
       }),
     ),
   }

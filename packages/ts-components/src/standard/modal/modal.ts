@@ -10,18 +10,21 @@ import {
   unref,
 } from 'regor'
 import {
+  type ComponentVariantMode,
   type ComponentVariant,
   resolveComponentClasses,
 } from '../componentVariant'
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl'
 export type ModalSlideFrom = 'none' | 'top' | 'right' | 'bottom' | 'left'
+const DEFAULT_MODAL_VARIANT_MODE: ComponentVariantMode = 'stateless'
 
 export interface Modal {
   id?: string
   title?: RefOrValue<string>
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
+  variantMode?: RefOrValue<ComponentVariantMode>
   class?: RefOrValue<string>
   size?: RefOrValue<ModalSize>
   fade?: RefOrValue<boolean>
@@ -97,6 +100,7 @@ function defineModalComponent() {
       'title',
       'tone',
       'variant',
+      'variantMode',
       'class',
       'size',
       'fade',
@@ -131,6 +135,7 @@ function resolveModal(props: Modal): Modal {
     classes: computed(() =>
       resolveComponentClasses(props, {
         defaultVariant: 'surface',
+        defaultVariantMode: DEFAULT_MODAL_VARIANT_MODE,
       }),
     ),
     rootClass: computed(() => resolveModalRootClass(props)),

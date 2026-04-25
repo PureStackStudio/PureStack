@@ -1,30 +1,38 @@
-import { getSemanticToneClass, type SemanticTone } from '@purestack/ts-style'
+import type { SemanticTone } from '@purestack/ts-style'
 import {
   type ComputedRef,
   computed,
   defineComponent,
   html,
   type RefOrValue,
-  unref,
 } from 'regor'
+import {
+  type ComponentVariant,
+  resolveComponentClasses,
+} from '../componentVariant'
 
 export interface Badge {
   class?: RefOrValue<string>
   tone?: RefOrValue<SemanticTone>
-  toneClass?: ComputedRef<string>
+  variant?: RefOrValue<ComponentVariant>
+  classes?: ComputedRef<string>
 }
 
-const badgeTemplate = html`<span class="badge tone-button" :class="[class, toneClass]">
+const badgeTemplate = html`<span class="badge" :class="classes">
   <slot></slot>
 </span>`
 
 function defineBadgeComponent() {
   return defineComponent<Badge>(badgeTemplate, {
-    props: ['tone', 'class'],
+    props: ['tone', 'variant', 'class'],
     context: (head) => ({
       ...head.props,
-      tone: head.props.tone,
-      toneClass: computed(() => getSemanticToneClass(unref(head.props.tone))),
+      classes: computed(() =>
+        resolveComponentClasses(head.props, {
+          defaultVariant: 'surface',
+          defaultVariantMode: 'stateless',
+        }),
+      ),
     }),
   })
 }

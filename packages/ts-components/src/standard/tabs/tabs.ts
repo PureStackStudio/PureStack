@@ -12,11 +12,13 @@ import {
   unref,
 } from 'regor'
 import {
+  type ComponentVariantMode,
   type ComponentVariant,
   resolveComponentClasses,
 } from '../componentVariant'
 
 const defaultGroup = 'tabs-default'
+const DEFAULT_TABS_VARIANT_MODE: ComponentVariantMode = 'stateless'
 let nextAutoGroupId = 1
 let nextAutoTabId = 1
 
@@ -27,6 +29,7 @@ export class Tabs {
   selectedTab?: RefOrValue<string>
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
+  variantMode?: RefOrValue<ComponentVariantMode>
   tabVariant?: RefOrValue<ComponentVariant>
   classes?: ComputedRef<string>
 }
@@ -40,6 +43,7 @@ export interface TabPane {
   class?: RefOrValue<string>
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
+  variantMode?: RefOrValue<ComponentVariantMode>
   tabVariant?: RefOrValue<ComponentVariant>
   classes?: ComputedRef<string>
   tabClasses?: ComputedRef<string>
@@ -96,6 +100,7 @@ function defineTabsComponent() {
       'selectedTab',
       'tone',
       'variant',
+      'variantMode',
       'tabVariant',
     ],
     context: (head) => {
@@ -116,6 +121,7 @@ function defineTabPaneComponent() {
       'group',
       'tone',
       'variant',
+      'variantMode',
       'tabVariant',
     ],
     context: (head) => resolveTabPane(head),
@@ -140,6 +146,7 @@ function resolveTabs(props: Tabs): Tabs {
     classes: computed(() =>
       resolveComponentClasses(props, {
         defaultVariant: 'surface',
+        defaultVariantMode: DEFAULT_TABS_VARIANT_MODE,
       }),
     ),
   })
@@ -163,18 +170,21 @@ function resolveTabPane(head: ComponentHead<TabPane>): TabPane {
   const group = head.props.group || fromParent?.group || defaultGroup
   const id = resolveTabId(unref(head.props.id))
   const tone = head.props.tone || fromParent?.tone
+  const variantMode = head.props.variantMode || fromParent?.variantMode
   const tabVariant = head.props.tabVariant || fromParent?.tabVariant
   return {
     ...head.props,
     id,
     group,
     tone,
+    variantMode,
     tabVariant,
     classes: computed(() =>
       resolveComponentClasses(
-        { tone, variant: head.props.variant },
+        { tone, variant: head.props.variant, variantMode },
         {
           defaultVariant: 'none',
+          defaultVariantMode: DEFAULT_TABS_VARIANT_MODE,
         },
       ),
     ),
