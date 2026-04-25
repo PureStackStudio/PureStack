@@ -20,16 +20,11 @@ export interface Grid {
   alignItems?: RefOrValue<GridAlignItems>
   justifyItems?: RefOrValue<GridJustifyItems>
   dense?: RefOrValue<boolean | string>
-  className?: ComputedRef<string>
+  classes?: ComputedRef<string>
   gridStyle?: ComputedRef<Record<string, string>>
 }
 
-const gridTemplate = html`<div
-  :is="container ?? 'div'"
-  class="grid"
-  :class="className"
-  :style="gridStyle"
->
+const gridTemplate = html`<div :is="container ?? 'div'" class="grid" :class="classes" :style="gridStyle">
   <slot></slot>
 </div>`
 
@@ -57,7 +52,7 @@ export function defineGridComponents() {
 }
 
 function resolveGrid(props: Grid): Grid {
-  const className = computed(() => {
+  const classes = computed(() => {
     return [
       resolveAlignClass(props.alignItems),
       resolveJustifyClass(props.justifyItems),
@@ -80,7 +75,7 @@ function resolveGrid(props: Grid): Grid {
 
   return {
     ...props,
-    className,
+    classes,
     gridStyle,
   }
 }

@@ -3,21 +3,16 @@ import { styleBuilder, type ThemeMode, themes } from '@purestack/ts-style'
 
 export function registerFooterStyles() {
   themes.forEach((theme, palette) => {
-    applyFooterShellStyles(theme, palette)
+    applyFooterShellStyles(theme)
     applyFooterBottomStyles(theme, palette)
   })
 }
 
-export function applyFooterShellStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-) {
+export function applyFooterShellStyles(theme: ThemeMode) {
   styleBuilder
     .select('.site-footer', theme)
     .position('relative')
     .overflow('hidden')
-    .border(`0px solid ${palette.current.border.default}`)
-    .background(palette.current.surface.rest.background)
     .padding('0')
 
   styleBuilder

@@ -1,12 +1,15 @@
-import { getSemanticToneClass, type SemanticTone } from '@purestack/ts-style'
+import type { SemanticTone } from '@purestack/ts-style'
 import {
   type ComputedRef,
   computed,
   defineComponent,
   html,
   type RefOrValue,
-  unref,
 } from 'regor'
+import {
+  type ComponentVariant,
+  resolveComponentClasses,
+} from '../componentVariant'
 
 export interface SiteFooter {
   teleport?: string
@@ -14,12 +17,14 @@ export interface SiteFooter {
   copyright?: string
   legalLabel?: string
   tone?: RefOrValue<SemanticTone>
-  toneClass?: ComputedRef<string>
+  variant?: RefOrValue<ComponentVariant>
+  class?: RefOrValue<string>
+  classes?: ComputedRef<string>
 }
 
 const siteFooterTemplate = html`<footer
-  class="site-footer doc-content tone-surface"
-  :class="toneClass"
+  class="site-footer doc-content"
+  :class="classes"
   :aria-label="ariaLabel"
   :r-teleport="teleport"
 >
@@ -54,7 +59,15 @@ const siteFooterTemplate = html`<footer
 
 function defineSiteFooterComponent() {
   return defineComponent<SiteFooter>(siteFooterTemplate, {
-    props: ['teleport', 'ariaLabel', 'copyright', 'legalLabel', 'tone'],
+    props: [
+      'teleport',
+      'ariaLabel',
+      'copyright',
+      'legalLabel',
+      'tone',
+      'variant',
+      'class',
+    ],
     context: (head) => resolveSiteFooter(head.props),
   })
 }
@@ -73,6 +86,10 @@ function resolveSiteFooter(props: SiteFooter): SiteFooter {
     ariaLabel: props.ariaLabel || 'Site footer',
     legalLabel: props.legalLabel || 'Legal and policy links',
     copyright: props.copyright || `(c) ${year}. All rights reserved.`,
-    toneClass: computed(() => getSemanticToneClass(unref(props.tone))),
+    classes: computed(() =>
+      resolveComponentClasses(props, {
+        defaultVariant: 'surface',
+      }),
+    ),
   }
 }
