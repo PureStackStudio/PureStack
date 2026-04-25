@@ -26,19 +26,49 @@ the material treatment of a variant independently from the semantic color role.
   <Btn variant="solid" tone="danger">danger</Btn>
 </Flex>
 
-## Soft
+## Surface
 
 <Flex wrap="true" align="center">
-  <Btn variant="soft" tone="neutral">neutral</Btn>
-  <Btn variant="soft" tone="accent">accent</Btn>
-  <Btn variant="soft" tone="feature">feature</Btn>
-  <Btn variant="soft" tone="secondary">secondary</Btn>
-  <Btn variant="soft" tone="custom">custom</Btn>
-  <Btn variant="soft" tone="ghost">ghost</Btn>
-  <Btn variant="soft" tone="info">info</Btn>
-  <Btn variant="soft" tone="success">success</Btn>
-  <Btn variant="soft" tone="warning">warning</Btn>
-  <Btn variant="soft" tone="danger">danger</Btn>
+  <Btn variant="surface" tone="neutral">neutral</Btn>
+  <Btn variant="surface" tone="accent">accent</Btn>
+  <Btn variant="surface" tone="feature">feature</Btn>
+  <Btn variant="surface" tone="secondary">secondary</Btn>
+  <Btn variant="surface" tone="custom">custom</Btn>
+  <Btn variant="surface" tone="ghost">ghost</Btn>
+  <Btn variant="surface" tone="info">info</Btn>
+  <Btn variant="surface" tone="success">success</Btn>
+  <Btn variant="surface" tone="warning">warning</Btn>
+  <Btn variant="surface" tone="danger">danger</Btn>
+</Flex>
+
+## Surface Alt
+
+<Flex wrap="true" align="center">
+  <Btn variant="surfaceAlt" tone="neutral">neutral</Btn>
+  <Btn variant="surfaceAlt" tone="accent">accent</Btn>
+  <Btn variant="surfaceAlt" tone="feature">feature</Btn>
+  <Btn variant="surfaceAlt" tone="secondary">secondary</Btn>
+  <Btn variant="surfaceAlt" tone="custom">custom</Btn>
+  <Btn variant="surfaceAlt" tone="ghost">ghost</Btn>
+  <Btn variant="surfaceAlt" tone="info">info</Btn>
+  <Btn variant="surfaceAlt" tone="success">success</Btn>
+  <Btn variant="surfaceAlt" tone="warning">warning</Btn>
+  <Btn variant="surfaceAlt" tone="danger">danger</Btn>
+</Flex>
+
+## Outline Fill
+
+<Flex wrap="true" align="center">
+  <Btn variant="outlineFill" tone="neutral">neutral</Btn>
+  <Btn variant="outlineFill" tone="accent">accent</Btn>
+  <Btn variant="outlineFill" tone="feature">feature</Btn>
+  <Btn variant="outlineFill" tone="secondary">secondary</Btn>
+  <Btn variant="outlineFill" tone="custom">custom</Btn>
+  <Btn variant="outlineFill" tone="ghost">ghost</Btn>
+  <Btn variant="outlineFill" tone="info">info</Btn>
+  <Btn variant="outlineFill" tone="success">success</Btn>
+  <Btn variant="outlineFill" tone="warning">warning</Btn>
+  <Btn variant="outlineFill" tone="danger">danger</Btn>
 </Flex>
 
 ## Outline
@@ -146,6 +176,14 @@ the material treatment of a variant independently from the semantic color role.
   <Btn variant="bracket" tone="danger">danger</Btn>
 </Flex>
 
+## None
+
+<Flex wrap="true" align="center">
+  <Btn variant="none" class="b-1 rounded-md b-tone tone-text pad-2">custom</Btn>
+  <Btn variant="none" class="b-0 rounded-pill tone-fill-button-all tone-text-button-all pad-2">filled</Btn>
+  <Btn variant="none" class="underline-hover tone-text fw-700">link-like</Btn>
+</Flex>
+
 ## Button Links
 
 The same variants are available on `BtnLink`.
@@ -154,8 +192,14 @@ The same variants are available on `BtnLink`.
   <BtnLink href="/guide/button-variant-sample/" variant="solid" tone="accent">
     solid
   </BtnLink>
-  <BtnLink href="/guide/button-variant-sample/" variant="soft" tone="feature">
-    soft
+  <BtnLink href="/guide/button-variant-sample/" variant="surface" tone="neutral">
+    surface
+  </BtnLink>
+  <BtnLink href="/guide/button-variant-sample/" variant="surfaceAlt" tone="feature">
+    surface alt
+  </BtnLink>
+  <BtnLink href="/guide/button-variant-sample/" variant="outlineFill" tone="info">
+    outline fill
   </BtnLink>
   <BtnLink href="/guide/button-variant-sample/" variant="outline" tone="info">
     outline
@@ -178,13 +222,16 @@ The same variants are available on `BtnLink`.
   <BtnLink href="/guide/button-variant-sample/" variant="bracket" tone="neutral">
     bracket
   </BtnLink>
+  <BtnLink href="/guide/button-variant-sample/" variant="none" class="b-1 rounded-md b-tone tone-text pad-2">
+    none
+  </BtnLink>
 </Flex>
 
 ## Props Reference
 
 ```html
 <Btn
-  variant="solid|soft|outline|subtle|link|sheen|underline|rail|bracket"
+  variant="none|solid|surface|surfaceAlt|outlineFill|outline|subtle|link|sheen|underline|rail|bracket"
   tone="neutral|accent|feature|secondary|custom|ghost|info|success|warning|danger"
 >
   Label

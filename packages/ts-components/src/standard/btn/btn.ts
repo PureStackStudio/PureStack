@@ -13,8 +13,11 @@ export type BtnSize = 'sm' | 'md' | 'lg'
 export type BtnType = 'button' | 'submit' | 'reset'
 export type BtnIconPosition = 'start' | 'end'
 export type BtnVariant =
+  | 'none'
   | 'solid'
-  | 'soft'
+  | 'surface'
+  | 'surfaceAlt'
+  | 'outlineFill'
   | 'outline'
   | 'subtle'
   | 'link'
@@ -53,16 +56,25 @@ export interface BtnLink extends BtnBase {
 
 const DEFAULT_BUTTON_VARIANT: BtnVariant = 'solid'
 const BUTTON_VARIANT_CLASSES: Record<BtnVariant, string> = {
-  solid: 'tone-fill-button-all tone-border-button-all tone-text-button-all',
-  soft: 'tone-fill-surface-alt-all tone-border-surface-alt-all tone-text',
+  none: '',
+  solid:
+    'b-1 rounded-md tone-fill-button-all tone-border-button-all tone-text-button-all',
+  surface:
+    'b-1 rounded-md tone-fill-surface-all tone-border-surface-all tone-text',
+  surfaceAlt:
+    'b-1 rounded-md tone-fill-surface-alt-all tone-border-surface-alt-all tone-text',
+  outlineFill:
+    'b-2 rounded-md tone-border-button-all tone-text tone-fill-button-hover tone-text-button-hover tone-fill-button-active tone-text-button-active',
   outline:
-    'tone-border-button-all tone-text tone-fill-button-hover tone-text-button-hover tone-fill-button-active tone-text-button-active',
-  subtle: 'tone-text tone-fill-surface-hover tone-fill-surface-active',
-  link: 'tone-text',
-  sheen: 'tone-text-bg-button-all',
-  underline: 'tone-inset-b-hover tone-border-button-all tone-text',
-  rail: 'tone-inset-l-hover tone-border-button-all tone-text',
-  bracket: 'tone-inset-y-hover tone-border-button-all tone-text',
+    'b-2 b-2-hover rounded-md tone-border-button-hover tone-fill-button-active tone-text tone-text-button-hover tone-fill-button-active tone-text-button-active',
+  subtle:
+    'b-0 rounded-md tone-text tone-fill-surface-hover tone-fill-surface-active',
+  link: 'underline-hover tone-text',
+  sheen: 'tone-text-bg-button-all fs-h1 pad-1 fw-900 uppercase',
+  underline: 'tone-inset-b-hover tone-inset-b-active tone-text',
+  rail: 'bl-1 inset-size-4 padl-4 padr-3 tone-inset-l-hover tone-border-button-all tone-text tone-fill-active tone-text-button-active',
+  bracket:
+    'tone-inset-y-hover tone-inset-y-active tone-text tone-fill-active tone-text-button-active',
 }
 
 const buttonTemplate = html`<button

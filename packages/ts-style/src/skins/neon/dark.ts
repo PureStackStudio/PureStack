@@ -75,10 +75,10 @@ const core: NeonCore = {
   secondary: createToneColors(secondaryScale[toneIndex], secondaryScale, delta),
   custom: createToneColors(customScale[toneIndex], customScale, delta),
   ghost: createToneColors(neutralScale[toneIndex], neutralScale, delta),
-  info: createToneColors(info[toneIndex], infoScale, delta),
-  success: createToneColors(success[toneIndex], successScale, delta),
-  warning: createToneColors(warning[toneIndex], warningScale, delta),
-  danger: createToneColors(danger[toneIndex], dangerScale, delta),
+  info: createToneColors(infoScale[toneIndex], infoScale, delta),
+  success: createToneColors(successScale[toneIndex], successScale, delta),
+  warning: createToneColors(warningScale[toneIndex], warningScale, delta),
+  danger: createToneColors(dangerScale[toneIndex], dangerScale, delta),
 }
 
 function resolveScaleIndex(value: number) {
@@ -90,6 +90,7 @@ export function createToneColors(
   scale: string[],
   delta: DeltaToneColors,
 ): ToneColors {
+  if (!tone) throw new Error('tone is not defined.')
   return {
     tone,
     canvas: scale[resolveScaleIndex(12 + delta.canvas)],

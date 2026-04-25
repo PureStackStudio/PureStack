@@ -1,18 +1,14 @@
-import type { ThemeOptions, ThemePalette } from '@purestack/ts-style'
+import type { ThemePalette } from '@purestack/ts-style'
 import { styleBuilder, type ThemeMode, themes } from '@purestack/ts-style'
 
 export function registerButtonStyles() {
   themes.forEach((theme, palette, options) => {
-    registerButtonBaseStyles(theme, palette, options)
+    registerButtonBaseStyles(theme, palette)
     registerButtonSizeStyles(theme, palette, options.radii)
   })
 }
 
-function registerButtonBaseStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+function registerButtonBaseStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.btn', theme)
     .display('inline-flex')
@@ -21,7 +17,8 @@ function registerButtonBaseStyles(
     .alignItems('center')
     .justifyContent('center')
     .gap('0.25em')
-    .border('1px solid transparent')
+    .border('none')
+    .borderColor('transparent')
     .cursor('pointer')
     .textDecoration('none')
     .whiteSpace('nowrap')

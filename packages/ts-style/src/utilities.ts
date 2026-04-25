@@ -13,6 +13,7 @@ export const SPACING_UTILITIES = {
 } as const
 
 type SpacingUtilityName = keyof typeof SPACING_UTILITIES
+const BORDER_WIDTH_UTILITIES = [1, 2, 3] as const
 
 export function registerUtilityStyles() {
   themes.forEach((theme, palette, options) => {
@@ -21,8 +22,10 @@ export function registerUtilityStyles() {
     applyGapUtilities(theme)
     applyLayoutUtilities(theme)
     applyBorderUtilities(theme, palette, options.radii)
+    applyToneInsetSizeUtilities(theme)
     applyTextUtilities(theme, palette)
     applyFontSizeUtilities(theme, palette)
+    applyFontWeightUtilities(theme)
     applyShadowUtilities(theme)
   })
 }
@@ -85,77 +88,110 @@ function applyBorderUtilities(
   palette: ThemePalette,
   radii: ThemeOptions['radii'],
 ) {
+  applyBorderWidthUtilities(theme)
+
   styleBuilder
-    .select('.b', theme)
+    .select('.b-none, .b-none-hover:hover', theme)
+    .borderStyle(force('none'))
+  styleBuilder
+    .select('.b-solid, .b-solid-hover:hover', theme)
     .borderStyle(force('solid'))
-    .borderWidth(force('1px'))
-
-  styleBuilder.select('.b-0', theme).borderWidth(force('0'))
-  styleBuilder.select('.b-none', theme).borderStyle(force('none'))
-  styleBuilder.select('.b-solid', theme).borderStyle(force('solid'))
-  styleBuilder.select('.b-dashed', theme).borderStyle(force('dashed'))
-  styleBuilder.select('.b-dotted', theme).borderStyle(force('dotted'))
-
   styleBuilder
-    .select('.bx', theme)
-    .borderLeftWidth(force('1px'))
-    .borderRightWidth(force('1px'))
-    .borderLeftStyle(force('solid'))
-    .borderRightStyle(force('solid'))
+    .select('.b-dashed, .b-dashed-hover:hover', theme)
+    .borderStyle(force('dashed'))
   styleBuilder
-    .select('.by', theme)
-    .borderTopWidth(force('1px'))
-    .borderBottomWidth(force('1px'))
-    .borderTopStyle(force('solid'))
-    .borderBottomStyle(force('solid'))
-  styleBuilder
-    .select('.bt', theme)
-    .borderTopWidth(force('1px'))
-    .borderTopStyle(force('solid'))
-  styleBuilder
-    .select('.br', theme)
-    .borderRightWidth(force('1px'))
-    .borderRightStyle(force('solid'))
-  styleBuilder
-    .select('.bb', theme)
-    .borderBottomWidth(force('1px'))
-    .borderBottomStyle(force('solid'))
-  styleBuilder
-    .select('.bl', theme)
-    .borderLeftWidth(force('1px'))
-    .borderLeftStyle(force('solid'))
+    .select('.b-dotted, .b-dotted-hover:hover', theme)
+    .borderStyle(force('dotted'))
 
   styleBuilder
-    .select('.bx-0', theme)
-    .borderLeftWidth(force('0'))
-    .borderRightWidth(force('0'))
-  styleBuilder
-    .select('.by-0', theme)
-    .borderTopWidth(force('0'))
-    .borderBottomWidth(force('0'))
-  styleBuilder.select('.bt-0', theme).borderTopWidth(force('0'))
-  styleBuilder.select('.br-0', theme).borderRightWidth(force('0'))
-  styleBuilder.select('.bb-0', theme).borderBottomWidth(force('0'))
-  styleBuilder.select('.bl-0', theme).borderLeftWidth(force('0'))
-
-  styleBuilder
-    .select('.b-subtle', theme)
+    .select('.b-subtle, .b-subtle-hover:hover', theme)
     .borderColor(force(palette.current.border.subtle))
   styleBuilder
-    .select('.b-default', theme)
+    .select('.b-default, .b-default-hover:hover', theme)
     .borderColor(force(palette.current.border.default))
   styleBuilder
-    .select('.b-focus', theme)
+    .select('.b-focus, .b-focus-hover:hover', theme)
     .borderColor(force(palette.current.border.focus))
-  styleBuilder.select('.b-tone', theme).borderColor(force(palette.current.tone))
-  styleBuilder.select('.b-transparent', theme).borderColor(force('transparent'))
-  styleBuilder.select('.b-current', theme).borderColor(force('currentColor'))
+  styleBuilder
+    .select('.b-tone, .b-tone-hover:hover', theme)
+    .borderColor(force(palette.current.tone))
+  styleBuilder
+    .select('.b-transparent, .b-transparent-hover:hover', theme)
+    .borderColor(force('transparent'))
+  styleBuilder
+    .select('.b-current, .b-current-hover:hover', theme)
+    .borderColor(force('currentColor'))
 
   applyRadiusUtility(theme, 'none', '0')
   applyRadiusUtility(theme, 'sm', radii.sm)
   applyRadiusUtility(theme, 'md', radii.md)
   applyRadiusUtility(theme, 'lg', radii.lg)
   applyRadiusUtility(theme, 'pill', radii.pill)
+}
+
+function applyBorderWidthUtilities(theme: string) {
+  for (const width of BORDER_WIDTH_UTILITIES) {
+    const value = force(`${width}px`)
+
+    styleBuilder
+      .select(withHover(`b-${width}`), theme)
+      .borderStyle(force('solid'))
+      .borderWidth(value)
+    styleBuilder
+      .select(withHover(`bx-${width}`), theme)
+      .borderLeftWidth(value)
+      .borderRightWidth(value)
+      .borderLeftStyle(force('solid'))
+      .borderRightStyle(force('solid'))
+    styleBuilder
+      .select(withHover(`by-${width}`), theme)
+      .borderTopWidth(value)
+      .borderBottomWidth(value)
+      .borderTopStyle(force('solid'))
+      .borderBottomStyle(force('solid'))
+    styleBuilder
+      .select(withHover(`bt-${width}`), theme)
+      .borderTopWidth(value)
+      .borderTopStyle(force('solid'))
+    styleBuilder
+      .select(withHover(`br-${width}`), theme)
+      .borderRightWidth(value)
+      .borderRightStyle(force('solid'))
+    styleBuilder
+      .select(withHover(`bb-${width}`), theme)
+      .borderBottomWidth(value)
+      .borderBottomStyle(force('solid'))
+    styleBuilder
+      .select(withHover(`bl-${width}`), theme)
+      .borderLeftWidth(value)
+      .borderLeftStyle(force('solid'))
+  }
+
+  styleBuilder.select(withHover('b-0'), theme).borderWidth(force('0'))
+  styleBuilder
+    .select(withHover('bx-0'), theme)
+    .borderLeftWidth(force('0'))
+    .borderRightWidth(force('0'))
+  styleBuilder
+    .select(withHover('by-0'), theme)
+    .borderTopWidth(force('0'))
+    .borderBottomWidth(force('0'))
+  styleBuilder.select(withHover('bt-0'), theme).borderTopWidth(force('0'))
+  styleBuilder.select(withHover('br-0'), theme).borderRightWidth(force('0'))
+  styleBuilder.select(withHover('bb-0'), theme).borderBottomWidth(force('0'))
+  styleBuilder.select(withHover('bl-0'), theme).borderLeftWidth(force('0'))
+}
+
+function withHover(name: string) {
+  return `.${name}, .${name}-hover:hover`
+}
+
+function applyToneInsetSizeUtilities(theme: string) {
+  for (const name of getSpacingUtilityNames()) {
+    styleBuilder
+      .select(`.inset-size-${name}`, theme)
+      .set('--tone-inset-size', SPACING_UTILITIES[name])
+  }
 }
 
 function applyRadiusUtility(theme: string, name: string, value: string) {
@@ -203,9 +239,24 @@ function applyFontSizeUtilities(theme: string, palette: ThemePalette) {
   styleBuilder.select('.fs-display', theme).fontSize(force(fontSizes.display))
 }
 
+function applyFontWeightUtilities(theme: string) {
+  styleBuilder.select('.fw-100', theme).fontWeight(force('100'))
+  styleBuilder.select('.fw-200', theme).fontWeight(force('200'))
+  styleBuilder.select('.fw-300', theme).fontWeight(force('300'))
+  styleBuilder.select('.fw-400', theme).fontWeight(force('400'))
+  styleBuilder.select('.fw-500', theme).fontWeight(force('500'))
+  styleBuilder.select('.fw-600', theme).fontWeight(force('600'))
+  styleBuilder.select('.fw-700', theme).fontWeight(force('700'))
+  styleBuilder.select('.fw-800', theme).fontWeight(force('800'))
+  styleBuilder.select('.fw-900', theme).fontWeight(force('900'))
+}
+
 function applyTextUtilities(theme: string, palette: ThemePalette) {
   styleBuilder
-    .select('.underline-hover:hover', theme)
+    .select(
+      '.underline-hover:hover, .underline-active:active, .underline-active.active',
+      theme,
+    )
     .textDecoration('underline !important')
   styleBuilder.select('.uppercase', theme).textTransform('uppercase !important')
 

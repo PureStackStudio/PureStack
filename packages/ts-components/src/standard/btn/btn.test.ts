@@ -198,6 +198,27 @@ describe('Button rendering', () => {
     expect(sheenHtml).toContain('tone-text-bg-button-all')
   })
 
+  it('supports none variant for fully custom classes', () => {
+    const cleanup = ensureDomGlobals()
+    const components = {
+      ...defineIconComponents(getSvgIcon),
+      ...defineButtonComponents(),
+    }
+    const html = renderApp(
+      `<Btn variant="none" class="custom-action">Custom</Btn>`,
+      {
+        components,
+        context: createTestContext(),
+      },
+    )
+    cleanup()
+
+    expect(html).toContain('custom-action')
+    expect(html).not.toContain('tone-fill-button-all')
+    expect(html).not.toContain('tone-border-button-all')
+    expect(html).not.toContain('tone-text-button-all')
+  })
+
   it('renders empty label span when button has no slot and no icon', () => {
     const cleanup = ensureDomGlobals()
     const components = {
