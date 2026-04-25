@@ -10,8 +10,8 @@ import {
   unref,
 } from 'regor'
 import {
-  type ComponentVariantMode,
   type ComponentVariant,
+  type ComponentVariantMode,
   resolveComponentClasses,
 } from '../componentVariant'
 

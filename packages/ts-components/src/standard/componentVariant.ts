@@ -35,8 +35,7 @@ export interface ResolveComponentClassesOptions {
 
 const STATELESS_COMPONENT_VARIANT_CLASSES: Record<ComponentVariant, string> = {
   none: '',
-  solid:
-    'b-1 rounded-md tone-fill-button tone-border-button tone-text-button',
+  solid: 'b-1 rounded-md tone-fill-button tone-border-button tone-text-button',
   surface:
     'b-1 rounded-md tone-fill-surface tone-border-surface tone-text-surface',
   surfaceAlt:
@@ -97,11 +96,12 @@ function mergeComponentVariantClasses(
   return merged
 }
 
-export function resolveComponentVariantClassName(
+function resolveComponentVariantClassName(
   variant: RefOrValue<ComponentVariant> | undefined,
   defaultVariant: ComponentVariant = DEFAULT_COMPONENT_VARIANT,
-  variantMode: RefOrValue<ComponentVariantMode> | undefined =
-    DEFAULT_COMPONENT_VARIANT_MODE,
+  variantMode:
+    | RefOrValue<ComponentVariantMode>
+    | undefined = DEFAULT_COMPONENT_VARIANT_MODE,
 ) {
   const resolvedVariant = unref(variant) || defaultVariant
   const resolvedMode = unref(variantMode) || DEFAULT_COMPONENT_VARIANT_MODE
