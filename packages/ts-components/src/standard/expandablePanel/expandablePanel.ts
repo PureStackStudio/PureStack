@@ -53,7 +53,7 @@ const expandablePanelTemplate = html`<details class="expandable-panel" :class="c
       </span>
     </slot>
   </summary>
-  <div class="expandable-panel__body"><slot></slot></div>
+  <div class="expandable-panel__body bt-0"><slot></slot></div>
 </details>`
 
 function defineExpandablePanelComponent() {
