@@ -27,7 +27,6 @@ export function registerUtilityStyles() {
     applyFontSizeUtilities(theme, palette)
     applyFontWeightUtilities(theme)
     applyLineHeightUtilities(theme)
-    applyJustifyContentUtilities(theme)
     applyShadowUtilities(theme)
   })
 }
@@ -258,14 +257,6 @@ function applyLineHeightUtilities(theme: string) {
       .select(`.lh-${index}`, theme)
       .lineHeight(force((1 + index * 0.1).toFixed(1)))
   }
-}
-
-function applyJustifyContentUtilities(theme: string) {
-  styleBuilder
-    .select('.justify-start', theme)
-    .justifyContent(force('flex-start'))
-  styleBuilder.select('.justify-center', theme).justifyContent(force('center'))
-  styleBuilder.select('.justify-end', theme).justifyContent(force('flex-end'))
 }
 
 function applyTextUtilities(theme: string, palette: ThemePalette) {

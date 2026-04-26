@@ -18,7 +18,7 @@ describe('Grid rendering', () => {
     cleanup()
 
     expect(html).toContain(
-      'class="grid grid--align-center grid--justify-start grid--dense"',
+      'class="grid grid-align-center grid-justify-start grid-dense"',
     )
     expect(html).toContain('--grid-template-columns: repeat(2, minmax(0, 1fr))')
     expect(html).toContain(

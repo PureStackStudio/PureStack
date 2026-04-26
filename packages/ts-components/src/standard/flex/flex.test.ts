@@ -18,7 +18,7 @@ describe('Flex rendering', () => {
     cleanup()
 
     expect(html).toContain(
-      'class="flex flex--column flex--align-center flex--justify-between flex--wrap-reverse flex--inline"',
+      'class="flex flex-column flex-align-center flex-justify-between flex-wrap-reverse flex-inline"',
     )
     expect(html).toContain('item')
   })
@@ -36,8 +36,8 @@ describe('Flex rendering', () => {
     cleanup()
 
     expect(html).toContain('class="flex ')
-    expect(html).toContain('flex--column-reverse')
-    expect(html).toContain('flex--direction-md-row-reverse')
+    expect(html).toContain('flex-column-reverse')
+    expect(html).toContain('flex-direction-md-row-reverse')
   })
 
   it('supports wrap as a boolean prop', () => {
@@ -49,14 +49,14 @@ describe('Flex rendering', () => {
     })
     cleanup()
 
-    expect(html).toContain('class="flex flex--wrap"')
+    expect(html).toContain('class="flex flex-wrap"')
   })
 
   it('renders responsive modifier classes for breakpoint-specific layout props', () => {
     const cleanup = ensureDomGlobals()
     const components = defineFlexComponents()
     const html = renderApp(
-      '<Flex justify="center" justifyMd="end" alignSm="center" directionLg="column" wrapXl="nowrap">item</Flex>',
+      '<Flex justify="stretch" justifyMd="end" alignSm="center" directionLg="column" wrapXl="nowrap">item</Flex>',
       {
         components,
         context: createTestContext(),
@@ -65,11 +65,11 @@ describe('Flex rendering', () => {
     cleanup()
 
     expect(html).toContain('class="flex ')
-    expect(html).toContain('flex--direction-lg-column')
-    expect(html).toContain('flex--align-sm-center')
-    expect(html).toContain('flex--justify-center')
-    expect(html).toContain('flex--justify-md-end')
-    expect(html).toContain('flex--nowrap-xl')
+    expect(html).toContain('flex-direction-lg-column')
+    expect(html).toContain('flex-align-sm-center')
+    expect(html).toContain('flex-justify-stretch')
+    expect(html).toContain('flex-justify-md-end')
+    expect(html).toContain('flex-nowrap-xl')
   })
 
   it('omits classes for default row direction and invalid values', () => {
@@ -85,8 +85,8 @@ describe('Flex rendering', () => {
     cleanup()
 
     expect(html).toContain('class="flex"')
-    expect(html).not.toContain('flex--column')
-    expect(html).not.toContain('flex--wrap')
-    expect(html).not.toContain('flex--inline')
+    expect(html).not.toContain('flex-column')
+    expect(html).not.toContain('flex-wrap')
+    expect(html).not.toContain('flex-inline')
   })
 })

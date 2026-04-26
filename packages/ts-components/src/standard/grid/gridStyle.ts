@@ -18,15 +18,15 @@ export function registerGridStyles() {
 
     styleBuilder.select('.grid > *', theme).minWidth('0')
 
-    styleBuilder.select('.grid--align-start', theme).alignItems('start')
-    styleBuilder.select('.grid--align-center', theme).alignItems('center')
-    styleBuilder.select('.grid--align-end', theme).alignItems('end')
+    styleBuilder.select('.grid-align-start', theme).alignItems('start')
+    styleBuilder.select('.grid-align-center', theme).alignItems('center')
+    styleBuilder.select('.grid-align-end', theme).alignItems('end')
 
-    styleBuilder.select('.grid--justify-start', theme).justifyItems('start')
-    styleBuilder.select('.grid--justify-center', theme).justifyItems('center')
-    styleBuilder.select('.grid--justify-end', theme).justifyItems('end')
+    styleBuilder.select('.grid-justify-start', theme).justifyItems('start')
+    styleBuilder.select('.grid-justify-center', theme).justifyItems('center')
+    styleBuilder.select('.grid-justify-end', theme).justifyItems('end')
 
-    styleBuilder.select('.grid--dense', theme).gridAutoFlow('row dense')
+    styleBuilder.select('.grid-dense', theme).gridAutoFlow('row dense')
 
     styleBuilder
       .select('.grid', theme)

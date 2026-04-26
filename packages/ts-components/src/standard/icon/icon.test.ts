@@ -18,14 +18,13 @@ describe('Icon rendering', () => {
     expect(html).toContain('class="icon"')
     expect(html).toContain('<svg')
     expect(html).not.toContain('style="')
-    expect(html).toContain('aria-hidden="true"')
   })
 
-  it('applies accessible label', () => {
+  it('passes accessibility attributes through to the icon root', () => {
     const cleanup = ensureDomGlobals()
     const components = defineIconComponents(getSvgIcon)
     const html = renderApp(
-      `<Icon name="iconoir:pin" role="img" aria-label="Pinned" />`,
+      `<Icon name="iconoir:pin" role="img" aria-label="Pinned" aria-hidden="false" />`,
       {
         components,
         context: createTestContext(),
@@ -35,7 +34,7 @@ describe('Icon rendering', () => {
 
     expect(html).toContain('role="img"')
     expect(html).toContain('aria-label="Pinned"')
-    expect(html).not.toMatch(/<span class="icon"[^>]*aria-hidden="true"/)
+    expect(html).toMatch(/<span class="icon"[^>]*aria-hidden="false"/)
   })
 
   it('renders nothing when icon name is missing', () => {
@@ -47,6 +46,42 @@ describe('Icon rendering', () => {
     })
     cleanup()
 
+    expect(html).not.toContain('class="icon"')
+  })
+
+  it('renders framed icons through IconFrame', () => {
+    const cleanup = ensureDomGlobals()
+    const components = defineIconComponents(getSvgIcon)
+    const html = renderApp(
+      `<IconFrame name="iconoir:check" tone="success" variant="surface" class="icon-frame--lg" role="img" aria-label="Complete" />`,
+      {
+        components,
+        context: createTestContext(),
+      },
+    )
+    cleanup()
+
+    expect(html).toContain('class="icon-frame')
+    expect(html).toContain('icon-frame--lg')
+    expect(html).toContain('tone-fill-surface')
+    expect(html).toContain('tone-border-surface')
+    expect(html).toContain('tone-text-surface')
+    expect(html).toContain('role="img"')
+    expect(html).toContain('aria-label="Complete"')
+    expect(html).toContain('class="icon"')
+    expect(html).toContain('<svg')
+  })
+
+  it('renders no frame when IconFrame has no icon name', () => {
+    const cleanup = ensureDomGlobals()
+    const components = defineIconComponents(getSvgIcon)
+    const html = renderApp(`<IconFrame />`, {
+      components,
+      context: createTestContext(),
+    })
+    cleanup()
+
+    expect(html).not.toContain('icon-frame')
     expect(html).not.toContain('class="icon"')
   })
 })

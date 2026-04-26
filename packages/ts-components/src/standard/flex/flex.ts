@@ -13,6 +13,7 @@ export type FlexJustify =
   | 'start'
   | 'center'
   | 'end'
+  | 'stretch'
   | 'between'
   | 'around'
   | 'evenly'
@@ -123,9 +124,9 @@ function resolveDirectionClass(value?: RefOrValue<FlexDirection>) {
   if (!value) return ''
 
   const normalized = unref(value)
-  if (normalized === 'column') return 'flex--column'
-  if (normalized === 'column-reverse') return 'flex--column-reverse'
-  if (normalized === 'row-reverse') return 'flex--row-reverse'
+  if (normalized === 'column') return 'flex-column'
+  if (normalized === 'column-reverse') return 'flex-column-reverse'
+  if (normalized === 'row-reverse') return 'flex-row-reverse'
   if (normalized === 'row') return ''
 
   return ''
@@ -138,13 +139,13 @@ function resolveResponsiveDirectionClass(
   if (!value) return ''
 
   const normalized = unref(value)
-  if (normalized === 'column') return `flex--direction-${breakpoint}-column`
+  if (normalized === 'column') return `flex-direction-${breakpoint}-column`
   if (normalized === 'column-reverse') {
-    return `flex--direction-${breakpoint}-column-reverse`
+    return `flex-direction-${breakpoint}-column-reverse`
   }
-  if (normalized === 'row') return `flex--direction-${breakpoint}-row`
+  if (normalized === 'row') return `flex-direction-${breakpoint}-row`
   if (normalized === 'row-reverse') {
-    return `flex--direction-${breakpoint}-row-reverse`
+    return `flex-direction-${breakpoint}-row-reverse`
   }
 
   return ''
@@ -161,7 +162,7 @@ function resolveAlignClass(value?: RefOrValue<FlexAlign>) {
     normalized === 'end' ||
     normalized === 'baseline'
   ) {
-    return `flex--align-${normalized}`
+    return `flex-align-${normalized}`
   }
 
   return ''
@@ -181,7 +182,7 @@ function resolveResponsiveAlignClass(
     normalized === 'end' ||
     normalized === 'baseline'
   ) {
-    return `flex--align-${breakpoint}-${normalized}`
+    return `flex-align-${breakpoint}-${normalized}`
   }
 
   return ''
@@ -195,11 +196,12 @@ function resolveJustifyClass(value?: RefOrValue<FlexJustify>) {
     normalized === 'start' ||
     normalized === 'center' ||
     normalized === 'end' ||
+    normalized === 'stretch' ||
     normalized === 'between' ||
     normalized === 'around' ||
     normalized === 'evenly'
   ) {
-    return `flex--justify-${normalized}`
+    return `flex-justify-${normalized}`
   }
 
   return ''
@@ -216,11 +218,12 @@ function resolveResponsiveJustifyClass(
     normalized === 'start' ||
     normalized === 'center' ||
     normalized === 'end' ||
+    normalized === 'stretch' ||
     normalized === 'between' ||
     normalized === 'around' ||
     normalized === 'evenly'
   ) {
-    return `flex--justify-${breakpoint}-${normalized}`
+    return `flex-justify-${breakpoint}-${normalized}`
   }
 
   return ''
@@ -231,9 +234,9 @@ function resolveWrapClass(value?: RefOrValue<FlexWrap>) {
 
   const normalized = unref(value)
   if (normalized === true || normalized === 'true' || normalized === 'wrap') {
-    return 'flex--wrap'
+    return 'flex-wrap'
   }
-  if (normalized === 'reverse') return 'flex--wrap-reverse'
+  if (normalized === 'reverse') return 'flex-wrap-reverse'
 
   return ''
 }
@@ -246,10 +249,10 @@ function resolveResponsiveWrapClass(
 
   const normalized = unref(value)
   if (normalized === true || normalized === 'true' || normalized === 'wrap') {
-    return `flex--wrap-${breakpoint}`
+    return `flex-wrap-${breakpoint}`
   }
-  if (normalized === 'nowrap') return `flex--nowrap-${breakpoint}`
-  if (normalized === 'reverse') return `flex--wrap-${breakpoint}-reverse`
+  if (normalized === 'nowrap') return `flex-nowrap-${breakpoint}`
+  if (normalized === 'reverse') return `flex-wrap-${breakpoint}-reverse`
 
   return ''
 }
@@ -258,7 +261,7 @@ function resolveInlineClass(value?: RefOrValue<boolean | string>) {
   if (!value) return ''
 
   const normalized = unref(value)
-  if (normalized === true || normalized === 'true') return 'flex--inline'
+  if (normalized === true || normalized === 'true') return 'flex-inline'
 
   return ''
 }

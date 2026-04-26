@@ -165,7 +165,7 @@ function buildNavState(
       isActive,
       isOpen: isActive || hasActiveChild,
       linkClass: [
-        'fs-body ws-normal justify-start w-full',
+        'fs-body ws-normal flex-justify-start w-full',
         'nav__link',
         isActive ? 'active' : '',
       ]

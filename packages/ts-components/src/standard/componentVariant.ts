@@ -124,7 +124,6 @@ export function resolveComponentClasses(
     ),
     getSemanticToneClass(unref(props.tone)),
     ...(options.classes || []).map(unref),
-    unref(props.class) || '',
   ]
     .filter(Boolean)
     .join(' ')

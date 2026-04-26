@@ -148,7 +148,7 @@ function resolveAlignClass(value?: RefOrValue<GridAlignItems>) {
     normalized === 'center' ||
     normalized === 'end'
   ) {
-    return `grid--align-${normalized}`
+    return `grid-align-${normalized}`
   }
   return ''
 }
@@ -161,7 +161,7 @@ function resolveJustifyClass(value?: RefOrValue<GridJustifyItems>) {
     normalized === 'center' ||
     normalized === 'end'
   ) {
-    return `grid--justify-${normalized}`
+    return `grid-justify-${normalized}`
   }
   return ''
 }
@@ -169,7 +169,7 @@ function resolveJustifyClass(value?: RefOrValue<GridJustifyItems>) {
 function resolveDenseClass(value?: RefOrValue<boolean | string>) {
   if (!value) return ''
   const normalized = unref(value)
-  if (normalized === true || normalized === 'true') return 'grid--dense'
+  if (normalized === true || normalized === 'true') return 'grid-dense'
 
   return ''
 }

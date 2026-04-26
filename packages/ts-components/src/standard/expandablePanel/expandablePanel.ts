@@ -34,7 +34,11 @@ const expandablePanelTemplate = html`<details class="expandable-panel gap-0" :cl
     :class="summaryClasses"
   >
     <slot name="summary">
-      <Icon class="tone-icon" :name="icon" r-if="icon" :framed="true"/>
+      <IconFrame
+        :name="icon"
+        r-if="icon"
+        :variant="summaryVariant"
+        variantMode="stateless"/>
       <Flex align="center" wrap="true" class="flex-1 gap-2">
         <span class="fw-700 min-w-0 lh-0" r-if="title">{{ title }}</span>
         <Badge :tone="tone" r-if="badge">{{ badge }}</Badge>
@@ -44,10 +48,11 @@ const expandablePanelTemplate = html`<details class="expandable-panel gap-0" :cl
       </Flex>
       <Flex align="center" justify="center" class="flex-none">
         <span class="fw-600" r-if="meta"> {{ meta }} </span>
-        <Icon
-          class="expandable-panel__chevron rounded-pill b-1 b-subtle tone-icon"
+        <IconFrame
+          class="expandable-panel__chevron rounded-pill"
           name="iconoir:nav-arrow-down"
-          :framed="true"/>
+          :variant="summaryVariant"
+          variantMode="stateless"/>
       </Flex>
     </slot>
   </Flex>

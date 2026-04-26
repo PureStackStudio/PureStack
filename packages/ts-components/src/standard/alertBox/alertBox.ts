@@ -19,11 +19,12 @@ export interface AlertBox {
 }
 
 const alertBoxTemplate = html`<aside class="alert tone-surface" :class="toneClass">
-  <Icon
-    class="expandable-panel__icon tone-icon"
+  <IconFrame
+    class="expandable-panel__icon"
     :name="icon"
     r-if="icon"
-    :framed="true"/>
+    :tone="tone"
+    variant="surface"/>
   <div class="alert__content">
     <div class="alert__header" r-if="title || eyebrow || badge">
       <p class="alert__eyebrow" r-if="eyebrow">{{ eyebrow }}</p>

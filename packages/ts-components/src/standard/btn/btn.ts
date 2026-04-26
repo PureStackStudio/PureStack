@@ -25,7 +25,6 @@ export interface BtnBase {
   iconPosition?: RefOrValue<BtnIconPosition>
   iconOnly?: RefOrValue<boolean>
   ariaLabel?: RefOrValue<string>
-  class?: RefOrValue<string>
   classes?: ComputedRef<string>
   showStartIcon?: ComputedRef<boolean>
   showEndIcon?: ComputedRef<boolean>
@@ -84,7 +83,6 @@ function defineButtonComponent() {
       'iconOnly',
       'ariaLabel',
       'disabled',
-      'class',
     ],
     context: (head) => resolveBtn(head.props),
   })
@@ -103,7 +101,6 @@ function defineButtonLinkComponent() {
       'iconPosition',
       'iconOnly',
       'ariaLabel',
-      'class',
     ],
     context: (head) => resolveBtnLink(head.props),
   })
