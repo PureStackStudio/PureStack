@@ -181,5 +181,5 @@ function resolveButtonHref(props: BtnLink) {
 function resolveButtonRel(props: BtnLink) {
   const rel = unref(props.rel)
   if (rel) return rel
-  return unref(props.target) === '_blank' ? 'noopener noreferrer' : ''
+  return unref(props.target) === '_blank' ? 'noopener noreferrer' : undefined
 }

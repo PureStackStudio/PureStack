@@ -431,14 +431,14 @@ function normalizeNavItems(value: unknown, folder: string): NavItem[] {
     if (resolveBoolean(raw.hidden)) continue
     const url = resolveUrl(raw, folder)
     const order = resolveNumber(raw.order)
-    const group = resolveString(raw.group)
+    const badge = resolveString(raw.badge)
     const icon = resolveString(raw.icon)
     const children = normalizeNavItems(raw.children, folder)
     const item: NavItem = {
       title,
       ...(url ? { url } : {}),
       ...(typeof order === 'number' ? { order } : {}),
-      ...(group ? { group } : {}),
+      ...(badge ? { badge } : {}),
       ...(icon ? { icon } : {}),
       ...(children.length > 0 ? { children } : {}),
     }

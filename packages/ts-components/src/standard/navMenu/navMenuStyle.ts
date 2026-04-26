@@ -14,9 +14,7 @@ import {
 export function registerNavStyles() {
   themes.forEach((theme, palette, options) => {
     registerNavShellStyles(theme, palette, options)
-    registerNavLinkStyles(theme, palette, options)
-    registerNavSummaryStyles(theme, palette, options)
-    registerNavBadgeStyles(theme, palette, options)
+    registerNavSummaryStyles(theme, palette)
   })
 }
 
@@ -28,7 +26,7 @@ export function registerNavShellStyles(
   styleBuilder
     .select('.nav__menu', theme)
     .display('block')
-    .padding('16px')
+    .padding('1em')
     .borderRadius(options.radii.lg)
     .border('1px solid transparent')
     .apply(palette.applyFont(palette.font.size.body))
@@ -258,17 +256,7 @@ export function registerNavShellStyles(
     .listStyle('none')
     .margin('0')
     .padding('0')
-    .display('grid')
-    .gap('4px')
-  styleBuilder
-    .select('.nav__list .nav__list', theme)
-    .marginTop('6px')
-    .paddingLeft('12px')
-    .borderLeft('1px solid transparent')
-    .borderLeftColor(palette.current.border.default)
-  styleBuilder.select('.nav__item', theme).display('grid').gap('4px')
-  styleBuilder.select('.nav__leaf', theme).display('block')
-  styleBuilder.select('.nav__group', theme).display('grid')
+  styleBuilder.select('.nav__list .nav__list', theme).paddingLeft('0.75em')
   styleBuilder
     .select('.template-doc--has-nav .doc-sidebar .nav__menu', theme)
     .media(mediaBelow(BREAKPOINTS.lg))
@@ -283,78 +271,21 @@ export function registerNavShellStyles(
     .boxSizing('border-box')
 }
 
-export function registerNavLinkStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
-  styleBuilder
-    .select('.nav__link', theme)
-    .display('block')
-    .padding('8px 12px')
-    .borderRadius(options.radii.md)
-    .textDecoration('none')
-    .fontWeight('600')
-    .background('transparent')
-    .transition('background 160ms ease, color 160ms ease')
-  styleBuilder
-    .select('.nav__text', theme)
-    .display('block')
-    .padding('8px 12px')
-    .borderRadius(options.radii.md)
-    .fontWeight('600')
-    .color(palette.current.text.subtle)
-}
-
 export function registerNavSummaryStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
-  styleBuilder
-    .select('.nav__summary', theme)
-    .display('flex')
-    .alignItems('center')
-    .justifyContent('space-between')
-    .gap('0.5em')
-    .cursor('pointer')
-    .paddingRight('8px')
-    .borderRadius(options.radii.md)
-  styleBuilder
-    .select('.nav__summary-content', theme)
-    .display('flex')
-    .alignItems('center')
-    .gap('0.5em')
-    .flex('1')
+  styleBuilder.select('.nav__summary', theme).position('relative')
   styleBuilder
     .select('.nav__chevron', theme)
-    .width('8px')
-    .height('8px')
-    .borderRight('2px solid currentColor')
-    .borderBottom('2px solid currentColor')
-    .transform('rotate(-45deg)')
+    .position('absolute')
+    .left('auto')
+    .right('2px')
+    .transform('rotate(0deg)')
     .transition('transform 160ms ease')
     .color(palette.current.text.subtle)
   styleBuilder
     .select('.nav__group[open] > .nav__summary .nav__chevron', theme)
-    .transform('rotate(45deg)')
-  styleBuilder
-    .select('.nav__summary::-webkit-details-marker', theme)
-    .display('none')
+    .transform('rotate(-90deg)')
   styleBuilder.select('.nav__summary::marker', theme).content('""')
-}
-
-export function registerNavBadgeStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
-  styleBuilder
-    .select('.nav__badge', theme)
-    .padding('2px 8px')
-    .borderRadius(options.radii.pill)
-    .apply(palette.applyFont(palette.font.size.xs, palette.font.weight.w700))
-    .textTransform('uppercase')
-    .background(palette.current.button.hover.background)
-    .color(palette.current.button.hover.text)
 }

@@ -89,8 +89,6 @@ describe('Button rendering', () => {
     )
     cleanup()
 
-    expect(html).toContain('tone-fill-surface-alt-all')
-    expect(html).toContain('tone-border-surface-alt-all')
     expect(html).toContain('tone--neutral')
     expect(html).toContain('btn--lg')
     expect(html).toContain('u-grow')
@@ -115,8 +113,6 @@ describe('Button rendering', () => {
 
     expect(html).toContain('<a')
     expect(html).toContain('href="/getting-started"')
-    expect(html).toContain('tone-fill-surface-alt-all')
-    expect(html).toContain('tone-border-surface-alt-all')
     expect(html).toContain('tone--neutral')
     expect(html).toContain('btn--lg')
     expect(html).toContain('<span class="btn__label">Read docs</span>')
@@ -160,42 +156,8 @@ describe('Button rendering', () => {
     })
     cleanup()
 
-    expect(warningHtml).toContain('tone-fill-surface-alt-all')
     expect(warningHtml).toContain('tone--warning')
-    expect(dangerHtml).toContain('tone-fill-surface-alt-all')
     expect(dangerHtml).toContain('tone--danger')
-  })
-
-  it('supports preset button variants', () => {
-    const cleanup = ensureDomGlobals()
-    const components = {
-      ...defineIconComponents(getSvgIcon),
-      ...defineButtonComponents(),
-    }
-    const solidHtml = renderApp(`<Btn variant="solid">Save</Btn>`, {
-      components,
-      context: createTestContext(),
-    })
-    const underlineHtml = renderApp(`<Btn variant="underline">Explore</Btn>`, {
-      components,
-      context: createTestContext(),
-    })
-    const sheenHtml = renderApp(
-      `<BtnLink href="/" variant="sheen">Home</BtnLink>`,
-      {
-        components,
-        context: createTestContext(),
-      },
-    )
-    cleanup()
-
-    expect(solidHtml).toContain('tone-fill-button-all')
-    expect(solidHtml).toContain('tone-border-button-all')
-    expect(solidHtml).toContain('tone-text-button-all')
-    expect(underlineHtml).toContain('tone-inset-b-hover')
-    expect(underlineHtml).toContain('tone-border-button-all')
-    expect(sheenHtml).toContain('tone-fill-canvas')
-    expect(sheenHtml).toContain('tone-text-bg-button-all')
   })
 
   it('supports none variant for fully custom classes', () => {

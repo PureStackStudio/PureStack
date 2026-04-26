@@ -24,10 +24,13 @@ describe('Icon rendering', () => {
   it('applies accessible label', () => {
     const cleanup = ensureDomGlobals()
     const components = defineIconComponents(getSvgIcon)
-    const html = renderApp(`<Icon name="iconoir:pin" aria-label="Pinned" />`, {
-      components,
-      context: createTestContext(),
-    })
+    const html = renderApp(
+      `<Icon name="iconoir:pin" role="img" aria-label="Pinned" />`,
+      {
+        components,
+        context: createTestContext(),
+      },
+    )
     cleanup()
 
     expect(html).toContain('role="img"')

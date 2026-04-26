@@ -19,7 +19,7 @@ export interface NavItem {
   children?: NavItem[]
   order?: number
   hidden?: boolean
-  group?: string
+  badge?: string
   icon?: string
 }
 

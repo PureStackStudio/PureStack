@@ -20,7 +20,8 @@ export interface NavList {
 export interface NavItemState extends NavItem {
   isActive: boolean
   isOpen: boolean
-  toneClass?: string
+  linkClass?: string
+  ariaCurrent?: string
 }
 
 const navItemTemplate = html`<li class="nav__item">
@@ -29,33 +30,32 @@ const navItemTemplate = html`<li class="nav__item">
     class="nav__group"
     :open="item.isOpen"
   >
-    <summary
-      class="nav__summary tone-interactive"
-      :class="{
-            'active': item.isActive,
-            'nav__summary--open': item.isOpen,
-          }"
-    >
-      <span class="nav__summary-content">
-        <span class="nav__text">{{ item.title }}</span>
-        <span r-if="item.group" class="nav__badge">{{ item.group }}</span>
-      </span>
-      <span class="nav__chevron" aria-hidden="true"></span>
+    <summary class="nav__summary w-full">
+      <BtnLink
+        variant="rail"
+        :tone="item.tone"
+        :class="item.linkClass"
+        :aria-current="item.ariaCurrent"
+      >
+        {{ item.title }}
+      </BtnLink>
+      <Icon
+        class="nav__chevron fs-xxs"
+        name="tabler:chevron-down"
+        aria-hidden="true"/>
     </summary>
     <NavList :items="item.children" :tone="item.tone"></NavList>
   </details>
-  <div r-else class="nav__leaf">
-    <a
-      r-if="item.url"
-      class="nav__link tone-interactive"
-      :class="{ 'active': item.isActive, [item.toneClass]: true }"
-      :href="item.url"
-      :aria-current="item.isActive ? 'page' : null"
-    >
-      {{ item.title }}
-    </a>
-    <span r-else class="nav__text">{{ item.title }}</span>
-  </div>
+  <BtnLink
+    r-else
+    variant="rail"
+    :href="item.url"
+    :tone="item.tone"
+    :class="item.linkClass"
+    :aria-current="item.ariaCurrent"
+  >
+    {{ item.title }}
+  </BtnLink>
 </li>`
 
 const navListTemplate = html`<ul class="nav__list">
@@ -63,7 +63,7 @@ const navListTemplate = html`<ul class="nav__list">
 </ul>`
 
 const navMenuTemplate = html`<nav
-  class="nav__menu tone-surface"
+  class="nav__menu tone-surface tone--neutral"
   :class="toneClass"
   aria-label="Site navigation"
 >
@@ -164,7 +164,14 @@ function buildNavState(
       ...(childStates.length > 0 ? { children: childStates } : {}),
       isActive,
       isOpen: isActive || hasActiveChild,
-      toneClass: getSemanticToneClass(tone),
+      linkClass: [
+        'fs-body ws-normal justify-start w-full',
+        'nav__link',
+        isActive ? 'active' : '',
+      ]
+        .filter(Boolean)
+        .join(' '),
+      ariaCurrent: isActive ? 'page' : undefined,
     }
   })
 }

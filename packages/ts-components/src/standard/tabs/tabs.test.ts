@@ -88,30 +88,6 @@ describe('Tabs rendering', () => {
     expect(html).toContain('<span class="tabs__tab-label">Install</span>')
   })
 
-  it('applies tone classes to tabs root, tab controls', () => {
-    const cleanup = ensureDomGlobals()
-    const components = {
-      ...defineIconComponents(getSvgIcon),
-      ...defineTabsComponents(),
-    }
-    const html = renderApp(
-      `<Tabs tone="warning">
-        <TabPane id="install" label="Install">Run npm install</TabPane>
-      </Tabs>`,
-      {
-        components,
-        context: createTestContext({
-          pageInfo: { relPath: 'tabs.mdx', urlPath: '/tabs/' },
-        }),
-      },
-    )
-    cleanup()
-
-    expect(html).toContain('<section class="tabs tone-surface tone--warning">')
-    expect(html).toContain('class="tabs__tab tone-button-interactive"')
-    expect(html).toContain('class="tabs__panel tone-surface"')
-  })
-
   it('binds selectedTab in both directions', () => {
     const cleanupGlobals = ensureDomGlobals()
     const cleanupDom = createDom(

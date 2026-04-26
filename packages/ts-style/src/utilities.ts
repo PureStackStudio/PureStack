@@ -27,6 +27,7 @@ export function registerUtilityStyles() {
     applyFontSizeUtilities(theme, palette)
     applyFontWeightUtilities(theme)
     applyLineHeightUtilities(theme)
+    applyJustifyContentUtilities(theme)
     applyShadowUtilities(theme)
   })
 }
@@ -79,6 +80,8 @@ function applyLayoutUtilities(theme: string) {
   styleBuilder.select('.h-full', theme).height(force('100%'))
   styleBuilder.select('.min-w-0', theme).minWidth(force('0'))
   styleBuilder.select('.cursor-pointer', theme).cursor(force('pointer'))
+  styleBuilder.select('.ws-normal', theme).whiteSpace(force('normal'))
+  styleBuilder.select('.ws-nowrap', theme).whiteSpace(force('nowrap'))
 }
 
 function applyBorderUtilities(
@@ -255,6 +258,14 @@ function applyLineHeightUtilities(theme: string) {
       .select(`.lh-${index}`, theme)
       .lineHeight(force((1 + index * 0.1).toFixed(1)))
   }
+}
+
+function applyJustifyContentUtilities(theme: string) {
+  styleBuilder
+    .select('.justify-start', theme)
+    .justifyContent(force('flex-start'))
+  styleBuilder.select('.justify-center', theme).justifyContent(force('center'))
+  styleBuilder.select('.justify-end', theme).justifyContent(force('flex-end'))
 }
 
 function applyTextUtilities(theme: string, palette: ThemePalette) {

@@ -45,7 +45,16 @@ const iconTemplate = html`<span class="icon-framed tone-icon" :class="[class, to
 
 function defineIconComponent(getSvgIcon: GetSvgIcon) {
   return defineComponent<Icon>(iconTemplate, {
-    props: ['name', 'class', 'ariaLabel', 'framed', 'tone'],
+    props: [
+      'name',
+      'class',
+      'ariaLabel',
+      'framed',
+      'tone',
+      'role',
+      'ariaLabel',
+      'ariaHidden',
+    ],
     context: (head) => resolveIcon(head.props, getSvgIcon),
   })
 }
@@ -61,15 +70,11 @@ function resolveIcon(props: Icon, getSvgIcon: GetSvgIcon): Icon {
     const name = unref(props.name)
     return name ? getSvgIcon(name) : ''
   })
-  const ariaHidden = computed(() => !unref(props.ariaLabel))
-  const role = computed<string>(() => (unref(props.ariaLabel) ? 'img' : ''))
   const toneClass = computed(() => getSemanticToneClass(unref(props.tone)))
 
   return {
     ...props,
     svg,
-    ariaHidden,
-    role,
     toneClass,
   }
 }

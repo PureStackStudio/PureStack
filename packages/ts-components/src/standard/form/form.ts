@@ -87,12 +87,9 @@ const formAssistLinkTemplate = html`<a
   {{ label }}
 </a>`
 
-const formSubmitTemplate = html`<Btn
-  type="submit"
-  :tone="tone"
-  :variant="variant"
-  :class="class"
->{{ label }}</Btn>`
+const formSubmitTemplate = html`<Btn type="submit" :tone="tone" :variant="variant" :class="class"
+  >{{ label }}</Btn
+>`
 
 const formDividerTemplate = html`<div class="form-block__divider" :data-label="label"></div>`
 
@@ -186,7 +183,9 @@ function resolveFormAssistLink(
     resolvedRel: computed(
       () =>
         unref(head.props.rel) ||
-        (unref(head.props.target) === '_blank' ? 'noopener noreferrer' : ''),
+        (unref(head.props.target) === '_blank'
+          ? 'noopener noreferrer'
+          : undefined),
     ),
   }
 }
