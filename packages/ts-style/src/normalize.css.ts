@@ -20,6 +20,11 @@ function applyNormalizeDocumentRules(theme: string) {
       'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, monospace',
     )
     .fontSize('1em')
+  styleBuilder
+    .select('ul, ol', theme)
+    .listStyle('none')
+    .padding('0')
+    .margin('0')
 }
 
 function applyNormalizeTextRules(theme: string) {
