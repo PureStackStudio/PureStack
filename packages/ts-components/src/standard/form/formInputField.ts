@@ -46,7 +46,6 @@ export class FormInputField {
   readonly placeholder?: RefOrValue<string>
   readonly icon?: RefOrValue<string>
   readonly iconEnd?: RefOrValue<string>
-  readonly class?: RefOrValue<string>
   classes?: ComputedRef<string>
 
   constructor(props: FormInputField) {
@@ -160,7 +159,6 @@ export function defineFormInputField() {
         'placeholder',
         'icon',
         'iconEnd',
-        'class',
       ],
       context: (head) => resolveFormInputField(head),
     }),

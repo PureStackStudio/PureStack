@@ -20,7 +20,6 @@ export interface ExpandablePanel {
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
   summaryVariant?: RefOrValue<ComponentVariant>
-  class?: RefOrValue<string>
   open?: RefOrValue<boolean>
   classes?: ComputedRef<string>
   summaryClasses?: ComputedRef<string>
@@ -70,7 +69,6 @@ function defineExpandablePanelComponent() {
       'tone',
       'variant',
       'summaryVariant',
-      'class',
       'open',
     ],
     context: (head) => resolveExpandablePanel(head.props),

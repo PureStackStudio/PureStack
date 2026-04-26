@@ -13,16 +13,14 @@ export interface SectionHeader {
   subtitle?: RefOrValue<string>
   footnote?: RefOrValue<string>
   titleTag?: RefOrValue<string>
-  class?: RefOrValue<string>
   eyebrowClass?: RefOrValue<string>
   titleClass?: RefOrValue<string>
   subtitleClass?: RefOrValue<string>
   footnoteClass?: RefOrValue<string>
-  classes?: ComputedRef<string>
   resolvedTitleTag?: ComputedRef<string>
 }
 
-const sectionHeaderTemplate = html`<div class="section-header" :class="classes">
+const sectionHeaderTemplate = html`<div class="section-header">
   <div class="text-eyebrow" :class="eyebrowClass" r-if="eyebrow">
     {{ eyebrow }}
   </div>
@@ -50,7 +48,6 @@ function defineSectionHeaderComponent() {
       'subtitle',
       'footnote',
       'titleTag',
-      'class',
       'eyebrowClass',
       'titleClass',
       'subtitleClass',
@@ -69,7 +66,6 @@ export function defineSectionHeaderComponents() {
 function resolveSectionHeader(props: SectionHeader): SectionHeader {
   return {
     ...props,
-    classes: computed(() => resolveString(unref(props.class))),
     resolvedTitleTag: computed(() => resolveTitleTag(unref(props.titleTag))),
   }
 }

@@ -19,7 +19,6 @@ export interface AppForm {
   method?: RefOrValue<string>
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
-  class?: RefOrValue<string>
   classes?: ComputedRef<string>
 }
 
@@ -45,7 +44,6 @@ export interface FormSubmit {
   label?: RefOrValue<string>
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
-  class?: RefOrValue<string>
 }
 
 export interface FormDivider {
@@ -55,7 +53,6 @@ export interface FormDivider {
 export interface FormStatus {
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
-  class?: RefOrValue<string>
   hidden?: RefOrValue<boolean>
   classes?: ComputedRef<string>
 }
@@ -87,9 +84,7 @@ const formAssistLinkTemplate = html`<a
   {{ label }}
 </a>`
 
-const formSubmitTemplate = html`<Btn type="submit" :tone="tone" :variant="variant" :class="class"
-  >{{ label }}</Btn
->`
+const formSubmitTemplate = html`<Btn type="submit" :tone="tone" :variant="variant">{{ label }}</Btn>`
 
 const formDividerTemplate = html`<div class="form-block__divider" :data-label="label"></div>`
 
@@ -105,7 +100,7 @@ const formStatusTemplate = html`<div
 
 function defineAppFormComponent() {
   return defineComponent<AppForm>(appFormTemplate, {
-    props: ['action', 'method', 'tone', 'variant', 'class'],
+    props: ['action', 'method', 'tone', 'variant'],
     context: (head) => resolveAppForm(head.props),
   })
 }
@@ -130,7 +125,7 @@ function defineFormAssistLinkComponent() {
 
 function defineFormSubmitComponent() {
   return defineComponent<FormSubmit>(formSubmitTemplate, {
-    props: ['label', 'tone', 'variant', 'class'],
+    props: ['label', 'tone', 'variant'],
     context: (head) => resolveFormSubmit(head),
   })
 }
@@ -144,7 +139,7 @@ function defineFormDividerComponent() {
 
 function defineFormStatusComponent() {
   return defineComponent<FormStatus>(formStatusTemplate, {
-    props: ['tone', 'variant', 'class', 'hidden'],
+    props: ['tone', 'variant', 'hidden'],
     context: (head) => resolveFormStatus(head),
   })
 }

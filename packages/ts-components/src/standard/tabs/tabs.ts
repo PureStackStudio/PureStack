@@ -23,7 +23,6 @@ let nextAutoGroupId = 1
 let nextAutoTabId = 1
 
 export class Tabs {
-  class?: RefOrValue<string>
   group: string = defaultGroup
   ariaLabel?: RefOrValue<string>
   selectedTab?: RefOrValue<string>
@@ -40,7 +39,6 @@ export interface TabPane {
   icon?: RefOrValue<string>
   disabled?: RefOrValue<boolean>
   group?: string
-  class?: RefOrValue<string>
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
   variantMode?: RefOrValue<ComponentVariantMode>
@@ -94,7 +92,6 @@ const tabPaneTemplate = html`<div class="tabs__item">
 function defineTabsComponent() {
   return defineComponent<Tabs>(tabsTemplate, {
     props: [
-      'class',
       'ariaLabel',
       'group',
       'selectedTab',
@@ -114,7 +111,6 @@ function defineTabPaneComponent() {
   return defineComponent<TabPane>(tabPaneTemplate, {
     props: [
       'id',
-      'class',
       'label',
       'icon',
       'disabled',

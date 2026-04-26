@@ -25,7 +25,6 @@ export interface Modal {
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
   variantMode?: RefOrValue<ComponentVariantMode>
-  class?: RefOrValue<string>
   size?: RefOrValue<ModalSize>
   fade?: RefOrValue<boolean>
   slideFrom?: RefOrValue<ModalSlideFrom>
@@ -101,7 +100,6 @@ function defineModalComponent() {
       'tone',
       'variant',
       'variantMode',
-      'class',
       'size',
       'fade',
       'slideFrom',

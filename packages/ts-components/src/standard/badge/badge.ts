@@ -12,7 +12,6 @@ import {
 } from '../componentVariant'
 
 export interface Badge {
-  class?: RefOrValue<string>
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
   classes?: ComputedRef<string>
@@ -24,7 +23,7 @@ const badgeTemplate = html`<span class="badge" :class="classes">
 
 function defineBadgeComponent() {
   return defineComponent<Badge>(badgeTemplate, {
-    props: ['tone', 'variant', 'class'],
+    props: ['tone', 'variant'],
     context: (head) => ({
       ...head.props,
       classes: computed(() =>

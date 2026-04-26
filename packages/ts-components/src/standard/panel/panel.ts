@@ -17,7 +17,6 @@ export interface Panel {
   variant?: RefOrValue<ComponentVariant>
   variantMode?: RefOrValue<ComponentVariantMode>
   classes?: ComputedRef<string>
-  class?: RefOrValue<string>
 }
 
 const DEFAULT_PANEL_VARIANT: ComponentVariant = 'surface'
@@ -29,7 +28,7 @@ const panelTemplate = html`<section class="panel" :class="classes">
 
 function definePanelComponent() {
   return defineComponent<Panel>(panelTemplate, {
-    props: ['tone', 'variant', 'variantMode', 'class'],
+    props: ['tone', 'variant', 'variantMode'],
     context: (head) => resolvePanel(head.props),
   })
 }

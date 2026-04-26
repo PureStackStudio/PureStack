@@ -18,7 +18,6 @@ export interface SiteFooter {
   legalLabel?: string
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
-  class?: RefOrValue<string>
   classes?: ComputedRef<string>
 }
 
@@ -66,7 +65,6 @@ function defineSiteFooterComponent() {
       'legalLabel',
       'tone',
       'variant',
-      'class',
     ],
     context: (head) => resolveSiteFooter(head.props),
   })

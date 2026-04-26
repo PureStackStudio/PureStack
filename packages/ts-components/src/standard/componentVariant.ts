@@ -25,7 +25,6 @@ export interface ComponentClassProps {
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
   variantMode?: RefOrValue<ComponentVariantMode>
-  class?: RefOrValue<string>
 }
 
 export interface ResolveComponentClassesOptions {
