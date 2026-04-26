@@ -32,7 +32,7 @@ const navItemTemplate = html`<li class="nav__item">
   >
     <summary class="nav__summary w-full">
       <BtnLink
-        variant="rail"
+        variant="subtleBtn"
         :tone="item.tone"
         :class="item.linkClass"
         :aria-current="item.ariaCurrent"
@@ -48,7 +48,7 @@ const navItemTemplate = html`<li class="nav__item">
   </details>
   <BtnLink
     r-else
-    variant="rail"
+    variant="subtleBtn"
     :href="item.url"
     :tone="item.tone"
     :class="item.linkClass"

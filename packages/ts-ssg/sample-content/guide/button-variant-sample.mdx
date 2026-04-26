@@ -101,6 +101,21 @@ the material treatment of a variant independently from the semantic color role.
   <Btn variant="subtle" tone="danger">danger</Btn>
 </Flex>
 
+## Subtle Button
+
+<Flex wrap="true" align="center">
+  <Btn variant="subtleBtn" tone="neutral">neutral</Btn>
+  <Btn variant="subtleBtn" tone="accent">accent</Btn>
+  <Btn variant="subtleBtn" tone="feature">feature</Btn>
+  <Btn variant="subtleBtn" tone="secondary">secondary</Btn>
+  <Btn variant="subtleBtn" tone="custom">custom</Btn>
+  <Btn variant="subtleBtn" tone="ghost">ghost</Btn>
+  <Btn variant="subtleBtn" tone="info">info</Btn>
+  <Btn variant="subtleBtn" tone="success">success</Btn>
+  <Btn variant="subtleBtn" tone="warning">warning</Btn>
+  <Btn variant="subtleBtn" tone="danger">danger</Btn>
+</Flex>
+
 ## Link
 
 <Flex wrap="true" align="center">
@@ -207,6 +222,9 @@ The same variants are available on `BtnLink`.
   <BtnLink href="/guide/button-variant-sample/" variant="subtle" tone="success">
     subtle
   </BtnLink>
+  <BtnLink href="/guide/button-variant-sample/" variant="subtleBtn" tone="accent">
+    subtle button
+  </BtnLink>
   <BtnLink href="/guide/button-variant-sample/" variant="link" tone="warning">
     link
   </BtnLink>
@@ -231,7 +249,7 @@ The same variants are available on `BtnLink`.
 
 ```html
 <Btn
-  variant="none|solid|surface|surfaceAlt|outlineFill|outline|subtle|link|sheen|underline|rail|bracket"
+  variant="none|solid|surface|surfaceAlt|outlineFill|outline|subtle|subtleBtn|link|sheen|underline|rail|bracket"
   tone="neutral|accent|feature|secondary|custom|ghost|info|success|warning|danger"
 >
   Label

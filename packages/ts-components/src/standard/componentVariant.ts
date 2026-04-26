@@ -9,6 +9,7 @@ export type ComponentVariant =
   | 'outlineFill'
   | 'outline'
   | 'subtle'
+  | 'subtleBtn'
   | 'link'
   | 'sheen'
   | 'underline'
@@ -43,6 +44,7 @@ const STATELESS_COMPONENT_VARIANT_CLASSES: Record<ComponentVariant, string> = {
   outlineFill: 'b-2 rounded-md tone-border-button tone-text',
   outline: 'b-2 rounded-md tone-text',
   subtle: 'b-0 rounded-md tone-text',
+  subtleBtn: 'b-0 rounded-md tone-text-button',
   link: 'tone-text',
   sheen: 'tone-text-bg-button fs-h1 pad-1 fw-900 uppercase',
   underline: 'tone-text',
@@ -62,6 +64,8 @@ const STATEFUL_COMPONENT_VARIANT_CLASSES = {
   outline:
     'b-2-hover tone-border-button-hover tone-border-button-active tone-fill-button-active tone-text-button-hover tone-text-button-active',
   subtle: 'tone-fill-surface-hover tone-fill-surface-active',
+  subtleBtn:
+    'tone-fill-button-hover tone-fill-button-active tone-text-button-hover tone-text-button-active',
   link: 'underline-hover',
   sheen: 'tone-text-bg-button-hover tone-text-bg-button-active',
   underline: 'tone-inset-b-hover tone-inset-b-active',

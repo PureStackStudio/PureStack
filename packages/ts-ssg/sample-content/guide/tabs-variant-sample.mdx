@@ -81,6 +81,15 @@ to the tabs shell, individual tab panels, and generated tab buttons.
     </TabPane>
   </Tabs>
 
+  <Tabs tone="feature" tabVariant="subtleBtn" selected-tab="alpha">
+    <TabPane id="alpha" label="Alpha" icon="iconoir:code">
+      Subtle button tab buttons.
+    </TabPane>
+    <TabPane id="beta" label="Beta" icon="iconoir:check">
+      Button-token text keeps the tabs quiet but action-oriented.
+    </TabPane>
+  </Tabs>
+
   <Tabs tone="success" tabVariant="rail" selected-tab="alpha">
     <TabPane id="alpha" label="Alpha" icon="iconoir:code">
       Rail tab buttons.
@@ -108,6 +117,9 @@ to the tabs shell, individual tab panels, and generated tab buttons.
       Outline panel.
     </TabPane>
     <TabPane id="two" label="Subtle" variant="subtle"> Subtle panel. </TabPane>
+    <TabPane id="three" label="Subtle Button" variant="subtleBtn">
+      Subtle button panel.
+    </TabPane>
   </Tabs>
 </Grid>
 
@@ -149,13 +161,13 @@ to the tabs shell, individual tab panels, and generated tab buttons.
 
 ```html
 <Tabs
-  variant="none|solid|surface|surfaceAlt|outlineFill|outline|subtle|link|sheen|underline|rail|bracket"
-  tabVariant="none|solid|surface|surfaceAlt|outlineFill|outline|subtle|link|sheen|underline|rail|bracket"
+  variant="none|solid|surface|surfaceAlt|outlineFill|outline|subtle|subtleBtn|link|sheen|underline|rail|bracket"
+  tabVariant="none|solid|surface|surfaceAlt|outlineFill|outline|subtle|subtleBtn|link|sheen|underline|rail|bracket"
   tone="neutral|accent|feature|secondary|custom|ghost|info|success|warning|danger"
 >
   <TabPane
-    variant="none|solid|surface|surfaceAlt|outlineFill|outline|subtle|link|sheen|underline|rail|bracket"
-    tabVariant="none|solid|surface|surfaceAlt|outlineFill|outline|subtle|link|sheen|underline|rail|bracket"
+    variant="none|solid|surface|surfaceAlt|outlineFill|outline|subtle|subtleBtn|link|sheen|underline|rail|bracket"
+    tabVariant="none|solid|surface|surfaceAlt|outlineFill|outline|subtle|subtleBtn|link|sheen|underline|rail|bracket"
     tone="neutral|accent|feature|secondary|custom|ghost|info|success|warning|danger"
   >
     Content
