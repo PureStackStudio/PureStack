@@ -13,18 +13,18 @@ export function registerGridStyles() {
       .minWidth('0')
       .gap('0.75rem')
       .gridTemplateColumns('var(--grid-template-columns)')
-      .alignItems('stretch')
-      .justifyItems('stretch')
 
     styleBuilder.select('.grid > *', theme).minWidth('0')
 
-    styleBuilder.select('.grid-align-start', theme).alignItems('start')
-    styleBuilder.select('.grid-align-center', theme).alignItems('center')
-    styleBuilder.select('.grid-align-end', theme).alignItems('end')
+    styleBuilder.select('.align-stretch', theme).alignItems('stretch')
+    styleBuilder.select('.align-start', theme).alignItems('start')
+    styleBuilder.select('.align-center', theme).alignItems('center')
+    styleBuilder.select('.align-end', theme).alignItems('end')
 
-    styleBuilder.select('.grid-justify-start', theme).justifyItems('start')
-    styleBuilder.select('.grid-justify-center', theme).justifyItems('center')
-    styleBuilder.select('.grid-justify-end', theme).justifyItems('end')
+    styleBuilder.select('.justify-items-stretch', theme).justifyItems('stretch')
+    styleBuilder.select('.justify-items-start', theme).justifyItems('start')
+    styleBuilder.select('.justify-items-center', theme).justifyItems('center')
+    styleBuilder.select('.justify-items-end', theme).justifyItems('end')
 
     styleBuilder.select('.grid-dense', theme).gridAutoFlow('row dense')
 

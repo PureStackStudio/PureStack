@@ -2,6 +2,11 @@ import { styleBuilder } from './styles'
 import { type ThemeOptions, themes } from './themeOptions'
 import type { ThemePalette } from './themePalette'
 
+// Flex and grid utility classes live with their component styles:
+// packages/ts-components/src/standard/flex/flexStyle.ts
+// packages/ts-components/src/standard/grid/gridStyle.ts
+// Keep layout-specific utilities there so this generic registry does not
+// duplicate component-owned rules.
 export const SPACING_UTILITIES = {
   0: '0 !important',
   1: '0.25em !important',

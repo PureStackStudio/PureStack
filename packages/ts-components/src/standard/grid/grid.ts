@@ -7,8 +7,8 @@ import {
   unref,
 } from 'regor'
 
-export type GridAlignItems = 'start' | 'center' | 'end'
-export type GridJustifyItems = 'start' | 'center' | 'end'
+export type GridAlignItems = 'stretch' | 'start' | 'center' | 'end'
+export type GridJustifyItems = 'stretch' | 'start' | 'center' | 'end'
 
 export interface Grid {
   container?: RefOrValue<string>
@@ -144,11 +144,12 @@ function resolveAlignClass(value?: RefOrValue<GridAlignItems>) {
   if (!value) return ''
   const normalized = unref(value).toLowerCase()
   if (
+    normalized === 'stretch' ||
     normalized === 'start' ||
     normalized === 'center' ||
     normalized === 'end'
   ) {
-    return `grid-align-${normalized}`
+    return `align-${normalized}`
   }
   return ''
 }
@@ -157,11 +158,12 @@ function resolveJustifyClass(value?: RefOrValue<GridJustifyItems>) {
   if (!value) return ''
   const normalized = unref(value).toLowerCase()
   if (
+    normalized === 'stretch' ||
     normalized === 'start' ||
     normalized === 'center' ||
     normalized === 'end'
   ) {
-    return `grid-justify-${normalized}`
+    return `justify-items-${normalized}`
   }
   return ''
 }

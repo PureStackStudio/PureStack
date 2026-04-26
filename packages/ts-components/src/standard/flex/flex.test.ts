@@ -9,7 +9,7 @@ describe('Flex rendering', () => {
     const cleanup = ensureDomGlobals()
     const components = defineFlexComponents()
     const html = renderApp(
-      '<Flex direction="column" align="center" justify="between" wrap="reverse" inline="true">item</Flex>',
+      '<Flex direction="column" align="start" justify="between" wrap="reverse" inline="true">item</Flex>',
       {
         components,
         context: createTestContext(),
@@ -18,7 +18,7 @@ describe('Flex rendering', () => {
     cleanup()
 
     expect(html).toContain(
-      'class="flex flex-column flex-align-center flex-justify-between flex-wrap-reverse flex-inline"',
+      'class="flex flex-column align-flex-start justify-between flex-wrap-reverse flex-inline"',
     )
     expect(html).toContain('item')
   })
@@ -56,7 +56,7 @@ describe('Flex rendering', () => {
     const cleanup = ensureDomGlobals()
     const components = defineFlexComponents()
     const html = renderApp(
-      '<Flex justify="stretch" justifyMd="end" alignSm="center" directionLg="column" wrapXl="nowrap">item</Flex>',
+      '<Flex justify="stretch" justifyMd="end" alignSm="center" alignMd="end" directionLg="column" wrapXl="nowrap">item</Flex>',
       {
         components,
         context: createTestContext(),
@@ -66,9 +66,10 @@ describe('Flex rendering', () => {
 
     expect(html).toContain('class="flex ')
     expect(html).toContain('flex-direction-lg-column')
-    expect(html).toContain('flex-align-sm-center')
-    expect(html).toContain('flex-justify-stretch')
-    expect(html).toContain('flex-justify-md-end')
+    expect(html).toContain('align-sm-center')
+    expect(html).toContain('align-md-flex-end')
+    expect(html).toContain('justify-stretch')
+    expect(html).toContain('justify-md-end')
     expect(html).toContain('flex-nowrap-xl')
   })
 

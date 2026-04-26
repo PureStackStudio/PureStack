@@ -155,14 +155,15 @@ function resolveAlignClass(value?: RefOrValue<FlexAlign>) {
   if (!value) return ''
 
   const normalized = unref(value)
+  if (normalized === 'start') return 'align-flex-start'
+  if (normalized === 'end') return 'align-flex-end'
+
   if (
     normalized === 'stretch' ||
-    normalized === 'start' ||
     normalized === 'center' ||
-    normalized === 'end' ||
     normalized === 'baseline'
   ) {
-    return `flex-align-${normalized}`
+    return `align-${normalized}`
   }
 
   return ''
@@ -175,14 +176,15 @@ function resolveResponsiveAlignClass(
   if (!value) return ''
 
   const normalized = unref(value)
+  if (normalized === 'start') return `align-${breakpoint}-flex-start`
+  if (normalized === 'end') return `align-${breakpoint}-flex-end`
+
   if (
     normalized === 'stretch' ||
-    normalized === 'start' ||
     normalized === 'center' ||
-    normalized === 'end' ||
     normalized === 'baseline'
   ) {
-    return `flex-align-${breakpoint}-${normalized}`
+    return `align-${breakpoint}-${normalized}`
   }
 
   return ''
@@ -201,7 +203,7 @@ function resolveJustifyClass(value?: RefOrValue<FlexJustify>) {
     normalized === 'around' ||
     normalized === 'evenly'
   ) {
-    return `flex-justify-${normalized}`
+    return `justify-${normalized}`
   }
 
   return ''
@@ -223,7 +225,7 @@ function resolveResponsiveJustifyClass(
     normalized === 'around' ||
     normalized === 'evenly'
   ) {
-    return `flex-justify-${breakpoint}-${normalized}`
+    return `justify-${breakpoint}-${normalized}`
   }
 
   return ''

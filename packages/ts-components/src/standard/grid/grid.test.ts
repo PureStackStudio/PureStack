@@ -18,13 +18,28 @@ describe('Grid rendering', () => {
     cleanup()
 
     expect(html).toContain(
-      'class="grid grid-align-center grid-justify-start grid-dense"',
+      'class="grid align-center justify-items-start grid-dense"',
     )
     expect(html).toContain('--grid-template-columns: repeat(2, minmax(0, 1fr))')
     expect(html).toContain(
       '--grid-template-columns-md: repeat(3, minmax(0, 1fr))',
     )
     expect(html).toContain('item')
+  })
+
+  it('renders stretch alignment and justification classes', () => {
+    const cleanup = ensureDomGlobals()
+    const components = defineGridComponents()
+    const html = renderApp(
+      '<Grid alignItems="stretch" justifyItems="stretch">item</Grid>',
+      {
+        components,
+        context: createTestContext(),
+      },
+    )
+    cleanup()
+
+    expect(html).toContain('class="grid align-stretch justify-items-stretch"')
   })
 
   it('renders custom template columns for base and responsive props', () => {
