@@ -113,7 +113,7 @@ const landingSectionTemplate = html`<Panel
       :subtitle="subtitle"
       :titleTag="titleTag || 'h2'"
       subtitleClass="mb-0"/>
-    <div class="min-w-0"><slot></slot></div>
+    <slot></slot>
   </Grid>
 </Panel>`
 
