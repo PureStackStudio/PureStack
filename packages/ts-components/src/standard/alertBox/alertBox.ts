@@ -18,7 +18,10 @@ export interface AlertBox {
   toneClass?: ComputedRef<string>
 }
 
-const alertBoxTemplate = html`<aside class="alert tone-surface" :class="toneClass">
+const alertBoxTemplate = html`<aside
+  class="alert tone-fill-surface tone-border-surface tone-text-surface"
+  :class="toneClass"
+>
   <IconFrame
     class="expandable-panel__icon"
     :name="icon"

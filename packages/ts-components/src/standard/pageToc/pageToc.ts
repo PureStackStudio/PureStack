@@ -15,7 +15,11 @@ export interface PageTocItem extends PageOutlineItem {
   children?: PageTocItem[]
 }
 
-const pageTocTemplate = html`<nav class="page-toc tone-surface" :class="toneClass" aria-label="On this page">
+const pageTocTemplate = html`<nav
+  class="page-toc tone-fill-surface tone-border-surface tone-text-surface"
+  :class="toneClass"
+  aria-label="On this page"
+>
   <button
     class="page-toc__panel-toggle tone-button-interactive"
     type="button"

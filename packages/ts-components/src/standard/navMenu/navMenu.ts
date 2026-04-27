@@ -63,7 +63,7 @@ const navListTemplate = html`<ul class="nav__list">
 </ul>`
 
 const navMenuTemplate = html`<nav
-  class="nav__menu tone-surface tone--neutral"
+  class="nav__menu tone-fill-surface tone-border-surface tone-text-surface tone--neutral"
   :class="toneClass"
   aria-label="Site navigation"
 >
