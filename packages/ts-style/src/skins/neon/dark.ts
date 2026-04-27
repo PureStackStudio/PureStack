@@ -28,7 +28,7 @@ const bestColors = {
 export const { accent, neutral } = bestColors.red
 export const feature = '#cb166e'
 export const secondary = '#116db4'
-export const custom = '#241002'
+export const custom = '#e35508'
 export const info = '#15a9c0'
 export const success = '#259740'
 export const warning = '#c49a1c'
@@ -46,7 +46,7 @@ export interface DeltaToneColors {
 const delta: DeltaToneColors = {
   canvas: 0,
   button: 0,
-  foreground: 0,
+  foreground: 7,
   border: 0,
   surface: 0,
   surfaceAlt: 0,
@@ -106,5 +106,6 @@ export const neonDark = createNeonPalette({
   mode: 'dark',
   core,
   accent,
-  chromeLighting: 0.22,
+  chromeLighting: 0.33,
+  borderAlpha: 0.66,
 })

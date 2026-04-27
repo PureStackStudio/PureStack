@@ -43,7 +43,7 @@ const STATELESS_COMPONENT_VARIANT_CLASSES: Record<ComponentVariant, string> = {
   outlineFill: 'b-2 rounded-md tone-border-button tone-text',
   outline: 'b-2 rounded-md tone-text',
   subtle: 'b-0 rounded-md tone-text',
-  subtleBtn: 'b-0 rounded-md tone-text-button',
+  subtleBtn: 'b-0 rounded-md tone-text',
   link: 'tone-text',
   sheen: 'tone-text-bg-button fs-h1 pad-1 fw-900 uppercase',
   underline: 'tone-text',
@@ -61,8 +61,9 @@ const STATEFUL_COMPONENT_VARIANT_CLASSES = {
   outlineFill:
     'tone-fill-button-hover tone-text-button-hover tone-fill-button-active tone-text-button-active',
   outline:
-    'b-2-hover tone-border-button-hover tone-border-button-active tone-fill-button-active tone-text-button-hover tone-text-button-active',
-  subtle: 'tone-fill-surface-hover tone-fill-surface-active',
+    'b-2-hover tone-border-button-hover tone-border-button-active tone-fill-button-active tone-text-button-active',
+  subtle:
+    'tone-fill-surface-hover tone-fill-surface-active tone-text-surface-hover tone-text-surface-active',
   subtleBtn:
     'tone-fill-button-hover tone-fill-button-active tone-text-button-hover tone-text-button-active',
   link: 'underline-hover',

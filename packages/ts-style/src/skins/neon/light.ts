@@ -15,25 +15,25 @@ import {
   warning,
 } from './dark'
 
+const delta: DeltaToneColors = {
+  canvas: 0,
+  button: 0,
+  foreground: -3,
+  border: 0,
+  surface: -5,
+  surfaceAlt: 15,
+}
 const delta1: DeltaToneColors = {
   canvas: 0,
-  button: -10,
-  foreground: 0,
+  button: 10,
+  foreground: 7,
   border: 0,
-  surface: 0,
-  surfaceAlt: 0,
-}
-const delta2: DeltaToneColors = {
-  canvas: 0,
-  button: -10,
-  foreground: 0,
-  border: 0,
-  surface: 10,
+  surface: 30,
   surfaceAlt: 30,
 }
-const mode: ThemeMode = 'light'
+const mode: ThemeMode = 'dark'
 const accentScale = createColorScale(accent, mode)
-const neutralScale = createColorScale(neutral, mode)
+const neutralScale = createColorScale(neutral, 'light')
 const featureScale = createColorScale(feature, mode)
 const secondaryScale = createColorScale(secondary, mode)
 const customScale = createColorScale(custom, mode)
@@ -42,16 +42,16 @@ const successScale = createColorScale(success, mode)
 const warningScale = createColorScale(warning, mode)
 const dangerScale = createColorScale(danger, mode)
 const core: NeonCore = {
-  neutral: createToneColors(neutral, neutralScale, delta1),
-  accent: createToneColors(accent, accentScale, delta2),
-  feature: createToneColors(feature, featureScale, delta2),
-  secondary: createToneColors(secondary, secondaryScale, delta2),
-  custom: createToneColors(custom, customScale, delta2),
-  ghost: createToneColors(neutral, neutralScale, delta1),
-  info: createToneColors(info, infoScale, delta2),
-  success: createToneColors(success, successScale, delta2),
-  warning: createToneColors(warning, warningScale, delta2),
-  danger: createToneColors(danger, dangerScale, delta2),
+  neutral: createToneColors(neutral, neutralScale, delta),
+  accent: createToneColors(accent, accentScale, delta1),
+  feature: createToneColors(feature, featureScale, delta1),
+  secondary: createToneColors(secondary, secondaryScale, delta1),
+  custom: createToneColors(custom, customScale, delta1),
+  ghost: createToneColors(neutral, neutralScale, delta),
+  info: createToneColors(info, infoScale, delta1),
+  success: createToneColors(success, successScale, delta1),
+  warning: createToneColors(warning, warningScale, delta1),
+  danger: createToneColors(danger, dangerScale, delta1),
 }
 
 export const neonLight = createNeonPalette({
@@ -59,4 +59,5 @@ export const neonLight = createNeonPalette({
   core,
   accent,
   chromeLighting: 0.33,
+  borderAlpha: 1,
 })
