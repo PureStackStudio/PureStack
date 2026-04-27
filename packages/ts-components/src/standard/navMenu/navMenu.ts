@@ -70,7 +70,7 @@ const navMenuTemplate = html`<nav
   <div class="nav__header-row">
     <div class="nav__header">Navigation</div>
     <button
-      class="nav__panel-toggle tone-button-interactive"
+      class="nav__panel-toggle tone-fill-button-all tone-text-button-all tone-border-button-all"
       type="button"
       title="Navigation"
       aria-label="Toggle navigation panel"

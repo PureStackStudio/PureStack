@@ -21,7 +21,7 @@ const pageTocTemplate = html`<nav
   aria-label="On this page"
 >
   <button
-    class="page-toc__panel-toggle tone-button-interactive"
+    class="page-toc__panel-toggle tone-fill-button-all tone-text-button-all tone-border-button-all"
     type="button"
     aria-controls="doc-toc"
     aria-expanded="false"
