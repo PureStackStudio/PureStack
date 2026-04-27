@@ -3,198 +3,429 @@ title: CalcCore
 description: Backend-native calculation engine for SaaS platforms.
 template: doc
 layout:
-  fullWidth: true
+  fullWidth: false
   navMode: drawer
   showToc: false
 nav:
   order: 1
 ---
 
-<HeroBanner>
-  <template #eyebrow><span>Backend-native calculation engine</span></template>
-  <template #title><span>CalcCore</span></template>
-  <template #tagline>
-    <span>
-      Deterministic calculations for SaaS backends Excel-compatible formulas.
-      Backend-grade execution. CalcCore is a headless calculation engine
-      designed for modern SaaS systems. It allows you to author complex business
-      logic using Excel-compatible formulas or code, then run that logic safely,
-      deterministically, and at scale — without Excel in production.
-    </span>
-  </template>
-  <template #actions>
-    <BtnLink href="./getting-started" icon="iconoir:arrow-right" tone="accent">
-      Get Started
-    </BtnLink>
-    <BtnLink
-      href="https://github.com/koculu/logpot"
-      icon="lucide:external-link"
-      tone="ghost"
-      target="_blank"
-    >
-      View on GitHub
-    </BtnLink>
-  </template>
-  <template #media>
-    <HeroMedia src="../hero.png" alt="CalcCore logo"/>
-  </template>
-</HeroBanner>
+<Panel tone="neutral" variant="surface" class="mb-6">
+  <Grid
+    columns="1"
+    columnsLg="minmax(0, 1.12fr) minmax(320px, 0.88fr)"
+    alignItems="center"
+  >
+    <Flex direction="column" align="start" class="gap-4">
+      <Flex wrap="true" align="center" class="gap-2">
+        <Badge tone="accent">Backend-native</Badge>
+        <Badge tone="feature">Excel-compatible</Badge>
+        <Badge tone="success">Deterministic</Badge>
+      </Flex>
 
-# CalcCore
+      <SectionHeader
+        eyebrow="Calculation runtime for production systems"
+        title="CalcCore turns spreadsheet logic into backend certainty."
+        subtitle="Author pricing, forecasting, eligibility, and financial rules with familiar formula semantics, then execute them inside APIs, jobs, and SaaS services without shipping Excel to production."
+        titleTag="h1"
+        titleClass="fs-display mb-2"
+        subtitleClass="text-lead mb-0"/>
 
-## Backend-native calculation engine  
-### Excel-compatible logic, designed for production systems
+      <Flex wrap="true" align="center" class="gap-3">
+        <BtnLink
+          href="/getting-started/"
+          tone="accent"
+          size="lg"
+          icon="lucide:arrow-right"
+          iconPosition="end"
+        >
+          Start building
+        </BtnLink>
+        <BtnLink
+          href="/guide/pricing/"
+          tone="ghost"
+          size="lg"
+          variant="outline"
+          icon="lucide:scale"
+        >
+          View licensing
+        </BtnLink>
+      </Flex>
 
-CalcCore is a **headless calculation engine** for SaaS backends and internal platforms.
+      <Grid columns="1" columnsSm="3" class="w-full">
+        <Panel tone="neutral" variant="rail" class="box-shadow-none">
+          <p class="prose-meta mb-1">Runtime</p>
+          <strong>Headless engine</strong>
+        </Panel>
+        <Panel tone="neutral" variant="rail" class="box-shadow-none">
+          <p class="prose-meta mb-1">Inputs</p>
+          <strong>Typed data models</strong>
+        </Panel>
+        <Panel tone="neutral" variant="rail" class="box-shadow-none">
+          <p class="prose-meta mb-1">Outputs</p>
+          <strong>Auditable results</strong>
+        </Panel>
+      </Grid>
+    </Flex>
 
-It enables teams to **define complex calculation logic using familiar Excel-style formulas or code**, and **execute that logic deterministically and efficiently inside backend services**.
-
-CalcCore focuses on correctness, predictability, and long-term maintainability in production environments.
-
----
-
-## Why CalcCore exists
-
-Many backend systems rely on complex calculation logic:
-
-- pricing and discount models  
-- financial and accounting rules  
-- forecasting and planning logic  
-- eligibility and decision rules  
-
-In practice, this logic is often designed and validated using spreadsheets, then reimplemented in code for production use.
-
-CalcCore bridges this gap by providing a **dedicated calculation runtime** that can execute spreadsheet-style logic directly in backend systems, with production-grade guarantees.
-
----
-
-## What CalcCore provides
-
-### Backend-oriented execution model
-CalcCore is designed for:
-- APIs and services
-- background jobs
-- batch processing
-- high-throughput workloads
-
-It integrates naturally into modern backend architectures.
-
----
-
-### Deterministic and reproducible calculations
-CalcCore emphasizes predictable behavior:
-
-- explicit evaluation semantics  
-- controlled recalculation behavior  
-- consistent results for identical inputs  
-
-This makes calculations easier to test, debug, and reproduce over time.
-
----
-
-### Familiar formula semantics
-CalcCore supports a wide range of **Excel-compatible functions and behaviors**, including:
-
-- arithmetic and logical expressions  
-- lookup and reference functions  
-- financial and date/time calculations  
-- array-oriented and table-style logic  
-
-Teams can work with familiar concepts without introducing a new modeling language.
-
----
-
-### Flexible model authoring
-Calculation models can be authored in multiple ways:
-
-- **Code-first**, for engineering-owned logic and CI-driven workflows  
-- **Excel-based**, for scenarios where spreadsheet authoring and validation are preferred  
-
-Both approaches compile into the same execution model at runtime.
-
----
-
-### Designed for observability
-CalcCore exposes rich execution information:
-
-- structured error reporting  
-- dependency-aware evaluation  
-- optional calculation traces  
-
-This supports debugging, auditing, and long-term operational confidence.
-
----
-
-## Example: pricing logic in a backend service
+    <Panel tone="neutral" variant="surface" class="box-shadow-none">
+      <Flex direction="column" class="gap-4">
+        <Flex justify="between" align="center" wrap="true">
+          <Flex align="center" class="gap-2">
+            <IconFrame
+              name="lucide:calculator"
+              tone="accent"
+              class="icon-frame--lg"/>
+            <div>
+              <strong>Pricing model</strong>
+              <p class="prose-meta mb-0">compiled and evaluated server-side</p>
+            </div>
+          </Flex>
+          <Badge tone="success">Ready</Badge>
+        </Flex>
 
 ```csharp
-var model = Model.Create("pricing:v1", m =>
-{
-    var age        = m.Input.Number("customer.age");
-    var orderTotal = m.Input.Number("order.total");
+var discount =
+    If(customer.IsSenior, 0.15,
+    If(order.Total >= 200, 0.10, 0.00));
 
-    var discount =
-        m.If(age >= 60, 0.15,
-        m.If(orderTotal >= 200, 0.10, 0.00));
-
-    m.Output("price.final",
-        orderTotal * (1 - discount) * 1.19);
-});
-
-var engine = new EvaluationEngine(model);
-
-var result = engine.Evaluate(new
-{
-    customer = new { age = 42 },
-    order    = new { total = 199.90 }
-});
+Output("price.final",
+    order.Total * (1 - discount) * taxRate);
 ```
 
-This model can be evaluated repeatedly with different inputs, producing consistent and predictable results suitable for production use.
+        <Grid columns="1" columnsSm="3">
+          <AlertBox tone="info" title="Model" icon="lucide:file-spreadsheet">
+            Spreadsheet semantics stay visible.
+          </AlertBox>
+          <AlertBox tone="feature" title="Compile" icon="lucide:braces">
+            Formulas become executable rules.
+          </AlertBox>
+          <AlertBox tone="success" title="Evaluate" icon="lucide:server-cog">
+            Results are reproducible.
+          </AlertBox>
+        </Grid>
+      </Flex>
+    </Panel>
+  </Grid>
+</Panel>
 
----
+<SectionHeader
+  eyebrow="Why it exists"
+  title="Business logic should not disappear between the spreadsheet and production."
+  subtitle="Teams already design complex calculation models in spreadsheets. The risky part is the rewrite: formulas become code, edge cases drift, and audits depend on memory. CalcCore keeps the model explicit from authoring to execution."/>
 
-## Who CalcCore is designed for
+<Grid columns="1" columnsLg="4" class="mb-6">
+  <AlertBox tone="warning" title="Pricing rules" icon="lucide:badge-percent">
+    Tiered discounts, contractual overrides, taxes, surcharges, and renewal
+    rules all need one source of truth.
+  </AlertBox>
+  <AlertBox tone="info" title="Forecasting" icon="lucide:chart-line">
+    Planning models can run in services, background jobs, and batch pipelines
+    without a spreadsheet process.
+  </AlertBox>
+  <AlertBox tone="feature" title="Eligibility" icon="lucide:list-checks">
+    Decision rules remain readable while still fitting normal backend deployment
+    and review workflows.
+  </AlertBox>
+  <AlertBox tone="success" title="Finance" icon="lucide:shield-check">
+    Results can be tested, reproduced, traced, and explained long after the
+    original request finished.
+  </AlertBox>
+</Grid>
 
-CalcCore is a good fit for teams that:
+<Panel tone="ghost" variant="surfaceAlt" class="mb-6">
+  <Grid columns="1" columnsLg="3" alignItems="start">
+    <SectionHeader
+      eyebrow="The model"
+      title="A runtime shaped for backend teams."
+      subtitle="CalcCore is not a spreadsheet UI. It is the execution layer you embed where correctness matters."
+      titleClass="fs-h1"/>
 
-* operate SaaS platforms with non-trivial calculation logic
-* need predictable and testable calculation behavior
-* want to reduce the gap between spreadsheet-based models and backend execution
-* value long-term maintainability and correctness
+    <Flex direction="column" class="gap-3">
+      <ExpandablePanel
+        title="Formula semantics without Excel in production"
+        description="Use familiar spreadsheet-style expressions while keeping the runtime headless."
+        icon="lucide:file-spreadsheet"
+        tone="accent"
+        open="true"
+      >
+        Business users and engineers can reason about the same calculation
+        model, while production runs a dedicated backend engine.
+      </ExpandablePanel>
 
-Typical adopters include SaaS companies, fintech platforms, internal tooling teams, and data-driven services.
+      <ExpandablePanel
+        title="Explicit evaluation behavior"
+        description="Inputs, dependencies, recalculation, errors, and outputs are modeled deliberately."
+        icon="lucide:workflow"
+        tone="feature"
+      >
+        The engine favors predictable execution over hidden magic, so repeated
+        evaluations with the same inputs produce the same results.
+      </ExpandablePanel>
+    </Flex>
 
----
+    <Flex direction="column" class="gap-3">
+      <ExpandablePanel
+        title="Code-first or spreadsheet-first authoring"
+        description="Choose the authoring workflow that fits the ownership of the model."
+        icon="lucide:code"
+        tone="info"
+        open="true"
+      >
+        Engineering-owned logic can live in source control. Spreadsheet-owned
+        models can be validated, compiled, and executed through the same engine.
+      </ExpandablePanel>
 
-## Getting started
+      <ExpandablePanel
+        title="Operational diagnostics"
+        description="Structured errors and calculation traces make failures explainable."
+        icon="lucide:activity"
+        tone="success"
+      >
+        When a customer-facing number looks wrong, the system can show which
+        inputs and dependencies shaped the result.
+      </ExpandablePanel>
+    </Flex>
+  </Grid>
+</Panel>
 
-* [Quick Start](/docs/quick-start)
-* [Authoring Models (Code-First)](/docs/authoring-models-code)
-* [Authoring Models (Excel)](/docs/authoring-models-excel)
-* [How CalcCore Works](/how-it-works)
+<SectionHeader
+  eyebrow="How it works"
+  title="Compile the model once. Evaluate it everywhere."
+  subtitle="CalcCore gives calculation logic the same engineering discipline as the rest of your backend: versioned models, typed inputs, repeatable execution, and reviewable behavior."/>
 
----
+<Tabs
+  ariaLabel="CalcCore workflow"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+  class="my-6"
+>
+  <TabPane id="author" label="Author" icon="lucide:table">
+    <Grid columns="1" columnsLg="2" alignItems="start">
+      <div>
+        <h3>Use the language your model already speaks.</h3>
+        <p>
+          Define formulas with spreadsheet-compatible semantics, or build the
+          model directly in code when engineering ownership matters more than
+          spreadsheet authoring.
+        </p>
+      </div>
+      <AlertBox tone="accent" title="Best for" icon="lucide:square-function">
+        Pricing tables, margin models, eligibility rules, accounting schedules,
+        usage tiers, forecasts, and scenario planning.
+      </AlertBox>
+    </Grid>
+  </TabPane>
 
-## Pricing
+  <TabPane id="compile" label="Compile" icon="lucide:braces">
+    <Grid columns="1" columnsLg="2" alignItems="start">
+      <div>
+        <h3>Turn the model into an execution graph.</h3>
+        <p>
+          CalcCore resolves dependencies, validates references, prepares the
+          calculation order, and gives the backend a model it can run
+          repeatedly.
+        </p>
+      </div>
+      <AlertBox
+        tone="feature"
+        title="Built for review"
+        icon="lucide:git-branch"
+      >
+        Treat model changes like software changes: version them, diff them, test
+        them, and promote them through environments.
+      </AlertBox>
+    </Grid>
+  </TabPane>
 
-CalcCore is commercially licensed and priced for backend and SaaS usage, with simple and predictable terms.
+  <TabPane id="evaluate" label="Evaluate" icon="lucide:server">
+    <Grid columns="1" columnsLg="2" alignItems="start">
+      <div>
+        <h3>Run calculations inside your backend boundary.</h3>
+        <p>
+          Feed the engine typed inputs from APIs, events, queues, or jobs and
+          receive structured outputs that can be stored, returned, or audited.
+        </p>
+      </div>
+      <AlertBox tone="success" title="Production fit" icon="lucide:database">
+        No desktop dependency. No workbook automation. No production logic
+        hiding in a file share.
+      </AlertBox>
+    </Grid>
+  </TabPane>
+</Tabs>
 
-* per-service licensing
-* no usage-based surprises
-* suitable for long-running production systems
+<Grid columns="1" columnsLg="3" class="mb-6">
+  <Panel tone="accent" variant="surface">
+    <IconFrame
+      name="lucide:calculator"
+      tone="accent"
+      class="icon-frame--lg mb-3"/>
+    <h3>Deterministic by design</h3>
+    <p>
+      Evaluation semantics are explicit, controlled, and repeatable. The same
+      model and inputs produce the same result.
+    </p>
+  </Panel>
 
-[View Pricing](/pricing)
+  <Panel tone="feature" variant="surface">
+    <IconFrame
+      name="lucide:layers"
+      tone="feature"
+      class="icon-frame--lg mb-3"/>
+    <h3>Made for complex models</h3>
+    <p>
+      Model dependencies, intermediate values, tables, and outputs are first
+      class instead of incidental details hidden in application code.
+    </p>
+  </Panel>
 
----
+  <Panel tone="success" variant="surface">
+    <IconFrame
+      name="lucide:shield-check"
+      tone="success"
+      class="icon-frame--lg mb-3"/>
+    <h3>Inspectable when it matters</h3>
+    <p>
+      Structured errors and optional traces help teams explain exactly how a
+      result was reached.
+    </p>
+  </Panel>
+</Grid>
 
-## A focus on long-term reliability
+<PricingTable
+  eyebrow="Commercial licensing"
+  title="Predictable terms for backend and SaaS usage."
+  subtitle="Start with evaluation, then license by service when CalcCore becomes part of production."
+  footnote="No per-cell pricing. No per-formula pricing. No execution-count surprises."
+  tone="ghost"
+>
+  <PricingPlan
+    title="Developer"
+    summary="For exploration, prototypes, and small-team validation."
+    price="Evaluation"
+    period="request access"
+    icon="lucide:terminal"
+    cta-label="Start building"
+    cta-link="/getting-started/"
+  >
+    <PricingFeature icon="lucide:check">Full runtime evaluation</PricingFeature>
+    <PricingFeature icon="lucide:check"
+      >Code-first model authoring</PricingFeature
+    >
+    <PricingFeature icon="lucide:check"
+      >Local and CI-friendly workflow</PricingFeature
+    >
+  </PricingPlan>
 
-CalcCore is developed with an emphasis on:
+  <PricingPlan
+    title="SaaS Runtime"
+    summary="For production APIs, jobs, and internal platforms."
+    price="Per service"
+    period="simple licensing"
+    icon="lucide:rocket"
+    badge="Core plan"
+    variant="featured"
+    tone="accent"
+    cta-label="View licensing"
+    cta-link="/guide/pricing/"
+  >
+    <PricingFeature icon="lucide:check"
+      >Production service deployment</PricingFeature
+    >
+    <PricingFeature icon="lucide:check"
+      >Unlimited models in the service</PricingFeature
+    >
+    <PricingFeature icon="lucide:check"
+      >No usage-metered execution fees</PricingFeature
+    >
+  </PricingPlan>
 
-* correctness over convenience
-* explicit behavior over hidden magic
-* stable APIs and execution semantics
+  <PricingPlan
+    title="Business"
+    summary="For mission-critical calculation systems."
+    price="Annual"
+    period="support available"
+    icon="lucide:briefcase-business"
+    cta-label="Talk to us"
+    cta-link="mailto:team@purestack.dev"
+  >
+    <PricingFeature icon="lucide:check"
+      >Priority support options</PricingFeature
+    >
+    <PricingFeature icon="lucide:check"
+      >Long-term version stability</PricingFeature
+    >
+    <PricingFeature icon="lucide:check"
+      >Deployment and architecture review</PricingFeature
+    >
+  </PricingPlan>
+</PricingTable>
 
-It is intended for teams that treat calculation logic as a core part of their system architecture.
+<Panel tone="neutral" variant="outline" class="mb-6">
+  <Grid
+    columns="1"
+    columnsLg="minmax(0, 0.75fr) minmax(0, 1.25fr)"
+    alignItems="start"
+  >
+    <SectionHeader
+      eyebrow="Built for teams"
+      title="Who should use CalcCore?"
+      subtitle="CalcCore fits organizations where calculation logic is not a side note. It is product behavior, customer money, operational policy, or regulated decisioning."
+      titleClass="fs-h1"/>
 
+    <Grid columns="1" columnsMd="2">
+      <AlertBox tone="accent" title="SaaS platforms" icon="lucide:server">
+        Pricing, subscriptions, entitlements, usage tiers, and customer-specific
+        commercial logic.
+      </AlertBox>
+      <AlertBox tone="feature" title="Fintech teams" icon="lucide:chart-column">
+        Interest, fees, ledgers, allocation rules, portfolio logic, and
+        repeatable calculation audit trails.
+      </AlertBox>
+      <AlertBox tone="info" title="Internal tools" icon="lucide:settings">
+        Forecasting, planning, operations models, approvals, and back-office
+        decision systems.
+      </AlertBox>
+      <AlertBox tone="success" title="Data products" icon="lucide:database">
+        Scenario evaluation, explainable outputs, dependency-aware results, and
+        reproducible model runs.
+      </AlertBox>
+    </Grid>
+  </Grid>
+</Panel>
+
+<Grid columns="1" columnsLg="2" class="mb-6">
+  <Panel tone="accent" variant="surfaceAlt">
+    <SectionHeader
+      eyebrow="Start small"
+      title="Put one critical formula path behind CalcCore."
+      subtitle="Choose a calculation that already lives in a spreadsheet and already causes rewrite pain. Model it, test it, run it from the backend, and compare every output."
+      titleClass="fs-h2"/>
+    <BtnLink
+      href="/getting-started/"
+      tone="accent"
+      icon="lucide:arrow-right"
+      iconPosition="end"
+    >
+      Read the quick start
+    </BtnLink>
+  </Panel>
+
+  <Panel tone="ghost" variant="surface">
+    <SectionHeader
+      eyebrow="Think long term"
+      title="Make calculation logic a real architectural boundary."
+      subtitle="Once the first model is proven, version models deliberately, move them through environments, trace production results, and let business logic evolve without disappearing into service code."
+      titleClass="fs-h2"/>
+    <BtnLink
+      href="/guide/pricing/"
+      tone="ghost"
+      variant="outline"
+      icon="lucide:scale"
+    >
+      Review licensing
+    </BtnLink>
+  </Panel>
+</Grid>
