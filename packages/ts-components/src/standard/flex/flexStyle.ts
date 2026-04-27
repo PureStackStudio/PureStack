@@ -35,23 +35,15 @@ export function registerFlexStyles() {
     styleBuilder.select('.align-flex-end', theme).alignItems('flex-end')
     styleBuilder.select('.align-baseline', theme).alignItems('baseline')
 
-    styleBuilder
-      .select('.justify-start', theme)
-      .justifyContent('flex-start')
+    styleBuilder.select('.justify-start', theme).justifyContent('flex-start')
     styleBuilder.select('.justify-center', theme).justifyContent('center')
     styleBuilder.select('.justify-end', theme).justifyContent('flex-end')
-    styleBuilder
-      .select('.justify-stretch', theme)
-      .justifyContent('stretch')
+    styleBuilder.select('.justify-stretch', theme).justifyContent('stretch')
     styleBuilder
       .select('.justify-between', theme)
       .justifyContent('space-between')
-    styleBuilder
-      .select('.justify-around', theme)
-      .justifyContent('space-around')
-    styleBuilder
-      .select('.justify-evenly', theme)
-      .justifyContent('space-evenly')
+    styleBuilder.select('.justify-around', theme).justifyContent('space-around')
+    styleBuilder.select('.justify-evenly', theme).justifyContent('space-evenly')
 
     styleBuilder.select('.self-stretch', theme).alignSelf('stretch')
     styleBuilder.select('.self-start', theme).alignSelf('flex-start')

@@ -89,13 +89,13 @@ const navMenuTemplate = html`<nav
       data-nav-menu-collapse
     >
       <span
-        class="nav__collapse-toggle-icon nav__collapse-toggle-icon--collapse pad-1"
+        class="nav__collapse-toggle-icon nav__collapse-toggle-icon--collapse p-1"
         aria-hidden="true"
       >
         <Icon name="iconoir:pin-slash"/>
       </span>
       <span
-        class="nav__collapse-toggle-icon nav__collapse-toggle-icon--open pad-1"
+        class="nav__collapse-toggle-icon nav__collapse-toggle-icon--open p-1"
         aria-hidden="true"
       >
         <Icon name="iconoir:pin"/>

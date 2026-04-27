@@ -60,13 +60,13 @@ function applyMarginUtilities(theme: string) {
 function applyPaddingUtilities(theme: string) {
   for (const name of getSpacingUtilityNames()) {
     const value = SPACING_UTILITIES[name]
-    styleBuilder.select(`.pad-${name}`, theme).padding(value)
-    styleBuilder.select(`.padt-${name}`, theme).paddingTop(value)
-    styleBuilder.select(`.padr-${name}`, theme).paddingRight(value)
-    styleBuilder.select(`.padb-${name}`, theme).paddingBottom(value)
-    styleBuilder.select(`.padl-${name}`, theme).paddingLeft(value)
-    styleBuilder.select(`.padx-${name}`, theme).set('padding-inline', value)
-    styleBuilder.select(`.pady-${name}`, theme).set('padding-block', value)
+    styleBuilder.select(`.p-${name}`, theme).padding(value)
+    styleBuilder.select(`.pt-${name}`, theme).paddingTop(value)
+    styleBuilder.select(`.pr-${name}`, theme).paddingRight(value)
+    styleBuilder.select(`.pb-${name}`, theme).paddingBottom(value)
+    styleBuilder.select(`.pl-${name}`, theme).paddingLeft(value)
+    styleBuilder.select(`.px-${name}`, theme).set('padding-inline', value)
+    styleBuilder.select(`.py-${name}`, theme).set('padding-block', value)
   }
 }
 

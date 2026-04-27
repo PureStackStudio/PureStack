@@ -38,12 +38,12 @@ const pageTocTemplate = html`<nav
       data-page-toc-restore
     >
       <span
-        class="page-toc__header-toggle-icon page-toc__header-toggle-icon--collapse pad-1"
+        class="page-toc__header-toggle-icon page-toc__header-toggle-icon--collapse p-1"
       >
         <Icon name="iconoir:pin-slash"/>
       </span>
       <span
-        class="page-toc__header-toggle-icon page-toc__header-toggle-icon--restore pad-1"
+        class="page-toc__header-toggle-icon page-toc__header-toggle-icon--restore p-1"
       >
         <Icon name="iconoir:pin"/>
       </span>
@@ -54,7 +54,7 @@ const pageTocTemplate = html`<nav
       <BtnLink
         variant="link"
         :href="item.href"
-        class="page-toc__link justify-start w-full ws-normal fw-400 fs-sm tone-fill-button-active tone-text-button-active pady-1 padl-2"
+        class="page-toc__link justify-start w-full ws-normal fw-400 fs-sm tone-fill-button-active tone-text-button-active py-1 pl-2"
       >
         {{ item.title }}
       </BtnLink>
@@ -69,7 +69,7 @@ const pageTocTemplate = html`<nav
           <BtnLink
             variant="link"
             :href="child.href"
-            class="page-toc__link page-toc__link--sub justify-start w-full ws-normal fw-200 fs-xs tone-fill-button-active tone-text-button-active pady-1 padl-2"
+            class="page-toc__link page-toc__link--sub justify-start w-full ws-normal fw-200 fs-xs tone-fill-button-active tone-text-button-active py-1 pl-2"
           >
             {{ child.title }}
           </BtnLink>

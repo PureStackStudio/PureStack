@@ -29,7 +29,7 @@ const expandablePanelTemplate = html`<details class="expandable-panel gap-0" :cl
   <Flex
     container="summary"
     align="center"
-    class="expandable-panel__summary cursor-pointer pad-4"
+    class="expandable-panel__summary cursor-pointer p-4"
     :class="summaryClasses"
   >
     <slot name="summary">
@@ -55,7 +55,7 @@ const expandablePanelTemplate = html`<details class="expandable-panel gap-0" :cl
       </Flex>
     </slot>
   </Flex>
-  <div class="expandable-panel__body pad-4 bt-0"><slot></slot></div>
+  <div class="expandable-panel__body p-4 bt-0"><slot></slot></div>
 </details>`
 
 function defineExpandablePanelComponent() {
