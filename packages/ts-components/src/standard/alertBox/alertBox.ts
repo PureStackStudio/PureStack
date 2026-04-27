@@ -28,9 +28,7 @@ const alertBoxTemplate = html`<aside class="alert tone-surface" :class="toneClas
   <div class="alert__content">
     <div class="alert__header" r-if="title || eyebrow || badge">
       <p class="alert__eyebrow" r-if="eyebrow">{{ eyebrow }}</p>
-      <h3 class="alert__title tone-text" r-if="title">
-        {{ title }}
-      </h3>
+      <h3 class="alert__title tone-text-surface" r-if="title">{{ title }}</h3>
       <Badge :tone="tone" r-if="badge">{{ badge }}</Badge>
     </div>
     <div class="alert__body"><slot></slot></div>

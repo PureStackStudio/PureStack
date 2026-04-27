@@ -31,7 +31,7 @@ function registerFormFieldStyles(
   styleBuilder
     .select('.form-block__label', theme)
     .apply(palette.applyFont(palette.font.size.xxs, palette.font.weight.w700))
-    .color(palette.current.text.default)
+    .color(palette.current.tone)
     .lineHeight('1')
   styleBuilder
     .select('.form-block__input-shell', theme)
@@ -124,7 +124,7 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .alignItems('center')
     .gap('0.5em')
     .apply(palette.applyFont(palette.font.size.xxs))
-    .color(palette.current.text.default)
+    .color(palette.current.tone)
   styleBuilder
     .select('.form-block__check input', theme)
     .width('1.5em')
@@ -134,7 +134,7 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .select('.form-block__assist-link', theme)
     .apply(palette.applyFont(palette.font.size.xxs, palette.font.weight.w700))
     .textDecoration('none')
-    .color(palette.current.text.default)
+    .color(palette.current.tone)
   styleBuilder
     .select('.form-block__assist-link:hover', theme)
     .textDecoration('underline')

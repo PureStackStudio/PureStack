@@ -96,9 +96,8 @@ function registerTabsShellStyles(
     .textAlign('left')
     .whiteSpace('nowrap')
     .apply(palette.applyFont(palette.font.size.xxs, palette.font.weight.w600))
-    .opacity(0.5)
 
-  styleBuilder.select('.tabs__overflow-option:hover', theme).opacity(1)
+  styleBuilder.select('.tabs__overflow-option:hover', theme)
 
   styleBuilder
     .select('.tabs__select-wrap', theme)
@@ -149,11 +148,10 @@ function registerTabsControlStyles(theme: ThemeMode, palette: ThemePalette) {
     .select('.tabs__tab-buttons > .btn', theme)
     .flexShrink('0')
     .whiteSpace('nowrap')
-    .opacity(0.5)
 
-  styleBuilder.select('.tabs__tab-buttons > .btn:hover', theme).opacity(1)
+  styleBuilder.select('.tabs__tab-buttons > .btn:hover', theme)
 
-  styleBuilder.select('.tabs__tab-buttons > .btn.active', theme).opacity(1)
+  styleBuilder.select('.tabs__tab-buttons > .btn.active', theme)
 
   styleBuilder
     .select('.tabs__tab-icon', theme)
