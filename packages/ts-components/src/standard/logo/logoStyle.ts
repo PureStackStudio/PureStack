@@ -93,13 +93,15 @@ export function registerLogoShellStyles(
     .placeItems('center')
     .position('relative')
     .background(
-      `var(--ps-logo-glyph-background, ${palette.current.icon.background})`,
+      `var(--ps-logo-glyph-background, ${palette.current.button.rest.background})`,
     )
     .backgroundColor(
-      `var(--ps-logo-glyph-background, ${palette.current.icon.background})`,
+      `var(--ps-logo-glyph-background, ${palette.current.button.rest.background})`,
     )
-    .border(`1px solid ${palette.current.icon.border}`)
-    .color(`var(--ps-logo-glyph-foreground, ${palette.current.icon.color})`)
+    .border(`1px solid ${palette.current.button.rest.border}`)
+    .color(
+      `var(--ps-logo-glyph-foreground, ${palette.current.button.rest.text})`,
+    )
 
   styleBuilder
     .select('.site-logo__glyph > .icon', theme)

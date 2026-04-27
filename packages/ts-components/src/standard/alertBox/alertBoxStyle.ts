@@ -21,7 +21,6 @@ export function applyAlertShellStyles(
   options: ThemeOptions,
 ) {
   applyAlertContainerStyles(theme, palette, options)
-  applyAlertIconStyles(theme, palette, options)
   applyAlertHeaderStyles(theme, palette)
   applyAlertBodyStyles(theme, palette)
   applyAlertActionStyles(theme, palette, options)
@@ -46,37 +45,6 @@ export function applyAlertContainerStyles(
     .background(palette.current.surface.rest.background)
     .color(palette.current.text.default)
     .boxShadow(palette.effect.panelShadow)
-}
-
-export function applyAlertIconStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
-  styleBuilder
-    .select('.alert .alert__icon', theme)
-    .width('32px')
-    .height('32px')
-    .borderRadius(options.radii.sm)
-    .display('inline-flex')
-    .alignItems('center')
-    .justifyContent('center')
-    .background(palette.current.icon.gradient)
-    .backgroundColor(palette.current.icon.background)
-    .border(`1px solid ${palette.current.icon.border}`)
-    .color(palette.current.icon.color)
-    .boxShadow(palette.effect.interactiveShadow)
-
-  styleBuilder
-    .select('.alert__icon svg', theme)
-    .width('16px')
-    .height('16px')
-    .display('block')
-    .stroke('currentColor')
-    .fill('none')
-    .strokeLinecap('round')
-    .strokeLinejoin('round')
-    .strokeWidth('2.2')
 }
 
 export function applyAlertHeaderStyles(
