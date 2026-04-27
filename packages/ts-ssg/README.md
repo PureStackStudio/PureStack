@@ -264,7 +264,6 @@ Built-in component sets are initialized automatically each build:
 - contact: `contactForm`
 - expandable panel: `expandablePanel`
 - panel: `panel`
-- hero: `heroBanner`, `heroMedia`
 - footer: `siteFooter`
 - top bar: `topBar`
 - logo: `siteLogo`

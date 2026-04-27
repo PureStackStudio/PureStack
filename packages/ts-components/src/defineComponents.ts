@@ -9,7 +9,6 @@ import { defineFooterComponents } from './standard/footer/footer'
 import { defineFormComponents } from './standard/form/form'
 import { defineFormInputField } from './standard/form/formInputField'
 import { defineGridComponents } from './standard/grid/grid'
-import { defineHeroComponents } from './standard/hero/hero'
 import { defineIconComponents, type GetSvgIcon } from './standard/icon/icon'
 import { defineLoginComponents } from './standard/login/login'
 import { defineLogoComponents } from './standard/logo/logo'
@@ -38,7 +37,6 @@ export function defineComponents(getSvgIcon: GetSvgIcon) {
     ...defineFormComponents(),
     ...defineFormInputField(),
     ...defineGridComponents(),
-    ...defineHeroComponents(),
     ...defineIconComponents(getSvgIcon),
     ...defineLoginComponents(),
     ...defineLogoComponents(),

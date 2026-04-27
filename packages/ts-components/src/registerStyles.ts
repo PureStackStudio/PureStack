@@ -9,7 +9,6 @@ import { registerFlexStyles } from './standard/flex/flexStyle'
 import { registerFooterStyles } from './standard/footer/footerStyle'
 import { registerFormStyles } from './standard/form/formStyle'
 import { registerGridStyles } from './standard/grid/gridStyle'
-import { registerHeroStyles } from './standard/hero/heroStyle'
 import { registerIconStyles } from './standard/icon/iconStyle'
 import { registerLoginStyles } from './standard/login/loginStyle'
 import { registerLogoStyles } from './standard/logo/logoStyle'
@@ -36,7 +35,6 @@ export function registerStyles() {
   registerFooterStyles()
   registerFormStyles()
   registerGridStyles()
-  registerHeroStyles()
   registerIconStyles()
   registerLoginStyles()
   registerLogoStyles()

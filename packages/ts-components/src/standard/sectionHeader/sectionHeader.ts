@@ -38,6 +38,7 @@ const sectionHeaderTemplate = html`<div class="section-header">
   <p class="prose-meta" :class="footnoteClass" r-if="footnote">
     {{ footnote }}
   </p>
+  <slot></slot>
 </div>`
 
 function defineSectionHeaderComponent() {
