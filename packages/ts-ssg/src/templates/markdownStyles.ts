@@ -164,15 +164,16 @@ function registerCopyButtonBaseStyles(
     .zIndex(2)
     .width('2.15rem')
     .height('2.15rem')
-    .padding('0')
+    .padding('0.25em')
+    .fontSize(palette.font.size.xxs)
     .display('inline-flex')
     .alignItems('center')
     .justifyContent('center')
+    .borderWidth('1px')
     .borderRadius(options.radii.sm)
     .boxShadow(palette.effect.interactiveShadow)
     .cursor('pointer')
     .opacity(0)
-    .transform('translateY(-4px)')
     .pointerEvents('none')
     .transition(
       'opacity 140ms ease, transform 180ms ease, background-color 140ms ease, border-color 140ms ease, color 140ms ease',
@@ -189,14 +190,7 @@ function registerCopyButtonInteractionStyles(
       theme,
     )
     .opacity(1)
-    .transform('translateY(0)')
     .pointerEvents('auto')
-
-  styleBuilder
-    .select('.doc-content :where(pre > .code-copy-button svg)', theme)
-    .width('1.05rem')
-    .height('1.05rem')
-    .display('block')
 
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button:hover)', theme)
@@ -216,7 +210,6 @@ function registerCopyButtonStateStyles(
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button:focus-visible)', theme)
     .opacity(1)
-    .transform('translateY(0)')
     .pointerEvents('auto')
     .outline(`2px solid ${palette.semanticTone.neutral.button.focusRing}`)
 
@@ -231,7 +224,6 @@ function registerCopyButtonStateStyles(
     .select('.doc-content :where(pre > .code-copy-button)', theme)
     .media('hover: none')
     .opacity(1)
-    .transform('translateY(0)')
     .pointerEvents('auto')
 
   styleBuilder

@@ -9,10 +9,11 @@
     "colors": [
       "var(--ps-current-text-subtle)",
       "var(--ps-current-text-default)",
-      "var(--ps-semantic-tone-accent-button-rest-background)"
+      "var(--ps-semantic-tone-accent-button-hover-background)",
+      "#fdfdfd"
     ],
     "logoBackground": 2,
-    "logoForeground": 1,
+    "logoForeground": 3,
     "subtitle": "backend-native engine",
     "href": "/",
     "icon": "iconoir:cube"

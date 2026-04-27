@@ -21,8 +21,8 @@ const bestColors = {
     neutral: '#6d6626',
   },
   red: {
-    accent: '#a61717',
-    neutral: '#2c3a49',
+    accent: '#ea1111',
+    neutral: '#495e70',
   },
 }
 export const { accent, neutral } = bestColors.red

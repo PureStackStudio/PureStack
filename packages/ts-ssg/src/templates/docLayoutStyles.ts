@@ -94,7 +94,7 @@ function registerDocLayoutSidebarStyles(
     .maxHeight('calc(100vh - 88px)')
     .height('auto')
     .transform('translateX(120%)')
-    .zIndex(35)
+    .zIndex(40)
     .overflow('auto')
     .boxShadow(options.shadows.strong)
   styleBuilder
