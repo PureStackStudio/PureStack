@@ -10,6 +10,7 @@ import { defineFormComponents } from './standard/form/form'
 import { defineFormInputField } from './standard/form/formInputField'
 import { defineGridComponents } from './standard/grid/grid'
 import { defineIconComponents, type GetSvgIcon } from './standard/icon/icon'
+import { defineLandingComponents } from './standard/landing/landing'
 import { defineLoginComponents } from './standard/login/login'
 import { defineLogoComponents } from './standard/logo/logo'
 import { defineModalComponents } from './standard/modal/modal'
@@ -38,6 +39,7 @@ export function defineComponents(getSvgIcon: GetSvgIcon) {
     ...defineFormInputField(),
     ...defineGridComponents(),
     ...defineIconComponents(getSvgIcon),
+    ...defineLandingComponents(),
     ...defineLoginComponents(),
     ...defineLogoComponents(),
     ...defineModalComponents(),

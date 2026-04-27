@@ -57,6 +57,18 @@ export type { GetSvgIcon, Icon, IconFrame } from './standard/icon/icon'
 export { defineIconComponents } from './standard/icon/icon'
 export { registerIconStyles } from './standard/icon/iconStyle'
 export type {
+  CodeShowcase,
+  ComparisonColumn,
+  ComparisonFeature,
+  ComparisonTable,
+  CtaSection,
+  FeatureCard,
+  LandingSection,
+  MetricItem,
+  MetricStrip,
+} from './standard/landing/landing'
+export { defineLandingComponents } from './standard/landing/landing'
+export type {
   LoginFooter,
   LoginHeader,
   LoginProvider,
