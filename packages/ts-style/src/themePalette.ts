@@ -133,12 +133,6 @@ export interface SemanticToneTokens {
     }
     focusRing: string
   }
-  icon: {
-    background: string
-    gradient: string
-    color: string
-    border: string
-  }
 }
 
 export interface ThemeTypography {
@@ -246,12 +240,6 @@ export interface ThemePaletteCurrent {
       text: string
     }
     focusRing: string
-  }
-  icon: {
-    background: string
-    gradient: string
-    color: string
-    border: string
   }
 }
 

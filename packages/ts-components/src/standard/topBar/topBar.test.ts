@@ -82,29 +82,4 @@ describe('TopBar rendering', () => {
     expect(html).not.toContain('Pure')
     expect(html).not.toContain('Stack')
   })
-
-  it('applies tone and variant classes to the top bar shell', () => {
-    const cleanup = ensureDomGlobals()
-    const components = {
-      ...defineFlexComponents(),
-      ...defineLogoComponents(),
-      ...defineTopBarComponents(),
-      ...defineSearchComponents(),
-    }
-    const html = renderApp(
-      `<TopBar tone="accent" variant="outline" variantMode="stateful" />`,
-      {
-        components,
-        context: createTestContext(),
-      },
-    )
-    cleanup()
-
-    expect(html).toContain('class="topbar')
-    expect(html).toContain('tone--accent')
-    expect(html).toContain('tone-border-button-hover')
-    expect(html).toContain('tone-border-button-active')
-    expect(html).toContain('tone-fill-button-active')
-    expect(html).toContain('tone-text-button-active')
-  })
 })

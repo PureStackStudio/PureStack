@@ -141,11 +141,5 @@ function createCurrentPalette(
       disabled: { ...tokens.button.disabled },
       focusRing: tokens.button.focusRing,
     },
-    icon: {
-      background: tokens.icon.background,
-      gradient: tokens.icon.gradient,
-      color: tokens.icon.color,
-      border: tokens.icon.border,
-    },
   }
 }

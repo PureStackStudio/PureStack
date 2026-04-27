@@ -48,7 +48,6 @@ export type ToneOverrides = {
   border?: Partial<Tone['border']>
   text?: Partial<Tone['text']>
   button?: ToneButtonOverrides
-  icon?: Partial<Tone['icon']>
 }
 
 type ToneChromeOptions = {
@@ -247,12 +246,5 @@ export function createTone(
       ...(overrides.text || {}),
     },
     button,
-    icon: {
-      background: buttonBg.level5,
-      gradient: createChrome('icon', buttonBg, 'rest', false, chrome),
-      color: foreground.level5,
-      border: defaultBorder,
-      ...(overrides.icon || {}),
-    },
   }
 }
