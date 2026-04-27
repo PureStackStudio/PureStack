@@ -141,13 +141,6 @@ export function registerSemanticToneUtilityStyles() {
       .outline('none')
       .boxShadow(`0 0 0 2px ${current.button.focusRing}`)
 
-    styleBuilder
-      .select('.tone-icon', theme)
-      .background(current.icon.gradient)
-      .backgroundColor(current.icon.background)
-      .borderColor(current.icon.border)
-      .color(current.icon.color)
-
     createPresets(styleBuilder, current, theme)
   })
 }
