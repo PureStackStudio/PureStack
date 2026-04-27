@@ -3,7 +3,7 @@ title: CalcCore
 description: Backend-native calculation engine for SaaS platforms.
 template: doc
 layout:
-  fullWidth: true
+  fullWidth: false
   navMode: drawer
   showToc: false
 nav:
@@ -20,8 +20,8 @@ nav:
   <Flex direction="column" align="start" class="gap-4">
     <Flex wrap="true" align="center" class="gap-2">
       <Badge tone="accent">Backend-native</Badge>
-      <Badge tone="feature">Excel-compatible</Badge>
-      <Badge tone="success">Deterministic</Badge>
+      <Badge tone="secondary">Excel-compatible</Badge>
+      <Badge tone="neutral">Deterministic</Badge>
     </Flex>
 
     <SectionHeader
@@ -67,7 +67,7 @@ nav:
         label="Inputs"
         value="Typed data models"
         icon="lucide:table"
-        tone="feature"/>
+        tone="secondary"/>
       <MetricItem
         label="Outputs"
         value="Auditable results"
@@ -105,7 +105,7 @@ Output("price.final",
           label="Compile"
           value="Executable graph"
           icon="lucide:braces"
-          tone="feature"/>
+          tone="secondary"/>
         <MetricItem
           label="Evaluate"
           value="Stable output"
@@ -125,22 +125,22 @@ Output("price.final",
 >
   <Grid columns="1" columnsLg="4">
     <FeatureCard
-      tone="warning"
+      tone="neutral"
       title="Pricing rules"
       summary="Tiered discounts, contractual overrides, taxes, surcharges, and renewal rules all need one source of truth."
       icon="lucide:badge-percent"/>
     <FeatureCard
-      tone="info"
+      tone="neutral"
       title="Forecasting"
       summary="Planning models can run in services, background jobs, and batch pipelines without a spreadsheet process."
       icon="lucide:chart-line"/>
     <FeatureCard
-      tone="feature"
+      tone="neutral"
       title="Eligibility"
       summary="Decision rules remain readable while still fitting normal backend deployment and review workflows."
       icon="lucide:list-checks"/>
     <FeatureCard
-      tone="success"
+      tone="neutral"
       title="Finance"
       summary="Results can be tested, reproduced, traced, and explained long after the original request finished."
       icon="lucide:shield-check"/>
@@ -148,7 +148,7 @@ Output("price.final",
 </LandingSection>
 
 <LandingSection
-  tone="ghost"
+  tone="secondary"
   variant="surfaceAlt"
   eyebrow="The model"
   title="A runtime shaped for backend teams."
@@ -160,7 +160,7 @@ Output("price.final",
       title="Formula semantics without Excel in production"
       summary="Use familiar spreadsheet-style expressions while keeping the runtime headless."
       icon="lucide:file-spreadsheet"
-      tone="accent"
+      tone="secondary"
     >
       Business users and engineers can reason about the same calculation model,
       while production runs a dedicated backend engine.
@@ -170,7 +170,7 @@ Output("price.final",
       title="Explicit evaluation behavior"
       summary="Inputs, dependencies, recalculation, errors, and outputs are modeled deliberately."
       icon="lucide:workflow"
-      tone="feature"
+      tone="neutral"
     >
       The engine favors predictable execution over hidden magic, so repeated
       evaluations with the same inputs produce the same results.
@@ -180,7 +180,7 @@ Output("price.final",
       title="Code-first or spreadsheet-first authoring"
       summary="Choose the authoring workflow that fits the ownership of the model."
       icon="lucide:code"
-      tone="info"
+      tone="secondary"
     >
       Engineering-owned logic can live in source control. Spreadsheet-owned
       models can be validated, compiled, and executed through the same engine.
@@ -190,7 +190,7 @@ Output("price.final",
       title="Operational diagnostics"
       summary="Structured errors and calculation traces make failures explainable."
       icon="lucide:activity"
-      tone="success"
+      tone="neutral"
     >
       When a customer-facing number looks wrong, the system can show which
       inputs and dependencies shaped the result.
@@ -222,7 +222,7 @@ Output("price.final",
           </p>
         </div>
         <FeatureCard
-          tone="accent"
+          tone="neutral"
           title="Best for"
           icon="lucide:square-function"
         >
@@ -243,7 +243,7 @@ Output("price.final",
           </p>
         </div>
         <FeatureCard
-          tone="feature"
+          tone="secondary"
           title="Built for review"
           icon="lucide:git-branch"
         >
@@ -263,7 +263,7 @@ Output("price.final",
           </p>
         </div>
         <FeatureCard
-          tone="success"
+          tone="neutral"
           title="Production fit"
           icon="lucide:database"
         >
@@ -285,15 +285,15 @@ Output("price.final",
     title="Spreadsheet automation"
     summary="Fast to begin, difficult to operate."
     icon="lucide:file-spreadsheet"
-    tone="warning"
+    tone="neutral"
   >
-    <ComparisonFeature icon="lucide:triangle-alert" tone="warning">
+    <ComparisonFeature icon="lucide:triangle-alert" tone="neutral">
       Desktop or workbook automation in a service boundary.
     </ComparisonFeature>
-    <ComparisonFeature icon="lucide:triangle-alert" tone="warning">
+    <ComparisonFeature icon="lucide:triangle-alert" tone="neutral">
       Hidden dependencies, mutable files, and limited observability.
     </ComparisonFeature>
-    <ComparisonFeature icon="lucide:triangle-alert" tone="warning">
+    <ComparisonFeature icon="lucide:triangle-alert" tone="neutral">
       Hard to reproduce failures across environments.
     </ComparisonFeature>
   </ComparisonColumn>
@@ -302,15 +302,15 @@ Output("price.final",
     title="Rewritten service code"
     summary="Operationally familiar, but easy to diverge."
     icon="lucide:code"
-    tone="info"
+    tone="secondary"
   >
-    <ComparisonFeature icon="lucide:git-branch" tone="info">
+    <ComparisonFeature icon="lucide:git-branch" tone="secondary">
       Business formulas become a second implementation.
     </ComparisonFeature>
-    <ComparisonFeature icon="lucide:git-branch" tone="info">
+    <ComparisonFeature icon="lucide:git-branch" tone="secondary">
       Spreadsheet validation and production behavior drift over time.
     </ComparisonFeature>
-    <ComparisonFeature icon="lucide:git-branch" tone="info">
+    <ComparisonFeature icon="lucide:git-branch" tone="secondary">
       Audits depend on comments, memory, and scattered tests.
     </ComparisonFeature>
   </ComparisonColumn>
@@ -323,13 +323,13 @@ Output("price.final",
     tone="accent"
     variant="surfaceAlt"
   >
-    <ComparisonFeature icon="lucide:check" tone="success">
+    <ComparisonFeature icon="lucide:check" tone="accent">
       Familiar model semantics compiled into an execution graph.
     </ComparisonFeature>
-    <ComparisonFeature icon="lucide:check" tone="success">
+    <ComparisonFeature icon="lucide:check" tone="accent">
       Deterministic evaluation inside APIs, jobs, and services.
     </ComparisonFeature>
-    <ComparisonFeature icon="lucide:check" tone="success">
+    <ComparisonFeature icon="lucide:check" tone="accent">
       Structured errors, traces, and reproducible results.
     </ComparisonFeature>
   </ComparisonColumn>
@@ -337,19 +337,19 @@ Output("price.final",
 
 <Grid columns="1" columnsLg="3" class="mb-6">
   <FeatureCard
-    tone="accent"
+    tone="neutral"
     title="Deterministic by design"
     summary="Evaluation semantics are explicit, controlled, and repeatable. The same model and inputs produce the same result."
     icon="lucide:calculator"/>
 
   <FeatureCard
-    tone="feature"
+    tone="secondary"
     title="Made for complex models"
     summary="Model dependencies, intermediate values, tables, and outputs are first class instead of incidental details hidden in application code."
     icon="lucide:layers"/>
 
   <FeatureCard
-    tone="success"
+    tone="neutral"
     title="Inspectable when it matters"
     summary="Structured errors and optional traces help teams explain exactly how a result was reached."
     icon="lucide:shield-check"/>
@@ -388,7 +388,7 @@ Output("price.final",
     icon="lucide:rocket"
     badge="Core plan"
     variant="featured"
-    tone="accent"
+    tone="neutral"
     cta-label="View licensing"
     cta-link="/guide/pricing/"
   >
@@ -434,22 +434,22 @@ Output("price.final",
 >
   <Grid columns="1" columnsMd="2">
     <FeatureCard
-      tone="accent"
+      tone="neutral"
       title="SaaS platforms"
       summary="Pricing, subscriptions, entitlements, usage tiers, and customer-specific commercial logic."
       icon="lucide:server"/>
     <FeatureCard
-      tone="feature"
+      tone="secondary"
       title="Fintech teams"
       summary="Interest, fees, ledgers, allocation rules, portfolio logic, and repeatable calculation audit trails."
       icon="lucide:chart-column"/>
     <FeatureCard
-      tone="info"
+      tone="secondary"
       title="Internal tools"
       summary="Forecasting, planning, operations models, approvals, and back-office decision systems."
       icon="lucide:settings"/>
     <FeatureCard
-      tone="success"
+      tone="neutral"
       title="Data products"
       summary="Scenario evaluation, explainable outputs, dependency-aware results, and reproducible model runs."
       icon="lucide:database"/>
