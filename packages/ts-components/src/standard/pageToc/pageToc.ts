@@ -31,7 +31,7 @@ const pageTocTemplate = html`<nav
   <div class="page-toc__header-row">
     <div class="page-toc__header">{{ title }}</div>
     <button
-      class="page-toc__restore-toggle tone-interactive"
+      class="page-toc__restore-toggle tone-text-button-all tone-fill-button-hover tone-fill-button-active tone-border-button-hover tone-border-button-active"
       type="button"
       title="Collapse table of contents"
       aria-label="Collapse table of contents"

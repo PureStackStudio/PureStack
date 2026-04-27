@@ -86,61 +86,6 @@ export function registerSemanticToneUtilityStyles() {
       )
     }
 
-    styleBuilder
-      .select('.tone-button, .tone-button-interactive', theme)
-      .background(current.button.rest.background)
-      .borderColor(current.button.rest.border)
-      .color(current.button.rest.text)
-      .backgroundSize('calc(100% + 10px) calc(100% + 10px)')
-      .backgroundPosition('center')
-
-    styleBuilder
-      .select('.tone-interactive', theme)
-      .color(current.button.rest.text)
-      .backgroundSize('calc(100% + 10px) calc(100% + 10px)')
-      .backgroundPosition('center')
-
-    styleBuilder
-      .select('.tone-button-interactive:hover, .tone-interactive:hover', theme)
-      .backgroundImage(current.button.hover.background)
-      .borderColor(current.button.hover.border)
-      .color(current.button.hover.text)
-
-    styleBuilder
-      .select(
-        '.tone-button-interactive:active, .tone-button-interactive.active, .tone-interactive:active, .tone-interactive.active',
-        theme,
-      )
-      .backgroundImage(current.button.active.background)
-      .borderColor(current.button.active.border)
-      .color(current.button.active.text)
-
-    styleBuilder
-      .select(
-        '.tone-button-interactive[aria-selected="true"], .tone-button-interactive[aria-pressed="true"], .tone-button-interactive[aria-current="true"], .tone-button-interactive.is-active',
-        theme,
-      )
-      .backgroundImage(current.button.active.background)
-      .borderColor(current.button.active.border)
-      .color(current.button.active.text)
-
-    styleBuilder
-      .select(
-        '.tone-button-interactive:disabled, .tone-interactive:disabled',
-        theme,
-      )
-      .backgroundImage(current.button.disabled.background)
-      .borderColor(current.button.disabled.border)
-      .color(current.button.disabled.text)
-
-    styleBuilder
-      .select(
-        '.tone-button-interactive:focus-visible, .tone-interactive:focus-visible',
-        theme,
-      )
-      .outline('none')
-      .boxShadow(`0 0 0 2px ${current.button.focusRing}`)
-
     createPresets(styleBuilder, current, theme)
   })
 }

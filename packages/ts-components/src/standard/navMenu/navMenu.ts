@@ -82,7 +82,7 @@ const navMenuTemplate = html`<nav
       <span class="nav__panel-toggle-label">navigation</span>
     </button>
     <button
-      class="nav__collapse-toggle tone-interactive"
+      class="nav__collapse-toggle tone-text-button-all tone-fill-button-hover tone-fill-button-active tone-border-button-hover tone-border-button-active"
       type="button"
       title="Collapse navigation"
       aria-label="Collapse navigation"
