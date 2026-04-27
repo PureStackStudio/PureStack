@@ -14,7 +14,7 @@ export interface SearchBox {
 const searchBoxTemplate = html`<div class="site-search" data-pagefind-search>
   <FormInputField
     icon="tabler:search"
-    :tone="tone ?? 'ghost'"
+    :tone="tone"
     :variant="variant"
     type="search"
     name="q"

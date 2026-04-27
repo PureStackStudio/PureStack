@@ -1,15 +1,40 @@
 import type { LogoConfig, TsSsgContext } from '@purestack/ts-common'
 
 import { resolveTsSsgContext } from '@purestack/ts-common'
-import { defineComponent, html } from 'regor'
+import type { SemanticTone } from '@purestack/ts-style'
+import {
+  type ComputedRef,
+  computed,
+  defineComponent,
+  html,
+  type RefOrValue,
+} from 'regor'
+import {
+  type ComponentVariant,
+  type ComponentVariantMode,
+  resolveComponentClasses,
+} from '../componentVariant'
 
 export interface TopBar {
   siteLogo: LogoConfig
+  tone?: RefOrValue<SemanticTone>
+  variant?: RefOrValue<ComponentVariant>
+  classes?: ComputedRef<string>
 }
 
-function resolveTopBar(context: TsSsgContext): TopBar {
+const DEFAULT_TOP_BAR_VARIANT: ComponentVariant = 'surfaceAlt'
+const DEFAULT_TOP_BAR_VARIANT_MODE: ComponentVariantMode = 'stateless'
+
+function resolveTopBar(context: TsSsgContext, props: TopBar): TopBar {
   return {
+    ...props,
     siteLogo: context.site.logo,
+    classes: computed(() =>
+      resolveComponentClasses(props, {
+        defaultVariant: DEFAULT_TOP_BAR_VARIANT,
+        defaultVariantMode: DEFAULT_TOP_BAR_VARIANT_MODE,
+      }),
+    ),
   }
 }
 
@@ -19,10 +44,10 @@ const topBarTemplate = html`<input
   type="checkbox"
   autocomplete="off"
   aria-hidden="true"/>
-<header class="topbar">
+<header class="topbar" :class="classes">
   <Flex align="center">
     <SiteLogo
-      class="flex-none"
+      class="flex-none tone--neutral"
       :brand="siteLogo.brand"
       :letterColors="siteLogo.letterColors"
       :subtitleLetterColors="siteLogo.subtitleLetterColors"
@@ -52,7 +77,9 @@ const topBarTemplate = html`<input
       :subtitle="siteLogo.subtitle"
       :href="siteLogo.href"
       :icon="siteLogo.icon"/>
-    <SearchBox class="topbar__search flex-auto"/>
+    <SearchBox
+      class="topbar__search flex-auto rounded-md tone-text-surface"
+      variant="none"/>
     <Flex class="topbar__controls flex-none" align="center" justify="end">
       <ThemeSwitcher/>
       <label
@@ -67,7 +94,8 @@ const topBarTemplate = html`<input
 
 function defineTopBarComponent() {
   return defineComponent<TopBar>(topBarTemplate, {
-    context: (head) => resolveTopBar(resolveTsSsgContext(head)),
+    props: ['tone', 'variant'],
+    context: (head) => resolveTopBar(resolveTsSsgContext(head), head.props),
   })
 }
 

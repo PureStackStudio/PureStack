@@ -28,9 +28,12 @@ export function registerTopBarShellStyles(
     .top('0')
     .zIndex(40)
     .backdropFilter('blur(10px)')
-    .borderBottom('1px solid transparent')
-    .background(palette.current.surfaceAlt.rest.background)
-    .borderBottomColor(palette.current.border.subtle)
+    .borderTopWidth('0 !important')
+    .borderRightWidth('0 !important')
+    .borderBottomWidth('1px !important')
+    .borderBottomStyle('solid !important')
+    .borderLeftWidth('0 !important')
+    .borderRadius('0 !important')
 
   styleBuilder.select('.topbar__controls', theme).marginLeft('auto')
 
