@@ -47,9 +47,13 @@ const pageTocTemplate = html`<nav class="page-toc tone-surface" :class="toneClas
   </div>
   <ul class="page-toc__list" r-if="items.length > 0">
     <li r-for="item in items" class="page-toc__item page-toc__item--h2">
-      <a class="page-toc__link tone-interactive" :href="item.href">
+      <BtnLink
+        variant="link"
+        :href="item.href"
+        class="page-toc__link justify-start w-full ws-normal fw-400 fs-sm tone-fill-button-active tone-text-button-active pady-1 padl-2"
+      >
         {{ item.title }}
-      </a>
+      </BtnLink>
       <ul
         r-if="item.children && item.children.length > 0"
         class="page-toc__list page-toc__list--nested"
@@ -58,12 +62,13 @@ const pageTocTemplate = html`<nav class="page-toc tone-surface" :class="toneClas
           r-for="child in item.children"
           class="page-toc__item page-toc__item--h3"
         >
-          <a
-            class="page-toc__link page-toc__link--sub tone-interactive"
+          <BtnLink
+            variant="link"
             :href="child.href"
+            class="page-toc__link page-toc__link--sub justify-start w-full ws-normal fw-200 fs-xs tone-fill-button-active tone-text-button-active pady-1 padl-2"
           >
             {{ child.title }}
-          </a>
+          </BtnLink>
         </li>
       </ul>
     </li>

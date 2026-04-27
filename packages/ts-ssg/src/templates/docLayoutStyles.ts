@@ -67,7 +67,8 @@ function registerDocLayoutShellStyles(
     .select('.doc-shell--nav-drawer', theme)
     .gridTemplateColumns('1fr')
   styleBuilder.select('.doc-main', theme).minWidth('0')
-  styleBuilder.select('.doc-content', theme).margin('0').padding('8px 0 80px')
+  styleBuilder.select('.doc-content', theme).margin('0').padding('0.5em 0 1em')
+  styleBuilder.select('.doc-content :where(ul,ol)', theme).listStyle('auto')
 }
 
 function registerDocLayoutSidebarStyles(

@@ -12,7 +12,7 @@ import {
 export function registerPageTocStyles() {
   themes.forEach((theme, palette, options) => {
     registerPageTocShellStyles(theme, palette, options)
-    registerPageTocLinkStyles(theme, options)
+    registerPageTocLinkStyles(theme)
     registerPageTocTargetStyles(theme, palette)
     registerPageTocLayoutStyles(theme, palette, options)
   })
@@ -27,7 +27,7 @@ export function registerPageTocShellStyles(
     .select('.page-toc', theme)
     .display('grid')
     .alignContent('start')
-    .gap('0.6em')
+    .gap('0')
     .padding('1em')
     .borderRadius(options.radii.lg)
     .border('1px solid transparent')
@@ -38,7 +38,6 @@ export function registerPageTocShellStyles(
     .alignItems('center')
     .justifyContent('space-between')
     .gap('0.5em')
-    .marginBottom('0.5em')
   styleBuilder
     .select('.page-toc__header', theme)
     .apply(palette.applyFont(palette.font.size.xxs, palette.font.weight.w700))
@@ -91,12 +90,12 @@ export function registerPageTocShellStyles(
     .margin('0')
     .padding('0')
     .display('grid')
-    .gap('6px')
+    .gap('0.25em')
     .overflow('hidden')
   styleBuilder
     .select('.page-toc__list--nested', theme)
-    .paddingLeft('12px')
-    .borderLeft(`1px solid ${palette.current.border.default}`)
+    .paddingLeft('0.75em')
+    .borderLeft(`1px solid ${palette.current.border.subtle}`)
   styleBuilder.select('.page-toc__item', theme).display('grid')
   styleBuilder
     .select('.page-toc__empty', theme)
@@ -110,17 +109,9 @@ export function registerPageTocShellStyles(
     .display('none')
 }
 
-export function registerPageTocLinkStyles(
-  theme: ThemeMode,
-  options: ThemeOptions,
-) {
+export function registerPageTocLinkStyles(theme: ThemeMode) {
   styleBuilder
     .select('.page-toc__link', theme)
-    .display('block')
-    .padding('8px 12px')
-    .borderRadius(options.radii.md)
-    .textDecoration('none')
-    .fontWeight('600')
     .transition('background 160ms ease, color 160ms ease')
 
   styleBuilder.select('.page-toc__link--sub', theme).fontWeight('500')
