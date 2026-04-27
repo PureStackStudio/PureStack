@@ -4,18 +4,30 @@ import type {
   ComponentVariant,
   ComponentVariantMode,
 } from '../componentVariant'
+import type { GridAlignItems } from '../grid/grid'
+
+export type LandingTitleTag =
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
+  | 'h5'
+  | 'h6'
+  | 'p'
+  | 'div'
+  | 'span'
 
 export interface LandingSection {
   eyebrow?: RefOrValue<string>
   title?: RefOrValue<string>
   subtitle?: RefOrValue<string>
-  titleTag?: RefOrValue<string>
+  titleTag?: RefOrValue<LandingTitleTag>
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
   variantMode?: RefOrValue<ComponentVariantMode>
   columns?: RefOrValue<number | string>
   columnsLg?: RefOrValue<number | string>
-  alignItems?: RefOrValue<string>
+  alignItems?: RefOrValue<GridAlignItems>
 }
 
 export interface FeatureCard {
