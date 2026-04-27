@@ -24,6 +24,14 @@ const bestColors = {
     accent: '#ea1111',
     neutral: '#495e70',
   },
+  green: {
+    accent: '#1cc82a',
+    neutral: '#2b4739',
+  },
+  pink: {
+    accent: '#c81c9a',
+    neutral: '#3f2b47',
+  },
 }
 export const { accent, neutral } = bestColors.red
 export const feature = '#cb166e'
