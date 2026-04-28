@@ -14,15 +14,18 @@ layout:
 
 <Flex direction="column">
   <AlertBox title="Default info alert">
-    AlertBox defaults to `tone="info"` and `variant="surfaceAlt"` when no visual props are provided.
+    AlertBox defaults to `tone="info"` and `variant="surface"` when no visual
+    props are provided.
   </AlertBox>
 
   <AlertBox title="Text-only alert">
-    This is the most compact shape: title plus body, no icon, no badge, no metadata.
+    This is the most compact shape: title plus body, no icon, no badge, no
+    metadata.
   </AlertBox>
 
   <AlertBox>
-    Body-only alerts work for quiet inline notes where a title would add more noise than clarity.
+    Body-only alerts work for quiet inline notes where a title would add more
+    noise than clarity.
   </AlertBox>
 </Flex>
 
@@ -59,7 +62,8 @@ layout:
     tone="danger"
     icon="lucide:shield-alert"
   >
-    Rotate the exposed token and replace dependent environment variables before restarting workers.
+    Rotate the exposed token and replace dependent environment variables before
+    restarting workers.
   </AlertBox>
 </Flex>
 
@@ -75,7 +79,9 @@ layout:
     Rule simulation is ready for early testing on staging tenants.
     <template #actions>
       <BtnLink href="#request-access" tone="accent">Request access</BtnLink>
-      <BtnLink href="#read-plan" tone="neutral" variant="outline">Read rollout plan</BtnLink>
+      <BtnLink href="#read-plan" tone="neutral" variant="outline"
+        >Read rollout plan</BtnLink
+      >
     </template>
   </AlertBox>
 
@@ -86,10 +92,13 @@ layout:
     tone="danger"
     icon="lucide:circle-x"
   >
-    Update the payment method to avoid service interruption on the next renewal attempt.
+    Update the payment method to avoid service interruption on the next renewal
+    attempt.
     <template #actions>
       <BtnLink href="#retry-payment" tone="danger">Retry payment</BtnLink>
-      <BtnLink href="#billing-settings" tone="neutral" variant="outline">Open settings</BtnLink>
+      <BtnLink href="#billing-settings" tone="neutral" variant="outline"
+        >Open settings</BtnLink
+      >
     </template>
   </AlertBox>
 </Flex>
@@ -98,7 +107,8 @@ layout:
 
 <Flex direction="column">
   <AlertBox tone="neutral" title="Neutral" icon="lucide:info">
-    Useful for policy notes, low-priority context, and persistent documentation hints.
+    Useful for policy notes, low-priority context, and persistent documentation
+    hints.
   </AlertBox>
 
   <AlertBox tone="info" title="Info" icon="lucide:info">
@@ -114,7 +124,8 @@ layout:
   </AlertBox>
 
   <AlertBox tone="danger" title="Danger" icon="lucide:circle-alert">
-    Use for destructive states, security risk, failed payment, or data-loss potential.
+    Use for destructive states, security risk, failed payment, or data-loss
+    potential.
   </AlertBox>
 
   <AlertBox tone="accent" title="Accent" icon="lucide:rocket">
@@ -133,17 +144,14 @@ layout:
 ## Variant Gallery
 
 <Flex direction="column">
-  <AlertBox
-    tone="info"
-    variant="surfaceAlt"
-    title="surfaceAlt"
-    icon="lucide:info"
-  >
-    The default alert surface: calm, readable, and suitable for most page content.
+  <AlertBox tone="info" variant="surface" title="surface" icon="lucide:info">
+    The default alert surface: calm, readable, and suitable for most page
+    content.
   </AlertBox>
 
-  <AlertBox tone="info" variant="surface" title="surface" icon="lucide:info">
-    A quieter framed surface when the surrounding section already has enough contrast.
+  <AlertBox tone="info" variant="surfaceAlt" title="surface" icon="lucide:info">
+    A quieter framed surface when the surrounding section already has enough
+    contrast.
   </AlertBox>
 
   <AlertBox tone="info" variant="outline" title="outline" icon="lucide:info">
@@ -156,7 +164,8 @@ layout:
     title="outlineFill"
     icon="lucide:info"
   >
-    Stronger border treatment for notes that need more presence without a solid fill.
+    Stronger border treatment for notes that need more presence without a solid
+    fill.
   </AlertBox>
 
   <AlertBox tone="info" variant="solid" title="solid" icon="lucide:info">
@@ -187,7 +196,8 @@ layout:
     icon="lucide:settings"
     badge="Interactive"
   >
-    `variantMode="stateful"` applies hover and active variant classes. Use it when an alert behaves like an interactive choice or opens a richer flow.
+    `variantMode="stateful"` applies hover and active variant classes. Use it
+    when an alert behaves like an interactive choice or opens a richer flow.
     <template #actions>
       <BtnLink href="#configure" tone="accent">Configure</BtnLink>
     </template>
@@ -200,7 +210,8 @@ layout:
     title="Stateful outline"
     icon="lucide:bell"
   >
-    The same alert structure can participate in interactive stacks without adding custom alert styles.
+    The same alert structure can participate in interactive stacks without
+    adding custom alert styles.
   </AlertBox>
 </Flex>
 
@@ -224,9 +235,12 @@ layout:
     meta="Sunday 01:00 - 02:00 UTC"
     icon="lucide:triangle-alert"
   >
-    Background throughput may be reduced during index maintenance. Reads stay available.
+    Background throughput may be reduced during index maintenance. Reads stay
+    available.
     <template #actions>
-      <BtnLink href="#maintenance" tone="warning">View maintenance note</BtnLink>
+      <BtnLink href="#maintenance" tone="warning"
+        >View maintenance note</BtnLink
+      >
     </template>
   </AlertBox>
 
@@ -236,7 +250,8 @@ layout:
     title="Migration complete"
     icon="lucide:circle-check"
   >
-    The tenant moved to the new runtime successfully. Old queue workers are drained and disabled.
+    The tenant moved to the new runtime successfully. Old queue workers are
+    drained and disabled.
   </AlertBox>
 </Flex>
 

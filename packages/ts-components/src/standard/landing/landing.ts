@@ -151,7 +151,7 @@ const featureCardTemplate = html`<Panel :tone="tone" :variant="variant || 'surfa
   </Flex>
 </Panel>`
 
-const metricStripTemplate = html`<Panel :tone="tone" :variant="variant || 'surfaceAlt'" class="w-full">
+const metricStripTemplate = html`<Panel :tone="tone" :variant="variant || 'surface'" class="w-full">
   <Grid
     :columns="columns || 1"
     :columnsSm="columnsSm || 2"
@@ -206,7 +206,7 @@ const codeShowcaseTemplate = html`<Panel :tone="tone" :variant="variant || 'surf
   </Flex>
 </Panel>`
 
-const comparisonTableTemplate = html`<Panel :tone="tone" :variant="variant || 'surfaceAlt'" class="mb-6">
+const comparisonTableTemplate = html`<Panel :tone="tone" :variant="variant || 'surface'" class="mb-6">
   <Flex direction="column" align="start" class="w-full">
     <SectionHeader
       r-if="eyebrow || title || subtitle"
@@ -252,7 +252,7 @@ const comparisonFeatureTemplate = html`<Flex container="li" align="start">
   <slot></slot>
 </Flex>`
 
-const ctaSectionTemplate = html`<Panel :tone="tone" :variant="variant || 'surfaceAlt'">
+const ctaSectionTemplate = html`<Panel :tone="tone" :variant="variant || 'surface'">
   <Grid columns="1" columnsLg="minmax(0, 1fr) auto" alignItems="center">
     <SectionHeader
       :eyebrow="eyebrow"

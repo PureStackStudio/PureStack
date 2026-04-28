@@ -18,7 +18,7 @@ export interface AlertBox {
 
 const alertBoxTemplate = html`<Panel
   :tone="tone || 'info'"
-  :variant="variant || 'surfaceAlt'"
+  :variant="variant || 'surface'"
   :variantMode="variantMode || 'stateless'"
 >
   <Flex align="start">
