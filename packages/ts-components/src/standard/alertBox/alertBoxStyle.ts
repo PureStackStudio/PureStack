@@ -22,7 +22,7 @@ export function applyAlertShellStyles(
 ) {
   applyAlertContainerStyles(theme, palette, options)
   applyAlertHeaderStyles(theme, palette)
-  applyAlertBodyStyles(theme, palette)
+  applyAlertBodyStyles(theme)
   applyAlertActionStyles(theme, palette, options)
   applyAlertMetaStyles(theme, palette)
 }
@@ -81,20 +81,8 @@ export function applyAlertHeaderStyles(
     .color(palette.current.text.default)
 }
 
-export function applyAlertBodyStyles(theme: ThemeMode, palette: ThemePalette) {
+export function applyAlertBodyStyles(theme: ThemeMode) {
   styleBuilder.select('.alert__body', theme).display('grid').gap('0.5em')
-  styleBuilder
-    .select('.alert__body :where(p, ul, ol)', theme)
-    .margin('0')
-    .lineHeight('1.6')
-  styleBuilder
-    .select('.alert__body :where(strong)', theme)
-    .color(palette.current.text.default)
-  styleBuilder
-    .select('.alert__body :where(a)', theme)
-    .color(palette.current.text.default)
-    .fontWeight('600')
-    .textDecoration('underline')
 }
 
 export function applyAlertActionStyles(
