@@ -1,6 +1,6 @@
 ---
-title: Alert Component Samples
-description: Rich examples for AlertBox with tone, icon, badge, and BtnLink actions via the actions slot.
+title: AlertBox Samples
+description: Examples for the utility-light AlertBox API with tones, variants, icons, badges, metadata, and actions.
 layout:
   showToc: true
   fullWidth: true
@@ -8,265 +8,272 @@ layout:
 
 # AlertBox Samples
 
-`AlertBox` is a rich, theme-aware callout component for inline notices, warnings, release notes, and action prompts.
+`AlertBox` is a small composition primitive for notices, operational updates, release prompts, and inline guidance. It now uses the shared `Panel`, `Flex`, `IconFrame`, and `Badge` primitives, so tone and variant behavior stays consistent with the rest of the system.
 
-## 1. Basic informational alert
+## Default
 
-<AlertBox
-  tone="info"
-  title="Heads up: API contract update"
-  meta="Updated 2 hours ago"
->
-  The `v2` API response now includes `traceId` in every payload.
-</AlertBox>
+<Flex direction="column">
+  <AlertBox title="Default info alert">
+    AlertBox defaults to `tone="info"` and `variant="surfaceAlt"` when no visual props are provided.
+  </AlertBox>
 
-## 2. Success alert with actions
+  <AlertBox title="Text-only alert">
+    This is the most compact shape: title plus body, no icon, no badge, no metadata.
+  </AlertBox>
 
-<AlertBox
-  tone="success"
-  title="Deployment completed"
-  badge="Stable"
-  eyebrow="Release"
-  icon="iconoir:check"
-  meta="Build #1042 finished in 3m 12s"
->
-  Your production rollout passed smoke tests and latency checks. No regressions
-  detected in core endpoints.
-  <template #actions>
-    <BtnLink tone="neutral" href="#release-notes">View release notes</BtnLink>
-    <BtnLink tone="neutral" href="#observability"
-      >Open observability dashboard</BtnLink
-    >
-  </template>
-</AlertBox>
+  <AlertBox>
+    Body-only alerts work for quiet inline notes where a title would add more noise than clarity.
+  </AlertBox>
+</Flex>
 
-## 3. Warning alert
+## Header Options
 
-<AlertBox
-  tone="warning"
-  title="Planned maintenance window"
-  icon="iconoir:clock"
-  meta="Sunday 01:00 - 02:00 UTC"
->
-  During maintenance, background job throughput may be reduced.
-  <ul>
-    <li>Read operations stay available.</li>
-    <li>Retry failed writes after the maintenance window.</li>
-    <li>Webhook delivery can be delayed by a few minutes.</li>
-  </ul>
-</AlertBox>
+<Flex direction="column">
+  <AlertBox
+    eyebrow="Release"
+    title="Deployment completed"
+    badge="Stable"
+    meta="Build #1042 finished in 3m 12s"
+    tone="success"
+    icon="lucide:circle-check"
+  >
+    Production smoke tests, latency checks, and error budget checks all passed.
+  </AlertBox>
 
-## 4. Danger alert
+  <AlertBox
+    eyebrow="Incident"
+    title="Queue processing delay"
+    badge="Investigating"
+    meta="INC-4381"
+    tone="warning"
+    icon="lucide:triangle-alert"
+  >
+    Background jobs are delayed in one region. No data loss has been observed.
+  </AlertBox>
 
-<AlertBox
-  tone="danger"
-  title="Payment authorization failed"
-  badge="Action required"
-  meta="Error code: BILLING-402"
->
-  We could not renew your subscription. Update the payment method to avoid
-  service interruption.
-  <template #actions>
-    <BtnLink tone="neutral" href="#retry-payment">Retry payment</BtnLink>
-    <BtnLink tone="neutral" href="#billing-settings"
-      >Open billing settings</BtnLink
-    >
-  </template>
-</AlertBox>
+  <AlertBox
+    eyebrow="Security"
+    title="Token rotation required"
+    badge="Critical"
+    meta="Runbook: SEC-012"
+    tone="danger"
+    icon="lucide:shield-alert"
+  >
+    Rotate the exposed token and replace dependent environment variables before restarting workers.
+  </AlertBox>
+</Flex>
 
-## 5. Accent callout
+## Actions Slot
 
-<AlertBox
-  tone="accent"
-  eyebrow="New"
-  title="Private beta: rule simulation"
-  badge="Invite only"
-  icon="iconoir:rocket"
->
-  Simulate pricing and eligibility rules before publishing changes. Compare
-  expected and computed outcomes side-by-side.
-  <template #actions>
-    <BtnLink tone="neutral" href="#join-beta">Request beta access</BtnLink>
-  </template>
-</AlertBox>
+<Flex direction="column">
+  <AlertBox
+    title="Private beta is available"
+    badge="Invite only"
+    tone="accent"
+    icon="lucide:rocket"
+  >
+    Rule simulation is ready for early testing on staging tenants.
+    <template #actions>
+      <BtnLink href="#request-access" tone="accent">Request access</BtnLink>
+      <BtnLink href="#read-plan" tone="neutral" variant="outline">Read rollout plan</BtnLink>
+    </template>
+  </AlertBox>
 
-## 6. Dense alert examples
+  <AlertBox
+    title="Billing authorization failed"
+    badge="Action required"
+    meta="Error code: BILLING-402"
+    tone="danger"
+    icon="lucide:circle-x"
+  >
+    Update the payment method to avoid service interruption on the next renewal attempt.
+    <template #actions>
+      <BtnLink href="#retry-payment" tone="danger">Retry payment</BtnLink>
+      <BtnLink href="#billing-settings" tone="neutral" variant="outline">Open settings</BtnLink>
+    </template>
+  </AlertBox>
+</Flex>
 
-<AlertBox tone="neutral" title="SDK note" icon="iconoir:code">
-  `@purestack/ts-ssg` now exports `builtInSkins` directly from the package root.
-</AlertBox>
+## Tone Gallery
 
-<AlertBox tone="info" title="Migration tip" icon="iconoir:book-stack">
-  Keep component styles palette-driven. Avoid hardcoded color values in
-  component files.
-</AlertBox>
+<Flex direction="column">
+  <AlertBox tone="neutral" title="Neutral" icon="lucide:info">
+    Useful for policy notes, low-priority context, and persistent documentation hints.
+  </AlertBox>
 
-## 7. Content-rich alert with code and list
+  <AlertBox tone="info" title="Info" icon="lucide:info">
+    The default tone for facts, tips, and non-blocking operational messages.
+  </AlertBox>
 
-<AlertBox tone="info" title="Recommended hardening steps" icon="iconoir:shield">
-  Before enabling public access:
-  <ol>
-    <li>Set strict `Content-Security-Policy` headers.</li>
-    <li>Enable detailed request logging for error triage.</li>
-    <li>Pin versions in deployment config and lockfiles.</li>
-  </ol>
-  Example config key:
-  <p><code>security.csp.defaultSrc = 'self'</code></p>
-</AlertBox>
+  <AlertBox tone="success" title="Success" icon="lucide:circle-check">
+    Use for completed work, resolved incidents, and positive system states.
+  </AlertBox>
 
-## 8. Full prop showcase
+  <AlertBox tone="warning" title="Warning" icon="lucide:triangle-alert">
+    Use when the user should adjust behavior before a problem becomes urgent.
+  </AlertBox>
+
+  <AlertBox tone="danger" title="Danger" icon="lucide:circle-alert">
+    Use for destructive states, security risk, failed payment, or data-loss potential.
+  </AlertBox>
+
+  <AlertBox tone="accent" title="Accent" icon="lucide:rocket">
+    Use for product moments, launch prompts, and high-value discovery.
+  </AlertBox>
+
+  <AlertBox tone="feature" title="Feature" icon="lucide:badge-check">
+    Use for preview capabilities, feature flags, and capability announcements.
+  </AlertBox>
+
+  <AlertBox tone="secondary" title="Secondary" icon="lucide:bell">
+    Use for alternate paths and secondary workflows that still deserve color.
+  </AlertBox>
+</Flex>
+
+## Variant Gallery
+
+<Flex direction="column">
+  <AlertBox
+    tone="info"
+    variant="surfaceAlt"
+    title="surfaceAlt"
+    icon="lucide:info"
+  >
+    The default alert surface: calm, readable, and suitable for most page content.
+  </AlertBox>
+
+  <AlertBox tone="info" variant="surface" title="surface" icon="lucide:info">
+    A quieter framed surface when the surrounding section already has enough contrast.
+  </AlertBox>
+
+  <AlertBox tone="info" variant="outline" title="outline" icon="lucide:info">
+    Border-first treatment for dense documentation and stacked callouts.
+  </AlertBox>
+
+  <AlertBox
+    tone="info"
+    variant="outlineFill"
+    title="outlineFill"
+    icon="lucide:info"
+  >
+    Stronger border treatment for notes that need more presence without a solid fill.
+  </AlertBox>
+
+  <AlertBox tone="info" variant="solid" title="solid" icon="lucide:info">
+    High-emphasis treatment for the one alert that should dominate the group.
+  </AlertBox>
+
+  <AlertBox tone="info" variant="subtle" title="subtle" icon="lucide:info">
+    Low-emphasis treatment for short supporting context.
+  </AlertBox>
+
+  <AlertBox tone="info" variant="rail" title="rail" icon="lucide:info">
+    Editorial callout style for guide pages and long-form docs.
+  </AlertBox>
+
+  <AlertBox tone="info" variant="bracket" title="bracket" icon="lucide:info">
+    Compact annotation style for contextual asides.
+  </AlertBox>
+</Flex>
+
+## Stateful Variant Mode
+
+<Flex direction="column">
+  <AlertBox
+    tone="accent"
+    variant="surface"
+    variantMode="stateful"
+    title="Stateful surface"
+    icon="lucide:settings"
+    badge="Interactive"
+  >
+    `variantMode="stateful"` applies hover and active variant classes. Use it when an alert behaves like an interactive choice or opens a richer flow.
+    <template #actions>
+      <BtnLink href="#configure" tone="accent">Configure</BtnLink>
+    </template>
+  </AlertBox>
+
+  <AlertBox
+    tone="secondary"
+    variant="outline"
+    variantMode="stateful"
+    title="Stateful outline"
+    icon="lucide:bell"
+  >
+    The same alert structure can participate in interactive stacks without adding custom alert styles.
+  </AlertBox>
+</Flex>
+
+## Content Shapes
+
+<Flex direction="column">
+  <AlertBox tone="info" title="Markdown content" icon="lucide:code">
+    Alert body content can include inline `code`, lists, and regular MDX prose.
+
+    <ul>
+      <li>Keep the component shell consistent.</li>
+      <li>Let content define the message density.</li>
+      <li>Use actions only when the next step is clear.</li>
+    </ul>
+  </AlertBox>
+
+  <AlertBox
+    tone="warning"
+    title="Maintenance window"
+    badge="Scheduled"
+    meta="Sunday 01:00 - 02:00 UTC"
+    icon="lucide:triangle-alert"
+  >
+    Background throughput may be reduced during index maintenance. Reads stay available.
+    <template #actions>
+      <BtnLink href="#maintenance" tone="warning">View maintenance note</BtnLink>
+    </template>
+  </AlertBox>
+
+  <AlertBox
+    tone="success"
+    variant="rail"
+    title="Migration complete"
+    icon="lucide:circle-check"
+  >
+    The tenant moved to the new runtime successfully. Old queue workers are drained and disabled.
+  </AlertBox>
+</Flex>
+
+## Compact Stack
+
+<Flex direction="column">
+  <AlertBox tone="neutral" title="SDK note" icon="lucide:code">
+    The package root exports the stable component registry.
+  </AlertBox>
+
+  <AlertBox tone="info" title="Docs note" icon="lucide:info">
+    Prefer shared variants over one-off component classes.
+  </AlertBox>
+
+  <AlertBox tone="success" title="Ready to publish" icon="lucide:badge-check">
+    Changelog, export map, and sample content are aligned.
+  </AlertBox>
+</Flex>
+
+## API Reference
 
 ```html
 <AlertBox
-  tone="info|success|warning|danger|accent|neutral"
-  title="Alert title"
+  tone="info"
+  variant="surfaceAlt"
+  variantMode="stateless"
   eyebrow="Optional eyebrow"
+  title="Alert title"
   badge="Optional badge"
-  meta="Optional metadata line"
-  icon="iconoir:check|iconoir:clock|iconoir:headset-help|iconoir:rocket"
+  meta="Optional metadata"
+  icon="lucide:info"
 >
-  Body content goes here.
+  Alert body content.
+
   <template #actions>
-    <BtnLink tone="neutral" href="#">Primary action</BtnLink>
-    <BtnLink tone="neutral" href="#">Secondary action</BtnLink>
+    <BtnLink href="#primary">Primary action</BtnLink>
+    <BtnLink href="#secondary" variant="outline">Secondary action</BtnLink>
   </template>
 </AlertBox>
 ```
-
-## 9. Release planning notice
-
-<AlertBox
-  tone="warning"
-  eyebrow="Release planning"
-  title="Webhook contract is changing before launch"
-  badge="Breaking change"
-  icon="iconoir:clock"
-  meta="Planned rollout: next milestone"
->
-  The draft endpoint `/api/webhooks/events` will move to
-  `/api/runtime/webhooks/events` before the first public release. Update
-  integration docs and internal references now.
-  <template #actions>
-    <BtnLink tone="neutral" href="#integration-notes"
-      >Open integration notes</BtnLink
-    >
-    <BtnLink tone="neutral" href="#release-checklist"
-      >Read release checklist</BtnLink
-    >
-  </template>
-</AlertBox>
-
-## 10. Security advisory
-
-<AlertBox
-  tone="danger"
-  eyebrow="Security"
-  title="Rotate leaked token immediately"
-  badge="Critical"
-  icon="iconoir:shield"
->
-  A token with elevated privileges was exposed in build logs. Revoke all
-  compromised keys and issue new scoped tokens.
-  <template #actions>
-    <BtnLink tone="neutral" href="#rotate-keys">Rotate keys now</BtnLink>
-    <BtnLink tone="neutral" href="#security-runbook"
-      >Open incident runbook</BtnLink
-    >
-  </template>
-</AlertBox>
-
-## 11. Incident status update
-
-<AlertBox
-  tone="info"
-  eyebrow="Incident"
-  title="Queue processing delays in EU region"
-  badge="Investigating"
-  icon="iconoir:headset-help"
-  meta="INC-4381 • Last update 14:42 UTC"
->
-  We are seeing elevated queue latency for EU workloads. No data loss has been
-  observed.
-  <template #actions>
-    <BtnLink tone="neutral" href="#status-page"
-      >View public status page</BtnLink
-    >
-    <BtnLink tone="neutral" href="#subscribe-updates"
-      >Subscribe to updates</BtnLink
-    >
-  </template>
-</AlertBox>
-
-## 12. Feature flag notice
-
-<AlertBox
-  tone="accent"
-  title="New cache engine behind feature flag"
-  eyebrow="Rollout"
-  badge="Canary"
-  icon="iconoir:rocket"
->
-  Enable `runtime.cache.v2` for 5% traffic first. Measure p95 latency and
-  error-rate before expanding rollout.
-</AlertBox>
-
-## 13. Compliance policy alert
-
-<AlertBox
-  tone="neutral"
-  title="Data retention policy updated"
-  eyebrow="Policy"
-  icon="iconoir:book-stack"
-  meta="Effective: next billing cycle"
->
-  Audit log retention changed from 30 to 90 days for all paid plans. Contact
-  legal if your tenant requires a custom retention term.
-</AlertBox>
-
-## 14. Maintenance completed
-
-<AlertBox
-  tone="success"
-  title="Maintenance completed successfully"
-  badge="Resolved"
-  icon="iconoir:check"
-  meta="Total downtime: 0 minutes"
->
-  Schema migration and index optimization are complete. Throughput improved by
-  approximately 18%.
-  <template #actions>
-    <BtnLink tone="neutral" href="#postmortem"
-      >Read maintenance summary</BtnLink
-    >
-  </template>
-</AlertBox>
-
-## 15. No-icon text-only alert
-
-<AlertBox tone="warning" title="Quota nearing limit">
-  Current usage is at 92% of your monthly allocation.
-</AlertBox>
-
-## 16. Dense checklist alert
-
-<AlertBox
-  tone="accent"
-  eyebrow="Launch checklist"
-  title="Before publishing your SDK"
-  icon="iconoir:code"
->
-  <ul>
-    <li>Confirm semantic version and changelog entries.</li>
-    <li>Run docs build and verify code examples compile.</li>
-    <li>Validate package export map in Node ESM and CJS projects.</li>
-    <li>Smoke-test install on a clean environment.</li>
-  </ul>
-  <template #actions>
-    <BtnLink tone="neutral" href="#release-checklist"
-      >Open full checklist</BtnLink
-    >
-    <BtnLink tone="neutral" href="#publish-runbook"
-      >Open publish runbook</BtnLink
-    >
-  </template>
-</AlertBox>

@@ -129,36 +129,35 @@ const landingSectionTemplate = html`<Panel
   </Grid>
 </Panel>`
 
-const featureCardTemplate = html`<Panel
-  :tone="tone"
-  :variant="variant || 'surface'"
-  class="h-full"
->
-  <Flex direction="column" align="start" class="gap-3 h-full">
-    <Flex align="center" justify="between" class="w-full gap-3" r-if="icon || badge">
+const featureCardTemplate = html`<Panel :tone="tone" :variant="variant || 'surface'" class="h-full">
+  <Flex direction="column" align="start" class="gap-3 h-full" justify="center">
+    <Flex
+      align="center"
+      justify="center"
+      class="w-full gap-3"
+      r-if="icon || badge"
+    >
       <IconFrame
         r-if="icon"
         :name="icon"
         :tone="tone"
-        variant="surface"
+        :variant="variant"
         class="icon-frame--lg"/>
       <Badge r-if="badge" :tone="tone">{{ badge }}</Badge>
     </Flex>
-    <p class="text-eyebrow mb-0" r-if="eyebrow">{{ eyebrow }}</p>
-    <h3 class="fs-h4 fw-700 lh-2 mb-0" r-if="title">{{ title }}</h3>
-    <p class="text-tagline mb-0" r-if="summary">{{ summary }}</p>
-    <div class="min-w-0 lh-6"><slot></slot></div>
+    <Flex direction="column" align="center" class="text-justify">
+      <p class="text-eyebrow" r-if="eyebrow">{{ eyebrow }}</p>
+      <h3 class="fs-h4 fw-700 my-0" r-if="title">{{ title }}</h3>
+      <p class="text-tagline mb-0" r-if="summary">{{ summary }}</p>
+      <slot></slot>
+    </Flex>
     <Flex wrap="true" class="gap-2 mt-auto">
       <slot name="actions"></slot>
     </Flex>
   </Flex>
 </Panel>`
 
-const metricStripTemplate = html`<Panel
-  :tone="tone"
-  :variant="variant || 'surfaceAlt'"
-  class="w-full"
->
+const metricStripTemplate = html`<Panel :tone="tone" :variant="variant || 'surfaceAlt'" class="w-full">
   <Grid
     :columns="columns || 1"
     :columnsSm="columnsSm || 2"
@@ -169,26 +168,22 @@ const metricStripTemplate = html`<Panel
   </Grid>
 </Panel>`
 
-const metricItemTemplate = html`<Flex align="start" class="gap-2 min-w-0">
+const metricItemTemplate = html`<Flex align="start">
   <IconFrame
     r-if="icon"
     :name="icon"
     :tone="tone"
     variant="surface"
     class="icon-frame--sm"/>
-  <div class="min-w-0">
+  <div>
     <p class="prose-meta mb-1" r-if="label">{{ label }}</p>
-    <strong class="fs-body lh-2" r-if="value">{{ value }}</strong>
+    <strong class="fs-body" r-if="value">{{ value }}</strong>
     <p class="text-subtle fs-xs mb-0" r-if="detail">{{ detail }}</p>
     <slot></slot>
   </div>
 </Flex>`
 
-const codeShowcaseTemplate = html`<Panel
-  :tone="tone"
-  :variant="variant || 'surface'"
-  class="h-full"
->
+const codeShowcaseTemplate = html`<Panel :tone="tone" :variant="variant || 'surface'" class="h-full">
   <Flex direction="column" class="gap-4 h-full">
     <Flex align="start" justify="between" wrap="true" class="gap-3">
       <SectionHeader
@@ -203,7 +198,12 @@ const codeShowcaseTemplate = html`<Panel
     <Panel variant="outline" tone="neutral" class="box-shadow-none">
       <slot></slot>
     </Panel>
-    <Panel r-if="resultTitle || resultMeta" :tone="tone" variant="outline" class="box-shadow-none">
+    <Panel
+      r-if="resultTitle || resultMeta"
+      :tone="tone"
+      variant="outline"
+      class="box-shadow-none"
+    >
       <Flex align="center" justify="between" wrap="true" class="gap-2">
         <strong r-if="resultTitle">{{ resultTitle }}</strong>
         <Badge r-if="resultMeta" :tone="tone">{{ resultMeta }}</Badge>
@@ -215,11 +215,7 @@ const codeShowcaseTemplate = html`<Panel
   </Flex>
 </Panel>`
 
-const comparisonTableTemplate = html`<Panel
-  :tone="tone"
-  :variant="variant || 'surfaceAlt'"
-  class="mb-6"
->
+const comparisonTableTemplate = html`<Panel :tone="tone" :variant="variant || 'surfaceAlt'" class="mb-6">
   <Flex direction="column" align="start" class="gap-4 w-full">
     <SectionHeader
       r-if="eyebrow || title || subtitle"
@@ -239,13 +235,9 @@ const comparisonTableTemplate = html`<Panel
   </Flex>
 </Panel>`
 
-const comparisonColumnTemplate = html`<Panel
-  :tone="tone"
-  :variant="variant || 'surface'"
-  class="h-full"
->
-  <Flex direction="column" align="start" class="gap-3 h-full">
-    <Flex align="center" justify="between" class="w-full gap-3" r-if="icon || badge">
+const comparisonColumnTemplate = html`<Panel :tone="tone" :variant="variant || 'surface'" class="h-full">
+  <Flex direction="column" align="start" class="h-full">
+    <Flex align="center" justify="between" class="w-full" r-if="icon || badge">
       <IconFrame
         r-if="icon"
         :name="icon"
@@ -254,34 +246,19 @@ const comparisonColumnTemplate = html`<Panel
         class="icon-frame--lg"/>
       <Badge r-if="badge" :tone="tone">{{ badge }}</Badge>
     </Flex>
-    <h3 class="fs-h4 fw-700 lh-2 mb-0" r-if="title">{{ title }}</h3>
+    <h3 class="fs-h4 fw-700 my-0" r-if="title">{{ title }}</h3>
     <p class="text-tagline mb-0" r-if="summary">{{ summary }}</p>
-    <Flex
-      container="ul"
-      direction="column"
-      align="start"
-      class="gap-3 m-0 p-0 w-full"
-    >
-      <slot></slot>
-    </Flex>
+    <slot></slot>
   </Flex>
 </Panel>`
 
-const comparisonFeatureTemplate = html`<Flex container="li" align="start" class="gap-2 min-w-0">
-  <IconFrame
-    :name="icon || 'lucide:check'"
-    :tone="tone"
-    variant="surface"
-    class="icon-frame--sm"/>
-  <span class="min-w-0 lh-5"><slot></slot></span>
+const comparisonFeatureTemplate = html`<Flex container="li" align="start">
+  <IconFrame :name="icon || 'lucide:check'" :tone="tone" variant="surface"/>
+  <slot></slot>
 </Flex>`
 
-const ctaSectionTemplate = html`<Panel
-  :tone="tone"
-  :variant="variant || 'surfaceAlt'"
-  class="mb-6"
->
-  <Grid columns="1" columnsLg="minmax(0, 1fr) auto" alignItems="center" class="gap-4">
+const ctaSectionTemplate = html`<Panel :tone="tone" :variant="variant || 'surfaceAlt'">
+  <Grid columns="1" columnsLg="minmax(0, 1fr) auto" alignItems="center">
     <SectionHeader
       :eyebrow="eyebrow"
       :title="title"
@@ -289,7 +266,7 @@ const ctaSectionTemplate = html`<Panel
       titleTag="h2"
       titleClass="fs-h2 mb-2"
       subtitleClass="mb-0"/>
-    <Flex align="center" justify="end" wrap="true" class="gap-3">
+    <Flex align="center" justify="end" wrap="true">
       <BtnLink
         r-if="primaryLabel && primaryHref"
         :href="primaryHref"

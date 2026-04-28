@@ -275,6 +275,12 @@ function applyTextUtilities(theme: string, palette: ThemePalette) {
       theme,
     )
     .textDecoration('underline !important')
+  styleBuilder.select('.text-left', theme).textAlign('left !important')
+  styleBuilder.select('.text-center', theme).textAlign('center !important')
+  styleBuilder.select('.text-right', theme).textAlign('right !important')
+  styleBuilder.select('.text-start', theme).textAlign('start !important')
+  styleBuilder.select('.text-end', theme).textAlign('end !important')
+  styleBuilder.select('.text-justify', theme).textAlign('justify !important')
   styleBuilder.select('.uppercase', theme).textTransform('uppercase !important')
 
   styleBuilder
