@@ -116,7 +116,6 @@ const landingSectionTemplate = html`<Panel
     columns="1"
     :columnsLg="columnsLg || columns"
     :alignItems="alignItems || 'start'"
-    class="gap-6"
   >
     <SectionHeader
       r-if="eyebrow || title || subtitle"
@@ -130,13 +129,8 @@ const landingSectionTemplate = html`<Panel
 </Panel>`
 
 const featureCardTemplate = html`<Panel :tone="tone" :variant="variant || 'surface'" class="h-full">
-  <Flex direction="column" align="start" class="gap-3 h-full" justify="center">
-    <Flex
-      align="center"
-      justify="center"
-      class="w-full gap-3"
-      r-if="icon || badge"
-    >
+  <Flex direction="column" align="start" class="h-full" justify="center">
+    <Flex align="center" justify="center" class="w-full" r-if="icon || badge">
       <IconFrame
         r-if="icon"
         :name="icon"
@@ -151,7 +145,7 @@ const featureCardTemplate = html`<Panel :tone="tone" :variant="variant || 'surfa
       <p class="text-tagline mb-0" r-if="summary">{{ summary }}</p>
       <slot></slot>
     </Flex>
-    <Flex wrap="true" class="gap-2 mt-auto">
+    <Flex wrap="true" class="mt-auto">
       <slot name="actions"></slot>
     </Flex>
   </Flex>
@@ -162,7 +156,6 @@ const metricStripTemplate = html`<Panel :tone="tone" :variant="variant || 'surfa
     :columns="columns || 1"
     :columnsSm="columnsSm || 2"
     :columnsLg="columnsLg || 4"
-    class="gap-3"
   >
     <slot></slot>
   </Grid>
@@ -184,8 +177,8 @@ const metricItemTemplate = html`<Flex align="start">
 </Flex>`
 
 const codeShowcaseTemplate = html`<Panel :tone="tone" :variant="variant || 'surface'" class="h-full">
-  <Flex direction="column" class="gap-4 h-full">
-    <Flex align="start" justify="between" wrap="true" class="gap-3">
+  <Flex direction="column" class="h-full">
+    <Flex align="start" justify="between" wrap="true">
       <SectionHeader
         :eyebrow="eyebrow"
         :title="title"
@@ -204,19 +197,17 @@ const codeShowcaseTemplate = html`<Panel :tone="tone" :variant="variant || 'surf
       variant="outline"
       class="box-shadow-none"
     >
-      <Flex align="center" justify="between" wrap="true" class="gap-2">
+      <Flex align="center" justify="between" wrap="true" class="mb-2">
         <strong r-if="resultTitle">{{ resultTitle }}</strong>
         <Badge r-if="resultMeta" :tone="tone">{{ resultMeta }}</Badge>
       </Flex>
-      <div class="mt-3 min-w-0">
-        <slot name="result"></slot>
-      </div>
+      <slot name="result"></slot>
     </Panel>
   </Flex>
 </Panel>`
 
 const comparisonTableTemplate = html`<Panel :tone="tone" :variant="variant || 'surfaceAlt'" class="mb-6">
-  <Flex direction="column" align="start" class="gap-4 w-full">
+  <Flex direction="column" align="start" class="w-full">
     <SectionHeader
       r-if="eyebrow || title || subtitle"
       :eyebrow="eyebrow"
@@ -228,7 +219,7 @@ const comparisonTableTemplate = html`<Panel :tone="tone" :variant="variant || 's
       :columns="columns || 1"
       :columnsLg="columnsLg || 3"
       alignItems="stretch"
-      class="gap-4 w-full"
+      class="w-full"
     >
       <slot></slot>
     </Grid>
