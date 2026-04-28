@@ -38,12 +38,12 @@ function registerIconBaseStyles(theme: string, options: ThemeOptions) {
   styleBuilder
     .select('.icon-frame--sm', theme)
     .borderRadius(options.radii.sm)
-    .padding('0.25em')
-    .fontSize('0.82rem')
+    .padding('0.5em')
+    .fontSize('0.6em')
 
   styleBuilder
     .select('.icon-frame--lg', theme)
     .borderRadius('0.75rem')
     .padding('0.5em')
-    .fontSize('1.12rem')
+    .fontSize('1.5em')
 }

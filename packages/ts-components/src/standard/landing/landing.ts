@@ -136,7 +136,7 @@ const featureCardTemplate = html`<Panel :tone="tone" :variant="variant || 'surfa
         :name="icon"
         :tone="tone"
         :variant="variant"
-        class="icon-frame--lg"/>
+        size="lg"/>
       <Badge r-if="badge" :tone="tone">{{ badge }}</Badge>
     </Flex>
     <Flex direction="column" align="center" class="text-justify">
@@ -167,7 +167,7 @@ const metricItemTemplate = html`<Flex align="start">
     :name="icon"
     :tone="tone"
     variant="surface"
-    class="icon-frame--sm"/>
+    size="sm"/>
   <div>
     <p class="prose-meta mb-1" r-if="label">{{ label }}</p>
     <strong class="fs-body" r-if="value">{{ value }}</strong>
@@ -233,8 +233,8 @@ const comparisonColumnTemplate = html`<Panel :tone="tone" :variant="variant || '
         r-if="icon"
         :name="icon"
         :tone="tone"
-        variant="surface"
-        class="icon-frame--lg"/>
+        :variant="variant"
+        size="lg"/>
       <Badge r-if="badge" :tone="tone">{{ badge }}</Badge>
     </Flex>
     <h3 class="fs-h4 fw-700 my-0" r-if="title">{{ title }}</h3>
@@ -244,7 +244,11 @@ const comparisonColumnTemplate = html`<Panel :tone="tone" :variant="variant || '
 </Panel>`
 
 const comparisonFeatureTemplate = html`<Flex container="li" align="start">
-  <IconFrame :name="icon || 'lucide:check'" :tone="tone" variant="surface"/>
+  <IconFrame
+    :name="icon || 'lucide:check'"
+    :tone="tone"
+    variant="surface"
+    size="sm"/>
   <slot></slot>
 </Flex>`
 

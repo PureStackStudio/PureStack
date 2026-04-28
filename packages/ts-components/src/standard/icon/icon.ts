@@ -14,6 +14,7 @@ import {
 } from '../componentVariant'
 
 export type GetSvgIcon = (name: string) => string
+export type IconFrameSize = 'sm' | 'md' | 'lg'
 
 export interface Icon {
   name?: RefOrValue<string>
@@ -23,6 +24,7 @@ export interface Icon {
 export interface IconFrame {
   name?: RefOrValue<string>
   tone?: RefOrValue<SemanticTone>
+  size?: RefOrValue<IconFrameSize>
   variant?: RefOrValue<ComponentVariant>
   variantMode?: RefOrValue<ComponentVariantMode>
   classes?: ComputedRef<string>
@@ -47,7 +49,7 @@ function defineIconComponent(getSvgIcon: GetSvgIcon) {
 
 function defineIconFrameComponent() {
   return defineComponent<IconFrame>(iconFrameTemplate, {
-    props: ['name', 'tone', 'variant', 'variantMode'],
+    props: ['name', 'tone', 'size', 'variant', 'variantMode'],
     context: (head) => resolveIconFrame(head.props),
   })
 }
@@ -79,7 +81,16 @@ function resolveIconFrame(props: IconFrame): IconFrame {
       resolveComponentClasses(props, {
         defaultVariant: DEFAULT_ICON_FRAME_VARIANT,
         defaultVariantMode: DEFAULT_ICON_FRAME_VARIANT_MODE,
+        classes: [resolveIconFrameSizeClass(props.size)],
       }),
     ),
   }
+}
+
+function resolveIconFrameSizeClass(size?: RefOrValue<IconFrameSize>) {
+  const resolvedSize = unref(size)
+  if (resolvedSize === 'sm' || resolvedSize === 'lg') {
+    return `icon-frame--${resolvedSize}`
+  }
+  return ''
 }

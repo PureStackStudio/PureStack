@@ -55,7 +55,12 @@ export { registerFormStyles } from './standard/form/formStyle'
 export type { Grid } from './standard/grid/grid'
 export { defineGridComponents } from './standard/grid/grid'
 export { registerGridStyles } from './standard/grid/gridStyle'
-export type { GetSvgIcon, Icon, IconFrame } from './standard/icon/icon'
+export type {
+  GetSvgIcon,
+  Icon,
+  IconFrame,
+  IconFrameSize,
+} from './standard/icon/icon'
 export { defineIconComponents } from './standard/icon/icon'
 export { registerIconStyles } from './standard/icon/iconStyle'
 export type {

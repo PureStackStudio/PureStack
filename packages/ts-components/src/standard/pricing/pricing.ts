@@ -67,7 +67,8 @@ const pricingPlanTemplate = html`<Panel :tone="tone" :class="panelClass">
         :name="icon"
         :tone="tone"
         variant="surface"
-        class="pricing-plan__icon icon-frame--lg"/>
+        size="lg"
+        class="pricing-plan__icon"/>
       <Badge r-if="badge">{{ badge }}</Badge>
     </Flex>
     <SectionHeader
@@ -99,7 +100,8 @@ const pricingFeatureTemplate = html`<Flex container="li" align="start" class="pr
   <IconFrame
     :name="icon || 'iconoir:check'"
     variant="surface"
-    class="pricing-feature__icon icon-frame--sm"/>
+    size="sm"
+    class="pricing-feature__icon"/>
   <span class="min-w-0"><slot></slot></span>
 </Flex>`
 
