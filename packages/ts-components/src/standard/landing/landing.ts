@@ -128,8 +128,8 @@ const landingSectionTemplate = html`<Panel
   </Grid>
 </Panel>`
 
-const featureCardTemplate = html`<Panel :tone="tone" :variant="variant || 'surface'" class="h-full">
-  <Flex direction="column" align="start" class="h-full" justify="center">
+const featureCardTemplate = html`<Panel :tone="tone" :variant="variant || 'surface'">
+  <Flex direction="column" align="start" justify="center">
     <Flex align="center" justify="center" class="w-full" r-if="icon || badge">
       <IconFrame
         r-if="icon"
@@ -176,8 +176,8 @@ const metricItemTemplate = html`<Flex align="start">
   </div>
 </Flex>`
 
-const codeShowcaseTemplate = html`<Panel :tone="tone" :variant="variant || 'surface'" class="h-full">
-  <Flex direction="column" class="h-full">
+const codeShowcaseTemplate = html`<Panel :tone="tone" :variant="variant || 'surface'">
+  <Flex direction="column">
     <Flex align="start" justify="between" wrap="true">
       <SectionHeader
         :eyebrow="eyebrow"
@@ -226,8 +226,8 @@ const comparisonTableTemplate = html`<Panel :tone="tone" :variant="variant || 's
   </Flex>
 </Panel>`
 
-const comparisonColumnTemplate = html`<Panel :tone="tone" :variant="variant || 'surface'" class="h-full">
-  <Flex direction="column" align="start" class="h-full">
+const comparisonColumnTemplate = html`<Panel :tone="tone" :variant="variant || 'surface'">
+  <Flex direction="column" align="start">
     <Flex align="center" justify="between" class="w-full" r-if="icon || badge">
       <IconFrame
         r-if="icon"
