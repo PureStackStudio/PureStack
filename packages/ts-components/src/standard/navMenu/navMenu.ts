@@ -20,7 +20,7 @@ export interface NavList {
 export interface NavItemState extends NavItem {
   isActive: boolean
   isOpen: boolean
-  linkClass?: string
+  linkClass?: string[]
   ariaCurrent?: string
 }
 
@@ -32,7 +32,7 @@ const navItemTemplate = html`<li class="nav__item">
   >
     <summary class="nav__summary w-full">
       <BtnLink
-        variant="subtleBtn"
+        variant="none"
         :tone="item.tone"
         :class="item.linkClass"
         :aria-current="item.ariaCurrent"
@@ -48,7 +48,7 @@ const navItemTemplate = html`<li class="nav__item">
   </details>
   <BtnLink
     r-else
-    variant="subtleBtn"
+    variant="none"
     :href="item.url"
     :tone="item.tone"
     :class="item.linkClass"
@@ -70,7 +70,7 @@ const navMenuTemplate = html`<nav
   <div class="nav__header-row">
     <div class="nav__header">Navigation</div>
     <button
-      class="nav__panel-toggle tone-fill-button-all tone-text-button-all tone-border-button-all"
+      class="nav__panel-toggle tone-fill-surface-all tone-text-surface-all tone-border-surface-all"
       type="button"
       title="Navigation"
       aria-label="Toggle navigation panel"
@@ -82,7 +82,7 @@ const navMenuTemplate = html`<nav
       <span class="nav__panel-toggle-label">navigation</span>
     </button>
     <button
-      class="nav__collapse-toggle tone-text-button-all tone-fill-button-hover tone-fill-button-active tone-border-button-hover tone-border-button-active"
+      class="nav__collapse-toggle tone-text-surface-all tone-fill-surface-hover tone-fill-surface-active tone-border-surface-hover tone-border-surface-active"
       type="button"
       title="Collapse navigation"
       aria-label="Collapse navigation"
@@ -147,7 +147,6 @@ function buildNavState(
   currentPath: string | undefined,
 ): NavItemState[] {
   return items.map((item) => {
-    const tone = item.tone
     const childStates = item.children
       ? buildNavState(item.children, currentPath)
       : []
@@ -160,17 +159,14 @@ function buildNavState(
     )
     return {
       ...item,
-      tone,
+      tone: isActive ? 'accent' : 'neutral',
       ...(childStates.length > 0 ? { children: childStates } : {}),
       isActive,
       isOpen: isActive || hasActiveChild,
       linkClass: [
-        'fs-body ws-normal justify-start w-full',
-        'nav__link',
-        isActive ? 'active' : '',
-      ]
-        .filter(Boolean)
-        .join(' '),
+        'fs-body ws-normal justify-start w-full tone-fill-surface-hover tone-fill-surface-active rounded-sm',
+        isActive ? 'active tone-text-surface-active' : 'tone-text',
+      ],
       ariaCurrent: isActive ? 'page' : undefined,
     }
   })

@@ -146,14 +146,16 @@ export function createTone(
   isGhost = false,
   chrome: ToneChromeOptions = {},
 ): Tone {
+  const surfaceDelta = 10
+  const buttonDelta = 10
   const canvas = createScale(colors.canvas, 3, mode)
-  const buttonBg = createScale(colors.button, 10, mode)
+  const buttonBg = createScale(colors.button, buttonDelta, mode)
   const foreground = createScale(colors.foreground, 1, mode)
   const rootForeground = createScale(colors.foreground, 7, mode)
   const rootBorder = createScale(colors.border, 7, mode)
   const border = createScale(colors.border, 1, mode)
-  const surface = createScale(colors.surface, 10, mode)
-  const surfaceAlt = createScale(colors.surfaceAlt, 10, mode)
+  const surface = createScale(colors.surface, surfaceDelta, mode)
+  const surfaceAlt = createScale(colors.surfaceAlt, surfaceDelta, mode)
   const defaultText = foreground.level3
   const subtleText = subtleTone(foreground.level1)
   const defaultBorder = borderTone(border.level3)

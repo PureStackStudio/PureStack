@@ -33,7 +33,7 @@ const bestColors = {
     neutral: '#3f2b47',
   },
 }
-export const { accent, neutral } = bestColors.standardBlue
+export const { accent, neutral } = bestColors.red
 export const feature = '#cb166e'
 export const secondary = '#116db4'
 export const custom = '#e35508'
