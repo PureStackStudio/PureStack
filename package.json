@@ -24,6 +24,7 @@
   "scripts": {
     "dev": "yarn tsx --watch packages/ts-ssg/src/index.ts",
     "embed": "yarn tsx scripts/embed.ts && yarn format",
+    "regor-components": "yarn tsx scripts/regor-components.ts",
     "gen-icons": "yarn tsx scripts/generate-icons.ts",
     "build": "yarn workspaces foreach --no-private --all --verbose --topological -- run build",
     "lint": "yarn workspaces foreach --no-private --all --verbose --topological -- run lint && yarn lint-mygate",
@@ -34,7 +35,7 @@
     "pack-vscode-ext": "yarn --cwd packages/ts-ssg-vscode build && yarn --cwd packages/ts-ssg-vscode package",
     "longest": "yarn tsx ./scripts/longest-functions.ts",
     "format": "biome format --write",
-    "pre-commit": "yarn embed && yarn format && yarn lint && yarn build && yarn test run",
+    "pre-commit": "yarn regor-components && yarn embed && yarn format && yarn lint && yarn build && yarn test run",
     "mygate": "yarn tsx --watch packages/ts-ssg/src/index.ts --content MyGate/MyGateApp/admin-panel/content --serve",
     "lint-mygate": "biome check MyGate/MyGateApp/admin-panel/content --write --formatter-enabled=false",
     "format-mygate": "biome format MyGate/MyGateApp/admin-panel/content --write"

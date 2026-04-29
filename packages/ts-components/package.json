@@ -29,6 +29,7 @@
   ],
   "scripts": {
     "build": "tsc",
+    "regor-components": "yarn tsx ../../scripts/regor-components.ts",
     "lint": "biome check ./src --formatter-enabled=false --write",
     "test": "vitest"
   },
@@ -67,14 +68,15 @@
     "Grid",
     "Icon",
     "IconFrame",
+    "LandingBand",
     "LandingSection",
     "LoginFooter",
     "LoginHeader",
     "LoginProvider",
-    "Modal",
-    "ModalTrigger",
     "MetricItem",
     "MetricStrip",
+    "Modal",
+    "ModalTrigger",
     "NavList",
     "NavMenu",
     "PageScript",
@@ -85,10 +87,12 @@
     "PricingTable",
     "RegorApp",
     "SearchBox",
+    "SectionHeader",
     "SiteFooter",
     "SiteLogo",
     "TabPane",
     "Tabs",
+    "ThemeSwitcher",
     "TopBar"
   ]
 }
