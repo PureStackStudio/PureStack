@@ -7,35 +7,46 @@ const bestColors = {
   standardBlue: {
     accent: '#1788f1',
     neutral: '#232c38',
+    secondary: '#116db4',
   },
-  orangeBlue: {
-    accent: '#c7690a',
-    neutral: '#2a5b68',
+  blue: {
+    accent: '#2874b7',
+    neutral: '#2a435a',
+    secondary: '#245e6b',
   },
-  orangeDarkBlue: {
-    accent: '#c7690a',
-    neutral: '#232c38',
+  orange: {
+    accent: '#c7460a',
+    neutral: '#260d05',
+    secondary: '#821e4b',
   },
   yellow: {
     accent: '#b6a012',
     neutral: '#6d6626',
+    secondary: '#d7951a',
   },
   red: {
     accent: '#ea1111',
     neutral: '#495e70',
+    secondary: '#9a3a27',
+  },
+  redSkin: {
+    accent: '#ea1111',
+    neutral: '#5d2929',
+    secondary: '#9a3a27',
   },
   green: {
-    accent: '#1cc82a',
-    neutral: '#2b4739',
+    accent: '#50b728',
+    neutral: '#47452b',
+    secondary: '#546f26',
   },
   pink: {
     accent: '#c81c9a',
     neutral: '#3f2b47',
+    secondary: '#43194e',
   },
 }
-export const { accent, neutral } = bestColors.red
+export const { accent, neutral, secondary } = bestColors.green
 export const feature = '#cb166e'
-export const secondary = '#116db4'
 export const custom = '#e35508'
 export const info = '#15a9c0'
 export const success = '#259740'

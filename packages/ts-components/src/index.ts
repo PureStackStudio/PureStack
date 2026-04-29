@@ -70,6 +70,8 @@ export type {
   ComparisonTable,
   CtaSection,
   FeatureCard,
+  LandingBand,
+  LandingBandImageFit,
   LandingSection,
   MetricItem,
   MetricStrip,

@@ -1,10 +1,26 @@
+import type { CSSProps } from '@purestack/ts-css'
 import type { SemanticTone } from '@purestack/ts-style'
-import { defineComponent, html, type RefOrValue } from 'regor'
+import {
+  type ComputedRef,
+  computed,
+  defineComponent,
+  html,
+  type RefOrValue,
+  unref,
+} from 'regor'
 import type {
   ComponentVariant,
   ComponentVariantMode,
 } from '../componentVariant'
+import { resolveComponentClasses } from '../componentVariant'
 import type { GridAlignItems } from '../grid/grid'
+
+export type LandingBandImageFit =
+  | 'cover'
+  | 'contain'
+  | 'fill'
+  | 'none'
+  | 'scale-down'
 
 export type LandingTitleTag =
   | 'h1'
@@ -16,6 +32,22 @@ export type LandingTitleTag =
   | 'p'
   | 'div'
   | 'span'
+
+export interface LandingBand {
+  tone?: RefOrValue<SemanticTone>
+  variant?: RefOrValue<ComponentVariant>
+  variantMode?: RefOrValue<ComponentVariantMode>
+  image?: RefOrValue<string>
+  imageFit?: RefOrValue<LandingBandImageFit>
+  imagePosition?: RefOrValue<string>
+  height?: RefOrValue<string>
+  paddingTop?: RefOrValue<string>
+  paddingBottom?: RefOrValue<string>
+  marginTop?: RefOrValue<string>
+  marginBottom?: RefOrValue<string>
+  classes?: ComputedRef<string>
+  bandStyle?: ComputedRef<Partial<CSSProps>>
+}
 
 export interface LandingSection {
   eyebrow?: RefOrValue<string>
@@ -105,6 +137,14 @@ export interface CtaSection {
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
 }
+
+const DEFAULT_LANDING_BAND_VARIANT: ComponentVariant = 'surfaceAlt'
+const DEFAULT_LANDING_BAND_VARIANT_MODE: ComponentVariantMode = 'stateless'
+const DEFAULT_LANDING_BAND_HEIGHT = '16rem'
+
+const landingBandTemplate = html`<section :class="classes" :style="bandStyle">
+  <slot></slot>
+</section>`
 
 const landingSectionTemplate = html`<Panel
   :tone="tone"
@@ -288,6 +328,25 @@ const ctaSectionTemplate = html`<Panel :tone="tone" :variant="variant || 'surfac
   </Grid>
 </Panel>`
 
+function defineLandingBandComponent() {
+  return defineComponent<LandingBand>(landingBandTemplate, {
+    props: [
+      'tone',
+      'variant',
+      'variantMode',
+      'image',
+      'imageFit',
+      'imagePosition',
+      'height',
+      'marginTop',
+      'marginBottom',
+      'paddingTop',
+      'paddingBottom',
+    ],
+    context: (head) => resolveLandingBand(head.props),
+  })
+}
+
 function defineLandingSectionComponent() {
   return defineComponent<LandingSection>(landingSectionTemplate, {
     props: [
@@ -385,6 +444,7 @@ function defineCtaSectionComponent() {
 
 export function defineLandingComponents() {
   return {
+    landingBand: defineLandingBandComponent(),
     landingSection: defineLandingSectionComponent(),
     featureCard: defineFeatureCardComponent(),
     metricStrip: defineMetricStripComponent(),
@@ -395,4 +455,60 @@ export function defineLandingComponents() {
     comparisonFeature: defineComparisonFeatureComponent(),
     ctaSection: defineCtaSectionComponent(),
   }
+}
+
+function resolveLandingBand(props: LandingBand): LandingBand {
+  const height = computed(() =>
+    resolveStyleValue(props.height, DEFAULT_LANDING_BAND_HEIGHT),
+  )
+
+  return {
+    ...props,
+    classes: computed(() =>
+      resolveComponentClasses(props, {
+        defaultVariant: DEFAULT_LANDING_BAND_VARIANT,
+        defaultVariantMode: DEFAULT_LANDING_BAND_VARIANT_MODE,
+        classes: ['rounded-none'],
+      }),
+    ),
+    bandStyle: computed<Partial<CSSProps>>(() => ({
+      display: 'flex',
+      alignItems: 'start',
+      justifyContent: 'center',
+      overflow: 'hidden',
+      boxSizing: 'border-box',
+      pointerEvents: 'none',
+      minHeight: height(),
+      marginInline: 'calc(50% - 50vw)',
+      paddingLeft: '1em',
+      paddingRight: '1em',
+      paddingInlineStart: 'calc(-1 * (50% - 50vw))',
+      paddingInlineEnd: 'calc(-1 * (50% - 50vw))',
+      paddingTop: resolveStyleValue(props.paddingTop, '1em'),
+      paddingBottom: resolveStyleValue(props.paddingBottom, '1em'),
+      marginTop: resolveStyleValue(props.marginTop, '0'),
+      marginBottom: resolveStyleValue(props.marginBottom, '0'),
+      backgroundImage: resolveBackgroundImage(props.image),
+      backgroundSize: unref(props.imageFit) || 'cover',
+      backgroundPosition: unref(props.imagePosition) || 'center',
+      backgroundRepeat: 'no-repeat',
+    })),
+  }
+}
+
+function resolveBackgroundImage(image?: RefOrValue<string>) {
+  const resolved = unref(image)
+  return typeof resolved === 'string' && resolved.trim()
+    ? `url("${resolved.trim()}")`
+    : undefined
+}
+
+function resolveStyleValue(
+  value: RefOrValue<string> | undefined,
+  fallback: string,
+) {
+  const resolved = unref(value)
+  return typeof resolved === 'string' && resolved.trim()
+    ? resolved.trim()
+    : fallback
 }

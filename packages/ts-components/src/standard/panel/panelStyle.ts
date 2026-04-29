@@ -5,6 +5,7 @@ export function registerPanelStyles() {
     styleBuilder
       .select('.panel', theme)
       .display('grid')
+      .padding('0')
       .boxShadow(palette.effect.panelShadow)
       .overflow('hidden')
       .transition(

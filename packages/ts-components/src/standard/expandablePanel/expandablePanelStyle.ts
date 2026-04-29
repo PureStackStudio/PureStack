@@ -19,6 +19,7 @@ function registerExpandablePanelShellStyles(
   styleBuilder
     .select('.expandable-panel', theme)
     .boxShadow(palette.effect.panelShadow)
+    .padding('0')
     .overflow('hidden')
     .transition(
       'border-color 180ms ease, box-shadow 180ms ease, background 180ms ease',

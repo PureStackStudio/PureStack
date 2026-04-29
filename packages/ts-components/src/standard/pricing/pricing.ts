@@ -39,11 +39,7 @@ export interface PricingFeature {
   variant?: RefOrValue<ComponentVariant>
 }
 
-const pricingTableTemplate = html`<Panel
-  :tone="tone"
-  :variant="variant || 'none'"
-  :variantMode="variantMode"
->
+const pricingTableTemplate = html`<Panel :tone="tone" :variant="variant || 'none'" :variantMode="variantMode">
   <Flex direction="column" align="start">
     <SectionHeader
       r-if="eyebrow || title || subtitle || footnote"
@@ -57,17 +53,14 @@ const pricingTableTemplate = html`<Panel
       :columnsLg="columnsLg || 2"
       :columnsXl="columnsXl || 4"
       alignItems="stretch"
+      justifyItems="center"
     >
       <slot></slot>
     </Grid>
   </Flex>
 </Panel>`
 
-const pricingPlanTemplate = html`<Panel
-  :tone="tone"
-  :variant="variant || 'surface'"
-  :variantMode="variantMode"
->
+const pricingPlanTemplate = html`<Panel :tone="tone" :variant="variant || 'surface'" :variantMode="variantMode">
   <Flex direction="column" align="start">
     <Flex justify="between" align="center" r-if="icon || badge">
       <IconFrame
@@ -78,10 +71,7 @@ const pricingPlanTemplate = html`<Panel
         size="lg"/>
       <Badge r-if="badge" :tone="tone">{{ badge }}</Badge>
     </Flex>
-    <SectionHeader
-      :title="title"
-      :subtitle="summary"
-      titleTag="h3"/>
+    <SectionHeader :title="title" :subtitle="summary" titleTag="h3"/>
     <Flex align="baseline" r-if="price">
       <strong class="fs-h2">{{ price }}</strong>
       <span r-if="period">{{ period }}</span>

@@ -22,7 +22,7 @@ export interface Panel {
 const DEFAULT_PANEL_VARIANT: ComponentVariant = 'surface'
 const DEFAULT_PANEL_VARIANT_MODE: ComponentVariantMode = 'stateless'
 
-const panelTemplate = html`<section class="panel" :class="classes">
+const panelTemplate = html`<section class="panel tone-text" :class="classes">
   <div class="panel__body"><slot></slot></div>
 </section>`
 
