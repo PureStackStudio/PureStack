@@ -168,10 +168,7 @@ function logImportedSymbolResolution(
       )
 
       if (aliasDeclaration) {
-        logSourceFileAllDiagnostics(
-          program,
-          aliasDeclaration.getSourceFile(),
-        )
+        logSourceFileAllDiagnostics(program, aliasDeclaration.getSourceFile())
       }
     }
   }
@@ -188,7 +185,9 @@ function logSourceFileAllDiagnostics(
     ...program.getSemanticDiagnostics(sourceFile),
   ]
   if (diagnostics.length === 0) {
-    debugLogger(`[componentMetadata] diagnostics ${sourceFile.fileName}: (none)`)
+    debugLogger(
+      `[componentMetadata] diagnostics ${sourceFile.fileName}: (none)`,
+    )
     return
   }
 
@@ -218,9 +217,10 @@ function logSourceFileDiagnostics(
   if (!ENABLE_COMPONENT_METADATA_DIAGNOSTICS || !debugLogger) return
 
   const diagnostics = program.getSemanticDiagnostics(sourceFile)
-  const relevantDiagnostics = diagnostics.filter((diagnostic) =>
-    diagnostic.messageText.toString().includes('@purestack/ts-css') ||
-    diagnostic.messageText.toString().includes('CSSProps'),
+  const relevantDiagnostics = diagnostics.filter(
+    (diagnostic) =>
+      diagnostic.messageText.toString().includes('@purestack/ts-css') ||
+      diagnostic.messageText.toString().includes('CSSProps'),
   )
   if (relevantDiagnostics.length === 0) return
 
@@ -476,13 +476,7 @@ function createComponentPropInfo(
   const declaration = getPreferredPropertyDeclaration(propSymbol)
   const propType = getPropValueType(checker, propSymbol, declaration)
   const typeInfo = analyzeType(checker, propType)
-  logPropTypeResolution(
-    checker,
-    propName,
-    declaration,
-    propType,
-    typeInfo,
-  )
+  logPropTypeResolution(checker, propName, declaration, propType, typeInfo)
 
   return {
     propName,
@@ -576,7 +570,9 @@ function getIndexedAccessDebugLines(
   ]
 }
 
-function getIndexedAccessLiteralName(literal: TypeScript.LiteralTypeNode['literal']) {
+function getIndexedAccessLiteralName(
+  literal: TypeScript.LiteralTypeNode['literal'],
+) {
   if (
     ts.isStringLiteral(literal) ||
     ts.isNoSubstitutionTemplateLiteral(literal)
@@ -587,7 +583,9 @@ function getIndexedAccessLiteralName(literal: TypeScript.LiteralTypeNode['litera
   return undefined
 }
 
-function getDebugDeclarationSignature(declaration: TypeScript.Declaration | undefined) {
+function getDebugDeclarationSignature(
+  declaration: TypeScript.Declaration | undefined,
+) {
   if (
     declaration &&
     (ts.isPropertySignature(declaration) ||
@@ -618,7 +616,9 @@ function getDefineComponentTypeArgument(node: TypeScript.CallExpression) {
   return typeArgument
 }
 
-function getDefineComponentTypeName(typeArgument: TypeScript.TypeReferenceNode) {
+function getDefineComponentTypeName(
+  typeArgument: TypeScript.TypeReferenceNode,
+) {
   return getEntityNameText(typeArgument.typeName)
 }
 
@@ -708,7 +708,9 @@ function getPropValueType(
   return checker.getTypeOfSymbolAtLocation(propSymbol, location)
 }
 
-function unwrapComponentPropTypeNode(typeNode: TypeScript.TypeNode): TypeScript.TypeNode {
+function unwrapComponentPropTypeNode(
+  typeNode: TypeScript.TypeNode,
+): TypeScript.TypeNode {
   if (ts.isParenthesizedTypeNode(typeNode)) {
     return unwrapComponentPropTypeNode(typeNode.type)
   }
@@ -847,7 +849,10 @@ function isNumberType(type: TypeScript.Type) {
   return (type.flags & ts.TypeFlags.Number) !== 0
 }
 
-function getLiteralCompletionValue(type: TypeScript.Type, checker: TypeScript.TypeChecker) {
+function getLiteralCompletionValue(
+  type: TypeScript.Type,
+  checker: TypeScript.TypeChecker,
+) {
   if ((type.flags & ts.TypeFlags.StringLiteral) !== 0) {
     return (type as TypeScript.StringLiteralType).value
   }
@@ -911,7 +916,10 @@ function getPropSignature(
   return `${propName}: ${checker.typeToString(propType)}`
 }
 
-function getSymbolDocumentation(checker: TypeScript.TypeChecker, symbol?: TypeScript.Symbol) {
+function getSymbolDocumentation(
+  checker: TypeScript.TypeChecker,
+  symbol?: TypeScript.Symbol,
+) {
   const resolvedSymbol = resolveAliasedSymbol(checker, symbol) ?? symbol
   if (!resolvedSymbol) return undefined
 
@@ -922,7 +930,10 @@ function getSymbolDocumentation(checker: TypeScript.TypeChecker, symbol?: TypeSc
   return documentation || undefined
 }
 
-function resolveAliasedSymbol(checker: TypeScript.TypeChecker, symbol?: TypeScript.Symbol) {
+function resolveAliasedSymbol(
+  checker: TypeScript.TypeChecker,
+  symbol?: TypeScript.Symbol,
+) {
   if (!symbol) return undefined
   if ((symbol.flags & ts.SymbolFlags.Alias) === 0) return symbol
 

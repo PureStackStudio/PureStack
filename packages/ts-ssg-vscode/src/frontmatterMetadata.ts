@@ -489,7 +489,10 @@ function analyzeObjectType(
   }
 }
 
-function findNamedTypeDeclaration(sourceFile: TypeScript.SourceFile, typeName: string) {
+function findNamedTypeDeclaration(
+  sourceFile: TypeScript.SourceFile,
+  typeName: string,
+) {
   for (const statement of sourceFile.statements) {
     if (
       (ts.isInterfaceDeclaration(statement) ||
@@ -572,7 +575,10 @@ function getPropertySignature(
   return `${propertyName}: ${checker.typeToString(propertyType)}`
 }
 
-function getSymbolDocumentation(checker: TypeScript.TypeChecker, symbol?: TypeScript.Symbol) {
+function getSymbolDocumentation(
+  checker: TypeScript.TypeChecker,
+  symbol?: TypeScript.Symbol,
+) {
   const resolvedSymbol = resolveAliasedSymbol(checker, symbol) ?? symbol
   if (!resolvedSymbol) return undefined
 
@@ -583,7 +589,10 @@ function getSymbolDocumentation(checker: TypeScript.TypeChecker, symbol?: TypeSc
   return documentation || undefined
 }
 
-function resolveAliasedSymbol(checker: TypeScript.TypeChecker, symbol?: TypeScript.Symbol) {
+function resolveAliasedSymbol(
+  checker: TypeScript.TypeChecker,
+  symbol?: TypeScript.Symbol,
+) {
   if (!symbol) return undefined
   if ((symbol.flags & ts.SymbolFlags.Alias) === 0) return symbol
 
@@ -598,7 +607,10 @@ function isOptionalPropertySymbol(symbol: TypeScript.Symbol) {
   return (symbol.flags & ts.SymbolFlags.Optional) !== 0
 }
 
-function hasStringIndexSignature(type: TypeScript.Type, checker: TypeScript.TypeChecker) {
+function hasStringIndexSignature(
+  type: TypeScript.Type,
+  checker: TypeScript.TypeChecker,
+) {
   return checker.getIndexTypeOfType(type, ts.IndexKind.String) !== undefined
 }
 
@@ -621,7 +633,10 @@ function isNumberType(type: TypeScript.Type) {
   return (type.flags & ts.TypeFlags.Number) !== 0
 }
 
-function getLiteralCompletionValue(type: TypeScript.Type, checker: TypeScript.TypeChecker) {
+function getLiteralCompletionValue(
+  type: TypeScript.Type,
+  checker: TypeScript.TypeChecker,
+) {
   if ((type.flags & ts.TypeFlags.StringLiteral) !== 0) {
     return (type as TypeScript.StringLiteralType).value
   }
