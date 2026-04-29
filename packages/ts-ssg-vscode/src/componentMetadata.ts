@@ -37,6 +37,8 @@ type AnalyzedTypeInfo = {
 
 type ComponentMetadataDebugLogger = (message: string) => void
 
+const ENABLE_COMPONENT_METADATA_DIAGNOSTICS = false
+
 const projectServiceCache = new Map<string, CachedProjectService>()
 let debugLogger: ComponentMetadataDebugLogger | undefined
 
@@ -97,7 +99,7 @@ export function getComponentMetadata(
 }
 
 function logMetadataRequest(filePath: string, componentName: string) {
-  if (!debugLogger) return
+  if (!ENABLE_COMPONENT_METADATA_DIAGNOSTICS || !debugLogger) return
 
   const configPath = ts.findConfigFile(
     path.dirname(filePath),
@@ -122,7 +124,7 @@ function logImportedSymbolResolution(
   moduleName: string,
   importedName: string,
 ) {
-  if (!debugLogger) return
+  if (!ENABLE_COMPONENT_METADATA_DIAGNOSTICS || !debugLogger) return
 
   for (const statement of sourceFile.statements) {
     if (!ts.isImportDeclaration(statement)) continue
@@ -179,7 +181,7 @@ function logSourceFileAllDiagnostics(
   program: TypeScript.Program,
   sourceFile: TypeScript.SourceFile,
 ) {
-  if (!debugLogger) return
+  if (!ENABLE_COMPONENT_METADATA_DIAGNOSTICS || !debugLogger) return
 
   const diagnostics = [
     ...program.getSyntacticDiagnostics(sourceFile),
@@ -213,7 +215,7 @@ function logSourceFileDiagnostics(
   program: TypeScript.Program,
   sourceFile: TypeScript.SourceFile,
 ) {
-  if (!debugLogger) return
+  if (!ENABLE_COMPONENT_METADATA_DIAGNOSTICS || !debugLogger) return
 
   const diagnostics = program.getSemanticDiagnostics(sourceFile)
   const relevantDiagnostics = diagnostics.filter((diagnostic) =>
@@ -332,7 +334,7 @@ function logParsedProjectConfiguration(
   configPath: string,
   parsedConfig: TypeScript.ParsedCommandLine,
 ) {
-  if (!debugLogger) return
+  if (!ENABLE_COMPONENT_METADATA_DIAGNOSTICS || !debugLogger) return
 
   const diagnostics = parsedConfig.errors.map((diagnostic) => {
     const message = ts.flattenDiagnosticMessageText(
@@ -361,7 +363,7 @@ function logModuleResolution(
   sourceFile: TypeScript.SourceFile,
   moduleName: string,
 ) {
-  if (!debugLogger) return
+  if (!ENABLE_COMPONENT_METADATA_DIAGNOSTICS || !debugLogger) return
 
   const compilerOptions = program.getCompilerOptions()
   const resolvedModule = ts.resolveModuleName(
@@ -504,7 +506,7 @@ function logPropTypeResolution(
   propType: TypeScript.Type | undefined,
   typeInfo: AnalyzedTypeInfo,
 ) {
-  if (!debugLogger) return
+  if (!ENABLE_COMPONENT_METADATA_DIAGNOSTICS || !debugLogger) return
 
   const signature = getDebugDeclarationSignature(declaration)
   const shouldLog =
