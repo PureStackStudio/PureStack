@@ -3,6 +3,9 @@ import { renderApp } from '@purestack/ts-render'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
 import { defineButtonComponents } from '../btn/btn'
+import { defineFlexComponents } from '../flex/flex'
+import { defineFormComponents } from '../form/form'
+import { definePanelComponents } from '../panel/panel'
 import { defineConsentComponents } from './consent'
 
 describe('Consent component rendering', () => {
@@ -10,6 +13,9 @@ describe('Consent component rendering', () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineButtonComponents(),
+      ...defineFlexComponents(),
+      ...defineFormComponents(),
+      ...definePanelComponents(),
       ...defineConsentComponents(),
     }
     const html = renderApp(`<Consent />`, {

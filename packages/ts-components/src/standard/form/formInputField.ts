@@ -117,7 +117,8 @@ const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
       :min="min"
       :step="step"
       :placeholder="placeholder"
-      r-model="model"/>
+      r-model="model"
+      r-inherit/>
     <div class="form-block__number-controls" r-if="isNumberField">
       <button
         class="form-block__number-btn form-block__number-btn--up tone-fill-button-all"

@@ -4,7 +4,12 @@ import type {
   TsSsgContext,
 } from '@purestack/ts-common'
 import { resolveTsSsgContext } from '@purestack/ts-common'
-import { defineComponent, html } from 'regor'
+import type { SemanticTone } from '@purestack/ts-style'
+import { defineComponent, html, type RefOrValue } from 'regor'
+import type {
+  ComponentVariant,
+  ComponentVariantMode,
+} from '../componentVariant'
 
 export interface ConsentCategoryState extends ConsentCategory {
   inputId?: string
@@ -13,6 +18,9 @@ export interface ConsentCategoryState extends ConsentCategory {
 export interface Consent extends ConsentConfig {
   settingsTeleport?: string
   categories: ConsentCategoryState[]
+  tone?: RefOrValue<SemanticTone>
+  variant?: RefOrValue<ComponentVariant>
+  variantMode?: RefOrValue<ComponentVariantMode>
 }
 
 const consentTemplate = html`<section class="consent" data-consent-root r-if="enabled">
@@ -25,22 +33,35 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
     hidden
     aria-hidden="true"
   >
-    <div class="consent__title">{{ bannerTitle }}</div>
-    <p class="consent__description">{{ bannerDescription }}</p>
-    <a class="consent__policy" r-if="privacyPolicyUrl" :href="privacyPolicyUrl">
-      {{ privacyPolicyLabel }}
-    </a>
-    <div class="consent__actions">
-      <Btn type="button" tone="success" data-consent-action="accept-all">
-        {{ acceptAllLabel }}
-      </Btn>
-      <Btn tone="neutral" type="button" data-consent-action="reject-all">
-        {{ rejectAllLabel }}
-      </Btn>
-      <Btn tone="neutral" type="button" data-consent-action="open-panel">
-        {{ manageLabel }}
-      </Btn>
-    </div>
+    <Panel
+      :tone="tone || 'neutral'"
+      :variant="variant || 'surfaceAlt'"
+      :variantMode="variantMode"
+    >
+      <Flex direction="column" align="start">
+        <strong>{{ bannerTitle }}</strong>
+        <span>{{ bannerDescription }}</span>
+        <BtnLink
+          r-if="privacyPolicyUrl"
+          :href="privacyPolicyUrl"
+          tone="neutral"
+          variant="link"
+        >
+          {{ privacyPolicyLabel }}
+        </BtnLink>
+        <Flex align="center" wrap="true">
+          <Btn type="button" tone="success" data-consent-action="accept-all">
+            {{ acceptAllLabel }}
+          </Btn>
+          <Btn tone="neutral" type="button" data-consent-action="reject-all">
+            {{ rejectAllLabel }}
+          </Btn>
+          <Btn tone="neutral" type="button" data-consent-action="open-panel">
+            {{ manageLabel }}
+          </Btn>
+        </Flex>
+      </Flex>
+    </Panel>
   </aside>
 
   <section
@@ -51,52 +72,62 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
     hidden
     aria-hidden="true"
   >
-    <div class="consent__panel-header">
-      <h2 class="consent__panel-title">{{ manageLabel }}</h2>
-      <Btn
-        tone="ghost"
-        size="sm"
-        type="button"
-        data-consent-action="close-panel"
-        aria-label="Close privacy settings"
-      >
-        <span aria-hidden="true">X</span>
-      </Btn>
-    </div>
+    <Panel
+      :tone="tone || 'neutral'"
+      :variant="variant || 'surfaceAlt'"
+      :variantMode="variantMode"
+    >
+      <Flex direction="column" align="start">
+        <Flex align="center" justify="between" class="w-full">
+          <strong>{{ manageLabel }}</strong>
+          <Btn
+            tone="ghost"
+            size="sm"
+            type="button"
+            data-consent-action="close-panel"
+            aria-label="Close privacy settings"
+          >
+            <span aria-hidden="true">X</span>
+          </Btn>
+        </Flex>
 
-    <div class="consent__list">
-      <label r-for="category in categories" class="consent__item">
-        <span class="consent__item-main">
-          <input
-            class="consent__checkbox"
-            type="checkbox"
-            :id="category.inputId"
-            :checked="category.required"
-            :disabled="category.required"
-            :data-consent-category-id="category.id"/>
-          <span class="consent__item-label">{{ category.label }}</span>
-        </span>
-        <span
-          class="consent__item-description"
-          r-if="category.description"
-          :id="category.inputId + '-desc'"
-        >
-          {{ category.description }}
-        </span>
-      </label>
-    </div>
+        <Flex direction="column" align="stretch" class="w-full">
+          <Panel
+            r-for="category in categories"
+            tone="neutral"
+            variant="outline"
+          >
+            <Flex direction="column" align="start">
+              <FormCheck
+                :id="category.inputId"
+                :label="category.label"
+                :checked="category.required"
+                :disabled="category.required"
+                :described-by="category.description ? category.inputId + '-desc' : undefined"
+                :data-consent-category-id="category.id"/>
+              <small
+                r-if="category.description"
+                :id="category.inputId + '-desc'"
+              >
+                {{ category.description }}
+              </small>
+            </Flex>
+          </Panel>
+        </Flex>
 
-    <div class="consent__panel-actions">
-      <Btn type="button" tone="success" data-consent-action="save">
-        {{ saveLabel }}
-      </Btn>
-      <Btn tone="success" type="button" data-consent-action="accept-all">
-        {{ acceptAllLabel }}
-      </Btn>
-      <Btn tone="neutral" type="button" data-consent-action="reject-all">
-        {{ rejectAllLabel }}
-      </Btn>
-    </div>
+        <Flex align="center" wrap="true">
+          <Btn type="button" tone="success" data-consent-action="save">
+            {{ saveLabel }}
+          </Btn>
+          <Btn tone="success" type="button" data-consent-action="accept-all">
+            {{ acceptAllLabel }}
+          </Btn>
+          <Btn tone="neutral" type="button" data-consent-action="reject-all">
+            {{ rejectAllLabel }}
+          </Btn>
+        </Flex>
+      </Flex>
+    </Panel>
   </section>
 
   <Btn
@@ -114,11 +145,15 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
 
 function defineConsentComponent() {
   return defineComponent<Consent>(consentTemplate, {
-    context: (head) => resolveConsent(resolveTsSsgContext(head)),
+    props: ['tone', 'variant', 'variantMode'],
+    context: (head) => resolveConsent(resolveTsSsgContext(head), head.props),
   })
 }
 
-function resolveConsent(context: TsSsgContext): Consent {
+function resolveConsent(
+  context: TsSsgContext,
+  props: Partial<Consent>,
+): Consent {
   const consent = context.site.consent
   const categories = consent.categories.map((category) => ({
     id: category.id,
@@ -129,6 +164,9 @@ function resolveConsent(context: TsSsgContext): Consent {
   }))
   return {
     ...consent,
+    tone: props.tone,
+    variant: props.variant,
+    variantMode: props.variantMode,
     settingsTeleport: context.pageInfo.frontmatter.layout.showFooter
       ? '.consent-settings-teleport-area'
       : 'body',

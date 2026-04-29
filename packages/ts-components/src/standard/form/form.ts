@@ -70,7 +70,12 @@ const appFormTemplate = html`<form
 const formMetaTemplate = html`<div class="form-block__meta"><slot></slot></div>`
 
 const formCheckTemplate = html`<label class="form-block__check">
-  <input type="checkbox" :name="name" :value="value" :checked="checked"/>
+  <input
+    type="checkbox"
+    :name="name"
+    :value="value"
+    :checked="checked"
+    r-inherit/>
   <span>{{ label }}</span>
 </label>`
 
