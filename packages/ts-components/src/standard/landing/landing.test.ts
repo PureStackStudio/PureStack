@@ -6,6 +6,33 @@ import { defineComponents } from '../../defineComponents'
 import { createTestContext } from '../../test/testContext'
 
 describe('Landing components rendering', () => {
+  it('renders landing band shaped edges with horizontal slant start coordinates', () => {
+    const cleanup = ensureDomGlobals()
+    const html = renderApp(
+      `<LandingBand
+        topEdge="slant-down"
+        topEdgeStart="200px"
+        bottomEdge="slant-up"
+        bottomEdgeStart="50%"
+        edgeSize="3rem"
+      >
+        <p>Shaped band</p>
+      </LandingBand>`,
+      {
+        components: defineComponents(getSvgIcon),
+        context: createTestContext(),
+      },
+    )
+    cleanup()
+
+    expect(html).toContain('Shaped band')
+    expect(html).toContain(
+      'clip-path: polygon(0 0, 200px 0, 100% 3rem, 100% calc(100% - 3rem), 50% 100%, 0 100%)',
+    )
+    expect(html).toContain('padding-top: calc(1em + 3rem)')
+    expect(html).toContain('padding-bottom: calc(1em + 3rem)')
+  })
+
   it('renders the landing section, metrics, feature card, and CTA actions', () => {
     const cleanup = ensureDomGlobals()
     const html = renderApp(

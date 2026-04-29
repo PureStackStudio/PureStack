@@ -71,6 +71,7 @@ export type {
   CtaSection,
   FeatureCard,
   LandingBand,
+  LandingBandEdge,
   LandingBandImageFit,
   LandingSection,
   MetricItem,

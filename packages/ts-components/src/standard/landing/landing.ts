@@ -22,6 +22,8 @@ export type LandingBandImageFit =
   | 'none'
   | 'scale-down'
 
+export type LandingBandEdge = 'flat' | 'slant-up' | 'slant-down'
+
 export type LandingTitleTag =
   | 'h1'
   | 'h2'
@@ -45,6 +47,11 @@ export interface LandingBand {
   paddingBottom?: RefOrValue<string>
   marginTop?: RefOrValue<string>
   marginBottom?: RefOrValue<string>
+  topEdge?: RefOrValue<LandingBandEdge>
+  bottomEdge?: RefOrValue<LandingBandEdge>
+  edgeSize?: RefOrValue<string>
+  topEdgeStart?: RefOrValue<string>
+  bottomEdgeStart?: RefOrValue<string>
   classes?: ComputedRef<string>
   bandStyle?: ComputedRef<Partial<CSSProps>>
 }
@@ -141,6 +148,8 @@ export interface CtaSection {
 const DEFAULT_LANDING_BAND_VARIANT: ComponentVariant = 'surfaceAlt'
 const DEFAULT_LANDING_BAND_VARIANT_MODE: ComponentVariantMode = 'stateless'
 const DEFAULT_LANDING_BAND_HEIGHT = '16rem'
+const DEFAULT_LANDING_BAND_EDGE_SIZE = '4rem'
+const DEFAULT_LANDING_BAND_EDGE_START = '0%'
 
 const landingBandTemplate = html`<section :class="classes" :style="bandStyle">
   <slot></slot>
@@ -342,6 +351,11 @@ function defineLandingBandComponent() {
       'marginBottom',
       'paddingTop',
       'paddingBottom',
+      'topEdge',
+      'bottomEdge',
+      'edgeSize',
+      'topEdgeStart',
+      'bottomEdgeStart',
     ],
     context: (head) => resolveLandingBand(head.props),
   })
@@ -461,6 +475,9 @@ function resolveLandingBand(props: LandingBand): LandingBand {
   const height = computed(() =>
     resolveStyleValue(props.height, DEFAULT_LANDING_BAND_HEIGHT),
   )
+  const edgeSize = computed(() =>
+    resolveStyleValue(props.edgeSize, DEFAULT_LANDING_BAND_EDGE_SIZE),
+  )
 
   return {
     ...props,
@@ -484,16 +501,78 @@ function resolveLandingBand(props: LandingBand): LandingBand {
       paddingRight: '1em',
       paddingInlineStart: 'calc(-1 * (50% - 50vw))',
       paddingInlineEnd: 'calc(-1 * (50% - 50vw))',
-      paddingTop: resolveStyleValue(props.paddingTop, '1em'),
-      paddingBottom: resolveStyleValue(props.paddingBottom, '1em'),
+      paddingTop: resolveLandingBandEdgePadding(
+        props.paddingTop,
+        edgeSize(),
+        props.topEdge,
+      ),
+      paddingBottom: resolveLandingBandEdgePadding(
+        props.paddingBottom,
+        edgeSize(),
+        props.bottomEdge,
+      ),
       marginTop: resolveStyleValue(props.marginTop, '0'),
       marginBottom: resolveStyleValue(props.marginBottom, '0'),
       backgroundImage: resolveBackgroundImage(props.image),
       backgroundSize: unref(props.imageFit) || 'cover',
       backgroundPosition: unref(props.imagePosition) || 'center',
       backgroundRepeat: 'no-repeat',
+      clipPath: resolveLandingBandClipPath(props, edgeSize()),
     })),
   }
+}
+
+function resolveLandingBandClipPath(
+  props: LandingBand,
+  edgeSize: string,
+): string | undefined {
+  const topEdge = resolveLandingBandEdge(props.topEdge)
+  const bottomEdge = resolveLandingBandEdge(props.bottomEdge)
+
+  if (topEdge === 'flat' && bottomEdge === 'flat') return undefined
+
+  const topStart = resolveStyleValue(
+    props.topEdgeStart,
+    DEFAULT_LANDING_BAND_EDGE_START,
+  )
+  const bottomStart = resolveStyleValue(
+    props.bottomEdgeStart,
+    DEFAULT_LANDING_BAND_EDGE_START,
+  )
+  const topLeftY = topEdge === 'slant-up' ? edgeSize : '0'
+  const topRightY = topEdge === 'slant-down' ? edgeSize : '0'
+  const bottomRightY =
+    bottomEdge === 'slant-up' ? `calc(100% - ${edgeSize})` : '100%'
+  const bottomLeftY =
+    bottomEdge === 'slant-down' ? `calc(100% - ${edgeSize})` : '100%'
+  const points = [
+    `0 ${topLeftY}`,
+    `${topStart} ${topLeftY}`,
+    `100% ${topRightY}`,
+    `100% ${bottomRightY}`,
+    `${bottomStart} ${bottomLeftY}`,
+    `0 ${bottomLeftY}`,
+  ]
+
+  return `polygon(${points.join(', ')})`
+}
+
+function resolveLandingBandEdgePadding(
+  padding: RefOrValue<string> | undefined,
+  edgeSize: string,
+  edge: RefOrValue<LandingBandEdge> | undefined,
+) {
+  const resolvedPadding = resolveStyleValue(padding, '1em')
+  return resolveLandingBandEdge(edge) === 'flat'
+    ? resolvedPadding
+    : `calc(${resolvedPadding} + ${edgeSize})`
+}
+
+function resolveLandingBandEdge(edge?: RefOrValue<LandingBandEdge>) {
+  const resolved = unref(edge)
+  return resolved === 'slant-up' || resolved === 'slant-down'
+    ? resolved
+    : 'flat'
 }
 
 function resolveBackgroundImage(image?: RefOrValue<string>) {
