@@ -1,11 +1,14 @@
+import * as path from 'node:path'
 import * as vscode from 'vscode'
 import {
   clearComponentMetadataCache,
   getComponentMetadata,
   setComponentMetadataDebugLogger,
 } from './componentMetadata'
+import type { ComponentSuggestion } from './componentResolver'
 import {
   clearComponentResolverCaches,
+  getComponentSuggestions,
   resolveComponentTarget,
 } from './componentResolver'
 import {
@@ -79,6 +82,8 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.languages.registerCompletionItemProvider(
       SUPPORTED_SELECTORS,
       new ComponentCompletionProvider(),
+      '<',
+      '/',
       ' ',
       '-',
       '"',
@@ -260,6 +265,9 @@ class ComponentCompletionProvider implements vscode.CompletionItemProvider {
     document: vscode.TextDocument,
     position: vscode.Position,
   ): vscode.CompletionItem[] | undefined {
+    const nameContext = getComponentNameCompletionContext(document, position)
+    if (nameContext) return getComponentNameCompletions(document, nameContext)
+
     const tagContext = getComponentTagContextAtPosition(document, position)
     if (!tagContext || tagContext.isClosingTag) return undefined
 
@@ -320,6 +328,180 @@ class ComponentCompletionProvider implements vscode.CompletionItemProvider {
         return item
       })
   }
+}
+
+type ComponentNameCompletionContext = {
+  isClosingTag: boolean
+  prefix: string
+  replaceRange: vscode.Range
+}
+
+function getComponentNameCompletions(
+  document: vscode.TextDocument,
+  context: ComponentNameCompletionContext,
+) {
+  const workspaceRoot = resolveWorkspaceRoot(document.uri.fsPath)
+  if (!workspaceRoot) return undefined
+
+  const suggestions = getComponentSuggestions(workspaceRoot)
+  const closingComponentName = context.isClosingTag
+    ? getNearestUnclosedComponentName(document, context.replaceRange.start)
+    : undefined
+  const prioritizedSuggestions = prioritizeComponentSuggestions(
+    suggestions,
+    closingComponentName,
+  )
+
+  return prioritizedSuggestions.map((suggestion) => {
+    const item = new vscode.CompletionItem(
+      suggestion.componentName,
+      vscode.CompletionItemKind.Class,
+    )
+    item.insertText = suggestion.componentName
+    item.filterText = suggestion.componentName
+    item.range = context.replaceRange
+    item.detail =
+      suggestion.source === 'workspace'
+        ? getWorkspaceRelativePath(document, suggestion.filePath)
+        : `dependency: ${getWorkspaceRelativePath(document, suggestion.filePath)}`
+
+    if (
+      closingComponentName &&
+      normalizeComponentName(suggestion.componentName) ===
+        normalizeComponentName(closingComponentName)
+    ) {
+      item.sortText = `!${suggestion.componentName}`
+      item.preselect = true
+    }
+
+    return item
+  })
+}
+
+function getComponentNameCompletionContext(
+  document: vscode.TextDocument,
+  position: vscode.Position,
+): ComponentNameCompletionContext | undefined {
+  if (!isSupportedTemplateContext(document, position)) return undefined
+
+  const text = document.getText()
+  const offset = document.offsetAt(position)
+  const tagStart = findOpenTagStart(text, offset)
+  if (tagStart < 0) return undefined
+
+  const textBeforeCursor = text.slice(tagStart, offset)
+  if (textBeforeCursor.includes('>')) return undefined
+  if (/^<\s*[!?]/.test(textBeforeCursor)) return undefined
+
+  const isClosingTag = /^<\s*\//.test(textBeforeCursor)
+  let nameStart = tagStart + 1
+  while (/\s/.test(text[nameStart] ?? '')) nameStart++
+  if (text[nameStart] === '/') {
+    nameStart++
+    while (/\s/.test(text[nameStart] ?? '')) nameStart++
+  }
+
+  if (offset < nameStart) return undefined
+
+  const prefix = text.slice(nameStart, offset)
+  if (!/^[A-Za-z][A-Za-z0-9-]*$/.test(prefix) && prefix.length > 0) {
+    return undefined
+  }
+
+  const textBetweenTagAndName = text.slice(tagStart, nameStart)
+  if (!/^<\s*\/?\s*$/.test(textBetweenTagAndName)) return undefined
+
+  return {
+    isClosingTag,
+    prefix,
+    replaceRange: new vscode.Range(
+      document.positionAt(nameStart),
+      document.positionAt(offset),
+    ),
+  }
+}
+
+function prioritizeComponentSuggestions(
+  suggestions: ComponentSuggestion[],
+  preferredComponentName?: string,
+) {
+  if (!preferredComponentName) return suggestions
+
+  const normalizedPreferredName = normalizeComponentName(preferredComponentName)
+  return [
+    ...suggestions.filter(
+      (suggestion) =>
+        normalizeComponentName(suggestion.componentName) ===
+        normalizedPreferredName,
+    ),
+    ...suggestions.filter(
+      (suggestion) =>
+        normalizeComponentName(suggestion.componentName) !==
+        normalizedPreferredName,
+    ),
+  ]
+}
+
+function getNearestUnclosedComponentName(
+  document: vscode.TextDocument,
+  position: vscode.Position,
+) {
+  const text = document.getText(
+    new vscode.Range(new vscode.Position(0, 0), position),
+  )
+  const stack: string[] = []
+  const tagPattern = /<\/?\s*([A-Z][A-Za-z0-9-]*)\b[^>]*>/g
+
+  for (;;) {
+    const match = tagPattern.exec(text)
+    if (!match) return stack[stack.length - 1]
+
+    const fullTag = match[0]
+    const componentName = match[1]
+    if (/^<\s*\//.test(fullTag)) {
+      const matchingIndex = findLastNormalizedIndex(stack, componentName)
+      if (matchingIndex >= 0) stack.splice(matchingIndex)
+      continue
+    }
+
+    if (/\/\s*>$/.test(fullTag)) continue
+    stack.push(componentName)
+  }
+}
+
+function findOpenTagStart(documentText: string, offset: number) {
+  for (let index = offset - 1; index >= 0; index--) {
+    const currentCharacter = documentText[index]
+    if (currentCharacter === '<') return index
+    if (currentCharacter === '>') return -1
+  }
+
+  return -1
+}
+
+function getWorkspaceRelativePath(
+  document: vscode.TextDocument,
+  filePath: string,
+) {
+  const workspaceRoot = resolveWorkspaceRoot(document.uri.fsPath)
+  if (!workspaceRoot) return filePath
+
+  const relativePath = path.relative(workspaceRoot, filePath)
+  if (relativePath.startsWith('..')) return filePath
+
+  return relativePath
+}
+
+function findLastNormalizedIndex(values: string[], expectedValue: string) {
+  const normalizedExpectedValue = normalizeComponentName(expectedValue)
+
+  for (let index = values.length - 1; index >= 0; index--) {
+    if (normalizeComponentName(values[index]) === normalizedExpectedValue) {
+      return index
+    }
+  }
+
+  return -1
 }
 
 class ComponentHoverProvider implements vscode.HoverProvider {

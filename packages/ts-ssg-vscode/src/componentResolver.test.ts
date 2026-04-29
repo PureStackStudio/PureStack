@@ -4,6 +4,7 @@ import * as path from 'node:path'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import {
   clearComponentResolverCaches,
+  getComponentSuggestions,
   resolveComponentTarget,
 } from './componentResolver'
 
@@ -64,6 +65,18 @@ describe('resolveComponentTarget dependency fallback', () => {
     expect(getResolvedLineText(target?.filePath, target?.line)).toMatch(
       /export\s+interface\s+TabPane\b/,
     )
+  })
+
+  it('lists dependency component suggestions from regorComponents', () => {
+    const suggestions = getComponentSuggestions(isolatedWorkspaceRoot)
+    const names = suggestions.map((suggestion) => suggestion.componentName)
+
+    expect(names).toContain('Btn')
+    expect(names).toContain('TabPane')
+    expect(
+      suggestions.find((suggestion) => suggestion.componentName === 'Btn')
+        ?.source,
+    ).toBe('dependency')
   })
 })
 
@@ -147,6 +160,11 @@ describe('resolveComponentTarget cache invalidation', () => {
       'ExistingComponent',
     )
     expect(firstTarget).toBeDefined()
+    expect(
+      getComponentSuggestions(isolatedWorkspaceRoot).map(
+        (suggestion) => suggestion.componentName,
+      ),
+    ).toContain('ExistingComponent')
 
     const addedComponentPath = path.join(
       isolatedWorkspaceRoot,
@@ -174,6 +192,11 @@ describe('resolveComponentTarget cache invalidation', () => {
       'NewComponent',
     )
     expect(staleTarget).toBeUndefined()
+    expect(
+      getComponentSuggestions(isolatedWorkspaceRoot).map(
+        (suggestion) => suggestion.componentName,
+      ),
+    ).not.toContain('NewComponent')
 
     clearComponentResolverCaches(isolatedWorkspaceRoot)
 
@@ -183,6 +206,11 @@ describe('resolveComponentTarget cache invalidation', () => {
     )
     expect(refreshedTarget).toBeDefined()
     expect(refreshedTarget?.filePath).toBe(addedComponentPath)
+    expect(
+      getComponentSuggestions(isolatedWorkspaceRoot).map(
+        (suggestion) => suggestion.componentName,
+      ),
+    ).toContain('NewComponent')
   })
 })
 

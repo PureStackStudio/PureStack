@@ -19,11 +19,17 @@ const LOCAL_COMPONENT_PATTERN =
   /^\s*(?:export\s+)?(?:declare\s+)?(?:abstract\s+)?(interface|type|class)\s+([A-Za-z][A-Za-z0-9]*)\b/
 
 const workspaceComponentFilesCache = new Map<string, string[]>()
+const componentSuggestionsCache = new Map<string, ComponentSuggestion[]>()
 const dependencyPackageCache = new Map<string, DependencyComponentPackage[]>()
 
 export type ResolvedComponentTarget = {
   filePath: string
   line: number
+}
+
+export type ComponentSuggestion = ResolvedComponentTarget & {
+  componentName: string
+  source: 'workspace' | 'dependency'
 }
 
 type DependencyComponentPackage = {
@@ -53,12 +59,24 @@ export function resolveComponentTarget(
 export function clearComponentResolverCaches(workspaceRoot?: string) {
   if (!workspaceRoot) {
     workspaceComponentFilesCache.clear()
+    componentSuggestionsCache.clear()
     dependencyPackageCache.clear()
     return
   }
 
   workspaceComponentFilesCache.delete(workspaceRoot)
+  componentSuggestionsCache.delete(workspaceRoot)
   dependencyPackageCache.delete(workspaceRoot)
+}
+
+export function getComponentSuggestions(workspaceRoot: string) {
+  const cachedSuggestions = componentSuggestionsCache.get(workspaceRoot)
+  if (cachedSuggestions) return cachedSuggestions
+
+  const suggestions = collectComponentSuggestions(workspaceRoot)
+  componentSuggestionsCache.set(workspaceRoot, suggestions)
+
+  return suggestions
 }
 
 function resolveWorkspaceComponentTarget(
@@ -108,6 +126,67 @@ function resolveDependencyComponentTarget(
         filePath: resolveRealPath(filePath),
         line: exportedDefinition.line,
       }
+    }
+  }
+
+  return undefined
+}
+
+function collectComponentSuggestions(workspaceRoot: string) {
+  const suggestions: ComponentSuggestion[] = []
+  const seenNames = new Set<string>()
+
+  for (const filePath of getWorkspaceComponentFiles(workspaceRoot)) {
+    for (const definition of findComponentDefinitionsInFile(filePath)) {
+      const normalizedName = normalizeComponentName(definition.name)
+      if (seenNames.has(normalizedName)) continue
+
+      seenNames.add(normalizedName)
+      suggestions.push({
+        componentName: definition.name,
+        filePath,
+        line: definition.line,
+        source: 'workspace',
+      })
+    }
+  }
+
+  for (const dependencyPackage of getDependencyComponentPackages(workspaceRoot)) {
+    for (const normalizedName of dependencyPackage.componentNames) {
+      if (seenNames.has(normalizedName)) continue
+
+      const target = resolveDependencyComponentSuggestion(
+        dependencyPackage,
+        normalizedName,
+      )
+      if (!target) continue
+
+      seenNames.add(normalizedName)
+      suggestions.push(target)
+    }
+  }
+
+  return suggestions.sort((left, right) =>
+    left.componentName.localeCompare(right.componentName),
+  )
+}
+
+function resolveDependencyComponentSuggestion(
+  dependencyPackage: DependencyComponentPackage,
+  normalizedComponentName: string,
+): ComponentSuggestion | undefined {
+  for (const filePath of dependencyPackage.files) {
+    const definition = findComponentDefinitionInFile(
+      filePath,
+      normalizedComponentName,
+    )
+    if (!definition) continue
+
+    return {
+      componentName: definition.name,
+      filePath: resolveRealPath(filePath),
+      line: definition.line,
+      source: 'dependency',
     }
   }
 
@@ -309,10 +388,38 @@ function findComponentDefinitionInFile(
 
     return {
       line: lineIndex,
+      name: declaration.name,
     }
   }
 
   return undefined
+}
+
+function findComponentDefinitionsInFile(
+  filePath: string,
+  includeLocalDefinitions = false,
+) {
+  const source = fs.readFileSync(filePath, 'utf8')
+  const lines = source.split(/\r?\n/)
+  const pattern = includeLocalDefinitions
+    ? LOCAL_COMPONENT_PATTERN
+    : EXPORTED_COMPONENT_PATTERN
+  const definitions: Array<{ line: number; name: string }> = []
+
+  for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+    const declaration = getComponentDeclarationFromLine(
+      lines[lineIndex],
+      pattern,
+    )
+    if (!declaration) continue
+
+    definitions.push({
+      line: lineIndex,
+      name: declaration.name,
+    })
+  }
+
+  return definitions
 }
 
 function getComponentDeclarationFromLine(line: string, pattern: RegExp) {
