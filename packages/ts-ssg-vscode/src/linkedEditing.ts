@@ -4,8 +4,8 @@ import {
   isOffsetInsideIgnoredRange,
   sanitizeMarkup,
   scanTagTokens,
-  VOID_HTML_TAG_NAMES,
   type TagToken,
+  VOID_HTML_TAG_NAMES,
 } from './markupSupport'
 
 const TAG_NAME_PATTERN = /[A-Za-z][A-Za-z0-9._:$-]*/
