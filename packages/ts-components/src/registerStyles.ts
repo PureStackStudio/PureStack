@@ -15,7 +15,6 @@ import { registerModalStyles } from './standard/modal/modalStyle'
 import { registerNavStyles } from './standard/navMenu/navMenuStyle'
 import { registerPageTocStyles } from './standard/pageToc/pageTocStyle'
 import { registerPanelStyles } from './standard/panel/panelStyle'
-import { registerPricingStyles } from './standard/pricing/pricingStyle'
 import { registerSearchBoxStyles } from './standard/searchBox/searchBoxStyle'
 import { registerTabsStyles } from './standard/tabs/tabsStyle'
 import { registerThemeSwitcherStyles } from './standard/themeSwitcher/themeSwitcherStyle'
@@ -39,7 +38,6 @@ export function registerStyles() {
   registerNavStyles()
   registerPageTocStyles()
   registerPanelStyles()
-  registerPricingStyles()
   registerSearchBoxStyles()
   registerTabsStyles()
   registerThemeSwitcherStyles()

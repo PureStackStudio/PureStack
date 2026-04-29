@@ -103,7 +103,6 @@ export type {
   PricingTable,
 } from './standard/pricing/pricing'
 export { definePricingComponents } from './standard/pricing/pricing'
-export { registerPricingStyles } from './standard/pricing/pricingStyle'
 export type { SearchBox } from './standard/searchBox/searchBox'
 export { defineSearchComponents } from './standard/searchBox/searchBox'
 export { registerSearchBoxStyles } from './standard/searchBox/searchBoxStyle'

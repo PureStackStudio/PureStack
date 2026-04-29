@@ -1,114 +1,124 @@
 import type { SemanticTone } from '@purestack/ts-style'
-import {
-  type ComputedRef,
-  computed,
-  defineComponent,
-  html,
-  type RefOrValue,
-} from 'regor'
-
-export type PricingPlanVariant = 'featured' | 'primary'
+import { defineComponent, html, type RefOrValue } from 'regor'
+import type {
+  ComponentVariant,
+  ComponentVariantMode,
+} from '../componentVariant'
 
 export interface PricingTable {
-  eyebrow?: string
-  title?: string
-  subtitle?: string
-  footnote?: string
+  eyebrow?: RefOrValue<string>
+  title?: RefOrValue<string>
+  subtitle?: RefOrValue<string>
+  footnote?: RefOrValue<string>
   tone?: RefOrValue<SemanticTone>
+  variant?: RefOrValue<ComponentVariant>
+  variantMode?: RefOrValue<ComponentVariantMode>
+  columns?: RefOrValue<number | string>
+  columnsLg?: RefOrValue<number | string>
+  columnsXl?: RefOrValue<number | string>
 }
 
 export interface PricingPlan {
-  title?: string
-  summary?: string
-  price?: string
-  period?: string
-  badge?: string
-  note?: string
-  variant?: PricingPlanVariant
-  icon?: string
-  ctaLabel?: string
-  ctaLink?: string
+  title?: RefOrValue<string>
+  summary?: RefOrValue<string>
+  price?: RefOrValue<string>
+  period?: RefOrValue<string>
+  badge?: RefOrValue<string>
+  note?: RefOrValue<string>
+  variant?: RefOrValue<ComponentVariant>
+  variantMode?: RefOrValue<ComponentVariantMode>
+  icon?: RefOrValue<string>
+  ctaLabel?: RefOrValue<string>
+  ctaLink?: RefOrValue<string>
   tone?: RefOrValue<SemanticTone>
-  panelClass?: ComputedRef<string>
 }
 
 export interface PricingFeature {
-  icon?: string
+  icon?: RefOrValue<string>
+  tone?: RefOrValue<SemanticTone>
+  variant?: RefOrValue<ComponentVariant>
 }
 
-const pricingTableTemplate = html`<Panel :tone="tone" class="pricing">
-  <Flex direction="column" align="start" class="pricing__stack gap-4">
+const pricingTableTemplate = html`<Panel
+  :tone="tone"
+  :variant="variant || 'none'"
+  :variantMode="variantMode"
+>
+  <Flex direction="column" align="start">
     <SectionHeader
       r-if="eyebrow || title || subtitle || footnote"
       :eyebrow="eyebrow"
       :title="title"
       :subtitle="subtitle"
       :footnote="footnote"
-      titleTag="h2"
-      subtitleClass="mb-0"
-      footnoteClass="mb-0"/>
+      titleTag="h2"/>
     <Grid
-      class="pricing__grid gap-4"
-      columns="1"
-      columnsLg="2"
-      columnsXl="4"
-      alignItems="start"
+      :columns="columns || 1"
+      :columnsLg="columnsLg || 2"
+      :columnsXl="columnsXl || 4"
+      alignItems="stretch"
     >
       <slot></slot>
     </Grid>
   </Flex>
 </Panel>`
 
-const pricingPlanTemplate = html`<Panel :tone="tone" :class="panelClass">
-  <Flex direction="column" align="start" class="pricing-plan__stack gap-3">
-    <Flex justify="between" align="center" class="w-full" r-if="icon || badge">
+const pricingPlanTemplate = html`<Panel
+  :tone="tone"
+  :variant="variant || 'surface'"
+  :variantMode="variantMode"
+>
+  <Flex direction="column" align="start">
+    <Flex justify="between" align="center" r-if="icon || badge">
       <IconFrame
         r-if="icon"
         :name="icon"
         :tone="tone"
         variant="surface"
-        size="lg"
-        class="pricing-plan__icon"/>
-      <Badge r-if="badge">{{ badge }}</Badge>
+        size="lg"/>
+      <Badge r-if="badge" :tone="tone">{{ badge }}</Badge>
     </Flex>
     <SectionHeader
       :title="title"
       :subtitle="summary"
-      titleTag="h3"
-      titleClass="fs-xl mb-0"
-      subtitleClass="mb-0"/>
-    <Flex class="pricing-plan__price" align="baseline" r-if="price">
-      <span class="pricing-plan__amount">{{ price }}</span>
-      <span class="pricing-plan__period" r-if="period">{{ period }}</span>
+      titleTag="h3"/>
+    <Flex align="baseline" r-if="price">
+      <strong class="fs-h2">{{ price }}</strong>
+      <span r-if="period">{{ period }}</span>
     </Flex>
-    <BtnLink class="mt-auto" :href="ctaLink" r-if="ctaLabel && ctaLink">
+    <BtnLink :href="ctaLink" :tone="tone" r-if="ctaLabel && ctaLink">
       {{ ctaLabel }}
     </BtnLink>
-    <Flex
-      container="ul"
-      direction="column"
-      align="start"
-      class="pricing-plan__features gap-2"
-    >
+    <Flex container="ul" direction="column" align="start" class="m-0 p-0">
       <slot></slot>
     </Flex>
-    <p class="pricing-plan__note text-subtle mb-0" r-if="note">{{ note }}</p>
+    <small r-if="note">{{ note }}</small>
   </Flex>
 </Panel>`
 
-const pricingFeatureTemplate = html`<Flex container="li" align="start" class="pricing-feature gap-2 w-full">
+const pricingFeatureTemplate = html`<Flex container="li" align="start">
   <IconFrame
     :name="icon || 'iconoir:check'"
-    variant="surface"
-    size="sm"
-    class="pricing-feature__icon"/>
-  <span class="min-w-0"><slot></slot></span>
+    :tone="tone"
+    :variant="variant || 'surface'"
+    size="sm"/>
+  <slot></slot>
 </Flex>`
 
 function definePricingTableComponent() {
   return defineComponent<PricingTable>(pricingTableTemplate, {
-    props: ['eyebrow', 'title', 'subtitle', 'footnote'],
-    context: (head) => resolvePricingTable(head.props),
+    props: [
+      'eyebrow',
+      'title',
+      'subtitle',
+      'footnote',
+      'tone',
+      'variant',
+      'variantMode',
+      'columns',
+      'columnsLg',
+      'columnsXl',
+    ],
   })
 }
 
@@ -122,19 +132,18 @@ function definePricingPlanComponent() {
       'badge',
       'note',
       'variant',
+      'variantMode',
       'icon',
       'ctaLabel',
       'ctaLink',
       'tone',
     ],
-    context: (head) => resolvePricingPlan(head.props),
   })
 }
 
 function definePricingFeatureComponent() {
   return defineComponent<PricingFeature>(pricingFeatureTemplate, {
-    props: ['icon'],
-    context: (head) => resolvePricingFeature(head.props),
+    props: ['icon', 'tone', 'variant'],
   })
 }
 
@@ -144,49 +153,4 @@ export function definePricingComponents() {
     pricingPlan: definePricingPlanComponent(),
     pricingFeature: definePricingFeatureComponent(),
   }
-}
-
-function resolvePricingTable(props: PricingTable): PricingTable {
-  return {
-    ...props,
-  }
-}
-
-function resolvePricingPlan(props: PricingPlan): PricingPlan {
-  const title = resolveString(props.title) || 'Plan'
-  const variant = resolveVariant(props.variant)
-  const ctaLabel = resolveString(props.ctaLabel)
-  const ctaLink = resolveString(props.ctaLink)
-  return {
-    ...props,
-    title,
-    variant,
-    ctaLabel,
-    ctaLink,
-    panelClass: computed(() =>
-      ['pricing-plan', variant === 'featured' ? 'pricing-plan--featured' : '']
-        .filter(Boolean)
-        .join(' '),
-    ),
-  }
-}
-
-function resolvePricingFeature(props: PricingFeature): PricingFeature {
-  const icon = resolveString(props.icon)
-  return {
-    icon,
-  }
-}
-
-function resolveVariant(value?: string) {
-  const normalized = resolveString(value).toLowerCase()
-  if (!normalized) return undefined
-  if (normalized === 'featured' || normalized === 'primary') return 'featured'
-  return undefined
-}
-
-function resolveString(value: unknown) {
-  return typeof value === 'string' && value.trim().length > 0
-    ? value.trim()
-    : ''
 }
