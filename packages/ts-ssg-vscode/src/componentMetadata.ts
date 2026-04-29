@@ -395,6 +395,7 @@ function analyzeType(
     let includesBoolean = false
     let includesBroadString = false
     let includesBroadNumber = false
+    let includesUnknown = false
 
     for (const member of normalizedType.types) {
       const memberType = checker.getNonNullableType(member)
@@ -404,7 +405,7 @@ function analyzeType(
         continue
       }
 
-      if (isStringType(memberType)) {
+      if (isStringLikeType(memberType)) {
         includesBroadString = true
         continue
       }
@@ -416,7 +417,8 @@ function analyzeType(
 
       const literalValue = getLiteralCompletionValue(memberType, checker)
       if (literalValue === undefined) {
-        return { valueKind: 'unknown' }
+        includesUnknown = true
+        continue
       }
 
       if (literalValue === 'true' || literalValue === 'false') {
@@ -447,6 +449,7 @@ function analyzeType(
 
     if (includesBroadString) return { valueKind: 'string' }
     if (includesBroadNumber) return { valueKind: 'number' }
+    if (includesUnknown) return { valueKind: 'unknown' }
 
     return { valueKind: 'unknown' }
   }
@@ -458,7 +461,7 @@ function analyzeType(
     }
   }
 
-  if (isStringType(normalizedType)) {
+  if (isStringLikeType(normalizedType)) {
     return { valueKind: 'string' }
   }
 
@@ -490,6 +493,14 @@ function isBooleanType(type: ts.Type) {
 
 function isStringType(type: ts.Type) {
   return (type.flags & ts.TypeFlags.String) !== 0
+}
+
+function isStringLikeType(type: ts.Type): boolean {
+  if (isStringType(type)) return true
+
+  if ((type.flags & ts.TypeFlags.Intersection) === 0) return false
+
+  return (type as ts.IntersectionType).types.some(isStringType)
 }
 
 function isNumberType(type: ts.Type) {
