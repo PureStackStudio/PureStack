@@ -10,6 +10,9 @@ describe('Landing components rendering', () => {
     const cleanup = ensureDomGlobals()
     const html = renderApp(
       `<LandingBand
+        display="grid"
+        alignItems="center"
+        justifyContent="end"
         topEdge="slant-down"
         topEdgeStart="200px"
         bottomEdge="slant-up"
@@ -26,6 +29,10 @@ describe('Landing components rendering', () => {
     cleanup()
 
     expect(html).toContain('Shaped band')
+    expect(html).toContain(' b-0"')
+    expect(html).toContain('display: grid')
+    expect(html).toContain('align-items: center')
+    expect(html).toContain('justify-content: end')
     expect(html).toContain(
       'clip-path: polygon(0 0, 200px 0, 100% 3rem, 100% calc(100% - 3rem), 50% 100%, 0 100%)',
     )

@@ -16,8 +16,18 @@ edge with a slant.
 
 ## 1. Flat full-bleed band
 
-<LandingBand tone="accent" variant="surfaceAlt" height="auto" paddingTop="4rem" paddingBottom="4rem">
-  <Grid columns="1" columnsLg="minmax(0, 1fr) minmax(18rem, 0.42fr)" alignItems="center">
+<LandingBand
+  tone="accent"
+  variant="surfaceAlt"
+  height="auto"
+  paddingTop="4rem"
+  paddingBottom="4rem"
+>
+  <Grid
+    columns="1"
+    columnsLg="minmax(0, 1fr) minmax(18rem, 0.42fr)"
+    alignItems="center"
+  >
     <SectionHeader
       eyebrow="Full-bleed surface"
       title="A wide band for strong page rhythm."
@@ -49,12 +59,16 @@ edge with a slant.
   variant="surfaceAlt"
   height="auto"
   paddingTop="4rem"
-  paddingBottom="4rem"
+  paddingBottom="0rem"
   bottomEdge="slant-up"
   bottomEdgeStart="35%"
-  edgeSize="4rem"
+  edgeSize="11rem"
 >
-  <Grid columns="1" columnsLg="minmax(0, 0.8fr) minmax(0, 1.2fr)" alignItems="center">
+  <Grid
+    columns="1"
+    columnsLg="minmax(0, 0.8fr) minmax(0, 1.2fr)"
+    alignItems="center"
+  >
     <FeatureCard
       tone="neutral"
       variant="surface"
@@ -70,7 +84,12 @@ edge with a slant.
   </Grid>
 </LandingBand>
 
-<Grid columns="1" columnsMd="3" class="my-6">
+<Grid
+  columns="1"
+  columnsMd="3"
+  class="mb-6"
+  style="margin-top: -150px; z-index: 1; position: relative"
+>
   <FeatureCard
     tone="neutral"
     title="Content safe"
@@ -100,7 +119,11 @@ edge with a slant.
   topEdgeStart="12rem"
   edgeSize="3.5rem"
 >
-  <Grid columns="1" columnsLg="minmax(0, 1.1fr) minmax(16rem, 0.9fr)" alignItems="center">
+  <Grid
+    columns="1"
+    columnsLg="minmax(0, 1.1fr) minmax(16rem, 0.9fr)"
+    alignItems="center"
+  >
     <SectionHeader
       eyebrow="Offset entry"
       title="The top edge can start from a fixed coordinate."
@@ -109,7 +132,11 @@ edge with a slant.
       subtitleClass="mb-0"/>
     <Panel tone="neutral" variant="surface">
       <Flex direction="column" align="start">
-        <IconFrame name="lucide:panel-top" tone="info" variant="surface" size="lg"/>
+        <IconFrame
+          name="lucide:panel-top"
+          tone="info"
+          variant="surface"
+          size="lg"/>
         <strong>topEdge="slant-down"</strong>
         <p class="mb-0">
           Pair fixed starts with fixed art direction when the composition needs
@@ -194,11 +221,15 @@ edge with a slant.
   height="8rem"
   paddingTop="2rem"
   paddingBottom="2rem"
-  bottomEdge="slant-down"
-  bottomEdgeStart="200px"
   edgeSize="2rem"
+  alignItems="center"
 >
-  <Flex align="center" justify="center" class="w-full">
+  <Flex
+    class="self-align-center"
+    align="center"
+    justify="center"
+    class="w-full"
+  >
     <Badge tone="neutral">200px slant start</Badge>
   </Flex>
 </LandingBand>

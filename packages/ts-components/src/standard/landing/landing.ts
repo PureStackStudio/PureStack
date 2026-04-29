@@ -42,6 +42,9 @@ export interface LandingBand {
   image?: RefOrValue<string>
   imageFit?: RefOrValue<LandingBandImageFit>
   imagePosition?: RefOrValue<string>
+  display?: RefOrValue<CSSProps['display']>
+  alignItems?: RefOrValue<CSSProps['alignItems']>
+  justifyContent?: RefOrValue<CSSProps['justifyContent']>
   height?: RefOrValue<string>
   paddingTop?: RefOrValue<string>
   paddingBottom?: RefOrValue<string>
@@ -346,6 +349,9 @@ function defineLandingBandComponent() {
       'image',
       'imageFit',
       'imagePosition',
+      'display',
+      'alignItems',
+      'justifyContent',
       'height',
       'marginTop',
       'marginBottom',
@@ -485,13 +491,13 @@ function resolveLandingBand(props: LandingBand): LandingBand {
       resolveComponentClasses(props, {
         defaultVariant: DEFAULT_LANDING_BAND_VARIANT,
         defaultVariantMode: DEFAULT_LANDING_BAND_VARIANT_MODE,
-        classes: ['rounded-none'],
+        classes: ['rounded-none', resolveLandingBandBorderClass(props)],
       }),
     ),
     bandStyle: computed<Partial<CSSProps>>(() => ({
-      display: 'flex',
-      alignItems: 'start',
-      justifyContent: 'center',
+      display: resolveCssPropValue(props.display, 'flex'),
+      alignItems: resolveCssPropValue(props.alignItems, 'start'),
+      justifyContent: resolveCssPropValue(props.justifyContent, 'center'),
       overflow: 'hidden',
       boxSizing: 'border-box',
       pointerEvents: 'none',
@@ -575,6 +581,13 @@ function resolveLandingBandEdge(edge?: RefOrValue<LandingBandEdge>) {
     : 'flat'
 }
 
+function resolveLandingBandBorderClass(props: LandingBand) {
+  return resolveLandingBandEdge(props.topEdge) === 'flat' &&
+    resolveLandingBandEdge(props.bottomEdge) === 'flat'
+    ? undefined
+    : 'b-0'
+}
+
 function resolveBackgroundImage(image?: RefOrValue<string>) {
   const resolved = unref(image)
   return typeof resolved === 'string' && resolved.trim()
@@ -590,4 +603,8 @@ function resolveStyleValue(
   return typeof resolved === 'string' && resolved.trim()
     ? resolved.trim()
     : fallback
+}
+
+function resolveCssPropValue<T>(value: RefOrValue<T> | undefined, fallback: T) {
+  return unref(value) || fallback
 }
