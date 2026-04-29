@@ -105,13 +105,21 @@ function resolveDependencyComponentTarget(
       if (!exportedDefinition) continue
 
       return {
-        filePath,
+        filePath: resolveRealPath(filePath),
         line: exportedDefinition.line,
       }
     }
   }
 
   return undefined
+}
+
+function resolveRealPath(filePath: string) {
+  try {
+    return fs.realpathSync.native(filePath)
+  } catch {
+    return filePath
+  }
 }
 
 function getWorkspaceComponentFiles(workspaceRoot: string) {
@@ -156,13 +164,28 @@ function getDependencyComponentPackages(workspaceRoot: string) {
   if (cachedPackages) return cachedPackages
 
   const dependencyPackages: DependencyComponentPackage[] = []
-  collectDependencyComponentPackages(
-    path.join(workspaceRoot, NODE_MODULES_DIRECTORY_NAME),
-    dependencyPackages,
-  )
+  for (const nodeModulesPath of getAncestorNodeModulesPaths(workspaceRoot)) {
+    collectDependencyComponentPackages(nodeModulesPath, dependencyPackages)
+  }
   dependencyPackageCache.set(workspaceRoot, dependencyPackages)
 
   return dependencyPackages
+}
+
+function getAncestorNodeModulesPaths(workspaceRoot: string) {
+  const nodeModulesPaths: string[] = []
+  let currentDirectory = path.resolve(workspaceRoot)
+
+  for (;;) {
+    nodeModulesPaths.push(
+      path.join(currentDirectory, NODE_MODULES_DIRECTORY_NAME),
+    )
+
+    const parentDirectory = path.dirname(currentDirectory)
+    if (parentDirectory === currentDirectory) return nodeModulesPaths
+
+    currentDirectory = parentDirectory
+  }
 }
 
 function collectDependencyComponentPackages(

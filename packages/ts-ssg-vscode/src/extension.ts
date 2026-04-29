@@ -1,8 +1,8 @@
-import ts from 'typescript'
 import * as vscode from 'vscode'
 import {
   clearComponentMetadataCache,
   getComponentMetadata,
+  setComponentMetadataDebugLogger,
 } from './componentMetadata'
 import {
   clearComponentResolverCaches,
@@ -25,6 +25,12 @@ import {
   formatActiveEditorTemplates,
   isOffsetInsideSupportedTaggedTemplate,
 } from './templateFormatting'
+import runtimeTs, {
+  resolveWorkspaceTypescriptPath,
+  setTypescriptWorkspaceRoots,
+} from './typescriptRuntime'
+
+const ts = runtimeTs
 
 const COMPONENT_TAG_PATTERN = /[A-Za-z][A-Za-z0-9-]*/
 const COMPONENT_NAME_PATTERN = /^[A-Za-z][A-Za-z0-9-]*$/
@@ -37,7 +43,35 @@ const SUPPORTED_SELECTORS: vscode.DocumentSelector = [
 ]
 
 export function activate(context: vscode.ExtensionContext) {
+  const outputChannel = vscode.window.createOutputChannel(
+    'PureStack Component Tools',
+  )
+  const workspaceRoots = getWorkspaceRootPaths()
+  setTypescriptWorkspaceRoots(workspaceRoots)
+
+  const typescriptPath = resolveWorkspaceTypescriptPath()
+  if (!typescriptPath) {
+    outputChannel.appendLine(
+      [
+        '[typescript] Cannot resolve TypeScript from the current workspace.',
+        'PureStack Component Tools will stay inactive for this window.',
+        `Workspace roots: ${workspaceRoots.length > 0 ? workspaceRoots.join(', ') : '(none)'}`,
+      ].join('\n'),
+    )
+    context.subscriptions.push(outputChannel)
+    return
+  }
+
+  outputChannel.appendLine(`[typescript] ${typescriptPath}`)
+  setComponentMetadataDebugLogger((message) => {
+    outputChannel.appendLine(message)
+  })
+
   context.subscriptions.push(
+    outputChannel,
+    {
+      dispose: () => setComponentMetadataDebugLogger(undefined),
+    },
     vscode.languages.registerDefinitionProvider(
       SUPPORTED_SELECTORS,
       new ComponentDefinitionProvider(),
@@ -118,6 +152,12 @@ export function activate(context: vscode.ExtensionContext) {
   )
 }
 
+function getWorkspaceRootPaths() {
+  return (
+    vscode.workspace.workspaceFolders?.map((folder) => folder.uri.fsPath) ?? []
+  )
+}
+
 export function deactivate() {}
 
 function registerComponentResolverWatchers() {
@@ -149,6 +189,7 @@ function registerComponentResolverWatchers() {
 
   subscriptions.push(
     vscode.workspace.onDidChangeWorkspaceFolders(() => {
+      setTypescriptWorkspaceRoots(getWorkspaceRootPaths())
       clearComponentResolverCaches()
       clearComponentMetadataCache()
     }),

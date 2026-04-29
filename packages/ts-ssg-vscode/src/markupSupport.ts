@@ -1,5 +1,8 @@
-import ts from 'typescript'
+import type * as TypeScript from 'typescript'
 import * as vscode from 'vscode'
+import runtimeTs from './typescriptRuntime'
+
+const ts = runtimeTs
 
 const SUPPORTED_TEMPLATE_TAG_NAMES = new Set(['html', 'svg'])
 
@@ -188,7 +191,7 @@ function getTypeScriptTemplateContextAtOffset(
   visitNode(sourceFile)
   return matchedContext
 
-  function visitNode(node: ts.Node) {
+  function visitNode(node: TypeScript.Node) {
     if (matchedContext) return
     if (offset < node.getStart(sourceFile) || offset > node.getEnd()) return
 
@@ -266,8 +269,8 @@ function getMdxIgnoredRanges(document: vscode.TextDocument) {
 }
 
 function getSupportedTemplateContext(
-  sourceFile: ts.SourceFile,
-  node: ts.Node,
+  sourceFile: TypeScript.SourceFile,
+  node: TypeScript.Node,
   offset: number,
 ): MarkupContext | undefined {
   if (!ts.isTaggedTemplateExpression(node)) return undefined
@@ -290,8 +293,8 @@ function getSupportedTemplateContext(
 }
 
 function getTemplateIgnoredRanges(
-  sourceFile: ts.SourceFile,
-  template: ts.TemplateLiteral,
+  sourceFile: TypeScript.SourceFile,
+  template: TypeScript.TemplateLiteral,
 ) {
   if (!ts.isTemplateExpression(template)) return []
 

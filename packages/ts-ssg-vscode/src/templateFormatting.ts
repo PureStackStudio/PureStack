@@ -1,5 +1,9 @@
-import ts from 'typescript'
+import type * as TypeScript from 'typescript'
 import * as vscode from 'vscode'
+import runtimeTs from './typescriptRuntime'
+
+const ts = runtimeTs
+
 import {
   formatHtmlFragment,
   getHtmlFormattingOptions,
@@ -74,7 +78,7 @@ export function getSupportedTaggedTemplates(
   visitNode(sourceFile)
   return templates
 
-  function visitNode(node: ts.Node) {
+  function visitNode(node: TypeScript.Node) {
     if (ts.isTaggedTemplateExpression(node)) {
       const template = createSupportedTaggedTemplate(node, sourceFile, document)
       if (template) templates.push(template)
@@ -85,7 +89,7 @@ export function getSupportedTaggedTemplates(
 }
 
 export function isOffsetInsideSupportedTaggedTemplate(
-  sourceFile: ts.SourceFile,
+  sourceFile: TypeScript.SourceFile,
   offset: number,
 ) {
   let isInsideTemplate = false
@@ -93,7 +97,7 @@ export function isOffsetInsideSupportedTaggedTemplate(
   visitNode(sourceFile)
   return isInsideTemplate
 
-  function visitNode(node: ts.Node) {
+  function visitNode(node: TypeScript.Node) {
     if (isInsideTemplate) return
     if (offset < node.getStart(sourceFile) || offset >= node.getEnd()) return
 
@@ -121,8 +125,8 @@ export function isOffsetInsideSupportedTaggedTemplate(
 }
 
 function createSupportedTaggedTemplate(
-  node: ts.TaggedTemplateExpression,
-  sourceFile: ts.SourceFile,
+  node: TypeScript.TaggedTemplateExpression,
+  sourceFile: TypeScript.SourceFile,
   document: vscode.TextDocument,
 ) {
   const tagName = getSupportedTemplateTagName(node.tag.getText(sourceFile))
@@ -201,15 +205,15 @@ function getSupportedTemplateTagName(tagText: string) {
 }
 
 function sliceTemplateHeadContent(
-  head: ts.TemplateHead,
-  sourceFile: ts.SourceFile,
+  head: TypeScript.TemplateHead,
+  sourceFile: TypeScript.SourceFile,
 ) {
   return sourceFile.text.slice(head.getStart(sourceFile) + 1, head.getEnd() - 2)
 }
 
 function sliceTemplateSpanLiteralContent(
-  literal: ts.TemplateMiddle | ts.TemplateTail,
-  sourceFile: ts.SourceFile,
+  literal: TypeScript.TemplateMiddle | TypeScript.TemplateTail,
+  sourceFile: TypeScript.SourceFile,
 ) {
   const endOffset = ts.isTemplateTail(literal) ? 1 : 2
   return sourceFile.text.slice(

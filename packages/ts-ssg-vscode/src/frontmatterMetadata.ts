@@ -1,6 +1,9 @@
 import * as fs from 'node:fs'
 import * as path from 'node:path'
-import ts from 'typescript'
+import type * as TypeScript from 'typescript'
+import runtimeTs from './typescriptRuntime'
+
+const ts = runtimeTs
 
 export type FrontmatterPropertyMetadata = {
   allowUnknownKeys: boolean
@@ -26,7 +29,7 @@ type FrontmatterMetadataRoot = {
 
 type CachedProjectService = {
   configMtimeMs: number
-  languageService: ts.LanguageService
+  languageService: TypeScript.LanguageService
   metadataVersion: string
   root: FrontmatterMetadataRoot
 }
@@ -159,7 +162,7 @@ function createProjectLanguageService(filePath: string, configPath?: string) {
     ? readProjectConfiguration(filePath, configPath)
     : createSingleFileProject(filePath)
 
-  const host: ts.LanguageServiceHost = {
+  const host: TypeScript.LanguageServiceHost = {
     directoryExists: ts.sys.directoryExists?.bind(ts.sys),
     fileExists: ts.sys.fileExists,
     getCompilationSettings: () => compilerOptions,
@@ -229,8 +232,8 @@ function createSingleFileProject(filePath: string) {
 }
 
 function buildPageFrontmatterMetadata(
-  sourceFile: ts.SourceFile,
-  checker: ts.TypeChecker,
+  sourceFile: TypeScript.SourceFile,
+  checker: TypeScript.TypeChecker,
 ) {
   const declaration = findNamedTypeDeclaration(sourceFile, 'PageFrontmatter')
   if (!declaration) return undefined
@@ -259,9 +262,9 @@ function buildPageFrontmatterMetadata(
 }
 
 function buildTypeProperties(
-  type: ts.Type,
+  type: TypeScript.Type,
   parentPath: string[],
-  checker: ts.TypeChecker,
+  checker: TypeScript.TypeChecker,
   visitedTypes: Set<string>,
 ) {
   const apparentType = checker.getApparentType(type)
@@ -312,8 +315,8 @@ function buildTypeProperties(
 }
 
 function analyzeType(
-  checker: ts.TypeChecker,
-  type: ts.Type,
+  checker: TypeScript.TypeChecker,
+  type: TypeScript.Type,
   propertyPath: string[],
   visitedTypes: Set<string>,
 ): AnalyzedFrontmatterType {
@@ -324,7 +327,7 @@ function analyzeType(
     let includesBoolean = false
     let includesBroadString = false
     let includesBroadNumber = false
-    const objectMembers: ts.Type[] = []
+    const objectMembers: TypeScript.Type[] = []
 
     for (const member of normalizedType.types) {
       const memberType = checker.getNonNullableType(member)
@@ -457,8 +460,8 @@ function analyzeType(
 }
 
 function analyzeObjectType(
-  checker: ts.TypeChecker,
-  type: ts.Type,
+  checker: TypeScript.TypeChecker,
+  type: TypeScript.Type,
   propertyPath: string[],
   visitedTypes: Set<string>,
 ): AnalyzedFrontmatterType {
@@ -486,7 +489,7 @@ function analyzeObjectType(
   }
 }
 
-function findNamedTypeDeclaration(sourceFile: ts.SourceFile, typeName: string) {
+function findNamedTypeDeclaration(sourceFile: TypeScript.SourceFile, typeName: string) {
   for (const statement of sourceFile.statements) {
     if (
       (ts.isInterfaceDeclaration(statement) ||
@@ -501,7 +504,7 @@ function findNamedTypeDeclaration(sourceFile: ts.SourceFile, typeName: string) {
   return undefined
 }
 
-function getPreferredPropertyDeclaration(symbol?: ts.Symbol) {
+function getPreferredPropertyDeclaration(symbol?: TypeScript.Symbol) {
   if (!symbol?.declarations || symbol.declarations.length === 0) {
     return undefined
   }
@@ -516,10 +519,10 @@ function getPreferredPropertyDeclaration(symbol?: ts.Symbol) {
 }
 
 function getTypeSignature(
-  checker: ts.TypeChecker,
-  symbol: ts.Symbol,
-  type: ts.Type,
-  declaration?: ts.Declaration,
+  checker: TypeScript.TypeChecker,
+  symbol: TypeScript.Symbol,
+  type: TypeScript.Type,
+  declaration?: TypeScript.Declaration,
 ) {
   if (declaration && ts.isInterfaceDeclaration(declaration)) {
     return `interface ${declaration.name.text}`
@@ -537,10 +540,10 @@ function getTypeSignature(
 }
 
 function getPropertySignature(
-  checker: ts.TypeChecker,
+  checker: TypeScript.TypeChecker,
   propertyName: string,
-  propertySymbol: ts.Symbol,
-  declaration?: ts.Declaration,
+  propertySymbol: TypeScript.Symbol,
+  declaration?: TypeScript.Declaration,
 ) {
   if (
     declaration &&
@@ -569,7 +572,7 @@ function getPropertySignature(
   return `${propertyName}: ${checker.typeToString(propertyType)}`
 }
 
-function getSymbolDocumentation(checker: ts.TypeChecker, symbol?: ts.Symbol) {
+function getSymbolDocumentation(checker: TypeScript.TypeChecker, symbol?: TypeScript.Symbol) {
   const resolvedSymbol = resolveAliasedSymbol(checker, symbol) ?? symbol
   if (!resolvedSymbol) return undefined
 
@@ -580,7 +583,7 @@ function getSymbolDocumentation(checker: ts.TypeChecker, symbol?: ts.Symbol) {
   return documentation || undefined
 }
 
-function resolveAliasedSymbol(checker: ts.TypeChecker, symbol?: ts.Symbol) {
+function resolveAliasedSymbol(checker: TypeScript.TypeChecker, symbol?: TypeScript.Symbol) {
   if (!symbol) return undefined
   if ((symbol.flags & ts.SymbolFlags.Alias) === 0) return symbol
 
@@ -591,36 +594,36 @@ function resolveAliasedSymbol(checker: ts.TypeChecker, symbol?: ts.Symbol) {
   }
 }
 
-function isOptionalPropertySymbol(symbol: ts.Symbol) {
+function isOptionalPropertySymbol(symbol: TypeScript.Symbol) {
   return (symbol.flags & ts.SymbolFlags.Optional) !== 0
 }
 
-function hasStringIndexSignature(type: ts.Type, checker: ts.TypeChecker) {
+function hasStringIndexSignature(type: TypeScript.Type, checker: TypeScript.TypeChecker) {
   return checker.getIndexTypeOfType(type, ts.IndexKind.String) !== undefined
 }
 
-function isObjectLikeType(type: ts.Type) {
+function isObjectLikeType(type: TypeScript.Type) {
   return (
     (type.flags & ts.TypeFlags.Object) !== 0 ||
     (type.flags & ts.TypeFlags.NonPrimitive) !== 0
   )
 }
 
-function isBooleanType(type: ts.Type) {
+function isBooleanType(type: TypeScript.Type) {
   return (type.flags & ts.TypeFlags.Boolean) !== 0
 }
 
-function isStringType(type: ts.Type) {
+function isStringType(type: TypeScript.Type) {
   return (type.flags & ts.TypeFlags.String) !== 0
 }
 
-function isNumberType(type: ts.Type) {
+function isNumberType(type: TypeScript.Type) {
   return (type.flags & ts.TypeFlags.Number) !== 0
 }
 
-function getLiteralCompletionValue(type: ts.Type, checker: ts.TypeChecker) {
+function getLiteralCompletionValue(type: TypeScript.Type, checker: TypeScript.TypeChecker) {
   if ((type.flags & ts.TypeFlags.StringLiteral) !== 0) {
-    return (type as ts.StringLiteralType).value
+    return (type as TypeScript.StringLiteralType).value
   }
 
   if ((type.flags & ts.TypeFlags.BooleanLiteral) !== 0) {
@@ -631,7 +634,7 @@ function getLiteralCompletionValue(type: ts.Type, checker: ts.TypeChecker) {
   return undefined
 }
 
-function getLineNumber(node: ts.Node) {
+function getLineNumber(node: TypeScript.Node) {
   const sourceFile = node.getSourceFile()
   return sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile))
     .line

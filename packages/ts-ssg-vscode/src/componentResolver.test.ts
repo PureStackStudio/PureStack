@@ -67,6 +67,41 @@ describe('resolveComponentTarget dependency fallback', () => {
   })
 })
 
+describe('resolveComponentTarget monorepo package workspace', () => {
+  afterAll(() => {
+    clearComponentResolverCaches()
+  })
+
+  it('resolves LandingBand from the canonical ts-components source path when ts-ssg is the workspace root', () => {
+    const repoRoot = process.cwd()
+    const workspaceRoot = path.join(repoRoot, 'packages', 'ts-ssg')
+    const preferredLocalFilePath = path.join(
+      workspaceRoot,
+      'sample-content',
+      'guide',
+      'landing-band-sample.mdx',
+    )
+    const expectedSourcePath = path.join(
+      repoRoot,
+      'packages',
+      'ts-components',
+      'src',
+      'standard',
+      'landing',
+      'landing.ts',
+    )
+
+    const target = resolveComponentTarget(
+      workspaceRoot,
+      'LandingBand',
+      preferredLocalFilePath,
+    )
+
+    expect(target).toBeDefined()
+    expect(target?.filePath).toBe(expectedSourcePath)
+  })
+})
+
 describe('resolveComponentTarget cache invalidation', () => {
   let isolatedWorkspaceRoot = ''
 
