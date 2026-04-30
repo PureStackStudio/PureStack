@@ -95,6 +95,7 @@ function applyLayoutUtilities(theme: string) {
   styleBuilder.select('.cursor-pointer', theme).cursor(force('pointer'))
   styleBuilder.select('.ws-normal', theme).whiteSpace(force('normal'))
   styleBuilder.select('.ws-nowrap', theme).whiteSpace(force('nowrap'))
+  styleBuilder.select('.col-resize', theme).cursor(force('col-resize'))
 }
 
 function applyBorderUtilities(

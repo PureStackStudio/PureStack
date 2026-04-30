@@ -210,7 +210,7 @@ export const docLayoutDefaults = {
    * before that value can become preferredNavWidth and then activeNavWidth.
    * Visible only when activeNavWidth is non-zero.
    */
-  maxNavWidth: '420px',
+  maxNavWidth: '820px',
   /**
    * Minimum persisted/user table-of-contents sidebar width.
    *
@@ -226,7 +226,7 @@ export const docLayoutDefaults = {
    * before that value can become preferredTocWidth and then activeTocWidth.
    * Visible only when activeTocWidth is non-zero.
    */
-  maxTocWidth: '360px',
+  maxTocWidth: '820px',
 } as const
 
 export function docLayoutVar(name: keyof typeof docLayoutVars) {

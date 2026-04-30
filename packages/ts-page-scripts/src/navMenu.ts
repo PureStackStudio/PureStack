@@ -5,12 +5,16 @@ import {
 } from '../../ts-style/src/docLayoutVars'
 import {
   applyStoredDocLayoutPreferences,
+  DOC_LAYOUT_NAV_WIDTH_STORAGE_KEY,
   readDocLayoutPxVar,
 } from './docLayoutCssVars'
 
 const NAV_COLLAPSED_CLASS = 'template-doc--nav-collapsed'
 const NAV_COLLAPSED_STORAGE_KEY = 'ts-ssg:nav-collapsed'
 const NAV_OPEN_CLASS = 'doc-sidebar--open'
+const NAV_RESIZE_HOVER_CLASS = 'col-resize'
+const NAV_RESIZING_CLASS = 'resizing'
+const NAV_RESIZE_EDGE_TOLERANCE_PX = 20
 const EDGE_OPEN_THRESHOLD_FALLBACK_PX = Number.parseFloat(
   docLayoutDefaults.defaultRailWidth,
 )
@@ -46,6 +50,7 @@ function init() {
       media.matches
     )
   }
+  const supportsDesktopResize = () => supportsDesktopCollapse()
 
   const setCollapsed = (collapsed: boolean) => {
     if (!supportsDesktopCollapse()) {
@@ -100,10 +105,50 @@ function init() {
     syncCollapseButton()
   }
 
+  const isOnResizeEdge = (event: MouseEvent) => {
+    if (!supportsDesktopResize()) return false
+    const rect = menu.getBoundingClientRect()
+    return Math.abs(event.clientX - rect.right) <= NAV_RESIZE_EDGE_TOLERANCE_PX
+  }
+
+  const setResizeHover = (hover: boolean) => {
+    document.body.classList.toggle(NAV_RESIZE_HOVER_CLASS, hover)
+  }
+
+  const resolveNavWidth = (clientX: number) => {
+    const min = readDocLayoutPxVar(
+      docLayoutVars.minNavWidth,
+      Number.parseFloat(docLayoutDefaults.minNavWidth),
+    )
+    const max = readDocLayoutPxVar(
+      docLayoutVars.maxNavWidth,
+      Number.parseFloat(docLayoutDefaults.maxNavWidth),
+    )
+    const left = sidebar?.getBoundingClientRect().left ?? 0
+    const marginInlineEnd = readPxValue(
+      getComputedStyle(menu).marginInlineEnd,
+      0,
+    )
+    return clamp(clientX - left + marginInlineEnd, min, max)
+  }
+
+  const applyNavWidth = (width: number) => {
+    document.body.style.setProperty(docLayoutVars.userNavWidth, `${width}px`)
+  }
+
+  const persistNavWidth = (width: number) => {
+    try {
+      localStorage.setItem(DOC_LAYOUT_NAV_WIDTH_STORAGE_KEY, String(width))
+    } catch {}
+  }
+
   applyStoredPreference()
 
   if (typeof media.addEventListener === 'function') {
-    media.addEventListener('change', applyStoredPreference)
+    media.addEventListener('change', () => {
+      applyStoredPreference()
+      setResizeHover(false)
+    })
   }
 
   if (collapseToggle) {
@@ -122,6 +167,43 @@ function init() {
       syncCollapseButton()
     })
   }
+
+  menu.addEventListener('mousemove', (event) => {
+    if (document.body.classList.contains(NAV_RESIZING_CLASS)) return
+    setResizeHover(isOnResizeEdge(event))
+  })
+
+  menu.addEventListener('mouseleave', () => {
+    if (document.body.classList.contains(NAV_RESIZING_CLASS)) return
+    setResizeHover(false)
+  })
+
+  menu.addEventListener('mousedown', (event) => {
+    if (event.button !== 0) return
+    if (!isOnResizeEdge(event)) return
+
+    event.preventDefault()
+    const body = document.body
+    body.classList.add(NAV_RESIZING_CLASS)
+    setResizeHover(false)
+
+    const onMouseMove = (moveEvent: MouseEvent) => {
+      applyNavWidth(resolveNavWidth(moveEvent.clientX))
+    }
+
+    const onMouseUp = (upEvent: MouseEvent) => {
+      const width = resolveNavWidth(upEvent.clientX)
+      applyNavWidth(width)
+      persistNavWidth(width)
+      body.classList.remove(NAV_RESIZING_CLASS)
+      setResizeHover(false)
+      window.removeEventListener('mousemove', onMouseMove)
+      window.removeEventListener('mouseup', onMouseUp)
+    }
+
+    window.addEventListener('mousemove', onMouseMove)
+    window.addEventListener('mouseup', onMouseUp)
+  })
 
   for (const panelToggle of panelToggles) {
     panelToggle.addEventListener('click', (event) => {
@@ -159,6 +241,16 @@ function init() {
     if (event.clientX > edgeOpenThreshold) return
     setPanelOpen(true)
   })
+}
+
+function clamp(value: number, min: number, max: number) {
+  if (min > max) return value
+  return Math.min(Math.max(value, min), max)
+}
+
+function readPxValue(value: string, fallback: number) {
+  const parsed = Number.parseFloat(value)
+  return Number.isFinite(parsed) ? parsed : fallback
 }
 
 ready(init)
