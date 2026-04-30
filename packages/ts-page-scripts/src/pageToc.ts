@@ -5,6 +5,7 @@ import {
 } from '../../ts-style/src/docLayoutVars'
 import {
   applyStoredDocLayoutPreferences,
+  DOC_LAYOUT_TOC_WIDTH_STORAGE_KEY,
   readDocLayoutPxVar,
 } from './docLayoutCssVars'
 
@@ -16,6 +17,9 @@ const TOC_OPEN_CLASS = 'doc-toc--open'
 const BODY_TOC_OPEN_CLASS = 'doc-toc-open'
 const BODY_FORCE_COLLAPSED_CLASS = 'template-doc--toc-collapsed'
 const TOC_COLLAPSED_STORAGE_KEY = 'ts-ssg:toc-collapsed'
+const TOC_RESIZE_HOVER_CLASS = 'col-resize'
+const TOC_RESIZING_CLASS = 'resizing'
+const TOC_RESIZE_EDGE_TOLERANCE_PX = 20
 const EDGE_OPEN_THRESHOLD_FALLBACK_PX = Number.parseFloat(
   docLayoutDefaults.defaultRailWidth,
 )
@@ -51,7 +55,7 @@ function init() {
   )
   const media = window.matchMedia(matchMediaMax(BREAKPOINTS.toc))
   const edgeOpenMedia = window.matchMedia(EDGE_OPEN_POINTER_QUERY)
-  const readStoredCollapsedPreference = () => {
+  const readStored = () => {
     try {
       const value = localStorage.getItem(TOC_COLLAPSED_STORAGE_KEY)
       if (value === '1') return true
@@ -61,14 +65,20 @@ function init() {
       return null
     }
   }
-  const writeStoredCollapsedPreference = (collapsed: boolean) => {
+  const writeStored = (collapsed: boolean) => {
     try {
       localStorage.setItem(TOC_COLLAPSED_STORAGE_KEY, collapsed ? '1' : '0')
     } catch {}
   }
   const isForceCollapsed = () =>
     document.body.classList.contains(BODY_FORCE_COLLAPSED_CLASS)
+  const supportsDesktopCollapse = () => {
+    const body = document.body
+    return body.classList.contains('template-doc--has-toc') && !media.matches
+  }
+  const mediaMd = window.matchMedia(matchMediaMax(BREAKPOINTS.md))
   const isCollapsible = () => isForceCollapsed() || media.matches
+  const supportsDesktopResize = () => !mediaMd.matches
   const syncHeaderToggle = () => {
     if (!restoreToggle) return
     if (isForceCollapsed()) {
@@ -99,23 +109,78 @@ function init() {
   const shouldHighlightTargets = () =>
     !isCollapsible() || Boolean(tocShell?.classList.contains(TOC_OPEN_CLASS))
 
-  const storedCollapsed = readStoredCollapsedPreference()
-  if (storedCollapsed === true) {
-    document.body.classList.add(BODY_FORCE_COLLAPSED_CLASS)
-  } else if (storedCollapsed === false) {
-    document.body.classList.remove(BODY_FORCE_COLLAPSED_CLASS)
-  }
-  syncHeaderToggle()
+  const shouldOpenByDefault = () => !isCollapsible()
 
-  // Ensure body class always reflects current TOC state for consistent styling.
-  setTocOpen(Boolean(tocShell?.classList.contains(TOC_OPEN_CLASS)))
+  const syncOpenState = () => {
+    setTocOpen(shouldOpenByDefault())
+  }
+
+  const applyStoredPreference = () => {
+    const stored = readStored()
+    if (stored === true) {
+      document.body.classList.add(BODY_FORCE_COLLAPSED_CLASS)
+    } else if (stored === false) {
+      document.body.classList.remove(BODY_FORCE_COLLAPSED_CLASS)
+    }
+    syncHeaderToggle()
+  }
+
+  const isOnResizeEdge = (event: MouseEvent) => {
+    if (!supportsDesktopResize()) return false
+    const rect = toc.getBoundingClientRect()
+    return Math.abs(event.clientX - rect.left) <= TOC_RESIZE_EDGE_TOLERANCE_PX
+  }
+
+  const setResizeHover = (hover: boolean) => {
+    document.body.classList.toggle(TOC_RESIZE_HOVER_CLASS, hover)
+  }
+
+  const resolveTocWidth = (clientX: number) => {
+    const min = readDocLayoutPxVar(
+      docLayoutVars.minTocWidth,
+      Number.parseFloat(docLayoutDefaults.minTocWidth),
+    )
+    const max = readDocLayoutPxVar(
+      docLayoutVars.maxTocWidth,
+      Number.parseFloat(docLayoutDefaults.maxTocWidth),
+    )
+    const right = tocShell?.getBoundingClientRect().right ?? window.innerWidth
+    const marginInlineStart = readPxValue(
+      getComputedStyle(toc).marginInlineStart,
+      0,
+    )
+    return clamp(right - clientX + marginInlineStart, min, max)
+  }
+
+  const applyTocWidth = (width: number) => {
+    document.body.style.setProperty(docLayoutVars.userTocWidth, `${width}px`)
+  }
+
+  const persistTocWidth = (width: number) => {
+    try {
+      localStorage.setItem(DOC_LAYOUT_TOC_WIDTH_STORAGE_KEY, String(width))
+    } catch {}
+  }
+
+  applyStoredPreference()
+
+  // Compute the runtime TOC state from the active layout mode instead of
+  // inheriting an arbitrary server-rendered class.
+  syncOpenState()
+
+  if (typeof media.addEventListener === 'function') {
+    media.addEventListener('change', () => {
+      setResizeHover(false)
+      syncOpenState()
+    })
+  }
 
   if (restoreToggle) {
     restoreToggle.addEventListener('click', (event) => {
       event.preventDefault()
       if (isForceCollapsed()) {
         document.body.classList.remove(BODY_FORCE_COLLAPSED_CLASS)
-        writeStoredCollapsedPreference(false)
+        writeStored(false)
         syncHeaderToggle()
         window.requestAnimationFrame(() => {
           setTocOpen(true)
@@ -123,11 +188,48 @@ function init() {
         return
       }
       document.body.classList.add(BODY_FORCE_COLLAPSED_CLASS)
-      writeStoredCollapsedPreference(true)
+      writeStored(true)
       syncHeaderToggle()
       setTocOpen(false)
     })
   }
+
+  toc.addEventListener('mousemove', (event) => {
+    if (document.body.classList.contains(TOC_RESIZING_CLASS)) return
+    setResizeHover(isOnResizeEdge(event))
+  })
+
+  toc.addEventListener('mouseleave', () => {
+    if (document.body.classList.contains(TOC_RESIZING_CLASS)) return
+    setResizeHover(false)
+  })
+
+  toc.addEventListener('mousedown', (event) => {
+    if (event.button !== 0) return
+    if (!isOnResizeEdge(event)) return
+
+    event.preventDefault()
+    const body = document.body
+    body.classList.add(TOC_RESIZING_CLASS)
+    setResizeHover(false)
+
+    const onMouseMove = (moveEvent: MouseEvent) => {
+      applyTocWidth(resolveTocWidth(moveEvent.clientX))
+    }
+
+    const onMouseUp = (upEvent: MouseEvent) => {
+      const width = resolveTocWidth(upEvent.clientX)
+      applyTocWidth(width)
+      persistTocWidth(width)
+      body.classList.remove(TOC_RESIZING_CLASS)
+      setResizeHover(false)
+      window.removeEventListener('mousemove', onMouseMove)
+      window.removeEventListener('mouseup', onMouseUp)
+    }
+
+    window.addEventListener('mousemove', onMouseMove)
+    window.addEventListener('mouseup', onMouseUp)
+  })
 
   if (toggle && tocShell) {
     toggle.addEventListener('click', (event) => {
@@ -154,6 +256,8 @@ function init() {
     })
 
     const maybeOpenFromEdge = (event: MouseEvent | PointerEvent) => {
+      if (document.body.classList.contains(TOC_RESIZING_CLASS)) return
+      if (!supportsDesktopCollapse() && !media.matches) return
       if (!isCollapsible()) return
       if (!edgeOpenMedia.matches) return
       if (tocShell.classList.contains(TOC_OPEN_CLASS)) return
@@ -170,12 +274,6 @@ function init() {
       document.addEventListener('pointermove', maybeOpenFromEdge)
     } else {
       document.addEventListener('mousemove', maybeOpenFromEdge)
-    }
-
-    if (typeof media.addEventListener === 'function') {
-      media.addEventListener('change', () => {
-        if (!isCollapsible()) setTocOpen(false)
-      })
     }
   }
 
@@ -331,6 +429,16 @@ function init() {
   }
 
   handleHash()
+}
+
+function clamp(value: number, min: number, max: number) {
+  if (min > max) return value
+  return Math.min(Math.max(value, min), max)
+}
+
+function readPxValue(value: string, fallback: number) {
+  const parsed = Number.parseFloat(value)
+  return Number.isFinite(parsed) ? parsed : fallback
 }
 
 ready(init)

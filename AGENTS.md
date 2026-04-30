@@ -75,3 +75,5 @@ Icon rule
 When using icon names, always verify them against the generated icon list in `packages/ts-svg-icons` first.
 
 Do not guess icon names. If an icon name does not exist in `packages/ts-svg-icons`, do not use it.
+
+Never run embed script yourself. Just let me know so I can run manually.

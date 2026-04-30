@@ -2,6 +2,7 @@ import type { ThemePalette } from '@purestack/ts-style'
 import {
   BREAKPOINTS,
   docLayoutVar,
+  mediaAbove,
   mediaBelow,
   mediaMax,
   styleBuilder,
@@ -26,14 +27,15 @@ export function registerPageTocShellStyles(
 ) {
   styleBuilder
     .select('.page-toc', theme)
-    .display('grid')
-    .alignContent('start')
-    .gap('0')
+    .display('block')
     .marginLeft(docLayoutVar('activeShellPaddingInlineEnd'))
     .padding('1em')
     .borderRadius(options.radii.lg)
     .border('1px solid transparent')
     .apply(palette.applyFont(palette.font.size.body))
+    .maxHeight('100%')
+    .overflowY('auto')
+    .overflowX('hidden')
   styleBuilder
     .select('.page-toc__header-row', theme)
     .display('flex')
@@ -103,7 +105,6 @@ export function registerPageTocShellStyles(
     .select('.page-toc__empty', theme)
     .apply(palette.applyFont(palette.font.size.xs, palette.font.weight.w600))
     .color(palette.current.text.subtle)
-
   styleBuilder.select('.page-toc__panel-toggle', theme).display('none')
   styleBuilder
     .select('.page-toc__restore-toggle', theme)
@@ -139,6 +140,13 @@ export function registerPageTocLayoutStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
+  registerPageTocShellGridStyles(theme)
+  registerPageTocSidebarBaseStyles(theme)
+  registerPageTocMobileOverlayStyles(theme, palette, options)
+  registerPageTocDesktopCollapsedStyles(theme)
+}
+
+function registerPageTocShellGridStyles(theme: ThemeMode) {
   styleBuilder
     .select('.doc-shell--toc', theme)
     .gridTemplateColumns(
@@ -156,197 +164,18 @@ export function registerPageTocLayoutStyles(
     .gridTemplateColumns(`${docLayoutVar('activeNavWidth')} minmax(0, 1fr)`)
   styleBuilder
     .select(
+      '.doc-shell--toc-only, .doc-shell--nav-drawer.doc-shell--toc',
+      theme,
+    )
+    .media(mediaMax(BREAKPOINTS.toc))
+    .gridTemplateColumns('1fr')
+  styleBuilder
+    .select(
       '.doc-shell--toc, .template-doc--toc-collapsed .doc-shell--toc',
       theme,
     )
     .media(mediaBelow(BREAKPOINTS.lg))
     .gridTemplateColumns('1fr !important')
-
-  styleBuilder
-    .select('.doc-shell--toc-only', theme)
-    .media(mediaMax(BREAKPOINTS.toc))
-    .gridTemplateColumns('1fr')
-  styleBuilder
-    .select('.doc-shell--nav-drawer.doc-shell--toc', theme)
-    .media(mediaMax(BREAKPOINTS.toc))
-    .gridTemplateColumns('1fr')
-  styleBuilder
-    .select('.doc-toc', theme)
-    .position('sticky')
-    .top('88px')
-    .width('100%')
-    .zIndex(30)
-    .alignSelf('start')
-    .height('calc(100vh - 112px)')
-    .overflow('auto')
-  // Responsive TOC contract: collapse at the shared `toc` breakpoint,
-  // then switch to full-screen overlay at the shared `phone` breakpoint.
-  styleBuilder
-    .select('.template-doc:not(.template-doc--toc-collapsed) .doc-toc', theme)
-    .media(mediaMax(BREAKPOINTS.toc))
-    .position('fixed')
-    .top('72px')
-    .right('0')
-    .left('auto')
-    .width('auto')
-    .maxWidth('100vw')
-    .height('calc(100dvh - 72px)')
-    .zIndex(140)
-    .overflow('hidden')
-    .background('transparent')
-    .boxShadow('none')
-
-  styleBuilder
-    .select(
-      '.template-doc.template-doc--nav-ready:not(.template-doc--toc-collapsed) .doc-toc',
-      theme,
-    )
-    .media(mediaMax(BREAKPOINTS.toc))
-    .transition('transform 260ms ease')
-
-  styleBuilder
-    .select('.template-doc:not(.template-doc--toc-collapsed) .doc-toc', theme)
-    .media(mediaMax(BREAKPOINTS.sm))
-    .top('72px')
-    .left('0')
-    .right('0')
-    .width('auto')
-    .maxWidth('none')
-    .height('calc(100dvh - 72px)')
-
-  styleBuilder
-    .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open',
-      theme,
-    )
-    .media(mediaMax(BREAKPOINTS.toc))
-    .transform('translateX(0)')
-    .overflowY('auto')
-    .overflowX('hidden')
-    .webkitOverflowScrolling('touch')
-
-  styleBuilder
-    .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc:not(.doc-toc--open)',
-      theme,
-    )
-    .media(mediaMax(BREAKPOINTS.toc))
-    .width(docLayoutVar('activeRailWidth'))
-    .left('auto')
-    .right('0')
-    .transform('translateX(0)')
-    .background('transparent')
-    .boxShadow('none')
-    .pointerEvents('none')
-  styleBuilder
-    .select(
-      '.template-doc:not(.template-doc--toc-collapsed).doc-toc-open',
-      theme,
-    )
-    .media(mediaMax(BREAKPOINTS.sm))
-    .overflow('hidden')
-
-  styleBuilder
-    .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .page-toc__panel-toggle',
-      theme,
-    )
-    .media(mediaMax(BREAKPOINTS.toc))
-    .position('absolute')
-    .left('0')
-    .right('auto')
-    .transform('translateY(-50%) rotate(180deg)')
-    .writingMode('vertical-rl')
-    .textOrientation('mixed')
-    .width(docLayoutVar('activeRailWidth'))
-    .height('120px')
-    .display('flex')
-    .alignItems('center')
-    .justifyContent('center')
-    .apply(palette.applyFont(palette.font.size.xxxs, palette.font.weight.w600))
-    .textTransform('uppercase')
-    .color(palette.current.text.subtle)
-    .border('1px solid transparent')
-    .borderLeft('none')
-    .borderRadius(`0 ${options.radii.md} ${options.radii.md} 0`)
-    .boxShadow('none')
-    .userSelect('none')
-    .cursor('pointer')
-    .pointerEvents('auto')
-    .zIndex(2)
-
-  styleBuilder
-    .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc:not(.doc-toc--open) .page-toc > :not(.page-toc__panel-toggle)',
-      theme,
-    )
-    .media(mediaMax(BREAKPOINTS.toc))
-    .display('none')
-
-  styleBuilder
-    .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc:not(.doc-toc--open) .page-toc',
-      theme,
-    )
-    .media(mediaMax(BREAKPOINTS.toc))
-    .background('transparent')
-    .border('none')
-
-  styleBuilder
-    .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .page-toc__panel-toggle:focus-visible',
-      theme,
-    )
-    .media(mediaMax(BREAKPOINTS.toc))
-
-  styleBuilder
-    .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open .page-toc__panel-toggle',
-      theme,
-    )
-    .media(mediaMax(BREAKPOINTS.toc))
-    .display('none')
-
-  styleBuilder
-    .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc .page-toc',
-      theme,
-    )
-    .media(mediaMax(BREAKPOINTS.toc))
-    .height('100%')
-    .overflow('visible')
-    .padding('0')
-    .borderRadius('0')
-    .webkitOverflowScrolling('touch')
-
-  styleBuilder
-    .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc.doc-toc--open .page-toc',
-      theme,
-    )
-    .media(mediaMax(BREAKPOINTS.toc))
-    .height('auto')
-    .maxHeight('none')
-    .padding('30px 16px 14px')
-    .borderRadius(options.radii.lg)
-    .gap('2px')
-    .overflow('visible')
-
-  styleBuilder
-    .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc .page-toc__header',
-      theme,
-    )
-    .media(mediaMax(BREAKPOINTS.toc))
-    .paddingRight('104px')
-
-  styleBuilder
-    .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc .page-toc > .page-toc__list, .template-doc:not(.template-doc--toc-collapsed) .doc-toc .page-toc__empty',
-      theme,
-    )
-    .media(mediaMax(BREAKPOINTS.toc))
-    .paddingBottom('8px')
 
   styleBuilder
     .select('.template-doc--toc-collapsed .doc-shell--toc', theme)
@@ -360,142 +189,181 @@ export function registerPageTocLayoutStyles(
       theme,
     )
     .gridTemplateColumns('1fr')
+}
+
+function registerPageTocSidebarBaseStyles(theme: ThemeMode) {
+  styleBuilder
+    .select('.doc-toc', theme)
+    .position('sticky')
+    .top('88px')
+    .width('100%')
+    .zIndex(30)
+    .alignSelf('start')
+    .height('calc(100vh - 112px)')
+    .overflow('auto')
 
   styleBuilder
-    .select('.template-doc--toc-collapsed .doc-toc', theme)
+    .select('.template-doc--has-toc .doc-toc', theme)
+    .media(mediaAbove(BREAKPOINTS.toc))
+    .overflow('visible')
+    .transformOrigin('right center')
+    .transform('translateX(0)')
+    .willChange('transform')
+    .zIndex(30)
+  styleBuilder
+    .select(
+      '.template-doc.template-doc--nav-ready.template-doc--has-toc .doc-toc',
+      theme,
+    )
+    .transition('transform 260ms ease')
+}
+
+function registerPageTocMobileOverlayStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
+  styleBuilder
+    .select('.template-doc--has-toc .doc-toc', theme)
+    .media(mediaMax(BREAKPOINTS.toc))
     .position('fixed')
     .top('72px')
     .right('0')
-    .left('auto')
-    .width('auto')
-    .maxWidth('100vw')
+    .maxWidth('none')
     .height('calc(100dvh - 72px)')
     .zIndex(140)
     .overflow('hidden')
     .background('transparent')
     .boxShadow('none')
-
   styleBuilder
-    .select(
-      '.template-doc.template-doc--nav-ready.template-doc--toc-collapsed .doc-toc',
-      theme,
-    )
-    .transition('transform 260ms ease')
-
-  styleBuilder
-    .select('.template-doc--toc-collapsed .doc-toc', theme)
+    .select('.template-doc--has-toc .doc-toc', theme)
     .media(mediaMax(BREAKPOINTS.sm))
-    .top('72px')
-    .left('0')
-    .right('0')
-    .width('auto')
-    .maxWidth('none')
-    .height('calc(100dvh - 72px)')
-
+    .width('100%')
   styleBuilder
-    .select('.template-doc--toc-collapsed .doc-toc.doc-toc--open', theme)
+    .select('.template-doc--has-toc .doc-toc.doc-toc--open', theme)
+    .media(mediaMax(BREAKPOINTS.toc))
     .transform('translateX(0)')
     .overflowY('auto')
     .overflowX('hidden')
     .webkitOverflowScrolling('touch')
-
   styleBuilder
-    .select('.template-doc--toc-collapsed.doc-toc-open', theme)
-    .media(mediaMax(BREAKPOINTS.sm))
-    .overflow('hidden')
-
-  styleBuilder
-    .select('.template-doc--toc-collapsed .doc-toc:not(.doc-toc--open)', theme)
+    .select('.template-doc--has-toc .doc-toc:not(.doc-toc--open)', theme)
+    .media(mediaMax(BREAKPOINTS.toc))
     .width(docLayoutVar('activeRailWidth'))
-    .left('auto')
     .right('0')
-    .transform('translateX(0)')
+    .left('auto')
+    .transform(`translateX(calc(100% - ${docLayoutVar('activeRailWidth')}))`)
     .background('transparent')
     .boxShadow('none')
     .pointerEvents('none')
   styleBuilder
-    .select('.template-doc--toc-collapsed .page-toc__panel-toggle', theme)
-    .position('absolute')
-    .left('0')
-    .right('auto')
-    .bottom('5rem')
-    .transform('rotate(180deg)')
-    .writingMode('vertical-rl')
-    .textOrientation('mixed')
-    .width(docLayoutVar('activeRailWidth'))
-    .height('120px')
-    .display('flex')
-    .alignItems('center')
-    .justifyContent('center')
-    .apply(palette.applyFont(palette.font.size.xxxs, palette.font.weight.w700))
-    .textTransform('uppercase')
-    .border(`1px solid ${palette.current.border.default}`)
-    .borderLeft('none')
-    .borderRadius(`0 ${options.radii.md} ${options.radii.md} 0`)
-    .userSelect('none')
-    .cursor('pointer')
-    .pointerEvents('auto')
-    .zIndex(2)
+    .select('.template-doc--has-toc.doc-toc-open', theme)
+    .media(mediaMax(BREAKPOINTS.sm))
+    .overflow('hidden')
 
   styleBuilder
-    .select('.template-doc--toc-collapsed .page-toc__panel-toggle', theme)
-    .media(mediaMax(BREAKPOINTS.toc))
+    .select('.template-doc--has-toc.doc-toc-open', theme)
+    .media(mediaMax(BREAKPOINTS.sm))
+    .overflow('hidden')
 
   styleBuilder
     .select(
-      '.template-doc--toc-collapsed .doc-toc:not(.doc-toc--open) .page-toc > :not(.page-toc__panel-toggle)',
+      '.template-doc--has-toc .doc-toc:not(.doc-toc--open) .page-toc',
+      theme,
+    )
+    .media(mediaMax(BREAKPOINTS.toc))
+    .background('transparent')
+    .border('none')
+    .boxShadow('none')
+
+  styleBuilder
+    .select('.template-doc--has-toc .page-toc__panel-toggle', theme)
+    .media(mediaMax(BREAKPOINTS.toc))
+    .position('absolute')
+    .left('0')
+    .right('auto')
+  styleBuilder
+    .select('.page-toc__panel-toggle', theme)
+    .height('120px')
+    .writingMode('vertical-rl')
+    .textOrientation('mixed')
+    .width(docLayoutVar('activeRailWidth'))
+    .transform('rotate(180deg)')
+    .bottom('5rem')
+    .apply(palette.applyFont(palette.font.size.xxxs, palette.font.weight.w700))
+    .border(`1px solid ${palette.current.border.default}`)
+    .borderLeft('none')
+    .borderRadius(`0 ${options.radii.md} ${options.radii.md} 0`)
+    .pointerEvents('auto')
+    .zIndex(2)
+    .userSelect('none')
+    .cursor('pointer')
+    .display('flex')
+    .alignItems('center')
+    .justifyContent('center')
+    .textTransform('uppercase')
+    .position('fixed')
+
+  styleBuilder
+    .select(
+      '.template-doc--has-toc .doc-toc:not(.doc-toc--open) .page-toc > :not(.page-toc__panel-toggle)',
+      theme,
+    )
+    .media(mediaMax(BREAKPOINTS.toc))
+    .display('none')
+  styleBuilder
+    .select(
+      '.template-doc--has-toc .doc-toc.doc-toc--open .page-toc__panel-toggle',
       theme,
     )
     .display('none')
+}
 
+function registerPageTocDesktopCollapsedStyles(theme: ThemeMode) {
+  styleBuilder
+    .select('.template-doc--toc-collapsed .doc-toc', theme)
+    .media(mediaAbove(BREAKPOINTS.toc))
+    .width(docLayoutVar('activeRailWidth'))
+    .position('fixed')
+    .top('72px')
+    .right('0')
+    .left('auto')
+    .height('calc(100dvh - 72px)')
+    .maxHeight('none')
+    .background('transparent')
+    .boxShadow('none')
+    .overflow('visible')
+    .transform(`translateX(calc(100% - ${docLayoutVar('activeRailWidth')}))`)
+    .zIndex(140)
+  styleBuilder
+    .select('.template-doc--toc-collapsed .doc-toc.doc-toc--open', theme)
+    .media(mediaAbove(BREAKPOINTS.md))
+    .width(docLayoutVar('preferredTocWidth'))
+    .background('transparent')
+    .boxShadow('none')
+    .transform('translateX(0)')
+  styleBuilder
+    .select('.page-toc', theme)
+    .media(mediaBelow(BREAKPOINTS.md))
+    .marginInlineStart('0')
+    .borderRadius('0')
+  styleBuilder
+    .select(
+      '.template-doc--toc-collapsed .doc-toc:not(.doc-toc--open) .page-toc__header, .template-doc--toc-collapsed .doc-toc:not(.doc-toc--open) .page-toc__restore-toggle, .template-doc--toc-collapsed .doc-toc:not(.doc-toc--open) .page-toc__list, .template-doc--toc-collapsed .doc-toc:not(.doc-toc--open) .page-toc__empty',
+      theme,
+    )
+    .media(mediaAbove(BREAKPOINTS.toc))
+    .display('none')
   styleBuilder
     .select(
       '.template-doc--toc-collapsed .doc-toc:not(.doc-toc--open) .page-toc',
       theme,
     )
+    .width(docLayoutVar('activeRailWidth'))
+    .marginLeft('0')
+    .padding('0')
     .background('transparent')
     .border('none')
-
-  styleBuilder.select(
-    '.template-doc--toc-collapsed .page-toc__panel-toggle:focus-visible',
-    theme,
-  )
-
-  styleBuilder
-    .select(
-      '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc__panel-toggle',
-      theme,
-    )
-    .display('none')
-
-  styleBuilder
-    .select('.template-doc--toc-collapsed .doc-toc .page-toc', theme)
-    .height('100%')
-    .overflow('visible')
-    .padding('0')
     .borderRadius('0')
-    .webkitOverflowScrolling('touch')
-
-  styleBuilder
-    .select(
-      '.template-doc--toc-collapsed .doc-toc.doc-toc--open .page-toc',
-      theme,
-    )
-    .height('auto')
-    .maxHeight('none')
-    .padding('30px 16px 14px')
-    .borderRadius(options.radii.lg)
-    .gap('2px')
     .overflow('visible')
-
-  styleBuilder
-    .select('.template-doc--toc-collapsed .doc-toc .page-toc__header', theme)
-    .paddingRight('104px')
-
-  styleBuilder
-    .select(
-      '.template-doc--toc-collapsed .doc-toc .page-toc > .page-toc__list, .template-doc--toc-collapsed .doc-toc .page-toc__empty',
-      theme,
-    )
-    .paddingBottom('8px')
 }
