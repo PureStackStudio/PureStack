@@ -151,7 +151,9 @@ function collectComponentSuggestions(workspaceRoot: string) {
     }
   }
 
-  for (const dependencyPackage of getDependencyComponentPackages(workspaceRoot)) {
+  for (const dependencyPackage of getDependencyComponentPackages(
+    workspaceRoot,
+  )) {
     for (const normalizedName of dependencyPackage.componentNames) {
       if (seenNames.has(normalizedName)) continue
 
