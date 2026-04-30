@@ -6,8 +6,8 @@ import type { ToneColors } from './shared'
 const bestColors = {
   standardBlue: {
     accent: '#1788f1',
-    neutral: '#232c38',
-    secondary: '#116db4',
+    neutral: '#232525',
+    secondary: '#27b789',
   },
   blue: {
     accent: '#2874b7',
