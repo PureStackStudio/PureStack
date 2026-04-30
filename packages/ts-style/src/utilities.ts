@@ -19,6 +19,13 @@ export const SPACING_UTILITIES = {
 
 type SpacingUtilityName = keyof typeof SPACING_UTILITIES
 const BORDER_WIDTH_UTILITIES = [1, 2, 3] as const
+const OPACITY_UTILITIES = {
+  0: '0',
+  25: '0.25',
+  50: '0.5',
+  75: '0.75',
+  1: '1',
+} as const
 
 export function registerUtilityStyles() {
   themes.forEach((theme, palette, options) => {
@@ -27,6 +34,7 @@ export function registerUtilityStyles() {
     applyGapUtilities(theme)
     applyLayoutUtilities(theme)
     applyBorderUtilities(theme, palette, options.radii)
+    applyOpacityUtilities(theme)
     applyToneInsetSizeUtilities(theme)
     applyTextUtilities(theme, palette)
     applyFontSizeUtilities(theme, palette)
@@ -199,6 +207,12 @@ function applyBorderWidthUtilities(theme: string) {
 
 function withHover(name: string) {
   return `.${name}, .${name}-hover:hover`
+}
+
+function applyOpacityUtilities(theme: string) {
+  for (const [name, value] of Object.entries(OPACITY_UTILITIES)) {
+    styleBuilder.select(withHover(`opacity-${name}`), theme).opacity(force(value))
+  }
 }
 
 function applyToneInsetSizeUtilities(theme: string) {
