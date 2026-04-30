@@ -1,6 +1,7 @@
 import type { ThemePalette } from '@purestack/ts-style'
 import {
   BREAKPOINTS,
+  docLayoutVar,
   mediaBelow,
   mediaMax,
   styleBuilder,
@@ -28,6 +29,7 @@ export function registerPageTocShellStyles(
     .display('grid')
     .alignContent('start')
     .gap('0')
+    .marginLeft(docLayoutVar('activeShellPaddingInlineEnd'))
     .padding('1em')
     .borderRadius(options.radii.lg)
     .border('1px solid transparent')
@@ -139,17 +141,19 @@ export function registerPageTocLayoutStyles(
 ) {
   styleBuilder
     .select('.doc-shell--toc', theme)
-    .gridTemplateColumns('260px minmax(0, 1fr) 240px')
+    .gridTemplateColumns(
+      `${docLayoutVar('activeNavWidth')} minmax(0, 1fr) ${docLayoutVar('activeTocWidth')}`,
+    )
   styleBuilder
     .select('.doc-shell--toc-only', theme)
-    .gridTemplateColumns('minmax(0, 1fr) 240px')
+    .gridTemplateColumns(`minmax(0, 1fr) ${docLayoutVar('activeTocWidth')}`)
   styleBuilder
     .select('.doc-shell--nav-drawer.doc-shell--toc', theme)
-    .gridTemplateColumns('minmax(0, 1fr) 240px')
+    .gridTemplateColumns(`minmax(0, 1fr) ${docLayoutVar('activeTocWidth')}`)
   styleBuilder
     .select('.doc-shell--toc', theme)
     .media(mediaMax(BREAKPOINTS.toc))
-    .gridTemplateColumns('260px minmax(0, 1fr)')
+    .gridTemplateColumns(`${docLayoutVar('activeNavWidth')} minmax(0, 1fr)`)
   styleBuilder
     .select(
       '.doc-shell--toc, .template-doc--toc-collapsed .doc-shell--toc',
@@ -189,7 +193,6 @@ export function registerPageTocLayoutStyles(
     .height('calc(100dvh - 72px)')
     .zIndex(140)
     .overflow('hidden')
-    .transform('translateX(calc(100% - 26px))')
     .background('transparent')
     .boxShadow('none')
 
@@ -228,19 +231,13 @@ export function registerPageTocLayoutStyles(
       theme,
     )
     .media(mediaMax(BREAKPOINTS.toc))
-    .width('26px')
+    .width(docLayoutVar('activeRailWidth'))
+    .left('auto')
+    .right('0')
+    .transform('translateX(0)')
     .background('transparent')
     .boxShadow('none')
     .pointerEvents('none')
-  styleBuilder
-    .select(
-      '.template-doc:not(.template-doc--toc-collapsed) .doc-toc:not(.doc-toc--open)',
-      theme,
-    )
-    .media(mediaMax(BREAKPOINTS.sm))
-    .left('auto')
-    .right('0')
-
   styleBuilder
     .select(
       '.template-doc:not(.template-doc--toc-collapsed).doc-toc-open',
@@ -258,11 +255,10 @@ export function registerPageTocLayoutStyles(
     .position('absolute')
     .left('0')
     .right('auto')
-    .top('85%')
     .transform('translateY(-50%) rotate(180deg)')
     .writingMode('vertical-rl')
     .textOrientation('mixed')
-    .width('26px')
+    .width(docLayoutVar('activeRailWidth'))
     .height('120px')
     .display('flex')
     .alignItems('center')
@@ -354,7 +350,7 @@ export function registerPageTocLayoutStyles(
 
   styleBuilder
     .select('.template-doc--toc-collapsed .doc-shell--toc', theme)
-    .gridTemplateColumns('260px minmax(0, 1fr)')
+    .gridTemplateColumns(`${docLayoutVar('activeNavWidth')} minmax(0, 1fr)`)
   styleBuilder
     .select('.template-doc--toc-collapsed .doc-shell--toc-only', theme)
     .gridTemplateColumns('1fr')
@@ -376,7 +372,6 @@ export function registerPageTocLayoutStyles(
     .height('calc(100dvh - 72px)')
     .zIndex(140)
     .overflow('hidden')
-    .transform('translateX(calc(100% - 26px))')
     .background('transparent')
     .boxShadow('none')
 
@@ -411,26 +406,23 @@ export function registerPageTocLayoutStyles(
 
   styleBuilder
     .select('.template-doc--toc-collapsed .doc-toc:not(.doc-toc--open)', theme)
-    .width('26px')
+    .width(docLayoutVar('activeRailWidth'))
+    .left('auto')
+    .right('0')
+    .transform('translateX(0)')
     .background('transparent')
     .boxShadow('none')
     .pointerEvents('none')
-  styleBuilder
-    .select('.template-doc--toc-collapsed .doc-toc:not(.doc-toc--open)', theme)
-    .media(mediaMax(BREAKPOINTS.sm))
-    .left('auto')
-    .right('0')
-
   styleBuilder
     .select('.template-doc--toc-collapsed .page-toc__panel-toggle', theme)
     .position('absolute')
     .left('0')
     .right('auto')
-    .top('50%')
-    .transform('translateY(-50%) rotate(180deg)')
+    .bottom('5rem')
+    .transform('rotate(180deg)')
     .writingMode('vertical-rl')
     .textOrientation('mixed')
-    .width('26px')
+    .width(docLayoutVar('activeRailWidth'))
     .height('120px')
     .display('flex')
     .alignItems('center')
@@ -448,7 +440,6 @@ export function registerPageTocLayoutStyles(
   styleBuilder
     .select('.template-doc--toc-collapsed .page-toc__panel-toggle', theme)
     .media(mediaMax(BREAKPOINTS.toc))
-    .top('85%')
 
   styleBuilder
     .select(

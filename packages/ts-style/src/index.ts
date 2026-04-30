@@ -1,4 +1,5 @@
 export * from './breakpoints'
+export * from './docLayoutVars'
 export * from './normalize.css'
 export * from './semanticTone'
 export {

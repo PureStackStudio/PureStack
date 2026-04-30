@@ -1,6 +1,7 @@
 import type { ThemePalette } from '@purestack/ts-style'
 import {
   BREAKPOINTS,
+  docLayoutVar,
   mediaAbove,
   mediaBelow,
   mediaMax,
@@ -33,6 +34,7 @@ export function registerNavShellStyles(
     .maxHeight('100%')
     .overflowY('auto')
     .overflowX('hidden')
+    .marginRight(docLayoutVar('activeShellPaddingInlineStart'))
   styleBuilder
     .select('.nav__header-row', theme)
     .display('flex')
@@ -60,7 +62,7 @@ export function registerNavShellStyles(
     .borderRadius(options.radii.md)
     .cursor('pointer')
     .transition('background 160ms ease, color 160ms ease')
-    .top('49px')
+    .bottom('5rem')
   styleBuilder.select('.nav__panel-toggle-label', theme).display('inline-block')
   styleBuilder.select('.nav__panel-toggle-icon', theme).display('none')
   styleBuilder
@@ -132,7 +134,7 @@ export function registerNavShellStyles(
       theme,
     )
     .media(mediaMin(BREAKPOINTS.lg))
-    .width('26px')
+    .width(docLayoutVar('activeRailWidth'))
     .position('fixed')
     .left('0')
     .right('auto')
@@ -142,7 +144,7 @@ export function registerNavShellStyles(
     .background('transparent')
     .boxShadow('none')
     .overflow('visible')
-    .transform('translateX(calc(-100% + 26px))')
+    .transform(`translateX(calc(-100% + ${docLayoutVar('activeRailWidth')}))`)
     .zIndex(140)
   styleBuilder
     .select(
@@ -150,7 +152,7 @@ export function registerNavShellStyles(
       theme,
     )
     .media(mediaMin(BREAKPOINTS.lg))
-    .width('260px')
+    .width(docLayoutVar('preferredNavWidth'))
     .background('transparent')
     .boxShadow('none')
     .transform('translateX(0)')
@@ -167,7 +169,7 @@ export function registerNavShellStyles(
       theme,
     )
     .media(mediaAbove(BREAKPOINTS.toc))
-    .gridTemplateColumns('minmax(0, 1fr) 240px')
+    .gridTemplateColumns(`minmax(0, 1fr) ${docLayoutVar('activeTocWidth')}`)
   styleBuilder
     .select(
       '.template-doc.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-shell--toc',
@@ -195,7 +197,7 @@ export function registerNavShellStyles(
       theme,
     )
     .media(mediaMin(BREAKPOINTS.lg))
-    .width('26px')
+    .width(docLayoutVar('activeRailWidth'))
     .marginLeft('0')
     .padding('0')
     .background('transparent')
@@ -209,7 +211,7 @@ export function registerNavShellStyles(
     )
     .media(mediaMin(BREAKPOINTS.lg))
     .margin('0')
-    .width('26px')
+    .width(docLayoutVar('activeRailWidth'))
     .height('118px')
     .position('static')
   styleBuilder
@@ -224,9 +226,9 @@ export function registerNavShellStyles(
     .justifyContent('center')
     .writingMode('vertical-rl')
     .textOrientation('mixed')
-    .width('26px')
     .height('auto')
     .padding('0.6em 0')
+    .width(docLayoutVar('activeRailWidth'))
     .apply(palette.applyFont(palette.font.size.xxxs, palette.font.weight.w700))
     .textTransform('uppercase')
     .userSelect('none')

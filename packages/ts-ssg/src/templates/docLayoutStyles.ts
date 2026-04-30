@@ -1,9 +1,13 @@
 import type { ThemePalette } from '@purestack/ts-style'
 import {
   BREAKPOINTS,
+  docLayoutDefaults,
+  docLayoutVar,
+  docLayoutVars,
   getBreakpoint,
   mediaBelow,
   mediaMax,
+  mediaMin,
   styleBuilder,
   type ThemeMode,
   type ThemeOptions,
@@ -30,44 +34,149 @@ function registerDocLayoutShellStyles(
     .fontFamily(options.typography.baseFamily)
     .background(palette.semanticTone.neutral.canvas)
     .color(palette.current.text.default)
+    .set(docLayoutVars.defaultNavWidth, docLayoutDefaults.defaultNavWidth)
+    .set(docLayoutVars.defaultTocWidth, docLayoutDefaults.defaultTocWidth)
+    .set(docLayoutVars.defaultRailWidth, docLayoutDefaults.defaultRailWidth)
+    .set(
+      docLayoutVars.defaultShellPaddingInlineStart,
+      docLayoutDefaults.defaultShellPaddingInlineStart,
+    )
+    .set(
+      docLayoutVars.defaultShellPaddingInlineEnd,
+      docLayoutDefaults.defaultShellPaddingInlineEnd,
+    )
+    .set(
+      docLayoutVars.defaultShellPaddingBlock,
+      docLayoutDefaults.defaultShellPaddingBlock,
+    )
+    .set(
+      docLayoutVars.compactShellPaddingInlineStart,
+      docLayoutDefaults.compactShellPaddingInlineStart,
+    )
+    .set(
+      docLayoutVars.compactShellPaddingInlineEnd,
+      docLayoutDefaults.compactShellPaddingInlineEnd,
+    )
+    .set(
+      docLayoutVars.compactShellPaddingBlock,
+      docLayoutDefaults.compactShellPaddingBlock,
+    )
+    .set(
+      docLayoutVars.fullShellPaddingInlineStart,
+      docLayoutDefaults.fullShellPaddingInlineStart,
+    )
+    .set(
+      docLayoutVars.fullShellPaddingInlineEnd,
+      docLayoutDefaults.fullShellPaddingInlineEnd,
+    )
+    .set(
+      docLayoutVars.fullShellPaddingBlock,
+      docLayoutDefaults.fullShellPaddingBlock,
+    )
+    .set(docLayoutVars.minNavWidth, docLayoutDefaults.minNavWidth)
+    .set(docLayoutVars.maxNavWidth, docLayoutDefaults.maxNavWidth)
+    .set(docLayoutVars.minTocWidth, docLayoutDefaults.minTocWidth)
+    .set(docLayoutVars.maxTocWidth, docLayoutDefaults.maxTocWidth)
+    .set(
+      docLayoutVars.preferredNavWidth,
+      `clamp(${docLayoutVar('minNavWidth')}, var(${docLayoutVars.userNavWidth}, ${docLayoutVar('defaultNavWidth')}), ${docLayoutVar('maxNavWidth')})`,
+    )
+    .set(
+      docLayoutVars.preferredTocWidth,
+      `clamp(${docLayoutVar('minTocWidth')}, var(${docLayoutVars.userTocWidth}, ${docLayoutVar('defaultTocWidth')}), ${docLayoutVar('maxTocWidth')})`,
+    )
+    .set(
+      docLayoutVars.preferredShellPaddingInlineStart,
+      `var(${docLayoutVars.userShellPaddingInlineStart}, ${docLayoutVar('defaultShellPaddingInlineStart')})`,
+    )
+    .set(
+      docLayoutVars.preferredShellPaddingInlineEnd,
+      `var(${docLayoutVars.userShellPaddingInlineEnd}, ${docLayoutVar('defaultShellPaddingInlineEnd')})`,
+    )
+    .set(docLayoutVars.activeNavWidth, '0px')
+    .set(docLayoutVars.activeTocWidth, '0px')
+    .set(docLayoutVars.activeRailWidth, docLayoutVar('defaultRailWidth'))
+    .set(
+      docLayoutVars.activeShellPaddingInlineStart,
+      docLayoutVar('preferredShellPaddingInlineStart'),
+    )
+    .set(
+      docLayoutVars.activeShellPaddingInlineEnd,
+      docLayoutVar('preferredShellPaddingInlineEnd'),
+    )
+    .set(
+      docLayoutVars.activeShellPaddingBlock,
+      docLayoutVar('defaultShellPaddingBlock'),
+    )
+
+  styleBuilder
+    .select(
+      '.template-doc--has-nav:not(.template-doc--nav-drawer):not(.template-doc--nav-collapsed)',
+      theme,
+    )
+    .media(mediaMin(BREAKPOINTS.lg))
+    .set(docLayoutVars.activeNavWidth, docLayoutVar('preferredNavWidth'))
+
+  styleBuilder
+    .select('.template-doc--has-toc:not(.template-doc--toc-collapsed)', theme)
+    .set(docLayoutVars.activeTocWidth, docLayoutVar('preferredTocWidth'))
+
+  styleBuilder
+    .select('.template-doc--has-toc:not(.template-doc--toc-collapsed)', theme)
+    .media(mediaMax(BREAKPOINTS.toc))
+    .set(docLayoutVars.activeTocWidth, '0px')
+
+  styleBuilder
+    .select('.template-doc--toc-collapsed', theme)
+    .set(docLayoutVars.activeTocWidth, '0px')
+
+  styleBuilder
+    .select('.template-doc--full-main', theme)
+    .set(
+      docLayoutVars.activeShellPaddingInlineStart,
+      docLayoutVar('fullShellPaddingInlineStart'),
+    )
+    .set(
+      docLayoutVars.activeShellPaddingInlineEnd,
+      docLayoutVar('fullShellPaddingInlineEnd'),
+    )
+    .set(
+      docLayoutVars.activeShellPaddingBlock,
+      docLayoutVar('fullShellPaddingBlock'),
+    )
 
   styleBuilder
     .select('.doc-shell', theme)
     .display('grid')
-    .gap('28px')
-    .padding('32px')
+    .gap('0')
+    .paddingInlineStart(docLayoutVar('activeShellPaddingInlineStart'))
+    .paddingInlineEnd(docLayoutVar('activeShellPaddingInlineEnd'))
+    .set('padding-block', docLayoutVar('activeShellPaddingBlock'))
     .maxWidth(getBreakpoint(BREAKPOINTS.wide))
     .margin('0 auto')
     .width('100%')
     .boxSizing('border-box')
-    .gridTemplateColumns('260px minmax(0, 1fr)')
+    .gridTemplateColumns('minmax(0, 1fr)')
+
+  styleBuilder
+    .select(
+      '.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-shell:not(.doc-shell--toc)',
+      theme,
+    )
+    .media(mediaMin(BREAKPOINTS.lg))
+    .gridTemplateColumns(`${docLayoutVar('activeNavWidth')} minmax(0, 1fr)`)
 
   styleBuilder
     .select('.template-doc--full-main .doc-shell', theme)
     .maxWidth('none')
     .margin('0')
-    .padding('1em')
-
-  styleBuilder
-    .select(
-      '.template-doc--full-main.template-doc--nav-collapsed .doc-shell',
-      theme,
-    )
-    .paddingLeft('3rem')
-
-  styleBuilder
-    .select(
-      '.template-doc--full-main.template-doc--toc-collapsed .doc-shell',
-      theme,
-    )
-    .paddingRight('3rem')
 
   styleBuilder.select('.doc-shell--single', theme).gridTemplateColumns('1fr')
   styleBuilder
     .select('.doc-shell--nav-drawer', theme)
     .gridTemplateColumns('1fr')
   styleBuilder.select('.doc-main', theme).minWidth('0')
-  styleBuilder.select('.doc-content', theme).margin('0').padding('0.5em 0 1em')
+  styleBuilder.select('.doc-content', theme).margin('0').padding('0')
   styleBuilder.select('.doc-content :where(ul,ol)', theme).listStyle('auto')
 }
 
@@ -114,7 +223,36 @@ function registerDocLayoutResponsiveStyles(
     .select('.doc-shell', theme)
     .media(mediaBelow(BREAKPOINTS.lg))
     .gridTemplateColumns('1fr')
-    .padding('16px')
+  styleBuilder
+    .select('.template-doc', theme)
+    .media(mediaBelow(BREAKPOINTS.lg))
+    .set(
+      docLayoutVars.activeShellPaddingInlineStart,
+      docLayoutVar('compactShellPaddingInlineStart'),
+    )
+    .set(
+      docLayoutVars.activeShellPaddingInlineEnd,
+      docLayoutVar('compactShellPaddingInlineEnd'),
+    )
+    .set(
+      docLayoutVars.activeShellPaddingBlock,
+      docLayoutVar('compactShellPaddingBlock'),
+    )
+  styleBuilder
+    .select('.template-doc.template-doc--full-main', theme)
+    .media(mediaBelow(BREAKPOINTS.lg))
+    .set(
+      docLayoutVars.activeShellPaddingInlineStart,
+      docLayoutVar('compactShellPaddingInlineStart'),
+    )
+    .set(
+      docLayoutVars.activeShellPaddingInlineEnd,
+      docLayoutVar('compactShellPaddingInlineEnd'),
+    )
+    .set(
+      docLayoutVars.activeShellPaddingBlock,
+      docLayoutVar('compactShellPaddingBlock'),
+    )
   styleBuilder
     .select('.template-doc', theme)
     .media(mediaBelow(BREAKPOINTS.lg))

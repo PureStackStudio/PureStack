@@ -13,7 +13,11 @@ export function registerNormalizeStyles() {
 function applyNormalizeDocumentRules(theme: string) {
   styleBuilder.select('*, *::before, *::after', theme).boxSizing('border-box')
   styleBuilder.select('html', theme).webkitTextSizeAdjust('100%')
-  styleBuilder.select('body', theme).margin('0').lineHeight('1.4')
+  styleBuilder
+    .select('body', theme)
+    .margin('0')
+    .lineHeight('1.4')
+    .overflowX('clip')
   styleBuilder
     .select('pre, code, kbd, samp', theme)
     .fontFamily(

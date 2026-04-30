@@ -1,5 +1,5 @@
 import type { CSSProps } from '@purestack/ts-css'
-import type { SemanticTone } from '@purestack/ts-style'
+import { docLayoutVar, type SemanticTone } from '@purestack/ts-style'
 import {
   type ComputedRef,
   computed,
@@ -153,6 +153,7 @@ const DEFAULT_LANDING_BAND_VARIANT_MODE: ComponentVariantMode = 'stateless'
 const DEFAULT_LANDING_BAND_HEIGHT = '16rem'
 const DEFAULT_LANDING_BAND_EDGE_SIZE = '4rem'
 const DEFAULT_LANDING_BAND_EDGE_START = '0%'
+const LANDING_BAND_INLINE_PADDING = '1em'
 
 const landingBandTemplate = html`<section :class="classes" :style="bandStyle">
   <slot></slot>
@@ -484,6 +485,8 @@ function resolveLandingBand(props: LandingBand): LandingBand {
   const edgeSize = computed(() =>
     resolveStyleValue(props.edgeSize, DEFAULT_LANDING_BAND_EDGE_SIZE),
   )
+  const inlineStartBleed = resolveLandingBandInlineBleed('start')
+  const inlineEndBleed = resolveLandingBandInlineBleed('end')
 
   return {
     ...props,
@@ -505,11 +508,10 @@ function resolveLandingBand(props: LandingBand): LandingBand {
       boxSizing: 'border-box',
       pointerEvents: 'none',
       minHeight: height(),
-      marginInline: 'calc(50% - 50vw)',
-      paddingLeft: '1em',
-      paddingRight: '1em',
-      paddingInlineStart: 'calc(-1 * (50% - 50vw))',
-      paddingInlineEnd: 'calc(-1 * (50% - 50vw))',
+      marginInlineStart: `calc(-1 * (${inlineStartBleed}))`,
+      marginInlineEnd: `calc(-1 * (${inlineEndBleed}))`,
+      paddingInlineStart: `calc(${LANDING_BAND_INLINE_PADDING} + ${inlineStartBleed})`,
+      paddingInlineEnd: `calc(${LANDING_BAND_INLINE_PADDING} + ${inlineEndBleed})`,
       paddingTop: resolveLandingBandEdgePadding(
         props.paddingTop,
         edgeSize(),
@@ -529,6 +531,38 @@ function resolveLandingBand(props: LandingBand): LandingBand {
       clipPath: resolveLandingBandClipPath(props, edgeSize()),
     })),
   }
+}
+
+function resolveLandingBandInlineBleed(side: 'start' | 'end') {
+  return `${resolveCenteredViewportBleed()} + ${resolveDocLayoutInlineCorrection(side)}`
+}
+
+function resolveCenteredViewportBleed() {
+  return '50vw - 50%'
+}
+
+function resolveDocLayoutInlineCorrection(side: 'start' | 'end') {
+  const inlineStartState = `(${resolveDocLayoutInlineStartState()})`
+  const inlineEndState = `(${resolveDocLayoutInlineEndState()})`
+  const balance =
+    side === 'start'
+      ? `${inlineStartState} - ${inlineEndState}`
+      : `${inlineEndState} - ${inlineStartState}`
+  return `(${balance}) / 2`
+}
+
+function resolveDocLayoutInlineStartState() {
+  return [
+    docLayoutVar('activeShellPaddingInlineStart'),
+    docLayoutVar('activeNavWidth'),
+  ].join(' + ')
+}
+
+function resolveDocLayoutInlineEndState() {
+  return [
+    docLayoutVar('activeShellPaddingInlineEnd'),
+    docLayoutVar('activeTocWidth'),
+  ].join(' + ')
 }
 
 function resolveLandingBandClipPath(

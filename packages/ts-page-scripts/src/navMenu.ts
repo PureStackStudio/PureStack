@@ -1,9 +1,19 @@
 import { BREAKPOINTS, matchMediaMin } from '../../ts-style/src/breakpoints'
+import {
+  docLayoutDefaults,
+  docLayoutVars,
+} from '../../ts-style/src/docLayoutVars'
+import {
+  applyStoredDocLayoutPreferences,
+  readDocLayoutPxVar,
+} from './docLayoutCssVars'
 
 const NAV_COLLAPSED_CLASS = 'template-doc--nav-collapsed'
 const NAV_COLLAPSED_STORAGE_KEY = 'ts-ssg:nav-collapsed'
 const NAV_OPEN_CLASS = 'doc-sidebar--open'
-const EDGE_OPEN_THRESHOLD_PX = 26
+const EDGE_OPEN_THRESHOLD_FALLBACK_PX = Number.parseFloat(
+  docLayoutDefaults.defaultRailWidth,
+)
 
 function ready(fn: () => void) {
   if (document.readyState === 'loading') {
@@ -14,6 +24,8 @@ function ready(fn: () => void) {
 }
 
 function init() {
+  applyStoredDocLayoutPreferences()
+
   const menu = document.querySelector<HTMLElement>('.nav__menu')
   if (!menu) return
   const sidebar = menu.closest<HTMLElement>('.doc-sidebar')
@@ -140,7 +152,11 @@ function init() {
     if (!supportsDesktopCollapse()) return
     if (!document.body.classList.contains(NAV_COLLAPSED_CLASS)) return
     if (sidebar?.classList.contains(NAV_OPEN_CLASS)) return
-    if (event.clientX > EDGE_OPEN_THRESHOLD_PX) return
+    const edgeOpenThreshold = readDocLayoutPxVar(
+      docLayoutVars.activeRailWidth,
+      EDGE_OPEN_THRESHOLD_FALLBACK_PX,
+    )
+    if (event.clientX > edgeOpenThreshold) return
     setPanelOpen(true)
   })
 }

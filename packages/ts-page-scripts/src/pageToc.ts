@@ -1,4 +1,12 @@
 import { BREAKPOINTS, matchMediaMax } from '../../ts-style/src/breakpoints'
+import {
+  docLayoutDefaults,
+  docLayoutVars,
+} from '../../ts-style/src/docLayoutVars'
+import {
+  applyStoredDocLayoutPreferences,
+  readDocLayoutPxVar,
+} from './docLayoutCssVars'
 
 const OPEN_LABEL = 'close'
 const CLOSED_LABEL = 'on this page'
@@ -8,7 +16,9 @@ const TOC_OPEN_CLASS = 'doc-toc--open'
 const BODY_TOC_OPEN_CLASS = 'doc-toc-open'
 const BODY_FORCE_COLLAPSED_CLASS = 'template-doc--toc-collapsed'
 const TOC_COLLAPSED_STORAGE_KEY = 'ts-ssg:toc-collapsed'
-const EDGE_OPEN_THRESHOLD_PX = 26
+const EDGE_OPEN_THRESHOLD_FALLBACK_PX = Number.parseFloat(
+  docLayoutDefaults.defaultRailWidth,
+)
 const EDGE_OPEN_POINTER_QUERY = '(hover: hover) and (pointer: fine)'
 const ACTIVE_SCROLL_OFFSET = 110
 const FLASH_DURATION_MS = 1400
@@ -23,6 +33,8 @@ function ready(fn: () => void) {
 }
 
 function init() {
+  applyStoredDocLayoutPreferences()
+
   const toc = document.querySelector<HTMLElement>('.page-toc')
   if (!toc) {
     document.body.classList.remove(BODY_TOC_OPEN_CLASS)
@@ -146,7 +158,11 @@ function init() {
       if (!edgeOpenMedia.matches) return
       if (tocShell.classList.contains(TOC_OPEN_CLASS)) return
       if ('pointerType' in event && event.pointerType !== 'mouse') return
-      if (event.clientX < window.innerWidth - EDGE_OPEN_THRESHOLD_PX) return
+      const edgeOpenThreshold = readDocLayoutPxVar(
+        docLayoutVars.activeRailWidth,
+        EDGE_OPEN_THRESHOLD_FALLBACK_PX,
+      )
+      if (event.clientX < window.innerWidth - edgeOpenThreshold) return
       setTocOpen(true)
     }
 

@@ -36,6 +36,12 @@ describe('Landing components rendering', () => {
     expect(html).toContain(
       'clip-path: polygon(0 0, 200px 0, 100% 3rem, 100% calc(100% - 3rem), 50% 100%, 0 100%)',
     )
+    expect(html).toContain(
+      'margin-inline-start: calc(-1 * (50vw - 50% + ((var(--ps-doc-layout-active-shell-padding-inline-start) + var(--ps-doc-layout-active-nav-width)) - (var(--ps-doc-layout-active-shell-padding-inline-end) + var(--ps-doc-layout-active-toc-width))) / 2))',
+    )
+    expect(html).toContain(
+      'margin-inline-end: calc(-1 * (50vw - 50% + ((var(--ps-doc-layout-active-shell-padding-inline-end) + var(--ps-doc-layout-active-toc-width)) - (var(--ps-doc-layout-active-shell-padding-inline-start) + var(--ps-doc-layout-active-nav-width))) / 2))',
+    )
     expect(html).toContain('padding-top: calc(1em + 3rem)')
     expect(html).toContain('padding-bottom: calc(1em + 3rem)')
   })
