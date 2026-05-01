@@ -88,7 +88,12 @@ export { registerLoginStyles } from './standard/login/loginStyle'
 export type { SiteLogo } from './standard/logo/logo'
 export { defineLogoComponents } from './standard/logo/logo'
 export { registerLogoStyles } from './standard/logo/logoStyle'
-export type { Modal, ModalTrigger } from './standard/modal/modal'
+export type {
+  Modal,
+  ModalSize,
+  ModalSlideFrom,
+  ModalTrigger,
+} from './standard/modal/modal'
 export { defineModalComponents } from './standard/modal/modal'
 export { registerModalStyles } from './standard/modal/modalStyle'
 export type { NavItemState, NavList, NavMenu } from './standard/navMenu/navMenu'
