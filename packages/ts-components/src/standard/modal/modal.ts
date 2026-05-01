@@ -5,6 +5,7 @@ import {
   type ComputedRef,
   computed,
   defineComponent,
+  type Emits,
   html,
   type RefOrValue,
   unref,
@@ -17,6 +18,7 @@ import {
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl'
 export type ModalSlideFrom = 'none' | 'top' | 'right' | 'bottom' | 'left'
+
 const DEFAULT_MODAL_VARIANT_MODE: ComponentVariantMode = 'stateless'
 
 export interface Modal {
@@ -32,6 +34,7 @@ export interface Modal {
   titleId?: string
   rootClass?: ComputedRef<string>
   classes?: ComputedRef<string>
+  emits?: Emits<'close' | 'cancel'>
 }
 
 export interface ModalTrigger {

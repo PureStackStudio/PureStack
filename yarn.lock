@@ -1054,7 +1054,7 @@ __metadata:
     "@purestack/ts-minidom": "workspace:^"
     "@purestack/ts-page-scripts": "workspace:^"
     "@purestack/ts-util": "workspace:^"
-    regor: "npm:^1.6.2"
+    regor: "npm:^1.6.3"
   languageName: unknown
   linkType: soft
 
@@ -5711,10 +5711,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regor@npm:^1.6.2":
-  version: 1.6.2
-  resolution: "regor@npm:1.6.2"
-  checksum: 10c0/fdd4a5f5f05861925e6a3e57e1c74622dafdb7d6146109edec5077c159049667a466fd07c503ff643e817ea2f56850cb685051dc88de1bb6f6e9cdce6477c94b
+"regor@npm:^1.6.3":
+  version: 1.6.3
+  resolution: "regor@npm:1.6.3"
+  checksum: 10c0/e88c841ebf1b35759b8c3da7d5f22abd4755a3ad0dc3cac929150a3a7eb7d131b790b95018c1b99fbf0b6ff7849dfe653e286e69878687042f538532358887d7
   languageName: node
   linkType: hard
 

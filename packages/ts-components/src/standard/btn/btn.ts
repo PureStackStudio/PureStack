@@ -4,6 +4,7 @@ import {
   type ComputedRef,
   computed,
   defineComponent,
+  type Emits,
   html,
   type RefOrValue,
   unref,
@@ -28,6 +29,7 @@ export interface BtnBase {
   classes?: ComputedRef<string>
   showStartIcon?: ComputedRef<boolean>
   showEndIcon?: ComputedRef<boolean>
+  emits?: Emits<'click'>
 }
 
 export interface Btn extends BtnBase {
