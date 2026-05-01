@@ -95,6 +95,12 @@ export type {
   ModalTrigger,
 } from './standard/modal/modal'
 export { defineModalComponents } from './standard/modal/modal'
+export type {
+  ModalActionContract,
+  ModalContract,
+  ModalStore,
+} from './standard/modal/modalStore'
+export { useModalStore } from './standard/modal/modalStore'
 export { registerModalStyles } from './standard/modal/modalStyle'
 export type { NavItemState, NavList, NavMenu } from './standard/navMenu/navMenu'
 export { defineNavigationComponents } from './standard/navMenu/navMenu'

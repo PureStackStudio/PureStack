@@ -50,13 +50,13 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
           {{ privacyPolicyLabel }}
         </BtnLink>
         <Flex align="center" wrap="true">
-          <Btn type="button" tone="success" data-consent-action="accept-all">
+          <Btn tone="success" data-consent-action="accept-all">
             {{ acceptAllLabel }}
           </Btn>
-          <Btn tone="neutral" type="button" data-consent-action="reject-all">
+          <Btn tone="neutral" data-consent-action="reject-all">
             {{ rejectAllLabel }}
           </Btn>
-          <Btn tone="neutral" type="button" data-consent-action="open-panel">
+          <Btn tone="neutral" data-consent-action="open-panel">
             {{ manageLabel }}
           </Btn>
         </Flex>
@@ -83,7 +83,6 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
           <Btn
             tone="ghost"
             size="sm"
-            type="button"
             data-consent-action="close-panel"
             aria-label="Close privacy settings"
           >
@@ -116,13 +115,11 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
         </Flex>
 
         <Flex align="center" wrap="true">
-          <Btn type="button" tone="success" data-consent-action="save">
-            {{ saveLabel }}
-          </Btn>
-          <Btn tone="success" type="button" data-consent-action="accept-all">
+          <Btn tone="success" data-consent-action="save"> {{ saveLabel }} </Btn>
+          <Btn tone="success" data-consent-action="accept-all">
             {{ acceptAllLabel }}
           </Btn>
-          <Btn tone="neutral" type="button" data-consent-action="reject-all">
+          <Btn tone="neutral" data-consent-action="reject-all">
             {{ rejectAllLabel }}
           </Btn>
         </Flex>
@@ -134,7 +131,6 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
     tone="ghost"
     size="sm"
     data-consent-settings
-    type="button"
     data-consent-action="open-panel"
     :r-teleport="settingsTeleport"
     hidden

@@ -6,6 +6,7 @@ export {
   toOutputAssetRelPath,
   toPosixPath,
 } from './assetPath'
+export { Base } from './base'
 export { Cache, type CacheOptions } from './cache'
 export { clamp } from './clamp'
 export { escapeHtml } from './escapeHtml'

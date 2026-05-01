@@ -76,6 +76,7 @@
     "MetricItem",
     "MetricStrip",
     "Modal",
+    "ModalStore",
     "ModalTrigger",
     "NavList",
     "NavMenu",

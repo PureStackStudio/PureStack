@@ -15,6 +15,7 @@ import {
   type ComponentVariantMode,
   resolveComponentClasses,
 } from '../componentVariant'
+import { defineModalStoreComponent } from './modalStore'
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl'
 export type ModalSlideFrom = 'none' | 'top' | 'right' | 'bottom' | 'left'
@@ -67,7 +68,6 @@ const modalTemplate = html`<dialog
             r-if="showClose"
             :variant="variant"
             size="sm"
-            type="button"
             data-modal-close
             aria-label="Close dialog"
           >
@@ -86,7 +86,6 @@ const modalTemplate = html`<dialog
 </dialog>`
 
 const modalTriggerTemplate = html`<Btn
-  type="button"
   :tone="tone"
   :variant="variant"
   :data-modal-target="target"
@@ -126,6 +125,7 @@ export function defineModalComponents() {
   return {
     modal: defineModalComponent(),
     modalTrigger: defineModalTriggerComponent(),
+    ...defineModalStoreComponent(),
   }
 }
 

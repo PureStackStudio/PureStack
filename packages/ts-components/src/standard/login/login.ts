@@ -35,9 +35,7 @@ const loginHeaderTemplate = html`<header class="login-panel__header">
   <p class="login-panel__description" r-if="description">{{ description }}</p>
 </header>`
 
-const loginProviderTemplate = html`<Btn tone="neutral" type="button">
-  {{ label }}
-</Btn>`
+const loginProviderTemplate = html`<Btn tone="neutral"> {{ label }} </Btn>`
 
 const loginFooterTemplate = html`<p class="login-panel__footer">
   <span>{{ text }}</span>
