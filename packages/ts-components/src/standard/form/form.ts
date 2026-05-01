@@ -6,6 +6,7 @@ import {
   computed,
   defineComponent,
   html,
+  type Ref,
   type RefOrValue,
   unref,
 } from 'regor'
@@ -28,7 +29,9 @@ export interface FormCheck {
   label?: RefOrValue<string>
   name?: RefOrValue<string>
   value?: RefOrValue<string>
+  model?: Ref<boolean>
   checked?: RefOrValue<boolean>
+  disabled?: RefOrValue<boolean>
 }
 
 export interface FormAssistLink {
@@ -75,7 +78,8 @@ const formCheckTemplate = html`<label class="form-block__check">
     :name="name"
     :value="value"
     :checked="checked"
-    r-inherit/>
+    :disabled="disabled"
+    r-model="model"/>
   <span>{{ label }}</span>
 </label>`
 
@@ -116,7 +120,7 @@ function defineFormMetaComponent() {
 
 function defineFormCheckComponent() {
   return defineComponent<FormCheck>(formCheckTemplate, {
-    props: ['label', 'name', 'value', 'checked'],
+    props: ['label', 'name', 'value', 'model', 'checked', 'disabled'],
     context: (head) => head.props,
   })
 }
