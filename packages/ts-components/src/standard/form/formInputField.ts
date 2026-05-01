@@ -44,6 +44,7 @@ export class FormInputField {
   readonly min?: RefOrValue<number | string>
   readonly step?: RefOrValue<number | string>
   readonly placeholder?: RefOrValue<string>
+  readonly disabled?: RefOrValue<boolean>
   readonly icon?: RefOrValue<string>
   readonly iconEnd?: RefOrValue<string>
   classes?: ComputedRef<string>
@@ -117,6 +118,7 @@ const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
       :min="min"
       :step="step"
       :placeholder="placeholder"
+      :disabled="disabled"
       r-model="model"
       r-inherit/>
     <div class="form-block__number-controls" r-if="isNumberField">
@@ -125,6 +127,7 @@ const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
         type="button"
         aria-label="Increase value"
         @click="increment"
+        :disabled="disabled"
         tabindex="-1"
       >
         +
@@ -134,6 +137,7 @@ const formInputFieldTemplate = html`<label class="form-block__field" :for="id">
         type="button"
         aria-label="Decrease value"
         @click="decrement"
+        :disabled="disabled"
         tabindex="-1"
       >
         -
@@ -158,6 +162,7 @@ export function defineFormInputField() {
         'min',
         'step',
         'placeholder',
+        'disabled',
         'icon',
         'iconEnd',
       ],
