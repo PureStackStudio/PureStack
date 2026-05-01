@@ -179,6 +179,105 @@ describe('getComponentMetadata attribute naming', () => {
   })
 })
 
+describe('getComponentMetadata Emits event attributes', () => {
+  let isolatedWorkspaceRoot = ''
+  let componentFilePath = ''
+
+  beforeAll(() => {
+    isolatedWorkspaceRoot = fs.mkdtempSync(
+      path.join(os.tmpdir(), 'purestack-component-emits-'),
+    )
+
+    fs.writeFileSync(
+      path.join(isolatedWorkspaceRoot, 'tsconfig.json'),
+      JSON.stringify(
+        {
+          compilerOptions: {
+            module: 'NodeNext',
+            moduleResolution: 'NodeNext',
+            target: 'ES2020',
+          },
+          include: ['src/**/*.ts'],
+        },
+        null,
+        2,
+      ),
+    )
+
+    componentFilePath = path.join(
+      isolatedWorkspaceRoot,
+      'src',
+      'dialogComponent.ts',
+    )
+    fs.mkdirSync(path.dirname(componentFilePath), { recursive: true })
+    fs.writeFileSync(
+      componentFilePath,
+      [
+        "import { defineComponent, html, type Emits, type RefOrValue } from 'regor'",
+        '',
+        'export interface DialogComponent {',
+        '  tone?: RefOrValue<"info">',
+        "  signals?: Emits<'close' | 'cancel'>",
+        '}',
+        '',
+        'export function defineDialogComponents() {',
+        '  return {',
+        "    dialogComponent: defineComponent<DialogComponent>(html`<div/>`, { props: ['tone'] }),",
+        '  }',
+        '}',
+        '',
+      ].join('\n'),
+    )
+  })
+
+  afterAll(() => {
+    clearComponentMetadataCache()
+    if (!isolatedWorkspaceRoot) return
+
+    fs.rmSync(isolatedWorkspaceRoot, { force: true, recursive: true })
+  })
+
+  it('discovers event attributes from Emits fields regardless of field name', () => {
+    const metadata = getComponentMetadata(componentFilePath, 'DialogComponent')
+
+    expect(metadata?.props.map((prop) => prop.attributeName)).toEqual(['tone'])
+    expect(metadata?.events.map((event) => event.attributeName)).toEqual([
+      '@close',
+      '@cancel',
+    ])
+    expect(metadata?.events.map((event) => event.eventName)).toEqual([
+      'close',
+      'cancel',
+    ])
+    expect(metadata?.events[0]?.signature).toBe(
+      "signals?: Emits<'close' | 'cancel'>",
+    )
+  })
+
+  it('recognizes emitted event attributes in MDX component tags', () => {
+    const mdxText = '<DialogComponent @close="closeDialog" />'
+    const cursorOffset = mdxText.indexOf('@close="') + '@close="'.length
+
+    const tagContext = getComponentTagContextAtOffset(mdxText, cursorOffset)
+
+    expect(tagContext?.componentName).toBe('DialogComponent')
+    expect(tagContext?.activeAttributeName).toBe('@close')
+    expect(tagContext?.attributeNames.has('@close')).toBe(true)
+  })
+
+  it('recognizes emitted event attributes in TypeScript tagged templates', () => {
+    const sourceText =
+      'const template = html`<DialogComponent @cancel="cancelDialog" />`'
+    const cursorOffset = sourceText.indexOf('@cancel="') + '@cancel="'.length
+
+    const tagContext = getComponentTagContextAtOffset(sourceText, cursorOffset)
+
+    expect(tagContext?.componentName).toBe('DialogComponent')
+    expect(tagContext?.activeAttributeName).toBe('@cancel')
+    expect(tagContext?.attributeNames.has('@cancel')).toBe(true)
+  })
+})
+
 describe('getComponentMetadata open string literal unions', () => {
   let isolatedWorkspaceRoot = ''
   let componentFilePath = ''

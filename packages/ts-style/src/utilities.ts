@@ -211,7 +211,9 @@ function withHover(name: string) {
 
 function applyOpacityUtilities(theme: string) {
   for (const [name, value] of Object.entries(OPACITY_UTILITIES)) {
-    styleBuilder.select(withHover(`opacity-${name}`), theme).opacity(force(value))
+    styleBuilder
+      .select(withHover(`opacity-${name}`), theme)
+      .opacity(force(value))
   }
 }
 

@@ -16,6 +16,15 @@ export type ComponentPropInfo = {
   literalValues?: string[]
 }
 
+export type ComponentEventInfo = {
+  eventName: string
+  attributeName: string
+  declarationFilePath: string
+  declarationLine: number
+  documentation?: string
+  signature?: string
+}
+
 export type ComponentMetadata = {
   componentName: string
   declarationFilePath: string
@@ -23,6 +32,7 @@ export type ComponentMetadata = {
   documentation?: string
   signature: string
   props: ComponentPropInfo[]
+  events: ComponentEventInfo[]
 }
 
 type CachedProjectService = {
@@ -461,6 +471,7 @@ function createComponentMetadata(
     props: propNames.map((propName) =>
       createComponentPropInfo(propName, componentType, checker),
     ),
+    events: createComponentEventInfos(componentType, checker),
   }
 }
 
@@ -491,6 +502,85 @@ function createComponentPropInfo(
     valueKind: typeInfo.valueKind,
     literalValues: typeInfo.literalValues,
   }
+}
+
+function createComponentEventInfos(
+  componentType: TypeScript.Type,
+  checker: TypeScript.TypeChecker,
+): ComponentEventInfo[] {
+  const apparentComponentType = checker.getApparentType(componentType)
+  const eventInfos: ComponentEventInfo[] = []
+
+  for (const propSymbol of apparentComponentType.getProperties()) {
+    const declaration = getPreferredPropertyDeclaration(propSymbol)
+    const eventNames = getEmitsEventNames(checker, declaration)
+    if (eventNames.length === 0) continue
+
+    for (const eventName of eventNames) {
+      eventInfos.push({
+        eventName,
+        attributeName: `@${eventName}`,
+        declarationFilePath:
+          declaration?.getSourceFile().fileName ??
+          componentType.symbol?.declarations?.[0]?.getSourceFile().fileName ??
+          '',
+        declarationLine: declaration ? getLineNumber(declaration) : 0,
+        documentation: getSymbolDocumentation(checker, propSymbol),
+        signature: getPropSignature(
+          checker,
+          propSymbol.getName(),
+          propSymbol,
+          declaration,
+        ),
+      })
+    }
+  }
+
+  return eventInfos
+}
+
+function getEmitsEventNames(
+  checker: TypeScript.TypeChecker,
+  declaration: TypeScript.Declaration | undefined,
+) {
+  if (
+    !declaration ||
+    (!ts.isPropertySignature(declaration) &&
+      !ts.isPropertyDeclaration(declaration)) ||
+    !declaration.type
+  ) {
+    return []
+  }
+
+  const typeNode = unwrapParenthesizedTypeNode(declaration.type)
+  if (!ts.isTypeReferenceNode(typeNode)) return []
+  if (!isEmitsTypeReference(checker, typeNode)) return []
+
+  const eventTypeNode = typeNode.typeArguments?.[0]
+  if (!eventTypeNode) return []
+
+  return getStringLiteralTypeValues(eventTypeNode)
+}
+
+function isEmitsTypeReference(
+  checker: TypeScript.TypeChecker,
+  typeNode: TypeScript.TypeReferenceNode,
+) {
+  if (getEntityNameText(typeNode.typeName) === 'Emits') return true
+
+  const symbol = checker.getSymbolAtLocation(typeNode.typeName)
+  const resolvedSymbol = resolveAliasedSymbol(checker, symbol)
+  return resolvedSymbol?.getName() === 'Emits'
+}
+
+function getStringLiteralTypeValues(typeNode: TypeScript.TypeNode): string[] {
+  if (ts.isLiteralTypeNode(typeNode) && ts.isStringLiteral(typeNode.literal)) {
+    return [typeNode.literal.text]
+  }
+
+  if (!ts.isUnionTypeNode(typeNode)) return []
+
+  return typeNode.types.flatMap(getStringLiteralTypeValues)
 }
 
 function logPropTypeResolution(
@@ -711,14 +801,22 @@ function getPropValueType(
 function unwrapComponentPropTypeNode(
   typeNode: TypeScript.TypeNode,
 ): TypeScript.TypeNode {
-  if (ts.isParenthesizedTypeNode(typeNode)) {
-    return unwrapComponentPropTypeNode(typeNode.type)
+  const unwrappedTypeNode = unwrapParenthesizedTypeNode(typeNode)
+
+  if (ts.isTypeReferenceNode(unwrappedTypeNode)) {
+    if (unwrappedTypeNode.typeArguments?.[0]) {
+      return unwrapComponentPropTypeNode(unwrappedTypeNode.typeArguments[0])
+    }
   }
 
-  if (ts.isTypeReferenceNode(typeNode)) {
-    if (typeNode.typeArguments?.[0]) {
-      return unwrapComponentPropTypeNode(typeNode.typeArguments[0])
-    }
+  return unwrappedTypeNode
+}
+
+function unwrapParenthesizedTypeNode(
+  typeNode: TypeScript.TypeNode,
+): TypeScript.TypeNode {
+  if (ts.isParenthesizedTypeNode(typeNode)) {
+    return unwrapParenthesizedTypeNode(typeNode.type)
   }
 
   return typeNode

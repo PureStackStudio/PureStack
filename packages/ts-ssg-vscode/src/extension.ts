@@ -1,6 +1,7 @@
 import * as path from 'node:path'
 import * as vscode from 'vscode'
 import {
+  type ComponentMetadata,
   clearComponentMetadataCache,
   getComponentMetadata,
   setComponentMetadataDebugLogger,
@@ -242,10 +243,17 @@ class ComponentDefinitionProvider implements vscode.DefinitionProvider {
           normalizeAttributeName(item.attributeName) ===
           normalizedAttributeName,
       )
-      if (prop) {
+      const attribute =
+        prop ??
+        metadata.events.find(
+          (item) =>
+            normalizeAttributeName(item.attributeName) ===
+            normalizedAttributeName,
+        )
+      if (attribute) {
         return new vscode.Location(
           vscode.Uri.file(target.filePath),
-          new vscode.Position(prop.declarationLine, 0),
+          new vscode.Position(attribute.declarationLine, 0),
         )
       }
     }
@@ -307,27 +315,44 @@ class ComponentCompletionProvider implements vscode.CompletionItemProvider {
       Array.from(tagContext.attributeNames).map(normalizeAttributeName),
     )
 
-    return metadata.props
+    return getComponentAttributeInfos(metadata)
       .filter(
-        (prop) =>
+        (attribute) =>
           !existingAttributeNames.has(
-            normalizeAttributeName(prop.attributeName),
+            normalizeAttributeName(attribute.attributeName),
           ),
       )
-      .map((prop) => {
+      .map((attribute) => {
         const item = new vscode.CompletionItem(
-          prop.attributeName,
+          attribute.attributeName,
           vscode.CompletionItemKind.Property,
         )
-        item.insertText = `${prop.attributeName}=""`
-        item.detail = `${metadata.componentName}.${prop.propName}`
+        item.insertText = `${attribute.attributeName}=""`
+        item.detail = `${metadata.componentName}.${attribute.name}`
         item.documentation = createDocumentationText(
-          prop.signature,
-          prop.documentation,
+          attribute.signature,
+          attribute.documentation,
         )
         return item
       })
   }
+}
+
+function getComponentAttributeInfos(metadata: ComponentMetadata) {
+  return [
+    ...metadata.props.map((prop) => ({
+      attributeName: prop.attributeName,
+      documentation: prop.documentation,
+      name: prop.propName,
+      signature: prop.signature,
+    })),
+    ...metadata.events.map((event) => ({
+      attributeName: event.attributeName,
+      documentation: event.documentation,
+      name: event.eventName,
+      signature: event.signature,
+    })),
+  ]
 }
 
 type ComponentNameCompletionContext = {
@@ -541,10 +566,17 @@ class ComponentHoverProvider implements vscode.HoverProvider {
       (item) =>
         normalizeAttributeName(item.attributeName) === normalizedAttributeName,
     )
-    if (!prop) return undefined
+    const attribute =
+      prop ??
+      metadata.events.find(
+        (item) =>
+          normalizeAttributeName(item.attributeName) ===
+          normalizedAttributeName,
+      )
+    if (!attribute) return undefined
 
     return new vscode.Hover(
-      createHoverContents(prop.signature, prop.documentation),
+      createHoverContents(attribute.signature, attribute.documentation),
     )
   }
 }
