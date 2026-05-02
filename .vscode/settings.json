@@ -18,5 +18,6 @@
   },
   "[json]": {
     "editor.defaultFormatter": "biomejs.biome"
-  }
+  },
+  "dotnet.server.useOmnisharp": false
 }
