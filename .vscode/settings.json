@@ -19,5 +19,11 @@
   "[json]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
-  "dotnet.server.useOmnisharp": false
+  "dotnet.server.useOmnisharp": false,
+  "[csharp]": {
+    "editor.defaultFormatter": "ms-dotnettools.csharp",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  }
 }
