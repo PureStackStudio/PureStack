@@ -8,6 +8,7 @@ import {
   html,
   type Ref,
   type RefOrValue,
+  ref,
   unref,
 } from 'regor'
 import {
@@ -25,13 +26,17 @@ export interface AppForm {
 
 export interface FormMeta {}
 
-export interface FormCheck {
+export class FormCheck {
   label?: RefOrValue<string>
   name?: RefOrValue<string>
   value?: RefOrValue<string>
   model?: Ref<boolean>
   checked?: RefOrValue<boolean>
   disabled?: RefOrValue<boolean>
+  constructor(props: FormCheck) {
+    Object.assign(this, props)
+    this.model = ref<boolean>(false)
+  }
 }
 
 export interface FormAssistLink {
@@ -121,7 +126,7 @@ function defineFormMetaComponent() {
 function defineFormCheckComponent() {
   return defineComponent<FormCheck>(formCheckTemplate, {
     props: ['label', 'name', 'value', 'model', 'checked', 'disabled'],
-    context: (head) => head.props,
+    context: (head) => new FormCheck(head.props),
   })
 }
 
