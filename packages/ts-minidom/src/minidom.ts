@@ -254,7 +254,7 @@ class MiniNode {
   }
 
   dispatchEvent(event: MiniEvent): boolean {
-    if (!event || !event.type) return true
+    if (!event?.type) return true
     if (!event.target) event.target = this
     const normalizedType = event.type.toLowerCase()
     this.dispatchToListeners(normalizedType, event)

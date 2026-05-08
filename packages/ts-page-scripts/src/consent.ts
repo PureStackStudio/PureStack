@@ -132,7 +132,7 @@ if (
     }
   }
   function isServiceAllowed(service: ConsentService, state: ConsentState) {
-    if (!service || !service.category) return false
+    if (!service?.category) return false
     return state.categories[service.category] === true
   }
   function applyConsentAttributes(state: ConsentState) {
@@ -163,7 +163,7 @@ if (
   function loadAllowedServices(state: ConsentState) {
     for (let i = 0; i < services.length; i += 1) {
       const service = services[i]
-      if (!service || !service.id || loadedServices[service.id]) continue
+      if (!service?.id || loadedServices[service.id]) continue
       if (!isServiceAllowed(service, state)) continue
       const scripts = Array.isArray(service.scripts) ? service.scripts : []
       for (let j = 0; j < scripts.length; j += 1) {

@@ -3,10 +3,7 @@ import { createApp, ref, sref } from 'regor'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
 import { defineIconComponents } from '../icon/icon'
-import {
-  defineFormSelectField,
-  type FormSelectOption,
-} from './formSelectField'
+import { defineFormSelectField, type FormSelectOption } from './formSelectField'
 
 describe('FormSelectField', () => {
   it('renders placeholder, options, and the default select affordance', () => {
@@ -55,7 +52,9 @@ describe('FormSelectField', () => {
       expect(renderedOptions[1]?.textContent).toBe('Design')
       expect(renderedOptions[2]?.getAttribute('disabled')).toBe('')
       expect(icon).toBeTruthy()
-      expect(document.body.innerHTML).toContain('<path d="m6 9 6 6 6-6"></path>')
+      expect(document.body.innerHTML).toContain(
+        '<path d="m6 9 6 6 6-6"></path>',
+      )
     } finally {
       app.unbind()
       cleanupDom()
