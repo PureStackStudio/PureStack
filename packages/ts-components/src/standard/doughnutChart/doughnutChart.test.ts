@@ -42,7 +42,7 @@ describe('DoughnutChart rendering', () => {
       expect(html).toContain('mask="url(#doughnut-chart-mask-')
       expect(html).toContain('fill="black"')
       expect(html).toContain('class="doughnut-chart__separator"')
-      expect(html).toContain('A 46 46 0 0')
+      expect(html).toContain('A 46.35 46.35 0 0')
       expect(html).toContain('A 32 32 0 0')
       expect(html).toContain('Total')
       expect(html).toContain('100%')

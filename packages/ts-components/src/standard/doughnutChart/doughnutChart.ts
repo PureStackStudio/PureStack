@@ -74,6 +74,7 @@ const DEFAULT_EMPTY_LABEL = 'No data'
 const FULL_CIRCLE = 360
 const MAX_SEPARATOR_SEGMENT_SHARE = 0.15
 const MIN_SEPARATOR_WIDTH = 0.25
+const SEPARATOR_MASK_BLEED = 0.35
 
 const DEFAULT_SEGMENT_COLORS = [
   getThemePaletteVar('semanticTone.accent.tone'),
@@ -300,7 +301,12 @@ function resolveSeparators(
       return []
     }
 
-    const path = separatorPath(cursor, innerRadius, CHART_OUTER_RADIUS, width)
+    const path = separatorPath(
+      cursor,
+      Math.max(0, innerRadius - SEPARATOR_MASK_BLEED),
+      CHART_OUTER_RADIUS + SEPARATOR_MASK_BLEED,
+      width,
+    )
     cursor += segment.percent * FULL_CIRCLE
     return [{ path }]
   })
