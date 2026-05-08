@@ -55,6 +55,9 @@ export interface DoughnutChart {
   resolvedEmptyLabel?: ComputedRef<string>
   chartSegments?: ComputedRef<ResolvedDoughnutChartSegment[]>
   separators?: ComputedRef<ResolvedDoughnutChartSeparator[]>
+  hasSeparators?: ComputedRef<boolean>
+  separatorMaskId?: string
+  separatorMaskUrl?: ComputedRef<string | undefined>
   hasSegments?: ComputedRef<boolean>
   total?: ComputedRef<number>
   centerValueText?: ComputedRef<string>
@@ -82,6 +85,8 @@ const DEFAULT_SEGMENT_COLORS = [
   getThemePaletteVar('semanticTone.danger.tone'),
 ]
 
+let nextAutoDoughnutChartMaskId = 1
+
 const doughnutChartTemplate = svg`<svg
   class="doughnut-chart"
   :class="classes"
@@ -94,24 +99,38 @@ const doughnutChartTemplate = svg`<svg
 >
   <title r-if="title">{{ title }}</title>
   <desc r-if="description">{{ description }}</desc>
-  <path class="doughnut-chart__track" :d="trackPath" fill-rule="evenodd"/>
-  <g class="doughnut-chart__segments" r-if="hasSegments">
-    <path
-      r-for="segment in chartSegments"
-      class="doughnut-chart__segment"
-      :d="segment.path"
-      :fill="segment.color"
-      :aria-label="segment.label + ': ' + segment.formattedValue"
-      fill-rule="evenodd"
+  <defs r-if="hasSeparators">
+    <mask
+      class="doughnut-chart__separator-mask"
+      :id="separatorMaskId"
+      maskUnits="userSpaceOnUse"
+      x="0"
+      y="0"
+      width="100"
+      height="100"
     >
-      <title r-text="segment.label + ': ' + segment.formattedValue"></title>
-    </path>
-  </g>
-  <g class="doughnut-chart__separators" r-if="hasSegments">
-    <path
-      r-for="separator in separators"
-      class="doughnut-chart__separator"
-      :d="separator.path"/>
+      <rect x="0" y="0" width="100" height="100" fill="white"/>
+      <path
+        r-for="separator in separators"
+        class="doughnut-chart__separator"
+        :d="separator.path"
+        fill="black"/>
+    </mask>
+  </defs>
+  <g :mask="separatorMaskUrl">
+    <path class="doughnut-chart__track" :d="trackPath" fill-rule="evenodd"/>
+    <g class="doughnut-chart__segments" r-if="hasSegments">
+      <path
+        r-for="segment in chartSegments"
+        class="doughnut-chart__segment"
+        :d="segment.path"
+        :fill="segment.color"
+        :aria-label="segment.label + ': ' + segment.formattedValue"
+        fill-rule="evenodd"
+      >
+        <title r-text="segment.label + ': ' + segment.formattedValue"></title>
+      </path>
+    </g>
   </g>
   <g class="doughnut-chart__center" r-if="centerValueText || centerLabel">
     <text
@@ -173,6 +192,7 @@ export function defineDoughnutChartComponents() {
 }
 
 function resolveDoughnutChart(props: DoughnutChart): DoughnutChart {
+  const separatorMaskId = resolveDoughnutChartMaskId()
   const thickness = computed(() =>
     clampNumber(props.thickness, DEFAULT_CHART_THICKNESS, 2, 40),
   )
@@ -201,10 +221,21 @@ function resolveDoughnutChart(props: DoughnutChart): DoughnutChart {
     total,
     chartSegments,
     separators,
+    hasSeparators: computed(() => separators().length > 0),
+    separatorMaskId,
+    separatorMaskUrl: computed(() =>
+      separators().length > 0 ? `url(#${separatorMaskId})` : undefined,
+    ),
     hasSegments: computed(() => chartSegments().length > 0),
     centerValueText: computed(() => resolveCenterValue(props, total())),
     trackPath: computed(() => fullRingPath(CHART_OUTER_RADIUS, innerRadius())),
   }
+}
+
+function resolveDoughnutChartMaskId() {
+  const id = `doughnut-chart-mask-${nextAutoDoughnutChartMaskId}`
+  nextAutoDoughnutChartMaskId += 1
+  return id
 }
 
 function resolveChartSegments(
