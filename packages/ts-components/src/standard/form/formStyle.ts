@@ -15,6 +15,7 @@ export function registerFormStyles() {
     registerFormMetaStyles(theme, palette)
     registerFormStatusStyles(theme, palette, options)
     registerFormResponsiveStyles(theme)
+    registerFormSelectFieldStyles(theme, palette)
   })
 }
 
@@ -109,6 +110,54 @@ function registerFormFieldStyles(
     .apply(palette.applyFont(palette.font.size.sm, palette.font.weight.w700))
     .lineHeight('1')
     .cursor('pointer')
+}
+
+function registerFormSelectFieldStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+) {
+  registerFormSelectControlStyles(theme)
+  registerFormSelectOptionStyles(theme, palette)
+  registerFormSelectIconStyles(theme)
+}
+
+function registerFormSelectControlStyles(theme: ThemeMode) {
+  styleBuilder.select('.form-block__select-shell', theme).position('relative')
+  styleBuilder
+    .select('.form-block__select', theme)
+    .appearance('none')
+    .cursor('pointer')
+    .paddingRight('1em')
+  styleBuilder
+    .select('.form-block__select:disabled', theme)
+    .cursor('not-allowed')
+}
+
+function registerFormSelectOptionStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+) {
+  styleBuilder
+    .select('.form-block__select option, .form-block__select optgroup', theme)
+    .backgroundColor(palette.current.tone)
+  styleBuilder
+    .select(
+      '.form-block__select option:disabled, .form-block__select optgroup:disabled',
+      theme,
+    )
+    .color(palette.current.text.subtle)
+}
+
+function registerFormSelectIconStyles(theme: ThemeMode) {
+  styleBuilder
+    .select('.form-block__select-icon', theme)
+    .position('absolute')
+    .right('0')
+    .top('50%')
+    .transform('translateY(-50%)')
+    .pointerEvents('none')
+    .marginLeft('0')
+    .marginRight('0')
 }
 
 function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {

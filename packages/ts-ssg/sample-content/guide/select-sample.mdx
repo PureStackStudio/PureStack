@@ -1,0 +1,160 @@
+---
+title: Select Component Samples
+description: Native select field examples with inline option bindings, placeholders, tones, and form layouts.
+layout:
+  showToc: true
+  fullWidth: true
+---
+
+# Select Component Samples
+
+`FormSelectField` gives forms a polished native select without giving up browser semantics, keyboard behavior, or regular form submission.
+
+## 1. Inline options
+
+<AppForm action="/workspace/settings" method="post" tone="accent">
+  <Grid columns="1" columnsMd="2">
+    <FormSelectField
+      label="Workspace region"
+      name="region"
+      placeholder="Choose a region"
+      required="true"
+      :options="[
+        { label: 'US East', value: 'us-east' },
+        { label: 'US West', value: 'us-west' },
+        { label: 'Europe Central', value: 'eu-central' },
+        { label: 'Asia Pacific', value: 'apac' },
+      ]"/>
+    <FormSelectField
+      label="Release channel"
+      name="releaseChannel"
+      placeholder="Select channel"
+      :options="[
+        { label: 'Stable', value: 'stable' },
+        { label: 'Preview', value: 'preview' },
+        { label: 'Canary', value: 'canary', disabled: true },
+      ]"/>
+  </Grid>
+
+  <FormStatus tone="accent">
+    Inline option arrays keep static MDX pages expressive without requiring a
+    separate script block.
+  </FormStatus>
+  <FormSubmit label="Save workspace"/>
+</AppForm>
+
+## 2. Selects beside text inputs
+
+<AppForm action="/support/request" method="post" tone="info">
+  <Grid columns="1" columnsMd="3">
+    <FormInputField
+      label="Account"
+      name="account"
+      placeholder="northwind"
+      required="true"/>
+    <FormSelectField
+      label="Priority"
+      name="priority"
+      placeholder="Choose priority"
+      icon="iconoir:headset-help"
+      :options="[
+        { label: 'Low', value: 'low' },
+        { label: 'Normal', value: 'normal' },
+        { label: 'High', value: 'high' },
+        { label: 'Urgent', value: 'urgent' },
+      ]"/>
+    <FormSelectField
+      label="Owner team"
+      name="ownerTeam"
+      placeholder="Route to team"
+      :options="[
+        { label: 'Platform', value: 'platform' },
+        { label: 'Security', value: 'security' },
+        { label: 'Billing', value: 'billing' },
+      ]"/>
+  </Grid>
+
+  <FormInputField
+    label="Summary"
+    name="summary"
+    placeholder="Briefly describe the request"/>
+  <FormSubmit label="Create request" tone="info"/>
+</AppForm>
+
+## 3. Tone and variant combinations
+
+<Grid columns="1" columnsMd="2">
+  <AppForm action="/deployment" method="post" tone="success">
+    <FormSelectField
+      label="Deployment target"
+      name="deploymentTarget"
+      placeholder="Select target"
+      :options="[
+        { label: 'Production', value: 'production' },
+        { label: 'Staging', value: 'staging' },
+        { label: 'Development', value: 'development' },
+      ]"/>
+    <FormSubmit label="Schedule deploy" tone="success"/>
+  </AppForm>
+
+  <AppForm action="/incident" method="post" tone="warning">
+    <FormSelectField
+      label="Incident severity"
+      name="severity"
+      placeholder="Select severity"
+      variant="surface"
+      :options="[
+        { label: 'SEV 3', value: 'sev3' },
+        { label: 'SEV 2', value: 'sev2' },
+        { label: 'SEV 1', value: 'sev1' },
+      ]"/>
+    <FormSubmit label="Open incident" tone="warning"/>
+  </AppForm>
+</Grid>
+
+## 4. Disabled state
+
+<AppForm action="/billing" method="post" tone="neutral">
+  <Grid columns="1" columnsMd="2">
+    <FormSelectField
+      label="Billing cadence"
+      name="billingCadence"
+      :options="[
+        { label: 'Monthly', value: 'monthly' },
+        { label: 'Annual', value: 'annual' },
+      ]"/>
+    <FormSelectField
+      label="Contract tier"
+      name="contractTier"
+      disabled="true"
+      :options="[
+        { label: 'Enterprise', value: 'enterprise' },
+      ]"/>
+  </Grid>
+
+  <FormStatus tone="neutral">
+    Disabled select fields keep their visual structure while clearly opting out
+    of interaction.
+  </FormStatus>
+</AppForm>
+
+## 5. Props reference
+
+```html
+<FormSelectField
+  label="Field label"
+  tone="optional tone override"
+  variant="surfaceAlt|surface|outline|subtle|..."
+  name="fieldName"
+  placeholder="Choose one"
+  autocomplete="..."
+  required="true|false"
+  disabled="true|false"
+  icon="iconoir:headset-help"
+  iconEnd="lucide:chevron-down"
+  :options="[
+    { label: 'Option label', value: 'option-value' },
+    { label: 'Disabled option', value: 'disabled-option', disabled: true },
+  ]"
+/>
+```

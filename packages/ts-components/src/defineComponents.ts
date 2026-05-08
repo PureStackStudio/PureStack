@@ -8,6 +8,7 @@ import { defineFlexComponents } from './standard/flex/flex'
 import { defineFooterComponents } from './standard/footer/footer'
 import { defineFormComponents } from './standard/form/form'
 import { defineFormInputField } from './standard/form/formInputField'
+import { defineFormSelectField } from './standard/form/formSelectField'
 import { defineGridComponents } from './standard/grid/grid'
 import { defineIconComponents, type GetSvgIcon } from './standard/icon/icon'
 import { defineLandingComponents } from './standard/landing/landing'
@@ -37,6 +38,7 @@ export function defineComponents(getSvgIcon: GetSvgIcon) {
     ...defineFooterComponents(),
     ...defineFormComponents(),
     ...defineFormInputField(),
+    ...defineFormSelectField(),
     ...defineGridComponents(),
     ...defineIconComponents(getSvgIcon),
     ...defineLandingComponents(),

@@ -63,6 +63,7 @@
     "FormDivider",
     "FormInputField",
     "FormMeta",
+    "FormSelectField",
     "FormStatus",
     "FormSubmit",
     "Grid",
