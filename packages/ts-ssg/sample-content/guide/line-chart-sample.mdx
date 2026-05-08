@@ -1,0 +1,167 @@
+---
+title: Line Chart Samples
+description: SVG line chart examples for trends, multi-series comparisons, and compact sparklines.
+layout:
+  showToc: true
+  fullWidth: true
+---
+
+# Line Chart Samples
+
+`LineChart` renders crisp, static-friendly SVG trend lines from inline series data. It is small on purpose: bring the surrounding narrative, let the component own the geometry.
+
+## 1. Runtime adoption trend
+
+<Panel tone="accent" variant="surfaceAlt">
+  <Grid columns="1" columnsLg="minmax(0, 1fr) 18rem" alignItems="center">
+    <LineChart
+      title="Runtime adoption trend"
+      description="Monthly adoption across core and edge runtimes."
+      valueSuffix="%"
+      showArea="false"
+      :series="[
+        {
+          label: 'Core',
+          points: [
+            { label: 'Jan', value: 34 },
+            { label: 'Feb', value: 42 },
+            { label: 'Mar', value: 48 },
+            { label: 'Apr', value: 57 },
+            { label: 'May', value: 64 },
+            { label: 'Jun', value: 73 },
+          ],
+        },
+        {
+          label: 'Edge',
+          points: [
+            { label: 'Jan', value: 12 },
+            { label: 'Feb', value: 19 },
+            { label: 'Mar', value: 28 },
+            { label: 'Apr', value: 36 },
+            { label: 'May', value: 48 },
+            { label: 'Jun', value: 58 },
+          ],
+        },
+      ]"/>
+    <div>
+      <Badge tone="success">Upward</Badge>
+      <h2>Adoption is compounding month by month</h2>
+      <p>
+        Smooth SVG paths, themed series colors, point markers, grid lines, and
+        compact axis labels keep the chart readable in dense dashboards.
+      </p>
+    </div>
+  </Grid>
+</Panel>
+
+## 2. Explicit colors and value labels
+
+<Panel tone="feature">
+  <LineChart
+    title="Latency delta"
+    description="Percent change from the release baseline."
+    valueSuffix="%"
+    minValue="-30"
+    maxValue="40"
+    showValues="true"
+    showArea="true"
+    :series="[
+      {
+        label: 'Render',
+        color: '#22c55e',
+        points: [
+          { label: 'v1', value: -12 },
+          { label: 'v2', value: 8 },
+          { label: 'v3', value: 22 },
+          { label: 'v4', value: 31 },
+        ],
+      },
+      {
+        label: 'Hydrate',
+        color: '#f97316',
+        points: [
+          { label: 'v1', value: -18 },
+          { label: 'v2', value: -6 },
+          { label: 'v3', value: 7 },
+          { label: 'v4', value: 18 },
+        ],
+      },
+    ]"/>
+</Panel>
+
+## 3. Quiet sparkline-style trend
+
+<Panel tone="ghost">
+  <LineChart
+    title="Deploy velocity"
+    showAxis="false"
+    showLabels="false"
+    showPoints="false"
+    curve="linear"
+    height="180"
+    :series="[
+      {
+        label: 'Deploys',
+        points: [
+          { label: 'Mon', value: 8 },
+          { label: 'Tue', value: 13 },
+          { label: 'Wed', value: 11 },
+          { label: 'Thu', value: 19 },
+          { label: 'Fri', value: 16 },
+          { label: 'Sat', value: 6 },
+          { label: 'Sun', value: 4 },
+        ],
+      },
+    ]"/>
+</Panel>
+
+## 4. Empty state
+
+<Panel tone="neutral">
+  <LineChart
+    title="No measurements"
+    emptyLabel="No chartable values"
+    :series="[
+      {
+        label: 'Pending',
+        points: [
+          { label: 'Now', value: 'n/a' },
+        ],
+      },
+    ]"/>
+</Panel>
+
+## 5. Props reference
+
+```html
+<LineChart
+  title="Accessible SVG title"
+  description="Longer accessible description"
+  ariaLabel="Optional aria-label override"
+  emptyLabel="No data"
+  valueSuffix="%"
+  width="100%|520|32rem"
+  height="auto|320|20rem"
+  minValue="-40"
+  maxValue="100"
+  curve="smooth|linear"
+  animated="true|false"
+  showArea="true|false"
+  showPoints="true|false"
+  showValues="true|false"
+  showLabels="true|false"
+  showAxis="true|false"
+  tone="neutral|accent|info|success|warning|danger|ghost|feature|secondary|custom"
+  variant="none|surface|outline|..."
+  :series="[
+    {
+      label: 'Core',
+      color: '#22c55e',
+      points: [
+        { label: 'Jan', value: 34 },
+        { label: 'Feb', value: 42 },
+      ],
+    },
+  ]"
+/>
+```

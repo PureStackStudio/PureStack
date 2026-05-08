@@ -11,6 +11,7 @@ import { registerFooterStyles } from './standard/footer/footerStyle'
 import { registerFormStyles } from './standard/form/formStyle'
 import { registerGridStyles } from './standard/grid/gridStyle'
 import { registerIconStyles } from './standard/icon/iconStyle'
+import { registerLineChartStyles } from './standard/lineChart/lineChartStyle'
 import { registerLoginStyles } from './standard/login/loginStyle'
 import { registerLogoStyles } from './standard/logo/logoStyle'
 import { registerModalStyles } from './standard/modal/modalStyle'
@@ -36,6 +37,7 @@ export function registerStyles() {
   registerFormStyles()
   registerGridStyles()
   registerIconStyles()
+  registerLineChartStyles()
   registerLoginStyles()
   registerLogoStyles()
   registerModalStyles()

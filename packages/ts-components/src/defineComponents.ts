@@ -14,6 +14,7 @@ import { defineFormSelectField } from './standard/form/formSelectField'
 import { defineGridComponents } from './standard/grid/grid'
 import { defineIconComponents, type GetSvgIcon } from './standard/icon/icon'
 import { defineLandingComponents } from './standard/landing/landing'
+import { defineLineChartComponents } from './standard/lineChart/lineChart'
 import { defineLoginComponents } from './standard/login/login'
 import { defineLogoComponents } from './standard/logo/logo'
 import { defineModalComponents } from './standard/modal/modal'
@@ -46,6 +47,7 @@ export function defineComponents(getSvgIcon: GetSvgIcon) {
     ...defineGridComponents(),
     ...defineIconComponents(getSvgIcon),
     ...defineLandingComponents(),
+    ...defineLineChartComponents(),
     ...defineLoginComponents(),
     ...defineLogoComponents(),
     ...defineModalComponents(),

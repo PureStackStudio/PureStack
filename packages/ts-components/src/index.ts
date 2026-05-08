@@ -100,6 +100,14 @@ export type {
 } from './standard/landing/landing'
 export { defineLandingComponents } from './standard/landing/landing'
 export type {
+  LineChart,
+  LineChartCurve,
+  LineChartPoint,
+  LineChartSeries,
+} from './standard/lineChart/lineChart'
+export { defineLineChartComponents } from './standard/lineChart/lineChart'
+export { registerLineChartStyles } from './standard/lineChart/lineChartStyle'
+export type {
   LoginFooter,
   LoginHeader,
   LoginProvider,
