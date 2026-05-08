@@ -43,6 +43,7 @@ export type ToneOverrides = {
   surface?: ToneSurfaceOverrides
   surfaceAlt?: ToneSurfaceOverrides
   canvas?: Tone['canvas']
+  canvascolor?: Tone['canvascolor']
   root?: Tone['root']
   overlay?: Tone['overlay']
   border?: Partial<Tone['border']>
@@ -53,6 +54,8 @@ export type ToneOverrides = {
 type ToneChromeOptions = {
   lighting?: number
 }
+
+type ToneState = 'rest' | 'hover' | 'active' | 'disabled'
 
 export function rgba(hex: string, alphaValue: number) {
   const { r, g, b, a } = hexToRgba(hex)
@@ -111,24 +114,28 @@ function createInteractiveGroup(
   return {
     rest: {
       background: createChrome(kind, scale, 'rest', isGhost, chrome),
+      bgcolor: createChromeColor(scale, 'rest', isGhost),
       border: isGhost ? 'transparent' : defaultBorder,
       text: isGhost ? 'currentColor' : defaultText,
       ...(groupOverrides?.rest || {}),
     },
     hover: {
       background: createChrome(kind, scale, 'hover', isGhost, chrome),
+      bgcolor: createChromeColor(scale, 'hover', isGhost),
       border: defaultBorder,
       text: defaultText,
       ...(groupOverrides?.hover || {}),
     },
     active: {
       background: createChrome(kind, scale, 'active', isGhost, chrome),
+      bgcolor: createChromeColor(scale, 'active', isGhost),
       border: defaultBorder,
       text: defaultText,
       ...(groupOverrides?.active || {}),
     },
     disabled: {
       background: createChrome(kind, scale, 'disabled', isGhost, chrome),
+      bgcolor: createChromeColor(scale, 'disabled', isGhost),
       border: subtleBorder,
       text: subtleText,
       ...(groupOverrides?.disabled || {}),
@@ -169,24 +176,28 @@ export function createTone(
   const button = {
     rest: {
       background: createChrome('button', buttonBg, 'rest', isGhost, chrome),
+      bgcolor: createChromeColor(buttonBg, 'rest', isGhost),
       border: isGhost ? 'transparent' : buttonBorderRest,
       text: isGhost ? 'currentColor' : foreground.level2,
       ...(overrides.button?.rest || {}),
     },
     hover: {
       background: createChrome('button', buttonBg, 'hover', isGhost, chrome),
+      bgcolor: createChromeColor(buttonBg, 'hover', isGhost),
       border: buttonBorderHover,
       text: foreground.level5,
       ...(overrides.button?.hover || {}),
     },
     active: {
       background: createChrome('button', buttonBg, 'active', isGhost, chrome),
+      bgcolor: createChromeColor(buttonBg, 'active', isGhost),
       border: buttonBorderActive,
       text: foreground.level5,
       ...(overrides.button?.active || {}),
     },
     disabled: {
       background: createChrome('button', buttonBg, 'disabled', isGhost, chrome),
+      bgcolor: createChromeColor(buttonBg, 'disabled', isGhost),
       border: buttonBorderDisabled,
       text: foreground.level1,
       ...(overrides.button?.disabled || {}),
@@ -222,6 +233,7 @@ export function createTone(
     ),
     canvas:
       overrides.canvas ?? createChrome('canvas', canvas, 'rest', false, chrome),
+    canvascolor: overrides.canvascolor ?? canvas.level3,
     root: {
       text: {
         default: rootForeground.level5,
@@ -249,4 +261,15 @@ export function createTone(
     },
     button,
   }
+}
+
+function createChromeColor(
+  scale: ToneScale,
+  state: ToneState,
+  isGhost: boolean,
+) {
+  if (isGhost && state === 'rest') return 'transparent'
+  if (state === 'disabled') return scale.level1
+  if (state === 'hover' || state === 'active') return scale.level4
+  return scale.level3
 }

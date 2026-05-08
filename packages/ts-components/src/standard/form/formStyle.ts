@@ -138,13 +138,10 @@ function registerFormSelectOptionStyles(
   palette: ThemePalette,
 ) {
   styleBuilder
-    .select('.form-block__select option, .form-block__select optgroup', theme)
-    .backgroundColor(palette.current.tone)
+    .select('option, optgroup', theme)
+    .backgroundColor(palette.current.canvascolor)
   styleBuilder
-    .select(
-      '.form-block__select option:disabled, .form-block__select optgroup:disabled',
-      theme,
-    )
+    .select('option:disabled, optgroup:disabled', theme)
     .color(palette.current.text.subtle)
 }
 

@@ -40,55 +40,31 @@
 
 import type { CSSProps } from '@purestack/ts-css'
 
+interface InteractiveToneState {
+  background: string
+  bgcolor: string
+  border: string
+  text: string
+}
+
 export interface SemanticToneTokens {
   tone: string
   surface: {
-    rest: {
-      background: string
-      border: string
-      text: string
-    }
-    hover: {
-      background: string
-      border: string
-      text: string
-    }
-    active: {
-      background: string
-      border: string
-      text: string
-    }
-    disabled: {
-      background: string
-      border: string
-      text: string
-    }
+    rest: InteractiveToneState
+    hover: InteractiveToneState
+    active: InteractiveToneState
+    disabled: InteractiveToneState
     focusRing: string
   }
   surfaceAlt: {
-    rest: {
-      background: string
-      border: string
-      text: string
-    }
-    hover: {
-      background: string
-      border: string
-      text: string
-    }
-    active: {
-      background: string
-      border: string
-      text: string
-    }
-    disabled: {
-      background: string
-      border: string
-      text: string
-    }
+    rest: InteractiveToneState
+    hover: InteractiveToneState
+    active: InteractiveToneState
+    disabled: InteractiveToneState
     focusRing: string
   }
   canvas: string
+  canvascolor: string
   root: {
     border: {
       subtle: string
@@ -111,26 +87,10 @@ export interface SemanticToneTokens {
     subtle: string
   }
   button: {
-    rest: {
-      background: string
-      border: string
-      text: string
-    }
-    hover: {
-      background: string
-      border: string
-      text: string
-    }
-    active: {
-      background: string
-      border: string
-      text: string
-    }
-    disabled: {
-      background: string
-      border: string
-      text: string
-    }
+    rest: InteractiveToneState
+    hover: InteractiveToneState
+    active: InteractiveToneState
+    disabled: InteractiveToneState
     focusRing: string
   }
 }
@@ -162,51 +122,20 @@ export interface ThemeTypography {
 export interface ThemePaletteCurrent {
   tone: string
   canvas: string
+  canvascolor: string
   overlay: string
   surface: {
-    rest: {
-      background: string
-      border: string
-      text: string
-    }
-    hover: {
-      background: string
-      border: string
-      text: string
-    }
-    active: {
-      background: string
-      border: string
-      text: string
-    }
-    disabled: {
-      background: string
-      border: string
-      text: string
-    }
+    rest: InteractiveToneState
+    hover: InteractiveToneState
+    active: InteractiveToneState
+    disabled: InteractiveToneState
     focusRing: string
   }
   surfaceAlt: {
-    rest: {
-      background: string
-      border: string
-      text: string
-    }
-    hover: {
-      background: string
-      border: string
-      text: string
-    }
-    active: {
-      background: string
-      border: string
-      text: string
-    }
-    disabled: {
-      background: string
-      border: string
-      text: string
-    }
+    rest: InteractiveToneState
+    hover: InteractiveToneState
+    active: InteractiveToneState
+    disabled: InteractiveToneState
     focusRing: string
   }
   text: {
@@ -219,26 +148,10 @@ export interface ThemePaletteCurrent {
     focus: string
   }
   button: {
-    rest: {
-      background: string
-      border: string
-      text: string
-    }
-    hover: {
-      background: string
-      border: string
-      text: string
-    }
-    active: {
-      background: string
-      border: string
-      text: string
-    }
-    disabled: {
-      background: string
-      border: string
-      text: string
-    }
+    rest: InteractiveToneState
+    hover: InteractiveToneState
+    active: InteractiveToneState
+    disabled: InteractiveToneState
     focusRing: string
   }
 }
