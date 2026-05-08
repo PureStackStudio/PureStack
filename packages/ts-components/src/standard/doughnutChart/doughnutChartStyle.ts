@@ -38,7 +38,10 @@ function registerDoughnutChartBaseStyles(theme: ThemeMode) {
     .filter('brightness(1.08)')
 
   styleBuilder
-    .select('.doughnut-chart__center, .doughnut-chart__empty', theme)
+    .select(
+      '.doughnut-chart__separators, .doughnut-chart__center, .doughnut-chart__empty',
+      theme,
+    )
     .pointerEvents('none')
 }
 
@@ -48,6 +51,10 @@ function registerDoughnutChartPaintStyles(
 ) {
   styleBuilder
     .select('.doughnut-chart__track', theme)
+    .fill(palette.current.surfaceAlt.rest.bgcolor)
+
+  styleBuilder
+    .select('.doughnut-chart__separator', theme)
     .fill(palette.current.surfaceAlt.rest.bgcolor)
 
   styleBuilder

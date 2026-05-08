@@ -29,6 +29,10 @@ export interface ResolvedDoughnutChartSegment {
   color: string
 }
 
+export interface ResolvedDoughnutChartSeparator {
+  path: string
+}
+
 export interface DoughnutChart {
   segments?: RefOrValue<Array<RefOrValue<DoughnutChartSegment>>>
   title?: RefOrValue<string>
@@ -50,6 +54,7 @@ export interface DoughnutChart {
   resolvedAriaLabel?: ComputedRef<string>
   resolvedEmptyLabel?: ComputedRef<string>
   chartSegments?: ComputedRef<ResolvedDoughnutChartSegment[]>
+  separators?: ComputedRef<ResolvedDoughnutChartSeparator[]>
   hasSegments?: ComputedRef<boolean>
   total?: ComputedRef<number>
   centerValueText?: ComputedRef<string>
@@ -99,6 +104,12 @@ const doughnutChartTemplate = svg`<svg
     >
       <title r-text="segment.label + ': ' + segment.formattedValue"></title>
     </path>
+  </g>
+  <g class="doughnut-chart__separators" r-if="hasSegments">
+    <path
+      r-for="separator in separators"
+      class="doughnut-chart__separator"
+      :d="separator.path"/>
   </g>
   <g class="doughnut-chart__center" r-if="centerValueText || centerLabel">
     <text
@@ -168,6 +179,9 @@ function resolveDoughnutChart(props: DoughnutChart): DoughnutChart {
   const chartSegments = computed(() =>
     resolveChartSegments(props, total(), innerRadius()),
   )
+  const separators = computed(() =>
+    resolveSeparators(props, chartSegments(), innerRadius()),
+  )
 
   return {
     ...props,
@@ -184,6 +198,7 @@ function resolveDoughnutChart(props: DoughnutChart): DoughnutChart {
     ),
     total,
     chartSegments,
+    separators,
     hasSegments: computed(() => chartSegments().length > 0),
     centerValueText: computed(() => resolveCenterValue(props, total())),
     trackPath: computed(() => fullRingPath(CHART_OUTER_RADIUS, innerRadius())),
@@ -198,15 +213,13 @@ function resolveChartSegments(
   if (total <= 0) return []
 
   const startAngle = readNumber(props.startAngle, DEFAULT_CHART_START_ANGLE)
-  const gap = clampNumber(props.gap, DEFAULT_CHART_GAP, 0, 24)
   const valueSuffix = resolveText(props.valueSuffix)
   let cursor = startAngle
 
   return resolvePositiveSegments(props.segments).map((segment, index) => {
     const span = (segment.value / total) * FULL_CIRCLE
-    const segmentGap = span > gap ? gap : 0
-    const segmentStart = cursor + segmentGap / 2
-    const segmentEnd = cursor + span - segmentGap / 2
+    const segmentStart = cursor
+    const segmentEnd = cursor + span
     cursor += span
 
     return {
@@ -227,6 +240,74 @@ function resolveChartSegments(
             ),
     }
   })
+}
+
+function resolveSeparators(
+  props: DoughnutChart,
+  segments: ResolvedDoughnutChartSegment[],
+  innerRadius: number,
+): ResolvedDoughnutChartSeparator[] {
+  if (segments.length < 2) return []
+
+  const gap = clampNumber(props.gap, DEFAULT_CHART_GAP, 0, 24)
+  if (gap <= 0) return []
+
+  let cursor = readNumber(props.startAngle, DEFAULT_CHART_START_ANGLE)
+  return segments.map((segment) => {
+    const path = separatorPath(cursor, innerRadius, CHART_OUTER_RADIUS, gap)
+    cursor += segment.percent * FULL_CIRCLE
+    return {
+      path,
+    }
+  })
+}
+
+function separatorPath(
+  angle: number,
+  innerRadius: number,
+  outerRadius: number,
+  width: number,
+) {
+  const halfWidth = Math.min(
+    width / 2,
+    innerRadius - 0.001,
+    outerRadius - 0.001,
+  )
+  if (halfWidth <= 0) return ''
+
+  const radians = (angle * Math.PI) / 180
+  const ux = Math.cos(radians)
+  const uy = Math.sin(radians)
+  const px = -uy
+  const py = ux
+  const outerDistance = Math.sqrt(outerRadius ** 2 - halfWidth ** 2)
+  const innerDistance = Math.sqrt(innerRadius ** 2 - halfWidth ** 2)
+  const outerStart = offsetPoint(ux, uy, px, py, outerDistance, halfWidth)
+  const outerEnd = offsetPoint(ux, uy, px, py, outerDistance, -halfWidth)
+  const innerEnd = offsetPoint(ux, uy, px, py, innerDistance, -halfWidth)
+  const innerStart = offsetPoint(ux, uy, px, py, innerDistance, halfWidth)
+
+  return [
+    `M ${formatPoint(outerStart)}`,
+    `A ${fmt(outerRadius)} ${fmt(outerRadius)} 0 0 0 ${formatPoint(outerEnd)}`,
+    `L ${formatPoint(innerEnd)}`,
+    `A ${fmt(innerRadius)} ${fmt(innerRadius)} 0 0 1 ${formatPoint(innerStart)}`,
+    'Z',
+  ].join(' ')
+}
+
+function offsetPoint(
+  ux: number,
+  uy: number,
+  px: number,
+  py: number,
+  radialDistance: number,
+  offset: number,
+) {
+  return {
+    x: CHART_CENTER + ux * radialDistance + px * offset,
+    y: CHART_CENTER + uy * radialDistance + py * offset,
+  }
 }
 
 function resolvePositiveSegments(

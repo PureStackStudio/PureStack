@@ -38,6 +38,9 @@ describe('DoughnutChart rendering', () => {
       expect(html).toContain('fill="#18a999"')
       expect(html).toContain('Product: 64%')
       expect(html).toContain('Services: 36%')
+      expect(html).toContain('class="doughnut-chart__separator"')
+      expect(html).toContain('A 46 46 0 0')
+      expect(html).toContain('A 32 32 0 0')
       expect(html).toContain('Total')
       expect(html).toContain('100%')
     } finally {
@@ -68,6 +71,7 @@ describe('DoughnutChart rendering', () => {
       const html = document.body.innerHTML
       expect(html).toContain('Waiting')
       expect(html).not.toContain('None: 0')
+      expect(html).not.toContain('doughnut-chart__separator')
     } finally {
       app.unbind()
       cleanupDom()
