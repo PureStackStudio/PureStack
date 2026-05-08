@@ -46,6 +46,7 @@ export interface DoughnutChart {
   thickness?: RefOrValue<number | string>
   gap?: RefOrValue<number | string>
   startAngle?: RefOrValue<number | string>
+  animated?: RefOrValue<boolean | string>
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
   variantMode?: RefOrValue<ComponentVariantMode>
@@ -58,6 +59,7 @@ export interface DoughnutChart {
   hasSeparators?: ComputedRef<boolean>
   separatorMaskId?: string
   separatorMaskUrl?: ComputedRef<string | undefined>
+  isAnimated?: ComputedRef<boolean>
   hasSegments?: ComputedRef<boolean>
   total?: ComputedRef<number>
   centerValueText?: ComputedRef<string>
@@ -118,7 +120,25 @@ const doughnutChartTemplate = svg`<svg
         fill="black"/>
     </mask>
   </defs>
-  <g :mask="separatorMaskUrl">
+  <g class="doughnut-chart__plot" :mask="separatorMaskUrl">
+    <animate
+      r-if="isAnimated"
+      attributeName="opacity"
+      from="0"
+      to="1"
+      dur="560ms"
+      fill="freeze"/>
+    <animateTransform
+      r-if="isAnimated"
+      attributeName="transform"
+      type="rotate"
+      from="-90 50 50"
+      to="0 50 50"
+      dur="1760ms"
+      calcMode="spline"
+      keyTimes="0;1"
+      keySplines="0.16 1 0.3 1"
+      fill="freeze"/>
     <path class="doughnut-chart__track" :d="trackPath" fill-rule="evenodd"/>
     <g class="doughnut-chart__segments" r-if="hasSegments">
       <path
@@ -134,6 +154,13 @@ const doughnutChartTemplate = svg`<svg
     </g>
   </g>
   <g class="doughnut-chart__center" r-if="centerValueText || centerLabel">
+    <animate
+      r-if="isAnimated"
+      attributeName="opacity"
+      from="0"
+      to="1"
+      dur="360ms"
+      fill="freeze"/>
     <text
       class="doughnut-chart__center-value"
       x="50"
@@ -178,6 +205,7 @@ function defineDoughnutChartComponent() {
       'thickness',
       'gap',
       'startAngle',
+      'animated',
       'tone',
       'variant',
       'variantMode',
@@ -222,6 +250,7 @@ function resolveDoughnutChart(props: DoughnutChart): DoughnutChart {
     total,
     chartSegments,
     separators,
+    isAnimated: computed(() => resolveAnimated(props.animated)),
     hasSeparators: computed(() => separators().length > 0),
     separatorMaskId,
     separatorMaskUrl: computed(() =>
@@ -231,6 +260,14 @@ function resolveDoughnutChart(props: DoughnutChart): DoughnutChart {
     centerValueText: computed(() => resolveCenterValue(props, total())),
     trackPath: computed(() => fullRingPath(CHART_OUTER_RADIUS, innerRadius())),
   }
+}
+
+function resolveAnimated(value?: RefOrValue<boolean | string>) {
+  const resolved = unref(value)
+  if (resolved === false) return false
+  if (typeof resolved !== 'string') return true
+  const normalized = resolved.trim().toLowerCase()
+  return normalized !== 'false' && normalized !== '0' && normalized !== 'off'
 }
 
 function resolveDoughnutChartMaskId() {

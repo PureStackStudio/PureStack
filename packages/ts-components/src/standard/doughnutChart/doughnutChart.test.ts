@@ -44,6 +44,8 @@ describe('DoughnutChart rendering', () => {
       expect(html).toContain('class="doughnut-chart__separator"')
       expect(html).toContain('A 46.35 46.35 0 0')
       expect(html).toContain('A 32 32 0 0')
+      expect(html).toContain('<animate')
+      expect(html).toContain('<animatetransform')
       expect(html).toContain('Total')
       expect(html).toContain('100%')
     } finally {
@@ -120,6 +122,38 @@ describe('DoughnutChart rendering', () => {
         Number(points[2]) - Number(points[4]),
       )
       expect(width).toBeLessThan(2)
+    } finally {
+      app.unbind()
+      cleanupDom()
+      cleanupGlobals()
+    }
+  })
+
+  it('can render without the initial animation', () => {
+    const cleanupGlobals = ensureDomGlobals()
+    const cleanupDom = createDom(
+      '<!DOCTYPE html><html><body><div id="app"></div></body></html>',
+    )
+    const app = createApp(
+      {
+        components: defineDoughnutChartComponents(),
+        tsSsgContext: createTestContext(),
+        segments: [
+          { label: 'Product', value: 60 },
+          { label: 'Services', value: 40 },
+        ],
+      },
+      {
+        selector: '#app',
+        template: `<DoughnutChart animated="false" :segments="segments" />`,
+      },
+    )
+
+    try {
+      const html = document.body.innerHTML
+
+      expect(html).not.toContain('<animate')
+      expect(html).not.toContain('<animatetransform')
     } finally {
       app.unbind()
       cleanupDom()
