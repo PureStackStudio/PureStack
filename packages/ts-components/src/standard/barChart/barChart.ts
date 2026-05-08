@@ -385,7 +385,7 @@ function resolveAriaLabel(props: BarChart) {
 
 function resolveSize(
   size: RefOrValue<number | string> | undefined,
-  fallback: number,
+  fallback: number | string,
 ) {
   const resolved = unref(size)
   if (typeof resolved === 'number' && Number.isFinite(resolved)) {
