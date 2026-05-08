@@ -160,4 +160,46 @@ describe('DoughnutChart rendering', () => {
       cleanupGlobals()
     }
   })
+
+  it('renders custom center text sizes', () => {
+    const cleanupGlobals = ensureDomGlobals()
+    const cleanupDom = createDom(
+      '<!DOCTYPE html><html><body><div id="app"></div></body></html>',
+    )
+    const app = createApp(
+      {
+        components: defineDoughnutChartComponents(),
+        tsSsgContext: createTestContext(),
+        segments: [
+          { label: 'Product', value: 60 },
+          { label: 'Services', value: 40 },
+        ],
+      },
+      {
+        selector: '#app',
+        template: `<DoughnutChart
+          centerLabel="Total"
+          centerValueSize="14"
+          centerLabelSize="7px"
+          :segments="segments"
+        />`,
+      },
+    )
+
+    try {
+      const value = document.querySelector<SVGTextElement>(
+        '.doughnut-chart__center-value',
+      )
+      const label = document.querySelector<SVGTextElement>(
+        '.doughnut-chart__center-label',
+      )
+
+      expect(value?.getAttribute('style')).toContain('font-size: 14px')
+      expect(label?.getAttribute('style')).toContain('font-size: 7px')
+    } finally {
+      app.unbind()
+      cleanupDom()
+      cleanupGlobals()
+    }
+  })
 })

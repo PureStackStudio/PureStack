@@ -13,12 +13,7 @@ export function registerDoughnutChartStyles() {
 }
 
 function registerDoughnutChartBaseStyles(theme: ThemeMode) {
-  styleBuilder
-    .select('.doughnut-chart', theme)
-    .display('block')
-    .maxWidth('100%')
-    .height('auto')
-    .overflow('visible')
+  styleBuilder.select('.doughnut-chart', theme)
 
   styleBuilder
     .select('.doughnut-chart__segment', theme)
@@ -53,7 +48,7 @@ function registerDoughnutChartPaintStyles(
   styleBuilder
     .select('.doughnut-chart__center-value', theme)
     .fill(palette.current.text.default)
-    .apply(palette.applyFont(palette.font.size.h4, palette.font.weight.w700))
+    .apply(palette.applyFont(palette.font.size.body, palette.font.weight.w700))
     .set('dominant-baseline', 'middle')
 
   styleBuilder

@@ -40,6 +40,8 @@ export interface DoughnutChart {
   ariaLabel?: RefOrValue<string>
   centerLabel?: RefOrValue<string>
   centerValue?: RefOrValue<string>
+  centerLabelSize?: RefOrValue<number | string>
+  centerValueSize?: RefOrValue<number | string>
   emptyLabel?: RefOrValue<string>
   valueSuffix?: RefOrValue<string>
   size?: RefOrValue<number | string>
@@ -63,6 +65,8 @@ export interface DoughnutChart {
   hasSegments?: ComputedRef<boolean>
   total?: ComputedRef<number>
   centerValueText?: ComputedRef<string>
+  centerLabelStyle?: ComputedRef<Record<string, string> | undefined>
+  centerValueStyle?: ComputedRef<Record<string, string> | undefined>
   trackPath?: ComputedRef<string>
 }
 
@@ -79,13 +83,14 @@ const MIN_SEPARATOR_WIDTH = 0.25
 const SEPARATOR_MASK_BLEED = 0.35
 
 const DEFAULT_SEGMENT_COLORS = [
-  getThemePaletteVar('semanticTone.accent.tone'),
-  getThemePaletteVar('semanticTone.success.tone'),
-  getThemePaletteVar('semanticTone.info.tone'),
-  getThemePaletteVar('semanticTone.warning.tone'),
-  getThemePaletteVar('semanticTone.feature.tone'),
-  getThemePaletteVar('semanticTone.secondary.tone'),
-  getThemePaletteVar('semanticTone.danger.tone'),
+  getThemePaletteVar('semanticTone.accent.button.hover.bgcolor'),
+  getThemePaletteVar('semanticTone.feature.button.hover.bgcolor'),
+  getThemePaletteVar('semanticTone.success.button.hover.bgcolor'),
+  getThemePaletteVar('semanticTone.info.button.hover.bgcolor'),
+  getThemePaletteVar('semanticTone.warning.button.hover.bgcolor'),
+  getThemePaletteVar('semanticTone.secondary.button.hover.bgcolor'),
+  getThemePaletteVar('semanticTone.danger.button.hover.bgcolor'),
+  getThemePaletteVar('semanticTone.custom.button.hover.bgcolor'),
 ]
 
 let nextAutoDoughnutChartMaskId = 1
@@ -166,6 +171,7 @@ const doughnutChartTemplate = svg`<svg
       x="50"
       :y="centerLabel ? 48 : 52"
       text-anchor="middle"
+      :style="centerValueStyle"
     >
       {{ centerValueText }}
     </text>
@@ -175,6 +181,7 @@ const doughnutChartTemplate = svg`<svg
       x="50"
       y="61"
       text-anchor="middle"
+      :style="centerLabelStyle"
     >
       {{ centerLabel }}
     </text>
@@ -199,6 +206,8 @@ function defineDoughnutChartComponent() {
       'ariaLabel',
       'centerLabel',
       'centerValue',
+      'centerLabelSize',
+      'centerValueSize',
       'emptyLabel',
       'valueSuffix',
       'size',
@@ -258,6 +267,12 @@ function resolveDoughnutChart(props: DoughnutChart): DoughnutChart {
     ),
     hasSegments: computed(() => chartSegments().length > 0),
     centerValueText: computed(() => resolveCenterValue(props, total())),
+    centerLabelStyle: computed<Record<string, string> | undefined>(() =>
+      resolveFontSizeStyle(props.centerLabelSize),
+    ),
+    centerValueStyle: computed<Record<string, string> | undefined>(() =>
+      resolveFontSizeStyle(props.centerValueSize),
+    ),
     trackPath: computed(() => fullRingPath(CHART_OUTER_RADIUS, innerRadius())),
   }
 }
@@ -464,6 +479,25 @@ function resolveSize(size?: RefOrValue<number | string>) {
   if (typeof resolved !== 'string') return DEFAULT_CHART_SIZE
   const trimmed = resolved.trim()
   return trimmed || DEFAULT_CHART_SIZE
+}
+
+function resolveFontSizeStyle(size?: RefOrValue<number | string>) {
+  const fontSize = resolveCssSize(size)
+  return fontSize ? { fontSize } : undefined
+}
+
+function resolveCssSize(size?: RefOrValue<number | string>) {
+  const resolved = unref(size)
+  if (typeof resolved === 'number' && Number.isFinite(resolved)) {
+    return `${resolved}px`
+  }
+  if (typeof resolved !== 'string') return ''
+  const trimmed = resolved.trim()
+  return isNumericString(trimmed) ? `${trimmed}px` : trimmed
+}
+
+function isNumericString(value: string) {
+  return /^-?\d+(?:\.\d+)?$/.test(value)
 }
 
 function fullRingPath(outerRadius: number, innerRadius: number) {
