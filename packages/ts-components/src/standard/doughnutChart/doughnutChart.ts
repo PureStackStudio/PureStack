@@ -72,7 +72,7 @@ export interface DoughnutChart {
 
 const CHART_CENTER = 50
 const CHART_OUTER_RADIUS = 46
-const DEFAULT_CHART_SIZE = 220
+const DEFAULT_CHART_SIZE = '100%'
 const DEFAULT_CHART_THICKNESS = 14
 const DEFAULT_CHART_GAP = 2
 const DEFAULT_CHART_START_ANGLE = -90

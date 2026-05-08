@@ -76,15 +76,15 @@ export interface BarChart {
   zeroLineY?: ComputedRef<number>
 }
 
-const VIEWBOX_HEIGHT = 64
+const VIEWBOX_HEIGHT = 58
 const PLOT_X = 8
 const PLOT_Y = 6
 const PLOT_WIDTH = 86
 const PLOT_HEIGHT = 43
-const LABEL_Y = 59
+const LABEL_Y = 53.5
 const VALUE_LABEL_OFFSET = 2.4
-const DEFAULT_CHART_WIDTH = 520
-const DEFAULT_CHART_HEIGHT = 320
+const DEFAULT_CHART_WIDTH = '100%'
+const DEFAULT_CHART_HEIGHT = 'auto'
 const DEFAULT_EMPTY_LABEL = 'No data'
 const DEFAULT_GRID_LINE_COUNT = 5
 const BAR_WIDTH_SHARE = 0.64
@@ -104,7 +104,7 @@ const DEFAULT_BAR_COLORS = [
 const barChartTemplate = svg`<svg
   class="bar-chart"
   :class="classes"
-  viewBox="0 0 100 64"
+  viewBox="0 0 100 58"
   :width="resolvedWidth"
   :height="resolvedHeight"
   role="img"
@@ -144,7 +144,7 @@ const barChartTemplate = svg`<svg
         attributeName="height"
         from="0"
         :to="item.height"
-        dur="720ms"
+        dur="1720ms"
         calcMode="spline"
         keyTimes="0;1"
         keySplines="0.16 1 0.3 1"
@@ -154,7 +154,7 @@ const barChartTemplate = svg`<svg
         attributeName="y"
         :from="zeroLineY"
         :to="item.y"
-        dur="720ms"
+        dur="1720ms"
         calcMode="spline"
         keyTimes="0;1"
         keySplines="0.16 1 0.3 1"
@@ -188,7 +188,7 @@ const barChartTemplate = svg`<svg
     r-if="!hasItems"
     class="bar-chart__empty"
     x="50"
-    y="33"
+    y="30"
     text-anchor="middle"
   >
     {{ resolvedEmptyLabel }}

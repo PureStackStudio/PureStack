@@ -5,6 +5,11 @@ import {
   themes,
 } from '@purestack/ts-style'
 
+const BAR_CHART_VALUE_FONT_SIZE = '2.5px'
+const BAR_CHART_LABEL_FONT_SIZE = '2.2px'
+const BAR_CHART_AXIS_FONT_SIZE = '1.9px'
+const BAR_CHART_EMPTY_FONT_SIZE = '2.6px'
+
 export function registerBarChartStyles() {
   themes.forEach((theme, palette) => {
     registerBarChartBaseStyles(theme)
@@ -49,23 +54,27 @@ function registerBarChartPaintStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.bar-chart__value', theme)
     .fill(palette.current.text.default)
-    .apply(palette.applyFont(palette.font.size.xxxs, palette.font.weight.w700))
+    .fontSize(BAR_CHART_VALUE_FONT_SIZE)
+    .fontWeight(palette.font.weight.w700)
 
   styleBuilder
     .select('.bar-chart__label', theme)
     .fill(palette.current.text.subtle)
-    .apply(palette.applyFont(palette.font.size.xxxs, palette.font.weight.w700))
+    .fontSize(BAR_CHART_LABEL_FONT_SIZE)
+    .fontWeight(palette.font.weight.w700)
 
   styleBuilder
     .select('.bar-chart__grid-line text', theme)
     .fill(palette.current.text.subtle)
-    .apply(palette.applyFont(palette.font.size.xxxs, palette.font.weight.w500))
+    .fontSize(BAR_CHART_AXIS_FONT_SIZE)
+    .fontWeight(palette.font.weight.w500)
     .set('dominant-baseline', 'middle')
     .set('text-anchor', 'end')
 
   styleBuilder
     .select('.bar-chart__empty', theme)
     .fill(palette.current.text.subtle)
-    .apply(palette.applyFont(palette.font.size.xxs, palette.font.weight.w700))
+    .fontSize(BAR_CHART_EMPTY_FONT_SIZE)
+    .fontWeight(palette.font.weight.w700)
     .set('dominant-baseline', 'middle')
 }
