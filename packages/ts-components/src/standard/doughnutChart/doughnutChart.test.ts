@@ -78,4 +78,48 @@ describe('DoughnutChart rendering', () => {
       cleanupGlobals()
     }
   })
+
+  it('shrinks separators around tiny segments', () => {
+    const cleanupGlobals = ensureDomGlobals()
+    const cleanupDom = createDom(
+      '<!DOCTYPE html><html><body><div id="app"></div></body></html>',
+    )
+    const app = createApp(
+      {
+        components: defineDoughnutChartComponents(),
+        tsSsgContext: createTestContext(),
+        segments: [
+          { label: 'Large', value: 99 },
+          { label: 'Tiny', value: 1 },
+        ],
+      },
+      {
+        selector: '#app',
+        template: `<DoughnutChart gap="8" :segments="segments" />`,
+      },
+    )
+
+    try {
+      const separator = document.querySelector<SVGPathElement>(
+        '.doughnut-chart__separator',
+      )
+      const path = separator?.getAttribute('d') || ''
+      const points = path.match(
+        /M ([\d.-]+) ([\d.-]+) A [^ ]+ [^ ]+ 0 0 0 ([\d.-]+) ([\d.-]+)/,
+      )
+
+      expect(points).toBeTruthy()
+      if (!points) return
+
+      const width = Math.hypot(
+        Number(points[1]) - Number(points[3]),
+        Number(points[2]) - Number(points[4]),
+      )
+      expect(width).toBeLessThan(2)
+    } finally {
+      app.unbind()
+      cleanupDom()
+      cleanupGlobals()
+    }
+  })
 })

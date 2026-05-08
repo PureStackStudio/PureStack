@@ -69,6 +69,8 @@ const DEFAULT_CHART_GAP = 2
 const DEFAULT_CHART_START_ANGLE = -90
 const DEFAULT_EMPTY_LABEL = 'No data'
 const FULL_CIRCLE = 360
+const MAX_SEPARATOR_SEGMENT_SHARE = 0.15
+const MIN_SEPARATOR_WIDTH = 0.25
 
 const DEFAULT_SEGMENT_COLORS = [
   getThemePaletteVar('semanticTone.accent.tone'),
@@ -253,13 +255,45 @@ function resolveSeparators(
   if (gap <= 0) return []
 
   let cursor = readNumber(props.startAngle, DEFAULT_CHART_START_ANGLE)
-  return segments.map((segment) => {
-    const path = separatorPath(cursor, innerRadius, CHART_OUTER_RADIUS, gap)
-    cursor += segment.percent * FULL_CIRCLE
-    return {
-      path,
+  return segments.flatMap((segment, index) => {
+    const previousSegment = segments.at(index - 1) || segment
+    const width = resolveAdaptiveSeparatorWidth(
+      gap,
+      innerRadius,
+      CHART_OUTER_RADIUS,
+      previousSegment,
+      segment,
+    )
+    if (width < MIN_SEPARATOR_WIDTH) {
+      cursor += segment.percent * FULL_CIRCLE
+      return []
     }
+
+    const path = separatorPath(cursor, innerRadius, CHART_OUTER_RADIUS, width)
+    cursor += segment.percent * FULL_CIRCLE
+    return [{ path }]
   })
+}
+
+function resolveAdaptiveSeparatorWidth(
+  maxWidth: number,
+  innerRadius: number,
+  outerRadius: number,
+  previousSegment: ResolvedDoughnutChartSegment,
+  nextSegment: ResolvedDoughnutChartSegment,
+) {
+  const smallerSegmentSpan =
+    Math.min(previousSegment.percent, nextSegment.percent) * FULL_CIRCLE
+  const maxSeparatorAngle = smallerSegmentSpan * MAX_SEPARATOR_SEGMENT_SHARE
+  const midRadius = (innerRadius + outerRadius) / 2
+  const adaptiveWidth = chordWidth(midRadius, maxSeparatorAngle)
+  return Math.min(maxWidth, adaptiveWidth)
+}
+
+function chordWidth(radius: number, angle: number) {
+  if (radius <= 0 || angle <= 0) return 0
+  const radians = (angle * Math.PI) / 180
+  return 2 * radius * Math.sin(radians / 2)
 }
 
 function separatorPath(
