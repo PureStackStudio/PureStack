@@ -24,6 +24,13 @@ export { registerConsentStyles } from './standard/consent/consentStyle'
 export type { ContactForm } from './standard/contactForm/contactForm'
 export { defineContactFormComponents } from './standard/contactForm/contactForm'
 export { registerContactFormStyles } from './standard/contactForm/contactFormStyle'
+export type {
+  DoughnutChart,
+  DoughnutChartSegment,
+  ResolvedDoughnutChartSegment,
+} from './standard/doughnutChart/doughnutChart'
+export { defineDoughnutChartComponents } from './standard/doughnutChart/doughnutChart'
+export { registerDoughnutChartStyles } from './standard/doughnutChart/doughnutChartStyle'
 export type { ExpandablePanel } from './standard/expandablePanel/expandablePanel'
 export { defineExpandablePanelComponents } from './standard/expandablePanel/expandablePanel'
 export { registerExpandablePanelStyles } from './standard/expandablePanel/expandablePanelStyle'

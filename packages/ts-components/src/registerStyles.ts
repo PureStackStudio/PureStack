@@ -3,6 +3,7 @@ import { registerBadgeStyles } from './standard/badge/badgeStyle'
 import { registerButtonStyles } from './standard/btn/btnStyle'
 import { registerConsentStyles } from './standard/consent/consentStyle'
 import { registerContactFormStyles } from './standard/contactForm/contactFormStyle'
+import { registerDoughnutChartStyles } from './standard/doughnutChart/doughnutChartStyle'
 import { registerExpandablePanelStyles } from './standard/expandablePanel/expandablePanelStyle'
 import { registerFlexStyles } from './standard/flex/flexStyle'
 import { registerFooterStyles } from './standard/footer/footerStyle'
@@ -26,6 +27,7 @@ export function registerStyles() {
   registerButtonStyles()
   registerConsentStyles()
   registerContactFormStyles()
+  registerDoughnutChartStyles()
   registerExpandablePanelStyles()
   registerFlexStyles()
   registerFooterStyles()

@@ -3,6 +3,7 @@ import { defineBadgeComponents } from './standard/badge/badge'
 import { defineButtonComponents } from './standard/btn/btn'
 import { defineConsentComponents } from './standard/consent/consent'
 import { defineContactFormComponents } from './standard/contactForm/contactForm'
+import { defineDoughnutChartComponents } from './standard/doughnutChart/doughnutChart'
 import { defineExpandablePanelComponents } from './standard/expandablePanel/expandablePanel'
 import { defineFlexComponents } from './standard/flex/flex'
 import { defineFooterComponents } from './standard/footer/footer'
@@ -33,6 +34,7 @@ export function defineComponents(getSvgIcon: GetSvgIcon) {
     ...defineButtonComponents(),
     ...defineConsentComponents(),
     ...defineContactFormComponents(),
+    ...defineDoughnutChartComponents(),
     ...defineExpandablePanelComponents(),
     ...defineFlexComponents(),
     ...defineFooterComponents(),
