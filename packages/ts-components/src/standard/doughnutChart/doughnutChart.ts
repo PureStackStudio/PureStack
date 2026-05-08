@@ -103,7 +103,6 @@ const doughnutChartTemplate = svg`<svg
   :height="resolvedSize"
   role="img"
   :aria-label="resolvedAriaLabel"
-  r-inherit
 >
   <title r-if="title">{{ title }}</title>
   <desc r-if="description">{{ description }}</desc>

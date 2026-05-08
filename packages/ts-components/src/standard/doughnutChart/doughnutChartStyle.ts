@@ -13,8 +13,6 @@ export function registerDoughnutChartStyles() {
 }
 
 function registerDoughnutChartBaseStyles(theme: ThemeMode) {
-  styleBuilder.select('.doughnut-chart', theme)
-
   styleBuilder
     .select('.doughnut-chart__segment', theme)
     .transition('opacity 180ms ease, filter 180ms ease, transform 180ms ease')

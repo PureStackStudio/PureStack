@@ -1,5 +1,6 @@
 import { registerUtilityStyles } from '@purestack/ts-style'
 import { registerBadgeStyles } from './standard/badge/badgeStyle'
+import { registerBarChartStyles } from './standard/barChart/barChartStyle'
 import { registerButtonStyles } from './standard/btn/btnStyle'
 import { registerConsentStyles } from './standard/consent/consentStyle'
 import { registerContactFormStyles } from './standard/contactForm/contactFormStyle'
@@ -23,6 +24,7 @@ import { registerTopBarStyles } from './standard/topBar/topBarStyle'
 
 export function registerStyles() {
   registerUtilityStyles()
+  registerBarChartStyles()
   registerBadgeStyles()
   registerButtonStyles()
   registerConsentStyles()

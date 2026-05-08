@@ -6,6 +6,14 @@ export type { Badge } from './standard/badge/badge'
 export { defineBadgeComponents } from './standard/badge/badge'
 export { registerBadgeStyles } from './standard/badge/badgeStyle'
 export type {
+  BarChart,
+  BarChartItem,
+  ResolvedBarChartGridLine,
+  ResolvedBarChartItem,
+} from './standard/barChart/barChart'
+export { defineBarChartComponents } from './standard/barChart/barChart'
+export { registerBarChartStyles } from './standard/barChart/barChartStyle'
+export type {
   Btn,
   BtnIconPosition,
   BtnLink,

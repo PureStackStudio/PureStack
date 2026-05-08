@@ -1,0 +1,127 @@
+---
+title: Bar Chart Samples
+description: SVG bar chart examples for dashboard metrics, comparisons, and negative values.
+layout:
+  showToc: true
+  fullWidth: true
+---
+
+# Bar Chart Samples
+
+`BarChart` renders crisp, static-friendly SVG bars from inline item data. It is built for compact dashboards and comparison panels where the chart should stay readable without bringing a full charting runtime.
+
+## 1. Runtime adoption
+
+<Panel tone="accent" variant="surfaceAlt">
+  <Grid columns="1" columnsLg="minmax(0, 1fr) 18rem" alignItems="center">
+    <BarChart
+      title="Runtime adoption"
+      description="Adoption across core, edge, workers, services, and labs runtimes."
+      valueSuffix="%"
+      height="280"
+      :items="[
+        { label: 'Core', value: 64 },
+        { label: 'Edge', value: 48 },
+        { label: 'Workers', value: 37 },
+        { label: 'Services', value: 28 },
+        { label: 'Labs', value: 12 },
+      ]"/>
+    <div>
+      <Badge tone="success">Momentum</Badge>
+      <h2>Core stays strong while edge adoption rises</h2>
+      <p>
+        Bars, grid lines, value labels, and hover states are real SVG elements,
+        so the chart stays sharp in static output and scales cleanly inside
+        dense dashboard layouts.
+      </p>
+    </div>
+  </Grid>
+</Panel>
+
+## 2. Explicit colors
+
+<Grid columns="1" columnsMd="2" alignItems="stretch">
+  <Panel tone="info">
+    <BarChart
+      title="Platform usage"
+      valueSuffix="k"
+      :items="[
+        { label: 'API', value: 44, color: '#3b82f6' },
+        { label: 'Jobs', value: 31, color: '#14b8a6' },
+        { label: 'Sync', value: 18, color: '#f59e0b' },
+        { label: 'Admin', value: 9, color: '#ef4444' },
+      ]"/>
+  </Panel>
+
+  <Panel tone="feature">
+    <BarChart
+      title="Latency improvement"
+      description="Percent change from the previous release."
+      valueSuffix="%"
+      minValue="-40"
+      maxValue="40"
+      :items="[
+        { label: 'Parse', value: 24, color: '#22c55e' },
+        { label: 'Render', value: 18, color: '#14b8a6' },
+        { label: 'Hydrate', value: -11, color: '#f97316' },
+        { label: 'Cache', value: 31, color: '#8b5cf6' },
+      ]"/>
+  </Panel>
+</Grid>
+
+## 3. Quiet sparkline-style bars
+
+<Panel tone="ghost">
+  <BarChart
+    title="Weekly deploys"
+    showAxis="false"
+    showValues="false"
+    height="180"
+    :items="[
+      { label: 'Mon', value: 8 },
+      { label: 'Tue', value: 13 },
+      { label: 'Wed', value: 11 },
+      { label: 'Thu', value: 19 },
+      { label: 'Fri', value: 16 },
+      { label: 'Sat', value: 6 },
+      { label: 'Sun', value: 4 },
+    ]"/>
+</Panel>
+
+## 4. Empty state
+
+<Panel tone="neutral">
+  <BarChart
+    title="No measurements"
+    emptyLabel="No chartable values"
+    :items="[
+      { label: 'Pending', value: 'n/a' },
+      { label: 'Waiting', value: '' },
+    ]"/>
+</Panel>
+
+## 5. Props reference
+
+```html
+<BarChart
+  title="Accessible SVG title"
+  description="Longer accessible description"
+  ariaLabel="Optional aria-label override"
+  emptyLabel="No data"
+  valueSuffix="%"
+  width="520|32rem|100%"
+  height="320|20rem|100%"
+  minValue="-40"
+  maxValue="100"
+  animated="true|false"
+  showValues="true|false"
+  showLabels="true|false"
+  showAxis="true|false"
+  tone="neutral|accent|info|success|warning|danger|ghost|feature|secondary|custom"
+  variant="none|surface|outline|..."
+  :items="[
+    { label: 'Core', value: 64 },
+    { label: 'Edge', value: 48, color: '#14b8a6' },
+  ]"
+/>
+```

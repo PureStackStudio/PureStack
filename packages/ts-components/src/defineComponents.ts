@@ -1,5 +1,6 @@
 import { defineAlertComponents } from './standard/alertBox/alertBox'
 import { defineBadgeComponents } from './standard/badge/badge'
+import { defineBarChartComponents } from './standard/barChart/barChart'
 import { defineButtonComponents } from './standard/btn/btn'
 import { defineConsentComponents } from './standard/consent/consent'
 import { defineContactFormComponents } from './standard/contactForm/contactForm'
@@ -30,6 +31,7 @@ import { defineTopBarComponents } from './standard/topBar/topBar'
 export function defineComponents(getSvgIcon: GetSvgIcon) {
   return {
     ...defineAlertComponents(),
+    ...defineBarChartComponents(),
     ...defineBadgeComponents(),
     ...defineButtonComponents(),
     ...defineConsentComponents(),
