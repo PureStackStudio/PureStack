@@ -1,5 +1,4 @@
 import type { SemanticTone } from '@purestack/ts-style'
-import { getThemePaletteVar } from '@purestack/ts-style'
 import {
   type ComputedRef,
   computed,
@@ -8,6 +7,19 @@ import {
   svg,
   unref,
 } from 'regor'
+import {
+  CARTESIAN_CHART_LABEL_Y,
+  CARTESIAN_CHART_PLOT_HEIGHT,
+  CARTESIAN_CHART_PLOT_WIDTH,
+  CARTESIAN_CHART_PLOT_X,
+  CARTESIAN_CHART_PLOT_Y,
+  CARTESIAN_CHART_VIEWBOX_HEIGHT,
+  DEFAULT_CARTESIAN_CHART_HEIGHT,
+  DEFAULT_CARTESIAN_CHART_WIDTH,
+  DEFAULT_CARTESIAN_GRID_LINE_COUNT,
+  DEFAULT_CHART_COLORS,
+  DEFAULT_CHART_EMPTY_LABEL,
+} from '../chart/chartDefaults'
 import {
   formatChartNumber,
   formatChartPoint,
@@ -98,29 +110,8 @@ export interface LineChart {
   zeroLineY?: ComputedRef<number>
 }
 
-const VIEWBOX_HEIGHT = 58
-const PLOT_X = 8
-const PLOT_Y = 6
-const PLOT_WIDTH = 86
-const PLOT_HEIGHT = 43
-const LABEL_Y = 53.5
 const VALUE_LABEL_OFFSET = 2.6
-const DEFAULT_CHART_WIDTH = '100%'
-const DEFAULT_CHART_HEIGHT = undefined //auto height
-const DEFAULT_EMPTY_LABEL = 'No data'
-const DEFAULT_GRID_LINE_COUNT = 5
 const MAX_X_LABEL_COUNT = 7
-
-const DEFAULT_SERIES_COLORS = [
-  getThemePaletteVar('semanticTone.accent.button.hover.bgcolor'),
-  getThemePaletteVar('semanticTone.feature.button.hover.bgcolor'),
-  getThemePaletteVar('semanticTone.success.button.hover.bgcolor'),
-  getThemePaletteVar('semanticTone.info.button.hover.bgcolor'),
-  getThemePaletteVar('semanticTone.warning.button.hover.bgcolor'),
-  getThemePaletteVar('semanticTone.secondary.button.hover.bgcolor'),
-  getThemePaletteVar('semanticTone.danger.button.hover.bgcolor'),
-  getThemePaletteVar('semanticTone.custom.button.hover.bgcolor'),
-]
 
 const lineChartTemplate = svg`<svg
   class="line-chart"
@@ -294,14 +285,14 @@ function resolveLineChart(props: LineChart): LineChart {
       }),
     ),
     resolvedWidth: computed(() =>
-      resolveChartSize(props.width, DEFAULT_CHART_WIDTH),
+      resolveChartSize(props.width, DEFAULT_CARTESIAN_CHART_WIDTH),
     ),
     resolvedHeight: computed(() =>
-      resolveChartSize(props.height, DEFAULT_CHART_HEIGHT),
+      resolveChartSize(props.height, DEFAULT_CARTESIAN_CHART_HEIGHT),
     ),
     resolvedAriaLabel: computed(() => resolveAriaLabel(props)),
     resolvedEmptyLabel: computed(
-      () => resolveChartText(props.emptyLabel) || DEFAULT_EMPTY_LABEL,
+      () => resolveChartText(props.emptyLabel) || DEFAULT_CHART_EMPTY_LABEL,
     ),
     chartSeries,
     gridLines: computed(() => resolveGridLines(domain(), props.valueSuffix)),
@@ -341,7 +332,7 @@ function resolveChartSeries(
       const y = valueToY(point.value, domain)
       const valueLabelY =
         point.value < 0
-          ? Math.min(VIEWBOX_HEIGHT - 2, y + VALUE_LABEL_OFFSET)
+          ? Math.min(CARTESIAN_CHART_VIEWBOX_HEIGHT - 2, y + VALUE_LABEL_OFFSET)
           : Math.max(2, y - VALUE_LABEL_OFFSET)
 
       return {
@@ -359,7 +350,7 @@ function resolveChartSeries(
       label: series.label,
       color:
         series.color ||
-        DEFAULT_SERIES_COLORS[index % DEFAULT_SERIES_COLORS.length],
+        DEFAULT_CHART_COLORS[index % DEFAULT_CHART_COLORS.length],
       path: resolveLinePath(points, curve),
       areaPath: resolveAreaPath(points, zeroY, curve),
       points,
@@ -457,7 +448,7 @@ function resolveXLabels(
     .map((point) => ({
       label: point.label,
       x: point.x,
-      y: LABEL_Y,
+      y: CARTESIAN_CHART_LABEL_Y,
     }))
 }
 
@@ -494,28 +485,36 @@ function resolveGridLines(
   valueSuffix: LineChart['valueSuffix'],
 ): ResolvedLineChartGridLine[] {
   const suffix = resolveChartText(valueSuffix)
-  const step = (domain.max - domain.min) / (DEFAULT_GRID_LINE_COUNT - 1)
+  const step =
+    (domain.max - domain.min) / (DEFAULT_CARTESIAN_GRID_LINE_COUNT - 1)
 
-  return Array.from({ length: DEFAULT_GRID_LINE_COUNT }, (_, index) => {
-    const value = domain.max - step * index
-    return {
-      value,
-      formattedValue: formatChartValue(value, suffix),
-      y: valueToY(value, domain),
-    }
-  })
+  return Array.from(
+    { length: DEFAULT_CARTESIAN_GRID_LINE_COUNT },
+    (_, index) => {
+      const value = domain.max - step * index
+      return {
+        value,
+        formattedValue: formatChartValue(value, suffix),
+        y: valueToY(value, domain),
+      }
+    },
+  )
 }
 
 function pointIndexToX(index: number, count: number) {
-  if (count <= 1) return PLOT_X + PLOT_WIDTH / 2
-  return PLOT_X + (index / (count - 1)) * PLOT_WIDTH
+  if (count <= 1) {
+    return CARTESIAN_CHART_PLOT_X + CARTESIAN_CHART_PLOT_WIDTH / 2
+  }
+  return (
+    CARTESIAN_CHART_PLOT_X + (index / (count - 1)) * CARTESIAN_CHART_PLOT_WIDTH
+  )
 }
 
 function valueToY(value: number, domain: ChartDomain) {
   const range = domain.max - domain.min
-  if (range <= 0) return PLOT_Y + PLOT_HEIGHT
+  if (range <= 0) return CARTESIAN_CHART_PLOT_Y + CARTESIAN_CHART_PLOT_HEIGHT
   const ratio = (domain.max - value) / range
-  return PLOT_Y + ratio * PLOT_HEIGHT
+  return CARTESIAN_CHART_PLOT_Y + ratio * CARTESIAN_CHART_PLOT_HEIGHT
 }
 
 function resolveAriaLabel(props: LineChart) {

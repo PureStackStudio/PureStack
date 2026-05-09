@@ -29,6 +29,8 @@ Suggested direction:
 
 **Where:** `standard/barChart/barChart.ts`, `standard/lineChart/lineChart.ts`, `standard/doughnutChart/doughnutChart.ts`
 
+**Status:** Done.
+
 Several constants are repeated or conceptually shared:
 
 - default chart width/height/size

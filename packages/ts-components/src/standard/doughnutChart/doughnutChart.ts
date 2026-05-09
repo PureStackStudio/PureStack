@@ -1,5 +1,4 @@
 import type { SemanticTone } from '@purestack/ts-style'
-import { getThemePaletteVar } from '@purestack/ts-style'
 import {
   type ComputedRef,
   computed,
@@ -8,6 +7,11 @@ import {
   svg,
   unref,
 } from 'regor'
+import {
+  DEFAULT_CHART_COLORS,
+  DEFAULT_CHART_EMPTY_LABEL,
+  DEFAULT_CHART_SIZE,
+} from '../chart/chartDefaults'
 import {
   clampChartNumber,
   formatChartNumber,
@@ -81,26 +85,13 @@ export interface DoughnutChart {
 
 const CHART_CENTER = 50
 const CHART_OUTER_RADIUS = 46
-const DEFAULT_CHART_SIZE = '100%'
 const DEFAULT_CHART_THICKNESS = 14
 const DEFAULT_CHART_GAP = 2
 const DEFAULT_CHART_START_ANGLE = -90
-const DEFAULT_EMPTY_LABEL = 'No data'
 const FULL_CIRCLE = 360
 const MAX_SEPARATOR_SEGMENT_SHARE = 0.15
 const MIN_SEPARATOR_WIDTH = 0.25
 const SEPARATOR_MASK_BLEED = 0.35
-
-const DEFAULT_SEGMENT_COLORS = [
-  getThemePaletteVar('semanticTone.accent.button.hover.bgcolor'),
-  getThemePaletteVar('semanticTone.feature.button.hover.bgcolor'),
-  getThemePaletteVar('semanticTone.success.button.hover.bgcolor'),
-  getThemePaletteVar('semanticTone.info.button.hover.bgcolor'),
-  getThemePaletteVar('semanticTone.warning.button.hover.bgcolor'),
-  getThemePaletteVar('semanticTone.secondary.button.hover.bgcolor'),
-  getThemePaletteVar('semanticTone.danger.button.hover.bgcolor'),
-  getThemePaletteVar('semanticTone.custom.button.hover.bgcolor'),
-]
 
 let nextAutoDoughnutChartMaskId = 1
 
@@ -265,7 +256,7 @@ function resolveDoughnutChart(props: DoughnutChart): DoughnutChart {
     ),
     resolvedAriaLabel: computed(() => resolveAriaLabel(props)),
     resolvedEmptyLabel: computed(
-      () => resolveChartText(props.emptyLabel) || DEFAULT_EMPTY_LABEL,
+      () => resolveChartText(props.emptyLabel) || DEFAULT_CHART_EMPTY_LABEL,
     ),
     total,
     chartSegments,
@@ -319,7 +310,7 @@ function resolveChartSegments(
       formattedValue: formatSegmentValue(segment.value, valueSuffix),
       color:
         segment.color ||
-        DEFAULT_SEGMENT_COLORS[index % DEFAULT_SEGMENT_COLORS.length],
+        DEFAULT_CHART_COLORS[index % DEFAULT_CHART_COLORS.length],
       path:
         segmentEnd - segmentStart >= FULL_CIRCLE - 0.001
           ? fullRingPath(CHART_OUTER_RADIUS, innerRadius)

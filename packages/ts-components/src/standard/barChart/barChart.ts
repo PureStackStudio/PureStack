@@ -1,5 +1,4 @@
 import type { SemanticTone } from '@purestack/ts-style'
-import { getThemePaletteVar } from '@purestack/ts-style'
 import {
   type ComputedRef,
   computed,
@@ -8,6 +7,19 @@ import {
   svg,
   unref,
 } from 'regor'
+import {
+  CARTESIAN_CHART_LABEL_Y,
+  CARTESIAN_CHART_PLOT_HEIGHT,
+  CARTESIAN_CHART_PLOT_WIDTH,
+  CARTESIAN_CHART_PLOT_X,
+  CARTESIAN_CHART_PLOT_Y,
+  CARTESIAN_CHART_VIEWBOX_HEIGHT,
+  DEFAULT_CARTESIAN_CHART_HEIGHT,
+  DEFAULT_CARTESIAN_CHART_WIDTH,
+  DEFAULT_CARTESIAN_GRID_LINE_COUNT,
+  DEFAULT_CHART_COLORS,
+  DEFAULT_CHART_EMPTY_LABEL,
+} from '../chart/chartDefaults'
 import {
   formatChartValue,
   readChartNumber,
@@ -78,30 +90,9 @@ export interface BarChart {
   zeroLineY?: ComputedRef<number>
 }
 
-const VIEWBOX_HEIGHT = 58
-const PLOT_X = 8
-const PLOT_Y = 6
-const PLOT_WIDTH = 86
-const PLOT_HEIGHT = 43
-const LABEL_Y = 53.5
 const VALUE_LABEL_OFFSET = 2.4
-const DEFAULT_CHART_WIDTH = '100%'
-const DEFAULT_CHART_HEIGHT = undefined //auto height
-const DEFAULT_EMPTY_LABEL = 'No data'
-const DEFAULT_GRID_LINE_COUNT = 5
 const BAR_WIDTH_SHARE = 0.64
 const MIN_VISIBLE_BAR_HEIGHT = 0.35
-
-const DEFAULT_BAR_COLORS = [
-  getThemePaletteVar('semanticTone.accent.button.hover.bgcolor'),
-  getThemePaletteVar('semanticTone.feature.button.hover.bgcolor'),
-  getThemePaletteVar('semanticTone.success.button.hover.bgcolor'),
-  getThemePaletteVar('semanticTone.info.button.hover.bgcolor'),
-  getThemePaletteVar('semanticTone.warning.button.hover.bgcolor'),
-  getThemePaletteVar('semanticTone.secondary.button.hover.bgcolor'),
-  getThemePaletteVar('semanticTone.danger.button.hover.bgcolor'),
-  getThemePaletteVar('semanticTone.custom.button.hover.bgcolor'),
-]
 
 const barChartTemplate = svg`<svg
   class="bar-chart"
@@ -244,14 +235,14 @@ function resolveBarChart(props: BarChart): BarChart {
       }),
     ),
     resolvedWidth: computed(() =>
-      resolveChartSize(props.width, DEFAULT_CHART_WIDTH),
+      resolveChartSize(props.width, DEFAULT_CARTESIAN_CHART_WIDTH),
     ),
     resolvedHeight: computed(() =>
-      resolveChartSize(props.height, DEFAULT_CHART_HEIGHT),
+      resolveChartSize(props.height, DEFAULT_CARTESIAN_CHART_HEIGHT),
     ),
     resolvedAriaLabel: computed(() => resolveAriaLabel(props)),
     resolvedEmptyLabel: computed(
-      () => resolveChartText(props.emptyLabel) || DEFAULT_EMPTY_LABEL,
+      () => resolveChartText(props.emptyLabel) || DEFAULT_CHART_EMPTY_LABEL,
     ),
     chartItems: computed(() => resolveChartItems(props, domain())),
     gridLines: computed(() => resolveGridLines(domain(), props.valueSuffix)),
@@ -272,7 +263,7 @@ function resolveChartItems(
   const items = resolveItems(props.items)
   if (!items.length) return []
 
-  const laneWidth = PLOT_WIDTH / items.length
+  const laneWidth = CARTESIAN_CHART_PLOT_WIDTH / items.length
   const barWidth = Math.max(1, laneWidth * BAR_WIDTH_SHARE)
   const valueSuffix = resolveChartText(props.valueSuffix)
   const zeroY = valueToY(0, domain)
@@ -283,12 +274,16 @@ function resolveChartItems(
     const height =
       item.value === 0 ? 0 : Math.max(rawHeight, MIN_VISIBLE_BAR_HEIGHT)
     const isNegative = item.value < 0
-    const x = PLOT_X + laneWidth * index + (laneWidth - barWidth) / 2
+    const x =
+      CARTESIAN_CHART_PLOT_X + laneWidth * index + (laneWidth - barWidth) / 2
     const y = isNegative
       ? zeroY
       : Math.min(valueY, zeroY) - (height - rawHeight)
     const valueLabelY = isNegative
-      ? Math.min(VIEWBOX_HEIGHT - 2, y + height + VALUE_LABEL_OFFSET)
+      ? Math.min(
+          CARTESIAN_CHART_VIEWBOX_HEIGHT - 2,
+          y + height + VALUE_LABEL_OFFSET,
+        )
       : Math.max(2, y - VALUE_LABEL_OFFSET)
 
     return {
@@ -296,7 +291,7 @@ function resolveChartItems(
       value: item.value,
       formattedValue: formatChartValue(item.value, valueSuffix),
       color:
-        item.color || DEFAULT_BAR_COLORS[index % DEFAULT_BAR_COLORS.length],
+        item.color || DEFAULT_CHART_COLORS[index % DEFAULT_CHART_COLORS.length],
       x,
       y,
       width: barWidth,
@@ -305,7 +300,7 @@ function resolveChartItems(
       valueLabelY,
       valueLabelBaseline: isNegative ? 'hanging' : 'auto',
       labelX: x + barWidth / 2,
-      labelY: LABEL_Y,
+      labelY: CARTESIAN_CHART_LABEL_Y,
       roundedTop: Math.min(1.4, barWidth / 2, height / 2),
     }
   })
@@ -362,23 +357,27 @@ function resolveGridLines(
   valueSuffix: BarChart['valueSuffix'],
 ): ResolvedBarChartGridLine[] {
   const suffix = resolveChartText(valueSuffix)
-  const step = (domain.max - domain.min) / (DEFAULT_GRID_LINE_COUNT - 1)
+  const step =
+    (domain.max - domain.min) / (DEFAULT_CARTESIAN_GRID_LINE_COUNT - 1)
 
-  return Array.from({ length: DEFAULT_GRID_LINE_COUNT }, (_, index) => {
-    const value = domain.max - step * index
-    return {
-      value,
-      formattedValue: formatChartValue(value, suffix),
-      y: valueToY(value, domain),
-    }
-  })
+  return Array.from(
+    { length: DEFAULT_CARTESIAN_GRID_LINE_COUNT },
+    (_, index) => {
+      const value = domain.max - step * index
+      return {
+        value,
+        formattedValue: formatChartValue(value, suffix),
+        y: valueToY(value, domain),
+      }
+    },
+  )
 }
 
 function valueToY(value: number, domain: ChartDomain) {
   const range = domain.max - domain.min
-  if (range <= 0) return PLOT_Y + PLOT_HEIGHT
+  if (range <= 0) return CARTESIAN_CHART_PLOT_Y + CARTESIAN_CHART_PLOT_HEIGHT
   const ratio = (domain.max - value) / range
-  return PLOT_Y + ratio * PLOT_HEIGHT
+  return CARTESIAN_CHART_PLOT_Y + ratio * CARTESIAN_CHART_PLOT_HEIGHT
 }
 
 function resolveAriaLabel(props: BarChart) {
