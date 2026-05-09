@@ -50,7 +50,6 @@ function init() {
       media.matches
     )
   }
-  const supportsDesktopResize = () => supportsDesktopCollapse()
 
   const setCollapsed = (collapsed: boolean) => {
     if (!supportsDesktopCollapse()) {
@@ -106,7 +105,7 @@ function init() {
   }
 
   const isOnResizeEdge = (event: MouseEvent) => {
-    if (!supportsDesktopResize()) return false
+    if (!supportsDesktopCollapse()) return false
     const rect = menu.getBoundingClientRect()
     return Math.abs(event.clientX - rect.right) <= NAV_RESIZE_EDGE_TOLERANCE_PX
   }
