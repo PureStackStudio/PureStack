@@ -19,7 +19,7 @@ layout:
 
     <template #form>
       <AppForm
-        class="p-4"
+        class="p-3"
         action="/account/"
         method="post"
         tone="accent"
@@ -43,7 +43,7 @@ layout:
           required="true"/>
         <FormMeta>
           <FormCheck label="Remember this device" name="remember" value="yes"/>
-          <FormAssistLink href="/settings/" label="Need help?"/>
+          <FormAssistLink href="/recovery/" label="Forgot password?"/>
         </FormMeta>
         <FormSubmit label="Sign In" tone="accent" variant="solid"/>
         <FormStatus tone="success" hidden="true">

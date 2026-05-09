@@ -1,0 +1,92 @@
+---
+title: Account Recovery
+description: Recover access to your PureStack workspace.
+nav:
+  hidden: true
+layout:
+  fullWidth: true
+  showToc: false
+---
+
+<Grid columns="1" columnsLg="auto 1fr" alignItems="center">
+  <LoginPanel>
+    <template #header>
+      <LoginHeader
+        badge="Account Recovery"
+        title="Reset your password"
+        description="Enter the email for your workspace and we will send a secure recovery link."/>
+    </template>
+
+    <template #form>
+      <AppForm
+        class="p-4"
+        action="/signin/"
+        method="post"
+        tone="accent"
+        variant="surface"
+      >
+        <FormInputField
+          label="Email"
+          type="email"
+          name="email"
+          placeholder="you@company.dev"
+          autocomplete="email"
+          icon="lucide:mail-search"
+          required="true"/>
+        <FormSubmit label="Send Recovery Link" tone="accent" variant="solid"/>
+        <FormStatus tone="success" hidden="true">
+          Recovery link sent. Check your inbox to continue.
+        </FormStatus>
+      </AppForm>
+    </template>
+
+    <template #footer>
+      <LoginFooter
+        text="Remembered your password?"
+        linkLabel="Sign in"
+        linkHref="/signin/"/>
+    </template>
+  </LoginPanel>
+
+  <LandingSection
+    eyebrow="Secure Access"
+    title="Get back into your workspace without lowering the bar."
+    subtitle="Recovery is designed around a short-lived email link, trusted-device awareness, and clear next steps after your password is reset."
+    columns="1"
+  >
+    <MetricStrip columns="1" columnsSm="3" tone="accent" variant="surface">
+      <MetricItem
+        icon="lucide:mail-check"
+        label="Email"
+        value="Verified"
+        detail="Recovery starts from the address attached to your account."/>
+      <MetricItem
+        icon="lucide:rotate-ccw-key"
+        label="Link"
+        value="Single Use"
+        detail="The reset link is meant for one focused recovery session."/>
+      <MetricItem
+        icon="lucide:shield-check"
+        label="Session"
+        value="Reviewed"
+        detail="Password resets should prompt a fresh look at active devices."/>
+    </MetricStrip>
+  </LandingSection>
+</Grid>
+
+<script>
+  (() => {
+    const form = document.querySelector('.login-panel .form-block')
+    const status = document.querySelector('.login-panel .form-status')
+    const submit = form?.querySelector('button[type="submit"]')
+
+    form?.addEventListener('submit', (event) => {
+      event.preventDefault()
+      status?.removeAttribute('hidden')
+      submit?.setAttribute('disabled', 'true')
+      window.setTimeout(() => {
+        submit?.removeAttribute('disabled')
+      }, 1400)
+    })
+  })()
+</script>
