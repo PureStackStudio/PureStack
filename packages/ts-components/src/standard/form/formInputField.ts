@@ -10,12 +10,13 @@ import {
   ref,
   unref,
 } from 'regor'
+import { createAutoId } from '../autoId'
 import {
   type ComponentVariant,
   resolveComponentClasses,
 } from '../componentVariant'
 
-let nextAutoInputId = 1
+const resolveInputId = createAutoId('form-input')
 
 export type FormInputFieldType =
   | 'text'
@@ -53,7 +54,7 @@ export class FormInputField {
     Object.assign(this, {
       ...props,
     })
-    this.id = resolveInputId(unref(props.id))
+    this.id = resolveInputId(props.id)
     if (!this.model) this.model = ref<string | number>('')
   }
 
@@ -179,11 +180,4 @@ function resolveFormInputField(head: ComponentHead<FormInputField>) {
     }),
   )
   return field
-}
-
-function resolveInputId(id?: string) {
-  if (id) return id
-  const nextId = `form-input-${nextAutoInputId}`
-  nextAutoInputId += 1
-  return nextId
 }

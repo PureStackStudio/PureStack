@@ -10,12 +10,13 @@ import {
   ref,
   unref,
 } from 'regor'
+import { createAutoId } from '../autoId'
 import {
   type ComponentVariant,
   resolveComponentClasses,
 } from '../componentVariant'
 
-let nextAutoSelectId = 1
+const resolveSelectId = createAutoId('form-select')
 
 export type FormSelectValue = string | number
 
@@ -54,7 +55,7 @@ export class FormSelectField {
     Object.assign(this, {
       ...props,
     })
-    this.id = resolveSelectId(unref(props.id))
+    this.id = resolveSelectId(props.id)
     if (!this.model) this.model = ref<FormSelectValue>('')
   }
 }
@@ -138,11 +139,4 @@ function resolveSelectOption(
     value: unref(option.value) ?? label,
     disabled: unref(option.disabled),
   }
-}
-
-function resolveSelectId(id?: string) {
-  if (id) return id
-  const nextId = `form-select-${nextAutoSelectId}`
-  nextAutoSelectId += 1
-  return nextId
 }

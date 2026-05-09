@@ -85,6 +85,8 @@ Suggested direction:
 
 **Where:** `standard/form/formInputField.ts`, `standard/form/formSelectField.ts`, `standard/tabs/tabs.ts`, `standard/doughnutChart/doughnutChart.ts`
 
+**Status:** Done.
+
 Several components use local module counters:
 
 - `form-input-*`

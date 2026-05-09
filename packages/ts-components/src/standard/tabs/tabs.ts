@@ -11,6 +11,7 @@ import {
   ref,
   unref,
 } from 'regor'
+import { createAutoId } from '../autoId'
 import {
   type ComponentVariant,
   type ComponentVariantMode,
@@ -19,8 +20,8 @@ import {
 
 const defaultGroup = 'tabs-default'
 const DEFAULT_TABS_VARIANT_MODE: ComponentVariantMode = 'stateless'
-let nextAutoGroupId = 1
-let nextAutoTabId = 1
+const resolveTabGroup = createAutoId(defaultGroup)
+const resolveTabId = createAutoId('tab')
 
 export class Tabs {
   group: string = defaultGroup
@@ -152,15 +153,6 @@ function ensureSelectedTabIsRef(selectedTab?: RefOrValue<string>) {
   return isRef(selectedTab) ? selectedTab : ref(selectedTab)
 }
 
-function resolveTabGroup(group: string) {
-  group = group?.trim?.()
-  if (group) return group
-
-  const nextGroup = `${defaultGroup}-${nextAutoGroupId}`
-  nextAutoGroupId += 1
-  return nextGroup
-}
-
 function resolveTabPane(head: ComponentHead<TabPane>): TabPane {
   const fromParent = head.findContext(Tabs)
   const group = head.props.group || fromParent?.group || defaultGroup
@@ -194,15 +186,6 @@ function resolveTabPane(head: ComponentHead<TabPane>): TabPane {
       ),
     ),
   }
-}
-
-function resolveTabId(id?: string) {
-  id = id?.trim?.()
-  if (id) return id.trim()
-
-  const nextId = `tab-${nextAutoTabId}`
-  nextAutoTabId += 1
-  return nextId
 }
 
 function markTabsRuntimeEmbed(head: ComponentHead<Tabs>) {

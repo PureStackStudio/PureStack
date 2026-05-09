@@ -7,6 +7,7 @@ import {
   svg,
   unref,
 } from 'regor'
+import { createAutoId } from '../autoId'
 import {
   DEFAULT_CHART_COLORS,
   DEFAULT_CHART_EMPTY_LABEL,
@@ -92,8 +93,7 @@ const FULL_CIRCLE = 360
 const MAX_SEPARATOR_SEGMENT_SHARE = 0.15
 const MIN_SEPARATOR_WIDTH = 0.25
 const SEPARATOR_MASK_BLEED = 0.35
-
-let nextAutoDoughnutChartMaskId = 1
+const resolveDoughnutChartMaskId = createAutoId('doughnut-chart-mask')
 
 const doughnutChartTemplate = svg`<svg
   class="doughnut-chart"
@@ -276,12 +276,6 @@ function resolveDoughnutChart(props: DoughnutChart): DoughnutChart {
     ),
     trackPath: computed(() => fullRingPath(CHART_OUTER_RADIUS, innerRadius())),
   }
-}
-
-function resolveDoughnutChartMaskId() {
-  const id = `doughnut-chart-mask-${nextAutoDoughnutChartMaskId}`
-  nextAutoDoughnutChartMaskId += 1
-  return id
 }
 
 function resolveChartSegments(
