@@ -82,6 +82,7 @@ const topBarTemplate = html`<input
       variant="none"/>
     <Flex class="topbar__controls flex-none" align="center" justify="end">
       <ThemeSwitcher/>
+      <SignIn/>
       <label
         class="topbar__icon topbar__toggle"
         for="doc-nav-toggle"

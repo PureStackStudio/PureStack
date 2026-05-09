@@ -19,6 +19,7 @@ import { registerNavStyles } from './standard/navMenu/navMenuStyle'
 import { registerPageTocStyles } from './standard/pageToc/pageTocStyle'
 import { registerPanelStyles } from './standard/panel/panelStyle'
 import { registerSearchBoxStyles } from './standard/searchBox/searchBoxStyle'
+import { registerSignInStyles } from './standard/signIn/signInStyle'
 import { registerTabsStyles } from './standard/tabs/tabsStyle'
 import { registerThemeSwitcherStyles } from './standard/themeSwitcher/themeSwitcherStyle'
 import { registerTopBarStyles } from './standard/topBar/topBarStyle'
@@ -45,6 +46,7 @@ export function registerStyles() {
   registerPageTocStyles()
   registerPanelStyles()
   registerSearchBoxStyles()
+  registerSignInStyles()
   registerTabsStyles()
   registerThemeSwitcherStyles()
   registerTopBarStyles()

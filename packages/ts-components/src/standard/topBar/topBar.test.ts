@@ -2,19 +2,27 @@ import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '@purestack/ts-render'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
+import { defineButtonComponents } from '../btn/btn'
 import { defineFlexComponents } from '../flex/flex'
+import { defineIconComponents } from '../icon/icon'
 import { defineLogoComponents } from '../logo/logo'
 import { defineSearchComponents } from '../searchBox/searchBox'
+import { defineSignInComponents } from '../signIn/signIn'
+import { defineThemeSwitcherComponents } from '../themeSwitcher/themeSwitcher'
 import { defineTopBarComponents } from '../topBar/topBar'
 
 describe('TopBar rendering', () => {
   it('applies logo values from site config', () => {
     const cleanup = ensureDomGlobals()
     const components = {
+      ...defineButtonComponents(),
       ...defineFlexComponents(),
+      ...defineIconComponents((name) => `<svg data-icon="${name}"></svg>`),
       ...defineLogoComponents(),
-      ...defineTopBarComponents(),
       ...defineSearchComponents(),
+      ...defineSignInComponents(),
+      ...defineThemeSwitcherComponents(),
+      ...defineTopBarComponents(),
     }
     const html = renderApp(`<TopBar />`, {
       components,
@@ -75,6 +83,8 @@ describe('TopBar rendering', () => {
     ).toBeGreaterThan(1)
     expect(html).toContain('href="/docs/"')
     expect(html).toContain('name="q"')
+    expect(html).toContain('class="sign-in"')
+    expect(html).toContain('data-icon="lucide:circle-user-round"')
     expect((html.match(/class="flex/g) ?? []).length).toBeGreaterThan(1)
     expect(html).toContain('tone-fill-surface-alt')
     expect(html).toContain('tone-border-surface-alt')

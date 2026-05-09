@@ -26,6 +26,7 @@ export function registerTopBarShellStyles(
     .padding('16px')
     .position('sticky')
     .top('0')
+    .overflowX('clip')
     .zIndex(40)
     .backdropFilter('blur(10px)')
     .borderTopWidth('0 !important')

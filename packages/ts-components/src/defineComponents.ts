@@ -25,6 +25,7 @@ import { definePanelComponents } from './standard/panel/panel'
 import { definePricingComponents } from './standard/pricing/pricing'
 import { defineSearchComponents } from './standard/searchBox/searchBox'
 import { defineSectionHeaderComponents } from './standard/sectionHeader/sectionHeader'
+import { defineSignInComponents } from './standard/signIn/signIn'
 import { defineTabsComponents } from './standard/tabs/tabs'
 import { defineThemeSwitcherComponents } from './standard/themeSwitcher/themeSwitcher'
 import { defineTopBarComponents } from './standard/topBar/topBar'
@@ -59,6 +60,7 @@ export function defineComponents(getSvgIcon: GetSvgIcon) {
     ...definePricingComponents(),
     ...defineSearchComponents(),
     ...defineSectionHeaderComponents(),
+    ...defineSignInComponents(),
     ...defineTabsComponents(),
     ...defineScriptComponents(),
   }
