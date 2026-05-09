@@ -8,15 +8,19 @@ import {
   unref,
 } from 'regor'
 import {
+  type CartesianChartDomain,
+  type ResolvedCartesianChartGridLine,
+  resolveCartesianChartDomain,
+  resolveCartesianChartGridLines,
+  valueToCartesianChartY,
+} from '../chart/cartesianChart'
+import {
   CARTESIAN_CHART_LABEL_Y,
-  CARTESIAN_CHART_PLOT_HEIGHT,
   CARTESIAN_CHART_PLOT_WIDTH,
   CARTESIAN_CHART_PLOT_X,
-  CARTESIAN_CHART_PLOT_Y,
   CARTESIAN_CHART_VIEWBOX_HEIGHT,
   DEFAULT_CARTESIAN_CHART_HEIGHT,
   DEFAULT_CARTESIAN_CHART_WIDTH,
-  DEFAULT_CARTESIAN_GRID_LINE_COUNT,
   DEFAULT_CHART_COLORS,
   DEFAULT_CHART_EMPTY_LABEL,
 } from '../chart/chartDefaults'
@@ -55,11 +59,8 @@ export interface ResolvedBarChartItem {
   roundedTop: number
 }
 
-export interface ResolvedBarChartGridLine {
-  value: number
-  formattedValue: string
-  y: number
-}
+export interface ResolvedBarChartGridLine
+  extends ResolvedCartesianChartGridLine {}
 
 export interface BarChart {
   items?: RefOrValue<Array<RefOrValue<BarChartItem>>>
@@ -245,20 +246,17 @@ function resolveBarChart(props: BarChart): BarChart {
       () => resolveChartText(props.emptyLabel) || DEFAULT_CHART_EMPTY_LABEL,
     ),
     chartItems: computed(() => resolveChartItems(props, domain())),
-    gridLines: computed(() => resolveGridLines(domain(), props.valueSuffix)),
+    gridLines: computed(() =>
+      resolveCartesianChartGridLines(domain(), props.valueSuffix),
+    ),
     hasItems: computed(() => resolveItems(props.items).length > 0),
-    zeroLineY: computed(() => valueToY(0, domain())),
+    zeroLineY: computed(() => valueToCartesianChartY(0, domain())),
   }
-}
-
-interface ChartDomain {
-  min: number
-  max: number
 }
 
 function resolveChartItems(
   props: BarChart,
-  domain: ChartDomain,
+  domain: CartesianChartDomain,
 ): ResolvedBarChartItem[] {
   const items = resolveItems(props.items)
   if (!items.length) return []
@@ -266,10 +264,10 @@ function resolveChartItems(
   const laneWidth = CARTESIAN_CHART_PLOT_WIDTH / items.length
   const barWidth = Math.max(1, laneWidth * BAR_WIDTH_SHARE)
   const valueSuffix = resolveChartText(props.valueSuffix)
-  const zeroY = valueToY(0, domain)
+  const zeroY = valueToCartesianChartY(0, domain)
 
   return items.map((item, index) => {
-    const valueY = valueToY(item.value, domain)
+    const valueY = valueToCartesianChartY(item.value, domain)
     const rawHeight = Math.abs(zeroY - valueY)
     const height =
       item.value === 0 ? 0 : Math.max(rawHeight, MIN_VISIBLE_BAR_HEIGHT)
@@ -326,58 +324,13 @@ function resolveItems(items: BarChart['items']): ResolvedBarChartSourceItem[] {
     .filter((item) => Number.isFinite(item.value))
 }
 
-function resolveDomain(props: BarChart): ChartDomain {
+function resolveDomain(props: BarChart): CartesianChartDomain {
   const values = resolveItems(props.items).map((item) => item.value)
-  const fallbackMax = values.length ? Math.max(...values) : 1
-  const fallbackMin = values.length ? Math.min(...values) : 0
-  let min = Math.min(
-    readChartNumber(props.minValue, Math.min(0, fallbackMin)),
-    fallbackMin,
-    0,
-  )
-  let max = Math.max(
-    readChartNumber(props.maxValue, Math.max(0, fallbackMax)),
-    fallbackMax,
-    0,
-  )
-
-  if (min === max) {
-    if (min === 0) max = 1
-    else if (min > 0) min = 0
-    else max = 0
-  }
-
-  if (min > max) [min, max] = [max, min]
-
-  return { min, max }
-}
-
-function resolveGridLines(
-  domain: ChartDomain,
-  valueSuffix: BarChart['valueSuffix'],
-): ResolvedBarChartGridLine[] {
-  const suffix = resolveChartText(valueSuffix)
-  const step =
-    (domain.max - domain.min) / (DEFAULT_CARTESIAN_GRID_LINE_COUNT - 1)
-
-  return Array.from(
-    { length: DEFAULT_CARTESIAN_GRID_LINE_COUNT },
-    (_, index) => {
-      const value = domain.max - step * index
-      return {
-        value,
-        formattedValue: formatChartValue(value, suffix),
-        y: valueToY(value, domain),
-      }
-    },
-  )
-}
-
-function valueToY(value: number, domain: ChartDomain) {
-  const range = domain.max - domain.min
-  if (range <= 0) return CARTESIAN_CHART_PLOT_Y + CARTESIAN_CHART_PLOT_HEIGHT
-  const ratio = (domain.max - value) / range
-  return CARTESIAN_CHART_PLOT_Y + ratio * CARTESIAN_CHART_PLOT_HEIGHT
+  return resolveCartesianChartDomain({
+    values,
+    minValue: props.minValue,
+    maxValue: props.maxValue,
+  })
 }
 
 function resolveAriaLabel(props: BarChart) {

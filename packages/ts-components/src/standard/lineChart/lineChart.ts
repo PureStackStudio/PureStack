@@ -8,15 +8,18 @@ import {
   unref,
 } from 'regor'
 import {
+  type CartesianChartDomain,
+  pointIndexToCartesianChartX,
+  type ResolvedCartesianChartGridLine,
+  resolveCartesianChartDomain,
+  resolveCartesianChartGridLines,
+  valueToCartesianChartY,
+} from '../chart/cartesianChart'
+import {
   CARTESIAN_CHART_LABEL_Y,
-  CARTESIAN_CHART_PLOT_HEIGHT,
-  CARTESIAN_CHART_PLOT_WIDTH,
-  CARTESIAN_CHART_PLOT_X,
-  CARTESIAN_CHART_PLOT_Y,
   CARTESIAN_CHART_VIEWBOX_HEIGHT,
   DEFAULT_CARTESIAN_CHART_HEIGHT,
   DEFAULT_CARTESIAN_CHART_WIDTH,
-  DEFAULT_CARTESIAN_GRID_LINE_COUNT,
   DEFAULT_CHART_COLORS,
   DEFAULT_CHART_EMPTY_LABEL,
 } from '../chart/chartDefaults'
@@ -65,11 +68,8 @@ export interface ResolvedLineChartSeries {
   points: ResolvedLineChartPoint[]
 }
 
-export interface ResolvedLineChartGridLine {
-  value: number
-  formattedValue: string
-  y: number
-}
+export interface ResolvedLineChartGridLine
+  extends ResolvedCartesianChartGridLine {}
 
 export interface ResolvedLineChartLabel {
   label: string
@@ -295,16 +295,13 @@ function resolveLineChart(props: LineChart): LineChart {
       () => resolveChartText(props.emptyLabel) || DEFAULT_CHART_EMPTY_LABEL,
     ),
     chartSeries,
-    gridLines: computed(() => resolveGridLines(domain(), props.valueSuffix)),
+    gridLines: computed(() =>
+      resolveCartesianChartGridLines(domain(), props.valueSuffix),
+    ),
     xLabels: computed(() => resolveXLabels(chartSeries())),
     hasSeries: computed(() => chartSeries().length > 0),
-    zeroLineY: computed(() => valueToY(0, domain())),
+    zeroLineY: computed(() => valueToCartesianChartY(0, domain())),
   }
-}
-
-interface ChartDomain {
-  min: number
-  max: number
 }
 
 interface ResolvedLineChartSourceSeries {
@@ -320,16 +317,16 @@ interface ResolvedLineChartSourcePoint {
 
 function resolveChartSeries(
   props: LineChart,
-  domain: ChartDomain,
+  domain: CartesianChartDomain,
 ): ResolvedLineChartSeries[] {
   const valueSuffix = resolveChartText(props.valueSuffix)
   const curve = resolveCurve(props.curve)
-  const zeroY = valueToY(0, domain)
+  const zeroY = valueToCartesianChartY(0, domain)
 
   return resolveSeries(props.series).map((series, index) => {
     const points = series.points.map((point, pointIndex) => {
-      const x = pointIndexToX(pointIndex, series.points.length)
-      const y = valueToY(point.value, domain)
+      const x = pointIndexToCartesianChartX(pointIndex, series.points.length)
+      const y = valueToCartesianChartY(point.value, domain)
       const valueLabelY =
         point.value < 0
           ? Math.min(CARTESIAN_CHART_VIEWBOX_HEIGHT - 2, y + VALUE_LABEL_OFFSET)
@@ -452,69 +449,15 @@ function resolveXLabels(
     }))
 }
 
-function resolveDomain(props: LineChart): ChartDomain {
+function resolveDomain(props: LineChart): CartesianChartDomain {
   const values = resolveSeries(props.series).flatMap((series) =>
     series.points.map((point) => point.value),
   )
-  const fallbackMax = values.length ? Math.max(...values) : 1
-  const fallbackMin = values.length ? Math.min(...values) : 0
-  let min = Math.min(
-    readChartNumber(props.minValue, Math.min(0, fallbackMin)),
-    fallbackMin,
-    0,
-  )
-  let max = Math.max(
-    readChartNumber(props.maxValue, Math.max(0, fallbackMax)),
-    fallbackMax,
-    0,
-  )
-
-  if (min === max) {
-    if (min === 0) max = 1
-    else if (min > 0) min = 0
-    else max = 0
-  }
-
-  if (min > max) [min, max] = [max, min]
-
-  return { min, max }
-}
-
-function resolveGridLines(
-  domain: ChartDomain,
-  valueSuffix: LineChart['valueSuffix'],
-): ResolvedLineChartGridLine[] {
-  const suffix = resolveChartText(valueSuffix)
-  const step =
-    (domain.max - domain.min) / (DEFAULT_CARTESIAN_GRID_LINE_COUNT - 1)
-
-  return Array.from(
-    { length: DEFAULT_CARTESIAN_GRID_LINE_COUNT },
-    (_, index) => {
-      const value = domain.max - step * index
-      return {
-        value,
-        formattedValue: formatChartValue(value, suffix),
-        y: valueToY(value, domain),
-      }
-    },
-  )
-}
-
-function pointIndexToX(index: number, count: number) {
-  if (count <= 1) {
-    return CARTESIAN_CHART_PLOT_X + CARTESIAN_CHART_PLOT_WIDTH / 2
-  }
-  return (
-    CARTESIAN_CHART_PLOT_X + (index / (count - 1)) * CARTESIAN_CHART_PLOT_WIDTH
-  )
-}
-
-function valueToY(value: number, domain: ChartDomain) {
-  const range = domain.max - domain.min
-  if (range <= 0) return CARTESIAN_CHART_PLOT_Y + CARTESIAN_CHART_PLOT_HEIGHT
-  const ratio = (domain.max - value) / range
-  return CARTESIAN_CHART_PLOT_Y + ratio * CARTESIAN_CHART_PLOT_HEIGHT
+  return resolveCartesianChartDomain({
+    values,
+    minValue: props.minValue,
+    maxValue: props.maxValue,
+  })
 }
 
 function resolveAriaLabel(props: LineChart) {

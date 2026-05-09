@@ -51,6 +51,8 @@ Suggested direction:
 
 **Where:** `standard/barChart/barChart.ts`, `standard/lineChart/lineChart.ts`
 
+**Status:** Done.
+
 Bar and line charts both define:
 
 - `ChartDomain`
