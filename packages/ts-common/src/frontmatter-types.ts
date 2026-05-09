@@ -121,6 +121,17 @@ export interface FrontmatterLayoutOptions {
   showToc: boolean
 
   /**
+   * Controls whether the generated page navigation menu is rendered.
+   *
+   * This is separate from `nav.hidden`: `nav.hidden` removes the current page
+   * from generated navigation, while `showNav` controls the navigation shell on
+   * the current page.
+   *
+   * Defaults to `true`.
+   */
+  showNav: boolean
+
+  /**
    * Starts the built-in TOC in its collapsed visual state.
    *
    * This does not disable the TOC. It only changes the initial presentation

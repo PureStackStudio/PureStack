@@ -220,4 +220,33 @@ describe('renderPage consent integration', () => {
     expect(html).not.toContain('doc-shell--toc')
     expect(html).not.toContain('page-toc')
   })
+
+  it('does not render navigation shell when showNav is false', async () => {
+    const site = resolveSiteConfig({ rootDir: process.cwd() })
+    const html = await renderPage({
+      bodyHtml: '<p>Hello</p>',
+      pageInfo: {
+        relPath: 'index.md',
+        urlPath: '/',
+        frontmatter: normalizeFrontmatter({
+          layout: {
+            showNav: false,
+          },
+        }),
+      },
+      navigation: {
+        mode: 'auto',
+        folder: '',
+        items: [{ title: 'Home', url: '/' }],
+        global: [],
+        tone: 'neutral',
+      },
+      site,
+      consent: site.consent,
+      analytics: site.analytics,
+    })
+    expect(html).not.toContain('class="doc-sidebar"')
+    expect(html).toContain('<body class="template-doc">')
+    expect(html).not.toContain('<nav-menu')
+  })
 })

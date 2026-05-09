@@ -59,6 +59,7 @@ const DEFAULT_PAGE_INFO: PageInfo = {
       navMode: 'sidebar',
       fullWidth: false,
       showToc: false,
+      showNav: true,
       showFooter: true,
       tocCollapsed: false,
     },

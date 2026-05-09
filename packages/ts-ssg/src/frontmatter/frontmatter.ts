@@ -51,6 +51,7 @@ export function normalizeFrontmatter(
       ),
       fullWidth: resolveKey(rawLayout, 'fullWidth') === true,
       showToc: resolveKey(rawLayout, 'showToc') === true,
+      showNav: resolveKey(rawLayout, 'showNav') !== false,
       tocTone: pickSemanticTone(resolveKey(rawLayout, 'tocTone')),
       tocCollapsed: resolveKey(rawLayout, 'tocCollapsed') === true,
       showFooter: typeof showFooter === 'boolean' ? showFooter : true,

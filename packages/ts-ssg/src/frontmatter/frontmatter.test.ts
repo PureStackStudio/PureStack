@@ -20,6 +20,7 @@ describe('frontmatter', () => {
         NAVMODE: 'drawer',
         FULLWIDTH: true,
         SHOWTOC: true,
+        SHOWNAV: false,
         TOCCOLLAPSED: true,
         SHOWFOOTER: false,
       },
@@ -37,8 +38,15 @@ describe('frontmatter', () => {
     expect(normalized.layout.navMode).toBe('drawer')
     expect(normalized.layout.fullWidth).toBe(true)
     expect(normalized.layout.showToc).toBe(true)
+    expect(normalized.layout.showNav).toBe(false)
     expect(normalized.layout.tocCollapsed).toBe(true)
     expect(normalized.layout.showFooter).toBe(false)
+  })
+
+  it('shows page navigation by default', () => {
+    const normalized = normalizeFrontmatter({})
+
+    expect(normalized.layout.showNav).toBe(true)
   })
 
   it('parses frontmatter source with mixed-case keys', () => {

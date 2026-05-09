@@ -100,7 +100,7 @@ function resolveDocLayout(
 ): DocLayout {
   const navMode = frontmatter.layout.navMode
   const layoutClass = resolveDocLayoutClass(frontmatter)
-  const showNav = hasNavItems(navigation)
+  const showNav = frontmatter.layout.showNav && hasNavItems(navigation)
   const showToc = isTocEnabled(frontmatter, outline)
   const tocCollapsed = frontmatter.layout.tocCollapsed === true
   const bodyClass = buildDocBodyClass(
