@@ -14,6 +14,8 @@ describe('frontmatter', () => {
       NAV: {
         TITLE: 'Navigation title',
         ORDER: 2,
+        BADGE: 'New',
+        ICON: 'iconoir:star',
         HIDDEN: true,
       },
       LAYOUT: {
@@ -34,6 +36,8 @@ describe('frontmatter', () => {
     expect(normalized.draft).toBe(true)
     expect(normalized.nav.title).toBe('Navigation title')
     expect(normalized.nav.order).toBe(2)
+    expect(normalized.nav.badge).toBe('New')
+    expect(normalized.nav.icon).toBe('iconoir:star')
     expect(normalized.nav.hidden).toBe(true)
     expect(normalized.layout.navMode).toBe('drawer')
     expect(normalized.layout.fullWidth).toBe(true)

@@ -136,4 +136,37 @@ describe('navigation', () => {
       ])
     })
   })
+
+  it('adds frontmatter nav badge and icon to generated items', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      await fs.mkdir(contentDir, { recursive: true })
+      await fs.writeFile(
+        path.join(contentDir, 'account.mdx'),
+        [
+          '---',
+          'title: Account',
+          'nav:',
+          '  badge: Beta',
+          '  icon: iconoir:user',
+          '---',
+          '# Account',
+        ].join('\n'),
+        'utf8',
+      )
+
+      const files = await discoverContent(contentDir)
+      const nav = await buildNavigation(contentDir, files)
+      const rootItems = nav?.byFolder[''] ?? []
+
+      expect(rootItems).toEqual([
+        {
+          title: 'Account',
+          url: '/account/',
+          badge: 'Beta',
+          icon: 'iconoir:user',
+        },
+      ])
+    })
+  })
 })

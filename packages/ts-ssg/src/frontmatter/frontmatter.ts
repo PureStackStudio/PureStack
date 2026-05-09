@@ -40,6 +40,8 @@ export function normalizeFrontmatter(
       ...rawNav,
       title: resolveString(resolveKey(rawNav, 'title')),
       order: resolveNumber(resolveKey(rawNav, 'order')),
+      badge: resolveString(resolveKey(rawNav, 'badge')),
+      icon: resolveString(resolveKey(rawNav, 'icon')),
       tone: pickSemanticTone(resolveKey(rawNav, 'tone')),
       hidden: resolveKey(rawNav, 'hidden') === true,
     },

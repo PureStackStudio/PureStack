@@ -174,6 +174,8 @@ head:
 nav:
   title: Start Here
   order: 1
+  badge: New
+  icon: iconoir:star
   hidden: false
 layout:
   navMode: sidebar # sidebar | drawer

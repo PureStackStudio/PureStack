@@ -40,6 +40,8 @@ interface ContentMeta {
   urlPath: string
   title: string
   order?: number
+  badge?: string
+  icon?: string
   hidden: boolean
   isIndex: boolean
 }
@@ -217,6 +219,8 @@ async function loadContentMeta(files: ContentFile[]): Promise<ContentMeta[]> {
       extractHeadingTitle(parsed.body) ||
       humanizeSegment(baseName)
     const order = resolveNumber(nav?.order) ?? resolveNumber(frontmatter.order)
+    const badge = resolveString(nav?.badge)
+    const icon = resolveString(nav?.icon)
 
     result.push({
       file,
@@ -224,6 +228,8 @@ async function loadContentMeta(files: ContentFile[]): Promise<ContentMeta[]> {
       urlPath,
       title,
       order,
+      badge,
+      icon,
       hidden,
       isIndex,
     })
@@ -371,6 +377,8 @@ function toNavItem(meta: ContentMeta): NavItem {
     url: meta.urlPath,
   }
   if (typeof meta.order === 'number') item.order = meta.order
+  if (meta.badge) item.badge = meta.badge
+  if (meta.icon) item.icon = meta.icon
   return item
 }
 

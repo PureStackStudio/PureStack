@@ -186,6 +186,16 @@ export interface FrontmatterNavOptions {
   order?: number
 
   /**
+   * Badge text shown with this page's generated navigation item.
+   */
+  badge?: string
+
+  /**
+   * Icon name shown with this page's generated navigation item.
+   */
+  icon?: string
+
+  /**
    * Overrides the navigation menu tone for this page.
    *
    * When present, this takes precedence over the resolved site navigation tone
