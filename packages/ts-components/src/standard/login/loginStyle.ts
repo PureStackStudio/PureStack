@@ -22,11 +22,6 @@ function registerLoginShellStyles(
   options: ThemeOptions,
 ) {
   styleBuilder
-    .select('.login-panel', theme)
-    .width('100%')
-    .maxWidth('460px')
-    .margin('32px auto')
-  styleBuilder
     .select('.login-panel__shell', theme)
     .display('grid')
     .gap('16px')

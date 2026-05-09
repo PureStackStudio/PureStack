@@ -19,6 +19,8 @@ export interface TopBar {
   siteLogo: LogoConfig
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
+  signInAvatarSrc?: RefOrValue<string>
+  signInAvatarAlt?: RefOrValue<string>
   classes?: ComputedRef<string>
 }
 
@@ -82,7 +84,7 @@ const topBarTemplate = html`<input
       variant="none"/>
     <Flex class="topbar__controls flex-none" align="center" justify="end">
       <ThemeSwitcher/>
-      <SignIn/>
+      <SignIn :avatarSrc="signInAvatarSrc" :avatarAlt="signInAvatarAlt"/>
       <label
         class="topbar__icon topbar__toggle"
         for="doc-nav-toggle"
@@ -95,7 +97,7 @@ const topBarTemplate = html`<input
 
 function defineTopBarComponent() {
   return defineComponent<TopBar>(topBarTemplate, {
-    props: ['tone', 'variant'],
+    props: ['tone', 'variant', 'signInAvatarSrc', 'signInAvatarAlt'],
     context: (head) => resolveTopBar(resolveTsSsgContext(head), head.props),
   })
 }

@@ -66,6 +66,25 @@ function registerSignInShellStyles(
     .width('1.25rem')
     .height('1.25rem')
 
+  styleBuilder
+    .select('.sign-in__signed-out-view, .sign-in__signed-in-view', theme)
+    .display('inline-flex')
+    .alignItems('center')
+    .justifyContent('center')
+    .width('100%')
+    .height('100%')
+
+  styleBuilder
+    .select(
+      '.sign-in__signed-in-view, .signed-in .sign-in__signed-out-view',
+      theme,
+    )
+    .display('none')
+
+  styleBuilder
+    .select('.signed-in .sign-in__signed-in-view', theme)
+    .display('inline-flex')
+
   styleBuilder.select('.sign-in__trigger-label', theme).display('none')
 }
 
@@ -106,6 +125,17 @@ function registerSignInPanelStyles(
     .transition('none')
 
   styleBuilder.select('.sign-in__nav', theme).display('grid').gap('0.15em')
+
+  styleBuilder
+    .select(
+      '.sign-in__signed-in-action, .signed-in .sign-in__signed-out-action',
+      theme,
+    )
+    .display('none')
+
+  styleBuilder
+    .select('.signed-in .sign-in__signed-in-action', theme)
+    .display('inline-flex')
 
   styleBuilder
     .select('.sign-in__item', theme)

@@ -1,0 +1,129 @@
+---
+title: Sign Up
+description: Create a PureStack workspace account.
+nav:
+  hidden: true
+layout:
+  fullWidth: true
+  showToc: false
+---
+
+<Grid columns="1" columnsLg="auto 1fr" alignItems="center">
+  <LoginPanel>
+    <template #header>
+      <LoginHeader
+        badge="Start Building"
+        title="Create your account"
+        description="Set up your workspace and invite the team when you are ready."/>
+    </template>
+
+    <template #form>
+      <AppForm
+        class="p-4"
+        action="/account/"
+        method="post"
+        tone="accent"
+        variant="surface"
+      >
+        <Grid columns="1" columnsMd="2">
+          <FormInputField
+            label="First name"
+            name="firstName"
+            placeholder="Ada"
+            autocomplete="given-name"
+            icon="lucide:user-round"
+            required="true"/>
+          <FormInputField
+            label="Last name"
+            name="lastName"
+            placeholder="Lovelace"
+            autocomplete="family-name"
+            icon="lucide:user-round"
+            required="true"/>
+        </Grid>
+        <FormInputField
+          label="Work email"
+          type="email"
+          name="email"
+          placeholder="ada@analytical.engine"
+          autocomplete="email"
+          icon="lucide:mail"
+          required="true"/>
+        <FormInputField
+          label="Workspace"
+          name="workspace"
+          placeholder="Analytical Engine Lab"
+          autocomplete="organization"
+          icon="lucide:building-2"
+          required="true"/>
+        <FormInputField
+          label="Password"
+          type="password"
+          name="password"
+          placeholder="Create a strong password"
+          autocomplete="new-password"
+          icon="lucide:key-round"
+          required="true"/>
+        <FormCheck
+          label="Send me release notes and implementation ideas"
+          name="updates"
+          value="yes"
+          checked="true"/>
+        <FormSubmit label="Create Account" tone="accent" variant="solid"/>
+        <FormStatus tone="success" hidden="true">
+          Account ready. Opening your workspace.
+        </FormStatus>
+      </AppForm>
+    </template>
+
+    <template #footer>
+      <LoginFooter
+        text="Already have an account?"
+        linkLabel="Sign in"
+        linkHref="/signin/"/>
+    </template>
+  </LoginPanel>
+
+  <LandingSection
+    eyebrow="One Clean Surface"
+    title="Give every project a home before the first deploy."
+    subtitle="PureStack accounts keep docs, preferences, launch paths, and operational context organized around the way your team actually works."
+    columns="1"
+    class="box-shadow-none"
+  >
+    <ComparisonTable
+      columns="1"
+      columnsLg="2"
+      tone="accent"
+      variant="none"
+      class="box-shadow-none"
+    >
+      <ComparisonColumn
+        icon="lucide:sparkles"
+        title="Focused defaults"
+        summary="Start with sensible settings instead of a blank control room."/>
+      <ComparisonColumn
+        icon="lucide:shield-check"
+        title="Ready for teams"
+        summary="Profile and workspace boundaries are clear from the first session."/>
+    </ComparisonTable>
+  </LandingSection>
+</Grid>
+
+<script>
+  (() => {
+    const key = 'purestack-sample-auth'
+    const form = document.querySelector('.login-panel .form-block')
+    const status = document.querySelector('.login-panel .form-status')
+
+    form?.addEventListener('submit', (event) => {
+      event.preventDefault()
+      localStorage.setItem(key, 'signed-in')
+      document.documentElement.classList.add('signed-in')
+      status?.removeAttribute('hidden')
+      window.setTimeout(() => {
+        window.location.href = '/account/'
+      }, 450)
+    })
+  })()
+</script>

@@ -1,0 +1,235 @@
+---
+title: Account
+description: Account overview for the sample workspace.
+nav:
+  hidden: true
+layout:
+  fullWidth: true
+  showToc: false
+---
+
+<SectionHeader
+  class="mb-3"
+  eyebrow="Workspace"
+  title="Welcome back, Sample User"
+  subtitle="A focused account overview for profile state, workspace health, billing, and the next useful action."
+>
+  <Flex>
+    <BtnLink href="/settings/" tone="accent" icon="lucide:settings">
+      Settings
+    </BtnLink>
+    <BtnLink
+      href="/signout/"
+      tone="neutral"
+      variant="outline"
+      icon="lucide:log-out"
+    >
+      Sign Out
+    </BtnLink>
+  </Flex>
+</SectionHeader>
+
+<MetricStrip
+  columns="1"
+  columnsSm="2"
+  columnsLg="4"
+  tone="accent"
+  variant="surface"
+  class="mb-3"
+>
+  <MetricItem
+    icon="lucide:circle-check"
+    label="Account"
+    value="Active"
+    detail="Signed in and ready for workspace navigation."/>
+  <MetricItem
+    icon="lucide:rocket"
+    label="Launches"
+    value="3 planned"
+    detail="Two drafts and one production rollout."/>
+  <MetricItem
+    icon="lucide:activity"
+    label="Activity"
+    value="18 updates"
+    detail="Changes across docs, settings, and previews."/>
+  <MetricItem
+    icon="lucide:shield-check"
+    label="Security"
+    value="Protected"
+    detail="Device confirmation and alerts enabled."/>
+</MetricStrip>
+
+<Grid
+  columns="1"
+  columnsLg="minmax(0, 0.72fr) minmax(320px, 0.42fr)"
+  alignItems="start"
+>
+  <Flex direction="column">
+    <Panel tone="accent" variant="surface">
+      <Grid columns="1" columnsMd="minmax(0, 1fr) auto" alignItems="center">
+        <SectionHeader
+          eyebrow="Profile"
+          title="Sample User"
+          subtitle="Product Engineer at PureStack Studio. Account-aware components can use this identity for avatars, menus, and workspace context."
+          titleTag="h2"
+          titleClass="fs-h3 mb-1"
+          subtitleClass="mb-0"/>
+        <IconFrame
+          name="tabler:user-filled"
+          tone="accent"
+          variant="surface"
+          size="lg"/>
+      </Grid>
+      <Grid columns="1" columnsMd="3">
+        <MetricItem
+          icon="lucide:mail"
+          label="Email"
+          value="sample@purestack.dev"
+          detail="Primary contact"/>
+        <MetricItem
+          icon="lucide:map-pin"
+          label="Region"
+          value="Berlin"
+          detail="Europe/Berlin defaults"/>
+        <MetricItem
+          icon="lucide:users"
+          label="Workspace"
+          value="PureStack Studio"
+          detail="Owner access"/>
+      </Grid>
+    </Panel>
+
+    <Panel tone="info" variant="surface">
+      <SectionHeader
+        eyebrow="Recent Activity"
+        title="Pick up where you left off"
+        subtitle="A short account timeline keeps the next move obvious without turning the page into a noisy dashboard."
+        titleTag="h2"
+        titleClass="fs-h4 mb-1"
+        subtitleClass="mb-0"/>
+      <Grid columns="1" columnsMd="3">
+        <FeatureCard
+          icon="lucide:folder-kanban"
+          title="Navigation review"
+          summary="Account routes were added to the sample content and hidden from the main nav."/>
+        <FeatureCard
+          icon="lucide:settings"
+          title="Settings updated"
+          summary="Profile, security, workspace, and notification preferences are available."/>
+        <FeatureCard
+          icon="lucide:calendar-check"
+          title="Launch prep"
+          summary="The signed-in topbar flow is ready for sample-site walkthroughs."/>
+      </Grid>
+    </Panel>
+
+    <Panel tone="neutral" variant="surface">
+      <SectionHeader
+        eyebrow="Plan"
+        title="Studio Preview"
+        subtitle="Enough structure to show how account-aware product surfaces can feel without adding backend weight."
+        titleTag="h2"
+        titleClass="fs-h4 mb-1"
+        subtitleClass="mb-0"/>
+      <ComparisonTable columns="1" columnsLg="3" tone="accent" variant="none">
+        <ComparisonColumn
+          icon="lucide:chart-no-axes-column-increasing"
+          title="Usage"
+          summary="24 content pages indexed this week."/>
+        <ComparisonColumn
+          icon="lucide:credit-card"
+          title="Billing"
+          summary="Preview plan, no payment method required."/>
+        <ComparisonColumn
+          icon="lucide:circle-dollar-sign"
+          title="Seats"
+          summary="One owner seat with team-ready controls."/>
+      </ComparisonTable>
+    </Panel>
+  </Flex>
+
+  <Flex direction="column">
+    <Panel tone="success" variant="surface">
+      <SectionHeader
+        eyebrow="Quick Actions"
+        title="Move fast from here"
+        subtitle="The account page should answer the obvious question: what can I do next?"
+        titleTag="h2"
+        titleClass="fs-h4 mb-1"
+        subtitleClass="mb-0"/>
+      <Grid columns="1">
+        <BtnLink href="/settings/" tone="accent" icon="lucide:settings">
+          Manage Settings
+        </BtnLink>
+        <BtnLink
+          href="/guide/"
+          tone="neutral"
+          variant="outline"
+          icon="lucide:folder-kanban"
+        >
+          Browse Guide
+        </BtnLink>
+        <BtnLink
+          href="/signin/"
+          tone="neutral"
+          variant="outline"
+          icon="lucide:history"
+        >
+          Switch Account
+        </BtnLink>
+      </Grid>
+    </Panel>
+
+    <Panel tone="warning" variant="surface">
+      <SectionHeader
+        eyebrow="Attention"
+        title="Finish security review"
+        subtitle="A compact warning gives the user one useful thing to resolve."
+        titleTag="h2"
+        titleClass="fs-h4 mb-1"
+        subtitleClass="mb-0"/>
+      <AlertBox tone="warning" title="Recovery details">
+        Add a backup recovery method before sharing this workspace with a team.
+      </AlertBox>
+      <BtnLink
+        href="/settings/"
+        tone="warning"
+        variant="outline"
+        icon="lucide:triangle-alert"
+      >
+        Review Security
+      </BtnLink>
+    </Panel>
+
+    <Panel tone="accent" variant="surface">
+      <SectionHeader
+        eyebrow="Session"
+        title="Trusted device"
+        subtitle="This browser is treated as the current signed-in workspace session."
+        titleTag="h2"
+        titleClass="fs-h4 mb-1"
+        subtitleClass="mb-0"/>
+      <MetricItem
+        icon="lucide:monitor"
+        label="Current device"
+        value="Windows workstation"
+        detail="Active now"/>
+      <BtnLink
+        href="/signout/"
+        tone="neutral"
+        variant="outline"
+        icon="lucide:log-out"
+      >
+        Sign Out
+      </BtnLink>
+    </Panel>
+  </Flex>
+</Grid>
+
+<script>
+  (() => {
+    const key = 'purestack-sample-auth'
+    localStorage.setItem(key, 'signed-in')
+    document.documentElement.classList.add('signed-in')
+  })()
+</script>

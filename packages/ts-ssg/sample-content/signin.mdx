@@ -1,0 +1,114 @@
+---
+title: Sign In
+description: Sign in to your PureStack workspace.
+nav:
+  hidden: true
+layout:
+  fullWidth: true
+  showToc: false
+---
+
+<Grid columns="1" columnsLg="auto 1fr" alignItems="center">
+  <LoginPanel>
+    <template #header>
+      <LoginHeader
+        badge="PureStack Account"
+        title="Sign in"
+        description="Use your email and password to continue."/>
+    </template>
+
+    <template #form>
+      <AppForm
+        class="p-4"
+        action="/account/"
+        method="post"
+        tone="accent"
+        variant="surface"
+      >
+        <FormInputField
+          label="Email"
+          type="email"
+          name="email"
+          placeholder="you@company.dev"
+          autocomplete="email"
+          icon="lucide:mail"
+          required="true"/>
+        <FormInputField
+          label="Password"
+          type="password"
+          name="password"
+          placeholder="Enter your password"
+          autocomplete="current-password"
+          icon="lucide:lock-keyhole"
+          required="true"/>
+        <FormMeta>
+          <FormCheck label="Remember this device" name="remember" value="yes"/>
+          <FormAssistLink href="/settings/" label="Need help?"/>
+        </FormMeta>
+        <FormSubmit label="Sign In" tone="accent" variant="solid"/>
+        <FormStatus tone="success" hidden="true">
+          Signed in. Redirecting to your account.
+        </FormStatus>
+      </AppForm>
+    </template>
+
+    <template #divider>
+      <FormDivider label="or"/>
+    </template>
+
+    <template #providers>
+      <LoginProvider label="Continue with GitHub"/>
+      <LoginProvider label="Continue with SSO"/>
+    </template>
+
+    <template #footer>
+      <LoginFooter
+        text="New to PureStack?"
+        linkLabel="Create an account"
+        linkHref="/signup/"/>
+    </template>
+  </LoginPanel>
+
+  <LandingSection
+    eyebrow="Welcome Back"
+    title="Return to your workspace with everything exactly where you left it."
+    subtitle="Review launches, resume implementation notes, and keep your team's stack moving from one focused account surface."
+    columns="1"
+  >
+    <MetricStrip columns="1" columnsSm="3" tone="accent" variant="surface">
+      <MetricItem
+        icon="lucide:shield-check"
+        label="Sessions"
+        value="Protected"
+        detail="Remembered only on trusted devices."/>
+      <MetricItem
+        icon="lucide:sparkles"
+        label="Workspace"
+        value="Ready"
+        detail="Search, docs, and settings stay close."/>
+      <MetricItem
+        icon="lucide:badge-check"
+        label="Profile"
+        value="Synced"
+        detail="Preferences travel with your account."/>
+    </MetricStrip>
+  </LandingSection>
+</Grid>
+
+<script>
+  (() => {
+    const key = 'purestack-sample-auth'
+    const form = document.querySelector('.login-panel .form-block')
+    const status = document.querySelector('.login-panel .form-status')
+
+    form?.addEventListener('submit', (event) => {
+      event.preventDefault()
+      localStorage.setItem(key, 'signed-in')
+      document.documentElement.classList.add('signed-in')
+      status?.removeAttribute('hidden')
+      window.setTimeout(() => {
+        window.location.href = '/account/'
+      }, 450)
+    })
+  })()
+</script>

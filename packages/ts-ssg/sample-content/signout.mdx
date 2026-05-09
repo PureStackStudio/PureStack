@@ -1,0 +1,35 @@
+---
+title: Sign Out
+description: Sign out of your PureStack workspace.
+nav:
+  hidden: true
+layout:
+  fullWidth: true
+  showToc: false
+---
+
+<SectionHeader
+  eyebrow="Session Ended"
+  title="You are signed out"
+  subtitle="The topbar is back in its signed-out state. Sign in again whenever you are ready to continue."
+  class="mb-3"
+>
+  <Flex>
+    <BtnLink href="/signin/" tone="accent" icon="lucide:log-in">
+      Sign In Again
+    </BtnLink>
+    <BtnLink href="/" tone="neutral" variant="outline">Go Home</BtnLink>
+  </Flex>
+</SectionHeader>
+
+<AlertBox tone="success" title="Signed out">
+  Your workspace session has ended for this browser.
+</AlertBox>
+
+<script>
+  (() => {
+    const key = 'purestack-sample-auth'
+    localStorage.removeItem(key)
+    document.documentElement.classList.remove('signed-in')
+  })()
+</script>

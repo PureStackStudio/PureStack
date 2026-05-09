@@ -23,10 +23,13 @@ describe('SignIn rendering', () => {
 
     expect(html).toContain('class="sign-in"')
     expect(html).toContain('aria-label="Account menu"')
-    expect(html).toContain('data-icon="lucide:circle-user-round"')
+    expect(html).toContain('data-icon="lucide:log-in"')
+    expect(html).toContain('data-icon="tabler:user-filled"')
+    expect(html).toContain('href="/signin/"')
+    expect(html).toContain('href="/signup/"')
     expect(html).toContain('href="/account/"')
-    expect(html).toContain('href="/account/settings/"')
-    expect(html).toContain('href="/sign-out/"')
+    expect(html).toContain('href="/settings/"')
+    expect(html).toContain('href="/signout/"')
   })
 
   it('renders a supplied avatar image and custom menu content', () => {
@@ -50,6 +53,6 @@ describe('SignIn rendering', () => {
     expect(html).toContain('src="/me.png"')
     expect(html).toContain('alt="Ada Lovelace"')
     expect(html).toContain('href="/billing/"')
-    expect(html).not.toContain('href="/account/settings/"')
+    expect(html).not.toContain('href="/settings/"')
   })
 })
