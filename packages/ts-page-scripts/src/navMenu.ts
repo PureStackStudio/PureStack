@@ -19,6 +19,8 @@ const EDGE_OPEN_THRESHOLD_FALLBACK_PX = Number.parseFloat(
   docLayoutDefaults.defaultRailWidth,
 )
 
+applyStoredDocLayoutPreferences()
+
 function ready(fn: () => void) {
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', fn, { once: true })
@@ -28,8 +30,6 @@ function ready(fn: () => void) {
 }
 
 function init() {
-  applyStoredDocLayoutPreferences()
-
   const menu = document.querySelector<HTMLElement>('.nav__menu')
   if (!menu) return
   const sidebar = menu.closest<HTMLElement>('.doc-sidebar')

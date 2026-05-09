@@ -4,7 +4,9 @@ export const DOC_LAYOUT_NAV_WIDTH_STORAGE_KEY = 'ts-ssg:doc-layout:nav-width'
 export const DOC_LAYOUT_TOC_WIDTH_STORAGE_KEY = 'ts-ssg:doc-layout:toc-width'
 
 export function readDocLayoutPxVar(name: string, fallback: number) {
-  const raw = getComputedStyle(document.body).getPropertyValue(name).trim()
+  const raw = getComputedStyle(document.documentElement)
+    .getPropertyValue(name)
+    .trim()
   const value = Number.parseFloat(raw)
   return Number.isFinite(value) ? value : fallback
 }
@@ -35,7 +37,7 @@ function applyStoredLengthPreference(
   const min = readDocLayoutPxVar(minVar, stored)
   const max = readDocLayoutPxVar(maxVar, stored)
   const clamped = clamp(stored, min, max)
-  document.body.style.setProperty(cssVar, `${clamped}px`)
+  document.documentElement.style.setProperty(cssVar, `${clamped}px`)
 }
 
 function readStoredPixelValue(storageKey: string) {

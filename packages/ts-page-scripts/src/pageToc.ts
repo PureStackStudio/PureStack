@@ -28,6 +28,8 @@ const ACTIVE_SCROLL_OFFSET = 110
 const FLASH_DURATION_MS = 1400
 const MANUAL_ACTIVE_LOCK_MS = 900
 
+applyStoredDocLayoutPreferences()
+
 function ready(fn: () => void) {
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', fn, { once: true })
@@ -37,8 +39,6 @@ function ready(fn: () => void) {
 }
 
 function init() {
-  applyStoredDocLayoutPreferences()
-
   const toc = document.querySelector<HTMLElement>('.page-toc')
   if (!toc) {
     document.body.classList.remove(BODY_TOC_OPEN_CLASS)
