@@ -5,6 +5,7 @@ template: doc
 hidden: true
 nav:
   hidden: true
+  icon: iconoir:page
 layout:
   navMode: sidebar
   showToc: true

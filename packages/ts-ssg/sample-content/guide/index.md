@@ -3,6 +3,8 @@ title: Overview
 layout:
   showToc: true
   fullWidth: true
+nav:
+  icon: iconoir:book
 ---
 
 This is a simple Markdown page.

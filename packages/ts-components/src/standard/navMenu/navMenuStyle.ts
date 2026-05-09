@@ -25,6 +25,19 @@ export function registerNavShellStyles(
   options: ThemeOptions,
 ) {
   styleBuilder
+    .select('li.nav__item', theme)
+    .marginInlineStart('-0.5rem')
+    .marginInlineEnd('-0.5rem')
+  styleBuilder
+    .select('li.nav__item .icon', theme)
+    .width('1.3em')
+    .height('1.3em')
+  styleBuilder.select('li.nav__item .btn', theme).gap('0.5em').padding('0.5em')
+  styleBuilder
+    .select('.nav__list .nav__list li.nav__item', theme)
+    .marginInlineStart('0.75rem')
+    .marginInlineEnd('0rem')
+  styleBuilder
     .select('.nav__menu', theme)
     .display('block')
     .padding('1em')
@@ -258,7 +271,6 @@ export function registerNavShellStyles(
     .listStyle('none')
     .margin('0')
     .padding('0')
-  styleBuilder.select('.nav__list .nav__list', theme).paddingLeft('0.75em')
   styleBuilder
     .select('.template-doc--has-nav .doc-sidebar .nav__menu', theme)
     .media(mediaBelow(BREAKPOINTS.lg))

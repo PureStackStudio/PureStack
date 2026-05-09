@@ -5,6 +5,7 @@ layout:
   fullWidth: true
 nav:
   order: 7
+  icon: iconoir:code
 ---
 
 ## Log Levels

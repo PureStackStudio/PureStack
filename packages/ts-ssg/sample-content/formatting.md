@@ -5,6 +5,7 @@ layout:
   fullWidth: true
 nav:
   order: 6
+  icon: iconoir:text
 ---
 
 ## Color & Styling

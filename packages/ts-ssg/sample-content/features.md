@@ -5,6 +5,7 @@ layout:
   fullWidth: true
 nav:
   order: 4
+  icon: iconoir:spark
 ---
 
 ## What Is a Logger and Why You Need One

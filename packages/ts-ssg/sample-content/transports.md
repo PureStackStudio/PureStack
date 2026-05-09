@@ -6,6 +6,7 @@ layout:
   fullWidth: true
 nav:
   order: 5
+  icon: iconoir:network
 ---
 
 LogPot uses **Transports** to manage the delivery of log entries to various sinks (console, files, HTTP endpoints, etc.). Transports derive from a common abstract base class and share a consistent set of behaviors and configuration options.
