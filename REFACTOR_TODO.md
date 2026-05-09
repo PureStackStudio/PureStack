@@ -12,7 +12,6 @@ The chart components each carry local helpers for resolving common prop shapes:
 
 - `readNumber`
 - `resolveText`
-- `resolveBoolean`
 - `resolveSize`
 - `formatValue`
 - coordinate/number formatting such as `fmt`, `formatCoordinate`, and `formatPoint`
@@ -218,15 +217,15 @@ Suggested direction:
 
 Boolean-like props currently differ:
 
-- chart booleans treat `"false"`, `"0"`, and `"off"` as false
+- chart booleans now use direct prop defaults on the original prop names
 - flex/grid toggles mostly check `true` and `"true"`
-- doughnut has `resolveAnimated` with a chart-specific default
+- doughnut no longer needs a separate `isAnimated` alias
 
 Suggested direction:
 
-- Create a shared `resolveBooleanProp(value, fallback)` helper.
-- Use it for chart toggles first.
-- Decide separately whether flex/grid should keep their narrower interpretation or move to the same semantics.
+- Avoid introducing a chart boolean helper.
+- Prefer assigning defaults in the resolved object, then spreading props, for example `{ animated: true, ...props }`.
+- Decide separately whether flex/grid should keep their current narrower interpretation or move to direct defaulted props too.
 
 ## 13. Consolidate SVG Accessibility Defaults
 

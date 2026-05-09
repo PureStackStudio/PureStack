@@ -13,7 +13,6 @@ import {
   formatChartPoint,
   formatChartValue,
   readChartNumber,
-  resolveChartBoolean,
   resolveChartSize,
   resolveChartText,
 } from '../chart/chartUtils'
@@ -89,19 +88,13 @@ export interface LineChart {
   variantMode?: RefOrValue<ComponentVariantMode>
   classes?: ComputedRef<string>
   resolvedWidth?: ComputedRef<string | number>
-  resolvedHeight?: ComputedRef<string | number>
+  resolvedHeight?: ComputedRef<string | number | undefined>
   resolvedAriaLabel?: ComputedRef<string>
   resolvedEmptyLabel?: ComputedRef<string>
   chartSeries?: ComputedRef<ResolvedLineChartSeries[]>
   gridLines?: ComputedRef<ResolvedLineChartGridLine[]>
   xLabels?: ComputedRef<ResolvedLineChartLabel[]>
   hasSeries?: ComputedRef<boolean>
-  isAnimated?: ComputedRef<boolean>
-  shouldShowArea?: ComputedRef<boolean>
-  shouldShowPoints?: ComputedRef<boolean>
-  shouldShowValues?: ComputedRef<boolean>
-  shouldShowLabels?: ComputedRef<boolean>
-  shouldShowAxis?: ComputedRef<boolean>
   zeroLineY?: ComputedRef<number>
 }
 
@@ -140,20 +133,20 @@ const lineChartTemplate = svg`<svg
 >
   <title r-if="title">{{ title }}</title>
   <desc r-if="description">{{ description }}</desc>
-  <g class="line-chart__grid" r-if="hasSeries && shouldShowAxis">
+  <g class="line-chart__grid" r-if="hasSeries && showAxis">
     <g r-for="line in gridLines" class="line-chart__grid-line">
       <line x1="8" x2="94" :y1="line.y" :y2="line.y"/>
       <text x="5.4" :y="line.y">{{ line.formattedValue }}</text>
     </g>
   </g>
   <line
-    r-if="hasSeries && shouldShowAxis"
+    r-if="hasSeries && showAxis"
     class="line-chart__zero-line"
     x1="8"
     x2="94"
     :y1="zeroLineY"
     :y2="zeroLineY"/>
-  <g class="line-chart__areas" r-if="hasSeries && shouldShowArea">
+  <g class="line-chart__areas" r-if="hasSeries && showArea">
     <path
       r-for="item in chartSeries"
       class="line-chart__area"
@@ -162,7 +155,7 @@ const lineChartTemplate = svg`<svg
       :aria-label="item.label"
     >
       <animate
-        r-if="isAnimated"
+        r-if="animated"
         attributeName="opacity"
         from="0"
         to="1"
@@ -180,7 +173,7 @@ const lineChartTemplate = svg`<svg
     >
       <title r-text="item.label"></title>
       <animate
-        r-if="isAnimated"
+        r-if="animated"
         attributeName="opacity"
         from="0"
         to="1"
@@ -188,7 +181,7 @@ const lineChartTemplate = svg`<svg
         fill="freeze"/>
     </path>
   </g>
-  <g class="line-chart__points" r-if="hasSeries && shouldShowPoints">
+  <g class="line-chart__points" r-if="hasSeries && showPoints">
     <g r-for="item in chartSeries" class="line-chart__point-series">
       <circle
         r-for="point in item.points"
@@ -203,7 +196,7 @@ const lineChartTemplate = svg`<svg
           r-text="item.label + ', ' + point.label + ': ' + point.formattedValue"
         ></title>
         <animate
-          r-if="isAnimated"
+          r-if="animated"
           attributeName="r"
           from="0"
           to="0.9"
@@ -212,7 +205,7 @@ const lineChartTemplate = svg`<svg
       </circle>
     </g>
   </g>
-  <g class="line-chart__values" r-if="hasSeries && shouldShowValues">
+  <g class="line-chart__values" r-if="hasSeries && showValues">
     <g r-for="item in chartSeries" class="line-chart__value-series">
       <text
         r-for="point in item.points"
@@ -226,7 +219,7 @@ const lineChartTemplate = svg`<svg
       </text>
     </g>
   </g>
-  <g class="line-chart__labels" r-if="hasSeries && shouldShowLabels">
+  <g class="line-chart__labels" r-if="hasSeries && showLabels">
     <text
       r-for="label in xLabels"
       class="line-chart__label"
@@ -287,6 +280,12 @@ function resolveLineChart(props: LineChart): LineChart {
   const chartSeries = computed(() => resolveChartSeries(props, domain()))
 
   return {
+    animated: true,
+    showArea: false,
+    showPoints: true,
+    showValues: false,
+    showLabels: true,
+    showAxis: true,
     ...props,
     classes: computed(() =>
       resolveComponentClasses(props, {
@@ -308,18 +307,6 @@ function resolveLineChart(props: LineChart): LineChart {
     gridLines: computed(() => resolveGridLines(domain(), props.valueSuffix)),
     xLabels: computed(() => resolveXLabels(chartSeries())),
     hasSeries: computed(() => chartSeries().length > 0),
-    isAnimated: computed(() => resolveChartBoolean(props.animated, true)),
-    shouldShowArea: computed(() => resolveChartBoolean(props.showArea, false)),
-    shouldShowPoints: computed(() =>
-      resolveChartBoolean(props.showPoints, true),
-    ),
-    shouldShowValues: computed(() =>
-      resolveChartBoolean(props.showValues, false),
-    ),
-    shouldShowLabels: computed(() =>
-      resolveChartBoolean(props.showLabels, true),
-    ),
-    shouldShowAxis: computed(() => resolveChartBoolean(props.showAxis, true)),
     zeroLineY: computed(() => valueToY(0, domain())),
   }
 }

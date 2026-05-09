@@ -14,7 +14,6 @@ import {
   formatChartPoint,
   formatChartValue,
   readChartNumber,
-  resolveChartBoolean,
   resolveChartCssSize,
   resolveChartSize,
   resolveChartText,
@@ -72,7 +71,6 @@ export interface DoughnutChart {
   hasSeparators?: ComputedRef<boolean>
   separatorMaskId?: string
   separatorMaskUrl?: ComputedRef<string | undefined>
-  isAnimated?: ComputedRef<boolean>
   hasSegments?: ComputedRef<boolean>
   total?: ComputedRef<number>
   centerValueText?: ComputedRef<string>
@@ -137,14 +135,14 @@ const doughnutChartTemplate = svg`<svg
   </defs>
   <g class="doughnut-chart__plot" :mask="separatorMaskUrl">
     <animate
-      r-if="isAnimated"
+      r-if="animated"
       attributeName="opacity"
       from="0"
       to="1"
       dur="560ms"
       fill="freeze"/>
     <animateTransform
-      r-if="isAnimated"
+      r-if="animated"
       attributeName="transform"
       type="rotate"
       from="-90 50 50"
@@ -170,7 +168,7 @@ const doughnutChartTemplate = svg`<svg
   </g>
   <g class="doughnut-chart__center" r-if="centerValueText || centerLabel">
     <animate
-      r-if="isAnimated"
+      r-if="animated"
       attributeName="opacity"
       from="0"
       to="1"
@@ -254,6 +252,7 @@ function resolveDoughnutChart(props: DoughnutChart): DoughnutChart {
   )
 
   return {
+    animated: true,
     ...props,
     classes: computed(() =>
       resolveComponentClasses(props, {
@@ -271,7 +270,6 @@ function resolveDoughnutChart(props: DoughnutChart): DoughnutChart {
     total,
     chartSegments,
     separators,
-    isAnimated: computed(() => resolveChartBoolean(props.animated, true)),
     hasSeparators: computed(() => separators().length > 0),
     separatorMaskId,
     separatorMaskUrl: computed(() =>

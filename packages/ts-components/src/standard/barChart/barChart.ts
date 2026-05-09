@@ -11,7 +11,6 @@ import {
 import {
   formatChartValue,
   readChartNumber,
-  resolveChartBoolean,
   resolveChartSize,
   resolveChartText,
 } from '../chart/chartUtils'
@@ -70,16 +69,12 @@ export interface BarChart {
   variantMode?: RefOrValue<ComponentVariantMode>
   classes?: ComputedRef<string>
   resolvedWidth?: ComputedRef<string | number>
-  resolvedHeight?: ComputedRef<string | number>
+  resolvedHeight?: ComputedRef<string | number | undefined>
   resolvedAriaLabel?: ComputedRef<string>
   resolvedEmptyLabel?: ComputedRef<string>
   chartItems?: ComputedRef<ResolvedBarChartItem[]>
   gridLines?: ComputedRef<ResolvedBarChartGridLine[]>
   hasItems?: ComputedRef<boolean>
-  isAnimated?: ComputedRef<boolean>
-  shouldShowValues?: ComputedRef<boolean>
-  shouldShowLabels?: ComputedRef<boolean>
-  shouldShowAxis?: ComputedRef<boolean>
   zeroLineY?: ComputedRef<number>
 }
 
@@ -119,14 +114,14 @@ const barChartTemplate = svg`<svg
 >
   <title r-if="title">{{ title }}</title>
   <desc r-if="description">{{ description }}</desc>
-  <g class="bar-chart__grid" r-if="hasItems && shouldShowAxis">
+  <g class="bar-chart__grid" r-if="hasItems && showAxis">
     <g r-for="line in gridLines" class="bar-chart__grid-line">
       <line x1="8" x2="94" :y1="line.y" :y2="line.y"/>
       <text x="5.4" :y="line.y">{{ line.formattedValue }}</text>
     </g>
   </g>
   <line
-    r-if="hasItems && shouldShowAxis"
+    r-if="hasItems && showAxis"
     class="bar-chart__zero-line"
     x1="8"
     x2="94"
@@ -147,7 +142,7 @@ const barChartTemplate = svg`<svg
     >
       <title r-text="item.label + ': ' + item.formattedValue"></title>
       <animate
-        r-if="isAnimated"
+        r-if="animated"
         attributeName="height"
         from="0"
         :to="item.height"
@@ -157,7 +152,7 @@ const barChartTemplate = svg`<svg
         keySplines="0.16 1 0.3 1"
         fill="freeze"/>
       <animate
-        r-if="isAnimated"
+        r-if="animated"
         attributeName="y"
         :from="zeroLineY"
         :to="item.y"
@@ -168,7 +163,7 @@ const barChartTemplate = svg`<svg
         fill="freeze"/>
     </rect>
   </g>
-  <g class="bar-chart__values" r-if="hasItems && shouldShowValues">
+  <g class="bar-chart__values" r-if="hasItems && showValues">
     <text
       r-for="item in chartItems"
       class="bar-chart__value"
@@ -180,7 +175,7 @@ const barChartTemplate = svg`<svg
       {{ item.formattedValue }}
     </text>
   </g>
-  <g class="bar-chart__labels" r-if="hasItems && shouldShowLabels">
+  <g class="bar-chart__labels" r-if="hasItems && showLabels">
     <text
       r-for="item in chartItems"
       class="bar-chart__label"
@@ -237,6 +232,10 @@ function resolveBarChart(props: BarChart): BarChart {
   const domain = computed(() => resolveDomain(props))
 
   return {
+    animated: true,
+    showValues: true,
+    showLabels: true,
+    showAxis: true,
     ...props,
     classes: computed(() =>
       resolveComponentClasses(props, {
@@ -257,14 +256,6 @@ function resolveBarChart(props: BarChart): BarChart {
     chartItems: computed(() => resolveChartItems(props, domain())),
     gridLines: computed(() => resolveGridLines(domain(), props.valueSuffix)),
     hasItems: computed(() => resolveItems(props.items).length > 0),
-    isAnimated: computed(() => resolveChartBoolean(props.animated, true)),
-    shouldShowValues: computed(() =>
-      resolveChartBoolean(props.showValues, true),
-    ),
-    shouldShowLabels: computed(() =>
-      resolveChartBoolean(props.showLabels, true),
-    ),
-    shouldShowAxis: computed(() => resolveChartBoolean(props.showAxis, true)),
     zeroLineY: computed(() => valueToY(0, domain())),
   }
 }

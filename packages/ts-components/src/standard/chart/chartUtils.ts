@@ -31,18 +31,6 @@ export function resolveChartText(value?: RefOrValue<string>) {
   return typeof resolved === 'string' ? resolved.trim() : ''
 }
 
-export function resolveChartBoolean(
-  value: RefOrValue<boolean | string> | undefined,
-  fallback: boolean,
-) {
-  const resolved = unref(value)
-  if (typeof resolved === 'boolean') return resolved
-  if (typeof resolved !== 'string') return fallback
-  const normalized = resolved.trim().toLowerCase()
-  if (!normalized) return fallback
-  return normalized !== 'false' && normalized !== '0' && normalized !== 'off'
-}
-
 export function resolveChartSize(
   size: RefOrValue<number | string> | undefined,
   fallback: number | string | undefined,
