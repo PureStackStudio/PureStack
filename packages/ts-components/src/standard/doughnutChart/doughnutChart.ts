@@ -8,6 +8,17 @@ import {
   svg,
   unref,
 } from 'regor'
+import {
+  clampChartNumber,
+  formatChartNumber,
+  formatChartPoint,
+  formatChartValue,
+  readChartNumber,
+  resolveChartBoolean,
+  resolveChartCssSize,
+  resolveChartSize,
+  resolveChartText,
+} from '../chart/chartUtils'
 import type {
   ComponentVariant,
   ComponentVariantMode,
@@ -231,7 +242,7 @@ export function defineDoughnutChartComponents() {
 function resolveDoughnutChart(props: DoughnutChart): DoughnutChart {
   const separatorMaskId = resolveDoughnutChartMaskId()
   const thickness = computed(() =>
-    clampNumber(props.thickness, DEFAULT_CHART_THICKNESS, 2, 40),
+    clampChartNumber(props.thickness, DEFAULT_CHART_THICKNESS, 2, 40),
   )
   const innerRadius = computed(() => CHART_OUTER_RADIUS - thickness())
   const total = computed(() => resolveTotal(props.segments))
@@ -250,15 +261,17 @@ function resolveDoughnutChart(props: DoughnutChart): DoughnutChart {
         defaultVariantMode: 'stateless',
       }),
     ),
-    resolvedSize: computed(() => resolveSize(props.size)),
+    resolvedSize: computed(() =>
+      resolveChartSize(props.size, DEFAULT_CHART_SIZE),
+    ),
     resolvedAriaLabel: computed(() => resolveAriaLabel(props)),
     resolvedEmptyLabel: computed(
-      () => resolveText(props.emptyLabel) || DEFAULT_EMPTY_LABEL,
+      () => resolveChartText(props.emptyLabel) || DEFAULT_EMPTY_LABEL,
     ),
     total,
     chartSegments,
     separators,
-    isAnimated: computed(() => resolveAnimated(props.animated)),
+    isAnimated: computed(() => resolveChartBoolean(props.animated, true)),
     hasSeparators: computed(() => separators().length > 0),
     separatorMaskId,
     separatorMaskUrl: computed(() =>
@@ -276,14 +289,6 @@ function resolveDoughnutChart(props: DoughnutChart): DoughnutChart {
   }
 }
 
-function resolveAnimated(value?: RefOrValue<boolean | string>) {
-  const resolved = unref(value)
-  if (resolved === false) return false
-  if (typeof resolved !== 'string') return true
-  const normalized = resolved.trim().toLowerCase()
-  return normalized !== 'false' && normalized !== '0' && normalized !== 'off'
-}
-
 function resolveDoughnutChartMaskId() {
   const id = `doughnut-chart-mask-${nextAutoDoughnutChartMaskId}`
   nextAutoDoughnutChartMaskId += 1
@@ -297,8 +302,11 @@ function resolveChartSegments(
 ): ResolvedDoughnutChartSegment[] {
   if (total <= 0) return []
 
-  const startAngle = readNumber(props.startAngle, DEFAULT_CHART_START_ANGLE)
-  const valueSuffix = resolveText(props.valueSuffix)
+  const startAngle = readChartNumber(
+    props.startAngle,
+    DEFAULT_CHART_START_ANGLE,
+  )
+  const valueSuffix = resolveChartText(props.valueSuffix)
   let cursor = startAngle
 
   return resolvePositiveSegments(props.segments).map((segment, index) => {
@@ -334,10 +342,10 @@ function resolveSeparators(
 ): ResolvedDoughnutChartSeparator[] {
   if (segments.length < 2) return []
 
-  const gap = clampNumber(props.gap, DEFAULT_CHART_GAP, 0, 24)
+  const gap = clampChartNumber(props.gap, DEFAULT_CHART_GAP, 0, 24)
   if (gap <= 0) return []
 
-  let cursor = readNumber(props.startAngle, DEFAULT_CHART_START_ANGLE)
+  let cursor = readChartNumber(props.startAngle, DEFAULT_CHART_START_ANGLE)
   return segments.flatMap((segment, index) => {
     const previousSegment = segments.at(index - 1) || segment
     const width = resolveAdaptiveSeparatorWidth(
@@ -440,11 +448,11 @@ function resolvePositiveSegments(
   return (unref(segments) || [])
     .map((segmentInput, index) => {
       const segment = unref(segmentInput)
-      const value = readNumber(segment?.value, 0)
+      const value = readChartNumber(segment?.value, 0)
       return {
-        label: resolveText(segment?.label) || `Segment ${index + 1}`,
+        label: resolveChartText(segment?.label) || `Segment ${index + 1}`,
         value: value > 0 ? value : 0,
-        color: resolveText(segment?.color),
+        color: resolveChartText(segment?.color),
       }
     })
     .filter((segment) => segment.value > 0)
@@ -458,45 +466,23 @@ function resolveTotal(segments: DoughnutChart['segments']) {
 }
 
 function resolveCenterValue(props: DoughnutChart, total: number) {
-  const explicit = resolveText(props.centerValue)
+  const explicit = resolveChartText(props.centerValue)
   if (explicit) return explicit
   if (total <= 0) return ''
-  return formatSegmentValue(total, resolveText(props.valueSuffix))
+  return formatSegmentValue(total, resolveChartText(props.valueSuffix))
 }
 
 function resolveAriaLabel(props: DoughnutChart) {
   return (
-    resolveText(props.ariaLabel) || resolveText(props.title) || 'Doughnut chart'
+    resolveChartText(props.ariaLabel) ||
+    resolveChartText(props.title) ||
+    'Doughnut chart'
   )
 }
 
-function resolveSize(size?: RefOrValue<number | string>) {
-  const resolved = unref(size)
-  if (typeof resolved === 'number' && Number.isFinite(resolved)) {
-    return Math.max(1, resolved)
-  }
-  if (typeof resolved !== 'string') return DEFAULT_CHART_SIZE
-  const trimmed = resolved.trim()
-  return trimmed || DEFAULT_CHART_SIZE
-}
-
 function resolveFontSizeStyle(size?: RefOrValue<number | string>) {
-  const fontSize = resolveCssSize(size)
+  const fontSize = resolveChartCssSize(size)
   return fontSize ? { fontSize } : undefined
-}
-
-function resolveCssSize(size?: RefOrValue<number | string>) {
-  const resolved = unref(size)
-  if (typeof resolved === 'number' && Number.isFinite(resolved)) {
-    return `${resolved}px`
-  }
-  if (typeof resolved !== 'string') return ''
-  const trimmed = resolved.trim()
-  return isNumericString(trimmed) ? `${trimmed}px` : trimmed
-}
-
-function isNumericString(value: string) {
-  return /^-?\d+(?:\.\d+)?$/.test(value)
 }
 
 function fullRingPath(outerRadius: number, innerRadius: number) {
@@ -546,40 +532,13 @@ function pointAtAngle(radius: number, angle: number) {
 }
 
 function formatPoint(point: { x: number; y: number }) {
-  return `${fmt(point.x)} ${fmt(point.y)}`
+  return formatChartPoint(point, { precision: 3 })
 }
 
 function formatSegmentValue(value: number, suffix: string) {
-  const formatted = Number.isInteger(value) ? String(value) : fmt(value)
-  return suffix ? `${formatted}${suffix}` : formatted
-}
-
-function clampNumber(
-  value: RefOrValue<number | string> | undefined,
-  fallback: number,
-  min: number,
-  max: number,
-) {
-  return Math.min(Math.max(readNumber(value, fallback), min), max)
-}
-
-function readNumber(
-  value: RefOrValue<number | string> | undefined,
-  fallback: number,
-) {
-  const resolved = unref(value)
-  const number =
-    typeof resolved === 'number'
-      ? resolved
-      : Number.parseFloat(String(resolved))
-  return Number.isFinite(number) ? number : fallback
-}
-
-function resolveText(value?: RefOrValue<string>) {
-  const resolved = unref(value)
-  return typeof resolved === 'string' ? resolved.trim() : ''
+  return formatChartValue(value, suffix, { precision: 3 })
 }
 
 function fmt(value: number) {
-  return Number.parseFloat(value.toFixed(3)).toString()
+  return formatChartNumber(value, { precision: 3 })
 }

@@ -8,6 +8,13 @@ import {
   svg,
   unref,
 } from 'regor'
+import {
+  formatChartValue,
+  readChartNumber,
+  resolveChartBoolean,
+  resolveChartSize,
+  resolveChartText,
+} from '../chart/chartUtils'
 import type {
   ComponentVariant,
   ComponentVariantMode,
@@ -84,7 +91,7 @@ const PLOT_HEIGHT = 43
 const LABEL_Y = 53.5
 const VALUE_LABEL_OFFSET = 2.4
 const DEFAULT_CHART_WIDTH = '100%'
-const DEFAULT_CHART_HEIGHT = undefined
+const DEFAULT_CHART_HEIGHT = undefined //auto height
 const DEFAULT_EMPTY_LABEL = 'No data'
 const DEFAULT_GRID_LINE_COUNT = 5
 const BAR_WIDTH_SHARE = 0.64
@@ -238,22 +245,26 @@ function resolveBarChart(props: BarChart): BarChart {
       }),
     ),
     resolvedWidth: computed(() =>
-      resolveSize(props.width, DEFAULT_CHART_WIDTH),
+      resolveChartSize(props.width, DEFAULT_CHART_WIDTH),
     ),
     resolvedHeight: computed(() =>
-      resolveSize(props.height, DEFAULT_CHART_HEIGHT),
+      resolveChartSize(props.height, DEFAULT_CHART_HEIGHT),
     ),
     resolvedAriaLabel: computed(() => resolveAriaLabel(props)),
     resolvedEmptyLabel: computed(
-      () => resolveText(props.emptyLabel) || DEFAULT_EMPTY_LABEL,
+      () => resolveChartText(props.emptyLabel) || DEFAULT_EMPTY_LABEL,
     ),
     chartItems: computed(() => resolveChartItems(props, domain())),
     gridLines: computed(() => resolveGridLines(domain(), props.valueSuffix)),
     hasItems: computed(() => resolveItems(props.items).length > 0),
-    isAnimated: computed(() => resolveBoolean(props.animated, true)),
-    shouldShowValues: computed(() => resolveBoolean(props.showValues, true)),
-    shouldShowLabels: computed(() => resolveBoolean(props.showLabels, true)),
-    shouldShowAxis: computed(() => resolveBoolean(props.showAxis, true)),
+    isAnimated: computed(() => resolveChartBoolean(props.animated, true)),
+    shouldShowValues: computed(() =>
+      resolveChartBoolean(props.showValues, true),
+    ),
+    shouldShowLabels: computed(() =>
+      resolveChartBoolean(props.showLabels, true),
+    ),
+    shouldShowAxis: computed(() => resolveChartBoolean(props.showAxis, true)),
     zeroLineY: computed(() => valueToY(0, domain())),
   }
 }
@@ -272,7 +283,7 @@ function resolveChartItems(
 
   const laneWidth = PLOT_WIDTH / items.length
   const barWidth = Math.max(1, laneWidth * BAR_WIDTH_SHARE)
-  const valueSuffix = resolveText(props.valueSuffix)
+  const valueSuffix = resolveChartText(props.valueSuffix)
   const zeroY = valueToY(0, domain)
 
   return items.map((item, index) => {
@@ -292,7 +303,7 @@ function resolveChartItems(
     return {
       label: item.label,
       value: item.value,
-      formattedValue: formatValue(item.value, valueSuffix),
+      formattedValue: formatChartValue(item.value, valueSuffix),
       color:
         item.color || DEFAULT_BAR_COLORS[index % DEFAULT_BAR_COLORS.length],
       x,
@@ -319,11 +330,11 @@ function resolveItems(items: BarChart['items']): ResolvedBarChartSourceItem[] {
   return (unref(items) || [])
     .map((itemInput, index) => {
       const item = unref(itemInput)
-      const value = readNumber(item?.value, Number.NaN)
+      const value = readChartNumber(item?.value, Number.NaN)
       return {
-        label: resolveText(item?.label) || `Item ${index + 1}`,
+        label: resolveChartText(item?.label) || `Item ${index + 1}`,
         value,
-        color: resolveText(item?.color),
+        color: resolveChartText(item?.color),
       }
     })
     .filter((item) => Number.isFinite(item.value))
@@ -334,12 +345,12 @@ function resolveDomain(props: BarChart): ChartDomain {
   const fallbackMax = values.length ? Math.max(...values) : 1
   const fallbackMin = values.length ? Math.min(...values) : 0
   let min = Math.min(
-    readNumber(props.minValue, Math.min(0, fallbackMin)),
+    readChartNumber(props.minValue, Math.min(0, fallbackMin)),
     fallbackMin,
     0,
   )
   let max = Math.max(
-    readNumber(props.maxValue, Math.max(0, fallbackMax)),
+    readChartNumber(props.maxValue, Math.max(0, fallbackMax)),
     fallbackMax,
     0,
   )
@@ -359,14 +370,14 @@ function resolveGridLines(
   domain: ChartDomain,
   valueSuffix: BarChart['valueSuffix'],
 ): ResolvedBarChartGridLine[] {
-  const suffix = resolveText(valueSuffix)
+  const suffix = resolveChartText(valueSuffix)
   const step = (domain.max - domain.min) / (DEFAULT_GRID_LINE_COUNT - 1)
 
   return Array.from({ length: DEFAULT_GRID_LINE_COUNT }, (_, index) => {
     const value = domain.max - step * index
     return {
       value,
-      formattedValue: formatValue(value, suffix),
+      formattedValue: formatChartValue(value, suffix),
       y: valueToY(value, domain),
     }
   })
@@ -380,56 +391,9 @@ function valueToY(value: number, domain: ChartDomain) {
 }
 
 function resolveAriaLabel(props: BarChart) {
-  return resolveText(props.ariaLabel) || resolveText(props.title) || 'Bar chart'
-}
-
-function resolveSize(
-  size: RefOrValue<number | string> | undefined,
-  fallback: number | string,
-) {
-  const resolved = unref(size)
-  if (typeof resolved === 'number' && Number.isFinite(resolved)) {
-    return Math.max(1, resolved)
-  }
-  if (typeof resolved !== 'string') return fallback
-  const trimmed = resolved.trim()
-  return trimmed || fallback
-}
-
-function resolveBoolean(
-  value: RefOrValue<boolean | string> | undefined,
-  fallback: boolean,
-) {
-  const resolved = unref(value)
-  if (typeof resolved === 'boolean') return resolved
-  if (typeof resolved !== 'string') return fallback
-  const normalized = resolved.trim().toLowerCase()
-  if (!normalized) return fallback
-  return normalized !== 'false' && normalized !== '0' && normalized !== 'off'
-}
-
-function readNumber(
-  value: RefOrValue<number | string> | undefined,
-  fallback: number,
-) {
-  const resolved = unref(value)
-  const number =
-    typeof resolved === 'number'
-      ? resolved
-      : Number.parseFloat(String(resolved))
-  return Number.isFinite(number) ? number : fallback
-}
-
-function resolveText(value?: RefOrValue<string>) {
-  const resolved = unref(value)
-  return typeof resolved === 'string' ? resolved.trim() : ''
-}
-
-function formatValue(value: number, suffix: string) {
-  const formatted = Number.isInteger(value) ? String(value) : fmt(value)
-  return suffix ? `${formatted}${suffix}` : formatted
-}
-
-function fmt(value: number) {
-  return Number.parseFloat(value.toFixed(2)).toString()
+  return (
+    resolveChartText(props.ariaLabel) ||
+    resolveChartText(props.title) ||
+    'Bar chart'
+  )
 }

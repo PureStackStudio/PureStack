@@ -8,6 +8,15 @@ import {
   svg,
   unref,
 } from 'regor'
+import {
+  formatChartNumber,
+  formatChartPoint,
+  formatChartValue,
+  readChartNumber,
+  resolveChartBoolean,
+  resolveChartSize,
+  resolveChartText,
+} from '../chart/chartUtils'
 import type {
   ComponentVariant,
   ComponentVariantMode,
@@ -104,7 +113,7 @@ const PLOT_HEIGHT = 43
 const LABEL_Y = 53.5
 const VALUE_LABEL_OFFSET = 2.6
 const DEFAULT_CHART_WIDTH = '100%'
-const DEFAULT_CHART_HEIGHT = undefined
+const DEFAULT_CHART_HEIGHT = undefined //auto height
 const DEFAULT_EMPTY_LABEL = 'No data'
 const DEFAULT_GRID_LINE_COUNT = 5
 const MAX_X_LABEL_COUNT = 7
@@ -286,25 +295,31 @@ function resolveLineChart(props: LineChart): LineChart {
       }),
     ),
     resolvedWidth: computed(() =>
-      resolveSize(props.width, DEFAULT_CHART_WIDTH),
+      resolveChartSize(props.width, DEFAULT_CHART_WIDTH),
     ),
     resolvedHeight: computed(() =>
-      resolveSize(props.height, DEFAULT_CHART_HEIGHT),
+      resolveChartSize(props.height, DEFAULT_CHART_HEIGHT),
     ),
     resolvedAriaLabel: computed(() => resolveAriaLabel(props)),
     resolvedEmptyLabel: computed(
-      () => resolveText(props.emptyLabel) || DEFAULT_EMPTY_LABEL,
+      () => resolveChartText(props.emptyLabel) || DEFAULT_EMPTY_LABEL,
     ),
     chartSeries,
     gridLines: computed(() => resolveGridLines(domain(), props.valueSuffix)),
     xLabels: computed(() => resolveXLabels(chartSeries())),
     hasSeries: computed(() => chartSeries().length > 0),
-    isAnimated: computed(() => resolveBoolean(props.animated, true)),
-    shouldShowArea: computed(() => resolveBoolean(props.showArea, false)),
-    shouldShowPoints: computed(() => resolveBoolean(props.showPoints, true)),
-    shouldShowValues: computed(() => resolveBoolean(props.showValues, false)),
-    shouldShowLabels: computed(() => resolveBoolean(props.showLabels, true)),
-    shouldShowAxis: computed(() => resolveBoolean(props.showAxis, true)),
+    isAnimated: computed(() => resolveChartBoolean(props.animated, true)),
+    shouldShowArea: computed(() => resolveChartBoolean(props.showArea, false)),
+    shouldShowPoints: computed(() =>
+      resolveChartBoolean(props.showPoints, true),
+    ),
+    shouldShowValues: computed(() =>
+      resolveChartBoolean(props.showValues, false),
+    ),
+    shouldShowLabels: computed(() =>
+      resolveChartBoolean(props.showLabels, true),
+    ),
+    shouldShowAxis: computed(() => resolveChartBoolean(props.showAxis, true)),
     zeroLineY: computed(() => valueToY(0, domain())),
   }
 }
@@ -329,7 +344,7 @@ function resolveChartSeries(
   props: LineChart,
   domain: ChartDomain,
 ): ResolvedLineChartSeries[] {
-  const valueSuffix = resolveText(props.valueSuffix)
+  const valueSuffix = resolveChartText(props.valueSuffix)
   const curve = resolveCurve(props.curve)
   const zeroY = valueToY(0, domain)
 
@@ -345,7 +360,7 @@ function resolveChartSeries(
       return {
         label: point.label,
         value: point.value,
-        formattedValue: formatValue(point.value, valueSuffix),
+        formattedValue: formatChartValue(point.value, valueSuffix),
         x,
         y,
         valueLabelY,
@@ -372,8 +387,8 @@ function resolveSeries(
     .map((series, index) => {
       const resolvedSeries = unref(series)
       return {
-        label: resolveText(resolvedSeries?.label) || `Series ${index + 1}`,
-        color: resolveText(resolvedSeries?.color),
+        label: resolveChartText(resolvedSeries?.label) || `Series ${index + 1}`,
+        color: resolveChartText(resolvedSeries?.color),
         points: resolvePoints(resolvedSeries?.points),
       }
     })
@@ -386,9 +401,9 @@ function resolvePoints(
   return (unref(pointsInput) || [])
     .map((pointInput, index) => {
       const point = unref(pointInput)
-      const value = readNumber(point?.value, Number.NaN)
+      const value = readChartNumber(point?.value, Number.NaN)
       return {
-        label: resolveText(point?.label) || `Point ${index + 1}`,
+        label: resolveChartText(point?.label) || `Point ${index + 1}`,
         value,
       }
     })
@@ -400,25 +415,28 @@ function resolveLinePath(
   curve: LineChartCurve,
 ) {
   if (!points.length) return ''
-  if (points.length === 1) return `M ${formatPoint(points[0])}`
+  if (points.length === 1) return `M ${formatChartPoint(points[0])}`
   if (curve === 'linear') {
     return points
-      .map((point, index) => `${index === 0 ? 'M' : 'L'} ${formatPoint(point)}`)
+      .map(
+        (point, index) =>
+          `${index === 0 ? 'M' : 'L'} ${formatChartPoint(point)}`,
+      )
       .join(' ')
   }
 
   return [
-    `M ${formatPoint(points[0])}`,
+    `M ${formatChartPoint(points[0])}`,
     ...points.slice(1).map((point, index) => {
       const previous = points[index]
       const midpointX = (previous.x + point.x) / 2
       return [
         'C',
-        formatCoordinate(midpointX),
-        formatCoordinate(previous.y),
-        formatCoordinate(midpointX),
-        formatCoordinate(point.y),
-        formatPoint(point),
+        formatChartNumber(midpointX),
+        formatChartNumber(previous.y),
+        formatChartNumber(midpointX),
+        formatChartNumber(point.y),
+        formatChartPoint(point),
       ].join(' ')
     }),
   ].join(' ')
@@ -433,9 +451,9 @@ function resolveAreaPath(
   const first = points[0]
   const last = points.at(-1) || first
   return [
-    `M ${formatCoordinate(first.x)} ${formatCoordinate(zeroY)}`,
+    `M ${formatChartNumber(first.x)} ${formatChartNumber(zeroY)}`,
     resolveLinePath(points, curve).replace(/^M /, 'L '),
-    `L ${formatCoordinate(last.x)} ${formatCoordinate(zeroY)}`,
+    `L ${formatChartNumber(last.x)} ${formatChartNumber(zeroY)}`,
     'Z',
   ].join(' ')
 }
@@ -463,12 +481,12 @@ function resolveDomain(props: LineChart): ChartDomain {
   const fallbackMax = values.length ? Math.max(...values) : 1
   const fallbackMin = values.length ? Math.min(...values) : 0
   let min = Math.min(
-    readNumber(props.minValue, Math.min(0, fallbackMin)),
+    readChartNumber(props.minValue, Math.min(0, fallbackMin)),
     fallbackMin,
     0,
   )
   let max = Math.max(
-    readNumber(props.maxValue, Math.max(0, fallbackMax)),
+    readChartNumber(props.maxValue, Math.max(0, fallbackMax)),
     fallbackMax,
     0,
   )
@@ -488,14 +506,14 @@ function resolveGridLines(
   domain: ChartDomain,
   valueSuffix: LineChart['valueSuffix'],
 ): ResolvedLineChartGridLine[] {
-  const suffix = resolveText(valueSuffix)
+  const suffix = resolveChartText(valueSuffix)
   const step = (domain.max - domain.min) / (DEFAULT_GRID_LINE_COUNT - 1)
 
   return Array.from({ length: DEFAULT_GRID_LINE_COUNT }, (_, index) => {
     const value = domain.max - step * index
     return {
       value,
-      formattedValue: formatValue(value, suffix),
+      formattedValue: formatChartValue(value, suffix),
       y: valueToY(value, domain),
     }
   })
@@ -515,67 +533,12 @@ function valueToY(value: number, domain: ChartDomain) {
 
 function resolveAriaLabel(props: LineChart) {
   return (
-    resolveText(props.ariaLabel) || resolveText(props.title) || 'Line chart'
+    resolveChartText(props.ariaLabel) ||
+    resolveChartText(props.title) ||
+    'Line chart'
   )
-}
-
-function resolveSize(
-  size: RefOrValue<number | string> | undefined,
-  fallback: number | string,
-) {
-  const resolved = unref(size)
-  if (typeof resolved === 'number' && Number.isFinite(resolved)) {
-    return Math.max(1, resolved)
-  }
-  if (typeof resolved !== 'string') return fallback
-  const trimmed = resolved.trim()
-  return trimmed || fallback
-}
-
-function resolveBoolean(
-  value: RefOrValue<boolean | string> | undefined,
-  fallback: boolean,
-) {
-  const resolved = unref(value)
-  if (typeof resolved === 'boolean') return resolved
-  if (typeof resolved !== 'string') return fallback
-  const normalized = resolved.trim().toLowerCase()
-  if (!normalized) return fallback
-  return normalized !== 'false' && normalized !== '0' && normalized !== 'off'
 }
 
 function resolveCurve(value: RefOrValue<LineChartCurve> | undefined) {
   return unref(value) === 'linear' ? 'linear' : 'smooth'
-}
-
-function readNumber(
-  value: RefOrValue<number | string> | undefined,
-  fallback: number,
-) {
-  const resolved = unref(value)
-  const number =
-    typeof resolved === 'number'
-      ? resolved
-      : Number.parseFloat(String(resolved))
-  return Number.isFinite(number) ? number : fallback
-}
-
-function resolveText(value?: RefOrValue<string>) {
-  const resolved = unref(value)
-  return typeof resolved === 'string' ? resolved.trim() : ''
-}
-
-function formatValue(value: number, suffix: string) {
-  const formatted = Number.isInteger(value)
-    ? String(value)
-    : formatCoordinate(value)
-  return suffix ? `${formatted}${suffix}` : formatted
-}
-
-function formatPoint(point: Pick<ResolvedLineChartPoint, 'x' | 'y'>) {
-  return `${formatCoordinate(point.x)} ${formatCoordinate(point.y)}`
-}
-
-function formatCoordinate(value: number) {
-  return Number.parseFloat(value.toFixed(2)).toString()
 }
