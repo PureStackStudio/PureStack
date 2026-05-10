@@ -1,5 +1,12 @@
+import { getBreakpointNames } from './breakpoints'
 import { styleBuilder } from './styles'
-import { type ThemeOptions, themes } from './themeOptions'
+import {
+  BREAKPOINTS,
+  mediaMax,
+  mediaMin,
+  type ThemeOptions,
+  themes,
+} from './themeOptions'
 import type { ThemePalette } from './themePalette'
 
 // Flex and grid utility classes live with their component styles:
@@ -33,6 +40,7 @@ export function registerUtilityStyles() {
     applyPaddingUtilities(theme)
     applyGapUtilities(theme)
     applyLayoutUtilities(theme)
+    applyVisibilityUtilities(theme)
     applyBorderUtilities(theme, palette, options.radii)
     applyOpacityUtilities(theme)
     applyToneInsetSizeUtilities(theme)
@@ -104,6 +112,22 @@ function applyLayoutUtilities(theme: string) {
   styleBuilder.select('.ws-normal', theme).whiteSpace(force('normal'))
   styleBuilder.select('.ws-nowrap', theme).whiteSpace(force('nowrap'))
   styleBuilder.select('.col-resize', theme).cursor(force('col-resize'))
+}
+
+function applyVisibilityUtilities(theme: string) {
+  styleBuilder.select('.hidden', theme).display(force('none'))
+
+  for (const name of getBreakpointNames()) {
+    const breakpoint = BREAKPOINTS[name]
+    styleBuilder
+      .select(`.hidden-${name}`, theme)
+      .media(mediaMax(breakpoint))
+      .display(force('none'))
+    styleBuilder
+      .select(`.hidden-${name}-up`, theme)
+      .media(mediaMin(breakpoint))
+      .display(force('none'))
+  }
 }
 
 function applyBorderUtilities(

@@ -13,8 +13,13 @@ export const BREAKPOINTS = {
   toc: defineBreakpoint('toc', '1320px'),
   wide: defineBreakpoint('wide', '1400px'),
 } as const
+export type BreakpointName = keyof typeof BREAKPOINTS
 
 export type BreakpointToken = (typeof BREAKPOINTS)[keyof typeof BREAKPOINTS]
+
+export function getBreakpointNames(): BreakpointName[] {
+  return Object.keys(BREAKPOINTS) as BreakpointName[]
+}
 
 export function getBreakpoint(breakpoint: BreakpointToken): string {
   return breakpoint.value
