@@ -84,7 +84,10 @@ const topBarTemplate = html`<input
       variant="none"/>
     <Flex class="topbar__controls flex-none" align="center" justify="end">
       <ThemeSwitcher/>
-      <SignIn :avatarSrc="signInAvatarSrc" :avatarAlt="signInAvatarAlt"/>
+      <SignIn
+        class="topbar__account"
+        :avatarSrc="signInAvatarSrc"
+        :avatarAlt="signInAvatarAlt"/>
       <label
         class="topbar__icon topbar__toggle"
         for="doc-nav-toggle"

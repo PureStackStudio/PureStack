@@ -4,11 +4,19 @@ import {
   tryResolveTsSsgContext,
 } from '@purestack/ts-common'
 import { getSemanticToneClass, type SemanticTone } from '@purestack/ts-style'
-import { type ComputedRef, computed, defineComponent, html } from 'regor'
+import {
+  type ComputedRef,
+  computed,
+  defineComponent,
+  html,
+  type RefOrValue,
+} from 'regor'
 
 export interface NavMenu {
   items?: NavItem[]
   tone?: SemanticTone
+  signInAvatarSrc?: RefOrValue<string>
+  signInAvatarAlt?: RefOrValue<string>
   toneClass?: ComputedRef<string>
 }
 
@@ -71,6 +79,10 @@ const navMenuTemplate = html`<nav
 >
   <div class="nav__header-row">
     <div class="nav__header">Navigation</div>
+    <SignIn
+      class="nav__account"
+      :avatarSrc="signInAvatarSrc"
+      :avatarAlt="signInAvatarAlt"/>
     <button
       class="nav__panel-toggle tone-fill-surface-all tone-text-surface-all tone-border-surface-all"
       type="button"
@@ -191,7 +203,7 @@ function defineNavListComponent() {
 
 function defineNavMenuComponent() {
   return defineComponent<NavMenu>(navMenuTemplate, {
-    props: ['items', 'tone'],
+    props: ['items', 'tone', 'signInAvatarSrc', 'signInAvatarAlt'],
     context: (head) => {
       const context = tryResolveTsSsgContext(head)
       return {

@@ -11,6 +11,7 @@ import {
   type ThemeOptions,
   themes,
 } from '@purestack/ts-style'
+import { getTopBarToggleVisibleSelectors } from '../topBar/topBarStyle'
 
 export function registerNavStyles() {
   themes.forEach((theme, palette, options) => {
@@ -55,6 +56,7 @@ export function registerNavShellStyles(
     .justifyContent('space-between')
     .gap('0.5em')
     .marginBottom('0.5em')
+  registerNavAccountPlacementStyles(theme)
   styleBuilder.select('.nav__search', theme).display('none').width('100%')
   styleBuilder
     .select('.nav__search', theme)
@@ -283,6 +285,21 @@ export function registerNavShellStyles(
     .height('100%')
     .overflow('auto')
     .boxSizing('border-box')
+}
+
+function registerNavAccountPlacementStyles(theme: ThemeMode) {
+  styleBuilder.select('.nav__menu .nav__account', theme).display('none')
+  for (const rule of getTopBarToggleVisibleSelectors(
+    '.doc-sidebar .nav__menu .nav__account',
+  )) {
+    let selector = styleBuilder.select(rule.selector, theme)
+    if (rule.media) selector = selector.media(rule.media)
+    selector.display('inline-block').marginLeft('auto')
+  }
+  styleBuilder
+    .select('.nav__account .sign-in__panel', theme)
+    .right('0')
+    .left('auto')
 }
 
 export function registerNavSummaryStyles(

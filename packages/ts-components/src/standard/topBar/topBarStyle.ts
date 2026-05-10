@@ -3,6 +3,7 @@ import {
   BREAKPOINTS,
   mediaBelow,
   mediaMax,
+  mediaMin,
   styleBuilder,
   type ThemeMode,
   type ThemeOptions,
@@ -14,6 +15,28 @@ export function registerTopBarStyles() {
     registerTopBarShellStyles(theme, palette, options)
     registerTopBarToggleStyles(theme, palette)
   })
+}
+
+export function getTopBarToggleVisibleSelectors(targetSelector: string) {
+  return [
+    { selector: `.template-doc--nav-drawer ${targetSelector}` },
+    {
+      selector: `.template-doc--has-nav ${targetSelector}`,
+      media: mediaBelow(BREAKPOINTS.lg),
+    },
+  ]
+}
+
+export function getTopBarToggleHiddenSelectors(targetSelector: string) {
+  return [
+    {
+      selector: `body:not(.template-doc--nav-drawer):not(.template-doc--has-nav) ${targetSelector}`,
+    },
+    {
+      selector: `.template-doc--has-nav:not(.template-doc--nav-drawer) ${targetSelector}`,
+      media: mediaMin(BREAKPOINTS.lg),
+    },
+  ]
 }
 
 export function registerTopBarShellStyles(
@@ -37,6 +60,7 @@ export function registerTopBarShellStyles(
     .borderRadius('0 !important')
 
   styleBuilder.select('.topbar__controls', theme).marginLeft('auto')
+  registerTopBarAccountVisibilityStyles(theme)
 
   styleBuilder
     .select('.topbar__icon', theme)
@@ -51,6 +75,15 @@ export function registerTopBarShellStyles(
     .position('relative')
     .padding('0')
     .color(palette.current.text.subtle)
+}
+
+function registerTopBarAccountVisibilityStyles(theme: ThemeMode) {
+  styleBuilder.select('.topbar__account', theme).display('none')
+  for (const rule of getTopBarToggleHiddenSelectors('.topbar__account')) {
+    let selector = styleBuilder.select(rule.selector, theme)
+    if (rule.media) selector = selector.media(rule.media)
+    selector.display('inline-block')
+  }
 }
 
 export function registerTopBarToggleStyles(

@@ -83,7 +83,7 @@ describe('TopBar rendering', () => {
     ).toBeGreaterThan(1)
     expect(html).toContain('href="/docs/"')
     expect(html).toContain('name="q"')
-    expect(html).toContain('class="sign-in"')
+    expect(html).toContain('class="sign-in topbar__account"')
     expect(html).toContain('data-icon="lucide:log-in"')
     expect((html.match(/class="flex/g) ?? []).length).toBeGreaterThan(1)
     expect(html).toContain('tone-fill-surface-alt')
