@@ -4,7 +4,9 @@ import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
 import { defineButtonComponents } from '../btn/btn'
+import { defineFlexComponents } from '../flex/flex'
 import { defineIconComponents } from '../icon/icon'
+import { definePanelComponents } from '../panel/panel'
 import { defineSignInComponents } from '../signIn/signIn'
 import { defineNavigationComponents } from './navMenu'
 
@@ -13,7 +15,9 @@ describe('NavMenu rendering', () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineButtonComponents(),
+      ...defineFlexComponents(),
       ...defineIconComponents(getSvgIcon),
+      ...definePanelComponents(),
       ...defineSignInComponents(),
       ...defineNavigationComponents(),
     }
@@ -40,7 +44,7 @@ describe('NavMenu rendering', () => {
     expect(html).toContain('Home')
     expect(html).toContain('Group')
     expect(html).toContain('Child')
-    expect(html).toContain('class="sign-in nav__account"')
+    expect(html).toContain('class="sign-in position-relative nav__account"')
     expect(html).not.toContain('r-else=')
   })
 })

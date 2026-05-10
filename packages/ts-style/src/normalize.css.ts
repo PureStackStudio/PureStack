@@ -60,7 +60,7 @@ function applyNormalizeFormRules(theme: string) {
 }
 
 function applyNormalizeMediaRules(theme: string) {
-  styleBuilder.select('summary', theme).display('list-item')
+  styleBuilder.select('summary', theme).display('list-item').listStyle('none')
   styleBuilder.select('[hidden]', theme).display('none')
   styleBuilder
     .select('img, picture, video, canvas, svg', theme)

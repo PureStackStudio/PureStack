@@ -5,13 +5,13 @@ export function registerPanelStyles() {
     styleBuilder
       .select('.panel', theme)
       .display('grid')
-      .padding('0')
+      .padding('1em')
       .boxShadow(palette.effect.panelShadow)
       .overflow('hidden')
       .transition(
         'border-color 180ms ease, box-shadow 180ms ease, background 180ms ease',
       )
 
-    styleBuilder.select('.panel__body', theme).padding('1em').overflowX('auto')
+    styleBuilder.select('.panel__body', theme).overflowX('auto')
   })
 }

@@ -296,10 +296,6 @@ function registerNavAccountPlacementStyles(theme: ThemeMode) {
     if (rule.media) selector = selector.media(rule.media)
     selector.display('inline-block').marginLeft('auto')
   }
-  styleBuilder
-    .select('.nav__account .sign-in__panel', theme)
-    .right('0')
-    .left('auto')
 }
 
 export function registerNavSummaryStyles(

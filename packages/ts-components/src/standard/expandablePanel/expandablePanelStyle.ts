@@ -40,10 +40,6 @@ function registerExpandablePanelSummaryStyles(
     .borderBottomRightRadius('0 !important')
 
   styleBuilder
-    .select('.expandable-panel__summary::-webkit-details-marker', theme)
-    .display('none')
-
-  styleBuilder
     .select('.expandable-panel__summary:focus-visible', theme)
     .outline(`2px solid ${palette.current.border.focus}`)
     .outlineOffset('-2px')

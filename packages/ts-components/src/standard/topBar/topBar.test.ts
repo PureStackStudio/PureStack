@@ -6,6 +6,7 @@ import { defineButtonComponents } from '../btn/btn'
 import { defineFlexComponents } from '../flex/flex'
 import { defineIconComponents } from '../icon/icon'
 import { defineLogoComponents } from '../logo/logo'
+import { definePanelComponents } from '../panel/panel'
 import { defineSearchComponents } from '../searchBox/searchBox'
 import { defineSignInComponents } from '../signIn/signIn'
 import { defineThemeSwitcherComponents } from '../themeSwitcher/themeSwitcher'
@@ -19,6 +20,7 @@ describe('TopBar rendering', () => {
       ...defineFlexComponents(),
       ...defineIconComponents((name) => `<svg data-icon="${name}"></svg>`),
       ...defineLogoComponents(),
+      ...definePanelComponents(),
       ...defineSearchComponents(),
       ...defineSignInComponents(),
       ...defineThemeSwitcherComponents(),
@@ -86,7 +88,7 @@ describe('TopBar rendering', () => {
     ).toBeGreaterThan(1)
     expect(html).toContain('href="/docs/"')
     expect(html).toContain('name="q"')
-    expect(html).toContain('class="sign-in topbar__account"')
+    expect(html).toContain('class="sign-in position-relative topbar__account"')
     expect(html).toContain('data-icon="lucide:log-in"')
     expect((html.match(/class="flex/g) ?? []).length).toBeGreaterThan(1)
     expect(html).toContain('tone-fill-surface-alt')
