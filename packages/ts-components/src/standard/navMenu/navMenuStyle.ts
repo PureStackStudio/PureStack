@@ -55,7 +55,6 @@ export function registerNavShellStyles(
     .alignItems('center')
     .justifyContent('space-between')
     .gap('0.5em')
-    .marginBottom('0.5em')
   registerNavAccountPlacementStyles(theme)
   styleBuilder.select('.nav__search', theme).display('none').width('100%')
   styleBuilder

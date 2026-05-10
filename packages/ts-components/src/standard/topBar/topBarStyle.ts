@@ -46,7 +46,7 @@ export function registerTopBarShellStyles(
 ) {
   styleBuilder
     .select('.topbar', theme)
-    .padding('16px')
+    .padding('1rem')
     .position('sticky')
     .top('0')
     .overflowX('clip')

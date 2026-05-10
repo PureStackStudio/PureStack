@@ -1,6 +1,4 @@
 import {
-  BREAKPOINTS,
-  mediaMax,
   styleBuilder,
   type ThemeMode,
   type ThemeOptions,
@@ -56,16 +54,11 @@ function registerSignInPanelPlacementStyles(theme: ThemeMode) {
   styleBuilder
     .select('.sign-in__panel', theme)
     .position('absolute')
+    .display('block')
     .top('100%')
     .right('0')
     .zIndex(60)
-    .minWidth('220px')
-
-  styleBuilder
-    .select('.sign-in__panel', theme)
-    .media(mediaMax(BREAKPOINTS.sm))
-    .right('-58px')
-    .minWidth('min(76vw, 240px)')
+    .minWidth('180px')
 }
 
 function registerSignInAvatarStyles(theme: ThemeMode, options: ThemeOptions) {

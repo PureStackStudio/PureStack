@@ -116,8 +116,8 @@ const navMenuTemplate = html`<nav
       </span>
     </button>
   </div>
-  <SearchBox class="nav__search"/>
   <NavList :items="items"></NavList>
+  <SearchBox class="nav__search mt-1"/>
 </nav>`
 
 function resolveNavItems(context?: TsSsgContext): NavItem[] {

@@ -39,10 +39,16 @@ const signInTemplate = html`<details r-if="authEnabled" class="sign-in position-
     class="sign-in__trigger topbar__icon rounded-pill cursor-pointer overflow-hidden"
     aria-label="Account menu"
   >
-    <span class="sign-in__signed-out-view" aria-hidden="true">
+    <span
+      class="sign-in__signed-out-view tone-fill-surface-hover tone-fill-surface-active tone-border-surface-hover tone-border-surface-active"
+      aria-hidden="true"
+    >
       <Icon :name="resolvedIcon"/>
     </span>
-    <span class="sign-in__signed-in-view" aria-hidden="true">
+    <span
+      class="sign-in__signed-in-view tone-fill-surface-hover tone-fill-surface-active tone-border-surface-hover tone-border-surface-active"
+      aria-hidden="true"
+    >
       <slot name="avatar">
         <img
           r-if="avatarSrc"
@@ -55,10 +61,10 @@ const signInTemplate = html`<details r-if="authEnabled" class="sign-in position-
     <span class="hidden">{{ resolvedLabel }}</span>
   </summary>
   <Panel
-    class="sign-in__panel mt-2 p-1"
-    :tone="tone || 'neutral'"
-    :variant="variant || 'surface'"
-    :variantMode="variantMode || 'stateless'"
+    class="sign-in__panel p-1 mt-1"
+    :tone="tone"
+    :variant="variant || 'surfaceAlt'"
+    :variantMode="variantMode"
   >
     <slot>
       <Flex
@@ -71,7 +77,7 @@ const signInTemplate = html`<details r-if="authEnabled" class="sign-in position-
         <BtnLink
           class="sign-in__signed-out-action justify-start w-full text-start"
           href="/signin/"
-          :tone="tone || 'neutral'"
+          :tone="tone"
           variant="subtleBtn"
           icon="lucide:log-in"
         >
@@ -81,7 +87,7 @@ const signInTemplate = html`<details r-if="authEnabled" class="sign-in position-
           r-if="signUpEnabled"
           class="sign-in__signed-out-action justify-start w-full text-start"
           href="/signup/"
-          :tone="tone || 'neutral'"
+          :tone="tone"
           variant="subtleBtn"
           icon="lucide:user-plus"
         >
@@ -90,7 +96,7 @@ const signInTemplate = html`<details r-if="authEnabled" class="sign-in position-
         <BtnLink
           class="sign-in__signed-in-action justify-start w-full text-start"
           href="/account/"
-          :tone="tone || 'neutral'"
+          :tone="tone"
           variant="subtleBtn"
           icon="lucide:user-round"
         >
@@ -99,7 +105,7 @@ const signInTemplate = html`<details r-if="authEnabled" class="sign-in position-
         <BtnLink
           class="sign-in__signed-in-action justify-start w-full text-start"
           href="/settings/"
-          :tone="tone || 'neutral'"
+          :tone="tone"
           variant="subtleBtn"
           icon="lucide:settings"
         >
@@ -108,7 +114,7 @@ const signInTemplate = html`<details r-if="authEnabled" class="sign-in position-
         <BtnLink
           class="sign-in__signed-in-action justify-start w-full text-start"
           href="/signout/"
-          :tone="tone || 'neutral'"
+          :tone="tone"
           variant="subtleBtn"
           icon="lucide:log-out"
         >
