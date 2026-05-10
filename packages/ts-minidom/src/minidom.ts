@@ -306,6 +306,7 @@ class MiniNode {
 }
 
 class MiniDocument extends MiniNode {
+  readonly isMinidom = true
   documentElement: MiniElement | null = null
   head: MiniElement | null = null
   body: MiniElement | null = null

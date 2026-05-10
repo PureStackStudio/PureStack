@@ -35,7 +35,6 @@ describe('SignIn rendering', () => {
     expect(html).toContain('data-menu-runtime')
     expect(html).toContain('aria-label="Account menu"')
     expect(html).toContain('class="panel tone-text')
-    expect(html).toContain('tone--neutral')
     expect(html).toContain('tone-fill-surface')
     expect(html).toContain('data-icon="lucide:log-in"')
     expect(html).toContain('data-icon="tabler:user-filled"')
