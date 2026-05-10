@@ -26,19 +26,19 @@ export interface RegorApp {
 }
 
 const pageScriptTemplate = html`<script
-    :r-teleport="teleport"
-    :src="src"
-    :type="type"
-    :async="async"
-    :defer="defer"
-    :integrity="integrity"
-    :nonce="nonce"
-    :crossorigin="crossOrigin"
-    :referrerpolicy="referrerPolicy"
-    :nomodule="noModule"
-  ></script>`
+  :r-teleport="teleport"
+  :src="src"
+  :type="type"
+  :async="async"
+  :defer="defer"
+  :integrity="integrity"
+  :nonce="nonce"
+  :crossorigin="crossOrigin"
+  :referrerpolicy="referrerPolicy"
+  :nomodule="noModule"
+></script>`
 
-const regorAppTemplate = html`<App><PageScript :src="src" /></App>`
+const regorAppTemplate = html`<App><PageScript :src="src"/></App>`
 
 function definePageScriptComponent() {
   return defineComponent<PageScript>(pageScriptTemplate, {
