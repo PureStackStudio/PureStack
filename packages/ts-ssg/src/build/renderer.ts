@@ -15,6 +15,7 @@ import {
   buildNavMenuScript,
   buildPagefindSearchScript,
   buildPageTocScript,
+  buildSignInScript,
   buildThemeSwitchScript,
 } from '@purestack/ts-page-scripts'
 import { type ThemeStylesheetLink, themes } from '@purestack/ts-style'
@@ -48,6 +49,7 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
   appendThemeSwitchScript(head, themes)
   appendConsentScript(head, input.consent)
   appendGa4Script(head, input.analytics, input.consent)
+  appendSignInScript(head)
   if (isNavEnabled(input.pageInfo.frontmatter)) {
     appendNavMenuScript(head)
   }
@@ -145,6 +147,11 @@ function appendGa4Script(
 
 function appendNavMenuScript(head: ReturnType<typeof getHead>) {
   const script = buildNavMenuScript()
+  head.push(h('script').raw(script))
+}
+
+function appendSignInScript(head: ReturnType<typeof getHead>) {
+  const script = buildSignInScript()
   head.push(h('script').raw(script))
 }
 

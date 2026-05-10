@@ -19,6 +19,7 @@ const embedEntries = [
   { name: 'modal', fn: 'buildModalScript' },
   { name: 'codeCopy', fn: 'buildCodeCopyScript' },
   { name: 'pagefindSearch', fn: 'buildPagefindSearchScript' },
+  { name: 'signInRuntime', fn: 'buildSignInScript' },
   { name: 'consent', fn: 'buildEmbeddedConsentScript' },
   { name: 'themeSwitch', fn: 'buildEmbeddedThemeSwitchScript' },
 ] as const
