@@ -23,7 +23,7 @@ const DEFAULT_SIGN_IN_ICON = 'lucide:log-in'
 const DEFAULT_ACCOUNT_ICON = 'tabler:user-filled'
 const DEFAULT_SIGN_IN_LABEL = 'Account'
 
-const signInTemplate = html`<details class="sign-in">
+const signInTemplate = html`<details class="sign-in" data-menu-runtime>
   <summary class="sign-in__trigger topbar__icon" aria-label="Account menu">
     <span class="sign-in__signed-out-view" aria-hidden="true">
       <Icon class="sign-in__icon" :name="resolvedIcon"/>

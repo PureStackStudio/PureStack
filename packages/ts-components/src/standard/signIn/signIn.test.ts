@@ -22,6 +22,7 @@ describe('SignIn rendering', () => {
     cleanup()
 
     expect(html).toContain('class="sign-in"')
+    expect(html).toContain('data-menu-runtime')
     expect(html).toContain('aria-label="Account menu"')
     expect(html).toContain('data-icon="lucide:log-in"')
     expect(html).toContain('data-icon="tabler:user-filled"')
