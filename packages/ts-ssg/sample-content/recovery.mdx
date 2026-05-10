@@ -11,15 +11,17 @@ layout:
 ---
 
 <Grid columns="1" columnsLg="auto 1fr" alignItems="center">
-  <LoginPanel>
-    <template #header>
-      <LoginHeader
-        badge="Account Recovery"
-        title="Reset your password"
-        description="Enter the email for your workspace and we will send a secure recovery link."/>
-    </template>
+  <Panel class="auth-form w-full">
+    <Flex direction="column" class="gap-4">
+      <header>
+        <p class="text-eyebrow">Account Recovery</p>
+        <h1 class="text-title">Reset your password</h1>
+        <p class="text-tagline">
+          Enter the email for your workspace and we will send a secure recovery
+          link.
+        </p>
+      </header>
 
-    <template #form>
       <AppForm
         class="p-4"
         action="/signin/"
@@ -40,15 +42,13 @@ layout:
           Recovery link sent. Check your inbox to continue.
         </FormStatus>
       </AppForm>
-    </template>
 
-    <template #footer>
-      <LoginFooter
-        text="Remembered your password?"
-        linkLabel="Sign in"
-        linkHref="/signin/"/>
-    </template>
-  </LoginPanel>
+      <Flex align="center" wrap="true" class="gap-1 fs-sm">
+        <span>Remembered your password?</span>
+        <FormAssistLink href="/signin/" label="Sign in"/>
+      </Flex>
+    </Flex>
+  </Panel>
 
   <LandingSection
     eyebrow="Secure Access"
@@ -78,8 +78,8 @@ layout:
 
 <script>
   (() => {
-    const form = document.querySelector('.login-panel .form-block')
-    const status = document.querySelector('.login-panel .form-status')
+    const form = document.querySelector('.auth-form .form-block')
+    const status = document.querySelector('.auth-form .form-status')
     const submit = form?.querySelector('button[type="submit"]')
 
     form?.addEventListener('submit', (event) => {

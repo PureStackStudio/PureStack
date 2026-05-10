@@ -11,15 +11,14 @@ layout:
 ---
 
 <Grid columns="1" columnsLg="auto 1fr" alignItems="center">
-  <LoginPanel>
-    <template #header>
-      <LoginHeader
-        badge="PureStack Account"
-        title="Sign in"
-        description="Use your email and password to continue."/>
-    </template>
+  <Panel class="auth-form w-full">
+    <Flex direction="column" class="gap-4">
+      <header>
+        <p class="text-eyebrow">PureStack Account</p>
+        <h1 class="text-title">Sign in</h1>
+        <p class="text-tagline">Use your email and password to continue.</p>
+      </header>
 
-    <template #form>
       <AppForm
         class="p-3"
         action="/account/"
@@ -52,24 +51,24 @@ layout:
           Signed in. Redirecting to your account.
         </FormStatus>
       </AppForm>
-    </template>
 
-    <template #divider>
       <FormDivider label="or"/>
-    </template>
 
-    <template #providers>
-      <LoginProvider label="Continue with GitHub"/>
-      <LoginProvider label="Continue with SSO"/>
-    </template>
+      <Grid columns="1">
+        <Btn tone="neutral" variant="surface" class="w-full">
+          Continue with GitHub
+        </Btn>
+        <Btn tone="neutral" variant="surface" class="w-full">
+          Continue with SSO
+        </Btn>
+      </Grid>
 
-    <template #footer>
-      <LoginFooter
-        text="New to PureStack?"
-        linkLabel="Create an account"
-        linkHref="/signup/"/>
-    </template>
-  </LoginPanel>
+      <Flex align="center" wrap="true" class="gap-1 fs-sm">
+        <span>New to PureStack?</span>
+        <FormAssistLink href="/signup/" label="Create an account"/>
+      </Flex>
+    </Flex>
+  </Panel>
 
   <LandingSection
     eyebrow="Welcome Back"
@@ -100,8 +99,8 @@ layout:
 <script>
   (() => {
     const key = 'purestack-sample-auth'
-    const form = document.querySelector('.login-panel .form-block')
-    const status = document.querySelector('.login-panel .form-status')
+    const form = document.querySelector('.auth-form .form-block')
+    const status = document.querySelector('.auth-form .form-status')
 
     form?.addEventListener('submit', (event) => {
       event.preventDefault()

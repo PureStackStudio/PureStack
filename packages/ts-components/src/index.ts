@@ -107,13 +107,6 @@ export type {
 } from './standard/lineChart/lineChart'
 export { defineLineChartComponents } from './standard/lineChart/lineChart'
 export { registerLineChartStyles } from './standard/lineChart/lineChartStyle'
-export type {
-  LoginFooter,
-  LoginHeader,
-  LoginProvider,
-} from './standard/login/login'
-export { defineLoginComponents } from './standard/login/login'
-export { registerLoginStyles } from './standard/login/loginStyle'
 export type { SiteLogo } from './standard/logo/logo'
 export { defineLogoComponents } from './standard/logo/logo'
 export { registerLogoStyles } from './standard/logo/logoStyle'

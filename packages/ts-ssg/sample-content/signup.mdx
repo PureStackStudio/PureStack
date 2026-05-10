@@ -11,15 +11,16 @@ layout:
 ---
 
 <Grid columns="1" columnsLg="auto 1fr" alignItems="center">
-  <LoginPanel>
-    <template #header>
-      <LoginHeader
-        badge="Start Building"
-        title="Create your account"
-        description="Set up your workspace and invite the team when you are ready."/>
-    </template>
+  <Panel class="auth-form w-full">
+    <Flex direction="column" class="gap-4">
+      <header>
+        <p class="text-eyebrow">Start Building</p>
+        <h1 class="text-title">Create your account</h1>
+        <p class="text-tagline">
+          Set up your workspace and invite the team when you are ready.
+        </p>
+      </header>
 
-    <template #form>
       <AppForm
         class="p-3"
         action="/account/"
@@ -76,15 +77,13 @@ layout:
           Account ready. Opening your workspace.
         </FormStatus>
       </AppForm>
-    </template>
 
-    <template #footer>
-      <LoginFooter
-        text="Already have an account?"
-        linkLabel="Sign in"
-        linkHref="/signin/"/>
-    </template>
-  </LoginPanel>
+      <Flex align="center" wrap="true" class="gap-1 fs-sm">
+        <span>Already have an account?</span>
+        <FormAssistLink href="/signin/" label="Sign in"/>
+      </Flex>
+    </Flex>
+  </Panel>
 
   <LandingSection
     eyebrow="One Clean Surface"
@@ -115,8 +114,8 @@ layout:
 <script>
   (() => {
     const key = 'purestack-sample-auth'
-    const form = document.querySelector('.login-panel .form-block')
-    const status = document.querySelector('.login-panel .form-status')
+    const form = document.querySelector('.auth-form .form-block')
+    const status = document.querySelector('.auth-form .form-status')
 
     form?.addEventListener('submit', (event) => {
       event.preventDefault()
