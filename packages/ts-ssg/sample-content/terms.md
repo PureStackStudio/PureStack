@@ -10,7 +10,7 @@ layout:
   navMode: sidebar
   showToc: true
   showFooter: true
-  fullWidth: true
+  fullWidth: false
 ---
 
 # Terms of Service

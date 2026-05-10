@@ -3,7 +3,7 @@ title: Overview
 template: doc
 layout:
   showToc: true
-  fullWidth: true
+  fullWidth: false
 nav:
   order: 3
   icon: iconoir:dashboard
@@ -34,28 +34,36 @@ LogPot is a modern, TypeScript-first logging library for Node.js that makes it e
 LogPot aims to give you both a **developer-friendly** API (TypeScript types, child loggers, scoped metadata) and **production-ready** robustness (async job queues, automatic file rotation, retry logic, worker isolation). Perfect for services, CLIs, or any Node.js app that demands reliability and clarity in its logs.
 
 <CardGrid>
-
   <Card title="Custom Levels" icon="setting">
-    Define your own severity names and numeric priorities (e.g. “TRACE”, “DEBUG”, “MY_ALERT”) to match your application’s needs.
+    Define your own severity names and numeric priorities (e.g. “TRACE”,
+    “DEBUG”, “MY_ALERT”) to match your application’s needs.
   </Card>
 
   <Card title="Worker-Thread Offloading" icon="rocket">
-    Push heavy I/O and formatting work into background threads so your main event loop stays responsive.
+    Push heavy I/O and formatting work into background threads so your main
+    event loop stays responsive.
   </Card>
 
   <Card title="Templated Formatting" icon="seti:json">
-    Render logs as JSON-array, NDJSON, enveloped JSON, or fully-templated text with padding, truncation, colors, emojis, and custom hooks.
+    Render logs as JSON-array, NDJSON, enveloped JSON, or fully-templated text
+    with padding, truncation, colors, emojis, and custom hooks.
   </Card>
 
   <Card title="Built-In Transports" icon="heart">
     Batteries-included support for:
     <ul>
       <li>File transport with rotation, retention, batching & compression</li>
-      <li>HTTP transport with Basic, Bearer, API-Key or OAuth2 authentication</li>
-      <li>Console transport, or roll your own via the abstract<code>Transport</code> base</li>
+      <li>
+        HTTP transport with Basic, Bearer, API-Key or OAuth2 authentication
+      </li>
+      <li>
+        Console transport, or roll your own via the abstract<code
+          >Transport</code
+        >
+        base
+      </li>
     </ul>
   </Card>
-
 </CardGrid>
 
 ---

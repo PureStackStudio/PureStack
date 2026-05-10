@@ -2,7 +2,7 @@
 title: Overview
 layout:
   showToc: true
-  fullWidth: true
+  fullWidth: false
 nav:
   icon: iconoir:book
 ---

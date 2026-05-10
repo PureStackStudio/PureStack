@@ -2,7 +2,7 @@
 title: 'Formatting'
 layout:
   showToc: true
-  fullWidth: true
+  fullWidth: false
 nav:
   order: 6
   icon: iconoir:text

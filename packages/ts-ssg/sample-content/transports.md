@@ -3,7 +3,7 @@ title: 'Transports'
 layout:
   showToc: true
   tocCollapsed: true
-  fullWidth: true
+  fullWidth: false
 nav:
   order: 5
   icon: iconoir:network
