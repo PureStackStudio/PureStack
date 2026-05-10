@@ -102,6 +102,28 @@ describe('resolveSiteConfig sitemap', () => {
     expect(config.html.minify).toBe(false)
   })
 
+  it('provides auth defaults', () => {
+    const config = resolveSiteConfig({ rootDir: process.cwd() })
+    expect(config.auth).toEqual({
+      enabled: false,
+      signUp: true,
+    })
+  })
+
+  it('resolves auth overrides from input config', () => {
+    const config = resolveSiteConfig({
+      rootDir: process.cwd(),
+      auth: {
+        enabled: true,
+        signUp: false,
+      },
+    })
+    expect(config.auth).toEqual({
+      enabled: true,
+      signUp: false,
+    })
+  })
+
   it('applies html minify override from input', () => {
     const config = resolveSiteConfig({
       rootDir: process.cwd(),

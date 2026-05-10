@@ -30,6 +30,7 @@ export {
 } from './resolveTsSsgContext'
 export type {
   AnalyticsConfig,
+  AuthConfig,
   Ga4Config,
   LogoConfig,
   PagefindConfig,

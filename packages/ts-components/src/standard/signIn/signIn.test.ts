@@ -17,7 +17,13 @@ describe('SignIn rendering', () => {
         ...defineIconComponents(getSvgIcon),
         ...defineSignInComponents(),
       },
-      context: createTestContext(),
+      context: createTestContext({
+        site: {
+          auth: {
+            enabled: true,
+          },
+        },
+      }),
     })
     cleanup()
 
@@ -45,7 +51,13 @@ describe('SignIn rendering', () => {
           ...defineIconComponents(getSvgIcon),
           ...defineSignInComponents(),
         },
-        context: createTestContext(),
+        context: createTestContext({
+          site: {
+            auth: {
+              enabled: true,
+            },
+          },
+        }),
       },
     )
     cleanup()
@@ -55,5 +67,50 @@ describe('SignIn rendering', () => {
     expect(html).toContain('alt="Ada Lovelace"')
     expect(html).toContain('href="/billing/"')
     expect(html).not.toContain('href="/settings/"')
+  })
+
+  it('renders nothing when site auth is disabled or unavailable', () => {
+    const cleanup = ensureDomGlobals()
+    const components = {
+      ...defineButtonComponents(),
+      ...defineIconComponents(getSvgIcon),
+      ...defineSignInComponents(),
+    }
+    const disabledHtml = renderApp(`<SignIn />`, {
+      components,
+      context: createTestContext(),
+    })
+    const noContextHtml = renderApp(`<SignIn />`, {
+      components,
+      context: {} as never,
+    })
+    cleanup()
+
+    expect(disabledHtml).not.toContain('class="sign-in"')
+    expect(noContextHtml).not.toContain('class="sign-in"')
+  })
+
+  it('hides sign up when site auth disables registration', () => {
+    const cleanup = ensureDomGlobals()
+    const html = renderApp(`<SignIn />`, {
+      components: {
+        ...defineButtonComponents(),
+        ...defineIconComponents(getSvgIcon),
+        ...defineSignInComponents(),
+      },
+      context: createTestContext({
+        site: {
+          auth: {
+            enabled: true,
+            signUp: false,
+          },
+        },
+      }),
+    })
+    cleanup()
+
+    expect(html).toContain('href="/signin/"')
+    expect(html).not.toContain('href="/signup/"')
+    expect(html).toContain('href="/account/"')
   })
 })

@@ -1,3 +1,4 @@
+import { tryResolveTsSsgContext } from '@purestack/ts-common'
 import {
   type ComputedRef,
   computed,
@@ -13,6 +14,8 @@ export interface SignIn {
   icon?: RefOrValue<string>
   accountIcon?: RefOrValue<string>
   label?: RefOrValue<string>
+  authEnabled?: boolean
+  signUpEnabled?: boolean
   resolvedIcon?: ComputedRef<string>
   resolvedAccountIcon?: ComputedRef<string>
   resolvedLabel?: ComputedRef<string>
@@ -23,7 +26,10 @@ const DEFAULT_SIGN_IN_ICON = 'lucide:log-in'
 const DEFAULT_ACCOUNT_ICON = 'tabler:user-filled'
 const DEFAULT_SIGN_IN_LABEL = 'Account'
 
-const signInTemplate = html`<details class="sign-in" data-menu-runtime>
+const signInTemplate = html`<details
+  r-if="authEnabled"
+  class="sign-in"
+  data-menu-runtime>
   <summary class="sign-in__trigger topbar__icon" aria-label="Account menu">
     <span class="sign-in__signed-out-view" aria-hidden="true">
       <Icon class="sign-in__icon" :name="resolvedIcon"/>
@@ -57,6 +63,7 @@ const signInTemplate = html`<details class="sign-in" data-menu-runtime>
           Sign in
         </BtnLink>
         <BtnLink
+          r-if="signUpEnabled"
           class="sign-in__item sign-in__signed-out-action justify-start w-full rounded-sm tone-fill-surface-hover tone-fill-surface-active"
           href="/signup/"
           variant="none"
@@ -96,7 +103,7 @@ const signInTemplate = html`<details class="sign-in" data-menu-runtime>
 function defineSignInComponent() {
   return defineComponent<SignIn>(signInTemplate, {
     props: ['avatarSrc', 'avatarAlt', 'icon', 'accountIcon', 'label'],
-    context: (head) => resolveSignIn(head.props),
+    context: (head) => resolveSignIn(head.props, head),
   })
 }
 
@@ -104,9 +111,12 @@ export function defineSignInComponents() {
   return { signIn: defineSignInComponent() }
 }
 
-function resolveSignIn(props: SignIn): SignIn {
+function resolveSignIn(props: SignIn, head: unknown): SignIn {
+  const auth = tryResolveTsSsgContext(head)?.site?.auth
   return {
     ...props,
+    authEnabled: auth?.enabled === true,
+    signUpEnabled: auth?.signUp !== false,
     resolvedIcon: computed(() => unref(props.icon) || DEFAULT_SIGN_IN_ICON),
     resolvedAccountIcon: computed(
       () => unref(props.accountIcon) || DEFAULT_ACCOUNT_ICON,

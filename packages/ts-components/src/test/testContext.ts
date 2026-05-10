@@ -33,6 +33,10 @@ const DEFAULT_SITE: DeepPartial<SiteConfig> = {
     href: '/',
     icon: 'iconoir:cube',
   },
+  auth: {
+    enabled: false,
+    signUp: true,
+  },
   consent: {
     enabled: false,
     storageKey: 'ts-ssg-consent',

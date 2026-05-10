@@ -278,6 +278,23 @@
         }
       }
     },
+    "auth": {
+      "type": "object",
+      "description": "Site-wide authentication UI policy.",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether built-in sign-in/account controls render across the site.",
+          "default": false
+        },
+        "signUp": {
+          "type": "boolean",
+          "description": "Whether the built-in sign-up action is shown when auth is enabled.",
+          "default": true
+        }
+      }
+    },
     "sitemap": {
       "type": "object",
       "description": "Sitemap generation settings.",

@@ -41,6 +41,9 @@
   "pageToc": {
     "tone": "neutral"
   },
+  "auth": {
+    "enabled": true
+  },
   "sitemap": {
     "enabled": true,
     "baseUrl": "https://example.com",

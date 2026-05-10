@@ -47,6 +47,9 @@ describe('TopBar rendering', () => {
             href: '/docs/',
             icon: 'iconoir:cube',
           },
+          auth: {
+            enabled: true,
+          },
         },
       }),
     })

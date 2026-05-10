@@ -26,7 +26,13 @@ describe('NavMenu rendering', () => {
       ></NavMenu>`,
       {
         components,
-        context: createTestContext(),
+        context: createTestContext({
+          site: {
+            auth: {
+              enabled: true,
+            },
+          },
+        }),
       },
     )
     cleanup()

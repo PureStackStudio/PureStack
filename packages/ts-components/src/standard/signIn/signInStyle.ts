@@ -107,22 +107,11 @@ function registerSignInPanelStyles(
     .boxShadow(palette.effect.panelShadow)
     .opacity('0')
     .pointerEvents('none')
-    .transform('translate3d(0, -0.35rem, 0)')
-    .transformOrigin('top right')
-    .transition(
-      'opacity 170ms ease, transform 220ms cubic-bezier(0.16, 1, 0.3, 1)',
-    )
 
   styleBuilder
     .select('.sign-in[open] .sign-in__panel', theme)
     .opacity('1')
     .pointerEvents('auto')
-    .transform('translate3d(0, 0, 0)')
-
-  styleBuilder
-    .select('.sign-in__panel', theme)
-    .media('prefers-reduced-motion: reduce')
-    .transition('none')
 
   styleBuilder.select('.sign-in__nav', theme).display('grid').gap('0.15em')
 

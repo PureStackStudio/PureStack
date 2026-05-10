@@ -3,6 +3,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type {
   AnalyticsConfig,
+  AuthConfig,
   ConsentCategory,
   ConsentConfig,
   ConsentScript,
@@ -75,6 +76,7 @@ export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
     fileConfig.navigation,
   )
   const pageToc = resolvePageTocConfig(input.pageToc, fileConfig.pageToc)
+  const auth = resolveAuthConfig(input.auth, fileConfig.auth)
   const sitemap = resolveSitemapConfig(input.sitemap, fileConfig.sitemap)
   const analytics = resolveAnalyticsConfig(
     input.analytics,
@@ -98,11 +100,22 @@ export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
     html,
     navigation,
     pageToc,
+    auth,
     sitemap,
     consent,
     analytics,
     pagefind,
     mdx,
+  }
+}
+
+function resolveAuthConfig(
+  input?: DeepPartial<AuthConfig>,
+  file?: DeepPartial<AuthConfig>,
+): AuthConfig {
+  return {
+    enabled: pickBoolean(input?.enabled, file?.enabled, false),
+    signUp: pickBoolean(input?.signUp, file?.signUp, true),
   }
 }
 

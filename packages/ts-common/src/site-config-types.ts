@@ -18,6 +18,7 @@ export interface SiteConfig {
   html: SiteHtmlConfig
   navigation: NavigationConfig
   pageToc: PageTocConfig
+  auth: AuthConfig
   sitemap: SitemapConfig
   consent: ConsentConfig
   analytics: AnalyticsConfig
@@ -27,6 +28,11 @@ export interface SiteConfig {
 
 export interface PageTocConfig {
   tone: SemanticTone
+}
+
+export interface AuthConfig {
+  enabled: boolean
+  signUp: boolean
 }
 
 export interface SiteStyleConfig {
