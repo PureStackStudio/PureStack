@@ -195,7 +195,7 @@ function registerDocLayoutSidebarStyles(
     .width('100%')
     .zIndex(30)
     .alignSelf('start')
-    .height('calc(100vh - 112px)')
+    .maxHeight('calc(100% - 112px)')
     .overflow('auto')
   styleBuilder
     .select('.template-doc--nav-drawer .doc-sidebar', theme)
