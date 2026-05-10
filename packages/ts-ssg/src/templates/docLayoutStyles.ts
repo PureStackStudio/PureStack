@@ -152,11 +152,20 @@ function registerDocLayoutShellStyles(
     .paddingInlineStart(docLayoutVar('activeShellPaddingInlineStart'))
     .paddingInlineEnd(docLayoutVar('activeShellPaddingInlineEnd'))
     .set('padding-block', docLayoutVar('activeShellPaddingBlock'))
-    .maxWidth(getBreakpoint(BREAKPOINTS.wide))
-    .margin('0 auto')
+    .margin('0')
     .width('100%')
     .boxSizing('border-box')
     .gridTemplateColumns('minmax(0, 1fr)')
+
+  styleBuilder
+    .select('.doc-shell .doc-main > article', theme)
+    .maxWidth(getBreakpoint(BREAKPOINTS.wide))
+    .margin('0 auto')
+
+  styleBuilder
+    .select('.template-doc--full-main .doc-shell .doc-main > article', theme)
+    .maxWidth('none')
+    .margin('0')
 
   styleBuilder
     .select(
@@ -165,11 +174,6 @@ function registerDocLayoutShellStyles(
     )
     .media(mediaMin(BREAKPOINTS.lg))
     .gridTemplateColumns(`${docLayoutVar('activeNavWidth')} minmax(0, 1fr)`)
-
-  styleBuilder
-    .select('.template-doc--full-main .doc-shell', theme)
-    .maxWidth('none')
-    .margin('0')
 
   styleBuilder.select('.doc-shell--single', theme).gridTemplateColumns('1fr')
   styleBuilder

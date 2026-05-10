@@ -2,7 +2,7 @@
 title: 'Features'
 layout:
   showToc: true
-  fullWidth: true
+  fullWidth: false
 nav:
   order: 4
   icon: iconoir:spark
