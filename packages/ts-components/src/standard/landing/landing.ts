@@ -223,7 +223,7 @@ const metricItemTemplate = html`<Flex align="start">
     size="sm"/>
   <div>
     <p class="prose-meta mb-1" r-if="label">{{ label }}</p>
-    <strong class="fs-body" r-if="value">{{ value }}</strong>
+    <strong class="fs-body" r-if="value != undefined">{{ value }}</strong>
     <p class="text-subtle fs-xs mb-0" r-if="detail">{{ detail }}</p>
     <slot></slot>
   </div>
