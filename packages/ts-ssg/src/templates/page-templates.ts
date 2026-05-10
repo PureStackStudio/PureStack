@@ -127,7 +127,8 @@ function buildDocBodyClass(
   showToc: boolean,
   tocCollapsed: boolean,
 ) {
-  const navClass = navMode === 'drawer' ? 'template-doc--nav-drawer' : ''
+  const navClass =
+    showNav && navMode === 'drawer' ? 'template-doc--nav-drawer' : ''
   const hasNavClass = showNav ? 'template-doc--has-nav' : ''
   const hasTocClass = showToc ? 'template-doc--has-toc' : ''
   const tocCollapsedClass =

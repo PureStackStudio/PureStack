@@ -30,8 +30,12 @@ function ready(fn: () => void) {
 }
 
 function init() {
+  resetNavToggle()
   const menu = document.querySelector<HTMLElement>('.nav__menu')
-  if (!menu) return
+  if (!menu) {
+    markNavReady()
+    return
+  }
   const sidebar = menu.closest<HTMLElement>('.doc-sidebar')
 
   const collapseToggle = menu.querySelector<HTMLElement>(
@@ -239,6 +243,23 @@ function init() {
     )
     if (event.clientX > edgeOpenThreshold) return
     setPanelOpen(true)
+  })
+
+  markNavReady()
+}
+
+function resetNavToggle() {
+  const navToggle = document.getElementById('doc-nav-toggle')
+  if (navToggle && 'checked' in navToggle) {
+    ;(navToggle as HTMLInputElement).checked = false
+  }
+}
+
+function markNavReady() {
+  globalThis.requestAnimationFrame(() => {
+    if (document.body) {
+      document.body.classList.add('template-doc--nav-ready')
+    }
   })
 }
 

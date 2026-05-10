@@ -17,6 +17,7 @@ describe('renderPage consent integration', () => {
       site,
     })
     expect(html).toContain('ts-ssg:nav-collapsed')
+    expect(html).toContain('template-doc--nav-ready')
   })
 
   it('does not inject consent runtime when consent is disabled', async () => {
@@ -248,5 +249,7 @@ describe('renderPage consent integration', () => {
     expect(html).not.toContain('class="doc-sidebar"')
     expect(html).toContain('<body class="template-doc">')
     expect(html).not.toContain('<nav-menu')
+    expect(html).not.toContain('template-doc--nav-ready')
+    expect(html).not.toContain('ts-ssg:nav-collapsed')
   })
 })

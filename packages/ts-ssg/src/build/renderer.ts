@@ -13,7 +13,6 @@ import {
   buildCodeCopyScript,
   buildConsentScript,
   buildNavMenuScript,
-  buildNavTransitionReadyScript,
   buildPagefindSearchScript,
   buildPageTocScript,
   buildThemeSwitchScript,
@@ -49,8 +48,9 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
   appendThemeSwitchScript(head, themes)
   appendConsentScript(head, input.consent)
   appendGa4Script(head, input.analytics, input.consent)
-  appendNavTransitionReadyScript(head)
-  appendNavMenuScript(head)
+  if (isNavEnabled(input.pageInfo.frontmatter)) {
+    appendNavMenuScript(head)
+  }
   appendCodeCopyScript(head)
   appendPagefindSearchScript(head)
   const { pageTemplate, templateName } = resolvePageTemplate(
@@ -143,14 +143,13 @@ function appendGa4Script(
   )
 }
 
-function appendNavTransitionReadyScript(head: ReturnType<typeof getHead>) {
-  const script = buildNavTransitionReadyScript()
-  head.push(h('script').raw(script))
-}
-
 function appendNavMenuScript(head: ReturnType<typeof getHead>) {
   const script = buildNavMenuScript()
   head.push(h('script').raw(script))
+}
+
+function isNavEnabled(frontmatter: PageFrontmatter) {
+  return frontmatter.layout.showNav !== false
 }
 
 function appendTocScript(

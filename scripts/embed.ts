@@ -19,7 +19,6 @@ const embedEntries = [
   { name: 'modal', fn: 'buildModalScript' },
   { name: 'codeCopy', fn: 'buildCodeCopyScript' },
   { name: 'pagefindSearch', fn: 'buildPagefindSearchScript' },
-  { name: 'navTransitionReady', fn: 'buildNavTransitionReadyScript' },
   { name: 'consent', fn: 'buildEmbeddedConsentScript' },
   { name: 'themeSwitch', fn: 'buildEmbeddedThemeSwitchScript' },
 ] as const
