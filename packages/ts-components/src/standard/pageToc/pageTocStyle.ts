@@ -200,6 +200,7 @@ function registerPageTocSidebarBaseStyles(theme: ThemeMode) {
     .alignSelf('start')
     .maxHeight('calc(100vh - 130px)')
     .overflow('auto')
+    .userSelect('none')
 
   styleBuilder
     .select('.template-doc--has-toc .doc-toc', theme)

@@ -28,6 +28,7 @@ function registerButtonBaseStyles(theme: ThemeMode, palette: ThemePalette) {
     .webkitTapHighlightColor('transparent')
     .padding('0.5em 0.75em')
     .apply(palette.applyFont(palette.font.size.body, palette.font.weight.w500))
+    .userSelect('none')
 
   styleBuilder
     .select('.btn:disabled', theme)

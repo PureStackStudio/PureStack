@@ -191,6 +191,7 @@ function registerDocLayoutSidebarStyles(
     .overflow('hidden')
     .touchAction('none')
     .set('overscroll-behavior', 'none')
+    .userSelect('none')
   styleBuilder
     .select('.template-doc--nav-drawer .doc-sidebar', theme)
     .position('fixed')
@@ -198,7 +199,7 @@ function registerDocLayoutSidebarStyles(
     .right('16px')
     .left('auto')
     .width('fit-content')
-    .maxWidth('min(360px, calc(100vw - 32px))')
+    .minWidth('300px')
     .height('auto')
     .transform('translateX(120%)')
     .zIndex(40)
