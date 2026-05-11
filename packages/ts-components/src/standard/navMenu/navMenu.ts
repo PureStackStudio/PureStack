@@ -8,6 +8,7 @@ import {
   type ComputedRef,
   computed,
   defineComponent,
+  flatten,
   html,
   type RefOrValue,
 } from 'regor'
@@ -160,7 +161,7 @@ function buildNavState(
   items: NavItem[],
   currentPath: string | undefined,
 ): NavItemState[] {
-  return items.map((item) => {
+  return flatten(items).map((item) => {
     const childStates = item.children
       ? buildNavState(item.children, currentPath)
       : []

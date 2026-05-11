@@ -6,6 +6,7 @@ import {
   computed,
   defineComponent,
   html,
+  isRef,
   type Ref,
   type RefOrValue,
   ref,
@@ -30,12 +31,11 @@ export class FormCheck {
   label?: RefOrValue<string>
   name?: RefOrValue<string>
   value?: RefOrValue<string>
-  model?: Ref<boolean>
-  checked?: RefOrValue<boolean>
+  checked?: Ref<boolean>
   disabled?: RefOrValue<boolean>
   constructor(props: FormCheck) {
     Object.assign(this, props)
-    this.model = ref<boolean>(false)
+    if (!isRef(this.checked)) this.checked = ref<boolean>(this.checked)
   }
 }
 
@@ -82,9 +82,9 @@ const formCheckTemplate = html`<label class="form-block__check">
     type="checkbox"
     :name="name"
     :value="value"
-    :checked="checked"
     :disabled="disabled"
-    r-model="model"/>
+    r-model="checked"
+    r-inherit/>
   <span>{{ label }}</span>
 </label>`
 
@@ -125,7 +125,7 @@ function defineFormMetaComponent() {
 
 function defineFormCheckComponent() {
   return defineComponent<FormCheck>(formCheckTemplate, {
-    props: ['label', 'name', 'value', 'model', 'checked', 'disabled'],
+    props: ['label', 'name', 'value', 'checked', 'disabled'],
     context: (head) => new FormCheck(head.props),
   })
 }

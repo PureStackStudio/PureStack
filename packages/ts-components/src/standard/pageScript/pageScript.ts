@@ -6,7 +6,7 @@ import {
   toOutputAssetRelPath,
   toPosixPath,
 } from '@purestack/ts-util'
-import { type ComponentHead, defineComponent, html } from 'regor'
+import { type ComponentHead, defineComponent, flatten, html } from 'regor'
 
 export interface PageScript {
   teleport?: string
@@ -75,7 +75,7 @@ export function defineScriptComponents() {
 }
 
 function resolvePageScript(head: ComponentHead<PageScript>): PageScript {
-  const props = head.props
+  const props = flatten(head.props)
   const tsSsgContext = resolveTsSsgContext(head)
   const pageRelPath = tsSsgContext.pageInfo.relPath
   const src = resolveScriptSrc(props.src, pageRelPath, (sourceRelPath) => {

@@ -62,7 +62,10 @@ export class FormSelectField {
 
 const formSelectFieldTemplate = html`<label class="form-block__field" :for="id">
   <span class="form-block__label" r-if="label">{{ label }}</span>
-  <div class="form-block__input-shell form-block__select-shell" :class="classes">
+  <div
+    class="form-block__input-shell form-block__select-shell"
+    :class="classes"
+  >
     <Icon class="form-block__input-icon" :name="icon" r-if="icon"/>
     <select
       :id="id"
@@ -72,7 +75,8 @@ const formSelectFieldTemplate = html`<label class="form-block__field" :for="id">
       :autocomplete="autocomplete || 'off'"
       :disabled="disabled"
       r-model="model"
-      r-inherit>
+      r-inherit
+    >
       <option value="" disabled r-if="hasPlaceholder">{{ placeholder }}</option>
       <option
         r-for="option in resolvedOptions"
@@ -82,7 +86,9 @@ const formSelectFieldTemplate = html`<label class="form-block__field" :for="id">
         {{ option.label }}
       </option>
     </select>
-    <Icon class="form-block__input-icon form-block__select-icon" :name="resolvedIconEnd"/>
+    <Icon
+      class="form-block__input-icon form-block__select-icon"
+      :name="resolvedIconEnd"/>
   </div>
 </label>`
 

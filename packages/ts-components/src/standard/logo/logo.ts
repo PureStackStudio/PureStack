@@ -3,7 +3,7 @@ import {
   getThemePaletteVar,
   normalizeThemeVariableReference,
 } from '@purestack/ts-style'
-import { defineComponent, html } from 'regor'
+import { defineComponent, flatten, html } from 'regor'
 
 const logoTemplate = html`<div class="site-logo" :style="layoutStyle">
   <a class="site-logo__link" :href="href ?? '/'" :aria-label="ariaLabel">
@@ -379,7 +379,7 @@ function defineSiteLogoComponent() {
       'icon',
       'ariaLabel',
     ],
-    context: (head) => resolveSiteLogo(head.props),
+    context: (head) => resolveSiteLogo(flatten(head.props)),
   })
 }
 
