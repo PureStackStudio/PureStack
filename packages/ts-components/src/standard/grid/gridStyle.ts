@@ -26,6 +26,11 @@ export function registerGridStyles() {
     styleBuilder.select('.justify-items-center', theme).justifyItems('center')
     styleBuilder.select('.justify-items-end', theme).justifyItems('end')
 
+    styleBuilder.select('.justify-self-stretch', theme).justifySelf('stretch')
+    styleBuilder.select('.justify-self-start', theme).justifySelf('start')
+    styleBuilder.select('.justify-self-center', theme).justifySelf('center')
+    styleBuilder.select('.justify-self-end', theme).justifySelf('end')
+
     styleBuilder.select('.grid-dense', theme).gridAutoFlow('row dense')
 
     styleBuilder
