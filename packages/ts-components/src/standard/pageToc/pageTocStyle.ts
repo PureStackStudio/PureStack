@@ -196,7 +196,6 @@ function registerPageTocSidebarBaseStyles(theme: ThemeMode) {
     .select('.doc-toc', theme)
     .position('sticky')
     .top('105px')
-    .width('100%')
     .zIndex(30)
     .alignSelf('start')
     .maxHeight('calc(100vh - 130px)')
@@ -225,12 +224,15 @@ function registerPageTocMobileOverlayStyles(
 ) {
   styleBuilder
     .select('.template-doc--has-toc .doc-toc', theme)
+    .media(mediaMax(BREAKPOINTS.lg))
+    .top('78px')
+    .height('calc(100dvh - 78px)')
+  styleBuilder
+    .select('.template-doc--has-toc .doc-toc', theme)
     .media(mediaMax(BREAKPOINTS.toc))
     .position('fixed')
-    .top('78px')
     .right('0')
     .maxWidth('none')
-    .height('calc(100dvh - 78px)')
     .zIndex(140)
     .overflow('hidden')
     .background('transparent')
