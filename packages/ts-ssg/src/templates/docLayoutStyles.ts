@@ -191,7 +191,7 @@ function registerDocLayoutSidebarStyles(
   styleBuilder
     .select('.doc-sidebar', theme) // sync this with '.doc-toc' to get same behavior on both sides.
     .position('sticky')
-    .top('88px')
+    .top('105px')
     .width('100%')
     .zIndex(30)
     .alignSelf('start')
@@ -207,7 +207,6 @@ function registerDocLayoutSidebarStyles(
     .left('auto')
     .width('fit-content')
     .maxWidth('min(360px, calc(100vw - 32px))')
-    .maxHeight('calc(100vh - 88px)')
     .height('auto')
     .transform('translateX(120%)')
     .zIndex(40)

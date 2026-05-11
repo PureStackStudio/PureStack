@@ -195,7 +195,7 @@ function registerPageTocSidebarBaseStyles(theme: ThemeMode) {
   styleBuilder
     .select('.doc-toc', theme)
     .position('sticky')
-    .top('88px')
+    .top('105px')
     .width('100%')
     .zIndex(30)
     .alignSelf('start')
