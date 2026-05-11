@@ -132,7 +132,6 @@ export function registerNavShellStyles(
     .media(mediaMin(BREAKPOINTS.lg))
     .transformOrigin('left center')
     .transform('translateX(0)')
-    .willChange('transform')
     .zIndex(30)
   styleBuilder
     .select(
@@ -308,6 +307,8 @@ export function registerNavSummaryStyles(
     .right('2px')
     .transform('rotate(0deg)')
     .transition('transform 160ms ease')
+    .top('50%')
+    .set('translate', '0 -50%')
     .color(palette.current.text.subtle)
   styleBuilder
     .select('.nav__group[open] > .nav__summary .nav__chevron', theme)

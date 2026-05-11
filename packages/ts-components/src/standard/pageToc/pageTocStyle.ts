@@ -207,7 +207,6 @@ function registerPageTocSidebarBaseStyles(theme: ThemeMode) {
     .overflow('visible')
     .transformOrigin('right center')
     .transform('translateX(0)')
-    .willChange('transform')
     .zIndex(30)
   styleBuilder
     .select(
@@ -312,7 +311,7 @@ function registerPageTocMobileOverlayStyles(
       theme,
     )
     .media(mediaMax(BREAKPOINTS.toc))
-    .display('none')
+    .visibility('hidden')
   styleBuilder
     .select(
       '.template-doc--has-toc .doc-toc.doc-toc--open .page-toc__panel-toggle',
@@ -338,7 +337,7 @@ function registerPageTocDesktopCollapsedStyles(theme: ThemeMode) {
     .transform(`translateX(calc(100% - ${docLayoutVar('activeRailWidth')}))`)
     .zIndex(140)
   styleBuilder
-    .select('.template-doc--toc-collapsed .doc-toc.doc-toc--open', theme)
+    .select('.doc-toc.doc-toc--open', theme)
     .media(mediaAbove(BREAKPOINTS.md))
     .width(docLayoutVar('preferredTocWidth'))
     .background('transparent')

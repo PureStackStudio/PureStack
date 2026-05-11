@@ -63,7 +63,6 @@ function registerModalShellStyles(
     .boxShadow(options.shadows.soft)
     .color(palette.current.text.default)
     .transform('translate3d(0, 0, 0)')
-    .willChange('transform, opacity')
     .opacity('1')
 
   styleBuilder

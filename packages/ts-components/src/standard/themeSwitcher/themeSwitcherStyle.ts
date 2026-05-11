@@ -77,7 +77,6 @@ export function registerThemeSwitcherTrackStyles(
     .transition(
       'transform 260ms cubic-bezier(0.4, 0, 0.2, 1), background 200ms ease, box-shadow 200ms ease',
     )
-    .willChange('transform')
 
   styleBuilder
     .select('.theme-switcher__track-icon', theme)

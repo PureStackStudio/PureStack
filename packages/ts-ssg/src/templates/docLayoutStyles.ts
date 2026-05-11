@@ -119,16 +119,8 @@ function registerDocLayoutShellStyles(
 
   styleBuilder
     .select('.template-doc--has-toc:not(.template-doc--toc-collapsed)', theme)
+    .media(mediaMin(BREAKPOINTS.toc))
     .set(docLayoutVars.activeTocWidth, docLayoutVar('preferredTocWidth'))
-
-  styleBuilder
-    .select('.template-doc--has-toc:not(.template-doc--toc-collapsed)', theme)
-    .media(mediaMax(BREAKPOINTS.toc))
-    .set(docLayoutVars.activeTocWidth, '0px')
-
-  styleBuilder
-    .select('.template-doc--toc-collapsed', theme)
-    .set(docLayoutVars.activeTocWidth, '0px')
 
   styleBuilder
     .select('.template-doc--full-main', theme)
