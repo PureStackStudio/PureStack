@@ -12,9 +12,9 @@ const emojis: Record<string, string> = {
   '@purestack/ts-ssg': '⚙️',
   '@purestack/utils': '⚙️',
 }
-const packages: PackageJson[] = globSync(['packages/**/package.json']).map(
-  (p) => JSON.parse(readFileSync(path.join(p), 'utf8')),
-)
+const packages: PackageJson[] = globSync(['packages/**/package.json'])
+  .map((p) => JSON.parse(readFileSync(path.join(p), 'utf8')))
+  .filter((x) => !['@purestack/ts-ssg-vscode'].includes(x.name))
 const mainPkgName =
   packages.map((x) => x.name).filter((n) => !n.startsWith('@'))[0] ??
   packages

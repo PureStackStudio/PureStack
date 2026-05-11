@@ -1,6 +1,6 @@
-import { globSync, readFileSync } from 'fs'
-import { rm } from 'fs/promises'
-import path from 'path'
+import { globSync, readFileSync } from 'node:fs'
+import { rm } from 'node:fs/promises'
+import path from 'node:path'
 
 import { timeIt } from './timeIt'
 
