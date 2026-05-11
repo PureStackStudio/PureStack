@@ -27,7 +27,7 @@
     "regor-components": "yarn tsx scripts/regor-components.ts",
     "gen-icons": "yarn tsx scripts/generate-icons.ts",
     "build": "echo 'Building...' && yarn workspaces foreach --no-private --all --verbose --topological -- run build",
-    "lint": "yarn workspaces foreach --no-private --all --verbose --topological -- run lint && yarn lint-mygate",
+    "lint": "yarn workspaces foreach --no-private --all --verbose --topological -- run lint && yarn lint-puregate",
     "bundle": "yarn tsx --no-warnings scripts/bundle.ts",
     "cleanup": "yarn tsx --no-warnings scripts/cleanup.ts",
     "test": "vitest",
@@ -36,8 +36,8 @@
     "longest": "yarn tsx ./scripts/longest-functions.ts",
     "format": "biome format --write",
     "pre-commit": "yarn regor-components && yarn embed && yarn format && yarn lint && yarn build && yarn test run",
-    "mygate": "yarn tsx --watch packages/ts-ssg/src/index.ts --content PureGate/PureGateApp/admin-panel/content --serve",
-    "lint-mygate": "biome check PureGate/PureGateApp/admin-panel/content --write --formatter-enabled=false",
-    "format-mygate": "biome format PureGate/PureGateApp/admin-panel/content --write"
+    "puregate": "yarn tsx --watch packages/ts-ssg/src/index.ts --content PureGate/PureGateApp/admin-panel/content --serve",
+    "lint-puregate": "biome check PureGate/PureGateApp/admin-panel/content --write --formatter-enabled=false",
+    "format-puregate": "biome format PureGate/PureGateApp/admin-panel/content --write"
   }
 }
