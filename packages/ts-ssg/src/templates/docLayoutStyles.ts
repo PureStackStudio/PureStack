@@ -195,8 +195,10 @@ function registerDocLayoutSidebarStyles(
     .width('100%')
     .zIndex(30)
     .alignSelf('start')
-    .maxHeight('calc(100% - 112px)')
-    .overflow('auto')
+    .maxHeight('calc(100vh - 130px)')
+    .overflow('hidden')
+    .touchAction('none')
+    .set('overscroll-behavior', 'none')
   styleBuilder
     .select('.template-doc--nav-drawer .doc-sidebar', theme)
     .position('fixed')

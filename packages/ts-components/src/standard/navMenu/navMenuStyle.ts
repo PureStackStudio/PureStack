@@ -45,7 +45,7 @@ export function registerNavShellStyles(
     .borderRadius(options.radii.lg)
     .border('1px solid transparent')
     .apply(palette.applyFont(palette.font.size.body))
-    .maxHeight('100%')
+    .maxHeight('calc(100vh - 130px)')
     .overflowY('auto')
     .overflowX('hidden')
     .marginRight(docLayoutVar('activeShellPaddingInlineStart'))
@@ -130,7 +130,6 @@ export function registerNavShellStyles(
       theme,
     )
     .media(mediaMin(BREAKPOINTS.lg))
-    .overflow('visible')
     .transformOrigin('left center')
     .transform('translateX(0)')
     .willChange('transform')
