@@ -68,8 +68,9 @@ layout:
 >
   <Flex direction="column">
     <Panel tone="accent" variant="surface">
-      <Grid columns="1" columnsMd="minmax(0, 1fr) auto" alignItems="center">
+      <Grid columns="minmax(0, 1fr) auto" alignItems="center">
         <SectionHeader
+          class="mb-3"
           eyebrow="Profile"
           title="Sample User"
           subtitle="Product Engineer at PureStack Studio. Account-aware components can use this identity for avatars, menus, and workspace context."
@@ -77,6 +78,7 @@ layout:
           titleClass="fs-h3 mb-1"
           subtitleClass="mb-0"/>
         <IconFrame
+          class="justify-self-center"
           name="tabler:user-filled"
           tone="accent"
           variant="surface"
@@ -103,6 +105,7 @@ layout:
 
     <Panel tone="info" variant="surface">
       <SectionHeader
+        class="mb-3"
         eyebrow="Recent Activity"
         title="Pick up where you left off"
         subtitle="A short account timeline keeps the next move obvious without turning the page into a noisy dashboard."
@@ -153,6 +156,7 @@ layout:
   <Flex direction="column">
     <Panel tone="success" variant="surface">
       <SectionHeader
+        class="mb-3"
         eyebrow="Quick Actions"
         title="Move fast from here"
         subtitle="The account page should answer the obvious question: what can I do next?"
@@ -184,6 +188,7 @@ layout:
 
     <Panel tone="warning" variant="surface">
       <SectionHeader
+        class="mb-3"
         eyebrow="Attention"
         title="Finish security review"
         subtitle="A compact warning gives the user one useful thing to resolve."
@@ -205,6 +210,7 @@ layout:
 
     <Panel tone="accent" variant="surface">
       <SectionHeader
+        class="mb-3"
         eyebrow="Session"
         title="Trusted device"
         subtitle="This browser is treated as the current signed-in workspace session."
