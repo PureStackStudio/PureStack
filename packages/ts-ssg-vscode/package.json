@@ -80,6 +80,19 @@
       },
       {
         "injectTo": [
+          "source.mdx"
+        ],
+        "scopeName": "inline.mdx.script-style.injection",
+        "path": "./syntaxes/mdx-script-style-injection.json",
+        "embeddedLanguages": {
+          "meta.embedded.block.css": "css",
+          "meta.embedded.block.js": "javascript",
+          "source.css": "css",
+          "source.js": "javascript"
+        }
+      },
+      {
+        "injectTo": [
           "source.ts",
           "text.html.basic"
         ],

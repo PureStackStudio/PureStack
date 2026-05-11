@@ -1,0 +1,111 @@
+{
+  "fileTypes": [],
+  "injectionSelector": "L:source.mdx - markup.code",
+  "patterns": [
+    {
+      "begin": "(<)(style)(?=\\s|>)([^>]*)(>)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.jsx"
+        },
+        "2": {
+          "name": "entity.name.tag.jsx"
+        },
+        "3": {
+          "patterns": [
+            {
+              "include": "source.tsx#jsx-tag-attribute-name"
+            },
+            {
+              "include": "source.tsx#jsx-tag-attribute-assignment"
+            },
+            {
+              "include": "source.tsx#jsx-string-double-quoted"
+            },
+            {
+              "include": "source.tsx#jsx-string-single-quoted"
+            },
+            {
+              "include": "source.tsx#jsx-evaluated-code"
+            }
+          ]
+        },
+        "4": {
+          "name": "punctuation.definition.tag.end.jsx"
+        }
+      },
+      "contentName": "meta.embedded.block.css",
+      "end": "(</)(style)(\\s*>)",
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.jsx"
+        },
+        "2": {
+          "name": "entity.name.tag.jsx"
+        },
+        "3": {
+          "name": "punctuation.definition.tag.end.jsx"
+        }
+      },
+      "name": "meta.tag.style.mdx",
+      "patterns": [
+        {
+          "include": "source.css"
+        }
+      ]
+    },
+    {
+      "begin": "(<)(script)(?=\\s|>)([^>]*)(>)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.jsx"
+        },
+        "2": {
+          "name": "entity.name.tag.jsx"
+        },
+        "3": {
+          "patterns": [
+            {
+              "include": "source.tsx#jsx-tag-attribute-name"
+            },
+            {
+              "include": "source.tsx#jsx-tag-attribute-assignment"
+            },
+            {
+              "include": "source.tsx#jsx-string-double-quoted"
+            },
+            {
+              "include": "source.tsx#jsx-string-single-quoted"
+            },
+            {
+              "include": "source.tsx#jsx-evaluated-code"
+            }
+          ]
+        },
+        "4": {
+          "name": "punctuation.definition.tag.end.jsx"
+        }
+      },
+      "contentName": "meta.embedded.block.js",
+      "end": "(</)(script)(\\s*>)",
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.jsx"
+        },
+        "2": {
+          "name": "entity.name.tag.jsx"
+        },
+        "3": {
+          "name": "punctuation.definition.tag.end.jsx"
+        }
+      },
+      "name": "meta.tag.script.mdx",
+      "patterns": [
+        {
+          "include": "source.js"
+        }
+      ]
+    }
+  ],
+  "scopeName": "inline.mdx.script-style.injection"
+}

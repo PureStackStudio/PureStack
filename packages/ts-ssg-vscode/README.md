@@ -257,6 +257,8 @@ That includes:
 - MDX file icon
 - language configuration
 - Regor-aware attribute tokenization for `:`, `@`, and `#`
+- CSS highlighting inside `<style>` tags
+- JavaScript highlighting inside `<script>` tags
 
 The extension does not try to turn MDX into a second TypeScript template system. It keeps MDX aligned with its role in PureStack as a static content authoring format, while still making Regor-style markup pleasant to work with.
 
