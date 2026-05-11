@@ -28,7 +28,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsgo",
     "lint": "biome check ./src --formatter-enabled=false --write",
     "test": "vitest"
   },
