@@ -36,8 +36,8 @@
     "longest": "yarn tsx ./scripts/longest-functions.ts",
     "format": "biome format --write",
     "pre-commit": "yarn regor-components && yarn embed && yarn format && yarn lint && yarn build && yarn test run",
-    "mygate": "yarn tsx --watch packages/ts-ssg/src/index.ts --content MyGate/MyGateApp/admin-panel/content --serve",
-    "lint-mygate": "biome check MyGate/MyGateApp/admin-panel/content --write --formatter-enabled=false",
-    "format-mygate": "biome format MyGate/MyGateApp/admin-panel/content --write"
+    "mygate": "yarn tsx --watch packages/ts-ssg/src/index.ts --content PureGate/PureGateApp/admin-panel/content --serve",
+    "lint-mygate": "biome check PureGate/PureGateApp/admin-panel/content --write --formatter-enabled=false",
+    "format-mygate": "biome format PureGate/PureGateApp/admin-panel/content --write"
   }
 }
