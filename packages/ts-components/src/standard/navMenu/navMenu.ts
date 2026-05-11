@@ -8,9 +8,9 @@ import {
   type ComputedRef,
   computed,
   defineComponent,
-  flatten,
   html,
   type RefOrValue,
+  unref,
 } from 'regor'
 
 export interface NavMenu {
@@ -161,7 +161,7 @@ function buildNavState(
   items: NavItem[],
   currentPath: string | undefined,
 ): NavItemState[] {
-  return flatten(items).map((item) => {
+  return unref(items).map((item) => {
     const childStates = item.children
       ? buildNavState(item.children, currentPath)
       : []
