@@ -241,7 +241,12 @@ const codeShowcaseTemplate = html`<Panel :tone="tone" :variant="variant || 'surf
         subtitleClass="mb-0"/>
       <Badge r-if="language" :tone="tone">{{ language }}</Badge>
     </Flex>
-    <Panel variant="outline" tone="neutral" class="box-shadow-none">
+    <Panel
+      variant="outline"
+      tone="neutral"
+      class="box-shadow-none"
+      bodyClass="overflow-x-auto"
+    >
       <slot></slot>
     </Panel>
     <Panel

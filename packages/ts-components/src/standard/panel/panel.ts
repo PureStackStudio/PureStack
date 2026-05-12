@@ -16,6 +16,7 @@ export interface Panel {
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
   variantMode?: RefOrValue<ComponentVariantMode>
+  bodyClass?: RefOrValue<string>
   classes?: ComputedRef<string>
 }
 
@@ -23,12 +24,14 @@ const DEFAULT_PANEL_VARIANT: ComponentVariant = 'surface'
 const DEFAULT_PANEL_VARIANT_MODE: ComponentVariantMode = 'stateless'
 
 const panelTemplate = html`<section class="panel tone-text" :class="classes">
-  <div class="panel__body"><slot></slot></div>
+  <div class="panel__body" :class="bodyClass">
+    <slot></slot>
+  </div>
 </section>`
 
 function definePanelComponent() {
   return defineComponent<Panel>(panelTemplate, {
-    props: ['tone', 'variant', 'variantMode'],
+    props: ['tone', 'variant', 'variantMode', 'bodyClass'],
     context: (head) => resolvePanel(head.props),
   })
 }

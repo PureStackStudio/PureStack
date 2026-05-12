@@ -11,7 +11,5 @@ export function registerPanelStyles() {
       .transition(
         'border-color 180ms ease, box-shadow 180ms ease, background 180ms ease',
       )
-
-    styleBuilder.select('.panel__body', theme).overflowX('auto')
   })
 }
