@@ -113,13 +113,21 @@ function registerInlineCodeStyles(
   options: ThemeOptions,
 ) {
   styleBuilder
-    .select('.doc-content :where(code)', theme)
+    .select('.doc-content :where(code, pre)', theme)
     .fontFamily("'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace")
     .apply(palette.applyFont(palette.font.size.xs))
     .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
+    .color(palette.semanticTone.neutral.surfaceAlt.rest.text)
     .border(`1px solid ${palette.current.border.default}`)
     .borderRadius(options.radii.sm)
+    .margin('0')
+  styleBuilder
+    .select('.doc-content :where(code)', theme)
     .padding('0.15em 0.35em')
+  styleBuilder
+    .select('.doc-content :where(pre)', theme)
+    .padding('18px 20px')
+    .position('relative')
 }
 
 function registerPreAndCopyButtonStyles(
@@ -127,28 +135,10 @@ function registerPreAndCopyButtonStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-  registerPreShellStyles(theme, palette, options)
   registerCopyButtonBaseStyles(theme, palette, options)
   registerCopyButtonInteractionStyles(theme, palette)
   registerCopyButtonStateStyles(theme, palette)
   registerPreCodeResetStyles(theme)
-}
-
-function registerPreShellStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
-  styleBuilder
-    .select('.doc-content :where(pre)', theme)
-    .margin('0')
-    .padding('18px 20px')
-    .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
-    .border(`1px solid ${palette.current.border.default}`)
-    .borderRadius(options.radii.md)
-    .position('relative')
-    .overflow('auto')
-    .apply(palette.applyFont(palette.font.size.xs))
 }
 
 function registerCopyButtonBaseStyles(

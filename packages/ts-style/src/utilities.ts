@@ -112,6 +112,7 @@ function applyLayoutUtilities(theme: string) {
   styleBuilder.select('.ws-normal', theme).whiteSpace(force('normal'))
   styleBuilder.select('.ws-nowrap', theme).whiteSpace(force('nowrap'))
   styleBuilder.select('.col-resize', theme).cursor(force('col-resize'))
+  styleBuilder.select('.bg-none', theme).background(force('none'))
 }
 
 function applyVisibilityUtilities(theme: string) {
