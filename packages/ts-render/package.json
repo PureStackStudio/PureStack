@@ -37,6 +37,6 @@
     "@purestack/ts-minidom": "workspace:^",
     "@purestack/ts-page-scripts": "workspace:^",
     "@purestack/ts-util": "workspace:^",
-    "regor": "^1.6.5"
+    "regor": "^1.6.6"
   }
 }
