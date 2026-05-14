@@ -121,6 +121,7 @@ function registerInlineCodeStyles(
     .border(`1px solid ${palette.current.border.default}`)
     .borderRadius(options.radii.sm)
     .margin('0')
+    .overflowX('auto')
   styleBuilder
     .select('.doc-content :where(code)', theme)
     .padding('0.15em 0.35em')

@@ -171,7 +171,7 @@ function registerDocLayoutShellStyles(
   styleBuilder
     .select('.doc-shell--nav-drawer', theme)
     .gridTemplateColumns('1fr')
-  styleBuilder.select('.doc-main', theme).minWidth('0')
+  styleBuilder.select('.doc-main', theme).minWidth('0').overflowX('clip')
   styleBuilder.select('.doc-content', theme).margin('0').padding('0')
   styleBuilder.select('.doc-content :where(ul,ol)', theme).listStyle('auto')
 }
