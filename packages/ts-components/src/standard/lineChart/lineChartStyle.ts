@@ -28,7 +28,7 @@ function registerLineChartBaseStyles(theme: ThemeMode) {
 
   styleBuilder
     .select('.line-chart__area', theme)
-    .opacity('0.14')
+    .opacity('0.34')
     .transition('opacity 180ms ease')
 
   styleBuilder.select('.line-chart__point', theme).strokeWidth('0')

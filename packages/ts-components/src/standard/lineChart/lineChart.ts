@@ -144,15 +144,7 @@ const lineChartTemplate = svg`<svg
       :d="item.areaPath"
       :fill="item.color"
       :aria-label="item.label"
-    >
-      <animate
-        r-if="animated"
-        attributeName="opacity"
-        from="0"
-        to="1"
-        dur="820ms"
-        fill="freeze"/>
-    </path>
+    ></path>
   </g>
   <g class="line-chart__series" r-if="hasSeries">
     <path
@@ -165,10 +157,10 @@ const lineChartTemplate = svg`<svg
       <title r-text="item.label"></title>
       <animate
         r-if="animated"
-        attributeName="opacity"
+        attributeName="stroke-opacity"
         from="0"
         to="1"
-        dur="520ms"
+        dur="820ms"
         fill="freeze"/>
     </path>
   </g>
