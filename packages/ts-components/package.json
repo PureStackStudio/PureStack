@@ -96,6 +96,8 @@
     "TabPane",
     "Tabs",
     "ThemeSwitcher",
-    "TopBar"
+    "TopBar",
+    "VariableVirtualList",
+    "VirtualList"
   ]
 }
