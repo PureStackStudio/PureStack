@@ -5,7 +5,7 @@ export function registerVirtualListStyles() {
     styleBuilder
       .select('.virtual-list', theme)
       .overflowY('auto')
-      .overflowX('hidden')
+      .overflowX('auto')
       .minWidth('0')
 
     styleBuilder
@@ -23,7 +23,7 @@ export function registerVirtualListStyles() {
 
     styleBuilder
       .select('.virtual-list__item', theme)
-      .overflow('hidden')
+      .overflow('visible')
       .minWidth('0')
 
     styleBuilder

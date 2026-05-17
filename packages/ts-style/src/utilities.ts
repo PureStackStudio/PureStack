@@ -328,6 +328,7 @@ function applyTextUtilities(theme: string, palette: ThemePalette) {
   styleBuilder.select('.text-start', theme).textAlign('start !important')
   styleBuilder.select('.text-end', theme).textAlign('end !important')
   styleBuilder.select('.text-justify', theme).textAlign('justify !important')
+  styleBuilder.select('.text-ellipsis', theme).textOverflow('ellipsis')
   styleBuilder.select('.uppercase', theme).textTransform('uppercase !important')
 
   styleBuilder
