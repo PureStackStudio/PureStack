@@ -40,7 +40,7 @@ describe('FormSelectField', () => {
     try {
       const select = document.querySelector<HTMLSelectElement>('select')
       const renderedOptions = document.querySelectorAll('option')
-      const icon = document.querySelector('.form-block__select-icon')
+      const icon = document.querySelector('.icon.form-block__input-icon')
 
       expect(select).toBeTruthy()
       expect(select?.getAttribute('required')).toBe('')
