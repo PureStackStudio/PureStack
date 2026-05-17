@@ -48,7 +48,6 @@ const virtualListTemplate = html`<div class="virtual-list" :style="viewportStyle
       <div
         class="virtual-list__item"
         :style="itemStyle"
-        :key="row.index"
         r-for="row in visibleRows"
       >
         <div
@@ -87,7 +86,6 @@ const variableVirtualListTemplate = html`<div
       <div
         class="virtual-list__item"
         :ref="rowElementRefs[row.index]"
-        :key="row.index"
         r-for="row in visibleRows"
       >
         <div
