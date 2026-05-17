@@ -66,7 +66,11 @@ const formSelectFieldTemplate = html`<label class="form-block__field" :for="id">
     class="form-block__input-shell form-block__select-shell"
     :class="classes"
   >
-    <Icon class="form-block__input-icon" :name="icon" r-if="icon"/>
+    <Icon
+      class="form-block__input-icon"
+      :name="icon"
+      r-if="icon"
+      style="pointer-events: none"/>
     <select
       :id="id"
       class="form-block__input form-block__select"

@@ -127,7 +127,7 @@ function registerFormSelectControlStyles(theme: ThemeMode) {
     .select('.form-block__select', theme)
     .appearance('none')
     .cursor('pointer')
-    .paddingRight('1em')
+    .paddingRight('2em')
   styleBuilder
     .select('.form-block__select:disabled', theme)
     .cursor('not-allowed')
