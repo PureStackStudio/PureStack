@@ -287,7 +287,7 @@ function registerTableStyles(
 ) {
   registerTableContainerStyles(theme, palette, options)
   registerTableHeaderStyles(theme, palette, options)
-  registerTableBodyRowStyles(theme, palette, options)
+  registerTableBodyRowStyles(theme, options)
   registerTableCellStyles(theme, palette)
   registerTableInlineCodeStyles(theme, palette, options)
   registerTableResponsiveStyles(theme)
@@ -340,24 +340,7 @@ function registerTableHeaderStyles(
     .borderTopRightRadius(options.radii.md)
 }
 
-function registerTableBodyRowStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
-  styleBuilder
-    .select('.doc-content :where(tbody tr)', theme)
-    .transition('background-color 140ms ease')
-
-  styleBuilder
-    .select('.doc-content :where(tbody tr:nth-child(even))', theme)
-    .background(palette.current.surfaceAlt.rest.background)
-
-  styleBuilder
-    .select('.doc-content :where(tbody tr:hover)', theme)
-    .background(palette.current.tone)
-    .color(palette.current.text.default)
-
+function registerTableBodyRowStyles(theme: ThemeMode, options: ThemeOptions) {
   styleBuilder
     .select('.doc-content :where(tbody tr:last-child td)', theme)
     .borderBottom('none')

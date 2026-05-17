@@ -28,6 +28,8 @@ import { defineSignInComponents } from './standard/signIn/signIn'
 import { defineTabsComponents } from './standard/tabs/tabs'
 import { defineThemeSwitcherComponents } from './standard/themeSwitcher/themeSwitcher'
 import { defineTopBarComponents } from './standard/topBar/topBar'
+import { defineVirtualListComponents } from './standard/virtualList/virtualList'
+import { defineVirtualTableComponents } from './standard/virtualList/virtualTable'
 
 export function defineComponents(getSvgIcon: GetSvgIcon) {
   return {
@@ -52,6 +54,8 @@ export function defineComponents(getSvgIcon: GetSvgIcon) {
     ...defineModalComponents(),
     ...defineTopBarComponents(),
     ...defineThemeSwitcherComponents(),
+    ...defineVirtualListComponents(),
+    ...defineVirtualTableComponents(),
     ...defineNavigationComponents(),
     ...definePanelComponents(),
     ...definePageTocComponents(),

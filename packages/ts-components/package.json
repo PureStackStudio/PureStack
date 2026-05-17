@@ -98,6 +98,7 @@
     "ThemeSwitcher",
     "TopBar",
     "VariableVirtualList",
-    "VirtualList"
+    "VirtualList",
+    "VirtualTable"
   ]
 }

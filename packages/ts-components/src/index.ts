@@ -163,3 +163,6 @@ export type {
 } from './standard/virtualList/virtualList'
 export { defineVirtualListComponents } from './standard/virtualList/virtualList'
 export { registerVirtualListStyles } from './standard/virtualList/virtualListStyle'
+export type { VirtualTable } from './standard/virtualList/virtualTable'
+export { defineVirtualTableComponents } from './standard/virtualList/virtualTable'
+export { registerVirtualTableStyles } from './standard/virtualList/virtualTableStyle'

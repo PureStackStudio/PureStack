@@ -23,6 +23,7 @@ import { registerTabsStyles } from './standard/tabs/tabsStyle'
 import { registerThemeSwitcherStyles } from './standard/themeSwitcher/themeSwitcherStyle'
 import { registerTopBarStyles } from './standard/topBar/topBarStyle'
 import { registerVirtualListStyles } from './standard/virtualList/virtualListStyle'
+import { registerVirtualTableStyles } from './standard/virtualList/virtualTableStyle'
 
 export function registerStyles() {
   registerUtilityStyles()
@@ -50,4 +51,5 @@ export function registerStyles() {
   registerThemeSwitcherStyles()
   registerTopBarStyles()
   registerVirtualListStyles()
+  registerVirtualTableStyles()
 }
