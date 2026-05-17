@@ -42,16 +42,13 @@ export interface VariableVirtualList extends VirtualList {
   unmounted?: () => void
 }
 
-const virtualListTemplate = html`<div
-  class="virtual-list"
-  :style="viewportStyle"
-  @scroll="handleScroll"
->
+const virtualListTemplate = html`<div class="virtual-list" :style="viewportStyle" @scroll="handleScroll">
   <div class="virtual-list__spacer" :style="spacerStyle">
     <div class="virtual-list__window" :style="windowStyle">
       <div
         class="virtual-list__item"
         :style="itemStyle"
+        :key="row.index"
         r-for="row in visibleRows"
       >
         <div
@@ -90,6 +87,7 @@ const variableVirtualListTemplate = html`<div
       <div
         class="virtual-list__item"
         :ref="rowElementRefs[row.index]"
+        :key="row.index"
         r-for="row in visibleRows"
       >
         <div
@@ -125,12 +123,9 @@ export function defineVirtualListComponents() {
 }
 
 function resolveVirtualList(head: ComponentHead<VirtualList>) {
-  head.enableSwitch = true
   const props = head.props
   const scrollTop = ref(0)
-  const itemHeight = computed(() =>
-    resolvePositiveNumber(props.itemHeight, 44),
-  )
+  const itemHeight = computed(() => resolvePositiveNumber(props.itemHeight, 44))
   const height = computed(() => resolvePositiveNumber(props.height, 560))
   const overscan = computed(() =>
     Math.trunc(resolvePositiveNumber(props.overscan, 6)),
@@ -230,7 +225,9 @@ class VariableVirtualListContext {
       const value = unref(props.items)
       return Array.isArray(value) ? value : []
     })
-    this.resolvedHeight = computed(() => resolvePositiveNumber(props.height, 560))
+    this.resolvedHeight = computed(() =>
+      resolvePositiveNumber(props.height, 560),
+    )
     this.resolvedEstimateHeight = computed(() =>
       resolvePositiveNumber(props.estimateHeight ?? props.itemHeight, 56),
     )
