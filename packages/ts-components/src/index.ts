@@ -156,6 +156,7 @@ export type { TopBar } from './standard/topBar/topBar'
 export { defineTopBarComponents } from './standard/topBar/topBar'
 export { registerTopBarStyles } from './standard/topBar/topBarStyle'
 export type {
+  VariableVirtualList,
   VirtualList,
   VirtualListRow,
   VirtualListSelect,

@@ -27,6 +27,11 @@ export function registerVirtualListStyles() {
       .minWidth('0')
 
     styleBuilder
+      .select('.variable-virtual-list .virtual-list__item', theme)
+      .overflow('visible')
+      .minWidth('0')
+
+    styleBuilder
       .select('.virtual-list__row', theme)
       .display('grid')
       .gridTemplateColumns('10rem 7rem minmax(10rem, 16rem) minmax(0, 1fr)')
