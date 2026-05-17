@@ -22,6 +22,7 @@ import { registerSignInStyles } from './standard/signIn/signInStyle'
 import { registerTabsStyles } from './standard/tabs/tabsStyle'
 import { registerThemeSwitcherStyles } from './standard/themeSwitcher/themeSwitcherStyle'
 import { registerTopBarStyles } from './standard/topBar/topBarStyle'
+import { registerVirtualListStyles } from './standard/virtualList/virtualListStyle'
 
 export function registerStyles() {
   registerUtilityStyles()
@@ -48,4 +49,5 @@ export function registerStyles() {
   registerTabsStyles()
   registerThemeSwitcherStyles()
   registerTopBarStyles()
+  registerVirtualListStyles()
 }

@@ -155,3 +155,10 @@ export { registerThemeSwitcherStyles } from './standard/themeSwitcher/themeSwitc
 export type { TopBar } from './standard/topBar/topBar'
 export { defineTopBarComponents } from './standard/topBar/topBar'
 export { registerTopBarStyles } from './standard/topBar/topBarStyle'
+export type {
+  VirtualList,
+  VirtualListRow,
+  VirtualListSelect,
+} from './standard/virtualList/virtualList'
+export { defineVirtualListComponents } from './standard/virtualList/virtualList'
+export { registerVirtualListStyles } from './standard/virtualList/virtualListStyle'
