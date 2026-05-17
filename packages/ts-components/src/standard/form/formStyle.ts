@@ -127,10 +127,16 @@ function registerFormSelectControlStyles(theme: ThemeMode) {
     .select('.form-block__select', theme)
     .appearance('none')
     .cursor('pointer')
-    .paddingRight('2em')
+    .paddingRight('2.9em')
   styleBuilder
     .select('.form-block__select:disabled', theme)
     .cursor('not-allowed')
+  styleBuilder
+    .select(
+      '.form-block__select-shell:has(> .form-block__input-icon:first-child) .form-block__select',
+      theme,
+    )
+    .paddingLeft('2.9em')
 }
 
 function registerFormSelectOptionStyles(
@@ -147,9 +153,25 @@ function registerFormSelectOptionStyles(
 
 function registerFormSelectIconStyles(theme: ThemeMode) {
   styleBuilder
-    .select('.form-block__select-icon', theme)
+    .select(
+      '.form-block__select-shell > .form-block__input-icon:first-child',
+      theme,
+    )
     .position('absolute')
-    .right('0')
+    .left('0.6em')
+    .top('50%')
+    .transform('translateY(-50%)')
+    .pointerEvents('none')
+    .marginLeft('0')
+    .marginRight('0')
+
+  styleBuilder
+    .select(
+      '.form-block__select-shell > .form-block__input-icon:last-child',
+      theme,
+    )
+    .position('absolute')
+    .right('0.6em')
     .top('50%')
     .transform('translateY(-50%)')
     .pointerEvents('none')

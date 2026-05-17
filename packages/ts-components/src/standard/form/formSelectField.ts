@@ -91,7 +91,7 @@ const formSelectFieldTemplate = html`<label class="form-block__field" :for="id">
       </option>
     </select>
     <Icon
-      class="form-block__input-icon form-block__select-icon"
+      class="form-block__input-icon"
       :name="resolvedIconEnd"/>
   </div>
 </label>`
