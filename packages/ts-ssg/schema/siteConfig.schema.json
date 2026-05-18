@@ -607,8 +607,13 @@
     },
     "outDir": {
       "type": "string",
-      "description": "Output directory path. Relative paths are resolved from the content directory (siteConfig location).",
+      "description": "Development output directory path. Relative paths are resolved from the content directory (siteConfig location).",
       "default": "dist/site"
+    },
+    "publishDir": {
+      "type": "string",
+      "description": "Publish output directory path used by publish builds. Relative paths are resolved from the content directory (siteConfig location).",
+      "default": "dist/publish"
     }
   }
 }

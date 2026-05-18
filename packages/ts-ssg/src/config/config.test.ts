@@ -24,6 +24,24 @@ describe('resolveSiteConfig sitemap', () => {
     }
   })
 
+  it('resolves siteConfig publishDir relative to contentDir', () => {
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'ts-ssg-config-'))
+    try {
+      const rootDir = path.join(tempRoot, 'repo-root')
+      const contentDir = path.join(rootDir, 'apps', 'admin', 'content')
+      fs.mkdirSync(contentDir, { recursive: true })
+      fs.writeFileSync(
+        path.join(contentDir, 'siteConfig.json'),
+        JSON.stringify({ publishDir: '../publish' }),
+      )
+
+      const config = resolveSiteConfig({ rootDir, contentDir })
+      expect(config.publishDir).toBe(path.resolve(contentDir, '../publish'))
+    } finally {
+      fs.rmSync(tempRoot, { recursive: true, force: true })
+    }
+  })
+
   it('applies theme skin from siteConfig.json', () => {
     const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'ts-ssg-config-'))
     try {
@@ -81,6 +99,7 @@ describe('resolveSiteConfig sitemap', () => {
 
   it('provides style defaults', () => {
     const config = resolveSiteConfig({ rootDir: process.cwd() })
+    expect(config.publishDir).toBe(path.join(process.cwd(), 'dist', 'publish'))
     expect(config.style.fileName).toBe('site.css')
     expect(config.style.href).toBe('/assets/site.css')
     expect(config.style.themes).toEqual(['light', 'dark'])

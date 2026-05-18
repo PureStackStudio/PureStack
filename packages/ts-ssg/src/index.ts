@@ -3,6 +3,7 @@ export {
   type BuildInput,
   type BuildResult,
   buildSite,
+  type PublishOptions,
 } from './build/site'
 export { resolveSiteConfig } from './config/config'
 export {

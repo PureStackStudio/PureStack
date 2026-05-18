@@ -10,6 +10,7 @@ import type { IncrementalBuildResult } from './types'
 
 interface ScriptEntrypointManagerInput {
   config: Pick<SiteConfig, 'contentDir' | 'outDir'>
+  minifyScripts: boolean
   assets: Record<string, AssetManifestEntry>
   persistManifest: () => Promise<void>
 }
@@ -131,6 +132,7 @@ export class ScriptEntrypointManager {
       this.input.config.contentDir,
       this.input.config.outDir,
       assetFile,
+      { minifyScripts: this.input.minifyScripts },
     )
     if (!assetCopy.copied) return
 

@@ -89,5 +89,6 @@
   "mdx": {
     "highlighter": "shiki"
   },
-  "outDir": "../dist/site"
+  "outDir": "../dist/site",
+  "publishDir": "../dist/publish"
 }

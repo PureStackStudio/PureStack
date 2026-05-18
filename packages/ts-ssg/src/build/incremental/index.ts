@@ -2,7 +2,6 @@ import path from 'node:path'
 import type { SiteConfig } from '@purestack/ts-common'
 import { themes } from '@purestack/ts-style'
 import { getLogger, type Logger } from 'logpot'
-import { resolveSiteConfig } from '../../config/config'
 import {
   type ContentFile,
   discoverContent,
@@ -14,6 +13,7 @@ import {
 import { buildNavigation } from '../../navigation/navigation'
 import { initBuiltinComponents } from '../../regor/initBuiltinComponents'
 import { copyStaticAssets } from '../assets'
+import { resolveBuildSiteConfig } from '../build-config'
 import { writeGeneratedFavicon } from '../favicon'
 import { prepareOutDir } from '../io'
 import {
@@ -58,6 +58,7 @@ interface IncrementalRuntimeOptions {
   config: SiteConfig
   hooks: BuildHooks
   cleanOutDir: boolean
+  minifyScripts: boolean
   log: Logger
   context: BuildContext
   manifest: BuildManifest
@@ -66,11 +67,12 @@ interface IncrementalRuntimeOptions {
 async function createIncrementalRuntime(
   input: BuildInput,
 ): Promise<IncrementalRuntime> {
-  const configInput = input.siteConfig ?? {}
   const buildOptions = input.options ?? {}
-  const config = resolveSiteConfig(configInput)
+  const publishOptions = input.publish ?? {}
+  const config = resolveBuildSiteConfig(input)
   const hooks = buildOptions.hooks ?? {}
   const cleanOutDir = buildOptions.cleanOutDir === true
+  const minifyScripts = publishOptions.enabled === true
   const mdx = await resolveMdxBuildOptions(config.mdx)
   themes.setOptions(config.style.theme)
   initBuiltinComponents({ includeShikiStyles: isShikiEnabled(config.mdx) })
@@ -102,6 +104,7 @@ async function createIncrementalRuntime(
     config,
     hooks,
     cleanOutDir,
+    minifyScripts,
     log,
     context,
     manifest,
@@ -143,6 +146,7 @@ class IncrementalRuntime {
         contentDir: options.config.contentDir,
         outDir: options.config.outDir,
       },
+      minifyScripts: options.minifyScripts,
       assets: options.manifest.assets,
       persistManifest: () => this.persistManifest(),
     })
@@ -239,6 +243,7 @@ class IncrementalRuntime {
     const copiedAssets = await copyStaticAssets(
       this.config.contentDir,
       this.config.outDir,
+      { minifyScripts: this.options.minifyScripts },
     )
     this.scriptEntrypoints.rebuildDependencyIndex(
       copiedAssets.tsDependencyIndex,

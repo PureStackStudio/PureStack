@@ -59,18 +59,20 @@ await startDevServer({
 
 Flags:
 
+- `--content ./content` or `--content=./content` (required; directory must contain `siteConfig.json`)
 - `--port 4173` or `--port=4173`
 - `--host 127.0.0.1` or `--host=127.0.0.1`
-- `--content ./content` or `--content=./content`
 - `--no-watch`
 - `--no-reload`
 - `--clean`
+- `--publish`
 
 Examples from this monorepo:
 
 ```bash
-yarn tsx packages/ts-ssg/src/cli.ts
+yarn tsx packages/ts-ssg/src/cli.ts --content ./packages/ts-ssg/sample-content
 yarn tsx packages/ts-ssg/src/cli.ts serve --content ./packages/ts-ssg/sample-content --port 4173
+yarn tsx packages/ts-ssg/src/cli.ts --content ./packages/ts-ssg/sample-content --clean --publish
 ```
 
 ## Content Model
@@ -97,7 +99,8 @@ Config comes from:
 
 - `rootDir`: project root. Default is package root.
 - `contentDir`: default `rootDir/sample-content`.
-- `outDir`: default `rootDir/dist/site`.
+- `outDir`: development output directory. Default `rootDir/dist/site`.
+- `publishDir`: publish output directory used by `--publish`. Default `rootDir/dist/publish`.
 - `siteTitle`: default `"ts-ssg"`.
 - `logo`: brand fields for top bar.
 - `style.fileName`: default `"site.css"`.
@@ -119,6 +122,7 @@ Config comes from:
   "$schema": "../schema/siteConfig.schema.json",
   "siteTitle": "Acme Docs",
   "outDir": "dist/site",
+  "publishDir": "dist/publish",
   "style": {
     "fileName": "site.css",
     "href": "/assets/site.css",

@@ -2,12 +2,12 @@ import fsPromises from 'node:fs/promises'
 import http from 'node:http'
 import { logError } from '@purestack/ts-util'
 import { getLogger, type Logger } from 'logpot'
+import { resolveBuildSiteConfig } from '../build/build-config'
 import {
   createIncrementalBuilder,
   type IncrementalBuilder,
 } from '../build/incremental'
 import type { BuildInput } from '../build/site'
-import { resolveSiteConfig } from '../config/config'
 import {
   broadcastJson,
   injectLiveReload,
@@ -70,7 +70,7 @@ export async function startDevServer(
       ...(baseBuildInput.options ?? {}),
     },
   }
-  const config = resolveSiteConfig(buildInput.siteConfig)
+  const config = resolveBuildSiteConfig(buildInput)
   const log = getLogger()
 
   const { host, port, watch, liveReload } = resolveDevServerOptions(input)

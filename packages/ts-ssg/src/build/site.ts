@@ -2,9 +2,12 @@ import type { PageTemplateMap, SiteConfigInput } from '@purestack/ts-common'
 import type { Component } from 'regor'
 import type { ContentFile } from '../discover/content'
 import type { NavigationTree } from '../navigation/navigation'
+import type { PublishOptions } from './build-config'
 import { createIncrementalBuilder } from './incremental'
 import type { BuildContext, PageRenderResult } from './page'
 import type { WriteStylesResult } from './styles'
+
+export type { PublishOptions } from './build-config'
 
 export interface BuildResult {
   outDir: string
@@ -61,6 +64,7 @@ export interface BuildOptions {
 export interface BuildInput {
   siteConfig?: SiteConfigInput
   options?: BuildOptions
+  publish?: PublishOptions
 }
 
 export async function buildSite(input: BuildInput = {}): Promise<BuildResult> {

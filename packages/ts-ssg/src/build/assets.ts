@@ -12,6 +12,10 @@ export interface CopyStaticAssetsResult {
   tsDependencyIndex: Record<string, string[]>
 }
 
+export interface StaticAssetBuildOptions {
+  minifyScripts?: boolean
+}
+
 export interface CopyStaticAssetResult {
   outPath: string
   copied: boolean
@@ -21,6 +25,7 @@ export interface CopyStaticAssetResult {
 export async function copyStaticAssets(
   contentDir: string,
   outDir: string,
+  options: StaticAssetBuildOptions = {},
 ): Promise<CopyStaticAssetsResult> {
   const log = getLogger()
   const assets = await discoverStaticAssets(contentDir)
@@ -32,6 +37,7 @@ export async function copyStaticAssets(
       contentDir,
       asset,
       outPath,
+      options,
     )
     if (dependencyRelPaths.length > 0) {
       tsDependencyIndex[asset.relPath] = dependencyRelPaths
@@ -45,6 +51,7 @@ export async function copyStaticAsset(
   contentDir: string,
   outDir: string,
   asset: StaticAssetFile,
+  options: StaticAssetBuildOptions = {},
 ): Promise<CopyStaticAssetResult> {
   const log = getLogger()
   const outPath = resolveStaticOutPath(outDir, asset)
@@ -54,6 +61,7 @@ export async function copyStaticAsset(
       contentDir,
       asset,
       outPath,
+      options,
     )
     log.info('static asset copied', {
       assetPath: asset.absPath,
@@ -79,6 +87,7 @@ async function writeStaticAsset(
   contentDir: string,
   asset: StaticAssetFile,
   outPath: string,
+  options: StaticAssetBuildOptions,
 ) {
   if (isTypeScriptAssetPath(asset.relPath)) {
     const buildResult = await buildScript({
@@ -86,7 +95,7 @@ async function writeStaticAsset(
       outfile: outPath,
       bundle: true,
       format: 'esm',
-      minify: false,
+      minify: options.minifyScripts === true,
       treeShaking: true,
       platform: 'browser',
       target: 'esnext',

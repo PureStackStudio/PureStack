@@ -61,8 +61,12 @@ export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
   const fileConfig = loadSiteConfigFile(contentDir)
   const outDir =
     input.outDir ??
-    resolveOutDirFromFile(fileConfig.outDir, contentDir) ??
+    resolvePathFromFileConfig(fileConfig.outDir, contentDir) ??
     path.join(rootDir, 'dist', 'site')
+  const publishDir =
+    input.publishDir ??
+    resolvePathFromFileConfig(fileConfig.publishDir, contentDir) ??
+    path.join(rootDir, 'dist', 'publish')
   const siteTitle = resolveString(
     input.siteTitle,
     fileConfig.siteTitle,
@@ -93,6 +97,7 @@ export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
     rootDir,
     contentDir,
     outDir,
+    publishDir,
     siteTitle,
     favicon: resolveFavicon(input.favicon, fileConfig.favicon),
     logo,
@@ -252,7 +257,7 @@ function pickBoolean(...values: Array<unknown>) {
   return false
 }
 
-function resolveOutDirFromFile(value: unknown, contentDir: string) {
+function resolvePathFromFileConfig(value: unknown, contentDir: string) {
   if (typeof value !== 'string' || value.length === 0) return undefined
   if (path.isAbsolute(value)) return value
   return path.resolve(contentDir, value)

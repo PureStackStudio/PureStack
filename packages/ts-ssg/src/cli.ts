@@ -1,8 +1,10 @@
 #!/usr/bin/env node
+import fs from 'node:fs'
 import path from 'node:path'
 import { logError } from '@purestack/ts-util'
 import { createLogger, getLogger } from 'logpot'
 import { buildSite } from './build/site'
+import { SITE_CONFIG_FILENAME } from './config/config'
 import { type DevServerInput, startDevServer } from './dev/server'
 
 runCli(process.argv.slice(2)).catch((error) => {
@@ -39,6 +41,7 @@ type CliCommand = 'build' | 'serve'
 interface CliState {
   command: CliCommand
   input: DevServerInput
+  contentDir?: string
 }
 
 function parseCliArgs(args: string[]): CliState {
@@ -53,7 +56,9 @@ function parseCliArgs(args: string[]): CliState {
     const direct = args.find((arg) => arg.startsWith(`${name}=`))
     if (direct) return direct.slice(name.length + 1)
     const index = args.indexOf(name)
-    if (index !== -1 && args[index + 1]) return args[index + 1]
+    if (index !== -1 && args[index + 1] && !args[index + 1].startsWith('--')) {
+      return args[index + 1]
+    }
     return undefined
   }
 
@@ -71,9 +76,10 @@ function parseCliArgs(args: string[]): CliState {
   }
   const contentDir = readValue('--content')
   if (contentDir) {
+    state.contentDir = path.resolve(contentDir)
     state.input.build ??= {}
     state.input.build.siteConfig ??= {}
-    state.input.build.siteConfig.contentDir = path.resolve(contentDir)
+    state.input.build.siteConfig.contentDir = state.contentDir
   }
 
   if (args.includes('--no-watch')) {
@@ -87,6 +93,21 @@ function parseCliArgs(args: string[]): CliState {
     state.input.build.options ??= {}
     state.input.build.options.cleanOutDir = true
   }
+  if (args.includes('--publish')) {
+    state.input.build ??= {}
+    state.input.build.publish = { enabled: true }
+  }
 
+  assertContentConfig(state.contentDir)
   return state
+}
+
+function assertContentConfig(contentDir: string | undefined) {
+  if (!contentDir) {
+    throw new Error('Missing required --content <dir> option.')
+  }
+  const configPath = path.join(contentDir, SITE_CONFIG_FILENAME)
+  if (!fs.existsSync(configPath)) {
+    throw new Error(`Missing required ${SITE_CONFIG_FILENAME}: ${configPath}`)
+  }
 }

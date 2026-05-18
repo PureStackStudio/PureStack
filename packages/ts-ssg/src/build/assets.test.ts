@@ -7,6 +7,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import {
   type CopyStaticAssetsResult,
+  copyStaticAsset,
   copyStaticAssets,
   resolveStaticOutPath,
 } from './assets'
@@ -80,6 +81,44 @@ describe('static assets', () => {
 
       const txtOutput = await fs.readFile(txtPath, 'utf8')
       expect(txtOutput).toBe('hello')
+    } finally {
+      await fs.rm(root, { recursive: true, force: true })
+    }
+  })
+
+  it('minifies compiled ts assets when requested', async () => {
+    const root = await fs.mkdtemp(
+      path.join(process.cwd(), '.tmp-ts-ssg-assets-'),
+    )
+    const outDir = path.join(root, 'dist')
+    try {
+      const entryPath = path.join(root, 'login.ts')
+      await writeFile(
+        entryPath,
+        [
+          'const message = "hello world"',
+          'function greet(value: string) {',
+          '  console.log(value)',
+          '}',
+          'greet(message)',
+        ].join('\n'),
+      )
+
+      const result = await copyStaticAsset(
+        root,
+        outDir,
+        {
+          absPath: entryPath,
+          relPath: 'login.ts',
+          ext: '.ts',
+        },
+        { minifyScripts: true },
+      )
+
+      const output = await fs.readFile(result.outPath, 'utf8')
+      expect(output).not.toContain('function greet')
+      expect(output).not.toContain('\n  ')
+      expect(output).toContain('console.log')
     } finally {
       await fs.rm(root, { recursive: true, force: true })
     }
