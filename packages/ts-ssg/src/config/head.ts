@@ -20,7 +20,7 @@ const DEFAULTS: BasicHeadConfig = {
   },
   favIcon: {
     rel: 'icon',
-    href: '/favicon.svg',
+    href: '/assets/favicon.svg',
     type: 'image/svg+xml',
   },
 }

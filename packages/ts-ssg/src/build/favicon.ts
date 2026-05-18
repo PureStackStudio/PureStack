@@ -9,7 +9,7 @@ const FAVICON_OUTPUT_NAME = 'favicon.svg'
 export async function writeGeneratedFavicon(config: SiteConfig): Promise<void> {
   if (!config.favicon) return
   const svg = buildFaviconSvg(config, getSvgIcon(config.favicon))
-  const absPath = path.join(config.outDir, FAVICON_OUTPUT_NAME)
+  const absPath = path.join(config.outDir, 'assets', FAVICON_OUTPUT_NAME)
   await ensureDir(absPath)
   await fs.writeFile(absPath, svg, 'utf8')
 }

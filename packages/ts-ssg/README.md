@@ -101,7 +101,7 @@ Config comes from:
 - `siteTitle`: default `"ts-ssg"`.
 - `logo`: brand fields for top bar.
 - `style.fileName`: default `"site.css"`.
-- `style.href`: default `"/site.css"`.
+- `style.href`: default `"/assets/site.css"`.
 - `style.themes`: must include `"light"` and `"dark"`.
 - `style.pretty`: default `false`. Set `true` to format generated CSS with Prettier.
 - `navigation`: auto/custom/hybrid/none behavior.
@@ -121,7 +121,7 @@ Config comes from:
   "outDir": "dist/site",
   "style": {
     "fileName": "site.css",
-    "href": "/site.css",
+    "href": "/assets/site.css",
     "themes": ["light", "dark"],
     "pretty": false
   },
@@ -299,9 +299,9 @@ Theme utilities:
 
 `style.themes` controls generated files:
 
-- `site.css` for `light`
-- `site.dark.css` for `dark`
-- `site.<theme>.css` for additional themes
+- `assets/site.css` for `light`
+- `assets/site.dark.css` for `dark`
+- `assets/site.<theme>.css` for additional themes
 
 ## Markdown/MDX Compilation
 

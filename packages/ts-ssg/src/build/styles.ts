@@ -42,7 +42,7 @@ export async function writeStyles(
       includeHljsTheme,
     )
     const cssName = resolveThemeFileName(fileName, theme)
-    const outPath = path.join(outDir, cssName)
+    const outPath = path.join(outDir, 'assets', cssName)
     await ensureDir(outPath)
     await fs.writeFile(outPath, css)
     hash.update(css)
@@ -56,7 +56,7 @@ export async function writeStyles(
   return {
     outPath:
       lightOutPath ??
-      path.join(outDir, resolveThemeFileName(fileName, 'light')),
+      path.join(outDir, 'assets', resolveThemeFileName(fileName, 'light')),
     outputs: resultPaths,
     signature: hash.digest('hex'),
   }

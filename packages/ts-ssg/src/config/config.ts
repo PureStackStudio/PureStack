@@ -148,7 +148,11 @@ function resolveStyleConfig(
     styleFile?.fileName,
     'site.css',
   )
-  const href = resolveString(styleInput?.href, styleFile?.href, `/${fileName}`)
+  const href = resolveString(
+    styleInput?.href,
+    styleFile?.href,
+    `/assets/${fileName}`,
+  )
   const themeNames = resolveThemes(styleInput?.themes, styleFile?.themes)
   const pretty = pickBoolean(styleInput?.pretty, styleFile?.pretty, false)
   const theme = themes.resolve(styleInput?.theme, styleFile?.theme)

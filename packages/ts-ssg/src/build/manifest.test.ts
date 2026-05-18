@@ -34,7 +34,7 @@ describe('manifest', () => {
         siteTitle: 'Test Site',
         style: {
           fileName: 'site.css',
-          href: '/site.css',
+          href: '/assets/site.css',
         },
       })
       const manifest = createEmptyManifest(config)

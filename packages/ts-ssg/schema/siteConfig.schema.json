@@ -15,7 +15,7 @@
     },
     "favicon": {
       "type": "string",
-      "description": "SVG icon name from ts-svg-icons used to generate /favicon.svg during the build."
+      "description": "SVG icon name from ts-svg-icons used to generate /assets/favicon.svg during the build."
     },
     "logo": {
       "type": "object",
@@ -160,7 +160,7 @@
         "href": {
           "type": "string",
           "description": "Public href injected into rendered pages for the site stylesheet.",
-          "default": "/site.css"
+          "default": "/assets/site.css"
         },
         "themes": {
           "type": "array",

@@ -20,7 +20,7 @@
   },
   "style": {
     "fileName": "site.css",
-    "href": "/site.css",
+    "href": "/assets/site.css",
     "themes": ["light", "dark"],
     "pretty": false,
     "theme": {

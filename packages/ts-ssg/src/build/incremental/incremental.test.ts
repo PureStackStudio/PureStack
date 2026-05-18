@@ -55,7 +55,7 @@ describe('incremental builder', () => {
         siteTitle: 'Test Site',
         style: {
           fileName: 'site.css',
-          href: '/site.css',
+          href: '/assets/site.css',
         },
       })
 
@@ -79,7 +79,7 @@ describe('incremental builder', () => {
           siteTitle: 'Test Site',
           style: {
             fileName: 'site.css',
-            href: '/site.css',
+            href: '/assets/site.css',
           },
         },
       })
@@ -115,7 +115,7 @@ describe('incremental builder', () => {
           siteTitle: 'Test Site',
           style: {
             fileName: 'site.css',
-            href: '/site.css',
+            href: '/assets/site.css',
           },
           mdx: {
             highlighter: 'highlightjs',
@@ -125,9 +125,12 @@ describe('incremental builder', () => {
 
       await builder.buildAll('test highlightjs styles')
 
-      const lightCss = await fs.readFile(path.join(outDir, 'site.css'), 'utf8')
+      const lightCss = await fs.readFile(
+        path.join(outDir, 'assets', 'site.css'),
+        'utf8',
+      )
       const darkCss = await fs.readFile(
-        path.join(outDir, 'site.dark.css'),
+        path.join(outDir, 'assets', 'site.dark.css'),
         'utf8',
       )
 
@@ -169,7 +172,7 @@ describe('incremental builder', () => {
           siteTitle: 'Test Site',
           style: {
             fileName: 'site.css',
-            href: '/site.css',
+            href: '/assets/site.css',
           },
           mdx: {
             disableHighlighter: true,
@@ -221,7 +224,7 @@ describe('incremental builder', () => {
           siteTitle: 'Test Site',
           style: {
             fileName: 'site.css',
-            href: '/site.css',
+            href: '/assets/site.css',
           },
           navigation: {
             mode: 'auto',

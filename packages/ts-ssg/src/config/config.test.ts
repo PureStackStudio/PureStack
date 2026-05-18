@@ -82,7 +82,7 @@ describe('resolveSiteConfig sitemap', () => {
   it('provides style defaults', () => {
     const config = resolveSiteConfig({ rootDir: process.cwd() })
     expect(config.style.fileName).toBe('site.css')
-    expect(config.style.href).toBe('/site.css')
+    expect(config.style.href).toBe('/assets/site.css')
     expect(config.style.themes).toEqual(['light', 'dark'])
     expect(config.style.pretty).toBe(false)
   })
