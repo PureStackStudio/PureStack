@@ -155,6 +155,8 @@ export { registerThemeSwitcherStyles } from './standard/themeSwitcher/themeSwitc
 export type { TopBar } from './standard/topBar/topBar'
 export { defineTopBarComponents } from './standard/topBar/topBar'
 export { registerTopBarStyles } from './standard/topBar/topBarStyle'
+export type { VariableVirtualTable } from './standard/virtualList/variableVirtualTable'
+export { defineVariableVirtualTableComponents } from './standard/virtualList/variableVirtualTable'
 export type {
   VariableVirtualList,
   VirtualList,
