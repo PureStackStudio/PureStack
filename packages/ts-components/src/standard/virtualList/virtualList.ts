@@ -16,15 +16,12 @@ export interface VirtualListRow {
   item: unknown
 }
 
-export type VirtualListSelect = (item: unknown, index: number) => void
-
 export interface VirtualList {
   items?: RefOrValue<unknown[]>
   height?: RefOrValue<number | string>
   itemHeight?: RefOrValue<number | string>
   overscan?: RefOrValue<number | string>
   rowComponent?: RefOrValue<string>
-  select?: RefOrValue<VirtualListSelect>
   scrollTop?: ReturnType<typeof ref<number>>
   visibleRows?: ComputedRef<VirtualListRow[]>
   viewportStyle?: ComputedRef<Record<string, string>>
@@ -54,7 +51,6 @@ const virtualListTemplate = html`<div class="virtual-list" :style="viewportStyle
           :is="resolvedRowComponent"
           :item="row.item"
           :index="row.index"
-          :select="select"
         ></div>
       </div>
     </div>
@@ -69,7 +65,6 @@ function defineVirtualListComponent() {
       'itemHeight',
       'overscan',
       'rowComponent',
-      'select',
     ],
     context: (head) => resolveVirtualList(head),
   })
@@ -92,7 +87,6 @@ const variableVirtualListTemplate = html`<div
           :is="resolvedRowComponent"
           :item="row.item"
           :index="row.index"
-          :select="select"
         ></div>
       </div>
     </div>
@@ -107,7 +101,6 @@ function defineVariableVirtualListComponent() {
       'estimateHeight',
       'overscan',
       'rowComponent',
-      'select',
     ],
     context: (head) => resolveVariableVirtualList(head),
   })
@@ -188,7 +181,6 @@ function resolvePositiveNumber(
 }
 
 class VariableVirtualListContext {
-  readonly select?: RefOrValue<VirtualListSelect>
   readonly scrollTop = ref(0)
   readonly viewportElement = sref<HTMLElement | null>(null)
   readonly rowElementRefs: Array<ReturnType<typeof sref<HTMLElement | null>>> =
@@ -218,7 +210,6 @@ class VariableVirtualListContext {
   private hasDeferredMeasurements = false
 
   constructor(props: VariableVirtualList) {
-    this.select = props.select
     this.resolvedItems = computed(() => {
       const value = unref(props.items)
       return Array.isArray(value) ? value : []
