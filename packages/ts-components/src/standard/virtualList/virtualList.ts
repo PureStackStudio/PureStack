@@ -59,13 +59,7 @@ const virtualListTemplate = html`<div class="virtual-list" :style="viewportStyle
 
 function defineVirtualListComponent() {
   return defineComponent<VirtualList>(virtualListTemplate, {
-    props: [
-      'items',
-      'height',
-      'itemHeight',
-      'overscan',
-      'rowComponent',
-    ],
+    props: ['items', 'height', 'itemHeight', 'overscan', 'rowComponent'],
     context: (head) => resolveVirtualList(head),
   })
 }
@@ -95,13 +89,7 @@ const variableVirtualListTemplate = html`<div
 
 function defineVariableVirtualListComponent() {
   return defineComponent<VariableVirtualList>(variableVirtualListTemplate, {
-    props: [
-      'items',
-      'height',
-      'estimateHeight',
-      'overscan',
-      'rowComponent',
-    ],
+    props: ['items', 'height', 'estimateHeight', 'overscan', 'rowComponent'],
     context: (head) => resolveVariableVirtualList(head),
   })
 }

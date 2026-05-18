@@ -1,3 +1,4 @@
+export type { TsSsgModalApi, TsSsgTabsApi } from '@purestack/ts-page-scripts'
 export { defineComponents } from './defineComponents'
 export { registerStyles } from './registerStyles'
 export type { AlertBox } from './standard/alertBox/alertBox'
@@ -161,7 +162,6 @@ export type {
   VariableVirtualList,
   VirtualList,
   VirtualListRow,
-  VirtualListSelect,
 } from './standard/virtualList/virtualList'
 export { defineVirtualListComponents } from './standard/virtualList/virtualList'
 export { registerVirtualListStyles } from './standard/virtualList/virtualListStyle'
