@@ -52,7 +52,7 @@ await startDevServer({
 
 ## CLI Usage
 
-`src/index.ts` includes a direct-run CLI mode:
+`src/cli.ts` provides the CLI:
 
 - `build` (default)
 - `serve` / `dev` / `--serve`
@@ -69,8 +69,8 @@ Flags:
 Examples from this monorepo:
 
 ```bash
-yarn tsx packages/ts-ssg/src/index.ts
-yarn tsx packages/ts-ssg/src/index.ts serve --content ./packages/ts-ssg/sample-content --port 4173
+yarn tsx packages/ts-ssg/src/cli.ts
+yarn tsx packages/ts-ssg/src/cli.ts serve --content ./packages/ts-ssg/sample-content --port 4173
 ```
 
 ## Content Model

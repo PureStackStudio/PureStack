@@ -6,6 +6,9 @@
   "types": "./dist/ts-ssg.d.mts",
   "type": "module",
   "sideEffects": false,
+  "bin": {
+    "ts-ssg": "./dist/cli.mjs"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/koculu/purestack.git",

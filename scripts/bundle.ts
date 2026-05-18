@@ -49,6 +49,7 @@ interface PackageJson extends Record<string, unknown> {
   main: string
   module: string
   types: string
+  bin?: string | Record<string, string>
   exports: Record<
     string,
     {
@@ -74,7 +75,29 @@ function getEntries(pkg: PackageJson) {
       [name]: `./packages/${pkgName}/src/${name}.ts`,
     })
   }
+  for (const entry of resolveBinEntries(pkg)) {
+    result.push({
+      [entry.name]: `./packages/${pkgName}/src/${entry.name}.ts`,
+    })
+  }
   return result
+}
+
+function resolveBinEntries(pkg: PackageJson) {
+  const bin =
+    typeof pkg.bin === 'string'
+      ? { [unscope(pkg.name)]: pkg.bin }
+      : (pkg.bin ?? {})
+  return Object.values(bin).map((outFile) => {
+    if (!outFile.startsWith('./dist/') || !outFile.endsWith('.mjs')) {
+      throw new Error(
+        `${pkg.name} package bin entries should point to ./dist/*.mjs files.`,
+      )
+    }
+    return {
+      name: path.basename(outFile, '.mjs'),
+    }
+  })
 }
 async function bundlePackage(pkg: PackageJson) {
   const entries = getEntries(pkg)
@@ -140,6 +163,17 @@ function addBanner(banner: string) {
   return {
     name: 'add-banner',
     renderChunk(code: string) {
+      if (code.startsWith('#!')) {
+        const firstLineEnd = code.indexOf('\n')
+        if (firstLineEnd !== -1) {
+          return {
+            code: `${code.slice(0, firstLineEnd + 1)}${banner}${code.slice(
+              firstLineEnd + 1,
+            )}`,
+            map: null,
+          }
+        }
+      }
       return {
         code: banner + code,
         map: null,

@@ -22,7 +22,7 @@
   },
   "files": [],
   "scripts": {
-    "dev": "yarn tsx --watch packages/ts-ssg/src/index.ts",
+    "dev": "yarn tsx --watch packages/ts-ssg/src/cli.ts",
     "embed": "yarn tsx scripts/embed.ts && yarn format",
     "regor-components": "yarn tsx scripts/regor-components.ts",
     "gen-icons": "yarn tsx scripts/generate-icons.ts",
@@ -36,7 +36,7 @@
     "longest": "yarn tsx ./scripts/longest-functions.ts",
     "format": "biome format --write",
     "pre-commit": "yarn regor-components && yarn embed && yarn format && yarn lint && yarn build && yarn test run",
-    "puregate": "yarn tsx --watch packages/ts-ssg/src/index.ts --content PureGate/PureGateApp/admin-panel --serve",
+    "puregate": "yarn tsx --watch packages/ts-ssg/src/cli.ts --content PureGate/PureGateApp/admin-panel --serve",
     "lint-puregate": "biome check PureGate/PureGateApp/admin-panel --write --formatter-enabled=false",
     "format-puregate": "biome format PureGate/PureGateApp/admin-panel --write"
   }
