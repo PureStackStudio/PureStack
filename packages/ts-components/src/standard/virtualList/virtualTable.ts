@@ -25,7 +25,6 @@ export interface VirtualTable {
   tableStyle?: ComputedRef<Record<string, string>>
   topSpacerStyle?: ComputedRef<Record<string, string>>
   bottomSpacerStyle?: ComputedRef<Record<string, string>>
-  rowStyle?: ComputedRef<Record<string, string>>
   handleScroll?: (event: Event) => void
   hasHeaderComponent?: ComputedRef<boolean>
   hasFooterComponent?: ComputedRef<boolean>
@@ -45,7 +44,7 @@ const virtualTableTemplate = html`<div class="virtual-table" :style="viewportSty
         :item="row.item"
         :index="row.index"
         :select="select"
-        :rowStyle="rowStyle"
+        style="height: var(--virtual-table-item-height) !important;"
         r-for="row in visibleRows"
       ></tr>
       <tr class="virtual-table__spacer-row">
@@ -102,6 +101,7 @@ function resolveVirtualTable(head: ComponentHead<VirtualTable>) {
       minWidth: '0',
     })),
     tableStyle: computed<Record<string, string>>(() => ({
+      '--virtual-table-item-height': `${window.itemHeight()}px`,
       width: 'max-content',
       minWidth: '100%',
       borderCollapse: 'collapse',
@@ -115,9 +115,6 @@ function resolveVirtualTable(head: ComponentHead<VirtualTable>) {
       height: `${Math.max(0, window.items().length - endIndex()) * window.itemHeight()}px`,
       padding: '0',
       border: '0',
-    })),
-    rowStyle: computed<Record<string, string>>(() => ({
-      height: `${window.itemHeight()}px`,
     })),
     hasHeaderComponent: computed(() => !!unref(props.headerComponent)),
     hasFooterComponent: computed(() => !!unref(props.footerComponent)),
