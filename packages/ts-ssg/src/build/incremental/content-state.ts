@@ -14,6 +14,7 @@ import {
   buildPage,
   renderPageFromFile,
   writePage,
+  writePageError,
 } from '../page'
 import type { BuildHooks } from '../site'
 import {
@@ -69,13 +70,25 @@ export class IncrementalContentState {
   async renderAllPages(contentFiles: ContentFile[], hooks: BuildHooks) {
     let pages = 0
     for (const file of contentFiles) {
-      await hooks.onPageStart?.(this.input.context, file)
-      const page = await renderPageFromFile(this.input.context, file)
-      this.input.onPageBuilt(file.relPath, page.scriptEntrypoints)
-      await hooks.onPageRendered?.(this.input.context, page)
-      await writePage(page, this.input.config.html.minify)
-      await hooks.onPageWritten?.(this.input.context, page)
-      pages += 1
+      try {
+        await hooks.onPageStart?.(this.input.context, file)
+        const page = await renderPageFromFile(this.input.context, file)
+        this.input.onPageBuilt(file.relPath, page.scriptEntrypoints)
+        await hooks.onPageRendered?.(this.input.context, page)
+        await writePage(page, this.input.config.html.minify)
+        await hooks.onPageWritten?.(this.input.context, page)
+        pages += 1
+      } catch (error) {
+        if (this.input.context.writeErrorPages !== true) {
+          throw error
+        }
+        this.input.log.error('page build failed', {
+          relPath: file.relPath,
+          error: error instanceof Error ? error.message : String(error),
+        })
+        const page = await writePageError(this.input.context, file, error)
+        this.input.onPageBuilt(file.relPath, page.scriptEntrypoints)
+      }
     }
     return pages
   }

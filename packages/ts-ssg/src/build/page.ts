@@ -163,7 +163,7 @@ export async function renderPageFromFile(
       outPath,
     })
     if (context.writeErrorPages) {
-      return await buildErrorPageResult(context, file, errorWithContext, {
+      return await writePageError(context, file, errorWithContext, {
         outPath,
         urlPath,
         renderStart,
@@ -376,13 +376,17 @@ type ErrorRenderContext = {
   renderStart: bigint
 }
 
-async function buildErrorPageResult(
+export async function writePageError(
   context: BuildContext,
   file: ContentFile,
   error: unknown,
-  renderContext: ErrorRenderContext,
+  renderContext?: ErrorRenderContext,
 ): Promise<PageRenderResult> {
-  const { outPath, urlPath, renderStart } = renderContext
+  const route = resolveRouteInfo(file)
+  const outPath =
+    renderContext?.outPath ?? resolveOutPath(context.config.outDir, file)
+  const urlPath = renderContext?.urlPath ?? route.urlPath
+  const renderStart = renderContext?.renderStart ?? process.hrtime.bigint()
   const message = toErrorMessage(error)
   const stack = toErrorStack(error)
   const html = buildRenderErrorHtml({
@@ -395,14 +399,9 @@ async function buildErrorPageResult(
   await writeHtml({
     outPath,
     html,
-    minify: context.config.html.minify,
+    minify: false,
   })
-  await writeRenderErrorLog(
-    context.config,
-    context.config.outDir,
-    file.relPath,
-    html,
-  )
+  await writeRenderErrorLog(context.config.outDir, file.relPath, html)
   getLogger().error('page render error written', {
     file: file.relPath,
     outPath,
@@ -507,7 +506,6 @@ function buildRenderErrorHtml(input: RenderErrorHtmlInput): string {
 }
 
 async function writeRenderErrorLog(
-  config: SiteConfig,
   outDir: string,
   relPath: string,
   html: string,
@@ -515,16 +513,15 @@ async function writeRenderErrorLog(
   const fileName = `${Date.now()}-${toSafeFilePart(relPath)}.html`
   const targetPath = path.join(outDir, '.ts-ssg', 'errors', fileName)
   const latestPath = path.join(outDir, '.ts-ssg', 'errors', 'latest.html')
-  const minify = config.html.minify
   await writeHtml({
     outPath: targetPath,
     html,
-    minify,
+    minify: false,
   })
   await writeHtml({
     outPath: latestPath,
     html,
-    minify,
+    minify: false,
   })
 }
 
