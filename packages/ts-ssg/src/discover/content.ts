@@ -18,9 +18,16 @@ export interface StaticAssetFile {
 }
 
 const CONTENT_EXTS = new Set(['.md', '.mdx'])
-const TS_EXT = '.ts'
 export const DEFAULT_FOOTER_FILENAME = 'footer.mdx'
 export const DEFAULT_HEADER_FILENAME = 'header.mdx'
+export const IGNORED_STATIC_CONTENT_FILENAMES = [
+  'AGENTS.MD',
+  SITE_CONFIG_FILENAME,
+  DEFAULT_FOOTER_FILENAME,
+  DEFAULT_HEADER_FILENAME,
+  'tsconfig.json',
+] as const
+export const IGNORED_STATIC_CONTENT_EXTENSIONS = ['.ts'] as const
 
 export function isContentFile(_relPath: string, ext: string) {
   return CONTENT_EXTS.has(ext)
@@ -40,6 +47,13 @@ export function isDefaultFooterFile(relPath: string) {
 
 export function isDefaultHeaderFile(relPath: string) {
   return path.basename(relPath) === DEFAULT_HEADER_FILENAME
+}
+
+export function isIgnoredStaticContentFile(relPath: string) {
+  const basename = path.basename(relPath).toUpperCase()
+  return IGNORED_STATIC_CONTENT_FILENAMES.some(
+    (fileName) => basename === fileName.toUpperCase(),
+  )
 }
 
 export async function discoverContent(
@@ -67,11 +81,8 @@ export async function discoverStaticAssets(
   const log = getLogger()
   const assets: StaticAssetFile[] = []
   await walkDir(contentDir, contentDir, assets, (relPath, ext) => {
-    if (isAgentsFile(relPath)) return false
-    if (isSiteConfigFile(relPath)) return false
-    if (isDefaultFooterFile(relPath)) return false
-    if (isDefaultHeaderFile(relPath)) return false
-    if (isTypeScriptAssetFile(ext)) return false
+    if (isIgnoredStaticContentFile(relPath)) return false
+    if (isIgnoredStaticContentExtension(ext)) return false
     return !isContentFile(relPath, ext)
   })
   log.info('static assets discovered', { assets })
@@ -127,6 +138,9 @@ async function walkDir(
   }
 }
 
-function isTypeScriptAssetFile(ext: string) {
-  return ext.toLowerCase() === TS_EXT
+function isIgnoredStaticContentExtension(ext: string) {
+  const normalized = ext.toLowerCase()
+  return IGNORED_STATIC_CONTENT_EXTENSIONS.some(
+    (ignoredExt) => normalized === ignoredExt,
+  )
 }
