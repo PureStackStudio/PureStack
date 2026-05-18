@@ -12,7 +12,7 @@ import {
 } from 'regor'
 import type { VirtualListRow } from './virtualList'
 import type { VirtualTable } from './virtualTable'
-
+// known limitation: vertical scroll bar is not synced perfectly to the mouse pointer during scroll.
 export interface VariableVirtualTable extends VirtualTable {
   estimateHeight?: RefOrValue<number | string>
   rowElementRefs?: Array<ReturnType<typeof sref<HTMLElement | null>>>
@@ -315,7 +315,9 @@ class VariableVirtualTableContext implements VariableVirtualTable {
   }
 }
 
-function resolveVariableVirtualTable(head: ComponentHead<VariableVirtualTable>) {
+function resolveVariableVirtualTable(
+  head: ComponentHead<VariableVirtualTable>,
+) {
   head.autoProps = false
   return new VariableVirtualTableContext(head.props)
 }
