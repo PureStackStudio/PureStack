@@ -8,7 +8,7 @@ import {
   ref,
   unref,
 } from 'regor'
-import type { VirtualListRow, VirtualListSelect } from './virtualList'
+import type { VirtualListRow } from './virtualList'
 
 export interface VirtualTable {
   items?: RefOrValue<unknown[]>
@@ -18,7 +18,6 @@ export interface VirtualTable {
   rowComponent?: RefOrValue<string>
   headerComponent?: RefOrValue<string>
   footerComponent?: RefOrValue<string>
-  select?: RefOrValue<VirtualListSelect>
   scrollTop?: ReturnType<typeof ref<number>>
   visibleRows?: ComputedRef<VirtualListRow[]>
   viewportStyle?: ComputedRef<Record<string, string>>
@@ -43,7 +42,6 @@ const virtualTableTemplate = html`<div class="virtual-table" :style="viewportSty
         :is="rowComponent"
         :item="row.item"
         :index="row.index"
-        :select="select"
         style="height: var(--virtual-table-item-height) !important;"
         r-for="row in visibleRows"
       ></tr>
@@ -67,7 +65,6 @@ function defineVirtualTableComponent() {
       'rowComponent',
       'headerComponent',
       'footerComponent',
-      'select',
     ],
     context: (head) => resolveVirtualTable(head),
   })
