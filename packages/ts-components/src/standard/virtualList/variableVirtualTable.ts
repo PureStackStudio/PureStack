@@ -12,7 +12,7 @@ import {
 } from 'regor'
 import type { VirtualListRow } from './virtualList'
 import type { VirtualTable } from './virtualTable'
-// known limitation: vertical scroll bar is not synced perfectly to the mouse pointer during scroll.
+// known limitation: vertical scroll bar is not synced perfectly to the mouse pointer during scroll. eiter fix it or delete this component!
 export interface VariableVirtualTable extends VirtualTable {
   estimateHeight?: RefOrValue<number | string>
   rowElementRefs?: Array<ReturnType<typeof sref<HTMLElement | null>>>
