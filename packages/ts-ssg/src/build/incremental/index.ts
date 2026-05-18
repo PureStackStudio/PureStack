@@ -59,6 +59,7 @@ interface IncrementalRuntimeOptions {
   hooks: BuildHooks
   cleanOutDir: boolean
   minifyScripts: boolean
+  failOnAssetError: boolean
   log: Logger
   context: BuildContext
   manifest: BuildManifest
@@ -73,6 +74,7 @@ async function createIncrementalRuntime(
   const hooks = buildOptions.hooks ?? {}
   const cleanOutDir = buildOptions.cleanOutDir === true
   const minifyScripts = publishOptions.enabled === true
+  const failOnAssetError = publishOptions.enabled === true
   const mdx = await resolveMdxBuildOptions(config.mdx)
   themes.setOptions(config.style.theme)
   initBuiltinComponents({ includeShikiStyles: isShikiEnabled(config.mdx) })
@@ -105,6 +107,7 @@ async function createIncrementalRuntime(
     hooks,
     cleanOutDir,
     minifyScripts,
+    failOnAssetError,
     log,
     context,
     manifest,
@@ -147,6 +150,7 @@ class IncrementalRuntime {
         outDir: options.config.outDir,
       },
       minifyScripts: options.minifyScripts,
+      failOnAssetError: options.failOnAssetError,
       assets: options.manifest.assets,
       persistManifest: () => this.persistManifest(),
     })

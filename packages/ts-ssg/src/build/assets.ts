@@ -14,6 +14,7 @@ export interface CopyStaticAssetsResult {
 
 export interface StaticAssetBuildOptions {
   minifyScripts?: boolean
+  failOnError?: boolean
 }
 
 export interface CopyStaticAssetResult {
@@ -75,6 +76,9 @@ export async function copyStaticAsset(
       outPath,
       error: message,
     })
+    if (options.failOnError === true) {
+      throw error
+    }
     return { outPath, copied: false, dependencyRelPaths: [] }
   }
 }
