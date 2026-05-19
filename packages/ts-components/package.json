@@ -53,6 +53,7 @@
     "ComparisonColumn",
     "ComparisonFeature",
     "ComparisonTable",
+    "Composer",
     "Consent",
     "ContactForm",
     "CtaSection",

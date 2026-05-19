@@ -27,6 +27,9 @@ export type {
   ComponentVariant,
   ComponentVariantMode,
 } from './standard/componentVariant'
+export type { Composer, ComposerCommand } from './standard/composer/composer'
+export { defineComposerComponents } from './standard/composer/composer'
+export { registerComposerStyles } from './standard/composer/composerStyle'
 export type { Consent, ConsentCategoryState } from './standard/consent/consent'
 export { defineConsentComponents } from './standard/consent/consent'
 export { registerConsentStyles } from './standard/consent/consentStyle'

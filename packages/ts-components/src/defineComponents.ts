@@ -2,6 +2,7 @@ import { defineAlertComponents } from './standard/alertBox/alertBox'
 import { defineBadgeComponents } from './standard/badge/badge'
 import { defineBarChartComponents } from './standard/barChart/barChart'
 import { defineButtonComponents } from './standard/btn/btn'
+import { defineComposerComponents } from './standard/composer/composer'
 import { defineConsentComponents } from './standard/consent/consent'
 import { defineContactFormComponents } from './standard/contactForm/contactForm'
 import { defineDoughnutChartComponents } from './standard/doughnutChart/doughnutChart'
@@ -40,6 +41,7 @@ export function defineComponents(getSvgIcon: GetSvgIcon) {
     ...defineButtonComponents(),
     ...defineConsentComponents(),
     ...defineContactFormComponents(),
+    ...defineComposerComponents(),
     ...defineDoughnutChartComponents(),
     ...defineExpandablePanelComponents(),
     ...defineFlexComponents(),
