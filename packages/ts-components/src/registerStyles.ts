@@ -6,6 +6,7 @@ import { registerComposerStyles } from './standard/composer/composerStyle'
 import { registerConsentStyles } from './standard/consent/consentStyle'
 import { registerContactFormStyles } from './standard/contactForm/contactFormStyle'
 import { registerDoughnutChartStyles } from './standard/doughnutChart/doughnutChartStyle'
+import { registerDropFilesStyles } from './standard/dropFiles/dropFilesStyle'
 import { registerExpandablePanelStyles } from './standard/expandablePanel/expandablePanelStyle'
 import { registerFlexStyles } from './standard/flex/flexStyle'
 import { registerFooterStyles } from './standard/footer/footerStyle'
@@ -35,6 +36,7 @@ export function registerStyles() {
   registerConsentStyles()
   registerContactFormStyles()
   registerDoughnutChartStyles()
+  registerDropFilesStyles()
   registerExpandablePanelStyles()
   registerFlexStyles()
   registerFooterStyles()

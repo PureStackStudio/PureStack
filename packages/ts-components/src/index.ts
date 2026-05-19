@@ -52,6 +52,13 @@ export type {
 } from './standard/doughnutChart/doughnutChart'
 export { defineDoughnutChartComponents } from './standard/doughnutChart/doughnutChart'
 export { registerDoughnutChartStyles } from './standard/doughnutChart/doughnutChartStyle'
+export type {
+  DropFileItem,
+  DropFiles,
+  DropFilesIconMap,
+} from './standard/dropFiles/dropFiles'
+export { defineDropFilesComponents } from './standard/dropFiles/dropFiles'
+export { registerDropFilesStyles } from './standard/dropFiles/dropFilesStyle'
 export type { ExpandablePanel } from './standard/expandablePanel/expandablePanel'
 export { defineExpandablePanelComponents } from './standard/expandablePanel/expandablePanel'
 export { registerExpandablePanelStyles } from './standard/expandablePanel/expandablePanelStyle'

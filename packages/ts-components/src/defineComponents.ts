@@ -6,6 +6,7 @@ import { defineComposerComponents } from './standard/composer/composer'
 import { defineConsentComponents } from './standard/consent/consent'
 import { defineContactFormComponents } from './standard/contactForm/contactForm'
 import { defineDoughnutChartComponents } from './standard/doughnutChart/doughnutChart'
+import { defineDropFilesComponents } from './standard/dropFiles/dropFiles'
 import { defineExpandablePanelComponents } from './standard/expandablePanel/expandablePanel'
 import { defineFlexComponents } from './standard/flex/flex'
 import { defineFooterComponents } from './standard/footer/footer'
@@ -43,6 +44,7 @@ export function defineComponents(getSvgIcon: GetSvgIcon) {
     ...defineContactFormComponents(),
     ...defineComposerComponents(),
     ...defineDoughnutChartComponents(),
+    ...defineDropFilesComponents(),
     ...defineExpandablePanelComponents(),
     ...defineFlexComponents(),
     ...defineFooterComponents(),
