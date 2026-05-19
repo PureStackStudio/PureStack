@@ -342,6 +342,7 @@ const ALLOWED_TAGS = new Set([
   'DIV',
   'EM',
   'I',
+  'IMG',
   'LI',
   'OL',
   'P',
@@ -349,6 +350,17 @@ const ALLOWED_TAGS = new Set([
   'STRONG',
   'U',
   'UL',
+])
+
+const ALLOWED_STYLE_PROPERTIES = new Set([
+  'background-color',
+  'color',
+  'font-family',
+  'font-size',
+  'font-style',
+  'font-weight',
+  'text-align',
+  'text-decoration',
 ])
 
 function sanitizeHtml(value: string | undefined) {
@@ -376,48 +388,218 @@ function appendSanitizedNode(parent: Node, node: Node) {
 
   const tag = node.tagName.toUpperCase()
   if (!ALLOWED_TAGS.has(tag)) {
-    for (const child of Array.from(node.childNodes)) appendSanitizedNode(parent, child)
+    for (const child of Array.from(node.childNodes))
+      appendSanitizedNode(parent, child)
     return
   }
 
   if (tag === 'A') {
     const href = sanitizeHref(node.getAttribute('href') ?? '')
     if (!href) {
-      for (const child of Array.from(node.childNodes)) appendSanitizedNode(parent, child)
+      for (const child of Array.from(node.childNodes))
+        appendSanitizedNode(parent, child)
       return
     }
   }
+  if (tag === 'IMG' && !sanitizeImageSrc(node.getAttribute('src') ?? '')) return
 
   const element = document.createElement(tag.toLowerCase())
   if (tag === 'A') {
-    element.setAttribute('href', sanitizeHref(node.getAttribute('href') ?? '') ?? '')
+    element.setAttribute(
+      'href',
+      sanitizeHref(node.getAttribute('href') ?? '') ?? '',
+    )
     element.setAttribute('target', '_blank')
     element.setAttribute('rel', 'noopener noreferrer')
   }
+  if (tag === 'IMG') {
+    element.setAttribute(
+      'src',
+      sanitizeImageSrc(node.getAttribute('src') ?? '') ?? '',
+    )
+    const alt = sanitizePlainAttribute(node.getAttribute('alt') ?? '')
+    const title = sanitizePlainAttribute(node.getAttribute('title') ?? '')
+    if (alt) element.setAttribute('alt', alt)
+    if (title) element.setAttribute('title', title)
+  }
 
-  for (const child of Array.from(node.childNodes)) appendSanitizedNode(element, child)
+  copyAllowedStyles(node, element)
+
+  for (const child of Array.from(node.childNodes))
+    appendSanitizedNode(element, child)
   parent.appendChild(element)
 }
 
+function sanitizeImageSrc(value: string) {
+  const url = parseHttpUrl(value)
+  if (!url) return undefined
+  if (isMailImageProxyUrl(url)) return url.href
+
+  const proxy = new URL(
+    '/_mail/image-proxy',
+    globalThis.location?.href ?? 'https://localhost/',
+  )
+  proxy.searchParams.set('u', url.href)
+  return proxy.href
+}
+
 function sanitizeHref(value: string) {
+  const parsed = parseUrl(value)
+  if (!parsed) return undefined
+
+  if (
+    parsed.protocol !== 'http:' &&
+    parsed.protocol !== 'https:' &&
+    parsed.protocol !== 'mailto:'
+  )
+    return undefined
+
+  if (parsed.protocol === 'mailto:') return parsed.href
+  return parsed.toString()
+}
+
+function parseHttpUrl(value: string) {
+  const parsed = parseUrl(value)
+  if (!parsed) return undefined
+  return parsed.protocol === 'http:' || parsed.protocol === 'https:'
+    ? parsed
+    : undefined
+}
+
+function parseUrl(value: string) {
   const trimmed = value.trim()
   if (!trimmed) return undefined
   if (typeof URL === 'undefined') return undefined
 
   try {
-    const parsed = new URL(trimmed, globalThis.location?.href ?? 'https://localhost/')
-    if (
-      parsed.protocol !== 'http:' &&
-      parsed.protocol !== 'https:' &&
-      parsed.protocol !== 'mailto:'
-    )
-      return undefined
-
-    if (parsed.protocol === 'mailto:') return parsed.href
-    return parsed.toString()
+    return new URL(trimmed, globalThis.location?.href ?? 'https://localhost/')
   } catch {
     return undefined
   }
+}
+
+function isMailImageProxyUrl(url: URL) {
+  const origin = new URL(globalThis.location?.href ?? 'https://localhost/')
+    .origin
+  return url.origin === origin && url.pathname === '/_mail/image-proxy'
+}
+
+function sanitizePlainAttribute(value: string) {
+  let text = ''
+  for (let i = 0; i < value.length; ++i) {
+    const code = value.charCodeAt(i)
+    if (code >= 32 && code !== 127) text += value[i]
+  }
+
+  return text.replace(/\s+/g, ' ').trim()
+}
+
+function copyAllowedStyles(source: HTMLElement, target: HTMLElement) {
+  const style = source.getAttribute('style')
+  if (!style) return
+
+  for (const item of style.split(';')) {
+    const separator = item.indexOf(':')
+    if (separator <= 0) continue
+
+    const name = item.slice(0, separator).trim().toLowerCase()
+    if (!ALLOWED_STYLE_PROPERTIES.has(name)) continue
+
+    const value = sanitizeStyleValue(name, item.slice(separator + 1))
+    if (value) target.style.setProperty(name, value)
+  }
+}
+
+function sanitizeStyleValue(name: string, value: string) {
+  const trimmed = value.trim()
+  if (!trimmed || /url\s*\(/i.test(trimmed)) return undefined
+
+  switch (name) {
+    case 'background-color':
+    case 'color':
+      return sanitizeColor(trimmed)
+    case 'font-family':
+      return sanitizeFontFamily(trimmed)
+    case 'font-size':
+      return sanitizeFontSize(trimmed)
+    case 'font-style':
+      return sanitizeKeyword(trimmed, ['italic', 'normal', 'oblique'])
+    case 'font-weight':
+      return sanitizeFontWeight(trimmed)
+    case 'text-align':
+      return sanitizeKeyword(trimmed, [
+        'center',
+        'end',
+        'justify',
+        'left',
+        'right',
+        'start',
+      ])
+    case 'text-decoration':
+      return sanitizeTextDecoration(trimmed)
+    default:
+      return undefined
+  }
+}
+
+function sanitizeColor(value: string) {
+  const probe = document.createElement('span')
+  probe.style.color = ''
+  probe.style.color = value
+  return probe.style.color || undefined
+}
+
+function sanitizeFontFamily(value: string) {
+  const normalized = value.toLowerCase()
+  if (normalized.includes('monospace') || normalized.includes('courier'))
+    return 'ui-monospace, SFMono-Regular, Consolas, monospace'
+  if (
+    normalized.includes('serif') ||
+    normalized.includes('georgia') ||
+    normalized.includes('times')
+  )
+    return 'Georgia, "Times New Roman", serif'
+  if (
+    normalized.includes('sans-serif') ||
+    normalized.includes('arial') ||
+    normalized.includes('helvetica') ||
+    normalized.includes('verdana') ||
+    normalized.includes('tahoma') ||
+    normalized.includes('system-ui')
+  )
+    return 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
+  return undefined
+}
+
+function sanitizeFontSize(value: string) {
+  const match = /^(\d+(?:\.\d+)?)px$/i.exec(value.trim())
+  if (!match) return undefined
+
+  const size = Number(match[1])
+  if (!Number.isFinite(size)) return undefined
+  return `${Math.min(32, Math.max(10, size))}px`
+}
+
+function sanitizeKeyword(value: string, allowed: string[]) {
+  const normalized = value.trim().toLowerCase()
+  return allowed.includes(normalized) ? normalized : undefined
+}
+
+function sanitizeFontWeight(value: string) {
+  const normalized = value.trim().toLowerCase()
+  if (normalized === 'bold' || normalized === 'normal') return normalized
+  if (/^[1-9]00$/.test(normalized)) return normalized
+  return undefined
+}
+
+function sanitizeTextDecoration(value: string) {
+  const allowed = new Set(['line-through', 'none', 'overline', 'underline'])
+  const values = value
+    .trim()
+    .toLowerCase()
+    .split(/\s+/)
+    .filter((item) => allowed.has(item))
+  return values.length > 0 ? values.join(' ') : undefined
 }
 
 function htmlToText(value: string) {
@@ -463,11 +645,9 @@ function plainTextToHtml(value: string) {
 
   return text
     .split(/\n{2,}/)
-    .map((paragraph) =>
-      `<p>${paragraph
-        .split('\n')
-        .map(escapeHtml)
-        .join('<br>')}</p>`,
+    .map(
+      (paragraph) =>
+        `<p>${paragraph.split('\n').map(escapeHtml).join('<br>')}</p>`,
     )
     .join('')
 }

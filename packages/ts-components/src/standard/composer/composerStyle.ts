@@ -1,5 +1,10 @@
 import type { ThemePalette } from '@purestack/ts-style'
-import { styleBuilder, type ThemeMode, type ThemeOptions, themes } from '@purestack/ts-style'
+import {
+  styleBuilder,
+  type ThemeMode,
+  type ThemeOptions,
+  themes,
+} from '@purestack/ts-style'
 
 export function registerComposerStyles() {
   themes.forEach((theme, palette, options) => {
@@ -39,7 +44,10 @@ function registerComposerShellStyles(
     .boxShadow(`0 0 0 3px ${palette.current.border.focus}`)
 }
 
-function registerComposerToolbarStyles(theme: ThemeMode, palette: ThemePalette) {
+function registerComposerToolbarStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+) {
   styleBuilder
     .select('.composer__toolbar', theme)
     .display('flex')
@@ -79,7 +87,10 @@ function registerComposerToolbarStyles(theme: ThemeMode, palette: ThemePalette) 
     .cursor('not-allowed')
     .opacity('0.55')
 
-  styleBuilder.select('.composer__tool .icon', theme).width('1.1em').height('1.1em')
+  styleBuilder
+    .select('.composer__tool .icon', theme)
+    .width('1.1em')
+    .height('1.1em')
 
   styleBuilder
     .select('.composer__divider', theme)
@@ -128,8 +139,12 @@ function registerComposerSurfaceStyles(
     .textDecoration('underline')
 
   styleBuilder
-    .select('.composer__editor p', theme)
-    .margin('0 0 0.7em')
+    .select('.composer__editor img', theme)
+    .maxWidth('100%')
+    .height('auto')
+    .borderRadius('4px')
+
+  styleBuilder.select('.composer__editor p', theme).margin('0 0 0.7em')
 
   styleBuilder.select('.composer__editor p:last-child', theme).marginBottom('0')
 
