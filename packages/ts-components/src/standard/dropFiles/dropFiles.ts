@@ -212,7 +212,9 @@ class DropFilesContext implements DropFiles {
         ],
       }),
     )
-    this.acceptValue = computed(() => resolveAccept(this.accept, this.iconMap).join(','))
+    this.acceptValue = computed(() =>
+      resolveAccept(this.accept, this.iconMap).join(','),
+    )
     this.resolvedMultiple = computed(() => unref(props.multiple) !== false)
     this.resolvedUploadIcon = computed(
       () => unref(props.uploadIcon) || DEFAULT_UPLOAD_ICON,
@@ -377,19 +379,16 @@ function createDropFileItem(
 }
 
 function createFileId(file: File, sequence: number) {
-  return [
-    sequence,
-    file.name,
-    file.size,
-    file.lastModified,
-  ].join(':')
+  return [sequence, file.name, file.size, file.lastModified].join(':')
 }
 
 function readAccept(value: RefOrValue<string> | string[] | undefined) {
   return Array.isArray(value) ? value : unref(value)
 }
 
-function readIconMap(value: DropFilesIconMap | SRef<DropFilesIconMap> | undefined) {
+function readIconMap(
+  value: DropFilesIconMap | SRef<DropFilesIconMap> | undefined,
+) {
   return typeof value === 'function' ? value() : value
 }
 
@@ -413,10 +412,7 @@ function normalizeAccept(value: string | string[] | undefined) {
   }
 
   if (!value) return []
-  return value
-    .split(',')
-    .map(normalizeAcceptToken)
-    .filter(Boolean)
+  return value.split(',').map(normalizeAcceptToken).filter(Boolean)
 }
 
 function normalizeAcceptToken(value: string) {
@@ -459,10 +455,12 @@ function hasFileTransfer(dataTransfer: DataTransfer | null) {
 }
 
 function isSameFile(left: File, right: File) {
-  return left.name === right.name
-    && left.size === right.size
-    && left.type === right.type
-    && left.lastModified === right.lastModified
+  return (
+    left.name === right.name &&
+    left.size === right.size &&
+    left.type === right.type &&
+    left.lastModified === right.lastModified
+  )
 }
 
 function formatFileSize(size: number) {

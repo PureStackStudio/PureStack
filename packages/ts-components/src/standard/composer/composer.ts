@@ -462,7 +462,10 @@ interface SanitizeHtmlOptions {
   deferCidImageSrc?: boolean
 }
 
-function sanitizeHtml(value: string | undefined, options: SanitizeHtmlOptions = {}) {
+function sanitizeHtml(
+  value: string | undefined,
+  options: SanitizeHtmlOptions = {},
+) {
   const raw = value ?? ''
   if (!raw.trim()) return ''
   if (typeof document === 'undefined') return escapeHtml(raw.trim())
@@ -521,7 +524,11 @@ function appendSanitizedNode(
     element.setAttribute('rel', 'noopener noreferrer')
   }
   if (tag === 'IMG') {
-    if (options.deferCidImageSrc && imageSrc && normalizeEmailCidUrl(imageSrc)) {
+    if (
+      options.deferCidImageSrc &&
+      imageSrc &&
+      normalizeEmailCidUrl(imageSrc)
+    ) {
       element.setAttribute('data-puregate-cid-src', imageSrc)
     } else {
       element.setAttribute('src', imageSrc ?? '')
