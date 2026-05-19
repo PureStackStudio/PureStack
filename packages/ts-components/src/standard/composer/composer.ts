@@ -54,7 +54,7 @@ export interface Composer {
   handlePaste?: (event: ClipboardEvent) => void
   handleDragOver?: (event: DragEvent) => void
   handleDrop?: (event: DragEvent) => void
-  handleSourceInput?: () => void
+  handleSourceInput?: (event: Event) => void
 }
 
 const composerTemplate = html`<div class="composer-field">
@@ -161,7 +161,7 @@ const composerTemplate = html`<div class="composer-field">
         :placeholder="placeholder"
         :aria-label="label || placeholder || 'Message body source'"
         spellcheck="false"
-        r-model="sourceHtml"
+        :value="sourceHtml"
         @input="handleSourceInput"></textarea>
     </div>
   </div>
@@ -318,9 +318,14 @@ class ComposerContext implements Composer {
     if (files.length > 0) this.emitFiles(event, files)
   }
 
-  handleSourceInput = () => {
+  handleSourceInput = (event: Event) => {
     if (unref(this.disabled)) return
-    this.writeModel(this.sourceHtml())
+
+    const target = event.currentTarget
+    if (!(target instanceof HTMLTextAreaElement)) return
+
+    this.sourceHtml(target.value)
+    this.writeSourceModel(target.value)
   }
 
   private syncFromEditor() {
@@ -356,6 +361,14 @@ class ComposerContext implements Composer {
     this.html(sanitized)
     this.text(htmlToText(sanitized))
     this.sourceHtml(sanitized)
+    this.writingModel = false
+  }
+
+  private writeSourceModel(value: string) {
+    const sanitized = this.sanitizeModelHtml(value)
+    this.writingModel = true
+    this.html(sanitized)
+    this.text(htmlToText(sanitized))
     this.writingModel = false
   }
 
