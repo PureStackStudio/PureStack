@@ -174,6 +174,10 @@ const IMAGE_URL_CSS_PROPERTIES = new Set([
 
 const CSS_URL_PATTERN = /url\(\s*(?:"([^"]*)"|'([^']*)'|([^)]*?))\s*\)/gi
 
+export interface EmailHtmlPolicyOptions {
+  imageUrlResolver?: (url: string) => string | undefined
+}
+
 export function copySafeEmailStyles(source: HTMLElement, target: HTMLElement) {
   applySafeEmailStyles(source.getAttribute('style'), target)
 }
@@ -181,6 +185,7 @@ export function copySafeEmailStyles(source: HTMLElement, target: HTMLElement) {
 export function applySafeEmailStyles(
   style: string | null | undefined,
   target: HTMLElement,
+  options: EmailHtmlPolicyOptions = {},
 ) {
   if (!style) return
   for (const item of style.split(';')) {
@@ -188,12 +193,20 @@ export function applySafeEmailStyles(
     if (separator <= 0) continue
 
     const property = item.slice(0, separator).trim().toLowerCase()
-    const value = sanitizeEmailStyleValue(property, item.slice(separator + 1))
+    const value = sanitizeEmailStyleValue(
+      property,
+      item.slice(separator + 1),
+      options,
+    )
     if (value) target.style.setProperty(property, value)
   }
 }
 
-export function sanitizeEmailStyleValue(property: string, value: string) {
+export function sanitizeEmailStyleValue(
+  property: string,
+  value: string,
+  options: EmailHtmlPolicyOptions = {},
+) {
   if (!GMAIL_SUPPORTED_CSS_PROPERTIES.has(property)) return undefined
 
   const trimmed = stripImportant(value.trim())
@@ -202,7 +215,7 @@ export function sanitizeEmailStyleValue(property: string, value: string) {
   if (CSS_URL_PATTERN.test(trimmed)) {
     CSS_URL_PATTERN.lastIndex = 0
     if (!IMAGE_URL_CSS_PROPERTIES.has(property)) return undefined
-    const rewritten = rewriteCssUrls(trimmed)
+    const rewritten = rewriteCssUrls(trimmed, options)
     CSS_URL_PATTERN.lastIndex = 0
     return rewritten
   }
@@ -221,7 +234,7 @@ export function sanitizePlainAttribute(value: string) {
   return text.replace(/\s+/g, ' ').trim()
 }
 
-export function toMailImageProxyUrl(value: string) {
+export function toSafeEmailImageUrl(value: string) {
   const trimmed = value.trim()
   if (!trimmed) return undefined
 
@@ -233,15 +246,8 @@ export function toMailImageProxyUrl(value: string) {
       trimmed,
       globalThis.location?.href ?? 'https://localhost/',
     )
-    if (isMailImageProxyUrl(url)) return url.href
     if (url.protocol !== 'http:' && url.protocol !== 'https:') return undefined
-
-    const proxy = new URL(
-      '/_mail/image-proxy',
-      globalThis.location?.href ?? 'https://localhost/',
-    )
-    proxy.searchParams.set('u', url.href)
-    return proxy.href
+    return url.href
   } catch {
     return undefined
   }
@@ -262,12 +268,14 @@ function isSafeCssValue(value: string) {
   )
 }
 
-function rewriteCssUrls(value: string) {
+function rewriteCssUrls(value: string, options: EmailHtmlPolicyOptions) {
   return value.replace(
     CSS_URL_PATTERN,
     (_match, doubleUrl, singleUrl, bareUrl) => {
       const rawUrl = doubleUrl ?? singleUrl ?? bareUrl ?? ''
-      const proxiedUrl = toMailImageProxyUrl(rawUrl.trim())
+      const proxiedUrl = options.imageUrlResolver
+        ? options.imageUrlResolver(rawUrl.trim())
+        : toSafeEmailImageUrl(rawUrl.trim())
       return proxiedUrl ? `url("${escapeCssUrl(proxiedUrl)}")` : ''
     },
   )
@@ -285,10 +293,4 @@ function hasUnsafeCssCharacter(value: string) {
 
 function escapeCssUrl(value: string) {
   return value.replace(/["\\\r\n]/g, '')
-}
-
-function isMailImageProxyUrl(url: URL) {
-  const origin = new URL(globalThis.location?.href ?? 'https://localhost/')
-    .origin
-  return url.origin === origin && url.pathname === '/_mail/image-proxy'
 }

@@ -19,7 +19,7 @@ import {
 import {
   copySafeEmailStyles,
   sanitizePlainAttribute,
-  toMailImageProxyUrl,
+  toSafeEmailImageUrl,
 } from './emailHtmlPolicy'
 
 export type ComposerCommand =
@@ -433,7 +433,7 @@ function appendSanitizedNode(parent: Node, node: Node) {
 }
 
 function sanitizeImageSrc(value: string) {
-  return toMailImageProxyUrl(value)
+  return toSafeEmailImageUrl(value)
 }
 
 function sanitizeHref(value: string) {

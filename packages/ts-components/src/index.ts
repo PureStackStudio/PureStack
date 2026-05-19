@@ -30,13 +30,14 @@ export type {
 export type { Composer, ComposerCommand } from './standard/composer/composer'
 export { defineComposerComponents } from './standard/composer/composer'
 export { registerComposerStyles } from './standard/composer/composerStyle'
+export type { EmailHtmlPolicyOptions } from './standard/composer/emailHtmlPolicy'
 export {
   applySafeEmailStyles,
   copySafeEmailStyles,
   GMAIL_SUPPORTED_CSS_PROPERTIES,
   sanitizeEmailStyleValue,
   sanitizePlainAttribute,
-  toMailImageProxyUrl,
+  toSafeEmailImageUrl,
 } from './standard/composer/emailHtmlPolicy'
 export type { Consent, ConsentCategoryState } from './standard/consent/consent'
 export { defineConsentComponents } from './standard/consent/consent'
