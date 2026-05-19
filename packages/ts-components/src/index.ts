@@ -35,6 +35,8 @@ export {
   applySafeEmailStyles,
   copySafeEmailStyles,
   GMAIL_SUPPORTED_CSS_PROPERTIES,
+  normalizeEmailCidUrl,
+  normalizeEmailContentId,
   sanitizeEmailStyleValue,
   sanitizePlainAttribute,
   toSafeEmailImageUrl,
@@ -55,9 +57,14 @@ export { registerDoughnutChartStyles } from './standard/doughnutChart/doughnutCh
 export type {
   DropFileItem,
   DropFiles,
+  DropFilesAddOptions,
+  DropFilesAddResult,
   DropFilesIconMap,
 } from './standard/dropFiles/dropFiles'
-export { defineDropFilesComponents } from './standard/dropFiles/dropFiles'
+export {
+  addDropFiles,
+  defineDropFilesComponents,
+} from './standard/dropFiles/dropFiles'
 export { registerDropFilesStyles } from './standard/dropFiles/dropFilesStyle'
 export type { ExpandablePanel } from './standard/expandablePanel/expandablePanel'
 export { defineExpandablePanelComponents } from './standard/expandablePanel/expandablePanel'

@@ -178,8 +178,12 @@ export interface EmailHtmlPolicyOptions {
   imageUrlResolver?: (url: string) => string | undefined
 }
 
-export function copySafeEmailStyles(source: HTMLElement, target: HTMLElement) {
-  applySafeEmailStyles(source.getAttribute('style'), target)
+export function copySafeEmailStyles(
+  source: HTMLElement,
+  target: HTMLElement,
+  options: EmailHtmlPolicyOptions = {},
+) {
+  applySafeEmailStyles(source.getAttribute('style'), target, options)
 }
 
 export function applySafeEmailStyles(
@@ -238,7 +242,8 @@ export function toSafeEmailImageUrl(value: string) {
   const trimmed = value.trim()
   if (!trimmed) return undefined
 
-  if (trimmed.startsWith('cid:') || trimmed.startsWith('data:image/'))
+  const lower = trimmed.toLowerCase()
+  if (lower.startsWith('cid:') || lower.startsWith('data:image/'))
     return trimmed
 
   try {
@@ -251,6 +256,29 @@ export function toSafeEmailImageUrl(value: string) {
   } catch {
     return undefined
   }
+}
+
+export function normalizeEmailCidUrl(value: string) {
+  const trimmed = value.trim()
+  if (!trimmed.toLowerCase().startsWith('cid:')) return undefined
+
+  const rawContentId = trimmed.slice(4)
+  let decodedContentId = rawContentId
+  try {
+    decodedContentId = decodeURIComponent(rawContentId)
+  } catch {
+    decodedContentId = rawContentId
+  }
+
+  return normalizeEmailContentId(decodedContentId) || undefined
+}
+
+export function normalizeEmailContentId(value: string) {
+  let contentId = value.trim()
+  if (contentId.length >= 2 && contentId[0] === '<' && contentId.at(-1) === '>')
+    contentId = contentId.slice(1, -1).trim()
+
+  return contentId.toLowerCase()
 }
 
 function stripImportant(value: string) {

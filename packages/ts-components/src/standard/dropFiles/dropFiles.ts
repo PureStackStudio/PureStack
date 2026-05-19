@@ -28,6 +28,20 @@ export interface DropFileItem {
 
 export type DropFilesIconMap = Record<string, string>
 
+export interface DropFilesAddOptions {
+  accept?: RefOrValue<string> | string[]
+  iconMap?: DropFilesIconMap | SRef<DropFilesIconMap>
+  fileIcon?: RefOrValue<string>
+  multiple?: RefOrValue<boolean>
+  idSequence?: number
+}
+
+export interface DropFilesAddResult {
+  files: DropFileItem[]
+  idSequence: number
+  acceptedCount: number
+}
+
 export interface DropFiles {
   files?: SRef<DropFileItem[]>
   accept?: RefOrValue<string> | string[]
@@ -279,51 +293,16 @@ class DropFilesContext implements DropFiles {
   private addFileList(fileList: FileList | null | undefined) {
     if (!fileList || fileList.length === 0) return
 
-    const accepted = Array.from(fileList)
-      .filter((file) => acceptsFile(file, resolveAccept(this.accept, this.iconMap)))
-      .map((file) => this.toItem(file))
-    if (accepted.length === 0) return
-
-    if (!this.resolvedMultiple()) {
-      this.writeFiles([accepted[0]])
-      return
-    }
-
-    const next = [...this.files()]
-    for (const item of accepted) {
-      if (!next.some((existing) => isSameFile(existing.file, item.file))) {
-        next.push(item)
-      }
-    }
-
-    this.writeFiles(next)
-  }
-
-  private toItem(file: File): DropFileItem {
-    return {
-      id: this.createFileId(file),
-      file,
-      name: file.name,
-      type: file.type,
-      size: file.size,
-      sizeLabel: formatFileSize(file.size),
-      lastModified: file.lastModified,
-      icon: resolveFileIcon(
-        file,
-        readIconMap(this.iconMap),
-        unref(this.fileIcon) || DEFAULT_FILE_ICON,
-      ),
-    }
-  }
-
-  private createFileId(file: File) {
-    ++this.idSequence
-    return [
-      this.idSequence,
-      file.name,
-      file.size,
-      file.lastModified,
-    ].join(':')
+    const result = addDropFiles(this.files(), Array.from(fileList), {
+      accept: this.accept,
+      iconMap: this.iconMap,
+      fileIcon: this.fileIcon,
+      multiple: this.multiple,
+      idSequence: this.idSequence,
+    })
+    this.idSequence = result.idSequence
+    if (result.acceptedCount === 0) return
+    this.writeFiles(result.files)
   }
 
   private writeFiles(files: DropFileItem[]) {
@@ -334,6 +313,76 @@ class DropFilesContext implements DropFiles {
 
 function resolveDropFiles(head: ComponentHead<DropFiles>) {
   return new DropFilesContext(head.props) as DropFiles
+}
+
+export function addDropFiles(
+  currentFiles: DropFileItem[],
+  files: File[],
+  options: DropFilesAddOptions = {},
+): DropFilesAddResult {
+  const accept = resolveAccept(options.accept, options.iconMap)
+  const accepted = files
+    .filter((file) => acceptsFile(file, accept))
+    .map((file) => createDropFileItem(file, options))
+
+  let idSequence = options.idSequence ?? 0
+  const sequenced = accepted.map((item) => {
+    ++idSequence
+    return {
+      ...item,
+      id: createFileId(item.file, idSequence),
+    }
+  })
+  if (sequenced.length === 0)
+    return { files: currentFiles, idSequence, acceptedCount: 0 }
+
+  if (unref(options.multiple) === false) {
+    return {
+      files: [sequenced[0]],
+      idSequence,
+      acceptedCount: 1,
+    }
+  }
+
+  const next = [...currentFiles]
+  let addedCount = 0
+  for (const item of sequenced) {
+    if (!next.some((existing) => isSameFile(existing.file, item.file))) {
+      next.push(item)
+      ++addedCount
+    }
+  }
+
+  return { files: next, idSequence, acceptedCount: addedCount }
+}
+
+function createDropFileItem(
+  file: File,
+  options: DropFilesAddOptions,
+): DropFileItem {
+  return {
+    id: '',
+    file,
+    name: file.name,
+    type: file.type,
+    size: file.size,
+    sizeLabel: formatFileSize(file.size),
+    lastModified: file.lastModified,
+    icon: resolveFileIcon(
+      file,
+      readIconMap(options.iconMap),
+      unref(options.fileIcon) || DEFAULT_FILE_ICON,
+    ),
+  }
+}
+
+function createFileId(file: File, sequence: number) {
+  return [
+    sequence,
+    file.name,
+    file.size,
+    file.lastModified,
+  ].join(':')
 }
 
 function readAccept(value: RefOrValue<string> | string[] | undefined) {

@@ -9,6 +9,7 @@ import {
   type Ref,
   type RefOrValue,
   ref,
+  type SRef,
   sref,
   unref,
 } from 'regor'
@@ -18,6 +19,7 @@ import {
 } from '../componentVariant'
 import {
   copySafeEmailStyles,
+  normalizeEmailCidUrl,
   sanitizePlainAttribute,
   toSafeEmailImageUrl,
 } from './emailHtmlPolicy'
@@ -31,14 +33,15 @@ export type ComposerCommand =
   | 'removeFormat'
 
 export interface Composer {
-  html?: Ref<string>
-  text?: Ref<string>
+  html?: Ref<string> | SRef<string>
+  text?: Ref<string> | SRef<string>
   label?: RefOrValue<string>
   placeholder?: RefOrValue<string>
   disabled?: RefOrValue<boolean>
   minHeight?: RefOrValue<number | string>
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
+  imagePreviewUrls?: RefOrValue<Record<string, string>>
   classes?: ComputedRef<string>
   editorStyle?: ComputedRef<Record<string, string>>
   editorElement?: ReturnType<typeof sref<HTMLElement | null>>
@@ -49,8 +52,9 @@ export interface Composer {
   toggleSourceMode?: () => void
   handleInput?: (event: Event) => void
   handlePaste?: (event: ClipboardEvent) => void
+  handleDragOver?: (event: DragEvent) => void
+  handleDrop?: (event: DragEvent) => void
   handleSourceInput?: () => void
-  unmounted?: () => void
 }
 
 const composerTemplate = html`<div class="composer-field">
@@ -146,7 +150,9 @@ const composerTemplate = html`<div class="composer-field">
         aria-multiline="true"
         spellcheck="true"
         @input="handleInput"
-        @paste="handlePaste"></div>
+        @paste="handlePaste"
+        @dragover="handleDragOver"
+        @drop="handleDrop"></div>
       <textarea
         r-if="sourceMode"
         class="composer__source"
@@ -172,6 +178,7 @@ function defineComposerComponent() {
       'minHeight',
       'tone',
       'variant',
+      'imagePreviewUrls',
     ],
     context: (head) => resolveComposer(head),
   })
@@ -184,20 +191,20 @@ export function defineComposerComponents() {
 }
 
 class ComposerContext implements Composer {
-  readonly html: Ref<string>
-  readonly text: Ref<string>
+  readonly html: Ref<string> | SRef<string>
+  readonly text: Ref<string> | SRef<string>
   readonly label?: RefOrValue<string>
   readonly placeholder?: RefOrValue<string>
   readonly disabled?: RefOrValue<boolean>
   readonly minHeight?: RefOrValue<number | string>
   readonly tone?: RefOrValue<SemanticTone>
   readonly variant?: RefOrValue<ComponentVariant>
+  readonly imagePreviewUrls?: RefOrValue<Record<string, string>>
   readonly editorElement = sref<HTMLElement | null>(null)
   readonly sourceHtml = ref('')
   readonly sourceMode = ref(false)
   readonly classes: ComputedRef<string>
   readonly editorStyle: ComputedRef<Record<string, string>>
-  private readonly stops: Array<() => void> = []
   private writingModel = false
 
   constructor(props: Composer) {
@@ -212,22 +219,20 @@ class ComposerContext implements Composer {
     this.editorStyle = computed<Record<string, string>>(() => ({
       minHeight: resolveCssSize(unref(props.minHeight), '220px'),
     }))
-    this.sourceHtml(sanitizeHtml(this.html()))
+    this.sourceHtml(this.sanitizeModelHtml(this.html()))
     this.text(htmlToText(this.sourceHtml()))
-    this.stops.push(
-      observe(this.editorElement, () => {
+    observe(this.editorElement, () => {
+      this.syncEditorFromModel()
+    })
+    observe(this.html, (value) => {
+      if (this.writingModel) return
+      this.syncFromExternalHtml(value)
+    })
+    if (typeof this.imagePreviewUrls === 'function') {
+      observe(this.imagePreviewUrls, () => {
         this.syncEditorFromModel()
-      }),
-      observe(this.html, (value) => {
-        if (this.writingModel) return
-        this.syncFromExternalHtml(value)
-      }),
-    )
-  }
-
-  unmounted = () => {
-    for (const stop of this.stops) stop()
-    this.stops.length = 0
+      })
+    }
   }
 
   format = (command: ComposerCommand) => {
@@ -270,17 +275,47 @@ class ComposerContext implements Composer {
     const data = event.clipboardData
     if (!data) return
 
-    event.preventDefault()
+    const files = Array.from(data.files ?? [])
     const htmlData = data.getData('text/html')
     const textData = data.getData('text/plain')
+    if (files.length > 0) this.emitFiles(event, files)
+
+    event.preventDefault()
     const nextHtml = htmlData
-      ? sanitizeHtml(htmlData)
+      ? this.sanitizeModelHtml(htmlData)
       : plainTextToHtml(textData)
     if (!nextHtml) return
 
     this.focusEditor()
     document.execCommand('insertHTML', false, nextHtml)
     this.syncFromEditor()
+  }
+
+  handleDragOver = (event: DragEvent) => {
+    if (
+      unref(this.disabled) ||
+      this.sourceMode() ||
+      !hasFileTransfer(event.dataTransfer)
+    ) {
+      return
+    }
+
+    event.preventDefault()
+    if (event.dataTransfer) event.dataTransfer.dropEffect = 'copy'
+  }
+
+  handleDrop = (event: DragEvent) => {
+    if (
+      unref(this.disabled) ||
+      this.sourceMode() ||
+      !hasFileTransfer(event.dataTransfer)
+    ) {
+      return
+    }
+
+    event.preventDefault()
+    const files = Array.from(event.dataTransfer?.files ?? [])
+    if (files.length > 0) this.emitFiles(event, files)
   }
 
   handleSourceInput = () => {
@@ -292,11 +327,11 @@ class ComposerContext implements Composer {
     const element = this.editorElement()
     if (!element) return
 
-    this.writeModel(element.innerHTML)
+    this.writeModel(this.sanitizeModelHtml(element.innerHTML))
   }
 
   private syncFromExternalHtml(value: string) {
-    const sanitized = sanitizeHtml(value)
+    const sanitized = this.sanitizeModelHtml(value)
     if (sanitized !== value) {
       this.writeModel(sanitized)
       return
@@ -311,12 +346,12 @@ class ComposerContext implements Composer {
     const element = this.editorElement()
     if (!element || this.sourceMode()) return
 
-    const sanitized = sanitizeHtml(this.html())
+    const sanitized = this.toEditorHtml(this.html())
     if (element.innerHTML !== sanitized) element.innerHTML = sanitized
   }
 
   private writeModel(value: string) {
-    const sanitized = sanitizeHtml(value)
+    const sanitized = this.sanitizeModelHtml(value)
     this.writingModel = true
     this.html(sanitized)
     this.text(htmlToText(sanitized))
@@ -327,6 +362,61 @@ class ComposerContext implements Composer {
   private focusEditor() {
     const element = this.editorElement()
     if (element) element.focus()
+  }
+
+  private emitFiles(event: Event, files: File[]) {
+    const target = event.currentTarget
+    if (!(target instanceof EventTarget)) return
+
+    target.dispatchEvent(
+      new CustomEvent('files', {
+        bubbles: true,
+        detail: { files },
+      }),
+    )
+  }
+
+  private sanitizeModelHtml(value: string | undefined) {
+    return sanitizeHtml(value, {
+      imageUrlResolver: (url) => this.toModelImageUrl(url),
+      deferCidImageSrc: true,
+    })
+  }
+
+  private toEditorHtml(value: string | undefined) {
+    return sanitizeHtml(value, {
+      imageUrlResolver: (url) => this.toEditorImageUrl(url),
+    })
+  }
+
+  private toEditorImageUrl(value: string) {
+    const contentId = normalizeEmailCidUrl(value)
+    if (contentId) {
+      const previewUrls = this.readImagePreviewUrls()
+      const previewUrl = previewUrls[contentId]
+      if (typeof previewUrl === 'string' && previewUrl) return previewUrl
+      return TRANSPARENT_IMAGE_DATA_URL
+    }
+
+    return toSafeEmailImageUrl(value)
+  }
+
+  private toModelImageUrl(value: string) {
+    const contentId = this.findPreviewContentId(value)
+    if (contentId) return `cid:${contentId}`
+    return toSafeEmailImageUrl(value)
+  }
+
+  private findPreviewContentId(value: string) {
+    const urls = this.readImagePreviewUrls()
+    for (const [contentId, url] of Object.entries(urls))
+      if (url === value) return contentId
+
+    return ''
+  }
+
+  private readImagePreviewUrls() {
+    return (unref(this.imagePreviewUrls) ?? {}) as Record<string, string>
   }
 }
 
@@ -364,7 +454,15 @@ const ALLOWED_TAGS = new Set([
   'UL',
 ])
 
-function sanitizeHtml(value: string | undefined) {
+const TRANSPARENT_IMAGE_DATA_URL =
+  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=='
+
+interface SanitizeHtmlOptions {
+  imageUrlResolver?: (url: string) => string | undefined
+  deferCidImageSrc?: boolean
+}
+
+function sanitizeHtml(value: string | undefined, options: SanitizeHtmlOptions = {}) {
   const raw = value ?? ''
   if (!raw.trim()) return ''
   if (typeof document === 'undefined') return escapeHtml(raw.trim())
@@ -373,14 +471,19 @@ function sanitizeHtml(value: string | undefined) {
   template.innerHTML = raw
   const output = document.createDocumentFragment()
   for (const child of Array.from(template.content.childNodes)) {
-    appendSanitizedNode(output, child)
+    appendSanitizedNode(output, child, options)
   }
   const wrapper = document.createElement('div')
   wrapper.appendChild(output)
-  return wrapper.innerHTML.trim()
+  const html = wrapper.innerHTML.trim()
+  return options.deferCidImageSrc ? restoreDeferredCidImageSources(html) : html
 }
 
-function appendSanitizedNode(parent: Node, node: Node) {
+function appendSanitizedNode(
+  parent: Node,
+  node: Node,
+  options: SanitizeHtmlOptions,
+) {
   if (node.nodeType === Node.TEXT_NODE) {
     parent.appendChild(document.createTextNode(node.textContent ?? ''))
     return
@@ -390,7 +493,7 @@ function appendSanitizedNode(parent: Node, node: Node) {
   const tag = node.tagName.toUpperCase()
   if (!ALLOWED_TAGS.has(tag)) {
     for (const child of Array.from(node.childNodes))
-      appendSanitizedNode(parent, child)
+      appendSanitizedNode(parent, child, options)
     return
   }
 
@@ -398,11 +501,15 @@ function appendSanitizedNode(parent: Node, node: Node) {
     const href = sanitizeHref(node.getAttribute('href') ?? '')
     if (!href) {
       for (const child of Array.from(node.childNodes))
-        appendSanitizedNode(parent, child)
+        appendSanitizedNode(parent, child, options)
       return
     }
   }
-  if (tag === 'IMG' && !sanitizeImageSrc(node.getAttribute('src') ?? '')) return
+  const imageSrc =
+    tag === 'IMG'
+      ? sanitizeImageSrc(node.getAttribute('src') ?? '', options)
+      : undefined
+  if (tag === 'IMG' && !imageSrc) return
 
   const element = document.createElement(tag.toLowerCase())
   if (tag === 'A') {
@@ -414,10 +521,11 @@ function appendSanitizedNode(parent: Node, node: Node) {
     element.setAttribute('rel', 'noopener noreferrer')
   }
   if (tag === 'IMG') {
-    element.setAttribute(
-      'src',
-      sanitizeImageSrc(node.getAttribute('src') ?? '') ?? '',
-    )
+    if (options.deferCidImageSrc && imageSrc && normalizeEmailCidUrl(imageSrc)) {
+      element.setAttribute('data-puregate-cid-src', imageSrc)
+    } else {
+      element.setAttribute('src', imageSrc ?? '')
+    }
     const alt = sanitizePlainAttribute(node.getAttribute('alt') ?? '')
     const title = sanitizePlainAttribute(node.getAttribute('title') ?? '')
     if (alt) element.setAttribute('alt', alt)
@@ -425,15 +533,23 @@ function appendSanitizedNode(parent: Node, node: Node) {
   }
 
   copyAllowedAttributes(node, element, tag)
-  copySafeEmailStyles(node, element)
+  copySafeEmailStyles(node, element, {
+    imageUrlResolver: options.imageUrlResolver,
+  })
 
   for (const child of Array.from(node.childNodes))
-    appendSanitizedNode(element, child)
+    appendSanitizedNode(element, child, options)
   parent.appendChild(element)
 }
 
-function sanitizeImageSrc(value: string) {
-  return toSafeEmailImageUrl(value)
+function sanitizeImageSrc(value: string, options: SanitizeHtmlOptions) {
+  return options.imageUrlResolver
+    ? options.imageUrlResolver(value)
+    : toSafeEmailImageUrl(value)
+}
+
+function restoreDeferredCidImageSources(html: string) {
+  return html.replace(/\sdata-puregate-cid-src="([^"]*)"/g, ' src="$1"')
 }
 
 function sanitizeHref(value: string) {
@@ -461,6 +577,11 @@ function parseUrl(value: string) {
   } catch {
     return undefined
   }
+}
+
+function hasFileTransfer(dataTransfer: DataTransfer | null) {
+  if (!dataTransfer) return false
+  return Array.from(dataTransfer.types).includes('Files')
 }
 
 function copyAllowedAttributes(
@@ -578,7 +699,9 @@ function htmlToText(value: string) {
   if (!value.trim()) return ''
 
   const template = document.createElement('template')
-  template.innerHTML = sanitizeHtml(value)
+  template.innerHTML = sanitizeHtml(value, {
+    deferCidImageSrc: true,
+  })
   const lines: string[] = []
   collectText(template.content, lines)
   return lines
