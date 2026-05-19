@@ -348,6 +348,13 @@ const ALLOWED_TAGS = new Set([
   'P',
   'SPAN',
   'STRONG',
+  'TABLE',
+  'TBODY',
+  'TD',
+  'TFOOT',
+  'TH',
+  'THEAD',
+  'TR',
   'U',
   'UL',
 ])
@@ -359,8 +366,11 @@ const ALLOWED_STYLE_PROPERTIES = new Set([
   'font-size',
   'font-style',
   'font-weight',
+  'height',
+  'line-height',
   'text-align',
   'text-decoration',
+  'width',
 ])
 
 function sanitizeHtml(value: string | undefined) {
@@ -423,6 +433,7 @@ function appendSanitizedNode(parent: Node, node: Node) {
     if (title) element.setAttribute('title', title)
   }
 
+  copyAllowedAttributes(node, element, tag)
   copyAllowedStyles(node, element)
 
   for (const child of Array.from(node.childNodes))
@@ -494,6 +505,112 @@ function sanitizePlainAttribute(value: string) {
   return text.replace(/\s+/g, ' ').trim()
 }
 
+function copyAllowedAttributes(
+  source: HTMLElement,
+  target: HTMLElement,
+  tag: string,
+) {
+  if (tag === 'TABLE') {
+    copyDimensionAttribute(source, target, 'width')
+    copyNumberAttribute(source, target, 'border', 0, 20)
+    copyNumberAttribute(source, target, 'cellpadding', 0, 80)
+    copyNumberAttribute(source, target, 'cellspacing', 0, 80)
+    copyKeywordAttribute(source, target, 'align', ['center', 'left', 'right'])
+    copyKeywordAttribute(source, target, 'role', ['none', 'presentation'])
+    return
+  }
+
+  if (tag === 'TD' || tag === 'TH') {
+    copyDimensionAttribute(source, target, 'width')
+    copyDimensionAttribute(source, target, 'height')
+    copyNumberAttribute(source, target, 'colspan', 1, 100)
+    copyNumberAttribute(source, target, 'rowspan', 1, 100)
+    copyKeywordAttribute(source, target, 'align', [
+      'center',
+      'justify',
+      'left',
+      'right',
+    ])
+    copyKeywordAttribute(source, target, 'valign', [
+      'baseline',
+      'bottom',
+      'middle',
+      'top',
+    ])
+    copyKeywordAttribute(source, target, 'aria-hidden', ['false', 'true'])
+    return
+  }
+
+  if (tag === 'TR') {
+    copyKeywordAttribute(source, target, 'align', [
+      'center',
+      'justify',
+      'left',
+      'right',
+    ])
+    copyKeywordAttribute(source, target, 'valign', [
+      'baseline',
+      'bottom',
+      'middle',
+      'top',
+    ])
+  }
+}
+
+function copyDimensionAttribute(
+  source: HTMLElement,
+  target: HTMLElement,
+  name: string,
+) {
+  const value = sanitizeHtmlDimension(source.getAttribute(name) ?? '')
+  if (value) target.setAttribute(name, value)
+}
+
+function copyNumberAttribute(
+  source: HTMLElement,
+  target: HTMLElement,
+  name: string,
+  min: number,
+  max: number,
+) {
+  const value = sanitizeIntegerAttribute(
+    source.getAttribute(name) ?? '',
+    min,
+    max,
+  )
+  if (value) target.setAttribute(name, value)
+}
+
+function copyKeywordAttribute(
+  source: HTMLElement,
+  target: HTMLElement,
+  name: string,
+  allowed: string[],
+) {
+  const value = sanitizeKeyword(source.getAttribute(name) ?? '', allowed)
+  if (value) target.setAttribute(name, value)
+}
+
+function sanitizeHtmlDimension(value: string) {
+  const trimmed = value.trim()
+  const match = /^(\d{1,4})(%)?$/.exec(trimmed)
+  if (!match) return undefined
+
+  const amount = Number(match[1])
+  if (!Number.isFinite(amount)) return undefined
+  if (match[2]) return `${Math.min(100, Math.max(1, amount))}%`
+  return String(Math.min(2400, Math.max(0, amount)))
+}
+
+function sanitizeIntegerAttribute(value: string, min: number, max: number) {
+  const match = /^\d{1,4}$/.exec(value.trim())
+  if (!match) return undefined
+
+  const amount = Number(match[0])
+  if (!Number.isFinite(amount)) return undefined
+  return String(Math.min(max, Math.max(min, amount)))
+}
+
 function copyAllowedStyles(source: HTMLElement, target: HTMLElement) {
   const style = source.getAttribute('style')
   if (!style) return
@@ -526,6 +643,11 @@ function sanitizeStyleValue(name: string, value: string) {
       return sanitizeKeyword(trimmed, ['italic', 'normal', 'oblique'])
     case 'font-weight':
       return sanitizeFontWeight(trimmed)
+    case 'height':
+    case 'width':
+      return sanitizeCssDimension(trimmed)
+    case 'line-height':
+      return sanitizeLineHeight(trimmed)
     case 'text-align':
       return sanitizeKeyword(trimmed, [
         'center',
@@ -580,6 +702,36 @@ function sanitizeFontSize(value: string) {
   return `${Math.min(32, Math.max(10, size))}px`
 }
 
+function sanitizeCssDimension(value: string) {
+  const match = /^(\d+(?:\.\d+)?)(px|%)$/i.exec(value.trim())
+  if (!match) return undefined
+
+  const amount = Number(match[1])
+  if (!Number.isFinite(amount)) return undefined
+  if (match[2] === '%') return `${Math.min(100, Math.max(0, amount))}%`
+  return `${Math.min(2400, Math.max(0, amount))}px`
+}
+
+function sanitizeLineHeight(value: string) {
+  const normalized = value.trim().toLowerCase()
+  if (normalized === 'normal') return normalized
+
+  const unitless = /^(\d+(?:\.\d+)?)$/.exec(normalized)
+  if (unitless) {
+    const amount = Number(unitless[1])
+    if (!Number.isFinite(amount)) return undefined
+    return String(Math.min(3, Math.max(0.8, amount)))
+  }
+
+  const length = /^(\d+(?:\.\d+)?)(px|%)$/i.exec(normalized)
+  if (!length) return undefined
+
+  const amount = Number(length[1])
+  if (!Number.isFinite(amount)) return undefined
+  if (length[2] === '%') return `${Math.min(300, Math.max(80, amount))}%`
+  return `${Math.min(120, Math.max(8, amount))}px`
+}
+
 function sanitizeKeyword(value: string, allowed: string[]) {
   const normalized = value.trim().toLowerCase()
   return allowed.includes(normalized) ? normalized : undefined
@@ -628,7 +780,9 @@ function collectText(node: Node, lines: string[]) {
 
   const isBlock =
     node instanceof HTMLElement &&
-    ['DIV', 'LI', 'OL', 'P', 'UL'].includes(node.tagName.toUpperCase())
+    ['DIV', 'LI', 'OL', 'P', 'TABLE', 'TBODY', 'TD', 'TH', 'TR', 'UL'].includes(
+      node.tagName.toUpperCase(),
+    )
   if (isBlock && lines[lines.length - 1]?.trim()) lines.push('')
   if (node instanceof HTMLElement && node.tagName.toUpperCase() === 'BR') {
     lines.push('')

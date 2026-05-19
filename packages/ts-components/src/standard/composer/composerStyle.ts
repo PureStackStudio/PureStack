@@ -144,6 +144,11 @@ function registerComposerSurfaceStyles(
     .height('auto')
     .borderRadius('4px')
 
+  styleBuilder
+    .select('.composer__editor table', theme)
+    .maxWidth('100%')
+    .borderCollapse('collapse')
+
   styleBuilder.select('.composer__editor p', theme).margin('0 0 0.7em')
 
   styleBuilder.select('.composer__editor p:last-child', theme).marginBottom('0')
