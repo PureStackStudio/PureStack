@@ -13,6 +13,7 @@ import {
   sref,
   unref,
 } from 'regor'
+import { createAutoId } from '../autoId'
 import {
   type ComponentVariant,
   resolveComponentClasses,
@@ -44,6 +45,7 @@ export interface Composer {
   imagePreviewUrls?: RefOrValue<Record<string, string>>
   classes?: ComputedRef<string>
   editorStyle?: ComputedRef<Record<string, string>>
+  sourceId?: string
   editorElement?: ReturnType<typeof sref<HTMLElement | null>>
   sourceHtml?: Ref<string>
   sourceMode?: Ref<boolean>
@@ -155,6 +157,7 @@ const composerTemplate = html`<div class="composer-field">
         @drop="handleDrop"></div>
       <textarea
         r-if="sourceMode"
+        :id="sourceId"
         class="composer__source"
         :style="editorStyle"
         :disabled="disabled"
@@ -205,6 +208,7 @@ class ComposerContext implements Composer {
   readonly sourceMode = ref(false)
   readonly classes: ComputedRef<string>
   readonly editorStyle: ComputedRef<Record<string, string>>
+  readonly sourceId: string
   private writingModel = false
 
   constructor(props: Composer) {
@@ -219,6 +223,7 @@ class ComposerContext implements Composer {
     this.editorStyle = computed<Record<string, string>>(() => ({
       minHeight: resolveCssSize(unref(props.minHeight), '220px'),
     }))
+    this.sourceId = resolveComposerSourceId()
     this.sourceHtml(this.sanitizeModelHtml(this.html()))
     this.text(htmlToText(this.sourceHtml()))
     observe(this.editorElement, () => {
@@ -432,6 +437,8 @@ class ComposerContext implements Composer {
     return (unref(this.imagePreviewUrls) ?? {}) as Record<string, string>
   }
 }
+
+const resolveComposerSourceId = createAutoId('composer-source')
 
 function resolveComposer(head: ComponentHead<Composer>) {
   return new ComposerContext(head.props) as Composer
