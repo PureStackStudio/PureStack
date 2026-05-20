@@ -180,7 +180,6 @@ class VariableVirtualListContext {
   readonly resolvedRowComponent: ComputedRef<string>
   private readonly rowHeights: number[] = []
   private readonly rowObservers = new Map<number, ResizeObserver>()
-  private readonly refStops: Array<() => void> = []
   private readonly measurementVersion = ref(0)
   private measuredHeightTotal = 0
   private measuredRowCount = 0
@@ -270,8 +269,6 @@ class VariableVirtualListContext {
   unmounted = () => {
     if (this.pendingFrame) cancelAnimationFrame(this.pendingFrame)
     if (this.scrollEndTimer !== undefined) clearTimeout(this.scrollEndTimer)
-    for (const stop of this.refStops) stop()
-    this.refStops.length = 0
     for (const observer of this.rowObservers.values()) observer.disconnect()
     this.rowObservers.clear()
   }
@@ -299,11 +296,9 @@ class VariableVirtualListContext {
 
     const elementRef = sref<HTMLElement | null>(null)
     this.rowElementRefs[index] = elementRef
-    this.refStops.push(
-      observe(elementRef, (element) => {
-        this.observeRowElement(index, element)
-      }),
-    )
+    observe(elementRef, (element) => {
+      this.observeRowElement(index, element)
+    })
   }
 
   private observeRowElement(index: number, element: HTMLElement | null) {
