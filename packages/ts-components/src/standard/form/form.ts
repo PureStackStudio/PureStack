@@ -35,7 +35,7 @@ export class FormCheck {
   disabled?: RefOrValue<boolean>
   constructor(props: FormCheck) {
     Object.assign(this, props)
-    if (!isRef(this.checked)) this.checked = ref<boolean>(this.checked)
+    if (!isRef(this.checked)) this.checked = ref<boolean>(!!this.checked)
   }
 }
 
