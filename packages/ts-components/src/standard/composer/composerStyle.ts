@@ -107,7 +107,10 @@ function registerComposerSurfaceStyles(
   palette: ThemePalette,
   options: ThemeOptions,
 ) {
-  styleBuilder.select('.composer__surface', theme).position('relative')
+  styleBuilder
+    .select('.composer__surface', theme)
+    .position('relative')
+    .overflowX('auto')
 
   styleBuilder
     .select('.composer__editor, .composer__source', theme)

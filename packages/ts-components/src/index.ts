@@ -34,6 +34,7 @@ export type { EmailHtmlPolicyOptions } from './standard/composer/emailHtmlPolicy
 export {
   applySafeEmailStyles,
   copySafeEmailStyles,
+  GMAIL_COMPATIBLE_EMAIL_TAGS,
   GMAIL_SUPPORTED_CSS_PROPERTIES,
   normalizeEmailCidUrl,
   normalizeEmailContentId,

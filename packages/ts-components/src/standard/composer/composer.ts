@@ -20,6 +20,7 @@ import {
 } from '../componentVariant'
 import {
   copySafeEmailStyles,
+  GMAIL_COMPATIBLE_EMAIL_TAGS,
   normalizeEmailCidUrl,
   sanitizePlainAttribute,
   toSafeEmailImageUrl,
@@ -450,29 +451,38 @@ function resolveCssSize(value: number | string | undefined, fallback: string) {
   return fallback
 }
 
-const ALLOWED_TAGS = new Set([
-  'A',
-  'B',
-  'BR',
-  'DIV',
-  'EM',
-  'I',
-  'IMG',
-  'LI',
-  'OL',
-  'P',
-  'SPAN',
-  'STRONG',
-  'TABLE',
-  'TBODY',
-  'TD',
-  'TFOOT',
-  'TH',
-  'THEAD',
-  'TR',
-  'U',
-  'UL',
+const COMPOSER_BLOCKED_CONTAINER_TAGS = new Set(['BODY', 'HTML', 'STYLE'])
+const DROPPED_TAGS = new Set([
+  'AREA',
+  'AUDIO',
+  'BASE',
+  'BUTTON',
+  'CANVAS',
+  'EMBED',
+  'FORM',
+  'HEAD',
+  'IFRAME',
+  'INPUT',
+  'LINK',
+  'MAP',
+  'META',
+  'NOSCRIPT',
+  'OBJECT',
+  'OPTION',
+  'SCRIPT',
+  'SELECT',
+  'SOURCE',
+  'STYLE',
+  'TEMPLATE',
+  'TEXTAREA',
+  'TITLE',
+  'VIDEO',
 ])
+const ALLOWED_TAGS = new Set(
+  Array.from(GMAIL_COMPATIBLE_EMAIL_TAGS).filter(
+    (tag) => !COMPOSER_BLOCKED_CONTAINER_TAGS.has(tag),
+  ),
+)
 
 const TRANSPARENT_IMAGE_DATA_URL =
   'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=='
@@ -515,6 +525,8 @@ function appendSanitizedNode(
 
   const tag = node.tagName.toUpperCase()
   if (!ALLOWED_TAGS.has(tag)) {
+    if (DROPPED_TAGS.has(tag)) return
+
     for (const child of Array.from(node.childNodes))
       appendSanitizedNode(parent, child, options)
     return
@@ -626,6 +638,13 @@ function copyAllowedAttributes(
     return
   }
 
+  if (tag === 'COL' || tag === 'COLGROUP') {
+    copyDimensionAttribute(source, target, 'width')
+    copyNumberAttribute(source, target, 'span', 1, 100)
+    copyKeywordAttribute(source, target, 'align', ['center', 'left', 'right'])
+    return
+  }
+
   if (tag === 'TD' || tag === 'TH') {
     copyDimensionAttribute(source, target, 'width')
     copyDimensionAttribute(source, target, 'height')
@@ -661,6 +680,45 @@ function copyAllowedAttributes(
       'top',
     ])
   }
+
+  if (tag === 'FONT') {
+    copyPlainAttribute(source, target, 'face')
+    copyColorAttribute(source, target, 'color')
+    copyFontSizeAttribute(source, target, 'size')
+    return
+  }
+
+  if (tag === 'OL') {
+    copyNumberAttribute(source, target, 'start', 1, 9999)
+    copyKeywordAttribute(source, target, 'type', ['1', 'a', 'A', 'i', 'I'])
+  }
+}
+
+function copyPlainAttribute(
+  source: HTMLElement,
+  target: HTMLElement,
+  name: string,
+) {
+  const value = sanitizePlainAttribute(source.getAttribute(name) ?? '')
+  if (value) target.setAttribute(name, value)
+}
+
+function copyColorAttribute(
+  source: HTMLElement,
+  target: HTMLElement,
+  name: string,
+) {
+  const value = sanitizeColorAttribute(source.getAttribute(name) ?? '')
+  if (value) target.setAttribute(name, value)
+}
+
+function copyFontSizeAttribute(
+  source: HTMLElement,
+  target: HTMLElement,
+  name: string,
+) {
+  const value = sanitizeFontSizeAttribute(source.getAttribute(name) ?? '')
+  if (value) target.setAttribute(name, value)
 }
 
 function copyDimensionAttribute(
@@ -718,8 +776,35 @@ function sanitizeIntegerAttribute(value: string, min: number, max: number) {
 }
 
 function sanitizeKeyword(value: string, allowed: string[]) {
-  const normalized = value.trim().toLowerCase()
-  return allowed.includes(normalized) ? normalized : undefined
+  const normalized = value.trim()
+  const exactMatch = allowed.find((item) => item === normalized)
+  if (exactMatch) return exactMatch
+
+  const match = allowed.find(
+    (item) => item.toLowerCase() === normalized.toLowerCase(),
+  )
+  return match
+}
+
+function sanitizeColorAttribute(value: string) {
+  const normalized = value.trim()
+  if (
+    /^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(normalized) ||
+    /^[a-z]{3,24}$/i.test(normalized)
+  ) {
+    return normalized
+  }
+
+  return undefined
+}
+
+function sanitizeFontSizeAttribute(value: string) {
+  const match = /^[+-]?\d$/.exec(value.trim())
+  if (!match) return undefined
+
+  const amount = Number(match[0])
+  if (!Number.isFinite(amount)) return undefined
+  return String(Math.min(7, Math.max(-7, amount)))
 }
 
 function htmlToText(value: string) {
@@ -750,9 +835,35 @@ function collectText(node: Node, lines: string[]) {
 
   const isBlock =
     node instanceof HTMLElement &&
-    ['DIV', 'LI', 'OL', 'P', 'TABLE', 'TBODY', 'TD', 'TH', 'TR', 'UL'].includes(
-      node.tagName.toUpperCase(),
-    )
+    [
+      'ADDRESS',
+      'BLOCKQUOTE',
+      'CAPTION',
+      'CENTER',
+      'DD',
+      'DIV',
+      'DL',
+      'DT',
+      'H1',
+      'H2',
+      'H3',
+      'H4',
+      'H5',
+      'H6',
+      'HR',
+      'LI',
+      'OL',
+      'P',
+      'PRE',
+      'TABLE',
+      'TBODY',
+      'TD',
+      'TFOOT',
+      'TH',
+      'THEAD',
+      'TR',
+      'UL',
+    ].includes(node.tagName.toUpperCase())
   if (isBlock && lines[lines.length - 1]?.trim()) lines.push('')
   if (node instanceof HTMLElement && node.tagName.toUpperCase() === 'BR') {
     lines.push('')

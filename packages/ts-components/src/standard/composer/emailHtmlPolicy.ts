@@ -1,3 +1,60 @@
+export const GMAIL_COMPATIBLE_EMAIL_TAGS = new Set([
+  'A',
+  'ADDRESS',
+  'B',
+  'BLOCKQUOTE',
+  'BODY',
+  'BR',
+  'CAPTION',
+  'CENTER',
+  'CITE',
+  'CODE',
+  'COL',
+  'COLGROUP',
+  'DD',
+  'DEL',
+  'DIV',
+  'DL',
+  'DT',
+  'EM',
+  'FONT',
+  'H1',
+  'H2',
+  'H3',
+  'H4',
+  'H5',
+  'H6',
+  'HTML',
+  'HR',
+  'I',
+  'IMG',
+  'INS',
+  'KBD',
+  'LI',
+  'OL',
+  'P',
+  'PRE',
+  'S',
+  'SAMP',
+  'SMALL',
+  'SPAN',
+  'STRONG',
+  'STYLE',
+  'SUB',
+  'SUP',
+  'TABLE',
+  'TBODY',
+  'TD',
+  'TFOOT',
+  'TH',
+  'THEAD',
+  'TR',
+  'TT',
+  'U',
+  'UL',
+  'VAR',
+])
+
 export const GMAIL_SUPPORTED_CSS_PROPERTIES = new Set([
   'azimuth',
   'background',
@@ -192,8 +249,8 @@ export function applySafeEmailStyles(
   options: EmailHtmlPolicyOptions = {},
 ) {
   if (!style) return
-  for (const item of style.split(';')) {
-    const separator = item.indexOf(':')
+  for (const item of splitCssDeclarations(style)) {
+    const separator = findCssDeclarationSeparator(item)
     if (separator <= 0) continue
 
     const property = item.slice(0, separator).trim().toLowerCase()
@@ -206,6 +263,98 @@ export function applySafeEmailStyles(
   }
 }
 
+function splitCssDeclarations(style: string) {
+  const declarations: string[] = []
+  let start = 0
+  let quote = ''
+  let parenDepth = 0
+  let escaped = false
+
+  for (let i = 0; i < style.length; ++i) {
+    const char = style[i]
+    if (escaped) {
+      escaped = false
+      continue
+    }
+
+    if (char === '\\') {
+      escaped = true
+      continue
+    }
+
+    if (quote) {
+      if (char === quote) quote = ''
+      continue
+    }
+
+    if (char === '"' || char === "'") {
+      quote = char
+      continue
+    }
+
+    if (char === '(') {
+      ++parenDepth
+      continue
+    }
+
+    if (char === ')') {
+      if (parenDepth > 0) --parenDepth
+      continue
+    }
+
+    if (char === ';' && parenDepth === 0) {
+      declarations.push(style.slice(start, i))
+      start = i + 1
+    }
+  }
+
+  declarations.push(style.slice(start))
+  return declarations
+}
+
+function findCssDeclarationSeparator(declaration: string) {
+  let quote = ''
+  let parenDepth = 0
+  let escaped = false
+
+  for (let i = 0; i < declaration.length; ++i) {
+    const char = declaration[i]
+    if (escaped) {
+      escaped = false
+      continue
+    }
+
+    if (char === '\\') {
+      escaped = true
+      continue
+    }
+
+    if (quote) {
+      if (char === quote) quote = ''
+      continue
+    }
+
+    if (char === '"' || char === "'") {
+      quote = char
+      continue
+    }
+
+    if (char === '(') {
+      ++parenDepth
+      continue
+    }
+
+    if (char === ')') {
+      if (parenDepth > 0) --parenDepth
+      continue
+    }
+
+    if (char === ':' && parenDepth === 0) return i
+  }
+
+  return -1
+}
+
 export function sanitizeEmailStyleValue(
   property: string,
   value: string,
@@ -216,6 +365,7 @@ export function sanitizeEmailStyleValue(
   const trimmed = stripImportant(value.trim())
   if (!isSafeCssValue(trimmed)) return undefined
 
+  CSS_URL_PATTERN.lastIndex = 0
   if (CSS_URL_PATTERN.test(trimmed)) {
     CSS_URL_PATTERN.lastIndex = 0
     if (!IMAGE_URL_CSS_PROPERTIES.has(property)) return undefined
