@@ -5,6 +5,12 @@ import {
   type ThemeOptions,
   themes,
 } from '@purestack/ts-style'
+import { registerComposerInitialCanvasStyles } from './composerCanvasInitialStyle'
+import { registerComposerRevertCanvasStyles } from './composerCanvasRevertStyle'
+import type { ComposerCanvasStyleOption } from './composerCanvasStyleTypes'
+import { registerComposerThemeCanvasStyles } from './composerCanvasThemeStyle'
+
+const COMPOSER_CANVAS_STYLE: ComposerCanvasStyleOption = 'initial'
 
 export function registerComposerStyles() {
   themes.forEach((theme, palette, options) => {
@@ -112,8 +118,10 @@ function registerComposerSurfaceStyles(
     .position('relative')
     .overflowX('auto')
 
+  registerComposerCanvasStyles(theme, palette)
+
   styleBuilder
-    .select('.composer__editor, .composer__source', theme)
+    .select('.composer__source', theme)
     .width('100%')
     .boxSizing('border-box')
     .padding('0.85em 0.95em')
@@ -126,42 +134,6 @@ function registerComposerSurfaceStyles(
     .lineHeight('1.55')
 
   styleBuilder
-    .select('.composer__editor', theme)
-    .overflowY('auto')
-    .whiteSpace('normal')
-
-  styleBuilder
-    .select('.composer__editor:empty::before', theme)
-    .content('attr(data-placeholder)')
-    .color(palette.current.text.subtle)
-    .pointerEvents('none')
-
-  styleBuilder
-    .select('.composer__editor a', theme)
-    .color(palette.current.tone)
-    .textDecoration('underline')
-
-  styleBuilder
-    .select('.composer__editor img', theme)
-    .maxWidth('100%')
-    .height('auto')
-    .borderRadius('4px')
-
-  styleBuilder
-    .select('.composer__editor table', theme)
-    .maxWidth('100%')
-    .borderCollapse('collapse')
-
-  styleBuilder.select('.composer__editor p', theme).margin('0 0 0.7em')
-
-  styleBuilder.select('.composer__editor p:last-child', theme).marginBottom('0')
-
-  styleBuilder
-    .select('.composer__editor ul, .composer__editor ol', theme)
-    .margin('0 0 0.7em')
-    .paddingLeft('1.4em')
-
-  styleBuilder
     .select('.composer__source', theme)
     .display('block')
     .resize('vertical')
@@ -170,4 +142,19 @@ function registerComposerSurfaceStyles(
     .borderTop(`1px solid ${palette.current.border.default}`)
     .borderBottomLeftRadius(options.radii.md)
     .borderBottomRightRadius(options.radii.md)
+}
+
+function registerComposerCanvasStyles(theme: ThemeMode, palette: ThemePalette) {
+  const context = { palette, theme }
+  if (COMPOSER_CANVAS_STYLE === 'theme') {
+    registerComposerThemeCanvasStyles(context)
+    return
+  }
+
+  if (COMPOSER_CANVAS_STYLE === 'initial') {
+    registerComposerInitialCanvasStyles(context)
+    return
+  }
+
+  registerComposerRevertCanvasStyles(context)
 }
