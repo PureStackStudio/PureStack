@@ -16,8 +16,10 @@ export interface VirtualTable {
   itemHeight?: RefOrValue<number | string>
   overscan?: RefOrValue<number | string>
   rowComponent?: RefOrValue<string>
+  colGroupComponent?: RefOrValue<string>
   headerComponent?: RefOrValue<string>
   footerComponent?: RefOrValue<string>
+  tableLayout?: RefOrValue<'auto' | 'fixed'>
   scrollTop?: ReturnType<typeof ref<number>>
   visibleRows?: ComputedRef<VirtualListRow[]>
   viewportStyle?: ComputedRef<Record<string, string>>
@@ -25,12 +27,14 @@ export interface VirtualTable {
   topSpacerStyle?: ComputedRef<Record<string, string>>
   bottomSpacerStyle?: ComputedRef<Record<string, string>>
   handleScroll?: (event: Event) => void
+  hasColGroupComponent?: ComputedRef<boolean>
   hasHeaderComponent?: ComputedRef<boolean>
   hasFooterComponent?: ComputedRef<boolean>
 }
 
 const virtualTableTemplate = html`<div class="virtual-table" :style="viewportStyle" @scroll="handleScroll">
   <table class="virtual-table__table" :style="tableStyle">
+    <colgroup r-if="hasColGroupComponent" :is="colGroupComponent"></colgroup>
     <thead r-if="hasHeaderComponent">
       <tr :is="headerComponent"></tr>
     </thead>
@@ -63,8 +67,10 @@ function defineVirtualTableComponent() {
       'itemHeight',
       'overscan',
       'rowComponent',
+      'colGroupComponent',
       'headerComponent',
       'footerComponent',
+      'tableLayout',
     ],
     context: (head) => resolveVirtualTable(head),
   })
@@ -97,12 +103,16 @@ function resolveVirtualTable(head: ComponentHead<VirtualTable>) {
       boxSizing: 'border-box',
       minWidth: '0',
     })),
-    tableStyle: computed<Record<string, string>>(() => ({
-      '--virtual-table-item-height': `${window.itemHeight()}px`,
-      width: 'max-content',
-      minWidth: '100%',
-      borderCollapse: 'collapse',
-    })),
+    tableStyle: computed<Record<string, string>>(() => {
+      const fixed = unref(props.tableLayout) === 'fixed'
+      return {
+        '--virtual-table-item-height': `${window.itemHeight()}px`,
+        width: fixed ? '100%' : 'max-content',
+        minWidth: '100%',
+        borderCollapse: 'collapse',
+        tableLayout: fixed ? 'fixed' : 'auto',
+      }
+    }),
     topSpacerStyle: computed<Record<string, string>>(() => ({
       height: `${window.startIndex() * window.itemHeight()}px`,
       padding: '0',
@@ -113,6 +123,7 @@ function resolveVirtualTable(head: ComponentHead<VirtualTable>) {
       padding: '0',
       border: '0',
     })),
+    hasColGroupComponent: computed(() => !!unref(props.colGroupComponent)),
     hasHeaderComponent: computed(() => !!unref(props.headerComponent)),
     hasFooterComponent: computed(() => !!unref(props.footerComponent)),
     handleScroll: window.handleScroll,
