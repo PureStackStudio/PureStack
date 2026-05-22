@@ -33,12 +33,28 @@ const OPACITY_UTILITIES = {
   75: '0.75',
   1: '1',
 } as const
+const DISPLAY_UTILITIES = {
+  none: 'none',
+  block: 'block',
+  inline: 'inline',
+  'inline-block': 'inline-block',
+  flex: 'flex',
+  'inline-flex': 'inline-flex',
+  grid: 'grid',
+  'inline-grid': 'inline-grid',
+  contents: 'contents',
+  table: 'table',
+  'table-row': 'table-row',
+  'table-cell': 'table-cell',
+  'list-item': 'list-item',
+} as const
 
 export function registerUtilityStyles() {
   themes.forEach((theme, palette, options) => {
     applyMarginUtilities(theme)
     applyPaddingUtilities(theme)
     applyGapUtilities(theme)
+    applyDisplayUtilities(theme)
     applyLayoutUtilities(theme)
     applyVisibilityUtilities(theme)
     applyBorderUtilities(theme, palette, options.radii)
@@ -95,9 +111,16 @@ function applyGapUtilities(theme: string) {
   }
 }
 
+function applyDisplayUtilities(theme: string) {
+  for (const [name, value] of Object.entries(DISPLAY_UTILITIES)) {
+    styleBuilder.select(`.d-${name}`, theme).display(force(value))
+  }
+}
+
 function applyLayoutUtilities(theme: string) {
   styleBuilder.select('.w-full', theme).width(force('100%'))
   styleBuilder.select('.h-full', theme).height(force('100%'))
+  styleBuilder.select('.max-h-inspector', theme).maxHeight(force('24rem'))
   styleBuilder.select('.auto-fit', theme).width(force('1%'))
   styleBuilder.select('.min-w-0', theme).minWidth(force('0'))
   styleBuilder.select('.overflow-auto', theme).overflow(force('auto'))
@@ -112,6 +135,7 @@ function applyLayoutUtilities(theme: string) {
   styleBuilder.select('.cursor-pointer', theme).cursor(force('pointer'))
   styleBuilder.select('.ws-normal', theme).whiteSpace(force('normal'))
   styleBuilder.select('.ws-nowrap', theme).whiteSpace(force('nowrap'))
+  styleBuilder.select('.ws-pre-wrap', theme).whiteSpace(force('pre-wrap'))
   styleBuilder.select('.col-resize', theme).cursor(force('col-resize'))
   styleBuilder.select('.bg-none', theme).background(force('none'))
 }
