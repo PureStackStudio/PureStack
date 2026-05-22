@@ -28,7 +28,11 @@ export type {
   ComponentVariantMode,
 } from './standard/componentVariant'
 export type { Composer, ComposerCommand } from './standard/composer/composer'
-export { defineComposerComponents } from './standard/composer/composer'
+export {
+  COMPOSER_BODY_STYLE,
+  createComposerBodyHtml,
+  defineComposerComponents,
+} from './standard/composer/composer'
 export { registerComposerStyles } from './standard/composer/composerStyle'
 export type { EmailHtmlPolicyOptions } from './standard/composer/emailHtmlPolicy'
 export {

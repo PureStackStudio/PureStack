@@ -43,6 +43,7 @@ export interface Composer {
   label?: RefOrValue<string>
   placeholder?: RefOrValue<string>
   disabled?: RefOrValue<boolean>
+  focusOnMount?: RefOrValue<boolean>
   minHeight?: RefOrValue<number | string>
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
@@ -210,6 +211,7 @@ function defineComposerComponent() {
       'label',
       'placeholder',
       'disabled',
+      'focusOnMount',
       'minHeight',
       'tone',
       'variant',
@@ -231,6 +233,7 @@ class ComposerContext implements Composer {
   readonly label?: RefOrValue<string>
   readonly placeholder?: RefOrValue<string>
   readonly disabled?: RefOrValue<boolean>
+  readonly focusOnMount?: RefOrValue<boolean>
   readonly minHeight?: RefOrValue<number | string>
   readonly tone?: RefOrValue<SemanticTone>
   readonly variant?: RefOrValue<ComponentVariant>
@@ -270,6 +273,10 @@ class ComposerContext implements Composer {
         this.syncEditorFromModel()
       })
     }
+  }
+
+  mounted = () => {
+    if (unref(this.focusOnMount)) this.scheduleEditorFocus()
   }
 
   format = (command: ComposerCommand) => {
@@ -416,6 +423,40 @@ class ComposerContext implements Composer {
     if (element) element.focus()
   }
 
+  private scheduleEditorFocus(attempt = 0) {
+    requestAnimationFrame(() => {
+      this.syncEditorFromModel()
+      if (this.focusEditorForWriting()) return
+      if (attempt >= FOCUS_RETRY_COUNT) return
+
+      setTimeout(
+        () => this.scheduleEditorFocus(attempt + 1),
+        FOCUS_RETRY_DELAY_MS,
+      )
+    })
+  }
+
+  private focusEditorForWriting() {
+    const element = this.editorElement()
+    if (!element || this.sourceMode() || unref(this.disabled)) return false
+    if (!isVisibleForFocus(element)) return false
+
+    element.focus({ preventScroll: true })
+    const target = findWritingStartNode(element)
+    const range = document.createRange()
+    if (target instanceof Text) {
+      range.setStart(target, 0)
+    } else {
+      range.setStart(target, 0)
+    }
+    range.collapse(true)
+
+    const selection = window.getSelection()
+    selection?.removeAllRanges()
+    selection?.addRange(range)
+    return document.activeElement === element
+  }
+
   private emitFiles(event: Event, files: File[]) {
     const target = event.currentTarget
     if (!(target instanceof EventTarget)) return
@@ -480,17 +521,26 @@ class ComposerContext implements Composer {
 }
 
 const resolveComposerSourceId = createAutoId('composer-source')
-const EMPTY_EDITOR_BODY_STYLE = 'padding:16px'
+export const COMPOSER_BODY_STYLE = 'padding:16px'
+const FOCUS_RETRY_COUNT = 12
+const FOCUS_RETRY_DELAY_MS = 25
 
 function resolveComposer(head: ComponentHead<Composer>) {
   return new ComposerContext(head.props) as Composer
 }
 
-function createEmptyEditorHtml(placeholder: string | undefined) {
+export function createComposerBodyHtml(
+  contentHtml = '',
+  placeholder?: string,
+) {
   const placeholderAttribute = placeholder
     ? ` data-placeholder="${escapeHtmlAttribute(placeholder)}"`
     : ''
-  return `<div data-puregate-composer-body="true"${placeholderAttribute} style="${EMPTY_EDITOR_BODY_STYLE}"></div>`
+  return `<div data-puregate-composer-body="true"${placeholderAttribute} style="${COMPOSER_BODY_STYLE}">${contentHtml}</div>`
+}
+
+function createEmptyEditorHtml(placeholder: string | undefined) {
+  return createComposerBodyHtml('', placeholder)
 }
 
 function resolveCssSize(value: number | string | undefined, fallback: string) {
@@ -886,6 +936,28 @@ function hasMeaningfulEditorContent(node: Node) {
     if (hasMeaningfulEditorContent(child)) return true
 
   return false
+}
+
+function findWritingStartNode(root: HTMLElement): Node {
+  for (const child of Array.from(root.childNodes)) {
+    if (child instanceof HTMLElement && isEmptyWritingBlock(child))
+      return child
+    if (child.nodeType === Node.TEXT_NODE && child.textContent?.trim())
+      return child
+  }
+
+  return root
+}
+
+function isVisibleForFocus(element: HTMLElement) {
+  return element.isConnected && element.getClientRects().length > 0
+}
+
+function isEmptyWritingBlock(element: HTMLElement) {
+  const tag = element.tagName.toUpperCase()
+  if (tag !== 'P' && tag !== 'DIV') return false
+  if (element.querySelector('img, table, hr')) return false
+  return !element.textContent?.trim()
 }
 
 function collectText(node: Node, lines: string[]) {
