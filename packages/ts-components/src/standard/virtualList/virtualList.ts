@@ -190,6 +190,7 @@ class VariableVirtualListContext {
   private readonly offsets: ComputedRef<number[]>
   private readonly startIndex: ComputedRef<number>
   private readonly firstVisibleIndex: ComputedRef<number>
+  private readonly normalizedScrollTop: ComputedRef<number>
   private pendingIndexes = new Set<number>()
   private pendingFrame = 0
   private scrollEndTimer: ReturnType<typeof setTimeout> | undefined
@@ -222,8 +223,12 @@ class VariableVirtualListContext {
 
       return offsets
     })
+    this.normalizedScrollTop = computed(() => {
+      const value = this.scrollTop()
+      return value <= 0.5 ? 0 : value
+    })
     this.firstVisibleIndex = computed(() =>
-      findOffsetIndex(this.offsets(), this.scrollTop()),
+      findOffsetIndex(this.offsets(), this.normalizedScrollTop()),
     )
     this.startIndex = computed(() =>
       Math.max(0, this.firstVisibleIndex() - this.resolvedOverscan()),
@@ -249,16 +254,15 @@ class VariableVirtualListContext {
     })
   }
 
-  handleScroll = (event: Event) => {
-    const target = event.currentTarget
-    if (!(target instanceof HTMLElement)) return
+  handleScroll = () => {
+    this.syncScrollTopFromViewport()
 
-    this.scrollTop(target.scrollTop)
     this.isScrolling = true
     if (this.scrollEndTimer !== undefined) clearTimeout(this.scrollEndTimer)
     this.scrollEndTimer = setTimeout(() => {
       this.scrollEndTimer = undefined
       this.isScrolling = false
+      this.syncScrollTopFromViewport()
       if (!this.hasDeferredMeasurements) return
 
       this.hasDeferredMeasurements = false
@@ -277,7 +281,7 @@ class VariableVirtualListContext {
     const source = this.resolvedItems()
     const offsets = this.offsets()
     const start = this.startIndex()
-    const viewportBottom = this.scrollTop() + this.resolvedHeight()
+    const viewportBottom = this.normalizedScrollTop() + this.resolvedHeight()
     let end =
       findOffsetIndex(offsets, viewportBottom) + this.resolvedOverscan() + 1
     end = Math.min(source.length, Math.max(start, end))
@@ -328,6 +332,7 @@ class VariableVirtualListContext {
   }
 
   private flushMeasurements() {
+    this.syncScrollTopFromViewport()
     let changed = false
 
     for (const index of this.pendingIndexes) {
@@ -369,6 +374,20 @@ class VariableVirtualListContext {
     }
 
     this.measuredHeightTotal += next - previous
+  }
+
+  private syncScrollTopFromViewport() {
+    const viewport = this.viewportElement()
+    if (!viewport) return
+
+    this.setScrollTop(viewport.scrollTop)
+  }
+
+  private setScrollTop(value: number) {
+    const next = Number.isFinite(value) && value > 0 ? value : 0
+    if (this.scrollTop() === next) return
+
+    this.scrollTop(next)
   }
 }
 
