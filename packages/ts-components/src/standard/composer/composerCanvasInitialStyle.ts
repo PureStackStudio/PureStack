@@ -75,6 +75,19 @@ function registerComposerInitialCanvasElementDefaults({
     .display('block')
     .font('inherit')
     .color('inherit')
+    .lineHeight('inherit')
+    .caretColor('inherit')
+
+  styleBuilder
+    .select('.composer__editor div:empty, .composer__editor p:empty', theme)
+    .minHeight('1.55em')
+
+  styleBuilder
+    .select('.composer__editor br', theme)
+    .display('inline')
+    .font('inherit')
+    .lineHeight('inherit')
+    .caretColor('inherit')
 
   styleBuilder
     .select('.composer__editor strong, .composer__editor b', theme)
