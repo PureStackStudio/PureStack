@@ -50,7 +50,5 @@ export function registerComposerCanvasPreviewDefaults({
 
   styleBuilder.select('.composer__editor p:first-child', theme).marginTop('0')
 
-  styleBuilder
-    .select('.composer__editor p:last-child', theme)
-    .marginBottom('0')
+  styleBuilder.select('.composer__editor p:last-child', theme).marginBottom('0')
 }

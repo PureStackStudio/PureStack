@@ -44,9 +44,7 @@ export function registerComposerThemeCanvasStyles({
 
   styleBuilder.select('.composer__editor p', theme).margin('0 0 0.7em')
 
-  styleBuilder
-    .select('.composer__editor p:last-child', theme)
-    .marginBottom('0')
+  styleBuilder.select('.composer__editor p:last-child', theme).marginBottom('0')
 
   styleBuilder
     .select('.composer__editor ul, .composer__editor ol', theme)

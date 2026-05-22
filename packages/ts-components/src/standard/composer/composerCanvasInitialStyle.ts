@@ -81,12 +81,13 @@ function registerComposerInitialCanvasElementDefaults({
     .fontWeight('bold')
 
   styleBuilder
-    .select('.composer__editor em, .composer__editor i, .composer__editor cite', theme)
+    .select(
+      '.composer__editor em, .composer__editor i, .composer__editor cite',
+      theme,
+    )
     .fontStyle('italic')
 
-  styleBuilder
-    .select('.composer__editor small', theme)
-    .fontSize('80%')
+  styleBuilder.select('.composer__editor small', theme).fontSize('80%')
 
   styleBuilder
     .select('.composer__editor sub', theme)
@@ -133,12 +134,13 @@ function registerComposerInitialCanvasElementDefaults({
     .fontWeight('bold')
     .margin('2.33em 0')
 
-  styleBuilder
-    .select('.composer__editor blockquote', theme)
-    .margin('1em 40px')
+  styleBuilder.select('.composer__editor blockquote', theme).margin('1em 40px')
 
   styleBuilder
-    .select('.composer__editor pre, .composer__editor code, .composer__editor kbd, .composer__editor samp, .composer__editor tt', theme)
+    .select(
+      '.composer__editor pre, .composer__editor code, .composer__editor kbd, .composer__editor samp, .composer__editor tt',
+      theme,
+    )
     .fontFamily('monospace')
 
   styleBuilder
@@ -146,21 +148,13 @@ function registerComposerInitialCanvasElementDefaults({
     .margin('1em 0')
     .paddingLeft('40px')
 
-  styleBuilder
-    .select('.composer__editor li', theme)
-    .display('list-item')
+  styleBuilder.select('.composer__editor li', theme).display('list-item')
 
-  styleBuilder
-    .select('.composer__editor ul', theme)
-    .listStyle('disc')
+  styleBuilder.select('.composer__editor ul', theme).listStyle('disc')
 
-  styleBuilder
-    .select('.composer__editor ol', theme)
-    .listStyle('decimal')
+  styleBuilder.select('.composer__editor ol', theme).listStyle('decimal')
 
-  styleBuilder
-    .select('.composer__editor table', theme)
-    .display('table')
+  styleBuilder.select('.composer__editor table', theme).display('table')
 
   styleBuilder
     .select('.composer__editor caption', theme)
@@ -170,9 +164,7 @@ function registerComposerInitialCanvasElementDefaults({
     .select('.composer__editor colgroup', theme)
     .display('table-column-group')
 
-  styleBuilder
-    .select('.composer__editor col', theme)
-    .display('table-column')
+  styleBuilder.select('.composer__editor col', theme).display('table-column')
 
   styleBuilder
     .select('.composer__editor thead', theme)
@@ -186,9 +178,7 @@ function registerComposerInitialCanvasElementDefaults({
     .select('.composer__editor tfoot', theme)
     .display('table-footer-group')
 
-  styleBuilder
-    .select('.composer__editor tr', theme)
-    .display('table-row')
+  styleBuilder.select('.composer__editor tr', theme).display('table-row')
 
   styleBuilder
     .select('.composer__editor td, .composer__editor th', theme)
