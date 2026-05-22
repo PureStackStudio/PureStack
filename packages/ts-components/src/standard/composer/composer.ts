@@ -30,6 +30,9 @@ export type ComposerCommand =
   | 'bold'
   | 'italic'
   | 'underline'
+  | 'justifyLeft'
+  | 'justifyCenter'
+  | 'justifyRight'
   | 'insertUnorderedList'
   | 'insertOrderedList'
   | 'removeFormat'
@@ -90,6 +93,34 @@ const composerTemplate = html`<div class="composer-field">
         :disabled="disabled"
         @click="format('underline')">
         <Icon name="lucide:underline"/>
+      </button>
+      <span class="composer__divider" aria-hidden="true"></span>
+      <button
+        class="composer__tool"
+        type="button"
+        title="Align left"
+        aria-label="Align left"
+        :disabled="disabled"
+        @click="format('justifyLeft')">
+        <Icon name="tabler:align-left"/>
+      </button>
+      <button
+        class="composer__tool"
+        type="button"
+        title="Align center"
+        aria-label="Align center"
+        :disabled="disabled"
+        @click="format('justifyCenter')">
+        <Icon name="tabler:align-center"/>
+      </button>
+      <button
+        class="composer__tool"
+        type="button"
+        title="Align right"
+        aria-label="Align right"
+        :disabled="disabled"
+        @click="format('justifyRight')">
+        <Icon name="tabler:align-right"/>
       </button>
       <span class="composer__divider" aria-hidden="true"></span>
       <button
@@ -338,7 +369,9 @@ class ComposerContext implements Composer {
     const element = this.editorElement()
     if (!element) return
 
-    this.writeModel(this.sanitizeModelHtml(element.innerHTML))
+    const value = this.readModelHtmlFromEditor(element)
+    this.writeModel(value)
+    if (!value) this.syncEditorFromModel()
   }
 
   private syncFromExternalHtml(value: string) {
@@ -403,9 +436,16 @@ class ComposerContext implements Composer {
   }
 
   private toEditorHtml(value: string | undefined) {
-    return sanitizeHtml(value, {
+    const sanitized = sanitizeHtml(value, {
       imageUrlResolver: (url) => this.toEditorImageUrl(url),
     })
+    return sanitized || createEmptyEditorHtml(unref(this.placeholder))
+  }
+
+  private readModelHtmlFromEditor(element: HTMLElement) {
+    if (!hasMeaningfulEditorContent(element)) return ''
+
+    return this.sanitizeModelHtml(element.innerHTML)
   }
 
   private toEditorImageUrl(value: string) {
@@ -440,9 +480,17 @@ class ComposerContext implements Composer {
 }
 
 const resolveComposerSourceId = createAutoId('composer-source')
+const EMPTY_EDITOR_BODY_STYLE = 'padding:16px'
 
 function resolveComposer(head: ComponentHead<Composer>) {
   return new ComposerContext(head.props) as Composer
+}
+
+function createEmptyEditorHtml(placeholder: string | undefined) {
+  const placeholderAttribute = placeholder
+    ? ` data-placeholder="${escapeHtmlAttribute(placeholder)}"`
+    : ''
+  return `<div data-puregate-composer-body="true"${placeholderAttribute} style="${EMPTY_EDITOR_BODY_STYLE}"></div>`
 }
 
 function resolveCssSize(value: number | string | undefined, fallback: string) {
@@ -823,6 +871,23 @@ function htmlToText(value: string) {
     .trim()
 }
 
+function hasMeaningfulEditorContent(node: Node) {
+  if (node.nodeType === Node.TEXT_NODE) return !!node.textContent?.trim()
+  if (!(node instanceof HTMLElement || node instanceof DocumentFragment))
+    return false
+
+  if (node instanceof HTMLElement) {
+    const tag = node.tagName.toUpperCase()
+    if (tag === 'IMG' || tag === 'HR') return true
+    if (tag === 'BR') return false
+  }
+
+  for (const child of Array.from(node.childNodes))
+    if (hasMeaningfulEditorContent(child)) return true
+
+  return false
+}
+
 function collectText(node: Node, lines: string[]) {
   if (node.nodeType === Node.TEXT_NODE) {
     const text = node.textContent?.replace(/\s+/g, ' ') ?? ''
@@ -894,4 +959,8 @@ function escapeHtml(value: string) {
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#39;')
+}
+
+function escapeHtmlAttribute(value: string) {
+  return escapeHtml(value).replaceAll('`', '&#96;')
 }

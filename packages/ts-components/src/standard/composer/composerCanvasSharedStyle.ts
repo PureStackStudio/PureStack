@@ -12,7 +12,7 @@ export function registerComposerCanvasPreviewDefaults({
     .display('block')
     .width('100%')
     .boxSizing('border-box')
-    .padding('0.85em 0.95em')
+    .padding('0')
     .border('none')
     .borderRadius('0')
     .outline('none')
@@ -29,6 +29,12 @@ export function registerComposerCanvasPreviewDefaults({
 
   styleBuilder
     .select('.composer__editor:empty::before', theme)
+    .content('attr(data-placeholder)')
+    .color('#777')
+    .pointerEvents('none')
+
+  styleBuilder
+    .select('.composer__editor [data-puregate-composer-body]:empty::before', theme)
     .content('attr(data-placeholder)')
     .color('#777')
     .pointerEvents('none')
