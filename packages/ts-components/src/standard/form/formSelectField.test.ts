@@ -68,7 +68,7 @@ describe('FormSelectField', () => {
       '<!DOCTYPE html><html><body><div id="app"></div></body></html>',
     )
     const model = ref('standard')
-    const autocomplete = ref('organization')
+    const autocomplete = ref<string | null>('organization')
     const disabled = ref(false)
     const options = sref<FormSelectOption[]>([
       { label: 'Standard', value: 'standard' },
@@ -101,7 +101,7 @@ describe('FormSelectField', () => {
       expect(select?.getAttribute('disabled')).toBeNull()
       expect(document.querySelectorAll('option')).toHaveLength(2)
 
-      autocomplete(undefined)
+      autocomplete(null)
       disabled(true)
       options([{ label: 'Enterprise', value: 'enterprise' }])
 

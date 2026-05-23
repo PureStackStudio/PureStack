@@ -12,7 +12,7 @@ describe('FormInputField', () => {
       '<!DOCTYPE html><html><body><div id="app"></div></body></html>',
     )
     const model = ref('Ada')
-    const autocomplete = ref('name')
+    const autocomplete = ref<string | null>('name')
     const app = createApp(
       {
         components: defineFormInputField(),
@@ -37,7 +37,7 @@ describe('FormInputField', () => {
 
       expect(input?.getAttribute('autocomplete')).toBe('email')
 
-      autocomplete(undefined)
+      autocomplete(null)
       expect(input?.getAttribute('autocomplete')).toBe('off')
     } finally {
       app.unbind()
