@@ -34,7 +34,10 @@ export function registerComposerCanvasPreviewDefaults({
     .pointerEvents('none')
 
   styleBuilder
-    .select('.composer__editor [data-puregate-composer-body]:empty::before', theme)
+    .select(
+      '.composer__editor [data-puregate-composer-body]:empty::before',
+      theme,
+    )
     .content('attr(data-placeholder)')
     .color('#777')
     .pointerEvents('none')

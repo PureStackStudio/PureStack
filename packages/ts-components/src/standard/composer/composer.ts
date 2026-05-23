@@ -529,10 +529,7 @@ function resolveComposer(head: ComponentHead<Composer>) {
   return new ComposerContext(head.props) as Composer
 }
 
-export function createComposerBodyHtml(
-  contentHtml = '',
-  placeholder?: string,
-) {
+export function createComposerBodyHtml(contentHtml = '', placeholder?: string) {
   const placeholderAttribute = placeholder
     ? ` data-placeholder="${escapeHtmlAttribute(placeholder)}"`
     : ''
@@ -940,8 +937,7 @@ function hasMeaningfulEditorContent(node: Node) {
 
 function findWritingStartNode(root: HTMLElement): Node {
   for (const child of Array.from(root.childNodes)) {
-    if (child instanceof HTMLElement && isEmptyWritingBlock(child))
-      return child
+    if (child instanceof HTMLElement && isEmptyWritingBlock(child)) return child
     if (child.nodeType === Node.TEXT_NODE && child.textContent?.trim())
       return child
   }
