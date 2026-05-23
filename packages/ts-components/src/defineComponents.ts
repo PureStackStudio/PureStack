@@ -29,6 +29,7 @@ import { defineSectionHeaderComponents } from './standard/sectionHeader/sectionH
 import { defineSignInComponents } from './standard/signIn/signIn'
 import { defineTabsComponents } from './standard/tabs/tabs'
 import { defineThemeSwitcherComponents } from './standard/themeSwitcher/themeSwitcher'
+import { defineToastComponents } from './standard/toast/toastHost'
 import { defineTopBarComponents } from './standard/topBar/topBar'
 import { defineVariableVirtualTableComponents } from './standard/virtualList/variableVirtualTable'
 import { defineVirtualListComponents } from './standard/virtualList/virtualList'
@@ -59,6 +60,7 @@ export function defineComponents(getSvgIcon: GetSvgIcon) {
     ...defineModalComponents(),
     ...defineTopBarComponents(),
     ...defineThemeSwitcherComponents(),
+    ...defineToastComponents(),
     ...defineVirtualListComponents(),
     ...defineVirtualTableComponents(),
     ...defineVariableVirtualTableComponents(),
