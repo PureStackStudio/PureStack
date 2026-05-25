@@ -41,7 +41,7 @@ describe('SignIn rendering', () => {
     expect(html).toContain('href="/signin/"')
     expect(html).toContain('href="/signup/"')
     expect(html).toContain('href="/account/"')
-    expect(html).toContain('href="/settings/"')
+    expect(html).toContain('href="/account/settings/"')
     expect(html).toContain('href="/signout/"')
   })
 
