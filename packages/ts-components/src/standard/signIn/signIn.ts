@@ -104,7 +104,7 @@ const signInTemplate = html`<details r-if="authEnabled" class="sign-in position-
         </BtnLink>
         <BtnLink
           class="sign-in__signed-in-action justify-start w-full text-start"
-          href="/settings/"
+          href="/account/settings/"
           :tone="tone"
           variant="subtleBtn"
           icon="lucide:settings"
