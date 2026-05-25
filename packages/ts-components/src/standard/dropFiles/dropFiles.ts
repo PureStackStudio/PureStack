@@ -29,7 +29,7 @@ export interface DropFileItem {
 export type DropFilesIconMap = Record<string, string>
 
 export interface DropFilesAddOptions {
-  accept?: RefOrValue<string> | string[]
+  accept?: RefOrValue<string> | string[] // TODO: components can never get values, string[] is wrong type, must be included in RefOrValue. check for other abuse and fix all.
   iconMap?: DropFilesIconMap | SRef<DropFilesIconMap>
   fileIcon?: RefOrValue<string>
   multiple?: RefOrValue<boolean>
@@ -114,7 +114,8 @@ const dropFilesTemplate = html`<div class="drop-files">
     @dragenter="handleDragEnter"
     @dragover="handleDragOver"
     @dragleave="handleDragLeave"
-    @drop="handleDrop">
+    @drop="handleDrop"
+  >
     <Icon class="drop-files__zone-icon" :name="resolvedUploadIcon"/>
     <span class="drop-files__zone-title">{{ emptyTitle || 'Add files' }}</span>
     <span class="drop-files__zone-text">
@@ -137,7 +138,8 @@ const dropFilesTemplate = html`<div class="drop-files">
         title="Remove file"
         aria-label="Remove file"
         :disabled="disabled"
-        @click="removeFile(item.id)">
+        @click="removeFile(item.id)"
+      >
         <Icon :name="resolvedRemoveIcon"/>
       </button>
     </li>
