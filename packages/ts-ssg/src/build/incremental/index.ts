@@ -101,10 +101,12 @@ async function createIncrementalRuntime(
     templates: buildOptions.templates,
     navigation,
     mdx,
-    resolveScriptPublicPath: (sourceRelPath) =>
-      `/${toOutputAssetRelPath(sourceRelPath, {
-        cacheKey: scriptCacheKeys.ensure(sourceRelPath),
-      })}`,
+    resolveScriptPublicPath: config.scripts.cacheBusting
+      ? (sourceRelPath) =>
+          `/${toOutputAssetRelPath(sourceRelPath, {
+            cacheKey: scriptCacheKeys.ensure(sourceRelPath),
+          })}`
+      : undefined,
   }
   context.headerHtmlByDir = await resolveHeaderHtmlByDirectory(config, mdx)
   context.footerHtmlByDir = await resolveFooterHtmlByDirectory(config, mdx)
@@ -161,6 +163,7 @@ class IncrementalRuntime {
       },
       minifyScripts: options.minifyScripts,
       failOnAssetError: options.failOnAssetError,
+      cacheBusting: options.config.scripts.cacheBusting,
       assets: options.manifest.assets,
       scriptCacheKeys: this.scriptCacheKeys,
       persistManifest: () => this.persistManifest(),
@@ -261,7 +264,7 @@ class IncrementalRuntime {
       this.config.outDir,
       {
         minifyScripts: this.options.minifyScripts,
-        getScriptCacheKey: (relPath) => this.scriptCacheKeys.get(relPath),
+        getScriptCacheKey: this.resolveScriptCacheKey,
       },
     )
     this.scriptEntrypoints.rebuildDependencyIndex(
@@ -328,7 +331,7 @@ class IncrementalRuntime {
         outputs: styleResult.outputs,
       },
       {
-        getScriptCacheKey: (relPath) => this.scriptCacheKeys.get(relPath),
+        getScriptCacheKey: this.resolveScriptCacheKey,
       },
     )
     await this.persistManifest()
@@ -382,6 +385,12 @@ class IncrementalRuntime {
         outPath: sitemap.robotsOutPath,
       })
     }
+  }
+
+  private resolveScriptCacheKey = (relPath: string) => {
+    return this.config.scripts.cacheBusting
+      ? this.scriptCacheKeys.get(relPath)
+      : undefined
   }
 
   private async writeSitemapFromManifest() {

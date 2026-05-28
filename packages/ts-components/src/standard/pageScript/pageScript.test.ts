@@ -49,22 +49,19 @@ describe('PageScript rendering', () => {
     const cleanup = ensureDomGlobals()
     const components = defineScriptComponents()
     const resolvedScripts: string[] = []
-    const html = renderApp(
-      '<PageScript src="./login.ts?mode=prod#boot" />',
-      {
-        components,
-        context: createTestContext({
-          pageInfo: {
-            relPath: 'login.mdx',
-            urlPath: '/login/',
-          },
-          resolveScriptPublicPath: (sourceRelPath) => {
-            resolvedScripts.push(sourceRelPath)
-            return '/login/login.ab12.js'
-          },
-        }),
-      },
-    )
+    const html = renderApp('<PageScript src="./login.ts?mode=prod#boot" />', {
+      components,
+      context: createTestContext({
+        pageInfo: {
+          relPath: 'login.mdx',
+          urlPath: '/login/',
+        },
+        resolveScriptPublicPath: (sourceRelPath) => {
+          resolvedScripts.push(sourceRelPath)
+          return '/login/login.ab12.js'
+        },
+      }),
+    })
     cleanup()
 
     expect(resolvedScripts).toEqual(['login.ts'])

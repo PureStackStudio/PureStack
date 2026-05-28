@@ -20,6 +20,7 @@ export interface SiteConfig {
   navigation: NavigationConfig
   pageToc: PageTocConfig
   auth: AuthConfig
+  scripts: SiteScriptsConfig
   sitemap: SitemapConfig
   consent: ConsentConfig
   analytics: AnalyticsConfig
@@ -34,6 +35,10 @@ export interface PageTocConfig {
 export interface AuthConfig {
   enabled: boolean
   signUp: boolean
+}
+
+export interface SiteScriptsConfig {
+  cacheBusting: boolean
 }
 
 export interface SiteStyleConfig {

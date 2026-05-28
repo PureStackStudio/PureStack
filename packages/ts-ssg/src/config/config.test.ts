@@ -153,6 +153,20 @@ describe('resolveSiteConfig sitemap', () => {
     expect(config.html.minify).toBe(true)
   })
 
+  it('enables script cache busting by default and accepts overrides', () => {
+    expect(resolveSiteConfig({ rootDir: process.cwd() }).scripts).toEqual({
+      cacheBusting: true,
+    })
+
+    const config = resolveSiteConfig({
+      rootDir: process.cwd(),
+      scripts: {
+        cacheBusting: false,
+      },
+    })
+    expect(config.scripts.cacheBusting).toBe(false)
+  })
+
   it('resolves logo overrides from input config', () => {
     const config = resolveSiteConfig({
       rootDir: process.cwd(),

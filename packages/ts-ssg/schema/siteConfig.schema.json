@@ -295,6 +295,18 @@
         }
       }
     },
+    "scripts": {
+      "type": "object",
+      "description": "Script asset output settings.",
+      "additionalProperties": false,
+      "properties": {
+        "cacheBusting": {
+          "type": "boolean",
+          "description": "When true, emitted local TypeScript script filenames include a build cache key so browsers fetch fresh bundles after rebuilds.",
+          "default": true
+        }
+      }
+    },
     "sitemap": {
       "type": "object",
       "description": "Sitemap generation settings.",

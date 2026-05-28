@@ -13,6 +13,7 @@ interface ScriptEntrypointManagerInput {
   config: Pick<SiteConfig, 'contentDir' | 'outDir'>
   minifyScripts: boolean
   failOnAssetError: boolean
+  cacheBusting: boolean
   assets: Record<string, AssetManifestEntry>
   scriptCacheKeys: ScriptCacheKeyStore
   persistManifest: () => Promise<void>
@@ -51,6 +52,10 @@ export class ScriptEntrypointManager {
   removeTrackedEntrypoint(entryRelPath: string) {
     this.input.scriptCacheKeys.remove(entryRelPath)
     this.removeEntrypoint(entryRelPath)
+  }
+
+  usesCacheBusting() {
+    return this.input.cacheBusting
   }
 
   resolveImpactedEntryRelPaths(changedRelPath: string) {
@@ -161,10 +166,7 @@ export class ScriptEntrypointManager {
     }
 
     const priorCacheKey = this.input.scriptCacheKeys.get(entryRelPath)
-    const cacheKey =
-      options.bumpCacheKeys === true
-        ? this.input.scriptCacheKeys.bump(entryRelPath)
-        : this.input.scriptCacheKeys.ensure(entryRelPath)
+    const cacheKey = this.resolveCacheKey(entryRelPath, options)
     const assetCopy = await copyStaticAsset(
       this.input.config.contentDir,
       this.input.config.outDir,
@@ -192,7 +194,7 @@ export class ScriptEntrypointManager {
       relPath: entryRelPath,
       ext,
       outPath: assetCopy.outPath,
-      cacheKey,
+      ...(cacheKey ? { cacheKey } : {}),
       ...signature,
     }
     result.changedAssets += 1
@@ -213,6 +215,16 @@ export class ScriptEntrypointManager {
       }
     }
     return entries
+  }
+
+  private resolveCacheKey(
+    entryRelPath: string,
+    options: { bumpCacheKeys?: boolean },
+  ) {
+    if (!this.input.cacheBusting) return undefined
+    return options.bumpCacheKeys === true
+      ? this.input.scriptCacheKeys.bump(entryRelPath)
+      : this.input.scriptCacheKeys.ensure(entryRelPath)
   }
 
   private getEntrypointAssetFiles(): StaticAssetFile[] {

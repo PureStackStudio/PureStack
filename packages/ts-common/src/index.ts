@@ -41,6 +41,7 @@ export type {
   SiteHtmlConfig,
   SiteMdxConfig,
   SitemapConfig,
+  SiteScriptsConfig,
   SiteStyleConfig,
   SiteStyleConfigInput,
 } from './site-config-types'

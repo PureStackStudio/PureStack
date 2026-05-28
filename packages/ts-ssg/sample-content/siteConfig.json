@@ -30,6 +30,9 @@
   "html": {
     "minify": false
   },
+  "scripts": {
+    "cacheBusting": true
+  },
   "navigation": {
     "mode": "auto",
     "navFileName": "_nav.json",

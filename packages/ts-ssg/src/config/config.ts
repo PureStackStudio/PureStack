@@ -18,6 +18,7 @@ import type {
   SiteHtmlConfig,
   SiteMdxConfig,
   SitemapConfig,
+  SiteScriptsConfig,
   SiteStyleConfig,
 } from '@purestack/ts-common'
 import { pickSemanticTone, resolveThemes, themes } from '@purestack/ts-style'
@@ -81,6 +82,7 @@ export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
   )
   const pageToc = resolvePageTocConfig(input.pageToc, fileConfig.pageToc)
   const auth = resolveAuthConfig(input.auth, fileConfig.auth)
+  const scripts = resolveScriptsConfig(input.scripts, fileConfig.scripts)
   const sitemap = resolveSitemapConfig(input.sitemap, fileConfig.sitemap)
   const analytics = resolveAnalyticsConfig(
     input.analytics,
@@ -106,11 +108,21 @@ export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
     navigation,
     pageToc,
     auth,
+    scripts,
     sitemap,
     consent,
     analytics,
     pagefind,
     mdx,
+  }
+}
+
+function resolveScriptsConfig(
+  input?: DeepPartial<SiteScriptsConfig>,
+  file?: DeepPartial<SiteScriptsConfig>,
+): SiteScriptsConfig {
+  return {
+    cacheBusting: pickBoolean(input?.cacheBusting, file?.cacheBusting, true),
   }
 }
 
@@ -250,11 +262,12 @@ function resolveString(...values: Array<string | undefined>) {
   return ''
 }
 
-function pickBoolean(...values: Array<unknown>) {
-  for (const value of values) {
+function pickBoolean(input: unknown, file: unknown, fallback = false) {
+  const searchValues = [input, file]
+  for (const value of searchValues) {
     if (typeof value === 'boolean') return value
   }
-  return false
+  return fallback
 }
 
 function resolvePathFromFileConfig(value: unknown, contentDir: string) {

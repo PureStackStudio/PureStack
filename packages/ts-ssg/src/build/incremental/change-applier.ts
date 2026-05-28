@@ -239,12 +239,14 @@ export class IncrementalChangeApplier {
       this.input.scriptEntrypoints.resolveImpactedEntryRelPaths(relPath)
     if (impactedEntries.size === 0) return
 
-    const rebuiltEntries = await this.input.scriptEntrypoints.rebuildEntrypoints(
-      impactedEntries,
-      result,
-      { bumpCacheKeys: true },
-    )
+    const rebuiltEntries =
+      await this.input.scriptEntrypoints.rebuildEntrypoints(
+        impactedEntries,
+        result,
+        { bumpCacheKeys: true },
+      )
     if (rebuiltEntries.size === 0) return
+    if (!this.input.scriptEntrypoints.usesCacheBusting()) return
     await this.input.contentState.rebuildContentRelPaths(
       this.input.scriptEntrypoints.getPageRelPathsForEntrypoints(
         rebuiltEntries,

@@ -290,4 +290,48 @@ describe('incremental builder', () => {
       expect(await fileExists(bundlePath)).toBe(false)
     })
   })
+
+  it('uses stable script filenames when script cache busting is disabled', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      const outDir = path.join(base, 'out')
+      await fs.mkdir(contentDir, { recursive: true })
+      await fs.mkdir(outDir, { recursive: true })
+      await fs.writeFile(
+        path.join(contentDir, 'hosts.mdx'),
+        '<RegorApp src="./hosts.ts" id="hosts-admin-app" />',
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'hosts.ts'),
+        "console.log('stable')\n",
+        'utf8',
+      )
+
+      const builder = await createIncrementalBuilder({
+        siteConfig: {
+          rootDir: base,
+          contentDir,
+          outDir,
+          siteTitle: 'Test Site',
+          scripts: {
+            cacheBusting: false,
+          },
+          style: {
+            fileName: 'site.css',
+            href: '/assets/site.css',
+          },
+          mdx: {
+            disableHighlighter: true,
+          },
+        },
+      })
+
+      await builder.buildAll('stable scripts')
+
+      const bundle = await readScriptBundle(outDir)
+      expect(bundle.path).toBe(path.join(outDir, 'hosts', 'hosts.js'))
+      expect(bundle.content).toContain('stable')
+    })
+  })
 })
