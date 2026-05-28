@@ -13,6 +13,7 @@ interface ScriptEntrypointManagerInput {
   minifyScripts: boolean
   failOnAssetError: boolean
   assets: Record<string, AssetManifestEntry>
+  getScriptCacheKey: () => string | undefined
   persistManifest: () => Promise<void>
 }
 
@@ -50,7 +51,7 @@ export class ScriptEntrypointManager {
     changedRelPath: string,
     result: IncrementalBuildResult,
   ) {
-    const entries = this.resolveImpactedEntrypoints(changedRelPath)
+    const entries = this.resolveImpactedEntryRelPaths(changedRelPath)
     if (entries.size === 0) return
     for (const entryRelPath of entries) {
       await this.rebuildSingleEntrypoint(entryRelPath, result)
@@ -73,6 +74,28 @@ export class ScriptEntrypointManager {
 
   removeTrackedEntrypoint(entryRelPath: string) {
     this.removeEntrypoint(entryRelPath)
+  }
+
+  resolveImpactedEntryRelPaths(changedRelPath: string) {
+    const normalized = this.normalizeRelPath(changedRelPath)
+    const impacted = new Set<string>()
+    if (this.entryDependencies.has(normalized)) {
+      impacted.add(normalized)
+    }
+    const dependents = this.dependentsByRelPath.get(normalized)
+    if (!dependents) return impacted
+    for (const entryRelPath of dependents) {
+      impacted.add(entryRelPath)
+    }
+    return impacted
+  }
+
+  getPageRelPathsWithScripts() {
+    const pages: string[] = []
+    for (const [pageRelPath, entries] of this.pageEntrypoints) {
+      if (entries.size > 0) pages.push(pageRelPath)
+    }
+    return pages
   }
 
   async syncState(input: {
@@ -136,9 +159,14 @@ export class ScriptEntrypointManager {
       {
         minifyScripts: this.input.minifyScripts,
         failOnError: this.input.failOnAssetError,
+        scriptCacheKey: this.input.getScriptCacheKey(),
       },
     )
     if (!assetCopy.copied) return
+    const priorEntry = this.input.assets[entryRelPath]
+    if (priorEntry?.outPath && priorEntry.outPath !== assetCopy.outPath) {
+      await removeFile(priorEntry.outPath)
+    }
 
     this.input.assets[entryRelPath] = {
       relPath: entryRelPath,
@@ -153,20 +181,6 @@ export class ScriptEntrypointManager {
         ? assetCopy.dependencyRelPaths
         : [entryRelPath],
     )
-  }
-
-  private resolveImpactedEntrypoints(changedRelPath: string) {
-    const normalized = this.normalizeRelPath(changedRelPath)
-    const impacted = new Set<string>()
-    if (this.entryDependencies.has(normalized)) {
-      impacted.add(normalized)
-    }
-    const dependents = this.dependentsByRelPath.get(normalized)
-    if (!dependents) return impacted
-    for (const entryRelPath of dependents) {
-      impacted.add(entryRelPath)
-    }
-    return impacted
   }
 
   private collectDesiredEntrypoints() {

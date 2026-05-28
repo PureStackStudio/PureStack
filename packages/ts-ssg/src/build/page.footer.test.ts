@@ -121,11 +121,12 @@ describe('footer hierarchy', () => {
         {
           config,
           headerHtmlByDir,
+          scriptCacheKey: 'm4x9p2',
         },
         toContentFile(contentDir, path.join('account', 'settings.mdx')),
       )
 
-      expect(page.html).toContain('src="/auth-state/auth-state.js"')
+      expect(page.html).toContain('src="/auth-state/auth-state.m4x9p2.js"')
       expect(page.html).not.toContain('/account/auth-state/auth-state.js')
       expect(page.scriptEntrypoints).toEqual(['auth-state.ts'])
     } finally {

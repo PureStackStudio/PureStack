@@ -3,6 +3,10 @@
 const TS_EXT = '.ts'
 const JS_EXT = '.js'
 
+export interface OutputAssetPathOptions {
+  cacheKey?: string
+}
+
 export function isTypeScriptAssetPath(filePath: string) {
   return getExtension(filePath).toLowerCase() === TS_EXT
 }
@@ -50,12 +54,23 @@ export function normalizePosixPath(filePath: string) {
   return result.length > 0 ? result.join('/') : '.'
 }
 
-export function toOutputAssetRelPath(relPath: string) {
+export function toOutputAssetRelPath(
+  relPath: string,
+  options: OutputAssetPathOptions = {},
+) {
   if (!isTypeScriptAssetPath(relPath)) return relPath
   const normalized = toPosixPath(relPath)
   const { dir, name } = splitPath(normalized)
-  const fileName = `${name}${JS_EXT}`
+  const cacheKey = normalizeCacheKey(options.cacheKey)
+  const fileName = cacheKey
+    ? `${name}.${cacheKey}${JS_EXT}`
+    : `${name}${JS_EXT}`
   return dir.length > 0 ? `${dir}/${name}/${fileName}` : `${name}/${fileName}`
+}
+
+function normalizeCacheKey(value: string | undefined) {
+  const normalized = value?.trim().replaceAll(/[^a-zA-Z0-9_-]/g, '')
+  return normalized && normalized.length > 0 ? normalized : undefined
 }
 
 function getExtension(filePath: string) {

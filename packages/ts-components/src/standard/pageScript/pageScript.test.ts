@@ -45,6 +45,32 @@ describe('PageScript rendering', () => {
     expect(html).toContain('type="module"')
   })
 
+  it('uses the SSG script public path resolver when available', () => {
+    const cleanup = ensureDomGlobals()
+    const components = defineScriptComponents()
+    const resolvedScripts: string[] = []
+    const html = renderApp(
+      '<PageScript src="./login.ts?mode=prod#boot" />',
+      {
+        components,
+        context: createTestContext({
+          pageInfo: {
+            relPath: 'login.mdx',
+            urlPath: '/login/',
+          },
+          resolveScriptPublicPath: (sourceRelPath) => {
+            resolvedScripts.push(sourceRelPath)
+            return '/login/login.ab12.js'
+          },
+        }),
+      },
+    )
+    cleanup()
+
+    expect(resolvedScripts).toEqual(['login.ts'])
+    expect(html).toContain('src="/login/login.ab12.js?mode=prod#boot"')
+  })
+
   it('resolves local src relative to an explicit source owner', () => {
     const cleanup = ensureDomGlobals()
     const components = defineScriptComponents()

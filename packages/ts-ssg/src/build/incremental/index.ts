@@ -30,6 +30,7 @@ import {
   resolveHeaderHtmlByDirectory,
 } from '../page'
 import { buildPagefindIndex } from '../pagefind'
+import { createScriptCacheKey } from '../script-cache-key'
 import type { BuildHooks, BuildInput, BuildResult } from '../site'
 import { writeSitemap } from '../sitemap'
 import { type WriteStylesResult, writeStyles } from '../styles'
@@ -92,6 +93,7 @@ async function createIncrementalRuntime(
     templates: buildOptions.templates,
     navigation,
     mdx,
+    scriptCacheKey: createScriptCacheKey(),
   }
   context.headerHtmlByDir = await resolveHeaderHtmlByDirectory(config, mdx)
   context.footerHtmlByDir = await resolveFooterHtmlByDirectory(config, mdx)
@@ -152,6 +154,7 @@ class IncrementalRuntime {
       minifyScripts: options.minifyScripts,
       failOnAssetError: options.failOnAssetError,
       assets: options.manifest.assets,
+      getScriptCacheKey: () => this.context.scriptCacheKey,
       persistManifest: () => this.persistManifest(),
     })
     this.contentState = new IncrementalContentState({
@@ -169,6 +172,7 @@ class IncrementalRuntime {
       getManifest: () => this.manifest,
       contentState: this.contentState,
       scriptEntrypoints: this.scriptEntrypoints,
+      refreshScriptCacheKey: () => this.refreshScriptCacheKey(),
       persistManifest: () => this.persistManifest(),
     })
   }
@@ -206,6 +210,7 @@ class IncrementalRuntime {
     const buildStartMs = Date.now()
     const hooks = this.resolveBuildHooks()
 
+    this.refreshScriptCacheKey()
     this.log.info('build started', { reason })
     const prepared = await this.prepareBuild(hooks)
     this.scriptEntrypoints.clearPageEntrypoints()
@@ -247,7 +252,10 @@ class IncrementalRuntime {
     const copiedAssets = await copyStaticAssets(
       this.config.contentDir,
       this.config.outDir,
-      { minifyScripts: this.options.minifyScripts },
+      {
+        minifyScripts: this.options.minifyScripts,
+        scriptCacheKey: this.context.scriptCacheKey,
+      },
     )
     this.scriptEntrypoints.rebuildDependencyIndex(
       copiedAssets.tsDependencyIndex,
@@ -304,10 +312,18 @@ class IncrementalRuntime {
 
     await buildPagefindIndex(this.config.outDir, this.config.pagefind)
 
-    this.manifest = await buildManifest(this.config, contentFiles, assetFiles, {
-      signature: styleResult.signature,
-      outputs: styleResult.outputs,
-    })
+    this.manifest = await buildManifest(
+      this.config,
+      contentFiles,
+      assetFiles,
+      {
+        signature: styleResult.signature,
+        outputs: styleResult.outputs,
+      },
+      {
+        scriptCacheKey: this.context.scriptCacheKey,
+      },
+    )
     await this.persistManifest()
     this.contentState.rebuildIndexFromManifest()
     this.contentState.clearDirtyPages()
@@ -359,6 +375,10 @@ class IncrementalRuntime {
         outPath: sitemap.robotsOutPath,
       })
     }
+  }
+
+  private refreshScriptCacheKey() {
+    this.context.scriptCacheKey = createScriptCacheKey()
   }
 
   private async writeSitemapFromManifest() {

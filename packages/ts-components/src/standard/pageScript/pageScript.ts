@@ -86,9 +86,14 @@ function resolvePageScript(head: ComponentHead<PageScript>): PageScript {
   const tsSsgContext = resolveTsSsgContext(head)
   const ownerRelPath =
     toOptionalString(props.sourceRelPath) ?? tsSsgContext.pageInfo.relPath
-  const src = resolveScriptSrc(props.src, ownerRelPath, (sourceRelPath) => {
-    tsSsgContext.recordScriptEntrypoint(sourceRelPath)
-  })
+  const src = resolveScriptSrc(
+    props.src,
+    ownerRelPath,
+    (sourceRelPath) => {
+      tsSsgContext.recordScriptEntrypoint(sourceRelPath)
+    },
+    tsSsgContext.resolveScriptPublicPath,
+  )
   return {
     ...props,
     src,
@@ -101,6 +106,7 @@ function resolveScriptSrc(
   src: unknown,
   pageRelPath: string,
   onSourceResolved?: (sourceRelPath: string) => void,
+  resolveScriptPublicPath?: (sourceRelPath: string) => string,
 ) {
   const normalized = toOptionalString(src)
   if (!normalized) {
@@ -110,7 +116,10 @@ function resolveScriptSrc(
   const { base, suffix } = splitSuffix(normalized)
   const sourceRelPath = resolveSourceRelPath(base, pageRelPath)
   onSourceResolved?.(sourceRelPath)
-  return `/${toOutputAssetRelPath(sourceRelPath)}${suffix}`
+  const publicPath =
+    resolveScriptPublicPath?.(sourceRelPath) ??
+    `/${toOutputAssetRelPath(sourceRelPath)}`
+  return `${publicPath}${suffix}`
 }
 
 function splitSuffix(src: string) {

@@ -15,6 +15,7 @@ export interface CopyStaticAssetsResult {
 export interface StaticAssetBuildOptions {
   minifyScripts?: boolean
   failOnError?: boolean
+  scriptCacheKey?: string
 }
 
 export interface CopyStaticAssetResult {
@@ -32,7 +33,7 @@ export async function copyStaticAssets(
   const assets = await discoverStaticAssets(contentDir)
   const tsDependencyIndex: Record<string, string[]> = {}
   for (const asset of assets) {
-    const outPath = resolveStaticOutPath(outDir, asset)
+    const outPath = resolveStaticOutPath(outDir, asset, options)
     await ensureDir(outPath)
     const dependencyRelPaths = await writeStaticAsset(
       contentDir,
@@ -55,7 +56,7 @@ export async function copyStaticAsset(
   options: StaticAssetBuildOptions = {},
 ): Promise<CopyStaticAssetResult> {
   const log = getLogger()
-  const outPath = resolveStaticOutPath(outDir, asset)
+  const outPath = resolveStaticOutPath(outDir, asset, options)
   try {
     await ensureDir(outPath)
     const dependencyRelPaths = await writeStaticAsset(
@@ -83,8 +84,15 @@ export async function copyStaticAsset(
   }
 }
 
-export function resolveStaticOutPath(outDir: string, asset: StaticAssetFile) {
-  return path.join(outDir, toOutputAssetRelPath(asset.relPath))
+export function resolveStaticOutPath(
+  outDir: string,
+  asset: StaticAssetFile,
+  options: Pick<StaticAssetBuildOptions, 'scriptCacheKey'> = {},
+) {
+  return path.join(
+    outDir,
+    toOutputAssetRelPath(asset.relPath, { cacheKey: options.scriptCacheKey }),
+  )
 }
 
 async function writeStaticAsset(

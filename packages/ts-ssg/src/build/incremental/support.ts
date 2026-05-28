@@ -148,6 +148,7 @@ export async function buildManifest(
   contentFiles: ContentFile[],
   assetFiles: StaticAssetFile[],
   stylesResult: StylesManifestEntry,
+  options: { scriptCacheKey?: string } = {},
 ): Promise<BuildManifest> {
   const content: Record<string, ContentManifestEntry> = {}
   for (const file of contentFiles) {
@@ -166,7 +167,9 @@ export async function buildManifest(
   for (const asset of assetFiles) {
     const signature = await readSignature(asset.absPath)
     if (!signature) continue
-    const outPath = resolveStaticOutPath(config.outDir, asset)
+    const outPath = resolveStaticOutPath(config.outDir, asset, {
+      scriptCacheKey: options.scriptCacheKey,
+    })
     assets[asset.relPath] = {
       relPath: asset.relPath,
       ext: asset.ext,

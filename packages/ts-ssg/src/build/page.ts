@@ -10,7 +10,7 @@ import type {
 import type { BasicHeadConfig } from '@purestack/ts-html'
 import { renderApp } from '@purestack/ts-render'
 import { resolveThemeStyleLinks } from '@purestack/ts-style'
-import { isError } from '@purestack/ts-util'
+import { isError, toOutputAssetRelPath } from '@purestack/ts-util'
 import { getLogger } from 'logpot'
 import type { Component } from 'regor'
 import {
@@ -42,6 +42,7 @@ export interface BuildContext {
   templates?: PageTemplateMap
   navigation?: NavigationTree
   mdx?: MdxRenderOptions
+  scriptCacheKey?: string
 }
 
 export interface PageRenderResult {
@@ -335,6 +336,10 @@ function renderPageApp(
         if (path.extname(sourceRelPath).toLowerCase() !== '.ts') return
         scriptEntrypoints.add(sourceRelPath.replaceAll('\\', '/'))
       },
+      resolveScriptPublicPath: (sourceRelPath: string) =>
+        `/${toOutputAssetRelPath(sourceRelPath, {
+          cacheKey: context.scriptCacheKey,
+        })}`,
       recordRuntimeEmbed: () => {},
     },
   })

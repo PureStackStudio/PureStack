@@ -175,6 +175,22 @@ export class IncrementalContentState {
     return true
   }
 
+  async rebuildContentRelPaths(
+    relPaths: string[],
+    result: IncrementalBuildResult,
+  ) {
+    const uniqueRelPaths = [...new Set(relPaths)]
+    for (const relPath of uniqueRelPaths) {
+      const signature = await this.readRelPathSignature(relPath)
+      if (!signature) {
+        await this.handleMissingRelPathSource(relPath)
+        continue
+      }
+      const rendered = await this.renderAndPersistRelPath(relPath, signature)
+      if (rendered) result.changedPages += 1
+    }
+  }
+
   async handleMissingRelPathSource(relPath: string) {
     const entry = this.input.getManifest().content[relPath]
     if (entry) {

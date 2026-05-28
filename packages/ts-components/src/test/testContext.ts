@@ -79,6 +79,7 @@ interface TestContextOptions {
   pageInfo?: DeepPartial<PageInfo>
   navigation?: TsSsgNavigation
   outline?: PageOutlineItem[]
+  resolveScriptPublicPath?: (sourceRelPath: string) => string
 }
 
 export function createTestSite(
@@ -104,6 +105,7 @@ export function createTestContext(
     outline: options.outline,
     theme: site.style.theme,
     recordScriptEntrypoint: () => {},
+    resolveScriptPublicPath: options.resolveScriptPublicPath,
     recordRuntimeEmbed: () => {},
   }
 }

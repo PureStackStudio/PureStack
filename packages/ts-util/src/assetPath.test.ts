@@ -30,6 +30,15 @@ describe('assetPath', () => {
     expect(toOutputAssetRelPath('types/foo.d.ts')).toBe('types/foo.d/foo.d.js')
   })
 
+  it('adds cache keys to emitted TypeScript filenames', () => {
+    expect(toOutputAssetRelPath('login.ts', { cacheKey: 'm4x9p2' })).toBe(
+      'login/login.m4x9p2.js',
+    )
+    expect(
+      toOutputAssetRelPath('nested/app.ts', { cacheKey: 'build:42' }),
+    ).toBe('nested/app/app.build42.js')
+  })
+
   it('preserves non-TypeScript asset paths', () => {
     expect(toOutputAssetRelPath('styles/site.css')).toBe('styles/site.css')
     expect(toOutputAssetRelPath('scripts/app.tsx')).toBe('scripts/app.tsx')

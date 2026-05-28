@@ -56,6 +56,21 @@ describe('static assets', () => {
     expect(txtOut).toBe(path.join(outDir, 'notes.txt'))
   })
 
+  it('resolves .ts assets to cache-keyed output paths', () => {
+    const outDir = '/tmp/out'
+    const tsOut = resolveStaticOutPath(
+      outDir,
+      {
+        absPath: '/tmp/content/login.ts',
+        relPath: 'login.ts',
+        ext: '.ts',
+      },
+      { scriptCacheKey: 'm4x9p2' },
+    )
+
+    expect(tsOut).toBe(path.join(outDir, 'login', 'login.m4x9p2.js'))
+  })
+
   it('copies non-ts assets and skips .ts files during static discovery', async () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-assets-'))
     const outDir = path.join(root, 'dist')

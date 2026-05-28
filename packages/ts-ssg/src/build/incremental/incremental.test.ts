@@ -29,6 +29,22 @@ async function fileExists(filePath: string) {
   }
 }
 
+async function readScriptBundle(
+  outDir: string,
+  pageRelPath = path.join('hosts', 'index.html'),
+) {
+  const pageHtml = await fs.readFile(path.join(outDir, pageRelPath), 'utf8')
+  const match = /<script\b[^>]*\bsrc="([^"]+\.js)"[^>]*>/.exec(pageHtml)
+  if (!match) {
+    throw new Error(`Expected script bundle in ${pageRelPath}`)
+  }
+  const bundlePath = path.join(outDir, match[1].replace(/^\/+/, ''))
+  return {
+    path: bundlePath,
+    content: await fs.readFile(bundlePath, 'utf8'),
+  }
+}
+
 describe('incremental builder', () => {
   let logger: Logger | undefined
 
@@ -182,8 +198,8 @@ describe('incremental builder', () => {
 
       await builder.applyChange(path.join(contentDir, 'hosts.mdx'))
 
-      const hostsBundlePath = path.join(outDir, 'hosts', 'hosts.js')
-      expect(await fs.readFile(hostsBundlePath, 'utf8')).toContain('before')
+      const beforeBundle = await readScriptBundle(outDir)
+      expect(beforeBundle.content).toContain('before')
 
       await fs.writeFile(
         path.join(contentDir, 'common', 'message.ts'),
@@ -195,7 +211,9 @@ describe('incremental builder', () => {
       )
 
       expect(result.changedAssets).toBeGreaterThan(0)
-      expect(await fs.readFile(hostsBundlePath, 'utf8')).toContain('after')
+      const afterBundle = await readScriptBundle(outDir)
+      expect(afterBundle.content).toContain('after')
+      expect(await fileExists(beforeBundle.path)).toBe(false)
     })
   })
 
@@ -236,7 +254,7 @@ describe('incremental builder', () => {
       })
 
       await builder.applyChange(path.join(contentDir, 'hosts.mdx'))
-      const bundlePath = path.join(outDir, 'hosts', 'hosts.js')
+      const { path: bundlePath } = await readScriptBundle(outDir)
       expect(await fileExists(bundlePath)).toBe(true)
 
       await fs.rm(path.join(contentDir, 'hosts.mdx'))
