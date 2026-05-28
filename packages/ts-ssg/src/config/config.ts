@@ -435,6 +435,7 @@ function resolvePagefindConfig(
   file?: Partial<PagefindConfig>,
 ): PagefindConfig {
   return {
+    enabled: input?.enabled ?? file?.enabled ?? true,
     excludePaths: normalizePagefindExcludePaths(
       input?.excludePaths ?? file?.excludePaths,
     ),

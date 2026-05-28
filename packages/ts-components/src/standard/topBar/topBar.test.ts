@@ -52,6 +52,9 @@ describe('TopBar rendering', () => {
           auth: {
             enabled: true,
           },
+          pagefind: {
+            enabled: true,
+          },
         },
       }),
     })

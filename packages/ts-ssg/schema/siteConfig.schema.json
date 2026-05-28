@@ -594,6 +594,11 @@
       "description": "Pagefind indexing settings.",
       "additionalProperties": false,
       "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether Pagefind search indexing and the built-in search runtime are enabled.",
+          "default": true
+        },
         "excludePaths": {
           "type": "array",
           "description": "Route prefixes to exclude from search indexing (for example /privacy/).",

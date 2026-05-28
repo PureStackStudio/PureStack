@@ -56,7 +56,7 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
     appendNavMenuScript(head)
   }
   appendCodeCopyScript(head)
-  appendPagefindSearchScript(head)
+  appendPagefindSearchScript(head, input.site)
   const { pageTemplate, templateName } = resolvePageTemplate(
     template,
     templates,
@@ -186,7 +186,11 @@ function appendCodeCopyScript(head: ReturnType<typeof getHead>) {
   head.push(h('script').raw(script))
 }
 
-function appendPagefindSearchScript(head: ReturnType<typeof getHead>) {
+function appendPagefindSearchScript(
+  head: ReturnType<typeof getHead>,
+  site: SiteConfig,
+) {
+  if (!site.pagefind.enabled) return
   const script = buildPagefindSearchScript()
   head.push(h('script').attr({ type: 'module' }).raw(script))
 }

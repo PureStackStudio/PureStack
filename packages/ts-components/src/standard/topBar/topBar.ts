@@ -22,6 +22,7 @@ export interface TopBar {
   signInAvatarSrc?: RefOrValue<string>
   signInAvatarAlt?: RefOrValue<string>
   classes?: ComputedRef<string>
+  searchEnabled?: boolean
 }
 
 const DEFAULT_TOP_BAR_VARIANT: ComponentVariant = 'surfaceAlt'
@@ -31,6 +32,7 @@ function resolveTopBar(context: TsSsgContext, props: TopBar): TopBar {
   return {
     ...props,
     siteLogo: context.site.logo,
+    searchEnabled: context.site.pagefind?.enabled === true,
     classes: computed(() =>
       resolveComponentClasses(props, {
         defaultVariant: DEFAULT_TOP_BAR_VARIANT,
@@ -80,6 +82,7 @@ const topBarTemplate = html`<input
       :href="siteLogo.href"
       :icon="siteLogo.icon"/>
     <SearchBox
+      r-if="searchEnabled"
       class="topbar__search flex-auto rounded-md tone-text-surface"
       variant="none"/>
     <Flex class="topbar__controls flex-none" align="center" justify="end">

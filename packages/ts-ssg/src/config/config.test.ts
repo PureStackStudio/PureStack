@@ -371,14 +371,24 @@ describe('resolveSiteConfig sitemap', () => {
     const config = resolveSiteConfig({
       rootDir: process.cwd(),
       pagefind: {
+        enabled: true,
         excludePaths: ['privacy', '/imprint', '/terms/', ' /privacy/ '],
       },
     })
+    expect(config.pagefind.enabled).toBe(true)
     expect(config.pagefind.excludePaths).toEqual([
       '/privacy/',
       '/imprint/',
       '/terms/',
     ])
+  })
+
+  it('enables pagefind by default', () => {
+    const config = resolveSiteConfig({ rootDir: process.cwd() })
+    expect(config.pagefind).toEqual({
+      enabled: true,
+      excludePaths: [],
+    })
   })
 
   it('provides analytics defaults', () => {

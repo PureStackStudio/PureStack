@@ -87,6 +87,7 @@
     }
   },
   "pagefind": {
+    "enabled": true,
     "excludePaths": ["/privacy/", "/imprint/", "/terms/"]
   },
   "mdx": {

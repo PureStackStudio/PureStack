@@ -19,6 +19,7 @@ export interface NavMenu {
   signInAvatarSrc?: RefOrValue<string>
   signInAvatarAlt?: RefOrValue<string>
   toneClass?: ComputedRef<string>
+  searchEnabled?: boolean
 }
 
 export interface NavList {
@@ -118,7 +119,7 @@ const navMenuTemplate = html`<nav
     </button>
   </div>
   <NavList :items="items"></NavList>
-  <SearchBox class="nav__search mt-1"/>
+  <SearchBox r-if="searchEnabled" class="nav__search mt-1"/>
 </nav>`
 
 function resolveNavItems(context?: TsSsgContext): NavItem[] {
@@ -210,6 +211,7 @@ function defineNavMenuComponent() {
       return {
         ...head.props,
         toneClass: computed(() => getSemanticToneClass(head.props.tone)),
+        searchEnabled: context?.site.pagefind?.enabled === true,
         items: buildNavState(
           head.props.items ?? resolveNavItems(context),
           resolveCurrentPath(context),

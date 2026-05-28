@@ -117,6 +117,7 @@ export interface AnalyticsConfig {
 }
 
 export interface PagefindConfig {
+  enabled: boolean
   excludePaths: string[]
 }
 

@@ -113,7 +113,7 @@ Config comes from:
 - `sitemap`: sitemap + robots settings.
 - `consent`: GDPR-style consent manager config for optional scripts.
 - `analytics`: analytics integrations (GA4 supported out of the box).
-- `pagefind`: search indexing options (for example excluded route prefixes).
+- `pagefind`: search indexing options.
 
 ## `siteConfig.json` Example
 
@@ -157,6 +157,10 @@ Config comes from:
     "ga4": {
       "measurementId": "G-XXXXXXXX"
     }
+  },
+  "pagefind": {
+    "enabled": true,
+    "excludePaths": ["/privacy/"]
   }
 }
 ```
@@ -364,15 +368,16 @@ In dev/watch mode:
 
 ### Pagefind
 
-Full builds run Pagefind indexing over `outDir` and write to:
+When enabled, full builds run Pagefind indexing over `outDir` and write to:
 
 - `<outDir>/pagefind`
 
 Optional config:
 
+- `pagefind.enabled`: enables Pagefind indexing and the built-in search runtime. Defaults to `true`.
 - `pagefind.excludePaths`: array of route prefixes excluded from indexing (e.g. `["/privacy/", "/imprint/", "/terms/"]`).
 
-Build logs include indexed page count and total indexed byte size.
+When disabled, stale `<outDir>/pagefind` output is removed. Build logs include indexed page count and total indexed byte size when indexing runs.
 
 ### Sitemap / Robots
 

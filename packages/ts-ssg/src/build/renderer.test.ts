@@ -60,6 +60,44 @@ describe('renderPage consent integration', () => {
     expect(html).toContain('template-doc--nav-ready')
   })
 
+  it('injects pagefind search runtime when pagefind is enabled', async () => {
+    const site = resolveSiteConfig({
+      rootDir: process.cwd(),
+      pagefind: {
+        enabled: true,
+      },
+    })
+    const html = await renderPage({
+      bodyHtml: '<p>Hello</p>',
+      pageInfo: {
+        relPath: 'index.md',
+        urlPath: '/',
+        frontmatter: normalizeFrontmatter({}),
+      },
+      site,
+    })
+    expect(html).toContain('/pagefind/pagefind.js')
+  })
+
+  it('does not inject pagefind search runtime when pagefind is disabled', async () => {
+    const site = resolveSiteConfig({
+      rootDir: process.cwd(),
+      pagefind: {
+        enabled: false,
+      },
+    })
+    const html = await renderPage({
+      bodyHtml: '<p>Hello</p>',
+      pageInfo: {
+        relPath: 'index.md',
+        urlPath: '/',
+        frontmatter: normalizeFrontmatter({}),
+      },
+      site,
+    })
+    expect(html).not.toContain('/pagefind/pagefind.js')
+  })
+
   it('does not inject consent runtime when consent is disabled', async () => {
     const site = resolveSiteConfig({
       rootDir: process.cwd(),

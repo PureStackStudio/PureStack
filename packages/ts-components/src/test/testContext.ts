@@ -37,6 +37,10 @@ const DEFAULT_SITE: DeepPartial<SiteConfig> = {
     enabled: false,
     signUp: true,
   },
+  pagefind: {
+    enabled: false,
+    excludePaths: [],
+  },
   consent: {
     enabled: false,
     storageKey: 'ts-ssg-consent',

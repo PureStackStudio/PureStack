@@ -20,6 +20,15 @@ export async function buildPagefindIndex(
 ): Promise<BuildPagefindResult> {
   const log = getLogger()
   const state = createPagefindBuildState(outDir, config)
+  if (!config.enabled) {
+    await removePagefindOutput(state.outputPath)
+    log.info('pagefind indexing disabled', {
+      outDir: state.outDir,
+      outputPath: state.outputPath,
+      durationMs: elapsedSince(state.startedAt),
+    })
+    return toBuildPagefindResult(state)
+  }
 
   try {
     await runPagefindBuild(state)
@@ -259,6 +268,10 @@ async function cleanupPagefind(index: pagefind.PagefindIndex | undefined) {
     await index.deleteIndex().catch(() => undefined)
   }
   await pagefind.close().catch(() => undefined)
+}
+
+async function removePagefindOutput(outputPath: string) {
+  await fs.rm(outputPath, { recursive: true, force: true })
 }
 
 function toErrorMessage(error: unknown): string {
