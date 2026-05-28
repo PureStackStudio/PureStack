@@ -148,7 +148,7 @@ export async function buildManifest(
   contentFiles: ContentFile[],
   assetFiles: StaticAssetFile[],
   stylesResult: StylesManifestEntry,
-  options: { scriptCacheKey?: string } = {},
+  options: { getScriptCacheKey?: (relPath: string) => string | undefined } = {},
 ): Promise<BuildManifest> {
   const content: Record<string, ContentManifestEntry> = {}
   for (const file of contentFiles) {
@@ -168,12 +168,14 @@ export async function buildManifest(
     const signature = await readSignature(asset.absPath)
     if (!signature) continue
     const outPath = resolveStaticOutPath(config.outDir, asset, {
-      scriptCacheKey: options.scriptCacheKey,
+      getScriptCacheKey: options.getScriptCacheKey,
     })
+    const cacheKey = options.getScriptCacheKey?.(asset.relPath)
     assets[asset.relPath] = {
       relPath: asset.relPath,
       ext: asset.ext,
       outPath,
+      ...(cacheKey ? { cacheKey } : {}),
       ...signature,
     }
   }

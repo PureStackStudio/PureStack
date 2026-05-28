@@ -121,7 +121,7 @@ describe('footer hierarchy', () => {
         {
           config,
           headerHtmlByDir,
-          scriptCacheKey: 'm4x9p2',
+          resolveScriptPublicPath: () => '/auth-state/auth-state.m4x9p2.js',
         },
         toContentFile(contentDir, path.join('account', 'settings.mdx')),
       )

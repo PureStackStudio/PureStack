@@ -1,6 +1,7 @@
 import path from 'node:path'
 import type { SiteConfig } from '@purestack/ts-common'
 import { themes } from '@purestack/ts-style'
+import { toOutputAssetRelPath } from '@purestack/ts-util'
 import { getLogger, type Logger } from 'logpot'
 import {
   type ContentFile,
@@ -30,7 +31,7 @@ import {
   resolveHeaderHtmlByDirectory,
 } from '../page'
 import { buildPagefindIndex } from '../pagefind'
-import { createScriptCacheKey } from '../script-cache-key'
+import { ScriptCacheKeyStore } from '../script-cache-key'
 import type { BuildHooks, BuildInput, BuildResult } from '../site'
 import { writeSitemap } from '../sitemap'
 import { type WriteStylesResult, writeStyles } from '../styles'
@@ -64,6 +65,7 @@ interface IncrementalRuntimeOptions {
   log: Logger
   context: BuildContext
   manifest: BuildManifest
+  scriptCacheKeys: ScriptCacheKeyStore
 }
 
 async function createIncrementalRuntime(
@@ -86,6 +88,12 @@ async function createIncrementalRuntime(
     discovered,
     config.navigation,
   )
+  const existing = await readManifest(config.outDir)
+  const manifest =
+    existing && isCompatibleManifest(existing, config)
+      ? existing
+      : createEmptyManifest(config)
+  const scriptCacheKeys = new ScriptCacheKeyStore(manifest.assets)
   const context: BuildContext = {
     config,
     writeErrorPages: buildOptions.writeErrorPages === true,
@@ -93,16 +101,13 @@ async function createIncrementalRuntime(
     templates: buildOptions.templates,
     navigation,
     mdx,
-    scriptCacheKey: createScriptCacheKey(),
+    resolveScriptPublicPath: (sourceRelPath) =>
+      `/${toOutputAssetRelPath(sourceRelPath, {
+        cacheKey: scriptCacheKeys.ensure(sourceRelPath),
+      })}`,
   }
   context.headerHtmlByDir = await resolveHeaderHtmlByDirectory(config, mdx)
   context.footerHtmlByDir = await resolveFooterHtmlByDirectory(config, mdx)
-
-  const existing = await readManifest(config.outDir)
-  const manifest =
-    existing && isCompatibleManifest(existing, config)
-      ? existing
-      : createEmptyManifest(config)
 
   return new IncrementalRuntime({
     config,
@@ -113,6 +118,7 @@ async function createIncrementalRuntime(
     log,
     context,
     manifest,
+    scriptCacheKeys,
   })
 }
 
@@ -144,8 +150,10 @@ class IncrementalRuntime {
   private readonly contentState: IncrementalContentState
   private readonly scriptEntrypoints: ScriptEntrypointManager
   private readonly changeApplier: IncrementalChangeApplier
+  private readonly scriptCacheKeys: ScriptCacheKeyStore
 
   constructor(private readonly options: IncrementalRuntimeOptions) {
+    this.scriptCacheKeys = options.scriptCacheKeys
     this.scriptEntrypoints = new ScriptEntrypointManager({
       config: {
         contentDir: options.config.contentDir,
@@ -154,7 +162,7 @@ class IncrementalRuntime {
       minifyScripts: options.minifyScripts,
       failOnAssetError: options.failOnAssetError,
       assets: options.manifest.assets,
-      getScriptCacheKey: () => this.context.scriptCacheKey,
+      scriptCacheKeys: this.scriptCacheKeys,
       persistManifest: () => this.persistManifest(),
     })
     this.contentState = new IncrementalContentState({
@@ -172,7 +180,6 @@ class IncrementalRuntime {
       getManifest: () => this.manifest,
       contentState: this.contentState,
       scriptEntrypoints: this.scriptEntrypoints,
-      refreshScriptCacheKey: () => this.refreshScriptCacheKey(),
       persistManifest: () => this.persistManifest(),
     })
   }
@@ -210,7 +217,7 @@ class IncrementalRuntime {
     const buildStartMs = Date.now()
     const hooks = this.resolveBuildHooks()
 
-    this.refreshScriptCacheKey()
+    this.scriptCacheKeys.clear()
     this.log.info('build started', { reason })
     const prepared = await this.prepareBuild(hooks)
     this.scriptEntrypoints.clearPageEntrypoints()
@@ -254,7 +261,7 @@ class IncrementalRuntime {
       this.config.outDir,
       {
         minifyScripts: this.options.minifyScripts,
-        scriptCacheKey: this.context.scriptCacheKey,
+        getScriptCacheKey: (relPath) => this.scriptCacheKeys.get(relPath),
       },
     )
     this.scriptEntrypoints.rebuildDependencyIndex(
@@ -321,7 +328,7 @@ class IncrementalRuntime {
         outputs: styleResult.outputs,
       },
       {
-        scriptCacheKey: this.context.scriptCacheKey,
+        getScriptCacheKey: (relPath) => this.scriptCacheKeys.get(relPath),
       },
     )
     await this.persistManifest()
@@ -375,10 +382,6 @@ class IncrementalRuntime {
         outPath: sitemap.robotsOutPath,
       })
     }
-  }
-
-  private refreshScriptCacheKey() {
-    this.context.scriptCacheKey = createScriptCacheKey()
   }
 
   private async writeSitemapFromManifest() {

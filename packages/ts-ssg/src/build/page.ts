@@ -42,7 +42,7 @@ export interface BuildContext {
   templates?: PageTemplateMap
   navigation?: NavigationTree
   mdx?: MdxRenderOptions
-  scriptCacheKey?: string
+  resolveScriptPublicPath?: (sourceRelPath: string) => string
 }
 
 export interface PageRenderResult {
@@ -337,9 +337,8 @@ function renderPageApp(
         scriptEntrypoints.add(sourceRelPath.replaceAll('\\', '/'))
       },
       resolveScriptPublicPath: (sourceRelPath: string) =>
-        `/${toOutputAssetRelPath(sourceRelPath, {
-          cacheKey: context.scriptCacheKey,
-        })}`,
+        context.resolveScriptPublicPath?.(sourceRelPath) ??
+        `/${toOutputAssetRelPath(sourceRelPath)}`,
       recordRuntimeEmbed: () => {},
     },
   })

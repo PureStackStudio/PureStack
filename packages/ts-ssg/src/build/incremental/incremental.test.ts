@@ -168,10 +168,20 @@ describe('incremental builder', () => {
         '<RegorApp src="./hosts.ts" id="hosts-admin-app" />',
         'utf8',
       )
+      await fs.writeFile(
+        path.join(contentDir, 'account.mdx'),
+        '<RegorApp src="./account.ts" id="account-admin-app" />',
+        'utf8',
+      )
 
       await fs.writeFile(
         path.join(contentDir, 'hosts.ts'),
         "import { message } from './common/message'\nconsole.log(message)\n",
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'account.ts'),
+        "console.log('account')\n",
         'utf8',
       )
       await fs.writeFile(
@@ -196,10 +206,15 @@ describe('incremental builder', () => {
         },
       })
 
-      await builder.applyChange(path.join(contentDir, 'hosts.mdx'))
+      await builder.buildAll('initial')
 
       const beforeBundle = await readScriptBundle(outDir)
       expect(beforeBundle.content).toContain('before')
+      const accountBundle = await readScriptBundle(
+        outDir,
+        path.join('account', 'index.html'),
+      )
+      expect(accountBundle.content).toContain('account')
 
       await fs.writeFile(
         path.join(contentDir, 'common', 'message.ts'),
@@ -211,8 +226,15 @@ describe('incremental builder', () => {
       )
 
       expect(result.changedAssets).toBeGreaterThan(0)
+      expect(result.changedPages).toBe(1)
       const afterBundle = await readScriptBundle(outDir)
       expect(afterBundle.content).toContain('after')
+      const nextAccountBundle = await readScriptBundle(
+        outDir,
+        path.join('account', 'index.html'),
+      )
+      expect(nextAccountBundle.path).toBe(accountBundle.path)
+      expect(nextAccountBundle.content).toBe(accountBundle.content)
       expect(await fileExists(beforeBundle.path)).toBe(false)
     })
   })

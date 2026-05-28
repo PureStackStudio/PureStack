@@ -37,6 +37,7 @@ export interface AssetManifestEntry extends FileSignature {
   relPath: string
   ext: string
   outPath: string
+  cacheKey?: string
 }
 
 export interface StylesManifestEntry {

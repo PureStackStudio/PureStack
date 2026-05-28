@@ -31,7 +31,6 @@ interface IncrementalChangeApplierInput {
   getManifest: () => BuildManifest
   contentState: IncrementalContentState
   scriptEntrypoints: ScriptEntrypointManager
-  refreshScriptCacheKey: () => void
   persistManifest: () => Promise<void>
 }
 
@@ -167,9 +166,7 @@ export class IncrementalChangeApplier {
       this.input.scriptEntrypoints.removeTrackedEntrypoint(relPath)
       result.deletedAssets += 1
     }
-    if (ext === '.ts') {
-      await this.input.scriptEntrypoints.rebuildDependents(relPath, result)
-    }
+    if (ext === '.ts') await this.handleScriptAssetChange(relPath, result)
     if (contentEntry || assetEntry) {
       await this.input.persistManifest()
     }
@@ -242,14 +239,16 @@ export class IncrementalChangeApplier {
       this.input.scriptEntrypoints.resolveImpactedEntryRelPaths(relPath)
     if (impactedEntries.size === 0) return
 
-    this.input.refreshScriptCacheKey()
-    await this.input.scriptEntrypoints.syncState({
+    const rebuiltEntries = await this.input.scriptEntrypoints.rebuildEntrypoints(
+      impactedEntries,
       result,
-      persist: false,
-      rebuildAll: true,
-    })
+      { bumpCacheKeys: true },
+    )
+    if (rebuiltEntries.size === 0) return
     await this.input.contentState.rebuildContentRelPaths(
-      this.input.scriptEntrypoints.getPageRelPathsWithScripts(),
+      this.input.scriptEntrypoints.getPageRelPathsForEntrypoints(
+        rebuiltEntries,
+      ),
       result,
     )
   }

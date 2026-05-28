@@ -5,6 +5,7 @@ import type { StaticAssetFile } from '../../discover/content'
 import { copyStaticAsset } from '../assets'
 import type { AssetManifestEntry } from '../manifest'
 import { readSignature } from '../manifest'
+import type { ScriptCacheKeyStore } from '../script-cache-key'
 import { removeFile, toAssetFile } from './support'
 import type { IncrementalBuildResult } from './types'
 
@@ -13,7 +14,7 @@ interface ScriptEntrypointManagerInput {
   minifyScripts: boolean
   failOnAssetError: boolean
   assets: Record<string, AssetManifestEntry>
-  getScriptCacheKey: () => string | undefined
+  scriptCacheKeys: ScriptCacheKeyStore
   persistManifest: () => Promise<void>
 }
 
@@ -47,32 +48,8 @@ export class ScriptEntrypointManager {
     this.pageEntrypoints.delete(this.normalizeRelPath(pageRelPath))
   }
 
-  async rebuildAssetGraph(
-    changedRelPath: string,
-    result: IncrementalBuildResult,
-  ) {
-    const entries = this.resolveImpactedEntryRelPaths(changedRelPath)
-    if (entries.size === 0) return
-    for (const entryRelPath of entries) {
-      await this.rebuildSingleEntrypoint(entryRelPath, result)
-    }
-  }
-
-  async rebuildDependents(
-    changedRelPath: string,
-    result: IncrementalBuildResult,
-  ) {
-    const dependents = this.dependentsByRelPath.get(
-      this.normalizeRelPath(changedRelPath),
-    )
-    if (!dependents || dependents.size === 0) return
-    for (const entryRelPath of dependents) {
-      if (entryRelPath === changedRelPath) continue
-      await this.rebuildSingleEntrypoint(entryRelPath, result)
-    }
-  }
-
   removeTrackedEntrypoint(entryRelPath: string) {
+    this.input.scriptCacheKeys.remove(entryRelPath)
     this.removeEntrypoint(entryRelPath)
   }
 
@@ -90,12 +67,35 @@ export class ScriptEntrypointManager {
     return impacted
   }
 
-  getPageRelPathsWithScripts() {
+  getPageRelPathsForEntrypoints(entryRelPaths: Iterable<string>) {
+    const entries = new Set(
+      [...entryRelPaths].map((entryRelPath) =>
+        this.normalizeRelPath(entryRelPath),
+      ),
+    )
     const pages: string[] = []
-    for (const [pageRelPath, entries] of this.pageEntrypoints) {
-      if (entries.size > 0) pages.push(pageRelPath)
+    for (const [pageRelPath, pageEntries] of this.pageEntrypoints) {
+      for (const entryRelPath of pageEntries) {
+        if (!entries.has(entryRelPath)) continue
+        pages.push(pageRelPath)
+        break
+      }
     }
     return pages
+  }
+
+  async rebuildEntrypoints(
+    entryRelPaths: Iterable<string>,
+    result: IncrementalBuildResult,
+    options: { bumpCacheKeys?: boolean } = {},
+  ) {
+    const rebuilt = new Set<string>()
+    for (const entryRelPath of entryRelPaths) {
+      if (await this.rebuildSingleEntrypoint(entryRelPath, result, options)) {
+        rebuilt.add(this.normalizeRelPath(entryRelPath))
+      }
+    }
+    return rebuilt
   }
 
   async syncState(input: {
@@ -105,7 +105,12 @@ export class ScriptEntrypointManager {
   }): Promise<StaticAssetFile[]> {
     const { result, persist, rebuildAll } = input
     const nextEntries = this.collectDesiredEntrypoints()
-    const currentEntries = new Set(this.entryDependencies.keys())
+    const currentEntries = new Set([
+      ...this.entryDependencies.keys(),
+      ...Object.values(this.input.assets)
+        .filter((entry) => entry.ext.toLowerCase() === '.ts')
+        .map((entry) => this.normalizeRelPath(entry.relPath)),
+    ])
 
     for (const entryRelPath of currentEntries) {
       if (nextEntries.has(entryRelPath)) continue
@@ -115,6 +120,7 @@ export class ScriptEntrypointManager {
         delete this.input.assets[entryRelPath]
         result.deletedAssets += 1
       }
+      this.input.scriptCacheKeys.remove(entryRelPath)
       this.removeEntrypoint(entryRelPath)
     }
 
@@ -133,6 +139,7 @@ export class ScriptEntrypointManager {
   private async rebuildSingleEntrypoint(
     entryRelPath: string,
     result: IncrementalBuildResult,
+    options: { bumpCacheKeys?: boolean } = {},
   ) {
     const ext = path.extname(entryRelPath).toLowerCase() || '.ts'
     const assetFile = toAssetFile(
@@ -148,10 +155,16 @@ export class ScriptEntrypointManager {
         delete this.input.assets[entryRelPath]
         result.deletedAssets += 1
       }
+      this.input.scriptCacheKeys.remove(entryRelPath)
       this.removeEntrypoint(entryRelPath)
-      return
+      return true
     }
 
+    const priorCacheKey = this.input.scriptCacheKeys.get(entryRelPath)
+    const cacheKey =
+      options.bumpCacheKeys === true
+        ? this.input.scriptCacheKeys.bump(entryRelPath)
+        : this.input.scriptCacheKeys.ensure(entryRelPath)
     const assetCopy = await copyStaticAsset(
       this.input.config.contentDir,
       this.input.config.outDir,
@@ -159,10 +172,17 @@ export class ScriptEntrypointManager {
       {
         minifyScripts: this.input.minifyScripts,
         failOnError: this.input.failOnAssetError,
-        scriptCacheKey: this.input.getScriptCacheKey(),
+        scriptCacheKey: cacheKey,
       },
     )
-    if (!assetCopy.copied) return
+    if (!assetCopy.copied) {
+      if (priorCacheKey) {
+        this.input.scriptCacheKeys.set(entryRelPath, priorCacheKey)
+      } else {
+        this.input.scriptCacheKeys.remove(entryRelPath)
+      }
+      return false
+    }
     const priorEntry = this.input.assets[entryRelPath]
     if (priorEntry?.outPath && priorEntry.outPath !== assetCopy.outPath) {
       await removeFile(priorEntry.outPath)
@@ -172,6 +192,7 @@ export class ScriptEntrypointManager {
       relPath: entryRelPath,
       ext,
       outPath: assetCopy.outPath,
+      cacheKey,
       ...signature,
     }
     result.changedAssets += 1
@@ -181,6 +202,7 @@ export class ScriptEntrypointManager {
         ? assetCopy.dependencyRelPaths
         : [entryRelPath],
     )
+    return true
   }
 
   private collectDesiredEntrypoints() {

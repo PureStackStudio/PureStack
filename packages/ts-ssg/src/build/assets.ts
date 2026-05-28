@@ -16,6 +16,7 @@ export interface StaticAssetBuildOptions {
   minifyScripts?: boolean
   failOnError?: boolean
   scriptCacheKey?: string
+  getScriptCacheKey?: (relPath: string) => string | undefined
 }
 
 export interface CopyStaticAssetResult {
@@ -87,12 +88,27 @@ export async function copyStaticAsset(
 export function resolveStaticOutPath(
   outDir: string,
   asset: StaticAssetFile,
-  options: Pick<StaticAssetBuildOptions, 'scriptCacheKey'> = {},
+  options: Pick<
+    StaticAssetBuildOptions,
+    'getScriptCacheKey' | 'scriptCacheKey'
+  > = {},
 ) {
   return path.join(
     outDir,
-    toOutputAssetRelPath(asset.relPath, { cacheKey: options.scriptCacheKey }),
+    toOutputAssetRelPath(asset.relPath, {
+      cacheKey: resolveScriptCacheKey(asset.relPath, options),
+    }),
   )
+}
+
+function resolveScriptCacheKey(
+  relPath: string,
+  options: Pick<
+    StaticAssetBuildOptions,
+    'getScriptCacheKey' | 'scriptCacheKey'
+  >,
+) {
+  return options.getScriptCacheKey?.(relPath) ?? options.scriptCacheKey
 }
 
 async function writeStaticAsset(
