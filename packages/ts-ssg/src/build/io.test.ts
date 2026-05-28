@@ -15,6 +15,8 @@ describe('writeHtml', () => {
       await writeHtml({ outPath, html, minify: true })
       const written = await fs.readFile(outPath, 'utf8')
       expect(written).toContain('<!doctype html>')
+      expect(written).toContain('<html>')
+      expect(written).toContain('<body>')
       expect(written).toContain('<p>Hello')
       expect(written).not.toContain('\n')
     } finally {

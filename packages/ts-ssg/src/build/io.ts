@@ -34,6 +34,9 @@ async function minifyHtml(input: string): Promise<string> {
     content: input,
     settings: {
       compressor: async () => ({ code: '' }),
+      options: {
+        removeOptionalTags: false,
+      },
     },
   })
   return result.code
