@@ -35,6 +35,7 @@ export interface PageTocConfig {
 export interface AuthConfig {
   enabled: boolean
   signUp: boolean
+  signedInStorageKey: string
 }
 
 export interface SiteScriptsConfig {

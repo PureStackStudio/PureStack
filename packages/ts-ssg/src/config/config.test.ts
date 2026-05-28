@@ -126,6 +126,7 @@ describe('resolveSiteConfig sitemap', () => {
     expect(config.auth).toEqual({
       enabled: false,
       signUp: true,
+      signedInStorageKey: 'signed-in-hint',
     })
   })
 
@@ -135,11 +136,13 @@ describe('resolveSiteConfig sitemap', () => {
       auth: {
         enabled: true,
         signUp: false,
+        signedInStorageKey: 'site:auth:signed-in',
       },
     })
     expect(config.auth).toEqual({
       enabled: true,
       signUp: false,
+      signedInStorageKey: 'site:auth:signed-in',
     })
   })
 

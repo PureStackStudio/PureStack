@@ -292,6 +292,11 @@
           "type": "boolean",
           "description": "Whether the built-in sign-up action is shown when auth is enabled.",
           "default": true
+        },
+        "signedInStorageKey": {
+          "type": "string",
+          "description": "localStorage key used for the critical weak signed-in UI hint.",
+          "default": "signed-in-hint"
         }
       }
     },

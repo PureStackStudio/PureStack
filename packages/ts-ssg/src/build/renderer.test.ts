@@ -5,6 +5,46 @@ import { normalizeFrontmatter } from '../frontmatter/frontmatter'
 import { renderPage } from './renderer'
 
 describe('renderPage consent integration', () => {
+  it('injects the critical auth state hint when auth is enabled', async () => {
+    const site = resolveSiteConfig({
+      rootDir: process.cwd(),
+      auth: {
+        enabled: true,
+      },
+    })
+    const html = await renderPage({
+      bodyHtml: '<p>Hello</p>',
+      pageInfo: {
+        relPath: 'index.md',
+        urlPath: '/',
+        frontmatter: normalizeFrontmatter({}),
+      },
+      site,
+    })
+    expect(html).toContain('signed-in-hint')
+    expect(html).toContain('signed-in')
+    expect(html).toContain('localStorage.getItem')
+  })
+
+  it('does not inject the critical auth state hint when auth is disabled', async () => {
+    const site = resolveSiteConfig({
+      rootDir: process.cwd(),
+      auth: {
+        enabled: false,
+      },
+    })
+    const html = await renderPage({
+      bodyHtml: '<p>Hello</p>',
+      pageInfo: {
+        relPath: 'index.md',
+        urlPath: '/',
+        frontmatter: normalizeFrontmatter({}),
+      },
+      site,
+    })
+    expect(html).not.toContain('signed-in-hint')
+  })
+
   it('injects nav menu runtime for doc pages', async () => {
     const site = resolveSiteConfig({ rootDir: process.cwd() })
     const html = await renderPage({

@@ -1,5 +1,3 @@
-const INPUT_KEY = '__PURESTACK_THEME_SWITCH_THEMES__'
-
 type ThemeApi = {
   get: () => string
   list: () => string[]
@@ -12,10 +10,10 @@ declare global {
   }
 }
 
-const raw = (globalThis as Record<string, unknown>)[INPUT_KEY]
-delete (globalThis as Record<string, unknown>)[INPUT_KEY]
-const themes = Array.isArray(raw)
-  ? raw.filter((x): x is string => typeof x === 'string')
+declare const themeSwitchThemes: string[] | undefined
+
+const themes = Array.isArray(themeSwitchThemes)
+  ? themeSwitchThemes.filter((x): x is string => typeof x === 'string')
   : []
 
 if (themes.length > 0) {

@@ -17,6 +17,6 @@ import { buildEmbeddedThemeSwitchScript } from './embed/themeSwitch.embed'
 export function buildThemeSwitchScript(themes: string[]) {
   const unique = [...new Set(themes)]
   const serialized = JSON.stringify(unique)
-  const payload = `globalThis.__PURESTACK_THEME_SWITCH_THEMES__=${serialized};`
-  return `(function(){${payload}})();${buildEmbeddedThemeSwitchScript()}`
+  const payload = `"use strict";var themeSwitchThemes=${serialized};`
+  return `(function(){${payload}${buildEmbeddedThemeSwitchScript()}})();`
 }

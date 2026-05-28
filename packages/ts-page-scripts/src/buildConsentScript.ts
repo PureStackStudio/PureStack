@@ -3,6 +3,6 @@ import { buildEmbeddedConsentScript } from './embed/consent.embed'
 
 export function buildConsentScript(config: ConsentConfig) {
   const serialized = JSON.stringify(config)
-  const payload = `globalThis.__CONSENT_CONFIG__ =${serialized};`
-  return `(function(){${payload}})();${buildEmbeddedConsentScript()}`
+  const payload = `"use strict";var consentConfig=${serialized};`
+  return `(function(){${payload}${buildEmbeddedConsentScript()}})();`
 }

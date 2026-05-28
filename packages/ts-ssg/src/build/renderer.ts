@@ -10,6 +10,7 @@ import type {
 } from '@purestack/ts-common'
 import { type BasicHeadConfig, h } from '@purestack/ts-html'
 import {
+  buildAuthStateHintScript,
   buildCodeCopyScript,
   buildConsentScript,
   buildMenuRuntimeScript,
@@ -45,6 +46,7 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
   const head = getHead(headConfig)
   const themes = getStyleThemes(styleLinks)
   head.push(h('style').raw(buildCriticalThemeStyle(themes.length > 0)))
+  appendAuthStateHintScript(head, input.site)
   appendStyleLinkTags(head, styleLinks)
   appendThemeSwitchScript(head, themes)
   appendConsentScript(head, input.consent)
@@ -74,6 +76,16 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
     footerHtml: input.footerHtml,
   })
   return html.toHtml()
+}
+
+function appendAuthStateHintScript(
+  head: ReturnType<typeof getHead>,
+  site: SiteConfig,
+) {
+  if (!site.auth.enabled || !site.auth.signedInStorageKey) return
+  const script = buildAuthStateHintScript(site.auth.signedInStorageKey)
+  if (!script) return
+  head.push(h('script').raw(script))
 }
 
 function getStyleThemes(

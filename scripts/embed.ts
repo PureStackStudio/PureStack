@@ -22,6 +22,7 @@ const embedEntries = [
   { name: 'menuRuntime', fn: 'buildMenuRuntimeScript' },
   { name: 'consent', fn: 'buildEmbeddedConsentScript' },
   { name: 'themeSwitch', fn: 'buildEmbeddedThemeSwitchScript' },
+  { name: 'authStateHint', fn: 'buildEmbeddedAuthStateHintScript' },
 ] as const
 
 function renderModule(fnName: string, script: string) {

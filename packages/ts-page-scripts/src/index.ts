@@ -1,3 +1,4 @@
+export { buildAuthStateHintScript } from './buildAuthStateHintScript'
 export { buildConsentScript } from './buildConsentScript'
 export { buildThemeSwitchScript } from './buildThemeSwitchScript'
 export { buildCodeCopyScript } from './embed/codeCopy.embed'

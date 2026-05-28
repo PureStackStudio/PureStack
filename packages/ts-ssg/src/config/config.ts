@@ -133,6 +133,11 @@ function resolveAuthConfig(
   return {
     enabled: pickBoolean(input?.enabled, file?.enabled, false),
     signUp: pickBoolean(input?.signUp, file?.signUp, true),
+    signedInStorageKey: resolveString(
+      input?.signedInStorageKey,
+      file?.signedInStorageKey,
+      'signed-in-hint',
+    ),
   }
 }
 

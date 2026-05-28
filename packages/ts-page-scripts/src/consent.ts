@@ -23,22 +23,18 @@ declare global {
   }
 }
 
-const INPUT_KEY = '__CONSENT_CONFIG__'
-const config = (globalThis as Record<string, unknown>)[
-  INPUT_KEY
-] as ConsentConfig
-delete (globalThis as Record<string, unknown>)[INPUT_KEY]
+declare const consentConfig: ConsentConfig | undefined
 
 if (
-  config &&
-  Array.isArray(config.categories) &&
-  Array.isArray(config.services)
+  consentConfig &&
+  Array.isArray(consentConfig.categories) &&
+  Array.isArray(consentConfig.services)
 ) {
   const root = document.documentElement
-  const storageKey = config.storageKey || 'ts-ssg-consent'
-  const policyVersion = String(config.policyVersion || '1')
-  const categories = config.categories
-  const services = config.services
+  const storageKey = consentConfig.storageKey || 'ts-ssg-consent'
+  const policyVersion = String(consentConfig.policyVersion || '1')
+  const categories = consentConfig.categories
+  const services = consentConfig.services
   const loadedServices: Record<string, boolean> = Object.create(null)
   const checkboxById: Record<string, HTMLInputElement> = Object.create(null)
 
