@@ -14,6 +14,7 @@ import { defineAutoCompleteInputComponents } from './standard/form/autoCompleteI
 import { defineFormComponents } from './standard/form/form'
 import { defineFormInputField } from './standard/form/formInputField'
 import { defineFormSelectField } from './standard/form/formSelectField'
+import { defineMultiAutoCompleteInputComponents } from './standard/form/multiAutoCompleteInput'
 import { defineGridComponents } from './standard/grid/grid'
 import { defineIconComponents, type GetSvgIcon } from './standard/icon/icon'
 import { defineLandingComponents } from './standard/landing/landing'
@@ -54,6 +55,7 @@ export function defineComponents(getSvgIcon: GetSvgIcon) {
     ...defineFormComponents(),
     ...defineFormInputField(),
     ...defineFormSelectField(),
+    ...defineMultiAutoCompleteInputComponents(),
     ...defineGridComponents(),
     ...defineIconComponents(getSvgIcon),
     ...defineLandingComponents(),

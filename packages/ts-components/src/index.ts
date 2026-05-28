@@ -114,6 +114,21 @@ export type {
 } from './standard/form/formSelectField'
 export { defineFormSelectField } from './standard/form/formSelectField'
 export { registerFormStyles } from './standard/form/formStyle'
+export type {
+  MultiAutoCompleteCreateItem,
+  MultiAutoCompleteDefaultOptionRow,
+  MultiAutoCompleteInput,
+  MultiAutoCompleteItem,
+  MultiAutoCompleteItemsChange,
+  MultiAutoCompleteOptionRow,
+  MultiAutoCompleteOptionToItem,
+  MultiAutoCompleteSearch,
+  MultiAutoCompleteSelect,
+  MultiAutoCompleteSelectedRow,
+  MultiAutoCompleteSplitInput,
+  ResolvedMultiAutoCompleteItem,
+} from './standard/form/multiAutoCompleteInput'
+export { defineMultiAutoCompleteInputComponents } from './standard/form/multiAutoCompleteInput'
 export type { Grid } from './standard/grid/grid'
 export { defineGridComponents } from './standard/grid/grid'
 export { registerGridStyles } from './standard/grid/gridStyle'

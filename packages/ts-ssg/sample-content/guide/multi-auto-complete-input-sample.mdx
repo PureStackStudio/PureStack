@@ -1,0 +1,137 @@
+---
+title: MultiAutoCompleteInput
+description: Multi autocomplete input examples with selected chips, custom rows, free-text creation, and paste splitting.
+layout:
+  showToc: true
+  fullWidth: false
+nav:
+  icon: lucide:mail
+---
+
+# MultiAutoCompleteInput
+
+`MultiAutoCompleteInput` owns a list of selected items while keeping a query input open for the next item. It is built for recipient fields, tag pickers, user assignment, and similar multi-value flows.
+
+## 1. Runtime playground
+
+Type a known recipient, select from the popup, or paste multiple addresses separated by commas, semicolons, or new lines.
+
+<app id="multi-auto-complete-input"></app>
+
+<PageScript src="./multi-auto-complete-input-sample.ts" />
+
+## 2. Basic usage
+
+```html
+<MultiAutoCompleteInput
+  label="Recipients"
+  placeholder="Add a recipient"
+  icon="lucide:mail"
+  :items="recipients"
+  :model="recipientQuery"
+  :options="recipientOptions"
+  :onCreateItem="createRecipientItem"
+  :onSplitInput="splitRecipients"
+/>
+```
+
+## 3. Custom row component
+
+Use `rowComponent` when suggestions need more than a single label. The row receives the option, query, active state, selected state, disabled state, and index.
+
+```html
+<MultiAutoCompleteInput
+  rowComponent="RecipientSuggestionRow"
+  :items="recipients"
+  :model="recipientQuery"
+  :options="recipientOptions"
+/>
+```
+
+## 4. Props reference
+
+```html
+<MultiAutoCompleteInput
+  label="Field label"
+  name="fieldName"
+  placeholder="Add item"
+  icon="lucide:mail"
+  iconEnd="lucide:chevron-down"
+  removeIcon="lucide:x"
+  minLength="0"
+  maxResults="10"
+  openOnFocus="true|false"
+  allowCustomValues="true|false"
+  allowDuplicates="true|false"
+  separators=",;"
+  loading="true|false"
+  loadingText="Loading suggestions"
+  emptyText="No suggestions"
+  rowComponent="CustomSuggestionRow"
+  :items="selectedItemsRef"
+  :model="queryRef"
+  :options="options"
+  :onCreateItem="createItem"
+  :onOptionToItem="optionToItem"
+  :onSplitInput="splitInput"
+  @itemschange="handleItems($event.detail.items)"
+  @optionselect="handleSelect($event.detail.option)"
+/>
+```
+
+<style>
+  .multi-autocomplete-guide__shell {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .multi-autocomplete-guide__recipient-row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.65rem;
+  }
+
+  .multi-autocomplete-guide__avatar {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    background: var(--ps-current-surface-alt-rest-background);
+    color: var(--ps-current-tone);
+    font-weight: 800;
+    font-size: 0.75rem;
+  }
+
+  .multi-autocomplete-guide__recipient-main,
+  .multi-autocomplete-guide__summary li {
+    display: grid;
+    min-width: 0;
+    gap: 0.15rem;
+  }
+
+  .multi-autocomplete-guide__recipient-main strong,
+  .multi-autocomplete-guide__recipient-main span,
+  .multi-autocomplete-guide__summary strong,
+  .multi-autocomplete-guide__summary span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .multi-autocomplete-guide__recipient-main span,
+  .multi-autocomplete-guide__summary span {
+    opacity: 0.72;
+    font-size: 0.85rem;
+  }
+
+  .multi-autocomplete-guide__summary {
+    display: grid;
+    gap: 0.55rem;
+    margin: 0 0 1rem;
+    padding: 0;
+    list-style: none;
+  }
+</style>

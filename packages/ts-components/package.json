@@ -83,6 +83,8 @@
     "Modal",
     "ModalStore",
     "ModalTrigger",
+    "MultiAutoCompleteInput",
+    "MultiAutoCompleteOptionRow",
     "NavList",
     "NavMenu",
     "PageScript",

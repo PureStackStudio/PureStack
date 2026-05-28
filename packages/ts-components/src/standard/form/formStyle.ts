@@ -13,6 +13,7 @@ export function registerFormStyles() {
     registerFormShellStyles(theme)
     registerFormFieldStyles(theme, palette, options)
     registerAutoCompleteInputStyles(theme, palette, options)
+    registerMultiAutoCompleteInputStyles(theme, palette, options)
     registerFormMetaStyles(theme, palette)
     registerFormStatusStyles(theme, palette, options)
     registerFormResponsiveStyles(theme)
@@ -267,6 +268,157 @@ function registerAutoCompleteInputStyles(
     .width('1em')
     .height('1em')
     .color(palette.current.tone)
+}
+
+function registerMultiAutoCompleteInputStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
+  styleBuilder
+    .select('.multi-auto-complete-input', theme)
+    .position('relative')
+    .maxWidth('100%')
+
+  styleBuilder
+    .select('.multi-auto-complete-input__shell', theme)
+    .minHeight('2.45em')
+    .cursor('text')
+
+  styleBuilder
+    .select('.multi-auto-complete-input__shell--disabled', theme)
+    .cursor('not-allowed')
+
+  styleBuilder
+    .select('.multi-auto-complete-input__control', theme)
+    .display('flex')
+    .alignItems('center')
+    .flexWrap('wrap')
+    .gap('0.35em')
+    .width('100%')
+    .minWidth('0')
+    .padding('0.35em')
+    .boxSizing('border-box')
+
+  styleBuilder
+    .select('.multi-auto-complete-input__query', theme)
+    .width('8rem')
+    .minWidth('7rem')
+    .padding('0.15em 0.25em')
+    .lineHeight('1.5')
+
+  styleBuilder
+    .select('.multi-auto-complete-input__item', theme)
+    .display('inline-flex')
+    .alignItems('center')
+    .maxWidth('100%')
+    .gap('0.3em')
+    .padding('0.18em 0.25em 0.18em 0.55em')
+    .borderRadius(options.radii.sm)
+    .background(palette.current.surfaceAlt.rest.background)
+    .color(palette.current.text.default)
+    .apply(palette.applyFont(palette.font.size.xs, palette.font.weight.w600))
+
+  styleBuilder
+    .select('.multi-auto-complete-input__item--invalid', theme)
+    .background(palette.semanticTone.danger.surface.rest.background)
+    .color(palette.semanticTone.danger.text.default)
+
+  styleBuilder
+    .select('.multi-auto-complete-input__item--disabled', theme)
+    .opacity('0.58')
+
+  styleBuilder
+    .select('.multi-auto-complete-input__item-label', theme)
+    .minWidth('0')
+    .overflow('hidden')
+    .textOverflow('ellipsis')
+    .whiteSpace('nowrap')
+
+  styleBuilder
+    .select('.multi-auto-complete-input__remove', theme)
+    .display('grid')
+    .placeItems('center')
+    .width('1.35em')
+    .height('1.35em')
+    .padding('0')
+    .border('none')
+    .borderRadius(options.radii.sm)
+    .background('transparent')
+    .color('currentColor')
+    .cursor('pointer')
+
+  styleBuilder
+    .select('.multi-auto-complete-input__remove:hover', theme)
+    .background(palette.current.button.hover.background)
+    .color(palette.current.button.hover.text)
+
+  styleBuilder
+    .select('.multi-auto-complete-input__remove svg', theme)
+    .width('0.9em')
+    .height('0.9em')
+
+  styleBuilder
+    .select('.multi-auto-complete-input__popup', theme)
+    .position('absolute')
+    .left('0')
+    .right('0')
+    .top('calc(100% + 6px)')
+    .boxSizing('border-box')
+    .maxHeight('18rem')
+    .overflow('auto')
+    .padding('0.35em')
+    .borderRadius(options.radii.md)
+    .border(`1px solid ${palette.current.border.default}`)
+    .background(palette.current.surface.rest.background)
+    .boxShadow(options.shadows.strong)
+    .zIndex('70')
+
+  styleBuilder
+    .select('.multi-auto-complete-input__listbox', theme)
+    .display('grid')
+    .gap('0.2em')
+
+  styleBuilder
+    .select('.multi-auto-complete-input__option', theme)
+    .borderRadius(options.radii.sm)
+    .color(palette.current.text.default)
+    .cursor('pointer')
+    .transition('background 140ms ease, color 140ms ease')
+
+  styleBuilder
+    .select(
+      '.multi-auto-complete-input__option:hover:not(.multi-auto-complete-input__option--disabled), .multi-auto-complete-input__option--active',
+      theme,
+    )
+    .background(palette.current.button.hover.background)
+    .color(palette.current.button.hover.text)
+
+  styleBuilder
+    .select('.multi-auto-complete-input__option--disabled', theme)
+    .cursor('not-allowed')
+    .opacity('0.55')
+
+  styleBuilder
+    .select(
+      '.multi-auto-complete-input__message, .multi-auto-complete-input__default-row',
+      theme,
+    )
+    .boxSizing('border-box')
+    .width('100%')
+    .padding('0.55em 0.65em')
+    .apply(palette.applyFont(palette.font.size.sm))
+
+  styleBuilder
+    .select('.multi-auto-complete-input__message', theme)
+    .color(palette.current.text.subtle)
+
+  styleBuilder
+    .select('.multi-auto-complete-input__default-label', theme)
+    .display('block')
+    .overflow('hidden')
+    .textOverflow('ellipsis')
+    .whiteSpace('nowrap')
 }
 
 function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
