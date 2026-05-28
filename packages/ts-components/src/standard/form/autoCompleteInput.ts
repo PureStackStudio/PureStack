@@ -287,7 +287,9 @@ class AutoCompleteInputContext implements AutoCompleteInput {
     this.query = computed(() => String(unref(this.model) ?? ''))
     this.resolvedOptions = computed(() => {
       const options = unref(props.options)
-      return Array.isArray(options) ? options.map(resolveAutoCompleteOption) : []
+      return Array.isArray(options)
+        ? options.map(resolveAutoCompleteOption)
+        : []
     })
     this.filteredOptions = computed(() => this.resolveFilteredOptions())
     this.rows = computed(() => this.resolveRows())
@@ -513,8 +515,11 @@ class AutoCompleteInputContext implements AutoCompleteInput {
     fallback: number,
   ) {
     const raw = unref(value)
-    const parsed = typeof raw === 'number' ? raw : Number.parseFloat(String(raw))
-    return Number.isFinite(parsed) && parsed >= 0 ? Math.trunc(parsed) : fallback
+    const parsed =
+      typeof raw === 'number' ? raw : Number.parseFloat(String(raw))
+    return Number.isFinite(parsed) && parsed >= 0
+      ? Math.trunc(parsed)
+      : fallback
   }
 
   private clearClosingTimer() {
