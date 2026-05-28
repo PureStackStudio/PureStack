@@ -12,6 +12,7 @@ export function registerFormStyles() {
   themes.forEach((theme, palette, options) => {
     registerFormShellStyles(theme)
     registerFormFieldStyles(theme, palette, options)
+    registerAutoCompleteInputStyles(theme, palette, options)
     registerFormMetaStyles(theme, palette)
     registerFormStatusStyles(theme, palette, options)
     registerFormResponsiveStyles(theme)
@@ -177,6 +178,95 @@ function registerFormSelectIconStyles(theme: ThemeMode) {
     .pointerEvents('none')
     .marginLeft('0')
     .marginRight('0')
+}
+
+function registerAutoCompleteInputStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+  options: ThemeOptions,
+) {
+  styleBuilder
+    .select('.auto-complete-input', theme)
+    .position('relative')
+    .maxWidth('100%')
+
+  styleBuilder
+    .select('.auto-complete-input__popup', theme)
+    .position('absolute')
+    .left('0')
+    .right('0')
+    .top('calc(100% + 6px)')
+    .boxSizing('border-box')
+    .maxHeight('18rem')
+    .overflow('auto')
+    .padding('0.35em')
+    .borderRadius(options.radii.md)
+    .border(`1px solid ${palette.current.border.default}`)
+    .background(palette.current.surface.rest.background)
+    .boxShadow(options.shadows.strong)
+    .zIndex('70')
+
+  styleBuilder
+    .select('.auto-complete-input__listbox', theme)
+    .display('grid')
+    .gap('0.2em')
+
+  styleBuilder
+    .select('.auto-complete-input__option', theme)
+    .borderRadius(options.radii.sm)
+    .color(palette.current.text.default)
+    .cursor('pointer')
+    .transition('background 140ms ease, color 140ms ease')
+
+  styleBuilder
+    .select(
+      '.auto-complete-input__option:hover:not(.auto-complete-input__option--disabled), .auto-complete-input__option--active',
+      theme,
+    )
+    .background(palette.current.button.hover.background)
+    .color(palette.current.button.hover.text)
+
+  styleBuilder
+    .select('.auto-complete-input__option--selected', theme)
+    .background(palette.current.surfaceAlt.rest.background)
+
+  styleBuilder
+    .select('.auto-complete-input__option--disabled', theme)
+    .cursor('not-allowed')
+    .opacity('0.55')
+
+  styleBuilder
+    .select(
+      '.auto-complete-input__message, .auto-complete-input__default-row',
+      theme,
+    )
+    .boxSizing('border-box')
+    .width('100%')
+    .padding('0.55em 0.65em')
+    .apply(palette.applyFont(palette.font.size.sm))
+
+  styleBuilder
+    .select('.auto-complete-input__message', theme)
+    .color(palette.current.text.subtle)
+
+  styleBuilder
+    .select('.auto-complete-input__default-row', theme)
+    .display('grid')
+    .gridTemplateColumns('minmax(0, 1fr) auto')
+    .alignItems('center')
+    .gap('0.6em')
+
+  styleBuilder
+    .select('.auto-complete-input__default-label', theme)
+    .overflow('hidden')
+    .textOverflow('ellipsis')
+    .whiteSpace('nowrap')
+
+  styleBuilder
+    .select('.auto-complete-input__default-check', theme)
+    .width('1em')
+    .height('1em')
+    .color(palette.current.tone)
 }
 
 function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {

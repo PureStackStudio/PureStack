@@ -87,6 +87,15 @@ export type { SiteFooter } from './standard/footer/footer'
 export { defineFooterComponents } from './standard/footer/footer'
 export { registerFooterStyles } from './standard/footer/footerStyle'
 export type {
+  AutoCompleteInput,
+  AutoCompleteOption,
+  AutoCompleteOptionRow,
+  AutoCompleteRow,
+  AutoCompleteValue,
+  ResolvedAutoCompleteOption,
+} from './standard/form/autoCompleteInput'
+export { defineAutoCompleteInputComponents } from './standard/form/autoCompleteInput'
+export type {
   AppForm,
   FormAssistLink,
   FormCheck,

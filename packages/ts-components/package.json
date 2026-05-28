@@ -45,6 +45,8 @@
   "regorComponents": [
     "AlertBox",
     "AppForm",
+    "AutoCompleteInput",
+    "AutoCompleteOptionRow",
     "Badge",
     "BarChart",
     "Btn",

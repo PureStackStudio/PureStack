@@ -1,0 +1,200 @@
+---
+title: AutoCompleteInput Component Samples
+description: Autocomplete input examples with inline options, custom row components, keyboard selection, and page-script runtime behavior.
+layout:
+  showToc: true
+  fullWidth: false
+nav:
+  icon: iconoir:input-search
+---
+
+# AutoCompleteInput Component Samples
+
+`AutoCompleteInput` keeps the exact `FormInputField` surface while adding a combobox popup, option filtering, keyboard selection, and a named row component hook for custom suggestion layouts.
+
+## 1. Runtime playground
+
+This playground is mounted with `PageScript`, so the fields below are live: type into them, use arrow keys, press Enter, and watch the selected values update.
+
+<app id="auto-complete-input-runtime"></app>
+
+<PageScript src="./auto-complete-input-sample.ts" />
+
+## 2. Inline options
+
+Use inline options when the suggestion list is known at authoring time. The component keeps normal form attributes like `name`, `required`, `autocomplete`, icons, tone, and variant.
+
+<app id="auto-complete-inline-options"></app>
+
+```html
+<AutoCompleteInput
+  label="Workspace"
+  name="workspace"
+  placeholder="Search workspaces"
+  icon="lucide:search"
+  required="true"
+  :model="workspaceQuery"
+  :selectedValue="workspaceValue"
+  :options="[
+    { label: 'Atlas Cloud', value: 'atlas-cloud', keywords: ['enterprise', 'production'] },
+    { label: 'Beacon Labs', value: 'beacon-labs', keywords: ['research', 'preview'] },
+    { label: 'Compass Ops', value: 'compass-ops', keywords: ['operations', 'incident'] },
+    { label: 'Delta Finance', value: 'delta-finance', keywords: ['billing', 'revenue'] },
+  ]"
+/>
+```
+
+## 3. Custom row component by name
+
+The popup appearance is controlled with a component name, not a slot. `AutoCompleteInput` owns combobox behavior; the row component owns visual presentation.
+
+```html
+<AutoCompleteInput
+  label="Owner"
+  name="owner"
+  rowComponent="PeopleSuggestionRow"
+  :options="peopleOptions"
+  @optionselect="assignOwner($event.detail.option)"
+/>
+```
+
+The row component receives the same structured props for every option.
+
+```ts
+defineComponent(
+  html`<div class="people-row" :data-active="active">
+    <span>{{ option.label }}</span>
+    <Badge r-if="selected">Selected</Badge>
+  </div>`,
+  {
+    props: ['option', 'item', 'index', 'query', 'active', 'selected', 'disabled'],
+  },
+)
+```
+
+## 4. Async search pattern
+
+Use `@querychange` for remote or delayed sources. The component shows its loading message while `loading` is true and keeps keyboard behavior consistent when new options arrive.
+
+```html
+<AutoCompleteInput
+  label="Service"
+  :model="serviceQuery"
+  :options="serviceOptions"
+  :loading="serviceLoading"
+  loadingText="Searching services"
+  emptyText="No service matches"
+  @querychange="searchServices($event.detail.query)"
+  @optionselect="selectService($event.detail.option)"
+/>
+```
+
+## 5. Form composition
+
+Autocomplete fields can sit beside normal inputs and selects because the component reuses `FormInputField` internally.
+
+<app id="auto-complete-form-composition"></app>
+
+## 6. Props reference
+
+```html
+<AutoCompleteInput
+  label="Field label"
+  tone="neutral|accent|info|success|warning|danger|ghost|feature|secondary|custom"
+  variant="surfaceAlt|surface|outline|subtle|..."
+  name="fieldName"
+  type="search|text"
+  placeholder="Search..."
+  autocomplete="off"
+  required="true|false"
+  disabled="true|false"
+  icon="lucide:search"
+  iconEnd="lucide:chevron-down"
+  minLength="0"
+  maxResults="10"
+  openOnFocus="true|false"
+  loading="true|false"
+  loadingText="Loading suggestions"
+  emptyText="No suggestions"
+  rowComponent="CustomSuggestionRow"
+  :model="queryRef"
+  :selectedValue="selectedValueRef"
+  :options="[
+    { label: 'Visible label', value: 'submitted-value', keywords: ['searchable'], disabled: false },
+  ]"
+  @querychange="handleSearch($event.detail.query)"
+  @optionselect="handleSelect($event.detail.option)"
+/>
+```
+
+<style>
+  .autocomplete-guide__shell {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .autocomplete-guide__summary {
+    display: grid;
+    gap: 0.55rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .autocomplete-guide__summary li {
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  .autocomplete-guide__summary strong {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  .autocomplete-guide__summary span {
+    opacity: 0.78;
+  }
+
+  .autocomplete-guide__person-row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.65rem;
+  }
+
+  .autocomplete-guide__avatar {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    background: var(--ps-current-surface-alt-rest-background);
+    color: var(--ps-current-tone);
+    font-weight: 800;
+    font-size: 0.75rem;
+  }
+
+  .autocomplete-guide__person-main {
+    display: grid;
+    min-width: 0;
+    gap: 0.1rem;
+  }
+
+  .autocomplete-guide__person-name,
+  .autocomplete-guide__person-role {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .autocomplete-guide__person-role {
+    opacity: 0.72;
+    font-size: 0.85rem;
+  }
+
+  .autocomplete-guide__person-check {
+    width: 1rem;
+    height: 1rem;
+  }
+</style>

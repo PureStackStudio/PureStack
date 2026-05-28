@@ -10,6 +10,7 @@ import { defineDropFilesComponents } from './standard/dropFiles/dropFiles'
 import { defineExpandablePanelComponents } from './standard/expandablePanel/expandablePanel'
 import { defineFlexComponents } from './standard/flex/flex'
 import { defineFooterComponents } from './standard/footer/footer'
+import { defineAutoCompleteInputComponents } from './standard/form/autoCompleteInput'
 import { defineFormComponents } from './standard/form/form'
 import { defineFormInputField } from './standard/form/formInputField'
 import { defineFormSelectField } from './standard/form/formSelectField'
@@ -49,6 +50,7 @@ export function defineComponents(getSvgIcon: GetSvgIcon) {
     ...defineExpandablePanelComponents(),
     ...defineFlexComponents(),
     ...defineFooterComponents(),
+    ...defineAutoCompleteInputComponents(),
     ...defineFormComponents(),
     ...defineFormInputField(),
     ...defineFormSelectField(),
