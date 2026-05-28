@@ -38,6 +38,20 @@ describe('compileMdxToHtml', () => {
     expect(compiledHtml).toContain('<p>Afterward.</p>')
   })
 
+  it('annotates script components with the MDX source path', () => {
+    const compiledHtml = compileMdx(
+      '<PageScript src="./auth-state.ts" teleport="head"/>\n<RegorApp src="./app.ts" />',
+      { sourceRelPath: 'header.mdx' },
+    ).bodyHtml
+
+    expect(compiledHtml).toContain(
+      '<PageScript src="./auth-state.ts" teleport="head" sourceRelPath="header.mdx"/>',
+    )
+    expect(compiledHtml).toContain(
+      '<RegorApp src="./app.ts" sourceRelPath="header.mdx" />',
+    )
+  })
+
   it('unwraps a standalone inline markup island when it is the only paragraph content', () => {
     const compiledHtml = compileMdxToHtml('<span>inline</span>')
     expect(compiledHtml).toContain('<span>inline</span>')

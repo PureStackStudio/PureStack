@@ -6,7 +6,12 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import { resolveSiteConfig } from '../config/config'
 import type { ContentFile } from '../discover/content'
-import { renderPageFromFile, resolveFooterHtmlByDirectory } from './page'
+import { initBuiltinComponents } from '../regor/initBuiltinComponents'
+import {
+  renderPageFromFile,
+  resolveFooterHtmlByDirectory,
+  resolveHeaderHtmlByDirectory,
+} from './page'
 
 async function writeFile(filePath: string, contents = '') {
   await fs.mkdir(path.dirname(filePath), { recursive: true })
@@ -19,6 +24,7 @@ describe('footer hierarchy', () => {
   beforeAll(() => {
     disableLogger()
     logger = getLogger()
+    initBuiltinComponents()
   })
 
   afterAll(async () => {
@@ -81,6 +87,47 @@ describe('footer hierarchy', () => {
         toContentFile(contentDir, path.join('guide', 'sub', 'page.mdx')),
       )
       expect(guideSubPage.html).toContain('Guide Footer')
+    } finally {
+      await fs.rm(root, { recursive: true, force: true })
+    }
+  })
+
+  it('resolves header PageScript sources relative to the header file', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-'))
+    try {
+      const contentDir = path.join(root, 'content')
+      const outDir = path.join(root, 'out')
+      await writeFile(
+        path.join(contentDir, 'header.mdx'),
+        '<PageScript src="./auth-state.ts" teleport="head" />',
+      )
+      await writeFile(path.join(contentDir, 'auth-state.ts'), 'export {}')
+      await writeFile(
+        path.join(contentDir, 'account', 'settings.mdx'),
+        '# Settings',
+      )
+
+      const config = resolveSiteConfig({
+        rootDir: root,
+        contentDir,
+        outDir,
+      })
+      const headerHtmlByDir = await resolveHeaderHtmlByDirectory(
+        config,
+        undefined,
+      )
+
+      const page = await renderPageFromFile(
+        {
+          config,
+          headerHtmlByDir,
+        },
+        toContentFile(contentDir, path.join('account', 'settings.mdx')),
+      )
+
+      expect(page.html).toContain('src="/auth-state/auth-state.js"')
+      expect(page.html).not.toContain('/account/auth-state/auth-state.js')
+      expect(page.scriptEntrypoints).toEqual(['auth-state.ts'])
     } finally {
       await fs.rm(root, { recursive: true, force: true })
     }

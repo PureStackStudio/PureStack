@@ -15,6 +15,7 @@ export interface MdxCompileResult {
 
 export interface MdxRenderOptions {
   highlighter?: MdxCodeHighlighter
+  sourceRelPath?: string
 }
 
 export function compileAstToHtml(

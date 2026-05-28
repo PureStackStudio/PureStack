@@ -45,6 +45,27 @@ describe('PageScript rendering', () => {
     expect(html).toContain('type="module"')
   })
 
+  it('resolves local src relative to an explicit source owner', () => {
+    const cleanup = ensureDomGlobals()
+    const components = defineScriptComponents()
+    const html = renderApp(
+      '<PageScript src="./auth-state.ts" sourceRelPath="header.mdx" />',
+      {
+        components,
+        context: createTestContext({
+          pageInfo: {
+            relPath: 'account/settings.mdx',
+            urlPath: '/account/settings/',
+          },
+        }),
+      },
+    )
+    cleanup()
+
+    expect(html).toContain('src="/auth-state/auth-state.js"')
+    expect(html).not.toContain('/account/auth-state/auth-state.js')
+  })
+
   it('renders RegorApp as app shell and reuses PageScript src mapping', () => {
     const cleanup = ensureDomGlobals()
     const components = defineScriptComponents()
@@ -67,5 +88,26 @@ describe('PageScript rendering', () => {
     expect(html).toContain('name="hosts-main"')
     expect(html).toContain('src="/hosts/hosts.js"')
     expect(html).toContain('type="module"')
+  })
+
+  it('passes RegorApp source owner through to its PageScript', () => {
+    const cleanup = ensureDomGlobals()
+    const components = defineScriptComponents()
+    const html = renderApp(
+      '<RegorApp src="./auth-state.ts" sourceRelPath="header.mdx"></RegorApp>',
+      {
+        components,
+        context: createTestContext({
+          pageInfo: {
+            relPath: 'account/settings.mdx',
+            urlPath: '/account/settings/',
+          },
+        }),
+      },
+    )
+    cleanup()
+
+    expect(html).toContain('src="/auth-state/auth-state.js"')
+    expect(html).not.toContain('/account/auth-state/auth-state.js')
   })
 })

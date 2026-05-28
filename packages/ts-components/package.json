@@ -98,6 +98,7 @@
     "TabPane",
     "Tabs",
     "ThemeSwitcher",
+    "ToastHost",
     "TopBar",
     "VariableVirtualList",
     "VariableVirtualTable",

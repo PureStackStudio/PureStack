@@ -30,7 +30,9 @@ export function compileMdx(
 ): MdxCompileResult {
   const parser = unified().use(remarkParse).use(remarkGfm)
   const roughFile = parser.parse(source)
-  const masked = maskRegorMarkup(source, roughFile)
+  const masked = maskRegorMarkup(source, roughFile, {
+    sourceRelPath: options.sourceRelPath,
+  })
   const file = parser.parse(masked.source)
   restoreRegorMarkup(
     file,

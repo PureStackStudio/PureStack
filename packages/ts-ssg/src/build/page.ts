@@ -222,7 +222,10 @@ function compilePageContent(
   mdxOptions: MdxRenderOptions | undefined,
 ) {
   return file.ext === '.mdx'
-    ? compileMdx(sourceBody, mdxOptions)
+    ? compileMdx(sourceBody, {
+        ...(mdxOptions ?? {}),
+        sourceRelPath: file.relPath,
+      })
     : compileMarkdown(sourceBody, mdxOptions)
 }
 

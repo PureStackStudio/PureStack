@@ -11,6 +11,7 @@ import { type ComponentHead, defineComponent, flatten, html } from 'regor'
 export interface PageScript {
   teleport?: string
   src?: string
+  sourceRelPath?: string
   type?: string
   async?: unknown
   defer?: unknown
@@ -23,6 +24,7 @@ export interface PageScript {
 
 export interface RegorApp {
   src?: string
+  sourceRelPath?: string
 }
 
 const pageScriptTemplate = html`<script
@@ -38,13 +40,17 @@ const pageScriptTemplate = html`<script
   :nomodule="noModule"
 ></script>`
 
-const regorAppTemplate = html`<App><PageScript :src="src"/></App>`
+const regorAppTemplate = html`<App><PageScript
+  :src="src"
+  :sourceRelPath="sourceRelPath"
+/></App>`
 
 function definePageScriptComponent() {
   return defineComponent<PageScript>(pageScriptTemplate, {
     props: [
       'teleport',
       'src',
+      'sourceRelPath',
       'type',
       'async',
       'defer',
@@ -60,9 +66,10 @@ function definePageScriptComponent() {
 
 function defineRegorAppComponent() {
   return defineComponent<RegorApp>(regorAppTemplate, {
-    props: ['src'],
+    props: ['src', 'sourceRelPath'],
     context: (head) => ({
       src: head.props.src,
+      sourceRelPath: head.props.sourceRelPath,
     }),
   })
 }
@@ -77,8 +84,9 @@ export function defineScriptComponents() {
 function resolvePageScript(head: ComponentHead<PageScript>): PageScript {
   const props = flatten(head.props)
   const tsSsgContext = resolveTsSsgContext(head)
-  const pageRelPath = tsSsgContext.pageInfo.relPath
-  const src = resolveScriptSrc(props.src, pageRelPath, (sourceRelPath) => {
+  const ownerRelPath =
+    toOptionalString(props.sourceRelPath) ?? tsSsgContext.pageInfo.relPath
+  const src = resolveScriptSrc(props.src, ownerRelPath, (sourceRelPath) => {
     tsSsgContext.recordScriptEntrypoint(sourceRelPath)
   })
   return {

@@ -79,6 +79,10 @@ type MarkupSegment = {
   source: string
 }
 
+type RegorMarkupMaskOptions = {
+  sourceRelPath?: string
+}
+
 type TagToken = {
   end: number
   kind: 'closing' | 'opening'
@@ -105,7 +109,11 @@ const VOID_HTML_TAG_NAMES = new Set([
   'wbr',
 ])
 
-export function maskRegorMarkup(source: string, root: unknown) {
+export function maskRegorMarkup(
+  source: string,
+  root: unknown,
+  options: RegorMarkupMaskOptions = {},
+) {
   const ignoredRanges = collectIgnoredRanges(root)
   const ranges = collectMarkupRanges(source, ignoredRanges)
   const segments: MarkupSegment[] = []
@@ -120,7 +128,10 @@ export function maskRegorMarkup(source: string, root: unknown) {
     const placeholder = `PURESTACK_REGOR_MARKUP_${index}_`
     segments.push({
       placeholder,
-      source: source.slice(range.start, range.end),
+      source: annotateRegorScriptSourceRelPath(
+        source.slice(range.start, range.end),
+        options.sourceRelPath,
+      ),
     })
     next += source.slice(lastIndex, range.start)
     next += placeholder
@@ -245,6 +256,61 @@ function createTextNode(value: string): TextNode {
 
 function createHtmlNode(value: string): HtmlNode {
   return { type: 'html', value }
+}
+
+function annotateRegorScriptSourceRelPath(
+  source: string,
+  sourceRelPath?: string,
+) {
+  const normalizedSourceRelPath = sourceRelPath?.trim()
+  if (!normalizedSourceRelPath) return source
+
+  const tokens = scanTagTokens(source).filter(
+    (token) =>
+      token.kind === 'opening' && isSourceOwnedScriptComponentName(token.name),
+  )
+  if (tokens.length === 0) return source
+
+  const attribute = ` sourceRelPath="${escapeHtmlAttribute(normalizedSourceRelPath)}"`
+  let cursor = 0
+  const parts = tokens.flatMap((token) => {
+    const insertIndex = getAttributeInsertIndex(source, token)
+    const part = [source.slice(cursor, insertIndex), attribute]
+    cursor = insertIndex
+    return part
+  })
+
+  parts.push(source.slice(cursor))
+  return parts.join('')
+}
+
+function isSourceOwnedScriptComponentName(name: string) {
+  const normalized = normalizeMarkupName(name)
+  return normalized === 'pagescript' || normalized === 'regorapp'
+}
+
+function normalizeMarkupName(name: string) {
+  return name.toLowerCase().replaceAll(/[^a-z0-9]/g, '')
+}
+
+function getAttributeInsertIndex(source: string, token: TagToken) {
+  if (!token.selfClosing) return token.end - 1
+  const slashIndex = getSelfClosingSlashIndex(source, token)
+  if (slashIndex === undefined) return token.end - 1
+
+  let insertIndex = slashIndex
+  while (insertIndex > token.nameEnd && /\s/.test(source[insertIndex - 1])) {
+    insertIndex -= 1
+  }
+  return insertIndex
+}
+
+function getSelfClosingSlashIndex(source: string, token: TagToken) {
+  let index = token.end - 2
+  while (index > token.nameEnd && /\s/.test(source[index])) {
+    index -= 1
+  }
+  return source[index] === '/' ? index : undefined
 }
 
 function containsOnlyMarkupAndWhitespace(node: ParagraphNode) {
