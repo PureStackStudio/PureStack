@@ -2,11 +2,13 @@ import fs from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
 
-import { describe, expect, it } from 'vitest'
+import { disableLogger, getLogger, type Logger } from 'logpot'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import { resolveSiteConfig } from '../config/config'
 import {
   createEmptyManifest,
+  manifestPath,
   readManifest,
   signatureEqual,
   writeManifest,
@@ -21,7 +23,24 @@ async function withTempDir<T>(worker: (dir: string) => Promise<T>) {
   }
 }
 
+async function writeRawManifest(outDir: string, contents: string) {
+  const filePath = manifestPath(outDir)
+  await fs.mkdir(path.dirname(filePath), { recursive: true })
+  await fs.writeFile(filePath, contents, 'utf8')
+}
+
 describe('manifest', () => {
+  let logger: Logger | undefined
+
+  beforeAll(async () => {
+    disableLogger()
+    logger = getLogger()
+  })
+
+  afterAll(async () => {
+    await logger?.close()
+  })
+
   it('round-trips a manifest to disk', async () => {
     await withTempDir(async (base) => {
       const contentDir = path.join(base, 'content')
@@ -43,6 +62,33 @@ describe('manifest', () => {
       expect(loaded?.config).toEqual(manifest.config)
       expect(loaded?.version).toBe(manifest.version)
       expect(loaded?.content).toEqual({})
+    })
+  })
+
+  it('ignores an empty manifest cache', async () => {
+    await withTempDir(async (base) => {
+      const outDir = path.join(base, 'out')
+      await writeRawManifest(outDir, '')
+
+      await expect(readManifest(outDir)).resolves.toBeNull()
+    })
+  })
+
+  it('ignores an invalid JSON manifest cache', async () => {
+    await withTempDir(async (base) => {
+      const outDir = path.join(base, 'out')
+      await writeRawManifest(outDir, '{')
+
+      await expect(readManifest(outDir)).resolves.toBeNull()
+    })
+  })
+
+  it('ignores a manifest cache with the wrong shape', async () => {
+    await withTempDir(async (base) => {
+      const outDir = path.join(base, 'out')
+      await writeRawManifest(outDir, '[]')
+
+      await expect(readManifest(outDir)).resolves.toBeNull()
     })
   })
 

@@ -4,6 +4,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import type { SiteConfig } from '@purestack/ts-common'
 import { ensureDir } from '@purestack/ts-util-node'
+import { getLogger } from 'logpot'
 
 export const MANIFEST_VERSION = 1
 export const MANIFEST_DIRNAME = '.ts-ssg'
@@ -101,7 +102,7 @@ export async function readManifest(
   const filePath = manifestPath(outDir)
   try {
     const raw = await fs.readFile(filePath, 'utf8')
-    return parseManifestJson(raw)
+    return parseManifestJson(raw, filePath)
   } catch (error) {
     if (isEnoent(error)) return null
     throw error
@@ -158,9 +159,26 @@ function createManifestConfigSignature(config: SiteConfig) {
   return createHash('sha256').update(JSON.stringify(config)).digest('hex')
 }
 
-function parseManifestJson(raw: string): BuildManifest | null {
-  const parsed = JSON.parse(raw) as BuildManifest
-  return isBuildManifest(parsed) ? parsed : null
+function parseManifestJson(
+  raw: string,
+  filePath: string,
+): BuildManifest | null {
+  if (raw.trim().length === 0) {
+    logIgnoredManifest(filePath, 'empty manifest')
+    return null
+  }
+
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(raw)
+  } catch (error) {
+    logIgnoredManifest(filePath, 'invalid JSON', error)
+    return null
+  }
+
+  if (isBuildManifest(parsed)) return parsed
+  logIgnoredManifest(filePath, 'invalid manifest shape')
+  return null
 }
 
 function isBuildManifest(value: unknown): value is BuildManifest {
@@ -181,6 +199,16 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
 function isEnoent(error: unknown): boolean {
   const err = error as NodeJS.ErrnoException
   return err?.code === 'ENOENT'
+}
+
+function logIgnoredManifest(filePath: string, reason: string, error?: unknown) {
+  const meta: Record<string, unknown> = { filePath, reason }
+  if (error instanceof Error) {
+    meta.error = error.message
+  } else if (error !== undefined) {
+    meta.error = String(error)
+  }
+  getLogger().warn('manifest cache ignored', meta)
 }
 
 function fileSignatureFromStats(stats: Stats): FileSignature | null {
