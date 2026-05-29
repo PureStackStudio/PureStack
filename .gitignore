@@ -1,8 +1,7 @@
-.yarn
+/.yarn
 .pnp.*
 node_modules
 dist
-types
 *.tgz
 PureGate
 *.vsix
