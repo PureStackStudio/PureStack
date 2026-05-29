@@ -18,10 +18,8 @@ export class ToastStore {
   private nextId = 0
   private readonly timers = new Map<string, ReturnType<typeof setTimeout>>()
 
-  notify = (message: string, tone: SemanticTone = 'info') => {
-    const text = message.trim()
+  notify = (text: string, tone: SemanticTone = 'info') => {
     if (!text) return
-
     const toast: ToastItem = {
       id: `toast-${++this.nextId}`,
       message: text,
