@@ -205,6 +205,13 @@ export function maskMdxExpressions(source: string) {
   let placeholderContent = ''
 
   for (let index = 0; index < source.length; ) {
+    const rawTextEnd = findRawTextElementEnd(source, index)
+    if (rawTextEnd !== undefined) {
+      placeholderContent += source.slice(index, rawTextEnd)
+      index = rawTextEnd
+      continue
+    }
+
     if (!isMdxExpressionStart(source, index)) {
       placeholderContent += source[index]
       index++
@@ -283,7 +290,7 @@ function restoreMdxExpressions(
 ) {
   let restored = formatted
 
-  for (const expression of expressions) {
+  for (const expression of sortLongestPlaceholderFirst(expressions)) {
     restored = restored.split(expression.placeholder).join(expression.source)
   }
 
@@ -453,6 +460,36 @@ function closeMatchingTag(stack: string[], tagName: string) {
 
 function escapeRegExp(value: string) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+function sortLongestPlaceholderFirst<T extends { placeholder: string }>(
+  placeholders: T[],
+) {
+  return [...placeholders].sort(
+    (left, right) => right.placeholder.length - left.placeholder.length,
+  )
+}
+
+function findRawTextElementEnd(source: string, startIndex: number) {
+  if (source[startIndex] !== '<' || source[startIndex + 1] === '/') {
+    return undefined
+  }
+
+  const tagEnd = findTagEnd(source, startIndex + 1)
+  if (tagEnd === -1) return undefined
+
+  const openingTag = source.slice(startIndex, tagEnd + 1)
+  const tagName = /^<\s*(script|style)\b/i.exec(openingTag)?.[1]
+  if (!tagName) return undefined
+
+  const closingTagPattern = new RegExp(
+    `<\\/\\s*${escapeRegExp(tagName)}\\s*>`,
+    'i',
+  )
+  const closingTagMatch = closingTagPattern.exec(source.slice(tagEnd + 1))
+  if (!closingTagMatch) return undefined
+
+  return tagEnd + 1 + closingTagMatch.index + closingTagMatch[0].length
 }
 
 function parseFenceDelimiter(trimmed: string) {

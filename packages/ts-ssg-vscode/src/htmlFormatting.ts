@@ -1,4 +1,5 @@
 import htmlPlugin from 'prettier/plugins/html'
+import postcssPlugin from 'prettier/plugins/postcss'
 import prettier from 'prettier/standalone'
 import * as vscode from 'vscode'
 
@@ -18,7 +19,7 @@ export async function formatHtmlFragment(
   return prettier.format(source, {
     htmlWhitespaceSensitivity: 'css',
     parser: 'html',
-    plugins: [htmlPlugin],
+    plugins: [htmlPlugin, postcssPlugin],
     printWidth: options.printWidth,
     tabWidth: options.tabSize,
     useTabs: options.useTabs,
