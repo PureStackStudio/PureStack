@@ -14,13 +14,6 @@ export function applyFooterShellStyles(theme: ThemeMode) {
     .position('relative')
     .overflow('hidden')
     .padding('0')
-
-  styleBuilder
-    .select('.site-footer__inner', theme)
-    .position('relative')
-    .display('grid')
-    .padding('1em')
-    .background('transparent')
 }
 
 export function applyFooterBottomStyles(

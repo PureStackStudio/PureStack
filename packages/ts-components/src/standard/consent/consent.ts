@@ -163,9 +163,7 @@ function resolveConsent(
     tone: props.tone,
     variant: props.variant,
     variantMode: props.variantMode,
-    settingsTeleport: context.pageInfo.frontmatter.layout.showFooter
-      ? '.consent-settings-teleport-area'
-      : 'body',
+    settingsTeleport: '.consent-settings-teleport-area',
     categories,
   }
 }

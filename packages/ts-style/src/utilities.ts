@@ -123,6 +123,8 @@ function applyLayoutUtilities(theme: string) {
   styleBuilder.select('.max-h-inspector', theme).maxHeight(force('24rem'))
   styleBuilder.select('.auto-fit', theme).width(force('1%'))
   styleBuilder.select('.min-w-0', theme).minWidth(force('0'))
+  styleBuilder.select('.overflow-y-visible', theme).overflow(force('visible'))
+  styleBuilder.select('.overflow-x-visible', theme).overflow(force('visible'))
   styleBuilder.select('.overflow-visible', theme).overflow(force('visible'))
   styleBuilder.select('.overflow-auto', theme).overflow(force('auto'))
   styleBuilder.select('.overflow-hidden', theme).overflow(force('hidden'))
