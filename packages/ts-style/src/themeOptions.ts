@@ -47,8 +47,8 @@ export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
     ...DEFAULT_SKIN,
   },
   radii: {
-    sm: '8px',
-    md: '10px',
+    sm: '6px',
+    md: '8px',
     lg: '16px',
     pill: '999px',
   },
