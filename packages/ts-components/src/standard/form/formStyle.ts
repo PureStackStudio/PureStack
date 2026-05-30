@@ -354,9 +354,9 @@ function registerMultiAutoCompleteInputStyles(
     .color(palette.current.button.hover.text)
 
   styleBuilder
-    .select('.multi-auto-complete-input__remove svg', theme)
-    .width('0.9em')
-    .height('0.9em')
+    .select('.multi-auto-complete-input__remove .icon', theme)
+    .width('1em')
+    .height('1em')
 
   styleBuilder
     .select('.multi-auto-complete-input__popup', theme)
