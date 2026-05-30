@@ -1,7 +1,13 @@
 {
   "$schema": "https://biomejs.dev/schemas/latest/schema.json",
   "files": {
-    "includes": ["**", "!**/dist", "!**/node_modules", "!**/.yarn"],
+    "includes": [
+      "**",
+      "!**/dist",
+      "!**/node_modules",
+      "!**/.yarn",
+      "!**/.puregate"
+    ],
     "ignoreUnknown": true
   },
   "formatter": {

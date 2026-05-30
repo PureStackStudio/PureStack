@@ -40,12 +40,17 @@ const bestColors = {
     secondary: '#546f26',
   },
   pink: {
-    accent: '#c81c9a',
-    neutral: '#3f2b47',
-    secondary: '#43194e',
+    accent: '#21c2d7',
+    neutral: '#2c7c36',
+    secondary: '#741033',
+  },
+  test: {
+    accent: '#de6310',
+    neutral: '#000000',
+    secondary: '#6d2727',
   },
 }
-export const { accent, neutral, secondary } = bestColors.green
+export const { accent, neutral, secondary } = bestColors.test
 export const feature = '#cb166e'
 export const custom = '#e35508'
 export const info = '#15a9c0'
