@@ -49,7 +49,7 @@ export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
   radii: {
     sm: '6px',
     md: '8px',
-    lg: '16px',
+    lg: '12px',
     pill: '999px',
   },
   typography: {

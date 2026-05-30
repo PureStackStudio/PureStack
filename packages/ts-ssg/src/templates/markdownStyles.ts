@@ -324,7 +324,7 @@ function registerTableHeaderStyles(
   options: ThemeOptions,
 ) {
   styleBuilder
-    .select('.doc-content :where(thead th)', theme)
+    .select('.doc-content :where(thead tr)', theme)
     .background(palette.current.surface.rest.background)
     .color(palette.current.text.default)
     .apply(palette.applyFont(palette.font.size.xxs))
