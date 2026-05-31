@@ -12,12 +12,12 @@ const DEFAULTS: BasicHeadConfig = {
   title: 'Page | Page Title',
   viewport: 'width=device-width,initial-scale=1',
   description: 'The purestack page.',
-  canonicalUrl: 'https://tenray.io/purestack',
-  openGraph: {
+  canonicalUrl: undefined, // TODO: fix this, dynamically generate one.
+  openGraph: undefined /*{
     title: 'Page Title',
     description: 'The purestack page.',
-    url: 'https://tenray.io/purestack',
-  },
+    url: 'https://purestack.studio',
+  },*/,
   favIcon: {
     rel: 'icon',
     href: '/assets/favicon.svg',

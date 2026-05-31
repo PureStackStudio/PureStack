@@ -11,7 +11,7 @@
     "url": "git+https://github.com/koculu/purestack.git",
     "directory": "packages/ts-style"
   },
-  "homepage": "https://tenray.io/purestack",
+  "homepage": "https://purestack.studio",
   "bugs": {
     "url": "https://github.com/koculu/purestack/issues"
   },
