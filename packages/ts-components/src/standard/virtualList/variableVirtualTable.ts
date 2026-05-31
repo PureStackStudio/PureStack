@@ -27,9 +27,7 @@ const variableVirtualTableTemplate = html`<div
   @scroll="handleScroll"
 >
   <table class="virtual-table__table" :style="tableStyle">
-    <thead r-if="hasHeaderComponent">
-      <tr :is="headerComponent"></tr>
-    </thead>
+    <thead :is="headerComponent" r-if="hasHeaderComponent"></thead>
     <tbody>
       <tr class="virtual-table__spacer-row">
         <td :style="topSpacerStyle"></td>
@@ -166,7 +164,8 @@ class VariableVirtualTableContext implements VariableVirtualTable {
     this.tableStyle = computed<Record<string, string>>(() => ({
       width: 'max-content',
       minWidth: '100%',
-      borderCollapse: 'collapse',
+      borderCollapse: 'separate',
+      borderSpacing: '0',
     }))
     this.topSpacerStyle = computed<Record<string, string>>(() => ({
       height: `${this.offsets()[this.startIndex()] ?? 0}px`,

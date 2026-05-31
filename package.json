@@ -40,10 +40,10 @@
     "puregate:publish": "yarn puregate:publish:web && yarn puregate:publish:app",
     "puregate:publish:web": "yarn tsx packages/ts-ssg/src/cli.ts --content PureGate/PureGateApp/admin-panel --clean --publish",
     "puregate:publish:app": "powershell -ExecutionPolicy Bypass -Command \"Set-Location './PureGate'; ./scripts/package-bootstrap.ps1\"",
-    "puregate:deploy:web": "pgdeploy deploy --host https://koculu77.dev --package ./PureGate/PureGateApp/.puregate/content/puregate.local/web --allow-path 'pagefind/*,.ts-ssg/manifest.json'",
+    "puregate:deploy:web": "pgdeploy deploy --host https://admin.puregate.dev --package ./PureGate/PureGateApp/.puregate/content/puregate.local/web --allow-path 'pagefind/*,.ts-ssg/manifest.json'",
     "puregate:deploy:web2": "pgdeploy deploy --host https://mail.koculu77.dev --package ./PureGate/PureGateApp/.puregate/content/puregate.local/web --allow-path 'pagefind/*,.ts-ssg/manifest.json'",
     "puregate:deploy:web3": "pgdeploy deploy --host https://test.com --package ./PureGate/PureGateApp/.puregate/content/puregate.local/web --allow-path 'pagefind/*,.ts-ssg/manifest.json'",
-    "puregate:deploy:app": "pgdeploy artifact deploy --host https://koculu77.dev --artifact system/puregate --package PureGate/artifacts/bootstrap/work/package/release --apply true --allow-path='admin-panel/.ts-ssg/manifest.json,admin-panel/pagefind*' --allow-path='release-id,watchdog/puregate,deploy/pgdeploy,app/PureGateApp,app/*.so,app/*.pdb,app/*.staticwebassets.*,manifest.json'",
+    "puregate:deploy:app": "pgdeploy artifact deploy --host https://admin.puregate.dev --artifact system/puregate --package PureGate/artifacts/bootstrap/work/package/release --apply true --allow-path='admin-panel/.ts-ssg/manifest.json,admin-panel/pagefind*' --allow-path='release-id,watchdog/puregate,deploy/pgdeploy,app/PureGateApp,app/*.so,app/*.so.dbg,app/*.pdb,app/*.staticwebassets.*,manifest.json'",
     "lint-puregate": "biome check PureGate/PureGateApp/admin-panel --write --formatter-enabled=false",
     "format-puregate": "biome format PureGate/PureGateApp/admin-panel --write"
   }

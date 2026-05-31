@@ -7,7 +7,7 @@ export function registerVirtualTableStyles() {
       .verticalAlign('middle')
 
     styleBuilder
-      .select('.virtual-table__table thead th', theme)
+      .select('.virtual-table__table thead', theme)
       .position('sticky')
       .top('0')
       .zIndex(2)

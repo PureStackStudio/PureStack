@@ -35,9 +35,7 @@ export interface VirtualTable {
 const virtualTableTemplate = html`<div class="virtual-table" :style="viewportStyle" @scroll="handleScroll">
   <table class="virtual-table__table" :style="tableStyle">
     <colgroup r-if="hasColGroupComponent" :is="colGroupComponent"></colgroup>
-    <thead r-if="hasHeaderComponent">
-      <tr :is="headerComponent"></tr>
-    </thead>
+    <thead :is="headerComponent" r-if="hasHeaderComponent"></thead>
     <tbody>
       <tr class="virtual-table__spacer-row">
         <td :style="topSpacerStyle"></td>
@@ -109,7 +107,8 @@ function resolveVirtualTable(head: ComponentHead<VirtualTable>) {
         '--virtual-table-item-height': `${window.itemHeight()}px`,
         width: fixed ? '100%' : 'max-content',
         minWidth: '100%',
-        borderCollapse: 'collapse',
+        borderCollapse: 'separate',
+        borderSpacing: '0',
         tableLayout: fixed ? 'fixed' : 'auto',
       }
     }),

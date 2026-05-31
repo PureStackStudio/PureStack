@@ -289,6 +289,7 @@ function registerTableStyles(
   registerTableHeaderStyles(theme, palette, options)
   registerTableBodyRowStyles(theme, options)
   registerTableCellStyles(theme, palette)
+  registerTableHeaderCellStyles(theme, options)
   registerTableInlineCodeStyles(theme, palette, options)
   registerTableResponsiveStyles(theme)
 }
@@ -324,13 +325,21 @@ function registerTableHeaderStyles(
   options: ThemeOptions,
 ) {
   styleBuilder
-    .select('.doc-content :where(thead tr)', theme)
+    .select('.doc-content :where(thead)', theme)
     .background(palette.current.surface.rest.background)
+    .boxShadow(`inset 0 -1px ${palette.current.border.default}`)
+
+  styleBuilder
+    .select('.doc-content :where(thead tr)', theme)
     .color(palette.current.text.default)
     .apply(palette.applyFont(palette.font.size.xxs))
     .textTransform('uppercase')
-    .borderBottom(`1px solid ${palette.current.border.default}`)
+}
 
+function registerTableHeaderCellStyles(
+  theme: ThemeMode,
+  options: ThemeOptions,
+) {
   styleBuilder
     .select('.doc-content :where(thead th:first-child)', theme)
     .borderTopLeftRadius(options.radii.md)
@@ -338,6 +347,10 @@ function registerTableHeaderStyles(
   styleBuilder
     .select('.doc-content :where(thead th:last-child)', theme)
     .borderTopRightRadius(options.radii.md)
+
+  styleBuilder
+    .select('.doc-content :where(thead th)', theme)
+    .borderBottom('none')
 }
 
 function registerTableBodyRowStyles(theme: ThemeMode, options: ThemeOptions) {
