@@ -34,7 +34,7 @@ export interface VirtualTable {
 
 const virtualTableTemplate = html`<div class="virtual-table" :style="viewportStyle" @scroll="handleScroll">
   <table class="virtual-table__table" :style="tableStyle">
-    <colgroup r-if="hasColGroupComponent" :is="colGroupComponent"></colgroup>
+    <colgroup :is="colGroupComponent" r-if="hasColGroupComponent"></colgroup>
     <thead :is="headerComponent" r-if="hasHeaderComponent"></thead>
     <tbody>
       <tr class="virtual-table__spacer-row">
@@ -51,9 +51,7 @@ const virtualTableTemplate = html`<div class="virtual-table" :style="viewportSty
         <td :style="bottomSpacerStyle"></td>
       </tr>
     </tbody>
-    <tfoot r-if="hasFooterComponent">
-      <tr :is="footerComponent"></tr>
-    </tfoot>
+    <tfoot :is="footerComponent" r-if="hasFooterComponent"></tfoot>
   </table>
 </div>`
 

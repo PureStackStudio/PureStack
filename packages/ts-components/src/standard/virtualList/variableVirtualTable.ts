@@ -27,6 +27,7 @@ const variableVirtualTableTemplate = html`<div
   @scroll="handleScroll"
 >
   <table class="virtual-table__table" :style="tableStyle">
+    <colgroup :is="colGroupComponent" r-if="hasColGroupComponent"></colgroup>
     <thead :is="headerComponent" r-if="hasHeaderComponent"></thead>
     <tbody>
       <tr class="virtual-table__spacer-row">
@@ -43,9 +44,7 @@ const variableVirtualTableTemplate = html`<div
         <td :style="bottomSpacerStyle"></td>
       </tr>
     </tbody>
-    <tfoot r-if="hasFooterComponent">
-      <tr :is="footerComponent"></tr>
-    </tfoot>
+    <tfoot :is="footerComponent" r-if="hasFooterComponent"></tfoot>
   </table>
 </div>`
 
@@ -57,6 +56,7 @@ function defineVariableVirtualTableComponent() {
       'estimateHeight',
       'overscan',
       'rowComponent',
+      'colGroupComponent',
       'headerComponent',
       'footerComponent',
     ],
@@ -76,6 +76,7 @@ class VariableVirtualTableContext implements VariableVirtualTable {
   readonly estimateHeight?: RefOrValue<number | string>
   readonly overscan?: RefOrValue<number | string>
   readonly rowComponent?: RefOrValue<string>
+  readonly colGroupComponent?: RefOrValue<string>
   readonly headerComponent?: RefOrValue<string>
   readonly footerComponent?: RefOrValue<string>
   readonly scrollTop = ref(0)
@@ -87,6 +88,7 @@ class VariableVirtualTableContext implements VariableVirtualTable {
   readonly tableStyle: ComputedRef<Record<string, string>>
   readonly topSpacerStyle: ComputedRef<Record<string, string>>
   readonly bottomSpacerStyle: ComputedRef<Record<string, string>>
+  readonly hasColGroupComponent: ComputedRef<boolean>
   readonly hasHeaderComponent: ComputedRef<boolean>
   readonly hasFooterComponent: ComputedRef<boolean>
   private readonly rowHeights: number[] = []
@@ -114,6 +116,7 @@ class VariableVirtualTableContext implements VariableVirtualTable {
     this.estimateHeight = props.estimateHeight
     this.overscan = props.overscan
     this.rowComponent = props.rowComponent
+    this.colGroupComponent = props.colGroupComponent
     this.headerComponent = props.headerComponent
     this.footerComponent = props.footerComponent
     this.resolvedItems = computed(() => {
@@ -182,6 +185,7 @@ class VariableVirtualTableContext implements VariableVirtualTable {
         border: '0',
       }
     })
+    this.hasColGroupComponent = computed(() => !!unref(props.colGroupComponent))
     this.hasHeaderComponent = computed(() => !!unref(props.headerComponent))
     this.hasFooterComponent = computed(() => !!unref(props.footerComponent))
   }
