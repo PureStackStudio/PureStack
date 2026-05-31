@@ -42,6 +42,7 @@ export async function copyStaticAssets(
       outPath,
       options,
     )
+    await removeStaleScriptOutputFiles(asset, outPath, options)
     if (dependencyRelPaths.length > 0) {
       tsDependencyIndex[asset.relPath] = dependencyRelPaths
     }
@@ -66,6 +67,7 @@ export async function copyStaticAsset(
       outPath,
       options,
     )
+    await removeStaleScriptOutputFiles(asset, outPath, options)
     log.info('static asset copied', {
       assetPath: asset.absPath,
       outPath,
@@ -136,6 +138,42 @@ async function writeStaticAsset(
   return []
 }
 
+async function removeStaleScriptOutputFiles(
+  asset: StaticAssetFile,
+  outPath: string,
+  options: StaticAssetBuildOptions,
+) {
+  if (!isTypeScriptAssetPath(asset.relPath)) return
+  if (!resolveScriptCacheKey(asset.relPath, options)) return
+
+  const outputDirectory = path.dirname(outPath)
+  const currentFileName = path.basename(outPath)
+  const scriptName = path.basename(asset.relPath, path.extname(asset.relPath))
+
+  let entries: string[]
+  try {
+    entries = await fs.readdir(outputDirectory)
+  } catch (error) {
+    if (isEnoent(error)) return
+    throw error
+  }
+
+  await Promise.all(
+    entries.map(async (entry) => {
+      if (entry === currentFileName) return
+      if (!isStaleScriptOutputFile(entry, scriptName)) return
+      await fs.rm(path.join(outputDirectory, entry), { force: true })
+    }),
+  )
+}
+
+function isStaleScriptOutputFile(fileName: string, scriptName: string) {
+  return (
+    fileName === `${scriptName}.js` ||
+    (fileName.startsWith(`${scriptName}.`) && fileName.endsWith('.js'))
+  )
+}
+
 function collectDependencyRelPaths(
   metafile: Metafile | undefined,
   root: string,
@@ -155,4 +193,9 @@ function collectDependencyRelPaths(
 
 function isOutsideRoot(relPath: string) {
   return relPath === '..' || relPath.startsWith('../')
+}
+
+function isEnoent(error: unknown) {
+  const err = error as NodeJS.ErrnoException
+  return err?.code === 'ENOENT'
 }

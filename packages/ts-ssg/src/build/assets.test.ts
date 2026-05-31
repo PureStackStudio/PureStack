@@ -138,4 +138,46 @@ describe('static assets', () => {
       await fs.rm(root, { recursive: true, force: true })
     }
   })
+
+  it('removes stale cache-keyed script siblings after writing a new bundle', async () => {
+    const root = await fs.mkdtemp(
+      path.join(process.cwd(), '.tmp-ts-ssg-assets-'),
+    )
+    const outDir = path.join(root, 'dist')
+    try {
+      const entryPath = path.join(root, 'login.ts')
+      await writeFile(entryPath, "console.log('fresh')\n")
+      await writeFile(path.join(outDir, 'login', 'login.js'), 'old stable')
+      await writeFile(path.join(outDir, 'login', 'login.oldkey.js'), 'old')
+      await writeFile(
+        path.join(outDir, 'login', 'other.oldkey.js'),
+        'keep',
+      )
+
+      const result = await copyStaticAsset(
+        root,
+        outDir,
+        {
+          absPath: entryPath,
+          relPath: 'login.ts',
+          ext: '.ts',
+        },
+        { scriptCacheKey: 'newkey' },
+      )
+
+      expect(result.outPath).toBe(path.join(outDir, 'login', 'login.newkey.js'))
+      await expect(fs.stat(result.outPath)).resolves.toBeTruthy()
+      await expect(
+        fs.stat(path.join(outDir, 'login', 'login.js')),
+      ).rejects.toBeTruthy()
+      await expect(
+        fs.stat(path.join(outDir, 'login', 'login.oldkey.js')),
+      ).rejects.toBeTruthy()
+      await expect(
+        fs.stat(path.join(outDir, 'login', 'other.oldkey.js')),
+      ).resolves.toBeTruthy()
+    } finally {
+      await fs.rm(root, { recursive: true, force: true })
+    }
+  })
 })
