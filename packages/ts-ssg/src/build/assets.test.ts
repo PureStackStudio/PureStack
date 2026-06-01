@@ -149,10 +149,7 @@ describe('static assets', () => {
       await writeFile(entryPath, "console.log('fresh')\n")
       await writeFile(path.join(outDir, 'login', 'login.js'), 'old stable')
       await writeFile(path.join(outDir, 'login', 'login.oldkey.js'), 'old')
-      await writeFile(
-        path.join(outDir, 'login', 'other.oldkey.js'),
-        'keep',
-      )
+      await writeFile(path.join(outDir, 'login', 'other.oldkey.js'), 'keep')
 
       const result = await copyStaticAsset(
         root,

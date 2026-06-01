@@ -286,7 +286,7 @@ function registerTableStyles(
   options: ThemeOptions,
 ) {
   registerTableContainerStyles(theme, palette, options)
-  registerTableHeaderStyles(theme, palette, options)
+  registerTableHeaderStyles(theme, palette)
   registerTableBodyRowStyles(theme, options)
   registerTableCellStyles(theme, palette)
   registerTableHeaderCellStyles(theme, options)
@@ -319,11 +319,7 @@ function registerTableContainerStyles(
     .margin('0')
 }
 
-function registerTableHeaderStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+function registerTableHeaderStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.doc-content :where(thead)', theme)
     .background(palette.current.surface.rest.background)
