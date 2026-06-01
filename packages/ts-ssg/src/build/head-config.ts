@@ -17,7 +17,7 @@ export function resolveHeadConfig(
   const resolvedTitle =
     typeof title === 'string'
       ? siteTitle
-        ? `${title} | ${siteTitle}`
+        ? `${siteTitle} | ${title}`
         : title
       : typeof siteTitle === 'string'
         ? siteTitle

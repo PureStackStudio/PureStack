@@ -23,6 +23,7 @@ export interface TopBar {
   signInAvatarAlt?: RefOrValue<string>
   classes?: ComputedRef<string>
   searchEnabled?: boolean
+  signInEnabled?: boolean
 }
 
 const DEFAULT_TOP_BAR_VARIANT: ComponentVariant = 'surfaceAlt'
@@ -88,6 +89,7 @@ const topBarTemplate = html`<input
     <Flex class="topbar__controls flex-none" align="center" justify="end">
       <ThemeSwitcher/>
       <SignIn
+        r-if="signInEnabled"
         class="topbar__account"
         :avatarSrc="signInAvatarSrc"
         :avatarAlt="signInAvatarAlt"/>
@@ -103,7 +105,14 @@ const topBarTemplate = html`<input
 
 function defineTopBarComponent() {
   return defineComponent<TopBar>(topBarTemplate, {
-    props: ['tone', 'variant', 'signInAvatarSrc', 'signInAvatarAlt'],
+    props: [
+      'tone',
+      'variant',
+      'signInAvatarSrc',
+      'signInAvatarAlt',
+      'signInEnabled',
+      'searchEnabled',
+    ],
     context: (head) => resolveTopBar(resolveTsSsgContext(head), head.props),
   })
 }
