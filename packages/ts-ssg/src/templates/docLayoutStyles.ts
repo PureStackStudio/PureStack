@@ -30,7 +30,9 @@ function registerDocLayoutShellStyles(
   styleBuilder
     .select('.template-doc', theme)
     .margin('0')
-    .minHeight('100vh')
+    .display('flex')
+    .flexDirection('column')
+    .minHeight('100dvh')
     .fontFamily(options.typography.baseFamily)
     .background(palette.semanticTone.neutral.canvas)
     .color(palette.current.text.default)
@@ -140,6 +142,7 @@ function registerDocLayoutShellStyles(
   styleBuilder
     .select('.doc-shell', theme)
     .display('grid')
+    .flex('1 0 auto')
     .gap('0')
     .paddingInlineStart(docLayoutVar('activeShellPaddingInlineStart'))
     .paddingInlineEnd(docLayoutVar('activeShellPaddingInlineEnd'))
@@ -167,6 +170,7 @@ function registerDocLayoutShellStyles(
     .media(mediaMin(BREAKPOINTS.lg))
     .gridTemplateColumns(`${docLayoutVar('activeNavWidth')} minmax(0, 1fr)`)
 
+  styleBuilder.select('.template-doc > .site-footer', theme).flex('0 0 auto')
   styleBuilder.select('.doc-shell--single', theme).gridTemplateColumns('1fr')
   styleBuilder
     .select('.doc-shell--nav-drawer', theme)
