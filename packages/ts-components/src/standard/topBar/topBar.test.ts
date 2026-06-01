@@ -26,7 +26,7 @@ describe('TopBar rendering', () => {
       ...defineThemeSwitcherComponents(),
       ...defineTopBarComponents(),
     }
-    const html = renderApp(`<TopBar />`, {
+    const html = renderApp(`<TopBar signInEnabled="true"/>`, {
       components,
       context: createTestContext({
         site: {
