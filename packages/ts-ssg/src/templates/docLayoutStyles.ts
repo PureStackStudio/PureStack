@@ -16,7 +16,7 @@ import {
 
 export function registerDocLayoutStyles() {
   themes.forEach((theme, palette, options) => {
-    styleBuilder.select('html', theme).fontSize('16px')
+    styleBuilder.select('html', theme).fontSize('90%')
     registerDocLayoutShellStyles(theme, palette, options)
     registerDocLayoutSidebarStyles(theme, options)
     registerDocLayoutResponsiveStyles(theme, options)
