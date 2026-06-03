@@ -5,10 +5,10 @@ import {
   themes,
 } from '@purestack/ts-style'
 
-const BAR_CHART_VALUE_FONT_SIZE = '2.5px'
-const BAR_CHART_LABEL_FONT_SIZE = '2.2px'
-const BAR_CHART_AXIS_FONT_SIZE = '1.9px'
-const BAR_CHART_EMPTY_FONT_SIZE = '2.6px'
+const BAR_CHART_VALUE_FONT_SIZE = '0.15625rem'
+const BAR_CHART_LABEL_FONT_SIZE = '0.1375rem'
+const BAR_CHART_AXIS_FONT_SIZE = '0.11875rem'
+const BAR_CHART_EMPTY_FONT_SIZE = '0.1625rem'
 
 export function registerBarChartStyles() {
   themes.forEach((theme, palette) => {

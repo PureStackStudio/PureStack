@@ -2,7 +2,7 @@ import { styleBuilder } from '@purestack/ts-style'
 import type { ComposerCanvasStyleContext } from './composerCanvasStyleTypes'
 
 const EMAIL_FONT =
-  '15px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif'
+  '0.9375rem/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif'
 
 export function registerComposerCanvasPreviewDefaults({
   theme,

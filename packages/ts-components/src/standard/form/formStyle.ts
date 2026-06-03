@@ -22,7 +22,7 @@ export function registerFormStyles() {
 }
 
 function registerFormShellStyles(theme: ThemeMode) {
-  styleBuilder.select('.form-block', theme).display('grid').gap('12px')
+  styleBuilder.select('.form-block', theme).display('grid').gap('0.75rem')
 }
 
 function registerFormFieldStyles(
@@ -196,7 +196,7 @@ function registerAutoCompleteInputStyles(
     .position('absolute')
     .left('0')
     .right('0')
-    .top('calc(100% + 6px)')
+    .top('calc(100% + 0.375rem)')
     .boxSizing('border-box')
     .maxHeight('18rem')
     .overflow('auto')
@@ -363,7 +363,7 @@ function registerMultiAutoCompleteInputStyles(
     .position('absolute')
     .left('0')
     .right('0')
-    .top('calc(100% + 6px)')
+    .top('calc(100% + 0.375rem)')
     .boxSizing('border-box')
     .maxHeight('18rem')
     .overflow('auto')
@@ -427,7 +427,7 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .display('flex')
     .alignItems('center')
     .justifyContent('space-between')
-    .gap('10px')
+    .gap('0.625rem')
   styleBuilder
     .select('.form-block__check', theme)
     .display('inline-flex')
@@ -453,7 +453,7 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .position('relative')
     .height('1px')
     .background(palette.current.border.default)
-    .margin('2px 0')
+    .margin('0.125rem 0')
   styleBuilder
     .select('.form-block__divider::after', theme)
     .content('attr(data-label)')
@@ -474,7 +474,7 @@ function registerFormStatusStyles(
 ) {
   styleBuilder
     .select('.form-status', theme)
-    .marginTop('4px')
+    .marginTop('0.25rem')
     .padding('0.5em 0.6em')
     .borderRadius(options.radii.md)
     .apply(palette.applyFont(palette.font.size.sm))

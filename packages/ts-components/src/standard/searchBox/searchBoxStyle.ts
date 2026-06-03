@@ -63,12 +63,12 @@ function registerSearchBoxResultContainerStyles(
   styleBuilder
     .select('.site-search__results', theme)
     .position('absolute')
-    .top('calc(100% + 8px)')
+    .top('calc(100% + 0.5rem)')
     .right('0')
-    .width('min(560px, calc(100vw - 32px))')
-    .maxHeight('420px')
+    .width('min(35rem, calc(100vw - 2rem))')
+    .maxHeight('26.25rem')
     .overflow('auto')
-    .padding('8px')
+    .padding('0.5rem')
     .borderRadius(options.radii.lg)
     .border(`1px solid ${palette.current.border.default}`)
     .background(palette.current.surface.rest.background)
@@ -81,11 +81,11 @@ function registerSearchBoxResultTopBarOverlayStyles(theme: ThemeMode) {
     .select('.topbar .site-search__results', theme)
     .media(mediaAbove(BREAKPOINTS.sm))
     .position('fixed')
-    .top('76px')
+    .top('4.75rem')
     .left('50%')
     .right('auto')
     .transform('translateX(-50%)')
-    .width(`min(${getBreakpoint(BREAKPOINTS.sm)}, calc(100vw - 32px))`)
+    .width(`min(${getBreakpoint(BREAKPOINTS.sm)}, calc(100vw - 2rem))`)
     .zIndex('120')
 }
 
@@ -110,8 +110,8 @@ function registerSearchBoxResultListStyles(
   styleBuilder
     .select('.site-search__results .site-search__link', theme)
     .display('grid')
-    .gap('6px')
-    .padding('12px 14px')
+    .gap('0.375rem')
+    .padding('0.75rem 0.875rem')
     .borderRadius(options.radii.md)
     .border(`1px solid ${palette.current.border.subtle}`)
     .background(palette.current.surface.rest.background)
@@ -157,15 +157,15 @@ function registerSearchBoxResultContentStyles(
 
   styleBuilder
     .select('.site-search__results mark.site-search__highlight', theme)
-    .padding('0 3px')
-    .borderRadius('5px')
+    .padding('0 0.1875rem')
+    .borderRadius('0.3125rem')
     .background(palette.current.button.hover.background)
     .color(palette.current.button.hover.text)
 
   styleBuilder
     .select('.site-search__results .site-search__message', theme)
     .margin('0')
-    .padding('10px 12px')
+    .padding('0.625rem 0.75rem')
     .borderRadius(options.radii.md)
     .border(`1px dashed ${palette.current.border.default}`)
     .background(palette.current.surface.rest.background)

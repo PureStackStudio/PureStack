@@ -31,7 +31,7 @@ function registerTabsShellStyles(
   styleBuilder
     .select('.tabs__list', theme)
     .display('grid')
-    .gridTemplateColumns('repeat(auto-fit, minmax(120px, 1fr))')
+    .gridTemplateColumns('repeat(auto-fit, minmax(7.5rem, 1fr))')
     .gap('0.6em 0.4em')
     .alignItems('stretch')
     .alignContent('start')
@@ -74,12 +74,12 @@ function registerTabsShellStyles(
     .display('none')
     .position('absolute')
     .right('0')
-    .top('calc(100% + 6px)')
+    .top('calc(100% + 0.375rem)')
     .zIndex(20)
     .minWidth('100%')
     .width('max-content')
-    .maxWidth('min(92vw, 460px)')
-    .padding('6px')
+    .maxWidth('min(92vw, 28.75rem)')
+    .padding('0.375rem')
     .borderRadius(options.radii.md)
     .border('1px solid transparent')
     .boxShadow(options.shadows.soft)
@@ -87,7 +87,7 @@ function registerTabsShellStyles(
   styleBuilder
     .select('.tabs__overflow--open .tabs__overflow-menu', theme)
     .display('grid')
-    .gap('4px')
+    .gap('0.25rem')
 
   styleBuilder
     .select('.tabs__overflow-option', theme)
@@ -102,14 +102,14 @@ function registerTabsShellStyles(
   styleBuilder
     .select('.tabs__select-wrap', theme)
     .display('none')
-    .margin('2px 0 4px')
+    .margin('0.125rem 0 0.25rem')
 
   styleBuilder
     .select('.tabs__select', theme)
     .display('block')
     .width('100%')
-    .minHeight('42px')
-    .padding('10px 40px 10px 12px')
+    .minHeight('2.625rem')
+    .padding('0.625rem 2.5rem 0.625rem 0.75rem')
     .borderRadius(options.radii.md)
     .border('1px solid transparent')
     .apply(palette.applyFont(palette.font.size.xs, palette.font.weight.w600))

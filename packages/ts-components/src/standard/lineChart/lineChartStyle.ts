@@ -5,10 +5,10 @@ import {
   themes,
 } from '@purestack/ts-style'
 
-const LINE_CHART_VALUE_FONT_SIZE = '2.4px'
-const LINE_CHART_LABEL_FONT_SIZE = '2.2px'
-const LINE_CHART_AXIS_FONT_SIZE = '1.9px'
-const LINE_CHART_EMPTY_FONT_SIZE = '2.6px'
+const LINE_CHART_VALUE_FONT_SIZE = '0.15rem'
+const LINE_CHART_LABEL_FONT_SIZE = '0.1375rem'
+const LINE_CHART_AXIS_FONT_SIZE = '0.11875rem'
+const LINE_CHART_EMPTY_FONT_SIZE = '0.1625rem'
 
 export function registerLineChartStyles() {
   themes.forEach((theme, palette) => {

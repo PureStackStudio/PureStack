@@ -147,7 +147,9 @@ function registerComposerInitialCanvasElementDefaults({
     .fontWeight('bold')
     .margin('2.33em 0')
 
-  styleBuilder.select('.composer__editor blockquote', theme).margin('1em 40px')
+  styleBuilder
+    .select('.composer__editor blockquote', theme)
+    .margin('1em 2.5rem')
 
   styleBuilder
     .select(
@@ -159,7 +161,7 @@ function registerComposerInitialCanvasElementDefaults({
   styleBuilder
     .select('.composer__editor ol, .composer__editor ul', theme)
     .margin('1em 0')
-    .paddingLeft('40px')
+    .paddingLeft('2.5rem')
 
   styleBuilder.select('.composer__editor li', theme).display('list-item')
 

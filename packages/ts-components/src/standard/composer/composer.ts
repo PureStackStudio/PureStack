@@ -256,7 +256,7 @@ class ComposerContext implements Composer {
       }),
     )
     this.editorStyle = computed<Record<string, string>>(() => ({
-      minHeight: resolveCssSize(unref(props.minHeight), '220px'),
+      minHeight: resolveCssSize(unref(props.minHeight), '13.75rem'),
     }))
     this.sourceId = resolveComposerSourceId()
     this.sourceHtml(this.sanitizeModelHtml(this.html()))
@@ -521,7 +521,7 @@ class ComposerContext implements Composer {
 }
 
 const resolveComposerSourceId = createAutoId('composer-source')
-export const COMPOSER_BODY_STYLE = 'padding:16px'
+export const COMPOSER_BODY_STYLE = 'padding:1rem'
 const FOCUS_RETRY_COUNT = 12
 const FOCUS_RETRY_DELAY_MS = 25
 

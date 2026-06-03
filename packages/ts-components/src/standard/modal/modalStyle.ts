@@ -56,8 +56,8 @@ function registerModalShellStyles(
     .select('.modal__panel', theme)
     .position('relative')
     .display('grid')
-    .width('min(92vw, 640px)')
-    .maxHeight('min(86vh, 900px)')
+    .width('min(92vw, 40rem)')
+    .maxHeight('min(86vh, 56.25rem)')
     .overflow('auto')
     .background(palette.current.canvas)
     .boxShadow(options.shadows.soft)
@@ -186,14 +186,14 @@ function registerModalMotionStyles(theme: ThemeMode) {
 function registerModalSizeStyles(theme: ThemeMode) {
   styleBuilder
     .select('.modal--size-sm .modal__panel', theme)
-    .width('min(92vw, 420px)')
+    .width('min(92vw, 26.25rem)')
   styleBuilder
     .select('.modal--size-md .modal__panel', theme)
-    .width('min(92vw, 640px)')
+    .width('min(92vw, 40rem)')
   styleBuilder
     .select('.modal--size-lg .modal__panel', theme)
-    .width('min(94vw, 860px)')
+    .width('min(94vw, 53.75rem)')
   styleBuilder
     .select('.modal--size-xl .modal__panel', theme)
-    .width('min(96vw, 1080px)')
+    .width('min(96vw, 67.5rem)')
 }

@@ -54,7 +54,7 @@ export function registerTopBarShellStyles(
     .backdropFilter('blur(0.625rem)')
     .borderTopWidth('0 !important')
     .borderRightWidth('0 !important')
-    .borderBottomWidth('0.0625rem !important')
+    .borderBottomWidth('1px !important')
     .borderBottomStyle('solid !important')
     .borderLeftWidth('0 !important')
     .borderRadius('0 !important')
@@ -69,7 +69,7 @@ export function registerTopBarShellStyles(
     .borderRadius(options.radii.pill)
     .display('grid')
     .placeItems('center')
-    .border('0.0625rem solid transparent')
+    .border('1px solid transparent')
     .background('transparent')
     .cursor('pointer')
     .position('relative')
@@ -115,7 +115,7 @@ function registerTopBarToggleVisibilityStyles(
     .display('grid')
   styleBuilder
     .select('.topbar__toggle:focus-visible', theme)
-    .outline(`0.125rem solid ${palette.current.border.focus}`)
+    .outline(`2px solid ${palette.current.border.focus}`)
 }
 
 function registerTopBarToggleGlyphStyles(theme: ThemeMode) {

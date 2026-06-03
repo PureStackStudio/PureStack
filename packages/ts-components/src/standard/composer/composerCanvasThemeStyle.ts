@@ -35,7 +35,7 @@ export function registerComposerThemeCanvasStyles({
     .select('.composer__editor img', theme)
     .maxWidth('100%')
     .height('auto')
-    .borderRadius('4px')
+    .borderRadius('0.25rem')
 
   styleBuilder
     .select('.composer__editor table', theme)

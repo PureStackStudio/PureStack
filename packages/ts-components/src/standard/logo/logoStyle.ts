@@ -31,11 +31,11 @@ const LOGO_DEFAULTS = {
     xl: '2.85rem',
   },
   subtitleInset: {
-    base: '0.5px',
-    sm: '0.5px',
-    md: '1px',
-    lg: '1px',
-    xl: '1px',
+    base: '0.03125rem',
+    sm: '0.03125rem',
+    md: '0.0625rem',
+    lg: '0.0625rem',
+    xl: '0.0625rem',
   },
 } as const
 
@@ -112,7 +112,7 @@ export function registerLogoShellStyles(
     .select('.site-logo__glyph-mark', theme)
     .position('absolute')
     .inset('30%')
-    .borderRadius('4px')
+    .borderRadius('0.25rem')
     .backgroundColor('currentColor')
 }
 
