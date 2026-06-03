@@ -153,18 +153,18 @@ function createEffect(core: NeonCore, mode: ThemeMode) {
   const info = createScale(core.info.button, 18, mode)
   const shadowColor = core.neutral.foreground
   const effect: ThemePalette['effect'] = {
-    glowPrimary: `0 0 28px ${rgba(accent.level3, 0.22)}`,
-    glowSecondary: `0 0 28px ${rgba(info.level3, 0.18)}`,
-    floatingShadow: `0 9px 23px ${rgba(shadowColor, 0.24)}`,
-    panelShadow: `0 7px 13px  ${rgba(shadowColor, 0.07)}`,
-    panelShadowStrong: `0 7px 13px ${rgba(shadowColor, 0.07)}`,
-    accentShadow: `0 16px 48px ${rgba(accent.level3, 0.22)}`,
-    interactiveShadow: `0 6px 14px ${rgba(shadowColor, 0.12)}`,
-    trackShadow: `inset 0 1px 0 ${rgba(text.level5, 0.05)}`,
-    thumbShadow: `0 12px 24px ${rgba(shadowColor, 0.18)}`,
+    glowPrimary: `0 0 1.75rem ${rgba(accent.level3, 0.22)}`,
+    glowSecondary: `0 0 1.75rem ${rgba(info.level3, 0.18)}`,
+    floatingShadow: `0 0.5625rem 1.4375rem ${rgba(shadowColor, 0.24)}`,
+    panelShadow: `0 0.4375rem 0.8125rem  ${rgba(shadowColor, 0.07)}`,
+    panelShadowStrong: `0 0.4375rem 0.8125rem ${rgba(shadowColor, 0.07)}`,
+    accentShadow: `0 1rem 3rem ${rgba(accent.level3, 0.22)}`,
+    interactiveShadow: `0 0.375rem 0.875rem ${rgba(shadowColor, 0.12)}`,
+    trackShadow: `inset 0 0.0625rem 0 ${rgba(text.level5, 0.05)}`,
+    thumbShadow: `0 0.75rem 1.5rem ${rgba(shadowColor, 0.18)}`,
     overlayScrim: rgba(shadowColor, 0.66),
-    focusGlow: `0 0 0 2px ${rgba(accent.level3, 0.42)}, 0 0 24px ${rgba(accent.level3, 0.18)}`,
-    insetShadow: `inset 0 10px 28px ${rgba(shadowColor, 0.34)}`,
+    focusGlow: `0 0 0 0.125rem ${rgba(accent.level3, 0.42)}, 0 0 1.5rem ${rgba(accent.level3, 0.18)}`,
+    insetShadow: `inset 0 0.625rem 1.75rem ${rgba(shadowColor, 0.34)}`,
   }
   return effect
 }
