@@ -16,6 +16,9 @@ import {
 
 export function registerDocLayoutStyles() {
   themes.forEach((theme, palette, options) => {
+    if (options.remSize) {
+      styleBuilder.select('html', theme).fontSize(options.remSize)
+    }
     if (options.mobileRemSize) {
       styleBuilder
         .select('html', theme)

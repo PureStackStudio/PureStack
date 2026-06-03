@@ -22,6 +22,7 @@ export const THEME_MODES = ['light', 'dark'] as const
 export type ThemeMode = (typeof THEME_MODES)[number]
 
 export interface ThemeOptions {
+  remSize: string
   mobileRemSize: string
   colors: Record<ThemeMode, ThemePalette>
   radii: {
@@ -44,6 +45,7 @@ export type ThemeOptionsInput = DeepPartial<ThemeOptions> & {
 }
 
 export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
+  remSize: '',
   mobileRemSize: '',
   colors: {
     ...DEFAULT_SKIN,
