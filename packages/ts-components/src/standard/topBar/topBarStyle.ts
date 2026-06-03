@@ -51,10 +51,10 @@ export function registerTopBarShellStyles(
     .top('0')
     .overflowX('clip')
     .zIndex(40)
-    .backdropFilter('blur(10px)')
+    .backdropFilter('blur(0.625rem)')
     .borderTopWidth('0 !important')
     .borderRightWidth('0 !important')
-    .borderBottomWidth('1px !important')
+    .borderBottomWidth('0.0625rem !important')
     .borderBottomStyle('solid !important')
     .borderLeftWidth('0 !important')
     .borderRadius('0 !important')
@@ -64,12 +64,12 @@ export function registerTopBarShellStyles(
 
   styleBuilder
     .select('.topbar__icon', theme)
-    .width('42px')
-    .height('42px')
+    .width('2.625rem')
+    .height('2.625rem')
     .borderRadius(options.radii.pill)
     .display('grid')
     .placeItems('center')
-    .border('1px solid transparent')
+    .border('0.0625rem solid transparent')
     .background('transparent')
     .cursor('pointer')
     .position('relative')
@@ -115,30 +115,30 @@ function registerTopBarToggleVisibilityStyles(
     .display('grid')
   styleBuilder
     .select('.topbar__toggle:focus-visible', theme)
-    .outline(`2px solid ${palette.current.border.focus}`)
+    .outline(`0.125rem solid ${palette.current.border.focus}`)
 }
 
 function registerTopBarToggleGlyphStyles(theme: ThemeMode) {
   styleBuilder
     .select('.topbar__toggle::before', theme)
     .content('""')
-    .width('18px')
-    .height('2px')
+    .width('1.125rem')
+    .height('0.125rem')
     .background('currentColor')
     .position('absolute')
-    .top('14px')
-    .left('12px')
+    .top('0.875rem')
+    .left('0.75rem')
     .transition('transform 200ms ease, top 200ms ease')
-    .boxShadow('0 6px 0 0 currentColor')
+    .boxShadow('0 0.375rem 0 0 currentColor')
   styleBuilder
     .select('.topbar__toggle::after', theme)
     .content('""')
-    .width('18px')
-    .height('2px')
+    .width('1.125rem')
+    .height('0.125rem')
     .background('currentColor')
     .position('absolute')
-    .top('26px')
-    .left('12px')
+    .top('1.625rem')
+    .left('0.75rem')
     .transition('transform 200ms ease, top 200ms ease')
 }
 
@@ -146,12 +146,12 @@ function registerTopBarToggleCheckedStateStyles(theme: ThemeMode) {
   styleBuilder.select('.doc-nav-toggle', theme).display('none')
   styleBuilder
     .select('.doc-nav-toggle:checked ~ .topbar .topbar__toggle::before', theme)
-    .top('20px')
+    .top('1.25rem')
     .transform('rotate(45deg)')
     .boxShadow('none')
   styleBuilder
     .select('.doc-nav-toggle:checked ~ .topbar .topbar__toggle::after', theme)
-    .top('20px')
+    .top('1.25rem')
     .transform('rotate(-45deg)')
 }
 

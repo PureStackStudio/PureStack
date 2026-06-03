@@ -16,7 +16,12 @@ import {
 
 export function registerDocLayoutStyles() {
   themes.forEach((theme, palette, options) => {
-    styleBuilder.select('html', theme).fontSize('16px')
+    if (options.mobileRemSize) {
+      styleBuilder
+        .select('html', theme)
+        .media(mediaBelow(BREAKPOINTS.md))
+        .fontSize(options.mobileRemSize)
+    }
     registerDocLayoutShellStyles(theme, palette, options)
     registerDocLayoutSidebarStyles(theme, options)
     registerDocLayoutResponsiveStyles(theme, options)
@@ -96,8 +101,8 @@ function registerDocLayoutShellStyles(
       docLayoutVars.preferredShellPaddingInlineEnd,
       `var(${docLayoutVars.userShellPaddingInlineEnd}, ${docLayoutVar('defaultShellPaddingInlineEnd')})`,
     )
-    .set(docLayoutVars.activeNavWidth, '0px')
-    .set(docLayoutVars.activeTocWidth, '0px')
+    .set(docLayoutVars.activeNavWidth, '0')
+    .set(docLayoutVars.activeTocWidth, '0')
     .set(docLayoutVars.activeRailWidth, docLayoutVar('defaultRailWidth'))
     .set(
       docLayoutVars.activeShellPaddingInlineStart,
@@ -188,11 +193,11 @@ function registerDocLayoutSidebarStyles(
   styleBuilder
     .select('.doc-sidebar', theme) // sync this with '.doc-toc' to get same behavior on both sides.
     .position('sticky')
-    .top('105px')
+    .top('6.5625rem')
     .width('100%')
     .zIndex(30)
     .alignSelf('start')
-    .maxHeight('calc(100vh - 130px)')
+    .maxHeight('calc(100vh - 8.125rem)')
     .overflow('hidden')
     .touchAction('none')
     .set('overscroll-behavior', 'none')
@@ -200,11 +205,11 @@ function registerDocLayoutSidebarStyles(
   styleBuilder
     .select('.template-doc--nav-drawer .doc-sidebar', theme)
     .position('fixed')
-    .top('105px')
-    .right('16px')
+    .top('6.5625rem')
+    .right('1rem')
     .left('auto')
     .width('fit-content')
-    .minWidth('300px')
+    .minWidth('18.75rem')
     .height('auto')
     .transform('translateX(120%)')
     .zIndex(40)
@@ -267,11 +272,11 @@ function registerDocLayoutResponsiveStyles(
     )
     .media(mediaBelow(BREAKPOINTS.lg))
     .position('fixed')
-    .top('78px')
+    .top('4.875rem')
     .left('auto')
     .right('0')
     .bottom('0')
-    .height('calc(100dvh - 78px)')
+    .height('calc(100dvh - 4.875rem)')
     .maxWidth('100vw')
     .maxHeight('none')
     .borderRadius('0')

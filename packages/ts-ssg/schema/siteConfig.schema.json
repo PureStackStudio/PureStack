@@ -191,6 +191,11 @@
                 "neon"
               ],
               "description": "Built-in skin preset. Applies both light and dark palettes before any explicit theme token overrides."
+            },
+            "mobileRemSize": {
+              "type": "string",
+              "description": "Optional root font-size applied below the medium breakpoint. Leave empty to keep the browser/default root size.",
+              "default": ""
             }
           }
         }

@@ -33,7 +33,7 @@ export function registerPageTocShellStyles(
     .borderRadius(options.radii.lg)
     .border('1px solid transparent')
     .apply(palette.applyFont(palette.font.size.body))
-    .maxHeight('calc(100vh - 130px)')
+    .maxHeight('calc(100vh - 8.125rem)')
     .overflowY('auto')
     .overflowX('hidden')
   styleBuilder
@@ -126,7 +126,7 @@ export function registerPageTocTargetStyles(
 ) {
   styleBuilder
     .select('.doc-content .page-toc__target', theme)
-    .scrollMarginTop('96px')
+    .scrollMarginTop('6rem')
     .padding('0')
     .borderRadius('0')
     .transition('background 200ms ease, color 200ms ease')
@@ -195,10 +195,10 @@ function registerPageTocSidebarBaseStyles(theme: ThemeMode) {
   styleBuilder
     .select('.doc-toc', theme)
     .position('sticky')
-    .top('105px')
+    .top('6.5625rem')
     .zIndex(30)
     .alignSelf('start')
-    .maxHeight('calc(100vh - 130px)')
+    .maxHeight('calc(100vh - 8.125rem)')
     .overflow('auto')
     .userSelect('none')
 
@@ -225,8 +225,8 @@ function registerPageTocMobileOverlayStyles(
   styleBuilder
     .select('.template-doc--has-toc .doc-toc', theme)
     .media(mediaMax(BREAKPOINTS.lg))
-    .top('78px')
-    .height('calc(100dvh - 78px)')
+    .top('4.875rem')
+    .height('calc(100dvh - 4.875rem)')
   styleBuilder
     .select('.template-doc--has-toc .doc-toc', theme)
     .media(mediaMax(BREAKPOINTS.toc))
@@ -286,7 +286,7 @@ function registerPageTocMobileOverlayStyles(
     .right('auto')
   styleBuilder
     .select('.page-toc__panel-toggle', theme)
-    .height('120px')
+    .height('7.5rem')
     .writingMode('vertical-rl')
     .textOrientation('mixed')
     .width(docLayoutVar('activeRailWidth'))
@@ -327,10 +327,10 @@ function registerPageTocDesktopCollapsedStyles(theme: ThemeMode) {
     .media(mediaAbove(BREAKPOINTS.toc))
     .width(docLayoutVar('activeRailWidth'))
     .position('fixed')
-    .top('105px')
+    .top('6.5625rem')
     .right('0')
     .left('auto')
-    .height('calc(100dvh - 105px)')
+    .height('calc(100dvh - 6.5625rem)')
     .maxHeight('none')
     .background('transparent')
     .boxShadow('none')

@@ -22,6 +22,7 @@ export const THEME_MODES = ['light', 'dark'] as const
 export type ThemeMode = (typeof THEME_MODES)[number]
 
 export interface ThemeOptions {
+  mobileRemSize: string
   colors: Record<ThemeMode, ThemePalette>
   radii: {
     sm: string
@@ -43,21 +44,22 @@ export type ThemeOptionsInput = DeepPartial<ThemeOptions> & {
 }
 
 export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
+  mobileRemSize: '',
   colors: {
     ...DEFAULT_SKIN,
   },
   radii: {
-    sm: '6px',
-    md: '8px',
-    lg: '12px',
-    pill: '999px',
+    sm: '0.375rem',
+    md: '0.5rem',
+    lg: '0.75rem',
+    pill: '62.4375rem',
   },
   typography: {
     baseFamily: "'Manrope', 'Segoe UI', system-ui, sans-serif",
   },
   shadows: {
-    soft: '0 10px 18px rgba(0, 0, 0, 0.18)',
-    strong: '0 20px 40px rgba(0, 0, 0, 0.4)',
+    soft: '0 0.625rem 1.125rem rgba(0, 0, 0, 0.18)',
+    strong: '0 1.25rem 2.5rem rgba(0, 0, 0, 0.4)',
   },
 }
 

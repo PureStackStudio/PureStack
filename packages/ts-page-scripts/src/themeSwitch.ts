@@ -20,6 +20,7 @@ if (themes.length > 0) {
   const storageKey = 'ts-ssg-theme'
   const root = document.documentElement
   let themeReady = false
+  let themeSwitchersReady = false
 
   function isValid(theme: string) {
     return themes.indexOf(theme) !== -1
@@ -86,6 +87,18 @@ if (themes.length > 0) {
   function disableLinks(links: HTMLLinkElement[]) {
     for (let i = 0; i < links.length; i += 1) links[i].disabled = true
   }
+  function markSwitchersReady() {
+    if (themeSwitchersReady) return
+    themeSwitchersReady = true
+    globalThis.requestAnimationFrame(() => {
+      globalThis.requestAnimationFrame(() => {
+        const switches = document.querySelectorAll('.theme-switcher')
+        for (let i = 0; i < switches.length; i += 1) {
+          switches[i].setAttribute('data-theme-switcher-ready', 'true')
+        }
+      })
+    })
+  }
   function syncSwitchers(theme: string) {
     const switches = document.querySelectorAll('.theme-switcher')
     for (let i = 0; i < switches.length; i += 1) {
@@ -93,12 +106,6 @@ if (themes.length > 0) {
       el.setAttribute('data-theme', theme)
       el.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false')
     }
-    globalThis.requestAnimationFrame(() => {
-      const after = document.querySelectorAll('.theme-switcher')
-      for (let i = 0; i < after.length; i += 1) {
-        after[i].setAttribute('data-theme-switcher-ready', 'true')
-      }
-    })
   }
   function scheduleSync(
     theme: string,
@@ -106,17 +113,24 @@ if (themes.length > 0) {
     disableAfter?: HTMLLinkElement[],
   ) {
     syncSwitchers(theme)
-    if (disableAfter && link && link.sheet != null) disableLinks(disableAfter)
-    if (link && link.sheet == null) {
-      link.addEventListener(
-        'load',
-        () => {
-          syncSwitchers(theme)
-          if (disableAfter) disableLinks(disableAfter)
-        },
-        { once: true },
-      )
+    if (!link) {
+      markSwitchersReady()
+      return
     }
+    if (link.sheet != null) {
+      if (disableAfter) disableLinks(disableAfter)
+      markSwitchersReady()
+      return
+    }
+    link.addEventListener(
+      'load',
+      () => {
+        syncSwitchers(theme)
+        if (disableAfter) disableLinks(disableAfter)
+        markSwitchersReady()
+      },
+      { once: true },
+    )
   }
 
   let current = resolvePreferred()

@@ -58,7 +58,7 @@ function registerSignInPanelPlacementStyles(theme: ThemeMode) {
     .top('100%')
     .right('0')
     .zIndex(60)
-    .minWidth('180px')
+    .minWidth('11.25rem')
 }
 
 function registerSignInAvatarStyles(theme: ThemeMode, options: ThemeOptions) {

@@ -77,7 +77,7 @@ export const docLayoutDefaults = {
    * Also used by page scripts as the fallback pointer edge-open threshold.
    * Flow: defaultRailWidth -> activeRailWidth.
    */
-  defaultRailWidth: '26px',
+  defaultRailWidth: '1.625rem',
   /**
    * Fallback start padding for the normal desktop doc shell.
    *

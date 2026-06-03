@@ -40,7 +40,7 @@ function registerHeadingStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.doc-content :where(h1, h2, h3, h4, h5, h6)', theme)
     .margin('0 0 0.6em')
-    .scrollMarginTop('96px')
+    .scrollMarginTop('6rem')
 
   styleBuilder
     .select('.doc-content :where(h1)', theme)
@@ -127,7 +127,7 @@ function registerInlineCodeStyles(
     .padding('0.15em 0.35em')
   styleBuilder
     .select('.doc-content :where(pre)', theme)
-    .padding('18px 20px')
+    .padding('1.125rem 1.25rem')
     .position('relative')
 }
 
@@ -150,8 +150,8 @@ function registerCopyButtonBaseStyles(
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button)', theme)
     .position('absolute')
-    .top('12px')
-    .right('12px')
+    .top('0.75rem')
+    .right('0.75rem')
     .zIndex(2)
     .width('2.15rem')
     .height('2.15rem')
@@ -370,7 +370,7 @@ function registerTableCellStyles(theme: ThemeMode, palette: ThemePalette) {
 
   styleBuilder
     .select('.doc-content :where(th, td)', theme)
-    .padding('11px 14px')
+    .padding('0.6875rem 0.875rem')
     .textAlign('left')
     .verticalAlign('top')
     .borderBottom(`1px solid ${palette.current.border.subtle}`)
@@ -394,7 +394,7 @@ function registerTableResponsiveStyles(theme: ThemeMode) {
   styleBuilder
     .select('.doc-content :where(th, td)', theme)
     .media(mediaMax(BREAKPOINTS.lg))
-    .padding('9px 11px')
+    .padding('0.5625rem 0.6875rem')
 }
 
 function registerHrStyles(theme: ThemeMode, palette: ThemePalette) {
