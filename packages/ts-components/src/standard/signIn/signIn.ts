@@ -150,7 +150,7 @@ function resolveSignIn(props: SignIn, head: unknown): SignIn {
   return {
     ...props,
     authEnabled: auth?.enabled === true,
-    signUpEnabled: auth?.signUp !== false,
+    signUpEnabled: auth?.signUp === true,
     resolvedIcon: computed(() => unref(props.icon) || DEFAULT_SIGN_IN_ICON),
     resolvedAccountIcon: computed(
       () => unref(props.accountIcon) || DEFAULT_ACCOUNT_ICON,
