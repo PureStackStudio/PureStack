@@ -154,7 +154,19 @@ export type {
   MetricItem,
   MetricStrip,
 } from './standard/landing/landing'
-export { defineLandingComponents } from './standard/landing/landing'
+export {
+  defineCodeShowcaseComponent,
+  defineComparisonColumnComponent,
+  defineComparisonFeatureComponent,
+  defineComparisonTableComponent,
+  defineCtaSectionComponent,
+  defineFeatureCardComponent,
+  defineLandingBandComponent,
+  defineLandingComponents,
+  defineLandingSectionComponent,
+  defineMetricItemComponent,
+  defineMetricStripComponent,
+} from './standard/landing/landing'
 export type {
   LineChart,
   LineChartCurve,

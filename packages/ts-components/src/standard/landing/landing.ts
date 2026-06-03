@@ -346,140 +346,174 @@ const ctaSectionTemplate = html`<Panel :tone="tone" :variant="variant || 'surfac
   </Grid>
 </Panel>`
 
-function defineLandingBandComponent() {
-  return defineComponent<LandingBand>(landingBandTemplate, {
-    props: [
-      'tone',
-      'variant',
-      'variantMode',
-      'image',
-      'imageFit',
-      'imagePosition',
-      'display',
-      'alignItems',
-      'justifyContent',
-      'height',
-      'marginTop',
-      'marginBottom',
-      'paddingTop',
-      'paddingBottom',
-      'topEdge',
-      'bottomEdge',
-      'edgeSize',
-      'topEdgeStart',
-      'bottomEdgeStart',
-    ],
-    context: (head) => resolveLandingBand(head.props),
-  })
+export function defineLandingBandComponent() {
+  return {
+    landingBand: defineComponent<LandingBand>(landingBandTemplate, {
+      props: [
+        'tone',
+        'variant',
+        'variantMode',
+        'image',
+        'imageFit',
+        'imagePosition',
+        'display',
+        'alignItems',
+        'justifyContent',
+        'height',
+        'marginTop',
+        'marginBottom',
+        'paddingTop',
+        'paddingBottom',
+        'topEdge',
+        'bottomEdge',
+        'edgeSize',
+        'topEdgeStart',
+        'bottomEdgeStart',
+      ],
+      context: (head) => resolveLandingBand(head.props),
+    }),
+  }
 }
 
-function defineLandingSectionComponent() {
-  return defineComponent<LandingSection>(landingSectionTemplate, {
-    props: [
-      'eyebrow',
-      'title',
-      'subtitle',
-      'titleTag',
-      'tone',
-      'variant',
-      'variantMode',
-      'columns',
-      'columnsLg',
-      'alignItems',
-    ],
-  })
+export function defineLandingSectionComponent() {
+  return {
+    landingSection: defineComponent<LandingSection>(landingSectionTemplate, {
+      props: [
+        'eyebrow',
+        'title',
+        'subtitle',
+        'titleTag',
+        'tone',
+        'variant',
+        'variantMode',
+        'columns',
+        'columnsLg',
+        'alignItems',
+      ],
+    }),
+  }
 }
 
-function defineFeatureCardComponent() {
-  return defineComponent<FeatureCard>(featureCardTemplate, {
-    props: ['eyebrow', 'title', 'summary', 'badge', 'icon', 'tone', 'variant'],
-  })
+export function defineFeatureCardComponent() {
+  return {
+    featureCard: defineComponent<FeatureCard>(featureCardTemplate, {
+      props: [
+        'eyebrow',
+        'title',
+        'summary',
+        'badge',
+        'icon',
+        'tone',
+        'variant',
+      ],
+    }),
+  }
 }
 
-function defineMetricStripComponent() {
-  return defineComponent<MetricStrip>(metricStripTemplate, {
-    props: ['tone', 'variant', 'columns', 'columnsSm', 'columnsLg'],
-  })
+export function defineMetricStripComponent() {
+  return {
+    metricStrip: defineComponent<MetricStrip>(metricStripTemplate, {
+      props: ['tone', 'variant', 'columns', 'columnsSm', 'columnsLg'],
+    }),
+  }
 }
 
-function defineMetricItemComponent() {
-  return defineComponent<MetricItem>(metricItemTemplate, {
-    props: ['label', 'value', 'detail', 'icon', 'tone'],
-  })
+export function defineMetricItemComponent() {
+  return {
+    metricItem: defineComponent<MetricItem>(metricItemTemplate, {
+      props: ['label', 'value', 'detail', 'icon', 'tone'],
+    }),
+  }
 }
 
-function defineCodeShowcaseComponent() {
-  return defineComponent<CodeShowcase>(codeShowcaseTemplate, {
-    props: [
-      'eyebrow',
-      'title',
-      'summary',
-      'language',
-      'resultTitle',
-      'resultMeta',
-      'tone',
-      'variant',
-    ],
-  })
+export function defineCodeShowcaseComponent() {
+  return {
+    codeShowcase: defineComponent<CodeShowcase>(codeShowcaseTemplate, {
+      props: [
+        'eyebrow',
+        'title',
+        'summary',
+        'language',
+        'resultTitle',
+        'resultMeta',
+        'tone',
+        'variant',
+      ],
+    }),
+  }
 }
 
-function defineComparisonTableComponent() {
-  return defineComponent<ComparisonTable>(comparisonTableTemplate, {
-    props: [
-      'eyebrow',
-      'title',
-      'subtitle',
-      'tone',
-      'variant',
-      'columns',
-      'columnsLg',
-    ],
-  })
+export function defineComparisonTableComponent() {
+  return {
+    comparisonTable: defineComponent<ComparisonTable>(comparisonTableTemplate, {
+      props: [
+        'eyebrow',
+        'title',
+        'subtitle',
+        'tone',
+        'variant',
+        'columns',
+        'columnsLg',
+      ],
+    }),
+  }
 }
 
-function defineComparisonColumnComponent() {
-  return defineComponent<ComparisonColumn>(comparisonColumnTemplate, {
-    props: ['title', 'summary', 'badge', 'icon', 'tone', 'variant'],
-  })
+export function defineComparisonColumnComponent() {
+  return {
+    comparisonColumn: defineComponent<ComparisonColumn>(
+      comparisonColumnTemplate,
+      {
+        props: ['title', 'summary', 'badge', 'icon', 'tone', 'variant'],
+      },
+    ),
+  }
 }
 
-function defineComparisonFeatureComponent() {
-  return defineComponent<ComparisonFeature>(comparisonFeatureTemplate, {
-    props: ['icon', 'tone'],
-  })
+export function defineComparisonFeatureComponent() {
+  return {
+    comparisonFeature: defineComponent<ComparisonFeature>(
+      comparisonFeatureTemplate,
+      {
+        props: ['icon', 'tone'],
+      },
+    ),
+  }
 }
 
-function defineCtaSectionComponent() {
-  return defineComponent<CtaSection>(ctaSectionTemplate, {
-    props: [
-      'eyebrow',
-      'title',
-      'subtitle',
-      'primaryLabel',
-      'primaryHref',
-      'primaryIcon',
-      'secondaryLabel',
-      'secondaryHref',
-      'secondaryIcon',
-      'meta',
-      'tone',
-      'variant',
-    ],
-  })
+export function defineCtaSectionComponent() {
+  return {
+    ctaSection: defineComponent<CtaSection>(ctaSectionTemplate, {
+      props: [
+        'eyebrow',
+        'title',
+        'subtitle',
+        'primaryLabel',
+        'primaryHref',
+        'primaryIcon',
+        'secondaryLabel',
+        'secondaryHref',
+        'secondaryIcon',
+        'meta',
+        'tone',
+        'variant',
+      ],
+    }),
+  }
 }
 
 export function defineLandingComponents() {
   return {
-    landingBand: defineLandingBandComponent(),
-    landingSection: defineLandingSectionComponent(),
-    featureCard: defineFeatureCardComponent(),
-    metricStrip: defineMetricStripComponent(),
-    metricItem: defineMetricItemComponent(),
-    codeShowcase: defineCodeShowcaseComponent(),
-    comparisonTable: defineComparisonTableComponent(),
-    comparisonColumn: defineComparisonColumnComponent(),
-    comparisonFeature: defineComparisonFeatureComponent(),
-    ctaSection: defineCtaSectionComponent(),
+    ...defineLandingBandComponent(),
+    ...defineLandingSectionComponent(),
+    ...defineFeatureCardComponent(),
+    ...defineMetricStripComponent(),
+    ...defineMetricItemComponent(),
+    ...defineCodeShowcaseComponent(),
+    ...defineComparisonTableComponent(),
+    ...defineComparisonColumnComponent(),
+    ...defineComparisonFeatureComponent(),
+    ...defineCtaSectionComponent(),
   }
 }
 
