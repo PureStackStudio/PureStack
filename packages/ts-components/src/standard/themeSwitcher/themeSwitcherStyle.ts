@@ -6,6 +6,8 @@ import {
   themes,
 } from '@purestack/ts-style'
 
+const THEME_SWITCHER_THUMB_OFFSET = '2.125rem'
+
 export function registerThemeSwitcherStyles() {
   themes.forEach((theme, palette, options) => {
     registerThemeSwitcherShellStyles(theme, palette, options)
@@ -26,8 +28,8 @@ export function registerThemeSwitcherShellStyles(
     .alignItems('center')
     .justifyContent('center')
     .gap('0')
-    .height('42px')
-    .minWidth('90px')
+    .height('2.625rem')
+    .minWidth('5.625rem')
     .padding('0')
     .borderRadius(options.radii.pill)
     .border('1px solid transparent')
@@ -64,13 +66,13 @@ export function registerThemeSwitcherTrackStyles(
     .select('.theme-switcher__thumb', theme)
     .position('absolute')
     .top('50%')
-    .left('10px')
-    .width('36px')
-    .height('36px')
+    .left('0.625rem')
+    .width('2.25rem')
+    .height('2.25rem')
     .borderRadius('50%')
     .background(palette.current.surface.rest.background)
     .boxShadow(palette.effect.thumbShadow)
-    .backdropFilter('blur(8px)')
+    .backdropFilter('blur(0.5rem)')
     .transform('translateY(-50%) translateX(0)')
     .display('grid')
     .placeItems('center')
@@ -79,11 +81,18 @@ export function registerThemeSwitcherTrackStyles(
     )
 
   styleBuilder
+    .select(
+      '.theme-switcher:not([data-theme-switcher-ready="true"]) .theme-switcher__thumb',
+      theme,
+    )
+    .transition('none')
+
+  styleBuilder
     .select('.theme-switcher__track-icon', theme)
     .position('absolute')
     .top('50%')
-    .width('18px')
-    .height('18px')
+    .width('1.125rem')
+    .height('1.125rem')
     .display('grid')
     .placeItems('center')
     .opacity(0.55)
@@ -91,11 +100,11 @@ export function registerThemeSwitcherTrackStyles(
 
   styleBuilder
     .select('.theme-switcher__track-icon--sun', theme)
-    .left('18px')
+    .left('1.125rem')
     .color(palette.current.button.hover.text)
   styleBuilder
     .select('.theme-switcher__track-icon--moon', theme)
-    .right('18px')
+    .right('1.125rem')
     .color(palette.current.button.hover.text)
 }
 
@@ -105,8 +114,8 @@ export function registerThemeSwitcherIconStyles(
 ) {
   styleBuilder
     .select('.theme-switcher__track-icon svg', theme)
-    .width('18px')
-    .height('18px')
+    .width('1.125rem')
+    .height('1.125rem')
     .stroke('currentColor')
     .fill('none')
     .strokeWidth('2')
@@ -121,16 +130,16 @@ export function registerThemeSwitcherIconStyles(
     .select('.theme-switcher__icon', theme)
     .display('grid')
     .placeItems('center')
-    .width('18px')
-    .height('18px')
+    .width('1.125rem')
+    .height('1.125rem')
     .position('relative')
     .zIndex(2)
     .gridArea('1 / 1')
     .transition('transform 160ms ease, opacity 160ms ease')
   styleBuilder
     .select('.theme-switcher__icon svg', theme)
-    .width('18px')
-    .height('18px')
+    .width('1.125rem')
+    .height('1.125rem')
     .stroke('currentColor')
     .fill('none')
     .strokeWidth('2')
@@ -156,23 +165,34 @@ export function registerThemeSwitcherIconStyles(
 export function registerThemeSwitcherActiveStateStyles(theme: ThemeMode) {
   styleBuilder
     .select(
-      `.theme-switcher[data-theme="${theme}"] .theme-switcher__track`,
+      `html[data-theme="${theme}"] .theme-switcher .theme-switcher__track`,
       theme,
     )
     .opacity(0.85)
+
+  styleBuilder
+    .select(
+      `html[data-theme="${theme}"] .theme-switcher .theme-switcher__thumb`,
+      theme,
+    )
+    .transform(
+      theme === 'dark'
+        ? `translateY(-50%) translateX(${THEME_SWITCHER_THUMB_OFFSET})`
+        : 'translateY(-50%) translateX(0)',
+    )
 
   const activeIcon = theme === 'dark' ? 'moon' : 'sun'
   const inactiveIcon = theme === 'dark' ? 'sun' : 'moon'
   styleBuilder
     .select(
-      `.theme-switcher[data-theme="${theme}"] .theme-switcher__icon--${activeIcon}`,
+      `html[data-theme="${theme}"] .theme-switcher .theme-switcher__icon--${activeIcon}`,
       theme,
     )
     .opacity(1)
     .transform('scale(1)')
   styleBuilder
     .select(
-      `.theme-switcher[data-theme="${theme}"] .theme-switcher__icon--${inactiveIcon}`,
+      `html[data-theme="${theme}"] .theme-switcher .theme-switcher__icon--${inactiveIcon}`,
       theme,
     )
     .opacity(0)

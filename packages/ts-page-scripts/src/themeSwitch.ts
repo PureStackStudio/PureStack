@@ -86,54 +86,32 @@ if (themes.length > 0) {
   function disableLinks(links: HTMLLinkElement[]) {
     for (let i = 0; i < links.length; i += 1) links[i].disabled = true
   }
-  function updateThumb(el: Element, theme: string, animate: boolean) {
-    const thumb = el.querySelector<HTMLElement>('.theme-switcher__thumb')
-    if (!thumb) return
-    const inset = 10
-    const size = 36
-    let max = (el as HTMLElement).clientWidth - inset * 2 - size
-    if (max < 0) max = 0
-    const translate = theme === 'dark' ? max : 0
-    thumb.style.transition =
-      animate === false
-        ? 'none'
-        : 'transform 260ms cubic-bezier(0.4, 0, 0.2, 1), background 200ms ease, box-shadow 200ms ease'
-    thumb.style.transform = `translateY(-50%) translateX(${translate}px)`
-    if (animate === false) {
-      globalThis.requestAnimationFrame(() => {
-        thumb.style.transition =
-          'transform 260ms cubic-bezier(0.4, 0, 0.2, 1), background 200ms ease, box-shadow 200ms ease'
-      })
-    }
-  }
-  function syncSwitchers(theme: string, animate: boolean) {
+  function syncSwitchers(theme: string) {
     const switches = document.querySelectorAll('.theme-switcher')
     for (let i = 0; i < switches.length; i += 1) {
       const el = switches[i]
       el.setAttribute('data-theme', theme)
       el.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false')
-      updateThumb(el, theme, animate)
     }
     globalThis.requestAnimationFrame(() => {
       const after = document.querySelectorAll('.theme-switcher')
       for (let i = 0; i < after.length; i += 1) {
-        updateThumb(after[i], theme, animate)
+        after[i].setAttribute('data-theme-switcher-ready', 'true')
       }
     })
   }
   function scheduleSync(
     theme: string,
     link: HTMLLinkElement | null,
-    animate: boolean,
     disableAfter?: HTMLLinkElement[],
   ) {
-    syncSwitchers(theme, animate)
+    syncSwitchers(theme)
     if (disableAfter && link && link.sheet != null) disableLinks(disableAfter)
     if (link && link.sheet == null) {
       link.addEventListener(
         'load',
         () => {
-          syncSwitchers(theme, animate)
+          syncSwitchers(theme)
           if (disableAfter) disableLinks(disableAfter)
         },
         { once: true },
@@ -163,7 +141,7 @@ if (themes.length > 0) {
   }
   function initSwitchers() {
     bindSwitchers()
-    scheduleSync(current, active, false)
+    scheduleSync(current, active)
   }
 
   if (document.readyState === 'loading') {
@@ -184,7 +162,7 @@ if (themes.length > 0) {
       current = theme
       const appliedNext = applyTheme(current, true)
       setStored(current)
-      scheduleSync(current, appliedNext.active, true, appliedNext.others)
+      scheduleSync(current, appliedNext.active, appliedNext.others)
     },
   }
 }
