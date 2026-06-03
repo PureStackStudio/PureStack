@@ -27,7 +27,7 @@ function buildFaviconSvg(config: SiteConfig, iconSvg: string) {
 
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}"${rootAttributes}>`,
-    `<rect width="24" height="24" rx="6" fill="none"/>`,
+    `<rect width="24" height="24" rx="6" fill="none" stroke="none"/>`,
     body,
     '</svg>',
   ].join('')
