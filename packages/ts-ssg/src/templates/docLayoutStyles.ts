@@ -104,8 +104,8 @@ function registerDocLayoutShellStyles(
       docLayoutVars.preferredShellPaddingInlineEnd,
       `var(${docLayoutVars.userShellPaddingInlineEnd}, ${docLayoutVar('defaultShellPaddingInlineEnd')})`,
     )
-    .set(docLayoutVars.activeNavWidth, '0')
-    .set(docLayoutVars.activeTocWidth, '0')
+    .set(docLayoutVars.activeNavWidth, '0px') // keep px!!, used in calc()
+    .set(docLayoutVars.activeTocWidth, '0px') // keep px!!, used in calc()
     .set(docLayoutVars.activeRailWidth, docLayoutVar('defaultRailWidth'))
     .set(
       docLayoutVars.activeShellPaddingInlineStart,
