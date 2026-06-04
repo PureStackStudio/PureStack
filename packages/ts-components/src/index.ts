@@ -140,6 +140,15 @@ export type {
 } from './standard/icon/icon'
 export { defineIconComponents } from './standard/icon/icon'
 export { registerIconStyles } from './standard/icon/iconStyle'
+export { defineCodeShowcaseComponent } from './standard/landing/codeShowcase'
+export { defineComparisonColumnComponent } from './standard/landing/comparisonColumn'
+export { defineComparisonFeatureComponent } from './standard/landing/comparisonFeature'
+export { defineComparisonTableComponent } from './standard/landing/comparisonTable'
+export { defineCtaSectionComponent } from './standard/landing/ctaSection'
+export { defineFeatureCardComponent } from './standard/landing/featureCard'
+export { defineLandingComponents } from './standard/landing/landing'
+export { defineLandingBandComponent } from './standard/landing/landingBand'
+export { defineLandingSectionComponent } from './standard/landing/landingSection'
 export type {
   CodeShowcase,
   ComparisonColumn,
@@ -151,22 +160,12 @@ export type {
   LandingBandEdge,
   LandingBandImageFit,
   LandingSection,
+  LandingTitleTag,
   MetricItem,
   MetricStrip,
-} from './standard/landing/landing'
-export {
-  defineCodeShowcaseComponent,
-  defineComparisonColumnComponent,
-  defineComparisonFeatureComponent,
-  defineComparisonTableComponent,
-  defineCtaSectionComponent,
-  defineFeatureCardComponent,
-  defineLandingBandComponent,
-  defineLandingComponents,
-  defineLandingSectionComponent,
-  defineMetricItemComponent,
-  defineMetricStripComponent,
-} from './standard/landing/landing'
+} from './standard/landing/landingTypes'
+export { defineMetricItemComponent } from './standard/landing/metricItem'
+export { defineMetricStripComponent } from './standard/landing/metricStrip'
 export type {
   LineChart,
   LineChartCurve,
