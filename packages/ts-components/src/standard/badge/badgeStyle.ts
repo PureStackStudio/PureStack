@@ -17,6 +17,5 @@ function registerBadgeBaseStyles(theme: ThemeMode, palette: ThemePalette) {
     .display('inline-flex')
     .alignItems('center')
     .padding('0.12em 0.75em')
-    .borderRadius('999px')
     .apply(palette.applyFont(palette.font.size.xxs, palette.font.weight.w700))
 }
