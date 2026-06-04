@@ -19,5 +19,4 @@ function registerBadgeBaseStyles(theme: ThemeMode, palette: ThemePalette) {
     .padding('0.12em 0.75em')
     .borderRadius('999px')
     .apply(palette.applyFont(palette.font.size.xxs, palette.font.weight.w700))
-    .textTransform('uppercase')
 }
