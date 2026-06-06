@@ -26,5 +26,7 @@
       "source.organizeImports": "explicit"
     }
   },
-  "files.eol": "\n"
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true
 }
