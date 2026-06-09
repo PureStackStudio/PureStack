@@ -44,13 +44,18 @@ const bestColors = {
     neutral: '#2c7c36',
     secondary: '#741033',
   },
-  test: {
+  puregate: {
     accent: '#de6310',
     neutral: '#000000',
     secondary: '#6d2727',
   },
+  zonetree: {
+    accent: '#14d79c',
+    neutral: '#294a40',
+    secondary: '#6d2727',
+  },
 }
-export const { accent, neutral, secondary } = bestColors.test
+export const { accent, neutral, secondary } = bestColors.puregate
 export const feature = '#cb166e'
 export const custom = '#e35508'
 export const info = '#15a9c0'
