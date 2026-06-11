@@ -123,9 +123,9 @@ const navMenuTemplate = html`<nav
 </nav>`
 
 function resolveNavItems(context?: TsSsgContext): NavItem[] {
-  const globalItems = context?.navigation?.global ?? []
-  if (globalItems.length > 0) return globalItems
-  return context?.navigation?.items ?? []
+  const items = context?.navigation?.items ?? []
+  if (items.length > 0) return items
+  return context?.navigation?.global ?? []
 }
 
 function normalizePath(url: string | undefined): string | undefined {

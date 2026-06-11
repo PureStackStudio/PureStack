@@ -251,6 +251,14 @@
           "description": "Sorting strategy for navigation items.",
           "default": "order"
         },
+        "roots": {
+          "type": "array",
+          "description": "Folder paths that act as navigation roots for their descendant pages.",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
         "tone": {
           "type": "string",
           "enum": [

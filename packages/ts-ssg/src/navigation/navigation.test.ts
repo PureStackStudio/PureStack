@@ -5,8 +5,9 @@ import path from 'node:path'
 import { disableLogger, getLogger, type Logger } from 'logpot'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
+import type { ContentFile } from '../discover/content'
 import { discoverContent } from '../discover/content'
-import { buildNavigation } from './navigation'
+import { buildNavigation, resolvePageNavigation } from './navigation'
 
 async function withTempDir<T>(worker: (dir: string) => Promise<T>) {
   const base = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-nav-'))
@@ -169,4 +170,61 @@ describe('navigation', () => {
       ])
     })
   })
+
+  it('uses configured navigation roots for descendant pages', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      await fs.mkdir(path.join(contentDir, 'docs', 'usage'), {
+        recursive: true,
+      })
+      await fs.writeFile(
+        path.join(contentDir, 'index.mdx'),
+        `---\ntitle: Home\n---\n# Home\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'docs', 'index.mdx'),
+        `---\ntitle: Docs\n---\n# Docs\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'docs', 'getting-started.mdx'),
+        `---\ntitle: Getting Started\n---\n# Getting Started\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'docs', 'usage', 'transactions.mdx'),
+        `---\ntitle: Transactions\n---\n# Transactions\n`,
+        'utf8',
+      )
+
+      const files = await discoverContent(contentDir)
+      const nav = await buildNavigation(contentDir, files, {
+        maxDepth: 20,
+        roots: ['docs'],
+      })
+      const transactions = findContentFile(files, 'docs/usage/transactions.mdx')
+      const pageNav = resolvePageNavigation(nav, transactions)
+
+      expect(pageNav?.folder).toBe('docs/usage')
+      expect(pageNav?.root).toBe('docs')
+      expect(pageNav?.items.map((item) => item.title)).toEqual([
+        'Docs',
+        'Getting Started',
+        'Usage',
+      ])
+      expect(pageNav?.items.find((item) => item.title === 'Usage')).toEqual({
+        title: 'Usage',
+        children: [{ title: 'Transactions', url: '/docs/usage/transactions/' }],
+      })
+    })
+  })
 })
+
+function findContentFile(files: ContentFile[], relPath: string): ContentFile {
+  const file = files.find(
+    (entry) => entry.relPath.replaceAll('\\', '/') === relPath,
+  )
+  if (!file) throw new Error(`Missing content file: ${relPath}`)
+  return file
+}

@@ -9,6 +9,8 @@ export interface PageOutlineItem {
 }
 
 export interface TsSsgNavigation {
+  folder?: string
+  root?: string
   global?: NavItem[]
   items?: NavItem[]
 }

@@ -19,6 +19,7 @@ export interface ResolvedNavigationConfig {
   maxDepth: number
   includeIndex: boolean
   sortBy: NavigationSort
+  roots: string[]
   tone: SemanticTone
 }
 
@@ -59,6 +60,7 @@ const DEFAULT_NAV_CONFIG: ResolvedNavigationConfig = {
   maxDepth: 1,
   includeIndex: true,
   sortBy: 'order',
+  roots: [],
   tone: 'neutral',
 }
 
@@ -83,8 +85,9 @@ export function resolveNavigationConfig(
       ? merged.includeIndex
       : DEFAULT_NAV_CONFIG.includeIndex
   const sortBy = resolveSort(merged.sortBy)
+  const roots = resolveNavigationRoots(merged.roots)
   const tone = pickSemanticTone(merged.tone) ?? DEFAULT_NAV_CONFIG.tone
-  return { mode, navFileName, maxDepth, includeIndex, sortBy, tone }
+  return { mode, navFileName, maxDepth, includeIndex, sortBy, roots, tone }
 }
 
 export async function buildNavigation(
@@ -165,14 +168,23 @@ export function resolvePageNavigation(
 ): PageNavigation | undefined {
   if (!tree) return undefined
   const folder = resolveFolderKey(file.relPath)
-  const items = tree.byFolder[folder] ?? []
+  const root = resolveNavigationRoot(folder, tree.config.roots)
+  const items = tree.byFolder[root] ?? tree.byFolder[folder] ?? []
   return {
     mode: tree.mode,
     folder,
+    root,
     items,
     global: tree.global,
     tone: pickSemanticTone(frontmatter?.nav?.tone) ?? tree.config.tone,
   }
+}
+
+export function resolveNavigationRoot(folder: string, roots: string[]) {
+  for (const root of roots) {
+    if (folder === root || folder.startsWith(`${root}/`)) return root
+  }
+  return folder
 }
 
 export function resolveFolderKey(relPath: string) {
@@ -554,6 +566,33 @@ function resolveMaxDepth(value: number | undefined) {
 function resolveSort(value: NavigationSort | undefined): NavigationSort {
   if (value === 'order' || value === 'title' || value === 'path') return value
   return DEFAULT_NAV_CONFIG.sortBy
+}
+
+function resolveNavigationRoots(value: unknown): string[] {
+  if (!Array.isArray(value)) return DEFAULT_NAV_CONFIG.roots
+  const roots = new Set<string>()
+  for (const entry of value) {
+    const root = normalizeNavigationRoot(entry)
+    if (root) roots.add(root)
+  }
+  return [...roots].sort((a, b) => b.length - a.length)
+}
+
+function normalizeNavigationRoot(value: unknown) {
+  if (typeof value !== 'string') return undefined
+  const trimmed = value.trim().replaceAll('\\', '/').replace(/^\/+|\/+$/g, '')
+  if (!trimmed) return undefined
+  const normalized = path.posix.normalize(trimmed)
+  if (
+    normalized === '.' ||
+    normalized === '..' ||
+    normalized.startsWith('../')
+  ) {
+    throw new Error(
+      `Invalid navigation root "${value}". Navigation roots must stay inside the content root.`,
+    )
+  }
+  return normalized
 }
 
 function resolveString(value: unknown) {

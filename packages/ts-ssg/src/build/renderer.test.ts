@@ -316,6 +316,7 @@ describe('renderPage consent integration', () => {
       navigation: {
         mode: 'auto',
         folder: '',
+        root: '',
         items: [{ title: 'Home', url: '/' }],
         global: [],
         tone: 'neutral',

@@ -9,6 +9,7 @@ export interface NavigationConfig {
   maxDepth?: number
   includeIndex?: boolean
   sortBy?: NavigationSort
+  roots?: string[]
   tone?: SemanticTone
 }
 
@@ -26,6 +27,7 @@ export interface NavItem {
 export interface PageNavigation {
   mode: NavigationMode
   folder: string
+  root: string
   items: NavItem[]
   global: NavItem[]
   tone: SemanticTone
