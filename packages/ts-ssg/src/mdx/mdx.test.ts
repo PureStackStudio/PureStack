@@ -78,6 +78,19 @@ describe('compileMdxToHtml', () => {
     expect(compiledHtml).toContain('&#x3C;Btn @click="save">')
   })
 
+  it('preserves prose spaces around inline code spans', () => {
+    const source =
+      'through `BlockCacheLifeTime` and `InactiveBlockCacheCleanupInterval`.'
+
+    const compiledHtml = compileMdx(source, {
+      highlighter: createHljsHighlighter(),
+    }).bodyHtml
+
+    expect(compiledHtml).toContain('through <code')
+    expect(compiledHtml).toContain('</code> and <code')
+    expect(compiledHtml).toContain('class="shiki shiki-inline shiki-themes"')
+  })
+
   it('renders a custom markup component at root level', async () => {
     const source = '<CustomComponent data-id="x" />\n\nParagraph text.'
     const html = renderApp(compileMdxToHtml(source), {
