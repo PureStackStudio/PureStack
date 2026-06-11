@@ -1,6 +1,6 @@
 import path from 'node:path'
 import type { SiteConfig } from '@purestack/ts-common'
-import { isContentFile } from '../../discover/content'
+import { DEFAULT_NAV_FILENAME, isContentFile } from '../../discover/content'
 import { copyStaticAsset } from '../assets'
 import {
   type AssetManifestEntry,
@@ -83,6 +83,10 @@ export class IncrementalChangeApplier {
   }
 
   private async applyChangeState(state: ChangeState): Promise<void> {
+    if (this.isNavigationFileChange(state.relPath)) {
+      await this.handleNavigationFileChange(state)
+      return
+    }
     if (!state.signature) {
       await this.handleMissingSignatureChange(state)
       return
@@ -110,6 +114,41 @@ export class IncrementalChangeApplier {
     return (
       Boolean(state.contentEntry) || isContentFile(state.relPath, state.ext)
     )
+  }
+
+  private isNavigationFileChange(relPath: string) {
+    const basename = path.basename(relPath).toUpperCase()
+    return basename === DEFAULT_NAV_FILENAME.toUpperCase()
+  }
+
+  private async handleNavigationFileChange(state: ChangeState) {
+    if (state.assetEntry) {
+      await this.removeStaticAssetManifestEntry(state)
+    }
+
+    if (this.input.config.navigation.mode !== 'none') {
+      const contentFiles =
+        await this.input.contentState.refreshNavigationAndMarkDirty()
+      await this.input.contentState.rebuildContentRelPaths(
+        contentFiles.map((file) => file.relPath),
+        state.result,
+      )
+      await this.input.persistManifest()
+      return
+    }
+
+    if (state.assetEntry) {
+      await this.input.persistManifest()
+    }
+  }
+
+  private async removeStaticAssetManifestEntry(state: ChangeState) {
+    if (!state.assetEntry) return
+    const manifest = this.input.getManifest()
+    await removeFile(state.assetEntry.outPath)
+    delete manifest.assets[state.relPath]
+    this.input.scriptEntrypoints.removeTrackedEntrypoint(state.relPath)
+    state.result.deletedAssets += 1
   }
 
   private async rebuildNavigationForChange(

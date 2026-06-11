@@ -20,11 +20,13 @@ export interface StaticAssetFile {
 const CONTENT_EXTS = new Set(['.md', '.mdx'])
 export const DEFAULT_FOOTER_FILENAME = 'footer.mdx'
 export const DEFAULT_HEADER_FILENAME = 'header.mdx'
+export const DEFAULT_NAV_FILENAME = '_nav.json'
 export const IGNORED_STATIC_CONTENT_FILENAMES = [
   'AGENTS.MD',
   SITE_CONFIG_FILENAME,
   DEFAULT_FOOTER_FILENAME,
   DEFAULT_HEADER_FILENAME,
+  DEFAULT_NAV_FILENAME,
   'tsconfig.json',
 ] as const
 export const IGNORED_STATIC_CONTENT_EXTENSIONS = ['.ts'] as const

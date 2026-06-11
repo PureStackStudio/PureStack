@@ -101,6 +101,37 @@ describe('static assets', () => {
     }
   })
 
+  it('does not copy navigation source files', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-assets-'))
+    const outDir = path.join(root, 'dist')
+    try {
+      await writeFile(path.join(root, '_nav.json'), '{"items":[]}')
+      await writeFile(path.join(root, 'docs', '_nav.json'), '{"items":[]}')
+      await writeFile(path.join(root, 'docs', 'data.json'), '{"public":true}')
+
+      const result = await copyStaticAssets(root, outDir)
+
+      expect(result.assets).toBe(1)
+      expect(hasAsset(result, '_nav.json', '.json')).toBe(false)
+      expect(hasAsset(result, path.join('docs', '_nav.json'), '.json')).toBe(
+        false,
+      )
+      expect(hasAsset(result, path.join('docs', 'data.json'), '.json')).toBe(
+        true,
+      )
+
+      await expect(fs.stat(path.join(outDir, '_nav.json'))).rejects.toBeTruthy()
+      await expect(
+        fs.stat(path.join(outDir, 'docs', '_nav.json')),
+      ).rejects.toBeTruthy()
+      await expect(
+        fs.stat(path.join(outDir, 'docs', 'data.json')),
+      ).resolves.toBeTruthy()
+    } finally {
+      await fs.rm(root, { recursive: true, force: true })
+    }
+  })
+
   it('minifies compiled ts assets when requested', async () => {
     const root = await fs.mkdtemp(
       path.join(process.cwd(), '.tmp-ts-ssg-assets-'),
