@@ -121,6 +121,26 @@ describe('resolveSiteConfig sitemap', () => {
     expect(config.html.minify).toBe(false)
   })
 
+  it('provides page toc defaults and accepts overrides', () => {
+    expect(resolveSiteConfig({ rootDir: process.cwd() }).pageToc).toEqual({
+      enabled: true,
+      tone: 'neutral',
+    })
+
+    const config = resolveSiteConfig({
+      rootDir: process.cwd(),
+      pageToc: {
+        enabled: false,
+        tone: 'accent',
+      },
+    })
+
+    expect(config.pageToc).toEqual({
+      enabled: false,
+      tone: 'accent',
+    })
+  })
+
   it('provides auth defaults', () => {
     const config = resolveSiteConfig({ rootDir: process.cwd() })
     expect(config.auth).toEqual({
@@ -483,6 +503,7 @@ describe('resolveSiteConfig sitemap', () => {
           mdx: {
             highlighter: 'highlightjs',
             disableHighlighter: false,
+            compileMdAsMdx: false,
           },
         }),
       )
@@ -490,6 +511,7 @@ describe('resolveSiteConfig sitemap', () => {
       const config = resolveSiteConfig({ rootDir, contentDir })
       expect(config.mdx.highlighter).toBe('highlightjs')
       expect(config.mdx.disableHighlighter).toBe(false)
+      expect(config.mdx.compileMdAsMdx).toBe(false)
     } finally {
       fs.rmSync(tempRoot, { recursive: true, force: true })
     }
@@ -499,6 +521,7 @@ describe('resolveSiteConfig sitemap', () => {
     const config = resolveSiteConfig({ rootDir: process.cwd() })
     expect(config.mdx.highlighter).toBe('highlightjs')
     expect(config.mdx.disableHighlighter).toBe(false)
+    expect(config.mdx.compileMdAsMdx).toBe(true)
   })
 
   it('prefers input mdx over siteConfig file', () => {
@@ -513,6 +536,7 @@ describe('resolveSiteConfig sitemap', () => {
           mdx: {
             highlighter: 'shiki',
             disableHighlighter: true,
+            compileMdAsMdx: false,
           },
         }),
       )
@@ -523,11 +547,13 @@ describe('resolveSiteConfig sitemap', () => {
         mdx: {
           highlighter: 'highlightjs',
           disableHighlighter: false,
+          compileMdAsMdx: true,
         },
       })
 
       expect(config.mdx.highlighter).toBe('highlightjs')
       expect(config.mdx.disableHighlighter).toBe(false)
+      expect(config.mdx.compileMdAsMdx).toBe(true)
     } finally {
       fs.rmSync(tempRoot, { recursive: true, force: true })
     }

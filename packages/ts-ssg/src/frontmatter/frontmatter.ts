@@ -10,22 +10,29 @@ import matter from 'gray-matter'
 export function parseFrontmatterSource(
   source: string,
   sourceLabel?: string,
+  options?: NormalizeFrontmatterOptions,
 ): ParsedFrontmatterSource {
   const parsed = matter(source)
   return {
     body: parsed.content,
-    frontmatter: normalizeFrontmatter(parsed.data, sourceLabel),
+    frontmatter: normalizeFrontmatter(parsed.data, sourceLabel, options),
   }
+}
+
+export interface NormalizeFrontmatterOptions {
+  defaultShowToc?: boolean
 }
 
 export function normalizeFrontmatter(
   data: unknown,
   sourceLabel?: string,
+  options: NormalizeFrontmatterOptions = {},
 ): PageFrontmatter {
   const raw = isPlainObject(data) ? data : {}
   const rawLayout = resolveObject(raw, 'layout') ?? {}
   const rawNav = resolveObject(raw, 'nav') ?? {}
   const showFooter = resolveKey(rawLayout, 'showFooter')
+  const showToc = resolveKey(rawLayout, 'showToc')
 
   return {
     ...raw,
@@ -52,7 +59,10 @@ export function normalizeFrontmatter(
         sourceLabel,
       ),
       fullWidth: resolveKey(rawLayout, 'fullWidth') === true,
-      showToc: resolveKey(rawLayout, 'showToc') === true,
+      showToc:
+        typeof showToc === 'boolean'
+          ? showToc
+          : options.defaultShowToc === true,
       showNav: resolveKey(rawLayout, 'showNav') !== false,
       tocTone: pickSemanticTone(resolveKey(rawLayout, 'tocTone')),
       tocCollapsed: resolveKey(rawLayout, 'tocCollapsed') === true,

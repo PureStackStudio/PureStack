@@ -116,7 +116,7 @@ export interface FrontmatterLayoutOptions {
    * The TOC appears only when this flag is `true` and the page actually has
    * extracted headings.
    *
-   * Defaults to `false`.
+   * Defaults to the site-level `pageToc.enabled` setting.
    */
   showToc: boolean
 

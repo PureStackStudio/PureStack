@@ -106,7 +106,9 @@ export async function renderPageFromFile(
   const outPath = resolveOutPath(context.config.outDir, file)
   try {
     const source = await readSource(file.absPath)
-    const parsedContent = parseFrontmatterSource(source, file.relPath)
+    const parsedContent = parseFrontmatterSource(source, file.relPath, {
+      defaultShowToc: context.config.pageToc.enabled,
+    })
     const navigation = resolvePageNavigation(
       context.navigation,
       file,
@@ -120,7 +122,12 @@ export async function renderPageFromFile(
     const headConfig = resolveHeadConfig(parsedContent.frontmatter, {
       siteTitle: context.config.siteTitle,
     })
-    const compiled = compilePageContent(file, parsedContent.body, context.mdx)
+    const compiled = compilePageContent(
+      file,
+      parsedContent.body,
+      context.mdx,
+      context.config.mdx.compileMdAsMdx,
+    )
     const template = parsedContent.frontmatter.template
     const scriptEntrypoints = new Set<string>()
     const htmlShell = await renderPageShell({
@@ -179,7 +186,7 @@ export async function resolveFooterHtmlByDirectory(
   mdxOptions: MdxRenderOptions | undefined,
 ): Promise<Map<string, string>> {
   const footers = await discoverDefaultFooters(config.contentDir)
-  return await resolveSpecialHtmlByDirectory(footers, mdxOptions)
+  return await resolveSpecialHtmlByDirectory(config, footers, mdxOptions)
 }
 
 export async function resolveHeaderHtmlByDirectory(
@@ -187,10 +194,11 @@ export async function resolveHeaderHtmlByDirectory(
   mdxOptions: MdxRenderOptions | undefined,
 ): Promise<Map<string, string>> {
   const headers = await discoverDefaultHeaders(config.contentDir)
-  return await resolveSpecialHtmlByDirectory(headers, mdxOptions)
+  return await resolveSpecialHtmlByDirectory(config, headers, mdxOptions)
 }
 
 async function resolveSpecialHtmlByDirectory(
+  config: SiteConfig,
   files: ContentFile[],
   mdxOptions: MdxRenderOptions | undefined,
 ): Promise<Map<string, string>> {
@@ -198,7 +206,12 @@ async function resolveSpecialHtmlByDirectory(
   for (const file of files) {
     const source = await readSource(file.absPath)
     const parsedContent = parseFrontmatterSource(source, file.relPath)
-    const compiled = compilePageContent(file, parsedContent.body, mdxOptions)
+    const compiled = compilePageContent(
+      file,
+      parsedContent.body,
+      mdxOptions,
+      config.mdx.compileMdAsMdx,
+    )
     const dirKey = toDirKey(file.relPath)
     htmlByDir.set(dirKey, compiled.bodyHtml)
   }
@@ -221,13 +234,19 @@ function compilePageContent(
   file: ContentFile,
   sourceBody: string,
   mdxOptions: MdxRenderOptions | undefined,
+  compileMdAsMdx: boolean,
 ) {
-  return file.ext === '.mdx'
-    ? compileMdx(sourceBody, {
-        ...(mdxOptions ?? {}),
-        sourceRelPath: file.relPath,
-      })
-    : compileMarkdown(sourceBody, mdxOptions)
+  const shouldCompileMdAsMdx = mdxOptions?.compileMdAsMdx ?? compileMdAsMdx
+  if (file.ext === '.mdx' || shouldCompileMdAsMdx) {
+    return compileMdx(sourceBody, {
+      ...(mdxOptions ?? {}),
+      sourceRelPath: file.relPath,
+    })
+  }
+  return compileMarkdown(sourceBody, {
+    ...(mdxOptions ?? {}),
+    sourceRelPath: file.relPath,
+  })
 }
 
 type RenderPageShellInput = {

@@ -272,6 +272,11 @@
       "description": "Page table-of-contents component configuration.",
       "additionalProperties": false,
       "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Default table-of-contents behavior for pages. Individual pages can override it with frontmatter layout.showToc.",
+          "default": true
+        },
         "tone": {
           "type": "string",
           "enum": [
@@ -634,6 +639,11 @@
           "type": "boolean",
           "description": "Disable syntax highlighting entirely.",
           "default": false
+        },
+        "compileMdAsMdx": {
+          "type": "boolean",
+          "description": "Compile .md content files with the MDX/Regor markup pipeline.",
+          "default": true
         }
       }
     },

@@ -55,7 +55,7 @@ const bestColors = {
     secondary: '#6d2727',
   },
 }
-export const { accent, neutral, secondary } = bestColors.puregate
+export const { accent, neutral, secondary } = bestColors.zonetree
 export const feature = '#cb166e'
 export const custom = '#e35508'
 export const info = '#15a9c0'

@@ -53,6 +53,34 @@ describe('frontmatter', () => {
     expect(normalized.layout.showNav).toBe(true)
   })
 
+  it('uses the configured toc default when frontmatter omits showToc', () => {
+    const disabled = normalizeFrontmatter({}, undefined, {
+      defaultShowToc: false,
+    })
+    const enabled = normalizeFrontmatter({}, undefined, {
+      defaultShowToc: true,
+    })
+
+    expect(disabled.layout.showToc).toBe(false)
+    expect(enabled.layout.showToc).toBe(true)
+  })
+
+  it('prefers explicit frontmatter showToc over the configured default', () => {
+    const enabledByPage = normalizeFrontmatter(
+      { layout: { showToc: true } },
+      undefined,
+      { defaultShowToc: false },
+    )
+    const disabledByPage = normalizeFrontmatter(
+      { layout: { showToc: false } },
+      undefined,
+      { defaultShowToc: true },
+    )
+
+    expect(enabledByPage.layout.showToc).toBe(true)
+    expect(disabledByPage.layout.showToc).toBe(false)
+  })
+
   it('parses frontmatter source with mixed-case keys', () => {
     const source = [
       '---',

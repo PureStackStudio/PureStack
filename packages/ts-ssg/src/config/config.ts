@@ -146,6 +146,7 @@ function resolvePageTocConfig(
   file?: DeepPartial<PageTocConfig>,
 ): PageTocConfig {
   return {
+    enabled: pickBoolean(input?.enabled, file?.enabled, true),
     tone: pickSemanticTone(input?.tone, file?.tone) ?? 'neutral',
   }
 }
@@ -450,6 +451,7 @@ function resolveMdxConfig(
     highlighter: resolveMdxHighlighter(input?.highlighter, file?.highlighter),
     disableHighlighter:
       input?.disableHighlighter ?? file?.disableHighlighter ?? false,
+    compileMdAsMdx: input?.compileMdAsMdx ?? file?.compileMdAsMdx ?? true,
   }
 }
 

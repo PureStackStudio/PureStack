@@ -89,7 +89,10 @@ export async function resolveMdxBuildOptions(
   mdx: Partial<SiteMdxConfig> | undefined,
 ): Promise<MdxRenderOptions> {
   const highlighter = await resolveHighlighter(mdx)
-  return { highlighter }
+  return {
+    highlighter,
+    compileMdAsMdx: mdx?.compileMdAsMdx ?? true,
+  }
 }
 
 async function resolveHighlighter(

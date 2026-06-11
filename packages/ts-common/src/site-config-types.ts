@@ -29,6 +29,7 @@ export interface SiteConfig {
 }
 
 export interface PageTocConfig {
+  enabled: boolean
   tone: SemanticTone
 }
 
@@ -124,6 +125,7 @@ export interface PagefindConfig {
 export interface SiteMdxConfig {
   highlighter: 'shiki' | 'highlightjs'
   disableHighlighter: boolean
+  compileMdAsMdx: boolean
 }
 
 export type SiteStyleConfigInput = DeepPartial<
