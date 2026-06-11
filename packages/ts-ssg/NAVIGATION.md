@@ -14,6 +14,7 @@ into page templates.
 
 ```ts
 export interface NavItem {
+  id?: string
   title: string
   url?: string
   children?: NavItem[]
@@ -26,12 +27,15 @@ export interface NavItem {
 export interface PageNavigation {
   mode: 'auto' | 'custom' | 'hybrid' | 'none'
   folder: string
+  root: string
   items: NavItem[]
   global: NavItem[]
 }
 ```
 
-`items` is the current folder’s menu. `global` maps to the root folder menu.
+`folder` is the page's physical content folder. `root` is the configured
+navigation root selected for that page. `items` is the selected menu for the
+page; `global` maps to the content root menu.
 
 ## Configuration
 
@@ -45,6 +49,7 @@ await buildSite({
     maxDepth: 2,
     includeIndex: true,
     sortBy: 'order',
+    roots: ['docs'],
   },
 })
 ```
@@ -57,7 +62,8 @@ await buildSite({
     "navFileName": "_nav.json",
     "maxDepth": 2,
     "includeIndex": true,
-    "sortBy": "order"
+    "sortBy": "order",
+    "roots": ["docs"]
   }
 }
 ```
@@ -68,6 +74,12 @@ Defaults:
 - `maxDepth`: `1`
 - `includeIndex`: `true`
 - `sortBy`: `order`
+- `roots`: `[]`
+
+`roots` marks folders that act as navigation roots for descendant pages. With
+`roots: ["docs"]`, both `docs/index.md` and `docs/usage/transactions.md` use
+the `docs` menu as their page navigation. Without a matching root, the page's
+own folder is used.
 
 ## Dynamic (auto) menus
 
@@ -90,7 +102,8 @@ that page becomes the group item and receives the remaining children.
 ## Custom menus
 
 Custom menus are defined per folder using `_nav.json` (or a configured filename).
-The file can be either an array of items or an object with `mode` and `items`.
+The file can be either an array of items or an object with `mode`, `items`, and
+`sequence`.
 
 ```json
 [
@@ -102,9 +115,19 @@ The file can be either an array of items or an object with `mode` and `items`.
 ```json
 {
   "mode": "merge",
+  "sequence": [
+    "index.md",
+    "github",
+    "usage/",
+    "usage/opening-a-tree.md",
+    "usage/transactions.md"
+  ],
   "items": [
-    { "title": "Home", "url": "/" },
-    { "title": "External Docs", "url": "https://example.com" }
+    {
+      "id": "github",
+      "title": "GitHub",
+      "url": "https://github.com/example/project"
+    }
   ]
 }
 ```
@@ -112,6 +135,27 @@ The file can be either an array of items or an object with `mode` and `items`.
 `mode` values:
 - `override`: ignore auto items and use only custom items
 - `merge`: merge auto + custom and then sort
+
+`sequence` is a lightweight ordering overlay for the final mixed menu. Entries
+are resolved relative to the folder containing the nav file. The builder first
+combines auto items and custom `items` according to `mode`, then moves sequence
+matches to the front in the listed order. Unmatched items are appended using
+normal `navigation.sortBy`.
+
+Sequence is hierarchical. A `docs/_nav.json` entry such as
+`usage/transactions.md` helps place the `Usage` group in the `docs` menu and is
+also inherited by `docs/usage`, where it orders the `Transactions` page among
+that group's children. A nested `docs/usage/_nav.json` can still refine the
+`usage` folder by defining its own `sequence`.
+
+Sequence entries can match:
+
+- auto pages by source path, route, basename, or extensionless name, such as
+  `getting-started.md`, `getting-started`, or `/docs/getting-started/`
+- auto folders by folder path or route, such as `usage/` or `/docs/usage/`
+- custom items by `id`, URL, title, or title slug
+
+Unknown sequence entries are ignored, so a stale entry does not break the build.
 
 Relative URLs inside `_nav.json` resolve from the folder that contains the file:
 

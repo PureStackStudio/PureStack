@@ -219,6 +219,8 @@ Exact behavior by mode (from `buildNavigation` + `resolveBaseFolderItems`):
 
 Nav file name is configurable via `navigation.navFileName` and defaults to `_nav.json`.
 Nav files are discovered per folder only in `custom` and `hybrid` modes.
+`navigation.roots` can mark folders as nav roots for descendant pages, e.g.
+`"roots": ["docs"]` makes every page under `docs/` use the `docs` menu.
 
 Each nav file may be:
 
@@ -228,8 +230,9 @@ Each nav file may be:
 ```json
 {
   "mode": "merge",
+  "sequence": ["index.md", "github", "guide/", "guide/install.md"],
   "items": [
-    { "title": "Overview", "url": "/" },
+    { "id": "github", "title": "GitHub", "url": "https://github.com/acme/docs" },
     {
       "title": "Guide",
       "url": "/guide/",
@@ -240,7 +243,14 @@ Each nav file may be:
 ```
 
 For object form, `mode` accepts `merge` or `override` and defaults to `merge`.
-Supported nav item fields: `title`, `url|href|path`, `order`, `hidden`, `group`, `icon`, `children`.
+Supported nav item fields: `id`, `title`, `url|href|path`, `order`, `hidden`, `group`, `icon`, `children`.
+`sequence` orders the final mixed menu after auto and custom items are combined.
+Entries are resolved relative to the nav file folder and are inherited by
+descendant folders, so one root nav file can order nested pages like
+`usage/transactions.md`. It can match auto pages (`getting-started.md`,
+`getting-started`, `/docs/getting-started/`), auto folders (`usage/`,
+`/docs/usage/`), or custom items by `id`. Unmatched menu entries are appended
+using normal `sortBy`; unknown sequence entries are ignored.
 
 ## Templates
 

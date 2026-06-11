@@ -14,6 +14,7 @@ export interface NavigationConfig {
 }
 
 export interface NavItem {
+  id?: string
   title: string
   url?: string
   children?: NavItem[]

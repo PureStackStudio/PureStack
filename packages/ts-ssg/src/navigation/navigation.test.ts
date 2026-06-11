@@ -193,6 +193,16 @@ describe('navigation', () => {
         'utf8',
       )
       await fs.writeFile(
+        path.join(contentDir, 'docs', 'usage', 'opening-a-tree.mdx'),
+        `---\ntitle: Opening a Tree\n---\n# Opening a Tree\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'docs', 'usage', 'reads-and-writes.mdx'),
+        `---\ntitle: Reads and Writes\n---\n# Reads and Writes\n`,
+        'utf8',
+      )
+      await fs.writeFile(
         path.join(contentDir, 'docs', 'usage', 'transactions.mdx'),
         `---\ntitle: Transactions\n---\n# Transactions\n`,
         'utf8',
@@ -215,7 +225,99 @@ describe('navigation', () => {
       ])
       expect(pageNav?.items.find((item) => item.title === 'Usage')).toEqual({
         title: 'Usage',
-        children: [{ title: 'Transactions', url: '/docs/usage/transactions/' }],
+        children: [
+          { title: 'Opening a Tree', url: '/docs/usage/opening-a-tree/' },
+          { title: 'Reads and Writes', url: '/docs/usage/reads-and-writes/' },
+          { title: 'Transactions', url: '/docs/usage/transactions/' },
+        ],
+      })
+    })
+  })
+
+  it('applies nav file sequence to mixed auto and custom items', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      await fs.mkdir(path.join(contentDir, 'docs', 'usage'), {
+        recursive: true,
+      })
+      await fs.writeFile(
+        path.join(contentDir, 'docs', 'index.mdx'),
+        `---\ntitle: Docs\n---\n# Docs\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'docs', 'getting-started.mdx'),
+        `---\ntitle: Getting Started\n---\n# Getting Started\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'docs', 'usage', 'opening-a-tree.mdx'),
+        `---\ntitle: Opening a Tree\n---\n# Opening a Tree\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'docs', 'usage', 'reads-and-writes.mdx'),
+        `---\ntitle: Reads and Writes\n---\n# Reads and Writes\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'docs', 'usage', 'transactions.mdx'),
+        `---\ntitle: Transactions\n---\n# Transactions\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'docs', '_nav.json'),
+        JSON.stringify(
+          {
+            mode: 'merge',
+            sequence: [
+              'index.md',
+              'github',
+              'usage/',
+              'usage/reads-and-writes.md',
+              'usage/opening-a-tree.md',
+              'usage/transactions.md',
+              'missing.md',
+            ],
+            items: [
+              {
+                id: 'github',
+                title: 'GitHub',
+                url: 'https://github.com/koculu/ZoneTree',
+              },
+            ],
+          },
+          null,
+          2,
+        ),
+        'utf8',
+      )
+
+      const files = await discoverContent(contentDir)
+      const nav = await buildNavigation(contentDir, files, {
+        mode: 'hybrid',
+        maxDepth: 20,
+      })
+      const items = nav?.byFolder['docs'] ?? []
+
+      expect(items.map((item) => item.title)).toEqual([
+        'Docs',
+        'GitHub',
+        'Usage',
+        'Getting Started',
+      ])
+      expect(items[1]).toEqual({
+        id: 'github',
+        title: 'GitHub',
+        url: 'https://github.com/koculu/ZoneTree',
+      })
+      expect(items[2]).toEqual({
+        title: 'Usage',
+        children: [
+          { title: 'Reads and Writes', url: '/docs/usage/reads-and-writes/' },
+          { title: 'Opening a Tree', url: '/docs/usage/opening-a-tree/' },
+          { title: 'Transactions', url: '/docs/usage/transactions/' },
+        ],
       })
     })
   })
