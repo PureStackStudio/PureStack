@@ -101,6 +101,30 @@ describe('page content compilation', () => {
       await fs.rm(root, { recursive: true, force: true })
     }
   })
+
+  it('rewrites raw markdown page links during page rendering', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-page-'))
+    try {
+      const contentDir = path.join(root, 'content')
+      const outDir = path.join(root, 'out')
+      await writeFile(
+        path.join(contentDir, 'docs', 'getting-started.md'),
+        '<a href="usage/reads-and-writes.md">read and write API</a>',
+      )
+
+      const config = resolveSiteConfig({ rootDir: root, contentDir, outDir })
+      const page = await renderPageFromFile(
+        { config },
+        toContentFile(contentDir, path.join('docs', 'getting-started.md')),
+      )
+
+      expect(page.bodyHtml).toContain(
+        'href="/docs/usage/reads-and-writes/"',
+      )
+    } finally {
+      await fs.rm(root, { recursive: true, force: true })
+    }
+  })
 })
 
 function toContentFile(contentDir: string, relPath: string): ContentFile {

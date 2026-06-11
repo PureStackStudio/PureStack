@@ -28,6 +28,7 @@ import {
   type NavigationTree,
   resolvePageNavigation,
 } from '../navigation/navigation'
+import { resolvePageContentHref } from './content-hrefs'
 import { resolveHeadConfig } from './head-config'
 import { readSource, writeHtml } from './io'
 import { resolveOutPath, resolveRouteInfo } from './out-path'
@@ -241,11 +242,13 @@ function compilePageContent(
     return compileMdx(sourceBody, {
       ...(mdxOptions ?? {}),
       sourceRelPath: file.relPath,
+      resolveContentHref: resolvePageContentHref,
     })
   }
   return compileMarkdown(sourceBody, {
     ...(mdxOptions ?? {}),
     sourceRelPath: file.relPath,
+    resolveContentHref: resolvePageContentHref,
   })
 }
 

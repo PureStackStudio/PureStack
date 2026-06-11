@@ -2,10 +2,10 @@ import type { PageOutlineItem } from '@purestack/ts-common'
 import type { Element, Root, Text } from 'hast'
 import type { Root as MdastRoot } from 'mdast'
 import { toHast } from 'mdast-util-to-hast'
-import rehypeRaw from 'rehype-raw'
 import rehypeStringify from 'rehype-stringify'
 import { unified } from 'unified'
 import type { MdxCodeHighlighter } from './highlight'
+import { rewriteLinks } from './linkRewrite'
 import { applyShikiHighlighting } from './shikiHighlighting'
 
 export interface MdxCompileResult {
@@ -13,9 +13,16 @@ export interface MdxCompileResult {
   outline: PageOutlineItem[]
 }
 
+export type MdxContentHrefResolver = (
+  href: string,
+  sourceRelPath: string,
+) => string
+
 export interface MdxRenderOptions {
   highlighter?: MdxCodeHighlighter
   sourceRelPath?: string
+  compileMdAsMdx?: boolean
+  resolveContentHref?: MdxContentHrefResolver
 }
 
 export function compileAstToHtml(
@@ -31,9 +38,9 @@ export function compileAstToHtml(
   if (options.highlighter) {
     applyShikiHighlighting(tree, options.highlighter)
   }
+  rewriteLinks(tree, options)
   const bodyHtml = String(
     unified()
-      .use(rehypeRaw)
       .use(rehypeStringify, { allowDangerousHtml: true })
       .stringify(tree),
   )

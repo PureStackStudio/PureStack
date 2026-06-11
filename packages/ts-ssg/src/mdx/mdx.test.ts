@@ -3,6 +3,7 @@ import { defineModalComponents } from '@purestack/ts-components'
 import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '@purestack/ts-render'
 import { describe, expect, it } from 'vitest'
+import { resolvePageContentHref } from '../build/content-hrefs'
 import { resolveSiteConfig } from '../config/config'
 import { normalizeFrontmatter } from '../frontmatter/frontmatter'
 import { createHljsHighlighter } from './highlightjs'
@@ -162,6 +163,31 @@ describe('compileMdxToHtml', () => {
     expect(html).toContain('<tbody>')
     expect(html).toContain('<td>Bus</td>')
     expect(html).toContain('<td>Sea</td>')
+  })
+
+  it('rewrites markdown content links to routed page URLs', async () => {
+    const html = compileMdx(
+      '[read and write API](usage/reads-and-writes.md)',
+      {
+        sourceRelPath: 'docs/getting-started.md',
+        resolveContentHref: resolvePageContentHref,
+      },
+    ).bodyHtml
+
+    expect(html).toContain('href="/docs/usage/reads-and-writes/"')
+    expect(html).not.toContain('href="usage/reads-and-writes.md"')
+  })
+
+  it('rewrites raw HTML content links with the configured link resolver', async () => {
+    const html = compileMdx(
+      '<a href="../usage/transactions.md#scope">Transactions</a>',
+      {
+        sourceRelPath: 'docs/concepts/storage-engine.md',
+        resolveContentHref: resolvePageContentHref,
+      },
+    ).bodyHtml
+
+    expect(html).toContain('href="/docs/usage/transactions/#scope"')
   })
 
   it('strips empty paragraphs around template slot content', async () => {

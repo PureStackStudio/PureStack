@@ -1,6 +1,7 @@
 import type { TsSsgContext } from '@purestack/ts-common'
 import { renderApp } from '@purestack/ts-render'
 import { describe, expect, it } from 'vitest'
+import { resolvePageContentHref } from '../build/content-hrefs'
 import { resolveMdxBuildOptions } from '../build/incremental/support'
 import { resolveSiteConfig } from '../config/config'
 import { normalizeFrontmatter } from '../frontmatter/frontmatter'
@@ -39,6 +40,15 @@ describe('compileMarkdown', () => {
 
     expect(html).toContain('<pre class="hljs shiki">')
     expect(html).toContain('<code class="hljs language-typescript">')
+  })
+
+  it('rewrites markdown content links when the markdown route is used', async () => {
+    const html = compileMarkdown('[Transactions](usage/transactions.md)', {
+      sourceRelPath: 'docs/index.md',
+      resolveContentHref: resolvePageContentHref,
+    }).bodyHtml
+
+    expect(html).toContain('href="/docs/usage/transactions/"')
   })
 })
 

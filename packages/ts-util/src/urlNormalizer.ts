@@ -5,14 +5,17 @@ interface NormalizeHrefOptions {
 }
 
 export const urlNormalizer = {
-  isExternalHref(href: string): boolean {
+  isSpecialHref(href: string): boolean {
     return (
       href.startsWith('#') ||
       href.startsWith('?') ||
       href.startsWith('//') ||
-      href.startsWith('../') ||
       /^[a-zA-Z][a-zA-Z+.-]*:/.test(href)
     )
+  },
+
+  isExternalHref(href: string): boolean {
+    return urlNormalizer.isSpecialHref(href) || href.startsWith('../')
   },
 
   splitSuffix(href: string): { base: string; suffix: string } {
@@ -63,6 +66,10 @@ export const urlNormalizer = {
       trailingSlash: 'always',
     })
     return normalized || '/'
+  },
+
+  hasPathExtension(value: string): boolean {
+    return hasPathExtension(value)
   },
 }
 
