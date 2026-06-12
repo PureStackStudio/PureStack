@@ -234,6 +234,45 @@ describe('navigation', () => {
     })
   })
 
+  it('uses root navigation for descendant pages when no navigation roots are configured', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      await fs.mkdir(path.join(contentDir, 'guide'), { recursive: true })
+      await fs.writeFile(
+        path.join(contentDir, 'index.mdx'),
+        `---\ntitle: Home\n---\n# Home\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'guide', 'index.mdx'),
+        `---\ntitle: Guide\n---\n# Guide\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'guide', 'button-sample.mdx'),
+        `---\ntitle: Button Sample\n---\n# Button Sample\n`,
+        'utf8',
+      )
+
+      const files = await discoverContent(contentDir)
+      const nav = await buildNavigation(contentDir, files, { maxDepth: 20 })
+      const buttonSample = findContentFile(files, 'guide/button-sample.mdx')
+      const pageNav = resolvePageNavigation(nav, buttonSample)
+
+      expect(pageNav?.folder).toBe('guide')
+      expect(pageNav?.root).toBe('')
+      expect(pageNav?.items.map((item) => item.title)).toEqual([
+        'Home',
+        'Guide',
+      ])
+      expect(pageNav?.items.find((item) => item.title === 'Guide')).toEqual({
+        title: 'Guide',
+        url: '/guide/',
+        children: [{ title: 'Button Sample', url: '/guide/button-sample/' }],
+      })
+    })
+  })
+
   it('applies nav file sequence to mixed auto and custom items', async () => {
     await withTempDir(async (base) => {
       const contentDir = path.join(base, 'content')

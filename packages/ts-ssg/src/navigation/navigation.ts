@@ -77,7 +77,7 @@ export function resolveNavigationRoot(folder: string, roots: string[]) {
   for (const root of roots) {
     if (folder === root || folder.startsWith(`${root}/`)) return root
   }
-  return folder
+  return ''
 }
 
 function collectFolders(files: ContentFile[]) {
