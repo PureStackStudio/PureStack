@@ -1,7 +1,15 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import type { InternalNavItem, NavFile, ResolvedNavigationConfig } from './model'
-import { buildCustomSequenceKeys, normalizeNavSequence } from './sequence'
+import type {
+  InternalNavItem,
+  NavFile,
+  ResolvedNavigationConfig,
+} from './model'
+import {
+  buildCustomSequenceKeys,
+  normalizeNavIcons,
+  normalizeNavSequence,
+} from './sequence'
 import {
   isExternalUrl,
   isPlainObject,
@@ -37,18 +45,19 @@ async function readNavFile(
     const parsed = JSON.parse(raw) as unknown
     if (Array.isArray(parsed)) {
       const items = normalizeNavItems(parsed, folder)
-      return { mode: 'override', items, sequence: [] }
+      return { mode: 'override', items, sequence: [], icons: [] }
     }
     if (!isPlainObject(parsed)) {
       throw new Error('nav file must be a JSON object or array.')
     }
     const items = normalizeNavItems(parsed.items, folder)
     const sequence = normalizeNavSequence(parsed.sequence, folder)
+    const icons = normalizeNavIcons(parsed.icons, folder)
     const mode =
       parsed.mode === 'merge' || parsed.mode === 'override'
         ? parsed.mode
         : 'merge'
-    return { mode, items, sequence }
+    return { mode, items, sequence, icons }
   } catch (error) {
     const err = error as NodeJS.ErrnoException
     if (err.code === 'ENOENT') return null

@@ -360,6 +360,83 @@ describe('navigation', () => {
       })
     })
   })
+
+  it('applies nav file icons to mixed auto and custom items', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      await fs.mkdir(path.join(contentDir, 'docs', 'usage'), {
+        recursive: true,
+      })
+      await fs.writeFile(
+        path.join(contentDir, 'docs', 'index.mdx'),
+        `---\ntitle: Docs\n---\n# Docs\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'docs', 'usage', 'transactions.mdx'),
+        `---\ntitle: Transactions\n---\n# Transactions\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'docs', '_nav.json'),
+        JSON.stringify(
+          {
+            mode: 'merge',
+            icons: {
+              'index.md': 'iconoir:home',
+              'usage/': 'iconoir:book',
+              'usage/transactions.md': 'iconoir:database',
+              github: 'iconoir:github',
+            },
+            items: [
+              {
+                id: 'github',
+                title: 'GitHub',
+                url: 'https://github.com/example/project',
+              },
+            ],
+          },
+          null,
+          2,
+        ),
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'docs', 'usage', '_nav.json'),
+        JSON.stringify(
+          {
+            icons: {
+              'transactions.md': 'iconoir:rocket',
+            },
+          },
+          null,
+          2,
+        ),
+        'utf8',
+      )
+
+      const files = await discoverContent(contentDir)
+      const nav = await buildNavigation(contentDir, files, {
+        mode: 'hybrid',
+        maxDepth: 20,
+      })
+      const docsItems = nav?.byFolder['docs'] ?? []
+      const usageItems = nav?.byFolder['docs/usage'] ?? []
+
+      expect(docsItems.find((item) => item.title === 'Docs')?.icon).toBe(
+        'iconoir:home',
+      )
+      expect(docsItems.find((item) => item.title === 'GitHub')?.icon).toBe(
+        'iconoir:github',
+      )
+      expect(docsItems.find((item) => item.title === 'Usage')?.icon).toBe(
+        'iconoir:book',
+      )
+      expect(
+        usageItems.find((item) => item.title === 'Transactions')?.icon,
+      ).toBe('iconoir:rocket')
+    })
+  })
 })
 
 function findContentFile(files: ContentFile[], relPath: string): ContentFile {

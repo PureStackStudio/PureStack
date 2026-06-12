@@ -8,6 +8,7 @@ import type {
   ResolvedNavigationConfig,
 } from './model'
 import {
+  applyIcons,
   applySequence,
   buildFolderSequenceKeys,
   buildPageSequenceKeys,
@@ -71,12 +72,14 @@ export function buildNestedNavigation(
     node: FolderNode,
     remaining: number,
     inheritedSequence: NavSequenceEntry[],
+    inheritedIcons: NavFile['icons'],
   ): InternalNavItem[] => {
     const baseItems = baseByFolder[node.relPath] ?? []
     const items = [...baseItems]
     const custom = customByFolder[node.relPath]
     const overrideMode = custom?.mode === 'override'
     const sequence = [...(custom?.sequence ?? []), ...inheritedSequence]
+    const icons = [...(custom?.icons ?? []), ...inheritedIcons]
 
     if (
       allowChildren &&
@@ -93,6 +96,7 @@ export function buildNestedNavigation(
           buildNode,
           remaining,
           sequence,
+          icons,
           customByFolder,
           config,
         )
@@ -103,12 +107,13 @@ export function buildNestedNavigation(
     }
 
     const sortedItems = sortNavItems(items, config.sortBy)
-    const finalItems = applySequence(sortedItems, sequence, config.sortBy)
+    const sequencedItems = applySequence(sortedItems, sequence, config.sortBy)
+    const finalItems = applyIcons(sequencedItems, icons)
     byFolder[node.relPath] = finalItems
     return finalItems
   }
 
-  buildNode(root, depth, [])
+  buildNode(root, depth, [], [])
   return byFolder
 }
 
@@ -174,13 +179,20 @@ function buildNestedChildNavItem(
     node: FolderNode,
     remaining: number,
     inheritedSequence: NavSequenceEntry[],
+    inheritedIcons: NavFile['icons'],
   ) => InternalNavItem[],
   remaining: number,
   inheritedSequence: NavSequenceEntry[],
+  inheritedIcons: NavFile['icons'],
   customByFolder: Record<string, NavFile>,
   config: ResolvedNavigationConfig,
 ): InternalNavItem | null {
-  const childItems = buildNode(child, remaining - 1, inheritedSequence)
+  const childItems = buildNode(
+    child,
+    remaining - 1,
+    inheritedSequence,
+    inheritedIcons,
+  )
   if (childItems.length === 0) return null
   const childOverride = customByFolder[child.relPath]?.mode === 'override'
   const indexMeta = child.pages.find((page) => page.isIndex && !page.hidden)

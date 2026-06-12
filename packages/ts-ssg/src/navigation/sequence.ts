@@ -4,10 +4,12 @@ import type {
   ContentMeta,
   FolderNode,
   InternalNavItem,
+  NavIconEntry,
   NavSequenceEntry,
 } from './model'
 import {
   isExternalUrl,
+  isPlainObject,
   splitUrlSuffix,
   stripPathExtension,
   toPosixPath,
@@ -26,6 +28,25 @@ export function normalizeNavSequence(
       value: entry,
       keys: buildSequenceEntryKeys(entry, folder),
     }))
+}
+
+export function normalizeNavIcons(
+  value: unknown,
+  folder: string,
+): NavIconEntry[] {
+  if (!isPlainObject(value)) return []
+  const entries: NavIconEntry[] = []
+  for (const [rawKey, rawIcon] of Object.entries(value)) {
+    const key = rawKey.trim()
+    const icon = typeof rawIcon === 'string' ? rawIcon.trim() : ''
+    if (!key || !icon) continue
+    entries.push({
+      value: key,
+      icon,
+      keys: buildSequenceEntryKeys(key, folder),
+    })
+  }
+  return entries
 }
 
 export function applySequence(
@@ -48,6 +69,17 @@ export function applySequence(
   }
 
   return [...ordered, ...sortNavItems(remaining, sortBy)]
+}
+
+export function applyIcons(
+  items: InternalNavItem[],
+  icons: NavIconEntry[],
+): InternalNavItem[] {
+  if (icons.length === 0 || items.length === 0) return items
+  return items.map((item) => {
+    const icon = resolveIcon(item, icons)
+    return icon ? { ...item, icon } : item
+  })
 }
 
 export function sortNavItems(
@@ -104,11 +136,31 @@ function itemMatchesSequence(
   item: InternalNavItem,
   entryKeys: Set<string>,
 ): boolean {
-  for (const key of buildItemSequenceKeySet(item)) {
-    if (entryKeys.has(key)) return true
-  }
+  if (itemMatchesNavKeys(item, entryKeys)) return true
   for (const child of item.children ?? []) {
     if (itemMatchesSequence(child, entryKeys)) return true
+  }
+  return false
+}
+
+function resolveIcon(
+  item: InternalNavItem,
+  icons: NavIconEntry[],
+): string | undefined {
+  for (const entry of icons) {
+    if (itemMatchesNavKeys(item, buildSequenceKeyCandidates(entry))) {
+      return entry.icon
+    }
+  }
+  return item.icon
+}
+
+function itemMatchesNavKeys(
+  item: InternalNavItem,
+  entryKeys: Set<string>,
+): boolean {
+  for (const key of buildItemSequenceKeySet(item)) {
+    if (entryKeys.has(key)) return true
   }
   return false
 }

@@ -27,6 +27,7 @@ export interface NavFile {
   mode?: 'override' | 'merge'
   items: InternalNavItem[]
   sequence: NavSequenceEntry[]
+  icons: NavIconEntry[]
 }
 
 export type InternalNavItem = Omit<NavItem, 'children'> & {
@@ -36,6 +37,12 @@ export type InternalNavItem = Omit<NavItem, 'children'> & {
 
 export interface NavSequenceEntry {
   value: string
+  keys: string[]
+}
+
+export interface NavIconEntry {
+  value: string
+  icon: string
   keys: string[]
 }
 

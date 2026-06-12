@@ -79,7 +79,7 @@ Defaults:
 `roots` marks folders that act as navigation roots for descendant pages. With
 `roots: ["docs"]`, both `docs/index.md` and `docs/usage/transactions.md` use
 the `docs` menu as their page navigation. Without a matching root, the page's
-own folder is used.
+navigation uses the content root menu.
 
 ## Dynamic (auto) menus
 
@@ -122,6 +122,12 @@ The file can be either an array of items or an object with `mode`, `items`, and
     "usage/opening-a-tree.md",
     "usage/transactions.md"
   ],
+  "icons": {
+    "index.md": "iconoir:home",
+    "github": "iconoir:github",
+    "usage/": "iconoir:book",
+    "usage/transactions.md": "iconoir:database"
+  },
   "items": [
     {
       "id": "github",
@@ -156,6 +162,26 @@ Sequence entries can match:
 - custom items by `id`, URL, title, or title slug
 
 Unknown sequence entries are ignored, so a stale entry does not break the build.
+
+`icons` is a lightweight presentation overlay for auto and custom items. Keys
+use the same matching rules as `sequence`; values are icon names rendered by the
+navigation component. This lets a folder-level `_nav.json` add selected icons
+without requiring frontmatter in every Markdown file:
+
+```json
+{
+  "icons": {
+    "index.md": "iconoir:home",
+    "usage/": "iconoir:book",
+    "usage/transactions.md": "iconoir:database",
+    "github": "iconoir:github"
+  }
+}
+```
+
+Icon overlays are inherited by child folders. A child folder's `_nav.json` can
+override inherited icons by defining a matching key in its own `icons` map.
+Unknown icon keys are ignored.
 
 Relative URLs inside `_nav.json` resolve from the folder that contains the file:
 
