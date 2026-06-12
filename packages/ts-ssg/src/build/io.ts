@@ -37,7 +37,7 @@ async function minifyHtml(input: string): Promise<string> {
       options: {
         collapseInlineTagWhitespace: false,
         removeOptionalTags: false,
-        conservativeCollapse: true
+        conservativeCollapse: true,
       },
     },
   })

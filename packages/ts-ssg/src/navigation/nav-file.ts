@@ -1,7 +1,6 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import type { ResolvedNavigationConfig } from './model'
-import type { InternalNavItem, NavFile } from './model'
+import type { InternalNavItem, NavFile, ResolvedNavigationConfig } from './model'
 import { buildCustomSequenceKeys, normalizeNavSequence } from './sequence'
 import {
   isExternalUrl,

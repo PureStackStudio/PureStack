@@ -8,4 +8,9 @@ export { buildNavMenuScript } from './embed/navMenu.embed'
 export { buildPagefindSearchScript } from './embed/pagefindSearch.embed'
 export { buildPageTocScript } from './embed/pageToc.embed'
 export { buildTabsScript } from './embed/tabs.embed'
-export type { TsSsgModalApi, TsSsgTabsApi } from './runtimeGlobals'
+export type {
+  TsSsgModalApi,
+  TsSsgNavMenuApi,
+  TsSsgPageTocApi,
+  TsSsgTabsApi,
+} from './runtimeGlobals'

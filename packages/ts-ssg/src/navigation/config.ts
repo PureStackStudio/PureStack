@@ -79,7 +79,10 @@ function resolveNavigationRoots(value: unknown): string[] {
 
 function normalizeNavigationRoot(value: unknown) {
   if (typeof value !== 'string') return undefined
-  const trimmed = value.trim().replaceAll('\\', '/').replace(/^\/+|\/+$/g, '')
+  const trimmed = value
+    .trim()
+    .replaceAll('\\', '/')
+    .replace(/^\/+|\/+$/g, '')
   if (!trimmed) return undefined
   const normalized = path.posix.normalize(trimmed)
   if (

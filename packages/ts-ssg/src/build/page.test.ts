@@ -41,9 +41,7 @@ describe('page content compilation', () => {
       )
 
       expect(page.bodyHtml).toContain('<Badge tone="accent" />')
-      expect(page.bodyHtml).not.toContain(
-        '&#x3C;Badge tone="accent" />',
-      )
+      expect(page.bodyHtml).not.toContain('&#x3C;Badge tone="accent" />')
     } finally {
       await fs.rm(root, { recursive: true, force: true })
     }
@@ -118,9 +116,7 @@ describe('page content compilation', () => {
         toContentFile(contentDir, path.join('docs', 'getting-started.md')),
       )
 
-      expect(page.bodyHtml).toContain(
-        'href="/docs/usage/reads-and-writes/"',
-      )
+      expect(page.bodyHtml).toContain('href="/docs/usage/reads-and-writes/"')
     } finally {
       await fs.rm(root, { recursive: true, force: true })
     }

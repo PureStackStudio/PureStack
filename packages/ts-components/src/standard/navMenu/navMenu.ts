@@ -20,6 +20,7 @@ export interface NavMenu {
   signInAvatarAlt?: RefOrValue<string>
   toneClass?: ComputedRef<string>
   searchEnabled?: boolean
+  navRoot?: string
 }
 
 export interface NavList {
@@ -30,6 +31,7 @@ export interface NavList {
 export interface NavItemState extends NavItem {
   isActive: boolean
   isOpen: boolean
+  stateKey: string
   linkClass?: string[]
   ariaCurrent?: string
 }
@@ -39,6 +41,8 @@ const navItemTemplate = html`<li class="nav__item">
     r-if="item.children && item.children.length > 0"
     class="nav__group"
     :open="item.isOpen"
+    :data-nav-group-key="item.stateKey"
+    :data-nav-default-open="item.isOpen ? 'true' : undefined"
   >
     <summary class="nav__summary w-full">
       <BtnLink
@@ -77,6 +81,7 @@ const navListTemplate = html`<ul class="nav__list">
 const navMenuTemplate = html`<nav
   class="nav__menu tone-fill-surface tone-border-surface tone-text-surface tone--neutral"
   :class="toneClass"
+  :data-nav-root="navRoot"
   aria-label="Site navigation"
 >
   <div class="nav__header-row">
@@ -120,6 +125,7 @@ const navMenuTemplate = html`<nav
   </div>
   <NavList :items="items"></NavList>
   <SearchBox r-if="searchEnabled" class="nav__search mt-1"/>
+  <script>window.tsSsgNavMenu?.hydrate(document.currentScript?.parentElement)</script>
 </nav>`
 
 function resolveNavItems(context?: TsSsgContext): NavItem[] {
@@ -161,10 +167,12 @@ function resolveCurrentPath(context?: TsSsgContext): string | undefined {
 function buildNavState(
   items: NavItem[],
   currentPath: string | undefined,
+  parentKey = '',
 ): NavItemState[] {
   return unref(items).map((item) => {
+    const stateKey = resolveNavItemStateKey(item, parentKey)
     const childStates = item.children
-      ? buildNavState(item.children, currentPath)
+      ? buildNavState(item.children, currentPath, stateKey)
       : []
     const itemPath = normalizePath(item.url)
     const isActive = Boolean(
@@ -179,6 +187,7 @@ function buildNavState(
       ...(childStates.length > 0 ? { children: childStates } : {}),
       isActive,
       isOpen: isActive || hasActiveChild,
+      stateKey,
       linkClass: [
         'fs-body ws-normal justify-start w-full tone-fill-surface-hover tone-fill-surface-active rounded-sm',
         isActive ? 'active tone-text-surface-active' : 'tone-text',
@@ -186,6 +195,19 @@ function buildNavState(
       ariaCurrent: isActive ? 'page' : undefined,
     }
   })
+}
+
+function resolveNavItemStateKey(item: NavItem, parentKey: string) {
+  const segment = normalizeNavStateKeyPart(item.id ?? item.url ?? item.title)
+  return parentKey ? `${parentKey}/${segment}` : segment
+}
+
+function normalizeNavStateKeyPart(value: string) {
+  const normalized = value
+    .trim()
+    .replaceAll('\\', '/')
+    .replace(/^\/+|\/+$/g, '')
+  return normalized || 'item'
 }
 
 function defineNavItemComponent() {
@@ -212,6 +234,7 @@ function defineNavMenuComponent() {
         ...head.props,
         toneClass: computed(() => getSemanticToneClass(head.props.tone)),
         searchEnabled: context?.site.pagefind?.enabled === true,
+        navRoot: normalizeNavStateKeyPart(context?.navigation?.root ?? ''),
         items: buildNavState(
           head.props.items ?? resolveNavItems(context),
           resolveCurrentPath(context),

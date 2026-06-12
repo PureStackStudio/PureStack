@@ -8,9 +8,19 @@ export interface TsSsgModalApi {
   close(id: string): void
 }
 
+export interface TsSsgNavMenuApi {
+  hydrate(root?: Element | null): void
+}
+
+export interface TsSsgPageTocApi {
+  hydrate(root?: Element | null): void
+}
+
 declare global {
   interface Window {
     tsSsgTabs?: TsSsgTabsApi
     tsSsgModal?: TsSsgModalApi
+    tsSsgNavMenu?: TsSsgNavMenuApi
+    tsSsgPageToc?: TsSsgPageTocApi
   }
 }

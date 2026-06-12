@@ -78,6 +78,7 @@ const pageTocTemplate = html`<nav
     </li>
   </ul>
   <div class="page-toc__empty" r-else>No sections yet.</div>
+  <script>window.tsSsgPageToc?.hydrate(document.currentScript?.parentElement)</script>
 </nav>`
 
 function toPageTocItems(items: PageOutlineItem[]): PageTocItem[] {

@@ -19,7 +19,7 @@ import {
 import { resolveFolderKey } from './utils'
 
 export type { NavigationTree, ResolvedNavigationConfig }
-export { resolveNavigationConfig, resolveFolderKey }
+export { resolveFolderKey, resolveNavigationConfig }
 
 export async function buildNavigation(
   contentDir: string,

@@ -179,13 +179,10 @@ describe('compileMdxToHtml', () => {
   })
 
   it('rewrites markdown content links to routed page URLs', async () => {
-    const html = compileMdx(
-      '[read and write API](usage/reads-and-writes.md)',
-      {
-        sourceRelPath: 'docs/getting-started.md',
-        resolveContentHref: resolvePageContentHref,
-      },
-    ).bodyHtml
+    const html = compileMdx('[read and write API](usage/reads-and-writes.md)', {
+      sourceRelPath: 'docs/getting-started.md',
+      resolveContentHref: resolvePageContentHref,
+    }).bodyHtml
 
     expect(html).toContain('href="/docs/usage/reads-and-writes/"')
     expect(html).not.toContain('href="usage/reads-and-writes.md"')

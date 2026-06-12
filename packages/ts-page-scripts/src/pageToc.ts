@@ -8,6 +8,7 @@ import {
   DOC_LAYOUT_TOC_WIDTH_STORAGE_KEY,
   readDocLayoutPxVar,
 } from './docLayoutCssVars'
+import type { TsSsgPageTocApi } from './runtimeGlobals'
 
 const OPEN_LABEL = 'close'
 const CLOSED_LABEL = 'on this page'
@@ -28,23 +29,30 @@ const ACTIVE_SCROLL_OFFSET = 110
 const FLASH_DURATION_MS = 1400
 const MANUAL_ACTIVE_LOCK_MS = 900
 
+const initializedTocs = new WeakSet<HTMLElement>()
+
 applyStoredDocLayoutPreferences()
 
-function ready(fn: () => void) {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', fn, { once: true })
-    return
-  }
-  fn()
+const pageTocApi: TsSsgPageTocApi = {
+  hydrate(root?: Element | null) {
+    hydratePageToc(root)
+  },
 }
 
-function init() {
-  const toc = document.querySelector<HTMLElement>('.page-toc')
+globalThis.window.tsSsgPageToc = pageTocApi
+
+function hydratePageToc(root?: Element | null) {
+  const toc = resolvePageToc(root)
   if (!toc) {
     document.body.classList.remove(BODY_TOC_OPEN_CLASS)
     return
   }
+  if (initializedTocs.has(toc)) return
+  initializedTocs.add(toc)
+  init(toc)
+}
 
+function init(toc: HTMLElement) {
   const tocShell = toc.closest<HTMLElement>('.doc-toc')
   const toggle = toc.querySelector<HTMLElement>('.page-toc__panel-toggle')
   const restoreToggle = toc.querySelector<HTMLElement>(
@@ -441,4 +449,9 @@ function readPxValue(value: string, fallback: number) {
   return Number.isFinite(parsed) ? parsed : fallback
 }
 
-ready(init)
+function resolvePageToc(root?: Element | null) {
+  root ??= document.querySelector<HTMLElement>('.page-toc')
+  if (!(root instanceof HTMLElement)) return null
+  if (root.classList.contains('page-toc')) return root
+  return root.querySelector<HTMLElement>('.page-toc')
+}

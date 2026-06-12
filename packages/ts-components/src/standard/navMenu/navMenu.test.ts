@@ -47,4 +47,52 @@ describe('NavMenu rendering', () => {
     expect(html).toContain('class="sign-in position-relative nav__account"')
     expect(html).not.toContain('r-else=')
   })
+
+  it('renders stable state keys for collapsible groups', () => {
+    const cleanup = ensureDomGlobals()
+    const components = {
+      ...defineButtonComponents(),
+      ...defineFlexComponents(),
+      ...defineIconComponents(getSvgIcon),
+      ...definePanelComponents(),
+      ...defineSignInComponents(),
+      ...defineNavigationComponents(),
+    }
+    const html = renderApp(
+      `<NavMenu
+        :items="[
+          {
+            title: 'Docs',
+            url: '/docs/',
+            children: [
+              {
+                title: 'Storage',
+                children: [{ title: 'Disk Segments', url: '/docs/storage/disk-segments/' }]
+              }
+            ]
+          }
+        ]"
+      ></NavMenu>`,
+      {
+        components,
+        context: createTestContext({
+          navigation: {
+            root: 'docs',
+          },
+          pageInfo: {
+            urlPath: '/docs/storage/disk-segments/',
+          },
+        }),
+      },
+    )
+    cleanup()
+
+    expect(html).toContain('data-nav-root="docs"')
+    expect(html).toContain('data-nav-group-key="docs"')
+    expect(html).toContain('data-nav-group-key="docs/Storage"')
+    expect(html).toContain('data-nav-default-open="true"')
+    expect(html).toContain(
+      'window.tsSsgNavMenu?.hydrate(document.currentScript?.parentElement)',
+    )
+  })
 })
