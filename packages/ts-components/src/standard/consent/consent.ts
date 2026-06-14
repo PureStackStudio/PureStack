@@ -50,7 +50,7 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
           {{ privacyPolicyLabel }}
         </BtnLink>
         <Flex align="center" wrap="true">
-          <Btn tone="success" data-consent-action="accept-all">
+          <Btn tone="accent" data-consent-action="accept-all">
             {{ acceptAllLabel }}
           </Btn>
           <Btn tone="neutral" data-consent-action="reject-all">
@@ -115,8 +115,8 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
         </Flex>
 
         <Flex align="center" wrap="true">
-          <Btn tone="success" data-consent-action="save"> {{ saveLabel }} </Btn>
-          <Btn tone="success" data-consent-action="accept-all">
+          <Btn tone="accent" data-consent-action="save"> {{ saveLabel }} </Btn>
+          <Btn tone="accent" data-consent-action="accept-all">
             {{ acceptAllLabel }}
           </Btn>
           <Btn tone="neutral" data-consent-action="reject-all">
