@@ -17,9 +17,7 @@ export interface Badge {
   classes?: ComputedRef<string>
 }
 
-const badgeTemplate = html`<span class="badge" :class="classes">
-  <slot></slot>
-</span>`
+const badgeTemplate = html`<span class="badge" :class="classes"><slot></slot></span>`
 
 function defineBadgeComponent() {
   return defineComponent<Badge>(badgeTemplate, {

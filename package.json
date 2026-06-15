@@ -48,7 +48,6 @@
     "serve:zonetree": "yarn tsx --watch packages/ts-ssg/src/cli.ts --content PureGate/PureGateApp/zonetree-dev --serve --port 4500",
     "publish:zonetree": "yarn tsx packages/ts-ssg/src/cli.ts --content PureGate/PureGateApp/zonetree-dev --clean --publish",
     "deploy:zonetree": "pgdeploy deploy --host https://zonetree.dev --package ./PureGate/PureGateApp/.puregate/content/zonetree.dev/web --allow-path 'pagefind/*,.ts-ssg/manifest.json'",
-
     "puregate:deploy:app": "pgdeploy artifact deploy --host https://admin.puregate.dev --artifact system/puregate --package PureGate/artifacts/bootstrap/work/package/release --apply true --allow-path='admin-panel/.ts-ssg/manifest.json,admin-panel/pagefind*' --allow-path='release-id,watchdog/puregate,deploy/pgdeploy,app/PureGateApp,app/*.so,app/*.so.dbg,app/*.pdb,app/*.staticwebassets.*,manifest.json'",
     "lint-puregate": "biome check PureGate/PureGateApp/admin-panel --write --formatter-enabled=false",
     "format-puregate": "biome format PureGate/PureGateApp/admin-panel --write"
