@@ -115,6 +115,7 @@ The file can be either an array of items or an object with `mode`, `items`, and
 ```json
 {
   "mode": "merge",
+  "pageLinks": true,
   "sequence": [
     "index.md",
     "github",
@@ -162,6 +163,12 @@ Sequence entries can match:
 - custom items by `id`, URL, title, or title slug
 
 Unknown sequence entries are ignored, so a stale entry does not break the build.
+
+`pageLinks: true` enables previous/next page links for pages covered by that
+nav file. Links are derived from the final visible navigation order, skip
+external URLs and grouping items without URLs, and inherit into child folders.
+The built-in `doc` template renders those links as `BtnLink` controls after the
+page content.
 
 `icons` is a lightweight presentation overlay for auto and custom items. Keys
 use the same matching rules as `sequence`; values are icon names rendered by the

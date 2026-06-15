@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import { urlNormalizer } from '@purestack/ts-util'
 import type {
   InternalNavItem,
   NavFile,
@@ -11,12 +12,10 @@ import {
   normalizeNavSequence,
 } from './sequence'
 import {
-  isExternalUrl,
   isPlainObject,
   resolveBoolean,
   resolveNumber,
   resolveString,
-  splitUrlSuffix,
 } from './utils'
 
 export async function loadCustomNavigation(
@@ -53,11 +52,12 @@ async function readNavFile(
     const items = normalizeNavItems(parsed.items, folder)
     const sequence = normalizeNavSequence(parsed.sequence, folder)
     const icons = normalizeNavIcons(parsed.icons, folder)
+    const pageLinks = resolveBoolean(parsed.pageLinks) ? true : undefined
     const mode =
       parsed.mode === 'merge' || parsed.mode === 'override'
         ? parsed.mode
         : 'merge'
-    return { mode, items, sequence, icons }
+    return { mode, items, sequence, icons, pageLinks }
   } catch (error) {
     const err = error as NodeJS.ErrnoException
     if (err.code === 'ENOENT') return null
@@ -101,12 +101,12 @@ function resolveUrl(raw: Record<string, unknown>, folder: string) {
   const url =
     resolveString(raw.url) || resolveString(raw.href) || resolveString(raw.path)
   if (!url) return undefined
-  if (isExternalUrl(url)) return url
+  if (urlNormalizer.isSpecialHref(url)) return url
   return resolveInternalUrl(folder, url)
 }
 
 function resolveInternalUrl(folder: string, url: string) {
-  const { base, suffix } = splitUrlSuffix(url)
+  const { base, suffix } = urlNormalizer.splitSuffix(url)
   const joined = path.posix.join('/', folder, base)
   const hasExt = path.posix.extname(joined).length > 0
   const normalized = hasExt || joined.endsWith('/') ? joined : `${joined}/`

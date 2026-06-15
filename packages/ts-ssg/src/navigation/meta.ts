@@ -1,8 +1,8 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import { resolveRouteInfo } from '../build/out-path'
 import type { ContentFile } from '../discover/content'
 import { parseFrontmatterSource } from '../frontmatter/frontmatter'
+import { resolveRouteInfo } from '../routing/route'
 import type { ContentMeta } from './model'
 import {
   humanizeSegment,

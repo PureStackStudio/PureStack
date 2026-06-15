@@ -2,7 +2,8 @@ import path from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
-import { resolveOutPath, resolveRouteInfo } from './out-path'
+import { resolveRouteInfo } from '../routing/route'
+import { resolveOutPath } from './out-path'
 
 const root = path.join('dist', 'site')
 
@@ -29,6 +30,11 @@ describe('resolveRouteInfo', () => {
   it('resolves nested routes', () => {
     const relPath = path.join('guide', 'overview.md')
     const info = resolveRouteInfo(file(relPath, '.md'))
+    expect(info.urlPath).toBe('/guide/overview/')
+  })
+
+  it('normalizes backslash separators in route paths', () => {
+    const info = resolveRouteInfo(file('guide\\overview.md', '.md'))
     expect(info.urlPath).toBe('/guide/overview/')
   })
 })

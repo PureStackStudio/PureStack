@@ -4,6 +4,7 @@ import {
   tryResolveTsSsgContext,
 } from '@purestack/ts-common'
 import { getSemanticToneClass, type SemanticTone } from '@purestack/ts-style'
+import { urlNormalizer } from '@purestack/ts-util'
 import {
   type ComputedRef,
   computed,
@@ -134,32 +135,13 @@ function resolveNavItems(context?: TsSsgContext): NavItem[] {
   return context?.navigation?.global ?? []
 }
 
-function normalizePath(url: string | undefined): string | undefined {
-  if (!url) return undefined
-  const trimmed = url.trim()
-  if (!trimmed) return undefined
-  if (trimmed.startsWith('#') || trimmed.startsWith('//')) return undefined
-  if (/^[a-zA-Z][a-zA-Z+.-]*:/.test(trimmed)) return undefined
-  const hashIndex = trimmed.indexOf('#')
-  const queryIndex = trimmed.indexOf('?')
-  const index =
-    hashIndex === -1
-      ? queryIndex
-      : queryIndex === -1
-        ? hashIndex
-        : Math.min(hashIndex, queryIndex)
-  const base = index === -1 ? trimmed : trimmed.slice(0, index)
-  if (!base) return undefined
-  const withSlash = base.startsWith('/') ? base : `/${base}`
-  if (withSlash === '/') return '/'
-  return withSlash.endsWith('/') ? withSlash : `${withSlash}/`
-}
-
 function resolveCurrentPath(context?: TsSsgContext): string | undefined {
-  const fromContext = normalizePath(context?.pageInfo?.urlPath)
+  const fromContext = urlNormalizer.normalizeInternalPath(
+    context?.pageInfo?.urlPath,
+  )
   if (fromContext) return fromContext
   if (typeof window !== 'undefined' && window.location?.pathname) {
-    return normalizePath(window.location.pathname)
+    return urlNormalizer.normalizeInternalPath(window.location.pathname)
   }
   return undefined
 }
@@ -174,7 +156,7 @@ function buildNavState(
     const childStates = item.children
       ? buildNavState(item.children, currentPath, stateKey)
       : []
-    const itemPath = normalizePath(item.url)
+    const itemPath = urlNormalizer.normalizeInternalPath(item.url)
     const isActive = Boolean(
       itemPath && currentPath && itemPath === currentPath,
     )

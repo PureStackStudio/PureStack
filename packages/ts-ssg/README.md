@@ -230,6 +230,7 @@ Each nav file may be:
 ```json
 {
   "mode": "merge",
+  "pageLinks": true,
   "sequence": ["index.md", "github", "guide/", "guide/install.md"],
   "items": [
     { "id": "github", "title": "GitHub", "url": "https://github.com/acme/docs" },
@@ -251,6 +252,10 @@ descendant folders, so one root nav file can order nested pages like
 `getting-started`, `/docs/getting-started/`), auto folders (`usage/`,
 `/docs/usage/`), or custom items by `id`. Unmatched menu entries are appended
 using normal `sortBy`; unknown sequence entries are ignored.
+
+Set `"pageLinks": true` in a nav file to render previous/next `BtnLink`
+controls after doc page content. The links follow the final visible navigation
+order, inherit into child folders, and skip external URLs.
 
 ## Templates
 
@@ -288,6 +293,7 @@ Built-in component sets are initialized automatically each build:
 - top bar: `topBar`
 - logo: `siteLogo`
 - navigation: `navMenu`, `navList`, `navItem`
+- page links: `pageLinks`
 - page toc: `pageToc`
 - pricing: `pricingTable`, `pricingPlan`, `pricingFeature`
 - search: `searchBox`

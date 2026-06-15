@@ -25,6 +25,16 @@ export interface NavItem {
   tone?: SemanticTone
 }
 
+export interface PageNavigationLink {
+  title: string
+  url: string
+}
+
+export interface PageNavigationLinks {
+  previous?: PageNavigationLink
+  next?: PageNavigationLink
+}
+
 export interface PageNavigation {
   mode: NavigationMode
   folder: string
@@ -32,4 +42,5 @@ export interface PageNavigation {
   items: NavItem[]
   global: NavItem[]
   tone: SemanticTone
+  pageLinks?: PageNavigationLinks
 }

@@ -5,6 +5,7 @@ import {
   normalizePosixPath,
   toOutputAssetRelPath,
   toPosixPath,
+  urlNormalizer,
 } from '@purestack/ts-util'
 import { type ComponentHead, defineComponent, flatten, html } from 'regor'
 
@@ -113,29 +114,13 @@ function resolveScriptSrc(
     throw new Error('PageScript requires a non-empty "src" prop.')
   }
   if (isExternalSrc(normalized)) return normalized
-  const { base, suffix } = splitSuffix(normalized)
+  const { base, suffix } = urlNormalizer.splitSuffix(normalized)
   const sourceRelPath = resolveSourceRelPath(base, pageRelPath)
   onSourceResolved?.(sourceRelPath)
   const publicPath =
     resolveScriptPublicPath?.(sourceRelPath) ??
     `/${toOutputAssetRelPath(sourceRelPath)}`
   return `${publicPath}${suffix}`
-}
-
-function splitSuffix(src: string) {
-  const hashIndex = src.indexOf('#')
-  const queryIndex = src.indexOf('?')
-  const index =
-    hashIndex === -1
-      ? queryIndex
-      : queryIndex === -1
-        ? hashIndex
-        : Math.min(hashIndex, queryIndex)
-  if (index < 0) return { base: src, suffix: '' }
-  return {
-    base: src.slice(0, index),
-    suffix: src.slice(index),
-  }
 }
 
 function resolveSourceRelPath(value: string, pageRelPath: string) {

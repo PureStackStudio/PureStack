@@ -1,5 +1,10 @@
 import type { ThemeOptions } from '@purestack/ts-style'
-import type { NavItem, PageInfo, SiteConfig } from './index'
+import type {
+  NavItem,
+  PageInfo,
+  PageNavigationLinks,
+  SiteConfig,
+} from './index'
 
 export interface PageOutlineItem {
   id: string
@@ -13,6 +18,7 @@ export interface TsSsgNavigation {
   root?: string
   global?: NavItem[]
   items?: NavItem[]
+  pageLinks?: PageNavigationLinks
 }
 
 export interface TsSsgContext {

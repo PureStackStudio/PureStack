@@ -22,6 +22,7 @@ import { defineLineChartComponents } from './standard/lineChart/lineChart'
 import { defineLogoComponents } from './standard/logo/logo'
 import { defineModalComponents } from './standard/modal/modal'
 import { defineNavigationComponents } from './standard/navMenu/navMenu'
+import { definePageLinksComponents } from './standard/pageLinks/pageLinks'
 import { defineScriptComponents } from './standard/pageScript/pageScript'
 import { definePageTocComponents } from './standard/pageToc/pageToc'
 import { definePanelComponents } from './standard/panel/panel'
@@ -70,6 +71,7 @@ export function defineComponents(getSvgIcon: GetSvgIcon) {
     ...defineVariableVirtualTableComponents(),
     ...defineNavigationComponents(),
     ...definePanelComponents(),
+    ...definePageLinksComponents(),
     ...definePageTocComponents(),
     ...definePricingComponents(),
     ...defineSearchComponents(),

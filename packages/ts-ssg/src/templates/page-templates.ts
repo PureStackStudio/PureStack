@@ -66,7 +66,12 @@ function renderDocTemplate({
               : []),
             h('main')
               .attr({ class: 'doc-main' })
-              .push(h('article').attr({ class: 'doc-content' }).raw(bodyHtml)),
+              .push(
+                h('article')
+                  .attr({ class: 'doc-content' })
+                  .raw(bodyHtml)
+                  .push(...(navigation?.pageLinks ? [h('PageLinks')] : [])),
+              ),
             ...(layout.showToc
               ? [
                   h('aside')

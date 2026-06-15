@@ -5,6 +5,9 @@ import { disableLogger, getLogger, type Logger } from 'logpot'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from '../config/config'
 import type { ContentFile } from '../discover/content'
+import { discoverContent } from '../discover/content'
+import { buildNavigation } from '../navigation/navigation'
+import { initBuiltinComponents } from '../regor/initBuiltinComponents'
 import { renderPageFromFile } from './page'
 
 async function writeFile(filePath: string, contents = '') {
@@ -18,6 +21,7 @@ describe('page content compilation', () => {
   beforeAll(() => {
     disableLogger()
     logger = getLogger()
+    initBuiltinComponents()
   })
 
   afterAll(async () => {
@@ -117,6 +121,73 @@ describe('page content compilation', () => {
       )
 
       expect(page.bodyHtml).toContain('href="/docs/usage/reads-and-writes/"')
+    } finally {
+      await fs.rm(root, { recursive: true, force: true })
+    }
+  })
+
+  it('renders previous and next page links when nav file enables pageLinks', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-page-'))
+    try {
+      const contentDir = path.join(root, 'content')
+      const outDir = path.join(root, 'out')
+      await writeFile(path.join(contentDir, 'docs', 'index.md'), '# Docs')
+      await writeFile(
+        path.join(contentDir, 'docs', 'getting-started.md'),
+        '# Getting Started',
+      )
+      await writeFile(
+        path.join(contentDir, 'docs', 'usage', 'reads-and-writes.md'),
+        '# Reads and Writes',
+      )
+      await writeFile(
+        path.join(contentDir, 'docs', '_nav.json'),
+        JSON.stringify(
+          {
+            pageLinks: true,
+            sequence: [
+              'index.md',
+              'getting-started.md',
+              'usage/reads-and-writes.md',
+            ],
+          },
+          null,
+          2,
+        ),
+      )
+
+      const config = resolveSiteConfig({
+        rootDir: root,
+        contentDir,
+        outDir,
+        navigation: {
+          mode: 'hybrid',
+          maxDepth: 20,
+          roots: ['docs'],
+        },
+      })
+      const files = await discoverContent(contentDir)
+      const navigation = await buildNavigation(contentDir, files, {
+        mode: 'hybrid',
+        maxDepth: 20,
+        roots: ['docs'],
+      })
+      const page = await renderPageFromFile(
+        { config, navigation },
+        toContentFile(contentDir, path.join('docs', 'getting-started.md')),
+      )
+
+      expect(page.navigation?.pageLinks).toEqual({
+        previous: { title: 'Docs', url: '/docs/' },
+        next: {
+          title: 'Reads and Writes',
+          url: '/docs/usage/reads-and-writes/',
+        },
+      })
+      expect(page.html).toContain('rel="prev"')
+      expect(page.html).toContain('href="/docs/"')
+      expect(page.html).toContain('rel="next"')
+      expect(page.html).toContain('href="/docs/usage/reads-and-writes/"')
     } finally {
       await fs.rm(root, { recursive: true, force: true })
     }

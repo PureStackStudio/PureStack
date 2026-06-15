@@ -20,6 +20,7 @@ export interface NavigationTree {
   mode: NavigationMode
   config: ResolvedNavigationConfig
   byFolder: Record<string, NavItem[]>
+  pageLinksByFolder: Record<string, boolean>
   global: NavItem[]
 }
 
@@ -28,6 +29,7 @@ export interface NavFile {
   items: InternalNavItem[]
   sequence: NavSequenceEntry[]
   icons: NavIconEntry[]
+  pageLinks?: boolean
 }
 
 export type InternalNavItem = Omit<NavItem, 'children'> & {

@@ -1,7 +1,7 @@
 import path from 'node:path'
 import { urlNormalizer } from '@purestack/ts-util'
 import type { ContentFile } from '../discover/content'
-import { resolveRouteInfo } from './out-path'
+import { resolveRouteInfo } from '../routing/route'
 
 export function resolvePageContentHref(
   href: string,

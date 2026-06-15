@@ -437,6 +437,61 @@ describe('navigation', () => {
       ).toBe('iconoir:rocket')
     })
   })
+
+  it('skips non-page nav items when resolving previous and next page links', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      await fs.mkdir(path.join(contentDir, 'docs'), { recursive: true })
+      await fs.writeFile(
+        path.join(contentDir, 'docs', 'index.mdx'),
+        `---\ntitle: Docs\n---\n# Docs\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'docs', 'intro.mdx'),
+        `---\ntitle: Intro\n---\n# Intro\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'docs', 'tutorial.mdx'),
+        `---\ntitle: Tutorial\n---\n# Tutorial\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'docs', '_nav.json'),
+        JSON.stringify(
+          {
+            mode: 'override',
+            pageLinks: true,
+            items: [
+              { title: 'Docs', url: './' },
+              { title: 'Intro', url: 'intro#top' },
+              { title: 'Tutorial', url: 'tutorial?tab=reference' },
+              { title: 'Download', url: '/assets/manual.pdf' },
+              { title: 'GitHub', url: 'https://github.com/example/project' },
+            ],
+          },
+          null,
+          2,
+        ),
+        'utf8',
+      )
+
+      const files = await discoverContent(contentDir)
+      const nav = await buildNavigation(contentDir, files, {
+        mode: 'hybrid',
+        maxDepth: 20,
+        roots: ['docs'],
+      })
+      const intro = findContentFile(files, 'docs/intro.mdx')
+      const pageNav = resolvePageNavigation(nav, intro)
+
+      expect(pageNav?.pageLinks).toEqual({
+        previous: { title: 'Docs', url: '/docs/' },
+        next: { title: 'Tutorial', url: '/docs/tutorial/' },
+      })
+    })
+  })
 })
 
 function findContentFile(files: ContentFile[], relPath: string): ContentFile {

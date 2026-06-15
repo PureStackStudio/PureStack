@@ -68,6 +68,23 @@ export const urlNormalizer = {
     return normalized || '/'
   },
 
+  normalizeInternalPath(value: string | undefined): string | undefined {
+    if (typeof value !== 'string') return undefined
+    const trimmed = value.trim()
+    if (!trimmed || urlNormalizer.isExternalHref(trimmed)) return undefined
+
+    const { base } = urlNormalizer.splitSuffix(trimmed)
+    const normalizedBase = base
+      .replaceAll('\\', '/')
+      .replace(/^\.\/+/, '')
+      .replace(/\/{2,}/g, '/')
+    if (!normalizedBase) return undefined
+    if (urlNormalizer.isExternalHref(normalizedBase)) return undefined
+    return urlNormalizer.normalizeHref(normalizedBase, {
+      trailingSlash: 'always',
+    })
+  },
+
   hasPathExtension(value: string): boolean {
     return hasPathExtension(value)
   },

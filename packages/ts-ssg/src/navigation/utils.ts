@@ -30,27 +30,6 @@ export function isPlainObject(
   return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
 
-export function splitUrlSuffix(url: string) {
-  const hashIndex = url.indexOf('#')
-  const queryIndex = url.indexOf('?')
-  const index =
-    hashIndex === -1
-      ? queryIndex
-      : queryIndex === -1
-        ? hashIndex
-        : Math.min(hashIndex, queryIndex)
-  if (index === -1) return { base: url, suffix: '' }
-  return { base: url.slice(0, index), suffix: url.slice(index) }
-}
-
-export function isExternalUrl(url: string) {
-  return (
-    url.startsWith('#') ||
-    url.startsWith('//') ||
-    /^[a-zA-Z][a-zA-Z+.-]*:/.test(url)
-  )
-}
-
 export function humanizeSegment(segment: string) {
   const cleaned = segment.replace(/[-_]+/g, ' ').trim()
   if (!cleaned) return segment

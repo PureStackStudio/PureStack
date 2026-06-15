@@ -24,7 +24,7 @@ import {
   readManifest,
   writeManifest,
 } from '../manifest'
-import { resolveRouteInfo } from '../out-path'
+import { resolveRouteInfo } from '../../routing/route'
 import {
   type BuildContext,
   resolveFooterHtmlByDirectory,

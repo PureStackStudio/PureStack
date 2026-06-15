@@ -31,7 +31,8 @@ import {
 import { resolvePageContentHref } from './content-hrefs'
 import { resolveHeadConfig } from './head-config'
 import { readSource, writeHtml } from './io'
-import { resolveOutPath, resolveRouteInfo } from './out-path'
+import { resolveRouteInfo } from '../routing/route'
+import { resolveOutPath } from './out-path'
 import { renderPage } from './renderer'
 
 export interface BuildContext {

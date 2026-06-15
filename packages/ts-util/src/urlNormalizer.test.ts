@@ -60,4 +60,15 @@ describe('urlNormalizer', () => {
     expect(urlNormalizer.normalizeUrlPath('/guide')).toBe('/guide/')
     expect(urlNormalizer.normalizeUrlPath('/feed.xml')).toBe('/feed.xml')
   })
+
+  it('normalizes internal path keys without query or hash suffixes', () => {
+    expect(urlNormalizer.normalizeInternalPath('./guide#intro')).toBe('/guide/')
+    expect(urlNormalizer.normalizeInternalPath('guide?tab=api')).toBe('/guide/')
+    expect(urlNormalizer.normalizeInternalPath('/feed.xml')).toBe('/feed.xml')
+    expect(urlNormalizer.normalizeInternalPath('https://example.com')).toBe(
+      undefined,
+    )
+    expect(urlNormalizer.normalizeInternalPath('./../guide')).toBe(undefined)
+    expect(urlNormalizer.normalizeInternalPath('#intro')).toBe(undefined)
+  })
 })

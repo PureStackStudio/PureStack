@@ -1,5 +1,6 @@
 import path from 'node:path'
 import type { NavigationSort } from '@purestack/ts-common'
+import { urlNormalizer } from '@purestack/ts-util'
 import type {
   ContentMeta,
   FolderNode,
@@ -8,9 +9,7 @@ import type {
   NavSequenceEntry,
 } from './model'
 import {
-  isExternalUrl,
   isPlainObject,
-  splitUrlSuffix,
   stripPathExtension,
   toPosixPath,
 } from './utils'
@@ -179,8 +178,13 @@ function buildItemSequenceKeySet(item: InternalNavItem): Set<string> {
 
 function buildSequenceEntryKeys(value: string, folder: string): string[] {
   const keys = [value]
-  const { base, suffix } = splitUrlSuffix(value)
-  if (folder && base && !isExternalUrl(base) && !base.startsWith('/')) {
+  const { base, suffix } = urlNormalizer.splitSuffix(value)
+  if (
+    folder &&
+    base &&
+    !urlNormalizer.isSpecialHref(base) &&
+    !base.startsWith('/')
+  ) {
     keys.push(`${path.posix.normalize(path.posix.join(folder, base))}${suffix}`)
   }
   return [...new Set(keys)]
@@ -215,7 +219,7 @@ function normalizeSequenceKey(value: string | undefined) {
   if (!value) return undefined
   const trimmed = value.trim()
   if (!trimmed) return undefined
-  const { base } = splitUrlSuffix(trimmed)
+  const { base } = urlNormalizer.splitSuffix(trimmed)
   const normalized = base
     .replaceAll('\\', '/')
     .replace(/^\.\//, '')

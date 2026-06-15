@@ -7,8 +7,9 @@ import { pickSemanticTone } from '@purestack/ts-style'
 import type { ContentFile } from '../discover/content'
 import { resolveNavigationConfig } from './config'
 import { loadContentMeta } from './meta'
-import type { NavigationTree, ResolvedNavigationConfig } from './model'
+import type { NavFile, NavigationTree, ResolvedNavigationConfig } from './model'
 import { loadCustomNavigation } from './nav-file'
+import { buildPageLinksByFolder, resolvePageLinks } from './page-links'
 import {
   buildAutoNavigation,
   buildBaseFolderNavigation,
@@ -50,8 +51,15 @@ export async function buildNavigation(
     config,
   )
   const publicByFolder = stripInternalNavByFolder(byFolder)
+  const pageLinksByFolder = buildPageLinksByFolder(customByFolder)
   const global = publicByFolder[''] ?? []
-  return { mode: config.mode, config, byFolder: publicByFolder, global }
+  return {
+    mode: config.mode,
+    config,
+    byFolder: publicByFolder,
+    pageLinksByFolder,
+    global,
+  }
 }
 
 export function resolvePageNavigation(
@@ -63,6 +71,7 @@ export function resolvePageNavigation(
   const folder = resolveFolderKey(file.relPath)
   const root = resolveNavigationRoot(folder, tree.config.roots)
   const items = tree.byFolder[root] ?? tree.byFolder[folder] ?? []
+  const pageLinks = resolvePageLinks(tree, folder, items, file)
   return {
     mode: tree.mode,
     folder,
@@ -70,6 +79,7 @@ export function resolvePageNavigation(
     items,
     global: tree.global,
     tone: pickSemanticTone(frontmatter?.nav?.tone) ?? tree.config.tone,
+    ...(pageLinks ? { pageLinks } : {}),
   }
 }
 

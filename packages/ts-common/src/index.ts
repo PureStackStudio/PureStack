@@ -16,6 +16,8 @@ export type {
   NavigationConfig,
   NavigationMode,
   NavigationSort,
+  PageNavigationLink,
+  PageNavigationLinks,
   PageNavigation,
 } from './navMenu-types'
 export type {

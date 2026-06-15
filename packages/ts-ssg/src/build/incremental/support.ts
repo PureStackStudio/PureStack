@@ -20,7 +20,8 @@ import {
   readSignature,
   type StylesManifestEntry,
 } from '../manifest'
-import { resolveOutPath, resolveRouteInfo } from '../out-path'
+import { resolveRouteInfo } from '../../routing/route'
+import { resolveOutPath } from '../out-path'
 import type { BuildCountSummary } from '../site'
 
 export class ManifestContentIndex {
