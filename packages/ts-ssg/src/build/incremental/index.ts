@@ -13,6 +13,7 @@ import {
 } from '../../discover/content'
 import { buildNavigation } from '../../navigation/navigation'
 import { initBuiltinComponents } from '../../regor/initBuiltinComponents'
+import { assertUniqueContentRoutes, resolveRouteInfo } from '../../routing/route'
 import { copyStaticAssets } from '../assets'
 import { resolveBuildSiteConfig } from '../build-config'
 import { writeGeneratedFavicon } from '../favicon'
@@ -24,7 +25,6 @@ import {
   readManifest,
   writeManifest,
 } from '../manifest'
-import { resolveRouteInfo } from '../../routing/route'
 import {
   type BuildContext,
   resolveFooterHtmlByDirectory,
@@ -83,6 +83,7 @@ async function createIncrementalRuntime(
   initBuiltinComponents({ includeShikiStyles: isShikiEnabled(config.mdx) })
   const log = getLogger()
   const discovered = await discoverContent(config.contentDir)
+  assertUniqueContentRoutes(discovered)
   const navigation = await buildNavigation(
     config.contentDir,
     discovered,
@@ -279,6 +280,7 @@ class IncrementalRuntime {
       this.context.mdx,
     )
     const contentFiles = await discoverContent(this.config.contentDir)
+    assertUniqueContentRoutes(contentFiles)
     await hooks.onContentDiscovered?.(this.context, contentFiles)
     this.context.navigation = await buildNavigation(
       this.config.contentDir,

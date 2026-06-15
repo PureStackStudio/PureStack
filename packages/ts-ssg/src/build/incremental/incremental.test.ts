@@ -1,5 +1,4 @@
 import fs from 'node:fs/promises'
-import os from 'node:os'
 import path from 'node:path'
 
 import { disableLogger, getLogger, type Logger } from 'logpot'
@@ -10,7 +9,7 @@ import { createEmptyManifest, readManifest, writeManifest } from '../manifest'
 import { createIncrementalBuilder } from './index'
 
 async function withTempDir<T>(worker: (dir: string) => Promise<T>) {
-  const base = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-'))
+  const base = await fs.mkdtemp(path.join(process.cwd(), '.tmp-ts-ssg-'))
   try {
     return await worker(base)
   } finally {
@@ -330,8 +329,61 @@ describe('incremental builder', () => {
       await builder.buildAll('stable scripts')
 
       const bundle = await readScriptBundle(outDir)
-      expect(bundle.path).toBe(path.join(outDir, 'hosts', 'hosts.js'))
+      expect(bundle.path).toBe(path.join(outDir, 'hosts.js'))
       expect(bundle.content).toContain('stable')
+    })
+  })
+
+  it('builds same-name folder pages with colocated script entrypoints', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      const outDir = path.join(base, 'out')
+      await fs.mkdir(path.join(contentDir, 'account'), { recursive: true })
+      await fs.mkdir(outDir, { recursive: true })
+      await fs.writeFile(
+        path.join(contentDir, 'account', 'account.mdx'),
+        '<RegorApp src="./account.ts" id="account-admin-app" />',
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'account', 'account.ts'),
+        "console.log('colocated account')\n",
+        'utf8',
+      )
+
+      const builder = await createIncrementalBuilder({
+        siteConfig: {
+          rootDir: base,
+          contentDir,
+          outDir,
+          siteTitle: 'Test Site',
+          style: {
+            fileName: 'site.css',
+            href: '/assets/site.css',
+          },
+          mdx: {
+            disableHighlighter: true,
+          },
+        },
+      })
+
+      await builder.buildAll('same-name folder page')
+
+      const bundle = await readScriptBundle(
+        outDir,
+        path.join('account', 'index.html'),
+      )
+      expect(path.dirname(bundle.path)).toBe(path.join(outDir, 'account'))
+      expect(path.basename(bundle.path)).toMatch(/^account\.[\w-]+\.js$/)
+      expect(bundle.content).toContain('colocated account')
+
+      const manifest = await readManifest(outDir)
+      expect(
+        manifest?.content[path.join('account', 'account.mdx')]?.outPath,
+      ).toBe(
+        path.join(outDir, 'account', 'index.html'),
+      )
+      expect(manifest?.assets['account/account.ts']?.outPath).toBe(bundle.path)
     })
   })
 })

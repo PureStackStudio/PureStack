@@ -52,7 +52,7 @@ describe('static assets', () => {
       ext: '.txt',
     })
 
-    expect(tsOut).toBe(path.join(outDir, 'login', 'login.js'))
+    expect(tsOut).toBe(path.join(outDir, 'login.js'))
     expect(txtOut).toBe(path.join(outDir, 'notes.txt'))
   })
 
@@ -68,7 +68,7 @@ describe('static assets', () => {
       { scriptCacheKey: 'm4x9p2' },
     )
 
-    expect(tsOut).toBe(path.join(outDir, 'login', 'login.m4x9p2.js'))
+    expect(tsOut).toBe(path.join(outDir, 'login.m4x9p2.js'))
   })
 
   it('copies non-ts assets and skips .ts files during static discovery', async () => {
@@ -87,7 +87,7 @@ describe('static assets', () => {
       expect(hasAsset(result, 'login.ts', '.ts')).toBe(false)
       expect(hasAsset(result, 'notes.txt', '.txt')).toBe(true)
 
-      const jsPath = path.join(outDir, 'login', 'login.js')
+      const jsPath = path.join(outDir, 'login.js')
       const txtPath = path.join(outDir, 'notes.txt')
 
       await expect(fs.stat(jsPath)).rejects.toBeTruthy()
@@ -178,9 +178,9 @@ describe('static assets', () => {
     try {
       const entryPath = path.join(root, 'login.ts')
       await writeFile(entryPath, "console.log('fresh')\n")
-      await writeFile(path.join(outDir, 'login', 'login.js'), 'old stable')
-      await writeFile(path.join(outDir, 'login', 'login.oldkey.js'), 'old')
-      await writeFile(path.join(outDir, 'login', 'other.oldkey.js'), 'keep')
+      await writeFile(path.join(outDir, 'login.js'), 'old stable')
+      await writeFile(path.join(outDir, 'login.oldkey.js'), 'old')
+      await writeFile(path.join(outDir, 'other.oldkey.js'), 'keep')
 
       const result = await copyStaticAsset(
         root,
@@ -193,16 +193,14 @@ describe('static assets', () => {
         { scriptCacheKey: 'newkey' },
       )
 
-      expect(result.outPath).toBe(path.join(outDir, 'login', 'login.newkey.js'))
+      expect(result.outPath).toBe(path.join(outDir, 'login.newkey.js'))
       await expect(fs.stat(result.outPath)).resolves.toBeTruthy()
+      await expect(fs.stat(path.join(outDir, 'login.js'))).rejects.toBeTruthy()
       await expect(
-        fs.stat(path.join(outDir, 'login', 'login.js')),
+        fs.stat(path.join(outDir, 'login.oldkey.js')),
       ).rejects.toBeTruthy()
       await expect(
-        fs.stat(path.join(outDir, 'login', 'login.oldkey.js')),
-      ).rejects.toBeTruthy()
-      await expect(
-        fs.stat(path.join(outDir, 'login', 'other.oldkey.js')),
+        fs.stat(path.join(outDir, 'other.oldkey.js')),
       ).resolves.toBeTruthy()
     } finally {
       await fs.rm(root, { recursive: true, force: true })

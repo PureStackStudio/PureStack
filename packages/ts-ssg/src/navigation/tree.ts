@@ -195,10 +195,14 @@ function buildNestedChildNavItem(
   )
   if (childItems.length === 0) return null
   const childOverride = customByFolder[child.relPath]?.mode === 'override'
-  const indexMeta = child.pages.find((page) => page.isIndex && !page.hidden)
-  if (!childOverride && indexMeta && config.includeIndex) {
-    const indexItem = toNavItem(indexMeta)
-    const filtered = childItems.filter((item) => item.url !== indexMeta.urlPath)
+  const folderIndexMeta = child.pages.find(
+    (page) => page.isFolderIndex && !page.hidden,
+  )
+  if (!childOverride && folderIndexMeta && config.includeIndex) {
+    const indexItem = toNavItem(folderIndexMeta)
+    const filtered = childItems.filter(
+      (item) => item.url !== folderIndexMeta.urlPath,
+    )
     const folderIndexItem = {
       ...indexItem,
       sequenceKeys: [
@@ -224,7 +228,7 @@ function createPageItems(
   const items: InternalNavItem[] = []
   for (const page of pages) {
     if (page.hidden) continue
-    if (!config.includeIndex && page.isIndex) continue
+    if (!config.includeIndex && page.isFolderIndex) continue
     items.push(toNavItem(page))
   }
   return items

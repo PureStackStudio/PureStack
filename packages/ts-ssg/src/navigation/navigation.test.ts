@@ -171,6 +171,35 @@ describe('navigation', () => {
     })
   })
 
+  it('uses same-name folder pages as folder index navigation items', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      await fs.mkdir(path.join(contentDir, 'account'), { recursive: true })
+      await fs.writeFile(
+        path.join(contentDir, 'account', 'account.mdx'),
+        `---\ntitle: Account\n---\n# Account\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'account', 'settings.mdx'),
+        `---\ntitle: Settings\n---\n# Settings\n`,
+        'utf8',
+      )
+
+      const files = await discoverContent(contentDir)
+      const nav = await buildNavigation(contentDir, files, { maxDepth: 2 })
+      const rootItems = nav?.byFolder[''] ?? []
+
+      expect(rootItems).toEqual([
+        {
+          title: 'Account',
+          url: '/account/',
+          children: [{ title: 'Settings', url: '/account/settings/' }],
+        },
+      ])
+    })
+  })
+
   it('uses configured navigation roots for descendant pages', async () => {
     await withTempDir(async (base) => {
       const contentDir = path.join(base, 'content')

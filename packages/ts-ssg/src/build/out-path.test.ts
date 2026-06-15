@@ -2,7 +2,7 @@ import path from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
-import { resolveRouteInfo } from '../routing/route'
+import { assertUniqueContentRoutes, resolveRouteInfo } from '../routing/route'
 import { resolveOutPath } from './out-path'
 
 const root = path.join('dist', 'site')
@@ -27,6 +27,13 @@ describe('resolveRouteInfo', () => {
     expect(info.urlPath).toBe('/guide/')
   })
 
+  it('resolves same-name folder index routes', () => {
+    const relPath = path.join('account', 'account.mdx')
+    const info = resolveRouteInfo(file(relPath, '.mdx'))
+    expect(info.urlPath).toBe('/account/')
+    expect(info.isFolderIndex).toBe(true)
+  })
+
   it('resolves nested routes', () => {
     const relPath = path.join('guide', 'overview.md')
     const info = resolveRouteInfo(file(relPath, '.md'))
@@ -36,6 +43,17 @@ describe('resolveRouteInfo', () => {
   it('normalizes backslash separators in route paths', () => {
     const info = resolveRouteInfo(file('guide\\overview.md', '.md'))
     expect(info.urlPath).toBe('/guide/overview/')
+  })
+
+  it('throws on duplicate content routes', () => {
+    expect(() =>
+      assertUniqueContentRoutes([
+        file(path.join('account', 'index.mdx'), '.mdx'),
+        file(path.join('account', 'account.mdx'), '.mdx'),
+      ]),
+    ).toThrow(
+      'Duplicate content routes detected. /account/: account/account.mdx, account/index.mdx',
+    )
   })
 })
 
@@ -49,6 +67,12 @@ describe('resolveOutPath', () => {
     const relPath = path.join('guide', 'index.md')
     const outPath = resolveOutPath(root, file(relPath, '.md'))
     expect(outPath).toBe(path.join(root, 'guide', 'index.html'))
+  })
+
+  it('writes same-name folder index to its folder', () => {
+    const relPath = path.join('account', 'account.mdx')
+    const outPath = resolveOutPath(root, file(relPath, '.mdx'))
+    expect(outPath).toBe(path.join(root, 'account', 'index.html'))
   })
 
   it('writes nested content to clean url folder', () => {

@@ -82,6 +82,7 @@ yarn tsx packages/ts-ssg/src/cli.ts --content ./packages/ts-ssg/sample-content -
 - Routes:
   - `index.mdx` -> `/`
   - `guide/index.md` -> `/guide/`
+  - `guide/guide.mdx` -> `/guide/`
   - `guide/intro.mdx` -> `/guide/intro/`
 - Output pages are always `index.html` in folder routes.
 

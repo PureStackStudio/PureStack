@@ -3,6 +3,7 @@ import type { SiteConfig } from '@purestack/ts-common'
 import type { Logger } from 'logpot'
 import { type ContentFile, discoverContent } from '../../discover/content'
 import { buildNavigation } from '../../navigation/navigation'
+import { assertUniqueContentRoutes } from '../../routing/route'
 import {
   type BuildManifest,
   type FileSignature,
@@ -104,6 +105,7 @@ export class IncrementalContentState {
     let relPath = this.contentIndex.getRelPathByUrlPath(normalized)
     if (!relPath) {
       const contentFiles = await discoverContent(this.input.config.contentDir)
+      assertUniqueContentRoutes(contentFiles)
       this.contentIndex.updateUrlPathMapFromFiles(contentFiles)
       relPath = this.contentIndex.getRelPathByUrlPath(normalized)
       if (!relPath) return false
@@ -113,6 +115,7 @@ export class IncrementalContentState {
 
   async refreshNavigationAndMarkDirty() {
     const contentFiles = await discoverContent(this.input.config.contentDir)
+    assertUniqueContentRoutes(contentFiles)
     this.input.context.navigation = await buildNavigation(
       this.input.config.contentDir,
       contentFiles,

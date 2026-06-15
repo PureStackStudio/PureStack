@@ -65,7 +65,7 @@ export function toOutputAssetRelPath(
   const fileName = cacheKey
     ? `${name}.${cacheKey}${JS_EXT}`
     : `${name}${JS_EXT}`
-  return dir.length > 0 ? `${dir}/${name}/${fileName}` : `${name}/${fileName}`
+  return dir.length > 0 ? `${dir}/${fileName}` : fileName
 }
 
 function normalizeCacheKey(value: string | undefined) {

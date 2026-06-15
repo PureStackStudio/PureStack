@@ -20,23 +20,29 @@ describe('assetPath', () => {
   })
 
   it('maps TypeScript asset paths to emitted output paths', () => {
-    expect(toOutputAssetRelPath('login.ts')).toBe('login/login.js')
-    expect(toOutputAssetRelPath('nested/app.ts')).toBe('nested/app/app.js')
+    expect(toOutputAssetRelPath('login.ts')).toBe('login.js')
+    expect(toOutputAssetRelPath('nested/app.ts')).toBe('nested/app.js')
     expect(toOutputAssetRelPath('nested/path/ENTRY.TS')).toBe(
-      'nested/path/ENTRY/ENTRY.js',
+      'nested/path/ENTRY.js',
     )
-    expect(toOutputAssetRelPath('v1.2/app.ts')).toBe('v1.2/app/app.js')
-    expect(toOutputAssetRelPath('.hidden.ts')).toBe('.hidden/.hidden.js')
-    expect(toOutputAssetRelPath('types/foo.d.ts')).toBe('types/foo.d/foo.d.js')
+    expect(toOutputAssetRelPath('account/account.ts')).toBe(
+      'account/account.js',
+    )
+    expect(toOutputAssetRelPath('v1.2/app.ts')).toBe('v1.2/app.js')
+    expect(toOutputAssetRelPath('.hidden.ts')).toBe('.hidden.js')
+    expect(toOutputAssetRelPath('types/foo.d.ts')).toBe('types/foo.d.js')
   })
 
   it('adds cache keys to emitted TypeScript filenames', () => {
     expect(toOutputAssetRelPath('login.ts', { cacheKey: 'm4x9p2' })).toBe(
-      'login/login.m4x9p2.js',
+      'login.m4x9p2.js',
     )
     expect(
       toOutputAssetRelPath('nested/app.ts', { cacheKey: 'build:42' }),
-    ).toBe('nested/app/app.build42.js')
+    ).toBe('nested/app.build42.js')
+    expect(
+      toOutputAssetRelPath('account/account.ts', { cacheKey: 'm4x9p2' }),
+    ).toBe('account/account.m4x9p2.js')
   })
 
   it('preserves non-TypeScript asset paths', () => {
@@ -45,9 +51,12 @@ describe('assetPath', () => {
   })
 
   it('normalizes Windows separators before rewriting output paths', () => {
-    expect(toOutputAssetRelPath('nested\\app.ts')).toBe('nested/app/app.js')
+    expect(toOutputAssetRelPath('nested\\app.ts')).toBe('nested/app.js')
     expect(toOutputAssetRelPath('nested\\path\\ENTRY.TS')).toBe(
-      'nested/path/ENTRY/ENTRY.js',
+      'nested/path/ENTRY.js',
+    )
+    expect(toOutputAssetRelPath('account\\account.ts')).toBe(
+      'account/account.js',
     )
   })
 

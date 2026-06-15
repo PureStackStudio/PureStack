@@ -121,13 +121,13 @@ describe('footer hierarchy', () => {
         {
           config,
           headerHtmlByDir,
-          resolveScriptPublicPath: () => '/auth-state/auth-state.m4x9p2.js',
+          resolveScriptPublicPath: () => '/auth-state.m4x9p2.js',
         },
         toContentFile(contentDir, path.join('account', 'settings.mdx')),
       )
 
-      expect(page.html).toContain('src="/auth-state/auth-state.m4x9p2.js"')
-      expect(page.html).not.toContain('/account/auth-state/auth-state.js')
+      expect(page.html).toContain('src="/auth-state.m4x9p2.js"')
+      expect(page.html).not.toContain('/account/auth-state.js')
       expect(page.scriptEntrypoints).toEqual(['auth-state.ts'])
     } finally {
       await fs.rm(root, { recursive: true, force: true })

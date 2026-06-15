@@ -57,7 +57,7 @@ export interface ContentMeta {
   badge?: string
   icon?: string
   hidden: boolean
-  isIndex: boolean
+  isFolderIndex: boolean
 }
 
 export interface FolderNode {

@@ -1,8 +1,7 @@
 import fs from 'node:fs/promises'
-import path from 'node:path'
 import type { ContentFile } from '../discover/content'
 import { parseFrontmatterSource } from '../frontmatter/frontmatter'
-import { resolveRouteInfo } from '../routing/route'
+import { resolveRouteFileInfo } from '../routing/route'
 import type { ContentMeta } from './model'
 import {
   humanizeSegment,
@@ -10,7 +9,6 @@ import {
   resolveFolderKey,
   resolveNumber,
   resolveString,
-  toPosixPath,
 } from './utils'
 
 export async function loadContentMeta(
@@ -21,11 +19,10 @@ export async function loadContentMeta(
     const raw = await fs.readFile(file.absPath, 'utf8')
     const parsed = parseFrontmatterSource(raw, file.relPath)
     const frontmatter = parsed.frontmatter
-    const relPosix = toPosixPath(file.relPath)
-    const baseName = path.posix.basename(relPosix, file.ext)
-    const isIndex = baseName === 'index'
+    const route = resolveRouteFileInfo(file)
+    const baseName = route.baseName
     const folder = resolveFolderKey(file.relPath)
-    const { urlPath } = resolveRouteInfo(file)
+    const { urlPath } = route
 
     const nav = frontmatter.nav
     const hidden =
@@ -50,7 +47,7 @@ export async function loadContentMeta(
       badge,
       icon,
       hidden,
-      isIndex,
+      isFolderIndex: route.isFolderIndex,
     })
   }
   return result

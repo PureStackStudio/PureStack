@@ -20,7 +20,7 @@ describe('PageScript rendering', () => {
     cleanup()
 
     expect(html).toContain('<script')
-    expect(html).toContain('src="/login/login.js"')
+    expect(html).toContain('src="/login.js"')
     expect(html).toContain('type="module"')
   })
 
@@ -41,7 +41,7 @@ describe('PageScript rendering', () => {
     )
     cleanup()
 
-    expect(html).toContain('src="/scripts/policies/policies.js?mode=prod#boot"')
+    expect(html).toContain('src="/scripts/policies.js?mode=prod#boot"')
     expect(html).toContain('type="module"')
   })
 
@@ -58,14 +58,14 @@ describe('PageScript rendering', () => {
         },
         resolveScriptPublicPath: (sourceRelPath) => {
           resolvedScripts.push(sourceRelPath)
-          return '/login/login.ab12.js'
+          return '/login.ab12.js'
         },
       }),
     })
     cleanup()
 
     expect(resolvedScripts).toEqual(['login.ts'])
-    expect(html).toContain('src="/login/login.ab12.js?mode=prod#boot"')
+    expect(html).toContain('src="/login.ab12.js?mode=prod#boot"')
   })
 
   it('resolves local src relative to an explicit source owner', () => {
@@ -85,8 +85,25 @@ describe('PageScript rendering', () => {
     )
     cleanup()
 
-    expect(html).toContain('src="/auth-state/auth-state.js"')
-    expect(html).not.toContain('/account/auth-state/auth-state.js')
+    expect(html).toContain('src="/auth-state.js"')
+    expect(html).not.toContain('/account/auth-state.js')
+  })
+
+  it('maps same-name folder page scripts beside their folder page', () => {
+    const cleanup = ensureDomGlobals()
+    const components = defineScriptComponents()
+    const html = renderApp('<PageScript src="./account.ts" />', {
+      components,
+      context: createTestContext({
+        pageInfo: {
+          relPath: 'account/account.mdx',
+          urlPath: '/account/',
+        },
+      }),
+    })
+    cleanup()
+
+    expect(html).toContain('src="/account/account.js"')
   })
 
   it('renders RegorApp as app shell and reuses PageScript src mapping', () => {
@@ -109,7 +126,7 @@ describe('PageScript rendering', () => {
     expect(html).toContain('<app')
     expect(html).toContain('id="hosts-app"')
     expect(html).toContain('name="hosts-main"')
-    expect(html).toContain('src="/hosts/hosts.js"')
+    expect(html).toContain('src="/hosts.js"')
     expect(html).toContain('type="module"')
   })
 
@@ -130,7 +147,7 @@ describe('PageScript rendering', () => {
     )
     cleanup()
 
-    expect(html).toContain('src="/auth-state/auth-state.js"')
-    expect(html).not.toContain('/account/auth-state/auth-state.js')
+    expect(html).toContain('src="/auth-state.js"')
+    expect(html).not.toContain('/account/auth-state.js')
   })
 })
