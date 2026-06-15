@@ -25,7 +25,7 @@ const delta: DeltaToneColors = {
 }
 const delta1: DeltaToneColors = {
   canvas: 30,
-  button: 0,
+  button: 10,
   foreground: 7,
   border: 30,
   surface: 30,
