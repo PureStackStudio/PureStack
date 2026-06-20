@@ -7,7 +7,7 @@ import { pickSemanticTone } from '@purestack/ts-style'
 import type { ContentFile } from '../discover/content'
 import { resolveNavigationConfig } from './config'
 import { loadContentMeta } from './meta'
-import type { NavFile, NavigationTree, ResolvedNavigationConfig } from './model'
+import type { NavigationTree, ResolvedNavigationConfig } from './model'
 import { loadCustomNavigation } from './nav-file'
 import { buildPageLinksByFolder, resolvePageLinks } from './page-links'
 import {

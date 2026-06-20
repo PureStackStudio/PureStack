@@ -366,7 +366,7 @@ describe('navigation', () => {
         mode: 'hybrid',
         maxDepth: 20,
       })
-      const items = nav?.byFolder['docs'] ?? []
+      const items = nav?.byFolder.docs ?? []
 
       expect(items.map((item) => item.title)).toEqual([
         'Docs',
@@ -449,7 +449,7 @@ describe('navigation', () => {
         mode: 'hybrid',
         maxDepth: 20,
       })
-      const docsItems = nav?.byFolder['docs'] ?? []
+      const docsItems = nav?.byFolder.docs ?? []
       const usageItems = nav?.byFolder['docs/usage'] ?? []
 
       expect(docsItems.find((item) => item.title === 'Docs')?.icon).toBe(
