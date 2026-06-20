@@ -11,6 +11,7 @@ import {
   type MdxCodeHighlighter,
 } from '../../mdx/highlight'
 import { createHljsHighlighter } from '../../mdx/highlightjs'
+import { resolveRouteInfo } from '../../routing/route'
 import { resolveStaticOutPath } from '../assets'
 import {
   type AssetManifestEntry,
@@ -20,7 +21,6 @@ import {
   readSignature,
   type StylesManifestEntry,
 } from '../manifest'
-import { resolveRouteInfo } from '../../routing/route'
 import { resolveOutPath } from '../out-path'
 import type { BuildCountSummary } from '../site'
 

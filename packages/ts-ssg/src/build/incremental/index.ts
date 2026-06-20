@@ -13,7 +13,10 @@ import {
 } from '../../discover/content'
 import { buildNavigation } from '../../navigation/navigation'
 import { initBuiltinComponents } from '../../regor/initBuiltinComponents'
-import { assertUniqueContentRoutes, resolveRouteInfo } from '../../routing/route'
+import {
+  assertUniqueContentRoutes,
+  resolveRouteInfo,
+} from '../../routing/route'
 import { copyStaticAssets } from '../assets'
 import { resolveBuildSiteConfig } from '../build-config'
 import { writeGeneratedFavicon } from '../favicon'

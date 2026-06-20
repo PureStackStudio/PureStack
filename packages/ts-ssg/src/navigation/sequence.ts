@@ -8,11 +8,7 @@ import type {
   NavIconEntry,
   NavSequenceEntry,
 } from './model'
-import {
-  isPlainObject,
-  stripPathExtension,
-  toPosixPath,
-} from './utils'
+import { isPlainObject, stripPathExtension, toPosixPath } from './utils'
 
 export function normalizeNavSequence(
   value: unknown,

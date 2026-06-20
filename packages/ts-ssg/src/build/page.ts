@@ -28,10 +28,10 @@ import {
   type NavigationTree,
   resolvePageNavigation,
 } from '../navigation/navigation'
+import { resolveRouteInfo } from '../routing/route'
 import { resolvePageContentHref } from './content-hrefs'
 import { resolveHeadConfig } from './head-config'
 import { readSource, writeHtml } from './io'
-import { resolveRouteInfo } from '../routing/route'
 import { resolveOutPath } from './out-path'
 import { renderPage } from './renderer'
 

@@ -71,7 +71,8 @@ function flattenPageLinks(items: NavItem[]) {
 
 function normalizePageLinkUrl(url: string | undefined) {
   const normalized = urlNormalizer.normalizeInternalPath(url)
-  if (!normalized || urlNormalizer.hasPathExtension(normalized)) return undefined
+  if (!normalized || urlNormalizer.hasPathExtension(normalized))
+    return undefined
   return normalized
 }
 

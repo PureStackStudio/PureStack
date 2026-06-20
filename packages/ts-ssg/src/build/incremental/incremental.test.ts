@@ -380,9 +380,7 @@ describe('incremental builder', () => {
       const manifest = await readManifest(outDir)
       expect(
         manifest?.content[path.join('account', 'account.mdx')]?.outPath,
-      ).toBe(
-        path.join(outDir, 'account', 'index.html'),
-      )
+      ).toBe(path.join(outDir, 'account', 'index.html'))
       expect(manifest?.assets['account/account.ts']?.outPath).toBe(bundle.path)
     })
   })

@@ -27,9 +27,9 @@ describe('resolvePageContentHref', () => {
   })
 
   it('resolves same-name folder pages to folder routes', () => {
-    expect(resolvePageContentHref('./account.mdx', 'account/settings.mdx')).toBe(
-      '/account/',
-    )
+    expect(
+      resolvePageContentHref('./account.mdx', 'account/settings.mdx'),
+    ).toBe('/account/')
   })
 
   it('leaves external, special, and asset links unchanged', () => {
