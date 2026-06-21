@@ -1,4 +1,5 @@
 import type { SemanticTone } from '@purestack/ts-style'
+import type { PreviewConfig } from './site-config-types'
 
 /**
  * Normalized frontmatter for a content page.
@@ -31,6 +32,14 @@ export interface PageFrontmatter {
    * as canonical URLs or downstream head configuration inputs.
    */
   head?: Record<string, unknown>
+
+  /**
+   * Social/search preview metadata for this page.
+   *
+   * Missing fields are filled from the page title/description and site-level
+   * preview defaults before Open Graph and Twitter tags are generated.
+   */
+  preview?: PreviewConfig
 
   /**
    * Page template key.

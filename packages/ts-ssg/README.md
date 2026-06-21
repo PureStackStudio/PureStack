@@ -116,6 +116,7 @@ Config comes from:
 - `consent`: GDPR-style consent manager config for optional scripts.
 - `analytics`: analytics integrations (GA4 supported out of the box).
 - `pagefind`: search indexing options.
+- `preview`: site-level social/search preview defaults for canonical, Open Graph, and Twitter Card metadata.
 
 ## `siteConfig.json` Example
 
@@ -164,6 +165,15 @@ Config comes from:
   "pagefind": {
     "enabled": true,
     "excludePaths": ["/privacy/"]
+  },
+  "preview": {
+    "title": "Acme Docs",
+    "description": "Practical documentation for Acme products.",
+    "image": "/assets/preview.png",
+    "imageAlt": "Acme Docs preview",
+    "imageWidth": 1200,
+    "imageHeight": 630,
+    "twitterCard": "summary_large_image"
   }
 }
 ```
@@ -182,6 +192,12 @@ hidden: false
 draft: false
 head:
   canonicalUrl: https://docs.acme.com/getting-started/
+preview:
+  title: Getting Started
+  description: First steps with Acme Docs
+  image: /assets/previews/getting-started.png
+  imageWidth: 1200
+  imageHeight: 630
 nav:
   title: Start Here
   order: 1
@@ -202,6 +218,7 @@ Notes:
 - `layout.navMode` accepts only `sidebar` or `drawer` (invalid values throw).
 - `draft: true` hides page from generated navigation.
 - Title fallback order for nav: `nav.title` -> `title` -> first `# heading` -> filename.
+- `preview` overrides site-level preview defaults for the current page. Missing preview fields fall back to page `title` / `description`, then `siteConfig.preview`.
 
 ## Navigation
 
@@ -411,6 +428,15 @@ Validation:
 
 - sitemap requires non-empty absolute `sitemap.baseUrl` when enabled.
 - sitemap and robots URLs include `basePath` when configured.
+
+### Social Previews
+
+`siteConfig.preview` provides defaults for generated canonical, Open Graph, and
+Twitter Card metadata. Page frontmatter can override only the fields that differ.
+Relative preview images are resolved against `sitemap.baseUrl` and include
+`basePath` when configured. Declare `imageWidth` and `imageHeight` when the
+dimensions are known so preview crawlers can render cards without probing the
+image first. Explicit `head` frontmatter still wins for custom metadata.
 
 ## Consent Manager
 

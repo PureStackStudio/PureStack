@@ -26,6 +26,7 @@ export interface SiteConfig {
   consent: ConsentConfig
   analytics: AnalyticsConfig
   pagefind: PagefindConfig
+  preview: PreviewConfig
   mdx: SiteMdxConfig
 }
 
@@ -121,6 +122,21 @@ export interface AnalyticsConfig {
 export interface PagefindConfig {
   enabled: boolean
   excludePaths: string[]
+}
+
+export interface PreviewConfig {
+  title?: string
+  description?: string
+  image?: string
+  imageAlt?: string
+  imageWidth?: number
+  imageHeight?: number
+  siteName?: string
+  type?: string
+  locale?: string
+  twitterCard?: string
+  twitterSite?: string
+  twitterCreator?: string
 }
 
 export interface SiteMdxConfig {

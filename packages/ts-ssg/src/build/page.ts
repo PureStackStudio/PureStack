@@ -124,6 +124,10 @@ export async function renderPageFromFile(
     )
     const headConfig = resolveHeadConfig(parsedContent.frontmatter, {
       siteTitle: context.config.siteTitle,
+      sitePreview: context.config.preview,
+      basePath: context.config.basePath,
+      baseUrl: context.config.sitemap.baseUrl,
+      urlPath,
     })
     const compiled = compilePageContent(
       file,

@@ -49,6 +49,8 @@ export type OpenGraphProperty =
   | 'og:description'
   | 'og:url'
   | 'og:image'
+  | 'og:image:width'
+  | 'og:image:height'
   | 'og:image:alt'
   | 'og:type'
   | 'og:site_name'

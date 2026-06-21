@@ -37,6 +37,7 @@ export type {
   LogoConfig,
   PagefindConfig,
   PageTocConfig,
+  PreviewConfig,
   RobotsConfig,
   SiteConfig,
   SiteConfigInput,

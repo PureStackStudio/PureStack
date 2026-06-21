@@ -637,6 +637,64 @@
         }
       }
     },
+    "preview": {
+      "type": "object",
+      "description": "Site-level social/search preview defaults used to generate canonical, Open Graph, and Twitter Card metadata.",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Default title for social preview cards."
+        },
+        "description": {
+          "type": "string",
+          "description": "Default description for social preview cards."
+        },
+        "image": {
+          "type": "string",
+          "description": "Default preview image URL or site-root-relative path."
+        },
+        "imageAlt": {
+          "type": "string",
+          "description": "Alt text for the default preview image."
+        },
+        "imageWidth": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Width of the default preview image in pixels."
+        },
+        "imageHeight": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Height of the default preview image in pixels."
+        },
+        "siteName": {
+          "type": "string",
+          "description": "Open Graph site name. Defaults to siteTitle when omitted."
+        },
+        "type": {
+          "type": "string",
+          "description": "Open Graph type, for example website or article.",
+          "default": "website"
+        },
+        "locale": {
+          "type": "string",
+          "description": "Open Graph locale, for example en_US."
+        },
+        "twitterCard": {
+          "type": "string",
+          "description": "Twitter Card type, for example summary or summary_large_image."
+        },
+        "twitterSite": {
+          "type": "string",
+          "description": "Twitter/X site handle."
+        },
+        "twitterCreator": {
+          "type": "string",
+          "description": "Twitter/X creator handle."
+        }
+      }
+    },
     "mdx": {
       "type": "object",
       "description": "Markdown/MDX compiler settings.",

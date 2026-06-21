@@ -102,6 +102,40 @@ describe('frontmatter', () => {
     expect(parsed.body).toContain('# Heading')
   })
 
+  it('normalizes preview frontmatter case-insensitively', () => {
+    const normalized = normalizeFrontmatter({
+      PREVIEW: {
+        TITLE: 'Preview title',
+        DESCRIPTION: 'Preview description',
+        IMAGE: '/assets/preview.png',
+        IMAGEALT: 'Preview image',
+        IMAGEWIDTH: 1200,
+        IMAGEHEIGHT: 630,
+        SITENAME: 'Preview Site',
+        TYPE: 'article',
+        LOCALE: 'en_US',
+        TWITTERCARD: 'summary_large_image',
+        TWITTERSITE: '@site',
+        TWITTERCREATOR: '@creator',
+      },
+    })
+
+    expect(normalized.preview).toEqual({
+      title: 'Preview title',
+      description: 'Preview description',
+      image: '/assets/preview.png',
+      imageAlt: 'Preview image',
+      imageWidth: 1200,
+      imageHeight: 630,
+      siteName: 'Preview Site',
+      type: 'article',
+      locale: 'en_US',
+      twitterCard: 'summary_large_image',
+      twitterSite: '@site',
+      twitterCreator: '@creator',
+    })
+  })
+
   it('normalizes embed.tabs as head/body', () => {
     const head = normalizeFrontmatter({ embed: { tabs: 'head' } })
     const body = normalizeFrontmatter({ embed: { tabs: 'body' } })

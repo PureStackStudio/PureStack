@@ -59,6 +59,12 @@ export interface BasicHeadConfig {
     url?: string
     /** Image URL for Open Graph. */
     image?: string
+    /** Alt text for the Open Graph image. */
+    imageAlt?: string
+    /** Width of the Open Graph image in pixels. */
+    imageWidth?: number
+    /** Height of the Open Graph image in pixels. */
+    imageHeight?: number
     /** Type of content, e.g., "website", "article". */
     type?: string
     /** Site name for Open Graph. */
@@ -90,6 +96,8 @@ export interface BasicHeadConfig {
     description?: string
     /** Image URL for Twitter Card. */
     image?: string
+    /** Alt text for Twitter Card image. */
+    imageAlt?: string
   }
 
   /**

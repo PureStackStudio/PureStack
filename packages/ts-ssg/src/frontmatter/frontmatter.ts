@@ -3,6 +3,7 @@ import type {
   FrontmatterLayoutOptions,
   PageFrontmatter,
   ParsedFrontmatterSource,
+  PreviewConfig,
 } from '@purestack/ts-common'
 import { pickSemanticTone } from '@purestack/ts-style'
 import matter from 'gray-matter'
@@ -39,6 +40,7 @@ export function normalizeFrontmatter(
     title: resolveString(resolveKey(raw, 'title')),
     description: resolveString(resolveKey(raw, 'description')),
     head: resolveObject(raw, 'head'),
+    preview: resolvePreviewConfig(raw),
     template: resolveString(resolveKey(raw, 'template')) ?? 'doc',
     order: resolveNumber(resolveKey(raw, 'order')),
     hidden: resolveKey(raw, 'hidden') === true,
@@ -72,6 +74,35 @@ export function normalizeFrontmatter(
   }
 }
 
+function resolvePreviewConfig(
+  source: Record<string, unknown>,
+): PreviewConfig | undefined {
+  const rawPreview = resolveObject(source, 'preview')
+  if (!rawPreview) return undefined
+  const preview: PreviewConfig = {
+    title: resolveString(resolveKey(rawPreview, 'title')),
+    description: resolveString(resolveKey(rawPreview, 'description')),
+    image: resolveString(resolveKey(rawPreview, 'image')),
+    imageAlt: resolveString(resolveKey(rawPreview, 'imageAlt')),
+    imageWidth: resolvePositiveInteger(resolveKey(rawPreview, 'imageWidth')),
+    imageHeight: resolvePositiveInteger(resolveKey(rawPreview, 'imageHeight')),
+    siteName: resolveString(resolveKey(rawPreview, 'siteName')),
+    type: resolveString(resolveKey(rawPreview, 'type')),
+    locale: resolveString(resolveKey(rawPreview, 'locale')),
+    twitterCard: resolveString(resolveKey(rawPreview, 'twitterCard')),
+    twitterSite: resolveString(resolveKey(rawPreview, 'twitterSite')),
+    twitterCreator: resolveString(resolveKey(rawPreview, 'twitterCreator')),
+  }
+  return hasPreviewValue(preview) ? preview : undefined
+}
+
+function hasPreviewValue(preview: PreviewConfig): boolean {
+  return Object.values(preview).some((value) => {
+    if (typeof value === 'string') return value.length > 0
+    return typeof value === 'number'
+  })
+}
+
 function isPlainObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
@@ -101,6 +132,12 @@ function resolveString(value: unknown): string | undefined {
 
 function resolveNumber(value: unknown): number | undefined {
   return typeof value === 'number' && !Number.isNaN(value) ? value : undefined
+}
+
+function resolvePositiveInteger(value: unknown): number | undefined {
+  return typeof value === 'number' && Number.isInteger(value) && value > 0
+    ? value
+    : undefined
 }
 
 function resolveLayoutNavMode(

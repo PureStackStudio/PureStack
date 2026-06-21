@@ -62,6 +62,21 @@ export function getHeadConfig(basic: BasicHeadConfig): HeadConfig {
     if (og.url) propertyMetas.push({ property: 'og:url', content: og.url })
     if (og.image)
       propertyMetas.push({ property: 'og:image', content: og.image })
+    if (og.imageWidth)
+      propertyMetas.push({
+        property: 'og:image:width',
+        content: String(og.imageWidth),
+      })
+    if (og.imageHeight)
+      propertyMetas.push({
+        property: 'og:image:height',
+        content: String(og.imageHeight),
+      })
+    if (og.imageAlt)
+      propertyMetas.push({
+        property: 'og:image:alt',
+        content: og.imageAlt,
+      })
     if (og.type) propertyMetas.push({ property: 'og:type', content: og.type })
     if (og.siteName)
       propertyMetas.push({ property: 'og:site_name', content: og.siteName })
@@ -80,6 +95,8 @@ export function getHeadConfig(basic: BasicHeadConfig): HeadConfig {
     if (tw.description)
       nameMetas.push({ name: 'twitter:description', content: tw.description })
     if (tw.image) nameMetas.push({ name: 'twitter:image', content: tw.image })
+    if (tw.imageAlt)
+      nameMetas.push({ name: 'twitter:image:alt', content: tw.imageAlt })
   }
 
   if (basic.themeColor)

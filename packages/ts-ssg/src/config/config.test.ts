@@ -101,6 +101,20 @@ describe('resolveSiteConfig sitemap', () => {
     const config = resolveSiteConfig({ rootDir: process.cwd() })
     expect(config.publishDir).toBe(path.join(process.cwd(), 'dist', 'publish'))
     expect(config.basePath).toBe('')
+    expect(config.preview).toEqual({
+      title: undefined,
+      description: undefined,
+      image: undefined,
+      imageAlt: undefined,
+      imageWidth: undefined,
+      imageHeight: undefined,
+      siteName: undefined,
+      type: undefined,
+      locale: undefined,
+      twitterCard: undefined,
+      twitterSite: undefined,
+      twitterCreator: undefined,
+    })
     expect(config.style.fileName).toBe('site.css')
     expect(config.style.href).toBe('/assets/site.css')
     expect(config.style.themes).toEqual(['light', 'dark'])
@@ -278,6 +292,61 @@ describe('resolveSiteConfig sitemap', () => {
       favicon: 'iconoir:cube',
     })
     expect(config.favicon).toBe('iconoir:cube')
+  })
+
+  it('resolves preview defaults from siteConfig file and input config', () => {
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'ts-ssg-config-'))
+    try {
+      const rootDir = path.join(tempRoot, 'repo-root')
+      const contentDir = path.join(rootDir, 'content')
+      fs.mkdirSync(contentDir, { recursive: true })
+      fs.writeFileSync(
+        path.join(contentDir, 'siteConfig.json'),
+        JSON.stringify({
+          preview: {
+            title: 'File Title',
+            description: 'File description.',
+            image: '/file.png',
+            imageAlt: 'File image',
+            imageWidth: 1200,
+            imageHeight: 630,
+            siteName: 'File Site',
+            type: 'website',
+            locale: 'en_US',
+            twitterCard: 'summary_large_image',
+            twitterSite: '@file',
+            twitterCreator: '@fileCreator',
+          },
+        }),
+      )
+
+      const config = resolveSiteConfig({
+        rootDir,
+        contentDir,
+        preview: {
+          title: 'Input Title',
+          imageHeight: 720,
+          twitterCreator: '@inputCreator',
+        },
+      })
+
+      expect(config.preview).toEqual({
+        title: 'Input Title',
+        description: 'File description.',
+        image: '/file.png',
+        imageAlt: 'File image',
+        imageWidth: 1200,
+        imageHeight: 720,
+        siteName: 'File Site',
+        type: 'website',
+        locale: 'en_US',
+        twitterCard: 'summary_large_image',
+        twitterSite: '@file',
+        twitterCreator: '@inputCreator',
+      })
+    } finally {
+      fs.rmSync(tempRoot, { recursive: true, force: true })
+    }
   })
 
   it('provides sitemap defaults', () => {
