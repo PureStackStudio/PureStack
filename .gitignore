@@ -6,3 +6,4 @@ dist
 PureGate
 *.vsix
 .codex/*
+/.tmp
