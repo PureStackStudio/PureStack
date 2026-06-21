@@ -1,3 +1,4 @@
+import { tryResolveTsSsgContext } from '@purestack/ts-common'
 import type { SemanticTone } from '@purestack/ts-style'
 import { urlNormalizer } from '@purestack/ts-util'
 import {
@@ -115,7 +116,7 @@ const formStatusTemplate = html`<div
 function defineAppFormComponent() {
   return defineComponent<AppForm>(appFormTemplate, {
     props: ['action', 'method', 'tone', 'variant'],
-    context: (head) => resolveAppForm(head.props),
+    context: (head) => resolveAppForm(head),
   })
 }
 
@@ -170,9 +171,11 @@ export function defineFormComponents() {
   }
 }
 
-function resolveAppForm(props: AppForm): AppForm {
+function resolveAppForm(head: ComponentHead<AppForm>): AppForm {
+  const props = head.props
   return {
     ...props,
+    action: resolvePublicAction(head),
     classes: computed(() =>
       resolveComponentClasses(props, {
         defaultVariant: 'none',
@@ -181,13 +184,22 @@ function resolveAppForm(props: AppForm): AppForm {
   }
 }
 
+function resolvePublicAction(head: ComponentHead<AppForm>) {
+  const action = unref(head.props.action)
+  if (!action) return action
+  return tryResolveTsSsgContext(head)?.resolvePublicHref(action) ?? action
+}
+
 function resolveFormAssistLink(
   head: ComponentHead<FormAssistLink>,
 ): FormAssistLink {
   return {
     ...head.props,
     normalizedHref: computed(() =>
-      urlNormalizer.normalizeHref(unref(head.props.href)),
+      resolvePublicHref(
+        urlNormalizer.normalizeHref(unref(head.props.href)),
+        head,
+      ),
     ),
     resolvedRel: computed(
       () =>
@@ -197,6 +209,14 @@ function resolveFormAssistLink(
           : undefined),
     ),
   }
+}
+
+function resolvePublicHref(
+  href: string | undefined,
+  head: ComponentHead<FormAssistLink>,
+) {
+  if (!href) return undefined
+  return tryResolveTsSsgContext(head)?.resolvePublicHref(href) ?? href
 }
 
 function resolveFormSubmit(head: ComponentHead<FormSubmit>): FormSubmit {

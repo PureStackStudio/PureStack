@@ -1,3 +1,4 @@
+import { type TsSsgContext, tryResolveTsSsgContext } from '@purestack/ts-common'
 import {
   getCurrentThemePaletteVar,
   getThemePaletteVar,
@@ -90,7 +91,10 @@ export interface SiteLogo {
   ariaLabel?: string
 }
 
-function resolveSiteLogo(props: SiteLogo): SiteLogo {
+function resolveSiteLogo(
+  props: SiteLogo,
+  context: TsSsgContext | undefined,
+): SiteLogo {
   const brand = props.brand
   const letterColors = props.letterColors
   const subtitleLetterColors = props.subtitleLetterColors
@@ -108,6 +112,8 @@ function resolveSiteLogo(props: SiteLogo): SiteLogo {
   const glyphStyle = resolveGlyphStyle(colors, logoBackground, logoForeground)
   const layoutStyle = resolveLogoLayoutStyle(props)
   const href = props.href
+    ? (context?.resolvePublicHref(props.href) ?? props.href)
+    : props.href
   const icon = props.icon
   const ariaLabel = props.ariaLabel
 
@@ -379,7 +385,8 @@ function defineSiteLogoComponent() {
       'icon',
       'ariaLabel',
     ],
-    context: (head) => resolveSiteLogo(flatten(head.props)),
+    context: (head) =>
+      resolveSiteLogo(flatten(head.props), tryResolveTsSsgContext(head)),
   })
 }
 

@@ -23,7 +23,7 @@ import type {
 } from '@purestack/ts-common'
 import { pickSemanticTone, resolveThemes, themes } from '@purestack/ts-style'
 import type { DeepPartial } from '@purestack/ts-util'
-import { isPlainObject } from '@purestack/ts-util'
+import { isPlainObject, normalizeBasePath } from '@purestack/ts-util'
 import { resolveNavigationConfig } from '../navigation/navigation'
 
 const DEFAULT_ROOT = path.resolve(
@@ -68,6 +68,9 @@ export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
     input.publishDir ??
     resolvePathFromFileConfig(fileConfig.publishDir, contentDir) ??
     path.join(rootDir, 'dist', 'publish')
+  const basePath = normalizeBasePath(
+    resolveString(input.basePath, fileConfig.basePath),
+  )
   const siteTitle = resolveString(
     input.siteTitle,
     fileConfig.siteTitle,
@@ -100,6 +103,7 @@ export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
     contentDir,
     outDir,
     publishDir,
+    basePath,
     siteTitle,
     favicon: resolveFavicon(input.favicon, fileConfig.favicon),
     logo,

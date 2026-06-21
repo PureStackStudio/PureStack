@@ -531,6 +531,8 @@ function createTestContext(): TsSsgContext {
       frontmatter: normalizeFrontmatter({}),
     },
     theme: site.style.theme,
+    basePath: site.basePath,
+    resolvePublicHref: (href) => href,
     recordScriptEntrypoint: () => {},
     recordRuntimeEmbed: () => {},
   }

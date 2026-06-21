@@ -27,6 +27,8 @@ export interface TsSsgContext {
   navigation?: TsSsgNavigation
   outline?: PageOutlineItem[]
   theme: ThemeOptions
+  basePath: string
+  resolvePublicHref: (href: string) => string
   recordScriptEntrypoint: (sourceRelPath: string) => void
   resolveScriptPublicPath?: (sourceRelPath: string) => string
   recordRuntimeEmbed: (name: string, position: 'body' | 'head') => void

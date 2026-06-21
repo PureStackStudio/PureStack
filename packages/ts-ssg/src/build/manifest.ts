@@ -18,6 +18,7 @@ export interface FileSignature {
 export interface ManifestConfig {
   contentDir: string
   outDir: string
+  basePath: string
   siteTitle: string
   style: {
     fileName: string
@@ -65,6 +66,7 @@ export function manifestConfigFromSiteConfig(
   return {
     contentDir: config.contentDir,
     outDir: config.outDir,
+    basePath: config.basePath,
     siteTitle: config.siteTitle,
     style: {
       fileName: config.style.fileName,
@@ -143,6 +145,7 @@ function manifestConfigEqual(left: ManifestConfig, right: ManifestConfig) {
   return (
     left.contentDir === right.contentDir &&
     left.outDir === right.outDir &&
+    left.basePath === right.basePath &&
     left.siteTitle === right.siteTitle &&
     isPlainObject(left.style) &&
     isPlainObject(right.style) &&

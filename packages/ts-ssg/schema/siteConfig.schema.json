@@ -13,6 +13,11 @@
       "description": "Default site title used by the head config when a page does not provide its own title.",
       "default": "ts-ssg"
     },
+    "basePath": {
+      "type": "string",
+      "description": "Optional public mount path for generated URLs, for example /docs or /admin-panel. Output files remain rooted at outDir.",
+      "default": ""
+    },
     "favicon": {
       "type": "string",
       "description": "SVG icon name from ts-svg-icons used to generate /assets/favicon.svg during the build."

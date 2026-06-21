@@ -12,6 +12,7 @@ export { clamp } from './clamp'
 export { escapeHtml } from './escapeHtml'
 export { type LoggerLike, logError } from './logging'
 export { merge } from './merge'
+export { normalizeBasePath, stripBasePath, withBasePath } from './publicPath'
 export {
   isAbortError,
   isEmptyPlainObject,

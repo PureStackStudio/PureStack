@@ -9,10 +9,11 @@ import {
   DEFAULT_THEME_OPTIONS,
   getCurrentThemePaletteVar,
 } from '@purestack/ts-style'
-import type { DeepPartial } from '@purestack/ts-util'
+import { type DeepPartial, withBasePath } from '@purestack/ts-util'
 
 const DEFAULT_SITE: DeepPartial<SiteConfig> = {
   siteTitle: 'Test Site',
+  basePath: '',
   style: {
     theme: DEFAULT_THEME_OPTIONS,
   },
@@ -108,6 +109,8 @@ export function createTestContext(
     navigation: options.navigation,
     outline: options.outline,
     theme: site.style.theme,
+    basePath: site.basePath,
+    resolvePublicHref: (href) => withBasePath(site.basePath, href),
     recordScriptEntrypoint: () => {},
     resolveScriptPublicPath: options.resolveScriptPublicPath,
     recordRuntimeEmbed: () => {},

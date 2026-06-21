@@ -100,10 +100,36 @@ describe('resolveSiteConfig sitemap', () => {
   it('provides style defaults', () => {
     const config = resolveSiteConfig({ rootDir: process.cwd() })
     expect(config.publishDir).toBe(path.join(process.cwd(), 'dist', 'publish'))
+    expect(config.basePath).toBe('')
     expect(config.style.fileName).toBe('site.css')
     expect(config.style.href).toBe('/assets/site.css')
     expect(config.style.themes).toEqual(['light', 'dark'])
     expect(config.style.pretty).toBe(false)
+  })
+
+  it('normalizes basePath from site config and input', () => {
+    expect(
+      resolveSiteConfig({
+        rootDir: process.cwd(),
+        basePath: 'admin-panel/',
+      }).basePath,
+    ).toBe('/admin-panel')
+
+    expect(
+      resolveSiteConfig({
+        rootDir: process.cwd(),
+        basePath: '/',
+      }).basePath,
+    ).toBe('')
+  })
+
+  it('rejects invalid basePath values', () => {
+    expect(() =>
+      resolveSiteConfig({
+        rootDir: process.cwd(),
+        basePath: 'https://example.com/docs',
+      }),
+    ).toThrowError(/basePath/)
   })
 
   it('applies style pretty override from input', () => {

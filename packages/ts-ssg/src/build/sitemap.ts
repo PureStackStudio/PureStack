@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import type { RobotsConfig, SitemapConfig } from '@purestack/ts-common'
+import { withBasePath } from '@purestack/ts-util'
 import { ensureDir } from '@purestack/ts-util-node'
 
 export interface SitemapPageEntry {
@@ -17,12 +18,15 @@ export interface SitemapWriteResult {
 export function buildSitemapXml(
   baseUrl: string,
   pages: SitemapPageEntry[],
+  basePath = '',
 ): string {
   const sortedPages = [...pages].sort((left, right) =>
     left.urlPath.localeCompare(right.urlPath),
   )
   const rows = sortedPages.map((page) => {
-    const loc = xmlEscape(joinBaseUrl(baseUrl, page.urlPath))
+    const loc = xmlEscape(
+      joinBaseUrl(baseUrl, withBasePath(basePath, page.urlPath)),
+    )
     const lastmod = formatLastMod(page.lastModifiedMs)
     if (!lastmod) {
       return `  <url><loc>${loc}</loc></url>`
@@ -42,14 +46,15 @@ export async function writeSitemap(
   outDir: string,
   config: SitemapConfig,
   pages: SitemapPageEntry[],
+  basePath = '',
 ): Promise<SitemapWriteResult | null> {
   if (!config.enabled) return null
   if (config.baseUrl.length === 0) return null
   const outPath = path.join(outDir, config.fileName)
-  const xml = buildSitemapXml(config.baseUrl, pages)
+  const xml = buildSitemapXml(config.baseUrl, pages, basePath)
   await ensureDir(outPath)
   await fs.writeFile(outPath, xml, 'utf8')
-  const robotsOutPath = await writeRobotsTxt(outDir, config)
+  const robotsOutPath = await writeRobotsTxt(outDir, config, basePath)
   return { outPath, urls: pages.length, robotsOutPath }
 }
 
@@ -79,12 +84,16 @@ function publicPathForFileName(fileName: string) {
   return `/${posix}`
 }
 
-async function writeRobotsTxt(outDir: string, config: SitemapConfig) {
+async function writeRobotsTxt(
+  outDir: string,
+  config: SitemapConfig,
+  basePath: string,
+) {
   if (!config.robots.enabled) return undefined
   const robotsOutPath = path.join(outDir, config.robots.fileName)
   const primarySitemapUrl = joinBaseUrl(
     config.baseUrl,
-    publicPathForFileName(config.fileName),
+    withBasePath(basePath, publicPathForFileName(config.fileName)),
   )
   const robots = buildRobotsTxt(config.robots, primarySitemapUrl)
   await ensureDir(robotsOutPath)

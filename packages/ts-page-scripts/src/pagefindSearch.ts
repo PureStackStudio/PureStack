@@ -22,6 +22,12 @@ type PagefindApi = {
   search: (query: string) => Promise<PagefindSearchResponse>
 }
 
+declare global {
+  interface Window {
+    tsSsgPagefindBasePath?: string
+  }
+}
+
 function isPagefindApi(value: unknown): value is PagefindApi {
   return (
     typeof value === 'object' &&
@@ -145,6 +151,22 @@ function resolveSearchInput(root: HTMLElement): HTMLInputElement | null {
   return target.querySelector('input')
 }
 
+function resolveBasePath() {
+  const raw = window.tsSsgPagefindBasePath
+  if (typeof raw !== 'string') return ''
+  const trimmed = raw.trim()
+  if (!trimmed || trimmed === '/') return ''
+  const normalized = trimmed.startsWith('/') ? trimmed : `/${trimmed}`
+  return normalized.replace(/\/+$/, '')
+}
+
+function withBasePath(basePath: string, url: string) {
+  if (!basePath || !url.startsWith('/')) return url
+  if (url === basePath || url.startsWith(`${basePath}/`)) return url
+  if (url === '/') return `${basePath}/`
+  return `${basePath}${url}`
+}
+
 async function setupSearch(root: HTMLElement) {
   const input = resolveSearchInput(root)
   const output = root.querySelector<HTMLElement>('[data-pagefind-results]')
@@ -156,14 +178,16 @@ async function setupSearch(root: HTMLElement) {
   }
   const searchInput = input
   const searchOutput = output
+  const basePath = resolveBasePath()
 
   let loadPromise: Promise<PagefindApi> | undefined
   function loadPagefind(): Promise<PagefindApi> {
     const promise =
       loadPromise ??
       (() => {
+        const pagefindPath = `${basePath}/pagefind/pagefind.js`
         const dynamicImport = new Function(
-          "return import('/pagefind/pagefind.js')",
+          `return import(${JSON.stringify(pagefindPath)})`,
         ) as () => Promise<{
           default?: PagefindApi
           search?: PagefindApi['search']
@@ -237,7 +261,7 @@ async function setupSearch(root: HTMLElement) {
     const mapped = records.map((record): SearchRecord => {
       const meta = record?.meta ?? {}
       return {
-        url: record?.url || '/',
+        url: withBasePath(basePath, record?.url || '/'),
         title: typeof meta.title === 'string' ? meta.title : '',
         excerpt: record?.excerpt || '',
       }

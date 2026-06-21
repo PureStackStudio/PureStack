@@ -191,6 +191,13 @@ function appendPagefindSearchScript(
   site: SiteConfig,
 ) {
   if (!site.pagefind.enabled) return
+  if (site.basePath) {
+    head.push(
+      h('script').raw(
+        `window.tsSsgPagefindBasePath=${JSON.stringify(site.basePath)};`,
+      ),
+    )
+  }
   const script = buildPagefindSearchScript()
   head.push(h('script').attr({ type: 'module' }).raw(script))
 }

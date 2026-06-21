@@ -10,7 +10,7 @@ import type {
 import type { BasicHeadConfig } from '@purestack/ts-html'
 import { renderApp } from '@purestack/ts-render'
 import { resolveThemeStyleLinks } from '@purestack/ts-style'
-import { isError, toOutputAssetRelPath } from '@purestack/ts-util'
+import { isError, toOutputAssetRelPath, withBasePath } from '@purestack/ts-util'
 import { getLogger } from 'logpot'
 import type { Component } from 'regor'
 import {
@@ -33,6 +33,7 @@ import { resolvePageContentHref } from './content-hrefs'
 import { resolveHeadConfig } from './head-config'
 import { readSource, writeHtml } from './io'
 import { resolveOutPath } from './out-path'
+import { applyPublicBasePath } from './public-hrefs'
 import { renderPage } from './renderer'
 
 export interface BuildContext {
@@ -141,12 +142,15 @@ export async function renderPageFromFile(
       outline: compiled.outline,
       pageInfo,
     })
-    const html = renderPageApp(context, htmlShell, {
-      pageInfo,
-      navigation,
-      outline: compiled.outline,
-      scriptEntrypoints,
-    })
+    const html = applyPublicBasePath(
+      renderPageApp(context, htmlShell, {
+        pageInfo,
+        navigation,
+        outline: compiled.outline,
+        scriptEntrypoints,
+      }),
+      context.config.basePath,
+    )
     const renderTimeMs =
       Number(process.hrtime.bigint() - renderStart) / 1_000_000
     return {
@@ -355,13 +359,19 @@ function renderPageApp(
       site: context.config,
       ...baseContext,
       theme: context.config.style.theme,
+      basePath: context.config.basePath,
+      resolvePublicHref: (href: string) =>
+        withBasePath(context.config.basePath, href),
       recordScriptEntrypoint: (sourceRelPath: string) => {
         if (path.extname(sourceRelPath).toLowerCase() !== '.ts') return
         scriptEntrypoints.add(sourceRelPath.replaceAll('\\', '/'))
       },
       resolveScriptPublicPath: (sourceRelPath: string) =>
-        context.resolveScriptPublicPath?.(sourceRelPath) ??
-        `/${toOutputAssetRelPath(sourceRelPath)}`,
+        withBasePath(
+          context.config.basePath,
+          context.resolveScriptPublicPath?.(sourceRelPath) ??
+            `/${toOutputAssetRelPath(sourceRelPath)}`,
+        ),
       recordRuntimeEmbed: () => {},
     },
   })

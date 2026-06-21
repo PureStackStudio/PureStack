@@ -411,6 +411,11 @@ class IncrementalRuntime {
         lastModifiedMs: entry.mtimeMs,
       }
     })
-    return writeSitemap(this.config.outDir, this.config.sitemap, pages)
+    return writeSitemap(
+      this.config.outDir,
+      this.config.sitemap,
+      pages,
+      this.config.basePath,
+    )
   }
 }

@@ -1,3 +1,4 @@
+import { type TsSsgContext, tryResolveTsSsgContext } from '@purestack/ts-common'
 import type { SemanticTone } from '@purestack/ts-style'
 import { urlNormalizer } from '@purestack/ts-util'
 import {
@@ -104,7 +105,7 @@ function defineButtonLinkComponent() {
       'iconOnly',
       'ariaLabel',
     ],
-    context: (head) => resolveBtnLink(head.props),
+    context: (head) => resolveBtnLink(head.props, tryResolveTsSsgContext(head)),
   })
 }
 
@@ -130,7 +131,10 @@ function resolveBtn(props: Btn): Btn {
   }
 }
 
-function resolveBtnLink(props: BtnLink): BtnLink {
+function resolveBtnLink(
+  props: BtnLink,
+  context: TsSsgContext | undefined,
+): BtnLink {
   return {
     ...props,
     classes: computed(() =>
@@ -139,7 +143,7 @@ function resolveBtnLink(props: BtnLink): BtnLink {
         classes: resolveButtonStateClasses(props),
       }),
     ),
-    resolvedHref: computed(() => resolveButtonHref(props)),
+    resolvedHref: computed(() => resolveButtonHref(props, context)),
     resolvedRel: computed(() => resolveButtonRel(props)),
     showStartIcon: computed(() => resolveShowStartIcon(props)),
     showEndIcon: computed(() => resolveShowEndIcon(props)),
@@ -173,8 +177,11 @@ function resolveShowEndIcon(props: BtnBase) {
   return hasIcon && unref(props.iconPosition) === 'end'
 }
 
-function resolveButtonHref(props: BtnLink) {
-  return urlNormalizer.normalizeHref(unref(props.href))
+function resolveButtonHref(props: BtnLink, context: TsSsgContext | undefined) {
+  const normalized = urlNormalizer.normalizeHref(unref(props.href))
+  return normalized
+    ? (context?.resolvePublicHref(normalized) ?? normalized)
+    : undefined
 }
 
 function resolveButtonRel(props: BtnLink) {

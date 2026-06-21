@@ -27,6 +27,18 @@ describe('sitemap', () => {
     expect(xml).toContain('<lastmod>')
   })
 
+  it('builds xml with a public base path', () => {
+    const xml = buildSitemapXml(
+      'https://docs.example.com',
+      [{ urlPath: '/' }, { urlPath: '/api/' }],
+      '/admin-panel',
+    )
+    expect(xml).toContain('<loc>https://docs.example.com/admin-panel/</loc>')
+    expect(xml).toContain(
+      '<loc>https://docs.example.com/admin-panel/api/</loc>',
+    )
+  })
+
   it('writes sitemap.xml when enabled', async () => {
     await withTempDir(async (dir) => {
       const result = await writeSitemap(
@@ -65,6 +77,34 @@ describe('sitemap', () => {
         'Sitemap: https://docs.example.com/news-sitemap.xml',
       )
       expect(robots).toContain('# generated')
+    })
+  })
+
+  it('writes robots sitemap URL with a public base path', async () => {
+    await withTempDir(async (dir) => {
+      await writeSitemap(
+        dir,
+        {
+          enabled: true,
+          baseUrl: 'https://docs.example.com',
+          fileName: 'sitemap.xml',
+          robots: {
+            enabled: true,
+            fileName: 'robots.txt',
+            userAgent: '*',
+            allow: ['/'],
+            disallow: [],
+            additionalSitemaps: [],
+            customDirectives: [],
+          },
+        },
+        [{ urlPath: '/' }],
+        '/admin-panel',
+      )
+      const robots = await fs.readFile(path.join(dir, 'robots.txt'), 'utf8')
+      expect(robots).toContain(
+        'Sitemap: https://docs.example.com/admin-panel/sitemap.xml',
+      )
     })
   })
 

@@ -1,6 +1,6 @@
 import fsPromises from 'node:fs/promises'
 import http from 'node:http'
-import { logError } from '@purestack/ts-util'
+import { logError, stripBasePath, withBasePath } from '@purestack/ts-util'
 import { getLogger, type Logger } from 'logpot'
 import { resolveBuildSiteConfig } from '../build/build-config'
 import {
@@ -148,7 +148,7 @@ export async function startDevServer(
       await incremental.buildAll(reason)
       if (!initialBuildDone) {
         log.info('serving at', {
-          url: `http://${displayHost}:${port}/`,
+          url: `http://${displayHost}:${port}${withBasePath(config.basePath, '/')}`,
         })
         initialBuildDone = true
       }
@@ -203,6 +203,7 @@ export async function startDevServer(
       host,
       port,
       outDir: config.outDir,
+      basePath: config.basePath,
       liveReload,
       incremental,
       clients,
@@ -292,6 +293,7 @@ type DevServerRequestHandlerInput = {
   host: string
   port: number
   outDir: string
+  basePath: string
   liveReload: boolean
   incremental: IncrementalBuilder
   clients: LiveReloadClients
@@ -306,6 +308,7 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
     host,
     port,
     outDir,
+    basePath,
     liveReload,
     incremental,
     clients,
@@ -323,11 +326,20 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
     }
 
     const { pathname } = new URL(req.url, `http://${host}:${port}`)
+    const liveReloadPath = withBasePath(basePath, LIVE_RELOAD_PATH)
 
-    if (liveReload && pathname === LIVE_RELOAD_PATH) {
+    if (liveReload && pathname === liveReloadPath) {
       registerLiveReloadClient(clients, req, res, getLiveReloadVersion())
       return
     }
+
+    if (!isRequestUnderBasePath(basePath, pathname)) {
+      res.writeHead(404)
+      res.end('Not found')
+      return
+    }
+
+    const internalPathname = stripBasePath(basePath, pathname)
 
     res.setTimeout(REQUEST_TIMEOUT_MS, () => {
       res.destroy()
@@ -335,7 +347,7 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
 
     const fileResult = await resolveRequestFile({
       outDir,
-      pathname,
+      pathname: internalPathname,
       incremental,
       log,
     })
@@ -351,7 +363,8 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
       res,
       filePath: fileResult.filePath,
       ext: fileResult.ext,
-      pathname,
+      publicPathname: pathname,
+      liveReloadPath,
       liveReload,
       liveReloadVersion,
       incremental,
@@ -360,6 +373,11 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
       log,
     })
   }
+}
+
+function isRequestUnderBasePath(basePath: string, pathname: string) {
+  if (!basePath) return true
+  return pathname === basePath || pathname.startsWith(`${basePath}/`)
 }
 
 type ResolveRequestFileInput = {
@@ -390,7 +408,8 @@ type ServeResolvedFileInput = {
   res: http.ServerResponse
   filePath: string
   ext: string
-  pathname: string
+  publicPathname: string
+  liveReloadPath: string
   liveReload: boolean
   liveReloadVersion: number
   incremental: IncrementalBuilder
@@ -405,7 +424,8 @@ async function serveResolvedFile(input: ServeResolvedFileInput): Promise<void> {
     res,
     filePath,
     ext,
-    pathname,
+    publicPathname,
+    liveReloadPath,
     liveReload,
     liveReloadVersion,
     incremental,
@@ -417,12 +437,12 @@ async function serveResolvedFile(input: ServeResolvedFileInput): Promise<void> {
     if (ext === '.html') {
       const html = await fsPromises.readFile(filePath, 'utf8')
       const injected = liveReload
-        ? injectLiveReload(html, LIVE_RELOAD_PATH, liveReloadVersion)
+        ? injectLiveReload(html, liveReloadPath, liveReloadVersion)
         : html
       writeHtmlResponse(res, 200, injected)
       queueBackgroundRender({
         filePath,
-        pathname,
+        pathname: publicPathname,
         incremental,
         backgroundRenderTasks,
         notifyPageRendered,

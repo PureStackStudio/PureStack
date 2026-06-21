@@ -126,6 +126,50 @@ describe('page content compilation', () => {
     }
   })
 
+  it('applies basePath to rendered public URLs without changing logical routes', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-page-'))
+    try {
+      const contentDir = path.join(root, 'content')
+      const outDir = path.join(root, 'out')
+      await writeFile(
+        path.join(contentDir, 'index.mdx'),
+        [
+          '<a href="/docs/">Docs</a>',
+          '<a href="#local">Local anchor</a>',
+          '<img src="/assets/logo.png" srcset="/assets/logo.png 1x, https://cdn.example.com/logo.png 2x"/>',
+          '<BtnLink href="/signin/">Sign in</BtnLink>',
+          '<PageScript src="./app.ts" />',
+          '<PageScript src="/root-app.ts" />',
+        ].join('\n'),
+      )
+
+      const config = resolveSiteConfig({
+        rootDir: root,
+        contentDir,
+        outDir,
+        basePath: '/admin-panel/',
+      })
+      const page = await renderPageFromFile(
+        { config },
+        toContentFile(contentDir, 'index.mdx'),
+      )
+
+      expect(page.urlPath).toBe('/')
+      expect(page.outPath).toBe(path.join(outDir, 'index.html'))
+      expect(page.html).toContain('href="/admin-panel/docs/"')
+      expect(page.html).toContain('href="#local"')
+      expect(page.html).toContain('src="/admin-panel/assets/logo.png"')
+      expect(page.html).toContain('/admin-panel/assets/logo.png 1x')
+      expect(page.html).toContain('https://cdn.example.com/logo.png 2x')
+      expect(page.html).toContain('href="/admin-panel/signin/"')
+      expect(page.html).toContain('src="/admin-panel/app.js"')
+      expect(page.html).toContain('src="/admin-panel/root-app.js"')
+      expect(page.scriptEntrypoints).toEqual(['app.ts', 'root-app.ts'])
+    } finally {
+      await fs.rm(root, { recursive: true, force: true })
+    }
+  })
+
   it('renders previous and next page links when nav file enables pageLinks', async () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-page-'))
     try {

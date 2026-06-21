@@ -102,6 +102,7 @@ Config comes from:
 - `contentDir`: default `rootDir/sample-content`.
 - `outDir`: development output directory. Default `rootDir/dist/site`.
 - `publishDir`: publish output directory used by `--publish`. Default `rootDir/dist/publish`.
+- `basePath`: optional public mount path such as `"/docs"` or `"/admin-panel"`. It prefixes generated public URLs without changing output file paths.
 - `siteTitle`: default `"ts-ssg"`.
 - `logo`: brand fields for top bar.
 - `style.fileName`: default `"site.css"`.
@@ -122,6 +123,7 @@ Config comes from:
 {
   "$schema": "../schema/siteConfig.schema.json",
   "siteTitle": "Acme Docs",
+  "basePath": "/docs",
   "outDir": "dist/site",
   "publishDir": "dist/publish",
   "style": {
@@ -394,6 +396,8 @@ Optional config:
 - `pagefind.enabled`: enables Pagefind indexing and the built-in search runtime. Defaults to `true`.
 - `pagefind.excludePaths`: array of route prefixes excluded from indexing (e.g. `["/privacy/", "/imprint/", "/terms/"]`).
 
+When `basePath` is configured, the search runtime loads Pagefind from the public mount path while Pagefind indexing still reads the normal output directory.
+
 When disabled, stale `<outDir>/pagefind` output is removed. Build logs include indexed page count and total indexed byte size when indexing runs.
 
 ### Sitemap / Robots
@@ -406,6 +410,7 @@ If enabled:
 Validation:
 
 - sitemap requires non-empty absolute `sitemap.baseUrl` when enabled.
+- sitemap and robots URLs include `basePath` when configured.
 
 ## Consent Manager
 
