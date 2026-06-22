@@ -33,4 +33,19 @@ describe('getHeadConfig', () => {
       content: 'Preview image',
     })
   })
+
+  it('emits alternate localized links', () => {
+    const head = getHeadConfig({
+      alternates: [
+        { hrefLang: 'en', href: 'https://example.com/en/' },
+        { hrefLang: 'tr', href: 'https://example.com/tr/' },
+      ],
+    })
+
+    expect(head.links).toContainEqual({
+      rel: 'alternate',
+      hreflang: 'tr',
+      href: 'https://example.com/tr/',
+    })
+  })
 })

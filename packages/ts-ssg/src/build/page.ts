@@ -5,6 +5,7 @@ import type {
   PageNavigation,
   PageOutlineItem,
   PageTemplateMap,
+  PageTranslationInfo,
   SiteConfig,
 } from '@purestack/ts-common'
 import type { BasicHeadConfig } from '@purestack/ts-html'
@@ -22,6 +23,12 @@ import {
   normalizeFrontmatter,
   parseFrontmatterSource,
 } from '../frontmatter/frontmatter'
+import {
+  type ContentTranslationsByKey,
+  type ResolvedContentFile,
+  resolveContentFile,
+  resolvePlainContentFile,
+} from '../i18n/content'
 import { compileMarkdown } from '../mdx/md'
 import { compileMdx, type MdxRenderOptions } from '../mdx/mdx'
 import {
@@ -44,12 +51,13 @@ export interface BuildContext {
   components?: Record<string, Component>
   templates?: PageTemplateMap
   navigation?: NavigationTree
+  translationsByKey?: ContentTranslationsByKey
   mdx?: MdxRenderOptions
   resolveScriptPublicPath?: (sourceRelPath: string) => string
 }
 
 export interface PageRenderResult {
-  file: ContentFile
+  file: ResolvedContentFile
   frontmatter: PageFrontmatter
   body: string
   headConfig: BasicHeadConfig
@@ -67,7 +75,7 @@ export interface PageRenderResult {
 
 export async function buildPage(
   context: BuildContext,
-  file: ContentFile,
+  file: ResolvedContentFile,
 ): Promise<PageRenderResult> {
   const page = await renderPageFromFile(context, file)
   await writePage(page, context.config.html.minify)
@@ -102,7 +110,7 @@ export async function writePage(
 
 export async function renderPageFromFile(
   context: BuildContext,
-  file: ContentFile,
+  file: ResolvedContentFile,
 ): Promise<PageRenderResult> {
   const renderStart = process.hrtime.bigint()
   const { urlPath } = resolveRouteInfo(file)
@@ -121,6 +129,7 @@ export async function renderPageFromFile(
       file,
       urlPath,
       parsedContent.frontmatter,
+      context.translationsByKey,
     )
     const headConfig = resolveHeadConfig(parsedContent.frontmatter, {
       siteTitle: context.config.siteTitle,
@@ -128,12 +137,14 @@ export async function renderPageFromFile(
       basePath: context.config.basePath,
       baseUrl: context.config.sitemap.baseUrl,
       urlPath,
+      translations: pageInfo.translations,
     })
     const compiled = compilePageContent(
       file,
       parsedContent.body,
       context.mdx,
       context.config.mdx.compileMdAsMdx,
+      context.config,
     )
     const template = parsedContent.frontmatter.template
     const scriptEntrypoints = new Set<string>()
@@ -214,50 +225,83 @@ async function resolveSpecialHtmlByDirectory(
 ): Promise<Map<string, string>> {
   const htmlByDir = new Map<string, string>()
   for (const file of files) {
-    const source = await readSource(file.absPath)
-    const parsedContent = parseFrontmatterSource(source, file.relPath)
+    const localizedFile = resolveSpecialContentFile(config, file)
+    const source = await readSource(localizedFile.absPath)
+    const parsedContent = parseFrontmatterSource(source, localizedFile.relPath)
     const compiled = compilePageContent(
-      file,
+      localizedFile,
       parsedContent.body,
       mdxOptions,
       config.mdx.compileMdAsMdx,
+      config,
     )
-    const dirKey = toDirKey(file.relPath)
+    const dirKey = toDirKey(localizedFile.relPath)
     htmlByDir.set(dirKey, compiled.bodyHtml)
   }
   return htmlByDir
 }
 
+function resolveSpecialContentFile(config: SiteConfig, file: ContentFile) {
+  if (!config.i18n.enabled) return resolvePlainContentFile(file)
+  const locale = file.relPath.replaceAll('\\', '/').split('/')[0]
+  return locale && config.i18n.locales.includes(locale)
+    ? resolveContentFile(config, file)
+    : resolvePlainContentFile(file)
+}
+
 function createPageTemplateInfo(
-  file: ContentFile,
+  file: ResolvedContentFile,
   urlPath: string,
   frontmatter: PageFrontmatter,
+  translationsByKey?: ContentTranslationsByKey,
 ): PageInfo {
   return {
-    relPath: file.relPath,
+    relPath: toTemplateRelPath(file.relPath),
     urlPath,
     frontmatter,
+    ...(file.locale ? { locale: file.locale } : {}),
+    ...(file.translationKey ? { translationKey: file.translationKey } : {}),
+    ...resolvePageTranslations(file, translationsByKey),
   }
 }
 
+function resolvePageTranslations(
+  file: ResolvedContentFile,
+  translationsByKey: ContentTranslationsByKey | undefined,
+): { translations?: PageTranslationInfo[] } {
+  if (!file.translationKey || !translationsByKey) return {}
+  const translations = (translationsByKey.get(file.translationKey) ?? [])
+    .filter((entry) => entry.locale && entry.urlPath)
+    .map((entry) => ({
+      locale: entry.locale as string,
+      urlPath: entry.urlPath as string,
+      relPath: toTemplateRelPath(entry.relPath),
+    }))
+    .sort((left, right) => left.locale.localeCompare(right.locale))
+  return translations.length > 0 ? { translations } : {}
+}
+
 function compilePageContent(
-  file: ContentFile,
+  file: ResolvedContentFile,
   sourceBody: string,
   mdxOptions: MdxRenderOptions | undefined,
   compileMdAsMdx: boolean,
+  config: SiteConfig,
 ) {
   const shouldCompileMdAsMdx = mdxOptions?.compileMdAsMdx ?? compileMdAsMdx
   if (file.ext === '.mdx' || shouldCompileMdAsMdx) {
     return compileMdx(sourceBody, {
       ...(mdxOptions ?? {}),
       sourceRelPath: file.relPath,
-      resolveContentHref: resolvePageContentHref,
+      resolveContentHref: (href, sourceRelPath) =>
+        resolvePageContentHref(href, sourceRelPath, config),
     })
   }
   return compileMarkdown(sourceBody, {
     ...(mdxOptions ?? {}),
     sourceRelPath: file.relPath,
-    resolveContentHref: resolvePageContentHref,
+    resolveContentHref: (href, sourceRelPath) =>
+      resolvePageContentHref(href, sourceRelPath, config),
   })
 }
 
@@ -344,6 +388,10 @@ function toParentDirKey(dirKey: string) {
   return dirKey.slice(0, slashIndex)
 }
 
+function toTemplateRelPath(relPath: string) {
+  return relPath.replaceAll('\\', '/')
+}
+
 type RenderAppContextInput = {
   pageInfo: PageInfo
   navigation: PageNavigation | undefined
@@ -364,6 +412,13 @@ function renderPageApp(
       ...baseContext,
       theme: context.config.style.theme,
       basePath: context.config.basePath,
+      locale: baseContext.pageInfo.locale,
+      locales: context.config.i18n.locales,
+      defaultLocale: context.config.i18n.defaultLocale || undefined,
+      resolveLocaleHref: (locale: string) =>
+        baseContext.pageInfo.translations?.find(
+          (entry) => entry.locale === locale,
+        )?.urlPath,
       resolvePublicHref: (href: string) =>
         withBasePath(context.config.basePath, href),
       recordScriptEntrypoint: (sourceRelPath: string) => {
@@ -422,7 +477,7 @@ type ErrorRenderContext = {
 
 export async function writePageError(
   context: BuildContext,
-  file: ContentFile,
+  file: ResolvedContentFile,
   error: unknown,
   renderContext?: ErrorRenderContext,
 ): Promise<PageRenderResult> {

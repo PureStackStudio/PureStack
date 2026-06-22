@@ -42,6 +42,14 @@ const DEFAULT_SITE: DeepPartial<SiteConfig> = {
     enabled: false,
     excludePaths: [],
   },
+  i18n: {
+    enabled: false,
+    defaultLocale: '',
+    locales: [],
+    urlStrategy: 'prefix-all',
+    queryParam: 'lang',
+    cookieName: 'ts-ssg.lang',
+  },
   consent: {
     enabled: false,
     storageKey: 'ts-ssg-consent',
@@ -103,13 +111,19 @@ export function createTestContext(
   options: TestContextOptions = {},
 ): TsSsgContext {
   const site = createTestSite(options.site)
+  const pageInfo = createTestPageInfo(options.pageInfo)
   return {
     site,
-    pageInfo: createTestPageInfo(options.pageInfo),
+    pageInfo,
     navigation: options.navigation,
     outline: options.outline,
     theme: site.style.theme,
     basePath: site.basePath,
+    locale: pageInfo.locale,
+    locales: site.i18n.locales,
+    defaultLocale: site.i18n.defaultLocale || undefined,
+    resolveLocaleHref: (locale) =>
+      pageInfo.translations?.find((entry) => entry.locale === locale)?.urlPath,
     resolvePublicHref: (href) => withBasePath(site.basePath, href),
     recordScriptEntrypoint: () => {},
     resolveScriptPublicPath: options.resolveScriptPublicPath,

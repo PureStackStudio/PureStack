@@ -117,6 +117,7 @@ Config comes from:
 - `analytics`: analytics integrations (GA4 supported out of the box).
 - `pagefind`: search indexing options.
 - `preview`: site-level social/search preview defaults for canonical, Open Graph, and Twitter Card metadata.
+- `i18n`: optional multilingual routing. Omit it for unchanged single-language behavior.
 
 ## `siteConfig.json` Example
 
@@ -174,6 +175,11 @@ Config comes from:
     "imageWidth": 1200,
     "imageHeight": 630,
     "twitterCard": "summary_large_image"
+  },
+  "i18n": {
+    "defaultLocale": "en",
+    "locales": ["en", "de"],
+    "urlStrategy": "prefix-all"
   }
 }
 ```
@@ -437,6 +443,35 @@ Relative preview images are resolved against `sitemap.baseUrl` and include
 `basePath` when configured. Declare `imageWidth` and `imageHeight` when the
 dimensions are known so preview crawlers can render cards without probing the
 image first. Explicit `head` frontmatter still wins for custom metadata.
+
+### Multilingual Sites
+
+i18n is opt-in. Without `siteConfig.i18n`, existing content routes and output
+paths are unchanged.
+
+When i18n is enabled, content lives under locale folders:
+
+```txt
+content/
+  en/
+    index.mdx
+    docs/index.md
+  de/
+    index.mdx
+    docs/index.md
+```
+
+Supported URL strategies:
+
+- `prefix-all`: public URLs include the locale, e.g. `/en/docs/` and `/de/docs/`.
+- `hidden`: output is still written under locale folders, but canonical public
+  routes stay unprefixed, e.g. `/docs/`. Hosts can select the locale using
+  `?lang=tr`, the configured cookie, `Accept-Language`, then `defaultLocale`.
+
+Rendered pages expose `locale`, `locales`, `defaultLocale`, and
+`resolveLocaleHref(locale)` through `TsSsgContext`. The default templates add
+`<html lang="...">`. Prefixed i18n pages emit canonical and `hreflang`
+alternate links when localized URLs are distinct.
 
 ## Consent Manager
 

@@ -1,5 +1,6 @@
 import fsPromises from 'node:fs/promises'
 import http from 'node:http'
+import type { I18nConfig } from '@purestack/ts-common'
 import { logError, stripBasePath, withBasePath } from '@purestack/ts-util'
 import { getLogger, type Logger } from 'logpot'
 import { resolveBuildSiteConfig } from '../build/build-config'
@@ -14,6 +15,11 @@ import {
   type LiveReloadClients,
   registerLiveReloadClient,
 } from './live-reload'
+import {
+  buildLocalePreferenceCookie,
+  type RequestLocalePreference,
+  resolveRequestLocale,
+} from './locale-preference'
 import {
   isLikelyHtmlPath,
   resolveStaticFile,
@@ -204,6 +210,7 @@ export async function startDevServer(
       port,
       outDir: config.outDir,
       basePath: config.basePath,
+      i18n: config.i18n,
       liveReload,
       incremental,
       clients,
@@ -294,6 +301,7 @@ type DevServerRequestHandlerInput = {
   port: number
   outDir: string
   basePath: string
+  i18n: I18nConfig
   liveReload: boolean
   incremental: IncrementalBuilder
   clients: LiveReloadClients
@@ -309,6 +317,7 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
     port,
     outDir,
     basePath,
+    i18n,
     liveReload,
     incremental,
     clients,
@@ -340,6 +349,8 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
     }
 
     const internalPathname = stripBasePath(basePath, pathname)
+    const localePreference = resolveRequestLocale(req, i18n)
+    persistQueryLocalePreference(res, i18n, localePreference)
 
     res.setTimeout(REQUEST_TIMEOUT_MS, () => {
       res.destroy()
@@ -348,6 +359,8 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
     const fileResult = await resolveRequestFile({
       outDir,
       pathname: internalPathname,
+      locale: localePreference.locale,
+      i18n,
       incremental,
       log,
     })
@@ -383,24 +396,61 @@ function isRequestUnderBasePath(basePath: string, pathname: string) {
 type ResolveRequestFileInput = {
   outDir: string
   pathname: string
+  locale?: string
+  i18n: I18nConfig
   incremental: IncrementalBuilder
   log: Logger
 }
 
 async function resolveRequestFile(input: ResolveRequestFileInput) {
-  const { outDir, pathname, incremental, log } = input
+  const { outDir, pathname, locale, i18n, incremental, log } = input
   let fileResult = await resolveStaticFile(outDir, pathname)
+  if (!fileResult && i18n.enabled && i18n.urlStrategy === 'hidden' && locale) {
+    fileResult = await resolveStaticFile(
+      outDir,
+      withHiddenLocale(locale, pathname),
+    )
+  }
   if (!fileResult && isLikelyHtmlPath(pathname)) {
     try {
       const rendered = await incremental.renderByUrlPath(pathname)
       if (rendered) {
         fileResult = await resolveStaticFile(outDir, pathname)
+        if (
+          !fileResult &&
+          i18n.enabled &&
+          i18n.urlStrategy === 'hidden' &&
+          locale
+        ) {
+          fileResult = await resolveStaticFile(
+            outDir,
+            withHiddenLocale(locale, pathname),
+          )
+        }
       }
     } catch (error) {
       logError(log, error, 'lazy route render failed')
     }
   }
   return fileResult
+}
+
+function persistQueryLocalePreference(
+  res: http.ServerResponse,
+  i18n: I18nConfig,
+  preference: RequestLocalePreference,
+) {
+  if (!i18n.enabled || i18n.urlStrategy !== 'hidden') return
+  if (preference.source !== 'query' || !preference.locale) return
+  res.setHeader(
+    'Set-Cookie',
+    buildLocalePreferenceCookie(i18n.cookieName, preference.locale),
+  )
+}
+
+function withHiddenLocale(locale: string, pathname: string) {
+  if (pathname === '/') return `/${locale}/`
+  return `/${locale}${pathname}`
 }
 
 type ServeResolvedFileInput = {

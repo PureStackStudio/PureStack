@@ -5,7 +5,10 @@ import { disableLogger, getLogger, type Logger } from 'logpot'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import { resolveSiteConfig } from '../config/config'
-import type { ContentFile } from '../discover/content'
+import {
+  type ResolvedContentFile,
+  resolvePlainContentFile,
+} from '../i18n/content'
 import { initBuiltinComponents } from '../regor/initBuiltinComponents'
 import {
   renderPageFromFile,
@@ -135,10 +138,13 @@ describe('footer hierarchy', () => {
   })
 })
 
-function toContentFile(contentDir: string, relPath: string): ContentFile {
-  return {
+function toContentFile(
+  contentDir: string,
+  relPath: string,
+): ResolvedContentFile {
+  return resolvePlainContentFile({
     absPath: path.join(contentDir, relPath),
     relPath,
     ext: path.extname(relPath),
-  }
+  })
 }

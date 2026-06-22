@@ -49,6 +49,13 @@ export function getHeadConfig(basic: BasicHeadConfig): HeadConfig {
 
   if (basic.canonicalUrl)
     links.push({ rel: 'canonical', href: basic.canonicalUrl })
+  for (const alternate of basic.alternates ?? []) {
+    links.push({
+      rel: 'alternate',
+      hreflang: alternate.hrefLang,
+      href: alternate.href,
+    })
+  }
 
   if (basic.openGraph) {
     const og = basic.openGraph

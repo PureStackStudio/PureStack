@@ -1,6 +1,6 @@
 import type { PageTemplateMap, SiteConfigInput } from '@purestack/ts-common'
 import type { Component } from 'regor'
-import type { ContentFile } from '../discover/content'
+import type { ResolvedContentFile } from '../i18n/content'
 import type { NavigationTree } from '../navigation/navigation'
 import type { PublishOptions } from './build-config'
 import { createIncrementalBuilder } from './incremental'
@@ -25,7 +25,7 @@ export interface BuildHooks {
   onConfigResolved?: (context: BuildContext) => void | Promise<void>
   onContentDiscovered?: (
     context: BuildContext,
-    files: ContentFile[],
+    files: ResolvedContentFile[],
   ) => void | Promise<void>
   onNavigationBuilt?: (
     context: BuildContext,
@@ -33,7 +33,7 @@ export interface BuildHooks {
   ) => void | Promise<void>
   onPageStart?: (
     context: BuildContext,
-    file: ContentFile,
+    file: ResolvedContentFile,
   ) => void | Promise<void>
   onPageRendered?: (
     context: BuildContext,

@@ -27,6 +27,7 @@ export interface SiteConfig {
   analytics: AnalyticsConfig
   pagefind: PagefindConfig
   preview: PreviewConfig
+  i18n: I18nConfig
   mdx: SiteMdxConfig
 }
 
@@ -137,6 +138,17 @@ export interface PreviewConfig {
   twitterCard?: string
   twitterSite?: string
   twitterCreator?: string
+}
+
+export type I18nUrlStrategy = 'prefix-all' | 'hidden'
+
+export interface I18nConfig {
+  enabled: boolean
+  defaultLocale: string
+  locales: string[]
+  urlStrategy: I18nUrlStrategy
+  queryParam: string
+  cookieName: string
 }
 
 export interface SiteMdxConfig {

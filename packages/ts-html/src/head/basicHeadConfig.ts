@@ -43,6 +43,14 @@ export interface BasicHeadConfig {
   canonicalUrl?: string
 
   /**
+   * Alternate localized URLs for the page.
+   */
+  alternates?: Array<{
+    hrefLang: string
+    href: string
+  }>
+
+  /**
    * Directives for web crawlers, e.g. "index,follow" or "noindex,nofollow".
    */
   robots?: 'index,follow' | 'noindex,nofollow' | (string & {})

@@ -23,15 +23,18 @@ export function buildSitemapXml(
   const sortedPages = [...pages].sort((left, right) =>
     left.urlPath.localeCompare(right.urlPath),
   )
-  const rows = sortedPages.map((page) => {
+  const seenLocs = new Set<string>()
+  const rows = sortedPages.flatMap((page) => {
     const loc = xmlEscape(
       joinBaseUrl(baseUrl, withBasePath(basePath, page.urlPath)),
     )
+    if (seenLocs.has(loc)) return []
+    seenLocs.add(loc)
     const lastmod = formatLastMod(page.lastModifiedMs)
     if (!lastmod) {
-      return `  <url><loc>${loc}</loc></url>`
+      return [`  <url><loc>${loc}</loc></url>`]
     }
-    return `  <url><loc>${loc}</loc><lastmod>${lastmod}</lastmod></url>`
+    return [`  <url><loc>${loc}</loc><lastmod>${lastmod}</lastmod></url>`]
   })
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
@@ -55,7 +58,23 @@ export async function writeSitemap(
   await ensureDir(outPath)
   await fs.writeFile(outPath, xml, 'utf8')
   const robotsOutPath = await writeRobotsTxt(outDir, config, basePath)
-  return { outPath, urls: pages.length, robotsOutPath }
+  return {
+    outPath,
+    urls: countUniquePageUrls(config.baseUrl, pages, basePath),
+    robotsOutPath,
+  }
+}
+
+function countUniquePageUrls(
+  baseUrl: string,
+  pages: SitemapPageEntry[],
+  basePath: string,
+) {
+  return new Set(
+    pages.map((page) =>
+      joinBaseUrl(baseUrl, withBasePath(basePath, page.urlPath)),
+    ),
+  ).size
 }
 
 function joinBaseUrl(baseUrl: string, urlPath: string) {

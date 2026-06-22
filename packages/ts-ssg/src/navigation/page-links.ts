@@ -4,9 +4,8 @@ import type {
   PageNavigationLinks,
 } from '@purestack/ts-common'
 import { urlNormalizer } from '@purestack/ts-util'
-import type { ContentFile } from '../discover/content'
 import { resolveRouteInfo } from '../routing/route'
-import type { NavFile, NavigationTree } from './model'
+import type { NavFile, NavigationContentFile, NavigationTree } from './model'
 
 export function buildPageLinksByFolder(
   customByFolder: Record<string, NavFile>,
@@ -22,7 +21,7 @@ export function resolvePageLinks(
   tree: NavigationTree,
   folder: string,
   items: NavItem[],
-  file: ContentFile,
+  file: NavigationContentFile,
 ): PageNavigationLinks | undefined {
   if (!isPageLinksEnabled(tree, folder)) return undefined
   const currentUrl = normalizePageLinkUrl(resolveRouteInfo(file).urlPath)

@@ -9,6 +9,15 @@ export interface PageInfo {
   relPath: string
   urlPath: string
   frontmatter: PageFrontmatter
+  locale?: string
+  translationKey?: string
+  translations?: PageTranslationInfo[]
+}
+
+export interface PageTranslationInfo {
+  locale: string
+  urlPath: string
+  relPath: string
 }
 
 export interface PageTemplateInput {

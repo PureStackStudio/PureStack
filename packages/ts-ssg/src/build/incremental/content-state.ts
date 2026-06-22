@@ -1,7 +1,13 @@
 import path from 'node:path'
 import type { SiteConfig } from '@purestack/ts-common'
 import type { Logger } from 'logpot'
-import { type ContentFile, discoverContent } from '../../discover/content'
+import { discoverContent } from '../../discover/content'
+import {
+  buildTranslationsByKey,
+  type ResolvedContentFile,
+  resolveContentFile,
+  resolveContentFiles,
+} from '../../i18n/content'
 import { buildNavigation } from '../../navigation/navigation'
 import { assertUniqueContentRoutes } from '../../routing/route'
 import {
@@ -36,7 +42,7 @@ interface IncrementalContentStateInput {
 }
 
 interface RebuildNavigatedContentInput {
-  contentFiles: ContentFile[]
+  contentFiles: ResolvedContentFile[]
   relPath: string
   ext: string
   signature: FileSignature
@@ -56,7 +62,10 @@ export class IncrementalContentState {
   private readonly contentIndex: ManifestContentIndex
 
   constructor(private readonly input: IncrementalContentStateInput) {
-    this.contentIndex = new ManifestContentIndex(input.config.contentDir)
+    this.contentIndex = new ManifestContentIndex(
+      input.config.contentDir,
+      input.config,
+    )
     this.contentIndex.rebuildFromManifest(input.getManifest())
   }
 
@@ -68,7 +77,7 @@ export class IncrementalContentState {
     this.dirtyPages.clear()
   }
 
-  async renderAllPages(contentFiles: ContentFile[], hooks: BuildHooks) {
+  async renderAllPages(contentFiles: ResolvedContentFile[], hooks: BuildHooks) {
     let pages = 0
     for (const file of contentFiles) {
       try {
@@ -104,7 +113,10 @@ export class IncrementalContentState {
     const normalized = normalizeUrlPath(urlPath)
     let relPath = this.contentIndex.getRelPathByUrlPath(normalized)
     if (!relPath) {
-      const contentFiles = await discoverContent(this.input.config.contentDir)
+      const contentFiles = resolveContentFiles(
+        this.input.config,
+        await discoverContent(this.input.config.contentDir),
+      )
       assertUniqueContentRoutes(contentFiles)
       this.contentIndex.updateUrlPathMapFromFiles(contentFiles)
       relPath = this.contentIndex.getRelPathByUrlPath(normalized)
@@ -114,13 +126,17 @@ export class IncrementalContentState {
   }
 
   async refreshNavigationAndMarkDirty() {
-    const contentFiles = await discoverContent(this.input.config.contentDir)
+    const contentFiles = resolveContentFiles(
+      this.input.config,
+      await discoverContent(this.input.config.contentDir),
+    )
     assertUniqueContentRoutes(contentFiles)
     this.input.context.navigation = await buildNavigation(
       this.input.config.contentDir,
       contentFiles,
       this.input.config.navigation,
     )
+    this.input.context.translationsByKey = buildTranslationsByKey(contentFiles)
     this.markAllPagesDirty(contentFiles)
     return contentFiles
   }
@@ -142,7 +158,7 @@ export class IncrementalContentState {
     const { contentFiles, relPath, ext, signature, result } = input
     const contentFile =
       contentFiles.find((file) => file.relPath === relPath) ??
-      toContentFile(this.input.config.contentDir, relPath, ext)
+      this.toResolvedContentFile(relPath, ext)
     const page = await buildPage(this.input.context, contentFile)
     this.input.onPageBuilt(contentFile.relPath, page.scriptEntrypoints)
     this.upsertContentManifestEntry(relPath, contentFile.ext, signature)
@@ -152,11 +168,7 @@ export class IncrementalContentState {
 
   async rebuildSingleContent(input: RebuildSingleContentInput) {
     const { relPath, ext, signature, result } = input
-    const contentFile = toContentFile(
-      this.input.config.contentDir,
-      relPath,
-      ext,
-    )
+    const contentFile = this.toResolvedContentFile(relPath, ext)
     const page = await buildPage(this.input.context, contentFile)
     this.input.onPageBuilt(contentFile.relPath, page.scriptEntrypoints)
     this.upsertContentManifestEntry(relPath, contentFile.ext, signature)
@@ -165,11 +177,7 @@ export class IncrementalContentState {
 
   async renderAndPersistRelPath(relPath: string, signature: FileSignature) {
     const ext = this.resolveContentExt(relPath)
-    const contentFile = toContentFile(
-      this.input.config.contentDir,
-      relPath,
-      ext,
-    )
+    const contentFile = this.toResolvedContentFile(relPath, ext)
     const page = await buildPage(this.input.context, contentFile)
     this.input.onPageBuilt(contentFile.relPath, page.scriptEntrypoints)
     this.upsertContentManifestEntry(relPath, contentFile.ext, signature)
@@ -211,11 +219,7 @@ export class IncrementalContentState {
     ext: string,
     signature: FileSignature,
   ) {
-    const contentFile = toContentFile(
-      this.input.config.contentDir,
-      relPath,
-      ext,
-    )
+    const contentFile = this.toResolvedContentFile(relPath, ext)
     const outPath = resolveOutPath(this.input.config.outDir, contentFile)
     this.input.getManifest().content[relPath] = {
       relPath,
@@ -226,13 +230,18 @@ export class IncrementalContentState {
     this.contentIndex.set(relPath, outPath, ext)
   }
 
+  private toResolvedContentFile(relPath: string, ext: string) {
+    const file = toContentFile(this.input.config.contentDir, relPath, ext)
+    return resolveContentFile(this.input.config, file)
+  }
+
   private resolveContentExt(relPath: string) {
     return (
       this.input.getManifest().content[relPath]?.ext ?? path.extname(relPath)
     )
   }
 
-  private markAllPagesDirty(contentFiles: ContentFile[]) {
+  private markAllPagesDirty(contentFiles: ResolvedContentFile[]) {
     this.dirtyPages.clear()
     for (const file of contentFiles) {
       this.dirtyPages.add(file.relPath)

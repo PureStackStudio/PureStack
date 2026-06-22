@@ -142,9 +142,7 @@ describe('resolveHeadConfig', () => {
     expect(head.openGraph?.image).toBe(
       'https://cdn.example.com/social/home.png',
     )
-    expect(head.twitter?.image).toBe(
-      'https://cdn.example.com/social/home.png',
-    )
+    expect(head.twitter?.image).toBe('https://cdn.example.com/social/home.png')
   })
 
   it('allows explicit head frontmatter to override generated preview metadata', () => {

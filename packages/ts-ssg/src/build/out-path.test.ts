@@ -2,6 +2,7 @@ import path from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
+import { resolvePlainContentFile } from '../i18n/content'
 import { assertUniqueContentRoutes, resolveRouteInfo } from '../routing/route'
 import { resolveOutPath } from './out-path'
 
@@ -13,6 +14,10 @@ function file(relPath: string, ext: string) {
     relPath,
     ext,
   }
+}
+
+function resolvedFile(relPath: string, ext: string) {
+  return resolvePlainContentFile(file(relPath, ext))
 }
 
 describe('resolveRouteInfo', () => {
@@ -48,8 +53,8 @@ describe('resolveRouteInfo', () => {
   it('throws on duplicate content routes', () => {
     expect(() =>
       assertUniqueContentRoutes([
-        file(path.join('account', 'index.mdx'), '.mdx'),
-        file(path.join('account', 'account.mdx'), '.mdx'),
+        resolvedFile(path.join('account', 'index.mdx'), '.mdx'),
+        resolvedFile(path.join('account', 'account.mdx'), '.mdx'),
       ]),
     ).toThrow(
       'Duplicate content routes detected. /account/: account/account.mdx, account/index.mdx',
@@ -59,25 +64,37 @@ describe('resolveRouteInfo', () => {
 
 describe('resolveOutPath', () => {
   it('writes index to root index.html', () => {
-    const outPath = resolveOutPath(root, file('index.mdx', '.mdx'))
+    const outPath = resolveOutPath(root, resolvedFile('index.mdx', '.mdx'))
     expect(outPath).toBe(path.join(root, 'index.html'))
   })
 
   it('writes nested index to its folder', () => {
     const relPath = path.join('guide', 'index.md')
-    const outPath = resolveOutPath(root, file(relPath, '.md'))
+    const outPath = resolveOutPath(root, resolvedFile(relPath, '.md'))
     expect(outPath).toBe(path.join(root, 'guide', 'index.html'))
   })
 
   it('writes same-name folder index to its folder', () => {
     const relPath = path.join('account', 'account.mdx')
-    const outPath = resolveOutPath(root, file(relPath, '.mdx'))
+    const outPath = resolveOutPath(root, resolvedFile(relPath, '.mdx'))
     expect(outPath).toBe(path.join(root, 'account', 'index.html'))
   })
 
   it('writes nested content to clean url folder', () => {
     const relPath = path.join('guide', 'overview.md')
-    const outPath = resolveOutPath(root, file(relPath, '.md'))
+    const outPath = resolveOutPath(root, resolvedFile(relPath, '.md'))
     expect(outPath).toBe(path.join(root, 'guide', 'overview', 'index.html'))
+  })
+
+  it('uses outputRelPath for localized output folders', () => {
+    const outPath = resolveOutPath(root, {
+      ...file('en/docs/index.md', '.md'),
+      routeRelPath: 'docs/index.md',
+      outputRelPath: 'en/docs/index.md',
+      urlPath: '/docs/',
+      locale: 'en',
+    })
+
+    expect(outPath).toBe(path.join(root, 'en', 'docs', 'index.html'))
   })
 })

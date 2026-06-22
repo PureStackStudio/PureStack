@@ -28,6 +28,10 @@ export interface TsSsgContext {
   outline?: PageOutlineItem[]
   theme: ThemeOptions
   basePath: string
+  locale?: string
+  locales: string[]
+  defaultLocale?: string
+  resolveLocaleHref: (locale: string) => string | undefined
   resolvePublicHref: (href: string) => string
   recordScriptEntrypoint: (sourceRelPath: string) => void
   resolveScriptPublicPath?: (sourceRelPath: string) => string

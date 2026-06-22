@@ -39,6 +39,17 @@ describe('sitemap', () => {
     )
   })
 
+  it('deduplicates repeated public URLs', () => {
+    const xml = buildSitemapXml('https://docs.example.com', [
+      { urlPath: '/docs/' },
+      { urlPath: '/docs/' },
+    ])
+
+    expect(
+      xml.match(/<loc>https:\/\/docs\.example\.com\/docs\/<\/loc>/g),
+    ).toHaveLength(1)
+  })
+
   it('writes sitemap.xml when enabled', async () => {
     await withTempDir(async (dir) => {
       const result = await writeSitemap(

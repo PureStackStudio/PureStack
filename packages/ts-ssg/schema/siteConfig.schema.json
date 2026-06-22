@@ -695,6 +695,46 @@
         }
       }
     },
+    "i18n": {
+      "type": "object",
+      "description": "Optional multilingual site configuration. When omitted, the site behaves as a single-language site.",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enables locale-aware content discovery and routing.",
+          "default": false
+        },
+        "defaultLocale": {
+          "type": "string",
+          "description": "Default locale, for example en or de."
+        },
+        "locales": {
+          "type": "array",
+          "description": "Supported locale folder names.",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "urlStrategy": {
+          "type": "string",
+          "enum": ["prefix-all", "hidden"],
+          "description": "Public URL strategy. prefix-all emits /en/... and /de/.... hidden keeps canonical URLs unprefixed while writing locale folders for host/server negotiation.",
+          "default": "prefix-all"
+        },
+        "queryParam": {
+          "type": "string",
+          "description": "Language query parameter used by hidden-strategy hosts/dev server.",
+          "default": "lang"
+        },
+        "cookieName": {
+          "type": "string",
+          "description": "Language preference cookie name used by hidden-strategy hosts/dev server.",
+          "default": "ts-ssg.lang"
+        }
+      }
+    },
     "mdx": {
       "type": "object",
       "description": "Markdown/MDX compiler settings.",

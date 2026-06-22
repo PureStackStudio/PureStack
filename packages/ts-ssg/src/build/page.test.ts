@@ -4,8 +4,14 @@ import path from 'node:path'
 import { disableLogger, getLogger, type Logger } from 'logpot'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from '../config/config'
-import type { ContentFile } from '../discover/content'
 import { discoverContent } from '../discover/content'
+import {
+  buildTranslationsByKey,
+  type ResolvedContentFile,
+  resolveContentFile,
+  resolveContentFiles,
+  resolvePlainContentFile,
+} from '../i18n/content'
 import { buildNavigation } from '../navigation/navigation'
 import { initBuiltinComponents } from '../regor/initBuiltinComponents'
 import { renderPageFromFile } from './page'
@@ -232,21 +238,116 @@ describe('page content compilation', () => {
       expect(page.html).toContain(
         'rel="canonical" href="https://example.com/product/docs/"',
       )
-      expect(page.html).toContain(
-        'property="og:title" content="Docs Preview"',
-      )
+      expect(page.html).toContain('property="og:title" content="Docs Preview"')
       expect(page.html).toContain(
         'property="og:image" content="https://example.com/product/assets/docs-preview.png"',
       )
-      expect(page.html).toContain(
-        'property="og:image:width" content="640"',
-      )
-      expect(page.html).toContain(
-        'property="og:image:height" content="320"',
-      )
+      expect(page.html).toContain('property="og:image:width" content="640"')
+      expect(page.html).toContain('property="og:image:height" content="320"')
       expect(page.html).toContain(
         'name="twitter:card" content="summary_large_image"',
       )
+    } finally {
+      await fs.rm(root, { recursive: true, force: true })
+    }
+  })
+
+  it('renders localized pages with lang and hreflang metadata for prefixed i18n', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-page-'))
+    try {
+      const contentDir = path.join(root, 'content')
+      const outDir = path.join(root, 'out')
+      await writeFile(
+        path.join(contentDir, 'en', 'index.mdx'),
+        ['---', 'title: Home', '---', '[Docs](docs/index.md)'].join('\n'),
+      )
+      await writeFile(
+        path.join(contentDir, 'tr', 'index.mdx'),
+        ['---', 'title: Ana Sayfa', '---', '[Docs](docs/index.md)'].join('\n'),
+      )
+
+      const config = resolveSiteConfig({
+        rootDir: root,
+        contentDir,
+        outDir,
+        sitemap: {
+          enabled: true,
+          baseUrl: 'https://example.com',
+        },
+        i18n: {
+          defaultLocale: 'en',
+          locales: ['en', 'tr'],
+          urlStrategy: 'prefix-all',
+        },
+      })
+      const files = resolveContentFiles(
+        config,
+        await discoverContent(contentDir),
+      )
+      const page = await renderPageFromFile(
+        { config, translationsByKey: buildTranslationsByKey(files) },
+        files.find((file) => file.relPath === 'en/index.mdx') ??
+          resolveContentFile(
+            config,
+            toRawContentFile(contentDir, path.join('en', 'index.mdx')),
+          ),
+      )
+
+      expect(page.urlPath).toBe('/en/')
+      expect(page.outPath).toBe(path.join(outDir, 'en', 'index.html'))
+      expect(page.pageInfo.locale).toBe('en')
+      expect(page.pageInfo.translations).toEqual([
+        { locale: 'en', relPath: 'en/index.mdx', urlPath: '/en/' },
+        { locale: 'tr', relPath: 'tr/index.mdx', urlPath: '/tr/' },
+      ])
+      expect(page.html).toContain('<html lang="en">')
+      expect(page.html).toContain('href="/en/docs/"')
+      expect(page.html).toContain(
+        'rel="alternate" hreflang="tr" href="https://example.com/tr/"',
+      )
+    } finally {
+      await fs.rm(root, { recursive: true, force: true })
+    }
+  })
+
+  it('writes hidden i18n pages under locale folders while keeping public routes clean', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-page-'))
+    try {
+      const contentDir = path.join(root, 'content')
+      const outDir = path.join(root, 'out')
+      await writeFile(path.join(contentDir, 'en', 'docs', 'index.md'), '# Docs')
+      await writeFile(
+        path.join(contentDir, 'tr', 'docs', 'index.md'),
+        '# Belgeler',
+      )
+
+      const config = resolveSiteConfig({
+        rootDir: root,
+        contentDir,
+        outDir,
+        i18n: {
+          defaultLocale: 'en',
+          locales: ['en', 'tr'],
+          urlStrategy: 'hidden',
+        },
+      })
+      const files = resolveContentFiles(
+        config,
+        await discoverContent(contentDir),
+      )
+      const page = await renderPageFromFile(
+        { config, translationsByKey: buildTranslationsByKey(files) },
+        files.find((file) => file.relPath === 'tr/docs/index.md') ??
+          resolveContentFile(
+            config,
+            toRawContentFile(contentDir, path.join('tr', 'docs', 'index.md')),
+          ),
+      )
+
+      expect(page.urlPath).toBe('/docs/')
+      expect(page.outPath).toBe(path.join(outDir, 'tr', 'docs', 'index.html'))
+      expect(page.html).toContain('<html lang="tr">')
+      expect(page.html).not.toContain('rel="alternate"')
     } finally {
       await fs.rm(root, { recursive: true, force: true })
     }
@@ -320,7 +421,14 @@ describe('page content compilation', () => {
   })
 })
 
-function toContentFile(contentDir: string, relPath: string): ContentFile {
+function toContentFile(
+  contentDir: string,
+  relPath: string,
+): ResolvedContentFile {
+  return resolvePlainContentFile(toRawContentFile(contentDir, relPath))
+}
+
+function toRawContentFile(contentDir: string, relPath: string) {
   return {
     absPath: path.join(contentDir, relPath),
     relPath,

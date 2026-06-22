@@ -115,6 +115,14 @@ describe('resolveSiteConfig sitemap', () => {
       twitterSite: undefined,
       twitterCreator: undefined,
     })
+    expect(config.i18n).toEqual({
+      enabled: false,
+      defaultLocale: '',
+      locales: [],
+      urlStrategy: 'prefix-all',
+      queryParam: 'lang',
+      cookieName: 'ts-ssg.lang',
+    })
     expect(config.style.fileName).toBe('site.css')
     expect(config.style.href).toBe('/assets/site.css')
     expect(config.style.themes).toEqual(['light', 'dark'])
@@ -347,6 +355,39 @@ describe('resolveSiteConfig sitemap', () => {
     } finally {
       fs.rmSync(tempRoot, { recursive: true, force: true })
     }
+  })
+
+  it('resolves i18n config when locales are configured', () => {
+    const config = resolveSiteConfig({
+      rootDir: process.cwd(),
+      i18n: {
+        defaultLocale: 'en',
+        locales: ['tr', 'en', 'tr'],
+        urlStrategy: 'hidden',
+        queryParam: 'locale',
+        cookieName: 'puregate.lang',
+      },
+    })
+
+    expect(config.i18n).toEqual({
+      enabled: true,
+      defaultLocale: 'en',
+      locales: ['en', 'tr'],
+      urlStrategy: 'hidden',
+      queryParam: 'locale',
+      cookieName: 'puregate.lang',
+    })
+  })
+
+  it('throws when i18n is enabled without a default locale', () => {
+    expect(() =>
+      resolveSiteConfig({
+        rootDir: process.cwd(),
+        i18n: {
+          enabled: true,
+        },
+      }),
+    ).toThrowError(/defaultLocale/)
   })
 
   it('provides sitemap defaults', () => {

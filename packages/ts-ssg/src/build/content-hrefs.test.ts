@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { resolveSiteConfig } from '../config/config'
 import { resolvePageContentHref } from './content-hrefs'
 
 describe('resolvePageContentHref', () => {
@@ -30,6 +31,55 @@ describe('resolvePageContentHref', () => {
     expect(
       resolvePageContentHref('./account.mdx', 'account/settings.mdx'),
     ).toBe('/account/')
+  })
+
+  it('resolves hidden i18n content links to clean public routes', () => {
+    const config = resolveSiteConfig({
+      rootDir: process.cwd(),
+      i18n: {
+        defaultLocale: 'en',
+        locales: ['en', 'de'],
+        urlStrategy: 'hidden',
+      },
+    })
+
+    expect(
+      resolvePageContentHref(
+        'usage/reads-and-writes.md',
+        'en/docs/getting-started.md',
+        config,
+      ),
+    ).toBe('/docs/usage/reads-and-writes/')
+  })
+
+  it('resolves root-absolute i18n content links inside the current locale', () => {
+    const config = resolveSiteConfig({
+      rootDir: process.cwd(),
+      i18n: {
+        defaultLocale: 'en',
+        locales: ['en', 'tr'],
+        urlStrategy: 'prefix-all',
+      },
+    })
+
+    expect(
+      resolvePageContentHref('/docs/index.md', 'en/index.mdx', config),
+    ).toBe('/en/docs/')
+  })
+
+  it('preserves explicit locale folders in root-absolute i18n content links', () => {
+    const config = resolveSiteConfig({
+      rootDir: process.cwd(),
+      i18n: {
+        defaultLocale: 'en',
+        locales: ['en', 'tr'],
+        urlStrategy: 'hidden',
+      },
+    })
+
+    expect(
+      resolvePageContentHref('/tr/docs/index.md', 'en/index.mdx', config),
+    ).toBe('/docs/')
   })
 
   it('leaves external, special, and asset links unchanged', () => {

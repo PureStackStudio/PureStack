@@ -4,13 +4,18 @@ import { themes } from '@purestack/ts-style'
 import { toOutputAssetRelPath } from '@purestack/ts-util'
 import { getLogger, type Logger } from 'logpot'
 import {
-  type ContentFile,
   discoverContent,
   isDefaultFooterFile,
   isDefaultHeaderFile,
   isSiteConfigFile,
   type StaticAssetFile,
 } from '../../discover/content'
+import {
+  buildTranslationsByKey,
+  type ResolvedContentFile,
+  resolveContentFile,
+  resolveContentFiles,
+} from '../../i18n/content'
 import { buildNavigation } from '../../navigation/navigation'
 import { initBuiltinComponents } from '../../regor/initBuiltinComponents'
 import {
@@ -85,7 +90,10 @@ async function createIncrementalRuntime(
   themes.setOptions(config.style.theme)
   initBuiltinComponents({ includeShikiStyles: isShikiEnabled(config.mdx) })
   const log = getLogger()
-  const discovered = await discoverContent(config.contentDir)
+  const discovered = resolveContentFiles(
+    config,
+    await discoverContent(config.contentDir),
+  )
   assertUniqueContentRoutes(discovered)
   const navigation = await buildNavigation(
     config.contentDir,
@@ -104,6 +112,7 @@ async function createIncrementalRuntime(
     components: buildOptions.components,
     templates: buildOptions.templates,
     navigation,
+    translationsByKey: buildTranslationsByKey(discovered),
     mdx,
     resolveScriptPublicPath: config.scripts.cacheBusting
       ? (sourceRelPath) =>
@@ -137,12 +146,12 @@ function isHighlightJsEnabled(mdx: SiteConfig['mdx'] | undefined): boolean {
 }
 
 type BuildPreparationResult = {
-  contentFiles: ContentFile[]
+  contentFiles: ResolvedContentFile[]
   assetFiles: StaticAssetFile[]
 }
 
 type BuildSummaryInput = {
-  contentFiles: ContentFile[]
+  contentFiles: ResolvedContentFile[]
   assetFiles: StaticAssetFile[]
   pages: number
 }
@@ -282,7 +291,10 @@ class IncrementalRuntime {
       this.config,
       this.context.mdx,
     )
-    const contentFiles = await discoverContent(this.config.contentDir)
+    const contentFiles = resolveContentFiles(
+      this.config,
+      await discoverContent(this.config.contentDir),
+    )
     assertUniqueContentRoutes(contentFiles)
     await hooks.onContentDiscovered?.(this.context, contentFiles)
     this.context.navigation = await buildNavigation(
@@ -290,6 +302,7 @@ class IncrementalRuntime {
       contentFiles,
       this.config.navigation,
     )
+    this.context.translationsByKey = buildTranslationsByKey(contentFiles)
     await hooks.onNavigationBuilt?.(this.context, this.context.navigation)
     return { contentFiles, assetFiles: copiedAssets.files }
   }
@@ -405,7 +418,7 @@ class IncrementalRuntime {
         entry.relPath,
         entry.ext,
       )
-      const route = resolveRouteInfo(file)
+      const route = resolveRouteInfo(resolveContentFile(this.config, file))
       return {
         urlPath: route.urlPath,
         lastModifiedMs: entry.mtimeMs,

@@ -4,10 +4,13 @@ import type {
   PageNavigation,
 } from '@purestack/ts-common'
 import { pickSemanticTone } from '@purestack/ts-style'
-import type { ContentFile } from '../discover/content'
 import { resolveNavigationConfig } from './config'
 import { loadContentMeta } from './meta'
-import type { NavigationTree, ResolvedNavigationConfig } from './model'
+import type {
+  NavigationContentFile,
+  NavigationTree,
+  ResolvedNavigationConfig,
+} from './model'
 import { loadCustomNavigation } from './nav-file'
 import { buildPageLinksByFolder, resolvePageLinks } from './page-links'
 import {
@@ -24,7 +27,7 @@ export { resolveFolderKey, resolveNavigationConfig }
 
 export async function buildNavigation(
   contentDir: string,
-  files: ContentFile[],
+  files: NavigationContentFile[],
   navigation?: NavigationConfig,
 ): Promise<NavigationTree | undefined> {
   const config = resolveNavigationConfig(navigation)
@@ -64,12 +67,15 @@ export async function buildNavigation(
 
 export function resolvePageNavigation(
   tree: NavigationTree | undefined,
-  file: ContentFile,
+  file: NavigationContentFile,
   frontmatter?: PageFrontmatter,
 ): PageNavigation | undefined {
   if (!tree) return undefined
   const folder = resolveFolderKey(file.relPath)
-  const root = resolveNavigationRoot(folder, tree.config.roots)
+  const locale = resolveContentLocale(file)
+  const root = locale
+    ? resolveLocalizedNavigationRoot(folder, locale, tree.config.roots)
+    : resolveNavigationRoot(folder, tree.config.roots)
   const items = tree.byFolder[root] ?? tree.byFolder[folder] ?? []
   const pageLinks = resolvePageLinks(tree, folder, items, file)
   return {
@@ -77,10 +83,22 @@ export function resolvePageNavigation(
     folder,
     root,
     items,
-    global: tree.global,
+    global: locale ? (tree.byFolder[locale] ?? tree.global) : tree.global,
     tone: pickSemanticTone(frontmatter?.nav?.tone) ?? tree.config.tone,
     ...(pageLinks ? { pageLinks } : {}),
   }
+}
+
+function resolveLocalizedNavigationRoot(
+  folder: string,
+  locale: string,
+  roots: string[],
+) {
+  if (roots.length === 0) return locale
+  const localizedRoots = roots.map((root) =>
+    root ? `${locale}/${root}` : locale,
+  )
+  return resolveNavigationRoot(folder, localizedRoots)
 }
 
 export function resolveNavigationRoot(folder: string, roots: string[]) {
@@ -90,7 +108,7 @@ export function resolveNavigationRoot(folder: string, roots: string[]) {
   return ''
 }
 
-function collectFolders(files: ContentFile[]) {
+function collectFolders(files: NavigationContentFile[]) {
   const folders = new Set<string>()
   folders.add('')
   for (const file of files) {
@@ -103,4 +121,8 @@ function collectFolders(files: ContentFile[]) {
     }
   }
   return folders
+}
+
+function resolveContentLocale(file: NavigationContentFile) {
+  return 'locale' in file ? file.locale : undefined
 }

@@ -1,8 +1,7 @@
 import fs from 'node:fs/promises'
-import type { ContentFile } from '../discover/content'
 import { parseFrontmatterSource } from '../frontmatter/frontmatter'
 import { resolveRouteFileInfo } from '../routing/route'
-import type { ContentMeta } from './model'
+import type { ContentMeta, NavigationContentFile } from './model'
 import {
   humanizeSegment,
   resolveBoolean,
@@ -12,7 +11,7 @@ import {
 } from './utils'
 
 export async function loadContentMeta(
-  files: ContentFile[],
+  files: NavigationContentFile[],
 ): Promise<ContentMeta[]> {
   const result: ContentMeta[] = []
   for (const file of files) {

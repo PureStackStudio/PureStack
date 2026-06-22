@@ -11,7 +11,10 @@ import { disableLogger, getLogger, type Logger } from 'logpot'
 import type { Component } from 'regor'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from '../config/config'
-import type { ContentFile } from '../discover/content'
+import {
+  type ResolvedContentFile,
+  resolvePlainContentFile,
+} from '../i18n/content'
 import { renderPageFromFile } from './page'
 
 async function writeFile(filePath: string, contents = '') {
@@ -137,10 +140,13 @@ embed:
   })
 })
 
-function toContentFile(contentDir: string, relPath: string): ContentFile {
-  return {
+function toContentFile(
+  contentDir: string,
+  relPath: string,
+): ResolvedContentFile {
+  return resolvePlainContentFile({
     absPath: path.join(contentDir, relPath),
     relPath,
     ext: path.extname(relPath),
-  }
+  })
 }

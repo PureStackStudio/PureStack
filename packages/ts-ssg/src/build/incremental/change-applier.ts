@@ -5,6 +5,7 @@ import {
   discoverContent,
   isContentFile,
 } from '../../discover/content'
+import { resolveContentFiles } from '../../i18n/content'
 import { assertUniqueContentRoutes } from '../../routing/route'
 import { copyStaticAsset } from '../assets'
 import {
@@ -243,7 +244,10 @@ export class IncrementalChangeApplier {
   }
 
   private async assertUniqueContentRoutes() {
-    const contentFiles = await discoverContent(this.input.config.contentDir)
+    const contentFiles = resolveContentFiles(
+      this.input.config,
+      await discoverContent(this.input.config.contentDir),
+    )
     assertUniqueContentRoutes(contentFiles)
   }
 

@@ -3,6 +3,11 @@ import path from 'node:path'
 import type { SiteConfig, SiteMdxConfig } from '@purestack/ts-common'
 import { urlNormalizer } from '@purestack/ts-util'
 import type { ContentFile, StaticAssetFile } from '../../discover/content'
+import {
+  type ResolvedContentFile,
+  resolveContentFile,
+  resolvePlainContentFile,
+} from '../../i18n/content'
 import type { MdxRenderOptions } from '../../mdx/compile'
 import {
   createMdxHighlighter,
@@ -30,7 +35,10 @@ export class ManifestContentIndex {
   private readonly urlPathToRelPath = new Map<string, string>()
   private readonly relPathToUrlPath = new Map<string, string>()
 
-  constructor(private readonly contentDir: string) {}
+  constructor(
+    private readonly contentDir: string,
+    private readonly config?: SiteConfig,
+  ) {}
 
   rebuildFromManifest(manifest: BuildManifest) {
     this.outPathToRelPath.clear()
@@ -53,11 +61,11 @@ export class ManifestContentIndex {
     }
     this.relPathToOutPath.set(relPath, outPath)
     this.outPathToRelPath.set(outPath, relPath)
-    const routeInfo = resolveRouteInfo(
-      toContentFile(this.contentDir, relPath, ext ?? path.extname(relPath)),
-    )
+    const routeInfo = resolveRouteInfo(this.toContentFile(relPath, ext))
     this.relPathToUrlPath.set(relPath, routeInfo.urlPath)
-    this.urlPathToRelPath.set(routeInfo.urlPath, relPath)
+    if (!this.urlPathToRelPath.has(routeInfo.urlPath)) {
+      this.urlPathToRelPath.set(routeInfo.urlPath, relPath)
+    }
   }
 
   remove(relPath: string) {
@@ -77,12 +85,25 @@ export class ManifestContentIndex {
     return this.urlPathToRelPath.get(urlPath)
   }
 
-  updateUrlPathMapFromFiles(files: ContentFile[]) {
+  updateUrlPathMapFromFiles(files: ResolvedContentFile[]) {
     for (const file of files) {
       const routeInfo = resolveRouteInfo(file)
       this.relPathToUrlPath.set(file.relPath, routeInfo.urlPath)
-      this.urlPathToRelPath.set(routeInfo.urlPath, file.relPath)
+      if (!this.urlPathToRelPath.has(routeInfo.urlPath)) {
+        this.urlPathToRelPath.set(routeInfo.urlPath, file.relPath)
+      }
     }
+  }
+
+  private toContentFile(relPath: string, ext?: string): ResolvedContentFile {
+    const file = toContentFile(
+      this.contentDir,
+      relPath,
+      ext ?? path.extname(relPath),
+    )
+    return this.config
+      ? resolveContentFile(this.config, file)
+      : resolvePlainContentFile(file)
   }
 }
 
@@ -149,7 +170,7 @@ export async function removeFile(filePath: string) {
 
 export async function buildManifest(
   config: SiteConfig,
-  contentFiles: ContentFile[],
+  contentFiles: ResolvedContentFile[],
   assetFiles: StaticAssetFile[],
   stylesResult: StylesManifestEntry,
   options: { getScriptCacheKey?: (relPath: string) => string | undefined } = {},

@@ -1,11 +1,14 @@
 import path from 'node:path'
+import type { SiteConfig } from '@purestack/ts-common'
 import { urlNormalizer } from '@purestack/ts-util'
 import type { ContentFile } from '../discover/content'
+import { resolveContentTarget } from '../i18n/content'
 import { resolveRouteInfo } from '../routing/route'
 
 export function resolvePageContentHref(
   href: string,
   sourceRelPath: string,
+  config?: SiteConfig,
 ): string {
   const trimmed = href.trim()
   if (!trimmed || trimmed !== href) return href
@@ -15,16 +18,24 @@ export function resolvePageContentHref(
   const ext = path.posix.extname(base).toLowerCase()
   if (ext !== '.md' && ext !== '.mdx') return href
 
-  const targetRelPath = resolveContentTargetRelPath(sourceRelPath, base)
-  const route = resolveRouteInfo(toContentFile(targetRelPath, ext))
+  const targetRelPath = resolveContentTargetRelPath(sourceRelPath, base, config)
+  const targetFile =
+    config?.i18n.enabled === true
+      ? resolveContentTarget(config, targetRelPath, ext)
+      : toContentFile(targetRelPath, ext)
+  const route = resolveRouteInfo(targetFile)
   return `${route.urlPath}${suffix}`
 }
 
-function resolveContentTargetRelPath(sourceRelPath: string, hrefBase: string) {
+function resolveContentTargetRelPath(
+  sourceRelPath: string,
+  hrefBase: string,
+  config?: SiteConfig,
+) {
   const sourcePosix = toPosixPath(sourceRelPath)
   const hrefPosix = toPosixPath(hrefBase)
   const targetRelPath = hrefPosix.startsWith('/')
-    ? path.posix.normalize(hrefPosix.replace(/^\/+/, ''))
+    ? resolveAbsoluteContentTargetRelPath(sourcePosix, hrefPosix, config)
     : path.posix.normalize(
         path.posix.join(path.posix.dirname(sourcePosix), hrefPosix),
       )
@@ -34,6 +45,25 @@ function resolveContentTargetRelPath(sourceRelPath: string, hrefBase: string) {
     )
   }
   return targetRelPath
+}
+
+function resolveAbsoluteContentTargetRelPath(
+  sourceRelPath: string,
+  hrefPath: string,
+  config?: SiteConfig,
+) {
+  const targetRelPath = path.posix.normalize(hrefPath.replace(/^\/+/, ''))
+  if (!config?.i18n.enabled) return targetRelPath
+  const sourceLocale = resolveSourceLocale(sourceRelPath, config)
+  if (!sourceLocale) return targetRelPath
+  const targetLocale = targetRelPath.split('/')[0]
+  if (config.i18n.locales.includes(targetLocale)) return targetRelPath
+  return path.posix.join(sourceLocale, targetRelPath)
+}
+
+function resolveSourceLocale(sourceRelPath: string, config: SiteConfig) {
+  const sourceLocale = sourceRelPath.split('/')[0]
+  return config.i18n.locales.includes(sourceLocale) ? sourceLocale : undefined
 }
 
 function toContentFile(relPath: string, ext: string): ContentFile {

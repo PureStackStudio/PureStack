@@ -1,4 +1,8 @@
-import type { PageFrontmatter, PreviewConfig } from '@purestack/ts-common'
+import type {
+  PageFrontmatter,
+  PageTranslationInfo,
+  PreviewConfig,
+} from '@purestack/ts-common'
 import type { BasicHeadConfig } from '@purestack/ts-html'
 import { merge, withBasePath } from '@purestack/ts-util'
 
@@ -8,6 +12,7 @@ export interface HeadConfigOptions {
   basePath?: string
   baseUrl?: string
   urlPath?: string
+  translations?: PageTranslationInfo[]
 }
 
 export function resolveHeadConfig(
@@ -89,9 +94,29 @@ function resolvePreviewConfig(
 
   return {
     ...(pageUrl ? { canonicalUrl: pageUrl } : {}),
+    ...resolveAlternateLinks(options),
     ...(Object.keys(openGraph).length > 0 ? { openGraph } : {}),
     ...(Object.keys(twitter).length > 0 ? { twitter } : {}),
   }
+}
+
+function resolveAlternateLinks(
+  options: HeadConfigOptions,
+): Pick<BasicHeadConfig, 'alternates'> {
+  const translations = options.translations ?? []
+  const alternates = translations
+    .map((entry) => ({
+      hrefLang: entry.locale,
+      href: resolveAbsoluteUrl(
+        withBasePath(options.basePath ?? '', entry.urlPath),
+        options.baseUrl,
+      ),
+    }))
+    .filter((entry): entry is { hrefLang: string; href: string } =>
+      Boolean(entry.href),
+    )
+  const uniqueHrefs = new Set(alternates.map((entry) => entry.href))
+  return uniqueHrefs.size > 1 ? { alternates } : {}
 }
 
 type ResolvedPreviewImage = {

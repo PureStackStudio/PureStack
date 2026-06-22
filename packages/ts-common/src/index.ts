@@ -25,6 +25,7 @@ export type {
   PageTemplate,
   PageTemplateInput,
   PageTemplateMap,
+  PageTranslationInfo,
 } from './page-template-types'
 export {
   resolveTsSsgContext,
@@ -34,6 +35,8 @@ export type {
   AnalyticsConfig,
   AuthConfig,
   Ga4Config,
+  I18nConfig,
+  I18nUrlStrategy,
   LogoConfig,
   PagefindConfig,
   PageTocConfig,

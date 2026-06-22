@@ -48,46 +48,48 @@ function renderDocTemplate({
   const frontmatter = pageInfo.frontmatter
   const layout = resolveDocLayout(frontmatter, navigation, outline)
   const showFooter = frontmatter.layout.showFooter
-  return h('html').push(
-    head,
-    h('body')
-      .attr({ class: layout.bodyClass })
-      .push(
-        buildTopBar(headerHtml),
-        h('div')
-          .attr({ class: layout.shellClass })
-          .push(
-            ...(layout.showNav
-              ? [
-                  h('aside')
-                    .attr({ class: 'doc-sidebar', id: 'doc-sidebar' })
-                    .push(h('nav-menu').attr({ tone: navigation?.tone })),
-                ]
-              : []),
-            h('main')
-              .attr({ class: 'doc-main' })
-              .push(
-                h('article')
-                  .attr({ class: 'doc-content' })
-                  .raw(bodyHtml)
-                  .push(...(navigation?.pageLinks ? [h('PageLinks')] : [])),
-              ),
-            ...(layout.showToc
-              ? [
-                  h('aside')
-                    .attr({ class: 'doc-toc', id: 'doc-toc' })
-                    .push(
-                      h('page-toc').attr({
-                        tone: frontmatter.layout.tocTone ?? site.pageToc.tone,
-                      }),
-                    ),
-                ]
-              : []),
-          ),
-        h('consent'),
-        buildFooter(showFooter, footerHtml),
-      ),
-  )
+  return h('html')
+    .attr(resolveHtmlAttrs(pageInfo.locale))
+    .push(
+      head,
+      h('body')
+        .attr({ class: layout.bodyClass })
+        .push(
+          buildTopBar(headerHtml),
+          h('div')
+            .attr({ class: layout.shellClass })
+            .push(
+              ...(layout.showNav
+                ? [
+                    h('aside')
+                      .attr({ class: 'doc-sidebar', id: 'doc-sidebar' })
+                      .push(h('nav-menu').attr({ tone: navigation?.tone })),
+                  ]
+                : []),
+              h('main')
+                .attr({ class: 'doc-main' })
+                .push(
+                  h('article')
+                    .attr({ class: 'doc-content' })
+                    .raw(bodyHtml)
+                    .push(...(navigation?.pageLinks ? [h('PageLinks')] : [])),
+                ),
+              ...(layout.showToc
+                ? [
+                    h('aside')
+                      .attr({ class: 'doc-toc', id: 'doc-toc' })
+                      .push(
+                        h('page-toc').attr({
+                          tone: frontmatter.layout.tocTone ?? site.pageToc.tone,
+                        }),
+                      ),
+                  ]
+                : []),
+            ),
+          h('consent'),
+          buildFooter(showFooter, footerHtml),
+        ),
+    )
 }
 
 type DocLayout = {
@@ -176,17 +178,23 @@ function renderSplashTemplate({
   footerHtml,
 }: PageTemplateInput) {
   const showFooter = pageInfo.frontmatter.layout.showFooter
-  return h('html').push(
-    head,
-    h('body')
-      .attr({ class: 'template-splash' })
-      .push(
-        buildTopBar(headerHtml),
-        h('main').push(h('section').attr({ class: 'splash' }).raw(bodyHtml)),
-        h('consent'),
-        buildFooter(showFooter, footerHtml),
-      ),
-  )
+  return h('html')
+    .attr(resolveHtmlAttrs(pageInfo.locale))
+    .push(
+      head,
+      h('body')
+        .attr({ class: 'template-splash' })
+        .push(
+          buildTopBar(headerHtml),
+          h('main').push(h('section').attr({ class: 'splash' }).raw(bodyHtml)),
+          h('consent'),
+          buildFooter(showFooter, footerHtml),
+        ),
+    )
+}
+
+function resolveHtmlAttrs(locale: string | undefined) {
+  return locale ? { lang: locale } : {}
 }
 
 function buildTopBar(headerHtml?: string) {

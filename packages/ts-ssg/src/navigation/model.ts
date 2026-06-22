@@ -5,6 +5,9 @@ import type {
 } from '@purestack/ts-common'
 import type { SemanticTone } from '@purestack/ts-style'
 import type { ContentFile } from '../discover/content'
+import type { ResolvedContentFile } from '../i18n/content'
+
+export type NavigationContentFile = ContentFile | ResolvedContentFile
 
 export interface ResolvedNavigationConfig {
   mode: NavigationMode
@@ -49,7 +52,7 @@ export interface NavIconEntry {
 }
 
 export interface ContentMeta {
-  file: ContentFile
+  file: NavigationContentFile
   folder: string
   urlPath: string
   title: string

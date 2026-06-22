@@ -9,6 +9,8 @@ import type {
   ConsentScript,
   ConsentService,
   Ga4Config,
+  I18nConfig,
+  I18nUrlStrategy,
   LogoConfig,
   PagefindConfig,
   PageTocConfig,
@@ -99,6 +101,7 @@ export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
   )
   const pagefind = resolvePagefindConfig(input.pagefind, fileConfig.pagefind)
   const preview = resolvePreviewConfig(input.preview, fileConfig.preview)
+  const i18n = resolveI18nConfig(input.i18n, fileConfig.i18n)
   const mdx = resolveMdxConfig(input.mdx, fileConfig.mdx)
   return {
     rootDir,
@@ -120,6 +123,7 @@ export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
     analytics,
     pagefind,
     preview,
+    i18n,
     mdx,
   }
 }
@@ -468,16 +472,78 @@ function resolvePreviewConfig(
     siteName: resolveOptionalString(input?.siteName ?? file?.siteName),
     type: resolveOptionalString(input?.type ?? file?.type),
     locale: resolveOptionalString(input?.locale ?? file?.locale),
-    twitterCard: resolveOptionalString(
-      input?.twitterCard ?? file?.twitterCard,
-    ),
-    twitterSite: resolveOptionalString(
-      input?.twitterSite ?? file?.twitterSite,
-    ),
+    twitterCard: resolveOptionalString(input?.twitterCard ?? file?.twitterCard),
+    twitterSite: resolveOptionalString(input?.twitterSite ?? file?.twitterSite),
     twitterCreator: resolveOptionalString(
       input?.twitterCreator ?? file?.twitterCreator,
     ),
   }
+}
+
+function resolveI18nConfig(
+  input?: DeepPartial<I18nConfig>,
+  file?: DeepPartial<I18nConfig>,
+): I18nConfig {
+  const rawLocales = input?.locales ?? file?.locales
+  const locales = normalizeLocales(rawLocales)
+  const defaultLocale =
+    normalizeLocale(input?.defaultLocale ?? file?.defaultLocale) ??
+    locales[0] ??
+    ''
+  const enabled =
+    pickBoolean(input?.enabled, file?.enabled, false) || locales.length > 0
+  const resolvedLocales = enabled
+    ? normalizeLocales([defaultLocale, ...locales])
+    : []
+  if (enabled && !defaultLocale) {
+    throw new Error(
+      'i18n.defaultLocale is required when i18n is enabled or locales are configured.',
+    )
+  }
+  if (enabled && !resolvedLocales.includes(defaultLocale)) {
+    throw new Error('i18n.locales must include i18n.defaultLocale.')
+  }
+  return {
+    enabled,
+    defaultLocale: enabled ? defaultLocale : '',
+    locales: resolvedLocales,
+    urlStrategy: resolveI18nUrlStrategy(
+      input?.urlStrategy ?? file?.urlStrategy,
+    ),
+    queryParam: resolveString(input?.queryParam, file?.queryParam, 'lang'),
+    cookieName: resolveString(
+      input?.cookieName,
+      file?.cookieName,
+      'ts-ssg.lang',
+    ),
+  }
+}
+
+function normalizeLocales(value: unknown): string[] {
+  if (!Array.isArray(value)) return []
+  const result: string[] = []
+  const seen = new Set<string>()
+  for (const entry of value) {
+    const locale = normalizeLocale(entry)
+    if (!locale || seen.has(locale)) continue
+    seen.add(locale)
+    result.push(locale)
+  }
+  return result
+}
+
+function normalizeLocale(value: unknown): string | undefined {
+  const locale = resolveOptionalString(value)
+  if (!locale) return undefined
+  if (!/^[A-Za-z0-9-]+$/.test(locale)) {
+    throw new Error(`Invalid locale "${locale}".`)
+  }
+  return locale
+}
+
+function resolveI18nUrlStrategy(value: unknown): I18nUrlStrategy {
+  if (value === 'hidden') return 'hidden'
+  return 'prefix-all'
 }
 
 function normalizePreviewImageDimension(value: unknown) {
