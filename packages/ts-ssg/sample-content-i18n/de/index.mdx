@@ -1,0 +1,46 @@
+---
+title: LocaleLab
+description: Deutsche Startseite fuer das PureStack Mehrsprachenbeispiel.
+template: doc
+layout:
+  navMode: drawer
+  showToc: false
+nav:
+  order: 1
+preview:
+  title: LocaleLab auf Deutsch
+  description: Sieh die deutsche Version mit Sprachpraefix und hreflang Alternativen.
+  locale: de_DE
+---
+
+# LocaleLab
+
+Diese Seite wird aus `de/index.mdx` erzeugt und unter `/de/` veroeffentlicht.
+
+Die passende englische Seite liegt in `en/index.mdx` und ist unter
+[/en/](/en/) erreichbar. Weil beide Dateien dieselbe Routenform haben, erzeugt
+PureStack Uebersetzungsalternativen in den Metadaten.
+
+<Grid columns="1" columnsMd="3">
+  <FeatureCard
+    title="Locale Ordner"
+    summary="Das erste Pfadsegment waehlt die Sprache."
+    icon="tabler:globe"/>
+  <FeatureCard
+    title="Praefix URL"
+    summary="Die oeffentliche Route zeigt die Sprache sichtbar."
+    icon="tabler:route"/>
+  <FeatureCard
+    title="Gemeinsamer Routenschluessel"
+    summary="Gleiche Pfade werden als Uebersetzungen derselben Seite erkannt."
+    icon="tabler:settings"/>
+</Grid>
+
+## Links ausprobieren
+
+- Relativer Markdown Link: [Dokumentation lesen](docs/index.md)
+- Root-absoluter Markdown Link: [Zum Routing](/docs/routing.md)
+- Expliziter Locale Link: [Englische Routing Seite](/en/docs/routing.md)
+
+Die ersten beiden Links bleiben deutsch. Der explizite Locale Link springt
+absichtlich zur englischen Seite.

@@ -1,0 +1,9 @@
+{
+  "mode": "override",
+  "pageLinks": true,
+  "items": [
+    { "title": "Docs", "url": "./" },
+    { "title": "Routing", "url": "routing" },
+    { "title": "Content links", "url": "links" }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "$schema": "../schema/siteConfig.schema.json",
+  "siteTitle": "PureStack i18n Sample",
+  "favicon": "tabler:globe",
+  "logo": {
+    "brand": "Pure Stack",
+    "letterColors": "11112222",
+    "subtitle": "i18n sample content",
+    "href": "/",
+    "icon": "tabler:globe",
+    "colors": [
+      "var(--ps-current-text-subtle)",
+      "var(--ps-current-text-default)",
+      "var(--ps-semantic-tone-accent-button-hover-background)",
+      "#ffffff"
+    ],
+    "logoBackground": 2,
+    "logoForeground": 3
+  },
+  "style": {
+    "fileName": "site.css",
+    "href": "/assets/site.css",
+    "themes": ["light", "dark"],
+    "pretty": false,
+    "theme": {
+      "skin": "neon"
+    }
+  },
+  "html": {
+    "minify": false
+  },
+  "navigation": {
+    "mode": "hybrid",
+    "navFileName": "_nav.json",
+    "maxDepth": 20,
+    "includeIndex": true,
+    "sortBy": "order",
+    "roots": ["docs"],
+    "tone": "neutral"
+  },
+  "pageToc": {
+    "enabled": true,
+    "tone": "neutral"
+  },
+  "sitemap": {
+    "enabled": true,
+    "baseUrl": "https://example.com",
+    "fileName": "sitemap.xml",
+    "robots": {
+      "enabled": true,
+      "fileName": "robots.txt",
+      "userAgent": "*",
+      "allow": ["/"],
+      "disallow": ["/drafts/"],
+      "customDirectives": ["# i18n sample robots output"]
+    }
+  },
+  "preview": {
+    "title": "PureStack i18n Sample",
+    "description": "A bilingual sample site showing locale folders, prefixed routes, hreflang metadata, localized navigation, and content-link rewriting.",
+    "image": "https://example.com/assets/i18n-preview.png",
+    "imageAlt": "PureStack i18n sample preview",
+    "imageWidth": 1200,
+    "imageHeight": 630,
+    "siteName": "PureStack i18n Sample",
+    "type": "website",
+    "twitterCard": "summary_large_image"
+  },
+  "i18n": {
+    "enabled": true,
+    "defaultLocale": "en",
+    "locales": ["en", "de"],
+    "urlStrategy": "prefix-all",
+    "queryParam": "lang",
+    "cookieName": "purestack.i18n"
+  },
+  "pagefind": {
+    "enabled": false
+  },
+  "mdx": {
+    "highlighter": "highlightjs"
+  },
+  "outDir": "../dist/i18n-site",
+  "publishDir": "../dist/i18n-publish"
+}

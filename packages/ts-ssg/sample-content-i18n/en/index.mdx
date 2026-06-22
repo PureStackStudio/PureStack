@@ -1,0 +1,46 @@
+---
+title: LocaleLab
+description: English landing page for the PureStack multilingual sample.
+template: doc
+layout:
+  navMode: drawer
+  showToc: false
+nav:
+  order: 1
+preview:
+  title: LocaleLab in English
+  description: See the English version with prefixed routes and hreflang alternates.
+  locale: en_US
+---
+
+# LocaleLab
+
+This page is generated from `en/index.mdx` and published at `/en/`.
+
+The matching German page lives at `de/index.mdx` and is published at
+[/de/](/de/). Because both files share the same route shape, the generated page
+metadata includes translation alternates.
+
+<Grid columns="1" columnsMd="3">
+  <FeatureCard
+    title="Locale folder"
+    summary="The first path segment selects the locale."
+    icon="tabler:globe"/>
+  <FeatureCard
+    title="Prefixed URL"
+    summary="The public route keeps the locale visible."
+    icon="tabler:route"/>
+  <FeatureCard
+    title="Shared route key"
+    summary="Matching paths become translations of the same page."
+    icon="tabler:settings"/>
+</Grid>
+
+## Try the links
+
+- Relative markdown link: [Read the docs](docs/index.md)
+- Root-absolute markdown link: [Go to routing](/docs/routing.md)
+- Explicit locale link: [German routing page](/de/docs/routing.md)
+
+The first two links stay in English. The explicit locale link intentionally
+jumps to German.
