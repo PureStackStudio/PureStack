@@ -449,10 +449,13 @@ image first. Explicit `head` frontmatter still wins for custom metadata.
 i18n is opt-in. Without `siteConfig.i18n`, existing content routes and output
 paths are unchanged.
 
-When i18n is enabled, content lives under locale folders:
+When i18n is enabled, localized content lives under configured locale folders.
+Content outside those folders remains ordinary global site content:
 
 ```txt
 content/
+  index.mdx
+  about.mdx
   en/
     index.mdx
     docs/index.md

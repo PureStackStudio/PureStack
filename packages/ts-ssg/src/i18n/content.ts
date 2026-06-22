@@ -35,9 +35,7 @@ export function resolveContentFile(
   const sourceRelPath = toPosixPath(file.relPath)
   const [locale = '', ...rest] = sourceRelPath.split('/')
   if (!localeSet.has(locale) || rest.length === 0) {
-    throw new Error(
-      `i18n content files must be placed under a configured locale folder: "${sourceRelPath}".`,
-    )
+    return resolvePlainContentFile(file)
   }
   const routeRelPath = rest.join('/')
   const logicalRoute = resolveRouteInfo({

@@ -2,7 +2,8 @@
 title: Documentation
 description: English documentation root for the i18n sample.
 nav:
-  order: 1
+  title: Docs
+  order: 2
 ---
 
 # Documentation

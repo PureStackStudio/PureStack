@@ -310,6 +310,54 @@ describe('page content compilation', () => {
     }
   })
 
+  it('renders global root content normally when i18n is enabled', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-page-'))
+    try {
+      const contentDir = path.join(root, 'content')
+      const outDir = path.join(root, 'out')
+      await writeFile(
+        path.join(contentDir, 'index.mdx'),
+        [
+          '---',
+          'title: Language chooser',
+          '---',
+          '[Docs](/docs/index.md)',
+        ].join('\n'),
+      )
+
+      const config = resolveSiteConfig({
+        rootDir: root,
+        contentDir,
+        outDir,
+        sitemap: {
+          enabled: true,
+          baseUrl: 'https://example.com',
+        },
+        i18n: {
+          defaultLocale: 'en',
+          locales: ['en', 'tr'],
+          urlStrategy: 'prefix-all',
+        },
+      })
+      const page = await renderPageFromFile(
+        { config },
+        resolveContentFile(config, toRawContentFile(contentDir, 'index.mdx')),
+      )
+
+      expect(page.urlPath).toBe('/')
+      expect(page.outPath).toBe(path.join(outDir, 'index.html'))
+      expect(page.pageInfo.locale).toBeUndefined()
+      expect(page.pageInfo.translationKey).toBeUndefined()
+      expect(page.pageInfo.translations).toBeUndefined()
+      expect(page.html).toContain('<html>')
+      expect(page.html).toContain('href="/docs/"')
+      expect(page.html).toContain('rel="canonical" href="https://example.com/"')
+      expect(page.html).not.toContain('hreflang=')
+    } finally {
+      await fs.rm(root, { recursive: true, force: true })
+    }
+  })
+
   it('writes hidden i18n pages under locale folders while keeping public routes clean', async () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-page-'))
     try {

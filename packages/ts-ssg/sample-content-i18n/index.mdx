@@ -1,0 +1,53 @@
+---
+title: PureStack i18n Sample
+description: Choose a language for the PureStack multilingual sample.
+template: doc
+layout:
+  navMode: drawer
+  showNav: false
+  showToc: false
+nav:
+  hidden: true
+preview:
+  title: PureStack i18n Sample
+  description: Choose English or German for the multilingual sample.
+  locale: en_US
+---
+
+# PureStack i18n Sample
+
+This root page is ordinary global MDX content. The localized pages live in the
+configured locale folders and keep their own routes, navigation, metadata, and
+content-link behavior.
+
+<Grid columns="1" columnsMd="2" alignItems="stretch">
+  <Panel tone="neutral" variant="surface" bodyClass="p-4">
+    <Flex direction="column" align="start" class="gap-3">
+      <Flex align="center" class="gap-3">
+        <IconFrame name="tabler:globe" size="sm"/>
+        <div>
+          <h2 class="fs-h4 my-0">English</h2>
+          <p class="text-tagline mb-0">Browse the English locale output.</p>
+        </div>
+      </Flex>
+      <BtnLink href="/en/" tone="accent">Open English</BtnLink>
+    </Flex>
+  </Panel>
+
+  <Panel tone="neutral" variant="surface" bodyClass="p-4">
+    <Flex direction="column" align="start" class="gap-3">
+      <Flex align="center" class="gap-3">
+        <IconFrame name="tabler:route" size="sm"/>
+        <div>
+          <h2 class="fs-h4 my-0">Deutsch</h2>
+          <p class="text-tagline mb-0">Browse the German locale output.</p>
+        </div>
+      </Flex>
+      <BtnLink href="/de/" tone="accent">Open Deutsch</BtnLink>
+    </Flex>
+  </Panel>
+</Grid>
+
+Root content stays global. A root-absolute markdown link authored here resolves
+without a locale prefix, while links inside `en/` or `de/` stay inside their
+current locale.

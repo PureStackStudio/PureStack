@@ -2,7 +2,8 @@
 title: Dokumentation
 description: Deutsche Dokumentationswurzel fuer das i18n Beispiel.
 nav:
-  order: 1
+  title: Dokumentation
+  order: 2
 ---
 
 # Dokumentation

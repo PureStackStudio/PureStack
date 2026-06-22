@@ -97,7 +97,6 @@ export function buildNestedNavigation(
           remaining,
           sequence,
           icons,
-          customByFolder,
           config,
         )
         if (childItem) {
@@ -107,8 +106,10 @@ export function buildNestedNavigation(
     }
 
     const sortedItems = sortNavItems(items, config.sortBy)
-    const sequencedItems = applySequence(sortedItems, sequence, config.sortBy)
-    const finalItems = applyIcons(sequencedItems, icons)
+    const orderedItems = overrideMode
+      ? applySequence(items, sequence, config.sortBy)
+      : applySequence(sortedItems, sequence, config.sortBy)
+    const finalItems = applyIcons(orderedItems, icons)
     byFolder[node.relPath] = finalItems
     return finalItems
   }
@@ -184,7 +185,6 @@ function buildNestedChildNavItem(
   remaining: number,
   inheritedSequence: NavSequenceEntry[],
   inheritedIcons: NavFile['icons'],
-  customByFolder: Record<string, NavFile>,
   config: ResolvedNavigationConfig,
 ): InternalNavItem | null {
   const childItems = buildNode(
@@ -194,11 +194,10 @@ function buildNestedChildNavItem(
     inheritedIcons,
   )
   if (childItems.length === 0) return null
-  const childOverride = customByFolder[child.relPath]?.mode === 'override'
   const folderIndexMeta = child.pages.find(
     (page) => page.isFolderIndex && !page.hidden,
   )
-  if (!childOverride && folderIndexMeta && config.includeIndex) {
+  if (folderIndexMeta && config.includeIndex) {
     const indexItem = toNavItem(folderIndexMeta)
     const filtered = childItems.filter(
       (item) => item.url !== folderIndexMeta.urlPath,

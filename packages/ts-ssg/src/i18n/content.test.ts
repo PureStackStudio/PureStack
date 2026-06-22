@@ -2,6 +2,7 @@ import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from '../config/config'
 import type { ContentFile } from '../discover/content'
+import { assertUniqueContentRoutes } from '../routing/route'
 import { resolveContentFiles } from './content'
 
 describe('resolveContentFiles', () => {
@@ -75,18 +76,70 @@ describe('resolveContentFiles', () => {
     ])
   })
 
-  it('rejects content outside configured locale folders when i18n is enabled', () => {
+  it('keeps content outside configured locale folders as ordinary site content', () => {
     const config = resolveSiteConfig({
       rootDir: process.cwd(),
       i18n: {
         defaultLocale: 'en',
         locales: ['en', 'tr'],
+        urlStrategy: 'prefix-all',
       },
     })
 
-    expect(() => resolveContentFiles(config, [file('index.mdx')])).toThrowError(
-      /locale folder/,
-    )
+    const files = resolveContentFiles(config, [
+      file('index.mdx'),
+      file('about.md'),
+      file('en.mdx'),
+      file('en/docs/index.md'),
+    ])
+    const home = findFile(files, 'index.mdx')
+    const about = findFile(files, 'about.md')
+    const namedLocalePage = findFile(files, 'en.mdx')
+    const localizedDocs = findFile(files, 'en/docs/index.md')
+
+    expect(home).toMatchObject({
+      routeRelPath: 'index.mdx',
+      outputRelPath: 'index.mdx',
+      urlPath: '/',
+    })
+    expect(home.locale).toBeUndefined()
+    expect(home.translationKey).toBeUndefined()
+    expect(about).toMatchObject({
+      routeRelPath: 'about.md',
+      outputRelPath: 'about.md',
+      urlPath: '/about/',
+    })
+    expect(about.locale).toBeUndefined()
+    expect(namedLocalePage).toMatchObject({
+      routeRelPath: 'en.mdx',
+      outputRelPath: 'en.mdx',
+      urlPath: '/en/',
+    })
+    expect(namedLocalePage.locale).toBeUndefined()
+    expect(localizedDocs).toMatchObject({
+      locale: 'en',
+      routeRelPath: 'docs/index.md',
+      outputRelPath: 'en/docs/index.md',
+      urlPath: '/en/docs/',
+      translationKey: 'docs',
+    })
+  })
+
+  it('still rejects route collisions between global and localized content', () => {
+    const config = resolveSiteConfig({
+      rootDir: process.cwd(),
+      i18n: {
+        defaultLocale: 'en',
+        locales: ['en', 'tr'],
+        urlStrategy: 'hidden',
+      },
+    })
+
+    expect(() =>
+      assertUniqueContentRoutes(
+        resolveContentFiles(config, [file('index.mdx'), file('en/index.mdx')]),
+      ),
+    ).toThrow('Duplicate content routes detected. /: en/index.mdx, index.mdx')
   })
 })
 
@@ -96,4 +149,10 @@ function file(relPath: string): ContentFile {
     relPath,
     ext: path.extname(relPath),
   }
+}
+
+function findFile<T extends ContentFile>(files: T[], relPath: string): T {
+  const file = files.find((entry) => entry.relPath === relPath)
+  if (!file) throw new Error(`Missing content file: ${relPath}`)
+  return file
 }

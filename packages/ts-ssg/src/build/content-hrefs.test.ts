@@ -67,6 +67,21 @@ describe('resolvePageContentHref', () => {
     ).toBe('/en/docs/')
   })
 
+  it('keeps root-absolute i18n content links global from global content', () => {
+    const config = resolveSiteConfig({
+      rootDir: process.cwd(),
+      i18n: {
+        defaultLocale: 'en',
+        locales: ['en', 'tr'],
+        urlStrategy: 'prefix-all',
+      },
+    })
+
+    expect(resolvePageContentHref('/docs/index.md', 'index.mdx', config)).toBe(
+      '/docs/',
+    )
+  })
+
   it('preserves explicit locale folders in root-absolute i18n content links', () => {
     const config = resolveSiteConfig({
       rootDir: process.cwd(),

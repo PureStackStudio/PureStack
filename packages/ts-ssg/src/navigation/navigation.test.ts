@@ -101,6 +101,94 @@ describe('navigation', () => {
     })
   })
 
+  it('preserves authored item order in override nav files', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      await fs.mkdir(path.join(contentDir, 'docs'), { recursive: true })
+      await fs.writeFile(path.join(contentDir, 'docs', 'index.md'), '# Docs')
+      await fs.writeFile(
+        path.join(contentDir, 'docs', 'routing.md'),
+        '# Routing',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'docs', 'links.md'),
+        '# Content links',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'docs', '_nav.json'),
+        JSON.stringify(
+          {
+            mode: 'override',
+            items: [
+              { title: 'Docs', url: './' },
+              { title: 'Routing', url: 'routing' },
+              { title: 'Content links', url: 'links' },
+            ],
+          },
+          null,
+          2,
+        ),
+      )
+
+      const files = await discoverContent(contentDir)
+      const nav = await buildNavigation(contentDir, files, {
+        mode: 'hybrid',
+        maxDepth: 20,
+      })
+
+      expect(nav?.byFolder.docs.map((item) => item.title)).toEqual([
+        'Docs',
+        'Routing',
+        'Content links',
+      ])
+    })
+  })
+
+  it('uses folder index metadata for nested folders with override nav files', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      await fs.mkdir(path.join(contentDir, 'en', 'docs'), { recursive: true })
+      await fs.writeFile(
+        path.join(contentDir, 'en', 'index.mdx'),
+        `---\ntitle: LocaleLab\nnav:\n  order: 1\n---\n# LocaleLab\n`,
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'en', 'docs', 'index.md'),
+        `---\ntitle: Docs\nnav:\n  order: 2\n---\n# Docs\n`,
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'en', 'docs', 'routing.md'),
+        '# Routing',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'en', 'docs', '_nav.json'),
+        JSON.stringify({
+          mode: 'override',
+          items: [
+            { title: 'Docs', url: './' },
+            { title: 'Routing', url: 'routing' },
+          ],
+        }),
+      )
+
+      const files = await discoverContent(contentDir)
+      const nav = await buildNavigation(contentDir, files, {
+        mode: 'hybrid',
+        maxDepth: 20,
+      })
+
+      expect(nav?.byFolder.en).toEqual([
+        { title: 'LocaleLab', url: '/en/', order: 1 },
+        {
+          title: 'Docs',
+          url: '/en/docs/',
+          order: 2,
+          children: [{ title: 'Routing', url: '/en/docs/routing/' }],
+        },
+      ])
+    })
+  })
+
   it('treats missing order as zero so negatives rise and positives sink', async () => {
     await withTempDir(async (base) => {
       const contentDir = path.join(base, 'content')

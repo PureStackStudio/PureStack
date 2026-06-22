@@ -10,6 +10,7 @@ Run it from the repository root:
 
 It demonstrates:
 
+- global root content in index.mdx.
 - en and de locale folders.
 - prefix-all URLs such as /en/docs/ and /de/docs/.
 - localized header.mdx and footer.mdx.
@@ -22,6 +23,7 @@ It demonstrates:
 
 To inspect the generated result after a build, open:
 
+- ../dist/i18n-site/index.html
 - ../dist/i18n-site/en/index.html
 - ../dist/i18n-site/de/index.html
 - ../dist/i18n-site/sitemap.xml
