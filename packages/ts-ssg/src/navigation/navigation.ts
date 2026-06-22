@@ -98,14 +98,18 @@ function resolveLocalizedNavigationRoot(
   const localizedRoots = roots.map((root) =>
     root ? `${locale}/${root}` : locale,
   )
-  return resolveNavigationRoot(folder, localizedRoots)
+  return resolveNavigationRoot(folder, localizedRoots, locale)
 }
 
-export function resolveNavigationRoot(folder: string, roots: string[]) {
+export function resolveNavigationRoot(
+  folder: string,
+  roots: string[],
+  fallback = '',
+) {
   for (const root of roots) {
     if (folder === root || folder.startsWith(`${root}/`)) return root
   }
-  return ''
+  return fallback
 }
 
 function collectFolders(files: NavigationContentFile[]) {

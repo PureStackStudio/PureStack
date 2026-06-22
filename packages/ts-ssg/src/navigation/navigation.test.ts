@@ -4,9 +4,10 @@ import path from 'node:path'
 
 import { disableLogger, getLogger, type Logger } from 'logpot'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-
+import { resolveSiteConfig } from '../config/config'
 import type { ContentFile } from '../discover/content'
 import { discoverContent } from '../discover/content'
+import { type ResolvedContentFile, resolveContentFiles } from '../i18n/content'
 import { buildNavigation, resolvePageNavigation } from './navigation'
 
 async function withTempDir<T>(worker: (dir: string) => Promise<T>) {
@@ -521,9 +522,78 @@ describe('navigation', () => {
       })
     })
   })
+
+  it('falls back to the locale root for localized pages outside configured navigation roots', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      await fs.mkdir(path.join(contentDir, 'en', 'docs'), { recursive: true })
+      await fs.mkdir(path.join(contentDir, 'de', 'docs'), { recursive: true })
+      await fs.writeFile(
+        path.join(contentDir, 'en', 'index.mdx'),
+        `---\ntitle: LocaleLab\n---\n# LocaleLab\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'de', 'index.mdx'),
+        `---\ntitle: LocaleLab\n---\n# LocaleLab\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'en', 'docs', 'index.mdx'),
+        `---\ntitle: Docs\n---\n# Docs\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'de', 'docs', 'index.mdx'),
+        `---\ntitle: Docs\n---\n# Docs\n`,
+        'utf8',
+      )
+
+      const config = resolveSiteConfig({
+        rootDir: base,
+        contentDir,
+        i18n: {
+          enabled: true,
+          defaultLocale: 'en',
+          locales: ['en', 'de'],
+        },
+        navigation: {
+          roots: ['docs'],
+          maxDepth: 20,
+        },
+      })
+      const files = resolveContentFiles(
+        config,
+        await discoverContent(contentDir),
+      )
+      const nav = await buildNavigation(contentDir, files, config.navigation)
+      const englishHome = findResolvedContentFile(files, 'en/index.mdx')
+      const pageNav = resolvePageNavigation(nav, englishHome)
+
+      expect(pageNav?.root).toBe('en')
+      expect(pageNav?.items.map((item) => item.title)).toEqual([
+        'LocaleLab',
+        'Docs',
+      ])
+      expect(
+        pageNav?.items.filter((item) => item.title === 'LocaleLab'),
+      ).toHaveLength(1)
+    })
+  })
 })
 
 function findContentFile(files: ContentFile[], relPath: string): ContentFile {
+  const file = files.find(
+    (entry) => entry.relPath.replaceAll('\\', '/') === relPath,
+  )
+  if (!file) throw new Error(`Missing content file: ${relPath}`)
+  return file
+}
+
+function findResolvedContentFile(
+  files: ResolvedContentFile[],
+  relPath: string,
+): ResolvedContentFile {
   const file = files.find(
     (entry) => entry.relPath.replaceAll('\\', '/') === relPath,
   )
