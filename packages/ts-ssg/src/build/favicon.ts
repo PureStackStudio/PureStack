@@ -18,11 +18,11 @@ function buildFaviconSvg(config: SiteConfig, iconSvg: string) {
   const viewBox = extractViewBox(iconSvg) ?? '0 0 24 24'
   const rootAttributesSource = extractSvgRootAttributes(iconSvg)
   const rootAttributes = rootAttributesSource
-    ? ` ${normalizeSvgContent(rootAttributesSource, config.style.theme.colors.dark.accent)}`
+    ? ` ${normalizeSvgContent(rootAttributesSource, config.style.theme.palette.dark.accent)}`
     : ''
   const body = normalizeSvgContent(
     extractSvgBody(iconSvg),
-    config.style.theme.colors.dark.accent,
+    config.style.theme.palette.dark.accent,
   )
 
   return [

@@ -28,7 +28,7 @@ export type ThemeMode = (typeof THEME_MODES)[number]
 export interface ThemeOptions {
   remSize: string
   mobileRemSize: string
-  colors: Record<ThemeMode, ThemePalette>
+  palette: Record<ThemeMode, ThemePalette>
 }
 
 export type ThemeOptionsInput = DeepPartial<ThemeOptions> & {
@@ -39,7 +39,7 @@ export type ThemeOptionsInput = DeepPartial<ThemeOptions> & {
 export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
   remSize: '',
   mobileRemSize: '',
-  colors: {
+  palette: {
     ...DEFAULT_SKIN,
   },
 }
@@ -56,7 +56,7 @@ function resolveThemeOptions(
     const skin = resolveSkinName(value.skin)
     if (skin) {
       merged = mergeThemeOptions(merged, {
-        colors: builtInSkins[skin].create(resolveSkinPresets(value.presets)),
+        palette: builtInSkins[skin].create(resolveSkinPresets(value.presets)),
       })
     }
     merged = mergeThemeOptions(merged, omitSkin(value))
@@ -79,7 +79,7 @@ function getThemePalette(theme: ThemeName): ThemePalette {
 
 function getRawThemePalette(theme: ThemeName): ThemePalette {
   const mode = resolveThemeMode(theme)
-  return activeThemeOptions.colors[mode]
+  return activeThemeOptions.palette[mode]
 }
 
 function resolveThemeMode(theme: ThemeName): ThemeMode {
@@ -168,7 +168,7 @@ function createThemePalettes(
   options: ThemeOptions,
 ): Record<ThemeMode, ThemePalette> {
   return {
-    light: createThemePaletteVarBindings(options.colors.light),
-    dark: createThemePaletteVarBindings(options.colors.dark),
+    light: createThemePaletteVarBindings(options.palette.light),
+    dark: createThemePaletteVarBindings(options.palette.dark),
   }
 }

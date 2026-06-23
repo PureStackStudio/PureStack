@@ -20,7 +20,7 @@ function buildConfig(outDir: string) {
     outDir,
     style: {
       theme: {
-        colors: {
+        palette: {
           dark: {
             accent: '#38bdf8',
           },

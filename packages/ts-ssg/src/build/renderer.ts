@@ -204,8 +204,8 @@ function appendPagefindSearchScript(
 
 function buildCriticalThemeStyle(hasThemeGate: boolean) {
   const options = themes.getOptions()
-  const lightPalette = options.colors.light
-  const darkPalette = options.colors.dark
+  const lightPalette = options.palette.light
+  const darkPalette = options.palette.dark
   const light = {
     background: lightPalette.semanticTone.neutral.canvas,
     text: lightPalette.semanticTone.neutral.text.default,

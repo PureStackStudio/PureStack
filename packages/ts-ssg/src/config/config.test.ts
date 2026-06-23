@@ -55,8 +55,8 @@ describe('resolveSiteConfig sitemap', () => {
 
       const config = resolveSiteConfig({ rootDir, contentDir })
       const neon = builtInSkins.neon.create()
-      expect(config.style.theme.colors.light.accent).toBe(neon.light.accent)
-      expect(config.style.theme.colors.dark.accent).toBe(neon.dark.accent)
+      expect(config.style.theme.palette.light.accent).toBe(neon.light.accent)
+      expect(config.style.theme.palette.dark.accent).toBe(neon.dark.accent)
     } finally {
       fs.rmSync(tempRoot, { recursive: true, force: true })
     }
@@ -612,8 +612,8 @@ describe('resolveSiteConfig sitemap', () => {
       },
     })
     const neon = builtInSkins.neon.create()
-    expect(config.style.theme.colors.light.accent).toBe(neon.light.accent)
-    expect(config.style.theme.colors.dark.accent).toBe(neon.dark.accent)
+    expect(config.style.theme.palette.light.accent).toBe(neon.light.accent)
+    expect(config.style.theme.palette.dark.accent).toBe(neon.dark.accent)
   })
 
   it('accepts theme skin preset lists from input', () => {
@@ -628,8 +628,8 @@ describe('resolveSiteConfig sitemap', () => {
       },
     })
     const neon = builtInSkins.neon.create(presets)
-    expect(config.style.theme.colors.light.accent).toBe(neon.light.accent)
-    expect(config.style.theme.colors.dark.accent).toBe(neon.dark.accent)
+    expect(config.style.theme.palette.light.accent).toBe(neon.light.accent)
+    expect(config.style.theme.palette.dark.accent).toBe(neon.dark.accent)
   })
 
   it('throws when theme skin is unknown', () => {
