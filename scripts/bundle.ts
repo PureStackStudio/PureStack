@@ -257,15 +257,16 @@ function getBanner(pkg: PackageJson) {
 
 async function cleanDist(pkg: PublishPackage) {
   await timeIt(`clean ${relative(pkg.distDir)}`, 'clean', async () => {
-    const artifactFiles = globSync(
-      [
-        path.join(pkg.distDir, '*.mjs'),
-        path.join(pkg.distDir, '*.mjs.map'),
-        path.join(pkg.distDir, '*.d.mts'),
-        path.join(pkg.distDir, '*.d.mts.map'),
-      ],
-      { windowsPathsNoEscape: true },
-    )
+    const artifactFiles = pkg.entries.flatMap((entry) => [
+      path.join(pkg.packageDir, entry.outputPath),
+      path.join(pkg.packageDir, `${entry.outputPath}.map`),
+      ...(entry.typePath
+        ? [
+            path.join(pkg.packageDir, entry.typePath),
+            path.join(pkg.packageDir, `${entry.typePath}.map`),
+          ]
+        : []),
+    ])
 
     await Promise.all(
       artifactFiles.map((filePath) => rm(filePath, { force: true })),
