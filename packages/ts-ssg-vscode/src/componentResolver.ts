@@ -17,6 +17,8 @@ const EXPORTED_COMPONENT_PATTERN =
   /^\s*export\s+(?:declare\s+)?(?:abstract\s+)?(interface|type|class)\s+([A-Za-z][A-Za-z0-9]*)\b/
 const LOCAL_COMPONENT_PATTERN =
   /^\s*(?:export\s+)?(?:declare\s+)?(?:abstract\s+)?(interface|type|class)\s+([A-Za-z][A-Za-z0-9]*)\b/
+const DEFINE_COMPONENT_TYPE_ARGUMENT_PATTERN =
+  /\bdefineComponent\s*<\s*([A-Za-z][A-Za-z0-9]*)\b/g
 
 const workspaceComponentFilesCache = new Map<string, string[]>()
 const componentSuggestionsCache = new Map<string, ComponentSuggestion[]>()
@@ -53,6 +55,43 @@ export function resolveComponentTarget(
   return resolveDependencyComponentTarget(
     workspaceRoot,
     normalizedComponentName,
+  )
+}
+
+export function resolveComponentMetadataTarget(
+  workspaceRoot: string,
+  componentName: string,
+  preferredLocalFilePath?: string,
+): ResolvedComponentTarget | undefined {
+  const normalizedComponentName = normalizeComponentName(componentName)
+  const candidateFiles = prioritizePreferredFile(
+    getWorkspaceComponentFiles(workspaceRoot),
+    preferredLocalFilePath,
+  )
+
+  for (const filePath of candidateFiles) {
+    const usage = findDefineComponentUsageInFile(
+      filePath,
+      normalizedComponentName,
+    )
+    if (!usage) continue
+
+    return {
+      filePath,
+      line: usage.line,
+    }
+  }
+
+  const dependencyTarget = resolveDependencyComponentMetadataTarget(
+    workspaceRoot,
+    normalizedComponentName,
+  )
+  if (dependencyTarget) return dependencyTarget
+
+  return resolveComponentTarget(
+    workspaceRoot,
+    componentName,
+    preferredLocalFilePath,
   )
 }
 
@@ -125,6 +164,32 @@ function resolveDependencyComponentTarget(
       return {
         filePath: resolveRealPath(filePath),
         line: exportedDefinition.line,
+      }
+    }
+  }
+
+  return undefined
+}
+
+function resolveDependencyComponentMetadataTarget(
+  workspaceRoot: string,
+  normalizedComponentName: string,
+) {
+  const dependencyPackages = getDependencyComponentPackages(workspaceRoot)
+
+  for (const dependencyPackage of dependencyPackages) {
+    if (!dependencyPackage.componentNames.has(normalizedComponentName)) continue
+
+    for (const filePath of dependencyPackage.files) {
+      const usage = findDefineComponentUsageInFile(
+        filePath,
+        normalizedComponentName,
+      )
+      if (!usage) continue
+
+      return {
+        filePath: resolveRealPath(filePath),
+        line: usage.line,
       }
     }
   }
@@ -422,6 +487,37 @@ function findComponentDefinitionsInFile(
   }
 
   return definitions
+}
+
+function findDefineComponentUsageInFile(
+  filePath: string,
+  normalizedComponentName: string,
+) {
+  const source = fs.readFileSync(filePath, 'utf8')
+  DEFINE_COMPONENT_TYPE_ARGUMENT_PATTERN.lastIndex = 0
+
+  for (;;) {
+    const match = DEFINE_COMPONENT_TYPE_ARGUMENT_PATTERN.exec(source)
+    if (!match) return undefined
+
+    const name = match[1]
+    if (normalizeComponentName(name) !== normalizedComponentName) continue
+
+    return {
+      line: getLineNumberAtOffset(source, match.index),
+      name,
+    }
+  }
+}
+
+function getLineNumberAtOffset(source: string, offset: number) {
+  let line = 0
+
+  for (let index = 0; index < offset; index++) {
+    if (source[index] === '\n') line++
+  }
+
+  return line
 }
 
 function getComponentDeclarationFromLine(line: string, pattern: RegExp) {

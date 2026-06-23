@@ -5,6 +5,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import {
   clearComponentResolverCaches,
   getComponentSuggestions,
+  resolveComponentMetadataTarget,
   resolveComponentTarget,
 } from './componentResolver'
 
@@ -112,6 +113,38 @@ describe('resolveComponentTarget monorepo package workspace', () => {
 
     expect(target).toBeDefined()
     expect(target?.filePath).toBe(expectedSourcePath)
+  })
+
+  it('resolves LandingBand metadata from the split implementation source path', () => {
+    const repoRoot = process.cwd()
+    const workspaceRoot = path.join(repoRoot, 'packages', 'ts-ssg')
+    const preferredLocalFilePath = path.join(
+      workspaceRoot,
+      'sample-content',
+      'guide',
+      'landing-band-sample.mdx',
+    )
+    const expectedSourcePath = path.join(
+      repoRoot,
+      'packages',
+      'ts-components',
+      'src',
+      'standard',
+      'landing',
+      'landingBand.ts',
+    )
+
+    const target = resolveComponentMetadataTarget(
+      workspaceRoot,
+      'LandingBand',
+      preferredLocalFilePath,
+    )
+
+    expect(target).toBeDefined()
+    expect(target?.filePath).toBe(expectedSourcePath)
+    expect(getResolvedLineText(target?.filePath, target?.line)).toMatch(
+      /defineComponent<LandingBand>\(/,
+    )
   })
 })
 

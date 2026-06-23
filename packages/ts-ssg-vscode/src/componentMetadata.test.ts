@@ -8,6 +8,7 @@ import {
 } from './componentMetadata'
 import {
   clearComponentResolverCaches,
+  resolveComponentMetadataTarget,
   resolveComponentTarget,
 } from './componentResolver'
 import { getComponentTagContextAtOffset } from './componentTagContext'
@@ -420,8 +421,27 @@ describe('getComponentMetadata monorepo component metadata', () => {
       path.join('packages', 'ts-components', 'src', 'standard', 'landing'),
     )
 
-    const metadata = target
-      ? getComponentMetadata(target.filePath, tagContext?.componentName ?? '')
+    const metadataTarget = resolveComponentMetadataTarget(
+      workspaceRoot,
+      tagContext?.componentName ?? '',
+      mdxFilePath,
+    )
+    expect(metadataTarget?.filePath).toContain(
+      path.join(
+        'packages',
+        'ts-components',
+        'src',
+        'standard',
+        'landing',
+        'landingBand.ts',
+      ),
+    )
+
+    const metadata = metadataTarget
+      ? getComponentMetadata(
+          metadataTarget.filePath,
+          tagContext?.componentName ?? '',
+        )
       : undefined
     const activeProp = metadata?.props.find(
       (prop) => prop.attributeName === tagContext?.activeAttributeName,

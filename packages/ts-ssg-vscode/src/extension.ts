@@ -10,6 +10,7 @@ import type { ComponentSuggestion } from './componentResolver'
 import {
   clearComponentResolverCaches,
   getComponentSuggestions,
+  resolveComponentMetadataTarget,
   resolveComponentTarget,
 } from './componentResolver'
 import {
@@ -222,10 +223,14 @@ class ComponentDefinitionProvider implements vscode.DefinitionProvider {
     )
     if (!target) return undefined
 
-    const metadata = getComponentMetadata(
-      target.filePath,
+    const metadataTarget = resolveComponentMetadataTarget(
+      workspaceRoot,
       tagContext.componentName,
+      document.uri.fsPath,
     )
+    const metadata = metadataTarget
+      ? getComponentMetadata(metadataTarget.filePath, tagContext.componentName)
+      : undefined
     if (!metadata) {
       return new vscode.Location(
         vscode.Uri.file(target.filePath),
@@ -252,7 +257,7 @@ class ComponentDefinitionProvider implements vscode.DefinitionProvider {
         )
       if (attribute) {
         return new vscode.Location(
-          vscode.Uri.file(target.filePath),
+          vscode.Uri.file(attribute.declarationFilePath),
           new vscode.Position(attribute.declarationLine, 0),
         )
       }
@@ -262,7 +267,7 @@ class ComponentDefinitionProvider implements vscode.DefinitionProvider {
     if (!componentName) return undefined
 
     return new vscode.Location(
-      vscode.Uri.file(target.filePath),
+      vscode.Uri.file(metadata.declarationFilePath),
       new vscode.Position(metadata.declarationLine, 0),
     )
   }
@@ -588,7 +593,7 @@ function resolveComponentMetadataForTag(
   const workspaceRoot = resolveWorkspaceRoot(document.uri.fsPath)
   if (!workspaceRoot) return undefined
 
-  const target = resolveComponentTarget(
+  const target = resolveComponentMetadataTarget(
     workspaceRoot,
     componentName,
     document.uri.fsPath,
