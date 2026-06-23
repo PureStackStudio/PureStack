@@ -1,5 +1,9 @@
 import { type DeepPartial, merge } from '@purestack/ts-util'
-import { type BuiltInSkinName, builtInSkins } from './skins'
+import {
+  type BuiltInSkinName,
+  type SkinPresetList,
+  builtInSkins,
+} from './skins'
 import { normalizeThemeName, type ThemeName } from './themeAssets'
 import type { ThemePalette } from './themePalette'
 import { createThemePaletteVarBindings } from './themePaletteVars'
@@ -17,7 +21,7 @@ export {
   mediaMin,
 } from './breakpoints'
 
-const DEFAULT_SKIN = builtInSkins.neon
+const DEFAULT_SKIN = builtInSkins.neon.create()
 export const THEME_MODES = ['light', 'dark'] as const
 export type ThemeMode = (typeof THEME_MODES)[number]
 
@@ -42,6 +46,7 @@ export interface ThemeOptions {
 
 export type ThemeOptionsInput = DeepPartial<ThemeOptions> & {
   skin?: BuiltInSkinName
+  presets?: SkinPresetList
 }
 
 export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
@@ -76,7 +81,11 @@ function resolveThemeOptions(
     if (!value) continue
     const skin = resolveSkinName(value.skin)
     if (skin) {
-      merged = mergeThemeOptions(merged, { colors: builtInSkins[skin] })
+      merged = mergeThemeOptions(merged, {
+        colors: builtInSkins[skin].create(
+          resolveSkinPresets(value.presets),
+        ),
+      })
     }
     merged = mergeThemeOptions(merged, omitSkin(value))
   }
@@ -165,7 +174,7 @@ function mergeThemeOptions(
 }
 
 function omitSkin(input: ThemeOptionsInput): ThemeOptionsInput {
-  const { skin: _skin, ...rest } = input
+  const { skin: _skin, presets: _presets, ...rest } = input
   return rest
 }
 
@@ -176,6 +185,11 @@ function resolveSkinName(value: unknown): BuiltInSkinName | undefined {
   throw new Error(
     `Unknown theme skin "${value}". Expected one of: ${Object.keys(builtInSkins).join(', ')}.`,
   )
+}
+
+function resolveSkinPresets(value: unknown): readonly string[] {
+  if (!Array.isArray(value)) return []
+  return value.filter((preset): preset is string => typeof preset === 'string')
 }
 
 function createThemePalettes(

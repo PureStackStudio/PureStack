@@ -3,9 +3,11 @@ export * from './docLayoutVars'
 export * from './normalize.css'
 export * from './semanticTone'
 export {
+  type BuiltInSkin,
   type BuiltInSkinName,
   type BuiltInSkinPair,
   type BuiltInSkins,
+  type SkinPresetList,
   builtInSkins,
 } from './skins'
 export * from './styles'

@@ -187,15 +187,16 @@
           "properties": {
             "skin": {
               "type": "string",
-              "enum": [
-                "ocean",
-                "evergreen",
-                "pastel",
-                "extrao",
-                "cyberpunk",
-                "neon"
-              ],
-              "description": "Built-in skin preset. Applies both light and dark palettes before any explicit theme token overrides."
+              "enum": ["neon"],
+              "description": "Built-in skin name. Applies both light and dark palettes before any explicit theme token overrides."
+            },
+            "presets": {
+              "type": "array",
+              "description": "Ordered skin preset names. Presets are interpreted by the selected skin.",
+              "items": {
+                "type": "string"
+              },
+              "default": []
             },
             "remSize": {
               "type": "string",
