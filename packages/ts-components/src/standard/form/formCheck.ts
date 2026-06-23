@@ -9,6 +9,7 @@ import {
   type Ref,
   type RefOrValue,
   ref,
+  unref,
 } from 'regor'
 import { createAutoId } from '../autoId'
 import { resolveComponentClasses } from '../componentVariant'
@@ -23,6 +24,8 @@ export class FormCheck {
   checked?: Ref<boolean>
   disabled?: RefOrValue<boolean>
   tone?: RefOrValue<SemanticTone>
+  rootClass?: RefOrValue<string>
+  hasLabel?: ComputedRef<boolean>
   classes?: ComputedRef<string>
 
   constructor(props: FormCheck) {
@@ -45,24 +48,43 @@ const formCheckTemplate = html`<label class="form-block__check" :class="classes"
     r-model="checked"
     r-inherit/>
   <span class="form-block__check-control" aria-hidden="true"></span>
-  <span class="form-block__check-label">{{ label }}</span>
+  <span class="form-block__check-label" r-if="hasLabel">{{ label }}</span>
 </label>`
 
 export function defineFormCheckComponent() {
   return defineComponent<FormCheck>(formCheckTemplate, {
-    props: ['id', 'label', 'name', 'value', 'checked', 'disabled', 'tone'],
+    props: [
+      'id',
+      'label',
+      'name',
+      'value',
+      'checked',
+      'disabled',
+      'tone',
+      'rootClass',
+    ],
     context: (head) => resolveFormCheck(head),
   })
 }
 
 function resolveFormCheck(head: ComponentHead<FormCheck>): FormCheck {
   const check = new FormCheck(head.props)
+  check.hasLabel = computed(() => hasCheckLabel(head.props.label))
   check.classes = computed(() =>
     resolveComponentClasses(head.props, {
       defaultVariant: 'none',
+      classes: [
+        check.hasLabel?.() ? undefined : 'form-block__check--bare',
+        head.props.rootClass,
+      ],
     }),
   )
   return check
+}
+
+function hasCheckLabel(label: RefOrValue<string> | undefined) {
+  const value = unref(label)
+  return typeof value === 'string' ? value.trim().length > 0 : Boolean(value)
 }
 
 function resolveInitialChecked(value: unknown) {

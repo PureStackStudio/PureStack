@@ -91,6 +91,73 @@ describe('FormCheck', () => {
     }
   })
 
+  it('applies rootClass to the label while inherited class stays on the input', () => {
+    const cleanupGlobals = ensureDomGlobals()
+    const cleanupDom = createDom(
+      '<!DOCTYPE html><html><body><div id="app"></div></body></html>',
+    )
+    const app = createApp(
+      {
+        components: defineFormComponents(),
+        tsSsgContext: createTestContext(),
+      },
+      {
+        selector: '#app',
+        template:
+          '<FormCheck label="Styled" rootClass="check-root-extra" class="native-input-extra" />',
+      },
+    )
+
+    try {
+      const label =
+        document.querySelector<HTMLLabelElement>('.form-block__check')
+      const input = document.querySelector<HTMLInputElement>(
+        '.form-block__check-input',
+      )
+
+      expect(label?.classList.contains('check-root-extra')).toBe(true)
+      expect(label?.classList.contains('native-input-extra')).toBe(false)
+      expect(input?.classList.contains('native-input-extra')).toBe(true)
+    } finally {
+      app.unbind()
+      cleanupDom()
+      cleanupGlobals()
+    }
+  })
+
+  it('uses a bare root layout when label is missing', () => {
+    const cleanupGlobals = ensureDomGlobals()
+    const cleanupDom = createDom(
+      '<!DOCTYPE html><html><body><div id="app"></div></body></html>',
+    )
+    const app = createApp(
+      {
+        components: defineFormComponents(),
+        tsSsgContext: createTestContext(),
+      },
+      {
+        selector: '#app',
+        template: '<FormCheck aria-label="Select row" />',
+      },
+    )
+
+    try {
+      const label =
+        document.querySelector<HTMLLabelElement>('.form-block__check')
+      const input = document.querySelector<HTMLInputElement>(
+        '.form-block__check-input',
+      )
+
+      expect(label?.classList.contains('form-block__check--bare')).toBe(true)
+      expect(document.querySelector('.form-block__check-label')).toBeNull()
+      expect(input?.getAttribute('aria-label')).toBe('Select row')
+    } finally {
+      app.unbind()
+      cleanupDom()
+      cleanupGlobals()
+    }
+  })
+
   it('treats checked="false" as unchecked', () => {
     const cleanupGlobals = ensureDomGlobals()
     const cleanupDom = createDom(

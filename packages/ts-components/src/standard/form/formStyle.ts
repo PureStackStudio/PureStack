@@ -468,6 +468,15 @@ function registerFormCheckStyles(theme: ThemeMode, palette: ThemePalette) {
     .background(palette.current.surfaceAlt.hover.background)
     .color(palette.current.surfaceAlt.hover.text)
   styleBuilder
+    .select('.form-block__check--bare', theme)
+    .gridTemplateColumns('auto')
+    .gap('0')
+    .padding('0')
+    .width('fit-content')
+  styleBuilder
+    .select('.form-block__check--bare:hover', theme)
+    .background('transparent')
+  styleBuilder
     .select('.form-block__check:has(.form-block__check-input:disabled)', theme)
     .cursor('not-allowed')
     .opacity('0.62')
