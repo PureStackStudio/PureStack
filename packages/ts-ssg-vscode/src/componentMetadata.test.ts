@@ -279,6 +279,84 @@ describe('getComponentMetadata Emits event attributes', () => {
   })
 })
 
+describe('getComponentMetadata type-only fallback', () => {
+  let isolatedWorkspaceRoot = ''
+  let componentFilePath = ''
+
+  beforeAll(() => {
+    isolatedWorkspaceRoot = fs.mkdtempSync(
+      path.join(os.tmpdir(), 'purestack-component-type-only-'),
+    )
+
+    fs.writeFileSync(
+      path.join(isolatedWorkspaceRoot, 'tsconfig.json'),
+      JSON.stringify(
+        {
+          compilerOptions: {
+            module: 'NodeNext',
+            moduleResolution: 'NodeNext',
+            target: 'ES2020',
+          },
+          include: ['src/**/*.ts'],
+        },
+        null,
+        2,
+      ),
+    )
+
+    componentFilePath = path.join(
+      isolatedWorkspaceRoot,
+      'src',
+      'typeOnlyComponent.ts',
+    )
+    fs.mkdirSync(path.dirname(componentFilePath), { recursive: true })
+    fs.writeFileSync(
+      componentFilePath,
+      [
+        'type ComputedRef<T> = () => T',
+        'type Emits<T extends string> = { emit: (eventName: T) => void }',
+        'type RefOrValue<T> = T',
+        '',
+        'export interface TypeOnlyComponent {',
+        '  tone?: RefOrValue<"info" | "danger">',
+        '  label?: RefOrValue<string>',
+        "  signals?: Emits<'close' | 'cancel'>",
+        '  classes?: ComputedRef<string>',
+        '}',
+        '',
+      ].join('\n'),
+    )
+  })
+
+  afterAll(() => {
+    clearComponentMetadataCache()
+    if (!isolatedWorkspaceRoot) return
+
+    fs.rmSync(isolatedWorkspaceRoot, { force: true, recursive: true })
+  })
+
+  it('uses public type properties when no defineComponent metadata is available', () => {
+    const metadata = getComponentMetadata(
+      componentFilePath,
+      'TypeOnlyComponent',
+    )
+
+    expect(metadata?.signature).toBe('interface TypeOnlyComponent')
+    expect(metadata?.props.map((prop) => prop.propName)).toEqual([
+      'tone',
+      'label',
+    ])
+    expect(metadata?.events.map((event) => event.attributeName)).toEqual([
+      '@close',
+      '@cancel',
+    ])
+
+    const tone = metadata?.props.find((prop) => prop.propName === 'tone')
+    expect(tone?.signature).toBe('tone?: RefOrValue<"info" | "danger">')
+    expect(tone?.literalValues).toEqual(['info', 'danger'])
+  })
+})
+
 describe('getComponentMetadata open string literal unions', () => {
   let isolatedWorkspaceRoot = ''
   let componentFilePath = ''

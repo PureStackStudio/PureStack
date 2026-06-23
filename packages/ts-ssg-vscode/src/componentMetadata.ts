@@ -105,7 +105,15 @@ export function getComponentMetadata(
     program.getTypeChecker(),
   )
 
-  return metadataByNormalizedName.get(normalizeComponentName(componentName))
+  const normalizedComponentName = normalizeComponentName(componentName)
+  return (
+    metadataByNormalizedName.get(normalizedComponentName) ??
+    createTypeOnlyComponentMetadata(
+      sourceFile,
+      program.getTypeChecker(),
+      componentName,
+    )
+  )
 }
 
 function logMetadataRequest(filePath: string, componentName: string) {
@@ -475,6 +483,143 @@ function createComponentMetadata(
   }
 }
 
+function createTypeOnlyComponentMetadata(
+  sourceFile: TypeScript.SourceFile,
+  checker: TypeScript.TypeChecker,
+  componentName: string,
+): ComponentMetadata | undefined {
+  const componentDeclaration = findComponentTypeDeclarationInFile(
+    sourceFile,
+    componentName,
+  )
+  if (!componentDeclaration) return undefined
+
+  const componentSymbol = getTypeDeclarationSymbol(
+    componentDeclaration,
+    checker,
+  )
+  const componentType = componentSymbol
+    ? checker.getDeclaredTypeOfSymbol(componentSymbol)
+    : checker.getTypeAtLocation(componentDeclaration)
+  const resolvedComponentName = getTypeDeclarationName(componentDeclaration)
+  if (!resolvedComponentName) return undefined
+
+  const propNames = getTypeOnlyComponentPropNames(componentType, checker)
+
+  return {
+    componentName: resolvedComponentName,
+    declarationFilePath: componentDeclaration.getSourceFile().fileName,
+    declarationLine: getLineNumber(componentDeclaration),
+    documentation: getSymbolDocumentation(checker, componentSymbol),
+    signature: getComponentSignature(
+      checker,
+      resolvedComponentName,
+      componentType,
+      componentDeclaration,
+    ),
+    props: propNames.map((propName) =>
+      createComponentPropInfo(propName, componentType, checker),
+    ),
+    events: createComponentEventInfos(componentType, checker),
+  }
+}
+
+function findComponentTypeDeclarationInFile(
+  sourceFile: TypeScript.SourceFile,
+  componentName: string,
+) {
+  const normalizedComponentName = normalizeComponentName(componentName)
+
+  for (const statement of sourceFile.statements) {
+    if (!isComponentTypeDeclaration(statement)) continue
+    if (
+      normalizeComponentName(getTypeDeclarationName(statement) ?? '') !==
+      normalizedComponentName
+    ) {
+      continue
+    }
+
+    return statement
+  }
+
+  return undefined
+}
+
+function isComponentTypeDeclaration(
+  node: TypeScript.Node,
+): node is
+  | TypeScript.InterfaceDeclaration
+  | TypeScript.TypeAliasDeclaration
+  | TypeScript.ClassDeclaration {
+  return (
+    ts.isInterfaceDeclaration(node) ||
+    ts.isTypeAliasDeclaration(node) ||
+    ts.isClassDeclaration(node)
+  )
+}
+
+function getTypeDeclarationName(
+  declaration:
+    | TypeScript.InterfaceDeclaration
+    | TypeScript.TypeAliasDeclaration
+    | TypeScript.ClassDeclaration,
+) {
+  return declaration.name?.text
+}
+
+function getTypeDeclarationSymbol(
+  declaration:
+    | TypeScript.InterfaceDeclaration
+    | TypeScript.TypeAliasDeclaration
+    | TypeScript.ClassDeclaration,
+  checker: TypeScript.TypeChecker,
+) {
+  return declaration.name
+    ? resolveAliasedSymbol(
+        checker,
+        checker.getSymbolAtLocation(declaration.name),
+      )
+    : undefined
+}
+
+function getTypeOnlyComponentPropNames(
+  componentType: TypeScript.Type,
+  checker: TypeScript.TypeChecker,
+) {
+  const apparentComponentType = checker.getApparentType(componentType)
+  const propNames: string[] = []
+
+  for (const propSymbol of apparentComponentType.getProperties()) {
+    const declaration = getPreferredPropertyDeclaration(propSymbol)
+    if (!isTypeOnlyComponentPropDeclaration(declaration, checker)) continue
+
+    propNames.push(propSymbol.getName())
+  }
+
+  return propNames
+}
+
+function isTypeOnlyComponentPropDeclaration(
+  declaration: TypeScript.Declaration | undefined,
+  checker: TypeScript.TypeChecker,
+) {
+  if (
+    !declaration ||
+    (!ts.isPropertySignature(declaration) &&
+      !ts.isPropertyDeclaration(declaration)) ||
+    !declaration.type
+  ) {
+    return false
+  }
+
+  if (getEmitsEventNames(checker, declaration).length > 0) return false
+  if (isDirectTypeReference(checker, declaration.type, 'ComputedRef')) {
+    return false
+  }
+
+  return true
+}
+
 function createComponentPropInfo(
   propName: string,
   componentType: TypeScript.Type,
@@ -566,11 +711,31 @@ function isEmitsTypeReference(
   checker: TypeScript.TypeChecker,
   typeNode: TypeScript.TypeReferenceNode,
 ) {
-  if (getEntityNameText(typeNode.typeName) === 'Emits') return true
+  return isTypeReference(checker, typeNode, 'Emits')
+}
+
+function isDirectTypeReference(
+  checker: TypeScript.TypeChecker,
+  typeNode: TypeScript.TypeNode,
+  typeName: string,
+) {
+  const unwrappedTypeNode = unwrapParenthesizedTypeNode(typeNode)
+  return (
+    ts.isTypeReferenceNode(unwrappedTypeNode) &&
+    isTypeReference(checker, unwrappedTypeNode, typeName)
+  )
+}
+
+function isTypeReference(
+  checker: TypeScript.TypeChecker,
+  typeNode: TypeScript.TypeReferenceNode,
+  expectedName: string,
+) {
+  if (getEntityNameText(typeNode.typeName) === expectedName) return true
 
   const symbol = checker.getSymbolAtLocation(typeNode.typeName)
   const resolvedSymbol = resolveAliasedSymbol(checker, symbol)
-  return resolvedSymbol?.getName() === 'Emits'
+  return resolvedSymbol?.getName() === expectedName
 }
 
 function getStringLiteralTypeValues(typeNode: TypeScript.TypeNode): string[] {
