@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
-import { themes, themeSkins } from '@purestack/ts-style'
+import { themeSkins, themes } from '@purestack/ts-style'
 import { describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from './config'
 
@@ -55,7 +55,9 @@ describe('resolveSiteConfig sitemap', () => {
 
       const config = resolveSiteConfig({ rootDir, contentDir })
       const standard = themeSkins.standard.create()
-      expect(config.style.theme.palette.light.accent).toBe(standard.light.accent)
+      expect(config.style.theme.palette.light.accent).toBe(
+        standard.light.accent,
+      )
       expect(config.style.theme.palette.dark.accent).toBe(standard.dark.accent)
     } finally {
       fs.rmSync(tempRoot, { recursive: true, force: true })

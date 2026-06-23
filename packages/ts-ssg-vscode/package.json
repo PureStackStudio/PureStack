@@ -1,7 +1,7 @@
 {
   "name": "purestack-component-navigation",
   "displayName": "PureStack Component Tools",
-  "description": "Component navigation, prop IntelliSense, lit-html syntax highlighting, and template formatting for Markdown, MDX, and TypeScript templates.",
+  "description": "Component navigation, prop IntelliSense, lit-html syntax highlighting, and template formatting for Markdown, Regor MDX, and TypeScript templates.",
   "version": "1.0.0",
   "private": true,
   "publisher": "purestack-local",
@@ -52,10 +52,13 @@
       {
         "id": "mdx",
         "aliases": [
-          "MDX"
+          "MDX",
+          "Regor MDX",
+          "RMDX"
         ],
         "extensions": [
-          ".mdx"
+          ".mdx",
+          ".rmdx"
         ],
         "scopeName": "source.mdx",
         "configuration": "./language-configuration.json",

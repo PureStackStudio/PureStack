@@ -2,6 +2,7 @@ import path from 'node:path'
 import type { SiteConfig } from '@purestack/ts-common'
 import { urlNormalizer } from '@purestack/ts-util'
 import type { ContentFile } from '../discover/content'
+import { isContentExt } from '../discover/contentExtensions'
 import { resolveContentTarget } from '../i18n/content'
 import { resolveRouteInfo } from '../routing/route'
 
@@ -16,7 +17,7 @@ export function resolvePageContentHref(
 
   const { base, suffix } = urlNormalizer.splitSuffix(trimmed)
   const ext = path.posix.extname(base).toLowerCase()
-  if (ext !== '.md' && ext !== '.mdx') return href
+  if (!isContentExt(ext)) return href
 
   const targetRelPath = resolveContentTargetRelPath(sourceRelPath, base, config)
   const targetFile =

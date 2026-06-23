@@ -34,7 +34,7 @@ describe('footer hierarchy', () => {
     await logger?.close()
   })
 
-  it('uses nearest footer.mdx from page folder ancestry', async () => {
+  it('uses nearest Regor MDX footer from page folder ancestry', async () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-'))
     try {
       const contentDir = path.join(root, 'content')
@@ -44,7 +44,7 @@ describe('footer hierarchy', () => {
         '<site-footer><p>Root Footer</p></site-footer>',
       )
       await writeFile(
-        path.join(contentDir, 'guide', 'footer.mdx'),
+        path.join(contentDir, 'guide', 'footer.rmdx'),
         '<site-footer><p>Guide Footer</p></site-footer>',
       )
       await writeFile(path.join(contentDir, 'index.mdx'), '# Home')
@@ -95,13 +95,13 @@ describe('footer hierarchy', () => {
     }
   })
 
-  it('resolves header PageScript sources relative to the header file', async () => {
+  it('resolves header PageScript sources relative to the Regor MDX header file', async () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-'))
     try {
       const contentDir = path.join(root, 'content')
       const outDir = path.join(root, 'out')
       await writeFile(
-        path.join(contentDir, 'header.mdx'),
+        path.join(contentDir, 'header.rmdx'),
         '<PageScript src="./auth-state.ts" teleport="head" />',
       )
       await writeFile(path.join(contentDir, 'auth-state.ts'), 'export {}')

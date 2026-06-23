@@ -556,6 +556,48 @@ describe('navigation', () => {
     })
   })
 
+  it('matches nav sequence and icon keys across Regor MDX extensions', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      await fs.mkdir(path.join(contentDir, 'docs'), { recursive: true })
+      await fs.writeFile(
+        path.join(contentDir, 'docs', 'index.rmdx'),
+        `---\ntitle: Docs\n---\n# Docs\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'docs', 'intro.rmdx'),
+        `---\ntitle: Intro\n---\n# Intro\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'docs', '_nav.json'),
+        JSON.stringify(
+          {
+            mode: 'merge',
+            sequence: ['intro.md', 'index.mdx'],
+            icons: {
+              'intro.mdx': 'iconoir:database',
+            },
+          },
+          null,
+          2,
+        ),
+        'utf8',
+      )
+
+      const files = await discoverContent(contentDir)
+      const nav = await buildNavigation(contentDir, files, {
+        mode: 'hybrid',
+        maxDepth: 20,
+      })
+      const docsItems = nav?.byFolder.docs ?? []
+
+      expect(docsItems.map((item) => item.title)).toEqual(['Intro', 'Docs'])
+      expect(docsItems[0]?.icon).toBe('iconoir:database')
+    })
+  })
+
   it('skips non-page nav items when resolving previous and next page links', async () => {
     await withTempDir(async (base) => {
       const contentDir = path.join(base, 'content')

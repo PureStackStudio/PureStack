@@ -365,7 +365,7 @@ describe('getComponentMetadata monorepo component metadata', () => {
       'src',
       'standard',
       'landing',
-      'landing.ts',
+      'landingBand.ts',
     )
 
     const metadata = getComponentMetadata(componentFilePath, 'LandingBand')

@@ -1,6 +1,7 @@
 import path from 'node:path'
 import type { NavigationSort } from '@purestack/ts-common'
 import { urlNormalizer } from '@purestack/ts-util'
+import { CONTENT_EXTS } from '../discover/contentExtensions'
 import type {
   ContentMeta,
   FolderNode,
@@ -204,10 +205,12 @@ function addSequenceKey(keys: Set<string>, value: string | undefined) {
   else keys.add(`${key}/`)
 
   const ext = path.posix.extname(key).toLowerCase()
-  if (ext === '.md' || ext === '.mdx') {
-    const withoutExt = key.slice(0, -ext.length)
-    keys.add(withoutExt)
-    keys.add(ext === '.md' ? `${withoutExt}.mdx` : `${withoutExt}.md`)
+  if (!CONTENT_EXTS.has(ext)) return
+
+  const withoutExt = key.slice(0, -ext.length)
+  keys.add(withoutExt)
+  for (const contentExt of CONTENT_EXTS) {
+    if (contentExt !== ext) keys.add(`${withoutExt}${contentExt}`)
   }
 }
 

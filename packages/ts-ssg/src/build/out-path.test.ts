@@ -26,6 +26,11 @@ describe('resolveRouteInfo', () => {
     expect(info.urlPath).toBe('/')
   })
 
+  it('resolves Regor MDX index routes', () => {
+    const info = resolveRouteInfo(file('index.rmdx', '.rmdx'))
+    expect(info.urlPath).toBe('/')
+  })
+
   it('resolves nested index routes', () => {
     const relPath = path.join('guide', 'index.md')
     const info = resolveRouteInfo(file(relPath, '.md'))
@@ -45,6 +50,12 @@ describe('resolveRouteInfo', () => {
     expect(info.urlPath).toBe('/guide/overview/')
   })
 
+  it('resolves nested Regor MDX routes', () => {
+    const relPath = path.join('guide', 'overview.rmdx')
+    const info = resolveRouteInfo(file(relPath, '.rmdx'))
+    expect(info.urlPath).toBe('/guide/overview/')
+  })
+
   it('normalizes backslash separators in route paths', () => {
     const info = resolveRouteInfo(file('guide\\overview.md', '.md'))
     expect(info.urlPath).toBe('/guide/overview/')
@@ -58,6 +69,17 @@ describe('resolveRouteInfo', () => {
       ]),
     ).toThrow(
       'Duplicate content routes detected. /account/: account/account.mdx, account/index.mdx',
+    )
+  })
+
+  it('throws when .mdx and .rmdx resolve to the same route', () => {
+    expect(() =>
+      assertUniqueContentRoutes([
+        resolvedFile(path.join('guide', 'intro.mdx'), '.mdx'),
+        resolvedFile(path.join('guide', 'intro.rmdx'), '.rmdx'),
+      ]),
+    ).toThrow(
+      'Duplicate content routes detected. /guide/intro/: guide/intro.mdx, guide/intro.rmdx',
     )
   })
 })
@@ -83,6 +105,12 @@ describe('resolveOutPath', () => {
   it('writes nested content to clean url folder', () => {
     const relPath = path.join('guide', 'overview.md')
     const outPath = resolveOutPath(root, resolvedFile(relPath, '.md'))
+    expect(outPath).toBe(path.join(root, 'guide', 'overview', 'index.html'))
+  })
+
+  it('writes Regor MDX content to clean url folders', () => {
+    const relPath = path.join('guide', 'overview.rmdx')
+    const outPath = resolveOutPath(root, resolvedFile(relPath, '.rmdx'))
     expect(outPath).toBe(path.join(root, 'guide', 'overview', 'index.html'))
   })
 

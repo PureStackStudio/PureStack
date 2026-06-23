@@ -1,6 +1,6 @@
 # `@purestack/ts-ssg`
 
-Static site generator for Markdown/MDX content with:
+Static site generator for Markdown/Regor MDX content with:
 
 - deterministic file-based routing,
 - built-in themed UI components (Regor),
@@ -77,7 +77,10 @@ yarn tsx packages/ts-ssg/src/cli.ts --content ./packages/ts-ssg/sample-content -
 
 ## Content Model
 
-- Content files: `.md`, `.mdx`
+- Content files: `.md`, `.mdx`, `.rmdx`
+- Regor MDX files can use either `.mdx` or `.rmdx`.
+  Use `.mdx` if you prefer the familiar MDX extension.
+  Use `.rmdx` if you want to make the Regor-specific dialect explicit.
 - Static assets: everything else in `contentDir` (except `siteConfig.json`)
 - Routes:
   - `index.mdx` -> `/`
@@ -305,7 +308,7 @@ const templates: PageTemplateMap = {
 }
 ```
 
-## Components and MDX
+## Components and Regor MDX
 
 Built-in component sets are initialized automatically each build:
 
@@ -348,10 +351,10 @@ Theme utilities:
 - `assets/site.dark.css` for `dark`
 - `assets/site.<theme>.css` for additional themes
 
-## Markdown/MDX Compilation
+## Markdown/Regor MDX Compilation
 
 - Markdown: `remark-parse` + `remark-gfm`
-- MDX: `remark-parse` + `remark-gfm` + `remark-mdx`
+- Regor MDX (`.mdx`, `.rmdx`): `remark-parse` + `remark-gfm` with Regor component markup preservation
 - HTML output via HAST + rehype
 - H2/H3 outline extraction for page TOC
 - Optional Shiki highlighting

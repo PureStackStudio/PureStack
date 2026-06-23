@@ -87,6 +87,36 @@ describe('page content compilation', () => {
     }
   })
 
+  it('compiles .rmdx pages as Regor MDX even when markdown stays plain', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-page-'))
+    try {
+      const contentDir = path.join(root, 'content')
+      const outDir = path.join(root, 'out')
+      await writeFile(
+        path.join(contentDir, 'index.rmdx'),
+        ['# Home', '', '<Badge tone="accent" />'].join('\n'),
+      )
+
+      const config = resolveSiteConfig({
+        rootDir: root,
+        contentDir,
+        outDir,
+        mdx: {
+          compileMdAsMdx: false,
+        },
+      })
+      const page = await renderPageFromFile(
+        { config },
+        toContentFile(contentDir, 'index.rmdx'),
+      )
+
+      expect(page.bodyHtml).toContain('<Badge tone="accent" />')
+      expect(page.bodyHtml).not.toContain('&#x3C;Badge tone="accent" />')
+    } finally {
+      await fs.rm(root, { recursive: true, force: true })
+    }
+  })
+
   it('uses pageToc.enabled as the default toc behavior', async () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-page-'))
     try {

@@ -19,6 +19,7 @@ import {
   discoverDefaultFooters,
   discoverDefaultHeaders,
 } from '../discover/content'
+import { isRegorMdxContentExt } from '../discover/contentExtensions'
 import {
   normalizeFrontmatter,
   parseFrontmatterSource,
@@ -289,7 +290,7 @@ function compilePageContent(
   config: SiteConfig,
 ) {
   const shouldCompileMdAsMdx = mdxOptions?.compileMdAsMdx ?? compileMdAsMdx
-  if (file.ext === '.mdx' || shouldCompileMdAsMdx) {
+  if (isRegorMdxContentExt(file.ext) || shouldCompileMdAsMdx) {
     return compileMdx(sourceBody, {
       ...(mdxOptions ?? {}),
       sourceRelPath: file.relPath,

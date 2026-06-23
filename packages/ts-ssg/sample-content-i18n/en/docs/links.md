@@ -7,7 +7,7 @@ nav:
 
 # Content links
 
-The markdown compiler rewrites links to `.md` and `.mdx` files into public
+The markdown compiler rewrites links to `.md`, `.mdx`, and `.rmdx` files into public
 routes. In an i18n site, the current source locale is part of that decision.
 
 | Markdown href | Rendered href |

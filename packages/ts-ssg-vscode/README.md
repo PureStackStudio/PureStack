@@ -6,7 +6,7 @@ It understands component tags in Markdown and MDX, understands Regor markup insi
 
 This extension is built for the PureStack workflow:
 
-- author content in `.md` and `.mdx`
+- author content in `.md`, `.mdx`, and `.rmdx`
 - build interactive UI with Regor components
 - write dynamic templates in TypeScript
 - move between markup and source without losing context
@@ -15,7 +15,7 @@ This extension is built for the PureStack workflow:
 
 ### Component-aware authoring
 
-- `Go to Definition` on component tags in Markdown, MDX, and supported TypeScript templates
+- `Go to Definition` on component tags in Markdown, Regor MDX, and supported TypeScript templates
 - prop IntelliSense for Regor component attributes
 - literal value suggestions for resolvable prop unions and booleans
 - hover information for components and props
@@ -24,26 +24,26 @@ This extension is built for the PureStack workflow:
 
 - syntax highlighting for `html`, `raw`, and `svg` tagged templates in TypeScript
 - Regor interpolation highlighting for `{{ ... }}` inside HTML tagged templates
-- MDX language support with official grammar wiring plus Regor-specific improvements
-- Regor-style MDX attributes such as `:model`, `@click`, and `#slot`
+- Regor MDX language support with official grammar wiring plus Regor-specific improvements
+- Regor-style attributes such as `:model`, `@click`, and `#slot`
 
 ### Formatting and diagnostics
 
 - format embedded markup inside TypeScript tagged templates
-- format standalone markup blocks inside MDX
+- format standalone markup blocks inside Regor MDX
 - red-squiggle diagnostics for invalid HTML structure in both places
 - self-closing tags normalized to PureStack style such as `<Component/>`
 
-### MDX frontmatter IntelliSense
+### Regor MDX frontmatter IntelliSense
 
-- key completion for MDX YAML frontmatter based on `PageFrontmatter`
+- key completion for Regor MDX YAML frontmatter based on `PageFrontmatter`
 - nested completion for `nav`, `layout`, and `embed`
 - value suggestions for booleans and constrained unions such as `layout.navMode`
 - hover information for known frontmatter fields
 
 ### Editing ergonomics
 
-- auto-close tags while typing in TypeScript templates and MDX markup
+- auto-close tags while typing in TypeScript templates and Regor MDX markup
 - auto-complete `/>` while typing self-closing tags
 - linked editing for opening and closing tag names
 
@@ -68,11 +68,13 @@ const view = html`
 `
 ```
 
-### Markdown and MDX
+### Markdown and Regor MDX
 
-Component tags inside `.md` and `.mdx` participate in navigation, hover, and prop IntelliSense.
+Component tags inside `.md`, `.mdx`, and `.rmdx` participate in navigation, hover, and prop IntelliSense.
 
-In `.mdx`, the extension also adds:
+Regor supports `.mdx` and `.rmdx` files for Markdown plus Regor components. Use `.mdx` if you prefer the familiar MDX extension. Use `.rmdx` if you want to make the Regor-specific dialect explicit.
+
+In `.mdx` and `.rmdx`, the extension also adds:
 
 - official MDX syntax highlighting
 - Regor-aware attribute highlighting
@@ -124,7 +126,7 @@ In TypeScript:
 - only the content of `html` and `svg` tagged templates is reformatted
 - surrounding TypeScript stays untouched
 
-In MDX:
+In Regor MDX:
 
 - standalone markup blocks are formatted
 - Markdown prose, frontmatter, and fenced code blocks are left alone
@@ -141,7 +143,7 @@ Available commands:
 Invalid HTML structure inside supported markup regions is surfaced as diagnostics:
 
 - in TypeScript template bodies
-- in standalone MDX markup blocks
+- in standalone Regor MDX markup blocks
 
 Expressions are masked during validation so the error points at the surrounding markup instead of being confused by embedded code.
 
@@ -247,20 +249,20 @@ Behavior split:
 - `html` and `svg` receive the full editing pipeline: formatting, diagnostics, auto-close, and linked editing
 - `raw` remains syntax-highlighted, but is intentionally excluded from formatting and tag-editing behavior
 
-### MDX
+### Regor MDX
 
-MDX support is built on the official MDX grammar and then extended for PureStack authoring.
+Regor MDX support is built on the official MDX grammar and then extended for PureStack authoring.
 
 That includes:
 
-- MDX language registration
-- MDX file icon
+- MDX language registration for `.mdx` and `.rmdx`, with Regor MDX aliases
+- Regor MDX file icon
 - language configuration
 - Regor-aware attribute tokenization for `:`, `@`, and `#`
 - CSS highlighting inside `<style>` tags
 - JavaScript highlighting inside `<script>` tags
 
-The extension does not try to turn MDX into a second TypeScript template system. It keeps MDX aligned with its role in PureStack as a static content authoring format, while still making Regor-style markup pleasant to work with.
+The extension does not try to turn Regor MDX into a second TypeScript template system. It keeps Regor MDX aligned with its role in PureStack as a static content authoring format, while still making Regor-style markup pleasant to work with.
 
 ## Formatting Rules
 
@@ -300,13 +302,13 @@ Useful settings:
 1. Open the PureStack repository in VS Code.
 2. Run `yarn --cwd packages/ts-ssg-vscode build`.
 3. Launch the extension development host from VS Code.
-4. Open a `.ts`, `.md`, or `.mdx` file inside the repo.
+4. Open a `.ts`, `.md`, `.mdx`, or `.rmdx` file inside the repo.
 
 ### Good Files To Test
 
 - a TypeScript file with `html`, `raw`, or `svg` tagged templates
-- an MDX guide page under `packages/ts-ssg/sample-content/guide`
-- a Markdown or MDX document with component tags such as `<Flex>` or `<Btn>`
+- a Regor MDX guide page under `packages/ts-ssg/sample-content/guide`
+- a Markdown or Regor MDX document with component tags such as `<Flex>` or `<Btn>`
 
 ### Package A VSIX
 

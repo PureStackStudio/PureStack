@@ -33,6 +33,15 @@ describe('resolvePageContentHref', () => {
     ).toBe('/account/')
   })
 
+  it('resolves Regor MDX page links to routed URLs', () => {
+    expect(
+      resolvePageContentHref(
+        'usage/reads-and-writes.rmdx?mode=full#scope',
+        'docs/getting-started.mdx',
+      ),
+    ).toBe('/docs/usage/reads-and-writes/?mode=full#scope')
+  })
+
   it('resolves hidden i18n content links to clean public routes', () => {
     const config = resolveSiteConfig({
       rootDir: process.cwd(),

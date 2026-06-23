@@ -7,7 +7,7 @@ nav:
 
 # Content Links
 
-Der Markdown Compiler schreibt Links auf `.md` und `.mdx` Dateien zu
+Der Markdown Compiler schreibt Links auf `.md`, `.mdx` und `.rmdx` Dateien zu
 oeffentlichen Routen um. In einer i18n Site fliesst die aktuelle Quellsprache
 in diese Entscheidung ein.
 

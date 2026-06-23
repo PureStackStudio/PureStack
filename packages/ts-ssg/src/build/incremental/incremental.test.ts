@@ -110,6 +110,47 @@ describe('incremental builder', () => {
     })
   })
 
+  it('treats new .rmdx files as Regor MDX content changes', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      const outDir = path.join(base, 'out')
+      await fs.mkdir(contentDir, { recursive: true })
+      await fs.mkdir(outDir, { recursive: true })
+      await fs.writeFile(
+        path.join(contentDir, 'index.rmdx'),
+        ['# Home', '', '<Badge tone="accent" />'].join('\n'),
+        'utf8',
+      )
+
+      const builder = await createIncrementalBuilder({
+        siteConfig: {
+          rootDir: base,
+          contentDir,
+          outDir,
+          siteTitle: 'Test Site',
+          style: {
+            fileName: 'site.css',
+            href: '/assets/site.css',
+          },
+          mdx: {
+            compileMdAsMdx: false,
+          },
+        },
+      })
+
+      const result = await builder.applyChange(
+        path.join(contentDir, 'index.rmdx'),
+      )
+      expect(result.changedPages).toBe(1)
+
+      const html = await fs.readFile(path.join(outDir, 'index.html'), 'utf8')
+      expect(html).toContain('class="badge')
+      expect(html).not.toContain('&#x3C;Badge tone="accent" />')
+      const manifest = await readManifest(outDir)
+      expect(manifest?.content['index.rmdx']?.ext).toBe('.rmdx')
+    })
+  })
+
   it('does not emit shiki selectors when highlightjs is selected', async () => {
     await withTempDir(async (base) => {
       const contentDir = path.join(base, 'content')

@@ -33,12 +33,13 @@ describe('discoverContent + discoverStaticAssets', () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-'))
     try {
       await writeFile(path.join(root, 'index.mdx'), '# Home')
+      await writeFile(path.join(root, 'pricing.rmdx'), '# Pricing')
       await writeFile(path.join(root, 'header.mdx'), '<TopBar />')
       await writeFile(path.join(root, 'footer.mdx'), '<SiteFooter />')
       await writeFile(path.join(root, '_nav.json'), '{"items":[]}')
       await writeFile(path.join(root, 'guide', 'overview.md'), '# Guide')
       await writeFile(path.join(root, 'guide', 'header.mdx'), '<TopBar />')
-      await writeFile(path.join(root, 'guide', 'footer.mdx'), '<SiteFooter />')
+      await writeFile(path.join(root, 'guide', 'footer.rmdx'), '<SiteFooter />')
       await writeFile(path.join(root, 'guide', '_nav.json'), '{"items":[]}')
       await writeFile(path.join(root, 'assets', 'logo.png'), 'png')
       await writeFile(path.join(root, 'hosts.ts'), 'console.log("hosts")')
@@ -55,12 +56,13 @@ describe('discoverContent + discoverStaticAssets', () => {
       expect(contentRel).toEqual([
         path.join('guide', 'overview.md'),
         'index.mdx',
+        'pricing.rmdx',
       ])
 
       const footerRel = footers.map((file) => file.relPath)
       expect(footerRel).toEqual([
         'footer.mdx',
-        path.join('guide', 'footer.mdx'),
+        path.join('guide', 'footer.rmdx'),
       ])
 
       const headerRel = headers.map((file) => file.relPath)
@@ -77,6 +79,20 @@ describe('discoverContent + discoverStaticAssets', () => {
         'notes.txt',
       ].sort((a, b) => a.localeCompare(b))
       expect(assetRel).toEqual(expectedAssets)
+    } finally {
+      await fs.rm(root, { recursive: true, force: true })
+    }
+  })
+
+  it('rejects duplicate Regor MDX partials in one directory', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-'))
+    try {
+      await writeFile(path.join(root, 'header.mdx'), '<TopBar />')
+      await writeFile(path.join(root, 'header.rmdx'), '<TopBar />')
+
+      await expect(discoverDefaultHeaders(root)).rejects.toThrow(
+        'Duplicate Regor MDX header partials detected. Keep only one per directory: header.mdx, header.rmdx',
+      )
     } finally {
       await fs.rm(root, { recursive: true, force: true })
     }

@@ -4,6 +4,17 @@ import path from 'node:path'
 import { getLogger } from 'logpot'
 
 import { SITE_CONFIG_FILENAME } from '../config/config'
+import { isContentExt, isRegorMdxContentExt } from './contentExtensions'
+
+export {
+  CONTENT_EXTS,
+  isContentExt,
+  isRegorMdxContentExt,
+  MARKDOWN_CONTENT_EXT,
+  MDX_CONTENT_EXT,
+  REGOR_MDX_CONTENT_EXT,
+  REGOR_MDX_CONTENT_EXTS,
+} from './contentExtensions'
 
 export interface ContentFile {
   absPath: string
@@ -17,9 +28,10 @@ export interface StaticAssetFile {
   ext: string
 }
 
-const CONTENT_EXTS = new Set(['.md', '.mdx'])
 export const DEFAULT_FOOTER_FILENAME = 'footer.mdx'
 export const DEFAULT_HEADER_FILENAME = 'header.mdx'
+const DEFAULT_FOOTER_BASENAME = 'footer'
+const DEFAULT_HEADER_BASENAME = 'header'
 export const DEFAULT_NAV_FILENAME = '_nav.json'
 export const IGNORED_STATIC_CONTENT_FILENAMES = [
   'AGENTS.MD',
@@ -32,7 +44,7 @@ export const IGNORED_STATIC_CONTENT_FILENAMES = [
 export const IGNORED_STATIC_CONTENT_EXTENSIONS = ['.ts'] as const
 
 export function isContentFile(_relPath: string, ext: string) {
-  return CONTENT_EXTS.has(ext)
+  return isContentExt(ext)
 }
 
 export function isAgentsFile(relPath: string) {
@@ -44,11 +56,11 @@ export function isSiteConfigFile(relPath: string) {
 }
 
 export function isDefaultFooterFile(relPath: string) {
-  return path.basename(relPath) === DEFAULT_FOOTER_FILENAME
+  return isDefaultSpecialContentFile(relPath, DEFAULT_FOOTER_BASENAME)
 }
 
 export function isDefaultHeaderFile(relPath: string) {
-  return path.basename(relPath) === DEFAULT_HEADER_FILENAME
+  return isDefaultSpecialContentFile(relPath, DEFAULT_HEADER_BASENAME)
 }
 
 export function isIgnoredStaticContentFile(relPath: string) {
@@ -96,8 +108,9 @@ export async function discoverDefaultFooters(
 ): Promise<ContentFile[]> {
   const files: ContentFile[] = []
   await walkDir(contentDir, contentDir, files, (relPath, ext) => {
-    return ext === '.mdx' && isDefaultFooterFile(relPath)
+    return isRegorMdxContentExt(ext) && isDefaultFooterFile(relPath)
   })
+  assertUniqueDefaultSpecialFiles(files, 'footer')
   return files.sort((a, b) => a.relPath.localeCompare(b.relPath))
 }
 
@@ -106,8 +119,9 @@ export async function discoverDefaultHeaders(
 ): Promise<ContentFile[]> {
   const files: ContentFile[] = []
   await walkDir(contentDir, contentDir, files, (relPath, ext) => {
-    return ext === '.mdx' && isDefaultHeaderFile(relPath)
+    return isRegorMdxContentExt(ext) && isDefaultHeaderFile(relPath)
   })
+  assertUniqueDefaultSpecialFiles(files, 'header')
   return files.sort((a, b) => a.relPath.localeCompare(b.relPath))
 }
 
@@ -145,4 +159,39 @@ function isIgnoredStaticContentExtension(ext: string) {
   return IGNORED_STATIC_CONTENT_EXTENSIONS.some(
     (ignoredExt) => normalized === ignoredExt,
   )
+}
+
+function isDefaultSpecialContentFile(relPath: string, basename: string) {
+  const ext = path.extname(relPath)
+  if (!isRegorMdxContentExt(ext)) return false
+  return path.basename(relPath, ext).toLowerCase() === basename
+}
+
+function assertUniqueDefaultSpecialFiles(files: ContentFile[], kind: string) {
+  const byDir = new Map<string, ContentFile[]>()
+  for (const file of files) {
+    const dir = normalizeDir(path.dirname(file.relPath))
+    const dirFiles = byDir.get(dir) ?? []
+    dirFiles.push(file)
+    byDir.set(dir, dirFiles)
+  }
+
+  const duplicates = [...byDir.values()].filter((entries) => entries.length > 1)
+  if (duplicates.length === 0) return
+
+  const details = duplicates
+    .map((entries) =>
+      entries
+        .map((entry) => entry.relPath.replaceAll('\\', '/'))
+        .sort((a, b) => a.localeCompare(b))
+        .join(', '),
+    )
+    .join('; ')
+  throw new Error(
+    `Duplicate Regor MDX ${kind} partials detected. Keep only one per directory: ${details}`,
+  )
+}
+
+function normalizeDir(dir: string) {
+  return dir === '.' ? '' : dir.replaceAll('\\', '/')
 }

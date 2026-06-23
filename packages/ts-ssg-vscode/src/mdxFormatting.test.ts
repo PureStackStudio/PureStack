@@ -1,3 +1,5 @@
+import * as fs from 'node:fs'
+import * as path from 'node:path'
 import { describe, expect, it, vi } from 'vitest'
 
 class TestPosition {
@@ -32,13 +34,13 @@ vi.mock('vscode', () => ({
   },
 }))
 
-function createMdxDocument(text: string) {
+function createMdxDocument(text: string, fsPath = 'test.mdx') {
   const lines = text.split('\n')
 
   return {
     languageId: 'mdx',
     lineCount: lines.length,
-    uri: { fsPath: 'test.mdx' },
+    uri: { fsPath },
     getText: () => text,
     lineAt: (line: number) => ({
       text: lines[line],
@@ -123,6 +125,54 @@ ${paragraphs}
     expect(formatted).toContain('{value11}')
     expect(formatted).not.toContain('{value1}0')
     expect(formatted).not.toContain('{value1}1')
+  })
+
+  it('formats rmdx documents through the MDX language mode', async () => {
+    const { buildMdxFormattingEdits } = await import('./mdxFormatting.js')
+    const source = `<Panel><Badge tone="accent" /></Panel>`
+
+    const edits = await buildMdxFormattingEdits(
+      createMdxDocument(source, 'test.rmdx') as never,
+      { requireFormatOnSave: true },
+    )
+    const formatted = applyEdits(source, edits as Array<{ newText: string }>)
+
+    expect(formatted).toBe('<Panel><Badge tone="accent"/></Panel>')
+  })
+})
+
+describe('Regor MDX language identity', () => {
+  it('keeps .mdx and .rmdx on the stable MDX language contribution', () => {
+    const manifest = JSON.parse(
+      fs.readFileSync(
+        path.join(process.cwd(), 'packages', 'ts-ssg-vscode', 'package.json'),
+        'utf8',
+      ),
+    ) as {
+      contributes?: {
+        languages?: Array<{ id?: string; extensions?: string[] }>
+        grammars?: Array<{ language?: string }>
+      }
+    }
+
+    const mdxLanguage = manifest.contributes?.languages?.find(
+      (language) => language.id === 'mdx',
+    )
+
+    expect(mdxLanguage?.extensions).toEqual(
+      expect.arrayContaining(['.mdx', '.rmdx']),
+    )
+    expect(
+      manifest.contributes?.languages?.some(
+        (language) =>
+          language.id !== 'mdx' && language.extensions?.includes('.mdx'),
+      ),
+    ).toBe(false)
+    expect(
+      manifest.contributes?.grammars?.some(
+        (grammar) => grammar.language === 'mdx',
+      ),
+    ).toBe(true)
   })
 })
 

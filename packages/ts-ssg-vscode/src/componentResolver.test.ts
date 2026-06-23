@@ -101,7 +101,7 @@ describe('resolveComponentTarget monorepo package workspace', () => {
       'src',
       'standard',
       'landing',
-      'landing.ts',
+      'landingTypes.ts',
     )
 
     const target = resolveComponentTarget(
