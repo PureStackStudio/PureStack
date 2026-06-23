@@ -24,6 +24,14 @@ export type {
 export { defineButtonComponents } from './standard/btn/btn'
 export { registerButtonStyles } from './standard/btn/btnStyle'
 export type {
+  BtnGroup,
+  BtnGroupAlign,
+  BtnGroupDropDown,
+  BtnGroupDropDownAlign,
+} from './standard/btnGroup/btnGroup'
+export { defineBtnGroupComponents } from './standard/btnGroup/btnGroup'
+export { registerBtnGroupStyles } from './standard/btnGroup/btnGroupStyle'
+export type {
   ComponentVariant,
   ComponentVariantMode,
 } from './standard/componentVariant'

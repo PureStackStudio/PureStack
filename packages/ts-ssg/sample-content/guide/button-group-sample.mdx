@@ -1,0 +1,186 @@
+---
+title: Button Group Samples
+description: Split actions, overflow menus, links, and compact toolbars with BtnGroup.
+layout:
+  showToc: true
+  fullWidth: false
+nav:
+  icon: tabler:chevron-down
+---
+
+# Button Group Samples
+
+`BtnGroup` is for moments where one action should stay close to its related alternatives. The default slot stays completely open: put `Btn`, `BtnLink`, and ordinary markup wherever the action model needs them.
+
+## 1. Split publish action
+
+<Panel tone="neutral" variant="surfaceAlt" class="p-4 overflow-y-visible">
+  <Flex direction="column" class="gap-3">
+    <div>
+      <div class="fs-h2 fw-700">Release notes</div>
+      <p class="tone-text-muted mb-0">
+        A primary action with nearby publishing choices.
+      </p>
+    </div>
+
+    <BtnGroup>
+      <Btn tone="accent" icon="iconoir:send">Publish now</Btn>
+      <BtnGroupDropDown label="More" tone="accent">
+        <Btn tone="neutral" variant="subtle" icon="iconoir:calendar">
+          Schedule publish
+        </Btn>
+        <Btn tone="neutral" variant="subtle" icon="iconoir:check">
+          Save as ready
+        </Btn>
+        <Btn tone="neutral" variant="subtle" icon="iconoir:download">
+          Export draft
+        </Btn>
+      </BtnGroupDropDown>
+    </BtnGroup>
+  </Flex>
+</Panel>
+
+## 2. Selection toolbar
+
+<Panel tone="neutral" variant="surfaceAlt" class="p-3 overflow-y-visible">
+  <Flex justify="between" align="center" wrap="true" class="gap-3">
+    <Flex direction="column" class="gap-1">
+      <div class="fw-700">8 messages selected</div>
+      <div class="fs-xs tone-text-muted">
+        Inbox actions stay compact under pressure.
+      </div>
+    </Flex>
+
+    <BtnGroup align="end" wrap="true">
+      <Btn tone="neutral" variant="outline" icon="iconoir:archive">
+        Archive
+      </Btn>
+      <Btn tone="neutral" variant="outline" icon="iconoir:mail-open">
+        Mark read
+      </Btn>
+      <BtnGroupDropDown
+        icon="iconoir:more-horiz"
+        iconOnly="true"
+        ariaLabel="More message actions"
+        variant="outline"
+      >
+        <Btn tone="neutral" variant="subtle" icon="iconoir:mail">
+          Mark unread
+        </Btn>
+        <Btn tone="warning" variant="subtle" icon="iconoir:archive">
+          Move to spam
+        </Btn>
+        <Btn tone="danger" variant="subtle" icon="iconoir:trash">
+          Move to trash
+        </Btn>
+      </BtnGroupDropDown>
+    </BtnGroup>
+  </Flex>
+</Panel>
+
+## 3. Link menu with context
+
+<BtnGroup>
+  <BtnLink href="/guide/" tone="accent" icon="iconoir:rocket">
+    Open guide
+  </BtnLink>
+  <BtnGroupDropDown label="Explore" variant="outline" menuVariant="surface">
+    <BtnLink
+      href="/guide/button-sample/"
+      tone="neutral"
+      variant="subtle"
+      icon="iconoir:code"
+    >
+      Button samples
+    </BtnLink>
+    <BtnLink
+      href="/guide/button-link-sample/"
+      tone="neutral"
+      variant="subtle"
+      icon="iconoir:send"
+    >
+      Link buttons
+    </BtnLink>
+    <BtnLink
+      href="/guide/button-variant-sample/"
+      tone="neutral"
+      variant="subtle"
+      icon="iconoir:settings"
+    >
+      Variant matrix
+    </BtnLink>
+    <div class="p-2 fs-xs tone-text-muted">
+      Menus can include plain markup for descriptions, separators, counters, or
+      previews.
+    </div>
+  </BtnGroupDropDown>
+</BtnGroup>
+
+## 4. Compact status actions
+
+<Flex wrap="true" align="center" class="gap-3">
+  <BtnGroup>
+    <Btn tone="success" size="sm" icon="iconoir:check">Approved</Btn>
+    <BtnGroupDropDown size="sm" label="Change" variant="outline" align="start">
+      <Btn tone="neutral" variant="subtle">Needs review</Btn>
+      <Btn tone="warning" variant="subtle">Blocked</Btn>
+      <Btn tone="danger" variant="subtle">Rejected</Btn>
+    </BtnGroupDropDown>
+  </BtnGroup>
+
+  <BtnGroup>
+    <Btn tone="info" size="sm" icon="iconoir:calendar">Today</Btn>
+    <BtnGroupDropDown
+      size="sm"
+      icon="iconoir:more-horiz"
+      iconOnly="true"
+      ariaLabel="More date actions"
+      variant="outline"
+    >
+      <Btn tone="neutral" variant="subtle">Tomorrow</Btn>
+      <Btn tone="neutral" variant="subtle">Next week</Btn>
+      <Btn tone="neutral" variant="subtle">Custom date</Btn>
+    </BtnGroupDropDown>
+  </BtnGroup>
+</Flex>
+
+## 5. Wrapped groups
+
+<Panel tone="neutral" variant="surfaceAlt" class="p-3 overflow-y-visible">
+  <BtnGroup wrap="true">
+    <Btn tone="accent" icon="iconoir:user-plus">Invite member</Btn>
+    <Btn tone="neutral" variant="outline" icon="iconoir:settings">
+      Manage roles
+    </Btn>
+    <BtnGroupDropDown label="Team actions" variant="outline">
+      <Btn tone="neutral" variant="subtle">Copy invite link</Btn>
+      <Btn tone="neutral" variant="subtle">Download member list</Btn>
+      <Btn tone="danger" variant="subtle">Disable invites</Btn>
+    </BtnGroupDropDown>
+  </BtnGroup>
+</Panel>
+
+## 6. Props reference
+
+```html
+<BtnGroup align="start|center|end" wrap="true|false">
+  <Btn>Default action</Btn>
+  <BtnGroupDropDown
+    label="More"
+    icon="lucide:chevron-down"
+    iconPosition="start|end"
+    iconOnly="true|false"
+    ariaLabel="Accessible label for icon-only menus"
+    tone="accent|neutral|ghost|info|success|warning|danger"
+    size="sm|md|lg"
+    variant="solid|surface|surfaceAlt|outlineFill|outline|subtle|subtleBtn|link"
+    menuTone="neutral"
+    menuVariant="surfaceAlt"
+    align="start|end"
+  >
+    <Btn>Second action</Btn>
+    <BtnLink href="/guide/">Link action</BtnLink>
+    <div>Custom markup</div>
+  </BtnGroupDropDown>
+</BtnGroup>
+```

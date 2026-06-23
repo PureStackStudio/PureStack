@@ -34,7 +34,12 @@ const DEFAULT_SIGN_IN_ICON = 'lucide:log-in'
 const DEFAULT_ACCOUNT_ICON = 'tabler:user-filled'
 const DEFAULT_SIGN_IN_LABEL = 'Account'
 
-const signInTemplate = html`<details r-if="authEnabled" class="sign-in position-relative" data-menu-runtime>
+const signInTemplate = html`<details
+  r-if="authEnabled"
+  class="sign-in position-relative"
+  data-menu-runtime
+  data-menu-align="end"
+>
   <summary
     class="sign-in__trigger topbar__icon rounded-pill cursor-pointer overflow-hidden"
     aria-label="Account menu"
@@ -65,6 +70,7 @@ const signInTemplate = html`<details r-if="authEnabled" class="sign-in position-
     :tone="tone"
     :variant="variant || 'surfaceAlt'"
     :variantMode="variantMode"
+    data-menu-panel
   >
     <slot>
       <Flex

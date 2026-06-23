@@ -2,6 +2,7 @@ import { registerUtilityStyles } from '@purestack/ts-style'
 import { registerBadgeStyles } from './standard/badge/badgeStyle'
 import { registerBarChartStyles } from './standard/barChart/barChartStyle'
 import { registerButtonStyles } from './standard/btn/btnStyle'
+import { registerBtnGroupStyles } from './standard/btnGroup/btnGroupStyle'
 import { registerComposerStyles } from './standard/composer/composerStyle'
 import { registerConsentStyles } from './standard/consent/consentStyle'
 import { registerContactFormStyles } from './standard/contactForm/contactFormStyle'
@@ -32,6 +33,7 @@ export function registerStyles() {
   registerBarChartStyles()
   registerBadgeStyles()
   registerButtonStyles()
+  registerBtnGroupStyles()
   registerComposerStyles()
   registerConsentStyles()
   registerContactFormStyles()
