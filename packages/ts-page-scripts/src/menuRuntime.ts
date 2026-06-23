@@ -1,3 +1,5 @@
+import type { TsSsgMenusApi } from './runtimeGlobals'
+
 const MENU_SELECTOR = 'details[data-menu-runtime]'
 const MENU_PANEL_SELECTOR = '[data-menu-panel]'
 const DEFAULT_MENU_ALIGN = 'end'
@@ -7,6 +9,24 @@ const MENU_OFFSET = 6
 type MenuAlign = 'start' | 'end'
 
 let pendingPlacementFrame = 0
+
+const menuRuntimeApi: TsSsgMenusApi = {
+  close(source?: Event | Element) {
+    const menu = resolveMenuFromSource(source)
+    if (menu) closeMenu(menu)
+  },
+  closeAll() {
+    closeOpenMenus()
+  },
+  refresh(source?: Event | Element) {
+    const menu = resolveMenuFromSource(source)
+    if (menu) {
+      placeMenu(menu)
+      return
+    }
+    placeOpenMenus()
+  },
+}
 
 function ready(run: () => void) {
   if (document.readyState === 'loading') {
@@ -46,9 +66,7 @@ function closeOpenMenusOutsideTarget(event: MouseEvent) {
 
 function closeOpenMenusOnEscape(event: KeyboardEvent) {
   if (event.key !== 'Escape') return
-  for (const menu of getOpenMenus()) {
-    closeMenu(menu)
-  }
+  closeOpenMenus()
 }
 
 function handleMenuToggle(event: Event) {
@@ -74,6 +92,12 @@ function getOpenMenus() {
 function closeMenu(menu: HTMLDetailsElement) {
   menu.removeAttribute('open')
   clearMenuPlacement(menu)
+}
+
+function closeOpenMenus() {
+  for (const menu of getOpenMenus()) {
+    closeMenu(menu)
+  }
 }
 
 function closeSiblingMenus(activeMenu: HTMLDetailsElement) {
@@ -142,6 +166,25 @@ function resolveMenuPanel(menu: HTMLDetailsElement) {
     (child): child is HTMLElement =>
       child instanceof HTMLElement && child.tagName !== 'SUMMARY',
   )
+}
+
+function resolveMenuFromSource(source: Event | Element | undefined) {
+  if (!source) return null
+  if (source instanceof HTMLDetailsElement && source.matches(MENU_SELECTOR)) {
+    return source
+  }
+
+  const target = source instanceof Event ? source.target : source
+  if (!(target instanceof Node)) return null
+
+  const targetElement =
+    target instanceof Element
+      ? target
+      : target.parentElement instanceof Element
+        ? target.parentElement
+        : null
+
+  return targetElement?.closest<HTMLDetailsElement>(MENU_SELECTOR) ?? null
 }
 
 function resolvePanelLeft(
@@ -215,3 +258,5 @@ function clearMenuPlacement(menu: HTMLDetailsElement) {
 }
 
 ready(initMenuRuntime)
+
+globalThis.window.tsSsgMenus = menuRuntimeApi

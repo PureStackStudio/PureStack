@@ -1,4 +1,8 @@
-export type { TsSsgModalApi, TsSsgTabsApi } from '@purestack/ts-page-scripts'
+export type {
+  TsSsgMenusApi,
+  TsSsgModalApi,
+  TsSsgTabsApi,
+} from '@purestack/ts-page-scripts'
 export { defineComponents } from './defineComponents'
 export { registerStyles } from './registerStyles'
 export type { AlertBox } from './standard/alertBox/alertBox'

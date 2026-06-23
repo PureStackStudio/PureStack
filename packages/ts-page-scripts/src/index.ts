@@ -9,6 +9,7 @@ export { buildPagefindSearchScript } from './embed/pagefindSearch.embed'
 export { buildPageTocScript } from './embed/pageToc.embed'
 export { buildTabsScript } from './embed/tabs.embed'
 export type {
+  TsSsgMenusApi,
   TsSsgModalApi,
   TsSsgNavMenuApi,
   TsSsgPageTocApi,
