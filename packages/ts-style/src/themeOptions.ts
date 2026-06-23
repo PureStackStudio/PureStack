@@ -23,7 +23,7 @@ export {
   mediaMin,
 } from './breakpoints'
 
-const DEFAULT_SKIN = themeSkins.neon.create()
+const DEFAULT_SKIN = themeSkins.standard.create()
 export const THEME_MODES = ['light', 'dark'] as const
 export type ThemeMode = (typeof THEME_MODES)[number]
 

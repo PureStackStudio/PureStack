@@ -17,7 +17,7 @@ export interface ThemeSkin {
 export type ThemeSkinRegistry = Record<ThemeSkinName, ThemeSkin>
 
 export const themeSkins: ThemeSkinRegistry = {
-  neon: {
+  standard: {
     create: (presets) => ({
       light: createNeonLight(presets),
       dark: createNeonDark(presets),

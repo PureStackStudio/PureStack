@@ -23,7 +23,7 @@
     "themes": ["light", "dark"],
     "pretty": false,
     "theme": {
-      "skin": "neon",
+      "skin": "standard",
       "presets": ["orange"]
     }
   },

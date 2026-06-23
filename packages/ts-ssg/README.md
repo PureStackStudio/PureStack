@@ -332,12 +332,7 @@ Important rendering constraint: Regor components are rendered statically. Compon
 
 Built-in skins export:
 
-- `ocean`
-- `evergreen`
-- `pastel`
-- `extrao`
-- `cyberpunk`
-- `neon`
+- `standard`
 
 Theme utilities:
 

@@ -50,13 +50,13 @@ describe('resolveSiteConfig sitemap', () => {
       fs.mkdirSync(contentDir, { recursive: true })
       fs.writeFileSync(
         path.join(contentDir, 'siteConfig.json'),
-        JSON.stringify({ style: { theme: { skin: 'neon' } } }),
+        JSON.stringify({ style: { theme: { skin: 'standard' } } }),
       )
 
       const config = resolveSiteConfig({ rootDir, contentDir })
-      const neon = themeSkins.neon.create()
-      expect(config.style.theme.palette.light.accent).toBe(neon.light.accent)
-      expect(config.style.theme.palette.dark.accent).toBe(neon.dark.accent)
+      const standard = themeSkins.standard.create()
+      expect(config.style.theme.palette.light.accent).toBe(standard.light.accent)
+      expect(config.style.theme.palette.dark.accent).toBe(standard.dark.accent)
     } finally {
       fs.rmSync(tempRoot, { recursive: true, force: true })
     }
@@ -607,13 +607,13 @@ describe('resolveSiteConfig sitemap', () => {
       rootDir: process.cwd(),
       style: {
         theme: {
-          skin: 'neon',
+          skin: 'standard',
         },
       },
     })
-    const neon = themeSkins.neon.create()
-    expect(config.style.theme.palette.light.accent).toBe(neon.light.accent)
-    expect(config.style.theme.palette.dark.accent).toBe(neon.dark.accent)
+    const standard = themeSkins.standard.create()
+    expect(config.style.theme.palette.light.accent).toBe(standard.light.accent)
+    expect(config.style.theme.palette.dark.accent).toBe(standard.dark.accent)
   })
 
   it('accepts theme skin preset lists from input', () => {
@@ -622,21 +622,21 @@ describe('resolveSiteConfig sitemap', () => {
       rootDir: process.cwd(),
       style: {
         theme: {
-          skin: 'neon',
+          skin: 'standard',
           presets,
         },
       },
     })
-    const neon = themeSkins.neon.create(presets)
-    expect(config.style.theme.palette.light.accent).toBe(neon.light.accent)
-    expect(config.style.theme.palette.dark.accent).toBe(neon.dark.accent)
+    const standard = themeSkins.standard.create(presets)
+    expect(config.style.theme.palette.light.accent).toBe(standard.light.accent)
+    expect(config.style.theme.palette.dark.accent).toBe(standard.dark.accent)
   })
 
   it('applies registered theme skins with presets from siteConfig.json', () => {
     const skinName = 'test-registered-skin'
     themes.registerSkin(skinName, {
       create: (presets) => {
-        const skin = themeSkins.neon.create(presets)
+        const skin = themeSkins.standard.create(presets)
         const accent =
           presets?.join('|') === 'site-a|site-b' ? '#123456' : '#654321'
         return {
