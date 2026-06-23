@@ -1,8 +1,8 @@
 import { type DeepPartial, merge } from '@purestack/ts-util'
 import {
   type BuiltInSkinName,
-  type SkinPresetList,
   builtInSkins,
+  type SkinPresetList,
 } from './skins'
 import { normalizeThemeName, type ThemeName } from './themeAssets'
 import type { ThemePalette } from './themePalette'
@@ -82,9 +82,7 @@ function resolveThemeOptions(
     const skin = resolveSkinName(value.skin)
     if (skin) {
       merged = mergeThemeOptions(merged, {
-        colors: builtInSkins[skin].create(
-          resolveSkinPresets(value.presets),
-        ),
+        colors: builtInSkins[skin].create(resolveSkinPresets(value.presets)),
       })
     }
     merged = mergeThemeOptions(merged, omitSkin(value))

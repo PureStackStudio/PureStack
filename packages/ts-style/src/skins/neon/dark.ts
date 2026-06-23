@@ -55,7 +55,8 @@ const bestColors = {
     secondary: '#6d2727',
   },
 }
-export const { accent, neutral, secondary } = bestColors.puregate
+export type NeonColors = (typeof bestColors)['puregate']
+
 export const feature = '#cb166e'
 export const custom = '#e35508'
 export const info = '#15a9c0'
@@ -87,28 +88,7 @@ export function createColorScale(hex: string, mode: ThemeMode) {
   return getColors(hex, 80, 80, scaleLength, mode === 'light')
 }
 
-const accentScale = createColorScale(accent, mode)
-const neutralScale = createColorScale(neutral, mode)
-const featureScale = createColorScale(feature, mode)
-const secondaryScale = createColorScale(secondary, mode)
-const customScale = createColorScale(custom, mode)
-const infoScale = createColorScale(info, mode)
-const successScale = createColorScale(success, mode)
-const warningScale = createColorScale(warning, mode)
-const dangerScale = createColorScale(danger, mode)
 const toneIndex = 50
-const core: NeonCore = {
-  neutral: createToneColors(neutralScale[toneIndex], neutralScale, delta),
-  accent: createToneColors(accentScale[toneIndex], accentScale, delta),
-  feature: createToneColors(featureScale[toneIndex], featureScale, delta),
-  secondary: createToneColors(secondaryScale[toneIndex], secondaryScale, delta),
-  custom: createToneColors(customScale[toneIndex], customScale, delta),
-  ghost: createToneColors(neutralScale[toneIndex], neutralScale, delta),
-  info: createToneColors(infoScale[toneIndex], infoScale, delta),
-  success: createToneColors(successScale[toneIndex], successScale, delta),
-  warning: createToneColors(warningScale[toneIndex], warningScale, delta),
-  danger: createToneColors(dangerScale[toneIndex], dangerScale, delta),
-}
 
 function resolveScaleIndex(value: number) {
   return Math.min(Math.max(value, 0), scaleLength - 1)
@@ -131,10 +111,65 @@ export function createToneColors(
   }
 }
 
-export const neonDark = createNeonPalette({
-  mode: 'dark',
-  core,
-  accent,
-  chromeLighting: 0.33,
-  borderAlpha: 0.66,
-})
+export function getNeonColors(presets?: readonly string[]): NeonColors {
+  let colors: NeonColors | undefined
+  for (const preset of presets ?? []) {
+    colors = bestColors[preset as keyof typeof bestColors] ?? colors
+  }
+  colors ??= bestColors.puregate
+  return colors
+}
+
+function applyDeltaPresets(
+  presets: readonly string[] | undefined,
+  delta: DeltaToneColors,
+) {
+  for (const preset of presets ?? []) {
+    void preset
+    void delta
+  }
+}
+
+function createNeonDarkCore(
+  colors: NeonColors,
+  presets: readonly string[] | undefined,
+): NeonCore {
+  applyDeltaPresets(presets, delta)
+  const accentScale = createColorScale(colors.accent, mode)
+  const neutralScale = createColorScale(colors.neutral, mode)
+  const featureScale = createColorScale(feature, mode)
+  const secondaryScale = createColorScale(colors.secondary, mode)
+  const customScale = createColorScale(custom, mode)
+  const infoScale = createColorScale(info, mode)
+  const successScale = createColorScale(success, mode)
+  const warningScale = createColorScale(warning, mode)
+  const dangerScale = createColorScale(danger, mode)
+
+  return {
+    neutral: createToneColors(neutralScale[toneIndex], neutralScale, delta),
+    accent: createToneColors(accentScale[toneIndex], accentScale, delta),
+    feature: createToneColors(featureScale[toneIndex], featureScale, delta),
+    secondary: createToneColors(
+      secondaryScale[toneIndex],
+      secondaryScale,
+      delta,
+    ),
+    custom: createToneColors(customScale[toneIndex], customScale, delta),
+    ghost: createToneColors(neutralScale[toneIndex], neutralScale, delta),
+    info: createToneColors(infoScale[toneIndex], infoScale, delta),
+    success: createToneColors(successScale[toneIndex], successScale, delta),
+    warning: createToneColors(warningScale[toneIndex], warningScale, delta),
+    danger: createToneColors(dangerScale[toneIndex], dangerScale, delta),
+  }
+}
+
+export function createNeonDark(presets?: readonly string[]) {
+  const colors = getNeonColors(presets)
+  return createNeonPalette({
+    mode: 'dark',
+    core: createNeonDarkCore(colors, presets),
+    accent: colors.accent,
+    chromeLighting: 0.33,
+    borderAlpha: 0.66,
+  })
+}

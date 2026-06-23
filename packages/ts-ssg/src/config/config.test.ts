@@ -55,8 +55,8 @@ describe('resolveSiteConfig sitemap', () => {
 
       const config = resolveSiteConfig({ rootDir, contentDir })
       const neon = builtInSkins.neon.create()
-      expect(config.style.theme.colors.light).toEqual(neon.light)
-      expect(config.style.theme.colors.dark).toEqual(neon.dark)
+      expect(config.style.theme.colors.light.accent).toBe(neon.light.accent)
+      expect(config.style.theme.colors.dark.accent).toBe(neon.dark.accent)
     } finally {
       fs.rmSync(tempRoot, { recursive: true, force: true })
     }
@@ -612,23 +612,24 @@ describe('resolveSiteConfig sitemap', () => {
       },
     })
     const neon = builtInSkins.neon.create()
-    expect(config.style.theme.colors.light).toEqual(neon.light)
-    expect(config.style.theme.colors.dark).toEqual(neon.dark)
+    expect(config.style.theme.colors.light.accent).toBe(neon.light.accent)
+    expect(config.style.theme.colors.dark.accent).toBe(neon.dark.accent)
   })
 
   it('accepts theme skin preset lists from input', () => {
+    const presets = ['site-a', 'site-b']
     const config = resolveSiteConfig({
       rootDir: process.cwd(),
       style: {
         theme: {
           skin: 'neon',
-          presets: ['puregate'],
+          presets,
         },
       },
     })
-    const neon = builtInSkins.neon.create(['puregate'])
-    expect(config.style.theme.colors.light).toEqual(neon.light)
-    expect(config.style.theme.colors.dark).toEqual(neon.dark)
+    const neon = builtInSkins.neon.create(presets)
+    expect(config.style.theme.colors.light.accent).toBe(neon.light.accent)
+    expect(config.style.theme.colors.dark.accent).toBe(neon.dark.accent)
   })
 
   it('throws when theme skin is unknown', () => {

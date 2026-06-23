@@ -7,8 +7,8 @@ export {
   type BuiltInSkinName,
   type BuiltInSkinPair,
   type BuiltInSkins,
-  type SkinPresetList,
   builtInSkins,
+  type SkinPresetList,
 } from './skins'
 export * from './styles'
 export * from './themeAssets'
