@@ -1008,10 +1008,13 @@ __metadata:
   resolution: "@purestack/ts-components@workspace:packages/ts-components"
   dependencies:
     "@purestack/ts-common": "workspace:^"
+    "@purestack/ts-css": "workspace:^"
     "@purestack/ts-minidom": "workspace:^"
+    "@purestack/ts-page-scripts": "workspace:^"
     "@purestack/ts-render": "workspace:^"
     "@purestack/ts-style": "workspace:^"
     "@purestack/ts-util": "workspace:^"
+    regor: "npm:^1.7.3"
   languageName: unknown
   linkType: soft
 

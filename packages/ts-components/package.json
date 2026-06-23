@@ -34,6 +34,7 @@
     "!src/test/**",
     "!src/**/*.test.ts",
     "!src/**/*.spec.ts",
+    "tsconfig.json",
     "README.md",
     "LICENSE"
   ],
@@ -49,8 +50,11 @@
   },
   "dependencies": {
     "@purestack/ts-common": "workspace:^",
+    "@purestack/ts-css": "workspace:^",
+    "@purestack/ts-page-scripts": "workspace:^",
     "@purestack/ts-style": "workspace:^",
-    "@purestack/ts-util": "workspace:^"
+    "@purestack/ts-util": "workspace:^",
+    "regor": "^1.7.3"
   },
   "regorComponents": [
     "AlertBox",
