@@ -21,6 +21,7 @@
   "exports": {
     ".": {
       "types": "./dist/ts-components.d.mts",
+      "source": "./src/index.ts",
       "import": "./dist/ts-components.mjs"
     }
   },
