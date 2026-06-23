@@ -4,7 +4,6 @@ import {
   mediaMin,
   styleBuilder,
   type ThemeMode,
-  type ThemeOptions,
   themes,
 } from '@purestack/ts-style'
 
@@ -48,8 +47,8 @@ type LogoResponsiveToken =
 type LogoBreakpoint = 'sm' | 'md' | 'lg' | 'xl'
 
 export function registerLogoStyles() {
-  themes.forEach((theme, palette, options) => {
-    registerLogoShellStyles(theme, palette, options)
+  themes.forEach((theme, palette) => {
+    registerLogoShellStyles(theme, palette)
     registerLogoTextStyles(theme, palette)
     registerLogoResponsiveStyles(theme)
     registerLogoInteractiveStyles(theme, palette)
@@ -59,7 +58,6 @@ export function registerLogoStyles() {
 export function registerLogoShellStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
   styleBuilder
     .select('.site-logo', theme)
@@ -72,7 +70,7 @@ export function registerLogoShellStyles(
     .alignItems('center')
     .gap('0.25rem')
     .padding('0.25rem 0.5rem')
-    .borderRadius(options.radii.sm)
+    .borderRadius(palette.radii.sm)
     .border(`1px solid ${palette.current.border.subtle}`)
     .textDecoration('none')
     .maxWidth('100%')
@@ -88,7 +86,7 @@ export function registerLogoShellStyles(
     .height(resolveLogoVar('icon-size'))
     .minWidth(resolveLogoVar('icon-size'))
     .minHeight(resolveLogoVar('icon-size'))
-    .borderRadius(options.radii.md)
+    .borderRadius(palette.radii.md)
     .display('grid')
     .placeItems('center')
     .position('relative')

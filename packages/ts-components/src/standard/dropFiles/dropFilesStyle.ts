@@ -1,16 +1,11 @@
 import type { ThemePalette } from '@purestack/ts-style'
-import {
-  styleBuilder,
-  type ThemeMode,
-  type ThemeOptions,
-  themes,
-} from '@purestack/ts-style'
+import { styleBuilder, type ThemeMode, themes } from '@purestack/ts-style'
 
 export function registerDropFilesStyles() {
-  themes.forEach((theme, palette, options) => {
+  themes.forEach((theme, palette) => {
     registerDropFilesFieldStyles(theme, palette)
-    registerDropFilesZoneStyles(theme, palette, options)
-    registerDropFilesListStyles(theme, palette, options)
+    registerDropFilesZoneStyles(theme, palette)
+    registerDropFilesListStyles(theme, palette)
   })
 }
 
@@ -33,11 +28,7 @@ function registerDropFilesFieldStyles(theme: ThemeMode, palette: ThemePalette) {
     .whiteSpace('nowrap')
 }
 
-function registerDropFilesZoneStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+function registerDropFilesZoneStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.drop-files__zone', theme)
     .display('grid')
@@ -47,7 +38,7 @@ function registerDropFilesZoneStyles(
     .width('100%')
     .minHeight('9em')
     .padding('1.25em')
-    .borderRadius(options.radii.md)
+    .borderRadius(palette.radii.md)
     .border(`1px dashed ${palette.current.border.default}`)
     .background(palette.current.surfaceAlt.rest.background)
     .color(palette.current.text.default)
@@ -95,11 +86,7 @@ function registerDropFilesZoneStyles(
     .color(palette.current.text.subtle)
 }
 
-function registerDropFilesListStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+function registerDropFilesListStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.drop-files__list', theme)
     .display('grid')
@@ -116,7 +103,7 @@ function registerDropFilesListStyles(
     .gap('0.65em')
     .boxSizing('border-box')
     .padding('0.6em')
-    .borderRadius(options.radii.md)
+    .borderRadius(palette.radii.md)
     .border(`1px solid ${palette.current.border.subtle}`)
     .background(palette.current.surface.rest.background)
 
@@ -126,7 +113,7 @@ function registerDropFilesListStyles(
     .placeItems('center')
     .width('2em')
     .height('2em')
-    .borderRadius(options.radii.sm)
+    .borderRadius(palette.radii.sm)
     .background(palette.current.surfaceAlt.rest.background)
     .color(palette.current.tone)
 
@@ -161,7 +148,7 @@ function registerDropFilesListStyles(
     .height('2.1em')
     .padding('0')
     .border('none')
-    .borderRadius(options.radii.sm)
+    .borderRadius(palette.radii.sm)
     .background('transparent')
     .color(palette.current.text.subtle)
     .cursor('pointer')

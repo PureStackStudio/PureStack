@@ -6,13 +6,12 @@ import {
   mediaMin,
   styleBuilder,
   type ThemeMode,
-  type ThemeOptions,
   themes,
 } from '@purestack/ts-style'
 
 export function registerTopBarStyles() {
-  themes.forEach((theme, palette, options) => {
-    registerTopBarShellStyles(theme, palette, options)
+  themes.forEach((theme, palette) => {
+    registerTopBarShellStyles(theme, palette)
     registerTopBarToggleStyles(theme, palette)
   })
 }
@@ -42,7 +41,6 @@ export function getTopBarToggleHiddenSelectors(targetSelector: string) {
 export function registerTopBarShellStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
   styleBuilder
     .select('.topbar', theme)
@@ -66,7 +64,7 @@ export function registerTopBarShellStyles(
     .select('.topbar__icon', theme)
     .width('2.625rem')
     .height('2.625rem')
-    .borderRadius(options.radii.pill)
+    .borderRadius(palette.radii.pill)
     .display('grid')
     .placeItems('center')
     .border('1px solid transparent')

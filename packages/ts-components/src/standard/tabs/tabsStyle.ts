@@ -1,25 +1,20 @@
 import {
   styleBuilder,
   type ThemeMode,
-  type ThemeOptions,
   type ThemePalette,
   themes,
 } from '@purestack/ts-style'
 
 export function registerTabsStyles() {
-  themes.forEach((theme, palette, options) => {
-    registerTabsShellStyles(theme, palette, options)
+  themes.forEach((theme, palette) => {
+    registerTabsShellStyles(theme, palette)
     registerTabsControlStyles(theme, palette)
     registerTabsPanelStyles(theme)
     registerTabsResponsiveStyles(theme)
   })
 }
 
-function registerTabsShellStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+function registerTabsShellStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.tabs', theme)
     .display('grid')
@@ -80,7 +75,7 @@ function registerTabsShellStyles(
     .width('max-content')
     .maxWidth('min(92vw, 28.75rem)')
     .padding('0.375rem')
-    .borderRadius(options.radii.md)
+    .borderRadius(palette.radii.md)
     .border('1px solid transparent')
     .boxShadow(palette.effect.softShadow)
 
@@ -110,7 +105,7 @@ function registerTabsShellStyles(
     .width('100%')
     .minHeight('2.625rem')
     .padding('0.625rem 2.5rem 0.625rem 0.75rem')
-    .borderRadius(options.radii.md)
+    .borderRadius(palette.radii.md)
     .border('1px solid transparent')
     .apply(palette.applyFont(palette.font.size.xs, palette.font.weight.w600))
     .appearance('none')

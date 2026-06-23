@@ -8,14 +8,13 @@ import {
   mediaMin,
   styleBuilder,
   type ThemeMode,
-  type ThemeOptions,
   themes,
 } from '@purestack/ts-style'
 import { getTopBarToggleVisibleSelectors } from '../topBar/topBarStyle'
 
 export function registerNavStyles() {
-  themes.forEach((theme, palette, options) => {
-    registerNavShellStyles(theme, palette, options)
+  themes.forEach((theme, palette) => {
+    registerNavShellStyles(theme, palette)
     registerNavSummaryStyles(theme, palette)
   })
 }
@@ -23,7 +22,6 @@ export function registerNavStyles() {
 export function registerNavShellStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
   styleBuilder
     .select('li.nav__item', theme)
@@ -42,7 +40,7 @@ export function registerNavShellStyles(
     .select('.nav__menu', theme)
     .display('block')
     .padding('1em')
-    .borderRadius(options.radii.lg)
+    .borderRadius(palette.radii.lg)
     .border('1px solid transparent')
     .apply(palette.applyFont(palette.font.size.body))
     .maxHeight('calc(100vh - 8.125rem)')
@@ -73,7 +71,7 @@ export function registerNavShellStyles(
     .alignItems('center')
     .justifyContent('center')
     .padding('0')
-    .borderRadius(options.radii.md)
+    .borderRadius(palette.radii.md)
     .cursor('pointer')
     .transition('background 160ms ease, color 160ms ease')
     .bottom('5rem')
@@ -92,7 +90,7 @@ export function registerNavShellStyles(
     .justifyContent('center')
     .padding('0.25em')
     .border(`transparent`)
-    .borderRadius(options.radii.md)
+    .borderRadius(palette.radii.md)
     .background('transparent')
     .cursor('pointer')
     .transition('background 160ms ease, color 160ms ease')
@@ -246,7 +244,7 @@ export function registerNavShellStyles(
     .userSelect('none')
     .border(`1px solid ${palette.current.border.default}`)
     .borderLeft('none')
-    .borderRadius(`0 ${options.radii.md} ${options.radii.md} 0`)
+    .borderRadius(`0 ${palette.radii.md} ${palette.radii.md} 0`)
   styleBuilder
     .select(
       '.template-doc--nav-collapsed.template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar.doc-sidebar--open .nav__panel-toggle',

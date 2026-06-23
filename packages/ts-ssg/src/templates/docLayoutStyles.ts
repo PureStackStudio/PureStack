@@ -10,7 +10,6 @@ import {
   mediaMin,
   styleBuilder,
   type ThemeMode,
-  type ThemeOptions,
   themes,
 } from '@purestack/ts-style'
 
@@ -25,17 +24,13 @@ export function registerDocLayoutStyles() {
         .media(mediaBelow(BREAKPOINTS.md))
         .fontSize(options.mobileRemSize)
     }
-    registerDocLayoutShellStyles(theme, palette, options)
+    registerDocLayoutShellStyles(theme, palette)
     registerDocLayoutSidebarStyles(theme, palette)
     registerDocLayoutResponsiveStyles(theme, palette)
   })
 }
 
-function registerDocLayoutShellStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+function registerDocLayoutShellStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.template-doc', theme)
     .margin('0')

@@ -4,18 +4,17 @@ import {
   mediaMax,
   styleBuilder,
   type ThemeMode,
-  type ThemeOptions,
   themes,
 } from '@purestack/ts-style'
 
 export function registerFormStyles() {
-  themes.forEach((theme, palette, options) => {
+  themes.forEach((theme, palette) => {
     registerFormShellStyles(theme)
-    registerFormFieldStyles(theme, palette, options)
-    registerAutoCompleteInputStyles(theme, palette, options)
-    registerMultiAutoCompleteInputStyles(theme, palette, options)
+    registerFormFieldStyles(theme, palette)
+    registerAutoCompleteInputStyles(theme, palette)
+    registerMultiAutoCompleteInputStyles(theme, palette)
     registerFormMetaStyles(theme, palette)
-    registerFormStatusStyles(theme, palette, options)
+    registerFormStatusStyles(theme, palette)
     registerFormResponsiveStyles(theme)
     registerFormSelectFieldStyles(theme, palette)
   })
@@ -25,11 +24,7 @@ function registerFormShellStyles(theme: ThemeMode) {
   styleBuilder.select('.form-block', theme).display('grid').gap('0.75rem')
 }
 
-function registerFormFieldStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+function registerFormFieldStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder.select('.form-block__field', theme).display('grid').gap('0.6em')
   styleBuilder
     .select('.form-block__label', theme)
@@ -40,7 +35,7 @@ function registerFormFieldStyles(
     .select('.form-block__input-shell', theme)
     .width('100%')
     .boxSizing('border-box')
-    .borderRadius(options.radii.md)
+    .borderRadius(palette.radii.md)
     .transition('border-color 160ms ease, box-shadow 160ms ease')
     .display('flex')
     .alignItems('stretch')
@@ -184,7 +179,6 @@ function registerFormSelectIconStyles(theme: ThemeMode) {
 function registerAutoCompleteInputStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
   styleBuilder
     .select('.auto-complete-input', theme)
@@ -201,7 +195,7 @@ function registerAutoCompleteInputStyles(
     .maxHeight('18rem')
     .overflow('auto')
     .padding('0.35em')
-    .borderRadius(options.radii.md)
+    .borderRadius(palette.radii.md)
     .border(`1px solid ${palette.current.border.default}`)
     .background(palette.current.surface.rest.background)
     .boxShadow(palette.effect.strongShadow)
@@ -214,7 +208,7 @@ function registerAutoCompleteInputStyles(
 
   styleBuilder
     .select('.auto-complete-input__option', theme)
-    .borderRadius(options.radii.sm)
+    .borderRadius(palette.radii.sm)
     .color(palette.current.text.default)
     .cursor('pointer')
     .transition('background 140ms ease, color 140ms ease')
@@ -273,7 +267,6 @@ function registerAutoCompleteInputStyles(
 function registerMultiAutoCompleteInputStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
   styleBuilder
     .select('.multi-auto-complete-input', theme)
@@ -314,7 +307,7 @@ function registerMultiAutoCompleteInputStyles(
     .maxWidth('100%')
     .gap('0.3em')
     .padding('0.18em 0.25em 0.18em 0.55em')
-    .borderRadius(options.radii.sm)
+    .borderRadius(palette.radii.sm)
     .background(palette.current.surfaceAlt.rest.background)
     .color(palette.current.text.default)
     .apply(palette.applyFont(palette.font.size.xs, palette.font.weight.w600))
@@ -343,7 +336,7 @@ function registerMultiAutoCompleteInputStyles(
     .height('1.35em')
     .padding('0')
     .border('none')
-    .borderRadius(options.radii.sm)
+    .borderRadius(palette.radii.sm)
     .background('transparent')
     .color('currentColor')
     .cursor('pointer')
@@ -368,7 +361,7 @@ function registerMultiAutoCompleteInputStyles(
     .maxHeight('18rem')
     .overflow('auto')
     .padding('0.35em')
-    .borderRadius(options.radii.md)
+    .borderRadius(palette.radii.md)
     .border(`1px solid ${palette.current.border.default}`)
     .background(palette.current.surface.rest.background)
     .boxShadow(palette.effect.strongShadow)
@@ -381,7 +374,7 @@ function registerMultiAutoCompleteInputStyles(
 
   styleBuilder
     .select('.multi-auto-complete-input__option', theme)
-    .borderRadius(options.radii.sm)
+    .borderRadius(palette.radii.sm)
     .color(palette.current.text.default)
     .cursor('pointer')
     .transition('background 140ms ease, color 140ms ease')
@@ -467,16 +460,12 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .color(palette.current.text.subtle)
 }
 
-function registerFormStatusStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+function registerFormStatusStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.form-status', theme)
     .marginTop('0.25rem')
     .padding('0.5em 0.6em')
-    .borderRadius(options.radii.md)
+    .borderRadius(palette.radii.md)
     .apply(palette.applyFont(palette.font.size.sm))
 }
 

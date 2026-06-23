@@ -29,12 +29,6 @@ export interface ThemeOptions {
   remSize: string
   mobileRemSize: string
   colors: Record<ThemeMode, ThemePalette>
-  radii: {
-    sm: string
-    md: string
-    lg: string
-    pill: string
-  }
 }
 
 export type ThemeOptionsInput = DeepPartial<ThemeOptions> & {
@@ -47,12 +41,6 @@ export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
   mobileRemSize: '',
   colors: {
     ...DEFAULT_SKIN,
-  },
-  radii: {
-    sm: '0.375rem',
-    md: '0.5rem',
-    lg: '0.75rem',
-    pill: '62.4375rem',
   },
 }
 

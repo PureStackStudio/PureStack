@@ -122,6 +122,13 @@ export interface ThemeTypography {
   }
 }
 
+export interface ThemeRadii {
+  sm: string
+  md: string
+  lg: string
+  pill: string
+}
+
 export interface ThemePaletteCurrent {
   tone: string
   canvas: string
@@ -163,6 +170,7 @@ export interface ThemePalette {
   accent: string
   current: ThemePaletteCurrent
   font: ThemeTypography
+  radii: ThemeRadii
   applyFont: (
     fontSize: string,
     fontWeight?: CSSProps['fontWeight'],

@@ -217,7 +217,7 @@ function collectThemePaletteEntries(
   }
 
   for (const [key, child] of Object.entries(value)) {
-    if (isCurrentPaletteKey(path, key) || isFontPaletteKey(path, key)) continue
+    if (isSkippedThemePaletteKey(path, key)) continue
     collectThemePaletteEntries(child, [...path, key], entries)
   }
 }
@@ -278,7 +278,7 @@ function mapThemePaletteValue<T>(
 
   const out: Record<string, unknown> = {}
   for (const [key, child] of Object.entries(value as Record<string, unknown>)) {
-    if (isCurrentPaletteKey(path, key) || isFontPaletteKey(path, key)) {
+    if (isSkippedThemePaletteKey(path, key)) {
       out[key] = child
       continue
     }
@@ -291,8 +291,12 @@ function isCurrentPaletteKey(path: string[], key: string) {
   return path.length === 0 && key === 'current'
 }
 
-function isFontPaletteKey(path: string[], key: string) {
-  return path.length === 0 && key === 'font'
+function isSkippedThemePaletteKey(path: string[], key: string) {
+  return isCurrentPaletteKey(path, key) || isStaticPaletteKey(path, key)
+}
+
+function isStaticPaletteKey(path: string[], key: string) {
+  return path.length === 0 && (key === 'font' || key === 'radii')
 }
 
 function normalizePath(path: string | readonly string[]) {

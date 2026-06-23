@@ -4,7 +4,6 @@ import {
   mediaMax,
   styleBuilder,
   type ThemeMode,
-  type ThemeOptions,
   themes,
 } from '@purestack/ts-style'
 
@@ -14,16 +13,16 @@ export interface MarkdownStyleOptions {
 
 export function registerMarkdownStyles(options: MarkdownStyleOptions = {}) {
   const includeShikiStyles = options.includeShikiStyles !== false
-  themes.forEach((theme, palette, options) => {
+  themes.forEach((theme, palette) => {
     registerBaseProseStyles(theme, palette)
     registerHeadingStyles(theme, palette)
     registerListStyles(theme)
     registerLinkStyles(theme, palette)
-    registerCodeStyles(theme, palette, options, includeShikiStyles)
-    registerBlockquoteStyles(theme, palette, options)
-    registerTableStyles(theme, palette, options)
+    registerCodeStyles(theme, palette, includeShikiStyles)
+    registerBlockquoteStyles(theme, palette)
+    registerTableStyles(theme, palette)
     registerHrStyles(theme, palette)
-    registerMediaStyles(theme, palette, options)
+    registerMediaStyles(theme, palette)
   })
 }
 
@@ -97,21 +96,16 @@ function registerLinkStyles(theme: ThemeMode, palette: ThemePalette) {
 function registerCodeStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
   includeShikiStyles: boolean,
 ) {
-  registerInlineCodeStyles(theme, palette, options)
-  registerPreAndCopyButtonStyles(theme, palette, options)
+  registerInlineCodeStyles(theme, palette)
+  registerPreAndCopyButtonStyles(theme, palette)
   if (includeShikiStyles) {
     registerShikiStyles(theme)
   }
 }
 
-function registerInlineCodeStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+function registerInlineCodeStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.doc-content :where(code, pre)', theme)
     .fontFamily("'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace")
@@ -119,7 +113,7 @@ function registerInlineCodeStyles(
     .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
     .color(palette.semanticTone.neutral.surfaceAlt.rest.text)
     .border(`1px solid ${palette.current.border.default}`)
-    .borderRadius(options.radii.sm)
+    .borderRadius(palette.radii.sm)
     .margin('0')
     .marginBlockEnd('1rem')
     .overflowX('auto')
@@ -135,19 +129,14 @@ function registerInlineCodeStyles(
 function registerPreAndCopyButtonStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
-  registerCopyButtonBaseStyles(theme, palette, options)
+  registerCopyButtonBaseStyles(theme, palette)
   registerCopyButtonInteractionStyles(theme, palette)
   registerCopyButtonStateStyles(theme, palette)
   registerPreCodeResetStyles(theme)
 }
 
-function registerCopyButtonBaseStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+function registerCopyButtonBaseStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.doc-content :where(pre > .code-copy-button)', theme)
     .position('absolute')
@@ -162,7 +151,7 @@ function registerCopyButtonBaseStyles(
     .alignItems('center')
     .justifyContent('center')
     .borderWidth('1px')
-    .borderRadius(options.radii.sm)
+    .borderRadius(palette.radii.sm)
     .boxShadow(palette.effect.interactiveShadow)
     .cursor('pointer')
     .opacity(0)
@@ -260,11 +249,7 @@ function registerShikiStyles(theme: ThemeMode) {
     .border('none')
 }
 
-function registerBlockquoteStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+function registerBlockquoteStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.doc-content :where(blockquote)', theme)
     .margin('0 0 1.4em')
@@ -273,7 +258,7 @@ function registerBlockquoteStyles(
     .set('padding-inline-start', '0.5em')
     .background(palette.current.button.rest.background)
     .color(palette.current.button.rest.text)
-    .borderRadius(options.radii.sm)
+    .borderRadius(palette.radii.sm)
 
   styleBuilder
     .select('.doc-content blockquote :where(p)', theme)
@@ -281,25 +266,17 @@ function registerBlockquoteStyles(
     .padding('0')
 }
 
-function registerTableStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
-  registerTableContainerStyles(theme, palette, options)
+function registerTableStyles(theme: ThemeMode, palette: ThemePalette) {
+  registerTableContainerStyles(theme, palette)
   registerTableHeaderStyles(theme, palette)
-  registerTableBodyRowStyles(theme, options)
+  registerTableBodyRowStyles(theme, palette)
   registerTableCellStyles(theme, palette)
-  registerTableHeaderCellStyles(theme, options)
-  registerTableInlineCodeStyles(theme, palette, options)
+  registerTableHeaderCellStyles(theme, palette)
+  registerTableInlineCodeStyles(theme, palette)
   registerTableResponsiveStyles(theme)
 }
 
-function registerTableContainerStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+function registerTableContainerStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.doc-content :where(.table-scroll)', theme)
     .margin('0 0 1.4em')
@@ -307,7 +284,7 @@ function registerTableContainerStyles(
     .overflowX('auto')
     .background(palette.current.surface.rest.background)
     .border(`1px solid ${palette.current.border.default}`)
-    .borderRadius(options.radii.md)
+    .borderRadius(palette.radii.md)
     .boxShadow(palette.effect.panelShadow)
 
   styleBuilder
@@ -335,33 +312,33 @@ function registerTableHeaderStyles(theme: ThemeMode, palette: ThemePalette) {
 
 function registerTableHeaderCellStyles(
   theme: ThemeMode,
-  options: ThemeOptions,
+  palette: ThemePalette,
 ) {
   styleBuilder
     .select('.doc-content :where(thead th:first-child)', theme)
-    .borderTopLeftRadius(options.radii.md)
+    .borderTopLeftRadius(palette.radii.md)
 
   styleBuilder
     .select('.doc-content :where(thead th:last-child)', theme)
-    .borderTopRightRadius(options.radii.md)
+    .borderTopRightRadius(palette.radii.md)
 
   styleBuilder
     .select('.doc-content :where(thead th)', theme)
     .borderBottom('none')
 }
 
-function registerTableBodyRowStyles(theme: ThemeMode, options: ThemeOptions) {
+function registerTableBodyRowStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.doc-content :where(tbody tr:last-child td)', theme)
     .borderBottom('none')
 
   styleBuilder
     .select('.doc-content :where(tbody tr:last-child td:first-child)', theme)
-    .borderBottomLeftRadius(options.radii.md)
+    .borderBottomLeftRadius(palette.radii.md)
 
   styleBuilder
     .select('.doc-content :where(tbody tr:last-child td:last-child)', theme)
-    .borderBottomRightRadius(options.radii.md)
+    .borderBottomRightRadius(palette.radii.md)
 }
 
 function registerTableCellStyles(theme: ThemeMode, palette: ThemePalette) {
@@ -380,14 +357,13 @@ function registerTableCellStyles(theme: ThemeMode, palette: ThemePalette) {
 function registerTableInlineCodeStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
   styleBuilder
     .select('.doc-content :where(table code)', theme)
     .background(palette.semanticTone.neutral.surface.rest.background)
     .color(palette.semanticTone.neutral.surface.rest.text)
     .border(`1px solid ${palette.semanticTone.neutral.surface.rest.border}`)
-    .borderRadius(options.radii.pill)
+    .borderRadius(palette.radii.pill)
     .opacity(0.9)
 }
 
@@ -406,16 +382,12 @@ function registerHrStyles(theme: ThemeMode, palette: ThemePalette) {
     .margin('2em 0')
 }
 
-function registerMediaStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+function registerMediaStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.doc-content :where(img, video)', theme)
     .maxWidth('100%')
     .height('auto')
-    .borderRadius(options.radii.md)
+    .borderRadius(palette.radii.md)
     .border(`1px solid ${palette.current.border.subtle}`)
 
   styleBuilder.select('.doc-content :where(figure)', theme).margin('0 0 1.4em')

@@ -2,9 +2,9 @@ import type { ThemePalette } from '@purestack/ts-style'
 import { styleBuilder, type ThemeMode, themes } from '@purestack/ts-style'
 
 export function registerButtonStyles() {
-  themes.forEach((theme, palette, options) => {
+  themes.forEach((theme, palette) => {
     registerButtonBaseStyles(theme, palette)
-    registerButtonSizeStyles(theme, palette, options.radii)
+    registerButtonSizeStyles(theme, palette)
   })
 }
 
@@ -44,11 +44,7 @@ function registerButtonBaseStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder.select('.btn__icon', theme).width('1.1em').height('1.1em')
 }
 
-function registerButtonSizeStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  _radii: { sm: string; md: string; lg: string },
-) {
+function registerButtonSizeStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.btn--sm', theme)
     .apply(palette.applyFont(palette.font.size.xs, palette.font.weight.w500))

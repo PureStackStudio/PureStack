@@ -1,17 +1,12 @@
 import type { ThemePalette } from '@purestack/ts-style'
-import {
-  styleBuilder,
-  type ThemeMode,
-  type ThemeOptions,
-  themes,
-} from '@purestack/ts-style'
+import { styleBuilder, type ThemeMode, themes } from '@purestack/ts-style'
 
 const THEME_SWITCHER_THUMB_OFFSET = '2.125rem'
 
 export function registerThemeSwitcherStyles() {
-  themes.forEach((theme, palette, options) => {
-    registerThemeSwitcherShellStyles(theme, palette, options)
-    registerThemeSwitcherTrackStyles(theme, palette, options)
+  themes.forEach((theme, palette) => {
+    registerThemeSwitcherShellStyles(theme, palette)
+    registerThemeSwitcherTrackStyles(theme, palette)
     registerThemeSwitcherIconStyles(theme, palette)
     registerThemeSwitcherActiveStateStyles(theme)
   })
@@ -20,7 +15,6 @@ export function registerThemeSwitcherStyles() {
 export function registerThemeSwitcherShellStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
   styleBuilder
     .select('.theme-switcher', theme)
@@ -31,7 +25,7 @@ export function registerThemeSwitcherShellStyles(
     .height('2.625rem')
     .minWidth('5.625rem')
     .padding('0')
-    .borderRadius(options.radii.pill)
+    .borderRadius(palette.radii.pill)
     .border('1px solid transparent')
     .background(palette.current.button.rest.background)
     .borderColor(palette.current.button.rest.text)
@@ -52,12 +46,11 @@ export function registerThemeSwitcherShellStyles(
 export function registerThemeSwitcherTrackStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
   styleBuilder
     .select('.theme-switcher__track', theme)
     .position('absolute')
-    .borderRadius(options.radii.pill)
+    .borderRadius(palette.radii.pill)
     .background(palette.current.button.hover.background)
     .boxShadow(palette.effect.trackShadow)
     .transition('opacity 180ms ease, transform 220ms ease')

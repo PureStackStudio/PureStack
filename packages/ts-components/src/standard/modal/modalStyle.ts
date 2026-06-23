@@ -1,24 +1,15 @@
 import type { ThemePalette } from '@purestack/ts-style'
-import {
-  styleBuilder,
-  type ThemeMode,
-  type ThemeOptions,
-  themes,
-} from '@purestack/ts-style'
+import { styleBuilder, type ThemeMode, themes } from '@purestack/ts-style'
 
 export function registerModalStyles() {
-  themes.forEach((theme, palette, options) => {
-    registerModalShellStyles(theme, palette, options)
+  themes.forEach((theme, palette) => {
+    registerModalShellStyles(theme, palette)
     registerModalMotionStyles(theme)
     registerModalSizeStyles(theme)
   })
 }
 
-function registerModalShellStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+function registerModalShellStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.modal', theme)
     .position('fixed')
@@ -71,7 +62,7 @@ function registerModalShellStyles(
     .gap('1em')
     .minHeight('100%')
     .padding('1em')
-    .borderRadius(options.radii.lg)
+    .borderRadius(palette.radii.lg)
 
   styleBuilder
     .select('.modal__header', theme)

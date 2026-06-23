@@ -5,14 +5,13 @@ import {
   mediaAbove,
   styleBuilder,
   type ThemeMode,
-  type ThemeOptions,
   themes,
 } from '@purestack/ts-style'
 
 export function registerSearchBoxStyles() {
-  themes.forEach((theme, palette, options) => {
+  themes.forEach((theme, palette) => {
     registerSearchBoxShellStyles(theme)
-    registerSearchBoxResultStyles(theme, palette, options)
+    registerSearchBoxResultStyles(theme, palette)
   })
 }
 
@@ -47,18 +46,16 @@ function registerSearchBoxShellAccessibilityStyles(theme: ThemeMode) {
 export function registerSearchBoxResultStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
-  registerSearchBoxResultContainerStyles(theme, palette, options)
+  registerSearchBoxResultContainerStyles(theme, palette)
   registerSearchBoxResultTopBarOverlayStyles(theme)
-  registerSearchBoxResultListStyles(theme, palette, options)
-  registerSearchBoxResultContentStyles(theme, palette, options)
+  registerSearchBoxResultListStyles(theme, palette)
+  registerSearchBoxResultContentStyles(theme, palette)
 }
 
 function registerSearchBoxResultContainerStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
   styleBuilder
     .select('.site-search__results', theme)
@@ -69,7 +66,7 @@ function registerSearchBoxResultContainerStyles(
     .maxHeight('26.25rem')
     .overflow('auto')
     .padding('0.5rem')
-    .borderRadius(options.radii.lg)
+    .borderRadius(palette.radii.lg)
     .border(`1px solid ${palette.current.border.default}`)
     .background(palette.current.surface.rest.background)
     .boxShadow(palette.effect.strongShadow)
@@ -92,7 +89,6 @@ function registerSearchBoxResultTopBarOverlayStyles(theme: ThemeMode) {
 function registerSearchBoxResultListStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
   styleBuilder
     .select('.site-search__results ul.site-search__list', theme)
@@ -112,7 +108,7 @@ function registerSearchBoxResultListStyles(
     .display('grid')
     .gap('0.375rem')
     .padding('0.75rem 0.875rem')
-    .borderRadius(options.radii.md)
+    .borderRadius(palette.radii.md)
     .border(`1px solid ${palette.current.border.subtle}`)
     .background(palette.current.surface.rest.background)
     .textDecoration('none')
@@ -134,7 +130,6 @@ function registerSearchBoxResultListStyles(
 function registerSearchBoxResultContentStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
   styleBuilder
     .select('.site-search__results .site-search__title', theme)
@@ -166,7 +161,7 @@ function registerSearchBoxResultContentStyles(
     .select('.site-search__results .site-search__message', theme)
     .margin('0')
     .padding('0.625rem 0.75rem')
-    .borderRadius(options.radii.md)
+    .borderRadius(palette.radii.md)
     .border(`1px dashed ${palette.current.border.default}`)
     .background(palette.current.surface.rest.background)
     .color(palette.current.text.subtle)

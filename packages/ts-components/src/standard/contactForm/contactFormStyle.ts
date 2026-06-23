@@ -4,14 +4,13 @@ import {
   mediaMax,
   styleBuilder,
   type ThemeMode,
-  type ThemeOptions,
   themes,
 } from '@purestack/ts-style'
 
 export function registerContactFormStyles() {
-  themes.forEach((theme, palette, options) => {
-    registerContactFormShellStyles(theme, palette, options)
-    registerContactFormFieldStyles(theme, palette, options)
+  themes.forEach((theme, palette) => {
+    registerContactFormShellStyles(theme, palette)
+    registerContactFormFieldStyles(theme, palette)
     registerContactFormActionStyles(theme)
     registerContactFormResponsiveStyles(theme)
   })
@@ -20,7 +19,6 @@ export function registerContactFormStyles() {
 function registerContactFormShellStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
   styleBuilder
     .select('.contact-form', theme)
@@ -28,7 +26,7 @@ function registerContactFormShellStyles(
     .padding('1.125rem')
     .display('grid')
     .gap('0.875rem')
-    .borderRadius(options.radii.lg)
+    .borderRadius(palette.radii.lg)
     .background(palette.current.surface.rest.background)
     .border(`1px solid ${palette.current.border.default}`)
     .boxShadow(palette.effect.panelShadow)
@@ -58,7 +56,6 @@ function registerContactFormShellStyles(
 function registerContactFormFieldStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
   styleBuilder
     .select('.contact-form__field', theme)
@@ -76,7 +73,7 @@ function registerContactFormFieldStyles(
     )
     .width('100%')
     .padding('0.625rem 0.75rem')
-    .borderRadius(options.radii.md)
+    .borderRadius(palette.radii.md)
     .border(`1px solid ${palette.current.border.default}`)
     .background(palette.current.surfaceAlt.rest.background)
     .color(palette.current.text.default)

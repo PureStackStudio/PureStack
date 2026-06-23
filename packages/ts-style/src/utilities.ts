@@ -1,12 +1,6 @@
 import { getBreakpointNames } from './breakpoints'
 import { styleBuilder } from './styles'
-import {
-  BREAKPOINTS,
-  mediaMax,
-  mediaMin,
-  type ThemeOptions,
-  themes,
-} from './themeOptions'
+import { BREAKPOINTS, mediaMax, mediaMin, themes } from './themeOptions'
 import type { ThemePalette } from './themePalette'
 
 // Flex and grid utility classes live with their component styles:
@@ -50,14 +44,14 @@ const DISPLAY_UTILITIES = {
 } as const
 
 export function registerUtilityStyles() {
-  themes.forEach((theme, palette, options) => {
+  themes.forEach((theme, palette) => {
     applyMarginUtilities(theme)
     applyPaddingUtilities(theme)
     applyGapUtilities(theme)
     applyDisplayUtilities(theme)
     applyLayoutUtilities(theme)
     applyVisibilityUtilities(theme)
-    applyBorderUtilities(theme, palette, options.radii)
+    applyBorderUtilities(theme, palette, palette.radii)
     applyOpacityUtilities(theme)
     applyToneInsetSizeUtilities(theme)
     applyTextUtilities(theme, palette)
@@ -162,7 +156,7 @@ function applyVisibilityUtilities(theme: string) {
 function applyBorderUtilities(
   theme: string,
   palette: ThemePalette,
-  radii: ThemeOptions['radii'],
+  radii: ThemePalette['radii'],
 ) {
   applyBorderWidthUtilities(theme)
 

@@ -1,16 +1,16 @@
 import {
   styleBuilder,
   type ThemeMode,
-  type ThemeOptions,
+  type ThemePalette,
   themes,
 } from '@purestack/ts-style'
 
 export function registerSignInStyles() {
-  themes.forEach((theme, _palette, options) => {
+  themes.forEach((theme, palette) => {
     registerSignInDisclosureStyles(theme)
     registerSignInAuthStateStyles(theme)
     registerSignInPanelPlacementStyles(theme)
-    registerSignInAvatarStyles(theme, options)
+    registerSignInAvatarStyles(theme, palette)
   })
 }
 
@@ -61,10 +61,10 @@ function registerSignInPanelPlacementStyles(theme: ThemeMode) {
     .minWidth('11.25rem')
 }
 
-function registerSignInAvatarStyles(theme: ThemeMode, options: ThemeOptions) {
+function registerSignInAvatarStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.sign-in__avatar', theme)
     .display('block')
     .objectFit('cover')
-    .borderRadius(options.radii.pill)
+    .borderRadius(palette.radii.pill)
 }

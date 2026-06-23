@@ -7,30 +7,28 @@ import {
   mediaMax,
   styleBuilder,
   type ThemeMode,
-  type ThemeOptions,
   themes,
 } from '@purestack/ts-style'
 
 export function registerPageTocStyles() {
-  themes.forEach((theme, palette, options) => {
-    registerPageTocShellStyles(theme, palette, options)
+  themes.forEach((theme, palette) => {
+    registerPageTocShellStyles(theme, palette)
     registerPageTocLinkStyles(theme)
     registerPageTocTargetStyles(theme, palette)
-    registerPageTocLayoutStyles(theme, palette, options)
+    registerPageTocLayoutStyles(theme, palette)
   })
 }
 
 export function registerPageTocShellStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
   styleBuilder
     .select('.page-toc', theme)
     .display('block')
     .marginLeft(docLayoutVar('activeShellPaddingInlineEnd'))
     .padding('1em')
-    .borderRadius(options.radii.lg)
+    .borderRadius(palette.radii.lg)
     .border('1px solid transparent')
     .apply(palette.applyFont(palette.font.size.body))
     .maxHeight('calc(100vh - 8.125rem)')
@@ -56,7 +54,7 @@ export function registerPageTocShellStyles(
     .padding('0.25em')
     .background('transparent')
     .border('transparent')
-    .borderRadius(options.radii.md)
+    .borderRadius(palette.radii.md)
     .cursor('pointer')
     .transition('background 160ms ease, color 160ms ease')
     .apply(palette.applyFont(palette.font.size.xxxs))
@@ -138,11 +136,10 @@ export function registerPageTocTargetStyles(
 export function registerPageTocLayoutStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
   registerPageTocShellGridStyles(theme)
   registerPageTocSidebarBaseStyles(theme)
-  registerPageTocMobileOverlayStyles(theme, palette, options)
+  registerPageTocMobileOverlayStyles(theme, palette)
   registerPageTocDesktopCollapsedStyles(theme)
 }
 
@@ -220,7 +217,6 @@ function registerPageTocSidebarBaseStyles(theme: ThemeMode) {
 function registerPageTocMobileOverlayStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
   styleBuilder
     .select('.template-doc--has-toc .doc-toc', theme)
@@ -295,7 +291,7 @@ function registerPageTocMobileOverlayStyles(
     .apply(palette.applyFont(palette.font.size.xxxs, palette.font.weight.w700))
     .border(`1px solid ${palette.current.border.default}`)
     .borderLeft('none')
-    .borderRadius(`0 ${options.radii.md} ${options.radii.md} 0`)
+    .borderRadius(`0 ${palette.radii.md} ${palette.radii.md} 0`)
     .pointerEvents('auto')
     .zIndex(2)
     .userSelect('none')

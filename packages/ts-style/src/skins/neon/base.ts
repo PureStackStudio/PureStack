@@ -44,6 +44,12 @@ export function createNeonPalette({
     accent,
     current: getCurrentThemePalette(),
     font: createTypography(),
+    radii: {
+      sm: '0.375rem',
+      md: '0.5rem',
+      lg: '0.75rem',
+      pill: '62.4375rem',
+    },
     applyFont:
       (fontSize: string, fontWeight?: CSSProps['fontWeight']) => () => ({
         fontSize,

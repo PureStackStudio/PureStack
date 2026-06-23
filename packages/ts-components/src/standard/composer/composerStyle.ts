@@ -1,10 +1,5 @@
 import type { ThemePalette } from '@purestack/ts-style'
-import {
-  styleBuilder,
-  type ThemeMode,
-  type ThemeOptions,
-  themes,
-} from '@purestack/ts-style'
+import { styleBuilder, type ThemeMode, themes } from '@purestack/ts-style'
 import { registerComposerInitialCanvasStyles } from './composerCanvasInitialStyle'
 import { registerComposerRevertCanvasStyles } from './composerCanvasRevertStyle'
 import type { ComposerCanvasStyleOption } from './composerCanvasStyleTypes'
@@ -13,11 +8,11 @@ import { registerComposerThemeCanvasStyles } from './composerCanvasThemeStyle'
 const COMPOSER_CANVAS_STYLE: ComposerCanvasStyleOption = 'initial'
 
 export function registerComposerStyles() {
-  themes.forEach((theme, palette, options) => {
+  themes.forEach((theme, palette) => {
     registerComposerFieldStyles(theme, palette)
-    registerComposerShellStyles(theme, palette, options)
+    registerComposerShellStyles(theme, palette)
     registerComposerToolbarStyles(theme, palette)
-    registerComposerSurfaceStyles(theme, palette, options)
+    registerComposerSurfaceStyles(theme, palette)
   })
 }
 
@@ -30,18 +25,14 @@ function registerComposerFieldStyles(theme: ThemeMode, palette: ThemePalette) {
     .lineHeight('1')
 }
 
-function registerComposerShellStyles(
-  theme: ThemeMode,
-  palette: ThemePalette,
-  options: ThemeOptions,
-) {
+function registerComposerShellStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.composer', theme)
     .display('grid')
     .width('100%')
     .boxSizing('border-box')
     .overflow('hidden')
-    .borderRadius(options.radii.md)
+    .borderRadius(palette.radii.md)
     .transition('border-color 160ms ease, box-shadow 160ms ease')
 
   styleBuilder
@@ -111,7 +102,6 @@ function registerComposerToolbarStyles(
 function registerComposerSurfaceStyles(
   theme: ThemeMode,
   palette: ThemePalette,
-  options: ThemeOptions,
 ) {
   styleBuilder
     .select('.composer__surface', theme)
@@ -140,8 +130,8 @@ function registerComposerSurfaceStyles(
     .fontFamily('ui-monospace, SFMono-Regular, Menlo, Consolas, monospace')
     .background(palette.current.surface.rest.background)
     .borderTop(`1px solid ${palette.current.border.default}`)
-    .borderBottomLeftRadius(options.radii.md)
-    .borderBottomRightRadius(options.radii.md)
+    .borderBottomLeftRadius(palette.radii.md)
+    .borderBottomRightRadius(palette.radii.md)
 }
 
 function registerComposerCanvasStyles(theme: ThemeMode, palette: ThemePalette) {

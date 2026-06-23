@@ -1,12 +1,13 @@
-import { styleBuilder, type ThemeOptions, themes } from '@purestack/ts-style'
+import type { ThemePalette } from '@purestack/ts-style'
+import { styleBuilder, themes } from '@purestack/ts-style'
 
 export function registerIconStyles() {
-  themes.forEach((theme, _palette, options) => {
-    registerIconBaseStyles(theme, options)
+  themes.forEach((theme, palette) => {
+    registerIconBaseStyles(theme, palette)
   })
 }
 
-function registerIconBaseStyles(theme: string, options: ThemeOptions) {
+function registerIconBaseStyles(theme: string, palette: ThemePalette) {
   styleBuilder
     .select('.icon', theme)
     .display('inline-flex')
@@ -33,11 +34,11 @@ function registerIconBaseStyles(theme: string, options: ThemeOptions) {
     .justifyContent('center')
     .lineHeight('0')
     .flexShrink('0')
-    .borderRadius(options.radii.md)
+    .borderRadius(palette.radii.md)
 
   styleBuilder
     .select('.icon-frame--sm', theme)
-    .borderRadius(options.radii.sm)
+    .borderRadius(palette.radii.sm)
     .padding('0.5em')
     .fontSize('0.6em')
 
