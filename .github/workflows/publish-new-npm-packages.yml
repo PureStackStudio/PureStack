@@ -1,0 +1,56 @@
+name: Publish new npm packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_publish:
+        description: Type publish-new-packages to publish missing npm packages.
+        required: true
+        type: string
+      dry_run:
+        description: Check registry state without publishing.
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish-new:
+    if: inputs.confirm_publish == 'publish-new-packages'
+    runs-on: ubuntu-latest
+    environment: npm-publish
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build publish artifacts
+        run: yarn bundle
+
+      - name: Pack packages
+        run: yarn package
+
+      - name: Dry-run registry check
+        if: inputs.dry_run
+        run: yarn publish-new-packages
+
+      - name: Publish missing packages
+        if: ${{ !inputs.dry_run }}
+        run: yarn publish-new-packages --publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

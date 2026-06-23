@@ -80,6 +80,7 @@ From the repo root:
 - `yarn build`: build all non-private workspaces
 - `yarn lint`: lint all workspaces
 - `yarn bundle`: build and verify publishable package artifacts
+- `yarn publish-new-packages`: dry-run check for npm packages that do not exist yet
 - `yarn test`: run tests via Vitest
 - `yarn package`: create tarballs for all workspaces
 

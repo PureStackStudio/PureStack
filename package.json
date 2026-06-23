@@ -39,6 +39,7 @@
     "check-eol": "node scripts/check-eol.js",
     "bundle": "yarn tsx --no-warnings scripts/bundle.ts",
     "cleanup": "yarn tsx --no-warnings scripts/cleanup.ts",
+    "publish-new-packages": "yarn tsx --no-warnings scripts/publish-new-packages.ts",
     "test": "vitest",
     "package": "yarn workspaces foreach --no-private --all --parallel pack",
     "pack-vscode-ext": "yarn --cwd packages/ts-ssg-vscode build && yarn --cwd packages/ts-ssg-vscode package",
