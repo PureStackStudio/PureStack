@@ -186,9 +186,16 @@
           "additionalProperties": true,
           "properties": {
             "skin": {
-              "type": "string",
-              "enum": ["neon"],
-              "description": "Built-in skin name. Applies both light and dark palettes before any explicit theme token overrides."
+              "anyOf": [
+                {
+                  "type": "string",
+                  "enum": ["neon"]
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "description": "Registered theme skin name. Applies both light and dark palettes before any explicit theme token overrides."
             },
             "presets": {
               "type": "array",

@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
-import { builtInSkins } from '@purestack/ts-style'
+import { builtInSkins, themes } from '@purestack/ts-style'
 import { describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from './config'
 
@@ -630,6 +630,45 @@ describe('resolveSiteConfig sitemap', () => {
     const neon = builtInSkins.neon.create(presets)
     expect(config.style.theme.palette.light.accent).toBe(neon.light.accent)
     expect(config.style.theme.palette.dark.accent).toBe(neon.dark.accent)
+  })
+
+  it('applies registered theme skins with presets from siteConfig.json', () => {
+    const skinName = 'test-registered-skin'
+    themes.registerSkin(skinName, {
+      create: (presets) => {
+        const skin = builtInSkins.neon.create(presets)
+        const accent =
+          presets?.join('|') === 'site-a|site-b' ? '#123456' : '#654321'
+        return {
+          light: { ...skin.light, accent },
+          dark: { ...skin.dark, accent },
+        }
+      },
+    })
+
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'ts-ssg-config-'))
+    try {
+      const rootDir = path.join(tempRoot, 'repo-root')
+      const contentDir = path.join(rootDir, 'content')
+      fs.mkdirSync(contentDir, { recursive: true })
+      fs.writeFileSync(
+        path.join(contentDir, 'siteConfig.json'),
+        JSON.stringify({
+          style: {
+            theme: {
+              skin: skinName,
+              presets: ['site-a', 'site-b'],
+            },
+          },
+        }),
+      )
+
+      const config = resolveSiteConfig({ rootDir, contentDir })
+      expect(config.style.theme.palette.light.accent).toBe('#123456')
+      expect(config.style.theme.palette.dark.accent).toBe('#123456')
+    } finally {
+      fs.rmSync(tempRoot, { recursive: true, force: true })
+    }
   })
 
   it('throws when theme skin is unknown', () => {

@@ -8,6 +8,7 @@ export {
   type BuiltInSkinPair,
   type BuiltInSkins,
   builtInSkins,
+  registerSkin,
   type SkinPresetList,
 } from './skins'
 export * from './styles'
@@ -15,6 +16,7 @@ export * from './themeAssets'
 export * from './themeOptions'
 export type {
   ThemePalette,
+  ThemeRadii,
   ThemeTypography,
 } from './themePalette'
 export * from './themePaletteVars'

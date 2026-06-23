@@ -1,7 +1,9 @@
 import { type DeepPartial, merge } from '@purestack/ts-util'
 import {
+  type BuiltInSkin,
   type BuiltInSkinName,
   builtInSkins,
+  registerSkin,
   type SkinPresetList,
 } from './skins'
 import { normalizeThemeName, type ThemeName } from './themeAssets'
@@ -113,6 +115,7 @@ export interface Themes {
   readonly modes: readonly ThemeMode[]
   readonly defaults: ThemeOptions
   resolve: (...values: Array<ThemeOptionsInput | undefined>) => ThemeOptions
+  registerSkin: (name: string, skin: BuiltInSkin) => void
   setOptions: (options: ThemeOptions) => void
   getOptions: () => ThemeOptions
   palette: (theme: ThemeName) => ThemePalette
@@ -130,6 +133,7 @@ export const themes: Themes = {
   modes: THEME_MODES,
   defaults: DEFAULT_THEME_OPTIONS,
   resolve: (...values) => resolveThemeOptions(...values),
+  registerSkin: (name, skin) => registerSkin(name, skin),
   setOptions: (options) => setThemeOptions(options),
   getOptions: () => getThemeOptions(),
   palette: (theme) => getThemePalette(theme),
