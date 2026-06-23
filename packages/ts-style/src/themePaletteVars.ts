@@ -29,6 +29,8 @@ const EFFECT_PROPS = [
   'glowPrimary',
   'glowSecondary',
   'floatingShadow',
+  'softShadow',
+  'strongShadow',
   'panelShadow',
   'panelShadowStrong',
   'accentShadow',

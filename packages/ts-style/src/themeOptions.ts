@@ -35,13 +35,6 @@ export interface ThemeOptions {
     lg: string
     pill: string
   }
-  typography: {
-    baseFamily: string
-  }
-  shadows: {
-    soft: string
-    strong: string
-  }
 }
 
 export type ThemeOptionsInput = DeepPartial<ThemeOptions> & {
@@ -60,13 +53,6 @@ export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
     md: '0.5rem',
     lg: '0.75rem',
     pill: '62.4375rem',
-  },
-  typography: {
-    baseFamily: "'Manrope', 'Segoe UI', system-ui, sans-serif",
-  },
-  shadows: {
-    soft: '0 0.625rem 1.125rem rgba(0, 0, 0, 0.18)',
-    strong: '0 1.25rem 2.5rem rgba(0, 0, 0, 0.4)',
   },
 }
 

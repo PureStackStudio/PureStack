@@ -72,7 +72,7 @@ function registerSearchBoxResultContainerStyles(
     .borderRadius(options.radii.lg)
     .border(`1px solid ${palette.current.border.default}`)
     .background(palette.current.surface.rest.background)
-    .boxShadow(options.shadows.strong)
+    .boxShadow(palette.effect.strongShadow)
     .zIndex('60')
 }
 

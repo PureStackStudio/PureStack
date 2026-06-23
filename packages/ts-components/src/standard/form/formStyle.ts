@@ -204,7 +204,7 @@ function registerAutoCompleteInputStyles(
     .borderRadius(options.radii.md)
     .border(`1px solid ${palette.current.border.default}`)
     .background(palette.current.surface.rest.background)
-    .boxShadow(options.shadows.strong)
+    .boxShadow(palette.effect.strongShadow)
     .zIndex('70')
 
   styleBuilder
@@ -371,7 +371,7 @@ function registerMultiAutoCompleteInputStyles(
     .borderRadius(options.radii.md)
     .border(`1px solid ${palette.current.border.default}`)
     .background(palette.current.surface.rest.background)
-    .boxShadow(options.shadows.strong)
+    .boxShadow(palette.effect.strongShadow)
     .zIndex('70')
 
   styleBuilder

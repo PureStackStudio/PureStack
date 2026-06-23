@@ -26,7 +26,7 @@ function registerTabsShellStyles(
     .gap('0.6em')
     .alignContent('start')
     .padding('1em')
-    .boxShadow(options.shadows.soft)
+    .boxShadow(palette.effect.softShadow)
 
   styleBuilder
     .select('.tabs__list', theme)
@@ -82,7 +82,7 @@ function registerTabsShellStyles(
     .padding('0.375rem')
     .borderRadius(options.radii.md)
     .border('1px solid transparent')
-    .boxShadow(options.shadows.soft)
+    .boxShadow(palette.effect.softShadow)
 
   styleBuilder
     .select('.tabs__overflow--open .tabs__overflow-menu', theme)

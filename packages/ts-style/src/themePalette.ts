@@ -96,6 +96,9 @@ export interface SemanticToneTokens {
 }
 
 export interface ThemeTypography {
+  family: {
+    base: string
+  }
   size: {
     xxxs: string
     xxs: string
@@ -183,6 +186,10 @@ export interface ThemePalette {
     glowSecondary: string
     /** Floating element shadow (cards/media blocks). */
     floatingShadow: string
+    /** Soft shadow migrated from the former theme options shadow token. */
+    softShadow: string
+    /** Strong shadow migrated from the former theme options shadow token. */
+    strongShadow: string
     /** Default panel shadow. */
     panelShadow: string
     /** Stronger panel shadow for featured cards. */

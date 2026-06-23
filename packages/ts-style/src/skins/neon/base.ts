@@ -156,7 +156,9 @@ function createEffect(core: NeonCore, mode: ThemeMode) {
     glowPrimary: `0 0 1.75rem ${rgba(accent.level3, 0.22)}`,
     glowSecondary: `0 0 1.75rem ${rgba(info.level3, 0.18)}`,
     floatingShadow: `0 0.5625rem 1.4375rem ${rgba(shadowColor, 0.24)}`,
-    panelShadow: `0 0.4375rem 0.8125rem  ${rgba(shadowColor, 0.07)}`,
+    softShadow: '0 0.625rem 1.125rem rgba(0, 0, 0, 0.18)',
+    strongShadow: '0 1.25rem 2.5rem rgba(0, 0, 0, 0.4)',
+    panelShadow: `0 0.4375rem 0.8125rem ${rgba(shadowColor, 0.07)}`,
     panelShadowStrong: `0 0.4375rem 0.8125rem ${rgba(shadowColor, 0.07)}`,
     accentShadow: `0 1rem 3rem ${rgba(accent.level3, 0.22)}`,
     interactiveShadow: `0 0.375rem 0.875rem ${rgba(shadowColor, 0.12)}`,
@@ -171,6 +173,9 @@ function createEffect(core: NeonCore, mode: ThemeMode) {
 
 function createTypography(): ThemeTypography {
   return {
+    family: {
+      base: "'Manrope', 'Segoe UI', system-ui, sans-serif",
+    },
     size: {
       xxxs: '0.72rem',
       xxs: '0.85rem',

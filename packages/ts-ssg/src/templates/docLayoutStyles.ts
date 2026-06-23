@@ -26,8 +26,8 @@ export function registerDocLayoutStyles() {
         .fontSize(options.mobileRemSize)
     }
     registerDocLayoutShellStyles(theme, palette, options)
-    registerDocLayoutSidebarStyles(theme, options)
-    registerDocLayoutResponsiveStyles(theme, options)
+    registerDocLayoutSidebarStyles(theme, palette)
+    registerDocLayoutResponsiveStyles(theme, palette)
   })
 }
 
@@ -42,7 +42,7 @@ function registerDocLayoutShellStyles(
     .display('flex')
     .flexDirection('column')
     .minHeight('100dvh')
-    .fontFamily(options.typography.baseFamily)
+    .fontFamily(palette.font.family.base)
     .background(palette.semanticTone.neutral.canvas)
     .color(palette.current.text.default)
     .set(docLayoutVars.defaultNavWidth, docLayoutDefaults.defaultNavWidth)
@@ -191,7 +191,7 @@ function registerDocLayoutShellStyles(
 
 function registerDocLayoutSidebarStyles(
   theme: ThemeMode,
-  options: ThemeOptions,
+  palette: ThemePalette,
 ) {
   styleBuilder
     .select('.doc-sidebar', theme) // sync this with '.doc-toc' to get same behavior on both sides.
@@ -217,7 +217,7 @@ function registerDocLayoutSidebarStyles(
     .transform('translateX(120%)')
     .zIndex(40)
     .overflow('auto')
-    .boxShadow(options.shadows.strong)
+    .boxShadow(palette.effect.strongShadow)
   styleBuilder
     .select(
       '.template-doc.template-doc--nav-ready.template-doc--nav-drawer .doc-sidebar',
@@ -228,7 +228,7 @@ function registerDocLayoutSidebarStyles(
 
 function registerDocLayoutResponsiveStyles(
   theme: ThemeMode,
-  options: ThemeOptions,
+  palette: ThemePalette,
 ) {
   styleBuilder
     .select('.doc-shell', theme)
@@ -287,7 +287,7 @@ function registerDocLayoutResponsiveStyles(
     .overflow('hidden')
     .transform('translateX(120%)')
     .zIndex(50)
-    .boxShadow(options.shadows.strong)
+    .boxShadow(palette.effect.strongShadow)
   styleBuilder
     .select(
       '.template-doc--nav-drawer .doc-sidebar, .template-doc--has-nav:not(.template-doc--nav-drawer) .doc-sidebar',

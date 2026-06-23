@@ -60,7 +60,7 @@ function registerModalShellStyles(
     .maxHeight('min(86vh, 56.25rem)')
     .overflow('auto')
     .background(palette.current.canvas)
-    .boxShadow(options.shadows.soft)
+    .boxShadow(palette.effect.softShadow)
     .color(palette.current.text.default)
     .transform('translate3d(0, 0, 0)')
     .opacity('1')
