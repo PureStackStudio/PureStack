@@ -55,7 +55,7 @@ const bestColors = {
     secondary: '#6d2727',
   },
 }
-export type NeonColors = (typeof bestColors)['puregate']
+export type NeonColors = (typeof bestColors)['standardBlue']
 
 export const feature = '#cb166e'
 export const custom = '#e35508'

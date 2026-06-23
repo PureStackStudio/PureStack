@@ -24,7 +24,8 @@
     "themes": ["light", "dark"],
     "pretty": false,
     "theme": {
-      "skin": "neon"
+      "skin": "neon",
+      "presets": ["red"]
     }
   },
   "html": {
