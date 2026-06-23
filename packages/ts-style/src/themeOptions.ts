@@ -1,10 +1,10 @@
 import { type DeepPartial, merge } from '@purestack/ts-util'
 import {
-  type BuiltInSkin,
-  type BuiltInSkinName,
-  builtInSkins,
   registerSkin,
   type SkinPresetList,
+  type ThemeSkin,
+  type ThemeSkinName,
+  themeSkins,
 } from './skins'
 import { normalizeThemeName, type ThemeName } from './themeAssets'
 import type { ThemePalette } from './themePalette'
@@ -23,7 +23,7 @@ export {
   mediaMin,
 } from './breakpoints'
 
-const DEFAULT_SKIN = builtInSkins.neon.create()
+const DEFAULT_SKIN = themeSkins.neon.create()
 export const THEME_MODES = ['light', 'dark'] as const
 export type ThemeMode = (typeof THEME_MODES)[number]
 
@@ -34,7 +34,7 @@ export interface ThemeOptions {
 }
 
 export type ThemeOptionsInput = DeepPartial<ThemeOptions> & {
-  skin?: BuiltInSkinName
+  skin?: ThemeSkinName
   presets?: SkinPresetList
 }
 
@@ -58,7 +58,7 @@ function resolveThemeOptions(
     const skin = resolveSkinName(value.skin)
     if (skin) {
       merged = mergeThemeOptions(merged, {
-        palette: builtInSkins[skin].create(resolveSkinPresets(value.presets)),
+        palette: themeSkins[skin].create(resolveSkinPresets(value.presets)),
       })
     }
     merged = mergeThemeOptions(merged, omitSkin(value))
@@ -115,7 +115,7 @@ export interface Themes {
   readonly modes: readonly ThemeMode[]
   readonly defaults: ThemeOptions
   resolve: (...values: Array<ThemeOptionsInput | undefined>) => ThemeOptions
-  registerSkin: (name: string, skin: BuiltInSkin) => void
+  registerSkin: (name: ThemeSkinName, skin: ThemeSkin) => void
   setOptions: (options: ThemeOptions) => void
   getOptions: () => ThemeOptions
   palette: (theme: ThemeName) => ThemePalette
@@ -154,12 +154,12 @@ function omitSkin(input: ThemeOptionsInput): ThemeOptionsInput {
   return rest
 }
 
-function resolveSkinName(value: unknown): BuiltInSkinName | undefined {
+function resolveSkinName(value: unknown): ThemeSkinName | undefined {
   if (typeof value !== 'string') return undefined
-  const skin = value.trim() as BuiltInSkinName
-  if (skin in builtInSkins) return skin
+  const skin = value.trim() as ThemeSkinName
+  if (skin in themeSkins) return skin
   throw new Error(
-    `Unknown theme skin "${value}". Expected one of: ${Object.keys(builtInSkins).join(', ')}.`,
+    `Unknown theme skin "${value}". Expected one of: ${Object.keys(themeSkins).join(', ')}.`,
   )
 }
 

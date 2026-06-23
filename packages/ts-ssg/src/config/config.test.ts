@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
-import { builtInSkins, themes } from '@purestack/ts-style'
+import { themes, themeSkins } from '@purestack/ts-style'
 import { describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from './config'
 
@@ -54,7 +54,7 @@ describe('resolveSiteConfig sitemap', () => {
       )
 
       const config = resolveSiteConfig({ rootDir, contentDir })
-      const neon = builtInSkins.neon.create()
+      const neon = themeSkins.neon.create()
       expect(config.style.theme.palette.light.accent).toBe(neon.light.accent)
       expect(config.style.theme.palette.dark.accent).toBe(neon.dark.accent)
     } finally {
@@ -611,7 +611,7 @@ describe('resolveSiteConfig sitemap', () => {
         },
       },
     })
-    const neon = builtInSkins.neon.create()
+    const neon = themeSkins.neon.create()
     expect(config.style.theme.palette.light.accent).toBe(neon.light.accent)
     expect(config.style.theme.palette.dark.accent).toBe(neon.dark.accent)
   })
@@ -627,7 +627,7 @@ describe('resolveSiteConfig sitemap', () => {
         },
       },
     })
-    const neon = builtInSkins.neon.create(presets)
+    const neon = themeSkins.neon.create(presets)
     expect(config.style.theme.palette.light.accent).toBe(neon.light.accent)
     expect(config.style.theme.palette.dark.accent).toBe(neon.dark.accent)
   })
@@ -636,7 +636,7 @@ describe('resolveSiteConfig sitemap', () => {
     const skinName = 'test-registered-skin'
     themes.registerSkin(skinName, {
       create: (presets) => {
-        const skin = builtInSkins.neon.create(presets)
+        const skin = themeSkins.neon.create(presets)
         const accent =
           presets?.join('|') === 'site-a|site-b' ? '#123456' : '#654321'
         return {

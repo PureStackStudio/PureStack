@@ -2,21 +2,21 @@ import type { ThemePalette } from '../themePalette'
 import { createNeonDark } from './neon/dark'
 import { createNeonLight } from './neon/light'
 
-export type BuiltInSkinName = string
+export type ThemeSkinName = string
 export type SkinPresetList = readonly string[]
 
-export interface BuiltInSkinPair {
+export interface ThemeSkinPair {
   light: ThemePalette
   dark: ThemePalette
 }
 
-export interface BuiltInSkin {
-  create: (presets?: SkinPresetList) => BuiltInSkinPair
+export interface ThemeSkin {
+  create: (presets?: SkinPresetList) => ThemeSkinPair
 }
 
-export type BuiltInSkins = Record<string, BuiltInSkin>
+export type ThemeSkinRegistry = Record<ThemeSkinName, ThemeSkin>
 
-export const builtInSkins: BuiltInSkins = {
+export const themeSkins: ThemeSkinRegistry = {
   neon: {
     create: (presets) => ({
       light: createNeonLight(presets),
@@ -25,6 +25,6 @@ export const builtInSkins: BuiltInSkins = {
   },
 }
 
-export function registerSkin(name: string, skin: BuiltInSkin) {
-  builtInSkins[name] = skin
+export function registerSkin(name: ThemeSkinName, skin: ThemeSkin) {
+  themeSkins[name] = skin
 }
