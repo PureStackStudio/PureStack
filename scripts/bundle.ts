@@ -347,7 +347,11 @@ async function bundlePackage(pkg: PublishPackage) {
           outDir: pkg.distDir,
           outExtensions: () => ({ js: '.mjs', dts: '.d.mts' }),
           logLevel: 'silent',
-          plugins: [replaceVersion(pkg.packageJson.version), addBanner(banner)],
+          plugins: [
+            replaceVersion(pkg.packageJson.version),
+            inlineStaticRegorTemplates(),
+            addBanner(banner),
+          ],
         }
         await build(opts)
       },
@@ -397,6 +401,24 @@ function replaceVersion(version: string) {
           /\bversion = PURESTACK_VERSION\b/g,
           `version = ${JSON.stringify(version)}`,
         ),
+        map: null,
+      }
+    },
+  }
+}
+
+function inlineStaticRegorTemplates() {
+  return {
+    name: 'inline-static-regor-templates',
+    transform(code: string, id: string) {
+      const normalizedId = id.replaceAll('\\', '/')
+      if (!normalizedId.includes('/packages/ts-components/src/')) return null
+
+      const nextCode = code.replace(/(?<![\w$.])(?:html|svg)\s*`/g, '`')
+
+      if (nextCode === code) return null
+      return {
+        code: nextCode,
         map: null,
       }
     },
