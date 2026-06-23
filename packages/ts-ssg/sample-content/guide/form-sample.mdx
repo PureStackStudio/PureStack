@@ -119,19 +119,27 @@ nav:
     These settings affect login behavior, session lifetime, and recovery flow.
   </AlertBox>
 
-  <FormCheck
-    label="Require multi-factor authentication for administrators"
-    name="requireMfa"
-    value="yes"
-    checked="true"/>
-  <FormCheck
-    label="Notify security team on suspicious sign-ins"
-    name="notifySecurity"
-    value="yes"/>
-  <FormCheck
-    label="I confirm the rollback plan has been documented"
-    name="rollbackConfirmed"
-    value="yes"/>
+  <Grid columns="1" columnsMd="2" alignItems="start">
+    <FormCheck
+      label="Require multi-factor authentication for administrators"
+      name="requireMfa"
+      value="yes"
+      checked="true"/>
+    <FormCheck
+      label="Notify security team on suspicious sign-ins"
+      name="notifySecurity"
+      value="yes"/>
+    <FormCheck
+      label="I confirm the rollback plan has been documented and owners can act within the required response window"
+      name="rollbackConfirmed"
+      value="yes"/>
+    <FormCheck
+      label="Legacy password-only sign-ins are locked by policy"
+      name="legacyPasswordOnly"
+      value="yes"
+      checked="true"
+      disabled="true"/>
+  </Grid>
 
   <FormSubmit label="Save policy" tone="warning"/>
 </AppForm>
@@ -580,7 +588,15 @@ nav:
     iconEnd="iconoir:search"
   />
 
-  <FormCheck label="Accept terms" name="terms" value="yes" checked="true|false" />
+  <FormCheck
+    id="terms"
+    label="Accept terms"
+    name="terms"
+    value="yes"
+    checked="true|false"
+    disabled="true|false"
+    tone="optional override"
+  />
   <FormAssistLink href="/help" label="Need help?" />
   <FormDivider label="Optional section" />
   <FormStatus tone="info|success|warning|danger|accent|neutral|ghost">

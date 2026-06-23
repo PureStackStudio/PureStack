@@ -423,16 +423,104 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .gap('0.625rem')
   styleBuilder
     .select('.form-block__check', theme)
-    .display('inline-flex')
-    .alignItems('center')
-    .gap('0.5em')
+    .position('relative')
+    .display('grid')
+    .gridTemplateColumns('auto minmax(0, 1fr)')
+    .alignItems('start')
+    .gap('0.65em')
+    .padding('0.45em 0.55em')
+    .borderRadius(palette.radii.md)
     .apply(palette.applyFont(palette.font.size.xxs))
     .color(palette.current.tone)
+    .cursor('pointer')
+    .transition('background 150ms ease, color 150ms ease, opacity 150ms ease')
   styleBuilder
-    .select('.form-block__check input', theme)
-    .width('1.5em')
-    .height('1.5em')
-    .accentColor(palette.current.tone)
+    .select('.form-block__check:hover', theme)
+    .background(palette.current.surfaceAlt.hover.background)
+    .color(palette.current.surfaceAlt.hover.text)
+  styleBuilder
+    .select('.form-block__check:has(.form-block__check-input:disabled)', theme)
+    .cursor('not-allowed')
+    .opacity('0.62')
+  styleBuilder
+    .select(
+      '.form-block__check:has(.form-block__check-input:disabled):hover',
+      theme,
+    )
+    .background('transparent')
+  styleBuilder
+    .select('.form-block__check-input', theme)
+    .position('absolute')
+    .width('1px')
+    .height('1px')
+    .margin('0')
+    .opacity('0')
+    .pointerEvents('none')
+  styleBuilder
+    .select('.form-block__check-control', theme)
+    .position('relative')
+    .display('grid')
+    .placeItems('center')
+    .width('1.35em')
+    .height('1.35em')
+    .boxSizing('border-box')
+    .border(`1px solid ${palette.current.border.default}`)
+    .borderRadius(palette.radii.sm)
+    .background(palette.current.surfaceAlt.rest.background)
+    .color(palette.current.button.rest.text)
+    .boxShadow('inset 0 1px 0 rgba(255, 255, 255, 0.08)')
+    .transition(
+      'background 150ms ease, border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease',
+    )
+  styleBuilder
+    .select('.form-block__check-control::after', theme)
+    .content('""')
+    .width('0.38em')
+    .height('0.68em')
+    .border('solid currentColor')
+    .borderWidth('0 0.16em 0.16em 0')
+    .opacity('0')
+    .transform('translateY(-0.08em) rotate(45deg) scale(0.72)')
+    .transition('opacity 120ms ease, transform 150ms ease')
+  styleBuilder
+    .select(
+      '.form-block__check-input:focus-visible + .form-block__check-control',
+      theme,
+    )
+    .outline('none')
+    .borderColor(palette.current.border.default)
+    .boxShadow(`0 0 0 3px ${palette.current.border.focus}`)
+  styleBuilder
+    .select(
+      '.form-block__check-input:active + .form-block__check-control',
+      theme,
+    )
+    .transform('scale(0.96)')
+  styleBuilder
+    .select(
+      '.form-block__check-input:checked + .form-block__check-control',
+      theme,
+    )
+    .borderColor(palette.current.button.rest.border)
+    .background(palette.current.button.rest.background)
+    .boxShadow('none')
+  styleBuilder
+    .select(
+      '.form-block__check-input:checked + .form-block__check-control::after',
+      theme,
+    )
+    .opacity('1')
+    .transform('translateY(-0.08em) rotate(45deg) scale(1)')
+  styleBuilder
+    .select(
+      '.form-block__check-input:disabled + .form-block__check-control',
+      theme,
+    )
+    .boxShadow('none')
+  styleBuilder
+    .select('.form-block__check-label', theme)
+    .minWidth('0')
+    .lineHeight('1.35')
   styleBuilder
     .select('.form-block__assist-link', theme)
     .apply(palette.applyFont(palette.font.size.xxs, palette.font.weight.w700))
