@@ -14,6 +14,7 @@ export function registerFormStyles() {
     registerAutoCompleteInputStyles(theme, palette)
     registerMultiAutoCompleteInputStyles(theme, palette)
     registerFormMetaStyles(theme, palette)
+    registerFormCheckStyles(theme, palette)
     registerFormStatusStyles(theme, palette)
     registerFormResponsiveStyles(theme)
     registerFormSelectFieldStyles(theme, palette)
@@ -422,6 +423,34 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .justifyContent('space-between')
     .gap('0.625rem')
   styleBuilder
+    .select('.form-block__assist-link', theme)
+    .apply(palette.applyFont(palette.font.size.xxs, palette.font.weight.w700))
+    .textDecoration('none')
+    .color(palette.current.tone)
+  styleBuilder
+    .select('.form-block__assist-link:hover', theme)
+    .textDecoration('underline')
+  styleBuilder
+    .select('.form-block__divider', theme)
+    .position('relative')
+    .height('1px')
+    .background(palette.current.border.default)
+    .margin('0.125rem 0')
+  styleBuilder
+    .select('.form-block__divider::after', theme)
+    .content('attr(data-label)')
+    .position('absolute')
+    .left('50%')
+    .top('50%')
+    .transform('translate(-50%, -50%)')
+    .padding('0 0.5em')
+    .apply(palette.applyFont(palette.font.size.xxxs, palette.font.weight.w700))
+    .background(palette.current.surfaceAlt.rest.background)
+    .color(palette.current.text.subtle)
+}
+
+function registerFormCheckStyles(theme: ThemeMode, palette: ThemePalette) {
+  styleBuilder
     .select('.form-block__check', theme)
     .position('relative')
     .display('grid')
@@ -442,12 +471,6 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .select('.form-block__check:has(.form-block__check-input:disabled)', theme)
     .cursor('not-allowed')
     .opacity('0.62')
-  styleBuilder
-    .select(
-      '.form-block__check:has(.form-block__check-input:disabled):hover',
-      theme,
-    )
-    .background('transparent')
   styleBuilder
     .select('.form-block__check-input', theme)
     .position('absolute')
@@ -521,31 +544,6 @@ function registerFormMetaStyles(theme: ThemeMode, palette: ThemePalette) {
     .select('.form-block__check-label', theme)
     .minWidth('0')
     .lineHeight('1.35')
-  styleBuilder
-    .select('.form-block__assist-link', theme)
-    .apply(palette.applyFont(palette.font.size.xxs, palette.font.weight.w700))
-    .textDecoration('none')
-    .color(palette.current.tone)
-  styleBuilder
-    .select('.form-block__assist-link:hover', theme)
-    .textDecoration('underline')
-  styleBuilder
-    .select('.form-block__divider', theme)
-    .position('relative')
-    .height('1px')
-    .background(palette.current.border.default)
-    .margin('0.125rem 0')
-  styleBuilder
-    .select('.form-block__divider::after', theme)
-    .content('attr(data-label)')
-    .position('absolute')
-    .left('50%')
-    .top('50%')
-    .transform('translate(-50%, -50%)')
-    .padding('0 0.5em')
-    .apply(palette.applyFont(palette.font.size.xxxs, palette.font.weight.w700))
-    .background(palette.current.surfaceAlt.rest.background)
-    .color(palette.current.text.subtle)
 }
 
 function registerFormStatusStyles(theme: ThemeMode, palette: ThemePalette) {

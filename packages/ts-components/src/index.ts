@@ -98,13 +98,14 @@ export { defineAutoCompleteInputComponents } from './standard/form/autoCompleteI
 export type {
   AppForm,
   FormAssistLink,
-  FormCheck,
   FormDivider,
   FormMeta,
   FormStatus,
   FormSubmit,
 } from './standard/form/form'
 export { defineFormComponents } from './standard/form/form'
+export type { FormCheck } from './standard/form/formCheck'
+export { defineFormCheckComponent } from './standard/form/formCheck'
 export type { FormInputField } from './standard/form/formInputField'
 export { defineFormInputField } from './standard/form/formInputField'
 export type {
