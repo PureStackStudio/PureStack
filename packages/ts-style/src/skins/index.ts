@@ -1,6 +1,6 @@
 import type { ThemePalette } from '../themePalette'
-import { createNeonDark } from './neon/dark'
-import { createNeonLight } from './neon/light'
+import { createNeonDark } from './standard/dark'
+import { createNeonLight } from './standard/light'
 
 export type ThemeSkinName = string
 export type SkinPresetList = readonly string[]
