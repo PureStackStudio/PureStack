@@ -1,5 +1,5 @@
 import type { ThemeMode } from '../../themeOptions'
-import { createNeonPalette, type NeonCore } from './base'
+import { createStandardPalette, type StandardCore } from './base'
 import {
   createColorScale,
   createToneColors,
@@ -7,9 +7,9 @@ import {
   type DeltaToneColors,
   danger,
   feature,
-  getNeonColors,
+  getStandardColors,
   info,
-  type NeonColors,
+  type StandardColors,
   success,
   warning,
 } from './dark'
@@ -30,10 +30,10 @@ function applyDeltaPresets(
   }
 }
 
-function createNeonLightCore(
-  colors: NeonColors,
+function createStandardLightCore(
+  colors: StandardColors,
   presets: readonly string[] | undefined,
-): NeonCore {
+): StandardCore {
   const delta: DeltaToneColors = {
     canvas: -5,
     button: 0,
@@ -79,11 +79,11 @@ function createNeonLightCore(
   }
 }
 
-export function createNeonLight(presets?: readonly string[]) {
-  const colors = getNeonColors(presets)
-  return createNeonPalette({
+export function createStandardLight(presets?: readonly string[]) {
+  const colors = getStandardColors(presets)
+  return createStandardPalette({
     mode: 'light',
-    core: createNeonLightCore(colors, presets),
+    core: createStandardLightCore(colors, presets),
     accent: colors.accent,
     chromeLighting: 0.33,
     borderAlpha: 1,

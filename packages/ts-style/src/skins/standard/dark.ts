@@ -1,6 +1,6 @@
 import { getColors } from '@purestack/ts-css'
 import type { ThemeMode } from '../../themeOptions'
-import { createNeonPalette, type NeonCore } from './base'
+import { createStandardPalette, type StandardCore } from './base'
 import type { ToneColors } from './shared'
 
 const bestColors = {
@@ -40,9 +40,9 @@ const bestColors = {
     secondary: '#546f26',
   },
   pink: {
-    accent: '#21c2d7',
-    neutral: '#2c7c36',
-    secondary: '#741033',
+    accent: '#ac21d7',
+    neutral: '#302534',
+    secondary: '#d72194',
   },
   puregate: {
     accent: '#de6310',
@@ -55,7 +55,7 @@ const bestColors = {
     secondary: '#6d2727',
   },
 }
-export type NeonColors = (typeof bestColors)['standardBlue']
+export type StandardColors = (typeof bestColors)['standardBlue']
 
 export const feature = '#cb166e'
 export const custom = '#e35508'
@@ -111,8 +111,8 @@ export function createToneColors(
   }
 }
 
-export function getNeonColors(presets?: readonly string[]): NeonColors {
-  let colors: NeonColors | undefined
+export function getStandardColors(presets?: readonly string[]): StandardColors {
+  let colors: StandardColors | undefined
   for (const preset of presets ?? []) {
     colors = bestColors[preset as keyof typeof bestColors] ?? colors
   }
@@ -130,10 +130,10 @@ function applyDeltaPresets(
   }
 }
 
-function createNeonDarkCore(
-  colors: NeonColors,
+function createStandardDarkCore(
+  colors: StandardColors,
   presets: readonly string[] | undefined,
-): NeonCore {
+): StandardCore {
   applyDeltaPresets(presets, delta)
   const accentScale = createColorScale(colors.accent, mode)
   const neutralScale = createColorScale(colors.neutral, mode)
@@ -163,11 +163,11 @@ function createNeonDarkCore(
   }
 }
 
-export function createNeonDark(presets?: readonly string[]) {
-  const colors = getNeonColors(presets)
-  return createNeonPalette({
+export function createStandardDark(presets?: readonly string[]) {
+  const colors = getStandardColors(presets)
+  return createStandardPalette({
     mode: 'dark',
-    core: createNeonDarkCore(colors, presets),
+    core: createStandardDarkCore(colors, presets),
     accent: colors.accent,
     chromeLighting: 0.33,
     borderAlpha: 0.66,

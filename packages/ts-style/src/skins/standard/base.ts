@@ -6,7 +6,7 @@ import { getLetterSpacing } from '../../typography/getLetterSpacing'
 import { getLineHeight } from '../../typography/getLineHeight'
 import { createScale, createTone, rgba, type ToneColors } from './shared'
 
-export type NeonCore = {
+export type StandardCore = {
   neutral: ToneColors
   accent: ToneColors
   feature: ToneColors
@@ -19,23 +19,23 @@ export type NeonCore = {
   danger: ToneColors
 }
 
-type NeonPaletteOptions = {
+type StandardPaletteOptions = {
   mode: ThemeMode
-  core: NeonCore
+  core: StandardCore
   borderAlpha?: number
   subtleAlpha?: number
   chromeLighting?: number
   accent: string
 }
 
-export function createNeonPalette({
+export function createStandardPalette({
   mode,
   core,
   accent,
   chromeLighting = 0.22,
   borderAlpha = 0.66,
   subtleAlpha = 0.5,
-}: NeonPaletteOptions): ThemePalette {
+}: StandardPaletteOptions): ThemePalette {
   const borderTone = (hex: string) => rgba(hex, borderAlpha)
   const subtleTone = (hex: string) => rgba(hex, subtleAlpha)
   const chrome = { lighting: chromeLighting }
@@ -153,7 +153,7 @@ export function createNeonPalette({
   }
 }
 
-function createEffect(core: NeonCore, mode: ThemeMode) {
+function createEffect(core: StandardCore, mode: ThemeMode) {
   const text = createScale(core.neutral.foreground, 18, mode)
   const accent = createScale(core.accent.button, 20, mode)
   const info = createScale(core.info.button, 18, mode)

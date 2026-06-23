@@ -1,6 +1,6 @@
 import type { ThemePalette } from '../themePalette'
-import { createNeonDark } from './standard/dark'
-import { createNeonLight } from './standard/light'
+import { createStandardDark } from './standard/dark'
+import { createStandardLight } from './standard/light'
 
 export type ThemeSkinName = string
 export type SkinPresetList = readonly string[]
@@ -19,8 +19,8 @@ export type ThemeSkinRegistry = Record<ThemeSkinName, ThemeSkin>
 export const themeSkins: ThemeSkinRegistry = {
   standard: {
     create: (presets) => ({
-      light: createNeonLight(presets),
-      dark: createNeonDark(presets),
+      light: createStandardLight(presets),
+      dark: createStandardDark(presets),
     }),
   },
 }
