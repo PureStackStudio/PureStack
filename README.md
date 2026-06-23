@@ -79,7 +79,7 @@ From the repo root:
 - `yarn dev`: run the `ts-ssg` entry in watch mode
 - `yarn build`: build all non-private workspaces
 - `yarn lint`: lint all workspaces
-- `yarn bundle`: build bundles + fix `.d.ts` exports
+- `yarn bundle`: build and verify publishable package artifacts
 - `yarn test`: run tests via Vitest
 - `yarn package`: create tarballs for all workspaces
 

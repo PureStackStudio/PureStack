@@ -9,6 +9,14 @@
     "packages/*"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PureStackStudio/PureStack.git"
+  },
+  "homepage": "https://purestack.studio",
+  "bugs": {
+    "url": "https://github.com/PureStackStudio/PureStack/issues"
+  },
   "devDependencies": {
     "@biomejs/biome": "^2.4.15",
     "@types/node": "^25.6.2",

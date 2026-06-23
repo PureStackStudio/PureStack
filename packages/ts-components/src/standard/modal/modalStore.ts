@@ -1,6 +1,8 @@
-import type { Btn, Modal } from '@purestack/ts-components'
 import { Base } from '@purestack/ts-util'
 import { defineComponent, html, type RefOrValue, ref, sref, unref } from 'regor'
+
+import type { Btn } from '../btn/btn'
+import type { Modal } from './modal'
 
 let nextModalId = 1
 let modalStoreSingleton: ModalStore | undefined

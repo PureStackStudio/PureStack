@@ -3,6 +3,7 @@
 node_modules
 dist
 *.tgz
+tsconfig.bundle.generated.json
 PureGate
 *.vsix
 .codex/*

@@ -8,22 +8,25 @@
   "sideEffects": false,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/koculu/purestack.git",
+    "url": "git+https://github.com/PureStackStudio/PureStack.git",
     "directory": "packages/ts-minidom"
   },
   "homepage": "https://purestack.studio",
   "bugs": {
-    "url": "https://github.com/koculu/purestack/issues"
+    "url": "https://github.com/PureStackStudio/PureStack/issues"
   },
   "exports": {
     ".": {
-      "require": "./dist/ts-minidom.mjs",
+      "types": "./dist/ts-minidom.d.mts",
       "import": "./dist/ts-minidom.mjs"
     }
   },
   "license": "MIT",
   "files": [
-    "dist/**/*",
+    "dist/*.mjs",
+    "dist/*.mjs.map",
+    "dist/*.d.mts",
+    "dist/*.d.mts.map",
     "README.md",
     "LICENSE"
   ],
