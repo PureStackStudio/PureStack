@@ -81,56 +81,6 @@ the source that defines them.
 PureStack does not require the backend to be TypeScript. It focuses on the
 product frontend source: content, UI, state, styles, scripts, and tooling.
 
-## A Tiny Shape Of PureStack
-
-A page can be ordinary Markdown plus Regor components:
-
-```mdx
----
-title: Status
-layout:
-  fullWidth: true
----
-
-# Status
-
-<Panel tone="info">
-  <Badge tone="success">Ready</Badge>
-  <p>The product surface stays close to the content.</p>
-</Panel>
-```
-
-A page can also mount a TypeScript app as a browser asset:
-
-```mdx
-<RegorApp src="./status.ts" id="status-app" />
-```
-
-```ts
-import { defineBadgeComponents } from '@purestack/ts-components'
-import { createApp, html } from 'regor'
-
-const mount = document.querySelector('app#status-app')
-
-if (mount instanceof HTMLElement) {
-  createApp(
-    {
-      components: {
-        ...defineBadgeComponents(),
-      },
-    },
-    {
-      element: mount,
-      template: html`<Badge tone="success">Ready</Badge>`,
-    },
-  )
-}
-```
-
-The point is not that AI cannot generate React or Vue. It can. The point is
-that PureStack gives AI a smaller, stronger, typed source world for sustained
-generation and maintenance.
-
 ## Development
 
 This repository uses Yarn workspaces and TypeScript 7 through `tsgo`.
