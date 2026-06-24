@@ -46,11 +46,134 @@ This repository contains the PureStack package workspace: the SSG pipeline,
 Regor component system, typed style and HTML/CSS builders, runtime page scripts,
 icon tooling, rendering foundation, shared types, and editor support.
 
+## The Core Packages
+
+PureStack has many packages, but three of them define the day-to-day experience.
+
+### `@purestack/ts-ssg`
+
+`ts-ssg` is the product frontend pipeline.
+
+It builds Markdown, MDX, and Regor MDX into a site or app surface, serves it in
+development, watches content changes, and bundles TypeScript browser assets. It
+is where content, templates, navigation, styles, scripts, and static assets meet
+in one workflow.
+
+Feature shape:
+
+- Markdown, `.mdx`, and `.rmdx` content
+- frontmatter-driven pages
+- custom template maps
+- file-based navigation
+- page outline and table-of-contents support
+- dev server with watch mode and live reload
+- TypeScript browser asset bundling
+- optional sitemap, robots, Pagefind, consent, and GA4 configuration
+- build hooks for projects that need to observe or extend the pipeline
+
+### `@purestack/ts-components`
+
+`ts-components` is the product UI vocabulary.
+
+It provides Regor components for real product surfaces: forms, buttons, panels,
+navigation, tabs, modals, toasts, charts, landing sections, pricing tables,
+search, theme switching, virtual lists, and more.
+
+The package keeps component registration and style registration separate. That
+lets the SSG pipeline generate site styles while browser-side TypeScript can
+reuse the same component vocabulary. It also ships TypeScript source files for
+better package-aware tooling and editor metadata.
+
+### `@purestack/ts-style`
+
+`ts-style` is the design coherence layer.
+
+It keeps themes, skins, semantic tones, breakpoints, utility styles, typography,
+palette variables, and document layout styles in TypeScript. Components can use
+shared tones like `neutral`, `accent`, `info`, `success`, `warning`, and
+`danger` without scattering visual decisions across unrelated CSS conventions.
+
+## Using `ts-ssg`
+
+A PureStack content folder is centered around `siteConfig.json` and content
+files:
+
+```txt
+content/
+  siteConfig.json
+  index.mdx
+  dashboard.ts
+```
+
+Minimal config:
+
+```json
+{
+  "siteTitle": "My Product",
+  "outDir": "../dist/site"
+}
+```
+
+Content can stay mostly Markdown while mounting TypeScript where behavior is
+needed:
+
+```mdx
+---
+title: Dashboard
+template: doc
+layout:
+  fullWidth: true
+---
+
+# Dashboard
+
+<RegorApp src="./dashboard.ts" id="dashboard-app" />
+```
+
+The TypeScript asset is bundled for the browser:
+
+```ts
+import {
+  defineBadgeComponents,
+  definePanelComponents,
+} from '@purestack/ts-components'
+import { createApp, html } from 'regor'
+
+const mount = document.querySelector('app#dashboard-app')
+
+if (mount instanceof HTMLElement) {
+  createApp(
+    {
+      components: {
+        ...defineBadgeComponents(),
+        ...definePanelComponents(),
+      },
+    },
+    {
+      element: mount,
+      template: html`<Panel tone="info">
+        <Badge tone="success">Ready</Badge>
+      </Panel>`,
+    },
+  )
+}
+```
+
+Run the pipeline with a content directory:
+
+```sh
+ts-ssg --content ./content --serve
+ts-ssg --content ./content --clean
+ts-ssg --content ./content --clean --publish
+```
+
+## Package Map
+
 | Package | Role |
 | --- | --- |
-| [`@purestack/ts-ssg`](packages/ts-ssg) | Builds and serves Markdown, MDX, and Regor MDX content sites. Exports `buildSite`, `startDevServer`, navigation, frontmatter, template, and highlighting APIs. |
-| [`@purestack/ts-components`](packages/ts-components) | Regor component library with component definition and style registration exports for forms, navigation, panels, charts, modals, tabs, virtual lists, and product UI primitives. |
-| [`@purestack/ts-style`](packages/ts-style) | Theme, skin, semantic tone, breakpoint, utility, typography, and document layout style infrastructure. |
+| [`@purestack/ts-ssg`](packages/ts-ssg) | Build and dev-server pipeline for Markdown, MDX, Regor MDX, templates, navigation, styles, scripts, and browser assets. |
+| [`@purestack/ts-components`](packages/ts-components) | Regor component definitions, component metadata, and matching style registration for product frontend primitives. |
+| [`@purestack/ts-style`](packages/ts-style) | Theme, skin, semantic tone, breakpoint, utility, typography, palette, and layout style infrastructure. |
 | [`@purestack/ts-html`](packages/ts-html) | Typed HTML node and head helpers through `h`, `TSNode`, `createHead`, and head config utilities. |
 | [`@purestack/ts-css`](packages/ts-css) | Typed CSS style builder exports including `Style`, `s`, `CSSProps`, color helpers, and gradient helpers. |
 | [`@purestack/ts-page-scripts`](packages/ts-page-scripts) | Runtime script builders for theme switching, consent, auth state hints, code copy, menus, modals, nav menus, Pagefind search, page TOC, and tabs. |
