@@ -32,6 +32,7 @@
   "scripts": {
     "purestack": "yarn tsx packages/purestack/src/cli.ts",
     "dev": "yarn tsx --watch packages/ts-ssg/src/cli.ts serve --content packages/ts-ssg/sample-content",
+    "frontend": "yarn tsx --watch packages/ts-ssg/src/cli.ts serve --content frontend/purestack.studio --port 4700",
     "embed": "yarn tsx scripts/embed.ts && yarn format",
     "regor-components": "yarn tsx scripts/regor-components.ts",
     "gen-icons": "yarn tsx scripts/generate-icons.ts",
