@@ -8,3 +8,4 @@ PureGate
 *.vsix
 .codex/*
 /.tmp
+/frontend/out/
