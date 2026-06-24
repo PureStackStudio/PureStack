@@ -170,6 +170,92 @@ describe('static assets', () => {
     }
   })
 
+  it('bundles source-condition packages after stripping unused Regor template tags', async () => {
+    const root = await fs.mkdtemp(
+      path.join(process.cwd(), '.tmp-ts-ssg-assets-'),
+    )
+    const outDir = path.join(root, 'dist')
+    try {
+      await writeFile(
+        path.join(
+          root,
+          'node_modules',
+          'source-component-package',
+          'package.json',
+        ),
+        JSON.stringify(
+          {
+            name: 'source-component-package',
+            type: 'module',
+            sideEffects: false,
+            exports: {
+              '.': {
+                source: './src/index.ts',
+                import: './dist/index.js',
+              },
+            },
+          },
+          null,
+          2,
+        ),
+      )
+      await writeFile(
+        path.join(
+          root,
+          'node_modules',
+          'source-component-package',
+          'src',
+          'index.ts',
+        ),
+        [
+          "import { html } from 'regor'",
+          'const unusedTemplate = html`<UnusedComponent />`',
+          "export const usedValue = 'source-ok'",
+          'export function usedComponent() {',
+          '  return usedValue',
+          '}',
+        ].join('\n'),
+      )
+      await writeFile(
+        path.join(
+          root,
+          'node_modules',
+          'source-component-package',
+          'dist',
+          'index.js',
+        ),
+        "export const usedValue = 'dist-fallback'\n",
+      )
+
+      const entryPath = path.join(root, 'entry.ts')
+      await writeFile(
+        entryPath,
+        [
+          "import { usedComponent } from 'source-component-package'",
+          'console.log(usedComponent())',
+        ].join('\n'),
+      )
+
+      const result = await copyStaticAsset(
+        root,
+        outDir,
+        {
+          absPath: entryPath,
+          relPath: 'entry.ts',
+          ext: '.ts',
+        },
+        { minifyScripts: true },
+      )
+
+      const output = await fs.readFile(result.outPath, 'utf8')
+      expect(output).toContain('source-ok')
+      expect(output).not.toContain('dist-fallback')
+      expect(output).not.toContain('UnusedComponent')
+    } finally {
+      await fs.rm(root, { recursive: true, force: true })
+    }
+  })
+
   it('removes stale cache-keyed script siblings after writing a new bundle', async () => {
     const root = await fs.mkdtemp(
       path.join(process.cwd(), '.tmp-ts-ssg-assets-'),

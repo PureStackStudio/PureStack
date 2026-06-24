@@ -5,6 +5,7 @@ import { ensureDir } from '@purestack/ts-util-node'
 import { build as buildScript, type Metafile } from 'esbuild'
 import { getLogger } from 'logpot'
 import { discoverStaticAssets, type StaticAssetFile } from '../discover/content'
+import { regorTemplateTagsPlugin } from './regorTemplateTransform'
 
 export interface CopyStaticAssetsResult {
   assets: number
@@ -128,9 +129,11 @@ async function writeStaticAsset(
       minify: options.minifyScripts === true,
       treeShaking: true,
       platform: 'browser',
+      conditions: ['source'],
       target: 'esnext',
       logLevel: 'silent',
       metafile: true,
+      plugins: [regorTemplateTagsPlugin()],
     })
     return collectDependencyRelPaths(buildResult.metafile, contentDir)
   }
