@@ -131,14 +131,6 @@ The point is not that AI cannot generate React or Vue. It can. The point is
 that PureStack gives AI a smaller, stronger, typed source world for sustained
 generation and maintenance.
 
-## Current Status
-
-PureStack is built, working, and already used in production.
-
-The public release is being prepared step by step: docs, examples, packaging,
-site, and presentation are still being shaped. Some APIs may change before the
-public release is finalized.
-
 ## Development
 
 This repository uses Yarn workspaces and TypeScript 7 through `tsgo`.
