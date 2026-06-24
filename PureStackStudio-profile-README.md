@@ -34,7 +34,7 @@ part of the everyday act of building software.
 
 ## 🧭 What PureStack Is
 
-PureStack is a working TypeScript-native ecosystem for building real products:
+PureStack is an AI-native ecosystem for building real products:
 content sites, documentation, product frontends, admin surfaces, dashboards, and
 operational tools from one coherent source model.
 
