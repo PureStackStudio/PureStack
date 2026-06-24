@@ -1,6 +1,6 @@
 ---
-title:
-description:
+title: PureStack
+description: Pure frontend infrastructure for the AI age.
 template: doc
 layout:
   fullWidth: true
@@ -11,3 +11,730 @@ nav:
   hidden: false
 ---
 
+<main
+  class="purestack-landing overflow-x-visible"
+  aria-label="PureStack Studio landing page"
+>
+  <section class="ps-hero" aria-labelledby="purestack-title">
+    <div class="ps-source-field" aria-hidden="true">
+      <div class="ps-source-field__grid"></div>
+      <div class="ps-source-field__axis ps-source-field__axis--x"></div>
+      <div class="ps-source-field__axis ps-source-field__axis--y"></div>
+      <div class="ps-source-field__node ps-source-field__node--content">
+        content
+      </div>
+      <div class="ps-source-field__node ps-source-field__node--components">
+        components
+      </div>
+      <div class="ps-source-field__node ps-source-field__node--styles">
+        styles
+      </div>
+      <div class="ps-source-field__node ps-source-field__node--scripts">
+        scripts
+      </div>
+      <div class="ps-source-field__node ps-source-field__node--tooling">
+        tooling
+      </div>
+      <div class="ps-source-field__node ps-source-field__node--output">
+        output
+      </div>
+      <div class="ps-source-field__core">
+        <img src="/assets/pure-stack-logo.png" alt=""/>
+        <span>TypeScript source graph</span>
+      </div>
+    </div>
+
+    <div class="ps-hero__copy">
+      <p class="ps-kicker">PureStack Studio</p>
+      <h1 id="purestack-title">PureStack</h1>
+      <p class="ps-hero__line">Pure frontend infrastructure for the AI age.</p>
+      <p class="ps-hero__body">
+        PureStack keeps content, interfaces, styles, scripts, workflows, and
+        tooling in one coherent source model, so humans and AI can reason about
+        real product frontends without translating intent across a scattered
+        stack.
+      </p>
+      <div class="ps-actions flex mt-6 gap-3" aria-label="Primary actions">
+        <BtnLink href="#stack" tone="accent" class="py-3 px-4 fw-700">
+          Explore the stack
+        </BtnLink>
+        <BtnLink
+          href="https://github.com/PureStackStudio/PureStack"
+          target="_blank"
+          tone="neutral"
+          variant="surface"
+          icon="tabler:brand-github"
+          class="py-3 px-4 fw-700"
+        >
+          Source
+        </BtnLink>
+      </div>
+    </div>
+  </section>
+
+  <section class="ps-statement" aria-label="PureStack statement">
+    <p>
+      Modern frontend work is powerful, but fragmented. PureStack is the
+      opposite bet: fewer translation layers, stronger source, and product UI
+      that stays inspectable as it grows.
+    </p>
+  </section>
+
+  <section id="stack" class="ps-section ps-section--stack">
+    <SectionHeader
+      eyebrow="The stack"
+      title="One source model for product frontend work."
+      subtitle="The public package is not a theme. It is a coordinated frontend pipeline: content, Regor components, typed styles, page scripts, icons, rendering, and editor support designed to belong together."
+      titleTag="h2"
+      titleClass="fs-h2 mb-2"
+      subtitleClass="mb-0"/>
+
+    <Grid columns="1" columnsMd="2" columnsLg="3" class="mt-5">
+      <FeatureCard
+        tone="accent"
+        variant="surface"
+        title="ts-ssg"
+        summary="Markdown, MDX, routes, navigation, scripts, styles, sitemap, preview metadata, live reload, and publish output in one deterministic build."
+        icon="tabler:layout-dashboard"/>
+      <FeatureCard
+        tone="neutral"
+        variant="surface"
+        title="ts-components"
+        summary="A practical Regor UI vocabulary for docs, landing pages, dashboards, forms, tabs, charts, search, modals, and admin surfaces."
+        icon="tabler:layout"/>
+      <FeatureCard
+        tone="neutral"
+        variant="surface"
+        title="ts-style"
+        summary="Themes, skins, semantic tones, typography, palette variables, breakpoints, and utility classes authored in TypeScript."
+        icon="tabler:code"/>
+    </Grid>
+
+    <MetricStrip
+      tone="neutral"
+      variant="surface"
+      columnsSm="2"
+      columnsLg="4"
+      class="mt-4"
+    >
+      <MetricItem
+        label="Content"
+        value="Markdown + MDX"
+        detail="Prose stays readable."
+        icon="tabler:book-2"
+        tone="accent"/>
+      <MetricItem
+        label="Runtime"
+        value="Regor apps"
+        detail="Behavior mounts where needed."
+        icon="tabler:device-desktop-analytics"
+        tone="neutral"/>
+      <MetricItem
+        label="Style"
+        value="Typed tokens"
+        detail="Design decisions stay source-backed."
+        icon="tabler:layout"
+        tone="neutral"/>
+      <MetricItem
+        label="Output"
+        value="Static or app"
+        detail="One pipeline, many surfaces."
+        icon="tabler:database"
+        tone="accent"/>
+    </MetricStrip>
+  </section>
+
+  <LandingSection
+    tone="neutral"
+    variant="none"
+    columnsLg="minmax(0, 0.76fr) minmax(0, 1.24fr)"
+    alignItems="start"
+    class="ps-section ps-section--workflow"
+  >
+    <div>
+      <SectionHeader
+        eyebrow="Eat your own dog food"
+        title="The website is built from the same vocabulary it explains."
+        subtitle="This page is MDX. Its visual system is PureStack CSS. Its layout uses the same components available to product pages, docs, and app shells."
+        titleTag="h2"
+        titleClass="fs-h2 mb-2"
+        subtitleClass="mb-0"/>
+      <p class="ps-copy mt-4">
+        PureStack is designed for the long life of a product: docs one day,
+        launch pages the next, then dashboards, operational consoles, and
+        browser assets when static content needs live behavior.
+      </p>
+    </div>
+
+    <CodeShowcase
+      tone="accent"
+      variant="surface"
+      language="MDX + TypeScript"
+      eyebrow="Source shape"
+      title="A frontend as source, not glue."
+      summary="Content owns the route. TypeScript owns behavior. Shared components and styles keep the product coherent."
+      resultTitle="What PureStack keeps together"
+      resultMeta="One pipeline"
+    >
+```mdx
+---
+title: Dashboard
+template: doc
+layout:
+  fullWidth: true
+---
+
+<RegorApp src="./dashboard.ts" id="dashboard-app" />
+```
+
+      <template #result>
+        <MetricStrip tone="ghost" variant="none" columnsSm="3" columnsLg="3">
+          <MetricItem
+            label="Author"
+            value="Readable content"
+            icon="tabler:book-2"
+            tone="accent"/>
+          <MetricItem
+            label="Mount"
+            value="Typed app asset"
+            icon="tabler:code"
+            tone="neutral"/>
+          <MetricItem
+            label="Ship"
+            value="Static output"
+            icon="tabler:database"
+            tone="accent"/>
+        </MetricStrip>
+      </template>
+    </CodeShowcase>
+  </LandingSection>
+
+  <LandingBand
+    tone="accent"
+    variant="surfaceAlt"
+    height="auto"
+    paddingTop="5rem"
+    paddingBottom="5rem"
+  >
+    <div class="ps-band-copy">
+      <p class="ps-kicker">Why it matters</p>
+      <h2>
+        AI can generate code anywhere. PureStack is built for what happens after
+        the first shot.
+      </h2>
+      <p>
+        Real products change. Screens multiply. Styles evolve. Documentation and
+        interfaces need to stay understandable. PureStack optimizes the source
+        graph so both people and AI can keep building with confidence.
+      </p>
+    </div>
+  </LandingBand>
+
+  <section class="ps-section ps-section--proof">
+    <SectionHeader
+      eyebrow="Production proof"
+      title="The framework already carries serious surfaces."
+      subtitle="The existing repo is the evidence. PureStack powers public product pages, documentation systems, and live admin applications without switching mental models."
+      titleTag="h2"
+      titleClass="fs-h2 mb-2"
+      subtitleClass="mb-0"/>
+
+    <Grid columns="1" columnsLg="3" class="mt-5">
+      <FeatureCard
+        tone="accent"
+        variant="surface"
+        title="PureGate Admin"
+        summary="Operational console for hosts, TLS, mail, logs, artifacts, observability, HMAC credentials, identity, RBAC, ZoneTree maintenance, and data search."
+        icon="tabler:layout-dashboard"/>
+      <FeatureCard
+        tone="neutral"
+        variant="surface"
+        title="PureGate Landing"
+        summary="A focused public gateway page with custom visual language, built directly in MDX with shared buttons, icons, footer, and theme tokens."
+        icon="tabler:device-desktop-analytics"/>
+      <FeatureCard
+        tone="neutral"
+        variant="surface"
+        title="ZoneTree Docs"
+        summary="A full documentation site with hybrid navigation, Pagefind search, social preview metadata, sitemap, robots, and deep technical content."
+        icon="tabler:book-2"/>
+    </Grid>
+  </section>
+
+  <section class="ps-section ps-section--principles">
+    <SectionHeader
+      eyebrow="Architecture principles"
+      title="Coherence is the feature."
+      subtitle="PureStack reduces the number of places intent can disappear."
+      titleTag="h2"
+      titleClass="fs-h2 mb-2"
+      subtitleClass="mb-0"/>
+
+    <Grid columns="1" columnsMd="2" columnsLg="4" class="mt-5">
+      <FeatureCard
+        tone="neutral"
+        variant="surface"
+        title="Typed where it counts"
+        summary="Styles, config, HTML helpers, scripts, rendering, and components live in TypeScript instead of disconnected convention layers."
+        icon="tabler:code"/>
+      <FeatureCard
+        tone="accent"
+        variant="surface"
+        title="Content stays close"
+        summary="Markdown remains the home for prose, while MDX can compose real product UI without losing the route's readability."
+        icon="tabler:book-2"/>
+      <FeatureCard
+        tone="neutral"
+        variant="surface"
+        title="Static first"
+        summary="Pages render predictably, publish cleanly, and only mount browser behavior where the product actually needs it."
+        icon="tabler:database"/>
+      <FeatureCard
+        tone="accent"
+        variant="surface"
+        title="AI-readable source"
+        summary="A smaller, clearer source graph gives AI fewer seams to guess across and more structure to inspect."
+        icon="tabler:device-desktop-analytics"/>
+    </Grid>
+  </section>
+
+  <CtaSection
+    tone="accent"
+    variant="surface"
+    eyebrow="Opening gradually"
+    title="PureStack is already built. Now the public surface is becoming clear."
+    subtitle="This site is the front door for the package, the examples, the docs, and the release story."
+    primaryLabel="View source"
+    primaryHref="https://github.com/PureStackStudio/PureStack"
+    primaryIcon="tabler:brand-github"
+    secondaryLabel="Read the stack"
+    secondaryHref="#stack"
+    secondaryIcon="tabler:book-2"
+    meta="Founder-led, production-proven, and designed for software that should stay understandable."/>
+</main>
+
+<style>
+  body {
+    --pss-bg: var(--ps-current-canvas);
+    --pss-line: color-mix(
+      in srgb,
+      var(--ps-current-border-subtle) 78%,
+      transparent
+    );
+    background: var(--pss-bg);
+  }
+
+  .doc-shell {
+    padding: 0;
+  }
+
+  .doc-content:has(.purestack-landing) {
+    max-width: none;
+    padding: 0;
+  }
+
+  .doc-content:has(.purestack-landing) > main {
+    margin: 0;
+  }
+
+  body:has(.purestack-landing) .topbar {
+    background: color-mix(in srgb, var(--pss-bg) 78%, transparent);
+    border-bottom-color: var(--pss-line) !important;
+  }
+
+  .purestack-landing {
+    --pss-panel: var(--ps-current-surface-rest-background);
+    --pss-panel-alt: var(--ps-current-surface-alt-rest-background);
+    --pss-line-strong: color-mix(
+      in srgb,
+      var(--ps-current-border-default) 82%,
+      transparent
+    );
+    --pss-text: var(--ps-current-text-default);
+    --pss-muted: var(--ps-current-text-subtle);
+    --pss-soft: color-mix(
+      in srgb,
+      var(--ps-current-text-default) 68%,
+      var(--ps-current-text-subtle)
+    );
+    --pss-accent: var(--ps-semantic-tone-accent-tone);
+    --pss-info: var(--ps-semantic-tone-info-tone);
+    --pss-success: var(--ps-semantic-tone-success-tone);
+    --pss-warning: var(--ps-semantic-tone-warning-tone);
+    --pss-radius: 8px;
+    color: var(--pss-text);
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  .purestack-landing * {
+    box-sizing: border-box;
+  }
+
+  .ps-hero {
+    align-items: center;
+    display: grid;
+    min-height: calc(100vh - 4rem);
+    overflow: hidden;
+    padding: 5rem max(2rem, calc((100vw - 1180px) / 2)) 6rem;
+    position: relative;
+  }
+
+  .ps-hero::before {
+    background-image:
+      linear-gradient(var(--pss-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--pss-line) 1px, transparent 1px);
+    background-size: 72px 72px;
+    content: "";
+    inset: 0;
+    mask-image: linear-gradient(to bottom, #000 0%, transparent 86%);
+    opacity: 0.36;
+    pointer-events: none;
+    position: absolute;
+  }
+
+  html[data-theme="light"] .ps-hero::before {
+    opacity: 0.62;
+  }
+
+  .ps-source-field {
+    aspect-ratio: 1 / 0.78;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--pss-panel) 88%, var(--pss-accent)) 0%,
+      color-mix(in srgb, var(--pss-bg) 94%, var(--pss-info)) 54%,
+      color-mix(in srgb, var(--pss-panel-alt) 88%, var(--pss-success)) 100%
+    );
+    border: 1px solid var(--pss-line);
+    border-radius: var(--pss-radius);
+    box-shadow: var(--ps-effect-floating-shadow);
+    min-height: 30rem;
+    opacity: 0.96;
+    overflow: hidden;
+    position: absolute;
+    right: max(1rem, calc((100vw - 1180px) / 2));
+    top: 50%;
+    transform: translateY(-47%);
+    width: min(56rem, 62vw);
+  }
+
+  .ps-source-field::after {
+    background:
+      linear-gradient(
+        90deg,
+        transparent,
+        color-mix(in srgb, var(--pss-accent) 18%, transparent),
+        transparent
+      ),
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--pss-text) 4%, transparent),
+        transparent 45%
+      );
+    content: "";
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+  }
+
+  .ps-source-field__grid {
+    background-image:
+      linear-gradient(
+        color-mix(in srgb, var(--pss-muted) 14%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--pss-muted) 14%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 48px 48px;
+    inset: 0;
+    opacity: 0.62;
+    position: absolute;
+  }
+
+  .ps-source-field__axis {
+    background: var(--pss-line-strong);
+    position: absolute;
+  }
+
+  .ps-source-field__axis--x {
+    height: 1px;
+    left: 7%;
+    right: 7%;
+    top: 50%;
+  }
+
+  .ps-source-field__axis--y {
+    bottom: 10%;
+    left: 50%;
+    top: 10%;
+    width: 1px;
+  }
+
+  .ps-source-field__core {
+    align-items: center;
+    background: color-mix(in srgb, var(--pss-panel) 88%, transparent);
+    border: 1px solid color-mix(in srgb, var(--pss-accent) 62%, transparent);
+    border-radius: var(--pss-radius);
+    box-shadow: 0 0 42px color-mix(in srgb, var(--pss-accent) 24%, transparent);
+    color: var(--pss-text);
+    display: grid;
+    gap: 0.75rem;
+    justify-items: center;
+    left: 50%;
+    padding: 1rem;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 13rem;
+    z-index: 2;
+  }
+
+  .ps-source-field__core img {
+    height: 4rem;
+    width: 4rem;
+  }
+
+  .ps-source-field__core span,
+  .ps-source-field__node {
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .ps-source-field__node {
+    background: color-mix(in srgb, var(--pss-bg) 78%, transparent);
+    border: 1px solid var(--pss-line-strong);
+    border-radius: var(--pss-radius);
+    color: var(--pss-soft);
+    min-width: 7rem;
+    padding: 0.68rem 0.8rem;
+    position: absolute;
+    text-align: center;
+    z-index: 2;
+  }
+
+  .ps-source-field__node--content {
+    left: 10%;
+    top: 20%;
+  }
+
+  .ps-source-field__node--components {
+    right: 11%;
+    top: 18%;
+  }
+
+  .ps-source-field__node--styles {
+    left: 15%;
+    top: 58%;
+  }
+
+  .ps-source-field__node--scripts {
+    right: 14%;
+    top: 58%;
+  }
+
+  .ps-source-field__node--tooling {
+    left: 50%;
+    top: 9%;
+    transform: translateX(-50%);
+  }
+
+  .ps-source-field__node--output {
+    bottom: 9%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .ps-hero__copy {
+    max-width: 36rem;
+    position: relative;
+    z-index: 3;
+  }
+
+  .ps-kicker {
+    color: var(--pss-muted);
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    margin: 0 0 1.2rem;
+    text-transform: uppercase;
+  }
+
+  .ps-hero h1 {
+    color: var(--pss-text);
+    font-size: 5rem;
+    font-weight: 850;
+    letter-spacing: 0;
+    line-height: 0.96;
+    margin: 0;
+  }
+
+  .ps-hero__line {
+    color: var(--pss-text);
+    font-size: 1.55rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1.3;
+    margin: 1.35rem 0 0;
+  }
+
+  .ps-hero__body,
+  .ps-copy,
+  .ps-band-copy p {
+    color: var(--pss-soft);
+    font-size: 1.06rem;
+    line-height: 1.75;
+  }
+
+  .ps-hero__body {
+    margin: 1.4rem 0 0;
+    max-width: 34rem;
+  }
+
+  .ps-statement,
+  .ps-section {
+    padding-left: max(2rem, calc((100vw - 1180px) / 2));
+    padding-right: max(2rem, calc((100vw - 1180px) / 2));
+  }
+
+  .ps-statement {
+    border-block: 1px solid var(--pss-line);
+    padding-bottom: 5rem;
+    padding-top: 5rem;
+  }
+
+  .ps-statement p {
+    color: var(--pss-text);
+    font-size: 2rem;
+    font-weight: 650;
+    line-height: 1.35;
+    margin: 0;
+    max-width: 63rem;
+  }
+
+  .ps-section {
+    padding-bottom: 6rem;
+    padding-top: 6rem;
+  }
+
+  .ps-section--workflow {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .ps-band-copy {
+    max-width: 68rem;
+    pointer-events: auto;
+  }
+
+  .ps-band-copy h2 {
+    color: var(--pss-text);
+    font-size: 2.45rem;
+    line-height: 1.16;
+    margin: 1rem 0 0;
+    max-width: 58rem;
+  }
+
+  .ps-band-copy p:last-child {
+    margin: 1.4rem 0 0;
+    max-width: 48rem;
+  }
+
+  .ps-section--principles {
+    border-top: 1px solid var(--pss-line);
+  }
+
+  .purestack-landing .feature-card,
+  .purestack-landing .panel {
+    border-radius: var(--pss-radius);
+  }
+
+  @media (max-width: 980px) {
+    .ps-hero {
+      min-height: auto;
+      padding-bottom: 4rem;
+      padding-top: 4rem;
+    }
+
+    .ps-source-field {
+      margin-top: 3rem;
+      min-height: 28rem;
+      position: relative;
+      right: auto;
+      top: auto;
+      transform: none;
+      width: 100%;
+    }
+
+    .ps-hero__copy {
+      max-width: 42rem;
+      text-align: center;
+    }
+
+    .ps-hero__body {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .ps-actions {
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .ps-hero,
+    .ps-statement,
+    .ps-section {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .ps-hero h1 {
+      font-size: 3.15rem;
+    }
+
+    .ps-hero__line {
+      font-size: 1.25rem;
+    }
+
+    .ps-actions {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .ps-source-field {
+      aspect-ratio: auto;
+      min-height: 33rem;
+    }
+
+    .ps-source-field__core {
+      width: 11rem;
+    }
+
+    .ps-source-field__node {
+      min-width: 6.25rem;
+      padding-left: 0.55rem;
+      padding-right: 0.55rem;
+    }
+
+    .ps-source-field__node--content,
+    .ps-source-field__node--styles {
+      left: 5%;
+    }
+
+    .ps-source-field__node--components,
+    .ps-source-field__node--scripts {
+      right: 5%;
+    }
+
+    .ps-statement p,
+    .ps-band-copy h2 {
+      font-size: 1.65rem;
+    }
+  }
+</style>

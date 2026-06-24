@@ -2,7 +2,7 @@
 
 # PureStack Studio
 
-**TypeScript-native frontend infrastructure for the AI age.**
+**Pure frontend infrastructure for the AI age.**
 
 Coherent source for real products: content, interfaces, styles, scripts,
 workflows, and tooling designed to belong together.

@@ -1,8 +1,66 @@
 <SiteFooter
-  class="b-0"
+  class="bt-1 tone-border-surface"
   :copyright="`(c) ${new Date().getFullYear()} PureStack. All rights reserved.`"
   tone="neutral"
   variant="none"
+  legalLabel="PureStack links"
 >
-  <template #legal> </template>
+  <Grid columns="1" columnsLg="minmax(0, 1.25fr) minmax(0, 1fr)">
+    <Panel tone="ghost" class="box-shadow-none">
+      <Flex direction="column" align="start">
+        <div class="text-eyebrow">PureStack Studio</div>
+        <h2 class="text-title">Frontend source that stays coherent.</h2>
+        <p class="text-tagline">
+          Content, components, styles, scripts, and tooling designed to belong
+          together instead of becoming a stack of translations.
+        </p>
+        <Flex wrap="true">
+          <Badge tone="neutral">TypeScript-native</Badge>
+          <Badge tone="neutral">AI-readable source</Badge>
+          <Badge tone="neutral">Production-proven</Badge>
+        </Flex>
+      </Flex>
+    </Panel>
+
+    <Grid columns="1" columnsMd="2">
+      <Panel tone="ghost" class="box-shadow-none">
+        <Flex direction="column" align="start">
+          <div class="text-eyebrow">Build</div>
+          <h3 class="text-title">Public package</h3>
+          <p class="text-tagline">
+            The PureStack package exposes the CLI and TypeScript API for custom
+            content directories.
+          </p>
+          <BtnLink
+            href="https://github.com/PureStackStudio/PureStack"
+            target="_blank"
+            tone="neutral"
+            icon="tabler:brand-github"
+          >
+            Source
+          </BtnLink>
+        </Flex>
+      </Panel>
+
+      <Panel tone="ghost" class="box-shadow-none">
+        <Flex direction="column" align="start">
+          <div class="text-eyebrow">Next</div>
+          <h3 class="text-title">Docs are coming</h3>
+          <p class="text-tagline">
+            The first page is the front door. The docs root will follow once
+            the release path is ready.
+          </p>
+          <BtnLink href="/" tone="ghost" icon="tabler:book-2">
+            Home
+          </BtnLink>
+        </Flex>
+      </Panel>
+    </Grid>
+  </Grid>
+
+  <template #legal>
+    <a href="https://github.com/PureStackStudio/PureStack" target="_blank">
+      GitHub
+    </a>
+  </template>
 </SiteFooter>
