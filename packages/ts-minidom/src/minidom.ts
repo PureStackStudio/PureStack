@@ -1681,7 +1681,7 @@ function parseAttributes(input: string, start: number) {
         if (input[i] === '/' && input[i + 1] === '>') {
           selfClosing = true
           i += 2
-          attrs.set(name, value)
+          setParsedAttribute(attrs, name, value)
           break
         }
       }
@@ -1690,9 +1690,30 @@ function parseAttributes(input: string, start: number) {
       i += 1
       continue
     }
-    attrs.set(name, value)
+    setParsedAttribute(attrs, name, value)
   }
   return { attrs, end: i, selfClosing }
+}
+
+function setParsedAttribute(
+  attrs: Map<string, string>,
+  name: string,
+  value: string,
+) {
+  const previous = attrs.get(name)
+  if (
+    previous !== undefined &&
+    (isMeaningfulAttributeValue(previous) || isMeaningfulAttributeValue(value))
+  ) {
+    throw new Error(
+      `Duplicate attribute "${name}" while parsing HTML. Previous value: "${previous}". New value: "${value}".`,
+    )
+  }
+  attrs.set(name, value)
+}
+
+function isMeaningfulAttributeValue(value: string) {
+  return value.trim().length > 0
 }
 
 function decodeEntities(value: string) {
