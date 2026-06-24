@@ -5,6 +5,7 @@ export {
   buildSite,
   type PublishOptions,
 } from './build/site'
+export { runCli } from './cli-runner'
 export { resolveSiteConfig } from './config/config'
 export {
   type DevServerHandle,

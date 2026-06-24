@@ -59,7 +59,11 @@ const publishPackages = sortByWorkspaceDependencies(
 )
 const workspacePackageNames = allPackages
   .map((pkg) => pkg.packageJson.name)
-  .filter((name) => name.startsWith('@purestack/'))
+  .filter(isPureStackPackageName)
+
+function isPureStackPackageName(name: string) {
+  return name === 'purestack' || name.startsWith('@purestack/')
+}
 
 function readPackageJson(packageJsonPath: string) {
   const packageDir = path.dirname(path.join(projectRoot, packageJsonPath))
@@ -81,7 +85,7 @@ function isPublishPackage(pkg: { packageJson: PackageJson }): pkg is {
 } {
   return (
     !pkg.packageJson.private &&
-    pkg.packageJson.name.startsWith('@purestack/') &&
+    isPureStackPackageName(pkg.packageJson.name) &&
     Boolean(pkg.packageJson.exports)
   )
 }
@@ -121,7 +125,7 @@ function getWorkspaceDependencyNames(pkg: PackageJson) {
     ...Object.keys(pkg.peerDependencies ?? {}),
     ...Object.keys(pkg.optionalDependencies ?? {}),
     ...Object.keys(pkg.devDependencies ?? {}),
-  ].filter((name) => name.startsWith('@purestack/'))
+  ].filter(isPureStackPackageName)
 }
 
 function toPublishPackage(pkg: {
@@ -347,11 +351,7 @@ async function bundlePackage(pkg: PublishPackage) {
           outDir: pkg.distDir,
           outExtensions: () => ({ js: '.mjs', dts: '.d.mts' }),
           logLevel: 'silent',
-          plugins: [
-            replaceVersion(pkg.packageJson.version),
-            inlineStaticRegorTemplates(),
-            addBanner(banner),
-          ],
+          plugins: [inlineStaticRegorTemplates(), addBanner(banner)],
         }
         await build(opts)
       },
@@ -389,22 +389,6 @@ async function writeDtsTsconfig(pkg: PublishPackage) {
     `${JSON.stringify(tsconfig, null, 2)}\n`,
     'utf8',
   )
-}
-
-function replaceVersion(version: string) {
-  return {
-    name: 'replace-version',
-    transform(code: string, id: string) {
-      if (!id.endsWith('index.ts')) return null
-      return {
-        code: code.replace(
-          /\bversion = PURESTACK_VERSION\b/g,
-          `version = ${JSON.stringify(version)}`,
-        ),
-        map: null,
-      }
-    },
-  }
 }
 
 function inlineStaticRegorTemplates() {

@@ -89,6 +89,22 @@ async function packageExists(packageName: string) {
   }
 }
 
+async function packageVersionExists(packageName: string, version: string) {
+  try {
+    await npmJson([
+      'view',
+      `${packageName}@${version}`,
+      'version',
+      '--registry',
+      options.registry,
+    ])
+    return true
+  } catch (error) {
+    if (isNpmNotFound(error)) return false
+    throw error
+  }
+}
+
 function isNpmNotFound(error: unknown) {
   if (!isExecError(error)) return false
   return (
@@ -118,9 +134,13 @@ function discoverPublishablePackages() {
     .filter(
       (pkg) =>
         !pkg.packageJson.private &&
-        pkg.packageJson.name.startsWith('@purestack/') &&
+        isPureStackPackageName(pkg.packageJson.name) &&
         Boolean(pkg.packageJson.exports),
     )
+}
+
+function isPureStackPackageName(name: string) {
+  return name === 'purestack' || name.startsWith('@purestack/')
 }
 
 function readPackage(packageJsonPath: string): PackageInfo {
@@ -167,7 +187,7 @@ function getWorkspaceDependencyNames(pkg: PackageJson) {
     ...Object.keys(pkg.peerDependencies ?? {}),
     ...Object.keys(pkg.optionalDependencies ?? {}),
     ...Object.keys(pkg.devDependencies ?? {}),
-  ].filter((name) => name.startsWith('@purestack/'))
+  ].filter(isPureStackPackageName)
 }
 
 function parseArgs(args: string[]): PublishOptions {
@@ -214,11 +234,11 @@ function requireArg(args: string[], index: number) {
 }
 
 function printHelp() {
-  console.log(`Publish PureStack packages that do not exist on npm yet.
+  console.log(`Publish PureStack package versions that do not exist on npm yet.
 
 Usage:
   yarn publish-new-packages              Dry-run registry check
-  yarn publish-new-packages --publish    Publish missing packages
+  yarn publish-new-packages --publish    Publish missing package versions
 
 Run yarn bundle && yarn package before --publish.
 
@@ -254,7 +274,7 @@ async function publishPackage(pkg: PackageInfo) {
 
 async function main() {
   if (publishablePackages.length === 0) {
-    throw new Error('No publishable @purestack/* packages found.')
+    throw new Error('No publishable PureStack packages found.')
   }
 
   console.log(
@@ -264,19 +284,31 @@ async function main() {
   const missingPackages: PackageInfo[] = []
 
   for (const pkg of publishablePackages) {
-    const exists = await packageExists(pkg.packageJson.name)
-    if (exists) {
-      console.log(`skip existing ${pkg.packageJson.name}`)
+    if (!pkg.packageJson.version) {
+      throw new Error(`${pkg.packageJson.name} is missing version.`)
+    }
+
+    const nameExists = await packageExists(pkg.packageJson.name)
+    const versionExists =
+      nameExists &&
+      (await packageVersionExists(
+        pkg.packageJson.name,
+        pkg.packageJson.version,
+      ))
+    if (versionExists) {
+      console.log(
+        `skip existing ${pkg.packageJson.name}@${pkg.packageJson.version}`,
+      )
       continue
     }
 
     missingPackages.push(pkg)
-    console.log(`missing ${pkg.packageJson.name}`)
+    console.log(`missing ${pkg.packageJson.name}@${pkg.packageJson.version}`)
   }
 
   if (!options.publish) {
     console.log(
-      `Dry run complete. ${missingPackages.length} package(s) would be published.`,
+      `Dry run complete. ${missingPackages.length} package version(s) would be published.`,
     )
     return
   }

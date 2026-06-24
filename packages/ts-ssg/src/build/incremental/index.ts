@@ -83,7 +83,8 @@ async function createIncrementalRuntime(
   const publishOptions = input.publish ?? {}
   const config = resolveBuildSiteConfig(input)
   const hooks = buildOptions.hooks ?? {}
-  const cleanOutDir = buildOptions.cleanOutDir === true
+  const cleanOutDir =
+    publishOptions.enabled === true || buildOptions.cleanOutDir === true
   const minifyScripts = publishOptions.enabled === true
   const failOnAssetError = publishOptions.enabled === true
   const mdx = await resolveMdxBuildOptions(config.mdx)

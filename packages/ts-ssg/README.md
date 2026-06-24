@@ -54,25 +54,25 @@ await startDevServer({
 
 `src/cli.ts` provides the CLI:
 
-- `build` (default)
-- `serve` / `dev` / `--serve`
+- `build`
+- `serve`
+- `publish`
 
 Flags:
 
 - `--content ./content` or `--content=./content` (required; directory must contain `siteConfig.json`)
-- `--port 4173` or `--port=4173`
-- `--host 127.0.0.1` or `--host=127.0.0.1`
-- `--no-watch`
-- `--no-reload`
-- `--clean`
-- `--publish`
+- `--clean` (`build`, `serve`)
+- `--port 4173` or `--port=4173` (`serve`)
+- `--host 127.0.0.1` or `--host=127.0.0.1` (`serve`)
+- `--no-watch` (`serve`)
+- `--no-reload` (`serve`)
 
 Examples from this monorepo:
 
 ```bash
-yarn tsx packages/ts-ssg/src/cli.ts --content ./packages/ts-ssg/sample-content
+yarn tsx packages/ts-ssg/src/cli.ts build --content ./packages/ts-ssg/sample-content
 yarn tsx packages/ts-ssg/src/cli.ts serve --content ./packages/ts-ssg/sample-content --port 4173
-yarn tsx packages/ts-ssg/src/cli.ts --content ./packages/ts-ssg/sample-content --clean --publish
+yarn tsx packages/ts-ssg/src/cli.ts publish --content ./packages/ts-ssg/sample-content
 ```
 
 ## Content Model
@@ -104,7 +104,7 @@ Config comes from:
 - `rootDir`: project root. Default is package root.
 - `contentDir`: default `rootDir/sample-content`.
 - `outDir`: development output directory. Default `rootDir/dist/site`.
-- `publishDir`: publish output directory used by `--publish`. Default `rootDir/dist/publish`.
+- `publishDir`: clean output directory used by the `publish` command. Default `rootDir/dist/publish`.
 - `basePath`: optional public mount path such as `"/docs"` or `"/admin-panel"`. It prefixes generated public URLs without changing output file paths.
 - `siteTitle`: default `"ts-ssg"`.
 - `logo`: brand fields for top bar.

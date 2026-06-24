@@ -1062,7 +1062,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@purestack/ts-ssg@workspace:packages/ts-ssg":
+"@purestack/ts-ssg@workspace:^, @purestack/ts-ssg@workspace:packages/ts-ssg":
   version: 0.0.0-use.local
   resolution: "@purestack/ts-ssg@workspace:packages/ts-ssg"
   dependencies:
@@ -5713,6 +5713,16 @@ __metadata:
     vite: "npm:^7.3.1"
     vite-tsconfig-paths: "npm:^6.1.1"
     vitest: "npm:^4.0.18"
+  languageName: unknown
+  linkType: soft
+
+"purestack@workspace:packages/purestack":
+  version: 0.0.0-use.local
+  resolution: "purestack@workspace:packages/purestack"
+  dependencies:
+    "@purestack/ts-ssg": "workspace:^"
+  bin:
+    purestack: ./dist/cli.mjs
   languageName: unknown
   linkType: soft
 

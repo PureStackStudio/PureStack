@@ -1,15 +1,16 @@
 {
-  "name": "@purestack/ts-render",
+  "name": "purestack",
   "version": "1.1.0",
   "packageManager": "yarn@4.9.2",
-  "module": "./dist/ts-render.mjs",
-  "types": "./dist/ts-render.d.mts",
+  "module": "./dist/purestack.mjs",
+  "types": "./dist/purestack.d.mts",
   "type": "module",
   "sideEffects": false,
+  "bin": "./dist/cli.mjs",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/PureStackStudio/PureStack.git",
-    "directory": "packages/ts-render"
+    "directory": "packages/purestack"
   },
   "homepage": "https://purestack.studio",
   "bugs": {
@@ -20,8 +21,8 @@
   },
   "exports": {
     ".": {
-      "types": "./dist/ts-render.d.mts",
-      "import": "./dist/ts-render.mjs"
+      "types": "./dist/purestack.d.mts",
+      "import": "./dist/purestack.mjs"
     }
   },
   "license": "MIT",
@@ -39,10 +40,6 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@purestack/ts-common": "workspace:^",
-    "@purestack/ts-minidom": "workspace:^",
-    "@purestack/ts-page-scripts": "workspace:^",
-    "@purestack/ts-util": "workspace:^",
-    "regor": "^1.7.3"
+    "@purestack/ts-ssg": "workspace:^"
   }
 }

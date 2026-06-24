@@ -46,6 +46,19 @@ This repository contains the PureStack package workspace: the SSG pipeline,
 Regor component system, typed style and HTML/CSS builders, runtime page scripts,
 icon tooling, rendering foundation, shared types, and editor support.
 
+## Install
+
+```sh
+yarn add purestack
+```
+
+The public package provides the `purestack` CLI and the TypeScript API for custom
+projects:
+
+```ts
+import { buildSite, startDevServer } from 'purestack'
+```
+
 ## The Core Packages
 
 PureStack has many packages, but three of them define the day-to-day experience.
@@ -93,7 +106,7 @@ palette variables, and document layout styles in TypeScript. Components can use
 shared tones like `neutral`, `accent`, `info`, `success`, `warning`, and
 `danger` without scattering visual decisions across unrelated CSS conventions.
 
-## Using `ts-ssg`
+## Using PureStack
 
 A PureStack content folder is centered around `siteConfig.json` and content
 files:
@@ -162,15 +175,26 @@ if (mount instanceof HTMLElement) {
 Run the pipeline with a content directory:
 
 ```sh
-ts-ssg --content ./content --serve
-ts-ssg --content ./content --clean
-ts-ssg --content ./content --clean --publish
+yarn purestack build --content ./content
+yarn purestack serve --content ./content --port 4173
+yarn purestack publish --content ./content
+
+Usage:
+  purestack build --content <dir> [--clean]
+  purestack serve --content <dir> [--host <host>] [--port <port>] [--clean] [--no-watch] [--no-reload]
+  purestack publish --content <dir>
+
+Commands:
+  build     Build a content directory into its configured outDir.
+  serve     Start the dev server for a content directory.
+  publish   Clean and build a publish artifact using the configured publishDir.
 ```
 
 ## Package Map
 
 | Package | Role |
 | --- | --- |
+| [`purestack`](packages/purestack) | Public package and CLI. Re-exports the TypeScript API from `@purestack/ts-ssg`. |
 | [`@purestack/ts-ssg`](packages/ts-ssg) | Build and dev-server pipeline for Markdown, MDX, Regor MDX, templates, navigation, styles, scripts, and browser assets. |
 | [`@purestack/ts-components`](packages/ts-components) | Regor component definitions, component metadata, and matching style registration for product frontend primitives. |
 | [`@purestack/ts-style`](packages/ts-style) | Theme, skin, semantic tone, breakpoint, utility, typography, palette, and layout style infrastructure. |
