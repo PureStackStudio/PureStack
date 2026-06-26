@@ -11,9 +11,7 @@ describe('parseFragment', () => {
   })
 
   it('throws when a duplicate empty attribute would erase meaningful information', () => {
-    expect(() =>
-      parseFragment('<div class="visible" class=""></div>'),
-    ).toThrow(
+    expect(() => parseFragment('<div class="visible" class=""></div>')).toThrow(
       'Duplicate attribute "class" while parsing HTML. Previous value: "visible". New value: "".',
     )
   })

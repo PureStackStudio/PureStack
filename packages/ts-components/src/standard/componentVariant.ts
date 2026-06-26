@@ -45,7 +45,7 @@ const STATELESS_COMPONENT_VARIANT_CLASSES: Record<ComponentVariant, string> = {
   subtle: 'b-0 rounded-md tone-text',
   subtleBtn: 'b-0 rounded-md tone-text',
   link: 'tone-text',
-  sheen: 'tone-text-bg-button fs-h1 p-1 fw-900 uppercase',
+  sheen: 'tone-text-bg-button',
   underline: 'tone-text',
   rail: 'bl-1 inset-size-4 pl-4 pr-3 tone-border-button tone-text',
   bracket: 'tone-text',

@@ -68,7 +68,7 @@ describe('stripRegorTemplateTags', () => {
   it('does not strip dynamic Regor templates', () => {
     const source = [
       "import { html } from 'regor'",
-      'const markup = html`<Panel>${label}</Panel>`',
+      `const markup = html\`<Panel>\${label}</Panel>\``,
     ].join('\n')
 
     expect(stripRegorTemplateTags(source)).toBe(source)
