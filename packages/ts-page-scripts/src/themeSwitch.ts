@@ -67,7 +67,9 @@ if (themes.length > 0) {
         active: null as HTMLLinkElement | null,
         others: [] as HTMLLinkElement[],
       }
-    const links = document.querySelectorAll<HTMLLinkElement>('link[data-theme]')
+    const links = document.querySelectorAll<HTMLLinkElement>(
+      'link[rel="stylesheet"][data-theme]',
+    )
     let active: HTMLLinkElement | null = null
     const others: HTMLLinkElement[] = []
     for (let i = 0; i < links.length; i += 1) {
