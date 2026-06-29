@@ -277,6 +277,9 @@ function init(menu: HTMLElement) {
   applyStoredPreference()
   applyStoredOpenGroups()
   applyStoredScrollTop()
+  globalThis.requestAnimationFrame(() => {
+    applyStoredScrollTop()
+  })
 
   for (const group of navGroups) {
     group.addEventListener('toggle', writeStoredOpenGroups)
