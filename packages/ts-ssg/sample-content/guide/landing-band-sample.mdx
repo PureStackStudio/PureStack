@@ -225,12 +225,7 @@ edge with a slant.
   edgeSize="2rem"
   alignItems="center"
 >
-  <Flex
-    class="self-align-center"
-    align="center"
-    justify="center"
-    class="w-full"
-  >
+  <Flex class="w-full self-align-center" align="center" justify="center">
     <Badge tone="neutral">200px slant start</Badge>
   </Flex>
 </LandingBand>
@@ -260,11 +255,13 @@ edge with a slant.
 ```
 
 <style>
-  @media(min-width: 1024px) {
-    .nav__menu, .page-toc {
+  @media (min-width: 1024px) {
+    .nav__menu,
+    .page-toc {
       opacity: 0.9;
     }
-    .nav__menu:hover, .page-toc:hover {
+    .nav__menu:hover,
+    .page-toc:hover {
       opacity: 1;
     }
   }

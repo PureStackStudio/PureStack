@@ -6,7 +6,7 @@ This sample is a compact bilingual site for the ts-ssg i18n pipeline.
 Run it from the repository root:
 
   yarn tsx packages/ts-ssg/src/cli.ts --content ./packages/ts-ssg/sample-content-i18n --clean
-  yarn tsx packages/ts-ssg/src/cli.ts serve --content ./packages/ts-ssg/sample-content-i18n --port 4174
+  yarn tsx packages/ts-ssg/src/cli.ts serve --content ./packages/ts-ssg/sample-content-i18n --port 4175
 
 It demonstrates:
 
