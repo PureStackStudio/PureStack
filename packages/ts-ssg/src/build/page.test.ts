@@ -135,6 +135,90 @@ describe('page content compilation', () => {
 
       expect(page.frontmatter.layout.showToc).toBe(true)
       expect(page.html).toContain('class="doc-toc"')
+      expect(page.html).toContain('href="#section"')
+      expect(page.html).not.toContain('href="#home"')
+    } finally {
+      await fs.rm(root, { recursive: true, force: true })
+    }
+  })
+
+  it('uses the first compiled heading as the page title when frontmatter has no title', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-page-'))
+    try {
+      const contentDir = path.join(root, 'content')
+      const outDir = path.join(root, 'out')
+      await writeFile(
+        path.join(contentDir, 'getting-started.md'),
+        ['# Getting Started', '', '## Install'].join('\n'),
+      )
+
+      const config = resolveSiteConfig({
+        rootDir: root,
+        contentDir,
+        outDir,
+        siteTitle: 'Docs',
+      })
+      const page = await renderPageFromFile(
+        { config },
+        toContentFile(contentDir, 'getting-started.md'),
+      )
+
+      expect(page.frontmatter.title).toBe('Getting Started')
+      expect(page.pageInfo.frontmatter.title).toBe('Getting Started')
+      expect(page.headConfig.title).toBe('Docs | Getting Started')
+    } finally {
+      await fs.rm(root, { recursive: true, force: true })
+    }
+  })
+
+  it('does not render a toc shell when the only outline item is the page h1', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-page-'))
+    try {
+      const contentDir = path.join(root, 'content')
+      const outDir = path.join(root, 'out')
+      await writeFile(path.join(contentDir, 'index.md'), '# Home')
+
+      const config = resolveSiteConfig({ rootDir: root, contentDir, outDir })
+      const page = await renderPageFromFile(
+        { config },
+        toContentFile(contentDir, 'index.md'),
+      )
+
+      expect(page.outline).toEqual([
+        {
+          id: 'home',
+          title: 'Home',
+          depth: 1,
+        },
+      ])
+      expect(page.html).not.toContain('class="doc-toc"')
+    } finally {
+      await fs.rm(root, { recursive: true, force: true })
+    }
+  })
+
+  it('keeps a single h2 as a visible toc item when the page has no h1', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-page-'))
+    try {
+      const contentDir = path.join(root, 'content')
+      const outDir = path.join(root, 'out')
+      await writeFile(path.join(contentDir, 'index.md'), '## Section')
+
+      const config = resolveSiteConfig({ rootDir: root, contentDir, outDir })
+      const page = await renderPageFromFile(
+        { config },
+        toContentFile(contentDir, 'index.md'),
+      )
+
+      expect(page.outline).toEqual([
+        {
+          id: 'section',
+          title: 'Section',
+          depth: 2,
+        },
+      ])
+      expect(page.html).toContain('class="doc-toc"')
+      expect(page.html).toContain('href="#section"')
     } finally {
       await fs.rm(root, { recursive: true, force: true })
     }

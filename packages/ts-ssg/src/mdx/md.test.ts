@@ -50,6 +50,84 @@ describe('compileMarkdown', () => {
 
     expect(html).toContain('href="/docs/usage/transactions/"')
   })
+
+  it('collects h1, h2, and h3 headings into the page outline', () => {
+    const source = [
+      '# Getting Started',
+      '',
+      '## Install',
+      '',
+      '### Package Manager',
+      '',
+      '## Configure',
+    ].join('\n')
+
+    expect(compileMarkdown(source).outline).toEqual([
+      {
+        id: 'getting-started',
+        title: 'Getting Started',
+        depth: 1,
+        children: [
+          {
+            id: 'install',
+            title: 'Install',
+            depth: 2,
+            children: [
+              {
+                id: 'package-manager',
+                title: 'Package Manager',
+                depth: 3,
+              },
+            ],
+          },
+          {
+            id: 'configure',
+            title: 'Configure',
+            depth: 2,
+          },
+        ],
+      },
+    ])
+  })
+
+  it('does not attach skipped headings to stale ancestors', () => {
+    const source = [
+      '# First Page',
+      '',
+      '## Old Section',
+      '',
+      '# Second Page',
+      '',
+      '### Skipped Section',
+    ].join('\n')
+
+    expect(compileMarkdown(source).outline).toEqual([
+      {
+        id: 'first-page',
+        title: 'First Page',
+        depth: 1,
+        children: [
+          {
+            id: 'old-section',
+            title: 'Old Section',
+            depth: 2,
+          },
+        ],
+      },
+      {
+        id: 'second-page',
+        title: 'Second Page',
+        depth: 1,
+        children: [
+          {
+            id: 'skipped-section',
+            title: 'Skipped Section',
+            depth: 3,
+          },
+        ],
+      },
+    ])
+  })
 })
 
 function createTestContext(): TsSsgContext {

@@ -121,25 +121,6 @@ export async function renderPageFromFile(
     const parsedContent = parseFrontmatterSource(source, file.relPath, {
       defaultShowToc: context.config.pageToc.enabled,
     })
-    const navigation = resolvePageNavigation(
-      context.navigation,
-      file,
-      parsedContent.frontmatter,
-    )
-    const pageInfo = createPageTemplateInfo(
-      file,
-      urlPath,
-      parsedContent.frontmatter,
-      context.translationsByKey,
-    )
-    const headConfig = resolveHeadConfig(parsedContent.frontmatter, {
-      siteTitle: context.config.siteTitle,
-      sitePreview: context.config.preview,
-      basePath: context.config.basePath,
-      baseUrl: context.config.sitemap.baseUrl,
-      urlPath,
-      translations: pageInfo.translations,
-    })
     const compiled = compilePageContent(
       file,
       parsedContent.body,
@@ -147,7 +128,30 @@ export async function renderPageFromFile(
       context.config.mdx.compileMdAsMdx,
       context.config,
     )
-    const template = parsedContent.frontmatter.template
+    const frontmatter = resolvePageFrontmatterTitle(
+      parsedContent.frontmatter,
+      compiled.outline,
+    )
+    const navigation = resolvePageNavigation(
+      context.navigation,
+      file,
+      frontmatter,
+    )
+    const pageInfo = createPageTemplateInfo(
+      file,
+      urlPath,
+      frontmatter,
+      context.translationsByKey,
+    )
+    const headConfig = resolveHeadConfig(frontmatter, {
+      siteTitle: context.config.siteTitle,
+      sitePreview: context.config.preview,
+      basePath: context.config.basePath,
+      baseUrl: context.config.sitemap.baseUrl,
+      urlPath,
+      translations: pageInfo.translations,
+    })
+    const template = frontmatter.template
     const scriptEntrypoints = new Set<string>()
     const htmlShell = await renderPageShell({
       context,
@@ -171,7 +175,8 @@ export async function renderPageFromFile(
       Number(process.hrtime.bigint() - renderStart) / 1_000_000
     return {
       file,
-      ...parsedContent,
+      body: parsedContent.body,
+      frontmatter,
       headConfig,
       ...compiled,
       html,
@@ -248,6 +253,29 @@ function resolveSpecialContentFile(config: SiteConfig, file: ContentFile) {
   return locale && config.i18n.locales.includes(locale)
     ? resolveContentFile(config, file)
     : resolvePlainContentFile(file)
+}
+
+function resolvePageFrontmatterTitle(
+  frontmatter: PageFrontmatter,
+  outline: PageOutlineItem[],
+) {
+  if (typeof frontmatter.title === 'string' && frontmatter.title.trim()) {
+    return frontmatter
+  }
+  const title = findFirstOutlineTitle(outline)
+  return title ? { ...frontmatter, title } : frontmatter
+}
+
+function findFirstOutlineTitle(outline: PageOutlineItem[]): string | undefined {
+  for (const item of outline) {
+    const title = item.title.trim()
+    if (title) return title
+    const childTitle = item.children
+      ? findFirstOutlineTitle(item.children)
+      : undefined
+    if (childTitle) return childTitle
+  }
+  return undefined
 }
 
 function createPageTemplateInfo(

@@ -78,7 +78,9 @@ const pageTocTemplate = html`<nav
     </li>
   </ul>
   <div class="page-toc__empty" r-else>No sections yet.</div>
-  <script>window.tsSsgPageToc?.hydrate(document.currentScript?.parentElement)</script>
+  <script>
+    window.tsSsgPageToc?.hydrate(document.currentScript?.parentElement)
+  </script>
 </nav>`
 
 function toPageTocItems(items: PageOutlineItem[]): PageTocItem[] {
@@ -93,9 +95,16 @@ function toPageTocItems(items: PageOutlineItem[]): PageTocItem[] {
   })
 }
 
+function omitSingleDocumentHeading(items: PageOutlineItem[]) {
+  if (items.length !== 1) return items
+  const [item] = items
+  if (!item || item.depth !== 1) return items
+  return item.children ?? []
+}
+
 function resolveItems(props: PageToc, context: TsSsgContext | undefined) {
   const items = props.items ?? context?.outline ?? []
-  return toPageTocItems(items)
+  return toPageTocItems(omitSingleDocumentHeading(items))
 }
 
 function resolveTitle(props: PageToc) {

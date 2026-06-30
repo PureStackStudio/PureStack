@@ -86,14 +86,17 @@ function isTableScrollContainer(node: Root | Element): node is Element {
 }
 
 const OUTLINE_HEADING_LEVELS = new Map([
+  ['h1', 1],
   ['h2', 2],
   ['h3', 3],
 ])
 
+type CollectedOutlineItem = PageOutlineItem & { depth: number }
+
 function collectOutline(root: Root): PageOutlineItem[] {
   const outline: PageOutlineItem[] = []
   const slugCounts = new Map<string, number>()
-  let currentParent: PageOutlineItem | undefined
+  const ancestors: CollectedOutlineItem[] = []
 
   const visit = (node: Element | Text) => {
     if (node.type === 'element') {
@@ -104,17 +107,21 @@ function collectOutline(root: Root): PageOutlineItem[] {
         if (title) {
           const id = ensureHeadingId(node, title, slugCounts)
           if (id) {
-            const item: PageOutlineItem = { id, title, depth }
-            if (depth === 2) {
-              outline.push(item)
-              currentParent = item
-            } else if (depth === 3 && currentParent) {
-              const children = currentParent.children ?? []
+            const item: CollectedOutlineItem = { id, title, depth }
+            while (true) {
+              const ancestor = ancestors.at(-1)
+              if (!ancestor || ancestor.depth < depth) break
+              ancestors.pop()
+            }
+            const parent = ancestors.at(-1)
+            if (parent) {
+              const children = parent.children ?? []
               children.push(item)
-              currentParent.children = children
+              parent.children = children
             } else {
               outline.push(item)
             }
+            ancestors.push(item)
           }
         }
       }
