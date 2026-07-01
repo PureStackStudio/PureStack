@@ -25,7 +25,7 @@ function applyNormalizeDocumentRules(theme: string) {
     )
     .fontSize('1em')
   styleBuilder
-    .select('ul, ol', theme)
+    .select(':where(ul, ol)', theme)
     .listStyle('none')
     .padding('0')
     .margin('0')

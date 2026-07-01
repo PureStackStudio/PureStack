@@ -27,69 +27,66 @@ export function registerMarkdownStyles(options: MarkdownStyleOptions = {}) {
 }
 
 function registerBaseProseStyles(theme: ThemeMode, palette: ThemePalette) {
-  styleBuilder
-    .select('.doc-content', theme)
+  markdown(theme)
+    .select(':where(:scope)')
     .apply(palette.applyFont(palette.font.size.body))
     .color(palette.current.text.default)
 
-  styleBuilder.select('.doc-content :where(p)', theme).margin('0 0 1em')
+  markdown(theme).select(':where(p)').margin('0 0 1em')
 }
 
 function registerHeadingStyles(theme: ThemeMode, palette: ThemePalette) {
-  styleBuilder
-    .select('.doc-content :where(h1, h2, h3, h4, h5, h6)', theme)
+  markdown(theme)
+    .select(':where(h1, h2, h3, h4, h5, h6)')
     .margin('0 0 0.6em')
     .scrollMarginTop('6rem')
 
-  styleBuilder
-    .select('.doc-content :where(h1)', theme)
+  markdown(theme)
+    .select(':where(h1)')
     .apply(palette.applyFont(palette.font.size.h1, palette.font.weight.w700))
     .margin('0 0 0.5em')
-  styleBuilder
-    .select('.doc-content :where(h2)', theme)
+  markdown(theme)
+    .select(':where(h2)')
     .apply(palette.applyFont(palette.font.size.h2, palette.font.weight.w700))
 
-  styleBuilder
-    .select('.doc-content :where(h3)', theme)
+  markdown(theme)
+    .select(':where(h3)')
     .apply(palette.applyFont(palette.font.size.h3, palette.font.weight.w600))
-  styleBuilder
-    .select('.doc-content :where(h4)', theme)
+  markdown(theme)
+    .select(':where(h4)')
     .apply(palette.applyFont(palette.font.size.h4, palette.font.weight.w600))
-  styleBuilder
-    .select('.doc-content :where(h5)', theme)
+  markdown(theme)
+    .select(':where(h5)')
     .apply(palette.applyFont(palette.font.size.h5, palette.font.weight.w600))
-  styleBuilder
-    .select('.doc-content :where(h6)', theme)
+  markdown(theme)
+    .select(':where(h6)')
     .apply(palette.applyFont(palette.font.size.h6, palette.font.weight.w600))
 
-  styleBuilder
-    .select(
-      '.doc-content :where(* + h1, * + h2, * + h3, * + h4, * + h5, * + h6)',
-      theme,
-    )
+  markdown(theme)
+    .select(':where(* + h1, * + h2, * + h3, * + h4, * + h5, * + h6)')
     .marginTop('1.2em')
 }
 
 function registerListStyles(theme: ThemeMode) {
-  styleBuilder
-    .select('.doc-content :where(ul, ol)', theme)
+  markdown(theme)
+    .select(':where(ul, ol)')
     .margin('0 0 1em 1.4em')
     .padding('0')
-  styleBuilder.select('.doc-content :where(li)', theme).margin('0.35em 0')
-  styleBuilder.select('.doc-content :where(li > p)', theme).margin('0.4em 0')
+  markdown(theme).select(':where(li)').margin('0.35em 0')
+  markdown(theme).select(':where(li > p)').margin('0.4em 0')
 }
 
 function registerLinkStyles(theme: ThemeMode, palette: ThemePalette) {
-  styleBuilder
-    .select('.doc-content :where(a)', theme)
+  markdown(theme)
+    .select(':where(a)')
     .color(palette.current.text.default)
     .textDecoration('none')
     .fontWeight(palette.font.weight.w600)
-  styleBuilder
-    .select('.doc-content :where(a:hover)', theme)
+  markdown(theme)
+    .select(':where(a:hover)')
     .textDecoration('underline')
-  styleBuilder
-    .select('.doc-content :where(a:focus-visible)', theme)
+  markdown(theme)
+    .select(':where(a:focus-visible)')
     .outline(`2px solid ${palette.current.border.focus}`)
 }
 
@@ -106,8 +103,8 @@ function registerCodeStyles(
 }
 
 function registerInlineCodeStyles(theme: ThemeMode, palette: ThemePalette) {
-  styleBuilder
-    .select('.doc-content :where(code, pre)', theme)
+  markdown(theme)
+    .select(':where(code, pre)')
     .fontFamily("'SFMono-Regular', 'Consolas', 'Liberation Mono', monospace")
     .apply(palette.applyFont(palette.font.size.xs))
     .background(palette.semanticTone.neutral.surfaceAlt.rest.background)
@@ -117,11 +114,11 @@ function registerInlineCodeStyles(theme: ThemeMode, palette: ThemePalette) {
     .margin('0')
     .marginBlockEnd('1rem')
     .overflowX('auto')
-  styleBuilder
-    .select('.doc-content :where(code)', theme)
+  markdown(theme)
+    .select(':where(code)')
     .padding('0.15em 0.35em')
-  styleBuilder
-    .select('.doc-content :where(pre)', theme)
+  markdown(theme)
+    .select(':where(pre)')
     .padding('1.125rem 1.25rem')
     .position('relative')
 }
@@ -137,8 +134,8 @@ function registerPreAndCopyButtonStyles(
 }
 
 function registerCopyButtonBaseStyles(theme: ThemeMode, palette: ThemePalette) {
-  styleBuilder
-    .select('.doc-content :where(pre > .code-copy-button)', theme)
+  markdown(theme)
+    .select(':where(pre > .code-copy-button)')
     .position('absolute')
     .top('0.75rem')
     .right('0.75rem')
@@ -165,21 +162,20 @@ function registerCopyButtonInteractionStyles(
   theme: ThemeMode,
   palette: ThemePalette,
 ) {
-  styleBuilder
+  markdown(theme)
     .select(
-      '.doc-content :where(pre:hover > .code-copy-button, pre:focus-within > .code-copy-button)',
-      theme,
+      ':where(pre:hover > .code-copy-button, pre:focus-within > .code-copy-button)',
     )
     .opacity(1)
     .pointerEvents('auto')
 
-  styleBuilder
-    .select('.doc-content :where(pre > .code-copy-button:hover)', theme)
+  markdown(theme)
+    .select(':where(pre > .code-copy-button:hover)')
     .background(palette.semanticTone.neutral.surface.hover.background)
     .borderColor(palette.current.border.default)
 
-  styleBuilder
-    .select('.doc-content :where(pre > .code-copy-button:active)', theme)
+  markdown(theme)
+    .select(':where(pre > .code-copy-button:active)')
     .background(palette.semanticTone.neutral.surface.active.background)
     .borderColor(palette.current.border.default)
 }
@@ -188,70 +184,70 @@ function registerCopyButtonStateStyles(
   theme: ThemeMode,
   palette: ThemePalette,
 ) {
-  styleBuilder
-    .select('.doc-content :where(pre > .code-copy-button:focus-visible)', theme)
+  markdown(theme)
+    .select(':where(pre > .code-copy-button:focus-visible)')
     .opacity(1)
     .pointerEvents('auto')
     .outline(`2px solid ${palette.semanticTone.neutral.button.focusRing}`)
 
-  styleBuilder
-    .select('.doc-content :where(pre > .code-copy-button:disabled)', theme)
+  markdown(theme)
+    .select(':where(pre > .code-copy-button:disabled)')
     .background(palette.semanticTone.neutral.surface.disabled.background)
     .color(palette.current.text.subtle)
     .borderColor(palette.current.border.subtle)
     .cursor('not-allowed')
 
-  styleBuilder
-    .select('.doc-content :where(pre > .code-copy-button)', theme)
+  markdown(theme)
+    .select(':where(pre > .code-copy-button)')
     .media('hover: none')
     .opacity(1)
     .pointerEvents('auto')
 
-  styleBuilder
-    .select('.doc-content pre > .code-copy-button.is-copied', theme)
+  markdown(theme)
+    .select(':where(pre > .code-copy-button.is-copied)')
     .background(palette.semanticTone.success.button.rest.background)
     .borderColor(palette.semanticTone.success.border.default)
     .color(palette.semanticTone.success.text.default)
 
-  styleBuilder
-    .select('.doc-content pre > .code-copy-button.is-error', theme)
+  markdown(theme)
+    .select(':where(pre > .code-copy-button.is-error)')
     .background(palette.semanticTone.danger.button.rest.background)
     .borderColor(palette.semanticTone.danger.border.default)
     .color(palette.semanticTone.danger.text.default)
 }
 
 function registerPreCodeResetStyles(theme: ThemeMode) {
-  styleBuilder
-    .select('.doc-content :where(pre code)', theme)
+  markdown(theme)
+    .select(':where(pre code)')
     .background('transparent')
     .border('none')
     .padding('0')
 }
 
 function registerShikiStyles(theme: ThemeMode) {
-  styleBuilder
-    .select('.doc-content :where(pre.shiki.shiki-themes)', theme)
+  markdown(theme)
+    .select(':where(pre.shiki.shiki-themes)')
     .background(`var(--shiki-${theme}-bg)`)
     .color(`var(--shiki-${theme})`)
 
-  styleBuilder
-    .select('.doc-content :where(pre.shiki.shiki-themes .line)', theme)
+  markdown(theme)
+    .select(':where(pre.shiki.shiki-themes .line)')
     .color(`var(--shiki-${theme})`)
 
-  styleBuilder
-    .select('.doc-content :where(pre.shiki.shiki-themes span)', theme)
+  markdown(theme)
+    .select(':where(pre.shiki.shiki-themes span)')
     .color(`var(--shiki-${theme})`)
 
-  styleBuilder
-    .select('.doc-content :where(code.shiki-inline)', theme)
+  markdown(theme)
+    .select(':where(code.shiki-inline)')
     .color(`var(--shiki-${theme})`)
     .background(`var(--shiki-${theme}-bg)`)
     .border('none')
 }
 
 function registerBlockquoteStyles(theme: ThemeMode, palette: ThemePalette) {
-  styleBuilder
-    .select('.doc-content :where(blockquote)', theme)
+  markdown(theme)
+    .select(':where(blockquote)')
     .margin('0 0 1.4em')
     .padding('0.65em 1.1em')
     .set('border-inline-start', `0.5em solid ${palette.current.tone}`)
@@ -260,8 +256,8 @@ function registerBlockquoteStyles(theme: ThemeMode, palette: ThemePalette) {
     .color(palette.current.button.rest.text)
     .borderRadius(palette.radii.sm)
 
-  styleBuilder
-    .select('.doc-content blockquote :where(p)', theme)
+  markdown(theme)
+    .select(':where(blockquote p)')
     .margin('0')
     .padding('0')
 }
@@ -277,8 +273,8 @@ function registerTableStyles(theme: ThemeMode, palette: ThemePalette) {
 }
 
 function registerTableContainerStyles(theme: ThemeMode, palette: ThemePalette) {
-  styleBuilder
-    .select('.doc-content :where(.table-scroll)', theme)
+  markdown(theme)
+    .select(':where(.table-scroll)')
     .margin('0 0 1.4em')
     .maxWidth('100%')
     .overflowX('auto')
@@ -287,8 +283,8 @@ function registerTableContainerStyles(theme: ThemeMode, palette: ThemePalette) {
     .borderRadius(palette.radii.md)
     .boxShadow(palette.effect.panelShadow)
 
-  styleBuilder
-    .select('.doc-content :where(table)', theme)
+  markdown(theme)
+    .select(':where(table)')
     .width('max-content')
     .minWidth('100%')
     .borderCollapse('separate')
@@ -298,13 +294,13 @@ function registerTableContainerStyles(theme: ThemeMode, palette: ThemePalette) {
 }
 
 function registerTableHeaderStyles(theme: ThemeMode, palette: ThemePalette) {
-  styleBuilder
-    .select('.doc-content :where(thead)', theme)
+  markdown(theme)
+    .select(':where(thead)')
     .background(palette.current.surface.rest.background)
     .boxShadow(`inset 0 -1px ${palette.current.border.default}`)
 
-  styleBuilder
-    .select('.doc-content :where(thead tr)', theme)
+  markdown(theme)
+    .select(':where(thead tr)')
     .color(palette.current.text.default)
     .apply(palette.applyFont(palette.font.size.xxs))
     .textTransform('uppercase')
@@ -314,40 +310,40 @@ function registerTableHeaderCellStyles(
   theme: ThemeMode,
   palette: ThemePalette,
 ) {
-  styleBuilder
-    .select('.doc-content :where(thead th:first-child)', theme)
+  markdown(theme)
+    .select(':where(thead th:first-child)')
     .borderTopLeftRadius(palette.radii.md)
 
-  styleBuilder
-    .select('.doc-content :where(thead th:last-child)', theme)
+  markdown(theme)
+    .select(':where(thead th:last-child)')
     .borderTopRightRadius(palette.radii.md)
 
-  styleBuilder
-    .select('.doc-content :where(thead th)', theme)
+  markdown(theme)
+    .select(':where(thead th)')
     .borderBottom('none')
 }
 
 function registerTableBodyRowStyles(theme: ThemeMode, palette: ThemePalette) {
-  styleBuilder
-    .select('.doc-content :where(tbody tr:last-child td)', theme)
+  markdown(theme)
+    .select(':where(tbody tr:last-child td)')
     .borderBottom('none')
 
-  styleBuilder
-    .select('.doc-content :where(tbody tr:last-child td:first-child)', theme)
+  markdown(theme)
+    .select(':where(tbody tr:last-child td:first-child)')
     .borderBottomLeftRadius(palette.radii.md)
 
-  styleBuilder
-    .select('.doc-content :where(tbody tr:last-child td:last-child)', theme)
+  markdown(theme)
+    .select(':where(tbody tr:last-child td:last-child)')
     .borderBottomRightRadius(palette.radii.md)
 }
 
 function registerTableCellStyles(theme: ThemeMode, palette: ThemePalette) {
-  styleBuilder
-    .select('.doc-content :where(th + th, td + td)', theme)
+  markdown(theme)
+    .select(':where(th + th, td + td)')
     .borderLeft(`1px solid ${palette.current.border.subtle}`)
 
-  styleBuilder
-    .select('.doc-content :where(th, td)', theme)
+  markdown(theme)
+    .select(':where(th, td)')
     .padding('0.6875rem 0.875rem')
     .textAlign('left')
     .verticalAlign('top')
@@ -358,8 +354,8 @@ function registerTableInlineCodeStyles(
   theme: ThemeMode,
   palette: ThemePalette,
 ) {
-  styleBuilder
-    .select('.doc-content :where(table code)', theme)
+  markdown(theme)
+    .select(':where(table code)')
     .background(palette.semanticTone.neutral.surface.rest.background)
     .color(palette.semanticTone.neutral.surface.rest.text)
     .border(`1px solid ${palette.semanticTone.neutral.surface.rest.border}`)
@@ -368,33 +364,37 @@ function registerTableInlineCodeStyles(
 }
 
 function registerTableResponsiveStyles(theme: ThemeMode) {
-  styleBuilder
-    .select('.doc-content :where(th, td)', theme)
+  markdown(theme)
+    .select(':where(th, td)')
     .media(mediaMax(BREAKPOINTS.lg))
     .padding('0.5625rem 0.6875rem')
 }
 
 function registerHrStyles(theme: ThemeMode, palette: ThemePalette) {
-  styleBuilder
-    .select('.doc-content :where(hr)', theme)
+  markdown(theme)
+    .select(':where(hr)')
     .border('none')
     .borderTop(`1px solid ${palette.current.border.subtle}`)
     .margin('2em 0')
 }
 
 function registerMediaStyles(theme: ThemeMode, palette: ThemePalette) {
-  styleBuilder
-    .select('.doc-content :where(img, video)', theme)
+  markdown(theme)
+    .select(':where(img, video)')
     .maxWidth('100%')
     .height('auto')
     .borderRadius(palette.radii.md)
     .border(`1px solid ${palette.current.border.subtle}`)
 
-  styleBuilder.select('.doc-content :where(figure)', theme).margin('0 0 1.4em')
+  markdown(theme).select(':where(figure)').margin('0 0 1.4em')
 
-  styleBuilder
-    .select('.doc-content :where(figcaption)', theme)
+  markdown(theme)
+    .select(':where(figcaption)')
     .marginTop('0.6em')
     .apply(palette.applyFont(palette.font.size.sm))
     .color(palette.current.text.subtle)
+}
+
+function markdown(theme: ThemeMode) {
+  return styleBuilder.get(theme).scope('.doc-content')
 }
