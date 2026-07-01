@@ -68,10 +68,7 @@ function registerHeadingStyles(theme: ThemeMode, palette: ThemePalette) {
 }
 
 function registerListStyles(theme: ThemeMode) {
-  markdown(theme)
-    .select(':where(ul, ol)')
-    .margin('0 0 1em 1.4em')
-    .padding('0')
+  markdown(theme).select(':where(ul, ol)').margin('0 0 1em 1.4em').padding('0')
   markdown(theme).select(':where(li)').margin('0.35em 0')
   markdown(theme).select(':where(li > p)').margin('0.4em 0')
 }
@@ -82,9 +79,7 @@ function registerLinkStyles(theme: ThemeMode, palette: ThemePalette) {
     .color(palette.current.text.default)
     .textDecoration('none')
     .fontWeight(palette.font.weight.w600)
-  markdown(theme)
-    .select(':where(a:hover)')
-    .textDecoration('underline')
+  markdown(theme).select(':where(a:hover)').textDecoration('underline')
   markdown(theme)
     .select(':where(a:focus-visible)')
     .outline(`2px solid ${palette.current.border.focus}`)
@@ -258,10 +253,7 @@ function registerBlockquoteStyles(theme: ThemeMode, palette: ThemePalette) {
     .color(palette.current.button.rest.text)
     .borderRadius(palette.radii.sm)
 
-  markdown(theme)
-    .select(':where(blockquote p)')
-    .margin('0')
-    .padding('0')
+  markdown(theme).select(':where(blockquote p)').margin('0').padding('0')
 }
 
 function registerTableStyles(theme: ThemeMode, palette: ThemePalette) {
@@ -320,15 +312,11 @@ function registerTableHeaderCellStyles(
     .select(':where(thead th:last-child)')
     .borderTopRightRadius(palette.radii.md)
 
-  markdown(theme)
-    .select(':where(thead th)')
-    .borderBottom('none')
+  markdown(theme).select(':where(thead th)').borderBottom('none')
 }
 
 function registerTableBodyRowStyles(theme: ThemeMode, palette: ThemePalette) {
-  markdown(theme)
-    .select(':where(tbody tr:last-child td)')
-    .borderBottom('none')
+  markdown(theme).select(':where(tbody tr:last-child td)').borderBottom('none')
 
   markdown(theme)
     .select(':where(tbody tr:last-child td:first-child)')
