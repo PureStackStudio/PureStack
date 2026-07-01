@@ -1,3 +1,4 @@
+export { BaseStyle, RootStyle } from './baseStyle'
 export { getColors, getGradient, hexToRgba } from './colors'
 export type { CSSProps } from './cssProps'
 export { s } from './s'

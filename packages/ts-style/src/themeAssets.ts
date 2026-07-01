@@ -8,9 +8,7 @@ export interface ThemeStylesheetLink {
   href: string
   rel: string
   media?: string
-  title?: string
   dataTheme?: string
-  disabled?: boolean
 }
 
 export function normalizeThemeName(name: string): string {
@@ -98,8 +96,6 @@ export function resolveThemeStyleLinks(
       href,
       rel: 'stylesheet',
       dataTheme: theme,
-      disabled: theme !== 'light',
-      ...(theme !== 'light' ? { title: theme } : {}),
     }
   })
 }

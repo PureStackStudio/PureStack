@@ -11,8 +11,8 @@ import { buildEmbeddedThemeSwitchScript } from './embed/themeSwitch.embed'
  * Behavior:
  * - Reads preferred theme from localStorage key "ts-ssg-theme" if present.
  * - Falls back to prefers-color-scheme when available.
- * - Enables the matching <link data-theme="..."> and disables the rest.
- * - Adds data-theme, data-theme-mode, and data-theme-ready attributes on <html>.
+ * - Uses scoped theme stylesheets loaded as <link data-theme="...">.
+ * - Adds data-theme and data-theme-ready attributes on <html>.
  */
 export function buildThemeSwitchScript(themes: string[]) {
   const unique = [...new Set(themes)]

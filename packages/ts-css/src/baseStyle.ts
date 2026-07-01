@@ -59,6 +59,9 @@ export class BaseStyle<T extends RootStyle> extends RootStyle {
   select(selector: string) {
     let child = this.children.get(selector)
     if (child) return child
+    if (isGroupingRule(this.selector)) {
+      return this.selectWithoutParentKey(selector)
+    }
     const selectors = new Set(['+', '>', '|', '~', ' ', '|', ':'])
     const separator =
       this.selector.length === 0 || selectors.has(selector[0]) ? '' : ' '
@@ -90,28 +93,40 @@ export class BaseStyle<T extends RootStyle> extends RootStyle {
     if (!query) return this
     const selector = query.startsWith('@media') ? query : `@media(${query})`
     let child = this.children.get(selector)
+    const parentSelector = isGroupingRule(this.selector) ? '' : this.selector
     if (child) {
-      return this.#asBaseStyle(child).selectWithoutParentKey(this.selector)
+      return this.#asBaseStyle(child).selectWithoutParentKey(parentSelector)
     }
     child = this.#createT(selector)
     this.children.set(selector, child)
-    child = this.#asBaseStyle(child).selectWithoutParentKey(this.selector)
+    child = this.#asBaseStyle(child).selectWithoutParentKey(parentSelector)
+    return child
+  }
+
+  scope(rootSelector: string, limitSelector?: string) {
+    const selector = buildScopeRule(rootSelector, limitSelector)
+    if (!selector) return this
+    let child = this.children.get(selector)
+    if (child) return child
+    child = this.#createT(selector)
+    this.children.set(selector, child)
     return child
   }
 
   toCSS() {
     let result = ''
     const children = [...this.children.entries()].sort((a, b) => {
-      const isAMedia = a[1].selector.startsWith('@media')
-      const isBMedia = b[1].selector.startsWith('@media')
-      if (isAMedia && !isBMedia) return 1
-      if (!isAMedia && isBMedia) return -1
+      const isAGroup = isGroupingRule(a[1].selector)
+      const isBGroup = isGroupingRule(b[1].selector)
+      if (isAGroup && !isBGroup) return 1
+      if (!isAGroup && isBGroup) return -1
       return a[1].id - b[1].id
     })
     const selector = this.selector
-    if (selector.startsWith('@media')) {
+    if (isGroupingRule(selector)) {
       const mediaContent = children
-        .map((x) => `\r\n${x[1].toCSS()}`)[0]
+        .map((x) => `\r\n${x[1].toCSS()}`)
+        .join('')
         .trimEnd()
       result = `${selector} {${mediaContent}
 }
@@ -169,4 +184,17 @@ ${props}
     this.set('white-space', value)
     return this
   }
+}
+
+function isGroupingRule(selector: string) {
+  return selector.startsWith('@media') || selector.startsWith('@scope')
+}
+
+function buildScopeRule(rootSelector: string, limitSelector?: string) {
+  const root = rootSelector.trim()
+  if (!root) return ''
+  if (root.startsWith('@scope')) return root
+  const limit = limitSelector?.trim()
+  if (!limit) return `@scope (${root})`
+  return `@scope (${root}) to (${limit})`
 }

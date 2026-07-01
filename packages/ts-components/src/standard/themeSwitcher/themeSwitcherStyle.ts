@@ -157,17 +157,11 @@ export function registerThemeSwitcherIconStyles(
 
 export function registerThemeSwitcherActiveStateStyles(theme: ThemeMode) {
   styleBuilder
-    .select(
-      `html[data-theme="${theme}"] .theme-switcher .theme-switcher__track`,
-      theme,
-    )
+    .select(`.theme-switcher .theme-switcher__track`, theme)
     .opacity(0.85)
 
   styleBuilder
-    .select(
-      `html[data-theme="${theme}"] .theme-switcher .theme-switcher__thumb`,
-      theme,
-    )
+    .select(`.theme-switcher .theme-switcher__thumb`, theme)
     .transform(
       theme === 'dark'
         ? `translateY(-50%) translateX(${THEME_SWITCHER_THUMB_OFFSET})`
@@ -177,17 +171,11 @@ export function registerThemeSwitcherActiveStateStyles(theme: ThemeMode) {
   const activeIcon = theme === 'dark' ? 'moon' : 'sun'
   const inactiveIcon = theme === 'dark' ? 'sun' : 'moon'
   styleBuilder
-    .select(
-      `html[data-theme="${theme}"] .theme-switcher .theme-switcher__icon--${activeIcon}`,
-      theme,
-    )
+    .select(`.theme-switcher .theme-switcher__icon--${activeIcon}`, theme)
     .opacity(1)
     .transform('scale(1)')
   styleBuilder
-    .select(
-      `html[data-theme="${theme}"] .theme-switcher .theme-switcher__icon--${inactiveIcon}`,
-      theme,
-    )
+    .select(`.theme-switcher .theme-switcher__icon--${inactiveIcon}`, theme)
     .opacity(0)
     .transform('scale(0.6)')
 }

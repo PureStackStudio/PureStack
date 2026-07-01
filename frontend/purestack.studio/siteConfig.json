@@ -9,7 +9,7 @@
     "pretty": false,
     "theme": {
       "skin": "standard",
-      "presets": ["red"]
+      "presets": ["purestack"]
     }
   },
   "auth": {
@@ -68,7 +68,7 @@
   },
   "preview": {
     "title": "PureStack Studio",
-    "description": "Coherent frontend infrastructure for content, product surfaces, and AI-assisted teams.",
+    "description": "AI-native frontend studio for content, product surfaces, and teams building with TypeScript.",
     "image": "/assets/pure-stack-logo.png",
     "imageAlt": "PureStack logo",
     "imageWidth": 800,

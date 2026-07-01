@@ -54,51 +54,51 @@ if (themes.length > 0) {
     themeReady = true
     root.setAttribute('data-theme-ready', 'true')
   }
-  function waitForReady(link: HTMLLinkElement | null) {
-    if (!link || link.sheet != null) {
-      markReady()
+  function afterNextFrame(run: () => void) {
+    globalThis.requestAnimationFrame(run)
+  }
+  function afterNextPaint(run: () => void) {
+    globalThis.requestAnimationFrame(() => {
+      globalThis.requestAnimationFrame(run)
+    })
+  }
+  function getThemeLinks() {
+    return Array.from(
+      document.querySelectorAll<HTMLLinkElement>(
+        'link[rel="stylesheet"][data-theme]',
+      ),
+    )
+  }
+  function waitForThemeStyles() {
+    const links = getThemeLinks()
+    let pending = links.length
+    if (pending === 0) {
+      afterNextFrame(markReady)
       return
     }
-    link.addEventListener('load', () => markReady(), { once: true })
-  }
-  function applyTheme(theme: string, deferDisable: boolean) {
-    if (!isValid(theme))
-      return {
-        active: null as HTMLLinkElement | null,
-        others: [] as HTMLLinkElement[],
-      }
-    const links = document.querySelectorAll<HTMLLinkElement>(
-      'link[rel="stylesheet"][data-theme]',
-    )
-    let active: HTMLLinkElement | null = null
-    const others: HTMLLinkElement[] = []
-    for (let i = 0; i < links.length; i += 1) {
-      const link = links[i]
-      const linkTheme = link.getAttribute('data-theme')
-      if (linkTheme === theme) {
-        link.disabled = false
-        active = link
-      } else {
-        others.push(link)
-        if (!deferDisable) link.disabled = true
-      }
+
+    function finishLink() {
+      pending -= 1
+      if (pending === 0) afterNextFrame(markReady)
     }
-    root.setAttribute('data-theme', theme)
-    return { active, others }
-  }
-  function disableLinks(links: HTMLLinkElement[]) {
-    for (let i = 0; i < links.length; i += 1) links[i].disabled = true
+
+    for (const link of links) {
+      if (link.sheet != null) {
+        finishLink()
+        continue
+      }
+      link.addEventListener('load', finishLink, { once: true })
+      link.addEventListener('error', finishLink, { once: true })
+    }
   }
   function markSwitchersReady() {
     if (themeSwitchersReady) return
     themeSwitchersReady = true
-    globalThis.requestAnimationFrame(() => {
-      globalThis.requestAnimationFrame(() => {
-        const switches = document.querySelectorAll('.theme-switcher')
-        for (let i = 0; i < switches.length; i += 1) {
-          switches[i].setAttribute('data-theme-switcher-ready', 'true')
-        }
-      })
+    afterNextPaint(() => {
+      const switches = document.querySelectorAll('.theme-switcher')
+      for (let i = 0; i < switches.length; i += 1) {
+        switches[i].setAttribute('data-theme-switcher-ready', 'true')
+      }
     })
   }
   function syncSwitchers(theme: string) {
@@ -109,38 +109,16 @@ if (themes.length > 0) {
       el.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false')
     }
   }
-  function scheduleSync(
-    theme: string,
-    link: HTMLLinkElement | null,
-    disableAfter?: HTMLLinkElement[],
-  ) {
+  function applyTheme(theme: string) {
+    if (!isValid(theme)) return
+    root.setAttribute('data-theme', theme)
     syncSwitchers(theme)
-    if (!link) {
-      markSwitchersReady()
-      return
-    }
-    if (link.sheet != null) {
-      if (disableAfter) disableLinks(disableAfter)
-      markSwitchersReady()
-      return
-    }
-    link.addEventListener(
-      'load',
-      () => {
-        syncSwitchers(theme)
-        if (disableAfter) disableLinks(disableAfter)
-        markSwitchersReady()
-      },
-      { once: true },
-    )
+    markSwitchersReady()
   }
 
   let current = resolvePreferred()
-  const applied = applyTheme(current, false)
-  const active = applied.active
   root.setAttribute('data-theme', current)
-  root.setAttribute('data-theme-mode', 'auto')
-  waitForReady(active)
+  waitForThemeStyles()
 
   function bindSwitchers() {
     const switches = document.querySelectorAll('.theme-switcher')
@@ -157,7 +135,7 @@ if (themes.length > 0) {
   }
   function initSwitchers() {
     bindSwitchers()
-    scheduleSync(current, active)
+    applyTheme(current)
   }
 
   if (document.readyState === 'loading') {
@@ -176,9 +154,8 @@ if (themes.length > 0) {
     set(theme: string) {
       if (!isValid(theme)) return
       current = theme
-      const appliedNext = applyTheme(current, true)
       setStored(current)
-      scheduleSync(current, appliedNext.active, appliedNext.others)
+      applyTheme(current)
     },
   }
 }

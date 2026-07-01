@@ -68,6 +68,44 @@ describe('Style', () => {
 `)
   })
 
+  it('creates scope grouping rules', async () => {
+    const st = s().scope('html[data-theme="dark"]')
+    st.select(':scope').color('black')
+    st.select('.btn').color('white')
+
+    expect(await st.toPrettyCSS()).toBe(`@scope (html[data-theme="dark"]) {
+  :scope {
+    color: black;
+  }
+
+  .btn {
+    color: white;
+  }
+}
+`)
+  })
+
+  it('keeps media rules inside scope blocks', async () => {
+    const st = s().scope('.shell')
+    st.select('.btn').media('min-width: 40rem').display('block')
+    st.media('min-width: 60rem').select('.panel').display('grid')
+
+    expect(await st.toPrettyCSS()).toBe(`@scope (.shell) {
+  @media (min-width: 40rem) {
+    .btn {
+      display: block;
+    }
+  }
+
+  @media (min-width: 60rem) {
+    .panel {
+      display: grid;
+    }
+  }
+}
+`)
+  })
+
   it('sets zoom property and is chainable', () => {
     const st = s()
     const ret = st.zoom('normal')

@@ -2,7 +2,7 @@ import { Style } from '@purestack/ts-css'
 
 import { normalizeThemeName, type ThemeName } from './themeAssets'
 import { themes } from './themeOptions'
-import { buildThemePaletteVariableCss } from './themePaletteVars'
+import { listThemePaletteVarEntries } from './themePaletteVars'
 
 const styleBuilders = new Map<ThemeName, Style>()
 export type StyleBuilder = typeof styleBuilder
@@ -16,12 +16,16 @@ export const styleBuilder = {
     const normalized = normalizeThemeName(theme)
     const existing = styleBuilders.get(normalized)
     if (existing) return existing
-    const created = new Style()
+    const created = new Style().scope(getThemeScopeSelector(normalized))
     styleBuilders.set(normalized, created)
     return created
   },
   select(selector: string, theme: ThemeName) {
-    return styleBuilder.get(theme).select(selector)
+    const normalized = normalizeThemeName(theme)
+    const scoped = styleBuilder.get(normalized)
+    return isThemeRootSelector(selector)
+      ? scoped.select(':scope')
+      : scoped.select(selector)
   },
   has(theme: ThemeName) {
     const normalized = normalizeThemeName(theme)
@@ -41,14 +45,26 @@ export const styleBuilder = {
   async render(theme: ThemeName, pretty: boolean = true) {
     const normalized = normalizeThemeName(theme)
     const style = styleBuilder.get(normalized)
+    applyThemePaletteVariableDeclarations(style.select(':scope'), normalized)
     const rendered = pretty ? style.toPrettyCSS() : style.toCSS()
-    const paletteVars = buildThemePaletteVariableCss(
-      themes.rawPalette(normalized),
-      pretty,
-    )
-    return rendered ? `${paletteVars}\n\n${rendered}` : paletteVars
+    return rendered
   },
   reset() {
     styleBuilders.clear()
   },
+}
+
+function getThemeScopeSelector(theme: ThemeName) {
+  return `html[data-theme="${normalizeThemeName(theme)}"]`
+}
+
+function isThemeRootSelector(selector: string) {
+  const trimmed = selector.trim()
+  return trimmed === 'html' || trimmed === ':root'
+}
+
+function applyThemePaletteVariableDeclarations(style: Style, theme: ThemeName) {
+  for (const entry of listThemePaletteVarEntries(themes.rawPalette(theme))) {
+    style.set(entry.name, entry.value)
+  }
 }

@@ -104,22 +104,10 @@ function appendStyleLinkTags(
   for (const link of styleLinks) {
     head.push(
       h('link').attr({
-        rel: 'preload',
-        as: 'style',
-        href: link.href,
-        ...(link.media ? { media: link.media } : {}),
-        ...(link.title ? { title: link.title } : {}),
-        ...(link.dataTheme ? { 'data-theme': link.dataTheme } : {}),
-      }),
-    )
-    head.push(
-      h('link').attr({
         rel: link.rel,
         href: link.href,
         ...(link.media ? { media: link.media } : {}),
-        ...(link.title ? { title: link.title } : {}),
         ...(link.dataTheme ? { 'data-theme': link.dataTheme } : {}),
-        ...(link.disabled ? { disabled: '' } : {}),
       }),
     )
   }
