@@ -117,6 +117,8 @@ function registerInlineCodeStyles(theme: ThemeMode, palette: ThemePalette) {
   markdown(theme)
     .select(':where(code)')
     .padding('0.15em 0.35em')
+    .overflowWrap('anywhere')
+    .wordBreak('break-word')
   markdown(theme)
     .select(':where(pre)')
     .padding('1.125rem 1.25rem')
