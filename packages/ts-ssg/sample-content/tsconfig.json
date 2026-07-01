@@ -1,7 +1,10 @@
 {
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
-    "composite": false
+    "composite": false,
+    "paths": {
+      "@purestack/*": ["../../../packages/*/src"]
+    }
   },
   "include": ["./**/*.ts"]
 }

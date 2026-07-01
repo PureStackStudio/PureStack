@@ -13,7 +13,10 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "types": [],
-    "lib": ["ESNext", "DOM", "DOM.Iterable"]
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "paths": {
+      "@purestack/*": ["../../packages/*/src"]
+    }
   },
   "include": ["src/**/*.ts"],
   "exclude": ["src/test/**", "src/**/*.test.ts", "src/**/*.spec.ts"]
