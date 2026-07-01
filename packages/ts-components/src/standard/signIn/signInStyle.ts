@@ -29,24 +29,24 @@ function registerSignInAuthStateStyles(theme: ThemeMode) {
 
   styleBuilder
     .select(
-      '.sign-in__signed-in-view, .signed-in .sign-in__signed-out-view',
+      '.sign-in__signed-in-view, :scope.signed-in .sign-in__signed-out-view',
       theme,
     )
     .display('none')
 
   styleBuilder
-    .select('.signed-in .sign-in__signed-in-view', theme)
+    .select(':scope.signed-in .sign-in__signed-in-view', theme)
     .display('inline-flex')
 
   styleBuilder
     .select(
-      '.sign-in__signed-in-action, .signed-in .sign-in__signed-out-action',
+      '.sign-in__signed-in-action, :scope.signed-in .sign-in__signed-out-action',
       theme,
     )
     .display('none')
 
   styleBuilder
-    .select('.signed-in .sign-in__signed-in-action', theme)
+    .select(':scope.signed-in .sign-in__signed-in-action', theme)
     .display('inline-flex')
 }
 

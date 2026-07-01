@@ -265,11 +265,11 @@ layout:
 
 <script>
   (() => {
-    const key = 'purestack-sample-auth'
+    const key = 'signed-in-hint'
     const form = document.querySelector('.form-block')
     const status = document.querySelector('.form-status')
 
-    localStorage.setItem(key, 'signed-in')
+    localStorage.setItem(key, '1')
     document.documentElement.classList.add('signed-in')
 
     form?.addEventListener('submit', (event) => {

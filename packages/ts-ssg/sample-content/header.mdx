@@ -4,18 +4,3 @@
   signInEnabled="true"
   signInAvatarSrc="/hero.png"
   signInAvatarAlt="Signed in sample user"/>
-
-<script>
-  (() => {
-    const key = 'purestack-sample-auth'
-    const syncAuthState = () => {
-      document.documentElement.classList.toggle(
-        'signed-in',
-        localStorage.getItem(key) === 'signed-in',
-      )
-    }
-
-    syncAuthState()
-    window.addEventListener('storage', syncAuthState)
-  })()
-</script>
