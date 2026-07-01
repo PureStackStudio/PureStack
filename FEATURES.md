@@ -688,8 +688,7 @@ This inventory summarizes the capabilities currently visible in the repository. 
 - Log clear commands.
 - Hard clear mode.
 - Archive-before-clear mode.
-- Logrotate config installation.
-- Logrotate reset/debug commands.
+- Log rotation.
 - Daily/size-based rotation policy.
 - Long retention default.
 
