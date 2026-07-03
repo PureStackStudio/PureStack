@@ -11,7 +11,13 @@ nav:
   hidden: false
 ---
 
-<LandingSection tone="neutral" variant="surface" columnsLg="minmax(0, 1.08fr) minmax(320px, .92fr)" alignItems="center" class="mb-6">
+<LandingSection
+  tone="neutral"
+  variant="none"
+  columnsLg="minmax(0, 1.08fr) minmax(320px, .92fr)"
+  alignItems="center"
+  class="mb-6 box-shadow-none"
+>
   <Flex direction="column" align="start" class="gap-4">
     <Flex wrap="true" align="center" class="gap-2">
       <Badge tone="accent">TypeScript-native</Badge>
@@ -25,12 +31,19 @@ nav:
       subtitle="PureStack keeps content, interfaces, styles, scripts, workflows, and delivery output in one understandable source model for real product frontends."
       titleTag="h1"
       titleClass="fs-display mb-2"
-      subtitleClass="text-lead mb-0"
-    />
+      subtitleClass="text-lead mb-0"/>
 
     <Flex wrap="true" align="center" class="gap-3">
-      <BtnLink href="#source-model" tone="accent" icon="tabler:book-2">Explore the model</BtnLink>
-      <BtnLink href="#packages" tone="neutral" variant="outline" icon="tabler:layout-dashboard">See the stack</BtnLink>
+      <BtnLink href="#source-model" tone="accent" icon="tabler:book-2"
+        >Explore the model</BtnLink
+      >
+      <BtnLink
+        href="#packages"
+        tone="neutral"
+        variant="outline"
+        icon="tabler:layout-dashboard"
+        >See the stack</BtnLink
+      >
     </Flex>
   </Flex>
 
@@ -61,62 +74,96 @@ layout:
 ```
 
     <template #result>
-      <MetricStrip tone="accent" variant="surface" columns="1fr" columnsSm="repeat(3, 1fr)" class="box-shadow-none">
-        <MetricItem value="MDX" label="content" detail="pages, docs, metadata" icon="tabler:book-2" tone="accent" />
-        <MetricItem value="UI" label="components" detail="layouts, forms, dashboards" icon="tabler:layout" tone="secondary" />
-        <MetricItem value="SSG" label="delivery" detail="routes, assets, scripts" icon="tabler:code" tone="neutral" />
+      <MetricStrip
+        tone="accent"
+        variant="surface"
+        columns="1fr"
+        columnsSm="repeat(3, 1fr)"
+        class="box-shadow-none"
+      >
+        <MetricItem
+          value="MDX"
+          label="content"
+          detail="pages, docs, metadata"
+          icon="tabler:book-2"
+          tone="accent"/>
+        <MetricItem
+          value="UI"
+          label="components"
+          detail="layouts, forms, dashboards"
+          icon="tabler:layout"
+          tone="secondary"/>
+        <MetricItem
+          value="SSG"
+          label="delivery"
+          detail="routes, assets, scripts"
+          icon="tabler:code"
+          tone="neutral"/>
       </MetricStrip>
     </template>
   </CodeShowcase>
 </LandingSection>
 
-<LandingBand tone="accent" variant="surfaceAlt" height="auto" paddingTop="5rem" paddingBottom="5rem" class="mb-6">
+<LandingBand
+  tone="accent"
+  variant="surfaceAlt"
+  height="auto"
+  paddingTop="5rem"
+  paddingBottom="5rem"
+  class="mb-6"
+>
   <SectionHeader
     eyebrow="Why it exists"
     title="Frontend work should preserve product intent instead of scattering it across disconnected layers."
     subtitle="PureStack is built for the long life of software: after the first page ships, while screens multiply, styles evolve, workflows change, and AI becomes part of everyday implementation."
     titleClass="fs-h2"
-    subtitleClass="text-lead mb-0"
-  />
+    subtitleClass="text-lead mb-0"/>
 </LandingBand>
 
-<Grid columns="1fr" columnsMd="repeat(2, minmax(0, 1fr))" columnsLg="repeat(4, minmax(0, 1fr))" class="mb-6">
+<Grid
+  columns="1fr"
+  columnsMd="repeat(2, minmax(0, 1fr))"
+  columnsLg="repeat(4, minmax(0, 1fr))"
+  class="mb-6"
+>
   <FeatureCard
     icon="tabler:book-2"
     eyebrow="Content"
     title="Writing stays close to meaning"
     summary="Markdown and MDX carry prose, page metadata, navigation context, previews, and product narrative without leaving the frontend source."
-    tone="accent"
-  />
+    tone="accent"/>
   <FeatureCard
     icon="tabler:layout"
     eyebrow="Interface"
     title="UI stays composable"
     summary="Landing sections, panels, grids, forms, tabs, tables, charts, modals, and operational controls share one typed component vocabulary."
-    tone="secondary"
-  />
+    tone="secondary"/>
   <FeatureCard
     icon="tabler:database"
     eyebrow="Style"
     title="Design stays systematic"
     summary="Themes, semantic tones, utilities, typography, skins, breakpoints, and palette variables come from the same styling foundation."
-    tone="neutral"
-  />
+    tone="neutral"/>
   <FeatureCard
     icon="tabler:code"
     eyebrow="Delivery"
     title="Runtime stays intentional"
     summary="Static output remains the default, while search, scripts, analytics, consent, and browser bundles are added where the product needs them."
-    tone="accent"
-  />
+    tone="accent"/>
 </Grid>
 
-<LandingSection id="source-model" tone="neutral" variant="surface" columnsLg="minmax(300px, .82fr) minmax(0, 1.18fr)" alignItems="start" class="mb-6">
+<LandingSection
+  id="source-model"
+  tone="neutral"
+  variant="none"
+  columnsLg="minmax(300px, .82fr) minmax(0, 1.18fr)"
+  alignItems="start"
+  class="box-shadow-none mb-6"
+>
   <SectionHeader
     eyebrow="The source model"
     title="A frontend system that is readable before it is rendered."
-    subtitle="PureStack favors explicit source over hidden conventions. Humans can inspect it. AI agents can reason about it. Product teams can extend it without losing the thread."
-  />
+    subtitle="PureStack favors explicit source over hidden conventions. Humans can inspect it. AI agents can reason about it. Product teams can extend it without losing the thread."/>
 
   <ComparisonTable
     tone="accent"
@@ -127,16 +174,44 @@ layout:
     columns="1fr"
     columnsLg="repeat(2, minmax(0, 1fr))"
   >
-    <ComparisonColumn title="Conventional assembly" badge="Fragmented" icon="tabler:layout" tone="neutral">
-      <ComparisonFeature icon="tabler:book-2" tone="neutral">Content lives in one system, UI in another, styling in another, and scripts somewhere else.</ComparisonFeature>
-      <ComparisonFeature icon="tabler:database" tone="neutral">Design rules depend on naming discipline, duplicated conventions, and fragile file boundaries.</ComparisonFeature>
-      <ComparisonFeature icon="tabler:code" tone="neutral">AI edits must infer intent from scattered templates, runtime code, generated assets, and build configuration.</ComparisonFeature>
+    <ComparisonColumn
+      title="Conventional assembly"
+      badge="Fragmented"
+      icon="tabler:layout"
+      tone="neutral"
+    >
+      <ComparisonFeature icon="tabler:book-2" tone="neutral"
+        >Content lives in one system, UI in another, styling in another, and
+        scripts somewhere else.</ComparisonFeature
+      >
+      <ComparisonFeature icon="tabler:database" tone="neutral"
+        >Design rules depend on naming discipline, duplicated conventions, and
+        fragile file boundaries.</ComparisonFeature
+      >
+      <ComparisonFeature icon="tabler:code" tone="neutral"
+        >AI edits must infer intent from scattered templates, runtime code,
+        generated assets, and build configuration.</ComparisonFeature
+      >
     </ComparisonColumn>
 
-    <ComparisonColumn title="PureStack source" badge="Coherent" icon="tabler:device-desktop-analytics" tone="accent">
-      <ComparisonFeature icon="tabler:book-2" tone="accent">Content, metadata, navigation, and product copy stay inside authored frontend source.</ComparisonFeature>
-      <ComparisonFeature icon="tabler:layout" tone="accent">Typed components express reusable interface patterns from landing pages to admin surfaces.</ComparisonFeature>
-      <ComparisonFeature icon="tabler:code" tone="accent">The SSG connects routes, assets, styles, scripts, search, sitemap, robots, and static delivery.</ComparisonFeature>
+    <ComparisonColumn
+      title="PureStack source"
+      badge="Coherent"
+      icon="tabler:device-desktop-analytics"
+      tone="accent"
+    >
+      <ComparisonFeature icon="tabler:book-2" tone="accent"
+        >Content, metadata, navigation, and product copy stay inside authored
+        frontend source.</ComparisonFeature
+      >
+      <ComparisonFeature icon="tabler:layout" tone="accent"
+        >Typed components express reusable interface patterns from landing pages
+        to admin surfaces.</ComparisonFeature
+      >
+      <ComparisonFeature icon="tabler:code" tone="accent"
+        >The SSG connects routes, assets, styles, scripts, search, sitemap,
+        robots, and static delivery.</ComparisonFeature
+      >
     </ComparisonColumn>
   </ComparisonTable>
 </LandingSection>
@@ -144,35 +219,75 @@ layout:
 <Tabs selectedTab="content" tone="accent" class="mb-6">
   <TabPane id="content" label="Content Sites">
     <Grid columns="1fr" columnsMd="repeat(3, minmax(0, 1fr))">
-      <FeatureCard title="MDX-first pages" summary="Documentation, product pages, and narrative content use author-friendly source without giving up typed components." icon="tabler:book-2" tone="accent" />
-      <FeatureCard title="Search and metadata" summary="Pagefind, previews, robots, sitemap, and structured page data are part of the site pipeline." icon="tabler:database" tone="secondary" />
-      <FeatureCard title="Static output" summary="Fast frontend output is the baseline, with browser behavior added deliberately." icon="tabler:code" tone="neutral" />
+      <FeatureCard
+        title="MDX-first pages"
+        summary="Documentation, product pages, and narrative content use author-friendly source without giving up typed components."
+        icon="tabler:book-2"
+        tone="accent"/>
+      <FeatureCard
+        title="Search and metadata"
+        summary="Pagefind, previews, robots, sitemap, and structured page data are part of the site pipeline."
+        icon="tabler:database"
+        tone="secondary"/>
+      <FeatureCard
+        title="Static output"
+        summary="Fast frontend output is the baseline, with browser behavior added deliberately."
+        icon="tabler:code"
+        tone="neutral"/>
     </Grid>
   </TabPane>
 
   <TabPane id="product" label="Product UI">
     <Grid columns="1fr" columnsMd="repeat(3, minmax(0, 1fr))">
-      <FeatureCard title="Shared visual language" summary="Buttons, panels, grids, badges, tabs, cards, pricing, navigation, and CTAs draw from one product vocabulary." icon="tabler:layout" tone="accent" />
-      <FeatureCard title="Interactive surfaces" summary="Forms, modals, toasts, theme controls, search, charts, and browser scripts fit the same architecture." icon="tabler:device-desktop-analytics" tone="secondary" />
-      <FeatureCard title="Readable evolution" summary="New sections and workflows can be added without turning the frontend into disconnected one-off code." icon="tabler:code" tone="neutral" />
+      <FeatureCard
+        title="Shared visual language"
+        summary="Buttons, panels, grids, badges, tabs, cards, pricing, navigation, and CTAs draw from one product vocabulary."
+        icon="tabler:layout"
+        tone="accent"/>
+      <FeatureCard
+        title="Interactive surfaces"
+        summary="Forms, modals, toasts, theme controls, search, charts, and browser scripts fit the same architecture."
+        icon="tabler:device-desktop-analytics"
+        tone="secondary"/>
+      <FeatureCard
+        title="Readable evolution"
+        summary="New sections and workflows can be added without turning the frontend into disconnected one-off code."
+        icon="tabler:code"
+        tone="neutral"/>
     </Grid>
   </TabPane>
 
   <TabPane id="operations" label="Operations">
     <Grid columns="1fr" columnsMd="repeat(3, minmax(0, 1fr))">
-      <FeatureCard title="Admin-ready primitives" summary="The component system includes the building blocks expected by dashboards and operational tools." icon="tabler:layout-dashboard" tone="accent" />
-      <FeatureCard title="Consistent decisions" summary="Layout density, interaction patterns, tones, and responsive behavior stay aligned across product surfaces." icon="tabler:database" tone="secondary" />
-      <FeatureCard title="AI-compatible source" summary="Explicit TypeScript, MDX, and configuration give agents stable material to inspect, compose, and refactor." icon="tabler:code" tone="neutral" />
+      <FeatureCard
+        title="Admin-ready primitives"
+        summary="The component system includes the building blocks expected by dashboards and operational tools."
+        icon="tabler:layout-dashboard"
+        tone="accent"/>
+      <FeatureCard
+        title="Consistent decisions"
+        summary="Layout density, interaction patterns, tones, and responsive behavior stay aligned across product surfaces."
+        icon="tabler:database"
+        tone="secondary"/>
+      <FeatureCard
+        title="AI-compatible source"
+        summary="Explicit TypeScript, MDX, and configuration give agents stable material to inspect, compose, and refactor."
+        icon="tabler:code"
+        tone="neutral"/>
     </Grid>
   </TabPane>
 </Tabs>
 
-<LandingSection id="packages" tone="neutral" variant="surface" class="mb-6">
+<LandingSection
+  id="packages"
+  tone="neutral"
+  variant="none"
+  class="mb-6 box-shadow-none"
+>
   <SectionHeader
     eyebrow="Core packages"
     title="Modular packages, one frontend philosophy."
-    subtitle="PureStack separates responsibilities without splitting the product model. Each package owns a layer, and the layers are designed to work together."
-  />
+    subtitle="PureStack separates responsibilities without splitting the product model. Each package owns a layer, and the layers are designed to work together."/>
 
   <Grid columns="1fr" columnsLg="repeat(3, minmax(0, 1fr))">
     <FeatureCard
@@ -180,22 +295,19 @@ layout:
       eyebrow="@purestack/ts-ssg"
       title="Static frontend generation"
       summary="Routes, layouts, MDX, Regor components, static assets, robots, sitemap, Pagefind, analytics hooks, consent, live reload, and browser TypeScript bundling."
-      tone="accent"
-    />
+      tone="accent"/>
     <FeatureCard
       icon="tabler:layout"
       eyebrow="@purestack/ts-components"
       title="Product UI vocabulary"
       summary="Buttons, panels, grids, landing sections, feature cards, forms, tables, tabs, modals, toasts, charts, navigation, pricing, search, and theme controls."
-      tone="secondary"
-    />
+      tone="secondary"/>
     <FeatureCard
       icon="tabler:database"
       eyebrow="@purestack/ts-style"
       title="Design coherence layer"
       summary="Semantic tones, utilities, theme presets, typography, skins, breakpoints, palette variables, documentation layout styles, and reusable visual conventions."
-      tone="neutral"
-    />
+      tone="neutral"/>
   </Grid>
 </LandingSection>
 
@@ -205,8 +317,7 @@ layout:
       eyebrow="For teams"
       title="A calmer way to grow a frontend."
       subtitle="Start with a content directory. Add real product UI. Keep source files clear enough for designers, engineers, writers, and AI agents to understand the same system."
-      titleClass="fs-h3"
-    />
+      titleClass="fs-h3"/>
   </Panel>
 
   <Panel tone="secondary" variant="surfaceAlt">
@@ -214,8 +325,7 @@ layout:
       eyebrow="For products"
       title="A structure that survives iteration."
       subtitle="PureStack is designed for sites that become products, docs that need real components, and operational screens that should still feel like one coherent frontend."
-      titleClass="fs-h3"
-    />
+      titleClass="fs-h3"/>
   </Panel>
 </Grid>
 
@@ -230,5 +340,4 @@ layout:
   secondaryHref="#source-model"
   secondaryIcon="tabler:book-2"
   meta="TypeScript-native. Component-driven. Static by default."
-  tone="accent"
-/>
+  tone="accent"/>
