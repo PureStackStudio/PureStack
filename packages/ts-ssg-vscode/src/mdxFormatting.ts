@@ -239,7 +239,7 @@ export function maskMdxExpressions(source: string) {
 
 export function maskMdxFencedRegions(source: string) {
   const fences: MdxFencePlaceholder[] = []
-  const lines = source.split('\n')
+  const lines = splitInlineMdxFenceOpeners(source).split('\n')
   const placeholderLines: string[] = []
 
   for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
@@ -284,6 +284,56 @@ export function maskMdxFencedRegions(source: string) {
   }
 
   return { fences, placeholderContent: placeholderLines.join('\n') }
+}
+
+function splitInlineMdxFenceOpeners(source: string) {
+  const lines = source.split('\n')
+  const splitLines: string[] = []
+  let activeFence: { length: number; marker: '`' | '~' } | undefined
+
+  for (const line of lines) {
+    if (!activeFence) {
+      const splitLine = splitLineBeforeInlineMdxFenceOpener(line)
+      if (splitLine) {
+        splitLines.push(splitLine.before, splitLine.fenceLine)
+
+        const delimiter = parseFenceDelimiter(splitLine.fenceLine.trim())
+        activeFence = delimiter
+          ? { length: delimiter.length, marker: delimiter.marker }
+          : undefined
+        continue
+      }
+    }
+
+    splitLines.push(line)
+
+    const delimiter = parseFenceDelimiter(line.trim())
+    if (!delimiter) continue
+
+    if (!activeFence) {
+      activeFence = { length: delimiter.length, marker: delimiter.marker }
+      continue
+    }
+
+    if (isFenceClosingDelimiter(delimiter, activeFence)) {
+      activeFence = undefined
+    }
+  }
+
+  return splitLines.join('\n')
+}
+
+function splitLineBeforeInlineMdxFenceOpener(line: string) {
+  const match = /^(.+?)[\t ]*((?:`{3,}|~{3,}).*)$/.exec(line)
+  if (!match) return undefined
+
+  const before = match[1].trimEnd()
+  if (before.trim().length === 0) return undefined
+
+  return {
+    before,
+    fenceLine: match[2],
+  }
 }
 
 function normalizeMdxFenceDelimiterIndent(lines: string[]) {
@@ -384,7 +434,9 @@ function closeMdxFrontmatter(trimmed: string, state: MdxBlockScanState) {
 }
 
 function updateMdxFenceState(trimmed: string, state: MdxBlockScanState) {
-  const delimiter = parseFenceDelimiter(trimmed)
+  const delimiter =
+    parseFenceDelimiter(trimmed) ??
+    (!state.inFence ? parseInlineMdxFenceOpener(trimmed) : undefined)
   if (!delimiter) return state.inFence
 
   if (!state.inFence) {
@@ -408,6 +460,13 @@ function updateMdxFenceState(trimmed: string, state: MdxBlockScanState) {
   }
 
   return true
+}
+
+function parseInlineMdxFenceOpener(trimmed: string) {
+  const splitLine = splitLineBeforeInlineMdxFenceOpener(trimmed)
+  if (!splitLine) return undefined
+
+  return parseFenceDelimiter(splitLine.fenceLine.trim())
 }
 
 function collectActiveMarkupBlock(
