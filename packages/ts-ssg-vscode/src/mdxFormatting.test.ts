@@ -167,6 +167,35 @@ ${paragraphs}
     expect(formatted).not.toContain('<TabPane> ```mdx')
     expect(formatted).not.toContain('``` </TabPane>')
   })
+
+  it('aligns MDX fence delimiters without changing fenced code content', async () => {
+    const { buildMdxFormattingEdits } = await import('./mdxFormatting.js')
+    const source = `<Tabs tone="neutral">
+  <TabPane>
+    \`\`\`mdx
+      <LandingSection>
+        <a>asdf</a>
+      </LandingSection>
+    \`\`\`
+  </TabPane>
+</Tabs>`
+
+    const edits = await buildMdxFormattingEdits(
+      createMdxDocument(source) as never,
+      { requireFormatOnSave: true },
+    )
+    const formatted = applyEdits(source, edits as Array<{ newText: string }>)
+
+    expect(formatted).toBe(`<Tabs tone="neutral">
+  <TabPane>
+\`\`\`mdx
+      <LandingSection>
+        <a>asdf</a>
+      </LandingSection>
+\`\`\`
+  </TabPane>
+</Tabs>`)
+  })
 })
 
 describe('Regor MDX language identity', () => {

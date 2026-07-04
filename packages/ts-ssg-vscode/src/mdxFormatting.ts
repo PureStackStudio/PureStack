@@ -275,13 +275,30 @@ export function maskMdxFencedRegions(source: string) {
     const placeholder = `<!--PURESTACK_MDX_FENCE_${fences.length}-->`
     fences.push({
       placeholder,
-      source: lines.slice(lineIndex, closingLineIndex + 1).join('\n'),
+      source: normalizeMdxFenceDelimiterIndent(
+        lines.slice(lineIndex, closingLineIndex + 1),
+      ),
     })
     placeholderLines.push(placeholder)
     lineIndex = closingLineIndex
   }
 
   return { fences, placeholderContent: placeholderLines.join('\n') }
+}
+
+function normalizeMdxFenceDelimiterIndent(lines: string[]) {
+  if (lines.length < 2) return lines.join('\n')
+
+  const normalizedLines = [...lines]
+  normalizedLines[0] = trimLineStartIndent(normalizedLines[0])
+  normalizedLines[normalizedLines.length - 1] = trimLineStartIndent(
+    normalizedLines[normalizedLines.length - 1],
+  )
+  return normalizedLines.join('\n')
+}
+
+function trimLineStartIndent(line: string) {
+  return line.replace(/^[\t ]+/, '')
 }
 
 function restoreMdxExpressions(
