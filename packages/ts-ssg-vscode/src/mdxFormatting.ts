@@ -62,9 +62,9 @@ export async function buildMdxFormattingEdits(
       ? block.range.intersection(request.onlyWithinRange)
       : true,
   )
-  if (blocks.length === 0) return []
 
   const edits: vscode.TextEdit[] = []
+  const blockRanges = blocks.map((block) => block.range)
 
   for (const block of blocks) {
     const formatted = await formatMdxMarkupBlock(document, block)
@@ -73,7 +73,129 @@ export async function buildMdxFormattingEdits(
     edits.push(vscode.TextEdit.replace(block.range, formatted))
   }
 
+  edits.push(...buildMdxFenceDelimiterEdits(document, blockRanges))
+
   return edits
+}
+
+function buildMdxFenceDelimiterEdits(
+  document: vscode.TextDocument,
+  excludedRanges: vscode.Range[],
+) {
+  const edits: vscode.TextEdit[] = []
+  let activeFence: { length: number; marker: '`' | '~' } | undefined
+  let frontmatterHandled = false
+  let inFrontmatter = false
+
+  for (let lineIndex = 0; lineIndex < document.lineCount; lineIndex++) {
+    const line = document.lineAt(lineIndex)
+    const lineText = line.text
+    const trimmed = lineText.trim()
+
+    if (!frontmatterHandled && lineIndex === 0 && trimmed === '---') {
+      frontmatterHandled = true
+      inFrontmatter = true
+      continue
+    }
+
+    if (inFrontmatter) {
+      if (trimmed === '---') inFrontmatter = false
+      continue
+    }
+
+    if (isLineInsideAnyRange(lineIndex, excludedRanges)) {
+      continue
+    }
+
+    if (!activeFence) {
+      const splitLine = splitLineBeforeInlineMdxFenceOpener(lineText)
+      if (splitLine) {
+        const replacement = [
+          ...splitAdjacentMarkupTags(splitLine.before),
+          splitLine.fenceLine,
+        ].join('\n')
+        pushLineReplacement(edits, line.range, lineText, replacement)
+
+        const delimiter = parseFenceDelimiter(splitLine.fenceLine.trim())
+        activeFence = delimiter
+          ? { length: delimiter.length, marker: delimiter.marker }
+          : undefined
+        continue
+      }
+
+      const delimiter = parseFenceDelimiter(trimmed)
+      if (!delimiter) continue
+
+      pushLineReplacement(
+        edits,
+        line.range,
+        lineText,
+        trimLineStartIndent(lineText),
+      )
+      activeFence = { length: delimiter.length, marker: delimiter.marker }
+      continue
+    }
+
+    const splitClosingPrefix = splitLineAfterInlineMdxFenceCloser(
+      lineText,
+      activeFence,
+    )
+    if (splitClosingPrefix) {
+      const replacement = [
+        trimLineStartIndent(splitClosingPrefix.fenceLine),
+        splitClosingPrefix.after,
+      ].join('\n')
+      pushLineReplacement(edits, line.range, lineText, replacement)
+      activeFence = undefined
+      continue
+    }
+
+    const splitClosingSuffix = splitLineBeforeInlineMdxFenceCloser(
+      lineText,
+      activeFence,
+    )
+    if (splitClosingSuffix) {
+      const replacement = [
+        splitClosingSuffix.before,
+        trimLineStartIndent(splitClosingSuffix.fenceLine),
+      ].join('\n')
+      pushLineReplacement(edits, line.range, lineText, replacement)
+      activeFence = undefined
+      continue
+    }
+
+    const delimiter = parseFenceDelimiter(trimmed)
+    if (!delimiter || !isFenceClosingDelimiter(delimiter, activeFence)) {
+      continue
+    }
+
+    pushLineReplacement(
+      edits,
+      line.range,
+      lineText,
+      trimLineStartIndent(lineText),
+    )
+    activeFence = undefined
+  }
+
+  return edits
+}
+
+function pushLineReplacement(
+  edits: vscode.TextEdit[],
+  range: vscode.Range,
+  oldText: string,
+  newText: string,
+) {
+  if (newText === oldText) return
+
+  edits.push(vscode.TextEdit.replace(range, newText))
+}
+
+function isLineInsideAnyRange(lineIndex: number, ranges: vscode.Range[]) {
+  return ranges.some(
+    (range) => lineIndex >= range.start.line && lineIndex <= range.end.line,
+  )
 }
 
 export async function formatActiveEditorMdxMarkup(
@@ -295,7 +417,10 @@ function splitInlineMdxFenceDelimiters(source: string) {
     if (!activeFence) {
       const splitLine = splitLineBeforeInlineMdxFenceOpener(line)
       if (splitLine) {
-        splitLines.push(splitLine.before, splitLine.fenceLine)
+        splitLines.push(
+          ...splitAdjacentMarkupTags(splitLine.before),
+          splitLine.fenceLine,
+        )
 
         const delimiter = parseFenceDelimiter(splitLine.fenceLine.trim())
         activeFence = delimiter
@@ -322,6 +447,19 @@ function splitInlineMdxFenceDelimiters(source: string) {
       continue
     }
 
+    const splitTrailingClosingLine = splitLineBeforeInlineMdxFenceCloser(
+      line,
+      activeFence,
+    )
+    if (splitTrailingClosingLine) {
+      splitLines.push(
+        splitTrailingClosingLine.before,
+        splitTrailingClosingLine.fenceLine,
+      )
+      activeFence = undefined
+      continue
+    }
+
     splitLines.push(line)
 
     const delimiter = parseFenceDelimiter(line.trim())
@@ -344,6 +482,49 @@ function splitLineBeforeInlineMdxFenceOpener(line: string) {
 
   return {
     before,
+    fenceLine: match[2],
+  }
+}
+
+function splitAdjacentMarkupTags(line: string) {
+  const tokens = scanTagTokens(line)
+  if (tokens.length < 2) return [line]
+
+  let cursor = 0
+  const lines: string[] = []
+  const indent = /^\s*/.exec(line)?.[0] ?? ''
+
+  for (const token of tokens) {
+    if (line.slice(cursor, token.start).trim().length > 0) return [line]
+
+    const tag = line.slice(token.start, token.end)
+    lines.push(lines.length === 0 ? `${indent}${tag}` : tag)
+    cursor = token.end
+  }
+
+  if (line.slice(cursor).trim().length > 0) return [line]
+
+  return lines
+}
+
+function splitLineBeforeInlineMdxFenceCloser(
+  line: string,
+  activeFence: { length: number; marker: '`' | '~' },
+) {
+  const pattern = new RegExp(
+    `^(.*?)[\\t ]*(${escapeRegExp(activeFence.marker.repeat(activeFence.length))}${escapeRegExp(activeFence.marker)}*)[\\t ]*$`,
+  )
+  const match = pattern.exec(line)
+  if (!match || match[1].trim().length === 0) return undefined
+
+  const closingDelimiter = parseFenceDelimiter(match[2].trim())
+  if (!closingDelimiter) return undefined
+  if (!isFenceClosingDelimiter(closingDelimiter, activeFence)) {
+    return undefined
+  }
+
+  return {
+    before: match[1].trimEnd(),
     fenceLine: match[2],
   }
 }
@@ -513,9 +694,15 @@ function parseInlineMdxFenceCloser(
     length: state.fenceLength,
     marker: state.fenceMarker,
   })
-  if (!splitLine) return undefined
+  if (splitLine) return parseFenceDelimiter(splitLine.fenceLine.trim())
 
-  return parseFenceDelimiter(splitLine.fenceLine.trim())
+  const trailingSplitLine = splitLineBeforeInlineMdxFenceCloser(trimmed, {
+    length: state.fenceLength,
+    marker: state.fenceMarker,
+  })
+  if (!trailingSplitLine) return undefined
+
+  return parseFenceDelimiter(trailingSplitLine.fenceLine.trim())
 }
 
 function collectActiveMarkupBlock(
@@ -527,8 +714,15 @@ function collectActiveMarkupBlock(
   state: MdxBlockScanState,
 ) {
   if (state.activeStartLine === undefined) {
-    if (updateMdxFenceState(trimmed, state)) return
-    if (!looksLikeMarkupBlockStart(trimmed)) return
+    if (state.inFence) {
+      updateMdxFenceState(trimmed, state)
+      return
+    }
+
+    if (!looksLikeMarkupBlockStart(trimmed)) {
+      if (updateMdxFenceState(trimmed, state)) return
+      return
+    }
 
     state.activeStartLine = lineIndex
     state.activeEndLine = lineIndex

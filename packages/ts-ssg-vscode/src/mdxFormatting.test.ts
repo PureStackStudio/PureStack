@@ -52,13 +52,47 @@ function createMdxDocument(text: string, fsPath = 'test.mdx') {
   }
 }
 
-function applyEdits(source: string, edits: Array<{ newText: string }>) {
+function applyEdits(
+  source: string,
+  edits: Array<{ range?: TestRange; newText: string }>,
+) {
   if (edits.length === 0) return source
-  if (edits.length !== 1) {
-    throw new Error(`Expected one edit, received ${edits.length}`)
+
+  const lineStarts = getLineStarts(source)
+  let result = source
+
+  for (const edit of [...edits].sort(
+    (left, right) =>
+      getOffset(lineStarts, requireRange(right).start) -
+      getOffset(lineStarts, requireRange(left).start),
+  )) {
+    const range = requireRange(edit)
+    const start = getOffset(lineStarts, range.start)
+    const end = getOffset(lineStarts, range.end)
+    result = `${result.slice(0, start)}${edit.newText}${result.slice(end)}`
   }
 
-  return edits[0].newText
+  return result
+}
+
+function requireRange(edit: { range?: TestRange }) {
+  if (!edit.range) throw new Error('Expected edit range')
+
+  return edit.range
+}
+
+function getLineStarts(source: string) {
+  const starts = [0]
+
+  for (let index = 0; index < source.length; index++) {
+    if (source[index] === '\n') starts.push(index + 1)
+  }
+
+  return starts
+}
+
+function getOffset(lineStarts: number[], position: TestPosition) {
+  return lineStarts[position.line] + position.character
 }
 
 describe('buildMdxFormattingEdits', () => {
@@ -197,6 +231,26 @@ ${paragraphs}
 </Tabs>`)
   })
 
+  it('splits regular MDX fence closers away from preceding code content', async () => {
+    const { buildMdxFormattingEdits } = await import('./mdxFormatting.js')
+    const source = `\`\`\`mdx
+<LandingSection> </LandingSection> \`\`\`
+
+asdas`
+
+    const edits = await buildMdxFormattingEdits(
+      createMdxDocument(source) as never,
+      { requireFormatOnSave: true },
+    )
+    const formatted = applyEdits(source, edits as Array<{ newText: string }>)
+
+    expect(formatted).toBe(`\`\`\`mdx
+<LandingSection> </LandingSection>
+\`\`\`
+
+asdas`)
+  })
+
   it('splits MDX fence openers away from preceding tag closers', async () => {
     const { buildMdxFormattingEdits } = await import('./mdxFormatting.js')
     const source = `<Tabs tone="neutral">
@@ -265,6 +319,33 @@ ${paragraphs}
       <a>asdf</a>
     </LandingSection>
 \`\`\`</TabPane>
+</Tabs>`
+
+    const edits = await buildMdxFormattingEdits(
+      createMdxDocument(source) as never,
+      { requireFormatOnSave: true },
+    )
+    const formatted = applyEdits(source, edits as Array<{ newText: string }>)
+
+    expect(formatted).toBe(`<Tabs tone="neutral">
+  <TabPane>
+\`\`\`mdx
+    <LandingSection>
+      <a>asdf</a>
+    </LandingSection>
+\`\`\`
+  </TabPane>
+</Tabs>`)
+  })
+
+  it('formats markup that starts on the same line as an inline MDX fence opener', async () => {
+    const { buildMdxFormattingEdits } = await import('./mdxFormatting.js')
+    const source = `<Tabs tone="neutral"><TabPane>\`\`\`mdx
+    <LandingSection>
+      <a>asdf</a>
+    </LandingSection>
+\`\`\`
+  </TabPane>
 </Tabs>`
 
     const edits = await buildMdxFormattingEdits(
