@@ -139,6 +139,34 @@ ${paragraphs}
 
     expect(formatted).toBe('<Panel><Badge tone="accent"/></Panel>')
   })
+
+  it('keeps fenced code blocks on standalone lines inside MDX components', async () => {
+    const { buildMdxFormattingEdits } = await import('./mdxFormatting.js')
+    const source = `<Tabs tone="neutral">
+  <TabPane>
+\`\`\`mdx
+<LandingSection>
+</LandingSection>
+\`\`\`
+  </TabPane>
+  <TabPane>
+\`\`\`mdx
+<LandingSection>
+</LandingSection>
+\`\`\`
+  </TabPane>
+</Tabs>`
+
+    const edits = await buildMdxFormattingEdits(
+      createMdxDocument(source) as never,
+      { requireFormatOnSave: true },
+    )
+    const formatted = applyEdits(source, edits as Array<{ newText: string }>)
+
+    expect(formatted).toBe(source)
+    expect(formatted).not.toContain('<TabPane> ```mdx')
+    expect(formatted).not.toContain('``` </TabPane>')
+  })
 })
 
 describe('Regor MDX language identity', () => {

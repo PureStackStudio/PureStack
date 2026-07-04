@@ -272,7 +272,7 @@ export function maskMdxFencedRegions(source: string) {
       continue
     }
 
-    const placeholder = `PURESTACK_MDX_FENCE_${fences.length}`
+    const placeholder = `<!--PURESTACK_MDX_FENCE_${fences.length}-->`
     fences.push({
       placeholder,
       source: lines.slice(lineIndex, closingLineIndex + 1).join('\n'),
