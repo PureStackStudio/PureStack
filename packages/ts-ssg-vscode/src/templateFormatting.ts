@@ -133,6 +133,10 @@ function createSupportedTaggedTemplate(
   if (!tagName) return undefined
 
   const template = node.template
+  if (isLikelyPrematureRawBacktickClose(sourceFile.text, template)) {
+    return undefined
+  }
+
   const innerStart = template.getStart(sourceFile) + 1
   const innerEnd = template.getEnd() - 1
   if (innerEnd < innerStart) return undefined
@@ -202,6 +206,13 @@ function getSupportedTemplateTagName(tagText: string) {
   }
 
   return undefined
+}
+
+function isLikelyPrematureRawBacktickClose(
+  sourceText: string,
+  template: TypeScript.TemplateLiteral,
+) {
+  return sourceText.startsWith('``', template.getEnd())
 }
 
 function sliceTemplateHeadContent(
