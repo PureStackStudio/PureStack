@@ -239,7 +239,7 @@ export function maskMdxExpressions(source: string) {
 
 export function maskMdxFencedRegions(source: string) {
   const fences: MdxFencePlaceholder[] = []
-  const lines = splitInlineMdxFenceOpeners(source).split('\n')
+  const lines = splitInlineMdxFenceDelimiters(source).split('\n')
   const placeholderLines: string[] = []
 
   for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
@@ -286,7 +286,7 @@ export function maskMdxFencedRegions(source: string) {
   return { fences, placeholderContent: placeholderLines.join('\n') }
 }
 
-function splitInlineMdxFenceOpeners(source: string) {
+function splitInlineMdxFenceDelimiters(source: string) {
   const lines = source.split('\n')
   const splitLines: string[] = []
   let activeFence: { length: number; marker: '`' | '~' } | undefined
@@ -303,17 +303,29 @@ function splitInlineMdxFenceOpeners(source: string) {
           : undefined
         continue
       }
+
+      splitLines.push(line)
+
+      const delimiter = parseFenceDelimiter(line.trim())
+      if (!delimiter) continue
+      activeFence = { length: delimiter.length, marker: delimiter.marker }
+      continue
+    }
+
+    const splitClosingLine = splitLineAfterInlineMdxFenceCloser(
+      line,
+      activeFence,
+    )
+    if (splitClosingLine) {
+      splitLines.push(splitClosingLine.fenceLine, splitClosingLine.after)
+      activeFence = undefined
+      continue
     }
 
     splitLines.push(line)
 
     const delimiter = parseFenceDelimiter(line.trim())
     if (!delimiter) continue
-
-    if (!activeFence) {
-      activeFence = { length: delimiter.length, marker: delimiter.marker }
-      continue
-    }
 
     if (isFenceClosingDelimiter(delimiter, activeFence)) {
       activeFence = undefined
@@ -333,6 +345,28 @@ function splitLineBeforeInlineMdxFenceOpener(line: string) {
   return {
     before,
     fenceLine: match[2],
+  }
+}
+
+function splitLineAfterInlineMdxFenceCloser(
+  line: string,
+  activeFence: { length: number; marker: '`' | '~' },
+) {
+  const pattern = new RegExp(
+    `^([\\t ]*${escapeRegExp(activeFence.marker.repeat(activeFence.length))}${escapeRegExp(activeFence.marker)}*)(.*)$`,
+  )
+  const match = pattern.exec(line)
+  if (!match || match[2].trim().length === 0) return undefined
+
+  const closingDelimiter = parseFenceDelimiter(match[1].trim())
+  if (!closingDelimiter) return undefined
+  if (!isFenceClosingDelimiter(closingDelimiter, activeFence)) {
+    return undefined
+  }
+
+  return {
+    fenceLine: match[1],
+    after: match[2],
   }
 }
 
@@ -434,9 +468,9 @@ function closeMdxFrontmatter(trimmed: string, state: MdxBlockScanState) {
 }
 
 function updateMdxFenceState(trimmed: string, state: MdxBlockScanState) {
-  const delimiter =
-    parseFenceDelimiter(trimmed) ??
-    (!state.inFence ? parseInlineMdxFenceOpener(trimmed) : undefined)
+  const delimiter = state.inFence
+    ? parseInlineMdxFenceCloser(trimmed, state) ?? parseFenceDelimiter(trimmed)
+    : parseFenceDelimiter(trimmed) ?? parseInlineMdxFenceOpener(trimmed)
   if (!delimiter) return state.inFence
 
   if (!state.inFence) {
@@ -464,6 +498,21 @@ function updateMdxFenceState(trimmed: string, state: MdxBlockScanState) {
 
 function parseInlineMdxFenceOpener(trimmed: string) {
   const splitLine = splitLineBeforeInlineMdxFenceOpener(trimmed)
+  if (!splitLine) return undefined
+
+  return parseFenceDelimiter(splitLine.fenceLine.trim())
+}
+
+function parseInlineMdxFenceCloser(
+  trimmed: string,
+  state: MdxBlockScanState,
+) {
+  if (!state.fenceMarker || !state.fenceLength) return undefined
+
+  const splitLine = splitLineAfterInlineMdxFenceCloser(trimmed, {
+    length: state.fenceLength,
+    marker: state.fenceMarker,
+  })
   if (!splitLine) return undefined
 
   return parseFenceDelimiter(splitLine.fenceLine.trim())
