@@ -15,9 +15,14 @@ export interface MdxFenceDelimiter extends MdxFence {
   suffix: string
 }
 
+export interface MdxFenceDelimiterEditOptions {
+  onlyWithinRange?: vscode.Range
+}
+
 export function buildMdxFenceDelimiterEdits(
   document: vscode.TextDocument,
   excludedRanges: vscode.Range[],
+  options: MdxFenceDelimiterEditOptions = {},
 ) {
   const edits: vscode.TextEdit[] = []
   let activeFence: MdxFence | undefined
@@ -41,6 +46,13 @@ export function buildMdxFenceDelimiterEdits(
     }
 
     if (isLineInsideAnyRange(lineIndex, excludedRanges)) {
+      continue
+    }
+
+    if (
+      options.onlyWithinRange &&
+      !line.range.intersection(options.onlyWithinRange)
+    ) {
       continue
     }
 
@@ -300,6 +312,8 @@ function splitInlineMdxFenceDelimiters(source: string) {
 }
 
 function splitLineBeforeInlineMdxFenceOpener(line: string) {
+  if (parseMdxFenceDelimiter(line.trim())) return undefined
+
   const match = /^(.+?)[\t ]*((?:`{3,}|~{3,}).*)$/.exec(line)
   if (!match) return undefined
 

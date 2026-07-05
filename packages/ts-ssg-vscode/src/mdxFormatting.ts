@@ -77,7 +77,11 @@ export async function buildMdxFormattingEdits(
     edits.push(vscode.TextEdit.replace(block.range, formatted))
   }
 
-  edits.push(...buildMdxFenceDelimiterEdits(document, blockRanges))
+  edits.push(
+    ...buildMdxFenceDelimiterEdits(document, blockRanges, {
+      onlyWithinRange: request.onlyWithinRange,
+    }),
+  )
 
   return edits
 }

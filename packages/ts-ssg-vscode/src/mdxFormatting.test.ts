@@ -15,9 +15,24 @@ class TestRange {
     readonly end: TestPosition,
   ) {}
 
-  intersection() {
-    return this
+  intersection(other: TestRange) {
+    const start = comparePositions(this.start, other.start) >= 0
+      ? this.start
+      : other.start
+    const end = comparePositions(this.end, other.end) <= 0
+      ? this.end
+      : other.end
+
+    return comparePositions(start, end) <= 0
+      ? new TestRange(start, end)
+      : undefined
   }
+}
+
+function comparePositions(left: TestPosition, right: TestPosition) {
+  if (left.line !== right.line) return left.line - right.line
+
+  return left.character - right.character
 }
 
 vi.mock('vscode', () => ({
@@ -249,6 +264,38 @@ asdas`
 \`\`\`
 
 asdas`)
+  })
+
+  it('limits standalone fence delimiter edits to the requested range', async () => {
+    const { buildMdxFormattingEdits } = await import('./mdxFormatting.js')
+    const source = `\`\`\`mdx
+<First> </First> \`\`\`
+
+middle
+
+\`\`\`mdx
+<Second> </Second> \`\`\``
+
+    const edits = await buildMdxFormattingEdits(
+      createMdxDocument(source) as never,
+      {
+        onlyWithinRange: new TestRange(
+          new TestPosition(5, 0),
+          new TestPosition(6, 100),
+        ) as never,
+        requireFormatOnSave: true,
+      },
+    )
+    const formatted = applyEdits(source, edits as Array<{ newText: string }>)
+
+    expect(formatted).toBe(`\`\`\`mdx
+<First> </First> \`\`\`
+
+middle
+
+\`\`\`mdx
+<Second> </Second>
+\`\`\``)
   })
 
   it('splits MDX fence openers away from preceding tag closers', async () => {
