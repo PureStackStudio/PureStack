@@ -189,6 +189,44 @@ ${paragraphs}
     expect(formatted).toBe('<Panel><Badge tone="accent"/></Panel>')
   })
 
+  it('preserves standalone tag-shaped inline code spans inside MDX components', async () => {
+    const { buildMdxFormattingEdits } = await import('./mdxFormatting.js')
+    const inlineCode =
+      '`<LandingSection> asdas asdcasd asd asdas asd asdas asadas </LandingSection>`'
+    const source = `<Tabs tone="neutral">
+  <TabPane>
+    ${inlineCode}
+  </TabPane>
+</Tabs>`
+
+    const edits = await buildMdxFormattingEdits(
+      createMdxDocument(source) as never,
+      { requireFormatOnSave: true },
+    )
+    const formatted = applyEdits(source, edits as Array<{ newText: string }>)
+
+    expect(formatted).toContain(inlineCode)
+    expect(formatted).not.toContain('</LandingSection\n')
+    expect(formatted).not.toContain('</LandingSection\r\n')
+  })
+
+  it('preserves inline tag-shaped code spans inside MDX component text', async () => {
+    const { buildMdxFormattingEdits } = await import('./mdxFormatting.js')
+    const inlineCode =
+      '`<LandingSection> asdas asdcasd asd asdas asd asdas asadas </LandingSection>`'
+    const source = `<Callout>Use ${inlineCode} when documenting a component.</Callout>`
+
+    const edits = await buildMdxFormattingEdits(
+      createMdxDocument(source) as never,
+      { requireFormatOnSave: true },
+    )
+    const formatted = applyEdits(source, edits as Array<{ newText: string }>)
+
+    expect(formatted).toContain(inlineCode)
+    expect(formatted).not.toContain('</LandingSection\n')
+    expect(formatted).not.toContain('</LandingSection\r\n')
+  })
+
   it('keeps fenced code blocks on standalone lines inside MDX components', async () => {
     const { buildMdxFormattingEdits } = await import('./mdxFormatting.js')
     const source = `<Tabs tone="neutral">

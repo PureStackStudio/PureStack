@@ -32,6 +32,11 @@ interface MdxExpressionPlaceholder {
   source: string
 }
 
+interface MdxInlineCodePlaceholder {
+  placeholder: string
+  source: string
+}
+
 interface MdxFormattingRequest {
   onlyWithinRange?: vscode.Range
   requireFormatOnSave?: boolean
@@ -186,8 +191,10 @@ async function formatMdxMarkupBlock(
   const formattingOptions = getHtmlFormattingOptions(document)
   const { fences, placeholderContent: fencePlaceholderContent } =
     maskMdxFencedRegions(block.content.trim())
+  const { inlineCodeSpans, placeholderContent: inlineCodePlaceholderContent } =
+    maskMdxInlineCodeSpans(fencePlaceholderContent)
   const { expressions, placeholderContent } = maskMdxExpressions(
-    fencePlaceholderContent,
+    inlineCodePlaceholderContent,
   )
   if (!placeholderContent.includes('<')) return undefined
 
@@ -202,12 +209,101 @@ async function formatMdxMarkupBlock(
     return undefined
   }
 
-  const restored = restoreMdxExpressions(
+  const restoredExpressions = restoreMdxExpressions(
     normalizeSelfClosingTagSpacing(formatted.trim()),
     expressions,
   )
+  const restoredInlineCode = restoreMdxInlineCodeSpans(
+    restoredExpressions,
+    inlineCodeSpans,
+  )
 
-  return restoreMdxFencedRegions(restored, fences)
+  return restoreMdxFencedRegions(restoredInlineCode, fences)
+}
+
+function maskMdxInlineCodeSpans(source: string) {
+  const inlineCodeSpans: MdxInlineCodePlaceholder[] = []
+  const lines = source.split('\n')
+  const placeholderLines = lines.map((line) =>
+    maskMdxInlineCodeSpansInLine(line, inlineCodeSpans),
+  )
+
+  return {
+    inlineCodeSpans,
+    placeholderContent: placeholderLines.join('\n'),
+  }
+}
+
+function maskMdxInlineCodeSpansInLine(
+  line: string,
+  inlineCodeSpans: MdxInlineCodePlaceholder[],
+) {
+  let placeholderLine = ''
+
+  for (let index = 0; index < line.length; ) {
+    const start = line.indexOf('`', index)
+    if (start === -1) {
+      placeholderLine += line.slice(index)
+      break
+    }
+
+    const tickCount = countRepeatedChar(line, start, '`')
+    if (tickCount !== 1) {
+      placeholderLine += line.slice(index, start + tickCount)
+      index = start + tickCount
+      continue
+    }
+
+    const end = findMdxInlineCodeEnd(line, start + 1)
+    if (end === -1) {
+      placeholderLine += line.slice(index)
+      break
+    }
+
+    const source = line.slice(start, end + 1)
+    const placeholder = createMdxInlineCodePlaceholder(
+      inlineCodeSpans.length,
+      line,
+      start,
+      end + 1,
+    )
+    inlineCodeSpans.push({ placeholder, source })
+    placeholderLine += line.slice(index, start)
+    placeholderLine += placeholder
+    index = end + 1
+  }
+
+  return placeholderLine
+}
+
+function createMdxInlineCodePlaceholder(
+  index: number,
+  line: string,
+  start: number,
+  end: number,
+) {
+  const lineBefore = line.slice(0, start)
+  const lineAfter = line.slice(end)
+  if (lineBefore.trim().length === 0 && lineAfter.trim().length === 0) {
+    return `<!--PURESTACK_MDX_INLINE_CODE_${index}-->`
+  }
+
+  return `PURESTACK_MDX_INLINE_CODE_${index}`
+}
+
+function restoreMdxInlineCodeSpans(
+  formatted: string,
+  inlineCodeSpans: MdxInlineCodePlaceholder[],
+) {
+  let restored = formatted
+
+  for (const inlineCodeSpan of sortLongestPlaceholderFirst(inlineCodeSpans)) {
+    restored = restored
+      .split(inlineCodeSpan.placeholder)
+      .join(inlineCodeSpan.source)
+  }
+
+  return restored
 }
 
 export function maskMdxExpressions(source: string) {
@@ -424,6 +520,24 @@ function sortLongestPlaceholderFirst<T extends { placeholder: string }>(
   return [...placeholders].sort(
     (left, right) => right.placeholder.length - left.placeholder.length,
   )
+}
+
+function findMdxInlineCodeEnd(line: string, startIndex: number) {
+  for (let index = startIndex; index < line.length; index++) {
+    if (line[index] === '`') return index
+  }
+
+  return -1
+}
+
+function countRepeatedChar(line: string, startIndex: number, char: string) {
+  let count = 0
+
+  while (line[startIndex + count] === char) {
+    count++
+  }
+
+  return count
 }
 
 function findRawTextElementEnd(source: string, startIndex: number) {
