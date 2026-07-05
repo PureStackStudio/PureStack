@@ -4,8 +4,8 @@ import {
   getMdxMarkupBlocks,
   type MdxMarkupBlock,
   maskMdxExpressions,
-  maskMdxFencedRegions,
 } from './mdxFormatting'
+import { maskMdxFencedRegions } from './mdxFenceFormatting'
 import {
   getSupportedTaggedTemplates,
   type SupportedTaggedTemplate,
