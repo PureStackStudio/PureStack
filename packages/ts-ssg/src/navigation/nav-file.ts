@@ -50,6 +50,7 @@ async function readNavFile(
       throw new Error('nav file must be a JSON object or array.')
     }
     const items = normalizeNavItems(parsed.items, folder)
+    const root = normalizeNavRoot(parsed.root, folder)
     const sequence = normalizeNavSequence(parsed.sequence, folder)
     const icons = normalizeNavIcons(parsed.icons, folder)
     const pageLinks = resolveBoolean(parsed.pageLinks) ? true : undefined
@@ -57,7 +58,7 @@ async function readNavFile(
       parsed.mode === 'merge' || parsed.mode === 'override'
         ? parsed.mode
         : 'merge'
-    return { mode, items, sequence, icons, pageLinks }
+    return { mode, root, items, sequence, icons, pageLinks }
   } catch (error) {
     const err = error as NodeJS.ErrnoException
     if (err.code === 'ENOENT') return null
@@ -66,6 +67,29 @@ async function readNavFile(
       cause: error,
     })
   }
+}
+
+function normalizeNavRoot(value: unknown, folder: string) {
+  const root = resolveString(value)
+  if (!root) return undefined
+  const normalizedInput = root
+    .replaceAll('\\', '/')
+    .replace(/^\/+|\/+$/g, '')
+  const joined = root.trim().startsWith('/')
+    ? normalizedInput
+    : path.posix.join(folder, normalizedInput)
+  const normalized =
+    joined === '.' ? '' : path.posix.normalize(joined).replace(/^\/+|\/+$/g, '')
+  if (
+    normalized === '..' ||
+    normalized.startsWith('../') ||
+    normalized.includes('/../')
+  ) {
+    throw new Error(
+      `Invalid nav root "${root}". Navigation roots must stay inside the content root.`,
+    )
+  }
+  return normalized
 }
 
 function normalizeNavItems(value: unknown, folder: string): InternalNavItem[] {

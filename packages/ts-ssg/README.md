@@ -259,6 +259,7 @@ Each nav file may be:
 ```json
 {
   "mode": "merge",
+  "root": "reference",
   "pageLinks": true,
   "sequence": ["index.md", "github", "guide/", "guide/install.md"],
   "items": [
@@ -274,6 +275,9 @@ Each nav file may be:
 
 For object form, `mode` accepts `merge` or `override` and defaults to `merge`.
 Supported nav item fields: `id`, `title`, `url|href|path`, `order`, `hidden`, `group`, `icon`, `children`.
+Set `root` in a nav file to make pages in that folder and descendant folders
+render a specific navigation root. Relative values resolve from the nav file
+folder; leading-slash values resolve from the content root.
 `sequence` orders the final mixed menu after auto and custom items are combined.
 Entries are resolved relative to the nav file folder and are inherited by
 descendant folders, so one root nav file can order nested pages like

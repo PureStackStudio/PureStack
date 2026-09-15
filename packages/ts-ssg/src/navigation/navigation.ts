@@ -7,6 +7,7 @@ import { pickSemanticTone } from '@purestack/ts-style'
 import { resolveNavigationConfig } from './config'
 import { loadContentMeta } from './meta'
 import type {
+  NavFile,
   NavigationContentFile,
   NavigationTree,
   ResolvedNavigationConfig,
@@ -54,12 +55,18 @@ export async function buildNavigation(
     config,
   )
   const publicByFolder = stripInternalNavByFolder(byFolder)
+  const rootByFolder = buildNavigationRootOverrides(
+    folderSet,
+    customByFolder,
+    publicByFolder,
+  )
   const pageLinksByFolder = buildPageLinksByFolder(customByFolder)
   const global = publicByFolder[''] ?? []
   return {
     mode: config.mode,
     config,
     byFolder: publicByFolder,
+    rootByFolder,
     pageLinksByFolder,
     global,
   }
@@ -73,9 +80,12 @@ export function resolvePageNavigation(
   if (!tree) return undefined
   const folder = resolveFolderKey(file.relPath)
   const locale = resolveContentLocale(file)
-  const root = locale
+  const configuredRoot = locale
     ? resolveLocalizedNavigationRoot(folder, locale, tree.config.roots)
     : resolveNavigationRoot(folder, tree.config.roots)
+  const root = Object.hasOwn(tree.rootByFolder, folder)
+    ? (tree.rootByFolder[folder] ?? configuredRoot)
+    : configuredRoot
   const items = tree.byFolder[root] ?? tree.byFolder[folder] ?? []
   const pageLinks = resolvePageLinks(tree, folder, items, file)
   return {
@@ -129,4 +139,43 @@ function collectFolders(files: NavigationContentFile[]) {
 
 function resolveContentLocale(file: NavigationContentFile) {
   return 'locale' in file ? file.locale : undefined
+}
+
+function buildNavigationRootOverrides(
+  folders: Set<string>,
+  customByFolder: Record<string, NavFile>,
+  byFolder: Record<string, unknown>,
+) {
+  const result: Record<string, string> = {}
+  for (const folder of folders) {
+    const override = findInheritedNavigationRoot(folder, customByFolder)
+    if (!override) continue
+    const { sourceFolder, root } = override
+    if (!Object.hasOwn(byFolder, root)) {
+      const sourcePath = sourceFolder ? `${sourceFolder}/_nav.json` : '_nav.json'
+      throw new Error(
+        `Invalid navigation root "${root}" in ${sourcePath}: root menu was not built.`,
+      )
+    }
+    result[folder] = root
+  }
+  return result
+}
+
+function findInheritedNavigationRoot(
+  folder: string,
+  customByFolder: Record<string, { root?: string }>,
+) {
+  let current = folder
+  while (true) {
+    const root = customByFolder[current]?.root
+    if (root !== undefined) return { sourceFolder: current, root }
+    if (!current) return undefined
+    current = parentFolder(current)
+  }
+}
+
+function parentFolder(folder: string) {
+  const slashIndex = folder.lastIndexOf('/')
+  return slashIndex < 0 ? '' : folder.slice(0, slashIndex)
 }

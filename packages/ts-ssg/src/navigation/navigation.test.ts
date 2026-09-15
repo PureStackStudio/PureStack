@@ -352,6 +352,94 @@ describe('navigation', () => {
     })
   })
 
+  it('builds descendant roots below overridden parent folders', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      await fs.mkdir(
+        path.join(contentDir, 'docs', 'benchmark', 'reference', '100k'),
+        { recursive: true },
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'docs', 'index.md'),
+        '# Docs',
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'docs', 'benchmark', 'benchmark.md'),
+        '# Profile Store Benchmark',
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(
+          contentDir,
+          'docs',
+          'benchmark',
+          'reference',
+          '100k',
+          '100k.md',
+        ),
+        '# Benchmark 100K Profiles',
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'docs', 'benchmark', '_nav.json'),
+        JSON.stringify({
+          mode: 'override',
+          root: 'reference',
+          items: [{ title: 'Profile Store Benchmark', path: '.' }],
+        }),
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'docs', 'benchmark', 'reference', '_nav.json'),
+        JSON.stringify({
+          mode: 'merge',
+          sequence: ['benchmark', '100k/'],
+          items: [
+            {
+              id: 'benchmark',
+              title: 'Profile Store Benchmark',
+              path: '../',
+            },
+          ],
+        }),
+        'utf8',
+      )
+
+      const files = await discoverContent(contentDir)
+      const nav = await buildNavigation(contentDir, files, {
+        mode: 'hybrid',
+        maxDepth: 20,
+        roots: ['docs/benchmark/reference', 'docs'],
+      })
+      const docsItems = nav?.byFolder.docs ?? []
+      const benchmark = findContentFile(files, 'docs/benchmark/benchmark.md')
+      const benchmarkNav = resolvePageNavigation(nav, benchmark)
+      const reference = findContentFile(
+        files,
+        'docs/benchmark/reference/100k/100k.md',
+      )
+      const pageNav = resolvePageNavigation(nav, reference)
+
+      expect(
+        docsItems.find((item) => item.title === 'Profile Store Benchmark'),
+      ).toEqual({
+        title: 'Profile Store Benchmark',
+        url: '/docs/benchmark/',
+      })
+      expect(
+        docsItems.find((item) => item.title === 'Profile Store Benchmark')
+          ?.children,
+      ).toBeUndefined()
+      expect(benchmarkNav?.root).toBe('docs/benchmark/reference')
+      expect(pageNav?.root).toBe('docs/benchmark/reference')
+      expect(pageNav?.items.map((item) => item.title)).toEqual([
+        'Profile Store Benchmark',
+        'Benchmark 100K Profiles',
+      ])
+    })
+  })
+
   it('uses root navigation for descendant pages when no navigation roots are configured', async () => {
     await withTempDir(async (base) => {
       const contentDir = path.join(base, 'content')

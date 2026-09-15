@@ -81,12 +81,7 @@ export function buildNestedNavigation(
     const sequence = [...(custom?.sequence ?? []), ...inheritedSequence]
     const icons = [...(custom?.icons ?? []), ...inheritedIcons]
 
-    if (
-      allowChildren &&
-      !overrideMode &&
-      remaining > 1 &&
-      node.children.size > 0
-    ) {
+    if (allowChildren && remaining > 1 && node.children.size > 0) {
       const children = [...node.children.values()].sort((a, b) =>
         a.name.localeCompare(b.name),
       )
@@ -99,7 +94,7 @@ export function buildNestedNavigation(
           icons,
           config,
         )
-        if (childItem) {
+        if (!overrideMode && childItem) {
           items.push(childItem)
         }
       }

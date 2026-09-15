@@ -23,12 +23,14 @@ export interface NavigationTree {
   mode: NavigationMode
   config: ResolvedNavigationConfig
   byFolder: Record<string, NavItem[]>
+  rootByFolder: Record<string, string>
   pageLinksByFolder: Record<string, boolean>
   global: NavItem[]
 }
 
 export interface NavFile {
   mode?: 'override' | 'merge'
+  root?: string
   items: InternalNavItem[]
   sequence: NavSequenceEntry[]
   icons: NavIconEntry[]

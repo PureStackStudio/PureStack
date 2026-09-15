@@ -115,6 +115,7 @@ The file can be either an array of items or an object with `mode`, `items`, and
 ```json
 {
   "mode": "merge",
+  "root": "reference",
   "pageLinks": true,
   "sequence": [
     "index.md",
@@ -142,6 +143,12 @@ The file can be either an array of items or an object with `mode`, `items`, and
 `mode` values:
 - `override`: ignore auto items and use only custom items
 - `merge`: merge auto + custom and then sort
+
+`root` overrides the selected navigation root for pages in the folder that owns
+the nav file and its descendant folders. Relative values resolve from the nav
+file folder, so `docs/benchmark/_nav.json` can use `"root": "reference"` to
+select `docs/benchmark/reference`. Leading-slash values resolve from the
+content root.
 
 `sequence` is a lightweight ordering overlay for the final mixed menu. Entries
 are resolved relative to the folder containing the nav file. The builder first
