@@ -1,7 +1,7 @@
 {
   "$schema": "../../packages/ts-ssg/schema/siteConfig.schema.json",
-  "siteTitle": "PureStack Studio",
-  "favicon": "tabler:device-desktop-analytics",
+  "siteTitle": "PureStack",
+  "favicon": "tabler:stack-2",
   "style": {
     "fileName": "site.css",
     "href": "/assets/site.css",
@@ -9,7 +9,11 @@
     "pretty": false,
     "theme": {
       "skin": "standard",
-      "presets": ["purestack"]
+      "presets": ["purestack"],
+      "palette": {
+        "light": { "accent": "#9be7ba" },
+        "dark": { "accent": "#9be7ba" }
+      }
     }
   },
   "auth": {
@@ -46,8 +50,8 @@
     }
   },
   "consent": {
-    "enabled": true,
-    "policyVersion": "2023-02-17",
+    "enabled": false,
+    "policyVersion": "2026-09-15",
     "categories": [
       {
         "id": "necessary",
@@ -67,12 +71,12 @@
     "excludePaths": []
   },
   "preview": {
-    "title": "PureStack Studio",
-    "description": "AI-native frontend studio for content, product surfaces, and teams building with TypeScript.",
-    "image": "/assets/pure-stack-logo.png",
-    "imageAlt": "PureStack logo",
-    "imageWidth": 800,
-    "imageHeight": 800,
+    "title": "PureStack — One language. A whole frontend.",
+    "description": "Content, components, styles, and interactivity. One coherent TypeScript ecosystem. Built for you and your AI.",
+    "image": "/assets/social-preview.png",
+    "imageAlt": "PureStack. One language. A whole frontend. A TypeScript-native frontend ecosystem.",
+    "imageWidth": 1200,
+    "imageHeight": 630,
     "siteName": "PureStack Studio",
     "twitterCard": "summary_large_image"
   },

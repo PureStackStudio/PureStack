@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M60 0H0V60" fill="none" stroke="#22382b" stroke-width=".6"/>
+    </pattern>
+    <radialGradient id="glow"><stop stop-color="#223e2c" stop-opacity=".65"/><stop offset="1" stop-color="#0b0e11" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#0b0e11"/>
+  <rect width="1200" height="630" fill="url(#grid)" opacity=".4"/>
+  <ellipse cx="820" cy="330" rx="650" ry="430" fill="url(#glow)"/>
+  <rect x="30" y="30" width="1140" height="570" rx="12" fill="none" stroke="#34483b"/>
+  <g transform="translate(78 78) scale(1.5)" fill="none" stroke="#9be7ba" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 4l-8 4l8 4l8 -4l-8 -4M4 12l8 4l8 -4M4 16l8 4l8 -4"/>
+  </g>
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <text x="124" y="108" font-size="30" font-weight="650" fill="#ecefee" letter-spacing="-1">PureStack<tspan fill="#9be7ba">.</tspan></text>
+    <text x="82" y="274" font-size="80" font-weight="600" letter-spacing="-3.5" fill="#ecefee">One language.</text>
+    <text x="82" y="366" font-size="80" font-weight="600" letter-spacing="-3.5" fill="#9be7ba">A whole frontend.</text>
+    <text x="86" y="425" font-size="23" fill="#a4b4a9">Content, components, styles, and interactivity.</text>
+    <text x="86" y="460" font-size="23" fill="#a4b4a9">One coherent TypeScript ecosystem.</text>
+  </g>
+  <path d="M85 516h1030" stroke="#314235"/>
+  <g font-family="Consolas, monospace" font-size="14" fill="#93b79d">
+    <text x="86" y="554" letter-spacing="1">OPEN SOURCE · TYPESCRIPT-NATIVE · MIT LICENSED</text>
+    <text x="1115" y="554" text-anchor="end">purestack.studio ↗</text>
+  </g>
+</svg>

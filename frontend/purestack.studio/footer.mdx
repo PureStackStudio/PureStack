@@ -1,66 +1,32 @@
-<SiteFooter
-  class="bt-1 tone-border-surface"
-  :copyright="`(c) ${new Date().getFullYear()} PureStack. All rights reserved.`"
-  tone="neutral"
-  variant="none"
-  legalLabel="PureStack links"
->
-  <Grid columns="1" columnsLg="minmax(0, 1.25fr) minmax(0, 1fr)">
-    <Panel tone="ghost" class="box-shadow-none">
-      <Flex direction="column" align="start">
-        <div class="text-eyebrow">PureStack Studio</div>
-        <h2 class="text-title">Frontend source that stays coherent.</h2>
-        <p class="text-tagline">
-          Content, components, styles, scripts, and tooling designed to belong
-          together instead of becoming a stack of translations.
-        </p>
-        <Flex wrap="true">
-          <Badge tone="neutral">TypeScript-native</Badge>
-          <Badge tone="neutral">AI-readable source</Badge>
-          <Badge tone="neutral">Production-proven</Badge>
-        </Flex>
-      </Flex>
-    </Panel>
 
-    <Grid columns="1" columnsMd="2">
-      <Panel tone="ghost" class="box-shadow-none">
-        <Flex direction="column" align="start">
-          <div class="text-eyebrow">Build</div>
-          <h3 class="text-title">Public package</h3>
-          <p class="text-tagline">
-            The PureStack package exposes the CLI and TypeScript API for custom
-            content directories.
-          </p>
-          <BtnLink
-            href="https://github.com/PureStackStudio/PureStack"
-            target="_blank"
-            tone="neutral"
-            icon="tabler:brand-github"
-          >
-            Source
-          </BtnLink>
-        </Flex>
-      </Panel>
-
-      <Panel tone="ghost" class="box-shadow-none">
-        <Flex direction="column" align="start">
-          <div class="text-eyebrow">Next</div>
-          <h3 class="text-title">Docs are coming</h3>
-          <p class="text-tagline">
-            The first page is the front door. The docs root will follow once
-            the release path is ready.
-          </p>
-          <BtnLink href="/" tone="ghost" icon="tabler:book-2">
-            Home
-          </BtnLink>
-        </Flex>
-      </Panel>
-    </Grid>
-  </Grid>
-
-  <template #legal>
-    <a href="https://github.com/PureStackStudio/PureStack" target="_blank">
-      GitHub
-    </a>
-  </template>
-</SiteFooter>
+<footer class="site-footer">
+  <div class="container footer-top">
+    <div>
+      <a class="wordmark" href="/" aria-label="PureStack home">
+        <span class="brand-mark" aria-hidden="true"><Icon name="tabler:stack-2" /></span>
+        <span>PureStack<span class="brand-period">.</span></span>
+      </a>
+      <p>Pure frontend infrastructure.<br />Built with PureStack. Naturally.</p>
+    </div>
+    <nav aria-label="Footer resources">
+      <div>
+        <span class="footer-label">EXPLORE</span><a href="#framework">The framework</a
+        ><a href="#ecosystem">The ecosystem</a><a href="#getting-started">Get started</a>
+      </div>
+      <div>
+        <span class="footer-label">OPEN SOURCE</span
+        ><a href="https://github.com/PureStackStudio/PureStack">GitHub ↗</a
+        ><a href="https://github.com/PureStackStudio/PureStack/issues">Issues ↗</a
+        ><a href="https://github.com/PureStackStudio/PureStack/blob/main/LICENSE"
+          >MIT license ↗</a
+        >
+      </div>
+    </nav>
+  </div>
+  <div class="container footer-bottom">
+    <span>© <span r-text="new Date().getFullYear()"></span> PureStack Studio</span
+    ><span class="footer-built"
+      ><span class="status-dot"></span>Made for what comes next.</span
+    ><a href="#main">Back to top ↑</a>
+  </div>
+</footer>

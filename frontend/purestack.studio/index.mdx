@@ -1,9 +1,9 @@
 ---
-title: PureStack
-description: AI-native frontend framework for content, product surfaces, and teams building with TypeScript.
-template: doc
+title: One language. A whole frontend.
+description: Build content sites, product interfaces, and interactive apps with a coherent TypeScript-native framework. Markdown, Regor components, typed styles, and static publishing.
+template: studio
 layout:
-  fullWidth: false
+  fullWidth: true
   showNav: false
   showToc: false
   showFooter: true
@@ -11,3 +11,641 @@ nav:
   hidden: false
 ---
 
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="container hero-content">
+    <a class="release-note" href="https://github.com/PureStackStudio/PureStack">
+      <span class="status-dot"></span><span>OPEN SOURCE. GETTING READY FOR LAUNCH.</span
+      ><span aria-hidden="true">↗</span>
+    </a>
+    <h1 id="hero-title">One language.<br /><span>A whole frontend.</span></h1>
+    <p class="hero-description">
+      Content, components, styles, and interactivity.<br class="desktop-break" />
+      One coherent TypeScript ecosystem. Built for you and your AI.
+    </p>
+    <div class="hero-actions">
+      <a class="button button-primary" href="#getting-started"
+        >Start building<Icon name="tabler:arrow-right"
+      /></a>
+      <a
+        class="button button-secondary"
+        href="https://github.com/PureStackStudio/PureStack"
+        ><Icon name="tabler:brand-github" />Explore the source</a
+      >
+    </div>
+    <div class="hero-notes">
+      <span><Icon name="tabler:check" />TypeScript-native</span
+      ><span><Icon name="tabler:check" />MIT licensed</span
+      ><span><Icon name="tabler:check" />Your choice of backend</span>
+    </div>
+  </div>
+
+  <div class="container workbench-wrap">
+    <div class="workbench" data-tabs>
+      <div class="workbench-toolbar">
+        <div class="window-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+        <span class="workbench-title">a little source. a lot of possibility.</span>
+        <span class="workbench-language">TypeScript + MDX</span>
+      </div>
+      <div class="workbench-tabs" data-tab-list aria-label="Explore PureStack examples">
+        <button
+          type="button"
+          id="tab-content"
+          data-tab="content"
+          aria-controls="example-content"
+          class="is-active"
+        >
+          <span class="file-icon mdx-icon">M↓</span>index.mdx
+        </button>
+        <button
+          type="button"
+          id="tab-interactive"
+          data-tab="interactive"
+          aria-controls="example-interactive"
+        >
+          <span class="file-icon ts-icon">TS</span>counter.ts
+        </button>
+        <button
+          type="button"
+          id="tab-style"
+          data-tab="style"
+          aria-controls="example-style"
+        >
+          <span class="file-icon ts-icon">TS</span>styles.ts
+        </button>
+        <span class="tab-hint">Explore the files <span aria-hidden="true">↖</span></span>
+      </div>
+
+      <div id="example-content" data-tab-panel="content" class="example-panel">
+        <div class="source-pane">
+          <div class="pane-caption">
+            <span>SOURCE</span
+            ><button
+              type="button"
+              class="copy-button"
+              data-copy="source-content"
+              aria-label="Copy MDX example"
+            >
+              <Icon name="tabler:copy" /><span>Copy</span>
+            </button>
+          </div>
+          <pre
+            class="source-code"
+            tabindex="0"
+            aria-label="MDX source example"
+          ><code id="source-content"><span class="syntax-muted">---</span>
+<span class="syntax-blue">title</span>: Your next idea
+<span class="syntax-blue">template</span>: splash
+<span class="syntax-muted">---</span>
+
+<span class="syntax-green"># Your next idea.</span>
+
+Write the story. Build the product.
+
+<span class="syntax-muted">&lt;</span><span class="syntax-green">Panel</span> <span class="syntax-blue">tone</span>=<span class="syntax-amber">"neutral"</span><span class="syntax-muted">&gt;</span>
+  <span class="syntax-muted">&lt;</span><span class="syntax-green">Badge</span> <span class="syntax-blue">tone</span>=<span class="syntax-amber">"success"</span><span class="syntax-muted">&gt;</span>Ready to build<span class="syntax-muted">&lt;/</span><span class="syntax-green">Badge</span><span class="syntax-muted">&gt;</span>
+  Content and components, together.
+<span class="syntax-muted">&lt;/</span><span class="syntax-green">Panel</span><span class="syntax-muted">&gt;</span></code></pre>
+        </div>
+        <div class="preview-pane">
+          <div class="pane-caption">
+            <span><span class="status-dot"></span>RENDERED PREVIEW</span
+            ><Icon name="tabler:arrow-up-right" />
+          </div>
+          <div class="content-preview">
+            <span class="preview-eyebrow">FROM IDEA TO INTERFACE</span>
+            <h2>Your next idea<span>.</span></h2>
+            <p>Write the story. Build the product.</p>
+            <Panel tone="neutral" class="demo-panel">
+              <Badge tone="success">Ready to build</Badge>
+              <p>Content and components, together.</p>
+            </Panel>
+            <div class="preview-footnote">
+              <Icon name="tabler:check" />Rendered to HTML by PureStack
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="example-interactive"
+        data-tab-panel="interactive"
+        class="example-panel"
+        hidden
+      >
+        <div class="source-pane">
+          <div class="pane-caption">
+            <span>SOURCE</span
+            ><button
+              type="button"
+              class="copy-button"
+              data-copy="source-interactive"
+              aria-label="Copy Regor counter example"
+            >
+              <Icon name="tabler:copy" /><span>Copy</span>
+            </button>
+          </div>
+          <pre
+            class="source-code"
+            tabindex="0"
+            aria-label="Regor TypeScript source example"
+          ><code id="source-interactive"><span class="syntax-purple">import</span> { createApp, html, ref } <span class="syntax-purple">from</span> <span class="syntax-amber">'regor'</span>
+
+<span class="syntax-purple">const</span> count = <span class="syntax-blue">ref</span>(<span class="syntax-amber">0</span>)
+<span class="syntax-purple">const</span> increment = () =&gt; <span class="syntax-blue">count</span>(count() + <span class="syntax-amber">1</span>)
+
+<span class="syntax-blue">createApp</span>({ count, increment }, {
+  selector: <span class="syntax-amber">'#counter'</span>,
+  template: html`<span class="syntax-muted">&lt;</span><span class="syntax-green">button</span>
+    <span class="syntax-blue">@click</span>=<span class="syntax-amber">"increment"</span><span class="syntax-muted">&gt;</span>
+    Clicked <span class="syntax-muted">&lt;</span><span class="syntax-green">span</span> <span class="syntax-blue">r-text</span>=<span class="syntax-amber">"count"</span><span class="syntax-muted">&gt;&lt;/</span><span class="syntax-green">span</span><span class="syntax-muted">&gt;</span> times
+  <span class="syntax-muted">&lt;/</span><span class="syntax-green">button</span><span class="syntax-muted">&gt;</span>`,
+})</code></pre>
+        </div>
+        <div class="preview-pane">
+          <div class="pane-caption">
+            <span><span class="status-dot"></span>LIVE REGOR PREVIEW</span
+            ><Icon name="tabler:bolt" />
+          </div>
+          <div class="counter-preview">
+            <span class="preview-eyebrow">A LITTLE REACTIVITY</span>
+            <h2>Go on. Give it a click.</h2>
+            <div id="counter">
+              <button type="button" disabled>Clicked 0 times</button>
+            </div>
+            <p>One ref. One event. A real interaction.</p>
+            <span class="preview-footnote"
+              >Explicit browser code. Predictable state.</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div id="example-style" data-tab-panel="style" class="example-panel" hidden>
+        <div class="source-pane">
+          <div class="pane-caption">
+            <span>SOURCE</span
+            ><button
+              type="button"
+              class="copy-button"
+              data-copy="source-style"
+              aria-label="Copy typed CSS example"
+            >
+              <Icon name="tabler:copy" /><span>Copy</span>
+            </button>
+          </div>
+          <pre
+            class="source-code"
+            tabindex="0"
+            aria-label="Typed CSS source example"
+          ><code id="source-style"><span class="syntax-purple">import</span> { Style } <span class="syntax-purple">from</span> <span class="syntax-amber">'@purestack/ts-css'</span>
+
+<span class="syntax-purple">const</span> card = <span class="syntax-purple">new</span> <span class="syntax-blue">Style</span>(<span class="syntax-amber">'.your-card'</span>)
+  .<span class="syntax-blue">padding</span>(<span class="syntax-amber">'24px'</span>)
+  .<span class="syntax-blue">borderRadius</span>(<span class="syntax-amber">'12px'</span>)
+  .<span class="syntax-blue">backgroundColor</span>(<span class="syntax-amber">'#151b18'</span>)
+  .<span class="syntax-blue">color</span>(<span class="syntax-amber">'#a3e6bd'</span>)
+
+<span class="syntax-muted">// Typed source. Standard CSS output.</span>
+card.<span class="syntax-blue">toCSS</span>()</code></pre>
+        </div>
+        <div class="preview-pane">
+          <div class="pane-caption">
+            <span><span class="status-dot"></span>TYPED STYLE PREVIEW</span
+            ><Icon name="tabler:palette" />
+          </div>
+          <div class="style-preview">
+            <div class="your-card">
+              <Icon name="tabler:layers-linked" />
+              <h2>A style of your own.</h2>
+              <p>Fluent. Composable. Still CSS.</p>
+            </div>
+            <span class="preview-footnote">Built with the Style API shown here.</span>
+          </div>
+        </div>
+      </div>
+      <div class="workbench-status">
+        <span><Icon name="tabler:check" />Same source. Connected workflow.</span
+        ><span>Made with PureStack <Icon name="tabler:stack-2" /></span>
+      </div>
+    </div>
+    <p class="workbench-caption">
+      Not a new language to learn. A better way to bring the pieces together.
+    </p>
+  </div>
+</section>
+
+<div class="build-for container">
+  <span>ONE FOUNDATION. MANY POSSIBILITIES.</span>
+  <div>
+    <span>Content sites</span><span>Documentation</span><span>Product interfaces</span
+    ><span>Admin tools</span><span>Dashboards</span>
+  </div>
+</div>
+
+<section class="section container" id="framework" aria-labelledby="framework-title">
+  <div class="section-heading">
+    <span class="eyebrow">01 / THE FRAMEWORK</span>
+    <h2 id="framework-title">
+      Everything connects.<br /><span>So you can keep building.</span>
+    </h2>
+    <p>
+      From the first page to the product around it.<br />A frontend that grows without
+      losing its shape.
+    </p>
+  </div>
+  <div class="feature-grid">
+    <article class="feature-card feature-content">
+      <div class="feature-icon"><Icon name="tabler:file-code" /></div>
+      <h3>Content is part of the product.</h3>
+      <p>
+        Write in Markdown. Compose with Regor MDX. Keep routes, metadata, navigation, and
+        page scripts close to the content they belong to.
+      </p>
+      <div class="file-tree" aria-label="Example content folder">
+        <div>
+          <span class="tree-folder">▾</span> content<span class="tree-note"
+            >one place for your frontend</span
+          >
+        </div>
+        <div class="tree-indent">
+          <span class="syntax-amber">{ }</span> siteConfig.json<span class="tree-note"
+            >configure</span
+          >
+        </div>
+        <div class="tree-indent">
+          <span class="syntax-green">M↓</span> index.mdx<span class="tree-note"
+            >compose</span
+          >
+        </div>
+        <div class="tree-indent">
+          <span class="syntax-blue">TS</span> dashboard.ts<span class="tree-note"
+            >interact</span
+          >
+        </div>
+        <div class="tree-indent"><span class="tree-folder">▾</span> docs</div>
+        <div class="tree-indent-deep">
+          <span class="syntax-green">M↓</span> getting-started.md<span class="tree-note"
+            >explain</span
+          >
+        </div>
+      </div>
+      <a
+        class="text-link"
+        href="https://github.com/PureStackStudio/PureStack/tree/main/packages/ts-ssg"
+        >Explore the content pipeline <span aria-hidden="true">↗</span></a
+      >
+    </article>
+    <article class="feature-card feature-components">
+      <div class="feature-icon"><Icon name="tabler:layers-linked" /></div>
+      <h3>Primitives for real interfaces.</h3>
+      <p>
+        Forms, charts, tabs, modals, toasts, and virtual tables. A shared component
+        vocabulary for the surfaces your product needs.
+      </p>
+      <div class="component-sample" aria-label="PureStack component examples">
+        <div class="sample-top">
+          <span>Project overview</span><Badge tone="success">Active</Badge>
+        </div>
+        <div class="sample-chart">
+          <span class="sample-chart-label">Example activity</span>
+          <BarChart
+            ariaLabel="Example activity across twelve days; illustrative data"
+            :items="[{label: '01', value: 25, color: '#45664f'}, {label: '02', value: 42, color: '#52795d'}, {label: '03', value: 32, color: '#45664f'}, {label: '04', value: 57, color: '#52795d'}, {label: '05', value: 46, color: '#45664f'}, {label: '06', value: 64, color: '#52795d'}, {label: '07', value: 52, color: '#45664f'}, {label: '08', value: 71, color: '#52795d'}, {label: '09', value: 61, color: '#45664f'}, {label: '10', value: 85, color: '#52795d'}, {label: '11', value: 72, color: '#45664f'}, {label: '12', value: 98, color: '#a0dbac'}]"
+            :minValue="0"
+            :maxValue="100"
+            :animated="false"
+            :showValues="false"
+            :showLabels="false"
+            :showAxis="false"
+            width="100%"
+            height="90"
+            preserveAspectRatio="none"
+            variant="none"
+          />
+          <div class="sample-chart-axis">
+            <span>01</span><span>04</span><span>08</span><span>12</span>
+          </div>
+        </div>
+        <div class="sample-bottom">
+          <span><span class="status-dot"></span>Ready for your next feature</span
+          ><span class="sample-avatar">PS</span>
+        </div>
+      </div>
+      <a
+        class="text-link"
+        href="https://github.com/PureStackStudio/PureStack/tree/main/packages/ts-components"
+        >Meet the components <span aria-hidden="true">↗</span></a
+      >
+    </article>
+    <article class="feature-card feature-small">
+      <div class="feature-icon"><Icon name="tabler:palette" /></div>
+      <h3>Design with a system.</h3>
+      <p>
+        Typed CSS, semantic tones, shared tokens, and light and dark themes. Visual
+        decisions that stay connected.
+      </p>
+      <div
+        class="tone-sample"
+        aria-label="Semantic tones: accent, info, success, warning, danger"
+      >
+        <i></i><i></i><i></i><i></i><i></i><span>One palette.<br />Every component.</span>
+      </div>
+    </article>
+    <article class="feature-card feature-small">
+      <div class="feature-icon"><Icon name="tabler:bolt" /></div>
+      <h3>Static where it can be.</h3>
+      <p>
+        Render content to HTML. Mount Regor apps where interaction belongs. Bundle browser
+        TypeScript through the same pipeline.
+      </p>
+      <div class="output-sample">
+        <span>HTML</span><span>CSS</span><span class="output-js">+ your JS</span
+        ><Icon name="tabler:arrow-right" /><span class="output-web">WEB</span>
+      </div>
+    </article>
+    <article class="feature-card feature-small">
+      <div class="feature-icon"><Icon name="tabler:code" /></div>
+      <h3>Your editor is in on it.</h3>
+      <p>
+        Component completion, typed prop hints, template diagnostics, and go-to-definition
+        with the PureStack VS Code extension.
+      </p>
+      <div class="editor-sample">
+        <span class="syntax-muted">&lt;</span><span class="syntax-green">Panel</span>
+        <span class="syntax-blue">tone</span>=<span class="syntax-amber">"success"</span
+        ><span class="syntax-muted">&gt;</span><span class="editor-caret"></span
+        ><small><Icon name="tabler:check" />SemanticTone</small>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="ai-section" aria-labelledby="ai-title">
+  <div class="container ai-layout">
+    <div>
+      <span class="eyebrow">BUILT FOR THE WAY WE BUILD NOW</span>
+      <h2 id="ai-title">The first prompt is<br />just the beginning<span>.</span></h2>
+      <p>
+        AI can generate a first draft. A real product needs source that stays
+        understandable as features change, screens multiply, and designs evolve.
+      </p>
+      <p>
+        PureStack keeps intent in typed, inspectable code. Easier for you to reason about.
+        Easier for your AI to work with.
+      </p>
+      <a
+        class="text-link"
+        href="https://github.com/PureStackStudio/PureStack#why-purestack-exists"
+        >Read the philosophy <span aria-hidden="true">↗</span></a
+      >
+    </div>
+    <div
+      class="source-diagram"
+      aria-label="Markdown, TypeScript components, styles, and browser scripts connect through PureStack to a product frontend"
+    >
+      <div class="diagram-inputs">
+        <span><span class="syntax-green">M↓</span> Content</span
+        ><span><span class="syntax-blue">TS</span> Components</span
+        ><span><span class="syntax-blue">TS</span> Styles</span
+        ><span><span class="syntax-blue">TS</span> Scripts</span>
+      </div>
+      <div class="diagram-lines" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <div class="diagram-core">
+        <Icon name="tabler:stack-2" /><strong>PureStack</strong
+        ><span>One coherent source model</span>
+      </div>
+      <div class="diagram-stem" aria-hidden="true"></div>
+      <div class="diagram-output">
+        <Icon name="tabler:world" /><span>Your product frontend</span
+        ><span class="status-dot"></span>
+      </div>
+      <p>Readable by humans. Navigable by AI.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section container" id="ecosystem" aria-labelledby="ecosystem-title">
+  <div class="section-heading split-heading">
+    <div>
+      <span class="eyebrow">02 / THE ECOSYSTEM</span>
+      <h2 id="ecosystem-title">
+        A complete stack.<br /><span>With room for your way.</span>
+      </h2>
+    </div>
+    <p>
+      One public entry point. Focused packages underneath.<br />Explore the pieces that
+      make PureStack work.
+    </p>
+  </div>
+  <div class="package-grid">
+    <a
+      class="package-card"
+      href="https://github.com/PureStackStudio/PureStack/tree/main/packages/ts-ssg"
+      ><span class="package-number">01</span>
+      <div>
+        <h3>Content &amp; publishing</h3>
+        <p>MDX, routing, navigation, live reload, search, i18n, and static output.</p>
+        <code>@purestack/ts-ssg</code>
+      </div>
+      <span aria-hidden="true">↗</span></a
+    >
+    <a
+      class="package-card"
+      href="https://github.com/PureStackStudio/PureStack/tree/main/packages/ts-components"
+      ><span class="package-number">02</span>
+      <div>
+        <h3>Components &amp; interaction</h3>
+        <p>Regor primitives for pages, forms, charts, and application interfaces.</p>
+        <code>@purestack/ts-components</code>
+      </div>
+      <span aria-hidden="true">↗</span></a
+    >
+    <a
+      class="package-card"
+      href="https://github.com/PureStackStudio/PureStack/tree/main/packages/ts-style"
+      ><span class="package-number">03</span>
+      <div>
+        <h3>Styles &amp; themes</h3>
+        <p>Palettes, semantic tones, skins, typography, and responsive tokens.</p>
+        <code>@purestack/ts-style</code>
+      </div>
+      <span aria-hidden="true">↗</span></a
+    >
+    <a
+      class="package-card"
+      href="https://github.com/PureStackStudio/PureStack/tree/main/packages/ts-ssg-vscode"
+      ><span class="package-number">04</span>
+      <div>
+        <h3>Tools &amp; foundations</h3>
+        <p>Typed builders, SVG icons, rendering tools, and a source-aware editor.</p>
+        <code>ts-html · ts-css · ts-ssg-vscode</code>
+      </div>
+      <span aria-hidden="true">↗</span></a
+    >
+  </div>
+  <div class="ecosystem-note">
+    <span
+      ><Icon name="tabler:braces" />Frontend infrastructure. Your backend, your
+      hosting.</span
+    ><a class="text-link" href="https://github.com/PureStackStudio/PureStack#package-map"
+      >View all packages <span aria-hidden="true">↗</span></a
+    >
+  </div>
+</section>
+
+<section class="start-section" id="getting-started" aria-labelledby="start-title">
+  <div class="container start-layout">
+    <div class="start-copy">
+      <span class="eyebrow">03 / START BUILDING</span>
+      <h2 id="start-title">Make something<br /><span>of your own.</span></h2>
+      <p>
+        PureStack is preparing for its first public release. Explore the source and run
+        the included examples today.
+      </p>
+      <ol class="start-steps">
+        <li>
+          <span>01</span>
+          <div>
+            <strong>Get the source</strong>
+            <p>Clone the repository and install with Yarn.</p>
+          </div>
+        </li>
+        <li>
+          <span>02</span>
+          <div>
+            <strong>Start the playground</strong>
+            <p>Run the included content site locally.</p>
+          </div>
+        </li>
+        <li>
+          <span>03</span>
+          <div>
+            <strong>Make it yours</strong>
+            <p>Edit a page. Add a component. Keep going.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+    <div class="start-terminal">
+      <div class="terminal-heading">
+        <span><Icon name="tabler:terminal-2" />Your terminal</span
+        ><span>FROM SOURCE</span>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-command">
+          <span class="syntax-muted"># Clone the project</span
+          ><code id="command-clone"
+            >git clone https://github.com/PureStackStudio/PureStack.git</code
+          ><button
+            type="button"
+            class="copy-button icon-only"
+            data-copy="command-clone"
+            aria-label="Copy clone command"
+          >
+            <Icon name="tabler:copy" />
+          </button>
+        </div>
+        <div class="terminal-command">
+          <span class="syntax-muted"># Install dependencies</span
+          ><code id="command-install">cd PureStack yarn install</code
+          ><button
+            type="button"
+            class="copy-button icon-only"
+            data-copy="command-install"
+            aria-label="Copy install commands"
+          >
+            <Icon name="tabler:copy" />
+          </button>
+        </div>
+        <div class="terminal-command">
+          <span class="syntax-muted"># Start the sample site</span
+          ><code id="command-dev">yarn dev</code
+          ><button
+            type="button"
+            class="copy-button icon-only"
+            data-copy="command-dev"
+            aria-label="Copy development command"
+          >
+            <Icon name="tabler:copy" />
+          </button>
+        </div>
+        <div class="terminal-address">
+          <span class="status-dot"></span>Open localhost:4173 in your browser
+        </div>
+      </div>
+      <a
+        class="terminal-footer"
+        href="https://github.com/PureStackStudio/PureStack#development"
+        >Setup details in the README <span aria-hidden="true">↗</span></a
+      >
+    </div>
+  </div>
+</section>
+
+<section class="section container faq-layout" aria-labelledby="faq-title">
+  <div>
+    <span class="eyebrow">A FEW GOOD QUESTIONS</span>
+    <h2 id="faq-title">Good to know.</h2>
+    <p class="faq-intro">A little more context<br />before your first commit.</p>
+  </div>
+  <div class="faq-list">
+    <details>
+      <summary>What can I build with PureStack?<span aria-hidden="true">+</span></summary>
+      <p>
+        Content sites, documentation, landing pages, product interfaces, dashboards, and
+        admin tools. Start with static pages and add TypeScript browser apps where you
+        need interaction.
+      </p>
+    </details>
+    <details>
+      <summary>How does interactivity work?<span aria-hidden="true">+</span></summary>
+      <p>
+        MDX components render to HTML during the build. For client-side state and events,
+        mount a Regor application from a TypeScript entry point using RegorApp or
+        PageScript. PureStack bundles that entry point and its dependencies for the
+        browser.
+      </p>
+    </details>
+    <details>
+      <summary>Is this React MDX?<span aria-hidden="true">+</span></summary>
+      <p>
+        PureStack uses Regor MDX: Markdown with Regor components and directives. You can
+        use the familiar .mdx extension or the explicit .rmdx extension. React components
+        are not interchangeable with Regor components.
+      </p>
+    </details>
+    <details>
+      <summary>
+        Do I need a particular backend or host?<span aria-hidden="true">+</span>
+      </summary>
+      <p>
+        No. PureStack produces static HTML, CSS, and browser assets that you can serve
+        from a static host or your own infrastructure. Your browser code can talk to
+        whichever backend your product uses.
+      </p>
+    </details>
+    <details>
+      <summary>Is PureStack available yet?<span aria-hidden="true">+</span></summary>
+      <p>
+        The framework is preparing for its first public release. The quick start above
+        uses the repository's local development workflow. Follow the GitHub repository for
+        release updates and package availability.
+      </p>
+    </details>
+  </div>
+</section>
+
+<section class="closing-section" aria-labelledby="closing-title">
+  <div class="container">
+    <span class="closing-icon" aria-hidden="true"><Icon name="tabler:stack-2" /></span>
+    <h2 id="closing-title">Less fragmentation.<br /><span>More creation.</span></h2>
+    <p>Your next frontend starts with a clearer foundation.</p>
+    <a class="button button-primary" href="https://github.com/PureStackStudio/PureStack"
+      >Build with PureStack<Icon name="tabler:arrow-up-right" /></a
+    ><span class="closing-note">Open source. TypeScript-native. Yours to build on.</span>
+  </div>
+</section>
+
+<div class="copy-toast" id="copy-status" role="status" aria-live="polite"></div>
+<PageScript src="./studio.ts" />
