@@ -410,9 +410,9 @@ function updateMdxFenceState(trimmed: string, state: MdxBlockScanState) {
       : undefined
   const delimiter =
     state.inFence && activeFence
-      ? parseInlineMdxFenceCloser(trimmed, activeFence) ??
-        parseMdxFenceDelimiter(trimmed)
-      : parseMdxFenceDelimiter(trimmed) ?? parseInlineMdxFenceOpener(trimmed)
+      ? (parseInlineMdxFenceCloser(trimmed, activeFence) ??
+        parseMdxFenceDelimiter(trimmed))
+      : (parseMdxFenceDelimiter(trimmed) ?? parseInlineMdxFenceOpener(trimmed))
   if (!delimiter) return state.inFence
 
   if (!state.inFence) {

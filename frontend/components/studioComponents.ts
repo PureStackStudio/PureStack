@@ -1,9 +1,5 @@
 import { getThemePaletteVar } from '@purestack/ts-style'
-import {
-  defineComponent,
-  html,
-  type RefOrValue,
-} from 'regor'
+import { defineComponent, html, type RefOrValue } from 'regor'
 
 export interface StudioFeature {
   title?: RefOrValue<string>
@@ -153,8 +149,7 @@ export function defineStudioComponents() {
         }),
       },
     ),
-    studioWorkbench:
-      defineComponent(html`<Panel
+    studioWorkbench: defineComponent(html`<Panel
   class="workbench"
   bodyClass="workbench__body"
   variant="surface"

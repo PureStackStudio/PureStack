@@ -72,9 +72,7 @@ async function readNavFile(
 function normalizeNavRoot(value: unknown, folder: string) {
   const root = resolveString(value)
   if (!root) return undefined
-  const normalizedInput = root
-    .replaceAll('\\', '/')
-    .replace(/^\/+|\/+$/g, '')
+  const normalizedInput = root.replaceAll('\\', '/').replace(/^\/+|\/+$/g, '')
   const joined = root.trim().startsWith('/')
     ? normalizedInput
     : path.posix.join(folder, normalizedInput)

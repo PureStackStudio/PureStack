@@ -141,17 +141,11 @@ function applyGapUtilities(theme: string) {
     applySpacingUtility(`gap-${name}`, value, (selector, utilityValue) =>
       styleBuilder.select(selector, theme).gap(utilityValue),
     )
-    applySpacingUtility(
-      `gap-x-${name}`,
-      value,
-      (selector, utilityValue) =>
-        styleBuilder.select(selector, theme).columnGap(utilityValue),
+    applySpacingUtility(`gap-x-${name}`, value, (selector, utilityValue) =>
+      styleBuilder.select(selector, theme).columnGap(utilityValue),
     )
-    applySpacingUtility(
-      `gap-y-${name}`,
-      value,
-      (selector, utilityValue) =>
-        styleBuilder.select(selector, theme).set('row-gap', utilityValue),
+    applySpacingUtility(`gap-y-${name}`, value, (selector, utilityValue) =>
+      styleBuilder.select(selector, theme).set('row-gap', utilityValue),
     )
   }
 }
@@ -427,7 +421,9 @@ function applyFontWeightUtilities(theme: string) {
 }
 
 function applyFontWeightUtility(theme: string, value: string) {
-  styleBuilder.select(`.fw-${value}, .medium-fs .fw-${value}`, theme).fontWeight(force(value))
+  styleBuilder
+    .select(`.fw-${value}, .medium-fs .fw-${value}`, theme)
+    .fontWeight(force(value))
   styleBuilder
     .select(`.large-fs .fw-${value}`, theme)
     .fontWeight(force(scaleLargeFontWeight(value)))
@@ -439,7 +435,10 @@ function scaleLargeFontWeight(value?: FontWeightValue): FontWeightValue {
 
   const progress = Math.max(
     0,
-    Math.min(1, (weight - MIN_FONT_WEIGHT) / (MAX_FONT_WEIGHT - MIN_FONT_WEIGHT)),
+    Math.min(
+      1,
+      (weight - MIN_FONT_WEIGHT) / (MAX_FONT_WEIGHT - MIN_FONT_WEIGHT),
+    ),
   )
   const adjustment =
     LARGE_FONT_WEIGHT_BASE_ADJUSTMENT +
@@ -526,12 +525,7 @@ function applyTextUtilities(theme: string, palette: ThemePalette) {
     .apply(palette.applyFont(palette.font.size.h4))
     .lineHeight('1.6')
     .margin('0 0 1em')
-  applyScaledTextFontUtility(
-    theme,
-    palette,
-    '.text-lead',
-    palette.font.size.h4,
-  )
+  applyScaledTextFontUtility(theme, palette, '.text-lead', palette.font.size.h4)
 
   styleBuilder
     .select('.text-caption', theme)

@@ -16,12 +16,10 @@ class TestRange {
   ) {}
 
   intersection(other: TestRange) {
-    const start = comparePositions(this.start, other.start) >= 0
-      ? this.start
-      : other.start
-    const end = comparePositions(this.end, other.end) <= 0
-      ? this.end
-      : other.end
+    const start =
+      comparePositions(this.start, other.start) >= 0 ? this.start : other.start
+    const end =
+      comparePositions(this.end, other.end) <= 0 ? this.end : other.end
 
     return comparePositions(start, end) <= 0
       ? new TestRange(start, end)

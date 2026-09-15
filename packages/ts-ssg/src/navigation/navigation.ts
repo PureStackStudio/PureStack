@@ -152,7 +152,9 @@ function buildNavigationRootOverrides(
     if (!override) continue
     const { sourceFolder, root } = override
     if (!Object.hasOwn(byFolder, root)) {
-      const sourcePath = sourceFolder ? `${sourceFolder}/_nav.json` : '_nav.json'
+      const sourcePath = sourceFolder
+        ? `${sourceFolder}/_nav.json`
+        : '_nav.json'
       throw new Error(
         `Invalid navigation root "${root}" in ${sourcePath}: root menu was not built.`,
       )
