@@ -8,12 +8,7 @@
     "themes": ["light", "dark"],
     "pretty": false,
     "theme": {
-      "skin": "standard",
-      "presets": ["purestack"],
-      "palette": {
-        "light": { "accent": "#9be7ba" },
-        "dark": { "accent": "#9be7ba" }
-      }
+      "skin": "studio"
     }
   },
   "auth": {

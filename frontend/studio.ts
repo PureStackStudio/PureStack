@@ -2,9 +2,14 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type { PageTemplateMap } from '@purestack/ts-common'
 import { h } from '@purestack/ts-html'
-import { buildSite, startDevServer } from '@purestack/ts-ssg'
+import { type BuildInput, buildSite, startDevServer } from '@purestack/ts-ssg'
 import { createLogger, getLogger } from 'logpot'
+import { defineStudioComponents } from './components/studioComponents'
 import { card } from './demoStyle'
+import { registerStudioSkin } from './theme/studioSkin'
+import { registerStudioStyles } from './theme/studioStyles'
+
+registerStudioSkin()
 
 const command = process.argv[2] ?? 'serve'
 if (!['serve', 'build', 'publish'].includes(command)) {
@@ -13,14 +18,13 @@ if (!['serve', 'build', 'publish'].includes(command)) {
 
 const templates: PageTemplateMap = {
   studio: ({ head, bodyHtml, headerHtml, footerHtml }) => {
-    head.push(h('link').attr({ rel: 'stylesheet', href: '/assets/studio.css' }))
     head.push(h('style').raw(card.toCSS()))
     return h('html')
-      .attr({ lang: 'en' })
+      .attr({ lang: 'en', 'data-theme': 'dark', 'data-theme-ready': '' })
       .push(
         head,
         h('body')
-          .class('studio')
+          .class('studio tone--neutral')
           .push(
             h('a')
               .class('skip-link')
@@ -34,14 +38,22 @@ const templates: PageTemplateMap = {
   },
 }
 
-const build = {
+const build: BuildInput = {
   siteConfig: {
     contentDir: path.join(
       path.dirname(fileURLToPath(import.meta.url)),
       'purestack.studio',
     ),
   },
-  options: { templates },
+  options: {
+    templates,
+    hooks: {
+      onConfigResolved(context) {
+        context.components = defineStudioComponents()
+        registerStudioStyles()
+      },
+    },
+  },
   publish: { enabled: command === 'publish' },
 }
 

@@ -4,5 +4,6 @@
     "composite": false,
     "incremental": false
   },
-  "include": ["./studio.ts", "./purestack.studio/**/*.ts"]
+  "include": ["./**/*.ts"],
+  "exclude": ["./out"]
 }

@@ -1,11 +1,7 @@
-
 <footer class="site-footer">
-  <div class="container footer-top">
+  <Flex class="container footer-top" justify="between">
     <div>
-      <a class="wordmark" href="/" aria-label="PureStack home">
-        <span class="brand-mark" aria-hidden="true"><Icon name="tabler:stack-2" /></span>
-        <span>PureStack<span class="brand-period">.</span></span>
-      </a>
+      <StudioBrand />
       <p>Pure frontend infrastructure.<br />Built with PureStack. Naturally.</p>
     </div>
     <nav aria-label="Footer resources">
@@ -22,11 +18,11 @@
         >
       </div>
     </nav>
-  </div>
-  <div class="container footer-bottom">
+  </Flex>
+  <Flex class="container footer-bottom" align="center" justify="between">
     <span>© <span r-text="new Date().getFullYear()"></span> PureStack Studio</span
     ><span class="footer-built"
       ><span class="status-dot"></span>Made for what comes next.</span
     ><a href="#main">Back to top ↑</a>
-  </div>
+  </Flex>
 </footer>
