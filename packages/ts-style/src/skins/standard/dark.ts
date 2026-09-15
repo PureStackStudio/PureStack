@@ -45,9 +45,9 @@ const bestColors = {
     secondary: '#d72194',
   },
   purestack: {
-    accent: '#3782f3',
-    neutral: '#151518',
-    secondary: '#a706dc',
+    accent: '#2874b7',
+    neutral: '#2a435a',
+    secondary: '#245e6b',
   },
   puregate: {
     accent: '#de6310',

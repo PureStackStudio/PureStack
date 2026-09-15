@@ -1,3 +1,4 @@
+import type { CSSProps } from '@purestack/ts-css'
 import { getBreakpointNames } from './breakpoints'
 import { styleBuilder } from './styles'
 import { BREAKPOINTS, mediaMax, mediaMin, themes } from './themeOptions'
@@ -19,6 +20,7 @@ export const SPACING_UTILITIES = {
 } as const
 
 type SpacingUtilityName = keyof typeof SPACING_UTILITIES
+type FontWeightValue = CSSProps['fontWeight']
 const BORDER_WIDTH_UTILITIES = [1, 2, 3] as const
 const OPACITY_UTILITIES = {
   0: '0',
@@ -42,6 +44,15 @@ const DISPLAY_UTILITIES = {
   'table-cell': 'table-cell',
   'list-item': 'list-item',
 } as const
+const LARGE_SIZE_BASE_SCALE = 1.25
+const LARGE_SIZE_GROWTH = 0.4
+const LARGE_LINE_HEIGHT_BASE_SIZE = 0.12
+const LARGE_LINE_HEIGHT_GROWTH = 0.4
+const MIN_FONT_WEIGHT = 100
+const DEFAULT_FONT_WEIGHT = 400
+const LARGE_FONT_WEIGHT_BASE_ADJUSTMENT = 25
+const LARGE_FONT_WEIGHT_GROWTH = 175
+const MAX_FONT_WEIGHT = 900
 
 export function registerUtilityStyles() {
   themes.forEach((theme, palette) => {
@@ -65,13 +76,27 @@ export function registerUtilityStyles() {
 function applyMarginUtilities(theme: string) {
   for (const name of getSpacingUtilityNames()) {
     const value = SPACING_UTILITIES[name]
-    styleBuilder.select(`.m-${name}`, theme).margin(value)
-    styleBuilder.select(`.mt-${name}`, theme).marginTop(value)
-    styleBuilder.select(`.mr-${name}`, theme).marginRight(value)
-    styleBuilder.select(`.mb-${name}`, theme).marginBottom(value)
-    styleBuilder.select(`.ml-${name}`, theme).marginLeft(value)
-    styleBuilder.select(`.mx-${name}`, theme).set('margin-inline', value)
-    styleBuilder.select(`.my-${name}`, theme).set('margin-block', value)
+    applySpacingUtility(`m-${name}`, value, (selector, utilityValue) =>
+      styleBuilder.select(selector, theme).margin(utilityValue),
+    )
+    applySpacingUtility(`mt-${name}`, value, (selector, utilityValue) =>
+      styleBuilder.select(selector, theme).marginTop(utilityValue),
+    )
+    applySpacingUtility(`mr-${name}`, value, (selector, utilityValue) =>
+      styleBuilder.select(selector, theme).marginRight(utilityValue),
+    )
+    applySpacingUtility(`mb-${name}`, value, (selector, utilityValue) =>
+      styleBuilder.select(selector, theme).marginBottom(utilityValue),
+    )
+    applySpacingUtility(`ml-${name}`, value, (selector, utilityValue) =>
+      styleBuilder.select(selector, theme).marginLeft(utilityValue),
+    )
+    applySpacingUtility(`mx-${name}`, value, (selector, utilityValue) =>
+      styleBuilder.select(selector, theme).set('margin-inline', utilityValue),
+    )
+    applySpacingUtility(`my-${name}`, value, (selector, utilityValue) =>
+      styleBuilder.select(selector, theme).set('margin-block', utilityValue),
+    )
   }
 
   styleBuilder.select('.m-auto', theme).margin('auto !important')
@@ -86,23 +111,58 @@ function applyMarginUtilities(theme: string) {
 function applyPaddingUtilities(theme: string) {
   for (const name of getSpacingUtilityNames()) {
     const value = SPACING_UTILITIES[name]
-    styleBuilder.select(`.p-${name}`, theme).padding(value)
-    styleBuilder.select(`.pt-${name}`, theme).paddingTop(value)
-    styleBuilder.select(`.pr-${name}`, theme).paddingRight(value)
-    styleBuilder.select(`.pb-${name}`, theme).paddingBottom(value)
-    styleBuilder.select(`.pl-${name}`, theme).paddingLeft(value)
-    styleBuilder.select(`.px-${name}`, theme).set('padding-inline', value)
-    styleBuilder.select(`.py-${name}`, theme).set('padding-block', value)
+    applySpacingUtility(`p-${name}`, value, (selector, utilityValue) =>
+      styleBuilder.select(selector, theme).padding(utilityValue),
+    )
+    applySpacingUtility(`pt-${name}`, value, (selector, utilityValue) =>
+      styleBuilder.select(selector, theme).paddingTop(utilityValue),
+    )
+    applySpacingUtility(`pr-${name}`, value, (selector, utilityValue) =>
+      styleBuilder.select(selector, theme).paddingRight(utilityValue),
+    )
+    applySpacingUtility(`pb-${name}`, value, (selector, utilityValue) =>
+      styleBuilder.select(selector, theme).paddingBottom(utilityValue),
+    )
+    applySpacingUtility(`pl-${name}`, value, (selector, utilityValue) =>
+      styleBuilder.select(selector, theme).paddingLeft(utilityValue),
+    )
+    applySpacingUtility(`px-${name}`, value, (selector, utilityValue) =>
+      styleBuilder.select(selector, theme).set('padding-inline', utilityValue),
+    )
+    applySpacingUtility(`py-${name}`, value, (selector, utilityValue) =>
+      styleBuilder.select(selector, theme).set('padding-block', utilityValue),
+    )
   }
 }
 
 function applyGapUtilities(theme: string) {
   for (const name of getSpacingUtilityNames()) {
     const value = SPACING_UTILITIES[name]
-    styleBuilder.select(`.gap-${name}`, theme).gap(value)
-    styleBuilder.select(`.gap-x-${name}`, theme).columnGap(value)
-    styleBuilder.select(`.gap-y-${name}`, theme).set('row-gap', value)
+    applySpacingUtility(`gap-${name}`, value, (selector, utilityValue) =>
+      styleBuilder.select(selector, theme).gap(utilityValue),
+    )
+    applySpacingUtility(
+      `gap-x-${name}`,
+      value,
+      (selector, utilityValue) =>
+        styleBuilder.select(selector, theme).columnGap(utilityValue),
+    )
+    applySpacingUtility(
+      `gap-y-${name}`,
+      value,
+      (selector, utilityValue) =>
+        styleBuilder.select(selector, theme).set('row-gap', utilityValue),
+    )
   }
+}
+
+function applySpacingUtility(
+  name: string,
+  value: string,
+  apply: (selector: string, value: string) => void,
+) {
+  apply(`.${name}, .medium-fs .${name}`, value)
+  apply(`.large-fs .${name}`, scaleLargeSize(value))
 }
 
 function applyDisplayUtilities(theme: string) {
@@ -303,30 +363,89 @@ function force(val: string) {
 
 function applyFontSizeUtilities(theme: string, palette: ThemePalette) {
   const fontSizes = palette.font.size
-  styleBuilder.select('.fs-xxxs', theme).fontSize(force(fontSizes.xxxs))
-  styleBuilder.select('.fs-xxs', theme).fontSize(force(fontSizes.xxs))
-  styleBuilder.select('.fs-xs', theme).fontSize(force(fontSizes.xs))
-  styleBuilder.select('.fs-sm', theme).fontSize(force(fontSizes.sm))
-  styleBuilder.select('.fs-body', theme).fontSize(force(fontSizes.body))
-  styleBuilder.select('.fs-h6', theme).fontSize(force(fontSizes.h6))
-  styleBuilder.select('.fs-h5', theme).fontSize(force(fontSizes.h5))
-  styleBuilder.select('.fs-h4', theme).fontSize(force(fontSizes.h4))
-  styleBuilder.select('.fs-h3', theme).fontSize(force(fontSizes.h3))
-  styleBuilder.select('.fs-h2', theme).fontSize(force(fontSizes.h2))
-  styleBuilder.select('.fs-h1', theme).fontSize(force(fontSizes.h1))
-  styleBuilder.select('.fs-display', theme).fontSize(force(fontSizes.display))
+  applyFontSizeUtility(theme, 'xxxs', fontSizes.xxxs)
+  applyFontSizeUtility(theme, 'xxs', fontSizes.xxs)
+  applyFontSizeUtility(theme, 'xs', fontSizes.xs)
+  applyFontSizeUtility(theme, 'sm', fontSizes.sm)
+  applyFontSizeUtility(theme, 'body', fontSizes.body)
+  applyFontSizeUtility(theme, 'h6', fontSizes.h6)
+  applyFontSizeUtility(theme, 'h5', fontSizes.h5)
+  applyFontSizeUtility(theme, 'h4', fontSizes.h4)
+  applyFontSizeUtility(theme, 'h3', fontSizes.h3)
+  applyFontSizeUtility(theme, 'h2', fontSizes.h2)
+  applyFontSizeUtility(theme, 'h1', fontSizes.h1)
+  applyFontSizeUtility(theme, 'display', fontSizes.display)
+}
+
+function applyFontSizeUtility(theme: string, name: string, value: string) {
+  styleBuilder.select(`.fs-${name}`, theme).fontSize(force(value))
+  styleBuilder
+    .select(`.large-fs .fs-${name}`, theme)
+    .fontSize(force(scaleLargeSize(value)))
+    .lineHeight(force(scaleLargeLineHeight(value)))
+  styleBuilder
+    .select(`.medium-fs .fs-${name}`, theme)
+    .fontSize(force(value))
+    .lineHeight(force('normal'))
+}
+
+function scaleLargeSize(value: string) {
+  const parsed = parseSize(value)
+  if (!parsed) return value
+
+  const scale = LARGE_SIZE_BASE_SCALE + parsed.size * LARGE_SIZE_GROWTH
+  return `${Number((parsed.size * scale).toFixed(4))}${parsed.unit}${parsed.priority}`
+}
+
+function scaleLargeLineHeight(value: string) {
+  const parsed = parseSize(value)
+  if (!parsed) return 'normal'
+
+  const lead =
+    LARGE_LINE_HEIGHT_BASE_SIZE + parsed.size * LARGE_LINE_HEIGHT_GROWTH
+  return `calc(1em + ${Number(lead.toFixed(4))}${parsed.unit})`
+}
+
+function parseSize(value: string) {
+  const match = value.trim().match(/^(-?\d*\.?\d+)([a-z%]+)(\s*!important)?$/i)
+  if (!match) return undefined
+
+  const [, amount, unit, priority = ''] = match
+  return { size: Number(amount), unit, priority }
 }
 
 function applyFontWeightUtilities(theme: string) {
-  styleBuilder.select('.fw-100', theme).fontWeight(force('100'))
-  styleBuilder.select('.fw-200', theme).fontWeight(force('200'))
-  styleBuilder.select('.fw-300', theme).fontWeight(force('300'))
-  styleBuilder.select('.fw-400', theme).fontWeight(force('400'))
-  styleBuilder.select('.fw-500', theme).fontWeight(force('500'))
-  styleBuilder.select('.fw-600', theme).fontWeight(force('600'))
-  styleBuilder.select('.fw-700', theme).fontWeight(force('700'))
-  styleBuilder.select('.fw-800', theme).fontWeight(force('800'))
-  styleBuilder.select('.fw-900', theme).fontWeight(force('900'))
+  applyFontWeightUtility(theme, '100')
+  applyFontWeightUtility(theme, '200')
+  applyFontWeightUtility(theme, '300')
+  applyFontWeightUtility(theme, '400')
+  applyFontWeightUtility(theme, '500')
+  applyFontWeightUtility(theme, '600')
+  applyFontWeightUtility(theme, '700')
+  applyFontWeightUtility(theme, '800')
+  applyFontWeightUtility(theme, '900')
+}
+
+function applyFontWeightUtility(theme: string, value: string) {
+  styleBuilder.select(`.fw-${value}, .medium-fs .fw-${value}`, theme).fontWeight(force(value))
+  styleBuilder
+    .select(`.large-fs .fw-${value}`, theme)
+    .fontWeight(force(scaleLargeFontWeight(value)))
+}
+
+function scaleLargeFontWeight(value?: FontWeightValue): FontWeightValue {
+  const weight = Number(value ?? DEFAULT_FONT_WEIGHT)
+  if (!Number.isFinite(weight)) return value ?? `${DEFAULT_FONT_WEIGHT}`
+
+  const progress = Math.max(
+    0,
+    Math.min(1, (weight - MIN_FONT_WEIGHT) / (MAX_FONT_WEIGHT - MIN_FONT_WEIGHT)),
+  )
+  const adjustment =
+    LARGE_FONT_WEIGHT_BASE_ADJUSTMENT +
+    LARGE_FONT_WEIGHT_GROWTH * progress * progress
+
+  return `${Math.min(Math.round(weight + adjustment), MAX_FONT_WEIGHT)}`
 }
 
 function applyLineHeightUtilities(theme: string) {
@@ -369,38 +488,74 @@ function applyTextUtilities(theme: string, palette: ThemePalette) {
     .letterSpacing('0.18em')
     .textTransform('uppercase')
     .margin('0 0 0.55em')
+  applyScaledTextFontUtility(
+    theme,
+    palette,
+    '.text-eyebrow',
+    palette.font.size.xs,
+    palette.font.weight.w700,
+  )
 
   styleBuilder
     .select('.text-title', theme)
     .apply(palette.applyFont(palette.font.size.h2, palette.font.weight.w700))
     .lineHeight('1.1')
     .margin('0 0 0.45em')
+  applyScaledTextFontUtility(
+    theme,
+    palette,
+    '.text-title',
+    palette.font.size.h2,
+    palette.font.weight.w700,
+  )
 
   styleBuilder
     .select('.text-tagline', theme)
     .apply(palette.applyFont(palette.font.size.sm))
     .color(palette.current.text.subtle)
-    .lineHeight('1.6')
     .margin('0 0 1em')
+  applyScaledTextFontUtility(
+    theme,
+    palette,
+    '.text-tagline',
+    palette.font.size.sm,
+  )
 
   styleBuilder
     .select('.text-lead', theme)
     .apply(palette.applyFont(palette.font.size.h4))
     .lineHeight('1.6')
     .margin('0 0 1em')
+  applyScaledTextFontUtility(
+    theme,
+    palette,
+    '.text-lead',
+    palette.font.size.h4,
+  )
 
   styleBuilder
     .select('.text-caption', theme)
     .apply(palette.applyFont(palette.font.size.h3))
-    .lineHeight('1.5')
     .margin('0 0 0.8em')
+  applyScaledTextFontUtility(
+    theme,
+    palette,
+    '.text-caption',
+    palette.font.size.h3,
+  )
 
   styleBuilder
     .select('.text-quote', theme)
     .apply(palette.applyFont(palette.font.size.h5, palette.font.weight.w600))
     .fontStyle('italic')
-    .lineHeight('1.5')
     .margin('0 0 0.65em')
+  applyScaledTextFontUtility(
+    theme,
+    palette,
+    '.text-quote',
+    palette.font.size.h5,
+    palette.font.weight.w600,
+  )
 
   styleBuilder
     .select('.text-attribution', theme)
@@ -408,12 +563,26 @@ function applyTextUtilities(theme: string, palette: ThemePalette) {
     .letterSpacing('0.08em')
     .textTransform('uppercase')
     .margin('0 0 0.75em')
+  applyScaledTextFontUtility(
+    theme,
+    palette,
+    '.text-attribution',
+    palette.font.size.xxs,
+    palette.font.weight.w600,
+  )
 
   styleBuilder
     .select('.prose-pullquote', theme)
     .apply(palette.applyFont(palette.font.size.h3, palette.font.weight.w100))
     .fontStyle('italic')
     .margin('0 0 1em')
+  applyScaledTextFontUtility(
+    theme,
+    palette,
+    '.prose-pullquote',
+    palette.font.size.h3,
+    palette.font.weight.w100,
+  )
 
   styleBuilder
     .select('.prose-meta', theme)
@@ -421,6 +590,31 @@ function applyTextUtilities(theme: string, palette: ThemePalette) {
     .letterSpacing('0.08em')
     .textTransform('uppercase')
     .margin('0 0 0.7em')
+  applyScaledTextFontUtility(
+    theme,
+    palette,
+    '.prose-meta',
+    palette.font.size.xxs,
+    palette.font.weight.w600,
+  )
+}
+
+function applyScaledTextFontUtility(
+  theme: string,
+  palette: ThemePalette,
+  selector: string,
+  value: string,
+  weight?: Parameters<ThemePalette['applyFont']>[1],
+) {
+  styleBuilder
+    .select(`.large-fs ${selector}`, theme)
+    .apply(
+      palette.applyFont(scaleLargeSize(value), scaleLargeFontWeight(weight)),
+    )
+    .lineHeight(scaleLargeLineHeight(value))
+  styleBuilder
+    .select(`.medium-fs ${selector}`, theme)
+    .apply(palette.applyFont(value, weight))
 }
 
 function getSpacingUtilityNames(): SpacingUtilityName[] {
