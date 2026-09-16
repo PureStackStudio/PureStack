@@ -10,7 +10,6 @@ import {
   computed,
   defineComponent,
   html,
-  type IRegorContext,
   type Ref,
   ref,
 } from 'regor'

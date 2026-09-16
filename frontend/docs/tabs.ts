@@ -1,4 +1,4 @@
-import { defineComponent, html, type IRegorContext, type Ref, ref } from 'regor'
+import { defineComponent, html, type Ref, ref } from 'regor'
 
 export interface DocsTabsState {
   selected: Ref<string>
