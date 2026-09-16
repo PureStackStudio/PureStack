@@ -9,6 +9,7 @@ import { card } from './demoStyle'
 import { defineDocumentationComponents } from './docs/docsComponents'
 import { registerStudioSkin } from './theme/studioSkin'
 import { registerStudioStyles } from './theme/studioStyles'
+import type { Component } from 'regor'
 
 registerStudioSkin()
 
@@ -53,7 +54,7 @@ const build: BuildInput = {
         context.components = {
           ...defineStudioComponents(),
           ...defineDocumentationComponents(),
-        }
+        } as unknown as Record<string, Component>
         registerStudioStyles()
       },
     },

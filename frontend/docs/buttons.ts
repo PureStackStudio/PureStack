@@ -15,7 +15,7 @@ import {
   ref,
 } from 'regor'
 
-export interface DocsButtonPlayground extends IRegorContext {
+export interface DocsButtonPlayground {
   tone: Ref<SemanticTone>
   variant: Ref<ComponentVariant>
   size: Ref<BtnSize>
@@ -35,13 +35,13 @@ export interface DocsButtonPlayground extends IRegorContext {
   reset: () => void
 }
 
-export interface DocsButtonEvents extends IRegorContext {
+export interface DocsButtonEvents {
   count: Ref<number>
   increment: () => void
   resetCount: () => void
 }
 
-export interface DocsButtonForm extends IRegorContext {
+export interface DocsButtonForm {
   project: Ref<string>
   message: Ref<string>
   submit: () => void
@@ -68,32 +68,75 @@ const options = (values: string[]) =>
 
 const buttonPlaygroundTemplate = html`<Grid columns="1" columnsMd="2" alignItems="center">
   <Flex direction="column" align="center">
-    <Btn :tone="tone" :variant="variant" :size="size" :icon="resolvedIcon" :iconPosition="position" :iconOnly="resolvedIconOnly" :disabled="disabled" ariaLabel="Create project" @click="activate">Create project</Btn>
+    <Btn
+      :tone="tone"
+      :variant="variant"
+      :size="size"
+      :icon="resolvedIcon"
+      :iconPosition="position"
+      :iconOnly="resolvedIconOnly"
+      :disabled="disabled"
+      ariaLabel="Create project"
+      @click="activate"
+      >Create project</Btn
+    >
     <p role="status" r-text="feedback"></p>
   </Flex>
   <Grid columns="2">
-    <FormSelectField id="button-tone" label="Tone" :model="tone" :options="tones"/>
-    <FormSelectField id="button-variant" label="Variant" :model="variant" :options="variants"/>
-    <FormSelectField id="button-size" label="Size" :model="size" :options="sizes"/>
-    <FormSelectField id="button-icon" label="Icon" :model="icon" :options="icons"/>
-    <FormSelectField id="button-position" label="Icon position" :model="position" :options="positions"/>
+    <FormSelectField
+      id="button-tone"
+      label="Tone"
+      :model="tone"
+      :options="tones"/>
+    <FormSelectField
+      id="button-variant"
+      label="Variant"
+      :model="variant"
+      :options="variants"/>
+    <FormSelectField
+      id="button-size"
+      label="Size"
+      :model="size"
+      :options="sizes"/>
+    <FormSelectField
+      id="button-icon"
+      label="Icon"
+      :model="icon"
+      :options="icons"/>
+    <FormSelectField
+      id="button-position"
+      label="Icon position"
+      :model="position"
+      :options="positions"/>
     <Flex direction="column" justify="center">
       <FormCheck id="button-disabled" label="Disabled" :checked="disabled"/>
       <FormCheck id="button-icon-only" label="Icon only" :checked="iconOnly"/>
     </Flex>
-    <Btn variant="link" tone="neutral" icon="tabler:refresh" @click="reset">Reset</Btn>
+    <Btn variant="link" tone="neutral" icon="tabler:refresh" @click="reset"
+      >Reset</Btn
+    >
   </Grid>
 </Grid>`
 
 const buttonEventsTemplate = html`<Flex direction="column" align="center">
   <Btn tone="accent" @click="increment">Add to collection</Btn>
-  <p role="status">Your collection has <strong r-text="count"></strong> items.</p>
+  <p role="status">
+    Your collection has <strong r-text="count"></strong> items.
+  </p>
   <Btn variant="link" tone="neutral" @click="resetCount">Reset collection</Btn>
 </Flex>`
 
 const buttonFormTemplate = html`<form @submit.prevent="submit" @reset.prevent="resetForm">
-  <FormInputField id="demo-project-name" label="Project name" :model="project" name="project" :required="true"/>
-  <Flex><Btn type="submit" tone="accent">Save project</Btn><Btn type="reset" variant="surface" tone="neutral">Reset</Btn></Flex>
+  <FormInputField
+    id="demo-project-name"
+    label="Project name"
+    :model="project"
+    name="project"
+    :required="true"/>
+  <Flex
+    ><Btn type="submit" tone="accent">Save project</Btn
+    ><Btn type="reset" variant="surface" tone="neutral">Reset</Btn></Flex
+  >
   <p role="status" r-text="message"></p>
 </form>`
 

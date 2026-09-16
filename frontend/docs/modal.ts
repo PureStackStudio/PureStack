@@ -1,7 +1,7 @@
 import { useModalStore } from '@purestack/ts-components'
 import { defineComponent, html, type IRegorContext, type Ref, ref } from 'regor'
 
-export interface DocsModalApi extends IRegorContext {
+export interface DocsModalApi {
   status: Ref<string>
   open: () => void
   close: () => void
@@ -9,7 +9,7 @@ export interface DocsModalApi extends IRegorContext {
   cancelled: () => void
 }
 
-export interface DocsModalStore extends IRegorContext {
+export interface DocsModalStore {
   result: Ref<string>
   review: () => void
 }
@@ -17,15 +17,25 @@ export interface DocsModalStore extends IRegorContext {
 const modalApiTemplate = html`<Flex direction="column" align="start">
   <Btn tone="accent" @click="open">Open with the browser API</Btn>
   <p role="status" r-text="status"></p>
-  <Modal id="api-dialog" title="A programmatic dialog" :showClose="true" @close="closed" @cancel="cancelled">
+  <Modal
+    id="api-dialog"
+    title="A programmatic dialog"
+    :showClose="true"
+    @close="closed"
+    @cancel="cancelled"
+  >
     <p>This dialog was opened by a Regor event handler.</p>
-    <template #footer><Btn tone="accent" @click="close">Close with the API</Btn></template>
+    <template #footer
+      ><Btn tone="accent" @click="close">Close with the API</Btn></template
+    >
   </Modal>
 </Flex>`
 
 const modalStoreTemplate = html`<Flex direction="column" align="start">
   <ModalStore/>
-  <Btn tone="accent" variant="surface" @click="review">Review a saved draft</Btn>
+  <Btn tone="accent" variant="surface" @click="review"
+    >Review a saved draft</Btn
+  >
   <p role="status" r-text="result"></p>
 </Flex>`
 

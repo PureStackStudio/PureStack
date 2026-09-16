@@ -6,7 +6,7 @@ import {
   type RefOrValue,
 } from 'regor'
 
-export interface StudioFeature extends IRegorContext {
+export interface StudioFeature {
   title?: RefOrValue<string>
   summary?: RefOrValue<string>
   icon?: RefOrValue<string>
@@ -14,7 +14,7 @@ export interface StudioFeature extends IRegorContext {
   linkLabel?: RefOrValue<string>
 }
 
-export interface StudioPackage extends IRegorContext {
+export interface StudioPackage {
   number?: RefOrValue<string>
   title?: RefOrValue<string>
   summary?: RefOrValue<string>
@@ -22,13 +22,13 @@ export interface StudioPackage extends IRegorContext {
   href?: RefOrValue<string>
 }
 
-export interface StudioCopy extends IRegorContext {
+export interface StudioCopy {
   target?: RefOrValue<string>
   label?: RefOrValue<string>
   iconOnly?: RefOrValue<boolean>
 }
 
-export interface StudioFaq extends IRegorContext {
+export interface StudioFaq {
   title?: RefOrValue<string>
 }
 
