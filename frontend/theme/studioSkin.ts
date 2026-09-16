@@ -8,7 +8,7 @@ import { type DeepPartial, merge } from '@purestack/ts-util'
 // The launch identity is deliberately dark in both system modes. All components
 // still consume the standard semantic palette contract and generated variables.
 function createStudioPalette(): ThemePalette {
-  return merge(themeSkins.standard.create().dark, {
+  return merge(themeSkins.standard.create(["red"]).dark, {
     accent: '#9be7ba',
     font: {
       family: {
@@ -29,13 +29,13 @@ function createStudioPalette(): ThemePalette {
         display: '5rem',
       },
     },
-    radii: { sm: '4px', md: '6px', lg: '8px' },
-    effect: {
+    //radii: { sm: '4px', md: '6px', lg: '8px' },
+    /*effect: {
       panelShadow: 'none',
       panelShadowStrong: 'none',
       softShadow: '0 8px 25px #0005',
       floatingShadow: '0 12px 70px #0005',
-    },
+    },*/
     semanticTone: {
       neutral: {
         tone: '#9aabaa',
@@ -171,6 +171,8 @@ export function registerStudioSkin() {
     create: () => ({
       light: createStudioPalette(),
       dark: createStudioPalette(),
+      light2: themeSkins.standard.create([""]).light,
+      dark2: themeSkins.standard.create([""]).dark,
     }),
   })
 }
