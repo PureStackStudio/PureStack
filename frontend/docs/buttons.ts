@@ -12,6 +12,8 @@ import {
   html,
   type Ref,
   ref,
+  type SRef,
+  sref,
 } from 'regor'
 
 export interface DocsButtonPlayground {
@@ -35,9 +37,14 @@ export interface DocsButtonPlayground {
 }
 
 export interface DocsButtonEvents {
-  count: Ref<number>
-  increment: () => void
-  resetCount: () => void
+  items: SRef<string[]>
+  limit: number
+  summary: ComputedRef<string>
+  isEmpty: ComputedRef<boolean>
+  isFull: ComputedRef<boolean>
+  addItem: () => void
+  removeItem: () => void
+  reset: () => void
 }
 
 export interface DocsButtonForm {
@@ -117,12 +124,18 @@ const buttonPlaygroundTemplate = html`<Grid columns="1" columnsMd="2" alignItems
   </Grid>
 </Grid>`
 
-const buttonEventsTemplate = html`<Flex direction="column" align="center">
-  <Btn tone="accent" @click="increment">Add to collection</Btn>
-  <p role="status">
-    Your collection has <strong r-text="count"></strong> items.
-  </p>
-  <Btn variant="link" tone="neutral" @click="resetCount">Reset collection</Btn>
+const buttonEventsTemplate = html`<Flex direction="column" align="start">
+  <strong>Build a collection</strong>
+  <p>Add up to {{ limit }} items. Remove one or start over.</p>
+  <p role="status" r-text="summary"></p>
+  <ul r-if="!isEmpty" aria-label="Collection items">
+    <li r-for="item in items" r-text="item"></li>
+  </ul>
+  <Flex wrap="true">
+    <Btn tone="accent" :disabled="isFull" @click="addItem">Add item</Btn>
+    <Btn tone="neutral" variant="surface" :disabled="isEmpty" @click="removeItem">Remove item</Btn>
+    <Btn tone="neutral" variant="link" :disabled="isEmpty" @click="reset">Reset</Btn>
+  </Flex>
 </Flex>`
 
 const buttonFormTemplate = html`<form @submit.prevent="submit" @reset.prevent="resetForm">
@@ -209,11 +222,32 @@ function createButtonPlayground(): DocsButtonPlayground {
 }
 
 function createButtonEvents(): DocsButtonEvents {
-  const count = ref(0)
+  const items = sref<string[]>([])
+  const limit = 5
+  let nextItem = 1
+  const isEmpty = computed(() => items().length === 0)
+  const isFull = computed(() => items().length === limit)
+  const summary = computed(() =>
+    isFull()
+      ? `Collection full: ${limit} items.`
+      : `${items().length} ${items().length === 1 ? 'item' : 'items'} in your collection.`,
+  )
   return {
-    count,
-    increment: () => count(count() + 1),
-    resetCount: () => count(0),
+    items,
+    limit,
+    summary,
+    isEmpty,
+    isFull,
+    addItem: () => {
+      if (!isFull()) items([...items(), `Item ${nextItem++}`])
+    },
+    removeItem: () => {
+      if (!isEmpty()) items(items().slice(0, -1))
+    },
+    reset: () => {
+      items([])
+      nextItem = 1
+    },
   }
 }
 

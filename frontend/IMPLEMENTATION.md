@@ -9,9 +9,12 @@ default `NavMenu` and `PageToc`. Markdown headings drive the outline, Markdown
 tables describe the API, and ordinary fenced code goes through ts-ssg's normal
 highlighting and copy pipeline.
 
-Static previews are direct MDX component markup. Interactive examples share
-their templates and context factories between server rendering and browser
-mounting. Native Tabs and Modal runtime behavior is demonstrated as shipped.
+Static previews are direct MDX component markup. Buttons uses `RegorApp` shells
+and explicitly mounts its components in the browser. Its collection example
+stores and renders a list of items; count, disabled states, and status derive
+from that list. Tabs and Modal share their interactive component definitions
+between server rendering and browser mounting. Native Tabs and Modal runtime
+behavior is demonstrated as shipped.
 No page-script source or generated embed was changed.
 
 Each documented component owns an example module in `frontend/docs` and a
@@ -133,9 +136,6 @@ Keep build output and browser tooling under ignored directories.
 - Replace the handwritten stylesheet with typed `styleBuilder` registrations,
   emitted through the existing light/dark stylesheet pipeline. Both modes use
   the dark identity. The document supplies an initial theme for no-JavaScript use.
-- Use native Tabs selection and panel visibility. The site script adds roving
-  keyboard focus and ARIA relationships after the bundled runtime creates its
-  buttons; it does not maintain a second selection model.
 - Preserve the accepted content and composition, then compare browser screenshots
   and verify keyboard behavior, responsive layouts, clipboard handling, no-JavaScript
   fallbacks, accessibility, and propagation of theme variables.

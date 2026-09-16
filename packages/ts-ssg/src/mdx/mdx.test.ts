@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest'
 import { resolvePageContentHref } from '../build/content-hrefs'
 import { resolveSiteConfig } from '../config/config'
 import { normalizeFrontmatter } from '../frontmatter/frontmatter'
+import { createMdxHighlighter } from './highlight'
 import { createHljsHighlighter } from './highlightjs'
 import { compileMdx, compileMdxToHtml } from './mdx'
 
@@ -463,6 +464,99 @@ describe('compileMdxToHtml', () => {
     expect(html).toContain('<pre><code class="language-bash">')
     expect(html).toContain('npm install @purestack/ts-ssg')
     expect(html).toContain('</TabPane>')
+  })
+
+  it.each([
+    '```',
+    '~~~~',
+  ])('preserves formatted source tabs with %s fences and no surrounding blank lines', (fence) => {
+    const source = [
+      '<Tabs',
+      '  tone="neutral"',
+      '>',
+      '  <TabPane id="preview">',
+      '    <RegorApp id="collection" src="./collection.ts"/>',
+      '  </TabPane>',
+      '  <TabPane id="source">',
+      `${fence}typescript`,
+      "import { html } from 'regor'",
+      '',
+      'export interface Collection { items: SRef<string[]> }',
+      '',
+      'const template = html`<Flex><RegorApp src="./example.ts"/></Flex>`',
+      'const closingTag = "</Tabs>"',
+      'const shorterFence = "```"',
+      fence,
+      '  </TabPane>',
+      '</Tabs>',
+      '',
+      '## After the sample',
+      '',
+      'Still visible.',
+    ].join('\n')
+
+    const result = compileMdx(source, {
+      sourceRelPath: 'components/buttons.mdx',
+      highlighter: createHljsHighlighter(),
+    })
+    const cleanup = ensureDomGlobals()
+    try {
+      const root = document.createElement('div')
+      root.innerHTML = result.bodyHtml
+      expect(root.querySelectorAll('tabs > tabpane')).toHaveLength(2)
+      expect(
+        root.querySelector('#preview regorapp')?.getAttribute('sourceRelPath'),
+      ).toBe('components/buttons.mdx')
+      const code = root.querySelector('#source pre code')
+      expect(code?.textContent?.trimEnd()).toBe(
+        source.split(`${fence}typescript\n`)[1].split(`\n${fence}\n`)[0],
+      )
+      expect(code?.querySelector('span')).not.toBeNull()
+      expect(root.querySelector('h2')?.textContent).toBe('After the sample')
+      expect(root.querySelector('p')?.textContent).toBe('Still visible.')
+    } finally {
+      cleanup()
+    }
+  })
+
+  it.each([
+    'none',
+    'highlightjs',
+    'shiki',
+  ])('preserves template literals inside source tabs with %s highlighting', async (engine) => {
+    const code = [
+      'const options = {',
+      '  template: html`<Collection/>`,',
+      `  label: \`Item \${nextItem++}\`,`,
+      '  entity: "&#x3C;",',
+      '}',
+    ].join('\n')
+    const source = [
+      '<TabPane>',
+      'Before `inline code`.',
+      '```typescript',
+      code,
+      '```',
+      'After `inline code`.',
+      '</TabPane>',
+    ].join('\n')
+    const highlighter =
+      engine === 'shiki'
+        ? await createMdxHighlighter(undefined, ['typescript'])
+        : engine === 'highlightjs'
+          ? createHljsHighlighter()
+          : undefined
+    const result = compileMdx(source, { highlighter })
+    const cleanup = ensureDomGlobals()
+    try {
+      const root = document.createElement('div')
+      root.innerHTML = result.bodyHtml
+      expect(root.querySelector('pre code')?.textContent?.trimEnd()).toBe(code)
+      expect(root.querySelectorAll('pre code code')).toHaveLength(0)
+      expect(root.querySelectorAll('tabpane > code')).toHaveLength(2)
+    } finally {
+      cleanup()
+    }
   })
 
   it('highlights fenced code blocks inside Regor component markup', async () => {

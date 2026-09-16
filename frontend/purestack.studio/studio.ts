@@ -1,70 +1,5 @@
 import { createApp, html, ref } from 'regor'
 
-/** Add keyboard navigation to the buttons created by PureStack's Tabs runtime.
- * Native Tabs owns selection, radios, responsive layout, and panel visibility. */
-function initializeWorkbench() {
-  const workbench = document.querySelector<HTMLElement>('.studio-tabs')
-  if (!workbench) return true
-  const list = workbench.querySelector<HTMLElement>('.tabs__tab-buttons')
-  const tabs = [
-    ...workbench.querySelectorAll<HTMLButtonElement>(
-      '.tabs__tab-buttons > .btn',
-    ),
-  ]
-  const controls = [
-    ...workbench.querySelectorAll<HTMLInputElement>('.tabs__control'),
-  ]
-  if (!list || tabs.length !== controls.length) return false
-  const panels = workbench.querySelector<HTMLElement>('.tabs__list')
-  list.setAttribute('role', 'tablist')
-  list.setAttribute(
-    'aria-label',
-    panels?.getAttribute('aria-label') ?? 'Explore PureStack examples',
-  )
-  panels?.removeAttribute('role')
-  panels?.removeAttribute('aria-label')
-  const updateFocus = () => {
-    tabs.forEach((tab, index) => {
-      tab.tabIndex = controls[index].checked ? 0 : -1
-      tab.setAttribute('aria-selected', String(controls[index].checked))
-    })
-  }
-  tabs.forEach((tab, index) => {
-    const control = controls[index]
-    tab.id = `tab-${control.id}`
-    tab.setAttribute('role', 'tab')
-    tab.setAttribute('aria-controls', `${control.id}-panel`)
-    document
-      .getElementById(`${control.id}-panel`)
-      ?.setAttribute('aria-labelledby', tab.id)
-    control.addEventListener('change', updateFocus)
-    tab.addEventListener('keydown', (event) => {
-      let next: number
-      switch (event.key) {
-        case 'ArrowRight':
-          next = (index + 1) % tabs.length
-          break
-        case 'ArrowLeft':
-          next = (index - 1 + tabs.length) % tabs.length
-          break
-        case 'Home':
-          next = 0
-          break
-        case 'End':
-          next = tabs.length - 1
-          break
-        default:
-          return
-      }
-      event.preventDefault()
-      tabs[next].click()
-      tabs[next].focus()
-    })
-  })
-  updateFocus()
-  return true
-}
-
 function initializeCopyButtons() {
   const status = document.getElementById('copy-status')
   let statusTimer: ReturnType<typeof setTimeout>
@@ -147,21 +82,12 @@ function initializeCounter() {
     {
       selector: '#counter',
       template: html`<button type="button" @click="increment">
-      Clicked <span r-text="count"></span> times
-    </button>`,
+  Clicked <span r-text="count"></span> times
+</button>`,
     },
   )
 }
 
-if (!initializeWorkbench()) {
-  const workbench = document.querySelector('.tabs.studio-tabs')
-  if (workbench) {
-    const observer = new MutationObserver(() => {
-      if (initializeWorkbench()) observer.disconnect()
-    })
-    observer.observe(workbench, { childList: true, subtree: true })
-  }
-}
 initializeCopyButtons()
 initializeMobileMenu()
 initializeCounter()

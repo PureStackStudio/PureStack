@@ -77,8 +77,9 @@ standard `TopBar` header, and the built-in `NavMenu` and `PageToc`.
 
 Author guidance, examples, code fences, and API tables in the MDX files under
 `purestack.studio/components/`. Static examples use standard components directly.
-Put the matching source in a fenced `html` block inside a native `details`
-element; ts-ssg handles highlighting and its standard code-copy control.
+The Buttons page pairs previews with source tabs using native `Tabs` and
+`TabPane`. Each file has its own source tab; ts-ssg handles fenced-code
+highlighting and its standard code-copy control.
 
 Examples requiring application state live in their component's module:
 `docs/buttons.ts`, `docs/tabs.ts`, and `docs/modal.ts`.
@@ -87,16 +88,19 @@ interfaces, individually named template strings, typed context factories, and
 explicit `defineComponent<Interface>` calls. `docs/docsComponents.ts` only merges
 the registrations for server rendering.
 Each MDX page loads its own matching browser entry (`components/buttons.ts`,
-`tabs.ts`, or `modal.ts`) through `PageScript`. Each entry registers its own
+`tabs.ts`, or `modal.ts`). Buttons uses `RegorApp` for each interactive mount;
+its browser entry targets the generated `app` elements by id. Tabs and Modal
+currently load their entries with `PageScript`. Each entry registers its own
 components and mounts them with direct `createApp` calls and explicit templates.
 There is no shared example contract, lookup table, or mounting helper.
 Tabs and Modal use their existing runtimes.
 There is no custom documentation template, stylesheet, or highlighter.
 
 To document another component, add its example module and matching browser
-entry, define its preview components in that example module, merge its exported
-registrations in `docs/docsComponents.ts`, and reference the
-entry from its MDX page. Pass derived component props as `computed` refs so
+entry and define its preview components in that example module. Use `RegorApp`
+to declare each browser mount in MDX; register components in
+`docs/docsComponents.ts` only when the MDX renders them on the server.
+Pass derived component props as `computed` refs so
 they keep updating after mount; the Buttons playground demonstrates this for
 icon selection and icon-only state.
 

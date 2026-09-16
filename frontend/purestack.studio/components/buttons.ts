@@ -43,21 +43,21 @@ const components = {
 createApp(
   { components },
   {
-    selector: '[data-doc-demo="button-playground"]',
+    selector: 'app#button-playground',
     template: html`<DocsButtonPlayground/>`,
   },
 )
 createApp(
   { components },
   {
-    selector: '[data-doc-demo="button-events"]',
+    selector: 'app#button-events',
     template: html`<DocsButtonEvents/>`,
   },
 )
 createApp(
   { components },
   {
-    selector: '[data-doc-demo="button-form"]',
+    selector: 'app#button-form',
     template: html`<DocsButtonForm/>`,
   },
 )

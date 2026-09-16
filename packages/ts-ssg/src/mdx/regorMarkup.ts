@@ -111,10 +111,14 @@ const VOID_HTML_TAG_NAMES = new Set([
 
 export function maskRegorMarkup(
   source: string,
-  root: unknown,
+  parse: (source: string) => unknown,
   options: RegorMarkupMaskOptions = {},
 ) {
-  const ignoredRanges = collectIgnoredRanges(root)
+  // Markdown's HTML blocks can hide a fence opener but expose its closer.
+  // Mask fences first so the preliminary parse cannot consume later markup.
+  const fenceRanges = collectFencedCodeRanges(source)
+  const root = parse(maskIgnoredRanges(source, fenceRanges))
+  const ignoredRanges = [...fenceRanges, ...collectIgnoredRanges(root)]
   const ranges = collectMarkupRanges(source, ignoredRanges)
   const segments: MarkupSegment[] = []
   if (ranges.length === 0) {
@@ -265,7 +269,9 @@ function annotateRegorScriptSourceRelPath(
   const normalizedSourceRelPath = sourceRelPath?.trim()
   if (!normalizedSourceRelPath) return source
 
-  const tokens = scanTagTokens(source).filter(
+  const tokens = scanTagTokens(
+    maskIgnoredRanges(source, collectFencedCodeRanges(source)),
+  ).filter(
     (token) =>
       token.kind === 'opening' && isSourceOwnedScriptComponentName(token.name),
   )
@@ -389,10 +395,30 @@ function maskIgnoredRanges(
   const chars = source.split('')
   for (const range of ignoredRanges) {
     for (let index = range.start; index < range.end; index++) {
-      chars[index] = ' '
+      if (chars[index] !== '\n' && chars[index] !== '\r') chars[index] = ' '
     }
   }
   return chars.join('')
+}
+
+function collectFencedCodeRanges(source: string) {
+  const ranges: Array<{ start: number; end: number }> = []
+  let active: { start: number; marker: string; length: number } | undefined
+  let offset = 0
+  for (const line of source.split('\n')) {
+    if (active) {
+      if (isFenceEnd(line, active.marker, active.length)) {
+        ranges.push({ start: active.start, end: offset + line.length })
+        active = undefined
+      }
+    } else {
+      const fence = parseFenceStart(line)
+      if (fence) active = { start: offset, ...fence }
+    }
+    offset += line.length + 1
+  }
+  if (active) ranges.push({ start: active.start, end: source.length })
+  return ranges
 }
 
 function collectIgnoredRanges(root: unknown) {
@@ -554,13 +580,11 @@ function replaceMarkupCodeFences(
 ) {
   const lines = source.split('\n')
   const next: string[] = []
+  let markupStart = 0
 
   for (let index = 0; index < lines.length; index += 1) {
     const fence = parseFenceStart(lines[index])
-    if (!fence) {
-      next.push(lines[index])
-      continue
-    }
+    if (!fence) continue
 
     const body: string[] = []
     let closeIndex = index + 1
@@ -568,24 +592,36 @@ function replaceMarkupCodeFences(
       if (isFenceEnd(lines[closeIndex], fence.marker, fence.length)) break
       body.push(stripFenceIndent(lines[closeIndex], fence.indent))
     }
-    if (closeIndex >= lines.length) {
-      next.push(lines[index])
-      continue
-    }
+    if (closeIndex >= lines.length) continue
 
+    if (markupStart < index) {
+      next.push(
+        replaceMarkupInlineCode(
+          lines.slice(markupStart, index).join('\n'),
+          highlighter,
+        ),
+      )
+    }
     next.push(
       renderCodeFenceBlock(body.join('\n'), fence.language, highlighter),
     )
     index = closeIndex
+    markupStart = closeIndex + 1
   }
 
-  return replaceMarkupInlineCode(next.join('\n'), highlighter)
+  if (markupStart < lines.length) {
+    next.push(
+      replaceMarkupInlineCode(lines.slice(markupStart).join('\n'), highlighter),
+    )
+  }
+  return next.join('\n')
 }
 
 function parseFenceStart(line: string) {
-  const match = /^([ \t]*)(`{3,}|~{3,})([^\n]*)$/.exec(line)
+  const match = /^([ \t]*)(`{3,}|~{3,})([^\r\n]*)\r?$/.exec(line)
   if (!match) return undefined
   const marker = match[2][0]
+  if (marker === '`' && match[3].includes('`')) return undefined
   const language = normalizeFenceLanguage(match[3])
   return {
     indent: match[1],
