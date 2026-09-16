@@ -35,7 +35,8 @@ yarn frontend:publish
 | `purestack.studio/index.mdx` | Landing page, source examples, and static component previews |
 | `purestack.studio/header.mdx`, `footer.mdx` | Shared navigation and footer |
 | `purestack.studio/studio.ts` | Keyboard enhancement for native Tabs, clipboard feedback, mobile menu, and live Regor counter |
-| `components/studioComponents.ts` | Typed compositions of Panel, Tabs, TabPane, Btn, BtnLink, SectionHeader, IconFrame, ExpandablePanel, and BarChart |
+| `components/studioComponents.ts` | Explicit registration of the Studio components |
+| `components/studio*.ts` | One file per component, with its exported interface, named template, and typed definition |
 | `theme/studioSkin.ts` | Dark studio skin using the standard semantic palette contract |
 | `theme/studioStyles.ts` | Registers the page's typed style extensions in PureStack's generated theme stylesheets |
 | `theme/*Styles.ts` | Layout, typography, responsive rules, and component composition spacing |
@@ -58,8 +59,9 @@ and `themes.forEach`, with framework breakpoint tokens. They are emitted into
 `site.css` and `site.dark.css`; there is no separate handwritten CSS asset.
 
 To change the identity, edit `theme/studioSkin.ts`. To add a reusable section,
-compose existing primitives in `components/studioComponents.ts` and register only
-the extra layout styles it needs. `demoStyle.ts` intentionally remains a small,
+compose existing primitives in its own file under `components/`, register its
+definition in `studioComponents.ts`, and register only the extra layout styles
+it needs. `demoStyle.ts` intentionally remains a small,
 self-contained example matching the workbench's displayed Style API source.
 
 The page deliberately describes the framework as pre-release and uses the
