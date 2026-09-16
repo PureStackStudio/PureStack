@@ -1,0 +1,43 @@
+---
+title: Components
+description: Explore PureStack components through live examples, copyable source, and complete API references.
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 0
+  icon: tabler:components
+---
+
+<span>THE PURESTACK COMPONENT LIBRARY</span>
+
+# Good interfaces start with good pieces.
+
+<p>Explore the primitives. Try the interactions. Take the source with you. A shared language for content sites and product interfaces.</p>
+
+## Explore the first collection
+
+Start with three component families. Each brings together usage guidance, live samples, accessibility guidance, and the API behind it.
+
+<Grid columns="1" columnsMd="3">
+  <Panel tone="neutral"><IconFrame name="tabler:square-rounded" tone="accent" variant="surface"/><h2>Buttons</h2><p>Actions, navigation, and a clear next step. Thirteen variants. Ten tones.</p><BtnLink href="/components/buttons/" tone="accent" variant="link" icon="tabler:arrow-right" iconPosition="end">Explore buttons</BtnLink></Panel>
+  <Panel tone="neutral"><IconFrame name="tabler:layout-grid" tone="accent" variant="surface"/><h2>Tabs</h2><p>Related views with persistent panels, composition, and responsive overflow.</p><BtnLink href="/components/tabs/" tone="accent" variant="link" icon="tabler:arrow-right" iconPosition="end">Explore tabs</BtnLink></Panel>
+  <Panel tone="neutral"><IconFrame name="tabler:app-window" tone="accent" variant="surface"/><h2>Modal</h2><p>Native dialogs with focus handling, flexible slots, and considered motion.</p><BtnLink href="/components/modal/" tone="accent" variant="link" icon="tabler:arrow-right" iconPosition="end">Explore modal</BtnLink></Panel>
+</Grid>
+
+## One component model
+
+Write components directly in Regor MDX. PureStack renders the content to HTML, generates its theme styles, and includes the runtime required by components such as Tabs and Modal.
+
+For application state, mount a Regor app from a TypeScript entry point using `PageScript` or `RegorApp`. Register the specific component families your app uses, then pass refs and handlers into the template.
+
+## A shared design system
+
+`tone` expresses intent; `variant` defines the visual treatment. Components consume the same semantic palette, typography, and radius tokens. Change the theme to make the system yours.
+
+<Panel tone="info" variant="surface">
+  <strong>Built with the components it documents</strong>
+  <p>These pages use PureStack’s standard documentation template, navigation, page TOC, components, and typed styles. Every sample renders actual <code>ts-components</code> output.</p>
+</Panel>

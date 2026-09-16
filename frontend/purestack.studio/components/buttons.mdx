@@ -1,0 +1,315 @@
+---
+title: Buttons
+description: Theme-aware actions and navigation with Btn and BtnLink. Explore every variant, tone, size, icon option, and browser interaction.
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 1
+  icon: tabler:square-rounded
+---
+
+# Buttons
+
+A clear next step. Theme-aware actions and links with the right semantics, expressive variants, and just enough API.
+
+<Badge tone="accent" variant="surface">Btn · BtnLink</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/btn/btn.ts) · [API reference](#api-reference)
+
+## Playground
+
+Explore all thirteen variants and ten semantic tones. Change the size, move the icon, or try the disabled state. The source below shows the starting configuration.
+
+<Panel tone="neutral" variant="surface">
+<div data-doc-demo="button-playground"><DocsButtonPlayground/></div>
+</Panel>
+
+<details>
+<summary>View source</summary>
+
+```html
+<Btn tone="accent" variant="solid" size="md" icon="tabler:plus">Create project</Btn>
+```
+
+</details>
+
+## Usage
+
+Use `Btn` for an action and `BtnLink` for navigation. Both are available directly in PureStack MDX. A `Btn` renders a native `button`; a `BtnLink` renders an anchor with a real `href`.
+
+<Panel tone="info" variant="surface">
+  <strong>Static markup. Explicit interaction.</strong>
+  <p>MDX renders components at build time. Mount a Regor app through <code>PageScript</code> or <code>RegorApp</code> when a button needs browser state or an event handler. The interaction example below shows both the markup and browser code.</p>
+</Panel>
+
+## Variants
+
+Choose the visual treatment independently from the tone. Filled variants suit primary actions; surface and outline variants give secondary actions structure. Link, underline, rail, and bracket variants work well in compact interfaces.
+
+<Panel tone="neutral" variant="surface">
+<Grid columns="2" columnsSm="3"><Flex direction="column" align="center"><Btn tone="accent" variant="solid">solid</Btn><code>solid</code></Flex>
+<Flex direction="column" align="center"><Btn tone="accent" variant="surface">surface</Btn><code>surface</code></Flex>
+<Flex direction="column" align="center"><Btn tone="accent" variant="surfaceAlt">surfaceAlt</Btn><code>surfaceAlt</code></Flex>
+<Flex direction="column" align="center"><Btn tone="accent" variant="outlineFill">outlineFill</Btn><code>outlineFill</code></Flex>
+<Flex direction="column" align="center"><Btn tone="accent" variant="outline">outline</Btn><code>outline</code></Flex>
+<Flex direction="column" align="center"><Btn tone="accent" variant="subtle">subtle</Btn><code>subtle</code></Flex>
+<Flex direction="column" align="center"><Btn tone="accent" variant="subtleBtn">subtleBtn</Btn><code>subtleBtn</code></Flex>
+<Flex direction="column" align="center"><Btn tone="accent" variant="link">link</Btn><code>link</code></Flex>
+<Flex direction="column" align="center"><Btn tone="accent" variant="sheen">sheen</Btn><code>sheen</code></Flex>
+<Flex direction="column" align="center"><Btn tone="accent" variant="underline">underline</Btn><code>underline</code></Flex>
+<Flex direction="column" align="center"><Btn tone="accent" variant="rail">rail</Btn><code>rail</code></Flex>
+<Flex direction="column" align="center"><Btn tone="accent" variant="bracket">bracket</Btn><code>bracket</code></Flex>
+<Flex direction="column" align="center"><Btn tone="accent" variant="none">none</Btn><code>none</code></Flex></Grid>
+</Panel>
+
+<details>
+<summary>View source</summary>
+
+```html
+<Grid columns="2" columnsSm="3"><Flex direction="column" align="center"><Btn tone="accent" variant="solid">solid</Btn><code>solid</code></Flex>
+<Flex direction="column" align="center"><Btn tone="accent" variant="surface">surface</Btn><code>surface</code></Flex>
+<Flex direction="column" align="center"><Btn tone="accent" variant="surfaceAlt">surfaceAlt</Btn><code>surfaceAlt</code></Flex>
+<Flex direction="column" align="center"><Btn tone="accent" variant="outlineFill">outlineFill</Btn><code>outlineFill</code></Flex>
+<Flex direction="column" align="center"><Btn tone="accent" variant="outline">outline</Btn><code>outline</code></Flex>
+<Flex direction="column" align="center"><Btn tone="accent" variant="subtle">subtle</Btn><code>subtle</code></Flex>
+<Flex direction="column" align="center"><Btn tone="accent" variant="subtleBtn">subtleBtn</Btn><code>subtleBtn</code></Flex>
+<Flex direction="column" align="center"><Btn tone="accent" variant="link">link</Btn><code>link</code></Flex>
+<Flex direction="column" align="center"><Btn tone="accent" variant="sheen">sheen</Btn><code>sheen</code></Flex>
+<Flex direction="column" align="center"><Btn tone="accent" variant="underline">underline</Btn><code>underline</code></Flex>
+<Flex direction="column" align="center"><Btn tone="accent" variant="rail">rail</Btn><code>rail</code></Flex>
+<Flex direction="column" align="center"><Btn tone="accent" variant="bracket">bracket</Btn><code>bracket</code></Flex>
+<Flex direction="column" align="center"><Btn tone="accent" variant="none">none</Btn><code>none</code></Flex></Grid>
+```
+
+</details>
+
+## Semantic tones
+
+Communicate intent through the palette. Every tone participates in the same theme system, including hover, active, and disabled states.
+
+<Panel tone="neutral" variant="surface">
+<Flex wrap="true"><Btn tone="neutral" variant="surface">neutral</Btn>
+<Btn tone="accent" variant="surface">accent</Btn>
+<Btn tone="feature" variant="surface">feature</Btn>
+<Btn tone="secondary" variant="surface">secondary</Btn>
+<Btn tone="custom" variant="surface">custom</Btn>
+<Btn tone="ghost" variant="surface">ghost</Btn>
+<Btn tone="info" variant="surface">info</Btn>
+<Btn tone="success" variant="surface">success</Btn>
+<Btn tone="warning" variant="surface">warning</Btn>
+<Btn tone="danger" variant="surface">danger</Btn></Flex>
+</Panel>
+
+<details>
+<summary>View source</summary>
+
+```html
+<Flex wrap="true"><Btn tone="neutral" variant="surface">neutral</Btn>
+<Btn tone="accent" variant="surface">accent</Btn>
+<Btn tone="feature" variant="surface">feature</Btn>
+<Btn tone="secondary" variant="surface">secondary</Btn>
+<Btn tone="custom" variant="surface">custom</Btn>
+<Btn tone="ghost" variant="surface">ghost</Btn>
+<Btn tone="info" variant="surface">info</Btn>
+<Btn tone="success" variant="surface">success</Btn>
+<Btn tone="warning" variant="surface">warning</Btn>
+<Btn tone="danger" variant="surface">danger</Btn></Flex>
+```
+
+</details>
+
+## Sizes and icons
+
+The `sm`, `md`, and `lg` sizes follow the active theme’s typography scale. Provide a registered icon name, then choose `start` or `end`. An icon-only button needs both an icon and an `ariaLabel`.
+
+<Panel tone="neutral" variant="surface">
+<Flex wrap="true" align="center">
+  <Btn size="sm" tone="accent">Small</Btn>
+  <Btn size="md" tone="accent" icon="tabler:plus">Create project</Btn>
+  <Btn size="lg" tone="neutral">Large</Btn>
+  <Btn tone="neutral" variant="surface" icon="tabler:arrow-right" iconPosition="end">Continue</Btn>
+  <Btn tone="accent" variant="surface" icon="tabler:check" :iconOnly="true" ariaLabel="Confirm selection"/>
+  <Btn tone="neutral" :disabled="true">Unavailable</Btn>
+</Flex>
+</Panel>
+
+<details>
+<summary>View source</summary>
+
+```html
+<Flex wrap="true" align="center">
+  <Btn size="sm" tone="accent">Small</Btn>
+  <Btn size="md" tone="accent" icon="tabler:plus">Create project</Btn>
+  <Btn size="lg" tone="neutral">Large</Btn>
+  <Btn tone="neutral" variant="surface" icon="tabler:arrow-right" iconPosition="end">Continue</Btn>
+  <Btn tone="accent" variant="surface" icon="tabler:check" :iconOnly="true" ariaLabel="Confirm selection"/>
+  <Btn tone="neutral" :disabled="true">Unavailable</Btn>
+</Flex>
+```
+
+</details>
+
+## Links
+
+Internal links use the SSG’s public path resolver. For `target="_blank"`, `BtnLink` supplies `rel="noopener noreferrer"` unless you specify your own `rel`.
+
+<Panel tone="neutral" variant="surface">
+<Flex wrap="true">
+  <BtnLink href="/components/tabs/" tone="accent" icon="tabler:arrow-right" iconPosition="end">Explore tabs</BtnLink>
+  <BtnLink href="https://github.com/PureStackStudio/PureStack" target="_blank" tone="neutral" variant="surface" icon="tabler:external-link" iconPosition="end">Source on GitHub</BtnLink>
+  <BtnLink href="#api-reference" variant="link" tone="accent">Jump to the API</BtnLink>
+</Flex>
+</Panel>
+
+<details>
+<summary>View source</summary>
+
+```html
+<Flex wrap="true">
+  <BtnLink href="/components/tabs/" tone="accent" icon="tabler:arrow-right" iconPosition="end">Explore tabs</BtnLink>
+  <BtnLink href="https://github.com/PureStackStudio/PureStack" target="_blank" tone="neutral" variant="surface" icon="tabler:external-link" iconPosition="end">Source on GitHub</BtnLink>
+  <BtnLink href="#api-reference" variant="link" tone="accent">Jump to the API</BtnLink>
+</Flex>
+```
+
+</details>
+
+## Browser interaction
+
+Click to add items, then reset the collection. The count belongs to this mounted example and survives opening or closing its source panel.
+
+<Panel tone="neutral" variant="surface">
+<div data-doc-demo="button-events"><DocsButtonEvents/></div>
+</Panel>
+
+<details>
+<summary>View source</summary>
+
+```html
+<Flex direction="column" align="center">
+  <Btn tone="accent" @click="increment">Add to collection</Btn>
+  <p role="status">Your collection has <strong r-text="count"></strong> items.</p>
+  <Btn variant="link" tone="neutral" @click="resetCount">Reset collection</Btn>
+</Flex>
+```
+
+Save the browser code as `collection.ts` beside your MDX page. Add a mount point and load it with `PageScript`:
+
+```html
+<div id="collection"></div>
+<PageScript src="./collection.ts"/>
+```
+
+**collection.ts**
+
+```typescript
+import { createApp, html, ref } from 'regor'
+import { defineButtonComponents, defineFlexComponents } from '@purestack/ts-components'
+
+const count = ref(0)
+const increment = () => count(count() + 1)
+const resetCount = () => count(0)
+
+createApp({
+  count, increment, resetCount,
+  components: { ...defineButtonComponents(), ...defineFlexComponents() },
+}, {
+  selector: '#collection',
+  template: html`<Flex direction="column" align="center">
+    <Btn tone="accent" @click="increment">Add to collection</Btn>
+    <p role="status">Your collection has <strong r-text="count"></strong> items.</p>
+    <Btn variant="link" tone="neutral" @click="resetCount">Reset collection</Btn>
+  </Flex>`,
+})
+```
+
+</details>
+
+### Submit and reset
+
+The default button type is `button`. Choose `submit` or `reset` explicitly inside a form. This sample validates the required field and handles submission locally.
+
+The form handles `@reset.prevent` so its reactive value stays synchronized with the input instead of being overwritten by the browser’s native reset.
+
+<Panel tone="neutral" variant="surface">
+<div data-doc-demo="button-form"><DocsButtonForm/></div>
+</Panel>
+
+<details>
+<summary>View source</summary>
+
+```html
+<form @submit.prevent="submit" @reset.prevent="resetForm">
+  <FormInputField id="demo-project-name" label="Project name" :model="project" name="project" :required="true"/>
+  <Flex><Btn type="submit" tone="accent">Save project</Btn><Btn type="reset" variant="surface" tone="neutral">Reset</Btn></Flex>
+  <p role="status" r-text="message"></p>
+</form>
+```
+
+**Browser TypeScript**
+
+```typescript
+const project = ref('My next idea')
+const message = ref('Changes stay in this demo.')
+const submit = () => message(`Saved “${project()}”.`)
+const resetForm = () => {
+  project('My next idea')
+  message('Form reset.')
+}
+// Pass these bindings into createApp with defineFormInputField(),
+// defineButtonComponents(), and defineFlexComponents().
+```
+
+</details>
+
+## Accessibility
+
+- Use a visible, specific label such as “Save project”.
+- Give icon-only controls an accessible name with `ariaLabel`.
+- A disabled button cannot be activated or reached with Tab. Use visible context to explain why an action is unavailable.
+- Keep navigation as links, including links styled as buttons.
+- Use bound booleans such as `:disabled="false"` when supplying boolean values through MDX.
+
+## API reference
+
+The tables list author-facing props, slots, and events. Props accept their value or a Regor ref where declared by the component. Computed implementation fields are internal.
+
+### Shared props · Btn and BtnLink
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| `tone` | `SemanticTone` | neutral (inherited) | neutral · accent · feature · secondary · custom · ghost · info · success · warning · danger |
+| `variant` | `ComponentVariant` | solid | solid · surface · surfaceAlt · outlineFill · outline · subtle · subtleBtn · link · sheen · underline · rail · bracket · none |
+| `size` | `'sm' \| 'md' \| 'lg'` | md | Uses the current theme’s font scale. |
+| `icon` | `string` | — | A registered provider:icon-name. |
+| `iconPosition` | `'start' \| 'end'` | start | Places the icon before or after the label. |
+| `iconOnly` | `boolean` | false | Hides the default slot. Supply an icon and ariaLabel. |
+| `ariaLabel` | `string` | — | Accessible name. Required when no visible label is present. |
+
+### Btn
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| `type` | `'button' \| 'submit' \| 'reset'` | button | The native button type. |
+| `disabled` | `boolean` | false | Native disabled state; removes the button from keyboard focus and blocks activation. |
+
+### BtnLink
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| `href` | `string` | — | Destination URL. Normalized through the SSG’s public/base-path resolver when available. |
+| `target` | `string` | — | Native anchor target, such as _blank. |
+| `rel` | `string` | automatic for _blank | Defaults to noopener noreferrer for _blank. An explicit rel takes precedence. |
+
+### Slots and events
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| `default` | `slot` | — | Button or link label. Hidden when iconOnly is true. |
+| `@click` | `MouseEvent` | — | A browser event. Attach a handler in a mounted Regor application. |
+| `class / data-* / aria-*` | `native attributes` | — | Additional attributes inherit onto the button or anchor. |
+
+<PageScript src="./buttons.ts"/>

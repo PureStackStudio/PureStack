@@ -1,7 +1,12 @@
 import { getThemePaletteVar } from '@purestack/ts-style'
-import { defineComponent, html, type RefOrValue } from 'regor'
+import {
+  defineComponent,
+  html,
+  type IRegorContext,
+  type RefOrValue,
+} from 'regor'
 
-export interface StudioFeature {
+export interface StudioFeature extends IRegorContext {
   title?: RefOrValue<string>
   summary?: RefOrValue<string>
   icon?: RefOrValue<string>
@@ -9,7 +14,7 @@ export interface StudioFeature {
   linkLabel?: RefOrValue<string>
 }
 
-export interface StudioPackage {
+export interface StudioPackage extends IRegorContext {
   number?: RefOrValue<string>
   title?: RefOrValue<string>
   summary?: RefOrValue<string>
@@ -17,13 +22,13 @@ export interface StudioPackage {
   href?: RefOrValue<string>
 }
 
-export interface StudioCopy {
+export interface StudioCopy extends IRegorContext {
   target?: RefOrValue<string>
   label?: RefOrValue<string>
   iconOnly?: RefOrValue<boolean>
 }
 
-export interface StudioFaq {
+export interface StudioFaq extends IRegorContext {
   title?: RefOrValue<string>
 }
 

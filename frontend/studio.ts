@@ -6,6 +6,7 @@ import { type BuildInput, buildSite, startDevServer } from '@purestack/ts-ssg'
 import { createLogger, getLogger } from 'logpot'
 import { defineStudioComponents } from './components/studioComponents'
 import { card } from './demoStyle'
+import { defineDocumentationComponents } from './docs/docsComponents'
 import { registerStudioSkin } from './theme/studioSkin'
 import { registerStudioStyles } from './theme/studioStyles'
 
@@ -49,7 +50,10 @@ const build: BuildInput = {
     templates,
     hooks: {
       onConfigResolved(context) {
-        context.components = defineStudioComponents()
+        context.components = {
+          ...defineStudioComponents(),
+          ...defineDocumentationComponents(),
+        }
         registerStudioStyles()
       },
     },

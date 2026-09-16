@@ -67,13 +67,53 @@ repository workflow instead of assuming an npm release already exists. Update
 the release announcement, quick start, and availability FAQ when publishing.
 GitHub links target `PureStackStudio/PureStack` and the `main` branch.
 
-## Validation
+## Component documentation pilot
+
+Open `/components/`, `/components/buttons/`, `/components/tabs/`, and
+`/components/modal/`. These pages use `template: doc` directly, the directory's
+standard `TopBar` header, and the built-in `NavMenu` and `PageToc`.
+
+Author guidance, examples, code fences, and API tables in the MDX files under
+`purestack.studio/components/`. Static examples use standard components directly.
+Put the matching source in a fenced `html` block inside a native `details`
+element; ts-ssg handles highlighting and its standard code-copy control.
+
+Examples requiring application state live in their component's module:
+`docs/buttons.ts`, `docs/tabs.ts`, and `docs/modal.ts`.
+Each module follows the standard `ts-components` pattern: exported context
+interfaces, individually named template strings, typed context factories, and
+explicit `defineComponent<Interface>` calls. `docs/docsComponents.ts` only merges
+the registrations for server rendering.
+Each MDX page loads its own matching browser entry (`components/buttons.ts`,
+`tabs.ts`, or `modal.ts`) through `PageScript`. Each entry registers its own
+components and mounts them with direct `createApp` calls and explicit templates.
+There is no shared example contract, lookup table, or mounting helper.
+Tabs and Modal use their existing runtimes.
+There is no custom documentation template, stylesheet, or highlighter.
+
+To document another component, add its example module and matching browser
+entry, define its preview components in that example module, merge its exported
+registrations in `docs/docsComponents.ts`, and reference the
+entry from its MDX page. Pass derived component props as `computed` refs so
+they keep updating after mount; the Buttons playground demonstrates this for
+icon selection and icon-only state.
+
+The pilot covers button variants, tones, sizes, icons, links, events and forms;
+tab composition, disabled panes, overflow, independent groups and controlled
+selection; and modal sizes, motion, slots, nesting, browser events and ModalStore.
+
+Browser checks cover desktop/mobile layout, the examples' state changes, source
+highlighting, and dialog dismissal/focus restoration. Shared framework
+accessibility and no-JavaScript findings are recorded in `IMPLEMENTATION.md`;
+these require attention before treating the documentation as release-ready.
+
+## Type checking
 
 ```sh
 yarn tsgo -p frontend/tsconfig.json --noEmit
 ```
 
-Browser verification covered all workbench tabs, arrow/Home/End keys, counter
+Landing-page verification covered all workbench tabs, arrow/Home/End keys, counter
 state, all copy controls and denied clipboard access, mobile menu and FAQ,
 320–1920px widths, no-JavaScript rendering with a light system preference,
 internal anchors, metadata, and WCAG A/AA automated checks. Browser tooling and

@@ -1,5 +1,50 @@
 # PureStack Studio launch site
 
+## Component documentation pilot
+
+The public `/components/` section establishes the format with Buttons, Tabs,
+and Modal. It uses `template: doc` without a wrapper template or style overrides.
+Its local `header.mdx` renders `TopBar`; navigation and page outlines are the
+default `NavMenu` and `PageToc`. Markdown headings drive the outline, Markdown
+tables describe the API, and ordinary fenced code goes through ts-ssg's normal
+highlighting and copy pipeline.
+
+Static previews are direct MDX component markup. Interactive examples share
+their templates and context factories between server rendering and browser
+mounting. Native Tabs and Modal runtime behavior is demonstrated as shipped.
+No page-script source or generated embed was changed.
+
+Each documented component owns an example module in `frontend/docs` and a
+matching browser entry beside its MDX page. Only the server registry combines
+the modules' explicit component registrations; it does not generate components
+or infer their names. Each example module owns exported context interfaces,
+individual template variables, typed context factories, and explicit
+`defineComponent<Interface>` calls, following `ts-components` conventions.
+Browser pages register their components and mount them with direct `createApp`
+calls. There is no shared example contract, lookup table, or mounting helper.
+
+Browser verification found existing shared-framework accessibility issues:
+
+- The default doc template emits no `lang` for a site without locale routing.
+- Navigation and TOC header opacity gives insufficient text contrast in the
+  studio skin.
+- Generated Tabs controls have `aria-selected` on buttons without tab roles;
+  the original tablist contains inputs and panels, and enhanced radios refer
+  to hidden labels.
+- Markdown table scroll containers are not keyboard focusable.
+- Without JavaScript, the default template's theme bootstrap leaves the
+  document hidden. The component markup is present, but the page is not visible.
+
+These are recorded for a shared-component accessibility pass. The pilot does
+not hide them behind page-specific replacements or runtime patches.
+
+Verification passed: tsgo, the local production build, live button controls and
+form reset, stateful tabs, ModalStore actions, dialog events/focus restoration,
+all dialog sizes and motion directions, nested dialogs, native code copying,
+TOC targets, 320–1920px layout checks, mobile navigation, and the existing
+production landing-page regression checks. Accessibility and no-JavaScript
+checks identified the limitations above; they did not pass.
+
 ## Direction
 
 Build in the existing `purestack.studio` content directory with PureStack's own

@@ -1,0 +1,236 @@
+---
+title: Tabs
+description: Compose grouped views with Tabs and TabPane. Working examples of variants, icons, disabled panes, independent groups, and responsive overflow.
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 2
+  icon: tabler:layout-grid
+---
+
+# Tabs
+
+Related views, one shared space. Compose real interfaces with persistent panels, independent styling, and responsive tab controls.
+
+<Badge tone="accent" variant="surface">Tabs · TabPane</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/tabs/tabs.ts) · [API reference](#api-reference)
+
+## Playground
+
+Explore this workspace. Edit its name in Settings, switch to another tab, and return: the pane stays mounted and your input stays put.
+
+<Panel tone="neutral" variant="surface">
+<Tabs group="workspace-demo" selectedTab="workspace-overview" tone="neutral" variant="surface" tabVariant="underline" ariaLabel="Workspace views">
+  <TabPane id="workspace-overview" label="Overview" icon="tabler:layout-grid">
+    <div class="p-4"><Badge tone="success">Ready to build</Badge><h3>Your next workspace.</h3><p>Keep your project’s content, activity, and settings in one place.</p></div>
+  </TabPane>
+  <TabPane id="workspace-settings" label="Settings" icon="tabler:adjustments-horizontal">
+    <div class="p-4"><FormInputField id="workspace-title" label="Workspace name" placeholder="Give your workspace a name"/><p>Edit this field, change tabs, and come back.</p></div>
+  </TabPane>
+  <TabPane id="workspace-activity" label="Activity" icon="tabler:code">
+    <div class="p-4"><h3>A clean starting point.</h3><p>Your team’s activity will appear here as you build.</p></div>
+  </TabPane>
+</Tabs>
+</Panel>
+
+<details>
+<summary>View source</summary>
+
+```html
+<Tabs group="workspace-demo" selectedTab="workspace-overview" tone="neutral" variant="surface" tabVariant="underline" ariaLabel="Workspace views">
+  <TabPane id="workspace-overview" label="Overview" icon="tabler:layout-grid">
+    <div class="p-4"><Badge tone="success">Ready to build</Badge><h3>Your next workspace.</h3><p>Keep your project’s content, activity, and settings in one place.</p></div>
+  </TabPane>
+  <TabPane id="workspace-settings" label="Settings" icon="tabler:adjustments-horizontal">
+    <div class="p-4"><FormInputField id="workspace-title" label="Workspace name" placeholder="Give your workspace a name"/><p>Edit this field, change tabs, and come back.</p></div>
+  </TabPane>
+  <TabPane id="workspace-activity" label="Activity" icon="tabler:code">
+    <div class="p-4"><h3>A clean starting point.</h3><p>Your team’s activity will appear here as you build.</p></div>
+  </TabPane>
+</Tabs>
+```
+
+</details>
+
+## Usage
+
+Place `TabPane` children inside `Tabs`. Set `selectedTab` to the starting pane’s `id`, give each instance its own `group`, and provide a descriptive `ariaLabel`.
+
+<Panel tone="info" variant="surface">
+  <strong>Built in to the publishing pipeline</strong>
+  <p>In MDX, <code>Tabs</code> automatically includes PureStack’s tab runtime. The runtime creates responsive controls; native radio inputs handle the static fallback. Your page content is rendered at build time.</p>
+</Panel>
+
+## Styling and composition
+
+There are three styling surfaces: `Tabs.variant` for the shell, `Tabs.tabVariant` for the controls, and `TabPane.variant` for individual panels. Pane-level `tone` and `tabVariant` override the inherited values.
+
+The header slot sits above the controls. A disabled pane remains unavailable in both the button row and compact selector.
+
+<Panel tone="neutral" variant="surface">
+<Tabs group="styled-tabs" selectedTab="styled-design" tone="accent" variant="surface" tabVariant="solid" variantMode="stateless" ariaLabel="Project resources">
+  <template #header><SectionHeader title="Project resources" titleTag="h3" subtitle="A header slot above your navigation."/></template>
+  <TabPane id="styled-design" label="Design" icon="tabler:components" variant="surfaceAlt"><div class="p-4"><h3>Connected by design.</h3><p>This panel uses surfaceAlt and inherits the accent tone.</p></div></TabPane>
+  <TabPane id="styled-code" label="Code" icon="tabler:code" tone="info" variant="surface"><div class="p-4"><h3>Your source, organized.</h3><p>This pane overrides the parent with the info tone.</p></div></TabPane>
+  <TabPane id="styled-locked" label="Archive" :disabled="true"><p>This pane is disabled.</p></TabPane>
+</Tabs>
+</Panel>
+
+<details>
+<summary>View source</summary>
+
+```html
+<Tabs group="styled-tabs" selectedTab="styled-design" tone="accent" variant="surface" tabVariant="solid" variantMode="stateless" ariaLabel="Project resources">
+  <template #header><SectionHeader title="Project resources" titleTag="h3" subtitle="A header slot above your navigation."/></template>
+  <TabPane id="styled-design" label="Design" icon="tabler:components" variant="surfaceAlt"><div class="p-4"><h3>Connected by design.</h3><p>This panel uses surfaceAlt and inherits the accent tone.</p></div></TabPane>
+  <TabPane id="styled-code" label="Code" icon="tabler:code" tone="info" variant="surface"><div class="p-4"><h3>Your source, organized.</h3><p>This pane overrides the parent with the info tone.</p></div></TabPane>
+  <TabPane id="styled-locked" label="Archive" :disabled="true"><p>This pane is disabled.</p></TabPane>
+</Tabs>
+```
+
+</details>
+
+## Responsive overflow
+
+When the row becomes too narrow, extra tabs move into an overflow menu. At the framework’s compact breakpoint, a native select replaces the button row. Try resizing the browser or opening this page on a phone.
+
+<Panel tone="neutral" variant="surface">
+<Tabs group="overflow-demo" selectedTab="overflow-0" tone="neutral" variant="surface" ariaLabel="Documentation topics"><TabPane id="overflow-0" label="Getting started"><div class="p-4"><h3>Getting started</h3><p>Topic 1 of 7. Choose another topic using the tabs, overflow menu, or compact selector.</p></div></TabPane>
+<TabPane id="overflow-1" label="Project configuration"><div class="p-4"><h3>Project configuration</h3><p>Topic 2 of 7. Choose another topic using the tabs, overflow menu, or compact selector.</p></div></TabPane>
+<TabPane id="overflow-2" label="Content and routing"><div class="p-4"><h3>Content and routing</h3><p>Topic 3 of 7. Choose another topic using the tabs, overflow menu, or compact selector.</p></div></TabPane>
+<TabPane id="overflow-3" label="Components and themes"><div class="p-4"><h3>Components and themes</h3><p>Topic 4 of 7. Choose another topic using the tabs, overflow menu, or compact selector.</p></div></TabPane>
+<TabPane id="overflow-4" label="Browser interactions"><div class="p-4"><h3>Browser interactions</h3><p>Topic 5 of 7. Choose another topic using the tabs, overflow menu, or compact selector.</p></div></TabPane>
+<TabPane id="overflow-5" label="Build and deployment"><div class="p-4"><h3>Build and deployment</h3><p>Topic 6 of 7. Choose another topic using the tabs, overflow menu, or compact selector.</p></div></TabPane>
+<TabPane id="overflow-6" label="Advanced patterns"><div class="p-4"><h3>Advanced patterns</h3><p>Topic 7 of 7. Choose another topic using the tabs, overflow menu, or compact selector.</p></div></TabPane></Tabs>
+</Panel>
+
+<details>
+<summary>View source</summary>
+
+```html
+<Tabs group="overflow-demo" selectedTab="overflow-0" tone="neutral" variant="surface" ariaLabel="Documentation topics"><TabPane id="overflow-0" label="Getting started"><div class="p-4"><h3>Getting started</h3><p>Topic 1 of 7. Choose another topic using the tabs, overflow menu, or compact selector.</p></div></TabPane>
+<TabPane id="overflow-1" label="Project configuration"><div class="p-4"><h3>Project configuration</h3><p>Topic 2 of 7. Choose another topic using the tabs, overflow menu, or compact selector.</p></div></TabPane>
+<TabPane id="overflow-2" label="Content and routing"><div class="p-4"><h3>Content and routing</h3><p>Topic 3 of 7. Choose another topic using the tabs, overflow menu, or compact selector.</p></div></TabPane>
+<TabPane id="overflow-3" label="Components and themes"><div class="p-4"><h3>Components and themes</h3><p>Topic 4 of 7. Choose another topic using the tabs, overflow menu, or compact selector.</p></div></TabPane>
+<TabPane id="overflow-4" label="Browser interactions"><div class="p-4"><h3>Browser interactions</h3><p>Topic 5 of 7. Choose another topic using the tabs, overflow menu, or compact selector.</p></div></TabPane>
+<TabPane id="overflow-5" label="Build and deployment"><div class="p-4"><h3>Build and deployment</h3><p>Topic 6 of 7. Choose another topic using the tabs, overflow menu, or compact selector.</p></div></TabPane>
+<TabPane id="overflow-6" label="Advanced patterns"><div class="p-4"><h3>Advanced patterns</h3><p>Topic 7 of 7. Choose another topic using the tabs, overflow menu, or compact selector.</p></div></TabPane></Tabs>
+```
+
+</details>
+
+## Independent groups
+
+Each instance needs a separate radio group. Pane ids must also be unique across the document because they connect inputs, labels, and panels.
+
+<Panel tone="neutral" variant="surface">
+<Grid columns="1" columnsMd="2">
+  <Tabs group="first-example" selectedTab="first-one" ariaLabel="First independent group"><TabPane id="first-one" label="First"><p class="p-4">First group, first pane.</p></TabPane><TabPane id="first-two" label="Second"><p class="p-4">First group, second pane.</p></TabPane></Tabs>
+  <Tabs group="second-example" selectedTab="second-one" ariaLabel="Second independent group"><TabPane id="second-one" label="First"><p class="p-4">Second group, first pane.</p></TabPane><TabPane id="second-two" label="Second"><p class="p-4">Second group, second pane.</p></TabPane></Tabs>
+</Grid>
+</Panel>
+
+<details>
+<summary>View source</summary>
+
+```html
+<Grid columns="1" columnsMd="2">
+  <Tabs group="first-example" selectedTab="first-one" ariaLabel="First independent group"><TabPane id="first-one" label="First"><p class="p-4">First group, first pane.</p></TabPane><TabPane id="first-two" label="Second"><p class="p-4">First group, second pane.</p></TabPane></Tabs>
+  <Tabs group="second-example" selectedTab="second-one" ariaLabel="Second independent group"><TabPane id="second-one" label="First"><p class="p-4">Second group, first pane.</p></TabPane><TabPane id="second-two" label="Second"><p class="p-4">Second group, second pane.</p></TabPane></Tabs>
+</Grid>
+```
+
+</details>
+
+## Browser state
+
+In a live Regor app, pass a `ref<string>` as `:selectedTab` to share selection with the surrounding UI. Register `defineTabsComponents()` in that app’s component map. After inserting new tabs dynamically, call `window.tsSsgTabs.refresh()` once the markup is mounted.
+
+Static MDX establishes the initial view. Mount a browser app when fields inside the panels need reactive state, validation, or actions. Opening a panel alone does not hydrate the application within it.
+
+<Panel tone="neutral" variant="surface">
+<div data-doc-demo="tabs-state"><DocsTabsState/></div>
+</Panel>
+
+<details>
+<summary>View source</summary>
+
+```html
+<Flex direction="column">
+  <Tabs group="controlled-demo" :selectedTab="selected" ariaLabel="Controlled tabs">
+    <TabPane id="controlled-preview" label="Preview"><p>Preview your changes here.</p></TabPane>
+    <TabPane id="controlled-settings" label="Settings"><p>Configure the project here.</p></TabPane>
+  </Tabs>
+  <p role="status">Selected pane: <code r-text="selected"></code></p>
+  <Btn variant="surface" tone="accent" @click="showSettings">Go to settings</Btn>
+</Flex>
+```
+
+**Browser TypeScript bindings**
+
+```typescript
+import { ref } from 'regor'
+
+const selected = ref('controlled-preview')
+const showSettings = () => selected('controlled-settings')
+
+// Pass selected and showSettings into createApp with
+// defineTabsComponents(), defineButtonComponents(),
+// defineFlexComponents(), and defineIconComponents().
+// After mounting, call window.tsSsgTabs?.refresh().
+```
+
+</details>
+
+## Accessibility
+
+- Give every tab list a descriptive `ariaLabel`.
+- Use meaningful tab labels, and use `disabled` for unavailable panels.
+- Native radio inputs provide a keyboard-operable fallback without JavaScript.
+- Keep unique pane ids so `aria-controls` and `aria-labelledby` remain valid.
+
+## API reference
+
+`TabPane` inherits its group and presentation defaults from the closest `Tabs` context. Use explicit ids and an explicit starting selection for predictable reusable examples.
+
+### Tabs
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| `group` | `string` | generated when omitted | Radio group name. Use a different group for each independent Tabs instance. |
+| `selectedTab` | `string \| Ref<string>` | first pane visually | Initial pane id, or a shared ref in a live Regor app. Explicitly set the starting pane. |
+| `ariaLabel` | `string` | Tabs | Accessible name for the tab list. |
+| `tone` | `SemanticTone` | neutral (inherited) | neutral · accent · feature · secondary · custom · ghost · info · success · warning · danger |
+| `variant` | `ComponentVariant` | surface | Styles the outer Tabs container. |
+| `variantMode` | `'stateful' \| 'stateless'` | stateless | Controls whether the variant includes hover and active styles. |
+| `tabVariant` | `ComponentVariant` | underline | Default appearance of the tab controls. |
+
+### TabPane
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| `id` | `string` | generated when omitted | Document-unique id. Also forms the radio id, label id, and panel id. |
+| `label` | `string` | id | Visible title of the tab. |
+| `icon` | `string` | — | Optional registered icon before the label. |
+| `disabled` | `boolean` | false | Disables the radio, generated tab button, and compact select option. |
+| `group` | `string` | parent Tabs.group | Inherits the radio group from the nearest Tabs context. |
+| `tone` | `SemanticTone` | parent Tabs.tone | Overrides the parent tone for this pane and its control. |
+| `variant` | `ComponentVariant` | none | Styles this pane’s content surface. |
+| `variantMode` | `'stateful' \| 'stateless'` | parent Tabs.variantMode | State behavior of this pane’s variant. |
+| `tabVariant` | `ComponentVariant` | parent, then underline | Overrides the parent control variant for this pane. |
+
+### Slots and runtime
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| `Tabs.default` | `slot` | — | TabPane children. |
+| `Tabs.header` | `named slot` | — | Content before the tab list. |
+| `TabPane.default` | `slot` | — | The pane’s content; stays in the DOM when another pane is selected. |
+| `window.tsSsgTabs.refresh(target?)` | `(selector?: string) => void` | automatic at load | Rebuilds runtime controls after dynamically adding or removing tabs. |
+
+
+<PageScript src="./tabs.ts"/>
