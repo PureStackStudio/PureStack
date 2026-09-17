@@ -2,12 +2,19 @@ import { getColors } from '@purestack/ts-css'
 import type { ThemeMode } from '../../themeOptions'
 import { createStandardPalette, type StandardCore } from './base'
 import type { ToneColors } from './shared'
+import { merge } from '@purestack/ts-util'
 
 const bestColors = {
   standardBlue: {
     accent: '#1788f1',
     neutral: '#232525',
     secondary: '#27b789',
+    feature: '#cb166e',
+    custom:'#e35508',
+    info: '#15a9c0',
+    success: '#259740',
+    warning: '#c49a1c',
+    danger:'#a92a37'
   },
   blue: {
     accent: '#2874b7',
@@ -48,6 +55,15 @@ const bestColors = {
     accent: '#2874b7',
     neutral: '#2a435a',
     secondary: '#245e6b',
+  },
+  lightgreen: {
+    accent: '#99fac0',
+    neutral: '#4e5e55',
+    success: '#a2d9ad',
+    info: '#85b0d6',
+    warning: '#d8bb77',
+    danger: '#c68887',
+    feature: '#b8acd7',
   },
   puregate: {
     accent: '#de6310',
@@ -118,11 +134,11 @@ export function createToneColors(
 
 export function getStandardColors(presets?: readonly string[]): StandardColors {
   let colors: StandardColors | undefined
+  const defaultColors = bestColors.standardBlue
   for (const preset of presets ?? []) {
-    colors = bestColors[preset as keyof typeof bestColors] ?? colors
+    colors =  merge(defaultColors, (bestColors[preset as keyof typeof bestColors] ?? defaultColors))
   }
-  colors ??= bestColors.puregate
-  return colors
+  return colors ?? defaultColors
 }
 
 function applyDeltaPresets(
