@@ -1,0 +1,1017 @@
+---
+title: Buttons
+description: Theme-aware actions with Btn. Explore every variant, tone, size, icon option, and browser interaction.
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 1
+  icon: tabler:square-rounded
+---
+
+# Buttons
+
+A clear next step. Theme-aware actions with native button semantics, expressive variants, and just enough API.
+
+<Badge tone="accent" variant="surface">Btn</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/btn/btn.ts) · [API reference](#api-reference)
+
+## Playground
+
+Explore all thirteen variants and ten semantic tones. Change the size, move the icon, or try the disabled state. The source tabs contain the complete playground: controls, reactive state, icon registration, and application mount.
+
+<Tabs
+  group="button-playground-example"
+  selectedTab="button-playground-preview"
+  ariaLabel="Button playground example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
+  <TabPane id="button-playground-preview" label="Preview">
+    <RegorApp id="button-playground" src="./button-playground.ts"/>
+  </TabPane>
+  <TabPane id="button-playground-mdx" label="button-playground.mdx">
+```html
+<RegorApp id="button-playground" src="./button-playground.ts"/>
+```
+  </TabPane>
+  <TabPane id="button-playground-typescript" label="button-playground.ts">
+```typescript
+import {
+  type BtnIconPosition,
+  type BtnSize,
+  type ComponentVariant,
+  defineButtonComponents,
+  defineFlexComponents,
+  defineFormComponents,
+  defineFormSelectField,
+  defineGridComponents,
+  defineIconComponents,
+  type FormSelectOption,
+} from '@purestack/ts-components'
+import { SEMANTIC_TONES, type SemanticTone } from '@purestack/ts-style'
+import {
+  lucide_chevron_down,
+  tabler_arrow_right,
+  tabler_check,
+  tabler_plus,
+  tabler_refresh,
+} from '@purestack/ts-svg-icons'
+import {
+  batch,
+  type ComputedRef,
+  computed,
+  createApp,
+  defineComponent,
+  html,
+  type Ref,
+  ref,
+} from 'regor'
+
+export interface ButtonPlayground {
+  tone: Ref<SemanticTone>
+  variant: Ref<ComponentVariant>
+  size: Ref<BtnSize>
+  icon: Ref<string>
+  position: Ref<BtnIconPosition>
+  iconOnly: Ref<boolean>
+  disabled: Ref<boolean>
+  resolvedIcon: ComputedRef<string>
+  resolvedIconOnly: ComputedRef<boolean>
+  feedback: Ref<string>
+  tones: FormSelectOption[]
+  variants: FormSelectOption[]
+  sizes: FormSelectOption[]
+  icons: FormSelectOption[]
+  positions: FormSelectOption[]
+  activate: () => void
+  reset: () => void
+}
+
+const variants: ComponentVariant[] = [
+  'solid',
+  'surface',
+  'surfaceAlt',
+  'outlineFill',
+  'outline',
+  'subtle',
+  'subtleBtn',
+  'link',
+  'sheen',
+  'underline',
+  'rail',
+  'bracket',
+  'none',
+]
+const options = (values: string[]) =>
+  values.map((value) => ({ label: value, value }))
+
+const buttonPlaygroundTemplate = html`<Grid columns="1" columnsMd="2" alignItems="center">
+  <Flex direction="column" align="center">
+    <Btn
+      :tone="tone"
+      :variant="variant"
+      :size="size"
+      :icon="resolvedIcon"
+      :iconPosition="position"
+      :iconOnly="resolvedIconOnly"
+      :disabled="disabled"
+      ariaLabel="Create project"
+      @click="activate"
+    >
+      Create project
+    </Btn>
+    <p role="status" r-text="feedback"></p>
+  </Flex>
+  <Grid columns="2">
+    <FormSelectField
+      id="button-tone"
+      label="Tone"
+      :model="tone"
+      :options="tones"/>
+    <FormSelectField
+      id="button-variant"
+      label="Variant"
+      :model="variant"
+      :options="variants"/>
+    <FormSelectField
+      id="button-size"
+      label="Size"
+      :model="size"
+      :options="sizes"/>
+    <FormSelectField
+      id="button-icon"
+      label="Icon"
+      :model="icon"
+      :options="icons"/>
+    <FormSelectField
+      id="button-position"
+      label="Icon position"
+      :model="position"
+      :options="positions"/>
+    <Flex direction="column" justify="center">
+      <FormCheck id="button-disabled" label="Disabled" :checked="disabled"/>
+      <FormCheck id="button-icon-only" label="Icon only" :checked="iconOnly"/>
+    </Flex>
+    <Btn variant="link" tone="neutral" icon="tabler:refresh" @click="reset">
+      Reset
+    </Btn>
+  </Grid>
+</Grid>`
+
+function createButtonPlayground(): ButtonPlayground {
+  const tone = ref<SemanticTone>('accent')
+  const variant = ref<ComponentVariant>('solid')
+  const size = ref<BtnSize>('md')
+  const icon = ref('tabler:plus')
+  const position = ref<BtnIconPosition>('start')
+  const iconOnly = ref(false)
+  const disabled = ref(false)
+  const feedback = ref('Click the button to try it.')
+  const count = ref(0)
+  const resolvedIcon = computed(() => (icon() === 'none' ? '' : icon()))
+  const resolvedIconOnly = computed(() => iconOnly() && resolvedIcon() !== '')
+  const reset = () =>
+    batch(() => {
+      tone('accent')
+      variant('solid')
+      size('md')
+      iconOnly(false)
+      position('start')
+      icon('tabler:plus')
+      disabled(false)
+      count(0)
+      feedback('Click the button to try it.')
+    })
+  const activate = () => {
+    count(count() + 1)
+    feedback(`Action triggered ${count()} ${count() === 1 ? 'time' : 'times'}.`)
+  }
+  return {
+    tone,
+    variant,
+    size,
+    icon,
+    position,
+    iconOnly,
+    resolvedIcon,
+    resolvedIconOnly,
+    disabled,
+    feedback,
+    activate,
+    reset,
+    tones: options(SEMANTIC_TONES),
+    variants: options(variants),
+    sizes: options(['sm', 'md', 'lg']),
+    icons: options([
+      'none',
+      'tabler:plus',
+      'tabler:check',
+      'tabler:arrow-right',
+    ]),
+    positions: options(['start', 'end']),
+  }
+}
+
+const icons: Record<string, string> = {
+  'lucide:chevron-down': lucide_chevron_down,
+  'tabler:arrow-right': tabler_arrow_right,
+  'tabler:check': tabler_check,
+  'tabler:plus': tabler_plus,
+  'tabler:refresh': tabler_refresh,
+}
+
+const component = defineComponent<ButtonPlayground>(buttonPlaygroundTemplate, {
+  context: createButtonPlayground,
+})
+
+createApp(
+  {
+    components: {
+      ButtonPlayground: component,
+      ...defineButtonComponents(),
+      ...defineFlexComponents(),
+      ...defineFormComponents(),
+      ...defineFormSelectField(),
+      ...defineGridComponents(),
+      ...defineIconComponents((name) => {
+        if (!icons[name]) throw new Error(`Icon is not registered: ${name}`)
+        return icons[name]
+      }),
+    },
+  },
+  {
+    selector: 'app#button-playground',
+    template: html`<ButtonPlayground/>`,
+  },
+)
+```
+  </TabPane>
+</Tabs>
+
+## Usage
+
+Use `Btn` to trigger an action, submit a form, or reset input. It renders a native `button` and is available directly in PureStack MDX. Choose its tone, variant, size, and icon to fit the task.
+
+<Panel tone="info" variant="surface">
+  <strong>Static markup. Explicit interaction.</strong>
+  <p>
+    MDX renders components at build time. Use <code>RegorApp</code> to load a
+    browser application when a button needs state or an event handler. The
+    interaction example below includes the app mount and complete TypeScript
+    source.
+  </p>
+</Panel>
+
+## Variants
+
+Choose the visual treatment independently from the tone. Filled variants suit primary actions; surface and outline variants give secondary actions structure. Link, underline, rail, and bracket variants work well in compact interfaces.
+
+<Tabs
+  group="button-variants-example"
+  selectedTab="button-variants-preview"
+  ariaLabel="Button variants example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
+  <TabPane id="button-variants-preview" label="Preview">
+    <Grid columns="2" columnsSm="3">
+      <Flex direction="column" align="center">
+        <Btn tone="accent" variant="solid">solid</Btn>
+        <code>solid</code>
+      </Flex>
+      <Flex direction="column" align="center">
+        <Btn tone="accent" variant="surface">surface</Btn>
+        <code>surface</code>
+      </Flex>
+      <Flex direction="column" align="center">
+        <Btn tone="accent" variant="surfaceAlt">surfaceAlt</Btn>
+        <code>surfaceAlt</code>
+      </Flex>
+      <Flex direction="column" align="center">
+        <Btn tone="accent" variant="outlineFill">outlineFill</Btn>
+        <code>outlineFill</code>
+      </Flex>
+      <Flex direction="column" align="center">
+        <Btn tone="accent" variant="outline">outline</Btn>
+        <code>outline</code>
+      </Flex>
+      <Flex direction="column" align="center">
+        <Btn tone="accent" variant="subtle">subtle</Btn>
+        <code>subtle</code>
+      </Flex>
+      <Flex direction="column" align="center">
+        <Btn tone="accent" variant="subtleBtn">subtleBtn</Btn>
+        <code>subtleBtn</code>
+      </Flex>
+      <Flex direction="column" align="center">
+        <Btn tone="accent" variant="link">link</Btn>
+        <code>link</code>
+      </Flex>
+      <Flex direction="column" align="center">
+        <Btn tone="accent" variant="sheen">sheen</Btn>
+        <code>sheen</code>
+      </Flex>
+      <Flex direction="column" align="center">
+        <Btn tone="accent" variant="underline">underline</Btn>
+        <code>underline</code>
+      </Flex>
+      <Flex direction="column" align="center">
+        <Btn tone="accent" variant="rail">rail</Btn>
+        <code>rail</code>
+      </Flex>
+      <Flex direction="column" align="center">
+        <Btn tone="accent" variant="bracket">bracket</Btn>
+        <code>bracket</code>
+      </Flex>
+      <Flex direction="column" align="center">
+        <Btn tone="accent" variant="none">none</Btn>
+        <code>none</code>
+      </Flex>
+    </Grid>
+  </TabPane>
+  <TabPane id="button-variants-source" label="variants.mdx">
+```html
+<Grid columns="2" columnsSm="3">
+  <Flex direction="column" align="center">
+    <Btn tone="accent" variant="solid">solid</Btn>
+    <code>solid</code>
+  </Flex>
+  <Flex direction="column" align="center">
+    <Btn tone="accent" variant="surface">surface</Btn>
+    <code>surface</code>
+  </Flex>
+  <Flex direction="column" align="center">
+    <Btn tone="accent" variant="surfaceAlt">surfaceAlt</Btn>
+    <code>surfaceAlt</code>
+  </Flex>
+  <Flex direction="column" align="center">
+    <Btn tone="accent" variant="outlineFill">outlineFill</Btn>
+    <code>outlineFill</code>
+  </Flex>
+  <Flex direction="column" align="center">
+    <Btn tone="accent" variant="outline">outline</Btn>
+    <code>outline</code>
+  </Flex>
+  <Flex direction="column" align="center">
+    <Btn tone="accent" variant="subtle">subtle</Btn>
+    <code>subtle</code>
+  </Flex>
+  <Flex direction="column" align="center">
+    <Btn tone="accent" variant="subtleBtn">subtleBtn</Btn>
+    <code>subtleBtn</code>
+  </Flex>
+  <Flex direction="column" align="center">
+    <Btn tone="accent" variant="link">link</Btn>
+    <code>link</code>
+  </Flex>
+  <Flex direction="column" align="center">
+    <Btn tone="accent" variant="sheen">sheen</Btn>
+    <code>sheen</code>
+  </Flex>
+  <Flex direction="column" align="center">
+    <Btn tone="accent" variant="underline">underline</Btn>
+    <code>underline</code>
+  </Flex>
+  <Flex direction="column" align="center">
+    <Btn tone="accent" variant="rail">rail</Btn>
+    <code>rail</code>
+  </Flex>
+  <Flex direction="column" align="center">
+    <Btn tone="accent" variant="bracket">bracket</Btn>
+    <code>bracket</code>
+  </Flex>
+  <Flex direction="column" align="center">
+    <Btn tone="accent" variant="none">none</Btn>
+    <code>none</code>
+  </Flex>
+</Grid>
+```
+  </TabPane>
+</Tabs>
+
+## Semantic tones
+
+Communicate intent through the palette. Every tone participates in the same theme system, including hover, active, and disabled states.
+
+<Tabs
+  group="button-tones-example"
+  selectedTab="button-tones-preview"
+  ariaLabel="Button semantic tones example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
+  <TabPane id="button-tones-preview" label="Preview">
+    <Flex wrap="true"
+      ><Btn tone="neutral" variant="surface">neutral</Btn>
+      <Btn tone="accent" variant="surface">accent</Btn>
+      <Btn tone="feature" variant="surface">feature</Btn>
+      <Btn tone="secondary" variant="surface">secondary</Btn>
+      <Btn tone="custom" variant="surface">custom</Btn>
+      <Btn tone="ghost" variant="surface">ghost</Btn>
+      <Btn tone="info" variant="surface">info</Btn>
+      <Btn tone="success" variant="surface">success</Btn>
+      <Btn tone="warning" variant="surface">warning</Btn>
+      <Btn tone="danger" variant="surface">danger</Btn></Flex
+    >
+  </TabPane>
+  <TabPane id="button-tones-source" label="Source">
+```html
+<Flex wrap="true"><Btn tone="neutral" variant="surface">neutral</Btn>
+<Btn tone="accent" variant="surface">accent</Btn>
+<Btn tone="feature" variant="surface">feature</Btn>
+<Btn tone="secondary" variant="surface">secondary</Btn>
+<Btn tone="custom" variant="surface">custom</Btn>
+<Btn tone="ghost" variant="surface">ghost</Btn>
+<Btn tone="info" variant="surface">info</Btn>
+<Btn tone="success" variant="surface">success</Btn>
+<Btn tone="warning" variant="surface">warning</Btn>
+<Btn tone="danger" variant="surface">danger</Btn></Flex>
+```
+  </TabPane>
+</Tabs>
+
+## Sizes and icons
+
+The `sm`, `md`, and `lg` sizes follow the active theme’s typography scale. Provide a registered icon name, then choose `start` or `end`. An icon-only button needs both an icon and an `ariaLabel`.
+
+<Tabs
+  group="button-sizes-icons-example"
+  selectedTab="button-sizes-icons-preview"
+  ariaLabel="Button sizes and icons example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
+  <TabPane id="button-sizes-icons-preview" label="Preview">
+    <Flex wrap="true" align="center">
+      <Btn size="sm" tone="accent">Small</Btn>
+      <Btn size="md" tone="accent" icon="tabler:plus">Create project</Btn>
+      <Btn size="lg" tone="neutral">Large</Btn>
+      <Btn
+        tone="neutral"
+        variant="surface"
+        icon="tabler:arrow-right"
+        iconPosition="end"
+        >Continue</Btn
+      >
+      <Btn
+        tone="accent"
+        variant="surface"
+        icon="tabler:check"
+        :iconOnly="true"
+        ariaLabel="Confirm selection"/>
+      <Btn tone="neutral" :disabled="true">Unavailable</Btn>
+    </Flex>
+  </TabPane>
+  <TabPane id="button-sizes-icons-source" label="Source">
+```html
+<Flex wrap="true" align="center">
+  <Btn size="sm" tone="accent">Small</Btn>
+  <Btn size="md" tone="accent" icon="tabler:plus">Create project</Btn>
+  <Btn size="lg" tone="neutral">Large</Btn>
+  <Btn tone="neutral" variant="surface" icon="tabler:arrow-right" iconPosition="end">Continue</Btn>
+  <Btn tone="accent" variant="surface" icon="tabler:check" :iconOnly="true" ariaLabel="Confirm selection"/>
+  <Btn tone="neutral" :disabled="true">Unavailable</Btn>
+</Flex>
+```
+  </TabPane>
+</Tabs>
+
+## Browser interaction
+
+Build a collection of up to five items. Add creates a visible list item; Remove deletes the last one; Reset clears the collection. The list stays intact when you switch tabs. Each source tab contains a complete file.
+
+<Tabs
+  group="button-events-example"
+  selectedTab="button-events-preview"
+  ariaLabel="Button browser interaction example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
+  <TabPane id="button-events-preview" label="Preview">
+    <RegorApp id="collection" src="./collection.ts"/>
+  </TabPane>
+  <TabPane id="button-events-mdx" label="collection.mdx">
+```html
+<RegorApp id="collection" src="./collection.ts"/>
+```
+  </TabPane>
+  <TabPane id="button-events-typescript" label="collection.ts">
+```typescript
+import {
+  defineButtonComponents,
+  defineFlexComponents,
+} from '@purestack/ts-components'
+import {
+  type ComputedRef,
+  computed,
+  createApp,
+  defineComponent,
+  html,
+  type SRef,
+  sref,
+} from 'regor'
+
+export interface Collection {
+  items: SRef<string[]>
+  limit: number
+  summary: ComputedRef<string>
+  isEmpty: ComputedRef<boolean>
+  isFull: ComputedRef<boolean>
+  addItem: () => void
+  removeItem: () => void
+  reset: () => void
+}
+
+const collectionTemplate = html`<Flex direction="column" align="start">
+  <strong>Build a collection</strong>
+  <p>Add up to {{ limit }} items. Remove one or start over.</p>
+  <p role="status" r-text="summary"></p>
+  <ul r-if="!isEmpty" aria-label="Collection items">
+    <li r-for="item in items" r-text="item"></li>
+  </ul>
+  <Flex wrap="true">
+    <Btn tone="accent" :disabled="isFull" @click="addItem">Add item</Btn>
+    <Btn tone="neutral" variant="surface" :disabled="isEmpty" @click="removeItem">Remove item</Btn>
+    <Btn tone="neutral" variant="link" :disabled="isEmpty" @click="reset">Reset</Btn>
+  </Flex>
+</Flex>`
+
+function createCollection(): Collection {
+  const items = sref<string[]>([])
+  const limit = 5
+  let nextItem = 1
+  const isEmpty = computed(() => items().length === 0)
+  const isFull = computed(() => items().length === limit)
+  const summary = computed(() =>
+    isFull()
+      ? `Collection full: ${limit} items.`
+      : `${items().length} ${items().length === 1 ? 'item' : 'items'} in your collection.`,
+  )
+  return {
+    items,
+    limit,
+    summary,
+    isEmpty,
+    isFull,
+    addItem: () => {
+      if (!isFull()) items([...items(), `Item ${nextItem++}`])
+    },
+    removeItem: () => {
+      if (!isEmpty()) items(items().slice(0, -1))
+    },
+    reset: () => {
+      items([])
+      nextItem = 1
+    },
+  }
+}
+
+const component = defineComponent<Collection>(collectionTemplate, {
+  context: createCollection,
+})
+
+createApp(
+  {
+    components: {
+      Collection: component,
+      ...defineButtonComponents(),
+      ...defineFlexComponents(),
+    },
+  },
+  {
+    selector: 'app#collection',
+    template: html`<Collection/>`,
+  },
+)
+```
+  </TabPane>
+</Tabs>
+
+### Submit and reset
+
+The default button type is `button`. Choose `submit` or `reset` explicitly inside a form. This sample validates the required field and handles submission locally.
+
+The form handles `@reset.prevent` so its reactive value stays synchronized with the input instead of being overwritten by the browser’s native reset.
+
+<Tabs
+  group="button-form-example"
+  selectedTab="button-form-preview"
+  ariaLabel="Button submit and reset example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
+  <TabPane id="button-form-preview" label="Preview">
+    <RegorApp id="project-form" src="./project-form.ts"/>
+  </TabPane>
+  <TabPane id="button-form-mdx" label="project-form.mdx">
+```html
+<RegorApp id="project-form" src="./project-form.ts"/>
+```
+  </TabPane>
+  <TabPane id="button-form-typescript" label="project-form.ts">
+```typescript
+import {
+  defineButtonComponents,
+  defineFlexComponents,
+  defineFormInputField,
+} from '@purestack/ts-components'
+import { createApp, defineComponent, html, type Ref, ref } from 'regor'
+
+export interface ProjectForm {
+  project: Ref<string>
+  message: Ref<string>
+  submit: () => void
+  resetForm: () => void
+}
+
+const projectFormTemplate = html`<Flex
+  container="form"
+  direction="column"
+  @submit.prevent="submit"
+  @reset.prevent="resetForm"
+>
+  <FormInputField
+    id="demo-project-name"
+    label="Project name"
+    :model="project"
+    name="project"
+    :required="true"/>
+  <Flex wrap="true">
+    <Btn type="submit" tone="accent">Save project</Btn>
+    <Btn type="reset" variant="surface" tone="neutral">Reset</Btn>
+  </Flex>
+  <p class="m-0" role="status" r-text="message"></p>
+</Flex>`
+
+function createProjectForm(): ProjectForm {
+  const project = ref('My next idea')
+  const message = ref('Changes stay in this demo.')
+  return {
+    project,
+    message,
+    submit: () => message(`Saved “${project()}”.`),
+    resetForm: () => {
+      project('My next idea')
+      message('Form reset.')
+    },
+  }
+}
+
+const component = defineComponent<ProjectForm>(projectFormTemplate, {
+  context: createProjectForm,
+})
+
+createApp(
+  {
+    components: {
+      ProjectForm: component,
+      ...defineButtonComponents(),
+      ...defineFlexComponents(),
+      ...defineFormInputField(),
+    },
+  },
+  {
+    selector: 'app#project-form',
+    template: html`<ProjectForm/>`,
+  },
+)
+```
+  </TabPane>
+</Tabs>
+
+## Accessibility
+
+- Use a visible, specific label such as “Save project”.
+- Give icon-only controls an accessible name with `ariaLabel`.
+- A disabled button cannot be activated or reached with Tab. Use visible context to explain why an action is unavailable.
+- Keep navigation as links, including links styled as buttons.
+- Use bound booleans such as `:disabled="false"` when supplying boolean values through MDX.
+
+## API reference
+
+<div class="api-overview">
+  <Flex align="center" justify="between" wrap="true">
+    <code class="api-overview__signature">&lt;Btn /&gt;</code>
+    <Flex align="center" wrap="true" class="gap-2">
+      <Badge tone="accent" variant="surface">9 props</Badge>
+      <Badge tone="neutral" variant="surfaceAlt">Native button</Badge>
+    </Flex>
+  </Flex>
+  <p>
+    All props are optional. Pass a value for static markup or a
+    <code>RefOrValue&lt;T&gt;</code> for reactive updates. Choose a property
+    below to jump to its contract.
+  </p>
+  <nav class="api-index" aria-label="Button properties">
+    <a href="#btn-tone">tone</a>
+    <a href="#btn-variant">variant</a>
+    <a href="#btn-size">size</a>
+    <a href="#btn-icon">icon</a>
+    <a href="#btn-icon-position">iconPosition</a>
+    <a href="#btn-icon-only">iconOnly</a>
+    <a href="#btn-aria-label">ariaLabel</a>
+    <a href="#btn-type">type</a>
+    <a href="#btn-disabled">disabled</a>
+  </nav>
+</div>
+
+[Open the playground](#playground) · [Read the component definition](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/btn/btn.ts)
+
+### Appearance
+
+Color, treatment, and scale are independent. Combine them to fit the importance of the action.
+
+<ApiProperty
+  anchor="btn-tone"
+  name="tone"
+  valueType="SemanticTone"
+  defaultValue="inherited"
+>
+  <p>
+    Sets the semantic color palette. Omit it to inherit the surrounding tone;
+    the standard theme starts with <code>neutral</code>.
+  </p>
+  <div class="api-values" aria-label="Accepted tones">
+    <Badge tone="neutral" variant="surface">neutral</Badge>
+    <Badge tone="accent" variant="surface">accent</Badge>
+    <Badge tone="feature" variant="surface">feature</Badge>
+    <Badge tone="secondary" variant="surface">secondary</Badge>
+    <Badge tone="custom" variant="surface">custom</Badge>
+    <Badge tone="ghost" variant="surface">ghost</Badge>
+    <Badge tone="info" variant="surface">info</Badge>
+    <Badge tone="success" variant="surface">success</Badge>
+    <Badge tone="warning" variant="surface">warning</Badge>
+    <Badge tone="danger" variant="surface">danger</Badge>
+  </div>
+```html
+<Btn tone="danger">Delete project</Btn>
+```
+</ApiProperty>
+
+<ApiProperty
+  anchor="btn-variant"
+  name="variant"
+  valueType="ComponentVariant"
+  defaultValue="solid"
+>
+  <p>
+    Sets the button's visual weight. Start with <code>solid</code> for the
+    primary action, <code>outline</code> for a secondary action, or
+    <code>link</code> for a quieter one.
+  </p>
+  <Flex class="api-demo" wrap="true" aria-label="Variant comparison">
+    <Btn tone="accent" variant="solid">solid</Btn>
+    <Btn tone="accent" variant="outline">outline</Btn>
+    <Btn tone="accent" variant="link">link</Btn>
+  </Flex>
+  <div class="api-values" aria-label="Accepted variants">
+    <code>solid</code><code>surface</code><code>surfaceAlt</code>
+    <code>outlineFill</code><code>outline</code><code>subtle</code>
+    <code>subtleBtn</code><code>link</code><code>sheen</code>
+    <code>underline</code><code>rail</code><code>bracket</code><code>none</code>
+  </div>
+  <p><a href="#variants">Compare all 13 variants</a></p>
+```html
+<Btn tone="accent" variant="outline">View details</Btn>
+```
+</ApiProperty>
+
+<ApiProperty
+  anchor="btn-size"
+  name="size"
+  valueType="BtnSize"
+  defaultValue="md"
+>
+  <p>
+    Uses the theme's typography scale. Omitting <code>size</code> keeps the same
+    base styling as <code>md</code>.
+  </p>
+  <Flex class="api-demo" align="center" wrap="true" aria-label="Accepted sizes">
+    <Btn size="sm" tone="neutral" variant="surface">sm</Btn>
+    <Btn size="md" tone="neutral" variant="surface">md</Btn>
+    <Btn size="lg" tone="neutral" variant="surface">lg</Btn>
+  </Flex>
+```html
+<Btn size="sm">Add item</Btn>
+```
+</ApiProperty>
+
+### Icons and labels
+
+Keep the action understandable with or without its icon.
+
+<ApiProperty
+  anchor="btn-icon"
+  name="icon"
+  valueType="string"
+  defaultValue="none"
+>
+  <p>
+    A registered icon in <code>provider:name</code> form. Omit it or pass an
+    empty string to show only the label.
+  </p>
+  <Flex class="api-demo" wrap="true">
+    <Btn tone="accent" icon="tabler:plus">Create project</Btn>
+  </Flex>
+  <p class="api-note">
+    In browser apps, register icons with <code>defineIconComponents</code>. The
+    <a href="#playground">playground source</a> includes the imports and
+    registration.
+  </p>
+```html
+<Btn icon="tabler:plus">Create project</Btn>
+```
+</ApiProperty>
+
+<ApiProperty
+  anchor="btn-icon-position"
+  name="iconPosition"
+  valueType="BtnIconPosition"
+  defaultValue="start"
+>
+  <p>
+    Places the icon before or after the label. Requires an
+    <a href="#btn-icon">icon</a>.
+  </p>
+  <Flex class="api-demo" wrap="true" aria-label="Accepted icon positions">
+    <Btn icon="tabler:arrow-right" iconPosition="start" variant="surface"
+      >start</Btn
+    >
+    <Btn icon="tabler:arrow-right" iconPosition="end" variant="surface"
+      >end</Btn
+    >
+  </Flex>
+```html
+<Btn icon="tabler:arrow-right" iconPosition="end">Continue</Btn>
+```
+</ApiProperty>
+
+<ApiProperty
+  anchor="btn-icon-only"
+  name="iconOnly"
+  valueType="boolean"
+  defaultValue="false"
+>
+  <p>
+    Hides the label and uses compact icon padding. Accepts <code>true</code> or
+    <code>false</code>.
+  </p>
+  <Flex class="api-demo" align="center" wrap="true">
+    <Btn
+      tone="accent"
+      icon="tabler:check"
+      :iconOnly="true"
+      ariaLabel="Confirm selection"/>
+    <span>Accessible name: <code>Confirm selection</code></span>
+  </Flex>
+  <p class="api-note">
+    Supply both <a href="#btn-icon">icon</a> and
+    <a href="#btn-aria-label">ariaLabel</a>. Hiding the label does not provide
+    an accessible name.
+  </p>
+```html
+<Btn
+  icon="tabler:check"
+  :iconOnly="true"
+  ariaLabel="Confirm selection"/>
+```
+</ApiProperty>
+
+<ApiProperty
+  anchor="btn-aria-label"
+  name="ariaLabel"
+  valueType="string"
+  defaultValue="not set"
+>
+  <p>
+    Sets <code>aria-label</code> on the native button. When omitted, the visible
+    label supplies its accessible name. Set it for icon-only controls or when a
+    short visible label needs more context.
+  </p>
+```html
+<Btn ariaLabel="Remove draft project">Remove</Btn>
+```
+</ApiProperty>
+
+### Button behavior
+
+Use native form behavior and boolean state to control what the action can do.
+
+<ApiProperty
+  anchor="btn-type"
+  name="type"
+  valueType="BtnType"
+  defaultValue="button"
+>
+  <p>
+    Chooses how the button interacts with its form. Unlike a bare HTML button,
+    <code>Btn</code> defaults to <code>button</code>.
+  </p>
+  <dl class="api-choices">
+    <dt><code>button</code></dt>
+    <dd>Runs a click handler without submitting the form.</dd>
+    <dt><code>submit</code></dt>
+    <dd>Validates and submits its associated form.</dd>
+    <dt><code>reset</code></dt>
+    <dd>Resets its associated form.</dd>
+  </dl>
+  <p>
+    <a href="#submit-and-reset"
+      >Try submit and reset with reactive form state</a
+    >
+  </p>
+```html
+<Btn type="submit">Save project</Btn>
+```
+</ApiProperty>
+
+<ApiProperty
+  anchor="btn-disabled"
+  name="disabled"
+  valueType="boolean"
+  defaultValue="false"
+>
+  <p>
+    Prevents activation and removes the button from keyboard tab order. Accepts
+    <code>true</code> or <code>false</code>.
+  </p>
+  <Flex
+    class="api-demo"
+    wrap="true"
+    aria-label="Enabled and disabled comparison"
+  >
+    <Btn tone="accent">Available</Btn>
+    <Btn tone="accent" :disabled="true">Unavailable</Btn>
+  </Flex>
+  <p class="api-note">
+    Bind booleans with <code>:</code>. The string <code>"false"</code> is not a
+    boolean. Explain why an action is unavailable in nearby visible text.
+  </p>
+```html
+<Btn :disabled="true">Unavailable</Btn>
+```
+</ApiProperty>
+
+### Slots
+
+<div class="api-contract" id="btn-default-slot">
+  <Flex align="center" wrap="true"
+    ><code>default</code
+    ><Badge tone="neutral" variant="surface">Button label</Badge></Flex
+  >
+  <p>
+    Text or inline markup placed between the tags becomes the visible label. It
+    is hidden when <code>iconOnly</code> is true. Avoid nested links, buttons,
+    or other interactive controls.
+  </p>
+```html
+<Btn>Save changes</Btn>
+```
+</div>
+
+### Events
+
+<div class="api-contract" id="btn-click-event">
+  <Flex align="center" wrap="true"
+    ><code>@click</code><code>(event: MouseEvent) =&gt; void</code></Flex
+  >
+  <p>
+    Fires on pointer or keyboard activation when the button is enabled. The
+    handler must live in a mounted Regor app; static MDX does not run browser
+    handlers.
+  </p>
+```html
+<Btn @click="save">Save changes</Btn>
+```
+  <p>
+    <a href="#browser-interaction">See the complete event example</a>. For
+    forms, use <code>type="submit"</code> and handle
+    <code>@submit.prevent</code> on the form.
+  </p>
+</div>
+
+### Native attributes
+
+Extra attributes pass through to the native `<button>`. Add `id`, `class`, `name`, `value`, `form`, `title`, `data-*`, or `aria-*` directly. Custom classes are added alongside theme classes.
+
+```html
+<Btn
+  type="submit"
+  form="project-editor"
+  name="intent"
+  value="save"
+  aria-describedby="save-help"
+>
+  Save project
+</Btn>
+```

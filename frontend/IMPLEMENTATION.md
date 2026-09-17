@@ -17,8 +17,9 @@ between server rendering and browser mounting. Native Tabs and Modal runtime
 behavior is demonstrated as shipped.
 No page-script source or generated embed was changed.
 
-Each documented component owns an example module in `frontend/docs` and a
-matching browser entry beside its MDX page. Only the server registry combines
+Buttons owns standalone example files beside its MDX page, with matching source
+tabs. Tabs and Modal own modules in `frontend/docs` and matching browser entries.
+Only the server registry combines
 the modules' explicit component registrations; it does not generate components
 or infer their names. Each example module owns exported context interfaces,
 individual template variables, typed context factories, and explicit

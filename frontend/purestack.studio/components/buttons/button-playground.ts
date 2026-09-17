@@ -1,20 +1,35 @@
-import type {
-  BtnIconPosition,
-  BtnSize,
-  ComponentVariant,
-  FormSelectOption,
+import {
+  type BtnIconPosition,
+  type BtnSize,
+  type ComponentVariant,
+  defineButtonComponents,
+  defineFlexComponents,
+  defineFormComponents,
+  defineFormSelectField,
+  defineGridComponents,
+  defineIconComponents,
+  type FormSelectOption,
 } from '@purestack/ts-components'
 import { SEMANTIC_TONES, type SemanticTone } from '@purestack/ts-style'
 import {
+  lucide_chevron_down,
+  tabler_arrow_right,
+  tabler_check,
+  tabler_plus,
+  tabler_refresh,
+} from '@purestack/ts-svg-icons'
+import {
+  batch,
   type ComputedRef,
   computed,
+  createApp,
   defineComponent,
   html,
   type Ref,
   ref,
 } from 'regor'
 
-export interface DocsButtonPlayground {
+export interface ButtonPlayground {
   tone: Ref<SemanticTone>
   variant: Ref<ComponentVariant>
   size: Ref<BtnSize>
@@ -64,8 +79,9 @@ const buttonPlaygroundTemplate = html`<Grid columns="1" columnsMd="2" alignItems
       :disabled="disabled"
       ariaLabel="Create project"
       @click="activate"
-      >Create project</Btn
     >
+      Create project
+    </Btn>
     <p role="status" r-text="feedback"></p>
   </Flex>
   <Grid columns="2">
@@ -98,45 +114,36 @@ const buttonPlaygroundTemplate = html`<Grid columns="1" columnsMd="2" alignItems
       <FormCheck id="button-disabled" label="Disabled" :checked="disabled"/>
       <FormCheck id="button-icon-only" label="Icon only" :checked="iconOnly"/>
     </Flex>
-    <Btn variant="link" tone="neutral" icon="tabler:refresh" @click="reset"
-      >Reset</Btn
-    >
+    <Btn variant="link" tone="neutral" icon="tabler:refresh" @click="reset">
+      Reset
+    </Btn>
   </Grid>
 </Grid>`
 
-export function defineButtonsExampleComponents() {
-  return {
-    DocsButtonPlayground: defineComponent<DocsButtonPlayground>(
-      buttonPlaygroundTemplate,
-      { context: createButtonPlayground },
-    ),
-  }
-}
-
-function createButtonPlayground(): DocsButtonPlayground {
-  const tone = ref<SemanticTone>('accent'),
-    variant = ref<ComponentVariant>('solid'),
-    size = ref<BtnSize>('md'),
-    icon = ref('tabler:plus'),
-    position = ref<BtnIconPosition>('start'),
-    iconOnly = ref(false),
-    disabled = ref(false),
-    feedback = ref('Click the button to try it.'),
-    count = ref(0)
-  // Component props need refs to retain updates after the component is created.
+function createButtonPlayground(): ButtonPlayground {
+  const tone = ref<SemanticTone>('accent')
+  const variant = ref<ComponentVariant>('solid')
+  const size = ref<BtnSize>('md')
+  const icon = ref('tabler:plus')
+  const position = ref<BtnIconPosition>('start')
+  const iconOnly = ref(false)
+  const disabled = ref(false)
+  const feedback = ref('Click the button to try it.')
+  const count = ref(0)
   const resolvedIcon = computed(() => (icon() === 'none' ? '' : icon()))
   const resolvedIconOnly = computed(() => iconOnly() && resolvedIcon() !== '')
-  const reset = () => {
-    tone('accent')
-    variant('solid')
-    size('md')
-    icon('tabler:plus')
-    position('start')
-    iconOnly(false)
-    disabled(false)
-    count(0)
-    feedback('Click the button to try it.')
-  }
+  const reset = () =>
+    batch(() => {
+      tone('accent')
+      variant('solid')
+      size('md')
+      iconOnly(false)
+      position('start')
+      icon('tabler:plus')
+      disabled(false)
+      count(0)
+      feedback('Click the button to try it.')
+    })
   const activate = () => {
     count(count() + 1)
     feedback(`Action triggered ${count()} ${count() === 1 ? 'time' : 'times'}.`)
@@ -166,3 +173,36 @@ function createButtonPlayground(): DocsButtonPlayground {
     positions: options(['start', 'end']),
   }
 }
+
+const icons: Record<string, string> = {
+  'lucide:chevron-down': lucide_chevron_down,
+  'tabler:arrow-right': tabler_arrow_right,
+  'tabler:check': tabler_check,
+  'tabler:plus': tabler_plus,
+  'tabler:refresh': tabler_refresh,
+}
+
+const component = defineComponent<ButtonPlayground>(buttonPlaygroundTemplate, {
+  context: createButtonPlayground,
+})
+
+createApp(
+  {
+    components: {
+      ButtonPlayground: component,
+      ...defineButtonComponents(),
+      ...defineFlexComponents(),
+      ...defineFormComponents(),
+      ...defineFormSelectField(),
+      ...defineGridComponents(),
+      ...defineIconComponents((name) => {
+        if (!icons[name]) throw new Error(`Icon is not registered: ${name}`)
+        return icons[name]
+      }),
+    },
+  },
+  {
+    selector: 'app#button-playground',
+    template: html`<ButtonPlayground/>`,
+  },
+)

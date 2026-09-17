@@ -12,19 +12,24 @@ export interface ProjectForm {
   resetForm: () => void
 }
 
-const projectFormTemplate = html`<form @submit.prevent="submit" @reset.prevent="resetForm">
+const projectFormTemplate = html`<Flex
+  container="form"
+  direction="column"
+  @submit.prevent="submit"
+  @reset.prevent="resetForm"
+>
   <FormInputField
     id="demo-project-name"
     label="Project name"
     :model="project"
     name="project"
     :required="true"/>
-  <Flex
-    ><Btn type="submit" tone="accent">Save project</Btn
-    ><Btn type="reset" variant="surface" tone="neutral">Reset</Btn></Flex
-  >
-  <p role="status" r-text="message"></p>
-</form>`
+  <Flex wrap="true">
+    <Btn type="submit" tone="accent">Save project</Btn>
+    <Btn type="reset" variant="surface" tone="neutral">Reset</Btn>
+  </Flex>
+  <p class="m-0" role="status" r-text="message"></p>
+</Flex>`
 
 function createProjectForm(): ProjectForm {
   const project = ref('My next idea')

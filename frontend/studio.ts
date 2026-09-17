@@ -7,6 +7,7 @@ import { createLogger, getLogger } from 'logpot'
 import { defineStudioComponents } from './components/studioComponents'
 import { card } from './demoStyle'
 import { defineDocumentationComponents } from './docs/docsComponents'
+import { registerApiReferenceStyles } from './docs/apiReferenceStyles'
 import { registerStudioSkin } from './theme/studioSkin'
 import { registerStudioStyles } from './theme/studioStyles'
 import type { Component } from 'regor'
@@ -56,6 +57,7 @@ const build: BuildInput = {
           ...defineDocumentationComponents(),
         } as unknown as Record<string, Component>
         registerStudioStyles()
+        registerApiReferenceStyles()
       },
     },
   },

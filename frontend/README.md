@@ -81,18 +81,25 @@ The Buttons page pairs previews with source tabs using native `Tabs` and
 `TabPane`. Each file has its own source tab; ts-ssg handles fenced-code
 highlighting and its standard code-copy control.
 
-The Buttons collection and form previews run `components/collection.ts` and
-`components/project-form.ts` directly. Their source tabs contain those same
+The Buttons API uses `docs/apiProperty.ts` for anchored property panels with a
+consistent type/default header. Property descriptions and fenced examples stay
+in MDX; native `ExpandablePanel` components list accepted tones and variants.
+The default page outline links to the API groups, slots, events, and attributes.
+
+The Buttons page lives in `components/buttons/buttons.mdx`, alongside
+`button-playground.ts`, `collection.ts`, and `project-form.ts`.
+The folder's matching page name keeps its URL at `/components/buttons/`.
+The previews run these neighboring TypeScript files directly.
+Their source tabs contain those same
 files; keep each fenced source block identical to its browser entry when editing.
-The playground lives in `docs/buttons.ts`; the other pilot examples live in
-`docs/tabs.ts` and `docs/modal.ts`.
+Static variant markup is formatted identically in its preview and source tab.
+The other pilot examples live in `docs/tabs.ts` and `docs/modal.ts`.
 Each module follows the standard `ts-components` pattern: exported context
 interfaces, individually named template strings, typed context factories, and
 explicit `defineComponent<Interface>` calls. `docs/docsComponents.ts` only merges
 the registrations for server rendering.
-Each MDX page loads its own matching browser entry (`components/buttons.ts`,
-`tabs.ts`, or `modal.ts`). Buttons uses `RegorApp` for each interactive mount;
-its browser entry targets the generated `app` elements by id. Tabs and Modal
+Buttons uses `RegorApp` for each interactive mount; each standalone example
+targets its generated `app` element by id. Tabs and Modal
 currently load their entries with `PageScript`. Each entry registers its own
 components and mounts them with direct `createApp` calls and explicit templates.
 There is no shared example contract, lookup table, or mounting helper.
