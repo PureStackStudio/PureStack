@@ -108,6 +108,7 @@ export function renderHighlightedPreHtml(
 ): string | undefined {
   const replacement = renderHighlightedPre(text, language, highlighter)
   if (!replacement) return undefined
+  replacement.properties['r-pre'] = ''
   return toHtml(replacement, { allowDangerousHtml: true })
 }
 

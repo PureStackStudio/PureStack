@@ -668,7 +668,7 @@ function renderCodeFenceBlock(
   const languageClass = language
     ? ` class="language-${escapeHtmlAttribute(language)}"`
     : ''
-  return `<pre><code${languageClass}>${escapeHtml(code)}</code></pre>`
+  return `<pre r-pre><code${languageClass}>${escapeHtml(code)}</code></pre>`
 }
 
 function replaceMarkupInlineCode(

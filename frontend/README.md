@@ -81,8 +81,11 @@ The Buttons page pairs previews with source tabs using native `Tabs` and
 `TabPane`. Each file has its own source tab; ts-ssg handles fenced-code
 highlighting and its standard code-copy control.
 
-Examples requiring application state live in their component's module:
-`docs/buttons.ts`, `docs/tabs.ts`, and `docs/modal.ts`.
+The Buttons collection and form previews run `components/collection.ts` and
+`components/project-form.ts` directly. Their source tabs contain those same
+files; keep each fenced source block identical to its browser entry when editing.
+The playground lives in `docs/buttons.ts`; the other pilot examples live in
+`docs/tabs.ts` and `docs/modal.ts`.
 Each module follows the standard `ts-components` pattern: exported context
 interfaces, individually named template strings, typed context factories, and
 explicit `defineComponent<Interface>` calls. `docs/docsComponents.ts` only merges

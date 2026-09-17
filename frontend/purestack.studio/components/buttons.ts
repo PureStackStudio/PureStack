@@ -2,7 +2,6 @@ import {
   defineButtonComponents,
   defineFlexComponents,
   defineFormComponents,
-  defineFormInputField,
   defineFormSelectField,
   defineGridComponents,
   defineIconComponents,
@@ -30,7 +29,6 @@ const components = {
   ...defineButtonComponents(),
   ...defineFlexComponents(),
   ...defineFormComponents(),
-  ...defineFormInputField(),
   ...defineFormSelectField(),
   ...defineGridComponents(),
   ...defineIconComponents((name) => {
@@ -45,19 +43,5 @@ createApp(
   {
     selector: 'app#button-playground',
     template: html`<DocsButtonPlayground/>`,
-  },
-)
-createApp(
-  { components },
-  {
-    selector: 'app#button-events',
-    template: html`<DocsButtonEvents/>`,
-  },
-)
-createApp(
-  { components },
-  {
-    selector: 'app#button-form',
-    template: html`<DocsButtonForm/>`,
   },
 )

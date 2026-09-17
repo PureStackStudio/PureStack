@@ -461,7 +461,7 @@ describe('compileMdxToHtml', () => {
 
     expect(html).toContain('<Tabs id="install-flow">')
     expect(html).toContain('<TabPane id="npm" label="npm">')
-    expect(html).toContain('<pre><code class="language-bash">')
+    expect(html).toContain('<pre r-pre><code class="language-bash">')
     expect(html).toContain('npm install @purestack/ts-ssg')
     expect(html).toContain('</TabPane>')
   })
@@ -527,6 +527,7 @@ describe('compileMdxToHtml', () => {
     const code = [
       'const options = {',
       '  template: html`<Collection/>`,',
+      '  content: html`<p>Add up to {{ limit }} items.</p>`,',
       `  label: \`Item \${nextItem++}\`,`,
       '  entity: "&#x3C;",',
       '}',
@@ -547,10 +548,14 @@ describe('compileMdxToHtml', () => {
           ? createHljsHighlighter()
           : undefined
     const result = compileMdx(source, { highlighter })
+    const rendered = renderApp(result.bodyHtml, {
+      components: {},
+      context: createTestContext(),
+    })
     const cleanup = ensureDomGlobals()
     try {
       const root = document.createElement('div')
-      root.innerHTML = result.bodyHtml
+      root.innerHTML = rendered
       expect(root.querySelector('pre code')?.textContent?.trimEnd()).toBe(code)
       expect(root.querySelectorAll('pre code code')).toHaveLength(0)
       expect(root.querySelectorAll('tabpane > code')).toHaveLength(2)

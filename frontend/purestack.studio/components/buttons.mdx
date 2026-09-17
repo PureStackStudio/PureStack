@@ -242,10 +242,7 @@ Build a collection of up to five items. Add creates a visible list item; Remove 
   tabVariant="underline"
 >
   <TabPane id="button-events-preview" label="Preview">
-    <RegorApp
-      id="button-events"
-      data-doc-demo="button-events"
-      src="./buttons.ts"/>
+    <RegorApp id="collection" src="./collection.ts"/>
   </TabPane>
   <TabPane id="button-events-mdx" label="collection.mdx">
 ```html
@@ -259,13 +256,13 @@ import {
   defineFlexComponents,
 } from '@purestack/ts-components'
 import {
+  type ComputedRef,
+  computed,
   createApp,
   defineComponent,
   html,
-  computed,
-  type ComputedRef,
-  sref,
   type SRef,
+  sref,
 } from 'regor'
 
 export interface Collection {
@@ -359,7 +356,7 @@ The form handles `@reset.prevent` so its reactive value stays synchronized with 
   tabVariant="underline"
 >
   <TabPane id="button-form-preview" label="Preview">
-    <RegorApp id="button-form" data-doc-demo="button-form" src="./buttons.ts"/>
+    <RegorApp id="project-form" src="./project-form.ts"/>
   </TabPane>
   <TabPane id="button-form-mdx" label="project-form.mdx">
 ```html
@@ -373,7 +370,7 @@ import {
   defineFlexComponents,
   defineFormInputField,
 } from '@purestack/ts-components'
-import { createApp, defineComponent, html, ref, type Ref } from 'regor'
+import { createApp, defineComponent, html, type Ref, ref } from 'regor'
 
 export interface ProjectForm {
   project: Ref<string>
