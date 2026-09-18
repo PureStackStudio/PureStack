@@ -10,11 +10,11 @@ const bestColors = {
     neutral: '#232525',
     secondary: '#27b789',
     feature: '#cb166e',
-    custom:'#e35508',
+    custom: '#e35508',
     info: '#15a9c0',
     success: '#259740',
     warning: '#c49a1c',
-    danger:'#a92a37'
+    danger: '#a92a37',
   },
   blue: {
     accent: '#2874b7',
@@ -136,7 +136,10 @@ export function getStandardColors(presets?: readonly string[]): StandardColors {
   let colors: StandardColors | undefined
   const defaultColors = bestColors.standardBlue
   for (const preset of presets ?? []) {
-    colors =  merge(defaultColors, (bestColors[preset as keyof typeof bestColors] ?? defaultColors))
+    colors = merge(
+      defaultColors,
+      bestColors[preset as keyof typeof bestColors] ?? defaultColors,
+    )
   }
   return colors ?? defaultColors
 }

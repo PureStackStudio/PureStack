@@ -6,7 +6,7 @@ import {
 import { type DeepPartial, merge } from '@purestack/ts-util'
 
 function createStudioPalette(mode: 'dark' | 'light'): ThemePalette {
-  return merge(themeSkins.standard.create(["lightgreen"])[mode], {
+  return merge(themeSkins.standard.create(['lightgreen'])[mode], {
     accent: '#9be7ba',
     font: {
       family: {
@@ -169,8 +169,8 @@ export function registerStudioSkin() {
     create: () => ({
       light: createStudioPalette('light'),
       dark: createStudioPalette('dark'),
-      light2: themeSkins.standard.create(["green"]).light,
-      dark2: themeSkins.standard.create(["green"]).dark,
+      light2: themeSkins.standard.create(['green']).light,
+      dark2: themeSkins.standard.create(['green']).dark,
     }),
   })
 }

@@ -11,40 +11,40 @@ import { createHljsHighlighter } from './highlightjs'
 import { compileMdx, compileMdxToHtml } from './mdx'
 
 describe('createMdxHighlighter', () => {
-  it.each(['typescript', 'ts'])(
-    'highlights html tagged templates inside %s source',
-    async (lang) => {
-      const highlighter = await createMdxHighlighter(undefined, [lang])
-      const html = highlighter.codeToHtml(
-        [
-          "const name = 'World'",
-          'const view = html`<div class="greeting">Hello ${name}</div>`',
-        ].join('\n'),
-        lang,
+  it.each([
+    'typescript',
+    'ts',
+  ])('highlights html tagged templates inside %s source', async (lang) => {
+    const highlighter = await createMdxHighlighter(undefined, [lang])
+    const html = highlighter.codeToHtml(
+      [
+        "const name = 'World'",
+        'const view = html`<div class="greeting">Hello ${name}</div>`',
+      ].join('\n'),
+      lang,
+    )
+    const cleanup = ensureDomGlobals()
+    try {
+      const root = document.createElement('div')
+      root.innerHTML = html
+      const tokens = Array.from(root.querySelectorAll('span')).map(
+        (token) => token.textContent,
       )
-      const cleanup = ensureDomGlobals()
-      try {
-        const root = document.createElement('div')
-        root.innerHTML = html
-        const tokens = Array.from(root.querySelectorAll('span')).map(
-          (token) => token.textContent,
-        )
 
-        // The embedded HTML grammar tokenizes tag and attribute names separately.
-        // Plain TypeScript would treat the template body as string content instead.
-        expect(tokens).toContain('div')
-        expect(tokens).toContain('class')
+      // The embedded HTML grammar tokenizes tag and attribute names separately.
+      // Plain TypeScript would treat the template body as string content instead.
+      expect(tokens).toContain('div')
+      expect(tokens).toContain('class')
 
-        // ${...} must return to TypeScript tokenization inside the HTML template.
-        expect(tokens).toContain('name')
-        expect(root.querySelector('code')?.textContent).toContain(
-          '<div class="greeting">Hello ${name}</div>',
-        )
-      } finally {
-        cleanup()
-      }
-    },
-  )
+      // ${...} must return to TypeScript tokenization inside the HTML template.
+      expect(tokens).toContain('name')
+      expect(root.querySelector('code')?.textContent).toContain(
+        '<div class="greeting">Hello ${name}</div>',
+      )
+    } finally {
+      cleanup()
+    }
+  })
 })
 
 describe('compileMdxToHtml', () => {
