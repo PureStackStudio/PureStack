@@ -36,8 +36,18 @@ The existing Btn, BtnLink, BtnGroup, BtnGroupDropDown, Badge, Tabs and Modal gui
 5. Exercise interactive samples in a browser, including empty/disabled states and keyboard controls.
 6. Review representative desktop/mobile screenshots in light and dark, then resolve overflow or hierarchy problems.
 
+## Category organization
+
+Group guides into `actions`, `layout`, `forms`, `data`, `landing`, `site` and `runtime`, matching the catalog's seven sections. Each category has a standard documentation overview page; each component retains its own folder with its MDX and associated sample files. Nested navigation follows the source folders automatically. Update cross-links, preview output paths and imports together, then verify generated navigation, page routes, local assets and source tabs with an isolated build.
+
 ## Status
 
-- Source inventory and contract review: complete for core, layout, landing, forms, charts and site integration; advanced sample behavior will be checked during implementation.
-- Guide implementation: in progress.
-- Catalog integration and verification: pending.
+- Source inventory and contract review: complete. The catalog covers 67 public components and browser entry points.
+- Guide implementation: complete, with 60 new individual guides and colocated source files.
+- Type checking with tsgo and Biome checks: passed.
+- Isolated SSG build after categorization: passed for 76 content pages; all 39 generated script references resolve to files.
+- Browser review: all 60 new guides checked in light and dark at 1440px and 390px. No horizontal page overflow, duplicate IDs, broken local fragments or runtime exceptions were found by the checks.
+- Source fidelity after categorization: 177 sample source tabs across all component guides match their rendered code and associated TypeScript files.
+- Interaction verification: 30 checks passed, including forms, keyboard autocomplete, file selection, charts, virtualized collections, dialogs, search, theme switching and isolated site-component previews.
+- Representative desktop and mobile screenshots reviewed in both skins. The isolated build avoids interference with the shared development output during verification.
+- Category organization: complete. All 67 guides and seven category overviews load with the expected navigation group and active-page state. Browser checks found no missing app mounts, asset errors or runtime exceptions. Generated-page checks found no stale component routes or broken component destinations; category overviews and representative guides also passed desktop/mobile overflow checks.

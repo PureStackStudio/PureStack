@@ -1,0 +1,256 @@
+---
+title: FormSelectField
+description: "A labelled native select with typed option data, reactive selection and familiar keyboard behavior."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 30
+  icon: tabler:components
+---
+
+# Form<wbr/>Select<wbr/>Field
+
+A labelled native select with typed option data, reactive selection and familiar keyboard behavior.
+
+<Badge tone="accent" variant="surface">FormSelectField</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/formSelectField.ts) · [API reference](#api-reference)
+
+
+
+## Choose a region
+
+Select a region and inspect its stored value. The unavailable option stays visible but cannot be selected.
+
+<Tabs group="form-select-field-sample-1" selectedTab="form-select-field-sample-1-preview" ariaLabel="Choose a region example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="form-select-field-sample-1-preview" label="Preview">
+    <RegorApp id="form-select-field-demo" src="./playground.ts"/>
+  </TabPane>
+  <TabPane id="form-select-field-sample-1-source-0" label="playground.mdx">
+```html
+<RegorApp id="form-select-field-demo" src="./playground.ts"/>
+```
+  </TabPane>
+  <TabPane id="form-select-field-sample-1-source-1" label="playground.ts">
+```typescript
+import {
+  defineFlexComponents,
+  defineFormComponents,
+  defineFormSelectField,
+  defineIconComponents,
+  type FormSelectOption,
+  type FormSelectValue,
+} from '@purestack/ts-components'
+import { lucide_chevron_down } from '@purestack/ts-svg-icons'
+import { createApp, defineComponent, html, type Ref, ref } from 'regor'
+
+export interface FormSelectFieldExample {
+  regionValue: Ref<FormSelectValue>
+  regionOptions: FormSelectOption[]
+  locked: Ref<boolean>
+}
+
+const formSelectFieldExampleTemplate = html`<Flex direction="column">
+  <FormSelectField
+    id="select-region"
+    label="Deployment region"
+    name="region"
+    placeholder="Choose a region"
+    :model="regionValue"
+    :options="regionOptions"
+    :disabled="locked"
+  />
+  <FormCheck id="select-lock" label="Lock selection" :checked="locked" />
+  <FormStatus>Selected region: {{ regionValue || 'None' }}</FormStatus>
+</Flex>`
+
+function createFormSelectFieldExample(): FormSelectFieldExample {
+  return {
+    regionValue: ref<FormSelectValue>(''),
+    locked: ref(false),
+    regionOptions: [
+      { label: 'Europe Central', value: 'eu-central' },
+      { label: 'US East', value: 'us-east' },
+      { label: 'Asia Pacific · unavailable', value: 'apac', disabled: true },
+    ],
+  }
+}
+
+const component = defineComponent<FormSelectFieldExample>(
+  formSelectFieldExampleTemplate,
+  {
+    context: createFormSelectFieldExample,
+  },
+)
+const icons: Record<string, string> = {
+  'lucide:chevron-down': lucide_chevron_down,
+}
+
+createApp(
+  {
+    components: {
+      FormSelectFieldExample: component,
+
+      ...defineFlexComponents(),
+      ...defineFormSelectField(),
+      ...defineFormComponents(),
+      ...defineIconComponents((name) => icons[name] ?? ''),
+    },
+  },
+  {
+    selector: 'app#form-select-field-demo',
+    template: html`<FormSelectFieldExample />`,
+  },
+)
+```
+  </TabPane>
+</Tabs>
+
+## Required and disabled states
+
+A placeholder is a disabled empty option. Validation belongs to the owning form.
+
+<Tabs group="form-select-field-sample-2" selectedTab="form-select-field-sample-2-preview" ariaLabel="Required and disabled states example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="form-select-field-sample-2-preview" label="Preview">
+    <Grid columns="1" columnsSm="2">
+      <FormSelectField
+        id="select-required"
+        label="Required choice"
+        :required="true"
+        placeholder="Select one"
+        :options="[{ label: 'Stable', value: 'stable' }, { label: 'Preview', value: 'preview' }]"
+      />
+      <FormSelectField
+        id="select-disabled"
+        label="Unavailable selection"
+        :disabled="true"
+        :options="[{ label: 'Managed by policy', value: 'policy' }]"
+      />
+    </Grid>
+  </TabPane>
+  <TabPane id="form-select-field-sample-2-source-0" label="select-states.mdx">
+```html
+<Grid columns="1" columnsSm="2">
+  <FormSelectField
+    id="select-required"
+    label="Required choice"
+    :required="true"
+    placeholder="Select one"
+    :options="[{ label: 'Stable', value: 'stable' }, { label: 'Preview', value: 'preview' }]"
+  />
+  <FormSelectField
+    id="select-disabled"
+    label="Unavailable selection"
+    :disabled="true"
+    :options="[{ label: 'Managed by policy', value: 'policy' }]"
+  />
+</Grid>
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+The browser owns the popup and its keyboard interactions. Native attributes and events are inherited by select. Numeric option values may be serialized as strings by native form submission; normalize values at your application boundary.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">FormSelectField contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="FormSelectField properties">
+  <a href="#form-select-field-prop-id">id</a>
+  <a href="#form-select-field-prop-label">label</a>
+  <a href="#form-select-field-prop-tone">tone</a>
+  <a href="#form-select-field-prop-variant">variant</a>
+  <a href="#form-select-field-prop-model">model</a>
+  <a href="#form-select-field-prop-name">name</a>
+  <a href="#form-select-field-prop-required">required</a>
+  <a href="#form-select-field-prop-autocomplete">autocomplete</a>
+  <a href="#form-select-field-prop-placeholder">placeholder</a>
+  <a href="#form-select-field-prop-disabled">disabled</a>
+  <a href="#form-select-field-prop-icon">icon</a>
+  <a href="#form-select-field-prop-iconEnd">iconEnd</a>
+  <a href="#form-select-field-prop-options">options</a>
+</nav>
+
+<ApiProperty anchor="form-select-field-prop-id" name="id" valueType="string" defaultValue="generated">
+  <p>Unique control ID. Supply an explicit value when help text or another element needs to reference this control.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-select-field-prop-label" name="label" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Visible label. Use language that describes the control or value in its surrounding context.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-select-field-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
+  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-select-field-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surfaceAlt">
+  <p>Visual treatment. Accepts solid, surface, surfaceAlt, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-select-field-prop-model" name="model" valueType="Ref&lt;FormSelectValue&gt;" defaultValue="ref('')">
+  <p>Two-way value ref. Pass the ref itself with :model="fieldValue" so edits update application state.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-select-field-prop-name" name="name" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Native form field name used during FormData serialization.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-select-field-prop-required" name="required" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
+  <p>Native required constraint. Validate the owning form before accepting its data.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-select-field-prop-autocomplete" name="autocomplete" valueType="RefOrValue&lt;string&gt;" defaultValue="off">
+  <p>Native browser autofill hint, such as name, email or current-password.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-select-field-prop-placeholder" name="placeholder" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>A short input hint shown while empty. Keep a separate visible label.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-select-field-prop-disabled" name="disabled" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
+  <p>Disables interaction. Use a bound boolean, for example :disabled="isLocked".</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-select-field-prop-icon" name="icon" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Registered SVG icon name. In browser apps, include the icon in the resolver passed to defineIconComponents.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-select-field-prop-iconEnd" name="iconEnd" valueType="RefOrValue&lt;string&gt;" defaultValue="lucide:chevron-down">
+  <p>Trailing registered icon. Include the default chevron in browser app icon registration.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-select-field-prop-options" name="options" valueType="RefOrValue&lt;FormSelectOption[]&gt;" defaultValue="[]">
+  <p>Suggestion or select data. Each option has a label, an optional value and an optional disabled flag. Omitted values use the label.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p>No slots. Register defineFormSelectField and defineIconComponents. Pass FormSelectOption[] with options and a Ref&lt;FormSelectValue&gt; with model.</p>
+</div>
+
+### Option data
+
+```typescript
+interface FormSelectOption {
+  label: RefOrValue<string>
+  value?: RefOrValue<string | number>
+  disabled?: RefOrValue<boolean>
+}
+```
+
+When value is omitted, the resolved label becomes the value.
+
+## Related components
+
+- [FormInputField](/components/forms/form-input-field/)
+- [AutoCompleteInput](/components/forms/auto-complete-input/)
+- [AppForm](/components/forms/app-form/)

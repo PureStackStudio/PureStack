@@ -1,0 +1,163 @@
+---
+title: Panel
+description: "A semantic surface for settings, summaries and grouped content. Control its tone, treatment and inner layout without losing the theme."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 10
+  icon: tabler:components
+---
+
+# Panel
+
+A semantic surface for settings, summaries and grouped content. Control its tone, treatment and inner layout without losing the theme.
+
+<Badge tone="accent" variant="surface">Panel</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/panel/panel.ts) · [API reference](#api-reference)
+
+Panel renders a section around a separate body container. Put spacing on the body when its children need breathing room.
+
+## A release summary
+
+Combine a quiet surface with a clear heading, status and a real destination.
+
+<Tabs group="panel-sample-1" selectedTab="panel-sample-1-preview" ariaLabel="A release summary example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="panel-sample-1-preview" label="Preview">
+    <Panel tone="neutral" variant="surface" bodyClass="p-4">
+      <Flex align="center" justify="between" wrap="true">
+        <h3 class="m-0">Release workspace</h3>
+        <Badge tone="success">Ready</Badge>
+      </Flex>
+      <p>Your content, components and theme are ready for review.</p>
+      <BtnLink href="/components/" tone="accent">Explore the library</BtnLink>
+    </Panel>
+  </TabPane>
+  <TabPane id="panel-sample-1-source-0" label="release-summary.mdx">
+```html
+<Panel tone="neutral" variant="surface" bodyClass="p-4">
+  <Flex align="center" justify="between" wrap="true">
+    <h3 class="m-0">Release workspace</h3>
+    <Badge tone="success">Ready</Badge>
+  </Flex>
+  <p>Your content, components and theme are ready for review.</p>
+  <BtnLink href="/components/" tone="accent">Explore the library</BtnLink>
+</Panel>
+```
+  </TabPane>
+</Tabs>
+
+## Surface hierarchy
+
+Use a stronger tone for important context and a quiet nested surface for supporting details.
+
+<Tabs group="panel-sample-2" selectedTab="panel-sample-2-preview" ariaLabel="Surface hierarchy example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="panel-sample-2-preview" label="Preview">
+    <Grid columns="1" columnsSm="2">
+      <Panel tone="accent" variant="surface" bodyClass="p-4">
+        <h3>Primary context</h3>
+        <p>A surface connects related content.</p>
+        <Panel tone="neutral" variant="outline" bodyClass="p-3">
+          Nested details stay readable.
+        </Panel>
+      </Panel>
+      <Panel tone="neutral" variant="outline" bodyClass="p-4">
+        <h3>Supporting context</h3>
+        <p>An outline separates content without a second filled surface.</p>
+      </Panel>
+    </Grid>
+  </TabPane>
+  <TabPane id="panel-sample-2-source-0" label="surface-hierarchy.mdx">
+```html
+<Grid columns="1" columnsSm="2">
+  <Panel tone="accent" variant="surface" bodyClass="p-4">
+    <h3>Primary context</h3>
+    <p>A surface connects related content.</p>
+    <Panel tone="neutral" variant="outline" bodyClass="p-3">
+      Nested details stay readable.
+    </Panel>
+  </Panel>
+  <Panel tone="neutral" variant="outline" bodyClass="p-4">
+    <h3>Supporting context</h3>
+    <p>An outline separates content without a second filled surface.</p>
+  </Panel>
+</Grid>
+```
+  </TabPane>
+</Tabs>
+
+## A stateful link surface
+
+The link provides navigation and keyboard semantics. The panel provides the visual response.
+
+<Tabs group="panel-sample-3" selectedTab="panel-sample-3-preview" ariaLabel="A stateful link surface example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="panel-sample-3-preview" label="Preview">
+    <a href="/components/landing/feature-card/" class="d-block">
+      <Panel tone="accent" variant="outlineFill" variantMode="stateful" bodyClass="p-4">
+        <strong>Build a feature card</strong>
+        <p class="mb-0">Explore richer card composition.</p>
+      </Panel>
+    </a>
+  </TabPane>
+  <TabPane id="panel-sample-3-source-0" label="linked-panel.mdx">
+```html
+<a href="/components/landing/feature-card/" class="d-block">
+  <Panel tone="accent" variant="outlineFill" variantMode="stateful" bodyClass="p-4">
+    <strong>Build a feature card</strong>
+    <p class="mb-0">Explore richer card composition.</p>
+  </Panel>
+</a>
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+Panel does not add an action or an accessible label. Give content sections a heading; use a real link or button for interactions. Its default overflow is hidden: add the existing `overflow-visible` utility when a popup inside the panel needs to escape.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">Panel contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="Panel properties">
+  <a href="#panel-prop-tone">tone</a>
+  <a href="#panel-prop-variant">variant</a>
+  <a href="#panel-prop-variantMode">variantMode</a>
+  <a href="#panel-prop-bodyClass">bodyClass</a>
+</nav>
+
+<ApiProperty anchor="panel-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
+  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+</ApiProperty>
+
+<ApiProperty anchor="panel-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surface">
+  <p>Visual treatment. Accepts solid, surface, surfaceAlt, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+</ApiProperty>
+
+<ApiProperty anchor="panel-prop-variantMode" name="variantMode" valueType="RefOrValue&lt;ComponentVariantMode&gt;" defaultValue="stateless">
+  <p>Use stateless for content surfaces; stateful enables the treatment’s hover, focus and active styles. It does not add interaction handlers.</p>
+</ApiProperty>
+
+<ApiProperty anchor="panel-prop-bodyClass" name="bodyClass" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Classes applied to the inner panel body. Use spacing utilities such as p-4 or layout utilities without changing the outer surface.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p><strong>Default slot:</strong> arbitrary flow content inside the body. Register definePanelComponents; composed content registers its own component families.</p>
+</div>
+
+
+
+## Related components
+
+- [FeatureCard](/components/landing/feature-card/)
+- [AlertBox](/components/actions/alert-box/)
+- [ExpandablePanel](/components/layout/expandable-panel/)

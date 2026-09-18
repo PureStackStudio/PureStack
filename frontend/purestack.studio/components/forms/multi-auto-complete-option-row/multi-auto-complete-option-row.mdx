@@ -1,0 +1,163 @@
+---
+title: MultiAutoCompleteOptionRow
+description: "The minimal default row presentation used by the multi-value suggestion picker."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 140
+  icon: tabler:components
+---
+
+# Multi<wbr/>Auto<wbr/>Complete<wbr/>Option<wbr/>Row
+
+The minimal default row presentation used by the multi-value suggestion picker.
+
+<Badge tone="accent" variant="surface">MultiAutoCompleteOptionRow</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/multiAutoCompleteInput.ts) · [API reference](#api-reference)
+
+
+
+## The default presentation
+
+The parent supplies active and disabled styling around this label.
+
+<Tabs group="multi-auto-complete-option-row-sample-1" selectedTab="multi-auto-complete-option-row-sample-1-preview" ariaLabel="The default presentation example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="multi-auto-complete-option-row-sample-1-preview" label="Preview">
+    <Panel bodyClass="p-3">
+      <MultiAutoCompleteOptionRow
+        :option="{label:'Accessibility',value:'a11y',keywords:[]}"
+      />
+      <MultiAutoCompleteOptionRow
+        :option="{label:'Performance',value:'perf',keywords:[]}"
+      />
+    </Panel>
+  </TabPane>
+  <TabPane id="multi-auto-complete-option-row-sample-1-source-0" label="default-rows.mdx">
+```html
+<Panel bodyClass="p-3">
+  <MultiAutoCompleteOptionRow
+    :option="{label:'Accessibility',value:'a11y',keywords:[]}"
+  />
+  <MultiAutoCompleteOptionRow
+    :option="{label:'Performance',value:'perf',keywords:[]}"
+  />
+</Panel>
+```
+  </TabPane>
+</Tabs>
+
+## Inside a token picker
+
+Select more than one option to see the owning component manage state.
+
+<Tabs group="multi-auto-complete-option-row-sample-2" selectedTab="multi-auto-complete-option-row-sample-2-preview" ariaLabel="Inside a token picker example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="multi-auto-complete-option-row-sample-2-preview" label="Preview">
+    <RegorApp id="multi-auto-complete-option-row-states-demo" src="./states.ts"/>
+  </TabPane>
+  <TabPane id="multi-auto-complete-option-row-sample-2-source-0" label="states.mdx">
+```html
+<RegorApp id="multi-auto-complete-option-row-states-demo" src="./states.ts"/>
+```
+  </TabPane>
+  <TabPane id="multi-auto-complete-option-row-sample-2-source-1" label="states.ts">
+```typescript
+import {
+  defineIconComponents,
+  defineMultiAutoCompleteInputComponents,
+} from '@purestack/ts-components'
+import { lucide_chevron_down, lucide_x } from '@purestack/ts-svg-icons'
+import { createApp, defineComponent, html } from 'regor'
+
+export interface MultiAutoCompleteOptionRowStates {}
+
+const multiAutoCompleteOptionRowStatesTemplate = html`<MultiAutoCompleteInput
+  id="multi-row-owner"
+  label="Topics"
+  rowComponent="MultiAutoCompleteOptionRow"
+  :allowCustomValues="false"
+  :options="[{label:'Accessibility',value:'a11y'},{label:'Performance',value:'perf'}]"
+/>`
+
+function createMultiAutoCompleteOptionRowStates(): MultiAutoCompleteOptionRowStates {
+  return {}
+}
+
+const component = defineComponent<MultiAutoCompleteOptionRowStates>(
+  multiAutoCompleteOptionRowStatesTemplate,
+  {
+    context: createMultiAutoCompleteOptionRowStates,
+  },
+)
+const icons: Record<string, string> = {
+  'lucide:x': lucide_x,
+  'lucide:chevron-down': lucide_chevron_down,
+}
+
+createApp(
+  {
+    components: {
+      MultiAutoCompleteOptionRowStates: component,
+
+      ...defineMultiAutoCompleteInputComponents(),
+      ...defineIconComponents((name) => icons[name] ?? ''),
+    },
+  },
+  {
+    selector: 'app#multi-auto-complete-option-row-states-demo',
+    template: html`<MultiAutoCompleteOptionRowStates />`,
+  },
+)
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+This component displays option.label. It does not own selection, filtering, focus or a click handler. Use rowComponent on MultiAutoCompleteInput to replace it with your own explicitly defined component.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">MultiAutoCompleteOptionRow contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="MultiAutoCompleteOptionRow properties">
+  <a href="#multi-auto-complete-option-row-prop-option">option</a>
+  <a href="#multi-auto-complete-option-row-prop-active">active</a>
+  <a href="#multi-auto-complete-option-row-prop-selected">selected</a>
+  <a href="#multi-auto-complete-option-row-prop-query">query</a>
+</nav>
+
+<ApiProperty anchor="multi-auto-complete-option-row-prop-option" name="option" valueType="RefOrValue&lt;ResolvedAutoCompleteOption | null&gt;" defaultValue="required">
+  <p>Resolved option object. Null displays no label.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-option-row-prop-active" name="active" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
+  <p>Accepted by the default row contract but not used in its template.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-option-row-prop-selected" name="selected" valueType="string" defaultValue="not set">
+  <p>Registered pass-through prop; the default row does not render a selected marker.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-option-row-prop-query" name="query" valueType="string" defaultValue="not set">
+  <p>Registered pass-through prop; the default row does not highlight query text.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p>No slots. Registered by defineMultiAutoCompleteInputComponents. Its exported presentation interface is MultiAutoCompleteDefaultOptionRow; MultiAutoCompleteOptionRow is also the name of the internal resolved row-data type.</p>
+</div>
+
+
+
+## Related components
+
+- [MultiAutoCompleteInput](/components/forms/multi-auto-complete-input/)
+- [AutoCompleteOptionRow](/components/forms/auto-complete-option-row/)

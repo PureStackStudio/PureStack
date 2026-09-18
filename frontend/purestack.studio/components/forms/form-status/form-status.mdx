@@ -1,0 +1,169 @@
+---
+title: FormStatus
+description: "Polite live feedback for validation, progress and completed form actions."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 90
+  icon: tabler:components
+---
+
+# Form<wbr/>Status
+
+Polite live feedback for validation, progress and completed form actions.
+
+<Badge tone="accent" variant="surface">FormStatus</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/form.ts) · [API reference](#api-reference)
+
+
+
+## Change the feedback
+
+The same mounted status region receives new text. Clear hides it until there is another message.
+
+<Tabs group="form-status-sample-1" selectedTab="form-status-sample-1-preview" ariaLabel="Change the feedback example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="form-status-sample-1-preview" label="Preview">
+    <RegorApp id="form-status-demo" src="./playground.ts"/>
+  </TabPane>
+  <TabPane id="form-status-sample-1-source-0" label="playground.mdx">
+```html
+<RegorApp id="form-status-demo" src="./playground.ts"/>
+```
+  </TabPane>
+  <TabPane id="form-status-sample-1-source-1" label="playground.ts">
+```typescript
+import {
+  defineButtonComponents,
+  defineFlexComponents,
+  defineFormComponents,
+} from '@purestack/ts-components'
+import type { SemanticTone } from '@purestack/ts-style'
+import { createApp, defineComponent, html, type Ref, ref } from 'regor'
+
+export interface FormStatusExample {
+  statusMessage: Ref<string>
+  statusTone: Ref<SemanticTone>
+  showSuccess: () => void
+  showError: () => void
+  clear: () => void
+}
+
+const formStatusExampleTemplate = html`<Flex direction="column">
+  <Flex wrap="true">
+    <Btn tone="success" @click="showSuccess">Save local draft</Btn>
+    <Btn tone="danger" variant="outline" @click="showError">
+      Show validation error
+    </Btn>
+    <Btn variant="link" @click="clear">Clear message</Btn>
+  </Flex>
+  <FormStatus :tone="statusTone" :hidden="!statusMessage">
+    {{ statusMessage }}
+  </FormStatus>
+</Flex>`
+
+function createFormStatusExample(): FormStatusExample {
+  const statusMessage = ref('Choose an action to see its feedback.')
+  const statusTone = ref<SemanticTone>('info')
+  return {
+    statusMessage,
+    statusTone,
+    showSuccess: () => {
+      statusTone('success')
+      statusMessage('Draft saved in this example.')
+    },
+    showError: () => {
+      statusTone('danger')
+      statusMessage('Enter a project name before continuing.')
+    },
+    clear: () => statusMessage(''),
+  }
+}
+
+const component = defineComponent<FormStatusExample>(
+  formStatusExampleTemplate,
+  {
+    context: createFormStatusExample,
+  },
+)
+
+createApp(
+  {
+    components: {
+      FormStatusExample: component,
+
+      ...defineFlexComponents(),
+      ...defineButtonComponents(),
+      ...defineFormComponents(),
+    },
+  },
+  { selector: 'app#form-status-demo', template: html`<FormStatusExample />` },
+)
+```
+  </TabPane>
+</Tabs>
+
+## A persistent explanation
+
+Static supporting information can also use the status surface.
+
+<Tabs group="form-status-sample-2" selectedTab="form-status-sample-2-preview" ariaLabel="A persistent explanation example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="form-status-sample-2-preview" label="Preview">
+    <FormStatus tone="warning" variant="outline">
+      Review the entered values before submitting this form.
+    </FormStatus>
+  </TabPane>
+  <TabPane id="form-status-sample-2-source-0" label="persistent-status.mdx">
+```html
+<FormStatus tone="warning" variant="outline">
+  Review the entered values before submitting this form.
+</FormStatus>
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+The root has role status and aria-live polite. Avoid duplicating the same message in multiple live regions. Hidden suppresses both visual and accessibility-tree output; keep field-specific errors associated with their fields as well.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">FormStatus contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="FormStatus properties">
+  <a href="#form-status-prop-tone">tone</a>
+  <a href="#form-status-prop-variant">variant</a>
+  <a href="#form-status-prop-hidden">hidden</a>
+</nav>
+
+<ApiProperty anchor="form-status-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
+  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-status-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surface">
+  <p>Visual treatment. Accepts solid, surface, surfaceAlt, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-status-prop-hidden" name="hidden" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
+  <p>Native hidden state. Bind a boolean to hide the region when no feedback is available.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p><strong>Default slot:</strong> feedback content. Register defineFormComponents. This component announces content but does not validate or submit a form.</p>
+</div>
+
+
+
+## Related components
+
+- [AppForm](/components/forms/app-form/)
+- [AlertBox](/components/actions/alert-box/)
+- [ToastHost](/components/actions/toast-host/)

@@ -1,0 +1,155 @@
+---
+title: SectionHeader
+description: "A consistent heading hierarchy with an eyebrow, subtitle and supporting footnote."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 40
+  icon: tabler:components
+---
+
+# Section<wbr/>Header
+
+A consistent heading hierarchy with an eyebrow, subtitle and supporting footnote.
+
+<Badge tone="accent" variant="surface">SectionHeader</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/sectionHeader/sectionHeader.ts) · [API reference](#api-reference)
+
+
+
+## A complete section heading
+
+Each text layer has a distinct job. The default heading level is h2.
+
+<Tabs group="section-header-sample-1" selectedTab="section-header-sample-1-preview" ariaLabel="A complete section heading example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="section-header-sample-1-preview" label="Preview">
+    <SectionHeader
+      eyebrow="THE COMPONENT SYSTEM"
+      title="Small pieces. Complete interfaces."
+      subtitle="Compose a page from focused components that share one theme."
+      footnote="Every example includes its source."
+    />
+  </TabPane>
+  <TabPane id="section-header-sample-1-source-0" label="complete-heading.mdx">
+```html
+<SectionHeader
+  eyebrow="THE COMPONENT SYSTEM"
+  title="Small pieces. Complete interfaces."
+  subtitle="Compose a page from focused components that share one theme."
+  footnote="Every example includes its source."
+/>
+```
+  </TabPane>
+</Tabs>
+
+## Fit the document hierarchy
+
+Use h3 when the header belongs inside a section. Utility classes adjust appearance without changing semantics.
+
+<Tabs group="section-header-sample-2" selectedTab="section-header-sample-2-preview" ariaLabel="Fit the document hierarchy example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="section-header-sample-2-preview" label="Preview">
+    <Panel bodyClass="p-4">
+      <SectionHeader
+        title="Within a card"
+        titleTag="h3"
+        titleClass="fs-h4 mb-2"
+        subtitle="The heading level follows the document, not the font size."
+        subtitleClass="mb-0"
+      >
+        <Badge tone="success">Ready to use</Badge>
+      </SectionHeader>
+    </Panel>
+  </TabPane>
+  <TabPane id="section-header-sample-2-source-0" label="heading-level.mdx">
+```html
+<Panel bodyClass="p-4">
+  <SectionHeader
+    title="Within a card"
+    titleTag="h3"
+    titleClass="fs-h4 mb-2"
+    subtitle="The heading level follows the document, not the font size."
+    subtitleClass="mb-0"
+  >
+    <Badge tone="success">Ready to use</Badge>
+  </SectionHeader>
+</Panel>
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+Choose heading levels in order. Visual size and heading semantics are independent. Empty text props omit their blocks; avoid empty headings and do not use the eyebrow as the only label.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">SectionHeader contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="SectionHeader properties">
+  <a href="#section-header-prop-eyebrow">eyebrow</a>
+  <a href="#section-header-prop-title">title</a>
+  <a href="#section-header-prop-subtitle">subtitle</a>
+  <a href="#section-header-prop-footnote">footnote</a>
+  <a href="#section-header-prop-titleTag">titleTag</a>
+  <a href="#section-header-prop-eyebrowClass">eyebrowClass</a>
+  <a href="#section-header-prop-titleClass">titleClass</a>
+  <a href="#section-header-prop-subtitleClass">subtitleClass</a>
+  <a href="#section-header-prop-footnoteClass">footnoteClass</a>
+</nav>
+
+<ApiProperty anchor="section-header-prop-eyebrow" name="eyebrow" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Short context above the heading, such as a category or release label.</p>
+</ApiProperty>
+
+<ApiProperty anchor="section-header-prop-title" name="title" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Visible heading. Choose a short title that identifies the content or task.</p>
+</ApiProperty>
+
+<ApiProperty anchor="section-header-prop-subtitle" name="subtitle" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Supporting text beneath the title.</p>
+</ApiProperty>
+
+<ApiProperty anchor="section-header-prop-footnote" name="footnote" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Supporting note below the section description.</p>
+</ApiProperty>
+
+<ApiProperty anchor="section-header-prop-titleTag" name="titleTag" valueType="RefOrValue&lt;string&gt;" defaultValue="h2">
+  <p>Heading element. Accepts h1–h6, p, div or span; invalid values fall back to h2. Match the surrounding document hierarchy.</p>
+</ApiProperty>
+
+<ApiProperty anchor="section-header-prop-eyebrowClass" name="eyebrowClass" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Additional classes on the eyebrow element. Use existing typography and spacing utilities.</p>
+</ApiProperty>
+
+<ApiProperty anchor="section-header-prop-titleClass" name="titleClass" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Additional classes on the title element. Use existing typography and spacing utilities.</p>
+</ApiProperty>
+
+<ApiProperty anchor="section-header-prop-subtitleClass" name="subtitleClass" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Additional classes on the subtitle element. Use existing typography and spacing utilities.</p>
+</ApiProperty>
+
+<ApiProperty anchor="section-header-prop-footnoteClass" name="footnoteClass" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Additional classes on the footnote element. Use existing typography and spacing utilities.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p><strong>Default slot:</strong> content following all text blocks, such as a badge or supporting link. Register defineSectionHeaderComponents.</p>
+</div>
+
+
+
+## Related components
+
+- [LandingSection](/components/landing/landing-section/)
+- [FeatureCard](/components/landing/feature-card/)
+- [Panel](/components/layout/panel/)

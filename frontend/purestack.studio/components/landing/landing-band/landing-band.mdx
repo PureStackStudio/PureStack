@@ -1,0 +1,229 @@
+---
+title: LandingBand
+description: "A full-width visual band with shaped edges, background imagery and theme-aware surfaces."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 10
+  icon: tabler:components
+---
+
+# Landing<wbr/>Band
+
+A full-width visual band with shaped edges, background imagery and theme-aware surfaces.
+
+<Badge tone="accent" variant="surface">LandingBand</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts) · [API reference](#api-reference)
+
+LandingBand extends to the viewport edges, including within a documentation layout. Its content is decorative by default: the band sets pointer-events to none.
+
+## A shaped section boundary
+
+The bottom edge creates a transition into the next section. Keep the important copy away from the clipped edge.
+
+<Tabs group="landing-band-sample-1" selectedTab="landing-band-sample-1-preview" ariaLabel="A shaped section boundary example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="landing-band-sample-1-preview" label="Preview">
+    <LandingBand
+      tone="accent"
+      height="14rem"
+      bottomEdge="slant-up"
+      edgeSize="2rem"
+      alignItems="center"
+    >
+      <SectionHeader
+        eyebrow="BUILD WITH PURESTACK"
+        title="One coherent interface"
+        subtitle="Content, components and a shared theme."
+      />
+    </LandingBand>
+  </TabPane>
+  <TabPane id="landing-band-sample-1-source-0" label="shaped-band.mdx">
+```html
+<LandingBand
+  tone="accent"
+  height="14rem"
+  bottomEdge="slant-up"
+  edgeSize="2rem"
+  alignItems="center"
+>
+  <SectionHeader
+    eyebrow="BUILD WITH PURESTACK"
+    title="One coherent interface"
+    subtitle="Content, components and a shared theme."
+  />
+</LandingBand>
+```
+  </TabPane>
+</Tabs>
+
+## Two deliberate edges
+
+Each edge has an independent direction and starting position.
+
+<Tabs group="landing-band-sample-2" selectedTab="landing-band-sample-2-preview" ariaLabel="Two deliberate edges example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="landing-band-sample-2-preview" label="Preview">
+    <LandingBand
+      tone="info"
+      variant="surface"
+      topEdge="slant-down"
+      bottomEdge="slant-down"
+      edgeSize="1.5rem"
+      topEdgeStart="20%"
+      bottomEdgeStart="40%"
+      paddingTop="2rem"
+      paddingBottom="2rem"
+    >
+      <SectionHeader
+        title="Space for a new chapter"
+        subtitle="A visual pause between sections."
+      />
+    </LandingBand>
+  </TabPane>
+  <TabPane id="landing-band-sample-2-source-0" label="paired-edges.mdx">
+```html
+<LandingBand
+  tone="info"
+  variant="surface"
+  topEdge="slant-down"
+  bottomEdge="slant-down"
+  edgeSize="1.5rem"
+  topEdgeStart="20%"
+  bottomEdgeStart="40%"
+  paddingTop="2rem"
+  paddingBottom="2rem"
+>
+  <SectionHeader
+    title="Space for a new chapter"
+    subtitle="A visual pause between sections."
+  />
+</LandingBand>
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+Use backgrounds as decoration and keep meaningful image content in a normal image element with alt text. Edge clipping needs enough padding. The full-width bleed is intentional; avoid placing a band in a narrow card. Interactive children must explicitly opt back into pointer events.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">LandingBand contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="LandingBand properties">
+  <a href="#landing-band-prop-tone">tone</a>
+  <a href="#landing-band-prop-variant">variant</a>
+  <a href="#landing-band-prop-variantMode">variantMode</a>
+  <a href="#landing-band-prop-image">image</a>
+  <a href="#landing-band-prop-imageFit">imageFit</a>
+  <a href="#landing-band-prop-imagePosition">imagePosition</a>
+  <a href="#landing-band-prop-display">display</a>
+  <a href="#landing-band-prop-alignItems">alignItems</a>
+  <a href="#landing-band-prop-justifyContent">justifyContent</a>
+  <a href="#landing-band-prop-height">height</a>
+  <a href="#landing-band-prop-marginTop">marginTop</a>
+  <a href="#landing-band-prop-marginBottom">marginBottom</a>
+  <a href="#landing-band-prop-paddingTop">paddingTop</a>
+  <a href="#landing-band-prop-paddingBottom">paddingBottom</a>
+  <a href="#landing-band-prop-topEdge">topEdge</a>
+  <a href="#landing-band-prop-bottomEdge">bottomEdge</a>
+  <a href="#landing-band-prop-edgeSize">edgeSize</a>
+  <a href="#landing-band-prop-topEdgeStart">topEdgeStart</a>
+  <a href="#landing-band-prop-bottomEdgeStart">bottomEdgeStart</a>
+</nav>
+
+<ApiProperty anchor="landing-band-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
+  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-band-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surfaceAlt">
+  <p>Visual treatment. Accepts solid, surface, surfaceAlt, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-band-prop-variantMode" name="variantMode" valueType="RefOrValue&lt;ComponentVariantMode&gt;" defaultValue="stateless">
+  <p>Use stateless for content surfaces; stateful enables the treatment’s hover, focus and active styles. It does not add interaction handlers.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-band-prop-image" name="image" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Background image URL. It becomes a CSS background and has no accessible alternative text.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-band-prop-imageFit" name="imageFit" valueType="RefOrValue&lt;LandingBandImageFit&gt;" defaultValue="cover">
+  <p>Background sizing value: cover, contain, fill, none or scale-down are accepted by the type; CSS background-size reliably supports cover, contain and valid CSS sizes.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-band-prop-imagePosition" name="imagePosition" valueType="RefOrValue&lt;string&gt;" defaultValue="center">
+  <p>CSS background-position value, such as center or center top.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-band-prop-display" name="display" valueType="RefOrValue&lt;CSSProps['display']&gt;" defaultValue="flex">
+  <p>CSS display mode for the section.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-band-prop-alignItems" name="alignItems" valueType="RefOrValue&lt;CSSProps['alignItems']&gt;" defaultValue="start">
+  <p>CSS align-items for the band’s content.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-band-prop-justifyContent" name="justifyContent" valueType="RefOrValue&lt;CSSProps['justifyContent']&gt;" defaultValue="center">
+  <p>CSS justify-content for the band’s content.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-band-prop-height" name="height" valueType="RefOrValue&lt;string&gt;" defaultValue="16rem">
+  <p>CSS minimum height, not a fixed height. Content can make the band taller.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-band-prop-marginTop" name="marginTop" valueType="RefOrValue&lt;string&gt;" defaultValue="0">
+  <p>CSS top margin.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-band-prop-marginBottom" name="marginBottom" valueType="RefOrValue&lt;string&gt;" defaultValue="0">
+  <p>CSS bottom margin.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-band-prop-paddingTop" name="paddingTop" valueType="RefOrValue&lt;string&gt;" defaultValue="1em">
+  <p>Top padding; a slanted top edge adds edgeSize automatically.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-band-prop-paddingBottom" name="paddingBottom" valueType="RefOrValue&lt;string&gt;" defaultValue="1em">
+  <p>Bottom padding; a slanted bottom edge adds edgeSize automatically.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-band-prop-topEdge" name="topEdge" valueType="RefOrValue&lt;LandingBandEdge&gt;" defaultValue="flat">
+  <p>Top clipping edge: flat, slant-up or slant-down.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-band-prop-bottomEdge" name="bottomEdge" valueType="RefOrValue&lt;LandingBandEdge&gt;" defaultValue="flat">
+  <p>Bottom clipping edge: flat, slant-up or slant-down.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-band-prop-edgeSize" name="edgeSize" valueType="RefOrValue&lt;string&gt;" defaultValue="4rem">
+  <p>Vertical depth of the slant, expressed as a CSS length.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-band-prop-topEdgeStart" name="topEdgeStart" valueType="RefOrValue&lt;string&gt;" defaultValue="0%">
+  <p>Horizontal start of the top diagonal as a CSS length or percentage.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-band-prop-bottomEdgeStart" name="bottomEdgeStart" valueType="RefOrValue&lt;string&gt;" defaultValue="0%">
+  <p>Horizontal start of the bottom diagonal as a CSS length or percentage.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p><strong>Default slot:</strong> band content. Register defineLandingBandComponent. The active doc layout variables keep full-width edges aligned as sidebars open and close.</p>
+</div>
+
+
+
+## Related components
+
+- [LandingSection](/components/landing/landing-section/)
+- [SectionHeader](/components/layout/section-header/)
+- [CtaSection](/components/landing/cta-section/)

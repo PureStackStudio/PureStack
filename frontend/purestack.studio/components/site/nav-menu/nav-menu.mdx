@@ -1,0 +1,205 @@
+---
+title: NavMenu
+description: "A hierarchical site navigation panel with active-page state, collapsible groups and optional search and account controls."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 40
+  icon: tabler:components
+---
+
+# Nav<wbr/>Menu
+
+A hierarchical site navigation panel with active-page state, collapsible groups and optional search and account controls.
+
+<Badge tone="accent" variant="surface">NavMenu</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/navMenu/navMenu.ts) · [API reference](#api-reference)
+
+
+
+## A focused navigation tree
+
+The current page opens its ancestor group. Expand Layout to inspect another branch; links open the real guides within the preview.
+
+<Tabs group="nav-menu-sample-1" selectedTab="nav-menu-sample-1-preview" ariaLabel="A focused navigation tree example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="nav-menu-sample-1-preview" label="Preview">
+    <NavMenuPreview />
+  </TabPane>
+  <TabPane id="nav-menu-sample-1-source-0" label="preview.mdx">
+```html
+<NavMenuPreview />
+```
+  </TabPane>
+  <TabPane id="nav-menu-sample-1-source-1" label="preview.ts">
+```typescript
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import type { SiteConfig, TsSsgContext } from '@purestack/ts-common'
+import { defineComponents } from '@purestack/ts-components'
+import {
+  buildMenuRuntimeScript,
+  buildNavMenuScript,
+  buildThemeSwitchScript,
+} from '@purestack/ts-page-scripts'
+import { renderApp } from '@purestack/ts-render'
+import { getSvgIcon } from '@purestack/ts-svg-icons'
+import { withBasePath } from '@purestack/ts-util'
+import { defineComponent, html } from 'regor'
+
+export interface NavMenuPreview {
+  previewHref: string
+}
+
+const navMenuPreviewTemplate = html`<iframe
+  title="NavMenu isolated example"
+  class="w-full rounded-md b-1 b-subtle"
+  style="height: 400px"
+  :src="previewHref"
+></iframe>`
+const exampleTemplate = html`<NavMenu />`
+
+function createNavMenuPreviewDocument(site: SiteConfig): string {
+  const context: TsSsgContext = {
+    site: { ...site },
+    pageInfo: {
+      relPath: 'components/site/nav-menu/nav-menu.mdx',
+      urlPath: '/components/site/nav-menu/',
+      frontmatter: {
+        template: 'doc',
+        hidden: false,
+        draft: false,
+        nav: { hidden: false },
+        layout: {
+          showNav: false,
+          showToc: false,
+          showFooter: false,
+          fullWidth: false,
+          navMode: 'sidebar',
+          tocCollapsed: false,
+        },
+      },
+    },
+    theme: site.style.theme,
+    basePath: site.basePath,
+    locales: site.i18n.locales,
+    defaultLocale: site.i18n.defaultLocale,
+    resolveLocaleHref: () => undefined,
+    resolvePublicHref: (href) => withBasePath(site.basePath, href),
+    recordScriptEntrypoint: () => {},
+    recordRuntimeEmbed: () => {},
+  }
+  context.site.pagefind = { ...context.site.pagefind, enabled: false }
+  context.site.auth = { ...context.site.auth, enabled: false }
+  context.pageInfo = {
+    ...context.pageInfo,
+    urlPath: '/components/site/nav-menu/',
+  }
+  context.navigation = {
+    root: '/components/',
+    items: [
+      {
+        title: 'Navigation',
+        children: [
+          { title: 'NavMenu', url: '/components/site/nav-menu/' },
+          { title: 'NavList', url: '/components/site/nav-list/' },
+        ],
+      },
+      {
+        title: 'Layout',
+        children: [
+          { title: 'Flex', url: '/components/layout/flex/' },
+          { title: 'Grid', url: '/components/layout/grid/' },
+        ],
+      },
+    ],
+  }
+  const body = renderApp(exampleTemplate, {
+    components: defineComponents(getSvgIcon),
+    context,
+  })
+  const scripts =
+    buildThemeSwitchScript(['light', 'dark']) +
+    buildNavMenuScript() +
+    buildMenuRuntimeScript()
+  const documentHtml = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="${withBasePath(site.basePath, '/assets/site.css')}" data-theme="light"><link rel="stylesheet" href="${withBasePath(site.basePath, '/assets/site.dark.css')}" data-theme="dark"></head><body class="template-doc tone--neutral p-3" data-pagefind-ignore="all"><main class="doc-content">${body}</main><script>${scripts}</script></body></html>`
+  return documentHtml
+}
+
+export function defineNavMenuPreviewComponent(site: SiteConfig) {
+  return defineComponent<NavMenuPreview>(navMenuPreviewTemplate, {
+    context: () => ({
+      previewHref: withBasePath(
+        site.basePath,
+        '/components/site/nav-menu/preview.html',
+      ),
+    }),
+  })
+}
+
+export async function writeNavMenuPreview(site: SiteConfig) {
+  const output = path.join(
+    site.outDir,
+    'components',
+    'site',
+    'nav-menu',
+    'preview.html',
+  )
+  const documentHtml = createNavMenuPreviewDocument(site)
+  await fs.mkdir(path.dirname(output), { recursive: true })
+  await fs.writeFile(output, documentHtml, 'utf8')
+}
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+NavMenu builds active and open state from the current URL when rendered. Groups use native details and summary. The standard navigation runtime handles remembered group state and doc-layout panel controls. Use NavList when you already have prepared row state and need only the list.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">NavMenu contract</p>
+  <p>NavMenu items and tone are resolved at creation. The SSG context supplies navigation, current URL, search configuration and authentication configuration.</p>
+</div>
+
+<nav class="api-index" aria-label="NavMenu properties">
+  <a href="#nav-menu-prop-items">items</a>
+  <a href="#nav-menu-prop-tone">tone</a>
+  <a href="#nav-menu-prop-signInAvatarSrc">signInAvatarSrc</a>
+  <a href="#nav-menu-prop-signInAvatarAlt">signInAvatarAlt</a>
+</nav>
+
+<ApiProperty anchor="nav-menu-prop-items" name="items" valueType="NavItem[]" defaultValue="context navigation items, then global">
+  <p>NavItem[] with title, optional url, children, icon and other navigation metadata. Active state is derived from the page URL.</p>
+</ApiProperty>
+
+<ApiProperty anchor="nav-menu-prop-tone" name="tone" valueType="SemanticTone" defaultValue="inherited">
+  <p>Panel tone. Active links are assigned accent; other items are assigned neutral by the state builder.</p>
+</ApiProperty>
+
+<ApiProperty anchor="nav-menu-prop-signInAvatarSrc" name="signInAvatarSrc" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Avatar image forwarded to the account control.</p>
+</ApiProperty>
+
+<ApiProperty anchor="nav-menu-prop-signInAvatarAlt" name="signInAvatarAlt" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Avatar alternative text forwarded to the account control.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p>No slots. Register defineNavigationComponents with BtnLink, Icon, SignIn and SearchBox dependencies. NavItem is an internal row component that reads its item from the surrounding list context.</p>
+</div>
+
+
+
+## Related components
+
+- [NavList](/components/site/nav-list/)
+- [PageToc](/components/site/page-toc/)
+- [TopBar](/components/site/top-bar/)

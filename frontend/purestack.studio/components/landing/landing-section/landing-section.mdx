@@ -1,0 +1,166 @@
+---
+title: LandingSection
+description: "Introduce a section and arrange its content beside a clear heading at larger breakpoints."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 20
+  icon: tabler:components
+---
+
+# Landing<wbr/>Section
+
+Introduce a section and arrange its content beside a clear heading at larger breakpoints.
+
+<Badge tone="accent" variant="surface">LandingSection</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts) · [API reference](#api-reference)
+
+
+
+## Heading and feature
+
+The heading counts as a grid item. At lg, it shares the row with the feature card.
+
+<Tabs group="landing-section-sample-1" selectedTab="landing-section-sample-1-preview" ariaLabel="Heading and feature example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="landing-section-sample-1-preview" label="Preview">
+    <LandingSection
+      eyebrow="WORKFLOW"
+      title="From source to interface"
+      subtitle="A focused way to build."
+      columnsLg="2"
+      alignItems="center"
+    >
+      <FeatureCard
+        title="Own every piece"
+        summary="Keep source, state and styles understandable."
+        tone="accent"
+        icon="lucide:check"
+      />
+    </LandingSection>
+  </TabPane>
+  <TabPane id="landing-section-sample-1-source-0" label="split-section.mdx">
+```html
+<LandingSection
+  eyebrow="WORKFLOW"
+  title="From source to interface"
+  subtitle="A focused way to build."
+  columnsLg="2"
+  alignItems="center"
+>
+  <FeatureCard
+    title="Own every piece"
+    summary="Keep source, state and styles understandable."
+    tone="accent"
+    icon="lucide:check"
+  />
+</LandingSection>
+```
+  </TabPane>
+</Tabs>
+
+## Content without a heading
+
+Omit the text props when the surrounding page already introduces the section.
+
+<Tabs group="landing-section-sample-2" selectedTab="landing-section-sample-2-preview" ariaLabel="Content without a heading example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="landing-section-sample-2-preview" label="Preview">
+    <LandingSection variant="surface" tone="neutral">
+      <Grid columns="1" columnsSm="2">
+        <Panel variant="outline" bodyClass="p-3">Write content in MDX.</Panel>
+        <Panel variant="outline" bodyClass="p-3">Add interactivity where it helps.</Panel>
+      </Grid>
+    </LandingSection>
+  </TabPane>
+  <TabPane id="landing-section-sample-2-source-0" label="content-section.mdx">
+```html
+<LandingSection variant="surface" tone="neutral">
+  <Grid columns="1" columnsSm="2">
+    <Panel variant="outline" bodyClass="p-3">Write content in MDX.</Panel>
+    <Panel variant="outline" bodyClass="p-3">Add interactivity where it helps.</Panel>
+  </Grid>
+</LandingSection>
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+Use titleTag to fit the heading into the document. The base layout is always one column. Both columns and columnsLg configure the large-screen layout, with columnsLg taking precedence.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">LandingSection contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="LandingSection properties">
+  <a href="#landing-section-prop-eyebrow">eyebrow</a>
+  <a href="#landing-section-prop-title">title</a>
+  <a href="#landing-section-prop-subtitle">subtitle</a>
+  <a href="#landing-section-prop-titleTag">titleTag</a>
+  <a href="#landing-section-prop-tone">tone</a>
+  <a href="#landing-section-prop-variant">variant</a>
+  <a href="#landing-section-prop-variantMode">variantMode</a>
+  <a href="#landing-section-prop-columns">columns</a>
+  <a href="#landing-section-prop-columnsLg">columnsLg</a>
+  <a href="#landing-section-prop-alignItems">alignItems</a>
+</nav>
+
+<ApiProperty anchor="landing-section-prop-eyebrow" name="eyebrow" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Short context above the heading, such as a category or release label.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-section-prop-title" name="title" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Visible heading. Choose a short title that identifies the content or task.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-section-prop-subtitle" name="subtitle" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Supporting text beneath the title.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-section-prop-titleTag" name="titleTag" valueType="RefOrValue&lt;LandingTitleTag&gt;" defaultValue="h2">
+  <p>Heading element. Accepts h1–h6, p, div or span; invalid values fall back to h2. Match the surrounding document hierarchy.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-section-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
+  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-section-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="none">
+  <p>Visual treatment. Accepts solid, surface, surfaceAlt, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-section-prop-variantMode" name="variantMode" valueType="RefOrValue&lt;ComponentVariantMode&gt;" defaultValue="stateless">
+  <p>Use stateless for content surfaces; stateful enables the treatment’s hover, focus and active styles. It does not add interaction handlers.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-section-prop-columns" name="columns" valueType="RefOrValue&lt;number | string&gt;" defaultValue="not set">
+  <p>Fallback large-breakpoint column definition. Base columns remain 1.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-section-prop-columnsLg" name="columnsLg" valueType="RefOrValue&lt;number | string&gt;" defaultValue="columns, then 1">
+  <p>Large-breakpoint column definition. Includes the optional SectionHeader as a grid item.</p>
+</ApiProperty>
+
+<ApiProperty anchor="landing-section-prop-alignItems" name="alignItems" valueType="RefOrValue&lt;GridAlignItems&gt;" defaultValue="start">
+  <p>Grid alignment: stretch, start, center or end.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p><strong>Default slot:</strong> section grid items after the optional header. Register defineLandingSectionComponent plus Panel, Grid and SectionHeader.</p>
+</div>
+
+
+
+## Related components
+
+- [SectionHeader](/components/layout/section-header/)
+- [FeatureCard](/components/landing/feature-card/)
+- [Grid](/components/layout/grid/)

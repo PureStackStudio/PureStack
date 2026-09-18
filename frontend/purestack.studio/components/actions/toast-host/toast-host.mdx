@@ -1,0 +1,153 @@
+---
+title: ToastHost
+description: "Display dismissible notifications from a ToastStore, with semantic tones and predictable lifetimes."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 70
+  icon: tabler:components
+---
+
+# Toast<wbr/>Host
+
+Display dismissible notifications from a ToastStore, with semantic tones and predictable lifetimes.
+
+<Badge tone="accent" variant="surface">ToastHost</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/toast/toastHost.ts) · [API reference](#api-reference)
+
+
+
+## Timed and persistent feedback
+
+Success disappears after five seconds; warning after ten. The error stays until dismissed. Notifications appear at the top of the viewport.
+
+<Tabs group="toast-host-sample-1" selectedTab="toast-host-sample-1-preview" ariaLabel="Timed and persistent feedback example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="toast-host-sample-1-preview" label="Preview">
+    <RegorApp id="toast-host-demo" src="./playground.ts"/>
+  </TabPane>
+  <TabPane id="toast-host-sample-1-source-0" label="playground.mdx">
+```html
+<RegorApp id="toast-host-demo" src="./playground.ts"/>
+```
+  </TabPane>
+  <TabPane id="toast-host-sample-1-source-1" label="playground.ts">
+```typescript
+import {
+  defineButtonComponents,
+  defineFlexComponents,
+  defineFormComponents,
+  defineIconComponents,
+  definePanelComponents,
+  defineToastComponents,
+  ToastStore,
+} from '@purestack/ts-components'
+import { iconoir_xmark } from '@purestack/ts-svg-icons'
+import { createApp, defineComponent, html } from 'regor'
+
+export interface ToastHostExample {
+  notifications: ToastStore
+  save: () => void
+  warn: () => void
+  fail: () => void
+  clear: () => void
+}
+
+const toastHostExampleTemplate = html`<Flex direction="column">
+  <ToastHost :items="notifications.items" :dismiss="notifications.dismiss" />
+  <Flex wrap="true">
+    <Btn tone="success" @click="save">Save local draft</Btn>
+    <Btn tone="warning" variant="outline" @click="warn">Show review reminder</Btn>
+    <Btn tone="danger" variant="outline" @click="fail">Show persistent error</Btn>
+    <Btn variant="link" @click="clear">Clear notifications</Btn>
+  </Flex>
+  <FormStatus>{{ notifications.items.length }} active notifications</FormStatus>
+</Flex>`
+
+function createToastHostExample(): ToastHostExample {
+  const notifications = new ToastStore()
+  return {
+    notifications,
+    save: () => notifications.notify('Local draft saved.', 'success'),
+    warn: () =>
+      notifications.notify('Review the content before publishing.', 'warning'),
+    fail: () =>
+      notifications.notify(
+        'Example build failed. Dismiss when acknowledged.',
+        'danger',
+      ),
+    clear: notifications.clear,
+  }
+}
+
+const component = defineComponent<ToastHostExample>(toastHostExampleTemplate, {
+  context: createToastHostExample,
+})
+const icons: Record<string, string> = { 'iconoir:xmark': iconoir_xmark }
+
+createApp(
+  {
+    components: {
+      ToastHostExample: component,
+
+      ...defineToastComponents(),
+      ...definePanelComponents(),
+      ...defineFlexComponents(),
+      ...defineButtonComponents(),
+      ...defineFormComponents(),
+      ...defineIconComponents((name) => icons[name] ?? ''),
+    },
+  },
+  { selector: 'app#toast-host-demo', template: html`<ToastHostExample />` },
+)
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+Mount one host per store. ToastHost positions notices over the page and provides a labelled dismiss button. It does not create a live region itself; this example uses a FormStatus to announce the active count. Keep critical information in the page as well, so a disappearing toast is not the only record.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">ToastHost contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="ToastHost properties">
+  <a href="#toast-host-prop-items">items</a>
+  <a href="#toast-host-prop-dismiss">dismiss</a>
+</nav>
+
+<ApiProperty anchor="toast-host-prop-items" name="items" valueType="SRef&lt;ToastItem[]&gt;" defaultValue="required">
+  <p>ToastStore.items: a shallow ref of ToastItem[] with id, message and SemanticTone.</p>
+</ApiProperty>
+
+<ApiProperty anchor="toast-host-prop-dismiss" name="dismiss" valueType="ToastStore['dismiss']" defaultValue="required">
+  <p>ToastStore.dismiss callback. Receives the ID of the notification to remove.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p>No slots. Register defineToastComponents with Flex, Panel, Btn and Icon dependencies. Include iconoir:xmark in the icon resolver.</p>
+</div>
+
+### ToastStore
+
+| Method | Behavior |
+| --- | --- |
+| `notify(message, tone?)` | Adds a toast. Default tone is info; empty messages are ignored. |
+| `dismiss(id)` | Removes one toast and clears its timer. |
+| `clear()` | Removes all toasts and clears all timers. |
+
+Info and success expire after 5 seconds, warning after 10 seconds. Other tones persist. Call clear when a long-lived app removes the host.
+
+## Related components
+
+- [FormStatus](/components/forms/form-status/)
+- [AlertBox](/components/actions/alert-box/)

@@ -1,0 +1,216 @@
+---
+title: SignIn
+description: "An account-menu entry point with signed-in and signed-out presentation, optional avatars and replaceable destinations."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 100
+  icon: tabler:components
+---
+
+# Sign<wbr/>In
+
+An account-menu entry point with signed-in and signed-out presentation, optional avatars and replaceable destinations.
+
+<Badge tone="accent" variant="surface">SignIn</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/signIn/signIn.ts) · [API reference](#api-reference)
+
+
+
+## An account menu with custom destinations
+
+The isolated preview enables the account component locally and uses working documentation links in its default slot.
+
+<Tabs group="sign-in-sample-1" selectedTab="sign-in-sample-1-preview" ariaLabel="An account menu with custom destinations example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="sign-in-sample-1-preview" label="Preview">
+    <SignInPreview />
+  </TabPane>
+  <TabPane id="sign-in-sample-1-source-0" label="preview.mdx">
+```html
+<SignInPreview />
+```
+  </TabPane>
+  <TabPane id="sign-in-sample-1-source-1" label="preview.ts">
+```typescript
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import type { SiteConfig, TsSsgContext } from '@purestack/ts-common'
+import { defineComponents } from '@purestack/ts-components'
+import {
+  buildMenuRuntimeScript,
+  buildThemeSwitchScript,
+} from '@purestack/ts-page-scripts'
+import { renderApp } from '@purestack/ts-render'
+import { getSvgIcon } from '@purestack/ts-svg-icons'
+import { withBasePath } from '@purestack/ts-util'
+import { defineComponent, html } from 'regor'
+
+export interface SignInPreview {
+  previewHref: string
+}
+
+const signInPreviewTemplate = html`<iframe
+  title="SignIn isolated example"
+  class="w-full rounded-md b-1 b-subtle"
+  style="height: 340px"
+  :src="previewHref"
+></iframe>`
+const exampleTemplate = html`<Flex align="center" justify="between">
+  <span>Example workspace</span>
+  <SignIn label="Workspace account" tone="neutral">
+    <Flex
+      container="nav"
+      direction="column"
+      aria-label="Example account destinations"
+    >
+      <BtnLink href="/components/" variant="subtleBtn">Component library</BtnLink>
+      <BtnLink href="/components/site/site-logo/" variant="subtleBtn">
+        Workspace branding
+      </BtnLink>
+    </Flex>
+  </SignIn>
+</Flex>
+<p class="mt-4">
+  Open the account menu. These custom destinations are documentation links; this
+  preview does not sign you in.
+</p>`
+
+function createSignInPreviewDocument(site: SiteConfig): string {
+  const context: TsSsgContext = {
+    site: { ...site },
+    pageInfo: {
+      relPath: 'components/site/sign-in/sign-in.mdx',
+      urlPath: '/components/site/sign-in/',
+      frontmatter: {
+        template: 'doc',
+        hidden: false,
+        draft: false,
+        nav: { hidden: false },
+        layout: {
+          showNav: false,
+          showToc: false,
+          showFooter: false,
+          fullWidth: false,
+          navMode: 'sidebar',
+          tocCollapsed: false,
+        },
+      },
+    },
+    theme: site.style.theme,
+    basePath: site.basePath,
+    locales: site.i18n.locales,
+    defaultLocale: site.i18n.defaultLocale,
+    resolveLocaleHref: () => undefined,
+    resolvePublicHref: (href) => withBasePath(site.basePath, href),
+    recordScriptEntrypoint: () => {},
+    recordRuntimeEmbed: () => {},
+  }
+  context.site.auth = { ...context.site.auth, enabled: true, signUp: false }
+  const body = renderApp(exampleTemplate, {
+    components: defineComponents(getSvgIcon),
+    context,
+  })
+  const scripts =
+    buildThemeSwitchScript(['light', 'dark']) + buildMenuRuntimeScript()
+  const documentHtml = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="${withBasePath(site.basePath, '/assets/site.css')}" data-theme="light"><link rel="stylesheet" href="${withBasePath(site.basePath, '/assets/site.dark.css')}" data-theme="dark"></head><body class="template-doc tone--neutral p-3" data-pagefind-ignore="all"><main class="doc-content">${body}</main><script>${scripts}</script></body></html>`
+  return documentHtml
+}
+
+export function defineSignInPreviewComponent(site: SiteConfig) {
+  return defineComponent<SignInPreview>(signInPreviewTemplate, {
+    context: () => ({
+      previewHref: withBasePath(
+        site.basePath,
+        '/components/site/sign-in/preview.html',
+      ),
+    }),
+  })
+}
+
+export async function writeSignInPreview(site: SiteConfig) {
+  const output = path.join(
+    site.outDir,
+    'components',
+    'site',
+    'sign-in',
+    'preview.html',
+  )
+  const documentHtml = createSignInPreviewDocument(site)
+  await fs.mkdir(path.dirname(output), { recursive: true })
+  await fs.writeFile(output, documentHtml, 'utf8')
+}
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+The component renders only when site.auth.enabled is true. It does not authenticate users itself. The standard auth-state hint controls signed-in versus signed-out presentation; the server remains responsible for session authorization. The native summary opens with Enter or Space, and the menu runtime handles Escape and outside clicks.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">SignIn contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="SignIn properties">
+  <a href="#sign-in-prop-avatarSrc">avatarSrc</a>
+  <a href="#sign-in-prop-avatarAlt">avatarAlt</a>
+  <a href="#sign-in-prop-icon">icon</a>
+  <a href="#sign-in-prop-accountIcon">accountIcon</a>
+  <a href="#sign-in-prop-label">label</a>
+  <a href="#sign-in-prop-tone">tone</a>
+  <a href="#sign-in-prop-variant">variant</a>
+  <a href="#sign-in-prop-variantMode">variantMode</a>
+</nav>
+
+<ApiProperty anchor="sign-in-prop-avatarSrc" name="avatarSrc" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Signed-in avatar URL. With no avatar, accountIcon is used.</p>
+</ApiProperty>
+
+<ApiProperty anchor="sign-in-prop-avatarAlt" name="avatarAlt" valueType="RefOrValue&lt;string&gt;" defaultValue="empty string">
+  <p>Avatar image alternative text. Decorative account imagery can keep the empty default.</p>
+</ApiProperty>
+
+<ApiProperty anchor="sign-in-prop-icon" name="icon" valueType="RefOrValue&lt;string&gt;" defaultValue="lucide:log-in">
+  <p>Signed-out trigger icon.</p>
+</ApiProperty>
+
+<ApiProperty anchor="sign-in-prop-accountIcon" name="accountIcon" valueType="RefOrValue&lt;string&gt;" defaultValue="tabler:user-filled">
+  <p>Signed-in fallback icon.</p>
+</ApiProperty>
+
+<ApiProperty anchor="sign-in-prop-label" name="label" valueType="RefOrValue&lt;string&gt;" defaultValue="Account">
+  <p>Hidden trigger text. The summary currently has the fixed accessible label Account menu.</p>
+</ApiProperty>
+
+<ApiProperty anchor="sign-in-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
+  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+</ApiProperty>
+
+<ApiProperty anchor="sign-in-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surfaceAlt">
+  <p>Account menu panel treatment.</p>
+</ApiProperty>
+
+<ApiProperty anchor="sign-in-prop-variantMode" name="variantMode" valueType="RefOrValue&lt;ComponentVariantMode&gt;" defaultValue="stateless">
+  <p>Use stateless for content surfaces; stateful enables the treatment’s hover, focus and active styles. It does not add interaction handlers.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p><strong>avatar:</strong> custom signed-in trigger content. <strong>default slot:</strong> replaces the generated account links. Default routes are /signin/, /signup/, /account/, /account/settings/ and /signout/. Register defineSignInComponents with Panel, Flex, BtnLink and Icon.</p>
+</div>
+
+
+
+## Related components
+
+- [TopBar](/components/site/top-bar/)
+- [BtnGroupDropDown](/components/actions/btn-group-drop-down/)
+- [SiteLogo](/components/site/site-logo/)

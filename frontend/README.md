@@ -73,11 +73,26 @@ repository workflow instead of assuming an npm release already exists. Update
 the release announcement, quick start, and availability FAQ when publishing.
 GitHub links target `PureStackStudio/PureStack` and the `main` branch.
 
-## Component documentation pilot
+## Component documentation
 
-Open `/components/`, `/components/buttons/`, `/components/btn-link/`,
-`/components/btn-group/`, `/components/btn-group-drop-down/`, `/components/badge/`, `/components/tabs/`, and
-`/components/modal/`. These pages use `template: doc` directly, the directory's
+The component catalog is organized into seven category folders, each with an
+`index.mdx` overview and a matching group in the generated navigation:
+
+- `actions/`: buttons, grouped actions, badges, alerts and notifications.
+- `layout/`: layout primitives, content surfaces, icons, tabs and dialogs.
+- `forms/`: forms, fields, autocomplete, rich text and files.
+- `data/`: charts and virtualized lists and tables.
+- `landing/`: product sections, metrics, comparisons and pricing.
+- `site/`: branding, navigation, search, themes, accounts and consent.
+- `runtime/`: RegorApp and PageScript browser entry points.
+
+Keep each component's MDX page and sample TypeScript files together under its
+category, for example `components/forms/app-form/app-form.mdx`. URLs follow
+the same hierarchy: `/components/forms/app-form/`.
+
+Open `/components/`, `/components/actions/buttons/`, `/components/actions/btn-link/`,
+`/components/actions/btn-group/`, `/components/actions/btn-group-drop-down/`, `/components/actions/badge/`, `/components/layout/tabs/`, and
+`/components/layout/modal/`. These pages use `template: doc` directly, the directory's
 standard `TopBar` header, and the built-in `NavMenu` and `PageToc`.
 
 Author guidance, examples, code fences, and API tables in the MDX files under
@@ -91,9 +106,9 @@ consistent type/default header. Property descriptions and fenced examples stay
 in MDX; native `ExpandablePanel` components list accepted tones and variants.
 The default page outline links to the API groups, slots, events, and attributes.
 
-The Buttons page lives in `components/buttons/buttons.mdx`, alongside
+The Buttons page lives in `components/actions/buttons/buttons.mdx`, alongside
 `button-playground.ts`, `collection.ts`, and `project-form.ts`.
-The folder's matching page name keeps its URL at `/components/buttons/`.
+The folder's matching page name keeps its URL at `/components/actions/buttons/`.
 The previews run these neighboring TypeScript files directly.
 Their source tabs contain those same
 files; keep each fenced source block identical to its browser entry when editing.
