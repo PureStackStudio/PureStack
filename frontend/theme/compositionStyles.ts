@@ -5,7 +5,6 @@ import { studioTypography } from './studioSkin'
 /** Spacing at composition boundaries; component variants own their visual states. */
 export function registerCompositionStyles(root: Style, palette: ThemePalette) {
   const tone = palette.semanticTone
-  root.select(':scope').css({ colorScheme: 'dark' })
   root
     .select('body.studio')
     .css({ background: tone.neutral.canvas, color: tone.neutral.text.default })

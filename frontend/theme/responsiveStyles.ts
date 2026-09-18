@@ -260,7 +260,7 @@ export function registerResponsiveStyles(root: Style, palette: ThemePalette) {
       padding: '13px 20px 20px',
       background: tone.accent.canvas,
       borderBottom: `1px solid ${tone.accent.surface.rest.border}`,
-      boxShadow: '0 20px 30px #0005',
+      boxShadow: palette.effect.floatingShadow,
     })
   root
     .media(mediaBelow(BREAKPOINTS.sm))
@@ -268,7 +268,7 @@ export function registerResponsiveStyles(root: Style, palette: ThemePalette) {
     .css({
       padding: '12px 3px',
       fontSize: palette.font.size.body,
-      borderBottom: '1px solid #ffffff08',
+      borderBottom: `1px solid ${tone.neutral.border.subtle}`,
     })
   root.media(mediaBelow(BREAKPOINTS.sm)).select('.studio .hero').css({
     paddingTop: '43px',

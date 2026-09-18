@@ -16,6 +16,9 @@ import { registerWorkbenchStyles } from './workbenchStyles'
 export function registerStudioStyles() {
   themes.forEach((theme, palette) => {
     const root = styleBuilder.get(theme)
+    root
+      .select(':scope')
+      .css({ colorScheme: theme === 'light' ? 'light' : 'dark' })
     registerFoundationStyles(root, palette)
     registerNavigationStyles(root, palette)
     registerHeroStyles(root, palette)

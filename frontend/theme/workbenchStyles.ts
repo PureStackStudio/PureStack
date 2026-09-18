@@ -152,7 +152,7 @@ export function registerWorkbenchStyles(root: Style, palette: ThemePalette) {
     borderRadius: palette.radii.md,
     background: tone.accent.surfaceAlt.rest.background,
     color: tone.accent.surface.hover.text,
-    boxShadow: '0 8px 25px #0005',
+    boxShadow: palette.effect.softShadow,
     opacity: '0',
     pointerEvents: 'none',
     fontSize: palette.font.size.sm,

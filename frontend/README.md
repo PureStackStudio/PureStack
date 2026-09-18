@@ -38,6 +38,8 @@ yarn frontend:publish
 | `components/studioComponents.ts` | Explicit registration of the Studio components |
 | `components/studio*.ts` | One file per component, with its exported interface, named template, and typed definition |
 | `theme/studioSkin.ts` | Dark studio skin using the standard semantic palette contract |
+| `theme/studioSkinLight.ts` | Light studio palette with warm white surfaces, green accents, and ten semantic tones |
+| `theme/studioSkinShared.ts` | Shared typography and corner radii for both studio modes |
 | `theme/studioStyles.ts` | Registers the page's typed style extensions in PureStack's generated theme stylesheets |
 | `theme/*Styles.ts` | Layout, typography, responsive rules, and component composition spacing |
 | `purestack.studio/siteConfig.json` | SEO, social preview, assets, and output paths |
@@ -52,7 +54,9 @@ framework's `Tabs` and `TabPane`, including its existing bundled runtime and
 native radio fallback. FAQ items use `ExpandablePanel`.
 
 Colors, component states, fonts, and radii come from the registered `studio` skin.
-Both system modes use the dark launch identity. Buttons, panels, badges, and icon
+Light mode uses warm white and sage surfaces with deep green accents; dark mode
+keeps the charcoal and mint identity. The standard theme switcher respects the
+saved choice or system preference. Buttons, panels, badges, and icon
 frames use standard semantic tones and variants; chart colors reference the same
 palette variables. Page-specific layout and decorative styles use `styleBuilder`
 and `themes.forEach`, with framework breakpoint tokens. They are emitted into

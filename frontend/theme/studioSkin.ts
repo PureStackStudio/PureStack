@@ -4,30 +4,13 @@ import {
   themeSkins,
 } from '@purestack/ts-style'
 import { type DeepPartial, merge } from '@purestack/ts-util'
+import { createStudioLightPalette } from './studioSkinLight'
+import { studioSkinShared } from './studioSkinShared'
 
-function createStudioPalette(mode: 'dark' | 'light'): ThemePalette {
-  return merge(themeSkins.standard.create(['lightgreen'])[mode], {
+function createStudioDarkPalette(): ThemePalette {
+  return merge(themeSkins.standard.create(['lightgreen']).dark, {
+    ...studioSkinShared,
     accent: '#9be7ba',
-    font: {
-      family: {
-        base: "'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif",
-      },
-      size: {
-        xxxs: '0.5625rem',
-        xxs: '0.625rem',
-        xs: '0.6875rem',
-        sm: '0.75rem',
-        body: '0.875rem',
-        h6: '1rem',
-        h5: '1.0625rem',
-        h4: '1.1875rem',
-        h3: '1.5rem',
-        h2: '2.125rem',
-        h1: '2.6875rem',
-        display: '5rem',
-      },
-    },
-    //radii: { sm: '4px', md: '6px', lg: '8px' },
     effect: {
       panelShadow: 'none',
       panelShadowStrong: 'none',
@@ -167,10 +150,10 @@ function createStudioPalette(mode: 'dark' | 'light'): ThemePalette {
 export function registerStudioSkin() {
   registerSkin('studio', {
     create: () => ({
-      light: createStudioPalette('light'),
-      dark: createStudioPalette('dark'),
-      light2: themeSkins.standard.create(['green']).light,
-      dark2: themeSkins.standard.create(['green']).dark,
+      light: createStudioLightPalette(),
+      dark: createStudioDarkPalette(),
+      //light2: themeSkins.standard.create(['green']).light,
+      //dark2: themeSkins.standard.create(['green']).dark,
     }),
   })
 }

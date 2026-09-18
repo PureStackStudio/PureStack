@@ -23,7 +23,7 @@ const templates: PageTemplateMap = {
   studio: ({ head, bodyHtml, headerHtml, footerHtml }) => {
     head.push(h('style').raw(card.toCSS()))
     return h('html')
-      .attr({ lang: 'en', 'data-theme': 'dark', 'data-theme-ready': '' })
+      .attr({ lang: 'en' })
       .push(
         head,
         h('body')
