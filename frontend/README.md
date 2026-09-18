@@ -71,7 +71,8 @@ GitHub links target `PureStackStudio/PureStack` and the `main` branch.
 
 ## Component documentation pilot
 
-Open `/components/`, `/components/buttons/`, `/components/tabs/`, and
+Open `/components/`, `/components/buttons/`, `/components/btn-link/`,
+`/components/btn-group/`, `/components/btn-group-drop-down/`, `/components/badge/`, `/components/tabs/`, and
 `/components/modal/`. These pages use `template: doc` directly, the directory's
 standard `TopBar` header, and the built-in `NavMenu` and `PageToc`.
 
@@ -93,6 +94,13 @@ The previews run these neighboring TypeScript files directly.
 Their source tabs contain those same
 files; keep each fenced source block identical to its browser entry when editing.
 Static variant markup is formatted identically in its preview and source tab.
+BtnLink, BtnGroup, BtnGroupDropDown, and Badge follow this same folder structure and source-tab
+contract, with one standalone TypeScript file per interactive sample. Their
+playgrounds cover all public props; formatting controls, a release checklist,
+a selection toolbar, and split publishing actions demonstrate stateful composition.
+The contextual action panels build on `button-group-sample.mdx` in the SSG's sample guide.
+These pages reuse the shared API property rows
+and the default documentation navigation and TOC.
 The other pilot examples live in `docs/tabs.ts` and `docs/modal.ts`.
 Each module follows the standard `ts-components` pattern: exported context
 interfaces, individually named template strings, typed context factories, and

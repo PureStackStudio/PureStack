@@ -1,0 +1,684 @@
+---
+title: BtnGroup
+description: Arrange related actions with explicit alignment, responsive wrapping, and independent button state. Includes an interactive formatting example.
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 3
+  icon: tabler:layout-list
+---
+
+# BtnGroup
+
+Keep related actions together. BtnGroup handles spacing, alignment, and wrapping while each child keeps its own appearance and behavior.
+
+<Badge tone="accent" variant="surface">BtnGroup</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/btnGroup/btnGroup.ts) · [API reference](#api-reference)
+
+Use it for action rows, navigation choices, or a small set of formatting controls. Its two layout props work with [Btn](/components/buttons/), [BtnLink](/components/btn-link/), and other controls in the default slot.
+
+## Playground
+
+Change the alignment, then switch to the compact preview and toggle wrapping. Each action reports its label so you can check that the children remain interactive. These playground actions do not save or discard data.
+
+The preview gives the group the full available width; this makes alignment visible. Wrapping starts enabled here so the sample fits small screens. The component's default is `false`.
+
+<Tabs
+  group="group-playground-example"
+  selectedTab="group-playground-preview"
+  ariaLabel="group playground example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
+  <TabPane id="group-playground-preview" label="Preview">
+    <RegorApp id="group-playground" src="./group-playground.ts"/>
+  </TabPane>
+  <TabPane id="group-playground-mdx" label="group-playground.mdx">
+```html
+<RegorApp id="group-playground" src="./group-playground.ts"/>
+```
+  </TabPane>
+  <TabPane id="group-playground-ts" label="group-playground.ts">
+```typescript
+import {
+  type BtnGroupAlign,
+  defineBtnGroupComponents,
+  defineButtonComponents,
+  defineFlexComponents,
+  defineFormComponents,
+  defineFormSelectField,
+  defineGridComponents,
+  defineIconComponents,
+  type FormSelectOption,
+} from '@purestack/ts-components'
+import { lucide_chevron_down } from '@purestack/ts-svg-icons'
+import {
+  batch,
+  type ComputedRef,
+  computed,
+  createApp,
+  defineComponent,
+  html,
+  type Ref,
+  ref,
+} from 'regor'
+
+export interface GroupPlayground {
+  groupAlign: Ref<BtnGroupAlign>
+  allowWrap: Ref<boolean>
+  width: Ref<string>
+  previewStyle: ComputedRef<{ width: string; maxWidth: string }>
+  message: Ref<string>
+  alignments: FormSelectOption[]
+  widths: FormSelectOption[]
+  choose: (action: string) => void
+  reset: () => void
+}
+
+const groupPlaygroundTemplate = html`<Flex direction="column">
+  <Grid columns="1" columnsSm="2">
+    <FormSelectField id="group-align" label="Alignment" :model="groupAlign" :options="alignments"/>
+    <FormSelectField id="group-width" label="Preview width" :model="width" :options="widths"/>
+  </Grid>
+  <FormCheck id="group-wrap" label="Allow wrapping" :checked="allowWrap"/>
+  <div class="overflow-x-auto p-2" :style="previewStyle" tabindex="0" role="region" aria-label="Button group preview">
+    <BtnGroup :align="groupAlign" :wrap="allowWrap" class="w-full" role="group" aria-label="Draft actions">
+      <Btn tone="accent" @click="choose('Save draft')">Save draft</Btn>
+      <Btn variant="surface" @click="choose('Preview')">Preview</Btn>
+      <Btn variant="surface" @click="choose('Duplicate')">Duplicate</Btn>
+      <Btn variant="link" @click="choose('Discard')">Discard</Btn>
+    </BtnGroup>
+  </div>
+  <p class="m-0" role="status">{{ message }}</p>
+  <Btn variant="link" @click="reset">Reset playground</Btn>
+</Flex>`
+
+function createGroupPlayground(): GroupPlayground {
+  const groupAlign = ref<BtnGroupAlign>('start')
+  const allowWrap = ref(true)
+  const width = ref('100%')
+  const message = ref('Choose an action to test the group.')
+  const previewStyle = computed(() => ({ width: '100%', maxWidth: width() }))
+  return {
+    groupAlign,
+    allowWrap,
+    width,
+    message,
+    previewStyle,
+    alignments: ['start', 'center', 'end'].map((value) => ({
+      label: value,
+      value,
+    })),
+    widths: [
+      { label: 'Full width', value: '100%' },
+      { label: 'Compact (18rem)', value: '18rem' },
+    ],
+    choose: (action) => message(`${action} selected.`),
+    reset: () =>
+      batch(() => {
+        groupAlign('start')
+        allowWrap(true)
+        width('100%')
+        message('Choose an action to test the group.')
+      }),
+  }
+}
+
+const component = defineComponent<GroupPlayground>(groupPlaygroundTemplate, {
+  context: createGroupPlayground,
+})
+
+createApp(
+  {
+    components: {
+      GroupPlayground: component,
+      ...defineBtnGroupComponents(),
+      ...defineButtonComponents(),
+      ...defineFlexComponents(),
+      ...defineGridComponents(),
+      ...defineFormComponents(),
+      ...defineFormSelectField(),
+      ...defineIconComponents((name) => {
+        if (name !== 'lucide:chevron-down')
+          throw new Error(`Icon is not registered: ${name}`)
+        return lucide_chevron_down
+      }),
+    },
+  },
+  { selector: 'app#group-playground', template: html`<GroupPlayground/>` },
+)
+```
+  </TabPane>
+</Tabs>
+
+## Alignment
+
+Choose `start`, `center`, or `end`. BtnGroup is `inline-flex` and naturally fits its contents. Add `class="w-full"` when the group should fill its container and align children within that space.
+
+<Tabs
+  group="group-alignment-example"
+  selectedTab="group-alignment-preview"
+  ariaLabel="group alignment example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
+  <TabPane id="group-alignment-preview" label="Preview">
+    <Flex direction="column">
+      <div>
+        <p>Start</p>
+        <BtnGroup align="start" :wrap="true" class="w-full" role="group" aria-label="Start-aligned navigation">
+          <BtnLink href="/components/buttons/" tone="accent">Buttons</BtnLink>
+          <BtnLink href="/components/btn-link/" variant="surface">Links</BtnLink>
+        </BtnGroup>
+      </div>
+      <div>
+        <p>Center</p>
+        <BtnGroup align="center" :wrap="true" class="w-full" role="group" aria-label="Centered navigation">
+          <BtnLink href="/components/buttons/" tone="accent">Buttons</BtnLink>
+          <BtnLink href="/components/btn-link/" variant="surface">Links</BtnLink>
+        </BtnGroup>
+      </div>
+      <div>
+        <p>End</p>
+        <BtnGroup align="end" :wrap="true" class="w-full" role="group" aria-label="End-aligned navigation">
+          <BtnLink href="/components/buttons/" tone="accent">Buttons</BtnLink>
+          <BtnLink href="/components/btn-link/" variant="surface">Links</BtnLink>
+        </BtnGroup>
+      </div>
+    </Flex>
+  </TabPane>
+  <TabPane id="group-alignment-mdx" label="group-alignment.mdx">
+```html
+<Flex direction="column">
+  <div>
+    <p>Start</p>
+    <BtnGroup align="start" :wrap="true" class="w-full" role="group" aria-label="Start-aligned navigation">
+      <BtnLink href="/components/buttons/" tone="accent">Buttons</BtnLink>
+      <BtnLink href="/components/btn-link/" variant="surface">Links</BtnLink>
+    </BtnGroup>
+  </div>
+  <div>
+    <p>Center</p>
+    <BtnGroup align="center" :wrap="true" class="w-full" role="group" aria-label="Centered navigation">
+      <BtnLink href="/components/buttons/" tone="accent">Buttons</BtnLink>
+      <BtnLink href="/components/btn-link/" variant="surface">Links</BtnLink>
+    </BtnGroup>
+  </div>
+  <div>
+    <p>End</p>
+    <BtnGroup align="end" :wrap="true" class="w-full" role="group" aria-label="End-aligned navigation">
+      <BtnLink href="/components/buttons/" tone="accent">Buttons</BtnLink>
+      <BtnLink href="/components/btn-link/" variant="surface">Links</BtnLink>
+    </BtnGroup>
+  </div>
+</Flex>
+```
+  </TabPane>
+</Tabs>
+
+## Wrapping
+
+Enable `:wrap="true"` when a group needs to fit a narrow container or translated labels. With wrapping disabled, the children stay in one row and can exceed the available width. The second example provides a horizontally scrollable container for that case.
+
+<Tabs
+  group="group-wrapping-example"
+  selectedTab="group-wrapping-preview"
+  ariaLabel="group wrapping example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
+  <TabPane id="group-wrapping-preview" label="Preview">
+    <Grid columns="1" columnsMd="2">
+      <div>
+        <p>Wrapping allowed</p>
+        <BtnGroup :wrap="true" class="w-full" role="group" aria-label="Wrapping documentation links">
+          <BtnLink href="/components/buttons/" variant="surface">Button documentation</BtnLink>
+          <BtnLink href="/components/btn-link/" variant="surface">Link documentation</BtnLink>
+          <BtnLink href="/components/badge/" variant="surface">Badge documentation</BtnLink>
+        </BtnGroup>
+      </div>
+      <div class="overflow-x-auto" tabindex="0" role="region" aria-label="Scrollable documentation links">
+        <p>Single row · scroll when needed</p>
+        <BtnGroup :wrap="false" role="group" aria-label="Single-row documentation links">
+          <BtnLink href="/components/buttons/" variant="surface">Button documentation</BtnLink>
+          <BtnLink href="/components/btn-link/" variant="surface">Link documentation</BtnLink>
+          <BtnLink href="/components/badge/" variant="surface">Badge documentation</BtnLink>
+        </BtnGroup>
+      </div>
+    </Grid>
+  </TabPane>
+  <TabPane id="group-wrapping-mdx" label="group-wrapping.mdx">
+```html
+<Grid columns="1" columnsMd="2">
+  <div>
+    <p>Wrapping allowed</p>
+    <BtnGroup :wrap="true" class="w-full" role="group" aria-label="Wrapping documentation links">
+      <BtnLink href="/components/buttons/" variant="surface">Button documentation</BtnLink>
+      <BtnLink href="/components/btn-link/" variant="surface">Link documentation</BtnLink>
+      <BtnLink href="/components/badge/" variant="surface">Badge documentation</BtnLink>
+    </BtnGroup>
+  </div>
+  <div class="overflow-x-auto" tabindex="0" role="region" aria-label="Scrollable documentation links">
+    <p>Single row · scroll when needed</p>
+    <BtnGroup :wrap="false" role="group" aria-label="Single-row documentation links">
+      <BtnLink href="/components/buttons/" variant="surface">Button documentation</BtnLink>
+      <BtnLink href="/components/btn-link/" variant="surface">Link documentation</BtnLink>
+      <BtnLink href="/components/badge/" variant="surface">Badge documentation</BtnLink>
+    </BtnGroup>
+  </div>
+</Grid>
+```
+  </TabPane>
+</Tabs>
+
+## Child appearance
+
+Each child owns its tone, variant, size, and icon. Set these on the child components. A group has no shared `size`, `variant`, or `disabled` prop.
+
+This compact navigation row uses a primary destination, a supporting destination, and a quieter reference link.
+
+<Tabs
+  group="group-child-appearance-example"
+  selectedTab="group-child-appearance-preview"
+  ariaLabel="group child appearance example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
+  <TabPane id="group-child-appearance-preview" label="Preview">
+    <BtnGroup :wrap="true" role="group" aria-label="Component resources">
+      <BtnLink href="/components/buttons/" tone="accent" size="sm" icon="tabler:arrow-right" iconPosition="end">Start with buttons</BtnLink>
+      <BtnLink href="/components/badge/" size="sm" variant="outline">Explore badges</BtnLink>
+      <BtnLink href="#api-reference" size="sm" variant="link">Group API</BtnLink>
+    </BtnGroup>
+  </TabPane>
+  <TabPane id="group-child-appearance-mdx" label="group-child-appearance.mdx">
+```html
+<BtnGroup :wrap="true" role="group" aria-label="Component resources">
+  <BtnLink href="/components/buttons/" tone="accent" size="sm" icon="tabler:arrow-right" iconPosition="end">Start with buttons</BtnLink>
+  <BtnLink href="/components/badge/" size="sm" variant="outline">Explore badges</BtnLink>
+  <BtnLink href="#api-reference" size="sm" variant="link">Group API</BtnLink>
+</BtnGroup>
+```
+  </TabPane>
+</Tabs>
+
+## Formatting controls
+
+A complete stateful example: Bold and Italic change the text below, update their visual treatment, and expose their pressed state to assistive technology. Reset clears both choices. BtnGroup arranges the controls; the application owns their selection and event handlers.
+
+<Tabs
+  group="formatting-controls-example"
+  selectedTab="formatting-controls-preview"
+  ariaLabel="formatting controls example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
+  <TabPane id="formatting-controls-preview" label="Preview">
+    <RegorApp id="formatting-controls-demo" src="./formatting-controls.ts"/>
+  </TabPane>
+  <TabPane id="formatting-controls-mdx" label="formatting-controls.mdx">
+```html
+<RegorApp id="formatting-controls-demo" src="./formatting-controls.ts"/>
+```
+  </TabPane>
+  <TabPane id="formatting-controls-ts" label="formatting-controls.ts">
+```typescript
+import {
+  type ComponentVariant,
+  defineBtnGroupComponents,
+  defineButtonComponents,
+  defineFlexComponents,
+} from '@purestack/ts-components'
+import {
+  batch,
+  type ComputedRef,
+  computed,
+  createApp,
+  defineComponent,
+  html,
+  type Ref,
+  ref,
+} from 'regor'
+
+export interface FormattingControls {
+  bold: Ref<boolean>
+  italic: Ref<boolean>
+  boldVariant: ComputedRef<ComponentVariant>
+  italicVariant: ComputedRef<ComponentVariant>
+  textStyle: ComputedRef<{ fontWeight: string; fontStyle: string }>
+  summary: ComputedRef<string>
+  toggleBold: () => void
+  toggleItalic: () => void
+  reset: () => void
+}
+
+const formattingControlsTemplate = html`<Flex direction="column" align="start">
+  <BtnGroup :wrap="true" role="group" aria-label="Text formatting">
+    <Btn :variant="boldVariant" tone="accent" :aria-pressed="bold" @click="toggleBold">Bold</Btn>
+    <Btn :variant="italicVariant" tone="accent" :aria-pressed="italic" @click="toggleItalic">Italic</Btn>
+    <Btn variant="link" @click="reset">Reset</Btn>
+  </BtnGroup>
+  <p :style="textStyle">Build something worth sharing.</p>
+  <p role="status" class="m-0">{{ summary }}</p>
+</Flex>`
+
+function createFormattingControls(): FormattingControls {
+  const bold = ref(false)
+  const italic = ref(false)
+  const boldVariant = computed<ComponentVariant>(() =>
+    bold() ? 'solid' : 'surface',
+  )
+  const italicVariant = computed<ComponentVariant>(() =>
+    italic() ? 'solid' : 'surface',
+  )
+  const textStyle = computed(() => ({
+    fontWeight: bold() ? '700' : '400',
+    fontStyle: italic() ? 'italic' : 'normal',
+  }))
+  const summary = computed(() => {
+    const active = [bold() ? 'bold' : '', italic() ? 'italic' : ''].filter(
+      Boolean,
+    )
+    return active.length
+      ? `Formatting: ${active.join(' and ')}.`
+      : 'Formatting: normal.'
+  })
+  return {
+    bold,
+    italic,
+    boldVariant,
+    italicVariant,
+    textStyle,
+    summary,
+    toggleBold: () => bold(!bold()),
+    toggleItalic: () => italic(!italic()),
+    reset: () =>
+      batch(() => {
+        bold(false)
+        italic(false)
+      }),
+  }
+}
+
+const component = defineComponent<FormattingControls>(
+  formattingControlsTemplate,
+  { context: createFormattingControls },
+)
+
+createApp(
+  {
+    components: {
+      FormattingControls: component,
+      ...defineBtnGroupComponents(),
+      ...defineButtonComponents(),
+      ...defineFlexComponents(),
+    },
+  },
+  {
+    selector: 'app#formatting-controls-demo',
+    template: html`<FormattingControls/>`,
+  },
+)
+```
+  </TabPane>
+</Tabs>
+
+## Selection toolbar
+
+Keep the context and its actions in one compact surface. This toolbar adapts the framework's message-selection sample: mark the eight example messages read or unread, archive them, or move them to trash. The selection count, status, and disabled actions update together. Reset restores the original selection.
+
+The icon-only overflow trigger is [BtnGroupDropDown](/components/btn-group-drop-down/). Its action handlers close the disclosure and restore trigger focus. Every change stays inside this example.
+
+<Tabs
+  group="selection-toolbar-example"
+  selectedTab="selection-toolbar-preview"
+  ariaLabel="selection toolbar example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
+  <TabPane id="selection-toolbar-preview" label="Preview">
+    <RegorApp id="selection-toolbar-demo" src="./selection-toolbar.ts"/>
+  </TabPane>
+  <TabPane id="selection-toolbar-mdx" label="selection-toolbar.mdx">
+```html
+<RegorApp id="selection-toolbar-demo" src="./selection-toolbar.ts"/>
+```
+  </TabPane>
+  <TabPane id="selection-toolbar-ts" label="selection-toolbar.ts">
+```typescript
+import {
+  defineBadgeComponents,
+  defineBtnGroupComponents,
+  defineButtonComponents,
+  defineFlexComponents,
+  defineIconComponents,
+  definePanelComponents,
+} from '@purestack/ts-components'
+import {
+  iconoir_archive,
+  iconoir_mail,
+  iconoir_mail_open,
+  iconoir_more_horiz,
+  iconoir_trash,
+} from '@purestack/ts-svg-icons'
+import {
+  batch,
+  type ComputedRef,
+  computed,
+  createApp,
+  defineComponent,
+  html,
+  type Ref,
+  ref,
+} from 'regor'
+
+export interface SelectionToolbar {
+  selectedCount: Ref<number>
+  unread: Ref<boolean>
+  selectionEmpty: ComputedRef<boolean>
+  readState: ComputedRef<string>
+  selectionLabel: ComputedRef<string>
+  message: Ref<string>
+  archive: () => void
+  markRead: () => void
+  markUnread: (event: Event) => void
+  trash: (event: Event) => void
+  reset: () => void
+}
+
+const selectionToolbarTemplate = html`<Panel tone="neutral" variant="surfaceAlt" class="p-4 overflow-visible">
+  <Flex direction="column" class="gap-3">
+    <Flex justify="between" align="center" wrap="true" class="gap-3">
+      <div>
+        <div class="fw-700">{{ selectionLabel }}</div>
+        <p class="fs-xs tone-text-muted mb-0">Inbox preview <Badge>{{ readState }}</Badge></p>
+      </div>
+      <BtnGroup align="end" :wrap="true" role="group" aria-label="Selected message actions">
+        <Btn variant="outline" icon="iconoir:archive" :disabled="selectionEmpty" @click="archive">Archive</Btn>
+        <Btn variant="outline" icon="iconoir:mail-open" :disabled="selectionEmpty" @click="markRead">Mark read</Btn>
+        <BtnGroupDropDown icon="iconoir:more-horiz" :iconOnly="true" ariaLabel="More message actions" variant="outline" menuTone="neutral">
+          <Btn variant="subtle" icon="iconoir:mail" :disabled="selectionEmpty" @click="markUnread">Mark unread</Btn>
+          <Btn tone="danger" variant="subtle" icon="iconoir:trash" :disabled="selectionEmpty" @click="trash">Move to trash</Btn>
+        </BtnGroupDropDown>
+      </BtnGroup>
+    </Flex>
+    <p role="status" class="m-0">{{ message }}</p>
+    <Btn variant="link" @click="reset">Reset selection</Btn>
+  </Flex>
+</Panel>`
+
+function createSelectionToolbar(): SelectionToolbar {
+  const selectedCount = ref(8)
+  const unread = ref(true)
+  const selectionEmpty = computed(() => selectedCount() === 0)
+  const readState = computed<string>(() =>
+    selectionEmpty() ? 'No selection' : unread() ? 'Unread' : 'Read',
+  )
+  const selectionLabel = computed(() => `${selectedCount()} messages selected`)
+  const message = ref('Actions affect only these eight example messages.')
+  const close = (event: Event) => {
+    const menu = (event.currentTarget as HTMLElement).closest('details')
+    if (menu) {
+      menu.open = false
+      menu.querySelector('summary')?.focus()
+    }
+  }
+  return {
+    selectedCount,
+    unread,
+    selectionEmpty,
+    readState,
+    selectionLabel,
+    message,
+    archive: () => {
+      message(`Archived ${selectedCount()} messages.`)
+      selectedCount(0)
+    },
+    markRead: () => {
+      unread(false)
+      message(`Marked ${selectedCount()} messages as read.`)
+    },
+    markUnread: (event) => {
+      unread(true)
+      message(`Marked ${selectedCount()} messages as unread.`)
+      close(event)
+    },
+    trash: (event) => {
+      message(`Moved ${selectedCount()} messages to trash.`)
+      selectedCount(0)
+      close(event)
+    },
+    reset: () =>
+      batch(() => {
+        selectedCount(8)
+        unread(true)
+        message('Actions affect only these eight example messages.')
+      }),
+  }
+}
+
+const icons: Record<string, string> = {
+  'iconoir:archive': iconoir_archive,
+  'iconoir:mail-open': iconoir_mail_open,
+  'iconoir:mail': iconoir_mail,
+  'iconoir:more-horiz': iconoir_more_horiz,
+  'iconoir:trash': iconoir_trash,
+}
+const component = defineComponent<SelectionToolbar>(selectionToolbarTemplate, {
+  context: createSelectionToolbar,
+})
+
+createApp(
+  {
+    components: {
+      SelectionToolbar: component,
+      ...defineBadgeComponents(),
+      ...defineBtnGroupComponents(),
+      ...defineButtonComponents(),
+      ...defineFlexComponents(),
+      ...definePanelComponents(),
+      ...defineIconComponents((name) => {
+        if (!icons[name]) throw new Error(`Icon is not registered: ${name}`)
+        return icons[name]
+      }),
+    },
+  },
+  {
+    selector: 'app#selection-toolbar-demo',
+    template: html`<SelectionToolbar/>`,
+  },
+)
+```
+  </TabPane>
+</Tabs>
+
+## Accessibility
+
+- Use `role="group"` with a meaningful `aria-label` or `aria-labelledby` when the relationship between the controls needs a name. BtnGroup renders a plain `div` by default.
+- Each child keeps its native keyboard behavior: Tab moves among controls, Enter follows links, and Enter or Space activates buttons.
+- Use `aria-pressed` on toggle buttons, as in the formatting example. The group does not manage selection.
+- Keep DOM order aligned with reading order. Wrapping changes the layout while preserving the order of the controls.
+- A group is not an ARIA toolbar. Adding `role="toolbar"` also requires implementing the expected toolbar keyboard behavior; BtnGroup does not supply arrow-key navigation or a roving tab stop.
+- If you intentionally keep a wide row, make its scroll container keyboard-accessible and give it a meaningful name.
+
+## API reference
+
+<div class="api-overview">
+  <code class="api-overview__signature">&lt;BtnGroup :wrap="true"&gt;</code>
+  <p>A native <code>&lt;div&gt;</code> with two layout props and one default slot. Alignment and wrapping use theme styles; a static group needs no application runtime.</p>
+  <nav class="api-index" aria-label="BtnGroup API groups">
+    <a href="#layout">Layout <span>2 props</span></a>
+    <a href="#slots-and-native-attributes">Slots and native attributes</a>
+    <a href="#state-and-events">State and events</a>
+  </nav>
+</div>
+
+Both props accept values or Regor refs. Register `defineBtnGroupComponents()` in a browser application, along with the component families used by its children.
+
+### Layout
+
+<ApiProperty anchor="group-prop-align" name="align" valueType="BtnGroupAlign" defaultValue="start (base alignment)">
+  <p>Aligns the children within the group. The default stylesheet uses start alignment. A content-sized group has no extra space to distribute; give it width when using center or end alignment.</p>
+  <div class="api-values"><code>start</code><code>center</code><code>end</code></div>
+  <div class="api-demo">
+    <BtnGroup align="end" :wrap="true" class="w-full" role="group" aria-label="End-aligned API example">
+      <BtnLink href="#alignment" variant="surface">See alignment</BtnLink>
+      <BtnLink href="#playground" tone="accent">Try it</BtnLink>
+    </BtnGroup>
+  </div>
+```html
+<BtnGroup align="end" :wrap="true" class="w-full">
+  <BtnLink href="/components/buttons/" variant="surface">Buttons</BtnLink>
+  <BtnLink href="/components/btn-link/" tone="accent">Links</BtnLink>
+</BtnGroup>
+```
+</ApiProperty>
+
+<ApiProperty anchor="group-prop-wrap" name="wrap" valueType="boolean" defaultValue="false">
+  <p>Allows children to flow onto another line when space is limited. Omission keeps a single row. Wrapping needs a constrained available width to become visible.</p>
+  <div class="api-values"><code>false · single row</code><code>true · multiple rows</code></div>
+  <p class="api-note">Use a boolean binding: <code>:wrap="false"</code>. An unbound string such as <code>wrap="false"</code> is not a boolean false.</p>
+```html
+<BtnGroup :wrap="true" class="w-full">
+  <BtnLink href="/components/buttons/" variant="surface">Button documentation</BtnLink>
+  <BtnLink href="/components/btn-link/" variant="surface">Link documentation</BtnLink>
+  <BtnLink href="/components/badge/" variant="surface">Badge documentation</BtnLink>
+</BtnGroup>
+```
+</ApiProperty>
+
+### Slots and native attributes
+
+<div class="api-contract">
+  <h4>Default slot</h4>
+  <p>Related controls rendered in source order. Each direct child is a flex item. Buttons and links keep their own props, accessible names, and native behavior.</p>
+  <h4>Native attributes</h4>
+  <p><code>class</code>, <code>id</code>, <code>role</code>, and ARIA attributes reach the root <code>div</code>. Use <code>class="w-full"</code> for an action row that fills its container.</p>
+  <h4>Scope</h4>
+  <p>The two public props are <code>align</code> and <code>wrap</code>. Dropdown menus are provided by the separate <a href="/components/btn-group-drop-down/">BtnGroupDropDown</a> component.</p>
+</div>
+
+```html
+<BtnGroup :wrap="true" role="group" aria-label="Documentation navigation">
+  <BtnLink href="/components/buttons/">Buttons</BtnLink>
+  <BtnLink href="/components/badge/" variant="surface">Badge</BtnLink>
+</BtnGroup>
+```
+
+### State and events
+
+BtnGroup adds no selection model, group-disabled state, or custom events. Attach action handlers and state to its children. Native events may bubble to the group as usual.
+
+The [formatting controls](#formatting-controls) show complete reactive code, including `computed` variant refs, native `aria-pressed`, and individual click handlers. Use that pattern when a child's appearance follows application state.
+
+For child props, see [Buttons](/components/buttons/) and [BtnLink](/components/btn-link/).

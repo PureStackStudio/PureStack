@@ -19,10 +19,14 @@ nav:
 
 ## Explore the first collection
 
-Start with three component families. Each brings together usage guidance, live samples, accessibility guidance, and the API behind it.
+Explore seven component guides. Each brings together usage guidance, live samples, accessibility guidance, and the API behind it.
 
 <Grid columns="1" columnsMd="3">
-  <Panel tone="neutral"><IconFrame name="tabler:square-rounded" tone="accent" variant="surface"/><h2>Buttons</h2><p>Actions, navigation, and a clear next step. Thirteen variants. Ten tones.</p><BtnLink href="/components/buttons/" tone="accent" variant="link" icon="tabler:arrow-right" iconPosition="end">Explore buttons</BtnLink></Panel>
+  <Panel tone="neutral"><IconFrame name="tabler:square-rounded" tone="accent" variant="surface"/><h2>Buttons</h2><p>Native actions, form controls, and a clear next step. Thirteen variants. Ten tones.</p><BtnLink href="/components/buttons/" tone="accent" variant="link" icon="tabler:arrow-right" iconPosition="end">Explore buttons</BtnLink></Panel>
+  <Panel tone="neutral"><IconFrame name="tabler:link" tone="accent" variant="surface"/><h2>BtnLink</h2><p>Button-styled navigation with real destinations, browsing targets, and accessible icons.</p><BtnLink href="/components/btn-link/" tone="accent" variant="link" icon="tabler:arrow-right" iconPosition="end">Explore links</BtnLink></Panel>
+  <Panel tone="neutral"><IconFrame name="tabler:layout-list" tone="accent" variant="surface"/><h2>BtnGroup</h2><p>Related actions with deliberate alignment, responsive wrapping, and independent state.</p><BtnLink href="/components/btn-group/" tone="accent" variant="link" icon="tabler:arrow-right" iconPosition="end">Explore groups</BtnLink></Panel>
+  <Panel tone="neutral"><IconFrame name="tabler:chevron-down" tone="accent" variant="surface"/><h2>BtnGroup<wbr/>DropDown</h2><p>Split actions and contextual menus with independent trigger styling and viewport-aware placement.</p><BtnLink href="/components/btn-group-drop-down/" tone="accent" variant="link" icon="tabler:arrow-right" iconPosition="end">Explore dropdowns</BtnLink></Panel>
+  <Panel tone="neutral"><IconFrame name="tabler:tag" tone="accent" variant="surface"/><h2>Badge</h2><p>Compact status, counts, and metadata with semantic color and reactive content.</p><BtnLink href="/components/badge/" tone="accent" variant="link" icon="tabler:arrow-right" iconPosition="end">Explore badges</BtnLink></Panel>
   <Panel tone="neutral"><IconFrame name="tabler:layout-grid" tone="accent" variant="surface"/><h2>Tabs</h2><p>Related views with persistent panels, composition, and responsive overflow.</p><BtnLink href="/components/tabs/" tone="accent" variant="link" icon="tabler:arrow-right" iconPosition="end">Explore tabs</BtnLink></Panel>
   <Panel tone="neutral"><IconFrame name="tabler:app-window" tone="accent" variant="surface"/><h2>Modal</h2><p>Native dialogs with focus handling, flexible slots, and considered motion.</p><BtnLink href="/components/modal/" tone="accent" variant="link" icon="tabler:arrow-right" iconPosition="end">Explore modal</BtnLink></Panel>
 </Grid>
@@ -31,7 +35,7 @@ Start with three component families. Each brings together usage guidance, live s
 
 Write components directly in Regor MDX. PureStack renders the content to HTML, generates its theme styles, and includes the runtime required by components such as Tabs and Modal.
 
-For application state, mount a Regor app from a TypeScript entry point using `PageScript` or `RegorApp`. Register the specific component families your app uses, then pass refs and handlers into the template.
+For application state, mount a Regor app from a TypeScript entry point using `RegorApp`. Register the specific component families your app uses, then pass refs and handlers into the template.
 
 ## A shared design system
 
