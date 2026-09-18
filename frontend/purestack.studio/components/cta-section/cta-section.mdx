@@ -1,0 +1,178 @@
+---
+title: CtaSection
+description: "Close a section with a clear next step, an optional secondary route and concise supporting context."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 140
+  icon: tabler:components
+---
+
+# Cta<wbr/>Section
+
+Close a section with a clear next step, an optional secondary route and concise supporting context.
+
+<Badge tone="accent" variant="surface">CtaSection</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts) · [API reference](#api-reference)
+
+
+
+## Primary and secondary destinations
+
+Both actions are real links. A button appears only when its label and destination are supplied.
+
+<Tabs group="cta-section-sample-1" selectedTab="cta-section-sample-1-preview" ariaLabel="Primary and secondary destinations example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="cta-section-sample-1-preview" label="Preview">
+    <CtaSection
+      eyebrow="KEEP EXPLORING"
+      title="Build your next interface"
+      subtitle="Start with a surface, then add the interaction."
+      primaryLabel="Explore Panel"
+      primaryHref="/components/panel/"
+      secondaryLabel="Browse all components"
+      secondaryHref="/components/"
+      meta="Source included in every guide."
+      tone="accent"
+    />
+  </TabPane>
+  <TabPane id="cta-section-sample-1-source-0" label="two-destinations.mdx">
+```html
+<CtaSection
+  eyebrow="KEEP EXPLORING"
+  title="Build your next interface"
+  subtitle="Start with a surface, then add the interaction."
+  primaryLabel="Explore Panel"
+  primaryHref="/components/panel/"
+  secondaryLabel="Browse all components"
+  secondaryHref="/components/"
+  meta="Source included in every guide."
+  tone="accent"
+/>
+```
+  </TabPane>
+</Tabs>
+
+## Add a custom action
+
+The actions slot follows the built-in links.
+
+<Tabs group="cta-section-sample-2" selectedTab="cta-section-sample-2-preview" ariaLabel="Add a custom action example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="cta-section-sample-2-preview" label="Preview">
+    <CtaSection
+      title="Choose a layout"
+      subtitle="Match the structure to your content."
+      variant="outline"
+    >
+      <template #actions>
+        <BtnLink href="/components/flex/" variant="outline">One axis</BtnLink>
+        <BtnLink href="/components/grid/" tone="accent">Two axes</BtnLink>
+      </template>
+    </CtaSection>
+  </TabPane>
+  <TabPane id="cta-section-sample-2-source-0" label="custom-actions.mdx">
+```html
+<CtaSection
+  title="Choose a layout"
+  subtitle="Match the structure to your content."
+  variant="outline"
+>
+  <template #actions>
+    <BtnLink href="/components/flex/" variant="outline">One axis</BtnLink>
+    <BtnLink href="/components/grid/" tone="accent">Two axes</BtnLink>
+  </template>
+</CtaSection>
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+The title is h2. Use specific action labels that describe the destination. Primary and secondary actions are BtnLink components, so navigation retains native link behavior.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">CtaSection contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="CtaSection properties">
+  <a href="#cta-section-prop-eyebrow">eyebrow</a>
+  <a href="#cta-section-prop-title">title</a>
+  <a href="#cta-section-prop-subtitle">subtitle</a>
+  <a href="#cta-section-prop-primaryLabel">primaryLabel</a>
+  <a href="#cta-section-prop-primaryHref">primaryHref</a>
+  <a href="#cta-section-prop-primaryIcon">primaryIcon</a>
+  <a href="#cta-section-prop-secondaryLabel">secondaryLabel</a>
+  <a href="#cta-section-prop-secondaryHref">secondaryHref</a>
+  <a href="#cta-section-prop-secondaryIcon">secondaryIcon</a>
+  <a href="#cta-section-prop-meta">meta</a>
+  <a href="#cta-section-prop-tone">tone</a>
+  <a href="#cta-section-prop-variant">variant</a>
+</nav>
+
+<ApiProperty anchor="cta-section-prop-eyebrow" name="eyebrow" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Short context above the heading, such as a category or release label.</p>
+</ApiProperty>
+
+<ApiProperty anchor="cta-section-prop-title" name="title" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Visible heading. Choose a short title that identifies the content or task.</p>
+</ApiProperty>
+
+<ApiProperty anchor="cta-section-prop-subtitle" name="subtitle" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Supporting text beneath the title.</p>
+</ApiProperty>
+
+<ApiProperty anchor="cta-section-prop-primaryLabel" name="primaryLabel" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Visible primary link text. Requires the matching Href prop.</p>
+</ApiProperty>
+
+<ApiProperty anchor="cta-section-prop-primaryHref" name="primaryHref" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Primary link destination. Requires the matching Label prop.</p>
+</ApiProperty>
+
+<ApiProperty anchor="cta-section-prop-primaryIcon" name="primaryIcon" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Registered SVG icon for the primary link.</p>
+</ApiProperty>
+
+<ApiProperty anchor="cta-section-prop-secondaryLabel" name="secondaryLabel" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Visible secondary link text. Requires the matching Href prop.</p>
+</ApiProperty>
+
+<ApiProperty anchor="cta-section-prop-secondaryHref" name="secondaryHref" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Secondary link destination. Requires the matching Label prop.</p>
+</ApiProperty>
+
+<ApiProperty anchor="cta-section-prop-secondaryIcon" name="secondaryIcon" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Registered SVG icon for the secondary link.</p>
+</ApiProperty>
+
+<ApiProperty anchor="cta-section-prop-meta" name="meta" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Secondary context such as an update time, limitation or reassurance.</p>
+</ApiProperty>
+
+<ApiProperty anchor="cta-section-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
+  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+</ApiProperty>
+
+<ApiProperty anchor="cta-section-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surface">
+  <p>Visual treatment. Accepts solid, surface, surfaceAlt, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p><strong>actions slot:</strong> additional actions. There is no default content slot. Register defineCtaSectionComponent with Panel, Grid, SectionHeader, Flex and BtnLink dependencies.</p>
+</div>
+
+
+
+## Related components
+
+- [LandingSection](/components/landing-section/)
+- [BtnLink](/components/btn-link/)
+- [SectionHeader](/components/section-header/)

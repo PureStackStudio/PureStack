@@ -1,0 +1,158 @@
+---
+title: CodeShowcase
+description: "Pair a code block with its visible result and the context needed to understand both."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 136
+  icon: tabler:components
+---
+
+# Code<wbr/>Showcase
+
+Pair a code block with its visible result and the context needed to understand both.
+
+<Badge tone="accent" variant="surface">CodeShowcase</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts) · [API reference](#api-reference)
+
+
+
+## Code and its result
+
+Write a normal fenced code block in the default slot. ts-ssg highlights it automatically; the result slot renders the matching component.
+
+<Tabs group="code-showcase-sample-1" selectedTab="code-showcase-sample-1-preview" ariaLabel="Code and its result example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="code-showcase-sample-1-preview" label="Preview">
+    <CodeShowcase
+      eyebrow="A SMALL EXAMPLE"
+      title="Semantic status"
+      summary="One component, one clear message."
+      language="MDX"
+      resultTitle="Rendered result"
+      resultMeta="Live component"
+      tone="accent"
+    >
+    
+    ```html
+    <Badge tone="success">Ready</Badge>
+    ```
+    
+      <template #result>
+        <Badge tone="success">Ready</Badge>
+      </template>
+    </CodeShowcase>
+  </TabPane>
+  <TabPane id="code-showcase-sample-1-source-0" label="code-result.mdx">
+````html
+<CodeShowcase
+  eyebrow="A SMALL EXAMPLE"
+  title="Semantic status"
+  summary="One component, one clear message."
+  language="MDX"
+  resultTitle="Rendered result"
+  resultMeta="Live component"
+  tone="accent"
+>
+
+```html
+<Badge tone="success">Ready</Badge>
+```
+
+  <template #result>
+    <Badge tone="success">Ready</Badge>
+  </template>
+</CodeShowcase>
+````
+  </TabPane>
+</Tabs>
+
+## A focused code note
+
+Omit resultTitle and resultMeta when a result panel is unnecessary.
+
+<Tabs group="code-showcase-sample-2" selectedTab="code-showcase-sample-2-preview" ariaLabel="A focused code note example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="code-showcase-sample-2-preview" label="Preview">
+    <CodeShowcase title="A named value" language="TypeScript" variant="outline">
+      <pre><code>const releaseName = 'Preview'</code></pre>
+    </CodeShowcase>
+  </TabPane>
+  <TabPane id="code-showcase-sample-2-source-0" label="code-note.mdx">
+```html
+<CodeShowcase title="A named value" language="TypeScript" variant="outline">
+  <pre><code>const releaseName = 'Preview'</code></pre>
+</CodeShowcase>
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+The language prop is a badge, not a syntax-highlighting engine. ts-ssg highlights fenced code in MDX automatically. A result slot is rendered only when resultTitle or resultMeta is present. Keep results keyboard-accessible when they contain controls.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">CodeShowcase contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="CodeShowcase properties">
+  <a href="#code-showcase-prop-eyebrow">eyebrow</a>
+  <a href="#code-showcase-prop-title">title</a>
+  <a href="#code-showcase-prop-summary">summary</a>
+  <a href="#code-showcase-prop-language">language</a>
+  <a href="#code-showcase-prop-resultTitle">resultTitle</a>
+  <a href="#code-showcase-prop-resultMeta">resultMeta</a>
+  <a href="#code-showcase-prop-tone">tone</a>
+  <a href="#code-showcase-prop-variant">variant</a>
+</nav>
+
+<ApiProperty anchor="code-showcase-prop-eyebrow" name="eyebrow" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Short context above the heading, such as a category or release label.</p>
+</ApiProperty>
+
+<ApiProperty anchor="code-showcase-prop-title" name="title" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Visible heading. Choose a short title that identifies the content or task.</p>
+</ApiProperty>
+
+<ApiProperty anchor="code-showcase-prop-summary" name="summary" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>A concise explanation beneath the heading.</p>
+</ApiProperty>
+
+<ApiProperty anchor="code-showcase-prop-language" name="language" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Language label displayed in a Badge. It does not transform source text.</p>
+</ApiProperty>
+
+<ApiProperty anchor="code-showcase-prop-resultTitle" name="resultTitle" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Result heading. Setting this or resultMeta enables the result panel.</p>
+</ApiProperty>
+
+<ApiProperty anchor="code-showcase-prop-resultMeta" name="resultMeta" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Result status or metadata badge. Setting this or resultTitle enables the result panel.</p>
+</ApiProperty>
+
+<ApiProperty anchor="code-showcase-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
+  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+</ApiProperty>
+
+<ApiProperty anchor="code-showcase-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surface">
+  <p>Visual treatment. Accepts solid, surface, surfaceAlt, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p><strong>Default slot:</strong> code or other explanatory content. <strong>result:</strong> rendered example. Register defineCodeShowcaseComponent with Panel, Flex, SectionHeader and Badge.</p>
+</div>
+
+
+
+## Related components
+
+- [Tabs](/components/tabs/)
+- [TabPane](/components/tab-pane/)
+- [Panel](/components/panel/)

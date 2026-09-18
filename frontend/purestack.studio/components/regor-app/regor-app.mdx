@@ -1,0 +1,125 @@
+---
+title: RegorApp
+description: "Mount an independent browser app from a TypeScript file colocated with its MDX page."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 168
+  icon: tabler:components
+---
+
+# Regor<wbr/>App
+
+Mount an independent browser app from a TypeScript file colocated with its MDX page.
+
+<Badge tone="accent" variant="surface">RegorApp</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/pageScript/pageScript.ts) · [API reference](#api-reference)
+
+
+
+## A focused browser app
+
+The app owns a small review counter. Its interface, template, context and registration are all explicit in the source tab.
+
+<Tabs group="regor-app-sample-1" selectedTab="regor-app-sample-1-preview" ariaLabel="A focused browser app example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="regor-app-sample-1-preview" label="Preview">
+    <RegorApp id="regor-app-demo" src="./playground.ts"/>
+  </TabPane>
+  <TabPane id="regor-app-sample-1-source-0" label="playground.mdx">
+```html
+<RegorApp id="regor-app-demo" src="./playground.ts"/>
+```
+  </TabPane>
+  <TabPane id="regor-app-sample-1-source-1" label="playground.ts">
+```typescript
+import {
+  defineButtonComponents,
+  defineFlexComponents,
+  defineFormComponents,
+} from '@purestack/ts-components'
+
+import { createApp, defineComponent, html, type Ref, ref } from 'regor'
+
+export interface RegorAppExample {
+  completed: Ref<number>
+  addTask: () => void
+  reset: () => void
+}
+
+const regorAppExampleTemplate = html`<Flex direction="column">
+  <FormStatus>{{ completed }} review tasks completed</FormStatus>
+  <Flex wrap="true">
+    <Btn tone="accent" @click="addTask">Complete a task</Btn>
+    <Btn variant="outline" @click="reset">Reset review</Btn>
+  </Flex>
+</Flex>`
+
+function createRegorAppExample(): RegorAppExample {
+  const completed = ref(0)
+  return {
+    completed,
+    addTask: () => completed(completed() + 1),
+    reset: () => completed(0),
+  }
+}
+
+const component = defineComponent<RegorAppExample>(regorAppExampleTemplate, {
+  context: createRegorAppExample,
+})
+
+createApp(
+  {
+    components: {
+      RegorAppExample: component,
+
+      ...defineFlexComponents(),
+      ...defineButtonComponents(),
+      ...defineFormComponents(),
+    },
+  },
+  { selector: 'app#regor-app-demo', template: html`<RegorAppExample />` },
+)
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+RegorApp renders an app mount element and a module entry script. Give the mount a unique native id and use the matching selector in createApp. Source resolution is automatic; sourceRelPath is only an override. Register the component families and SVG icons your browser app uses.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">RegorApp contract</p>
+  <p>src and sourceRelPath are component props. id is a native attribute on the app mount. The TypeScript entry point calls createApp explicitly.</p>
+</div>
+
+<nav class="api-index" aria-label="RegorApp properties">
+  <a href="#regor-app-prop-src">src</a>
+  <a href="#regor-app-prop-sourceRelPath">sourceRelPath</a>
+</nav>
+
+<ApiProperty anchor="regor-app-prop-src" name="src" valueType="string" defaultValue="required">
+  <p>Browser entry point. A relative path resolves from the current MDX page. SSG records and bundles local scripts.</p>
+</ApiProperty>
+
+<ApiProperty anchor="regor-app-prop-sourceRelPath" name="sourceRelPath" valueType="string" defaultValue="detected from the current page">
+  <p>Optional source-resolution override. Omit it for ordinary colocated MDX and TypeScript files.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p>No content slot. RegorApp uses PageScript internally. Available in SSG’s standard component registration; browser code imports createApp, defineComponent and html from Regor.</p>
+</div>
+
+
+
+## Related components
+
+- [PageScript](/components/page-script/)
+- [AppForm](/components/app-form/)

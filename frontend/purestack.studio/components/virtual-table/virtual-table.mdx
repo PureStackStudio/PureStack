@@ -1,0 +1,227 @@
+---
+title: VirtualTable
+description: "Render a large semantic table while mounting only nearby rows, with predictable fixed row heights."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 151
+  icon: tabler:components
+---
+
+# Virtual<wbr/>Table
+
+Render a large semantic table while mounting only nearby rows, with predictable fixed row heights.
+
+<Badge tone="accent" variant="surface">VirtualTable</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/virtualList/virtualTable.ts) · [API reference](#api-reference)
+
+
+
+## Browse a change history
+
+Scroll through 1,000 illustrative records, then clear and restore them. Every row fits the configured 52-pixel height.
+
+<Tabs group="virtual-table-sample-1" selectedTab="virtual-table-sample-1-preview" ariaLabel="Browse a change history example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="virtual-table-sample-1-preview" label="Preview">
+    <RegorApp id="virtual-table-demo" src="./playground.ts"/>
+  </TabPane>
+  <TabPane id="virtual-table-sample-1-source-0" label="playground.mdx">
+```html
+<RegorApp id="virtual-table-demo" src="./playground.ts"/>
+```
+  </TabPane>
+  <TabPane id="virtual-table-sample-1-source-1" label="playground.ts">
+```typescript
+import {
+  defineBadgeComponents,
+  defineButtonComponents,
+  defineFlexComponents,
+  defineFormComponents,
+  defineVirtualTableComponents,
+} from '@purestack/ts-components'
+
+import {
+  createApp,
+  defineComponent,
+  html,
+  type RefOrValue,
+  type SRef,
+  sref,
+} from 'regor'
+
+export interface ExampleRecord {
+  id: number
+  title: string
+  state: string
+  detail: string
+}
+export interface VirtualTableRow {
+  item: RefOrValue<ExampleRecord>
+  index: RefOrValue<number>
+}
+const rowTemplate = html`<tr :aria-rowindex="index + 2">
+  <td class="px-3 py-2">{{ item.id }}</td>
+  <td class="px-3 py-2">{{ item.title }}</td>
+  <td class="px-3 py-2">{{ item.state }}</td>
+</tr>`
+const rowComponent = defineComponent<VirtualTableRow>(rowTemplate, {
+  props: ['item', 'index'],
+})
+export interface VirtualTableHeader {}
+const headerTemplate = html`<thead>
+  <tr>
+    <th scope="col" class="px-3 py-2 tone-fill-surface">ID</th>
+    <th scope="col" class="px-3 py-2 tone-fill-surface">Change</th>
+    <th scope="col" class="px-3 py-2 tone-fill-surface">Status</th>
+  </tr>
+</thead>`
+const headerComponent = defineComponent<VirtualTableHeader>(headerTemplate)
+export interface VirtualTableExample {
+  records: SRef<ExampleRecord[]>
+  restore: () => void
+  clear: () => void
+}
+
+const virtualTableExampleTemplate = html`<Flex direction="column">
+  <Flex wrap="true">
+    <Btn @click="restore">Load 1,000 records</Btn>
+    <Btn variant="outline" @click="clear">Empty list</Btn>
+    <span role="status">{{ records.length }} records</span>
+  </Flex>
+  <VirtualTable
+    :items="records"
+    height="320"
+    itemHeight="52"
+    overscan="4"
+    rowComponent="VirtualTableRow"
+    headerComponent="VirtualTableHeader"
+    tabindex="0"
+    aria-label="Example change history"
+  />
+  <FormStatus r-if="records.length === 0">
+    No records. Load the example data to continue.
+  </FormStatus>
+</Flex>`
+
+function createVirtualTableExample(): VirtualTableExample {
+  const initial: ExampleRecord[] = Array.from({ length: 1000 }, (_, index) => ({
+    id: index + 1,
+    title: `Change ${index + 1}`,
+    state: index % 3 === 0 ? 'In review' : 'Ready',
+    detail:
+      index % 3 === 0
+        ? 'This change includes a longer explanation of the component behavior, its theme treatment and the verification needed before release.'
+        : 'A focused improvement to the documentation.',
+  }))
+  const records = sref(initial)
+  return {
+    records,
+    restore: () => records([...initial]),
+    clear: () => records([]),
+  }
+}
+
+const component = defineComponent<VirtualTableExample>(
+  virtualTableExampleTemplate,
+  {
+    context: createVirtualTableExample,
+  },
+)
+
+createApp(
+  {
+    components: {
+      VirtualTableExample: component,
+      VirtualTableRow: rowComponent,
+      VirtualTableHeader: headerComponent,
+      ...defineVirtualTableComponents(),
+      ...defineFlexComponents(),
+      ...defineBadgeComponents(),
+      ...defineButtonComponents(),
+      ...defineFormComponents(),
+    },
+  },
+  {
+    selector: 'app#virtual-table-demo',
+    template: html`<VirtualTableExample />`,
+  },
+)
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+The component calculates offsets from itemHeight. Wrapping content or extra vertical padding that exceeds that height breaks alignment. Virtualized off-screen content is absent from the DOM, so browser find, printing and assistive navigation cannot access the whole dataset at once. Offer a non-virtualized export or paginated view when complete access is required. The focusable viewport supports keyboard scrolling.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">VirtualTable contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="VirtualTable properties">
+  <a href="#virtual-table-prop-items">items</a>
+  <a href="#virtual-table-prop-height">height</a>
+  <a href="#virtual-table-prop-itemHeight">itemHeight</a>
+  <a href="#virtual-table-prop-overscan">overscan</a>
+  <a href="#virtual-table-prop-rowComponent">rowComponent</a>
+  <a href="#virtual-table-prop-colGroupComponent">colGroupComponent</a>
+  <a href="#virtual-table-prop-headerComponent">headerComponent</a>
+  <a href="#virtual-table-prop-footerComponent">footerComponent</a>
+  <a href="#virtual-table-prop-tableLayout">tableLayout</a>
+</nav>
+
+<ApiProperty anchor="virtual-table-prop-items" name="items" valueType="RefOrValue&lt;unknown[]&gt;" defaultValue="[]">
+  <p>Source array. Only the visible window and overscan rows are mounted. Keep durable row state in application data.</p>
+</ApiProperty>
+
+<ApiProperty anchor="virtual-table-prop-height" name="height" valueType="RefOrValue&lt;number | string&gt;" defaultValue="560">
+  <p>Viewport height in pixels. A positive number or numeric string is accepted. Invalid and non-positive values use the default.</p>
+</ApiProperty>
+
+<ApiProperty anchor="virtual-table-prop-itemHeight" name="itemHeight" valueType="RefOrValue&lt;number | string&gt;" defaultValue="44">
+  <p>Fixed row height in pixels. The rendered row, including padding and borders, must fit this exact height.</p>
+</ApiProperty>
+
+<ApiProperty anchor="virtual-table-prop-overscan" name="overscan" valueType="RefOrValue&lt;number | string&gt;" defaultValue="6">
+  <p>Extra rows rendered around the visible window. Positive numeric values are truncated to an integer; zero falls back to 6.</p>
+</ApiProperty>
+
+<ApiProperty anchor="virtual-table-prop-rowComponent" name="rowComponent" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Registered row component name. Receives item and absolute zero-based index. Provide a typed component that renders the item; the fallback does not format data for you.</p>
+</ApiProperty>
+
+<ApiProperty anchor="virtual-table-prop-colGroupComponent" name="colGroupComponent" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Registered component rendering colgroup and its col elements to define column widths.</p>
+</ApiProperty>
+
+<ApiProperty anchor="virtual-table-prop-headerComponent" name="headerComponent" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Registered component rendering thead with semantic th cells. It receives no item props.</p>
+</ApiProperty>
+
+<ApiProperty anchor="virtual-table-prop-footerComponent" name="footerComponent" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Registered component rendering tfoot for a summary. It receives no item props.</p>
+</ApiProperty>
+
+<ApiProperty anchor="virtual-table-prop-tableLayout" name="tableLayout" valueType="RefOrValue&lt;'auto' | 'fixed'&gt;" defaultValue="auto">
+  <p>auto uses content widths; fixed uses a 100% fixed-layout table.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p>No slots. Register defineVirtualTableComponents and each named row/header/footer component. Rows must render tr with td or th children. Header and footer components must render valid table sections. State that must survive scrolling belongs outside the mounted row.</p>
+</div>
+
+
+
+## Related components
+
+- [VariableVirtualTable](/components/variable-virtual-table/)
+- [VirtualList](/components/virtual-list/)

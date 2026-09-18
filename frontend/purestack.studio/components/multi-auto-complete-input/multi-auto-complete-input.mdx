@@ -1,0 +1,410 @@
+---
+title: MultiAutoCompleteInput
+description: "Select several suggestions, create new tokens and keep a structured list separate from the current query."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 126
+  icon: tabler:components
+---
+
+# Multi<wbr/>Auto<wbr/>Complete<wbr/>Input
+
+Select several suggestions, create new tokens and keep a structured list separate from the current query.
+
+<Badge tone="accent" variant="surface">MultiAutoCompleteInput</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/multiAutoCompleteInput.ts) · [API reference](#api-reference)
+
+
+
+## Tag a release
+
+Choose suggestions, type a new tag and press Enter, or paste comma-separated values. The Documentation tag is locked; remove other tags individually or clear them together.
+
+<Tabs group="multi-auto-complete-input-sample-1" selectedTab="multi-auto-complete-input-sample-1-preview" ariaLabel="Tag a release example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="multi-auto-complete-input-sample-1-preview" label="Preview">
+    <RegorApp id="multi-auto-complete-input-demo" src="./playground.ts"/>
+  </TabPane>
+  <TabPane id="multi-auto-complete-input-sample-1-source-0" label="playground.mdx">
+```html
+<RegorApp id="multi-auto-complete-input-demo" src="./playground.ts"/>
+```
+  </TabPane>
+  <TabPane id="multi-auto-complete-input-sample-1-source-1" label="playground.ts">
+```typescript
+import {
+  type AutoCompleteOption,
+  defineButtonComponents,
+  defineFlexComponents,
+  defineFormComponents,
+  defineIconComponents,
+  defineMultiAutoCompleteInputComponents,
+  type MultiAutoCompleteItem,
+} from '@purestack/ts-components'
+import { lucide_chevron_down, lucide_x } from '@purestack/ts-svg-icons'
+import {
+  createApp,
+  defineComponent,
+  html,
+  type Ref,
+  ref,
+  type SRef,
+  sref,
+} from 'regor'
+
+export interface MultiAutoCompleteInputExample {
+  selectedTags: SRef<MultiAutoCompleteItem[]>
+  tagQuery: Ref<string>
+  tagOptions: AutoCompleteOption[]
+  customAllowed: Ref<boolean>
+  duplicatesAllowed: Ref<boolean>
+  pending: Ref<boolean>
+  locked: Ref<boolean>
+  clear: () => void
+}
+
+const multiAutoCompleteInputExampleTemplate = html`<Flex direction="column">
+  <MultiAutoCompleteInput
+    id="multi-tags"
+    label="Release tags"
+    placeholder="Choose or type a tag"
+    name="tags"
+    :items="selectedTags"
+    :model="tagQuery"
+    :options="tagOptions"
+    :allowCustomValues="customAllowed"
+    :allowDuplicates="duplicatesAllowed"
+    :loading="pending"
+    :disabled="locked"
+    separators=",;"
+  />
+  <Flex wrap="true">
+    <FormCheck id="multi-custom" label="Allow new tags" :checked="customAllowed" />
+    <FormCheck
+      id="multi-duplicates"
+      label="Allow duplicates"
+      :checked="duplicatesAllowed"
+    />
+    <FormCheck id="multi-loading" label="Loading state" :checked="pending" />
+    <FormCheck id="multi-disabled" label="Disabled" :checked="locked" />
+  </Flex>
+  <Btn variant="link" @click="clear">Clear editable tags</Btn>
+  <FormStatus>
+    {{ selectedTags.length }} tags selected. Query: {{ tagQuery || 'Empty' }}
+  </FormStatus>
+  <ul>
+    <li r-for="tag in selectedTags">{{ tag.label }} · {{ tag.value }}</li>
+  </ul>
+</Flex>`
+
+function createMultiAutoCompleteInputExample(): MultiAutoCompleteInputExample {
+  const requiredTag: MultiAutoCompleteItem = {
+    label: 'Documentation',
+    value: 'docs',
+    disabled: true,
+  }
+  const selectedTags = sref<MultiAutoCompleteItem[]>([
+    requiredTag,
+    { label: 'Needs review', value: 'review', tone: 'warning' },
+  ])
+  return {
+    selectedTags,
+    tagQuery: ref(''),
+    tagOptions: [
+      { label: 'TypeScript', value: 'ts', keywords: ['typed'] },
+      { label: 'Accessibility', value: 'a11y' },
+      { label: 'Performance', value: 'perf' },
+      { label: 'Internal · unavailable', value: 'internal', disabled: true },
+    ],
+    customAllowed: ref(true),
+    duplicatesAllowed: ref(false),
+    pending: ref(false),
+    locked: ref(false),
+    clear: () => selectedTags([requiredTag]),
+  }
+}
+
+const component = defineComponent<MultiAutoCompleteInputExample>(
+  multiAutoCompleteInputExampleTemplate,
+  {
+    context: createMultiAutoCompleteInputExample,
+  },
+)
+const icons: Record<string, string> = {
+  'lucide:x': lucide_x,
+  'lucide:chevron-down': lucide_chevron_down,
+}
+
+createApp(
+  {
+    components: {
+      MultiAutoCompleteInputExample: component,
+
+      ...defineMultiAutoCompleteInputComponents(),
+      ...defineFlexComponents(),
+      ...defineFormComponents(),
+      ...defineButtonComponents(),
+      ...defineIconComponents((name) => icons[name] ?? ''),
+    },
+  },
+  {
+    selector: 'app#multi-auto-complete-input-demo',
+    template: html`<MultiAutoCompleteInputExample />`,
+  },
+)
+```
+  </TabPane>
+</Tabs>
+
+## Invalid and disabled tokens
+
+Token state can express validation results supplied by your application.
+
+<Tabs group="multi-auto-complete-input-sample-2" selectedTab="multi-auto-complete-input-sample-2-preview" ariaLabel="Invalid and disabled tokens example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="multi-auto-complete-input-sample-2-preview" label="Preview">
+    <RegorApp id="multi-auto-complete-input-states-demo" src="./states.ts"/>
+  </TabPane>
+  <TabPane id="multi-auto-complete-input-sample-2-source-0" label="states.mdx">
+```html
+<RegorApp id="multi-auto-complete-input-states-demo" src="./states.ts"/>
+```
+  </TabPane>
+  <TabPane id="multi-auto-complete-input-sample-2-source-1" label="states.ts">
+```typescript
+import {
+  defineIconComponents,
+  defineMultiAutoCompleteInputComponents,
+} from '@purestack/ts-components'
+import { lucide_chevron_down, lucide_x } from '@purestack/ts-svg-icons'
+import { createApp, defineComponent, html } from 'regor'
+
+export interface MultiAutoCompleteInputStates {}
+
+const multiAutoCompleteInputStatesTemplate = html`<MultiAutoCompleteInput
+  id="multi-token-states"
+  label="Example recipients"
+  :items="[{label:'Required reviewer',value:'reviewer',disabled:true},{label:'Invalid address',value:'invalid',invalid:true,tone:'danger'}]"
+  placeholder="Add a recipient"
+/>`
+
+function createMultiAutoCompleteInputStates(): MultiAutoCompleteInputStates {
+  return {}
+}
+
+const component = defineComponent<MultiAutoCompleteInputStates>(
+  multiAutoCompleteInputStatesTemplate,
+  {
+    context: createMultiAutoCompleteInputStates,
+  },
+)
+const icons: Record<string, string> = {
+  'lucide:x': lucide_x,
+  'lucide:chevron-down': lucide_chevron_down,
+}
+
+createApp(
+  {
+    components: {
+      MultiAutoCompleteInputStates: component,
+
+      ...defineMultiAutoCompleteInputComponents(),
+      ...defineIconComponents((name) => icons[name] ?? ''),
+    },
+  },
+  {
+    selector: 'app#multi-auto-complete-input-states-demo',
+    template: html`<MultiAutoCompleteInputStates />`,
+  },
+)
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+Arrow keys and Enter select suggestions; Escape closes the popup. Backspace on an empty query removes the last removable token. Each selected item produces a hidden field when name is supplied. required applies to the query input, so validate selected items explicitly when requiring at least one token.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">MultiAutoCompleteInput contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="MultiAutoCompleteInput properties">
+  <a href="#multi-auto-complete-input-prop-id">id</a>
+  <a href="#multi-auto-complete-input-prop-label">label</a>
+  <a href="#multi-auto-complete-input-prop-tone">tone</a>
+  <a href="#multi-auto-complete-input-prop-variant">variant</a>
+  <a href="#multi-auto-complete-input-prop-items">items</a>
+  <a href="#multi-auto-complete-input-prop-model">model</a>
+  <a href="#multi-auto-complete-input-prop-name">name</a>
+  <a href="#multi-auto-complete-input-prop-required">required</a>
+  <a href="#multi-auto-complete-input-prop-autocomplete">autocomplete</a>
+  <a href="#multi-auto-complete-input-prop-placeholder">placeholder</a>
+  <a href="#multi-auto-complete-input-prop-disabled">disabled</a>
+  <a href="#multi-auto-complete-input-prop-icon">icon</a>
+  <a href="#multi-auto-complete-input-prop-iconEnd">iconEnd</a>
+  <a href="#multi-auto-complete-input-prop-removeIcon">removeIcon</a>
+  <a href="#multi-auto-complete-input-prop-options">options</a>
+  <a href="#multi-auto-complete-input-prop-rowComponent">rowComponent</a>
+  <a href="#multi-auto-complete-input-prop-minLength">minLength</a>
+  <a href="#multi-auto-complete-input-prop-maxResults">maxResults</a>
+  <a href="#multi-auto-complete-input-prop-openOnFocus">openOnFocus</a>
+  <a href="#multi-auto-complete-input-prop-allowCustomValues">allowCustomValues</a>
+  <a href="#multi-auto-complete-input-prop-allowDuplicates">allowDuplicates</a>
+  <a href="#multi-auto-complete-input-prop-separators">separators</a>
+  <a href="#multi-auto-complete-input-prop-loading">loading</a>
+  <a href="#multi-auto-complete-input-prop-emptyText">emptyText</a>
+  <a href="#multi-auto-complete-input-prop-loadingText">loadingText</a>
+  <a href="#multi-auto-complete-input-prop-onCreateItem">onCreateItem</a>
+  <a href="#multi-auto-complete-input-prop-onOptionToItem">onOptionToItem</a>
+  <a href="#multi-auto-complete-input-prop-onSplitInput">onSplitInput</a>
+  <a href="#multi-auto-complete-input-prop-onItemsChange">onItemsChange</a>
+  <a href="#multi-auto-complete-input-prop-onSelect">onSelect</a>
+  <a href="#multi-auto-complete-input-prop-onSearch">onSearch</a>
+</nav>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-id" name="id" valueType="RefOrValue&lt;string&gt;" defaultValue="generated">
+  <p>Unique control ID. Supply an explicit value when help text or another element needs to reference this control.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-label" name="label" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Visible label. Use language that describes the control or value in its surrounding context.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
+  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surfaceAlt">
+  <p>Visual treatment. Accepts solid, surface, surfaceAlt, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-items" name="items" valueType="SRef&lt;MultiAutoCompleteItem[]&gt;" defaultValue="sref([])">
+  <p>Writable shallow ref of MultiAutoCompleteItem[]. Each item supports label, value, disabled, invalid, tone and keywords.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-model" name="model" valueType="Ref&lt;string&gt;" defaultValue="ref('')">
+  <p>Two-way value ref. Pass the ref itself with :model="fieldValue" so edits update application state.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-name" name="name" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Native form field name used during FormData serialization.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-required" name="required" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
+  <p>Native required constraint. Validate the owning form before accepting its data.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-autocomplete" name="autocomplete" valueType="RefOrValue&lt;string&gt;" defaultValue="off">
+  <p>Native browser autofill hint, such as name, email or current-password.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-placeholder" name="placeholder" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>A short input hint shown while empty. Keep a separate visible label.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-disabled" name="disabled" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
+  <p>Disables interaction. Use a bound boolean, for example :disabled="isLocked".</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-icon" name="icon" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Registered SVG icon name. In browser apps, include the icon in the resolver passed to defineIconComponents.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-iconEnd" name="iconEnd" valueType="RefOrValue&lt;string&gt;" defaultValue="lucide:chevron-down">
+  <p>Trailing suggestion icon.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-removeIcon" name="removeIcon" valueType="RefOrValue&lt;string&gt;" defaultValue="lucide:x">
+  <p>Registered icon on each removable token button.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-options" name="options" valueType="RefOrValue&lt;AutoCompleteOption[]&gt;" defaultValue="[]">
+  <p>Suggestion or select data. Each option has a label, an optional value and an optional disabled flag. Omitted values use the label.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-rowComponent" name="rowComponent" valueType="RefOrValue&lt;string&gt;" defaultValue="MultiAutoCompleteOptionRow">
+  <p>Registered row presentation. The input supplies option semantics and keyboard selection.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-minLength" name="minLength" valueType="RefOrValue&lt;number | string&gt;" defaultValue="0">
+  <p>Minimum trimmed query length before suggestions may open.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-maxResults" name="maxResults" valueType="RefOrValue&lt;number | string&gt;" defaultValue="10">
+  <p>Maximum number of matching suggestions rendered.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-openOnFocus" name="openOnFocus" valueType="RefOrValue&lt;boolean&gt;" defaultValue="true">
+  <p>Opens suggestions on focus when the minimum query length is met.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-allowCustomValues" name="allowCustomValues" valueType="RefOrValue&lt;boolean&gt;" defaultValue="true">
+  <p>Allows Enter and separators to create tokens from query text.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-allowDuplicates" name="allowDuplicates" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
+  <p>Allows repeated selected values when true.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-separators" name="separators" valueType="RefOrValue&lt;string&gt;" defaultValue=",;">
+  <p>Characters that commit query fragments; newline also splits pasted input.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-loading" name="loading" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
+  <p>Shows a loading state. Your application supplies options and manages any asynchronous request.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-emptyText" name="emptyText" valueType="RefOrValue&lt;string&gt;" defaultValue="No suggestions">
+  <p>Message displayed when the query has no matching suggestions.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-loadingText" name="loadingText" valueType="RefOrValue&lt;string&gt;" defaultValue="Loading suggestions">
+  <p>Status message while loading is true.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-onCreateItem" name="onCreateItem" valueType="RefOrValue&lt;MultiAutoCompleteCreateItem&gt;" defaultValue="not set">
+  <p>Maps query text to a MultiAutoCompleteItem, or null/undefined to reject it.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-onOptionToItem" name="onOptionToItem" valueType="RefOrValue&lt;MultiAutoCompleteOptionToItem&gt;" defaultValue="not set">
+  <p>Maps a resolved suggestion to an item, or null/undefined to reject it.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-onSplitInput" name="onSplitInput" valueType="RefOrValue&lt;MultiAutoCompleteSplitInput&gt;" defaultValue="not set">
+  <p>Custom text splitter returning string fragments. Replaces default separator splitting.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-onItemsChange" name="onItemsChange" valueType="RefOrValue&lt;MultiAutoCompleteItemsChange&gt;" defaultValue="not set">
+  <p>Receives the updated selected-item array.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-onSelect" name="onSelect" valueType="RefOrValue&lt;MultiAutoCompleteSelect&gt;" defaultValue="not set">
+  <p>Receives the resolved option and the item created from it.</p>
+</ApiProperty>
+
+<ApiProperty anchor="multi-auto-complete-input-prop-onSearch" name="onSearch" valueType="RefOrValue&lt;MultiAutoCompleteSearch&gt;" defaultValue="not set">
+  <p>Callback receiving the query string after an edit. Use it to load or filter application data.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p>No slots. Register defineMultiAutoCompleteInputComponents and defineIconComponents. Use sref for items and ref for the current text model.</p>
+</div>
+
+### Events and item data
+
+The input emits `itemschange`, `itemremove`, `itemcreate`, `optionselect` and `querychange`. Each item can carry `label`, `value`, `disabled`, `invalid`, `tone` and `keywords`. Keep persistence and domain validation in the owning app.
+
+## Related components
+
+- [MultiAutoCompleteOptionRow](/components/multi-auto-complete-option-row/)
+- [AutoCompleteInput](/components/auto-complete-input/)
+- [DropFiles](/components/drop-files/)

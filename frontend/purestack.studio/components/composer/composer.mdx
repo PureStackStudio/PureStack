@@ -1,0 +1,223 @@
+---
+title: Composer
+description: "Edit rich text with formatting tools, HTML source mode and synchronized HTML and plain-text refs."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 109
+  icon: tabler:components
+---
+
+# Composer
+
+Edit rich text with formatting tools, HTML source mode and synchronized HTML and plain-text refs.
+
+<Badge tone="accent" variant="surface">Composer</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/composer/composer.ts) · [API reference](#api-reference)
+
+
+
+## Write a release note
+
+Edit the draft, select text for formatting, switch to HTML source, or inspect the resulting values. Restore returns to the original content.
+
+<Tabs group="composer-sample-1" selectedTab="composer-sample-1-preview" ariaLabel="Write a release note example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="composer-sample-1-preview" label="Preview">
+    <RegorApp id="composer-demo" src="./playground.ts"/>
+  </TabPane>
+  <TabPane id="composer-sample-1-source-0" label="playground.mdx">
+```html
+<RegorApp id="composer-demo" src="./playground.ts"/>
+```
+  </TabPane>
+  <TabPane id="composer-sample-1-source-1" label="playground.ts">
+```typescript
+import {
+  defineBadgeComponents,
+  defineButtonComponents,
+  defineComposerComponents,
+  defineExpandablePanelComponents,
+  defineFlexComponents,
+  defineFormComponents,
+  defineIconComponents,
+  definePanelComponents,
+} from '@purestack/ts-components'
+import {
+  iconoir_nav_arrow_down,
+  lucide_bold,
+  lucide_code,
+  lucide_eraser,
+  lucide_italic,
+  lucide_link,
+  lucide_list,
+  lucide_list_ordered,
+  lucide_underline,
+  tabler_align_center,
+  tabler_align_left,
+  tabler_align_right,
+} from '@purestack/ts-svg-icons'
+import { createApp, defineComponent, html, type Ref, ref } from 'regor'
+
+export interface ComposerExample {
+  messageHtml: Ref<string>
+  messageText: Ref<string>
+  locked: Ref<boolean>
+  reset: () => void
+}
+
+const composerExampleTemplate = html`<Flex direction="column">
+  <Composer
+    label="Release note"
+    placeholder="Write a short update"
+    :html="messageHtml"
+    :text="messageText"
+    :disabled="locked"
+    minHeight="12rem"
+  />
+  <Flex wrap="true">
+    <FormCheck id="composer-lock" label="Read-only preview" :checked="locked" />
+    <Btn variant="link" @click="reset">Restore draft</Btn>
+  </Flex>
+  <Panel variant="outline" bodyClass="p-3">
+    <strong>Plain-text output</strong>
+    <p class="ws-pre-wrap">{{ messageText || 'No content' }}</p>
+  </Panel>
+  <ExpandablePanel title="Current HTML value">
+    <pre class="overflow-x-auto"><code>{{ messageHtml }}</code></pre>
+  </ExpandablePanel>
+</Flex>`
+
+function createComposerExample(): ComposerExample {
+  const initial =
+    '<p><strong>Preview release</strong></p><p>The component guides are ready for review.</p>'
+  const messageHtml = ref(initial)
+  return {
+    messageHtml,
+    messageText: ref(''),
+    locked: ref(false),
+    reset: () => messageHtml(initial),
+  }
+}
+
+const component = defineComponent<ComposerExample>(composerExampleTemplate, {
+  context: createComposerExample,
+})
+const icons: Record<string, string> = {
+  'iconoir:nav-arrow-down': iconoir_nav_arrow_down,
+  'lucide:bold': lucide_bold,
+  'lucide:italic': lucide_italic,
+  'lucide:underline': lucide_underline,
+  'tabler:align-left': tabler_align_left,
+  'tabler:align-center': tabler_align_center,
+  'tabler:align-right': tabler_align_right,
+  'lucide:list': lucide_list,
+  'lucide:list-ordered': lucide_list_ordered,
+  'lucide:link': lucide_link,
+  'lucide:eraser': lucide_eraser,
+  'lucide:code': lucide_code,
+}
+
+createApp(
+  {
+    components: {
+      ComposerExample: component,
+
+      ...defineComposerComponents(),
+      ...defineExpandablePanelComponents(),
+      ...defineBadgeComponents(),
+      ...defineFlexComponents(),
+      ...defineFormComponents(),
+      ...defineButtonComponents(),
+      ...definePanelComponents(),
+      ...defineIconComponents((name) => icons[name] ?? ''),
+    },
+  },
+  { selector: 'app#composer-demo', template: html`<ComposerExample />` },
+)
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+The toolbar supports bold, italic, underline, alignment, lists, links, clear formatting and HTML source. Formatting uses browser editing commands; select the target text first. Pasted and edited markup is normalized by the email HTML policy. Validate content at your application boundary before storing or sending it. The editor is a multiline textbox with a name from label or placeholder.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">Composer contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="Composer properties">
+  <a href="#composer-prop-html">html</a>
+  <a href="#composer-prop-text">text</a>
+  <a href="#composer-prop-label">label</a>
+  <a href="#composer-prop-placeholder">placeholder</a>
+  <a href="#composer-prop-disabled">disabled</a>
+  <a href="#composer-prop-focusOnMount">focusOnMount</a>
+  <a href="#composer-prop-minHeight">minHeight</a>
+  <a href="#composer-prop-tone">tone</a>
+  <a href="#composer-prop-variant">variant</a>
+  <a href="#composer-prop-imagePreviewUrls">imagePreviewUrls</a>
+</nav>
+
+<ApiProperty anchor="composer-prop-html" name="html" valueType="Ref&lt;string&gt; | SRef&lt;string&gt;" defaultValue="ref('')">
+  <p>Writable HTML model. External updates replace editor content.</p>
+</ApiProperty>
+
+<ApiProperty anchor="composer-prop-text" name="text" valueType="Ref&lt;string&gt; | SRef&lt;string&gt;" defaultValue="ref('')">
+  <p>Writable plain-text output synchronized from the HTML content.</p>
+</ApiProperty>
+
+<ApiProperty anchor="composer-prop-label" name="label" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Visible label. Use language that describes the control or value in its surrounding context.</p>
+</ApiProperty>
+
+<ApiProperty anchor="composer-prop-placeholder" name="placeholder" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>A short input hint shown while empty. Keep a separate visible label.</p>
+</ApiProperty>
+
+<ApiProperty anchor="composer-prop-disabled" name="disabled" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
+  <p>Disables interaction. Use a bound boolean, for example :disabled="isLocked".</p>
+</ApiProperty>
+
+<ApiProperty anchor="composer-prop-focusOnMount" name="focusOnMount" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
+  <p>Focuses the editor when mounted. Avoid automatic focus in inline documentation or pages with multiple tasks.</p>
+</ApiProperty>
+
+<ApiProperty anchor="composer-prop-minHeight" name="minHeight" valueType="RefOrValue&lt;number | string&gt;" defaultValue="13.75rem">
+  <p>Minimum editor height. Numbers become pixel lengths; CSS length strings are accepted.</p>
+</ApiProperty>
+
+<ApiProperty anchor="composer-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
+  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+</ApiProperty>
+
+<ApiProperty anchor="composer-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surfaceAlt">
+  <p>Visual treatment. Accepts solid, surface, surfaceAlt, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+</ApiProperty>
+
+<ApiProperty anchor="composer-prop-imagePreviewUrls" name="imagePreviewUrls" valueType="RefOrValue&lt;Record&lt;string, string&gt;&gt;" defaultValue="not set">
+  <p>Map from normalized content IDs to preview URLs for inline cid images. The model keeps its cid references while the editor uses preview URLs.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p>No slots. Register defineComposerComponents and every toolbar icon through defineIconComponents. The html and text refs are the data contract; the component does not submit a form or upload attachments.</p>
+</div>
+
+### Inline images and attachments
+
+The editor preserves supported email markup and normalizes links, styles and image URLs. Use `imagePreviewUrls` when an email model references `cid:` images. Manage the corresponding attachments and object-URL cleanup in the owning app. `createComposerBodyHtml` wraps content in the package’s email body presentation.
+
+## Related components
+
+- [DropFiles](/components/drop-files/)
+- [FormInputField](/components/form-input-field/)
+- [AppForm](/components/app-form/)

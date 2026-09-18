@@ -1,0 +1,195 @@
+---
+title: AppForm
+description: "A themed native form that keeps field composition, validation and submission in your control."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 117
+  icon: tabler:components
+---
+
+# App<wbr/>Form
+
+A themed native form that keeps field composition, validation and submission in your control.
+
+<Badge tone="accent" variant="surface">AppForm</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/form.ts) · [API reference](#api-reference)
+
+
+
+## Save a project
+
+Edit the project name, save it locally, then reset. The handler explicitly checks native constraints because AppForm renders novalidate.
+
+<Tabs group="app-form-sample-1" selectedTab="app-form-sample-1-preview" ariaLabel="Save a project example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="app-form-sample-1-preview" label="Preview">
+    <RegorApp id="app-form-demo" src="./playground.ts"/>
+  </TabPane>
+  <TabPane id="app-form-sample-1-source-0" label="playground.mdx">
+```html
+<RegorApp id="app-form-demo" src="./playground.ts"/>
+```
+  </TabPane>
+  <TabPane id="app-form-sample-1-source-1" label="playground.ts">
+```typescript
+import {
+  defineButtonComponents,
+  defineFlexComponents,
+  defineFormComponents,
+  defineFormInputField,
+  definePanelComponents,
+} from '@purestack/ts-components'
+
+import { createApp, defineComponent, html, type Ref, ref } from 'regor'
+
+export interface AppFormExample {
+  projectName: Ref<string>
+  savedProject: Ref<string>
+  save: (event: Event) => void
+  reset: () => void
+}
+
+const appFormExampleTemplate = html`<Panel bodyClass="p-4">
+  <AppForm @submit.prevent="save" @reset.prevent="reset">
+    <FormInputField
+      id="app-form-project"
+      name="project"
+      label="Project name"
+      :model="projectName"
+      :required="true"
+      minlength="3"
+    />
+    <FormMeta>
+      <FormSubmit label="Save project" tone="accent" />
+      <Btn type="reset" variant="outline">Reset</Btn>
+    </FormMeta>
+    <FormStatus tone="success" :hidden="!savedProject">
+      Saved locally: {{ savedProject }}
+    </FormStatus>
+  </AppForm>
+</Panel>`
+
+function createAppFormExample(): AppFormExample {
+  const projectName = ref('Studio docs')
+  const savedProject = ref('')
+  return {
+    projectName,
+    savedProject,
+    save: (event) => {
+      const form = event.target as HTMLFormElement
+      if (!form.reportValidity()) return
+      savedProject(String(new FormData(form).get('project') ?? ''))
+    },
+    reset: () => {
+      projectName('Studio docs')
+      savedProject('')
+    },
+  }
+}
+
+const component = defineComponent<AppFormExample>(appFormExampleTemplate, {
+  context: createAppFormExample,
+})
+
+createApp(
+  {
+    components: {
+      AppFormExample: component,
+
+      ...defineFlexComponents(),
+      ...definePanelComponents(),
+      ...defineButtonComponents(),
+      ...defineFormComponents(),
+      ...defineFormInputField(),
+    },
+  },
+  { selector: 'app#app-form-demo', template: html`<AppFormExample />` },
+)
+```
+  </TabPane>
+</Tabs>
+
+## Compose a form surface
+
+Choose the surrounding treatment independently of the fields. This disabled example shows structure without submitting data.
+
+<Tabs group="app-form-sample-2" selectedTab="app-form-sample-2-preview" ariaLabel="Compose a form surface example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="app-form-sample-2-preview" label="Preview">
+    <AppForm method="post" tone="neutral" variant="outline" class="p-4">
+      <FormInputField
+        id="form-structure-name"
+        name="name"
+        label="Workspace name"
+        placeholder="Your workspace"
+        :disabled="true"
+      />
+      <FormStatus>Connect the form to your application’s submit handler.</FormStatus>
+    </AppForm>
+  </TabPane>
+  <TabPane id="app-form-sample-2-source-0" label="form-structure.mdx">
+```html
+<AppForm method="post" tone="neutral" variant="outline" class="p-4">
+  <FormInputField
+    id="form-structure-name"
+    name="name"
+    label="Workspace name"
+    placeholder="Your workspace"
+    :disabled="true"
+  />
+  <FormStatus>Connect the form to your application’s submit handler.</FormStatus>
+</AppForm>
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+AppForm always renders `novalidate`. Use reportValidity or your own validation in a submit handler. Named controls participate in FormData; disabled controls do not. Reset reactive refs explicitly when handling reset in a Regor app.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">AppForm contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="AppForm properties">
+  <a href="#app-form-prop-action">action</a>
+  <a href="#app-form-prop-method">method</a>
+  <a href="#app-form-prop-tone">tone</a>
+  <a href="#app-form-prop-variant">variant</a>
+</nav>
+
+<ApiProperty anchor="app-form-prop-action" name="action" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Native submission URL, resolved against the SSG base path. Browser examples intercept submit to keep data local.</p>
+</ApiProperty>
+
+<ApiProperty anchor="app-form-prop-method" name="method" valueType="RefOrValue&lt;string&gt;" defaultValue="browser default: get">
+  <p>Native form method. Set post when your endpoint expects a request body.</p>
+</ApiProperty>
+
+<ApiProperty anchor="app-form-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
+  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+</ApiProperty>
+
+<ApiProperty anchor="app-form-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="none">
+  <p>Visual treatment. Accepts solid, surface, surfaceAlt, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p><strong>Default slot:</strong> native fields and form components. Native submit and reset events bubble normally. Register defineFormComponents; register each field family separately.</p>
+</div>
+
+
+
+## Related components
+
+- [FormInputField](/components/form-input-field/)
+- [FormSubmit](/components/form-submit/)
+- [FormStatus](/components/form-status/)

@@ -1,0 +1,183 @@
+---
+title: ComparisonTable
+description: "Compare approaches in responsive columns, each with its own heading, summary and feature list."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 137
+  icon: tabler:components
+---
+
+# Comparison<wbr/>Table
+
+Compare approaches in responsive columns, each with its own heading, summary and feature list.
+
+<Badge tone="accent" variant="surface">ComparisonTable</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts) · [API reference](#api-reference)
+
+
+
+## Compare two workflows
+
+A visual comparison uses cards, not a semantic HTML table. Use parallel headings and concrete statements.
+
+<Tabs group="comparison-table-sample-1" selectedTab="comparison-table-sample-1-preview" ariaLabel="Compare two workflows example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="comparison-table-sample-1-preview" label="Preview">
+    <ComparisonTable
+      eyebrow="CHOOSE YOUR STARTING POINT"
+      title="Two ways to compose"
+      subtitle="Use the approach that fits the interaction."
+      columnsLg="2"
+    >
+      <ComparisonColumn
+        title="Content page"
+        summary="Mostly static information."
+        tone="neutral"
+      >
+        <ul class="pl-0">
+          <ComparisonFeature>MDX authoring</ComparisonFeature>
+          <ComparisonFeature>Server-rendered components</ComparisonFeature>
+        </ul>
+      </ComparisonColumn>
+      <ComparisonColumn
+        title="Interactive view"
+        summary="Local application state."
+        badge="Reactive"
+        tone="accent"
+      >
+        <ul class="pl-0">
+          <ComparisonFeature>Regor refs</ComparisonFeature>
+          <ComparisonFeature>Focused browser entry point</ComparisonFeature>
+        </ul>
+      </ComparisonColumn>
+    </ComparisonTable>
+  </TabPane>
+  <TabPane id="comparison-table-sample-1-source-0" label="workflow-comparison.mdx">
+```html
+<ComparisonTable
+  eyebrow="CHOOSE YOUR STARTING POINT"
+  title="Two ways to compose"
+  subtitle="Use the approach that fits the interaction."
+  columnsLg="2"
+>
+  <ComparisonColumn
+    title="Content page"
+    summary="Mostly static information."
+    tone="neutral"
+  >
+    <ul class="pl-0">
+      <ComparisonFeature>MDX authoring</ComparisonFeature>
+      <ComparisonFeature>Server-rendered components</ComparisonFeature>
+    </ul>
+  </ComparisonColumn>
+  <ComparisonColumn
+    title="Interactive view"
+    summary="Local application state."
+    badge="Reactive"
+    tone="accent"
+  >
+    <ul class="pl-0">
+      <ComparisonFeature>Regor refs</ComparisonFeature>
+      <ComparisonFeature>Focused browser entry point</ComparisonFeature>
+    </ul>
+  </ComparisonColumn>
+</ComparisonTable>
+```
+  </TabPane>
+</Tabs>
+
+## A compact comparison
+
+Use the same composition for a small pair of options.
+
+<Tabs group="comparison-table-sample-2" selectedTab="comparison-table-sample-2-preview" ariaLabel="A compact comparison example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="comparison-table-sample-2-preview" label="Preview">
+    <ComparisonTable columns="1" columnsLg="2" variant="outline">
+      <ComparisonColumn title="Fixed layout" summary="Known dimensions." />
+      <ComparisonColumn
+        title="Responsive layout"
+        summary="Adapts to available space."
+        tone="info"
+      />
+    </ComparisonTable>
+  </TabPane>
+  <TabPane id="comparison-table-sample-2-source-0" label="compact-comparison.mdx">
+```html
+<ComparisonTable columns="1" columnsLg="2" variant="outline">
+  <ComparisonColumn title="Fixed layout" summary="Known dimensions." />
+  <ComparisonColumn
+    title="Responsive layout"
+    summary="Adapts to available space."
+    tone="info"
+  />
+</ComparisonTable>
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+The component renders a section with a grid. If readers need row-by-row relationships across many values, use an HTML table instead. Column titles are h3 beneath the optional h2 section title.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">ComparisonTable contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="ComparisonTable properties">
+  <a href="#comparison-table-prop-eyebrow">eyebrow</a>
+  <a href="#comparison-table-prop-title">title</a>
+  <a href="#comparison-table-prop-subtitle">subtitle</a>
+  <a href="#comparison-table-prop-tone">tone</a>
+  <a href="#comparison-table-prop-variant">variant</a>
+  <a href="#comparison-table-prop-columns">columns</a>
+  <a href="#comparison-table-prop-columnsLg">columnsLg</a>
+</nav>
+
+<ApiProperty anchor="comparison-table-prop-eyebrow" name="eyebrow" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Short context above the heading, such as a category or release label.</p>
+</ApiProperty>
+
+<ApiProperty anchor="comparison-table-prop-title" name="title" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Visible heading. Choose a short title that identifies the content or task.</p>
+</ApiProperty>
+
+<ApiProperty anchor="comparison-table-prop-subtitle" name="subtitle" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Supporting text beneath the title.</p>
+</ApiProperty>
+
+<ApiProperty anchor="comparison-table-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
+  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+</ApiProperty>
+
+<ApiProperty anchor="comparison-table-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surface">
+  <p>Visual treatment. Accepts solid, surface, surfaceAlt, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+</ApiProperty>
+
+<ApiProperty anchor="comparison-table-prop-columns" name="columns" valueType="RefOrValue&lt;number | string&gt;" defaultValue="1">
+  <p>Column count from 1 to 12, or a CSS track list such as minmax(0, 1fr) auto. Numeric counts are clamped.</p>
+</ApiProperty>
+
+<ApiProperty anchor="comparison-table-prop-columnsLg" name="columnsLg" valueType="RefOrValue&lt;number | string&gt;" defaultValue="3">
+  <p>Column count or CSS track list at the theme’s lg breakpoint and above.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p><strong>Default slot:</strong> ComparisonColumn elements. Register defineComparisonTableComponent with Panel, Flex, Grid and SectionHeader, plus the column and feature components you use.</p>
+</div>
+
+
+
+## Related components
+
+- [ComparisonColumn](/components/comparison-column/)
+- [ComparisonFeature](/components/comparison-feature/)
+- [PricingTable](/components/pricing-table/)

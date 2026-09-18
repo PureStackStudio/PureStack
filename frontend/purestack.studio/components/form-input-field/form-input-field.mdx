@@ -1,0 +1,272 @@
+---
+title: FormInputField
+description: "A labelled native input with reactive values, optional icons and built-in numeric step controls."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 124
+  icon: tabler:components
+---
+
+# Form<wbr/>Input<wbr/>Field
+
+A labelled native input with reactive values, optional icons and built-in numeric step controls.
+
+<Badge tone="accent" variant="surface">FormInputField</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/formInputField.ts) · [API reference](#api-reference)
+
+
+
+## Edit workspace details
+
+Type an email, adjust the seat count and lock the fields. The summary reads the same refs as the inputs.
+
+<Tabs group="form-input-field-sample-1" selectedTab="form-input-field-sample-1-preview" ariaLabel="Edit workspace details example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="form-input-field-sample-1-preview" label="Preview">
+    <RegorApp id="form-input-field-demo" src="./playground.ts"/>
+  </TabPane>
+  <TabPane id="form-input-field-sample-1-source-0" label="playground.mdx">
+```html
+<RegorApp id="form-input-field-demo" src="./playground.ts"/>
+```
+  </TabPane>
+  <TabPane id="form-input-field-sample-1-source-1" label="playground.ts">
+```typescript
+import {
+  defineButtonComponents,
+  defineFlexComponents,
+  defineFormComponents,
+  defineFormInputField,
+  defineGridComponents,
+  defineIconComponents,
+  definePanelComponents,
+} from '@purestack/ts-components'
+import { lucide_mail } from '@purestack/ts-svg-icons'
+import {
+  type ComputedRef,
+  computed,
+  createApp,
+  defineComponent,
+  html,
+  type Ref,
+  ref,
+} from 'regor'
+
+export interface FormInputFieldExample {
+  contactEmail: Ref<string>
+  seats: Ref<number | string>
+  locked: Ref<boolean>
+  summary: ComputedRef<string>
+}
+
+const formInputFieldExampleTemplate = html`<Flex direction="column">
+  <Grid columns="1" columnsSm="2">
+    <FormInputField
+      id="input-email"
+      label="Contact email"
+      name="email"
+      type="email"
+      autocomplete="email"
+      icon="lucide:mail"
+      placeholder="you@example.com"
+      :model="contactEmail"
+      :disabled="locked"
+    />
+    <FormInputField
+      id="input-seats"
+      label="Seats"
+      type="number"
+      min="1"
+      step="1"
+      :model="seats"
+      :disabled="locked"
+    />
+  </Grid>
+  <FormCheck id="input-lock" label="Lock fields" :checked="locked" />
+  <FormStatus>{{ summary }}</FormStatus>
+</Flex>`
+
+function createFormInputFieldExample(): FormInputFieldExample {
+  const contactEmail = ref('')
+  const seats = ref<number | string>(3)
+  const locked = ref(false)
+  return {
+    contactEmail,
+    seats,
+    locked,
+    summary: computed(
+      () => `${seats()} seats · ${contactEmail() || 'No email entered'}`,
+    ),
+  }
+}
+
+const component = defineComponent<FormInputFieldExample>(
+  formInputFieldExampleTemplate,
+  {
+    context: createFormInputFieldExample,
+  },
+)
+const icons: Record<string, string> = { 'lucide:mail': lucide_mail }
+
+createApp(
+  {
+    components: {
+      FormInputFieldExample: component,
+
+      ...defineFlexComponents(),
+      ...definePanelComponents(),
+      ...defineButtonComponents(),
+      ...defineFormComponents(),
+      ...defineFormInputField(),
+      ...defineGridComponents(),
+      ...defineIconComponents((name) => icons[name] ?? ''),
+    },
+  },
+  {
+    selector: 'app#form-input-field-demo',
+    template: html`<FormInputFieldExample />`,
+  },
+)
+```
+  </TabPane>
+</Tabs>
+
+## Native input types
+
+Use browser-native controls for dates, passwords and other structured input.
+
+<Tabs group="form-input-field-sample-2" selectedTab="form-input-field-sample-2-preview" ariaLabel="Native input types example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="form-input-field-sample-2-preview" label="Preview">
+    <Grid columns="1" columnsSm="2">
+      <FormInputField id="input-date" label="Review date" type="date" />
+      <FormInputField
+        id="input-password"
+        label="New password"
+        type="password"
+        autocomplete="new-password"
+        placeholder="Enter a password"
+      />
+    </Grid>
+  </TabPane>
+  <TabPane id="form-input-field-sample-2-source-0" label="native-types.mdx">
+```html
+<Grid columns="1" columnsSm="2">
+  <FormInputField id="input-date" label="Review date" type="date" />
+  <FormInputField
+    id="input-password"
+    label="New password"
+    type="password"
+    autocomplete="new-password"
+    placeholder="Enter a password"
+  />
+</Grid>
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+Visible labels are associated with generated or explicit IDs. Extra native attributes and events are inherited by the input. Number step buttons clamp to min; max and other native constraints still need form validation. Bind a ref rather than an evaluated ref value.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">FormInputField contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="FormInputField properties">
+  <a href="#form-input-field-prop-id">id</a>
+  <a href="#form-input-field-prop-label">label</a>
+  <a href="#form-input-field-prop-tone">tone</a>
+  <a href="#form-input-field-prop-variant">variant</a>
+  <a href="#form-input-field-prop-model">model</a>
+  <a href="#form-input-field-prop-type">type</a>
+  <a href="#form-input-field-prop-name">name</a>
+  <a href="#form-input-field-prop-required">required</a>
+  <a href="#form-input-field-prop-autocomplete">autocomplete</a>
+  <a href="#form-input-field-prop-min">min</a>
+  <a href="#form-input-field-prop-step">step</a>
+  <a href="#form-input-field-prop-placeholder">placeholder</a>
+  <a href="#form-input-field-prop-disabled">disabled</a>
+  <a href="#form-input-field-prop-icon">icon</a>
+  <a href="#form-input-field-prop-iconEnd">iconEnd</a>
+</nav>
+
+<ApiProperty anchor="form-input-field-prop-id" name="id" valueType="string" defaultValue="generated">
+  <p>Unique control ID. Supply an explicit value when help text or another element needs to reference this control.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-input-field-prop-label" name="label" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Visible label. Use language that describes the control or value in its surrounding context.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-input-field-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
+  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-input-field-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surfaceAlt">
+  <p>Visual treatment. Accepts solid, surface, surfaceAlt, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-input-field-prop-model" name="model" valueType="Ref&lt;string | number&gt;" defaultValue="ref('')">
+  <p>Two-way value ref. Pass the ref itself with :model="fieldValue" so edits update application state.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-input-field-prop-type" name="type" valueType="RefOrValue&lt;FormInputFieldType&gt;" defaultValue="text">
+  <p>Native input type: text, email, password, number, tel, url, search, date, time, datetime-local, month or week.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-input-field-prop-name" name="name" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Native form field name used during FormData serialization.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-input-field-prop-required" name="required" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
+  <p>Native required constraint. Validate the owning form before accepting its data.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-input-field-prop-autocomplete" name="autocomplete" valueType="RefOrValue&lt;string&gt;" defaultValue="off">
+  <p>Native browser autofill hint, such as name, email or current-password.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-input-field-prop-min" name="min" valueType="RefOrValue&lt;number | string&gt;" defaultValue="not set">
+  <p>Minimum numeric value. The number step buttons clamp to this value; native validation also uses it.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-input-field-prop-step" name="step" valueType="RefOrValue&lt;number | string&gt;" defaultValue="1 for step buttons">
+  <p>Positive numeric increment. Invalid or non-positive values fall back to 1 for the step buttons.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-input-field-prop-placeholder" name="placeholder" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>A short input hint shown while empty. Keep a separate visible label.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-input-field-prop-disabled" name="disabled" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
+  <p>Disables interaction. Use a bound boolean, for example :disabled="isLocked".</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-input-field-prop-icon" name="icon" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Registered SVG icon name. In browser apps, include the icon in the resolver passed to defineIconComponents.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-input-field-prop-iconEnd" name="iconEnd" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Trailing registered SVG icon. Keep the field label visible; an icon is not a replacement for its accessible name.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p>No slots. Input events remain native; model is the two-way value contract. Register defineFormInputField and defineIconComponents when using icons.</p>
+</div>
+
+
+
+## Related components
+
+- [AppForm](/components/app-form/)
+- [FormSelectField](/components/form-select-field/)
+- [AutoCompleteInput](/components/auto-complete-input/)

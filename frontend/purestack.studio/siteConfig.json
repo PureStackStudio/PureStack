@@ -62,7 +62,7 @@
     }
   },
   "pagefind": {
-    "enabled": false,
+    "enabled": true,
     "excludePaths": []
   },
   "preview": {

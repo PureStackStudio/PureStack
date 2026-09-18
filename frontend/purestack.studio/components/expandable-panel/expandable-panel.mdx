@@ -1,0 +1,205 @@
+---
+title: ExpandablePanel
+description: "Progressively disclose details with a native, keyboard-operable summary and a themed content surface."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 112
+  icon: tabler:components
+---
+
+# Expandable<wbr/>Panel
+
+Progressively disclose details with a native, keyboard-operable summary and a themed content surface.
+
+<Badge tone="accent" variant="surface">ExpandablePanel</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/expandablePanel/expandablePanel.ts) · [API reference](#api-reference)
+
+
+
+## Release details
+
+Open the summary to reveal supporting information. Native details preserves a useful interface before any app mounts.
+
+<Tabs group="expandable-panel-sample-1" selectedTab="expandable-panel-sample-1-preview" ariaLabel="Release details example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="expandable-panel-sample-1-preview" label="Preview">
+    <ExpandablePanel
+      title="What ships with a component?"
+      description="Source, theme styles and composition"
+      badge="3 parts"
+      icon="lucide:check"
+      meta="Open for details"
+      tone="accent"
+    >
+      <ul>
+        <li>A typed component contract.</li>
+        <li>Theme-aware presentation.</li>
+        <li>Composable slots and native HTML.</li>
+      </ul>
+    </ExpandablePanel>
+  </TabPane>
+  <TabPane id="expandable-panel-sample-1-source-0" label="release-details.mdx">
+```html
+<ExpandablePanel
+  title="What ships with a component?"
+  description="Source, theme styles and composition"
+  badge="3 parts"
+  icon="lucide:check"
+  meta="Open for details"
+  tone="accent"
+>
+  <ul>
+    <li>A typed component contract.</li>
+    <li>Theme-aware presentation.</li>
+    <li>Composable slots and native HTML.</li>
+  </ul>
+</ExpandablePanel>
+```
+  </TabPane>
+</Tabs>
+
+## Independent disclosure sections
+
+An initially open panel can sit beside a closed one. These disclosures are independent, not a single-selection accordion.
+
+<Tabs group="expandable-panel-sample-2" selectedTab="expandable-panel-sample-2-preview" ariaLabel="Independent disclosure sections example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="expandable-panel-sample-2-preview" label="Preview">
+    <Flex direction="column">
+      <ExpandablePanel
+        title="Content authoring"
+        :open="true"
+        variant="outline"
+        summaryVariant="surface"
+      >
+        <p>Write content in MDX and use registered components directly.</p>
+      </ExpandablePanel>
+      <ExpandablePanel title="Browser state" summaryVariant="subtle">
+        <p>Mount a RegorApp when a sample needs reactive state.</p>
+      </ExpandablePanel>
+    </Flex>
+  </TabPane>
+  <TabPane id="expandable-panel-sample-2-source-0" label="initial-state.mdx">
+```html
+<Flex direction="column">
+  <ExpandablePanel
+    title="Content authoring"
+    :open="true"
+    variant="outline"
+    summaryVariant="surface"
+  >
+    <p>Write content in MDX and use registered components directly.</p>
+  </ExpandablePanel>
+  <ExpandablePanel title="Browser state" summaryVariant="subtle">
+    <p>Mount a RegorApp when a sample needs reactive state.</p>
+  </ExpandablePanel>
+</Flex>
+```
+  </TabPane>
+</Tabs>
+
+## A custom summary
+
+Replace the generated summary content while preserving the native summary element.
+
+<Tabs group="expandable-panel-sample-3" selectedTab="expandable-panel-sample-3-preview" ariaLabel="A custom summary example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="expandable-panel-sample-3-preview" label="Preview">
+    <ExpandablePanel tone="success">
+      <template #summary>
+        <Flex align="center" justify="between" wrap="true">
+          <strong>Build report</strong>
+          <Badge tone="success">Passing</Badge>
+        </Flex>
+      </template>
+      <p>The documentation build completed successfully.</p>
+    </ExpandablePanel>
+  </TabPane>
+  <TabPane id="expandable-panel-sample-3-source-0" label="custom-summary.mdx">
+```html
+<ExpandablePanel tone="success">
+  <template #summary>
+    <Flex align="center" justify="between" wrap="true">
+      <strong>Build report</strong>
+      <Badge tone="success">Passing</Badge>
+    </Flex>
+  </template>
+  <p>The documentation build completed successfully.</p>
+</ExpandablePanel>
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+Focus the summary and press Enter or Space to toggle it. Do not put nested buttons or links inside a summary. The native `toggle` event reports open state; the open prop sets the element state but native user toggling does not write back to a parent ref automatically.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">ExpandablePanel contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="ExpandablePanel properties">
+  <a href="#expandable-panel-prop-title">title</a>
+  <a href="#expandable-panel-prop-description">description</a>
+  <a href="#expandable-panel-prop-meta">meta</a>
+  <a href="#expandable-panel-prop-badge">badge</a>
+  <a href="#expandable-panel-prop-icon">icon</a>
+  <a href="#expandable-panel-prop-tone">tone</a>
+  <a href="#expandable-panel-prop-variant">variant</a>
+  <a href="#expandable-panel-prop-summaryVariant">summaryVariant</a>
+  <a href="#expandable-panel-prop-open">open</a>
+</nav>
+
+<ApiProperty anchor="expandable-panel-prop-title" name="title" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Visible heading. Choose a short title that identifies the content or task.</p>
+</ApiProperty>
+
+<ApiProperty anchor="expandable-panel-prop-description" name="description" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Supporting description for the content.</p>
+</ApiProperty>
+
+<ApiProperty anchor="expandable-panel-prop-meta" name="meta" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Secondary context such as an update time, limitation or reassurance.</p>
+</ApiProperty>
+
+<ApiProperty anchor="expandable-panel-prop-badge" name="badge" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Optional compact label rendered with Badge.</p>
+</ApiProperty>
+
+<ApiProperty anchor="expandable-panel-prop-icon" name="icon" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Registered SVG icon name. In browser apps, include the icon in the resolver passed to defineIconComponents.</p>
+</ApiProperty>
+
+<ApiProperty anchor="expandable-panel-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
+  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+</ApiProperty>
+
+<ApiProperty anchor="expandable-panel-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surface">
+  <p>Visual treatment. Accepts solid, surface, surfaceAlt, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+</ApiProperty>
+
+<ApiProperty anchor="expandable-panel-prop-summaryVariant" name="summaryVariant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surface">
+  <p>Independent visual treatment for the stateful summary.</p>
+</ApiProperty>
+
+<ApiProperty anchor="expandable-panel-prop-open" name="open" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
+  <p>Initial or externally bound native details open state. Listen to toggle if application state must track user changes.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p><strong>Default slot:</strong> disclosure body. <strong>summary:</strong> replaces the generated icon, title, description and badge row. Register defineExpandablePanelComponents and its Panel, Flex, Badge and Icon dependencies.</p>
+</div>
+
+
+
+## Related components
+
+- [Panel](/components/panel/)
+- [AlertBox](/components/alert-box/)

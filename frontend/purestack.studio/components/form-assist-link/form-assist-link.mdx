@@ -1,0 +1,114 @@
+---
+title: FormAssistLink
+description: "A small native link for recovery, help and supporting form navigation."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 120
+  icon: tabler:components
+---
+
+# Form<wbr/>Assist<wbr/>Link
+
+A small native link for recovery, help and supporting form navigation.
+
+<Badge tone="accent" variant="surface">FormAssistLink</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/form.ts) · [API reference](#api-reference)
+
+
+
+## Contextual help
+
+Use a specific label that describes where the reader will go.
+
+<Tabs group="form-assist-link-sample-1" selectedTab="form-assist-link-sample-1-preview" ariaLabel="Contextual help example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="form-assist-link-sample-1-preview" label="Preview">
+    <FormMeta>
+      <span>Need a different input?</span>
+      <FormAssistLink href="/components/auto-complete-input/" label="Explore suggestions" />
+    </FormMeta>
+  </TabPane>
+  <TabPane id="form-assist-link-sample-1-source-0" label="help-link.mdx">
+```html
+<FormMeta>
+  <span>Need a different input?</span>
+  <FormAssistLink href="/components/auto-complete-input/" label="Explore suggestions" />
+</FormMeta>
+```
+  </TabPane>
+</Tabs>
+
+## A separate browsing context
+
+An explicit target receives safe relationship defaults unless you provide rel yourself.
+
+<Tabs group="form-assist-link-sample-2" selectedTab="form-assist-link-sample-2-preview" ariaLabel="A separate browsing context example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="form-assist-link-sample-2-preview" label="Preview">
+    <FormAssistLink
+      href="/components/app-form/"
+      label="Open the form guide in a new tab"
+      target="_blank"
+    />
+  </TabPane>
+  <TabPane id="form-assist-link-sample-2-source-0" label="new-tab.mdx">
+```html
+<FormAssistLink
+  href="/components/app-form/"
+  label="Open the form guide in a new tab"
+  target="_blank"
+/>
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+An empty destination suppresses the link. Link text comes from label, not a slot. Internal URLs are base-path aware in SSG context.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">FormAssistLink contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="FormAssistLink properties">
+  <a href="#form-assist-link-prop-href">href</a>
+  <a href="#form-assist-link-prop-label">label</a>
+  <a href="#form-assist-link-prop-target">target</a>
+  <a href="#form-assist-link-prop-rel">rel</a>
+</nav>
+
+<ApiProperty anchor="form-assist-link-prop-href" name="href" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Navigation destination. Internal paths are resolved against the site base path when SSG context is available.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-assist-link-prop-label" name="label" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Visible label. Use language that describes the control or value in its surrounding context.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-assist-link-prop-target" name="target" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Native browsing target. _blank opens a new browsing context.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-assist-link-prop-rel" name="rel" valueType="RefOrValue&lt;string&gt;" defaultValue="automatic for _blank">
+  <p>Native link relationship. An explicit value replaces the automatic noopener noreferrer used for _blank.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p>No slots. Native anchor attributes are inherited. Register defineFormComponents.</p>
+</div>
+
+
+
+## Related components
+
+- [FormMeta](/components/form-meta/)
+- [BtnLink](/components/btn-link/)
+- [AppForm](/components/app-form/)

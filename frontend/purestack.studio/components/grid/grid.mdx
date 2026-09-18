@@ -1,0 +1,190 @@
+---
+title: Grid
+description: "Responsive columns and explicit CSS tracks for cards, settings and content layouts."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 128
+  icon: tabler:components
+---
+
+# Grid
+
+Responsive columns and explicit CSS tracks for cards, settings and content layouts.
+
+<Badge tone="accent" variant="surface">Grid</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/grid/grid.ts) · [API reference](#api-reference)
+
+
+
+## A responsive card grid
+
+One column becomes two at sm and three at lg. Cards stretch to share the row height.
+
+<Tabs group="grid-sample-1" selectedTab="grid-sample-1-preview" ariaLabel="A responsive card grid example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="grid-sample-1-preview" label="Preview">
+    <Grid columns="1" columnsSm="2" columnsLg="3">
+      <Panel bodyClass="p-3">
+        <Badge tone="accent">01</Badge>
+        <h3>Content</h3>
+        <p>Write structured pages in MDX.</p>
+      </Panel>
+      <Panel bodyClass="p-3">
+        <Badge tone="info">02</Badge>
+        <h3>Components</h3>
+        <p>Compose reusable interfaces with typed props.</p>
+      </Panel>
+      <Panel bodyClass="p-3">
+        <Badge tone="success">03</Badge>
+        <h3>Theme</h3>
+        <p>Keep every surface consistent.</p>
+      </Panel>
+    </Grid>
+  </TabPane>
+  <TabPane id="grid-sample-1-source-0" label="responsive-cards.mdx">
+```html
+<Grid columns="1" columnsSm="2" columnsLg="3">
+  <Panel bodyClass="p-3">
+    <Badge tone="accent">01</Badge>
+    <h3>Content</h3>
+    <p>Write structured pages in MDX.</p>
+  </Panel>
+  <Panel bodyClass="p-3">
+    <Badge tone="info">02</Badge>
+    <h3>Components</h3>
+    <p>Compose reusable interfaces with typed props.</p>
+  </Panel>
+  <Panel bodyClass="p-3">
+    <Badge tone="success">03</Badge>
+    <h3>Theme</h3>
+    <p>Keep every surface consistent.</p>
+  </Panel>
+</Grid>
+```
+  </TabPane>
+</Tabs>
+
+## Content and action tracks
+
+A minmax track lets long content shrink; the action keeps its natural width when the viewport allows it.
+
+<Tabs group="grid-sample-2" selectedTab="grid-sample-2-preview" ariaLabel="Content and action tracks example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="grid-sample-2-preview" label="Preview">
+    <Grid columns="1" columnsMd="minmax(0, 1fr) auto" alignItems="center">
+      <div>
+        <h3 class="m-0">Ready to compose?</h3>
+        <p class="mb-0">Use explicit tracks when equal widths are not the right fit.</p>
+      </div>
+      <BtnLink href="/components/flex/" tone="accent">Explore Flex</BtnLink>
+    </Grid>
+  </TabPane>
+  <TabPane id="grid-sample-2-source-0" label="custom-tracks.mdx">
+```html
+<Grid columns="1" columnsMd="minmax(0, 1fr) auto" alignItems="center">
+  <div>
+    <h3 class="m-0">Ready to compose?</h3>
+    <p class="mb-0">Use explicit tracks when equal widths are not the right fit.</p>
+  </div>
+  <BtnLink href="/components/flex/" tone="accent">Explore Flex</BtnLink>
+</Grid>
+```
+  </TabPane>
+</Tabs>
+
+## Item alignment
+
+Alignment controls how children sit inside their cells. It does not change the number of tracks.
+
+<Tabs group="grid-sample-3" selectedTab="grid-sample-3-preview" ariaLabel="Item alignment example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="grid-sample-3-preview" label="Preview">
+    <Grid columns="2" alignItems="center" justifyItems="start">
+      <Badge tone="accent">Compact item</Badge>
+      <Panel bodyClass="p-4">A taller item establishes the row height.</Panel>
+    </Grid>
+  </TabPane>
+  <TabPane id="grid-sample-3-source-0" label="item-alignment.mdx">
+```html
+<Grid columns="2" alignItems="center" justifyItems="start">
+  <Badge tone="accent">Compact item</Badge>
+  <Panel bodyClass="p-4">A taller item establishes the row height.</Panel>
+</Grid>
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+Keep DOM order meaningful. Dense placement can fill earlier gaps but may make visual order differ from keyboard and reading order. Use `minmax(0, 1fr)` for shrinkable content tracks. Breakpoints use the active theme.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">Grid contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="Grid properties">
+  <a href="#grid-prop-container">container</a>
+  <a href="#grid-prop-columns">columns</a>
+  <a href="#grid-prop-columnsSm">columnsSm</a>
+  <a href="#grid-prop-columnsMd">columnsMd</a>
+  <a href="#grid-prop-columnsLg">columnsLg</a>
+  <a href="#grid-prop-columnsXl">columnsXl</a>
+  <a href="#grid-prop-alignItems">alignItems</a>
+  <a href="#grid-prop-justifyItems">justifyItems</a>
+  <a href="#grid-prop-dense">dense</a>
+</nav>
+
+<ApiProperty anchor="grid-prop-container" name="container" valueType="RefOrValue&lt;string&gt;" defaultValue="div">
+  <p>HTML element used as the layout root. Choose a semantic element such as section, nav or ul when its children fit that structure.</p>
+</ApiProperty>
+
+<ApiProperty anchor="grid-prop-columns" name="columns" valueType="RefOrValue&lt;number | string&gt;" defaultValue="1">
+  <p>Column count from 1 to 12, or a CSS track list such as minmax(0, 1fr) auto. Numeric counts are clamped.</p>
+</ApiProperty>
+
+<ApiProperty anchor="grid-prop-columnsSm" name="columnsSm" valueType="RefOrValue&lt;number | string&gt;" defaultValue="inherits columns">
+  <p>Column count or CSS track list at the theme’s sm breakpoint and above.</p>
+</ApiProperty>
+
+<ApiProperty anchor="grid-prop-columnsMd" name="columnsMd" valueType="RefOrValue&lt;number | string&gt;" defaultValue="inherits smaller breakpoint">
+  <p>Column count or CSS track list at the theme’s md breakpoint and above.</p>
+</ApiProperty>
+
+<ApiProperty anchor="grid-prop-columnsLg" name="columnsLg" valueType="RefOrValue&lt;number | string&gt;" defaultValue="inherits smaller breakpoint">
+  <p>Column count or CSS track list at the theme’s lg breakpoint and above.</p>
+</ApiProperty>
+
+<ApiProperty anchor="grid-prop-columnsXl" name="columnsXl" valueType="RefOrValue&lt;number | string&gt;" defaultValue="inherits smaller breakpoint">
+  <p>Column count or CSS track list at the theme’s xl breakpoint and above.</p>
+</ApiProperty>
+
+<ApiProperty anchor="grid-prop-alignItems" name="alignItems" valueType="RefOrValue&lt;GridAlignItems&gt;" defaultValue="stretch">
+  <p>Alignment inside each grid area: stretch, start, center or end.</p>
+</ApiProperty>
+
+<ApiProperty anchor="grid-prop-justifyItems" name="justifyItems" valueType="RefOrValue&lt;GridJustifyItems&gt;" defaultValue="stretch">
+  <p>Inline alignment inside each grid area: stretch, start, center or end.</p>
+</ApiProperty>
+
+<ApiProperty anchor="grid-prop-dense" name="dense" valueType="RefOrValue&lt;boolean | string&gt;" defaultValue="false">
+  <p>Enables CSS grid-auto-flow: row dense. Accepts true or the string true; use a boolean binding for clarity.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p><strong>Default slot:</strong> grid items. Native attributes are inherited by the chosen container. Register defineGridComponents.</p>
+</div>
+
+
+
+## Related components
+
+- [Flex](/components/flex/)
+- [MetricStrip](/components/metric-strip/)
+- [PricingTable](/components/pricing-table/)

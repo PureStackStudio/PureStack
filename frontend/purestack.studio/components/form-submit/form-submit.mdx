@@ -1,0 +1,177 @@
+---
+title: FormSubmit
+description: "A focused submit control for AppForm, with a visible label and shared button styling."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 121
+  icon: tabler:components
+---
+
+# Form<wbr/>Submit
+
+A focused submit control for AppForm, with a visible label and shared button styling.
+
+<Badge tone="accent" variant="surface">FormSubmit</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/form.ts) · [API reference](#api-reference)
+
+
+
+## Submit a meaningful value
+
+The button triggers the form’s submit event, including when the user submits from the text field.
+
+<Tabs group="form-submit-sample-1" selectedTab="form-submit-sample-1-preview" ariaLabel="Submit a meaningful value example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="form-submit-sample-1-preview" label="Preview">
+    <RegorApp id="form-submit-demo" src="./playground.ts"/>
+  </TabPane>
+  <TabPane id="form-submit-sample-1-source-0" label="playground.mdx">
+```html
+<RegorApp id="form-submit-demo" src="./playground.ts"/>
+```
+  </TabPane>
+  <TabPane id="form-submit-sample-1-source-1" label="playground.ts">
+```typescript
+import {
+  defineButtonComponents,
+  defineFlexComponents,
+  defineFormComponents,
+  defineFormInputField,
+  definePanelComponents,
+} from '@purestack/ts-components'
+
+import { createApp, defineComponent, html, type Ref, ref } from 'regor'
+
+export interface FormSubmitExample {
+  releaseTitle: Ref<string>
+  savedTitle: Ref<string>
+  submit: (event: Event) => void
+}
+
+const formSubmitExampleTemplate = html`<Panel bodyClass="p-4">
+  <AppForm @submit.prevent="submit">
+    <FormInputField
+      id="submit-title"
+      label="Release title"
+      name="release"
+      :model="releaseTitle"
+      :required="true"
+    />
+    <FormSubmit label="Save release title" tone="accent" />
+    <FormStatus tone="success" :hidden="!savedTitle">
+      Saved locally: {{ savedTitle }}
+    </FormStatus>
+  </AppForm>
+</Panel>`
+
+function createFormSubmitExample(): FormSubmitExample {
+  const releaseTitle = ref('Preview release')
+  const savedTitle = ref('')
+  return {
+    releaseTitle,
+    savedTitle,
+    submit: (event) => {
+      const form = event.target as HTMLFormElement
+      if (form.reportValidity()) savedTitle(releaseTitle())
+    },
+  }
+}
+
+const component = defineComponent<FormSubmitExample>(
+  formSubmitExampleTemplate,
+  {
+    context: createFormSubmitExample,
+  },
+)
+
+createApp(
+  {
+    components: {
+      FormSubmitExample: component,
+
+      ...defineFlexComponents(),
+      ...definePanelComponents(),
+      ...defineButtonComponents(),
+      ...defineFormComponents(),
+      ...defineFormInputField(),
+    },
+  },
+  { selector: 'app#form-submit-demo', template: html`<FormSubmitExample />` },
+)
+```
+  </TabPane>
+</Tabs>
+
+## Choose the action emphasis
+
+The disabled fieldset keeps this visual comparison from triggering a form action.
+
+<Tabs group="form-submit-sample-2" selectedTab="form-submit-sample-2-preview" ariaLabel="Choose the action emphasis example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="form-submit-sample-2-preview" label="Preview">
+    <fieldset disabled class="p-3">
+      <legend>Submit treatments</legend>
+      <Flex wrap="true">
+        <FormSubmit label="Save changes" tone="accent" />
+        <FormSubmit label="Request review" tone="neutral" variant="outline" />
+      </Flex>
+    </fieldset>
+  </TabPane>
+  <TabPane id="form-submit-sample-2-source-0" label="submit-treatments.mdx">
+```html
+<fieldset disabled class="p-3">
+  <legend>Submit treatments</legend>
+  <Flex wrap="true">
+    <FormSubmit label="Save changes" tone="accent" />
+    <FormSubmit label="Request review" tone="neutral" variant="outline" />
+  </Flex>
+</fieldset>
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+FormSubmit renders Btn with type submit. Put submission logic on the form to support keyboard submission and multiple submit paths. Use a complete label; this component has no default content slot.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">FormSubmit contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="FormSubmit properties">
+  <a href="#form-submit-prop-label">label</a>
+  <a href="#form-submit-prop-tone">tone</a>
+  <a href="#form-submit-prop-variant">variant</a>
+</nav>
+
+<ApiProperty anchor="form-submit-prop-label" name="label" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Visible label. Use language that describes the control or value in its surrounding context.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-submit-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
+  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+</ApiProperty>
+
+<ApiProperty anchor="form-submit-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="solid">
+  <p>Visual treatment. Accepts solid, surface, surfaceAlt, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p>No slots. Register defineFormComponents and defineButtonComponents. Use Btn type="submit" directly when you need its wider API, such as disabled or icons.</p>
+</div>
+
+
+
+## Related components
+
+- [AppForm](/components/app-form/)
+- [Btn](/components/buttons/)
+- [FormStatus](/components/form-status/)

@@ -1,0 +1,311 @@
+---
+title: DoughnutChart
+description: "Show positive parts of a whole with a configurable ring, centre label and theme-aware segment colors."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 110
+  icon: tabler:components
+---
+
+# Doughnut<wbr/>Chart
+
+Show positive parts of a whole with a configurable ring, centre label and theme-aware segment colors.
+
+<Badge tone="accent" variant="surface">DoughnutChart</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/doughnutChart/doughnutChart.ts) · [API reference](#api-reference)
+
+
+
+## A task distribution
+
+Change the geometry and inspect an empty state. The centre total is calculated from the positive segments.
+
+<Tabs group="doughnut-chart-sample-1" selectedTab="doughnut-chart-sample-1-preview" ariaLabel="A task distribution example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="doughnut-chart-sample-1-preview" label="Preview">
+    <RegorApp id="doughnut-chart-demo" src="./playground.ts"/>
+  </TabPane>
+  <TabPane id="doughnut-chart-sample-1-source-0" label="playground.mdx">
+```html
+<RegorApp id="doughnut-chart-demo" src="./playground.ts"/>
+```
+  </TabPane>
+  <TabPane id="doughnut-chart-sample-1-source-1" label="playground.ts">
+```typescript
+import {
+  type DoughnutChartSegment,
+  defineButtonComponents,
+  defineDoughnutChartComponents,
+  defineFlexComponents,
+  defineFormComponents,
+  defineFormInputField,
+  defineGridComponents,
+} from '@purestack/ts-components'
+
+import {
+  createApp,
+  defineComponent,
+  html,
+  type Ref,
+  ref,
+  type SRef,
+  sref,
+} from 'regor'
+
+export interface DoughnutChartExample {
+  chartSegments: SRef<DoughnutChartSegment[]>
+  ringThickness: Ref<number | string>
+  segmentGap: Ref<number | string>
+  startRotation: Ref<number | string>
+  restore: () => void
+  clear: () => void
+}
+
+const doughnutChartExampleTemplate = html`<Flex direction="column">
+  <Grid columns="1" columnsSm="2" alignItems="center">
+    <DoughnutChart
+      :segments="chartSegments"
+      title="Example task distribution"
+      centerLabel="Tasks"
+      :thickness="ringThickness"
+      :gap="segmentGap"
+      :startAngle="startRotation"
+      :animated="false"
+    />
+    <ul>
+      <li r-for="entry in chartSegments">
+        {{ entry.label }}: {{ entry.value }} tasks
+      </li>
+    </ul>
+  </Grid>
+  <Grid columns="1" columnsSm="3">
+    <FormInputField
+      id="ring-thickness"
+      label="Thickness (2–40)"
+      type="number"
+      min="2"
+      max="40"
+      :model="ringThickness"
+    />
+    <FormInputField
+      id="ring-gap"
+      label="Gap (0–24)"
+      type="number"
+      min="0"
+      max="24"
+      :model="segmentGap"
+    />
+    <FormInputField
+      id="ring-angle"
+      label="Start angle"
+      type="number"
+      step="15"
+      :model="startRotation"
+    />
+  </Grid>
+  <Flex wrap="true">
+    <Btn @click="restore">Restore segments</Btn>
+    <Btn variant="outline" @click="clear">Empty data</Btn>
+  </Flex>
+</Flex>`
+
+function createDoughnutChartExample(): DoughnutChartExample {
+  const initial: DoughnutChartSegment[] = [
+    { label: 'Complete', value: 18 },
+    { label: 'In review', value: 7 },
+    { label: 'Planned', value: 5 },
+  ]
+  const chartSegments = sref(initial)
+  return {
+    chartSegments,
+    ringThickness: ref<number | string>(14),
+    segmentGap: ref<number | string>(2),
+    startRotation: ref<number | string>(-90),
+    restore: () => chartSegments([...initial]),
+    clear: () => chartSegments([]),
+  }
+}
+
+const component = defineComponent<DoughnutChartExample>(
+  doughnutChartExampleTemplate,
+  {
+    context: createDoughnutChartExample,
+  },
+)
+
+createApp(
+  {
+    components: {
+      DoughnutChartExample: component,
+
+      ...defineFlexComponents(),
+      ...defineGridComponents(),
+      ...defineFormComponents(),
+      ...defineButtonComponents(),
+      ...defineFormInputField(),
+      ...defineDoughnutChartComponents(),
+    },
+  },
+  {
+    selector: 'app#doughnut-chart-demo',
+    template: html`<DoughnutChartExample />`,
+  },
+)
+```
+  </TabPane>
+</Tabs>
+
+## A focused completion ring
+
+Supply centre text when the total alone is not the intended message.
+
+<Tabs group="doughnut-chart-sample-2" selectedTab="doughnut-chart-sample-2-preview" ariaLabel="A focused completion ring example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="doughnut-chart-sample-2-preview" label="Preview">
+    <DoughnutChart
+      title="Example completion"
+      ariaLabel="75 complete, 25 remaining"
+      :segments="[{label:'Complete',value:75},{label:'Remaining',value:25}]"
+      centerLabel="Complete"
+      centerValue="75%"
+      size="16rem"
+      thickness="10"
+      :animated="false"
+    />
+  </TabPane>
+  <TabPane id="doughnut-chart-sample-2-source-0" label="completion-ring.mdx">
+```html
+<DoughnutChart
+  title="Example completion"
+  ariaLabel="75 complete, 25 remaining"
+  :segments="[{label:'Complete',value:75},{label:'Remaining',value:25}]"
+  centerLabel="Complete"
+  centerValue="75%"
+  size="16rem"
+  thickness="10"
+  :animated="false"
+/>
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+Only positive segments contribute to the ring and total. Zero, negative and unusable values are omitted. Supply a text legend with values; color and geometry alone are not a complete accessible representation.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">DoughnutChart contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="DoughnutChart properties">
+  <a href="#doughnut-chart-prop-segments">segments</a>
+  <a href="#doughnut-chart-prop-title">title</a>
+  <a href="#doughnut-chart-prop-description">description</a>
+  <a href="#doughnut-chart-prop-ariaLabel">ariaLabel</a>
+  <a href="#doughnut-chart-prop-centerLabel">centerLabel</a>
+  <a href="#doughnut-chart-prop-centerValue">centerValue</a>
+  <a href="#doughnut-chart-prop-centerLabelSize">centerLabelSize</a>
+  <a href="#doughnut-chart-prop-centerValueSize">centerValueSize</a>
+  <a href="#doughnut-chart-prop-emptyLabel">emptyLabel</a>
+  <a href="#doughnut-chart-prop-valueSuffix">valueSuffix</a>
+  <a href="#doughnut-chart-prop-size">size</a>
+  <a href="#doughnut-chart-prop-thickness">thickness</a>
+  <a href="#doughnut-chart-prop-gap">gap</a>
+  <a href="#doughnut-chart-prop-startAngle">startAngle</a>
+  <a href="#doughnut-chart-prop-animated">animated</a>
+  <a href="#doughnut-chart-prop-tone">tone</a>
+  <a href="#doughnut-chart-prop-variant">variant</a>
+  <a href="#doughnut-chart-prop-variantMode">variantMode</a>
+</nav>
+
+<ApiProperty anchor="doughnut-chart-prop-segments" name="segments" valueType="RefOrValue&lt;Array&lt;RefOrValue&lt;DoughnutChartSegment&gt;&gt;&gt;" defaultValue="[]">
+  <p>Array of DoughnutChartSegment objects with optional label, numeric value (or numeric string), and CSS color.</p>
+</ApiProperty>
+
+<ApiProperty anchor="doughnut-chart-prop-title" name="title" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>SVG title text.</p>
+</ApiProperty>
+
+<ApiProperty anchor="doughnut-chart-prop-description" name="description" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>SVG desc text.</p>
+</ApiProperty>
+
+<ApiProperty anchor="doughnut-chart-prop-ariaLabel" name="ariaLabel" valueType="RefOrValue&lt;string&gt;" defaultValue="title, then Doughnut chart">
+  <p>Accessible name on the SVG image.</p>
+</ApiProperty>
+
+<ApiProperty anchor="doughnut-chart-prop-centerLabel" name="centerLabel" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Supporting text in the ring centre.</p>
+</ApiProperty>
+
+<ApiProperty anchor="doughnut-chart-prop-centerValue" name="centerValue" valueType="RefOrValue&lt;string&gt;" defaultValue="sum of positive values">
+  <p>Explicit centre value. If empty, the positive total and valueSuffix are used.</p>
+</ApiProperty>
+
+<ApiProperty anchor="doughnut-chart-prop-centerLabelSize" name="centerLabelSize" valueType="RefOrValue&lt;number | string&gt;" defaultValue="theme styles">
+  <p>CSS font size for the centre label.</p>
+</ApiProperty>
+
+<ApiProperty anchor="doughnut-chart-prop-centerValueSize" name="centerValueSize" valueType="RefOrValue&lt;number | string&gt;" defaultValue="theme styles">
+  <p>CSS font size for the centre value.</p>
+</ApiProperty>
+
+<ApiProperty anchor="doughnut-chart-prop-emptyLabel" name="emptyLabel" valueType="RefOrValue&lt;string&gt;" defaultValue="No data">
+  <p>Visible fallback when no usable data remains.</p>
+</ApiProperty>
+
+<ApiProperty anchor="doughnut-chart-prop-valueSuffix" name="valueSuffix" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Unit appended to formatted values, such as ms or %.</p>
+</ApiProperty>
+
+<ApiProperty anchor="doughnut-chart-prop-size" name="size" valueType="RefOrValue&lt;number | string&gt;" defaultValue="100%">
+  <p>CSS size of the square chart. Numbers become pixel lengths.</p>
+</ApiProperty>
+
+<ApiProperty anchor="doughnut-chart-prop-thickness" name="thickness" valueType="RefOrValue&lt;number | string&gt;" defaultValue="14">
+  <p>Ring thickness in SVG units, clamped between 2 and 40.</p>
+</ApiProperty>
+
+<ApiProperty anchor="doughnut-chart-prop-gap" name="gap" valueType="RefOrValue&lt;number | string&gt;" defaultValue="2">
+  <p>Segment separation, clamped between 0 and 24.</p>
+</ApiProperty>
+
+<ApiProperty anchor="doughnut-chart-prop-startAngle" name="startAngle" valueType="RefOrValue&lt;number | string&gt;" defaultValue="-90">
+  <p>Starting angle in degrees. -90 starts at the top.</p>
+</ApiProperty>
+
+<ApiProperty anchor="doughnut-chart-prop-animated" name="animated" valueType="RefOrValue&lt;boolean | string&gt;" defaultValue="true">
+  <p>Enables the SVG entrance animation. Bind false for an immediate rendering.</p>
+</ApiProperty>
+
+<ApiProperty anchor="doughnut-chart-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
+  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+</ApiProperty>
+
+<ApiProperty anchor="doughnut-chart-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="none">
+  <p>Visual treatment. Accepts solid, surface, surfaceAlt, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+</ApiProperty>
+
+<ApiProperty anchor="doughnut-chart-prop-variantMode" name="variantMode" valueType="RefOrValue&lt;ComponentVariantMode&gt;" defaultValue="stateless">
+  <p>Use stateless for content surfaces; stateful enables the treatment’s hover, focus and active styles. It does not add interaction handlers.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p>No slots. Register defineDoughnutChartComponents. Segment colors use the active theme when no explicit color is supplied.</p>
+</div>
+
+
+
+## Related components
+
+- [BarChart](/components/bar-chart/)
+- [LineChart](/components/line-chart/)
+- [MetricStrip](/components/metric-strip/)

@@ -1,0 +1,411 @@
+---
+title: AutoCompleteInput
+description: "Search a suggestion list with native text input, keyboard selection and separate query and selected-value state."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 115
+  icon: tabler:components
+---
+
+# Auto<wbr/>Complete<wbr/>Input
+
+Search a suggestion list with native text input, keyboard selection and separate query and selected-value state.
+
+<Badge tone="accent" variant="surface">AutoCompleteInput</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/autoCompleteInput.ts) · [API reference](#api-reference)
+
+
+
+## Find a region
+
+Type a label, value or keyword; choose a result with the mouse or arrow keys and Enter. Toggle loading and disabled states to inspect their behavior.
+
+<Tabs group="auto-complete-input-sample-1" selectedTab="auto-complete-input-sample-1-preview" ariaLabel="Find a region example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="auto-complete-input-sample-1-preview" label="Preview">
+    <RegorApp id="auto-complete-input-demo" src="./playground.ts"/>
+  </TabPane>
+  <TabPane id="auto-complete-input-sample-1-source-0" label="playground.mdx">
+```html
+<RegorApp id="auto-complete-input-demo" src="./playground.ts"/>
+```
+  </TabPane>
+  <TabPane id="auto-complete-input-sample-1-source-1" label="playground.ts">
+```typescript
+import {
+  type AutoCompleteOption,
+  type AutoCompleteValue,
+  defineAutoCompleteInputComponents,
+  defineButtonComponents,
+  defineFlexComponents,
+  defineFormComponents,
+  defineFormInputField,
+  defineIconComponents,
+} from '@purestack/ts-components'
+import { lucide_check, lucide_chevron_down } from '@purestack/ts-svg-icons'
+import { createApp, defineComponent, html, type Ref, ref } from 'regor'
+
+export interface AutoCompleteInputExample {
+  searchQuery: Ref<string>
+  chosenRegion: Ref<AutoCompleteValue | null>
+  regionOptions: AutoCompleteOption[]
+  pending: Ref<boolean>
+  locked: Ref<boolean>
+  reset: () => void
+}
+
+const autoCompleteInputExampleTemplate = html`<Flex direction="column">
+  <AutoCompleteInput
+    id="auto-region"
+    label="Deployment region"
+    placeholder="Try Europe or Frankfurt"
+    :model="searchQuery"
+    :selectedValue="chosenRegion"
+    :options="regionOptions"
+    :loading="pending"
+    :disabled="locked"
+    emptyText="No matching region"
+  />
+  <Flex wrap="true">
+    <FormCheck id="auto-loading" label="Loading state" :checked="pending" />
+    <FormCheck id="auto-disabled" label="Disabled state" :checked="locked" />
+    <Btn variant="link" @click="reset">Clear selection</Btn>
+  </Flex>
+  <FormStatus>
+    Query: {{ searchQuery || 'Empty' }} · Selected value: {{ chosenRegion ?? 'None'
+    }}
+  </FormStatus>
+</Flex>`
+
+function createAutoCompleteInputExample(): AutoCompleteInputExample {
+  const searchQuery = ref('')
+  const chosenRegion = ref<AutoCompleteValue | null>(null)
+  return {
+    searchQuery,
+    chosenRegion,
+    pending: ref(false),
+    locked: ref(false),
+    regionOptions: [
+      { label: 'Europe Central', value: 'eu-central', keywords: ['Frankfurt'] },
+      { label: 'US East', value: 'us-east', keywords: ['Virginia'] },
+      { label: 'Asia Pacific', value: 'apac', keywords: ['Singapore'] },
+      {
+        label: 'Private region · unavailable',
+        value: 'private',
+        disabled: true,
+      },
+    ],
+    reset: () => {
+      searchQuery('')
+      chosenRegion(null)
+    },
+  }
+}
+
+const component = defineComponent<AutoCompleteInputExample>(
+  autoCompleteInputExampleTemplate,
+  {
+    context: createAutoCompleteInputExample,
+  },
+)
+const icons: Record<string, string> = {
+  'lucide:check': lucide_check,
+  'lucide:chevron-down': lucide_chevron_down,
+}
+
+createApp(
+  {
+    components: {
+      AutoCompleteInputExample: component,
+
+      ...defineAutoCompleteInputComponents(),
+      ...defineFormInputField(),
+      ...defineFlexComponents(),
+      ...defineFormComponents(),
+      ...defineButtonComponents(),
+      ...defineIconComponents((name) => icons[name] ?? ''),
+    },
+  },
+  {
+    selector: 'app#auto-complete-input-demo',
+    template: html`<AutoCompleteInputExample />`,
+  },
+)
+```
+  </TabPane>
+</Tabs>
+
+## A custom suggestion row
+
+Rows can show richer context while the parent owns listbox semantics and selection. This example waits for one character and limits results to three.
+
+<Tabs group="auto-complete-input-sample-2" selectedTab="auto-complete-input-sample-2-preview" ariaLabel="A custom suggestion row example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="auto-complete-input-sample-2-preview" label="Preview">
+    <RegorApp id="auto-custom-row-demo" src="./custom-row.ts"/>
+  </TabPane>
+  <TabPane id="auto-complete-input-sample-2-source-0" label="custom-row.mdx">
+```html
+<RegorApp id="auto-custom-row-demo" src="./custom-row.ts"/>
+```
+  </TabPane>
+  <TabPane id="auto-complete-input-sample-2-source-1" label="custom-row.ts">
+```typescript
+import {
+  type AutoCompleteOption,
+  defineAutoCompleteInputComponents,
+  defineBadgeComponents,
+  defineButtonComponents,
+  defineFlexComponents,
+  defineFormComponents,
+  defineFormInputField,
+  defineIconComponents,
+  type ResolvedAutoCompleteOption,
+} from '@purestack/ts-components'
+import { lucide_check, lucide_chevron_down } from '@purestack/ts-svg-icons'
+import {
+  createApp,
+  defineComponent,
+  html,
+  type Ref,
+  type RefOrValue,
+  ref,
+} from 'regor'
+
+export interface ServiceSuggestion {
+  option: RefOrValue<ResolvedAutoCompleteOption | null>
+  selected: RefOrValue<boolean>
+}
+const serviceSuggestionTemplate = html`<Flex align="center" justify="between">
+  <span>
+    <strong>{{ option?.label }}</strong>
+    <small class="d-block">Service ID: {{ option?.value }}</small>
+  </span>
+  <Badge r-if="selected" tone="success">Selected</Badge>
+</Flex>`
+const serviceSuggestion = defineComponent<ServiceSuggestion>(
+  serviceSuggestionTemplate,
+  { props: ['option', 'selected'] },
+)
+export interface CustomSuggestions {
+  serviceQuery: Ref<string>
+  serviceOptions: AutoCompleteOption[]
+}
+
+const customSuggestionsTemplate = html`<AutoCompleteInput
+  id="auto-service"
+  label="Service"
+  :model="serviceQuery"
+  :options="serviceOptions"
+  rowComponent="ServiceSuggestion"
+  :minLength="1"
+  :maxResults="3"
+  placeholder="Type API or mail"
+/>`
+
+function createCustomSuggestions(): CustomSuggestions {
+  return {
+    serviceQuery: ref(''),
+    serviceOptions: [
+      { label: 'Identity API', value: 'identity', keywords: ['auth'] },
+      { label: 'Mail gateway', value: 'mail', keywords: ['email'] },
+      { label: 'Billing API', value: 'billing', keywords: ['invoice'] },
+    ],
+  }
+}
+
+const component = defineComponent<CustomSuggestions>(
+  customSuggestionsTemplate,
+  {
+    context: createCustomSuggestions,
+  },
+)
+const icons: Record<string, string> = {
+  'lucide:check': lucide_check,
+  'lucide:chevron-down': lucide_chevron_down,
+}
+
+createApp(
+  {
+    components: {
+      CustomSuggestions: component,
+      ServiceSuggestion: serviceSuggestion,
+      ...defineAutoCompleteInputComponents(),
+      ...defineFormInputField(),
+      ...defineFlexComponents(),
+      ...defineFormComponents(),
+      ...defineButtonComponents(),
+      ...defineBadgeComponents(),
+      ...defineIconComponents((name) => icons[name] ?? ''),
+    },
+  },
+  {
+    selector: 'app#auto-custom-row-demo',
+    template: html`<CustomSuggestions />`,
+  },
+)
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+Arrow keys move through enabled suggestions; Enter selects, Escape closes. Search matches labels, values and keywords case-insensitively. Editing the query can clear selectedValue. Query text alone is not proof that an option was selected. Keep custom rows free of nested interactive controls.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">AutoCompleteInput contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="AutoCompleteInput properties">
+  <a href="#auto-complete-input-prop-id">id</a>
+  <a href="#auto-complete-input-prop-label">label</a>
+  <a href="#auto-complete-input-prop-tone">tone</a>
+  <a href="#auto-complete-input-prop-variant">variant</a>
+  <a href="#auto-complete-input-prop-model">model</a>
+  <a href="#auto-complete-input-prop-selectedValue">selectedValue</a>
+  <a href="#auto-complete-input-prop-type">type</a>
+  <a href="#auto-complete-input-prop-name">name</a>
+  <a href="#auto-complete-input-prop-required">required</a>
+  <a href="#auto-complete-input-prop-autocomplete">autocomplete</a>
+  <a href="#auto-complete-input-prop-placeholder">placeholder</a>
+  <a href="#auto-complete-input-prop-disabled">disabled</a>
+  <a href="#auto-complete-input-prop-icon">icon</a>
+  <a href="#auto-complete-input-prop-iconEnd">iconEnd</a>
+  <a href="#auto-complete-input-prop-options">options</a>
+  <a href="#auto-complete-input-prop-rowComponent">rowComponent</a>
+  <a href="#auto-complete-input-prop-minLength">minLength</a>
+  <a href="#auto-complete-input-prop-maxResults">maxResults</a>
+  <a href="#auto-complete-input-prop-openOnFocus">openOnFocus</a>
+  <a href="#auto-complete-input-prop-loading">loading</a>
+  <a href="#auto-complete-input-prop-emptyText">emptyText</a>
+  <a href="#auto-complete-input-prop-loadingText">loadingText</a>
+  <a href="#auto-complete-input-prop-onSelect">onSelect</a>
+  <a href="#auto-complete-input-prop-onSearch">onSearch</a>
+</nav>
+
+<ApiProperty anchor="auto-complete-input-prop-id" name="id" valueType="RefOrValue&lt;string&gt;" defaultValue="generated">
+  <p>Unique control ID. Supply an explicit value when help text or another element needs to reference this control.</p>
+</ApiProperty>
+
+<ApiProperty anchor="auto-complete-input-prop-label" name="label" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Visible label. Use language that describes the control or value in its surrounding context.</p>
+</ApiProperty>
+
+<ApiProperty anchor="auto-complete-input-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
+  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+</ApiProperty>
+
+<ApiProperty anchor="auto-complete-input-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="inherited FormInputField surfaceAlt">
+  <p>Visual treatment. Accepts solid, surface, surfaceAlt, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+</ApiProperty>
+
+<ApiProperty anchor="auto-complete-input-prop-model" name="model" valueType="Ref&lt;string&gt;" defaultValue="ref('')">
+  <p>Two-way value ref. Pass the ref itself with :model="fieldValue" so edits update application state.</p>
+</ApiProperty>
+
+<ApiProperty anchor="auto-complete-input-prop-selectedValue" name="selectedValue" valueType="Ref&lt;AutoCompleteValue | null&gt;" defaultValue="ref(null)">
+  <p>Selected option value, independent of the editable query model.</p>
+</ApiProperty>
+
+<ApiProperty anchor="auto-complete-input-prop-type" name="type" valueType="RefOrValue&lt;FormInputFieldType&gt;" defaultValue="search">
+  <p>Native input type forwarded to FormInputField.</p>
+</ApiProperty>
+
+<ApiProperty anchor="auto-complete-input-prop-name" name="name" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Native form field name used during FormData serialization.</p>
+</ApiProperty>
+
+<ApiProperty anchor="auto-complete-input-prop-required" name="required" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
+  <p>Native required constraint. Validate the owning form before accepting its data.</p>
+</ApiProperty>
+
+<ApiProperty anchor="auto-complete-input-prop-autocomplete" name="autocomplete" valueType="RefOrValue&lt;string&gt;" defaultValue="off">
+  <p>Native browser autofill hint, such as name, email or current-password.</p>
+</ApiProperty>
+
+<ApiProperty anchor="auto-complete-input-prop-placeholder" name="placeholder" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>A short input hint shown while empty. Keep a separate visible label.</p>
+</ApiProperty>
+
+<ApiProperty anchor="auto-complete-input-prop-disabled" name="disabled" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
+  <p>Disables interaction. Use a bound boolean, for example :disabled="isLocked".</p>
+</ApiProperty>
+
+<ApiProperty anchor="auto-complete-input-prop-icon" name="icon" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Registered SVG icon name. In browser apps, include the icon in the resolver passed to defineIconComponents.</p>
+</ApiProperty>
+
+<ApiProperty anchor="auto-complete-input-prop-iconEnd" name="iconEnd" valueType="RefOrValue&lt;string&gt;" defaultValue="lucide:chevron-down">
+  <p>Trailing icon for the input.</p>
+</ApiProperty>
+
+<ApiProperty anchor="auto-complete-input-prop-options" name="options" valueType="RefOrValue&lt;AutoCompleteOption[]&gt;" defaultValue="[]">
+  <p>Suggestion or select data. Each option has a label, an optional value and an optional disabled flag. Omitted values use the label.</p>
+</ApiProperty>
+
+<ApiProperty anchor="auto-complete-input-prop-rowComponent" name="rowComponent" valueType="RefOrValue&lt;string&gt;" defaultValue="AutoCompleteOptionRow">
+  <p>Registered suggestion row component. Receives option, item, index, query, active, selected and disabled. The parent supplies the clickable option wrapper.</p>
+</ApiProperty>
+
+<ApiProperty anchor="auto-complete-input-prop-minLength" name="minLength" valueType="RefOrValue&lt;number | string&gt;" defaultValue="0">
+  <p>Minimum trimmed query length before suggestions may open.</p>
+</ApiProperty>
+
+<ApiProperty anchor="auto-complete-input-prop-maxResults" name="maxResults" valueType="RefOrValue&lt;number | string&gt;" defaultValue="10">
+  <p>Maximum number of matching suggestions rendered.</p>
+</ApiProperty>
+
+<ApiProperty anchor="auto-complete-input-prop-openOnFocus" name="openOnFocus" valueType="RefOrValue&lt;boolean&gt;" defaultValue="true">
+  <p>Opens suggestions on focus when the minimum query length is met.</p>
+</ApiProperty>
+
+<ApiProperty anchor="auto-complete-input-prop-loading" name="loading" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
+  <p>Shows a loading state. Your application supplies options and manages any asynchronous request.</p>
+</ApiProperty>
+
+<ApiProperty anchor="auto-complete-input-prop-emptyText" name="emptyText" valueType="RefOrValue&lt;string&gt;" defaultValue="No suggestions">
+  <p>Message displayed when the query has no matching suggestions.</p>
+</ApiProperty>
+
+<ApiProperty anchor="auto-complete-input-prop-loadingText" name="loadingText" valueType="RefOrValue&lt;string&gt;" defaultValue="Loading suggestions">
+  <p>Status message while loading is true.</p>
+</ApiProperty>
+
+<ApiProperty anchor="auto-complete-input-prop-onSelect" name="onSelect" valueType="(option: ResolvedAutoCompleteOption) =&gt; void" defaultValue="not set">
+  <p>Callback receiving a ResolvedAutoCompleteOption after selection.</p>
+</ApiProperty>
+
+<ApiProperty anchor="auto-complete-input-prop-onSearch" name="onSearch" valueType="(query: string) =&gt; void" defaultValue="not set">
+  <p>Callback receiving the query string after an edit. Use it to load or filter application data.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p>No slots. Register defineAutoCompleteInputComponents, defineFormInputField and defineIconComponents. Custom rows are registered under the name passed to rowComponent.</p>
+</div>
+
+### Option and event contracts
+
+```typescript
+interface AutoCompleteOption {
+  label: RefOrValue<string>
+  value?: RefOrValue<string | number>
+  disabled?: RefOrValue<boolean>
+  keywords?: RefOrValue<string | string[]>
+}
+```
+
+The component also emits `optionselect` and `querychange`. Use callbacks or emitted events for application integration; avoid processing the same change through both paths.
+
+## Related components
+
+- [AutoCompleteOptionRow](/components/auto-complete-option-row/)
+- [MultiAutoCompleteInput](/components/multi-auto-complete-input/)
+- [FormSelectField](/components/form-select-field/)

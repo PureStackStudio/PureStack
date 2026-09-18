@@ -4,13 +4,18 @@ import type { PageTemplateMap } from '@purestack/ts-common'
 import { h } from '@purestack/ts-html'
 import { type BuildInput, buildSite, startDevServer } from '@purestack/ts-ssg'
 import { createLogger, getLogger } from 'logpot'
+import type { Component } from 'regor'
 import { defineStudioComponents } from './components/studioComponents'
 import { card } from './demoStyle'
-import { defineDocumentationComponents } from './docs/docsComponents'
 import { registerApiReferenceStyles } from './docs/apiReferenceStyles'
+import { defineDocumentationComponents } from './docs/docsComponents'
+import { writeConsentPreview } from './purestack.studio/components/consent/preview'
+import { writeNavMenuPreview } from './purestack.studio/components/nav-menu/preview'
+import { writePageTocPreview } from './purestack.studio/components/page-toc/preview'
+import { writeSignInPreview } from './purestack.studio/components/sign-in/preview'
+import { writeTopBarPreview } from './purestack.studio/components/top-bar/preview'
 import { registerStudioSkin } from './theme/studioSkin'
 import { registerStudioStyles } from './theme/studioStyles'
-import type { Component } from 'regor'
 
 registerStudioSkin()
 
@@ -54,10 +59,17 @@ const build: BuildInput = {
       onConfigResolved(context) {
         context.components = {
           ...defineStudioComponents(),
-          ...defineDocumentationComponents(),
+          ...defineDocumentationComponents(context.config),
         } as unknown as Record<string, Component>
         registerStudioStyles()
         registerApiReferenceStyles()
+      },
+      async onContentDiscovered(context) {
+        await writeConsentPreview(context.config)
+        await writeNavMenuPreview(context.config)
+        await writePageTocPreview(context.config)
+        await writeSignInPreview(context.config)
+        await writeTopBarPreview(context.config)
       },
     },
   },

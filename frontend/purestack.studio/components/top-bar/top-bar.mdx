@@ -1,0 +1,187 @@
+---
+title: TopBar
+description: "The standard site header combines branding, search, theme switching and optional account access."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 146
+  icon: tabler:components
+---
+
+# Top<wbr/>Bar
+
+The standard site header combines branding, search, theme switching and optional account access.
+
+<Badge tone="accent" variant="surface">TopBar</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/topBar/topBar.ts) · [API reference](#api-reference)
+
+The header above this guide is TopBar. The contained preview below has its own document so its navigation toggle ID does not collide with the real page header.
+
+## A complete header
+
+This preview reads the same logo configuration as the site. Search is disabled inside this isolated document because it has no independent index.
+
+<Tabs group="top-bar-sample-1" selectedTab="top-bar-sample-1-preview" ariaLabel="A complete header example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="top-bar-sample-1-preview" label="Preview">
+    <TopBarPreview />
+  </TabPane>
+  <TabPane id="top-bar-sample-1-source-0" label="preview.mdx">
+```html
+<TopBarPreview />
+```
+  </TabPane>
+  <TabPane id="top-bar-sample-1-source-1" label="preview.ts">
+```typescript
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import type { SiteConfig, TsSsgContext } from '@purestack/ts-common'
+import { defineComponents } from '@purestack/ts-components'
+import {
+  buildMenuRuntimeScript,
+  buildThemeSwitchScript,
+} from '@purestack/ts-page-scripts'
+import { renderApp } from '@purestack/ts-render'
+import { getSvgIcon } from '@purestack/ts-svg-icons'
+import { withBasePath } from '@purestack/ts-util'
+import { defineComponent, html } from 'regor'
+
+export interface TopBarPreview {
+  previewHref: string
+}
+
+const topBarPreviewTemplate = html`<iframe
+  title="TopBar isolated example"
+  class="w-full rounded-md b-1 b-subtle"
+  style="height: 260px"
+  :src="previewHref"
+></iframe>`
+const exampleTemplate = html`<TopBar tone="neutral" variant="surface" />
+<p class="mt-4">
+  A complete header in its own document. The logo links home and the theme control
+  changes this preview.
+</p>`
+
+function createTopBarPreviewDocument(site: SiteConfig): string {
+  const context: TsSsgContext = {
+    site: { ...site },
+    pageInfo: {
+      relPath: 'components/top-bar/top-bar.mdx',
+      urlPath: '/components/top-bar/',
+      frontmatter: {
+        template: 'doc',
+        hidden: false,
+        draft: false,
+        nav: { hidden: false },
+        layout: {
+          showNav: false,
+          showToc: false,
+          showFooter: false,
+          fullWidth: false,
+          navMode: 'sidebar',
+          tocCollapsed: false,
+        },
+      },
+    },
+    theme: site.style.theme,
+    basePath: site.basePath,
+    locales: site.i18n.locales,
+    defaultLocale: site.i18n.defaultLocale,
+    resolveLocaleHref: () => undefined,
+    resolvePublicHref: (href) => withBasePath(site.basePath, href),
+    recordScriptEntrypoint: () => {},
+    recordRuntimeEmbed: () => {},
+  }
+  context.site.pagefind = { ...context.site.pagefind, enabled: false }
+  const body = renderApp(exampleTemplate, {
+    components: defineComponents(getSvgIcon),
+    context,
+  })
+  const scripts =
+    buildThemeSwitchScript(['light', 'dark']) + buildMenuRuntimeScript()
+  const documentHtml = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="${withBasePath(site.basePath, '/assets/site.css')}" data-theme="light"><link rel="stylesheet" href="${withBasePath(site.basePath, '/assets/site.dark.css')}" data-theme="dark"></head><body class="tone--neutral p-3"><main class="doc-content">${body}</main><script>${scripts}</script></body></html>`
+  return documentHtml
+}
+
+export function defineTopBarPreviewComponent(site: SiteConfig) {
+  return defineComponent<TopBarPreview>(topBarPreviewTemplate, {
+    context: () => ({
+      previewHref: withBasePath(
+        site.basePath,
+        '/components/top-bar/preview.html',
+      ),
+    }),
+  })
+}
+
+export async function writeTopBarPreview(site: SiteConfig) {
+  const output = path.join(site.outDir, 'components', 'top-bar', 'preview.html')
+  const documentHtml = createTopBarPreviewDocument(site)
+  await fs.mkdir(path.dirname(output), { recursive: true })
+  await fs.writeFile(output, documentHtml, 'utf8')
+}
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+TopBar renders a fixed doc-nav-toggle ID and should appear once per document. Its mobile navigation toggle works with the standard doc layout. Logo content comes from site.logo. Search visibility currently follows site.pagefind.enabled, even when a searchEnabled prop is supplied.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">TopBar contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="TopBar properties">
+  <a href="#top-bar-prop-tone">tone</a>
+  <a href="#top-bar-prop-variant">variant</a>
+  <a href="#top-bar-prop-signInAvatarSrc">signInAvatarSrc</a>
+  <a href="#top-bar-prop-signInAvatarAlt">signInAvatarAlt</a>
+  <a href="#top-bar-prop-signInEnabled">signInEnabled</a>
+  <a href="#top-bar-prop-searchEnabled">searchEnabled</a>
+</nav>
+
+<ApiProperty anchor="top-bar-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
+  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+</ApiProperty>
+
+<ApiProperty anchor="top-bar-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surfaceAlt">
+  <p>Visual treatment. Accepts solid, surface, surfaceAlt, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+</ApiProperty>
+
+<ApiProperty anchor="top-bar-prop-signInAvatarSrc" name="signInAvatarSrc" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Avatar URL forwarded to SignIn when account access is shown.</p>
+</ApiProperty>
+
+<ApiProperty anchor="top-bar-prop-signInAvatarAlt" name="signInAvatarAlt" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Avatar alternative text forwarded to SignIn.</p>
+</ApiProperty>
+
+<ApiProperty anchor="top-bar-prop-signInEnabled" name="signInEnabled" valueType="boolean" defaultValue="false">
+  <p>Shows the SignIn slot in the header; site.auth.enabled must also be true for the account component to render.</p>
+</ApiProperty>
+
+<ApiProperty anchor="top-bar-prop-searchEnabled" name="searchEnabled" valueType="boolean" defaultValue="site.pagefind.enabled">
+  <p>Registered prop currently resolved from site configuration. Configure pagefind.enabled to control search visibility.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p>No slots. Register defineTopBarComponents and the SiteLogo, SearchBox, ThemeSwitcher, SignIn, Flex and Icon families. Standard SSG registration provides these dependencies.</p>
+</div>
+
+
+
+## Related components
+
+- [SiteLogo](/components/site-logo/)
+- [SearchBox](/components/search-box/)
+- [ThemeSwitcher](/components/theme-switcher/)
+- [SignIn](/components/sign-in/)

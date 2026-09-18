@@ -1,0 +1,184 @@
+---
+title: TabPane
+description: "One labelled view within Tabs, with its own content surface, icon and availability state."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 166
+  icon: tabler:components
+---
+
+# Tab<wbr/>Pane
+
+One labelled view within Tabs, with its own content surface, icon and availability state.
+
+<Badge tone="accent" variant="surface">TabPane</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/tabs/tabs.ts) · [API reference](#api-reference)
+
+
+
+## Related views
+
+Each pane needs a unique ID. Tabs owns the group and initial selection.
+
+<Tabs group="tab-pane-sample-1" selectedTab="tab-pane-sample-1-preview" ariaLabel="Related views example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="tab-pane-sample-1-preview" label="Preview">
+    <Tabs
+      group="pane-release"
+      selectedTab="pane-overview"
+      ariaLabel="Release information"
+      tabVariant="underline"
+    >
+      <TabPane id="pane-overview" label="Overview" icon="lucide:check">
+        <h3>Preview release</h3>
+        <p>The content is ready for review.</p>
+      </TabPane>
+      <TabPane id="pane-checks" label="Checks">
+        <Badge tone="success">All checks passed</Badge>
+        <p>Review the source before publishing.</p>
+      </TabPane>
+      <TabPane id="pane-history" label="History · unavailable" :disabled="true">
+        <p>No previous releases.</p>
+      </TabPane>
+    </Tabs>
+  </TabPane>
+  <TabPane id="tab-pane-sample-1-source-0" label="related-views.mdx">
+```html
+<Tabs
+  group="pane-release"
+  selectedTab="pane-overview"
+  ariaLabel="Release information"
+  tabVariant="underline"
+>
+  <TabPane id="pane-overview" label="Overview" icon="lucide:check">
+    <h3>Preview release</h3>
+    <p>The content is ready for review.</p>
+  </TabPane>
+  <TabPane id="pane-checks" label="Checks">
+    <Badge tone="success">All checks passed</Badge>
+    <p>Review the source before publishing.</p>
+  </TabPane>
+  <TabPane id="pane-history" label="History · unavailable" :disabled="true">
+    <p>No previous releases.</p>
+  </TabPane>
+</Tabs>
+```
+  </TabPane>
+</Tabs>
+
+## Independent panel styling
+
+Pane variant styles the content surface; tabVariant styles the tab control.
+
+<Tabs group="tab-pane-sample-2" selectedTab="tab-pane-sample-2-preview" ariaLabel="Independent panel styling example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="tab-pane-sample-2-preview" label="Preview">
+    <Tabs group="pane-style" selectedTab="pane-details" ariaLabel="Styled views">
+      <TabPane
+        id="pane-details"
+        label="Details"
+        tone="accent"
+        variant="surface"
+        tabVariant="outline"
+      >
+        <p>A distinct panel surface.</p>
+      </TabPane>
+      <TabPane id="pane-notes" label="Notes" tone="neutral" variant="none">
+        <p>A quiet alternative.</p>
+      </TabPane>
+    </Tabs>
+  </TabPane>
+  <TabPane id="tab-pane-sample-2-source-0" label="panel-styling.mdx">
+```html
+<Tabs group="pane-style" selectedTab="pane-details" ariaLabel="Styled views">
+  <TabPane
+    id="pane-details"
+    label="Details"
+    tone="accent"
+    variant="surface"
+    tabVariant="outline"
+  >
+    <p>A distinct panel surface.</p>
+  </TabPane>
+  <TabPane id="pane-notes" label="Notes" tone="neutral" variant="none">
+    <p>A quiet alternative.</p>
+  </TabPane>
+</Tabs>
+```
+  </TabPane>
+</Tabs>
+
+## Behavior and accessibility
+
+Keep IDs unique across the document, including the generated -label and -panel suffixes. Disabled panes remain unavailable to selection. The standard tabs runtime supplies keyboard controls and responsive selection; content stays mounted while switching views.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">TabPane contract</p>
+  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+</div>
+
+<nav class="api-index" aria-label="TabPane properties">
+  <a href="#tab-pane-prop-id">id</a>
+  <a href="#tab-pane-prop-label">label</a>
+  <a href="#tab-pane-prop-icon">icon</a>
+  <a href="#tab-pane-prop-disabled">disabled</a>
+  <a href="#tab-pane-prop-group">group</a>
+  <a href="#tab-pane-prop-tone">tone</a>
+  <a href="#tab-pane-prop-variant">variant</a>
+  <a href="#tab-pane-prop-variantMode">variantMode</a>
+  <a href="#tab-pane-prop-tabVariant">tabVariant</a>
+</nav>
+
+<ApiProperty anchor="tab-pane-prop-id" name="id" valueType="string" defaultValue="generated">
+  <p>Unique pane identity and base for its label/panel IDs.</p>
+</ApiProperty>
+
+<ApiProperty anchor="tab-pane-prop-label" name="label" valueType="RefOrValue&lt;string&gt;" defaultValue="id">
+  <p>Visible tab label.</p>
+</ApiProperty>
+
+<ApiProperty anchor="tab-pane-prop-icon" name="icon" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Registered SVG icon name. In browser apps, include the icon in the resolver passed to defineIconComponents.</p>
+</ApiProperty>
+
+<ApiProperty anchor="tab-pane-prop-disabled" name="disabled" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
+  <p>Disables interaction. Use a bound boolean, for example :disabled="isLocked".</p>
+</ApiProperty>
+
+<ApiProperty anchor="tab-pane-prop-group" name="group" valueType="string" defaultValue="parent Tabs group">
+  <p>Radio group. Usually inherit it from Tabs so selection stays coordinated.</p>
+</ApiProperty>
+
+<ApiProperty anchor="tab-pane-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="parent Tabs tone">
+  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+</ApiProperty>
+
+<ApiProperty anchor="tab-pane-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="none">
+  <p>Treatment of the pane content surface.</p>
+</ApiProperty>
+
+<ApiProperty anchor="tab-pane-prop-variantMode" name="variantMode" valueType="RefOrValue&lt;ComponentVariantMode&gt;" defaultValue="parent Tabs, then stateless">
+  <p>Use stateless for content surfaces; stateful enables the treatment’s hover, focus and active styles. It does not add interaction handlers.</p>
+</ApiProperty>
+
+<ApiProperty anchor="tab-pane-prop-tabVariant" name="tabVariant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="parent Tabs, then underline">
+  <p>Visual treatment for the tab control, independent of the panel variant.</p>
+</ApiProperty>
+
+### Composition
+
+<div class="api-contract">
+<p><strong>Default slot:</strong> panel content. Place TabPane inside Tabs. Register defineTabsComponents and defineIconComponents; SSG includes the tabs runtime automatically.</p>
+</div>
+
+
+
+## Related components
+
+- [Tabs](/components/tabs/)
+- [CodeShowcase](/components/code-showcase/)
