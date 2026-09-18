@@ -125,7 +125,7 @@ const buttonPlaygroundTemplate = html`<Grid columns="1" columnsMd="2" alignItems
     >
       Create project
     </Btn>
-    <p role="status" r-text="feedback"></p>
+    <p role="status">{{ feedback }}</p>
   </Flex>
   <Grid columns="2">
     <FormSelectField
@@ -421,7 +421,7 @@ Communicate intent through the palette. Every tone participates in the same them
       <Btn tone="danger" variant="surface">danger</Btn></Flex
     >
   </TabPane>
-  <TabPane id="button-tones-source" label="Source">
+  <TabPane id="button-tones-source" label="tones.mdx">
 ```html
 <Flex wrap="true"><Btn tone="neutral" variant="surface">neutral</Btn>
 <Btn tone="accent" variant="surface">accent</Btn>
@@ -470,7 +470,7 @@ The `sm`, `md`, and `lg` sizes follow the active theme’s typography scale. Pro
       <Btn tone="neutral" :disabled="true">Unavailable</Btn>
     </Flex>
   </TabPane>
-  <TabPane id="button-sizes-icons-source" label="Source">
+  <TabPane id="button-sizes-icons-source" label="sizes-and-icons.mdx">
 ```html
 <Flex wrap="true" align="center">
   <Btn size="sm" tone="accent">Small</Btn>
@@ -534,9 +534,9 @@ export interface Collection {
 const collectionTemplate = html`<Flex direction="column" align="start">
   <strong>Build a collection</strong>
   <p>Add up to {{ limit }} items. Remove one or start over.</p>
-  <p role="status" r-text="summary"></p>
+  <p role="status">{{ summary }}</p>
   <ul r-if="!isEmpty" aria-label="Collection items">
-    <li r-for="item in items" r-text="item"></li>
+    <li r-for="item in items">{{ item }}</li>
   </ul>
   <Flex wrap="true">
     <Btn tone="accent" :disabled="isFull" @click="addItem">Add item</Btn>
@@ -650,7 +650,7 @@ const projectFormTemplate = html`<Flex
     <Btn type="submit" tone="accent">Save project</Btn>
     <Btn type="reset" variant="surface" tone="neutral">Reset</Btn>
   </Flex>
-  <p class="m-0" role="status" r-text="message"></p>
+  <p class="m-0" role="status">{{ message }}</p>
 </Flex>`
 
 function createProjectForm(): ProjectForm {

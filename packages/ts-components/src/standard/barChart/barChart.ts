@@ -132,7 +132,7 @@ const barChartTemplate = svg`<svg
       :fill="item.color"
       :aria-label="item.label + ': ' + item.formattedValue"
     >
-      <title r-text="item.label + ': ' + item.formattedValue"></title>
+      <title>{{ item.label + ': ' + item.formattedValue }}</title>
       <animate
         r-if="animated"
         attributeName="height"

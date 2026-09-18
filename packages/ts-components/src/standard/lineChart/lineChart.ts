@@ -154,7 +154,7 @@ const lineChartTemplate = svg`<svg
       :stroke="item.color"
       :aria-label="item.label"
     >
-      <title r-text="item.label"></title>
+      <title>{{ item.label }}</title>
       <animate
         r-if="animated"
         attributeName="stroke-opacity"
@@ -175,9 +175,7 @@ const lineChartTemplate = svg`<svg
         :fill="item.color"
         :aria-label="item.label + ', ' + point.label + ': ' + point.formattedValue"
       >
-        <title
-          r-text="item.label + ', ' + point.label + ': ' + point.formattedValue"
-        ></title>
+        <title>{{ item.label + ', ' + point.label + ': ' + point.formattedValue }}</title>
         <animate
           r-if="animated"
           attributeName="r"

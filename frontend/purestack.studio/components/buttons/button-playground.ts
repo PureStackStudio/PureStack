@@ -82,7 +82,7 @@ const buttonPlaygroundTemplate = html`<Grid columns="1" columnsMd="2" alignItems
     >
       Create project
     </Btn>
-    <p role="status" r-text="feedback"></p>
+    <p role="status">{{ feedback }}</p>
   </Flex>
   <Grid columns="2">
     <FormSelectField

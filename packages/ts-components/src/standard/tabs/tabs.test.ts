@@ -112,7 +112,7 @@ describe('Tabs rendering', () => {
           <TabPane id="install" label="Install">Run npm install</TabPane>
           <TabPane id="usage" label="Usage">Import buildSite</TabPane>
         </Tabs>
-        <output id="selected-tab" r-text="selectedTab"></output>`,
+        <output id="selected-tab">{{ selectedTab }}</output>`,
       },
     )
     try {

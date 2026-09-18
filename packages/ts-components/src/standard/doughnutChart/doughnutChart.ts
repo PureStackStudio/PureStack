@@ -153,7 +153,7 @@ const doughnutChartTemplate = svg`<svg
         :aria-label="segment.label + ': ' + segment.formattedValue"
         fill-rule="evenodd"
       >
-        <title r-text="segment.label + ': ' + segment.formattedValue"></title>
+        <title>{{ segment.label + ': ' + segment.formattedValue }}</title>
       </path>
     </g>
   </g>

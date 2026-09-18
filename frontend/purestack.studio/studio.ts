@@ -82,7 +82,7 @@ function initializeCounter() {
     {
       selector: '#counter',
       template: html`<button type="button" @click="increment">
-  Clicked <span r-text="count"></span> times
+  Clicked {{ count }} times
 </button>`,
     },
   )

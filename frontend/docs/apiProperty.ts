@@ -11,13 +11,13 @@ const apiPropertyTemplate = html`<section class="api-property" :id="anchor" :ari
   <header class="api-property__header">
     <h4>
       <a :href="'#' + anchor"
-        ><code r-text="name"></code><span aria-hidden="true"> #</span></a
+        ><code>{{ name }}</code><span aria-hidden="true"> #</span></a
       >
     </h4>
-    <code class="api-property__type" r-text="valueType"></code>
+    <code class="api-property__type">{{ valueType }}</code>
     <dl class="api-property__default">
       <dt>Default</dt>
-      <dd><code r-text="defaultValue"></code></dd>
+      <dd><code>{{ defaultValue }}</code></dd>
     </dl>
   </header>
   <div class="api-property__content"><slot></slot></div>

@@ -122,6 +122,7 @@ Write the story. Build the product.
               class="source-code"
               tabindex="0"
               aria-label="Regor TypeScript source example"
+              r-pre
             ><code id="source-interactive"><span class="syntax-purple">import</span> { createApp, html, ref } <span class="syntax-purple">from</span> <span class="syntax-amber">'regor'</span>
 
 <span class="syntax-purple">const</span> count = <span class="syntax-blue">ref</span>(<span class="syntax-amber">0</span>)
@@ -131,7 +132,7 @@ Write the story. Build the product.
   selector: <span class="syntax-amber">'#counter'</span>,
   template: html`<span class="syntax-muted">&lt;</span><span class="syntax-green">button</span>
     <span class="syntax-blue">@click</span>=<span class="syntax-amber">"increment"</span><span class="syntax-muted">&gt;</span>
-    Clicked <span class="syntax-muted">&lt;</span><span class="syntax-green">span</span> <span class="syntax-blue">r-text</span>=<span class="syntax-amber">"count"</span><span class="syntax-muted">&gt;&lt;/</span><span class="syntax-green">span</span><span class="syntax-muted">&gt;</span> times
+    Clicked <span class="syntax-amber">{{ count }}</span> times
   <span class="syntax-muted">&lt;/</span><span class="syntax-green">button</span><span class="syntax-muted">&gt;</span>`,
 })</code></pre>
           </div>

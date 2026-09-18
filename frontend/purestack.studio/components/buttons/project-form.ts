@@ -28,7 +28,7 @@ const projectFormTemplate = html`<Flex
     <Btn type="submit" tone="accent">Save project</Btn>
     <Btn type="reset" variant="surface" tone="neutral">Reset</Btn>
   </Flex>
-  <p class="m-0" role="status" r-text="message"></p>
+  <p class="m-0" role="status">{{ message }}</p>
 </Flex>`
 
 function createProjectForm(): ProjectForm {

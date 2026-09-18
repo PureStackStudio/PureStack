@@ -16,7 +16,7 @@ export interface DocsModalStore {
 
 const modalApiTemplate = html`<Flex direction="column" align="start">
   <Btn tone="accent" @click="open">Open with the browser API</Btn>
-  <p role="status" r-text="status"></p>
+  <p role="status">{{ status }}</p>
   <Modal
     id="api-dialog"
     title="A programmatic dialog"
@@ -36,7 +36,7 @@ const modalStoreTemplate = html`<Flex direction="column" align="start">
   <Btn tone="accent" variant="surface" @click="review"
     >Review a saved draft</Btn
   >
-  <p role="status" r-text="result"></p>
+  <p role="status">{{ result }}</p>
 </Flex>`
 
 export function defineModalExampleComponents() {

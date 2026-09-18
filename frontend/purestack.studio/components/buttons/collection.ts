@@ -26,9 +26,9 @@ export interface Collection {
 const collectionTemplate = html`<Flex direction="column" align="start">
   <strong>Build a collection</strong>
   <p>Add up to {{ limit }} items. Remove one or start over.</p>
-  <p role="status" r-text="summary"></p>
+  <p role="status">{{ summary }}</p>
   <ul r-if="!isEmpty" aria-label="Collection items">
-    <li r-for="item in items" r-text="item"></li>
+    <li r-for="item in items">{{ item }}</li>
   </ul>
   <Flex wrap="true">
     <Btn tone="accent" :disabled="isFull" @click="addItem">Add item</Btn>

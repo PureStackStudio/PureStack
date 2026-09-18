@@ -18,7 +18,7 @@ const tabsStateTemplate = html`<Flex direction="column">
       ><p>Configure the project here.</p></TabPane
     >
   </Tabs>
-  <p role="status">Selected pane: <code r-text="selected"></code></p>
+  <p role="status">Selected pane: <code>{{ selected }}</code></p>
   <Btn variant="surface" tone="accent" @click="showSettings"
     >Go to settings</Btn
   >

@@ -206,7 +206,7 @@ Open or close an existing dialog with `window.tsSsgModal.open(id)` and `.close(i
 ```html
 <Flex direction="column" align="start">
   <Btn tone="accent" @click="open">Open with the browser API</Btn>
-  <p role="status" r-text="status"></p>
+  <p role="status">{{ status }}</p>
   <Modal id="api-dialog" title="A programmatic dialog" :showClose="true" @close="closed" @cancel="cancelled">
     <p>This dialog was opened by a Regor event handler.</p>
     <template #footer><Btn tone="accent" @click="close">Close with the API</Btn></template>
@@ -251,7 +251,7 @@ For dialogs created from application state, register `defineModalComponents()`, 
 <Flex direction="column" align="start">
   <ModalStore/>
   <Btn tone="accent" variant="surface" @click="review">Review a saved draft</Btn>
-  <p role="status" r-text="result"></p>
+  <p role="status">{{ result }}</p>
 </Flex>
 ```
 

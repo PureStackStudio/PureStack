@@ -165,7 +165,7 @@ Static MDX establishes the initial view. Mount a browser app when fields inside 
     <TabPane id="controlled-preview" label="Preview"><p>Preview your changes here.</p></TabPane>
     <TabPane id="controlled-settings" label="Settings"><p>Configure the project here.</p></TabPane>
   </Tabs>
-  <p role="status">Selected pane: <code r-text="selected"></code></p>
+  <p role="status">Selected pane: <code>{{ selected }}</code></p>
   <Btn variant="surface" tone="accent" @click="showSettings">Go to settings</Btn>
 </Flex>
 ```
