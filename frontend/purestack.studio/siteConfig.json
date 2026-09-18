@@ -22,11 +22,12 @@
     "cacheBusting": true
   },
   "navigation": {
-    "mode": "auto",
+    "mode": "hybrid",
     "navFileName": "_nav.json",
     "maxDepth": 20,
     "includeIndex": true,
-    "sortBy": "order"
+    "sortBy": "order",
+    "roots": ["components"]
   },
   "sitemap": {
     "enabled": true,
