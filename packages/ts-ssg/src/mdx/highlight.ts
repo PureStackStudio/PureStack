@@ -24,6 +24,7 @@ export const DEFAULT_MDX_CODE_LANGS: MdxCodeLangs = [
   'js',
   'typescript',
   'ts',
+  'ts-tags',
   'jsx',
   'tsx',
   'json',
@@ -46,12 +47,15 @@ export const DEFAULT_MDX_CODE_LANGS: MdxCodeLangs = [
   'xml',
 ]
 
+const TYPESCRIPT_LANGS = new Set(['typescript', 'ts', 'cts', 'mts'])
+const TYPESCRIPT_WITH_TAGS_LANG = 'ts-tags'
+
 export async function createMdxHighlighter(
   themes: MdxCodeThemes = DEFAULT_MDX_CODE_THEMES,
   langs: MdxCodeLangs = DEFAULT_MDX_CODE_LANGS,
 ): Promise<MdxCodeHighlighter> {
   const themeList = dedupe([themes.light, themes.dark])
-  const langList = langs.length > 0 ? dedupe(langs) : []
+  const langList = resolveLoadedLanguages(langs)
   const highlighter: Highlighter = await createHighlighter({
     themes: themeList,
     langs: langList,
@@ -60,12 +64,35 @@ export async function createMdxHighlighter(
   return {
     codeToHtml: (code: string, lang?: string) => {
       return highlighter.codeToHtml(code, {
-        lang: lang ?? 'text',
+        lang: resolveHighlightLanguage(lang),
         themes: { light: themes.light, dark: themes.dark },
         defaultColor: false,
       })
     },
   }
+}
+
+function resolveLoadedLanguages(langs: string[]) {
+  const resolved = dedupe(langs.map(normalizeLanguageName))
+  if (
+    resolved.some((lang) => TYPESCRIPT_LANGS.has(lang)) &&
+    !resolved.includes(TYPESCRIPT_WITH_TAGS_LANG) &&
+    !resolved.includes('lit')
+  ) {
+    resolved.push(TYPESCRIPT_WITH_TAGS_LANG)
+  }
+  return resolved
+}
+
+function resolveHighlightLanguage(lang: string | undefined) {
+  const normalized = normalizeLanguageName(lang ?? 'text')
+  return TYPESCRIPT_LANGS.has(normalized)
+    ? TYPESCRIPT_WITH_TAGS_LANG
+    : normalized || 'text'
+}
+
+function normalizeLanguageName(value: string) {
+  return value.trim().toLowerCase()
 }
 
 function dedupe(values: string[]) {
