@@ -19,13 +19,11 @@ Show positive parts of a whole with a configurable ring, centre label and theme-
 
 [View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/doughnutChart/doughnutChart.ts) · [API reference](#api-reference)
 
+## Interactive playground
 
+Edit segment names and values, hide a category, and watch the total and percentage shares recalculate. Try **Tiny slices** with a larger gap, **One positive segment**, or **All zero** to explore the edge cases. Entrance animation is enabled; use Replay to see it again.
 
-## A task distribution
-
-Change the geometry and inspect an empty state. The centre total is calculated from the positive segments.
-
-<Tabs group="doughnut-chart-sample-1" selectedTab="doughnut-chart-sample-1-preview" ariaLabel="A task distribution example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs group="doughnut-chart-sample-1" selectedTab="doughnut-chart-sample-1-preview" ariaLabel="Interactive doughnut chart playground" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="doughnut-chart-sample-1-preview" label="Preview">
     <RegorApp id="doughnut-chart-demo" src="./playground.ts"/>
   </TabPane>
@@ -43,10 +41,16 @@ import {
   defineFlexComponents,
   defineFormComponents,
   defineFormInputField,
+  defineFormSelectField,
   defineGridComponents,
+  defineIconComponents,
+  definePanelComponents,
+  type FormSelectOption,
 } from '@purestack/ts-components'
-
+import { getThemePaletteVar } from '@purestack/ts-style'
+import { lucide_chevron_down } from '@purestack/ts-svg-icons'
 import {
+  batch,
   type ComputedRef,
   computed,
   createApp,
@@ -58,149 +62,612 @@ import {
   sref,
 } from 'regor'
 
-export interface DoughnutChartExample {
-  chartSegments: SRef<DoughnutChartSegment[]>
-  centerCaption: ComputedRef<string>
-  ringThickness: Ref<number | string>
-  segmentGap: Ref<number | string>
-  startRotation: Ref<number | string>
-  restore: () => void
-  clear: () => void
+export type DoughnutPreset =
+  | 'tasks'
+  | 'equal'
+  | 'dominant'
+  | 'tiny'
+  | 'single'
+  | 'zero'
+export type DoughnutCenterMode = 'total' | 'largest' | 'custom'
+
+export interface DoughnutEditorSegment {
+  id: string
+  label: Ref<string>
+  value: Ref<number | string>
+  enabled: Ref<boolean>
+  color: string
 }
 
-const doughnutChartExampleTemplate = html`<Flex direction="column">
-  <Grid columns="1" columnsSm="2" alignItems="center">
-    <DoughnutChart
-      :segments="chartSegments"
-      title="Example task distribution"
-      :centerLabel="centerCaption"
-      :thickness="ringThickness"
-      :gap="segmentGap"
-      :startAngle="startRotation"
-      :animated="false"
-    />
-    <ul>
-      <li r-for="entry in chartSegments">
-        {{ entry.label }}: {{ entry.value }} tasks
-      </li>
-    </ul>
+export interface DoughnutLegendEntry {
+  label: string
+  value: number
+  color: string
+  share: string
+}
+
+export interface DoughnutChartPlayground {
+  editorSegments: SRef<DoughnutEditorSegment[]>
+  chartSegments: ComputedRef<DoughnutChartSegment[]>
+  legend: ComputedRef<DoughnutLegendEntry[]>
+  total: ComputedRef<number>
+  summary: ComputedRef<string>
+  centerValue: ComputedRef<string>
+  centerLabel: ComputedRef<string>
+  replayDisabled: ComputedRef<boolean>
+  preset: Ref<DoughnutPreset>
+  centerMode: Ref<DoughnutCenterMode>
+  customValue: Ref<string>
+  caption: Ref<string>
+  suffix: Ref<string>
+  thickness: Ref<number | string>
+  gap: Ref<number | string>
+  angle: Ref<number | string>
+  size: Ref<number | string>
+  valueSize: Ref<number | string>
+  labelSize: Ref<number | string>
+  animated: Ref<boolean>
+  presets: FormSelectOption[]
+  centerModes: FormSelectOption[]
+  units: FormSelectOption[]
+  applyPreset: (event: Event) => void
+  replay: () => void
+  clear: () => void
+  reset: () => void
+}
+
+const doughnutChartPlaygroundTemplate = html`<Flex direction="column">
+  <Grid columns="1" columnsMd="2">
+    <FormSelectField id="ring-preset" label="Distribution" :model="preset" :options="presets" @change="applyPreset" />
+    <FormSelectField id="ring-unit" label="Value suffix" :model="suffix" :options="units" />
   </Grid>
-  <Grid columns="1" columnsSm="3">
-    <FormInputField
-      id="ring-thickness"
-      label="Thickness (2–40)"
-      type="number"
-      min="2"
-      max="40"
-      :model="ringThickness"
-    />
-    <FormInputField
-      id="ring-gap"
-      label="Gap (0–24)"
-      type="number"
-      min="0"
-      max="24"
-      :model="segmentGap"
-    />
-    <FormInputField
-      id="ring-angle"
-      label="Start angle"
-      type="number"
-      step="15"
-      :model="startRotation"
-    />
-  </Grid>
-  <Flex wrap="true">
-    <Btn @click="restore">Restore segments</Btn>
-    <Btn variant="outline" @click="clear">Empty data</Btn>
+  <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
+    <Flex justify="between" align="center" wrap="true">
+      <p class="text-eyebrow m-0">LIVE PREVIEW · PARTS OF A WHOLE</p>
+      <Btn variant="outline" size="sm" :disabled="replayDisabled" @click="replay">Replay animation</Btn>
+    </Flex>
+    <Grid columns="1" columnsMd="2" alignItems="center" class="my-3">
+      <DoughnutChart
+        :segments="chartSegments"
+        title="Illustrative distribution"
+        description="Positive values form the ring. The adjacent legend lists exact values and shares."
+        :ariaLabel="summary"
+        :centerValue="centerValue"
+        :centerLabel="centerLabel"
+        :centerValueSize="valueSize"
+        :centerLabelSize="labelSize"
+        :valueSuffix="suffix"
+        emptyLabel="No data"
+        :thickness="thickness"
+        :gap="gap"
+        :startAngle="angle"
+        :size="size"
+        :animated="animated"
+        class="mx-auto"
+        style="max-width: 100%; height: auto"
+      />
+      <Flex direction="column" aria-label="Segment values and shares">
+        <Flex r-for="entry in legend" justify="between" align="center" wrap="true">
+          <Flex align="center">
+            <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="5" :fill="entry.color" /></svg>
+            <span>{{ entry.label }}</span>
+          </Flex>
+          <strong>{{ entry.value }}{{ suffix }} · {{ entry.share }}%</strong>
+        </Flex>
+        <p r-if="!total" class="m-0 text-muted">Enable a positive segment or choose another distribution.</p>
+        <FormStatus>{{ summary }}</FormStatus>
+      </Flex>
+    </Grid>
+  </Panel>
+  <Flex justify="between" align="center" wrap="true">
+    <h3 class="m-0">Edit the distribution</h3>
+    <Flex wrap="true">
+      <Btn variant="outline" @click="clear">Empty data</Btn>
+      <Btn tone="accent" variant="surface" @click="reset">Reset playground</Btn>
+    </Flex>
   </Flex>
+  <Panel r-for="entry in editorSegments" tone="neutral" variant="surface" bodyClass="p-3 min-w-0">
+    <Grid columns="1" columnsMd="3" alignItems="center">
+      <FormInputField :id="'ring-name-' + entry.id" label="Segment name" :model="entry.label" />
+      <FormInputField :id="'ring-value-' + entry.id" label="Value" type="number" step="0.1" :model="entry.value" />
+      <FormCheck :id="'ring-enabled-' + entry.id" label="Include segment" :checked="entry.enabled" />
+    </Grid>
+  </Panel>
+  <p class="m-0 text-muted">Only finite, positive values contribute. Hide a segment to recalculate the total and shares; its color stays attached when restored.</p>
+  <h3 class="m-0">Ring geometry</h3>
+  <Grid columns="2" columnsMd="4">
+    <FormInputField id="ring-thickness" label="Thickness (2–40)" type="number" min="2" :model="thickness" />
+    <FormInputField id="ring-gap" label="Gap (0–24)" type="number" min="0" :model="gap" />
+    <FormInputField id="ring-angle" label="Start angle (°)" type="number" step="15" :model="angle" />
+    <FormInputField id="ring-size" label="Size (px)" type="number" min="100" step="20" :model="size" />
+  </Grid>
+  <p class="m-0 text-muted">Thickness and gap use the 100-unit SVG canvas and are clamped to the ranges above. Gaps shrink around tiny slices. Size fits the available preview width.</p>
+  <h3 class="m-0">Center content</h3>
+  <Grid columns="1" columnsMd="2">
+    <FormSelectField id="ring-center" label="Center value" :model="centerMode" :options="centerModes" />
+    <FormInputField r-if="centerMode === 'custom'" id="ring-custom" label="Custom value" :model="customValue" />
+    <FormInputField r-if="centerMode !== 'largest'" id="ring-caption" label="Center label" :model="caption" />
+  </Grid>
+  <Grid columns="2">
+    <FormInputField id="ring-value-size" label="Value font size" type="number" min="1" :model="valueSize" />
+    <FormInputField id="ring-label-size" label="Label font size" type="number" min="1" :model="labelSize" />
+  </Grid>
+  <p class="m-0 text-muted">Largest share is calculated from the visible values. Custom copy changes only the text. Font sizes scale with the SVG; thick rings and long labels need smaller type. This demo clears center copy when the total is zero.</p>
+  <FormCheck id="ring-motion" label="Entrance animation" :checked="animated" />
 </Flex>`
 
-function createDoughnutChartExample(): DoughnutChartExample {
-  const initial: DoughnutChartSegment[] = [
-    { label: 'Complete', value: 18 },
-    { label: 'In review', value: 7 },
-    { label: 'Planned', value: 5 },
+const presetValues: Record<DoughnutPreset, number[]> = {
+  tasks: [18, 7, 5],
+  equal: [10, 10, 10],
+  dominant: [27, 2, 1],
+  tiny: [99.5, 0.4, 0.1],
+  single: [30, 0, 0],
+  zero: [0, 0, 0],
+}
+
+function createSegments(preset: DoughnutPreset): DoughnutEditorSegment[] {
+  const colors = [
+    getThemePaletteVar('semanticTone.accent.button.hover.bgcolor'),
+    getThemePaletteVar('semanticTone.feature.button.hover.bgcolor'),
+    getThemePaletteVar('semanticTone.info.button.hover.bgcolor'),
   ]
-  const chartSegments = sref(initial)
-  return {
-    chartSegments,
-    centerCaption: computed<string>(() =>
-      chartSegments().length ? 'Tasks' : '',
+  return presetValues[preset].map((value, index) => ({
+    id: String(index),
+    label: ref(['Complete', 'In review', 'Planned'][index]),
+    value: ref<number | string>(value),
+    enabled: ref(true),
+    color: colors[index],
+  }))
+}
+
+function createDoughnutChartPlayground(): DoughnutChartPlayground {
+  const editorSegments = sref(createSegments('tasks'))
+  const preset = ref<DoughnutPreset>('tasks')
+  const centerMode = ref<DoughnutCenterMode>('total')
+  const customValue = ref('Ready')
+  const caption = ref('Tasks')
+  const suffix = ref('')
+  const thickness = ref<number | string>(14)
+  const gap = ref<number | string>(2)
+  const angle = ref<number | string>(-90)
+  const size = ref<number | string>(280)
+  const valueSize = ref<number | string>(16)
+  const labelSize = ref<number | string>(5)
+  const animated = ref(true)
+  const visible = computed(() =>
+    editorSegments()
+      .filter((entry) => entry.enabled())
+      .map((entry) => ({
+        label: entry.label().trim() || `Segment ${Number(entry.id) + 1}`,
+        value: Number(entry.value()),
+        color: entry.color,
+      }))
+      .filter((entry) => Number.isFinite(entry.value) && entry.value > 0),
+  )
+  const total = computed(() =>
+    visible().reduce((sum, entry) => sum + entry.value, 0),
+  )
+  const legend = computed(() =>
+    visible().map((entry) => ({
+      ...entry,
+      share: String(Number(((entry.value / total()) * 100).toFixed(1))),
+    })),
+  )
+  const largest = computed(() =>
+    legend().reduce<DoughnutLegendEntry | undefined>(
+      (best, entry) => (!best || entry.value > best.value ? entry : best),
+      undefined,
     ),
-    ringThickness: ref<number | string>(14),
-    segmentGap: ref<number | string>(2),
-    startRotation: ref<number | string>(-90),
-    restore: () => chartSegments([...initial]),
-    clear: () => chartSegments([]),
+  )
+  return {
+    editorSegments,
+    chartSegments: computed<DoughnutChartSegment[]>(() => visible()),
+    legend,
+    total,
+    summary: computed(() =>
+      total()
+        ? `${visible().length} segments · Total ${Number(total().toFixed(3))}${suffix()}`
+        : 'No positive values',
+    ),
+    centerValue: computed(() =>
+      !total()
+        ? ''
+        : centerMode() === 'largest'
+          ? `${largest()?.share}%`
+          : centerMode() === 'custom'
+            ? customValue()
+            : '',
+    ),
+    centerLabel: computed(() =>
+      !total()
+        ? ''
+        : centerMode() === 'largest'
+          ? (largest()?.label ?? '')
+          : caption(),
+    ),
+    replayDisabled: computed(() => !animated() || !total()),
+    preset,
+    centerMode,
+    customValue,
+    caption,
+    suffix,
+    thickness,
+    gap,
+    angle,
+    size,
+    valueSize,
+    labelSize,
+    animated,
+    presets: [
+      { label: 'Task distribution', value: 'tasks' },
+      { label: 'Equal shares', value: 'equal' },
+      { label: 'Dominant segment', value: 'dominant' },
+      { label: 'Tiny slices', value: 'tiny' },
+      { label: 'One positive segment', value: 'single' },
+      { label: 'All zero', value: 'zero' },
+    ],
+    centerModes: [
+      { label: 'Automatic total', value: 'total' },
+      { label: 'Largest share', value: 'largest' },
+      { label: 'Custom text', value: 'custom' },
+    ],
+    units: [
+      { label: 'No suffix', value: '' },
+      { label: 'Percent (%)', value: '%' },
+      { label: 'Gigabytes (GB)', value: 'GB' },
+    ],
+    applyPreset: (event) =>
+      editorSegments(
+        createSegments(
+          (event.target as HTMLSelectElement).value as DoughnutPreset,
+        ),
+      ),
+    replay: () => {
+      for (const animation of document.querySelectorAll<SVGAnimationElement>(
+        '#doughnut-chart-demo .doughnut-chart animate, #doughnut-chart-demo .doughnut-chart animateTransform',
+      ))
+        animation.beginElement()
+    },
+    clear: () => editorSegments([]),
+    reset: () =>
+      batch(() => {
+        preset('tasks')
+        centerMode('total')
+        customValue('Ready')
+        caption('Tasks')
+        suffix('')
+        thickness(14)
+        gap(2)
+        angle(-90)
+        size(280)
+        valueSize(16)
+        labelSize(5)
+        animated(true)
+        editorSegments(createSegments('tasks'))
+      }),
   }
 }
 
-const component = defineComponent<DoughnutChartExample>(
-  doughnutChartExampleTemplate,
-  {
-    context: createDoughnutChartExample,
-  },
+const doughnutChartPlayground = defineComponent<DoughnutChartPlayground>(
+  doughnutChartPlaygroundTemplate,
+  { context: createDoughnutChartPlayground },
 )
+const icons: Record<string, string> = {
+  'lucide:chevron-down': lucide_chevron_down,
+}
 
 createApp(
   {
     components: {
-      DoughnutChartExample: component,
-
-      ...defineFlexComponents(),
-      ...defineGridComponents(),
-      ...defineFormComponents(),
+      DoughnutChartPlayground: doughnutChartPlayground,
       ...defineButtonComponents(),
-      ...defineFormInputField(),
       ...defineDoughnutChartComponents(),
+      ...defineFlexComponents(),
+      ...defineFormComponents(),
+      ...defineFormInputField(),
+      ...defineFormSelectField(),
+      ...defineGridComponents(),
+      ...defineIconComponents((name) => icons[name] ?? ''),
+      ...definePanelComponents(),
     },
   },
   {
     selector: 'app#doughnut-chart-demo',
-    template: html`<DoughnutChartExample />`,
+    template: html`<DoughnutChartPlayground />`,
   },
 )
+```
+  </TabPane>
+</Tabs>
+
+The legend, percentage calculations and center modes are composed in the example. DoughnutChart renders the ring and center text; it does not generate a legend or calculate custom center percentages. Legend shares are rounded to one decimal place, so they may not add up to exactly 100%.
+
+## A distribution with context
+
+Pair the ring with a visible legend and a short interpretation. The automatic center value is the sum of the positive segments.
+
+<Tabs group="ring-distribution" selectedTab="ring-distribution-preview" ariaLabel="A distribution with context" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="ring-distribution-preview" label="Preview">
+<Panel variant="surface" bodyClass="p-3 min-w-0">
+  <p class="text-eyebrow">RELEASE READINESS</p>
+  <h3 class="mt-0">A clear picture of the sprint</h3>
+  <Grid columns="1" columnsMd="2" alignItems="center">
+    <DoughnutChart
+      title="Sprint task distribution"
+      description="Of 40 tasks, 24 are complete, 10 are in review and 6 are planned."
+      :segments="[{label:'Complete',value:24},{label:'In review',value:10},{label:'Planned',value:6}]"
+      centerLabel="Tasks"
+      centerLabelSize="5"
+      size="240"
+      class="mx-auto"
+      style="max-width: 100%; height: auto"
+    />
+    <Flex direction="column">
+      <Flex justify="between" wrap="true"><Badge tone="accent" variant="surface">Complete</Badge><strong>24 · 60%</strong></Flex>
+      <Flex justify="between" wrap="true"><Badge tone="feature" variant="surface">In review</Badge><strong>10 · 25%</strong></Flex>
+      <Flex justify="between" wrap="true"><Badge tone="success" variant="surface">Planned</Badge><strong>6 · 15%</strong></Flex>
+      <p class="text-muted m-0">60% of the sprint is complete. Review is the next place to focus.</p>
+    </Flex>
+  </Grid>
+</Panel>
+  </TabPane>
+  <TabPane id="ring-distribution-source" label="distribution.mdx">
+```html
+<Panel variant="surface" bodyClass="p-3 min-w-0">
+  <p class="text-eyebrow">RELEASE READINESS</p>
+  <h3 class="mt-0">A clear picture of the sprint</h3>
+  <Grid columns="1" columnsMd="2" alignItems="center">
+    <DoughnutChart
+      title="Sprint task distribution"
+      description="Of 40 tasks, 24 are complete, 10 are in review and 6 are planned."
+      :segments="[{label:'Complete',value:24},{label:'In review',value:10},{label:'Planned',value:6}]"
+      centerLabel="Tasks"
+      centerLabelSize="5"
+      size="240"
+      class="mx-auto"
+      style="max-width: 100%; height: auto"
+    />
+    <Flex direction="column">
+      <Flex justify="between" wrap="true"><Badge tone="accent" variant="surface">Complete</Badge><strong>24 · 60%</strong></Flex>
+      <Flex justify="between" wrap="true"><Badge tone="feature" variant="surface">In review</Badge><strong>10 · 25%</strong></Flex>
+      <Flex justify="between" wrap="true"><Badge tone="success" variant="surface">Planned</Badge><strong>6 · 15%</strong></Flex>
+      <p class="text-muted m-0">60% of the sprint is complete. Review is the next place to focus.</p>
+    </Flex>
+  </Grid>
+</Panel>
 ```
   </TabPane>
 </Tabs>
 
 ## A focused completion ring
 
-Supply centre text when the total alone is not the intended message.
+Pass actual counts as segments and compute the percentage separately. Setting centerValue to 75% does not turn a single value of 18 into a progress ring; include the remaining 6 as a second segment.
 
-<Tabs group="doughnut-chart-sample-2" selectedTab="doughnut-chart-sample-2-preview" ariaLabel="A focused completion ring example" tone="neutral" variant="surface" tabVariant="underline">
-  <TabPane id="doughnut-chart-sample-2-preview" label="Preview">
+<Tabs group="ring-completion" selectedTab="ring-completion-preview" ariaLabel="A focused completion ring" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="ring-completion-preview" label="Preview">
+<Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
+  <Grid columns="1" columnsMd="2" alignItems="center">
     <DoughnutChart
-      title="Example completion"
-      ariaLabel="75 complete, 25 remaining"
-      :segments="[{label:'Complete',value:75},{label:'Remaining',value:25}]"
-      centerLabel="Complete"
+      title="Release checklist completion"
+      ariaLabel="18 of 24 checks complete; 6 remaining"
+      :segments="[{label:'Complete',value:18},{label:'Remaining',value:6}]"
       centerValue="75%"
-      size="16rem"
-      thickness="10"
-      :animated="false"
+      centerLabel="Complete"
+      centerValueSize="16"
+      centerLabelSize="5"
+      thickness="9"
+      gap="3"
+      size="240"
+      class="mx-auto"
+      style="max-width: 100%; height: auto"
     />
+    <Flex direction="column">
+      <Badge tone="accent" variant="surface">Release checklist</Badge>
+      <h3 class="m-0">18 of 24 checks complete</h3>
+      <p class="m-0">6 checks remain before the release is ready.</p>
+      <p class="text-muted m-0">The center shows completion. The segments still contain the actual counts.</p>
+    </Flex>
+  </Grid>
+</Panel>
   </TabPane>
-  <TabPane id="doughnut-chart-sample-2-source-0" label="completion-ring.mdx">
+  <TabPane id="ring-completion-source" label="completion-ring.mdx">
 ```html
-<DoughnutChart
-  title="Example completion"
-  ariaLabel="75 complete, 25 remaining"
-  :segments="[{label:'Complete',value:75},{label:'Remaining',value:25}]"
-  centerLabel="Complete"
-  centerValue="75%"
-  size="16rem"
-  thickness="10"
-  :animated="false"
-/>
+<Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
+  <Grid columns="1" columnsMd="2" alignItems="center">
+    <DoughnutChart
+      title="Release checklist completion"
+      ariaLabel="18 of 24 checks complete; 6 remaining"
+      :segments="[{label:'Complete',value:18},{label:'Remaining',value:6}]"
+      centerValue="75%"
+      centerLabel="Complete"
+      centerValueSize="16"
+      centerLabelSize="5"
+      thickness="9"
+      gap="3"
+      size="240"
+      class="mx-auto"
+      style="max-width: 100%; height: auto"
+    />
+    <Flex direction="column">
+      <Badge tone="accent" variant="surface">Release checklist</Badge>
+      <h3 class="m-0">18 of 24 checks complete</h3>
+      <p class="m-0">6 checks remain before the release is ready.</p>
+      <p class="text-muted m-0">The center shows completion. The segments still contain the actual counts.</p>
+    </Flex>
+  </Grid>
+</Panel>
+```
+  </TabPane>
+</Tabs>
+
+## Ring geometry and tiny slices
+
+Compare a thin, continuous ring with a thicker ring containing very small shares. Gaps adapt to adjacent slices, so a large requested gap does not erase a tiny category. Keep exact values visible alongside the chart.
+
+<Tabs group="ring-geometry" selectedTab="ring-geometry-preview" ariaLabel="Ring geometry and tiny slices" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="ring-geometry-preview" label="Preview">
+<Grid columns="1" columnsMd="2">
+  <Panel variant="surface" bodyClass="p-3 min-w-0">
+    <h3 class="mt-0">Continuous ring</h3>
+    <DoughnutChart
+      title="Storage allocation without gaps"
+      ariaLabel="Media 60 GB, documents 25 GB, backups 15 GB"
+      :segments="[{label:'Media',value:60},{label:'Documents',value:25},{label:'Backups',value:15}]"
+      valueSuffix="GB"
+      centerLabel="Storage"
+      centerValueSize="12"
+      centerLabelSize="5"
+      thickness="8"
+      gap="0"
+      startAngle="0"
+      size="220"
+      class="mx-auto"
+      style="max-width: 100%; height: auto"
+    />
+    <p>Media 60 GB · Documents 25 GB · Backups 15 GB</p>
+  </Panel>
+  <Panel variant="surface" bodyClass="p-3 min-w-0">
+    <h3 class="mt-0">Tiny shares</h3>
+    <DoughnutChart
+      title="Traffic allocation with small slices"
+      ariaLabel="Stable 99.5%, canary 0.4%, preview 0.1%"
+      :segments="[{label:'Stable',value:99.5},{label:'Canary',value:0.4},{label:'Preview',value:0.1}]"
+      centerValue="99.5%"
+      centerLabel="Stable"
+      centerValueSize="10"
+      centerLabelSize="4"
+      thickness="20"
+      gap="8"
+      size="220"
+      class="mx-auto"
+      style="max-width: 100%; height: auto"
+    />
+    <p>Stable 99.5% · Canary 0.4% · Preview 0.1%</p>
+  </Panel>
+</Grid>
+  </TabPane>
+  <TabPane id="ring-geometry-source" label="ring-geometry.mdx">
+```html
+<Grid columns="1" columnsMd="2">
+  <Panel variant="surface" bodyClass="p-3 min-w-0">
+    <h3 class="mt-0">Continuous ring</h3>
+    <DoughnutChart
+      title="Storage allocation without gaps"
+      ariaLabel="Media 60 GB, documents 25 GB, backups 15 GB"
+      :segments="[{label:'Media',value:60},{label:'Documents',value:25},{label:'Backups',value:15}]"
+      valueSuffix="GB"
+      centerLabel="Storage"
+      centerValueSize="12"
+      centerLabelSize="5"
+      thickness="8"
+      gap="0"
+      startAngle="0"
+      size="220"
+      class="mx-auto"
+      style="max-width: 100%; height: auto"
+    />
+    <p>Media 60 GB · Documents 25 GB · Backups 15 GB</p>
+  </Panel>
+  <Panel variant="surface" bodyClass="p-3 min-w-0">
+    <h3 class="mt-0">Tiny shares</h3>
+    <DoughnutChart
+      title="Traffic allocation with small slices"
+      ariaLabel="Stable 99.5%, canary 0.4%, preview 0.1%"
+      :segments="[{label:'Stable',value:99.5},{label:'Canary',value:0.4},{label:'Preview',value:0.1}]"
+      centerValue="99.5%"
+      centerLabel="Stable"
+      centerValueSize="10"
+      centerLabelSize="4"
+      thickness="20"
+      gap="8"
+      size="220"
+      class="mx-auto"
+      style="max-width: 100%; height: auto"
+    />
+    <p>Stable 99.5% · Canary 0.4% · Preview 0.1%</p>
+  </Panel>
+</Grid>
+```
+  </TabPane>
+</Tabs>
+
+## Single and empty distributions
+
+A single positive segment becomes a full ring. An empty array and an array of all-zero values both have no positive total.
+
+<Tabs group="ring-empty" selectedTab="ring-empty-preview" ariaLabel="Single and empty distributions" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="ring-empty-preview" label="Preview">
+<Grid columns="1" columnsMd="2">
+  <Panel variant="surface" bodyClass="p-3 min-w-0">
+    <h3 class="mt-0">One category</h3>
+    <DoughnutChart
+      title="All 24 checks passed"
+      :segments="[{label:'Passed',value:24}]"
+      centerLabel="Passed"
+      centerLabelSize="5"
+      gap="12"
+      size="220"
+      class="mx-auto"
+      style="max-width: 100%; height: auto"
+    />
+    <p>24 passed. One positive segment fills the entire ring, with no separator.</p>
+  </Panel>
+  <Panel variant="surface" bodyClass="p-3 min-w-0">
+    <h3 class="mt-0">Awaiting data</h3>
+    <DoughnutChart
+      title="No check results yet"
+      :segments="[]"
+      emptyLabel="Pending"
+      size="220"
+      class="mx-auto"
+      style="max-width: 100%; height: auto"
+    />
+    <p>No results yet. Leave both center props unset to display the empty label.</p>
+  </Panel>
+</Grid>
+  </TabPane>
+  <TabPane id="ring-empty-source" label="single-and-empty.mdx">
+```html
+<Grid columns="1" columnsMd="2">
+  <Panel variant="surface" bodyClass="p-3 min-w-0">
+    <h3 class="mt-0">One category</h3>
+    <DoughnutChart
+      title="All 24 checks passed"
+      :segments="[{label:'Passed',value:24}]"
+      centerLabel="Passed"
+      centerLabelSize="5"
+      gap="12"
+      size="220"
+      class="mx-auto"
+      style="max-width: 100%; height: auto"
+    />
+    <p>24 passed. One positive segment fills the entire ring, with no separator.</p>
+  </Panel>
+  <Panel variant="surface" bodyClass="p-3 min-w-0">
+    <h3 class="mt-0">Awaiting data</h3>
+    <DoughnutChart
+      title="No check results yet"
+      :segments="[]"
+      emptyLabel="Pending"
+      size="220"
+      class="mx-auto"
+      style="max-width: 100%; height: auto"
+    />
+    <p>No results yet. Leave both center props unset to display the empty label.</p>
+  </Panel>
+</Grid>
 ```
   </TabPane>
 </Tabs>
 
 ## Behavior and accessibility
 
-Only positive segments contribute to the ring and total. Zero, negative and unusable values are omitted. Supply a text legend with values; color and geometry alone are not a complete accessible representation.
+- **Parts of a whole:** arc angles use each positive value divided by the positive total. Choose a bar chart when precise comparisons matter more than the overall distribution.
+- **Stable colors:** default colors follow the filtered segment order. The playground supplies explicit theme variables to keep colors attached when a segment is hidden.
+- **Text alongside color:** provide a visible legend with names and values. SVG titles help describe the image; they are not a substitute for nearby readable data.
+- **Center content:** custom text never changes the proportions. A thicker ring reduces the space available; text does not automatically wrap or shrink.
+- **Empty states:** no positive values leaves the track visible. The empty label appears only when both center props are empty. Explicit center copy can intentionally remain on an empty ring.
+- **Entrance animation:** the ring fades and rotates while the center fades separately. Data edits update geometry immediately. Replay calls the native SVG animations' beginElement method.
 
 ## API reference
 
@@ -230,36 +697,40 @@ Only positive segments contribute to the ring and total. Zero, negative and unus
   <a href="#doughnut-chart-prop-variantMode">variantMode</a>
 </nav>
 
+### Data and accessible descriptions
+
 <ApiProperty anchor="doughnut-chart-prop-segments" name="segments" valueType="RefOrValue&lt;Array&lt;RefOrValue&lt;DoughnutChartSegment&gt;&gt;&gt;" defaultValue="[]">
-  <p>Array of DoughnutChartSegment objects with optional label, numeric value (or numeric string), and CSS color.</p>
+  <p>An array of labelled positive values with optional CSS colors. Zero, negative and non-finite values do not contribute to the ring or total. Values need not sum to 100; each arc represents its share of the positive total.</p>
 </ApiProperty>
 
 <ApiProperty anchor="doughnut-chart-prop-title" name="title" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>SVG title text.</p>
+  <p>SVG title text. Provide a visible heading alongside the chart when readers need one.</p>
 </ApiProperty>
 
 <ApiProperty anchor="doughnut-chart-prop-description" name="description" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>SVG desc text.</p>
+  <p>SVG description with context such as the period, unit and meaning of the distribution.</p>
 </ApiProperty>
 
 <ApiProperty anchor="doughnut-chart-prop-ariaLabel" name="ariaLabel" valueType="RefOrValue&lt;string&gt;" defaultValue="title, then Doughnut chart">
   <p>Accessible name on the SVG image.</p>
 </ApiProperty>
 
+### Center content
+
 <ApiProperty anchor="doughnut-chart-prop-centerLabel" name="centerLabel" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Supporting text in the ring centre.</p>
+  <p>Supporting text below the center value. Keep it short: the component does not wrap or fit center text automatically.</p>
 </ApiProperty>
 
 <ApiProperty anchor="doughnut-chart-prop-centerValue" name="centerValue" valueType="RefOrValue&lt;string&gt;" defaultValue="sum of positive values">
-  <p>Explicit centre value. If empty, the positive total and valueSuffix are used.</p>
+  <p>Nonempty text overrides the automatic total without changing segment geometry. Empty or whitespace-only text falls back to the positive total with valueSuffix; it does not hide the total.</p>
 </ApiProperty>
 
 <ApiProperty anchor="doughnut-chart-prop-centerLabelSize" name="centerLabelSize" valueType="RefOrValue&lt;number | string&gt;" defaultValue="theme styles">
-  <p>CSS font size for the centre label.</p>
+  <p>Font size for the center label. Numbers become pixel lengths in SVG coordinates, so the text scales with the whole chart. Reduce it for long labels or thick rings.</p>
 </ApiProperty>
 
 <ApiProperty anchor="doughnut-chart-prop-centerValueSize" name="centerValueSize" valueType="RefOrValue&lt;number | string&gt;" defaultValue="theme styles">
-  <p>CSS font size for the centre value.</p>
+  <p>Font size for the center value. Numbers become pixel lengths in SVG coordinates; CSS size strings are also accepted. It does not resize the hole or fit text automatically.</p>
 </ApiProperty>
 
 <ApiProperty anchor="doughnut-chart-prop-emptyLabel" name="emptyLabel" valueType="RefOrValue&lt;string&gt;" defaultValue="No data">
@@ -267,31 +738,35 @@ Only positive segments contribute to the ring and total. Zero, negative and unus
 </ApiProperty>
 
 <ApiProperty anchor="doughnut-chart-prop-valueSuffix" name="valueSuffix" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Unit appended to formatted values, such as ms or %.</p>
+  <p>Appended to each segment title and the automatic center total. It does not calculate percentages and is not appended to an explicit centerValue.</p>
 </ApiProperty>
 
+### Ring geometry
+
 <ApiProperty anchor="doughnut-chart-prop-size" name="size" valueType="RefOrValue&lt;number | string&gt;" defaultValue="100%">
-  <p>CSS size of the square chart. Numbers become pixel lengths.</p>
+  <p>Width and height of the square SVG. Numbers become pixel lengths; strings can use CSS units. The samples add max-width: 100% and height: auto to fit narrow containers.</p>
 </ApiProperty>
 
 <ApiProperty anchor="doughnut-chart-prop-thickness" name="thickness" valueType="RefOrValue&lt;number | string&gt;" defaultValue="14">
-  <p>Ring thickness in SVG units, clamped between 2 and 40.</p>
+  <p>Radial thickness on the 100-unit SVG canvas, clamped to 2–40. The outer radius is 46, so the hole radius is 46 minus thickness. A thicker ring leaves less room for center text.</p>
 </ApiProperty>
 
 <ApiProperty anchor="doughnut-chart-prop-gap" name="gap" valueType="RefOrValue&lt;number | string&gt;" defaultValue="2">
-  <p>Segment separation, clamped between 0 and 24.</p>
+  <p>Maximum separator width on the SVG canvas, clamped to 0–24. Transparent mask cuts separate adjacent segments; widths shrink near tiny slices and may disappear. Zero joins the slices. A single segment has no separators.</p>
 </ApiProperty>
 
 <ApiProperty anchor="doughnut-chart-prop-startAngle" name="startAngle" valueType="RefOrValue&lt;number | string&gt;" defaultValue="-90">
-  <p>Starting angle in degrees. -90 starts at the top.</p>
+  <p>Starting angle in degrees, moving clockwise: -90 starts at the top, 0 at the right, 90 at the bottom. A single full ring has no visible starting edge.</p>
 </ApiProperty>
 
+### Animation and appearance
+
 <ApiProperty anchor="doughnut-chart-prop-animated" name="animated" valueType="RefOrValue&lt;boolean | string&gt;" defaultValue="true">
-  <p>Enables the SVG entrance animation. Bind false for an immediate rendering.</p>
+  <p>Enables the entrance fade and rotation of the ring, plus a separate center fade. It does not tween values or sweep arcs when data changes. Bind false for immediate rendering; Replay in the playground restarts the native SVG animations.</p>
 </ApiProperty>
 
 <ApiProperty anchor="doughnut-chart-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
-  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+  <p>Semantic intent for theme styling. Segment fills use the chart palette or each segment’s explicit color; changing tone does not assign all segments that color.</p>
 </ApiProperty>
 
 <ApiProperty anchor="doughnut-chart-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="none">
@@ -302,16 +777,28 @@ Only positive segments contribute to the ring and total. Zero, negative and unus
   <p>Use stateless for content surfaces; stateful enables the treatment’s hover, focus and active styles. It does not add interaction handlers.</p>
 </ApiProperty>
 
+### Segment contract
+
+```typescript
+import type { RefOrValue } from 'regor'
+
+interface DoughnutChartSegment {
+  label?: RefOrValue<string>
+  value?: RefOrValue<number | string>
+  color?: RefOrValue<string>
+}
+```
+
+Missing names become Segment 1, Segment 2, and so on, based on the input order. Numeric strings are parsed; use finite numbers for predictable input. Zero, negative and unusable values are omitted. A color can be any CSS color, including a theme variable.
+
 ### Composition
 
 <div class="api-contract">
-<p>No slots. Register defineDoughnutChartComponents. Segment colors use the active theme when no explicit color is supplied.</p>
+  <p>No slots or built-in legend. Register defineDoughnutChartComponents in a Regor app and bind a segments ref or computed value. Compose titles, legends and controls with Panel, Flex and native form components, as the playground does.</p>
 </div>
-
-
 
 ## Related components
 
-- [BarChart](/components/data/bar-chart/)
-- [LineChart](/components/data/line-chart/)
-- [MetricStrip](/components/landing/metric-strip/)
+- [BarChart](/components/data/bar-chart/) — compare category values precisely.
+- [LineChart](/components/data/line-chart/) — show change across ordered observations.
+- [MetricStrip](/components/landing/metric-strip/) — accompany a distribution with headline metrics.

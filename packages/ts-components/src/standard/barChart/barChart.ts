@@ -15,10 +15,8 @@ import {
   valueToCartesianChartY,
 } from '../chart/cartesianChart'
 import {
-  CARTESIAN_CHART_LABEL_Y,
   CARTESIAN_CHART_PLOT_WIDTH,
   CARTESIAN_CHART_PLOT_X,
-  CARTESIAN_CHART_VIEWBOX_HEIGHT,
   DEFAULT_CARTESIAN_CHART_HEIGHT,
   DEFAULT_CARTESIAN_CHART_WIDTH,
   DEFAULT_CHART_COLORS,
@@ -92,13 +90,14 @@ export interface BarChart {
 }
 
 const VALUE_LABEL_OFFSET = 2.4
+const CATEGORY_LABEL_Y = 60
 const BAR_WIDTH_SHARE = 0.64
 const MIN_VISIBLE_BAR_HEIGHT = 0.35
 
 const barChartTemplate = svg`<svg
   class="bar-chart"
   :class="classes"
-  viewBox="0 0 100 58"
+  viewBox="-6 0 106 64"
   :width="resolvedWidth"
   :height="resolvedHeight"
   role="img"
@@ -278,10 +277,7 @@ function resolveChartItems(
       ? zeroY
       : Math.min(valueY, zeroY) - (height - rawHeight)
     const valueLabelY = isNegative
-      ? Math.min(
-          CARTESIAN_CHART_VIEWBOX_HEIGHT - 2,
-          y + height + VALUE_LABEL_OFFSET,
-        )
+      ? y + height + VALUE_LABEL_OFFSET
       : Math.max(2, y - VALUE_LABEL_OFFSET)
 
     return {
@@ -298,7 +294,7 @@ function resolveChartItems(
       valueLabelY,
       valueLabelBaseline: isNegative ? 'hanging' : 'auto',
       labelX: x + barWidth / 2,
-      labelY: CARTESIAN_CHART_LABEL_Y,
+      labelY: CATEGORY_LABEL_Y,
       roundedTop: Math.min(1.4, barWidth / 2, height / 2),
     }
   })

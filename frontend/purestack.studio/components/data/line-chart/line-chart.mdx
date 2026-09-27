@@ -19,13 +19,11 @@ Show change across an ordered sequence with multiple series, optional areas and 
 
 [View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/lineChart/lineChart.ts) · [API reference](#api-reference)
 
+## Playground
 
+Edit either series, rename it, or hide it to inspect the other line. Try crossing trends, gains and losses, a flat baseline or a single observation. Every chart control below is reactive, and Reset restores the full example. All data is illustrative.
 
-## Compare two runs
-
-Switch between smooth and linear paths, show points and values, or clear the series. All numbers are illustrative.
-
-<Tabs group="line-chart-sample-1" selectedTab="line-chart-sample-1-preview" ariaLabel="Compare two runs example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs group="line-chart-sample-1" selectedTab="line-chart-sample-1-preview" ariaLabel="Interactive LineChart playground" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="line-chart-sample-1-preview" label="Preview">
     <RegorApp id="line-chart-demo" src="./playground.ts"/>
   </TabPane>
@@ -37,6 +35,7 @@ Switch between smooth and linear paths, show points and values, or clear the ser
   <TabPane id="line-chart-sample-1-source-1" label="playground.ts">
 ```typescript
 import {
+  defineBadgeComponents,
   defineButtonComponents,
   defineFlexComponents,
   defineFormComponents,
@@ -45,12 +44,17 @@ import {
   defineGridComponents,
   defineIconComponents,
   defineLineChartComponents,
+  definePanelComponents,
   type FormSelectOption,
   type LineChartCurve,
   type LineChartSeries,
 } from '@purestack/ts-components'
+import { getThemePaletteVar, type SemanticTone } from '@purestack/ts-style'
 import { lucide_chevron_down } from '@purestack/ts-svg-icons'
 import {
+  batch,
+  type ComputedRef,
+  computed,
   createApp,
   defineComponent,
   html,
@@ -60,94 +64,287 @@ import {
   sref,
 } from 'regor'
 
-export interface LineChartExample {
-  chartSeries: SRef<LineChartSeries[]>
-  lineCurve: Ref<LineChartCurve>
-  curveOptions: FormSelectOption[]
+export type LineChartPreset =
+  | 'growth'
+  | 'crossing'
+  | 'signed'
+  | 'flat'
+  | 'single'
+
+export interface LineChartEditorPoint {
+  id: string
+  label: string
+  value: Ref<number | string>
+}
+
+export interface LineChartEditorSeries {
+  id: string
+  label: Ref<string>
+  enabled: Ref<boolean>
+  tone: SemanticTone
+  color: string
+  points: LineChartEditorPoint[]
+}
+
+export interface LineChartPlayground {
+  editorSeries: SRef<LineChartEditorSeries[]>
+  chartSeries: ComputedRef<LineChartSeries[]>
+  summary: ComputedRef<string>
+  replayDisabled: ComputedRef<boolean>
+  preset: Ref<LineChartPreset>
+  curve: Ref<LineChartCurve>
+  suffix: Ref<string>
+  minimum: Ref<number | string>
+  maximum: Ref<number | string>
+  height: Ref<number | string>
   areaVisible: Ref<boolean>
   pointsVisible: Ref<boolean>
   valuesVisible: Ref<boolean>
-  restore: () => void
+  labelsVisible: Ref<boolean>
+  axisVisible: Ref<boolean>
+  motionEnabled: Ref<boolean>
+  presets: FormSelectOption[]
+  curves: FormSelectOption[]
+  units: FormSelectOption[]
+  applyPreset: (event: Event) => void
+  replay: () => void
   clear: () => void
+  reset: () => void
 }
 
-const lineChartExampleTemplate = html`<Flex direction="column">
-  <LineChart
-    :series="chartSeries"
-    title="Example build duration"
-    description="Two illustrative runs across four revisions."
-    valueSuffix=" s"
-    :curve="lineCurve"
-    :showArea="areaVisible"
-    :showPoints="pointsVisible"
-    :showValues="valuesVisible"
-    :animated="false"
-  />
-  <FormSelectField
-    id="line-curve"
-    label="Curve"
-    :model="lineCurve"
-    :options="curveOptions"
-  />
+const lineChartPlaygroundTemplate = html`<Flex direction="column">
+  <Grid columns="1" columnsMd="3">
+    <FormSelectField
+      id="line-preset"
+      label="Dataset"
+      :model="preset"
+      :options="presets"
+      @change="applyPreset"
+    />
+    <FormSelectField id="line-curve" label="Curve" :model="curve" :options="curves" />
+    <FormSelectField id="line-unit" label="Value suffix" :model="suffix" :options="units" />
+  </Grid>
+  <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
+    <Flex justify="between" align="center" wrap="true">
+      <p class="text-eyebrow m-0">LIVE PREVIEW · SERIES COMPARISON</p>
+      <Btn variant="outline" size="sm" :disabled="replayDisabled" @click="replay">Replay animation</Btn>
+    </Flex>
+    <Flex wrap="true" class="mt-3">
+      <template r-for="entry in editorSeries">
+        <Badge r-if="entry.enabled" :tone="entry.tone" variant="surface">{{ entry.label }}</Badge>
+      </template>
+    </Flex>
+    <div class="overflow-x-auto" tabindex="0" role="region" aria-label="Scrollable line chart preview">
+      <LineChart
+        :series="chartSeries"
+        title="Illustrative series comparison"
+        description="Equally spaced observations. Exact values can be edited in each series below."
+        :ariaLabel="summary"
+        emptyLabel="No visible series"
+        :curve="curve"
+        :valueSuffix="suffix"
+        :minValue="minimum"
+        :maxValue="maximum"
+        :height="height"
+        :showArea="areaVisible"
+        :showPoints="pointsVisible"
+        :showValues="valuesVisible"
+        :showLabels="labelsVisible"
+        :showAxis="axisVisible"
+        :animated="motionEnabled"
+        style="min-width: 440px"
+      />
+    </div>
+    <FormStatus>{{ summary }}</FormStatus>
+  </Panel>
   <Flex wrap="true">
-    <FormCheck id="line-area" label="Area" :checked="areaVisible" />
-    <FormCheck id="line-points" label="Points" :checked="pointsVisible" />
+    <FormCheck id="line-area" label="Area fill" :checked="areaVisible" />
+    <FormCheck id="line-points" label="Point markers" :checked="pointsVisible" />
     <FormCheck id="line-values" label="Values" :checked="valuesVisible" />
+    <FormCheck id="line-labels" label="Category labels" :checked="labelsVisible" />
+    <FormCheck id="line-axis" label="Grid and zero line" :checked="axisVisible" />
+    <FormCheck id="line-motion" label="Entrance animation" :checked="motionEnabled" />
   </Flex>
-  <Flex wrap="true">
-    <Btn @click="restore">Restore series</Btn>
-    <Btn variant="outline" @click="clear">Empty data</Btn>
+  <Grid columns="1" columnsMd="3">
+    <FormInputField id="line-min" label="Minimum bound" type="number" placeholder="Automatic" :model="minimum" />
+    <FormInputField id="line-max" label="Maximum bound" type="number" placeholder="Automatic" :model="maximum" />
+    <FormInputField id="line-height" label="Chart height (px)" type="number" min="180" step="20" :model="height" />
+  </Grid>
+  <p class="m-0 text-muted">Blank bounds use the data range. Bounds always expand to include zero and all visible points. Scroll the preview horizontally on narrow screens.</p>
+  <Flex justify="between" align="center" wrap="true">
+    <h3 class="m-0">Edit the series</h3>
+    <Flex wrap="true">
+      <Btn variant="outline" @click="clear">Empty data</Btn>
+      <Btn tone="accent" variant="surface" @click="reset">Reset playground</Btn>
+    </Flex>
   </Flex>
-  <div r-for="entry in chartSeries">
-    <strong>{{ entry.label }}</strong>
-    <ul>
-      <li r-for="point in entry.points">
-        {{ point.label }}: {{ point.value }} seconds
-      </li>
-    </ul>
-  </div>
+  <Panel r-for="entry in editorSeries" tone="neutral" variant="surface" bodyClass="p-3 min-w-0" :aria-label="entry.label">
+    <Flex direction="column">
+      <Flex justify="between" align="center" wrap="true">
+        <FormInputField :id="'line-name-' + entry.id" label="Series name" :model="entry.label" />
+        <FormCheck :id="'line-enabled-' + entry.id" label="Show series" :checked="entry.enabled" />
+      </Flex>
+      <Grid columns="2" columnsSm="3" columnsLg="5">
+        <FormInputField
+          r-for="point in entry.points"
+          :id="point.id"
+          :label="point.label"
+          type="number"
+          step="1"
+          :model="point.value"
+        />
+      </Grid>
+    </Flex>
+  </Panel>
 </Flex>`
 
-function createLineChartExample(): LineChartExample {
-  const initial: LineChartSeries[] = [
-    {
-      label: 'Full build',
-      points: [
-        { label: 'r1', value: 4.2 },
-        { label: 'r2', value: 3.5 },
-        { label: 'r3', value: 3.8 },
-        { label: 'r4', value: 2.9 },
-      ],
-    },
-    {
-      label: 'Incremental',
-      points: [
-        { label: 'r1', value: 1.2 },
-        { label: 'r2', value: 0.9 },
-        { label: 'r3', value: 1.1 },
-        { label: 'r4', value: 0.7 },
-      ],
-    },
+const presetValues: Record<LineChartPreset, [number[], number[]]> = {
+  growth: [
+    [18, 26, 37, 48, 64],
+    [10, 18, 25, 34, 43],
+  ],
+  crossing: [
+    [20, 38, 28, 58, 48],
+    [48, 26, 50, 32, 64],
+  ],
+  signed: [
+    [-18, -8, 12, 28, 40],
+    [-32, -18, -4, 12, 22],
+  ],
+  flat: [
+    [24, 24, 24, 24, 24],
+    [12, 12, 12, 12, 12],
+  ],
+  single: [[24], [12]],
+}
+
+function createLineChartSeries(
+  preset: LineChartPreset,
+): LineChartEditorSeries[] {
+  const colors = [
+    getThemePaletteVar('semanticTone.accent.button.hover.bgcolor'),
+    getThemePaletteVar('semanticTone.feature.button.hover.bgcolor'),
   ]
-  const chartSeries = sref(initial)
+  return presetValues[preset].map((values, index) => ({
+    id: String(index),
+    label: ref(index === 0 ? 'Current' : 'Baseline'),
+    enabled: ref(true),
+    tone: index === 0 ? 'accent' : 'feature',
+    color: colors[index],
+    points: values.map((value, pointIndex) => ({
+      id: `line-value-${index}-${pointIndex}`,
+      label: `R${pointIndex + 1}`,
+      value: ref<number | string>(value),
+    })),
+  }))
+}
+
+function createLineChartPlayground(): LineChartPlayground {
+  const editorSeries = sref(createLineChartSeries('growth'))
+  const preset = ref<LineChartPreset>('growth')
+  const curve = ref<LineChartCurve>('smooth')
+  const suffix = ref('%')
+  const minimum = ref<number | string>('')
+  const maximum = ref<number | string>('')
+  const height = ref<number | string>(300)
+  const areaVisible = ref(false)
+  const pointsVisible = ref(true)
+  const valuesVisible = ref(false)
+  const labelsVisible = ref(true)
+  const axisVisible = ref(true)
+  const motionEnabled = ref(true)
+  const chartSeries = computed<LineChartSeries[]>(() =>
+    editorSeries()
+      .filter((entry) => entry.enabled())
+      .map((entry, index) => ({
+        label: entry.label().trim() || `Series ${index + 1}`,
+        color: entry.color,
+        points: entry.points.map((point) => ({
+          label: point.label,
+          value: Number(point.value()),
+        })),
+      })),
+  )
   return {
+    editorSeries,
     chartSeries,
-    lineCurve: ref<LineChartCurve>('smooth'),
-    curveOptions: [
+    summary: computed(() => {
+      const visible = editorSeries().filter((entry) => entry.enabled())
+      if (!visible.length)
+        return 'No visible series. Enable a series, choose a dataset, or reset.'
+      return visible
+        .map((entry, index) => {
+          const latest = entry.points.at(-1)
+          return `${entry.label().trim() || `Series ${index + 1}`}: ${latest?.label} = ${Number(latest?.value())}${suffix()}`
+        })
+        .join(' · ')
+    }),
+    replayDisabled: computed(() => !motionEnabled() || !chartSeries().length),
+    preset,
+    curve,
+    suffix,
+    minimum,
+    maximum,
+    height,
+    areaVisible,
+    pointsVisible,
+    valuesVisible,
+    labelsVisible,
+    axisVisible,
+    motionEnabled,
+    presets: [
+      { label: 'Steady growth', value: 'growth' },
+      { label: 'Crossing trends', value: 'crossing' },
+      { label: 'Gains and losses', value: 'signed' },
+      { label: 'Flat series', value: 'flat' },
+      { label: 'Single observation', value: 'single' },
+    ],
+    curves: [
       { label: 'Smooth', value: 'smooth' },
       { label: 'Linear', value: 'linear' },
     ],
-    areaVisible: ref(false),
-    pointsVisible: ref(true),
-    valuesVisible: ref(false),
-    restore: () => chartSeries([...initial]),
-    clear: () => chartSeries([]),
+    units: [
+      { label: 'Percent (%)', value: '%' },
+      { label: 'Milliseconds (ms)', value: 'ms' },
+      { label: 'No suffix', value: '' },
+    ],
+    applyPreset: (event) => {
+      const next = (event.target as HTMLSelectElement).value as LineChartPreset
+      editorSeries(createLineChartSeries(next))
+    },
+    replay: () => {
+      for (const animation of document.querySelectorAll<SVGAnimationElement>(
+        '#line-chart-demo .line-chart animate',
+      )) {
+        animation.beginElement()
+      }
+    },
+    clear: () => editorSeries([]),
+    reset: () =>
+      batch(() => {
+        preset('growth')
+        curve('smooth')
+        suffix('%')
+        minimum('')
+        maximum('')
+        height(300)
+        areaVisible(false)
+        pointsVisible(true)
+        valuesVisible(false)
+        labelsVisible(true)
+        axisVisible(true)
+        motionEnabled(true)
+        editorSeries(createLineChartSeries('growth'))
+      }),
   }
 }
 
-const component = defineComponent<LineChartExample>(lineChartExampleTemplate, {
-  context: createLineChartExample,
-})
+const lineChartPlayground = defineComponent<LineChartPlayground>(
+  lineChartPlaygroundTemplate,
+  {
+    context: createLineChartPlayground,
+  },
+)
 const icons: Record<string, string> = {
   'lucide:chevron-down': lucide_chevron_down,
 }
@@ -155,58 +352,232 @@ const icons: Record<string, string> = {
 createApp(
   {
     components: {
-      LineChartExample: component,
-
-      ...defineFlexComponents(),
-      ...defineGridComponents(),
-      ...defineFormComponents(),
+      LineChartPlayground: lineChartPlayground,
+      ...defineBadgeComponents(),
       ...defineButtonComponents(),
+      ...defineFlexComponents(),
+      ...defineFormComponents(),
       ...defineFormInputField(),
-      ...defineLineChartComponents(),
       ...defineFormSelectField(),
+      ...defineGridComponents(),
       ...defineIconComponents((name) => icons[name] ?? ''),
+      ...defineLineChartComponents(),
+      ...definePanelComponents(),
     },
   },
-  { selector: 'app#line-chart-demo', template: html`<LineChartExample />` },
+  { selector: 'app#line-chart-demo', template: html`<LineChartPlayground />` },
 )
 ```
   </TabPane>
 </Tabs>
 
-## A minimal trend
+Entrance animation starts enabled. Use **Replay animation** to run the SVG animations again without changing your data. Turn it off for immediate comparisons while editing. With overlapping series, hide value labels and use the named input fields to read exact values.
 
-Remove axis decoration when a nearby explanation carries the detail.
 
-<Tabs group="line-chart-sample-2" selectedTab="line-chart-sample-2-preview" ariaLabel="A minimal trend example" tone="neutral" variant="surface" tabVariant="underline">
-  <TabPane id="line-chart-sample-2-preview" label="Preview">
+## Compare aligned series
+
+Give each series the same ordered categories and a visible legend. A fixed zero-to-100 scale keeps this comparison consistent. These are illustrative percentages.
+
+<Tabs group="line-chart-comparison" selectedTab="line-chart-comparison-preview" ariaLabel="Compare aligned series example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="line-chart-comparison-preview" label="Preview">
+    <Panel variant="surface" bodyClass="p-3">
+      <h3 class="mt-0">Adoption across five releases</h3>
+      <Flex wrap="true">
+        <Badge tone="accent">Current</Badge>
+        <Badge tone="feature">Previous</Badge>
+      </Flex>
+      <LineChart
+        title="Adoption by release"
+        ariaLabel="R1 to R5: Current 18, 26, 37, 48, 64 percent; Previous 10, 18, 25, 34, 43 percent"
+        :series="[
+          {label:'Current',points:[{label:'R1',value:18},{label:'R2',value:26},{label:'R3',value:37},{label:'R4',value:48},{label:'R5',value:64}]},
+          {label:'Previous',points:[{label:'R1',value:10},{label:'R2',value:18},{label:'R3',value:25},{label:'R4',value:34},{label:'R5',value:43}]}
+        ]"
+        minValue="0"
+        maxValue="100"
+        valueSuffix="%"
+        height="280"
+        curve="linear"
+      />
+    </Panel>
+  </TabPane>
+  <TabPane id="line-chart-comparison-source" label="aligned-series.mdx">
+```html
+<Panel variant="surface" bodyClass="p-3">
+  <h3 class="mt-0">Adoption across five releases</h3>
+  <Flex wrap="true">
+    <Badge tone="accent">Current</Badge>
+    <Badge tone="feature">Previous</Badge>
+  </Flex>
+  <LineChart
+    title="Adoption by release"
+    ariaLabel="R1 to R5: Current 18, 26, 37, 48, 64 percent; Previous 10, 18, 25, 34, 43 percent"
+    :series="[
+      {label:'Current',points:[{label:'R1',value:18},{label:'R2',value:26},{label:'R3',value:37},{label:'R4',value:48},{label:'R5',value:64}]},
+      {label:'Previous',points:[{label:'R1',value:10},{label:'R2',value:18},{label:'R3',value:25},{label:'R4',value:34},{label:'R5',value:43}]}
+    ]"
+    minValue="0"
+    maxValue="100"
+    valueSuffix="%"
+    height="280"
+    curve="linear"
+  />
+</Panel>
+```
+  </TabPane>
+</Tabs>
+
+
+## Fill an area across zero
+
+Area fill closes each path against zero. Positive and negative regions keep their direction, while value labels show the actual observations. Multiple series would overlap; area fill is not stacking.
+
+<Tabs group="line-chart-signed" selectedTab="line-chart-signed-preview" ariaLabel="Fill an area across zero example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="line-chart-signed-preview" label="Preview">
     <LineChart
-      title="Example trend"
-      ariaLabel="Three example values: 3, 5, 4"
-      :series="[{label:'Trend',points:[{label:'One',value:3},{label:'Two',value:5},{label:'Three',value:4}]}]"
-      curve="linear"
-      :showAxis="false"
+      title="Change from the release baseline"
+      ariaLabel="R1 minus 32 percent, R2 minus 12, R3 plus 8, R4 plus 24, R5 plus 36"
+      :series="[{label:'Change',points:[{label:'R1',value:-32},{label:'R2',value:-12},{label:'R3',value:8},{label:'R4',value:24},{label:'R5',value:36}]}]"
+      minValue="-40"
+      maxValue="40"
+      valueSuffix="%"
+      height="280"
+      :showArea="true"
       :showValues="true"
-      :animated="false"
     />
   </TabPane>
-  <TabPane id="line-chart-sample-2-source-0" label="minimal-trend.mdx">
+  <TabPane id="line-chart-signed-source" label="signed-area.mdx">
 ```html
 <LineChart
-  title="Example trend"
-  ariaLabel="Three example values: 3, 5, 4"
-  :series="[{label:'Trend',points:[{label:'One',value:3},{label:'Two',value:5},{label:'Three',value:4}]}]"
-  curve="linear"
-  :showAxis="false"
+  title="Change from the release baseline"
+  ariaLabel="R1 minus 32 percent, R2 minus 12, R3 plus 8, R4 plus 24, R5 plus 36"
+  :series="[{label:'Change',points:[{label:'R1',value:-32},{label:'R2',value:-12},{label:'R3',value:8},{label:'R4',value:24},{label:'R5',value:36}]}]"
+  minValue="-40"
+  maxValue="40"
+  valueSuffix="%"
+  height="280"
+  :showArea="true"
   :showValues="true"
-  :animated="false"
 />
 ```
   </TabPane>
 </Tabs>
 
+
+## A compact trend card
+
+Use a nearby headline to explain a small trend. Remove the axis, category labels and markers to emphasize its shape; retain the exact observations in the accessible name.
+
+<Tabs group="line-chart-compact" selectedTab="line-chart-compact-preview" ariaLabel="A compact trend card example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="line-chart-compact-preview" label="Preview">
+    <Panel tone="accent" variant="surface" bodyClass="p-3">
+      <p class="text-eyebrow mt-0">ILLUSTRATIVE LATENCY</p>
+      <h3>18 ms latest measurement</h3>
+      <p>Six observations across a tuning session.</p>
+      <LineChart
+        title="Latency trend"
+        ariaLabel="Latency measurements in milliseconds: 42, 36, 44, 29, 24, 18"
+        :series="[{label:'Latency',points:[{value:42},{value:36},{value:44},{value:29},{value:24},{value:18}]}]"
+        height="160"
+        curve="linear"
+        :showArea="true"
+        :showAxis="false"
+        :showLabels="false"
+        :showPoints="false"
+      />
+    </Panel>
+  </TabPane>
+  <TabPane id="line-chart-compact-source" label="compact-trend.mdx">
+```html
+<Panel tone="accent" variant="surface" bodyClass="p-3">
+  <p class="text-eyebrow mt-0">ILLUSTRATIVE LATENCY</p>
+  <h3>18 ms latest measurement</h3>
+  <p>Six observations across a tuning session.</p>
+  <LineChart
+    title="Latency trend"
+    ariaLabel="Latency measurements in milliseconds: 42, 36, 44, 29, 24, 18"
+    :series="[{label:'Latency',points:[{value:42},{value:36},{value:44},{value:29},{value:24},{value:18}]}]"
+    height="160"
+    curve="linear"
+    :showArea="true"
+    :showAxis="false"
+    :showLabels="false"
+    :showPoints="false"
+  />
+</Panel>
+```
+  </TabPane>
+</Tabs>
+
+
+## Single-point and empty states
+
+One observation needs a marker because there is no line segment yet. An empty series list displays your emptyLabel and removes the chart marks. Neither case needs placeholder data.
+
+<Tabs group="line-chart-states" selectedTab="line-chart-states-preview" ariaLabel="Single-point and empty states example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="line-chart-states-preview" label="Preview">
+    <Grid columns="1" columnsMd="2">
+      <Panel variant="surface" bodyClass="p-3">
+        <h3 class="mt-0">First measurement</h3>
+        <LineChart
+          title="First measurement"
+          ariaLabel="R1: 24 percent"
+          :series="[{label:'Current',points:[{label:'R1',value:24}]}]"
+          valueSuffix="%"
+          height="220"
+          :showPoints="true"
+          :showValues="true"
+        />
+      </Panel>
+      <Panel variant="surface" bodyClass="p-3">
+        <h3 class="mt-0">Awaiting measurements</h3>
+        <LineChart
+          title="No measurements yet"
+          emptyLabel="Waiting for the first run"
+          :series="[]"
+          height="220"
+        />
+      </Panel>
+    </Grid>
+  </TabPane>
+  <TabPane id="line-chart-states-source" label="data-states.mdx">
+```html
+<Grid columns="1" columnsMd="2">
+  <Panel variant="surface" bodyClass="p-3">
+    <h3 class="mt-0">First measurement</h3>
+    <LineChart
+      title="First measurement"
+      ariaLabel="R1: 24 percent"
+      :series="[{label:'Current',points:[{label:'R1',value:24}]}]"
+      valueSuffix="%"
+      height="220"
+      :showPoints="true"
+      :showValues="true"
+    />
+  </Panel>
+  <Panel variant="surface" bodyClass="p-3">
+    <h3 class="mt-0">Awaiting measurements</h3>
+    <LineChart
+      title="No measurements yet"
+      emptyLabel="Waiting for the first run"
+      :series="[]"
+      height="220"
+    />
+  </Panel>
+</Grid>
+```
+  </TabPane>
+</Tabs>
+
+
 ## Behavior and accessibility
 
-Points are spaced by index, not by a parsed date or x coordinate. Align series to the same ordered categories; x-axis labels come from the first series. Non-finite points are removed, so preprocess missing observations if gaps need a specific meaning.
+- **Category positions:** points are equally spaced by index. Date-like labels are text; this is not a continuous time axis. Compared series need the same point count and category order.
+- **Scale:** automatic bounds include zero and all valid values. Explicit bounds can widen the range, but never crop measurements. Hiding a series can change an automatic scale.
+- **Readable values:** use markers, a visible legend and nearby data when exact comparisons matter. Narrow previews can scroll horizontally. Value labels from coincident series are not automatically separated.
+- **Accessible context:** provide a meaningful title and description or ariaLabel. Each point has an SVG title, while the playground also exposes the measurements through labelled native fields. Color is supported by named series and editable values.
+- **Animation:** paths fade in and markers grow on entrance. Area fills remain static. Replay uses each SVG animation's native beginElement method.
+
 
 ## API reference
 
@@ -238,16 +609,18 @@ Points are spaced by index, not by a parsed date or x coordinate. Align series t
   <a href="#line-chart-prop-variantMode">variantMode</a>
 </nav>
 
+### Data and accessible descriptions
+
 <ApiProperty anchor="line-chart-prop-series" name="series" valueType="RefOrValue&lt;Array&lt;RefOrValue&lt;LineChartSeries&gt;&gt;&gt;" defaultValue="[]">
-  <p>Array of LineChartSeries objects: optional label and CSS color, plus points containing label and numeric value.</p>
+  <p>An array of named series with optional CSS colors and ordered points. Keep category order and point counts aligned across compared series. The data contracts below show the supported ref shapes.</p>
 </ApiProperty>
 
 <ApiProperty anchor="line-chart-prop-title" name="title" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>SVG title text.</p>
+  <p>SVG title text. Add a visible heading outside the SVG when the chart needs one.</p>
 </ApiProperty>
 
 <ApiProperty anchor="line-chart-prop-description" name="description" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>SVG desc text.</p>
+  <p>SVG description with context such as the metric, period and meaning of each series.</p>
 </ApiProperty>
 
 <ApiProperty anchor="line-chart-prop-ariaLabel" name="ariaLabel" valueType="RefOrValue&lt;string&gt;" defaultValue="title, then Line chart">
@@ -262,6 +635,8 @@ Points are spaced by index, not by a parsed date or x coordinate. Align series t
   <p>Unit appended to formatted values, such as ms or %.</p>
 </ApiProperty>
 
+### Size and scale
+
 <ApiProperty anchor="line-chart-prop-width" name="width" valueType="RefOrValue&lt;number | string&gt;" defaultValue="100%">
   <p>CSS width. Numeric values become pixel lengths; strings can use CSS units.</p>
 </ApiProperty>
@@ -271,40 +646,44 @@ Points are spaced by index, not by a parsed date or x coordinate. Align series t
 </ApiProperty>
 
 <ApiProperty anchor="line-chart-prop-minValue" name="minValue" valueType="RefOrValue&lt;number | string&gt;" defaultValue="automatic">
-  <p>Explicit lower domain bound. Omit it to derive the domain from the data.</p>
+  <p>Requested lower bound. The resolved range also includes zero and the smallest visible value. Leave it unset for automatic scaling; it never clips points.</p>
 </ApiProperty>
 
 <ApiProperty anchor="line-chart-prop-maxValue" name="maxValue" valueType="RefOrValue&lt;number | string&gt;" defaultValue="automatic">
-  <p>Explicit upper domain bound. Keep it above minValue and large enough to include the data.</p>
+  <p>Requested upper bound. The resolved range expands to include zero and the largest visible value. Use the same bounds on charts that should be compared.</p>
 </ApiProperty>
 
+### Curves and visibility
+
 <ApiProperty anchor="line-chart-prop-curve" name="curve" valueType="RefOrValue&lt;LineChartCurve&gt;" defaultValue="smooth">
-  <p>smooth draws cubic paths; linear joins observations with straight segments.</p>
+  <p>smooth connects points with cubic curves; linear uses straight segments. Neither mode changes the measurements or adds intermediate observations.</p>
 </ApiProperty>
 
 <ApiProperty anchor="line-chart-prop-animated" name="animated" valueType="RefOrValue&lt;boolean | string&gt;" defaultValue="true">
-  <p>Enables the SVG entrance animation. Bind false for an immediate rendering.</p>
+  <p>Fades in paths and grows point markers when they mount. This does not interpolate between datasets or animate area fills. Disable it for rapid editing; the playground also shows how to replay the native SVG animations.</p>
 </ApiProperty>
 
 <ApiProperty anchor="line-chart-prop-showArea" name="showArea" valueType="RefOrValue&lt;boolean | string&gt;" defaultValue="false">
-  <p>Fills each series between its path and the zero baseline.</p>
+  <p>Fills each series between its path and zero, including negative regions. Multiple areas overlap with transparency; they are not stacked.</p>
 </ApiProperty>
 
 <ApiProperty anchor="line-chart-prop-showPoints" name="showPoints" valueType="RefOrValue&lt;boolean | string&gt;" defaultValue="true">
-  <p>Draws a marker at each observation.</p>
+  <p>Draws a marker with a native SVG title at each observation. Keep this enabled for a single-point series, whose path alone has no visible segment.</p>
 </ApiProperty>
 
 <ApiProperty anchor="line-chart-prop-showValues" name="showValues" valueType="RefOrValue&lt;boolean | string&gt;" defaultValue="false">
-  <p>Draws numeric values beside marks. Enable only when labels have enough room.</p>
+  <p>Places values above positive points and below negative points. Labels from close or coincident series can overlap. Isolate a series or use the editable data fields for exact comparisons in a dense chart.</p>
 </ApiProperty>
 
 <ApiProperty anchor="line-chart-prop-showLabels" name="showLabels" valueType="RefOrValue&lt;boolean | string&gt;" defaultValue="true">
-  <p>Shows category labels along the horizontal axis.</p>
+  <p>Shows labels from the first visible series, thinning them for long sequences and retaining the final label. Points are spaced by index, not by time or a numeric x coordinate.</p>
 </ApiProperty>
 
 <ApiProperty anchor="line-chart-prop-showAxis" name="showAxis" valueType="RefOrValue&lt;boolean | string&gt;" defaultValue="true">
   <p>Shows the axis grid and value labels.</p>
 </ApiProperty>
+
+### Appearance
 
 <ApiProperty anchor="line-chart-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
   <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
@@ -318,13 +697,32 @@ Points are spaced by index, not by a parsed date or x coordinate. Align series t
   <p>Use stateless for content surfaces; stateful enables the treatment’s hover, focus and active styles. It does not add interaction handlers.</p>
 </ApiProperty>
 
+### Point and series contracts
+
+```typescript
+import type { RefOrValue } from 'regor'
+
+interface LineChartPoint {
+  label?: RefOrValue<string>
+  value?: RefOrValue<number | string>
+}
+
+interface LineChartSeries {
+  label?: RefOrValue<string>
+  color?: RefOrValue<string>
+  points?: RefOrValue<Array<RefOrValue<LineChartPoint>>>
+}
+```
+
+Missing names become `Series 1` and `Point 1`. Non-finite values are removed; series with no valid points are removed too. Filtering a point closes the sequence, so missing observations do not create visible gaps. Normalize your data before comparing series.
+
+Explicit colors stay attached to a series when others are hidden. Without a color, the palette is assigned by the visible series order. The playground uses theme variables so its legend and series colors stay consistent in both skins.
+
 ### Composition
 
 <div class="api-contract">
 <p>No slots. Register defineLineChartComponents. Series labels identify paths; provide an external legend or value list where readers need precise comparisons.</p>
 </div>
-
-
 
 ## Related components
 

@@ -5,6 +5,50 @@ import { createTestContext } from '../../test/testContext'
 import { defineBarChartComponents } from './barChart'
 
 describe('BarChart rendering', () => {
+  it.each([
+    [24, 38, -12, 46, 32],
+    [-18, -32, -8, -24, -12],
+    [0, 0, 0, 0, 0],
+  ])('reserves a separate category row for values %j', (...values) => {
+    const cleanupGlobals = ensureDomGlobals()
+    const cleanupDom = createDom(
+      '<!DOCTYPE html><html><body><div id="app"></div></body></html>',
+    )
+    const app = createApp(
+      {
+        components: defineBarChartComponents(),
+        tsSsgContext: createTestContext(),
+        items: values.map((value, index) => ({
+          label: `Day ${index + 1}`,
+          value,
+        })),
+      },
+      {
+        selector: '#app',
+        template: '<BarChart :items="items" :animated="false" />',
+      },
+    )
+
+    try {
+      const valueLabels = Array.from(
+        document.querySelectorAll('.bar-chart__value'),
+      )
+      const categoryLabels = Array.from(
+        document.querySelectorAll('.bar-chart__label'),
+      )
+      expect(valueLabels).toHaveLength(values.length)
+      for (const [index, valueLabel] of valueLabels.entries()) {
+        const valueY = Number(valueLabel.getAttribute('y'))
+        const categoryY = Number(categoryLabels[index].getAttribute('y'))
+        expect(categoryY - valueY).toBeGreaterThan(6)
+      }
+    } finally {
+      app.unbind()
+      cleanupDom()
+      cleanupGlobals()
+    }
+  })
+
   it('renders an svg bar chart from item data', () => {
     const cleanupGlobals = ensureDomGlobals()
     const cleanupDom = createDom(

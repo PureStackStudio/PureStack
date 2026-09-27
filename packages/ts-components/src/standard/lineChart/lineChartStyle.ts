@@ -48,6 +48,7 @@ function registerLineChartBaseStyles(theme: ThemeMode) {
       theme,
     )
     .pointerEvents('none')
+    .letterSpacing('normal')
 }
 
 function registerLineChartPaintStyles(theme: ThemeMode, palette: ThemePalette) {

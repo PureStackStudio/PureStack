@@ -38,6 +38,7 @@ function registerBarChartBaseStyles(theme: ThemeMode) {
       theme,
     )
     .pointerEvents('none')
+    .letterSpacing('normal')
 }
 
 function registerBarChartPaintStyles(theme: ThemeMode, palette: ThemePalette) {

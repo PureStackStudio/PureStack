@@ -16,8 +16,6 @@ import {
   valueToCartesianChartY,
 } from '../chart/cartesianChart'
 import {
-  CARTESIAN_CHART_LABEL_Y,
-  CARTESIAN_CHART_VIEWBOX_HEIGHT,
   DEFAULT_CARTESIAN_CHART_HEIGHT,
   DEFAULT_CARTESIAN_CHART_WIDTH,
   DEFAULT_CHART_COLORS,
@@ -111,12 +109,13 @@ export interface LineChart {
 }
 
 const VALUE_LABEL_OFFSET = 2.6
+const CATEGORY_LABEL_Y = 60
 const MAX_X_LABEL_COUNT = 7
 
 const lineChartTemplate = svg`<svg
   class="line-chart"
   :class="classes"
-  viewBox="0 0 100 58"
+  viewBox="-6 0 112 64"
   :width="resolvedWidth"
   :height="resolvedHeight"
   role="img"
@@ -319,7 +318,7 @@ function resolveChartSeries(
       const y = valueToCartesianChartY(point.value, domain)
       const valueLabelY =
         point.value < 0
-          ? Math.min(CARTESIAN_CHART_VIEWBOX_HEIGHT - 2, y + VALUE_LABEL_OFFSET)
+          ? y + VALUE_LABEL_OFFSET
           : Math.max(2, y - VALUE_LABEL_OFFSET)
 
       return {
@@ -435,7 +434,7 @@ function resolveXLabels(
     .map((point) => ({
       label: point.label,
       x: point.x,
-      y: CARTESIAN_CHART_LABEL_Y,
+      y: CATEGORY_LABEL_Y,
     }))
 }
 

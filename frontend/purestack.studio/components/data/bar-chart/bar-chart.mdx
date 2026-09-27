@@ -19,13 +19,11 @@ Compare categorical values in a responsive SVG chart, including positive and neg
 
 [View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/barChart/barChart.ts) · [API reference](#api-reference)
 
+## Playground
 
+Change the dataset, edit each daily value, and see the chart update immediately. Try an all-negative balance, set scale bounds, switch colors and units, or remove the data entirely. Reset restores every control.
 
-## A weekly balance
-
-Explore axis, label and value visibility, then empty and restore the data. The text list exposes the same values independently of the SVG.
-
-<Tabs group="bar-chart-sample-1" selectedTab="bar-chart-sample-1-preview" ariaLabel="A weekly balance example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs group="bar-chart-sample-1" selectedTab="bar-chart-sample-1-preview" ariaLabel="Interactive BarChart playground" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="bar-chart-sample-1-preview" label="Preview">
     <RegorApp id="bar-chart-demo" src="./playground.ts"/>
   </TabPane>
@@ -43,10 +41,18 @@ import {
   defineFlexComponents,
   defineFormComponents,
   defineFormInputField,
+  defineFormSelectField,
   defineGridComponents,
+  defineIconComponents,
+  definePanelComponents,
+  type FormSelectOption,
 } from '@purestack/ts-components'
-
+import { getThemePaletteVar } from '@purestack/ts-style'
+import { lucide_chevron_down } from '@purestack/ts-svg-icons'
 import {
+  batch,
+  type ComputedRef,
+  computed,
   createApp,
   defineComponent,
   html,
@@ -56,83 +62,225 @@ import {
   sref,
 } from 'regor'
 
-export interface BarChartExample {
-  chartItems: SRef<BarChartItem[]>
+export type BarChartPreset = 'mixed' | 'positive' | 'negative' | 'zero'
+export type BarChartPalette = 'balance' | 'categorical' | 'accent'
+
+export interface BarChartEditorRow {
+  id: string
+  label: string
+  value: Ref<number | string>
+}
+
+export interface BarChartPlayground {
+  rows: SRef<BarChartEditorRow[]>
+  chartItems: ComputedRef<BarChartItem[]>
+  summary: ComputedRef<string>
+  preset: Ref<BarChartPreset>
+  palette: Ref<BarChartPalette>
+  suffix: Ref<string>
+  minimum: Ref<number | string>
+  maximum: Ref<number | string>
+  height: Ref<number | string>
   valuesVisible: Ref<boolean>
   axisVisible: Ref<boolean>
   labelsVisible: Ref<boolean>
   motionEnabled: Ref<boolean>
-  restore: () => void
+  presets: FormSelectOption[]
+  palettes: FormSelectOption[]
+  units: FormSelectOption[]
+  applyPreset: (event: Event) => void
   clear: () => void
+  reset: () => void
 }
 
-const barChartExampleTemplate = html`<Flex direction="column">
-  <BarChart
-    :items="chartItems"
-    title="Example weekly balance"
-    description="Illustrative values include a negative day."
-    ariaLabel="Weekly balance in credits; values are listed below"
-    valueSuffix=" cr"
-    :showValues="valuesVisible"
-    :showAxis="axisVisible"
-    :showLabels="labelsVisible"
-    :animated="motionEnabled"
-  />
+const barChartPlaygroundTemplate = html`<Flex direction="column">
+  <Grid columns="1" columnsMd="3">
+    <FormSelectField id="bar-preset" label="Dataset" :model="preset" :options="presets" @change="applyPreset" />
+    <FormSelectField id="bar-palette" label="Bar colors" :model="palette" :options="palettes" />
+    <FormSelectField id="bar-unit" label="Value suffix" :model="suffix" :options="units" />
+  </Grid>
+  <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
+    <p class="text-eyebrow mt-0">LIVE PREVIEW · WEEKLY BALANCE</p>
+    <div class="overflow-x-auto" tabindex="0" role="region" aria-label="Scrollable chart preview">
+      <BarChart
+        :items="chartItems"
+        title="Weekly balance"
+        description="Illustrative daily changes. Edit the exact values in the fields below."
+        :ariaLabel="summary"
+        emptyLabel="No days to compare"
+        :valueSuffix="suffix"
+        :minValue="minimum"
+        :maxValue="maximum"
+        :height="height"
+        :showValues="valuesVisible"
+        :showAxis="axisVisible"
+        :showLabels="labelsVisible"
+        :animated="motionEnabled"
+        style="min-width: 440px"
+      />
+    </div>
+    <FormStatus>{{ summary }}</FormStatus>
+  </Panel>
   <Flex wrap="true">
     <FormCheck id="bar-values" label="Values" :checked="valuesVisible" />
-    <FormCheck id="bar-axis" label="Axis" :checked="axisVisible" />
-    <FormCheck id="bar-labels" label="Labels" :checked="labelsVisible" />
-    <FormCheck id="bar-motion" label="Animation" :checked="motionEnabled" />
+    <FormCheck id="bar-axis" label="Grid and zero line" :checked="axisVisible" />
+    <FormCheck id="bar-labels" label="Category labels" :checked="labelsVisible" />
+    <FormCheck id="bar-motion" label="Entrance animation" :checked="motionEnabled" />
   </Flex>
-  <Flex wrap="true">
-    <Btn @click="restore">Restore data</Btn>
-    <Btn variant="outline" @click="clear">Empty data</Btn>
+  <Flex justify="between" align="center" wrap="true">
+    <h3 class="m-0">Edit the data</h3>
+    <Flex wrap="true">
+      <Btn variant="outline" @click="clear">Empty data</Btn>
+      <Btn tone="accent" variant="surface" @click="reset">Reset playground</Btn>
+    </Flex>
   </Flex>
-  <ul>
-    <li r-for="entry in chartItems">
-      {{ entry.label }}: {{ entry.value }} credits
-    </li>
-  </ul>
+  <Grid columns="2" columnsSm="3" columnsLg="5">
+    <FormInputField
+      r-for="row in rows"
+      :id="row.id"
+      :label="row.label"
+      type="number"
+      step="1"
+      :model="row.value"
+    />
+  </Grid>
+  <Grid columns="1" columnsMd="3">
+    <FormInputField id="bar-min" label="Minimum bound" type="number" placeholder="Automatic" :model="minimum" />
+    <FormInputField id="bar-max" label="Maximum bound" type="number" placeholder="Automatic" :model="maximum" />
+    <FormInputField id="bar-height" label="Chart height (px)" type="number" min="180" step="20" :model="height" />
+  </Grid>
+  <p class="m-0 text-muted">Blank bounds use the data range. The scale always includes zero and every value. On narrow screens, scroll the preview horizontally to keep its labels readable.</p>
 </Flex>`
 
-function createBarChartExample(): BarChartExample {
-  const initial: BarChartItem[] = [
-    { label: 'Mon', value: 24 },
-    { label: 'Tue', value: 38 },
-    { label: 'Wed', value: -12 },
-    { label: 'Thu', value: 46 },
-    { label: 'Fri', value: 32 },
-  ]
-  const chartItems = sref(initial)
+const presetValues: Record<BarChartPreset, number[]> = {
+  mixed: [24, 38, -12, 46, 32],
+  positive: [18, 32, 25, 48, 60],
+  negative: [-18, -32, -8, -24, -12],
+  zero: [0, 0, 0, 0, 0],
+}
+
+function createBarChartRows(preset: BarChartPreset): BarChartEditorRow[] {
+  return ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].map((label, index) => ({
+    id: `bar-value-${index}`,
+    label,
+    value: ref<number | string>(presetValues[preset][index]),
+  }))
+}
+
+function createBarChartPlayground(): BarChartPlayground {
+  const preset = ref<BarChartPreset>('mixed')
+  const palette = ref<BarChartPalette>('balance')
+  const suffix = ref('')
+  const minimum = ref<number | string>('')
+  const maximum = ref<number | string>('')
+  const height = ref<number | string>(280)
+  const valuesVisible = ref(true)
+  const axisVisible = ref(true)
+  const labelsVisible = ref(true)
+  const motionEnabled = ref(true)
+  const rows = sref(createBarChartRows('mixed'))
+  const accent = getThemePaletteVar('semanticTone.accent.button.rest.bgcolor')
+  const danger = getThemePaletteVar('semanticTone.danger.button.rest.bgcolor')
+  const chartItems = computed<BarChartItem[]>(() =>
+    rows().map((row) => {
+      const value = Number(row.value())
+      return {
+        label: row.label,
+        value,
+        color:
+          palette() === 'categorical'
+            ? undefined
+            : palette() === 'balance' && value < 0
+              ? danger
+              : accent,
+      }
+    }),
+  )
   return {
+    rows,
     chartItems,
-    valuesVisible: ref(true),
-    axisVisible: ref(true),
-    labelsVisible: ref(true),
-    motionEnabled: ref(false),
-    restore: () => chartItems([...initial]),
-    clear: () => chartItems([]),
+    summary: computed(() => {
+      if (!rows().length)
+        return 'No data. Choose a dataset or reset the playground.'
+      const values = rows().map(
+        (row) => `${row.label}: ${Number(row.value())}${suffix()}`,
+      )
+      return values.join(' · ')
+    }),
+    preset,
+    palette,
+    suffix,
+    minimum,
+    maximum,
+    height,
+    valuesVisible,
+    axisVisible,
+    labelsVisible,
+    motionEnabled,
+    presets: [
+      { label: 'Mixed gains and losses', value: 'mixed' },
+      { label: 'All positive', value: 'positive' },
+      { label: 'All negative', value: 'negative' },
+      { label: 'All zero', value: 'zero' },
+    ],
+    palettes: [
+      { label: 'Gains / losses', value: 'balance' },
+      { label: 'One color per category', value: 'categorical' },
+      { label: 'Single accent', value: 'accent' },
+    ],
+    units: [
+      { label: 'No suffix', value: '' },
+      { label: 'Percent (%)', value: '%' },
+      { label: 'Milliseconds (ms)', value: 'ms' },
+      { label: 'Credits (cr)', value: 'cr' },
+    ],
+    applyPreset: (event) => {
+      const next = (event.target as HTMLSelectElement).value as BarChartPreset
+      rows(createBarChartRows(next))
+    },
+    clear: () => rows([]),
+    reset: () =>
+      batch(() => {
+        preset('mixed')
+        palette('balance')
+        suffix('')
+        minimum('')
+        maximum('')
+        height(280)
+        valuesVisible(true)
+        axisVisible(true)
+        labelsVisible(true)
+        motionEnabled(true)
+        rows(createBarChartRows('mixed'))
+      }),
   }
 }
 
-const component = defineComponent<BarChartExample>(barChartExampleTemplate, {
-  context: createBarChartExample,
-})
+const barChartPlayground = defineComponent<BarChartPlayground>(
+  barChartPlaygroundTemplate,
+  { context: createBarChartPlayground },
+)
+
+const icons: Record<string, string> = {
+  'lucide:chevron-down': lucide_chevron_down,
+}
 
 createApp(
   {
     components: {
-      BarChartExample: component,
-
-      ...defineFlexComponents(),
-      ...defineGridComponents(),
-      ...defineFormComponents(),
-      ...defineButtonComponents(),
-      ...defineFormInputField(),
+      BarChartPlayground: barChartPlayground,
       ...defineBarChartComponents(),
+      ...defineButtonComponents(),
+      ...defineFlexComponents(),
+      ...defineFormComponents(),
+      ...defineFormInputField(),
+      ...defineFormSelectField(),
+      ...defineGridComponents(),
+      ...defineIconComponents((name) => icons[name] ?? ''),
+      ...definePanelComponents(),
     },
   },
-  { selector: 'app#bar-chart-demo', template: html`<BarChartExample />` },
+  { selector: 'app#bar-chart-demo', template: html`<BarChartPlayground />` },
 )
 ```
   </TabPane>
@@ -140,7 +288,7 @@ createApp(
 
 ## A fixed comparison scale
 
-Use explicit bounds to keep multiple charts comparable.
+Use explicit bounds to compare values against a stable range. Here, both categories use a zero-to-100 scale. Bounds expand when needed to include the data; they do not clip outlying values.
 
 <Tabs group="bar-chart-sample-2" selectedTab="bar-chart-sample-2-preview" ariaLabel="A fixed comparison scale example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="bar-chart-sample-2-preview" label="Preview">
@@ -150,6 +298,7 @@ Use explicit bounds to keep multiple charts comparable.
       :items="[{label:'Content',value:80},{label:'Review',value:55}]"
       minValue="0"
       maxValue="100"
+      height="280"
       valueSuffix="%"
       :animated="false"
     />
@@ -162,9 +311,82 @@ Use explicit bounds to keep multiple charts comparable.
   :items="[{label:'Content',value:80},{label:'Review',value:55}]"
   minValue="0"
   maxValue="100"
+  height="280"
   valueSuffix="%"
   :animated="false"
 />
+```
+  </TabPane>
+</Tabs>
+
+## Positive and negative values
+
+Every bar starts at zero. Losses extend downward, with their values below the bar and category names in a separate row. A symmetric scale makes the direction and magnitude easy to compare.
+
+<Tabs group="bar-chart-signed" selectedTab="bar-chart-signed-preview" ariaLabel="Signed values example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="bar-chart-signed-preview" label="Preview">
+    <BarChart
+      title="Change since the previous release"
+      ariaLabel="Change: API plus 24 percent, jobs minus 32 percent, sync plus 18 percent, cache minus 8 percent"
+      :items="[{label:'API',value:24},{label:'Jobs',value:-32},{label:'Sync',value:18},{label:'Cache',value:-8}]"
+      minValue="-40"
+      maxValue="40"
+      height="280"
+      valueSuffix="%"
+      :animated="false"
+    />
+  </TabPane>
+  <TabPane id="bar-chart-signed-source" label="signed-values.mdx">
+```html
+<BarChart
+  title="Change since the previous release"
+  ariaLabel="Change: API plus 24 percent, jobs minus 32 percent, sync plus 18 percent, cache minus 8 percent"
+  :items="[{label:'API',value:24},{label:'Jobs',value:-32},{label:'Sync',value:18},{label:'Cache',value:-8}]"
+  minValue="-40"
+  maxValue="40"
+  height="280"
+  valueSuffix="%"
+  :animated="false"
+/>
+```
+  </TabPane>
+</Tabs>
+
+## A compact trend
+
+Hide the grid and numeric labels when the shape is the useful signal. Keep an accessible description with the exact values. The same component fits a small dashboard card.
+
+<Tabs group="bar-chart-compact" selectedTab="bar-chart-compact-preview" ariaLabel="Compact chart example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="bar-chart-compact-preview" label="Preview">
+    <Panel tone="accent" variant="surface" bodyClass="p-3">
+      <h3 class="mt-0">76 deployments this week</h3>
+      <p>Daily activity across the release pipeline.</p>
+      <BarChart
+        title="Daily deployments"
+        ariaLabel="Deployments: Monday 8, Tuesday 13, Wednesday 11, Thursday 19, Friday 16, Saturday 6, Sunday 3"
+        :items="[{label:'Mon',value:8},{label:'Tue',value:13},{label:'Wed',value:11},{label:'Thu',value:19},{label:'Fri',value:16},{label:'Sat',value:6},{label:'Sun',value:3}]"
+        height="180"
+        :showAxis="false"
+        :showValues="false"
+        :animated="false"
+      />
+    </Panel>
+  </TabPane>
+  <TabPane id="bar-chart-compact-source" label="compact-trend.mdx">
+```html
+<Panel tone="accent" variant="surface" bodyClass="p-3">
+  <h3 class="mt-0">76 deployments this week</h3>
+  <p>Daily activity across the release pipeline.</p>
+  <BarChart
+    title="Daily deployments"
+    ariaLabel="Deployments: Monday 8, Tuesday 13, Wednesday 11, Thursday 19, Friday 16, Saturday 6, Sunday 3"
+    :items="[{label:'Mon',value:8},{label:'Tue',value:13},{label:'Wed',value:11},{label:'Thu',value:19},{label:'Fri',value:16},{label:'Sat',value:6},{label:'Sun',value:3}]"
+    height="180"
+    :showAxis="false"
+    :showValues="false"
+    :animated="false"
+  />
+</Panel>
 ```
   </TabPane>
 </Tabs>
@@ -233,15 +455,15 @@ Each valid item is a category. Non-finite values are removed; negative values ex
 </ApiProperty>
 
 <ApiProperty anchor="bar-chart-prop-minValue" name="minValue" valueType="RefOrValue&lt;number | string&gt;" defaultValue="automatic">
-  <p>Explicit lower domain bound. Omit it to derive the domain from the data.</p>
+  <p>Requested lower domain bound. The resolved minimum also includes zero and the smallest data value. Omit it to use the data range automatically.</p>
 </ApiProperty>
 
 <ApiProperty anchor="bar-chart-prop-maxValue" name="maxValue" valueType="RefOrValue&lt;number | string&gt;" defaultValue="automatic">
-  <p>Explicit upper domain bound. Keep it above minValue and large enough to include the data.</p>
+  <p>Requested upper domain bound. The resolved maximum also includes zero and the largest data value, so bars are never clipped by a tighter bound.</p>
 </ApiProperty>
 
 <ApiProperty anchor="bar-chart-prop-animated" name="animated" valueType="RefOrValue&lt;boolean | string&gt;" defaultValue="true">
-  <p>Enables the SVG entrance animation. Bind false for an immediate rendering.</p>
+  <p>Enables the SVG entrance animation when bars mount. Bind false for immediate rendering, especially while editing values. This is not an interpolated transition between datasets.</p>
 </ApiProperty>
 
 <ApiProperty anchor="bar-chart-prop-showValues" name="showValues" valueType="RefOrValue&lt;boolean | string&gt;" defaultValue="true">
@@ -273,8 +495,6 @@ Each valid item is a category. Non-finite values are removed; negative values ex
 <div class="api-contract">
 <p>No slots. Register defineBarChartComponents. Bind a ref of BarChartItem[] to update the data.</p>
 </div>
-
-
 
 ## Related components
 

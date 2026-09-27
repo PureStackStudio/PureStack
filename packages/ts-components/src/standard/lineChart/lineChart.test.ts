@@ -5,6 +5,51 @@ import { createTestContext } from '../../test/testContext'
 import { defineLineChartComponents } from './lineChart'
 
 describe('LineChart rendering', () => {
+  it.each([
+    [-32, -8, 12, 28],
+    [-32, -18, -4, -12],
+    [0, 0, 0, 0],
+  ])('keeps category labels below values %j', (...values) => {
+    const cleanupGlobals = ensureDomGlobals()
+    const cleanupDom = createDom(
+      '<!DOCTYPE html><html><body><div id="app"></div></body></html>',
+    )
+    const app = createApp(
+      {
+        components: defineLineChartComponents(),
+        tsSsgContext: createTestContext(),
+        series: [
+          {
+            points: values.map((value, index) => ({
+              label: `Day ${index + 1}`,
+              value,
+            })),
+          },
+        ],
+      },
+      {
+        selector: '#app',
+        template:
+          '<LineChart :series="series" :showValues="true" :animated="false" />',
+      },
+    )
+    try {
+      const values = Array.from(document.querySelectorAll('.line-chart__value'))
+      const labels = Array.from(document.querySelectorAll('.line-chart__label'))
+      expect(values).toHaveLength(4)
+      for (const [index, value] of values.entries()) {
+        expect(
+          Number(labels[index].getAttribute('y')) -
+            Number(value.getAttribute('y')),
+        ).toBeGreaterThan(6)
+      }
+    } finally {
+      app.unbind()
+      cleanupDom()
+      cleanupGlobals()
+    }
+  })
+
   it('renders an svg line chart from series data', () => {
     const cleanupGlobals = ensureDomGlobals()
     const cleanupDom = createDom(
