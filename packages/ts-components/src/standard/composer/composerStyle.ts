@@ -17,7 +17,11 @@ export function registerComposerStyles() {
 }
 
 function registerComposerFieldStyles(theme: ThemeMode, palette: ThemePalette) {
-  styleBuilder.select('.composer-field', theme).display('grid').gap('0.6em')
+  styleBuilder
+    .select('.composer-field', theme)
+    .display('grid')
+    .minWidth('0')
+    .gap('0.6em')
   styleBuilder
     .select('.composer-field__label', theme)
     .apply(palette.applyFont(palette.font.size.xxs, palette.font.weight.w700))
@@ -48,6 +52,7 @@ function registerComposerToolbarStyles(
   styleBuilder
     .select('.composer__toolbar', theme)
     .display('flex')
+    .flexWrap('wrap')
     .alignItems('center')
     .gap('0.25rem')
     .padding('0.35em')
@@ -57,6 +62,7 @@ function registerComposerToolbarStyles(
   styleBuilder
     .select('.composer__tool', theme)
     .display('inline-flex')
+    .flexShrink('0')
     .alignItems('center')
     .justifyContent('center')
     .width('2.1em')

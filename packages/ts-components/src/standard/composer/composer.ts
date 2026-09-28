@@ -385,6 +385,7 @@ class ComposerContext implements Composer {
     const sanitized = this.sanitizeModelHtml(value)
     if (sanitized !== value) {
       this.writeModel(sanitized)
+      this.syncEditorFromModel()
       return
     }
 

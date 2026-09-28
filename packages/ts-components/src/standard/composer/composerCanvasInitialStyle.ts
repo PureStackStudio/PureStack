@@ -10,6 +10,14 @@ export function registerComposerInitialCanvasStyles(
     .all('initial')
     .boxSizing('border-box')
 
+  styleBuilder
+    .select('.composer__editor *', context.theme)
+    .font('inherit')
+    .color('inherit')
+    .lineHeight('inherit')
+    .caretColor('inherit')
+    .textAlign('inherit')
+
   registerComposerCanvasPreviewDefaults(context)
   registerComposerInitialCanvasElementDefaults(context)
 }
@@ -20,7 +28,6 @@ function registerComposerInitialCanvasElementDefaults({
   styleBuilder
     .select(
       [
-        '.composer__editor a',
         '.composer__editor b',
         '.composer__editor cite',
         '.composer__editor code',
@@ -163,7 +170,18 @@ function registerComposerInitialCanvasElementDefaults({
     .margin('1em 0')
     .paddingLeft('2.5rem')
 
-  styleBuilder.select('.composer__editor li', theme).display('list-item')
+  styleBuilder
+    .select('.composer__editor li', theme)
+    .display('list-item')
+    .listStyle('inherit')
+
+  styleBuilder
+    .select('.composer__editor u, .composer__editor ins', theme)
+    .textDecoration('underline')
+
+  styleBuilder
+    .select('.composer__editor s, .composer__editor del', theme)
+    .textDecoration('line-through')
 
   styleBuilder.select('.composer__editor ul', theme).listStyle('disc')
 

@@ -1,6 +1,6 @@
 ---
 title: Composer
-description: "Edit rich text with formatting tools, HTML source mode and synchronized HTML and plain-text refs."
+description: "Compose rich text, edit HTML source, manage draft snapshots and preview inline images with live, typed examples."
 template: doc
 layout:
   showNav: true
@@ -13,42 +13,49 @@ nav:
 
 # Composer
 
-Edit rich text with formatting tools, HTML source mode and synchronized HTML and plain-text refs.
+A rich-text editor for messages, replies and email drafts. Format content with the built-in toolbar, edit its HTML directly, and keep an HTML model and a plain-text copy in sync.
 
 <Badge tone="accent" variant="surface">Composer</Badge>
 
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/composer/composer.ts) · [API reference](#api-reference)
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/composer/composer.ts) · [API reference](#api-reference) · [Inline images](#inline-images-and-file-events)
 
+## Interactive playground
 
+Start with a release note or a support reply. Select a phrase and make it bold, turn a paragraph into a list, or use **HTML source** at the right of the toolbar to edit the markup. The model inspector shows the values your application receives.
 
-## Write a release note
+Change the tone, variant and height below the editor. Choose **Empty draft** to try the placeholder. Disabling the editor locks user input; the preset buttons still demonstrate how the owning app can update its model.
 
-Edit the draft, select text for formatting, switch to HTML source, or inspect the resulting values. Restore returns to the original content.
-
-<Tabs group="composer-sample-1" selectedTab="composer-sample-1-preview" ariaLabel="Write a release note example" tone="neutral" variant="surface" tabVariant="underline">
-  <TabPane id="composer-sample-1-preview" label="Preview">
+<Tabs group="composer-playground-sample" selectedTab="composer-playground-sample-preview" ariaLabel="playground example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="composer-playground-sample-preview" label="Preview">
     <RegorApp id="composer-demo" src="./playground.ts"/>
   </TabPane>
-  <TabPane id="composer-sample-1-source-0" label="playground.mdx">
+  <TabPane id="composer-playground-sample-mdx" label="playground.mdx">
 ```html
 <RegorApp id="composer-demo" src="./playground.ts"/>
 ```
   </TabPane>
-  <TabPane id="composer-sample-1-source-1" label="playground.ts">
+  <TabPane id="composer-playground-sample-ts" label="playground.ts">
 ```typescript
 import {
+  type ComponentVariant,
+  createComposerBodyHtml,
   defineBadgeComponents,
   defineButtonComponents,
   defineComposerComponents,
-  defineExpandablePanelComponents,
   defineFlexComponents,
   defineFormComponents,
+  defineFormInputField,
+  defineFormSelectField,
+  defineGridComponents,
   defineIconComponents,
   definePanelComponents,
+  defineTabsComponents,
+  type FormSelectOption,
 } from '@purestack/ts-components'
+import type { SemanticTone } from '@purestack/ts-style'
 import {
-  iconoir_nav_arrow_down,
   lucide_bold,
+  lucide_chevron_down,
   lucide_code,
   lucide_eraser,
   lucide_italic,
@@ -60,54 +67,153 @@ import {
   tabler_align_left,
   tabler_align_right,
 } from '@purestack/ts-svg-icons'
-import { createApp, defineComponent, html, type Ref, ref } from 'regor'
+import {
+  type ComputedRef,
+  computed,
+  createApp,
+  defineComponent,
+  html,
+  type Ref,
+  ref,
+} from 'regor'
 
-export interface ComposerExample {
+export interface ComposerPlayground {
   messageHtml: Ref<string>
   messageText: Ref<string>
-  locked: Ref<boolean>
+  editorLabel: Ref<string>
+  editorPlaceholder: Ref<string>
+  disabled: Ref<boolean>
+  tone: Ref<SemanticTone>
+  variant: Ref<ComponentVariant>
+  height: Ref<string>
+  words: ComputedRef<number>
+  tones: FormSelectOption[]
+  variants: FormSelectOption[]
+  heights: FormSelectOption[]
+  release: () => void
+  reply: () => void
+  clear: () => void
   reset: () => void
 }
 
-const composerExampleTemplate = html`<Flex direction="column">
-  <Composer
-    label="Release note"
-    placeholder="Write a short update"
-    :html="messageHtml"
-    :text="messageText"
-    :disabled="locked"
-    minHeight="12rem"
-  />
-  <Flex wrap="true">
-    <FormCheck id="composer-lock" label="Read-only preview" :checked="locked" />
-    <Btn variant="link" @click="reset">Restore draft</Btn>
+const releaseHtml = createComposerBodyHtml(
+  '<h2>Ready for your next release</h2><p>Build with <strong>typed components</strong>, a shared theme and a little less ceremony.</p><ul><li>Explore the interactive component guides.</li><li>Try both rich text and HTML source.</li><li>Share your feedback with the team.</li></ul><p><a href="https://purestack.studio/">Explore PureStack</a></p>',
+)
+const replyHtml = createComposerBodyHtml(
+  '<p>Hi Alex,</p><p>Thanks for trying the preview. Your feedback helped us improve <strong>keyboard navigation</strong> and the new component guides.</p><blockquote>Can we use the same theme across the whole app?</blockquote><p>Yes. Components inherit the active skin, so your interface stays consistent.</p><p>Best,<br>The PureStack team</p>',
+)
+
+const composerPlaygroundTemplate = html`<Flex direction="column">
+  <Flex justify="between" align="center" wrap="true">
+    <p class="text-eyebrow m-0">A draft, two live outputs</p>
+    <Badge tone="accent" variant="surface">{{ disabled ? 'Editing disabled' : 'Live editor' }}</Badge>
   </Flex>
-  <Panel variant="outline" bodyClass="p-3">
-    <strong>Plain-text output</strong>
-    <p class="ws-pre-wrap">{{ messageText || 'No content' }}</p>
+  <Flex wrap="true">
+    <Btn variant="outline" size="sm" @click="release">Load release note</Btn>
+    <Btn variant="outline" size="sm" @click="reply">Load support reply</Btn>
+    <Btn variant="outline" size="sm" @click="clear">Empty draft</Btn>
+  </Flex>
+  <Composer id="composer-playground-editor" :html="messageHtml" :text="messageText"
+    :label="editorLabel" :placeholder="editorPlaceholder" :disabled="disabled"
+    :tone="tone" :variant="variant" :minHeight="height"/>
+  <Flex justify="between" wrap="true">
+    <span class="text-muted" id="composer-counts">{{ words }} words · {{ messageText.length }} text characters</span>
+    <span class="text-muted">Select text, then choose a toolbar action.</span>
+  </Flex>
+  <Grid columns="1" columnsMd="3">
+    <FormSelectField id="composer-tone" label="Tone" :model="tone" :options="tones"/>
+    <FormSelectField id="composer-variant" label="Variant" :model="variant" :options="variants"/>
+    <FormSelectField id="composer-height" label="Minimum height" :model="height" :options="heights"/>
+  </Grid>
+  <Grid columns="1" columnsMd="2">
+    <FormInputField id="composer-label" label="Editor label" :model="editorLabel"/>
+    <FormInputField id="composer-placeholder" label="Empty-state hint" :model="editorPlaceholder"/>
+  </Grid>
+  <Flex justify="between" align="center" wrap="true">
+    <FormCheck id="composer-disabled" label="Disable editing and toolbar" :checked="disabled"/>
+    <Btn variant="link" @click="reset">Reset playground</Btn>
+  </Flex>
+  <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
+    <p class="text-eyebrow mt-0">Model inspector</p>
+    <Tabs group="composer-model" selectedTab="composer-model-text" ariaLabel="Live model values" tabVariant="underline">
+      <TabPane id="composer-model-text" label="Plain text">
+        <pre id="composer-text-output" class="max-h-inspector overflow-auto ws-pre-wrap m-0">{{ messageText || 'The draft is empty.' }}</pre>
+      </TabPane>
+      <TabPane id="composer-model-html" label="HTML">
+        <pre class="overflow-x-auto m-0"><code id="composer-html-output">{{ messageHtml || 'The draft is empty.' }}</code></pre>
+      </TabPane>
+    </Tabs>
+    <p class="text-muted mb-0">These values update as you type. The HTML source button in the editor lets you edit the markup itself.</p>
   </Panel>
-  <ExpandablePanel title="Current HTML value">
-    <pre class="overflow-x-auto"><code>{{ messageHtml }}</code></pre>
-  </ExpandablePanel>
 </Flex>`
 
-function createComposerExample(): ComposerExample {
-  const initial =
-    '<p><strong>Preview release</strong></p><p>The component guides are ready for review.</p>'
-  const messageHtml = ref(initial)
+function createComposerPlayground(): ComposerPlayground {
+  const messageHtml = ref(releaseHtml)
+  const messageText = ref('')
+  const editorLabel = ref('Release note')
+  const editorPlaceholder = ref('What would you like to share?')
+  const disabled = ref(false)
+  const tone = ref<SemanticTone>('neutral')
+  const variant = ref<ComponentVariant>('surfaceAlt')
+  const height = ref('18rem')
   return {
     messageHtml,
-    messageText: ref(''),
-    locked: ref(false),
-    reset: () => messageHtml(initial),
+    messageText,
+    editorLabel,
+    editorPlaceholder,
+    disabled,
+    tone,
+    variant,
+    height,
+    words: computed(() =>
+      messageText().trim() ? messageText().trim().split(/\s+/).length : 0,
+    ),
+    tones: [
+      'neutral',
+      'accent',
+      'secondary',
+      'info',
+      'success',
+      'warning',
+      'danger',
+      'feature',
+    ].map((value) => ({ value, label: value })),
+    variants: [
+      'surfaceAlt',
+      'surface',
+      'outline',
+      'outlineFill',
+      'solid',
+      'subtle',
+      'none',
+    ].map((value) => ({ value, label: value })),
+    heights: ['12rem', '18rem', '24rem'].map((value) => ({
+      value,
+      label: value,
+    })),
+    release: () => messageHtml(releaseHtml),
+    reply: () => messageHtml(replyHtml),
+    clear: () => messageHtml(''),
+    reset: () => {
+      messageHtml(releaseHtml)
+      editorLabel('Release note')
+      editorPlaceholder('What would you like to share?')
+      disabled(false)
+      tone('neutral')
+      variant('surfaceAlt')
+      height('18rem')
+    },
   }
 }
 
-const component = defineComponent<ComposerExample>(composerExampleTemplate, {
-  context: createComposerExample,
-})
+const composerPlayground = defineComponent<ComposerPlayground>(
+  composerPlaygroundTemplate,
+  {
+    context: createComposerPlayground,
+  },
+)
 const icons: Record<string, string> = {
-  'iconoir:nav-arrow-down': iconoir_nav_arrow_down,
+  'lucide:chevron-down': lucide_chevron_down,
   'lucide:bold': lucide_bold,
   'lucide:italic': lucide_italic,
   'lucide:underline': lucide_underline,
@@ -124,33 +230,553 @@ const icons: Record<string, string> = {
 createApp(
   {
     components: {
-      ComposerExample: component,
-
+      ComposerPlayground: composerPlayground,
       ...defineComposerComponents(),
-      ...defineExpandablePanelComponents(),
       ...defineBadgeComponents(),
+      ...defineButtonComponents(),
       ...defineFlexComponents(),
       ...defineFormComponents(),
-      ...defineButtonComponents(),
+      ...defineFormInputField(),
+      ...defineFormSelectField(),
+      ...defineGridComponents(),
       ...definePanelComponents(),
+      ...defineTabsComponents(),
       ...defineIconComponents((name) => icons[name] ?? ''),
     },
   },
-  { selector: 'app#composer-demo', template: html`<ComposerExample />` },
+  { selector: 'app#composer-demo', template: html`<ComposerPlayground/>` },
 )
 ```
   </TabPane>
 </Tabs>
 
-## Behavior and accessibility
+### What the toolbar does
 
-The toolbar supports bold, italic, underline, alignment, lists, links, clear formatting and HTML source. Formatting uses browser editing commands; select the target text first. Pasted and edited markup is normalized by the email HTML policy. Validate content at your application boundary before storing or sending it. The editor is a multiline textbox with a name from label or placeholder.
+| Tool | How to try it | Result |
+| --- | --- | --- |
+| Bold, italic, underline | Select words, then click a tool. | Formats the selection using the browser's editing commands. |
+| Left, center, right | Place the caret in a paragraph. | Changes the current block's alignment. |
+| Bulleted, numbered list | Select paragraphs or place the caret in one. | Toggles a list around the selected blocks. |
+| Link | Select text, click Link, enter an HTTPS or mailto URL. | Adds a link with `target="_blank"` and `rel="noopener noreferrer"`. |
+| Clear formatting | Select styled text and click the eraser. | Runs the browser's `removeFormat` command; it does not reset the draft or guarantee removal of links and block structure. |
+| HTML source | Click the code icon, edit, then click it again. | Switches between the visual editor and an editable HTML textarea. |
+
+Formatting commands operate in visual mode. In source mode, edit the markup itself; the other toolbar commands do not apply. Only the source toggle reports a pressed state—the toolbar does not track bold/list/alignment state for the current selection.
+
+## Save, restore and focus a draft
+
+**Open draft editor** mounts a Composer with `focusOnMount` enabled. Edit the message, save a snapshot, make another change, then restore it. Close and reopen the editor to see that the draft lives in the parent component, independently of the editor's lifetime.
+
+The sample saves both models in memory and requires non-empty plain text. That validation is an application choice: Composer itself allows empty and image-only messages.
+
+<Tabs group="composer-draft-workflow-sample" selectedTab="composer-draft-workflow-sample-preview" ariaLabel="draft-workflow example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="composer-draft-workflow-sample-preview" label="Preview">
+    <RegorApp id="composer-draft-demo" src="./draft-workflow.ts"/>
+  </TabPane>
+  <TabPane id="composer-draft-workflow-sample-mdx" label="draft-workflow.mdx">
+```html
+<RegorApp id="composer-draft-demo" src="./draft-workflow.ts"/>
+```
+  </TabPane>
+  <TabPane id="composer-draft-workflow-sample-ts" label="draft-workflow.ts">
+```typescript
+import {
+  createComposerBodyHtml,
+  defineBadgeComponents,
+  defineButtonComponents,
+  defineComposerComponents,
+  defineFlexComponents,
+  defineFormComponents,
+  defineIconComponents,
+  definePanelComponents,
+} from '@purestack/ts-components'
+import {
+  lucide_bold,
+  lucide_code,
+  lucide_eraser,
+  lucide_italic,
+  lucide_link,
+  lucide_list,
+  lucide_list_ordered,
+  lucide_underline,
+  tabler_align_center,
+  tabler_align_left,
+  tabler_align_right,
+} from '@purestack/ts-svg-icons'
+import {
+  type ComputedRef,
+  computed,
+  createApp,
+  defineComponent,
+  html,
+  type Ref,
+  ref,
+} from 'regor'
+
+export interface ComposerDraftWorkflow {
+  messageHtml: Ref<string>
+  messageText: Ref<string>
+  savedHtml: Ref<string>
+  savedText: Ref<string>
+  editing: Ref<boolean>
+  dirty: ComputedRef<boolean>
+  status: Ref<string>
+  open: () => void
+  save: () => void
+  restore: () => void
+}
+
+const composerDraftWorkflowTemplate = html`<Flex direction="column">
+  <Flex justify="between" align="center" wrap="true">
+    <div>
+      <p class="text-eyebrow m-0">Draft workspace</p>
+      <p class="mb-0">Open the editor, make a change, then save or restore the draft.</p>
+    </div>
+    <Badge :tone="dirty ? 'warning' : 'success'" variant="surface">{{ dirty ? 'Unsaved changes' : 'Saved snapshot' }}</Badge>
+  </Flex>
+  <Btn r-if="!editing" tone="accent" variant="surface" @click="open">Open draft editor</Btn>
+  <Composer r-if="editing" id="composer-draft-editor" label="Team update"
+    placeholder="Write a team update" :html="messageHtml" :text="messageText"
+    :focusOnMount="true" minHeight="14rem"/>
+  <Flex r-if="editing" wrap="true">
+    <Btn tone="accent" :disabled="!dirty || !messageText.trim()" @click="save">Save snapshot</Btn>
+    <Btn variant="outline" :disabled="!dirty" @click="restore">Restore snapshot</Btn>
+    <Btn variant="link" @click="editing = false">Close editor</Btn>
+  </Flex>
+  <FormStatus role="status">{{ status }}</FormStatus>
+  <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
+    <p class="text-eyebrow mt-0">Saved plain-text copy</p>
+    <p id="composer-saved-text" class="ws-pre-wrap mb-0">{{ savedText }}</p>
+  </Panel>
+  <p class="text-muted m-0">The snapshot stays in this example's memory. Reloading the page resets it.</p>
+</Flex>`
+
+function createComposerDraftWorkflow(): ComposerDraftWorkflow {
+  const initial = createComposerBodyHtml(
+    '<p>The preview is ready for review.</p><p>Next: test the keyboard flow and share your notes.</p>',
+  )
+  const messageHtml = ref(initial)
+  const messageText = ref('')
+  const savedHtml = ref(initial)
+  const savedText = ref(
+    'The preview is ready for review.\nNext: test the keyboard flow and share your notes.',
+  )
+  const editing = ref(false)
+  const status = ref(
+    'Open the editor to continue. Focus moves to the start of the draft.',
+  )
+  return {
+    messageHtml,
+    messageText,
+    savedHtml,
+    savedText,
+    editing,
+    status,
+    dirty: computed(() => messageHtml() !== savedHtml()),
+    open: () => {
+      editing(true)
+      status('Editing. Save captures both HTML and plain text.')
+    },
+    save: () => {
+      if (!messageText().trim()) return
+      savedHtml(messageHtml())
+      savedText(messageText())
+      status('Snapshot saved. You can keep editing or close the editor.')
+    },
+    restore: () => {
+      messageHtml(savedHtml())
+      status('Restored the saved snapshot.')
+    },
+  }
+}
+
+const composerDraftWorkflow = defineComponent<ComposerDraftWorkflow>(
+  composerDraftWorkflowTemplate,
+  {
+    context: createComposerDraftWorkflow,
+  },
+)
+const icons: Record<string, string> = {
+  'lucide:bold': lucide_bold,
+  'lucide:italic': lucide_italic,
+  'lucide:underline': lucide_underline,
+  'tabler:align-left': tabler_align_left,
+  'tabler:align-center': tabler_align_center,
+  'tabler:align-right': tabler_align_right,
+  'lucide:list': lucide_list,
+  'lucide:list-ordered': lucide_list_ordered,
+  'lucide:link': lucide_link,
+  'lucide:eraser': lucide_eraser,
+  'lucide:code': lucide_code,
+}
+
+createApp(
+  {
+    components: {
+      ComposerDraftWorkflow: composerDraftWorkflow,
+      ...defineComposerComponents(),
+      ...defineBadgeComponents(),
+      ...defineButtonComponents(),
+      ...defineFlexComponents(),
+      ...defineFormComponents(),
+      ...definePanelComponents(),
+      ...defineIconComponents((name) => icons[name] ?? ''),
+    },
+  },
+  {
+    selector: 'app#composer-draft-demo',
+    template: html`<ComposerDraftWorkflow/>`,
+  },
+)
+```
+  </TabPane>
+</Tabs>
+
+### One input model, two useful outputs
+
+Bind `html` to a writable ref. Changes from your app replace the draft; changes from the editor write back to that same ref. Bind `text` when you also need a searchable or plain-text representation.
+
+```typescript
+const messageHtml = ref('<p>Hello <strong>Alex</strong>.</p>')
+const messageText = ref('')
+```
+
+```html
+<Composer label="Message" :html="messageHtml" :text="messageText"/>
+```
+
+`text` is derived from HTML. Writing to the text ref does **not** update the editor. Block boundaries and line breaks become newlines, whitespace is normalized, and image alt text is not included. Do not use the text value as a lossless representation of the document.
+
+Composer is not a native form field: it does not serialize itself into `FormData`, provide a `required` prop, save drafts, or send messages. Read the refs in your submit handler and apply the validation your workflow needs.
+
+## Inline images and file events
+
+Try **Insert demo image**, choose a local image, or paste/drop an image file into the visual editor. The attachment tab shows the original file and its content ID; the HTML tab shows `cid:` references instead of temporary preview URLs. Remove an attachment to remove its image and release its URL.
+
+<Tabs group="composer-inline-images-sample" selectedTab="composer-inline-images-sample-preview" ariaLabel="inline-images example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="composer-inline-images-sample-preview" label="Preview">
+    <RegorApp id="composer-images-demo" src="./inline-images.ts"/>
+  </TabPane>
+  <TabPane id="composer-inline-images-sample-mdx" label="inline-images.mdx">
+```html
+<RegorApp id="composer-images-demo" src="./inline-images.ts"/>
+```
+  </TabPane>
+  <TabPane id="composer-inline-images-sample-ts" label="inline-images.ts">
+```typescript
+import {
+  createComposerBodyHtml,
+  defineBadgeComponents,
+  defineButtonComponents,
+  defineComposerComponents,
+  defineFlexComponents,
+  defineFormComponents,
+  defineIconComponents,
+  definePanelComponents,
+  defineTabsComponents,
+} from '@purestack/ts-components'
+import {
+  lucide_bold,
+  lucide_code,
+  lucide_eraser,
+  lucide_italic,
+  lucide_link,
+  lucide_list,
+  lucide_list_ordered,
+  lucide_underline,
+  tabler_align_center,
+  tabler_align_left,
+  tabler_align_right,
+} from '@purestack/ts-svg-icons'
+import {
+  createApp,
+  defineComponent,
+  html,
+  onUnmounted,
+  type Ref,
+  ref,
+  type SRef,
+  sref,
+} from 'regor'
+
+export interface ComposerAttachment {
+  contentId: string
+  file: File
+  previewUrl: string
+}
+
+export interface ComposerInlineImages {
+  messageHtml: Ref<string>
+  previewUrls: SRef<Record<string, string>>
+  attachments: SRef<ComposerAttachment[]>
+  fileInput: SRef<HTMLInputElement | null>
+  busy: Ref<boolean>
+  status: Ref<string>
+  choose: () => void
+  select: (event: Event) => void
+  receive: (event: CustomEvent<{ files: File[] }>) => void
+  insertDemo: () => Promise<void>
+  remove: (contentId: string) => void
+}
+
+const composerInlineImagesTemplate = html`<Flex direction="column">
+  <Flex justify="between" align="center" wrap="true">
+    <p class="text-eyebrow m-0">Inline image lab</p>
+    <Badge tone="info" variant="surface">Local previews · no uploads</Badge>
+  </Flex>
+  <Composer id="composer-images-editor" label="Image message" :html="messageHtml"
+    :imagePreviewUrls="previewUrls" minHeight="14rem" @files="receive"/>
+  <input :ref="fileInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif"
+    multiple hidden @change="select"/>
+  <Flex wrap="true">
+    <Btn tone="accent" variant="surface" @click="choose">Choose images</Btn>
+    <Btn variant="outline" :disabled="busy" @click="insertDemo">{{ busy ? 'Loading image…' : 'Insert demo image' }}</Btn>
+  </Flex>
+  <FormStatus role="status">{{ status }}</FormStatus>
+  <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
+    <Tabs group="composer-images-output" selectedTab="composer-attachments" ariaLabel="Image model inspection" tabVariant="underline">
+      <TabPane id="composer-attachments" label="Attachments">
+        <p r-if="!attachments.length" class="m-0 text-muted">Add an image to see its file and content ID.</p>
+        <Flex r-for="attachment in attachments" direction="column" class="py-3 bb-1 b-subtle">
+          <Flex justify="between" align="center" wrap="true">
+            <strong class="overflow-x-auto w-full">{{ attachment.file.name }}</strong>
+            <Btn variant="outline" size="sm" :aria-label="'Remove ' + attachment.file.name" @click="remove(attachment.contentId)">Remove</Btn>
+          </Flex>
+          <span class="text-muted">{{ Math.ceil(attachment.file.size / 1024) }} KB · {{ attachment.file.type }}</span>
+          <code class="overflow-x-auto">cid:{{ attachment.contentId }}</code>
+        </Flex>
+      </TabPane>
+      <TabPane id="composer-images-html" label="HTML with cid: URLs">
+        <pre class="overflow-x-auto m-0"><code id="composer-image-html">{{ messageHtml }}</code></pre>
+      </TabPane>
+    </Tabs>
+  </Panel>
+  <p class="text-muted m-0">You can also paste or drop image files into the editor. This example appends them to the message. PNG, JPEG, WebP and GIF files up to 5 MB each are accepted.</p>
+</Flex>`
+
+function createComposerInlineImages(): ComposerInlineImages {
+  const messageHtml = ref(
+    createComposerBodyHtml(
+      '<p><strong>A little more than words.</strong></p><p>Add a product image, screenshot or the demo logo below.</p>',
+    ),
+  )
+  const previewUrls = sref<Record<string, string>>({})
+  const attachments = sref<ComposerAttachment[]>([])
+  const fileInput = sref<HTMLInputElement | null>(null)
+  const status = ref(
+    'Images stay in this browser. The HTML model keeps portable cid: references.',
+  )
+  const busy = ref(false)
+  let disposed = false
+
+  const add = (files: File[]) => {
+    const accepted = files.filter(
+      (file) =>
+        ['image/png', 'image/jpeg', 'image/webp', 'image/gif'].includes(
+          file.type,
+        ) &&
+        file.size > 0 &&
+        file.size <= 5 * 1024 * 1024,
+    )
+    const entries = accepted.map((file) => ({
+      file,
+      contentId: `${crypto.randomUUID()}@composer.demo`,
+      previewUrl: URL.createObjectURL(file),
+    }))
+    if (entries.length) {
+      const document = new DOMParser().parseFromString(
+        messageHtml(),
+        'text/html',
+      )
+      const first = document.body.firstElementChild
+      const body =
+        document.body.children.length === 1 && first?.tagName === 'DIV'
+          ? first
+          : document.body
+      for (const entry of entries) {
+        const paragraph = document.createElement('p')
+        const image = document.createElement('img')
+        image.src = `cid:${entry.contentId}`
+        image.alt = entry.file.name
+        image.style.width = '240px'
+        paragraph.append(image)
+        body.append(paragraph)
+      }
+      attachments([...attachments(), ...entries])
+      previewUrls(
+        Object.fromEntries(
+          attachments().map((entry) => [entry.contentId, entry.previewUrl]),
+        ),
+      )
+      messageHtml(document.body.innerHTML)
+    }
+    const skipped = files.length - entries.length
+    status(
+      `${entries.length} ${entries.length === 1 ? 'image' : 'images'} added.` +
+        (skipped
+          ? ` ${skipped} ${skipped === 1 ? 'file' : 'files'} skipped. Use a supported image under 5 MB.`
+          : ''),
+    )
+  }
+
+  onUnmounted(() => {
+    disposed = true
+    for (const entry of attachments()) URL.revokeObjectURL(entry.previewUrl)
+  })
+
+  return {
+    messageHtml,
+    previewUrls,
+    attachments,
+    fileInput,
+    busy,
+    status,
+    choose: () => fileInput()?.click(),
+    select: (event) => {
+      const input = event.currentTarget as HTMLInputElement
+      add(Array.from(input.files ?? []))
+      input.value = ''
+    },
+    receive: (event) => add(event.detail.files),
+    insertDemo: async () => {
+      busy(true)
+      try {
+        const response = await fetch('/assets/pure-stack-logo.png')
+        if (!response.ok) throw new Error('Image unavailable')
+        const blob = await response.blob()
+        if (!disposed)
+          add([new File([blob], 'pure-stack-logo.png', { type: 'image/png' })])
+      } catch {
+        if (!disposed)
+          status(
+            'The demo image could not be loaded. Choose a local image instead.',
+          )
+      } finally {
+        if (!disposed) busy(false)
+      }
+    },
+    remove: (contentId) => {
+      const entry = attachments().find((item) => item.contentId === contentId)
+      if (!entry) return
+      const document = new DOMParser().parseFromString(
+        messageHtml(),
+        'text/html',
+      )
+      for (const image of document.querySelectorAll('img')) {
+        if (image.getAttribute('src') !== `cid:${contentId}`) continue
+        const paragraph = image.parentElement
+        image.remove()
+        if (paragraph?.tagName === 'P' && !paragraph.hasChildNodes())
+          paragraph.remove()
+      }
+      messageHtml(document.body.innerHTML)
+      attachments(attachments().filter((item) => item !== entry))
+      previewUrls(
+        Object.fromEntries(
+          attachments().map((item) => [item.contentId, item.previewUrl]),
+        ),
+      )
+      URL.revokeObjectURL(entry.previewUrl)
+      status(`Removed ${entry.file.name} and released its preview URL.`)
+    },
+  }
+}
+
+const composerInlineImages = defineComponent<ComposerInlineImages>(
+  composerInlineImagesTemplate,
+  {
+    context: createComposerInlineImages,
+  },
+)
+const icons: Record<string, string> = {
+  'lucide:bold': lucide_bold,
+  'lucide:italic': lucide_italic,
+  'lucide:underline': lucide_underline,
+  'tabler:align-left': tabler_align_left,
+  'tabler:align-center': tabler_align_center,
+  'tabler:align-right': tabler_align_right,
+  'lucide:list': lucide_list,
+  'lucide:list-ordered': lucide_list_ordered,
+  'lucide:link': lucide_link,
+  'lucide:eraser': lucide_eraser,
+  'lucide:code': lucide_code,
+}
+
+createApp(
+  {
+    components: {
+      ComposerInlineImages: composerInlineImages,
+      ...defineComposerComponents(),
+      ...defineBadgeComponents(),
+      ...defineButtonComponents(),
+      ...defineFlexComponents(),
+      ...defineFormComponents(),
+      ...definePanelComponents(),
+      ...defineTabsComponents(),
+      ...defineIconComponents((name) => icons[name] ?? ''),
+    },
+  },
+  {
+    selector: 'app#composer-images-demo',
+    template: html`<ComposerInlineImages/>`,
+  },
+)
+```
+  </TabPane>
+</Tabs>
+
+### From a file to an inline preview
+
+1. Composer emits a bubbling `files` event with `{ files: File[] }` in `event.detail` when files are pasted or dropped.
+2. The app validates the files, retains the accepted `File` objects, and assigns content IDs.
+3. The app writes an image such as `<img src="cid:logo@example" alt="Product logo">` into the HTML model and maps `logo@example` to its preview URL through `imagePreviewUrls`.
+4. Composer resolves that URL for display and maps it back to `cid:` when reading the visual editor. The app revokes object URLs when they are no longer needed.
+
+The event alone does not upload files or insert images. This example appends images to the message; insertion at a saved caret position is an application concern. The file picker also calls the same handler logic, without depending on clipboard access.
+
+Content-ID keys are normalized to lowercase, with surrounding angle brackets removed. For example, `cid:%3CLogo%40Example%3E` looks up `logo@example`. An unresolved ID uses a transparent placeholder in the editor. Use distinct preview URLs for distinct IDs so the reverse mapping stays unambiguous.
+
+When sending email, your backend must attach the corresponding bytes with matching content IDs. Object URLs are local to the browser and are not email attachments. The example deliberately retains files until **Remove** is used—even if the image is deleted manually in the editor.
+
+## HTML, paste and presentation
+
+### Visual content and source mode
+
+The visual canvas uses a white email-style surface, including in dark mode; the surrounding controls use the active skin. `tone` and `variant` style the editor shell, not the message's text and background colors. The canvas grows with its content; `minHeight` is a floor, not a fixed height or a content limit.
+
+Use the exported helper for a padded message body:
+
+```typescript
+import { createComposerBodyHtml } from '@purestack/ts-components'
+
+const messageHtml = ref(createComposerBodyHtml(
+  '<p>Hello Alex,</p><p>Your preview is ready.</p>',
+))
+```
+
+`createComposerBodyHtml(contentHtml = '', placeholder?)` returns a div wrapper with `padding:1rem` and an optional placeholder attribute. It is a presentation helper, **not a sanitizer**. Pass HTML you intend the editor to process; do not use the helper as a security boundary for rendering arbitrary HTML elsewhere.
+
+### What is preserved
+
+Composer normalizes content through its email HTML policy. Supported content includes paragraphs, headings, inline emphasis, lists, blockquotes, links, images and tables, with allowlisted attributes and inline styles. Scripts, forms and embedded interactive content are dropped. Arbitrary classes, event handlers and unsupported attributes are not a document format for this editor.
+
+Links accept HTTP, HTTPS and mailto destinations; relative links resolve against the page URL. Images support HTTP/HTTPS, image data URLs and `cid:` references. Blob previews belong in `imagePreviewUrls`, paired with `cid:` model URLs.
+
+In source mode, the textarea keeps the text you are currently editing while the HTML and plain-text refs receive normalized output. Switching back renders that output; unsupported markup can disappear or change. Validate content again at the application's storage or sending boundary according to your own policy.
+
+### Pasting and dropping
+
+- Rich-text paste uses the clipboard's HTML when present and normalizes it before insertion.
+- Plain-text paste escapes markup, turns blank lines into paragraphs, and preserves single line breaks.
+- Clipboard files trigger `files`; a paste can contain both files and text/HTML, so both paths can run.
+- File drag-and-drop prevents the browser's default file-opening behavior and emits `files` in visual mode. Your app decides what happens next.
+- Disabled editors ignore typing, paste and file drop handlers. In source mode, the textarea has native text-editing behavior rather than the visual editor's file handlers.
 
 ## API reference
 
 <div class="api-overview">
-  <p class="text-eyebrow">Composer contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p class="text-eyebrow">Models · editor behavior · presentation</p>
+  <p>Register <code>defineComposerComponents()</code> and the toolbar icons with <code>defineIconComponents()</code>. Every example's TypeScript tab includes a complete registration. Bind refs with colon-prefixed attributes; literal settings can be passed directly.</p>
 </div>
 
 <nav class="api-index" aria-label="Composer properties">
@@ -164,60 +790,78 @@ The toolbar supports bold, italic, underline, alignment, lists, links, clear for
   <a href="#composer-prop-tone">tone</a>
   <a href="#composer-prop-variant">variant</a>
   <a href="#composer-prop-imagePreviewUrls">imagePreviewUrls</a>
+  <a href="#composer-event-files">files event</a>
 </nav>
 
+### Content models
+
 <ApiProperty anchor="composer-prop-html" name="html" valueType="Ref&lt;string&gt; | SRef&lt;string&gt;" defaultValue="ref('')">
-  <p>Writable HTML model. External updates replace editor content.</p>
+  <p>The writable HTML model. Initialize it with a draft, read it when saving, or replace its value to load another message. Pass a ref, not a string literal. The editor writes normalized HTML back as the user edits.</p>
+  <p><code>:html="messageHtml"</code> · Updating this ref can replace the user's current content and selection; keep it stable during ordinary typing.</p>
 </ApiProperty>
 
 <ApiProperty anchor="composer-prop-text" name="text" valueType="Ref&lt;string&gt; | SRef&lt;string&gt;" defaultValue="ref('')">
-  <p>Writable plain-text output synchronized from the HTML content.</p>
+  <p>Plain-text output derived from the HTML. Useful for text previews, word counts and a plain-text message part. Assigning to this ref does not change the editor.</p>
+  <p><code>:text="messageText"</code> · Image-only messages can have an empty text value.</p>
 </ApiProperty>
 
+### Editing and naming
+
 <ApiProperty anchor="composer-prop-label" name="label" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Visible label. Use language that describes the control or value in its surrounding context.</p>
+  <p>A visible label above the editor and the accessible name for its textbox. Use a specific label such as <code>Reply to customer</code>.</p>
 </ApiProperty>
 
 <ApiProperty anchor="composer-prop-placeholder" name="placeholder" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>A short input hint shown while empty. Keep a separate visible label.</p>
+  <p>Hint for an empty draft. It also supplies the accessible name when no label is provided. A visible label is preferable; the hint disappears as content is entered.</p>
 </ApiProperty>
 
 <ApiProperty anchor="composer-prop-disabled" name="disabled" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
-  <p>Disables interaction. Use a bound boolean, for example :disabled="isLocked".</p>
+  <p>Disables all toolbar buttons, removes editability from the visual canvas and disables the source textarea. The parent can still replace the HTML model. This is a disabled state, not a separate read-only mode.</p>
+  <p><code>:disabled="isSaving"</code></p>
 </ApiProperty>
 
 <ApiProperty anchor="composer-prop-focusOnMount" name="focusOnMount" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
-  <p>Focuses the editor when mounted. Avoid automatic focus in inline documentation or pages with multiple tasks.</p>
+  <p>Requests focus at the start of the draft after mounting, with retries while the editor becomes visible. Set it when opening a deliberate editing flow, as in the draft example. It is a mount-time action, not a reactive focus command.</p>
 </ApiProperty>
 
+### Presentation and images
+
 <ApiProperty anchor="composer-prop-minHeight" name="minHeight" valueType="RefOrValue&lt;number | string&gt;" defaultValue="13.75rem">
-  <p>Minimum editor height. Numbers become pixel lengths; CSS length strings are accepted.</p>
+  <p>Minimum height for both the visual editor and source textarea. Numbers are pixel values (clamped to zero); strings must be CSS lengths.</p>
+  <p><code>:minHeight="240"</code> gives 240px. <code>minHeight="18rem"</code> gives a relative length. It does not constrain the toolbar or cap growing content.</p>
 </ApiProperty>
 
 <ApiProperty anchor="composer-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
-  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+  <p>Semantic color of the shell. Accepts neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The message canvas retains its email presentation.</p>
 </ApiProperty>
 
 <ApiProperty anchor="composer-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surfaceAlt">
-  <p>Visual treatment. Accepts solid, surface, surfaceAlt, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+  <p>Shell treatment. Surface, surfaceAlt and outline are useful starting points for editors. The complete shared type also accepts solid, outlineFill, subtle, subtleBtn, link, sheen, underline, rail, bracket and none.</p>
 </ApiProperty>
 
 <ApiProperty anchor="composer-prop-imagePreviewUrls" name="imagePreviewUrls" valueType="RefOrValue&lt;Record&lt;string, string&gt;&gt;" defaultValue="not set">
-  <p>Map from normalized content IDs to preview URLs for inline cid images. The model keeps its cid references while the editor uses preview URLs.</p>
+  <p>Maps normalized content IDs to editor preview URLs, while the model retains <code>cid:</code> image sources. Use a ref for maps that change and replace the map when adding or removing a preview.</p>
+  <p>The app owns the original files, attachment lifecycle and object-URL cleanup. See the inline-image sample for the complete flow.</p>
 </ApiProperty>
 
-### Composition
+### Events and composition
+
+<ApiProperty anchor="composer-event-files" name="files" valueType="CustomEvent&lt;{ files: File[] }&gt;" defaultValue="paste or drop">
+  <p>A bubbling event dispatched from the visual editor when a paste or file drop contains files. Read <code>event.detail.files</code> with <code>@files="handleFiles"</code>. File types and sizes are not filtered by Composer.</p>
+</ApiProperty>
 
 <div class="api-contract">
-<p>No slots. Register defineComposerComponents and every toolbar icon through defineIconComponents. The html and text refs are the data contract; the component does not submit a form or upload attachments.</p>
+  <p>Composer has no content slots or configurable toolbar slot. The public template props are listed above. Context methods such as <code>format</code> and <code>toggleSourceMode</code> are implementation details, not additional template props.</p>
 </div>
 
-### Inline images and attachments
+## Keyboard and accessibility
 
-The editor preserves supported email markup and normalizes links, styles and image URLs. Use `imagePreviewUrls` when an email model references `cid:` images. Manage the corresponding attachments and object-URL cleanup in the owning app. `createComposerBodyHtml` wraps content in the package’s email body presentation.
+The visual editor exposes `role="textbox"` and `aria-multiline="true"`. Its accessible name comes from `label`, then `placeholder`, then “Message body”. Source mode uses a native textarea. Toolbar buttons have individual accessible names and belong to a “Composer tools” toolbar.
+
+Use Tab to reach buttons and the editor; toolbar buttons use normal button keyboard behavior. Editing and formatting rely on the browser's native contenteditable commands, so selection behavior and shortcuts can vary by browser. Provide a visible label, use `focusOnMount` only after a deliberate user action, and announce save or validation results in your application—as the draft sample does with `FormStatus`.
 
 ## Related components
 
-- [DropFiles](/components/forms/drop-files/)
-- [FormInputField](/components/forms/form-input-field/)
-- [AppForm](/components/forms/app-form/)
+- [DropFiles](/components/forms/drop-files/) — a dedicated attachment picker and drop zone.
+- [FormInputField](/components/forms/form-input-field/) — subject lines and other plain-text fields.
+- [AppForm](/components/forms/app-form/) — structure and submit behavior around an editing workflow.
