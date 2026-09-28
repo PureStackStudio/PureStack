@@ -25,7 +25,14 @@ Start with a release note or a support reply. Select a phrase and make it bold, 
 
 Change the tone, variant and height below the editor. Choose **Empty draft** to try the placeholder. Disabling the editor locks user input; the preset buttons still demonstrate how the owning app can update its model.
 
-<Tabs group="composer-playground-sample" selectedTab="composer-playground-sample-preview" ariaLabel="playground example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="composer-playground-sample"
+  selectedTab="composer-playground-sample-preview"
+  ariaLabel="playground example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="composer-playground-sample-preview" label="Preview">
     <RegorApp id="composer-demo" src="./playground.ts"/>
   </TabPane>
@@ -269,7 +276,14 @@ Formatting commands operate in visual mode. In source mode, edit the markup itse
 
 The sample saves both models in memory and requires non-empty plain text. That validation is an application choice: Composer itself allows empty and image-only messages.
 
-<Tabs group="composer-draft-workflow-sample" selectedTab="composer-draft-workflow-sample-preview" ariaLabel="draft-workflow example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="composer-draft-workflow-sample"
+  selectedTab="composer-draft-workflow-sample-preview"
+  ariaLabel="draft-workflow example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="composer-draft-workflow-sample-preview" label="Preview">
     <RegorApp id="composer-draft-demo" src="./draft-workflow.ts"/>
   </TabPane>
@@ -453,7 +467,14 @@ Composer is not a native form field: it does not serialize itself into `FormData
 
 Try **Insert demo image**, choose a local image, or paste/drop an image file into the visual editor. The attachment tab shows the original file and its content ID; the HTML tab shows `cid:` references instead of temporary preview URLs. Remove an attachment to remove its image and release its URL.
 
-<Tabs group="composer-inline-images-sample" selectedTab="composer-inline-images-sample-preview" ariaLabel="inline-images example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="composer-inline-images-sample"
+  selectedTab="composer-inline-images-sample-preview"
+  ariaLabel="inline-images example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="composer-inline-images-sample-preview" label="Preview">
     <RegorApp id="composer-images-demo" src="./inline-images.ts"/>
   </TabPane>
@@ -776,7 +797,12 @@ In source mode, the textarea keeps the text you are currently editing while the 
 
 <div class="api-overview">
   <p class="text-eyebrow">Models · editor behavior · presentation</p>
-  <p>Register <code>defineComposerComponents()</code> and the toolbar icons with <code>defineIconComponents()</code>. Every example's TypeScript tab includes a complete registration. Bind refs with colon-prefixed attributes; literal settings can be passed directly.</p>
+  <p>
+    Register <code>defineComposerComponents()</code> and the toolbar icons with
+    <code>defineIconComponents()</code>. Every example's TypeScript tab includes
+    a complete registration. Bind refs with colon-prefixed attributes; literal
+    settings can be passed directly.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="Composer properties">
@@ -795,63 +821,180 @@ In source mode, the textarea keeps the text you are currently editing while the 
 
 ### Content models
 
-<ApiProperty anchor="composer-prop-html" name="html" valueType="Ref&lt;string&gt; | SRef&lt;string&gt;" defaultValue="ref('')">
-  <p>The writable HTML model. Initialize it with a draft, read it when saving, or replace its value to load another message. Pass a ref, not a string literal. The editor writes normalized HTML back as the user edits.</p>
-  <p><code>:html="messageHtml"</code> · Updating this ref can replace the user's current content and selection; keep it stable during ordinary typing.</p>
+<ApiProperty
+  anchor="composer-prop-html"
+  name="html"
+  valueType="Ref&lt;string&gt; | SRef&lt;string&gt;"
+  defaultValue="ref('')"
+>
+  <p>
+    The writable HTML model. Initialize it with a draft, read it when saving, or
+    replace its value to load another message. Pass a ref, not a string literal.
+    The editor writes normalized HTML back as the user edits.
+  </p>
+  <p>
+    <code>:html="messageHtml"</code> · Updating this ref can replace the user's
+    current content and selection; keep it stable during ordinary typing.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="composer-prop-text" name="text" valueType="Ref&lt;string&gt; | SRef&lt;string&gt;" defaultValue="ref('')">
-  <p>Plain-text output derived from the HTML. Useful for text previews, word counts and a plain-text message part. Assigning to this ref does not change the editor.</p>
-  <p><code>:text="messageText"</code> · Image-only messages can have an empty text value.</p>
+<ApiProperty
+  anchor="composer-prop-text"
+  name="text"
+  valueType="Ref&lt;string&gt; | SRef&lt;string&gt;"
+  defaultValue="ref('')"
+>
+  <p>
+    Plain-text output derived from the HTML. Useful for text previews, word
+    counts and a plain-text message part. Assigning to this ref does not change
+    the editor.
+  </p>
+  <p>
+    <code>:text="messageText"</code> · Image-only messages can have an empty
+    text value.
+  </p>
 </ApiProperty>
 
 ### Editing and naming
 
-<ApiProperty anchor="composer-prop-label" name="label" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>A visible label above the editor and the accessible name for its textbox. Use a specific label such as <code>Reply to customer</code>.</p>
+<ApiProperty
+  anchor="composer-prop-label"
+  name="label"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    A visible label above the editor and the accessible name for its textbox.
+    Use a specific label such as <code>Reply to customer</code>.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="composer-prop-placeholder" name="placeholder" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Hint for an empty draft. It also supplies the accessible name when no label is provided. A visible label is preferable; the hint disappears as content is entered.</p>
+<ApiProperty
+  anchor="composer-prop-placeholder"
+  name="placeholder"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Hint for an empty draft. It also supplies the accessible name when no label
+    is provided. A visible label is preferable; the hint disappears as content
+    is entered.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="composer-prop-disabled" name="disabled" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
-  <p>Disables all toolbar buttons, removes editability from the visual canvas and disables the source textarea. The parent can still replace the HTML model. This is a disabled state, not a separate read-only mode.</p>
+<ApiProperty
+  anchor="composer-prop-disabled"
+  name="disabled"
+  valueType="RefOrValue&lt;boolean&gt;"
+  defaultValue="false"
+>
+  <p>
+    Disables all toolbar buttons, removes editability from the visual canvas and
+    disables the source textarea. The parent can still replace the HTML model.
+    This is a disabled state, not a separate read-only mode.
+  </p>
   <p><code>:disabled="isSaving"</code></p>
 </ApiProperty>
 
-<ApiProperty anchor="composer-prop-focusOnMount" name="focusOnMount" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
-  <p>Requests focus at the start of the draft after mounting, with retries while the editor becomes visible. Set it when opening a deliberate editing flow, as in the draft example. It is a mount-time action, not a reactive focus command.</p>
+<ApiProperty
+  anchor="composer-prop-focusOnMount"
+  name="focusOnMount"
+  valueType="RefOrValue&lt;boolean&gt;"
+  defaultValue="false"
+>
+  <p>
+    Requests focus at the start of the draft after mounting, with retries while
+    the editor becomes visible. Set it when opening a deliberate editing flow,
+    as in the draft example. It is a mount-time action, not a reactive focus
+    command.
+  </p>
 </ApiProperty>
 
 ### Presentation and images
 
-<ApiProperty anchor="composer-prop-minHeight" name="minHeight" valueType="RefOrValue&lt;number | string&gt;" defaultValue="13.75rem">
-  <p>Minimum height for both the visual editor and source textarea. Numbers are pixel values (clamped to zero); strings must be CSS lengths.</p>
-  <p><code>:minHeight="240"</code> gives 240px. <code>minHeight="18rem"</code> gives a relative length. It does not constrain the toolbar or cap growing content.</p>
+<ApiProperty
+  anchor="composer-prop-minHeight"
+  name="minHeight"
+  valueType="RefOrValue&lt;number | string&gt;"
+  defaultValue="13.75rem"
+>
+  <p>
+    Minimum height for both the visual editor and source textarea. Numbers are
+    pixel values (clamped to zero); strings must be CSS lengths.
+  </p>
+  <p>
+    <code>:minHeight="240"</code> gives 240px.
+    <code>minHeight="18rem"</code> gives a relative length. It does not
+    constrain the toolbar or cap growing content.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="composer-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
-  <p>Semantic color of the shell. Accepts neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The message canvas retains its email presentation.</p>
+<ApiProperty
+  anchor="composer-prop-tone"
+  name="tone"
+  valueType="RefOrValue&lt;SemanticTone&gt;"
+  defaultValue="inherited"
+>
+  <p>
+    Semantic color of the shell. Accepts neutral, accent, secondary, info,
+    success, warning, danger, feature, custom or ghost. The message canvas
+    retains its email presentation.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="composer-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surfaceAlt">
-  <p>Shell treatment. Surface, surfaceAlt and outline are useful starting points for editors. The complete shared type also accepts solid, outlineFill, subtle, subtleBtn, link, sheen, underline, rail, bracket and none.</p>
+<ApiProperty
+  anchor="composer-prop-variant"
+  name="variant"
+  valueType="RefOrValue&lt;ComponentVariant&gt;"
+  defaultValue="surfaceAlt"
+>
+  <p>
+    Shell treatment. Surface, surfaceAlt and outline are useful starting points
+    for editors. The complete shared type also accepts solid, outlineFill,
+    subtle, subtleBtn, link, sheen, underline, rail, bracket and none.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="composer-prop-imagePreviewUrls" name="imagePreviewUrls" valueType="RefOrValue&lt;Record&lt;string, string&gt;&gt;" defaultValue="not set">
-  <p>Maps normalized content IDs to editor preview URLs, while the model retains <code>cid:</code> image sources. Use a ref for maps that change and replace the map when adding or removing a preview.</p>
-  <p>The app owns the original files, attachment lifecycle and object-URL cleanup. See the inline-image sample for the complete flow.</p>
+<ApiProperty
+  anchor="composer-prop-imagePreviewUrls"
+  name="imagePreviewUrls"
+  valueType="RefOrValue&lt;Record&lt;string, string&gt;&gt;"
+  defaultValue="not set"
+>
+  <p>
+    Maps normalized content IDs to editor preview URLs, while the model retains
+    <code>cid:</code> image sources. Use a ref for maps that change and replace
+    the map when adding or removing a preview.
+  </p>
+  <p>
+    The app owns the original files, attachment lifecycle and object-URL
+    cleanup. See the inline-image sample for the complete flow.
+  </p>
 </ApiProperty>
 
 ### Events and composition
 
-<ApiProperty anchor="composer-event-files" name="files" valueType="CustomEvent&lt;{ files: File[] }&gt;" defaultValue="paste or drop">
-  <p>A bubbling event dispatched from the visual editor when a paste or file drop contains files. Read <code>event.detail.files</code> with <code>@files="handleFiles"</code>. File types and sizes are not filtered by Composer.</p>
+<ApiProperty
+  anchor="composer-event-files"
+  name="files"
+  valueType="CustomEvent&lt;{ files: File[] }&gt;"
+  defaultValue="paste or drop"
+>
+  <p>
+    A bubbling event dispatched from the visual editor when a paste or file drop
+    contains files. Read <code>event.detail.files</code> with
+    <code>@files="handleFiles"</code>. File types and sizes are not filtered by
+    Composer.
+  </p>
 </ApiProperty>
 
 <div class="api-contract">
-  <p>Composer has no content slots or configurable toolbar slot. The public template props are listed above. Context methods such as <code>format</code> and <code>toggleSourceMode</code> are implementation details, not additional template props.</p>
+  <p>
+    Composer has no content slots or configurable toolbar slot. The public
+    template props are listed above. Context methods such as
+    <code>format</code> and <code>toggleSourceMode</code> are implementation
+    details, not additional template props.
+  </p>
 </div>
 
 ## Keyboard and accessibility
