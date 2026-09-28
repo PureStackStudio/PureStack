@@ -19,148 +19,525 @@ Render a large semantic table while mounting only nearby rows, with measured var
 
 [View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/virtualList/variableVirtualTable.ts) · [API reference](#api-reference)
 
+## Interactive playground
 
+Review a large queue with wrapping summaries and expandable notes. Change the summary width to see rows reflow, adjust the initial estimate and overscan, or sort and filter the dataset. Live counters inspect the mounted rows and their actual heights.
 
-## Browse a change history
-
-Scroll through 1,000 illustrative records, then clear and restore them. Longer descriptions exercise row measurement.
-
-<Tabs group="variable-virtual-table-sample-1" selectedTab="variable-virtual-table-sample-1-preview" ariaLabel="Browse a change history example" tone="neutral" variant="surface" tabVariant="underline">
-  <TabPane id="variable-virtual-table-sample-1-preview" label="Preview">
+<Tabs group="variable-virtual-table-playground" selectedTab="variable-virtual-table-playground-preview" ariaLabel="Interactive playground" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="variable-virtual-table-playground-preview" label="Preview">
     <RegorApp id="variable-virtual-table-demo" src="./playground.ts"/>
   </TabPane>
-  <TabPane id="variable-virtual-table-sample-1-source-0" label="playground.mdx">
+  <TabPane id="variable-virtual-table-playground-mdx" label="playground.mdx">
 ```html
 <RegorApp id="variable-virtual-table-demo" src="./playground.ts"/>
 ```
   </TabPane>
-  <TabPane id="variable-virtual-table-sample-1-source-1" label="playground.ts">
+  <TabPane id="variable-virtual-table-playground-source" label="playground.ts">
 ```typescript
 import {
   defineBadgeComponents,
   defineButtonComponents,
   defineFlexComponents,
   defineFormComponents,
+  defineFormInputField,
+  defineFormSelectField,
+  defineGridComponents,
+  defineIconComponents,
+  definePanelComponents,
   defineVariableVirtualTableComponents,
+  type FormSelectOption,
 } from '@purestack/ts-components'
-
+import { lucide_chevron_down } from '@purestack/ts-svg-icons'
 import {
+  batch,
+  type ComputedRef,
+  computed,
   createApp,
   defineComponent,
   html,
+  observe,
+  onMounted,
+  onUnmounted,
+  type Ref,
   type RefOrValue,
+  ref,
   type SRef,
   sref,
 } from 'regor'
 
-export interface ExampleRecord {
+export interface ReviewRecord {
   id: number
   title: string
-  state: string
+  summary: string
   detail: string
+  width: Ref<string>
+  expanded: Ref<boolean>
 }
-export interface VariableVirtualTableRow {
-  item: RefOrValue<ExampleRecord>
+
+export interface ReviewRow {
+  item: RefOrValue<ReviewRecord>
   index: RefOrValue<number>
 }
-const rowTemplate = html`<tr :aria-rowindex="index + 2">
-  <td class="px-3 py-2">{{ item.id }}</td>
-  <td class="px-3 py-2">
-    {{ item.title }}
-    <p class="mb-0 ws-normal" style="max-width: 24rem">{{ item.detail }}</p>
+
+export interface ReviewHeader {}
+export interface ReviewFooter {}
+export interface ReviewColumns {}
+
+const reviewRowTemplate = html`<tr :data-row="index">
+  <td class="px-3 py-2 bb-1 b-subtle ws-nowrap">{{ item.id }}</td>
+  <td class="px-3 py-2 bb-1 b-subtle">
+    <div :style="{ width: item.width + 'rem' }" class="ws-normal">
+      <Flex justify="between" align="center" wrap="true">
+        <strong>{{ item.title }}</strong>
+        <Btn variant="outline" size="sm" :aria-expanded="item.expanded" :aria-controls="'review-notes-' + item.id" @click="item.expanded = !item.expanded">{{ item.expanded ? 'Less detail' : 'More detail' }}</Btn>
+      </Flex>
+      <p class="mb-0">{{ item.summary }}</p>
+      <div r-if="item.expanded" :id="'review-notes-' + item.id" class="mt-3">
+        <Badge tone="info" variant="surface">Review notes</Badge>
+        <p class="mb-0">{{ item.detail }}</p>
+      </div>
+    </div>
   </td>
-  <td class="px-3 py-2">{{ item.state }}</td>
+  <td class="px-3 py-2 bb-1 b-subtle ws-nowrap"><Badge tone="info" variant="surface">Open</Badge></td>
 </tr>`
-const rowComponent = defineComponent<VariableVirtualTableRow>(rowTemplate, {
+const reviewHeaderTemplate = html`<thead><tr>
+  <th scope="col" class="px-3 py-2 tone-fill-surface">ID</th>
+  <th scope="col" class="px-3 py-2 tone-fill-surface">Review summary</th>
+  <th scope="col" class="px-3 py-2 tone-fill-surface">Status</th>
+</tr></thead>`
+const reviewFooterTemplate = html`<tfoot><tr><td colspan="3" class="px-3 py-2 tone-fill-surface">Review queue · illustrative data</td></tr></tfoot>`
+const reviewColumnsTemplate = html`<colgroup><col style="width: 5rem"/><col/><col style="width: 7rem"/></colgroup>`
+
+const reviewRow = defineComponent<ReviewRow>(reviewRowTemplate, {
   props: ['item', 'index'],
 })
-export interface VariableVirtualTableHeader {}
-const headerTemplate = html`<thead>
-  <tr>
-    <th scope="col" class="px-3 py-2 tone-fill-surface">ID</th>
-    <th scope="col" class="px-3 py-2 tone-fill-surface">Change</th>
-    <th scope="col" class="px-3 py-2 tone-fill-surface">Status</th>
-  </tr>
-</thead>`
-const headerComponent =
-  defineComponent<VariableVirtualTableHeader>(headerTemplate)
-export interface VariableVirtualTableExample {
-  records: SRef<ExampleRecord[]>
-  restore: () => void
+const reviewHeader = defineComponent<ReviewHeader>(reviewHeaderTemplate)
+const reviewFooter = defineComponent<ReviewFooter>(reviewFooterTemplate)
+const reviewColumns = defineComponent<ReviewColumns>(reviewColumnsTemplate)
+
+export interface VariableTablePlayground {
+  records: SRef<ReviewRecord[]>
+  filtered: ComputedRef<ReviewRecord[]>
+  query: Ref<string>
+  count: Ref<string>
+  height: Ref<string>
+  estimate: Ref<string>
+  overscan: Ref<string>
+  width: Ref<string>
+  header: Ref<boolean>
+  footer: Ref<boolean>
+  columns: Ref<boolean>
+  sort: Ref<string>
+  widths: FormSelectOption[]
+  sorts: FormSelectOption[]
+  active: Ref<boolean>
+  mountedRows: Ref<number>
+  rowRange: Ref<string>
+  measuredRange: Ref<string>
+  scrollExtent: Ref<number>
+  counts: FormSelectOption[]
+  heights: FormSelectOption[]
+  estimates: FormSelectOption[]
+  buffers: FormSelectOption[]
+  restart: () => void
+  load: () => void
   clear: () => void
+  reset: () => void
+  first: () => void
+  next: () => void
+  previous: () => void
 }
 
-const variableVirtualTableExampleTemplate = html`<Flex direction="column">
+const variableTablePlaygroundTemplate = html`<Flex direction="column">
+  <Grid columns="1" columnsMd="2">
+    <FormSelectField id="review-table-count" label="Dataset size" :model="count" :options="counts" @change="load" />
+    <FormInputField id="review-table-search" label="Search reviews" placeholder="Try Review 42" :model="query" />
+  </Grid>
+  <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
+    <Flex justify="between" align="center" wrap="true">
+      <p class="text-eyebrow m-0">LIVE PREVIEW · REVIEW TABLE</p>
+      <Badge tone="accent" variant="surface">{{ filtered.length }} matching records</Badge>
+    </Flex>
+    <Grid columns="2" columnsMd="4" class="my-3">
+      <div><p class="m-0 text-muted">Mounted rows</p><strong id="review-table-mounted">{{ mountedRows }}</strong></div>
+      <div><p class="m-0 text-muted">Positions</p><strong>{{ rowRange }}</strong></div>
+      <div><p class="m-0 text-muted">Row heights</p><strong id="review-table-measured">{{ measuredRange }}</strong></div>
+      <div><p class="m-0 text-muted">Scroll height</p><strong>{{ scrollExtent }} px</strong></div>
+    </Grid>
+    <div id="review-table-host">
+      <VariableVirtualTable r-if="active" id="review-table-viewport"
+        :items="filtered" :height="height" :estimateHeight="estimate" :overscan="overscan"
+        rowComponent="ReviewRow" :headerComponent="header ? 'ReviewHeader' : ''"
+        :footerComponent="footer ? 'ReviewFooter' : ''" :colGroupComponent="columns ? 'ReviewColumns' : ''"
+        tabindex="0" role="region" aria-label="Scrollable review table" class="b-1 b-subtle rounded-md"
+      />
+    </div>
+    <FormStatus r-if="!filtered.length" role="status">{{ records.length ? 'No matching reviews. Clear the search to see the table.' : 'The table is empty. Reload the dataset to continue.' }}</FormStatus>
+    <p class="mb-0 text-muted">Expand a review or change the summary width. Each row is measured after its text wraps. The header and footer stay visible; wide columns scroll inside this region.</p>
+  </Panel>
+  <Grid columns="1" columnsMd="3">
+    <FormSelectField id="review-table-height" label="Viewport height" :model="height" :options="heights" />
+    <FormSelectField id="review-table-estimate" label="Initial height estimate" :model="estimate" :options="estimates" @change="restart" />
+    <FormSelectField id="review-table-overscan" label="Overscan" :model="overscan" :options="buffers" />
+  </Grid>
+  <Grid columns="1" columnsMd="2">
+    <FormSelectField id="review-table-width" label="Summary width" :model="width" :options="widths" @change="restart" />
+    <FormSelectField id="review-table-sort" label="Sort by ID" :model="sort" :options="sorts" />
+  </Grid>
   <Flex wrap="true">
-    <Btn @click="restore">Load 1,000 records</Btn>
-    <Btn variant="outline" @click="clear">Empty list</Btn>
-    <span role="status">{{ records.length }} records</span>
+    <FormCheck id="review-table-header" label="Header" :checked="header" />
+    <FormCheck id="review-table-footer" label="Footer" :checked="footer" />
+    <FormCheck id="review-table-columns" label="Column widths" :checked="columns" />
   </Flex>
-  <VariableVirtualTable
-    :items="records"
-    height="320"
-    estimateHeight="88"
-    overscan="4"
-    rowComponent="VariableVirtualTableRow"
-    headerComponent="VariableVirtualTableHeader"
-    tabindex="0"
-    aria-label="Example change history"
-  />
-  <FormStatus r-if="records.length === 0">
-    No records. Load the example data to continue.
-  </FormStatus>
+  <Flex wrap="true">
+    <Btn variant="outline" :disabled="!filtered.length" @click="first">Back to top</Btn>
+    <Btn variant="outline" :disabled="!filtered.length" @click="previous">Previous screen</Btn>
+    <Btn tone="accent" variant="surface" :disabled="!filtered.length" @click="next">Next screen</Btn>
+  </Flex>
+  <p class="m-0 text-muted">The counters inspect mounted rows. Scroll height includes estimates for unseen rows and can change as you browse. Search, sort, dataset, width and estimate changes restart measurement from the top; expanded state stays on each record.</p>
+  <Flex wrap="true">
+    <Btn variant="outline" @click="restart">Restart measurement</Btn>
+    <Btn variant="outline" @click="load">Reload dataset</Btn>
+    <Btn variant="outline" @click="clear">Empty table</Btn>
+    <Btn tone="accent" variant="surface" @click="reset">Reset playground</Btn>
+  </Flex>
 </Flex>`
 
-function createVariableVirtualTableExample(): VariableVirtualTableExample {
-  const initial: ExampleRecord[] = Array.from({ length: 1000 }, (_, index) => ({
+function createReviews(count: number, width: Ref<string>): ReviewRecord[] {
+  const summaries = [
+    'Updated the component documentation.',
+    'Improved keyboard navigation and focus visibility across the release workflow. The review includes both desktop and narrow layouts.',
+    'Added examples for empty results, long labels and loading transitions. Each example uses the shared theme, typed component props and real application state so it can be adapted to a production screen.',
+  ]
+  return Array.from({ length: count }, (_, index) => ({
     id: index + 1,
-    title: `Change ${index + 1}`,
-    state: index % 3 === 0 ? 'In review' : 'Ready',
+    title: `Review ${index + 1}`,
+    summary: summaries[index % summaries.length],
     detail:
-      index % 3 === 0
-        ? 'This change includes a longer explanation of the component behavior, its theme treatment and the verification needed before release.'
-        : 'A focused improvement to the documentation.',
+      'The implementation keeps interaction state on the record. Expand this entry, scroll until it leaves the mounted window, and return to it: the notes remain open. Content can grow without assigning a new row height. ResizeObserver measures the rendered result and updates the virtual offsets.',
+    width,
+    expanded: ref(false),
   }))
-  const records = sref(initial)
-  return {
-    records,
-    restore: () => records([...initial]),
-    clear: () => records([]),
-  }
 }
 
-const component = defineComponent<VariableVirtualTableExample>(
-  variableVirtualTableExampleTemplate,
-  {
-    context: createVariableVirtualTableExample,
-  },
+function createVariableTablePlayground(): VariableTablePlayground {
+  const width = ref('28')
+  const header = ref(true),
+    footer = ref(true),
+    columns = ref(true),
+    sort = ref('asc')
+  const records = sref(createReviews(1000, width))
+  const query = ref(''),
+    count = ref('1000'),
+    height = ref('400'),
+    estimate = ref('140'),
+    overscan = ref('4')
+  const active = ref(true)
+  const mountedRows = ref(0),
+    rowRange = ref('—'),
+    measuredRange = ref('—'),
+    scrollExtent = ref(0)
+  const filtered = computed(() => {
+    const result = records().filter((item) =>
+      item.title.toLowerCase().includes(query().trim().toLowerCase()),
+    )
+    return sort() === 'desc' ? result.reverse() : result
+  })
+  let disposed = false
+  const restart = () => {
+    active(false)
+    queueMicrotask(() => {
+      if (!disposed) active(true)
+    })
+  }
+  const stop = observe(filtered, restart)
+  const viewport = () =>
+    document.querySelector<HTMLElement>('#review-table-viewport')
+  const scroll = (direction: number) => {
+    const element = viewport()
+    if (!element) return
+    element.scrollTop =
+      direction === 0 ? 0 : element.scrollTop + direction * element.clientHeight
+    element.dispatchEvent(new Event('scroll'))
+  }
+  const measure = () => {
+    const element = viewport()
+    const rows = Array.from(
+      element?.querySelectorAll<HTMLElement>('[data-row]') ?? [],
+    )
+    const sizes = rows.map((row) =>
+      Math.round(row.getBoundingClientRect().height),
+    )
+    mountedRows(rows.length)
+    rowRange(
+      rows.length
+        ? `${Number(rows[0].dataset.row) + 1}–${Number(rows.at(-1)?.dataset.row) + 1}`
+        : '—',
+    )
+    measuredRange(
+      sizes.length ? `${Math.min(...sizes)}–${Math.max(...sizes)} px` : '—',
+    )
+    scrollExtent(element?.scrollHeight ?? 0)
+  }
+  let observer: MutationObserver | undefined
+  let resize: ResizeObserver | undefined
+  onMounted(() => {
+    const host = document.querySelector('#review-table-host')
+    if (!host) return
+    observer = new MutationObserver(measure)
+    observer.observe(host, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['style', 'data-row'],
+    })
+    resize = new ResizeObserver(measure)
+    resize.observe(host)
+    measure()
+  })
+  onUnmounted(() => {
+    disposed = true
+    stop()
+    observer?.disconnect()
+    resize?.disconnect()
+  })
+  return {
+    records,
+    filtered,
+    query,
+    count,
+    height,
+    estimate,
+    overscan,
+    width,
+    header,
+    footer,
+    columns,
+    sort,
+    active,
+    mountedRows,
+    rowRange,
+    measuredRange,
+    scrollExtent,
+    widths: [18, 28, 40].map((n) => ({ label: n + 'rem', value: String(n) })),
+    sorts: [
+      { label: 'Oldest first', value: 'asc' },
+      { label: 'Newest first', value: 'desc' },
+    ],
+    counts: [100, 1000, 10000].map((n) => ({
+      label: `${n.toLocaleString('en-US')} records`,
+      value: String(n),
+    })),
+    heights: [280, 400, 520].map((n) => ({
+      label: `${n} px`,
+      value: String(n),
+    })),
+    estimates: [56, 140, 240].map((n) => ({
+      label: `${n} px`,
+      value: String(n),
+    })),
+    buffers: [1, 4, 12].map((n) => ({ label: `${n} rows`, value: String(n) })),
+    restart,
+    load: () => records(createReviews(Number(count()), width)),
+    clear: () => records([]),
+    first: () => scroll(0),
+    previous: () => scroll(-1),
+    next: () => scroll(1),
+    reset: () =>
+      batch(() => {
+        query('')
+        count('1000')
+        height('400')
+        estimate('140')
+        overscan('4')
+        width('28')
+        header(true)
+        footer(true)
+        columns(true)
+        sort('asc')
+        records(createReviews(1000, width))
+      }),
+  }
+}
+const variableTablePlayground = defineComponent<VariableTablePlayground>(
+  variableTablePlaygroundTemplate,
+  { context: createVariableTablePlayground },
 )
-
+const icons: Record<string, string> = {
+  'lucide:chevron-down': lucide_chevron_down,
+}
 createApp(
   {
     components: {
-      VariableVirtualTableExample: component,
-      VariableVirtualTableRow: rowComponent,
-      VariableVirtualTableHeader: headerComponent,
-      ...defineVariableVirtualTableComponents(),
-      ...defineFlexComponents(),
+      VariableTablePlayground: variableTablePlayground,
+      ReviewRow: reviewRow,
+      ReviewHeader: reviewHeader,
+      ReviewFooter: reviewFooter,
+      ReviewColumns: reviewColumns,
       ...defineBadgeComponents(),
       ...defineButtonComponents(),
+      ...defineFlexComponents(),
       ...defineFormComponents(),
+      ...defineFormInputField(),
+      ...defineFormSelectField(),
+      ...defineGridComponents(),
+      ...defineIconComponents((name) => icons[name] ?? ''),
+      ...definePanelComponents(),
+      ...defineVariableVirtualTableComponents(),
     },
   },
   {
     selector: 'app#variable-virtual-table-demo',
-    template: html`<VariableVirtualTableExample />`,
+    template: html`<VariableTablePlayground />`,
   },
 )
 ```
   </TabPane>
 </Tabs>
 
+## A table with wrapping descriptions
+
+Constrain the description width and let the browser determine row height. This example registers all four table parts and renders 200 findings with different content lengths.
+
+<Tabs group="variable-virtual-table-basic" selectedTab="variable-virtual-table-basic-preview" ariaLabel="A table with wrapping descriptions" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="variable-virtual-table-basic-preview" label="Preview">
+    <RegorApp id="variable-table-basic-demo" src="./basic-table.ts"/>
+  </TabPane>
+  <TabPane id="variable-virtual-table-basic-mdx" label="basic-table.mdx">
+```html
+<RegorApp id="variable-table-basic-demo" src="./basic-table.ts"/>
+```
+  </TabPane>
+  <TabPane id="variable-virtual-table-basic-source" label="basic-table.ts">
+```typescript
+import { defineVariableVirtualTableComponents } from '@purestack/ts-components'
+import { createApp, defineComponent, html, type RefOrValue } from 'regor'
+
+export interface Finding {
+  id: number
+  title: string
+  detail: string
+}
+export interface FindingRow {
+  item: RefOrValue<Finding>
+  index: RefOrValue<number>
+}
+export interface FindingHeader {}
+export interface FindingColumns {}
+export interface FindingFooter {}
+
+const findingRowTemplate = html`<tr :aria-rowindex="index + 2">
+  <td class="px-3 py-2 bb-1 b-subtle">{{ item.id }}</td>
+  <td class="px-3 py-2 bb-1 b-subtle">
+    <div class="ws-normal" style="width: 24rem">
+      <strong>{{ item.title }}</strong>
+      <p class="mb-0">{{ item.detail }}</p>
+    </div>
+  </td>
+</tr>`
+const findingHeaderTemplate = html`<thead><tr>
+  <th scope="col" class="px-3 py-2 tone-fill-surface">ID</th>
+  <th scope="col" class="px-3 py-2 tone-fill-surface">Finding</th>
+</tr></thead>`
+const findingColumnsTemplate = html`<colgroup><col style="width: 5rem"/><col/></colgroup>`
+const findingFooterTemplate = html`<tfoot><tr><td colspan="2" class="px-3 py-2 tone-fill-surface">200 illustrative review findings</td></tr></tfoot>`
+
+const findingRow = defineComponent<FindingRow>(findingRowTemplate, {
+  props: ['item', 'index'],
+})
+const findingHeader = defineComponent<FindingHeader>(findingHeaderTemplate)
+const findingColumns = defineComponent<FindingColumns>(findingColumnsTemplate)
+const findingFooter = defineComponent<FindingFooter>(findingFooterTemplate)
+
+export interface FindingsExample {
+  findings: Finding[]
+}
+const findingsTemplate = html`<VariableVirtualTable
+  :items="findings" height="320" estimateHeight="110" overscan="3"
+  rowComponent="FindingRow" headerComponent="FindingHeader"
+  colGroupComponent="FindingColumns" footerComponent="FindingFooter"
+  tabindex="0" role="region" aria-label="Review findings table"
+  class="b-1 b-subtle rounded-md"
+/>`
+const findingsExample = defineComponent<FindingsExample>(findingsTemplate, {
+  context: () => ({
+    findings: Array.from({ length: 200 }, (_, index) => ({
+      id: index + 1,
+      title: `Finding ${index + 1}`,
+      detail:
+        index % 2
+          ? 'Ready for review.'
+          : 'Verify keyboard navigation, focus visibility and the empty state before release. The description wraps inside a bounded column, so the table measures a taller row for this finding.',
+    })),
+  }),
+})
+createApp(
+  {
+    components: {
+      FindingsExample: findingsExample,
+      FindingRow: findingRow,
+      FindingHeader: findingHeader,
+      FindingColumns: findingColumns,
+      FindingFooter: findingFooter,
+      ...defineVariableVirtualTableComponents(),
+    },
+  },
+  {
+    selector: 'app#variable-table-basic-demo',
+    template: html`<FindingsExample />`,
+  },
+)
+```
+  </TabPane>
+</Tabs>
+
+## How measurement works
+
+<Grid columns="1" columnsMd="3">
+  <Panel variant="surface" bodyClass="p-3 min-w-0"><p class="text-eyebrow">01 · ESTIMATE</p><h3 class="mt-0">Start with a guess</h3><p>estimateHeight supplies the initial size of unseen rows. It is a starting point for offsets, not a constraint on the content.</p></Panel>
+  <Panel variant="surface" bodyClass="p-3 min-w-0"><p class="text-eyebrow">02 · MEASURE</p><h3 class="mt-0">Read the real height</h3><p>ResizeObserver tracks mounted rows. Wrapping text and expanded content update their measured sizes.</p></Panel>
+  <Panel variant="surface" bodyClass="p-3 min-w-0"><p class="text-eyebrow">03 · REFINE</p><h3 class="mt-0">Update the offsets</h3><p>Measured rows keep their sizes. The running average of measurements supplies the estimate for rows that have not been measured.</p></Panel>
+</Grid>
+
+The component finds the visible range from cumulative row offsets, then adds an overscan buffer. During scrolling, measurement changes are collected and applied after a short idle period (currently 120 ms). The estimated total and scrollbar thumb can change as new content is measured; this is not an exact, premeasured scroll map.
+
+Changing estimateHeight after measurements exist does not replace the running average or clear the cache. The playground restarts the component when you change the estimate so you can try a fresh initial value.
+
+## Expansion, filtering and measurement lifetime
+
+Expanded state belongs to each record. Scroll an expanded row out of the mounted range and return to it: the same ref restores its content. The row component itself does not own durable state.
+
+Measurements are currently cached by array index, not by a record key. Filtering, sorting or replacing the dataset can associate old heights with different records. The playground deliberately unmounts and remounts the virtual component when the sequence changes. This clears measurements and returns to the top while retaining the records and their expansion refs.
+
+Width changes remeasure mounted content, but cached heights for off-screen rows remain until those rows are rendered again. The width control restarts measurement to avoid reusing old widths' measurements. Ordinary browser resizing can still refine those heights progressively as you browse.
+
+**Restart measurement** is an example action implemented with r-if; it is not a component method. **Next screen** and **Previous screen** move by the actual viewport height. An exact jump to an arbitrary row would require known cumulative heights; multiplying an index by estimateHeight cannot guarantee that result.
+
+## Composing a real table
+
+| Component prop | Root element | Purpose |
+| --- | --- | --- |
+| rowComponent | tr | Receives item and index; render td or th cells. |
+| colGroupComponent | colgroup | Contains col elements that guide column widths. |
+| headerComponent | thead | Contains header rows and th cells with scope="col". |
+| footerComponent | tfoot | Contains summary rows; colspan must match your columns. |
+
+Each part is explicitly defined and registered in the example file. Header, footer and column-group components receive no item or index props. For a dynamic summary, supply application context to your own footer; the virtual table does not calculate aggregates.
+
+The existing theme makes the header sticky at the top and footer cells sticky at the bottom. Give those cells a surface background so scrolling content does not show through. Only data rows are virtualized; keep the surrounding sections compact.
+
+VariableVirtualTable uses a content-sized table with a minimum width of 100%. It does not register tableLayout as a public prop. The example constrains the summary content width explicitly so text wraps; a column width alone may not constrain an automatically sized table. Narrow viewports scroll horizontally inside the named region.
+
 ## Behavior and accessibility
 
-ResizeObserver measures rendered rows and updates the estimated total height. The scrollbar can adjust as measurements replace estimates. Choose an estimate close to typical row height. Virtualized off-screen content is absent from the DOM, so browser find, printing and assistive navigation cannot access the whole dataset at once. Offer a non-virtualized export or paginated view when complete access is required. The focusable viewport supports keyboard scrolling.
+- **Keyboard scrolling:** the examples add tabindex="0" to the viewport. Arrow keys and Page Up / Page Down use native browser scrolling. These components do not implement spreadsheet navigation or roving focus.
+- **Table semantics:** render valid table sections and scoped column headers. The examples name the scrollable region; attributes on the component root target that outer div, not the inner table. This is a native table, not an ARIA grid.
+- **State and focus:** keep durable state on records or in an external store, keyed by stable identity. A row outside the mounted window is removed, including any focused control inside it.
+- **Empty results:** compose a message outside the virtual content. Header and footer sections can remain when the items array is empty.
+- **Complete data access:** browser find, printing and assistive navigation only see mounted rows. Provide application search or a full-data view or export where complete access is needed.
+- **Memory and loading:** virtualization reduces mounted DOM, not the source array or filtering cost. Data fetching, pagination, selection and sorting remain application responsibilities.
+- **Scroll stability:** total height and scrollbar position can shift as estimates are replaced. These examples do not promise exact deep-link offsets or scroll anchoring during large size changes.
+
 
 ## API reference
 
@@ -180,47 +557,65 @@ ResizeObserver measures rendered rows and updates the estimated total height. Th
   <a href="#variable-virtual-table-prop-footerComponent">footerComponent</a>
 </nav>
 
+### Data
+
 <ApiProperty anchor="variable-virtual-table-prop-items" name="items" valueType="RefOrValue&lt;unknown[]&gt;" defaultValue="[]">
-  <p>Source array. Only the visible window and overscan rows are mounted. Keep durable row state in application data.</p>
+  <p>The complete source array. Only a window is mounted; all records remain in memory. Bind a ref or computed array to replace, filter or sort it. Non-array values resolve to an empty array. Measurements are cached by index; remount for a fresh cache when record order or identity changes.</p>
 </ApiProperty>
 
+### Viewport and window
+
 <ApiProperty anchor="variable-virtual-table-prop-height" name="height" valueType="RefOrValue&lt;number | string&gt;" defaultValue="560">
-  <p>Viewport height in pixels. A positive number or numeric string is accepted. Invalid and non-positive values use the default.</p>
+  <p>Viewport height in pixels. Positive numbers and numeric strings are accepted; invalid, non-finite and non-positive values fall back to 560. Use pixel values, not CSS units such as rem or %. This controls the viewport, not a row.</p>
 </ApiProperty>
 
 <ApiProperty anchor="variable-virtual-table-prop-estimateHeight" name="estimateHeight" valueType="RefOrValue&lt;number | string&gt;" defaultValue="56">
-  <p>Initial row height estimate in pixels. ResizeObserver measurements replace estimates as rows enter the viewport.</p>
+  <p>Initial pixel estimate before rows are measured. Invalid or non-positive values fall back to 56. It does not constrain rendered height. Once measurements exist, their running average estimates unseen rows; changing this prop does not clear cached measurements.</p>
 </ApiProperty>
 
 <ApiProperty anchor="variable-virtual-table-prop-overscan" name="overscan" valueType="RefOrValue&lt;number | string&gt;" defaultValue="6">
-  <p>Extra rows rendered around the visible window. Positive numeric values are truncated to an integer; zero falls back to 6.</p>
+  <p>Extra row buffer before and after the estimated visible range, clipped at array boundaries. More overscan mounts and measures more content. Use a positive integer; positive fractions truncate, while zero, negative and invalid values fall back to 6.</p>
 </ApiProperty>
 
+### Table component registration
+
 <ApiProperty anchor="variable-virtual-table-prop-rowComponent" name="rowComponent" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Registered row component name. Receives item and absolute zero-based index. Provide a typed component that renders the item; the fallback does not format data for you.</p>
+  <p>Registered component name for each data row. It receives item and the absolute zero-based index in the current items array. Its root must be tr with valid cells. No automatic item formatting is provided.</p>
 </ApiProperty>
 
 <ApiProperty anchor="variable-virtual-table-prop-colGroupComponent" name="colGroupComponent" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Registered component rendering colgroup and its col elements to define column widths.</p>
+  <p>Optional registered component with a colgroup root and col children. It receives no row props. Use it to describe column widths, together with an appropriate content layout.</p>
 </ApiProperty>
 
 <ApiProperty anchor="variable-virtual-table-prop-headerComponent" name="headerComponent" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Registered component rendering thead with semantic th cells. It receives no item props.</p>
+  <p>Optional registered component with a thead root, tr rows and scoped th cells. It receives no row props. Theme styles make the header sticky; give header cells an opaque surface background.</p>
 </ApiProperty>
 
 <ApiProperty anchor="variable-virtual-table-prop-footerComponent" name="footerComponent" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
-  <p>Registered component rendering tfoot for a summary. It receives no item props.</p>
+  <p>Optional registered component with a tfoot root and valid rows and cells. Footer cells are sticky at the bottom under the theme styles. Supply your own content or application context; no automatic aggregates or row props are passed.</p>
 </ApiProperty>
 
-### Composition
+### Row contract
 
-<div class="api-contract">
-<p>No slots. Register defineVariableVirtualTableComponents and each named row/header/footer component. Rows must render tr with td or th children. Header and footer components must render valid table sections. State that must survive scrolling belongs outside the mounted row.</p>
-</div>
+```typescript
+import type { RefOrValue } from 'regor'
 
+interface ExampleRow {
+  item: RefOrValue<YourRecord>
+  index: RefOrValue<number>
+}
+```
 
+Replace YourRecord with your application type and declare item and index in the component's props list. Index is a position in the current array, not a stable identity. The examples define exported interfaces, named templates and explicit registrations in their own TypeScript files.
+
+### Composition and public API
+
+<div class="api-contract"><p>No slots. Register defineVariableVirtualTableComponents and your named table sections. Controls, empty messages and durable state belong to your application. Native attributes and events are inherited by the scrollable root div.</p></div>
+
+Only the registered props above are public template inputs. itemHeight is not registered for this component, and neither is tableLayout. Internal measurement refs and methods are implementation details; there is no public cache-reset or scrollToIndex API.
 
 ## Related components
 
-- [VirtualTable](/components/data/virtual-table/)
 - [VirtualList](/components/data/virtual-list/)
+- [VariableVirtualList](/components/data/variable-virtual-list/)
+- [VirtualTable](/components/data/virtual-table/)

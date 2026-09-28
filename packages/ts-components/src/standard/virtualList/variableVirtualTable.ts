@@ -15,7 +15,6 @@ import type { VirtualTable } from './virtualTable'
 // known limitation: vertical scroll bar is not synced perfectly to the mouse pointer during scroll. eiter fix it or delete this component!
 export interface VariableVirtualTable extends VirtualTable {
   estimateHeight?: RefOrValue<number | string>
-  rowElementRefs?: Array<ReturnType<typeof sref<HTMLElement | null>>>
   viewportElement?: ReturnType<typeof sref<HTMLElement | null>>
   unmounted?: () => void
 }
@@ -35,7 +34,7 @@ const variableVirtualTableTemplate = html`<div
       </tr>
       <tr
         :is="rowComponent"
-        :ref="rowElementRefs[row.index]"
+        :data-virtual-row-index="row.index"
         :item="row.item"
         :index="row.index"
         r-for="row in visibleRows"
@@ -81,8 +80,6 @@ class VariableVirtualTableContext implements VariableVirtualTable {
   readonly footerComponent?: RefOrValue<string>
   readonly scrollTop = ref(0)
   readonly viewportElement = sref<HTMLElement | null>(null)
-  readonly rowElementRefs: Array<ReturnType<typeof sref<HTMLElement | null>>> =
-    []
   readonly visibleRows: ComputedRef<VirtualListRow[]>
   readonly viewportStyle: ComputedRef<Record<string, string>>
   readonly tableStyle: ComputedRef<Record<string, string>>
@@ -92,7 +89,10 @@ class VariableVirtualTableContext implements VariableVirtualTable {
   readonly hasHeaderComponent: ComputedRef<boolean>
   readonly hasFooterComponent: ComputedRef<boolean>
   private readonly rowHeights: number[] = []
-  private readonly rowObservers = new Map<number, ResizeObserver>()
+  private rowWindow = new Map<number, VirtualListRow>()
+  private readonly rowElements = new Map<number, HTMLElement>()
+  private rowObserver?: ResizeObserver
+  private bodyObserver?: MutationObserver
   private readonly measurementVersion = ref(0)
   private measuredHeightTotal = 0
   private measuredRowCount = 0
@@ -188,6 +188,7 @@ class VariableVirtualTableContext implements VariableVirtualTable {
     this.hasColGroupComponent = computed(() => !!unref(props.colGroupComponent))
     this.hasHeaderComponent = computed(() => !!unref(props.headerComponent))
     this.hasFooterComponent = computed(() => !!unref(props.footerComponent))
+    observe(this.viewportElement, (element) => this.observeViewport(element))
   }
 
   handleScroll = (event: Event) => {
@@ -210,52 +211,78 @@ class VariableVirtualTableContext implements VariableVirtualTable {
   unmounted = () => {
     if (this.pendingFrame) cancelAnimationFrame(this.pendingFrame)
     if (this.scrollEndTimer !== undefined) clearTimeout(this.scrollEndTimer)
-    for (const observer of this.rowObservers.values()) observer.disconnect()
-    this.rowObservers.clear()
+    this.rowObserver?.disconnect()
+    this.bodyObserver?.disconnect()
+    this.rowElements.clear()
   }
 
   private resolveVisibleRows() {
     const source = this.resolvedItems()
     const offsets = this.offsets()
-    const start = this.startIndex()
-    const viewportBottom = this.scrollTop() + this.resolvedHeight()
-    let end =
-      findOffsetIndex(offsets, viewportBottom) + this.resolvedOverscan() + 1
+    const scrollTop = this.scrollTop()
+    const overscan = this.resolvedOverscan()
+    // Keep the two boundaries on the same scroll-position snapshot.
+    const start = Math.max(0, findOffsetIndex(offsets, scrollTop) - overscan)
+    const viewportBottom = scrollTop + this.resolvedHeight()
+    let end = findOffsetIndex(offsets, viewportBottom) + overscan + 1
     end = Math.min(source.length, Math.max(start, end))
 
     const rows: VirtualListRow[] = []
+    const nextWindow = new Map<number, VirtualListRow>()
     for (let index = start; index < end; index += 1) {
-      this.ensureRowRef(index)
-      rows.push({ index, item: source[index] })
+      const previous = this.rowWindow.get(index)
+      const row =
+        previous && previous.item === source[index]
+          ? previous
+          : { index, item: source[index] }
+      rows.push(row)
+      nextWindow.set(index, row)
     }
+    this.rowWindow = nextWindow
 
     return rows
   }
 
-  private ensureRowRef(index: number) {
-    if (this.rowElementRefs[index]) return
-
-    const elementRef = sref<HTMLElement | null>(null)
-    this.rowElementRefs[index] = elementRef
-    observe(elementRef, (element) => {
-      this.observeRowElement(index, element)
-    })
-  }
-
-  private observeRowElement(index: number, element: HTMLElement | null) {
-    const existing = this.rowObservers.get(index)
-    if (existing) {
-      existing.disconnect()
-      this.rowObservers.delete(index)
-    }
+  private observeViewport(element: HTMLElement | null) {
+    this.rowObserver?.disconnect()
+    this.bodyObserver?.disconnect()
+    this.rowElements.clear()
     if (!element) return
 
-    const observer = new ResizeObserver(() => {
-      this.queueMeasurement(index)
+    this.rowObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const row = entry.target as HTMLElement
+        const index = Number(row.getAttribute('data-virtual-row-index'))
+        if (this.rowElements.get(index) === row) this.queueMeasurement(index)
+      }
     })
-    observer.observe(element)
-    this.rowObservers.set(index, observer)
-    this.queueMeasurement(index)
+    this.bodyObserver = new MutationObserver(() =>
+      this.syncMountedRows(element),
+    )
+    this.bodyObserver.observe(element, { childList: true, subtree: true })
+    this.syncMountedRows(element)
+  }
+
+  private syncMountedRows(viewport: HTMLElement) {
+    const next = new Map<number, HTMLElement>()
+    for (const row of viewport.querySelectorAll<HTMLElement>(
+      ':scope > table > tbody > tr[data-virtual-row-index]',
+    )) {
+      const index = Number(row.getAttribute('data-virtual-row-index'))
+      if (Number.isInteger(index) && index >= 0) next.set(index, row)
+    }
+    for (const [index, element] of this.rowElements) {
+      if (next.get(index) !== element) {
+        this.rowObserver?.unobserve(element)
+        this.rowElements.delete(index)
+      }
+    }
+    for (const [index, element] of next) {
+      if (this.rowElements.get(index) === element) continue
+      this.rowElements.set(index, element)
+      this.rowObserver?.observe(element)
+      this.queueMeasurement(index)
+    }
   }
 
   private queueMeasurement(index: number) {
@@ -272,7 +299,7 @@ class VariableVirtualTableContext implements VariableVirtualTable {
     let changed = false
 
     for (const index of this.pendingIndexes) {
-      const element = this.rowElementRefs[index]?.()
+      const element = this.rowElements.get(index)
       if (!element) continue
 
       const previous = this.rowHeights[index] ?? this.currentEstimateHeight()

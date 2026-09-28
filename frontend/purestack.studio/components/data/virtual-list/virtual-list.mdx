@@ -19,177 +19,660 @@ Keep large collections responsive by mounting a small scrolling window of fixed-
 
 [View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/virtualList/virtualList.ts) · [API reference](#api-reference)
 
+## Interactive playground
 
+Scroll through 10,000 release records while only a small window is mounted. Change the dataset size, filter the records, adjust density and overscan, or jump straight to a position. The counters inspect the actual rendered rows rather than estimating them.
 
-## Browse a change history
-
-Scroll through 1,000 illustrative records, then clear and restore them. Every row fits the configured 52-pixel height.
-
-<Tabs group="virtual-list-sample-1" selectedTab="virtual-list-sample-1-preview" ariaLabel="Browse a change history example" tone="neutral" variant="surface" tabVariant="underline">
-  <TabPane id="virtual-list-sample-1-preview" label="Preview">
+<Tabs group="list-playground" selectedTab="list-playground-preview" ariaLabel="Interactive playground" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="list-playground-preview" label="Preview">
     <RegorApp id="virtual-list-demo" src="./playground.ts"/>
   </TabPane>
-  <TabPane id="virtual-list-sample-1-source-0" label="playground.mdx">
+  <TabPane id="list-playground-mdx" label="playground.mdx">
 ```html
 <RegorApp id="virtual-list-demo" src="./playground.ts"/>
 ```
   </TabPane>
-  <TabPane id="virtual-list-sample-1-source-1" label="playground.ts">
+  <TabPane id="list-playground-source" label="playground.ts">
 ```typescript
 import {
   defineBadgeComponents,
   defineButtonComponents,
   defineFlexComponents,
   defineFormComponents,
+  defineFormInputField,
+  defineFormSelectField,
+  defineGridComponents,
+  defineIconComponents,
+  definePanelComponents,
   defineVirtualListComponents,
+  type FormSelectOption,
 } from '@purestack/ts-components'
-
+import type { SemanticTone } from '@purestack/ts-style'
+import { lucide_chevron_down } from '@purestack/ts-svg-icons'
 import {
+  batch,
+  type ComputedRef,
+  computed,
   createApp,
   defineComponent,
   html,
+  observe,
+  onMounted,
+  onUnmounted,
+  type Ref,
   type RefOrValue,
+  ref,
   type SRef,
   sref,
 } from 'regor'
 
-export interface ExampleRecord {
+export interface ReleaseRecord {
   id: number
   title: string
   state: string
-  detail: string
+  tone: SemanticTone
 }
-export interface VirtualListRow {
-  item: RefOrValue<ExampleRecord>
+
+export interface ReleaseRow {
+  item: RefOrValue<ReleaseRecord>
   index: RefOrValue<number>
 }
-const rowTemplate = html`<div class="px-3 py-2 bb-1 b-subtle" style="height: 52px; box-sizing: border-box">
-  <Flex align="center" justify="between">
-    <strong>{{ item.title }}</strong>
-    <Badge tone="info">{{ item.state }}</Badge>
-  </Flex>
-</div>`
-const rowComponent = defineComponent<VirtualListRow>(rowTemplate, {
+
+const releaseRowTemplate = html`<Flex
+  align="center" justify="between" class="px-3 bb-1 b-subtle"
+  style="height: 100%; box-sizing: border-box; overflow: hidden"
+  role="listitem" :aria-posinset="index + 1" :data-index="index"
+>
+  <strong class="min-w-0 ws-nowrap overflow-hidden text-ellipsis" :title="item.title">{{ item.title }}</strong>
+  <Badge :tone="item.tone" variant="surface" style="flex-shrink: 0">{{ item.state }}</Badge>
+</Flex>`
+
+const releaseRow = defineComponent<ReleaseRow>(releaseRowTemplate, {
   props: ['item', 'index'],
 })
 
-export interface VirtualListExample {
-  records: SRef<ExampleRecord[]>
-  restore: () => void
+export interface VirtualListPlayground {
+  records: SRef<ReleaseRecord[]>
+  filtered: ComputedRef<ReleaseRecord[]>
+  count: Ref<string>
+  query: Ref<string>
+  state: Ref<string>
+  height: Ref<string>
+  rowHeight: Ref<string>
+  overscan: Ref<string>
+  target: Ref<number | string>
+  mountedRows: Ref<number>
+  mountedRange: Ref<string>
+  scrollOffset: Ref<number>
+  counts: FormSelectOption[]
+  states: FormSelectOption[]
+  heights: FormSelectOption[]
+  densities: FormSelectOption[]
+  buffers: FormSelectOption[]
+  load: () => void
   clear: () => void
+  reset: () => void
+  jump: () => void
+  first: () => void
+  last: () => void
 }
 
-const virtualListExampleTemplate = html`<Flex direction="column">
+const virtualListPlaygroundTemplate = html`<Flex direction="column">
+  <Grid columns="1" columnsMd="3">
+    <FormSelectField id="list-count" label="Dataset size" :model="count" :options="counts" @change="load" />
+    <FormInputField id="list-search" label="Find a release" placeholder="Try Release 42" :model="query" />
+    <FormSelectField id="list-state" label="Status filter" :model="state" :options="states" />
+  </Grid>
+  <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
+    <Flex justify="between" align="center" wrap="true">
+      <p class="text-eyebrow m-0">LIVE PREVIEW · RELEASE QUEUE</p>
+      <Badge tone="accent" variant="surface">{{ filtered.length }} matching records</Badge>
+    </Flex>
+    <Grid columns="1" columnsSm="3" class="my-3">
+      <div><p class="text-muted m-0">Rows mounted</p><strong id="list-mounted">{{ mountedRows }}</strong></div>
+      <div><p class="text-muted m-0">Mounted positions</p><strong id="list-range">{{ mountedRange }}</strong></div>
+      <div><p class="text-muted m-0">Scroll offset</p><strong id="list-offset">{{ scrollOffset }} px</strong></div>
+    </Grid>
+    <VirtualList
+      id="release-viewport"
+      :items="filtered"
+      :height="height"
+      :itemHeight="rowHeight"
+      :overscan="overscan"
+      rowComponent="ReleaseRow"
+      tabindex="0"
+      role="list"
+      aria-label="Filtered release queue"
+      aria-describedby="list-keyboard-help"
+      class="b-1 b-subtle rounded-md"
+    />
+    <FormStatus r-if="!filtered.length" role="status">
+      {{ records.length ? 'No releases match. Clear the search or choose another status.' : 'The queue is empty. Load a dataset or reset the playground.' }}
+    </FormStatus>
+    <p id="list-keyboard-help" class="mb-0 text-muted">Focus the list and use Arrow keys or Page Up / Page Down to scroll. Counters show real mounted rows, including the overscan buffer.</p>
+  </Panel>
+  <Grid columns="1" columnsMd="3">
+    <FormSelectField id="list-height" label="Viewport height" :model="height" :options="heights" />
+    <FormSelectField id="list-row-height" label="Row height" :model="rowHeight" :options="densities" />
+    <FormSelectField id="list-overscan" label="Overscan" :model="overscan" :options="buffers" />
+  </Grid>
+  <p class="m-0 text-muted">Increasing the viewport or overscan mounts more rows. Changing the row height also changes the scroll distance. Each row fills its fixed-height wrapper, so the geometry stays aligned.</p>
+  <Grid columns="1" columnsMd="2" alignItems="end">
+    <FormInputField id="list-target" label="Jump to matching position (1-based)" type="number" min="1" :model="target" />
+    <Flex wrap="true">
+      <Btn tone="accent" :disabled="!filtered.length" @click="jump">Jump to row</Btn>
+      <Btn variant="outline" :disabled="!filtered.length" @click="first">First</Btn>
+      <Btn variant="outline" :disabled="!filtered.length" @click="last">Last</Btn>
+    </Flex>
+  </Grid>
   <Flex wrap="true">
-    <Btn @click="restore">Load 1,000 records</Btn>
+    <Btn variant="outline" @click="load">Reload dataset</Btn>
     <Btn variant="outline" @click="clear">Empty list</Btn>
-    <span role="status">{{ records.length }} records</span>
+    <Btn tone="accent" variant="surface" @click="reset">Reset playground</Btn>
   </Flex>
-  <VirtualList
-    :items="records"
-    height="320"
-    itemHeight="52"
-    overscan="4"
-    rowComponent="VirtualListRow"
-    tabindex="0"
-    aria-label="Example change history"
-  />
-  <FormStatus r-if="records.length === 0">
-    No records. Load the example data to continue.
-  </FormStatus>
 </Flex>`
 
-function createVirtualListExample(): VirtualListExample {
-  const initial: ExampleRecord[] = Array.from({ length: 1000 }, (_, index) => ({
+function createRecords(count: number): ReleaseRecord[] {
+  const states = ['Ready', 'Review', 'Queued']
+  const tones: SemanticTone[] = ['success', 'warning', 'info']
+  return Array.from({ length: count }, (_, index) => ({
     id: index + 1,
-    title: `Change ${index + 1}`,
-    state: index % 3 === 0 ? 'In review' : 'Ready',
-    detail:
-      index % 3 === 0
-        ? 'This change includes a longer explanation of the component behavior, its theme treatment and the verification needed before release.'
-        : 'A focused improvement to the documentation.',
+    title: `Release ${index + 1}`,
+    state: states[index % 3],
+    tone: tones[index % 3],
   }))
-  const records = sref(initial)
+}
+
+function createVirtualListPlayground(): VirtualListPlayground {
+  const count = ref('10000')
+  const records = sref(createRecords(Number(count())))
+  const query = ref('')
+  const state = ref('all')
+  const height = ref('336')
+  const rowHeight = ref('56')
+  const overscan = ref('4')
+  const target = ref<number | string>(5000)
+  const mountedRows = ref(0)
+  const mountedRange = ref('—')
+  const scrollOffset = ref(0)
+  const filtered = computed(() => {
+    const search = query().trim().toLowerCase()
+    return records().filter(
+      (item) =>
+        (state() === 'all' || item.state === state()) &&
+        item.title.toLowerCase().includes(search),
+    )
+  })
+  const viewport = () =>
+    document.querySelector<HTMLElement>('#release-viewport')
+  const scrollToPosition = (position: number) => {
+    const element = viewport()
+    if (!element) return
+    const index = Math.max(0, Math.min(filtered().length - 1, position - 1))
+    element.scrollTop = index * Number(rowHeight())
+    element.dispatchEvent(new Event('scroll'))
+  }
+  const stopFiltering = observe(filtered, () => scrollToPosition(1))
+  let observer: MutationObserver | undefined
+  let element: HTMLElement | null = null
+  const measure = () => {
+    if (!element) return
+    const rows = element.querySelectorAll<HTMLElement>('[data-index]')
+    mountedRows(rows.length)
+    mountedRange(
+      rows.length
+        ? `${Number(rows[0].dataset.index) + 1}–${Number(rows[rows.length - 1].dataset.index) + 1}`
+        : '—',
+    )
+    scrollOffset(Math.round(element.scrollTop))
+  }
+  onMounted(() => {
+    element = viewport()
+    if (!element) return
+    observer = new MutationObserver(measure)
+    observer.observe(element, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['data-index', 'style'],
+    })
+    element.addEventListener('scroll', measure)
+    measure()
+  })
+  onUnmounted(() => {
+    stopFiltering()
+    observer?.disconnect()
+    element?.removeEventListener('scroll', measure)
+  })
   return {
     records,
-    restore: () => records([...initial]),
+    filtered,
+    count,
+    query,
+    state,
+    height,
+    rowHeight,
+    overscan,
+    target,
+    mountedRows,
+    mountedRange,
+    scrollOffset,
+    counts: [100, 1000, 10000, 50000].map((value) => ({
+      label: `${value.toLocaleString('en-US')} records`,
+      value: String(value),
+    })),
+    states: [
+      { label: 'All statuses', value: 'all' },
+      ...['Ready', 'Review', 'Queued'].map((value) => ({
+        label: value,
+        value,
+      })),
+    ],
+    heights: [224, 336, 448].map((value) => ({
+      label: `${value} px`,
+      value: String(value),
+    })),
+    densities: [
+      { label: 'Compact · 44 px', value: '44' },
+      { label: 'Comfortable · 56 px', value: '56' },
+      { label: 'Spacious · 72 px', value: '72' },
+    ],
+    buffers: [1, 4, 12, 24].map((value) => ({
+      label: `${value} rows`,
+      value: String(value),
+    })),
+    load: () => records(createRecords(Number(count()))),
     clear: () => records([]),
+    first: () => scrollToPosition(1),
+    last: () => scrollToPosition(filtered().length),
+    jump: () =>
+      scrollToPosition(
+        Number.isFinite(Number(target())) ? Math.trunc(Number(target())) : 1,
+      ),
+    reset: () =>
+      batch(() => {
+        count('10000')
+        query('')
+        state('all')
+        height('336')
+        rowHeight('56')
+        overscan('4')
+        target(5000)
+        records(createRecords(10000))
+      }),
   }
 }
 
-const component = defineComponent<VirtualListExample>(
-  virtualListExampleTemplate,
-  {
-    context: createVirtualListExample,
-  },
+const virtualListPlayground = defineComponent<VirtualListPlayground>(
+  virtualListPlaygroundTemplate,
+  { context: createVirtualListPlayground },
 )
+const icons: Record<string, string> = {
+  'lucide:chevron-down': lucide_chevron_down,
+}
 
 createApp(
   {
     components: {
-      VirtualListExample: component,
-      VirtualListRow: rowComponent,
-      ...defineVirtualListComponents(),
-      ...defineFlexComponents(),
+      VirtualListPlayground: virtualListPlayground,
+      ReleaseRow: releaseRow,
       ...defineBadgeComponents(),
       ...defineButtonComponents(),
+      ...defineFlexComponents(),
       ...defineFormComponents(),
+      ...defineFormInputField(),
+      ...defineFormSelectField(),
+      ...defineGridComponents(),
+      ...defineIconComponents((name) => icons[name] ?? ''),
+      ...definePanelComponents(),
+      ...defineVirtualListComponents(),
     },
   },
-  { selector: 'app#virtual-list-demo', template: html`<VirtualListExample />` },
+  {
+    selector: 'app#virtual-list-demo',
+    template: html`<VirtualListPlayground />`,
+  },
 )
 ```
   </TabPane>
 </Tabs>
 
+## A minimal working list
+
+Start with a typed row component and register it alongside VirtualList. This complete example renders 1,000 strings with 48-pixel rows inside a 240-pixel viewport.
+
+<Tabs group="list-basic" selectedTab="list-basic-preview" ariaLabel="A minimal working list" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="list-basic-preview" label="Preview">
+    <RegorApp id="virtual-list-basic-demo" src="./basic-list.ts"/>
+  </TabPane>
+  <TabPane id="list-basic-mdx" label="basic-list.mdx">
+```html
+<RegorApp id="virtual-list-basic-demo" src="./basic-list.ts"/>
+```
+  </TabPane>
+  <TabPane id="list-basic-source" label="basic-list.ts">
+```typescript
+import { defineVirtualListComponents } from '@purestack/ts-components'
+import { createApp, defineComponent, html, type RefOrValue } from 'regor'
+
+export interface SimpleListRow {
+  item: RefOrValue<string>
+  index: RefOrValue<number>
+}
+
+const simpleListRowTemplate = html`<div
+  class="px-3 bb-1 b-subtle ws-nowrap overflow-hidden text-ellipsis"
+  style="height: 100%; box-sizing: border-box; display: flex; align-items: center"
+  role="listitem" :aria-posinset="index + 1" aria-setsize="1000"
+>{{ item }}</div>`
+
+const simpleListRow = defineComponent<SimpleListRow>(simpleListRowTemplate, {
+  props: ['item', 'index'],
+})
+
+export interface BasicListExample {
+  items: string[]
+}
+
+const basicListTemplate = html`<VirtualList
+  :items="items"
+  height="240"
+  itemHeight="48"
+  overscan="3"
+  rowComponent="SimpleListRow"
+  role="list"
+  tabindex="0"
+  aria-label="One thousand example records"
+  class="b-1 b-subtle rounded-md"
+/>`
+
+const basicList = defineComponent<BasicListExample>(basicListTemplate, {
+  context: () => ({
+    items: Array.from({ length: 1000 }, (_, index) => `Record ${index + 1}`),
+  }),
+})
+
+createApp(
+  {
+    components: {
+      BasicListExample: basicList,
+      SimpleListRow: simpleListRow,
+      ...defineVirtualListComponents(),
+    },
+  },
+  {
+    selector: 'app#virtual-list-basic-demo',
+    template: html`<BasicListExample />`,
+  },
+)
+```
+  </TabPane>
+</Tabs>
+
+## State that survives scrolling
+
+The checkbox ref belongs to each task in the parent dataset. Removing a row from the DOM does not discard that ref. Check tasks at both ends, return to the first, then filter to reviewed tasks.
+
+<Tabs group="list-state" selectedTab="list-state-preview" ariaLabel="State that survives scrolling" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="list-state-preview" label="Preview">
+    <RegorApp id="virtual-list-state-demo" src="./persistent-state.ts"/>
+  </TabPane>
+  <TabPane id="list-state-mdx" label="persistent-state.mdx">
+```html
+<RegorApp id="virtual-list-state-demo" src="./persistent-state.ts"/>
+```
+  </TabPane>
+  <TabPane id="list-state-source" label="persistent-state.ts">
+```typescript
+import {
+  defineBadgeComponents,
+  defineButtonComponents,
+  defineFlexComponents,
+  defineFormComponents,
+  definePanelComponents,
+  defineVirtualListComponents,
+} from '@purestack/ts-components'
+import {
+  batch,
+  type ComputedRef,
+  computed,
+  createApp,
+  defineComponent,
+  html,
+  observe,
+  onUnmounted,
+  type Ref,
+  type RefOrValue,
+  ref,
+} from 'regor'
+
+export interface ReviewTask {
+  id: number
+  title: string
+  reviewed: Ref<boolean>
+}
+
+export interface ReviewTaskRow {
+  item: RefOrValue<ReviewTask>
+  index: RefOrValue<number>
+}
+
+const reviewTaskRowTemplate = html`<Flex
+  align="center" class="px-3 bb-1 b-subtle"
+  style="height: 100%; box-sizing: border-box; overflow: hidden"
+  role="listitem" :aria-posinset="index + 1"
+>
+  <FormCheck :id="'review-task-' + item.id" :label="item.title" :checked="item.reviewed" />
+</Flex>`
+
+const reviewTaskRow = defineComponent<ReviewTaskRow>(reviewTaskRowTemplate, {
+  props: ['item', 'index'],
+})
+
+export interface PersistentStateExample {
+  tasks: ReviewTask[]
+  visible: ComputedRef<ReviewTask[]>
+  reviewedCount: ComputedRef<number>
+  reviewedOnly: Ref<boolean>
+  first: () => void
+  last: () => void
+  clear: () => void
+}
+
+const persistentStateTemplate = html`<Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
+  <Flex direction="column">
+    <Flex justify="between" align="center" wrap="true">
+      <h3 class="m-0">Review checklist</h3>
+      <Badge tone="success" variant="surface">{{ reviewedCount }} / {{ tasks.length }} reviewed</Badge>
+    </Flex>
+    <p class="m-0">Check a task, jump to the last row, then return to the first. Your selection survives the row being removed and mounted again.</p>
+    <Flex wrap="true">
+      <Btn variant="outline" :disabled="!visible.length" @click="first">First task</Btn>
+      <Btn variant="outline" :disabled="!visible.length" @click="last">Last task</Btn>
+      <Btn variant="outline" :disabled="!reviewedCount" @click="clear">Clear selections</Btn>
+    </Flex>
+    <FormCheck id="reviewed-only" label="Show reviewed only" :checked="reviewedOnly" />
+    <VirtualList
+      id="review-viewport" :items="visible" height="240" itemHeight="48" overscan="3"
+      rowComponent="ReviewTaskRow" role="list" tabindex="0" aria-label="Review tasks"
+      class="b-1 b-subtle rounded-md"
+    />
+    <FormStatus r-if="!visible.length" role="status">No reviewed tasks yet. Turn off the filter to select a task.</FormStatus>
+  </Flex>
+</Panel>`
+
+function createPersistentStateExample(): PersistentStateExample {
+  const tasks = Array.from({ length: 200 }, (_, index) => ({
+    id: index + 1,
+    title: `Review task ${index + 1}`,
+    reviewed: ref(false),
+  }))
+  const reviewedOnly = ref(false)
+  const visible = computed(() =>
+    reviewedOnly() ? tasks.filter((task) => task.reviewed()) : tasks,
+  )
+  const scrollTo = (position: number) => {
+    const viewport = document.querySelector<HTMLElement>('#review-viewport')
+    if (!viewport) return
+    viewport.scrollTop = Math.max(0, position) * 48
+    viewport.dispatchEvent(new Event('scroll'))
+  }
+  const stop = observe(visible, () => scrollTo(0))
+  onUnmounted(stop)
+  return {
+    tasks,
+    visible,
+    reviewedOnly,
+    reviewedCount: computed(
+      () => tasks.filter((task) => task.reviewed()).length,
+    ),
+    first: () => scrollTo(0),
+    last: () => scrollTo(visible().length - 1),
+    clear: () =>
+      batch(() => {
+        for (const task of tasks) task.reviewed(false)
+      }),
+  }
+}
+
+const persistentStateExample = defineComponent<PersistentStateExample>(
+  persistentStateTemplate,
+  { context: createPersistentStateExample },
+)
+
+createApp(
+  {
+    components: {
+      PersistentStateExample: persistentStateExample,
+      ReviewTaskRow: reviewTaskRow,
+      ...defineBadgeComponents(),
+      ...defineButtonComponents(),
+      ...defineFlexComponents(),
+      ...defineFormComponents(),
+      ...definePanelComponents(),
+      ...defineVirtualListComponents(),
+    },
+  },
+  {
+    selector: 'app#virtual-list-state-demo',
+    template: html`<PersistentStateExample />`,
+  },
+)
+```
+  </TabPane>
+</Tabs>
+
+## How the window works
+
+VirtualList keeps the full array in memory while mounting a small range of rows. A spacer provides the full scroll distance; a translated window places the mounted rows at their correct positions.
+
+<Grid columns="1" columnsMd="3">
+  <Panel variant="surface" bodyClass="p-3 min-w-0">
+    <p class="text-eyebrow">01 · VIEWPORT</p>
+    <h3 class="mt-0">336 pixels tall</h3>
+    <p>At 56 pixels per row, six rows fit in the viewport. The outer height stays fixed as the dataset grows.</p>
+  </Panel>
+  <Panel variant="surface" bodyClass="p-3 min-w-0">
+    <p class="text-eyebrow">02 · BUFFER</p>
+    <h3 class="mt-0">14 mounted rows</h3>
+    <p>Overscan 4 adds eight rows to the window budget: six visible rows plus four on either side. Near the boundaries, the range is adjusted.</p>
+  </Panel>
+  <Panel variant="surface" bodyClass="p-3 min-w-0">
+    <p class="text-eyebrow">03 · SCROLL SPACE</p>
+    <h3 class="mt-0">560,000 pixels</h3>
+    <p>10,000 records × 56 pixels gives the spacer height. This is scroll geometry, not 10,000 mounted row elements.</p>
+  </Panel>
+</Grid>
+
+The window starts at <code>max(0, floor(scrollTop / itemHeight) - overscan)</code> and mounts up to <code>ceil(height / itemHeight) + 2 × overscan</code> rows, limited by the remaining items. At the top, the unused leading buffer is effectively placed after the visible rows; near the end, fewer rows remain to mount. A partially visible row can also straddle the viewport edge.
+
+## Fixed heights that stay aligned
+
+**The complete row must fit itemHeight, including padding and borders.** VirtualList sets the height of a wrapper around your row component. The examples give the row root height: 100% and box-sizing: border-box, then constrain its content to that box.
+
+- Keep vertical spacing inside the row; external margins are not part of the calculated offset.
+- Use a single line or otherwise bounded content. Long release names in the playground truncate and expose their full value through a title attribute.
+- Keep itemHeight and the row design in sync when changing density.
+- For wrapping descriptions, expandable content or images with changing heights, use [VariableVirtualList](/components/data/variable-virtual-list/).
+
+## Filtering and scroll navigation
+
+Filtering is application code: the playground passes a computed array to items. The row index is its position in that filtered array, while item.id retains the record identity. Search and status changes return the viewport to the top so a shorter result set opens at a useful position.
+
+VirtualList has no public scrollToIndex method. For fixed-height rows, the pixel offset is <code>index × itemHeight</code>. The playground sets scrollTop on its own viewport and dispatches a scroll event to synchronize the component immediately. Jump positions are clamped to the matching dataset; the browser also clamps the final offset to the maximum scroll distance.
+
+The search, filters and jump controls do not load data from a server. Virtualization reduces mounted DOM; it does not reduce the memory occupied by the source array or make filtering an array free. Combine it with your own data-loading strategy when needed.
+
 ## Behavior and accessibility
 
-The component calculates offsets from itemHeight. Wrapping content or extra vertical padding that exceeds that height breaks alignment. Virtualized off-screen content is absent from the DOM, so browser find, printing and assistive navigation cannot access the whole dataset at once. Offer a non-virtualized export or paginated view when complete access is required. The focusable viewport supports keyboard scrolling.
+- **Keyboard scrolling:** the examples add tabindex="0" to the viewport. Arrow keys and Page Up / Page Down scroll the focused container using browser behavior. VirtualList does not add listbox selection or roving focus.
+- **List semantics:** provide role="list", a meaningful accessible name and role="listitem" on the row root. Rows can expose aria-posinset using index + 1; the basic example also supplies the known total through aria-setsize.
+- **Durable state:** store selections and edits in application data keyed by a stable record identity. Rows outside the mounted range are removed; local row state and focused controls can disappear with them.
+- **Complete access:** browser find, printing and assistive navigation only see mounted content. Provide search or an alternative full-data view or export when users need to inspect the whole collection.
+- **Empty results:** an empty array produces no rows and a zero-height spacer inside the configured viewport. Compose your own empty message, as both interactive examples do.
 
 ## API reference
 
 <div class="api-overview">
   <p class="text-eyebrow">VirtualList contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>Five public props control the dataset, scroll geometry and row renderer. RefOrValue accepts a literal or reactive ref. Use colon-prefixed attributes to bind refs and computed values. Native attributes and events pass through to the scrollable root div.</p>
 </div>
 
 <nav class="api-index" aria-label="VirtualList properties">
   <a href="#virtual-list-prop-items">items</a>
+  <a href="#virtual-list-prop-rowComponent">rowComponent</a>
   <a href="#virtual-list-prop-height">height</a>
   <a href="#virtual-list-prop-itemHeight">itemHeight</a>
   <a href="#virtual-list-prop-overscan">overscan</a>
-  <a href="#virtual-list-prop-rowComponent">rowComponent</a>
 </nav>
 
+### Data and rendering
+
 <ApiProperty anchor="virtual-list-prop-items" name="items" valueType="RefOrValue&lt;unknown[]&gt;" defaultValue="[]">
-  <p>Source array. Only the visible window and overscan rows are mounted. Keep durable row state in application data.</p>
-</ApiProperty>
-
-<ApiProperty anchor="virtual-list-prop-height" name="height" valueType="RefOrValue&lt;number | string&gt;" defaultValue="560">
-  <p>Viewport height in pixels. A positive number or numeric string is accepted. Invalid and non-positive values use the default.</p>
-</ApiProperty>
-
-<ApiProperty anchor="virtual-list-prop-itemHeight" name="itemHeight" valueType="RefOrValue&lt;number | string&gt;" defaultValue="44">
-  <p>Fixed row height in pixels. The rendered row, including padding and borders, must fit this exact height.</p>
-</ApiProperty>
-
-<ApiProperty anchor="virtual-list-prop-overscan" name="overscan" valueType="RefOrValue&lt;number | string&gt;" defaultValue="6">
-  <p>Extra rows rendered around the visible window. Positive numeric values are truncated to an integer; zero falls back to 6.</p>
+  <p>The complete array for this list. Only the current window is mounted; the whole array stays in memory. A missing or non-array value resolves to an empty array. Bind a ref or computed array for replacement and filtering. Preserve durable state on the records or in an external store.</p>
 </ApiProperty>
 
 <ApiProperty anchor="virtual-list-prop-rowComponent" name="rowComponent" valueType="RefOrValue&lt;string&gt;" defaultValue="div">
-  <p>Registered row component name. Receives item and absolute zero-based index. Provide a typed component that renders the item; the fallback does not format data for you.</p>
+  <p>Name of a component registered in the Regor app. Each mounted instance receives item and the absolute zero-based index in the current items array. Declare both in the row’s props list. The default div does not render the item as text; supply an explicit row renderer.</p>
 </ApiProperty>
 
-### Composition
+### Viewport and row geometry
+
+<ApiProperty anchor="virtual-list-prop-height" name="height" valueType="RefOrValue&lt;number | string&gt;" defaultValue="560">
+  <p>Viewport height in pixels. Accepts a positive number or numeric string; invalid, non-finite and non-positive values fall back to 560. This is not a CSS length API: use 320, not 20rem or 100%. Changing it recalculates the mounted window.</p>
+</ApiProperty>
+
+<ApiProperty anchor="virtual-list-prop-itemHeight" name="itemHeight" valueType="RefOrValue&lt;number | string&gt;" defaultValue="44">
+  <p>Fixed height of every item wrapper, in pixels. It determines offsets, spacer height and the window size. Invalid or non-positive values fall back to 44. The component does not measure or clip overflowing row content; size the full row, including padding and borders, to fit.</p>
+</ApiProperty>
+
+<ApiProperty anchor="virtual-list-prop-overscan" name="overscan" valueType="RefOrValue&lt;number | string&gt;" defaultValue="6">
+  <p>Buffer used before the visible start and twice in the total window budget. Higher values keep more rows mounted during scrolling at the cost of more DOM. Use a positive integer; positive fractions are truncated. Zero, negative and invalid values fall back to 6, so passing zero does not disable overscan.</p>
+</ApiProperty>
+
+### Row component contract
+
+```typescript
+import type { RefOrValue } from 'regor'
+
+interface RecordRow {
+  item: RefOrValue<ReleaseRecord>
+  index: RefOrValue<number>
+}
+```
+
+Use your own record type in place of ReleaseRecord. The index is absolute within the current items array, not relative to the mounted window. After filtering or reordering, it can change for the same item; use a stable field such as item.id for application identity and input IDs. The basic and persistent-state sources show complete definitions and registration.
+
+### Composition and limits
 
 <div class="api-contract">
-<p>No slots. Register defineVirtualListComponents and each named row/header/footer component. Rows receive item and index; they may compose ordinary components. State that must survive scrolling belongs outside the mounted row.</p>
+  <p>Register defineVirtualListComponents and your named row component. VirtualList has no slots, built-in header, footer, empty state, selection model or data fetcher. Compose these outside the viewport. It does not forward arbitrary parent props to rows; include row-specific data on each item or use application context.</p>
 </div>
 
-
+The exported interface includes internal computed fields and a scroll handler for implementation use. Only the five registered props above form the public template API; scrollTop is not a two-way component prop.
 
 ## Related components
 
-- [VariableVirtualList](/components/data/variable-virtual-list/)
-- [VirtualTable](/components/data/virtual-table/)
+- [VariableVirtualList](/components/data/variable-virtual-list/) — rows whose heights vary or change after rendering.
+- [VirtualTable](/components/data/virtual-table/) — fixed-height records arranged into columns.
+- [VariableVirtualTable](/components/data/variable-virtual-table/) — tabular data with measured row heights.

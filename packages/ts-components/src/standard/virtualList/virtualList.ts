@@ -179,6 +179,7 @@ class VariableVirtualListContext {
   readonly windowStyle: ComputedRef<Record<string, string>>
   readonly resolvedRowComponent: ComputedRef<string>
   private readonly rowHeights: number[] = []
+  private rowWindow = new Map<number, VirtualListRow>()
   private readonly rowObservers = new Map<number, ResizeObserver>()
   private readonly measurementVersion = ref(0)
   private measuredHeightTotal = 0
@@ -280,17 +281,28 @@ class VariableVirtualListContext {
   private resolveVisibleRows() {
     const source = this.resolvedItems()
     const offsets = this.offsets()
-    const start = this.startIndex()
-    const viewportBottom = this.normalizedScrollTop() + this.resolvedHeight()
-    let end =
-      findOffsetIndex(offsets, viewportBottom) + this.resolvedOverscan() + 1
+    const scrollTop = this.normalizedScrollTop()
+    const overscan = this.resolvedOverscan()
+    // Resolve both boundaries from the same scroll position. A separate
+    // computed start can still hold its previous value during notification.
+    const start = Math.max(0, findOffsetIndex(offsets, scrollTop) - overscan)
+    const viewportBottom = scrollTop + this.resolvedHeight()
+    let end = findOffsetIndex(offsets, viewportBottom) + overscan + 1
     end = Math.min(source.length, Math.max(start, end))
 
     const rows: VirtualListRow[] = []
+    const nextWindow = new Map<number, VirtualListRow>()
     for (let index = start; index < end; index += 1) {
       this.ensureRowRef(index)
-      rows.push({ index, item: source[index] })
+      const previous = this.rowWindow.get(index)
+      const row =
+        previous && previous.item === source[index]
+          ? previous
+          : { index, item: source[index] }
+      rows.push(row)
+      nextWindow.set(index, row)
     }
+    this.rowWindow = nextWindow
 
     return rows
   }
