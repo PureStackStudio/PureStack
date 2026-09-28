@@ -21,6 +21,10 @@ import {
   parseMdxFenceDelimiter,
   restoreMdxFencedRegions,
 } from './mdxFenceFormatting'
+import {
+  maskRegorExpressions,
+  restoreRegorExpressions,
+} from './regorExpressions'
 
 export interface MdxMarkupBlock {
   content: string
@@ -193,8 +197,12 @@ async function formatMdxMarkupBlock(
     maskMdxFencedRegions(block.content.trim())
   const { inlineCodeSpans, placeholderContent: inlineCodePlaceholderContent } =
     maskMdxInlineCodeSpans(fencePlaceholderContent)
+  const {
+    expressions: regorExpressions,
+    placeholderContent: regorPlaceholderContent,
+  } = maskRegorExpressions(inlineCodePlaceholderContent)
   const { expressions, placeholderContent } = maskMdxExpressions(
-    inlineCodePlaceholderContent,
+    regorPlaceholderContent,
   )
   if (!placeholderContent.includes('<')) return undefined
 
@@ -213,8 +221,12 @@ async function formatMdxMarkupBlock(
     normalizeSelfClosingTagSpacing(formatted.trim()),
     expressions,
   )
-  const restoredInlineCode = restoreMdxInlineCodeSpans(
+  const restoredRegorExpressions = restoreRegorExpressions(
     restoredExpressions,
+    regorExpressions,
+  )
+  const restoredInlineCode = restoreMdxInlineCodeSpans(
+    restoredRegorExpressions,
     inlineCodeSpans,
   )
 

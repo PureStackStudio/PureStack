@@ -10,6 +10,10 @@ import {
   normalizeSelfClosingTagSpacing,
   shouldFormatOnSave,
 } from './htmlFormatting'
+import {
+  maskRegorExpressions,
+  restoreRegorExpressions,
+} from './regorExpressions'
 
 export type SupportedTemplateTagName = 'html' | 'svg'
 
@@ -239,12 +243,14 @@ async function formatTaggedTemplate(
 ) {
   const formattingOptions = getHtmlFormattingOptions(document)
   const source = template.placeholderContent.trim()
+  const { expressions: regorExpressions, placeholderContent } =
+    maskRegorExpressions(source)
 
-  if (!source.includes('<')) return undefined
+  if (!placeholderContent.includes('<')) return undefined
 
   let formatted: string
   try {
-    formatted = await formatHtmlFragment(source, formattingOptions)
+    formatted = await formatHtmlFragment(placeholderContent, formattingOptions)
   } catch (error) {
     console.warn(
       `[PureStack] Skipping template formatting for ${document.uri.fsPath}:`,
@@ -253,12 +259,12 @@ async function formatTaggedTemplate(
     return undefined
   }
 
-  const restored = restoreTemplateExpressions(
+  const restoredTemplateExpressions = restoreTemplateExpressions(
     normalizeSelfClosingTagSpacing(formatted.trim()),
     template.expressions,
   )
 
-  return restored
+  return restoreRegorExpressions(restoredTemplateExpressions, regorExpressions)
 }
 
 function restoreTemplateExpressions(
