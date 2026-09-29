@@ -6,7 +6,6 @@ import { defineSignInPreviewComponent } from '../purestack.studio/components/sit
 import { defineTopBarPreviewComponent } from '../purestack.studio/components/site/top-bar/preview'
 import { defineApiPropertyComponent } from './apiProperty'
 import { defineModalExampleComponents } from './modal'
-import { defineTabsExampleComponents } from './tabs'
 
 export function defineDocumentationComponents(site: SiteConfig) {
   return {
@@ -16,7 +15,6 @@ export function defineDocumentationComponents(site: SiteConfig) {
     PageTocPreview: definePageTocPreviewComponent(site),
     SignInPreview: defineSignInPreviewComponent(site),
     TopBarPreview: defineTopBarPreviewComponent(site),
-    ...defineTabsExampleComponents(),
     ...defineModalExampleComponents(),
   }
 }
