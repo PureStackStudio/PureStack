@@ -24,131 +24,154 @@
     },
     "logo": {
       "type": "object",
-      "description": "Brand logo configuration used by the top bar RegorLogo component.",
+      "description": "Shared SiteLogo options used by the documentation header.",
       "additionalProperties": false,
       "properties": {
         "brand": {
           "type": "string",
-          "description": "Brand string rendered as a single justified letter stream.",
+          "description": "Brand name, rendered as ordinary text.",
           "default": "Pure Stack"
         },
-        "letterColors": {
-          "type": "string",
-          "description": "Optional per-letter color index map. Each digit selects an entry from logo.colors and applies it to the next non-space letter."
-        },
-        "subtitleLetterColors": {
-          "type": "string",
-          "description": "Optional per-letter color index map for the subtitle. Each digit selects an entry from logo.colors and applies it to the next non-space letter."
-        },
-        "colors": {
-          "type": "array",
-          "description": "Palette of CSS color values used by logo.letterColors.",
-          "items": {
-            "type": "string"
-          }
-        },
-        "logoBackground": {
-          "type": "integer",
-          "minimum": 0,
-          "description": "Optional index into logo.colors used for the logo glyph background. Keeps the built-in background when omitted."
-        },
-        "logoForeground": {
-          "type": "integer",
-          "minimum": 0,
-          "description": "Optional index into logo.colors used for the logo icon and fallback mark foreground. Keeps the built-in foreground when omitted."
-        },
-        "brandSize": {
-          "type": "string",
-          "description": "Base brand font size."
-        },
-        "brandSizeSm": {
-          "type": "string",
-          "description": "Brand font size from the small breakpoint upward."
-        },
-        "brandSizeMd": {
-          "type": "string",
-          "description": "Brand font size from the medium breakpoint upward."
-        },
-        "brandSizeLg": {
-          "type": "string",
-          "description": "Brand font size from the large breakpoint upward."
-        },
-        "brandSizeXl": {
-          "type": "string",
-          "description": "Brand font size from the extra-large breakpoint upward."
-        },
-        "subtitleSize": {
-          "type": "string",
-          "description": "Base subtitle font size."
-        },
-        "subtitleSizeSm": {
-          "type": "string",
-          "description": "Subtitle font size from the small breakpoint upward."
-        },
-        "subtitleSizeMd": {
-          "type": "string",
-          "description": "Subtitle font size from the medium breakpoint upward."
-        },
-        "subtitleSizeLg": {
-          "type": "string",
-          "description": "Subtitle font size from the large breakpoint upward."
-        },
-        "subtitleSizeXl": {
-          "type": "string",
-          "description": "Subtitle font size from the extra-large breakpoint upward."
-        },
-        "iconSize": {
-          "type": "string",
-          "description": "Base logo glyph size."
-        },
-        "iconSizeSm": {
-          "type": "string",
-          "description": "Logo glyph size from the small breakpoint upward."
-        },
-        "iconSizeMd": {
-          "type": "string",
-          "description": "Logo glyph size from the medium breakpoint upward."
-        },
-        "iconSizeLg": {
-          "type": "string",
-          "description": "Logo glyph size from the large breakpoint upward."
-        },
-        "iconSizeXl": {
-          "type": "string",
-          "description": "Logo glyph size from the extra-large breakpoint upward."
-        },
-        "subtitleInset": {
-          "type": "string",
-          "description": "Base left and right inset applied to the subtitle row."
-        },
-        "subtitleInsetSm": {
-          "type": "string",
-          "description": "Subtitle inset from the small breakpoint upward."
-        },
-        "subtitleInsetMd": {
-          "type": "string",
-          "description": "Subtitle inset from the medium breakpoint upward."
-        },
-        "subtitleInsetLg": {
-          "type": "string",
-          "description": "Subtitle inset from the large breakpoint upward."
-        },
-        "subtitleInsetXl": {
-          "type": "string",
-          "description": "Subtitle inset from the extra-large breakpoint upward."
+        "href": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Link destination. Null or an empty string renders a noninteractive logo.",
+          "default": "/"
         },
         "subtitle": {
           "type": "string",
-          "description": "Optional subtitle text shown below the brand name."
+          "description": "Secondary line beneath the wordmark."
         },
-        "href": {
+        "suffix": {
           "type": "string",
-          "description": "Logo link target.",
-          "default": "/"
+          "description": "Accented text appended to the brand, for example a period."
+        },
+        "ariaLabel": {
+          "type": "string",
+          "description": "Accessible name. Defaults to the brand."
         },
         "icon": {
           "type": "string",
-          "description": "SVG icon name from ts-svg-icons used in the logo component."
+          "description": "Registered SVG icon name."
+        },
+        "imageSrc": {
+          "type": "string",
+          "description": "Image used as the logo mark; takes priority over icon."
+        },
+        "imageSrcDark": {
+          "type": "string",
+          "description": "Optional image shown in dark mode; requires imageSrc."
+        },
+        "monogram": {
+          "type": "string",
+          "description": "Fallback mark text when no image or icon is provided."
+        },
+        "brandColor": {
+          "type": "string",
+          "description": "Wordmark CSS color or theme variable."
+        },
+        "accentColor": {
+          "type": "string",
+          "description": "Accent CSS color for the suffix, plain mark and gradient."
+        },
+        "markBackground": {
+          "type": "string",
+          "description": "Mark background CSS color or gradient."
+        },
+        "markColor": {
+          "type": "string",
+          "description": "Mark foreground CSS color."
+        },
+        "brandSize": {
+          "type": "string",
+          "description": "Custom wordmark CSS font size; supports clamp()."
+        },
+        "subtitleSize": {
+          "type": "string",
+          "description": "Custom subtitle CSS font size."
+        },
+        "markSize": {
+          "type": "string",
+          "description": "Custom mark CSS width and height."
+        },
+        "gap": {
+          "type": "string",
+          "description": "CSS gap between the mark and wordmark."
+        },
+        "layout": {
+          "type": "string",
+          "enum": [
+            "horizontal",
+            "stacked",
+            "wordmark",
+            "mark"
+          ],
+          "default": "horizontal"
+        },
+        "size": {
+          "type": "string",
+          "enum": [
+            "sm",
+            "md",
+            "lg",
+            "xl"
+          ],
+          "default": "md"
+        },
+        "appearance": {
+          "type": "string",
+          "enum": [
+            "plain",
+            "badge",
+            "outline"
+          ],
+          "default": "plain"
+        },
+        "markStyle": {
+          "type": "string",
+          "enum": [
+            "plain",
+            "soft",
+            "solid",
+            "outline"
+          ],
+          "default": "plain"
+        },
+        "wordmarkStyle": {
+          "type": "string",
+          "enum": [
+            "plain",
+            "accent",
+            "gradient"
+          ],
+          "default": "plain"
+        },
+        "shape": {
+          "type": "string",
+          "enum": [
+            "rounded",
+            "square",
+            "circle"
+          ],
+          "default": "rounded"
+        },
+        "tone": {
+          "type": "string",
+          "enum": [
+            "neutral",
+            "accent",
+            "secondary",
+            "info",
+            "success",
+            "warning",
+            "danger",
+            "feature",
+            "custom",
+            "ghost"
+          ],
+          "default": "accent"
         }
       }
     },
@@ -173,7 +196,10 @@
           "items": {
             "type": "string"
           },
-          "default": ["light", "dark"]
+          "default": [
+            "light",
+            "dark"
+          ]
         },
         "pretty": {
           "type": "boolean",
@@ -189,7 +215,9 @@
               "anyOf": [
                 {
                   "type": "string",
-                  "enum": ["standard"]
+                  "enum": [
+                    "standard"
+                  ]
                 },
                 {
                   "type": "string"
@@ -238,7 +266,12 @@
       "properties": {
         "mode": {
           "type": "string",
-          "enum": ["auto", "custom", "hybrid", "none"],
+          "enum": [
+            "auto",
+            "custom",
+            "hybrid",
+            "none"
+          ],
           "description": "Menu generation mode.",
           "default": "auto"
         },
@@ -260,7 +293,11 @@
         },
         "sortBy": {
           "type": "string",
-          "enum": ["order", "title", "path"],
+          "enum": [
+            "order",
+            "title",
+            "path"
+          ],
           "description": "Sorting strategy for navigation items.",
           "default": "order"
         },
@@ -391,13 +428,19 @@
             "allow": {
               "type": "array",
               "description": "Allowed path prefixes.",
-              "items": { "type": "string" },
-              "default": ["/"]
+              "items": {
+                "type": "string"
+              },
+              "default": [
+                "/"
+              ]
             },
             "disallow": {
               "type": "array",
               "description": "Disallowed path prefixes.",
-              "items": { "type": "string" },
+              "items": {
+                "type": "string"
+              },
               "default": []
             },
             "crawlDelay": {
@@ -412,13 +455,17 @@
             "additionalSitemaps": {
               "type": "array",
               "description": "Additional absolute sitemap URLs.",
-              "items": { "type": "string" },
+              "items": {
+                "type": "string"
+              },
               "default": []
             },
             "customDirectives": {
               "type": "array",
               "description": "Raw extra robots.txt lines appended at the end.",
-              "items": { "type": "string" },
+              "items": {
+                "type": "string"
+              },
               "default": []
             }
           }
@@ -513,7 +560,9 @@
                 "description": "Marks category as always enabled and non-toggleable."
               }
             },
-            "required": ["id"]
+            "required": [
+              "id"
+            ]
           }
         },
         "services": {
@@ -576,7 +625,10 @@
                     },
                     "crossOrigin": {
                       "type": "string",
-                      "enum": ["anonymous", "use-credentials"],
+                      "enum": [
+                        "anonymous",
+                        "use-credentials"
+                      ],
                       "description": "crossorigin attribute for external scripts."
                     },
                     "referrerPolicy": {
@@ -587,7 +639,11 @@
                 }
               }
             },
-            "required": ["id", "category", "scripts"]
+            "required": [
+              "id",
+              "category",
+              "scripts"
+            ]
           }
         }
       }
@@ -727,7 +783,10 @@
         },
         "urlStrategy": {
           "type": "string",
-          "enum": ["prefix-all", "hidden"],
+          "enum": [
+            "prefix-all",
+            "hidden"
+          ],
           "description": "Public URL strategy. prefix-all emits /en/... and /de/.... hidden keeps canonical URLs unprefixed while writing locale folders for host/server negotiation.",
           "default": "prefix-all"
         },
@@ -750,7 +809,10 @@
       "properties": {
         "highlighter": {
           "type": "string",
-          "enum": ["shiki", "highlightjs"],
+          "enum": [
+            "shiki",
+            "highlightjs"
+          ],
           "description": "Syntax highlighter backend. Use highlightjs for faster builds.",
           "default": "highlightjs"
         },

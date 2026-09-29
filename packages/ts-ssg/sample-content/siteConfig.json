@@ -4,19 +4,10 @@
   "favicon": "iconoir:cube",
   "logo": {
     "brand": "CalcCore",
-    "letterColors": "11112",
-    "subtitleLetterColors": "0",
-    "colors": [
-      "var(--ps-current-text-subtle)",
-      "var(--ps-current-text-default)",
-      "var(--ps-semantic-tone-accent-button-hover-background)",
-      "#fdfdfd"
-    ],
-    "logoBackground": 2,
-    "logoForeground": 3,
     "subtitle": "backend-native engine",
+    "icon": "iconoir:cube",
     "href": "/",
-    "icon": "iconoir:cube"
+    "markStyle": "soft"
   },
   "style": {
     "fileName": "site.css",

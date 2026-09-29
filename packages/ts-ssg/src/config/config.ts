@@ -203,65 +203,74 @@ function resolveLogoConfig(
   input?: DeepPartial<LogoConfig>,
   file?: DeepPartial<LogoConfig>,
 ): LogoConfig {
+  const href = input?.href !== undefined ? input.href : file?.href
   return {
     brand: resolveString(input?.brand, file?.brand, 'Pure Stack'),
-    letterColors: resolveOptionalString(
-      input?.letterColors ?? file?.letterColors,
+    href: href === null || href === '' ? href : resolveString(href, '/'),
+    subtitle: resolveOptionalString(input?.subtitle ?? file?.subtitle),
+    suffix: resolveOptionalString(input?.suffix ?? file?.suffix),
+    ariaLabel: resolveOptionalString(input?.ariaLabel ?? file?.ariaLabel),
+    icon: resolveOptionalString(input?.icon ?? file?.icon),
+    imageSrc: resolveOptionalString(input?.imageSrc ?? file?.imageSrc),
+    imageSrcDark: resolveOptionalString(
+      input?.imageSrcDark ?? file?.imageSrcDark,
     ),
-    subtitleLetterColors: resolveOptionalString(
-      input?.subtitleLetterColors ?? file?.subtitleLetterColors,
+    monogram: resolveOptionalString(input?.monogram ?? file?.monogram),
+    brandColor: resolveOptionalString(input?.brandColor ?? file?.brandColor),
+    accentColor: resolveOptionalString(input?.accentColor ?? file?.accentColor),
+    markBackground: resolveOptionalString(
+      input?.markBackground ?? file?.markBackground,
     ),
-    colors: resolveStringList(input?.colors ?? file?.colors),
-    logoBackground: normalizeOptionalNumber(
-      input?.logoBackground ?? file?.logoBackground,
-    ),
-    logoForeground: normalizeOptionalNumber(
-      input?.logoForeground ?? file?.logoForeground,
-    ),
+    markColor: resolveOptionalString(input?.markColor ?? file?.markColor),
     brandSize: resolveOptionalString(input?.brandSize ?? file?.brandSize),
-    brandSizeSm: resolveOptionalString(input?.brandSizeSm ?? file?.brandSizeSm),
-    brandSizeMd: resolveOptionalString(input?.brandSizeMd ?? file?.brandSizeMd),
-    brandSizeLg: resolveOptionalString(input?.brandSizeLg ?? file?.brandSizeLg),
-    brandSizeXl: resolveOptionalString(input?.brandSizeXl ?? file?.brandSizeXl),
     subtitleSize: resolveOptionalString(
       input?.subtitleSize ?? file?.subtitleSize,
     ),
-    subtitleSizeSm: resolveOptionalString(
-      input?.subtitleSizeSm ?? file?.subtitleSizeSm,
+    markSize: resolveOptionalString(input?.markSize ?? file?.markSize),
+    gap: resolveOptionalString(input?.gap ?? file?.gap),
+    layout: resolveLogoChoice(input?.layout ?? file?.layout, [
+      'horizontal',
+      'stacked',
+      'wordmark',
+      'mark',
+    ] as const),
+    size: resolveLogoChoice(input?.size ?? file?.size, [
+      'sm',
+      'md',
+      'lg',
+      'xl',
+    ] as const),
+    appearance: resolveLogoChoice(input?.appearance ?? file?.appearance, [
+      'plain',
+      'badge',
+      'outline',
+    ] as const),
+    markStyle: resolveLogoChoice(input?.markStyle ?? file?.markStyle, [
+      'plain',
+      'soft',
+      'solid',
+      'outline',
+    ] as const),
+    wordmarkStyle: resolveLogoChoice(
+      input?.wordmarkStyle ?? file?.wordmarkStyle,
+      ['plain', 'accent', 'gradient'] as const,
     ),
-    subtitleSizeMd: resolveOptionalString(
-      input?.subtitleSizeMd ?? file?.subtitleSizeMd,
-    ),
-    subtitleSizeLg: resolveOptionalString(
-      input?.subtitleSizeLg ?? file?.subtitleSizeLg,
-    ),
-    subtitleSizeXl: resolveOptionalString(
-      input?.subtitleSizeXl ?? file?.subtitleSizeXl,
-    ),
-    iconSize: resolveOptionalString(input?.iconSize ?? file?.iconSize),
-    iconSizeSm: resolveOptionalString(input?.iconSizeSm ?? file?.iconSizeSm),
-    iconSizeMd: resolveOptionalString(input?.iconSizeMd ?? file?.iconSizeMd),
-    iconSizeLg: resolveOptionalString(input?.iconSizeLg ?? file?.iconSizeLg),
-    iconSizeXl: resolveOptionalString(input?.iconSizeXl ?? file?.iconSizeXl),
-    subtitleInset: resolveOptionalString(
-      input?.subtitleInset ?? file?.subtitleInset,
-    ),
-    subtitleInsetSm: resolveOptionalString(
-      input?.subtitleInsetSm ?? file?.subtitleInsetSm,
-    ),
-    subtitleInsetMd: resolveOptionalString(
-      input?.subtitleInsetMd ?? file?.subtitleInsetMd,
-    ),
-    subtitleInsetLg: resolveOptionalString(
-      input?.subtitleInsetLg ?? file?.subtitleInsetLg,
-    ),
-    subtitleInsetXl: resolveOptionalString(
-      input?.subtitleInsetXl ?? file?.subtitleInsetXl,
-    ),
-    subtitle: resolveOptionalString(input?.subtitle ?? file?.subtitle),
-    href: resolveString(input?.href, file?.href, '/'),
-    icon: resolveOptionalString(input?.icon ?? file?.icon),
+    shape: resolveLogoChoice(input?.shape ?? file?.shape, [
+      'rounded',
+      'square',
+      'circle',
+    ] as const),
+    tone: pickSemanticTone(input?.tone, file?.tone),
   }
+}
+
+function resolveLogoChoice<T extends string>(
+  value: unknown,
+  choices: readonly T[],
+): T | undefined {
+  return typeof value === 'string' && choices.includes(value as T)
+    ? (value as T)
+    : undefined
 }
 
 function resolveFavicon(...values: Array<unknown>): string | undefined {
@@ -768,15 +777,6 @@ function resolveRobotsConfig(
 function resolveOptionalString(value: unknown) {
   if (typeof value !== 'string') return undefined
   const normalized = value.trim()
-  return normalized.length > 0 ? normalized : undefined
-}
-
-function resolveStringList(value: unknown): string[] | undefined {
-  if (!Array.isArray(value)) return undefined
-  const normalized = value
-    .filter((entry): entry is string => typeof entry === 'string')
-    .map((entry) => entry.trim())
-    .filter((entry) => entry.length > 0)
   return normalized.length > 0 ? normalized : undefined
 }
 

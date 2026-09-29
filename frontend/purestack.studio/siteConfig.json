@@ -67,7 +67,7 @@
     "excludePaths": []
   },
   "preview": {
-    "title": "PureStack — One language. A whole frontend.",
+    "title": "PureStack | One language. A whole frontend.",
     "description": "Content, components, styles, and interactivity. One coherent TypeScript ecosystem. Built for you and your AI.",
     "image": "/assets/social-preview.png",
     "imageAlt": "PureStack. One language. A whole frontend. A TypeScript-native frontend ecosystem.",
@@ -78,18 +78,12 @@
   },
   "logo": {
     "brand": "PureStack",
-    "subtitle": "AI-Native Frontend",
-    "letterColors": "111122",
-    "subtitleLetterColors": "0",
-    "colors": [
-      "var(--ps-current-text-subtle)",
-      "var(--ps-current-text-default)",
-      "var(--ps-semantic-tone-accent-button-rest-background)",
-      "#fdfdfd"
-    ],
-    "logoBackground": 2,
-    "logoForeground": 3,
-    "icon": "tabler:device-desktop-analytics"
+    "suffix": ".",
+    "icon": "tabler:stack-2",
+    "href": "/",
+    "ariaLabel": "PureStack home",
+    "size": "md",
+    "markStyle": "plain"
   },
   "mdx": {
     "highlighter": "shiki"

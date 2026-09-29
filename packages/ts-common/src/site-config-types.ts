@@ -5,6 +5,7 @@ import type {
 } from '@purestack/ts-style'
 import type { DeepPartial } from '@purestack/ts-util'
 import type { ConsentConfig } from './consent-types'
+import type { LogoConfig } from './logo-types'
 import type { NavigationConfig } from './navMenu-types'
 
 export interface SiteConfig {
@@ -56,38 +57,6 @@ export interface SiteStyleConfig {
 
 export interface SiteHtmlConfig {
   minify: boolean
-}
-
-export interface LogoConfig {
-  brand: string
-  letterColors?: string
-  subtitleLetterColors?: string
-  colors?: string[]
-  logoBackground?: number
-  logoForeground?: number
-  brandSize?: string
-  brandSizeSm?: string
-  brandSizeMd?: string
-  brandSizeLg?: string
-  brandSizeXl?: string
-  subtitleSize?: string
-  subtitleSizeSm?: string
-  subtitleSizeMd?: string
-  subtitleSizeLg?: string
-  subtitleSizeXl?: string
-  iconSize?: string
-  iconSizeSm?: string
-  iconSizeMd?: string
-  iconSizeLg?: string
-  iconSizeXl?: string
-  subtitleInset?: string
-  subtitleInsetSm?: string
-  subtitleInsetMd?: string
-  subtitleInsetLg?: string
-  subtitleInsetXl?: string
-  subtitle?: string
-  href: string
-  icon?: string
 }
 
 export interface SitemapConfig {

@@ -67,37 +67,9 @@ describe('resolveSiteConfig sitemap', () => {
   it('provides logo defaults', () => {
     const config = resolveSiteConfig({ rootDir: process.cwd() })
     expect(config.favicon).toBeUndefined()
-    expect(config.logo).toEqual({
-      brand: 'Pure Stack',
-      letterColors: undefined,
-      subtitleLetterColors: undefined,
-      colors: undefined,
-      logoBackground: undefined,
-      logoForeground: undefined,
-      brandSize: undefined,
-      brandSizeSm: undefined,
-      brandSizeMd: undefined,
-      brandSizeLg: undefined,
-      brandSizeXl: undefined,
-      subtitleSize: undefined,
-      subtitleSizeSm: undefined,
-      subtitleSizeMd: undefined,
-      subtitleSizeLg: undefined,
-      subtitleSizeXl: undefined,
-      iconSize: undefined,
-      iconSizeSm: undefined,
-      iconSizeMd: undefined,
-      iconSizeLg: undefined,
-      iconSizeXl: undefined,
-      subtitleInset: undefined,
-      subtitleInsetSm: undefined,
-      subtitleInsetMd: undefined,
-      subtitleInsetLg: undefined,
-      subtitleInsetXl: undefined,
-      subtitle: undefined,
-      href: '/',
-      icon: undefined,
-    })
+    expect(config.logo).toMatchObject({ brand: 'Pure Stack', href: '/' })
+    expect(config.logo.layout).toBeUndefined()
+    expect(config.logo.markStyle).toBeUndefined()
   })
 
   it('provides style defaults', () => {
@@ -241,60 +213,35 @@ describe('resolveSiteConfig sitemap', () => {
     expect(config.scripts.cacheBusting).toBe(false)
   })
 
-  it('resolves logo overrides from input config', () => {
-    const config = resolveSiteConfig({
-      rootDir: process.cwd(),
-      logo: {
-        brand: 'Calc Core',
-        letterColors: '00001111',
-        subtitleLetterColors: '1111111111111111111',
-        colors: ['#111111', '#ff0066'],
-        logoBackground: 1,
-        logoForeground: 0,
-        brandSize: '3rem',
-        brandSizeMd: '4rem',
-        subtitleSize: '0.5rem',
-        subtitleSizeLg: '0.65rem',
-        iconSize: '2.25rem',
-        iconSizeSm: '2.5rem',
-        subtitleInset: '1px',
-        subtitleInsetXl: '2px',
-        subtitle: 'backend-native engine',
-        href: '/home',
-        icon: 'iconoir:cube',
-      },
-    })
-    expect(config.logo).toEqual({
+  it('resolves logo presentation and noninteractive overrides', () => {
+    const logo = {
       brand: 'Calc Core',
-      letterColors: '00001111',
-      subtitleLetterColors: '1111111111111111111',
-      colors: ['#111111', '#ff0066'],
-      logoBackground: 1,
-      logoForeground: 0,
-      brandSize: '3rem',
-      brandSizeSm: undefined,
-      brandSizeMd: '4rem',
-      brandSizeLg: undefined,
-      brandSizeXl: undefined,
-      subtitleSize: '0.5rem',
-      subtitleSizeSm: undefined,
-      subtitleSizeMd: undefined,
-      subtitleSizeLg: '0.65rem',
-      subtitleSizeXl: undefined,
-      iconSize: '2.25rem',
-      iconSizeSm: '2.5rem',
-      iconSizeMd: undefined,
-      iconSizeLg: undefined,
-      iconSizeXl: undefined,
-      subtitleInset: '1px',
-      subtitleInsetSm: undefined,
-      subtitleInsetMd: undefined,
-      subtitleInsetLg: undefined,
-      subtitleInsetXl: '2px',
-      subtitle: 'backend-native engine',
-      href: '/home',
+      subtitle: 'Backend engine',
+      suffix: '.',
+      href: null,
       icon: 'iconoir:cube',
-    })
+      imageSrc: '/assets/logo.svg',
+      imageSrcDark: '/assets/logo-dark.svg',
+      size: 'lg',
+      layout: 'stacked',
+      appearance: 'badge',
+      markStyle: 'soft',
+      wordmarkStyle: 'gradient',
+      shape: 'circle',
+      tone: 'info',
+      brandColor: '#123456',
+      accentColor: '#2266aa',
+      markBackground: '#fff',
+      markColor: '#123456',
+      brandSize: 'clamp(1.5rem, 3vw, 3rem)',
+      subtitleSize: '0.75rem',
+      markSize: '3rem',
+      gap: '1rem',
+      ariaLabel: 'Calc Core identity',
+      monogram: 'CC',
+    } as const
+    const config = resolveSiteConfig({ rootDir: process.cwd(), logo })
+    expect(config.logo).toEqual(logo)
   })
 
   it('resolves favicon icon names from config', () => {

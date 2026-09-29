@@ -12,13 +12,6 @@ export function registerFooterStyles(root: Style, palette: ThemePalette) {
     gap: '40px',
     paddingBottom: '43px',
   })
-  root.select('.studio .footer-top .wordmark').css({
-    fontSize: '21px',
-  })
-  root.select('.studio .footer-top .brand-mark .icon').css({
-    width: '26px',
-    height: '26px',
-  })
   root.select('.studio .footer-top p').css({
     marginTop: '18px',
     fontSize: palette.font.size.xs,

@@ -58,6 +58,14 @@ export function registerTopBarShellStyles(
     .borderRadius('0 !important')
 
   styleBuilder.select('.topbar__controls', theme).marginLeft('auto')
+  styleBuilder
+    .select('.topbar', theme)
+    .media(mediaBelow(BREAKPOINTS.sm))
+    .padding('0.75rem')
+  styleBuilder
+    .select('.topbar > .flex, .topbar__controls', theme)
+    .media(mediaBelow(BREAKPOINTS.sm))
+    .gap('0.5rem')
   registerTopBarAccountVisibilityStyles(theme)
 
   styleBuilder

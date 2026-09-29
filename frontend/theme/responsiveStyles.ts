@@ -70,9 +70,6 @@ export function registerResponsiveStyles(root: Style, palette: ThemePalette) {
   root.media(mediaBelow(BREAKPOINTS.md)).select('.studio .desktop-nav a').css({
     fontSize: palette.font.size.sm,
   })
-  root.media(mediaBelow(BREAKPOINTS.md)).select('.studio .wordmark').css({
-    fontSize: '22px',
-  })
   root.media(mediaBelow(BREAKPOINTS.md)).select('.studio .hero h1').css({
     fontSize: '66px',
     letterSpacing: '-3px',

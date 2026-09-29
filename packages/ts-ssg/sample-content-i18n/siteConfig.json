@@ -4,18 +4,10 @@
   "favicon": "tabler:globe",
   "logo": {
     "brand": "PureStack",
-    "letterColors": "11112222",
     "subtitle": "i18n sample content",
-    "href": "/",
     "icon": "tabler:globe",
-    "colors": [
-      "var(--ps-current-text-subtle)",
-      "var(--ps-current-text-default)",
-      "var(--ps-semantic-tone-accent-button-hover-background)",
-      "#ffffff"
-    ],
-    "logoBackground": 2,
-    "logoForeground": 3
+    "href": "/",
+    "markStyle": "soft"
   },
   "style": {
     "fileName": "site.css",

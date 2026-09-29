@@ -15,26 +15,6 @@ export function registerNavigationStyles(root: Style, palette: ThemePalette) {
     height: '78px',
     gap: '40px',
   })
-  root.select('.studio .wordmark').css({
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '10px',
-    fontSize: palette.font.size.h3,
-    fontWeight: '650',
-    letterSpacing: '-1px',
-    lineHeight: '1',
-  })
-  root.select('.studio .brand-mark').css({
-    display: 'inline-flex',
-    color: tone.accent.text.default,
-  })
-  root.select('.studio .brand-mark .icon').css({
-    width: '30px',
-    height: '30px',
-  })
-  root.select('.studio .brand-period').css({
-    color: tone.accent.text.default,
-  })
   root.select('.studio .desktop-nav').css({
     display: 'flex',
     alignItems: 'center',

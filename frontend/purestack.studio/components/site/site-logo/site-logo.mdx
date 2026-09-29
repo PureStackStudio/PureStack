@@ -1,268 +1,641 @@
 ---
 title: SiteLogo
-description: "A linked wordmark with per-letter color, an optional SVG glyph and responsive sizing."
+description: "One brand identity, many presentations: responsive wordmarks, icon and image marks, monograms, theme-aware colors and reusable configuration."
 template: doc
 layout:
   showNav: true
   showToc: true
   showFooter: false
 nav:
-  order: 10
+  order: 20
   icon: tabler:components
 ---
 
-# Site<wbr/>Logo
+# SiteLogo
 
-A linked wordmark with per-letter color, an optional SVG glyph and responsive sizing.
+One brand identity for your navigation, footer, product cards and sign-in screens. Combine a mark, a wordmark and an optional subtitle, then choose the layout and treatment that fit the surrounding interface.
 
 <Badge tone="accent" variant="surface">SiteLogo</Badge>
 
 [View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/logo/logo.ts) · [API reference](#api-reference)
 
+## Interactive playground
 
+Change the brand, switch layouts, and explore the mark and wordmark treatments. Every control updates the same component. The live configuration is the object you can pass to another SiteLogo or save in your site configuration.
 
-## A compact wordmark
+The preview starts without a link so you can explore it freely. Enable **Link the preview to the home page** to try navigation. Switch the site's theme to compare light and dark appearances.
 
-The name, subtitle and glyph form one accessible home link.
+Use **Mark-to-title spacing** to bring the icon and brand name closer together or give them more room. **Default (compact)** uses 6px horizontally and 8px when stacked, at a 16px root font size. The control is disabled for mark-only and wordmark-only layouts, which have no mark-to-title gap.
 
-<Tabs group="site-logo-sample-1" selectedTab="site-logo-sample-1-preview" ariaLabel="A compact wordmark example" tone="neutral" variant="surface" tabVariant="underline">
-  <TabPane id="site-logo-sample-1-preview" label="Preview">
-    <SiteLogo
-      brand="PureStack"
-      subtitle="Component studio"
-      href="/"
-      icon="lucide:check"
-      brandSize="1.6rem"
-      brandSizeMd="2rem"
-      subtitleSize="0.65rem"
-      iconSize="2.5rem"
-      ariaLabel="PureStack home"
-    />
+<Tabs group="logo-playground-sample" selectedTab="logo-playground-sample-preview" ariaLabel="playground example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="logo-playground-sample-preview" label="Preview">
+    <RegorApp id="logo-playground" src="./playground.ts"/>
   </TabPane>
-  <TabPane id="site-logo-sample-1-source-0" label="compact-wordmark.mdx">
+  <TabPane id="logo-playground-sample-mdx" label="playground.mdx">
+```html
+<RegorApp id="logo-playground" src="./playground.ts"/>
+```
+  </TabPane>
+  <TabPane id="logo-playground-sample-ts" label="playground.ts">
+```typescript
+import {
+  defineBadgeComponents,
+  defineButtonComponents,
+  defineFlexComponents,
+  defineFormComponents,
+  defineFormInputField,
+  defineFormSelectField,
+  defineGridComponents,
+  defineIconComponents,
+  defineLogoComponents,
+  definePanelComponents,
+  type FormSelectOption,
+  type LogoConfig,
+} from '@purestack/ts-components'
+import { lucide_chevron_down, tabler_stack_2 } from '@purestack/ts-svg-icons'
+import {
+  type ComputedRef,
+  computed,
+  createApp,
+  defineComponent,
+  html,
+  type Ref,
+  ref,
+} from 'regor'
+
+export interface LogoPlayground {
+  brandName: Ref<string>
+  tagline: Ref<string>
+  punctuation: Ref<string>
+  logoLayout: Ref<NonNullable<LogoConfig['layout']>>
+  logoSize: Ref<NonNullable<LogoConfig['size']>>
+  treatment: Ref<NonNullable<LogoConfig['appearance']>>
+  markTreatment: Ref<NonNullable<LogoConfig['markStyle']>>
+  wordmarkTreatment: Ref<NonNullable<LogoConfig['wordmarkStyle']>>
+  markShape: Ref<NonNullable<LogoConfig['shape']>>
+  logoTone: Ref<NonNullable<LogoConfig['tone']>>
+  markSource: Ref<string>
+  customAccent: Ref<string>
+  spacing: Ref<string>
+  linked: Ref<boolean>
+  previewConfig: ComputedRef<LogoConfig>
+  configSource: ComputedRef<string>
+  layouts: FormSelectOption[]
+  sizes: FormSelectOption[]
+  spacings: FormSelectOption[]
+  treatments: FormSelectOption[]
+  marks: FormSelectOption[]
+  wordmarks: FormSelectOption[]
+  shapes: FormSelectOption[]
+  tones: FormSelectOption[]
+  sources: FormSelectOption[]
+  reset: () => void
+}
+
+const logoPlaygroundTemplate = html`<Flex direction="column">
+  <Panel variant="surfaceAlt" bodyClass="p-4 min-w-0">
+    <Flex justify="between" align="center" wrap="true">
+      <p class="text-eyebrow m-0">Your brand, your presentation</p>
+      <Badge tone="accent" variant="surface">Live preview</Badge>
+    </Flex>
+    <Flex align="center" justify="center" class="py-5">
+      <SiteLogo id="logo-preview" :config="previewConfig"/>
+    </Flex>
+    <p class="text-muted m-0">Switch the site theme to see the same logo in light and dark.</p>
+  </Panel>
+  <Grid columns="1" columnsMd="3">
+    <FormInputField id="logo-brand" label="Brand name" :model="brandName"/>
+    <FormInputField id="logo-subtitle" label="Subtitle" :model="tagline" placeholder="Optional tagline"/>
+    <FormInputField id="logo-suffix" label="Accented suffix" :model="punctuation"/>
+    <FormSelectField id="logo-layout" label="Layout" :model="logoLayout" :options="layouts"/>
+    <FormSelectField id="logo-size" label="Size" :model="logoSize" :options="sizes"/>
+    <FormSelectField id="logo-gap" label="Mark-to-title spacing" :model="spacing" :options="spacings" :disabled="logoLayout === 'mark' || logoLayout === 'wordmark'"/>
+    <FormSelectField id="logo-appearance" label="Appearance" :model="treatment" :options="treatments"/>
+    <FormSelectField id="logo-mark" label="Mark treatment" :model="markTreatment" :options="marks"/>
+    <FormSelectField id="logo-wordmark" label="Wordmark treatment" :model="wordmarkTreatment" :options="wordmarks"/>
+    <FormSelectField id="logo-shape" label="Mark shape" :model="markShape" :options="shapes"/>
+    <FormSelectField id="logo-tone" label="Tone" :model="logoTone" :options="tones"/>
+    <FormSelectField id="logo-source" label="Mark source" :model="markSource" :options="sources"/>
+    <FormInputField id="logo-accent" label="Custom accent color" :model="customAccent" placeholder="Theme default, or #58a6ff"/>
+  </Grid>
+  <Flex justify="between" align="center" wrap="true">
+    <FormCheck id="logo-linked" label="Link the preview to the home page" :checked="linked"/>
+    <Btn variant="outline" @click="reset">Reset playground</Btn>
+  </Flex>
+  <Panel variant="outline" bodyClass="p-3 min-w-0">
+    <p class="text-eyebrow mt-0">Live configuration</p>
+    <pre class="overflow-auto max-h-inspector m-0"><code id="logo-config-output">{{ configSource }}</code></pre>
+  </Panel>
+</Flex>`
+
+function createLogoPlayground(): LogoPlayground {
+  const brandName = ref('PureStack')
+  const tagline = ref('')
+  const punctuation = ref('.')
+  const logoLayout = ref<NonNullable<LogoConfig['layout']>>('horizontal')
+  const logoSize = ref<NonNullable<LogoConfig['size']>>('md')
+  const treatment = ref<NonNullable<LogoConfig['appearance']>>('plain')
+  const markTreatment = ref<NonNullable<LogoConfig['markStyle']>>('plain')
+  const wordmarkTreatment =
+    ref<NonNullable<LogoConfig['wordmarkStyle']>>('plain')
+  const markShape = ref<NonNullable<LogoConfig['shape']>>('rounded')
+  const logoTone = ref<NonNullable<LogoConfig['tone']>>('accent')
+  const markSource = ref('icon')
+  const customAccent = ref('')
+  const spacing = ref('')
+  const linked = ref(false)
+  const previewConfig = computed<LogoConfig>(() => ({
+    brand: brandName(),
+    subtitle: tagline(),
+    suffix: punctuation(),
+    href: linked() ? '/' : null,
+    layout: logoLayout(),
+    size: logoSize(),
+    appearance: treatment(),
+    markStyle: markTreatment(),
+    wordmarkStyle: wordmarkTreatment(),
+    shape: markShape(),
+    tone: logoTone(),
+    icon: markSource() === 'icon' ? 'tabler:stack-2' : undefined,
+    imageSrc:
+      markSource() === 'image' ? '/assets/pure-stack-logo.png' : undefined,
+    accentColor: customAccent() || undefined,
+    gap: spacing() || undefined,
+  }))
+  return {
+    brandName,
+    tagline,
+    punctuation,
+    logoLayout,
+    logoSize,
+    treatment,
+    markTreatment,
+    wordmarkTreatment,
+    markShape,
+    logoTone,
+    markSource,
+    customAccent,
+    spacing,
+    linked,
+    previewConfig,
+    configSource: computed(() => JSON.stringify(previewConfig(), null, 2)),
+    layouts: ['horizontal', 'stacked', 'wordmark', 'mark'].map((value) => ({
+      label: value,
+      value,
+    })),
+    sizes: ['sm', 'md', 'lg', 'xl'].map((value) => ({ label: value, value })),
+    spacings: [
+      { label: 'Default (compact)', value: '' },
+      { label: 'None · 0px', value: '0px' },
+      { label: 'Tight · 4px', value: '0.25rem' },
+      { label: 'Compact · 6px', value: '0.375rem' },
+      { label: 'Comfortable · 8px', value: '0.5rem' },
+      { label: 'Relaxed · 12px', value: '0.75rem' },
+      { label: 'Wide · 16px', value: '1rem' },
+    ],
+    treatments: ['plain', 'badge', 'outline'].map((value) => ({
+      label: value,
+      value,
+    })),
+    marks: ['plain', 'soft', 'solid', 'outline'].map((value) => ({
+      label: value,
+      value,
+    })),
+    wordmarks: ['plain', 'accent', 'gradient'].map((value) => ({
+      label: value,
+      value,
+    })),
+    shapes: ['rounded', 'square', 'circle'].map((value) => ({
+      label: value,
+      value,
+    })),
+    tones: [
+      'accent',
+      'neutral',
+      'secondary',
+      'info',
+      'success',
+      'warning',
+      'danger',
+      'feature',
+    ].map((value) => ({ label: value, value })),
+    sources: [
+      { label: 'Registered icon', value: 'icon' },
+      { label: 'Image', value: 'image' },
+      { label: 'Monogram', value: 'monogram' },
+    ],
+    reset: () => {
+      brandName('PureStack')
+      tagline('')
+      punctuation('.')
+      logoLayout('horizontal')
+      logoSize('md')
+      treatment('plain')
+      markTreatment('plain')
+      wordmarkTreatment('plain')
+      markShape('rounded')
+      logoTone('accent')
+      markSource('icon')
+      customAccent('')
+      spacing('')
+      linked(false)
+    },
+  }
+}
+
+const logoPlayground = defineComponent<LogoPlayground>(logoPlaygroundTemplate, {
+  context: createLogoPlayground,
+})
+const icons: Record<string, string> = {
+  'tabler:stack-2': tabler_stack_2,
+  'lucide:chevron-down': lucide_chevron_down,
+}
+createApp(
+  {
+    components: {
+      LogoPlayground: logoPlayground,
+      ...defineLogoComponents(),
+      ...defineFlexComponents(),
+      ...defineGridComponents(),
+      ...defineBadgeComponents(),
+      ...defineButtonComponents(),
+      ...definePanelComponents(),
+      ...defineFormComponents(),
+      ...defineFormInputField(),
+      ...defineFormSelectField(),
+      ...defineIconComponents((name) => icons[name] ?? ''),
+    },
+  },
+  { selector: 'app#logo-playground', template: html`<LogoPlayground/>` },
+)
+```
+  </TabPane>
+</Tabs>
+
+## Appearances and compositions
+
+Keep the identity consistent while adapting its presentation. These examples share one configuration and override only the settings that differ. The final example supplies its own vector through the mark slot.
+
+<Tabs group="logo-appearances-sample" selectedTab="logo-appearances-sample-preview" ariaLabel="appearances example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="logo-appearances-sample-preview" label="Preview">
+    <RegorApp id="logo-appearances" src="./appearances.ts"/>
+  </TabPane>
+  <TabPane id="logo-appearances-sample-mdx" label="appearances.mdx">
+```html
+<RegorApp id="logo-appearances" src="./appearances.ts"/>
+```
+  </TabPane>
+  <TabPane id="logo-appearances-sample-ts" label="appearances.ts">
+```typescript
+import {
+  defineFlexComponents,
+  defineGridComponents,
+  defineIconComponents,
+  defineLogoComponents,
+  definePanelComponents,
+  type LogoConfig,
+} from '@purestack/ts-components'
+import { tabler_stack_2 } from '@purestack/ts-svg-icons'
+import { createApp, defineComponent, html } from 'regor'
+
+export interface LogoAppearances {
+  identity: LogoConfig
+}
+
+const logoAppearancesTemplate = html`<Grid columns="1" columnsMd="2">
+  <Panel variant="outline" bodyClass="p-4 min-w-0">
+    <p class="text-eyebrow mt-0">Navigation</p>
+    <SiteLogo :config="identity"/>
+    <p class="text-muted mb-0">A quiet horizontal signature.</p>
+  </Panel>
+  <Panel variant="outline" bodyClass="p-4 min-w-0">
+    <p class="text-eyebrow mt-0">Brand badge</p>
+    <SiteLogo :config="identity" appearance="badge" markStyle="soft" size="sm"/>
+    <p class="text-muted mb-0">A contained identity for cards and embeds.</p>
+  </Panel>
+  <Panel variant="outline" bodyClass="p-4 min-w-0">
+    <p class="text-eyebrow mt-0">Centered signature</p>
+    <Flex justify="center"><SiteLogo :config="identity" layout="stacked" subtitle="Pure frontend infrastructure" size="lg" markStyle="solid"/></Flex>
+  </Panel>
+  <Panel variant="outline" bodyClass="p-4 min-w-0">
+    <p class="text-eyebrow mt-0">Wordmark</p>
+    <SiteLogo :config="identity" layout="wordmark" wordmarkStyle="gradient" size="lg"/>
+    <p class="text-muted mb-0">Typography with a theme-aware accent.</p>
+  </Panel>
+  <Panel variant="outline" bodyClass="p-4 min-w-0">
+    <p class="text-eyebrow mt-0">Compact marks</p>
+    <Flex align="center" wrap="true">
+      <SiteLogo :config="identity" layout="mark" markStyle="solid" shape="circle" size="lg"/>
+      <SiteLogo :config="identity" layout="mark" markStyle="outline" shape="square" size="lg"/>
+      <SiteLogo brand="North Star" monogram="NS" :href="null" layout="mark" markStyle="soft" size="lg" tone="info"/>
+    </Flex>
+    <p class="text-muted mb-0">Full accessible names, even without a wordmark.</p>
+  </Panel>
+  <Panel variant="outline" bodyClass="p-4 min-w-0">
+    <p class="text-eyebrow mt-0">Custom artwork</p>
+    <SiteLogo brand="Orbit" subtitle="A mark slot for your own vector" :href="null" size="lg" appearance="outline" tone="info">
+      <template #mark><svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <circle cx="16" cy="16" r="5" fill="currentColor"/>
+        <ellipse cx="16" cy="16" rx="14" ry="7" stroke="currentColor" stroke-width="2" transform="rotate(-35 16 16)"/>
+      </svg></template>
+    </SiteLogo>
+  </Panel>
+</Grid>`
+
+const logoAppearances = defineComponent<LogoAppearances>(
+  logoAppearancesTemplate,
+  {
+    context: () => ({
+      identity: {
+        brand: 'PureStack',
+        suffix: '.',
+        icon: 'tabler:stack-2',
+        href: null,
+      },
+    }),
+  },
+)
+createApp(
+  {
+    components: {
+      LogoAppearances: logoAppearances,
+      ...defineLogoComponents(),
+      ...defineFlexComponents(),
+      ...defineGridComponents(),
+      ...definePanelComponents(),
+      ...defineIconComponents((name) =>
+        name === 'tabler:stack-2' ? tabler_stack_2 : '',
+      ),
+    },
+  },
+  { selector: 'app#logo-appearances', template: html`<LogoAppearances/>` },
+)
+```
+  </TabPane>
+</Tabs>
+
+### Choose a layout
+
+| Layout | Displays | Useful for |
+| --- | --- | --- |
+| `horizontal` | Mark beside the wordmark and subtitle | Headers, footers and navigation |
+| `stacked` | Mark centered above the text | Welcome screens and brand cards |
+| `wordmark` | Brand text and optional subtitle | Editorial headings and compact signatures |
+| `mark` | Only the icon, image or monogram | Compact navigation and application tiles |
+
+### Choose a treatment
+
+These choices are independent: you can combine an outlined container with a solid mark, or a plain container with a gradient wordmark.
+
+| Setting | Choices | What changes |
+| --- | --- | --- |
+| `appearance` | `plain`, `badge`, `outline` | The whole logo's container, padding and border |
+| `markStyle` | `plain`, `soft`, `solid`, `outline` | The mark's background, border and inset |
+| `wordmarkStyle` | `plain`, `accent`, `gradient` | The brand text's color treatment |
+| `shape` | `rounded`, `square`, `circle` | The mark's outer shape |
+| `size` | `sm`, `md`, `lg`, `xl` | Coordinated wordmark, mark and subtitle sizes |
+
+The default wordmark keeps your original casing, spacing and text shaping. It does not split your brand into individual letters or force uppercase.
+
+## Share a brand across the site
+
+Define your identity once in `siteConfig.json`. The default documentation header reads this object through TopBar. PureStack Studio's landing header and footer use the same object through its small StudioBrand component.
+
+```json
+{
+  "logo": {
+    "brand": "PureStack",
+    "suffix": ".",
+    "icon": "tabler:stack-2",
+    "href": "/",
+    "ariaLabel": "PureStack home",
+    "size": "md",
+    "markStyle": "plain"
+  }
+}
+```
+
+In a Regor app, keep the same structure in a typed object:
+
+```typescript
+import type { LogoConfig } from '@purestack/ts-components'
+
+const identity: LogoConfig = {
+  brand: 'PureStack',
+  suffix: '.',
+  icon: 'tabler:stack-2',
+  href: '/',
+}
+```
+
+```html
+<SiteLogo :config="identity"/>
+<SiteLogo :config="identity" size="sm"/>
+<SiteLogo :config="identity" layout="stacked" subtitle="Pure frontend infrastructure"/>
+```
+
+Direct props override configuration values. An undefined prop inherits from `config`; an empty subtitle or suffix clears that text, and a null href removes navigation. Props and configuration refs remain reactive, including when the whole configuration object is replaced. A standalone SiteLogo does not implicitly read the site configuration—pass `config` or explicit brand props.
+
+## Icons, images and custom marks
+
+SiteLogo resolves its mark in this order: a **mark slot**, an **image**, a registered **Icon**, then a **monogram**. The default monogram uses the first character of the first two words in the brand; set `monogram` for a specific abbreviation such as “PS”.
+
+Register icons through `defineIconComponents` when creating your app. The examples include their complete registrations. SiteLogo itself does not bundle an icon collection.
+
+For existing artwork, provide the image path. A second image can adapt the artwork to the active dark theme:
+
+```html
+<SiteLogo
+  brand="Your brand"
+  imageSrc="/assets/brand-light.svg"
+  imageSrcDark="/assets/brand-dark.svg"
+  markSize="3rem"
+/>
+```
+
+Images keep their aspect ratio within the mark box. They have empty alt text because the component supplies the accessible name. The dark image follows the site's active theme, including a manual theme switch; it is only used when `imageSrc` is also provided. `tone` and `markColor` tint SVG icons and monograms, not the pixels inside an image.
+
+For your own SVG or markup, use Regor's named template syntax:
+
+```html
+<SiteLogo brand="Orbit" :href="null">
+  <template #mark>
+    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <circle cx="16" cy="16" r="10" stroke="currentColor" stroke-width="3"/>
+    </svg>
+  </template>
+</SiteLogo>
+```
+
+The mark is decorative content within the logo's accessible name. Do not place buttons, links or other interactive controls in this slot.
+
+## Spacing between the mark and title
+
+`gap` controls the space between the logo mark and the entire text block. The default is `0.375rem` (6px) for a horizontal logo and `0.5rem` (8px) for a stacked logo. These compact defaults apply to the landing header, footer and documentation header automatically.
+
+Override a single instance with a CSS length:
+
+```html
+<SiteLogo brand="PureStack" icon="tabler:stack-2" suffix="." gap="0.25rem"/>
+```
+
+To share the same spacing across the site, set `gap` inside the existing `logo` configuration in `siteConfig.json`:
+
+```json
+{
+  "logo": {
+    "brand": "PureStack",
+    "suffix": ".",
+    "icon": "tabler:stack-2",
+    "href": "/",
+    "gap": "0.25rem"
+  }
+}
+```
+
+A direct `gap` prop overrides `config.gap`. Omit it to use the defaults; `gap="0px"` removes the layout gap. In stacked layout, the same prop controls vertical spacing. It does not change the space between the brand name and subtitle, or remove transparent padding inside an image or SVG.
+
+## Size and color customization
+
+The four sizes coordinate the mark, brand and subtitle. The default medium size scales gently on small screens. For your own fluid sizing, use CSS lengths directly instead of separate props for every breakpoint:
+
 ```html
 <SiteLogo
   brand="PureStack"
-  subtitle="Component studio"
-  href="/"
-  icon="lucide:check"
-  brandSize="1.6rem"
-  brandSizeMd="2rem"
-  subtitleSize="0.65rem"
-  iconSize="2.5rem"
-  ariaLabel="PureStack home"
+  icon="tabler:stack-2"
+  suffix="."
+  brandSize="clamp(1.25rem, 3vw, 2rem)"
+  markSize="clamp(1.75rem, 4vw, 2.75rem)"
+  subtitleSize="0.75rem"
+  gap="0.375rem"
 />
 ```
-  </TabPane>
-</Tabs>
 
-## Theme-aware letter colors
+`tone` gets colors from the active skin. Use `brandColor` and `accentColor` for specific brand colors, and `markBackground` and `markColor` to customize the mark independently. CSS theme variables work too. The gradient wordmark blends the brand and accent colors; the solid mark uses the tone's button colors unless overridden.
 
-Use theme variables so the wordmark works in both skins.
-
-<Tabs group="site-logo-sample-2" selectedTab="site-logo-sample-2-preview" ariaLabel="Theme-aware letter colors example" tone="neutral" variant="surface" tabVariant="underline">
-  <TabPane id="site-logo-sample-2-preview" label="Preview">
-    <SiteLogo
-      brand="Studio Docs"
-      subtitle="Built with PureStack"
-      href="/components/"
-      :colors="['var(--ps-current-text-default)', 'var(--ps-current-text-subtle)']"
-      letterColors="0000001111"
-      subtitleLetterColors="1"
-      brandSize="1.8rem"
-      subtitleSize="0.65rem"
-    />
-  </TabPane>
-  <TabPane id="site-logo-sample-2-source-0" label="letter-palette.mdx">
-```html
-<SiteLogo
-  brand="Studio Docs"
-  subtitle="Built with PureStack"
-  href="/components/"
-  :colors="['var(--ps-current-text-default)', 'var(--ps-current-text-subtle)']"
-  letterColors="0000001111"
-  subtitleLetterColors="1"
-  brandSize="1.8rem"
-  subtitleSize="0.65rem"
-/>
-```
-  </TabPane>
-</Tabs>
-
-## Behavior and accessibility
-
-The logo is a link, not a heading. Give it a useful destination. Letter colors and responsive sizes are resolved when the component is created; these plain string props are not a reactive editor contract. Ensure every chosen color remains readable in each skin.
+The subtitle wraps and the wordmark can break on narrow screens. For very constrained navigation, choose `mark` or a smaller size. SiteLogo does not automatically hide your brand or subtitle at a viewport breakpoint.
 
 ## API reference
 
 <div class="api-overview">
-  <p class="text-eyebrow">SiteLogo contract</p>
-  <p>SiteLogo accepts plain configuration values. The site header supplies these from site.logo; using SiteLogo directly requires explicit brand content.</p>
+  <p class="text-eyebrow">Identity · presentation · reuse</p>
+  <p>Import <code>LogoConfig</code> for shared data and <code>SiteLogo</code> for the component type. Individual props accept literals or refs; <code>config</code> also accepts a reactive object. Bind reactive values with colon-prefixed attributes.</p>
 </div>
 
-<nav class="api-index" aria-label="SiteLogo properties">
-  <a href="#site-logo-prop-brand">brand</a>
-  <a href="#site-logo-prop-letterColors">letterColors</a>
-  <a href="#site-logo-prop-subtitleLetterColors">subtitleLetterColors</a>
-  <a href="#site-logo-prop-colors">colors</a>
-  <a href="#site-logo-prop-logoBackground">logoBackground</a>
-  <a href="#site-logo-prop-logoForeground">logoForeground</a>
-  <a href="#site-logo-prop-brandSize">brandSize</a>
-  <a href="#site-logo-prop-brandSizeSm">brandSizeSm</a>
-  <a href="#site-logo-prop-brandSizeMd">brandSizeMd</a>
-  <a href="#site-logo-prop-brandSizeLg">brandSizeLg</a>
-  <a href="#site-logo-prop-brandSizeXl">brandSizeXl</a>
-  <a href="#site-logo-prop-subtitleSize">subtitleSize</a>
-  <a href="#site-logo-prop-subtitleSizeSm">subtitleSizeSm</a>
-  <a href="#site-logo-prop-subtitleSizeMd">subtitleSizeMd</a>
-  <a href="#site-logo-prop-subtitleSizeLg">subtitleSizeLg</a>
-  <a href="#site-logo-prop-subtitleSizeXl">subtitleSizeXl</a>
-  <a href="#site-logo-prop-iconSize">iconSize</a>
-  <a href="#site-logo-prop-iconSizeSm">iconSizeSm</a>
-  <a href="#site-logo-prop-iconSizeMd">iconSizeMd</a>
-  <a href="#site-logo-prop-iconSizeLg">iconSizeLg</a>
-  <a href="#site-logo-prop-iconSizeXl">iconSizeXl</a>
-  <a href="#site-logo-prop-subtitleInset">subtitleInset</a>
-  <a href="#site-logo-prop-subtitleInsetSm">subtitleInsetSm</a>
-  <a href="#site-logo-prop-subtitleInsetMd">subtitleInsetMd</a>
-  <a href="#site-logo-prop-subtitleInsetLg">subtitleInsetLg</a>
-  <a href="#site-logo-prop-subtitleInsetXl">subtitleInsetXl</a>
-  <a href="#site-logo-prop-subtitle">subtitle</a>
-  <a href="#site-logo-prop-href">href</a>
-  <a href="#site-logo-prop-icon">icon</a>
-  <a href="#site-logo-prop-ariaLabel">ariaLabel</a>
+<nav class="api-index" aria-label="SiteLogo API">
+  <a href="#logo-config">config</a><a href="#logo-brand">brand</a><a href="#logo-layout">layout</a><a href="#logo-size">size</a><a href="#logo-gap">gap</a><a href="#logo-appearance">appearance</a><a href="#logo-markStyle">markStyle</a><a href="#logo-wordmarkStyle">wordmarkStyle</a><a href="#logo-icon">mark sources</a><a href="#logo-tone">colors</a><a href="#logo-href">navigation</a>
 </nav>
 
-<ApiProperty anchor="site-logo-prop-brand" name="brand" valueType="string" defaultValue="not set">
-  <p>Brand text split into individually styled letters.</p>
+### Identity and reuse
+
+<ApiProperty anchor="logo-config" name="config" valueType="RefOrValue&lt;Partial&lt;LogoConfig&gt;&gt;" defaultValue="not set">
+  <p>Shared settings. Explicit props override individual fields, so one identity can serve a header, footer and centered signature.</p>
 </ApiProperty>
 
-<ApiProperty anchor="site-logo-prop-letterColors" name="letterColors" valueType="string" defaultValue="accent fill">
-  <p>String of palette indexes for brand letters, for example 00111. The last index repeats for remaining letters; spaces do not advance the color cursor.</p>
+<ApiProperty anchor="logo-brand" name="brand" valueType="RefOrValue&lt;string&gt;" defaultValue="empty string">
+  <p>Brand name as ordinary text. Provide it even for a mark-only logo so it can supply the accessible name.</p>
 </ApiProperty>
 
-<ApiProperty anchor="site-logo-prop-subtitleLetterColors" name="subtitleLetterColors" valueType="string" defaultValue="subtle text fill">
-  <p>Palette indexes for subtitle letters, following the same rules as letterColors.</p>
+<ApiProperty anchor="logo-subtitle" name="subtitle" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Optional secondary line. It wraps naturally and is hidden in mark-only layout. An empty string clears a configured subtitle.</p>
 </ApiProperty>
 
-<ApiProperty anchor="site-logo-prop-colors" name="colors" valueType="string[]" defaultValue="not set">
-  <p>Array of CSS colors, gradients or supported theme-variable references used by letter and glyph indexes.</p>
+<ApiProperty anchor="logo-suffix" name="suffix" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Accent-colored text appended directly to the brand, such as a period. An empty string clears a configured suffix.</p>
 </ApiProperty>
 
-<ApiProperty anchor="site-logo-prop-logoBackground" name="logoBackground" valueType="number" defaultValue="theme default">
-  <p>Index into colors for the glyph background.</p>
+### Layout and treatments
+
+<ApiProperty anchor="logo-layout" name="layout" valueType="RefOrValue&lt;LogoLayout&gt;" defaultValue="horizontal">
+  <p>horizontal, stacked, wordmark or mark. Determines which parts are shown and their arrangement.</p>
 </ApiProperty>
 
-<ApiProperty anchor="site-logo-prop-logoForeground" name="logoForeground" valueType="number" defaultValue="theme default">
-  <p>Index into colors for the glyph foreground.</p>
+<ApiProperty anchor="logo-size" name="size" valueType="RefOrValue&lt;LogoSize&gt;" defaultValue="md">
+  <p>sm, md, lg or xl. Coordinates mark, brand and subtitle dimensions without changing the identity.</p>
 </ApiProperty>
 
-<ApiProperty anchor="site-logo-prop-brandSize" name="brandSize" valueType="string" defaultValue="theme default">
-  <p>Brand font size as a CSS length.</p>
+<ApiProperty anchor="logo-appearance" name="appearance" valueType="RefOrValue&lt;LogoAppearance&gt;" defaultValue="plain">
+  <p>plain has no container decoration. badge adds a tinted surface and border. outline adds padding and a border.</p>
 </ApiProperty>
 
-<ApiProperty anchor="site-logo-prop-brandSizeSm" name="brandSizeSm" valueType="string" defaultValue="inherits smaller breakpoint">
-  <p>Brand font size as a CSS length from the sm breakpoint.</p>
+<ApiProperty anchor="logo-markStyle" name="markStyle" valueType="RefOrValue&lt;LogoMarkStyle&gt;" defaultValue="plain">
+  <p>plain, soft, solid or outline. Applies to the mark box independently of the container appearance.</p>
 </ApiProperty>
 
-<ApiProperty anchor="site-logo-prop-brandSizeMd" name="brandSizeMd" valueType="string" defaultValue="inherits smaller breakpoint">
-  <p>Brand font size as a CSS length from the md breakpoint.</p>
+<ApiProperty anchor="logo-wordmarkStyle" name="wordmarkStyle" valueType="RefOrValue&lt;LogoWordmarkStyle&gt;" defaultValue="plain">
+  <p>plain uses the brand color; accent uses the accent color; gradient blends both. The suffix keeps its accent color.</p>
 </ApiProperty>
 
-<ApiProperty anchor="site-logo-prop-brandSizeLg" name="brandSizeLg" valueType="string" defaultValue="inherits smaller breakpoint">
-  <p>Brand font size as a CSS length from the lg breakpoint.</p>
+<ApiProperty anchor="logo-shape" name="shape" valueType="RefOrValue&lt;LogoShape&gt;" defaultValue="rounded">
+  <p>rounded, square or circle. Shapes and clips the mark box without changing the wordmark.</p>
 </ApiProperty>
 
-<ApiProperty anchor="site-logo-prop-brandSizeXl" name="brandSizeXl" valueType="string" defaultValue="inherits smaller breakpoint">
-  <p>Brand font size as a CSS length from the xl breakpoint.</p>
+### Mark sources
+
+<ApiProperty anchor="logo-icon" name="icon" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Registered SVG icon name, such as tabler:stack-2. Used when there is no mark slot or image.</p>
 </ApiProperty>
 
-<ApiProperty anchor="site-logo-prop-subtitleSize" name="subtitleSize" valueType="string" defaultValue="theme default">
-  <p>Subtitle font size as a CSS length.</p>
+<ApiProperty anchor="logo-imageSrc" name="imageSrc" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Image URL for the mark. Takes precedence over icon and monogram. The image is contained within the mark dimensions.</p>
 </ApiProperty>
 
-<ApiProperty anchor="site-logo-prop-subtitleSizeSm" name="subtitleSizeSm" valueType="string" defaultValue="inherits smaller breakpoint">
-  <p>Subtitle font size as a CSS length from the sm breakpoint.</p>
+<ApiProperty anchor="logo-imageSrcDark" name="imageSrcDark" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Optional dark-theme counterpart to imageSrc. Follows the active site theme.</p>
 </ApiProperty>
 
-<ApiProperty anchor="site-logo-prop-subtitleSizeMd" name="subtitleSizeMd" valueType="string" defaultValue="inherits smaller breakpoint">
-  <p>Subtitle font size as a CSS length from the md breakpoint.</p>
+<ApiProperty anchor="logo-monogram" name="monogram" valueType="RefOrValue&lt;string&gt;" defaultValue="derived from brand">
+  <p>Fallback mark text when no image or icon is supplied. Defaults to the first characters of the first two words; provide a short abbreviation for a specific identity.</p>
 </ApiProperty>
 
-<ApiProperty anchor="site-logo-prop-subtitleSizeLg" name="subtitleSizeLg" valueType="string" defaultValue="inherits smaller breakpoint">
-  <p>Subtitle font size as a CSS length from the lg breakpoint.</p>
+### Colors and custom dimensions
+
+<ApiProperty anchor="logo-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="accent">
+  <p>Semantic palette for the mark and accent text. The plain wordmark uses the neutral text color so it remains readable on the surrounding surface.</p>
 </ApiProperty>
 
-<ApiProperty anchor="site-logo-prop-subtitleSizeXl" name="subtitleSizeXl" valueType="string" defaultValue="inherits smaller breakpoint">
-  <p>Subtitle font size as a CSS length from the xl breakpoint.</p>
+<ApiProperty anchor="logo-brandColor" name="brandColor · accentColor" valueType="RefOrValue&lt;string&gt;" defaultValue="theme colors">
+  <p>CSS colors or theme variables for the wordmark and accent. Gradient wordmarks blend these two values.</p>
 </ApiProperty>
 
-<ApiProperty anchor="site-logo-prop-iconSize" name="iconSize" valueType="string" defaultValue="theme default">
-  <p>Glyph size as a CSS length.</p>
+<ApiProperty anchor="logo-markBackground" name="markBackground · markColor" valueType="RefOrValue&lt;string&gt;" defaultValue="mark treatment">
+  <p>Override the mark background and foreground independently. Backgrounds also accept CSS gradients. Foreground color affects currentColor SVGs and monograms.</p>
 </ApiProperty>
 
-<ApiProperty anchor="site-logo-prop-iconSizeSm" name="iconSizeSm" valueType="string" defaultValue="inherits smaller breakpoint">
-  <p>Glyph size as a CSS length from the sm breakpoint.</p>
+<ApiProperty anchor="logo-brandSize" name="brandSize · subtitleSize · markSize" valueType="RefOrValue&lt;string&gt;" defaultValue="size preset">
+  <p>CSS lengths overriding the corresponding preset dimensions. Use rem, px or clamp() values; markSize sets both width and height.</p>
 </ApiProperty>
 
-<ApiProperty anchor="site-logo-prop-iconSizeMd" name="iconSizeMd" valueType="string" defaultValue="inherits smaller breakpoint">
-  <p>Glyph size as a CSS length from the md breakpoint.</p>
+<ApiProperty anchor="logo-gap" name="gap" valueType="RefOrValue&lt;string&gt;" defaultValue="0.375rem; stacked 0.5rem">
+  <p>Space between the mark and text block: horizontal in horizontal layout, vertical when stacked. Accepts CSS lengths such as 0.25rem, 6px or 0px. Has no visible effect in mark-only or wordmark-only layout.</p>
+  <p>Set it on an instance or in the shared logo configuration. Try the Mark-to-title spacing control in the playground above.</p>
 </ApiProperty>
 
-<ApiProperty anchor="site-logo-prop-iconSizeLg" name="iconSizeLg" valueType="string" defaultValue="inherits smaller breakpoint">
-  <p>Glyph size as a CSS length from the lg breakpoint.</p>
+### Navigation and naming
+
+<ApiProperty anchor="logo-href" name="href" valueType="RefOrValue&lt;string | null&gt;" defaultValue="/">
+  <p>Anchor destination. Null or an empty string removes the href and makes the logo noninteractive. Relative public paths honor the SSG base path.</p>
 </ApiProperty>
 
-<ApiProperty anchor="site-logo-prop-iconSizeXl" name="iconSizeXl" valueType="string" defaultValue="inherits smaller breakpoint">
-  <p>Glyph size as a CSS length from the xl breakpoint.</p>
+<ApiProperty anchor="logo-ariaLabel" name="ariaLabel" valueType="RefOrValue&lt;string&gt;" defaultValue="brand name">
+  <p>Accessible name for the whole logo. Use a meaningful brand or destination label; the visual children do not create duplicate announcements.</p>
 </ApiProperty>
 
-<ApiProperty anchor="site-logo-prop-subtitleInset" name="subtitleInset" valueType="string" defaultValue="theme default">
-  <p>Inset for the subtitle as a CSS length.</p>
-</ApiProperty>
-
-<ApiProperty anchor="site-logo-prop-subtitleInsetSm" name="subtitleInsetSm" valueType="string" defaultValue="inherits smaller breakpoint">
-  <p>Inset for the subtitle as a CSS length from the sm breakpoint.</p>
-</ApiProperty>
-
-<ApiProperty anchor="site-logo-prop-subtitleInsetMd" name="subtitleInsetMd" valueType="string" defaultValue="inherits smaller breakpoint">
-  <p>Inset for the subtitle as a CSS length from the md breakpoint.</p>
-</ApiProperty>
-
-<ApiProperty anchor="site-logo-prop-subtitleInsetLg" name="subtitleInsetLg" valueType="string" defaultValue="inherits smaller breakpoint">
-  <p>Inset for the subtitle as a CSS length from the lg breakpoint.</p>
-</ApiProperty>
-
-<ApiProperty anchor="site-logo-prop-subtitleInsetXl" name="subtitleInsetXl" valueType="string" defaultValue="inherits smaller breakpoint">
-  <p>Inset for the subtitle as a CSS length from the xl breakpoint.</p>
-</ApiProperty>
-
-<ApiProperty anchor="site-logo-prop-subtitle" name="subtitle" valueType="string" defaultValue="not set">
-  <p>Supporting text beneath the title.</p>
-</ApiProperty>
-
-<ApiProperty anchor="site-logo-prop-href" name="href" valueType="string" defaultValue="/">
-  <p>Brand link destination, resolved against the site base path in SSG context.</p>
-</ApiProperty>
-
-<ApiProperty anchor="site-logo-prop-icon" name="icon" valueType="string" defaultValue="not set">
-  <p>Registered SVG icon name. In browser apps, include the icon in the resolver passed to defineIconComponents.</p>
-</ApiProperty>
-
-<ApiProperty anchor="site-logo-prop-ariaLabel" name="ariaLabel" valueType="string" defaultValue="not set">
-  <p>Accessible label for the brand link when its visible text is insufficient.</p>
-</ApiProperty>
-
-### Composition
+### Slots and registration
 
 <div class="api-contract">
-<p>No slots. Register defineLogoComponents and defineIconComponents if an icon is supplied. Without an icon, the glyph uses its built-in mark.</p>
+  <p>The named <code>mark</code> slot replaces the built-in image/icon/monogram content. It is omitted in wordmark-only layout. There is no default content slot.</p>
+  <p>Register <code>defineLogoComponents()</code> and <code>defineIconComponents()</code> for icon marks. The standard SSG component registration includes both; client examples register their own dependencies.</p>
 </div>
 
+## Accessibility and navigation
 
+The root has a single accessible name from `ariaLabel`, then `brand`, then `monogram`, with “Home” as a last fallback. Visual mark and text children are hidden from assistive technology to avoid duplicate announcements. A meaningful name is especially important in mark-only layout.
+
+A linked logo is an anchor with native keyboard navigation and a visible focus outline. Use `href="/"` for home, or another destination with an appropriate label. With `:href="null"` or an empty href, the logo has an image role, no link destination and no default tab stop. In an SSG page, logo links and image paths are resolved against the configured public base path.
 
 ## Related components
 
-- [TopBar](/components/site/top-bar/)
-- [Icon](/components/layout/icon/)
-- [SiteFooter](/components/site/site-footer/)
+- [TopBar](/components/site/top-bar/) — the documentation header that consumes the shared logo configuration.
+- [SiteFooter](/components/site/site-footer/) — compose a brand signature with footer content.
+- [Icon](/components/layout/icon/) — named SVG artwork for icon marks.

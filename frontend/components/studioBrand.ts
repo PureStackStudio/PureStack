@@ -1,13 +1,23 @@
-import { defineComponent, html } from 'regor'
+import {
+  type LogoConfig,
+  type LogoSize,
+  resolveTsSsgContext,
+} from '@purestack/ts-common'
+import { defineComponent, html, type RefOrValue } from 'regor'
 
-export interface StudioBrand {}
+export interface StudioBrand {
+  config: LogoConfig
+  size?: RefOrValue<LogoSize>
+}
 
-const studioBrandTemplate = html`<a class="wordmark" href="/" aria-label="PureStack home">
-  <span class="brand-mark" aria-hidden="true"
-    ><Icon name="tabler:stack-2"/></span>
-  <span>PureStack<span class="brand-period">.</span></span>
-</a>`
+const studioBrandTemplate = html`<SiteLogo :config="config" :size="size"/>`
 
 export function defineStudioBrandComponent() {
-  return defineComponent<StudioBrand>(studioBrandTemplate)
+  return defineComponent<StudioBrand>(studioBrandTemplate, {
+    props: ['size'],
+    context: (head) => ({
+      ...head.props,
+      config: resolveTsSsgContext(head).site.logo,
+    }),
+  })
 }

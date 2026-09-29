@@ -12,6 +12,15 @@ export type {
   ParsedFrontmatterSource,
 } from './frontmatter-types'
 export type {
+  LogoAppearance,
+  LogoConfig,
+  LogoLayout,
+  LogoMarkStyle,
+  LogoShape,
+  LogoSize,
+  LogoWordmarkStyle,
+} from './logo-types'
+export type {
   NavItem,
   NavigationConfig,
   NavigationMode,
@@ -37,7 +46,6 @@ export type {
   Ga4Config,
   I18nConfig,
   I18nUrlStrategy,
-  LogoConfig,
   PagefindConfig,
   PageTocConfig,
   PreviewConfig,

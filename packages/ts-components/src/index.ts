@@ -1,4 +1,13 @@
 export type {
+  LogoAppearance,
+  LogoConfig,
+  LogoLayout,
+  LogoMarkStyle,
+  LogoShape,
+  LogoSize,
+  LogoWordmarkStyle,
+} from '@purestack/ts-common'
+export type {
   TsSsgMenusApi,
   TsSsgModalApi,
   TsSsgTabsApi,

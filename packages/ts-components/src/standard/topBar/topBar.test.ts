@@ -32,22 +32,16 @@ describe('TopBar rendering', () => {
         site: {
           logo: {
             brand: 'Calc Core',
-            letterColors: '00001111',
-            subtitleLetterColors: '1111111111111111111',
-            colors: ['#111111', '#ff0066'],
-            logoBackground: 1,
-            logoForeground: 0,
-            brandSize: '3rem',
-            brandSizeMd: '4rem',
-            subtitleSize: '0.5rem',
-            subtitleSizeLg: '0.65rem',
-            iconSize: '2.25rem',
-            iconSizeSm: '2.5rem',
-            subtitleInset: '1px',
-            subtitleInsetXl: '2px',
-            subtitle: 'backend-native engine',
+            subtitle: 'Backend engine',
+            suffix: '.',
             href: '/docs/',
             icon: 'iconoir:cube',
+            size: 'lg',
+            appearance: 'badge',
+            markStyle: 'solid',
+            wordmarkStyle: 'gradient',
+            brandColor: '#111111',
+            accentColor: '#ff0066',
           },
           auth: {
             enabled: true,
@@ -60,35 +54,13 @@ describe('TopBar rendering', () => {
     })
     cleanup()
 
-    expect((html.match(/site-logo__brand-letter/g) ?? []).length).toBe(
-      'Calc Core'.length,
-    )
-    expect(html).toContain(
-      'background-image: #111111; background-color: #111111',
-    )
-    expect(html).toContain('class="site-logo__glyph"')
-    expect(html).toContain('--ps-logo-glyph-background: #ff0066')
-    expect(html).toContain('--ps-logo-glyph-foreground: #111111')
-    expect(html).toContain('--ps-logo-brand-size: 3rem')
-    expect(html).toContain('--ps-logo-brand-size-md: 4rem')
-    expect(html).toContain('--ps-logo-subtitle-size: 0.5rem')
-    expect(html).toContain('--ps-logo-subtitle-size-lg: 0.65rem')
-    expect(html).toContain('--ps-logo-icon-size: 2.25rem')
-    expect(html).toContain('--ps-logo-icon-size-sm: 2.5rem')
-    expect(html).toContain('--ps-logo-subtitle-inset: 1px')
-    expect(html).toContain('--ps-logo-subtitle-inset-xl: 2px')
-    expect(html).toContain(
-      'background-image: #ff0066; background-color: #ff0066',
-    )
-    expect((html.match(/site-logo__subtitle-letter/g) ?? []).length).toBe(
-      'backend-native engine'.length,
-    )
-    expect(
-      (
-        html.match(/background-image: #ff0066; background-color: #ff0066/g) ??
-        []
-      ).length,
-    ).toBeGreaterThan(1)
+    expect(html).toContain('>Calc Core</span>')
+    expect(html).toContain('>Backend engine</span>')
+    expect(html).toContain('site-logo--badge')
+    expect(html).toContain('site-logo--mark-solid')
+    expect(html).toContain('site-logo--wordmark-gradient')
+    expect(html).toContain('--ps-logo-brand-color: #111111')
+    expect(html).toContain('--ps-logo-accent-color: #ff0066')
     expect(html).toContain('href="/docs/"')
     expect(html).toContain('name="q"')
     expect(html).toContain('class="sign-in position-relative topbar__account"')

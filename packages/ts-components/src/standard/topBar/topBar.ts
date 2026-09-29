@@ -51,37 +51,7 @@ const topBarTemplate = html`<input
   aria-hidden="true"/>
 <header class="topbar" :class="classes">
   <Flex align="center">
-    <SiteLogo
-      class="flex-none tone--neutral"
-      :brand="siteLogo.brand"
-      :letterColors="siteLogo.letterColors"
-      :subtitleLetterColors="siteLogo.subtitleLetterColors"
-      :colors="siteLogo.colors"
-      :logoBackground="siteLogo.logoBackground"
-      :logoForeground="siteLogo.logoForeground"
-      :brandSize="siteLogo.brandSize"
-      :brandSizeSm="siteLogo.brandSizeSm"
-      :brandSizeMd="siteLogo.brandSizeMd"
-      :brandSizeLg="siteLogo.brandSizeLg"
-      :brandSizeXl="siteLogo.brandSizeXl"
-      :subtitleSize="siteLogo.subtitleSize"
-      :subtitleSizeSm="siteLogo.subtitleSizeSm"
-      :subtitleSizeMd="siteLogo.subtitleSizeMd"
-      :subtitleSizeLg="siteLogo.subtitleSizeLg"
-      :subtitleSizeXl="siteLogo.subtitleSizeXl"
-      :iconSize="siteLogo.iconSize"
-      :iconSizeSm="siteLogo.iconSizeSm"
-      :iconSizeMd="siteLogo.iconSizeMd"
-      :iconSizeLg="siteLogo.iconSizeLg"
-      :iconSizeXl="siteLogo.iconSizeXl"
-      :subtitleInset="siteLogo.subtitleInset"
-      :subtitleInsetSm="siteLogo.subtitleInsetSm"
-      :subtitleInsetMd="siteLogo.subtitleInsetMd"
-      :subtitleInsetLg="siteLogo.subtitleInsetLg"
-      :subtitleInsetXl="siteLogo.subtitleInsetXl"
-      :subtitle="siteLogo.subtitle"
-      :href="siteLogo.href"
-      :icon="siteLogo.icon"/>
+    <SiteLogo class="flex-none" :config="siteLogo"/>
     <SearchBox
       r-if="searchEnabled"
       class="topbar__search flex-auto rounded-md tone-text-surface"
