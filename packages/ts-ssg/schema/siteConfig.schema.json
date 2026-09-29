@@ -939,6 +939,23 @@
       "type": "string",
       "description": "Publish output directory path used by publish builds. Relative paths are resolved from the content directory (siteConfig location).",
       "default": "dist/publish"
+    },
+    "docLayout": {
+      "type": "object",
+      "description": "Documentation sidebar offsets below the site header.",
+      "additionalProperties": false,
+      "properties": {
+        "sidebarTop": {
+          "type": "string",
+          "default": "5.5625rem",
+          "description": "CSS length from the viewport top for desktop navigation and table-of-contents sidebars. Also adjusts their available scrolling height."
+        },
+        "sidebarTopMobile": {
+          "type": "string",
+          "default": "4.875rem",
+          "description": "CSS length from the viewport top for mobile navigation and table-of-contents drawers. Also adjusts their available scrolling height."
+        }
+      }
     }
   }
 }

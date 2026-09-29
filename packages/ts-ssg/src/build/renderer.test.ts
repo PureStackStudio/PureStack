@@ -5,6 +5,23 @@ import { normalizeFrontmatter } from '../frontmatter/frontmatter'
 import { renderPage } from './renderer'
 
 describe('renderPage consent integration', () => {
+  it('passes configured sidebar offsets to the documentation layout', async () => {
+    const site = resolveSiteConfig({
+      rootDir: process.cwd(),
+      docLayout: { sidebarTop: '8rem', sidebarTopMobile: '72px' },
+    })
+    const html = await renderPage({
+      bodyHtml: '<p>Hello</p>',
+      pageInfo: {
+        relPath: 'index.md',
+        urlPath: '/',
+        frontmatter: normalizeFrontmatter({}),
+      },
+      site,
+    })
+    expect(html).toContain('--ps-doc-layout-sidebar-top: 8rem;')
+    expect(html).toContain('--ps-doc-layout-sidebar-top-mobile: 72px;')
+  })
   it('injects the critical auth state hint when auth is enabled', async () => {
     const site = resolveSiteConfig({
       rootDir: process.cwd(),
@@ -326,7 +343,7 @@ describe('renderPage consent integration', () => {
       analytics: site.analytics,
     })
     expect(html).not.toContain('class="doc-sidebar"')
-    expect(html).toContain('<body class="template-doc">')
+    expect(html).toContain('<body class="template-doc"')
     expect(html).not.toContain('<nav-menu')
     expect(html).not.toContain('template-doc--nav-ready')
     expect(html).not.toContain('ts-ssg:nav-collapsed')

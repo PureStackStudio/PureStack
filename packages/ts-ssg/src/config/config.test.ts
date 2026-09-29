@@ -6,6 +6,40 @@ import { describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from './config'
 
 describe('resolveSiteConfig sitemap', () => {
+  it('resolves desktop and mobile sidebar offsets from defaults, file and input', () => {
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'ts-ssg-offsets-'))
+    try {
+      const input = { rootDir: tempRoot, contentDir: tempRoot }
+      expect(resolveSiteConfig(input).docLayout).toEqual({
+        sidebarTop: '5.5625rem',
+        sidebarTopMobile: '4.875rem',
+      })
+      fs.writeFileSync(
+        path.join(tempRoot, 'siteConfig.json'),
+        JSON.stringify({
+          docLayout: { sidebarTop: '8rem', sidebarTopMobile: '72px' },
+        }),
+      )
+      expect(resolveSiteConfig(input).docLayout).toEqual({
+        sidebarTop: '8rem',
+        sidebarTopMobile: '72px',
+      })
+      expect(
+        resolveSiteConfig({
+          ...input,
+          docLayout: { sidebarTop: ' calc(5rem + 8px) ' },
+        }).docLayout,
+      ).toEqual({ sidebarTop: 'calc(5rem + 8px)', sidebarTopMobile: '72px' })
+      expect(
+        resolveSiteConfig({
+          ...input,
+          docLayout: { sidebarTop: '  ', sidebarTopMobile: '0px' },
+        }).docLayout,
+      ).toEqual({ sidebarTop: '8rem', sidebarTopMobile: '0px' })
+    } finally {
+      fs.rmSync(tempRoot, { recursive: true, force: true })
+    }
+  })
   it('resolves siteConfig outDir relative to contentDir', () => {
     const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'ts-ssg-config-'))
     try {

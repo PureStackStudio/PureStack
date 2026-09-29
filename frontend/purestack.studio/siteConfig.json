@@ -85,6 +85,10 @@
     "size": "md",
     "markStyle": "plain"
   },
+  "docLayout": {
+    "sidebarTop": "5.5625rem",
+    "sidebarTopMobile": "4.875rem"
+  },
   "mdx": {
     "highlighter": "shiki"
   },

@@ -45,6 +45,7 @@ export {
 export type {
   AnalyticsConfig,
   AuthConfig,
+  DocLayoutConfig,
   Ga4Config,
   I18nConfig,
   I18nUrlStrategy,

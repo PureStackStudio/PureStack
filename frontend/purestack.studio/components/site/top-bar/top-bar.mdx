@@ -25,9 +25,16 @@ The header above this guide is TopBar. The contained preview below has its own d
 
 This preview reads the same logo configuration as the site. Search is disabled inside this isolated document because it has no independent index.
 
-<Tabs group="top-bar-sample-1" selectedTab="top-bar-sample-1-preview" ariaLabel="A complete header example" tone="neutral" variant="surface" tabVariant="underline">
+<Tabs
+  group="top-bar-sample-1"
+  selectedTab="top-bar-sample-1-preview"
+  ariaLabel="A complete header example"
+  tone="neutral"
+  variant="surface"
+  tabVariant="underline"
+>
   <TabPane id="top-bar-sample-1-preview" label="Preview">
-    <TopBarPreview />
+    <TopBarPreview/>
   </TabPane>
   <TabPane id="top-bar-sample-1-source-0" label="preview.mdx">
 ```html
@@ -160,13 +167,36 @@ The direct prop overrides `site.logo.component`; when both are omitted, TopBar r
 
 ## Behavior and accessibility
 
+### Sidebar spacing below the header
+
+When a different logo or custom header changes TopBar's height, set the sidebar offsets in `siteConfig.json`:
+
+```json
+{
+  "docLayout": {
+    "sidebarTop": "5.5625rem",
+    "sidebarTopMobile": "4.875rem"
+  }
+}
+```
+
+These are the defaults. Set each value to the header height plus the clearance you want below it. `sidebarTop` controls the desktop navigation and table of contents, including collapsed sidebars and drawers. `sidebarTopMobile` controls their mobile offsets at the existing responsive breakpoints. CSS lengths such as `96px`, `6rem` and `calc(5rem + 8px)` are supported.
+
+Both the top position and available scrolling height use the same setting. Desktop scroll panels retain their existing bottom clearance. This reserves space below the header; it does not resize TopBar itself. Rebuild the site after changing these settings.
+
+Custom documentation templates can set `--ps-doc-layout-sidebar-top` and `--ps-doc-layout-sidebar-top-mobile` on a shared ancestor of their sidebars. The default doc template sets both from site configuration automatically.
+
 TopBar renders a fixed doc-nav-toggle ID and should appear once per document. Its mobile navigation toggle works with the standard doc layout. Logo content comes from site.logo. Search visibility currently follows site.pagefind.enabled, even when a searchEnabled prop is supplied.
 
 ## API reference
 
 <div class="api-overview">
   <p class="text-eyebrow">TopBar contract</p>
-  <p>Props below are the public template API. RefOrValue accepts a literal or a reactive ref; bind refs with a colon-prefixed attribute. Native attributes and events can be passed through the component root.</p>
+  <p>
+    Props below are the public template API. RefOrValue accepts a literal or a
+    reactive ref; bind refs with a colon-prefixed attribute. Native attributes
+    and events can be passed through the component root.
+  </p>
 </div>
 
 <nav class="api-index" aria-label="TopBar properties">
@@ -179,38 +209,93 @@ TopBar renders a fixed doc-nav-toggle ID and should appear once per document. It
   <a href="#top-bar-prop-searchEnabled">searchEnabled</a>
 </nav>
 
-<ApiProperty anchor="top-bar-prop-logoComponent" name="logoComponent" valueType="RefOrValue&lt;string&gt;" defaultValue="site.logo.component or SiteLogo">
-  <p>Registered component name rendered through :is. Supports SiteLogo, ClassicLogo or a custom component accepting config. A direct prop takes precedence over the site setting and can change reactively.</p>
+<ApiProperty
+  anchor="top-bar-prop-logoComponent"
+  name="logoComponent"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="site.logo.component or SiteLogo"
+>
+  <p>
+    Registered component name rendered through :is. Supports SiteLogo,
+    ClassicLogo or a custom component accepting config. A direct prop takes
+    precedence over the site setting and can change reactively.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="top-bar-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
-  <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+<ApiProperty
+  anchor="top-bar-prop-tone"
+  name="tone"
+  valueType="RefOrValue&lt;SemanticTone&gt;"
+  defaultValue="inherited"
+>
+  <p>
+    Semantic intent: neutral, accent, secondary, info, success, warning, danger,
+    feature, custom or ghost. The active skin supplies the colors.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="top-bar-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="surfaceAlt">
-  <p>Visual treatment. Accepts solid, surface, surfaceAlt, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none.</p>
+<ApiProperty
+  anchor="top-bar-prop-variant"
+  name="variant"
+  valueType="RefOrValue&lt;ComponentVariant&gt;"
+  defaultValue="surfaceAlt"
+>
+  <p>
+    Visual treatment. Accepts solid, surface, surfaceAlt, outlineFill, outline,
+    subtle, subtleBtn, link, sheen, underline, rail, bracket or none.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="top-bar-prop-signInAvatarSrc" name="signInAvatarSrc" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="top-bar-prop-signInAvatarSrc"
+  name="signInAvatarSrc"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Avatar URL forwarded to SignIn when account access is shown.</p>
 </ApiProperty>
 
-<ApiProperty anchor="top-bar-prop-signInAvatarAlt" name="signInAvatarAlt" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty
+  anchor="top-bar-prop-signInAvatarAlt"
+  name="signInAvatarAlt"
+  valueType="RefOrValue&lt;string&gt;"
+  defaultValue="not set"
+>
   <p>Avatar alternative text forwarded to SignIn.</p>
 </ApiProperty>
 
-<ApiProperty anchor="top-bar-prop-signInEnabled" name="signInEnabled" valueType="boolean" defaultValue="false">
-  <p>Shows the SignIn slot in the header; site.auth.enabled must also be true for the account component to render.</p>
+<ApiProperty
+  anchor="top-bar-prop-signInEnabled"
+  name="signInEnabled"
+  valueType="boolean"
+  defaultValue="false"
+>
+  <p>
+    Shows the SignIn slot in the header; site.auth.enabled must also be true for
+    the account component to render.
+  </p>
 </ApiProperty>
 
-<ApiProperty anchor="top-bar-prop-searchEnabled" name="searchEnabled" valueType="boolean" defaultValue="site.pagefind.enabled">
-  <p>Registered prop currently resolved from site configuration. Configure pagefind.enabled to control search visibility.</p>
+<ApiProperty
+  anchor="top-bar-prop-searchEnabled"
+  name="searchEnabled"
+  valueType="boolean"
+  defaultValue="site.pagefind.enabled"
+>
+  <p>
+    Registered prop currently resolved from site configuration. Configure
+    pagefind.enabled to control search visibility.
+  </p>
 </ApiProperty>
 
 ### Composition
 
 <div class="api-contract">
-<p>No slots. Register defineTopBarComponents and the selected logo component, SearchBox, ThemeSwitcher, SignIn, Flex and Icon families. Standard SSG registration provides these dependencies.</p>
+  <p>
+    No slots. Register defineTopBarComponents and the selected logo component,
+    SearchBox, ThemeSwitcher, SignIn, Flex and Icon families. Standard SSG
+    registration provides these dependencies.
+  </p>
 </div>
 
 

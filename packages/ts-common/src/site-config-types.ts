@@ -17,6 +17,7 @@ export interface SiteConfig {
   siteTitle: string
   favicon?: string
   logo: SiteLogoConfig
+  docLayout: DocLayoutConfig
   style: SiteStyleConfig
   html: SiteHtmlConfig
   navigation: NavigationConfig
@@ -30,6 +31,13 @@ export interface SiteConfig {
   preview: PreviewConfig
   i18n: I18nConfig
   mdx: SiteMdxConfig
+}
+
+export interface DocLayoutConfig {
+  /** CSS length reserved above desktop navigation and TOC sidebars. */
+  sidebarTop: string
+  /** CSS length reserved above mobile navigation and TOC drawers. */
+  sidebarTopMobile: string
 }
 
 export interface PageTocConfig {

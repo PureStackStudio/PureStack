@@ -1,4 +1,6 @@
 export const docLayoutVars = {
+  sidebarTop: '--ps-doc-layout-sidebar-top',
+  sidebarTopMobile: '--ps-doc-layout-sidebar-top-mobile',
   defaultNavWidth: '--ps-doc-layout-default-nav-width',
   defaultTocWidth: '--ps-doc-layout-default-toc-width',
   defaultRailWidth: '--ps-doc-layout-default-rail-width',
@@ -42,6 +44,10 @@ export const docLayoutVars = {
 } as const
 
 export const docLayoutDefaults = {
+  /** Viewport offset below the header for desktop sidebars and drawers. */
+  sidebarTop: '5.5625rem',
+  /** Viewport offset below the header for mobile sidebars and drawers. */
+  sidebarTopMobile: '4.875rem',
   /**
    * Fallback desktop nav sidebar width.
    *

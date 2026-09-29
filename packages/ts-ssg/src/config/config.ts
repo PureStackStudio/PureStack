@@ -24,7 +24,12 @@ import type {
   SiteScriptsConfig,
   SiteStyleConfig,
 } from '@purestack/ts-common'
-import { pickSemanticTone, resolveThemes, themes } from '@purestack/ts-style'
+import {
+  docLayoutDefaults,
+  pickSemanticTone,
+  resolveThemes,
+  themes,
+} from '@purestack/ts-style'
 import type { DeepPartial } from '@purestack/ts-util'
 import { isPlainObject, normalizeBasePath } from '@purestack/ts-util'
 import { resolveNavigationConfig } from '../navigation/navigation'
@@ -112,6 +117,16 @@ export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
     siteTitle,
     favicon: resolveFavicon(input.favicon, fileConfig.favicon),
     logo,
+    docLayout: {
+      sidebarTop:
+        resolveOptionalString(input.docLayout?.sidebarTop) ??
+        resolveOptionalString(fileConfig.docLayout?.sidebarTop) ??
+        docLayoutDefaults.sidebarTop,
+      sidebarTopMobile:
+        resolveOptionalString(input.docLayout?.sidebarTopMobile) ??
+        resolveOptionalString(fileConfig.docLayout?.sidebarTopMobile) ??
+        docLayoutDefaults.sidebarTopMobile,
+    },
     style,
     html,
     navigation,

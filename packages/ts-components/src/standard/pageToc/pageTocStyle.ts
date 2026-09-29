@@ -31,7 +31,7 @@ export function registerPageTocShellStyles(
     .borderRadius(palette.radii.lg)
     .border('1px solid transparent')
     .apply(palette.applyFont(palette.font.size.body))
-    .maxHeight('calc(100vh - 8.125rem)')
+    .maxHeight(`calc(100vh - ${docLayoutVar('sidebarTop')} - 1.5625rem)`)
     .overflowY('auto')
     .overflowX('hidden')
   styleBuilder
@@ -192,10 +192,10 @@ function registerPageTocSidebarBaseStyles(theme: ThemeMode) {
   styleBuilder
     .select('.doc-toc', theme)
     .position('sticky')
-    .top('6.5625rem')
+    .top(docLayoutVar('sidebarTop'))
     .zIndex(30)
     .alignSelf('start')
-    .maxHeight('calc(100vh - 8.125rem)')
+    .maxHeight(`calc(100vh - ${docLayoutVar('sidebarTop')} - 1.5625rem)`)
     .overflow('auto')
     .userSelect('none')
 
@@ -221,8 +221,13 @@ function registerPageTocMobileOverlayStyles(
   styleBuilder
     .select('.template-doc--has-toc .doc-toc', theme)
     .media(mediaMax(BREAKPOINTS.lg))
-    .top('4.875rem')
-    .height('calc(100dvh - 4.875rem)')
+    .top(docLayoutVar('sidebarTopMobile'))
+    .height(`calc(100dvh - ${docLayoutVar('sidebarTopMobile')})`)
+    .maxHeight('none')
+  styleBuilder
+    .select('.template-doc--has-toc .doc-toc .page-toc', theme)
+    .media(mediaMax(BREAKPOINTS.lg))
+    .maxHeight(`calc(100dvh - ${docLayoutVar('sidebarTopMobile')})`)
   styleBuilder
     .select('.template-doc--has-toc .doc-toc', theme)
     .media(mediaMax(BREAKPOINTS.toc))
@@ -323,10 +328,10 @@ function registerPageTocDesktopCollapsedStyles(theme: ThemeMode) {
     .media(mediaAbove(BREAKPOINTS.toc))
     .width(docLayoutVar('activeRailWidth'))
     .position('fixed')
-    .top('6.5625rem')
+    .top(docLayoutVar('sidebarTop'))
     .right('0')
     .left('auto')
-    .height('calc(100dvh - 6.5625rem)')
+    .height(`calc(100dvh - ${docLayoutVar('sidebarTop')})`)
     .maxHeight('none')
     .background('transparent')
     .boxShadow('none')

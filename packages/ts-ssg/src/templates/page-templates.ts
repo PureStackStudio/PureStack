@@ -6,6 +6,7 @@ import type {
   PageTemplateMap,
 } from '@purestack/ts-common'
 import { h } from '@purestack/ts-html'
+import { docLayoutVars } from '@purestack/ts-style'
 import { isTocEnabled } from '../toc/isTocEnabled'
 
 export const defaultTemplates: PageTemplateMap = {
@@ -53,7 +54,10 @@ function renderDocTemplate({
     .push(
       head,
       h('body')
-        .attr({ class: layout.bodyClass })
+        .attr({
+          class: layout.bodyClass,
+          style: `${docLayoutVars.sidebarTop}: ${site.docLayout.sidebarTop}; ${docLayoutVars.sidebarTopMobile}: ${site.docLayout.sidebarTopMobile};`,
+        })
         .push(
           buildTopBar(headerHtml),
           h('div')
