@@ -16,19 +16,20 @@ describe('createMdxHighlighter', () => {
     'ts',
   ])('highlights html tagged templates inside %s source', async (lang) => {
     const highlighter = await createMdxHighlighter(undefined, [lang])
-    const html = highlighter.codeToHtml(
-      [
-        "const name = 'World'",
-        'const view = html`<div class="greeting">Hello ${name}</div>`',
-      ].join('\n'),
-      lang,
-    )
+    const source = [
+      "const name = 'World'",
+      'const view = html`<div class="greeting">Hello ${name}</div>`',
+    ].join('\n')
+    const html = highlighter.codeToHtml(source, lang)
     const cleanup = ensureDomGlobals()
     try {
       const root = document.createElement('div')
       root.innerHTML = html
-      const tokens = Array.from(root.querySelectorAll('span')).map(
-        (token) => token.textContent,
+      const templateLine = root.querySelectorAll('code > .line')[1]
+      // Shiki merges surrounding whitespace into styled tokens by default.
+      // Inspect only the template line so the declaration cannot satisfy "name".
+      const tokens = Array.from(templateLine.querySelectorAll('span')).map(
+        (token) => token.textContent?.trim(),
       )
 
       // The embedded HTML grammar tokenizes tag and attribute names separately.
@@ -38,9 +39,7 @@ describe('createMdxHighlighter', () => {
 
       // ${...} must return to TypeScript tokenization inside the HTML template.
       expect(tokens).toContain('name')
-      expect(root.querySelector('code')?.textContent).toContain(
-        '<div class="greeting">Hello ${name}</div>',
-      )
+      expect(root.querySelector('code')?.textContent).toBe(source)
     } finally {
       cleanup()
     }
