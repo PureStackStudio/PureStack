@@ -1,0 +1,310 @@
+---
+title: ClassicLogo
+description: "The original PureStack logo: uppercase lettering, indexed colors, a bordered icon tile and responsive typography."
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 21
+  icon: tabler:components
+---
+
+# ClassicLogo
+
+The original PureStack logo, with its compact bordered container, filled icon tile, uppercase brand and evenly distributed subtitle. Every original color and responsive sizing option is available in this separate component.
+
+<Badge tone="accent" variant="surface">ClassicLogo</Badge>
+
+[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/classicLogo/classicLogo.ts) · [API reference](#api-reference)
+
+## Interactive playground
+
+This starts with the original Studio identity and its original colors. Edit either line, change the color maps, or switch to SiteLogo to compare the two components. Restore original resets every control. Changing the component uses Regor's `:is`, just like TopBar.
+
+<Tabs group="classic-logo-sample" selectedTab="classic-logo-preview-tab" ariaLabel="Classic logo example" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="classic-logo-preview-tab" label="Preview">
+    <RegorApp id="classic-logo-playground" src="./playground.ts"/>
+  </TabPane>
+  <TabPane id="classic-logo-mdx-tab" label="playground.mdx">
+```html
+<RegorApp id="classic-logo-playground" src="./playground.ts"/>
+```
+  </TabPane>
+  <TabPane id="classic-logo-ts-tab" label="playground.ts">
+```typescript
+import {
+  type ClassicLogoConfig,
+  defineButtonComponents,
+  defineClassicLogoComponents,
+  defineFlexComponents,
+  defineFormInputField,
+  defineFormSelectField,
+  defineGridComponents,
+  defineIconComponents,
+  defineLogoComponents,
+  definePanelComponents,
+  type FormSelectOption,
+} from '@purestack/ts-components'
+import {
+  lucide_chevron_down,
+  tabler_device_desktop_analytics,
+} from '@purestack/ts-svg-icons'
+import {
+  type ComputedRef,
+  computed,
+  createApp,
+  defineComponent,
+  html,
+  type Ref,
+  ref,
+} from 'regor'
+
+export interface ClassicLogoPlayground {
+  brand: Ref<string>
+  subtitle: Ref<string>
+  letterColors: Ref<string>
+  subtitleLetterColors: Ref<string>
+  accent: Ref<string>
+  component: Ref<string>
+  componentOptions: FormSelectOption[]
+  config: ComputedRef<ClassicLogoConfig>
+  source: ComputedRef<string>
+  reset: () => void
+}
+
+const classicLogoPlaygroundTemplate = html`<Flex direction="column">
+  <Panel variant="surfaceAlt" bodyClass="p-4 min-w-0 overflow-auto">
+    <p class="text-eyebrow mt-0">Original Studio identity</p>
+    <div id="classic-preview" class="py-4"><div :is="component" :config="config"></div></div>
+    <p class="text-muted mb-0">The original container, letter spacing, icon and responsive sizes. Switch the site theme to compare both skins.</p>
+  </Panel>
+  <Grid columns="1" columnsMd="2">
+    <FormSelectField id="classic-component" label="Logo component" :model="component" :options="componentOptions"/>
+    <FormInputField id="classic-brand" label="Brand" :model="brand"/>
+    <FormInputField id="classic-subtitle" label="Subtitle" :model="subtitle"/>
+    <FormInputField id="classic-colors" label="Brand color map" :model="letterColors" :disabled="component !== 'ClassicLogo'"/>
+    <FormInputField id="classic-subtitle-colors" label="Subtitle color map" :model="subtitleLetterColors" :disabled="component !== 'ClassicLogo'"/>
+    <FormInputField id="classic-accent" label="Palette color 2" :model="accent" :disabled="component !== 'ClassicLogo'"/>
+  </Grid>
+  <p class="text-muted m-0">Palette: 0 = subtle text, 1 = normal text, 2 = accent, 3 = white. Each digit colors one non-space character; the final digit repeats.</p>
+  <Flex><Btn variant="outline" @click="reset">Restore original</Btn></Flex>
+  <Panel variant="outline" bodyClass="p-3 min-w-0">
+    <p class="text-eyebrow mt-0">siteConfig.json · logo</p>
+    <pre class="overflow-auto max-h-inspector m-0"><code id="classic-config">{{ source }}</code></pre>
+  </Panel>
+</Flex>`
+
+const classicLogoPlayground = defineComponent<ClassicLogoPlayground>(
+  classicLogoPlaygroundTemplate,
+  {
+    context: () => {
+      const brand = ref('PureStack')
+      const subtitle = ref('AI-Native Frontend')
+      const letterColors = ref('111122')
+      const subtitleLetterColors = ref('0')
+      const accent = ref(
+        'var(--ps-semantic-tone-accent-button-rest-background)',
+      )
+      const component = ref('ClassicLogo')
+      const config = computed<ClassicLogoConfig>(() => ({
+        brand: brand(),
+        subtitle: subtitle(),
+        letterColors: letterColors(),
+        subtitleLetterColors: subtitleLetterColors(),
+        colors: [
+          'var(--ps-current-text-subtle)',
+          'var(--ps-current-text-default)',
+          accent(),
+          '#fdfdfd',
+        ],
+        logoBackground: 2,
+        logoForeground: 3,
+        icon: 'tabler:device-desktop-analytics',
+        href: '/',
+      }))
+      return {
+        brand,
+        subtitle,
+        letterColors,
+        subtitleLetterColors,
+        accent,
+        component,
+        config,
+        componentOptions: ['ClassicLogo', 'SiteLogo'].map((value) => ({
+          label: value,
+          value,
+        })),
+        source: computed(() =>
+          JSON.stringify({ component: component(), ...config() }, null, 2),
+        ),
+        reset: () => {
+          brand('PureStack')
+          subtitle('AI-Native Frontend')
+          letterColors('111122')
+          subtitleLetterColors('0')
+          accent('var(--ps-semantic-tone-accent-button-rest-background)')
+          component('ClassicLogo')
+        },
+      }
+    },
+  },
+)
+
+const icons: Record<string, string> = {
+  'tabler:device-desktop-analytics': tabler_device_desktop_analytics,
+  'lucide:chevron-down': lucide_chevron_down,
+}
+
+createApp(
+  {
+    components: {
+      ClassicLogoPlayground: classicLogoPlayground,
+      ...defineClassicLogoComponents(),
+      ...defineLogoComponents(),
+      ...defineButtonComponents(),
+      ...defineFlexComponents(),
+      ...defineGridComponents(),
+      ...definePanelComponents(),
+      ...defineFormInputField(),
+      ...defineFormSelectField(),
+      ...defineIconComponents((name) => icons[name] ?? ''),
+    },
+  },
+  {
+    selector: 'app#classic-logo-playground',
+    template: html`<ClassicLogoPlayground/>`,
+  },
+)
+```
+  </TabPane>
+</Tabs>
+
+## Use the original logo in TopBar
+
+Set `logo.component` to `ClassicLogo` in `siteConfig.json`. This complete configuration restores the original Studio identity:
+
+```json
+{
+  "logo": {
+    "component": "ClassicLogo",
+    "brand": "PureStack",
+    "subtitle": "AI-Native Frontend",
+    "letterColors": "111122",
+    "subtitleLetterColors": "0",
+    "colors": [
+      "var(--ps-current-text-subtle)",
+      "var(--ps-current-text-default)",
+      "var(--ps-semantic-tone-accent-button-rest-background)",
+      "#fdfdfd"
+    ],
+    "logoBackground": 2,
+    "logoForeground": 3,
+    "icon": "tabler:device-desktop-analytics",
+    "href": "/"
+  }
+}
+```
+
+Or choose the component directly on a custom header:
+
+```html
+<TopBar logoComponent="ClassicLogo"/>
+```
+
+The direct prop takes precedence over `site.logo.component`. If neither is set, TopBar renders SiteLogo. TopBar passes `site.logo` as the selected component's `config` prop. Registered custom components can use the same contract.
+
+Outside TopBar, use `<ClassicLogo :config="identity"/>` with a `ClassicLogoConfig` object, or pass individual props. A direct prop overrides the corresponding configuration field. Props and configuration remain reactive.
+
+## Color each letter
+
+`colors` is a palette of CSS colors, gradients or theme variables. `letterColors` and `subtitleLetterColors` contain single-digit palette indexes, one digit per non-space character. The last digit repeats when the map is shorter than the text. Spaces keep their position and do not consume a digit.
+
+For the original brand, `111122` means:
+
+| Text | Palette index | Result |
+| --- | --- | --- |
+| Pure | 1 | Normal theme text |
+| Stack | 2 | Accent fill; the final 2 repeats |
+| Entire subtitle | 0 | Subtle theme text |
+
+`logoBackground` and `logoForeground` select colors from the same palette for the icon tile. They accept nonnegative integer indexes, including indexes beyond 9. Letter maps use individual digits, so they address palette entries 0–9.
+
+Without a map, brand letters use the theme's accent button background and subtitle letters use subtle text. Missing palette entries fall back to those fills. A nonnumeric map character leaves that letter unfilled; use valid digits for visible lettering. Icon foregrounds need a CSS color, while tile backgrounds and letter fills can also use gradients.
+
+## Responsive dimensions
+
+ClassicLogo preserves the original responsive sizes. Each dimension has a base prop and `Sm`, `Md`, `Lg` and `Xl` overrides, matching the theme breakpoints. Once supplied, a value carries forward to larger breakpoints until another override replaces it.
+
+| Dimension | Base / sm | md | lg / xl |
+| --- | --- | --- | --- |
+| Brand | 1.5rem | 1.75rem | 2rem |
+| Subtitle | 0.7rem | 0.74rem | 0.77rem |
+| Icon tile | 2rem | 2.5rem | 2.85rem |
+| Subtitle side inset | 0.03125rem | 0.0625rem | 0.0625rem |
+
+```html
+<ClassicLogo
+  brand="PureStack"
+  subtitle="AI-Native Frontend"
+  icon="tabler:device-desktop-analytics"
+  brandSize="1.25rem"
+  brandSizeMd="1.75rem"
+  iconSize="1.75rem"
+  iconSizeMd="2.5rem"
+  subtitleSize="0.6rem"
+  subtitleSizeMd="0.74rem"
+/>
+```
+
+The original layout keeps both text lines on one line, distributes their letters across a shared width and uses a fixed `0.25rem` mark-to-text gap. Long brand names need smaller dimensions in narrow navigation. SiteLogo offers wrapping, layout presets and a configurable `gap` when those are needed.
+
+## API reference
+
+<div class="api-overview">
+  <p class="text-eyebrow">Original appearance · independent component</p>
+  <p>Import ClassicLogoConfig for identity data and ClassicLogo for the component interface. Every input accepts a literal or a ref. Register defineClassicLogoComponents() and defineIconComponents(); the standard SSG registration includes both.</p>
+</div>
+
+<nav class="api-index" aria-label="ClassicLogo API">
+  <a href="#classic-config-api">config</a><a href="#classic-brand-api">identity</a><a href="#classic-palette-api">palette</a><a href="#classic-maps-api">letter maps</a><a href="#classic-tile-api">icon tile</a><a href="#classic-dimensions-api">dimensions</a><a href="#classic-navigation-api">navigation</a>
+</nav>
+
+<ApiProperty anchor="classic-config-api" name="config" valueType="RefOrValue&lt;Partial&lt;ClassicLogoConfig&gt;&gt;" defaultValue="not set">
+  <p>Shared settings. Direct props override defined fields; undefined props inherit from config. Standalone instances do not read site configuration automatically.</p>
+</ApiProperty>
+
+<ApiProperty anchor="classic-brand-api" name="brand · subtitle" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Brand and optional secondary line. Both render as individual uppercase letters. An empty subtitle removes the second line. Supply a brand for an accessible name.</p>
+</ApiProperty>
+
+<ApiProperty anchor="classic-palette-api" name="colors" valueType="RefOrValue&lt;string[]&gt;" defaultValue="not set">
+  <p>Indexed color palette shared by the brand, subtitle and icon tile. Accepts CSS colors, gradients and theme-variable references.</p>
+</ApiProperty>
+
+<ApiProperty anchor="classic-maps-api" name="letterColors · subtitleLetterColors" valueType="RefOrValue&lt;string&gt;" defaultValue="theme fills">
+  <p>Digit sequences selecting palette entries for each non-space letter. The final digit repeats; spaces do not advance the color index.</p>
+</ApiProperty>
+
+<ApiProperty anchor="classic-tile-api" name="logoBackground · logoForeground" valueType="RefOrValue&lt;number&gt;" defaultValue="theme button colors">
+  <p>Nonnegative integer palette indexes for the tile background and icon foreground. Invalid or missing indexes use the theme defaults.</p>
+</ApiProperty>
+
+<ApiProperty anchor="classic-icon-api" name="icon" valueType="RefOrValue&lt;string&gt;" defaultValue="built-in square">
+  <p>Registered SVG icon name. The icon fills 80% of its tile; without one, a small rounded square is drawn in the center. ClassicLogo has no image or mark slot.</p>
+</ApiProperty>
+
+<ApiProperty anchor="classic-dimensions-api" name="brandSize · subtitleSize · iconSize · subtitleInset" valueType="RefOrValue&lt;string&gt;" defaultValue="responsive defaults">
+  <p>CSS lengths for the brand font, subtitle font, square tile, and subtitle's left/right inset. Each supports Sm, Md, Lg and Xl suffixes: brandSizeMd, subtitleSizeLg, iconSizeSm, subtitleInsetXl, and the other corresponding combinations.</p>
+  <p>Overrides carry forward to larger breakpoints. The table above lists the untouched original defaults.</p>
+</ApiProperty>
+
+<ApiProperty anchor="classic-navigation-api" name="href · ariaLabel" valueType="RefOrValue&lt;string | null&gt; · RefOrValue&lt;string&gt;" defaultValue="/ · brand">
+  <p>Home destination and accessible name. SSG links respect the public base path. A null href removes navigation. Keyboard focus keeps the original visible outline.</p>
+</ApiProperty>
+
+## Related components
+
+- [SiteLogo](/components/site/site-logo/) — flexible layouts, image marks and modern wordmark treatments.
+- [TopBar](/components/site/top-bar/) — choose which logo component renders the shared site identity.

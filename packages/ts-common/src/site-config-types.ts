@@ -5,7 +5,7 @@ import type {
 } from '@purestack/ts-style'
 import type { DeepPartial } from '@purestack/ts-util'
 import type { ConsentConfig } from './consent-types'
-import type { LogoConfig } from './logo-types'
+import type { SiteLogoConfig } from './logo-types'
 import type { NavigationConfig } from './navMenu-types'
 
 export interface SiteConfig {
@@ -16,7 +16,7 @@ export interface SiteConfig {
   basePath: string
   siteTitle: string
   favicon?: string
-  logo: LogoConfig
+  logo: SiteLogoConfig
   style: SiteStyleConfig
   html: SiteHtmlConfig
   navigation: NavigationConfig

@@ -3,6 +3,7 @@ import { defineBadgeComponents } from './standard/badge/badge'
 import { defineBarChartComponents } from './standard/barChart/barChart'
 import { defineButtonComponents } from './standard/btn/btn'
 import { defineBtnGroupComponents } from './standard/btnGroup/btnGroup'
+import { defineClassicLogoComponents } from './standard/classicLogo/classicLogo'
 import { defineComposerComponents } from './standard/composer/composer'
 import { defineConsentComponents } from './standard/consent/consent'
 import { defineContactFormComponents } from './standard/contactForm/contactForm'
@@ -64,6 +65,7 @@ export function defineComponents(getSvgIcon: GetSvgIcon) {
     ...defineLandingComponents(),
     ...defineLineChartComponents(),
     ...defineLogoComponents(),
+    ...defineClassicLogoComponents(),
     ...defineModalComponents(),
     ...defineTopBarComponents(),
     ...defineThemeSwitcherComponents(),

@@ -11,7 +11,6 @@ import type {
   Ga4Config,
   I18nConfig,
   I18nUrlStrategy,
-  LogoConfig,
   PagefindConfig,
   PageTocConfig,
   PreviewConfig,
@@ -19,6 +18,7 @@ import type {
   SiteConfig,
   SiteConfigInput,
   SiteHtmlConfig,
+  SiteLogoConfig,
   SiteMdxConfig,
   SitemapConfig,
   SiteScriptsConfig,
@@ -79,7 +79,7 @@ export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
     fileConfig.siteTitle,
     'ts-ssg',
   )
-  const logo = resolveLogoConfig(input.logo, fileConfig.logo)
+  const logo = resolveSiteLogoConfig(input.logo, fileConfig.logo)
   const style = resolveStyleConfig(input, fileConfig)
   const html = resolveHtmlConfig(input.html, fileConfig.html)
   const navigation = resolveNavigationConfig(
@@ -199,13 +199,61 @@ function resolveStyleConfig(
   }
 }
 
-function resolveLogoConfig(
-  input?: DeepPartial<LogoConfig>,
-  file?: DeepPartial<LogoConfig>,
-): LogoConfig {
+function resolveSiteLogoConfig(
+  input?: DeepPartial<SiteLogoConfig>,
+  file?: DeepPartial<SiteLogoConfig>,
+): SiteLogoConfig {
   const href = input?.href !== undefined ? input.href : file?.href
   return {
     brand: resolveString(input?.brand, file?.brand, 'Pure Stack'),
+    letterColors: resolveOptionalString(
+      input?.letterColors ?? file?.letterColors,
+    ),
+    subtitleLetterColors: resolveOptionalString(
+      input?.subtitleLetterColors ?? file?.subtitleLetterColors,
+    ),
+    brandSizeSm: resolveOptionalString(input?.brandSizeSm ?? file?.brandSizeSm),
+    brandSizeMd: resolveOptionalString(input?.brandSizeMd ?? file?.brandSizeMd),
+    brandSizeLg: resolveOptionalString(input?.brandSizeLg ?? file?.brandSizeLg),
+    brandSizeXl: resolveOptionalString(input?.brandSizeXl ?? file?.brandSizeXl),
+    subtitleSizeSm: resolveOptionalString(
+      input?.subtitleSizeSm ?? file?.subtitleSizeSm,
+    ),
+    subtitleSizeMd: resolveOptionalString(
+      input?.subtitleSizeMd ?? file?.subtitleSizeMd,
+    ),
+    subtitleSizeLg: resolveOptionalString(
+      input?.subtitleSizeLg ?? file?.subtitleSizeLg,
+    ),
+    subtitleSizeXl: resolveOptionalString(
+      input?.subtitleSizeXl ?? file?.subtitleSizeXl,
+    ),
+    iconSize: resolveOptionalString(input?.iconSize ?? file?.iconSize),
+    iconSizeSm: resolveOptionalString(input?.iconSizeSm ?? file?.iconSizeSm),
+    iconSizeMd: resolveOptionalString(input?.iconSizeMd ?? file?.iconSizeMd),
+    iconSizeLg: resolveOptionalString(input?.iconSizeLg ?? file?.iconSizeLg),
+    iconSizeXl: resolveOptionalString(input?.iconSizeXl ?? file?.iconSizeXl),
+    subtitleInset: resolveOptionalString(
+      input?.subtitleInset ?? file?.subtitleInset,
+    ),
+    subtitleInsetSm: resolveOptionalString(
+      input?.subtitleInsetSm ?? file?.subtitleInsetSm,
+    ),
+    subtitleInsetMd: resolveOptionalString(
+      input?.subtitleInsetMd ?? file?.subtitleInsetMd,
+    ),
+    subtitleInsetLg: resolveOptionalString(
+      input?.subtitleInsetLg ?? file?.subtitleInsetLg,
+    ),
+    subtitleInsetXl: resolveOptionalString(
+      input?.subtitleInsetXl ?? file?.subtitleInsetXl,
+    ),
+    component: resolveOptionalString(input?.component ?? file?.component),
+    colors: (input?.colors ?? file?.colors)?.filter(
+      (color): color is string => typeof color === 'string',
+    ),
+    logoBackground: input?.logoBackground ?? file?.logoBackground,
+    logoForeground: input?.logoForeground ?? file?.logoForeground,
     href: href === null || href === '' ? href : resolveString(href, '/'),
     subtitle: resolveOptionalString(input?.subtitle ?? file?.subtitle),
     suffix: resolveOptionalString(input?.suffix ?? file?.suffix),

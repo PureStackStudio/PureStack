@@ -133,6 +133,31 @@ export async function writeTopBarPreview(site: SiteConfig) {
   </TabPane>
 </Tabs>
 
+## Choose the logo component
+
+TopBar uses Regor's `:is` binding to render the registered component named by `logoComponent`. It passes the site's logo settings as `config`.
+
+```html
+<TopBar logoComponent="ClassicLogo"/>
+```
+
+For the standard documentation header, select it in `siteConfig.json`:
+
+```json
+{
+  "logo": {
+    "component": "ClassicLogo",
+    "brand": "PureStack",
+    "subtitle": "AI-Native Frontend",
+    "icon": "tabler:device-desktop-analytics"
+  }
+}
+```
+
+The direct prop overrides `site.logo.component`; when both are omitted, TopBar renders SiteLogo. Bind a ref with `:logoComponent="selectedLogo"` to switch reactively. Custom registered components work too: accept a `config` prop and read the identity fields you need. Register the chosen component alongside TopBar when creating a standalone app.
+
+[ClassicLogo's guide](/components/site/classic-logo/) includes the exact original Studio color configuration and all its responsive sizing options. [SiteLogo](/components/site/site-logo/) provides the newer layouts and treatments.
+
 ## Behavior and accessibility
 
 TopBar renders a fixed doc-nav-toggle ID and should appear once per document. Its mobile navigation toggle works with the standard doc layout. Logo content comes from site.logo. Search visibility currently follows site.pagefind.enabled, even when a searchEnabled prop is supplied.
@@ -145,6 +170,7 @@ TopBar renders a fixed doc-nav-toggle ID and should appear once per document. It
 </div>
 
 <nav class="api-index" aria-label="TopBar properties">
+  <a href="#top-bar-prop-logoComponent">logoComponent</a>
   <a href="#top-bar-prop-tone">tone</a>
   <a href="#top-bar-prop-variant">variant</a>
   <a href="#top-bar-prop-signInAvatarSrc">signInAvatarSrc</a>
@@ -152,6 +178,10 @@ TopBar renders a fixed doc-nav-toggle ID and should appear once per document. It
   <a href="#top-bar-prop-signInEnabled">signInEnabled</a>
   <a href="#top-bar-prop-searchEnabled">searchEnabled</a>
 </nav>
+
+<ApiProperty anchor="top-bar-prop-logoComponent" name="logoComponent" valueType="RefOrValue&lt;string&gt;" defaultValue="site.logo.component or SiteLogo">
+  <p>Registered component name rendered through :is. Supports SiteLogo, ClassicLogo or a custom component accepting config. A direct prop takes precedence over the site setting and can change reactively.</p>
+</ApiProperty>
 
 <ApiProperty anchor="top-bar-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
   <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
@@ -180,7 +210,7 @@ TopBar renders a fixed doc-nav-toggle ID and should appear once per document. It
 ### Composition
 
 <div class="api-contract">
-<p>No slots. Register defineTopBarComponents and the SiteLogo, SearchBox, ThemeSwitcher, SignIn, Flex and Icon families. Standard SSG registration provides these dependencies.</p>
+<p>No slots. Register defineTopBarComponents and the selected logo component, SearchBox, ThemeSwitcher, SignIn, Flex and Icon families. Standard SSG registration provides these dependencies.</p>
 </div>
 
 

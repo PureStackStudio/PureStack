@@ -1,8 +1,10 @@
-import { ensureDomGlobals } from '@purestack/ts-minidom'
+import { createDom, ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '@purestack/ts-render'
+import { createApp, defineComponent, ref, html as template } from 'regor'
 import { describe, expect, it } from 'vitest'
 import { createTestContext } from '../../test/testContext'
 import { defineButtonComponents } from '../btn/btn'
+import { defineClassicLogoComponents } from '../classicLogo/classicLogo'
 import { defineFlexComponents } from '../flex/flex'
 import { defineIconComponents } from '../icon/icon'
 import { defineLogoComponents } from '../logo/logo'
@@ -13,6 +15,78 @@ import { defineThemeSwitcherComponents } from '../themeSwitcher/themeSwitcher'
 import { defineTopBarComponents } from '../topBar/topBar'
 
 describe('TopBar rendering', () => {
+  it('selects the configured logo and reactively overrides it with a registered component', () => {
+    const cleanupGlobals = ensureDomGlobals()
+    const cleanupDom = createDom(
+      '<html><body><div id="app"></div></body></html>',
+    )
+    const logoComponent = ref<string | undefined>(undefined)
+    const app = createApp(
+      {
+        components: {
+          ...defineTopBarComponents(),
+          ...defineFlexComponents(),
+          ...defineLogoComponents(),
+          ...defineClassicLogoComponents(),
+          ...defineIconComponents((name) => `<svg data-icon="${name}"></svg>`),
+          CustomLogo: defineComponent<{ config: { brand: string } }>(
+            template`<span class="custom-logo">{{ config.brand }}</span>`,
+            { props: ['config'] },
+          ),
+        },
+        tsSsgContext: createTestContext({
+          site: {
+            basePath: '/docs',
+            logo: {
+              component: 'ClassicLogo',
+              brand: 'PureStack',
+              subtitle: 'AI-Native Frontend',
+              colors: ['#111111', '#ff0066'],
+              letterColors: '000011',
+              logoBackground: 1,
+              brandSizeMd: '3rem',
+              icon: 'tabler:device-desktop-analytics',
+              href: '/',
+            },
+          },
+        }),
+        logoComponent,
+      },
+      {
+        selector: '#app',
+        template: '<TopBar :logoComponent="logoComponent"/>',
+      },
+    )
+    try {
+      expect(
+        document.querySelectorAll('.classic-logo__brand-letter'),
+      ).toHaveLength(9)
+      expect(
+        document.querySelector('.classic-logo__link')?.getAttribute('href'),
+      ).toBe('/docs/')
+      expect(
+        document.querySelector('.classic-logo')?.getAttribute('style'),
+      ).toContain('--ps-classic-logo-brand-size-md: 3rem')
+      logoComponent('SiteLogo')
+      expect(document.querySelector('.classic-logo')).toBeNull()
+      expect(document.querySelector('.site-logo__brand')?.textContent).toBe(
+        'PureStack',
+      )
+      logoComponent('CustomLogo')
+      expect(document.querySelector('.site-logo')).toBeNull()
+      expect(document.querySelector('.custom-logo')?.textContent).toBe(
+        'PureStack',
+      )
+      logoComponent(undefined)
+      expect(document.querySelector('.custom-logo')).toBeNull()
+      expect(document.querySelector('.classic-logo')).not.toBeNull()
+    } finally {
+      app.unbind()
+      cleanupDom()
+      cleanupGlobals()
+    }
+  })
+
   it('applies logo values from site config', () => {
     const cleanup = ensureDomGlobals()
     const components = {

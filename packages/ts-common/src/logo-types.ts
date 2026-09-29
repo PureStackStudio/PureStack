@@ -33,3 +33,42 @@ export interface LogoConfig {
   markSize?: string
   gap?: string
 }
+
+/** The original uppercase, letter-colored logo. */
+export interface ClassicLogoConfig {
+  brand: string
+  letterColors?: string
+  subtitleLetterColors?: string
+  colors?: string[]
+  logoBackground?: number
+  logoForeground?: number
+  subtitle?: string
+  brandSize?: string
+  brandSizeSm?: string
+  brandSizeMd?: string
+  brandSizeLg?: string
+  brandSizeXl?: string
+  subtitleSize?: string
+  subtitleSizeSm?: string
+  subtitleSizeMd?: string
+  subtitleSizeLg?: string
+  subtitleSizeXl?: string
+  iconSize?: string
+  iconSizeSm?: string
+  iconSizeMd?: string
+  iconSizeLg?: string
+  iconSizeXl?: string
+  subtitleInset?: string
+  subtitleInsetSm?: string
+  subtitleInsetMd?: string
+  subtitleInsetLg?: string
+  subtitleInsetXl?: string
+  href?: string | null
+  icon?: string
+  ariaLabel?: string
+}
+
+/** Shared header configuration; each component reads its own presentation fields. */
+export interface SiteLogoConfig extends LogoConfig, ClassicLogoConfig {
+  component?: string
+}

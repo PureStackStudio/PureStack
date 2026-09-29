@@ -252,6 +252,31 @@ describe('resolveSiteConfig sitemap', () => {
     expect(config.favicon).toBe('iconoir:cube')
   })
 
+  it('preserves classic logo selection, indexed colors and all responsive dimensions', () => {
+    const logo = {
+      component: 'ClassicLogo',
+      brand: 'PureStack',
+      href: '/',
+      subtitle: 'AI-Native Frontend',
+      letterColors: '111122',
+      subtitleLetterColors: '0',
+      colors: ['#888', '#fff', '#00ff88'],
+      logoBackground: 2,
+      logoForeground: 1,
+      ...Object.fromEntries(
+        ['brandSize', 'subtitleSize', 'iconSize', 'subtitleInset'].flatMap(
+          (name) =>
+            ['', 'Sm', 'Md', 'Lg', 'Xl'].map((suffix, i) => [
+              name + suffix,
+              `${i + 1}rem`,
+            ]),
+        ),
+      ),
+    }
+    const config = resolveSiteConfig({ rootDir: process.cwd(), logo })
+    expect(config.logo).toMatchObject(logo)
+  })
+
   it('resolves preview defaults from siteConfig file and input config', () => {
     const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'ts-ssg-config-'))
     try {

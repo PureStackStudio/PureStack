@@ -172,6 +172,108 @@
             "ghost"
           ],
           "default": "accent"
+        },
+        "letterColors": {
+          "type": "string",
+          "description": "Optional per-letter color index map. Each digit selects an entry from logo.colors and applies it to the next non-space letter."
+        },
+        "subtitleLetterColors": {
+          "type": "string",
+          "description": "Optional per-letter color index map for the subtitle. Each digit selects an entry from logo.colors and applies it to the next non-space letter."
+        },
+        "colors": {
+          "type": "array",
+          "description": "Palette of CSS color values used by logo.letterColors.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "logoBackground": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Optional index into logo.colors used for the logo glyph background. Keeps the built-in background when omitted."
+        },
+        "logoForeground": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Optional index into logo.colors used for the logo icon and fallback mark foreground. Keeps the built-in foreground when omitted."
+        },
+        "brandSizeSm": {
+          "type": "string",
+          "description": "Brand font size from the small breakpoint upward."
+        },
+        "brandSizeMd": {
+          "type": "string",
+          "description": "Brand font size from the medium breakpoint upward."
+        },
+        "brandSizeLg": {
+          "type": "string",
+          "description": "Brand font size from the large breakpoint upward."
+        },
+        "brandSizeXl": {
+          "type": "string",
+          "description": "Brand font size from the extra-large breakpoint upward."
+        },
+        "subtitleSizeSm": {
+          "type": "string",
+          "description": "Subtitle font size from the small breakpoint upward."
+        },
+        "subtitleSizeMd": {
+          "type": "string",
+          "description": "Subtitle font size from the medium breakpoint upward."
+        },
+        "subtitleSizeLg": {
+          "type": "string",
+          "description": "Subtitle font size from the large breakpoint upward."
+        },
+        "subtitleSizeXl": {
+          "type": "string",
+          "description": "Subtitle font size from the extra-large breakpoint upward."
+        },
+        "iconSize": {
+          "type": "string",
+          "description": "Base logo glyph size."
+        },
+        "iconSizeSm": {
+          "type": "string",
+          "description": "Logo glyph size from the small breakpoint upward."
+        },
+        "iconSizeMd": {
+          "type": "string",
+          "description": "Logo glyph size from the medium breakpoint upward."
+        },
+        "iconSizeLg": {
+          "type": "string",
+          "description": "Logo glyph size from the large breakpoint upward."
+        },
+        "iconSizeXl": {
+          "type": "string",
+          "description": "Logo glyph size from the extra-large breakpoint upward."
+        },
+        "subtitleInset": {
+          "type": "string",
+          "description": "Base left and right inset applied to the subtitle row."
+        },
+        "subtitleInsetSm": {
+          "type": "string",
+          "description": "Subtitle inset from the small breakpoint upward."
+        },
+        "subtitleInsetMd": {
+          "type": "string",
+          "description": "Subtitle inset from the medium breakpoint upward."
+        },
+        "subtitleInsetLg": {
+          "type": "string",
+          "description": "Subtitle inset from the large breakpoint upward."
+        },
+        "subtitleInsetXl": {
+          "type": "string",
+          "description": "Subtitle inset from the extra-large breakpoint upward."
+        },
+        "component": {
+          "type": "string",
+          "default": "SiteLogo",
+          "description": "Registered component rendered by TopBar: SiteLogo, ClassicLogo, or a custom component accepting config."
         }
       }
     },

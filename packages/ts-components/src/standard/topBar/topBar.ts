@@ -1,4 +1,4 @@
-import type { LogoConfig, TsSsgContext } from '@purestack/ts-common'
+import type { SiteLogoConfig, TsSsgContext } from '@purestack/ts-common'
 
 import { resolveTsSsgContext } from '@purestack/ts-common'
 import type { SemanticTone } from '@purestack/ts-style'
@@ -8,6 +8,7 @@ import {
   defineComponent,
   html,
   type RefOrValue,
+  unref,
 } from 'regor'
 import {
   type ComponentVariant,
@@ -16,7 +17,9 @@ import {
 } from '../componentVariant'
 
 export interface TopBar {
-  siteLogo: LogoConfig
+  siteLogo: SiteLogoConfig
+  logoComponent?: RefOrValue<string>
+  resolvedLogoComponent?: ComputedRef<string>
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
   signInAvatarSrc?: RefOrValue<string>
@@ -33,6 +36,10 @@ function resolveTopBar(context: TsSsgContext, props: TopBar): TopBar {
   return {
     ...props,
     siteLogo: context.site.logo,
+    resolvedLogoComponent: computed(
+      () =>
+        unref(props.logoComponent) ?? context.site.logo.component ?? 'SiteLogo',
+    ),
     searchEnabled: context.site.pagefind?.enabled === true,
     classes: computed(() =>
       resolveComponentClasses(props, {
@@ -51,7 +58,7 @@ const topBarTemplate = html`<input
   aria-hidden="true"/>
 <header class="topbar" :class="classes">
   <Flex align="center">
-    <SiteLogo class="flex-none" :config="siteLogo"/>
+    <div :is="resolvedLogoComponent" class="flex-none" :config="siteLogo"></div>
     <SearchBox
       r-if="searchEnabled"
       class="topbar__search flex-auto rounded-md tone-text-surface"
@@ -76,6 +83,7 @@ const topBarTemplate = html`<input
 function defineTopBarComponent() {
   return defineComponent<TopBar>(topBarTemplate, {
     props: [
+      'logoComponent',
       'tone',
       'variant',
       'signInAvatarSrc',

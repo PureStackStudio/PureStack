@@ -1,4 +1,5 @@
 export type {
+  ClassicLogoConfig,
   LogoAppearance,
   LogoConfig,
   LogoLayout,
@@ -6,6 +7,7 @@ export type {
   LogoShape,
   LogoSize,
   LogoWordmarkStyle,
+  SiteLogoConfig,
 } from '@purestack/ts-common'
 export type {
   TsSsgMenusApi,
@@ -44,6 +46,9 @@ export type {
 } from './standard/btnGroup/btnGroup'
 export { defineBtnGroupComponents } from './standard/btnGroup/btnGroup'
 export { registerBtnGroupStyles } from './standard/btnGroup/btnGroupStyle'
+export type { ClassicLogo } from './standard/classicLogo/classicLogo'
+export { defineClassicLogoComponents } from './standard/classicLogo/classicLogo'
+export { registerClassicLogoStyles } from './standard/classicLogo/classicLogoStyle'
 export type {
   ComponentVariant,
   ComponentVariantMode,

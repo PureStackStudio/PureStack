@@ -12,6 +12,7 @@ export type {
   ParsedFrontmatterSource,
 } from './frontmatter-types'
 export type {
+  ClassicLogoConfig,
   LogoAppearance,
   LogoConfig,
   LogoLayout,
@@ -19,6 +20,7 @@ export type {
   LogoShape,
   LogoSize,
   LogoWordmarkStyle,
+  SiteLogoConfig,
 } from './logo-types'
 export type {
   NavItem,
