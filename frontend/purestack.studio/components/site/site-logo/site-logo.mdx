@@ -436,7 +436,7 @@ const identity: LogoConfig = {
 <SiteLogo :config="identity" layout="stacked" subtitle="Pure frontend infrastructure"/>
 ```
 
-Direct props override configuration values. An undefined prop inherits from `config`; an empty subtitle or suffix clears that text, and a null href removes navigation. Props and configuration refs remain reactive, including when the whole configuration object is replaced. A standalone SiteLogo does not implicitly read the site configuration—pass `config` or explicit brand props.
+Direct props override configuration values. An undefined prop inherits from `config`; an empty subtitle or suffix clears that text, and a null href removes navigation. Props and configuration refs remain reactive, including when the whole configuration object is replaced. A standalone SiteLogo does not implicitly read the site configuration, pass `config` or explicit brand props.
 
 ## Icons, images and custom marks
 
@@ -638,6 +638,6 @@ A linked logo is an anchor with native keyboard navigation and a visible focus o
 
 ## Related components
 
-- [TopBar](/components/site/top-bar/) — the documentation header that consumes the shared logo configuration.
-- [SiteFooter](/components/site/site-footer/) — compose a brand signature with footer content.
-- [Icon](/components/layout/icon/) — named SVG artwork for icon marks.
+- [TopBar](/components/site/top-bar/): the documentation header that consumes the shared logo configuration.
+- [SiteFooter](/components/site/site-footer/): compose a brand signature with footer content.
+- [Icon](/components/layout/icon/): named SVG artwork for icon marks.

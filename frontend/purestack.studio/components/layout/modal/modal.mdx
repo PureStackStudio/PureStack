@@ -301,8 +301,8 @@ Presentation uses the same tones and variants as other PureStack components. A m
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| `id` | `string` | — | Provide a document-unique id that matches ModalTrigger.target. |
-| `title` | `string` | — | Visible and accessible dialog title. A custom header must provide {id}-title. |
+| `id` | `string` | - | Provide a document-unique id that matches ModalTrigger.target. |
+| `title` | `string` | - | Visible and accessible dialog title. A custom header must provide {id}-title. |
 | `tone` | `SemanticTone` | neutral (inherited) | neutral · accent · feature · secondary · custom · ghost · info · success · warning · danger |
 | `variant` | `ComponentVariant` | surface | Styles the interior surface. |
 | `variantMode` | `'stateful' \| 'stateless'` | stateless | Controls whether the variant includes hover and active styles. |
@@ -315,8 +315,8 @@ Presentation uses the same tones and variants as other PureStack components. A m
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| `target` | `string` | — | The target Modal id, without #. |
-| `label` | `string` | — | Visible trigger text. |
+| `target` | `string` | - | The target Modal id, without #. |
+| `label` | `string` | - | Visible trigger text. |
 | `tone` | `SemanticTone` | neutral (inherited) | neutral · accent · feature · secondary · custom · ghost · info · success · warning · danger |
 | `variant` | `ComponentVariant` | solid | Uses the standard Btn appearance variants. |
 
@@ -324,24 +324,24 @@ Presentation uses the same tones and variants as other PureStack components. A m
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| `default / body` | `slot` | — | Main content. The body slot takes precedence over default content. |
-| `header` | `named slot` | — | Replaces the title region. The built-in close button remains controlled by showClose. |
-| `footer` | `named slot` | — | Action area below the body. |
-| `content` | `named slot` | — | Replaces the entire interior. Retain .modal__panel and an accessible name. |
-| `@close / @cancel` | `native dialog events` | — | Observe dismissal in a browser application. The runtime handles cancel to animate closing. |
-| `data-modal-close` | `native attribute` | — | Marks a control inside the dialog as a dismissal action. |
-| `window.tsSsgModal.open(id)` | `(id: string) => void` | — | Opens an existing dialog programmatically. |
-| `window.tsSsgModal.close(id)` | `(id: string) => void` | — | Closes an existing dialog with its configured animation. |
+| `default / body` | `slot` | - | Main content. The body slot takes precedence over default content. |
+| `header` | `named slot` | - | Replaces the title region. The built-in close button remains controlled by showClose. |
+| `footer` | `named slot` | - | Action area below the body. |
+| `content` | `named slot` | - | Replaces the entire interior. Retain .modal__panel and an accessible name. |
+| `@close / @cancel` | `native dialog events` | - | Observe dismissal in a browser application. The runtime handles cancel to animate closing. |
+| `data-modal-close` | `native attribute` | - | Marks a control inside the dialog as a dismissal action. |
+| `window.tsSsgModal.open(id)` | `(id: string) => void` | - | Opens an existing dialog programmatically. |
+| `window.tsSsgModal.close(id)` | `(id: string) => void` | - | Closes an existing dialog with its configured animation. |
 | `window.tsSsgModal.refresh(target?)` | `(selector?: string) => void` | automatic at load | Binds dynamically inserted dialogs and triggers. |
 
 ### ModalStore · browser applications
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| `<ModalStore/>` | `component` | — | Mount once in a live Regor app before calling useModalStore(). |
-| `openModal(options)` | `ModalContract → modal item` | — | Creates and opens a dialog. Accepts Modal props plus body, note, and actions. |
-| `closeModal(id) / removeModal(id)` | `(id: string) => void` | — | Close an active dialog or remove a stored item. |
-| `actions` | `ModalActionContract[]` | — | Supports id, label, tone, variant, icon, disabled, closeOnClick (true), and onClick(modal, store). Async handlers are awaited. |
+| `<ModalStore/>` | `component` | - | Mount once in a live Regor app before calling useModalStore(). |
+| `openModal(options)` | `ModalContract → modal item` | - | Creates and opens a dialog. Accepts Modal props plus body, note, and actions. |
+| `closeModal(id) / removeModal(id)` | `(id: string) => void` | - | Close an active dialog or remove a stored item. |
+| `actions` | `ModalActionContract[]` | - | Supports id, label, tone, variant, icon, disabled, closeOnClick (true), and onClick(modal, store). Async handlers are awaited. |
 
 
 <PageScript src="./modal.ts"/>

@@ -157,7 +157,7 @@ function createVirtualListPlayground(): VirtualListPlayground {
   const overscan = ref('4')
   const target = ref<number | string>(5000)
   const mountedRows = ref(0)
-  const mountedRange = ref('—')
+  const mountedRange = ref('-')
   const scrollOffset = ref(0)
   const filtered = computed(() => {
     const search = query().trim().toLowerCase()
@@ -186,7 +186,7 @@ function createVirtualListPlayground(): VirtualListPlayground {
     mountedRange(
       rows.length
         ? `${Number(rows[0].dataset.index) + 1}–${Number(rows[rows.length - 1].dataset.index) + 1}`
-        : '—',
+        : '-',
     )
     scrollOffset(Math.round(element.scrollTop))
   }

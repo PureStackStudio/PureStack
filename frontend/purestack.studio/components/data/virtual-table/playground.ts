@@ -281,7 +281,7 @@ function createVirtualTablePlayground(): VirtualTablePlayground {
     columns = ref(true),
     target = ref<number | string>(5000)
   const mountedRows = ref(0),
-    rowRange = ref('—'),
+    rowRange = ref('-'),
     scrollOffset = ref(0)
   const filtered = computed(() => {
     const result = records().filter(
@@ -311,7 +311,7 @@ function createVirtualTablePlayground(): VirtualTablePlayground {
     rowRange(
       rows.length
         ? `${Number(rows[0].dataset.row) + 1}–${Number(rows.at(-1)?.dataset.row) + 1}`
-        : '—',
+        : '-',
     )
     scrollOffset(Math.round(element?.scrollTop ?? 0))
   }

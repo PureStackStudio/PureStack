@@ -193,7 +193,7 @@ function createVirtualListPlayground(): VirtualListPlayground {
   const overscan = ref('4')
   const target = ref<number | string>(5000)
   const mountedRows = ref(0)
-  const mountedRange = ref('—')
+  const mountedRange = ref('-')
   const scrollOffset = ref(0)
   const filtered = computed(() => {
     const search = query().trim().toLowerCase()
@@ -222,7 +222,7 @@ function createVirtualListPlayground(): VirtualListPlayground {
     mountedRange(
       rows.length
         ? `${Number(rows[0].dataset.index) + 1}–${Number(rows[rows.length - 1].dataset.index) + 1}`
-        : '—',
+        : '-',
     )
     scrollOffset(Math.round(element.scrollTop))
   }
@@ -673,6 +673,6 @@ The exported interface includes internal computed fields and a scroll handler fo
 
 ## Related components
 
-- [VariableVirtualList](/components/data/variable-virtual-list/) — rows whose heights vary or change after rendering.
-- [VirtualTable](/components/data/virtual-table/) — fixed-height records arranged into columns.
-- [VariableVirtualTable](/components/data/variable-virtual-table/) — tabular data with measured row heights.
+- [VariableVirtualList](/components/data/variable-virtual-list/): rows whose heights vary or change after rendering.
+- [VirtualTable](/components/data/virtual-table/): fixed-height records arranged into columns.
+- [VariableVirtualTable](/components/data/variable-virtual-table/): tabular data with measured row heights.

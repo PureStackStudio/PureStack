@@ -297,8 +297,8 @@ function createVariableTablePlayground(): VariableTablePlayground {
     overscan = ref('4')
   const active = ref(true)
   const mountedRows = ref(0),
-    rowRange = ref('—'),
-    measuredRange = ref('—'),
+    rowRange = ref('-'),
+    measuredRange = ref('-'),
     scrollExtent = ref(0)
   const filtered = computed(() => {
     const result = records().filter((item) =>
@@ -335,10 +335,10 @@ function createVariableTablePlayground(): VariableTablePlayground {
     rowRange(
       rows.length
         ? `${Number(rows[0].dataset.row) + 1}–${Number(rows.at(-1)?.dataset.row) + 1}`
-        : '—',
+        : '-',
     )
     measuredRange(
-      sizes.length ? `${Math.min(...sizes)}–${Math.max(...sizes)} px` : '—',
+      sizes.length ? `${Math.min(...sizes)}–${Math.max(...sizes)} px` : '-',
     )
     scrollExtent(element?.scrollHeight ?? 0)
   }

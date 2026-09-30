@@ -268,7 +268,7 @@ createApp(
 | Clear formatting | Select styled text and click the eraser. | Runs the browser's `removeFormat` command; it does not reset the draft or guarantee removal of links and block structure. |
 | HTML source | Click the code icon, edit, then click it again. | Switches between the visual editor and an editable HTML textarea. |
 
-Formatting commands operate in visual mode. In source mode, edit the markup itself; the other toolbar commands do not apply. Only the source toggle reports a pressed state—the toolbar does not track bold/list/alignment state for the current selection.
+Formatting commands operate in visual mode. In source mode, edit the markup itself; the other toolbar commands do not apply. Only the source toggle reports a pressed state, the toolbar does not track bold/list/alignment state for the current selection.
 
 ## Save, restore and focus a draft
 
@@ -757,7 +757,7 @@ The event alone does not upload files or insert images. This example appends ima
 
 Content-ID keys are normalized to lowercase, with surrounding angle brackets removed. For example, `cid:%3CLogo%40Example%3E` looks up `logo@example`. An unresolved ID uses a transparent placeholder in the editor. Use distinct preview URLs for distinct IDs so the reverse mapping stays unambiguous.
 
-When sending email, your backend must attach the corresponding bytes with matching content IDs. Object URLs are local to the browser and are not email attachments. The example deliberately retains files until **Remove** is used—even if the image is deleted manually in the editor.
+When sending email, your backend must attach the corresponding bytes with matching content IDs. Object URLs are local to the browser and are not email attachments. The example deliberately retains files until **Remove** is used, even if the image is deleted manually in the editor.
 
 ## HTML, paste and presentation
 
@@ -1001,10 +1001,10 @@ In source mode, the textarea keeps the text you are currently editing while the 
 
 The visual editor exposes `role="textbox"` and `aria-multiline="true"`. Its accessible name comes from `label`, then `placeholder`, then “Message body”. Source mode uses a native textarea. Toolbar buttons have individual accessible names and belong to a “Composer tools” toolbar.
 
-Use Tab to reach buttons and the editor; toolbar buttons use normal button keyboard behavior. Editing and formatting rely on the browser's native contenteditable commands, so selection behavior and shortcuts can vary by browser. Provide a visible label, use `focusOnMount` only after a deliberate user action, and announce save or validation results in your application—as the draft sample does with `FormStatus`.
+Use Tab to reach buttons and the editor; toolbar buttons use normal button keyboard behavior. Editing and formatting rely on the browser's native contenteditable commands, so selection behavior and shortcuts can vary by browser. Provide a visible label, use `focusOnMount` only after a deliberate user action, and announce save or validation results in your application, as the draft sample does with `FormStatus`.
 
 ## Related components
 
-- [DropFiles](/components/forms/drop-files/) — a dedicated attachment picker and drop zone.
-- [FormInputField](/components/forms/form-input-field/) — subject lines and other plain-text fields.
-- [AppForm](/components/forms/app-form/) — structure and submit behavior around an editing workflow.
+- [DropFiles](/components/forms/drop-files/): a dedicated attachment picker and drop zone.
+- [FormInputField](/components/forms/form-input-field/): subject lines and other plain-text fields.
+- [AppForm](/components/forms/app-form/): structure and submit behavior around an editing workflow.

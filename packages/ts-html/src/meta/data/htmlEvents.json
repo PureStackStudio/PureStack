@@ -605,7 +605,7 @@
   },
   {
     "name": "onresult",
-    "description": "The speech recognition service returns a result — a word or phrase has been positively recognized and this has been communicated back to the app."
+    "description": "The speech recognition service returns a result: a word or phrase has been positively recognized and this has been communicated back to the app."
   },
   {
     "name": "onresume",
@@ -645,11 +645,11 @@
   },
   {
     "name": "onsoundend",
-    "description": "Any sound — recognisable speech or not — has stopped being detected."
+    "description": "Any sound, recognisable speech or not, has stopped being detected."
   },
   {
     "name": "onsoundstart",
-    "description": "Any sound — recognisable speech or not — has been detected."
+    "description": "Any sound, recognisable speech or not, has been detected."
   },
   {
     "name": "onspeechend",
