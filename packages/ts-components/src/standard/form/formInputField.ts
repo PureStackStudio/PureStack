@@ -19,6 +19,7 @@ import {
 const resolveInputId = createAutoId('form-input')
 
 export type FormInputFieldType =
+  | 'color'
   | 'text'
   | 'email'
   | 'password'

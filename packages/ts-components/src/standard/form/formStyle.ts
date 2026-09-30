@@ -66,6 +66,11 @@ function registerFormFieldStyles(theme: ThemeMode, palette: ThemePalette) {
     .color(palette.current.text.subtle)
   styleBuilder.select('.form-block__input:focus-visible', theme).outline('none')
   styleBuilder
+    .select('.form-block__input[type="color"]', theme)
+    .padding('0.2rem')
+    .height('2rem')
+    .cursor('pointer')
+  styleBuilder
     .select(
       '.form-block__input[type="number"]::-webkit-outer-spin-button, .form-block__input[type="number"]::-webkit-inner-spin-button',
       theme,
