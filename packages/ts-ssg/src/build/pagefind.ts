@@ -90,6 +90,7 @@ function createPagefindBuildState(
 }
 
 async function runPagefindBuild(state: PagefindBuildState): Promise<void> {
+  await removePagefindOutput(state.outputPath)
   const created = await createPagefindIndex()
   state.errors.push(...created.errors)
   state.index = created.index
@@ -143,9 +144,38 @@ async function populateAndWritePagefindIndex(
   excludePaths: string[],
 ) {
   const htmlFiles = await collectHtmlFiles(outDir)
+  const indexedBytes = await measureHtmlFiles(htmlFiles, outDir, excludePaths)
+  const indexed =
+    excludePaths.length === 0
+      ? await indexHtmlDirectory(index, outDir)
+      : await indexHtmlFiles(index, outDir, htmlFiles, excludePaths)
+  const writeResult = await index.writeFiles({ outputPath })
+  return {
+    indexedPages: indexed.indexedPages,
+    indexedBytes,
+    errors: [...indexed.errors, ...writeResult.errors],
+  }
+}
+
+async function indexHtmlDirectory(
+  index: pagefind.PagefindIndex,
+  outDir: string,
+) {
+  const response = await index.addDirectory({ path: outDir })
+  return {
+    indexedPages: response.page_count,
+    errors: response.errors,
+  }
+}
+
+async function indexHtmlFiles(
+  index: pagefind.PagefindIndex,
+  outDir: string,
+  htmlFiles: string[],
+  excludePaths: string[],
+) {
   const errors: string[] = []
   let indexedPages = 0
-  let indexedBytes = 0
   for (const filePath of htmlFiles) {
     const relPath = toPosixPath(path.relative(outDir, filePath))
     if (shouldSkipPagefindPath(relPath, excludePaths)) continue
@@ -157,15 +187,26 @@ async function populateAndWritePagefindIndex(
     errors.push(...response.errors)
     if (response.file) {
       indexedPages += 1
-      indexedBytes += Buffer.byteLength(content, 'utf8')
     }
   }
-  const writeResult = await index.writeFiles({ outputPath })
   return {
     indexedPages,
-    indexedBytes,
-    errors: [...errors, ...writeResult.errors],
+    errors,
   }
+}
+
+async function measureHtmlFiles(
+  htmlFiles: string[],
+  outDir: string,
+  excludePaths: string[],
+): Promise<number> {
+  let bytes = 0
+  for (const filePath of htmlFiles) {
+    const relPath = toPosixPath(path.relative(outDir, filePath))
+    if (shouldSkipPagefindPath(relPath, excludePaths)) continue
+    bytes += (await fs.stat(filePath)).size
+  }
+  return bytes
 }
 
 async function collectHtmlFiles(rootDir: string): Promise<string[]> {
