@@ -1,0 +1,53 @@
+---
+title: Forms
+description: Build useful form layouts and connect submission behavior before launch.
+template: doc
+layout:
+  showToc: true
+  tocDepth: 2
+nav:
+  order: 4
+  icon: lucide:mail
+---
+
+# Forms
+
+The [contact form example](/contact/) combines `AppForm`, `FormInputField`, `FormSelectField`, `FormCheck`, `FormSubmit`, and `FormStatus`. It validates input in the browser and shows a local confirmation. It does not submit or store data.
+
+## Ask for what you need
+
+Use labels that tell people why a field exists. A small inquiry form usually needs a name, a reply address, a topic, and a message. The example keeps optional business details out of the first step.
+
+<Grid columns="1" columnsMd="2">
+  <Panel tone="neutral" variant="surfaceAlt">
+    <h3>Good field</h3>
+    <p><strong>Work email</strong> — where a reply should go.</p>
+  </Panel>
+  <Panel tone="neutral" variant="surfaceAlt">
+    <h3>Good choice</h3>
+    <p><strong>Topic</strong> — product question, implementation help, or something else.</p>
+  </Panel>
+</Grid>
+
+## Compose fields with the design system
+
+This excerpt shows the basic shape. The full example is in `contact.mdx`.
+
+```html
+<AppForm action="/contact/" method="post" tone="accent">
+  <FormInputField label="Name" name="name" required="true" />
+  <FormInputField label="Work email" name="email" type="email" required="true" />
+  <FormSubmit label="Send message" />
+  <FormStatus tone="success" hidden="true">Message sent.</FormStatus>
+</AppForm>
+```
+
+`FormMeta`, `FormAssistLink`, and `FormDivider` can help with longer flows. Use them when they clarify the relationship between choices, help links, and submission. A form with many fields may benefit from a `Grid` so related inputs sit together at larger widths.
+
+## Connect real behavior
+
+For a published site, send the form to a secure endpoint. Validate on the server, protect against abuse, and return an honest success or error state. Replace the contact page's local preview script with that real behavior. If you collect personal data, explain its use in a policy that matches your implementation.
+
+<AlertBox title="Honest feedback" tone="info">
+  A success message should appear only after the server confirms delivery. The current contact page says “preview complete” because it deliberately stays local.
+</AlertBox>

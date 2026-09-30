@@ -1,108 +1,35 @@
 <SiteFooter
-  :copyright="`(c) ${new Date().getFullYear()} PureStack. All rights reserved.`"
+  :copyright="`© ${new Date().getFullYear()} Waypoint starter. Built with PureStack.`"
   tone="neutral"
   variant="none"
   class="bt-1 tone-border-surface"
 >
-  <Grid columns="1" columnsLg="minmax(0, 1.25fr) minmax(0, 1fr)">
+  <Grid columns="1" columnsMd="2" columnsLg="3">
     <Panel tone="ghost" class="box-shadow-none">
+      <p class="text-eyebrow">Waypoint</p>
+      <h2 class="text-title">A calmer way to move work forward.</h2>
+      <p class="text-tagline">
+        A fictional product with real page patterns. Use this starter as a
+        foundation for your own site.
+      </p>
+    </Panel>
+    <Panel tone="ghost" class="box-shadow-none">
+      <p class="text-eyebrow">Explore</p>
       <Flex direction="column" align="start">
-        <div class="text-eyebrow">Ship beyond launch</div>
-        <h2 class="text-title">
-          One system for docs, marketing, and product pages
-        </h2>
-        <p class="text-tagline">
-          Ship polished public pages with reusable primitives instead of
-          rebuilding layout, tone, and navigation page by page.
-        </p>
-        <Flex wrap="true">
-          <Badge tone="neutral">Docs and marketing</Badge>
-          <Badge tone="neutral">Theme-aware primitives</Badge>
-          <Badge tone="neutral">Accessible defaults</Badge>
-        </Flex>
-        <Flex wrap="true">
-          <BtnLink href="/" tone="accent" icon="tabler:rocket">
-            Start building
-          </BtnLink>
-          <BtnLink href="/guide/" tone="ghost" icon="tabler:book-2">
-            Read the guide
-          </BtnLink>
-        </Flex>
+        <BtnLink href="/platform/" tone="ghost">Platform</BtnLink>
+        <BtnLink href="/workspace/" tone="ghost">Workspace preview</BtnLink>
+        <BtnLink href="/pricing/" tone="ghost">Plans</BtnLink>
+        <BtnLink href="/journal/" tone="ghost">Journal</BtnLink>
+        <BtnLink href="/about/" tone="ghost">About this starter</BtnLink>
       </Flex>
     </Panel>
-
-    <Grid columns="1" columnsMd="2">
-      <Panel tone="ghost" class="box-shadow-none">
-        <Flex direction="column" align="start">
-          <div class="text-eyebrow">Community</div>
-          <h3 class="text-title">Build in public</h3>
-          <p class="text-tagline">
-            Follow the work and stay close to the system as it evolves.
-          </p>
-          <Flex wrap="true">
-            <BtnLink
-              href="https://github.com"
-              target="_blank"
-              tone="neutral"
-              icon="tabler:brand-github"
-            >
-              GitHub
-            </BtnLink>
-            <BtnLink
-              href="https://npmjs.com"
-              target="_blank"
-              tone="ghost"
-              icon="tabler:brand-npm"
-            >
-              Packages
-            </BtnLink>
-          </Flex>
-        </Flex>
-      </Panel>
-
-      <Panel tone="ghost" class="box-shadow-none">
-        <Flex direction="column" align="start">
-          <div class="text-eyebrow">Why teams stay</div>
-          <h3 class="text-title">Why it works</h3>
-          <p class="text-tagline">
-            Reusable content blocks keep pages consistent without bespoke CSS.
-          </p>
-          <Flex wrap="true">
-            <Badge tone="neutral">Reusable content blocks</Badge>
-            <Badge tone="neutral">Shared visual rhythm</Badge>
-            <Badge tone="neutral">Less bespoke CSS</Badge>
-          </Flex>
-        </Flex>
-      </Panel>
-    </Grid>
+    <Panel tone="ghost" class="box-shadow-none">
+      <p class="text-eyebrow">Make it yours</p>
+      <p>Follow the guide to replace the brand, content, demo data, and site settings.</p>
+      <Flex direction="column" align="start">
+        <BtnLink href="/guide/" tone="ghost">Starter guide</BtnLink>
+        <BtnLink href="/contact/" tone="ghost">Form example</BtnLink>
+      </Flex>
+    </Panel>
   </Grid>
-
-  <template #legal>
-    <a href="/imprint/de/">Impressum</a>
-    <a href="/privacy/">Privacy</a>
-    <a href="/terms/">Terms</a>
-  </template>
-
-  <template #social>
-    <BtnLink
-      href="https://github.com"
-      target="_blank"
-      tone="info"
-      iconOnly="true"
-      size="sm"
-      icon="tabler:brand-github"
-    >
-      GitHub
-    </BtnLink>
-    <BtnLink
-      href="https://npmjs.com"
-      target="_blank"
-      tone="info"
-      iconOnly="true"
-      size="sm"
-      icon="tabler:brand-npm"
-    >
-      Npm
-    </BtnLink>
-  </template>
 </SiteFooter>

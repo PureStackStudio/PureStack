@@ -1,0 +1,116 @@
+---
+title: Platform
+description: See how the Waypoint example connects plans, updates, and decisions.
+template: doc
+layout:
+  fullWidth: false
+  showToc: true
+  tocDepth: 2
+nav:
+  order: 2
+  icon: lucide:layers
+---
+
+<SectionHeader
+  eyebrow="The Waypoint platform"
+  title="A shared view of the work behind every outcome."
+  subtitle="Waypoint is a fictional product built to show a complete PureStack site. Its workflow is simple: define the work, keep the story current, and make the next decision obvious."
+  titleTag="h1"
+  titleClass="fs-display"/>
+
+## Three views, one conversation
+
+<Grid columns="1" columnsMd="3">
+  <FeatureCard
+    title="Initiatives"
+    summary="Connect a goal to milestones, owners, and a realistic target date."
+    icon="lucide:target"
+    tone="accent"/>
+  <FeatureCard
+    title="Updates"
+    summary="Record a concise summary of progress, risks, and the help a team needs."
+    icon="lucide:message-circle"
+    tone="secondary"/>
+  <FeatureCard
+    title="Decisions"
+    summary="Keep the question, context, owner, and outcome together for future readers."
+    icon="lucide:git-branch"
+    tone="neutral"/>
+</Grid>
+
+## Follow a project from start to finish
+
+<Tabs ariaLabel="Waypoint workflow" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="plan" label="Plan" icon="lucide:target">
+    <Grid columns="1" columnsMd="2" alignItems="center">
+      <div>
+        <h3>Agree on the destination.</h3>
+        <p>Write the outcome in plain language. Add a small set of milestones and one accountable owner, so progress has a clear meaning.</p>
+      </div>
+      <AlertBox title="Example milestone" tone="info">Customer onboarding is ready when the welcome flow, help content, and handoff owner are confirmed.</AlertBox>
+    </Grid>
+  </TabPane>
+  <TabPane id="update" label="Update" icon="lucide:message-circle">
+    <Grid columns="1" columnsMd="2" alignItems="center">
+      <div>
+        <h3>Keep the picture current.</h3>
+        <p>Share what changed, what is blocked, and what happens next. Short updates give the whole team useful context without another status meeting.</p>
+      </div>
+      <AlertBox title="Example update" tone="success">The help center draft is complete. The only open item is final review of the welcome email.</AlertBox>
+    </Grid>
+  </TabPane>
+  <TabPane id="decide" label="Decide" icon="lucide:git-branch">
+    <Grid columns="1" columnsMd="2" alignItems="center">
+      <div>
+        <h3>Make decisions visible.</h3>
+        <p>Record the options, the person deciding, and the reason for the choice. The next teammate can pick up the work with confidence.</p>
+      </div>
+      <AlertBox title="Example decision" tone="warning">The launch owner will choose the release date after accessibility review closes.</AlertBox>
+    </Grid>
+  </TabPane>
+</Tabs>
+
+## Designed around a team rhythm
+
+<Grid columns="1" columnsMd="2" class="mb-6">
+  <Panel tone="neutral" variant="surfaceAlt">
+    <p class="text-eyebrow">Monday</p>
+    <h3>Set the focus</h3>
+    <p>Review milestones and choose the few actions that would move the initiative forward this week.</p>
+  </Panel>
+  <Panel tone="neutral" variant="surfaceAlt">
+    <p class="text-eyebrow">Friday</p>
+    <h3>Share the learning</h3>
+    <p>Summarize the change, record open decisions, and give stakeholders a trustworthy view of progress.</p>
+  </Panel>
+</Grid>
+
+<ComparisonTable
+  tone="neutral"
+  eyebrow="A clearer operating habit"
+  title="What a shared workspace changes"
+  subtitle="The comparison describes the sample product story and shows how to build a structured comparison page."
+>
+  <ComparisonColumn title="Scattered updates" summary="The story lives across messages and meetings." icon="lucide:message-circle" tone="neutral">
+    <ComparisonFeature icon="lucide:circle-question-mark" tone="neutral">Ownership is difficult to find.</ComparisonFeature>
+    <ComparisonFeature icon="lucide:circle-question-mark" tone="neutral">Status depends on who you ask.</ComparisonFeature>
+    <ComparisonFeature icon="lucide:circle-question-mark" tone="neutral">Decisions lose their context.</ComparisonFeature>
+  </ComparisonColumn>
+  <ComparisonColumn title="Waypoint" summary="The team sees the same current picture." icon="lucide:compass" tone="accent" variant="surfaceAlt" badge="Example approach">
+    <ComparisonFeature icon="lucide:check" tone="accent">Every initiative has an owner.</ComparisonFeature>
+    <ComparisonFeature icon="lucide:check" tone="accent">Updates connect to milestones.</ComparisonFeature>
+    <ComparisonFeature icon="lucide:check" tone="accent">Decisions stay with the work.</ComparisonFeature>
+  </ComparisonColumn>
+</ComparisonTable>
+
+<CtaSection
+  tone="accent"
+  eyebrow="See it in context"
+  title="Open the example workspace."
+  subtitle="Explore a sample initiative with status, charts, decisions, and next steps."
+  primaryLabel="View workspace"
+  primaryHref="/workspace/"
+  primaryIcon="lucide:arrow-right"
+  secondaryLabel="Read the guide"
+  secondaryHref="/guide/"
+  secondaryIcon="lucide:book-open"/>

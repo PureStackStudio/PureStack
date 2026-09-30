@@ -1,0 +1,43 @@
+---
+title: Starter guide
+description: Make the Waypoint starter your own, from content and layout to data and launch settings.
+template: doc
+layout:
+  showToc: false
+  fullWidth: false
+nav:
+  order: 6
+  icon: lucide:book-open
+---
+
+<SectionHeader
+  eyebrow="Starter guide"
+  title="Build a site with a clear story and room to grow."
+  subtitle="These short guides explain the pages you are looking at, the components that shape them, and the settings to review before launch."
+  titleTag="h1"
+  titleClass="fs-display"/>
+
+<Grid columns="1" columnsMd="2" columnsLg="3">
+  <FeatureCard title="1. Get started" summary="Find the content directory, run the site, and make the first edits." icon="lucide:rocket" tone="accent">
+    <template #actions><BtnLink href="/guide/getting-started/" tone="ghost">Read guide</BtnLink></template>
+  </FeatureCard>
+  <FeatureCard title="2. Content and navigation" summary="Understand file routes, frontmatter, search, and site settings." icon="lucide:file-text" tone="neutral">
+    <template #actions><BtnLink href="/guide/content/" tone="ghost">Read guide</BtnLink></template>
+  </FeatureCard>
+  <FeatureCard title="3. Components" summary="Use layout, landing, action, and feedback patterns consistently." icon="lucide:layers" tone="neutral">
+    <template #actions><BtnLink href="/guide/components/" tone="ghost">Read guide</BtnLink></template>
+  </FeatureCard>
+  <FeatureCard title="4. Forms" summary="See a working local preview and the steps for real submission." icon="lucide:mail" tone="neutral">
+    <template #actions><BtnLink href="/guide/forms/" tone="ghost">Read guide</BtnLink></template>
+  </FeatureCard>
+  <FeatureCard title="5. Data views" summary="Replace sample metrics and use accessible charts where they help." icon="lucide:chart-column" tone="neutral">
+    <template #actions><BtnLink href="/guide/data/" tone="ghost">Read guide</BtnLink></template>
+  </FeatureCard>
+  <FeatureCard title="6. Interactions" summary="Explore tabs, disclosures, dialogs, and page scripts." icon="lucide:mouse-pointer-click" tone="neutral">
+    <template #actions><BtnLink href="/guide/interactions/" tone="ghost">Read guide</BtnLink></template>
+  </FeatureCard>
+</Grid>
+
+<AlertBox title="Before publishing" tone="info">
+  Waypoint is a fictional brand. Review the <a href="/guide/launch-checklist/">launch checklist</a> to replace illustrative claims and connect any forms or business flows.
+</AlertBox>

@@ -1,65 +1,61 @@
 ---
-title: Contact
-description: Get in touch about product questions, support, and partnerships.
+title: Contact form example
+description: A complete form layout showing fields, selection, consent, and status.
 template: doc
-nav:
-  icon: iconoir:mail
 layout:
-  navMode: sidebar
   fullWidth: false
   showToc: false
-  showFooter: true
+nav:
+  hidden: true
+  icon: lucide:mail
 ---
 
 <SectionHeader
-  eyebrow="Contact"
-  title="Talk to the team behind PureStack."
-  subtitle="Whether you need implementation guidance, support, or a partnership conversation, we will route you to the right person quickly."
->
-  <Flex>
-    <BtnLink href="mailto:team@purestack.dev" tone="accent">Email Us</BtnLink>
-    <BtnLink href="/guide/" tone="ghost">Browse Documentation</BtnLink>
+  eyebrow="Form pattern"
+  title="Make the next conversation easy to start."
+  subtitle="This example shows a contact form with clear labels, a useful topic choice, and a visible result. It stays local to this page until you connect a submission endpoint."
+  titleTag="h1"
+  titleClass="fs-display"/>
+
+<Grid columns="1" columnsLg="minmax(0, 1.15fr) minmax(18rem, 0.85fr)" alignItems="start">
+  <Panel tone="neutral" variant="surfaceAlt">
+    <AppForm class="contact-form-demo" action="/contact/" method="post" tone="accent">
+      <Grid columns="1" columnsMd="2">
+        <FormInputField label="Name" name="name" type="text" autocomplete="name" placeholder="Your name" required="true"/>
+        <FormInputField label="Work email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required="true"/>
+      </Grid>
+      <FormSelectField
+        label="What would you like to discuss?"
+        name="topic"
+        placeholder="Choose a topic"
+        required="true"
+        :options="[
+          { label: 'A product question', value: 'product' },
+          { label: 'Implementation help', value: 'implementation' },
+          { label: 'Something else', value: 'other' }
+        ]"/>
+      <FormInputField label="Message" name="message" type="text" placeholder="A few details will help us respond" required="true"/>
+      <FormCheck label="I understand this starter does not send my message" name="demoAcknowledged" value="yes" required="true"/>
+      <FormSubmit label="Preview submission" tone="accent"/>
+      <FormStatus class="contact-demo-status" tone="info" hidden="true">
+        Form preview complete. No message was sent or stored. Connect this form to your own endpoint before publishing it.
+      </FormStatus>
+    </AppForm>
+  </Panel>
+  <Flex direction="column" class="gap-3">
+    <AlertBox title="This is a front-end example" tone="info">
+      The submit button validates the fields and shows a local confirmation. No data leaves your browser.
+    </AlertBox>
+    <Panel tone="neutral" variant="surface">
+      <h3>Before you publish</h3>
+      <ol>
+        <li>Connect a secure form endpoint.</li>
+        <li>Explain how you handle submitted data.</li>
+        <li>Replace this demo confirmation with real success and error states.</li>
+      </ol>
+      <BtnLink href="/guide/forms/" tone="ghost" icon="lucide:arrow-right" iconPosition="end">Read the form guide</BtnLink>
+    </Panel>
   </Flex>
-</SectionHeader>
+</Grid>
 
-## Choose Your Path
-
-<CardGrid columns="3">
-  <Card
-    title="General Inquiries"
-    description="Product questions, pricing direction, and onboarding discussions."
-    label="team@purestack.dev"
-    href="mailto:team@purestack.dev"
-    tone="default"/>
-  <Card
-    title="Technical Support"
-    description="Issue triage, debugging help, and architecture-level support requests."
-    label="support@purestack.dev"
-    href="mailto:support@purestack.dev"
-    tone="default"/>
-  <Card
-    title="Partnerships"
-    description="Integrations, reseller opportunities, and co-marketing conversations."
-    label="partners@purestack.dev"
-    href="mailto:partners@purestack.dev"
-    tone="default"/>
-</CardGrid>
-
-## Contact Form
-
-<AlertBox title="Response time" variant="info" tone="default">
-  We usually reply within one business day. Critical production issues should
-  include environment, version, and reproduction steps.
-</AlertBox>
-
-<ContactForm
-  action="mailto:team@purestack.dev?subject=PureStack%20Inquiry"
-  description="Include your environment, version, and desired outcome so we can respond quickly."
-  submitLabel="Open Email Draft"/>
-
-## Office and Availability
-
-- Location: Berlin, Germany
-- Working hours: Monday-Friday, 09:00-18:00 CET
-- Public updates: https://github.com/purestack
-
+<PageScript src="./contact-demo.ts" />

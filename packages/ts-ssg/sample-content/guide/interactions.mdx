@@ -1,0 +1,62 @@
+---
+title: Interactions
+description: Tabs, disclosures, dialogs, and small client scripts in context.
+template: doc
+layout:
+  showToc: true
+  tocDepth: 2
+nav:
+  order: 6
+  icon: lucide:mouse-pointer-click
+---
+
+# Interactions
+
+The starter uses client behavior where it helps a visitor explore or complete a task. The [platform page](/platform/) has tabs, the [plans page](/pricing/) has disclosures, and the [workspace preview](/workspace/) has a review agenda dialog.
+
+## Choose the smallest interaction
+
+`Tabs` are useful for peer views of the same subject. `ExpandablePanel` works for optional detail beneath a clear summary. `ModalTrigger` and `Modal` keep a focused task or explanation near the page that opens it.
+
+<Tabs ariaLabel="Interaction examples" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="tabs-example" label="Tabs" icon="lucide:panels-top-left">
+    <p>Use tabs when visitors can switch between short, related views without losing the page context.</p>
+  </TabPane>
+  <TabPane id="disclosure-example" label="Disclosure" icon="lucide:chevron-right">
+    <p>Use a disclosure for optional detail. Keep the summary specific enough to stand on its own.</p>
+  </TabPane>
+  <TabPane id="dialog-example" label="Dialog" icon="lucide:panel-top">
+    <p>Use a dialog for a focused explanation or decision. Give it a clear title and an obvious close control.</p>
+  </TabPane>
+</Tabs>
+
+<ExpandablePanel title="What should stay visible?" description="The answer should be available without another page." icon="lucide:circle-question-mark" tone="neutral">
+  <p>Keep the main outcome and the next action in the page. Put supporting detail here when a reader may need it but does not need to scan it every time.</p>
+</ExpandablePanel>
+
+## Enhance a small piece of content
+
+`PageScript` bundles a page-specific TypeScript entry point. The button below updates a local counter. It shows the pattern without claiming to save anything.
+
+<Panel tone="neutral" variant="surfaceAlt">
+  <Flex align="center" wrap="true" class="gap-3">
+    <Btn id="note-counter-button" type="button" tone="accent">Count a local click</Btn>
+    <output id="note-counter-output" aria-live="polite">No clicks yet</output>
+  </Flex>
+</Panel>
+
+<PageScript src="./interaction-demo.ts" />
+
+```ts
+const button = document.querySelector<HTMLButtonElement>('#note-counter-button')
+const output = document.querySelector<HTMLOutputElement>('#note-counter-output')
+let clicks = 0
+
+button?.addEventListener('click', () => {
+  clicks += 1
+  if (output)
+    output.textContent = `${clicks} local click${clicks === 1 ? '' : 's'}`
+})
+```
+
+For richer applications, use a component app with state and events. For a small enhancement to static content, a page script keeps the surrounding page simple.

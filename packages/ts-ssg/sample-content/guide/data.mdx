@@ -1,0 +1,56 @@
+---
+title: Data views
+description: Replace illustrative metrics and choose charts that explain a real question.
+template: doc
+layout:
+  showToc: true
+  tocDepth: 2
+nav:
+  order: 5
+  icon: lucide:chart-column
+---
+
+# Data views
+
+The [workspace preview](/workspace/) uses `MetricStrip`, `LineChart`, and `BarChart` to tell one project story. All values are defined in the page. Replace them with data from your own source before treating the view as a real dashboard.
+
+## Match the chart to the question
+
+| Question | Useful component |
+| --- | --- |
+| How much is done now? | `MetricItem` |
+| How did progress change? | `LineChart` |
+| How do groups compare? | `BarChart` |
+| How is a whole divided? | `DoughnutChart` |
+
+## Show a composition clearly
+
+The ring below shows an example allocation of the twelve ready tasks in the workspace. It is a different view of the same illustrative data: five product tasks, four design tasks, and three marketing tasks.
+
+<Grid columns="1" columnsLg="minmax(0, 0.8fr) minmax(18rem, 1.2fr)" alignItems="center">
+  <Panel tone="neutral" variant="surfaceAlt">
+    <DoughnutChart
+      title="Ready tasks by team"
+      description="Of twelve ready tasks, five belong to product, four to design, and three to marketing."
+      centerLabel="Ready tasks"
+      centerValue="12"
+      :segments="[
+        { label: 'Product', value: 5 },
+        { label: 'Design', value: 4 },
+        { label: 'Marketing', value: 3 }
+      ]"/>
+  </Panel>
+  <div>
+    <h3>Use the chart to support the sentence.</h3>
+    <p>Product owns the largest share of work ready for delivery. The chart provides a quick shape; the labels and nearby words carry the meaning.</p>
+    <p>Every chart in this starter includes a title and description so its purpose remains clear outside the visual shape.</p>
+  </div>
+</Grid>
+
+## Keep the source of truth clear
+
+When connecting a real source, transform the values into the component's small input arrays. Keep labels, units, and time windows beside the data. For a dashboard, choose a refresh strategy and state when the numbers were last updated.
+
+<AlertBox title="Illustrative values" tone="info">
+  No chart on the Waypoint starter reflects a real customer, project, or product metric.
+</AlertBox>

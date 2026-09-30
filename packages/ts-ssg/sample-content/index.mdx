@@ -1,500 +1,127 @@
 ---
-title: CalcCore
-description: Backend-native calculation engine for SaaS platforms.
+title: Project clarity for every team
+description: A focused example of a product landing page built with PureStack.
 template: doc
 layout:
   fullWidth: false
-  navMode: drawer
-  showToc: false
   showNav: false
+  showToc: false
 nav:
+  title: Home
   order: 1
-  icon: iconoir:home
+  icon: lucide:compass
 ---
 
-<LandingSection
-  tone="neutral"
-  variant="surface"
-  columnsLg="minmax(0, 1.08fr) minmax(320px, 0.92fr)"
-  alignItems="start"
-  class="mb-6"
->
-  <Flex direction="column" align="start" class="gap-4">
-    <Flex wrap="true" align="center" class="gap-2">
-      <Badge tone="accent">Backend-native</Badge>
-      <Badge tone="secondary">Excel-compatible</Badge>
-      <Badge tone="neutral">Deterministic</Badge>
-    </Flex>
+<link rel="stylesheet" href="/home.css" />
 
-    <SectionHeader
-      eyebrow="Calculation runtime for production systems"
-      title="CalcCore turns spreadsheet logic into backend certainty."
-      subtitle="Author pricing, forecasting, eligibility, and financial rules with familiar formula semantics, then execute them inside APIs, jobs, and SaaS services without shipping Excel to production."
-      titleTag="h1"
-      titleClass="fs-display mb-2"
-      subtitleClass="text-lead mb-0"/>
-
-    <Flex wrap="true" align="center" class="gap-3">
-      <BtnLink
-        href="/getting-started/"
-        tone="accent"
-        icon="lucide:arrow-right"
-        iconPosition="end"
-      >
-        Start building
-      </BtnLink>
-      <BtnLink
-        href="/guide/pricing/"
-        tone="ghost"
-        variant="outline"
-        icon="lucide:scale"
-      >
-        View licensing
-      </BtnLink>
-    </Flex>
-
-    <MetricStrip
-      tone="neutral"
-      variant="surface"
-      columnsSm="3"
-      columnsLg="3"
-      class="w-full"
-    >
-      <MetricItem
-        label="Runtime"
-        value="Headless engine"
-        icon="lucide:server-cog"
-        tone="accent"/>
-      <MetricItem
-        label="Inputs"
-        value="Typed data models"
-        icon="lucide:table"
-        tone="secondary"/>
-      <MetricItem
-        label="Outputs"
-        value="Auditable results"
-        icon="lucide:shield-check"
-        tone="success"/>
-    </MetricStrip>
-  </Flex>
-
-  <CodeShowcase
-    tone="neutral"
-    language="C#"
-    eyebrow="Live model"
-    title="Pricing model"
-    summary="Compiled and evaluated server-side."
-    resultTitle="Evaluation result"
-    resultMeta="Reproducible"
-  >
-```csharp
-var discount =
-    If(customer.IsSenior, 0.15,
-    If(order.Total >= 200, 0.10, 0.00));
-
-Output("price.final",
-    order.Total * (1 - discount) * taxRate);
-```
-
-    <template #result>
-      <MetricStrip tone="ghost" variant="none" columnsSm="3" columnsLg="3">
-        <MetricItem
-          label="Model"
-          value="Spreadsheet semantics"
-          icon="lucide:file-spreadsheet"
-          tone="info"/>
-        <MetricItem
-          label="Compile"
-          value="Executable graph"
-          icon="lucide:braces"
-          tone="secondary"/>
-        <MetricItem
-          label="Evaluate"
-          value="Stable output"
-          icon="lucide:calculator"
-          tone="success"/>
-      </MetricStrip>
-    </template>
-  </CodeShowcase>
-</LandingSection>
-
-<LandingBand
-  tone="accent"
-  paddingBottom="150px"
-  height="auto"
-  variant="surfaceAlt"
->
-  <SectionHeader
-    eyebrow="Why it exists"
-    title="Business logic should not disappear between the spreadsheet and production."
-    subtitle="Teams already design complex calculation models in spreadsheets. The risky part is the rewrite: formulas become code, edge cases drift, and audits depend on memory. CalcCore keeps the model explicit from authoring to execution."
-    variant="none"/>
-</LandingBand>
-
-
-<Grid
-  columns="1"
-  columnsMd="2"
-  columnsLg="4"
-  style="margin-top: -150px; margin-bottom: 2rem"
->
-  <FeatureCard
-    tone="neutral"
-    title="Pricing rules"
-    summary="Tiered discounts, contractual overrides, taxes, surcharges, and renewal rules all need one source of truth."
-    icon="lucide:badge-percent"/>
-  <FeatureCard
-    tone="neutral"
-    title="Forecasting"
-    summary="Planning models can run in services, background jobs, and batch pipelines without a spreadsheet process."
-    icon="lucide:chart-line"/>
-  <FeatureCard
-    tone="neutral"
-    title="Eligibility"
-    summary="Decision rules remain readable while still fitting normal backend deployment and review workflows."
-    icon="lucide:list-checks"/>
-  <FeatureCard
-    tone="neutral"
-    title="Finance"
-    summary="Results can be tested, reproduced, traced, and explained long after the original request finished."
-    icon="lucide:shield-check"/>
-</Grid>
-
-
-<LandingSection
-  class="mt-6"
-  tone="neutral"
-  variant="outline"
-  eyebrow="The model"
-  title="A runtime shaped for backend teams."
-  subtitle="CalcCore is not a spreadsheet UI. It is the execution layer you embed where correctness matters."
-  columnsLg="minmax(0, 0.72fr) minmax(0, 1.28fr)"
->
-  <Grid columns="1" columnsMd="2">
-    <FeatureCard
-      title="Formula semantics without Excel in production"
-      summary="Use familiar spreadsheet-style expressions while keeping the runtime headless."
-      icon="lucide:file-spreadsheet"
-      variant="none"
-      class="box-shadow-none"
-    >
-      Business users and engineers can reason about the same calculation model,
-      while production runs a dedicated backend engine.
-    </FeatureCard>
-
-    <FeatureCard
-      title="Explicit evaluation behavior"
-      summary="Inputs, dependencies, recalculation, errors, and outputs are modeled deliberately."
-      icon="lucide:workflow"
-      variant="none"
-      class="box-shadow-none"
-    >
-      The engine favors predictable execution over hidden magic, so repeated
-      evaluations with the same inputs produce the same results.
-    </FeatureCard>
-
-    <FeatureCard
-      title="Code-first or spreadsheet-first authoring"
-      summary="Choose the authoring workflow that fits the ownership of the model."
-      icon="lucide:code"
-      variant="none"
-      class="box-shadow-none"
-    >
-      Engineering-owned logic can live in source control. Spreadsheet-owned
-      models can be validated, compiled, and executed through the same engine.
-    </FeatureCard>
-
-    <FeatureCard
-      title="Operational diagnostics"
-      summary="Structured errors and calculation traces make failures explainable."
-      icon="lucide:activity"
-      variant="none"
-      class="box-shadow-none"
-    >
-      When a customer-facing number looks wrong, the system can show which
-      inputs and dependencies shaped the result.
-    </FeatureCard>
-  </Grid>
-</LandingSection>
-
-<LandingBand
-  tone="accent"
-  paddingBottom="150px"
-  height="auto"
-  variant="surfaceAlt"
->
-  <SectionHeader
-    eyebrow="How it works"
-    title="Compile the model once. Evaluate it everywhere."
-    subtitle="CalcCore gives calculation logic the same engineering discipline as the rest of your backend: versioned models, typed inputs, repeatable execution, and reviewable behavior."/>
-</LandingBand>
-
-
-<Tabs
-  class="mb-6"
-  style="margin-top: -150px"
-  ariaLabel="CalcCore workflow"
-  tone="neutral"
-  variant="surface"
-  tabVariant="underline"
->
-  <TabPane id="author" label="Author" icon="lucide:table">
-    <Grid columns="1" columnsLg="2" alignItems="start">
-      <div>
-        <h3>Use the language your model already speaks.</h3>
-        <p>
-          Define formulas with spreadsheet-compatible semantics, or build the
-          model directly in code when engineering ownership matters more than
-          spreadsheet authoring.
-        </p>
+<div class="waypoint-home">
+  <nav class="wp-home-nav" aria-label="Explore Waypoint">
+    <span>Explore Waypoint</span>
+    <div>
+      <a href="/platform/">Platform</a>
+      <a href="/workspace/">Workspace</a>
+      <a href="/pricing/">Plans</a>
+      <a href="/guide/">Starter guide</a>
+    </div>
+  </nav>
+  <section class="wp-hero" aria-labelledby="wp-hero-title">
+    <div class="wp-hero-copy">
+      <div class="wp-eyebrow"><span class="wp-eyebrow-mark" aria-hidden="true"></span> The Waypoint starter</div>
+      <h1 id="wp-hero-title">Make every next step <span>clear.</span></h1>
+      <p class="wp-hero-lead">A shared home for plans, progress, and decisions. Give your team the context to move forward together.</p>
+      <div class="wp-actions">
+        <a class="wp-button wp-button-primary" href="/workspace/">Explore the workspace <span aria-hidden="true">↗</span></a>
+        <a class="wp-button wp-button-secondary" href="/guide/getting-started/">Adapt this starter <span aria-hidden="true">→</span></a>
       </div>
-      <FeatureCard
-        tone="neutral"
-        title="Best for"
-        icon="lucide:square-function"
-      >
-        Pricing tables, margin models, eligibility rules, accounting schedules,
-        usage tiers, forecasts, and scenario planning.
-      </FeatureCard>
-    </Grid>
-  </TabPane>
+      <p class="wp-disclosure">An illustrative product and workspace, built with PureStack.</p>
+    </div>
 
-  <TabPane id="compile" label="Compile" icon="lucide:braces">
-    <Grid columns="1" columnsLg="2" alignItems="start">
-      <div>
-        <h3>Turn the model into an execution graph.</h3>
-        <p>
-          CalcCore resolves dependencies, validates references, prepares the
-          calculation order, and gives the backend a model it can run
-          repeatedly.
-        </p>
+    <div class="wp-product-shot" aria-label="Illustrative Waypoint project dashboard">
+      <div class="wp-product-chrome">
+        <div class="wp-window-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+        <span>WAYPOINT / PROJECT VIEW</span>
+        <span class="wp-chrome-end">EXAMPLE</span>
       </div>
-      <FeatureCard
-        tone="secondary"
-        title="Built for review"
-        icon="lucide:git-branch"
-      >
-        Treat model changes like software changes: version them, diff them, test
-        them, and promote them through environments.
-      </FeatureCard>
-    </Grid>
-  </TabPane>
-
-  <TabPane id="evaluate" label="Evaluate" icon="lucide:server">
-    <Grid columns="1" columnsLg="2" alignItems="start">
-      <div>
-        <h3>Run calculations inside your backend boundary.</h3>
-        <p>
-          Feed the engine typed inputs from APIs, events, queues, or jobs and
-          receive structured outputs that can be stored, returned, or audited.
-        </p>
+      <div class="wp-product-grid">
+        <div class="wp-project-card">
+          <div class="wp-project-overline"><span>ACTIVE INITIATIVE</span><span>Q4 / 2026</span></div>
+          <div class="wp-project-heading"><h2>Autumn launch</h2><span class="wp-status"><span aria-hidden="true"></span> On track</span></div>
+          <p>One clear view of launch readiness.</p>
+          <div class="wp-progress-label"><span>Milestone progress</span><strong>4 of 5</strong></div>
+          <div class="wp-progress-track" role="img" aria-label="Four of five milestones complete"><span></span></div>
+          <div class="wp-task-list">
+            <div class="wp-task"><span class="wp-task-check" aria-hidden="true">✓</span><span>Design handoff</span><small>Complete</small></div>
+            <div class="wp-task"><span class="wp-task-check" aria-hidden="true">✓</span><span>Help center draft</span><small>Complete</small></div>
+            <div class="wp-task"><span class="wp-task-next" aria-hidden="true"></span><span>Accessibility review</span><small>Next up</small></div>
+          </div>
+        </div>
+        <div class="wp-side-stack">
+          <div class="wp-side-card">
+            <span class="wp-side-label">NEXT REVIEW</span>
+            <strong>Friday</strong>
+            <span>10:00 · Project check-in</span>
+            <span class="wp-side-icon" aria-hidden="true">↗</span>
+          </div>
+          <div class="wp-side-card wp-side-card-decision">
+            <span class="wp-side-label">OPEN DECISION</span>
+            <strong>Release date</strong>
+            <span>Owner assigned</span>
+            <span class="wp-side-icon" aria-hidden="true">02</span>
+          </div>
+        </div>
       </div>
-      <FeatureCard tone="neutral" title="Production fit" icon="lucide:database">
-        No desktop dependency. No workbook automation. No production logic
-        hiding in a file share.
-      </FeatureCard>
-    </Grid>
-  </TabPane>
-</Tabs>
+      <div class="wp-product-bottom"><span><span class="wp-live-dot" aria-hidden="true"></span> Sample workspace</span><a href="/workspace/">View the full preview <span aria-hidden="true">→</span></a></div>
+    </div>
+  </section>
 
-<ComparisonTable
-  tone="neutral"
-  eyebrow="Compare the options"
-  title="CalcCore exists because the usual choices both leak risk."
-  subtitle="Spreadsheet automation is fragile in production. Rewritten service code drifts from the business model. CalcCore gives the model a backend-native runtime."
->
-  <ComparisonColumn
-    title="Spreadsheet automation"
-    summary="Fast to begin, difficult to operate."
-    icon="lucide:file-spreadsheet"
-    tone="neutral"
-  >
-    <ComparisonFeature icon="lucide:triangle-alert" tone="neutral">
-      Desktop or workbook automation in a service boundary.
-    </ComparisonFeature>
-    <ComparisonFeature icon="lucide:triangle-alert" tone="neutral">
-      Hidden dependencies, mutable files, and limited observability.
-    </ComparisonFeature>
-    <ComparisonFeature icon="lucide:triangle-alert" tone="neutral">
-      Hard to reproduce failures across environments.
-    </ComparisonFeature>
-  </ComparisonColumn>
+  <section class="wp-principles" aria-label="The Waypoint approach">
+    <div><span>01 / PLAN</span><strong>Give the work direction.</strong></div>
+    <div><span>02 / ALIGN</span><strong>Keep everyone in the loop.</strong></div>
+    <div><span>03 / DELIVER</span><strong>Make progress visible.</strong></div>
+  </section>
 
-  <ComparisonColumn
-    title="Rewritten service code"
-    summary="Operationally familiar, but easy to diverge."
-    icon="lucide:code"
-    tone="secondary"
-  >
-    <ComparisonFeature icon="lucide:git-branch" tone="secondary">
-      Business formulas become a second implementation.
-    </ComparisonFeature>
-    <ComparisonFeature icon="lucide:git-branch" tone="secondary">
-      Spreadsheet validation and production behavior drift over time.
-    </ComparisonFeature>
-    <ComparisonFeature icon="lucide:git-branch" tone="secondary">
-      Audits depend on comments, memory, and scattered tests.
-    </ComparisonFeature>
-  </ComparisonColumn>
+  <section class="wp-process" aria-labelledby="wp-process-title">
+    <div class="wp-section-intro">
+      <span class="wp-eyebrow">A connected way to work</span>
+      <h2 id="wp-process-title">One rhythm for the whole team.</h2>
+      <p>Good project habits need a place to live. Waypoint connects the goal, the weekly update, and the decisions that shape what happens next.</p>
+    </div>
+    <div class="wp-process-list">
+      <a href="/platform/"><span class="wp-step-number">01</span><span class="wp-step-copy"><strong>Set the direction</strong><small>Give every initiative a purpose, owner, and meaningful milestones.</small></span><span class="wp-step-arrow" aria-hidden="true">↗</span></a>
+      <a href="/workspace/"><span class="wp-step-number">02</span><span class="wp-step-copy"><strong>See the progress</strong><small>Bring updates, status, and the next review into one shared view.</small></span><span class="wp-step-arrow" aria-hidden="true">↗</span></a>
+      <a href="/journal/weekly-review/"><span class="wp-step-number">03</span><span class="wp-step-copy"><strong>Share the learning</strong><small>Turn the week's work into a short, useful story for everyone.</small></span><span class="wp-step-arrow" aria-hidden="true">↗</span></a>
+    </div>
+  </section>
 
-  <ComparisonColumn
-    title="CalcCore"
-    summary="Spreadsheet semantics, backend runtime discipline."
-    icon="lucide:calculator"
-    badge="Recommended"
-    tone="accent"
-    variant="surfaceAlt"
-  >
-    <ComparisonFeature icon="lucide:check" tone="accent">
-      Familiar model semantics compiled into an execution graph.
-    </ComparisonFeature>
-    <ComparisonFeature icon="lucide:check" tone="accent">
-      Deterministic evaluation inside APIs, jobs, and services.
-    </ComparisonFeature>
-    <ComparisonFeature icon="lucide:check" tone="accent">
-      Structured errors, traces, and reproducible results.
-    </ComparisonFeature>
-  </ComparisonColumn>
-</ComparisonTable>
+  <section class="wp-brief" aria-labelledby="wp-brief-title">
+    <div class="wp-brief-copy">
+      <span class="wp-eyebrow">The Friday brief</span>
+      <h2 id="wp-brief-title">An update people will actually read.</h2>
+      <p>Share what moved, what needs a decision, and where the team goes next. The example workspace keeps the details close when someone wants to go deeper.</p>
+      <a href="/workspace/">Explore the example workspace <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="wp-brief-paper">
+      <div class="wp-paper-top"><span>WEEK 06 / AUTUMN LAUNCH</span><span>FRIDAY BRIEF</span></div>
+      <h3>A good week of progress.</h3>
+      <p>The design handoff is complete. The help center draft is ready for final review.</p>
+      <div class="wp-paper-line"><span class="wp-paper-dot wp-dot-done" aria-hidden="true"></span><div><strong>Moved forward</strong><span>Release checklist prepared for review</span></div></div>
+      <div class="wp-paper-line"><span class="wp-paper-dot wp-dot-open" aria-hidden="true"></span><div><strong>Needs a decision</strong><span>Confirm the release date after accessibility sign-off</span></div></div>
+      <div class="wp-paper-footer">NEXT REVIEW <strong>FRIDAY, 10:00</strong></div>
+    </div>
+  </section>
 
-<Grid columns="1" columnsLg="3" class="mb-6">
-  <FeatureCard
-    tone="neutral"
-    title="Deterministic by design"
-    summary="Evaluation semantics are explicit, controlled, and repeatable. The same model and inputs produce the same result."
-    icon="lucide:calculator"/>
+  <section class="wp-explore" aria-labelledby="wp-explore-title">
+    <div class="wp-explore-heading"><div><span class="wp-eyebrow">Explore the starter</span><h2 id="wp-explore-title">See how the pieces fit.</h2></div><p>One visual language can carry a product story, a working preview, and the guide behind it.</p></div>
+    <div class="wp-explore-grid">
+      <a href="/platform/"><span class="wp-explore-index">01 / THE STORY</span><strong>Platform</strong><span>Discover the workflow and how it supports a team.</span><b aria-hidden="true">↗</b></a>
+      <a href="/workspace/"><span class="wp-explore-index">02 / THE PRODUCT</span><strong>Workspace</strong><span>Explore project status, charts, and decisions in context.</span><b aria-hidden="true">↗</b></a>
+      <a href="/guide/"><span class="wp-explore-index">03 / THE FOUNDATION</span><strong>Starter guide</strong><span>Find the files, components, and settings to make it yours.</span><b aria-hidden="true">↗</b></a>
+    </div>
+    <p class="wp-explore-more">Looking for the plan layout? <a href="/pricing/">Explore example pricing <span aria-hidden="true">→</span></a></p>
+  </section>
 
-  <FeatureCard
-    tone="secondary"
-    title="Made for complex models"
-    summary="Model dependencies, intermediate values, tables, and outputs are first class instead of incidental details hidden in application code."
-    icon="lucide:layers"/>
-
-  <FeatureCard
-    tone="neutral"
-    title="Inspectable when it matters"
-    summary="Structured errors and optional traces help teams explain exactly how a result was reached."
-    icon="lucide:shield-check"/>
-</Grid>
-
-<LandingBand
-  tone="accent"
-  paddingBottom="150px"
-  height="auto"
-  variant="surfaceAlt"
->
-  <SectionHeader
-    eyebrow="Commercial licensing"
-    title="Predictable terms for backend and SaaS usage."
-    subtitle="Start with evaluation, then license by service when CalcCore becomes part of production."
-    footnote="No per-cell pricing. No per-formula pricing. No execution-count surprises."/>
-</LandingBand>
-
-<PricingTable tone="neutral" style="margin-top: -150px" class="box-shadow-none">
-  <PricingPlan
-    title="Developer"
-    summary="For exploration, prototypes, and small-team validation."
-    price="Evaluation"
-    period="request access"
-    icon="lucide:terminal"
-    ctaLabel="Start building"
-    ctaLink="/getting-started/"
-  >
-    <PricingFeature icon="lucide:check">Full runtime evaluation</PricingFeature>
-    <PricingFeature icon="lucide:check"
-      >Code-first model authoring</PricingFeature
-    >
-    <PricingFeature icon="lucide:check"
-      >Local and CI-friendly workflow</PricingFeature
-    >
-  </PricingPlan>
-
-  <PricingPlan
-    title="SaaS Runtime"
-    summary="For production APIs, jobs, and internal platforms."
-    price="Per service"
-    period="simple licensing"
-    icon="lucide:rocket"
-    badge="Core plan"
-    variant="surfaceAlt"
-    tone="secondary"
-    ctaLabel="View licensing"
-    ctaLink="/guide/pricing/"
-  >
-    <PricingFeature icon="lucide:check"
-      >Production service deployment</PricingFeature
-    >
-    <PricingFeature icon="lucide:check"
-      >Unlimited models in the service</PricingFeature
-    >
-    <PricingFeature icon="lucide:check"
-      >No usage-metered execution fees</PricingFeature
-    >
-  </PricingPlan>
-
-  <PricingPlan
-    title="Business"
-    summary="For mission-critical calculation systems."
-    price="Annual"
-    period="support available"
-    icon="lucide:briefcase-business"
-    ctaLabel="Talk to us"
-    ctaLink="mailto:team@purestack.dev"
-  >
-    <PricingFeature icon="lucide:check"
-      >Priority support options</PricingFeature
-    >
-    <PricingFeature icon="lucide:check"
-      >Long-term version stability</PricingFeature
-    >
-    <PricingFeature icon="lucide:check"
-      >Deployment and architecture review</PricingFeature
-    >
-  </PricingPlan>
-</PricingTable>
-
-<LandingSection
-  tone="neutral"
-  variant="outline"
-  eyebrow="Built for teams"
-  title="Who should use CalcCore?"
-  subtitle="CalcCore fits organizations where calculation logic is not a side note. It is product behavior, customer money, operational policy, or regulated decisioning."
-  columnsLg="minmax(0, 0.72fr) minmax(0, 1.28fr)"
->
-  <Grid columns="1" columnsMd="2">
-    <FeatureCard
-      tone="neutral"
-      title="SaaS platforms"
-      summary="Pricing, subscriptions, entitlements, usage tiers, and customer-specific commercial logic."
-      icon="lucide:server"/>
-    <FeatureCard
-      tone="secondary"
-      title="Fintech teams"
-      summary="Interest, fees, ledgers, allocation rules, portfolio logic, and repeatable calculation audit trails."
-      icon="lucide:chart-column"/>
-    <FeatureCard
-      tone="secondary"
-      title="Internal tools"
-      summary="Forecasting, planning, operations models, approvals, and back-office decision systems."
-      icon="lucide:settings"/>
-    <FeatureCard
-      tone="neutral"
-      title="Data products"
-      summary="Scenario evaluation, explainable outputs, dependency-aware results, and reproducible model runs."
-      icon="lucide:database"/>
-  </Grid>
-</LandingSection>
-
-
-<CtaSection
-  tone="accent"
-  eyebrow="Start small"
-  title="Put one critical formula path behind CalcCore."
-  subtitle="Choose a calculation that already lives in a spreadsheet and already causes rewrite pain. Model it, test it, run it from the backend, and compare every output."
-  primaryLabel="Read the quick start"
-  primaryHref="/getting-started/"
-  primaryIcon="lucide:arrow-right"
-  secondaryLabel="Review licensing"
-  secondaryHref="/guide/pricing/"
-  secondaryIcon="lucide:scale"
-  meta="No Excel process in production. No per-execution billing surprises."/>
+  <section class="wp-final" aria-labelledby="wp-final-title">
+    <div><span class="wp-eyebrow">Built to become yours</span><h2 id="wp-final-title">Start with your story.</h2><p>Replace the example brand and data, keep the patterns that help your visitors, and shape a site that feels like your own.</p></div>
+    <a class="wp-button wp-button-primary" href="/guide/getting-started/">Read the getting started guide <span aria-hidden="true">↗</span></a>
+  </section>
+</div>

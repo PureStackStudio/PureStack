@@ -1,0 +1,119 @@
+---
+title: Workspace preview
+description: A fictional project dashboard with charts, status, disclosures, and a dialog.
+template: doc
+layout:
+  fullWidth: false
+  showToc: true
+  tocDepth: 2
+nav:
+  order: 3
+  icon: lucide:layout-dashboard
+---
+
+<SectionHeader
+  eyebrow="Illustrative workspace"
+  title="Autumn launch, all in one view."
+  subtitle="This is static example data. Use the page as a dashboard pattern, then connect your own data and actions."
+  titleTag="h1"
+  titleClass="fs-display"
+>
+  <Flex wrap="true" class="gap-2">
+    <Badge tone="success">On track</Badge>
+    <Badge tone="neutral">Marketing + product</Badge>
+    <Badge tone="info">Updated this week</Badge>
+  </Flex>
+</SectionHeader>
+
+<MetricStrip tone="neutral" variant="surface" columnsSm="2" columnsLg="4" class="mb-6">
+  <MetricItem label="Milestones complete" value="4 / 5" detail="One final review" icon="lucide:flag" tone="accent"/>
+  <MetricItem label="Open decisions" value="2" detail="Both have owners" icon="lucide:git-branch" tone="warning"/>
+  <MetricItem label="Tasks ready" value="12" detail="Across three teams" icon="lucide:circle-check" tone="success"/>
+  <MetricItem label="Next review" value="Friday" detail="Weekly project check-in" icon="lucide:calendar-days" tone="info"/>
+</MetricStrip>
+
+## Progress at a glance
+
+<Grid columns="1" columnsLg="2" alignItems="stretch">
+  <Panel tone="neutral" variant="surfaceAlt">
+    <h3>Milestones completed</h3>
+    <p>Example values across the first six weeks of the launch project.</p>
+    <LineChart
+      title="Milestone progress"
+      description="Cumulative completed milestones rose from zero to four over six weeks."
+      showArea="true"
+      :series="[{ label: 'Completed', points: [
+        { label: 'W1', value: 0 }, { label: 'W2', value: 1 },
+        { label: 'W3', value: 1 }, { label: 'W4', value: 2 },
+        { label: 'W5', value: 3 }, { label: 'W6', value: 4 }
+      ] }]"/>
+  </Panel>
+  <Panel tone="neutral" variant="surfaceAlt">
+    <h3>Work by team</h3>
+    <p>Tasks currently ready for delivery, grouped by owner team.</p>
+    <BarChart
+      title="Ready tasks by team"
+      description="Product has five ready tasks, design four, and marketing three."
+      :items="[
+        { label: 'Product', value: 5 },
+        { label: 'Design', value: 4 },
+        { label: 'Marketing', value: 3 }
+      ]"/>
+  </Panel>
+</Grid>
+
+## What needs attention
+
+<Grid columns="1" columnsLg="minmax(0, 1.1fr) minmax(18rem, 0.9fr)" alignItems="start">
+  <Flex direction="column" class="gap-3">
+    <AlertBox title="Decision due" tone="warning" badge="Owner assigned">
+      Maya will confirm the release date after the accessibility review closes.
+    </AlertBox>
+    <ExpandablePanel
+      title="Customer onboarding"
+      description="Welcome flow, help content, and handoff."
+      icon="lucide:users-round"
+      badge="Ready for review"
+      tone="neutral"
+      open="true"
+    >
+      <p>The welcome flow and help center draft are complete. The next step is a final content review and a named owner for launch day support.</p>
+    </ExpandablePanel>
+    <ExpandablePanel
+      title="Launch communications"
+      description="Release notes, customer email, and internal briefing."
+      icon="lucide:megaphone"
+      badge="In progress"
+      tone="neutral"
+    >
+      <p>Marketing has a working draft. Product will confirm the release date before the final send schedule is set.</p>
+    </ExpandablePanel>
+  </Flex>
+  <Panel tone="accent" variant="surfaceAlt">
+    <p class="text-eyebrow">Next team review</p>
+    <h3>Friday, 10:00</h3>
+    <p>Review the remaining milestone, decide the release date, and agree on the customer update.</p>
+    <ModalTrigger target="review-agenda" label="View review agenda" tone="accent"/>
+  </Panel>
+</Grid>
+
+<Modal id="review-agenda" title="Friday review agenda" showClose="true" tone="neutral">
+  <ol>
+    <li>Confirm accessibility review outcome.</li>
+    <li>Choose the release date and record the owner.</li>
+    <li>Approve the customer communication plan.</li>
+  </ol>
+  <p class="fs-sm">This dialog is an interaction example. It does not schedule a meeting.</p>
+</Modal>
+
+<CtaSection
+  tone="accent"
+  eyebrow="Build your own view"
+  title="Replace the example with your real project."
+  subtitle="The data lives in this page today. The guide shows which components carry the dashboard and how to swap in your own content."
+  primaryLabel="Read the data guide"
+  primaryHref="/guide/data/"
+  primaryIcon="lucide:arrow-right"
+  secondaryLabel="Explore interactions"
+  secondaryHref="/guide/interactions/"
+  secondaryIcon="lucide:layers"/>

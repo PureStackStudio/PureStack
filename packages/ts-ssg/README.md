@@ -75,6 +75,12 @@ yarn tsx packages/ts-ssg/src/cli.ts serve --content ./packages/ts-ssg/sample-con
 yarn tsx packages/ts-ssg/src/cli.ts publish --content ./packages/ts-ssg/sample-content
 ```
 
+`sample-content` is the Waypoint starter site: a fictional team workspace with
+connected marketing, dashboard, pricing, editorial, form, and guide pages. The
+product details and data are illustrative. Start at `/guide/getting-started/`
+after serving it, and review `/guide/launch-checklist/` before adapting it for
+a real launch.
+
 ## Content Model
 
 - Content files: `.md`, `.mdx`, `.rmdx`

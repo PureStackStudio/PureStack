@@ -1,0 +1,52 @@
+---
+title: Content and navigation
+description: File routes, frontmatter, site configuration, and search in the starter.
+template: doc
+layout:
+  showToc: true
+  tocDepth: 2
+nav:
+  order: 2
+  icon: lucide:file-text
+---
+
+# Content and navigation
+
+The content tree is the site map. The generator turns `index.mdx` into `/`, `platform.mdx` into `/platform/`, and `journal/weekly-review.md` into `/journal/weekly-review/`.
+
+## Frontmatter describes the page
+
+Every content page begins with metadata. It gives the page a title and description, and controls navigation and layout.
+
+```yaml
+---
+title: Platform
+description: How the product helps a team make progress.
+template: doc
+layout:
+  showToc: true
+nav:
+  order: 2
+  icon: lucide:layers
+---
+```
+
+Use `nav.hidden: true` for pages that should have a route but not appear in the menu. This starter uses it for the journal article, which is linked from the journal index.
+
+## Keep the top level focused
+
+The top navigation follows the order in page frontmatter. It points to Home, Platform, Workspace, Plans, Journal, and the Guide. About and Contact remain available through links elsewhere, so the primary menu stays focused. Add a page only when its place in that journey is clear.
+
+`header.mdx` renders the top bar. `footer.mdx` holds supporting navigation and the starter disclosure. Both are shared across the site.
+
+## Configure the site deliberately
+
+`siteConfig.json` sets the logo, light and dark themes, navigation, search, and output directories. This example enables Pagefind search so documentation and articles are discoverable.
+
+The example keeps sitemap and consent generation disabled. Before enabling a sitemap, set your real public URL. Before enabling optional analytics or consent services, publish a policy that matches the data you actually collect. See the [launch checklist](/guide/launch-checklist/).
+
+## Write for scanning and depth
+
+The [journal article](/journal/weekly-review/) shows headings, a quotation, a table, and internal links. The [platform page](/platform/) shows how MDX adds reusable components to that content model. Use Markdown for the narrative and MDX components when a structured visual block makes the story clearer.
+
+> A component should help the reader decide or understand something. The page should still make sense when read as a sequence of headings and paragraphs.

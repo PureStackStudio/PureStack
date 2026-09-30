@@ -1,77 +1,41 @@
 ---
-title: About
-description: Why this project exists, what we value, and how we build.
+title: About this starter
+description: The story behind the Waypoint example and how to make it your own.
 template: doc
 layout:
-  navMode: sidebar
   fullWidth: false
-  showToc: false
-  showFooter: true
+  showToc: true
+  tocDepth: 2
 nav:
-  icon: iconoir:help-circle
+  hidden: true
+  icon: lucide:info
 ---
 
 <SectionHeader
-  eyebrow="About"
-  title="Built for teams who care about fast docs and clean architecture."
-  subtitle="PureStack ts-ssg is a static site generator focused on deterministic output, great defaults, and composable UI primitives."
->
-  <Flex>
-    <BtnLink href="/getting-started/" tone="accent">Get Started</BtnLink>
-    <BtnLink href="/guide/" tone="ghost">Read the Guide</BtnLink>
-  </Flex>
-</SectionHeader>
+  eyebrow="About Waypoint"
+  title="A complete example, ready for your own story."
+  subtitle="Waypoint is a fictional team workspace. Its pages are here to demonstrate how a product site can feel consistent from the first impression through detailed content and interactive examples."
+  titleTag="h1"
+  titleClass="fs-display"/>
 
-## What We Believe
+## Why this example exists
 
-<CardGrid columns="3">
-  <Card
-    title="Static First"
-    description="Predictable build output, clean routing, and SEO-friendly pages without hydration complexity."
-    href="/overview/"
-    label="Architecture"
-    tone="default"/>
-  <Card
-    title="Developer Ergonomics"
-    description="Simple configuration, useful defaults, and build hooks where teams need extension points."
-    href="/guide/overview/"
-    label="Developer Guide"
-    tone="default"/>
-  <Card
-    title="Design Consistency"
-    description="Reusable themed components, typography tokens, and practical patterns that scale with content."
-    href="/guide/footer-sample/"
-    label="UI Components"
-    tone="default"/>
-</CardGrid>
+The starter gives you a connected set of pages instead of isolated component demos. A visitor can move from the [home page](/) to the [platform story](/platform/), explore a [workspace preview](/workspace/), compare [plans](/pricing/), and read a [journal article](/journal/weekly-review/). Each page serves a recognizable purpose.
 
-## What We Build
+Waypoint's product details and numbers are illustrative. They are content examples, not a service you can sign up for. The patterns underneath are the useful part: reusable sections, strong navigation, responsive layouts, accessible components, and a guide that explains where to change things.
 
-We build tooling for docs, product pages, and knowledge portals that need:
+## What the starter demonstrates
 
-- reliable builds in CI/CD,
-- high-quality default UX,
-- straightforward customization,
-- clean separation between content and runtime behavior.
+<Grid columns="1" columnsMd="3">
+  <FeatureCard title="Marketing pages" summary="A clear message, scannable benefits, focused calls to action, and a plan comparison." icon="lucide:megaphone" tone="neutral"/>
+  <FeatureCard title="Product views" summary="Metrics, charts, status, disclosures, and dialogs organized around a realistic project." icon="lucide:layout-dashboard" tone="secondary"/>
+  <FeatureCard title="Editorial content" summary="Readable headings, links, lists, tables, callouts, and code examples." icon="lucide:file-text" tone="neutral"/>
+</Grid>
 
-<AlertBox title="Our practical rule" variant="info" tone="default">
-  If a feature adds complexity, it must clearly improve maintainability or user
-  outcomes. Otherwise, it does not ship.
+## Make it yours
+
+Start with the audience and the promise. Then replace the brand, sample data, plan details, and links. Connect any form or account flow to your own backend before launch. The [getting started guide](/guide/getting-started/) walks through those steps in order.
+
+<AlertBox title="A useful starting rule" tone="info">
+  Keep the parts that explain your product. Remove the parts that do not. A strong starter should make editing easier, not dictate your final site map.
 </AlertBox>
-
-## Team Style
-
-Our team works with a strong bias for clarity:
-
-- explicit naming over clever abstractions,
-- small composable building blocks,
-- test coverage for behavior changes,
-- documentation that explains intent, not just syntax.
-
-## Contact
-
-If you want to collaborate, request a feature, or discuss architecture:
-
-- Email: **team@purestack.dev**
-- GitHub: **https://github.com/purestack**
-

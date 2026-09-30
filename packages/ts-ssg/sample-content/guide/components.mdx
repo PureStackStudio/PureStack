@@ -1,0 +1,97 @@
+---
+title: Components and layout
+description: Reusable sections, cards, actions, tone, and code presentation.
+template: doc
+layout:
+  showToc: true
+  tocDepth: 2
+nav:
+  order: 3
+  icon: lucide:layers
+---
+
+# Components and layout
+
+The starter uses components as a small visual language. The [home page](/) introduces the product with `LandingSection`, `LandingBand`, `SectionHeader`, `FeatureCard`, `MetricStrip`, and `CtaSection`. The [platform page](/platform/) adds tabs and a comparison table. The [plans page](/pricing/) shows a pricing table with a clear disclaimer.
+
+## Start with structure
+
+`Grid` controls responsive columns. `Flex` arranges smaller groups. `Panel` provides a surface without forcing a particular kind of content.
+
+<Grid columns="1" columnsMd="2">
+  <Panel tone="neutral" variant="surfaceAlt">
+    <p class="text-eyebrow">Surface</p>
+    <h3>Keep related information together</h3>
+    <p>Use a panel for a compact idea, such as a project summary or next action.</p>
+  </Panel>
+  <Panel tone="neutral" variant="outline">
+    <p class="text-eyebrow">Outline</p>
+    <h3>Give a section a quieter boundary</h3>
+    <p>An outline can separate supporting information without competing with the primary action.</p>
+  </Panel>
+</Grid>
+
+## Use tone to communicate meaning
+
+Tones work across badges, alerts, panels, and buttons. Keep `accent` for the primary action; use `info`, `success`, and `warning` for content that carries those meanings.
+
+<Flex wrap="true" class="gap-2">
+  <Badge tone="neutral">Draft</Badge>
+  <Badge tone="info">In review</Badge>
+  <Badge tone="success">Ready</Badge>
+  <Badge tone="warning">Needs a decision</Badge>
+</Flex>
+
+<Grid columns="1" columnsMd="2">
+  <AlertBox title="Helpful context" tone="info">A reader should know what to do with this information.</AlertBox>
+  <AlertBox title="Action required" tone="warning">Name the owner and the decision that is due.</AlertBox>
+</Grid>
+
+## Make actions specific
+
+Use a link when the visitor goes to another page. The label should say what the visitor will see there.
+
+<Flex wrap="true" class="gap-2">
+  <BtnLink href="/workspace/" tone="accent" icon="lucide:arrow-right" iconPosition="end">Open workspace preview</BtnLink>
+  <BtnLink href="/guide/forms/" tone="neutral" variant="outline">See form patterns</BtnLink>
+</Flex>
+
+`BtnGroup` can keep related destinations together. The menu below is a compact route to the guide's most useful examples.
+
+<BtnGroup>
+  <BtnLink href="/guide/getting-started/" tone="accent">Get started</BtnLink>
+  <BtnGroupDropDown label="More guides" tone="neutral" variant="outline">
+    <BtnLink href="/guide/data/" tone="neutral" variant="subtle">Data views</BtnLink>
+    <BtnLink href="/guide/interactions/" tone="neutral" variant="subtle">Interactions</BtnLink>
+    <BtnLink href="/guide/launch-checklist/" tone="neutral" variant="subtle">Launch checklist</BtnLink>
+  </BtnGroupDropDown>
+</BtnGroup>
+
+## Pair code with an outcome
+
+`CodeShowcase` frames a snippet and a result in one block. It works well for setup instructions or an example API response.
+
+<CodeShowcase
+  tone="neutral"
+  language="YAML"
+  eyebrow="Page metadata"
+  title="A page with a clear place in the site"
+  summary="Frontmatter controls the route label and the page layout."
+  resultTitle="What the visitor sees"
+  resultMeta="Generated page"
+>
+```yaml
+title: Workspace preview
+description: Project progress in one view.
+layout:
+  showToc: true
+nav:
+  order: 3
+```
+
+  <template #result>
+    <p>A titled page in the navigation, with a description for previews and a table of contents for longer content.</p>
+  </template>
+</CodeShowcase>
+
+For the exact syntax of a component, use the PureStack component documentation. This guide focuses on how the pieces work together in a complete site.

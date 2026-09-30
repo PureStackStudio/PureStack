@@ -1,186 +1,88 @@
 ---
-title: Pricing
-description: Simple, predictable pricing for backend calculation engines.
+title: Plans
+description: An example plan comparison page for the Waypoint starter.
+template: doc
 layout:
   fullWidth: false
-  navMode: sidebar
   showToc: true
   tocDepth: 2
 nav:
-  icon: iconoir:database
+  order: 4
+  icon: lucide:badge-check
 ---
 
-# Pricing
-
-## Simple and predictable licensing
-
-CalcCore is licensed for **backend and SaaS usage**, with pricing designed to be:
-
-- predictable over time
-- easy to budget
-- aligned with production deployments
-
-There are no usage-based surprises and no per-cell or per-formula limits.
-
----
+<SectionHeader
+  eyebrow="Example pricing page"
+  title="A plan for every stage of teamwork."
+  subtitle="This page demonstrates a clear plan comparison. The names, prices, and entitlements below are illustrative and must be replaced before publishing a real offer."
+  titleTag="h1"
+  titleClass="fs-display"/>
 
 <PricingTable
-  eyebrow="Pricing plans"
-  title="Choose the right license for your deployment"
-  subtitle="All plans are built around per-service licensing, with no usage-based surprises."
-  footnote="Annual billing includes two months free. Prices shown in EUR."
-  tone="ghost"
+  tone="neutral"
+  eyebrow="Waypoint plans"
+  title="Choose the shape of your workspace."
+  subtitle="The cards show how to explain increasing value without burying the choice in a feature matrix."
+  footnote="Example content only. No purchase or subscription is available on this starter."
 >
   <PricingPlan
-    title="Developer License"
-    summary="For individual developers and small teams."
-    price="€199"
-    period="one-time"
-    icon="iconoir:code"
-    note="€29 per month for ongoing evaluation."
-    ctaLabel="Start evaluation"
-    ctaLink="#contact"
+    title="Start"
+    summary="For a small team finding its rhythm."
+    price="Free"
+    period="example plan"
+    icon="lucide:compass"
+    ctaLabel="See the workspace"
+    ctaLink="/workspace/"
   >
-    <PricingFeature icon="iconoir:check">
-      For individuals and companies with up to **10 employees**
-    </PricingFeature>
-    <PricingFeature icon="iconoir:book-stack">
-      Development, and small-scale production use
-    </PricingFeature>
-    <PricingFeature icon="iconoir:check">Full feature set</PricingFeature>
-    <PricingFeature icon="iconoir:shield">
-      Single application or service
-    </PricingFeature>
+    <PricingFeature icon="lucide:check">One shared initiative</PricingFeature>
+    <PricingFeature icon="lucide:check">Milestones and owners</PricingFeature>
+    <PricingFeature icon="lucide:check">Weekly updates</PricingFeature>
   </PricingPlan>
-
   <PricingPlan
-    title="SaaS Runtime License"
-    summary="For production backend services and APIs."
-    price="€399"
-    period="per month"
-    icon="iconoir:rocket"
-    badge="Most popular"
+    title="Grow"
+    summary="For several teams moving together."
+    price="$12"
+    period="per person / month, example"
+    icon="lucide:users-round"
+    badge="Example favorite"
     variant="surfaceAlt"
     tone="accent"
-    note="€4,200 per year when billed annually."
-    ctaLabel="Request a license"
-    ctaLink="#contact"
+    ctaLabel="Explore the platform"
+    ctaLink="/platform/"
   >
-    <PricingFeature icon="iconoir:check">
-      Single production service or deployment
-    </PricingFeature>
-    <PricingFeature icon="iconoir:book-stack">
-      Unlimited calculation models
-    </PricingFeature>
-    <PricingFeature icon="lucide:infinity">
-      Unlimited executions within the licensed service
-    </PricingFeature>
-    <PricingFeature icon="iconoir:headset-help">
-      Ideal for SaaS and internal platforms
-    </PricingFeature>
+    <PricingFeature icon="lucide:check">Unlimited example initiatives</PricingFeature>
+    <PricingFeature icon="lucide:check">Decision records</PricingFeature>
+    <PricingFeature icon="lucide:check">Project health views</PricingFeature>
   </PricingPlan>
-
   <PricingPlan
-    title="Business License"
-    summary="For systems where calculations are mission-critical."
-    price="€6,000"
-    period="per year"
-    icon="iconoir:shield"
-    note="Includes priority support and long-term version stability."
-    ctaLabel="Talk to sales"
-    ctaLink="#contact"
-  >
-    <PricingFeature icon="iconoir:check">Production deployment</PricingFeature>
-    <PricingFeature icon="iconoir:headset-help">
-      Priority support and response SLAs
-    </PricingFeature>
-    <PricingFeature icon="iconoir:clock">
-      Long-term version stability
-    </PricingFeature>
-    <PricingFeature icon="iconoir:shield">
-      Best for pricing and financial systems
-    </PricingFeature>
-  </PricingPlan>
-
-  <PricingPlan
-    title="Enterprise License"
-    summary="For larger organizations and regulated environments."
+    title="Scale"
+    summary="For larger organizations with shared standards."
     price="Custom"
-    period="per year"
-    icon="iconoir:building"
-    note="Custom licensing terms, SLAs, and maintenance plans."
-    ctaLabel="Contact us"
-    ctaLink="#contact"
+    period="example plan"
+    icon="lucide:building-2"
+    ctaLabel="View the form pattern"
+    ctaLink="/contact/"
   >
-    <PricingFeature icon="iconoir:book-stack">
-      Multiple services or deployments
-    </PricingFeature>
-    <PricingFeature icon="iconoir:check">Custom licensing terms</PricingFeature>
-    <PricingFeature icon="iconoir:headset-help">
-      Optional support and SLA agreements
-    </PricingFeature>
-    <PricingFeature icon="iconoir:clock">
-      Long-term maintenance arrangements
-    </PricingFeature>
+    <PricingFeature icon="lucide:check">Cross-team portfolio view</PricingFeature>
+    <PricingFeature icon="lucide:check">Workspace governance</PricingFeature>
+    <PricingFeature icon="lucide:check">Guided onboarding</PricingFeature>
   </PricingPlan>
 </PricingTable>
 
----
+## Questions a pricing page should answer
 
-## What is included
+<ExpandablePanel title="Can a team change plans later?" description="Explain the upgrade path in direct language." icon="lucide:arrow-right" tone="neutral" open="true">
+  <p>In a real product, state when a plan change takes effect, how billing is adjusted, and what happens to existing data. This starter leaves those business rules to you.</p>
+</ExpandablePanel>
 
-All licenses include:
+<ExpandablePanel title="What counts as a person?" description="Define the unit behind per-person pricing." icon="lucide:users-round" tone="neutral">
+  <p>Specify whether guests, viewers, and suspended members are billed. Link to the same definition from checkout and account settings.</p>
+</ExpandablePanel>
 
-- Deterministic calculation engine
-- Code-first and Excel-compatible model authoring
-- Dependency-aware and incremental recalculation
-- Structured inputs and outputs
-- Error diagnostics and explainability APIs
-- Access to documentation and updates within the licensed version
+<ExpandablePanel title="What is included in support?" description="Set expectations before a customer needs help." icon="lucide:circle-question-mark" tone="neutral">
+  <p>Describe channels, hours, response targets, and any onboarding services in your actual offer.</p>
+</ExpandablePanel>
 
----
-
-## Licensing model
-
-CalcCore uses a **per-service licensing model**:
-
-- A *service* is a deployed backend application or workload that embeds CalcCore.
-- There are no limits on:
-  - number of formulas
-  - number of cells
-  - number of executions
-  - number of end users
-
-This model is intended to align naturally with modern SaaS and backend architectures.
-
----
-
-## Open and closed components
-
-CalcCore is a commercial product.
-
-Some auxiliary tools or examples may be open-sourced, but the core runtime and compiler are commercially licensed to ensure long-term maintenance and support.
-
----
-
-## Frequently asked questions
-
-### Can I start with the Developer License and upgrade later?
-Yes. You can begin with a Developer License and upgrade to a SaaS Runtime or Business when moving to production.
-
-### Do you offer trials?
-A time-limited evaluation license is available upon request.
-
-### Is pricing affected by usage volume?
-No. CalcCore pricing is not based on execution count, data size, or number of models.
-
-### Can CalcCore be used in on-premise environments?
-Yes. CalcCore can be deployed in cloud, hybrid, or on-premise environments under the same licensing terms.
-
----
-
-## Contact
-
-If you are unsure which license fits your use case, or if you have specific deployment requirements, please get in touch.
-
-We aim to keep licensing straightforward and aligned with real-world backend usage.
+<AlertBox title="Before launch" tone="info">
+  Replace every illustrative amount and entitlement. Connect the calls to action to a working sales or checkout flow and publish your real terms.
+</AlertBox>

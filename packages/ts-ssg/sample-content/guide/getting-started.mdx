@@ -1,0 +1,54 @@
+---
+title: Getting started
+description: Run the starter locally and make your first useful changes.
+template: doc
+layout:
+  showToc: true
+  tocDepth: 2
+nav:
+  order: 1
+  icon: lucide:rocket
+---
+
+# Getting started
+
+This site lives in `packages/ts-ssg/sample-content`. Each page is a Markdown or Regor MDX file. The site generator discovers the files, builds routes, applies the theme, and copies assets.
+
+## Run it in this repository
+
+From the repository root:
+
+```bash
+yarn install
+yarn dev
+```
+
+The `dev` script serves this content directory in watch mode. To create a production build:
+
+```bash
+yarn tsx packages/ts-ssg/src/cli.ts build --content packages/ts-ssg/sample-content
+```
+
+## Make the first edits
+
+1. Change `siteConfig.json`: set the site title, logo, theme, and navigation options.
+2. Rewrite `index.mdx`: lead with your own audience, promise, and primary action.
+3. Edit `header.mdx` and `footer.mdx`: keep every link intentional.
+4. Replace the illustrative project, plan, and article content with your own material.
+5. Remove pages that do not support your visitor's journey.
+
+Start with words and routes before fine-tuning visual details. This keeps the design tied to the job the site needs to do.
+
+## Choose a page pattern
+
+| Goal | Start with |
+| --- | --- |
+| Introduce a product | `index.mdx` and `platform.mdx` |
+| Explain a plan | `pricing.mdx` |
+| Show product data | `workspace.mdx` |
+| Publish an article | `journal/weekly-review.md` |
+| Collect an inquiry | `contact.mdx` and `contact-demo.ts` |
+
+## Use the guide as a map
+
+The [content guide](/guide/content/) covers file routing and configuration. The [component guide](/guide/components/) shows the design building blocks. The [launch checklist](/guide/launch-checklist/) covers the settings and integrations that depend on your real business.
