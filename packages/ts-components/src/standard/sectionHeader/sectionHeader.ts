@@ -13,6 +13,7 @@ export interface SectionHeader {
   subtitle?: RefOrValue<string>
   footnote?: RefOrValue<string>
   titleTag?: RefOrValue<string>
+  titleId?: RefOrValue<string>
   eyebrowClass?: RefOrValue<string>
   titleClass?: RefOrValue<string>
   subtitleClass?: RefOrValue<string>
@@ -26,6 +27,7 @@ const sectionHeaderTemplate = html`<div class="section-header">
   </div>
   <div
     :is="resolvedTitleTag"
+    :id="titleId"
     class="text-title"
     :class="titleClass"
     r-if="title"
@@ -49,6 +51,7 @@ function defineSectionHeaderComponent() {
       'subtitle',
       'footnote',
       'titleTag',
+      'titleId',
       'eyebrowClass',
       'titleClass',
       'subtitleClass',

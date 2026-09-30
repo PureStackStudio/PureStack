@@ -98,6 +98,7 @@ Choose heading levels in order. Visual size and heading semantics are independen
   <a href="#section-header-prop-subtitle">subtitle</a>
   <a href="#section-header-prop-footnote">footnote</a>
   <a href="#section-header-prop-titleTag">titleTag</a>
+  <a href="#section-header-prop-titleId">titleId</a>
   <a href="#section-header-prop-eyebrowClass">eyebrowClass</a>
   <a href="#section-header-prop-titleClass">titleClass</a>
   <a href="#section-header-prop-subtitleClass">subtitleClass</a>
@@ -122,6 +123,10 @@ Choose heading levels in order. Visual size and heading semantics are independen
 
 <ApiProperty anchor="section-header-prop-titleTag" name="titleTag" valueType="RefOrValue&lt;string&gt;" defaultValue="h2">
   <p>Heading element. Accepts h1–h6, p, div or span; invalid values fall back to h2. Match the surrounding document hierarchy.</p>
+</ApiProperty>
+
+<ApiProperty anchor="section-header-prop-titleId" name="titleId" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+  <p>Id on the title element. Reference it from the surrounding section with aria-labelledby.</p>
 </ApiProperty>
 
 <ApiProperty anchor="section-header-prop-eyebrowClass" name="eyebrowClass" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">

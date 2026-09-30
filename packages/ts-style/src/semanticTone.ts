@@ -1,6 +1,6 @@
 import type { Style } from '@purestack/ts-css'
 import { createPresets } from './semanticPresets'
-import { styleBuilder } from './styles'
+import { styleBuilder, THEME_ROOT_SELECTOR } from './styles'
 import { themes } from './themeOptions'
 import type { SemanticToneTokens, ThemePalette } from './themePalette'
 import {
@@ -74,9 +74,15 @@ export function registerSemanticToneUtilityStyles() {
   themes.forEach((theme, palette) => {
     const root = getSemanticToneTokens(palette, 'neutral')
     applyCurrentPaletteVars(
-      styleBuilder.select(':root', theme),
+      styleBuilder.select(THEME_ROOT_SELECTOR, theme),
       createCurrentPalette(root, true),
     )
+    // A nested theme--* region must not inherit text color or form control
+    // rendering from the surrounding mode.
+    styleBuilder
+      .select(':where(:scope:not(:root))', theme)
+      .color(palette.current.text.default)
+      .set('color-scheme', theme)
 
     for (const tone of SEMANTIC_TONES) {
       const tokens = getSemanticToneTokens(palette, tone)

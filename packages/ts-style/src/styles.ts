@@ -5,6 +5,24 @@ import { themes } from './themeOptions'
 import { listThemePaletteVarEntries } from './themePaletteVars'
 
 const styleBuilders = new Map<ThemeName, Style>()
+
+/**
+ * Palette variables land on every theme root with zero specificity, so a
+ * tone--* class on the same element still picks its tone.
+ */
+export const THEME_ROOT_SELECTOR = ':where(:scope)'
+
+/** Rules written for html or :root stay on the document root. */
+const DOCUMENT_ROOT_SELECTOR = ':scope:root'
+
+/**
+ * A theme renders under <html data-theme="…"> and under any element with the
+ * theme--… class, so a region can keep one mode while the page switches.
+ */
+export function getThemeClass(theme: ThemeName) {
+  return `theme--${normalizeThemeName(theme)}`
+}
+
 export type StyleBuilder = typeof styleBuilder
 export const styleBuilder = {
   get(theme: ThemeName) {
@@ -23,8 +41,8 @@ export const styleBuilder = {
   select(selector: string, theme: ThemeName) {
     const normalized = normalizeThemeName(theme)
     const scoped = styleBuilder.get(normalized)
-    return isThemeRootSelector(selector)
-      ? scoped.select(':scope')
+    return isDocumentRootSelector(selector)
+      ? scoped.select(DOCUMENT_ROOT_SELECTOR)
       : scoped.select(selector)
   },
   has(theme: ThemeName) {
@@ -45,7 +63,10 @@ export const styleBuilder = {
   async render(theme: ThemeName, pretty: boolean = true) {
     const normalized = normalizeThemeName(theme)
     const style = styleBuilder.get(normalized)
-    applyThemePaletteVariableDeclarations(style.select(':scope'), normalized)
+    applyThemePaletteVariableDeclarations(
+      style.select(THEME_ROOT_SELECTOR),
+      normalized,
+    )
     const rendered = pretty ? style.toPrettyCSS() : style.toCSS()
     return rendered
   },
@@ -55,10 +76,11 @@ export const styleBuilder = {
 }
 
 function getThemeScopeSelector(theme: ThemeName) {
-  return `html[data-theme="${normalizeThemeName(theme)}"]`
+  const name = normalizeThemeName(theme)
+  return `html[data-theme="${name}"], .${getThemeClass(name)}`
 }
 
-function isThemeRootSelector(selector: string) {
+function isDocumentRootSelector(selector: string) {
   const trimmed = selector.trim()
   return trimmed === 'html' || trimmed === ':root'
 }

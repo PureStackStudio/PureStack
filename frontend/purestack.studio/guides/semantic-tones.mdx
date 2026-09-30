@@ -177,6 +177,30 @@ Tone selection applies to descendants through current-palette CSS variables. A n
 
 The inner `text-eyebrow` also reads the current palette, so its subtle text color changes with `tone--success`. This is why tone classes are useful for composing a small visual system instead of setting each color separately.
 
+## Keep a region in one theme mode
+
+Tones follow the page theme, so a neutral card is light in the light theme and dark in the dark theme. Add `theme--dark` or `theme--light` to keep a region in one mode while the page switches. The region gets that mode's full palette from the same skin and presets, and tone classes inside it work as usual. Here a dark product frame holds a light card in both themes:
+
+<div class="theme--dark tone--accent tone-fill-surface-alt tone-border-surface-alt tone-text-surface-alt b-1 rounded-lg p-3">
+  <span class="text-eyebrow">Project view</span>
+  <div class="theme--light tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
+    <strong class="d-block">Autumn launch</strong>
+    <span class="text-subtle fs-sm">Light card, dark frame, in either theme.</span>
+  </div>
+</div>
+
+```mdx
+<div class="theme--dark tone--accent tone-fill-surface-alt tone-border-surface-alt tone-text-surface-alt b-1 rounded-lg p-3">
+  <span class="text-eyebrow">Project view</span>
+  <div class="theme--light tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
+    <strong class="d-block">Autumn launch</strong>
+    <span class="text-subtle fs-sm">Light card, dark frame, in either theme.</span>
+  </div>
+</div>
+```
+
+A `theme--*` region starts from the neutral tone of its mode and resets the inherited text color. Put `tone--*` on the same element or on a descendant. Rules that must win inside a region should rely on specificity, not on an outer `@scope`, because the region becomes the nearest theme scope.
+
 ## Hover, active, and disabled states
 
 Surface and button paint roles have state variants. Hover or press the first control; compare it with the disabled control. The `-all` suffix includes the rest, hover, active, and disabled treatments for that role.
