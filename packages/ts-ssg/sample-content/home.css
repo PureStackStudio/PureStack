@@ -1,37 +1,16 @@
 /*
  * Waypoint landing page.
  *
- * Structure lives in index.mdx: Grid, Flex, SectionHeader, BtnLink, Badge, and
- * Icon with utility classes. This file adds only what the theme cannot know:
- * the Waypoint brand, the display type, the fluid rhythm, and the illustrated
- * product views.
+ * Structure and color live in index.mdx: Grid, Flex, Panel, SectionHeader,
+ * BtnLink, Badge, and Icon with tone and utility classes, so the page follows
+ * the site theme and its presets. This file adds only sizes and rhythm the
+ * utility scale does not cover yet.
  *
- * Brand colors are tone scopes. Each one sets the same --ps-current-* variables
- * a tone--* class sets, so utilities such as tone-text, text-subtle, b-subtle,
- * and the BtnLink variants render in Waypoint colors.
+ * Rules nest under .waypoint-home for specificity rather than @scope, so they
+ * still apply inside theme--light and theme--dark regions.
  */
 
 .waypoint-home {
-  /* Night: the dark product views, the same in both themes. */
-  .wp-night {
-    --ps-current-tone: #8fd7df;
-    --ps-current-text-default: #fff;
-    --ps-current-text-subtle: #c4dbe5;
-    --ps-current-border-subtle: rgba(210, 236, 248, 0.14);
-    --ps-current-border-default: rgba(195, 225, 240, 0.22);
-    color: var(--ps-current-text-default);
-  }
-
-  /* Paper: light cards laid over the night views. */
-  .wp-paper {
-    --ps-current-text-default: #183449;
-    --ps-current-text-subtle: #637b8a;
-    --ps-current-border-subtle: #e1e9ef;
-    --ps-current-border-default: #dce6ed;
-    background: #f5f9fb;
-    color: var(--ps-current-text-default);
-  }
-
   :where(h1, h2, h3, p) {
     margin: 0;
   }
@@ -359,16 +338,10 @@
 
   /* Weekly brief. */
   .wp-brief {
-    gap: clamp(2rem, 6vw, 6rem);
     padding: 1.5rem;
-    border-radius: 1.35rem;
-    background:
-      radial-gradient(
-        circle at 8% 0%,
-        rgba(94, 170, 196, 0.23),
-        transparent 37%
-      ),
-      linear-gradient(135deg, #173d54, #0c2a3e 75%);
+  }
+  .wp-brief-grid {
+    gap: clamp(2rem, 6vw, 6rem);
   }
   .wp-brief-title {
     max-width: 12ch;
@@ -387,17 +360,11 @@
   .wp-brief-link {
     gap: 1rem;
     margin-top: 2rem;
-    color: #a8e6e7;
     font-size: 0.9rem;
     font-weight: 750;
   }
   .wp-brief-paper {
     padding: clamp(1.4rem, 3vw, 2.5rem);
-    border-radius: 0.95rem;
-    box-shadow: 0 25px 50px rgba(0, 17, 30, 0.25);
-  }
-  .wp-paper-label {
-    color: #6a8697;
   }
   .wp-paper-top {
     gap: 0.4rem;
@@ -431,21 +398,12 @@
     height: 0.55rem;
     margin-top: 0.28rem;
   }
-  .wp-dot-done {
-    background: #33a582;
-  }
-  .wp-dot-open {
-    background: #d2a460;
-  }
   .wp-paper-footer {
     gap: 0.5rem;
     margin-top: 0.4rem;
     padding-top: 1rem;
     letter-spacing: 0.1em;
     font-size: 0.59rem;
-  }
-  .wp-paper-footer strong {
-    color: #2a6171;
   }
 
   /* Page destinations and closing action. */

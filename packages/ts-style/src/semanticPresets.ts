@@ -162,6 +162,11 @@ function createFills(
         background: current.canvas,
       },
     },
+    'tone-fill-spotlight': {
+      rest: {
+        background: current.spotlight,
+      },
+    },
     'tone-fill-surface': {
       all: true,
       rest: {

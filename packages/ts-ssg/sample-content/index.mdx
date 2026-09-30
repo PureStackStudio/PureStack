@@ -98,27 +98,29 @@ nav:
       <Grid container="a" href="/journal/weekly-review/" columns="2rem minmax(0, 1fr) 1.2rem" alignItems="start" class="wp-step bb-1 b-subtle"><span class="wp-step-number tone-text">03</span><Flex container="span" direction="column" class="wp-step-copy"><strong>Share the learning</strong><small>Turn the week's work into a short, useful story for everyone.</small></Flex><Icon name="lucide:arrow-up-right" class="wp-arrow tone-text" aria-hidden="true"/></Grid>
     </div>
   </Grid>
-  <Grid container="section" columns="1" columnsMd="minmax(0, 0.85fr) minmax(0, 1.15fr)" alignItems="center" class="wp-brief wp-night overflow-hidden" aria-labelledby="wp-brief-title">
-    <SectionHeader
-      eyebrow="The Friday brief"
-      title="An update people will actually read."
-      titleId="wp-brief-title"
-      subtitle="Share what moved, what needs a decision, and where the team goes next. The example workspace keeps the details close when someone wants to go deeper."
-      eyebrowClass="wp-eyebrow"
-      titleClass="wp-brief-title"
-      subtitleClass="wp-brief-lead"
-    >
-      <a href="/workspace/" class="wp-brief-link wp-inline-link d-inline-flex underline-hover">Explore the example workspace <Icon name="lucide:arrow-up-right" aria-hidden="true"/></a>
-    </SectionHeader>
-    <div class="wp-brief-paper wp-paper">
-      <Flex direction="column" directionSm="row" justify="between" class="wp-paper-top wp-micro wp-paper-label bb-1 b-default"><span>WEEK 06 / AUTUMN LAUNCH</span><span>FRIDAY BRIEF</span></Flex>
-      <h3>A good week of progress.</h3>
-      <p class="wp-paper-summary text-subtle">The design handoff is complete. The help center draft is ready for final review.</p>
-      <Flex align="start" class="wp-paper-line bt-1 b-subtle"><span class="wp-paper-dot wp-dot-done rounded-pill" aria-hidden="true"></span><Flex direction="column" class="gap-1"><strong>Moved forward</strong><span class="text-subtle mb-0">Release checklist prepared for review</span></Flex></Flex>
-      <Flex align="start" class="wp-paper-line bt-1 b-subtle"><span class="wp-paper-dot wp-dot-open rounded-pill" aria-hidden="true"></span><Flex direction="column" class="gap-1"><strong>Needs a decision</strong><span class="text-subtle mb-0">Confirm the release date after accessibility sign-off</span></Flex></Flex>
-      <Flex justify="between" class="wp-paper-footer wp-micro wp-paper-label bt-1 b-default">NEXT REVIEW <strong>FRIDAY, 10:00</strong></Flex>
-    </div>
-  </Grid>
+  <Panel tone="accent" variant="spotlight" class="wp-brief theme--dark rounded-lg" aria-labelledby="wp-brief-title">
+    <Grid columns="1" columnsMd="minmax(0, 0.85fr) minmax(0, 1.15fr)" alignItems="center" class="wp-brief-grid">
+      <SectionHeader
+        eyebrow="The Friday brief"
+        title="An update people will actually read."
+        titleId="wp-brief-title"
+        subtitle="Share what moved, what needs a decision, and where the team goes next. The example workspace keeps the details close when someone wants to go deeper."
+        eyebrowClass="wp-eyebrow"
+        titleClass="wp-brief-title"
+        subtitleClass="wp-brief-lead"
+      >
+        <a href="/workspace/" class="wp-brief-link wp-inline-link d-inline-flex tone-text underline-hover">Explore the example workspace <Icon name="lucide:arrow-up-right" aria-hidden="true"/></a>
+      </SectionHeader>
+      <Panel tone="neutral" variant="spotlight" class="wp-brief-paper theme--light rounded-lg">
+        <Flex direction="column" directionSm="row" justify="between" class="wp-paper-top wp-micro text-subtle mb-0 bb-1 b-default"><span>WEEK 06 / AUTUMN LAUNCH</span><span>FRIDAY BRIEF</span></Flex>
+        <h3>A good week of progress.</h3>
+        <p class="wp-paper-summary text-subtle">The design handoff is complete. The help center draft is ready for final review.</p>
+        <Flex align="start" class="wp-paper-line bt-1 b-subtle"><span class="wp-paper-dot tone--success tone-fill-button rounded-pill" aria-hidden="true"></span><Flex direction="column" class="gap-1"><strong>Moved forward</strong><span class="text-subtle mb-0">Release checklist prepared for review</span></Flex></Flex>
+        <Flex align="start" class="wp-paper-line bt-1 b-subtle"><span class="wp-paper-dot tone--warning tone-fill-button rounded-pill" aria-hidden="true"></span><Flex direction="column" class="gap-1"><strong>Needs a decision</strong><span class="text-subtle mb-0">Confirm the release date after accessibility sign-off</span></Flex></Flex>
+        <Flex justify="between" class="wp-paper-footer wp-micro text-subtle mb-0 bt-1 b-default">NEXT REVIEW <strong class="tone--accent tone-text">FRIDAY, 10:00</strong></Flex>
+      </Panel>
+    </Grid>
+  </Panel>
   <section class="wp-explore" aria-labelledby="wp-explore-title">
     <Flex direction="column" directionMd="row" align="start" alignMd="end" justify="between" class="gap-6 mb-6">
       <SectionHeader

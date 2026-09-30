@@ -20,6 +20,10 @@ function state(background: string, border: string, text: string) {
   return { background, bgcolor: background, border, text }
 }
 
+function spotlight(lit: string, deep: string) {
+  return `radial-gradient(circle at 8% 0%, #ffffff66 0%, transparent 38%), linear-gradient(135deg, ${lit} 0%, ${deep} 75%)`
+}
+
 function createLightTone(colors: LightToneColors): StudioTone {
   const {
     ink,
@@ -36,6 +40,7 @@ function createLightTone(colors: LightToneColors): StudioTone {
   return {
     tone: fill,
     canvas: tint,
+    spotlight: spotlight(tint, tintActive),
     canvascolor: tint,
     overlay: '#14291e40',
     text: { default: ink, subtle: muted },
@@ -72,6 +77,7 @@ export function createStudioLightPalette(): ThemePalette {
   const neutral: StudioTone = {
     tone: '#51695b',
     canvas: '#f6f8f4',
+    spotlight: spotlight('#ffffff', '#e4ede3'),
     canvascolor: '#f6f8f4',
     overlay: '#14291e40',
     text: { default: '#1c2d24', subtle: '#57695e' },

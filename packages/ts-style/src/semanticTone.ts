@@ -116,6 +116,7 @@ function createCurrentPalette(
   return {
     tone: tokens.tone,
     canvas: tokens.canvas,
+    spotlight: tokens.spotlight,
     canvascolor: tokens.canvascolor,
     overlay: tokens.overlay,
     surface: {

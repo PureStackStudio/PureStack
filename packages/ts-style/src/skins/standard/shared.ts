@@ -1,7 +1,7 @@
 import { getColors, getGradient, hexToRgba } from '@purestack/ts-css'
 import type { ThemeMode } from '../../themeOptions'
 import type { SemanticToneTokens } from '../../themePalette'
-import { createChrome } from './chrome'
+import { createChrome, createSpotlight } from './chrome'
 
 export type ToneScale = {
   level1: string
@@ -43,6 +43,7 @@ export type ToneOverrides = {
   surface?: ToneSurfaceOverrides
   surfaceAlt?: ToneSurfaceOverrides
   canvas?: Tone['canvas']
+  spotlight?: Tone['spotlight']
   canvascolor?: Tone['canvascolor']
   root?: Tone['root']
   overlay?: Tone['overlay']
@@ -233,6 +234,18 @@ export function createTone(
     ),
     canvas:
       overrides.canvas ?? createChrome('canvas', canvas, 'rest', false, chrome),
+    spotlight:
+      overrides.spotlight ??
+      (isGhost
+        ? 'transparent'
+        : createSpotlight(
+            {
+              surface: colors.surface,
+              surfaceAlt: colors.surfaceAlt,
+              button: colors.button,
+            },
+            chrome,
+          )),
     canvascolor: overrides.canvascolor ?? canvas.level3,
     root: {
       text: {

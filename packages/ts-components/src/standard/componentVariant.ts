@@ -6,6 +6,7 @@ export type ComponentVariant =
   | 'solid'
   | 'surface'
   | 'surfaceAlt'
+  | 'spotlight'
   | 'outlineFill'
   | 'outline'
   | 'subtle'
@@ -40,6 +41,8 @@ const STATELESS_COMPONENT_VARIANT_CLASSES: Record<ComponentVariant, string> = {
     'b-1 rounded-md tone-fill-surface tone-border-surface tone-text-surface',
   surfaceAlt:
     'b-1 rounded-md tone-fill-surface-alt tone-border-surface-alt tone-text-surface-alt',
+  spotlight:
+    'b-1 rounded-md tone-fill-spotlight tone-border-surface-alt tone-text-surface-alt',
   outlineFill: 'b-2 rounded-md tone-border-button tone-text',
   outline: 'b-2 rounded-md tone-text',
   subtle: 'b-0 rounded-md tone-text',

@@ -80,9 +80,9 @@ Each card below uses the same surface, border, text, padding, and radius classes
 
 ## Compare roles within one tone
 
-A tone contains more than one background and text color. These three samples all select `accent`, but paint different roles from that palette:
+A tone contains more than one background and text color. These samples all select `accent`, but paint different roles from that palette:
 
-<Grid columns="1" columnsMd="3" class="gap-3">
+<Grid columns="1" columnsMd="2" columnsLg="4" class="gap-3">
   <div class="tone--accent tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
     <strong class="d-block mb-1">surface</strong>
     <span class="fs-sm">A regular content surface.</span>
@@ -94,6 +94,10 @@ A tone contains more than one background and text color. These three samples all
   <div class="tone--accent tone-fill-button tone-border-button tone-text-button b-1 rounded-md p-3">
     <strong class="d-block mb-1">button</strong>
     <span class="fs-sm">The stronger action treatment.</span>
+  </div>
+  <div class="tone--accent tone-fill-spotlight tone-border-surface-alt tone-text-surface-alt b-1 rounded-md p-3">
+    <strong class="d-block mb-1">spotlight</strong>
+    <span class="fs-sm">A calm, lit field for feature bands.</span>
   </div>
 </Grid>
 
@@ -109,9 +113,15 @@ A tone contains more than one background and text color. These three samples all
 <div class="tone--accent tone-fill-button tone-border-button tone-text-button b-1 rounded-md p-3">
   Button role
 </div>
+
+<div class="tone--accent tone-fill-spotlight tone-border-surface-alt tone-text-surface-alt b-1 rounded-md p-3">
+  Spotlight field
+</div>
 ```
 
 Keep fill, border, and text from the same role when you need a ready-made combination. Each role's colors are designed as a set within the active theme. The direct `tone-fill`, `tone-border`, and `tone-text` classes use the tone color itself; they are useful for accents, but they are not the same as a complete surface or button treatment.
+
+`spotlight` is for large areas such as feature bands, callouts, and showcase panels. It is a deep field lit softly from the top-left corner, without the gloss and edge shading of surfaces and buttons, so it stays calm at any size. It has no interaction states and pairs with the alternate surface border and text classes. Components accept it as `variant="spotlight"`, for example `<Panel tone="accent" variant="spotlight">`.
 
 ## Tone-colored text and clipped fills
 

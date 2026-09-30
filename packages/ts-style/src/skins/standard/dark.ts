@@ -1,8 +1,8 @@
 import { getColors } from '@purestack/ts-css'
+import { merge } from '@purestack/ts-util'
 import type { ThemeMode } from '../../themeOptions'
 import { createStandardPalette, type StandardCore } from './base'
 import type { ToneColors } from './shared'
-import { merge } from '@purestack/ts-util'
 
 const bestColors = {
   standardBlue: {

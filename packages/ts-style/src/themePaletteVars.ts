@@ -56,6 +56,7 @@ type InteractivePathTree<TStates extends readonly string[]> = {
 const CURRENT_THEME_PALETTE_PATHS = {
   tone: ['tone'],
   canvas: ['canvas'],
+  spotlight: ['spotlight'],
   canvascolor: ['canvascolor'],
   overlay: ['overlay'],
   surface: createInteractiveGroupPathTree(
@@ -356,6 +357,7 @@ function buildThemePaletteVarPaths() {
   for (const tone of SEMANTIC_TONE_NAMES) {
     paths.push(['semanticTone', tone, 'tone'])
     paths.push(['semanticTone', tone, 'canvas'])
+    paths.push(['semanticTone', tone, 'spotlight'])
     paths.push(['semanticTone', tone, 'canvascolor'])
     paths.push(['semanticTone', tone, 'overlay'])
 

@@ -64,6 +64,8 @@ export interface SemanticToneTokens {
     focusRing: string
   }
   canvas: string
+  /** Deep field lit from one corner, for feature bands and showcase panels. */
+  spotlight: string
   canvascolor: string
   root: {
     border: {
@@ -132,6 +134,8 @@ export interface ThemeRadii {
 export interface ThemePaletteCurrent {
   tone: string
   canvas: string
+  /** Deep field lit from one corner, for feature bands and showcase panels. */
+  spotlight: string
   canvascolor: string
   overlay: string
   surface: {
