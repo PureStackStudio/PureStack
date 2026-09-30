@@ -33,10 +33,7 @@
           "default": "Pure Stack"
         },
         "href": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": ["string", "null"],
           "description": "Link destination. Null or an empty string renders a noninteractive logo.",
           "default": "/"
         },
@@ -102,59 +99,32 @@
         },
         "layout": {
           "type": "string",
-          "enum": [
-            "horizontal",
-            "stacked",
-            "wordmark",
-            "mark"
-          ],
+          "enum": ["horizontal", "stacked", "wordmark", "mark"],
           "default": "horizontal"
         },
         "size": {
           "type": "string",
-          "enum": [
-            "sm",
-            "md",
-            "lg",
-            "xl"
-          ],
+          "enum": ["sm", "md", "lg", "xl"],
           "default": "md"
         },
         "appearance": {
           "type": "string",
-          "enum": [
-            "plain",
-            "badge",
-            "outline"
-          ],
+          "enum": ["plain", "badge", "outline"],
           "default": "plain"
         },
         "markStyle": {
           "type": "string",
-          "enum": [
-            "plain",
-            "soft",
-            "solid",
-            "outline"
-          ],
+          "enum": ["plain", "soft", "solid", "outline"],
           "default": "plain"
         },
         "wordmarkStyle": {
           "type": "string",
-          "enum": [
-            "plain",
-            "accent",
-            "gradient"
-          ],
+          "enum": ["plain", "accent", "gradient"],
           "default": "plain"
         },
         "shape": {
           "type": "string",
-          "enum": [
-            "rounded",
-            "square",
-            "circle"
-          ],
+          "enum": ["rounded", "square", "circle"],
           "default": "rounded"
         },
         "tone": {
@@ -298,10 +268,7 @@
           "items": {
             "type": "string"
           },
-          "default": [
-            "light",
-            "dark"
-          ]
+          "default": ["light", "dark"]
         },
         "pretty": {
           "type": "boolean",
@@ -317,9 +284,7 @@
               "anyOf": [
                 {
                   "type": "string",
-                  "enum": [
-                    "standard"
-                  ]
+                  "enum": ["standard"]
                 },
                 {
                   "type": "string"
@@ -368,12 +333,7 @@
       "properties": {
         "mode": {
           "type": "string",
-          "enum": [
-            "auto",
-            "custom",
-            "hybrid",
-            "none"
-          ],
+          "enum": ["auto", "custom", "hybrid", "none"],
           "description": "Menu generation mode.",
           "default": "auto"
         },
@@ -395,11 +355,7 @@
         },
         "sortBy": {
           "type": "string",
-          "enum": [
-            "order",
-            "title",
-            "path"
-          ],
+          "enum": ["order", "title", "path"],
           "description": "Sorting strategy for navigation items.",
           "default": "order"
         },
@@ -533,9 +489,7 @@
               "items": {
                 "type": "string"
               },
-              "default": [
-                "/"
-              ]
+              "default": ["/"]
             },
             "disallow": {
               "type": "array",
@@ -662,9 +616,7 @@
                 "description": "Marks category as always enabled and non-toggleable."
               }
             },
-            "required": [
-              "id"
-            ]
+            "required": ["id"]
           }
         },
         "services": {
@@ -727,10 +679,7 @@
                     },
                     "crossOrigin": {
                       "type": "string",
-                      "enum": [
-                        "anonymous",
-                        "use-credentials"
-                      ],
+                      "enum": ["anonymous", "use-credentials"],
                       "description": "crossorigin attribute for external scripts."
                     },
                     "referrerPolicy": {
@@ -741,11 +690,7 @@
                 }
               }
             },
-            "required": [
-              "id",
-              "category",
-              "scripts"
-            ]
+            "required": ["id", "category", "scripts"]
           }
         }
       }
@@ -885,10 +830,7 @@
         },
         "urlStrategy": {
           "type": "string",
-          "enum": [
-            "prefix-all",
-            "hidden"
-          ],
+          "enum": ["prefix-all", "hidden"],
           "description": "Public URL strategy. prefix-all emits /en/... and /de/.... hidden keeps canonical URLs unprefixed while writing locale folders for host/server negotiation.",
           "default": "prefix-all"
         },
@@ -911,10 +853,7 @@
       "properties": {
         "highlighter": {
           "type": "string",
-          "enum": [
-            "shiki",
-            "highlightjs"
-          ],
+          "enum": ["shiki", "highlightjs"],
           "description": "Syntax highlighter backend. Use highlightjs for faster builds.",
           "default": "highlightjs"
         },
