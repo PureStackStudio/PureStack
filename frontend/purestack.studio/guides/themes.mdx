@@ -1,0 +1,78 @@
+---
+title: Themes
+description: Configure light and dark themes, select a skin, and extend component styles with semantic palette values.
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 40
+  icon: tabler:palette
+---
+
+# Themes
+
+PureStack generates theme CSS from palettes. Each skin supplies light and dark values for type, surfaces, borders, and semantic tones. Components read those shared values so a theme change stays consistent across the page.
+
+See [Semantic tone classes](/guides/semantic-tones/) for visual examples of the roles generated from those palettes.
+
+## Start with the standard skin
+
+Add this to `siteConfig.json`:
+
+```json
+{
+  "style": {
+    "fileName": "site.css",
+    "href": "/assets/site.css",
+    "themes": ["light", "dark"],
+    "theme": { "skin": "standard" }
+  }
+}
+```
+
+The generator writes `assets/site.css` for light and `assets/site.dark.css` for dark. Its theme switcher uses the configured theme list and remembers a visitor's choice. Try the [ThemeSwitcher example](/components/site/theme-switcher/) on this site.
+
+## Create a skin
+
+Start from a standard color preset and override the values your design needs:
+
+```ts
+import { registerSkin, themeSkins } from '@purestack/ts-style'
+import { merge } from '@purestack/ts-util'
+
+registerSkin('my-site', {
+  create: () => {
+    const standard = themeSkins.standard.create(['green'])
+    return {
+      light: merge(standard.light, {
+        font: { size: { body: '1rem' } },
+      }),
+      dark: merge(standard.dark, {
+        font: { size: { body: '1rem' } },
+      }),
+    }
+  },
+})
+```
+
+Import the file that registers your skin before the site build begins, then set `"theme": { "skin": "my-site" }` in the style config. A skin is a full light/dark pair; the preset gives related semantic colors a coherent starting point, and `merge` preserves values you do not override.
+
+## Extend styles with palette roles
+
+Use semantic roles when a custom section needs color, so it follows both themes:
+
+```ts
+import { styleBuilder, themes } from '@purestack/ts-style'
+
+themes.forEach((theme, palette) => {
+  styleBuilder.get(theme).select('.feature-note').css({
+    background: palette.semanticTone.info.surface.rest.background,
+    color: palette.semanticTone.info.surface.rest.text,
+    borderColor: palette.semanticTone.info.surface.rest.border,
+  })
+})
+```
+
+Register such styles in your site runner before the build renders theme assets. For a real example, inspect the [Studio skin](https://github.com/PureStackStudio/PureStack/blob/main/frontend/theme/studioSkin.ts) and [Studio styles](https://github.com/PureStackStudio/PureStack/blob/main/frontend/theme/studioStyles.ts).

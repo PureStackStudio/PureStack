@@ -1,0 +1,375 @@
+---
+title: Site configuration
+description: Configure a PureStack site's output, appearance, navigation, search, metadata, languages, and optional scripts with siteConfig.json.
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 15
+  icon: tabler:settings
+---
+
+# Site configuration
+
+`siteConfig.json` is the site-wide starting point for a PureStack build. It controls where files are written, which styles and navigation are generated, and which optional features appear on every page. Page frontmatter still controls the title, description, template, and layout of an individual page.
+
+Put the file at the root of the content directory passed to the [PureStack CLI](/guides/purestack-cli/):
+
+```text
+content/
+  siteConfig.json
+  index.mdx
+  guides/
+    index.mdx
+    getting-started.mdx
+    _nav.json
+```
+
+The CLI requires this file. A custom TypeScript runner can also pass site configuration directly. Most runner values take precedence over file values; for `navigation`, the file values take precedence where both specify the same field. Omitted fields use the defaults described below. The [JSON Schema](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-ssg/schema/siteConfig.schema.json) lists every supported field and is useful for editor completion.
+
+## Start with a small config
+
+Save this as `content/siteConfig.json`:
+
+```json
+{
+  "siteTitle": "Acme Docs",
+  "logo": {
+    "brand": "Acme Docs",
+    "href": "/"
+  },
+  "style": {
+    "theme": { "skin": "standard" }
+  },
+  "navigation": {
+    "mode": "auto",
+    "roots": ["guides"]
+  },
+  "outDir": "../dist/site",
+  "publishDir": "../dist/publish"
+}
+```
+
+With the folder layout above, `index.mdx` renders at `/`, and `guides/getting-started.mdx` renders at `/guides/getting-started/`. The `guides` root gives pages in that folder their own documentation navigation. Light and dark styles are generated even though `style.themes` is omitted.
+
+## Paths and build output
+
+| Setting | What it does |
+| --- | --- |
+| `outDir` | Destination for `build` and `serve` output. A relative path in `siteConfig.json` is resolved from the content directory. |
+| `publishDir` | Destination for `publish`. Relative paths follow the same rule as `outDir`. |
+| `basePath` | Public mount path, such as `/docs`, used in generated URLs and the dev server. It does not add a `docs` folder inside the output directory. |
+| `html.minify` | Minifies generated HTML during a normal build; defaults to `false`. |
+| `scripts.cacheBusting` | Adds a build cache key to emitted local TypeScript script filenames; defaults to `true`. |
+
+For example, with `"outDir": "../dist/site"` in `content/siteConfig.json`, the build writes into `dist/site` beside `content`. `"basePath": "/docs"` makes the home page publicly available at `/docs/`, while its output file remains `dist/site/index.html`. Host that output at `/docs/`; changing the config alone cannot change a host's routing.
+
+If you omit `outDir` or `publishDir`, the generator uses its package-level default output directories. Set them explicitly for a standalone content folder. `publish` writes to `publishDir`, forces HTML minification on, and disables CSS pretty printing regardless of the ordinary build settings.
+
+The `--content` CLI option chooses the content directory. A custom runner can set `rootDir` or `contentDir` in its TypeScript input; these are not fields to put in `siteConfig.json` because the file is found *after* the content directory has been chosen.
+
+## Identity, favicon, and header logo
+
+`siteTitle` is the fallback browser title and part of the title generated for pages with frontmatter titles. For a page titled `Installation` under a site titled `Acme Docs`, the browser title is `Acme Docs | Installation`.
+
+`favicon` accepts a registered icon name from `@purestack/ts-svg-icons`. When set, the build creates `assets/favicon.svg`. The favicon and the header logo are configured separately:
+
+```json
+{
+  "siteTitle": "Acme Docs",
+  "favicon": "tabler:stack-2",
+  "logo": {
+    "brand": "Acme",
+    "suffix": " Docs",
+    "icon": "tabler:stack-2",
+    "href": "/",
+    "ariaLabel": "Acme Docs home",
+    "layout": "horizontal",
+    "size": "md",
+    "markStyle": "soft"
+  }
+}
+```
+
+The logo can use `imageSrc` and `imageSrcDark` instead of an icon, or a `monogram` mark. `imageSrc` takes priority over `icon`. `subtitle`, `appearance`, `wordmarkStyle`, `shape`, `tone`, colors, and size fields let you tune the mark and wordmark. Set `logo.href` to `null` or `""` for a noninteractive logo. For the full set of presentation fields, use the [schema](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-ssg/schema/siteConfig.schema.json) alongside the [SiteLogo component](/components/site/site-logo/).
+
+## Styles and themes
+
+PureStack generates a stylesheet for each configured theme. `light` and `dark` are required, and are the defaults. With the default filename, the generated files are `assets/site.css` and `assets/site.dark.css`.
+
+```json
+{
+  "style": {
+    "fileName": "site.css",
+    "href": "/assets/site.css",
+    "themes": ["light", "dark"],
+    "pretty": false,
+    "theme": {
+      "skin": "standard",
+      "presets": ["green"],
+      "remSize": "16px"
+    }
+  }
+}
+```
+
+`fileName` names the generated CSS file; `href` is the public stylesheet path inserted into pages. When `href` is omitted, it defaults to `/assets/` followed by `fileName`. If you set `href` explicitly, keep it aligned with the generated file. PureStack derives dark and any additional theme URLs from that light-theme `href`. `pretty` formats generated CSS with Prettier when `true`; it defaults to `false`.
+
+`theme.skin` selects a registered skin. A skin supplies the light and dark palettes; `theme.presets` and explicit theme tokens refine them. `remSize` and `mobileRemSize` optionally set the root font size. See [Themes](/guides/themes/) for custom skins and palette examples.
+
+## Navigation and page contents
+
+Navigation is automatic by default. `navigation.mode` chooses how PureStack builds it:
+
+| Mode | Behavior |
+| --- | --- |
+| `auto` | Build menus from content pages and their frontmatter. `_nav.json` files are ignored. |
+| `custom` | Use items declared in `_nav.json` files. |
+| `hybrid` | Combine discovered pages with custom items and ordering from `_nav.json`. |
+| `none` | Do not build a navigation tree. |
+
+```json
+{
+  "navigation": {
+    "mode": "hybrid",
+    "navFileName": "_nav.json",
+    "roots": ["guides", "reference"],
+    "maxDepth": 3,
+    "includeIndex": true,
+    "sortBy": "order",
+    "tone": "neutral"
+  },
+  "pageToc": {
+    "enabled": true,
+    "tone": "neutral"
+  },
+  "docLayout": {
+    "sidebarTop": "5.5625rem",
+    "sidebarTopMobile": "4.875rem"
+  }
+}
+```
+
+`roots` are paths **inside the content directory**, without a leading slash. They make the named folders independent navigation roots for their descendant pages. `maxDepth` limits nested folder navigation and defaults to `1`; `includeIndex` defaults to `true`. `sortBy` accepts `order`, `title`, or `path` and defaults to `order`. Use page frontmatter `nav.order`, `nav.icon`, and `nav.hidden` to tune discovered items.
+
+In `hybrid` mode, a folder's `_nav.json` can order discovered pages, add custom items, and enable previous/next links:
+
+```json
+{
+  "pageLinks": true,
+  "sequence": [
+    "index.mdx",
+    "getting-started.mdx"
+  ],
+  "items": [
+    {
+      "title": "API status",
+      "url": "https://status.example.com"
+    }
+  ]
+}
+```
+
+Place this in `content/guides/_nav.json`. A nav file can also use `"mode": "override"` to replace that folder's discovered items, or `"root"` to select another built navigation root. The default nav filename is `_nav.json`.
+
+`pageToc.enabled` sets the default for a page's table of contents; individual pages can override it with frontmatter `layout.showToc`. `docLayout.sidebarTop` and `sidebarTopMobile` are CSS lengths measured from the viewport top. Adjust them when your header height changes so the sidebars and mobile drawers start below it.
+
+## Markdown and code blocks
+
+```json
+{
+  "mdx": {
+    "highlighter": "shiki",
+    "disableHighlighter": false,
+    "compileMdAsMdx": true
+  }
+}
+```
+
+`mdx.highlighter` accepts `highlightjs` (the default and faster option) or `shiki`. `disableHighlighter` turns highlighting off. `compileMdAsMdx` defaults to `true`, so `.md` files use the MDX/Regor markup pipeline; `.mdx` files use that pipeline in either case. Use [Regor MDX](/guides/regor-mdx/) to learn the supported markup and components.
+
+## Search
+
+Pagefind indexing and the built-in search runtime are enabled by default. Turn them off with `"pagefind": { "enabled": false }`, or exclude selected route prefixes from the index:
+
+```json
+{
+  "pagefind": {
+    "enabled": true,
+    "excludePaths": ["/privacy/", "/drafts/"]
+  }
+}
+```
+
+Use public route paths here, with leading and trailing slashes. PureStack normalizes missing slashes and removes duplicates. An excluded route can still be built and served; it is simply left out of the search index. Search output is generated under `pagefind/` in the build directory.
+
+## Sitemap, robots, and social previews
+
+Sitemap generation is off by default. Enable it for a public site and supply the site's absolute origin as `sitemap.baseUrl`:
+
+```json
+{
+  "sitemap": {
+    "enabled": true,
+    "baseUrl": "https://docs.example.com",
+    "fileName": "sitemap.xml",
+    "robots": {
+      "enabled": true,
+      "userAgent": "*",
+      "allow": ["/"],
+      "disallow": ["/drafts/"]
+    }
+  },
+  "preview": {
+    "title": "Acme Docs",
+    "description": "Guides and reference for Acme.",
+    "image": "/assets/social-preview.png",
+    "imageAlt": "Acme Docs preview",
+    "imageWidth": 1200,
+    "imageHeight": 630,
+    "siteName": "Acme Docs",
+    "twitterCard": "summary_large_image"
+  }
+}
+```
+
+The build writes `sitemap.xml` and, unless `sitemap.robots.enabled` is `false`, `robots.txt`. `robots` defaults to `userAgent: "*"`, `allow: ["/"]`, and an empty `disallow` list. It also supports `fileName`, `crawlDelay`, `host`, `additionalSitemaps`, and raw `customDirectives` lines. Robots output is tied to sitemap generation: enabling `robots` alone does not create it.
+
+Use an origin such as `https://docs.example.com` for `baseUrl`. If the site is mounted at `/docs`, set `basePath` separately; PureStack adds it to sitemap and canonical URLs. `baseUrl` is also used to make canonical and social image URLs absolute. `preview.image` can be a full URL or a site-root-relative path. Ensure the image is present in the published assets.
+
+`preview` supplies site-wide Open Graph and Twitter Card defaults. Supported fields also include `type`, `locale`, `twitterSite`, and `twitterCreator`. Page frontmatter can set its own `title`, `description`, and `preview` values; those take priority on that page. If `preview.siteName` is omitted, the Open Graph site name falls back to `siteTitle`.
+
+## Languages and URL strategy
+
+For a multilingual site, place translated pages in folders named after their locales:
+
+```text
+content/
+  siteConfig.json
+  en/
+    index.mdx
+    guides/
+      install.mdx
+  de/
+    index.mdx
+    guides/
+      install.mdx
+```
+
+```json
+{
+  "i18n": {
+    "enabled": true,
+    "defaultLocale": "en",
+    "locales": ["en", "de"],
+    "urlStrategy": "prefix-all"
+  }
+}
+```
+
+With `prefix-all`, the examples above publish `/en/guides/install/` and `/de/guides/install/`. It is the default strategy. Supplying a nonempty `locales` list enables localization even if `enabled` is omitted. Set `defaultLocale` explicitly for clarity; when omitted, the first configured locale is used. Locale identifiers contain letters, numbers, or hyphens.
+
+`urlStrategy: "hidden"` keeps public routes unprefixed while writing locale folders for a host or server that chooses a language. The development server recognizes the `queryParam` (default `lang`) and `cookieName` (default `ts-ssg.lang`) for that choice. Plan corresponding language negotiation on your production host before choosing `hidden`; a plain static host cannot choose between two pages at the same public URL.
+
+## Authentication controls
+
+```json
+{
+  "auth": {
+    "enabled": true,
+    "signUp": false,
+    "signedInStorageKey": "acme-signed-in-hint"
+  }
+}
+```
+
+`auth.enabled` defaults to `false` and controls whether built-in sign-in and account UI appears. `signUp` defaults to `true` when that UI is enabled. `signedInStorageKey` names a local storage key for the UI's signed-in hint; it is not an authentication mechanism. Configure actual identity and access enforcement in the application or host that serves your site.
+
+## Consent and analytics
+
+Consent is off by default. Enable it when you want the built-in privacy banner, preference settings, and category-based loading of optional scripts. Categories default to `necessary`, `preferences`, `analytics`, and `marketing`; `necessary` is always required.
+
+```json
+{
+  "consent": {
+    "enabled": true,
+    "policyVersion": "2026-09-30",
+    "privacyPolicyUrl": "/privacy/",
+    "categories": [
+      { "id": "necessary", "label": "Necessary", "required": true },
+      { "id": "analytics", "label": "Analytics" }
+    ]
+  },
+  "analytics": {
+    "ga4": {
+      "measurementId": "G-EXAMPLE123",
+      "consentCategory": "analytics"
+    }
+  }
+}
+```
+
+Adding a valid `analytics.ga4.measurementId` enables GA4 unless you explicitly set `enabled: false`. The ID must have the `G-...` format. When consent is enabled, PureStack registers GA4 as a service under `analytics` and loads its scripts after that category is granted. If you replace the default categories, include the category named by `consentCategory`, or the build will fail. When consent is disabled, enabled GA4 scripts are included directly in page output.
+
+For another service, add a `consent.services` entry with a unique `id`, an existing `category`, and at least one script:
+
+```json
+{
+  "consent": {
+    "enabled": true,
+    "privacyPolicyUrl": "/privacy/",
+    "services": [
+      {
+        "id": "optional-widget",
+        "category": "preferences",
+        "label": "Optional widget",
+        "scripts": [
+          { "src": "https://example.com/widget.js", "defer": true }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Scripts accept an external `src` or inline `content`, plus optional `type`, `async`, `defer`, `integrity`, `nonce`, `crossOrigin`, and `referrerPolicy`. If you specify a `categories` array, it replaces the default list; include every category used by a service. `consent.storageKey` names the local storage entry for saved choices. Change `policyVersion` when the policy changes so visitors are asked again. Banner text and button labels can be customized with `bannerTitle`, `bannerDescription`, `privacyPolicyLabel`, `acceptAllLabel`, `rejectAllLabel`, `manageLabel`, `saveLabel`, and `settingsLabel`.
+
+## A public docs site under `/docs`
+
+This combines the settings that must agree when publishing under a subpath:
+
+```json
+{
+  "siteTitle": "Acme Docs",
+  "basePath": "/docs",
+  "style": {
+    "fileName": "site.css",
+    "href": "/assets/site.css",
+    "theme": { "skin": "standard" }
+  },
+  "navigation": {
+    "mode": "hybrid",
+    "roots": ["guides", "reference"],
+    "maxDepth": 3
+  },
+  "sitemap": {
+    "enabled": true,
+    "baseUrl": "https://example.com"
+  },
+  "preview": {
+    "image": "/assets/social-preview.png"
+  },
+  "outDir": "../dist/site",
+  "publishDir": "../dist/publish"
+}
+```
+
+This produces public links such as `https://example.com/docs/guides/` while keeping output rooted in `dist/site` or `dist/publish`. The host must serve that output at `/docs/`.
+
+## Check a configuration
+
+Use `purestack serve --content ./content` to inspect menus, styles, and public paths. Then run `purestack build --content ./content` and check the generated HTML, stylesheets, Pagefind files, and sitemap in `outDir`. Use `purestack publish --content ./content` when you want the release artifact in `publishDir`.
+
+If a build reports a missing sitemap base URL, add `sitemap.baseUrl` or disable the sitemap. If styles return 404 under a subpath, check that the host serves `outDir` at `basePath` and that `style.href` points to the generated CSS. If navigation is empty, check the mode, the content folder names in `roots`, and whether `_nav.json` is read in that mode.

@@ -1,0 +1,14 @@
+{
+  "pageLinks": true,
+  "sequence": [
+    "index.mdx",
+    "purestack-cli.mdx",
+    "site-config.mdx",
+    "vscode-extension.mdx",
+    "regor-mdx.mdx",
+    "typography.mdx",
+    "utility-css-classes.mdx",
+    "semantic-tones.mdx",
+    "themes.mdx"
+  ]
+}

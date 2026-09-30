@@ -27,7 +27,7 @@
     "maxDepth": 20,
     "includeIndex": true,
     "sortBy": "order",
-    "roots": ["components"]
+    "roots": ["guides", "components"]
   },
   "sitemap": {
     "enabled": true,

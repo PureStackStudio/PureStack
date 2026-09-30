@@ -1,0 +1,219 @@
+---
+title: Utility CSS classes
+description: Use PureStack's generated spacing, typography, layout, visibility, border, and semantic tone classes with accurate scales and responsive behavior.
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 35
+  icon: tabler:ruler
+---
+
+# Utility CSS classes
+
+PureStack generates a small vocabulary of reusable CSS classes alongside its component styles. Use them in MDX markup, in a component's `class` or `bodyClass` prop, or in a TypeScript `html` template. They are generated for each configured theme, so classes that use palette colors or font sizes follow the active skin.
+
+<Panel tone="info" bodyClass="p-3">
+  <p class="text-eyebrow mt-0">Release note</p>
+  <h2 class="mt-0 mb-2">A clearer way to build</h2>
+  <p class="mb-0">Spacing and type follow the site's theme.</p>
+</Panel>
+
+```mdx
+<Panel tone="info" bodyClass="p-3">
+  <p class="text-eyebrow mt-0">Release note</p>
+  <h2 class="mt-0 mb-2">A clearer way to build</h2>
+  <p class="mb-0">Spacing and type follow the site's theme.</p>
+</Panel>
+```
+
+Here `bodyClass` styles the Panel's body, while `class` styles the elements inside it. This distinction matters for components with their own wrapper and internal content. The [component catalog](/components/) shows which props each component exposes.
+
+The class names below come from PureStack's utility and component style generators. They are not Tailwind-style arbitrary values: a class works when the generator defines it. For a repeated design pattern, add a named style in your site's TypeScript styles; use utilities for local composition and small adjustments.
+
+## Spacing: margin, padding, and gap
+
+The numeric scale is shared by margins, padding, and gaps:
+
+| Number | CSS value |
+| --- | --- |
+| `0` | `0` |
+| `1` | `0.25em` |
+| `2` | `0.5em` |
+| `3` | `0.75em` |
+| `4` | `1em` |
+| `5` | `1.5em` |
+| `6` | `2em` |
+
+These values use `em`, so the computed space follows the element's font size. The generated spacing declarations use `!important`. `gap-3`, for example, sets a gap of `0.75em`; it is not a fixed pixel or rem value.
+
+| Pattern | Property | Example |
+| --- | --- | --- |
+| `m-{0..6}`, `p-{0..6}` | All sides | `m-0`, `p-3` |
+| `mt-`, `mr-`, `mb-`, `ml-` | Physical top, right, bottom, left margin | `mt-4`, `mb-0` |
+| `pt-`, `pr-`, `pb-`, `pl-` | Physical top, right, bottom, left padding | `pt-3`, `pb-2` |
+| `mx-`, `my-` | Logical inline and block margin | `mx-3`, `my-2` |
+| `px-`, `py-` | Logical inline and block padding | `px-3`, `py-2` |
+| `gap-`, `gap-x-`, `gap-y-` | Grid or flex gap, column gap, row gap | `gap-3`, `gap-x-2` |
+
+Append a number from `0` through `6` to any prefix in the table. For auto margins, use `m-auto`, `mt-auto`, `mr-auto`, `mb-auto`, `ml-auto`, `mx-auto`, or `my-auto`. There is no `p-auto` or `gap-auto`.
+
+```mdx
+<Flex direction="column" class="gap-3 p-3">
+  <h2 class="m-0">Account settings</h2>
+  <p class="m-0">Choose what appears on your profile.</p>
+  <BtnLink href="/components/" class="mt-2">Explore components</BtnLink>
+</Flex>
+```
+
+`Flex` supplies its own default gap of `0.75rem`; `gap-3` deliberately overrides it with `0.75em`. The same applies to `Grid`. Use `gap-x-*` and `gap-y-*` when the two axes need different spacing.
+
+## Typography and text
+
+Font-size utilities read the active theme's type scale. The available names are `fs-xxxs`, `fs-xxs`, `fs-xs`, `fs-sm`, `fs-body`, `fs-h6`, `fs-h5`, `fs-h4`, `fs-h3`, `fs-h2`, `fs-h1`, and `fs-display`. The same class can have different computed sizes under different skins.
+
+```mdx
+<p class="fs-sm">Supporting detail</p>
+<p class="fs-body">Regular body copy</p>
+<strong class="fs-h4">A prominent value</strong>
+```
+
+The other numeric type controls are `fw-100` through `fw-900`, in steps of 100, and `lh-0` through `lh-7`. Line-height maps to `1.0` through `1.7` in steps of `0.1`: `lh-4` means `line-height: 1.4`. These classes set presentation only; keep headings as real `h1`–`h6` elements so the document outline remains meaningful. See [Typography](/guides/typography/) for page structure and theme customization.
+
+| Class | Effect |
+| --- | --- |
+| `text-left`, `text-center`, `text-right` | Physical text alignment. |
+| `text-start`, `text-end`, `text-justify` | Logical start/end alignment or justified text. |
+| `uppercase`, `lowercase` | Text transform. |
+| `underline-hover`, `underline-active` | Underline on hover or on active interaction; `underline-active` also recognizes an `.active` class. |
+| `text-ellipsis` | Sets `text-overflow: ellipsis` only. Combine it with a constrained width, `overflow-hidden`, and `ws-nowrap` for a single-line ellipsis. |
+
+PureStack also has editorial role classes. They set a combination of font size, weight, color, transform, line height, and/or margin, depending on the role:
+
+| Role | Current treatment |
+| --- | --- |
+| `text-eyebrow` | Small uppercase label with wide tracking and subtle color. |
+| `text-title` | Strong section title based on the theme's `h2` size. |
+| `text-tagline` | Subtle supporting line based on the `sm` size. |
+| `text-lead` | Larger introductory copy based on the `h4` size. |
+| `text-caption` | Subtle text using the theme's `h3` size; it is a visual role, not a guarantee of small text. |
+| `text-quote` | Italic quote treatment based on the `h5` size. |
+| `text-attribution`, `prose-meta` | Small, uppercase supporting information. |
+| `prose-pullquote` | Larger italic pull quote. |
+| `text-subtle` | Subtle text color; resets top and inline margins and adds a bottom margin. |
+
+```mdx
+<span class="text-eyebrow">Field note</span>
+<h2 class="text-title">Small classes, consistent pages</h2>
+<p class="text-tagline">The visual roles follow the active theme.</p>
+<blockquote class="prose-pullquote">A short idea worth setting apart.</blockquote>
+<p class="text-attribution">PureStack team</p>
+```
+
+These roles include their own vertical margins. If one sits inside a tight component, adjust that margin explicitly with `m-0` or a side-specific spacing class. The [text utility sample](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-ssg/sample-content/guide/text-utilities-sample.mdx) shows the roles in full editorial sections.
+
+### Larger text contexts
+
+`large-fs` and `medium-fs` are classes on an **ancestor**, not viewport breakpoints. Inside `.large-fs`, the generator scales `fs-*`, `fw-*`, the editorial roles, and numeric margin, padding, and gap utilities. `.medium-fs` applies the ordinary scale for those same descendants. Use them only when the whole section needs that treatment; neither class changes at a screen width by itself.
+
+## Display, visibility, and breakpoints
+
+`d-*` classes set only CSS `display`. Available values are `none`, `block`, `inline`, `inline-block`, `flex`, `inline-flex`, `grid`, `inline-grid`, `contents`, `table`, `table-row`, `table-cell`, and `list-item`. For example, `d-flex` creates a flex formatting context but does not add PureStack's `.flex` defaults for gap, direction, and shrinking children.
+
+`hidden` sets `display: none`. Responsive visibility classes use these breakpoints:
+
+| Name | Width |
+| --- | --- |
+| `sm` | `640px` |
+| `md` | `768px` |
+| `lg` | `1024px` |
+| `xl` | `1280px` |
+| `toc` | `1320px` |
+| `wide` | `1400px` |
+
+For any name in this table, `hidden-{name}` hides at widths **up to and including** that breakpoint. `hidden-{name}-up` hides at widths **from** that breakpoint upward. For example, `hidden-md` hides at `768px` and below; `hidden-md-up` hides at `768px` and above. At exactly `768px`, both classes hide, so account for the shared boundary if you use separate mobile and desktop elements.
+
+```mdx
+<p class="hidden-md">Shown above 768px</p>
+<p class="hidden-lg-up">Shown below 1024px</p>
+```
+
+There is no general `md:p-3` or `md:d-flex` syntax in this utility set. Responsive Flex classes and the `Grid` component have their own explicit APIs, described next.
+
+## Flex and Grid composition
+
+The `.flex` class sets `display: flex`, a `0.75rem` default gap, row direction, stretch alignment, start justification, no wrapping, and `min-width: 0` for the container and its direct children. Its companions can override individual parts:
+
+| Class family | Choices |
+| --- | --- |
+| Direction | `flex-column`, `flex-column-reverse`, `flex-row-reverse` (`row` is the `.flex` default). |
+| Alignment | `align-stretch`, `align-start`, `align-flex-start`, `align-center`, `align-end`, `align-flex-end`, `align-baseline`. |
+| Justification | `justify-start`, `justify-center`, `justify-end`, `justify-stretch`, `justify-between`, `justify-around`, `justify-evenly`. |
+| Wrapping | `flex-wrap`, `flex-wrap-reverse`. |
+| Item behavior | `flex-auto`, `flex-none`, `flex-fill`, `flex-1`; `self-stretch`, `self-start`, `self-center`, `self-end`. |
+| Inline display | `flex-inline`. |
+
+The responsive Flex classes use `sm`, `md`, `lg`, and `xl` as **minimum** widths. Examples include `flex-direction-md-row`, `align-md-center`, `justify-lg-between`, `flex-wrap-sm`, and `flex-nowrap-lg`. These exact families exist; a prefix such as `md:flex-row` does not.
+
+```mdx
+<div class="flex flex-column flex-direction-md-row align-md-center gap-3">
+  <div class="flex-1 min-w-0">Title and supporting text</div>
+  <a href="/components/layout/flex/">Explore Flex</a>
+</div>
+```
+
+The [`Flex` component](/components/layout/flex/) exposes the same direction, alignment, justification, and wrapping choices as props. For example, `direction="column" directionMd="row"` produces the corresponding classes. That is usually clearer when an MDX layout has several responsive changes.
+
+The `.grid` class sets `display: grid`, a `0.75rem` gap, and columns from CSS variables. The [`Grid` component](/components/layout/grid/) sets those variables from `columns`, `columnsSm`, `columnsMd`, `columnsLg`, and `columnsXl`. A bare `d-grid` only changes display; it does not create the column variables or Grid defaults.
+
+```mdx
+<Grid columns="1" columnsMd="2" class="gap-3">
+  <Panel bodyClass="p-3">First card</Panel>
+  <Panel bodyClass="p-3">Second card</Panel>
+</Grid>
+```
+
+For grid children, `justify-self-start`, `justify-self-center`, `justify-self-end`, and `justify-self-stretch` control one item's alignment. Grid containers can use `justify-items-*` with the same four values, `align-*` for row alignment, and `grid-dense` for dense row placement. For a complex track definition, pass a CSS track string through the Grid component's `columns*` props.
+
+## Width, overflow, and positioning
+
+| Class | Effect |
+| --- | --- |
+| `w-full`, `h-full` | `width: 100%` or `height: 100%`. |
+| `min-w-0` | Allows a flex or grid child to shrink below its content's preferred width. |
+| `max-h-inspector` | Limits height to `24rem`. |
+| `overflow-visible`, `overflow-auto`, `overflow-hidden` | Set overflow on both axes. |
+| `overflow-x-auto`, `overflow-y-auto` | Scroll the named axis as needed. |
+| `overflow-x-visible`, `overflow-y-visible` | Set overall overflow to visible; both axes are affected. |
+| `position-static`, `position-relative`, `position-absolute`, `position-fixed`, `position-sticky` | Set CSS positioning. |
+| `ws-normal`, `ws-nowrap`, `ws-pre-wrap` | Set `white-space`. |
+| `cursor-pointer`, `col-resize` | Set pointer or column-resize cursor. |
+| `bg-none`, `box-shadow-none` | Remove a background or box shadow. |
+
+`auto-fit` is a specialized width utility that sets `width: 1%`; it is not a CSS Grid `auto-fit` track rule. Use it only when that width behavior is intended.
+
+## Borders, radius, and opacity
+
+Border width classes use pixels. `b-1`, `b-2`, and `b-3` set a solid border on all sides. `bx-*`, `by-*`, `bt-*`, `br-*`, `bb-*`, and `bl-*` set the specified edges; `0` removes a width on those edges. For example, `bb-1` adds a solid one-pixel bottom border, and `b-0` removes all border widths.
+
+Border style classes are `b-none`, `b-solid`, `b-dashed`, and `b-dotted`. Border color classes are `b-subtle`, `b-default`, `b-focus`, `b-tone`, `b-transparent`, and `b-current`. A color class sets color only, so pair it with a width class when you need a visible border:
+
+```mdx
+<div class="b-1 b-subtle rounded-md p-3">
+  A bordered note with theme-aware color.
+</div>
+```
+
+Append `-hover` to a border width, style, or color utility for its hover-only version, such as `b-2-hover` or `b-tone-hover`. Radius classes are `rounded-none`, `rounded-sm`, `rounded-md`, `rounded-lg`, and `rounded-pill`; `rounded-t-*`, `rounded-r-*`, `rounded-b-*`, and `rounded-l-*` apply those radii to a pair of corners. The radii read the active theme except for `rounded-none`.
+
+Opacity classes are `opacity-0`, `opacity-25`, `opacity-50`, `opacity-75`, and `opacity-1`, for `0`, `0.25`, `0.5`, `0.75`, and full opacity. Each also has a `-hover` form, such as `opacity-1-hover`. The value `1` means fully opaque, not one percent.
+
+## Semantic tone classes
+
+Tone classes let plain markup use the same palette roles as components. `tone--info` selects a palette; `tone-fill-surface`, `tone-border-surface`, and `tone-text-surface` paint from it. The [Semantic tone classes guide](/guides/semantic-tones/) has a visual gallery of every tone, side-by-side role comparisons, and interactive state examples.
+
+## Check a class in your site
+
+The CLI generates utility rules into the site's theme stylesheets, normally `assets/site.css` and `assets/site.dark.css`. If a class has no effect, first check its spelling and whether its family is actually generated. Then check the element in both light and dark themes. The [Themes guide](/guides/themes/) explains how changing the palette changes the generated values, and the [Site configuration guide](/guides/site-config/) covers the stylesheet path.

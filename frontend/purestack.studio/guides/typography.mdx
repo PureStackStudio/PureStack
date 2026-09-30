@@ -1,0 +1,66 @@
+---
+title: Typography
+description: Use semantic HTML and PureStack's shared type scale for readable interfaces.
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 30
+  icon: tabler:typography
+---
+
+# Typography
+
+Good type starts with structure. Use one page title, follow it with sections in heading order, and let paragraphs and lists carry the detail. The doc template builds its page outline from `h2` and `h3` headings.
+
+## Write a clear hierarchy
+
+```mdx
+# Project setup
+
+A short introduction to the task.
+
+## Install dependencies
+
+The first step and its context.
+
+### Check the result
+
+What the reader should see next.
+```
+
+The heading level describes the content hierarchy. Choose its visual treatment through the theme rather than skipping levels to get a larger font.
+
+## Use the type scale
+
+PureStack's theme palette defines a base font family, named sizes from `xxxs` through `display`, and weights. Generated utility classes expose the size scale when a piece of UI needs an explicit treatment:
+
+```html
+<p class="fs-sm">A compact caption</p>
+<p class="fs-body">Supporting text at the body size</p>
+<p class="fs-h3">A prominent metric label</p>
+```
+
+Keep headings as real heading elements even when their size is customized. The Studio skin uses a compact body scale; another skin can use the same names with different values.
+
+## Customize the scale
+
+Set shared typography values in a skin, then use the palette in typed styles:
+
+```ts
+import { themeSkins, type ThemePalette } from '@purestack/ts-style'
+import { merge } from '@purestack/ts-util'
+
+const light: ThemePalette = merge(themeSkins.standard.create().light, {
+  font: {
+    family: { base: "'Inter', system-ui, sans-serif" },
+    size: { body: '1rem', h2: '2rem' },
+  },
+})
+```
+
+The same `font` overrides can be shared with the dark palette. Register the resulting pair as a skin, then select it in `siteConfig.json`; the [Themes guide](/guides/themes/) shows the full flow.
+
+For controls, prefer the component's own size and variant props. The [component catalog](/components/) shows how each control responds to the active theme.

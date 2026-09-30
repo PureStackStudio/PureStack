@@ -1,0 +1,256 @@
+---
+title: Semantic tone classes
+description: See every PureStack tone, compare its surface and button roles, and compose theme-aware colors and interaction states in MDX.
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 38
+  icon: tabler:color-swatch
+---
+
+# Semantic tone classes
+
+Semantic tones give color a purpose. Instead of choosing a fixed blue or red for each page, you choose a tone such as `info`, `success`, or `danger`, then choose a role such as `surface` or `button`. PureStack resolves those roles from the active light or dark theme. Try the site's theme switcher while looking at the examples below: their class names stay the same while their palette values change.
+
+The key distinction is **selection versus painting**:
+
+- `tone--info` selects the info palette for an element and its descendants. On its own, it does not add a visible background, border, or text color.
+- `tone-fill-surface`, `tone-border-surface`, and `tone-text-surface` paint a background, border color, and text color from the selected palette.
+- `b-1`, padding, and radius classes supply the border width and shape. A tone border class sets color, but does not create a visible border by itself.
+
+```mdx
+<div class="tone--info tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
+  An information surface
+</div>
+```
+
+The same recipe works with another `tone--*` class without changing the paint classes.
+
+## All ten tones
+
+Each card below uses the same surface, border, text, padding, and radius classes. Only the selected tone changes. The labels describe typical uses; your site skin controls the actual colors.
+
+<Grid columns="1" columnsSm="2" columnsLg="3" class="gap-3">
+  <div class="tone--neutral tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
+    <strong class="d-block mb-1">neutral</strong>
+    <span class="fs-sm">Everyday content and quiet structure.</span>
+  </div>
+  <div class="tone--accent tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
+    <strong class="d-block mb-1">accent</strong>
+    <span class="fs-sm">Primary brand emphasis.</span>
+  </div>
+  <div class="tone--feature tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
+    <strong class="d-block mb-1">feature</strong>
+    <span class="fs-sm">A capability or featured section.</span>
+  </div>
+  <div class="tone--secondary tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
+    <strong class="d-block mb-1">secondary</strong>
+    <span class="fs-sm">Another emphasis lane beside accent.</span>
+  </div>
+  <div class="tone--custom tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
+    <strong class="d-block mb-1">custom</strong>
+    <span class="fs-sm">Product-specific meaning from the skin.</span>
+  </div>
+  <div class="tone--ghost tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
+    <strong class="d-block mb-1">ghost</strong>
+    <span class="fs-sm">A restrained treatment that stays close to its context.</span>
+  </div>
+  <div class="tone--info tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
+    <strong class="d-block mb-1">info</strong>
+    <span class="fs-sm">Helpful explanations and system notes.</span>
+  </div>
+  <div class="tone--success tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
+    <strong class="d-block mb-1">success</strong>
+    <span class="fs-sm">Completed work and positive confirmation.</span>
+  </div>
+  <div class="tone--warning tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
+    <strong class="d-block mb-1">warning</strong>
+    <span class="fs-sm">Something that needs attention.</span>
+  </div>
+  <div class="tone--danger tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
+    <strong class="d-block mb-1">danger</strong>
+    <span class="fs-sm">Critical conditions or destructive actions.</span>
+  </div>
+</Grid>
+
+`custom` is a named palette lane, not an arbitrary CSS color string. A skin can give it product-specific values. `ghost` is also a complete tone with its own tokens; its exact appearance depends on the skin.
+
+## Compare roles within one tone
+
+A tone contains more than one background and text color. These three samples all select `accent`, but paint different roles from that palette:
+
+<Grid columns="1" columnsMd="3" class="gap-3">
+  <div class="tone--accent tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
+    <strong class="d-block mb-1">surface</strong>
+    <span class="fs-sm">A regular content surface.</span>
+  </div>
+  <div class="tone--accent tone-fill-surface-alt tone-border-surface-alt tone-text-surface-alt b-1 rounded-md p-3">
+    <strong class="d-block mb-1">surface-alt</strong>
+    <span class="fs-sm">An alternate content surface.</span>
+  </div>
+  <div class="tone--accent tone-fill-button tone-border-button tone-text-button b-1 rounded-md p-3">
+    <strong class="d-block mb-1">button</strong>
+    <span class="fs-sm">The stronger action treatment.</span>
+  </div>
+</Grid>
+
+```mdx
+<div class="tone--accent tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
+  Regular surface
+</div>
+
+<div class="tone--accent tone-fill-surface-alt tone-border-surface-alt tone-text-surface-alt b-1 rounded-md p-3">
+  Alternate surface
+</div>
+
+<div class="tone--accent tone-fill-button tone-border-button tone-text-button b-1 rounded-md p-3">
+  Button role
+</div>
+```
+
+Keep fill, border, and text from the same role when you need a ready-made combination. Each role's colors are designed as a set within the active theme. The direct `tone-fill`, `tone-border`, and `tone-text` classes use the tone color itself; they are useful for accents, but they are not the same as a complete surface or button treatment.
+
+## Tone-colored text and clipped fills
+
+Use `tone-text` for the selected tone color. Use `tone-text-bg-button` when you want the button role's background treatment clipped into text. Both examples keep a neutral surrounding surface; the tone changes only for the label:
+
+<Grid columns="1" columnsMd="2" class="gap-3">
+  <div class="tone--neutral tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
+    <strong class="tone--accent tone-text d-block fs-h3 mb-1">Tone color</strong>
+    <span class="fs-sm">The accent color applied directly to text.</span>
+  </div>
+  <div class="tone--neutral tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
+    <strong class="tone--accent tone-text-bg-button d-block fs-h3 mb-1">Clipped fill</strong>
+    <span class="fs-sm">The accent button background applied inside text.</span>
+  </div>
+</Grid>
+
+```mdx
+<strong class="tone--accent tone-text">Tone color</strong>
+<strong class="tone--accent tone-text-bg-button">Clipped fill</strong>
+```
+
+The clipped fill can be a solid color or a richer background, depending on the skin. `tone-text-bg-surface` and `tone-text-bg-surface-alt` use the corresponding content roles.
+
+## Compose a callout from plain markup
+
+This callout uses the warning tone for its surface and an inset accent on the left. Its heading and body stay ordinary semantic HTML:
+
+<div class="tone--warning tone-fill-surface tone-border-surface tone-text-surface tone-inset-l inset-size-2 b-1 rounded-md p-3">
+  <strong class="d-block mb-1">Review before publishing</strong>
+  <span class="fs-sm">Check links and preview the site at its final URL.</span>
+</div>
+
+```mdx
+<div class="tone--warning tone-fill-surface tone-border-surface tone-text-surface tone-inset-l inset-size-2 b-1 rounded-md p-3">
+  <strong class="d-block mb-1">Review before publishing</strong>
+  <span class="fs-sm">Check links and preview the site at its final URL.</span>
+</div>
+```
+
+`tone-inset-l` adds a tone-colored rail without changing the surface border color. `inset-size-2` controls its width using the utility spacing scale.
+
+## Change a tone inside another tone
+
+Tone selection applies to descendants through current-palette CSS variables. A nested `tone--*` starts a new palette context for its own children. Here the note uses `neutral` and its inner status uses `success`:
+
+<div class="tone--neutral tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
+  <strong class="d-block mb-2">Build report</strong>
+  <div class="tone--success tone-fill-surface-alt tone-border-surface-alt tone-text-surface-alt b-1 rounded-md p-2">
+    <span class="text-eyebrow m-0">Completed</span>
+    <p class="m-0 fs-sm">All pages were generated.</p>
+  </div>
+</div>
+
+```mdx
+<div class="tone--neutral tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
+  <strong class="d-block mb-2">Build report</strong>
+  <div class="tone--success tone-fill-surface-alt tone-border-surface-alt tone-text-surface-alt b-1 rounded-md p-2">
+    <span class="text-eyebrow m-0">Completed</span>
+    <p class="m-0 fs-sm">All pages were generated.</p>
+  </div>
+</div>
+```
+
+The inner `text-eyebrow` also reads the current palette, so its subtle text color changes with `tone--success`. This is why tone classes are useful for composing a small visual system instead of setting each color separately.
+
+## Hover, active, and disabled states
+
+Surface and button paint roles have state variants. Hover or press the first control; compare it with the disabled control. The `-all` suffix includes the rest, hover, active, and disabled treatments for that role.
+
+<Flex wrap="true" align="center" class="gap-2">
+  <button type="button" class="tone--accent tone-fill-button-all tone-border-button-all tone-text-button-all b-1 rounded-md p-2 cursor-pointer">Hover or press</button>
+  <button type="button" disabled class="tone--accent tone-fill-button-all tone-border-button-all tone-text-button-all b-1 rounded-md p-2">Disabled</button>
+  <button type="button" class="tone--accent tone-text tone-fill-button-hover tone-fill-button-active tone-text-button-hover tone-text-button-active b-0 rounded-md p-2 cursor-pointer">Subtle action</button>
+</Flex>
+
+```mdx
+<button type="button" class="tone--accent tone-fill-button-all tone-border-button-all tone-text-button-all b-1 rounded-md p-2">
+  Hover or press
+</button>
+
+<button type="button" disabled class="tone--accent tone-fill-button-all tone-border-button-all tone-text-button-all b-1 rounded-md p-2">
+  Disabled
+</button>
+```
+
+For individual states, use a suffix such as `tone-fill-button-hover`, `tone-border-button-active`, or `tone-text-button-disabled`. `-hover` applies on `:hover`. `-active` applies on `:active` **or** when the element has an `.active` class. `-disabled` applies on `:disabled`. The shorthand `-all` exists for surface, alternate surface, and button fill, border, text, and text-background roles. It is not a universal suffix for every tone class.
+
+These classes paint states; they do not add button behavior or keyboard handling. Keep interactive elements as real buttons and links. Built-in components such as [Btn](/components/actions/buttons/) already connect tone, variant, and states through their props.
+
+## Use a tone as a line or inset accent
+
+A border-width class and `tone-border` give a plain block a tone-colored rule. `tone-inset-l` draws a left-side inset box shadow instead, using the current tone color:
+
+<Grid columns="1" columnsMd="2" class="gap-3">
+  <div class="tone--info tone-text tone-border bl-2 rounded-md p-3">
+    <strong class="d-block mb-1">Border rule</strong>
+    <span class="fs-sm">A two-pixel left border.</span>
+  </div>
+  <div class="tone--info tone-text tone-inset-l inset-size-4 rounded-md p-3">
+    <strong class="d-block mb-1">Inset accent</strong>
+    <span class="fs-sm">An inset rail that uses the tone color.</span>
+  </div>
+</Grid>
+
+```mdx
+<div class="tone--info tone-text tone-border bl-2 rounded-md p-3">
+  Border rule
+</div>
+
+<div class="tone--info tone-text tone-inset-l inset-size-4 rounded-md p-3">
+  Inset accent
+</div>
+```
+
+Other directions are `tone-inset-r`, `tone-inset-t`, `tone-inset-b`, `tone-inset-x`, and `tone-inset-y`. The `inset-size-0` through `inset-size-6` classes set `--tone-inset-size` using the [utility spacing scale](/guides/utility-css-classes/). Inset classes also have `-hover` and `-active` forms; they do not have `-disabled` or `-all` forms.
+
+## Class reference
+
+| Class family | What it sets | Common choices |
+| --- | --- | --- |
+| `tone--{name}` | Current palette context for the element and descendants. | `tone--neutral`, `tone--accent`, `tone--success` |
+| `tone-fill-{role}` | Background. | `canvas`, `surface`, `surface-alt`, `button` |
+| `tone-border-{role}` | Border color. | `surface`, `surface-alt`, `button` |
+| `tone-text-{role}` | Text color. | `surface`, `surface-alt`, `button` |
+| `tone-text-bg-{role}` | Role background clipped into text. | `surface`, `surface-alt`, `button` |
+| `tone-fill`, `tone-border`, `tone-text` | The tone color directly. | No role suffix. |
+| `tone-inset-{direction}` | Inset shadow in the tone color. | `l`, `r`, `t`, `b`, `x`, `y` |
+| `inset-size-{0..6}` | Custom property controlling inset width. | `inset-size-4` |
+
+Not every role has every state. The direct tone-color classes and `tone-fill-canvas` have rest, hover, and active forms; `tone-border` also has `-all`. The surface, alternate surface, and button families have disabled and `-all` forms. Use the explicit examples above as templates when composing stateful markup.
+
+## Components and skins
+
+For components, pass a semantic tone to the component instead of rebuilding its standard variant with classes:
+
+```mdx
+<Panel tone="info" variant="surface">A note</Panel>
+<Btn tone="danger" variant="solid">Delete item</Btn>
+<Badge tone="success">Complete</Badge>
+```
+
+Their variants combine border widths, radii, fill, border, text, and interaction classes. Use the raw tone utilities when you need a plain element or a custom combination. To change how a tone looks across the whole site, edit its tokens in a skin; the [Themes guide](/guides/themes/) explains the light and dark palette setup. The general [Utility CSS classes guide](/guides/utility-css-classes/) covers spacing, typography, layout, and borders used in these examples.

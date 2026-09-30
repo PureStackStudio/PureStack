@@ -1,0 +1,126 @@
+---
+title: VS Code extension
+description: Set up PureStack Component Tools for component navigation, frontmatter help, markup diagnostics, and formatting on save.
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 15
+  icon: tabler:brand-vscode
+---
+
+# VS Code extension
+
+PureStack Component Tools brings component knowledge into VS Code. As you write a page or a Regor template, it can suggest component names and props, open their declarations, explain frontmatter fields, format markup on save, and mark broken HTML structure.
+
+## Install from the repository
+
+The extension is currently packaged locally. Use VS Code 1.85 or newer, then run this command from a PureStack repository checkout:
+
+```sh
+yarn pack-vscode-ext
+```
+
+In VS Code, run **Extensions: Install from VSIX...** from the Command Palette and select the generated `.vsix` in `packages/ts-ssg-vscode/`. Reload the window and open your project folder. The project must have `typescript` installed so the extension can resolve its TypeScript runtime. For extension development, the [source README](https://github.com/PureStackStudio/PureStack/tree/main/packages/ts-ssg-vscode) also describes the Extension Development Host workflow.
+
+## Pick the right file
+
+| File | Editor support |
+| --- | --- |
+| `.md` | Component name, prop, and event completion; hover; Go to Definition. |
+| `.mdx`, `.rmdx` | The above, plus Regor MDX highlighting, frontmatter help, markup formatting and diagnostics, tag completion, and linked editing. |
+| `.ts` | Component tools inside `html` and `svg` tagged templates, plus template formatting, diagnostics, tag completion, and linked editing. |
+
+In TypeScript, `raw` tagged templates receive syntax highlighting. The markup editing features work in `html` and `svg` templates.
+
+MDX highlighting recognizes Regor attributes such as `:model`, `@click`, and `#slot`, plus CSS in `<style>` and JavaScript in `<script>`.
+
+## Read Regor templates in component source
+
+PureStack components define their markup in TypeScript `html` tagged templates. The extension highlights Regor interpolation inside those templates as TypeScript, alongside the HTML tags and Regor directives. This is the `MetricItem` component from `@purestack/ts-components`:
+
+```ts
+import { defineComponent, html } from 'regor'
+import type { MetricItem } from './landingTypes'
+
+export function defineMetricItemComponent() {
+  const metricItemTemplate = html`<Flex align="start">
+    <IconFrame
+      r-if="icon"
+      :name="icon"
+      :tone="tone"
+      variant="surface"
+      size="sm"/>
+    <div>
+      <p class="prose-meta mb-1" r-if="label">{{ label }}</p>
+      <strong class="fs-body">{{ value }}</strong>
+      <p class="text-subtle fs-xs mb-0" r-if="detail">{{ detail }}</p>
+      <slot></slot>
+    </div>
+  </Flex>`
+
+  return {
+    metricItem: defineComponent<MetricItem>(metricItemTemplate, {
+      props: ['label', 'value', 'detail', 'icon', 'tone'],
+    }),
+  }
+}
+```
+
+The editor highlights the expressions inside the double braces, recognizes directives such as `r-if` and `:tone`, and can navigate from the component or its public props to their TypeScript declarations. Formatting preserves the interpolation text while arranging the surrounding markup. [View the source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/metricItem.ts).
+
+## Find and use components
+
+Type an opening tag such as `<Btn` to see component names found in your workspace and installed Regor component packages. In an opening tag, completion offers the public props declared by `defineComponent`; events declared through `Emits` can appear as `@event` attributes. Supported literal unions and boolean props offer value suggestions.
+
+```mdx
+<Btn size="sm">Save changes</Btn>
+```
+
+Hover over a component or attribute for its type and documentation. Use **F12** or **Go to Definition** on a tag to open its type declaration; on a prop or event attribute, the command tries to open that attribute's declaration. Installed component packages participate when their `package.json` declares `regorComponents` metadata. The [component catalog](/components/) provides examples alongside this editor assistance.
+
+## Edit frontmatter with type information
+
+In `.mdx` and `.rmdx`, the extension reads the `PageFrontmatter` type to suggest page fields and nested keys. It suggests values for booleans and constrained options, shows field descriptions on hover, and opens a field's type declaration with **Go to Definition**.
+
+```mdx
+---
+title: Project guide
+template: doc
+nav:
+  order: 10
+layout:
+  showToc: true
+---
+
+# Project guide
+```
+
+Suggestions can appear as you type a key, `:`, or a new line in frontmatter. This type-aware help needs `PageFrontmatter` source available in the opened workspace or installed `@purestack/ts-common` package. The [Regor MDX guide](/guides/regor-mdx/) explains how the page is rendered.
+
+## Format markup on save
+
+Enable **Editor: Format On Save** in VS Code settings, or add this to your workspace's `.vscode/settings.json`:
+
+```json
+{
+  "editor.formatOnSave": true,
+  "editor.linkedEditing": true
+}
+```
+
+When you save a TypeScript file, PureStack formats the contents of its `html` and `svg` tagged templates. When you save `.mdx` or `.rmdx`, it formats standalone markup blocks and normalizes code fence delimiter placement. TypeScript around templates, MDX prose, frontmatter, and fenced code content stay intact. The formatter preserves embedded expressions and writes self-closing tags as `<Component/>`. It uses your editor's indentation and wrapping settings.
+
+For a one-off format, run **PureStack: Format HTML Templates**. This command also works on MDX markup despite its name. In TypeScript, **PureStack: Format Document With HTML Templates** runs your normal document formatter first and then formats the templates; in MDX it formats the markup blocks. These commands work without enabling Format On Save.
+
+## Catch mistakes while typing
+
+The extension checks HTML structure in `html` and `svg` templates and standalone MDX markup blocks as you edit. Invalid structure appears as a **PureStack HTML** error in the editor. Expressions are masked during checking so the diagnostic points to the surrounding markup.
+
+Typing `>` after a normal opening HTML tag inserts its closing tag. Uppercase component tags and void HTML tags become self-closing. Typing `/` at the end of an opening component tag completes `/>`. With `editor.linkedEditing` enabled, editing an opening or closing tag name updates its partner in supported MDX markup and TypeScript templates.
+
+## If completion is missing
+
+Open a project folder rather than a loose file, and check **Output → PureStack Component Tools** for the TypeScript path or an activation message. Component resolution looks for `defineComponent` in workspace TypeScript files and for `regorComponents` metadata in dependency packages. Frontmatter suggestions additionally need the `PageFrontmatter` type source. Formatting on save applies only when `editor.formatOnSave` is enabled and the file is recognized as TypeScript or MDX.
