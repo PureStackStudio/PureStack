@@ -24,7 +24,7 @@ import { registerPanelStyles } from './standard/panel/panelStyle'
 import { registerSearchBoxStyles } from './standard/searchBox/searchBoxStyle'
 import { registerSignInStyles } from './standard/signIn/signInStyle'
 import { registerTabsStyles } from './standard/tabs/tabsStyle'
-import { registerThemeSwitcherStyles } from './standard/themeSwitcher/themeSwitcherStyle'
+import { registerThemeToggleStyles } from './standard/themeToggle/themeToggleStyle'
 import { registerTopBarStyles } from './standard/topBar/topBarStyle'
 import { registerVirtualListStyles } from './standard/virtualList/virtualListStyle'
 import { registerVirtualTableStyles } from './standard/virtualList/virtualTableStyle'
@@ -56,7 +56,7 @@ export function registerStyles() {
   registerSearchBoxStyles()
   registerSignInStyles()
   registerTabsStyles()
-  registerThemeSwitcherStyles()
+  registerThemeToggleStyles()
   registerTopBarStyles()
   registerVirtualListStyles()
   registerVirtualTableStyles()

@@ -22,7 +22,7 @@
 | Charts | BarChart, LineChart, DoughnutChart | Reactive data, presentation controls, empty data, accessible values, series/segment contracts |
 | Large data | VirtualList, VariableVirtualList, VirtualTable, VariableVirtualTable | Real scrolling, typed row components, fixed versus measured heights, table headers, empty states |
 | Interaction helpers | TabPane, ModalTrigger, ToastHost | Parent composition, keyboard interactions, actual dialogs, timed and persistent notifications |
-| Site integration | SiteLogo, SiteFooter, TopBar, NavMenu, NavList, PageLinks, PageToc, SearchBox, ThemeSwitcher, SignIn, Consent | Real site context, scoped previews where global runtime requires isolation, configuration and runtime prerequisites |
+| Site integration | SiteLogo, SiteFooter, TopBar, NavMenu, NavList, PageLinks, PageToc, SearchBox, ThemeToggle, SignIn, Consent | Real site context, scoped previews where global runtime requires isolation, configuration and runtime prerequisites |
 | Browser entry points | RegorApp, PageScript | Working local entry points, automatic relative source resolution, module loading and lifecycle boundaries |
 
 The existing Btn, BtnLink, BtnGroup, BtnGroupDropDown, Badge, Tabs and Modal guides remain the reference standard. NavItem and ModalStore are internal registered implementation components; document their contracts with NavList and Modal rather than presenting them as independent public markup APIs.

@@ -119,7 +119,7 @@
     "SiteLogo",
     "TabPane",
     "Tabs",
-    "ThemeSwitcher",
+    "ThemeToggle",
     "ToastHost",
     "TopBar",
     "VariableVirtualList",

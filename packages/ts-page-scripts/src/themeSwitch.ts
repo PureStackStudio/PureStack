@@ -18,9 +18,9 @@ const themes = Array.isArray(themeSwitchThemes)
 
 if (themes.length > 0) {
   const storageKey = 'ts-ssg-theme'
+  const toggleSelector = '[data-theme-toggle]'
   const root = document.documentElement
   let themeReady = false
-  let themeSwitchersReady = false
 
   function isValid(theme: string) {
     return themes.indexOf(theme) !== -1
@@ -57,11 +57,6 @@ if (themes.length > 0) {
   function afterNextFrame(run: () => void) {
     globalThis.requestAnimationFrame(run)
   }
-  function afterNextPaint(run: () => void) {
-    globalThis.requestAnimationFrame(() => {
-      globalThis.requestAnimationFrame(run)
-    })
-  }
   function getThemeLinks() {
     return Array.from(
       document.querySelectorAll<HTMLLinkElement>(
@@ -91,39 +86,29 @@ if (themes.length > 0) {
       link.addEventListener('error', finishLink, { once: true })
     }
   }
-  function markSwitchersReady() {
-    if (themeSwitchersReady) return
-    themeSwitchersReady = true
-    afterNextPaint(() => {
-      const switches = document.querySelectorAll('.theme-switcher')
-      for (let i = 0; i < switches.length; i += 1) {
-        switches[i].setAttribute('data-theme-switcher-ready', 'true')
-      }
-    })
-  }
-  function syncSwitchers(theme: string) {
-    const switches = document.querySelectorAll('.theme-switcher')
-    for (let i = 0; i < switches.length; i += 1) {
-      const el = switches[i]
-      el.setAttribute('data-theme', theme)
-      el.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false')
+  function syncToggles(theme: string) {
+    const toggles = document.querySelectorAll(toggleSelector)
+    for (let i = 0; i < toggles.length; i += 1) {
+      toggles[i].setAttribute(
+        'aria-pressed',
+        theme === 'dark' ? 'true' : 'false',
+      )
     }
   }
   function applyTheme(theme: string) {
     if (!isValid(theme)) return
     root.setAttribute('data-theme', theme)
-    syncSwitchers(theme)
-    markSwitchersReady()
+    syncToggles(theme)
   }
 
   let current = resolvePreferred()
   root.setAttribute('data-theme', current)
   waitForThemeStyles()
 
-  function bindSwitchers() {
-    const switches = document.querySelectorAll('.theme-switcher')
-    for (let i = 0; i < switches.length; i += 1) {
-      const el = switches[i]
+  function bindToggles() {
+    const toggles = document.querySelectorAll(toggleSelector)
+    for (let i = 0; i < toggles.length; i += 1) {
+      const el = toggles[i]
       if (el.getAttribute('data-ts-ssg-theme-bound') === 'true') continue
       el.setAttribute('data-ts-ssg-theme-bound', 'true')
       el.addEventListener('click', () => {
@@ -133,15 +118,15 @@ if (themes.length > 0) {
       })
     }
   }
-  function initSwitchers() {
-    bindSwitchers()
+  function initToggles() {
+    bindToggles()
     applyTheme(current)
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initSwitchers)
+    document.addEventListener('DOMContentLoaded', initToggles)
   } else {
-    initSwitchers()
+    initToggles()
   }
 
   globalThis.window.tsSsgTheme = {

@@ -64,7 +64,7 @@ const topBarTemplate = html`<input
       class="topbar__search flex-auto rounded-md tone-text-surface"
       variant="none"/>
     <Flex class="topbar__controls flex-none" align="center" justify="end">
-      <ThemeSwitcher/>
+      <ThemeToggle/>
       <SignIn
         r-if="signInEnabled"
         class="topbar__account"

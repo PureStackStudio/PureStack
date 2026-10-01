@@ -11,7 +11,7 @@ import { defineLogoComponents } from '../logo/logo'
 import { definePanelComponents } from '../panel/panel'
 import { defineSearchComponents } from '../searchBox/searchBox'
 import { defineSignInComponents } from '../signIn/signIn'
-import { defineThemeSwitcherComponents } from '../themeSwitcher/themeSwitcher'
+import { defineThemeToggleComponents } from '../themeToggle/themeToggle'
 import { defineTopBarComponents } from '../topBar/topBar'
 
 describe('TopBar rendering', () => {
@@ -97,7 +97,7 @@ describe('TopBar rendering', () => {
       ...definePanelComponents(),
       ...defineSearchComponents(),
       ...defineSignInComponents(),
-      ...defineThemeSwitcherComponents(),
+      ...defineThemeToggleComponents(),
       ...defineTopBarComponents(),
     }
     const html = renderApp(`<TopBar signInEnabled="true"/>`, {

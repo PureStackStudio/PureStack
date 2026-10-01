@@ -33,7 +33,7 @@ import { defineSearchComponents } from './standard/searchBox/searchBox'
 import { defineSectionHeaderComponents } from './standard/sectionHeader/sectionHeader'
 import { defineSignInComponents } from './standard/signIn/signIn'
 import { defineTabsComponents } from './standard/tabs/tabs'
-import { defineThemeSwitcherComponents } from './standard/themeSwitcher/themeSwitcher'
+import { defineThemeToggleComponents } from './standard/themeToggle/themeToggle'
 import { defineToastComponents } from './standard/toast/toastHost'
 import { defineTopBarComponents } from './standard/topBar/topBar'
 import { defineVariableVirtualTableComponents } from './standard/virtualList/variableVirtualTable'
@@ -68,7 +68,7 @@ export function defineComponents(getSvgIcon: GetSvgIcon) {
     ...defineClassicLogoComponents(),
     ...defineModalComponents(),
     ...defineTopBarComponents(),
-    ...defineThemeSwitcherComponents(),
+    ...defineThemeToggleComponents(),
     ...defineToastComponents(),
     ...defineVirtualListComponents(),
     ...defineVirtualTableComponents(),

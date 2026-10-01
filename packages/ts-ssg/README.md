@@ -337,7 +337,7 @@ Built-in component sets are initialized automatically each build:
 - pricing: `pricingTable`, `pricingPlan`, `pricingFeature`
 - search: `searchBox`
 - tabs: `tabs`, `tabPane`
-- theme switcher: `themeSwitcher`
+- theme toggle: `themeToggle`
 
 Important rendering constraint: Regor components are rendered statically. Component state/events are not runtime-hydrated.
 
