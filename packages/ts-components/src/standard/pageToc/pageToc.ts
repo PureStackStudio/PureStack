@@ -16,7 +16,7 @@ export interface PageTocItem extends PageOutlineItem {
 }
 
 const pageTocTemplate = html`<nav
-  class="page-toc tone-fill-surface tone-border-surface tone-text-surface"
+  class="page-toc tone-fill-flat tone-border-surface tone-text-surface"
   :class="toneClass"
   aria-label="On this page"
 >

@@ -80,7 +80,7 @@ const navListTemplate = html`<ul class="nav__list">
 </ul>`
 
 const navMenuTemplate = html`<nav
-  class="nav__menu tone-fill-surface tone-border-surface tone-text-surface tone--neutral"
+  class="nav__menu tone-fill-flat tone-border-surface tone-text-surface tone--neutral"
   :class="toneClass"
   :data-nav-root="navRoot"
   aria-label="Site navigation"
@@ -126,7 +126,9 @@ const navMenuTemplate = html`<nav
   </div>
   <NavList :items="items"></NavList>
   <SearchBox r-if="searchEnabled" class="nav__search mt-1"/>
-  <script>window.tsSsgNavMenu?.hydrate(document.currentScript?.parentElement)</script>
+  <script>
+    window.tsSsgNavMenu?.hydrate(document.currentScript?.parentElement)
+  </script>
 </nav>`
 
 function resolveNavItems(context?: TsSsgContext): NavItem[] {
