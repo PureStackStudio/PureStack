@@ -56,7 +56,7 @@ const topBarTemplate = html`<input
   type="checkbox"
   autocomplete="off"
   aria-hidden="true"/>
-<header class="topbar" :class="classes">
+<header class="topbar" :class="classes" r-inherit>
   <Flex align="center">
     <div :is="resolvedLogoComponent" class="flex-none" :config="siteLogo"></div>
     <SearchBox
@@ -83,6 +83,7 @@ const topBarTemplate = html`<input
 function defineTopBarComponent() {
   return defineComponent<TopBar>(topBarTemplate, {
     props: [
+      'class',
       'logoComponent',
       'tone',
       'variant',
