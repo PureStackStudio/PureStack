@@ -1,0 +1,137 @@
+---
+title: Plans
+description: An example plan comparison page for the Waypoint starter.
+template: doc
+layout:
+  fullWidth: false
+  showToc: true
+  tocDepth: 2
+nav:
+  order: 4
+  icon: lucide:badge-check
+---
+
+<SectionHeader
+  eyebrow="Example plans page"
+  title="A plan for every stage of teamwork."
+  subtitle="This page demonstrates a clear plan comparison. The names, prices, and entitlements below are illustrative and must be replaced before publishing a real offer."
+  titleTag="h1"
+  eyebrowClass="tone-text fs-xxxs fw-800"
+  titleClass="fs-display"/>
+
+<PricingTable
+  tone="neutral"
+  variant="none"
+  columnsLg="3"
+  columnsXl="3"
+  class="p-0 mt-6 mb-6 box-shadow-none tone-text-surface"
+  eyebrow="Waypoint plans"
+  title="Choose the shape of your workspace."
+  subtitle="The cards show how to explain increasing value without burying the choice in a feature matrix."
+  footnote="Example content only. No purchase or subscription is available on this starter."
+>
+  <PricingPlan
+    title="Start"
+    summary="For a small team finding its rhythm."
+    price="Free"
+    period="example plan"
+    icon="lucide:compass"
+    tone="neutral"
+    variant="flat"
+    class="w-full rounded-lg p-5"
+    ctaLabel="See the workspace"
+    ctaLink="/workspace/"
+  >
+    <PricingFeature icon="lucide:check">One shared initiative</PricingFeature>
+    <PricingFeature icon="lucide:check">Milestones and owners</PricingFeature>
+    <PricingFeature icon="lucide:check">Weekly updates</PricingFeature>
+  </PricingPlan>
+  <PricingPlan
+    title="Grow"
+    summary="For several teams moving together."
+    price="$12"
+    period="per person / month"
+    icon="lucide:users-round"
+    badge="Example favorite"
+    tone="success"
+    variant="spotlight"
+    class="theme--dark w-full rounded-lg p-5"
+    ctaLabel="Explore the platform"
+    ctaLink="/platform/"
+  >
+    <PricingFeature icon="lucide:check"
+      >Unlimited example initiatives</PricingFeature
+    >
+    <PricingFeature icon="lucide:check">Decision records</PricingFeature>
+    <PricingFeature icon="lucide:check">Project health views</PricingFeature>
+  </PricingPlan>
+  <PricingPlan
+    title="Scale"
+    summary="For organizations working at scale."
+    price="Custom"
+    period="example plan"
+    icon="lucide:building-2"
+    tone="neutral"
+    variant="flat"
+    class="w-full rounded-lg p-5"
+    ctaLabel="View the form pattern"
+    ctaLink="/contact/"
+  >
+    <PricingFeature icon="lucide:check"
+      >Cross-team portfolio view</PricingFeature
+    >
+    <PricingFeature icon="lucide:check">Workspace governance</PricingFeature>
+    <PricingFeature icon="lucide:check">Guided onboarding</PricingFeature>
+  </PricingPlan>
+</PricingTable>
+
+## Questions a pricing page should answer
+
+<Flex direction="column" class="gap-3 mb-6">
+  <ExpandablePanel
+    title="Can a team change plans later?"
+    description="Explain the upgrade path in direct language."
+    icon="lucide:arrow-right"
+    tone="secondary"
+    variant="flat"
+    summaryVariant="flat"
+    open="true"
+  >
+    <p class="text-subtle mb-0">
+      In a real product, state when a plan change takes effect, how billing is
+      adjusted, and what happens to existing data. This starter leaves those
+      business rules to you.
+    </p>
+  </ExpandablePanel>
+  <ExpandablePanel
+    title="What counts as a person?"
+    description="Define the unit behind per-person pricing."
+    icon="lucide:users-round"
+    tone="secondary"
+    variant="flat"
+    summaryVariant="flat"
+  >
+    <p class="text-subtle mb-0">
+      Specify whether guests, viewers, and suspended members are billed. Link to
+      the same definition from checkout and account settings.
+    </p>
+  </ExpandablePanel>
+  <ExpandablePanel
+    title="What is included in support?"
+    description="Set expectations before a customer needs help."
+    icon="lucide:circle-question-mark"
+    tone="secondary"
+    variant="flat"
+    summaryVariant="flat"
+  >
+    <p class="text-subtle mb-0">
+      Describe channels, hours, response targets, and any onboarding services in
+      your actual offer.
+    </p>
+  </ExpandablePanel>
+</Flex>
+
+<AlertBox title="Before launch" tone="info" variant="rail">
+  Replace every illustrative amount and entitlement. Connect the calls to action
+  to a working sales or checkout flow and publish your real terms.
+</AlertBox>

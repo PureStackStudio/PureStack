@@ -16,28 +16,53 @@ nav:
   title="Autumn launch, all in one view."
   subtitle="This is static example data. Use the page as a dashboard pattern, then connect your own data and actions."
   titleTag="h1"
+  eyebrowClass="tone-text fs-xxxs fw-800"
   titleClass="fs-display"
 >
   <Flex wrap="true" class="gap-2">
-    <Badge tone="success">On track</Badge>
-    <Badge tone="neutral">Marketing + product</Badge>
-    <Badge tone="info">Updated this week</Badge>
+    <Badge tone="success" class="rounded-pill">On track</Badge>
+    <Badge tone="neutral" class="rounded-pill">Marketing + product</Badge>
+    <Badge tone="info" class="rounded-pill">Updated this week</Badge>
   </Flex>
 </SectionHeader>
 
-<MetricStrip tone="neutral" variant="surface" columnsSm="2" columnsLg="4" class="mb-6">
-  <MetricItem label="Milestones complete" value="4 / 5" detail="One final review" icon="lucide:flag" tone="accent"/>
-  <MetricItem label="Open decisions" value="2" detail="Both have owners" icon="lucide:git-branch" tone="warning"/>
-  <MetricItem label="Tasks ready" value="12" detail="Across three teams" icon="lucide:circle-check" tone="success"/>
-  <MetricItem label="Next review" value="Friday" detail="Weekly project check-in" icon="lucide:calendar-days" tone="info"/>
-</MetricStrip>
+<Grid columns="1" columnsSm="2" columnsLg="4" class="gap-4 mt-6 mb-6">
+  <Panel tone="neutral" variant="flat" class="rounded-lg p-5">
+    <Flex direction="column" class="gap-2">
+      <Flex align="center" justify="between"><span class="text-eyebrow fs-xxxs fw-800 mb-0">Milestones</span><IconFrame name="lucide:flag" tone="accent" size="sm"/></Flex>
+      <strong class="fs-h1">4 / 5</strong>
+      <span class="text-subtle fs-xxs mb-0">One final review</span>
+    </Flex>
+  </Panel>
+  <Panel tone="neutral" variant="flat" class="rounded-lg p-5">
+    <Flex direction="column" class="gap-2">
+      <Flex align="center" justify="between"><span class="text-eyebrow fs-xxxs fw-800 mb-0">Decisions</span><IconFrame name="lucide:git-branch" tone="warning" size="sm"/></Flex>
+      <strong class="fs-h1">2</strong>
+      <span class="text-subtle fs-xxs mb-0">Both have owners</span>
+    </Flex>
+  </Panel>
+  <Panel tone="neutral" variant="flat" class="rounded-lg p-5">
+    <Flex direction="column" class="gap-2">
+      <Flex align="center" justify="between"><span class="text-eyebrow fs-xxxs fw-800 mb-0">Tasks ready</span><IconFrame name="lucide:circle-check" tone="success" size="sm"/></Flex>
+      <strong class="fs-h1">12</strong>
+      <span class="text-subtle fs-xxs mb-0">Across three teams</span>
+    </Flex>
+  </Panel>
+  <Panel tone="neutral" variant="flat" class="rounded-lg p-5">
+    <Flex direction="column" class="gap-2">
+      <Flex align="center" justify="between"><span class="text-eyebrow fs-xxxs fw-800 mb-0">Next review</span><IconFrame name="lucide:calendar-days" tone="info" size="sm"/></Flex>
+      <strong class="fs-h1">Friday</strong>
+      <span class="text-subtle fs-xxs mb-0">Weekly project check-in</span>
+    </Flex>
+  </Panel>
+</Grid>
 
 ## Progress at a glance
 
-<Grid columns="1" columnsLg="2" alignItems="stretch">
-  <Panel tone="neutral" variant="surfaceAlt">
-    <h3>Milestones completed</h3>
-    <p>Example values across the first six weeks of the launch project.</p>
+<Grid columns="1" columnsLg="2" class="gap-4 mb-6">
+  <Panel tone="neutral" variant="flat" class="rounded-lg p-5">
+    <h3 class="m-0">Milestones completed</h3>
+    <p class="text-subtle fs-xxs mt-1 mb-4">Example values across the first six weeks of the launch project.</p>
     <LineChart
       title="Milestone progress"
       description="Cumulative completed milestones rose from zero to four over six weeks."
@@ -48,25 +73,25 @@ nav:
         { label: 'W5', value: 3 }, { label: 'W6', value: 4 }
       ] }]"/>
   </Panel>
-  <Panel tone="neutral" variant="surfaceAlt">
-    <h3>Work by team</h3>
-    <p>Tasks currently ready for delivery, grouped by owner team.</p>
+  <Panel tone="neutral" variant="flat" class="rounded-lg p-5">
+    <h3 class="m-0">Work by team</h3>
+    <p class="text-subtle fs-xxs mt-1 mb-4">Tasks currently ready for delivery, grouped by owner team.</p>
     <BarChart
       title="Ready tasks by team"
       description="Product has five ready tasks, design four, and marketing three."
       :items="[
-        { label: 'Product', value: 5 },
-        { label: 'Design', value: 4 },
-        { label: 'Marketing', value: 3 }
+        { label: 'Product', value: 5, color: 'var(--ps-semantic-tone-accent-button-hover-bgcolor)' },
+        { label: 'Design', value: 4, color: 'var(--ps-semantic-tone-accent-button-hover-bgcolor)' },
+        { label: 'Marketing', value: 3, color: 'var(--ps-semantic-tone-accent-button-hover-bgcolor)' }
       ]"/>
   </Panel>
 </Grid>
 
 ## What needs attention
 
-<Grid columns="1" columnsLg="minmax(0, 1.1fr) minmax(18rem, 0.9fr)" alignItems="start">
+<Grid columns="1" columnsLg="minmax(0, 1.1fr) minmax(18rem, 0.9fr)" alignItems="start" class="gap-4 mb-6">
   <Flex direction="column" class="gap-3">
-    <AlertBox title="Decision due" tone="warning" badge="Owner assigned">
+    <AlertBox title="Decision due" tone="warning" variant="rail" badge="Owner assigned">
       Maya will confirm the release date after the accessibility review closes.
     </AlertBox>
     <ExpandablePanel
@@ -75,9 +100,11 @@ nav:
       icon="lucide:users-round"
       badge="Ready for review"
       tone="neutral"
+      variant="flat"
+      summaryVariant="flat"
       open="true"
     >
-      <p>The welcome flow and help center draft are complete. The next step is a final content review and a named owner for launch day support.</p>
+      <p class="text-subtle mb-0">The welcome flow and help center draft are complete. The next step is a final content review and a named owner for launch day support.</p>
     </ExpandablePanel>
     <ExpandablePanel
       title="Launch communications"
@@ -85,15 +112,17 @@ nav:
       icon="lucide:megaphone"
       badge="In progress"
       tone="neutral"
+      variant="flat"
+      summaryVariant="flat"
     >
-      <p>Marketing has a working draft. Product will confirm the release date before the final send schedule is set.</p>
+      <p class="text-subtle mb-0">Marketing has a working draft. Product will confirm the release date before the final send schedule is set.</p>
     </ExpandablePanel>
   </Flex>
-  <Panel tone="accent" variant="surfaceAlt">
-    <p class="text-eyebrow">Next team review</p>
-    <h3>Friday, 10:00</h3>
-    <p>Review the remaining milestone, decide the release date, and agree on the customer update.</p>
-    <ModalTrigger target="review-agenda" label="View review agenda" tone="accent"/>
+  <Panel tone="accent" variant="flat" class="theme--dark rounded-lg p-5">
+    <span class="text-eyebrow tone-text fs-xxxs fw-800">Next team review</span>
+    <h3 class="fs-h2 mt-2 mb-2">Friday, 10:00</h3>
+    <p class="opacity-75 mb-5">Review the remaining milestone, decide the release date, and agree on the customer update.</p>
+    <Flex><ModalTrigger target="review-agenda" label="View review agenda" tone="accent"/></Flex>
   </Panel>
 </Grid>
 
@@ -106,14 +135,18 @@ nav:
   <p class="fs-sm">This dialog is an interaction example. It does not schedule a meeting.</p>
 </Modal>
 
-<CtaSection
-  tone="accent"
-  eyebrow="Build your own view"
-  title="Replace the example with your real project."
-  subtitle="The data lives in this page today. The guide shows which components carry the dashboard and how to swap in your own content."
-  primaryLabel="Read the data guide"
-  primaryHref="/guide/data/"
-  primaryIcon="lucide:arrow-right"
-  secondaryLabel="Explore interactions"
-  secondaryHref="/guide/interactions/"
-  secondaryIcon="lucide:layers"/>
+<Panel tone="accent" variant="spotlight" class="theme--dark rounded-lg p-6">
+  <Grid columns="1" columnsLg="minmax(0, 1fr) auto" alignItems="center" class="gap-5">
+    <SectionHeader
+      eyebrow="Build your own view"
+      title="Replace the example with your real project."
+      subtitle="The data lives in this page today. The guide shows which components carry the dashboard and how to swap in your own content."
+      eyebrowClass="tone-text fs-xxxs fw-800"
+      titleClass="fs-h2"
+      subtitleClass="tone-text-surface-alt opacity-75 mb-0"/>
+    <Flex wrap="true" class="gap-3">
+      <BtnLink href="/guide/data/" tone="accent" icon="lucide:arrow-right" iconPosition="end" class="px-5 py-3 gap-4 fw-700 box-shadow-accent lift-1-hover">Read the data guide</BtnLink>
+      <BtnLink href="/guide/interactions/" variant="glass" icon="lucide:layers" class="px-5 py-3 gap-3 fw-700 lift-1-hover">Explore interactions</BtnLink>
+    </Flex>
+  </Grid>
+</Panel>
