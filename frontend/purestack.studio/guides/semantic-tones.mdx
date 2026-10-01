@@ -131,6 +131,28 @@ The skin sets the field and the light color; the page decides where the light fa
 </Panel>
 ```
 
+Cards placed on a spotlight should not repeat its field. `tone-fill-glass` lets the field show through, lifted by a faint veil and lit by the same light, so a card reads as a lighter pane rather than a second color. The light follows the nearest `spotlight-from-*`, so cards and their spotlight are lit from the same side. Components accept it as `variant="glass"`. A different tone on a glass card tints it without breaking the field:
+
+<div class="tone--accent tone-fill-spotlight tone-border-surface-alt tone-text-surface-alt b-1 rounded-lg p-3 spotlight-from-top-right">
+  <Grid columns="1" columnsSm="2" class="gap-3">
+    <div class="tone-fill-glass tone-border-surface-alt b-1 rounded-md p-3">
+      <span class="text-eyebrow">Next review</span>
+      <strong class="d-block">Friday</strong>
+    </div>
+    <div class="tone--secondary tone-fill-glass tone-border-surface-alt tone-text-surface-alt b-1 rounded-md p-3">
+      <span class="text-eyebrow">Open decision</span>
+      <strong class="d-block">Release date</strong>
+    </div>
+  </Grid>
+</div>
+
+```mdx
+<Panel tone="accent" variant="spotlight" class="spotlight-from-top-right">
+  <Panel variant="glass">Next review</Panel>
+  <Panel tone="secondary" variant="glass">Open decision</Panel>
+</Panel>
+```
+
 ## Tone-colored text and clipped fills
 
 Use `tone-text` for the selected tone color. Use `tone-text-bg-button` when you want the button role's background treatment clipped into text. Both examples keep a neutral surrounding surface; the tone changes only for the label:

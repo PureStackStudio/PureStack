@@ -38,6 +38,14 @@ export function createPresets(
   createInset(current, styleBuilder, theme)
 }
 
+function spotlightLight(current: ThemePaletteCurrent, reach: string) {
+  return `radial-gradient(circle at var(${SPOTLIGHT_FROM_VAR}, ${SPOTLIGHT_FROM['top-left']}), ${current.spotlight.light} 0%, transparent ${reach})`
+}
+
+function glassVeil(current: ThemePaletteCurrent) {
+  return `color-mix(in srgb, ${current.spotlight.light} 45%, transparent)`
+}
+
 function createSpotlightOrigins(styleBuilder: StyleBuilder, theme: string) {
   for (const [name, position] of Object.entries(SPOTLIGHT_FROM)) {
     styleBuilder
@@ -186,7 +194,14 @@ function createFills(
     },
     'tone-fill-spotlight': {
       rest: {
-        background: `radial-gradient(circle at var(${SPOTLIGHT_FROM_VAR}, ${SPOTLIGHT_FROM['top-left']}), ${current.spotlight.light} 0%, transparent 46%), ${current.spotlight.field}`,
+        background: `${spotlightLight(current, '46%')}, ${current.spotlight.field}`,
+      },
+    },
+    // Glass lets the field behind show through, lifted by a veil and lit by
+    // the same light, so cards sit on a spotlight without a second color.
+    'tone-fill-glass': {
+      rest: {
+        background: `${spotlightLight(current, '75%')}, linear-gradient(${glassVeil(current)}, ${glassVeil(current)})`,
       },
     },
     'tone-fill-surface': {
