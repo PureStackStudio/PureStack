@@ -8,6 +8,9 @@ export type ComponentVariant =
   | 'surfaceAlt'
   | 'spotlight'
   | 'glass'
+  | 'flat'
+  | 'flatAlt'
+  | 'flatSolid'
   | 'outlineFill'
   | 'outline'
   | 'subtle'
@@ -46,6 +49,11 @@ const STATELESS_COMPONENT_VARIANT_CLASSES: Record<ComponentVariant, string> = {
     'b-1 rounded-md tone-fill-spotlight tone-border-surface-alt tone-text-surface-alt',
   glass:
     'b-1 rounded-md tone-fill-glass tone-border-surface-alt tone-text-surface-alt',
+  flat: 'b-1 rounded-md tone-fill-surface-flat tone-border-surface tone-text-surface',
+  flatAlt:
+    'b-1 rounded-md tone-fill-surface-alt-flat tone-border-surface-alt tone-text-surface-alt',
+  flatSolid:
+    'b-1 rounded-md tone-fill-button-flat tone-border-button tone-text-button',
   outlineFill: 'b-2 rounded-md tone-border-button tone-text',
   outline: 'b-2 rounded-md tone-text',
   subtle: 'b-0 rounded-md tone-text',
@@ -58,6 +66,11 @@ const STATELESS_COMPONENT_VARIANT_CLASSES: Record<ComponentVariant, string> = {
 }
 
 const STATEFUL_COMPONENT_VARIANT_CLASSES = {
+  flat: 'tone-fill-surface-flat-hover tone-fill-surface-flat-active tone-border-surface-hover tone-border-surface-active tone-text-surface-hover tone-text-surface-active',
+  flatAlt:
+    'tone-fill-surface-alt-flat-hover tone-fill-surface-alt-flat-active tone-border-surface-alt-hover tone-border-surface-alt-active tone-text-surface-alt-hover tone-text-surface-alt-active',
+  flatSolid:
+    'tone-fill-button-flat-hover tone-fill-button-flat-active tone-border-button-hover tone-border-button-active tone-text-button-hover tone-text-button-active',
   solid:
     'tone-fill-button-hover tone-fill-button-active tone-border-button-hover tone-border-button-active tone-text-button-hover tone-text-button-active',
   surface:

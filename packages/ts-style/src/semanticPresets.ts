@@ -42,6 +42,16 @@ function spotlightLight(current: ThemePaletteCurrent, reach: string) {
   return `radial-gradient(circle at var(${SPOTLIGHT_FROM_VAR}, ${SPOTLIGHT_FROM['top-left']}), ${current.spotlight.light} 0%, transparent ${reach})`
 }
 
+function flatFill(role: ThemePaletteCurrent['surface']): States {
+  return {
+    all: true,
+    rest: { background: role.rest.bgcolor },
+    hover: { background: role.hover.bgcolor },
+    active: { background: role.active.bgcolor },
+    disabled: { background: role.disabled.bgcolor },
+  }
+}
+
 function glass(current: ThemePaletteCurrent) {
   const veil = `color-mix(in srgb, ${current.spotlight.light} 45%, transparent)`
   return `${spotlightLight(current, '75%')}, linear-gradient(${veil}, ${veil})`
@@ -204,6 +214,11 @@ function createFills(
       rest: { background: glass(current) },
       hover: { background: glass(current) },
     },
+    // Flat fills paint each role's single color, without the gradient
+    // chrome, for the many quiet surfaces around a few spotlights.
+    'tone-fill-surface-flat': flatFill(current.surface),
+    'tone-fill-surface-alt-flat': flatFill(current.surfaceAlt),
+    'tone-fill-button-flat': flatFill(current.button),
     'tone-fill-surface': {
       all: true,
       rest: {
