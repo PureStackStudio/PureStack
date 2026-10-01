@@ -1,6 +1,6 @@
 ---
 title: Badge
-description: Compact status and metadata with semantic tones, thirteen visual treatments, inline composition, and reactive release status examples.
+description: Compact status and metadata with semantic tones, several visual treatments, inline composition, and reactive release status examples.
 template: doc
 layout:
   showNav: true
@@ -92,6 +92,11 @@ function createBadgePlayground(): BadgePlayground {
       'solid',
       'surface',
       'surfaceAlt',
+      'spotlight',
+      'glass',
+      'flat',
+      'flatAlt',
+      'flatSolid',
       'outlineFill',
       'outline',
       'subtle',
@@ -185,7 +190,7 @@ Use tone to reinforce the meaning already expressed by the label. “Passing”,
 
 ## Variants
 
-Badge accepts all thirteen shared variants and defaults to `surface`. Its variants use stateless styling: they do not add the hover and active behavior used by buttons. Interaction-oriented treatments may therefore look similar on a badge.
+Badge accepts every shared variant and defaults to `surface`. Its variants use stateless styling: they do not add the hover and active behavior used by buttons. Interaction-oriented treatments may therefore look similar on a badge.
 
 <Tabs
   group="badge-variants-example"
@@ -200,6 +205,11 @@ Badge accepts all thirteen shared variants and defaults to `surface`. Its varian
       <Badge tone="accent" variant="solid">solid</Badge>
       <Badge tone="accent" variant="surface">surface</Badge>
       <Badge tone="accent" variant="surfaceAlt">surfaceAlt</Badge>
+      <Badge tone="accent" variant="spotlight">spotlight</Badge>
+      <Badge tone="accent" variant="glass">glass</Badge>
+      <Badge tone="accent" variant="flat">flat</Badge>
+      <Badge tone="accent" variant="flatAlt">flatAlt</Badge>
+      <Badge tone="accent" variant="flatSolid">flatSolid</Badge>
       <Badge tone="accent" variant="outlineFill">outlineFill</Badge>
       <Badge tone="accent" variant="outline">outline</Badge>
       <Badge tone="accent" variant="subtle">subtle</Badge>
@@ -218,6 +228,11 @@ Badge accepts all thirteen shared variants and defaults to `surface`. Its varian
   <Badge tone="accent" variant="solid">solid</Badge>
   <Badge tone="accent" variant="surface">surface</Badge>
   <Badge tone="accent" variant="surfaceAlt">surfaceAlt</Badge>
+  <Badge tone="accent" variant="spotlight">spotlight</Badge>
+  <Badge tone="accent" variant="glass">glass</Badge>
+  <Badge tone="accent" variant="flat">flat</Badge>
+  <Badge tone="accent" variant="flatAlt">flatAlt</Badge>
+  <Badge tone="accent" variant="flatSolid">flatSolid</Badge>
   <Badge tone="accent" variant="outlineFill">outlineFill</Badge>
   <Badge tone="accent" variant="outline">outline</Badge>
   <Badge tone="accent" variant="subtle">subtle</Badge>
@@ -458,7 +473,7 @@ Both props accept values or Regor refs. Register `defineBadgeComponents()` when 
 
 <ApiProperty anchor="badge-prop-variant" name="variant" valueType="ComponentVariant" defaultValue="surface">
   <p>Sets the visual treatment using the stateless form of the shared variants. A variant changes appearance; it never turns the badge into a link or a button.</p>
-  <div class="api-values"><code>solid</code><code>surface</code><code>surfaceAlt</code><code>outlineFill</code><code>outline</code><code>subtle</code><code>subtleBtn</code><code>link</code><code>sheen</code><code>underline</code><code>rail</code><code>bracket</code><code>none</code></div>
+  <div class="api-values"><code>solid</code><code>surface</code><code>surfaceAlt</code><code>spotlight</code><code>glass</code><code>flat</code><code>flatAlt</code><code>flatSolid</code><code>outlineFill</code><code>outline</code><code>subtle</code><code>subtleBtn</code><code>link</code><code>sheen</code><code>underline</code><code>rail</code><code>bracket</code><code>none</code></div>
   <div class="api-demo"><Badge tone="accent" variant="solid">Solid</Badge><Badge tone="accent">Surface</Badge><Badge tone="accent" variant="outline">Outline</Badge><Badge tone="accent" variant="subtle">Subtle</Badge></div>
 ```html
 <Badge tone="accent" variant="solid">Featured</Badge>

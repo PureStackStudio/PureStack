@@ -21,7 +21,7 @@ A clear next step. Theme-aware actions with native button semantics, expressive 
 
 ## Playground
 
-Explore all thirteen variants and ten semantic tones. Change the size, move the icon, or try the disabled state. The source tabs contain the complete playground: controls, reactive state, icon registration, and application mount.
+Explore every variant and all ten semantic tones. Change the size, move the icon, or try the disabled state. The source tabs contain the complete playground: controls, reactive state, icon registration, and application mount.
 
 <Tabs
   group="button-playground-example"
@@ -96,6 +96,11 @@ const variants: ComponentVariant[] = [
   'solid',
   'surface',
   'surfaceAlt',
+  'spotlight',
+  'glass',
+  'flat',
+  'flatAlt',
+  'flatSolid',
   'outlineFill',
   'outline',
   'subtle',
@@ -280,116 +285,48 @@ Choose the visual treatment independently from the tone. Filled variants suit pr
   tabVariant="underline"
 >
   <TabPane id="button-variants-preview" label="Preview">
-    <Grid columns="2" columnsSm="3">
-      <Flex direction="column" align="center">
-        <Btn tone="accent" variant="solid">solid</Btn>
-        <code>solid</code>
-      </Flex>
-      <Flex direction="column" align="center">
-        <Btn tone="accent" variant="surface">surface</Btn>
-        <code>surface</code>
-      </Flex>
-      <Flex direction="column" align="center">
-        <Btn tone="accent" variant="surfaceAlt">surfaceAlt</Btn>
-        <code>surfaceAlt</code>
-      </Flex>
-      <Flex direction="column" align="center">
-        <Btn tone="accent" variant="outlineFill">outlineFill</Btn>
-        <code>outlineFill</code>
-      </Flex>
-      <Flex direction="column" align="center">
-        <Btn tone="accent" variant="outline">outline</Btn>
-        <code>outline</code>
-      </Flex>
-      <Flex direction="column" align="center">
-        <Btn tone="accent" variant="subtle">subtle</Btn>
-        <code>subtle</code>
-      </Flex>
-      <Flex direction="column" align="center">
-        <Btn tone="accent" variant="subtleBtn">subtleBtn</Btn>
-        <code>subtleBtn</code>
-      </Flex>
-      <Flex direction="column" align="center">
-        <Btn tone="accent" variant="link">link</Btn>
-        <code>link</code>
-      </Flex>
-      <Flex direction="column" align="center">
-        <Btn tone="accent" variant="sheen">sheen</Btn>
-        <code>sheen</code>
-      </Flex>
-      <Flex direction="column" align="center">
-        <Btn tone="accent" variant="underline">underline</Btn>
-        <code>underline</code>
-      </Flex>
-      <Flex direction="column" align="center">
-        <Btn tone="accent" variant="rail">rail</Btn>
-        <code>rail</code>
-      </Flex>
-      <Flex direction="column" align="center">
-        <Btn tone="accent" variant="bracket">bracket</Btn>
-        <code>bracket</code>
-      </Flex>
-      <Flex direction="column" align="center">
-        <Btn tone="accent" variant="none">none</Btn>
-        <code>none</code>
-      </Flex>
+    <Grid columns="2" columnsSm="3" alignItems="center" justifyItems="center" class="gap-4">
+      <Btn tone="accent" variant="solid">solid</Btn>
+      <Btn tone="accent" variant="surface">surface</Btn>
+      <Btn tone="accent" variant="surfaceAlt">surfaceAlt</Btn>
+      <Btn tone="accent" variant="spotlight">spotlight</Btn>
+      <Btn tone="accent" variant="glass">glass</Btn>
+      <Btn tone="accent" variant="flat">flat</Btn>
+      <Btn tone="accent" variant="flatAlt">flatAlt</Btn>
+      <Btn tone="accent" variant="flatSolid">flatSolid</Btn>
+      <Btn tone="accent" variant="outlineFill">outlineFill</Btn>
+      <Btn tone="accent" variant="outline">outline</Btn>
+      <Btn tone="accent" variant="subtle">subtle</Btn>
+      <Btn tone="accent" variant="subtleBtn">subtleBtn</Btn>
+      <Btn tone="accent" variant="link">link</Btn>
+      <Btn tone="accent" variant="sheen">sheen</Btn>
+      <Btn tone="accent" variant="underline">underline</Btn>
+      <Btn tone="accent" variant="rail">rail</Btn>
+      <Btn tone="accent" variant="bracket">bracket</Btn>
+      <Btn tone="accent" variant="none">none</Btn>
     </Grid>
   </TabPane>
   <TabPane id="button-variants-source" label="variants.mdx">
 ```html
-<Grid columns="2" columnsSm="3">
-  <Flex direction="column" align="center">
-    <Btn tone="accent" variant="solid">solid</Btn>
-    <code>solid</code>
-  </Flex>
-  <Flex direction="column" align="center">
-    <Btn tone="accent" variant="surface">surface</Btn>
-    <code>surface</code>
-  </Flex>
-  <Flex direction="column" align="center">
-    <Btn tone="accent" variant="surfaceAlt">surfaceAlt</Btn>
-    <code>surfaceAlt</code>
-  </Flex>
-  <Flex direction="column" align="center">
-    <Btn tone="accent" variant="outlineFill">outlineFill</Btn>
-    <code>outlineFill</code>
-  </Flex>
-  <Flex direction="column" align="center">
-    <Btn tone="accent" variant="outline">outline</Btn>
-    <code>outline</code>
-  </Flex>
-  <Flex direction="column" align="center">
-    <Btn tone="accent" variant="subtle">subtle</Btn>
-    <code>subtle</code>
-  </Flex>
-  <Flex direction="column" align="center">
-    <Btn tone="accent" variant="subtleBtn">subtleBtn</Btn>
-    <code>subtleBtn</code>
-  </Flex>
-  <Flex direction="column" align="center">
-    <Btn tone="accent" variant="link">link</Btn>
-    <code>link</code>
-  </Flex>
-  <Flex direction="column" align="center">
-    <Btn tone="accent" variant="sheen">sheen</Btn>
-    <code>sheen</code>
-  </Flex>
-  <Flex direction="column" align="center">
-    <Btn tone="accent" variant="underline">underline</Btn>
-    <code>underline</code>
-  </Flex>
-  <Flex direction="column" align="center">
-    <Btn tone="accent" variant="rail">rail</Btn>
-    <code>rail</code>
-  </Flex>
-  <Flex direction="column" align="center">
-    <Btn tone="accent" variant="bracket">bracket</Btn>
-    <code>bracket</code>
-  </Flex>
-  <Flex direction="column" align="center">
-    <Btn tone="accent" variant="none">none</Btn>
-    <code>none</code>
-  </Flex>
+<Grid columns="2" columnsSm="3" alignItems="center" justifyItems="center" class="gap-4">
+  <Btn tone="accent" variant="solid">solid</Btn>
+  <Btn tone="accent" variant="surface">surface</Btn>
+  <Btn tone="accent" variant="surfaceAlt">surfaceAlt</Btn>
+  <Btn tone="accent" variant="spotlight">spotlight</Btn>
+  <Btn tone="accent" variant="glass">glass</Btn>
+  <Btn tone="accent" variant="flat">flat</Btn>
+  <Btn tone="accent" variant="flatAlt">flatAlt</Btn>
+  <Btn tone="accent" variant="flatSolid">flatSolid</Btn>
+  <Btn tone="accent" variant="outlineFill">outlineFill</Btn>
+  <Btn tone="accent" variant="outline">outline</Btn>
+  <Btn tone="accent" variant="subtle">subtle</Btn>
+  <Btn tone="accent" variant="subtleBtn">subtleBtn</Btn>
+  <Btn tone="accent" variant="link">link</Btn>
+  <Btn tone="accent" variant="sheen">sheen</Btn>
+  <Btn tone="accent" variant="underline">underline</Btn>
+  <Btn tone="accent" variant="rail">rail</Btn>
+  <Btn tone="accent" variant="bracket">bracket</Btn>
+  <Btn tone="accent" variant="none">none</Btn>
 </Grid>
 ```
   </TabPane>
@@ -776,11 +713,12 @@ Color, treatment, and scale are independent. Combine them to fit the importance 
   </Flex>
   <div class="api-values" aria-label="Accepted variants">
     <code>solid</code><code>surface</code><code>surfaceAlt</code>
+    <code>spotlight</code><code>glass</code><code>flat</code><code>flatAlt</code><code>flatSolid</code>
     <code>outlineFill</code><code>outline</code><code>subtle</code>
     <code>subtleBtn</code><code>link</code><code>sheen</code>
     <code>underline</code><code>rail</code><code>bracket</code><code>none</code>
   </div>
-  <p><a href="#variants">Compare all 13 variants</a></p>
+  <p><a href="#variants">Compare all variants</a></p>
 ```html
 <Btn tone="accent" variant="outline">View details</Btn>
 ```

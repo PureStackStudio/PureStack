@@ -172,6 +172,11 @@ function createDropdownPlayground(): DropdownPlayground {
       'solid',
       'surface',
       'surfaceAlt',
+      'spotlight',
+      'glass',
+      'flat',
+      'flatAlt',
+      'flatSolid',
       'outlineFill',
       'outline',
       'subtle',
@@ -673,8 +678,8 @@ All props accept values or Regor refs. Register `defineBtnGroupComponents()` and
 </ApiProperty>
 
 <ApiProperty anchor="dropdown-prop-variant" name="variant" valueType="ComponentVariant" defaultValue="solid">
-  <p>The trigger's visual treatment. All thirteen shared variants are supported; the menu panel has its own variant.</p>
-  <div class="api-values"><code>solid</code><code>surface</code><code>surfaceAlt</code><code>outlineFill</code><code>outline</code><code>subtle</code><code>subtleBtn</code><code>link</code><code>sheen</code><code>underline</code><code>rail</code><code>bracket</code><code>none</code></div>
+  <p>The trigger's visual treatment. Every shared variant is supported; the menu panel has its own variant.</p>
+  <div class="api-values"><code>solid</code><code>surface</code><code>surfaceAlt</code><code>spotlight</code><code>glass</code><code>flat</code><code>flatAlt</code><code>flatSolid</code><code>outlineFill</code><code>outline</code><code>subtle</code><code>subtleBtn</code><code>link</code><code>sheen</code><code>underline</code><code>rail</code><code>bracket</code><code>none</code></div>
 ```html
 <BtnGroupDropDown label="Resources" variant="outline" menuVariant="surfaceAlt">
   <BtnLink href="/components/" variant="subtle">Component guides</BtnLink>
@@ -699,7 +704,7 @@ All props accept values or Regor refs. Register `defineBtnGroupComponents()` and
 </ApiProperty>
 
 <ApiProperty anchor="dropdown-prop-menu-variant" name="menuVariant" valueType="ComponentVariant" defaultValue="surfaceAlt">
-  <p>The menu's fill, border, and text treatment. Accepts the same thirteen variants as the trigger. Surface variants give popup content a distinct background.</p>
+  <p>The menu's fill, border, and text treatment. Accepts the same variants as the trigger. Surface variants give popup content a distinct background.</p>
 ```html
 <BtnGroupDropDown label="Explore" variant="outline" menuTone="neutral" menuVariant="surface">
   <BtnLink href="/components/" variant="subtle">Component guides</BtnLink>

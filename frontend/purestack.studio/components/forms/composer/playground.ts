@@ -143,6 +143,8 @@ function createComposerPlayground(): ComposerPlayground {
     variants: [
       'surfaceAlt',
       'surface',
+      'flat',
+      'flatAlt',
       'outline',
       'outlineFill',
       'solid',
