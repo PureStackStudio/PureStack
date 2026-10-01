@@ -66,6 +66,10 @@ const STATELESS_COMPONENT_VARIANT_CLASSES: Record<ComponentVariant, string> = {
 }
 
 const STATEFUL_COMPONENT_VARIANT_CLASSES = {
+  spotlight:
+    'tone-fill-spotlight-hover tone-fill-spotlight-active tone-border-surface-alt-hover tone-border-surface-alt-active tone-text-surface-alt-hover tone-text-surface-alt-active',
+  glass:
+    'tone-fill-glass-hover tone-fill-glass-active tone-border-surface-alt-hover tone-border-surface-alt-active tone-text-surface-alt-hover tone-text-surface-alt-active',
   flat: 'tone-fill-flat-hover tone-fill-flat-active tone-border-surface-hover tone-border-surface-active tone-text-surface-hover tone-text-surface-active',
   flatAlt:
     'tone-fill-flat-alt-hover tone-fill-flat-alt-active tone-border-surface-alt-hover tone-border-surface-alt-active tone-text-surface-alt-hover tone-text-surface-alt-active',

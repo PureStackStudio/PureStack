@@ -52,9 +52,40 @@ function flatFill(role: ThemePaletteCurrent['surface']): States {
   }
 }
 
-function glass(current: ThemePaletteCurrent) {
-  const veil = `color-mix(in srgb, ${current.spotlight.light} 45%, transparent)`
-  return `${spotlightLight(current, '75%')}, linear-gradient(${veil}, ${veil})`
+/**
+ * The spotlight answers a pointer by letting its light reach further, and
+ * goes dark, leaving only the field, when disabled.
+ */
+function spotlightFill(current: ThemePaletteCurrent): States {
+  const lit = (reach: string) =>
+    `${spotlightLight(current, reach)}, ${current.spotlight.field}`
+  return {
+    all: true,
+    rest: { background: lit('46%') },
+    hover: { background: lit('60%') },
+    active: { background: lit('72%') },
+    disabled: { background: current.spotlight.field },
+  }
+}
+
+/**
+ * Glass answers a pointer by thickening its veil, and loses its light and
+ * most of its veil when disabled.
+ */
+function glassFill(current: ThemePaletteCurrent): States {
+  const veil = (strength: string) => {
+    const color = `color-mix(in srgb, ${current.spotlight.light} ${strength}, transparent)`
+    return `linear-gradient(${color}, ${color})`
+  }
+  const lit = (strength: string) =>
+    `${spotlightLight(current, '75%')}, ${veil(strength)}`
+  return {
+    all: true,
+    rest: { background: lit('45%') },
+    hover: { background: lit('58%') },
+    active: { background: lit('70%') },
+    disabled: { background: veil('25%') },
+  }
 }
 
 function createSpotlightOrigins(styleBuilder: StyleBuilder, theme: string) {
@@ -203,17 +234,10 @@ function createFills(
         background: current.canvas,
       },
     },
-    'tone-fill-spotlight': {
-      rest: {
-        background: `${spotlightLight(current, '46%')}, ${current.spotlight.field}`,
-      },
-    },
+    'tone-fill-spotlight': spotlightFill(current),
     // Glass lets the field behind show through, lifted by a veil and lit by
     // the same light, so cards sit on a spotlight without a second color.
-    'tone-fill-glass': {
-      rest: { background: glass(current) },
-      hover: { background: glass(current) },
-    },
+    'tone-fill-glass': glassFill(current),
     // Flat fills paint each role's single color, without the gradient
     // chrome, for the many quiet surfaces around a few spotlights.
     'tone-fill-flat': flatFill(current.surface),
