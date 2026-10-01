@@ -216,9 +216,9 @@ function createFills(
     },
     // Flat fills paint each role's single color, without the gradient
     // chrome, for the many quiet surfaces around a few spotlights.
-    'tone-fill-surface-flat': flatFill(current.surface),
-    'tone-fill-surface-alt-flat': flatFill(current.surfaceAlt),
-    'tone-fill-button-flat': flatFill(current.button),
+    'tone-fill-flat': flatFill(current.surface),
+    'tone-fill-flat-alt': flatFill(current.surfaceAlt),
+    'tone-fill-flat-solid': flatFill(current.button),
     'tone-fill-surface': {
       all: true,
       rest: {
