@@ -71,6 +71,7 @@ export function registerUtilityStyles() {
     applyLineHeightUtilities(theme)
     applyShadowUtilities(theme, palette)
     applyMotionUtilities(theme)
+    applyRotateUtilities(theme)
   })
 }
 
@@ -383,6 +384,23 @@ const MOTION = '180ms ease'
  * row's content inward, and transition animates the paint and position
  * changes the other utilities make. All of it stops for reduced motion.
  */
+const ROTATE_UTILITIES = [1, 2, 3] as const
+
+/**
+ * A slight tilt for cards laid over a scene. These set the rotate property,
+ * not transform, so they combine with lift-* instead of replacing it.
+ */
+function applyRotateUtilities(theme: string) {
+  for (const degrees of ROTATE_UTILITIES) {
+    styleBuilder
+      .select(`.rotate-${degrees}`, theme)
+      .set('rotate', force(`${degrees}deg`))
+    styleBuilder
+      .select(`.-rotate-${degrees}`, theme)
+      .set('rotate', force(`-${degrees}deg`))
+  }
+}
+
 function applyMotionUtilities(theme: string) {
   for (const [name, offset] of Object.entries(LIFT_UTILITIES)) {
     styleBuilder

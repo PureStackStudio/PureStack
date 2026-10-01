@@ -12,141 +12,189 @@ nav:
   icon: lucide:compass
 ---
 
-<link rel="stylesheet" href="/home.css" />
-
-<div class="waypoint-home w-full min-w-0 mx-auto">
-  <Flex container="nav" align="center" justify="between" class="wp-home-nav gap-6 bb-1 b-subtle" aria-label="Explore Waypoint">
-    <span class="wp-kicker tone-text ws-nowrap hidden-md">Explore Waypoint</span>
-    <Flex align="center" class="wp-home-links">
-      <a href="/platform/" class="text-subtle mb-0 tone-text-hover fw-700 ws-nowrap">Platform</a>
-      <a href="/workspace/" class="text-subtle mb-0 tone-text-hover fw-700 ws-nowrap">Workspace</a>
-      <a href="/pricing/" class="text-subtle mb-0 tone-text-hover fw-700 ws-nowrap">Plans</a>
-      <a href="/guide/" class="text-subtle mb-0 tone-text-hover fw-700 ws-nowrap">Starter guide</a>
-    </Flex>
+<Flex container="nav" align="center" justify="between" wrap="true" class="gap-6 py-4 bb-1 b-subtle" aria-label="Explore Waypoint">
+  <span class="text-eyebrow tone-text fs-xxxs fw-800 mb-0 hidden-md">Explore Waypoint</span>
+  <Flex align="center" wrap="true" class="gap-6">
+    <a href="/platform/" class="text-subtle tone-text-hover fs-xxs fw-700 ws-nowrap mb-0">Platform</a>
+    <a href="/workspace/" class="text-subtle tone-text-hover fs-xxs fw-700 ws-nowrap mb-0">Workspace</a>
+    <a href="/pricing/" class="text-subtle tone-text-hover fs-xxs fw-700 ws-nowrap mb-0">Plans</a>
+    <a href="/guide/" class="text-subtle tone-text-hover fs-xxs fw-700 ws-nowrap mb-0">Starter guide</a>
   </Flex>
-  <Grid container="section" columns="1" columnsLg="minmax(0, 0.83fr) minmax(0, 1.17fr)" alignItems="center" class="wp-hero" aria-labelledby="wp-hero-title">
-    <div>
-      <div class="text-eyebrow wp-eyebrow"><span class="wp-eyebrow-mark rounded-pill tone-fill" aria-hidden="true"></span> The Waypoint starter</div>
-      <h1 id="wp-hero-title" class="wp-display">Make every next step <span class="tone-text">clear.</span></h1>
-      <p class="wp-hero-lead text-subtle">A shared home for plans, progress, and decisions. Give your team the context to move forward together.</p>
-      <Flex direction="column" directionSm="row" wrap="true" class="wp-actions">
-        <BtnLink href="/workspace/" icon="lucide:arrow-up-right" iconPosition="end" class="wp-cta box-shadow-accent lift-1-hover">Explore the workspace</BtnLink>
-        <BtnLink href="/guide/getting-started/" icon="lucide:arrow-right" iconPosition="end" variant="surface" class="wp-cta lift-1-hover">Adapt this starter</BtnLink>
-      </Flex>
-      <p class="wp-disclosure text-subtle">An illustrative product and workspace, built with PureStack.</p>
+</Flex>
+
+<Grid container="section" columns="1" columnsLg="minmax(0, 0.85fr) minmax(0, 1.15fr)" alignItems="center" class="gap-6 py-6 mb-6" aria-labelledby="wp-hero-title">
+  <div>
+    <Flex inline="true" align="center" class="gap-2 text-eyebrow tone-text fs-xxxs fw-800 mb-0"><Icon name="lucide:compass" aria-hidden="true"/>The Waypoint starter</Flex>
+    <div class="large-fs mt-4 mb-5">
+      <h1 id="wp-hero-title" class="fs-h1 fw-700 m-0">Make every next step <span class="tone--accent tone-text-bg-button">clear.</span></h1>
     </div>
-    <Panel tone="accent" variant="spotlight" class="wp-product-shot spotlight-from-top-right p-0 rounded-lg w-full mx-auto" aria-label="Illustrative Waypoint project dashboard">
-      <Flex align="center" class="wp-product-chrome wp-micro text-subtle mb-0 bb-1 b-subtle">
-        <Flex class="wp-window-dots" aria-hidden="true"><i class="tone--success tone-fill-button rounded-pill"></i><i class="tone--warning tone-fill-button rounded-pill"></i><i class="tone--neutral tone-fill-button rounded-pill"></i></Flex>
-        <span>WAYPOINT / PROJECT VIEW</span>
-        <span class="ml-auto">EXAMPLE</span>
-      </Flex>
-      <Grid columns="1" columnsMd="minmax(0, 1fr) 10.5rem" class="wp-product-grid">
-        <Panel tone="neutral" variant="spotlight" class="wp-project-card theme--light rounded-lg">
-          <Flex justify="between" class="wp-micro text-subtle mb-0"><span>ACTIVE INITIATIVE</span><span>Q4 / 2026</span></Flex>
-          <Flex align="center" justify="between" wrap="true" class="wp-project-heading gap-2">
-            <h2>Autumn launch</h2>
-            <Badge tone="success" class="wp-status rounded-pill ws-nowrap fw-800"><span class="tone-fill-button rounded-pill" aria-hidden="true"></span> On track</Badge>
-          </Flex>
-          <p class="wp-project-note text-subtle">One clear view of launch readiness.</p>
-          <Flex justify="between" class="wp-progress-label text-subtle mb-0"><span>Milestone progress</span><strong class="tone--accent tone-text">4 of 5</strong></Flex>
-          <div class="wp-progress-track tone-fill-surface-alt rounded-pill overflow-hidden" role="img" aria-label="Four of five milestones complete"><span class="tone--accent tone-fill-button d-block h-full rounded-pill"></span></div>
-          <div class="wp-task-list bt-1 b-default">
-            <Flex align="center" class="wp-task bb-1 b-subtle"><span class="wp-task-mark tone--success tone-fill-surface tone-text-surface rounded-pill" aria-hidden="true"><Icon name="lucide:check"/></span><span>Design handoff</span><small class="text-subtle">Complete</small></Flex>
-            <Flex align="center" class="wp-task bb-1 b-subtle"><span class="wp-task-mark tone--success tone-fill-surface tone-text-surface rounded-pill" aria-hidden="true"><Icon name="lucide:check"/></span><span>Help center draft</span><small class="text-subtle">Complete</small></Flex>
-            <Flex align="center" class="wp-task bb-1 b-subtle"><span class="wp-task-mark b-2 b-default rounded-pill" aria-hidden="true"></span><span>Accessibility review</span><small class="text-subtle">Next up</small></Flex>
-          </div>
-        </Panel>
-        <Grid columns="1" columnsSm="2" columnsMd="1" class="wp-side-stack">
-          <Flex direction="column" class="wp-side-card tone-fill-glass tone-text-surface-alt b-1 tone-border-surface-alt rounded-lg position-relative p-4">
-            <span class="wp-micro text-subtle mb-0">NEXT REVIEW</span>
-            <strong>Friday</strong>
-            <span class="wp-side-meta text-subtle mb-0">10:00 · Project check-in</span>
-            <Icon name="lucide:arrow-up-right" class="wp-side-icon position-absolute" aria-hidden="true"/>
-          </Flex>
-          <Flex direction="column" class="wp-side-card tone--secondary tone-fill-glass tone-text-surface-alt b-1 tone-border-surface-alt rounded-lg position-relative p-4">
-            <span class="wp-micro text-subtle mb-0">OPEN DECISION</span>
-            <strong>Release date</strong>
-            <span class="wp-side-meta text-subtle mb-0">Owner assigned</span>
-            <span class="wp-side-icon position-absolute" aria-hidden="true">02</span>
-          </Flex>
+    <p class="text-subtle fs-h3 lh-6 mb-0">A shared home for plans, progress, and decisions. Give your team the context to move forward together.</p>
+    <Flex direction="column" directionSm="row" wrap="true" class="gap-3 mt-6">
+      <BtnLink href="/workspace/" tone="accent" icon="lucide:arrow-up-right" iconPosition="end" class="px-5 py-3 gap-5 fw-700 box-shadow-accent lift-1-hover">Explore the workspace</BtnLink>
+      <BtnLink href="/guide/getting-started/" variant="surface" icon="lucide:arrow-right" iconPosition="end" class="px-5 py-3 gap-5 fw-700 lift-1-hover">Adapt this starter</BtnLink>
+    </Flex>
+    <p class="text-subtle fs-xxxs mt-5 mb-0">An illustrative product and workspace, built with PureStack.</p>
+  </div>
+  <Panel tone="accent" variant="spotlight" class="spotlight-from-top-right p-0 rounded-lg" aria-label="Illustrative Waypoint project dashboard">
+    <Flex align="center" class="gap-4 px-5 py-4 bb-1 b-subtle text-eyebrow fs-xxxs fw-800 mb-0">
+      <Flex class="gap-1" aria-hidden="true"><span class="tone--success tone-text-bg-button">●</span><span class="tone--warning tone-text-bg-button">●</span><span class="tone--neutral tone-text-bg-button">●</span></Flex>
+      <span>Waypoint / Project view</span>
+      <span class="ml-auto">Example</span>
+    </Flex>
+    <Grid columns="1" columnsMd="minmax(0, 1fr) 10.5rem" alignItems="start" class="gap-3 p-4">
+      <Panel tone="neutral" variant="spotlight" class="theme--light rounded-lg p-5">
+        <Flex justify="between" class="gap-3 text-eyebrow fs-xxxs fw-800 mb-0"><span>Active initiative</span><span>Q4 / 2026</span></Flex>
+        <Flex align="center" justify="between" wrap="true" class="gap-2 mt-4">
+          <h2 class="fs-h2 m-0">Autumn launch</h2>
+          <Badge tone="success" class="rounded-pill ws-nowrap">On track</Badge>
+        </Flex>
+        <p class="text-subtle fs-xxs mt-1 mb-0">One clear view of launch readiness.</p>
+        <Flex justify="between" class="text-subtle fs-xxs mt-5 mb-0"><span>Milestone progress</span><strong class="tone--accent tone-text">4 of 5</strong></Flex>
+        <Grid columns="5" class="gap-1 mt-2" role="img" aria-label="Four of five milestones complete">
+          <span class="tone--accent tone-fill-button rounded-pill py-1"></span>
+          <span class="tone--accent tone-fill-button rounded-pill py-1"></span>
+          <span class="tone--accent tone-fill-button rounded-pill py-1"></span>
+          <span class="tone--accent tone-fill-button rounded-pill py-1"></span>
+          <span class="tone-fill-surface-alt rounded-pill py-1"></span>
         </Grid>
+        <div class="bt-1 b-default mt-5">
+          <Flex align="center" class="gap-2 py-2 bb-1 b-subtle fs-xxs fw-700"><Icon name="lucide:circle-check" class="tone--success tone-text fs-xxxs" aria-hidden="true"/><span>Design handoff</span><small class="text-subtle fs-xxxs fw-600 ws-nowrap ml-auto mb-0">Complete</small></Flex>
+          <Flex align="center" class="gap-2 py-2 bb-1 b-subtle fs-xxs fw-700"><Icon name="lucide:circle-check" class="tone--success tone-text fs-xxxs" aria-hidden="true"/><span>Help center draft</span><small class="text-subtle fs-xxxs fw-600 ws-nowrap ml-auto mb-0">Complete</small></Flex>
+          <Flex align="center" class="gap-2 py-2 bb-1 b-subtle fs-xxs fw-700"><Icon name="lucide:circle" class="text-subtle fs-xxxs mb-0" aria-hidden="true"/><span>Accessibility review</span><small class="text-subtle fs-xxxs fw-600 ws-nowrap ml-auto mb-0">Next up</small></Flex>
+        </div>
+      </Panel>
+      <Grid columns="1" columnsSm="2" columnsMd="1" class="gap-3">
+        <Flex direction="column" class="gap-2 p-4 b-1 rounded-lg tone-fill-glass tone-border-surface-alt tone-text-surface-alt">
+          <span class="text-eyebrow fs-xxxs fw-800 mb-0">Next review</span>
+          <strong class="fs-h3">Friday</strong>
+          <span class="text-subtle fs-xxxs mb-0">10:00 · Project check-in</span>
+          <Flex justify="end" class="mt-auto"><Icon name="lucide:arrow-up-right" aria-hidden="true"/></Flex>
+        </Flex>
+        <Flex direction="column" class="gap-2 p-4 b-1 rounded-lg tone--secondary tone-fill-glass tone-border-surface-alt tone-text-surface-alt">
+          <span class="text-eyebrow fs-xxxs fw-800 mb-0">Open decision</span>
+          <strong class="fs-h3">Release date</strong>
+          <span class="text-subtle fs-xxxs mb-0">Owner assigned</span>
+          <Flex justify="end" class="mt-auto"><span class="fs-h3 fw-600" aria-hidden="true">02</span></Flex>
+        </Flex>
       </Grid>
-      <Flex direction="column" directionSm="row" align="start" alignSm="center" justify="between" class="wp-product-bottom text-subtle mb-0">
-        <Flex container="span" align="center" class="wp-live"><span class="wp-live-dot tone--success tone-fill-button rounded-pill" aria-hidden="true"></span> Sample workspace</Flex>
-        <a href="/workspace/" class="wp-inline-link underline-hover fw-700">View the full preview <Icon name="lucide:arrow-right" aria-hidden="true"/></a>
+    </Grid>
+    <Flex direction="column" directionSm="row" align="start" alignSm="center" justify="between" class="gap-2 px-5 pb-4 text-subtle fs-xxxs mb-0">
+      <span><span class="tone--success tone-text-bg-button" aria-hidden="true">●</span> Sample workspace</span>
+      <BtnLink href="/workspace/" variant="link" icon="lucide:arrow-right" iconPosition="end" class="p-0 fs-xxxs fw-700 tone-text-surface-alt">View the full preview</BtnLink>
+    </Flex>
+  </Panel>
+</Grid>
+
+<Grid container="section" columns="1" columnsMd="3" class="gap-5" aria-label="The Waypoint approach">
+  <Flex direction="column" class="gap-1 py-2 pl-4 bl-2 tone--accent tone-border">
+    <span class="text-eyebrow tone-text fs-xxxs fw-800 mb-0">01 / Plan</span>
+    <strong>Give the work direction.</strong>
+  </Flex>
+  <Flex direction="column" class="gap-1 py-2 pl-4 bl-2 tone--accent tone-border">
+    <span class="text-eyebrow tone-text fs-xxxs fw-800 mb-0">02 / Align</span>
+    <strong>Keep everyone in the loop.</strong>
+  </Flex>
+  <Flex direction="column" class="gap-1 py-2 pl-4 bl-2 tone--accent tone-border">
+    <span class="text-eyebrow tone-text fs-xxxs fw-800 mb-0">03 / Deliver</span>
+    <strong>Make progress visible.</strong>
+  </Flex>
+</Grid>
+
+<Grid container="section" columns="1" columnsMd="minmax(0, 0.9fr) minmax(0, 1.1fr)" class="gap-6 my-6 py-6" aria-labelledby="wp-process-title">
+  <SectionHeader
+    eyebrow="A connected way to work"
+    title="One rhythm for the whole team."
+    titleId="wp-process-title"
+    subtitle="Good project habits need a place to live. Waypoint connects the goal, the weekly update, and the decisions that shape what happens next."
+    eyebrowClass="tone-text fs-xxxs fw-800"
+    titleClass="fs-display"/>
+  <div class="bt-1 b-subtle">
+    <BtnLink href="/platform/" variant="none" icon="lucide:arrow-up-right" iconPosition="end" class="w-full px-1 py-5 bb-1 b-subtle justify-between align-flex-start ws-normal text-start fw-400 tone-text-surface tone-fill-glass-hover nudge-hover">
+      <Flex container="span" class="gap-4">
+        <span class="tone-text fs-xxs fw-800">01</span>
+        <Flex container="span" direction="column" class="gap-1"><strong class="fs-h3">Set the direction</strong><span class="text-subtle fs-xxs mb-0">Give every initiative a purpose, owner, and meaningful milestones.</span></Flex>
       </Flex>
+    </BtnLink>
+    <BtnLink href="/workspace/" variant="none" icon="lucide:arrow-up-right" iconPosition="end" class="w-full px-1 py-5 bb-1 b-subtle justify-between align-flex-start ws-normal text-start fw-400 tone-text-surface tone-fill-glass-hover nudge-hover">
+      <Flex container="span" class="gap-4">
+        <span class="tone-text fs-xxs fw-800">02</span>
+        <Flex container="span" direction="column" class="gap-1"><strong class="fs-h3">See the progress</strong><span class="text-subtle fs-xxs mb-0">Bring updates, status, and the next review into one shared view.</span></Flex>
+      </Flex>
+    </BtnLink>
+    <BtnLink href="/journal/weekly-review/" variant="none" icon="lucide:arrow-up-right" iconPosition="end" class="w-full px-1 py-5 bb-1 b-subtle justify-between align-flex-start ws-normal text-start fw-400 tone-text-surface tone-fill-glass-hover nudge-hover">
+      <Flex container="span" class="gap-4">
+        <span class="tone-text fs-xxs fw-800">03</span>
+        <Flex container="span" direction="column" class="gap-1"><strong class="fs-h3">Share the learning</strong><span class="text-subtle fs-xxs mb-0">Turn the week's work into a short, useful story for everyone.</span></Flex>
+      </Flex>
+    </BtnLink>
+  </div>
+</Grid>
+
+<Panel tone="accent" variant="spotlight" class="theme--dark rounded-lg p-6" aria-labelledby="wp-brief-title">
+  <Grid columns="1" columnsMd="minmax(0, 0.8fr) minmax(0, 1.2fr)" alignItems="center" class="gap-6 py-6">
+    <div>
+      <span class="text-eyebrow tone-text fs-xxxs fw-800">The Friday brief</span>
+      <div class="large-fs mt-3 mb-5">
+        <h2 id="wp-brief-title" class="fs-h2 fw-700 m-0">An update people will actually read.</h2>
+      </div>
+      <p class="tone-text-surface-alt opacity-75 lh-7 mb-0">Share what moved, what needs a decision, and where the team goes next. The example workspace keeps the details close when someone wants to go deeper.</p>
+      <BtnLink href="/workspace/" variant="link" icon="lucide:arrow-up-right" iconPosition="end" class="p-0 mt-6 fw-700">Explore the example workspace</BtnLink>
+    </div>
+    <Panel tone="neutral" variant="spotlight" class="theme--light rounded-lg p-6 rotate-1">
+      <Flex direction="column" directionSm="row" justify="between" class="gap-1 pb-4 bb-1 b-default text-eyebrow fs-xxxs fw-800 mb-0"><span>Week 06 / Autumn launch</span><span>Friday brief</span></Flex>
+      <h3 class="mt-5 mb-1">A good week of progress.</h3>
+      <p class="text-subtle fs-xxs mb-4">The design handoff is complete. The help center draft is ready for final review.</p>
+      <Flex align="start" class="gap-3 py-3 bt-1 b-subtle"><span class="tone--success tone-text-bg-button fs-xxxs" aria-hidden="true">●</span><Flex direction="column" class="gap-1"><strong class="fs-xxs">Moved forward</strong><span class="text-subtle fs-xxxs mb-0">Release checklist prepared for review</span></Flex></Flex>
+      <Flex align="start" class="gap-3 py-3 bt-1 b-subtle"><span class="tone--warning tone-text-bg-button fs-xxxs" aria-hidden="true">●</span><Flex direction="column" class="gap-1"><strong class="fs-xxs">Needs a decision</strong><span class="text-subtle fs-xxxs mb-0">Confirm the release date after accessibility sign-off</span></Flex></Flex>
+      <Flex justify="between" class="pt-4 bt-1 b-default text-eyebrow fs-xxxs fw-800 mb-0">Next review <strong class="tone--accent tone-text">Friday, 10:00</strong></Flex>
     </Panel>
   </Grid>
-  <Grid container="section" columns="1" columnsMd="3" class="wp-principles gap-0 by-1 b-subtle" aria-label="The Waypoint approach">
-    <Flex direction="column" class="wp-principle"><span class="wp-kicker tone-text">01 / PLAN</span><strong>Give the work direction.</strong></Flex>
-    <Flex direction="column" class="wp-principle"><span class="wp-kicker tone-text">02 / ALIGN</span><strong>Keep everyone in the loop.</strong></Flex>
-    <Flex direction="column" class="wp-principle"><span class="wp-kicker tone-text">03 / DELIVER</span><strong>Make progress visible.</strong></Flex>
-  </Grid>
-  <Grid container="section" columns="1" columnsMd="minmax(0, 0.9fr) minmax(0, 1.1fr)" class="wp-process" aria-labelledby="wp-process-title">
+</Panel>
+
+<section class="my-6 py-6" aria-labelledby="wp-explore-title">
+  <Grid columns="1" columnsMd="minmax(0, 1fr) minmax(0, 22rem)" alignItems="end" class="gap-4 mb-6">
     <SectionHeader
-      eyebrow="A connected way to work"
-      title="One rhythm for the whole team."
-      titleId="wp-process-title"
-      subtitle="Good project habits need a place to live. Waypoint connects the goal, the weekly update, and the decisions that shape what happens next."
-      eyebrowClass="wp-eyebrow"
-      titleClass="wp-section-title"
-      subtitleClass="wp-section-lead"/>
-    <div class="bt-1 b-subtle">
-      <Grid container="a" href="/platform/" columns="2rem minmax(0, 1fr) 1.2rem" alignItems="start" class="wp-step bb-1 b-subtle transition nudge-hover tone-fill-glass-hover"><span class="wp-step-number tone-text">01</span><Flex container="span" direction="column" class="wp-step-copy"><strong>Set the direction</strong><small>Give every initiative a purpose, owner, and meaningful milestones.</small></Flex><Icon name="lucide:arrow-up-right" class="wp-arrow tone-text" aria-hidden="true"/></Grid>
-      <Grid container="a" href="/workspace/" columns="2rem minmax(0, 1fr) 1.2rem" alignItems="start" class="wp-step bb-1 b-subtle transition nudge-hover tone-fill-glass-hover"><span class="wp-step-number tone-text">02</span><Flex container="span" direction="column" class="wp-step-copy"><strong>See the progress</strong><small>Bring updates, status, and the next review into one shared view.</small></Flex><Icon name="lucide:arrow-up-right" class="wp-arrow tone-text" aria-hidden="true"/></Grid>
-      <Grid container="a" href="/journal/weekly-review/" columns="2rem minmax(0, 1fr) 1.2rem" alignItems="start" class="wp-step bb-1 b-subtle transition nudge-hover tone-fill-glass-hover"><span class="wp-step-number tone-text">03</span><Flex container="span" direction="column" class="wp-step-copy"><strong>Share the learning</strong><small>Turn the week's work into a short, useful story for everyone.</small></Flex><Icon name="lucide:arrow-up-right" class="wp-arrow tone-text" aria-hidden="true"/></Grid>
-    </div>
+      eyebrow="Explore the starter"
+      title="See how the pieces fit."
+      titleId="wp-explore-title"
+      eyebrowClass="tone-text fs-xxxs fw-800"
+      titleClass="fs-display mb-0"/>
+    <p class="text-subtle mb-0">One visual language can carry a product story, a working preview, and the guide behind it.</p>
   </Grid>
-  <Panel tone="accent" variant="spotlight" class="wp-brief theme--dark rounded-lg" aria-labelledby="wp-brief-title">
-    <Grid columns="1" columnsMd="minmax(0, 0.85fr) minmax(0, 1.15fr)" alignItems="center" class="wp-brief-grid">
-      <SectionHeader
-        eyebrow="The Friday brief"
-        title="An update people will actually read."
-        titleId="wp-brief-title"
-        subtitle="Share what moved, what needs a decision, and where the team goes next. The example workspace keeps the details close when someone wants to go deeper."
-        eyebrowClass="wp-eyebrow"
-        titleClass="wp-brief-title"
-        subtitleClass="wp-brief-lead"
-      >
-        <a href="/workspace/" class="wp-brief-link wp-inline-link d-inline-flex tone-text underline-hover">Explore the example workspace <Icon name="lucide:arrow-up-right" aria-hidden="true"/></a>
-      </SectionHeader>
-      <Panel tone="neutral" variant="spotlight" class="wp-brief-paper theme--light rounded-lg">
-        <Flex direction="column" directionSm="row" justify="between" class="wp-paper-top wp-micro text-subtle mb-0 bb-1 b-default"><span>WEEK 06 / AUTUMN LAUNCH</span><span>FRIDAY BRIEF</span></Flex>
-        <h3>A good week of progress.</h3>
-        <p class="wp-paper-summary text-subtle">The design handoff is complete. The help center draft is ready for final review.</p>
-        <Flex align="start" class="wp-paper-line bt-1 b-subtle"><span class="wp-paper-dot tone--success tone-fill-button rounded-pill" aria-hidden="true"></span><Flex direction="column" class="gap-1"><strong>Moved forward</strong><span class="text-subtle mb-0">Release checklist prepared for review</span></Flex></Flex>
-        <Flex align="start" class="wp-paper-line bt-1 b-subtle"><span class="wp-paper-dot tone--warning tone-fill-button rounded-pill" aria-hidden="true"></span><Flex direction="column" class="gap-1"><strong>Needs a decision</strong><span class="text-subtle mb-0">Confirm the release date after accessibility sign-off</span></Flex></Flex>
-        <Flex justify="between" class="wp-paper-footer wp-micro text-subtle mb-0 bt-1 b-default">NEXT REVIEW <strong class="tone--accent tone-text">FRIDAY, 10:00</strong></Flex>
-      </Panel>
-    </Grid>
-  </Panel>
-  <section class="wp-explore" aria-labelledby="wp-explore-title">
-    <Flex direction="column" directionMd="row" align="start" alignMd="end" justify="between" class="gap-6 mb-6">
-      <SectionHeader
-        eyebrow="Explore the starter"
-        title="See how the pieces fit."
-        titleId="wp-explore-title"
-        eyebrowClass="wp-eyebrow"
-        titleClass="wp-section-title wp-title-wide"/>
-      <p class="wp-explore-summary text-subtle">One visual language can carry a product story, a working preview, and the guide behind it.</p>
-    </Flex>
-    <Grid columns="1" columnsMd="3" class="gap-4">
-      <Flex container="a" href="/platform/" direction="column" class="wp-explore-card position-relative gap-0 b-1 rounded-lg b-subtle b-tone-hover tone-fill-surface transition lift-2-hover box-shadow-floating-hover"><span class="wp-kicker tone-text">01 / THE STORY</span><strong>Platform</strong><span>Discover the workflow and how it supports a team.</span><Icon name="lucide:arrow-up-right" class="wp-arrow position-absolute tone-text" aria-hidden="true"/></Flex>
-      <Flex container="a" href="/workspace/" direction="column" class="wp-explore-card position-relative gap-0 b-1 rounded-lg b-subtle b-tone-hover tone-fill-surface transition lift-2-hover box-shadow-floating-hover"><span class="wp-kicker tone-text">02 / THE PRODUCT</span><strong>Workspace</strong><span>Explore project status, charts, and decisions in context.</span><Icon name="lucide:arrow-up-right" class="wp-arrow position-absolute tone-text" aria-hidden="true"/></Flex>
-      <Flex container="a" href="/guide/" direction="column" class="wp-explore-card position-relative gap-0 b-1 rounded-lg b-subtle b-tone-hover tone-fill-surface transition lift-2-hover box-shadow-floating-hover"><span class="wp-kicker tone-text">03 / THE FOUNDATION</span><strong>Starter guide</strong><span>Find the files, components, and settings to make it yours.</span><Icon name="lucide:arrow-up-right" class="wp-arrow position-absolute tone-text" aria-hidden="true"/></Flex>
-    </Grid>
-    <p class="wp-explore-more text-subtle">Looking for the plan layout? <a href="/pricing/" class="wp-inline-link tone-text underline-hover">Explore example pricing <Icon name="lucide:arrow-right" aria-hidden="true"/></a></p>
-  </section>
-  <Flex container="section" direction="column" directionMd="row" align="start" alignMd="center" justify="between" class="wp-final gap-6 bt-1 b-subtle" aria-labelledby="wp-final-title">
-    <SectionHeader
-      eyebrow="Built to become yours"
-      title="Start with your story."
-      titleId="wp-final-title"
-      subtitle="Replace the example brand and data, keep the patterns that help your visitors, and shape a site that feels like your own."
-      eyebrowClass="wp-eyebrow"
-      titleClass="wp-section-title wp-title-wide wp-final-title"
-      subtitleClass="wp-final-lead"/>
-    <BtnLink href="/guide/getting-started/" icon="lucide:arrow-up-right" iconPosition="end" class="wp-cta box-shadow-accent lift-1-hover flex-none">Read the getting started guide</BtnLink>
-  </Flex>
-</div>
+  <Grid columns="1" columnsMd="3" class="gap-4">
+    <BtnLink href="/platform/" tone="neutral" variant="spotlight" icon="lucide:arrow-up-right" iconPosition="end" class="rounded-lg p-5 justify-between align-flex-start ws-normal text-start fw-400 b-tone-hover lift-2-hover box-shadow-floating-hover">
+      <Flex container="span" direction="column" class="gap-2">
+        <span class="text-eyebrow tone-text fs-xxxs fw-800 mb-0">01 / The story</span>
+        <strong class="fs-h2 mt-5">Platform</strong>
+        <span class="text-subtle fs-xxs mb-0">Discover the workflow and how it supports a team.</span>
+      </Flex>
+    </BtnLink>
+    <BtnLink href="/workspace/" tone="neutral" variant="spotlight" icon="lucide:arrow-up-right" iconPosition="end" class="rounded-lg p-5 justify-between align-flex-start ws-normal text-start fw-400 b-tone-hover lift-2-hover box-shadow-floating-hover">
+      <Flex container="span" direction="column" class="gap-2">
+        <span class="text-eyebrow tone-text fs-xxxs fw-800 mb-0">02 / The product</span>
+        <strong class="fs-h2 mt-5">Workspace</strong>
+        <span class="text-subtle fs-xxs mb-0">Explore project status, charts, and decisions in context.</span>
+      </Flex>
+    </BtnLink>
+    <BtnLink href="/guide/" tone="neutral" variant="spotlight" icon="lucide:arrow-up-right" iconPosition="end" class="rounded-lg p-5 justify-between align-flex-start ws-normal text-start fw-400 b-tone-hover lift-2-hover box-shadow-floating-hover">
+      <Flex container="span" direction="column" class="gap-2">
+        <span class="text-eyebrow tone-text fs-xxxs fw-800 mb-0">03 / The foundation</span>
+        <strong class="fs-h2 mt-5">Starter guide</strong>
+        <span class="text-subtle fs-xxs mb-0">Find the files, components, and settings to make it yours.</span>
+      </Flex>
+    </BtnLink>
+  </Grid>
+  <p class="text-subtle fs-xxs mt-5 mb-0">Looking for the plan layout? <BtnLink href="/pricing/" tone="accent" variant="link" icon="lucide:arrow-right" iconPosition="end" class="p-0 fs-xxs fw-700">Explore example pricing</BtnLink></p>
+</section>
+
+<Flex container="section" direction="column" directionMd="row" align="start" alignMd="center" justify="between" class="gap-6 pt-6 mb-6 bt-1 b-subtle" aria-labelledby="wp-final-title">
+  <SectionHeader
+    eyebrow="Built to become yours"
+    title="Start with your story."
+    titleId="wp-final-title"
+    subtitle="Replace the example brand and data, keep the patterns that help your visitors, and shape a site that feels like your own."
+    eyebrowClass="tone-text fs-xxxs fw-800"
+    titleClass="fs-h1"
+    subtitleClass="mb-0"/>
+  <BtnLink href="/guide/getting-started/" tone="accent" icon="lucide:arrow-up-right" iconPosition="end" class="px-5 py-3 gap-5 fw-700 box-shadow-accent lift-1-hover flex-none">Read the getting started guide</BtnLink>
+</Flex>
