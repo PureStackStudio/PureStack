@@ -136,7 +136,7 @@ export function registerFeaturesStyles(root: Style, palette: ThemePalette) {
     padding: '18px 20px',
     border: `1px solid ${tone.neutral.surfaceAlt.rest.border}`,
     borderRadius: palette.radii.md,
-    background: tone.neutral.surfaceAlt.rest.background,
+    background: tone.neutral.surfaceAlt.rest.bgcolor,
   })
   root.select('.studio .sample-top').css({
     display: 'flex',
@@ -224,7 +224,7 @@ export function registerFeaturesStyles(root: Style, palette: ThemePalette) {
     height: '26px',
     borderRadius: '50%',
     background: tone.accent.text.default,
-    border: `3px solid ${tone.neutral.surface.rest.background}`,
+    border: `3px solid ${tone.neutral.surface.rest.bgcolor}`,
   })
   root.select('.studio .tone-sample i + i').css({
     marginLeft: '-6px',
@@ -264,7 +264,7 @@ export function registerFeaturesStyles(root: Style, palette: ThemePalette) {
     color: tone.warning.text.default,
   })
   root.select('.studio .output-sample .output-web').css({
-    background: tone.accent.surface.hover.background,
+    background: tone.accent.surface.hover.bgcolor,
     color: tone.accent.surface.rest.text,
     borderColor: tone.neutral.surface.hover.border,
   })
@@ -281,7 +281,7 @@ export function registerFeaturesStyles(root: Style, palette: ThemePalette) {
     marginTop: '25px',
     font: `11px ${studioTypography.mono}`,
     background: tone.neutral.canvas,
-    border: `1px solid ${tone.accent.surface.hover.background}`,
+    border: `1px solid ${tone.accent.surface.hover.bgcolor}`,
     borderRadius: palette.radii.sm,
     padding: '12px',
   })
@@ -295,7 +295,7 @@ export function registerFeaturesStyles(root: Style, palette: ThemePalette) {
     font: `8px ${studioTypography.mono}`,
     padding: '4px 6px',
     color: tone.success.text.default,
-    background: tone.accent.surface.hover.background,
+    background: tone.accent.surface.hover.bgcolor,
     border: `1px solid ${tone.neutral.surface.hover.border}`,
     borderRadius: '3px',
   })

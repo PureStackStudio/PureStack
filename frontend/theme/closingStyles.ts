@@ -59,7 +59,6 @@ export function registerClosingStyles(root: Style, palette: ThemePalette) {
     overflow: 'hidden',
     borderBlock: `1px solid ${tone.neutral.border.default}`,
     padding: '66px 0 72px',
-    background: `radial-gradient(ellipse at 50% 80%, color-mix(in srgb, ${tone.success.surface.rest.border} 14%, transparent) 0%, transparent 65%), ${tone.accent.canvas}`,
     textAlign: 'center',
   })
   root.select('.studio .closing-section::before').css({

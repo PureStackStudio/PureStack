@@ -112,7 +112,7 @@ export function createStudioLightPalette(): ThemePalette {
     },
   }
 
-  return merge(themeSkins.standard.create(['lightgreen']).light, {
+  return merge(themeSkins.standard.create(['mint']).light, {
     ...studioSkinShared,
     accent: '#216e4b',
     effect: {
@@ -178,7 +178,6 @@ export function createStudioLightPalette(): ThemePalette {
         border: '#dbbd9c',
       }),
       ghost: {
-        ...neutral,
         tone: 'currentColor',
         canvas: 'transparent',
         canvascolor: 'transparent',

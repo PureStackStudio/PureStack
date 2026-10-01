@@ -65,6 +65,17 @@ const bestColors = {
     danger: '#c68887',
     feature: '#b8acd7',
   },
+  mint: {
+    accent: '#6dd59a',
+    neutral: '#304336',
+    secondary: '#5fb39a',
+    feature: '#a98ad6',
+    custom: '#d98b5f',
+    info: '#6aa9d4',
+    success: '#6fbf83',
+    warning: '#d4ad5c',
+    danger: '#d47a7a',
+  },
   puregate: {
     accent: '#de6310',
     neutral: '#000000',

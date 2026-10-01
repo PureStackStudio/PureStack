@@ -43,7 +43,7 @@ export function registerHeroStyles(root: Style, palette: ThemePalette) {
     padding: '6px 11px',
     border: `1px solid ${tone.accent.border.subtle}`,
     borderRadius: '5px',
-    background: `color-mix(in srgb, ${tone.neutral.surface.hover.background} 50%, transparent)`,
+    background: `color-mix(in srgb, ${tone.neutral.surface.hover.bgcolor} 50%, transparent)`,
     color: `${tone.accent.surface.rest.text} !important`,
     font: `10px / 1.5 ${studioTypography.mono}`,
     letterSpacing: '1px',

@@ -17,7 +17,7 @@ export function registerWorkbenchStyles(root: Style, palette: ThemePalette) {
     height: '42px',
     padding: '0 19px',
     borderBottom: `1px solid ${tone.neutral.border.subtle}`,
-    background: tone.neutral.surfaceAlt.rest.background,
+    background: tone.neutral.surfaceAlt.rest.bgcolor,
   })
   root.select('.studio .window-dots').css({
     gap: '6px',
@@ -53,7 +53,7 @@ export function registerWorkbenchStyles(root: Style, palette: ThemePalette) {
     alignItems: 'stretch',
     height: '47px',
     borderBottom: `1px solid ${tone.neutral.border.subtle}`,
-    background: tone.neutral.surface.rest.background,
+    background: tone.neutral.surface.rest.bgcolor,
   })
   root.select('.studio-tabs :is(.tabs__tab, .tabs__tab-buttons > .btn)').css({
     display: 'flex',
@@ -71,11 +71,11 @@ export function registerWorkbenchStyles(root: Style, palette: ThemePalette) {
     .select('.studio-tabs :is(.tabs__tab, .tabs__tab-buttons > .btn):hover')
     .css({
       color: tone.accent.surface.hover.text,
-      background: tone.neutral.surfaceAlt.rest.background,
+      background: tone.neutral.surfaceAlt.rest.bgcolor,
     })
   root.select('.studio-tabs .tabs__tab-buttons > .btn.active').css({
     color: tone.neutral.text.default,
-    background: tone.neutral.surfaceAlt.rest.background,
+    background: tone.neutral.surfaceAlt.rest.bgcolor,
   })
   root.select('.studio-tabs .tabs__tab-buttons > .btn.active::before').css({
     content: '""',
@@ -91,7 +91,7 @@ export function registerWorkbenchStyles(root: Style, palette: ThemePalette) {
   })
   root.select('.studio .source-pane').css({
     minWidth: '0',
-    background: tone.neutral.surface.rest.background,
+    background: tone.neutral.surface.rest.bgcolor,
     borderRight: `1px solid ${tone.neutral.border.subtle}`,
   })
   root.select('.studio .pane-caption').css({
@@ -150,7 +150,7 @@ export function registerWorkbenchStyles(root: Style, palette: ThemePalette) {
     padding: '11px 18px',
     border: `1px solid ${tone.success.surface.rest.border}`,
     borderRadius: palette.radii.md,
-    background: tone.accent.surfaceAlt.rest.background,
+    background: tone.accent.surfaceAlt.rest.bgcolor,
     color: tone.accent.surface.hover.text,
     boxShadow: palette.effect.softShadow,
     opacity: '0',
@@ -197,7 +197,7 @@ export function registerWorkbenchStyles(root: Style, palette: ThemePalette) {
   })
   root.select('.studio .preview-pane').css({
     minWidth: '0',
-    background: `radial-gradient(ellipse at 50% 70%, color-mix(in srgb, ${tone.accent.surface.hover.background} 18%, transparent), transparent 75%), ${tone.neutral.surface.rest.background}`,
+    background: `radial-gradient(ellipse at 50% 70%, color-mix(in srgb, ${tone.accent.surface.hover.bgcolor} 18%, transparent), transparent 75%), ${tone.neutral.surface.rest.bgcolor}`,
   })
   root.select('.studio .content-preview').css({
     padding: '26px 44px 35px',
@@ -314,7 +314,7 @@ export function registerWorkbenchStyles(root: Style, palette: ThemePalette) {
     gap: '12px',
     padding: '6px 19px',
     borderTop: `1px solid ${tone.neutral.border.default}`,
-    background: tone.neutral.surfaceAlt.rest.background,
+    background: tone.neutral.surfaceAlt.rest.bgcolor,
     color: tone.success.text.subtle,
     font: `9px ${studioTypography.mono}`,
   })

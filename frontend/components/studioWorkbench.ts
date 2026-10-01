@@ -3,9 +3,9 @@ import { defineComponent, html } from 'regor'
 export interface StudioWorkbench {}
 
 const studioWorkbenchTemplate = html`<Panel
-  class="workbench"
+  class="workbench box-shadow-floating"
   bodyClass="workbench__body"
-  variant="surface"
+  variant="flat"
   tone="neutral"
 >
   <Flex class="workbench-toolbar" align="center">

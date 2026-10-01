@@ -9,7 +9,7 @@ export function registerGettingStartedStyles(
   const tone = palette.semanticTone
   root.select('.studio .start-section').css({
     borderBlock: `1px solid ${tone.neutral.border.subtle}`,
-    background: tone.neutral.surface.rest.background,
+    background: tone.neutral.surface.rest.bgcolor,
     paddingBlock: '77px',
   })
   root.select('.studio .start-layout').css({
@@ -44,7 +44,7 @@ export function registerGettingStartedStyles(
     border: `1px solid ${tone.neutral.surfaceAlt.rest.border}`,
     borderRadius: '50%',
     color: tone.success.text.default,
-    background: tone.accent.surface.rest.background,
+    background: tone.accent.surface.rest.bgcolor,
     font: `9px ${studioTypography.mono}`,
   })
   root.select('.studio .start-steps strong').css({
@@ -72,7 +72,7 @@ export function registerGettingStartedStyles(
     gap: '10px',
     padding: '15px 20px',
     borderBottom: `1px solid ${tone.neutral.border.default}`,
-    background: tone.neutral.surface.hover.background,
+    background: tone.neutral.surface.hover.bgcolor,
   })
   root.select('.studio .terminal-heading > span:first-child').css({
     display: 'flex',
@@ -139,11 +139,11 @@ export function registerGettingStartedStyles(
     justifyContent: 'space-between',
     padding: '13px 20px',
     borderTop: `1px solid ${tone.neutral.border.default}`,
-    background: tone.neutral.surfaceAlt.rest.background,
+    background: tone.neutral.surfaceAlt.rest.bgcolor,
     color: `${tone.success.text.default} !important`,
     fontSize: palette.font.size.xxs,
   })
   root.select('.studio .terminal-footer:hover').css({
-    background: tone.accent.surface.rest.background,
+    background: tone.accent.surface.rest.bgcolor,
   })
 }

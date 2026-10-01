@@ -8,7 +8,6 @@ export function registerArchitectureStyles(root: Style, palette: ThemePalette) {
     position: 'relative',
     borderBlock: `1px solid ${tone.neutral.border.subtle}`,
     paddingBlock: '80px',
-    background: tone.accent.canvas,
   })
   root.select('.studio .ai-layout').css({
     gap: '100px',
@@ -48,7 +47,7 @@ export function registerArchitectureStyles(root: Style, palette: ThemePalette) {
     padding: '14px 5px',
     color: tone.neutral.text.subtle,
     font: `9px ${studioTypography.mono}`,
-    background: tone.neutral.surfaceAlt.rest.background,
+    background: tone.neutral.surfaceAlt.rest.bgcolor,
   })
   root.select('.studio .diagram-inputs > span > span').css({
     fontSize: palette.font.size.sm,
@@ -83,7 +82,7 @@ export function registerArchitectureStyles(root: Style, palette: ThemePalette) {
     width: '67%',
     marginInline: 'auto',
     padding: '24px',
-    background: tone.accent.surfaceAlt.rest.background,
+    background: tone.accent.surfaceAlt.rest.bgcolor,
     border: `1px solid ${tone.accent.surface.hover.border}`,
     borderRadius: '9px',
     boxShadow: `0 0 38px color-mix(in srgb, ${tone.success.text.default} 4%, transparent)`,
@@ -129,7 +128,7 @@ export function registerArchitectureStyles(root: Style, palette: ThemePalette) {
     padding: '15px',
     border: `1px solid ${tone.accent.surface.rest.border}`,
     borderRadius: '5px',
-    background: tone.neutral.surfaceAlt.rest.background,
+    background: tone.neutral.surfaceAlt.rest.bgcolor,
     font: `11px ${studioTypography.mono}`,
     color: tone.accent.surface.rest.text,
   })

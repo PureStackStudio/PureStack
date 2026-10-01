@@ -21,7 +21,7 @@ export function registerEcosystemStyles(root: Style, palette: ThemePalette) {
     display: 'flex',
     gap: '18px',
     padding: '30px',
-    background: tone.neutral.surface.rest.background,
+    background: tone.neutral.surface.rest.bgcolor,
     transition: 'background 180ms',
   })
   root.select('.studio .package-card:nth-child(odd)').css({
@@ -31,7 +31,7 @@ export function registerEcosystemStyles(root: Style, palette: ThemePalette) {
     borderBottom: `1px solid ${tone.neutral.border.subtle}`,
   })
   root.select('.studio .package-card:hover').css({
-    background: tone.neutral.surface.hover.background,
+    background: tone.neutral.surface.hover.bgcolor,
   })
   root.select('.studio .package-number').css({
     paddingTop: '5px',

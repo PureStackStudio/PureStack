@@ -12,7 +12,7 @@ const studioFeatureTemplate = html`<Panel
   class="feature-card"
   bodyClass="feature-card__body"
   tone="neutral"
-  variant="surface"
+  variant="flat"
 >
   <IconFrame
     class="feature-icon"

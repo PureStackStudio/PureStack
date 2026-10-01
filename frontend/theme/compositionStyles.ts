@@ -86,7 +86,7 @@ export function registerCompositionStyles(root: Style, palette: ThemePalette) {
     })
   root.select('.studio .studio-tabs .tabs__control:checked + .tabs__tab').css({
     color: tone.neutral.text.default,
-    background: tone.neutral.surfaceAlt.rest.background,
+    background: tone.neutral.surfaceAlt.rest.bgcolor,
     boxShadow: `inset 0 2px ${tone.accent.text.default}`,
   })
   root
