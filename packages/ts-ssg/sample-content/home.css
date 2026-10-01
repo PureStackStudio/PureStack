@@ -92,13 +92,7 @@
     gap: 1.4rem;
   }
   .wp-home-links a {
-    color: var(--ps-current-text-subtle);
     font-size: 0.84rem;
-    font-weight: 700;
-    white-space: nowrap;
-  }
-  .wp-home-links a:hover {
-    color: var(--ps-current-tone);
   }
 
   /* Hero. */
@@ -123,24 +117,13 @@
     padding: 0.85rem 1.15rem;
     font-size: 0.94rem;
     line-height: 1.2;
-    /* The BtnLink variant sets the theme radius; Waypoint buttons are rounder. */
-    border-radius: 0.65rem !important;
     font-weight: 750;
-  }
-  .wp-cta:hover {
-    transform: translateY(-2px);
   }
   /* Trim the icon's side bearing so the arrow sits like a text glyph. */
   .wp-cta .icon {
     width: 1.2rem;
     height: 1.2rem;
     margin-inline: -0.17rem;
-  }
-  .wp-cta-primary {
-    box-shadow: 0 12px 28px rgba(18, 64, 91, 0.2);
-  }
-  .wp-cta-primary:hover {
-    box-shadow: 0 16px 32px rgba(18, 64, 91, 0.27);
   }
   .wp-disclosure {
     margin: 1.35rem 0 0;
@@ -299,13 +282,6 @@
   .wp-step {
     gap: 1.35rem;
     padding: 1.5rem 0.3rem;
-    transition:
-      padding 0.2s ease,
-      background 0.2s ease;
-  }
-  .wp-step:hover {
-    padding-left: 0.9rem;
-    background: var(--ps-current-surface-rest-background);
   }
   .wp-step-number {
     padding-top: 0.25rem;
@@ -419,16 +395,7 @@
   .wp-explore-card {
     min-height: 11.5rem;
     padding: 1.6rem;
-    border-radius: 0.9rem;
-    transition:
-      transform 0.2s ease,
-      border-color 0.2s ease,
-      box-shadow 0.2s ease;
     --wp-kicker-size: 0.62rem;
-  }
-  .wp-explore-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 16px 28px rgba(16, 60, 83, 0.11);
   }
   .wp-explore-card strong {
     margin-top: 1.4rem;
@@ -536,13 +503,6 @@
     }
     .wp-process {
       gap: clamp(2.5rem, 8vw, 8rem);
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .wp-cta,
-    .wp-step,
-    .wp-explore-card {
-      transition: none;
     }
   }
 }

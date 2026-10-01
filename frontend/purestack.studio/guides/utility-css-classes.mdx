@@ -190,7 +190,7 @@ For grid children, `justify-self-start`, `justify-self-center`, `justify-self-en
 | `position-static`, `position-relative`, `position-absolute`, `position-fixed`, `position-sticky` | Set CSS positioning. |
 | `ws-normal`, `ws-nowrap`, `ws-pre-wrap` | Set `white-space`. |
 | `cursor-pointer`, `col-resize` | Set pointer or column-resize cursor. |
-| `bg-none`, `box-shadow-none` | Remove a background or box shadow. |
+| `bg-none` | Remove a background. |
 
 `auto-fit` is a specialized width utility that sets `width: 1%`; it is not a CSS Grid `auto-fit` track rule. Use it only when that width behavior is intended.
 
@@ -209,6 +209,33 @@ Border style classes are `b-none`, `b-solid`, `b-dashed`, and `b-dotted`. Border
 Append `-hover` to a border width, style, or color utility for its hover-only version, such as `b-2-hover` or `b-tone-hover`. Radius classes are `rounded-none`, `rounded-sm`, `rounded-md`, `rounded-lg`, and `rounded-pill`; `rounded-t-*`, `rounded-r-*`, `rounded-b-*`, and `rounded-l-*` apply those radii to a pair of corners. The radii read the active theme except for `rounded-none`.
 
 Opacity classes are `opacity-0`, `opacity-25`, `opacity-50`, `opacity-75`, and `opacity-1`, for `0`, `0.25`, `0.5`, `0.75`, and full opacity. Each also has a `-hover` form, such as `opacity-1-hover`. The value `1` means fully opaque, not one percent.
+
+## Shadows and hover motion
+
+Shadow classes read the theme's effect tokens, so depth follows the skin and its presets. Each has a `-hover` form, and `box-shadow-none` removes a shadow, including a component's own.
+
+| Class | Effect |
+| --- | --- |
+| `box-shadow-panel`, `box-shadow-panel-strong` | The panel shadow and its stronger form. |
+| `box-shadow-soft`, `box-shadow-strong` | A soft or a deep neutral shadow. |
+| `box-shadow-interactive` | A small shadow for controls. |
+| `box-shadow-floating` | A lifted card. |
+| `box-shadow-accent` | A glow tinted with the accent color. |
+| `box-shadow-inset` | A recessed surface. |
+
+| Class | Effect |
+| --- | --- |
+| `lift-1`, `lift-2` | Raise an element by `2px` or `4px`. Use the `-hover` form for hover feedback. |
+| `nudge-hover` | On hover, slides a row's children inward by `0.5rem`. |
+| `transition` | Animates background, border color, shadow, color, and transform changes. |
+
+Combine them for hover feedback without custom CSS. Transitions and the nudge stop when the visitor prefers reduced motion:
+
+```mdx
+<a href="/guide/" class="b-1 b-subtle b-tone-hover rounded-lg p-4 transition lift-2-hover box-shadow-floating-hover">
+  Read the guide
+</a>
+```
 
 ## Semantic tone classes
 

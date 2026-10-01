@@ -18,10 +18,10 @@ nav:
   <Flex container="nav" align="center" justify="between" class="wp-home-nav gap-6 bb-1 b-subtle" aria-label="Explore Waypoint">
     <span class="wp-kicker tone-text ws-nowrap hidden-md">Explore Waypoint</span>
     <Flex align="center" class="wp-home-links">
-      <a href="/platform/">Platform</a>
-      <a href="/workspace/">Workspace</a>
-      <a href="/pricing/">Plans</a>
-      <a href="/guide/">Starter guide</a>
+      <a href="/platform/" class="text-subtle mb-0 tone-text-hover fw-700 ws-nowrap">Platform</a>
+      <a href="/workspace/" class="text-subtle mb-0 tone-text-hover fw-700 ws-nowrap">Workspace</a>
+      <a href="/pricing/" class="text-subtle mb-0 tone-text-hover fw-700 ws-nowrap">Plans</a>
+      <a href="/guide/" class="text-subtle mb-0 tone-text-hover fw-700 ws-nowrap">Starter guide</a>
     </Flex>
   </Flex>
   <Grid container="section" columns="1" columnsLg="minmax(0, 0.83fr) minmax(0, 1.17fr)" alignItems="center" class="wp-hero" aria-labelledby="wp-hero-title">
@@ -30,8 +30,8 @@ nav:
       <h1 id="wp-hero-title" class="wp-display">Make every next step <span class="tone-text">clear.</span></h1>
       <p class="wp-hero-lead text-subtle">A shared home for plans, progress, and decisions. Give your team the context to move forward together.</p>
       <Flex direction="column" directionSm="row" wrap="true" class="wp-actions">
-        <BtnLink href="/workspace/" icon="lucide:arrow-up-right" iconPosition="end" class="wp-cta wp-cta-primary">Explore the workspace</BtnLink>
-        <BtnLink href="/guide/getting-started/" icon="lucide:arrow-right" iconPosition="end" variant="surface" class="wp-cta">Adapt this starter</BtnLink>
+        <BtnLink href="/workspace/" icon="lucide:arrow-up-right" iconPosition="end" class="wp-cta box-shadow-accent lift-1-hover">Explore the workspace</BtnLink>
+        <BtnLink href="/guide/getting-started/" icon="lucide:arrow-right" iconPosition="end" variant="surface" class="wp-cta lift-1-hover">Adapt this starter</BtnLink>
       </Flex>
       <p class="wp-disclosure text-subtle">An illustrative product and workspace, built with PureStack.</p>
     </div>
@@ -93,9 +93,9 @@ nav:
       titleClass="wp-section-title"
       subtitleClass="wp-section-lead"/>
     <div class="bt-1 b-subtle">
-      <Grid container="a" href="/platform/" columns="2rem minmax(0, 1fr) 1.2rem" alignItems="start" class="wp-step bb-1 b-subtle"><span class="wp-step-number tone-text">01</span><Flex container="span" direction="column" class="wp-step-copy"><strong>Set the direction</strong><small>Give every initiative a purpose, owner, and meaningful milestones.</small></Flex><Icon name="lucide:arrow-up-right" class="wp-arrow tone-text" aria-hidden="true"/></Grid>
-      <Grid container="a" href="/workspace/" columns="2rem minmax(0, 1fr) 1.2rem" alignItems="start" class="wp-step bb-1 b-subtle"><span class="wp-step-number tone-text">02</span><Flex container="span" direction="column" class="wp-step-copy"><strong>See the progress</strong><small>Bring updates, status, and the next review into one shared view.</small></Flex><Icon name="lucide:arrow-up-right" class="wp-arrow tone-text" aria-hidden="true"/></Grid>
-      <Grid container="a" href="/journal/weekly-review/" columns="2rem minmax(0, 1fr) 1.2rem" alignItems="start" class="wp-step bb-1 b-subtle"><span class="wp-step-number tone-text">03</span><Flex container="span" direction="column" class="wp-step-copy"><strong>Share the learning</strong><small>Turn the week's work into a short, useful story for everyone.</small></Flex><Icon name="lucide:arrow-up-right" class="wp-arrow tone-text" aria-hidden="true"/></Grid>
+      <Grid container="a" href="/platform/" columns="2rem minmax(0, 1fr) 1.2rem" alignItems="start" class="wp-step bb-1 b-subtle transition nudge-hover tone-fill-glass-hover"><span class="wp-step-number tone-text">01</span><Flex container="span" direction="column" class="wp-step-copy"><strong>Set the direction</strong><small>Give every initiative a purpose, owner, and meaningful milestones.</small></Flex><Icon name="lucide:arrow-up-right" class="wp-arrow tone-text" aria-hidden="true"/></Grid>
+      <Grid container="a" href="/workspace/" columns="2rem minmax(0, 1fr) 1.2rem" alignItems="start" class="wp-step bb-1 b-subtle transition nudge-hover tone-fill-glass-hover"><span class="wp-step-number tone-text">02</span><Flex container="span" direction="column" class="wp-step-copy"><strong>See the progress</strong><small>Bring updates, status, and the next review into one shared view.</small></Flex><Icon name="lucide:arrow-up-right" class="wp-arrow tone-text" aria-hidden="true"/></Grid>
+      <Grid container="a" href="/journal/weekly-review/" columns="2rem minmax(0, 1fr) 1.2rem" alignItems="start" class="wp-step bb-1 b-subtle transition nudge-hover tone-fill-glass-hover"><span class="wp-step-number tone-text">03</span><Flex container="span" direction="column" class="wp-step-copy"><strong>Share the learning</strong><small>Turn the week's work into a short, useful story for everyone.</small></Flex><Icon name="lucide:arrow-up-right" class="wp-arrow tone-text" aria-hidden="true"/></Grid>
     </div>
   </Grid>
   <Panel tone="accent" variant="spotlight" class="wp-brief theme--dark rounded-lg" aria-labelledby="wp-brief-title">
@@ -132,9 +132,9 @@ nav:
       <p class="wp-explore-summary text-subtle">One visual language can carry a product story, a working preview, and the guide behind it.</p>
     </Flex>
     <Grid columns="1" columnsMd="3" class="gap-4">
-      <Flex container="a" href="/platform/" direction="column" class="wp-explore-card position-relative gap-0 b-1 b-subtle b-tone-hover tone-fill-surface"><span class="wp-kicker tone-text">01 / THE STORY</span><strong>Platform</strong><span>Discover the workflow and how it supports a team.</span><Icon name="lucide:arrow-up-right" class="wp-arrow position-absolute tone-text" aria-hidden="true"/></Flex>
-      <Flex container="a" href="/workspace/" direction="column" class="wp-explore-card position-relative gap-0 b-1 b-subtle b-tone-hover tone-fill-surface"><span class="wp-kicker tone-text">02 / THE PRODUCT</span><strong>Workspace</strong><span>Explore project status, charts, and decisions in context.</span><Icon name="lucide:arrow-up-right" class="wp-arrow position-absolute tone-text" aria-hidden="true"/></Flex>
-      <Flex container="a" href="/guide/" direction="column" class="wp-explore-card position-relative gap-0 b-1 b-subtle b-tone-hover tone-fill-surface"><span class="wp-kicker tone-text">03 / THE FOUNDATION</span><strong>Starter guide</strong><span>Find the files, components, and settings to make it yours.</span><Icon name="lucide:arrow-up-right" class="wp-arrow position-absolute tone-text" aria-hidden="true"/></Flex>
+      <Flex container="a" href="/platform/" direction="column" class="wp-explore-card position-relative gap-0 b-1 rounded-lg b-subtle b-tone-hover tone-fill-surface transition lift-2-hover box-shadow-floating-hover"><span class="wp-kicker tone-text">01 / THE STORY</span><strong>Platform</strong><span>Discover the workflow and how it supports a team.</span><Icon name="lucide:arrow-up-right" class="wp-arrow position-absolute tone-text" aria-hidden="true"/></Flex>
+      <Flex container="a" href="/workspace/" direction="column" class="wp-explore-card position-relative gap-0 b-1 rounded-lg b-subtle b-tone-hover tone-fill-surface transition lift-2-hover box-shadow-floating-hover"><span class="wp-kicker tone-text">02 / THE PRODUCT</span><strong>Workspace</strong><span>Explore project status, charts, and decisions in context.</span><Icon name="lucide:arrow-up-right" class="wp-arrow position-absolute tone-text" aria-hidden="true"/></Flex>
+      <Flex container="a" href="/guide/" direction="column" class="wp-explore-card position-relative gap-0 b-1 rounded-lg b-subtle b-tone-hover tone-fill-surface transition lift-2-hover box-shadow-floating-hover"><span class="wp-kicker tone-text">03 / THE FOUNDATION</span><strong>Starter guide</strong><span>Find the files, components, and settings to make it yours.</span><Icon name="lucide:arrow-up-right" class="wp-arrow position-absolute tone-text" aria-hidden="true"/></Flex>
     </Grid>
     <p class="wp-explore-more text-subtle">Looking for the plan layout? <a href="/pricing/" class="wp-inline-link tone-text underline-hover">Explore example pricing <Icon name="lucide:arrow-right" aria-hidden="true"/></a></p>
   </section>
@@ -147,6 +147,6 @@ nav:
       eyebrowClass="wp-eyebrow"
       titleClass="wp-section-title wp-title-wide wp-final-title"
       subtitleClass="wp-final-lead"/>
-    <BtnLink href="/guide/getting-started/" icon="lucide:arrow-up-right" iconPosition="end" class="wp-cta wp-cta-primary flex-none">Read the getting started guide</BtnLink>
+    <BtnLink href="/guide/getting-started/" icon="lucide:arrow-up-right" iconPosition="end" class="wp-cta box-shadow-accent lift-1-hover flex-none">Read the getting started guide</BtnLink>
   </Flex>
 </div>

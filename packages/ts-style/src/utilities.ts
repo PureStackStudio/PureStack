@@ -69,7 +69,8 @@ export function registerUtilityStyles() {
     applyFontSizeUtilities(theme, palette)
     applyFontWeightUtilities(theme)
     applyLineHeightUtilities(theme)
-    applyShadowUtilities(theme)
+    applyShadowUtilities(theme, palette)
+    applyMotionUtilities(theme)
   })
 }
 
@@ -347,8 +348,66 @@ function applyRadiusUtility(theme: string, name: string, value: string) {
     .borderBottomLeftRadius(radius)
 }
 
-function applyShadowUtilities(theme: string) {
-  styleBuilder.select('.box-shadow-none', theme).boxShadow(force('none'))
+/** Shadows read the theme's effect tokens, so depth follows the skin. */
+const SHADOW_UTILITIES = {
+  panel: 'panelShadow',
+  'panel-strong': 'panelShadowStrong',
+  soft: 'softShadow',
+  interactive: 'interactiveShadow',
+  floating: 'floatingShadow',
+  strong: 'strongShadow',
+  accent: 'accentShadow',
+  inset: 'insetShadow',
+} as const satisfies Record<string, keyof ThemePalette['effect']>
+
+function applyShadowUtilities(theme: string, palette: ThemePalette) {
+  styleBuilder
+    .select(withHover('box-shadow-none'), theme)
+    .boxShadow(force('none'))
+  for (const [name, effect] of Object.entries(SHADOW_UTILITIES)) {
+    styleBuilder
+      .select(withHover(`box-shadow-${name}`), theme)
+      .boxShadow(force(palette.effect[effect]))
+  }
+}
+
+const LIFT_UTILITIES = {
+  1: '-2px',
+  2: '-4px',
+} as const
+
+const MOTION = '180ms ease'
+
+/**
+ * Motion for hover feedback. lift-* raises an element, nudge-hover slides a
+ * row's content inward, and transition animates the paint and position
+ * changes the other utilities make. All of it stops for reduced motion.
+ */
+function applyMotionUtilities(theme: string) {
+  for (const [name, offset] of Object.entries(LIFT_UTILITIES)) {
+    styleBuilder
+      .select(withHover(`lift-${name}`), theme)
+      .transform(force(`translateY(${offset})`))
+  }
+
+  styleBuilder
+    .select('.transition', theme)
+    .transition(
+      ['background', 'border-color', 'box-shadow', 'color', 'transform']
+        .map((property) => `${property} ${MOTION}`)
+        .join(', '),
+    )
+  styleBuilder
+    .select('.nudge-hover > *', theme)
+    .transition(`transform ${MOTION}`)
+  styleBuilder
+    .select('.nudge-hover:hover > *', theme)
+    .transform('translateX(0.5rem)')
+
+  styleBuilder
+    .select('.transition, .nudge-hover > *', theme)
+    .media('prefers-reduced-motion: reduce')
+    .transition(force('none'))
 }
 
 function force(val: string) {
