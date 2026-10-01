@@ -63,13 +63,6 @@ export function registerResponsiveStyles(root: Style, palette: ThemePalette) {
     height: '68px',
     gap: '20px',
   })
-  root.media(mediaBelow(BREAKPOINTS.md)).select('.studio .desktop-nav').css({
-    gap: '20px',
-    padding: '0',
-  })
-  root.media(mediaBelow(BREAKPOINTS.md)).select('.studio .desktop-nav a').css({
-    fontSize: palette.font.size.sm,
-  })
   root.media(mediaBelow(BREAKPOINTS.md)).select('.studio .hero h1').css({
     fontSize: '66px',
     letterSpacing: '-3px',
@@ -203,10 +196,10 @@ export function registerResponsiveStyles(root: Style, palette: ThemePalette) {
     height: '65px',
     gap: '20px',
   })
-  root.media(mediaBelow(BREAKPOINTS.sm)).select('.studio .desktop-nav').css({
+  root.media(mediaBelow(BREAKPOINTS.lg)).select('.studio .desktop-nav').css({
     display: 'none',
   })
-  root.media(mediaBelow(BREAKPOINTS.sm)).select('.studio .header-source').css({
+  root.media(mediaBelow(BREAKPOINTS.lg)).select('.studio .header-actions').css({
     marginLeft: 'auto',
   })
   root
@@ -222,11 +215,11 @@ export function registerResponsiveStyles(root: Style, palette: ThemePalette) {
       width: '20px',
       height: '20px',
     })
-  root.media(mediaBelow(BREAKPOINTS.sm)).select('.studio .mobile-menu').css({
+  root.media(mediaBelow(BREAKPOINTS.lg)).select('.studio .mobile-menu').css({
     display: 'block',
   })
   root
-    .media(mediaBelow(BREAKPOINTS.sm))
+    .media(mediaBelow(BREAKPOINTS.lg))
     .select('.studio .mobile-menu summary')
     .css({
       display: 'flex',
@@ -239,17 +232,17 @@ export function registerResponsiveStyles(root: Style, palette: ThemePalette) {
       color: tone.neutral.surfaceAlt.rest.text,
     })
   root
-    .media(mediaBelow(BREAKPOINTS.sm))
+    .media(mediaBelow(BREAKPOINTS.lg))
     .select('.studio .mobile-menu summary::-webkit-details-marker')
     .css({
       display: 'none',
     })
   root
-    .media(mediaBelow(BREAKPOINTS.sm))
+    .media(mediaBelow(BREAKPOINTS.lg))
     .select('.studio .mobile-menu nav')
     .css({
       position: 'absolute',
-      top: '64px',
+      top: '100%',
       left: '0',
       right: '0',
       display: 'flex',
@@ -260,7 +253,7 @@ export function registerResponsiveStyles(root: Style, palette: ThemePalette) {
       boxShadow: palette.effect.floatingShadow,
     })
   root
-    .media(mediaBelow(BREAKPOINTS.sm))
+    .media(mediaBelow(BREAKPOINTS.lg))
     .select('.studio .mobile-menu nav a')
     .css({
       padding: '12px 3px',

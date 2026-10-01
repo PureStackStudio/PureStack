@@ -15,6 +15,15 @@ export function registerNavigationStyles(root: Style, palette: ThemePalette) {
     height: '78px',
     gap: '40px',
   })
+  root.select('.studio .header-inner > .site-logo').css({
+    flexShrink: '0',
+  })
+  root.select('.studio .header-actions').css({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    flexShrink: '0',
+  })
   root.select('.studio .desktop-nav').css({
     display: 'flex',
     alignItems: 'center',

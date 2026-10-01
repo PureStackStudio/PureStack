@@ -117,7 +117,10 @@ export function registerLogoStyles() {
       fontWeight: '700',
       letterSpacing: '-0.045em',
       lineHeight: '1.05',
-      overflowWrap: 'anywhere',
+      maxWidth: '100%',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
       color: brand,
     })
     styleBuilder.select('.site-logo__brand', theme).color(brand)
@@ -138,7 +141,10 @@ export function registerLogoStyles() {
       color: neutral.text.subtle,
       lineHeight: '1.4',
       letterSpacing: '0.06em',
-      overflowWrap: 'anywhere',
+      maxWidth: '100%',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
     })
     styleBuilder
       .select('.site-logo[href]', theme)

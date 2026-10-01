@@ -1,6 +1,6 @@
 <header class="site-header">
   <Flex class="container header-inner" align="center">
-    <StudioBrand />
+    <StudioBrand/>
     <nav class="desktop-nav" aria-label="Main navigation">
       <a href="#framework">Framework</a>
       <a href="#ecosystem">Ecosystem</a>
@@ -8,24 +8,29 @@
       <a href="/components/">Components</a>
       <a href="#getting-started">Get started</a>
     </nav>
-    <a
-      class="header-source"
-      href="https://github.com/PureStackStudio/PureStack"
-      aria-label="PureStack GitHub repository"
-    >
-      <Icon name="tabler:brand-github" /><span>GitHub</span
-      ><span aria-hidden="true">↗</span>
-    </a>
-    <details class="mobile-menu">
-      <summary aria-label="Toggle navigation"><Icon name="tabler:menu-2" /></summary>
-      <nav aria-label="Mobile navigation">
-        <a href="#framework">Framework</a>
-        <a href="#ecosystem">Ecosystem</a>
-        <a href="/guides/">Guides</a>
-        <a href="/components/">Components</a>
-        <a href="#getting-started">Get started</a>
-        <a href="https://github.com/PureStackStudio/PureStack">GitHub ↗</a>
-      </nav>
-    </details>
+    <div class="header-actions">
+      <ThemeToggle/>
+      <a
+        class="header-source"
+        href="https://github.com/PureStackStudio/PureStack"
+        aria-label="PureStack GitHub repository"
+      >
+        <Icon name="tabler:brand-github"/><span>GitHub</span
+        ><span aria-hidden="true">↗</span>
+      </a>
+      <details class="mobile-menu">
+        <summary aria-label="Toggle navigation">
+          <Icon name="tabler:menu-2"/>
+        </summary>
+        <nav aria-label="Mobile navigation">
+          <a href="#framework">Framework</a>
+          <a href="#ecosystem">Ecosystem</a>
+          <a href="/guides/">Guides</a>
+          <a href="/components/">Components</a>
+          <a href="#getting-started">Get started</a>
+          <a href="https://github.com/PureStackStudio/PureStack">GitHub ↗</a>
+        </nav>
+      </details>
+    </div>
   </Flex>
 </header>
