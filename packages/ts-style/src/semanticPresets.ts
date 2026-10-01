@@ -12,16 +12,38 @@ interface States {
 }
 type Preset = Record<string, States>
 
+/**
+ * Where the spotlight's light falls. The skin sets its color; the page picks
+ * the point with a spotlight-from-* class, top-left by default.
+ */
+const SPOTLIGHT_FROM_VAR = '--ps-spotlight-from'
+const SPOTLIGHT_FROM = {
+  'top-left': '8% 0%',
+  top: '50% 0%',
+  'top-right': '92% 0%',
+  'bottom-left': '8% 100%',
+  'bottom-right': '92% 100%',
+} as const
+
 export function createPresets(
   styleBuilder: StyleBuilder,
   current: ThemePaletteCurrent,
   theme: ThemeName,
 ) {
   createFills(current, styleBuilder, theme)
+  createSpotlightOrigins(styleBuilder, theme)
   createBorders(current, styleBuilder, theme)
   createText(current, styleBuilder, theme)
   createTextBg(current, styleBuilder, theme)
   createInset(current, styleBuilder, theme)
+}
+
+function createSpotlightOrigins(styleBuilder: StyleBuilder, theme: string) {
+  for (const [name, position] of Object.entries(SPOTLIGHT_FROM)) {
+    styleBuilder
+      .select(`.spotlight-from-${name}`, theme)
+      .set(SPOTLIGHT_FROM_VAR, position)
+  }
 }
 
 function createPreset(
@@ -164,7 +186,7 @@ function createFills(
     },
     'tone-fill-spotlight': {
       rest: {
-        background: current.spotlight,
+        background: `radial-gradient(circle at var(${SPOTLIGHT_FROM_VAR}, ${SPOTLIGHT_FROM['top-left']}), ${current.spotlight.light} 0%, transparent 46%), ${current.spotlight.field}`,
       },
     },
     'tone-fill-surface': {

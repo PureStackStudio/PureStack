@@ -121,7 +121,15 @@ A tone contains more than one background and text color. These samples all selec
 
 Keep fill, border, and text from the same role when you need a ready-made combination. Each role's colors are designed as a set within the active theme. The direct `tone-fill`, `tone-border`, and `tone-text` classes use the tone color itself; they are useful for accents, but they are not the same as a complete surface or button treatment.
 
-`spotlight` is for large areas such as feature bands, callouts, and showcase panels. It is a deep field lit softly from the top-left corner, without the gloss and edge shading of surfaces and buttons, so it stays calm at any size. It has no interaction states and pairs with the alternate surface border and text classes. Components accept it as `variant="spotlight"`, for example `<Panel tone="accent" variant="spotlight">`.
+`spotlight` is for large areas such as feature bands, callouts, and showcase panels. It is a calm field with a soft light, without the gloss and edge shading of surfaces and buttons, so it stays calm at any size. It has no interaction states and pairs with the alternate surface border and text classes. Components accept it as `variant="spotlight"`, for example `<Panel tone="accent" variant="spotlight">`.
+
+The skin sets the field and the light color; the page decides where the light falls. It comes from the top left by default. Move it with `spotlight-from-top`, `spotlight-from-top-right`, `spotlight-from-bottom-left`, or `spotlight-from-bottom-right`, for example to keep it visible when a card covers that corner:
+
+```mdx
+<Panel tone="accent" variant="spotlight" class="spotlight-from-top-right">
+  ...
+</Panel>
+```
 
 ## Tone-colored text and clipped fills
 

@@ -1,5 +1,6 @@
 import { hexToRgba } from '@purestack/ts-css'
 import { clamp } from '@purestack/ts-util'
+import type { SpotlightTokens } from '../../themePalette'
 import type { ToneScale } from './shared'
 
 export type ChromeState = 'rest' | 'hover' | 'active' | 'disabled'
@@ -51,28 +52,26 @@ export type SpotlightColors = {
 }
 
 /**
- * A deep field lit from one corner, for feature bands and showcase panels.
+ * A deep field and a soft light, for feature bands and showcase panels.
  * Unlike surfaces it has no gloss, hotspot, or edge shading, so large areas
- * stay calm. The field runs from a lit edge down into the alternate surface.
- * Light comes from the button color when it is brighter than the surface, so
- * dark fields keep their hue, and from white on light fields.
+ * stay calm. The field runs from a lit top edge down into the alternate
+ * surface; tone-fill-spotlight places the light where the page asks. Light
+ * comes from the button color when it is brighter than the surface, so dark
+ * fields keep their hue, and from white on light fields.
  */
 export function createSpotlight(
   { surface, surfaceAlt, button }: SpotlightColors,
   options: ChromeOptions = {},
-) {
+): SpotlightTokens {
   const lighting = clamp(options.lighting ?? 0.72, 0, 1.5)
   const light = luminance(button) > luminance(surface) ? button : '#ffffff'
-  return layered([
-    radialAt('8% 0%', [
-      [rgba(mix(light, '#ffffff', 0.4), 0.7 * lighting), '0%'],
-      ['transparent', '38%'],
-    ]),
-    linear('135deg', [
+  return {
+    field: linear('165deg', [
       [mix(surface, light, 0.35), '0%'],
-      [mix(surface, surfaceAlt, 0.3), '75%'],
+      [mix(surface, surfaceAlt, 0.15), '75%'],
     ]),
-  ])
+    light: rgba(mix(light, '#ffffff', 0.4), 0.9 * lighting),
+  }
 }
 
 export function createChrome(

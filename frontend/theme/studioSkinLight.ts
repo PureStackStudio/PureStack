@@ -21,7 +21,10 @@ function state(background: string, border: string, text: string) {
 }
 
 function spotlight(lit: string, deep: string) {
-  return `radial-gradient(circle at 8% 0%, #ffffff66 0%, transparent 38%), linear-gradient(135deg, ${lit} 0%, ${deep} 75%)`
+  return {
+    field: `linear-gradient(165deg, ${lit} 0%, ${deep} 75%)`,
+    light: '#ffffff66',
+  }
 }
 
 function createLightTone(colors: LightToneColors): StudioTone {

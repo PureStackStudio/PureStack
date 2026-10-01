@@ -47,6 +47,17 @@ interface InteractiveToneState {
   text: string
 }
 
+/**
+ * A calm field for feature bands and showcase panels, lit softly from one
+ * point. The skin decides the colors; the page decides where the light falls.
+ */
+export interface SpotlightTokens {
+  /** Background of the field, without the light. */
+  field: string
+  /** Color of the light at its brightest point. */
+  light: string
+}
+
 export interface SemanticToneTokens {
   tone: string
   surface: {
@@ -64,8 +75,7 @@ export interface SemanticToneTokens {
     focusRing: string
   }
   canvas: string
-  /** Deep field lit from one corner, for feature bands and showcase panels. */
-  spotlight: string
+  spotlight: SpotlightTokens
   canvascolor: string
   root: {
     border: {
@@ -134,8 +144,7 @@ export interface ThemeRadii {
 export interface ThemePaletteCurrent {
   tone: string
   canvas: string
-  /** Deep field lit from one corner, for feature bands and showcase panels. */
-  spotlight: string
+  spotlight: SpotlightTokens
   canvascolor: string
   overlay: string
   surface: {

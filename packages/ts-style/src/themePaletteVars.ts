@@ -24,6 +24,7 @@ const CURRENT_INTERACTIVE_STATES = [
 const INTERACTIVE_PROPS = ['background', 'bgcolor', 'border', 'text'] as const
 const BORDER_PROPS = ['subtle', 'default', 'focus'] as const
 const TEXT_PROPS = ['default', 'subtle'] as const
+const SPOTLIGHT_PROPS = ['field', 'light'] as const
 const ICON_PROPS = ['background', 'gradient', 'color', 'border'] as const
 const EFFECT_PROPS = [
   'glowPrimary',
@@ -56,7 +57,7 @@ type InteractivePathTree<TStates extends readonly string[]> = {
 const CURRENT_THEME_PALETTE_PATHS = {
   tone: ['tone'],
   canvas: ['canvas'],
-  spotlight: ['spotlight'],
+  spotlight: createPropertyPathTree('spotlight', SPOTLIGHT_PROPS),
   canvascolor: ['canvascolor'],
   overlay: ['overlay'],
   surface: createInteractiveGroupPathTree(
@@ -357,7 +358,9 @@ function buildThemePaletteVarPaths() {
   for (const tone of SEMANTIC_TONE_NAMES) {
     paths.push(['semanticTone', tone, 'tone'])
     paths.push(['semanticTone', tone, 'canvas'])
-    paths.push(['semanticTone', tone, 'spotlight'])
+    for (const prop of SPOTLIGHT_PROPS) {
+      paths.push(['semanticTone', tone, 'spotlight', prop])
+    }
     paths.push(['semanticTone', tone, 'canvascolor'])
     paths.push(['semanticTone', tone, 'overlay'])
 

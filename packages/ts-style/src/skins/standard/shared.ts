@@ -237,7 +237,7 @@ export function createTone(
     spotlight:
       overrides.spotlight ??
       (isGhost
-        ? 'transparent'
+        ? { field: 'transparent', light: 'transparent' }
         : createSpotlight(
             {
               surface: colors.surface,
