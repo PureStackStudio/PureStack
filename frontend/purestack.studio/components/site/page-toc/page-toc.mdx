@@ -146,6 +146,22 @@ export async function writePageTocPreview(site: SiteConfig) {
   </TabPane>
 </Tabs>
 
+## From site config
+
+The table of contents the doc layout renders takes its tone, variant and extra classes from the `pageToc` section of `siteConfig.json`. A page can still override the tone with `layout.tocTone` in its frontmatter.
+
+```json
+{
+  "pageToc": {
+    "tone": "neutral",
+    "variant": "surfaceAlt",
+    "class": "spotlight-from-top-right"
+  }
+}
+```
+
+The panel keeps its own rounded corners whatever the variant, and drops its border when it collapses to a rail.
+
 ## Behavior and accessibility
 
 The default doc template already renders the page TOC; do not add a second copy to a normal guide. A sole h1 outline root is omitted so the list starts at its children. The template renders top-level entries and one nested level. Panel controls belong to the standard doc layout.
@@ -161,6 +177,8 @@ The default doc template already renders the page TOC; do not add a second copy 
   <a href="#page-toc-prop-items">items</a>
   <a href="#page-toc-prop-title">title</a>
   <a href="#page-toc-prop-tone">tone</a>
+  <a href="#page-toc-prop-variant">variant</a>
+  <a href="#page-toc-prop-variantMode">variantMode</a>
 </nav>
 
 <ApiProperty anchor="page-toc-prop-items" name="items" valueType="PageOutlineItem[]" defaultValue="context.outline">
@@ -171,8 +189,16 @@ The default doc template already renders the page TOC; do not add a second copy 
   <p>Trimmed visible panel title. Empty text uses the default.</p>
 </ApiProperty>
 
-<ApiProperty anchor="page-toc-prop-tone" name="tone" valueType="SemanticTone" defaultValue="inherited">
+<ApiProperty anchor="page-toc-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="inherited">
   <p>Semantic intent: neutral, accent, secondary, info, success, warning, danger, feature, custom or ghost. The active skin supplies the colors.</p>
+</ApiProperty>
+
+<ApiProperty anchor="page-toc-prop-variant" name="variant" valueType="RefOrValue&lt;ComponentVariant&gt;" defaultValue="flat">
+  <p>Visual treatment of the panel. Accepts solid, surface, surfaceAlt, spotlight, glass, flat, flatAlt, flatSolid, outlineFill, outline, subtle, subtleBtn, link, sheen, underline, rail, bracket or none. The panel keeps its own rounded corners whatever the variant.</p>
+</ApiProperty>
+
+<ApiProperty anchor="page-toc-prop-variantMode" name="variantMode" valueType="RefOrValue&lt;ComponentVariantMode&gt;" defaultValue="stateless">
+  <p>Use stateless for the contents panel; stateful enables the treatment’s hover and active styles on the whole panel. Links keep their own hover and active styles either way.</p>
 </ApiProperty>
 
 ### Composition

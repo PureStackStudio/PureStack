@@ -95,6 +95,12 @@ function renderDocTemplate({
                       .push(
                         h('page-toc').attr({
                           tone: frontmatter.layout.tocTone ?? site.pageToc.tone,
+                          ...(site.pageToc.variant
+                            ? { variant: site.pageToc.variant }
+                            : {}),
+                          ...(site.pageToc.class
+                            ? { class: site.pageToc.class }
+                            : {}),
                         }),
                       ),
                   ]

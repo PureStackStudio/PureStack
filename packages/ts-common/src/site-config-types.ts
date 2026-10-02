@@ -43,6 +43,10 @@ export interface DocLayoutConfig {
 export interface PageTocConfig {
   enabled: boolean
   tone: SemanticTone
+  /** Treatment of the table of contents panel, such as flat, surfaceAlt or glass. */
+  variant?: string
+  /** Extra classes for the table of contents panel. */
+  class?: string
 }
 
 export interface AuthConfig {

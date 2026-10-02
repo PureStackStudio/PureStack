@@ -28,7 +28,7 @@ export function registerPageTocShellStyles(
     .display('block')
     .marginLeft(docLayoutVar('activeShellPaddingInlineEnd'))
     .padding('1em')
-    .borderRadius(palette.radii.lg)
+    .borderRadius(`${palette.radii.lg} !important`)
     .border('1px solid transparent')
     .apply(palette.applyFont(palette.font.size.body))
     .maxHeight(`calc(100vh - ${docLayoutVar('sidebarTop')} - 1.5625rem)`)
@@ -276,7 +276,7 @@ function registerPageTocMobileOverlayStyles(
     )
     .media(mediaMax(BREAKPOINTS.toc))
     .background('transparent')
-    .border('none')
+    .border('none !important')
     .boxShadow('none')
 
   styleBuilder
@@ -349,7 +349,7 @@ function registerPageTocDesktopCollapsedStyles(theme: ThemeMode) {
     .select('.page-toc', theme)
     .media(mediaBelow(BREAKPOINTS.md))
     .marginInlineStart('0')
-    .borderRadius('0')
+    .borderRadius('0 !important')
   styleBuilder
     .select(
       '.template-doc--toc-collapsed .doc-toc:not(.doc-toc--open) .page-toc__header, .template-doc--toc-collapsed .doc-toc:not(.doc-toc--open) .page-toc__restore-toggle, .template-doc--toc-collapsed .doc-toc:not(.doc-toc--open) .page-toc__list, .template-doc--toc-collapsed .doc-toc:not(.doc-toc--open) .page-toc__empty',
@@ -366,7 +366,7 @@ function registerPageTocDesktopCollapsedStyles(theme: ThemeMode) {
     .marginLeft('0')
     .padding('0')
     .background('transparent')
-    .border('none')
-    .borderRadius('0')
+    .border('none !important')
+    .borderRadius('0 !important')
     .overflow('visible')
 }

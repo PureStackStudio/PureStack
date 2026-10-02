@@ -171,9 +171,16 @@ function resolvePageTocConfig(
   input?: DeepPartial<PageTocConfig>,
   file?: DeepPartial<PageTocConfig>,
 ): PageTocConfig {
+  const variant =
+    resolveOptionalString(input?.variant) ??
+    resolveOptionalString(file?.variant)
+  const className =
+    resolveOptionalString(input?.class) ?? resolveOptionalString(file?.class)
   return {
     enabled: pickBoolean(input?.enabled, file?.enabled, true),
     tone: pickSemanticTone(input?.tone, file?.tone) ?? 'neutral',
+    ...(variant ? { variant } : {}),
+    ...(className ? { class: className } : {}),
   }
 }
 

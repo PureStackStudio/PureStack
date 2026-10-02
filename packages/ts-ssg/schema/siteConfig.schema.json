@@ -438,6 +438,35 @@
           ],
           "description": "Page table-of-contents semantic tone.",
           "default": "neutral"
+        },
+        "variant": {
+          "type": "string",
+          "enum": [
+            "solid",
+            "surface",
+            "surfaceAlt",
+            "spotlight",
+            "glass",
+            "flat",
+            "flatAlt",
+            "flatSolid",
+            "outlineFill",
+            "outline",
+            "subtle",
+            "subtleBtn",
+            "link",
+            "sheen",
+            "underline",
+            "rail",
+            "bracket",
+            "none"
+          ],
+          "description": "Page table-of-contents treatment. The panel keeps its own rounded corners whatever the variant.",
+          "default": "flat"
+        },
+        "class": {
+          "type": "string",
+          "description": "Extra classes for the page table of contents, such as spotlight-from-top-right."
         }
       }
     },

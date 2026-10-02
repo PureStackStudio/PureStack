@@ -370,6 +370,41 @@ describe('renderPage consent integration', () => {
     expect(html).toContain('<nav-menu tone="neutral">')
   })
 
+  it('passes the configured page toc variant and class to the page toc', async () => {
+    const site = resolveSiteConfig({
+      rootDir: process.cwd(),
+      pageToc: { variant: ' surfaceAlt ', class: 'spotlight-from-top-right' },
+    })
+    const html = await renderPage({
+      bodyHtml: '<h2 id="intro">Intro</h2>',
+      pageInfo: {
+        relPath: 'index.md',
+        urlPath: '/',
+        frontmatter: normalizeFrontmatter({ layout: { showToc: true } }),
+      },
+      outline: [{ id: 'intro', title: 'Intro', depth: 2 }],
+      site,
+    })
+    expect(html).toContain(
+      '<page-toc tone="neutral" variant="surfaceAlt" class="spotlight-from-top-right">',
+    )
+  })
+
+  it('leaves the page toc on its own variant when none is configured', async () => {
+    const site = resolveSiteConfig({ rootDir: process.cwd() })
+    const html = await renderPage({
+      bodyHtml: '<h2 id="intro">Intro</h2>',
+      pageInfo: {
+        relPath: 'index.md',
+        urlPath: '/',
+        frontmatter: normalizeFrontmatter({ layout: { showToc: true } }),
+      },
+      outline: [{ id: 'intro', title: 'Intro', depth: 2 }],
+      site,
+    })
+    expect(html).toContain('<page-toc tone="neutral">')
+  })
+
   it('does not render navigation shell when showNav is false', async () => {
     const site = resolveSiteConfig({ rootDir: process.cwd() })
     const html = await renderPage({

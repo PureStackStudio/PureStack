@@ -1,14 +1,30 @@
 import type { PageOutlineItem, TsSsgContext } from '@purestack/ts-common'
 import { resolveTsSsgContext } from '@purestack/ts-common'
-import { getSemanticToneClass, type SemanticTone } from '@purestack/ts-style'
-import { type ComputedRef, computed, defineComponent, html } from 'regor'
+import type { SemanticTone } from '@purestack/ts-style'
+import {
+  type ComputedRef,
+  computed,
+  defineComponent,
+  html,
+  type RefOrValue,
+} from 'regor'
+import {
+  type ComponentVariant,
+  type ComponentVariantMode,
+  resolveComponentClasses,
+} from '../componentVariant'
 
 export interface PageToc {
   items?: PageOutlineItem[]
   title?: string
-  tone?: SemanticTone
-  toneClass?: ComputedRef<string>
+  tone?: RefOrValue<SemanticTone>
+  variant?: RefOrValue<ComponentVariant>
+  variantMode?: RefOrValue<ComponentVariantMode>
+  classes?: ComputedRef<string>
 }
+
+const DEFAULT_PAGE_TOC_VARIANT: ComponentVariant = 'flat'
+const DEFAULT_PAGE_TOC_VARIANT_MODE: ComponentVariantMode = 'stateless'
 
 export interface PageTocItem extends PageOutlineItem {
   href: string
@@ -16,8 +32,8 @@ export interface PageTocItem extends PageOutlineItem {
 }
 
 const pageTocTemplate = html`<nav
-  class="page-toc tone-fill-flat tone-border-surface tone-text-surface"
-  :class="toneClass"
+  class="page-toc"
+  :class="classes"
   aria-label="On this page"
 >
   <button
@@ -115,13 +131,17 @@ function resolveTitle(props: PageToc) {
 
 function definePageTocComponent() {
   return defineComponent<PageToc>(pageTocTemplate, {
-    props: ['items', 'title', 'tone'],
+    props: ['items', 'title', 'tone', 'variant', 'variantMode'],
     context: (head) => {
       const context = resolveTsSsgContext(head)
-      const tone = head.props.tone
       return {
         title: resolveTitle(head.props),
-        toneClass: computed(() => getSemanticToneClass(tone)),
+        classes: computed(() =>
+          resolveComponentClasses(head.props, {
+            defaultVariant: DEFAULT_PAGE_TOC_VARIANT,
+            defaultVariantMode: DEFAULT_PAGE_TOC_VARIANT_MODE,
+          }),
+        ),
         items: resolveItems(head.props, context),
       }
     },
