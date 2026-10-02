@@ -36,7 +36,9 @@ The generator writes `assets/site.css` for light and `assets/site.dark.css` for 
 
 ## Create a skin
 
-Start from a standard color preset and override the values your design needs:
+Pass a color object to the standard skin to generate matching light and dark
+palettes. You can provide any subset of its semantic colors; omitted colors use
+the standard defaults:
 
 ```ts
 import { registerSkin, themeSkins } from '@purestack/ts-style'
@@ -44,7 +46,12 @@ import { merge } from '@purestack/ts-util'
 
 registerSkin('my-site', {
   create: () => {
-    const standard = themeSkins.standard.create(['green'])
+    const standard = themeSkins.standard.create({
+      accent: '#4b64c8',
+      neutral: '#293047',
+      secondary: '#168a75',
+      feature: '#b04783',
+    })
     return {
       light: merge(standard.light, {
         font: { size: { body: '1rem' } },
@@ -57,7 +64,7 @@ registerSkin('my-site', {
 })
 ```
 
-Import the file that registers your skin before the site build begins, then set `"theme": { "skin": "my-site" }` in the style config. A skin is a full light/dark pair; the preset gives related semantic colors a coherent starting point, and `merge` preserves values you do not override.
+Import the file that registers your skin before the site build begins, then set `"theme": { "skin": "my-site" }` in the style config. A skin is a full light/dark pair, and `merge` preserves palette values you do not override. You can also pass a list of built-in preset names, such as `['green']`, to `themeSkins.standard.create()`.
 
 ## Extend styles with palette roles
 

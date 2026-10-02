@@ -1,6 +1,8 @@
 import type { ThemePalette } from '../themePalette'
-import { createStandardDark } from './standard/dark'
+import { createStandardDark, type StandardColorPreset } from './standard/dark'
 import { createStandardLight } from './standard/light'
+
+export type { StandardColorPreset } from './standard/dark'
 
 export type ThemeSkinName = string
 export type SkinPresetList = readonly string[]
@@ -10,11 +12,13 @@ export interface ThemeSkinPair {
   dark: ThemePalette
 }
 
-export interface ThemeSkin {
-  create: (presets?: SkinPresetList) => ThemeSkinPair
+export interface ThemeSkin<TPresets = SkinPresetList> {
+  create: (presets?: TPresets) => ThemeSkinPair
 }
 
-export type ThemeSkinRegistry = Record<ThemeSkinName, ThemeSkin>
+export type ThemeSkinRegistry = Record<ThemeSkinName, ThemeSkin> & {
+  standard: ThemeSkin<SkinPresetList | StandardColorPreset>
+}
 
 export const themeSkins: ThemeSkinRegistry = {
   standard: {

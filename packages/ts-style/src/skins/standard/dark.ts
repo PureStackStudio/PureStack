@@ -88,13 +88,7 @@ const bestColors = {
   },
 }
 export type StandardColors = (typeof bestColors)['standardBlue']
-
-export const feature = '#cb166e'
-export const custom = '#e35508'
-export const info = '#15a9c0'
-export const success = '#259740'
-export const warning = '#c49a1c'
-export const danger = '#a92a37'
+export type StandardColorPreset = Partial<StandardColors>
 
 export interface DeltaToneColors {
   canvas: number
@@ -143,16 +137,22 @@ export function createToneColors(
   }
 }
 
-export function getStandardColors(presets?: readonly string[]): StandardColors {
-  let colors: StandardColors | undefined
+export function getStandardColors(
+  presets?: readonly string[] | StandardColorPreset,
+): StandardColors {
   const defaultColors = bestColors.standardBlue
-  for (const preset of presets ?? []) {
+  if (!presets) return defaultColors
+  if (!Array.isArray(presets)) {
+    return merge(defaultColors, presets)
+  }
+  let colors: StandardColors = defaultColors
+  for (const preset of presets) {
     colors = merge(
       defaultColors,
       bestColors[preset as keyof typeof bestColors] ?? defaultColors,
     )
   }
-  return colors ?? defaultColors
+  return colors
 }
 
 function applyDeltaPresets(
@@ -172,13 +172,13 @@ function createStandardDarkCore(
   applyDeltaPresets(presets, delta)
   const accentScale = createColorScale(colors.accent, mode)
   const neutralScale = createColorScale(colors.neutral, mode)
-  const featureScale = createColorScale(feature, mode)
+  const featureScale = createColorScale(colors.feature, mode)
   const secondaryScale = createColorScale(colors.secondary, mode)
-  const customScale = createColorScale(custom, mode)
-  const infoScale = createColorScale(info, mode)
-  const successScale = createColorScale(success, mode)
-  const warningScale = createColorScale(warning, mode)
-  const dangerScale = createColorScale(danger, mode)
+  const customScale = createColorScale(colors.custom, mode)
+  const infoScale = createColorScale(colors.info, mode)
+  const successScale = createColorScale(colors.success, mode)
+  const warningScale = createColorScale(colors.warning, mode)
+  const dangerScale = createColorScale(colors.danger, mode)
 
   return {
     neutral: createToneColors(neutralScale[toneIndex], neutralScale, delta),
@@ -198,11 +198,16 @@ function createStandardDarkCore(
   }
 }
 
-export function createStandardDark(presets?: readonly string[]) {
+export function createStandardDark(
+  presets?: readonly string[] | StandardColorPreset,
+) {
   const colors = getStandardColors(presets)
   return createStandardPalette({
     mode: 'dark',
-    core: createStandardDarkCore(colors, presets),
+    core: createStandardDarkCore(
+      colors,
+      Array.isArray(presets) ? presets : undefined,
+    ),
     accent: colors.accent,
     chromeLighting: 0.33,
     borderAlpha: 0.66,

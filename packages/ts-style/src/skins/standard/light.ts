@@ -3,15 +3,10 @@ import { createStandardPalette, type StandardCore } from './base'
 import {
   createColorScale,
   createToneColors,
-  custom,
   type DeltaToneColors,
-  danger,
-  feature,
   getStandardColors,
-  info,
+  type StandardColorPreset,
   type StandardColors,
-  success,
-  warning,
 } from './dark'
 
 const mode: ThemeMode = 'dark'
@@ -53,13 +48,13 @@ function createStandardLightCore(
   applyDeltaPresets(presets, delta, delta1)
   const accentScale = createColorScale(colors.accent, mode)
   const neutralScale = createColorScale(colors.neutral, 'light')
-  const featureScale = createColorScale(feature, mode)
+  const featureScale = createColorScale(colors.feature, mode)
   const secondaryScale = createColorScale(colors.secondary, mode)
-  const customScale = createColorScale(custom, mode)
-  const infoScale = createColorScale(info, mode)
-  const successScale = createColorScale(success, mode)
-  const warningScale = createColorScale(warning, mode)
-  const dangerScale = createColorScale(danger, mode)
+  const customScale = createColorScale(colors.custom, mode)
+  const infoScale = createColorScale(colors.info, mode)
+  const successScale = createColorScale(colors.success, mode)
+  const warningScale = createColorScale(colors.warning, mode)
+  const dangerScale = createColorScale(colors.danger, mode)
 
   return {
     neutral: createToneColors(neutralScale[70], neutralScale, delta),
@@ -79,11 +74,16 @@ function createStandardLightCore(
   }
 }
 
-export function createStandardLight(presets?: readonly string[]) {
+export function createStandardLight(
+  presets?: readonly string[] | StandardColorPreset,
+) {
   const colors = getStandardColors(presets)
   return createStandardPalette({
     mode: 'light',
-    core: createStandardLightCore(colors, presets),
+    core: createStandardLightCore(
+      colors,
+      Array.isArray(presets) ? presets : undefined,
+    ),
     accent: colors.accent,
     chromeLighting: 0.33,
     borderAlpha: 1,
