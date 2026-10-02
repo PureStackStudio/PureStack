@@ -83,6 +83,13 @@ function registerFormFieldStyles(theme: ThemeMode, palette: ThemePalette) {
   styleBuilder
     .select('.form-block__input-icon', theme)
     .color(palette.current.text.subtle)
+  // Size the icon from the field's text, not from the surrounding page, so it
+  // stays in proportion with the value and placeholder beside it.
+  styleBuilder
+    .select('.icon.form-block__input-icon', theme)
+    .fontSize(palette.font.size.sm)
+    .width('1.4em')
+    .height('1.4em')
   styleBuilder
     .select(
       '.form-block__input-shell > .form-block__input-icon:first-child',

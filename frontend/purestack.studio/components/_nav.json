@@ -1,9 +1,6 @@
 {
   "pageLinks": true,
-  "sequence": [
-    "index.mdx",
-    "guides"
-  ],
+  "sequence": ["index.mdx", "guides"],
   "items": [
     {
       "id": "guides",

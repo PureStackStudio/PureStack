@@ -38,7 +38,7 @@
     "enabled": false
   },
   "consent": {
-    "enabled": false
+    "enabled": true
   },
   "pagefind": {
     "enabled": true

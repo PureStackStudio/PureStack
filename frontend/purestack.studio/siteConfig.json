@@ -48,7 +48,7 @@
     }
   },
   "consent": {
-    "enabled": false,
+    "enabled": true,
     "policyVersion": "2026-09-15",
     "categories": [
       {
