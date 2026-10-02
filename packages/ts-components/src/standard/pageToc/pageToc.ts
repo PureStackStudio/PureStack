@@ -114,7 +114,7 @@ function toPageTocItems(items: PageOutlineItem[]): PageTocItem[] {
 function omitSingleDocumentHeading(items: PageOutlineItem[]) {
   if (items.length !== 1) return items
   const [item] = items
-  if (!item || item.depth !== 1) return items
+  if (item?.depth !== 1) return items
   return item.children ?? []
 }
 
