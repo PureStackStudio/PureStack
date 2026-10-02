@@ -1,3 +1,15 @@
 {
-  "pageLinks": true
+  "pageLinks": true,
+  "sequence": [
+    "index.mdx",
+    "guides"
+  ],
+  "items": [
+    {
+      "id": "guides",
+      "title": "Guides",
+      "url": "/guides/",
+      "icon": "tabler:book-2"
+    }
+  ]
 }

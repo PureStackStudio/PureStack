@@ -129,7 +129,10 @@ function resolveUrl(raw: Record<string, unknown>, folder: string) {
 
 function resolveInternalUrl(folder: string, url: string) {
   const { base, suffix } = urlNormalizer.splitSuffix(url)
-  const joined = path.posix.join('/', folder, base)
+  // A leading slash is site-absolute, so it must not be nested in the folder.
+  const joined = base.startsWith('/')
+    ? path.posix.normalize(base)
+    : path.posix.join('/', folder, base)
   const hasExt = path.posix.extname(joined).length > 0
   const normalized = hasExt || joined.endsWith('/') ? joined : `${joined}/`
   return `${normalized}${suffix}`

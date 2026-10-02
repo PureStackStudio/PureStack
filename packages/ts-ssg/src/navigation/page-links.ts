@@ -20,6 +20,7 @@ export function buildPageLinksByFolder(
 export function resolvePageLinks(
   tree: NavigationTree,
   folder: string,
+  root: string,
   items: NavItem[],
   file: NavigationContentFile,
 ): PageNavigationLinks | undefined {
@@ -27,7 +28,11 @@ export function resolvePageLinks(
   const currentUrl = normalizePageLinkUrl(resolveRouteInfo(file).urlPath)
   if (!currentUrl) return undefined
 
-  const links = flattenPageLinks(items)
+  // Previous and next walk one section. Items that link to another section,
+  // such as a cross-link from the guides to the components, are skipped.
+  const links = flattenPageLinks(items).filter((link) =>
+    isInsideRoot(link.url, root),
+  )
   const index = links.findIndex((link) => link.url === currentUrl)
   if (index < 0) return undefined
 
@@ -38,6 +43,12 @@ export function resolvePageLinks(
     ...(previous ? { previous } : {}),
     ...(next ? { next } : {}),
   }
+}
+
+function isInsideRoot(url: string, root: string) {
+  if (!root) return true
+  const rootUrl = `/${root}/`
+  return url === rootUrl || url.startsWith(rootUrl)
 }
 
 function isPageLinksEnabled(tree: NavigationTree, folder: string) {

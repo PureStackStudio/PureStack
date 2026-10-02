@@ -567,6 +567,38 @@ describe('navigation', () => {
     })
   })
 
+  it('keeps site-absolute custom item urls outside the nav file folder', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      await fs.mkdir(path.join(contentDir, 'guides'), { recursive: true })
+      await fs.writeFile(
+        path.join(contentDir, 'guides', 'index.mdx'),
+        `---\ntitle: Guides\n---\n# Guides\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'guides', '_nav.json'),
+        JSON.stringify({
+          items: [
+            { title: 'Components', url: '/components/' },
+            { title: 'Themes', url: 'themes' },
+          ],
+        }),
+        'utf8',
+      )
+
+      const files = await discoverContent(contentDir)
+      const nav = await buildNavigation(contentDir, files, {
+        mode: 'hybrid',
+        maxDepth: 20,
+      })
+      const urls = (nav?.byFolder.guides ?? []).map((item) => item.url)
+
+      expect(urls).toContain('/components/')
+      expect(urls).toContain('/guides/themes/')
+    })
+  })
+
   it('applies nav file icons to mixed auto and custom items', async () => {
     await withTempDir(async (base) => {
       const contentDir = path.join(base, 'content')
@@ -737,6 +769,67 @@ describe('navigation', () => {
       expect(pageNav?.pageLinks).toEqual({
         previous: { title: 'Docs', url: '/docs/' },
         next: { title: 'Tutorial', url: '/docs/tutorial/' },
+      })
+    })
+  })
+
+  it('keeps page links inside the current navigation root', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      await fs.mkdir(path.join(contentDir, 'guides'), { recursive: true })
+      await fs.mkdir(path.join(contentDir, 'components'), { recursive: true })
+      await fs.writeFile(
+        path.join(contentDir, 'guides', 'index.mdx'),
+        `---\ntitle: Guides\n---\n# Guides\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'guides', 'setup.mdx'),
+        `---\ntitle: Setup\n---\n# Setup\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'components', 'index.mdx'),
+        `---\ntitle: Components\n---\n# Components\n`,
+        'utf8',
+      )
+      await fs.writeFile(
+        path.join(contentDir, 'guides', '_nav.json'),
+        JSON.stringify({
+          pageLinks: true,
+          sequence: ['index.mdx', 'components', 'setup.mdx'],
+          items: [
+            { id: 'components', title: 'Components', url: '/components/' },
+          ],
+        }),
+        'utf8',
+      )
+
+      const files = await discoverContent(contentDir)
+      const nav = await buildNavigation(contentDir, files, {
+        mode: 'hybrid',
+        maxDepth: 20,
+        roots: ['guides', 'components'],
+      })
+      const guides = resolvePageNavigation(
+        nav,
+        findContentFile(files, 'guides/index.mdx'),
+      )
+      const setup = resolvePageNavigation(
+        nav,
+        findContentFile(files, 'guides/setup.mdx'),
+      )
+
+      expect(guides?.items.map((item) => item.title)).toEqual([
+        'Guides',
+        'Components',
+        'Setup',
+      ])
+      expect(guides?.pageLinks).toEqual({
+        next: { title: 'Setup', url: '/guides/setup/' },
+      })
+      expect(setup?.pageLinks).toEqual({
+        previous: { title: 'Guides', url: '/guides/' },
       })
     })
   })

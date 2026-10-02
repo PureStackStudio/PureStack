@@ -2,6 +2,7 @@
   "pageLinks": true,
   "sequence": [
     "index.mdx",
+    "components",
     "purestack-cli.mdx",
     "site-config.mdx",
     "vscode-extension.mdx",
@@ -11,5 +12,13 @@
     "semantic-tones.mdx",
     "icons.mdx",
     "themes.mdx"
+  ],
+  "items": [
+    {
+      "id": "components",
+      "title": "Components",
+      "url": "/components/",
+      "icon": "tabler:components"
+    }
   ]
 }

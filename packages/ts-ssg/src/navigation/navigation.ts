@@ -87,7 +87,7 @@ export function resolvePageNavigation(
     ? (tree.rootByFolder[folder] ?? configuredRoot)
     : configuredRoot
   const items = tree.byFolder[root] ?? tree.byFolder[folder] ?? []
-  const pageLinks = resolvePageLinks(tree, folder, items, file)
+  const pageLinks = resolvePageLinks(tree, folder, root, items, file)
   return {
     mode: tree.mode,
     folder,

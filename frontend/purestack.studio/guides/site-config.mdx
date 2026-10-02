@@ -172,7 +172,7 @@ In `hybrid` mode, a folder's `_nav.json` can order discovered pages, add custom 
 }
 ```
 
-Place this in `content/guides/_nav.json`. A nav file can also use `"mode": "override"` to replace that folder's discovered items, or `"root"` to select another built navigation root. The default nav filename is `_nav.json`.
+Place this in `content/guides/_nav.json`. A custom item's `url` is relative to the nav file's folder, unless it starts with `/`, which makes it site-absolute: `/components/` links to another section. Give an item an `id` to place it with `sequence`. Previous and next links stay within the current navigation root, so a link to another section appears in the menu but is skipped by previous and next. A nav file can also use `"mode": "override"` to replace that folder's discovered items, or `"root"` to select another built navigation root. The default nav filename is `_nav.json`.
 
 `pageToc.enabled` sets the default for a page's table of contents; individual pages can override it with frontmatter `layout.showToc`. `docLayout.sidebarTop` and `sidebarTopMobile` are CSS lengths measured from the viewport top. Adjust them when your header height changes so the sidebars and mobile drawers start below it.
 
