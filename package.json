@@ -18,11 +18,11 @@
     "url": "https://github.com/PureStackStudio/PureStack/issues"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.15",
+    "@biomejs/biome": "^2.5.14",
     "@types/node": "^25.6.2",
     "esbuild": "^0.28.0",
     "tsdown": "0.23.0",
-    "tsx": "^4.21.0",
+    "tsx": "^4.23.15",
     "typescript": "7.0.2",
     "typescript-parser": "npm:typescript@6.0.3",
     "vite": "^7.3.1",
