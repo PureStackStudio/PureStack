@@ -13,18 +13,46 @@ nav:
 
 # Charts and large data
 
-Present data with charts and keep large lists and tables responsive with virtualized rows.
+<p class="component-directory-lead">Make the pattern clear. Keep the detail within reach.</p>
 
-[All components](/components/)
+Compare categories, follow a trend, or explain a distribution. Then give people a responsive way to browse the records behind it. Seven guides combine real data editors, complete appearance galleries, and scrolling examples with visible mounted-row counters.
 
-## Component guides
+## Choose your view
 
-<Grid columns="1" columnsSm="2" columnsXl="3">
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Bar<wbr/>Chart</h3><p>Compare categorical values in a responsive SVG chart, including positive and negative data.</p><BtnLink href="/components/data/bar-chart/" tone="accent" variant="link">Explore Bar<wbr/>Chart</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Line<wbr/>Chart</h3><p>Show change across an ordered sequence with multiple series, optional areas and precise presentation controls.</p><BtnLink href="/components/data/line-chart/" tone="accent" variant="link">Explore Line<wbr/>Chart</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Doughnut<wbr/>Chart</h3><p>Show positive parts of a whole with a configurable ring, centre label and theme-aware segment colors.</p><BtnLink href="/components/data/doughnut-chart/" tone="accent" variant="link">Explore Doughnut<wbr/>Chart</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Virtual<wbr/>List</h3><p>Keep large collections responsive by mounting a small scrolling window of fixed-height rows.</p><BtnLink href="/components/data/virtual-list/" tone="accent" variant="link">Explore Virtual<wbr/>List</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Variable<wbr/>Virtual<wbr/>List</h3><p>Keep large collections responsive by mounting a small scrolling window of measured variable-height rows.</p><BtnLink href="/components/data/variable-virtual-list/" tone="accent" variant="link">Explore Variable<wbr/>Virtual<wbr/>List</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Virtual<wbr/>Table</h3><p>Render a large semantic table while mounting only nearby rows, with predictable fixed row heights.</p><BtnLink href="/components/data/virtual-table/" tone="accent" variant="link">Explore Virtual<wbr/>Table</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Variable<wbr/>Virtual<wbr/>Table</h3><p>Render a large semantic table while mounting only nearby rows, with measured variable row heights.</p><BtnLink href="/components/data/variable-virtual-table/" tone="accent" variant="link">Explore Variable<wbr/>Virtual<wbr/>Table</BtnLink></Panel>
+<div class="component-guide-grid">
+<article class="component-guide-card"><div class="component-guide-card__preview"><BarChart :items="[{label:'Mon',value:24},{label:'Tue',value:38},{label:'Wed',value:-12},{label:'Thu',value:46}]" height="150" ariaLabel="Daily changes:24,38,-12,46" :animated="false"/></div><h3>BarChart</h3><Badge tone="neutral">Compare categories</Badge><p>Positive values and losses share a zero baseline. Edit each value, choose a color strategy, and compare explicit bounds.</p><a href="/components/data/bar-chart/">Explore BarChart ↗</a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><LineChart :series="[{label:'Requests',points:[{label:'Mon',value:18},{label:'Tue',value:32},{label:'Wed',value:25},{label:'Thu',value:48}]}]" :showArea="true" :showPoints="true" height="150" ariaLabel="Requests:18,32,25,48" :animated="false"/></div><h3>LineChart</h3><Badge tone="neutral">Follow a trend</Badge><p>Compare ordered observations across series. Choose curves, areas, points, labels, and a shared scale.</p><a href="/components/data/line-chart/">Explore LineChart ↗</a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><DoughnutChart :segments="[{label:'Complete',value:18},{label:'Review',value:7},{label:'Planned',value:5}]" centerLabel="Tasks" size="150" ariaLabel="30 tasks:18 complete,7 review,5 planned" :animated="false"/></div><h3>DoughnutChart</h3><Badge tone="neutral">Explain a whole</Badge><p>Positive segments form a ring. Tune thickness, gaps, rotation, and center copy; compose an exact-value legend beside it.</p><a href="/components/data/doughnut-chart/">Explore DoughnutChart ↗</a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><Flex direction="column" class="w-full"><Flex justify="between"><strong>Release 41</strong><Badge tone="success">Ready</Badge></Flex><Flex justify="between"><strong>Release 42</strong><Badge tone="warning">Review</Badge></Flex><Flex justify="between"><strong>Release 43</strong><Badge tone="info">Queued</Badge></Flex></Flex></div><h3>VirtualList</h3><Badge tone="neutral">Fixed-height rows</Badge><p>A small scrolling window of equally sized records. Inspect real mounted counts and jump to a matching position.</p><a href="/components/data/virtual-list/">Explore VirtualList ↗</a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><Flex direction="column" class="w-full"><Badge tone="info">Measured heights</Badge><strong>Release notes</strong><p class="m-0">A short update.</p><p class="m-0">A longer review has room for wrapping text and expandable detail.</p></Flex></div><h3>Variable<wbr/>VirtualList</h3><Badge tone="neutral">Content-sized rows</Badge><p>Measured rows let text wrap and details expand. Keep record state while rows leave and re-enter the mounted window.</p><a href="/components/data/variable-virtual-list/">Explore VariableVirtualList ↗</a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><div class="w-full overflow-x-auto"><table><thead><tr><th scope="col">Release</th><th scope="col">Status</th></tr></thead><tbody><tr><td>Studio docs</td><td><Badge tone="success">Ready</Badge></td></tr><tr><td>Keyboard review</td><td><Badge tone="warning">Review</Badge></td></tr></tbody></table></div></div><h3>VirtualTable</h3><Badge tone="neutral">Fixed-height table</Badge><p>Native rows with sticky headers and footers. Compare auto or fixed column layout and explicit column widths.</p><a href="/components/data/virtual-table/">Explore VirtualTable ↗</a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><div class="w-full overflow-x-auto"><table><thead><tr><th scope="col">Review</th><th scope="col">Summary</th></tr></thead><tbody><tr><td>41</td><td>Updated the guides.</td></tr><tr><td>42</td><td>Wrapping descriptions and expanded notes determine each row’s measured height.</td></tr></tbody></table></div></div><h3>Variable<wbr/>VirtualTable</h3><Badge tone="neutral">Content-sized table</Badge><p>Let each table row grow with its content. Compare wrapping widths, initial estimates, and changing scroll extent.</p><a href="/components/data/variable-virtual-table/">Explore VariableVirtualTable ↗</a></article>
+</div>
+
+## Compose a useful data view
+
+<ComponentExample label="Pattern → exact values → records" caption="Charts summarize a dataset. A labelled legend or table explains its values; a searchable record view provides the detail. All values below are illustrative.">
+<div class="component-recipe">
+<SectionHeader eyebrow="RELEASE HEALTH" title="See progress and its context" subtitle="Compare daily changes and explain where the work stands." titleTag="h3" titleClass="fs-h3"/>
+<Grid columns="1" columnsMd="2" alignItems="center">
+<BarChart :items="[{label:'Mon',value:24},{label:'Tue',value:38},{label:'Wed',value:-12},{label:'Thu',value:46}]" ariaLabel="Daily changes:Monday24,Tuesday38,Wednesday-12,Thursday46" height="200" :animated="false"/>
+<Flex direction="column" align="center"><DoughnutChart :segments="[{label:'Complete',value:18},{label:'Review',value:7},{label:'Planned',value:5}]" centerLabel="Tasks" size="180" ariaLabel="30 tasks:18 complete,7 review,5 planned" :animated="false"/><Flex wrap="true"><Badge tone="accent">18 complete</Badge><Badge tone="feature">7 in review</Badge><Badge tone="success">5 planned</Badge></Flex></Flex>
 </Grid>
+<FormStatus tone="info">Daily changes: +24, +38, −12, +46. Task distribution: 18 complete, 7 in review, 5 planned.</FormStatus>
+<p><a href="/components/data/virtual-table/">Explore the searchable release table ↗</a></p>
+</div>
+</ComponentExample>
+
+## Pick the right geometry
+
+| Need | Component | What determines the layout |
+| --- | --- | --- |
+| Compare categories or signed changes | [BarChart](./bar-chart/) | A scale that includes zero and every value |
+| Follow an ordered sequence | [LineChart](./line-chart/) | Equally spaced observations across one or more series |
+| Show positive parts of a whole | [DoughnutChart](./doughnut-chart/) | Positive values normalized to the total |
+| Browse equally sized records | [VirtualList](./virtual-list/) | A known itemHeight |
+| Browse wrapping or expandable records | [VariableVirtualList](./variable-virtual-list/) | An initial estimate replaced by measurements |
+| Browse a table of equally sized rows | [VirtualTable](./virtual-table/) | A known itemHeight and chosen column layout |
+| Browse a table with growing rows | [VariableVirtualTable](./variable-virtual-table/) | Measured row heights and content wrapping |
+
+The chart guides show every tone, variant, and variant mode. The virtualized components expose geometry and rendering props; appearance belongs to the viewport and registered rows. Application search, sorting, data loading, legends, and durable state are composed in the working examples.

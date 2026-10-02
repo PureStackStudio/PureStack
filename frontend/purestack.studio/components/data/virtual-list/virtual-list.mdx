@@ -13,11 +13,7 @@ nav:
 
 # Virtual<wbr/>List
 
-Keep large collections responsive by mounting a small scrolling window of fixed-height rows.
-
-<Badge tone="accent" variant="surface">VirtualList</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/virtualList/virtualList.ts) · [API reference](#api-reference)
+<ComponentHeader name="VirtualList" kind="Fixed-height collection" summary="Browse thousands of records with a small mounted window. Predictable row heights make scrolling and position calculations straightforward." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/virtualList/virtualList.ts" section="Charts &amp; large data" sectionHref="/components/data/"/>
 
 ## Interactive playground
 
@@ -25,8 +21,11 @@ Scroll through 10,000 release records while only a small window is mounted. Chan
 
 <Tabs group="list-playground" selectedTab="list-playground-preview" ariaLabel="Interactive playground" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="list-playground-preview" label="Preview">
+<ComponentExample label="VirtualList in context" caption="Search and filter real records, change the viewport and buffer, and watch the mounted-row counters while scrolling.">
     <RegorApp id="virtual-list-demo" src="./playground.ts"/>
-  </TabPane>
+
+</ComponentExample>
+</TabPane>
   <TabPane id="list-playground-mdx" label="playground.mdx">
 ```html
 <RegorApp id="virtual-list-demo" src="./playground.ts"/>
@@ -343,8 +342,11 @@ Start with a typed row component and register it alongside VirtualList. This com
 
 <Tabs group="list-basic" selectedTab="list-basic-preview" ariaLabel="A minimal working list" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="list-basic-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="virtual-list-basic-demo" src="./basic-list.ts"/>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="list-basic-mdx" label="basic-list.mdx">
 ```html
 <RegorApp id="virtual-list-basic-demo" src="./basic-list.ts"/>
@@ -415,8 +417,11 @@ The checkbox ref belongs to each task in the parent dataset. Removing a row from
 
 <Tabs group="list-state" selectedTab="list-state-preview" ariaLabel="State that survives scrolling" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="list-state-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="virtual-list-state-demo" src="./persistent-state.ts"/>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="list-state-mdx" label="persistent-state.mdx">
 ```html
 <RegorApp id="virtual-list-state-demo" src="./persistent-state.ts"/>
@@ -602,6 +607,27 @@ Filtering is application code: the playground passes a computed array to items. 
 VirtualList has no public scrollToIndex method. For fixed-height rows, the pixel offset is <code>index × itemHeight</code>. The playground sets scrollTop on its own viewport and dispatches a scroll event to synchronize the component immediately. Jump positions are clamped to the matching dataset; the browser also clamps the final offset to the maximum scroll distance.
 
 The search, filters and jump controls do not load data from a server. Virtualization reduces mounted DOM; it does not reduce the memory occupied by the source array or make filtering an array free. Combine it with your own data-loading strategy when needed.
+
+## Read the mounted window
+
+The source array stays in memory; only nearby records become DOM rows. These components have no tone or variant props. Style the viewport and row components, and use semantic tones on their contents, as the live examples do.
+
+<ComponentExample label="One dataset, a small rendered window" caption="The diagram explains the scroll structure. The live counters above inspect actual mounted rows.">
+<div class="data-window-diagram"><div class="data-window-diagram__spacer">Earlier records · represented by calculated space</div><div class="data-window-diagram__rows"><Badge tone="info">Overscan before</Badge><p><strong>Visible records</strong><br/>Each row occupies the configured itemHeight.</p><Badge tone="info">Overscan after</Badge></div><div class="data-window-diagram__spacer">Later records · remain in the source array</div></div>
+</ComponentExample>
+
+## Feature map
+
+| Public feature | Visible behavior |
+| --- | --- |
+| items | Load 100 to 50,000 records; filter them or empty the dataset. |
+| height | Choose a viewport height and compare the mounted-row count. |
+| itemHeight | Switch row density and compare scrolling distances; row content must fit the fixed height. |
+| overscan | Change the buffer and watch how many extra rows are mounted. |
+| rowComponent | The live example registers a named row that receives item and the current array index. |
+| Native attributes and events | The viewport is a named, focusable scrolling region. Keyboard scrolling uses browser behavior. |
+| Durable state | The persistent-checkbox example keeps selection on the record after a row unmounts. |
+| Empty feedback | Empty the dataset or enter a search with no matches; feedback is composed outside the virtual rows. |
 
 ## Behavior and accessibility
 

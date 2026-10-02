@@ -242,6 +242,39 @@ export function registerComponentGuideStyles() {
     root.select('.forms-appearance-grid--composer').css({
       gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 24rem), 1fr))',
     })
+    root.select('.data-chart-gallery').css({
+      gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 16rem), 1fr))',
+    })
+    root.select('.data-chart-gallery .component-appearance-cell > svg').css({
+      alignSelf: 'center',
+      maxWidth: '100%',
+    })
+    root
+      .select(
+        '.data-chart-gallery text, .component-example .bar-chart text, .component-example .line-chart text, .component-example .doughnut-chart text',
+      )
+      .css({ fill: 'currentColor' })
+    root.select('.data-window-diagram').css({
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '0.5rem',
+      padding: '1rem',
+      border: `1px solid ${neutral.border.subtle}`,
+      borderRadius: '0.75rem',
+      background: neutral.surface.rest.background,
+    })
+    root.select('.data-window-diagram__spacer').css({
+      padding: '0.75rem',
+      textAlign: 'center',
+      border: `1px dashed ${neutral.border.subtle}`,
+      color: neutral.text.subtle,
+      fontSize: '0.8rem',
+    })
+    root.select('.data-window-diagram__rows').css({
+      padding: '1rem',
+      borderLeft: `3px solid ${accent.text.default}`,
+      background: accent.surface.rest.background,
+    })
     root.select('.forms-copy-sample').css({
       border: 'none',
       padding: '0',

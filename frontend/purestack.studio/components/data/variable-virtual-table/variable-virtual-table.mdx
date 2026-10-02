@@ -13,11 +13,7 @@ nav:
 
 # Variable<wbr/>Virtual<wbr/>Table
 
-Render a large semantic table while mounting only nearby rows, with measured variable row heights.
-
-<Badge tone="accent" variant="surface">VariableVirtualTable</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/virtualList/variableVirtualTable.ts) · [API reference](#api-reference)
+<ComponentHeader name="VariableVirtualTable" kind="Measured table" summary="Let table rows grow with their content. Wrapping descriptions and expandable details are measured inside a semantic, virtualized table." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/virtualList/variableVirtualTable.ts" section="Charts &amp; large data" sectionHref="/components/data/"/>
 
 ## Interactive playground
 
@@ -25,8 +21,11 @@ Review a large queue with wrapping summaries and expandable notes. Change the su
 
 <Tabs group="variable-virtual-table-playground" selectedTab="variable-virtual-table-playground-preview" ariaLabel="Interactive playground" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="variable-virtual-table-playground-preview" label="Preview">
+<ComponentExample label="VariableVirtualTable in context" caption="Expand reviews, change their wrapping width, and watch the measured sizes and scroll extent update.">
     <RegorApp id="variable-virtual-table-demo" src="./playground.ts"/>
-  </TabPane>
+
+</ComponentExample>
+</TabPane>
   <TabPane id="variable-virtual-table-playground-mdx" label="playground.mdx">
 ```html
 <RegorApp id="variable-virtual-table-demo" src="./playground.ts"/>
@@ -89,7 +88,14 @@ const reviewRowTemplate = html`<tr :data-row="index">
     <div :style="{ width: item.width + 'rem' }" class="ws-normal">
       <Flex justify="between" align="center" wrap="true">
         <strong>{{ item.title }}</strong>
-        <Btn variant="outline" size="sm" :aria-expanded="item.expanded" :aria-controls="'review-notes-' + item.id" @click="item.expanded = !item.expanded">{{ item.expanded ? 'Less detail' : 'More detail' }}</Btn>
+        <Btn
+          variant="outline"
+          size="sm"
+          :aria-expanded="item.expanded"
+          :aria-controls="'review-notes-' + item.id"
+          @click="item.expanded = !item.expanded"
+          >{{ item.expanded ? 'Less detail' : 'More detail' }}</Btn
+        >
       </Flex>
       <p class="mb-0">{{ item.summary }}</p>
       <div r-if="item.expanded" :id="'review-notes-' + item.id" class="mt-3">
@@ -98,15 +104,29 @@ const reviewRowTemplate = html`<tr :data-row="index">
       </div>
     </div>
   </td>
-  <td class="px-3 py-2 bb-1 b-subtle ws-nowrap"><Badge tone="info" variant="surface">Open</Badge></td>
+  <td class="px-3 py-2 bb-1 b-subtle ws-nowrap">
+    <Badge tone="info" variant="surface">Open</Badge>
+  </td>
 </tr>`
-const reviewHeaderTemplate = html`<thead><tr>
-  <th scope="col" class="px-3 py-2 tone-fill-surface">ID</th>
-  <th scope="col" class="px-3 py-2 tone-fill-surface">Review summary</th>
-  <th scope="col" class="px-3 py-2 tone-fill-surface">Status</th>
-</tr></thead>`
-const reviewFooterTemplate = html`<tfoot><tr><td colspan="3" class="px-3 py-2 tone-fill-surface">Review queue · illustrative data</td></tr></tfoot>`
-const reviewColumnsTemplate = html`<colgroup><col style="width: 5rem"/><col/><col style="width: 7rem"/></colgroup>`
+const reviewHeaderTemplate = html`<thead>
+  <tr>
+    <th scope="col" class="px-3 py-2 tone-fill-surface">ID</th>
+    <th scope="col" class="px-3 py-2 tone-fill-surface">Review summary</th>
+    <th scope="col" class="px-3 py-2 tone-fill-surface">Status</th>
+  </tr>
+</thead>`
+const reviewFooterTemplate = html`<tfoot>
+  <tr>
+    <td colspan="3" class="px-3 py-2 tone-fill-surface">
+      Review queue · illustrative data
+    </td>
+  </tr>
+</tfoot>`
+const reviewColumnsTemplate = html`<colgroup>
+  <col style="width: 5rem"/>
+  <col/>
+  <col style="width: 7rem"/>
+</colgroup>`
 
 const reviewRow = defineComponent<ReviewRow>(reviewRowTemplate, {
   props: ['item', 'index'],
@@ -150,51 +170,129 @@ export interface VariableTablePlayground {
 
 const variableTablePlaygroundTemplate = html`<Flex direction="column">
   <Grid columns="1" columnsMd="2">
-    <FormSelectField id="review-table-count" label="Dataset size" :model="count" :options="counts" @change="load" />
-    <FormInputField id="review-table-search" label="Search reviews" placeholder="Try Review 42" :model="query" />
+    <FormSelectField
+      id="review-table-count"
+      label="Dataset size"
+      :model="count"
+      :options="counts"
+      @change="load"/>
+    <FormInputField
+      id="review-table-search"
+      label="Search reviews"
+      placeholder="Try Review 42"
+      :model="query"/>
   </Grid>
   <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
     <Flex justify="between" align="center" wrap="true">
       <p class="text-eyebrow m-0">LIVE PREVIEW · REVIEW TABLE</p>
-      <Badge tone="accent" variant="surface">{{ filtered.length }} matching records</Badge>
+      <Badge tone="accent" variant="surface"
+        >{{ filtered.length }} matching records</Badge
+      >
     </Flex>
     <Grid columns="2" columnsMd="4" class="my-3">
-      <div><p class="m-0 text-muted">Mounted rows</p><strong id="review-table-mounted">{{ mountedRows }}</strong></div>
-      <div><p class="m-0 text-muted">Positions</p><strong>{{ rowRange }}</strong></div>
-      <div><p class="m-0 text-muted">Row heights</p><strong id="review-table-measured">{{ measuredRange }}</strong></div>
-      <div><p class="m-0 text-muted">Scroll height</p><strong>{{ scrollExtent }} px</strong></div>
+      <div>
+        <p class="m-0 text-muted">Mounted rows</p>
+        <strong id="review-table-mounted">{{ mountedRows }}</strong>
+      </div>
+      <div>
+        <p class="m-0 text-muted">Positions</p>
+        <strong>{{ rowRange }}</strong>
+      </div>
+      <div>
+        <p class="m-0 text-muted">Row heights</p>
+        <strong id="review-table-measured">{{ measuredRange }}</strong>
+      </div>
+      <div>
+        <p class="m-0 text-muted">Scroll height</p>
+        <strong>{{ scrollExtent }} px</strong>
+      </div>
     </Grid>
     <div id="review-table-host">
-      <VariableVirtualTable r-if="active" id="review-table-viewport"
-        :items="filtered" :height="height" :estimateHeight="estimate" :overscan="overscan"
-        rowComponent="ReviewRow" :headerComponent="header ? 'ReviewHeader' : ''"
-        :footerComponent="footer ? 'ReviewFooter' : ''" :colGroupComponent="columns ? 'ReviewColumns' : ''"
-        tabindex="0" role="region" aria-label="Scrollable review table" class="b-1 b-subtle rounded-md"
-      />
+      <VariableVirtualTable
+        r-if="active"
+        id="review-table-viewport"
+        :items="filtered"
+        :height="height"
+        :estimateHeight="estimate"
+        :overscan="overscan"
+        rowComponent="ReviewRow"
+        :headerComponent="header ? 'ReviewHeader' : ''"
+        :footerComponent="footer ? 'ReviewFooter' : ''"
+        :colGroupComponent="columns ? 'ReviewColumns' : ''"
+        tabindex="0"
+        role="region"
+        aria-label="Scrollable review table"
+        class="b-1 b-subtle rounded-md"/>
     </div>
-    <FormStatus r-if="!filtered.length" role="status">{{ records.length ? 'No matching reviews. Clear the search to see the table.' : 'The table is empty. Reload the dataset to continue.' }}</FormStatus>
-    <p class="mb-0 text-muted">Expand a review or change the summary width. Each row is measured after its text wraps. The header and footer stay visible; wide columns scroll inside this region.</p>
+    <FormStatus r-if="!filtered.length" role="status"
+      >{{ records.length ? 'No matching reviews. Clear the search to see the table.' : 'The table is empty. Reload the dataset to continue.' }}</FormStatus
+    >
+    <p class="mb-0 text-muted">
+      Expand a review or change the summary width. Each row is measured after
+      its text wraps. The header and footer stay visible; wide columns scroll
+      inside this region.
+    </p>
   </Panel>
   <Grid columns="1" columnsMd="3">
-    <FormSelectField id="review-table-height" label="Viewport height" :model="height" :options="heights" />
-    <FormSelectField id="review-table-estimate" label="Initial height estimate" :model="estimate" :options="estimates" @change="restart" />
-    <FormSelectField id="review-table-overscan" label="Overscan" :model="overscan" :options="buffers" />
+    <FormSelectField
+      id="review-table-height"
+      label="Viewport height"
+      :model="height"
+      :options="heights"/>
+    <FormSelectField
+      id="review-table-estimate"
+      label="Initial height estimate"
+      :model="estimate"
+      :options="estimates"
+      @change="restart"/>
+    <FormSelectField
+      id="review-table-overscan"
+      label="Overscan"
+      :model="overscan"
+      :options="buffers"/>
   </Grid>
   <Grid columns="1" columnsMd="2">
-    <FormSelectField id="review-table-width" label="Summary width" :model="width" :options="widths" @change="restart" />
-    <FormSelectField id="review-table-sort" label="Sort by ID" :model="sort" :options="sorts" />
+    <FormSelectField
+      id="review-table-width"
+      label="Summary width"
+      :model="width"
+      :options="widths"
+      @change="restart"/>
+    <FormSelectField
+      id="review-table-sort"
+      label="Sort by ID"
+      :model="sort"
+      :options="sorts"/>
   </Grid>
   <Flex wrap="true">
-    <FormCheck id="review-table-header" label="Header" :checked="header" />
-    <FormCheck id="review-table-footer" label="Footer" :checked="footer" />
-    <FormCheck id="review-table-columns" label="Column widths" :checked="columns" />
+    <FormCheck id="review-table-header" label="Header" :checked="header"/>
+    <FormCheck id="review-table-footer" label="Footer" :checked="footer"/>
+    <FormCheck
+      id="review-table-columns"
+      label="Column widths"
+      :checked="columns"/>
   </Flex>
   <Flex wrap="true">
-    <Btn variant="outline" :disabled="!filtered.length" @click="first">Back to top</Btn>
-    <Btn variant="outline" :disabled="!filtered.length" @click="previous">Previous screen</Btn>
-    <Btn tone="accent" variant="surface" :disabled="!filtered.length" @click="next">Next screen</Btn>
+    <Btn variant="outline" :disabled="!filtered.length" @click="first"
+      >Back to top</Btn
+    >
+    <Btn variant="outline" :disabled="!filtered.length" @click="previous"
+      >Previous screen</Btn
+    >
+    <Btn
+      tone="accent"
+      variant="surface"
+      :disabled="!filtered.length"
+      @click="next"
+      >Next screen</Btn
+    >
   </Flex>
-  <p class="m-0 text-muted">The counters inspect mounted rows. Scroll height includes estimates for unseen rows and can change as you browse. Search, sort, dataset, width and estimate changes restart measurement from the top; expanded state stays on each record.</p>
+  <p class="m-0 text-muted">
+    The counters inspect mounted rows. Scroll height includes estimates for
+    unseen rows and can change as you browse. Search, sort, dataset, width and
+    estimate changes restart measurement from the top; expanded state stays on
+    each record.
+  </p>
   <Flex wrap="true">
     <Btn variant="outline" @click="restart">Restart measurement</Btn>
     <Btn variant="outline" @click="load">Reload dataset</Btn>
@@ -324,7 +422,7 @@ function createVariableTablePlayground(): VariableTablePlayground {
       { label: 'Oldest first', value: 'asc' },
       { label: 'Newest first', value: 'desc' },
     ],
-    counts: [100, 1000, 10000].map((n) => ({
+    counts: [100, 1000, 10000, 50000].map((n) => ({
       label: `${n.toLocaleString('en-US')} records`,
       value: String(n),
     })),
@@ -388,7 +486,7 @@ createApp(
   },
   {
     selector: 'app#variable-virtual-table-demo',
-    template: html`<VariableTablePlayground />`,
+    template: html`<VariableTablePlayground/>`,
   },
 )
 ```
@@ -401,8 +499,11 @@ Constrain the description width and let the browser determine row height. This e
 
 <Tabs group="variable-virtual-table-basic" selectedTab="variable-virtual-table-basic-preview" ariaLabel="A table with wrapping descriptions" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="variable-virtual-table-basic-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="variable-table-basic-demo" src="./basic-table.ts"/>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="variable-virtual-table-basic-mdx" label="basic-table.mdx">
 ```html
 <RegorApp id="variable-table-basic-demo" src="./basic-table.ts"/>
@@ -528,6 +629,31 @@ The existing theme makes the header sticky at the top and footer cells sticky at
 
 VariableVirtualTable uses a content-sized table with a minimum width of 100%. It does not register tableLayout as a public prop. The example constrains the summary content width explicitly so text wraps; a column width alone may not constrain an automatically sized table. Narrow viewports scroll horizontally inside the named region.
 
+## Read the mounted window
+
+The source array stays in memory; only nearby records become DOM rows. These components have no tone or variant props. Style the viewport and row components, and use semantic tones on their contents, as the live examples do.
+
+<ComponentExample label="One dataset, a small rendered window" caption="The diagram explains the scroll structure. The live counters above inspect actual mounted rows.">
+<div class="data-window-diagram"><div class="data-window-diagram__spacer">Earlier records · represented by estimated and measured space</div><div class="data-window-diagram__rows"><Badge tone="info">Overscan before</Badge><p><strong>Visible table rows</strong><br/>Each rendered height is measured after content wraps or expands.</p><Badge tone="info">Overscan after</Badge></div><div class="data-window-diagram__spacer">Later records · remain in the source array</div></div>
+</ComponentExample>
+
+## Feature map
+
+| Public feature | Visible behavior |
+| --- | --- |
+| items | Load 100 to 50,000 records; filter and sort them or empty the dataset. |
+| height | Choose a viewport height and compare the mounted-row count. |
+| estimateHeight | Change the initial estimate, expand a record, and inspect actual measured heights. |
+| overscan | Change the buffer and watch how many extra rows are mounted. |
+| rowComponent | The live example registers a named row that receives item and the current array index. |
+| headerComponent and footerComponent | Toggle each section; both use valid native table roots and remain sticky. |
+| colGroupComponent | Toggle explicit widths and compare horizontal scrolling inside the viewport. |
+| Native attributes and events | The viewport is a named, focusable scrolling region. Keyboard scrolling uses browser behavior. |
+| Durable state | Expand a record, scroll it out of view, and return; its expansion is stored on the record. |
+| Empty feedback | Empty the dataset or enter a search with no matches; feedback is composed outside the virtual rows. |
+
+The measured components register estimateHeight, not itemHeight. VariableVirtualTable also has no tableLayout prop. Filtering, sorting, and large geometry changes in these demos remount the viewport to restart measurements; there is no public cache-reset method.
+
 ## Behavior and accessibility
 
 - **Keyboard scrolling:** the examples add tabindex="0" to the viewport. Arrow keys and Page Up / Page Down use native browser scrolling. These components do not implement spreadsheet navigation or roving focus.
@@ -537,7 +663,6 @@ VariableVirtualTable uses a content-sized table with a minimum width of 100%. It
 - **Complete data access:** browser find, printing and assistive navigation only see mounted rows. Provide application search or a full-data view or export where complete access is needed.
 - **Memory and loading:** virtualization reduces mounted DOM, not the source array or filtering cost. Data fetching, pagination, selection and sorting remain application responsibilities.
 - **Scroll stability:** total height and scrollbar position can shift as estimates are replaced. These examples do not promise exact deep-link offsets or scroll anchoring during large size changes.
-
 
 ## API reference
 

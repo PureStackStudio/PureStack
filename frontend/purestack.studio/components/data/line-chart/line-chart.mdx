@@ -13,11 +13,7 @@ nav:
 
 # Line<wbr/>Chart
 
-Show change across an ordered sequence with multiple series, optional areas and precise presentation controls.
-
-<Badge tone="accent" variant="surface">LineChart</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/lineChart/lineChart.ts) · [API reference](#api-reference)
+<ComponentHeader name="LineChart" kind="Ordered trends" summary="Make change easy to follow. Compare series, reveal individual observations, and choose linear or smooth curves with optional areas." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/lineChart/lineChart.ts" section="Charts &amp; large data" sectionHref="/components/data/"/>
 
 ## Playground
 
@@ -25,8 +21,11 @@ Edit either series, rename it, or hide it to inspect the other line. Try crossin
 
 <Tabs group="line-chart-sample-1" selectedTab="line-chart-sample-1-preview" ariaLabel="Interactive LineChart playground" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="line-chart-sample-1-preview" label="Preview">
+<ComponentExample label="LineChart in context" caption="Edit and rename series, toggle their visibility, and compare curves, areas, points, and labels.">
     <RegorApp id="line-chart-demo" src="./playground.ts"/>
-  </TabPane>
+
+</ComponentExample>
+</TabPane>
   <TabPane id="line-chart-sample-1-source-0" label="playground.mdx">
 ```html
 <RegorApp id="line-chart-demo" src="./playground.ts"/>
@@ -63,6 +62,11 @@ import {
   type SRef,
   sref,
 } from 'regor'
+import {
+  type ChartAppearanceState,
+  createChartAppearanceState,
+  defineChartAppearanceControls,
+} from '../../../../docs/dataGuide'
 
 export type LineChartPreset =
   | 'growth'
@@ -86,7 +90,7 @@ export interface LineChartEditorSeries {
   points: LineChartEditorPoint[]
 }
 
-export interface LineChartPlayground {
+export interface LineChartPlayground extends ChartAppearanceState {
   editorSeries: SRef<LineChartEditorSeries[]>
   chartSeries: ComputedRef<LineChartSeries[]>
   summary: ComputedRef<string>
@@ -124,6 +128,7 @@ const lineChartPlaygroundTemplate = html`<Flex direction="column">
     <FormSelectField id="line-curve" label="Curve" :model="curve" :options="curves" />
     <FormSelectField id="line-unit" label="Value suffix" :model="suffix" :options="units" />
   </Grid>
+  <ChartAppearanceControls prefix="line-chart-appearance" :tone="chartTone" :variant="chartVariant" :variantMode="chartVariantMode" :width="chartWidth" :showWidth="true"/>
   <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
     <Flex justify="between" align="center" wrap="true">
       <p class="text-eyebrow m-0">LIVE PREVIEW · SERIES COMPARISON</p>
@@ -136,6 +141,7 @@ const lineChartPlaygroundTemplate = html`<Flex direction="column">
     </Flex>
     <div class="overflow-x-auto" tabindex="0" role="region" aria-label="Scrollable line chart preview">
       <LineChart
+        :tone="chartTone" :variant="chartVariant" :variantMode="chartVariantMode" :width="chartWidth"
         :series="chartSeries"
         title="Illustrative series comparison"
         description="Equally spaced observations. Exact values can be edited in each series below."
@@ -240,6 +246,7 @@ function createLineChartSeries(
 }
 
 function createLineChartPlayground(): LineChartPlayground {
+  const appearance = createChartAppearanceState()
   const editorSeries = sref(createLineChartSeries('growth'))
   const preset = ref<LineChartPreset>('growth')
   const curve = ref<LineChartCurve>('smooth')
@@ -266,6 +273,7 @@ function createLineChartPlayground(): LineChartPlayground {
       })),
   )
   return {
+    ...appearance,
     editorSeries,
     chartSeries,
     summary: computed(() => {
@@ -322,6 +330,7 @@ function createLineChartPlayground(): LineChartPlayground {
     clear: () => editorSeries([]),
     reset: () =>
       batch(() => {
+        appearance.resetAppearance()
         preset('growth')
         curve('smooth')
         suffix('%')
@@ -352,6 +361,7 @@ const icons: Record<string, string> = {
 createApp(
   {
     components: {
+      ChartAppearanceControls: defineChartAppearanceControls(),
       LineChartPlayground: lineChartPlayground,
       ...defineBadgeComponents(),
       ...defineButtonComponents(),
@@ -373,13 +383,13 @@ createApp(
 
 Entrance animation starts enabled. Use **Replay animation** to run the SVG animations again without changing your data. Turn it off for immediate comparisons while editing. With overlapping series, hide value labels and use the named input fields to read exact values.
 
-
 ## Compare aligned series
 
 Give each series the same ordered categories and a visible legend. A fixed zero-to-100 scale keeps this comparison consistent. These are illustrative percentages.
 
 <Tabs group="line-chart-comparison" selectedTab="line-chart-comparison-preview" ariaLabel="Compare aligned series example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="line-chart-comparison-preview" label="Preview">
+<div class="component-preview-stage">
     <Panel variant="surface" bodyClass="p-3">
       <h3 class="mt-0">Adoption across five releases</h3>
       <Flex wrap="true">
@@ -400,7 +410,9 @@ Give each series the same ordered categories and a visible legend. A fixed zero-
         curve="linear"
       />
     </Panel>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="line-chart-comparison-source" label="aligned-series.mdx">
 ```html
 <Panel variant="surface" bodyClass="p-3">
@@ -427,13 +439,13 @@ Give each series the same ordered categories and a visible legend. A fixed zero-
   </TabPane>
 </Tabs>
 
-
 ## Fill an area across zero
 
 Area fill closes each path against zero. Positive and negative regions keep their direction, while value labels show the actual observations. Multiple series would overlap; area fill is not stacking.
 
 <Tabs group="line-chart-signed" selectedTab="line-chart-signed-preview" ariaLabel="Fill an area across zero example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="line-chart-signed-preview" label="Preview">
+<div class="component-preview-stage">
     <LineChart
       title="Change from the release baseline"
       ariaLabel="R1 minus 32 percent, R2 minus 12, R3 plus 8, R4 plus 24, R5 plus 36"
@@ -445,7 +457,9 @@ Area fill closes each path against zero. Positive and negative regions keep thei
       :showArea="true"
       :showValues="true"
     />
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="line-chart-signed-source" label="signed-area.mdx">
 ```html
 <LineChart
@@ -463,13 +477,13 @@ Area fill closes each path against zero. Positive and negative regions keep thei
   </TabPane>
 </Tabs>
 
-
 ## A compact trend card
 
 Use a nearby headline to explain a small trend. Remove the axis, category labels and markers to emphasize its shape; retain the exact observations in the accessible name.
 
 <Tabs group="line-chart-compact" selectedTab="line-chart-compact-preview" ariaLabel="A compact trend card example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="line-chart-compact-preview" label="Preview">
+<div class="component-preview-stage">
     <Panel tone="accent" variant="surface" bodyClass="p-3">
       <p class="text-eyebrow mt-0">ILLUSTRATIVE LATENCY</p>
       <h3>18 ms latest measurement</h3>
@@ -486,7 +500,9 @@ Use a nearby headline to explain a small trend. Remove the axis, category labels
         :showPoints="false"
       />
     </Panel>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="line-chart-compact-source" label="compact-trend.mdx">
 ```html
 <Panel tone="accent" variant="surface" bodyClass="p-3">
@@ -509,13 +525,13 @@ Use a nearby headline to explain a small trend. Remove the axis, category labels
   </TabPane>
 </Tabs>
 
-
 ## Single-point and empty states
 
 One observation needs a marker because there is no line segment yet. An empty series list displays your emptyLabel and removes the chart marks. Neither case needs placeholder data.
 
 <Tabs group="line-chart-states" selectedTab="line-chart-states-preview" ariaLabel="Single-point and empty states example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="line-chart-states-preview" label="Preview">
+<div class="component-preview-stage">
     <Grid columns="1" columnsMd="2">
       <Panel variant="surface" bodyClass="p-3">
         <h3 class="mt-0">First measurement</h3>
@@ -539,7 +555,9 @@ One observation needs a marker because there is no line segment yet. An empty se
         />
       </Panel>
     </Grid>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="line-chart-states-source" label="data-states.mdx">
 ```html
 <Grid columns="1" columnsMd="2">
@@ -569,6 +587,72 @@ One observation needs a marker because there is no line segment yet. An empty se
   </TabPane>
 </Tabs>
 
+## All ten semantic tones
+
+Compare all ten tones together. These examples use tone-aware plot colors; custom data colors and the chart’s tone remain independent.
+
+<ComponentExample label="All ten semantic tones" caption="All samples use the same illustrative values. Switch the site theme to compare both palettes.">
+<div data-chart-gallery="tone"><ChartAppearanceGallery component="LineChart" axis="tone"/></div>
+</ComponentExample>
+
+## All eighteen visual variants
+
+Every supported treatment is visible in accent, including none. The default chart variant is none; the live editor lets you combine any tone and treatment.
+
+<ComponentExample label="All eighteen visual variants" caption="All samples use the same illustrative values. Switch the site theme to compare both palettes.">
+<div data-chart-gallery="variant"><ChartAppearanceGallery component="LineChart" axis="variant"/></div>
+</ComponentExample>
+
+## Both variant modes
+
+Stateless keeps the resting appearance. Stateful adds the treatment’s hover and active classes; hover the outlineFill examples to compare them. Charts default to stateless and retain their native plot hover feedback in either mode.
+
+<ComponentExample label="Both variant modes" caption="All samples use the same illustrative values. Switch the site theme to compare both palettes.">
+<div data-chart-gallery="mode"><ChartAppearanceGallery component="LineChart" axis="mode"/></div>
+</ComponentExample>
+
+## Curves and display layers
+
+Every layer is visible here without changing a toggle. Smooth interpolation is a visual treatment of equally spaced observations; it does not add observations to the data.
+
+<ComponentExample label="Compare curves and layers" caption="The live editor also supports multiple series, signed values, flat data, and one observation.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Linear</code>
+<LineChart :series="[{label:'Requests',points:[{label:'Mon',value:18},{label:'Tue',value:32},{label:'Wed',value:25},{label:'Thu',value:48}]}]" curve="linear" :showPoints="true" height="180" ariaLabel="Linear requests: 18,32,25,48" :animated="false"/>
+</div>
+<div class="component-appearance-cell"><code>Smooth</code>
+<LineChart :series="[{label:'Requests',points:[{label:'Mon',value:18},{label:'Tue',value:32},{label:'Wed',value:25},{label:'Thu',value:48}]}]" curve="smooth" :showPoints="true" height="180" ariaLabel="Smooth requests: 18,32,25,48" :animated="false"/>
+</div>
+<div class="component-appearance-cell"><code>Area</code>
+<LineChart :series="[{label:'Requests',points:[{label:'Mon',value:18},{label:'Tue',value:32},{label:'Wed',value:25},{label:'Thu',value:48}]}]" :showArea="true" height="180" ariaLabel="Area requests: 18,32,25,48" :animated="false"/>
+</div>
+<div class="component-appearance-cell"><code>Points and values</code>
+<LineChart :series="[{label:'Requests',points:[{label:'Mon',value:18},{label:'Tue',value:32},{label:'Wed',value:25},{label:'Thu',value:48}]}]" :showPoints="true" :showValues="true" height="180" ariaLabel="Requests: 18,32,25,48" :animated="false"/>
+</div>
+<div class="component-appearance-cell"><code>Only the line</code>
+<LineChart :series="[{label:'Requests',points:[{label:'Mon',value:18},{label:'Tue',value:32},{label:'Wed',value:25},{label:'Thu',value:48}]}]" :showArea="false" :showPoints="false" :showValues="false" :showLabels="false" :showAxis="false" height="180" ariaLabel="Requests: 18,32,25,48" :animated="false"/>
+</div>
+<div class="component-appearance-cell"><code>One observation</code>
+<LineChart :series="[{label:'Requests',points:[{label:'Today',value:32}]}]" :showPoints="true" :showValues="true" height="180" ariaLabel="Today 32 requests" :animated="false"/>
+</div>
+<div class="component-appearance-cell"><code>Empty</code>
+<LineChart :series="[]" emptyLabel="No visible series" height="180" ariaLabel="No visible series" :animated="false"/>
+</div>
+</div>
+</ComponentExample>
+
+## Feature map
+
+| Feature | Where to try it |
+| --- | --- |
+| Reactive data and custom colors | Edit and rename both series; hide one to compare the other. Each series carries its own color. |
+| Tone, variant, and variantMode | Use the three appearance controls; every option also appears in the galleries. |
+| Accessible name and description | The live chart binds ariaLabel to its exact-value summary; title and description are SVG metadata. |
+| Empty label | Choose Empty data; a dedicated empty sample is also visible above. |
+| Units | Change the value suffix in the live editor. |
+| Size | Change width and height; blank width preserves responsive sizing. |
+| Entrance motion | Toggle entrance animation and use Replay animation. |
+| Domain | Change minimum and maximum bounds. The range includes zero and every data value. |
 
 ## Behavior and accessibility
 
@@ -577,7 +661,6 @@ One observation needs a marker because there is no line segment yet. An empty se
 - **Readable values:** use markers, a visible legend and nearby data when exact comparisons matter. Narrow previews can scroll horizontally. Value labels from coincident series are not automatically separated.
 - **Accessible context:** provide a meaningful title and description or ariaLabel. Each point has an SVG title, while the playground also exposes the measurements through labelled native fields. Color is supported by named series and editable values.
 - **Animation:** paths fade in and markers grow on entrance. Area fills remain static. Replay uses each SVG animation's native beginElement method.
-
 
 ## API reference
 

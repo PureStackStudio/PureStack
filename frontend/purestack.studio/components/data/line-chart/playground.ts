@@ -27,6 +27,11 @@ import {
   type SRef,
   sref,
 } from 'regor'
+import {
+  type ChartAppearanceState,
+  createChartAppearanceState,
+  defineChartAppearanceControls,
+} from '../../../../docs/dataGuide'
 
 export type LineChartPreset =
   | 'growth'
@@ -50,7 +55,7 @@ export interface LineChartEditorSeries {
   points: LineChartEditorPoint[]
 }
 
-export interface LineChartPlayground {
+export interface LineChartPlayground extends ChartAppearanceState {
   editorSeries: SRef<LineChartEditorSeries[]>
   chartSeries: ComputedRef<LineChartSeries[]>
   summary: ComputedRef<string>
@@ -88,6 +93,7 @@ const lineChartPlaygroundTemplate = html`<Flex direction="column">
     <FormSelectField id="line-curve" label="Curve" :model="curve" :options="curves" />
     <FormSelectField id="line-unit" label="Value suffix" :model="suffix" :options="units" />
   </Grid>
+  <ChartAppearanceControls prefix="line-chart-appearance" :tone="chartTone" :variant="chartVariant" :variantMode="chartVariantMode" :width="chartWidth" :showWidth="true"/>
   <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
     <Flex justify="between" align="center" wrap="true">
       <p class="text-eyebrow m-0">LIVE PREVIEW · SERIES COMPARISON</p>
@@ -100,6 +106,7 @@ const lineChartPlaygroundTemplate = html`<Flex direction="column">
     </Flex>
     <div class="overflow-x-auto" tabindex="0" role="region" aria-label="Scrollable line chart preview">
       <LineChart
+        :tone="chartTone" :variant="chartVariant" :variantMode="chartVariantMode" :width="chartWidth"
         :series="chartSeries"
         title="Illustrative series comparison"
         description="Equally spaced observations. Exact values can be edited in each series below."
@@ -204,6 +211,7 @@ function createLineChartSeries(
 }
 
 function createLineChartPlayground(): LineChartPlayground {
+  const appearance = createChartAppearanceState()
   const editorSeries = sref(createLineChartSeries('growth'))
   const preset = ref<LineChartPreset>('growth')
   const curve = ref<LineChartCurve>('smooth')
@@ -230,6 +238,7 @@ function createLineChartPlayground(): LineChartPlayground {
       })),
   )
   return {
+    ...appearance,
     editorSeries,
     chartSeries,
     summary: computed(() => {
@@ -286,6 +295,7 @@ function createLineChartPlayground(): LineChartPlayground {
     clear: () => editorSeries([]),
     reset: () =>
       batch(() => {
+        appearance.resetAppearance()
         preset('growth')
         curve('smooth')
         suffix('%')
@@ -316,6 +326,7 @@ const icons: Record<string, string> = {
 createApp(
   {
     components: {
+      ChartAppearanceControls: defineChartAppearanceControls(),
       LineChartPlayground: lineChartPlayground,
       ...defineBadgeComponents(),
       ...defineButtonComponents(),

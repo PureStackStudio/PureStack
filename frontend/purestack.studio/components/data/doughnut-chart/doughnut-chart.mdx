@@ -13,11 +13,7 @@ nav:
 
 # Doughnut<wbr/>Chart
 
-Show positive parts of a whole with a configurable ring, centre label and theme-aware segment colors.
-
-<Badge tone="accent" variant="surface">DoughnutChart</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/doughnutChart/doughnutChart.ts) · [API reference](#api-reference)
+<ComponentHeader name="DoughnutChart" kind="Parts of a whole" summary="Turn a positive distribution into a readable ring. Tune its geometry, explain the total, and keep exact shares in a nearby legend." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/doughnutChart/doughnutChart.ts" section="Charts &amp; large data" sectionHref="/components/data/"/>
 
 ## Interactive playground
 
@@ -25,8 +21,11 @@ Edit segment names and values, hide a category, and watch the total and percenta
 
 <Tabs group="doughnut-chart-sample-1" selectedTab="doughnut-chart-sample-1-preview" ariaLabel="Interactive doughnut chart playground" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="doughnut-chart-sample-1-preview" label="Preview">
+<ComponentExample label="DoughnutChart in context" caption="Edit segment values and names, change the ring geometry, and compare automatic or custom center content.">
     <RegorApp id="doughnut-chart-demo" src="./playground.ts"/>
-  </TabPane>
+
+</ComponentExample>
+</TabPane>
   <TabPane id="doughnut-chart-sample-1-source-0" label="playground.mdx">
 ```html
 <RegorApp id="doughnut-chart-demo" src="./playground.ts"/>
@@ -61,6 +60,11 @@ import {
   type SRef,
   sref,
 } from 'regor'
+import {
+  type ChartAppearanceState,
+  createChartAppearanceState,
+  defineChartAppearanceControls,
+} from '../../../../docs/dataGuide'
 
 export type DoughnutPreset =
   | 'tasks'
@@ -86,7 +90,7 @@ export interface DoughnutLegendEntry {
   share: string
 }
 
-export interface DoughnutChartPlayground {
+export interface DoughnutChartPlayground extends ChartAppearanceState {
   editorSegments: SRef<DoughnutEditorSegment[]>
   chartSegments: ComputedRef<DoughnutChartSegment[]>
   legend: ComputedRef<DoughnutLegendEntry[]>
@@ -121,6 +125,7 @@ const doughnutChartPlaygroundTemplate = html`<Flex direction="column">
     <FormSelectField id="ring-preset" label="Distribution" :model="preset" :options="presets" @change="applyPreset" />
     <FormSelectField id="ring-unit" label="Value suffix" :model="suffix" :options="units" />
   </Grid>
+  <ChartAppearanceControls prefix="doughnut-chart-appearance" :tone="chartTone" :variant="chartVariant" :variantMode="chartVariantMode" :width="chartWidth" :showWidth="false"/>
   <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
     <Flex justify="between" align="center" wrap="true">
       <p class="text-eyebrow m-0">LIVE PREVIEW · PARTS OF A WHOLE</p>
@@ -128,6 +133,7 @@ const doughnutChartPlaygroundTemplate = html`<Flex direction="column">
     </Flex>
     <Grid columns="1" columnsMd="2" alignItems="center" class="my-3">
       <DoughnutChart
+        :tone="chartTone" :variant="chartVariant" :variantMode="chartVariantMode"
         :segments="chartSegments"
         title="Illustrative distribution"
         description="Positive values form the ring. The adjacent legend lists exact values and shares."
@@ -221,6 +227,7 @@ function createSegments(preset: DoughnutPreset): DoughnutEditorSegment[] {
 }
 
 function createDoughnutChartPlayground(): DoughnutChartPlayground {
+  const appearance = createChartAppearanceState()
   const editorSegments = sref(createSegments('tasks'))
   const preset = ref<DoughnutPreset>('tasks')
   const centerMode = ref<DoughnutCenterMode>('total')
@@ -260,6 +267,7 @@ function createDoughnutChartPlayground(): DoughnutChartPlayground {
     ),
   )
   return {
+    ...appearance,
     editorSegments,
     chartSegments: computed<DoughnutChartSegment[]>(() => visible()),
     legend,
@@ -331,6 +339,7 @@ function createDoughnutChartPlayground(): DoughnutChartPlayground {
     clear: () => editorSegments([]),
     reset: () =>
       batch(() => {
+        appearance.resetAppearance()
         preset('tasks')
         centerMode('total')
         customValue('Ready')
@@ -359,6 +368,7 @@ const icons: Record<string, string> = {
 createApp(
   {
     components: {
+      ChartAppearanceControls: defineChartAppearanceControls(),
       DoughnutChartPlayground: doughnutChartPlayground,
       ...defineButtonComponents(),
       ...defineDoughnutChartComponents(),
@@ -388,6 +398,7 @@ Pair the ring with a visible legend and a short interpretation. The automatic ce
 
 <Tabs group="ring-distribution" selectedTab="ring-distribution-preview" ariaLabel="A distribution with context" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="ring-distribution-preview" label="Preview">
+<div class="component-preview-stage">
 <Panel variant="surface" bodyClass="p-3 min-w-0">
   <p class="text-eyebrow">RELEASE READINESS</p>
   <h3 class="mt-0">A clear picture of the sprint</h3>
@@ -410,7 +421,9 @@ Pair the ring with a visible legend and a short interpretation. The automatic ce
     </Flex>
   </Grid>
 </Panel>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="ring-distribution-source" label="distribution.mdx">
 ```html
 <Panel variant="surface" bodyClass="p-3 min-w-0">
@@ -445,6 +458,7 @@ Pass actual counts as segments and compute the percentage separately. Setting ce
 
 <Tabs group="ring-completion" selectedTab="ring-completion-preview" ariaLabel="A focused completion ring" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="ring-completion-preview" label="Preview">
+<div class="component-preview-stage">
 <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
   <Grid columns="1" columnsMd="2" alignItems="center">
     <DoughnutChart
@@ -469,7 +483,9 @@ Pass actual counts as segments and compute the percentage separately. Setting ce
     </Flex>
   </Grid>
 </Panel>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="ring-completion-source" label="completion-ring.mdx">
 ```html
 <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
@@ -506,6 +522,7 @@ Compare a thin, continuous ring with a thicker ring containing very small shares
 
 <Tabs group="ring-geometry" selectedTab="ring-geometry-preview" ariaLabel="Ring geometry and tiny slices" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="ring-geometry-preview" label="Preview">
+<div class="component-preview-stage">
 <Grid columns="1" columnsMd="2">
   <Panel variant="surface" bodyClass="p-3 min-w-0">
     <h3 class="mt-0">Continuous ring</h3>
@@ -545,7 +562,9 @@ Compare a thin, continuous ring with a thicker ring containing very small shares
     <p>Stable 99.5% · Canary 0.4% · Preview 0.1%</p>
   </Panel>
 </Grid>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="ring-geometry-source" label="ring-geometry.mdx">
 ```html
 <Grid columns="1" columnsMd="2">
@@ -597,6 +616,7 @@ A single positive segment becomes a full ring. An empty array and an array of al
 
 <Tabs group="ring-empty" selectedTab="ring-empty-preview" ariaLabel="Single and empty distributions" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="ring-empty-preview" label="Preview">
+<div class="component-preview-stage">
 <Grid columns="1" columnsMd="2">
   <Panel variant="surface" bodyClass="p-3 min-w-0">
     <h3 class="mt-0">One category</h3>
@@ -625,7 +645,9 @@ A single positive segment becomes a full ring. An empty array and an array of al
     <p>No results yet. Leave both center props unset to display the empty label.</p>
   </Panel>
 </Grid>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="ring-empty-source" label="single-and-empty.mdx">
 ```html
 <Grid columns="1" columnsMd="2">
@@ -659,6 +681,75 @@ A single positive segment becomes a full ring. An empty array and an array of al
 ```
   </TabPane>
 </Tabs>
+
+## All ten semantic tones
+
+Compare all ten tones together. These examples use tone-aware plot colors; custom data colors and the chart’s tone remain independent.
+
+<ComponentExample label="All ten semantic tones" caption="All samples use the same illustrative values. Switch the site theme to compare both palettes.">
+<div data-chart-gallery="tone"><ChartAppearanceGallery component="DoughnutChart" axis="tone"/></div>
+</ComponentExample>
+
+## All eighteen visual variants
+
+Every supported treatment is visible in accent, including none. The default chart variant is none; the live editor lets you combine any tone and treatment.
+
+<ComponentExample label="All eighteen visual variants" caption="All samples use the same illustrative values. Switch the site theme to compare both palettes.">
+<div data-chart-gallery="variant"><ChartAppearanceGallery component="DoughnutChart" axis="variant"/></div>
+</ComponentExample>
+
+## Both variant modes
+
+Stateless keeps the resting appearance. Stateful adds the treatment’s hover and active classes; hover the outlineFill examples to compare them. Charts default to stateless and retain their native plot hover feedback in either mode.
+
+<ComponentExample label="Both variant modes" caption="All samples use the same illustrative values. Switch the site theme to compare both palettes.">
+<div data-chart-gallery="mode"><ChartAppearanceGallery component="DoughnutChart" axis="mode"/></div>
+</ComponentExample>
+
+## Ring geometry and center copy
+
+Thin and thick rings, joined and separated slices, rotation, automatic totals, and custom center text are all shown together. Only finite positive values contribute.
+
+<ComponentExample label="Compare the whole ring" caption="Complete 18 · Review 7 · Planned 5. The live editor exposes exact values, percentages, font sizes, and entrance animation.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Thin ring</code>
+<DoughnutChart :segments="[{label:'Complete',value:18},{label:'Review',value:7},{label:'Planned',value:5}]" thickness="6" size="180" centerLabel="Tasks" ariaLabel="Tasks: complete18, review7, planned5" :animated="false"/>
+</div>
+<div class="component-appearance-cell"><code>Thick ring</code>
+<DoughnutChart :segments="[{label:'Complete',value:18},{label:'Review',value:7},{label:'Planned',value:5}]" thickness="28" size="180" centerLabel="Tasks" centerValueSize="8" centerLabelSize="4" ariaLabel="Tasks: complete18, review7, planned5" :animated="false"/>
+</div>
+<div class="component-appearance-cell"><code>No gap</code>
+<DoughnutChart :segments="[{label:'Complete',value:18},{label:'Review',value:7},{label:'Planned',value:5}]" gap="0" size="180" centerLabel="Tasks" ariaLabel="Joined slices: complete18, review7, planned5" :animated="false"/>
+</div>
+<div class="component-appearance-cell"><code>Separated slices</code>
+<DoughnutChart :segments="[{label:'Complete',value:18},{label:'Review',value:7},{label:'Planned',value:5}]" gap="6" size="180" centerLabel="Tasks" ariaLabel="Separated slices: complete18, review7, planned5" :animated="false"/>
+</div>
+<div class="component-appearance-cell"><code>Rotated</code>
+<DoughnutChart :segments="[{label:'Complete',value:18},{label:'Review',value:7},{label:'Planned',value:5}]" startAngle="0" size="180" centerLabel="Tasks" ariaLabel="Rotated slices: complete18, review7, planned5" :animated="false"/>
+</div>
+<div class="component-appearance-cell"><code>Custom center</code>
+<DoughnutChart :segments="[{label:'Complete',value:18},{label:'Review',value:7},{label:'Planned',value:5}]" centerValue="60%" centerLabel="Complete" size="180" ariaLabel="18 of30 tasks complete" :animated="false"/>
+</div>
+<div class="component-appearance-cell"><code>One full-circle segment</code>
+<DoughnutChart :segments="[{label:'Complete',value:30}]" centerLabel="Complete" size="180" ariaLabel="All30 tasks complete" :animated="false"/>
+</div>
+<div class="component-appearance-cell"><code>Empty</code>
+<DoughnutChart :segments="[]" emptyLabel="No positive values" centerValue="—" size="180" ariaLabel="No positive values" :animated="false"/>
+</div>
+</div>
+</ComponentExample>
+
+## Feature map
+
+| Feature | Where to try it |
+| --- | --- |
+| Reactive data and custom colors | Edit and rename segments; enable or hide them. The adjacent legend shows colors, values, and shares. |
+| Tone, variant, and variantMode | Use the three appearance controls; every option also appears in the galleries. |
+| Accessible name and description | The live chart binds ariaLabel to its exact-value summary; title and description are SVG metadata. |
+| Empty label | Choose Empty data; a dedicated empty sample is also visible above. |
+| Units | Change the value suffix in the live editor. |
+| Size | Change size and center font sizes. |
+| Entrance motion | Toggle entrance animation and use Replay animation. |
 
 ## Behavior and accessibility
 

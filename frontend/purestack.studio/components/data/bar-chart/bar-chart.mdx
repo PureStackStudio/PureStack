@@ -13,11 +13,7 @@ nav:
 
 # Bar<wbr/>Chart
 
-Compare categorical values in a responsive SVG chart, including positive and negative data.
-
-<Badge tone="accent" variant="surface">BarChart</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/barChart/barChart.ts) · [API reference](#api-reference)
+<ComponentHeader name="BarChart" kind="Categorical comparison" summary="Compare gains, losses, and categorical values. A responsive SVG with clear labels, explicit scales, and theme-aware presentation." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/barChart/barChart.ts" section="Charts &amp; large data" sectionHref="/components/data/"/>
 
 ## Playground
 
@@ -25,8 +21,11 @@ Change the dataset, edit each daily value, and see the chart update immediately.
 
 <Tabs group="bar-chart-sample-1" selectedTab="bar-chart-sample-1-preview" ariaLabel="Interactive BarChart playground" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="bar-chart-sample-1-preview" label="Preview">
+<ComponentExample label="BarChart in context" caption="Edit the values, change the scale, or compare datasets. The summary keeps the exact values beside the chart.">
     <RegorApp id="bar-chart-demo" src="./playground.ts"/>
-  </TabPane>
+
+</ComponentExample>
+</TabPane>
   <TabPane id="bar-chart-sample-1-source-0" label="playground.mdx">
 ```html
 <RegorApp id="bar-chart-demo" src="./playground.ts"/>
@@ -61,6 +60,11 @@ import {
   type SRef,
   sref,
 } from 'regor'
+import {
+  type ChartAppearanceState,
+  createChartAppearanceState,
+  defineChartAppearanceControls,
+} from '../../../../docs/dataGuide'
 
 export type BarChartPreset = 'mixed' | 'positive' | 'negative' | 'zero'
 export type BarChartPalette = 'balance' | 'categorical' | 'accent'
@@ -71,7 +75,7 @@ export interface BarChartEditorRow {
   value: Ref<number | string>
 }
 
-export interface BarChartPlayground {
+export interface BarChartPlayground extends ChartAppearanceState {
   rows: SRef<BarChartEditorRow[]>
   chartItems: ComputedRef<BarChartItem[]>
   summary: ComputedRef<string>
@@ -99,10 +103,12 @@ const barChartPlaygroundTemplate = html`<Flex direction="column">
     <FormSelectField id="bar-palette" label="Bar colors" :model="palette" :options="palettes" />
     <FormSelectField id="bar-unit" label="Value suffix" :model="suffix" :options="units" />
   </Grid>
+  <ChartAppearanceControls prefix="bar-chart-appearance" :tone="chartTone" :variant="chartVariant" :variantMode="chartVariantMode" :width="chartWidth" :showWidth="true"/>
   <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
     <p class="text-eyebrow mt-0">LIVE PREVIEW · WEEKLY BALANCE</p>
     <div class="overflow-x-auto" tabindex="0" role="region" aria-label="Scrollable chart preview">
       <BarChart
+        :tone="chartTone" :variant="chartVariant" :variantMode="chartVariantMode" :width="chartWidth"
         :items="chartItems"
         title="Weekly balance"
         description="Illustrative daily changes. Edit the exact values in the fields below."
@@ -168,6 +174,7 @@ function createBarChartRows(preset: BarChartPreset): BarChartEditorRow[] {
 }
 
 function createBarChartPlayground(): BarChartPlayground {
+  const appearance = createChartAppearanceState()
   const preset = ref<BarChartPreset>('mixed')
   const palette = ref<BarChartPalette>('balance')
   const suffix = ref('')
@@ -197,6 +204,7 @@ function createBarChartPlayground(): BarChartPlayground {
     }),
   )
   return {
+    ...appearance,
     rows,
     chartItems,
     summary: computed(() => {
@@ -241,6 +249,7 @@ function createBarChartPlayground(): BarChartPlayground {
     clear: () => rows([]),
     reset: () =>
       batch(() => {
+        appearance.resetAppearance()
         preset('mixed')
         palette('balance')
         suffix('')
@@ -268,6 +277,7 @@ const icons: Record<string, string> = {
 createApp(
   {
     components: {
+      ChartAppearanceControls: defineChartAppearanceControls(),
       BarChartPlayground: barChartPlayground,
       ...defineBarChartComponents(),
       ...defineButtonComponents(),
@@ -292,6 +302,7 @@ Use explicit bounds to compare values against a stable range. Here, both categor
 
 <Tabs group="bar-chart-sample-2" selectedTab="bar-chart-sample-2-preview" ariaLabel="A fixed comparison scale example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="bar-chart-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
     <BarChart
       title="Example completion"
       ariaLabel="Completion: content 80 percent, review 55 percent"
@@ -302,7 +313,9 @@ Use explicit bounds to compare values against a stable range. Here, both categor
       valueSuffix="%"
       :animated="false"
     />
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="bar-chart-sample-2-source-0" label="fixed-domain.mdx">
 ```html
 <BarChart
@@ -325,6 +338,7 @@ Every bar starts at zero. Losses extend downward, with their values below the ba
 
 <Tabs group="bar-chart-signed" selectedTab="bar-chart-signed-preview" ariaLabel="Signed values example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="bar-chart-signed-preview" label="Preview">
+<div class="component-preview-stage">
     <BarChart
       title="Change since the previous release"
       ariaLabel="Change: API plus 24 percent, jobs minus 32 percent, sync plus 18 percent, cache minus 8 percent"
@@ -335,7 +349,9 @@ Every bar starts at zero. Losses extend downward, with their values below the ba
       valueSuffix="%"
       :animated="false"
     />
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="bar-chart-signed-source" label="signed-values.mdx">
 ```html
 <BarChart
@@ -358,6 +374,7 @@ Hide the grid and numeric labels when the shape is the useful signal. Keep an ac
 
 <Tabs group="bar-chart-compact" selectedTab="bar-chart-compact-preview" ariaLabel="Compact chart example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="bar-chart-compact-preview" label="Preview">
+<div class="component-preview-stage">
     <Panel tone="accent" variant="surface" bodyClass="p-3">
       <h3 class="mt-0">76 deployments this week</h3>
       <p>Daily activity across the release pipeline.</p>
@@ -371,7 +388,9 @@ Hide the grid and numeric labels when the shape is the useful signal. Keep an ac
         :animated="false"
       />
     </Panel>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="bar-chart-compact-source" label="compact-trend.mdx">
 ```html
 <Panel tone="accent" variant="surface" bodyClass="p-3">
@@ -390,6 +409,70 @@ Hide the grid and numeric labels when the shape is the useful signal. Keep an ac
 ```
   </TabPane>
 </Tabs>
+
+## All ten semantic tones
+
+Compare all ten tones together. These examples use tone-aware plot colors; custom data colors and the chart’s tone remain independent.
+
+<ComponentExample label="All ten semantic tones" caption="All samples use the same illustrative values. Switch the site theme to compare both palettes.">
+<div data-chart-gallery="tone"><ChartAppearanceGallery component="BarChart" axis="tone"/></div>
+</ComponentExample>
+
+## All eighteen visual variants
+
+Every supported treatment is visible in accent, including none. The default chart variant is none; the live editor lets you combine any tone and treatment.
+
+<ComponentExample label="All eighteen visual variants" caption="All samples use the same illustrative values. Switch the site theme to compare both palettes.">
+<div data-chart-gallery="variant"><ChartAppearanceGallery component="BarChart" axis="variant"/></div>
+</ComponentExample>
+
+## Both variant modes
+
+Stateless keeps the resting appearance. Stateful adds the treatment’s hover and active classes; hover the outlineFill examples to compare them. Charts default to stateless and retain their native plot hover feedback in either mode.
+
+<ComponentExample label="Both variant modes" caption="All samples use the same illustrative values. Switch the site theme to compare both palettes.">
+<div data-chart-gallery="mode"><ChartAppearanceGallery component="BarChart" axis="mode"/></div>
+</ComponentExample>
+
+## Values, labels, and axes
+
+Compare all display switches together. Empty data has its own message; signed and zero datasets are also available in the live editor.
+
+<ComponentExample label="Choose the information density" caption="Titles and descriptions are SVG accessibility content. Visible summaries and the source editor provide the exact values.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>All annotations</code>
+<BarChart :items="[{label:'Mon',value:24},{label:'Tue',value:38},{label:'Wed',value:-12}]" ariaLabel="Monday 24, Tuesday 38, Wednesday -12" height="180" :animated="false"/>
+</div>
+<div class="component-appearance-cell"><code>No values</code>
+<BarChart :items="[{label:'Mon',value:24},{label:'Tue',value:38},{label:'Wed',value:-12}]" ariaLabel="Values hidden: Monday 24, Tuesday 38, Wednesday -12" height="180" :showValues="false" :animated="false"/>
+</div>
+<div class="component-appearance-cell"><code>No category labels</code>
+<BarChart :items="[{label:'Mon',value:24},{label:'Tue',value:38},{label:'Wed',value:-12}]" ariaLabel="Categories hidden: Monday 24, Tuesday 38, Wednesday -12" height="180" :showLabels="false" :animated="false"/>
+</div>
+<div class="component-appearance-cell"><code>No axes</code>
+<BarChart :items="[{label:'Mon',value:24},{label:'Tue',value:38},{label:'Wed',value:-12}]" ariaLabel="Axes hidden: Monday 24, Tuesday 38, Wednesday -12" height="180" :showAxis="false" :animated="false"/>
+</div>
+<div class="component-appearance-cell"><code>All zero</code>
+<BarChart :items="[{label:'Mon',value:0},{label:'Tue',value:0}]" ariaLabel="Monday and Tuesday zero" height="180" :animated="false"/>
+</div>
+<div class="component-appearance-cell"><code>Empty</code>
+<BarChart :items="[]" emptyLabel="No observations yet" ariaLabel="No observations yet" height="180" :animated="false"/>
+</div>
+</div>
+</ComponentExample>
+
+## Feature map
+
+| Feature | Where to try it |
+| --- | --- |
+| Reactive data and custom colors | Edit categories and values; compare the gains/losses, categorical, and single-accent palettes. |
+| Tone, variant, and variantMode | Use the three appearance controls; every option also appears in the galleries. |
+| Accessible name and description | The live chart binds ariaLabel to its exact-value summary; title and description are SVG metadata. |
+| Empty label | Choose Empty data; a dedicated empty sample is also visible above. |
+| Units | Change the value suffix in the live editor. |
+| Size | Change width and height; blank width preserves responsive sizing. |
+| Entrance motion | Toggle entrance animation; it is an entrance effect, rather than value interpolation. |
+| Domain | Change minimum and maximum bounds. The range includes zero and every data value. |
 
 ## Behavior and accessibility
 

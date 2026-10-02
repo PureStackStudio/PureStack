@@ -13,11 +13,7 @@ nav:
 
 # Virtual<wbr/>Table
 
-Render a large semantic table while mounting only nearby rows, with predictable fixed row heights.
-
-<Badge tone="accent" variant="surface">VirtualTable</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/virtualList/virtualTable.ts) · [API reference](#api-reference)
+<ComponentHeader name="VirtualTable" kind="Fixed-height table" summary="Keep a large table responsive without losing native table structure. Compose columns, sticky sections, and a small window of fixed-height rows." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/virtualList/virtualTable.ts" section="Charts &amp; large data" sectionHref="/components/data/"/>
 
 ## Interactive playground
 
@@ -25,8 +21,11 @@ Explore up to 50,000 release records with search, status filtering, sorting and 
 
 <Tabs group="virtual-table-playground" selectedTab="virtual-table-playground-preview" ariaLabel="Interactive playground" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="virtual-table-playground-preview" label="Preview">
+<ComponentExample label="VirtualTable in context" caption="Filter and sort the dataset, switch column layout, and compare headers, footers, widths, and mounted positions.">
     <RegorApp id="virtual-table-demo" src="./playground.ts"/>
-  </TabPane>
+
+</ComponentExample>
+</TabPane>
   <TabPane id="virtual-table-playground-mdx" label="playground.mdx">
 ```html
 <RegorApp id="virtual-table-demo" src="./playground.ts"/>
@@ -483,8 +482,11 @@ A small, copyable implementation with a typed row, semantic header, column group
 
 <Tabs group="virtual-table-basic" selectedTab="virtual-table-basic-preview" ariaLabel="A complete table composition" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="virtual-table-basic-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="virtual-table-basic-demo" src="./basic-table.ts"/>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="virtual-table-basic-mdx" label="basic-table.mdx">
 ```html
 <RegorApp id="virtual-table-basic-demo" src="./basic-table.ts"/>
@@ -606,6 +608,30 @@ The existing theme makes the header sticky at the top and footer cells sticky at
 
 Auto layout sizes the table from content and uses a minimum width of 100%; widths may shift as different rows mount. Fixed layout uses width: 100% with table-layout: fixed. A column group makes the intended widths explicit. Toggle both modes in the playground; oversized cell content can still require horizontal scrolling.
 
+## Read the mounted window
+
+The source array stays in memory; only nearby records become DOM rows. These components have no tone or variant props. Style the viewport and row components, and use semantic tones on their contents, as the live examples do.
+
+<ComponentExample label="One dataset, a small rendered window" caption="The diagram explains the scroll structure. The live counters above inspect actual mounted rows.">
+<div class="data-window-diagram"><div class="data-window-diagram__spacer">Earlier records · represented by calculated space</div><div class="data-window-diagram__rows"><Badge tone="info">Overscan before</Badge><p><strong>Visible table rows</strong><br/>Each row occupies the configured itemHeight.</p><Badge tone="info">Overscan after</Badge></div><div class="data-window-diagram__spacer">Later records · remain in the source array</div></div>
+</ComponentExample>
+
+## Feature map
+
+| Public feature | Visible behavior |
+| --- | --- |
+| items | Load 100 to 50,000 records; filter and sort them or empty the dataset. |
+| height | Choose a viewport height and compare the mounted-row count. |
+| itemHeight | Switch row density and compare scrolling distances; row content must fit the fixed height. |
+| overscan | Change the buffer and watch how many extra rows are mounted. |
+| rowComponent | The live example registers a named row that receives item and the current array index. |
+| headerComponent and footerComponent | Toggle each section; both use valid native table roots and remain sticky. |
+| colGroupComponent | Toggle explicit widths and compare horizontal scrolling inside the viewport. |
+| tableLayout | Compare auto and fixed column sizing in the live editor. |
+| Native attributes and events | The viewport is a named, focusable scrolling region. Keyboard scrolling uses browser behavior. |
+| Durable state | Sorting and filtering operate on the same records; use a stable record ID for durable application state. |
+| Empty feedback | Empty the dataset or enter a search with no matches; feedback is composed outside the virtual rows. |
+
 ## Behavior and accessibility
 
 - **Keyboard scrolling:** the examples add tabindex="0" to the viewport. Arrow keys and Page Up / Page Down use native browser scrolling. These components do not implement spreadsheet navigation or roving focus.
@@ -614,7 +640,6 @@ Auto layout sizes the table from content and uses a minimum width of 100%; width
 - **Empty results:** compose a message outside the virtual content. Header and footer sections can remain when the items array is empty.
 - **Complete data access:** browser find, printing and assistive navigation only see mounted rows. Provide application search or a full-data view or export where complete access is needed.
 - **Memory and loading:** virtualization reduces mounted DOM, not the source array or filtering cost. Data fetching, pagination, selection and sorting remain application responsibilities.
-
 
 ## API reference
 

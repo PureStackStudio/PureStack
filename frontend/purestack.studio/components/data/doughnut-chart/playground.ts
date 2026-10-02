@@ -25,6 +25,11 @@ import {
   type SRef,
   sref,
 } from 'regor'
+import {
+  type ChartAppearanceState,
+  createChartAppearanceState,
+  defineChartAppearanceControls,
+} from '../../../../docs/dataGuide'
 
 export type DoughnutPreset =
   | 'tasks'
@@ -50,7 +55,7 @@ export interface DoughnutLegendEntry {
   share: string
 }
 
-export interface DoughnutChartPlayground {
+export interface DoughnutChartPlayground extends ChartAppearanceState {
   editorSegments: SRef<DoughnutEditorSegment[]>
   chartSegments: ComputedRef<DoughnutChartSegment[]>
   legend: ComputedRef<DoughnutLegendEntry[]>
@@ -85,6 +90,7 @@ const doughnutChartPlaygroundTemplate = html`<Flex direction="column">
     <FormSelectField id="ring-preset" label="Distribution" :model="preset" :options="presets" @change="applyPreset" />
     <FormSelectField id="ring-unit" label="Value suffix" :model="suffix" :options="units" />
   </Grid>
+  <ChartAppearanceControls prefix="doughnut-chart-appearance" :tone="chartTone" :variant="chartVariant" :variantMode="chartVariantMode" :width="chartWidth" :showWidth="false"/>
   <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
     <Flex justify="between" align="center" wrap="true">
       <p class="text-eyebrow m-0">LIVE PREVIEW · PARTS OF A WHOLE</p>
@@ -92,6 +98,7 @@ const doughnutChartPlaygroundTemplate = html`<Flex direction="column">
     </Flex>
     <Grid columns="1" columnsMd="2" alignItems="center" class="my-3">
       <DoughnutChart
+        :tone="chartTone" :variant="chartVariant" :variantMode="chartVariantMode"
         :segments="chartSegments"
         title="Illustrative distribution"
         description="Positive values form the ring. The adjacent legend lists exact values and shares."
@@ -185,6 +192,7 @@ function createSegments(preset: DoughnutPreset): DoughnutEditorSegment[] {
 }
 
 function createDoughnutChartPlayground(): DoughnutChartPlayground {
+  const appearance = createChartAppearanceState()
   const editorSegments = sref(createSegments('tasks'))
   const preset = ref<DoughnutPreset>('tasks')
   const centerMode = ref<DoughnutCenterMode>('total')
@@ -224,6 +232,7 @@ function createDoughnutChartPlayground(): DoughnutChartPlayground {
     ),
   )
   return {
+    ...appearance,
     editorSegments,
     chartSegments: computed<DoughnutChartSegment[]>(() => visible()),
     legend,
@@ -295,6 +304,7 @@ function createDoughnutChartPlayground(): DoughnutChartPlayground {
     clear: () => editorSegments([]),
     reset: () =>
       batch(() => {
+        appearance.resetAppearance()
         preset('tasks')
         centerMode('total')
         customValue('Ready')
@@ -323,6 +333,7 @@ const icons: Record<string, string> = {
 createApp(
   {
     components: {
+      ChartAppearanceControls: defineChartAppearanceControls(),
       DoughnutChartPlayground: doughnutChartPlayground,
       ...defineButtonComponents(),
       ...defineDoughnutChartComponents(),

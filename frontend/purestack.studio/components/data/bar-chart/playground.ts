@@ -25,6 +25,11 @@ import {
   type SRef,
   sref,
 } from 'regor'
+import {
+  type ChartAppearanceState,
+  createChartAppearanceState,
+  defineChartAppearanceControls,
+} from '../../../../docs/dataGuide'
 
 export type BarChartPreset = 'mixed' | 'positive' | 'negative' | 'zero'
 export type BarChartPalette = 'balance' | 'categorical' | 'accent'
@@ -35,7 +40,7 @@ export interface BarChartEditorRow {
   value: Ref<number | string>
 }
 
-export interface BarChartPlayground {
+export interface BarChartPlayground extends ChartAppearanceState {
   rows: SRef<BarChartEditorRow[]>
   chartItems: ComputedRef<BarChartItem[]>
   summary: ComputedRef<string>
@@ -63,10 +68,12 @@ const barChartPlaygroundTemplate = html`<Flex direction="column">
     <FormSelectField id="bar-palette" label="Bar colors" :model="palette" :options="palettes" />
     <FormSelectField id="bar-unit" label="Value suffix" :model="suffix" :options="units" />
   </Grid>
+  <ChartAppearanceControls prefix="bar-chart-appearance" :tone="chartTone" :variant="chartVariant" :variantMode="chartVariantMode" :width="chartWidth" :showWidth="true"/>
   <Panel variant="surfaceAlt" bodyClass="p-3 min-w-0">
     <p class="text-eyebrow mt-0">LIVE PREVIEW · WEEKLY BALANCE</p>
     <div class="overflow-x-auto" tabindex="0" role="region" aria-label="Scrollable chart preview">
       <BarChart
+        :tone="chartTone" :variant="chartVariant" :variantMode="chartVariantMode" :width="chartWidth"
         :items="chartItems"
         title="Weekly balance"
         description="Illustrative daily changes. Edit the exact values in the fields below."
@@ -132,6 +139,7 @@ function createBarChartRows(preset: BarChartPreset): BarChartEditorRow[] {
 }
 
 function createBarChartPlayground(): BarChartPlayground {
+  const appearance = createChartAppearanceState()
   const preset = ref<BarChartPreset>('mixed')
   const palette = ref<BarChartPalette>('balance')
   const suffix = ref('')
@@ -161,6 +169,7 @@ function createBarChartPlayground(): BarChartPlayground {
     }),
   )
   return {
+    ...appearance,
     rows,
     chartItems,
     summary: computed(() => {
@@ -205,6 +214,7 @@ function createBarChartPlayground(): BarChartPlayground {
     clear: () => rows([]),
     reset: () =>
       batch(() => {
+        appearance.resetAppearance()
         preset('mixed')
         palette('balance')
         suffix('')
@@ -232,6 +242,7 @@ const icons: Record<string, string> = {
 createApp(
   {
     components: {
+      ChartAppearanceControls: defineChartAppearanceControls(),
       BarChartPlayground: barChartPlayground,
       ...defineBarChartComponents(),
       ...defineButtonComponents(),
