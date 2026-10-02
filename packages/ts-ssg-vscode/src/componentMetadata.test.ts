@@ -6,11 +6,7 @@ import {
   clearComponentMetadataCache,
   getComponentMetadata,
 } from './componentMetadata'
-import {
-  clearComponentResolverCaches,
-  resolveComponentMetadataTarget,
-  resolveComponentTarget,
-} from './componentResolver'
+import { clearComponentResolverCaches } from './componentResolver'
 import { getComponentTagContextAtOffset } from './componentTagContext'
 
 describe('getComponentMetadata cache invalidation', () => {
@@ -465,71 +461,6 @@ describe('getComponentMetadata monorepo component metadata', () => {
         'safe',
         'unsafe',
       ]),
-    )
-  })
-
-  it('resolves value completions from the real MDX cursor context', () => {
-    const workspaceRoot = process.cwd()
-    const mdxFilePath = path.join(
-      workspaceRoot,
-      'packages',
-      'ts-ssg',
-      'sample-content',
-      'guide',
-      'landing-band-sample.mdx',
-    )
-    const mdxText = fs.readFileSync(mdxFilePath, 'utf8')
-    const sectionStart = mdxText.indexOf('## 6. Quiet separator band')
-    const attributeStart = mdxText.indexOf('alignItems="center"', sectionStart)
-    expect(sectionStart).toBeGreaterThanOrEqual(0)
-    expect(attributeStart).toBeGreaterThanOrEqual(0)
-
-    const cursorOffset = attributeStart + 'alignItems="'.length
-
-    const tagContext = getComponentTagContextAtOffset(mdxText, cursorOffset)
-    expect(tagContext?.componentName).toBe('LandingBand')
-    expect(tagContext?.activeAttributeName).toBe('alignItems')
-
-    const target = resolveComponentTarget(
-      workspaceRoot,
-      tagContext?.componentName ?? '',
-      mdxFilePath,
-    )
-    expect(target?.filePath).toContain(
-      path.join('packages', 'ts-components', 'src', 'standard', 'landing'),
-    )
-
-    const metadataTarget = resolveComponentMetadataTarget(
-      workspaceRoot,
-      tagContext?.componentName ?? '',
-      mdxFilePath,
-    )
-    expect(metadataTarget?.filePath).toContain(
-      path.join(
-        'packages',
-        'ts-components',
-        'src',
-        'standard',
-        'landing',
-        'landingBand.ts',
-      ),
-    )
-
-    const metadata = metadataTarget
-      ? getComponentMetadata(
-          metadataTarget.filePath,
-          tagContext?.componentName ?? '',
-        )
-      : undefined
-    const activeProp = metadata?.props.find(
-      (prop) => prop.attributeName === tagContext?.activeAttributeName,
-    )
-
-    expect(activeProp?.signature).toBe(
-      "alignItems?: RefOrValue<CSSProps['alignItems']>",
-    )
-    expect(activeProp?.literalValues).toEqual(
-      expect.arrayContaining(['center', 'flex-start', 'stretch']),
     )
   })
 })

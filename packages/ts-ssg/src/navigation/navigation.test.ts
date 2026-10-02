@@ -528,7 +528,7 @@ describe('navigation', () => {
               {
                 id: 'github',
                 title: 'GitHub',
-                url: 'https://github.com/koculu/ZoneTree',
+                url: 'https://github.com/example/project',
               },
             ],
           },
@@ -554,7 +554,7 @@ describe('navigation', () => {
       expect(items[1]).toEqual({
         id: 'github',
         title: 'GitHub',
-        url: 'https://github.com/koculu/ZoneTree',
+        url: 'https://github.com/example/project',
       })
       expect(items[2]).toEqual({
         title: 'Usage',

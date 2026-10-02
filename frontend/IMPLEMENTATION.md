@@ -60,8 +60,7 @@ borders, generous spacing, and an interactive source/preview workbench.
 
 This is an implementation-oriented architecture review of the package boundaries,
 core rendering/build paths, and relevant component APIs. It is not an exhaustive
-line-by-line audit of every source file, generated asset, or the separate PureGate
-backend.
+line-by-line audit of every source file or generated asset.
 
 - The public `purestack` package exports the SSG API and CLI. Current build
   input is `{ siteConfig, options, publish }`; older README examples using
@@ -84,8 +83,6 @@ backend.
   checked against that generated registry.
 - The VS Code extension provides component completion, definition lookup,
   metadata-aware hover, linked editing, formatting, and template diagnostics.
-- PureGate's local application demonstrates product/admin uses; its backend is
-  a separate system and is not presented as a frontend framework capability.
 
 ## Page plan
 

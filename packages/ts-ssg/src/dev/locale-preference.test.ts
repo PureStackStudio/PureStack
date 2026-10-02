@@ -12,14 +12,14 @@ const i18n: I18nConfig = {
   locales: ['en', 'tr'],
   urlStrategy: 'hidden',
   queryParam: 'lang',
-  cookieName: 'puregate.lang',
+  cookieName: 'site.lang',
 }
 
 describe('dev server i18n locale preference', () => {
   it('prefers query locale over cookie and Accept-Language', () => {
     const preference = resolveRequestLocale(
       request('/?lang=tr', {
-        cookie: 'puregate.lang=en',
+        cookie: 'site.lang=en',
         'accept-language': 'en-US,en;q=0.9',
       }),
       i18n,
@@ -30,7 +30,7 @@ describe('dev server i18n locale preference', () => {
 
   it('falls back through cookie, Accept-Language, and default locale', () => {
     expect(
-      resolveRequestLocale(request('/', { cookie: 'puregate.lang=tr' }), i18n),
+      resolveRequestLocale(request('/', { cookie: 'site.lang=tr' }), i18n),
     ).toEqual({ locale: 'tr', source: 'cookie' })
 
     expect(
@@ -47,8 +47,8 @@ describe('dev server i18n locale preference', () => {
   })
 
   it('builds the hidden-strategy preference cookie from query locale', () => {
-    expect(buildLocalePreferenceCookie('puregate.lang', 'tr')).toBe(
-      'puregate.lang=tr; Path=/; SameSite=Lax',
+    expect(buildLocalePreferenceCookie('site.lang', 'tr')).toBe(
+      'site.lang=tr; Path=/; SameSite=Lax',
     )
   })
 })

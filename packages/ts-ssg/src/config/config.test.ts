@@ -374,7 +374,7 @@ describe('resolveSiteConfig sitemap', () => {
         locales: ['tr', 'en', 'tr'],
         urlStrategy: 'hidden',
         queryParam: 'locale',
-        cookieName: 'puregate.lang',
+        cookieName: 'site.lang',
       },
     })
 
@@ -384,7 +384,7 @@ describe('resolveSiteConfig sitemap', () => {
       locales: ['en', 'tr'],
       urlStrategy: 'hidden',
       queryParam: 'locale',
-      cookieName: 'puregate.lang',
+      cookieName: 'site.lang',
     })
   })
 

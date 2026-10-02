@@ -71,10 +71,9 @@ definition in `studioComponents.ts`, and register only the extra layout styles
 it needs. `demoStyle.ts` intentionally remains a small,
 self-contained example matching the workbench's displayed Style API source.
 
-The page deliberately describes the framework as pre-release and uses the
-repository workflow instead of assuming an npm release already exists. Update
-the release announcement, quick start, and availability FAQ when publishing.
-GitHub links target `PureStackStudio/PureStack` and the `main` branch.
+The page presents the published npm package and links to the CLI guide for new
+projects. Its quick start still uses the repository workflow to run the included
+sample site. GitHub links target `PureStackStudio/PureStack` and the `main` branch.
 
 ## Component documentation
 

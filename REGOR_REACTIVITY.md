@@ -1,7 +1,7 @@
 # Regor Reactivity
 
-This document describes the baseline reactivity model we use in PureStack and
-PureGate code. It starts with the common path: how to use `ref`, `sref`, and
+This document describes the baseline reactivity model used in PureStack code.
+It starts with the common path: how to use `ref`, `sref`, and
 `flatten` correctly without losing type safety.
 
 ## Reactive Factories

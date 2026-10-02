@@ -35,7 +35,7 @@ export function registerComposerCanvasPreviewDefaults({
 
   styleBuilder
     .select(
-      '.composer__editor [data-puregate-composer-body]:empty::before',
+      '.composer__editor [data-composer-body]:empty::before',
       theme,
     )
     .content('attr(data-placeholder)')

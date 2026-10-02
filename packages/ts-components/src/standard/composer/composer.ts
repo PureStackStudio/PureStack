@@ -534,7 +534,7 @@ export function createComposerBodyHtml(contentHtml = '', placeholder?: string) {
   const placeholderAttribute = placeholder
     ? ` data-placeholder="${escapeHtmlAttribute(placeholder)}"`
     : ''
-  return `<div data-puregate-composer-body="true"${placeholderAttribute} style="${COMPOSER_BODY_STYLE}">${contentHtml}</div>`
+  return `<div data-composer-body="true"${placeholderAttribute} style="${COMPOSER_BODY_STYLE}">${contentHtml}</div>`
 }
 
 function createEmptyEditorHtml(placeholder: string | undefined) {
@@ -657,7 +657,7 @@ function appendSanitizedNode(
       imageSrc &&
       normalizeEmailCidUrl(imageSrc)
     ) {
-      element.setAttribute('data-puregate-cid-src', imageSrc)
+      element.setAttribute('data-composer-cid-src', imageSrc)
     } else {
       element.setAttribute('src', imageSrc ?? '')
     }
@@ -684,7 +684,7 @@ function sanitizeImageSrc(value: string, options: SanitizeHtmlOptions) {
 }
 
 function restoreDeferredCidImageSources(html: string) {
-  return html.replace(/\sdata-puregate-cid-src="([^"]*)"/g, ' src="$1"')
+  return html.replace(/\sdata-composer-cid-src="([^"]*)"/g, ' src="$1"')
 }
 
 function sanitizeHref(value: string) {

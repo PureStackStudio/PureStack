@@ -25,7 +25,7 @@ Create a README that is inspiring, accurate, and robust:
   package metadata.
 - Do not present future plans as current features.
 - Do not position PureStack as a TypeScript backend/server ideology.
-- Do not couple PureStack to PureGate or any independent downstream project.
+- Do not couple PureStack to independent downstream projects.
 - Do not imply an open-source/pro split before the product strategy is decided.
 - Do not include install or publish commands unless they are true for the public
   release state.
@@ -276,7 +276,7 @@ Use this outline unless a better code-derived structure appears.
 Run this before accepting the README.
 
 - No claim depends only on docs.
-- No PureGate coupling.
+- No downstream project coupling.
 - No TypeScript-server ideology.
 - No invented examples.
 - No unverified commands.

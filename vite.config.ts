@@ -13,7 +13,7 @@ export default defineConfig({
       'packages/*/src/**/*.{test,spec}.{js,cjs,mjs,ts,cts,mts,jsx,tsx}',
     ],
     exclude: [
-      'packages/ts-ssg-vscode/src/**/*.{test,spec}.{js,cjs,mjs,ts,cts,mts,jsx,tsx}',
+      'packages/_ts-ssg-vscode/src/**/*.{test,spec}.{js,cjs,mjs,ts,cts,mts,jsx,tsx}',
     ],
   },
 })
