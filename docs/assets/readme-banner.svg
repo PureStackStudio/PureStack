@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">PureStack: Build sites with Markdown and TypeScript.</title>
+  <desc id="desc">Markdown content and TypeScript components, styles, and scripts flowing into a static site.</desc>
+  <defs>
+    <linearGradient id="background" x2="1" y2="1"><stop stop-color="#171125"/><stop offset="1" stop-color="#25133c"/></linearGradient>
+    <linearGradient id="brand" x2="1" y2="1"><stop stop-color="#ff59bf"/><stop offset="1" stop-color="#b469ff"/></linearGradient>
+    <radialGradient id="glow"><stop stop-color="#9b43db" stop-opacity=".22"/><stop offset="1" stop-color="#9b43db" stop-opacity="0"/></radialGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#ffffff" stroke-opacity=".035"/></pattern>
+  </defs>
+  <rect width="1200" height="360" rx="24" fill="url(#background)"/>
+  <rect width="1200" height="360" rx="24" fill="url(#grid)"/>
+  <ellipse cx="930" cy="170" rx="380" ry="260" fill="url(#glow)"/>
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <g transform="translate(56 45)" fill="none" stroke="url(#brand)" stroke-width="3" stroke-linejoin="round"><path d="M0 13 24 0 48 13 24 26Z"/><path d="m0 25 24 13 24-13M0 37l24 13 24-13"/></g>
+    <text x="120" y="79" fill="#d6c5ed" font-size="14" font-weight="600" letter-spacing="3">MARKDOWN · REGOR · TYPESCRIPT</text>
+    <text x="56" y="171" fill="#ffffff" font-size="76" font-weight="700" letter-spacing="-3">PureStack</text>
+    <text x="58" y="221" fill="#f0e6fa" font-size="24">Build sites with Markdown and TypeScript.</text>
+    <text x="58" y="260" fill="#baa9cf" font-size="18">Pages, components, styles, and browser scripts.</text>
+    <rect x="58" y="302" width="74" height="4" rx="2" fill="url(#brand)"/>
+    <text x="148" y="309" fill="#baa9cf" font-size="14" letter-spacing="1">purestack.studio</text>
+  </g>
+  <g font-family="Consolas, Liberation Mono, monospace" font-size="17">
+    <rect x="728" y="48" width="412" height="217" rx="14" fill="#160f25" stroke="#4d3267"/>
+    <path d="M728 91h412" stroke="#4d3267"/>
+    <circle cx="751" cy="70" r="4" fill="#ff69bd"/><circle cx="767" cy="70" r="4" fill="#b877ef"/><circle cx="783" cy="70" r="4" fill="#7d62ad"/>
+    <text x="808" y="76" fill="#a896bf" font-size="13">source → site</text>
+    <text x="752" y="129" fill="#f797d0">index.mdx</text><text x="933" y="129" fill="#a896bf" font-size="14">content</text>
+    <text x="752" y="165" fill="#d2a3ff">components.ts</text><text x="933" y="165" fill="#a896bf" font-size="14">interfaces</text>
+    <text x="752" y="201" fill="#d2a3ff">styles.ts</text><text x="933" y="201" fill="#a896bf" font-size="14">design</text>
+    <text x="752" y="237" fill="#d2a3ff">page.ts</text><text x="933" y="237" fill="#a896bf" font-size="14">behavior</text>
+    <path d="M934 266v17m-5-5 5 5 5-5" fill="none" stroke="#cf95fb" stroke-width="2"/>
+    <rect x="792" y="290" width="284" height="38" rx="9" fill="#38204e" stroke="#745094"/>
+    <text x="934" y="315" text-anchor="middle" fill="#ead3ff" font-size="15">HTML + CSS + JavaScript</text>
+  </g>
+</svg>

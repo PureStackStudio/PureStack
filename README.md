@@ -1,32 +1,60 @@
+<div align="center">
+
+<img src="docs/assets/readme-banner.svg" alt="PureStack: Build sites with Markdown and TypeScript. Pages, components, styles, and browser scripts." width="1200" />
+
 # PureStack
 
-**Build content sites and interactive pages with Markdown, components, and TypeScript.**
+**Build content sites and interactive pages from one coherent source model.**
+
+Markdown for your content. TypeScript for your components, styles, and behavior.
+
+[![npm version](https://img.shields.io/npm/v/purestack?style=flat-square&color=c026d3)](https://www.npmjs.com/package/purestack)
+[![CI](https://github.com/PureStackStudio/PureStack/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/PureStackStudio/PureStack/actions/workflows/ci.yml)
+[![TypeScript](https://img.shields.io/badge/TypeScript-7-3178c6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-a855f7?style=flat-square)](LICENSE)
+
+**[Explore the docs](https://purestack.studio/guides/)** ·
+**[Browse components](https://purestack.studio/components/)** ·
+**[See an example site](packages/ts-ssg/sample-content)** ·
+**[Contribute](CONTRIBUTING.md)**
+
+</div>
+
+---
+
+## Your content. Your components. One pipeline.
 
 PureStack turns a content directory into a static website. Write pages in
 Markdown or Regor MDX, use built-in components where they help, and add
 browser-side TypeScript only where a page needs behavior. The CLI handles
 routes, styles, assets, development preview, and release builds.
 
-[Documentation](https://purestack.studio/guides/) | [Component catalog](https://purestack.studio/components/) | [npm package](https://www.npmjs.com/package/purestack)
+| Build your foundation | Shape the experience |
+| :--- | :--- |
+| **📝 Content that becomes a site**<br>File-based routes, frontmatter, navigation, and page outlines. Write Markdown or compose richer pages with Regor MDX. | **🧩 Components you can compose**<br>Panels, tabs, forms, charts, and more. Explore the [component catalog](https://purestack.studio/components/) for building blocks. |
+| **🎨 A shared design language**<br>Themes, skins, semantic tones, and typed style builders keep components and pages visually connected. | **⚡ Interaction where you need it**<br>Load page-specific TypeScript with `PageScript` or mount a Regor app with `RegorApp`. |
+| **📦 Static files, ready to host**<br>Build HTML, CSS, JavaScript, and assets. Prepare a minified publish directory for your static host. | **🔎 Built-in discovery**<br>Optional Pagefind search, generated navigation, and sitemaps help readers find their way. |
 
-## What you can build
+> **PureStack in practice:** [purestack.studio](https://purestack.studio) is built
+> from the [frontend source in this repository](frontend).
 
-- **Content and documentation sites:** file-based routes, frontmatter, navigation,
-  page outlines, and optional search.
-- **Interactive pages:** server-rendered Regor components, page-specific
-  TypeScript through `PageScript`, and mounted apps through `RegorApp`.
-- **Sites with a consistent visual system:** themes, semantic tones, typed
-  styles, and a component library shared across pages.
-- **Static output:** generated HTML, CSS, JavaScript, and assets that can be
-  served by a static host.
+## Why coherent source matters
+
+Generating a first page is only the beginning. A product keeps changing:
+new content, new components, new behavior, and new people working on it.
+
+PureStack's architectural bet is that explicit, typed source makes that ongoing
+work easier for humans and AI tools to inspect and reason about. Content
+stays in Markdown; components, style builders, and scripts live in TypeScript.
+The aim is a source model that remains understandable as the product grows.
 
 `.mdx` and `.rmdx` pages use Regor components and expressions. Plain `.md`
 files work for prose pages. See the [Regor guide](https://purestack.studio/guides/regor/)
 for the markup and browser app model.
 
-## Quick start
+## Get your first page running
 
-Create a project and install the CLI:
+### 1. Create a project
 
 ```sh
 mkdir my-site
@@ -36,7 +64,18 @@ npm install purestack
 mkdir content
 ```
 
-Create `content/siteConfig.json`:
+### 2. Add your config and a page
+
+Your starting point is just two files:
+
+```text
+my-site/
+└── content/
+    ├── siteConfig.json
+    └── index.mdx
+```
+
+**`content/siteConfig.json`**
 
 ```json
 {
@@ -47,7 +86,7 @@ Create `content/siteConfig.json`:
 }
 ```
 
-Create `content/index.mdx`:
+**`content/index.mdx`**
 
 ```mdx
 ---
@@ -56,16 +95,16 @@ description: My first PureStack site.
 template: doc
 ---
 
-# Welcome
+# Make something worth reading.
 
-This page is built from MDX.
+Start with Markdown. Add components when your page needs more.
 
 <Panel tone="info" variant="surface">
-  <p>Edit this file and see the page update.</p>
+  <p>Your first PureStack page, ready to make your own.</p>
 </Panel>
 ```
 
-Start the development server:
+### 3. Preview it
 
 ```sh
 npx purestack serve --content ./content
@@ -74,7 +113,7 @@ npx purestack serve --content ./content
 Open <http://127.0.0.1:4173/>. Add `content/about.mdx` to create `/about/`.
 The server watches your files and reloads the browser as you edit.
 
-When the site is ready:
+### 4. Build for your host
 
 ```sh
 npx purestack build --content ./content
@@ -89,7 +128,19 @@ For browser behavior, add a TypeScript file beside a page and load it with
 `<PageScript src="./example.ts" />`. The [purestack package README](packages/purestack/README.md)
 has a complete example.
 
-## How PureStack fits together
+## Pick your next step
+
+| I want to… | Start here |
+| :--- | :--- |
+| Configure a site | [Site configuration](https://purestack.studio/guides/site-config/) |
+| Build a richer page | [Component catalog](https://purestack.studio/components/) |
+| Add browser behavior | [PageScript and RegorApp examples](packages/purestack/README.md) |
+| Understand the CLI | [CLI guide](https://purestack.studio/guides/purestack-cli/) |
+| Explore a complete project | [Sample content](packages/ts-ssg/sample-content) · [Website source](frontend) |
+| Work on PureStack itself | [Contribution guide](CONTRIBUTING.md) |
+
+<details>
+<summary><strong>How PureStack fits together</strong></summary>
 
 | Source | What PureStack does |
 | --- | --- |
@@ -103,7 +154,15 @@ The [CLI guide](https://purestack.studio/guides/purestack-cli/) covers the
 commands and options. [Site configuration](https://purestack.studio/guides/site-config/)
 covers navigation, themes, search, sitemap, localization, and output paths.
 
+</details>
+
 ## Repository map
+
+The workspace contains the CLI, site generator, UI components, typed HTML/CSS
+builders, browser scripts, icon providers, and a private VS Code extension.
+
+<details>
+<summary><strong>Explore the packages and source directories</strong></summary>
 
 | Path | Purpose |
 | --- | --- |
@@ -114,21 +173,25 @@ covers navigation, themes, search, sitemap, localization, and output paths.
 | [`packages/ts-css`](packages/ts-css) and [`packages/ts-html`](packages/ts-html) | Typed CSS and HTML builders. |
 | [`packages/ts-page-scripts`](packages/ts-page-scripts) | Browser-side behavior used by site components. |
 | [`packages/ts-svg-icons`](packages/ts-svg-icons) | SVG icon providers and lookup. |
-| [`packages/ts-ssg-vscode`](packages/ts-ssg-vscode) | VS Code support for PureStack content and components. |
+| [`packages/ts-ssg-vscode`](packages/ts-ssg-vscode) | Private VS Code extension for PureStack content and components. |
 | [`frontend`](frontend) | Source for purestack.studio, built with PureStack. |
 | [`packages/ts-ssg/sample-content`](packages/ts-ssg/sample-content) | A larger example site with content, components, and browser scripts. |
 
 The remaining workspace packages provide shared types, utilities, rendering,
 and DOM support.
 
+</details>
+
 ## Develop this repository
 
 See [Contributing](CONTRIBUTING.md) for the branch, pull request, CI, and publishing workflow.
 
-This is a Yarn 4 workspace. Run commands from the repository root:
+Use **Node.js 24** and the Yarn version pinned in `package.json`.
+Run commands from the repository root:
 
 ```sh
-yarn install
+corepack enable
+yarn install --immutable
 yarn build
 yarn dev
 ```
@@ -138,17 +201,23 @@ run `yarn frontend`; its development server opens at
 <http://127.0.0.1:4700/>. See the [frontend README](frontend/README.md) for
 the site-specific workflow.
 
-Useful checks and build commands:
+| Command | Purpose |
+| :--- | :--- |
+| `yarn lint:ci` | Check source without modifying files. |
+| `yarn test:ci` | Run the test suite once. |
+| `yarn bundle` | Build distributable packages. |
+| `yarn package` | Pack non-private workspaces into local tarballs. |
 
-```sh
-yarn test run
-yarn bundle
-yarn package
-```
+---
 
-`yarn bundle` creates distributable package builds. `yarn package` packs the
-non-private workspace packages into local tarballs.
+<div align="center">
 
-## License
+**Build something with PureStack. Help shape what comes next.**
 
-[MIT](LICENSE). Bugs and feature requests: [GitHub issues](https://github.com/PureStackStudio/PureStack/issues).
+[Documentation](https://purestack.studio/guides/) ·
+[Report a bug](https://github.com/PureStackStudio/PureStack/issues) ·
+[Contribute](CONTRIBUTING.md)
+
+Released under the [MIT license](LICENSE).
+
+</div>
