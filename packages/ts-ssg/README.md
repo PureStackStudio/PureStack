@@ -151,7 +151,10 @@ Config comes from:
     "navFileName": "_nav.json",
     "maxDepth": 3,
     "includeIndex": true,
-    "sortBy": "order"
+    "sortBy": "order",
+    "tone": "neutral",
+    "variant": "flat",
+    "class": ""
   },
   "sitemap": {
     "enabled": true,

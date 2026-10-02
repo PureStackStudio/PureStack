@@ -376,6 +376,22 @@ createApp(
   </TabPane>
 </Tabs>
 
+## From site config
+
+The menu the doc layout docks in its sidebar takes its tone, variant and extra classes from the `navigation` section of `siteConfig.json`. A page can still override the tone with `nav.tone` in its frontmatter.
+
+```json
+{
+  "navigation": {
+    "tone": "accent",
+    "variant": "glass",
+    "class": "spotlight-from-top-right"
+  }
+}
+```
+
+Docked in the sidebar, the menu stays square and borderless whatever the variant, so the variant sets its fill and colors.
+
 ## Your own items
 
 Pass `items` to show a tree that is not the site navigation, and `currentUrl` to say which page is current. Without `currentUrl`, NavMenu uses the page being rendered, then the browser location. Groups are items with `children`; a group can have its own `url` too.

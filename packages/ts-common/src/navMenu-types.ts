@@ -11,6 +11,10 @@ export interface NavigationConfig {
   sortBy?: NavigationSort
   roots?: string[]
   tone?: SemanticTone
+  /** Treatment of the navigation panel, such as flat, surfaceAlt or glass. */
+  variant?: string
+  /** Extra classes for the navigation panel. */
+  class?: string
 }
 
 export interface NavItem {

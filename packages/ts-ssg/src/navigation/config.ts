@@ -40,7 +40,24 @@ export function resolveNavigationConfig(
   const sortBy = resolveSort(merged.sortBy)
   const roots = resolveNavigationRoots(merged.roots)
   const tone = pickSemanticTone(merged.tone) ?? DEFAULT_NAV_CONFIG.tone
-  return { mode, navFileName, maxDepth, includeIndex, sortBy, roots, tone }
+  const variant = resolveText(merged.variant)
+  const className = resolveText(merged.class)
+  return {
+    mode,
+    navFileName,
+    maxDepth,
+    includeIndex,
+    sortBy,
+    roots,
+    tone,
+    ...(variant ? { variant } : {}),
+    ...(className ? { class: className } : {}),
+  }
+}
+
+function resolveText(value: unknown) {
+  if (typeof value !== 'string') return undefined
+  return value.trim() || undefined
 }
 
 function resolveMode(mode: NavigationMode | undefined): NavigationMode {

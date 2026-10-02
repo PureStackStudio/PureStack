@@ -317,6 +317,59 @@ describe('renderPage consent integration', () => {
     expect(html).not.toContain('page-toc')
   })
 
+  it('passes the configured navigation variant and class to the nav menu', async () => {
+    const site = resolveSiteConfig({
+      rootDir: process.cwd(),
+      navigation: {
+        tone: 'accent',
+        variant: ' glass ',
+        class: 'spotlight-from-top-right',
+      },
+    })
+    const html = await renderPage({
+      bodyHtml: '<p>Hello</p>',
+      pageInfo: {
+        relPath: 'index.md',
+        urlPath: '/',
+        frontmatter: normalizeFrontmatter({}),
+      },
+      navigation: {
+        mode: 'auto',
+        folder: '',
+        root: '',
+        items: [{ title: 'Home', url: '/' }],
+        global: [],
+        tone: 'accent',
+      },
+      site,
+    })
+    expect(html).toMatch(
+      /<nav-menu tone="accent" variant="glass" class="spotlight-from-top-right">/,
+    )
+  })
+
+  it('leaves the nav menu on its own variant when none is configured', async () => {
+    const site = resolveSiteConfig({ rootDir: process.cwd() })
+    const html = await renderPage({
+      bodyHtml: '<p>Hello</p>',
+      pageInfo: {
+        relPath: 'index.md',
+        urlPath: '/',
+        frontmatter: normalizeFrontmatter({}),
+      },
+      navigation: {
+        mode: 'auto',
+        folder: '',
+        root: '',
+        items: [{ title: 'Home', url: '/' }],
+        global: [],
+        tone: 'neutral',
+      },
+      site,
+    })
+    expect(html).toContain('<nav-menu tone="neutral">')
+  })
+
   it('does not render navigation shell when showNav is false', async () => {
     const site = resolveSiteConfig({ rootDir: process.cwd() })
     const html = await renderPage({

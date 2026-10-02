@@ -17,6 +17,8 @@ export interface ResolvedNavigationConfig {
   sortBy: NavigationSort
   roots: string[]
   tone: SemanticTone
+  variant?: string
+  class?: string
 }
 
 export interface NavigationTree {

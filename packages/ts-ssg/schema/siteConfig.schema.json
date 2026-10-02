@@ -383,6 +383,35 @@
           ],
           "description": "Navigation menu semantic tone.",
           "default": "neutral"
+        },
+        "variant": {
+          "type": "string",
+          "enum": [
+            "solid",
+            "surface",
+            "surfaceAlt",
+            "spotlight",
+            "glass",
+            "flat",
+            "flatAlt",
+            "flatSolid",
+            "outlineFill",
+            "outline",
+            "subtle",
+            "subtleBtn",
+            "link",
+            "sheen",
+            "underline",
+            "rail",
+            "bracket",
+            "none"
+          ],
+          "description": "Navigation menu treatment. Docked in the doc sidebar, the menu stays square and borderless whatever the variant.",
+          "default": "flat"
+        },
+        "class": {
+          "type": "string",
+          "description": "Extra classes for the navigation menu, such as spotlight-from-top-right."
         }
       }
     },

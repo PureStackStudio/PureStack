@@ -67,7 +67,17 @@ function renderDocTemplate({
                 ? [
                     h('aside')
                       .attr({ class: 'doc-sidebar', id: 'doc-sidebar' })
-                      .push(h('nav-menu').attr({ tone: navigation?.tone })),
+                      .push(
+                        h('nav-menu').attr({
+                          tone: navigation?.tone,
+                          ...(site.navigation.variant
+                            ? { variant: site.navigation.variant }
+                            : {}),
+                          ...(site.navigation.class
+                            ? { class: site.navigation.class }
+                            : {}),
+                        }),
+                      ),
                   ]
                 : []),
               h('main')

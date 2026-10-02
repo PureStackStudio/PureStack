@@ -76,6 +76,29 @@ describe('NavMenu rendering', () => {
     expect(customHtml).not.toContain('tone-fill-flat')
   })
 
+  it('adds a given class to the navigation panel', () => {
+    const cleanup = ensureDomGlobals()
+    const html = renderApp(
+      `<NavMenu :items="[]" class="spotlight-from-top-right"></NavMenu>`,
+      {
+        components: {
+          ...defineButtonComponents(),
+          ...defineFlexComponents(),
+          ...defineIconComponents(getSvgIcon),
+          ...definePanelComponents(),
+          ...defineSignInComponents(),
+          ...defineNavigationComponents(),
+        },
+        context: createTestContext(),
+      },
+    )
+    cleanup()
+
+    const navClass = html.match(/<nav class="([^"]*)"/)?.[1].split(' ')
+    expect(navClass).toContain('spotlight-from-top-right')
+    expect(navClass).toContain('tone-fill-flat')
+  })
+
   it('marks the currentUrl item as the current page and opens its group', () => {
     const cleanup = ensureDomGlobals()
     const components = {
