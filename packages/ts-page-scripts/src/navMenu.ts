@@ -43,7 +43,6 @@ function hydrateNavMenu(root?: Element | null) {
 }
 
 function init(menu: HTMLElement) {
-  resetNavToggle()
   const sidebar = menu.closest<HTMLElement>('.doc-sidebar')
 
   const collapseToggle = menu.querySelector<HTMLElement>(
@@ -274,7 +273,6 @@ function init(menu: HTMLElement) {
     } catch {}
   }
 
-  applyStoredPreference()
   applyStoredOpenGroups()
   applyStoredScrollTop()
   globalThis.requestAnimationFrame(() => {
@@ -285,6 +283,14 @@ function init(menu: HTMLElement) {
     group.addEventListener('toggle', writeStoredOpenGroups)
   }
   menu.addEventListener('scroll', queueStoredScrollTop, { passive: true })
+
+  // Collapsing, the floating panel and resizing shape the doc layout, so
+  // only the menu docked in its sidebar takes them on. Any other menu, such
+  // as one in a page or a playground, stays plain navigation.
+  if (!sidebar) return
+
+  resetNavToggle()
+  applyStoredPreference()
 
   if (typeof media.addEventListener === 'function') {
     media.addEventListener('change', () => {

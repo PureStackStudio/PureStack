@@ -3,7 +3,7 @@ import {
   type TsSsgContext,
   tryResolveTsSsgContext,
 } from '@purestack/ts-common'
-import { getSemanticToneClass, type SemanticTone } from '@purestack/ts-style'
+import type { SemanticTone } from '@purestack/ts-style'
 import { urlNormalizer } from '@purestack/ts-util'
 import {
   type ComputedRef,
@@ -11,15 +11,25 @@ import {
   defineComponent,
   html,
   type RefOrValue,
+  type SRef,
   unref,
 } from 'regor'
+import {
+  type ComponentVariant,
+  type ComponentVariantMode,
+  resolveComponentClasses,
+} from '../componentVariant'
 
 export interface NavMenu {
-  items?: NavItem[]
-  tone?: SemanticTone
+  items?: NavItem[] | SRef<NavItem[]>
+  currentUrl?: RefOrValue<string>
+  navItems?: ComputedRef<NavItemState[]>
+  tone?: RefOrValue<SemanticTone>
+  variant?: RefOrValue<ComponentVariant>
+  variantMode?: RefOrValue<ComponentVariantMode>
   signInAvatarSrc?: RefOrValue<string>
   signInAvatarAlt?: RefOrValue<string>
-  toneClass?: ComputedRef<string>
+  classes?: ComputedRef<string>
   searchEnabled?: boolean
   navRoot?: string
 }
@@ -79,9 +89,13 @@ const navListTemplate = html`<ul class="nav__list">
   <NavItem r-for="item in items"/>
 </ul>`
 
+const DEFAULT_NAV_MENU_TONE: SemanticTone = 'neutral'
+const DEFAULT_NAV_MENU_VARIANT: ComponentVariant = 'flat'
+const DEFAULT_NAV_MENU_VARIANT_MODE: ComponentVariantMode = 'stateless'
+
 const navMenuTemplate = html`<nav
-  class="nav__menu tone-fill-flat tone-border-surface tone-text-surface tone--neutral"
-  :class="toneClass"
+  class="nav__menu"
+  :class="classes"
   :data-nav-root="navRoot"
   aria-label="Site navigation"
 >
@@ -124,7 +138,7 @@ const navMenuTemplate = html`<nav
       </span>
     </button>
   </div>
-  <NavList :items="items"></NavList>
+  <NavList :items="navItems"></NavList>
   <SearchBox r-if="searchEnabled" class="nav__search mt-1"/>
   <script>
     window.tsSsgNavMenu?.hydrate(document.currentScript?.parentElement)
@@ -137,7 +151,12 @@ function resolveNavItems(context?: TsSsgContext): NavItem[] {
   return context?.navigation?.global ?? []
 }
 
-function resolveCurrentPath(context?: TsSsgContext): string | undefined {
+function resolveCurrentPath(
+  currentUrl: string | undefined,
+  context?: TsSsgContext,
+): string | undefined {
+  const fromProp = urlNormalizer.normalizeInternalPath(currentUrl)
+  if (fromProp) return fromProp
   const fromContext = urlNormalizer.normalizeInternalPath(
     context?.pageInfo?.urlPath,
   )
@@ -211,17 +230,36 @@ function defineNavListComponent() {
 
 function defineNavMenuComponent() {
   return defineComponent<NavMenu>(navMenuTemplate, {
-    props: ['items', 'tone', 'signInAvatarSrc', 'signInAvatarAlt'],
+    props: [
+      'items',
+      'currentUrl',
+      'tone',
+      'variant',
+      'variantMode',
+      'signInAvatarSrc',
+      'signInAvatarAlt',
+    ],
     context: (head) => {
       const context = tryResolveTsSsgContext(head)
+      const props = head.props
       return {
-        ...head.props,
-        toneClass: computed(() => getSemanticToneClass(head.props.tone)),
+        ...props,
+        classes: computed(() =>
+          resolveComponentClasses(
+            { ...props, tone: unref(props.tone) || DEFAULT_NAV_MENU_TONE },
+            {
+              defaultVariant: DEFAULT_NAV_MENU_VARIANT,
+              defaultVariantMode: DEFAULT_NAV_MENU_VARIANT_MODE,
+            },
+          ),
+        ),
         searchEnabled: context?.site.pagefind?.enabled === true,
         navRoot: normalizeNavStateKeyPart(context?.navigation?.root ?? ''),
-        items: buildNavState(
-          head.props.items ?? resolveNavItems(context),
-          resolveCurrentPath(context),
+        navItems: computed(() =>
+          buildNavState(
+            unref(props.items) ?? resolveNavItems(context),
+            resolveCurrentPath(unref(props.currentUrl), context),
+          ),
         ),
       }
     },

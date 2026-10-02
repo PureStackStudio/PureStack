@@ -372,11 +372,14 @@
           "enum": [
             "neutral",
             "accent",
+            "feature",
+            "secondary",
+            "custom",
+            "ghost",
             "info",
             "success",
             "warning",
-            "danger",
-            "ghost"
+            "danger"
           ],
           "description": "Navigation menu semantic tone.",
           "default": "neutral"

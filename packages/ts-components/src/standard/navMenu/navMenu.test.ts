@@ -48,6 +48,61 @@ describe('NavMenu rendering', () => {
     expect(html).not.toContain('r-else=')
   })
 
+  it('renders a neutral flat panel by default and accepts tone and variant', () => {
+    const cleanup = ensureDomGlobals()
+    const components = {
+      ...defineButtonComponents(),
+      ...defineFlexComponents(),
+      ...defineIconComponents(getSvgIcon),
+      ...definePanelComponents(),
+      ...defineSignInComponents(),
+      ...defineNavigationComponents(),
+    }
+    const render = (template: string) =>
+      renderApp(template, { components, context: createTestContext() })
+    const defaultHtml = render(`<NavMenu :items="[]"></NavMenu>`)
+    const customHtml = render(
+      `<NavMenu :items="[]" tone="accent" variant="glass" variantMode="stateful"></NavMenu>`,
+    )
+    cleanup()
+
+    expect(defaultHtml).toMatch(
+      /<nav class="nav__menu [^"]*tone-fill-flat [^"]*tone--neutral"/,
+    )
+    expect(defaultHtml).not.toContain('tone-fill-flat-hover')
+    expect(customHtml).toMatch(
+      /<nav class="nav__menu [^"]*tone-fill-glass [^"]*tone-fill-glass-hover[^"]*tone--accent"/,
+    )
+    expect(customHtml).not.toContain('tone-fill-flat')
+  })
+
+  it('marks the currentUrl item as the current page and opens its group', () => {
+    const cleanup = ensureDomGlobals()
+    const components = {
+      ...defineButtonComponents(),
+      ...defineFlexComponents(),
+      ...defineIconComponents(getSvgIcon),
+      ...definePanelComponents(),
+      ...defineSignInComponents(),
+      ...defineNavigationComponents(),
+    }
+    const html = renderApp(
+      `<NavMenu
+        currentUrl="/guides/themes/"
+        :items="[
+          { title: 'Home', url: '/' },
+          { title: 'Guides', children: [{ title: 'Themes', url: '/guides/themes/' }] }
+        ]"
+      ></NavMenu>`,
+      { components, context: createTestContext() },
+    )
+    cleanup()
+
+    expect(html).toMatch(/<a[^>]*aria-current="page"[^>]*>[\s\S]*?Themes/)
+    expect(html).toContain('data-nav-default-open="true"')
+    expect(html.match(/aria-current="page"/g)).toHaveLength(1)
+  })
+
   it('renders stable state keys for collapsible groups', () => {
     const cleanup = ensureDomGlobals()
     const components = {

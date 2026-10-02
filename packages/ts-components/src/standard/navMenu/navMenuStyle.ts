@@ -40,7 +40,7 @@ export function registerNavShellStyles(
     .select('.nav__menu', theme)
     .display('block')
     .padding('1em')
-    .borderRadius(palette.radii.lg)
+    .borderRadius(`${palette.radii.lg} !important`)
     .border('1px solid transparent')
     .apply(palette.applyFont(palette.font.size.body))
     .maxHeight(`calc(100vh - ${docLayoutVar('sidebarTop')} - 1.5625rem)`)
@@ -85,7 +85,7 @@ export function registerNavShellStyles(
     .outline(`2px solid ${palette.current.border.focus}`)
   styleBuilder
     .select('.nav__collapse-toggle', theme)
-    .display('inline-flex')
+    .display('none')
     .alignItems('center')
     .justifyContent('center')
     .padding('0.25em')
@@ -95,6 +95,10 @@ export function registerNavShellStyles(
     .cursor('pointer')
     .transition('background 160ms ease, color 160ms ease')
     .apply(palette.applyFont(palette.font.size.xxxs))
+  // Collapsing belongs to the doc layout, so only a docked menu offers it.
+  styleBuilder
+    .select('.doc-sidebar .nav__collapse-toggle', theme)
+    .display('inline-flex')
   styleBuilder
     .select('.nav__collapse-toggle-icon', theme)
     .display('inline-flex')
@@ -211,8 +215,8 @@ export function registerNavShellStyles(
     .marginLeft('0')
     .padding('0')
     .background('transparent')
-    .border('none')
-    .borderRadius('0')
+    .border('none !important')
+    .borderRadius('0 !important')
     .overflow('visible')
   styleBuilder
     .select(
@@ -254,7 +258,10 @@ export function registerNavShellStyles(
     .display('none')
 
   styleBuilder
-    .select('.nav__panel-toggle, .nav__collapse-toggle', theme)
+    .select(
+      '.doc-sidebar .nav__panel-toggle, .doc-sidebar .nav__collapse-toggle',
+      theme,
+    )
     .media(mediaBelow(BREAKPOINTS.lg))
     .display('none')
   styleBuilder
@@ -275,8 +282,8 @@ export function registerNavShellStyles(
     .maxWidth('none')
     .minHeight(`calc(100dvh - ${docLayoutVar('sidebarTopMobile')})`)
     .maxHeight('none')
-    .borderRadius('0')
-    .border('0')
+    .borderRadius('0 !important')
+    .border('0 !important')
     .padding('1rem 1rem 1.25rem')
     .height('100%')
     .overflow('auto')
