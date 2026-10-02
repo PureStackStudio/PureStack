@@ -13,13 +13,7 @@ nav:
 
 # Form<wbr/>Divider
 
-A quiet visual separator between related form paths.
-
-<Badge tone="accent" variant="surface">FormDivider</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/form.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="FormDivider" kind="Visual separation" summary="Make alternatives easier to scan. A quiet divider with an optional label between related form paths." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/form.ts" section="Forms &amp; input" sectionHref="/components/forms/"/>
 
 ## Separate two routes
 
@@ -27,6 +21,7 @@ Keep the label short and give each route a clear purpose.
 
 <Tabs group="form-divider-sample-1" selectedTab="form-divider-sample-1-preview" ariaLabel="Separate two routes example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="form-divider-sample-1-preview" label="Preview">
+<ComponentExample label="FormDivider in context" caption="A divider provides visual structure; nearby text and controls describe the alternatives.">
     <Panel bodyClass="p-4">
       <p>Choose a component guide to continue.</p>
       <BtnLink href="/components/forms/form-input-field/" tone="accent">Native input</BtnLink>
@@ -35,7 +30,9 @@ Keep the label short and give each route a clear purpose.
         Input with suggestions
       </BtnLink>
     </Panel>
-  </TabPane>
+
+</ComponentExample>
+</TabPane>
   <TabPane id="form-divider-sample-1-source-0" label="alternative-paths.mdx">
 ```html
 <Panel bodyClass="p-4">
@@ -56,12 +53,15 @@ Omit label when a simple visual break is enough.
 
 <Tabs group="form-divider-sample-2" selectedTab="form-divider-sample-2-preview" ariaLabel="An unlabelled divider example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="form-divider-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
     <div>
       <p>Primary details</p>
       <FormDivider />
       <p>Supporting information</p>
     </div>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="form-divider-sample-2-source-0" label="quiet-divider.mdx">
 ```html
 <div>
@@ -72,6 +72,24 @@ Omit label when a simple visual break is enough.
 ```
   </TabPane>
 </Tabs>
+
+## Labelled and unlabelled separators
+
+The optional label is visual content in the divider. Use ordinary nearby text to explain alternatives, since the line is not a semantic section heading.
+
+<ComponentExample label="Labelled and unlabelled separators" caption="Compare all values together. Use the live examples for application state and event handling.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Short label</code>
+<p>Continue with a project</p><FormDivider label="or"/><p>Read the getting-started guide</p>
+</div>
+<div class="component-appearance-cell"><code>Descriptive label</code>
+<p>Use your existing workspace</p><FormDivider label="another way"/><p>Create a new workspace</p>
+</div>
+<div class="component-appearance-cell"><code>No label</code>
+<p>Contact details</p><FormDivider/><p>Project details</p>
+</div>
+</div>
+</ComponentExample>
 
 ## Behavior and accessibility
 
@@ -97,8 +115,6 @@ The label is rendered through a data attribute and CSS. Do not use it as the onl
 <div class="api-contract">
 <p>No slots or events. Root is div.form-block__divider. Register defineFormComponents.</p>
 </div>
-
-
 
 ## Related components
 

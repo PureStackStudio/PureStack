@@ -239,6 +239,22 @@ export function registerComponentGuideStyles() {
       border: 'none',
       padding: '0',
     })
+    root.select('.forms-appearance-grid--composer').css({
+      gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 24rem), 1fr))',
+    })
+    root.select('.forms-copy-sample').css({
+      border: 'none',
+      padding: '0',
+      margin: '0',
+      minWidth: '0',
+    })
+    root.select('.forms-composer-card').css({
+      width: '100%',
+      padding: '1rem',
+      border: `1px solid ${neutral.border.subtle}`,
+      borderRadius: '0.75rem',
+      background: neutral.surface.rest.background,
+    })
     root
       .select('.component-appearance-cell > .btn-group__dropdown')
       .css({ alignSelf: 'start' })

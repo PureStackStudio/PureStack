@@ -13,13 +13,7 @@ nav:
 
 # Form<wbr/>Status
 
-Polite live feedback for validation, progress and completed form actions.
-
-<Badge tone="accent" variant="surface">FormStatus</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/form.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="FormStatus" kind="Live feedback" summary="Keep the outcome close to the task. Polite live feedback for progress, validation, and completed actions." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/form.ts" section="Forms &amp; input" sectionHref="/components/forms/"/>
 
 ## Change the feedback
 
@@ -27,8 +21,11 @@ The same mounted status region receives new text. Clear hides it until there is 
 
 <Tabs group="form-status-sample-1" selectedTab="form-status-sample-1-preview" ariaLabel="Change the feedback example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="form-status-sample-1-preview" label="Preview">
+<ComponentExample label="FormStatus in context" caption="Choose a success or validation message, then clear it. New content is announced politely.">
     <RegorApp id="form-status-demo" src="./playground.ts"/>
-  </TabPane>
+
+</ComponentExample>
+</TabPane>
   <TabPane id="form-status-sample-1-source-0" label="playground.mdx">
 ```html
 <RegorApp id="form-status-demo" src="./playground.ts"/>
@@ -43,6 +40,7 @@ import {
 } from '@purestack/ts-components'
 import type { SemanticTone } from '@purestack/ts-style'
 import { createApp, defineComponent, html, type Ref, ref } from 'regor'
+import { mountFormAppearanceGalleries } from '../appearance'
 
 export interface FormStatusExample {
   statusMessage: Ref<string>
@@ -102,6 +100,8 @@ createApp(
   },
   { selector: 'app#form-status-demo', template: html`<FormStatusExample />` },
 )
+
+mountFormAppearanceGalleries()
 ```
   </TabPane>
 </Tabs>
@@ -112,10 +112,13 @@ Static supporting information can also use the status surface.
 
 <Tabs group="form-status-sample-2" selectedTab="form-status-sample-2-preview" ariaLabel="A persistent explanation example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="form-status-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
     <FormStatus tone="warning" variant="outline">
       Review the entered values before submitting this form.
     </FormStatus>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="form-status-sample-2-source-0" label="persistent-status.mdx">
 ```html
 <FormStatus tone="warning" variant="outline">
@@ -124,6 +127,41 @@ Static supporting information can also use the status surface.
 ```
   </TabPane>
 </Tabs>
+
+## All semantic tones
+
+All ten tones are visible at once. The control’s label and content explain the intent independently of color.
+
+<ComponentExample label="All ten semantic tones" caption="Compare every treatment together. Switch the site theme to see both palettes; the working status demo above shows live updates.">
+<div id="forms-form-status-tone-gallery" data-form-gallery data-component="FormStatus" data-axis="tone">
+<FormAppearanceGallery component="FormStatus" axis="tone" prefix="forms-form-status-tone-gallery"/>
+</div>
+</ComponentExample>
+
+## All visual variants
+
+All eighteen supported treatments, shown in accent. Tone and variant are independent, so any treatment can be combined with a semantic tone.
+
+<ComponentExample label="All eighteen visual variants" caption="Compare every treatment together. Switch the site theme to see both palettes; the working status demo above shows live updates.">
+<div id="forms-form-status-variant-gallery" data-form-gallery data-component="FormStatus" data-axis="variant">
+<FormAppearanceGallery component="FormStatus" axis="variant" prefix="forms-form-status-variant-gallery"/>
+</div>
+</ComponentExample>
+
+## Visible and hidden feedback
+
+hidden is a boolean that removes the status from display. The live demo above adds, changes, and clears messages. Keep status updates concise.
+
+<ComponentExample label="Visible and hidden feedback" caption="Compare all values together. Use the live examples for application state and event handling.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Visible</code>
+<FormStatus tone="info" :hidden="false">Review the required fields.</FormStatus>
+</div>
+<div class="component-appearance-cell"><code>Hidden</code>
+<p>The status below is intentionally absent.</p><FormStatus tone="success" :hidden="true">Saved.</FormStatus>
+</div>
+</div>
+</ComponentExample>
 
 ## Behavior and accessibility
 
@@ -159,8 +197,6 @@ The root has role status and aria-live polite. Avoid duplicating the same messag
 <div class="api-contract">
 <p><strong>Default slot:</strong> feedback content. Register defineFormComponents. This component announces content but does not validate or submit a form.</p>
 </div>
-
-
 
 ## Related components
 

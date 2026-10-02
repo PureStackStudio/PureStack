@@ -13,13 +13,7 @@ nav:
 
 # Form<wbr/>Check
 
-A native checkbox with a visible label, semantic tone and a two-way boolean ref.
-
-<Badge tone="accent" variant="surface">FormCheck</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/formCheck.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="FormCheck" kind="Boolean choice" summary="A small control for a clear decision. Native checkbox behavior with a visible label and a reactive boolean." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/formCheck.ts" section="Forms &amp; input" sectionHref="/components/forms/"/>
 
 ## Notification preferences
 
@@ -27,8 +21,11 @@ Toggle each independent preference. The required security setting demonstrates a
 
 <Tabs group="form-check-sample-1" selectedTab="form-check-sample-1-preview" ariaLabel="Notification preferences example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="form-check-sample-1-preview" label="Preview">
+<ComponentExample label="FormCheck in context" caption="Toggle the preferences and lock the controls to compare available and disabled states.">
     <RegorApp id="form-check-demo" src="./playground.ts"/>
-  </TabPane>
+
+</ComponentExample>
+</TabPane>
   <TabPane id="form-check-sample-1-source-0" label="playground.mdx">
 ```html
 <RegorApp id="form-check-demo" src="./playground.ts"/>
@@ -40,8 +37,8 @@ import {
   defineFlexComponents,
   defineFormComponents,
 } from '@purestack/ts-components'
-
 import { createApp, defineComponent, html, type Ref, ref } from 'regor'
+import { mountFormAppearanceGalleries } from '../appearance'
 
 export interface FormCheckExample {
   emailUpdates: Ref<boolean>
@@ -99,6 +96,8 @@ createApp(
   },
   { selector: 'app#form-check-demo', template: html`<FormCheckExample />` },
 )
+
+mountFormAppearanceGalleries()
 ```
   </TabPane>
 </Tabs>
@@ -109,11 +108,14 @@ A checkbox without visible label text still needs an accessible name.
 
 <Tabs group="form-check-sample-2" selectedTab="form-check-sample-2-preview" ariaLabel="A compact labelled checkbox example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="form-check-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
     <Flex align="center">
       <FormCheck id="check-compact" aria-label="Select this example row" tone="accent" />
       <span>Example row</span>
     </Flex>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="form-check-sample-2-source-0" label="compact-checkbox.mdx">
 ```html
 <Flex align="center">
@@ -123,6 +125,40 @@ A checkbox without visible label text still needs an accessible name.
 ```
   </TabPane>
 </Tabs>
+
+## All semantic tones
+
+All ten tones are visible at once. The control’s label and content explain the intent independently of color.
+
+<ComponentExample label="All ten semantic tones" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
+<div id="forms-form-check-tone-gallery" data-form-gallery data-component="FormCheck" data-axis="tone">
+<FormAppearanceGallery component="FormCheck" axis="tone" prefix="forms-form-check-tone-gallery"/>
+</div>
+</ComponentExample>
+
+## Every checkbox state
+
+FormCheck has a tone prop and a fixed checkbox treatment; it has no variant prop. Native name and value contribute to form data when checked.
+
+<ComponentExample label="Every checkbox state" caption="Compare all values together. Use the live examples for application state and event handling.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Unchecked</code>
+<FormCheck id="forms-check-unchecked" label="Send release updates" name="updates" value="yes" :checked="false"/>
+</div>
+<div class="component-appearance-cell"><code>Checked</code>
+<FormCheck id="forms-check-checked" label="Send release updates" name="updates" value="yes" :checked="true"/>
+</div>
+<div class="component-appearance-cell"><code>Disabled unchecked</code>
+<FormCheck id="forms-check-disabled-off" label="Updates unavailable" :disabled="true" :checked="false"/>
+</div>
+<div class="component-appearance-cell"><code>Disabled checked</code>
+<FormCheck id="forms-check-disabled-on" label="Required reviewer" :disabled="true" :checked="true"/>
+</div>
+<div class="component-appearance-cell"><code>Accessible compact control</code>
+<FormCheck id="forms-check-compact" aria-label="Select this project" :checked="true" rootClass="m-0"/>
+</div>
+</div>
+</ComponentExample>
 
 ## Behavior and accessibility
 
@@ -183,8 +219,6 @@ Press Space while focused to toggle. Group related choices in fieldset with a le
 <div class="api-contract">
 <p>No slots. label provides visible text. Register defineFormComponents or register FormCheck with defineFormCheckComponent.</p>
 </div>
-
-
 
 ## Related components
 

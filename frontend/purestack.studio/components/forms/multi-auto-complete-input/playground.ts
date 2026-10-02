@@ -3,9 +3,11 @@ import {
   defineButtonComponents,
   defineFlexComponents,
   defineFormComponents,
+  defineFormInputField,
   defineIconComponents,
   defineMultiAutoCompleteInputComponents,
   type MultiAutoCompleteItem,
+  type ResolvedAutoCompleteOption,
 } from '@purestack/ts-components'
 import {
   lucide_chevron_down,
@@ -17,10 +19,12 @@ import {
   defineComponent,
   html,
   type Ref,
+  type RefOrValue,
   ref,
   type SRef,
   sref,
 } from 'regor'
+import { mountFormAppearanceGalleries } from '../appearance'
 
 export interface MultiAutoCompleteInputExample {
   selectedTags: SRef<MultiAutoCompleteItem[]>
@@ -30,6 +34,15 @@ export interface MultiAutoCompleteInputExample {
   duplicatesAllowed: Ref<boolean>
   pending: Ref<boolean>
   locked: Ref<boolean>
+  minimum: Ref<number>
+  limit: Ref<number>
+  focusOpens: Ref<boolean>
+  customItems: SRef<MultiAutoCompleteItem[]>
+  activity: Ref<string>
+  createTag: (query: string) => MultiAutoCompleteItem
+  mapTag: (option: ResolvedAutoCompleteOption) => MultiAutoCompleteItem
+  splitTags: (value: string) => string[]
+  itemsChanged: (items: MultiAutoCompleteItem[]) => void
   clear: () => void
 }
 
@@ -46,9 +59,17 @@ const multiAutoCompleteInputExampleTemplate = html`<Flex direction="column">
     :allowDuplicates="duplicatesAllowed"
     :loading="pending"
     :disabled="locked"
+    :minLength="minimum"
+    :maxResults="limit"
+    :openOnFocus="focusOpens"
     separators=",;"
   />
   <Flex wrap="true">
+    <FormInputField id="multi-minimum" label="Minimum query length" type="number" min="0" :model="minimum" />
+    <FormInputField id="multi-limit" label="Maximum results" type="number" min="1" :model="limit" />
+  </Flex>
+  <Flex wrap="true">
+    <FormCheck id="multi-focus" label="Open on focus" :checked="focusOpens" />
     <FormCheck id="multi-custom" label="Allow new tags" :checked="customAllowed" />
     <FormCheck
       id="multi-duplicates"
@@ -65,6 +86,13 @@ const multiAutoCompleteInputExampleTemplate = html`<Flex direction="column">
   <ul>
     <li r-for="tag in selectedTags">{{ tag.label }} · {{ tag.value }}</li>
   </ul>
+  <h3>Callback transforms and a custom row</h3>
+  <p>Choose a suggestion to give it a success tone. New tags use lowercase values and a feature tone. Paste tags separated by commas, semicolons, pipes, or newlines.</p>
+  <MultiAutoCompleteInput id="multi-customized" label="Normalized tags" :items="customItems"
+    :options="tagOptions" rowComponent="TagSuggestion" :onCreateItem="createTag"
+    :onOptionToItem="mapTag" :onSplitInput="splitTags" :onItemsChange="itemsChanged"
+    placeholder="Try Design | Research"/>
+  <FormStatus>{{ activity }}</FormStatus>
 </Flex>`
 
 function createMultiAutoCompleteInputExample(): MultiAutoCompleteInputExample {
@@ -77,6 +105,7 @@ function createMultiAutoCompleteInputExample(): MultiAutoCompleteInputExample {
     requiredTag,
     { label: 'Needs review', value: 'review', tone: 'warning' },
   ])
+  const activity = ref('Add a tag to inspect onItemsChange.')
   return {
     selectedTags,
     tagQuery: ref(''),
@@ -90,6 +119,26 @@ function createMultiAutoCompleteInputExample(): MultiAutoCompleteInputExample {
     duplicatesAllowed: ref(false),
     pending: ref(false),
     locked: ref(false),
+    minimum: ref(0),
+    limit: ref(3),
+    focusOpens: ref(true),
+    customItems: sref<MultiAutoCompleteItem[]>([]),
+    activity,
+    createTag: (query) => ({
+      label: query.trim(),
+      value: query.trim().toLowerCase(),
+      tone: 'feature',
+    }),
+    mapTag: (option) => ({
+      label: option.label,
+      value: option.value,
+      tone: 'success',
+    }),
+    splitTags: (value) => value.split(/[;,|\n]/),
+    itemsChanged: (items) =>
+      activity(
+        `onItemsChange: ${items.map((item) => item.value).join(', ') || '(empty)'}`,
+      ),
     clear: () => selectedTags([requiredTag]),
   }
 }
@@ -98,6 +147,16 @@ const component = defineComponent<MultiAutoCompleteInputExample>(
   multiAutoCompleteInputExampleTemplate,
   {
     context: createMultiAutoCompleteInputExample,
+  },
+)
+const tagSuggestion = defineComponent<{
+  option: RefOrValue<ResolvedAutoCompleteOption | null>
+  active?: RefOrValue<boolean>
+  query?: RefOrValue<string>
+}>(
+  html`<Flex direction="column" r-if="option"><strong>{{ option.label }}</strong><span class="text-muted">{{ option.value }} · {{ active ? 'Active suggestion' : 'Available suggestion' }}{{ query ? ' · query: ' + query : '' }}</span></Flex>`,
+  {
+    props: ['option', 'active', 'query'],
   },
 )
 const icons: Record<string, string> = {
@@ -110,8 +169,10 @@ createApp(
   {
     components: {
       MultiAutoCompleteInputExample: component,
+      TagSuggestion: tagSuggestion,
 
       ...defineMultiAutoCompleteInputComponents(),
+      ...defineFormInputField(),
       ...defineFlexComponents(),
       ...defineFormComponents(),
       ...defineButtonComponents(),
@@ -123,3 +184,5 @@ createApp(
     template: html`<MultiAutoCompleteInputExample />`,
   },
 )
+
+mountFormAppearanceGalleries()

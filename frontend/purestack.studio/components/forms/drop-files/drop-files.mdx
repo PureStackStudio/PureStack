@@ -13,13 +13,7 @@ nav:
 
 # Drop<wbr/>Files
 
-Collect local files through a picker, drag and drop, or paste, with removable selections and file-type filtering.
-
-<Badge tone="accent" variant="surface">DropFiles</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/dropFiles/dropFiles.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="DropFiles" kind="Local file collection" summary="Collect files with a familiar picker, drop gesture, or paste. Filter types, inspect selections, and remove individual files." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/dropFiles/dropFiles.ts" section="Forms &amp; input" sectionHref="/components/forms/"/>
 
 ## Collect project attachments
 
@@ -27,8 +21,11 @@ Add local text, image or PDF files, remove individual entries and inspect the to
 
 <Tabs group="drop-files-sample-1" selectedTab="drop-files-sample-1-preview" ariaLabel="Collect project attachments example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="drop-files-sample-1-preview" label="Preview">
+<ComponentExample label="DropFiles in context" caption="Choose, drop, or paste supported files. Selections stay in this browser; the demo does not upload them.">
     <RegorApp id="drop-files-demo" src="./playground.ts"/>
-  </TabPane>
+
+</ComponentExample>
+</TabPane>
   <TabPane id="drop-files-sample-1-source-0" label="playground.mdx">
 ```html
 <RegorApp id="drop-files-demo" src="./playground.ts"/>
@@ -38,6 +35,7 @@ Add local text, image or PDF files, remove individual entries and inspect the to
 ```typescript
 import {
   type DropFileItem,
+  type DropFilesIconMap,
   defineButtonComponents,
   defineDropFilesComponents,
   defineFlexComponents,
@@ -63,6 +61,7 @@ import {
   type SRef,
   sref,
 } from 'regor'
+import { mountFormAppearanceGalleries } from '../appearance'
 
 export interface DropFilesExample {
   selectedFiles: SRef<DropFileItem[]>
@@ -70,6 +69,10 @@ export interface DropFilesExample {
   locked: Ref<boolean>
   totalBytes: ComputedRef<number>
   clear: () => void
+  referenceFiles: SRef<DropFileItem[]>
+  fileIcons: DropFilesIconMap
+  activity: Ref<string>
+  filesChanged: (files: DropFileItem[]) => void
 }
 
 const dropFilesExampleTemplate = html`<Flex direction="column">
@@ -93,10 +96,20 @@ const dropFilesExampleTemplate = html`<Flex direction="column">
   <FormStatus>
     {{ selectedFiles.length }} files · {{ totalBytes }} bytes selected
   </FormStatus>
+  <h3>Custom copy, icons, and change callback</h3>
+  <DropFiles :files="referenceFiles" label="Design references" hint="Images and PDF files only."
+    emptyTitle="Add your references" emptyText="Choose files, drop them, or paste."
+    accept="image/*,.pdf" uploadIcon="lucide:file-image" fileIcon="lucide:file"
+    removeIcon="lucide:trash-2" :iconMap="fileIcons" :context="{ onChange: filesChanged }"/>
+  <FormStatus>{{ activity }}</FormStatus>
+  <ul><li r-for="file in referenceFiles">{{ file.name }} · {{ file.type || 'Unknown type' }} · {{ file.sizeLabel }} · {{ file.icon }}</li></ul>
 </Flex>`
 
 function createDropFilesExample(): DropFilesExample {
   const selectedFiles = sref<DropFileItem[]>([])
+  const activity = ref(
+    'Choose a reference to inspect onChange and file metadata.',
+  )
   return {
     selectedFiles,
     allowMany: ref(true),
@@ -105,6 +118,11 @@ function createDropFilesExample(): DropFilesExample {
       selectedFiles().reduce((sum, item) => sum + item.size, 0),
     ),
     clear: () => selectedFiles([]),
+    referenceFiles: sref<DropFileItem[]>([]),
+    fileIcons: { 'image/*': 'lucide:file-image', '.pdf': 'lucide:file-text' },
+    activity,
+    filesChanged: (files) =>
+      activity(`onChange: ${files.length} reference files selected`),
   }
 }
 
@@ -134,6 +152,8 @@ createApp(
   },
   { selector: 'app#drop-files-demo', template: html`<DropFilesExample />` },
 )
+
+mountFormAppearanceGalleries()
 ```
   </TabPane>
 </Tabs>
@@ -144,6 +164,7 @@ Use a hint to explain why selection is unavailable.
 
 <Tabs group="drop-files-sample-2" selectedTab="drop-files-sample-2-preview" ariaLabel="A clearly disabled drop zone example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="drop-files-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
     <DropFiles
       label="Attachments"
       emptyTitle="Attachments are locked"
@@ -151,7 +172,9 @@ Use a hint to explain why selection is unavailable.
       hint="Read-only example"
       :disabled="true"
     />
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="drop-files-sample-2-source-0" label="disabled-zone.mdx">
 ```html
 <DropFiles
@@ -164,6 +187,48 @@ Use a hint to explain why selection is unavailable.
 ```
   </TabPane>
 </Tabs>
+
+## All semantic tones
+
+All ten tones are visible at once. The control’s label and content explain the intent independently of color.
+
+<ComponentExample label="All ten semantic tones" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
+<div id="forms-drop-files-tone-gallery" data-form-gallery data-component="DropFiles" data-axis="tone">
+<FormAppearanceGallery component="DropFiles" axis="tone" prefix="forms-drop-files-tone-gallery"/>
+</div>
+</ComponentExample>
+
+## All visual variants
+
+All eighteen supported treatments, shown in accent. Tone and variant are independent, so any treatment can be combined with a semantic tone.
+
+<ComponentExample label="All eighteen visual variants" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
+<div id="forms-drop-files-variant-gallery" data-form-gallery data-component="DropFiles" data-axis="variant">
+<FormAppearanceGallery component="DropFiles" axis="variant" prefix="forms-drop-files-variant-gallery"/>
+</div>
+</ComponentExample>
+
+## File collection features
+
+| Feature | How to try it |
+| --- | --- |
+| Picker, drop, paste | All three add local File objects to the same selection. |
+| accept | The main demo accepts text, images, and PDF; filtering applies to every entry path. |
+| multiple | Toggle multiple files; single mode retains one accepted selection. |
+| disabled | Lock the collector; adding and removal are unavailable. |
+| File metadata | Each item includes id, file, name, type, size, formatted size, lastModified, and icon. |
+| Remove and clear | Remove individual files with their button, or clear the demo list. |
+| Empty copy | label, hint, emptyTitle, and emptyText describe the collector before files are added. |
+| Icons | uploadIcon, fileIcon, removeIcon, and iconMap choose registered symbols. |
+| onChange | Receives the updated selection; this component does not upload files. |
+
+```html
+<DropFiles label="Reference files" hint="Images and PDF only"
+  emptyTitle="Add your references" emptyText="Choose files, drop them, or paste."
+  accept="image/*,.pdf" :multiple="true" :disabled="locked" :files="files"
+  uploadIcon="lucide:cloud-upload" fileIcon="lucide:file" removeIcon="lucide:trash-2"
+  :iconMap="fileIcons" :context="{ onChange: filesChanged }"/>
+```
 
 ## Behavior and accessibility
 
@@ -259,8 +324,6 @@ The drop zone opens the native picker with Enter or Space. File acceptance is a 
 <div class="api-contract">
 <p>No slots. Register defineDropFilesComponents and its icons. Use addDropFiles when another input path needs the same filtering, metadata and deduplication behavior.</p>
 </div>
-
-
 
 ## Related components
 

@@ -17,6 +17,7 @@ import {
   type Ref,
   ref,
 } from 'regor'
+import { mountFormAppearanceGalleries } from '../appearance'
 
 export interface FormInputFieldExample {
   contactEmail: Ref<string>
@@ -93,3 +94,5 @@ createApp(
     template: html`<FormInputFieldExample />`,
   },
 )
+
+mountFormAppearanceGalleries()

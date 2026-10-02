@@ -13,13 +13,7 @@ nav:
 
 # Form<wbr/>Assist<wbr/>Link
 
-A small native link for recovery, help and supporting form navigation.
-
-<Badge tone="accent" variant="surface">FormAssistLink</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/form.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="FormAssistLink" kind="Supporting navigation" summary="A quiet route to help. Native links for recovery, documentation, and supporting form navigation." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/form.ts" section="Forms &amp; input" sectionHref="/components/forms/"/>
 
 ## Contextual help
 
@@ -27,11 +21,14 @@ Use a specific label that describes where the reader will go.
 
 <Tabs group="form-assist-link-sample-1" selectedTab="form-assist-link-sample-1-preview" ariaLabel="Contextual help example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="form-assist-link-sample-1-preview" label="Preview">
+<ComponentExample label="FormAssistLink in context" caption="These links navigate to actual guides. Their labels explain the destination.">
     <FormMeta>
       <span>Need a different input?</span>
       <FormAssistLink href="/components/forms/auto-complete-input/" label="Explore suggestions" />
     </FormMeta>
-  </TabPane>
+
+</ComponentExample>
+</TabPane>
   <TabPane id="form-assist-link-sample-1-source-0" label="help-link.mdx">
 ```html
 <FormMeta>
@@ -48,12 +45,15 @@ An explicit target receives safe relationship defaults unless you provide rel yo
 
 <Tabs group="form-assist-link-sample-2" selectedTab="form-assist-link-sample-2-preview" ariaLabel="A separate browsing context example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="form-assist-link-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
     <FormAssistLink
       href="/components/forms/app-form/"
       label="Open the form guide in a new tab"
       target="_blank"
     />
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="form-assist-link-sample-2-source-0" label="new-tab.mdx">
 ```html
 <FormAssistLink
@@ -64,6 +64,27 @@ An explicit target receives safe relationship defaults unless you provide rel yo
 ```
   </TabPane>
 </Tabs>
+
+## Destinations and browsing context
+
+href, label, target, and rel make the complete public API. A missing href omits the anchor. External GitHub links explicitly open a new tab.
+
+<ComponentExample label="Destinations and browsing context" caption="Compare all values together. Use the live examples for application state and event handling.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Internal guide</code>
+<FormAssistLink href="/guides/" label="Read the guides"/>
+</div>
+<div class="component-appearance-cell"><code>Section anchor</code>
+<FormAssistLink href="#api-reference" label="Jump to the API"/>
+</div>
+<div class="component-appearance-cell"><code>GitHub in a new tab</code>
+<FormAssistLink href="https://github.com/PureStackStudio/PureStack" label="Open GitHub in a new tab" target="_blank" rel="noopener noreferrer"/>
+</div>
+<div class="component-appearance-cell"><code>Missing destination</code>
+<p>No link is rendered below because href is omitted.</p><FormAssistLink label="Unavailable help"/>
+</div>
+</div>
+</ComponentExample>
 
 ## Behavior and accessibility
 
@@ -104,8 +125,6 @@ An empty destination suppresses the link. Link text comes from label, not a slot
 <div class="api-contract">
 <p>No slots. Native anchor attributes are inherited. Register defineFormComponents.</p>
 </div>
-
-
 
 ## Related components
 

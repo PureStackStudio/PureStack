@@ -2,8 +2,8 @@ import {
   defineFlexComponents,
   defineFormComponents,
 } from '@purestack/ts-components'
-
 import { createApp, defineComponent, html, type Ref, ref } from 'regor'
+import { mountFormAppearanceGalleries } from '../appearance'
 
 export interface FormCheckExample {
   emailUpdates: Ref<boolean>
@@ -61,3 +61,5 @@ createApp(
   },
   { selector: 'app#form-check-demo', template: html`<FormCheckExample />` },
 )
+
+mountFormAppearanceGalleries()

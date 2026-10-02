@@ -13,13 +13,7 @@ nav:
 
 # Form<wbr/>Select<wbr/>Field
 
-A labelled native select with typed option data, reactive selection and familiar keyboard behavior.
-
-<Badge tone="accent" variant="surface">FormSelectField</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/formSelectField.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="FormSelectField" kind="Native selection" summary="Make a focused choice from a known set. Labelled options, typed values, and the browser’s familiar keyboard behavior." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/formSelectField.ts" section="Forms &amp; input" sectionHref="/components/forms/"/>
 
 ## Choose a region
 
@@ -27,8 +21,11 @@ Select a region and inspect its stored value. The unavailable option stays visib
 
 <Tabs group="form-select-field-sample-1" selectedTab="form-select-field-sample-1-preview" ariaLabel="Choose a region example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="form-select-field-sample-1-preview" label="Preview">
+<ComponentExample label="FormSelectField in context" caption="Choose a deployment region, then lock the selection. The unavailable option remains visible.">
     <RegorApp id="form-select-field-demo" src="./playground.ts"/>
-  </TabPane>
+
+</ComponentExample>
+</TabPane>
   <TabPane id="form-select-field-sample-1-source-0" label="playground.mdx">
 ```html
 <RegorApp id="form-select-field-demo" src="./playground.ts"/>
@@ -46,6 +43,7 @@ import {
 } from '@purestack/ts-components'
 import { lucide_chevron_down } from '@purestack/ts-svg-icons'
 import { createApp, defineComponent, html, type Ref, ref } from 'regor'
+import { mountFormAppearanceGalleries } from '../appearance'
 
 export interface FormSelectFieldExample {
   regionValue: Ref<FormSelectValue>
@@ -105,6 +103,8 @@ createApp(
     template: html`<FormSelectFieldExample />`,
   },
 )
+
+mountFormAppearanceGalleries()
 ```
   </TabPane>
 </Tabs>
@@ -115,6 +115,7 @@ A placeholder is a disabled empty option. Validation belongs to the owning form.
 
 <Tabs group="form-select-field-sample-2" selectedTab="form-select-field-sample-2-preview" ariaLabel="Required and disabled states example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="form-select-field-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
     <Grid columns="1" columnsSm="2">
       <FormSelectField
         id="select-required"
@@ -130,7 +131,9 @@ A placeholder is a disabled empty option. Validation belongs to the owning form.
         :options="[{ label: 'Managed by policy', value: 'policy' }]"
       />
     </Grid>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="form-select-field-sample-2-source-0" label="select-states.mdx">
 ```html
 <Grid columns="1" columnsSm="2">
@@ -151,6 +154,56 @@ A placeholder is a disabled empty option. Validation belongs to the owning form.
 ```
   </TabPane>
 </Tabs>
+
+## All semantic tones
+
+All ten tones are visible at once. The control’s label and content explain the intent independently of color.
+
+<ComponentExample label="All ten semantic tones" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
+<div id="forms-form-select-field-tone-gallery" data-form-gallery data-component="FormSelectField" data-axis="tone">
+<FormAppearanceGallery component="FormSelectField" axis="tone" prefix="forms-form-select-field-tone-gallery"/>
+</div>
+</ComponentExample>
+
+## All visual variants
+
+All eighteen supported treatments, shown in accent. Tone and variant are independent, so any treatment can be combined with a semantic tone.
+
+<ComponentExample label="All eighteen visual variants" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
+<div id="forms-form-select-field-variant-gallery" data-form-gallery data-component="FormSelectField" data-axis="variant">
+<FormAppearanceGallery component="FormSelectField" axis="variant" prefix="forms-form-select-field-variant-gallery"/>
+</div>
+</ComponentExample>
+
+## Option data and field states
+
+Options may use string or numeric values, disabled flags, and a label fallback when value is omitted. The placeholder is a disabled empty option.
+
+<ComponentExample label="Option data and field states" caption="Compare all values together. Use the live examples for application state and event handling.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Placeholder</code>
+<FormSelectField id="forms-select-placeholder" label="Region" placeholder="Choose a region" :options="[{label:'Europe',value:'eu'},{label:'US East',value:'us'}]"/>
+</div>
+<div class="component-appearance-cell"><code>Disabled option</code>
+<FormSelectField id="forms-select-options" label="Region" :options="[{label:'Available',value:'ready'},{label:'Private · unavailable',value:'private',disabled:true}]"/>
+</div>
+<div class="component-appearance-cell"><code>Numeric values</code>
+<FormSelectField id="forms-select-numeric" label="Seats" :options="[{label:'One seat',value:1},{label:'Three seats',value:3}]"/>
+</div>
+<div class="component-appearance-cell"><code>Label fallback</code>
+<FormSelectField id="forms-select-fallback" label="Release channel" :options="[{label:'Stable'},{label:'Preview'}]"/>
+</div>
+<div class="component-appearance-cell"><code>Required</code>
+<FormSelectField id="forms-select-required" label="Required region" name="region" :required="true" placeholder="Choose a region" :options="[{label:'Europe',value:'eu'}]"/>
+</div>
+<div class="component-appearance-cell"><code>Disabled</code>
+<FormSelectField id="forms-select-disabled" label="Locked region" :disabled="true" :options="[{label:'Europe',value:'eu'}]"/>
+</div>
+<div class="component-appearance-cell"><code>Custom icons</code>
+<FormSelectField id="forms-select-icons" label="Deployment" icon="lucide:layers" iconEnd="lucide:check" :options="[{label:'Ready',value:'ready'}]"/>
+</div>
+</div>
+</ComponentExample>
 
 ## Behavior and accessibility
 

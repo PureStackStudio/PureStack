@@ -13,13 +13,7 @@ nav:
 
 # Multi<wbr/>Auto<wbr/>Complete<wbr/>Option<wbr/>Row
 
-The minimal default row presentation used by the multi-value suggestion picker.
-
-<Badge tone="accent" variant="surface">MultiAutoCompleteOptionRow</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/multiAutoCompleteInput.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="MultiAutoCompleteOptionRow" kind="Suggestion presentation" summary="A focused label inside a multi-value picker. The parent supplies availability, active styling, and selection behavior." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/multiAutoCompleteInput.ts" section="Forms &amp; input" sectionHref="/components/forms/"/>
 
 ## The default presentation
 
@@ -27,6 +21,7 @@ The parent supplies active and disabled styling around this label.
 
 <Tabs group="multi-auto-complete-option-row-sample-1" selectedTab="multi-auto-complete-option-row-sample-1-preview" ariaLabel="The default presentation example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="multi-auto-complete-option-row-sample-1-preview" label="Preview">
+<ComponentExample label="MultiAutoCompleteOptionRow in context" caption="The row supplies the label. The owning picker supplies the interactive option wrapper.">
     <Panel bodyClass="p-3">
       <MultiAutoCompleteOptionRow
         :option="{label:'Accessibility',value:'a11y',keywords:[]}"
@@ -35,7 +30,9 @@ The parent supplies active and disabled styling around this label.
         :option="{label:'Performance',value:'perf',keywords:[]}"
       />
     </Panel>
-  </TabPane>
+
+</ComponentExample>
+</TabPane>
   <TabPane id="multi-auto-complete-option-row-sample-1-source-0" label="default-rows.mdx">
 ```html
 <Panel bodyClass="p-3">
@@ -56,8 +53,11 @@ Select more than one option to see the owning component manage state.
 
 <Tabs group="multi-auto-complete-option-row-sample-2" selectedTab="multi-auto-complete-option-row-sample-2-preview" ariaLabel="Inside a token picker example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="multi-auto-complete-option-row-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="multi-auto-complete-option-row-states-demo" src="./states.ts"/>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="multi-auto-complete-option-row-sample-2-source-0" label="states.mdx">
 ```html
 <RegorApp id="multi-auto-complete-option-row-states-demo" src="./states.ts"/>
@@ -115,6 +115,24 @@ createApp(
   </TabPane>
 </Tabs>
 
+## The row contract
+
+option supplies the resolved label and value. active and query are available to custom rows; the default row does not highlight matches or supply selection behavior.
+
+<ComponentExample label="The row contract" caption="Compare all values together. Use the live examples for application state and event handling.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Default label</code>
+<MultiAutoCompleteOptionRow :option="{label:'Europe Central',value:'eu',keywords:[]}"/>
+</div>
+<div class="component-appearance-cell"><code>Active query</code>
+<MultiAutoCompleteOptionRow :option="{label:'Europe Central',value:'eu',keywords:['Frankfurt']}" :active="true" query="Europe"/>
+</div>
+<div class="component-appearance-cell"><code>Missing option</code>
+<p>No label below because option is null.</p><MultiAutoCompleteOptionRow :option="null"/>
+</div>
+</div>
+</ComponentExample>
+
 ## Behavior and accessibility
 
 This component displays option.label. It does not own selection, filtering, focus or a click handler. Use rowComponent on MultiAutoCompleteInput to replace it with your own explicitly defined component.
@@ -154,8 +172,6 @@ This component displays option.label. It does not own selection, filtering, focu
 <div class="api-contract">
 <p>No slots. Registered by defineMultiAutoCompleteInputComponents. Its exported presentation interface is MultiAutoCompleteDefaultOptionRow; MultiAutoCompleteOptionRow is also the name of the internal resolved row-data type.</p>
 </div>
-
-
 
 ## Related components
 

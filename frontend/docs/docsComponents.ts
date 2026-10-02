@@ -6,11 +6,13 @@ import { defineSignInPreviewComponent } from '../purestack.studio/components/sit
 import { defineTopBarPreviewComponent } from '../purestack.studio/components/site/top-bar/preview'
 import { defineApiPropertyComponent } from './apiProperty'
 import { defineComponentGuideComponents } from './componentGuide'
+import { defineFormAppearanceGallery } from './formAppearance'
 import { defineModalExampleComponents } from './modal'
 
 export function defineDocumentationComponents(site: SiteConfig) {
   return {
     ...defineComponentGuideComponents(),
+    FormAppearanceGallery: defineFormAppearanceGallery(),
     ApiProperty: defineApiPropertyComponent(),
     ConsentPreview: defineConsentPreviewComponent(site),
     NavMenuPreview: defineNavMenuPreviewComponent(site),

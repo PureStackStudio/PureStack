@@ -7,6 +7,7 @@ import {
   defineFormComponents,
   defineFormInputField,
   defineIconComponents,
+  type ResolvedAutoCompleteOption,
 } from '@purestack/ts-components'
 import {
   lucide_check,
@@ -14,6 +15,7 @@ import {
   lucide_loader_circle,
 } from '@purestack/ts-svg-icons'
 import { createApp, defineComponent, html, type Ref, ref } from 'regor'
+import { mountFormAppearanceGalleries } from '../appearance'
 
 export interface AutoCompleteInputExample {
   searchQuery: Ref<string>
@@ -21,6 +23,13 @@ export interface AutoCompleteInputExample {
   regionOptions: AutoCompleteOption[]
   pending: Ref<boolean>
   locked: Ref<boolean>
+  minimum: Ref<number>
+  limit: Ref<number>
+  focusOpens: Ref<boolean>
+  activity: Ref<string>
+  searchActivity: Ref<string>
+  searched: (query: string) => void
+  selected: (option: ResolvedAutoCompleteOption) => void
   reset: () => void
 }
 
@@ -34,9 +43,18 @@ const autoCompleteInputExampleTemplate = html`<Flex direction="column">
     :options="regionOptions"
     :loading="pending"
     :disabled="locked"
+    :minLength="minimum"
+    :maxResults="limit"
+    :openOnFocus="focusOpens"
+    :context="{ onSearch: searched, onSelect: selected }"
     emptyText="No matching region"
   />
   <Flex wrap="true">
+    <FormInputField id="auto-minimum" label="Minimum query length" type="number" min="0" :model="minimum" />
+    <FormInputField id="auto-limit" label="Maximum results" type="number" min="1" :model="limit" />
+  </Flex>
+  <Flex wrap="true">
+    <FormCheck id="auto-focus" label="Open on focus" :checked="focusOpens" />
     <FormCheck id="auto-loading" label="Loading state" :checked="pending" />
     <FormCheck id="auto-disabled" label="Disabled state" :checked="locked" />
     <Btn variant="link" @click="reset">Clear selection</Btn>
@@ -45,16 +63,28 @@ const autoCompleteInputExampleTemplate = html`<Flex direction="column">
     Query: {{ searchQuery || 'Empty' }} · Selected value: {{ chosenRegion ?? 'None'
     }}
   </FormStatus>
+  <p class="text-muted">onSearch: {{ searchActivity || '(empty query)' }}</p>
+  <p class="text-muted">{{ activity }}</p>
 </Flex>`
 
 function createAutoCompleteInputExample(): AutoCompleteInputExample {
   const searchQuery = ref('')
   const chosenRegion = ref<AutoCompleteValue | null>(null)
+  const activity = ref('Select a region to inspect onSelect.')
+  const searchActivity = ref('')
   return {
     searchQuery,
     chosenRegion,
     pending: ref(false),
     locked: ref(false),
+    minimum: ref(0),
+    limit: ref(3),
+    focusOpens: ref(true),
+    activity,
+    searchActivity,
+    searched: (query) => searchActivity(query),
+    selected: (option) =>
+      activity(`onSelect: ${option.label} → ${option.value}`),
     regionOptions: [
       { label: 'Europe Central', value: 'eu-central', keywords: ['Frankfurt'] },
       { label: 'US East', value: 'us-east', keywords: ['Virginia'] },
@@ -102,3 +132,5 @@ createApp(
     template: html`<AutoCompleteInputExample />`,
   },
 )
+
+mountFormAppearanceGalleries()

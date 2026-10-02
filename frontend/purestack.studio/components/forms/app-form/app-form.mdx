@@ -13,13 +13,7 @@ nav:
 
 # App<wbr/>Form
 
-A themed native form that keeps field composition, validation and submission in your control.
-
-<Badge tone="accent" variant="surface">AppForm</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/form.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="AppForm" kind="Form composition" summary="Compose a clear path from input to outcome. A themed native form with validation and submission in your control." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/form.ts" section="Forms &amp; input" sectionHref="/components/forms/"/>
 
 ## Save a project
 
@@ -27,8 +21,11 @@ Edit the project name, save it locally, then reset. The handler explicitly check
 
 <Tabs group="app-form-sample-1" selectedTab="app-form-sample-1-preview" ariaLabel="Save a project example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="app-form-sample-1-preview" label="Preview">
+<ComponentExample label="AppForm in context" caption="Edit the project name, save a local preview, and reset the form. No request leaves this page.">
     <RegorApp id="app-form-demo" src="./playground.ts"/>
-  </TabPane>
+
+</ComponentExample>
+</TabPane>
   <TabPane id="app-form-sample-1-source-0" label="playground.mdx">
 ```html
 <RegorApp id="app-form-demo" src="./playground.ts"/>
@@ -43,8 +40,8 @@ import {
   defineFormInputField,
   definePanelComponents,
 } from '@purestack/ts-components'
-
 import { createApp, defineComponent, html, type Ref, ref } from 'regor'
+import { mountFormAppearanceGalleries } from '../appearance'
 
 export interface AppFormExample {
   projectName: Ref<string>
@@ -109,6 +106,8 @@ createApp(
   },
   { selector: 'app#app-form-demo', template: html`<AppFormExample />` },
 )
+
+mountFormAppearanceGalleries()
 ```
   </TabPane>
 </Tabs>
@@ -119,6 +118,7 @@ Choose the surrounding treatment independently of the fields. This disabled exam
 
 <Tabs group="app-form-sample-2" selectedTab="app-form-sample-2-preview" ariaLabel="Compose a form surface example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="app-form-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
     <AppForm method="post" tone="neutral" variant="outline" class="p-4">
       <FormInputField
         id="form-structure-name"
@@ -129,7 +129,9 @@ Choose the surrounding treatment independently of the fields. This disabled exam
       />
       <FormStatus>Connect the form to your application’s submit handler.</FormStatus>
     </AppForm>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="app-form-sample-2-source-0" label="form-structure.mdx">
 ```html
 <AppForm method="post" tone="neutral" variant="outline" class="p-4">
@@ -145,6 +147,45 @@ Choose the surrounding treatment independently of the fields. This disabled exam
 ```
   </TabPane>
 </Tabs>
+
+## All semantic tones
+
+All ten tones are visible at once. The control’s label and content explain the intent independently of color.
+
+<ComponentExample label="All ten semantic tones" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
+<div id="forms-app-form-tone-gallery" data-form-gallery data-component="AppForm" data-axis="tone">
+<FormAppearanceGallery component="AppForm" axis="tone" prefix="forms-app-form-tone-gallery"/>
+</div>
+</ComponentExample>
+
+## All visual variants
+
+All eighteen supported treatments, shown in accent. Tone and variant are independent, so any treatment can be combined with a semantic tone.
+
+<ComponentExample label="All eighteen visual variants" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
+<div id="forms-app-form-variant-gallery" data-form-gallery data-component="AppForm" data-axis="variant">
+<FormAppearanceGallery component="AppForm" axis="variant" prefix="forms-app-form-variant-gallery"/>
+</div>
+</ComponentExample>
+
+## Composition, validation, and submission
+
+| Feature | Visible example |
+| --- | --- |
+| action and method | Native endpoint attributes; the local example intercepts submit. |
+| Default slot | Inputs, metadata, help links, divider, and feedback can be composed freely. |
+| Validation | AppForm uses novalidate. Call reportValidity in your submit handler when you want native validation. |
+| Form data | Give each contributing field a name, then read new FormData(form). |
+| Reset | The live example resets its refs explicitly; resetting a native form alone does not define application state. |
+| Appearance | Every tone and variant is visible above. |
+
+```html
+<AppForm action="/api/projects" method="post" @submit.prevent="save">
+  <FormInputField id="project-name" name="project" label="Project name" :model="projectName" :required="true"/>
+  <FormMeta><FormSubmit label="Save project" tone="accent"/><FormAssistLink href="/guides/" label="Need help?"/></FormMeta>
+  <FormStatus :hidden="!message">{{ message }}</FormStatus>
+</AppForm>
+```
 
 ## Behavior and accessibility
 
@@ -185,8 +226,6 @@ AppForm always renders `novalidate`. Use reportValidity or your own validation i
 <div class="api-contract">
 <p><strong>Default slot:</strong> native fields and form components. Native submit and reset events bubble normally. Register defineFormComponents; register each field family separately.</p>
 </div>
-
-
 
 ## Related components
 

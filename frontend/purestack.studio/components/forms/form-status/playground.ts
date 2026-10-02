@@ -5,6 +5,7 @@ import {
 } from '@purestack/ts-components'
 import type { SemanticTone } from '@purestack/ts-style'
 import { createApp, defineComponent, html, type Ref, ref } from 'regor'
+import { mountFormAppearanceGalleries } from '../appearance'
 
 export interface FormStatusExample {
   statusMessage: Ref<string>
@@ -64,3 +65,5 @@ createApp(
   },
   { selector: 'app#form-status-demo', template: html`<FormStatusExample />` },
 )
+
+mountFormAppearanceGalleries()

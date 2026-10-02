@@ -13,11 +13,7 @@ nav:
 
 # Composer
 
-A rich-text editor for messages, replies and email drafts. Format content with the built-in toolbar, edit its HTML directly, and keep an HTML model and a plain-text copy in sync.
-
-<Badge tone="accent" variant="surface">Composer</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/composer/composer.ts) · [API reference](#api-reference) · [Inline images](#inline-images-and-file-events)
+<ComponentHeader name="Composer" kind="Rich text editing" summary="Give a message room to take shape. Formatting, HTML source, synchronized outputs, and inline image workflows." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/composer/composer.ts" section="Forms &amp; input" sectionHref="/components/forms/"/>
 
 ## Interactive playground
 
@@ -34,8 +30,11 @@ Change the tone, variant and height below the editor. Choose **Empty draft** to 
   tabVariant="underline"
 >
   <TabPane id="composer-playground-sample-preview" label="Preview">
+<ComponentExample label="Composer in context" caption="Edit the content and explore the toolbar. The HTML and plain-text previews follow the current draft.">
     <RegorApp id="composer-demo" src="./playground.ts"/>
-  </TabPane>
+
+</ComponentExample>
+</TabPane>
   <TabPane id="composer-playground-sample-mdx" label="playground.mdx">
 ```html
 <RegorApp id="composer-demo" src="./playground.ts"/>
@@ -83,6 +82,7 @@ import {
   type Ref,
   ref,
 } from 'regor'
+import { mountFormAppearanceGalleries } from '../appearance'
 
 export interface ComposerPlayground {
   messageHtml: Ref<string>
@@ -255,6 +255,8 @@ createApp(
   },
   { selector: 'app#composer-demo', template: html`<ComposerPlayground/>` },
 )
+
+mountFormAppearanceGalleries()
 ```
   </TabPane>
 </Tabs>
@@ -287,8 +289,11 @@ The sample saves both models in memory and requires non-empty plain text. That v
   tabVariant="underline"
 >
   <TabPane id="composer-draft-workflow-sample-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="composer-draft-demo" src="./draft-workflow.ts"/>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="composer-draft-workflow-sample-mdx" label="draft-workflow.mdx">
 ```html
 <RegorApp id="composer-draft-demo" src="./draft-workflow.ts"/>
@@ -478,8 +483,11 @@ Try **Insert demo image**, choose a local image, or paste/drop an image file int
   tabVariant="underline"
 >
   <TabPane id="composer-inline-images-sample-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="composer-images-demo" src="./inline-images.ts"/>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="composer-inline-images-sample-mdx" label="inline-images.mdx">
 ```html
 <RegorApp id="composer-images-demo" src="./inline-images.ts"/>
@@ -998,6 +1006,26 @@ In source mode, the textarea keeps the text you are currently editing while the 
     details, not additional template props.
   </p>
 </div>
+
+## All semantic tones
+
+All ten tones are visible at once. The control’s label and content explain the intent independently of color.
+
+<ComponentExample label="All ten semantic tones" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
+<div id="forms-composer-tone-gallery" data-form-gallery data-component="Composer" data-axis="tone">
+<FormAppearanceGallery component="Composer" axis="tone" prefix="forms-composer-tone-gallery"/>
+</div>
+</ComponentExample>
+
+## All visual variants
+
+All eighteen supported treatments, shown in accent. Tone and variant are independent, so any treatment can be combined with a semantic tone.
+
+<ComponentExample label="All eighteen visual variants" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
+<div id="forms-composer-variant-gallery" data-form-gallery data-component="Composer" data-axis="variant">
+<FormAppearanceGallery component="Composer" axis="variant" prefix="forms-composer-variant-gallery"/>
+</div>
+</ComponentExample>
 
 ## Keyboard and accessibility
 

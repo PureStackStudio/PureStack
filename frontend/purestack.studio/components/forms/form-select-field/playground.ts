@@ -8,6 +8,7 @@ import {
 } from '@purestack/ts-components'
 import { lucide_chevron_down } from '@purestack/ts-svg-icons'
 import { createApp, defineComponent, html, type Ref, ref } from 'regor'
+import { mountFormAppearanceGalleries } from '../appearance'
 
 export interface FormSelectFieldExample {
   regionValue: Ref<FormSelectValue>
@@ -67,3 +68,5 @@ createApp(
     template: html`<FormSelectFieldExample />`,
   },
 )
+
+mountFormAppearanceGalleries()

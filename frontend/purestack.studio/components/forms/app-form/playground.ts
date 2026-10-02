@@ -5,8 +5,8 @@ import {
   defineFormInputField,
   definePanelComponents,
 } from '@purestack/ts-components'
-
 import { createApp, defineComponent, html, type Ref, ref } from 'regor'
+import { mountFormAppearanceGalleries } from '../appearance'
 
 export interface AppFormExample {
   projectName: Ref<string>
@@ -71,3 +71,5 @@ createApp(
   },
   { selector: 'app#app-form-demo', template: html`<AppFormExample />` },
 )
+
+mountFormAppearanceGalleries()

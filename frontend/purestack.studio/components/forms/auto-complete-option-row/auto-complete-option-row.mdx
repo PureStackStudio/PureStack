@@ -13,13 +13,7 @@ nav:
 
 # Auto<wbr/>Complete<wbr/>Option<wbr/>Row
 
-The default presentation for one autocomplete suggestion, including an optional selected indicator.
-
-<Badge tone="accent" variant="surface">AutoCompleteOptionRow</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/autoCompleteInput.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="AutoCompleteOptionRow" kind="Suggestion presentation" summary="Give one suggestion a clear label and an optional selected indicator. The owning input manages interaction." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/autoCompleteInput.ts" section="Forms &amp; input" sectionHref="/components/forms/"/>
 
 ## Default row states
 
@@ -27,6 +21,7 @@ These previews isolate the row presentation. AutoCompleteInput supplies its opti
 
 <Tabs group="auto-complete-option-row-sample-1" selectedTab="auto-complete-option-row-sample-1-preview" ariaLabel="Default row states example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="auto-complete-option-row-sample-1-preview" label="Preview">
+<ComponentExample label="AutoCompleteOptionRow in context" caption="These isolated rows show presentation. Use the live picker below for keyboard and selection behavior.">
     <Panel bodyClass="p-3">
       <AutoCompleteOptionRow
         :option="{label:'Europe Central',value:'eu-central',keywords:[]}"
@@ -37,7 +32,9 @@ These previews isolate the row presentation. AutoCompleteInput supplies its opti
         :selected="false"
       />
     </Panel>
-  </TabPane>
+
+</ComponentExample>
+</TabPane>
   <TabPane id="auto-complete-option-row-sample-1-source-0" label="row-states.mdx">
 ```html
 <Panel bodyClass="p-3">
@@ -60,8 +57,11 @@ The default row is already registered by the input family.
 
 <Tabs group="auto-complete-option-row-sample-2" selectedTab="auto-complete-option-row-sample-2-preview" ariaLabel="Inside its owning control example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="auto-complete-option-row-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="auto-complete-option-row-states-demo" src="./states.ts"/>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="auto-complete-option-row-sample-2-source-0" label="states.mdx">
 ```html
 <RegorApp id="auto-complete-option-row-states-demo" src="./states.ts"/>
@@ -120,6 +120,24 @@ createApp(
   </TabPane>
 </Tabs>
 
+## The row contract
+
+option supplies the resolved label and value. active and query are available to custom rows; the default row does not highlight matches or supply selection behavior.
+
+<ComponentExample label="The row contract" caption="Compare all values together. Use the live examples for application state and event handling.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Default label</code>
+<AutoCompleteOptionRow :option="{label:'Europe Central',value:'eu',keywords:[]}"/>
+</div>
+<div class="component-appearance-cell"><code>Active query</code>
+<AutoCompleteOptionRow :option="{label:'Europe Central',value:'eu',keywords:['Frankfurt']}" :active="true" query="Europe"/>
+</div>
+<div class="component-appearance-cell"><code>Missing option</code>
+<p>No label below because option is null.</p><AutoCompleteOptionRow :option="null"/>
+</div>
+</div>
+</ComponentExample>
+
 ## Behavior and accessibility
 
 The row is presentation only. It does not add role option, selection handlers or focus management; the owning input supplies those. selected shows a check icon. active and query are passed through for alternate renderers but are not used by this default template.
@@ -159,8 +177,6 @@ The row is presentation only. It does not add role option, selection handlers or
 <div class="api-contract">
 <p>No slots. Registered by defineAutoCompleteInputComponents. Include lucide:check in the icon resolver when rendering selected rows in a browser app.</p>
 </div>
-
-
 
 ## Related components
 

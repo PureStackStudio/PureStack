@@ -13,13 +13,7 @@ nav:
 
 # Form<wbr/>Submit
 
-A focused submit control for AppForm, with a visible label and shared button styling.
-
-<Badge tone="accent" variant="surface">FormSubmit</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/form.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="FormSubmit" kind="Submission action" summary="Make the next step clear. A labelled submit button with every shared tone and visual treatment." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/form.ts" section="Forms &amp; input" sectionHref="/components/forms/"/>
 
 ## Submit a meaningful value
 
@@ -27,8 +21,11 @@ The button triggers the form’s submit event, including when the user submits f
 
 <Tabs group="form-submit-sample-1" selectedTab="form-submit-sample-1-preview" ariaLabel="Submit a meaningful value example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="form-submit-sample-1-preview" label="Preview">
+<ComponentExample label="FormSubmit in context" caption="The live preview handles submission locally and shows the resulting value.">
     <RegorApp id="form-submit-demo" src="./playground.ts"/>
-  </TabPane>
+
+</ComponentExample>
+</TabPane>
   <TabPane id="form-submit-sample-1-source-0" label="playground.mdx">
 ```html
 <RegorApp id="form-submit-demo" src="./playground.ts"/>
@@ -43,8 +40,8 @@ import {
   defineFormInputField,
   definePanelComponents,
 } from '@purestack/ts-components'
-
 import { createApp, defineComponent, html, type Ref, ref } from 'regor'
+import { mountFormAppearanceGalleries } from '../appearance'
 
 export interface FormSubmitExample {
   releaseTitle: Ref<string>
@@ -102,6 +99,8 @@ createApp(
   },
   { selector: 'app#form-submit-demo', template: html`<FormSubmitExample />` },
 )
+
+mountFormAppearanceGalleries()
 ```
   </TabPane>
 </Tabs>
@@ -112,6 +111,7 @@ The disabled fieldset keeps this visual comparison from triggering a form action
 
 <Tabs group="form-submit-sample-2" selectedTab="form-submit-sample-2-preview" ariaLabel="Choose the action emphasis example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="form-submit-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
     <fieldset disabled class="p-3">
       <legend>Submit treatments</legend>
       <Flex wrap="true">
@@ -119,7 +119,9 @@ The disabled fieldset keeps this visual comparison from triggering a form action
         <FormSubmit label="Request review" tone="neutral" variant="outline" />
       </Flex>
     </fieldset>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="form-submit-sample-2-source-0" label="submit-treatments.mdx">
 ```html
 <fieldset disabled class="p-3">
@@ -132,6 +134,37 @@ The disabled fieldset keeps this visual comparison from triggering a form action
 ```
   </TabPane>
 </Tabs>
+
+## All semantic tones
+
+All ten tones are visible at once. The control’s label and content explain the intent independently of color.
+
+<ComponentExample label="All ten semantic tones" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
+<div id="forms-form-submit-tone-gallery" data-form-gallery data-component="FormSubmit" data-axis="tone">
+<FormAppearanceGallery component="FormSubmit" axis="tone" prefix="forms-form-submit-tone-gallery"/>
+</div>
+</ComponentExample>
+
+## All visual variants
+
+All eighteen supported treatments, shown in accent. Tone and variant are independent, so any treatment can be combined with a semantic tone.
+
+<ComponentExample label="All eighteen visual variants" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
+<div id="forms-form-submit-variant-gallery" data-form-gallery data-component="FormSubmit" data-axis="variant">
+<FormAppearanceGallery component="FormSubmit" axis="variant" prefix="forms-form-submit-variant-gallery"/>
+</div>
+</ComponentExample>
+
+## Submit semantics
+
+FormSubmit exposes label, tone, and variant and renders Btn with type="submit". Place it inside a form or pass a native form attribute for an external owner. Native name, value, and disabled attributes pass through to the button; application submission belongs to the form handler.
+
+```html
+<AppForm @submit.prevent="save">
+  <FormSubmit label="Save draft" tone="accent" name="intent" value="draft"/>
+</AppForm>
+<FormSubmit label="Save outside the form" form="project-form" variant="outline"/>
+```
 
 ## Behavior and accessibility
 
@@ -167,8 +200,6 @@ FormSubmit renders Btn with type submit. Put submission logic on the form to sup
 <div class="api-contract">
 <p>No slots. Register defineFormComponents and defineButtonComponents. Use Btn type="submit" directly when you need its wider API, such as disabled or icons.</p>
 </div>
-
-
 
 ## Related components
 

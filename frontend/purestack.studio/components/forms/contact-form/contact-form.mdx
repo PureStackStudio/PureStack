@@ -13,11 +13,7 @@ nav:
 
 # Contact<wbr/>Form
 
-A complete contact form with name, email, topic and message fields, plus configurable copy and a native submission endpoint.
-
-<Badge tone="accent" variant="surface">ContactForm</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/contactForm/contactForm.ts) · [API reference](#api-reference)
+<ComponentHeader name="ContactForm" kind="Complete form" summary="Start with a complete contact flow. Configure its copy and native endpoint, or capture a local preview." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/contactForm/contactForm.ts" section="Forms &amp; input" sectionHref="/components/forms/"/>
 
 Set your own action in production. The built-in default is a mailto destination; this preview intercepts submission and sends nothing.
 
@@ -27,8 +23,11 @@ Fill in the required fields and submit. Native validation runs before the local 
 
 <Tabs group="contact-form-sample-1" selectedTab="contact-form-sample-1-preview" ariaLabel="Preview a contact message example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="contact-form-sample-1-preview" label="Preview">
+<ComponentExample label="ContactForm in context" caption="Fill the required fields and preview the message. This demo captures the submission locally.">
     <RegorApp id="contact-form-demo" src="./playground.ts"/>
-  </TabPane>
+
+</ComponentExample>
+</TabPane>
   <TabPane id="contact-form-sample-1-source-0" label="playground.mdx">
 ```html
 <RegorApp id="contact-form-demo" src="./playground.ts"/>
@@ -107,6 +106,7 @@ This fieldset disables submission while showing a second copy configuration.
 
 <Tabs group="contact-form-sample-2" selectedTab="contact-form-sample-2-preview" ariaLabel="Adapt the copy example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="contact-form-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
     <fieldset disabled class="p-3">
       <legend>Support form configuration</legend>
       <ContactForm
@@ -121,7 +121,9 @@ This fieldset disables submission while showing a second copy configuration.
         messagePlaceholder="Describe the issue and expected result."
       />
     </fieldset>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="contact-form-sample-2-source-0" label="support-copy.mdx">
 ```html
 <fieldset disabled class="p-3">
@@ -141,6 +143,24 @@ This fieldset disables submission while showing a second copy configuration.
 ```
   </TabPane>
 </Tabs>
+
+## Every configurable text layer
+
+ContactForm has no tone or variant prop. Its configurable layers are title, description, submit label, four field labels, three text placeholders, and three topic labels. The preview below shows all of them together; the working form above captures a local submission.
+
+<ComponentExample label="A complete copy configuration" caption="This disabled copy sample demonstrates the text API without submitting to an endpoint.">
+<fieldset disabled class="forms-copy-sample"><legend>Configured copy</legend><ContactForm title="Start a conversation" description="Tell us what you want to build." action="#" method="post" submitLabel="Send project brief" nameLabel="Your name" emailLabel="Contact email" topicLabel="What brings you here?" messageLabel="Project context" namePlaceholder="Alex Morgan" emailPlaceholder="alex@example.com" messagePlaceholder="Describe your goals and constraints." topicGeneralLabel="New project" topicSupportLabel="Product support" topicPartnershipLabel="Work together"/></fieldset>
+</ComponentExample>
+
+```html
+<ContactForm action="/api/contact" method="post" title="Start a conversation"
+  description="Tell us what you want to build." submitLabel="Send project brief"
+  nameLabel="Your name" emailLabel="Contact email" topicLabel="Topic" messageLabel="Project context"
+  namePlaceholder="Alex Morgan" emailPlaceholder="alex@example.com" messagePlaceholder="Your goals"
+  topicGeneralLabel="New project" topicSupportLabel="Support" topicPartnershipLabel="Work together"/>
+```
+
+The method accepts get or post and defaults to post. The native form uses text/plain encoding; choose an endpoint that accepts that format or intercept submission to build a different request.
 
 ## Behavior and accessibility
 
@@ -236,8 +256,6 @@ The component renders a native form with required fields and enctype text/plain.
 <div class="api-contract">
 <p>No slots. Native submit events bubble from the nested form; handle them on a wrapper for local app behavior. Register defineContactFormComponents and defineButtonComponents.</p>
 </div>
-
-
 
 ## Related components
 

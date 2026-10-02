@@ -13,13 +13,7 @@ nav:
 
 # Auto<wbr/>Complete<wbr/>Input
 
-Search a suggestion list with native text input, keyboard selection and separate query and selected-value state.
-
-<Badge tone="accent" variant="surface">AutoCompleteInput</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/autoCompleteInput.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="AutoCompleteInput" kind="Searchable selection" summary="Find a known value without scrolling a long list. Query text and selected data remain separate." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/autoCompleteInput.ts" section="Forms &amp; input" sectionHref="/components/forms/"/>
 
 ## Find a region
 
@@ -27,8 +21,11 @@ Type a label, value or keyword; choose a result with the mouse or arrow keys and
 
 <Tabs group="auto-complete-input-sample-1" selectedTab="auto-complete-input-sample-1-preview" ariaLabel="Find a region example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="auto-complete-input-sample-1-preview" label="Preview">
+<ComponentExample label="AutoCompleteInput in context" caption="Search by label or keyword, select a region, and compare loading and disabled behavior.">
     <RegorApp id="auto-complete-input-demo" src="./playground.ts"/>
-  </TabPane>
+
+</ComponentExample>
+</TabPane>
   <TabPane id="auto-complete-input-sample-1-source-0" label="playground.mdx">
 ```html
 <RegorApp id="auto-complete-input-demo" src="./playground.ts"/>
@@ -45,6 +42,7 @@ import {
   defineFormComponents,
   defineFormInputField,
   defineIconComponents,
+  type ResolvedAutoCompleteOption,
 } from '@purestack/ts-components'
 import {
   lucide_check,
@@ -52,6 +50,7 @@ import {
   lucide_loader_circle,
 } from '@purestack/ts-svg-icons'
 import { createApp, defineComponent, html, type Ref, ref } from 'regor'
+import { mountFormAppearanceGalleries } from '../appearance'
 
 export interface AutoCompleteInputExample {
   searchQuery: Ref<string>
@@ -59,6 +58,13 @@ export interface AutoCompleteInputExample {
   regionOptions: AutoCompleteOption[]
   pending: Ref<boolean>
   locked: Ref<boolean>
+  minimum: Ref<number>
+  limit: Ref<number>
+  focusOpens: Ref<boolean>
+  activity: Ref<string>
+  searchActivity: Ref<string>
+  searched: (query: string) => void
+  selected: (option: ResolvedAutoCompleteOption) => void
   reset: () => void
 }
 
@@ -72,9 +78,18 @@ const autoCompleteInputExampleTemplate = html`<Flex direction="column">
     :options="regionOptions"
     :loading="pending"
     :disabled="locked"
+    :minLength="minimum"
+    :maxResults="limit"
+    :openOnFocus="focusOpens"
+    :context="{ onSearch: searched, onSelect: selected }"
     emptyText="No matching region"
   />
   <Flex wrap="true">
+    <FormInputField id="auto-minimum" label="Minimum query length" type="number" min="0" :model="minimum" />
+    <FormInputField id="auto-limit" label="Maximum results" type="number" min="1" :model="limit" />
+  </Flex>
+  <Flex wrap="true">
+    <FormCheck id="auto-focus" label="Open on focus" :checked="focusOpens" />
     <FormCheck id="auto-loading" label="Loading state" :checked="pending" />
     <FormCheck id="auto-disabled" label="Disabled state" :checked="locked" />
     <Btn variant="link" @click="reset">Clear selection</Btn>
@@ -83,16 +98,28 @@ const autoCompleteInputExampleTemplate = html`<Flex direction="column">
     Query: {{ searchQuery || 'Empty' }} · Selected value: {{ chosenRegion ?? 'None'
     }}
   </FormStatus>
+  <p class="text-muted">onSearch: {{ searchActivity || '(empty query)' }}</p>
+  <p class="text-muted">{{ activity }}</p>
 </Flex>`
 
 function createAutoCompleteInputExample(): AutoCompleteInputExample {
   const searchQuery = ref('')
   const chosenRegion = ref<AutoCompleteValue | null>(null)
+  const activity = ref('Select a region to inspect onSelect.')
+  const searchActivity = ref('')
   return {
     searchQuery,
     chosenRegion,
     pending: ref(false),
     locked: ref(false),
+    minimum: ref(0),
+    limit: ref(3),
+    focusOpens: ref(true),
+    activity,
+    searchActivity,
+    searched: (query) => searchActivity(query),
+    selected: (option) =>
+      activity(`onSelect: ${option.label} → ${option.value}`),
     regionOptions: [
       { label: 'Europe Central', value: 'eu-central', keywords: ['Frankfurt'] },
       { label: 'US East', value: 'us-east', keywords: ['Virginia'] },
@@ -140,6 +167,8 @@ createApp(
     template: html`<AutoCompleteInputExample />`,
   },
 )
+
+mountFormAppearanceGalleries()
 ```
   </TabPane>
 </Tabs>
@@ -150,8 +179,11 @@ Rows can show richer context while the parent owns listbox semantics and selecti
 
 <Tabs group="auto-complete-input-sample-2" selectedTab="auto-complete-input-sample-2-preview" ariaLabel="A custom suggestion row example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="auto-complete-input-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="auto-custom-row-demo" src="./custom-row.ts"/>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="auto-complete-input-sample-2-source-0" label="custom-row.mdx">
 ```html
 <RegorApp id="auto-custom-row-demo" src="./custom-row.ts"/>
@@ -255,6 +287,48 @@ createApp(
 ```
   </TabPane>
 </Tabs>
+
+## All semantic tones
+
+All ten tones are visible at once. The control’s label and content explain the intent independently of color.
+
+<ComponentExample label="All ten semantic tones" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
+<div id="forms-auto-complete-input-tone-gallery" data-form-gallery data-component="AutoCompleteInput" data-axis="tone">
+<FormAppearanceGallery component="AutoCompleteInput" axis="tone" prefix="forms-auto-complete-input-tone-gallery"/>
+</div>
+</ComponentExample>
+
+## All visual variants
+
+All eighteen supported treatments, shown in accent. Tone and variant are independent, so any treatment can be combined with a semantic tone.
+
+<ComponentExample label="All eighteen visual variants" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
+<div id="forms-auto-complete-input-variant-gallery" data-form-gallery data-component="AutoCompleteInput" data-axis="variant">
+<FormAppearanceGallery component="AutoCompleteInput" axis="variant" prefix="forms-auto-complete-input-variant-gallery"/>
+</div>
+</ComponentExample>
+
+## Search and selection features
+
+| Feature | How to try it |
+| --- | --- |
+| Query and selected value | Type a keyword such as Frankfurt; the result label and selected value remain distinct. |
+| Disabled suggestions | Private region is visible but cannot be selected. |
+| Loading and empty messages | Toggle loading, or search for a value with no matches. |
+| Minimum query length | minLength controls when filtering opens; adjust it in the live demo. |
+| Result limit | maxResults caps the list; adjust it in the live demo. |
+| Open on focus | Toggle it, then focus the input with an empty query. |
+| Custom row | The existing custom-row example includes its component and registration. |
+| Callbacks and events | onSearch and onSelect callbacks, plus querychange and optionselect events, carry the query or resolved option. |
+| Field semantics | type, name, required, autocomplete, placeholder, disabled, and both icon positions follow FormInputField. |
+
+```html
+<AutoCompleteInput id="region-search" label="Region" name="region"
+  :model="query" :selectedValue="selectedRegion" :options="regions"
+  minLength="2" maxResults="3" :openOnFocus="false"
+  loadingText="Finding regions…" emptyText="No matching region"
+  :context="{ onSearch: search, onSelect: select }" @querychange="queryChanged" @optionselect="optionSelected"/>
+```
 
 ## Behavior and accessibility
 

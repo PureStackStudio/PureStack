@@ -13,13 +13,7 @@ nav:
 
 # Form<wbr/>Meta
 
-A consistent row for secondary form choices, supporting links and submission controls.
-
-<Badge tone="accent" variant="surface">FormMeta</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/form.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="FormMeta" kind="Supporting layout" summary="Keep secondary choices, helpful links, and the next action in a consistent form row." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/form.ts" section="Forms &amp; input" sectionHref="/components/forms/"/>
 
 ## Supporting choices and links
 
@@ -27,11 +21,14 @@ Use the row to connect a preference with relevant guidance.
 
 <Tabs group="form-meta-sample-1" selectedTab="form-meta-sample-1-preview" ariaLabel="Supporting choices and links example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="form-meta-sample-1-preview" label="Preview">
+<ComponentExample label="FormMeta in context" caption="The container arranges its children; each control keeps its own native behavior.">
     <FormMeta>
       <FormCheck id="meta-remember" label="Remember this workspace" />
       <FormAssistLink href="/components/forms/form-check/" label="About checkbox state" />
     </FormMeta>
-  </TabPane>
+
+</ComponentExample>
+</TabPane>
   <TabPane id="form-meta-sample-1-source-0" label="supporting-row.mdx">
 ```html
 <FormMeta>
@@ -48,11 +45,14 @@ FormMeta provides structure; the controls retain their native behavior.
 
 <Tabs group="form-meta-sample-2" selectedTab="form-meta-sample-2-preview" ariaLabel="A wrapping action row example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="form-meta-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
     <FormMeta>
       <BtnLink href="/components/forms/app-form/" tone="accent">Explore complete forms</BtnLink>
       <span class="text-subtle">Keep secondary information close to the task.</span>
     </FormMeta>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="form-meta-sample-2-source-0" label="meta-actions.mdx">
 ```html
 <FormMeta>
@@ -62,6 +62,21 @@ FormMeta provides structure; the controls retain their native behavior.
 ```
   </TabPane>
 </Tabs>
+
+## Different contents, one row
+
+FormMeta has no props. Its default slot can contain checkboxes, help links, or controls; classes and other native attributes style the root.
+
+<ComponentExample label="Different contents, one row" caption="Compare all values together. Use the live examples for application state and event handling.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Choice + help</code>
+<FormMeta><FormCheck id="forms-meta-updates" label="Release updates"/><FormAssistLink href="/guides/" label="Need help?"/></FormMeta>
+</div>
+<div class="component-appearance-cell"><code>Related destinations</code>
+<FormMeta><BtnLink href="/components/forms/app-form/" variant="outline">Form composition</BtnLink><FormAssistLink href="/components/forms/form-status/" label="Feedback guide"/></FormMeta>
+</div>
+</div>
+</ComponentExample>
 
 ## Behavior and accessibility
 
@@ -81,8 +96,6 @@ This component has no public props.
 <div class="api-contract">
 <p><strong>Default slot:</strong> supporting form content. Root is div.form-block__meta. Register defineFormComponents.</p>
 </div>
-
-
 
 ## Related components
 

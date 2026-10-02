@@ -38,6 +38,7 @@ import {
   type Ref,
   ref,
 } from 'regor'
+import { mountFormAppearanceGalleries } from '../appearance'
 
 export interface ComposerPlayground {
   messageHtml: Ref<string>
@@ -210,3 +211,5 @@ createApp(
   },
   { selector: 'app#composer-demo', template: html`<ComposerPlayground/>` },
 )
+
+mountFormAppearanceGalleries()

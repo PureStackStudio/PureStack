@@ -13,13 +13,7 @@ nav:
 
 # Multi<wbr/>Auto<wbr/>Complete<wbr/>Input
 
-Select several suggestions, create new tokens and keep a structured list separate from the current query.
-
-<Badge tone="accent" variant="surface">MultiAutoCompleteInput</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/multiAutoCompleteInput.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="MultiAutoCompleteInput" kind="Token selection" summary="Build a useful collection one choice at a time. Select suggestions, create tokens, and keep structured data separate from the query." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/form/multiAutoCompleteInput.ts" section="Forms &amp; input" sectionHref="/components/forms/"/>
 
 ## Tag a release
 
@@ -27,8 +21,11 @@ Choose suggestions, type a new tag and press Enter, or paste comma-separated val
 
 <Tabs group="multi-auto-complete-input-sample-1" selectedTab="multi-auto-complete-input-sample-1-preview" ariaLabel="Tag a release example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="multi-auto-complete-input-sample-1-preview" label="Preview">
+<ComponentExample label="MultiAutoCompleteInput in context" caption="Add suggested or custom tags. Compare duplicate, loading, disabled, and protected-token behavior.">
     <RegorApp id="multi-auto-complete-input-demo" src="./playground.ts"/>
-  </TabPane>
+
+</ComponentExample>
+</TabPane>
   <TabPane id="multi-auto-complete-input-sample-1-source-0" label="playground.mdx">
 ```html
 <RegorApp id="multi-auto-complete-input-demo" src="./playground.ts"/>
@@ -41,9 +38,11 @@ import {
   defineButtonComponents,
   defineFlexComponents,
   defineFormComponents,
+  defineFormInputField,
   defineIconComponents,
   defineMultiAutoCompleteInputComponents,
   type MultiAutoCompleteItem,
+  type ResolvedAutoCompleteOption,
 } from '@purestack/ts-components'
 import {
   lucide_chevron_down,
@@ -55,10 +54,12 @@ import {
   defineComponent,
   html,
   type Ref,
+  type RefOrValue,
   ref,
   type SRef,
   sref,
 } from 'regor'
+import { mountFormAppearanceGalleries } from '../appearance'
 
 export interface MultiAutoCompleteInputExample {
   selectedTags: SRef<MultiAutoCompleteItem[]>
@@ -68,6 +69,15 @@ export interface MultiAutoCompleteInputExample {
   duplicatesAllowed: Ref<boolean>
   pending: Ref<boolean>
   locked: Ref<boolean>
+  minimum: Ref<number>
+  limit: Ref<number>
+  focusOpens: Ref<boolean>
+  customItems: SRef<MultiAutoCompleteItem[]>
+  activity: Ref<string>
+  createTag: (query: string) => MultiAutoCompleteItem
+  mapTag: (option: ResolvedAutoCompleteOption) => MultiAutoCompleteItem
+  splitTags: (value: string) => string[]
+  itemsChanged: (items: MultiAutoCompleteItem[]) => void
   clear: () => void
 }
 
@@ -84,9 +94,17 @@ const multiAutoCompleteInputExampleTemplate = html`<Flex direction="column">
     :allowDuplicates="duplicatesAllowed"
     :loading="pending"
     :disabled="locked"
+    :minLength="minimum"
+    :maxResults="limit"
+    :openOnFocus="focusOpens"
     separators=",;"
   />
   <Flex wrap="true">
+    <FormInputField id="multi-minimum" label="Minimum query length" type="number" min="0" :model="minimum" />
+    <FormInputField id="multi-limit" label="Maximum results" type="number" min="1" :model="limit" />
+  </Flex>
+  <Flex wrap="true">
+    <FormCheck id="multi-focus" label="Open on focus" :checked="focusOpens" />
     <FormCheck id="multi-custom" label="Allow new tags" :checked="customAllowed" />
     <FormCheck
       id="multi-duplicates"
@@ -103,6 +121,13 @@ const multiAutoCompleteInputExampleTemplate = html`<Flex direction="column">
   <ul>
     <li r-for="tag in selectedTags">{{ tag.label }} · {{ tag.value }}</li>
   </ul>
+  <h3>Callback transforms and a custom row</h3>
+  <p>Choose a suggestion to give it a success tone. New tags use lowercase values and a feature tone. Paste tags separated by commas, semicolons, pipes, or newlines.</p>
+  <MultiAutoCompleteInput id="multi-customized" label="Normalized tags" :items="customItems"
+    :options="tagOptions" rowComponent="TagSuggestion" :onCreateItem="createTag"
+    :onOptionToItem="mapTag" :onSplitInput="splitTags" :onItemsChange="itemsChanged"
+    placeholder="Try Design | Research"/>
+  <FormStatus>{{ activity }}</FormStatus>
 </Flex>`
 
 function createMultiAutoCompleteInputExample(): MultiAutoCompleteInputExample {
@@ -115,6 +140,7 @@ function createMultiAutoCompleteInputExample(): MultiAutoCompleteInputExample {
     requiredTag,
     { label: 'Needs review', value: 'review', tone: 'warning' },
   ])
+  const activity = ref('Add a tag to inspect onItemsChange.')
   return {
     selectedTags,
     tagQuery: ref(''),
@@ -128,6 +154,26 @@ function createMultiAutoCompleteInputExample(): MultiAutoCompleteInputExample {
     duplicatesAllowed: ref(false),
     pending: ref(false),
     locked: ref(false),
+    minimum: ref(0),
+    limit: ref(3),
+    focusOpens: ref(true),
+    customItems: sref<MultiAutoCompleteItem[]>([]),
+    activity,
+    createTag: (query) => ({
+      label: query.trim(),
+      value: query.trim().toLowerCase(),
+      tone: 'feature',
+    }),
+    mapTag: (option) => ({
+      label: option.label,
+      value: option.value,
+      tone: 'success',
+    }),
+    splitTags: (value) => value.split(/[;,|\n]/),
+    itemsChanged: (items) =>
+      activity(
+        `onItemsChange: ${items.map((item) => item.value).join(', ') || '(empty)'}`,
+      ),
     clear: () => selectedTags([requiredTag]),
   }
 }
@@ -136,6 +182,16 @@ const component = defineComponent<MultiAutoCompleteInputExample>(
   multiAutoCompleteInputExampleTemplate,
   {
     context: createMultiAutoCompleteInputExample,
+  },
+)
+const tagSuggestion = defineComponent<{
+  option: RefOrValue<ResolvedAutoCompleteOption | null>
+  active?: RefOrValue<boolean>
+  query?: RefOrValue<string>
+}>(
+  html`<Flex direction="column" r-if="option"><strong>{{ option.label }}</strong><span class="text-muted">{{ option.value }} · {{ active ? 'Active suggestion' : 'Available suggestion' }}{{ query ? ' · query: ' + query : '' }}</span></Flex>`,
+  {
+    props: ['option', 'active', 'query'],
   },
 )
 const icons: Record<string, string> = {
@@ -148,8 +204,10 @@ createApp(
   {
     components: {
       MultiAutoCompleteInputExample: component,
+      TagSuggestion: tagSuggestion,
 
       ...defineMultiAutoCompleteInputComponents(),
+      ...defineFormInputField(),
       ...defineFlexComponents(),
       ...defineFormComponents(),
       ...defineButtonComponents(),
@@ -161,6 +219,8 @@ createApp(
     template: html`<MultiAutoCompleteInputExample />`,
   },
 )
+
+mountFormAppearanceGalleries()
 ```
   </TabPane>
 </Tabs>
@@ -171,8 +231,11 @@ Token state can express validation results supplied by your application.
 
 <Tabs group="multi-auto-complete-input-sample-2" selectedTab="multi-auto-complete-input-sample-2-preview" ariaLabel="Invalid and disabled tokens example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="multi-auto-complete-input-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="multi-auto-complete-input-states-demo" src="./states.ts"/>
-  </TabPane>
+
+</div>
+</TabPane>
   <TabPane id="multi-auto-complete-input-sample-2-source-0" label="states.mdx">
 ```html
 <RegorApp id="multi-auto-complete-input-states-demo" src="./states.ts"/>
@@ -241,6 +304,52 @@ createApp(
 ```
   </TabPane>
 </Tabs>
+
+## All semantic tones
+
+All ten tones are visible at once. The control’s label and content explain the intent independently of color.
+
+<ComponentExample label="All ten semantic tones" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
+<div id="forms-multi-auto-complete-input-tone-gallery" data-form-gallery data-component="MultiAutoCompleteInput" data-axis="tone">
+<FormAppearanceGallery component="MultiAutoCompleteInput" axis="tone" prefix="forms-multi-auto-complete-input-tone-gallery"/>
+</div>
+</ComponentExample>
+
+## All visual variants
+
+All eighteen supported treatments, shown in accent. Tone and variant are independent, so any treatment can be combined with a semantic tone.
+
+<ComponentExample label="All eighteen visual variants" caption="Each sample is interactive and keeps its own local state. Switch the site theme to compare both palettes.">
+<div id="forms-multi-auto-complete-input-variant-gallery" data-form-gallery data-component="MultiAutoCompleteInput" data-axis="variant">
+<FormAppearanceGallery component="MultiAutoCompleteInput" axis="variant" prefix="forms-multi-auto-complete-input-variant-gallery"/>
+</div>
+</ComponentExample>
+
+## Token and suggestion features
+
+| Feature | How to try it |
+| --- | --- |
+| Selected items and query | Existing tags remain visible while the query changes. |
+| Custom values and duplicates | Toggle both controls in the live example, then enter the same new tag twice. |
+| Separators | Comma and semicolon commit tokens. Enter also creates a token when allowed. |
+| Protected and invalid tokens | The existing state example shows a non-removable required item and an invalid item. |
+| Item tone | Each selected item can choose its own semantic palette. |
+| Keywords and disabled options | Search typed to find TypeScript; the unavailable suggestion cannot be chosen. |
+| Loading, empty, minLength, maxResults, openOnFocus | Inspect the appearance and live search controls separately. |
+| Structured values | Suggestion values may be strings or numbers; missing values fall back to labels. |
+| Custom row | rowComponent changes suggestion presentation without replacing the parent’s selection logic. |
+| Callback transforms | onCreateItem, onOptionToItem, and onSplitInput customize creation, mapping, and splitting. |
+| Notifications | itemschange, itemremove, itemcreate, optionselect, and querychange report browser actions. |
+
+```html
+<MultiAutoCompleteInput id="release-tags" label="Tags" name="tags"
+  :items="tags" :model="query" :options="suggestions"
+  :allowCustomValues="true" :allowDuplicates="false" separators=",;"
+  minLength="1" maxResults="4" :openOnFocus="true"
+  :onCreateItem="createTag" :onOptionToItem="mapSuggestion" :onSplitInput="splitTags"
+  :onItemsChange="itemsChanged" :onSelect="selected" :onSearch="searched"
+  @itemremove="removed" @itemcreate="created" @querychange="queryChanged"/>
+```
 
 ## Behavior and accessibility
 
