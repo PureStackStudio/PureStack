@@ -13,13 +13,31 @@ nav:
 
 # BtnGroup<wbr/>DropDown
 
-Keep the primary action in reach and its alternatives close by. A native disclosure with a button-styled trigger, an open content slot, and independent menu styling.
-
-<Badge tone="accent" variant="surface">BtnGroupDropDown</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/btnGroup/btnGroup.ts) · [API reference](#api-reference)
+<ComponentHeader name="BtnGroupDropDown" kind="Native disclosure" summary="Keep the primary action in reach and its alternatives close by. Style the trigger and menu independently." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/btnGroup/btnGroup.ts"/>
 
 Use it beside a primary action inside [BtnGroup](/components/actions/btn-group/), or on its own for a compact set of links and actions. The trigger is a native `summary` inside `details`; menu items retain their own button or link semantics.
+
+## In context
+
+<ComponentExample label="Primary destination + alternatives" caption="Open the disclosure to see contextual navigation. Tab through its links; each remains a native anchor.">
+<div class="component-recipe"><p class="text-eyebrow">COMPONENT EXPLORER</p><h3>Choose your next building block</h3><p>A strong primary destination with a compact menu of related guides.</p><BtnGroup :wrap="true"><BtnLink href="/components/actions/buttons/" tone="accent">Explore buttons</BtnLink><BtnGroupDropDown label="More guides" variant="outline" menuTone="neutral" menuVariant="surface" align="end"><Flex direction="column"><BtnLink href="/components/actions/badge/" variant="subtleBtn">Badges</BtnLink><BtnLink href="/components/actions/alert-box/" variant="subtleBtn">Alerts</BtnLink><BtnLink href="/components/actions/toast-host/" variant="subtleBtn">Toasts</BtnLink></Flex></BtnGroupDropDown></BtnGroup></div>
+</ComponentExample>
+
+```html
+<p class="text-eyebrow">COMPONENT EXPLORER</p>
+<h3>Choose your next building block</h3>
+<p>A strong primary destination with a compact menu of related guides.</p>
+<BtnGroup :wrap="true">
+<BtnLink href="/components/actions/buttons/" tone="accent">Explore buttons</BtnLink>
+<BtnGroupDropDown label="More guides" variant="outline" menuTone="neutral" menuVariant="surface" align="end">
+<Flex direction="column">
+<BtnLink href="/components/actions/badge/" variant="subtleBtn">Badges</BtnLink>
+<BtnLink href="/components/actions/alert-box/" variant="subtleBtn">Alerts</BtnLink>
+<BtnLink href="/components/actions/toast-host/" variant="subtleBtn">Toasts</BtnLink>
+</Flex>
+</BtnGroupDropDown>
+</BtnGroup>
+```
 
 ## Playground
 
@@ -36,8 +54,10 @@ An empty accessible-name field lets the visible label name the trigger. In icon-
   tabVariant="underline"
 >
   <TabPane id="dropdown-playground-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="dropdown-playground" src="./dropdown-playground.ts"/>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="dropdown-playground-mdx" label="dropdown-playground.mdx">
 ```html
 <RegorApp id="dropdown-playground" src="./dropdown-playground.ts"/>
@@ -268,8 +288,10 @@ This example models the workflow locally; it does not publish content or schedul
   tabVariant="underline"
 >
   <TabPane id="publish-actions-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="publish-actions" src="./publish-actions.ts"/>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="publish-actions-mdx" label="publish-actions.mdx">
 ```html
 <RegorApp id="publish-actions" src="./publish-actions.ts"/>
@@ -417,6 +439,7 @@ The default slot accepts links, buttons, and ordinary markup. Add a short headin
   tabVariant="underline"
 >
   <TabPane id="dropdown-context-menu-preview" label="Preview">
+<div class="component-preview-stage">
     <Panel tone="neutral" variant="surfaceAlt" class="p-4 overflow-visible">
       <Flex direction="column" align="start" class="gap-3">
         <div>
@@ -435,7 +458,8 @@ The default slot accepts links, buttons, and ordinary markup. Add a short headin
         </BtnGroup>
       </Flex>
     </Panel>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="dropdown-context-menu-mdx" label="dropdown-context-menu.mdx">
 ```html
 <Panel tone="neutral" variant="surfaceAlt" class="p-4 overflow-visible">
@@ -473,6 +497,7 @@ Use an icon-only trigger when space is tight and its context is clear. Give it a
   tabVariant="underline"
 >
   <TabPane id="dropdown-compact-triggers-preview" label="Preview">
+<div class="component-preview-stage">
     <Panel tone="neutral" variant="surfaceAlt" class="p-4 overflow-visible">
       <Flex wrap="true" align="center" class="gap-3">
         <BtnGroup role="group" aria-label="Release resources">
@@ -498,7 +523,8 @@ Use an icon-only trigger when space is tight and its context is clear. Give it a
         </BtnGroup>
       </Flex>
     </Panel>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="dropdown-compact-triggers-mdx" label="dropdown-compact-triggers.mdx">
 ```html
 <Panel tone="neutral" variant="surfaceAlt" class="p-4 overflow-visible">
@@ -547,6 +573,7 @@ The row below wraps at narrow widths. Its surrounding Panel uses `overflow-visib
   tabVariant="underline"
 >
   <TabPane id="dropdown-placement-preview" label="Preview">
+<div class="component-preview-stage">
     <Panel tone="neutral" variant="surfaceAlt" class="p-4 overflow-visible">
       <Flex direction="column" class="gap-3">
         <div class="fw-700">Choose a starting point</div>
@@ -563,7 +590,8 @@ The row below wraps at narrow widths. Its surrounding Panel uses `overflow-visib
         </BtnGroup>
       </Flex>
     </Panel>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="dropdown-placement-mdx" label="dropdown-placement.mdx">
 ```html
 <Panel tone="neutral" variant="surfaceAlt" class="p-4 overflow-visible">
@@ -585,6 +613,109 @@ The row below wraps at narrow widths. Its surrounding Panel uses `overflow-visib
 ```
   </TabPane>
 </Tabs>
+
+## All trigger tones
+
+Every semantic tone. Open a trigger to inspect its neutral menu.
+
+<ComponentExample label="All trigger tones" caption="All values are shown together. Switch the site theme to compare light and dark rendering.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>neutral</code><BtnGroupDropDown label="neutral" tone="neutral" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>accent</code><BtnGroupDropDown label="accent" tone="accent" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>feature</code><BtnGroupDropDown label="feature" tone="feature" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>secondary</code><BtnGroupDropDown label="secondary" tone="secondary" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>custom</code><BtnGroupDropDown label="custom" tone="custom" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>ghost</code><BtnGroupDropDown label="ghost" tone="ghost" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>info</code><BtnGroupDropDown label="info" tone="info" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>success</code><BtnGroupDropDown label="success" tone="success" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>warning</code><BtnGroupDropDown label="warning" tone="warning" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>danger</code><BtnGroupDropDown label="danger" tone="danger" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+</div>
+</ComponentExample>
+
+## All trigger variants
+
+Every trigger treatment in accent.
+
+<ComponentExample label="All trigger variants" caption="All values are shown together. Switch the site theme to compare light and dark rendering.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>solid</code><BtnGroupDropDown label="solid" tone="accent" variant="solid" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>surface</code><BtnGroupDropDown label="surface" tone="accent" variant="surface" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>surfaceAlt</code><BtnGroupDropDown label="surfaceAlt" tone="accent" variant="surfaceAlt" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>spotlight</code><BtnGroupDropDown label="spotlight" tone="accent" variant="spotlight" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>glass</code><BtnGroupDropDown label="glass" tone="accent" variant="glass" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>flat</code><BtnGroupDropDown label="flat" tone="accent" variant="flat" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>flatAlt</code><BtnGroupDropDown label="flatAlt" tone="accent" variant="flatAlt" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>flatSolid</code><BtnGroupDropDown label="flatSolid" tone="accent" variant="flatSolid" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>outlineFill</code><BtnGroupDropDown label="outlineFill" tone="accent" variant="outlineFill" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>outline</code><BtnGroupDropDown label="outline" tone="accent" variant="outline" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>subtle</code><BtnGroupDropDown label="subtle" tone="accent" variant="subtle" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>subtleBtn</code><BtnGroupDropDown label="subtleBtn" tone="accent" variant="subtleBtn" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>link</code><BtnGroupDropDown label="link" tone="accent" variant="link" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>sheen</code><BtnGroupDropDown label="sheen" tone="accent" variant="sheen" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>underline</code><BtnGroupDropDown label="underline" tone="accent" variant="underline" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>rail</code><BtnGroupDropDown label="rail" tone="accent" variant="rail" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>bracket</code><BtnGroupDropDown label="bracket" tone="accent" variant="bracket" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>none</code><BtnGroupDropDown label="none" tone="accent" variant="none" menuTone="neutral"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+</div>
+</ComponentExample>
+
+## All menu tones
+
+Inline previews of all ten menu surface tones. Set menuTone on the disclosure to apply the corresponding palette.
+
+<ComponentExample label="All menu tones" caption="All values are shown together. Switch the site theme to compare light and dark rendering.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>neutral</code><Panel tone="neutral" variant="surfaceAlt"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>accent</code><Panel tone="accent" variant="surfaceAlt"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>feature</code><Panel tone="feature" variant="surfaceAlt"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>secondary</code><Panel tone="secondary" variant="surfaceAlt"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>custom</code><Panel tone="custom" variant="surfaceAlt"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>ghost</code><Panel tone="ghost" variant="surfaceAlt"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>info</code><Panel tone="info" variant="surfaceAlt"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>success</code><Panel tone="success" variant="surfaceAlt"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>warning</code><Panel tone="warning" variant="surfaceAlt"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>danger</code><Panel tone="danger" variant="surfaceAlt"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+</div>
+</ComponentExample>
+
+## All menu variants
+
+Inline previews of all eighteen menu surface treatments. Set menuVariant to apply the corresponding treatment.
+
+<ComponentExample label="All menu variants" caption="All values are shown together. Switch the site theme to compare light and dark rendering.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>solid</code><Panel tone="neutral" variant="solid"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>surface</code><Panel tone="neutral" variant="surface"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>surfaceAlt</code><Panel tone="neutral" variant="surfaceAlt"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>spotlight</code><Panel tone="neutral" variant="spotlight"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>glass</code><Panel tone="neutral" variant="glass"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>flat</code><Panel tone="neutral" variant="flat"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>flatAlt</code><Panel tone="neutral" variant="flatAlt"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>flatSolid</code><Panel tone="neutral" variant="flatSolid"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>outlineFill</code><Panel tone="neutral" variant="outlineFill"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>outline</code><Panel tone="neutral" variant="outline"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>subtle</code><Panel tone="neutral" variant="subtle"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>subtleBtn</code><Panel tone="neutral" variant="subtleBtn"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>link</code><Panel tone="neutral" variant="link"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>sheen</code><Panel tone="neutral" variant="sheen"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>underline</code><Panel tone="neutral" variant="underline"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>rail</code><Panel tone="neutral" variant="rail"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>bracket</code><Panel tone="neutral" variant="bracket"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+<div class="component-appearance-cell"><code>none</code><Panel tone="neutral" variant="none"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></Panel></div>
+</div>
+</ComponentExample>
+
+## Trigger and menu modes
+
+variantMode and menuVariantMode independently choose stateful or stateless styling. Disclosure behavior remains available in either mode.
+
+<ComponentExample label="Trigger and menu modes" caption="All values are shown together. Switch the site theme to compare light and dark rendering.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>stateful</code><BtnGroupDropDown label="stateful" variant="outlineFill" variantMode="stateful" menuVariant="outlineFill" menuVariantMode="stateful"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+<div class="component-appearance-cell"><code>stateless</code><BtnGroupDropDown label="stateless" variant="outlineFill" variantMode="stateless" menuVariant="outlineFill" menuVariantMode="stateless"><BtnLink href="#api-reference" variant="subtleBtn">API reference</BtnLink></BtnGroupDropDown></div>
+</div>
+</ComponentExample>
 
 ## Behavior and accessibility
 

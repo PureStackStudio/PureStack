@@ -13,11 +13,25 @@ nav:
 
 # Buttons
 
-A clear next step. Theme-aware actions with native button semantics, expressive variants, and just enough API.
+<ComponentHeader name="Btn" kind="Native action" summary="A clear next step. Theme-aware actions with native button semantics, expressive variants, and just enough API." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/btn/btn.ts"/>
 
-<Badge tone="accent" variant="surface">Btn</Badge>
+## In context
 
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/btn/btn.ts) · [API reference](#api-reference)
+<ComponentExample label="Action hierarchy" caption="Give one action the strongest emphasis. These are appearance samples; the playground below demonstrates activation.">
+<div class="component-recipe"><p class="text-eyebrow">PROJECT SETTINGS</p><h3>Ready for the next step?</h3><p>One primary action, a quieter alternative, and an explicit unavailable state.</p><BtnGroup :wrap="true"><Btn tone="accent">Save changes</Btn><Btn variant="outline">Preview</Btn><Btn variant="surface" :disabled="true">Publish</Btn></BtnGroup><p>Publishing becomes available after review.</p></div>
+</ComponentExample>
+
+```html
+<p class="text-eyebrow">PROJECT SETTINGS</p>
+<h3>Ready for the next step?</h3>
+<p>One primary action, a quieter alternative, and an explicit unavailable state.</p>
+<BtnGroup :wrap="true">
+<Btn tone="accent">Save changes</Btn>
+<Btn variant="outline">Preview</Btn>
+<Btn variant="surface" :disabled="true">Publish</Btn>
+</BtnGroup>
+<p>Publishing becomes available after review.</p>
+```
 
 ## Playground
 
@@ -32,8 +46,10 @@ Explore every variant and all ten semantic tones. Change the size, move the icon
   tabVariant="underline"
 >
   <TabPane id="button-playground-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="button-playground" src="./button-playground.ts"/>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="button-playground-mdx" label="button-playground.mdx">
 ```html
 <RegorApp id="button-playground" src="./button-playground.ts"/>
@@ -285,6 +301,7 @@ Choose the visual treatment independently from the tone. Filled variants suit pr
   tabVariant="underline"
 >
   <TabPane id="button-variants-preview" label="Preview">
+<div class="component-preview-stage">
     <Grid columns="2" columnsSm="3" alignItems="center" justifyItems="center" class="gap-4">
       <Btn tone="accent" variant="solid">solid</Btn>
       <Btn tone="accent" variant="surface">surface</Btn>
@@ -305,7 +322,8 @@ Choose the visual treatment independently from the tone. Filled variants suit pr
       <Btn tone="accent" variant="bracket">bracket</Btn>
       <Btn tone="accent" variant="none">none</Btn>
     </Grid>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="button-variants-source" label="variants.mdx">
 ```html
 <Grid columns="2" columnsSm="3" alignItems="center" justifyItems="center" class="gap-4">
@@ -345,6 +363,7 @@ Communicate intent through the palette. Every tone participates in the same them
   tabVariant="underline"
 >
   <TabPane id="button-tones-preview" label="Preview">
+<div class="component-preview-stage">
     <Flex wrap="true"
       ><Btn tone="neutral" variant="surface">neutral</Btn>
       <Btn tone="accent" variant="surface">accent</Btn>
@@ -357,7 +376,8 @@ Communicate intent through the palette. Every tone participates in the same them
       <Btn tone="warning" variant="surface">warning</Btn>
       <Btn tone="danger" variant="surface">danger</Btn></Flex
     >
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="button-tones-source" label="tones.mdx">
 ```html
 <Flex wrap="true"><Btn tone="neutral" variant="surface">neutral</Btn>
@@ -387,6 +407,7 @@ The `sm`, `md`, and `lg` sizes follow the active theme’s typography scale. Pro
   tabVariant="underline"
 >
   <TabPane id="button-sizes-icons-preview" label="Preview">
+<div class="component-preview-stage">
     <Flex wrap="true" align="center">
       <Btn size="sm" tone="accent">Small</Btn>
       <Btn size="md" tone="accent" icon="tabler:plus">Create project</Btn>
@@ -406,7 +427,8 @@ The `sm`, `md`, and `lg` sizes follow the active theme’s typography scale. Pro
         ariaLabel="Confirm selection"/>
       <Btn tone="neutral" :disabled="true">Unavailable</Btn>
     </Flex>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="button-sizes-icons-source" label="sizes-and-icons.mdx">
 ```html
 <Flex wrap="true" align="center">
@@ -434,8 +456,10 @@ Build a collection of up to five items. Add creates a visible list item; Remove 
   tabVariant="underline"
 >
   <TabPane id="button-events-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="collection" src="./collection.ts"/>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="button-events-mdx" label="collection.mdx">
 ```html
 <RegorApp id="collection" src="./collection.ts"/>
@@ -548,8 +572,10 @@ The form handles `@reset.prevent` so its reactive value stays synchronized with 
   tabVariant="underline"
 >
   <TabPane id="button-form-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="project-form" src="./project-form.ts"/>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="button-form-mdx" label="project-form.mdx">
 ```html
 <RegorApp id="project-form" src="./project-form.ts"/>

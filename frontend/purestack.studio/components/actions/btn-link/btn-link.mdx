@@ -13,13 +13,25 @@ nav:
 
 # BtnLink
 
-Give a destination the emphasis it deserves. BtnLink combines the visual language of a button with the familiar behavior of a real link.
-
-<Badge tone="accent" variant="surface">BtnLink</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/btn/btn.ts) · [API reference](#api-reference)
+<ComponentHeader name="BtnLink" kind="Navigation" summary="Give a destination the emphasis it deserves. Button styling with the familiar behavior of a real link." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/btn/btn.ts"/>
 
 Use BtnLink to navigate to a page, a section, or an external destination. For an action such as saving, submitting, or opening a dialog, use [Btn](/components/actions/buttons/).
+
+## In context
+
+<ComponentExample label="A useful destination" caption="These are real links. Use the keyboard or your browser’s open-in-new-tab action to follow them.">
+<div class="component-recipe"><Badge tone="feature">START HERE</Badge><h3>Build your first interface</h3><p>Learn how static content and interactive components fit together.</p><BtnGroup :wrap="true"><BtnLink href="/guides/regor/" tone="accent">Explore Regor</BtnLink><BtnLink href="/components/" variant="outline">Browse components</BtnLink></BtnGroup></div>
+</ComponentExample>
+
+```html
+<Badge tone="feature">START HERE</Badge>
+<h3>Build your first interface</h3>
+<p>Learn how static content and interactive components fit together.</p>
+<BtnGroup :wrap="true">
+<BtnLink href="/guides/regor/" tone="accent">Explore Regor</BtnLink>
+<BtnLink href="/components/" variant="outline">Browse components</BtnLink>
+</BtnGroup>
+```
 
 ## Playground
 
@@ -34,8 +46,10 @@ Change the destination, target, relationship, and appearance. The preview is a w
   tabVariant="underline"
 >
   <TabPane id="link-playground-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="link-playground" src="./link-playground.ts"/>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="link-playground-mdx" label="link-playground.mdx">
 ```html
 <RegorApp id="link-playground" src="./link-playground.ts"/>
@@ -261,6 +275,7 @@ One component, three familiar journeys. Internal URLs use the site's public URL 
   tabVariant="underline"
 >
   <TabPane id="link-destinations-preview" label="Preview">
+<div class="component-preview-stage">
     <Flex wrap="true" align="center">
       <BtnLink href="/components/actions/buttons/" tone="accent">Read the button guide</BtnLink>
       <BtnLink href="#link-destination" variant="outline">Jump to the destination</BtnLink>
@@ -272,7 +287,8 @@ One component, three familiar journeys. Internal URLs use the site's public URL 
         iconPosition="end"
       >GitHub (opens in a new tab)</BtnLink>
     </Flex>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="link-destinations-mdx" label="link-destinations.mdx">
 ```html
 <Flex wrap="true" align="center">
@@ -303,6 +319,7 @@ When `target` is `_blank` and `rel` is omitted or empty, BtnLink supplies `noope
   tabVariant="underline"
 >
   <TabPane id="link-relationships-preview" label="Preview">
+<div class="component-preview-stage">
     <Flex wrap="true" align="center">
       <BtnLink
         href="https://github.com/PureStackStudio/PureStack"
@@ -316,7 +333,8 @@ When `target` is `_blank` and `rel` is omitted or empty, BtnLink supplies `noope
         variant="surface"
       >Repository with nofollow (new tab)</BtnLink>
     </Flex>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="link-relationships-mdx" label="link-relationships.mdx">
 ```html
 <Flex wrap="true" align="center">
@@ -349,6 +367,7 @@ Thirteen treatments share the same link semantics. Use a strong treatment for th
   tabVariant="underline"
 >
   <TabPane id="link-variants-preview" label="Preview">
+<div class="component-preview-stage">
     <Flex wrap="true" align="center">
       <BtnLink href="#link-destination" tone="accent" variant="solid">solid</BtnLink>
       <BtnLink href="#link-destination" tone="accent" variant="surface">surface</BtnLink>
@@ -369,7 +388,8 @@ Thirteen treatments share the same link semantics. Use a strong treatment for th
       <BtnLink href="#link-destination" tone="accent" variant="bracket">bracket</BtnLink>
       <BtnLink href="#link-destination" tone="accent" variant="none">none</BtnLink>
     </Flex>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="link-variants-mdx" label="link-variants.mdx">
 ```html
 <Flex wrap="true" align="center">
@@ -409,6 +429,7 @@ Ten semantic tones express intent through the active theme. Pick a tone for its 
   tabVariant="underline"
 >
   <TabPane id="link-tones-preview" label="Preview">
+<div class="component-preview-stage">
     <Flex wrap="true" align="center">
       <BtnLink href="#link-destination" tone="neutral">neutral</BtnLink>
       <BtnLink href="#link-destination" tone="accent">accent</BtnLink>
@@ -421,7 +442,8 @@ Ten semantic tones express intent through the active theme. Pick a tone for its 
       <BtnLink href="#link-destination" tone="warning">warning</BtnLink>
       <BtnLink href="#link-destination" tone="danger">danger</BtnLink>
     </Flex>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="link-tones-mdx" label="link-tones.mdx">
 ```html
 <Flex wrap="true" align="center">
@@ -453,6 +475,7 @@ Choose `sm`, `md`, or `lg`. An icon can lead or follow the label. Icon-only link
   tabVariant="underline"
 >
   <TabPane id="link-sizes-and-icons-preview" label="Preview">
+<div class="component-preview-stage">
     <Flex direction="column" align="start">
       <Flex wrap="true" align="center">
         <BtnLink href="#link-destination" size="sm" tone="accent">Small link</BtnLink>
@@ -471,7 +494,8 @@ Choose `sm`, `md`, or `lg`. An icon can lead or follow the label. Icon-only link
         />
       </Flex>
     </Flex>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="link-sizes-and-icons-mdx" label="link-sizes-and-icons.mdx">
 ```html
 <Flex direction="column" align="start">

@@ -13,13 +13,29 @@ nav:
 
 # Badge
 
-A little context, right where it matters. Use Badge for status, counts, versions, and short labels that help readers understand the surrounding content.
-
-<Badge tone="accent" variant="surface">Badge</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/badge/badge.ts) · [API reference](#api-reference)
+<ComponentHeader name="Badge" kind="Inline metadata" summary="A little context, right where it matters. Status, counts, and versions that make an interface easier to scan." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/badge/badge.ts"/>
 
 Badge renders an inline `span` with two appearance props and a default slot. Its content describes something; use [Btn](/components/actions/buttons/) or [BtnLink](/components/actions/btn-link/) when the reader should take an action.
+
+## In context
+
+<ComponentExample label="Release metadata" caption="Badges describe the surrounding content. Pair explicit labels with color so status remains understandable.">
+<div class="component-recipe"><Flex align="center" justify="between" wrap="true"><h3>Design system</h3><Badge tone="success" variant="solid">Stable</Badge></Flex><p>A small set of labels tells the release story at a glance.</p><Flex wrap="true"><Badge tone="neutral">v1.0</Badge><Badge tone="info">12 components</Badge><Badge tone="feature" variant="outline">Theme aware</Badge><Badge tone="warning">Review pending</Badge></Flex></div>
+</ComponentExample>
+
+```html
+<Flex align="center" justify="between" wrap="true">
+<h3>Design system</h3>
+<Badge tone="success" variant="solid">Stable</Badge>
+</Flex>
+<p>A small set of labels tells the release story at a glance.</p>
+<Flex wrap="true">
+<Badge tone="neutral">v1.0</Badge>
+<Badge tone="info">12 components</Badge>
+<Badge tone="feature" variant="outline">Theme aware</Badge>
+<Badge tone="warning">Review pending</Badge>
+</Flex>
+```
 
 ## Playground
 
@@ -34,8 +50,10 @@ Edit the label and explore every tone and variant. The default surface treatment
   tabVariant="underline"
 >
   <TabPane id="badge-playground-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="badge-playground" src="./badge-playground.ts"/>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="badge-playground-mdx" label="badge-playground.mdx">
 ```html
 <RegorApp id="badge-playground" src="./badge-playground.ts"/>
@@ -157,6 +175,7 @@ Use tone to reinforce the meaning already expressed by the label. “Passing”,
   tabVariant="underline"
 >
   <TabPane id="badge-tones-preview" label="Preview">
+<div class="component-preview-stage">
     <Flex wrap="true" align="center">
       <Badge tone="neutral">neutral</Badge>
       <Badge tone="accent">accent</Badge>
@@ -169,7 +188,8 @@ Use tone to reinforce the meaning already expressed by the label. “Passing”,
       <Badge tone="warning">warning</Badge>
       <Badge tone="danger">danger</Badge>
     </Flex>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="badge-tones-mdx" label="badge-tones.mdx">
 ```html
 <Flex wrap="true" align="center">
@@ -201,6 +221,7 @@ Badge accepts every shared variant and defaults to `surface`. Its variants use s
   tabVariant="underline"
 >
   <TabPane id="badge-variants-preview" label="Preview">
+<div class="component-preview-stage">
     <Flex wrap="true" align="center">
       <Badge tone="accent" variant="solid">solid</Badge>
       <Badge tone="accent" variant="surface">surface</Badge>
@@ -221,7 +242,8 @@ Badge accepts every shared variant and defaults to `surface`. Its variants use s
       <Badge tone="accent" variant="bracket">bracket</Badge>
       <Badge tone="accent" variant="none">none</Badge>
     </Flex>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="badge-variants-mdx" label="badge-variants.mdx">
 ```html
 <Flex wrap="true" align="center">
@@ -261,6 +283,7 @@ The default slot accepts text and inline components. Put a badge beside a headin
   tabVariant="underline"
 >
   <TabPane id="badge-inline-composition-preview" label="Preview">
+<div class="component-preview-stage">
     <Flex direction="column" align="start">
       <Flex wrap="true" align="center">
         <strong>Public API</strong>
@@ -273,7 +296,8 @@ The default slot accepts text and inline components. Put a badge beside a headin
         All checks passed
       </Badge>
     </Flex>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="badge-inline-composition-mdx" label="badge-inline-composition.mdx">
 ```html
 <Flex direction="column" align="start">
@@ -307,8 +331,10 @@ This example runs entirely in your browser. It models a release workflow without
   tabVariant="underline"
 >
   <TabPane id="release-checklist-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="release-checklist" src="./release-checklist.ts"/>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="release-checklist-mdx" label="release-checklist.mdx">
 ```html
 <RegorApp id="release-checklist" src="./release-checklist.ts"/>

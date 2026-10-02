@@ -13,13 +13,24 @@ nav:
 
 # Toast<wbr/>Host
 
-Display dismissible notifications from a ToastStore, with semantic tones and predictable lifetimes.
+<ComponentHeader name="ToastHost" kind="Transient feedback" summary="Acknowledge the moment without interrupting the flow. Dismissible notifications with predictable lifetimes." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/toast/toastHost.ts"/>
 
-<Badge tone="accent" variant="surface">ToastHost</Badge>
+## In context
 
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/toast/toastHost.ts) · [API reference](#api-reference)
+<ComponentExample label="Notification anatomy" caption="An inline illustration of the host’s surface treatment. Use the live example below to trigger and dismiss actual viewport notifications.">
+<div class="component-recipe"><p class="text-eyebrow">AFTER AN ACTION</p><Panel tone="success" variant="surface"><Flex align="center" justify="between" wrap="true"><span>Local draft saved.</span><Badge tone="success">5 seconds</Badge></Flex></Panel><p>Keep a toast brief. Put persistent instructions next to the task in an AlertBox.</p></div>
+</ComponentExample>
 
-
+```html
+<p class="text-eyebrow">AFTER AN ACTION</p>
+<Panel tone="success" variant="surface">
+<Flex align="center" justify="between" wrap="true">
+<span>Local draft saved.</span>
+<Badge tone="success">5 seconds</Badge>
+</Flex>
+</Panel>
+<p>Keep a toast brief. Put persistent instructions next to the task in an AlertBox.</p>
+```
 
 ## Timed and persistent feedback
 
@@ -27,8 +38,10 @@ Success disappears after five seconds; warning after ten. The error stays until 
 
 <Tabs group="toast-host-sample-1" selectedTab="toast-host-sample-1-preview" ariaLabel="Timed and persistent feedback example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="toast-host-sample-1-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="toast-host-demo" src="./playground.ts"/>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="toast-host-sample-1-source-0" label="playground.mdx">
 ```html
 <RegorApp id="toast-host-demo" src="./playground.ts"/>
@@ -45,6 +58,7 @@ import {
   defineToastComponents,
   ToastStore,
 } from '@purestack/ts-components'
+import { SEMANTIC_TONES, type SemanticTone } from '@purestack/ts-style'
 import { iconoir_xmark } from '@purestack/ts-svg-icons'
 import { createApp, defineComponent, html } from 'regor'
 
@@ -54,6 +68,8 @@ export interface ToastHostExample {
   warn: () => void
   fail: () => void
   clear: () => void
+  tones: SemanticTone[]
+  notifyTone: (tone: SemanticTone) => void
 }
 
 const toastHostExampleTemplate = html`<Flex direction="column">
@@ -64,6 +80,10 @@ const toastHostExampleTemplate = html`<Flex direction="column">
     <Btn tone="danger" variant="outline" @click="fail">Show persistent error</Btn>
     <Btn variant="link" @click="clear">Clear notifications</Btn>
   </Flex>
+  <p>Try every supported tone. Info and success last 5 seconds, warning lasts 10; all others stay until dismissed.</p>
+  <Flex wrap="true" aria-label="All notification tones">
+    <Btn r-for="tone in tones" :tone="tone" variant="surface" @click="notifyTone(tone)">{{ tone }}</Btn>
+  </Flex>
   <FormStatus>{{ notifications.items.length }} active notifications</FormStatus>
 </Flex>`
 
@@ -71,6 +91,9 @@ function createToastHostExample(): ToastHostExample {
   const notifications = new ToastStore()
   return {
     notifications,
+    tones: SEMANTIC_TONES,
+    notifyTone: (tone) =>
+      notifications.notify(`${tone} example notification.`, tone),
     save: () => notifications.notify('Local draft saved.', 'success'),
     warn: () =>
       notifications.notify('Review the content before publishing.', 'warning'),
@@ -106,6 +129,37 @@ createApp(
 ```
   </TabPane>
 </Tabs>
+
+## All notification tones
+
+ToastHost always uses the surface variant and has no variant prop. All ten supported ToastStore tones appear below as inline illustrations.
+
+<ComponentExample label="All notification tones" caption="All values are shown together. Switch the site theme to compare light and dark rendering.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>neutral</code><Panel tone="neutral" variant="surface"><Flex align="center" justify="between" wrap="true"><span>neutral notification</span><Badge tone="neutral">Until dismissed</Badge></Flex></Panel></div>
+<div class="component-appearance-cell"><code>accent</code><Panel tone="accent" variant="surface"><Flex align="center" justify="between" wrap="true"><span>accent notification</span><Badge tone="accent">Until dismissed</Badge></Flex></Panel></div>
+<div class="component-appearance-cell"><code>feature</code><Panel tone="feature" variant="surface"><Flex align="center" justify="between" wrap="true"><span>feature notification</span><Badge tone="feature">Until dismissed</Badge></Flex></Panel></div>
+<div class="component-appearance-cell"><code>secondary</code><Panel tone="secondary" variant="surface"><Flex align="center" justify="between" wrap="true"><span>secondary notification</span><Badge tone="secondary">Until dismissed</Badge></Flex></Panel></div>
+<div class="component-appearance-cell"><code>custom</code><Panel tone="custom" variant="surface"><Flex align="center" justify="between" wrap="true"><span>custom notification</span><Badge tone="custom">Until dismissed</Badge></Flex></Panel></div>
+<div class="component-appearance-cell"><code>ghost</code><Panel tone="ghost" variant="surface"><Flex align="center" justify="between" wrap="true"><span>ghost notification</span><Badge tone="ghost">Until dismissed</Badge></Flex></Panel></div>
+<div class="component-appearance-cell"><code>info</code><Panel tone="info" variant="surface"><Flex align="center" justify="between" wrap="true"><span>info notification</span><Badge tone="info">5 seconds</Badge></Flex></Panel></div>
+<div class="component-appearance-cell"><code>success</code><Panel tone="success" variant="surface"><Flex align="center" justify="between" wrap="true"><span>success notification</span><Badge tone="success">5 seconds</Badge></Flex></Panel></div>
+<div class="component-appearance-cell"><code>warning</code><Panel tone="warning" variant="surface"><Flex align="center" justify="between" wrap="true"><span>warning notification</span><Badge tone="warning">10 seconds</Badge></Flex></Panel></div>
+<div class="component-appearance-cell"><code>danger</code><Panel tone="danger" variant="surface"><Flex align="center" justify="between" wrap="true"><span>danger notification</span><Badge tone="danger">Until dismissed</Badge></Flex></Panel></div>
+</div>
+</ComponentExample>
+
+## Notification lifecycle
+
+| Feature | What to try |
+| --- | --- |
+| Timed messages | Info and success disappear after 5 seconds; warning after 10. |
+| Persistent messages | Every other tone remains until dismissed or cleared. |
+| Individual dismissal | Use Dismiss on a live notification. |
+| Stacking | Trigger several messages; they stack at the top of the viewport. |
+| Clear the queue | Clear notifications removes all messages and timers. |
+| Empty message | `notify('')` creates no notification. |
+| Default tone | `notify('Saved')` uses info. |
 
 ## Behavior and accessibility
 

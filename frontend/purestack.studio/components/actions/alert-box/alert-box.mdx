@@ -13,13 +13,22 @@ nav:
 
 # Alert<wbr/>Box
 
-Give a message the right emphasis with a title, semantic tone, optional icon and contextual actions.
+<ComponentHeader name="AlertBox" kind="Contextual feedback" summary="Turn an important message into a useful next step. Combine context, semantic color, and actions in one notice." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/alertBox/alertBox.ts"/>
 
-<Badge tone="accent" variant="surface">AlertBox</Badge>
+## In context
 
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/alertBox/alertBox.ts) · [API reference](#api-reference)
+<ComponentExample label="A complete message" caption="Every content feature is visible: eyebrow, title, badge, icon, body, metadata, and the actions slot.">
+<div class="component-recipe"><AlertBox tone="info" variant="spotlight" eyebrow="DESIGN SYSTEM" title="Make feedback useful" badge="Tip" icon="lucide:check" meta="Semantic tones adapt to light and dark themes."><p>Explain what happened, why it matters, and what the reader can do next.</p><template #actions><BtnLink href="/guides/semantic-tones/" tone="info" variant="outline">Explore semantic tones</BtnLink></template></AlertBox></div>
+</ComponentExample>
 
-
+```html
+<AlertBox tone="info" variant="spotlight" eyebrow="DESIGN SYSTEM" title="Make feedback useful" badge="Tip" icon="lucide:check" meta="Semantic tones adapt to light and dark themes.">
+<p>Explain what happened, why it matters, and what the reader can do next.</p>
+<template #actions>
+<BtnLink href="/guides/semantic-tones/" tone="info" variant="outline">Explore semantic tones</BtnLink>
+</template>
+</AlertBox>
+```
 
 ## An actionable notice
 
@@ -27,6 +36,7 @@ Make the next step part of the message. The actions slot keeps it alongside the 
 
 <Tabs group="alert-box-sample-1" selectedTab="alert-box-sample-1-preview" ariaLabel="An actionable notice example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="alert-box-sample-1-preview" label="Preview">
+<div class="component-preview-stage">
     <AlertBox
       tone="info"
       title="A shared design language"
@@ -42,7 +52,8 @@ Make the next step part of the message. The actions slot keeps it alongside the 
         </BtnLink>
       </template>
     </AlertBox>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="alert-box-sample-1-source-0" label="actionable-notice.mdx">
 ```html
 <AlertBox
@@ -70,6 +81,7 @@ Keep the message explicit so color is never the only signal.
 
 <Tabs group="alert-box-sample-2" selectedTab="alert-box-sample-2-preview" ariaLabel="Choose the right urgency example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="alert-box-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
     <Flex direction="column">
       <AlertBox tone="success" title="All checks passed">
         The preview is ready for review.
@@ -81,7 +93,8 @@ Keep the message explicit so color is never the only signal.
         Correct the source error and build again.
       </AlertBox>
     </Flex>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="alert-box-sample-2-source-0" label="message-tones.mdx">
 ```html
 <Flex direction="column">
@@ -98,6 +111,63 @@ Keep the message explicit so color is never the only signal.
 ```
   </TabPane>
 </Tabs>
+
+## All semantic tones
+
+All ten tones, with visible labels. Explain intent through the message as well as color.
+
+<ComponentExample label="All semantic tones" caption="All values are shown together. Switch the site theme to compare light and dark rendering.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>neutral</code><AlertBox tone="neutral" title="neutral">A clear message with supporting context.</AlertBox></div>
+<div class="component-appearance-cell"><code>accent</code><AlertBox tone="accent" title="accent">A clear message with supporting context.</AlertBox></div>
+<div class="component-appearance-cell"><code>feature</code><AlertBox tone="feature" title="feature">A clear message with supporting context.</AlertBox></div>
+<div class="component-appearance-cell"><code>secondary</code><AlertBox tone="secondary" title="secondary">A clear message with supporting context.</AlertBox></div>
+<div class="component-appearance-cell"><code>custom</code><AlertBox tone="custom" title="custom">A clear message with supporting context.</AlertBox></div>
+<div class="component-appearance-cell"><code>ghost</code><AlertBox tone="ghost" title="ghost">A clear message with supporting context.</AlertBox></div>
+<div class="component-appearance-cell"><code>info</code><AlertBox tone="info" title="info">A clear message with supporting context.</AlertBox></div>
+<div class="component-appearance-cell"><code>success</code><AlertBox tone="success" title="success">A clear message with supporting context.</AlertBox></div>
+<div class="component-appearance-cell"><code>warning</code><AlertBox tone="warning" title="warning">A clear message with supporting context.</AlertBox></div>
+<div class="component-appearance-cell"><code>danger</code><AlertBox tone="danger" title="danger">A clear message with supporting context.</AlertBox></div>
+</div>
+</ComponentExample>
+
+## All visual variants
+
+All eighteen treatments in the info tone. Content, icons, and actions share the same API across treatments.
+
+<ComponentExample label="All visual variants" caption="All values are shown together. Switch the site theme to compare light and dark rendering.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>solid</code><AlertBox tone="info" variant="solid" title="solid">Supporting message.</AlertBox></div>
+<div class="component-appearance-cell"><code>surface</code><AlertBox tone="info" variant="surface" title="surface">Supporting message.</AlertBox></div>
+<div class="component-appearance-cell"><code>surfaceAlt</code><AlertBox tone="info" variant="surfaceAlt" title="surfaceAlt">Supporting message.</AlertBox></div>
+<div class="component-appearance-cell"><code>spotlight</code><AlertBox tone="info" variant="spotlight" title="spotlight">Supporting message.</AlertBox></div>
+<div class="component-appearance-cell"><code>glass</code><AlertBox tone="info" variant="glass" title="glass">Supporting message.</AlertBox></div>
+<div class="component-appearance-cell"><code>flat</code><AlertBox tone="info" variant="flat" title="flat">Supporting message.</AlertBox></div>
+<div class="component-appearance-cell"><code>flatAlt</code><AlertBox tone="info" variant="flatAlt" title="flatAlt">Supporting message.</AlertBox></div>
+<div class="component-appearance-cell"><code>flatSolid</code><AlertBox tone="info" variant="flatSolid" title="flatSolid">Supporting message.</AlertBox></div>
+<div class="component-appearance-cell"><code>outlineFill</code><AlertBox tone="info" variant="outlineFill" title="outlineFill">Supporting message.</AlertBox></div>
+<div class="component-appearance-cell"><code>outline</code><AlertBox tone="info" variant="outline" title="outline">Supporting message.</AlertBox></div>
+<div class="component-appearance-cell"><code>subtle</code><AlertBox tone="info" variant="subtle" title="subtle">Supporting message.</AlertBox></div>
+<div class="component-appearance-cell"><code>subtleBtn</code><AlertBox tone="info" variant="subtleBtn" title="subtleBtn">Supporting message.</AlertBox></div>
+<div class="component-appearance-cell"><code>link</code><AlertBox tone="info" variant="link" title="link">Supporting message.</AlertBox></div>
+<div class="component-appearance-cell"><code>sheen</code><AlertBox tone="info" variant="sheen" title="sheen">Supporting message.</AlertBox></div>
+<div class="component-appearance-cell"><code>underline</code><AlertBox tone="info" variant="underline" title="underline">Supporting message.</AlertBox></div>
+<div class="component-appearance-cell"><code>rail</code><AlertBox tone="info" variant="rail" title="rail">Supporting message.</AlertBox></div>
+<div class="component-appearance-cell"><code>bracket</code><AlertBox tone="info" variant="bracket" title="bracket">Supporting message.</AlertBox></div>
+<div class="component-appearance-cell"><code>none</code><AlertBox tone="info" variant="none" title="none">Supporting message.</AlertBox></div>
+</div>
+</ComponentExample>
+
+## Variant modes
+
+Stateless is the default. Stateful enables hover, focus, and active styling; it does not add action handlers. Hover or focus these notices to compare.
+
+<ComponentExample label="Variant modes" caption="All values are shown together. Switch the site theme to compare light and dark rendering.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>stateless</code><AlertBox tone="info" variant="outlineFill" variantMode="stateless" title="stateless" tabindex="0">Compare the treatment.</AlertBox></div>
+<div class="component-appearance-cell"><code>stateful</code><AlertBox tone="info" variant="outlineFill" variantMode="stateful" title="stateful" tabindex="0">Compare the treatment.</AlertBox></div>
+</div>
+</ComponentExample>
 
 ## Behavior and accessibility
 

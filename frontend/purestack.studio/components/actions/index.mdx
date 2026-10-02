@@ -13,18 +13,36 @@ nav:
 
 # Actions and feedback
 
-Give people clear actions and timely feedback with buttons, grouped controls, badges, alerts and notifications.
+<p class="component-directory-lead">Make the next step obvious. Make the outcome clear.</p>
 
-[All components](/components/)
+From a single button to a complete feedback loop, these seven components help people move through your interface with confidence. Explore practical examples, every supported tone and variant, and the complete public API.
 
-## Component guides
+## Choose your building block
 
-<Grid columns="1" columnsSm="2" columnsXl="3">
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Btn</h3><p>Native actions, form controls and several visual treatments.</p><BtnLink href="/components/actions/buttons/" tone="accent" variant="link">Explore Btn</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Btn<wbr/>Link</h3><p>Button-styled navigation with real destinations.</p><BtnLink href="/components/actions/btn-link/" tone="accent" variant="link">Explore Btn<wbr/>Link</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Btn<wbr/>Group</h3><p>Related actions with alignment and wrapping.</p><BtnLink href="/components/actions/btn-group/" tone="accent" variant="link">Explore Btn<wbr/>Group</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Btn<wbr/>Group<wbr/>Drop<wbr/>Down</h3><p>Split actions and contextual menus.</p><BtnLink href="/components/actions/btn-group-drop-down/" tone="accent" variant="link">Explore Btn<wbr/>Group<wbr/>Drop<wbr/>Down</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Badge</h3><p>Compact status, counts and metadata.</p><BtnLink href="/components/actions/badge/" tone="accent" variant="link">Explore Badge</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Alert<wbr/>Box</h3><p>Give a message the right emphasis with a title, semantic tone, optional icon and contextual actions.</p><BtnLink href="/components/actions/alert-box/" tone="accent" variant="link">Explore Alert<wbr/>Box</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Toast<wbr/>Host</h3><p>Display dismissible notifications from a ToastStore, with semantic tones and predictable lifetimes.</p><BtnLink href="/components/actions/toast-host/" tone="accent" variant="link">Explore Toast<wbr/>Host</BtnLink></Panel>
-</Grid>
+<div class="component-guide-grid">
+<article class="component-guide-card"><div class="component-guide-card__preview"><Btn tone="accent">Create project</Btn><Btn variant="outline">Preview</Btn></div><h3>Btn</h3><Badge tone="neutral">Native action</Badge><p>A clear next step. Theme-aware actions with native button semantics, expressive variants, and just enough API.</p><a href="/components/actions/buttons/">Explore Btn <span aria-hidden="true">↗</span></a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><BtnLink href="/guides/" tone="feature">Explore guides</BtnLink></div><h3>BtnLink</h3><Badge tone="neutral">Navigation</Badge><p>Give a destination the emphasis it deserves. Button styling with the familiar behavior of a real link.</p><a href="/components/actions/btn-link/">Explore BtnLink <span aria-hidden="true">↗</span></a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><BtnGroup :wrap="true"><Btn variant="surface">Day</Btn><Btn tone="accent">Week</Btn><Btn variant="surface">Month</Btn></BtnGroup></div><h3>BtnGroup</h3><Badge tone="neutral">Action layout</Badge><p>Related actions, one coherent row. Control alignment and wrapping while every child keeps its own identity.</p><a href="/components/actions/btn-group/">Explore BtnGroup <span aria-hidden="true">↗</span></a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><BtnGroupDropDown label="Explore" tone="secondary"><BtnLink href="/components/" variant="subtleBtn">All components</BtnLink></BtnGroupDropDown></div><h3>BtnGroupDropDown</h3><Badge tone="neutral">Native disclosure</Badge><p>Keep the primary action in reach and its alternatives close by. Style the trigger and menu independently.</p><a href="/components/actions/btn-group-drop-down/">Explore BtnGroupDropDown <span aria-hidden="true">↗</span></a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><Badge tone="success">Stable</Badge><Badge tone="info">v1.0</Badge><Badge tone="warning">In review</Badge></div><h3>Badge</h3><Badge tone="neutral">Inline metadata</Badge><p>A little context, right where it matters. Status, counts, and versions that make an interface easier to scan.</p><a href="/components/actions/badge/">Explore Badge <span aria-hidden="true">↗</span></a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><AlertBox tone="info" title="A little guidance">Keep the next step close to the message.</AlertBox></div><h3>AlertBox</h3><Badge tone="neutral">Contextual feedback</Badge><p>Turn an important message into a useful next step. Combine context, semantic color, and actions in one notice.</p><a href="/components/actions/alert-box/">Explore AlertBox <span aria-hidden="true">↗</span></a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><Panel tone="success" variant="surface">Draft saved. You’re all set.</Panel></div><h3>ToastHost</h3><Badge tone="neutral">Transient feedback</Badge><p>Acknowledge the moment without interrupting the flow. Dismissible notifications with predictable lifetimes.</p><a href="/components/actions/toast-host/">Explore ToastHost <span aria-hidden="true">↗</span></a></article>
+</div>
+
+## Design the feedback loop
+
+<ComponentExample label="Action → context → outcome" caption="Use an action for the task, a badge for persistent status, an alert for contextual guidance, and a toast for a brief acknowledgment.">
+<div class="component-recipe"><Flex align="center" justify="between" wrap="true"><h3>Release checklist</h3><Badge tone="warning">Review pending</Badge></Flex><AlertBox tone="info" title="One more step">Review your content before publishing.</AlertBox><BtnGroup :wrap="true"><BtnLink href="/guides/" tone="accent">Open guides</BtnLink><BtnLink href="/components/actions/toast-host/" variant="outline">Explore notifications</BtnLink></BtnGroup></div>
+</ComponentExample>
+
+## Pick the right feedback
+
+| Need | Component |
+| --- | --- |
+| Perform an action | [Btn](./buttons/) |
+| Navigate somewhere | [BtnLink](./btn-link/) |
+| Arrange related controls | [BtnGroup](./btn-group/) |
+| Reveal alternatives | [BtnGroupDropDown](./btn-group-drop-down/) |
+| Label status or metadata | [Badge](./badge/) |
+| Explain a message in context | [AlertBox](./alert-box/) |
+| Acknowledge a recent action | [ToastHost](./toast-host/) |

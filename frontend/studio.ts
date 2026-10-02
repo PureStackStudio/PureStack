@@ -7,6 +7,7 @@ import { createLogger, getLogger } from 'logpot'
 import { defineStudioComponents } from './components/studioComponents'
 import { card } from './demoStyle'
 import { registerApiReferenceStyles } from './docs/apiReferenceStyles'
+import { registerComponentGuideStyles } from './docs/componentGuide'
 import { defineDocumentationComponents } from './docs/docsComponents'
 import { writeConsentPreview } from './purestack.studio/components/site/consent/preview'
 import { writeNavMenuPreview } from './purestack.studio/components/site/nav-menu/preview'
@@ -63,6 +64,7 @@ const build: BuildInput = {
         }
         registerStudioStyles()
         registerApiReferenceStyles()
+        registerComponentGuideStyles()
       },
       async onContentDiscovered(context) {
         await writeConsentPreview(context.config)

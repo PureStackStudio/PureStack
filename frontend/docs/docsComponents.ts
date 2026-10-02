@@ -5,10 +5,12 @@ import { definePageTocPreviewComponent } from '../purestack.studio/components/si
 import { defineSignInPreviewComponent } from '../purestack.studio/components/site/sign-in/preview'
 import { defineTopBarPreviewComponent } from '../purestack.studio/components/site/top-bar/preview'
 import { defineApiPropertyComponent } from './apiProperty'
+import { defineComponentGuideComponents } from './componentGuide'
 import { defineModalExampleComponents } from './modal'
 
 export function defineDocumentationComponents(site: SiteConfig) {
   return {
+    ...defineComponentGuideComponents(),
     ApiProperty: defineApiPropertyComponent(),
     ConsentPreview: defineConsentPreviewComponent(site),
     NavMenuPreview: defineNavMenuPreviewComponent(site),

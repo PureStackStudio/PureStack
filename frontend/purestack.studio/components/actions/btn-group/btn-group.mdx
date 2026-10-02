@@ -13,13 +13,26 @@ nav:
 
 # BtnGroup
 
-Keep related actions together. BtnGroup handles spacing, alignment, and wrapping while each child keeps its own appearance and behavior.
-
-<Badge tone="accent" variant="surface">BtnGroup</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/btnGroup/btnGroup.ts) · [API reference](#api-reference)
+<ComponentHeader name="BtnGroup" kind="Action layout" summary="Related actions, one coherent row. Control alignment and wrapping while every child keeps its own identity." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/btnGroup/btnGroup.ts"/>
 
 Use it for action rows, navigation choices, or a small set of formatting controls. Its two layout props work with [Btn](/components/actions/buttons/), [BtnLink](/components/actions/btn-link/), and other controls in the default slot.
+
+## In context
+
+<ComponentExample label="A navigation toolbar" caption="The group supplies layout; its children supply navigation, tone, and emphasis.">
+<div class="component-recipe"><p class="text-eyebrow">YOUR WORKSPACE</p><h3>Everything within reach</h3><p>Keep related destinations together, with room to wrap on small screens.</p><BtnGroup align="end" :wrap="true" role="group" aria-label="Workspace guides"><BtnLink href="/components/forms/" variant="outline">Forms</BtnLink><BtnLink href="/components/layout/" variant="outline">Layout</BtnLink><BtnLink href="/guides/" tone="accent">Open guides</BtnLink></BtnGroup></div>
+</ComponentExample>
+
+```html
+<p class="text-eyebrow">YOUR WORKSPACE</p>
+<h3>Everything within reach</h3>
+<p>Keep related destinations together, with room to wrap on small screens.</p>
+<BtnGroup align="end" :wrap="true" role="group" aria-label="Workspace guides">
+<BtnLink href="/components/forms/" variant="outline">Forms</BtnLink>
+<BtnLink href="/components/layout/" variant="outline">Layout</BtnLink>
+<BtnLink href="/guides/" tone="accent">Open guides</BtnLink>
+</BtnGroup>
+```
 
 ## Playground
 
@@ -36,8 +49,10 @@ The preview gives the group the full available width; this makes alignment visib
   tabVariant="underline"
 >
   <TabPane id="group-playground-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="group-playground" src="./group-playground.ts"/>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="group-playground-mdx" label="group-playground.mdx">
 ```html
 <RegorApp id="group-playground" src="./group-playground.ts"/>
@@ -169,6 +184,7 @@ Choose `start`, `center`, or `end`. BtnGroup is `inline-flex` and naturally fits
   tabVariant="underline"
 >
   <TabPane id="group-alignment-preview" label="Preview">
+<div class="component-preview-stage">
     <Flex direction="column">
       <div>
         <p>Start</p>
@@ -192,7 +208,8 @@ Choose `start`, `center`, or `end`. BtnGroup is `inline-flex` and naturally fits
         </BtnGroup>
       </div>
     </Flex>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="group-alignment-mdx" label="group-alignment.mdx">
 ```html
 <Flex direction="column">
@@ -235,6 +252,7 @@ Enable `:wrap="true"` when a group needs to fit a narrow container or translated
   tabVariant="underline"
 >
   <TabPane id="group-wrapping-preview" label="Preview">
+<div class="component-preview-stage">
     <Grid columns="1" columnsMd="2">
       <div>
         <p>Wrapping allowed</p>
@@ -253,7 +271,8 @@ Enable `:wrap="true"` when a group needs to fit a narrow container or translated
         </BtnGroup>
       </div>
     </Grid>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="group-wrapping-mdx" label="group-wrapping.mdx">
 ```html
 <Grid columns="1" columnsMd="2">
@@ -293,12 +312,14 @@ This compact navigation row uses a primary destination, a supporting destination
   tabVariant="underline"
 >
   <TabPane id="group-child-appearance-preview" label="Preview">
+<div class="component-preview-stage">
     <BtnGroup :wrap="true" role="group" aria-label="Component resources">
       <BtnLink href="/components/actions/buttons/" tone="accent" size="sm" icon="tabler:arrow-right" iconPosition="end">Start with buttons</BtnLink>
       <BtnLink href="/components/actions/badge/" size="sm" variant="outline">Explore badges</BtnLink>
       <BtnLink href="#api-reference" size="sm" variant="link">Group API</BtnLink>
     </BtnGroup>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="group-child-appearance-mdx" label="group-child-appearance.mdx">
 ```html
 <BtnGroup :wrap="true" role="group" aria-label="Component resources">
@@ -323,8 +344,10 @@ A complete stateful example: Bold and Italic change the text below, update their
   tabVariant="underline"
 >
   <TabPane id="formatting-controls-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="formatting-controls-demo" src="./formatting-controls.ts"/>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="formatting-controls-mdx" label="formatting-controls.mdx">
 ```html
 <RegorApp id="formatting-controls-demo" src="./formatting-controls.ts"/>
@@ -447,8 +470,10 @@ The icon-only overflow trigger is [BtnGroupDropDown](/components/actions/btn-gro
   tabVariant="underline"
 >
   <TabPane id="selection-toolbar-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="selection-toolbar-demo" src="./selection-toolbar.ts"/>
-  </TabPane>
+  </div>
+</TabPane>
   <TabPane id="selection-toolbar-mdx" label="selection-toolbar.mdx">
 ```html
 <RegorApp id="selection-toolbar-demo" src="./selection-toolbar.ts"/>
