@@ -227,8 +227,8 @@ Before a section is accepted, answer these questions.
 
 - Do commands exist in root or package `package.json`?
 - Do commands avoid running generated embed scripts as a reader prerequisite?
-- Is `tsgo` used instead of `tsc` for TypeScript package build/typecheck
-  language, except where a package script explicitly uses another tool?
+- Do TypeScript build and type-check commands use the stable TypeScript 7
+  `tsc` executable, except where a package script explicitly uses another tool?
 
 ### Status
 

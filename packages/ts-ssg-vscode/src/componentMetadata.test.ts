@@ -8,6 +8,25 @@ import {
 } from './componentMetadata'
 import { clearComponentResolverCaches } from './componentResolver'
 import { getComponentTagContextAtOffset } from './componentTagContext'
+import runtimeTs, {
+  getTypescriptRuntimePath,
+  setTypescriptWorkspaceRoots,
+} from './typescriptRuntime'
+
+const extensionRoot = path.resolve(__dirname, '..')
+setTypescriptWorkspaceRoots([extensionRoot])
+
+describe('TypeScript runtime', () => {
+  it('uses the bundled compiler API for a TypeScript 7 workspace', () => {
+    setTypescriptWorkspaceRoots([path.resolve(extensionRoot, '../..')])
+    try {
+      expect(getTypescriptRuntimePath()).toBe('bundled TypeScript 6')
+      expect(typeof runtimeTs.createSourceFile).toBe('function')
+    } finally {
+      setTypescriptWorkspaceRoots([extensionRoot])
+    }
+  })
+})
 
 describe('getComponentMetadata cache invalidation', () => {
   let isolatedWorkspaceRoot = ''

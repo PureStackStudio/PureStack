@@ -1,4 +1,8 @@
+import * as path from 'node:path'
 import { describe, expect, it, vi } from 'vitest'
+import { setTypescriptWorkspaceRoots } from './typescriptRuntime'
+
+setTypescriptWorkspaceRoots([path.resolve(__dirname, '..')])
 
 class TestPosition {
   constructor(

@@ -40,7 +40,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsgo",
+    "build": "tsc",
     "regor-components": "yarn tsx ../../scripts/regor-components.ts",
     "lint": "biome check ./src --formatter-enabled=false --write",
     "test": "vitest"

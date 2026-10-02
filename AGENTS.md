@@ -84,4 +84,4 @@ Do not edit generated files under `packages/ts-page-scripts/src/embed` manually.
 
 When page script source changes require regenerated embeds, update only the source and generator configuration, then tell the user to run the embed script manually.
 
-use tsgo instead of tsc to build typescript files. This repo uses typescript v7.
+Use the stable TypeScript 7 `tsc` command to build and type-check TypeScript files.

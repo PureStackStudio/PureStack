@@ -1,5 +1,6 @@
 import { createRequire } from 'node:module'
 import * as path from 'node:path'
+import bundledTs from 'typescript'
 import type * as TypeScript from 'typescript'
 
 type TypeScriptRuntime = typeof TypeScript
@@ -44,20 +45,27 @@ function loadTypescriptRuntime(): TypeScriptRuntime {
   if (cachedRuntime) return cachedRuntime
 
   const runtimePath = resolveWorkspaceTypescriptPath()
-  if (!runtimePath) {
-    throw new Error(
-      [
-        'Cannot resolve TypeScript from the current workspace.',
-        'Install typescript in the opened workspace before using PureStack Component Tools.',
-        `Workspace roots: ${workspaceRoots.length > 0 ? workspaceRoots.join(', ') : '(none)'}`,
-      ].join(' '),
-    )
+  if (runtimePath) {
+    const workspaceRequire = createRequire(runtimePath)
+    const workspaceRuntime = workspaceRequire(runtimePath) as TypeScriptRuntime
+    if (hasCompilerApi(workspaceRuntime)) {
+      cachedRuntime = workspaceRuntime
+      cachedRuntimePath = runtimePath
+      return cachedRuntime
+    }
   }
 
-  const workspaceRequire = createRequire(runtimePath)
-  cachedRuntime = workspaceRequire(runtimePath) as TypeScriptRuntime
-  cachedRuntimePath = runtimePath
+  cachedRuntime = bundledTs
+  cachedRuntimePath = 'bundled TypeScript 6'
   return cachedRuntime
+}
+
+function hasCompilerApi(runtime: TypeScriptRuntime) {
+  return (
+    typeof runtime.createSourceFile === 'function' &&
+    typeof runtime.createLanguageService === 'function' &&
+    typeof runtime.sys?.fileExists === 'function'
+  )
 }
 
 const ts = new Proxy({} as TypeScriptRuntime, {

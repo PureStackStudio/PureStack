@@ -31,7 +31,7 @@ import {
   isOffsetInsideSupportedTaggedTemplate,
 } from './templateFormatting'
 import runtimeTs, {
-  resolveWorkspaceTypescriptPath,
+  getTypescriptRuntimePath,
   setTypescriptWorkspaceRoots,
 } from './typescriptRuntime'
 
@@ -54,18 +54,7 @@ export function activate(context: vscode.ExtensionContext) {
   const workspaceRoots = getWorkspaceRootPaths()
   setTypescriptWorkspaceRoots(workspaceRoots)
 
-  const typescriptPath = resolveWorkspaceTypescriptPath()
-  if (!typescriptPath) {
-    outputChannel.appendLine(
-      [
-        '[typescript] Cannot resolve TypeScript from the current workspace.',
-        'PureStack Component Tools will stay inactive for this window.',
-        `Workspace roots: ${workspaceRoots.length > 0 ? workspaceRoots.join(', ') : '(none)'}`,
-      ].join('\n'),
-    )
-    context.subscriptions.push(outputChannel)
-    return
-  }
+  const typescriptPath = getTypescriptRuntimePath()
 
   outputChannel.appendLine(`[typescript] ${typescriptPath}`)
   setComponentMetadataDebugLogger((message) => {

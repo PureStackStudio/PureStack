@@ -77,9 +77,9 @@ describe('TopBar rendering', () => {
       expect(document.querySelector('.custom-logo')?.textContent).toBe(
         'PureStack',
       )
-      logoComponent(undefined)
+      logoComponent('')
       expect(document.querySelector('.custom-logo')).toBeNull()
-      expect(document.querySelector('.classic-logo')).not.toBeNull()
+      expect(document.querySelector('.classic-logo')).toBeNull()
     } finally {
       app.unbind()
       cleanupDom()

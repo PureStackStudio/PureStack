@@ -260,7 +260,7 @@ function getBanner(pkg: PackageJson) {
 }
 
 async function cleanDist(pkg: PublishPackage) {
-  await timeIt(`clean ${relative(pkg.distDir)}`, 'clean', async () => {
+  await timeIt(`clean ${relative(pkg.distDir)}`, '', async () => {
     const artifactFiles = pkg.entries.flatMap((entry) => [
       path.join(pkg.packageDir, entry.outputPath),
       path.join(pkg.packageDir, `${entry.outputPath}.map`),
@@ -318,7 +318,7 @@ async function bundlePackage(pkg: PublishPackage) {
   for (const pkgEntry of pkg.entries) {
     await timeIt(
       `build ${pkg.packageJson.name}:${pkgEntry.name}`,
-      'build',
+      '',
       async () => {
         const opts: InlineConfig = {
           name: pkg.packageJson.name,
@@ -340,7 +340,6 @@ async function bundlePackage(pkg: PublishPackage) {
           },
           dts: pkgEntry.typePath
             ? {
-                tsgo: true,
                 tsconfig: generatedTsconfigPath,
                 sourcemap: true,
               }
@@ -432,7 +431,7 @@ function addBanner(banner: string) {
 }
 
 async function verifyPackage(pkg: PublishPackage) {
-  await timeIt(`verify ${pkg.packageJson.name}`, 'verify', async () => {
+  await timeIt(`verify ${pkg.packageJson.name}`, '', async () => {
     for (const entry of pkg.entries) {
       await assertFile(pkg, entry.outputPath)
       await assertFile(pkg, `${entry.outputPath}.map`)
@@ -478,7 +477,7 @@ async function main() {
   const packages = publishPackages.map(toPublishPackage)
 
   try {
-    await timeIt('total', 'total', async () => {
+    await timeIt('total', '', async () => {
       for (const pkg of packages) {
         await validatePackage(pkg)
         await cleanDist(pkg)

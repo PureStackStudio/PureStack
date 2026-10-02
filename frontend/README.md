@@ -155,7 +155,7 @@ these require attention before treating the documentation as release-ready.
 ## Type checking
 
 ```sh
-yarn tsgo -p frontend/tsconfig.json --noEmit
+yarn tsc -p frontend/tsconfig.json --noEmit
 ```
 
 Landing-page verification covered all workbench tabs, arrow/Home/End keys, counter

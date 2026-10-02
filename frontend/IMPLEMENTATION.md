@@ -42,7 +42,7 @@ Browser verification found existing shared-framework accessibility issues:
 These are recorded for a shared-component accessibility pass. The pilot does
 not hide them behind page-specific replacements or runtime patches.
 
-Verification passed: tsgo, the local production build, live button controls and
+Verification passed: TypeScript type checking, the local production build, live button controls and
 form reset, stateful tabs, ModalStore actions, dialog events/focus restoration,
 all dialog sizes and motion directions, nested dialogs, native code copying,
 TOC targets, 320–1920px layout checks, mobile navigation, and the existing
@@ -101,7 +101,7 @@ It does not require changes to generated embeds or framework APIs.
 
 ## Verification plan
 
-Build the site through the project runner and SSG API, check the frontend with `tsgo`, inspect
+Build the site through the project runner and SSG API, check the frontend with `tsc`, inspect
 desktop/mobile browser screenshots, and exercise navigation, copy controls,
 tabs, and reactive examples. Check semantic accessibility, reduced motion,
 JavaScript-disabled rendering, internal links, metadata, and publish output.

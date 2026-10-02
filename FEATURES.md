@@ -256,7 +256,7 @@ This inventory summarizes the package capabilities currently visible in the repo
 
 ## Build and Tooling Scripts
 
-- TypeScript 7 native preview dependency.
+- Stable TypeScript 7 compiler dependency.
 - Yarn 4 workspaces.
 - Vite config.
 - Biome formatting and checking.

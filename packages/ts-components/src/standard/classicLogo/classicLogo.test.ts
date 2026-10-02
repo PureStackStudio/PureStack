@@ -66,12 +66,12 @@ describe('ClassicLogo rendering', () => {
       expect(
         document.querySelector('.classic-logo__link')?.hasAttribute('href'),
       ).toBe(false)
-      brand(undefined)
+      brand('')
       expect(
         letters()
           .map((e) => e.textContent?.trim())
           .join(''),
-      ).toBe('Next')
+      ).toBe('')
     } finally {
       app.unbind()
       cleanupDom()

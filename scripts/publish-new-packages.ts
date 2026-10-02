@@ -195,7 +195,7 @@ function parseArgs(args: string[]): PublishOptions {
     publish: false,
     registry: 'https://registry.npmjs.org',
     tag: 'latest',
-    provenance: true,
+    provenance: false,
   }
 
   for (let index = 0; index < args.length; index += 1) {
@@ -211,6 +211,9 @@ function parseArgs(args: string[]): PublishOptions {
       case '--tag':
         options.tag = requireArg(args, index)
         index += 1
+        break
+      case '--provenance':
+        options.provenance = true
         break
       case '--no-provenance':
         options.provenance = false
@@ -245,7 +248,8 @@ Run yarn bundle && yarn package before --publish.
 Options:
   --registry <url>     npm registry URL. Defaults to https://registry.npmjs.org
   --tag <tag>          npm dist-tag. Defaults to latest
-  --no-provenance      Do not pass npm --provenance
+  --provenance         Add npm provenance (supported cloud CI only)
+  --no-provenance      Do not pass npm --provenance (default)
 `)
 }
 

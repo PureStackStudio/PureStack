@@ -31,7 +31,7 @@ The existing Btn, BtnLink, BtnGroup, BtnGroupDropDown, Badge, Tabs and Modal gui
 
 1. Replace the first-collection catalog with grouped, complete links and concise descriptions.
 2. Verify every public registered component has a guide and every registered prop has an API entry.
-3. Format and type-check all sample entry points with Biome and tsgo.
+3. Format and type-check all sample entry points with Biome and TypeScript 7.
 4. Build the complete site; verify all routes, fragments, sample bundles and source tabs.
 5. Exercise interactive samples in a browser, including empty/disabled states and keyboard controls.
 6. Review representative desktop/mobile screenshots in light and dark, then resolve overflow or hierarchy problems.
@@ -44,7 +44,7 @@ Group guides into `actions`, `layout`, `forms`, `data`, `landing`, `site` and `r
 
 - Source inventory and contract review: complete. The catalog covers 67 public components and browser entry points.
 - Guide implementation: complete, with 60 new individual guides and colocated source files.
-- Type checking with tsgo and Biome checks: passed.
+- Type checking with TypeScript and Biome checks: passed.
 - Isolated SSG build after categorization: passed for 76 content pages; all 39 generated script references resolve to files.
 - Browser review: all 60 new guides checked in light and dark at 1440px and 390px. No horizontal page overflow, duplicate IDs, broken local fragments or runtime exceptions were found by the checks.
 - Source fidelity after categorization: 177 sample source tabs across all component guides match their rendered code and associated TypeScript files.

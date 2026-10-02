@@ -1,5 +1,5 @@
 import { createDom, ensureDomGlobals } from '@purestack/ts-minidom'
-import { createApp, defineComponent, observe, ref } from 'regor'
+import { type Component, createApp, defineComponent, observe, ref } from 'regor'
 import { describe, expect, it, vi } from 'vitest'
 import { createTestContext } from '../../test/testContext'
 import {
@@ -65,16 +65,21 @@ describe('variable row measurements', () => {
       throw new Error('Measurement did not settle')
     }
     let context: VariableVirtualList | VariableVirtualTable | undefined
+    const recordContext = <T extends VariableVirtualList | VariableVirtualTable>(
+      candidate: Component<T>,
+    ) => {
+      const original = candidate.context
+      candidate.context = (head) => {
+        const resolved = original(head)
+        context = resolved
+        return resolved
+      }
+      return candidate
+    }
     const component =
       kind === 'list'
-        ? defineVirtualListComponents().variableVirtualList
-        : defineVariableVirtualTableComponents().variableVirtualTable
-    const original = component.context
-    component.context = (head) => {
-      const resolved = original(head)
-      context = resolved
-      return resolved
-    }
+        ? recordContext(defineVirtualListComponents().variableVirtualList)
+        : recordContext(defineVariableVirtualTableComponents().variableVirtualTable)
     const viewportHeight = ref(160)
     let rowMounts = 0
     const app = createApp(

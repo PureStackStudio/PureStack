@@ -4,7 +4,7 @@ const green = (s: string) => `\x1b[32m${s}\x1b[0m`
  * Measure and log how long `fn` takes.
  *
  * @param label - A short label (e.g. "cleanDist")
- * @param emoji - An emoji to prefix the log line
+ * @param emoji - An optional emoji to prefix the log line
  * @param fn - A sync or async function to time
  * @returns Whatever `fn` returns
  */
@@ -18,7 +18,7 @@ export async function timeIt<T>(
   const [sec, nanosec] = process.hrtime(start)
 
   // Print prefix without newline
-  process.stdout.write(`${emoji} ${label}: `)
+  process.stdout.write(`${emoji ? `${emoji} ` : ''}${label}: `)
 
   // Format ms or s
   let formatted: string
