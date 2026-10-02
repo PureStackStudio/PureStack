@@ -1,0 +1,282 @@
+---
+title: Icons
+description: Find icon names, place icons in pages and components, set them in navigation and site config, and register them in browser apps.
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 39
+  icon: tabler:icons
+---
+
+# Icons
+
+PureStack includes about 11,000 SVG icons from four open-source sets. You refer to each icon by a string name, and the same name works in MDX, component props, navigation, and the site configuration. The build inlines the icon's SVG markup in the page, so icons need no icon font, sprite sheet, or extra request.
+
+<Flex wrap="true" align="center" class="fs-h3">
+  <Icon name="tabler:rocket" aria-hidden="true" />
+  <Icon name="lucide:search" aria-hidden="true" />
+  <Icon name="iconoir:code" aria-hidden="true" />
+  <Icon name="phosphor:acorn" aria-hidden="true" />
+  <Icon name="tabler:heart-filled" aria-hidden="true" class="tone--danger tone-text" />
+  <Icon name="tabler:shield-check" aria-hidden="true" class="tone--success tone-text" />
+  <Icon name="tabler:sparkles" aria-hidden="true" class="tone--accent tone-text" />
+</Flex>
+
+## Name an icon
+
+An icon name is the collection, a colon, and the icon's name in that collection:
+
+```text
+tabler:rocket
+lucide:search
+iconoir:code
+phosphor:acorn
+```
+
+| Collection | Prefix | Icons | Variants |
+| --- | --- | --- | --- |
+| [Tabler](https://tabler.io/icons) | `tabler:` | 6,092 | Outline. Add `-filled` for the solid version, such as `tabler:heart-filled`. |
+| [Lucide](https://lucide.dev/icons/) | `lucide:` | 1,702 | Outline only. |
+| [Iconoir](https://iconoir.com/) | `iconoir:` | 1,671 | Outline. Add `-solid` where a solid version exists, such as `iconoir:check-circle-solid`. |
+| [Phosphor](https://phosphoricons.com/) | `phosphor:` | 1,512 | Regular weight only. |
+
+Each set has its own stroke weight and corner style. Pick one set for most of the interface so that icons look consistent. Use a second set only when the first one does not have the symbol you need. This site uses Tabler for navigation and Lucide inside components.
+
+## Find a valid name
+
+Icon names must match exactly. Browse a collection's website to find a symbol, then confirm the name in the list that PureStack ships. Use the generated file for that collection:
+
+```text
+packages/ts-svg-icons/src/tabler.generated.ts
+packages/ts-svg-icons/src/lucide.generated.ts
+packages/ts-svg-icons/src/iconoir.generated.ts
+packages/ts-svg-icons/src/phosphor.generated.ts
+```
+
+These files list names only. Collection websites can show icons that are newer than the version PureStack bundles, so treat the generated list as the source of truth. In TypeScript, the `AvailableIconNames` type autocompletes every name.
+
+When a page uses a name that does not exist, the build continues. The icon is left out of the page, and the build logs `Unknown icon: <name>`. Check the build output after you change icon names. An unknown `favicon` name works differently and stops the build.
+
+## Place an icon in a page
+
+`Icon` renders one icon as an inline element. You can use it anywhere in MDX:
+
+<Flex align="center">
+  <Icon name="lucide:check" aria-hidden="true" />
+  <span>Checks passed</span>
+</Flex>
+
+```mdx
+<Flex align="center">
+  <Icon name="lucide:check" aria-hidden="true" />
+  <span>Checks passed</span>
+</Flex>
+```
+
+### Size follows the text
+
+An icon is 1.7 times the current font size and stays square. To resize it, change the font size of the icon or its container with a type class. You do not need to set a width:
+
+<Flex wrap="true" align="center">
+  <span class="fs-sm"><Icon name="tabler:bolt" aria-hidden="true" /></span>
+  <span class="fs-body"><Icon name="tabler:bolt" aria-hidden="true" /></span>
+  <span class="fs-h3"><Icon name="tabler:bolt" aria-hidden="true" /></span>
+  <span class="fs-h1"><Icon name="tabler:bolt" aria-hidden="true" /></span>
+</Flex>
+
+```mdx
+<span class="fs-sm"><Icon name="tabler:bolt" aria-hidden="true" /></span>
+<span class="fs-h1"><Icon name="tabler:bolt" aria-hidden="true" /></span>
+```
+
+### Color follows the text
+
+Icons are drawn in the current text color, so an icon matches the label beside it, including in dark mode. To give an icon its own color, choose a tone and apply `tone-text`. Use this to reinforce meaning, not to decorate:
+
+<Flex wrap="true" align="center" class="fs-h3">
+  <Icon name="tabler:circle-check" aria-hidden="true" class="tone--success tone-text" />
+  <Icon name="tabler:info-circle" aria-hidden="true" class="tone--info tone-text" />
+  <Icon name="tabler:alert-triangle" aria-hidden="true" class="tone--warning tone-text" />
+  <Icon name="tabler:lock" aria-hidden="true" class="tone--danger tone-text" />
+</Flex>
+
+```mdx
+<Icon name="tabler:circle-check" aria-hidden="true" class="tone--success tone-text" />
+<Icon name="tabler:alert-triangle" aria-hidden="true" class="tone--warning tone-text" />
+```
+
+The [Semantic tones guide](/guides/semantic-tones/) explains the other tones and the `tone-*` classes.
+
+### Make the meaning available to everyone
+
+Every icon is hidden from assistive technology by default. Decide what a screen reader should announce in each case:
+
+- **Next to visible text**, the text already gives the meaning. Add `aria-hidden="true"` to the icon so the icon stays hidden.
+- **On its own**, the icon has to carry the meaning. Put it inside an element with `role="img"` and an `aria-label` that describes the meaning, not the shape.
+- **As an action**, use a button, not a clickable icon. Read the [buttons and links](#buttons-and-links) section below.
+
+A standalone icon with its meaning on the wrapper:
+
+<span role="img" aria-label="Verified publisher" class="fs-h3 tone--success tone-text">
+  <Icon name="tabler:shield-check" aria-hidden="true" />
+</span>
+
+```mdx
+<span role="img" aria-label="Verified publisher" class="fs-h3 tone--success tone-text">
+  <Icon name="tabler:shield-check" aria-hidden="true" />
+</span>
+```
+
+## Frame an icon
+
+`IconFrame` places an icon on a tone-colored tile. It works well as the lead symbol of a card, metric, or status summary. The tile takes `tone`, `variant`, and `size` (`sm`, `md`, or `lg`):
+
+<Flex wrap="true" align="center">
+  <IconFrame name="tabler:rocket" tone="accent" size="lg" aria-hidden="true" />
+  <IconFrame name="tabler:shield-check" tone="success" variant="surface" size="lg" aria-hidden="true" />
+  <IconFrame name="tabler:bell" tone="warning" variant="surface" size="lg" aria-hidden="true" />
+  <IconFrame name="tabler:sparkles" tone="feature" variant="flat" size="lg" aria-hidden="true" />
+</Flex>
+
+```mdx
+<IconFrame name="tabler:rocket" tone="accent" size="lg" aria-hidden="true" />
+<IconFrame name="tabler:shield-check" tone="success" variant="surface" size="lg" aria-hidden="true" />
+```
+
+The [IconFrame reference](/components/layout/icon-frame/) lists every variant.
+
+## Icons in components
+
+Many components accept icon names as props and render them with `Icon`. You choose the symbol, and the component handles size, color, and spacing.
+
+### Buttons and links
+
+`Btn`, `BtnLink`, and `BtnGroup` accept `icon`. Set `iconPosition="end"` for icons that show direction:
+
+<Flex wrap="true" align="center">
+  <Btn tone="accent" icon="tabler:plus">Create project</Btn>
+  <Btn tone="neutral" variant="surface" icon="tabler:arrow-right" iconPosition="end">Continue</Btn>
+  <Btn tone="neutral" variant="surface" icon="tabler:settings" :iconOnly="true" ariaLabel="Open settings"/>
+</Flex>
+
+```mdx
+<Btn tone="accent" icon="tabler:plus">Create project</Btn>
+<Btn tone="neutral" variant="surface" icon="tabler:arrow-right" iconPosition="end">Continue</Btn>
+<Btn tone="neutral" variant="surface" icon="tabler:settings" :iconOnly="true" ariaLabel="Open settings"/>
+```
+
+An icon-only button always needs `ariaLabel`. The label is the button's accessible name, and screen readers announce it. Name the action, such as "Open settings", not the symbol. Use an icon-only button only when the symbol is widely recognized.
+
+### Form fields
+
+`FormInputField` places `icon` at the start of the field and `iconEnd` at the end. The icon adds a visual hint, so the field still needs its label:
+
+```mdx
+<FormInputField id="email" label="Email" type="email" icon="lucide:mail" />
+```
+
+Other components also take icon props, including `AlertBox`, `ExpandablePanel`, `Tabs`, the autocomplete inputs, `DropFiles`, the landing cards, and the pricing components. Each [component page](/components/) lists its icon props and their defaults.
+
+## Navigation and site identity
+
+### Navigation icons
+
+Each page can set its own icon in the sidebar with frontmatter:
+
+```yaml
+nav:
+  order: 39
+  icon: tabler:icons
+```
+
+A folder's `_nav.json` can set icons for several entries at once. The keys are file names, folder names that end in `/`, or the `id` of a custom item:
+
+```json
+{
+  "icons": {
+    "index.mdx": "tabler:home",
+    "usage/": "tabler:book",
+    "usage/transactions.mdx": "tabler:database",
+    "github": "tabler:brand-github"
+  },
+  "items": [
+    { "id": "github", "title": "GitHub", "url": "https://github.com/example/project" }
+  ]
+}
+```
+
+If both set an icon for the same page, the `_nav.json` entry wins over the frontmatter.
+
+### Favicon and logo
+
+In `siteConfig.json`, `favicon` and `logo.icon` take icon names:
+
+```json
+{
+  "favicon": "tabler:stack-2",
+  "logo": {
+    "brand": "Acme",
+    "icon": "tabler:stack-2"
+  }
+}
+```
+
+The build turns `favicon` into `assets/favicon.svg` and colors it with your theme's dark accent. A favicon must be clear at 16 pixels, so choose a simple, bold shape. The [site configuration guide](/guides/site-config/) covers the other logo settings.
+
+## Icons in browser apps
+
+The steps above apply to pages that the build renders. An app that you mount with [RegorApp](/components/runtime/regor-app/) runs in the browser. There, the full icon list would be too large to send, so each app registers only the icons it uses.
+
+Every icon is also available as a named export. To get the export name, take the icon name and replace the colon and every hyphen with an underscore. For example, `tabler:plus` becomes `tabler_plus`, and `tabler:heart-filled` becomes `tabler_heart_filled`. Import the exports you need, map them back to their names, and give `defineIconComponents` a function that looks the icons up:
+
+```ts
+import {
+  defineButtonComponents,
+  defineFormSelectField,
+  defineIconComponents,
+} from '@purestack/ts-components'
+import {
+  lucide_chevron_down,
+  tabler_arrow_right,
+  tabler_plus,
+} from '@purestack/ts-svg-icons'
+import { createApp, html } from 'regor'
+
+const icons: Record<string, string> = {
+  'lucide:chevron-down': lucide_chevron_down,
+  'tabler:arrow-right': tabler_arrow_right,
+  'tabler:plus': tabler_plus,
+}
+
+createApp(
+  {
+    components: {
+      ...defineButtonComponents(),
+      ...defineFormSelectField(),
+      ...defineIconComponents((name) => {
+        if (!icons[name]) throw new Error(`Icon is not registered: ${name}`)
+        return icons[name]
+      }),
+    },
+  },
+  { selector: 'app#project-app', template: html`<ProjectApp/>` },
+)
+```
+
+Bundlers include only the icons you import. Do not import `getSvgIcon` in browser code, because it includes every icon in the bundle.
+
+The lookup function throws for an unregistered name, so a missing icon causes an error during development instead of leaving an empty space. Register the icons that you pass to components and the default icons that components draw themselves. If you leave a default unregistered, that part of the component appears without its icon:
+
+| Component | Default icons |
+| --- | --- |
+| `FormSelectField`, `BtnGroup` drop-down | `lucide:chevron-down` |
+| Autocomplete inputs | `lucide:chevron-down`, `lucide:loader-circle` while loading, `lucide:x` to remove a choice |
+| `DropFiles` | `lucide:cloud-upload`, `lucide:file`, `lucide:trash-2`, and `lucide:file-image`, `lucide:file-text`, or `lucide:file-archive` for common file types |
+| `SignIn` | `lucide:log-in`, `tabler:user-filled` |
+| Comparison and pricing features | `lucide:check`, `iconoir:check` |
+| `Composer` toolbar | `lucide:bold`, `lucide:italic`, `lucide:underline`, `tabler:align-left`, `tabler:align-center`, `tabler:align-right`, `lucide:list`, `lucide:list-ordered`, `lucide:link`, `lucide:eraser`, `lucide:code` |
+
+Setting your own icon prop replaces the default, so you only need to register the icon that you set.
