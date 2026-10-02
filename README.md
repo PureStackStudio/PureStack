@@ -123,6 +123,8 @@ and DOM support.
 
 ## Develop this repository
 
+See [Contributing](CONTRIBUTING.md) for the branch, pull request, CI, and publishing workflow.
+
 This is a Yarn 4 workspace. Run commands from the repository root:
 
 ```sh

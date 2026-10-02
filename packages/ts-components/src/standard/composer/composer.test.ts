@@ -29,7 +29,8 @@ describe('Composer', () => {
       },
     )
     try {
-      const editor = document.querySelector<HTMLElement>('.composer__editor')!
+      const editor = document.querySelector<HTMLElement>('.composer__editor')
+      if (!editor) throw new Error('Composer editor was not rendered')
       expect(editor.textContent).toBe('Original draft')
 
       messageHtml(

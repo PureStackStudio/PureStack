@@ -2,7 +2,8 @@ import { readdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import ts from 'typescript'
+// TypeScript 7 supplies tsc; this generator needs the JavaScript AST API.
+import ts from 'typescript-parser'
 
 interface PackageJson extends Record<string, unknown> {
   regorComponents?: unknown

@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Checks (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+          package-manager-cache: false
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Check line endings
+        run: yarn check-eol
+
+      - name: Lint without changing files
+        run: yarn lint:ci
+
+      - name: Type-check packages
+        run: yarn build
+
+      - name: Type-check VS Code extension with root TypeScript
+        run: yarn exec tsc -p packages/ts-ssg-vscode/tsconfig.json --noEmit
+
+      - name: Test
+        run: yarn test:ci
+
+      - name: Bundle distributable packages
+        if: runner.os == 'Linux'
+        run: yarn bundle
+
+      - name: Pack distributable packages
+        if: runner.os == 'Linux'
+        run: yarn package

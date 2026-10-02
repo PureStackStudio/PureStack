@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process'
-import { readdirSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 
 const root = process.cwd()
@@ -18,13 +18,13 @@ const ignoredDirectories = new Set([
 ])
 const crlf = Buffer.from('\r\n')
 
-function isGitRepository(directory) {
+function isGitRepository(directory: string): boolean {
   return readdirSync(directory, { withFileTypes: true }).some(
     (entry) => entry.name === '.git' && (entry.isDirectory() || entry.isFile()),
   )
 }
 
-function isTextContent(content) {
+function isTextContent(content: Buffer): boolean {
   for (const byte of content.subarray(0, 8000)) {
     if (byte === 0) {
       return false
@@ -34,7 +34,7 @@ function isTextContent(content) {
   return true
 }
 
-function* findGitRepositories(directory) {
+function* findGitRepositories(directory: string): Generator<string> {
   if (isGitRepository(directory)) {
     yield directory
   }
@@ -54,13 +54,15 @@ function* findGitRepositories(directory) {
   }
 }
 
-function listTrackedFiles(repository) {
+function listTrackedFiles(repository: string): string[] {
   return execFileSync('git', ['-C', repository, 'ls-files', '-z'], {
     encoding: 'utf8',
   })
     .split('\0')
     .filter(Boolean)
     .map((file) => path.join(repository, file))
+    // Deleted files remain in the index until their deletion is staged.
+    .filter((file) => existsSync(file))
 }
 
 const files = [...findGitRepositories(root)].flatMap(listTrackedFiles)

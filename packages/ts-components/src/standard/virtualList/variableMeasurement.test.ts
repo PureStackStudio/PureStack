@@ -146,15 +146,18 @@ describe('variable row measurements', () => {
       expect(total()).toBeGreaterThan(beforeResize)
       expect(context?.visibleRows?.()[0]).toBe(firstRow)
       const emittedSizes: number[] = []
-      const stop = observe(context!.visibleRows!, (rows) => {
+      const visibleRows = context?.visibleRows
+      const viewport = context?.viewportElement?.()
+      if (!visibleRows || !viewport)
+        throw new Error('Virtual rows and viewport were not initialized')
+      const stop = observe(visibleRows, (rows) => {
         emittedSizes.push(rows.length)
       })
-      const viewport = context!.viewportElement!()!
       for (const position of [1000000, 1900000, 200000, 0]) {
         const beforeJump = rowMounts
         viewport.scrollTop = position
         viewport.dispatchEvent(new Event('scroll'))
-        expect(context!.visibleRows!().length).toBeLessThan(20)
+        expect(visibleRows().length).toBeLessThan(20)
         expect(rowMounts - beforeJump).toBeLessThan(40)
       }
       stop()

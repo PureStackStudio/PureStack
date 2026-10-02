@@ -73,7 +73,11 @@ describe('SiteLogo', () => {
       },
     )
     try {
-      const logo = () => document.querySelector<HTMLElement>('.site-logo')!
+      const logo = () => {
+        const element = document.querySelector<HTMLElement>('.site-logo')
+        if (!element) throw new Error('Site logo was not rendered')
+        return element
+      }
       expect(logo().textContent).toContain('First Brand')
       expect(logo().getAttribute('aria-label')).toBe('Custom accessible name')
       config({
