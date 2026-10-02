@@ -20,7 +20,7 @@ describe('TopBar rendering', () => {
     const cleanupDom = createDom(
       '<html><body><div id="app"></div></body></html>',
     )
-    const logoComponent = ref<string | undefined>(undefined)
+    const logoComponent = ref<string | null>(null)
     const app = createApp(
       {
         components: {

@@ -1,6 +1,8 @@
 # @purestack/ts-util
 
-Shared utility helpers extracted from PureStack.
+Small, browser-safe helpers shared across PureStack packages. Exports include
+HTML escaping, object merging, value and type checks, caching, and URL and asset
+path handling.
 
-This package should stay browser-safe. Do not add Node-only dependencies such as
-`node:path`, `node:fs`, or other `node:` imports here.
+Use `escapeHtml`, `merge`, `normalizeBasePath`, or the other named exports when
+building on PureStack without pulling in Node.js APIs.

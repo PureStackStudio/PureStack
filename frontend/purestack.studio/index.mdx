@@ -563,10 +563,11 @@ card.<span class="syntax-blue">toCSS</span>()</code></pre>
       RegorApp or PageScript. PureStack bundles that entry point and its
       dependencies for the browser.
     </StudioFaq>
-    <StudioFaq title="Is this React MDX?">
-      PureStack uses Regor MDX: Markdown with Regor components and directives.
-      You can use the familiar .mdx extension or the explicit .rmdx extension.
-      React components are not interchangeable with Regor components.
+    <StudioFaq title="Can I use the same components in pages and apps?">
+      Yes. Regor renders components and directives in MDX to static HTML during
+      the build, and powers interactive apps in the browser. Your own components
+      can work in both places; browser apps register the built-in and custom
+      components they use. <a href="/guides/regor/">See the Regor guide</a>.
     </StudioFaq>
     <StudioFaq title="Do I need a particular backend or host?">
       No. PureStack produces static HTML, CSS, and browser assets that you can
