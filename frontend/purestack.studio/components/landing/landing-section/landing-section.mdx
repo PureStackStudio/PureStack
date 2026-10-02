@@ -13,13 +13,7 @@ nav:
 
 # Landing<wbr/>Section
 
-Introduce a section and arrange its content beside a clear heading at larger breakpoints.
-
-<Badge tone="accent" variant="surface">LandingSection</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="LandingSection" kind="Section rhythm" summary="Introduce a section and arrange its content beside a clear heading at larger breakpoints." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts" section="Landing &amp; pricing" sectionHref="/components/landing/"/>
 
 ## Heading and feature
 
@@ -27,6 +21,8 @@ The heading counts as a grid item. At lg, it shares the row with the feature car
 
 <Tabs group="landing-section-sample-1" selectedTab="landing-section-sample-1-preview" ariaLabel="Heading and feature example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="landing-section-sample-1-preview" label="Preview">
+<ComponentExample label="LandingSection in context" caption="Compare the composition, then open its source tab to adapt it.">
+
     <LandingSection
       eyebrow="WORKFLOW"
       title="From source to interface"
@@ -41,6 +37,8 @@ The heading counts as a grid item. At lg, it shares the row with the feature car
         icon="lucide:check"
       />
     </LandingSection>
+
+</ComponentExample>
   </TabPane>
   <TabPane id="landing-section-sample-1-source-0" label="split-section.mdx">
 ```html
@@ -68,13 +66,16 @@ Omit the text props when the surrounding page already introduces the section.
 
 <Tabs group="landing-section-sample-2" selectedTab="landing-section-sample-2-preview" ariaLabel="Content without a heading example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="landing-section-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
+
     <LandingSection variant="surface" tone="neutral">
       <Grid columns="1" columnsSm="2">
         <Panel variant="outline" bodyClass="p-3">Write content in MDX.</Panel>
         <Panel variant="outline" bodyClass="p-3">Add interactivity where it helps.</Panel>
       </Grid>
     </LandingSection>
-  </TabPane>
+
+</div>  </TabPane>
   <TabPane id="landing-section-sample-2-source-0" label="content-section.mdx">
 ```html
 <LandingSection variant="surface" tone="neutral">
@@ -86,6 +87,71 @@ Omit the text props when the surrounding page already introduces the section.
 ```
   </TabPane>
 </Tabs>
+
+## All ten semantic tones
+
+The same composition in every semantic tone. Child tones are explicit where the composition owns them, including navigation actions.
+
+<ComponentExample label="All ten semantic tones" caption="Switch the site theme to compare the same samples in both palettes.">
+<div data-landing-gallery="tone"><LandingAppearanceGallery component="LandingSection" axis="tone"/></div>
+</ComponentExample>
+
+## All eighteen visual variants
+
+Every supported variant is shown in accent, including none. Variant controls the outer treatment; nested content may use its own treatment.
+
+<ComponentExample label="All eighteen visual variants" caption="Switch the site theme to compare the same samples in both palettes.">
+<div data-landing-gallery="variant"><LandingAppearanceGallery component="LandingSection" axis="variant"/></div>
+</ComponentExample>
+
+## Both variant modes
+
+Hover these outlineFill examples to compare stateless and stateful treatments. Stateful styling adds interaction states; it does not turn a container into a button.
+
+<ComponentExample label="Both variant modes" caption="Switch the site theme to compare the same samples in both palettes.">
+<div data-landing-gallery="mode"><LandingAppearanceGallery component="LandingSection" axis="mode"/></div>
+</ComponentExample>
+
+## Heading semantics and alignment
+
+Choose the heading element to match the surrounding document. Every titleTag is rendered below with identical visual sizing; semantics and appearance are separate.
+
+<ComponentExample label="All nine title tags" caption="Use h1 only for a page title. Non-heading tags do not create document headings.">
+<div class="component-appearance-grid landing-title-tags">
+<div class="component-appearance-cell"><code>h1</code><LandingSection title="A clear chapter" titleTag="h1" variant="none"><p class="m-0">Supporting content</p></LandingSection></div>
+<div class="component-appearance-cell"><code>h2</code><LandingSection title="A clear chapter" titleTag="h2" variant="none"><p class="m-0">Supporting content</p></LandingSection></div>
+<div class="component-appearance-cell"><code>h3</code><LandingSection title="A clear chapter" titleTag="h3" variant="none"><p class="m-0">Supporting content</p></LandingSection></div>
+<div class="component-appearance-cell"><code>h4</code><LandingSection title="A clear chapter" titleTag="h4" variant="none"><p class="m-0">Supporting content</p></LandingSection></div>
+<div class="component-appearance-cell"><code>h5</code><LandingSection title="A clear chapter" titleTag="h5" variant="none"><p class="m-0">Supporting content</p></LandingSection></div>
+<div class="component-appearance-cell"><code>h6</code><LandingSection title="A clear chapter" titleTag="h6" variant="none"><p class="m-0">Supporting content</p></LandingSection></div>
+<div class="component-appearance-cell"><code>p</code><LandingSection title="A clear chapter" titleTag="p" variant="none"><p class="m-0">Supporting content</p></LandingSection></div>
+<div class="component-appearance-cell"><code>div</code><LandingSection title="A clear chapter" titleTag="div" variant="none"><p class="m-0">Supporting content</p></LandingSection></div>
+<div class="component-appearance-cell"><code>span</code><LandingSection title="A clear chapter" titleTag="span" variant="none"><p class="m-0">Supporting content</p></LandingSection></div>
+</div>
+</ComponentExample>
+
+## Grid alignment
+
+<ComponentExample label="Place the heading beside the content" caption="columnsLg takes a count or CSS track definition; narrow screens keep one column.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>start</code><LandingSection title="Build together" titleTag="h3" columnsLg="minmax(0, 1fr) minmax(0, 1fr)" alignItems="start"><Panel tone="info" class="p-3"><p>More room for a supporting story.</p><p>Compare how the heading aligns.</p></Panel></LandingSection></div>
+<div class="component-appearance-cell"><code>center</code><LandingSection title="Build together" titleTag="h3" columnsLg="minmax(0, 1fr) minmax(0, 1fr)" alignItems="center"><Panel tone="info" class="p-3"><p>More room for a supporting story.</p><p>Compare how the heading aligns.</p></Panel></LandingSection></div>
+<div class="component-appearance-cell"><code>end</code><LandingSection title="Build together" titleTag="h3" columnsLg="minmax(0, 1fr) minmax(0, 1fr)" alignItems="end"><Panel tone="info" class="p-3"><p>More room for a supporting story.</p><p>Compare how the heading aligns.</p></Panel></LandingSection></div>
+<div class="component-appearance-cell"><code>stretch</code><LandingSection title="Build together" titleTag="h3" columnsLg="minmax(0, 1fr) minmax(0, 1fr)" alignItems="stretch"><Panel tone="info" class="p-3"><p>More room for a supporting story.</p><p>Compare how the heading aligns.</p></Panel></LandingSection></div>
+</div>
+</ComponentExample>
+
+## Feature map
+
+| Public feature | Visible example |
+| --- | --- |
+| tone, variant, variantMode | Complete galleries above, with all supported values visible together. |
+| eyebrow, title, subtitle | The context example and tone gallery show the complete heading; the original content-only example omits it. |
+| titleTag | All nine supported elements are rendered in the heading-semantics comparison. |
+| columns, columnsLg | The original heading-and-feature example uses a column count; the alignment comparison uses explicit CSS tracks. The heading occupies its own grid cell. |
+| alignItems | Start, center, end, and stretch are shown together. |
+| Default slot | Place cards, badges, or any supporting composition after the heading. |
+| Native attributes and events | Pass attributes through the root; keyboard behavior belongs to the composed native controls. |
 
 ## Behavior and accessibility
 
@@ -156,8 +222,6 @@ Use titleTag to fit the heading into the document. The base layout is always one
 <div class="api-contract">
 <p><strong>Default slot:</strong> section grid items after the optional header. Register defineLandingSectionComponent plus Panel, Grid and SectionHeader.</p>
 </div>
-
-
 
 ## Related components
 

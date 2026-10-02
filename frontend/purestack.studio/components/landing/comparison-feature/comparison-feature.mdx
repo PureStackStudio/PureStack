@@ -13,13 +13,7 @@ nav:
 
 # Comparison<wbr/>Feature
 
-A list item with a compact icon, designed for clear and consistent comparison details.
-
-<Badge tone="accent" variant="surface">ComparisonFeature</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="ComparisonFeature" kind="Comparison detail" summary="A list item with a compact icon, designed for clear and consistent comparison details." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts" section="Landing &amp; pricing" sectionHref="/components/landing/"/>
 
 ## A readable feature list
 
@@ -27,12 +21,16 @@ Every feature is an li, so place it inside a list.
 
 <Tabs group="comparison-feature-sample-1" selectedTab="comparison-feature-sample-1-preview" ariaLabel="A readable feature list example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="comparison-feature-sample-1-preview" label="Preview">
+<ComponentExample label="ComparisonFeature in context" caption="Compare the composition, then open its source tab to adapt it.">
+
     <ul class="pl-0">
       <ComparisonFeature tone="success">Keyboard-operable controls</ComparisonFeature>
       <ComparisonFeature tone="info" icon="lucide:mail">
         Email integration supplied by your application
       </ComparisonFeature>
     </ul>
+
+</ComponentExample>
   </TabPane>
   <TabPane id="comparison-feature-sample-1-source-0" label="feature-list.mdx">
 ```html
@@ -52,6 +50,8 @@ The slot can contain more than a short string.
 
 <Tabs group="comparison-feature-sample-2" selectedTab="comparison-feature-sample-2-preview" ariaLabel="Rich supporting detail example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="comparison-feature-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
+
     <ul class="pl-0">
       <ComparisonFeature>
         <div>
@@ -62,7 +62,8 @@ The slot can contain more than a short string.
         </div>
       </ComparisonFeature>
     </ul>
-  </TabPane>
+
+</div>  </TabPane>
   <TabPane id="comparison-feature-sample-2-source-0" label="rich-feature.mdx">
 ```html
 <ul class="pl-0">
@@ -78,6 +79,35 @@ The slot can contain more than a short string.
 ```
   </TabPane>
 </Tabs>
+
+## All ten semantic tones
+
+Every tone is visible on the icon frame. The row text keeps the surrounding text color.
+
+<ComponentExample label="All ten semantic tones" caption="Switch the site theme to compare the same samples in both palettes.">
+<div data-landing-gallery="tone"><LandingAppearanceGallery component="ComparisonFeature" axis="tone"/></div>
+</ComponentExample>
+
+## Defaults, custom icons, and rich text
+
+<ComponentExample label="Explain the difference clearly" caption="ComparisonFeature creates an li. Keep it inside ul or ol; tone colors its icon rather than the entire row.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Default check</code><ul class="m-0 p-0"><ComparisonFeature>Shared themes</ComparisonFeature></ul></div>
+<div class="component-appearance-cell"><code>Custom icon</code><ul class="m-0 p-0"><ComparisonFeature icon="iconoir:check" tone="success">Reviewed patterns</ComparisonFeature></ul></div>
+<div class="component-appearance-cell"><code>Rich detail</code><ul class="m-0 p-0"><ComparisonFeature tone="info"><span><strong>Your own source</strong><br/>Read, adapt, and compose each pattern.<br/><a href="/components/">Explore the library</a></span></ComparisonFeature></ul></div>
+</div>
+</ComponentExample>
+
+## Feature map
+
+| Public feature | Visible example |
+| --- | --- |
+| tone | Complete galleries above, with all supported values visible together. |
+| icon | Compare the default lucide:check and an explicit iconoir:check. |
+| Default slot | Rich detail combines a strong label, supporting text, and a real guide link. Keep the li inside a list. |
+| Native attributes and events | Pass attributes through the root; keyboard behavior belongs to the composed native controls. |
+
+This component exposes tone but no variant or variantMode. Its icon uses a fixed surface treatment.
 
 ## Behavior and accessibility
 
@@ -108,8 +138,6 @@ Use explicit text for included, limited or unavailable features. An icon color a
 <div class="api-contract">
 <p><strong>Default slot:</strong> feature text or flow content. Root element is li. Register defineComparisonFeatureComponent with Flex and Icon dependencies.</p>
 </div>
-
-
 
 ## Related components
 

@@ -13,13 +13,7 @@ nav:
 
 # Landing<wbr/>Band
 
-A full-width visual band with shaped edges, background imagery and theme-aware surfaces.
-
-<Badge tone="accent" variant="surface">LandingBand</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts) · [API reference](#api-reference)
-
-LandingBand extends to the viewport edges, including within a documentation layout. Its content is decorative by default: the band sets pointer-events to none.
+<ComponentHeader name="LandingBand" kind="Shaped backdrop" summary="A full-width visual band with shaped edges, background imagery and theme-aware surfaces." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts" section="Landing &amp; pricing" sectionHref="/components/landing/"/>
 
 ## A shaped section boundary
 
@@ -27,6 +21,8 @@ The bottom edge creates a transition into the next section. Keep the important c
 
 <Tabs group="landing-band-sample-1" selectedTab="landing-band-sample-1-preview" ariaLabel="A shaped section boundary example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="landing-band-sample-1-preview" label="Preview">
+<ComponentExample label="LandingBand in context" caption="Compare the composition, then open its source tab to adapt it.">
+
     <LandingBand
       tone="accent"
       height="14rem"
@@ -40,6 +36,8 @@ The bottom edge creates a transition into the next section. Keep the important c
         subtitle="Content, components and a shared theme."
       />
     </LandingBand>
+
+</ComponentExample>
   </TabPane>
   <TabPane id="landing-band-sample-1-source-0" label="shaped-band.mdx">
 ```html
@@ -66,6 +64,8 @@ Each edge has an independent direction and starting position.
 
 <Tabs group="landing-band-sample-2" selectedTab="landing-band-sample-2-preview" ariaLabel="Two deliberate edges example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="landing-band-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
+
     <LandingBand
       tone="info"
       variant="surface"
@@ -82,7 +82,8 @@ Each edge has an independent direction and starting position.
         subtitle="A visual pause between sections."
       />
     </LandingBand>
-  </TabPane>
+
+</div>  </TabPane>
   <TabPane id="landing-band-sample-2-source-0" label="paired-edges.mdx">
 ```html
 <LandingBand
@@ -104,6 +105,87 @@ Each edge has an independent direction and starting position.
 ```
   </TabPane>
 </Tabs>
+
+## All ten semantic tones
+
+The same composition in every semantic tone. Child tones are explicit where the composition owns them, including navigation actions.
+
+<ComponentExample label="All ten semantic tones" caption="Switch the site theme to compare the same samples in both palettes.">
+<div data-landing-gallery="tone"><LandingAppearanceGallery component="LandingBand" axis="tone"/></div>
+</ComponentExample>
+
+## All eighteen visual variants
+
+Every supported variant is shown in accent, including none. Variant controls the outer treatment; nested content may use its own treatment.
+
+<ComponentExample label="All eighteen visual variants" caption="Switch the site theme to compare the same samples in both palettes.">
+<div data-landing-gallery="variant"><LandingAppearanceGallery component="LandingBand" axis="variant"/></div>
+</ComponentExample>
+
+## Both variant modes
+
+Hover these outlineFill examples to compare stateless and stateful treatments. Stateful styling adds interaction states; it does not turn a container into a button.
+
+<ComponentExample label="Both variant modes" caption="Switch the site theme to compare the same samples in both palettes.">
+<div data-landing-gallery="mode"><LandingAppearanceGallery component="LandingBand" axis="mode"/></div>
+</ComponentExample>
+
+## Every edge combination
+
+The top and bottom edges independently accept flat, slant-up, or slant-down. These nine miniatures keep every combination in view. Gallery bands are contained for comparison; the original examples above retain viewport bleed.
+
+<ComponentExample label="Nine ways to frame a chapter" caption="edgeSize controls depth; topEdgeStart and bottomEdgeStart move the start of each slope.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>flat / flat</code><div class="landing-band-mini"><LandingBand tone="feature" height="9rem" topEdge="flat" bottomEdge="flat" edgeSize="1.25rem" alignItems="center"><strong>Next chapter</strong></LandingBand></div></div>
+<div class="component-appearance-cell"><code>flat / slant-up</code><div class="landing-band-mini"><LandingBand tone="feature" height="9rem" topEdge="flat" bottomEdge="slant-up" edgeSize="1.25rem" alignItems="center"><strong>Next chapter</strong></LandingBand></div></div>
+<div class="component-appearance-cell"><code>flat / slant-down</code><div class="landing-band-mini"><LandingBand tone="feature" height="9rem" topEdge="flat" bottomEdge="slant-down" edgeSize="1.25rem" alignItems="center"><strong>Next chapter</strong></LandingBand></div></div>
+<div class="component-appearance-cell"><code>slant-up / flat</code><div class="landing-band-mini"><LandingBand tone="feature" height="9rem" topEdge="slant-up" bottomEdge="flat" edgeSize="1.25rem" alignItems="center"><strong>Next chapter</strong></LandingBand></div></div>
+<div class="component-appearance-cell"><code>slant-up / slant-up</code><div class="landing-band-mini"><LandingBand tone="feature" height="9rem" topEdge="slant-up" bottomEdge="slant-up" edgeSize="1.25rem" alignItems="center"><strong>Next chapter</strong></LandingBand></div></div>
+<div class="component-appearance-cell"><code>slant-up / slant-down</code><div class="landing-band-mini"><LandingBand tone="feature" height="9rem" topEdge="slant-up" bottomEdge="slant-down" edgeSize="1.25rem" alignItems="center"><strong>Next chapter</strong></LandingBand></div></div>
+<div class="component-appearance-cell"><code>slant-down / flat</code><div class="landing-band-mini"><LandingBand tone="feature" height="9rem" topEdge="slant-down" bottomEdge="flat" edgeSize="1.25rem" alignItems="center"><strong>Next chapter</strong></LandingBand></div></div>
+<div class="component-appearance-cell"><code>slant-down / slant-up</code><div class="landing-band-mini"><LandingBand tone="feature" height="9rem" topEdge="slant-down" bottomEdge="slant-up" edgeSize="1.25rem" alignItems="center"><strong>Next chapter</strong></LandingBand></div></div>
+<div class="component-appearance-cell"><code>slant-down / slant-down</code><div class="landing-band-mini"><LandingBand tone="feature" height="9rem" topEdge="slant-down" bottomEdge="slant-down" edgeSize="1.25rem" alignItems="center"><strong>Next chapter</strong></LandingBand></div></div>
+</div>
+</ComponentExample>
+
+## Every image fit
+
+The same small SVG background compares cover and contain with the browser behavior of fill, none, and scale-down. This is a decorative background; put meaningful imagery in an accessible image element.
+
+<ComponentExample label="Five background sizing strategies" caption="Each frame is 9rem high with centered imagery. CSS background-size receives imageFit directly: fill, none, and scale-down are not standard background-size keywords, so the browser ignores them. Use cover, contain, or a valid CSS size for predictable results.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>cover</code><div class="landing-band-mini"><LandingBand image="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='80'%3E%3Crect width='120' height='80' fill='%231d4ed8'/%3E%3Ccircle cx='30' cy='40' r='24' fill='%2393c5fd'/%3E%3Crect x='70' y='16' width='30' height='48' rx='8' fill='%23bfdbfe'/%3E%3C/svg%3E" imageFit="cover" height="9rem" variant="none"/></div></div>
+<div class="component-appearance-cell"><code>contain</code><div class="landing-band-mini"><LandingBand image="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='80'%3E%3Crect width='120' height='80' fill='%231d4ed8'/%3E%3Ccircle cx='30' cy='40' r='24' fill='%2393c5fd'/%3E%3Crect x='70' y='16' width='30' height='48' rx='8' fill='%23bfdbfe'/%3E%3C/svg%3E" imageFit="contain" height="9rem" variant="none"/></div></div>
+<div class="component-appearance-cell"><code>fill</code><div class="landing-band-mini"><LandingBand image="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='80'%3E%3Crect width='120' height='80' fill='%231d4ed8'/%3E%3Ccircle cx='30' cy='40' r='24' fill='%2393c5fd'/%3E%3Crect x='70' y='16' width='30' height='48' rx='8' fill='%23bfdbfe'/%3E%3C/svg%3E" imageFit="fill" height="9rem" variant="none"/></div></div>
+<div class="component-appearance-cell"><code>none</code><div class="landing-band-mini"><LandingBand image="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='80'%3E%3Crect width='120' height='80' fill='%231d4ed8'/%3E%3Ccircle cx='30' cy='40' r='24' fill='%2393c5fd'/%3E%3Crect x='70' y='16' width='30' height='48' rx='8' fill='%23bfdbfe'/%3E%3C/svg%3E" imageFit="none" height="9rem" variant="none"/></div></div>
+<div class="component-appearance-cell"><code>scale-down</code><div class="landing-band-mini"><LandingBand image="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='80'%3E%3Crect width='120' height='80' fill='%231d4ed8'/%3E%3Ccircle cx='30' cy='40' r='24' fill='%2393c5fd'/%3E%3Crect x='70' y='16' width='30' height='48' rx='8' fill='%23bfdbfe'/%3E%3C/svg%3E" imageFit="scale-down" height="9rem" variant="none"/></div></div>
+</div>
+</ComponentExample>
+
+## Position, spacing, and flow
+
+<ComponentExample label="Control the backdrop geometry" caption="Bands are decorative and have pointer-events disabled. Put navigation and forms outside the band.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Image at the left</code><div class="landing-band-mini"><LandingBand image="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='80'%3E%3Crect width='120' height='80' fill='%231d4ed8'/%3E%3Ccircle cx='30' cy='40' r='24' fill='%2393c5fd'/%3E%3Crect x='70' y='16' width='30' height='48' rx='8' fill='%23bfdbfe'/%3E%3C/svg%3E" imageFit="contain" imagePosition="left center" height="9rem" variant="none"/></div></div>
+<div class="component-appearance-cell"><code>Delayed slopes</code><div class="landing-band-mini"><LandingBand tone="success" topEdge="slant-up" bottomEdge="slant-down" topEdgeStart="35%" bottomEdgeStart="55%" edgeSize="2rem" height="12rem" paddingTop="1.5rem" paddingBottom="1.5rem"><strong>Room around the content</strong></LandingBand></div></div>
+<div class="component-appearance-cell"><code>Flex end alignment</code><div class="landing-band-mini"><LandingBand tone="info" display="flex" alignItems="end" justifyContent="end" height="10rem" paddingTop="1rem" paddingBottom="2rem"><strong>Lower corner</strong></LandingBand></div></div>
+<div class="component-appearance-cell"><code>Block flow and margins</code><div class="landing-band-mini"><LandingBand tone="warning" display="block" height="8rem" marginTop="1rem" marginBottom="1rem"><strong>A pause</strong><p>Block content stacks naturally.</p></LandingBand></div></div>
+</div>
+</ComponentExample>
+
+## Feature map
+
+| Public feature | Visible example |
+| --- | --- |
+| tone, variant, variantMode | Complete galleries above, with all supported values visible together. |
+| image, imageFit, imagePosition | Every image fit and the left-aligned background sample use the same decorative SVG. |
+| topEdge, bottomEdge | All nine independent edge combinations appear together. |
+| edgeSize, topEdgeStart, bottomEdgeStart | Delayed slopes uses a deeper edge and different start positions. |
+| height, paddingTop, paddingBottom | Compare the short miniatures with the taller, padded delayed-slope example. height is a minimum, so content can grow. |
+| display, alignItems, justifyContent | Compare default flex flow, centered content, end alignment, and block flow. |
+| marginTop, marginBottom | Block flow and margins adds space before and after the band. |
+| Default slot | Section headers and plain text are decorative content; keep interactive controls outside the band. |
+| Native attributes and events | Pass attributes through the root; keyboard behavior belongs to the composed native controls. |
 
 ## Behavior and accessibility
 
@@ -219,8 +301,6 @@ Use backgrounds as decoration and keep meaningful image content in a normal imag
 <div class="api-contract">
 <p><strong>Default slot:</strong> band content. Register defineLandingBandComponent. The active doc layout variables keep full-width edges aligned as sidebars open and close.</p>
 </div>
-
-
 
 ## Related components
 

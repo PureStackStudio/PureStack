@@ -13,13 +13,7 @@ nav:
 
 # Pricing<wbr/>Table
 
-A responsive plan comparison with a section heading, configurable columns and independent plan surfaces.
-
-<Badge tone="accent" variant="surface">PricingTable</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/pricing/pricing.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="PricingTable" kind="Plan comparison" summary="A responsive plan comparison with a section heading, configurable columns and independent plan surfaces." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/pricing/pricing.ts" section="Landing &amp; pricing" sectionHref="/components/landing/"/>
 
 ## A complete plan comparison
 
@@ -27,6 +21,8 @@ These illustrative plans link to documentation; they do not represent PureStack 
 
 <Tabs group="pricing-table-sample-1" selectedTab="pricing-table-sample-1-preview" ariaLabel="A complete plan comparison example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="pricing-table-sample-1-preview" label="Preview">
+<ComponentExample label="PricingTable in context" caption="Compare the composition, then open its source tab to adapt it.">
+
     <PricingTable
       eyebrow="ILLUSTRATIVE PLANS"
       title="Choose a starting point"
@@ -61,6 +57,8 @@ These illustrative plans link to documentation; they do not represent PureStack 
         <PricingFeature>Typed component props</PricingFeature>
       </PricingPlan>
     </PricingTable>
+
+</ComponentExample>
   </TabPane>
   <TabPane id="pricing-table-sample-1-source-0" label="plan-comparison.mdx">
 ```html
@@ -108,6 +106,8 @@ Set each relevant breakpoint when the table should remain one column.
 
 <Tabs group="pricing-table-sample-2" selectedTab="pricing-table-sample-2-preview" ariaLabel="A single plan example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="pricing-table-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
+
     <PricingTable columns="1" columnsLg="1" columnsXl="1" variant="outline">
       <PricingPlan
         title="Explore"
@@ -122,7 +122,8 @@ Set each relevant breakpoint when the table should remain one column.
         <PricingFeature>Copyable source</PricingFeature>
       </PricingPlan>
     </PricingTable>
-  </TabPane>
+
+</div>  </TabPane>
   <TabPane id="pricing-table-sample-2-source-0" label="single-plan.mdx">
 ```html
 <PricingTable columns="1" columnsLg="1" columnsXl="1" variant="outline">
@@ -142,6 +143,48 @@ Set each relevant breakpoint when the table should remain one column.
 ```
   </TabPane>
 </Tabs>
+
+## All ten semantic tones
+
+The same composition in every semantic tone. Child tones are explicit where the composition owns them, including navigation actions.
+
+<ComponentExample label="All ten semantic tones" caption="Switch the site theme to compare the same samples in both palettes.">
+<div data-landing-gallery="tone"><LandingAppearanceGallery component="PricingTable" axis="tone"/></div>
+</ComponentExample>
+
+## All eighteen visual variants
+
+Every supported variant is shown in accent, including none. Variant controls the outer treatment; nested content may use its own treatment.
+
+<ComponentExample label="All eighteen visual variants" caption="Switch the site theme to compare the same samples in both palettes.">
+<div data-landing-gallery="variant"><LandingAppearanceGallery component="PricingTable" axis="variant"/></div>
+</ComponentExample>
+
+## Both variant modes
+
+Hover these outlineFill examples to compare stateless and stateful treatments. Stateful styling adds interaction states; it does not turn a container into a button.
+
+<ComponentExample label="Both variant modes" caption="Switch the site theme to compare the same samples in both palettes.">
+<div data-landing-gallery="mode"><LandingAppearanceGallery component="PricingTable" axis="mode"/></div>
+</ComponentExample>
+
+## Responsive plan counts
+
+<ComponentExample label="Two, three, and four plans" caption="columns is the base count; columnsLg and columnsXl replace it. Prices here are illustrative display text.">
+<PricingTable eyebrow="YOUR WORKSPACE" title="2 ways to begin" subtitle="Compare the scope before choosing." footnote="Example prices; application billing is separate." columns="1" columnsLg="2" columnsXl="2"><PricingPlan title="Solo" summary="A personal starting point." price="$0" period="/ month" tone="neutral" badge="" ctaLabel="Explore" ctaLink="/components/"> <PricingFeature tone="neutral">Shared component library</PricingFeature><PricingFeature>Readable examples</PricingFeature></PricingPlan><PricingPlan title="Studio" summary="Room for shared work." price="$24" period="/ month" tone="accent" badge="Popular" ctaLabel="Explore" ctaLink="/components/"> <PricingFeature tone="accent">Shared component library</PricingFeature><PricingFeature>Readable examples</PricingFeature></PricingPlan></PricingTable>
+<PricingTable eyebrow="YOUR WORKSPACE" title="3 ways to begin" subtitle="Compare the scope before choosing." footnote="Example prices; application billing is separate." columns="1" columnsLg="2" columnsXl="3"><PricingPlan title="Solo" summary="A personal starting point." price="$0" period="/ month" tone="neutral" badge="" ctaLabel="Explore" ctaLink="/components/"> <PricingFeature tone="neutral">Shared component library</PricingFeature><PricingFeature>Readable examples</PricingFeature></PricingPlan><PricingPlan title="Studio" summary="Room for shared work." price="$24" period="/ month" tone="accent" badge="Popular" ctaLabel="Explore" ctaLink="/components/"> <PricingFeature tone="accent">Shared component library</PricingFeature><PricingFeature>Readable examples</PricingFeature></PricingPlan><PricingPlan title="Team" summary="A growing workspace." price="$49" period="/ month" tone="neutral" badge="" ctaLabel="Explore" ctaLink="/components/"> <PricingFeature tone="neutral">Shared component library</PricingFeature><PricingFeature>Readable examples</PricingFeature></PricingPlan></PricingTable>
+<PricingTable eyebrow="YOUR WORKSPACE" title="4 ways to begin" subtitle="Compare the scope before choosing." footnote="Example prices; application billing is separate." columns="1" columnsLg="2" columnsXl="4"><PricingPlan title="Solo" summary="A personal starting point." price="$0" period="/ month" tone="neutral" badge="" ctaLabel="Explore" ctaLink="/components/"> <PricingFeature tone="neutral">Shared component library</PricingFeature><PricingFeature>Readable examples</PricingFeature></PricingPlan><PricingPlan title="Studio" summary="Room for shared work." price="$24" period="/ month" tone="accent" badge="Popular" ctaLabel="Explore" ctaLink="/components/"> <PricingFeature tone="accent">Shared component library</PricingFeature><PricingFeature>Readable examples</PricingFeature></PricingPlan><PricingPlan title="Team" summary="A growing workspace." price="$49" period="/ month" tone="neutral" badge="" ctaLabel="Explore" ctaLink="/components/"> <PricingFeature tone="neutral">Shared component library</PricingFeature><PricingFeature>Readable examples</PricingFeature></PricingPlan><PricingPlan title="Custom" summary="Define your own scope." price="Custom" period="" tone="neutral" badge="" ctaLabel="Explore" ctaLink="/components/"> <PricingFeature tone="neutral">Shared component library</PricingFeature><PricingFeature>Readable examples</PricingFeature></PricingPlan></PricingTable>
+</ComponentExample>
+
+## Feature map
+
+| Public feature | Visible example |
+| --- | --- |
+| tone, variant, variantMode | Complete galleries above, with all supported values visible together. |
+| eyebrow, title, subtitle, footnote | Responsive plan-count comparisons show the introduction and a clear sample-pricing footnote. |
+| columns, columnsLg, columnsXl | Two-, three-, and four-plan compositions start in one column, become two at large, and use their final count at extra-large. |
+| Default slot | PricingPlan children own their price copy, features, tone, and CTA. |
+| Native attributes and events | Pass attributes through the root; keyboard behavior belongs to the composed native controls. |
 
 ## Behavior and accessibility
 
@@ -212,8 +255,6 @@ Keep prices, billing periods and limitations explicit. Plan headings are h3 unde
 <div class="api-contract">
 <p><strong>Default slot:</strong> PricingPlan cards. Register definePricingComponents with Panel, SectionHeader, Grid, Flex, Badge, BtnLink and Icon dependencies.</p>
 </div>
-
-
 
 ## Related components
 

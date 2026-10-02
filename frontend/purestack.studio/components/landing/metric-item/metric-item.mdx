@@ -13,13 +13,7 @@ nav:
 
 # Metric<wbr/>Item
 
-A compact value with a label, explanation and optional semantic icon.
-
-<Badge tone="accent" variant="surface">MetricItem</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="MetricItem" kind="One useful number" summary="A compact value with a label, explanation and optional semantic icon." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts" section="Landing &amp; pricing" sectionHref="/components/landing/"/>
 
 ## A value with context
 
@@ -27,6 +21,8 @@ Make the unit and time period part of the content.
 
 <Tabs group="metric-item-sample-1" selectedTab="metric-item-sample-1-preview" ariaLabel="A value with context example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="metric-item-sample-1-preview" label="Preview">
+<ComponentExample label="MetricItem in context" caption="Compare the composition, then open its source tab to adapt it.">
+
     <MetricItem
       label="Example build time"
       value="1.8 s"
@@ -34,6 +30,8 @@ Make the unit and time period part of the content.
       icon="lucide:check"
       tone="success"
     />
+
+</ComponentExample>
   </TabPane>
   <TabPane id="metric-item-sample-1-source-0" label="contextual-value.mdx">
 ```html
@@ -54,6 +52,8 @@ Use the default slot for a qualifier or destination after the metric.
 
 <Tabs group="metric-item-sample-2" selectedTab="metric-item-sample-2-preview" ariaLabel="Supporting content example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="metric-item-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
+
     <MetricItem
       label="Documentation"
       value="Ready"
@@ -61,7 +61,8 @@ Use the default slot for a qualifier or destination after the metric.
     >
       <BtnLink href="/components/" variant="link">Browse component guides</BtnLink>
     </MetricItem>
-  </TabPane>
+
+</div>  </TabPane>
   <TabPane id="metric-item-sample-2-source-0" label="metric-detail.mdx">
 ```html
 <MetricItem
@@ -74,6 +75,37 @@ Use the default slot for a qualifier or destination after the metric.
 ```
   </TabPane>
 </Tabs>
+
+## All ten semantic tones
+
+Every tone is visible on the icon frame. The row text keeps the surrounding text color.
+
+<ComponentExample label="All ten semantic tones" caption="Switch the site theme to compare the same samples in both palettes.">
+<div data-landing-gallery="tone"><LandingAppearanceGallery component="MetricItem" axis="tone"/></div>
+</ComponentExample>
+
+## A number with the right context
+
+<ComponentExample label="Display text, optional decoration, and supporting content" caption="value is display text; formatting, units, data fetching, and change calculations belong to your application.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Minimal</code><MetricItem value="48"/></div>
+<div class="component-appearance-cell"><code>Label and detail</code><MetricItem label="Guides" value="13" detail="Updated this week"/></div>
+<div class="component-appearance-cell"><code>Formatted value</code><MetricItem label="Availability" value="99.9%" icon="lucide:check" tone="success"/></div>
+<div class="component-appearance-cell"><code>Rich default slot</code><MetricItem label="Release health" value="Ready" icon="lucide:check" tone="info"><Badge tone="success">All checks complete</Badge><p class="m-0">Last reviewed today.</p></MetricItem></div>
+</div>
+</ComponentExample>
+
+## Feature map
+
+| Public feature | Visible example |
+| --- | --- |
+| tone | Complete galleries above, with all supported values visible together. |
+| label, value, detail | Compare the minimal number, a labelled value, and a formatted percentage. value is display text. |
+| icon | The percentage and rich-content examples add an icon; the minimal and labelled examples omit it. |
+| Default slot | Rich default slot adds a status badge and extra supporting text. |
+| Native attributes and events | Pass attributes through the root; keyboard behavior belongs to the composed native controls. |
+
+This component exposes tone but no variant or variantMode. Its icon uses a fixed surface treatment.
 
 ## Behavior and accessibility
 
@@ -119,8 +151,6 @@ The value is text, so units and formatted numbers remain under your control. Ton
 <div class="api-contract">
 <p><strong>Default slot:</strong> content after the detail. Register defineMetricItemComponent with Flex and Icon dependencies.</p>
 </div>
-
-
 
 ## Related components
 

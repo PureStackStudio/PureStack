@@ -13,13 +13,7 @@ nav:
 
 # Metric<wbr/>Strip
 
-Arrange related metrics in a responsive surface with a clear reading order.
-
-<Badge tone="accent" variant="surface">MetricStrip</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="MetricStrip" kind="Evidence at a glance" summary="Arrange related metrics in a responsive surface with a clear reading order." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts" section="Landing &amp; pricing" sectionHref="/components/landing/"/>
 
 ## A workspace snapshot
 
@@ -27,6 +21,8 @@ These are illustrative values. Each metric includes enough context to interpret 
 
 <Tabs group="metric-strip-sample-1" selectedTab="metric-strip-sample-1-preview" ariaLabel="A workspace snapshot example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="metric-strip-sample-1-preview" label="Preview">
+<ComponentExample label="MetricStrip in context" caption="Compare the composition, then open its source tab to adapt it.">
+
     <MetricStrip tone="neutral">
       <MetricItem
         label="Components"
@@ -48,6 +44,8 @@ These are illustrative values. Each metric includes enough context to interpret 
         tone="warning"
       />
     </MetricStrip>
+
+</ComponentExample>
   </TabPane>
   <TabPane id="metric-strip-sample-1-source-0" label="workspace-snapshot.mdx">
 ```html
@@ -82,11 +80,14 @@ Override both responsive widths when the content only needs two tracks.
 
 <Tabs group="metric-strip-sample-2" selectedTab="metric-strip-sample-2-preview" ariaLabel="A two-metric summary example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="metric-strip-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
+
     <MetricStrip columns="1" columnsSm="2" columnsLg="2" variant="outline">
       <MetricItem label="Completed" value="8 of 10" detail="Tasks in this example" />
       <MetricItem label="Next step" value="Review" detail="Check the remaining changes" />
     </MetricStrip>
-  </TabPane>
+
+</div>  </TabPane>
   <TabPane id="metric-strip-sample-2-source-0" label="compact-summary.mdx">
 ```html
 <MetricStrip columns="1" columnsSm="2" columnsLg="2" variant="outline">
@@ -96,6 +97,43 @@ Override both responsive widths when the content only needs two tracks.
 ```
   </TabPane>
 </Tabs>
+
+## All ten semantic tones
+
+The same composition in every semantic tone. Child tones are explicit where the composition owns them, including navigation actions.
+
+<ComponentExample label="All ten semantic tones" caption="Switch the site theme to compare the same samples in both palettes.">
+<div data-landing-gallery="tone"><LandingAppearanceGallery component="MetricStrip" axis="tone"/></div>
+</ComponentExample>
+
+## All eighteen visual variants
+
+Every supported variant is shown in accent, including none. Variant controls the outer treatment; nested content may use its own treatment.
+
+<ComponentExample label="All eighteen visual variants" caption="Switch the site theme to compare the same samples in both palettes.">
+<div data-landing-gallery="variant"><LandingAppearanceGallery component="MetricStrip" axis="variant"/></div>
+</ComponentExample>
+
+## Responsive density
+
+<ComponentExample label="Two, three, or four signals" caption="columns is the base count; columnsSm and columnsLg replace it at their breakpoints. Child MetricItem tones are explicit.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>2 metrics</code><MetricStrip columns="1" columnsSm="2" columnsLg="2" tone="info"><MetricItem label="Components" value="48" icon="lucide:check" tone="info"/><MetricItem label="Guides" value="13" icon="lucide:check" tone="info"/></MetricStrip></div>
+<div class="component-appearance-cell"><code>3 metrics</code><MetricStrip columns="1" columnsSm="2" columnsLg="3" tone="info"><MetricItem label="Components" value="48" icon="lucide:check" tone="info"/><MetricItem label="Guides" value="13" icon="lucide:check" tone="info"/><MetricItem label="Themes" value="2" icon="lucide:check" tone="info"/></MetricStrip></div>
+<div class="component-appearance-cell"><code>4 metrics</code><MetricStrip columns="1" columnsSm="2" columnsLg="4" tone="info"><MetricItem label="Components" value="48" icon="lucide:check" tone="info"/><MetricItem label="Guides" value="13" icon="lucide:check" tone="info"/><MetricItem label="Themes" value="2" icon="lucide:check" tone="info"/><MetricItem label="Workspaces" value="6" icon="lucide:check" tone="info"/></MetricStrip></div>
+</div>
+</ComponentExample>
+
+## Feature map
+
+| Public feature | Visible example |
+| --- | --- |
+| tone, variant | Complete galleries above, with all supported values visible together. |
+| columns, columnsSm, columnsLg | Two-, three-, and four-metric examples each start with one column and change at the small and large breakpoints. Resize to compare. |
+| Default slot | MetricItem supplies the usual child; the strip can group other content too. Child tones are explicit. |
+| Native attributes and events | Pass attributes through the root; keyboard behavior belongs to the composed native controls. |
+
+This component exposes tone and variant, but no variantMode. Style individual child components explicitly when their appearance should match.
 
 ## Behavior and accessibility
 
@@ -141,8 +179,6 @@ Use labels and details to communicate units, periods and provenance. MetricStrip
 <div class="api-contract">
 <p><strong>Default slot:</strong> MetricItem elements or other grid items. Register defineMetricStripComponent with Panel and Grid; register MetricItem separately.</p>
 </div>
-
-
 
 ## Related components
 

@@ -49,7 +49,7 @@
   },
   "consent": {
     "enabled": true,
-    "policyVersion": "2026-09-15",
+    "policyVersion": "2026-09-16",
     "categories": [
       {
         "id": "necessary",
@@ -61,7 +61,10 @@
   },
   "analytics": {
     "ga4": {
-      "enabled": false
+      "enabled": true,
+      "measurementId": "G-90ZXV1S6NF",
+      "consentCategory": "necessary",
+      "serviceId": "necessary"
     }
   },
   "pagefind": {

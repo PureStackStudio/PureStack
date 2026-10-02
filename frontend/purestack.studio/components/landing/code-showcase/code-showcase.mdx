@@ -13,13 +13,7 @@ nav:
 
 # Code<wbr/>Showcase
 
-Pair a code block with its visible result and the context needed to understand both.
-
-<Badge tone="accent" variant="surface">CodeShowcase</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="CodeShowcase" kind="Code and result" summary="Pair a code block with its visible result and the context needed to understand both." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts" section="Landing &amp; pricing" sectionHref="/components/landing/"/>
 
 ## Code and its result
 
@@ -27,6 +21,8 @@ Write a normal fenced code block in the default slot. ts-ssg highlights it autom
 
 <Tabs group="code-showcase-sample-1" selectedTab="code-showcase-sample-1-preview" ariaLabel="Code and its result example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="code-showcase-sample-1-preview" label="Preview">
+<ComponentExample label="CodeShowcase in context" caption="Compare the composition, then open its source tab to adapt it.">
+
     <CodeShowcase
       eyebrow="A SMALL EXAMPLE"
       title="Semantic status"
@@ -45,6 +41,8 @@ Write a normal fenced code block in the default slot. ts-ssg highlights it autom
         <Badge tone="success">Ready</Badge>
       </template>
     </CodeShowcase>
+
+</ComponentExample>
   </TabPane>
   <TabPane id="code-showcase-sample-1-source-0" label="code-result.mdx">
 ````html
@@ -76,10 +74,13 @@ Omit resultTitle and resultMeta when a result panel is unnecessary.
 
 <Tabs group="code-showcase-sample-2" selectedTab="code-showcase-sample-2-preview" ariaLabel="A focused code note example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="code-showcase-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
+
     <CodeShowcase title="A named value" language="TypeScript" variant="outline">
       <pre><code>const releaseName = 'Preview'</code></pre>
     </CodeShowcase>
-  </TabPane>
+
+</div>  </TabPane>
   <TabPane id="code-showcase-sample-2-source-0" label="code-note.mdx">
 ```html
 <CodeShowcase title="A named value" language="TypeScript" variant="outline">
@@ -88,6 +89,45 @@ Omit resultTitle and resultMeta when a result panel is unnecessary.
 ```
   </TabPane>
 </Tabs>
+
+## All ten semantic tones
+
+The same composition in every semantic tone. Child tones are explicit where the composition owns them, including navigation actions.
+
+<ComponentExample label="All ten semantic tones" caption="Switch the site theme to compare the same samples in both palettes.">
+<div data-landing-gallery="tone"><LandingAppearanceGallery component="CodeShowcase" axis="tone"/></div>
+</ComponentExample>
+
+## All eighteen visual variants
+
+Every supported variant is shown in accent, including none. Variant controls the outer treatment; nested content may use its own treatment.
+
+<ComponentExample label="All eighteen visual variants" caption="Switch the site theme to compare the same samples in both palettes.">
+<div data-landing-gallery="variant"><LandingAppearanceGallery component="CodeShowcase" axis="variant"/></div>
+</ComponentExample>
+
+## Result panel conditions
+
+<ComponentExample label="Code alone, a title, or result metadata" caption="Either resultTitle or resultMeta enables the result slot. language is a visible badge; syntax highlighting comes from MDX fenced code.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Code only</code><CodeShowcase title="A named value" summary="No result panel needed." language="TypeScript"><pre><code>const status = 'ready'</code></pre></CodeShowcase></div>
+<div class="component-appearance-cell"><code>Result title only</code><CodeShowcase title="Status label" resultTitle="Preview"><pre><code>&lt;Badge&gt;Ready&lt;/Badge&gt;</code></pre><template #result><Badge tone="success">Ready</Badge></template></CodeShowcase></div>
+<div class="component-appearance-cell"><code>Result metadata only</code><CodeShowcase eyebrow="ONE COMPONENT" title="Inline status" resultMeta="Live" tone="feature"><pre><code>&lt;Badge&gt;Ready&lt;/Badge&gt;</code></pre><template #result><Badge tone="feature">Ready</Badge></template></CodeShowcase></div>
+</div>
+</ComponentExample>
+
+## Feature map
+
+| Public feature | Visible example |
+| --- | --- |
+| tone, variant | Complete galleries above, with all supported values visible together. |
+| eyebrow, title, summary | The original code-and-result example introduces the purpose of the snippet. |
+| language | MDX and TypeScript badges label the snippets; the title-only result sample omits the language badge. |
+| resultTitle, resultMeta | Compare code-only, title-only result, metadata-only result, and the original result with both fields. |
+| Default and result slots | The default slot holds code; the named result slot holds live rendered content. A result heading or metadata is required to show that panel. |
+| Native attributes and events | Pass attributes through the root; keyboard behavior belongs to the composed native controls. |
+
+This component exposes tone and variant, but no variantMode. Style individual child components explicitly when their appearance should match.
 
 ## Behavior and accessibility
 
@@ -148,8 +188,6 @@ The language prop is a badge, not a syntax-highlighting engine. ts-ssg highlight
 <div class="api-contract">
 <p><strong>Default slot:</strong> code or other explanatory content. <strong>result:</strong> rendered example. Register defineCodeShowcaseComponent with Panel, Flex, SectionHeader and Badge.</p>
 </div>
-
-
 
 ## Related components
 

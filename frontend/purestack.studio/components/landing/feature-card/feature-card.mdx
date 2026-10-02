@@ -13,13 +13,7 @@ nav:
 
 # Feature<wbr/>Card
 
-Present one capability with a recognizable icon, short explanation and an optional next step.
-
-<Badge tone="accent" variant="surface">FeatureCard</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="FeatureCard" kind="Feature story" summary="Present one capability with a recognizable icon, short explanation and an optional next step." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/landing/landingTypes.ts" section="Landing &amp; pricing" sectionHref="/components/landing/"/>
 
 ## A feature with a next step
 
@@ -27,6 +21,8 @@ The actions slot gives readers a clear continuation.
 
 <Tabs group="feature-card-sample-1" selectedTab="feature-card-sample-1-preview" ariaLabel="A feature with a next step example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="feature-card-sample-1-preview" label="Preview">
+<ComponentExample label="FeatureCard in context" caption="Compare the composition, then open its source tab to adapt it.">
+
     <FeatureCard
       eyebrow="AUTHORING"
       title="Readable by design"
@@ -42,6 +38,8 @@ The actions slot gives readers a clear continuation.
         </BtnLink>
       </template>
     </FeatureCard>
+
+</ComponentExample>
   </TabPane>
   <TabPane id="feature-card-sample-1-source-0" label="feature-action.mdx">
 ```html
@@ -70,6 +68,8 @@ Cards share a theme but can express distinct intent.
 
 <Tabs group="feature-card-sample-2" selectedTab="feature-card-sample-2-preview" ariaLabel="A coherent feature set example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="feature-card-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
+
     <Grid columns="1" columnsSm="2">
       <FeatureCard
         title="Content first"
@@ -84,7 +84,8 @@ Cards share a theme but can express distinct intent.
         variant="surface"
       />
     </Grid>
-  </TabPane>
+
+</div>  </TabPane>
   <TabPane id="feature-card-sample-2-source-0" label="feature-set.mdx">
 ```html
 <Grid columns="1" columnsSm="2">
@@ -104,6 +105,46 @@ Cards share a theme but can express distinct intent.
 ```
   </TabPane>
 </Tabs>
+
+## All ten semantic tones
+
+The same composition in every semantic tone. Child tones are explicit where the composition owns them, including navigation actions.
+
+<ComponentExample label="All ten semantic tones" caption="Switch the site theme to compare the same samples in both palettes.">
+<div data-landing-gallery="tone"><LandingAppearanceGallery component="FeatureCard" axis="tone"/></div>
+</ComponentExample>
+
+## All eighteen visual variants
+
+Every supported variant is shown in accent, including none. Variant controls the outer treatment; nested content may use its own treatment.
+
+<ComponentExample label="All eighteen visual variants" caption="Switch the site theme to compare the same samples in both palettes.">
+<div data-landing-gallery="variant"><LandingAppearanceGallery component="FeatureCard" axis="variant"/></div>
+</ComponentExample>
+
+## Optional content and both slots
+
+<ComponentExample label="A card can be brief or complete" caption="The default slot extends the story; actions holds navigation. Each optional text and decoration can be omitted independently.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Text only</code><FeatureCard title="Clear by default" summary="A compact feature statement." variant="outline"/></div>
+<div class="component-appearance-cell"><code>Icon only</code><FeatureCard title="Shared patterns" icon="lucide:check" tone="info"/></div>
+<div class="component-appearance-cell"><code>Badge only</code><FeatureCard eyebrow="NEW THIS WEEK" title="Ready to use" badge="New" tone="success"/></div>
+<div class="component-appearance-cell"><code>Both slots</code><FeatureCard eyebrow="WORKFLOW" title="From idea to interface" summary="One small composition." icon="lucide:check" badge="Included" tone="feature"><p>Extend the summary with lists or rich text.</p><template #actions><BtnLink href="/components/layout/" tone="feature">See layouts</BtnLink><BtnLink href="/components/forms/" variant="outline" tone="feature">See forms</BtnLink></template></FeatureCard></div>
+</div>
+</ComponentExample>
+
+## Feature map
+
+| Public feature | Visible example |
+| --- | --- |
+| tone, variant | Complete galleries above, with all supported values visible together. |
+| eyebrow, title, summary | Compare the text-only card and the complete workflow card. |
+| icon, badge | Icon-only, badge-only, and combined decoration are visible together. |
+| Default slot | The complete workflow card adds rich supporting text below the summary. |
+| actions slot | Compare one destination in the original example with two destinations in Both slots. |
+| Native attributes and events | Pass attributes through the root; keyboard behavior belongs to the composed native controls. |
+
+This component exposes tone and variant, but no variantMode. Style individual child components explicitly when their appearance should match.
 
 ## Behavior and accessibility
 
@@ -159,8 +200,6 @@ The generated title is h3. Place feature cards under an h2 section heading, and 
 <div class="api-contract">
 <p><strong>Default slot:</strong> extra content after the summary. <strong>actions:</strong> links or buttons at the bottom. Register defineFeatureCardComponent with Panel, Flex, Icon, IconFrame and Badge.</p>
 </div>
-
-
 
 ## Related components
 

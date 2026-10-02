@@ -348,6 +348,56 @@ export function registerComponentGuideStyles() {
       color: accent.text.default,
     })
     root
+      .select('.landing-appearance-sample, .landing-directory-preview > *')
+      .css({
+        width: '100%',
+        minWidth: '0',
+      })
+    root
+      .select('.landing-appearance-sample > *, .landing-directory-preview > *')
+      .css({
+        marginBottom: '0',
+      })
+    root
+      .select('.landing-appearance-gallery pre, .landing-directory-preview pre')
+      .css({
+        whiteSpace: 'pre-wrap',
+        overflowWrap: 'anywhere',
+      })
+    root
+      .select(
+        '.landing-appearance-gallery .grid, .landing-directory-preview .grid',
+      )
+      .css({
+        gridTemplateColumns: 'minmax(0, 1fr)',
+      })
+    root.select('.landing-band-mini, .landing-directory-preview').css({
+      minWidth: '0',
+      overflow: 'hidden',
+    })
+    root
+      .select(
+        '.landing-band-mini > section, .landing-appearance-sample > section, .landing-directory-preview > section',
+      )
+      .css({
+        marginInlineStart: '0 !important',
+        marginInlineEnd: '0 !important',
+        paddingInlineStart: '1rem !important',
+        paddingInlineEnd: '1rem !important',
+      })
+    root
+      .select(
+        '.landing-appearance-gallery h2, .landing-appearance-gallery h3, .landing-directory-preview h2, .landing-directory-preview h3',
+      )
+      .css({
+        fontSize: '1.15rem',
+        lineHeight: '1.35',
+      })
+    root.select('.landing-title-tags .section-header > .text-title').css({
+      fontSize: '1.15rem',
+      lineHeight: '1.35',
+    })
+    root
       .media(mediaBelow(BREAKPOINTS.md))
       .select('.component-guide-grid')
       .css({ gridTemplateColumns: 'minmax(0, 1fr)' })
