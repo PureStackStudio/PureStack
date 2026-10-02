@@ -39,6 +39,7 @@ const templates: PageTemplateMap = {
               .text('Skip to content'),
             h('').raw(headerHtml ?? ''),
             h('main').id('main').attr({ tabindex: '-1' }).raw(bodyHtml),
+            h('consent'),
             h('').raw(footerHtml ?? ''),
           ),
       )

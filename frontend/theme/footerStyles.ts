@@ -54,6 +54,28 @@ export function registerFooterStyles(root: Style, palette: ThemePalette) {
     alignItems: 'center',
     gap: '7px',
   })
+  root.select('.studio .footer-actions').css({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '15px',
+  })
+  // The consent runtime moves its settings button here. Show it as one more
+  // footer link rather than a button.
+  root.select('.studio .footer-actions .consent-settings-teleport-area').css({
+    display: 'contents',
+  })
+  root.select('.studio .footer-actions .btn').css({
+    minHeight: '0',
+    padding: '0',
+    borderColor: 'transparent',
+    background: 'none',
+    boxShadow: 'none',
+    font: 'inherit',
+    color: 'inherit',
+  })
+  root.select('.studio .footer-actions .btn:hover').css({
+    color: tone.accent.text.default,
+  })
   root.select('.studio .footer-built .status-dot').css({
     width: '4px',
     height: '4px',
