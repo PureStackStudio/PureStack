@@ -1,6 +1,6 @@
 ---
 title: Typography
-description: Use semantic HTML and PureStack's shared type scale for readable interfaces.
+description: Structure pages with real headings, use the theme's type scale and text roles, and customize fonts, sizes, and weights.
 template: doc
 layout:
   showNav: true
@@ -13,9 +13,13 @@ nav:
 
 # Typography
 
-Good type starts with structure. Use one page title, follow it with sections in heading order, and let paragraphs and lists carry the detail. The doc template builds its page outline from `h2` and `h3` headings.
+In PureStack, every piece of text gets its type from the active skin. The skin defines one font family, a scale of named sizes, and a set of weights. Markdown headings, components, utility classes, and your own styles all use those same values, so changing one size updates it everywhere.
+
+You choose the sizes. PureStack works out the line height and letter spacing for each size and weight, so large headings set tightly and small labels stay readable.
 
 ## Write a clear hierarchy
+
+Start with structure. Use one `h1` per page, then `h2` for sections and `h3` for subsections, without skipping levels:
 
 ```mdx
 # Project setup
@@ -31,36 +35,255 @@ The first step and its context.
 What the reader should see next.
 ```
 
-The heading level describes the content hierarchy. Choose its visual treatment through the theme rather than skipping levels to get a larger font.
+The doc template builds the "On this page" outline from `h2` and `h3` headings, so a missing level also leaves a gap in the outline. Choose a heading level for its place in the content, not for its size. You can [change the visual treatment](#utility-classes) separately.
 
-## Use the type scale
+Inside a doc page, Markdown elements use the scale like this:
 
-PureStack's theme palette defines a base font family, named sizes from `xxxs` through `display`, and weights. Generated utility classes expose the size scale when a piece of UI needs an explicit treatment:
+| Element | Size | Weight |
+| --- | --- | --- |
+| Paragraphs, lists, tables | `body` | Regular |
+| `#` (`h1`) | `h1` | `w700` |
+| `##` (`h2`) | `h2` | `w700` |
+| `###` to `######` (`h3`–`h6`) | `h3` to `h6` | `w600` |
+| Inline code and code blocks | `xs` | Regular, monospace |
 
-```html
-<p class="fs-sm">A compact caption</p>
-<p class="fs-body">Supporting text at the body size</p>
-<p class="fs-h3">A prominent metric label</p>
+Headings get space above them only when they follow other content, so the first heading on a page sits flush with the top.
+
+## The type scale
+
+A skin defines twelve named sizes. The names describe a role, not a fixed size. `fs-h3` is the size of an `h3` in the active skin, whatever that is:
+
+<div class="tone--neutral tone-fill-surface tone-border-surface b-1 rounded-md p-4">
+  <div class="fs-display fw-700 lh-1">Display</div>
+  <div class="fs-h1 fw-700 lh-1 mt-2">Heading 1</div>
+  <div class="fs-h2 fw-700 lh-2 mt-2">Heading 2</div>
+  <div class="fs-h3 fw-600 lh-3 mt-2">Heading 3</div>
+  <div class="fs-h4 fw-600 mt-2">Heading 4</div>
+  <div class="fs-body mt-2">Body text carries most of the page.</div>
+  <div class="fs-sm text-subtle mt-2 mb-0">Small text for captions and supporting detail.</div>
+  <div class="fs-xs text-subtle mt-1 mb-0">Extra small text for labels and metadata.</div>
+</div>
+
+Sizes are `rem` values, so they scale with the [root font size](#change-the-root-size). Compare the standard skin that comes with PureStack and the custom Studio skin that this site uses:
+
+| Name | Typical use | Standard skin | Studio skin (this site) |
+| --- | --- | --- | --- |
+| `display` | Hero and marketing headlines | `2.545rem` | `5rem` |
+| `h1` | Page title | `2rem` | `2.6875rem` |
+| `h2` | Section heading | `1.5rem` | `2.125rem` |
+| `h3` | Subsection heading | `1.25rem` | `1.5rem` |
+| `h4` | Minor heading, lead text | `1rem` | `1.1875rem` |
+| `h5` | Minor heading, quotes | `1rem` | `1.0625rem` |
+| `h6` | Smallest heading | `1rem` | `1rem` |
+| `body` | Paragraphs and controls | `1rem` | `0.875rem` |
+| `sm` | Captions and supporting lines | `0.94rem` | `0.75rem` |
+| `xs` | Labels, code | `0.9rem` | `0.6875rem` |
+| `xxs` | Metadata and small caps | `0.85rem` | `0.625rem` |
+| `xxxs` | Badges and counters | `0.72rem` | `0.5625rem` |
+
+In the standard skin, `h4`, `h5`, and `h6` are the same size as body text and are told apart only by weight. If your content uses those levels often, give them distinct sizes in your skin.
+
+### Weights
+
+The scale has five named weights: `w100`, `w400`, `w500`, `w600`, and `w700`. Components and Markdown headings use the names, not raw numbers, so a skin can, for example, make all bold text `650` by changing `w700`. The weights only render if the font provides them. A font without a `600` file displays the nearest weight it has.
+
+## Line height and letter spacing are derived
+
+A skin defines sizes and weights only. When PureStack styles text, `palette.applyFont(size, weight)` returns the size and weight together with a matching line height and letter spacing:
+
+| Size | Weight | Line height | Letter spacing |
+| --- | --- | --- | --- |
+| `0.75rem` | 400 | 1.6 | `0.06em` |
+| `0.875rem` | 400 | 1.6 | `0.03em` |
+| `1rem` | 400 | 1.5 | normal |
+| `1.25rem` | 600 | 1.3 | `-0.003em` |
+| `1.5rem` | 700 | 1.3 | `-0.005em` |
+| `2rem` | 700 | 1.1 | `-0.01em` |
+| `3rem` | 700 | 1.02 | `-0.02em` |
+
+The rules follow ordinary typesetting practice:
+
+- **Line height tightens as size grows.** It is 1.6 for small text, 1.5 for body text, and close to 1 for display text.
+- **Weight tightens it further.** Weight 500 and above reduces the line height slightly, down to a floor that keeps lines from touching.
+- **Letter spacing opens up small text and closes up large text.** Spacing is wider below `1rem`, normal at `1rem`, and slightly negative above it, up to `-0.02em` at `3rem`.
+
+Because these values are calculated from `rem`, every size in a skin must be a `rem` string such as `"1.125rem"`. A `px` or `em` size stops the build with `fontSize must be a positive rem string`.
+
+## Utility classes
+
+Use utility classes when a single element needs a particular look, for example a large metric value or a small label. The [Utility CSS classes guide](/guides/utility-css-classes/#typography-and-text) lists them all.
+
+- `fs-xxxs` through `fs-display` set the font size from the scale.
+- `fw-100` through `fw-900` set the weight.
+- `lh-0` through `lh-7` set the line height from `1.0` to `1.7`.
+
+`fs-*` classes change the **size only**. They do not apply the derived line height, so large text keeps the line height of its surroundings. For multiline text at a large size, add a matching `lh-*` class, as the specimen above does:
+
+```mdx
+<p class="fs-h2 fw-700 lh-1">A large statement that may wrap onto a second line</p>
 ```
 
-Keep headings as real heading elements even when their size is customized. The Studio skin uses a compact body scale; another skin can use the same names with different values.
+### Text roles
 
-## Customize the scale
+Text roles combine size, weight, letter spacing, color, and margin into one class for common editorial patterns:
 
-Set shared typography values in a skin, then use the palette in typed styles:
+<div class="tone--neutral tone-fill-surface tone-border-surface b-1 rounded-md p-4">
+  <p class="text-eyebrow mt-0">Release notes</p>
+  <p class="text-title">Faster builds, calmer pages</p>
+  <p class="text-lead">This release cuts rebuild times in half and refines how pages load.</p>
+  <p class="text-attribution mb-0">PureStack team</p>
+</div>
+
+```mdx
+<p class="text-eyebrow">Release notes</p>
+<p class="text-title">Faster builds, calmer pages</p>
+<p class="text-lead">This release cuts rebuild times in half and refines how pages load.</p>
+<p class="text-attribution">PureStack team</p>
+```
+
+| Class | Based on | Treatment |
+| --- | --- | --- |
+| `text-eyebrow` | `xs`, `w700` | Uppercase, wide letter spacing, subtle color |
+| `text-title` | `h2`, `w700` | Tight line height |
+| `text-lead` | `h4` | Relaxed line height for introductions |
+| `text-tagline` | `sm` | Subtle color |
+| `text-quote` | `h5`, `w600` | Italic |
+| `prose-pullquote` | `h3`, `w100` | Light italic |
+| `text-attribution`, `prose-meta` | `xxs`, `w600` | Uppercase, subtle color |
+| `text-caption` | `h3` | Subtle color |
+| `text-subtle` | Inherited | Subtle color |
+
+Roles style an element; they do not change what it is. A `text-title` paragraph is still a paragraph, so use a real heading when the text starts a section. Roles also set their own bottom margin. Use `m-0` or `mb-0` when they sit inside a tight layout.
+
+### Larger reading contexts
+
+Add `large-fs` to a container to scale up the `fs-*`, `fw-*`, and text role classes inside it, along with spacing utilities, for example in a presentation slide or a kiosk view. `medium-fs` restores the normal scale inside such a container. Both classes act on descendants and do not respond to screen width.
+
+## Font families
+
+The skin's `font.family.base` sets the font for the doc template and everything inside it. Code always uses a separate monospace stack that is not part of the skin.
+
+The family is an ordinary CSS font stack:
+
+| Skin | `font.family.base` |
+| --- | --- |
+| Standard | `'Manrope', 'Segoe UI', system-ui, sans-serif` |
+| Studio | `'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif` |
+
+**PureStack does not download fonts.** The browser uses the first family in the stack that it can find, either installed on the visitor's device or loaded by your page. To use a web font, load it yourself, for example from the `head` of a custom page template:
 
 ```ts
-import { themeSkins, type ThemePalette } from '@purestack/ts-style'
-import { merge } from '@purestack/ts-util'
+head.push(
+  h('link').attr({ rel: 'stylesheet', href: '/assets/fonts/inter.css' }),
+)
+```
 
-const light: ThemePalette = merge(themeSkins.standard.create().light, {
+Always end the stack with fallbacks such as `system-ui` and `sans-serif`, so text stays readable before the font arrives or when it is unavailable.
+
+## Customize the type
+
+### In the site configuration
+
+To change a few values, override the font settings in `siteConfig.json`. Each theme mode has its own palette, so set the values for both `light` and `dark`:
+
+```json
+{
+  "style": {
+    "theme": {
+      "skin": "standard",
+      "palette": {
+        "light": {
+          "font": {
+            "family": { "base": "'Source Sans 3', system-ui, sans-serif" },
+            "size": { "body": "1.0625rem", "h4": "1.125rem" }
+          }
+        },
+        "dark": {
+          "font": {
+            "family": { "base": "'Source Sans 3', system-ui, sans-serif" },
+            "size": { "body": "1.0625rem", "h4": "1.125rem" }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Values you leave out keep the skin's settings.
+
+### In a skin
+
+When you build your own skin, define the type once and merge it into both modes:
+
+```ts
+import { registerSkin, type ThemePalette, themeSkins } from '@purestack/ts-style'
+import { type DeepPartial, merge } from '@purestack/ts-util'
+
+const type = {
   font: {
-    family: { base: "'Inter', system-ui, sans-serif" },
-    size: { body: '1rem', h2: '2rem' },
+    family: { base: "'Source Sans 3', system-ui, sans-serif" },
+    size: {
+      body: '1.0625rem',
+      h4: '1.25rem',
+      h3: '1.5rem',
+      h2: '2rem',
+      h1: '2.75rem',
+      display: '4rem',
+    },
+    weight: { w700: '650' },
+  },
+} satisfies DeepPartial<ThemePalette>
+
+registerSkin('my-site', {
+  create: () => {
+    const standard = themeSkins.standard.create()
+    return {
+      light: merge(standard.light, type),
+      dark: merge(standard.dark, type),
+    }
   },
 })
 ```
 
-The same `font` overrides can be shared with the dark palette. Register the resulting pair as a skin, then select it in `siteConfig.json`; the [Themes guide](/guides/themes/) shows the full flow.
+Keep the scale in order from `xxxs` up to `display`, with each step at least as large as the one before it. The [Themes guide](/guides/themes/) shows how to select a registered skin.
 
-For controls, prefer the component's own size and variant props. The [component catalog](/components/) shows how each control responds to the active theme.
+### Change the root size
+
+Because every size is in `rem`, the root font size scales the whole scale at once. `remSize` sets it for all screens, and `mobileRemSize` sets it below the medium breakpoint:
+
+```json
+{
+  "style": {
+    "theme": {
+      "skin": "standard",
+      "mobileRemSize": "15px"
+    }
+  }
+}
+```
+
+Leave both empty to respect the visitor's browser setting. When you do set them, prefer small adjustments. Visitors who enlarge text in their browser still expect the page to follow.
+
+## Use the scale in your own styles
+
+Custom styles can read the same scale. Pass a size and weight to `applyFont` to get the derived line height and letter spacing too:
+
+```ts
+import { styleBuilder, themes } from '@purestack/ts-style'
+
+themes.forEach((theme, palette) => {
+  styleBuilder
+    .get(theme)
+    .select('.metric-value')
+    .apply(palette.applyFont(palette.font.size.h1, palette.font.weight.w700))
+
+  styleBuilder
+    .get(theme)
+    .select('.metric-label')
+    .apply(palette.applyFont(palette.font.size.xs, palette.font.weight.w600))
+    .color(palette.current.text.subtle)
+})
+```
+
+Use names from the scale instead of fixed values like `'28px'`. Your styles then follow the skin, and a size change in the skin updates them along with everything else.
