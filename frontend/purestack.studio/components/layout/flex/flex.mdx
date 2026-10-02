@@ -13,12 +13,31 @@ nav:
 
 # Flex
 
-Arrange content along one axis, from compact inline metadata to responsive application toolbars.
+<ComponentHeader name="Flex" kind="One-dimensional layout" summary="Build a useful rhythm along one axis. Direction, alignment, distribution, and wrapping adapt with the viewport." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/flex/flex.ts" section="Layout &amp; content" sectionHref="/components/layout/"/>
 
-<Badge tone="accent" variant="surface">Flex</Badge>
+## In context
 
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/flex/flex.ts) · [API reference](#api-reference)
+<ComponentExample label="A toolbar that adapts" caption="Resize the viewport: the column becomes a row at md. Actions and metadata wrap independently.">
+<div class="component-recipe"><Flex direction="column" directionMd="row" align="start" alignMd="center" justify="between" wrap="true"><Flex align="center"><IconFrame name="lucide:layers" tone="feature"/><div><h3>Project library</h3><Badge tone="neutral">12 projects</Badge></div></Flex><Flex wrap="true"><BtnLink href="/components/layout/grid/" variant="outline">Browse layouts</BtnLink><BtnLink href="/guides/" tone="accent">Open guides</BtnLink></Flex></Flex></div>
+</ComponentExample>
 
+```html
+<div class="component-recipe">
+<Flex direction="column" directionMd="row" align="start" alignMd="center" justify="between" wrap="true">
+<Flex align="center">
+<IconFrame name="lucide:layers" tone="feature"/>
+<div>
+<h3>Project library</h3>
+<Badge tone="neutral">12 projects</Badge>
+</div>
+</Flex>
+<Flex wrap="true">
+<BtnLink href="/components/layout/grid/" variant="outline">Browse layouts</BtnLink>
+<BtnLink href="/guides/" tone="accent">Open guides</BtnLink>
+</Flex>
+</Flex>
+</div>
+```
 
 
 ## A responsive toolbar
@@ -27,6 +46,7 @@ Resize the viewport: the title and action stack first, then share a row.
 
 <Tabs group="flex-sample-1" selectedTab="flex-sample-1-preview" ariaLabel="A responsive toolbar example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="flex-sample-1-preview" label="Preview">
+<div class="component-preview-stage">
     <Flex
       direction="column"
       directionSm="row"
@@ -41,7 +61,10 @@ Resize the viewport: the title and action stack first, then share a row.
       </div>
       <BtnLink href="/components/layout/grid/" tone="accent">Explore Grid</BtnLink>
     </Flex>
-  </TabPane>
+
+
+</div>
+</TabPane>
   <TabPane id="flex-sample-1-source-0" label="responsive-toolbar.mdx">
 ```html
 <Flex
@@ -68,6 +91,7 @@ Wrapping keeps labels readable when there is less room. Gap utilities control sp
 
 <Tabs group="flex-sample-2" selectedTab="flex-sample-2-preview" ariaLabel="Wrapping metadata example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="flex-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
     <Flex wrap="true" align="center" class="gap-2">
       <Badge tone="accent">TypeScript</Badge>
       <Badge>Theme aware</Badge>
@@ -75,7 +99,10 @@ Wrapping keeps labels readable when there is less room. Gap utilities control sp
       <Badge>Accessible HTML</Badge>
       <Badge>Independent components</Badge>
     </Flex>
-  </TabPane>
+
+
+</div>
+</TabPane>
   <TabPane id="flex-sample-2-source-0" label="wrapping-metadata.mdx">
 ```html
 <Flex wrap="true" align="center" class="gap-2">
@@ -95,6 +122,7 @@ Use container for document semantics and inline for a layout that participates i
 
 <Tabs group="flex-sample-3" selectedTab="flex-sample-3-preview" ariaLabel="Semantic list and inline content example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="flex-sample-3-preview" label="Preview">
+<div class="component-preview-stage">
     <Flex container="ul" direction="column" class="pl-4">
       <li>Keep source order meaningful.</li>
       <li>Use layout to support the reading order.</li>
@@ -106,7 +134,10 @@ Use container for document semantics and inline for a layout that participates i
         <strong>Passing</strong>
       </Flex>
     </p>
-  </TabPane>
+
+
+</div>
+</TabPane>
   <TabPane id="flex-sample-3-source-0" label="semantic-flex.mdx">
 ```html
 <Flex container="ul" direction="column" class="pl-4">
@@ -123,6 +154,136 @@ Use container for document semantics and inline for a layout that participates i
 ```
   </TabPane>
 </Tabs>
+
+## Every direction
+
+The source order is always A, B, C. Reverse directions change visual order without changing reading or keyboard order.
+
+<ComponentExample label="Every direction" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>row</code>
+<Flex direction="row" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Flex>
+</div>
+<div class="component-appearance-cell"><code>row-reverse</code>
+<Flex direction="row-reverse" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Flex>
+</div>
+<div class="component-appearance-cell"><code>column</code>
+<Flex direction="column" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Flex>
+</div>
+<div class="component-appearance-cell"><code>column-reverse</code>
+<Flex direction="column-reverse" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Flex>
+</div>
+</div>
+</ComponentExample>
+
+## Every alignment
+
+The taller B tile makes cross-axis placement visible. Baseline aligns text rather than the tile edges.
+
+<ComponentExample label="Every alignment" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>stretch</code>
+<Flex align="stretch" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Flex>
+</div>
+<div class="component-appearance-cell"><code>start</code>
+<Flex align="start" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Flex>
+</div>
+<div class="component-appearance-cell"><code>center</code>
+<Flex align="center" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Flex>
+</div>
+<div class="component-appearance-cell"><code>end</code>
+<Flex align="end" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Flex>
+</div>
+<div class="component-appearance-cell"><code>baseline</code>
+<Flex align="baseline" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Flex>
+</div>
+</div>
+</ComponentExample>
+
+## Every distribution
+
+All seven justify values. Stretch is a valid value, but normal flex items do not grow just because justify-content is stretch; use a flex utility to grow them.
+
+<ComponentExample label="Every distribution" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>start</code>
+<Flex justify="start" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Flex>
+</div>
+<div class="component-appearance-cell"><code>center</code>
+<Flex justify="center" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Flex>
+</div>
+<div class="component-appearance-cell"><code>end</code>
+<Flex justify="end" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Flex>
+</div>
+<div class="component-appearance-cell"><code>stretch</code>
+<Flex justify="stretch" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Flex>
+</div>
+<div class="component-appearance-cell"><code>between</code>
+<Flex justify="between" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Flex>
+</div>
+<div class="component-appearance-cell"><code>around</code>
+<Flex justify="around" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Flex>
+</div>
+<div class="component-appearance-cell"><code>evenly</code>
+<Flex justify="evenly" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Flex>
+</div>
+</div>
+</ComponentExample>
+
+## Wrapping behavior
+
+Boolean true and wrap permit lines; false and nowrap keep one line. Reverse flips the line order. A scrollable stage makes overflow visible without widening the page.
+
+<ComponentExample label="Wrapping behavior" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>nowrap</code>
+<div class="layout-demo-scroll"><Flex wrap="nowrap" class="layout-demo-track layout-demo-track--narrow"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Flex></div>
+</div>
+<div class="component-appearance-cell"><code>wrap</code>
+<div class="layout-demo-scroll"><Flex wrap="wrap" class="layout-demo-track layout-demo-track--narrow"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Flex></div>
+</div>
+<div class="component-appearance-cell"><code>reverse</code>
+<div class="layout-demo-scroll"><Flex wrap="reverse" class="layout-demo-track layout-demo-track--narrow"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Flex></div>
+</div>
+</div>
+</ComponentExample>
+
+## Inline and semantic containers
+
+The container prop changes the root element. Use semantic children when choosing ul or nav. inline uses inline-flex.
+
+<ComponentExample label="Inline and semantic containers" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>inline</code>
+<p>A label <Flex :inline="true" align="center"><Icon name="lucide:check" aria-hidden="true"/><span>Ready</span></Flex> inside a sentence.</p>
+</div>
+<div class="component-appearance-cell"><code>ul</code>
+<Flex container="ul" direction="column"><li>Content reviewed</li><li>Navigation checked</li></Flex>
+</div>
+<div class="component-appearance-cell"><code>nav</code>
+<Flex container="nav" wrap="true" aria-label="Layout resources"><a href="/components/layout/grid/">Grid</a><a href="/components/layout/panel/">Panel</a></Flex>
+</div>
+</div>
+</ComponentExample>
+
+## Every responsive override
+
+Each base prop has Sm, Md, Lg, and Xl overrides. Values apply from that breakpoint upward and inherit the smaller value when omitted. Resize the page to inspect this complete configuration.
+
+<ComponentExample label="Responsive overrides" caption="Direction, alignment, distribution, and wrapping all use the same mobile-first breakpoint scheme.">
+<Flex direction="column" directionSm="row" directionMd="row-reverse" directionLg="row" directionXl="row" align="stretch" alignSm="start" alignMd="center" alignLg="baseline" alignXl="end" justify="start" justifySm="between" justifyMd="around" justifyLg="evenly" justifyXl="end" wrap="wrap" wrapSm="nowrap" wrapMd="wrap" wrapLg="reverse" wrapXl="wrap" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Flex>
+</ComponentExample>
+
+```html
+<Flex direction="column" directionSm="row" directionMd="row-reverse" directionLg="row" directionXl="row"
+  align="stretch" alignSm="start" alignMd="center" alignLg="baseline" alignXl="end"
+  justify="start" justifySm="between" justifyMd="around" justifyLg="evenly" justifyXl="end"
+  wrap="wrap" wrapSm="nowrap" wrapMd="wrap" wrapLg="reverse" wrapXl="wrap">
+  <span>A</span>
+<span>B</span>
+<span>C</span>
+</Flex>
+```
 
 ## Behavior and accessibility
 

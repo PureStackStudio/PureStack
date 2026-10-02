@@ -25,7 +25,7 @@ export interface TabsOverflow {
 
 const tabsOverflowTemplate = html`<Flex direction="column">
   <FormSelectField id="tabs-overflow-width" label="Available container width" :model="width" :options="widths"/>
-  <div class="max-w-full" :style="{ width }">
+  <div :style="{ width, maxWidth: '100%' }">
     <Tabs id="tabs-overflow-preview" group="tabs-overflow-topics" :selectedTab="selected" tone="neutral" variant="surface" tabVariant="outline" ariaLabel="Project sections">
       <TabPane r-for="topic in topics" :id="topic.id" :label="topic.label" :disabled="topic.disabled" class="p-3">
         <p class="text-eyebrow mt-0">{{ topic.eyebrow }}</p><h3 class="mt-0">{{ topic.title }}</h3>

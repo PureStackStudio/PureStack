@@ -13,12 +13,34 @@ nav:
 
 # Icon
 
-Render a registered SVG symbol with the surrounding text color and a deliberate accessible name.
+<ComponentHeader name="Icon" kind="SVG symbol" summary="A small visual cue with a precise purpose. Registered SVG symbols follow the surrounding text color." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/icon/icon.ts" section="Layout &amp; content" sectionHref="/components/layout/"/>
 
-<Badge tone="accent" variant="surface">Icon</Badge>
+## In context
 
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/icon/icon.ts) · [API reference](#api-reference)
+<ComponentExample label="A cue beside useful text" caption="Decorative icons are hidden from assistive technology when the adjacent label supplies the meaning.">
+<div class="component-recipe"><Flex direction="column"><Flex align="center"><Icon name="lucide:layers" aria-hidden="true"/><h3>Project library</h3></Flex><Flex align="center"><Icon name="lucide:check" aria-hidden="true"/><span>All checks passed</span></Flex><BtnLink href="/guides/" variant="outline"><Flex inline="true" align="center"><span>Explore the guides</span><Icon name="lucide:arrow-right" aria-hidden="true"/></Flex></BtnLink></Flex></div>
+</ComponentExample>
 
+```html
+<div class="component-recipe">
+<Flex direction="column">
+<Flex align="center">
+<Icon name="lucide:layers" aria-hidden="true"/>
+<h3>Project library</h3>
+</Flex>
+<Flex align="center">
+<Icon name="lucide:check" aria-hidden="true"/>
+<span>All checks passed</span>
+</Flex>
+<BtnLink href="/guides/" variant="outline">
+<Flex inline="true" align="center">
+<span>Explore the guides</span>
+<Icon name="lucide:arrow-right" aria-hidden="true"/>
+</Flex>
+</BtnLink>
+</Flex>
+</div>
+```
 
 
 ## Icons alongside text
@@ -27,6 +49,7 @@ Decorative symbols support visible labels without repeating them to assistive te
 
 <Tabs group="icon-sample-1" selectedTab="icon-sample-1-preview" ariaLabel="Icons alongside text example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="icon-sample-1-preview" label="Preview">
+<div class="component-preview-stage">
     <Flex wrap="true" align="center">
       <Flex align="center">
         <Icon name="lucide:check" aria-hidden="true" />
@@ -37,7 +60,10 @@ Decorative symbols support visible labels without repeating them to assistive te
         <span>Inbox</span>
       </Flex>
     </Flex>
-  </TabPane>
+
+
+</div>
+</TabPane>
   <TabPane id="icon-sample-1-source-0" label="labelled-icons.mdx">
 ```html
 <Flex wrap="true" align="center">
@@ -60,10 +86,14 @@ When an icon is the only content, provide its meaning on a semantic wrapper.
 
 <Tabs group="icon-sample-2" selectedTab="icon-sample-2-preview" ariaLabel="A standalone symbol example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="icon-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
     <span role="img" aria-label="Checks passed" class="fs-h2">
       <Icon name="lucide:check" aria-hidden="true" />
     </span>
-  </TabPane>
+
+
+</div>
+</TabPane>
   <TabPane id="icon-sample-2-source-0" label="standalone-icon.mdx">
 ```html
 <span role="img" aria-label="Checks passed" class="fs-h2">
@@ -72,6 +102,62 @@ When an icon is the only content, provide its meaning on a semantic wrapper.
 ```
   </TabPane>
 </Tabs>
+
+## Symbols with a purpose
+
+A few verified symbols from the registry. Icon has one prop, name; size and color come from ordinary attributes and CSS.
+
+<ComponentExample label="Symbols with a purpose" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>lucide:layers</code>
+<Flex align="center"><Icon name="lucide:layers" aria-hidden="true"/><span>layers</span></Flex>
+</div>
+<div class="component-appearance-cell"><code>lucide:layout-grid</code>
+<Flex align="center"><Icon name="lucide:layout-grid" aria-hidden="true"/><span>layout-grid</span></Flex>
+</div>
+<div class="component-appearance-cell"><code>lucide:check</code>
+<Flex align="center"><Icon name="lucide:check" aria-hidden="true"/><span>check</span></Flex>
+</div>
+<div class="component-appearance-cell"><code>lucide:settings</code>
+<Flex align="center"><Icon name="lucide:settings" aria-hidden="true"/><span>settings</span></Flex>
+</div>
+<div class="component-appearance-cell"><code>lucide:star</code>
+<Flex align="center"><Icon name="lucide:star" aria-hidden="true"/><span>star</span></Flex>
+</div>
+<div class="component-appearance-cell"><code>lucide:arrow-right</code>
+<Flex align="center"><Icon name="lucide:arrow-right" aria-hidden="true"/><span>arrow-right</span></Flex>
+</div>
+</div>
+</ComponentExample>
+
+## Size and inherited color
+
+These are CSS choices, not Icon props. The same symbol inherits each container’s font size and currentColor.
+
+<ComponentExample label="Size and inherited color" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>sm</code>
+<span class="layout-icon-sample layout-icon-sample--sm"><Icon name="lucide:star" role="img" aria-label="Featured item"/></span>
+</div>
+<div class="component-appearance-cell"><code>md</code>
+<span class="layout-icon-sample layout-icon-sample--md"><Icon name="lucide:star" role="img" aria-label="Featured item"/></span>
+</div>
+<div class="component-appearance-cell"><code>lg</code>
+<span class="layout-icon-sample layout-icon-sample--lg"><Icon name="lucide:star" role="img" aria-label="Featured item"/></span>
+</div>
+</div>
+</ComponentExample>
+
+## Missing and decorative icons
+
+An omitted or unresolved name produces no icon element. A missing symbol should never be the only way to understand an action. Put `aria-hidden="true"` on decorative icons; use `role="img"` and a meaningful `aria-label` for a standalone symbol.
+
+
+```html
+<Icon name="lucide:check" aria-hidden="true"/>
+<Icon name="lucide:star" role="img" aria-label="Featured project"/>
+<Icon/>
+```
 
 ## Behavior and accessibility
 

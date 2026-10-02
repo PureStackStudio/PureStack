@@ -13,12 +13,21 @@ nav:
 
 # Section<wbr/>Header
 
-A consistent heading hierarchy with an eyebrow, subtitle and supporting footnote.
+<ComponentHeader name="SectionHeader" kind="Content hierarchy" summary="Introduce a section with a clear hierarchy: context, title, subtitle, and a small supporting note." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/sectionHeader/sectionHeader.ts" section="Layout &amp; content" sectionHref="/components/layout/"/>
 
-<Badge tone="accent" variant="surface">SectionHeader</Badge>
+## In context
 
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/sectionHeader/sectionHeader.ts) · [API reference](#api-reference)
+<ComponentExample label="An editorial introduction" caption="All four text layers, custom classes, a deliberate heading level, a title anchor, and content in the default slot.">
+<div class="component-recipe"><SectionHeader eyebrow="THE WORKSPACE" title="A home for your next idea" subtitle="Arrange the essentials, then make room for what comes next." footnote="Updated with the latest design review." titleTag="h3" titleId="workspace-heading" eyebrowClass="mb-2" titleClass="fs-h3 mb-2" subtitleClass="mb-3" footnoteClass="mb-3"><Badge tone="feature">12 projects</Badge></SectionHeader></div>
+</ComponentExample>
 
+```html
+<div class="component-recipe">
+<SectionHeader eyebrow="THE WORKSPACE" title="A home for your next idea" subtitle="Arrange the essentials, then make room for what comes next." footnote="Updated with the latest design review." titleTag="h3" titleId="workspace-heading" eyebrowClass="mb-2" titleClass="fs-h3 mb-2" subtitleClass="mb-3" footnoteClass="mb-3">
+<Badge tone="feature">12 projects</Badge>
+</SectionHeader>
+</div>
+```
 
 
 ## A complete section heading
@@ -27,13 +36,17 @@ Each text layer has a distinct job. The default heading level is h2.
 
 <Tabs group="section-header-sample-1" selectedTab="section-header-sample-1-preview" ariaLabel="A complete section heading example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="section-header-sample-1-preview" label="Preview">
+<div class="component-preview-stage">
     <SectionHeader
       eyebrow="THE COMPONENT SYSTEM"
       title="Small pieces. Complete interfaces."
       subtitle="Compose a page from focused components that share one theme."
       footnote="Every example includes its source."
     />
-  </TabPane>
+
+
+</div>
+</TabPane>
   <TabPane id="section-header-sample-1-source-0" label="complete-heading.mdx">
 ```html
 <SectionHeader
@@ -52,6 +65,7 @@ Use h3 when the header belongs inside a section. Utility classes adjust appearan
 
 <Tabs group="section-header-sample-2" selectedTab="section-header-sample-2-preview" ariaLabel="Fit the document hierarchy example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="section-header-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
     <Panel bodyClass="p-4">
       <SectionHeader
         title="Within a card"
@@ -63,7 +77,10 @@ Use h3 when the header belongs inside a section. Utility classes adjust appearan
         <Badge tone="success">Ready to use</Badge>
       </SectionHeader>
     </Panel>
-  </TabPane>
+
+
+</div>
+</TabPane>
   <TabPane id="section-header-sample-2-source-0" label="heading-level.mdx">
 ```html
 <Panel bodyClass="p-4">
@@ -80,6 +97,73 @@ Use h3 when the header belongs inside a section. Utility classes adjust appearan
 ```
   </TabPane>
 </Tabs>
+
+## Every title element
+
+titleTag accepts h1–h6, p, div, or span. These samples use a uniform visual size so you can compare the actual elements. Use heading levels that fit your real document.
+
+<ComponentExample label="Every title element" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>h1</code>
+<SectionHeader title="h1 title" titleTag="h1" titleClass="fs-h4 mb-0"/>
+</div>
+<div class="component-appearance-cell"><code>h2</code>
+<SectionHeader title="h2 title" titleTag="h2" titleClass="fs-h4 mb-0"/>
+</div>
+<div class="component-appearance-cell"><code>h3</code>
+<SectionHeader title="h3 title" titleTag="h3" titleClass="fs-h4 mb-0"/>
+</div>
+<div class="component-appearance-cell"><code>h4</code>
+<SectionHeader title="h4 title" titleTag="h4" titleClass="fs-h4 mb-0"/>
+</div>
+<div class="component-appearance-cell"><code>h5</code>
+<SectionHeader title="h5 title" titleTag="h5" titleClass="fs-h4 mb-0"/>
+</div>
+<div class="component-appearance-cell"><code>h6</code>
+<SectionHeader title="h6 title" titleTag="h6" titleClass="fs-h4 mb-0"/>
+</div>
+<div class="component-appearance-cell"><code>p</code>
+<SectionHeader title="p title" titleTag="p" titleClass="fs-h4 mb-0"/>
+</div>
+<div class="component-appearance-cell"><code>div</code>
+<SectionHeader title="div title" titleTag="div" titleClass="fs-h4 mb-0"/>
+</div>
+<div class="component-appearance-cell"><code>span</code>
+<SectionHeader title="span title" titleTag="span" titleClass="fs-h4 mb-0"/>
+</div>
+</div>
+</ComponentExample>
+
+## Optional text layers
+
+Each missing layer is omitted. A title-only header can be enough; add context when it helps.
+
+<ComponentExample label="Optional text layers" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Title only</code>
+<SectionHeader title="Project library" titleTag="h3" titleClass="fs-h4"/>
+</div>
+<div class="component-appearance-cell"><code>Context + title</code>
+<SectionHeader eyebrow="WORKSPACE" title="Project library" titleTag="h3" titleClass="fs-h4"/>
+</div>
+<div class="component-appearance-cell"><code>Full hierarchy</code>
+<SectionHeader eyebrow="WORKSPACE" title="Project library" subtitle="A home for your next idea." footnote="Updated today." titleTag="h3" titleClass="fs-h4"/>
+</div>
+</div>
+</ComponentExample>
+
+## Styling each layer
+
+SectionHeader has no tone or variant props. Style its four text layers with eyebrowClass, titleClass, subtitleClass, and footnoteClass. titleId creates a linkable title; the default slot adds supporting content after the text.
+
+
+```html
+<div class="component-recipe">
+<SectionHeader eyebrow="THE WORKSPACE" title="A home for your next idea" subtitle="Arrange the essentials, then make room for what comes next." footnote="Updated with the latest design review." titleTag="h3" titleId="workspace-heading" eyebrowClass="mb-2" titleClass="fs-h3 mb-2" subtitleClass="mb-3" footnoteClass="mb-3">
+<Badge tone="feature">12 projects</Badge>
+</SectionHeader>
+</div>
+```
 
 ## Behavior and accessibility
 

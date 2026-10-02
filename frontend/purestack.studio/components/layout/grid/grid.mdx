@@ -13,12 +13,32 @@ nav:
 
 # Grid
 
-Responsive columns and explicit CSS tracks for cards, settings and content layouts.
+<ComponentHeader name="Grid" kind="Two-dimensional layout" summary="From equal cards to deliberate tracks. Responsive columns and item alignment make space for the content." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/grid/grid.ts" section="Layout &amp; content" sectionHref="/components/layout/"/>
 
-<Badge tone="accent" variant="surface">Grid</Badge>
+## In context
 
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/grid/grid.ts) · [API reference](#api-reference)
+<ComponentExample label="A responsive workspace" caption="One column on narrow screens, two at sm, and three at xl. The first card spans two columns from sm upward.">
+<Grid columns="1" columnsSm="2" columnsXl="3"><Panel class="layout-featured-card" tone="feature" variant="surface"><IconFrame name="lucide:layers" tone="feature"/><h3>Build with intent</h3><p>A featured card with room for a little more context.</p></Panel><Panel tone="info"><h3>Documentation</h3><p>A clear place to begin.</p><BtnLink href="/guides/" tone="info" variant="link">Open guides</BtnLink></Panel><Panel tone="success"><h3>Ready to compose</h3><p>Small components. Flexible layouts.</p></Panel></Grid>
+</ComponentExample>
 
+```html
+<Grid columns="1" columnsSm="2" columnsXl="3">
+<Panel class="layout-featured-card" tone="feature" variant="surface">
+<IconFrame name="lucide:layers" tone="feature"/>
+<h3>Build with intent</h3>
+<p>A featured card with room for a little more context.</p>
+</Panel>
+<Panel tone="info">
+<h3>Documentation</h3>
+<p>A clear place to begin.</p>
+<BtnLink href="/guides/" tone="info" variant="link">Open guides</BtnLink>
+</Panel>
+<Panel tone="success">
+<h3>Ready to compose</h3>
+<p>Small components. Flexible layouts.</p>
+</Panel>
+</Grid>
+```
 
 
 ## A responsive card grid
@@ -27,6 +47,7 @@ One column becomes two at sm and three at lg. Cards stretch to share the row hei
 
 <Tabs group="grid-sample-1" selectedTab="grid-sample-1-preview" ariaLabel="A responsive card grid example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="grid-sample-1-preview" label="Preview">
+<div class="component-preview-stage">
     <Grid columns="1" columnsSm="2" columnsLg="3">
       <Panel bodyClass="p-3">
         <Badge tone="accent">01</Badge>
@@ -44,7 +65,10 @@ One column becomes two at sm and three at lg. Cards stretch to share the row hei
         <p>Keep every surface consistent.</p>
       </Panel>
     </Grid>
-  </TabPane>
+
+
+</div>
+</TabPane>
   <TabPane id="grid-sample-1-source-0" label="responsive-cards.mdx">
 ```html
 <Grid columns="1" columnsSm="2" columnsLg="3">
@@ -74,6 +98,7 @@ A minmax track lets long content shrink; the action keeps its natural width when
 
 <Tabs group="grid-sample-2" selectedTab="grid-sample-2-preview" ariaLabel="Content and action tracks example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="grid-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
     <Grid columns="1" columnsMd="minmax(0, 1fr) auto" alignItems="center">
       <div>
         <h3 class="m-0">Ready to compose?</h3>
@@ -81,7 +106,10 @@ A minmax track lets long content shrink; the action keeps its natural width when
       </div>
       <BtnLink href="/components/layout/flex/" tone="accent">Explore Flex</BtnLink>
     </Grid>
-  </TabPane>
+
+
+</div>
+</TabPane>
   <TabPane id="grid-sample-2-source-0" label="custom-tracks.mdx">
 ```html
 <Grid columns="1" columnsMd="minmax(0, 1fr) auto" alignItems="center">
@@ -101,11 +129,15 @@ Alignment controls how children sit inside their cells. It does not change the n
 
 <Tabs group="grid-sample-3" selectedTab="grid-sample-3-preview" ariaLabel="Item alignment example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="grid-sample-3-preview" label="Preview">
+<div class="component-preview-stage">
     <Grid columns="2" alignItems="center" justifyItems="start">
       <Badge tone="accent">Compact item</Badge>
       <Panel bodyClass="p-4">A taller item establishes the row height.</Panel>
     </Grid>
-  </TabPane>
+
+
+</div>
+</TabPane>
   <TabPane id="grid-sample-3-source-0" label="item-alignment.mdx">
 ```html
 <Grid columns="2" alignItems="center" justifyItems="start">
@@ -115,6 +147,139 @@ Alignment controls how children sit inside their cells. It does not change the n
 ```
   </TabPane>
 </Tabs>
+
+## Every column count
+
+Numeric counts from 1 through 12. Values are clamped to this range; each track uses minmax(0, 1fr).
+
+<ComponentExample label="Every column count" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>1</code>
+<Grid columns="1" class="layout-grid-demo"><span class="layout-grid-tile">1</span></Grid>
+</div>
+<div class="component-appearance-cell"><code>2</code>
+<Grid columns="2" class="layout-grid-demo"><span class="layout-grid-tile">1</span><span class="layout-grid-tile">2</span></Grid>
+</div>
+<div class="component-appearance-cell"><code>3</code>
+<Grid columns="3" class="layout-grid-demo"><span class="layout-grid-tile">1</span><span class="layout-grid-tile">2</span><span class="layout-grid-tile">3</span></Grid>
+</div>
+<div class="component-appearance-cell"><code>4</code>
+<Grid columns="4" class="layout-grid-demo"><span class="layout-grid-tile">1</span><span class="layout-grid-tile">2</span><span class="layout-grid-tile">3</span><span class="layout-grid-tile">4</span></Grid>
+</div>
+<div class="component-appearance-cell"><code>5</code>
+<Grid columns="5" class="layout-grid-demo"><span class="layout-grid-tile">1</span><span class="layout-grid-tile">2</span><span class="layout-grid-tile">3</span><span class="layout-grid-tile">4</span><span class="layout-grid-tile">5</span></Grid>
+</div>
+<div class="component-appearance-cell"><code>6</code>
+<Grid columns="6" class="layout-grid-demo"><span class="layout-grid-tile">1</span><span class="layout-grid-tile">2</span><span class="layout-grid-tile">3</span><span class="layout-grid-tile">4</span><span class="layout-grid-tile">5</span><span class="layout-grid-tile">6</span></Grid>
+</div>
+<div class="component-appearance-cell"><code>7</code>
+<Grid columns="7" class="layout-grid-demo"><span class="layout-grid-tile">1</span><span class="layout-grid-tile">2</span><span class="layout-grid-tile">3</span><span class="layout-grid-tile">4</span><span class="layout-grid-tile">5</span><span class="layout-grid-tile">6</span><span class="layout-grid-tile">7</span></Grid>
+</div>
+<div class="component-appearance-cell"><code>8</code>
+<Grid columns="8" class="layout-grid-demo"><span class="layout-grid-tile">1</span><span class="layout-grid-tile">2</span><span class="layout-grid-tile">3</span><span class="layout-grid-tile">4</span><span class="layout-grid-tile">5</span><span class="layout-grid-tile">6</span><span class="layout-grid-tile">7</span><span class="layout-grid-tile">8</span></Grid>
+</div>
+<div class="component-appearance-cell"><code>9</code>
+<Grid columns="9" class="layout-grid-demo"><span class="layout-grid-tile">1</span><span class="layout-grid-tile">2</span><span class="layout-grid-tile">3</span><span class="layout-grid-tile">4</span><span class="layout-grid-tile">5</span><span class="layout-grid-tile">6</span><span class="layout-grid-tile">7</span><span class="layout-grid-tile">8</span><span class="layout-grid-tile">9</span></Grid>
+</div>
+<div class="component-appearance-cell"><code>10</code>
+<Grid columns="10" class="layout-grid-demo"><span class="layout-grid-tile">1</span><span class="layout-grid-tile">2</span><span class="layout-grid-tile">3</span><span class="layout-grid-tile">4</span><span class="layout-grid-tile">5</span><span class="layout-grid-tile">6</span><span class="layout-grid-tile">7</span><span class="layout-grid-tile">8</span><span class="layout-grid-tile">9</span><span class="layout-grid-tile">10</span></Grid>
+</div>
+<div class="component-appearance-cell"><code>11</code>
+<Grid columns="11" class="layout-grid-demo"><span class="layout-grid-tile">1</span><span class="layout-grid-tile">2</span><span class="layout-grid-tile">3</span><span class="layout-grid-tile">4</span><span class="layout-grid-tile">5</span><span class="layout-grid-tile">6</span><span class="layout-grid-tile">7</span><span class="layout-grid-tile">8</span><span class="layout-grid-tile">9</span><span class="layout-grid-tile">10</span><span class="layout-grid-tile">11</span></Grid>
+</div>
+<div class="component-appearance-cell"><code>12</code>
+<Grid columns="12" class="layout-grid-demo"><span class="layout-grid-tile">1</span><span class="layout-grid-tile">2</span><span class="layout-grid-tile">3</span><span class="layout-grid-tile">4</span><span class="layout-grid-tile">5</span><span class="layout-grid-tile">6</span><span class="layout-grid-tile">7</span><span class="layout-grid-tile">8</span><span class="layout-grid-tile">9</span><span class="layout-grid-tile">10</span><span class="layout-grid-tile">11</span><span class="layout-grid-tile">12</span></Grid>
+</div>
+</div>
+</ComponentExample>
+
+## Every item alignment
+
+All alignItems values with a fixed-height stage and a taller second tile.
+
+<ComponentExample label="Every item alignment" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>stretch</code>
+<Grid columns="3" alignItems="stretch" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Grid>
+</div>
+<div class="component-appearance-cell"><code>start</code>
+<Grid columns="3" alignItems="start" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Grid>
+</div>
+<div class="component-appearance-cell"><code>center</code>
+<Grid columns="3" alignItems="center" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Grid>
+</div>
+<div class="component-appearance-cell"><code>end</code>
+<Grid columns="3" alignItems="end" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Grid>
+</div>
+</div>
+</ComponentExample>
+
+## Every horizontal placement
+
+All justifyItems values. Stretch fills the track; the other values preserve the item’s natural width.
+
+<ComponentExample label="Every horizontal placement" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>stretch</code>
+<Grid columns="2" justifyItems="stretch" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Grid>
+</div>
+<div class="component-appearance-cell"><code>start</code>
+<Grid columns="2" justifyItems="start" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Grid>
+</div>
+<div class="component-appearance-cell"><code>center</code>
+<Grid columns="2" justifyItems="center" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Grid>
+</div>
+<div class="component-appearance-cell"><code>end</code>
+<Grid columns="2" justifyItems="end" class="layout-demo-track"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Grid>
+</div>
+</div>
+</ComponentExample>
+
+## Dense packing
+
+The third small tile can fill the earlier gap when dense is enabled. Packing may change visual order, so preserve a sensible source order.
+
+<ComponentExample label="Dense packing" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>false</code>
+<Grid columns="3" :dense="false" class="layout-grid-demo"><span class="layout-grid-tile" style="grid-column: span 2">A spans 2</span><span class="layout-grid-tile" style="grid-column: span 2">B spans 2</span><span class="layout-grid-tile">C</span><span class="layout-grid-tile">D</span></Grid>
+</div>
+<div class="component-appearance-cell"><code>true</code>
+<Grid columns="3" :dense="true" class="layout-grid-demo"><span class="layout-grid-tile" style="grid-column: span 2">A spans 2</span><span class="layout-grid-tile" style="grid-column: span 2">B spans 2</span><span class="layout-grid-tile">C</span><span class="layout-grid-tile">D</span></Grid>
+</div>
+</div>
+</ComponentExample>
+
+## Tracks, containers, and every breakpoint
+
+Columns accept a number, a numeric string, or a CSS track expression. Omitted responsive values inherit the smaller breakpoint. Custom gaps and spans belong to CSS classes or native style attributes.
+
+<ComponentExample label="Every responsive column override" caption="Resize the viewport: one column at the base size, two at sm, three at md, four at lg, and six at xl.">
+  <Grid columns="1" columnsSm="2" columnsMd="3" columnsLg="4" columnsXl="6" class="layout-grid-demo">
+    <span class="layout-grid-tile">A</span>
+    <span class="layout-grid-tile">B</span>
+    <span class="layout-grid-tile">C</span>
+    <span class="layout-grid-tile">D</span>
+    <span class="layout-grid-tile">E</span>
+    <span class="layout-grid-tile">F</span>
+  </Grid>
+</ComponentExample>
+
+<ComponentExample label="Explicit tracks" caption="minmax(0, 1fr) keeps the content track shrinkable; the action track follows its content.">
+<Grid container="section" columns="minmax(0, 1fr) auto" aria-label="Release summary"><p>Release checklist</p><Badge tone="success">Ready</Badge></Grid>
+</ComponentExample>
+
+```html
+<Grid container="section" columns="1" columnsSm="2" columnsMd="3" columnsLg="4" columnsXl="6" aria-label="Project cards">
+  <Panel>First project</Panel>
+  <Panel>Second project</Panel>
+</Grid>
+
+<Grid columns="minmax(0, 1fr) auto">
+  <span>Content</span>
+<Badge>Ready</Badge>
+</Grid>
+```
 
 ## Behavior and accessibility
 

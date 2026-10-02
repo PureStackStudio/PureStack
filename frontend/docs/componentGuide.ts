@@ -60,6 +60,54 @@ export function registerComponentGuideStyles() {
     const neutral = palette.semanticTone.neutral
     const accent = palette.semanticTone.accent
     root.select('.component-guide-card > .badge').css({ alignSelf: 'start' })
+    root.select('.layout-demo-track').css({
+      minHeight: '7rem',
+      padding: '0.75rem',
+      border: `1px dashed ${accent.border.subtle}`,
+      borderRadius: '0.5rem',
+      background: neutral.surface.rest.background,
+      gap: '0.5rem',
+    })
+    root.select('.layout-demo-item').css({
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      minWidth: '2rem',
+      padding: '0.5rem',
+      borderRadius: '0.4rem',
+      background: accent.surface.rest.background,
+      color: accent.text.default,
+      fontWeight: '600',
+    })
+    root
+      .select('.layout-demo-item--tall')
+      .css({ minHeight: '4rem', fontSize: '1.3rem' })
+    root.select('.layout-demo-scroll').css({ overflowX: 'auto', minWidth: '0' })
+    root
+      .select('.layout-demo-track--narrow')
+      .css({ width: '9rem', minHeight: '7rem' })
+    root.select('.layout-grid-demo').css({ gap: '0.25rem', minWidth: '0' })
+    root.select('.layout-grid-tile').css({
+      padding: '0.65rem 0',
+      textAlign: 'center',
+      minWidth: '0',
+      fontSize: '0.6rem',
+      borderRadius: '0.25rem',
+      background: accent.surface.rest.background,
+      color: accent.text.default,
+    })
+    root.select('.layout-icon-sample').css({
+      display: 'inline-flex',
+      justifyContent: 'center',
+      color: accent.text.default,
+    })
+    root.select('.layout-icon-sample--sm').css({ fontSize: '1rem' })
+    root.select('.layout-icon-sample--md').css({ fontSize: '1.75rem' })
+    root.select('.layout-icon-sample--lg').css({ fontSize: '2.5rem' })
+    root
+      .media('min-width: 640px')
+      .select('.layout-featured-card')
+      .css({ gridColumn: 'span 2' })
     root.select('.component-header').css({
       position: 'relative',
       overflow: 'hidden',

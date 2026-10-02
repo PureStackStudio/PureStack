@@ -13,12 +13,30 @@ nav:
 
 # Modal<wbr/>Trigger
 
-A labelled button that opens a matching Modal through the standard dialog runtime.
+<ComponentHeader name="ModalTrigger" kind="Dialog action" summary="A clear invitation to a focused task. Connect a labelled native button to a matching dialog." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/modal/modal.ts" section="Layout &amp; content" sectionHref="/components/layout/"/>
 
-<Badge tone="accent" variant="surface">ModalTrigger</Badge>
+## In context
 
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/modal/modal.ts) · [API reference](#api-reference)
+<ComponentExample label="A labelled next step" caption="The target matches the dialog ID. Multiple triggers can open the same dialog and retain their own appearance.">
+<div class="component-recipe"><h3>Release review</h3><p>Open a focused review without leaving your place in the document.</p><Flex wrap="true"><ModalTrigger target="layout-trigger-review" label="Review release" tone="accent"/><ModalTrigger target="layout-trigger-review" label="Preview again" tone="neutral" variant="outline"/></Flex><Modal id="layout-trigger-review" title="Review release" :showClose="true"><p>This dialog belongs to both triggers. Close it to return focus to the button you used.</p><template #footer><Btn tone="accent" data-modal-close>Done</Btn></template></Modal></div>
+</ComponentExample>
 
+```html
+<div class="component-recipe">
+<h3>Release review</h3>
+<p>Open a focused review without leaving your place in the document.</p>
+<Flex wrap="true">
+<ModalTrigger target="layout-trigger-review" label="Review release" tone="accent"/>
+<ModalTrigger target="layout-trigger-review" label="Preview again" tone="neutral" variant="outline"/>
+</Flex>
+<Modal id="layout-trigger-review" title="Review release" :showClose="true">
+<p>This dialog belongs to both triggers. Close it to return focus to the button you used.</p>
+<template #footer>
+<Btn tone="accent" data-modal-close>Done</Btn>
+</template>
+</Modal>
+</div>
+```
 
 
 ## Open a review dialog
@@ -27,6 +45,7 @@ The target is the dialog ID without a hash. Close returns focus to the trigger.
 
 <Tabs group="modal-trigger-sample-1" selectedTab="modal-trigger-sample-1-preview" ariaLabel="Open a review dialog example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="modal-trigger-sample-1-preview" label="Preview">
+<div class="component-preview-stage">
     <ModalTrigger target="trigger-review-dialog" label="Review release" tone="accent" />
     <Modal id="trigger-review-dialog" title="Review release" size="sm" :showClose="true">
       <p>The example release is ready for review.</p>
@@ -34,7 +53,10 @@ The target is the dialog ID without a hash. Close returns focus to the trigger.
         <Btn data-modal-close variant="outline">Close review</Btn>
       </template>
     </Modal>
-  </TabPane>
+
+
+</div>
+</TabPane>
   <TabPane id="modal-trigger-sample-1-source-0" label="review-dialog.mdx">
 ```html
 <ModalTrigger target="trigger-review-dialog" label="Review release" tone="accent" />
@@ -54,13 +76,17 @@ More than one trigger can open the same dialog; each has its own label and treat
 
 <Tabs group="modal-trigger-sample-2" selectedTab="modal-trigger-sample-2-preview" ariaLabel="A secondary trigger example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="modal-trigger-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
     <ModalTrigger
       target="trigger-review-dialog"
       label="Open the same review"
       tone="neutral"
       variant="outline"
     />
-  </TabPane>
+
+
+</div>
+</TabPane>
   <TabPane id="modal-trigger-sample-2-source-0" label="secondary-trigger.mdx">
 ```html
 <ModalTrigger
@@ -72,6 +98,108 @@ More than one trigger can open the same dialog; each has its own label and treat
 ```
   </TabPane>
 </Tabs>
+
+## All semantic tones
+
+All ten supported tones. A semantic palette communicates intent; visible labels keep the meaning explicit.
+
+<ComponentExample label="All semantic tones" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>neutral</code>
+<ModalTrigger target="layout-trigger-review" label="neutral" tone="neutral"/>
+</div>
+<div class="component-appearance-cell"><code>accent</code>
+<ModalTrigger target="layout-trigger-review" label="accent" tone="accent"/>
+</div>
+<div class="component-appearance-cell"><code>feature</code>
+<ModalTrigger target="layout-trigger-review" label="feature" tone="feature"/>
+</div>
+<div class="component-appearance-cell"><code>secondary</code>
+<ModalTrigger target="layout-trigger-review" label="secondary" tone="secondary"/>
+</div>
+<div class="component-appearance-cell"><code>custom</code>
+<ModalTrigger target="layout-trigger-review" label="custom" tone="custom"/>
+</div>
+<div class="component-appearance-cell"><code>ghost</code>
+<ModalTrigger target="layout-trigger-review" label="ghost" tone="ghost"/>
+</div>
+<div class="component-appearance-cell"><code>info</code>
+<ModalTrigger target="layout-trigger-review" label="info" tone="info"/>
+</div>
+<div class="component-appearance-cell"><code>success</code>
+<ModalTrigger target="layout-trigger-review" label="success" tone="success"/>
+</div>
+<div class="component-appearance-cell"><code>warning</code>
+<ModalTrigger target="layout-trigger-review" label="warning" tone="warning"/>
+</div>
+<div class="component-appearance-cell"><code>danger</code>
+<ModalTrigger target="layout-trigger-review" label="danger" tone="danger"/>
+</div>
+</div>
+</ComponentExample>
+
+## All visual variants
+
+All eighteen supported treatments, shown together.
+
+<ComponentExample label="All visual variants" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>solid</code>
+<ModalTrigger target="layout-trigger-review" label="solid" variant="solid"/>
+</div>
+<div class="component-appearance-cell"><code>surface</code>
+<ModalTrigger target="layout-trigger-review" label="surface" variant="surface"/>
+</div>
+<div class="component-appearance-cell"><code>surfaceAlt</code>
+<ModalTrigger target="layout-trigger-review" label="surfaceAlt" variant="surfaceAlt"/>
+</div>
+<div class="component-appearance-cell"><code>spotlight</code>
+<ModalTrigger target="layout-trigger-review" label="spotlight" variant="spotlight"/>
+</div>
+<div class="component-appearance-cell"><code>glass</code>
+<ModalTrigger target="layout-trigger-review" label="glass" variant="glass"/>
+</div>
+<div class="component-appearance-cell"><code>flat</code>
+<ModalTrigger target="layout-trigger-review" label="flat" variant="flat"/>
+</div>
+<div class="component-appearance-cell"><code>flatAlt</code>
+<ModalTrigger target="layout-trigger-review" label="flatAlt" variant="flatAlt"/>
+</div>
+<div class="component-appearance-cell"><code>flatSolid</code>
+<ModalTrigger target="layout-trigger-review" label="flatSolid" variant="flatSolid"/>
+</div>
+<div class="component-appearance-cell"><code>outlineFill</code>
+<ModalTrigger target="layout-trigger-review" label="outlineFill" variant="outlineFill"/>
+</div>
+<div class="component-appearance-cell"><code>outline</code>
+<ModalTrigger target="layout-trigger-review" label="outline" variant="outline"/>
+</div>
+<div class="component-appearance-cell"><code>subtle</code>
+<ModalTrigger target="layout-trigger-review" label="subtle" variant="subtle"/>
+</div>
+<div class="component-appearance-cell"><code>subtleBtn</code>
+<ModalTrigger target="layout-trigger-review" label="subtleBtn" variant="subtleBtn"/>
+</div>
+<div class="component-appearance-cell"><code>link</code>
+<ModalTrigger target="layout-trigger-review" label="link" variant="link"/>
+</div>
+<div class="component-appearance-cell"><code>sheen</code>
+<ModalTrigger target="layout-trigger-review" label="sheen" variant="sheen"/>
+</div>
+<div class="component-appearance-cell"><code>underline</code>
+<ModalTrigger target="layout-trigger-review" label="underline" variant="underline"/>
+</div>
+<div class="component-appearance-cell"><code>rail</code>
+<ModalTrigger target="layout-trigger-review" label="rail" variant="rail"/>
+</div>
+<div class="component-appearance-cell"><code>bracket</code>
+<ModalTrigger target="layout-trigger-review" label="bracket" variant="bracket"/>
+</div>
+<div class="component-appearance-cell"><code>none</code>
+<ModalTrigger target="layout-trigger-review" label="none" variant="none"/>
+</div>
+</div>
+</ComponentExample>
 
 ## Behavior and accessibility
 

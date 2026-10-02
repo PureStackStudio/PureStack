@@ -13,22 +13,41 @@ nav:
 
 # Layout and content
 
-Structure interfaces with responsive layouts, content surfaces, icons, grouped views and dialogs.
+<p class="component-directory-lead">Give every piece of content a place to belong.</p>
 
-[All components](/components/)
+Build the structure, establish the hierarchy, then reveal details when they matter. Eleven focused components share the same theme and compose into complete interfaces. Each guide shows real compositions and every supported appearance or layout option.
 
-## Component guides
+## Choose your building block
 
-<Grid columns="1" columnsSm="2" columnsXl="3">
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Panel</h3><p>A semantic surface for settings, summaries and grouped content. Control its tone, treatment and inner layout without losing the theme.</p><BtnLink href="/components/layout/panel/" tone="accent" variant="link">Explore Panel</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Flex</h3><p>Arrange content along one axis, from compact inline metadata to responsive application toolbars.</p><BtnLink href="/components/layout/flex/" tone="accent" variant="link">Explore Flex</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Grid</h3><p>Responsive columns and explicit CSS tracks for cards, settings and content layouts.</p><BtnLink href="/components/layout/grid/" tone="accent" variant="link">Explore Grid</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Section<wbr/>Header</h3><p>A consistent heading hierarchy with an eyebrow, subtitle and supporting footnote.</p><BtnLink href="/components/layout/section-header/" tone="accent" variant="link">Explore Section<wbr/>Header</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Expandable<wbr/>Panel</h3><p>Progressively disclose details with a native, keyboard-operable summary and a themed content surface.</p><BtnLink href="/components/layout/expandable-panel/" tone="accent" variant="link">Explore Expandable<wbr/>Panel</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Icon</h3><p>Render a registered SVG symbol with the surrounding text color and a deliberate accessible name.</p><BtnLink href="/components/layout/icon/" tone="accent" variant="link">Explore Icon</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Icon<wbr/>Frame</h3><p>Give an icon a consistent size, semantic color and framed treatment for cards, metrics and status summaries.</p><BtnLink href="/components/layout/icon-frame/" tone="accent" variant="link">Explore Icon<wbr/>Frame</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Tabs</h3><p>Related views with persistent panels and keyboard controls.</p><BtnLink href="/components/layout/tabs/" tone="accent" variant="link">Explore Tabs</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Tab<wbr/>Pane</h3><p>One labelled view within Tabs, with its own content surface, icon and availability state.</p><BtnLink href="/components/layout/tab-pane/" tone="accent" variant="link">Explore Tab<wbr/>Pane</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Modal</h3><p>Native dialogs with focus handling and flexible slots.</p><BtnLink href="/components/layout/modal/" tone="accent" variant="link">Explore Modal</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Modal<wbr/>Trigger</h3><p>A labelled button that opens a matching Modal through the standard dialog runtime.</p><BtnLink href="/components/layout/modal-trigger/" tone="accent" variant="link">Explore Modal<wbr/>Trigger</BtnLink></Panel>
-</Grid>
+<div class="component-guide-grid">
+<article class="component-guide-card"><div class="component-guide-card__preview"><Panel tone="feature" variant="surface"><strong>Design system</strong><Badge tone="success">Ready</Badge></Panel></div><h3>Panel</h3><Badge tone="neutral">Content surface</Badge><p>Give related content a place of its own. Semantic surfaces, layered treatments, and deliberate inner spacing.</p><a href="/components/layout/panel/">Explore Panel <span aria-hidden="true">↗</span></a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><Flex align="center" justify="between" class="w-full"><span class="layout-demo-item">A</span><span class="layout-demo-item layout-demo-item--tall">B</span><span class="layout-demo-item">C</span></Flex></div><h3>Flex</h3><Badge tone="neutral">One-dimensional layout</Badge><p>Build a useful rhythm along one axis. Direction, alignment, distribution, and wrapping adapt with the viewport.</p><a href="/components/layout/flex/">Explore Flex <span aria-hidden="true">↗</span></a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><Grid columns="3" class="w-full"><span class="layout-demo-item">A</span><span class="layout-demo-item">B</span><span class="layout-demo-item">C</span></Grid></div><h3>Grid</h3><Badge tone="neutral">Two-dimensional layout</Badge><p>From equal cards to deliberate tracks. Responsive columns and item alignment make space for the content.</p><a href="/components/layout/grid/">Explore Grid <span aria-hidden="true">↗</span></a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><SectionHeader eyebrow="WORKSPACE" title="A home for your ideas" titleTag="p" titleClass="fs-h4 mb-0"/></div><h3>SectionHeader</h3><Badge tone="neutral">Content hierarchy</Badge><p>Introduce a section with a clear hierarchy: context, title, subtitle, and a small supporting note.</p><a href="/components/layout/section-header/">Explore SectionHeader <span aria-hidden="true">↗</span></a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><ExpandablePanel title="Release details" badge="Ready" tone="success"><p>All checks passed.</p></ExpandablePanel></div><h3>ExpandablePanel</h3><Badge tone="neutral">Progressive disclosure</Badge><p>Keep the overview easy to scan and reveal details on demand. Native disclosure with an expressive summary.</p><a href="/components/layout/expandable-panel/">Explore ExpandablePanel <span aria-hidden="true">↗</span></a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><Icon name="lucide:layers"/><Icon name="lucide:check"/><Icon name="lucide:settings"/></div><h3>Icon</h3><Badge tone="neutral">SVG symbol</Badge><p>A small visual cue with a precise purpose. Registered SVG symbols follow the surrounding text color.</p><a href="/components/layout/icon/">Explore Icon <span aria-hidden="true">↗</span></a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><IconFrame name="lucide:layers" tone="feature" size="lg"/><IconFrame name="lucide:check" tone="success" variant="surface"/></div><h3>IconFrame</h3><Badge tone="neutral">Framed symbol</Badge><p>Give a symbol its own visual weight. Three sizes, every semantic tone, and the full range of surface treatments.</p><a href="/components/layout/icon-frame/">Explore IconFrame <span aria-hidden="true">↗</span></a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><Tabs group="layout-directory-tabs" selectedTab="layout-directory-overview" ariaLabel="Directory preview" tabVariant="underline"><TabPane id="layout-directory-overview" label="Overview">A focused view.</TabPane><TabPane id="layout-directory-details" label="Details">A second view.</TabPane></Tabs></div><h3>Tabs</h3><Badge tone="neutral">Related views</Badge><p>Let people move between related views without losing context. Independent surfaces and native keyboard controls.</p><a href="/components/layout/tabs/">Explore Tabs <span aria-hidden="true">↗</span></a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><Badge tone="feature">Overview</Badge><Badge tone="success">Checks</Badge><Badge tone="neutral">History</Badge></div><h3>TabPane</h3><Badge tone="neutral">Content view</Badge><p>One focused view inside a tab group. Control its label, icon, availability, and individual appearance.</p><a href="/components/layout/tab-pane/">Explore TabPane <span aria-hidden="true">↗</span></a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><ModalTrigger target="layout-directory-modal" label="Review release" tone="accent"/><Modal id="layout-directory-modal" title="Review release" :showClose="true"><p>A focused dialog, with a return to your place.</p></Modal></div><h3>Modal</h3><Badge tone="neutral">Focused dialog</Badge><p>Give an important moment its own space. Native dialogs with deliberate motion, flexible slots, and focus handling.</p><a href="/components/layout/modal/">Explore Modal <span aria-hidden="true">↗</span></a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><ModalTrigger target="layout-directory-modal" label="Open review" variant="outline"/></div><h3>ModalTrigger</h3><Badge tone="neutral">Dialog action</Badge><p>A clear invitation to a focused task. Connect a labelled native button to a matching dialog.</p><a href="/components/layout/modal-trigger/">Explore ModalTrigger <span aria-hidden="true">↗</span></a></article>
+</div>
+
+## Compose a complete interface
+
+<ComponentExample label="Structure → hierarchy → details" caption="Grid arranges the cards, Panel contains them, SectionHeader introduces them, and disclosure keeps the details close.">
+<div class="component-recipe"><SectionHeader eyebrow="PROJECT WORKSPACE" title="Make space for the essentials" subtitle="Start with the overview. Keep deeper detail within reach." titleTag="h3" titleClass="fs-h3"/><Grid columns="1" columnsSm="2"><Panel tone="feature"><Flex align="center"><IconFrame name="lucide:layers" tone="feature"/><h3>Design system</h3></Flex><p>A flexible foundation for your interface.</p><BtnLink href="/components/layout/panel/" tone="feature" variant="outline">Explore surfaces</BtnLink></Panel><ExpandablePanel title="Release checklist" description="Three checks before you publish." badge="Ready" tone="success" :open="true"><p>Content, navigation, and themes reviewed.</p><BtnLink href="/components/layout/expandable-panel/" tone="success" variant="link">Explore disclosure</BtnLink></ExpandablePanel></Grid></div>
+</ComponentExample>
+
+## Pick the right structure
+
+| Need | Components |
+| --- | --- |
+| Arrange a row, column, or toolbar | [Flex](./flex/) |
+| Place content in responsive tracks | [Grid](./grid/) |
+| Group content on a semantic surface | [Panel](./panel/) |
+| Introduce a section | [SectionHeader](./section-header/) |
+| Reveal supporting details | [ExpandablePanel](./expandable-panel/) |
+| Add a visual cue | [Icon](./icon/) and [IconFrame](./icon-frame/) |
+| Switch between related views | [Tabs](./tabs/) and [TabPane](./tab-pane/) |
+| Focus on a separate task | [Modal](./modal/) and [ModalTrigger](./modal-trigger/) |

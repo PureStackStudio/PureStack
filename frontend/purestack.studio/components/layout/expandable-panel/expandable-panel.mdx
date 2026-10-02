@@ -13,12 +13,22 @@ nav:
 
 # Expandable<wbr/>Panel
 
-Progressively disclose details with a native, keyboard-operable summary and a themed content surface.
+<ComponentHeader name="ExpandablePanel" kind="Progressive disclosure" summary="Keep the overview easy to scan and reveal details on demand. Native disclosure with an expressive summary." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/expandablePanel/expandablePanel.ts" section="Layout &amp; content" sectionHref="/components/layout/"/>
 
-<Badge tone="accent" variant="surface">ExpandablePanel</Badge>
+## In context
 
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/expandablePanel/expandablePanel.ts) · [API reference](#api-reference)
+<ComponentExample label="A release checklist" caption="The summary includes title, description, metadata, badge, and icon. This example starts open; click or press Enter on its summary to collapse it.">
+<ExpandablePanel title="Release readiness" description="The essentials before you publish." meta="3 checks" badge="Ready" icon="lucide:check" tone="success" variant="surface" summaryVariant="outline" :open="true"><Flex direction="column"><p>Content reviewed, navigation checked, and themes verified.</p><BtnLink href="/guides/" tone="success" variant="outline">Read the guides</BtnLink></Flex></ExpandablePanel>
+</ComponentExample>
 
+```html
+<ExpandablePanel title="Release readiness" description="The essentials before you publish." meta="3 checks" badge="Ready" icon="lucide:check" tone="success" variant="surface" summaryVariant="outline" :open="true">
+<Flex direction="column">
+<p>Content reviewed, navigation checked, and themes verified.</p>
+<BtnLink href="/guides/" tone="success" variant="outline">Read the guides</BtnLink>
+</Flex>
+</ExpandablePanel>
+```
 
 
 ## Release details
@@ -27,6 +37,7 @@ Open the summary to reveal supporting information. Native details preserves a us
 
 <Tabs group="expandable-panel-sample-1" selectedTab="expandable-panel-sample-1-preview" ariaLabel="Release details example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="expandable-panel-sample-1-preview" label="Preview">
+<div class="component-preview-stage">
     <ExpandablePanel
       title="What ships with a component?"
       description="Source, theme styles and composition"
@@ -41,7 +52,10 @@ Open the summary to reveal supporting information. Native details preserves a us
         <li>Composable slots and native HTML.</li>
       </ul>
     </ExpandablePanel>
-  </TabPane>
+
+
+</div>
+</TabPane>
   <TabPane id="expandable-panel-sample-1-source-0" label="release-details.mdx">
 ```html
 <ExpandablePanel
@@ -68,6 +82,7 @@ An initially open panel can sit beside a closed one. These disclosures are indep
 
 <Tabs group="expandable-panel-sample-2" selectedTab="expandable-panel-sample-2-preview" ariaLabel="Independent disclosure sections example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="expandable-panel-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
     <Flex direction="column">
       <ExpandablePanel
         title="Content authoring"
@@ -81,7 +96,10 @@ An initially open panel can sit beside a closed one. These disclosures are indep
         <p>Mount a RegorApp when a sample needs reactive state.</p>
       </ExpandablePanel>
     </Flex>
-  </TabPane>
+
+
+</div>
+</TabPane>
   <TabPane id="expandable-panel-sample-2-source-0" label="initial-state.mdx">
 ```html
 <Flex direction="column">
@@ -107,6 +125,7 @@ Replace the generated summary content while preserving the native summary elemen
 
 <Tabs group="expandable-panel-sample-3" selectedTab="expandable-panel-sample-3-preview" ariaLabel="A custom summary example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="expandable-panel-sample-3-preview" label="Preview">
+<div class="component-preview-stage">
     <ExpandablePanel tone="success">
       <template #summary>
         <Flex align="center" justify="between" wrap="true">
@@ -116,7 +135,10 @@ Replace the generated summary content while preserving the native summary elemen
       </template>
       <p>The documentation build completed successfully.</p>
     </ExpandablePanel>
-  </TabPane>
+
+
+</div>
+</TabPane>
   <TabPane id="expandable-panel-sample-3-source-0" label="custom-summary.mdx">
 ```html
 <ExpandablePanel tone="success">
@@ -131,6 +153,186 @@ Replace the generated summary content while preserving the native summary elemen
 ```
   </TabPane>
 </Tabs>
+
+## All semantic tones
+
+All ten supported tones. A semantic palette communicates intent; visible labels keep the meaning explicit.
+
+<ComponentExample label="All semantic tones" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>neutral</code>
+<ExpandablePanel title="neutral" tone="neutral" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>accent</code>
+<ExpandablePanel title="accent" tone="accent" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>feature</code>
+<ExpandablePanel title="feature" tone="feature" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>secondary</code>
+<ExpandablePanel title="secondary" tone="secondary" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>custom</code>
+<ExpandablePanel title="custom" tone="custom" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>ghost</code>
+<ExpandablePanel title="ghost" tone="ghost" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>info</code>
+<ExpandablePanel title="info" tone="info" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>success</code>
+<ExpandablePanel title="success" tone="success" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>warning</code>
+<ExpandablePanel title="warning" tone="warning" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>danger</code>
+<ExpandablePanel title="danger" tone="danger" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+</div>
+</ComponentExample>
+
+## All visual variants
+
+All eighteen supported treatments, shown together.
+
+<ComponentExample label="All visual variants" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>solid</code>
+<ExpandablePanel title="solid" variant="solid" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>surface</code>
+<ExpandablePanel title="surface" variant="surface" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>surfaceAlt</code>
+<ExpandablePanel title="surfaceAlt" variant="surfaceAlt" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>spotlight</code>
+<ExpandablePanel title="spotlight" variant="spotlight" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>glass</code>
+<ExpandablePanel title="glass" variant="glass" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>flat</code>
+<ExpandablePanel title="flat" variant="flat" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>flatAlt</code>
+<ExpandablePanel title="flatAlt" variant="flatAlt" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>flatSolid</code>
+<ExpandablePanel title="flatSolid" variant="flatSolid" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>outlineFill</code>
+<ExpandablePanel title="outlineFill" variant="outlineFill" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>outline</code>
+<ExpandablePanel title="outline" variant="outline" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>subtle</code>
+<ExpandablePanel title="subtle" variant="subtle" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>subtleBtn</code>
+<ExpandablePanel title="subtleBtn" variant="subtleBtn" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>link</code>
+<ExpandablePanel title="link" variant="link" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>sheen</code>
+<ExpandablePanel title="sheen" variant="sheen" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>underline</code>
+<ExpandablePanel title="underline" variant="underline" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>rail</code>
+<ExpandablePanel title="rail" variant="rail" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>bracket</code>
+<ExpandablePanel title="bracket" variant="bracket" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>none</code>
+<ExpandablePanel title="none" variant="none" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+</div>
+</ComponentExample>
+
+## All summary treatments
+
+summaryVariant styles the disclosure summary independently from the outer variant. All eighteen values are visible with their details expanded.
+
+<ComponentExample label="All summary treatments" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>solid</code>
+<ExpandablePanel title="solid" summaryVariant="solid" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>surface</code>
+<ExpandablePanel title="surface" summaryVariant="surface" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>surfaceAlt</code>
+<ExpandablePanel title="surfaceAlt" summaryVariant="surfaceAlt" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>spotlight</code>
+<ExpandablePanel title="spotlight" summaryVariant="spotlight" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>glass</code>
+<ExpandablePanel title="glass" summaryVariant="glass" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>flat</code>
+<ExpandablePanel title="flat" summaryVariant="flat" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>flatAlt</code>
+<ExpandablePanel title="flatAlt" summaryVariant="flatAlt" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>flatSolid</code>
+<ExpandablePanel title="flatSolid" summaryVariant="flatSolid" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>outlineFill</code>
+<ExpandablePanel title="outlineFill" summaryVariant="outlineFill" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>outline</code>
+<ExpandablePanel title="outline" summaryVariant="outline" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>subtle</code>
+<ExpandablePanel title="subtle" summaryVariant="subtle" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>subtleBtn</code>
+<ExpandablePanel title="subtleBtn" summaryVariant="subtleBtn" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>link</code>
+<ExpandablePanel title="link" summaryVariant="link" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>sheen</code>
+<ExpandablePanel title="sheen" summaryVariant="sheen" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>underline</code>
+<ExpandablePanel title="underline" summaryVariant="underline" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>rail</code>
+<ExpandablePanel title="rail" summaryVariant="rail" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>bracket</code>
+<ExpandablePanel title="bracket" summaryVariant="bracket" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>none</code>
+<ExpandablePanel title="none" summaryVariant="none" :open="true"><p>Details stay close to their summary.</p></ExpandablePanel>
+</div>
+</div>
+</ComponentExample>
+
+## Open and closed states
+
+The open prop selects the initial native details state. Both summaries remain keyboard-operable.
+
+<ComponentExample label="Open and closed states" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>false</code>
+<ExpandablePanel title="Initially collapsed" :open="false" badge="3 checks" description="Click the summary to toggle."><p>Content in the default slot.</p></ExpandablePanel>
+</div>
+<div class="component-appearance-cell"><code>true</code>
+<ExpandablePanel title="Initially expanded" :open="true" badge="3 checks" description="Click the summary to toggle."><p>Content in the default slot.</p></ExpandablePanel>
+</div>
+</div>
+</ComponentExample>
 
 ## Behavior and accessibility
 

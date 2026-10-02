@@ -13,13 +13,38 @@ nav:
 
 # Panel
 
-A semantic surface for settings, summaries and grouped content. Control its tone, treatment and inner layout without losing the theme.
-
-<Badge tone="accent" variant="surface">Panel</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/panel/panel.ts) · [API reference](#api-reference)
+<ComponentHeader name="Panel" kind="Content surface" summary="Give related content a place of its own. Semantic surfaces, layered treatments, and deliberate inner spacing." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/panel/panel.ts" section="Layout &amp; content" sectionHref="/components/layout/"/>
 
 Panel renders a section around a separate body container. Put spacing on the body when its children need breathing room.
+
+## In context
+
+<ComponentExample label="A project at a glance" caption="Tone, treatment, bodyClass, and the content slot work together in this summary.">
+<Panel tone="neutral" variant="surface" bodyClass="p-4"><Flex align="center" justify="between" wrap="true"><IconFrame name="lucide:layers" tone="feature" variant="surface"/><Badge tone="success">Ready</Badge></Flex><h3>Design system</h3><p>A shared foundation for your next interface.</p><Grid columns="2"><div><strong>12</strong><p>Components</p></div><div><strong>2</strong><p>Themes</p></div></Grid><BtnLink href="/components/" tone="accent" variant="outline">Explore the system</BtnLink></Panel>
+</ComponentExample>
+
+```html
+<Panel tone="neutral" variant="surface" bodyClass="p-4">
+<Flex align="center" justify="between" wrap="true">
+<IconFrame name="lucide:layers" tone="feature" variant="surface"/>
+<Badge tone="success">Ready</Badge>
+</Flex>
+<h3>Design system</h3>
+<p>A shared foundation for your next interface.</p>
+<Grid columns="2">
+<div>
+<strong>12</strong>
+<p>Components</p>
+</div>
+<div>
+<strong>2</strong>
+<p>Themes</p>
+</div>
+</Grid>
+<BtnLink href="/components/" tone="accent" variant="outline">Explore the system</BtnLink>
+</Panel>
+```
+
 
 ## A release summary
 
@@ -27,6 +52,7 @@ Combine a quiet surface with a clear heading, status and a real destination.
 
 <Tabs group="panel-sample-1" selectedTab="panel-sample-1-preview" ariaLabel="A release summary example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="panel-sample-1-preview" label="Preview">
+<div class="component-preview-stage">
     <Panel tone="neutral" variant="surface" bodyClass="p-4">
       <Flex align="center" justify="between" wrap="true">
         <h3 class="m-0">Release workspace</h3>
@@ -35,7 +61,10 @@ Combine a quiet surface with a clear heading, status and a real destination.
       <p>Your content, components and theme are ready for review.</p>
       <BtnLink href="/components/" tone="accent">Explore the library</BtnLink>
     </Panel>
-  </TabPane>
+
+
+</div>
+</TabPane>
   <TabPane id="panel-sample-1-source-0" label="release-summary.mdx">
 ```html
 <Panel tone="neutral" variant="surface" bodyClass="p-4">
@@ -56,6 +85,7 @@ Use a stronger tone for important context and a quiet nested surface for support
 
 <Tabs group="panel-sample-2" selectedTab="panel-sample-2-preview" ariaLabel="Surface hierarchy example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="panel-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
     <Grid columns="1" columnsSm="2">
       <Panel tone="accent" variant="surface" bodyClass="p-4">
         <h3>Primary context</h3>
@@ -69,7 +99,10 @@ Use a stronger tone for important context and a quiet nested surface for support
         <p>An outline separates content without a second filled surface.</p>
       </Panel>
     </Grid>
-  </TabPane>
+
+
+</div>
+</TabPane>
   <TabPane id="panel-sample-2-source-0" label="surface-hierarchy.mdx">
 ```html
 <Grid columns="1" columnsSm="2">
@@ -95,13 +128,17 @@ The link provides navigation and keyboard semantics. The panel provides the visu
 
 <Tabs group="panel-sample-3" selectedTab="panel-sample-3-preview" ariaLabel="A stateful link surface example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="panel-sample-3-preview" label="Preview">
+<div class="component-preview-stage">
     <a href="/components/landing/feature-card/" class="d-block">
       <Panel tone="accent" variant="outlineFill" variantMode="stateful" bodyClass="p-4">
         <strong>Build a feature card</strong>
         <p class="mb-0">Explore richer card composition.</p>
       </Panel>
     </a>
-  </TabPane>
+
+
+</div>
+</TabPane>
   <TabPane id="panel-sample-3-source-0" label="linked-panel.mdx">
 ```html
 <a href="/components/landing/feature-card/" class="d-block">
@@ -113,6 +150,141 @@ The link provides navigation and keyboard semantics. The panel provides the visu
 ```
   </TabPane>
 </Tabs>
+
+## All semantic tones
+
+All ten supported tones. A semantic palette communicates intent; visible labels keep the meaning explicit.
+
+<ComponentExample label="All semantic tones" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>neutral</code>
+<Panel tone="neutral"><strong>neutral</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>accent</code>
+<Panel tone="accent"><strong>accent</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>feature</code>
+<Panel tone="feature"><strong>feature</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>secondary</code>
+<Panel tone="secondary"><strong>secondary</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>custom</code>
+<Panel tone="custom"><strong>custom</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>ghost</code>
+<Panel tone="ghost"><strong>ghost</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>info</code>
+<Panel tone="info"><strong>info</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>success</code>
+<Panel tone="success"><strong>success</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>warning</code>
+<Panel tone="warning"><strong>warning</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>danger</code>
+<Panel tone="danger"><strong>danger</strong><p>Content with room to breathe.</p></Panel>
+</div>
+</div>
+</ComponentExample>
+
+## All visual variants
+
+All eighteen supported treatments, shown together.
+
+<ComponentExample label="All visual variants" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>solid</code>
+<Panel variant="solid"><strong>solid</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>surface</code>
+<Panel variant="surface"><strong>surface</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>surfaceAlt</code>
+<Panel variant="surfaceAlt"><strong>surfaceAlt</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>spotlight</code>
+<Panel variant="spotlight"><strong>spotlight</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>glass</code>
+<Panel variant="glass"><strong>glass</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>flat</code>
+<Panel variant="flat"><strong>flat</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>flatAlt</code>
+<Panel variant="flatAlt"><strong>flatAlt</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>flatSolid</code>
+<Panel variant="flatSolid"><strong>flatSolid</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>outlineFill</code>
+<Panel variant="outlineFill"><strong>outlineFill</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>outline</code>
+<Panel variant="outline"><strong>outline</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>subtle</code>
+<Panel variant="subtle"><strong>subtle</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>subtleBtn</code>
+<Panel variant="subtleBtn"><strong>subtleBtn</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>link</code>
+<Panel variant="link"><strong>link</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>sheen</code>
+<Panel variant="sheen"><strong>sheen</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>underline</code>
+<Panel variant="underline"><strong>underline</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>rail</code>
+<Panel variant="rail"><strong>rail</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>bracket</code>
+<Panel variant="bracket"><strong>bracket</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>none</code>
+<Panel variant="none"><strong>none</strong><p>Content with room to breathe.</p></Panel>
+</div>
+</div>
+</ComponentExample>
+
+## Variant modes
+
+Stateless shows the base treatment. Stateful includes hover, focus, and active styling; it does not add an action handler.
+
+<ComponentExample label="Variant modes" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>stateless</code>
+<Panel variantMode="stateless"><strong>stateless</strong><p>Content with room to breathe.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>stateful</code>
+<Panel variantMode="stateful"><strong>stateful</strong><p>Content with room to breathe.</p></Panel>
+</div>
+</div>
+</ComponentExample>
+
+## Inner spacing and composition
+
+bodyClass styles the inner body rather than the outer surface. variantMode can style a whole linked surface; a Panel itself is a section.
+
+<ComponentExample label="Inner spacing and composition" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Compact</code>
+<Panel bodyClass="p-2"><strong>A compact summary</strong></Panel>
+</div>
+<div class="component-appearance-cell"><code>Comfortable</code>
+<Panel bodyClass="p-4"><h3>Room to read</h3><p>A longer message fits comfortably.</p></Panel>
+</div>
+<div class="component-appearance-cell"><code>Custom layout</code>
+<Panel bodyClass="p-3"><Grid columns="minmax(0, 1fr) auto"><span>Build checks</span><Badge tone="success">Passed</Badge></Grid></Panel>
+</div>
+</div>
+</ComponentExample>
 
 ## Behavior and accessibility
 

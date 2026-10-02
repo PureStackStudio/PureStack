@@ -13,11 +13,7 @@ nav:
 
 # Tabs
 
-Give related views a shared home. Tabs combines a persistent set of panels with theme-aware controls, a responsive overflow menu and a compact selector for small screens.
-
-<Badge tone="accent" variant="surface">Tabs + TabPane</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/tabs/tabs.ts) · [API reference](#api-reference)
+<ComponentHeader name="Tabs" kind="Related views" summary="Let people move between related views without losing context. Independent surfaces and native keyboard controls." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/tabs/tabs.ts" section="Layout &amp; content" sectionHref="/components/layout/"/>
 
 <Grid columns="1" columnsMd="3">
   <Panel variant="outline" bodyClass="p-3"><p class="text-eyebrow mt-0">Selection</p><strong>One shared ref</strong><p class="text-muted mb-0">Connect the active pane to forms, buttons and the rest of your app.</p></Panel>
@@ -25,14 +21,46 @@ Give related views a shared home. Tabs combines a persistent set of panels with 
   <Panel variant="outline" bodyClass="p-3"><p class="text-eyebrow mt-0">Space</p><strong>Controls adapt</strong><p class="text-muted mb-0">Overflow on narrow containers. A native selector on mobile.</p></Panel>
 </Grid>
 
+## In context
+
+<ComponentExample label="A project workspace" caption="The header slot adds shared context. Views have unique IDs, independent content, an icon, and an explicitly unavailable state.">
+<Tabs group="layout-context-tabs" selectedTab="layout-context-overview" ariaLabel="Project workspace" tone="neutral" variant="surface" tabVariant="underline"><template #header><Flex align="center" justify="between" wrap="true" class="tabs__header p-3"><strong>Design system</strong><Badge tone="success">Ready</Badge></Flex></template><TabPane id="layout-context-overview" label="Overview" icon="lucide:layers"><h3>A shared foundation</h3><p>12 components, two themes, and a consistent visual language.</p></TabPane><TabPane id="layout-context-checks" label="Checks" icon="lucide:check" tone="success" variant="surface"><p>All checks passed. Ready for review.</p></TabPane><TabPane id="layout-context-history" label="History unavailable" :disabled="true"><p>No previous releases.</p></TabPane></Tabs>
+</ComponentExample>
+
+```html
+<Tabs group="layout-context-tabs" selectedTab="layout-context-overview" ariaLabel="Project workspace" tone="neutral" variant="surface" tabVariant="underline">
+<template #header>
+<Flex align="center" justify="between" wrap="true" class="tabs__header p-3">
+<strong>Design system</strong>
+<Badge tone="success">Ready</Badge>
+</Flex>
+</template>
+<TabPane id="layout-context-overview" label="Overview" icon="lucide:layers">
+<h3>A shared foundation</h3>
+<p>12 components, two themes, and a consistent visual language.</p>
+</TabPane>
+<TabPane id="layout-context-checks" label="Checks" icon="lucide:check" tone="success" variant="surface">
+<p>All checks passed. Ready for review.</p>
+</TabPane>
+<TabPane id="layout-context-history" label="History unavailable" :disabled="true">
+<p>No previous releases.</p>
+</TabPane>
+</Tabs>
+```
+
+
 ## Interactive playground
 
 Style the outer container, the tab controls and the panel independently. Enable Team, select it, then disable it again: this example returns to Overview so the active pane remains available. Switch the site theme to see every treatment in both skins.
 
 <Tabs group="tabs-doc-playground" selectedTab="tabs-doc-playground-preview" ariaLabel="playground example and source" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="tabs-doc-playground-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="tabs-playground" src="./playground.ts"/>
-  </TabPane>
+
+
+</div>
+</TabPane>
   <TabPane id="tabs-doc-playground-mdx" label="playground.mdx">
 ```html
 <RegorApp id="tabs-playground" src="./playground.ts"/>
@@ -304,8 +332,12 @@ Edit the release name and channel, review the draft, then save it locally. The b
 
 <Tabs group="tabs-doc-release-workspace" selectedTab="tabs-doc-release-workspace-preview" ariaLabel="release-workspace example and source" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="tabs-doc-release-workspace-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="release-workspace" src="./release-workspace.ts"/>
-  </TabPane>
+
+
+</div>
+</TabPane>
   <TabPane id="tabs-doc-release-workspace-mdx" label="release-workspace.mdx">
 ```html
 <RegorApp id="release-workspace" src="./release-workspace.ts"/>
@@ -465,8 +497,12 @@ Change the example's width without resizing the page. On desktop, the More tabs 
 
 <Tabs group="tabs-doc-overflow" selectedTab="tabs-doc-overflow-preview" ariaLabel="overflow example and source" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="tabs-doc-overflow-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="tabs-overflow" src="./overflow.ts"/>
-  </TabPane>
+
+
+</div>
+</TabPane>
   <TabPane id="tabs-doc-overflow-mdx" label="overflow.mdx">
 ```html
 <RegorApp id="tabs-overflow" src="./overflow.ts"/>
@@ -501,7 +537,7 @@ export interface TabsOverflow {
 
 const tabsOverflowTemplate = html`<Flex direction="column">
   <FormSelectField id="tabs-overflow-width" label="Available container width" :model="width" :options="widths"/>
-  <div class="max-w-full" :style="{ width }">
+  <div :style="{ width, maxWidth: '100%' }">
     <Tabs id="tabs-overflow-preview" group="tabs-overflow-topics" :selectedTab="selected" tone="neutral" variant="surface" tabVariant="outline" ariaLabel="Project sections">
       <TabPane r-for="topic in topics" :id="topic.id" :label="topic.label" :disabled="topic.disabled" class="p-3">
         <p class="text-eyebrow mt-0">{{ topic.eyebrow }}</p><h3 class="mt-0">{{ topic.title }}</h3>
@@ -616,8 +652,12 @@ Select Production, switch the outer group to Source, then return to Environments
 
 <Tabs group="tabs-doc-composition" selectedTab="tabs-doc-composition-preview" ariaLabel="composition example and source" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="tabs-doc-composition-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="tabs-composition" src="./composition.ts"/>
-  </TabPane>
+
+
+</div>
+</TabPane>
   <TabPane id="tabs-doc-composition-mdx" label="composition.mdx">
 ```html
 <RegorApp id="tabs-composition" src="./composition.ts"/>
@@ -775,6 +815,201 @@ All variant values are available in the playground: `none`, `solid`, `surface`, 
   <p>Builds or rebuilds the responsive controls for matching roots. Call it after mounting a Regor example, changing generated-control presentation, or adding and removing panes. Use a root selector such as #release-workspace-tabs to limit the work.</p>
   <p>The runtime responds to container resizing automatically. refresh does not fetch content, mount applications or persist selection across page loads.</p>
 </ApiProperty>
+
+## All semantic tones
+
+All ten supported tones. A semantic palette communicates intent; visible labels keep the meaning explicit.
+
+<ComponentExample label="All semantic tones" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>neutral</code>
+<Tabs group="gallery-tabs-tone-neutral" selectedTab="gallery-tabs-tone-neutral-one" ariaLabel="neutral example" tone="neutral"><TabPane id="gallery-tabs-tone-neutral-one" label="Overview" ><p>neutral content surface.</p></TabPane><TabPane id="gallery-tabs-tone-neutral-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>accent</code>
+<Tabs group="gallery-tabs-tone-accent" selectedTab="gallery-tabs-tone-accent-one" ariaLabel="accent example" tone="accent"><TabPane id="gallery-tabs-tone-accent-one" label="Overview" ><p>accent content surface.</p></TabPane><TabPane id="gallery-tabs-tone-accent-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>feature</code>
+<Tabs group="gallery-tabs-tone-feature" selectedTab="gallery-tabs-tone-feature-one" ariaLabel="feature example" tone="feature"><TabPane id="gallery-tabs-tone-feature-one" label="Overview" ><p>feature content surface.</p></TabPane><TabPane id="gallery-tabs-tone-feature-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>secondary</code>
+<Tabs group="gallery-tabs-tone-secondary" selectedTab="gallery-tabs-tone-secondary-one" ariaLabel="secondary example" tone="secondary"><TabPane id="gallery-tabs-tone-secondary-one" label="Overview" ><p>secondary content surface.</p></TabPane><TabPane id="gallery-tabs-tone-secondary-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>custom</code>
+<Tabs group="gallery-tabs-tone-custom" selectedTab="gallery-tabs-tone-custom-one" ariaLabel="custom example" tone="custom"><TabPane id="gallery-tabs-tone-custom-one" label="Overview" ><p>custom content surface.</p></TabPane><TabPane id="gallery-tabs-tone-custom-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>ghost</code>
+<Tabs group="gallery-tabs-tone-ghost" selectedTab="gallery-tabs-tone-ghost-one" ariaLabel="ghost example" tone="ghost"><TabPane id="gallery-tabs-tone-ghost-one" label="Overview" ><p>ghost content surface.</p></TabPane><TabPane id="gallery-tabs-tone-ghost-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>info</code>
+<Tabs group="gallery-tabs-tone-info" selectedTab="gallery-tabs-tone-info-one" ariaLabel="info example" tone="info"><TabPane id="gallery-tabs-tone-info-one" label="Overview" ><p>info content surface.</p></TabPane><TabPane id="gallery-tabs-tone-info-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>success</code>
+<Tabs group="gallery-tabs-tone-success" selectedTab="gallery-tabs-tone-success-one" ariaLabel="success example" tone="success"><TabPane id="gallery-tabs-tone-success-one" label="Overview" ><p>success content surface.</p></TabPane><TabPane id="gallery-tabs-tone-success-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>warning</code>
+<Tabs group="gallery-tabs-tone-warning" selectedTab="gallery-tabs-tone-warning-one" ariaLabel="warning example" tone="warning"><TabPane id="gallery-tabs-tone-warning-one" label="Overview" ><p>warning content surface.</p></TabPane><TabPane id="gallery-tabs-tone-warning-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>danger</code>
+<Tabs group="gallery-tabs-tone-danger" selectedTab="gallery-tabs-tone-danger-one" ariaLabel="danger example" tone="danger"><TabPane id="gallery-tabs-tone-danger-one" label="Overview" ><p>danger content surface.</p></TabPane><TabPane id="gallery-tabs-tone-danger-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+</div>
+</ComponentExample>
+
+## All visual variants
+
+All eighteen supported treatments, shown together. These examples style the Tabs container.
+
+<ComponentExample label="All visual variants" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>solid</code>
+<Tabs group="gallery-tabs-variant-solid" selectedTab="gallery-tabs-variant-solid-one" ariaLabel="solid example" variant="solid"><TabPane id="gallery-tabs-variant-solid-one" label="Overview" ><p>solid content surface.</p></TabPane><TabPane id="gallery-tabs-variant-solid-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>surface</code>
+<Tabs group="gallery-tabs-variant-surface" selectedTab="gallery-tabs-variant-surface-one" ariaLabel="surface example" variant="surface"><TabPane id="gallery-tabs-variant-surface-one" label="Overview" ><p>surface content surface.</p></TabPane><TabPane id="gallery-tabs-variant-surface-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>surfaceAlt</code>
+<Tabs group="gallery-tabs-variant-surfaceAlt" selectedTab="gallery-tabs-variant-surfaceAlt-one" ariaLabel="surfaceAlt example" variant="surfaceAlt"><TabPane id="gallery-tabs-variant-surfaceAlt-one" label="Overview" ><p>surfaceAlt content surface.</p></TabPane><TabPane id="gallery-tabs-variant-surfaceAlt-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>spotlight</code>
+<Tabs group="gallery-tabs-variant-spotlight" selectedTab="gallery-tabs-variant-spotlight-one" ariaLabel="spotlight example" variant="spotlight"><TabPane id="gallery-tabs-variant-spotlight-one" label="Overview" ><p>spotlight content surface.</p></TabPane><TabPane id="gallery-tabs-variant-spotlight-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>glass</code>
+<Tabs group="gallery-tabs-variant-glass" selectedTab="gallery-tabs-variant-glass-one" ariaLabel="glass example" variant="glass"><TabPane id="gallery-tabs-variant-glass-one" label="Overview" ><p>glass content surface.</p></TabPane><TabPane id="gallery-tabs-variant-glass-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>flat</code>
+<Tabs group="gallery-tabs-variant-flat" selectedTab="gallery-tabs-variant-flat-one" ariaLabel="flat example" variant="flat"><TabPane id="gallery-tabs-variant-flat-one" label="Overview" ><p>flat content surface.</p></TabPane><TabPane id="gallery-tabs-variant-flat-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>flatAlt</code>
+<Tabs group="gallery-tabs-variant-flatAlt" selectedTab="gallery-tabs-variant-flatAlt-one" ariaLabel="flatAlt example" variant="flatAlt"><TabPane id="gallery-tabs-variant-flatAlt-one" label="Overview" ><p>flatAlt content surface.</p></TabPane><TabPane id="gallery-tabs-variant-flatAlt-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>flatSolid</code>
+<Tabs group="gallery-tabs-variant-flatSolid" selectedTab="gallery-tabs-variant-flatSolid-one" ariaLabel="flatSolid example" variant="flatSolid"><TabPane id="gallery-tabs-variant-flatSolid-one" label="Overview" ><p>flatSolid content surface.</p></TabPane><TabPane id="gallery-tabs-variant-flatSolid-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>outlineFill</code>
+<Tabs group="gallery-tabs-variant-outlineFill" selectedTab="gallery-tabs-variant-outlineFill-one" ariaLabel="outlineFill example" variant="outlineFill"><TabPane id="gallery-tabs-variant-outlineFill-one" label="Overview" ><p>outlineFill content surface.</p></TabPane><TabPane id="gallery-tabs-variant-outlineFill-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>outline</code>
+<Tabs group="gallery-tabs-variant-outline" selectedTab="gallery-tabs-variant-outline-one" ariaLabel="outline example" variant="outline"><TabPane id="gallery-tabs-variant-outline-one" label="Overview" ><p>outline content surface.</p></TabPane><TabPane id="gallery-tabs-variant-outline-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>subtle</code>
+<Tabs group="gallery-tabs-variant-subtle" selectedTab="gallery-tabs-variant-subtle-one" ariaLabel="subtle example" variant="subtle"><TabPane id="gallery-tabs-variant-subtle-one" label="Overview" ><p>subtle content surface.</p></TabPane><TabPane id="gallery-tabs-variant-subtle-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>subtleBtn</code>
+<Tabs group="gallery-tabs-variant-subtleBtn" selectedTab="gallery-tabs-variant-subtleBtn-one" ariaLabel="subtleBtn example" variant="subtleBtn"><TabPane id="gallery-tabs-variant-subtleBtn-one" label="Overview" ><p>subtleBtn content surface.</p></TabPane><TabPane id="gallery-tabs-variant-subtleBtn-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>link</code>
+<Tabs group="gallery-tabs-variant-link" selectedTab="gallery-tabs-variant-link-one" ariaLabel="link example" variant="link"><TabPane id="gallery-tabs-variant-link-one" label="Overview" ><p>link content surface.</p></TabPane><TabPane id="gallery-tabs-variant-link-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>sheen</code>
+<Tabs group="gallery-tabs-variant-sheen" selectedTab="gallery-tabs-variant-sheen-one" ariaLabel="sheen example" variant="sheen"><TabPane id="gallery-tabs-variant-sheen-one" label="Overview" ><p>sheen content surface.</p></TabPane><TabPane id="gallery-tabs-variant-sheen-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>underline</code>
+<Tabs group="gallery-tabs-variant-underline" selectedTab="gallery-tabs-variant-underline-one" ariaLabel="underline example" variant="underline"><TabPane id="gallery-tabs-variant-underline-one" label="Overview" ><p>underline content surface.</p></TabPane><TabPane id="gallery-tabs-variant-underline-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>rail</code>
+<Tabs group="gallery-tabs-variant-rail" selectedTab="gallery-tabs-variant-rail-one" ariaLabel="rail example" variant="rail"><TabPane id="gallery-tabs-variant-rail-one" label="Overview" ><p>rail content surface.</p></TabPane><TabPane id="gallery-tabs-variant-rail-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>bracket</code>
+<Tabs group="gallery-tabs-variant-bracket" selectedTab="gallery-tabs-variant-bracket-one" ariaLabel="bracket example" variant="bracket"><TabPane id="gallery-tabs-variant-bracket-one" label="Overview" ><p>bracket content surface.</p></TabPane><TabPane id="gallery-tabs-variant-bracket-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>none</code>
+<Tabs group="gallery-tabs-variant-none" selectedTab="gallery-tabs-variant-none-one" ariaLabel="none example" variant="none"><TabPane id="gallery-tabs-variant-none-one" label="Overview" ><p>none content surface.</p></TabPane><TabPane id="gallery-tabs-variant-none-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+</div>
+</ComponentExample>
+
+## Variant modes
+
+Stateless shows the base treatment. Stateful includes hover, focus, and active styling; it does not add an action handler.
+
+<ComponentExample label="Variant modes" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>stateless</code>
+<Tabs group="gallery-tabs-variantMode-stateless" selectedTab="gallery-tabs-variantMode-stateless-one" ariaLabel="stateless example" variantMode="stateless"><TabPane id="gallery-tabs-variantMode-stateless-one" label="Overview" ><p>stateless content surface.</p></TabPane><TabPane id="gallery-tabs-variantMode-stateless-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>stateful</code>
+<Tabs group="gallery-tabs-variantMode-stateful" selectedTab="gallery-tabs-variantMode-stateful-one" ariaLabel="stateful example" variantMode="stateful"><TabPane id="gallery-tabs-variantMode-stateful-one" label="Overview" ><p>stateful content surface.</p></TabPane><TabPane id="gallery-tabs-variantMode-stateful-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+</div>
+</ComponentExample>
+
+## All tab-control treatments
+
+tabVariant is independent of the content surface. Each example shows both a selected and an available control; click or use the keyboard to switch views.
+
+<ComponentExample label="All tab-control treatments" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>solid</code>
+<Tabs group="gallery-tabs-tabVariant-solid" selectedTab="gallery-tabs-tabVariant-solid-one" ariaLabel="solid example" tabVariant="solid"><TabPane id="gallery-tabs-tabVariant-solid-one" label="Overview" ><p>solid content surface.</p></TabPane><TabPane id="gallery-tabs-tabVariant-solid-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>surface</code>
+<Tabs group="gallery-tabs-tabVariant-surface" selectedTab="gallery-tabs-tabVariant-surface-one" ariaLabel="surface example" tabVariant="surface"><TabPane id="gallery-tabs-tabVariant-surface-one" label="Overview" ><p>surface content surface.</p></TabPane><TabPane id="gallery-tabs-tabVariant-surface-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>surfaceAlt</code>
+<Tabs group="gallery-tabs-tabVariant-surfaceAlt" selectedTab="gallery-tabs-tabVariant-surfaceAlt-one" ariaLabel="surfaceAlt example" tabVariant="surfaceAlt"><TabPane id="gallery-tabs-tabVariant-surfaceAlt-one" label="Overview" ><p>surfaceAlt content surface.</p></TabPane><TabPane id="gallery-tabs-tabVariant-surfaceAlt-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>spotlight</code>
+<Tabs group="gallery-tabs-tabVariant-spotlight" selectedTab="gallery-tabs-tabVariant-spotlight-one" ariaLabel="spotlight example" tabVariant="spotlight"><TabPane id="gallery-tabs-tabVariant-spotlight-one" label="Overview" ><p>spotlight content surface.</p></TabPane><TabPane id="gallery-tabs-tabVariant-spotlight-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>glass</code>
+<Tabs group="gallery-tabs-tabVariant-glass" selectedTab="gallery-tabs-tabVariant-glass-one" ariaLabel="glass example" tabVariant="glass"><TabPane id="gallery-tabs-tabVariant-glass-one" label="Overview" ><p>glass content surface.</p></TabPane><TabPane id="gallery-tabs-tabVariant-glass-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>flat</code>
+<Tabs group="gallery-tabs-tabVariant-flat" selectedTab="gallery-tabs-tabVariant-flat-one" ariaLabel="flat example" tabVariant="flat"><TabPane id="gallery-tabs-tabVariant-flat-one" label="Overview" ><p>flat content surface.</p></TabPane><TabPane id="gallery-tabs-tabVariant-flat-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>flatAlt</code>
+<Tabs group="gallery-tabs-tabVariant-flatAlt" selectedTab="gallery-tabs-tabVariant-flatAlt-one" ariaLabel="flatAlt example" tabVariant="flatAlt"><TabPane id="gallery-tabs-tabVariant-flatAlt-one" label="Overview" ><p>flatAlt content surface.</p></TabPane><TabPane id="gallery-tabs-tabVariant-flatAlt-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>flatSolid</code>
+<Tabs group="gallery-tabs-tabVariant-flatSolid" selectedTab="gallery-tabs-tabVariant-flatSolid-one" ariaLabel="flatSolid example" tabVariant="flatSolid"><TabPane id="gallery-tabs-tabVariant-flatSolid-one" label="Overview" ><p>flatSolid content surface.</p></TabPane><TabPane id="gallery-tabs-tabVariant-flatSolid-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>outlineFill</code>
+<Tabs group="gallery-tabs-tabVariant-outlineFill" selectedTab="gallery-tabs-tabVariant-outlineFill-one" ariaLabel="outlineFill example" tabVariant="outlineFill"><TabPane id="gallery-tabs-tabVariant-outlineFill-one" label="Overview" ><p>outlineFill content surface.</p></TabPane><TabPane id="gallery-tabs-tabVariant-outlineFill-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>outline</code>
+<Tabs group="gallery-tabs-tabVariant-outline" selectedTab="gallery-tabs-tabVariant-outline-one" ariaLabel="outline example" tabVariant="outline"><TabPane id="gallery-tabs-tabVariant-outline-one" label="Overview" ><p>outline content surface.</p></TabPane><TabPane id="gallery-tabs-tabVariant-outline-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>subtle</code>
+<Tabs group="gallery-tabs-tabVariant-subtle" selectedTab="gallery-tabs-tabVariant-subtle-one" ariaLabel="subtle example" tabVariant="subtle"><TabPane id="gallery-tabs-tabVariant-subtle-one" label="Overview" ><p>subtle content surface.</p></TabPane><TabPane id="gallery-tabs-tabVariant-subtle-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>subtleBtn</code>
+<Tabs group="gallery-tabs-tabVariant-subtleBtn" selectedTab="gallery-tabs-tabVariant-subtleBtn-one" ariaLabel="subtleBtn example" tabVariant="subtleBtn"><TabPane id="gallery-tabs-tabVariant-subtleBtn-one" label="Overview" ><p>subtleBtn content surface.</p></TabPane><TabPane id="gallery-tabs-tabVariant-subtleBtn-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>link</code>
+<Tabs group="gallery-tabs-tabVariant-link" selectedTab="gallery-tabs-tabVariant-link-one" ariaLabel="link example" tabVariant="link"><TabPane id="gallery-tabs-tabVariant-link-one" label="Overview" ><p>link content surface.</p></TabPane><TabPane id="gallery-tabs-tabVariant-link-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>sheen</code>
+<Tabs group="gallery-tabs-tabVariant-sheen" selectedTab="gallery-tabs-tabVariant-sheen-one" ariaLabel="sheen example" tabVariant="sheen"><TabPane id="gallery-tabs-tabVariant-sheen-one" label="Overview" ><p>sheen content surface.</p></TabPane><TabPane id="gallery-tabs-tabVariant-sheen-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>underline</code>
+<Tabs group="gallery-tabs-tabVariant-underline" selectedTab="gallery-tabs-tabVariant-underline-one" ariaLabel="underline example" tabVariant="underline"><TabPane id="gallery-tabs-tabVariant-underline-one" label="Overview" ><p>underline content surface.</p></TabPane><TabPane id="gallery-tabs-tabVariant-underline-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>rail</code>
+<Tabs group="gallery-tabs-tabVariant-rail" selectedTab="gallery-tabs-tabVariant-rail-one" ariaLabel="rail example" tabVariant="rail"><TabPane id="gallery-tabs-tabVariant-rail-one" label="Overview" ><p>rail content surface.</p></TabPane><TabPane id="gallery-tabs-tabVariant-rail-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>bracket</code>
+<Tabs group="gallery-tabs-tabVariant-bracket" selectedTab="gallery-tabs-tabVariant-bracket-one" ariaLabel="bracket example" tabVariant="bracket"><TabPane id="gallery-tabs-tabVariant-bracket-one" label="Overview" ><p>bracket content surface.</p></TabPane><TabPane id="gallery-tabs-tabVariant-bracket-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>none</code>
+<Tabs group="gallery-tabs-tabVariant-none" selectedTab="gallery-tabs-tabVariant-none-one" ariaLabel="none example" tabVariant="none"><TabPane id="gallery-tabs-tabVariant-none-one" label="Overview" ><p>none content surface.</p></TabPane><TabPane id="gallery-tabs-tabVariant-none-two" label="Details" ><p>A second view.</p></TabPane></Tabs>
+</div>
+</div>
+</ComponentExample>
+
+## Pane availability and labels
+
+A text label, an optional icon, a disabled view, and label fallback to the ID are distinct pane features.
+
+<ComponentExample label="Pane availability and labels" caption="Every value is visible. Compare treatments in the site’s light and dark themes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>label, icon, disabled</code>
+<Tabs group="gallery-tabs-availability" selectedTab="gallery-tabs-available" ariaLabel="Availability"><TabPane id="gallery-tabs-available" label="Available" icon="lucide:check"><p>The initial selected view.</p></TabPane><TabPane id="gallery-tabs-disabled" label="Unavailable" :disabled="true"><p>This view cannot be selected.</p></TabPane></Tabs>
+</div>
+<div class="component-appearance-cell"><code>ID fallback</code>
+<Tabs group="tabs-fallback" selectedTab="tabs-details" ariaLabel="ID label fallback"><TabPane id="tabs-details"><p>Omitting label displays the pane ID.</p></TabPane></Tabs>
+</div>
+</div>
+</ComponentExample>
 
 ## Keyboard and accessibility
 
