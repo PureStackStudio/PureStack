@@ -1,254 +1,152 @@
-<div align="center">
-
 # PureStack
 
-**Pure frontend infrastructure for the AI age.**
+**Build content sites and interactive pages with Markdown, components, and TypeScript.**
 
-Coherent source for real products: content, interfaces, styles, scripts,
-workflows, and tooling designed to belong together.
+PureStack turns a content directory into a static website. Write pages in
+Markdown or Regor MDX, use built-in components where they help, and add
+browser-side TypeScript only where a page needs behavior. The CLI handles
+routes, styles, assets, development preview, and release builds.
 
-</div>
+[Documentation](https://purestack.studio/guides/) | [Component catalog](https://purestack.studio/components/) | [npm package](https://www.npmjs.com/package/purestack)
 
----
+## What you can build
 
-PureStack is a TypeScript-native frontend ecosystem for building content sites,
-documentation, product frontends, admin surfaces, dashboards, and operational
-tools from one coherent source model.
+- **Content and documentation sites:** file-based routes, frontmatter, navigation,
+  page outlines, and optional search.
+- **Interactive pages:** server-rendered Regor components, page-specific
+  TypeScript through `PageScript`, and mounted apps through `RegorApp`.
+- **Sites with a consistent visual system:** themes, semantic tones, typed
+  styles, and a component library shared across pages.
+- **Static output:** generated HTML, CSS, JavaScript, and assets that can be
+  served by a static host.
 
-It is designed for a world where AI is not an assistant on the side, but part of
-the everyday act of building software.
+`.mdx` and `.rmdx` pages use Regor components and expressions. Plain `.md`
+files work for prose pages. See the [Regor guide](https://purestack.studio/guides/regor/)
+for the markup and browser app model.
 
-## Why PureStack Exists
+## Quick start
 
-AI can one-shot code in any framework.
-
-PureStack is built for what happens after the first shot: the long life of a
-real product as features change, screens multiply, styles evolve, and the source
-needs to stay understandable.
-
-Most frontend stacks spread intent across too many layers: framework rules,
-template syntax, CSS conventions, utility classes, build plugins, runtime
-hydration, and editor-specific knowledge. AI can work there, but it has to keep
-guessing across boundaries.
-
-PureStack takes a different bet:
-
-**sustained AI generation is better when the product frontend is coherent,
-typed, inspectable, and mostly TypeScript.**
-
-Markdown belongs where prose belongs. Everything else should be high-quality
-source that humans can reason about and AI can inspect, compose, refactor, and
-extend with confidence.
-
-## What This Repository Contains
-
-This repository contains the PureStack package workspace: the SSG pipeline,
-Regor component system, typed style and HTML/CSS builders, runtime page scripts,
-icon tooling, rendering foundation, shared types, and editor support.
-
-## Install
+Create a project and install the CLI:
 
 ```sh
-yarn add purestack
+mkdir my-site
+cd my-site
+npm init -y
+npm install purestack
+mkdir content
 ```
 
-The public package provides the `purestack` CLI and the TypeScript API for custom
-projects:
-
-```ts
-import { buildSite, startDevServer } from 'purestack'
-```
-
-## The Core Packages
-
-PureStack has many packages, but three of them define the day-to-day experience.
-
-### `@purestack/ts-ssg`
-
-`ts-ssg` is the product frontend pipeline.
-
-It builds Markdown, MDX, and Regor MDX into a site or app surface, serves it in
-development, watches content changes, and bundles TypeScript browser assets. It
-is where content, templates, navigation, styles, scripts, and static assets meet
-in one workflow.
-
-Feature shape:
-
-- Markdown, `.mdx`, and `.rmdx` content
-- frontmatter-driven pages
-- custom template maps
-- file-based navigation
-- page outline and table-of-contents support
-- dev server with watch mode and live reload
-- TypeScript browser asset bundling
-- optional sitemap, robots, Pagefind, consent, and GA4 configuration
-- build hooks for projects that need to observe or extend the pipeline
-
-### `@purestack/ts-components`
-
-`ts-components` is the product UI vocabulary.
-
-It provides Regor components for real product surfaces: forms, buttons, panels,
-navigation, tabs, modals, toasts, charts, landing sections, pricing tables,
-search, theme switching, virtual lists, and more.
-
-The package keeps component registration and style registration separate. That
-lets the SSG pipeline generate site styles while browser-side TypeScript can
-reuse the same component vocabulary. It also ships TypeScript source files for
-better package-aware tooling and editor metadata.
-
-### `@purestack/ts-style`
-
-`ts-style` is the design coherence layer.
-
-It keeps themes, skins, semantic tones, breakpoints, utility styles, typography,
-palette variables, and document layout styles in TypeScript. Components can use
-shared tones like `neutral`, `accent`, `info`, `success`, `warning`, and
-`danger` without scattering visual decisions across unrelated CSS conventions.
-
-## Using PureStack
-
-A PureStack content folder is centered around `siteConfig.json` and content
-files:
-
-```txt
-content/
-  siteConfig.json
-  index.mdx
-  dashboard.ts
-```
-
-Minimal config:
+Create `content/siteConfig.json`:
 
 ```json
 {
-  "siteTitle": "My Product",
-  "outDir": "../dist/site"
+  "siteTitle": "My Site",
+  "logo": { "brand": "My Site", "href": "/" },
+  "outDir": "../dist/site",
+  "publishDir": "../dist/publish"
 }
 ```
 
-Content can stay mostly Markdown while mounting TypeScript where behavior is
-needed:
+Create `content/index.mdx`:
 
 ```mdx
 ---
-title: Dashboard
+title: Welcome
+description: My first PureStack site.
 template: doc
-layout:
-  fullWidth: true
 ---
 
-# Dashboard
+# Welcome
 
-<RegorApp src="./dashboard.ts" id="dashboard-app" />
+This page is built from MDX.
+
+<Panel tone="info" variant="surface">
+  <p>Edit this file and see the page update.</p>
+</Panel>
 ```
 
-The TypeScript asset is bundled for the browser:
-
-```ts
-import {
-  defineBadgeComponents,
-  definePanelComponents,
-} from '@purestack/ts-components'
-import { createApp, html } from 'regor'
-
-const mount = document.querySelector('app#dashboard-app')
-
-if (mount instanceof HTMLElement) {
-  createApp(
-    {
-      components: {
-        ...defineBadgeComponents(),
-        ...definePanelComponents(),
-      },
-    },
-    {
-      element: mount,
-      template: html`<Panel tone="info">
-        <Badge tone="success">Ready</Badge>
-      </Panel>`,
-    },
-  )
-}
-```
-
-Run the pipeline with a content directory:
+Start the development server:
 
 ```sh
-yarn purestack build --content ./content
-yarn purestack serve --content ./content --port 4173
-yarn purestack publish --content ./content
-
-Usage:
-  purestack build --content <dir> [--clean]
-  purestack serve --content <dir> [--host <host>] [--port <port>] [--clean] [--no-watch] [--no-reload]
-  purestack publish --content <dir>
-
-Commands:
-  build     Build a content directory into its configured outDir.
-  serve     Start the dev server for a content directory.
-  publish   Clean and build a publish artifact using the configured publishDir.
+npx purestack serve --content ./content
 ```
 
-## Package Map
+Open <http://127.0.0.1:4173/>. Add `content/about.mdx` to create `/about/`.
+The server watches your files and reloads the browser as you edit.
 
-| Package | Role |
+When the site is ready:
+
+```sh
+npx purestack build --content ./content
+npx purestack publish --content ./content
+```
+
+`build` writes to `dist/site`. `publish` creates a clean, minified artifact in
+`dist/publish`; it prepares files for deployment but does not upload them.
+Both paths come from `siteConfig.json` and are resolved relative to `content`.
+
+For browser behavior, add a TypeScript file beside a page and load it with
+`<PageScript src="./example.ts" />`. The [purestack package README](packages/purestack/README.md)
+has a complete example.
+
+## How PureStack fits together
+
+| Source | What PureStack does |
 | --- | --- |
-| [`purestack`](packages/purestack) | Public package and CLI. Re-exports the TypeScript API from `@purestack/ts-ssg`. |
-| [`@purestack/ts-ssg`](packages/ts-ssg) | Build and dev-server pipeline for Markdown, MDX, Regor MDX, templates, navigation, styles, scripts, and browser assets. |
-| [`@purestack/ts-components`](packages/ts-components) | Regor component definitions, component metadata, and matching style registration for product frontend primitives. |
-| [`@purestack/ts-style`](packages/ts-style) | Theme, skin, semantic tone, breakpoint, utility, typography, palette, and layout style infrastructure. |
-| [`@purestack/ts-html`](packages/ts-html) | Typed HTML node and head helpers through `h`, `TSNode`, `createHead`, and head config utilities. |
-| [`@purestack/ts-css`](packages/ts-css) | Typed CSS style builder exports including `Style`, `s`, `CSSProps`, color helpers, and gradient helpers. |
-| [`@purestack/ts-page-scripts`](packages/ts-page-scripts) | Runtime script builders for theme switching, consent, auth state hints, code copy, menus, modals, nav menus, Pagefind search, page TOC, and tabs. |
-| [`@purestack/ts-svg-icons`](packages/ts-svg-icons) | Tree-shakeable SVG icon access through provider exports and `getSvgIcon`. |
-| [`@purestack/ts-render`](packages/ts-render) | Regor/static rendering support through `renderApp` and a component registry. |
-| [`@purestack/ts-minidom`](packages/ts-minidom) | Minimal DOM implementation and DOM globals for rendering and tests. |
-| [`@purestack/ts-common`](packages/ts-common) | Shared site config, frontmatter, navigation, template, consent, analytics, and SSG context types. |
-| [`@purestack/ts-util`](packages/ts-util) | Browser-safe utility helpers for paths, public paths, escaping, merging, caching, logging, and type checks. |
-| [`@purestack/ts-util-node`](packages/ts-util-node) | Node-only filesystem helpers. |
-| [`ts-ssg-vscode`](packages/ts-ssg-vscode) | VS Code extension workspace for Regor MDX, template syntax, formatting, linked editing, diagnostics, and component metadata tooling. |
+| `siteConfig.json` | Defines output paths, site identity, themes, navigation, and optional features. |
+| `.md`, `.mdx`, `.rmdx` | Turn content files into routes and HTML pages. |
+| Regor components | Render UI into pages at build time. |
+| `PageScript` and `RegorApp` | Bundle TypeScript and add browser behavior where requested. |
+| Static assets | Copies files from the content directory into the site output. |
 
-## How The Pieces Fit
+The [CLI guide](https://purestack.studio/guides/purestack-cli/) covers the
+commands and options. [Site configuration](https://purestack.studio/guides/site-config/)
+covers navigation, themes, search, sitemap, localization, and output paths.
 
-PureStack keeps prose, product UI, styling, scripts, and build behavior close to
-the source that defines them.
+## Repository map
 
-- `.md` is for Markdown.
-- `.mdx` is the familiar extension for Markdown with Regor components.
-- `.rmdx` is the explicit Regor MDX extension when a project wants the dialect
-  to be visible in the filename.
-- TypeScript assets are bundled for the browser by the SSG pipeline.
-- Static Regor `html` and `svg` template tags are stripped during the SSG
-  browser bundling path so template syntax remains useful to tooling without
-  becoming a tree-shaking blocker.
-- `@purestack/ts-components` ships source files for better package-aware
-  tooling and component metadata.
+| Path | Purpose |
+| --- | --- |
+| [`packages/purestack`](packages/purestack) | Public `purestack` package, CLI, and TypeScript API. |
+| [`packages/ts-ssg`](packages/ts-ssg) | Content discovery, rendering, routing, builds, and development server. |
+| [`packages/ts-components`](packages/ts-components) | Built-in UI components and component metadata. |
+| [`packages/ts-style`](packages/ts-style) | Themes, skins, typography, and style generation. |
+| [`packages/ts-css`](packages/ts-css) and [`packages/ts-html`](packages/ts-html) | Typed CSS and HTML builders. |
+| [`packages/ts-page-scripts`](packages/ts-page-scripts) | Browser-side behavior used by site components. |
+| [`packages/ts-svg-icons`](packages/ts-svg-icons) | SVG icon providers and lookup. |
+| [`packages/ts-ssg-vscode`](packages/ts-ssg-vscode) | VS Code support for PureStack content and components. |
+| [`frontend`](frontend) | Source for purestack.studio, built with PureStack. |
+| [`packages/ts-ssg/sample-content`](packages/ts-ssg/sample-content) | A larger example site with content, components, and browser scripts. |
 
-PureStack does not require the backend to be TypeScript. It focuses on the
-product frontend source: content, UI, state, styles, scripts, and tooling.
+The remaining workspace packages provide shared types, utilities, rendering,
+and DOM support.
 
-## Development
+## Develop this repository
 
-This repository uses Yarn workspaces and TypeScript 7 through `tsgo`.
+This is a Yarn 4 workspace. Run commands from the repository root:
 
 ```sh
 yarn install
 yarn build
-yarn test
+yarn dev
 ```
 
-Useful workspace commands:
+`yarn dev` serves the included sample site. To work on the PureStack website,
+run `yarn frontend`; its development server opens at
+<http://127.0.0.1:4700/>. See the [frontend README](frontend/README.md) for
+the site-specific workflow.
+
+Useful checks and build commands:
 
 ```sh
-yarn dev
+yarn test run
 yarn bundle
-yarn lint
+yarn package
 ```
 
-`yarn dev` runs the `@purestack/ts-ssg` sample-content workflow. `yarn build`
-runs package builds across the workspace. `yarn test` runs Vitest.
+`yarn bundle` creates distributable package builds. `yarn package` packs the
+non-private workspace packages into local tarballs.
 
 ## License
 
-MIT.
+[MIT](LICENSE). Bugs and feature requests: [GitHub issues](https://github.com/PureStackStudio/PureStack/issues).
