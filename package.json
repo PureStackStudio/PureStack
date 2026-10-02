@@ -25,7 +25,7 @@
     "tsx": "^4.23.15",
     "typescript": "7.0.2",
     "typescript-parser": "npm:typescript@6.0.3",
-    "vite": "^7.3.1",
+    "vite": "^8.3.1",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^4.0.18"
   },
