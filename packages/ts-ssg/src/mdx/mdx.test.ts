@@ -11,40 +11,40 @@ import { createHljsHighlighter } from './highlightjs'
 import { compileMdx, compileMdxToHtml } from './mdx'
 
 describe('createMdxHighlighter', () => {
-  it.each([
-    'typescript',
-    'ts',
-  ])('highlights html tagged templates inside %s source', async (lang) => {
-    const highlighter = await createMdxHighlighter(undefined, [lang])
-    const source = [
-      "const name = 'World'",
-      // biome-ignore lint/suspicious/noTemplateCurlyInString: Literal TypeScript source for the highlighter.
-      'const view = html`<div class="greeting">Hello ${name}</div>`',
-    ].join('\n')
-    const html = highlighter.codeToHtml(source, lang)
-    const cleanup = ensureDomGlobals()
-    try {
-      const root = document.createElement('div')
-      root.innerHTML = html
-      const templateLine = root.querySelectorAll('code > .line')[1]
-      // Shiki merges surrounding whitespace into styled tokens by default.
-      // Inspect only the template line so the declaration cannot satisfy "name".
-      const tokens = Array.from(templateLine.querySelectorAll('span')).map(
-        (token) => token.textContent?.trim(),
-      )
+  it.each(['typescript', 'ts'])(
+    'highlights html tagged templates inside %s source',
+    async (lang) => {
+      const highlighter = await createMdxHighlighter(undefined, [lang])
+      const source = [
+        "const name = 'World'",
+        // biome-ignore lint/suspicious/noTemplateCurlyInString: Literal TypeScript source for the highlighter.
+        'const view = html`<div class="greeting">Hello ${name}</div>`',
+      ].join('\n')
+      const html = highlighter.codeToHtml(source, lang)
+      const cleanup = ensureDomGlobals()
+      try {
+        const root = document.createElement('div')
+        root.innerHTML = html
+        const templateLine = root.querySelectorAll('code > .line')[1]
+        // Shiki merges surrounding whitespace into styled tokens by default.
+        // Inspect only the template line so the declaration cannot satisfy "name".
+        const tokens = Array.from(templateLine.querySelectorAll('span')).map(
+          (token) => token.textContent?.trim(),
+        )
 
-      // The embedded HTML grammar tokenizes tag and attribute names separately.
-      // Plain TypeScript would treat the template body as string content instead.
-      expect(tokens).toContain('div')
-      expect(tokens).toContain('class')
+        // The embedded HTML grammar tokenizes tag and attribute names separately.
+        // Plain TypeScript would treat the template body as string content instead.
+        expect(tokens).toContain('div')
+        expect(tokens).toContain('class')
 
-      // ${...} must return to TypeScript tokenization inside the HTML template.
-      expect(tokens).toContain('name')
-      expect(root.querySelector('code')?.textContent).toBe(source)
-    } finally {
-      cleanup()
-    }
-  })
+        // ${...} must return to TypeScript tokenization inside the HTML template.
+        expect(tokens).toContain('name')
+        expect(root.querySelector('code')?.textContent).toBe(source)
+      } finally {
+        cleanup()
+      }
+    },
+  )
 })
 
 describe('compileMdxToHtml', () => {
@@ -146,24 +146,27 @@ describe('compileMdxToHtml', () => {
   it.each([
     ['without a highlighter', undefined],
     ['with a highlighter', createHljsHighlighter()],
-  ])('keeps Regor template syntax literal inside Markdown code %s', (_, highlighter) => {
-    const source = [
-      'Total {{ 1 + 1 }} with inline `{{ name }}` code.',
-      '',
-      '```html',
-      '<li r-for="item in items">{{ item }}</li>',
-      '```',
-    ].join('\n')
-    const html = renderApp(compileMdx(source, { highlighter }).bodyHtml, {
-      components: {},
-      context: createTestContext(),
-    })
-    const text = html.replace(/<[^>]+>/g, '')
+  ])(
+    'keeps Regor template syntax literal inside Markdown code %s',
+    (_, highlighter) => {
+      const source = [
+        'Total {{ 1 + 1 }} with inline `{{ name }}` code.',
+        '',
+        '```html',
+        '<li r-for="item in items">{{ item }}</li>',
+        '```',
+      ].join('\n')
+      const html = renderApp(compileMdx(source, { highlighter }).bodyHtml, {
+        components: {},
+        context: createTestContext(),
+      })
+      const text = html.replace(/<[^>]+>/g, '')
 
-    expect(text).toContain('Total 2 with inline')
-    expect(text).toContain('{{ name }}')
-    expect(text).toContain('{{ item }}')
-  })
+      expect(text).toContain('Total 2 with inline')
+      expect(text).toContain('{{ name }}')
+      expect(text).toContain('{{ item }}')
+    },
+  )
 
   it('preserves whitespace inside opaque inline markup blocks', async () => {
     const source = ['<span>', '  Inline text', '</span>'].join('\n')
@@ -527,103 +530,106 @@ describe('compileMdxToHtml', () => {
     expect(html).toContain('</TabPane>')
   })
 
-  it.each([
-    '```',
-    '~~~~',
-  ])('preserves formatted source tabs with %s fences and no surrounding blank lines', (fence) => {
-    const source = [
-      '<Tabs',
-      '  tone="neutral"',
-      '>',
-      '  <TabPane id="preview">',
-      '    <RegorApp id="collection" src="./collection.ts"/>',
-      '  </TabPane>',
-      '  <TabPane id="source">',
-      `${fence}typescript`,
-      "import { html } from 'regor'",
-      '',
-      'export interface Collection { items: SRef<string[]> }',
-      '',
-      'const template = html`<Flex><RegorApp src="./example.ts"/></Flex>`',
-      'const closingTag = "</Tabs>"',
-      'const shorterFence = "```"',
-      fence,
-      '  </TabPane>',
-      '</Tabs>',
-      '',
-      '## After the sample',
-      '',
-      'Still visible.',
-    ].join('\n')
+  it.each(['```', '~~~~'])(
+    'preserves formatted source tabs with %s fences and no surrounding blank lines',
+    (fence) => {
+      const source = [
+        '<Tabs',
+        '  tone="neutral"',
+        '>',
+        '  <TabPane id="preview">',
+        '    <RegorApp id="collection" src="./collection.ts"/>',
+        '  </TabPane>',
+        '  <TabPane id="source">',
+        `${fence}typescript`,
+        "import { html } from 'regor'",
+        '',
+        'export interface Collection { items: SRef<string[]> }',
+        '',
+        'const template = html`<Flex><RegorApp src="./example.ts"/></Flex>`',
+        'const closingTag = "</Tabs>"',
+        'const shorterFence = "```"',
+        fence,
+        '  </TabPane>',
+        '</Tabs>',
+        '',
+        '## After the sample',
+        '',
+        'Still visible.',
+      ].join('\n')
 
-    const result = compileMdx(source, {
-      sourceRelPath: 'components/buttons.mdx',
-      highlighter: createHljsHighlighter(),
-    })
-    const cleanup = ensureDomGlobals()
-    try {
-      const root = document.createElement('div')
-      root.innerHTML = result.bodyHtml
-      expect(root.querySelectorAll('tabs > tabpane')).toHaveLength(2)
-      expect(
-        root.querySelector('#preview regorapp')?.getAttribute('sourceRelPath'),
-      ).toBe('components/buttons.mdx')
-      const code = root.querySelector('#source pre code')
-      expect(code?.textContent?.trimEnd()).toBe(
-        source.split(`${fence}typescript\n`)[1].split(`\n${fence}\n`)[0],
-      )
-      expect(code?.querySelector('span')).not.toBeNull()
-      expect(root.querySelector('h2')?.textContent).toBe('After the sample')
-      expect(root.querySelector('p')?.textContent).toBe('Still visible.')
-    } finally {
-      cleanup()
-    }
-  })
+      const result = compileMdx(source, {
+        sourceRelPath: 'components/buttons.mdx',
+        highlighter: createHljsHighlighter(),
+      })
+      const cleanup = ensureDomGlobals()
+      try {
+        const root = document.createElement('div')
+        root.innerHTML = result.bodyHtml
+        expect(root.querySelectorAll('tabs > tabpane')).toHaveLength(2)
+        expect(
+          root
+            .querySelector('#preview regorapp')
+            ?.getAttribute('sourceRelPath'),
+        ).toBe('components/buttons.mdx')
+        const code = root.querySelector('#source pre code')
+        expect(code?.textContent?.trimEnd()).toBe(
+          source.split(`${fence}typescript\n`)[1].split(`\n${fence}\n`)[0],
+        )
+        expect(code?.querySelector('span')).not.toBeNull()
+        expect(root.querySelector('h2')?.textContent).toBe('After the sample')
+        expect(root.querySelector('p')?.textContent).toBe('Still visible.')
+      } finally {
+        cleanup()
+      }
+    },
+  )
 
-  it.each([
-    'none',
-    'highlightjs',
-    'shiki',
-  ])('preserves template literals inside source tabs with %s highlighting', async (engine) => {
-    const code = [
-      'const options = {',
-      '  template: html`<Collection/>`,',
-      '  content: html`<p>Add up to {{ limit }} items.</p>`,',
-      `  label: \`Item \${nextItem++}\`,`,
-      '  entity: "&#x3C;",',
-      '}',
-    ].join('\n')
-    const source = [
-      '<TabPane>',
-      'Before `inline code`.',
-      '```typescript',
-      code,
-      '```',
-      'After `inline code`.',
-      '</TabPane>',
-    ].join('\n')
-    const highlighter =
-      engine === 'shiki'
-        ? await createMdxHighlighter(undefined, ['typescript'])
-        : engine === 'highlightjs'
-          ? createHljsHighlighter()
-          : undefined
-    const result = compileMdx(source, { highlighter })
-    const rendered = renderApp(result.bodyHtml, {
-      components: {},
-      context: createTestContext(),
-    })
-    const cleanup = ensureDomGlobals()
-    try {
-      const root = document.createElement('div')
-      root.innerHTML = rendered
-      expect(root.querySelector('pre code')?.textContent?.trimEnd()).toBe(code)
-      expect(root.querySelectorAll('pre code code')).toHaveLength(0)
-      expect(root.querySelectorAll('tabpane > code')).toHaveLength(2)
-    } finally {
-      cleanup()
-    }
-  })
+  it.each(['none', 'highlightjs', 'shiki'])(
+    'preserves template literals inside source tabs with %s highlighting',
+    async (engine) => {
+      const code = [
+        'const options = {',
+        '  template: html`<Collection/>`,',
+        '  content: html`<p>Add up to {{ limit }} items.</p>`,',
+        `  label: \`Item \${nextItem++}\`,`,
+        '  entity: "&#x3C;",',
+        '}',
+      ].join('\n')
+      const source = [
+        '<TabPane>',
+        'Before `inline code`.',
+        '```typescript',
+        code,
+        '```',
+        'After `inline code`.',
+        '</TabPane>',
+      ].join('\n')
+      const highlighter =
+        engine === 'shiki'
+          ? await createMdxHighlighter(undefined, ['typescript'])
+          : engine === 'highlightjs'
+            ? createHljsHighlighter()
+            : undefined
+      const result = compileMdx(source, { highlighter })
+      const rendered = renderApp(result.bodyHtml, {
+        components: {},
+        context: createTestContext(),
+      })
+      const cleanup = ensureDomGlobals()
+      try {
+        const root = document.createElement('div')
+        root.innerHTML = rendered
+        expect(root.querySelector('pre code')?.textContent?.trimEnd()).toBe(
+          code,
+        )
+        expect(root.querySelectorAll('pre code code')).toHaveLength(0)
+        expect(root.querySelectorAll('tabpane > code')).toHaveLength(2)
+      } finally {
+        cleanup()
+      }
+    },
+  )
 
   it('highlights fenced code blocks inside Regor component markup', async () => {
     const source = [

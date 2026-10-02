@@ -22,6 +22,10 @@ export const tabler_accessible_filled =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-filled icon-tabler-accessible" fill="currentColor" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M17 3.34a10 10 0 1 1 -14.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 14.995 -8.336zm-1.051 6.844a1 1 0 0 0 -1.152 -.663l-.113 .03l-2.684 .895l-2.684 -.895l-.113 -.03a1 1 0 0 0 -.628 1.884l.109 .044l2.316 .771v.976l-1.832 2.75l-.06 .1a1 1 0 0 0 .237 1.21l.1 .076l.101 .06a1 1 0 0 0 1.21 -.237l.076 -.1l1.168 -1.752l1.168 1.752l.07 .093a1 1 0 0 0 1.653 -1.102l-.059 -.1l-1.832 -2.75v-.977l2.316 -.771l.109 -.044a1 1 0 0 0 .524 -1.221zm-3.949 -4.184a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0 -3" /></svg>'
 export const tabler_accessible_off =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-accessible-off" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M10 16.5l2 -3l2 3m-2 -3v-1.5m2.627 -1.376l.373 -.124m-6 0l2.231 .744" /><path d="M20.042 16.045a9 9 0 0 0 -12.087 -12.087m-2.318 1.677a9 9 0 1 0 12.725 12.73" /><path d="M12 8a.5 .5 0 1 0 -.5 -.5" /><path d="M3 3l18 18" /></svg>'
+export const tabler_acorn =
+  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-acorn" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M18 10l-.45 4.1a8.36 8.36 0 0 1 -5.18 6.83a1 1 0 0 1 -.74 0a8.36 8.36 0 0 1 -5.18 -6.83l-.45 -4.1" /><path d="M13 3a4.9 4.9 0 0 0 -1 3" /><path d="M8 6h8a3 3 0 0 1 3 3a1 1 0 0 1 -1 1h-12a1 1 0 0 1 -1 -1a3 3 0 0 1 3 -3" /></svg>'
+export const tabler_acrobatic =
+  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-acrobatic" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M13.207 3l-6.735 2.462a1 1 0 0 0 -.364 1.646l1.892 1.892" /><path d="M10.5 8.25l1.5 -.25h3.174a2 2 0 0 1 1.411 .583l1.422 1.417" /><path d="M8 9c0 4.5 1.781 5.14 3 5.5" /><path d="M13.007 21h-1a1 1 0 0 1 -1 -1l-.007 -5.5" /><path d="M12.007 14a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /></svg>'
 export const tabler_activity =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-activity" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12h4l3 8l4 -16l3 8h4" /></svg>'
 export const tabler_activity_heartbeat =
@@ -113,7 +117,7 @@ export const tabler_ai_agents =
 export const tabler_ai_gateway =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-ai-gateway" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 6.5a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0" /><path d="M15 6.5a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0" /><path d="M15 17.5a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0" /><path d="M4 17.5a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0" /><path d="M8.5 15.5l7 -7" /></svg>'
 export const tabler_air_balloon =
-  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-air-balloon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M10 20a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v1a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1l0 -1" /><path d="M12 16c3.314 0 6 -4.686 6 -8a6 6 0 1 0 -12 0c0 3.314 2.686 8 6 8" /><path d="M10 9a2 7 0 1 0 4 0a2 7 0 1 0 -4 0" /></svg>'
+  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-air-balloon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M9 21v-3h6v3a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1" /><path d="M9 18c-2.347 -2.169 -5 -5.226 -5 -8a8 8 0 1 1 16 0c0 2.774 -2.653 5.831 -5 8" /><path d="M5.5 14h13" /><path d="M10 14c-1.69 -4.712 -.924 -8.197 0 -11.602" /><path d="M14 14c1.469 -3.867 1.19 -7.735 0 -11.602" /></svg>'
 export const tabler_air_balloon_filled =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-filled icon-tabler-air-balloon" fill="currentColor" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M13 18a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2v-1a2 2 0 0 1 2 -2z" /><path d="M12 1a7 7 0 0 1 7 7c0 4.185 -3.297 9 -7 9s-7 -4.815 -7 -9a7 7 0 0 1 7 -7" /></svg>'
 export const tabler_air_conditioning =
@@ -122,6 +126,10 @@ export const tabler_air_conditioning_disabled =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-air-conditioning-disabled" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 10a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2l0 -4" /><path d="M7 16v-3a1 1 0 0 1 1 -1h8a1 1 0 0 1 1 1v3" /></svg>'
 export const tabler_air_traffic_control =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-air-traffic-control" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M11 3h2" /><path d="M12 3v3" /><path d="M5.998 6h12.004a2 2 0 0 1 1.916 2.575l-1.8 6a2 2 0 0 1 -1.916 1.425h-8.404a2 2 0 0 1 -1.916 -1.425l-1.8 -6a2 2 0 0 1 1.916 -2.575" /><path d="M8.5 6l1.5 10v5" /><path d="M15.5 6l-1.5 10v5" /></svg>'
+export const tabler_airpods_l =
+  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-airpods-l" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M6 4a4 4 0 0 1 4 3.8v10.7a1.5 1.5 0 1 1 -3 0v-6.5h-1a4 4 0 0 1 -4 -3.8v-.2a4 4 0 0 1 4 -4" /><path d="M15 8v8h4" /></svg>'
+export const tabler_airpods_r =
+  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-airpods-r" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M18 4a4 4 0 0 0 -4 3.8v10.7a1.5 1.5 0 1 0 3 0v-6.5h1a4 4 0 0 0 4 -3.8v-.2a4 4 0 0 0 -4 -4" /><path d="M5 12h2a2 2 0 1 0 0 -4h-2v8m4 0l-3 -4" /></svg>'
 export const tabler_alarm =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-alarm" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 13a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M12 10l0 3l2 0" /><path d="M7 4l-2.75 2" /><path d="M17 4l2.75 2" /></svg>'
 export const tabler_alarm_average =
@@ -336,6 +344,14 @@ export const tabler_api_off =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-api-off" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 13h5" /><path d="M12 16v-4m0 -4h3a2 2 0 0 1 2 2v1c0 .554 -.225 1.055 -.589 1.417m-3.411 .583h-1" /><path d="M20 8v8" /><path d="M9 16v-5.5a2.5 2.5 0 0 0 -5 0v5.5" /><path d="M3 3l18 18" /></svg>'
 export const tabler_app_window =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-app-window" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10" /><path d="M6 8h.01" /><path d="M9 8h.01" /></svg>'
+export const tabler_app_window_bottom =
+  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-app-window-bottom" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10" /><path d="M6 14h12v2h-12v-2" fill="currentColor" /></svg>'
+export const tabler_app_window_bottom_left =
+  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-app-window-bottom-left" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10" /><path d="M6 14h2v2h-2v-2" fill="currentColor" /></svg>'
+export const tabler_app_window_bottom_right =
+  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-app-window-bottom-right" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10" /><path d="M16 14h2v2h-2v-2" fill="currentColor" /></svg>'
+export const tabler_app_window_center =
+  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-app-window-center" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10" /><path d="M11 11h2v2h-2v-2" fill="currentColor" /></svg>'
 export const tabler_app_window_filled =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-filled icon-tabler-app-window" fill="currentColor" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M19 4a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-14a3 3 0 0 1 -3 -3v-10a3 3 0 0 1 3 -3zm-12.99 3l-.127 .007a1 1 0 0 0 .117 1.993l.127 -.007a1 1 0 0 0 -.117 -1.993zm3 0l-.127 .007a1 1 0 0 0 .117 1.993l.127 -.007a1 1 0 0 0 -.117 -1.993z" /></svg>'
 export const tabler_apple =
@@ -542,6 +558,8 @@ export const tabler_arrow_elbow_right =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-elbow-right" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M21 14v-6h-6" /><path d="M21 8l-9 9l-9 -9" /></svg>'
 export const tabler_arrow_fork =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-fork" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M16 3h5v5" /><path d="M8 3h-5v5" /><path d="M21 3l-7.536 7.536a5 5 0 0 0 -1.464 3.534v6.93" /><path d="M3 3l7.536 7.536a5 5 0 0 1 1.464 3.534v.93" /></svg>'
+export const tabler_arrow_fork_triple =
+  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-fork-triple" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 3v18" /><path d="M16 7l-4 -4l-4 4" /><path d="M16 11h5v5" /><path d="M8 11h-5v5" /><path d="M3 11l8.293 8.293c.453 .453 .707 1.067 .707 1.707" /><path d="M21 11l-8.293 8.293a2.4 2.4 0 0 0 -.707 1.707" /></svg>'
 export const tabler_arrow_forward =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-forward" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M15 11l4 4l-4 4m4 -4h-11a4 4 0 0 1 0 -8h1" /></svg>'
 export const tabler_arrow_forward_up =
@@ -1012,6 +1030,8 @@ export const tabler_ballpen_off =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-ballpen-off" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14 6l7 7l-2 2" /><path d="M10 10l-4.172 4.172a2.828 2.828 0 1 0 4 4l4.172 -4.172" /><path d="M16 12l4.414 -4.414a2 2 0 0 0 0 -2.829l-1.171 -1.171a2 2 0 0 0 -2.829 0l-4.414 4.414" /><path d="M4 20l1.768 -1.768" /><path d="M3 3l18 18" /></svg>'
 export const tabler_ban =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-ban" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M5.7 5.7l12.6 12.6" /></svg>'
+export const tabler_banana =
+  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-banana" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M20 6v-2a1 1 0 0 0 -1 -1h-2a1 1 0 0 0 -1 1v2a9.09 9.09 0 0 1 -4 8.08c-2 1.31 -5 1.57 -7 1.59a2 2 0 0 0 -2 2a2 2 0 0 0 1.16 1.81c2.69 1.2 9.46 3.44 14.35 -1.66c4.49 -4.74 1.49 -11.82 1.49 -11.82" /></svg>'
 export const tabler_bandage =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-bandage" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14 12l0 .01" /><path d="M10 12l0 .01" /><path d="M12 10l0 .01" /><path d="M12 14l0 .01" /><path d="M4.5 12.5l8 -8a4.94 4.94 0 0 1 7 7l-8 8a4.94 4.94 0 0 1 -7 -7" /></svg>'
 export const tabler_bandage_filled =
@@ -1255,7 +1275,7 @@ export const tabler_beta =
 export const tabler_bible =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-bible" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M19 4v16h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12" /><path d="M19 16h-12a2 2 0 0 0 -2 2" /><path d="M12 7v6" /><path d="M10 9h4" /></svg>'
 export const tabler_bike =
-  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-bike" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M2 18a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M16 18a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M12 19l0 -4l-3 -3l5 -4l2 3l3 0" /><path d="M16 5a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>'
+  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-bike" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M2 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M16 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M12 19v-4l-3 -3l5 -4l2 3h3" /><path d="M13.007 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /></svg>'
 export const tabler_bike_filled =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-filled icon-tabler-bike" fill="currentColor" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 14a4 4 0 1 1 -4 4l.005 -.2a4 4 0 0 1 3.995 -3.8" /><path d="M19 14a4 4 0 1 1 -4 4l.005 -.2a4 4 0 0 1 3.995 -3.8" /><path d="M14.832 7.445l1.703 2.555h2.465a1 1 0 0 1 .993 .883l.007 .117a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -.832 -.445l-1.396 -2.093l-3.275 2.62l2.21 2.21a1 1 0 0 1 .284 .577l.009 .131v4a1 1 0 0 1 -2 0v-3.585l-2.707 -2.708a1 1 0 0 1 -.01 -1.403l.092 -.085l5 -4a1 1 0 0 1 1.457 .226" /><path d="M17 3a2 2 0 1 1 -2 2l.005 -.15a2 2 0 0 1 1.995 -1.85" /></svg>'
 export const tabler_bike_off =
@@ -1325,7 +1345,7 @@ export const tabler_blur_off =
 export const tabler_bmp =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-bmp" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M18 16v-8h2a2 2 0 1 1 0 4h-2" /><path d="M6 14a2 2 0 0 1 -2 2h-2v-8h2a2 2 0 1 1 0 4h-2h2a2 2 0 0 1 2 2" /><path d="M9 16v-8l3 6l3 -6v8" /></svg>'
 export const tabler_body_scan =
-  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-body-scan" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 8v-2a2 2 0 0 1 2 -2h2" /><path d="M4 16v2a2 2 0 0 0 2 2h2" /><path d="M16 4h2a2 2 0 0 1 2 2v2" /><path d="M16 20h2a2 2 0 0 0 2 -2v-2" /><path d="M11 8a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M10 17v-1a2 2 0 1 1 4 0v1" /><path d="M8 10c.666 .666 1.334 1 2 1h4c.666 0 1.334 -.334 2 -1" /><path d="M12 11v3" /></svg>'
+  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-body-scan" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M11 8a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" /><path d="M10 17v-1a2 2 0 1 1 4 0v1" /><path d="M8 10q 1 1 2 1h4q 1 0 2 -1" /><path d="M12 11v3" /><path d="M3 7v-2a2 2 0 0 1 2 -2h2" /><path d="M3 17v2a2 2 0 0 0 2 2h2" /><path d="M17 3h2a2 2 0 0 1 2 2v2" /><path d="M17 21h2a2 2 0 0 0 2 -2v-2" /></svg>'
 export const tabler_bold =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-bold" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M7 5h6a3.5 3.5 0 0 1 0 7h-6l0 -7" /><path d="M13 12h1a3.5 3.5 0 0 1 0 7h-7v-7" /></svg>'
 export const tabler_bold_off =
@@ -1574,8 +1594,8 @@ export const tabler_brand_abstract =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-abstract" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 3c7.2 0 9 1.8 9 9c0 7.2 -1.8 9 -9 9c-7.2 0 -9 -1.8 -9 -9c0 -7.2 1.8 -9 9 -9" /><path d="M8 13.5a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0" /><path d="M8 8h8v8" /></svg>'
 export const tabler_brand_adobe =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-adobe" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12.893 4.514l7.977 14a.993 .993 0 0 1 -.394 1.365a1.04 1.04 0 0 1 -.5 .127h-3.476l-4.5 -8l-2.5 4h1.5l2 4h-8.977c-.565 0 -1.023 -.45 -1.023 -1c0 -.171 .045 -.34 .13 -.49l7.977 -13.993a1.034 1.034 0 0 1 1.786 0l0 -.009" /></svg>'
-export const tabler_brand_adobe_after_effect =
-  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-adobe-after-effect" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12c0 -4.243 0 -6.364 1.318 -7.682s3.44 -1.318 7.682 -1.318s6.364 0 7.682 1.318s1.318 3.44 1.318 7.682s0 6.364 -1.318 7.682s-3.44 1.318 -7.682 1.318s-6.364 0 -7.682 -1.318s-1.318 -3.44 -1.318 -7.682" /><path d="M12 15.79l-.82 -2.653m-4.864 2.652l.82 -2.652m0 0l.686 -2.218c.559 -1.806 .838 -2.708 1.336 -2.708s.777 .902 1.335 2.708l.686 2.218m-4.043 0h4.043" /><path d="M13.895 12.824v1.07a1.895 1.895 0 0 0 3.54 .942m-3.54 -2.012v-.824a1.895 1.895 0 1 1 3.79 0v.824l-3.79 0" /></svg>'
+export const tabler_brand_adobe_after_effects =
+  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-adobe-after-effects" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12c0 -4.243 0 -6.364 1.318 -7.682s3.44 -1.318 7.682 -1.318s6.364 0 7.682 1.318s1.318 3.44 1.318 7.682s0 6.364 -1.318 7.682s-3.44 1.318 -7.682 1.318s-6.364 0 -7.682 -1.318s-1.318 -3.44 -1.318 -7.682" /><path d="M12 15.79l-.82 -2.653m-4.864 2.652l.82 -2.652m0 0l.686 -2.218c.559 -1.806 .838 -2.708 1.336 -2.708s.777 .902 1.335 2.708l.686 2.218m-4.043 0h4.043" /><path d="M13.895 12.824v1.07a1.895 1.895 0 0 0 3.54 .942m-3.54 -2.012v-.824a1.895 1.895 0 1 1 3.79 0v.824l-3.79 0" /></svg>'
 export const tabler_brand_adobe_illustrator =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-adobe-illustrator" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12c0 -4.243 0 -6.364 1.318 -7.682s3.44 -1.318 7.682 -1.318s6.364 0 7.682 1.318s1.318 3.44 1.318 7.682s0 6.364 -1.318 7.682s-3.44 1.318 -7.682 1.318s-6.364 0 -7.682 -1.318s-1.318 -3.44 -1.318 -7.682" /><path d="M12.947 15.79l-.82 -2.653m-4.864 2.652l.82 -2.652m0 0l.687 -2.218c.558 -1.806 .838 -2.708 1.335 -2.708c.498 0 .777 .902 1.336 2.708l.686 2.218m-4.043 0h4.043" /><path d="M15.789 15.789v-4.736" /><path d="M15.789 8.684v-.473" /></svg>'
 export const tabler_brand_adobe_indesign =
@@ -1638,6 +1658,8 @@ export const tabler_brand_asana =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-asana" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M9 7a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M14 16a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M4 16a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /></svg>'
 export const tabler_brand_astro =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-astro" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14.972 3.483c.163 .196 .247 .46 .413 .987l3.64 11.53a15.5 15.5 0 0 0 -4.352 -1.42l-2.37 -7.723a.31 .31 0 0 0 -.296 -.213a.31 .31 0 0 0 -.295 .214l-2.342 7.718a15.5 15.5 0 0 0 -4.37 1.422l3.657 -11.53c.168 -.527 .251 -.79 .415 -.986c.144 -.172 .331 -.306 .544 -.388c.242 -.094 .527 -.094 1.099 -.094h2.612c.572 0 .858 0 1.1 .094c.213 .082 .4 .217 .545 .39" /><path d="M9 18c0 1.5 2 3 3 4c1 -1 3 -3 3 -4q -3 1.5 -6 0" /></svg>'
+export const tabler_brand_audible =
+  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-audible" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M18.46 9.75a9 9 0 0 0 -12.92 0" /><path d="M14.34 11.58a5 5 0 0 0 -4.68 0" /><path d="M22 13l-10 4l-10 -4" /></svg>'
 export const tabler_brand_auth0 =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-auth0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 14.5l-5.5 3.5l2 -6l-4.5 -4h6l2 -5l2 5h6l-4.5 4l2 6l-5.5 -3.5" /><path d="M20.507 8.872l-2.01 -5.872h-12.994l-2.009 5.872c-1.242 3.593 -.135 7.094 3.249 9.407l5.257 3.721l5.257 -3.721c3.385 -2.313 4.49 -5.814 3.25 -9.407" /></svg>'
 export const tabler_brand_aws =
@@ -1926,8 +1948,8 @@ export const tabler_brand_jira =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-jira" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M20 4h-9v1.5a2.5 2.5 0 0 0 2.5 2.5h1.5a1 1 0 0 1 1 1v1.5a2.5 2.5 0 0 0 2.5 2.5h1.5v-9" /><path d="M15 8h-8v1.5a2.5 2.5 0 0 0 2.5 2.5h1.5a1 1 0 0 1 1 1v1.5a2.5 2.5 0 0 0 2.5 2.5h1.5v-8a1 1 0 0 0 -1 -1" /><path d="M11 12h-8v1.5a2.5 2.5 0 0 0 2.5 2.5h1.5a1 1 0 0 1 1 1v1.5a2.5 2.5 0 0 0 2.5 2.5h1.5v-8a1 1 0 0 0 -1 -1" /></svg>'
 export const tabler_brand_juejin =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-juejin" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M2 12l10 7.422l10 -7.422" /><path d="M7 9l5 4l5 -4" /><path d="M11 6l1 .8l1 -.8l-1 -.8l-1 .8" /></svg>'
-export const tabler_brand_kako_talk =
-  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-kako-talk" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M10 8v7" /><path d="M14 10l-2 2.5l2 2.5" /><path d="M12 4c4.97 0 9 3.358 9 7.5c0 4.142 -4.03 7.5 -9 7.5c-.67 0 -1.323 -.061 -1.95 -.177l-3.05 2.177l.592 -2.962c-2.741 -1.284 -4.592 -3.73 -4.592 -6.538c0 -4.142 4.03 -7.5 9 -7.5" /></svg>'
+export const tabler_brand_kakao_talk =
+  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-kakao-talk" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M10 8v7" /><path d="M14 10l-2 2.5l2 2.5" /><path d="M12 4c4.97 0 9 3.358 9 7.5c0 4.142 -4.03 7.5 -9 7.5c-.67 0 -1.323 -.061 -1.95 -.177l-3.05 2.177l.592 -2.962c-2.741 -1.284 -4.592 -3.73 -4.592 -6.538c0 -4.142 4.03 -7.5 9 -7.5" /></svg>'
 export const tabler_brand_kbin =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-kbin" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M10.586 9.506h-2.43c-.434 -.932 -.7 -1.506 -1.596 -1.506l-2.404 .019c-.662 0 -1.353 .592 -1.103 1.487l2.216 9.436c.486 1.743 .811 2.058 1.145 2.058h.64" /><path d="M14.275 3h5.645c.84 0 1.24 .714 1.02 1.287l-4.687 15.109c-.42 1.133 -1.159 1.603 -2.354 1.603h-7.485c.39 0 .76 -.618 1.296 -2.061l4.457 -14.49c.326 -.83 .76 -1.448 2.108 -1.448" /></svg>'
 export const tabler_brand_kick =
@@ -1978,28 +2000,6 @@ export const tabler_brand_meetup =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-meetup" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5.455 10.82c.935 -2.163 3.045 -3.82 5.545 -3.82c2.104 0 2.844 1.915 2 4l-2 6" /><path d="M6.981 7l-3.981 9.914" /><path d="M13 11c.937 -2.16 3.071 -3.802 5.42 -3.972c2.104 0 3.128 1.706 2.284 3.792l-2.454 6.094c-.853 1.676 .75 2.586 2.75 2.086" /></svg>'
 export const tabler_brand_mercedes =
   '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-mercedes" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M12 3v9" /><path d="M12 12l7 5" /><path d="M12 12l-7 5" /></svg>'
-export const tabler_brand_messenger =
-  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-messenger" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 20l1.3 -3.9a9 8 0 1 1 3.4 2.9l-4.7 1" /><path d="M8 13l3 -2l2 2l3 -2" /></svg>'
-export const tabler_brand_messenger_filled =
-  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-filled icon-tabler-brand-messenger" fill="currentColor" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M18.894 5.446c3.667 3.127 4.168 8.238 1.152 11.897c-2.842 3.447 -7.965 4.583 -12.231 2.805l-.233 -.101l-4.374 .931l-.033 .005l-.042 .008l-.031 .002l-.01 .003h-.018l-.052 .004l-.024 -.001l-.02 .001l-.033 -.003h-.035l-.022 -.004l-.022 -.002l-.035 -.007l-.034 -.005l-.016 -.004l-.024 -.005l-.049 -.016l-.024 -.005l-.011 -.005l-.022 -.007l-.045 -.02l-.03 -.012l-.011 -.006l-.014 -.006l-.031 -.018l-.045 -.024l-.016 -.011l-.037 -.026l-.04 -.027l-.015 -.013l-.043 -.04l-.025 -.02l-.062 -.07l-.013 -.013l-.011 -.014l-.027 -.04l-.026 -.035a1 1 0 0 1 -.054 -.095l-.006 -.013l-.019 -.045l-.02 -.042l-.004 -.016l-.004 -.01l-.011 -.04l-.013 -.04l-.002 -.014l-.005 -.019l-.005 -.033l-.008 -.042l-.002 -.031l-.003 -.026l-.004 -.054l.001 -.036l.001 -.023l.002 -.053l.004 -.025v-.019l.008 -.036l.005 -.033l.004 -.017l.005 -.023l.018 -.06l.003 -.013l1.15 -3.45l-.022 -.037c-2.21 -3.747 -1.209 -8.392 2.411 -11.118l.23 -.168c3.898 -2.766 9.469 -2.54 13.073 .535m-2.062 5a1 1 0 0 0 -1.387 -.278l-2.318 1.544l-1.42 -1.42a1 1 0 0 0 -1.262 -.124l-3 2a1 1 0 0 0 -.277 1.387l.07 .093a1 1 0 0 0 1.317 .184l2.317 -1.545l1.42 1.42a1 1 0 0 0 1.263 .125l3 -2a1 1 0 0 0 .277 -1.387" /></svg>'
-export const tabler_brand_meta =
-  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-meta" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 10.174c1.766 -2.784 3.315 -4.174 4.648 -4.174c2 0 3.263 2.213 4 5.217c.704 2.869 .5 6.783 -2 6.783c-1.114 0 -2.648 -1.565 -4.148 -3.652a27.627 27.627 0 0 1 -2.5 -4.174" /><path d="M12 10.174c-1.766 -2.784 -3.315 -4.174 -4.648 -4.174c-2 0 -3.263 2.213 -4 5.217c-.704 2.869 -.5 6.783 2 6.783c1.114 0 2.648 -1.565 4.148 -3.652c1 -1.391 1.833 -2.783 2.5 -4.174" /></svg>'
-export const tabler_brand_metabrainz =
-  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-metabrainz" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 7v10l7 4v-18l-7 4" /><path d="M21 7v10l-7 4v-18l7 4" /></svg>'
-export const tabler_brand_minecraft =
-  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-minecraft" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M21 16.008v-8.018a1.98 1.98 0 0 0 -1 -1.717l-7 -4.008a2.016 2.016 0 0 0 -2 0l-7 4.008c-.619 .355 -1 1.01 -1 1.718v8.018c0 .709 .381 1.363 1 1.717l7 4.008c.62 .354 1.38 .354 2 0l7 -4.008c.619 -.355 1 -1.01 1 -1.718" /><path d="M12 22v-10" /><path d="M12 12l8.73 -5.04" /><path d="M3.27 6.96l8.73 5.04" /><path d="M12 17l3.003 -1.668m3 -1.667l2.997 -1.665m-9 5l-9 -5" /><path d="M15 17l3 -1.67v-3l-3 1.67l0 3" /></svg>'
-export const tabler_brand_miniprogram =
-  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-miniprogram" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M21 12a9 9 0 1 1 -18 0a9 9 0 0 1 18 0" /><path d="M8 11.503a2.5 2.5 0 1 0 4 2v-3a2.5 2.5 0 1 1 4 2" /></svg>'
-export const tabler_brand_mixpanel =
-  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-mixpanel" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M2 12a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0" /><path d="M19 12a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0" /><path d="M11 12a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /></svg>'
-export const tabler_brand_monday =
-  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-monday" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M18 15.5a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0" /><path d="M9.5 7a1.5 1.5 0 0 1 1.339 2.177l-4.034 7.074c-.264 .447 -.75 .749 -1.305 .749a1.5 1.5 0 0 1 -1.271 -2.297l3.906 -6.827a1.5 1.5 0 0 1 1.365 -.876" /><path d="M16.5 7a1.5 1.5 0 0 1 1.339 2.177l-4.034 7.074c-.264 .447 -.75 .749 -1.305 .749a1.5 1.5 0 0 1 -1.271 -2.297l3.906 -6.827a1.5 1.5 0 0 1 1.365 -.876" /></svg>'
-export const tabler_brand_mongodb =
-  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-mongodb" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 3v19" /><path d="M18 11.227c0 3.273 -1.812 4.77 -6 9.273c-4.188 -4.503 -6 -6 -6 -9.273c0 -4.454 3.071 -6.927 6 -9.227c2.929 2.3 6 4.773 6 9.227" /></svg>'
-export const tabler_brand_my_oppo =
-  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-my-oppo" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M18.316 5h-12.632l-3.418 4.019a1.089 1.089 0 0 0 .019 1.447l9.714 10.534l9.715 -10.49a1.09 1.09 0 0 0 .024 -1.444l-3.422 -4.066" /><path d="M9 11l3 3l3 -3" /></svg>'
-export const tabler_brand_mysql =
-  '<svg aria-hidden="true" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-mysql" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M13 21c-1.427 -1.026 -3.59 -3.854 -4 -6c-.486 .77 -1.501 2 -2 2c-1.499 -.888 -.574 -3.973 0 -6c-1.596 -1.433 -2.468 -2.458 -2.5 -4c-3.35 -3.44 -.444 -5.27 2.5 -3h1c8.482 .5 6.421 8.07 9 11.5c2.295 .522 3.665 2.254 5 3.5c-2.086 -.2 -2.784 -.344 -3.5 0c.478 1.64 2.123 2.2 3.5 3" /><path d="M9 7h.01" /></svg>'
 
 export type TablerIconNameChunk0 =
   | 'tabler:a-b'
@@ -2013,6 +2013,8 @@ export type TablerIconNameChunk0 =
   | 'tabler:accessible'
   | 'tabler:accessible-filled'
   | 'tabler:accessible-off'
+  | 'tabler:acorn'
+  | 'tabler:acrobatic'
   | 'tabler:activity'
   | 'tabler:activity-heartbeat'
   | 'tabler:ad'
@@ -2063,6 +2065,8 @@ export type TablerIconNameChunk0 =
   | 'tabler:air-conditioning'
   | 'tabler:air-conditioning-disabled'
   | 'tabler:air-traffic-control'
+  | 'tabler:airpods-l'
+  | 'tabler:airpods-r'
   | 'tabler:alarm'
   | 'tabler:alarm-average'
   | 'tabler:alarm-filled'
@@ -2170,6 +2174,10 @@ export type TablerIconNameChunk0 =
   | 'tabler:api-book'
   | 'tabler:api-off'
   | 'tabler:app-window'
+  | 'tabler:app-window-bottom'
+  | 'tabler:app-window-bottom-left'
+  | 'tabler:app-window-bottom-right'
+  | 'tabler:app-window-center'
   | 'tabler:app-window-filled'
   | 'tabler:apple'
   | 'tabler:apple-filled'
@@ -2273,6 +2281,7 @@ export type TablerIconNameChunk0 =
   | 'tabler:arrow-elbow-left'
   | 'tabler:arrow-elbow-right'
   | 'tabler:arrow-fork'
+  | 'tabler:arrow-fork-triple'
   | 'tabler:arrow-forward'
   | 'tabler:arrow-forward-up'
   | 'tabler:arrow-forward-up-double'
@@ -2508,6 +2517,7 @@ export type TablerIconNameChunk0 =
   | 'tabler:ballpen-filled'
   | 'tabler:ballpen-off'
   | 'tabler:ban'
+  | 'tabler:banana'
   | 'tabler:bandage'
   | 'tabler:bandage-filled'
   | 'tabler:bandage-off'
@@ -2789,7 +2799,7 @@ export type TablerIconNameChunk0 =
   | 'tabler:brand-4chan'
   | 'tabler:brand-abstract'
   | 'tabler:brand-adobe'
-  | 'tabler:brand-adobe-after-effect'
+  | 'tabler:brand-adobe-after-effects'
   | 'tabler:brand-adobe-illustrator'
   | 'tabler:brand-adobe-indesign'
   | 'tabler:brand-adobe-photoshop'
@@ -2821,6 +2831,7 @@ export type TablerIconNameChunk0 =
   | 'tabler:brand-arc'
   | 'tabler:brand-asana'
   | 'tabler:brand-astro'
+  | 'tabler:brand-audible'
   | 'tabler:brand-auth0'
   | 'tabler:brand-aws'
   | 'tabler:brand-azure'
@@ -2965,7 +2976,7 @@ export type TablerIconNameChunk0 =
   | 'tabler:brand-javascript'
   | 'tabler:brand-jira'
   | 'tabler:brand-juejin'
-  | 'tabler:brand-kako-talk'
+  | 'tabler:brand-kakao-talk'
   | 'tabler:brand-kbin'
   | 'tabler:brand-kick'
   | 'tabler:brand-kick-filled'
@@ -2991,14 +3002,3 @@ export type TablerIconNameChunk0 =
   | 'tabler:brand-medium'
   | 'tabler:brand-meetup'
   | 'tabler:brand-mercedes'
-  | 'tabler:brand-messenger'
-  | 'tabler:brand-messenger-filled'
-  | 'tabler:brand-meta'
-  | 'tabler:brand-metabrainz'
-  | 'tabler:brand-minecraft'
-  | 'tabler:brand-miniprogram'
-  | 'tabler:brand-mixpanel'
-  | 'tabler:brand-monday'
-  | 'tabler:brand-mongodb'
-  | 'tabler:brand-my-oppo'
-  | 'tabler:brand-mysql'

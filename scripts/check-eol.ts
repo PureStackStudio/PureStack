@@ -55,14 +55,16 @@ function* findGitRepositories(directory: string): Generator<string> {
 }
 
 function listTrackedFiles(repository: string): string[] {
-  return execFileSync('git', ['-C', repository, 'ls-files', '-z'], {
-    encoding: 'utf8',
-  })
-    .split('\0')
-    .filter(Boolean)
-    .map((file) => path.join(repository, file))
-    // Deleted files remain in the index until their deletion is staged.
-    .filter((file) => existsSync(file))
+  return (
+    execFileSync('git', ['-C', repository, 'ls-files', '-z'], {
+      encoding: 'utf8',
+    })
+      .split('\0')
+      .filter(Boolean)
+      .map((file) => path.join(repository, file))
+      // Deleted files remain in the index until their deletion is staged.
+      .filter((file) => existsSync(file))
+  )
 }
 
 const files = [...findGitRepositories(root)].flatMap(listTrackedFiles)
