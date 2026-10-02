@@ -40,7 +40,7 @@ export function registerEcosystemStyles(root: Style, palette: ThemePalette) {
   })
   root.select('.studio .package-card > span:last-child').css({
     marginLeft: 'auto',
-    color: tone.success.text.subtle,
+    color: tone.neutral.text.subtle,
     fontSize: '18px',
   })
   root.select('.studio .package-card h3').css({
@@ -51,7 +51,7 @@ export function registerEcosystemStyles(root: Style, palette: ThemePalette) {
     maxWidth: '365px',
     marginTop: '10px',
     fontSize: palette.font.size.sm,
-    color: tone.success.text.subtle,
+    color: tone.neutral.text.subtle,
     lineHeight: '1.8',
   })
   root.select('.studio .package-card code').css({

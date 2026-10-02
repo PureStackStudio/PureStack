@@ -31,7 +31,7 @@ export function registerFooterStyles(root: Style, palette: ThemePalette) {
   })
   root.select('.studio .footer-label').css({
     marginBottom: '6px',
-    color: tone.success.text.subtle,
+    color: tone.neutral.text.subtle,
     font: `8px ${studioTypography.mono}`,
     letterSpacing: '1.5px',
   })

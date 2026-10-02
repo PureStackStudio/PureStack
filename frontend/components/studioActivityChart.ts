@@ -36,7 +36,7 @@ function createStudioActivityChart(): StudioActivityChart {
           index === 11
             ? 'semanticTone.accent.text.default'
             : index % 2 === 0
-              ? 'semanticTone.success.surface.rest.border'
+              ? 'semanticTone.accent.surface.rest.border'
               : 'semanticTone.accent.surface.hover.border',
         ),
       }),

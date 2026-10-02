@@ -44,7 +44,7 @@ export function registerFeaturesStyles(root: Style, palette: ThemePalette) {
   root
     .select('.studio .section h2 > span, .studio .start-section h2 > span')
     .css({
-      color: tone.success.text.subtle,
+      color: tone.accent.text.subtle,
     })
   root.select('.studio .section-heading').css({
     marginBottom: '37px',
@@ -244,7 +244,7 @@ export function registerFeaturesStyles(root: Style, palette: ThemePalette) {
   root.select('.studio .tone-sample > span').css({
     marginLeft: '12px',
     font: `9px / 1.5 ${studioTypography.mono}`,
-    color: tone.success.text.subtle,
+    color: tone.neutral.text.subtle,
   })
   root.select('.studio .output-sample').css({
     display: 'flex',
@@ -294,7 +294,7 @@ export function registerFeaturesStyles(root: Style, palette: ThemePalette) {
     top: '-15px',
     font: `8px ${studioTypography.mono}`,
     padding: '4px 6px',
-    color: tone.success.text.default,
+    color: tone.accent.text.default,
     background: tone.accent.surface.hover.bgcolor,
     border: `1px solid ${tone.neutral.surface.hover.border}`,
     borderRadius: '3px',
@@ -307,6 +307,6 @@ export function registerFeaturesStyles(root: Style, palette: ThemePalette) {
     display: 'block',
     height: '13px',
     width: '1px',
-    background: tone.success.text.default,
+    background: tone.accent.text.default,
   })
 }

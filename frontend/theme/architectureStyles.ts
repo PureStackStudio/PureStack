@@ -58,15 +58,15 @@ export function registerArchitectureStyles(root: Style, palette: ThemePalette) {
   })
   root.select('.studio .diagram-lines i').css({
     height: '25px',
-    borderBottom: `1px solid ${tone.success.surface.rest.border}`,
-    borderLeft: `1px solid ${tone.success.surface.rest.border}`,
+    borderBottom: `1px solid ${tone.accent.surface.rest.border}`,
+    borderLeft: `1px solid ${tone.accent.surface.rest.border}`,
   })
   root.select('.studio .diagram-lines i:first-child').css({
     borderBottomLeftRadius: '10px',
   })
   root.select('.studio .diagram-lines i:last-child').css({
     borderLeft: '0',
-    borderRight: `1px solid ${tone.success.surface.rest.border}`,
+    borderRight: `1px solid ${tone.accent.surface.rest.border}`,
     borderBottomRightRadius: '10px',
   })
   root.select('.studio .diagram-lines::after').css({
@@ -85,7 +85,7 @@ export function registerArchitectureStyles(root: Style, palette: ThemePalette) {
     background: tone.accent.surfaceAlt.rest.bgcolor,
     border: `1px solid ${tone.accent.surface.hover.border}`,
     borderRadius: '9px',
-    boxShadow: `0 0 38px color-mix(in srgb, ${tone.success.text.default} 4%, transparent)`,
+    boxShadow: `0 0 38px color-mix(in srgb, ${tone.accent.text.default} 4%, transparent)`,
   })
   root.select('.studio .diagram-core::before').css({
     content: '""',
@@ -94,7 +94,7 @@ export function registerArchitectureStyles(root: Style, palette: ThemePalette) {
     left: '50%',
     height: '24px',
     width: '1px',
-    background: tone.success.surface.rest.border,
+    background: tone.accent.surface.rest.border,
   })
   root.select('.studio .diagram-core > .icon').css({
     width: '30px',
@@ -116,7 +116,7 @@ export function registerArchitectureStyles(root: Style, palette: ThemePalette) {
     width: '1px',
     height: '33px',
     marginInline: 'auto',
-    background: tone.success.surface.rest.border,
+    background: tone.accent.surface.rest.border,
   })
   root.select('.studio .diagram-output').css({
     display: 'flex',

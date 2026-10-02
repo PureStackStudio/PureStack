@@ -6,6 +6,7 @@ import {
   hexToRgba,
   hslToHex,
   hslToRgb,
+  oklchToHex,
   rgbaToHex,
   rgbToHsl,
 } from './colors' // adjust the import path as needed
@@ -175,5 +176,32 @@ describe('gradientStops', () => {
     expect(stops[0].color).toBe('#FF0000')
     expect(stops[1].color).toBe('#FFFF00')
     expect(stops[2].color).toBe('#00FF00')
+  })
+})
+
+describe('oklchToHex', () => {
+  it('converts the achromatic extremes', () => {
+    expect(oklchToHex({ l: 1, c: 0, h: 0 })).toBe('#FFFFFF')
+    expect(oklchToHex({ l: 0, c: 0, h: 0 })).toBe('#000000')
+  })
+
+  it('converts sRGB primaries', () => {
+    expect(oklchToHex({ l: 0.628, c: 0.2577, h: 29.23 })).toBe('#FF0000')
+    expect(oklchToHex({ l: 0.452, c: 0.3132, h: 264.05 })).toBe('#0000FF')
+  })
+
+  it('appends alpha', () => {
+    expect(oklchToHex({ l: 1, c: 0, h: 0, alpha: 0.5 })).toBe('#FFFFFF80')
+  })
+
+  it('reduces out-of-gamut chroma, keeping lightness and hue', () => {
+    const clipped = oklchToHex({ l: 0.72, c: 0.4, h: 258 })
+    const fitted = oklchToHex({ l: 0.72, c: 0.14, h: 258 })
+    expect(clipped).toMatch(/^#[0-9A-F]{6}$/)
+    const { b, r } = hexToRgba(clipped)
+    expect(b).toBeGreaterThan(r)
+    expect(rgbToHsl(hexToRgba(clipped)).s).toBeGreaterThanOrEqual(
+      rgbToHsl(hexToRgba(fitted)).s,
+    )
   })
 })

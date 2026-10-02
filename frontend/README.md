@@ -54,15 +54,18 @@ framework's `Tabs` and `TabPane`, including its existing bundled runtime and
 native radio fallback. FAQ items use `ExpandablePanel`.
 
 Colors, component states, fonts, and radii come from the registered `studio` skin.
-Light mode uses warm white and sage surfaces with deep green accents; dark mode
-keeps the charcoal and mint identity. The standard theme switcher respects the
+The identity is a cobalt accent over blue-slate neutrals, with indigo and
+violet companions. Each role is one OKLCH hue in `theme/studioSkinShared.ts`;
+light mode paints it as paper tints with saturated fills, dark mode as deep ink
+fields with luminous fills. The standard theme switcher respects the
 saved choice or system preference. Buttons, panels, badges, and icon
 frames use standard semantic tones and variants; chart colors reference the same
 palette variables. Page-specific layout and decorative styles use `styleBuilder`
 and `themes.forEach`, with framework breakpoint tokens. They are emitted into
 `site.css` and `site.dark.css`; there is no separate handwritten CSS asset.
 
-To change the identity, edit `theme/studioSkin.ts`. To add a reusable section,
+To change the identity, edit the hues in `theme/studioSkinShared.ts`. To add a
+reusable section,
 compose existing primitives in its own file under `components/`, register its
 definition in `studioComponents.ts`, and register only the extra layout styles
 it needs. `demoStyle.ts` intentionally remains a small,

@@ -43,7 +43,7 @@ export function registerGettingStartedStyles(
     height: '27px',
     border: `1px solid ${tone.neutral.surfaceAlt.rest.border}`,
     borderRadius: '50%',
-    color: tone.success.text.default,
+    color: tone.accent.text.default,
     background: tone.accent.surface.rest.bgcolor,
     font: `9px ${studioTypography.mono}`,
   })
@@ -87,7 +87,7 @@ export function registerGettingStartedStyles(
   })
   root.select('.studio .terminal-heading > span:last-child').css({
     font: `8px ${studioTypography.mono}`,
-    color: tone.success.text.subtle,
+    color: tone.neutral.text.subtle,
     letterSpacing: '1px',
   })
   root.select('.studio .terminal-body').css({
@@ -125,7 +125,7 @@ export function registerGettingStartedStyles(
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
-    color: tone.success.text.subtle,
+    color: tone.neutral.text.subtle,
     font: `9px / 1.7 ${studioTypography.mono}`,
     paddingTop: '5px',
   })
@@ -140,7 +140,7 @@ export function registerGettingStartedStyles(
     padding: '13px 20px',
     borderTop: `1px solid ${tone.neutral.border.default}`,
     background: tone.neutral.surfaceAlt.rest.bgcolor,
-    color: `${tone.success.text.default} !important`,
+    color: `${tone.accent.text.default} !important`,
     fontSize: palette.font.size.xxs,
   })
   root.select('.studio .terminal-footer:hover').css({

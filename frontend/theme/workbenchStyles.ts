@@ -315,7 +315,7 @@ export function registerWorkbenchStyles(root: Style, palette: ThemePalette) {
     padding: '6px 19px',
     borderTop: `1px solid ${tone.neutral.border.default}`,
     background: tone.neutral.surfaceAlt.rest.bgcolor,
-    color: tone.success.text.subtle,
+    color: tone.neutral.text.subtle,
     font: `9px ${studioTypography.mono}`,
   })
   root.select('.studio .workbench-status > span').css({

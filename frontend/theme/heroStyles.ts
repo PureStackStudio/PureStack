@@ -16,7 +16,7 @@ export function registerHeroStyles(root: Style, palette: ThemePalette) {
     right: '0',
     left: '0',
     height: '680px',
-    backgroundImage: `linear-gradient(color-mix(in srgb, ${tone.success.surface.rest.border} 5%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, ${tone.success.surface.rest.border} 5%, transparent) 1px, transparent 1px)`,
+    backgroundImage: `linear-gradient(color-mix(in srgb, ${tone.accent.surface.rest.border} 5%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, ${tone.accent.surface.rest.border} 5%, transparent) 1px, transparent 1px)`,
     backgroundSize: '72px 72px',
     maskImage: 'radial-gradient(ellipse at 50% 20%, #000 5%, transparent 70%)',
     pointerEvents: 'none',
@@ -30,7 +30,7 @@ export function registerHeroStyles(root: Style, palette: ThemePalette) {
     width: 'min(850px, 95%)',
     height: '580px',
     transform: 'translateX(-50%)',
-    background: `radial-gradient(ellipse, color-mix(in srgb, ${tone.success.text.subtle} 13%, transparent) 0%, transparent 67%)`,
+    background: `radial-gradient(ellipse, color-mix(in srgb, ${tone.accent.tone} 13%, transparent) 0%, transparent 67%)`,
     pointerEvents: 'none',
   })
   root.select('.studio .hero-content').css({
@@ -74,6 +74,10 @@ export function registerHeroStyles(root: Style, palette: ThemePalette) {
   })
   root.select('.studio .hero h1 > span').css({
     color: tone.accent.text.default,
+    background: `linear-gradient(100deg, ${tone.accent.text.default} 35%, ${tone.secondary.text.default})`,
+    backgroundClip: 'text',
+    webkitBackgroundClip: 'text',
+    webkitTextFillColor: 'transparent',
   })
   root.select('.studio .hero-description').css({
     marginTop: '26px !important',
@@ -106,7 +110,7 @@ export function registerHeroStyles(root: Style, palette: ThemePalette) {
   root.select('.studio .hero-notes').css({
     gap: '23px',
     marginTop: '19px',
-    color: tone.success.text.subtle,
+    color: tone.neutral.text.subtle,
     fontSize: palette.font.size.xs,
   })
   root.select('.studio .hero-notes > span').css({

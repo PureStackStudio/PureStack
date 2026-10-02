@@ -15,6 +15,7 @@ export * from './styles'
 export * from './themeAssets'
 export * from './themeOptions'
 export type {
+  SpotlightTokens,
   ThemePalette,
   ThemeRadii,
   ThemeTypography,

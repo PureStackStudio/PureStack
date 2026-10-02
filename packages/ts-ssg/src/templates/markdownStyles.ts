@@ -224,7 +224,6 @@ function registerPreCodeResetStyles(theme: ThemeMode) {
 function registerShikiStyles(theme: ThemeMode) {
   markdown(theme)
     .select(':where(pre.shiki.shiki-themes)')
-    .background(`var(--shiki-${theme}-bg)`)
     .color(`var(--shiki-${theme})`)
 
   markdown(theme)
@@ -238,7 +237,6 @@ function registerShikiStyles(theme: ThemeMode) {
   markdown(theme)
     .select(':where(code.shiki-inline)')
     .color(`var(--shiki-${theme})`)
-    .background(`var(--shiki-${theme}-bg)`)
     .border('none')
 }
 

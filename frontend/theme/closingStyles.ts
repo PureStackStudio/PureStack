@@ -12,7 +12,7 @@ export function registerClosingStyles(root: Style, palette: ThemePalette) {
   })
   root.select('.studio .faq-intro').css({
     marginTop: '17px !important',
-    color: tone.success.text.subtle,
+    color: tone.neutral.text.subtle,
     fontSize: '13px',
     lineHeight: '1.8',
   })
@@ -39,7 +39,7 @@ export function registerClosingStyles(root: Style, palette: ThemePalette) {
   root.select('.studio .faq-list summary > span:last-child').css({
     fontSize: palette.font.size.h4,
     lineHeight: '1',
-    color: tone.success.text.subtle,
+    color: tone.neutral.text.subtle,
     transition: 'transform 180ms',
   })
   root.select('.studio .faq-list details[open] summary').css({
@@ -51,7 +51,7 @@ export function registerClosingStyles(root: Style, palette: ThemePalette) {
   root.select('.studio .faq-list .expandable-panel__body > p').css({
     padding: '0 25px 22px 0',
     fontSize: palette.font.size.sm,
-    color: tone.success.text.subtle,
+    color: tone.neutral.text.subtle,
     lineHeight: '1.9',
   })
   root.select('.studio .closing-section').css({

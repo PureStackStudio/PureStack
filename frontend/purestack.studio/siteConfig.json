@@ -27,7 +27,9 @@
     "maxDepth": 20,
     "includeIndex": true,
     "sortBy": "order",
-    "roots": ["guides", "components"]
+    "roots": ["guides", "components"],
+    "variant": "spotlight",
+    "class": "spotlight-from-bottom-right"
   },
   "sitemap": {
     "enabled": true,

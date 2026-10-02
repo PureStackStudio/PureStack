@@ -4,5 +4,5 @@ import { Style } from '@purestack/ts-css'
 export const card = new Style('.your-card')
   .padding('24px')
   .borderRadius('12px')
-  .backgroundColor('#151b18')
-  .color('#a3e6bd')
+  .backgroundColor('#101828')
+  .color('#9cc2ff')

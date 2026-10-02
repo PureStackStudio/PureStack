@@ -167,6 +167,68 @@ export function hslToRgb({ h, s, l }: HSL): RGBA {
   }
 }
 
+export type OKLCH = {
+  /** Perceptual lightness, 0–1. */
+  l: number
+  /** Chroma, 0 for gray; vivid sRGB colors peak near 0.3. */
+  c: number
+  /** Hue angle in degrees. */
+  h: number
+  /** Optional alpha, 0–1. */
+  alpha?: number
+}
+
+/**
+ * Converts an OKLCH color to a HEX color string.
+ *
+ * Lightness is perceptual, so colors sharing `l` read equally bright whatever
+ * their hue. That makes OKLCH the natural space for a palette: pick a hue per
+ * role and reuse one set of lightness steps. Chroma beyond the sRGB gamut is
+ * reduced until the color fits, keeping its lightness and hue.
+ * @param oklch - The OKLCH representation of the color.
+ * @returns The HEX color string.
+ */
+export function oklchToHex({ l, c, h, alpha }: OKLCH): string {
+  let rgb = oklchToLinearRgb(l, c, h)
+  if (!isInGamut(rgb)) {
+    let low = 0
+    let high = c
+    for (let i = 0; i < 20; i++) {
+      const mid = (low + high) / 2
+      if (isInGamut(oklchToLinearRgb(l, mid, h))) low = mid
+      else high = mid
+    }
+    rgb = oklchToLinearRgb(l, low, h)
+  }
+  const [r, g, b] = rgb.map(toSrgbByte)
+  return rgbaToHex(r, g, b, alpha)
+}
+
+function oklchToLinearRgb(l: number, c: number, h: number) {
+  const radians = (h * Math.PI) / 180
+  const a = c * Math.cos(radians)
+  const b = c * Math.sin(radians)
+  const long = (l + 0.3963377774 * a + 0.2158037573 * b) ** 3
+  const medium = (l - 0.1055613458 * a - 0.0638541728 * b) ** 3
+  const short = (l - 0.0894841775 * a - 1.291485548 * b) ** 3
+  return [
+    4.0767416621 * long - 3.3077115913 * medium + 0.2309699292 * short,
+    -1.2684380046 * long + 2.6097574011 * medium - 0.3413193965 * short,
+    -0.0041960863 * long - 0.7034186147 * medium + 1.707614701 * short,
+  ]
+}
+
+function isInGamut(rgb: number[]) {
+  return rgb.every((channel) => channel >= -1e-4 && channel <= 1 + 1e-4)
+}
+
+function toSrgbByte(linear: number) {
+  const value = Math.min(Math.max(linear, 0), 1)
+  const encoded =
+    value <= 0.0031308 ? value * 12.92 : 1.055 * value ** (1 / 2.4) - 0.055
+  return Math.round(encoded * 255)
+}
+
 /**
  * Validates RGBA values to ensure they are within the correct range.
  * @param rgba - The RGBA representation of the color.
