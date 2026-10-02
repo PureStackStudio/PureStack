@@ -1168,7 +1168,7 @@ __metadata:
     "@phosphor-icons/core": "npm:^2.1.1"
     "@tabler/icons": "npm:^3.48.0"
     iconoir: "npm:^7.12.1"
-    lucide: "npm:^0.576.0"
+    lucide: "npm:^1.48.0"
   languageName: unknown
   linkType: soft
 
@@ -5010,10 +5010,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lucide@npm:^0.576.0":
-  version: 0.576.0
-  resolution: "lucide@npm:0.576.0"
-  checksum: 10c0/dee862a9311cab90bec310e89657f65b2cd1fd6a5d0aa11add51945dc9047c65aeff1b4c1ad8b53032b42aa070be06e8702074c1cafe00cb67bd1e3bb420e3d6
+"lucide@npm:^1.48.0":
+  version: 1.48.0
+  resolution: "lucide@npm:1.48.0"
+  checksum: 10c0/9910e7843ffb20d0bdd2b378305fb0a1ff5b670d18dba7ea258f720585f9c8855c81a92094dd0233da3aee4a6896ead20742381f43bf7bb184ba3e3e038d3392
   languageName: node
   linkType: hard
 
