@@ -1,5 +1,7 @@
 # PureStack Component Tools
 
+[Website](https://purestack.studio) · [GitHub Source](https://github.com/PureStackStudio/PureStack/tree/main/packages/ts-ssg-vscode)
+
 PureStack Component Tools turns VS Code into a real authoring environment for PureStack and Regor.
 
 It understands component tags in Markdown and MDX, understands Regor markup inside TypeScript `html` and `svg` tagged templates, and adds the editing behavior that makes those files feel first-class instead of “HTML inside a string”.

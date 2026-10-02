@@ -15,15 +15,27 @@ nav:
 
 PureStack Component Tools brings component knowledge into VS Code. As you write a page or a Regor template, it can suggest component names and props, open their declarations, explain frontmatter fields, format markup on save, and mark broken HTML structure.
 
-## Install from the repository
+## Install from the Marketplace
 
-The extension is currently packaged locally. Use VS Code 1.85 or newer, then run this command from a PureStack repository checkout:
+Use VS Code 1.85 or newer and install [PureStack Component Tools from the Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=purestack.purestack-component-navigation). You can also open the Extensions view with **Ctrl+Shift+X**, search for **PureStack Component Tools**, and click **Install** on the extension published by `purestack`.
+
+To install from a terminal:
+
+```sh
+code --install-extension purestack.purestack-component-navigation
+```
+
+Open your project folder after installation. The extension uses your project's TypeScript installation when available and otherwise uses its bundled TypeScript runtime.
+
+## Build from source
+
+To develop the extension or install a local build, run this command from a PureStack repository checkout:
 
 ```sh
 yarn pack-vscode-ext
 ```
 
-In VS Code, run **Extensions: Install from VSIX...** from the Command Palette and select the generated `.vsix` in `packages/ts-ssg-vscode/`. Reload the window and open your project folder. The project must have `typescript` installed so the extension can resolve its TypeScript runtime. For extension development, the [source README](https://github.com/PureStackStudio/PureStack/tree/main/packages/ts-ssg-vscode) also describes the Extension Development Host workflow.
+In VS Code, run **Extensions: Install from VSIX...** from the Command Palette and select the generated `.vsix` in `packages/ts-ssg-vscode/`. Reload the window and open your project folder. The [source README](https://github.com/PureStackStudio/PureStack/tree/main/packages/ts-ssg-vscode) also describes the Extension Development Host workflow.
 
 ## Pick the right file
 

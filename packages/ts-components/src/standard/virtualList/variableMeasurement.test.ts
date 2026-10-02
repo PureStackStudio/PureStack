@@ -65,7 +65,9 @@ describe('variable row measurements', () => {
       throw new Error('Measurement did not settle')
     }
     let context: VariableVirtualList | VariableVirtualTable | undefined
-    const recordContext = <T extends VariableVirtualList | VariableVirtualTable>(
+    const recordContext = <
+      T extends VariableVirtualList | VariableVirtualTable,
+    >(
       candidate: Component<T>,
     ) => {
       const original = candidate.context
@@ -79,7 +81,9 @@ describe('variable row measurements', () => {
     const component =
       kind === 'list'
         ? recordContext(defineVirtualListComponents().variableVirtualList)
-        : recordContext(defineVariableVirtualTableComponents().variableVirtualTable)
+        : recordContext(
+            defineVariableVirtualTableComponents().variableVirtualTable,
+          )
     const viewportHeight = ref(160)
     let rowMounts = 0
     const app = createApp(

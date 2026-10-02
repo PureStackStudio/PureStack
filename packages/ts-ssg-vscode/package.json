@@ -4,8 +4,12 @@
   "description": "Component navigation, prop IntelliSense, lit-html syntax highlighting, and template formatting for Markdown, Regor MDX, and TypeScript templates.",
   "version": "1.1.0",
   "private": true,
-  "publisher": "purestack-local",
+  "publisher": "purestack",
   "license": "MIT",
+  "homepage": "https://purestack.studio",
+  "bugs": {
+    "url": "https://github.com/PureStackStudio/PureStack/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/PureStackStudio/PureStack.git",
