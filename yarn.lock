@@ -909,23 +909,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@node-minify/html-minifier@npm:^10.4.0":
-  version: 10.4.0
-  resolution: "@node-minify/html-minifier@npm:10.4.0"
+"@node-minify/html-minifier@npm:^11.0.0":
+  version: 11.0.0
+  resolution: "@node-minify/html-minifier@npm:11.0.0"
   dependencies:
-    "@node-minify/utils": "npm:10.4.0"
-    html-minifier-next: "npm:^4.14.3"
-  checksum: 10c0/1e38085e53b9316952c0357f9b11f547850d4aaeefdf372b45078f97c2ca82865e613de75adcd2d387da706c4c86cfd2e15503600314ca94f2585cabec9684d7
+    "@node-minify/utils": "npm:11.0.0"
+    html-minifier-next: "npm:^4.19.1"
+  checksum: 10c0/04f74a9b1b00312625fa4babd2ae0920fb2f7d85c8dada6988e4679b4a91bd61957e66f993d297b12612779de55ca6322b1495ebbe78885174e6d63b6f9c4137
   languageName: node
   linkType: hard
 
-"@node-minify/utils@npm:10.4.0":
-  version: 10.4.0
-  resolution: "@node-minify/utils@npm:10.4.0"
+"@node-minify/utils@npm:11.0.0":
+  version: 11.0.0
+  resolution: "@node-minify/utils@npm:11.0.0"
   dependencies:
     fast-glob: "npm:^3.3.3"
     gzip-size: "npm:7.0.0"
-  checksum: 10c0/bc44d88b3e5b49906a3b3645e709175497cb9f094bf6632de6e19ab153f5efaedd4d85a236443c25cc1a968079efab1574bf57ee6c6251d37877a6bd280743e7
+  checksum: 10c0/965eeeec9cb9fae77bf1bcab54ee6cb366ef3b750d6fe02d6041e73b037bf4a92513eedea365f3c9a6f35f046c4435f9d90b207e3d6256586e87b02cfbe53a00
   languageName: node
   linkType: hard
 
@@ -1121,7 +1121,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@purestack/ts-ssg@workspace:packages/ts-ssg"
   dependencies:
-    "@node-minify/html-minifier": "npm:^10.4.0"
+    "@node-minify/html-minifier": "npm:^11.0.0"
     "@purestack/ts-common": "workspace:^"
     "@purestack/ts-components": "workspace:^"
     "@purestack/ts-html": "workspace:^"
@@ -4249,7 +4249,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"html-minifier-next@npm:^4.14.3":
+"html-minifier-next@npm:^4.19.1":
   version: 4.19.1
   resolution: "html-minifier-next@npm:4.19.1"
   dependencies:
