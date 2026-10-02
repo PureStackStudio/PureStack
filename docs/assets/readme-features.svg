@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+  <title id="title">What you can build with PureStack</title>
+  <desc id="desc">Six PureStack capabilities: Markdown and Regor MDX content; panels, tabs, forms, and charts; typed styles and themes; PageScript and RegorApp browser behavior; static HTML, CSS, JavaScript, and assets; and optional Pagefind search, navigation, and sitemaps.</desc>
+  <defs>
+    <linearGradient id="background" x2="100%" y2="100%"><stop stop-color="#171125"/><stop offset="1" stop-color="#25133c"/></linearGradient>
+    <linearGradient id="accent" x2="100%"><stop stop-color="#ff59bf"/><stop offset="1" stop-color="#b469ff"/></linearGradient>
+  </defs>
+  <rect width="1200" height="650" rx="24" fill="url(#background)"/>
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <text x="38" y="48" fill="#d6c5ed" font-size="17" font-weight="600" letter-spacing="2">PURESTACK / AT A GLANCE</text>
+    <path d="M38 66h1124" stroke="#48315e"/>
+    <g fill="#21182f" stroke="#49365d">
+      <rect x="28" y="90" width="560" height="168" rx="14"/>
+      <rect x="612" y="90" width="560" height="168" rx="14"/>
+      <rect x="28" y="274" width="560" height="168" rx="14"/>
+      <rect x="612" y="274" width="560" height="168" rx="14"/>
+      <rect x="28" y="458" width="560" height="168" rx="14"/>
+      <rect x="612" y="458" width="560" height="168" rx="14"/>
+    </g>
+    <g fill="url(#accent)">
+      <rect x="52" y="115" width="4" height="26" rx="2"/>
+      <rect x="636" y="115" width="4" height="26" rx="2"/>
+      <rect x="52" y="299" width="4" height="26" rx="2"/>
+      <rect x="636" y="299" width="4" height="26" rx="2"/>
+      <rect x="52" y="483" width="4" height="26" rx="2"/>
+      <rect x="636" y="483" width="4" height="26" rx="2"/>
+    </g>
+    <g fill="#f6efff" font-size="28" font-weight="600">
+      <text x="72" y="138">Content</text>
+      <text x="656" y="138">Components</text>
+      <text x="72" y="322">Styles</text>
+      <text x="656" y="322">Browser scripts</text>
+      <text x="72" y="506">Static output</text>
+      <text x="656" y="506">Search &amp; navigation</text>
+    </g>
+    <g fill="#c3b5d3" font-size="23">
+      <text x="52" y="182">Write Markdown and Regor MDX.</text>
+      <text x="52" y="217">Routes and frontmatter come with it.</text>
+      <text x="636" y="182">Compose panels, tabs, forms, and charts.</text>
+      <text x="636" y="217">Use built-in Regor components.</text>
+      <text x="52" y="366">Define styles in TypeScript.</text>
+      <text x="52" y="401">Share themes, skins, and semantic tones.</text>
+      <text x="636" y="366">Add page behavior with PageScript.</text>
+      <text x="636" y="401">Mount interactive apps with RegorApp.</text>
+      <text x="52" y="550">Build HTML, CSS, JavaScript, and assets.</text>
+      <text x="52" y="585">Prepare minified files for your host.</text>
+      <text x="636" y="550">Enable Pagefind search when you need it.</text>
+      <text x="636" y="585">Generate navigation and sitemaps.</text>
+    </g>
+  </g>
+</svg>

@@ -29,11 +29,7 @@ Markdown or Regor MDX, use built-in components where they help, and add
 browser-side TypeScript only where a page needs behavior. The CLI handles
 routes, styles, assets, development preview, and release builds.
 
-| Build your foundation | Shape the experience |
-| :--- | :--- |
-| **📝 Content that becomes a site**<br>File-based routes, frontmatter, navigation, and page outlines. Write Markdown or compose richer pages with Regor MDX. | **🧩 Components you can compose**<br>Panels, tabs, forms, charts, and more. Explore the [component catalog](https://purestack.studio/components/) for building blocks. |
-| **🎨 A shared design language**<br>Themes, skins, semantic tones, and typed style builders keep components and pages visually connected. | **⚡ Interaction where you need it**<br>Load page-specific TypeScript with `PageScript` or mount a Regor app with `RegorApp`. |
-| **📦 Static files, ready to host**<br>Build HTML, CSS, JavaScript, and assets. Prepare a minified publish directory for your static host. | **🔎 Built-in discovery**<br>Optional Pagefind search, generated navigation, and sitemaps help readers find their way. |
+<img src="docs/assets/readme-features.svg" alt="PureStack capabilities: Markdown and Regor MDX content; panels, tabs, forms, and charts; typed styles and themes; PageScript and RegorApp browser behavior; static HTML, CSS, JavaScript, and assets; optional Pagefind search, navigation, and sitemaps." width="1200" />
 
 > **PureStack in practice:** [purestack.studio](https://purestack.studio) is built
 > from the [frontend source in this repository](frontend).
