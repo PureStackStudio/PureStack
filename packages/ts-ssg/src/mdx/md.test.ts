@@ -38,7 +38,7 @@ describe('compileMarkdown', () => {
       context: createTestContext(),
     })
 
-    expect(html).toContain('<pre class="hljs shiki">')
+    expect(html).toContain('<pre class="hljs shiki" r-pre>')
     expect(html).toContain('<code class="hljs language-typescript">')
   })
 

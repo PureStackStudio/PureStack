@@ -38,6 +38,7 @@ export function compileAstToHtml(
   if (options.highlighter) {
     applyShikiHighlighting(tree, options.highlighter)
   }
+  keepCodeLiteral(tree)
   rewriteLinks(tree, options)
   const bodyHtml = String(
     unified()
@@ -45,6 +46,25 @@ export function compileAstToHtml(
       .stringify(tree),
   )
   return { bodyHtml, outline }
+}
+
+/**
+ * Code shows source, so Regor must not evaluate it when the page renders.
+ * Without `r-pre`, `{{ item }}` in a code sample would be replaced by its
+ * value, usually an empty string.
+ */
+function keepCodeLiteral(root: Root) {
+  const visit = (node: Root | Element) => {
+    for (const child of node.children ?? []) {
+      if (child.type !== 'element') continue
+      if (child.tagName === 'pre' || child.tagName === 'code') {
+        child.properties = { ...child.properties, 'r-pre': '' }
+        continue
+      }
+      visit(child)
+    }
+  }
+  visit(root)
 }
 
 function isHastRoot(node: ReturnType<typeof toHast>): node is Root {

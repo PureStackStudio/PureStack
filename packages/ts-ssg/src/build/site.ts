@@ -1,5 +1,4 @@
 import type { PageTemplateMap, SiteConfigInput } from '@purestack/ts-common'
-import type { Component } from 'regor'
 import type { ResolvedContentFile } from '../i18n/content'
 import type { NavigationTree } from '../navigation/navigation'
 import type { PublishOptions } from './build-config'
@@ -57,7 +56,7 @@ export interface BuildOptions {
   cleanOutDir?: boolean
   writeErrorPages?: boolean
   hooks?: BuildHooks
-  components?: Record<string, Component>
+  components?: Record<string, object>
   templates?: PageTemplateMap
 }
 

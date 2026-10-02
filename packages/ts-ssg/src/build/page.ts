@@ -13,7 +13,6 @@ import { renderApp } from '@purestack/ts-render'
 import { resolveThemeStyleLinks } from '@purestack/ts-style'
 import { isError, toOutputAssetRelPath, withBasePath } from '@purestack/ts-util'
 import { getLogger } from 'logpot'
-import type { Component } from 'regor'
 import {
   type ContentFile,
   discoverDefaultFooters,
@@ -49,7 +48,7 @@ export interface BuildContext {
   headerHtmlByDir?: Map<string, string>
   footerHtmlByDir?: Map<string, string>
   writeErrorPages?: boolean
-  components?: Record<string, Component>
+  components?: Record<string, object>
   templates?: PageTemplateMap
   navigation?: NavigationTree
   translationsByKey?: ContentTranslationsByKey

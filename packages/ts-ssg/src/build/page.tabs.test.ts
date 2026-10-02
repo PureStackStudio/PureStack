@@ -8,7 +8,6 @@ import {
 import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { getSvgIcon } from '@purestack/ts-svg-icons'
 import { disableLogger, getLogger, type Logger } from 'logpot'
-import type { Component } from 'regor'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from '../config/config'
 import {
@@ -54,7 +53,7 @@ describe('tabs runtime embedding', () => {
           components: {
             ...defineIconComponents(getSvgIcon),
             ...defineTabsComponents(),
-          } as unknown as Record<string, Component>,
+          },
         },
         toContentFile(contentDir, 'index.mdx'),
       )

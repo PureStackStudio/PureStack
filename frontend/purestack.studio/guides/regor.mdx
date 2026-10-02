@@ -1,0 +1,602 @@
+---
+title: Regor
+description: Render pages with Regor at build time, mount interactive Regor apps in the browser, and write your own components for both.
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: false
+nav:
+  order: 20
+  icon: tabler:atom
+highlights:
+  - One component model for pages and apps
+  - Plain TypeScript, no compiler plugin
+  - Built-in components and theme styles in both places
+---
+
+# Regor
+
+[Regor](https://github.com/koculu/Regor) is the component framework PureStack is built on. It runs in two places:
+
+<Grid columns="1" columnsSm="2" class="gap-3 mb-4">
+  <Panel tone="neutral" bodyClass="p-3">
+    <Flex align="center" class="mb-2">
+      <IconFrame
+        name="tabler:hammer"
+        tone="accent"
+        variant="surface"
+        aria-hidden="true"/>
+      <strong>At build time</strong>
+    </Flex>
+    <p class="m-0">
+      Regor renders your MDX pages and their components to static HTML. Visitors
+      receive finished markup that needs no JavaScript to display.
+    </p>
+  </Panel>
+  <Panel tone="neutral" bodyClass="p-3">
+    <Flex align="center" class="mb-2">
+      <IconFrame
+        name="tabler:click"
+        tone="secondary"
+        variant="surface"
+        aria-hidden="true"/>
+      <strong>In the browser</strong>
+    </Flex>
+    <p class="m-0">
+      Regor mounts interactive apps on your pages. They use the same built-in
+      components, theme styles, and TypeScript as your pages.
+    </p>
+  </Panel>
+</Grid>
+
+A PureStack page can load any browser library, including React or Vue, because PureStack bundles any TypeScript you give it. Regor is the natural choice because it reuses everything that is already there. The [component catalog](/components/) works in your apps without adapters, the component styles are already in the page's stylesheet, and your own components are ordinary TypeScript functions and classes that need no compiler plugin.
+
+<Flex wrap="true" align="center">
+  <BtnLink
+    href="https://github.com/koculu/Regor"
+    tone="neutral"
+    variant="surface"
+    icon="tabler:brand-github"
+    >Regor on GitHub</BtnLink
+  >
+  <BtnLink
+    href="/components/"
+    tone="accent"
+    variant="link"
+    icon="tabler:arrow-right"
+    iconPosition="end"
+    >Browse the components</BtnLink
+  >
+</Flex>
+
+## How a page is rendered
+
+Every page goes through the same four steps:
+
+<Grid columns="1" columnsSm="2" class="gap-3 mb-4">
+  <Panel tone="neutral" variant="flat" bodyClass="p-3">
+    <Flex align="center" class="mb-2">
+      <IconFrame
+        name="tabler:markdown"
+        tone="accent"
+        variant="surface"
+        aria-hidden="true"/>
+      <strong>1. Markdown becomes HTML</strong>
+    </Flex>
+    <p class="m-0">
+      PureStack converts the Markdown and keeps component markup, such as
+      <code>&lt;Panel&gt;</code> or <code>&lt;Btn&gt;</code>, exactly as you
+      wrote it.
+    </p>
+  </Panel>
+  <Panel tone="neutral" variant="flat" bodyClass="p-3">
+    <Flex align="center" class="mb-2">
+      <IconFrame
+        name="tabler:atom"
+        tone="accent"
+        variant="surface"
+        aria-hidden="true"/>
+      <strong>2. Regor renders the page</strong>
+    </Flex>
+    <p class="m-0">
+      Regor mounts the page in a lightweight DOM with every registered component
+      and the page's data. It expands components, evaluates expressions, and
+      applies conditions and loops.
+    </p>
+  </Panel>
+  <Panel tone="neutral" variant="flat" bodyClass="p-3">
+    <Flex align="center" class="mb-2">
+      <IconFrame
+        name="tabler:html"
+        tone="accent"
+        variant="surface"
+        aria-hidden="true"/>
+      <strong>3. Static HTML is published</strong>
+    </Flex>
+    <p class="m-0">
+      Event handlers and reactive state stay behind. Only the markup is
+      published, so the page displays without JavaScript.
+    </p>
+  </Panel>
+  <Panel tone="neutral" variant="flat" bodyClass="p-3">
+    <Flex align="center" class="mb-2">
+      <IconFrame
+        name="tabler:bolt"
+        tone="secondary"
+        variant="surface"
+        aria-hidden="true"/>
+      <strong>4. Browser apps start</strong>
+    </Flex>
+    <p class="m-0">
+      For each <a href="/components/runtime/regor-app/">RegorApp</a> or
+      <a href="/components/runtime/page-script/">PageScript</a> on the page,
+      PureStack bundles its TypeScript entry point, which runs when the page
+      loads.
+    </p>
+  </Panel>
+</Grid>
+
+| | At build time | In the browser |
+| --- | --- | --- |
+| Where it runs | Your build, once per page | The visitor's browser |
+| What it produces | Static HTML | A live, interactive interface |
+| Event handlers, `r-model`, timers | Not kept | Run normally |
+| Page data (`tsSsgContext`) | Available | Not available |
+| Components | All built-in and registered components | The component families you register |
+
+## Regor at build time
+
+### Use components in content
+
+Write components in an `.mdx`, `.rmdx`, or `.md` page as you would write HTML elements:
+
+```mdx
+<Panel tone="info" bodyClass="p-3">
+  <h2 class="mt-0">Before you begin</h2>
+  <p>Keep your site configuration beside the content folder.</p>
+  <BtnLink href="/guides/purestack-cli/" tone="info" variant="link">Set up the site</BtnLink>
+</Panel>
+```
+
+A plain attribute passes a string. An attribute that starts with a colon is a Regor expression, so use it for numbers, booleans, arrays, and objects:
+
+```mdx
+<Btn tone="neutral" icon="tabler:settings" :iconOnly="true" ariaLabel="Open settings"/>
+
+<DoughnutChart
+  title="Ready tasks by team"
+  :segments="[
+    { label: 'Product', value: 5 },
+    { label: 'Design', value: 4 }
+  ]"/>
+```
+
+### Expressions and page data
+
+Text in double braces is a Regor expression, anywhere in a page. Inside markup, expressions can read `tsSsgContext`, which holds the page and site data that PureStack provides during the build:
+
+| Field | Contents |
+| --- | --- |
+| `tsSsgContext.pageInfo.frontmatter` | The page's frontmatter, including any custom fields you add |
+| `tsSsgContext.pageInfo.urlPath` | The page's URL, such as `/guides/regor/` |
+| `tsSsgContext.pageInfo.relPath` | The source file path inside the content folder |
+| `tsSsgContext.site` | The resolved site configuration |
+| `tsSsgContext.navigation`, `tsSsgContext.outline` | The page's navigation and heading outline |
+| `tsSsgContext.locale`, `tsSsgContext.locales` | The page's language and the site's languages |
+
+This page lists three highlights in its frontmatter. The panel below reads them during the build:
+
+<Panel tone="accent" variant="surface" bodyClass="p-3" class="mb-4">
+  <p class="text-eyebrow mt-0">From this page's frontmatter</p>
+  <strong>{{ tsSsgContext.pageInfo.frontmatter.title }}</strong>
+  <ul class="mb-0">
+    <li r-for="item in tsSsgContext.pageInfo.frontmatter.highlights">
+      {{ item }}
+    </li>
+  </ul>
+</Panel>
+
+```mdx
+---
+title: Regor
+highlights:
+  - One component model for pages and apps
+  - Plain TypeScript, no compiler plugin
+  - Built-in components and theme styles in both places
+---
+
+<Panel tone="accent" variant="surface" bodyClass="p-3">
+  <strong>{{ tsSsgContext.pageInfo.frontmatter.title }}</strong>
+  <ul>
+    <li r-for="item in tsSsgContext.pageInfo.frontmatter.highlights">{{ item }}</li>
+  </ul>
+</Panel>
+```
+
+`r-if`, `r-else-if`, and `r-else` choose what to render. `r-for` repeats an element for each item. Loop over data from frontmatter, the page context, or component state.
+
+
+<AlertBox
+  tone="success"
+  icon="tabler:circle-check"
+  title="Code samples stay literal"
+>
+  Code blocks and inline code are never evaluated, so you can show template
+  syntax in documentation. To keep double braces literal in your own markup, add
+  <code>r-pre</code> to the element.
+</AlertBox>
+
+### What does not run at build time
+
+The build publishes markup, not behavior. `@click` handlers, `r-model`, reactive updates, and timers in page markup do nothing on the published page. Interactive components on content pages, such as `Tabs` or `Modal`, include a small script for their basic behavior. For anything else that responds to the visitor, [mount a browser app](#regor-in-the-browser).
+
+### Write build-time components
+
+A component is a template plus an optional context. This one composes built-in components and accepts props and a slot:
+
+```ts
+import { defineComponent, html, type RefOrValue } from 'regor'
+
+export interface ReleaseNote {
+  version?: RefOrValue<string>
+  date?: RefOrValue<string>
+  href?: RefOrValue<string>
+}
+
+const releaseNoteTemplate = html`<Panel tone="neutral" variant="flat" bodyClass="p-3">
+  <p class="text-eyebrow mt-0">{{ date }}</p>
+  <h3 class="mt-0">Version {{ version }}</h3>
+  <slot></slot>
+  <BtnLink r-if="href" :href="href" tone="accent" variant="link">Read the full notes</BtnLink>
+</Panel>`
+
+export function defineReleaseNoteComponents() {
+  return {
+    releaseNote: defineComponent<ReleaseNote>(releaseNoteTemplate, {
+      props: ['version', 'date', 'href'],
+    }),
+  }
+}
+```
+
+Register it in a build script that calls `buildSite`. Components you pass in `components` are added to the built-in ones:
+
+```ts
+import { buildSite } from '@purestack/ts-ssg'
+import { defineReleaseNoteComponents } from './components/releaseNote'
+
+await buildSite({
+  siteConfig: { contentDir: './content' },
+  options: {
+    components: { ...defineReleaseNoteComponents() },
+  },
+})
+```
+
+<AlertBox
+  tone="info"
+  icon="tabler:info-circle"
+  title="Always export component interfaces"
+>
+  Export the interface that types a component, as <code>ReleaseNote</code> is
+  exported here. The
+  <a href="/guides/vscode-extension/">VS Code extension</a> finds components
+  through their exported interfaces. Without the export, it can't complete the
+  component's props or jump from a tag in your markup to the component's source.
+</AlertBox>
+
+Then use it in any page. Content between the tags fills the `<slot>`:
+
+```mdx
+<ReleaseNote version="1.2" date="October 2026" href="/releases/1-2/">
+  Faster rebuilds and a new blue theme.
+</ReleaseNote>
+```
+
+Tag names match registered keys regardless of case, so `<ReleaseNote>` finds `releaseNote`. The kebab-case form `<release-note>` works too. Components can also read page data. Pass the component head to `resolveTsSsgContext` from `@purestack/ts-common`, as the built-in navigation and page-link components do.
+
+## Regor in the browser
+
+### Mount an app
+
+Place a `RegorApp` in a page and point it at a TypeScript file next to the page. It renders an `app` element with the `id` you give it and loads the script. The script calls `createApp` with the matching selector:
+
+<RegorApp id="launch-checklist" src="./regor-launch-checklist.ts"/>
+
+```mdx
+<RegorApp id="launch-checklist" src="./regor-launch-checklist.ts"/>
+```
+
+```ts
+import {
+  defineBadgeComponents,
+  defineButtonComponents,
+  defineFlexComponents,
+  defineFormComponents,
+  defineIconComponents,
+  definePanelComponents,
+} from '@purestack/ts-components'
+import { tabler_rocket } from '@purestack/ts-svg-icons'
+import {
+  batch,
+  type ComputedRef,
+  computed,
+  createApp,
+  defineComponent,
+  html,
+  type Ref,
+  ref,
+} from 'regor'
+
+export interface Task {
+  id: string
+  title: string
+  done: Ref<boolean>
+}
+
+export interface TaskRow {
+  task: Task
+}
+
+const taskRow = defineComponent<TaskRow>(
+  html`<FormCheck :id="'launch-' + task.id" :label="task.title" :checked="task.done" />`,
+  { props: ['task'] },
+)
+
+export interface LaunchChecklist {
+  tasks: Task[]
+  completed: ComputedRef<number>
+  ready: ComputedRef<boolean>
+  launched: Ref<boolean>
+  launch: () => void
+  reset: () => void
+}
+
+const launchChecklistTemplate = html`<Panel tone="neutral" variant="surfaceAlt" bodyClass="p-3">
+  <Flex direction="column">
+    <Flex justify="between" align="center" wrap="true">
+      <strong>Launch checklist</strong>
+      <Badge :tone="ready ? 'success' : 'warning'" variant="surface">
+        {{ completed }} of {{ tasks.length }} done
+      </Badge>
+    </Flex>
+    <TaskRow r-for="task in tasks" :task="task" />
+    <Flex wrap="true">
+      <Btn tone="accent" icon="tabler:rocket" :disabled="!ready || launched" @click="launch">Launch</Btn>
+      <Btn tone="neutral" variant="surface" @click="reset">Start over</Btn>
+    </Flex>
+    <FormStatus r-if="launched" role="status">Launched. Every check passed.</FormStatus>
+  </Flex>
+</Panel>`
+
+function createLaunchChecklist(): LaunchChecklist {
+  const tasks: Task[] = [
+    { id: 'docs', title: 'Docs reviewed', done: ref(true) },
+    { id: 'tests', title: 'Tests passing', done: ref(false) },
+    { id: 'notes', title: 'Release notes written', done: ref(false) },
+  ]
+  const launched = ref(false)
+  const completed = computed(() => tasks.filter((task) => task.done()).length)
+  const ready = computed(() => completed() === tasks.length)
+  return {
+    tasks,
+    completed,
+    ready,
+    launched,
+    launch: () => launched(true),
+    reset: () =>
+      batch(() => {
+        for (const task of tasks) task.done(false)
+        launched(false)
+      }),
+  }
+}
+
+createApp(
+  {
+    components: {
+      LaunchChecklist: defineComponent<LaunchChecklist>(
+        launchChecklistTemplate,
+        { context: createLaunchChecklist },
+      ),
+      TaskRow: taskRow,
+      ...defineBadgeComponents(),
+      ...defineButtonComponents(),
+      ...defineFlexComponents(),
+      ...defineFormComponents(),
+      ...defineIconComponents((name) =>
+        name === 'tabler:rocket' ? tabler_rocket : '',
+      ),
+      ...definePanelComponents(),
+    },
+  },
+  { selector: 'app#launch-checklist', template: html`<LaunchChecklist />` },
+)
+```
+
+The app is an ordinary module. You can split it into several files, import npm packages, and share code with your build-time components. PureStack bundles it with esbuild when it builds the page.
+
+### Register only what you use
+
+Browser apps do not get the build's component list. Each app registers the component families it renders, such as `defineButtonComponents()` or `defineFormComponents()`. Bundlers include only the families you import. You don't need to load any CSS, because the build already put every component's styles in the site stylesheet.
+
+<AlertBox tone="info" icon="tabler:info-circle" title="Register icons too">
+  Register each icon your app shows, including the defaults that components draw
+  themselves, such as the arrow in a select field. The
+  <a href="/guides/icons/#icons-in-browser-apps">Icons guide</a> lists those
+  defaults.
+</AlertBox>
+
+### Template syntax
+
+Browser templates use the same syntax as page markup:
+
+| Syntax | Meaning |
+| --- | --- |
+| `{{ expression }}` | Insert text |
+| `:name="expression"` | Bind an attribute or component prop |
+| `.name="expression"` | Set a DOM property |
+| `@event="handler"` | Listen to a DOM event or a component event |
+| `r-if`, `r-else-if`, `r-else` | Render conditionally |
+| `r-show` | Hide without removing the element |
+| `r-for="item in items"` | Repeat for each item |
+| `r-model="value"` | Two-way binding on native form fields |
+| `:class`, `:style` | Bind classes and inline styles |
+| `<slot>`, `<template #name>` | Pass content into a component |
+| `:is="name"` | Render the component named by an expression |
+| `:context="{ … }"` | Pass an object of inputs to a component |
+
+In TypeScript you call a ref to read it, as in `completed()`. In a template, write the name without the call, as in `{{ completed }}` or `:disabled="!ready"`. Regor reads the value and updates the element when it changes. This also works through nested refs: a template writes `editor.selectedHost.hostname` where TypeScript needs `editor().selectedHost().hostname()`.
+
+### Reactive state
+
+State lives in refs. Call a ref to read it and call it with a value to write it:
+
+```ts
+const count = ref(0)
+count() // read: 0
+count(1) // write
+```
+
+| API | Use it for |
+| --- | --- |
+| `ref(value)` | State whose nested fields are reactive too. Converts the object you pass in place, so its fields become refs. |
+| `cref(value)` | The same deep state as `ref`, built from a copy. The original object stays plain. Costs more than `ref`. |
+| `sref(value)` | A reactive container whose contents stay plain. Replace the value to notify, or change an array, `Map`, or `Set` in place. Assigning a field of a plain object does not notify. |
+| `computed(() => …)` | A value derived from other refs. Keep it free of side effects. |
+| `observe(source, callback)` | A side effect when one known ref changes |
+| `watchEffect(() => …)` | A side effect that reruns when any ref it reads changes |
+| `batch(() => …)` | Several changes that should notify observers once |
+| `flatten(value)` | Plain data from reactive content, for example before sending it to an API |
+
+Give refs a concrete type, such as `ref<User>(user)`, so TypeScript can describe the reactive shape. Model missing data with `null`, not `undefined`. Effects created inside a component are cleaned up when the component is removed.
+
+### Props, events, and lifecycle
+
+A component lists the props it accepts in `props`. Regor copies them into the component's context, so the template can use them directly. A component without a context, such as `ReleaseNote` above, needs nothing more.
+
+When the context needs a prop, read it from `head.props`. Type the prop as `RefOrValue<T>` when a parent can pass either a literal or a ref, and read it with `unref` inside a `computed`, so the value stays current when the parent's ref changes:
+
+```ts
+import {
+  type ComputedRef,
+  computed,
+  defineComponent,
+  html,
+  type RefOrValue,
+  unref,
+} from 'regor'
+
+export interface Greeting {
+  name?: RefOrValue<string>
+  message: ComputedRef<string>
+}
+
+const greeting = defineComponent<Greeting>(html`<p>{{ message }}</p>`, {
+  props: ['name'],
+  context: (head) => ({
+    message: computed(() => `Hello, ${unref(head.props.name) || 'there'}`),
+  }),
+})
+```
+
+When a parent binds a ref to a prop that the component also holds as a ref, Regor links the two in both directions. That is how PureStack form components edit your state: `<FormInputField :model="profile.email">` reads and writes `profile.email`, and `<FormCheck :checked="task.done">` toggles `task.done`.
+
+To report something to the parent, emit an event from the component's context. The parent listens with `@` and receives a `CustomEvent` whose `detail` holds the data:
+
+```ts
+context: (head) => ({
+  save: () => head.emit('saved', { id: 42 }),
+})
+```
+
+```html
+<EditorForm @saved="onSaved"></EditorForm>
+```
+
+For setup and cleanup, give the context `mounted` and `unmounted` methods, or call `onMounted` and `onUnmounted` while the component's context is created.
+
+## Build larger apps
+
+Regor has no app store or router that you must adopt. Larger apps are built from plain classes, and a few Regor features connect them.
+
+**Use classes as contexts.** A class instance can be a component context. Its fields are the state, and its arrow-function methods are the handlers:
+
+```ts
+import { ContextRegistry, defineComponent, html, ref, sref } from 'regor'
+
+export class Workspace {
+  readonly registry = new ContextRegistry()
+  readonly busy = ref(false)
+  readonly tabs = sref<string[]>([])
+
+  openTab = (name: string) => this.tabs([...this.tabs(), name])
+}
+```
+
+**Reach a parent's context with `requireContext`.** A child component asks for an ancestor's context by class. That gives it shared state and actions without passing props through every level:
+
+```ts
+export class Toolbar {
+  constructor(private readonly workspace: Workspace) {}
+
+  get busy() {
+    return this.workspace.busy
+  }
+
+  newTab = () => this.workspace.openTab('Untitled')
+}
+
+const toolbar = defineComponent<Toolbar>(
+  html`<Btn icon="tabler:plus" :disabled="busy" @click="newTab">New tab</Btn>`,
+  {
+    context: (head) => {
+      const workspace = head.requireContext(Workspace)
+      const context = new Toolbar(workspace)
+      workspace.registry.register(context)
+      return context
+    },
+  },
+)
+```
+
+`findContext` does the same lookup but returns `undefined` instead of throwing when no ancestor matches.
+
+**Find sibling contexts with a registry.** When components register themselves in a `ContextRegistry`, any part of the app can call `registry.require(Toolbar)` to reach another part, such as refreshing a table after a toolbar action.
+
+**Register components where they are used.** A context can carry its own `components` object. Those components are available to that component's template, so each feature brings the set it needs.
+
+**Render components from data.** `r-for` over a ref of objects can create whole components at runtime. For example, opening an editor can add a tab that holds a new editor component. To switch which component fills a region, bind its name with `:is`, as in `<section :is="currentView"></section>`. Some built-in components also take a component by its registered name, such as the `rowComponent` of `VirtualList`.
+
+**Share services.** `ToastStore` and `useModalStore()` from `@purestack/ts-components` give the whole app one place to show notifications and dialogs.
+
+These patterns scale from a single widget to a multi-page admin tool with tables, editors, and forms. Each piece is still a typed class or function that you can read and test like any other TypeScript.
+
+## Use other libraries
+
+A [PageScript](/components/runtime/page-script/) loads any TypeScript entry point. Use it for small enhancements to the page's HTML, or to mount a component from another framework. PureStack bundles the script and its npm dependencies, so you can use React, Vue, a charting library, or no library at all.
+
+<AlertBox tone="warning" icon="tabler:alert-triangle" title="What you give up">
+  Other frameworks can't use the built-in components, and they don't inherit the
+  theme automatically. Use
+  <a href="/guides/semantic-tones/">semantic tone</a> classes or palette
+  variables to keep them visually consistent.
+</AlertBox>
+
+## Choose where code runs
+
+| You want to… | Use |
+| --- | --- |
+| Write content with structured layout | Built-in components in MDX |
+| Repeat a section design across pages | A build-time component |
+| Show page data, such as frontmatter fields | An expression or loop in MDX |
+| Add an interactive tool or form | A `RegorApp` |
+| Enhance existing HTML with a few lines of code | A `PageScript` |
+| Embed a widget built with another framework | A `PageScript` |
+
+<AlertBox tone="accent" icon="tabler:bolt" title="Rule of thumb">
+  Keep content static, and use a browser app only for the parts that react to
+  the visitor. Pages then load fast, read well without JavaScript, and stay easy
+  for search engines and assistive technology to follow.
+</AlertBox>

@@ -111,7 +111,9 @@ describe('compileMdxToHtml', () => {
     ].join('\n')
 
     const compiledHtml = compileMdxToHtml(source)
-    expect(compiledHtml).toContain('<code>&#x3C;Btn .size="buttonSize"></code>')
+    expect(compiledHtml).toContain(
+      '<code r-pre="">&#x3C;Btn .size="buttonSize"></code>',
+    )
     expect(compiledHtml).toContain('&#x3C;Btn @click="save">')
   })
 
@@ -138,6 +140,28 @@ describe('compileMdxToHtml', () => {
     expect(html).toContain('<customcomponent')
     expect(html).toContain('data-id="x"')
     expect(html).toContain('<p>Paragraph text.</p>')
+  })
+
+  it.each([
+    ['without a highlighter', undefined],
+    ['with a highlighter', createHljsHighlighter()],
+  ])('keeps Regor template syntax literal inside Markdown code %s', (_, highlighter) => {
+    const source = [
+      'Total {{ 1 + 1 }} with inline `{{ name }}` code.',
+      '',
+      '```html',
+      '<li r-for="item in items">{{ item }}</li>',
+      '```',
+    ].join('\n')
+    const html = renderApp(compileMdx(source, { highlighter }).bodyHtml, {
+      components: {},
+      context: createTestContext(),
+    })
+    const text = html.replace(/<[^>]+>/g, '')
+
+    expect(text).toContain('Total 2 with inline')
+    expect(text).toContain('{{ name }}')
+    expect(text).toContain('{{ item }}')
   })
 
   it('preserves whitespace inside opaque inline markup blocks', async () => {

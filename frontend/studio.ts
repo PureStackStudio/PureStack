@@ -4,7 +4,6 @@ import type { PageTemplateMap } from '@purestack/ts-common'
 import { h } from '@purestack/ts-html'
 import { type BuildInput, buildSite, startDevServer } from '@purestack/ts-ssg'
 import { createLogger, getLogger } from 'logpot'
-import type { Component } from 'regor'
 import { defineStudioComponents } from './components/studioComponents'
 import { card } from './demoStyle'
 import { registerApiReferenceStyles } from './docs/apiReferenceStyles'
@@ -60,7 +59,7 @@ const build: BuildInput = {
         context.components = {
           ...defineStudioComponents(),
           ...defineDocumentationComponents(context.config),
-        } as unknown as Record<string, Component>
+        }
         registerStudioStyles()
         registerApiReferenceStyles()
       },
