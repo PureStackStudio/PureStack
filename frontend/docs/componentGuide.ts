@@ -59,6 +59,34 @@ export function registerComponentGuideStyles() {
     const root = styleBuilder.get(theme)
     const neutral = palette.semanticTone.neutral
     const accent = palette.semanticTone.accent
+    root.select('.tone-guide-swatch').css({ minHeight: '7rem', width: '100%' })
+    root.select(':where(.tone-guide-state)').css({
+      background: 'transparent',
+      border: '0 solid transparent',
+      color: 'inherit',
+      cursor: 'pointer',
+    })
+    root
+      .select('.tone-guide-state')
+      .css({ font: 'inherit', textAlign: 'start' })
+    root.select('.tone-guide-flow').css({
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 10rem), 1fr))',
+      gap: '0.75rem',
+    })
+    root.select('.tone-guide-flow > div').css({
+      padding: '1rem',
+      border: `1px solid ${accent.border.subtle}`,
+      borderRadius: '0.75rem',
+      background: accent.surface.rest.background,
+      minWidth: '0',
+    })
+    root
+      .select('.tone-guide-flow code, .tone-guide-gallery code')
+      .css({ overflowWrap: 'anywhere', whiteSpace: 'normal' })
+    root
+      .select('.tone-guide-glass-field')
+      .css({ backgroundColor: accent.spotlight.field })
     root.select('.runtime-code').css({
       whiteSpace: 'pre-wrap',
       overflowWrap: 'anywhere',

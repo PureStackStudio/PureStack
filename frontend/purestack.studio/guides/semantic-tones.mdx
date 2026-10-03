@@ -1,6 +1,6 @@
 ---
 title: Semantic tone classes
-description: See every PureStack tone, compare its surface and button roles, and compose theme-aware colors and interaction states in MDX.
+description: Understand the skin, theme, and inherited palette architecture. Explore every tone, paint family, state, spotlight origin, inset, and component variant.
 template: doc
 layout:
   showNav: true
@@ -13,315 +13,459 @@ nav:
 
 # Semantic tone classes
 
-Semantic tones give color a purpose. Instead of choosing a fixed blue or red for each page, you choose a tone such as `info`, `success`, or `danger`, then choose a role such as `surface` or `button`. PureStack resolves those roles from the active light or dark theme. Try the site's theme switcher while looking at the examples below: their class names stay the same while their palette values change.
+<div class="component-directory-lead">
+  <p class="text-eyebrow">COLOR WITH A PURPOSE</p>
+  <p>Choose an intent. Inherit a palette. Paint a role.</p>
+</div>
 
-The key distinction is **selection versus painting**:
+Ten semantic tones share one class vocabulary. Your skin supplies the colors; the active theme supplies the mode; the nearest tone supplies the context.
 
-- `tone--info` selects the info palette for an element and its descendants. On its own, it does not add a visible background, border, or text color.
-- `tone-fill-surface`, `tone-border-surface`, and `tone-text-surface` paint a background, border color, and text color from the selected palette.
-- `b-1`, padding, and radius classes supply the border width and shape. A tone border class sets color, but does not create a visible border by itself.
+<ComponentExample
+  label="One context, several roles"
+  caption="The children inherit feature. Only the status message selects its own success palette."
+>
+  <div
+    class="tone--feature tone-fill-spotlight tone-text-surface-alt rounded-md p-4 spotlight-from-top-right"
+  >
+    <p class="text-eyebrow">WORKSPACE / READY TO SHARE</p>
+    <h3>A coherent palette, without repeated colors</h3>
+    <p>
+      Surface, alternate surface, and button roles belong to the same semantic
+      context.
+    </p>
+    <div
+      class="tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3 mb-3"
+    >
+      <strong>Release notes</strong>
+      <p class="text-subtle">This text reads the inherited current palette.</p>
+      <div
+        class="tone-fill-surface-alt tone-border-surface-alt tone-text-surface-alt b-1 rounded-md p-2"
+      >
+        Alternate surface / supporting detail
+      </div>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+      <button
+        type="button"
+        class="tone-fill-button-all tone-border-button-all tone-text-button-all b-1 rounded-md p-2"
+      >
+        Publish preview</button
+      ><span
+        class="tone--success tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-2"
+        >Checks passed</span
+      >
+    </div>
+  </div>
+</ComponentExample>
 
-```mdx
-<div class="tone--info tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
+## How the architecture fits together
+
+<div class="tone-guide-flow">
+  <div>
+    <p class="text-eyebrow">01 / SKIN</p>
+    <strong>Semantic tokens</strong>
+    <p>Defines every tone's canvas, roles, states, text, borders, and light.</p>
+  </div>
+  <div>
+    <p class="text-eyebrow">02 / THEME</p>
+    <strong>Scoped variables</strong>
+    <p>
+      Light and dark roots expose the skin's palette as CSS custom properties.
+    </p>
+  </div>
+  <div>
+    <p class="text-eyebrow">03 / CONTEXT</p>
+    <strong>Current palette</strong>
+    <p>
+      <code>tone--info</code> binds inherited current variables to the info
+      tokens.
+    </p>
+  </div>
+  <div>
+    <p class="text-eyebrow">04 / PAINT</p>
+    <strong>Shared classes</strong>
+    <p>
+      Fill, border, text, and inset classes consume those current variables.
+    </p>
+  </div>
+  <div>
+    <p class="text-eyebrow">05 / COMPONENT</p>
+    <strong>Variant recipes</strong>
+    <p>Components compose the same classes into their public variants.</p>
+  </div>
+</div>
+
+The system separates meaning from appearance. A skin can change what `accent` looks like without changing component markup. Paint classes are shared across all tones, rather than generating another set of paint rules for every color.
+
+### The token contract
+
+Every semantic tone has this structure in both theme modes:
+
+```text
+semantic.tone.info
+├─ tone                         direct accent color
+├─ canvas / canvascolor         canvas fill / plain color
+├─ overlay                      overlay color
+├─ spotlight.field / light      field and radial light
+├─ surface / surfaceAlt / button
+│  ├─ rest / hover / active / disabled
+│  │  └─ background / bgcolor / border / text
+│  └─ focusRing
+├─ root.text.default / subtle
+├─ root.border.subtle / default / focus
+├─ text.default / subtle
+└─ border.subtle / default / focus
+```
+
+`background` is the complete fill and may contain a gradient. `bgcolor` is the plain color used by the flat fill families. Role text and border tokens are paired with that role's fill. General `text` and `border` tokens serve typography and structural accents outside a matched role.
+
+### From a theme token to a painted element
+
+```css
+/* Conceptual binding for tone--info; the framework generates this. */
+.tone--info {
+  --ps-current-surface-rest-background:
+    var(--ps-semantic-tone-info-surface-rest-background);
+}
+
+.tone-fill-surface {
+  background: var(--ps-current-surface-rest-background);
+}
+```
+
+`getCurrentThemePalette()` returns symbolic CSS variable references for use in style builders. `getThemePaletteVarName(path)` and `getCurrentThemePaletteVarName(path)` produce the variable names when you need to inspect or integrate them directly.
+
+The theme root starts with the **neutral** current palette. At that root, general current text and border variables use neutral's `root.text` and `root.border` aliases. An explicit `tone--neutral` instead selects neutral's regular `text` and `border` tokens, just as the other tone selectors do. This allows document chrome and a neutral component to have different typography and border needs.
+
+<p class="fs-sm">
+  Implementation:
+  <a
+    href="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-style/src/themePalette.ts"
+    target="_blank"
+    rel="noopener noreferrer"
+    >token contract ↗</a
+  >
+  ·
+  <a
+    href="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-style/src/semanticTone.ts"
+    target="_blank"
+    rel="noopener noreferrer"
+    >current palette bindings ↗</a
+  >
+  ·
+  <a
+    href="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-style/src/semanticPresets.ts"
+    target="_blank"
+    rel="noopener noreferrer"
+    >paint and state presets ↗</a
+  >
+</p>
+
+## Selection, paint, and geometry
+
+<ComponentExample
+  label="Build a surface in three steps"
+  caption="Selecting a palette alone adds no background, border, or text paint."
+>
+  <div class="component-guide-grid">
+    <div class="p-3 tone--info">
+      <code>tone--info</code>
+      <p>Context selected. This box still uses its surrounding paint.</p>
+      <span class="text-subtle"
+        >A consumer such as text-subtle already sees the new palette.</span
+      >
+    </div>
+    <div class="p-3 tone--info tone-fill-surface tone-text-surface">
+      <code>+ fill + text</code>
+      <p>Matched surface colors, inherited by ordinary children.</p>
+    </div>
+    <div
+      class="p-3 tone--info tone-fill-surface tone-text-surface tone-border-surface b-1 rounded-md"
+    >
+      <code>+ border + geometry</code>
+      <p>Border color, width, padding, and radius complete the recipe.</p>
+    </div>
+  </div>
+</ComponentExample>
+
+```html
+<div class="tone--info tone-fill-surface tone-border-surface
+            tone-text-surface b-1 rounded-md p-3">
   An information surface
 </div>
 ```
 
-The same recipe works with another `tone--*` class without changing the paint classes.
+Tone border classes set **color**. Add a width such as `b-1`, `b-2`, or `bl-2` to make the border visible. Spacing and radius remain independent utilities. Pair role fill, border, and text when you want the skin's intended contrast.
 
-## All ten tones
+## All ten semantic tones
 
-Each card below uses the same surface, border, text, padding, and radius classes. Only the selected tone changes. The labels describe typical uses; your site skin controls the actual colors.
+Every card uses the same recipe. Its alternate surface and button role inherit the selected tone. These meanings are conventions; your skin determines their actual colors.
 
-<Grid columns="1" columnsSm="2" columnsLg="3" class="gap-3">
-  <div class="tone--neutral tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
-    <strong class="d-block mb-1">neutral</strong>
-    <span class="fs-sm">Everyday content and quiet structure.</span>
-  </div>
-  <div class="tone--accent tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
-    <strong class="d-block mb-1">accent</strong>
-    <span class="fs-sm">Primary brand emphasis.</span>
-  </div>
-  <div class="tone--feature tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
-    <strong class="d-block mb-1">feature</strong>
-    <span class="fs-sm">A capability or featured section.</span>
-  </div>
-  <div class="tone--secondary tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
-    <strong class="d-block mb-1">secondary</strong>
-    <span class="fs-sm">Another emphasis lane beside accent.</span>
-  </div>
-  <div class="tone--custom tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
-    <strong class="d-block mb-1">custom</strong>
-    <span class="fs-sm">Product-specific meaning from the skin.</span>
-  </div>
-  <div class="tone--ghost tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
-    <strong class="d-block mb-1">ghost</strong>
-    <span class="fs-sm">A restrained treatment that stays close to its context.</span>
-  </div>
-  <div class="tone--info tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
-    <strong class="d-block mb-1">info</strong>
-    <span class="fs-sm">Helpful explanations and system notes.</span>
-  </div>
-  <div class="tone--success tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
-    <strong class="d-block mb-1">success</strong>
-    <span class="fs-sm">Completed work and positive confirmation.</span>
-  </div>
-  <div class="tone--warning tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
-    <strong class="d-block mb-1">warning</strong>
-    <span class="fs-sm">Something that needs attention.</span>
-  </div>
-  <div class="tone--danger tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
-    <strong class="d-block mb-1">danger</strong>
-    <span class="fs-sm">Critical conditions or destructive actions.</span>
-  </div>
-</Grid>
+<SemanticToneGallery axis="tones"/>
 
-`custom` is a named palette lane, not an arbitrary CSS color string. A skin can give it product-specific values. `ghost` is also a complete tone with its own tokens; its exact appearance depends on the skin.
+## All ten fill families
 
-## Compare roles within one tone
+The bare swatches keep the fills visible without placing potentially incompatible text over them. Compare the regular role backgrounds with their flat counterparts: a skin may give the former chrome or gradients, while flat always takes `bgcolor`.
 
-A tone contains more than one background and text color. These samples all select `accent`, but paint different roles from that palette:
+<SemanticToneGallery axis="fills"/>
 
-<Grid columns="1" columnsMd="2" columnsLg="4" class="gap-3">
-  <div class="tone--accent tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
-    <strong class="d-block mb-1">surface</strong>
-    <span class="fs-sm">A regular content surface.</span>
-  </div>
-  <div class="tone--accent tone-fill-surface-alt tone-border-surface-alt tone-text-surface-alt b-1 rounded-md p-3">
-    <strong class="d-block mb-1">surface-alt</strong>
-    <span class="fs-sm">An alternate content surface.</span>
-  </div>
-  <div class="tone--accent tone-fill-button tone-border-button tone-text-button b-1 rounded-md p-3">
-    <strong class="d-block mb-1">button</strong>
-    <span class="fs-sm">The stronger action treatment.</span>
-  </div>
-  <div class="tone--accent tone-fill-spotlight tone-border-surface-alt tone-text-surface-alt b-1 rounded-md p-3">
-    <strong class="d-block mb-1">spotlight</strong>
-    <span class="fs-sm">A calm, lit field for feature bands.</span>
-  </div>
-</Grid>
+Use `tone-fill` for a direct tone accent and `tone-fill-canvas` for canvas paint. Neither implies matching readable text. Surface, alternate surface, and button each have their own paired text and border classes. Spotlight and glass use alternate surface text and borders in the component recipes.
 
-```mdx
-<div class="tone--accent tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
-  Regular surface
-</div>
+## Inheritance and nested contexts
 
-<div class="tone--accent tone-fill-surface-alt tone-border-surface-alt tone-text-surface-alt b-1 rounded-md p-3">
-  Alternate surface
-</div>
-
-<div class="tone--accent tone-fill-button tone-border-button tone-text-button b-1 rounded-md p-3">
-  Button role
-</div>
-
-<div class="tone--accent tone-fill-spotlight tone-border-surface-alt tone-text-surface-alt b-1 rounded-md p-3">
-  Spotlight field
-</div>
-```
-
-Keep fill, border, and text from the same role when you need a ready-made combination. Each role's colors are designed as a set within the active theme. The direct `tone-fill`, `tone-border`, and `tone-text` classes use the tone color itself; they are useful for accents, but they are not the same as a complete surface or button treatment.
-
-`spotlight` is for large areas such as feature bands, callouts, and showcase panels. It is a calm field with a soft light, without the gloss and edge shading of surfaces and buttons, so it stays calm at any size. It pairs with the alternate surface border and text classes. Like every fill it has `-hover`, `-active`, `-disabled`, and `-all` forms: the light reaches further on hover and press, and goes out when disabled. Components accept it as `variant="spotlight"`, for example `<Panel tone="accent" variant="spotlight">`.
-
-Keep spotlights rare: one or two per page, for the pieces a visitor should notice first. Most surfaces should be quiet. `tone-fill-flat`, `tone-fill-flat-alt`, and `tone-fill-flat-solid` paint a role's single color without the gradient chrome, with the same `-hover`, `-active`, `-disabled`, and `-all` forms as the gradient fills. Components accept them as `variant="flat"`, `variant="flatAlt"`, and `variant="flatSolid"`:
-
-```mdx
-<Panel tone="neutral" variant="flat">A quiet card</Panel>
-<BtnLink href="/guide/" variant="flatSolid">A flat button</BtnLink>
-```
-
-The skin sets the field and the light color; the page decides where the light falls. It comes from the top left by default. Move it with `spotlight-from-top`, `spotlight-from-top-right`, `spotlight-from-bottom-left`, or `spotlight-from-bottom-right`, for example to keep it visible when a card covers that corner:
-
-```mdx
-<Panel tone="accent" variant="spotlight" class="spotlight-from-top-right">
-  ...
-</Panel>
-```
-
-Cards placed on a spotlight should not repeat its field. `tone-fill-glass` lets the field show through, lifted by a faint veil and lit by the same light, so a card reads as a lighter pane rather than a second color. The light follows the nearest `spotlight-from-*`, so cards and their spotlight are lit from the same side. Its veil thickens on hover and press, and thins without the light when disabled. Components accept it as `variant="glass"`. A different tone on a glass card tints it without breaking the field:
-
-<div class="tone--accent tone-fill-spotlight tone-border-surface-alt tone-text-surface-alt b-1 rounded-lg p-3 spotlight-from-top-right">
-  <Grid columns="1" columnsSm="2" class="gap-3">
-    <div class="tone-fill-glass tone-border-surface-alt b-1 rounded-md p-3">
-      <span class="text-eyebrow">Next review</span>
-      <strong class="d-block">Friday</strong>
+<ComponentExample
+  label="Nearest tone wins"
+  caption="The info child overrides only its own subtree. Its sibling continues to use accent."
+>
+  <div
+    class="tone--accent tone-fill-surface tone-text-surface tone-border-surface b-1 rounded-md p-3"
+  >
+    <strong>Parent: tone--accent</strong>
+    <p class="text-subtle">
+      Current variables inherit through ordinary DOM descendants.
+    </p>
+    <div class="component-guide-grid">
+      <div
+        class="tone--info tone-fill-surface tone-text-surface tone-border-surface b-1 rounded-md p-3"
+      >
+        <strong>Child: tone--info</strong>
+        <div class="tone-fill-button tone-text-button rounded-md p-2 mt-2">
+          Grandchild inherits info
+        </div>
+      </div>
+      <div
+        class="tone-fill-surface-alt tone-text-surface-alt tone-border-surface-alt b-1 rounded-md p-3"
+      >
+        <strong>Sibling: no tone selector</strong>
+        <p>Still accent, with the alternate surface role.</p>
+      </div>
     </div>
-    <div class="tone--secondary tone-fill-glass tone-border-surface-alt tone-text-surface-alt b-1 rounded-md p-3">
-      <span class="text-eyebrow">Open decision</span>
-      <strong class="d-block">Release date</strong>
+  </div>
+</ComponentExample>
+
+```html
+<section class="tone--accent">
+  <div class="tone-fill-surface tone-text-surface">Inherits accent</div>
+  <aside class="tone--info">
+    <div class="tone-fill-surface tone-text-surface">Inherits info</div>
+  </aside>
+</section>
+```
+
+### Nested theme roots
+
+`html[data-theme="light"]` and `html[data-theme="dark"]` set the document mode. `.theme--light` and `.theme--dark` create local theme regions, including inside the opposite mode. A theme root supplies its own text color and `color-scheme`, and rebases the current palette to **neutral**. Select a tone on that root or inside it to establish another intent. Root bindings use zero specificity so an explicit tone selector can win on the same element.
+
+<ComponentExample
+  label="Two local modes"
+  caption="Both regions stay in their assigned mode while you toggle the site's theme. Each starts neutral, then explicitly selects accent for its inner surface."
+>
+  <div class="component-guide-grid">
+    <div class="theme--light tone-fill-canvas rounded-md p-3">
+      <strong>theme--light / neutral root</strong>
+      <p class="text-subtle">
+        Local text and browser control scheme are light.
+      </p>
+      <div
+        class="tone--accent tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3"
+      >
+        Explicit accent in light mode
+      </div>
     </div>
-  </Grid>
-</div>
-
-```mdx
-<Panel tone="accent" variant="spotlight" class="spotlight-from-top-right">
-  <Panel variant="glass">Next review</Panel>
-  <Panel tone="secondary" variant="glass">Open decision</Panel>
-</Panel>
-```
-
-## Tone-colored text and clipped fills
-
-Use `tone-text` for the selected tone color. Use `tone-text-bg-button` when you want the button role's background treatment clipped into text. Both examples keep a neutral surrounding surface; the tone changes only for the label:
-
-<Grid columns="1" columnsMd="2" class="gap-3">
-  <div class="tone--neutral tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
-    <strong class="tone--accent tone-text d-block fs-h3 mb-1">Tone color</strong>
-    <span class="fs-sm">The accent color applied directly to text.</span>
+    <div class="theme--dark tone-fill-canvas rounded-md p-3">
+      <strong>theme--dark / neutral root</strong>
+      <p class="text-subtle">Local text and browser control scheme are dark.</p>
+      <div
+        class="tone--accent tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3"
+      >
+        Explicit accent in dark mode
+      </div>
+    </div>
   </div>
-  <div class="tone--neutral tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
-    <strong class="tone--accent tone-text-bg-button d-block fs-h3 mb-1">Clipped fill</strong>
-    <span class="fs-sm">The accent button background applied inside text.</span>
-  </div>
-</Grid>
+</ComponentExample>
 
-```mdx
-<strong class="tone--accent tone-text">Tone color</strong>
-<strong class="tone--accent tone-text-bg-button">Clipped fill</strong>
-```
+## Inspect a real recipe
 
-The clipped fill can be a solid color or a richer background, depending on the skin. `tone-text-bg-surface` and `tone-text-bg-surface-alt` use the corresponding content roles.
+Change the tone, role, and state. The inspector reads the generated current variables from the actual preview element. Switch the site theme to see the values change without changing the recipe.
 
-## Compose a callout from plain markup
+<RegorApp
+  id="tone-architecture-playground"
+  src="./semantic-tones/playground.ts"/>
 
-This callout uses the warning tone for its surface and an inset accent on the left. Its heading and body stay ordinary semantic HTML:
+## Every role and interaction state
 
-<div class="tone--warning tone-fill-surface tone-border-surface tone-text-surface tone-inset-l inset-size-2 b-1 rounded-md p-3">
-  <strong class="d-block mb-1">Review before publishing</strong>
-  <span class="fs-sm">Check links and preview the site at its final URL.</span>
-</div>
+All three matched roles are shown at rest, hover, active, and disabled. Hover snapshots paint the hover tokens directly so they remain visible; the other samples use the actual state selectors. The rest samples also respond to your pointer.
 
-```mdx
-<div class="tone--warning tone-fill-surface tone-border-surface tone-text-surface tone-inset-l inset-size-2 b-1 rounded-md p-3">
-  <strong class="d-block mb-1">Review before publishing</strong>
-  <span class="fs-sm">Check links and preview the site at its final URL.</span>
-</div>
-```
+<SemanticToneGallery axis="states"/>
 
-`tone-inset-l` adds a tone-colored rail without changing the surface border color. `inset-size-2` controls its width using the utility spacing scale.
-
-## Change a tone inside another tone
-
-Tone selection applies to descendants through current-palette CSS variables. A nested `tone--*` starts a new palette context for its own children. Here the note uses `neutral` and its inner status uses `success`:
-
-<div class="tone--neutral tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
-  <strong class="d-block mb-2">Build report</strong>
-  <div class="tone--success tone-fill-surface-alt tone-border-surface-alt tone-text-surface-alt b-1 rounded-md p-2">
-    <span class="text-eyebrow m-0">Completed</span>
-    <p class="m-0 fs-sm">All pages were generated.</p>
-  </div>
-</div>
-
-```mdx
-<div class="tone--neutral tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
-  <strong class="d-block mb-2">Build report</strong>
-  <div class="tone--success tone-fill-surface-alt tone-border-surface-alt tone-text-surface-alt b-1 rounded-md p-2">
-    <span class="text-eyebrow m-0">Completed</span>
-    <p class="m-0 fs-sm">All pages were generated.</p>
-  </div>
-</div>
-```
-
-The inner `text-eyebrow` also reads the current palette, so its subtle text color changes with `tone--success`. This is why tone classes are useful for composing a small visual system instead of setting each color separately.
-
-## Keep a region in one theme mode
-
-Tones follow the page theme, so a neutral card is light in the light theme and dark in the dark theme. Add `theme--dark` or `theme--light` to keep a region in one mode while the page switches. The region gets that mode's full palette from the same skin and presets, and tone classes inside it work as usual. Here a dark product frame holds a light card in both themes:
-
-<div class="theme--dark tone--accent tone-fill-surface-alt tone-border-surface-alt tone-text-surface-alt b-1 rounded-lg p-3">
-  <span class="text-eyebrow">Project view</span>
-  <div class="theme--light tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
-    <strong class="d-block">Autumn launch</strong>
-    <span class="text-subtle fs-sm">Light card, dark frame, in either theme.</span>
-  </div>
-</div>
-
-```mdx
-<div class="theme--dark tone--accent tone-fill-surface-alt tone-border-surface-alt tone-text-surface-alt b-1 rounded-lg p-3">
-  <span class="text-eyebrow">Project view</span>
-  <div class="theme--light tone-fill-surface tone-border-surface tone-text-surface b-1 rounded-md p-3">
-    <strong class="d-block">Autumn launch</strong>
-    <span class="text-subtle fs-sm">Light card, dark frame, in either theme.</span>
-  </div>
-</div>
-```
-
-A `theme--*` region starts from the neutral tone of its mode and resets the inherited text color. Put `tone--*` on the same element or on a descendant. Rules that must win inside a region should rely on specificity, not on an outer `@scope`, because the region becomes the nearest theme scope.
-
-## Hover, active, and disabled states
-
-Surface and button paint roles have state variants. Hover or press the first control; compare it with the disabled control. The `-all` suffix includes the rest, hover, active, and disabled treatments for that role.
-
-<Flex wrap="true" align="center" class="gap-2">
-  <button type="button" class="tone--accent tone-fill-button-all tone-border-button-all tone-text-button-all b-1 rounded-md p-2 cursor-pointer">Hover or press</button>
-  <button type="button" disabled class="tone--accent tone-fill-button-all tone-border-button-all tone-text-button-all b-1 rounded-md p-2">Disabled</button>
-  <button type="button" class="tone--accent tone-text tone-fill-button-hover tone-fill-button-active tone-text-button-hover tone-text-button-active b-0 rounded-md p-2 cursor-pointer">Subtle action</button>
-</Flex>
-
-```mdx
-<button type="button" class="tone--accent tone-fill-button-all tone-border-button-all tone-text-button-all b-1 rounded-md p-2">
-  Hover or press
-</button>
-
-<button type="button" disabled class="tone--accent tone-fill-button-all tone-border-button-all tone-text-button-all b-1 rounded-md p-2">
-  Disabled
+```html
+<button type="button" class="tone--accent
+  tone-fill-button-all tone-border-button-all tone-text-button-all
+  b-1 rounded-md p-2">
+  All four states
 </button>
 ```
 
-For individual states, use a suffix such as `tone-fill-button-hover`, `tone-border-button-active`, or `tone-text-button-disabled`. `-hover` applies on `:hover`. `-active` applies on `:active` **or** when the element has an `.active` class. `-disabled` applies on `:disabled`. The shorthand `-all` exists for surface, alternate surface, and button fill, border, text, and text-background roles. It is not a universal suffix for every tone class.
+The unsuffixed class paints rest. `-hover` applies under `:hover`; `-active` applies under `:active` or `.active`; `-disabled` applies under native `:disabled`. `-all` combines the available states for that family. A hover suffix alone does not paint rest, and `.active` does not create button behavior or an ARIA state. `aria-disabled="true"` alone does not match `:disabled`.
 
-These classes paint states; they do not add button behavior or keyboard handling. Keep interactive elements as real buttons and links. Built-in components such as [Btn](/components/actions/buttons/) already connect tone, variant, and states through their props.
+### Exact class and state reference
 
-## Use a tone as a line or inset accent
+The table lists every generated family. Append only the suffixes listed here; state support differs by family.
 
-A border-width class and `tone-border` give a plain block a tone-colored rule. `tone-inset-l` draws a left-side inset box shadow instead, using the current tone color:
+| Class family | Rest | `-hover` | `-active` | `-disabled` | `-all` | Source |
+| --- | --- | --- | --- | --- | --- | --- |
+| `tone-fill` | Yes | Yes | Yes | — | — | Direct tone color |
+| `tone-fill-canvas` | Yes | Yes | Yes | — | — | Canvas |
+| `tone-fill-surface`, `tone-fill-surface-alt`, `tone-fill-button` | Yes | Yes | Yes | Yes | Yes | Role background |
+| `tone-fill-flat`, `tone-fill-flat-alt`, `tone-fill-flat-solid` | Yes | Yes | Yes | Yes | Yes | Role bgcolor |
+| `tone-fill-spotlight`, `tone-fill-glass` | Yes | Yes | Yes | Yes | Yes | Field / light / veil |
+| `tone-border` | Yes | Yes | Yes | — | Yes | Direct tone color |
+| `tone-border-surface`, `tone-border-surface-alt`, `tone-border-button` | Yes | Yes | Yes | Yes | Yes | Role border |
+| `tone-text` | Yes | Yes | Yes | — | — | Direct tone color |
+| `tone-text-surface`, `tone-text-surface-alt`, `tone-text-button` | Yes | Yes | Yes | Yes | Yes | Role text |
+| `tone-text-bg-surface`, `tone-text-bg-surface-alt`, `tone-text-bg-button` | Yes | Yes | Yes | Yes | Yes | Role fill clipped to text |
+| `tone-inset-l`, `tone-inset-r`, `tone-inset-t`, `tone-inset-b`, `tone-inset-x`, `tone-inset-y` | Yes | Yes | Yes | — | — | Direct tone inset shadow |
 
-<Grid columns="1" columnsMd="2" class="gap-3">
-  <div class="tone--info tone-text tone-border bl-2 rounded-md p-3">
-    <strong class="d-block mb-1">Border rule</strong>
-    <span class="fs-sm">A two-pixel left border.</span>
+The general border family has an `-all` class but no disabled state. The general text, direct fill, canvas, and inset families have no `-all` class. Focus is a separate concern: these preset families do not generate `-focus` classes.
+
+## Text, borders, and clipped fills
+
+<ComponentExample
+  label="Typography consumes context too"
+  caption="The clipped samples use role backgrounds as glyph paint; they are decorative text, not the paired readable role text colors."
+>
+  <div class="tone--accent component-guide-grid">
+    <div class="p-3">
+      <p class="tone-text">tone-text / direct tone color</p>
+      <p class="text-subtle">text-subtle / general subtle text</p>
+      <p class="tone-fill-surface tone-text-surface rounded-md p-2">
+        tone-text-surface / paired surface text
+      </p>
+      <p class="tone-fill-surface-alt tone-text-surface-alt rounded-md p-2">
+        tone-text-surface-alt / paired alternate text
+      </p>
+      <p class="tone-fill-button tone-text-button rounded-md p-2">
+        tone-text-button / paired button text
+      </p>
+    </div>
+    <div class="p-3">
+      <p class="tone-text-bg-surface">Surface fill in text</p>
+      <p class="tone-text-bg-surface-alt">Alternate fill in text</p>
+      <p class="tone-text-bg-button">Button fill in text</p>
+    </div>
+    <div class="p-3">
+      <div class="tone-border b-2 rounded-md p-2 mb-2">
+        tone-border / direct tone color
+      </div>
+      <div class="b-subtle b-1 rounded-md p-2 mb-2">b-subtle</div>
+      <div class="b-default b-1 rounded-md p-2 mb-2">b-default</div>
+      <div class="b-focus b-1 rounded-md p-2 mb-2">b-focus</div>
+      <div class="b-tone b-1 rounded-md p-2">b-tone</div>
+    </div>
   </div>
-  <div class="tone--info tone-text tone-inset-l inset-size-4 rounded-md p-3">
-    <strong class="d-block mb-1">Inset accent</strong>
-    <span class="fs-sm">An inset rail that uses the tone color.</span>
+</ComponentExample>
+
+`text-subtle`, `prose-meta`, and `text-eyebrow` read current general subtle text. `b-subtle`, `b-default`, `b-focus`, and `b-tone` read current general border or tone tokens and set border color with `!important`. Avoid competing border-color classes on the same element.
+
+## Spotlight and glass: all five origins
+
+Spotlight combines a field with radial light. Glass paints radial light and a translucent veil; it does not add backdrop blur. Both read `--ps-spotlight-from`, which inherits independently of the tone context. Every origin is visible below, with an inner glass panel sharing its parent's light position.
+
+<SemanticToneGallery axis="origins"/>
+
+| Origin class | Light position |
+| --- | --- |
+| `spotlight-from-top-left` | `8% 0%` (also the default) |
+| `spotlight-from-top` | `50% 0%` |
+| `spotlight-from-top-right` | `92% 0%` |
+| `spotlight-from-bottom-left` | `8% 100%` |
+| `spotlight-from-bottom-right` | `92% 100%` |
+
+Spotlight's light reach grows from 46% at rest to 60% on hover and 72% when active; disabled paints the field alone. Glass uses a 75% light reach and veil strengths of 45%, 58%, and 70%; disabled paints only a 25% veil. A custom origin can use `style="--ps-spotlight-from: 35% 20%"`.
+
+```html
+<div class="tone--feature tone-fill-spotlight tone-text-surface-alt
+            spotlight-from-top-right rounded-md p-3">
+  <div class="tone-fill-glass tone-border-surface-alt
+              tone-text-surface-alt b-1 rounded-md p-3">
+    Same light origin, inherited feature palette
   </div>
-</Grid>
-
-```mdx
-<div class="tone--info tone-text tone-border bl-2 rounded-md p-3">
-  Border rule
-</div>
-
-<div class="tone--info tone-text tone-inset-l inset-size-4 rounded-md p-3">
-  Inset accent
 </div>
 ```
 
-Other directions are `tone-inset-r`, `tone-inset-t`, `tone-inset-b`, `tone-inset-x`, and `tone-inset-y`. The `inset-size-0` through `inset-size-6` classes set `--tone-inset-size` using the [utility spacing scale](/guides/utility-css-classes/). Inset classes also have `-hover` and `-active` forms; they do not have `-disabled` or `-all` forms.
+## Insets: all directions and sizes
 
-## Class reference
+Insets paint an internal edge using the direct tone color. `x` combines left and right; `y` combines top and bottom. Each class sets `box-shadow`, so use the combined direction rather than stacking individual inset classes to combine edges.
 
-| Class family | What it sets | Common choices |
-| --- | --- | --- |
-| `tone--{name}` | Current palette context for the element and descendants. | `tone--neutral`, `tone--accent`, `tone--success` |
-| `tone-fill-{role}` | Background. | `canvas`, `surface`, `surface-alt`, `button` |
-| `tone-border-{role}` | Border color. | `surface`, `surface-alt`, `button` |
-| `tone-text-{role}` | Text color. | `surface`, `surface-alt`, `button` |
-| `tone-text-bg-{role}` | Role background clipped into text. | `surface`, `surface-alt`, `button` |
-| `tone-fill`, `tone-border`, `tone-text` | The tone color directly. | No role suffix. |
-| `tone-inset-{direction}` | Inset shadow in the tone color. | `l`, `r`, `t`, `b`, `x`, `y` |
-| `inset-size-{0..6}` | Custom property controlling inset width. | `inset-size-4` |
+<SemanticToneGallery axis="insets"/>
 
-Not every role has every state. The direct tone-color classes and `tone-fill-canvas` have rest, hover, and active forms; `tone-border` also has `-all`. The surface, alternate surface, and button families have disabled and `-all` forms. Use the explicit examples above as templates when composing stateful markup.
+The default inset width is `.25em`. `inset-size-*` changes the width, including zero to remove it; the unit follows the element's font size.
 
-## Components and skins
+<SemanticToneGallery axis="sizes"/>
 
-For components, pass a semantic tone to the component instead of rebuilding its standard variant with classes:
+| Size | 0 | 1 | 2 | 3 | 4 | 5 | 6 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Width | `0` | `.25em` | `.5em` | `.75em` | `1em` | `1.5em` | `2em` |
 
-```mdx
-<Panel tone="info" variant="surface">A note</Panel>
-<Btn tone="danger" variant="solid">Delete item</Btn>
-<Badge tone="success">Complete</Badge>
+```html
+<div class="tone--warning tone-fill-surface tone-text-surface
+            tone-inset-l inset-size-2 p-3">
+  An attention marker without changing the outer border
+</div>
 ```
 
-Their variants combine border widths, radii, fill, border, text, and interaction classes. Use the raw tone utilities when you need a plain element or a custom combination. To change how a tone looks across the whole site, edit its tokens in a skin; the [Themes guide](/guides/themes/) explains the light and dark palette setup. The general [Utility CSS classes guide](/guides/utility-css-classes/) covers spacing, typography, layout, and borders used in these examples.
+## How components compose these classes
+
+Internally, `resolveComponentClasses()` combines a variant's rest recipe, optional interaction classes, and an explicit tone selector. With no tone supplied, the component inherits its surrounding context. The 18 variants below use the actual resolver with `tone: 'accent'` and `variantMode: 'stateful'`; hover and press them to see their behavior.
+
+<SemanticToneGallery axis="variants"/>
+
+| Variants | Recipe |
+| --- | --- |
+| `solid`, `surface`, `surfaceAlt` | Matched button, surface, or alternate fill + border + text |
+| `spotlight`, `glass` | Light fill + alternate surface border and text |
+| `flat`, `flatAlt`, `flatSolid` | Plain role bgcolor + matched border and text |
+| `outlineFill`, `outline` | Outline recipes with button fill on interaction |
+| `subtle`, `subtleBtn` | General text with surface or button fill on interaction |
+| `link` | General text + hover underline |
+| `sheen` | Button fill clipped to text |
+| `underline` | General text + bottom inset on interaction |
+| `rail` | Left border and spacing + left inset on hover |
+| `bracket` | General text + top and bottom insets on interaction |
+| `none` | No variant recipe |
+
+`variantMode: 'stateless'` keeps the rest recipe and omits the resolver's interaction additions. `stateful` adds the appropriate hover and active recipes; it does **not** automatically add every utility family's disabled classes. Components may provide their own disabled styling and behavior. `none` removes the variant recipe, while component base styles and an explicitly supplied tone still apply.
+
+```html
+<Btn tone="info" variant="surface" variantMode="stateful">
+  A component using the surface recipe
+</Btn>
+```
+
+<p class="fs-sm">
+  <a
+    href="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/componentVariant.ts"
+    target="_blank"
+    rel="noopener noreferrer"
+    >Read the complete variant recipes ↗</a
+  >
+</p>
+
+## Focus and custom styles
+
+Each role exposes a `focusRing` token. Consume it in component or custom styles; the tone presets do not automatically draw a focus indicator. General `border.focus` is also available for structural focus borders.
+
+```typescript
+import { getCurrentThemePalette } from '@purestack/ts-style'
+
+const current = getCurrentThemePalette()
+// Inside your registered style-builder callback:
+root.select('.my-action:focus-visible').css({
+  outline: `2px solid ${current.button.focusRing}`,
+  outlineOffset: '3px',
+})
+```
+
+The symbolic reference keeps the style responsive to the nearest tone and theme. Apply `tone--danger` to that action and its focus ring follows the danger button role without another selector.
+
+Continue with [themes and skins](/guides/themes) for palette authoring and [utility classes](/guides/utility-css-classes) for geometry and layout.
