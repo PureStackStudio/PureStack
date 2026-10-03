@@ -57,6 +57,3 @@ jobs:
       - name: Publish missing packages
         if: ${{ !inputs.dry_run }}
         run: yarn publish-new-packages --publish
-        env:
-          # Surfaces the OIDC token exchange result when publishing fails.
-          NPM_CONFIG_LOGLEVEL: verbose
