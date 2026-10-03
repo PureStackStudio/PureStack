@@ -33,6 +33,9 @@ jobs:
           registry-url: https://registry.npmjs.org
           package-manager-cache: false
 
+      - name: Update npm for trusted publishing
+        run: npm install -g npm@latest
+
       - name: Enable Corepack
         run: corepack enable
 
@@ -52,5 +55,3 @@ jobs:
       - name: Publish missing packages
         if: ${{ !inputs.dry_run }}
         run: yarn publish-new-packages --publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
