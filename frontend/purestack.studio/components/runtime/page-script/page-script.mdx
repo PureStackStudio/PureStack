@@ -13,51 +13,196 @@ nav:
 
 # Page<wbr/>Script
 
-Include a page-specific browser entry point with SSG path resolution, bundling and native script attributes.
-
-<Badge tone="accent" variant="surface">PageScript</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/pageScript/pageScript.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="PageScript" kind="DOM enhancement" summary="Include a page-specific browser entry point with SSG path resolution, bundling and native script attributes." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/pageScript/pageScript.ts" section="Browser entry points" sectionHref="/components/runtime/"/>
 
 ## Enhance existing content
 
-This plain DOM script calculates a reading-time estimate for the paragraph. Use RegorApp when the feature is a component app.
+Move the reading-speed slider to recalculate the estimate. This plain DOM script enhances existing server-rendered content; the paragraph and labelled input remain available before the script runs.
 
 <Tabs group="page-script-sample-1" selectedTab="page-script-sample-1-preview" ariaLabel="Enhance existing content example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="page-script-sample-1-preview" label="Preview">
-    <section aria-label="Reading-time example">
-      <p id="reading-time-content">
-        PureStack brings content, components and theme styles together. A small browser
-        entry point can enhance existing HTML when a full component app is unnecessary.
-      </p>
-      <output id="reading-time-result" aria-live="polite">Calculating reading time…</output>
-    </section>
-    <PageScript src="./reading-time.ts" />
+<ComponentExample label="PageScript in context" caption="Existing HTML gains a scoped event binding and a live calculation. The source tab shows both parts.">
+<section data-reading-example aria-label="Reading-time example">
+  <p data-reading-content>PureStack brings content, components and theme styles together. A small browser entry point can enhance existing HTML when a full component app is unnecessary.</p>
+  <label for="reading-rate">Reading speed · words per minute</label>
+  <input id="reading-rate" data-reading-rate type="range" min="10" max="300" step="10" value="200" class="w-full"/>
+  <output id="reading-time-result" data-reading-result aria-live="polite">Reading-time estimate appears when the module runs.</output>
+</section>
+<PageScript id="reading-time-entry" src="./reading-time.ts"/>
+
+</ComponentExample>
   </TabPane>
   <TabPane id="page-script-sample-1-source-0" label="reading-time.mdx">
 ```html
-<section aria-label="Reading-time example">
-  <p id="reading-time-content">
-    PureStack brings content, components and theme styles together. A small browser
-    entry point can enhance existing HTML when a full component app is unnecessary.
-  </p>
-  <output id="reading-time-result" aria-live="polite">Calculating reading time…</output>
+<section data-reading-example aria-label="Reading-time example">
+  <p data-reading-content>PureStack brings content, components and theme styles together. A small browser entry point can enhance existing HTML when a full component app is unnecessary.</p>
+  <label for="reading-rate">Reading speed · words per minute</label>
+  <input id="reading-rate" data-reading-rate type="range" min="10" max="300" step="10" value="200" class="w-full"/>
+  <output id="reading-time-result" data-reading-result aria-live="polite">Reading-time estimate appears when the module runs.</output>
 </section>
-<PageScript src="./reading-time.ts" />
+<PageScript id="reading-time-entry" src="./reading-time.ts"/>
 ```
   </TabPane>
   <TabPane id="page-script-sample-1-source-1" label="reading-time.ts">
 ```typescript
-const output = document.querySelector<HTMLOutputElement>('#reading-time-result')
-const text = document.querySelector('#reading-time-content')?.textContent ?? ''
-const words = text.trim().split(/\s+/).filter(Boolean).length
-if (output)
-  output.textContent = `${words} words · about ${Math.max(1, Math.ceil(words / 200))} minute to read`
+// Query each enhancement root; do not bind one global input to several widgets.
+for (const region of document.querySelectorAll<HTMLElement>(
+  '[data-reading-example]',
+)) {
+  const text = region.querySelector<HTMLElement>('[data-reading-content]')
+  const output = region.querySelector<HTMLOutputElement>(
+    '[data-reading-result]',
+  )
+  const rate = region.querySelector<HTMLInputElement>('[data-reading-rate]')
+  if (!text || !output || !rate) continue
+  const update = () => {
+    const words = (text.textContent ?? '')
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean).length
+    const wordsPerMinute = Math.max(1, Number(rate.value) || 200)
+    output.textContent = `${words} words · about ${Math.max(1, Math.ceil(words / wordsPerMinute))} minute${Math.ceil(words / wordsPerMinute) > 1 ? 's' : ''} to read`
+  }
+  rate.addEventListener('input', update)
+  update()
+}
 ```
   </TabPane>
 </Tabs>
+
+## See the emitted script
+
+The receipt below reads the actual script element in the browser. Its src is the build’s emitted JavaScript URL, and its default destination is body.
+
+<ComponentExample label="Source path → emitted URL → native tag" caption="The hashed filename may change between builds. Module scripts are deferred by browser semantics.">
+<article data-script-receipt="reading-time-entry"><pre class="runtime-code"><code>Inspecting the emitted script…</code></pre><small data-script-placement></small></article>
+</ComponentExample>
+
+## Choose a placement target
+
+teleport accepts a DOM selector. This module is inserted into a named example target and updates its nearby output. Keep the target unique and present in the rendered document.
+
+<ComponentExample label="An explicitly placed module" caption="The receipt reports the actual parent, so placement is observable rather than inferred from the MDX.">
+<div id="script-placement-target"></div><output id="placed-script-result" aria-live="polite">Waiting for the placed module.</output><article data-script-receipt="placed-script-entry"><pre class="runtime-code"><code>Inspecting the emitted script…</code></pre><small data-script-placement></small></article><PageScript id="placed-script-entry" src="./placed.ts" teleport="#script-placement-target"/>
+</ComponentExample>
+
+```html
+<div id="script-placement-target"></div>
+<output id="placed-script-result" aria-live="polite">Waiting for the placed module.</output>
+<PageScript id="placed-script-entry" src="./placed.ts" teleport="#script-placement-target"/>
+```
+
+```typescript
+const output = document.querySelector<HTMLOutputElement>(
+  '#placed-script-result',
+)
+if (output)
+  output.textContent = 'This module ran from the named placement target.'
+```
+
+## Every loading flag
+
+async, defer, and noModule are native script attributes. These receipts show their exact emitted presence. The async and defer comparison tags are inert data blocks, so they demonstrate forwarding without changing execution order on this guide. noModule is paired with a classic script; modern module-capable browsers skip that fallback.
+
+<ComponentExample label="Default, async, defer, and noModule" caption="Omitting a boolean attribute differs from emitting it. Bind booleans with a colon; a literal false string is still a present HTML attribute.">
+<div class="component-appearance-grid"><article class="component-appearance-cell" data-script-receipt="script-flags-default"><strong>Flags omitted</strong><p>No async, defer, or nomodule attribute is requested.</p><pre class="runtime-code"><code>Inspecting the emitted script…</code></pre><small data-script-placement></small></article><PageScript id="script-flags-default" src="./options-sample.ts" type="application/json" /><article class="component-appearance-cell" data-script-receipt="script-flags-async"><strong>async</strong><p>Execution does not wait for the normal deferred order.</p><pre class="runtime-code"><code>Inspecting the emitted script…</code></pre><small data-script-placement></small></article><PageScript id="script-flags-async" src="./options-sample.ts" type="application/json" :async="true"/><article class="component-appearance-cell" data-script-receipt="script-flags-defer"><strong>defer</strong><p>Useful for classic scripts; module scripts already defer.</p><pre class="runtime-code"><code>Inspecting the emitted script…</code></pre><small data-script-placement></small></article><PageScript id="script-flags-defer" src="./options-sample.ts" type="application/json" :defer="true"/>
+<article class="component-appearance-cell" data-script-receipt="script-flags-nomodule"><strong>noModule</strong><p>A classic fallback for browsers without module support.</p><pre class="runtime-code"><code>Inspecting the emitted script…</code></pre><small data-script-placement></small></article><PageScript id="script-flags-nomodule" src="./placed.ts" type="text/javascript" :noModule="true"/></div>
+</ComponentExample>
+
+```html
+<PageScript src="./entry.ts"/>
+<PageScript src="./entry.ts" :async="true"/>
+<PageScript src="./classic.ts" type="text/javascript" :defer="true"/>
+<PageScript src="./classic-fallback.ts" type="text/javascript" :noModule="true"/>
+```
+
+## Script type and metadata
+
+The live enhancements use type=module. The classic fallback above uses text/javascript. The metadata comparisons below use application/json, an inert data-block type; they do not execute or fetch their src. The integrity and nonce strings are illustrative values, not production configuration.
+
+<ComponentExample label="Integrity, nonce, and both cross-origin values" caption="These receipts display actual attributes without loading a third-party script.">
+<div class="component-appearance-grid"><article class="component-appearance-cell" data-script-receipt="script-integrity"><strong>integrity</strong><p>Supply the exact digest of the resource bytes you intend to load.</p><pre class="runtime-code"><code>Inspecting the emitted script…</code></pre><small data-script-placement></small></article><PageScript id="script-integrity" src="./options-sample.ts" type="application/json" integrity="sha384-illustrative-digest"/><article class="component-appearance-cell" data-script-receipt="script-nonce"><strong>nonce</strong><p>The nonce must match the policy for the actual response.</p><pre class="runtime-code"><code>Inspecting the emitted script…</code></pre><small data-script-placement></small></article><PageScript id="script-nonce" src="./options-sample.ts" type="application/json" nonce="docs-example-nonce"/><article class="component-appearance-cell" data-script-receipt="script-cors-anonymous"><strong>crossOrigin: anonymous</strong><p>Forward the native anonymous request setting.</p><pre class="runtime-code"><code>Inspecting the emitted script…</code></pre><small data-script-placement></small></article><PageScript id="script-cors-anonymous" src="./options-sample.ts" type="application/json" crossOrigin="anonymous"/><article class="component-appearance-cell" data-script-receipt="script-cors-credentials"><strong>crossOrigin: use-credentials</strong><p>Forward the native credentialed request setting.</p><pre class="runtime-code"><code>Inspecting the emitted script…</code></pre><small data-script-placement></small></article><PageScript id="script-cors-credentials" src="./options-sample.ts" type="application/json" crossOrigin="use-credentials"/></div>
+</ComponentExample>
+
+## Every referrer policy
+
+All native referrerPolicy values are visible together. Empty string leaves the browser’s default policy in effect. These inert tags demonstrate attribute forwarding rather than making requests.
+
+<ComponentExample label="Nine policy values" caption="The component forwards strings to the native attribute; request behavior belongs to the browser.">
+<div class="component-appearance-grid"><article class="component-appearance-cell" data-script-receipt="script-policy-0"><strong>Empty string · browser default</strong><p>Inspect the emitted referrerpolicy attribute.</p><pre class="runtime-code"><code>Inspecting the emitted script…</code></pre><small data-script-placement></small></article><PageScript id="script-policy-0" src="./options-sample.ts" type="application/json" referrerPolicy=""/>
+<article class="component-appearance-cell" data-script-receipt="script-policy-1"><strong>no-referrer</strong><p>Inspect the emitted referrerpolicy attribute.</p><pre class="runtime-code"><code>Inspecting the emitted script…</code></pre><small data-script-placement></small></article><PageScript id="script-policy-1" src="./options-sample.ts" type="application/json" referrerPolicy="no-referrer"/>
+<article class="component-appearance-cell" data-script-receipt="script-policy-2"><strong>no-referrer-when-downgrade</strong><p>Inspect the emitted referrerpolicy attribute.</p><pre class="runtime-code"><code>Inspecting the emitted script…</code></pre><small data-script-placement></small></article><PageScript id="script-policy-2" src="./options-sample.ts" type="application/json" referrerPolicy="no-referrer-when-downgrade"/>
+<article class="component-appearance-cell" data-script-receipt="script-policy-3"><strong>origin</strong><p>Inspect the emitted referrerpolicy attribute.</p><pre class="runtime-code"><code>Inspecting the emitted script…</code></pre><small data-script-placement></small></article><PageScript id="script-policy-3" src="./options-sample.ts" type="application/json" referrerPolicy="origin"/>
+<article class="component-appearance-cell" data-script-receipt="script-policy-4"><strong>origin-when-cross-origin</strong><p>Inspect the emitted referrerpolicy attribute.</p><pre class="runtime-code"><code>Inspecting the emitted script…</code></pre><small data-script-placement></small></article><PageScript id="script-policy-4" src="./options-sample.ts" type="application/json" referrerPolicy="origin-when-cross-origin"/>
+<article class="component-appearance-cell" data-script-receipt="script-policy-5"><strong>same-origin</strong><p>Inspect the emitted referrerpolicy attribute.</p><pre class="runtime-code"><code>Inspecting the emitted script…</code></pre><small data-script-placement></small></article><PageScript id="script-policy-5" src="./options-sample.ts" type="application/json" referrerPolicy="same-origin"/>
+<article class="component-appearance-cell" data-script-receipt="script-policy-6"><strong>strict-origin</strong><p>Inspect the emitted referrerpolicy attribute.</p><pre class="runtime-code"><code>Inspecting the emitted script…</code></pre><small data-script-placement></small></article><PageScript id="script-policy-6" src="./options-sample.ts" type="application/json" referrerPolicy="strict-origin"/>
+<article class="component-appearance-cell" data-script-receipt="script-policy-7"><strong>strict-origin-when-cross-origin</strong><p>Inspect the emitted referrerpolicy attribute.</p><pre class="runtime-code"><code>Inspecting the emitted script…</code></pre><small data-script-placement></small></article><PageScript id="script-policy-7" src="./options-sample.ts" type="application/json" referrerPolicy="strict-origin-when-cross-origin"/>
+<article class="component-appearance-cell" data-script-receipt="script-policy-8"><strong>unsafe-url</strong><p>Inspect the emitted referrerpolicy attribute.</p><pre class="runtime-code"><code>Inspecting the emitted script…</code></pre><small data-script-placement></small></article><PageScript id="script-policy-8" src="./options-sample.ts" type="application/json" referrerPolicy="unsafe-url"/></div>
+</ComponentExample>
+
+## Every source form
+
+Local entries are bundled; HTTP(S) and protocol-relative URLs remain external. A leading slash means the content source root, rather than the public output root. Query strings and fragments survive resolution. sourceRelPath supplies a different owner directory.
+
+<ComponentExample label="Five ways to resolve the entry" caption="The external URL below is a source example only; this guide does not load it.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Colocated</code><code>src="./reading-time.ts"</code><p class="m-0">Resolves beside this MDX page.</p></div>
+<div class="component-appearance-cell"><code>Sibling directory</code><code>src="../regor-app/playground.ts"</code><p class="m-0">Resolves from this source directory into its sibling.</p></div>
+<div class="component-appearance-cell"><code>Content root</code><code>src="/components/runtime/page-script/reading-time.ts"</code><p class="m-0">Resolves from the configured content root.</p></div>
+<div class="component-appearance-cell"><code>Different owner</code><code>:sourceRelPath="'components/runtime/page-script/page-script.mdx'"</code><p class="m-0">Uses that file’s directory when resolving a relative src.</p></div>
+<div class="component-appearance-cell"><code>External URL</code><code>src="https://example.com/widget.js"</code><p class="m-0">Remains external; the SSG does not bundle its bytes. Protocol-relative URLs are also treated as external.</p></div>
+</div>
+</ComponentExample>
+
+```html
+<PageScript src="./reading-time.ts?mode=docs#boot"/>
+<PageScript src="/components/runtime/page-script/reading-time.ts"/>
+<PageScript
+  src="./reading-time.ts"
+  :sourceRelPath="'components/runtime/page-script/page-script.mdx'"
+/>
+```
+
+## Inspection entry point
+
+The comparison receipts are populated by this small module. Each receipt names one script ID; the module reads its native attributes and parent without altering the page’s scripts.
+
+```typescript
+// Inspect the actual emitted tags, not a hand-written approximation of the output.
+for (const sample of document.querySelectorAll<HTMLElement>(
+  '[data-script-receipt]',
+)) {
+  const script = document.getElementById(sample.dataset.scriptReceipt ?? '')
+  const code = sample.querySelector('code')
+  if (!(script instanceof HTMLScriptElement) || !code) continue
+  const attributes = [...script.attributes].map((attribute) => {
+    const value = attribute.name === 'nonce' ? script.nonce : attribute.value
+    return value ? `${attribute.name}="${value}"` : attribute.name
+  })
+  code.textContent = `<script\n  ${attributes.join('\n  ')}\n></script>`
+  const placement = sample.querySelector('[data-script-placement]')
+  if (placement)
+    placement.textContent = `Actual parent: ${script.parentElement?.id ? `#${script.parentElement.id}` : script.parentElement?.tagName.toLowerCase()}`
+}
+```
+
+## Feature map
+
+| Public feature | Visible example |
+| --- | --- |
+| src | Reading-time enhancement and actual emitted URL receipt. |
+| sourceRelPath | Source-form comparison and explicit owner recipe. |
+| teleport | A working module inside the named placement target. |
+| type | Live module, classic noModule fallback, and inert application/json metadata tags. |
+| async, defer, noModule | Four loading-flag receipts and copyable source. |
+| integrity, nonce | Actual emitted metadata receipts with illustrative values. |
+| crossOrigin | Both anonymous and use-credentials receipts. |
+| referrerPolicy | All nine native values shown together. |
+| Native attributes | Unique script IDs let the inspection module read the real output. |
+
+PageScript has no tone, variant, or variantMode props and no content slot. It emits a script element; the surrounding HTML and the browser behavior supply the visible UI.
+
+<PageScript src="./script-options.ts"/>
 
 ## Behavior and accessibility
 
@@ -133,8 +278,6 @@ The default script type is module and the default teleport destination is body. 
 <div class="api-contract">
 <p>No slots. This is an SSG component. For a Regor component application, use RegorApp instead of manually pairing a mount element with PageScript.</p>
 </div>
-
-
 
 ## Related components
 

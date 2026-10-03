@@ -13,13 +13,45 @@ nav:
 
 # Browser entry points
 
-Add page-specific browser behavior with colocated TypeScript entry points and independent Regor apps.
+<p class="component-directory-lead">Small behavior. Clear ownership. A page that stays understandable.</p>
+
+Choose an independent component app or enhance the HTML already on the page. Both entry points resolve colocated TypeScript through the SSG; your browser code decides what happens next.
+
+## Choose the boundary
+
+<div class="component-guide-grid">
+<article class="component-guide-card"><div class="component-guide-card__preview"><Flex direction="column" align="start"><Badge tone="feature">Independent app</Badge><strong>Mount + template + refs</strong><span>Each instance owns its review state.</span></Flex></div><h3>RegorApp</h3><Badge tone="neutral">Component behavior</Badge><p>Register the parts you need, create fresh reactive state, and mount a focused UI. Try independent reviews, shared module loading, and explicit source ownership.</p><a href="/components/runtime/regor-app/">Explore RegorApp ↗</a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><Flex direction="column" align="start"><Badge tone="info">Existing HTML</Badge><strong>Find a region + bind an event</strong><span>A scoped script adds a reading-time estimate.</span></Flex></div><h3>PageScript</h3><Badge tone="neutral">DOM enhancement</Badge><p>Keep the server-rendered content and add page-specific behavior. Inspect emitted tags, placement, source paths, and every loading or metadata option.</p><a href="/components/runtime/page-script/">Explore PageScript ↗</a></article>
+</div>
+
+## Two working approaches
+
+<ComponentExample label="An app beside a DOM enhancement" caption="Each example loads a colocated entry using its guide as the source owner. Neither entry-point component has appearance variants.">
+<Grid columns="1" columnsLg="2"><RegorApp id="runtime-directory-review" data-review-counter="Page readiness" src="./playground.ts" :sourceRelPath="'components/runtime/regor-app/regor-app.mdx'"/><Panel tone="info" bodyClass="p-3"><section data-reading-example aria-label="Directory reading-time enhancement"><SectionHeader title="Enhance the paragraph" subtitle="Existing content gains one focused interaction." titleTag="h3"/><p data-reading-content>Keep content readable before JavaScript runs. A scoped entry point can add calculations, event handlers, and small improvements to an existing document. Choose a separate component app when reactive state and reusable templates make the feature easier to understand.</p><label for="runtime-directory-rate">Reading speed · words per minute</label><input id="runtime-directory-rate" data-reading-rate type="range" min="10" max="300" step="10" value="200" class="w-full"/><output data-reading-result aria-live="polite">Reading-time estimate appears when the module runs.</output></section></Panel></Grid><PageScript src="./reading-time.ts" :sourceRelPath="'components/runtime/page-script/page-script.mdx'"/>
+</ComponentExample>
+
+## Compare responsibilities
+
+| Need | RegorApp | PageScript |
+| --- | --- | --- |
+| Visible root | An app mount element | A script element |
+| UI ownership | Browser template and registered components | Existing HTML, selected by your script |
+| State | Refs and computed values in each createApp context | Your chosen DOM or JavaScript state |
+| Initialization | Entry point explicitly calls createApp | Entry point runs its enhancement code |
+| Multiple instances | Create one app with fresh state per mount | Scope queries and listeners to each region |
+| Source resolution | src and optional sourceRelPath | src and optional sourceRelPath |
+| Script placement and metadata | Uses the internal default PageScript | teleport, type, loading flags, and native metadata |
+| Appearance | Components inside the app | Enhanced HTML and its components |
+
+## From source to page
+
+<ComponentExample label="Resolve → bundle → emit → initialize" caption="A repeated module URL executes once. Entry points that serve multiple mounts must initialize every matching instance.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Resolve</code><strong>Find the source owner</strong><p class="m-0">Relative src uses the MDX directory. sourceRelPath changes that owner.</p></div>
+<div class="component-appearance-cell"><code>Bundle</code><strong>Record the local entry</strong><p class="m-0">The SSG bundles local TypeScript into a browser asset. External URLs stay external.</p></div>
+<div class="component-appearance-cell"><code>Emit</code><strong>Include the script</strong><p class="m-0">A native module tag points to the emitted asset; RegorApp also supplies an app mount.</p></div>
+<div class="component-appearance-cell"><code>Initialize</code><strong>Own the behavior</strong><p class="m-0">Register and mount component apps, or attach scoped listeners to the rendered document.</p></div>
+</div>
+</ComponentExample>
 
 [All components](/components/)
-
-## Component guides
-
-<Grid columns="1" columnsSm="2" columnsXl="3">
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Regor<wbr/>App</h3><p>Mount an independent browser app from a TypeScript file colocated with its MDX page.</p><BtnLink href="/components/runtime/regor-app/" tone="accent" variant="link">Explore Regor<wbr/>App</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Page<wbr/>Script</h3><p>Include a page-specific browser entry point with SSG path resolution, bundling and native script attributes.</p><BtnLink href="/components/runtime/page-script/" tone="accent" variant="link">Explore Page<wbr/>Script</BtnLink></Panel>
-</Grid>

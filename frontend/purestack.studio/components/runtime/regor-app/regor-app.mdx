@@ -13,25 +13,22 @@ nav:
 
 # Regor<wbr/>App
 
-Mount an independent browser app from a TypeScript file colocated with its MDX page.
-
-<Badge tone="accent" variant="surface">RegorApp</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/pageScript/pageScript.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="RegorApp" kind="Independent app" summary="Mount an independent browser app from a TypeScript file colocated with its MDX page." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/pageScript/pageScript.ts" section="Browser entry points" sectionHref="/components/runtime/"/>
 
 ## A focused browser app
 
-The app owns a small review counter. Its interface, template, context and registration are all explicit in the source tab.
+Complete and undo tasks, change the goal, add a note, and pause changes. The status and native progress bar update together. Reset restores this app’s initial state.
 
 <Tabs group="regor-app-sample-1" selectedTab="regor-app-sample-1-preview" ariaLabel="A focused browser app example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="regor-app-sample-1-preview" label="Preview">
-    <RegorApp id="regor-app-demo" src="./playground.ts"/>
+<ComponentExample label="RegorApp in context" caption="An app mount, a module, and fresh reactive state. Change the controls and inspect the complete source.">
+    <RegorApp id="regor-app-demo" data-review-counter="Release review" src="./playground.ts"/>
+
+</ComponentExample>
   </TabPane>
   <TabPane id="regor-app-sample-1-source-0" label="playground.mdx">
 ```html
-<RegorApp id="regor-app-demo" src="./playground.ts"/>
+<RegorApp id="regor-app-demo" data-review-counter="Release review" src="./playground.ts"/>
 ```
   </TabPane>
   <TabPane id="regor-app-sample-1-source-1" label="playground.ts">
@@ -40,52 +37,139 @@ import {
   defineButtonComponents,
   defineFlexComponents,
   defineFormComponents,
+  defineFormInputField,
+  definePanelComponents,
 } from '@purestack/ts-components'
+import { batch, computed, createApp, defineComponent, html, ref } from 'regor'
 
-import { createApp, defineComponent, html, type Ref, ref } from 'regor'
-
-export interface RegorAppExample {
-  completed: Ref<number>
-  addTask: () => void
-  reset: () => void
-}
-
-const regorAppExampleTemplate = html`<Flex direction="column">
-  <FormStatus>{{ completed }} review tasks completed</FormStatus>
-  <Flex wrap="true">
-    <Btn tone="accent" @click="addTask">Complete a task</Btn>
-    <Btn variant="outline" @click="reset">Reset review</Btn>
+const reviewTemplate = html`<Panel variant="surface" tone="neutral" bodyClass="p-3">
+  <Flex direction="column" align="stretch">
+    <div><p class="text-eyebrow m-0">INDEPENDENT BROWSER APP</p><h3 class="fs-h4 my-2">{{ title }}</h3></div>
+    <FormStatus :tone="completed >= target ? 'success' : 'info'" aria-live="polite">{{ completed }} of {{ target }} tasks complete · {{ completed >= target ? 'Ready for review' : 'Work in progress' }}</FormStatus>
+    <progress class="w-full" :value="completed" :max="target" :aria-label="title + ': ' + completed + ' of ' + target + ' complete'"></progress>
+    <FormInputField :id="prefix + '-goal'" label="Review goal" type="number" min="1" max="12" :model="goal" :disabled="locked"/>
+    <FormInputField :id="prefix + '-note'" label="Review note" placeholder="Add context for this review" :model="note" :disabled="locked"/>
+    <p class="m-0">{{ note || 'No review note yet.' }}</p>
+    <FormCheck :id="prefix + '-locked'" label="Pause changes" :checked="locked"/>
+    <Flex wrap="true" class="gap-2">
+      <Btn tone="accent" @click="complete" :disabled="locked || completed >= target">Complete a task</Btn>
+      <Btn variant="outline" @click="undo" :disabled="locked || completed === 0">Undo task</Btn>
+      <Btn tone="neutral" variant="subtleBtn" @click="reset">Reset review</Btn>
+    </Flex>
   </Flex>
-</Flex>`
+</Panel>`
 
-function createRegorAppExample(): RegorAppExample {
-  const completed = ref(0)
-  return {
-    completed,
-    addTask: () => completed(completed() + 1),
-    reset: () => completed(0),
-  }
-}
-
-const component = defineComponent<RegorAppExample>(regorAppExampleTemplate, {
-  context: createRegorAppExample,
-})
-
-createApp(
-  {
-    components: {
-      RegorAppExample: component,
-
-      ...defineFlexComponents(),
-      ...defineButtonComponents(),
-      ...defineFormComponents(),
+// One module may serve several mounts. Each createApp call owns fresh refs.
+for (const mount of document.querySelectorAll<HTMLElement>(
+  'app[data-review-counter]',
+)) {
+  createApp(
+    {
+      components: {
+        ReviewCounter: defineComponent(reviewTemplate, {
+          context: () => {
+            const completed = ref(0)
+            const goal = ref('5')
+            const note = ref('')
+            const locked = ref(false)
+            const target = computed(() =>
+              Math.max(1, Math.min(12, Math.floor(Number(goal()) || 5))),
+            )
+            return {
+              prefix: mount.id,
+              title: mount.dataset.reviewCounter || 'Release review',
+              completed,
+              goal,
+              note,
+              locked,
+              target,
+              complete: () => {
+                if (!locked() && completed() < target())
+                  completed(completed() + 1)
+              },
+              undo: () => {
+                if (!locked() && completed() > 0) completed(completed() - 1)
+              },
+              reset: () =>
+                batch(() => {
+                  completed(0)
+                  goal('5')
+                  note('')
+                  locked(false)
+                }),
+            }
+          },
+        }),
+        ...defineFlexComponents(),
+        ...definePanelComponents(),
+        ...defineButtonComponents(),
+        ...defineFormComponents(),
+        ...defineFormInputField(),
+      },
     },
-  },
-  { selector: 'app#regor-app-demo', template: html`<RegorAppExample />` },
-)
+    { element: mount, template: html`<ReviewCounter/>` },
+  )
+}
 ```
   </TabPane>
 </Tabs>
+
+## Two apps, independent state
+
+Both mounts load the same module URL. Browser modules execute once per URL; the entry point explicitly creates an app for every matching mount. Each call gets fresh refs and unique field IDs. Completing a task in one review leaves the other unchanged.
+
+<ComponentExample label="Design review and content review" caption="Change either goal or note, pause one app, and reset it. The neighboring app keeps its own state.">
+<Grid columns="1" columnsMd="2"><RegorApp id="regor-app-design" data-review-counter="Design review" src="./playground.ts"/><RegorApp id="regor-app-content" data-review-counter="Content review" src="./playground.ts"/></Grid>
+</ComponentExample>
+
+```html
+<Grid columns="1" columnsMd="2">
+  <RegorApp id="regor-app-design" data-review-counter="Design review" src="./playground.ts"/>
+  <RegorApp id="regor-app-content" data-review-counter="Content review" src="./playground.ts"/>
+</Grid>
+```
+
+## Explicit source ownership
+
+Bind an explicit sourceRelPath to change the source directory used to resolve src. The colon binding overrides the source owner automatically attached by MDX compilation. Here the owner is the real PageScript guide, and its sibling-relative src resolves back to this guide’s playground. The emitted bundle is shared with the other mounts.
+
+<ComponentExample label="A mount with a different source owner" caption="The app is still mounted on this page. sourceRelPath affects build-time path resolution, not DOM selection.">
+<RegorApp id="regor-app-owned" data-review-counter="Shared source review" src="../regor-app/playground.ts" :sourceRelPath="'components/runtime/page-script/page-script.mdx'"/>
+</ComponentExample>
+
+```html
+<RegorApp
+  id="regor-app-owned"
+  data-review-counter="Shared source review"
+  src="../regor-app/playground.ts"
+  :sourceRelPath="'components/runtime/page-script/page-script.mdx'"
+/>
+```
+
+## From MDX to reactive UI
+
+<ComponentExample label="Four pieces with clear ownership" caption="RegorApp creates the mount and includes the module. Your entry point registers components and calls createApp.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>1 · Source</code><strong>playground.ts beside the guide</strong><p class="m-0">The SSG resolves the relative path, records the entry point, and emits its browser bundle.</p></div>
+<div class="component-appearance-cell"><code>2 · Mount</code><strong>One unique app ID</strong><p class="m-0">id and data-review-counter are native attributes on the app element. Each field ID derives from the mount ID.</p></div>
+<div class="component-appearance-cell"><code>3 · Registration</code><strong>Only the component families used here</strong><p class="m-0">Buttons, flex, panels, form fields, and statuses are explicitly registered in the browser app.</p></div>
+<div class="component-appearance-cell"><code>4 · Context</code><strong>Fresh refs and computed values</strong><p class="m-0">Task count, goal, note, and pause state belong to one mount. Progress and feedback derive from them.</p></div>
+</div>
+</ComponentExample>
+
+## Feature map
+
+| Feature | Visible example |
+| --- | --- |
+| src | The focused app loads a colocated TypeScript entry point. |
+| sourceRelPath | Shared source review resolves src relative to another real MDX owner. |
+| Native id and data attributes | Every mount has its own ID and review label; the entry reads those attributes. |
+| Browser registration | The full source registers each component family used by the template. |
+| Independent state | Design and content reviews update and reset independently. |
+| Reactive values and events | Edit the goal and note, complete or undo a task, and pause changes. |
+| Derived presentation | Status, progress, disabled buttons, and the note reflect the current refs. |
+
+RegorApp has no tone, variant, or variantMode props and no server-rendered content slot. Appearance belongs to the components inside the mounted app. It creates a browser app rather than hydrating a server-rendered Regor component tree.
 
 ## Behavior and accessibility
 
@@ -116,8 +200,6 @@ RegorApp renders an app mount element and a module entry script. Give the mount 
 <div class="api-contract">
 <p>No content slot. RegorApp uses PageScript internally. Available in SSG’s standard component registration; browser code imports createApp, defineComponent and html from Regor.</p>
 </div>
-
-
 
 ## Related components
 

@@ -59,6 +59,16 @@ export function registerComponentGuideStyles() {
     const root = styleBuilder.get(theme)
     const neutral = palette.semanticTone.neutral
     const accent = palette.semanticTone.accent
+    root.select('.runtime-code').css({
+      whiteSpace: 'pre-wrap',
+      overflowWrap: 'anywhere',
+      fontSize: '0.75rem',
+      padding: '1rem',
+    })
+    root.select('.runtime-code code').css({ whiteSpace: 'inherit' })
+    root
+      .select('app[data-review-counter]')
+      .css({ display: 'block', minWidth: '0' })
     root.select('.component-guide-card > .badge').css({ alignSelf: 'start' })
     root.select('.layout-demo-track').css({
       minHeight: '7rem',
