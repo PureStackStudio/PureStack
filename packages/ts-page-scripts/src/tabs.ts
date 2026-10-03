@@ -1,6 +1,5 @@
 import { BREAKPOINTS, matchMediaMax } from '../../ts-style/src/breakpoints'
 
-const OVERFLOW_BUTTON_WIDTH = 42
 let nextAutoTabsSelectId = 1
 
 type TabsEntry = {
@@ -184,8 +183,6 @@ function enhanceTabs(root: HTMLElement) {
     lastInteraction = { source, index }
     entry.control.checked = true
     entry.control.dispatchEvent(new Event('change', { bubbles: true }))
-    syncState()
-    applyLayout()
   }
 
   function syncSelect() {
@@ -244,26 +241,19 @@ function enhanceTabs(root: HTMLElement) {
       btn.hidden = false
       btn.style.order = String(index)
     }
+    // Always measure from the same layout. Content-sized tabs grow with the
+    // overflow toggle, so a previous result must never feed the next one.
+    overflow.classList.remove('tabs__overflow--visible')
 
     const active = ensureActive()
-    const available = row.clientWidth
-    if (!available) return
+    if (buttonWrap.scrollWidth <= buttonWrap.clientWidth) return
 
-    const widths: number[] = []
-    let total = 0
-    for (let i = 0; i < tabs.length; i += 1) {
-      const btn = buttonMap.get(i)
-      if (!btn) continue
-      const width = Math.ceil(btn.getBoundingClientRect().width)
-      widths[i] = width
-      total += width
-    }
-    const gap = 8
-    total += Math.max(0, tabs.length - 1) * gap
-    if (total <= available) return
-
-    let budget = available - OVERFLOW_BUTTON_WIDTH - gap
-    if (budget < 0) budget = 0
+    overflow.classList.add('tabs__overflow--visible')
+    const budget = buttonWrap.getBoundingClientRect().width
+    const gap = Number.parseFloat(getComputedStyle(buttonWrap).columnGap) || 0
+    const widths = tabs.map(
+      (_, index) => buttonMap.get(index)?.getBoundingClientRect().width ?? 0,
+    )
     const getRangeFrom = (start: number) => {
       let used = 0
       let end = start - 1
@@ -429,10 +419,7 @@ function enhanceTabs(root: HTMLElement) {
       if (!lastInteraction && active !== -1) {
         lastInteraction = { source: 'external', index: active }
       }
-      syncState()
-      if (!root.classList.contains('tabs--compact')) {
-        computeHiddenIndexes()
-      }
+      applyLayout()
     }
     tabs[i].control.addEventListener('change', onControlChange)
     controlChangeHandlers.set(tabs[i].control, onControlChange)
