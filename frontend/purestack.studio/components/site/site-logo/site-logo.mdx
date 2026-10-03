@@ -13,13 +13,7 @@ nav:
 
 # SiteLogo
 
-One brand identity for your navigation, footer, product cards and sign-in screens. Combine a mark, a wordmark and an optional subtitle, then choose the layout and treatment that fit the surrounding interface.
-
-<Badge tone="accent" variant="surface">SiteLogo</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/logo/logo.ts) · [API reference](#api-reference)
-
-For the original bordered logo with uppercase, individually colored letters, use [ClassicLogo](/components/site/classic-logo/). TopBar can select either component through `logo.component` in site configuration or its `logoComponent` prop.
+<ComponentHeader name="SiteLogo" kind="Flexible identity" summary="One brand identity, many presentations: responsive wordmarks, icon and image marks, monograms, theme-aware colors and reusable configuration." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/logo/logo.ts" section="Site navigation &amp; services" sectionHref="/components/site/"/>
 
 ## Interactive playground
 
@@ -31,7 +25,10 @@ Use **Mark-to-title spacing** to bring the icon and brand name closer together o
 
 <Tabs group="logo-playground-sample" selectedTab="logo-playground-sample-preview" ariaLabel="playground example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="logo-playground-sample-preview" label="Preview">
+<ComponentExample label="SiteLogo in context" caption="Layouts, marks, wordmarks, sizing, and configuration. Open the source tab to adapt the composition.">
     <RegorApp id="logo-playground" src="./playground.ts"/>
+
+</ComponentExample>
   </TabPane>
   <TabPane id="logo-playground-sample-mdx" label="playground.mdx">
 ```html
@@ -280,7 +277,10 @@ Keep the identity consistent while adapting its presentation. These examples sha
 
 <Tabs group="logo-appearances-sample" selectedTab="logo-appearances-sample-preview" ariaLabel="appearances example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="logo-appearances-sample-preview" label="Preview">
+<div class="component-preview-stage">
     <RegorApp id="logo-appearances" src="./appearances.ts"/>
+
+</div>
   </TabPane>
   <TabPane id="logo-appearances-sample-mdx" label="appearances.mdx">
 ```html
@@ -517,6 +517,87 @@ The four sizes coordinate the mark, brand and subtitle. The default medium size 
 
 The subtitle wraps and the wordmark can break on narrow screens. For very constrained navigation, choose `mark` or a smaller size. SiteLogo does not automatically hide your brand or subtitle at a viewport breakpoint.
 
+## All ten semantic tones
+
+Every semantic tone appears on the same badge identity. Logo treatments are separate from component variants.
+
+<ComponentExample label="All ten semantic tones" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
+<div data-site-gallery="tone"><SiteAppearanceGallery component="SiteLogo" axis="tone"/></div>
+</ComponentExample>
+
+## Every layout
+
+<ComponentExample label="Every layout" caption="Each supported value is visible together; switch the site theme to compare colors.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>horizontal</code><SiteLogo brand="Studio" subtitle="Build together" :href="null" layout="horizontal" tone="accent"/></div>
+<div class="component-appearance-cell"><code>stacked</code><SiteLogo brand="Studio" subtitle="Build together" :href="null" layout="stacked" tone="accent"/></div>
+<div class="component-appearance-cell"><code>wordmark</code><SiteLogo brand="Studio" subtitle="Build together" :href="null" layout="wordmark" tone="accent"/></div>
+<div class="component-appearance-cell"><code>mark</code><SiteLogo brand="Studio" subtitle="Build together" :href="null" layout="mark" tone="accent"/></div>
+</div>
+</ComponentExample>
+
+## Every size
+
+<ComponentExample label="Every size" caption="Each supported value is visible together; switch the site theme to compare colors.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>sm</code><SiteLogo brand="Studio" subtitle="Build together" :href="null" size="sm" tone="accent"/></div>
+<div class="component-appearance-cell"><code>md</code><SiteLogo brand="Studio" subtitle="Build together" :href="null" size="md" tone="accent"/></div>
+<div class="component-appearance-cell"><code>lg</code><SiteLogo brand="Studio" subtitle="Build together" :href="null" size="lg" tone="accent"/></div>
+<div class="component-appearance-cell"><code>xl</code><SiteLogo brand="Studio" subtitle="Build together" :href="null" size="xl" tone="accent"/></div>
+</div>
+</ComponentExample>
+
+## Every appearance
+
+<ComponentExample label="Every appearance" caption="Each supported value is visible together; switch the site theme to compare colors.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>plain</code><SiteLogo brand="Studio" subtitle="Build together" :href="null" appearance="plain" tone="accent"/></div>
+<div class="component-appearance-cell"><code>badge</code><SiteLogo brand="Studio" subtitle="Build together" :href="null" appearance="badge" tone="accent"/></div>
+<div class="component-appearance-cell"><code>outline</code><SiteLogo brand="Studio" subtitle="Build together" :href="null" appearance="outline" tone="accent"/></div>
+</div>
+</ComponentExample>
+
+## Every mark treatment
+
+<ComponentExample label="Every markStyle" caption="Each supported value is visible together; switch the site theme to compare colors.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>plain</code><SiteLogo brand="Studio" subtitle="Build together" :href="null" markStyle="plain" tone="accent"/></div>
+<div class="component-appearance-cell"><code>soft</code><SiteLogo brand="Studio" subtitle="Build together" :href="null" markStyle="soft" tone="accent"/></div>
+<div class="component-appearance-cell"><code>solid</code><SiteLogo brand="Studio" subtitle="Build together" :href="null" markStyle="solid" tone="accent"/></div>
+<div class="component-appearance-cell"><code>outline</code><SiteLogo brand="Studio" subtitle="Build together" :href="null" markStyle="outline" tone="accent"/></div>
+</div>
+</ComponentExample>
+
+## Every wordmark treatment
+
+<ComponentExample label="Every wordmarkStyle" caption="Each supported value is visible together; switch the site theme to compare colors.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>plain</code><SiteLogo brand="Studio" subtitle="Build together" :href="null" wordmarkStyle="plain" tone="accent"/></div>
+<div class="component-appearance-cell"><code>accent</code><SiteLogo brand="Studio" subtitle="Build together" :href="null" wordmarkStyle="accent" tone="accent"/></div>
+<div class="component-appearance-cell"><code>gradient</code><SiteLogo brand="Studio" subtitle="Build together" :href="null" wordmarkStyle="gradient" tone="accent"/></div>
+</div>
+</ComponentExample>
+
+## Every shape
+
+<ComponentExample label="Every shape" caption="Each supported value is visible together; switch the site theme to compare colors.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>rounded</code><SiteLogo brand="Studio" subtitle="Build together" :href="null" shape="rounded" tone="accent" markStyle="solid"/></div>
+<div class="component-appearance-cell"><code>square</code><SiteLogo brand="Studio" subtitle="Build together" :href="null" shape="square" tone="accent" markStyle="solid"/></div>
+<div class="component-appearance-cell"><code>circle</code><SiteLogo brand="Studio" subtitle="Build together" :href="null" shape="circle" tone="accent" markStyle="solid"/></div>
+</div>
+</ComponentExample>
+
+## Feature map
+
+| Feature | Where to explore it |
+| --- | --- |
+| Layouts, marks, wordmarks, sizing, and configuration | Context preview, feature comparisons, and original copyable source examples. |
+| Public appearance options | Complete galleries above. Only options supported by this component are shown. |
+| Native semantics and integration | Behavior notes and API contracts below explain the component’s roots, slots, and runtime dependencies. |
+
+SiteLogo uses appearance, markStyle, and wordmarkStyle instead of component variants. Every supported value is shown above.
+
 ## API reference
 
 <div class="api-overview">
@@ -525,101 +606,101 @@ The subtitle wraps and the wordmark can break on narrow screens. For very constr
 </div>
 
 <nav class="api-index" aria-label="SiteLogo API">
-  <a href="#logo-config">config</a><a href="#logo-brand">brand</a><a href="#logo-layout">layout</a><a href="#logo-size">size</a><a href="#logo-gap">gap</a><a href="#logo-appearance">appearance</a><a href="#logo-markStyle">markStyle</a><a href="#logo-wordmarkStyle">wordmarkStyle</a><a href="#logo-icon">mark sources</a><a href="#logo-tone">colors</a><a href="#logo-href">navigation</a>
+  <a href="#site-logo-prop-config">config</a><a href="#site-logo-prop-brand">brand</a><a href="#site-logo-prop-layout">layout</a><a href="#site-logo-prop-size">size</a><a href="#site-logo-prop-gap">gap</a><a href="#site-logo-prop-appearance">appearance</a><a href="#site-logo-prop-markStyle">markStyle</a><a href="#site-logo-prop-wordmarkStyle">wordmarkStyle</a><a href="#site-logo-prop-icon">mark sources</a><a href="#site-logo-prop-tone">colors</a><a href="#site-logo-prop-href">navigation</a>
 </nav>
 
 ### Identity and reuse
 
-<ApiProperty anchor="logo-config" name="config" valueType="RefOrValue&lt;Partial&lt;LogoConfig&gt;&gt;" defaultValue="not set">
+<ApiProperty anchor="site-logo-prop-config" name="config" valueType="RefOrValue&lt;Partial&lt;LogoConfig&gt;&gt;" defaultValue="not set">
   <p>Shared settings. Explicit props override individual fields, so one identity can serve a header, footer and centered signature.</p>
 </ApiProperty>
 
-<ApiProperty anchor="logo-brand" name="brand" valueType="RefOrValue&lt;string&gt;" defaultValue="empty string">
+<ApiProperty anchor="site-logo-prop-brand" name="brand" valueType="RefOrValue&lt;string&gt;" defaultValue="empty string">
   <p>Brand name as ordinary text. Provide it even for a mark-only logo so it can supply the accessible name.</p>
 </ApiProperty>
 
-<ApiProperty anchor="logo-subtitle" name="subtitle" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty anchor="site-logo-prop-subtitle" name="subtitle" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
   <p>Optional secondary line. It wraps naturally and is hidden in mark-only layout. An empty string clears a configured subtitle.</p>
 </ApiProperty>
 
-<ApiProperty anchor="logo-suffix" name="suffix" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty anchor="site-logo-prop-suffix" name="suffix" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
   <p>Accent-colored text appended directly to the brand, such as a period. An empty string clears a configured suffix.</p>
 </ApiProperty>
 
 ### Layout and treatments
 
-<ApiProperty anchor="logo-layout" name="layout" valueType="RefOrValue&lt;LogoLayout&gt;" defaultValue="horizontal">
+<ApiProperty anchor="site-logo-prop-layout" name="layout" valueType="RefOrValue&lt;LogoLayout&gt;" defaultValue="horizontal">
   <p>horizontal, stacked, wordmark or mark. Determines which parts are shown and their arrangement.</p>
 </ApiProperty>
 
-<ApiProperty anchor="logo-size" name="size" valueType="RefOrValue&lt;LogoSize&gt;" defaultValue="md">
+<ApiProperty anchor="site-logo-prop-size" name="size" valueType="RefOrValue&lt;LogoSize&gt;" defaultValue="md">
   <p>sm, md, lg or xl. Coordinates mark, brand and subtitle dimensions without changing the identity.</p>
 </ApiProperty>
 
-<ApiProperty anchor="logo-appearance" name="appearance" valueType="RefOrValue&lt;LogoAppearance&gt;" defaultValue="plain">
+<ApiProperty anchor="site-logo-prop-appearance" name="appearance" valueType="RefOrValue&lt;LogoAppearance&gt;" defaultValue="plain">
   <p>plain has no container decoration. badge adds a tinted surface and border. outline adds padding and a border.</p>
 </ApiProperty>
 
-<ApiProperty anchor="logo-markStyle" name="markStyle" valueType="RefOrValue&lt;LogoMarkStyle&gt;" defaultValue="plain">
+<ApiProperty anchor="site-logo-prop-markStyle" name="markStyle" valueType="RefOrValue&lt;LogoMarkStyle&gt;" defaultValue="plain">
   <p>plain, soft, solid or outline. Applies to the mark box independently of the container appearance.</p>
 </ApiProperty>
 
-<ApiProperty anchor="logo-wordmarkStyle" name="wordmarkStyle" valueType="RefOrValue&lt;LogoWordmarkStyle&gt;" defaultValue="plain">
+<ApiProperty anchor="site-logo-prop-wordmarkStyle" name="wordmarkStyle" valueType="RefOrValue&lt;LogoWordmarkStyle&gt;" defaultValue="plain">
   <p>plain uses the brand color; accent uses the accent color; gradient blends both. The suffix keeps its accent color.</p>
 </ApiProperty>
 
-<ApiProperty anchor="logo-shape" name="shape" valueType="RefOrValue&lt;LogoShape&gt;" defaultValue="rounded">
+<ApiProperty anchor="site-logo-prop-shape" name="shape" valueType="RefOrValue&lt;LogoShape&gt;" defaultValue="rounded">
   <p>rounded, square or circle. Shapes and clips the mark box without changing the wordmark.</p>
 </ApiProperty>
 
 ### Mark sources
 
-<ApiProperty anchor="logo-icon" name="icon" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty anchor="site-logo-prop-icon" name="icon" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
   <p>Registered SVG icon name, such as tabler:stack-2. Used when there is no mark slot or image.</p>
 </ApiProperty>
 
-<ApiProperty anchor="logo-imageSrc" name="imageSrc" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty anchor="site-logo-prop-imageSrc" name="imageSrc" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
   <p>Image URL for the mark. Takes precedence over icon and monogram. The image is contained within the mark dimensions.</p>
 </ApiProperty>
 
-<ApiProperty anchor="logo-imageSrcDark" name="imageSrcDark" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
+<ApiProperty anchor="site-logo-prop-imageSrcDark" name="imageSrcDark" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
   <p>Optional dark-theme counterpart to imageSrc. Follows the active site theme.</p>
 </ApiProperty>
 
-<ApiProperty anchor="logo-monogram" name="monogram" valueType="RefOrValue&lt;string&gt;" defaultValue="derived from brand">
+<ApiProperty anchor="site-logo-prop-monogram" name="monogram" valueType="RefOrValue&lt;string&gt;" defaultValue="derived from brand">
   <p>Fallback mark text when no image or icon is supplied. Defaults to the first characters of the first two words; provide a short abbreviation for a specific identity.</p>
 </ApiProperty>
 
 ### Colors and custom dimensions
 
-<ApiProperty anchor="logo-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="accent">
+<ApiProperty anchor="site-logo-prop-tone" name="tone" valueType="RefOrValue&lt;SemanticTone&gt;" defaultValue="accent">
   <p>Semantic palette for the mark and accent text. The plain wordmark uses the neutral text color so it remains readable on the surrounding surface.</p>
 </ApiProperty>
 
-<ApiProperty anchor="logo-brandColor" name="brandColor · accentColor" valueType="RefOrValue&lt;string&gt;" defaultValue="theme colors">
+<ApiProperty anchor="site-logo-prop-brandColor" name="brandColor · accentColor" valueType="RefOrValue&lt;string&gt;" defaultValue="theme colors">
   <p>CSS colors or theme variables for the wordmark and accent. Gradient wordmarks blend these two values.</p>
 </ApiProperty>
 
-<ApiProperty anchor="logo-markBackground" name="markBackground · markColor" valueType="RefOrValue&lt;string&gt;" defaultValue="mark treatment">
+<ApiProperty anchor="site-logo-prop-markBackground" name="markBackground · markColor" valueType="RefOrValue&lt;string&gt;" defaultValue="mark treatment">
   <p>Override the mark background and foreground independently. Backgrounds also accept CSS gradients. Foreground color affects currentColor SVGs and monograms.</p>
 </ApiProperty>
 
-<ApiProperty anchor="logo-brandSize" name="brandSize · subtitleSize · markSize" valueType="RefOrValue&lt;string&gt;" defaultValue="size preset">
+<ApiProperty anchor="site-logo-prop-brandSize" name="brandSize · subtitleSize · markSize" valueType="RefOrValue&lt;string&gt;" defaultValue="size preset">
   <p>CSS lengths overriding the corresponding preset dimensions. Use rem, px or clamp() values; markSize sets both width and height.</p>
 </ApiProperty>
 
-<ApiProperty anchor="logo-gap" name="gap" valueType="RefOrValue&lt;string&gt;" defaultValue="0.375rem; stacked 0.5rem">
+<ApiProperty anchor="site-logo-prop-gap" name="gap" valueType="RefOrValue&lt;string&gt;" defaultValue="0.375rem; stacked 0.5rem">
   <p>Space between the mark and text block: horizontal in horizontal layout, vertical when stacked. Accepts CSS lengths such as 0.25rem, 6px or 0px. Has no visible effect in mark-only or wordmark-only layout.</p>
   <p>Set it on an instance or in the shared logo configuration. Try the Mark-to-title spacing control in the playground above.</p>
 </ApiProperty>
 
 ### Navigation and naming
 
-<ApiProperty anchor="logo-href" name="href" valueType="RefOrValue&lt;string | null&gt;" defaultValue="/">
+<ApiProperty anchor="site-logo-prop-href" name="href" valueType="RefOrValue&lt;string | null&gt;" defaultValue="/">
   <p>Anchor destination. Null or an empty string removes the href and makes the logo noninteractive. Relative public paths honor the SSG base path.</p>
 </ApiProperty>
 
-<ApiProperty anchor="logo-ariaLabel" name="ariaLabel" valueType="RefOrValue&lt;string&gt;" defaultValue="brand name">
+<ApiProperty anchor="site-logo-prop-ariaLabel" name="ariaLabel" valueType="RefOrValue&lt;string&gt;" defaultValue="brand name">
   <p>Accessible name for the whole logo. Use a meaningful brand or destination label; the visual children do not create duplicate announcements.</p>
 </ApiProperty>
 

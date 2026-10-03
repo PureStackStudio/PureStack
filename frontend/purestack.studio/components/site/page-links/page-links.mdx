@@ -13,13 +13,7 @@ nav:
 
 # Page<wbr/>Links
 
-Previous and next navigation for a reading sequence, with explicit destinations or SSG-derived neighbors.
-
-<Badge tone="accent" variant="surface">PageLinks</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/pageLinks/pageLinks.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="PageLinks" kind="Reading sequence" summary="Previous and next navigation for a reading sequence, with explicit destinations or SSG-derived neighbors." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/pageLinks/pageLinks.ts" section="Site navigation &amp; services" sectionHref="/components/site/"/>
 
 ## A guided reading sequence
 
@@ -27,17 +21,14 @@ Each link has a directional relationship and an accessible label.
 
 <Tabs group="page-links-sample-1" selectedTab="page-links-sample-1-preview" ariaLabel="A guided reading sequence example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="page-links-sample-1-preview" label="Preview">
-    <PageLinks
-      :previous="{title:'Grid',url:'/components/layout/grid/'}"
-      :next="{title:'Panel',url:'/components/layout/panel/'}"
-    />
+<ComponentExample label="PageLinks in context" caption="Both directions, one direction, and missing destinations. Open the source tab to adapt the composition.">
+    <PageLinks :context="{previous:{title:'Grid',url:'/components/layout/grid/'},next:{title:'Panel',url:'/components/layout/panel/'}}"/>
+
+</ComponentExample>
   </TabPane>
   <TabPane id="page-links-sample-1-source-0" label="reading-sequence.mdx">
 ```html
-<PageLinks
-  :previous="{title:'Grid',url:'/components/layout/grid/'}"
-  :next="{title:'Panel',url:'/components/layout/panel/'}"
-/>
+<PageLinks :context="{previous:{title:'Grid',url:'/components/layout/grid/'},next:{title:'Panel',url:'/components/layout/panel/'}}"/>
 ```
   </TabPane>
 </Tabs>
@@ -48,14 +39,37 @@ An incomplete link object is ignored. Supplying an empty object suppresses the i
 
 <Tabs group="page-links-sample-2" selectedTab="page-links-sample-2-preview" ariaLabel="One available direction example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="page-links-sample-2-preview" label="Preview">
-    <PageLinks :previous="{}" :next="{title:'Explore the library',url:'/components/'}" />
+<div class="component-preview-stage">
+    <PageLinks :context="{previous:{},next:{title:'Explore the library',url:'/components/'}}"/>
+
+</div>
   </TabPane>
   <TabPane id="page-links-sample-2-source-0" label="one-direction.mdx">
 ```html
-<PageLinks :previous="{}" :next="{title:'Explore the library',url:'/components/'}" />
+<PageLinks :context="{previous:{},next:{title:'Explore the library',url:'/components/'}}"/>
 ```
   </TabPane>
 </Tabs>
+
+## Every available direction
+
+<ComponentExample label="Both, previous, next, or neither" caption="Explicit links must have both a title and URL. Missing links leave their grid cell empty; neither direction renders no navigation.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Both directions</code><PageLinks :context="{previous:{title:'NavList',url:'/components/site/nav-list/'},next:{title:'PageToc',url:'/components/site/page-toc/'}}"/></div>
+<div class="component-appearance-cell"><code>Previous only</code><PageLinks :context="{previous:{title:'NavList',url:'/components/site/nav-list/'},next:{}}"/></div>
+<div class="component-appearance-cell"><code>Next only</code><PageLinks :context="{previous:{},next:{title:'PageToc',url:'/components/site/page-toc/'}}"/></div>
+<div class="component-appearance-cell"><code>Neither direction</code><PageLinks :context="{previous:{},next:{}}"/><p class="m-0">No navigation is rendered when both destinations are incomplete.</p></div>
+</div>
+</ComponentExample>
+
+## Feature map
+
+| Feature | Where to explore it |
+| --- | --- |
+| Both directions, one direction, and missing destinations | Context preview, feature comparisons, and original copyable source examples. |
+| Native semantics and integration | Behavior notes and API contracts below explain the component’s roots, slots, and runtime dependencies. |
+
+This component has no semantic-tone, component-variant, or variant-mode props. Its own content and styling API is shown above.
 
 ## Behavior and accessibility
 
@@ -86,8 +100,6 @@ Only links with both title and url render. Omitted props fall back to the page n
 <div class="api-contract">
 <p>No slots. Register definePageLinksComponents with Grid, Flex, BtnLink and Icon. SSG context is required, even when links are explicit.</p>
 </div>
-
-
 
 ## Related components
 

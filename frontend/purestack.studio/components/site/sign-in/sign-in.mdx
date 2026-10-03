@@ -13,13 +13,7 @@ nav:
 
 # Sign<wbr/>In
 
-An account-menu entry point with signed-in and signed-out presentation, optional avatars and replaceable destinations.
-
-<Badge tone="accent" variant="surface">SignIn</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/signIn/signIn.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="SignIn" kind="Account entry" summary="An account-menu entry point with signed-in and signed-out presentation, optional avatars and replaceable destinations." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/signIn/signIn.ts" section="Site navigation &amp; services" sectionHref="/components/site/"/>
 
 ## An account menu with custom destinations
 
@@ -27,7 +21,10 @@ The isolated preview enables the account component locally and uses working docu
 
 <Tabs group="sign-in-sample-1" selectedTab="sign-in-sample-1-preview" ariaLabel="An account menu with custom destinations example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="sign-in-sample-1-preview" label="Preview">
+<ComponentExample label="SignIn in context" caption="Signed-out and signed-in states, avatars, sign-up, and custom destinations. Open the source tab to adapt the composition.">
     <SignInPreview />
+
+</ComponentExample>
   </TabPane>
   <TabPane id="sign-in-sample-1-source-0" label="preview.mdx">
 ```html
@@ -147,6 +144,50 @@ export async function writeSignInPreview(site: SiteConfig) {
   </TabPane>
 </Tabs>
 
+## All ten semantic tones
+
+All supported values are visible together on the actual component, in an isolated document.
+
+<ComponentExample label="All ten semantic tones" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
+<div data-site-gallery="tone"><SiteAppearanceGallery component="SignIn" axis="tone"/></div>
+</ComponentExample>
+
+## All eighteen visual variants
+
+All supported values are visible together on the actual component, in an isolated document.
+
+<ComponentExample label="All eighteen visual variants" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
+<div data-site-gallery="variant"><SiteAppearanceGallery component="SignIn" axis="variant"/></div>
+</ComponentExample>
+
+## Both variant modes
+
+Compare stateless and stateful outlineFill treatments. Hover the samples; a stateful surface does not create new application behavior.
+
+<ComponentExample label="Both variant modes" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
+<div data-site-gallery="mode"><SiteAppearanceGallery component="SignIn" axis="mode"/></div>
+</ComponentExample>
+
+## Feature comparisons
+
+<ComponentExample label="Every configuration in view" caption="Each labelled sample exposes a different public feature or site configuration. Account states are presentation examples.">
+<div data-site-gallery="features"><SiteAppearanceGallery component="SignIn" axis="features"/></div>
+</ComponentExample>
+
+## Account state and content slots
+
+The comparisons show signed-out menus with and without sign-up, signed-in menus with a default icon or image avatar, custom icons and an avatar slot, and auth disabled. These are explicit document states for presentation; they do not create a session. The original working preview has real documentation links in its default slot.
+
+The label prop supplies hidden trigger text; the trigger currently retains the fixed accessible label Account menu. avatarAlt applies to the image. The avatar slot takes precedence over the avatar image and accountIcon.
+
+## Feature map
+
+| Feature | Where to explore it |
+| --- | --- |
+| Signed-out and signed-in states, avatars, sign-up, and custom destinations | Context preview, feature comparisons, and original copyable source examples. |
+| Public appearance options | Complete galleries above. Only options supported by this component are shown. |
+| Native semantics and integration | Behavior notes and API contracts below explain the component’s roots, slots, and runtime dependencies. |
+
 ## Behavior and accessibility
 
 The component renders only when site.auth.enabled is true. It does not authenticate users itself. The standard auth-state hint controls signed-in versus signed-out presentation; the server remains responsible for session authorization. The native summary opens with Enter or Space, and the menu runtime handles Escape and outside clicks.
@@ -206,8 +247,6 @@ The component renders only when site.auth.enabled is true. It does not authentic
 <div class="api-contract">
 <p><strong>avatar:</strong> custom signed-in trigger content. <strong>default slot:</strong> replaces the generated account links. Default routes are /signin/, /signup/, /account/, /account/settings/ and /signout/. Register defineSignInComponents with Panel, Flex, BtnLink and Icon.</p>
 </div>
-
-
 
 ## Related components
 

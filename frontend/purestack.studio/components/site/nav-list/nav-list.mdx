@@ -13,13 +13,7 @@ nav:
 
 # Nav<wbr/>List
 
-Render an already prepared navigation tree without the surrounding site panel controls.
-
-<Badge tone="accent" variant="surface">NavList</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/navMenu/navMenu.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="NavList" kind="Navigation tree" summary="Render an already prepared navigation tree without the surrounding site panel controls." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/navMenu/navMenu.ts" section="Site navigation &amp; services" sectionHref="/components/site/"/>
 
 ## A small prepared tree
 
@@ -27,11 +21,14 @@ NavList expects stateful rows. Supply active/open state explicitly when using it
 
 <Tabs group="nav-list-sample-1" selectedTab="nav-list-sample-1-preview" ariaLabel="A small prepared tree example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="nav-list-sample-1-preview" label="Preview">
+<ComponentExample label="NavList in context" caption="Prepared rows, nested groups, explicit link tones, and current-page semantics. Open the source tab to adapt the composition.">
     <nav aria-label="Example component links">
       <NavList
         :items="[{title:'Layout',isActive:false,isOpen:true,stateKey:'example-layout',children:[{title:'Flex',url:'/components/layout/flex/',isActive:false,isOpen:false,stateKey:'example-flex'},{title:'Grid',url:'/components/layout/grid/',isActive:false,isOpen:false,stateKey:'example-grid'}]},{title:'NavList',url:'/components/site/nav-list/',isActive:true,isOpen:false,stateKey:'example-nav-list',ariaCurrent:'page',tone:'accent'}]"
       />
     </nav>
+
+</ComponentExample>
   </TabPane>
   <TabPane id="nav-list-sample-1-source-0" label="prepared-navigation.mdx">
 ```html
@@ -43,6 +40,35 @@ NavList expects stateful rows. Supply active/open state explicitly when using it
 ```
   </TabPane>
 </Tabs>
+
+## All ten semantic tones
+
+Each row has an explicit tone. The NavList tone prop does not recolor rows by itself.
+
+<ComponentExample label="All ten semantic tones" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
+<div data-site-gallery="tone"><SiteAppearanceGallery component="NavList" axis="tone"/></div>
+</ComponentExample>
+
+## Prepared row states
+
+<ComponentExample label="Active, open, closed, and empty" caption="NavList renders supplied state. The navigation runtime handles group toggles; NavMenu computes active paths and classes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Active leaf</code><nav aria-label="Active example"><NavList :items="[{title:'NavList',url:'/components/site/nav-list/',isActive:true,isOpen:false,stateKey:'site-active-example',ariaCurrent:'page',tone:'accent',linkClass:['tone-fill-surface-all','tone-text-surface-all']}]"/></nav></div>
+<div class="component-appearance-cell"><code>Open group</code><nav aria-label="Open group example"><NavList :items="[{title:'Site components',isActive:false,isOpen:true,stateKey:'site-open-example',children:[{title:'SiteLogo',url:'/components/site/site-logo/',icon:'lucide:check',tone:'feature',isActive:false,isOpen:false,stateKey:'site-open-child'}]}]"/></nav></div>
+<div class="component-appearance-cell"><code>Closed group</code><nav aria-label="Closed group example"><NavList :items="[{title:'Layout components',isActive:false,isOpen:false,stateKey:'site-closed-example',children:[{title:'Grid',url:'/components/layout/grid/',isActive:false,isOpen:false,stateKey:'site-closed-child'}]}]"/></nav></div>
+<div class="component-appearance-cell"><code>Empty tree</code><nav aria-label="Empty navigation example"><NavList :items="[]"/><p class="m-0">Compose empty feedback beside the list.</p></nav></div>
+</div>
+</ComponentExample>
+
+## Feature map
+
+| Feature | Where to explore it |
+| --- | --- |
+| Prepared rows, nested groups, explicit link tones, and current-page semantics | Context preview, feature comparisons, and original copyable source examples. |
+| Public appearance options | Complete galleries above. Only options supported by this component are shown. |
+| Native semantics and integration | Behavior notes and API contracts below explain the component’s roots, slots, and runtime dependencies. |
+
+NavList exposes no variant or variantMode. Supply row tones, linkClass, ariaCurrent, isOpen, and stable stateKey values in the prepared items.
 
 ## Behavior and accessibility
 
@@ -73,8 +99,6 @@ NavList renders a ul. Wrap it in a labelled nav when it is a standalone navigati
 <div class="api-contract">
 <p>No slots. Register defineNavigationComponents with BtnLink and Icon. The internal NavItem component is composed by NavList and is not a standalone public row API.</p>
 </div>
-
-
 
 ## Related components
 

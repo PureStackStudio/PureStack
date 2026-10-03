@@ -13,23 +13,46 @@ nav:
 
 # Site navigation and services
 
-Connect pages with navigation, search and branding, then add theme, account and consent controls.
+<p class="component-directory-lead">A recognizable home. A clear path. Useful controls.</p>
+
+Twelve guides connect branding, navigation, search, theme, accounts, and privacy preferences. Explore working examples alongside complete appearance galleries and visible configuration comparisons.
+
+## Choose a part of the site
+
+<div class="component-guide-grid">
+<article class="component-guide-card"><div class="component-guide-card__preview"><ClassicLogo brand="STUDIO" subtitle="BUILD TOGETHER" brandSize="1rem" subtitleSize=".4rem" iconSize="2rem" :href="null"/></div><h3>Classic<wbr/>Logo</h3><Badge tone="neutral">Original identity</Badge><p>Color maps, responsive dimensions, and navigation.</p><a href="/components/site/classic-logo/">Explore ClassicLogo ↗</a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><SiteLogo brand="Studio" subtitle="Build together" :href="null" appearance="badge" markStyle="soft"/></div><h3>Site<wbr/>Logo</h3><Badge tone="neutral">Flexible identity</Badge><p>Layouts, marks, wordmarks, sizing, and configuration.</p><a href="/components/site/site-logo/">Explore SiteLogo ↗</a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><SectionHeader title="Keep exploring" subtitle="Content · Legal · Social · Privacy settings" titleTag="h3"/></div><h3>Site<wbr/>Footer</h3><Badge tone="neutral">Closing chapter</Badge><p>Content, legal, and social slots with an explicit teleport target.</p><a href="/components/site/site-footer/">Explore SiteFooter ↗</a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><Flex align="center" justify="between" class="w-full"><SiteLogo brand="Studio" :href="null" size="sm"/><ThemeToggle/></Flex></div><h3>Top<wbr/>Bar</h3><Badge tone="neutral">Site header</Badge><p>Brand selection, search, navigation toggle, theme, and account access.</p><a href="/components/site/top-bar/">Explore TopBar ↗</a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><nav aria-label="Directory navigation preview"><NavList :items="[{title:'Site guides',url:'/components/site/',isActive:true,isOpen:false,stateKey:'directory-nav',ariaCurrent:'page',tone:'accent'},{title:'Layouts',url:'/components/layout/',isActive:false,isOpen:false,stateKey:'directory-layout'}]"/></nav></div><h3>Nav<wbr/>Menu</h3><Badge tone="neutral">Prepared navigation</Badge><p>Active paths, open ancestors, hierarchy, and site controls.</p><a href="/components/site/nav-menu/">Explore NavMenu ↗</a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><Flex direction="column" align="start"><Badge tone="accent">Prepared tree</Badge><span>Open groups · Active links · Stable keys</span></Flex></div><h3>Nav<wbr/>List</h3><Badge tone="neutral">Navigation tree</Badge><p>Prepared rows, nested groups, explicit link tones, and current-page semantics.</p><a href="/components/site/nav-list/">Explore NavList ↗</a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><PageLinks :context="{previous:{title:'NavList',url:'/components/site/nav-list/'},next:{title:'PageToc',url:'/components/site/page-toc/'}}"/></div><h3>Page<wbr/>Links</h3><Badge tone="neutral">Reading sequence</Badge><p>Both directions, one direction, and missing destinations.</p><a href="/components/site/page-links/">Explore PageLinks ↗</a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><Flex direction="column" align="start"><strong>On this page</strong><a href="/components/site/page-toc/">Introduction</a><small>↳ Supporting detail</small></Flex></div><h3>Page<wbr/>Toc</h3><Badge tone="neutral">Document outline</Badge><p>Nested and flat headings, empty state, and layout controls.</p><a href="/components/site/page-toc/">Explore PageToc ↗</a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><SearchBox tone="accent" variant="surfaceAlt"/></div><h3>Search<wbr/>Box</h3><Badge tone="neutral">Content discovery</Badge><p>A native search field, real results, and Pagefind configuration.</p><a href="/components/site/search-box/">Explore SearchBox ↗</a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><Flex align="center"><ThemeToggle/><span>Light ↔ Dark</span></Flex></div><h3>Theme<wbr/>Toggle</h3><Badge tone="neutral">Theme preference</Badge><p>Both theme glyphs, keyboard activation, and synchronized state.</p><a href="/components/site/theme-toggle/">Explore ThemeToggle ↗</a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><Flex align="center"><Icon name="lucide:check"/><span>Account states · Avatars · Destinations</span></Flex></div><h3>Sign<wbr/>In</h3><Badge tone="neutral">Account entry</Badge><p>Signed-out and signed-in states, avatars, sign-up, and custom destinations.</p><a href="/components/site/sign-in/">Explore SignIn ↗</a></article>
+<article class="component-guide-card"><div class="component-guide-card__preview"><Flex direction="column" align="start"><Badge tone="info">Privacy choices</Badge><span>Required categories + optional preferences</span></Flex></div><h3>Consent</h3><Badge tone="neutral">Privacy preferences</Badge><p>Banner choices, required and optional categories, saved settings, and services.</p><a href="/components/site/consent/">Explore Consent ↗</a></article>
+</div>
+
+## Compose a coherent site
+
+<ComponentExample label="Identity → navigation → page content → services" caption="The real page header and side panels demonstrate the complete doc shell. This contained composition shows its reusable parts.">
+<div class="component-recipe"><Flex align="center" justify="between" wrap="true"><SiteLogo brand="Studio" subtitle="One shared language" href="/components/"/><ThemeToggle/></Flex><Grid columns="1" columnsLg="2"><Panel bodyClass="p-3"><SectionHeader title="Find your next pattern" subtitle="Explore by the work you need to do." titleTag="h3"/><SearchBox tone="neutral" variant="surfaceAlt"/></Panel><Panel bodyClass="p-3"><SectionHeader title="Keep reading" subtitle="A deliberate sequence of guides." titleTag="h3"/><PageLinks :context="{previous:{title:'Navigation tree',url:'/components/site/nav-list/'},next:{title:'Document outline',url:'/components/site/page-toc/'}}"/></Panel></Grid><div id="site-directory-footer"></div><SiteFooter teleport="#site-directory-footer" copyright="© Studio example"><p>A footer continues the story and keeps settings within reach.</p><template #legal><a href="/components/site/consent/">Privacy controls guide</a></template><template #social><a href="https://github.com/PureStackStudio/PureStack" target="_blank" rel="noopener noreferrer">GitHub ↗</a></template></SiteFooter></div>
+</ComponentExample>
+
+## What comes from where
+
+| Need | Components | Integration |
+| --- | --- | --- |
+| Brand identity | SiteLogo, ClassicLogo | Shared logo config, direct props, and responsive sizing |
+| Site header | TopBar | Site logo, Pagefind configuration, theme runtime, and optional account access |
+| Page hierarchy | NavMenu, NavList | Raw navigation + current URL, or explicitly prepared row state |
+| Reading direction | PageLinks, PageToc | SSG neighbors and outline, or explicit destinations and headings |
+| Content discovery | SearchBox | Generated Pagefind index and search runtime |
+| Appearance preference | ThemeToggle | Theme stylesheets and the theme runtime |
+| Account entry | SignIn | Site auth configuration, document account state, and menu runtime |
+| Privacy preferences | Consent, SiteFooter | Categories, policy version, services, isolated storage, and the settings target |
+
+Service components depend on the site’s configuration and runtimes. The guides distinguish accepted props from values derived from configuration, and keep isolated examples separate from the real page controls.
 
 [All components](/components/)
-
-## Component guides
-
-<Grid columns="1" columnsSm="2" columnsXl="3">
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Classic<wbr/>Logo</h3><p>The original bordered identity with uppercase lettering, indexed colors and responsive dimensions.</p><BtnLink href="/components/site/classic-logo/" tone="accent" variant="link">Explore Classic<wbr/>Logo</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Site<wbr/>Logo</h3><p>A reusable brand identity with flexible layouts, icon and image marks, and theme-aware treatments.</p><BtnLink href="/components/site/site-logo/" tone="accent" variant="link">Explore Site<wbr/>Logo</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Site<wbr/>Footer</h3><p>A site-wide footer with content, legal and social slots, plus a built-in home for consent settings.</p><BtnLink href="/components/site/site-footer/" tone="accent" variant="link">Explore Site<wbr/>Footer</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Top<wbr/>Bar</h3><p>The standard site header combines branding, search, theme switching and optional account access.</p><BtnLink href="/components/site/top-bar/" tone="accent" variant="link">Explore Top<wbr/>Bar</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Nav<wbr/>Menu</h3><p>A hierarchical site navigation panel with active-page state, collapsible groups and optional search and account controls.</p><BtnLink href="/components/site/nav-menu/" tone="accent" variant="link">Explore Nav<wbr/>Menu</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Nav<wbr/>List</h3><p>Render an already prepared navigation tree without the surrounding site panel controls.</p><BtnLink href="/components/site/nav-list/" tone="accent" variant="link">Explore Nav<wbr/>List</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Page<wbr/>Links</h3><p>Previous and next navigation for a reading sequence, with explicit destinations or SSG-derived neighbors.</p><BtnLink href="/components/site/page-links/" tone="accent" variant="link">Explore Page<wbr/>Links</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Page<wbr/>Toc</h3><p>A linked document outline with nested section entries and standard doc-layout controls.</p><BtnLink href="/components/site/page-toc/" tone="accent" variant="link">Explore Page<wbr/>Toc</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Search<wbr/>Box</h3><p>Search the built site with a native input and Pagefind-powered results.</p><BtnLink href="/components/site/search-box/" tone="accent" variant="link">Explore Search<wbr/>Box</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Theme<wbr/>Toggle</h3><p>One icon button that flips the site between its light and dark themes.</p><BtnLink href="/components/site/theme-toggle/" tone="accent" variant="link">Explore Theme<wbr/>Toggle</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Sign<wbr/>In</h3><p>An account-menu entry point with signed-in and signed-out presentation, optional avatars and replaceable destinations.</p><BtnLink href="/components/site/sign-in/" tone="accent" variant="link">Explore Sign<wbr/>In</BtnLink></Panel>
-  <Panel tone="neutral" bodyClass="p-3"><h3 class="mt-0">Consent</h3><p>A consent banner and preference panel driven by the site’s categories, policy version and service configuration.</p><BtnLink href="/components/site/consent/" tone="accent" variant="link">Explore Consent</BtnLink></Panel>
-</Grid>

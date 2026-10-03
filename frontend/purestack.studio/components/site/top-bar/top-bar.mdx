@@ -13,13 +13,7 @@ nav:
 
 # Top<wbr/>Bar
 
-The standard site header combines branding, search, theme switching and optional account access.
-
-<Badge tone="accent" variant="surface">TopBar</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/topBar/topBar.ts) · [API reference](#api-reference)
-
-The header above this guide is TopBar. The contained preview below has its own document so its navigation toggle ID does not collide with the real page header.
+<ComponentHeader name="TopBar" kind="Site header" summary="The standard site header combines branding, search, theme switching and optional account access." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/topBar/topBar.ts" section="Site navigation &amp; services" sectionHref="/components/site/"/>
 
 ## A complete header
 
@@ -34,7 +28,10 @@ This preview reads the same logo configuration as the site. Search is disabled i
   tabVariant="underline"
 >
   <TabPane id="top-bar-sample-1-preview" label="Preview">
+<ComponentExample label="TopBar in context" caption="Brand selection, search, navigation toggle, theme, and account access. Open the source tab to adapt the composition.">
     <TopBarPreview/>
+
+</ComponentExample>
   </TabPane>
   <TabPane id="top-bar-sample-1-source-0" label="preview.mdx">
 ```html
@@ -164,6 +161,44 @@ For the standard documentation header, select it in `siteConfig.json`:
 The direct prop overrides `site.logo.component`; when both are omitted, TopBar renders SiteLogo. Bind a ref with `:logoComponent="selectedLogo"` to switch reactively. Custom registered components work too: accept a `config` prop and read the identity fields you need. Register the chosen component alongside TopBar when creating a standalone app.
 
 [ClassicLogo's guide](/components/site/classic-logo/) includes the exact original Studio color configuration and all its responsive sizing options. [SiteLogo](/components/site/site-logo/) provides the newer layouts and treatments.
+
+## All ten semantic tones
+
+All supported values are visible together on the actual component, in an isolated document.
+
+<ComponentExample label="All ten semantic tones" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
+<div data-site-gallery="tone"><SiteAppearanceGallery component="TopBar" axis="tone"/></div>
+</ComponentExample>
+
+## All eighteen visual variants
+
+All supported values are visible together on the actual component, in an isolated document.
+
+<ComponentExample label="All eighteen visual variants" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
+<div data-site-gallery="variant"><SiteAppearanceGallery component="TopBar" axis="variant"/></div>
+</ComponentExample>
+
+## Feature comparisons
+
+<ComponentExample label="Every configuration in view" caption="Each labelled sample exposes a different public feature or site configuration. Account states are presentation examples.">
+<div data-site-gallery="features"><SiteAppearanceGallery component="TopBar" axis="features"/></div>
+</ComponentExample>
+
+## Configuration controls the header
+
+The comparisons above show both logo components, site-configured search, and explicit account access with an avatar. SearchBox is included when site.pagefind.enabled is true; searchEnabled is accepted but is overwritten by that site setting. signInEnabled explicitly requests the account control, and site.auth.enabled must also be true.
+
+The navigation toggle targets the doc layout’s fixed ID. Each header sample uses its own document. The working preview’s theme button switches that preview; appearance samples follow the guide’s theme.
+
+## Feature map
+
+| Feature | Where to explore it |
+| --- | --- |
+| Brand selection, search, navigation toggle, theme, and account access | Context preview, feature comparisons, and original copyable source examples. |
+| Public appearance options | Complete galleries above. Only options supported by this component are shown. |
+| Native semantics and integration | Behavior notes and API contracts below explain the component’s roots, slots, and runtime dependencies. |
+
+This component exposes tone and variant, but no variantMode.
 
 ## Behavior and accessibility
 
@@ -297,8 +332,6 @@ TopBar renders a fixed doc-nav-toggle ID and should appear once per document. It
     registration provides these dependencies.
   </p>
 </div>
-
-
 
 ## Related components
 

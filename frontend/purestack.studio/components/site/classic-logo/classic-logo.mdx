@@ -13,11 +13,7 @@ nav:
 
 # ClassicLogo
 
-The original PureStack logo, with its compact bordered container, filled icon tile, uppercase brand and evenly distributed subtitle. Every original color and responsive sizing option is available in this separate component.
-
-<Badge tone="accent" variant="surface">ClassicLogo</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/classicLogo/classicLogo.ts) · [API reference](#api-reference)
+<ComponentHeader name="ClassicLogo" kind="Original identity" summary="The original PureStack logo: uppercase lettering, indexed colors, a bordered icon tile and responsive typography." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/classicLogo/classicLogo.ts" section="Site navigation &amp; services" sectionHref="/components/site/"/>
 
 ## Interactive playground
 
@@ -25,7 +21,10 @@ This starts with the original Studio identity and its original colors. Edit eith
 
 <Tabs group="classic-logo-sample" selectedTab="classic-logo-preview-tab" ariaLabel="Classic logo example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="classic-logo-preview-tab" label="Preview">
+<ComponentExample label="ClassicLogo in context" caption="Color maps, responsive dimensions, and navigation. Open the source tab to adapt the composition.">
     <RegorApp id="classic-logo-playground" src="./playground.ts"/>
+
+</ComponentExample>
   </TabPane>
   <TabPane id="classic-logo-mdx-tab" label="playground.mdx">
 ```html
@@ -259,6 +258,25 @@ ClassicLogo preserves the original responsive sizes. Each dimension has a base p
 ```
 
 The original layout keeps both text lines on one line, distributes their letters across a shared width and uses a fixed `0.25rem` mark-to-text gap. Long brand names need smaller dimensions in narrow navigation. SiteLogo offers wrapping, layout presets and a configurable `gap` when those are needed.
+
+## A recognizable identity in different contexts
+
+<ComponentExample label="Classic branding at three scales" caption="ClassicLogo has its own indexed palette and dimensions. It does not expose semantic tones, component variants, or variant modes.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Small signature</code><ClassicLogo brand="STUDIO" subtitle="BUILD TOGETHER" brandSize="1rem" subtitleSize=".45rem" iconSize="2rem" subtitleInset=".1rem" :href="null"/></div>
+<div class="component-appearance-cell"><code>Custom icon</code><ClassicLogo brand="STUDIO" subtitle="ONE SHARED LANGUAGE" icon="lucide:check" brandSize="1.2rem" subtitleSize=".4rem" iconSize="2.5rem" :href="null"/></div>
+<div class="component-appearance-cell"><code>Home destination</code><ClassicLogo brand="STUDIO" subtitle="EXPLORE THE LIBRARY" href="/components/" ariaLabel="Studio component library" brandSize="1rem" subtitleSize=".4rem" iconSize="2rem"/></div>
+</div>
+</ComponentExample>
+
+## Feature map
+
+| Feature | Where to explore it |
+| --- | --- |
+| Color maps, responsive dimensions, and navigation | Context preview, feature comparisons, and original copyable source examples. |
+| Native semantics and integration | Behavior notes and API contracts below explain the component’s roots, slots, and runtime dependencies. |
+
+This component has no semantic-tone, component-variant, or variant-mode props. Its own content and styling API is shown above.
 
 ## API reference
 

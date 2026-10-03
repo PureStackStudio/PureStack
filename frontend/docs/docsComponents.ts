@@ -10,6 +10,7 @@ import { defineChartAppearanceGallery } from './dataGuide'
 import { defineFormAppearanceGallery } from './formAppearance'
 import { defineLandingAppearanceGallery } from './landingGuide'
 import { defineModalExampleComponents } from './modal'
+import { defineSiteAppearanceGallery } from './siteGuide'
 
 export function defineDocumentationComponents(site: SiteConfig) {
   return {
@@ -17,6 +18,7 @@ export function defineDocumentationComponents(site: SiteConfig) {
     FormAppearanceGallery: defineFormAppearanceGallery(),
     ChartAppearanceGallery: defineChartAppearanceGallery(),
     LandingAppearanceGallery: defineLandingAppearanceGallery(),
+    SiteAppearanceGallery: defineSiteAppearanceGallery(site),
     ApiProperty: defineApiPropertyComponent(),
     ConsentPreview: defineConsentPreviewComponent(site),
     NavMenuPreview: defineNavMenuPreviewComponent(site),

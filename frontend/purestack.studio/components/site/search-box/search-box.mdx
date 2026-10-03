@@ -13,13 +13,7 @@ nav:
 
 # Search<wbr/>Box
 
-Search the built site with a native input and Pagefind-powered results.
-
-<Badge tone="accent" variant="surface">SearchBox</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/searchBox/searchBox.ts) · [API reference](#api-reference)
-
-Search requires a generated Pagefind index and the standard search runtime. This site enables indexing so the preview searches real documentation.
+<ComponentHeader name="SearchBox" kind="Content discovery" summary="Search the built site with a native input and Pagefind-powered results." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/searchBox/searchBox.ts" section="Site navigation &amp; services" sectionHref="/components/site/"/>
 
 ## Search the component guides
 
@@ -27,7 +21,10 @@ Try “virtual”, “checkbox” or “variant”, then follow a matching resul
 
 <Tabs group="search-box-sample-1" selectedTab="search-box-sample-1-preview" ariaLabel="Search the component guides example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="search-box-sample-1-preview" label="Preview">
+<ComponentExample label="SearchBox in context" caption="A native search field, real results, and Pagefind configuration. Open the source tab to adapt the composition.">
     <SearchBox tone="neutral" variant="surfaceAlt" />
+
+</ComponentExample>
   </TabPane>
   <TabPane id="search-box-sample-1-source-0" label="documentation-search.mdx">
 ```html
@@ -35,6 +32,47 @@ Try “virtual”, “checkbox” or “variant”, then follow a matching resul
 ```
   </TabPane>
 </Tabs>
+
+## All ten semantic tones
+
+All supported values are visible together on the actual component, in an isolated document.
+
+<ComponentExample label="All ten semantic tones" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
+<div data-site-gallery="tone"><SiteAppearanceGallery component="SearchBox" axis="tone"/></div>
+</ComponentExample>
+
+## All eighteen visual variants
+
+All supported values are visible together on the actual component, in an isolated document.
+
+<ComponentExample label="All eighteen visual variants" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
+<div data-site-gallery="variant"><SiteAppearanceGallery component="SearchBox" axis="variant"/></div>
+</ComponentExample>
+
+## Search states and configuration
+
+The live field above searches the real documentation index. Try a matching term, a term with no matches, then clear it; the results region is separate from the native field. Appearance samples are isolated fields without their own search index.
+
+<ComponentExample label="What each search state means" caption="Use the working field to see actual result links; these labelled cards explain the states without hiding them in a selector.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Empty query</code><p class="m-0">The search field is visible; the results region stays hidden until a query is entered.</p></div>
+<div class="component-appearance-cell"><code>Matching query</code><p class="m-0">Try <strong>virtual</strong> or <strong>checkbox</strong>. Follow a result to the corresponding documentation page.</p></div>
+<div class="component-appearance-cell"><code>No matching pages</code><p class="m-0">Try <strong>no-match-example-12345</strong>. The runtime renders its no-results feedback.</p></div>
+<div class="component-appearance-cell"><code>No index</code><p class="m-0">A field alone does not create an index. Enable site.pagefind and include the generated Pagefind assets and search runtime.</p></div>
+</div>
+</ComponentExample>
+
+The current implementation derives its placeholder from site.siteTitle, even when a placeholder prop is supplied. Use the site title to configure the visible default; the API below describes the accepted prop separately.
+
+## Feature map
+
+| Feature | Where to explore it |
+| --- | --- |
+| A native search field, real results, and Pagefind configuration | Context preview, feature comparisons, and original copyable source examples. |
+| Public appearance options | Complete galleries above. Only options supported by this component are shown. |
+| Native semantics and integration | Behavior notes and API contracts below explain the component’s roots, slots, and runtime dependencies. |
+
+This component exposes tone and variant, but no variantMode.
 
 ## Behavior and accessibility
 

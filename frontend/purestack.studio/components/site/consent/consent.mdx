@@ -13,13 +13,7 @@ nav:
 
 # Consent
 
-A consent banner and preference panel driven by the site’s categories, policy version and service configuration.
-
-<Badge tone="accent" variant="surface">Consent</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/consent/consent.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="Consent" kind="Privacy preferences" summary="A consent banner and preference panel driven by the site’s categories, policy version and service configuration." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/consent/consent.ts" section="Site navigation &amp; services" sectionHref="/components/site/"/>
 
 ## Make and revise a choice
 
@@ -27,7 +21,10 @@ Accept, reject or choose optional categories, then reopen settings. Reset clears
 
 <Tabs group="consent-sample-1" selectedTab="consent-sample-1-preview" ariaLabel="Make and revise a choice example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="consent-sample-1-preview" label="Preview">
+<ComponentExample label="Consent in context" caption="Banner choices, required and optional categories, saved settings, and services. Open the source tab to adapt the composition.">
     <ConsentPreview />
+
+</ComponentExample>
   </TabPane>
   <TabPane id="consent-sample-1-source-0" label="preview.mdx">
 ```html
@@ -115,6 +112,8 @@ function createConsentPreviewDocument(site: SiteConfig): string {
     policyVersion: 'example-1',
     bannerTitle: 'Example privacy choices',
     bannerDescription: 'This isolated example has no tracking services.',
+    privacyPolicyUrl: '/components/site/consent/',
+    privacyPolicyLabel: 'Read the consent guide',
     categories: [
       {
         id: 'necessary',
@@ -123,8 +122,18 @@ function createConsentPreviewDocument(site: SiteConfig): string {
         description: 'Required for this example’s saved choice.',
       },
       {
+        id: 'preferences',
+        label: 'Preferences',
+        description: 'Illustrative optional interface preferences.',
+      },
+      {
         id: 'analytics',
         label: 'Analytics',
+        description: 'Illustrative optional category; no service is loaded.',
+      },
+      {
+        id: 'marketing',
+        label: 'Marketing',
         description: 'Illustrative optional category; no service is loaded.',
       },
     ],
@@ -167,6 +176,65 @@ export async function writeConsentPreview(site: SiteConfig) {
 ```
   </TabPane>
 </Tabs>
+
+## All ten semantic tones
+
+All supported values are visible together on the actual component, in an isolated document.
+
+<ComponentExample label="All ten semantic tones" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
+<div data-site-gallery="tone"><SiteAppearanceGallery component="Consent" axis="tone"/></div>
+</ComponentExample>
+
+## All eighteen visual variants
+
+All supported values are visible together on the actual component, in an isolated document.
+
+<ComponentExample label="All eighteen visual variants" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
+<div data-site-gallery="variant"><SiteAppearanceGallery component="Consent" axis="variant"/></div>
+</ComponentExample>
+
+## Both variant modes
+
+Compare stateless and stateful outlineFill treatments. Hover the samples; a stateful surface does not create new application behavior.
+
+<ComponentExample label="Both variant modes" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
+<div data-site-gallery="mode"><SiteAppearanceGallery component="Consent" axis="mode"/></div>
+</ComponentExample>
+
+## Every step of the preference flow
+
+Use the isolated working example to accept all, reject optional categories, manage individual categories, save, close, reopen, and reset. Its storage key is separate from this site’s own choice.
+
+<ComponentExample label="The complete choice lifecycle" caption="Required categories remain enabled. A saved choice is checked against policyVersion; changing that version asks for a fresh decision.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Banner</code><strong>Privacy choices</strong><p class="m-0">Accept all · Reject optional · Manage preferences · Read the privacy policy.</p></div>
+<div class="component-appearance-cell"><code>Preference panel</code><strong>Necessary + optional categories</strong><p class="m-0">Required categories are locked. Optional categories can be changed before saving.</p></div>
+<div class="component-appearance-cell"><code>Saved choice</code><strong>Settings remain available</strong><p class="m-0">Reopen from the settings control, revise preferences, and save again.</p></div>
+<div class="component-appearance-cell"><code>Policy or storage reset</code><strong>A fresh decision</strong><p class="m-0">A new policyVersion or clearing the example storage brings back the banner.</p></div>
+</div>
+</ComponentExample>
+
+## Configuration and service activation
+
+| Configuration | Visible role |
+| --- | --- |
+| enabled | Determines whether the component renders. |
+| storageKey, policyVersion | Keep the example separate and invalidate outdated choices. |
+| categories | Give each category an ID, label, description, and required flag. |
+| services | Associate a service with its consent category; optional services wait for permission. The example uses no tracking services. |
+| Banner, action, and settings labels | Customize the language of the banner, buttons, and preferences. |
+| privacyPolicyUrl, privacyPolicyLabel | Add the policy destination beside the banner copy. |
+| Footer settings target | The settings control teleports to .consent-settings-teleport-area. |
+
+Appearance galleries show the actual banner markup with every treatment. They are static comparisons; the isolated example above runs the full consent flow.
+
+## Feature map
+
+| Feature | Where to explore it |
+| --- | --- |
+| Banner choices, required and optional categories, saved settings, and services | Context preview, feature comparisons, and original copyable source examples. |
+| Public appearance options | Complete galleries above. Only options supported by this component are shown. |
+| Native semantics and integration | Behavior notes and API contracts below explain the component’s roots, slots, and runtime dependencies. |
 
 ## Behavior and accessibility
 

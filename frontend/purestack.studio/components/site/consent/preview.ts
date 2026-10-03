@@ -77,6 +77,8 @@ function createConsentPreviewDocument(site: SiteConfig): string {
     policyVersion: 'example-1',
     bannerTitle: 'Example privacy choices',
     bannerDescription: 'This isolated example has no tracking services.',
+    privacyPolicyUrl: '/components/site/consent/',
+    privacyPolicyLabel: 'Read the consent guide',
     categories: [
       {
         id: 'necessary',
@@ -85,8 +87,18 @@ function createConsentPreviewDocument(site: SiteConfig): string {
         description: 'Required for this example’s saved choice.',
       },
       {
+        id: 'preferences',
+        label: 'Preferences',
+        description: 'Illustrative optional interface preferences.',
+      },
+      {
         id: 'analytics',
         label: 'Analytics',
+        description: 'Illustrative optional category; no service is loaded.',
+      },
+      {
+        id: 'marketing',
+        label: 'Marketing',
         description: 'Illustrative optional category; no service is loaded.',
       },
     ],

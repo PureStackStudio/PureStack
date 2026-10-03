@@ -13,13 +13,7 @@ nav:
 
 # Theme<wbr/>Toggle
 
-One icon button that flips the site between its light and dark themes.
-
-<Badge tone="accent" variant="surface">ThemeToggle</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/themeToggle/themeToggle.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="ThemeToggle" kind="Theme preference" summary="One icon button that flips the site between its light and dark themes." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/themeToggle/themeToggle.ts" section="Site navigation &amp; services" sectionHref="/components/site/"/>
 
 ## Flip the theme
 
@@ -27,10 +21,13 @@ The sun shows in the light theme and the moon in the dark one. Press it and the 
 
 <Tabs group="theme-toggle-sample-1" selectedTab="theme-toggle-sample-1-preview" ariaLabel="Flip the theme example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="theme-toggle-sample-1-preview" label="Preview">
+<ComponentExample label="ThemeToggle in context" caption="Both theme glyphs, keyboard activation, and synchronized state. Open the source tab to adapt the composition.">
     <Flex align="center" wrap="true">
       <ThemeToggle />
       <span>Switch between the light and dark studio skins.</span>
     </Flex>
+
+</ComponentExample>
   </TabPane>
   <TabPane id="theme-toggle-sample-1-source-0" label="theme-control.mdx">
 ```html
@@ -48,6 +45,7 @@ The toggle sits beside a visible setting label as easily as it sits in a header.
 
 <Tabs group="theme-toggle-sample-2" selectedTab="theme-toggle-sample-2-preview" ariaLabel="In a settings row example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="theme-toggle-sample-2-preview" label="Preview">
+<div class="component-preview-stage">
     <Panel bodyClass="p-3">
       <Flex align="center" justify="between">
         <div>
@@ -57,6 +55,8 @@ The toggle sits beside a visible setting label as easily as it sits in a header.
         <ThemeToggle />
       </Flex>
     </Panel>
+
+</div>
   </TabPane>
   <TabPane id="theme-toggle-sample-2-source-0" label="appearance-setting.mdx">
 ```html
@@ -72,6 +72,26 @@ The toggle sits beside a visible setting label as easily as it sits in a header.
 ```
   </TabPane>
 </Tabs>
+
+## Both theme states
+
+<ComponentExample label="The two glyphs, together" caption="The working toggle above changes every bound toggle on the page. aria-pressed is false in light and true in dark.">
+<div class="component-appearance-grid">
+<div class="component-appearance-cell"><code>Light · aria-pressed=false</code><Flex align="center"><Icon name="lucide:sun"/><span>Sun glyph in the light theme</span></Flex></div>
+<div class="component-appearance-cell"><code>Dark · aria-pressed=true</code><Flex align="center"><Icon name="lucide:moon"/><span>Moon glyph in the dark theme</span></Flex></div>
+</div>
+</ComponentExample>
+
+ThemeToggle has no public appearance props or slots. Use the native button with Enter or Space; the theme runtime saves the choice and keeps all controls synchronized.
+
+## Feature map
+
+| Feature | Where to explore it |
+| --- | --- |
+| Both theme glyphs, keyboard activation, and synchronized state | Context preview, feature comparisons, and original copyable source examples. |
+| Native semantics and integration | Behavior notes and API contracts below explain the component’s roots, slots, and runtime dependencies. |
+
+This component has no semantic-tone, component-variant, or variant-mode props. Its own content and styling API is shown above.
 
 ## Behavior and accessibility
 
@@ -93,8 +113,6 @@ This component has no public props.
 <div class="api-contract">
 <p>No slots. Register defineThemeToggleComponents and the Icon family. SSG includes the theme runtime, which binds every element marked data-theme-toggle; outside SSG initialize buildThemeSwitchScript with the configured theme names and matching data-theme stylesheets.</p>
 </div>
-
-
 
 ## Related components
 

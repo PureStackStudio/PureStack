@@ -13,13 +13,7 @@ nav:
 
 # Page<wbr/>Toc
 
-A linked document outline with nested section entries and standard doc-layout controls.
-
-<Badge tone="accent" variant="surface">PageToc</Badge>
-
-[View source](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/pageToc/pageToc.ts) · [API reference](#api-reference)
-
-
+<ComponentHeader name="PageToc" kind="Document outline" summary="A linked document outline with nested section entries and standard doc-layout controls." source="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-components/src/standard/pageToc/pageToc.ts" section="Site navigation &amp; services" sectionHref="/components/site/"/>
 
 ## An outline with real targets
 
@@ -27,7 +21,10 @@ The example uses a small outline in an isolated document. Each link resolves to 
 
 <Tabs group="page-toc-sample-1" selectedTab="page-toc-sample-1-preview" ariaLabel="An outline with real targets example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="page-toc-sample-1-preview" label="Preview">
+<ComponentExample label="PageToc in context" caption="Nested and flat headings, empty state, and layout controls. Open the source tab to adapt the composition.">
     <PageTocPreview />
+
+</ComponentExample>
   </TabPane>
   <TabPane id="page-toc-sample-1-source-0" label="preview.mdx">
 ```html
@@ -162,6 +159,48 @@ The table of contents the doc layout renders takes its tone, variant and extra c
 
 The panel keeps its own rounded corners whatever the variant, and drops its border when it collapses to a rail.
 
+## All ten semantic tones
+
+All supported values are visible together on the actual component, in an isolated document.
+
+<ComponentExample label="All ten semantic tones" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
+<div data-site-gallery="tone"><SiteAppearanceGallery component="PageToc" axis="tone"/></div>
+</ComponentExample>
+
+## All eighteen visual variants
+
+All supported values are visible together on the actual component, in an isolated document.
+
+<ComponentExample label="All eighteen visual variants" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
+<div data-site-gallery="variant"><SiteAppearanceGallery component="PageToc" axis="variant"/></div>
+</ComponentExample>
+
+## Both variant modes
+
+Compare stateless and stateful outlineFill treatments. Hover the samples; a stateful surface does not create new application behavior.
+
+<ComponentExample label="Both variant modes" caption="Samples follow this guide’s theme. Service appearance comparisons do not register account, search, or consent services.">
+<div data-site-gallery="mode"><SiteAppearanceGallery component="PageToc" axis="mode"/></div>
+</ComponentExample>
+
+## Feature comparisons
+
+<ComponentExample label="Every configuration in view" caption="Each labelled sample exposes a different public feature or site configuration. Account states are presentation examples.">
+<div data-site-gallery="features"><SiteAppearanceGallery component="PageToc" axis="features"/></div>
+</ComponentExample>
+
+## Outline data and layout controls
+
+Nested, flat, and empty outlines appear together. Their links point to real targets inside the preview document. Use the isolated working example above for section navigation; the real table of contents at the side of this guide demonstrates collapse, restore, and mobile expansion. Appearance galleries omit layout docking controls so they remain contained.
+
+## Feature map
+
+| Feature | Where to explore it |
+| --- | --- |
+| Nested and flat headings, empty state, and layout controls | Context preview, feature comparisons, and original copyable source examples. |
+| Public appearance options | Complete galleries above. Only options supported by this component are shown. |
+| Native semantics and integration | Behavior notes and API contracts below explain the component’s roots, slots, and runtime dependencies. |
+
 ## Behavior and accessibility
 
 The default doc template already renders the page TOC; do not add a second copy to a normal guide. A sole h1 outline root is omitted so the list starts at its children. The template renders top-level entries and one nested level. Panel controls belong to the standard doc layout.
@@ -206,8 +245,6 @@ The default doc template already renders the page TOC; do not add a second copy 
 <div class="api-contract">
 <p>No slots. Register definePageTocComponents with BtnLink and Icon. SSG context supplies the outline when items is omitted; the standard runtime handles active-section and panel behavior.</p>
 </div>
-
-
 
 ## Related components
 

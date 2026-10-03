@@ -9,6 +9,7 @@ import { card } from './demoStyle'
 import { registerApiReferenceStyles } from './docs/apiReferenceStyles'
 import { registerComponentGuideStyles } from './docs/componentGuide'
 import { defineDocumentationComponents } from './docs/docsComponents'
+import { writeSiteGuidePreviews } from './docs/siteGuide'
 import { writeConsentPreview } from './purestack.studio/components/site/consent/preview'
 import { writeNavMenuPreview } from './purestack.studio/components/site/nav-menu/preview'
 import { writePageTocPreview } from './purestack.studio/components/site/page-toc/preview'
@@ -67,6 +68,7 @@ const build: BuildInput = {
         registerComponentGuideStyles()
       },
       async onContentDiscovered(context) {
+        await writeSiteGuidePreviews(context.config)
         await writeConsentPreview(context.config)
         await writeNavMenuPreview(context.config)
         await writePageTocPreview(context.config)
