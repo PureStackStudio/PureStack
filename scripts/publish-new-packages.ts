@@ -79,6 +79,7 @@ async function packageExists(packageName: string) {
       'view',
       packageName,
       'version',
+      '--prefer-online',
       '--registry',
       options.registry,
     ])
@@ -95,6 +96,7 @@ async function packageVersionExists(packageName: string, version: string) {
       'view',
       `${packageName}@${version}`,
       'version',
+      '--prefer-online',
       '--registry',
       options.registry,
     ])
@@ -273,7 +275,22 @@ async function publishPackage(pkg: PackageInfo) {
 
   if (options.provenance) args.push('--provenance')
 
-  await npm(args)
+  try {
+    await npm(args)
+    return true
+  } catch (error) {
+    if (isAlreadyPublished(error)) return false
+    throw error
+  }
+}
+
+// npm view can lag behind a fresh publish, so a rerun may still try to
+// publish a version that is already live. That is a skip, not a failure.
+function isAlreadyPublished(error: unknown) {
+  if (!isExecError(error)) return false
+  return error.stderr.includes(
+    'cannot publish over the previously published versions',
+  )
 }
 
 async function main() {
@@ -317,12 +334,18 @@ async function main() {
     return
   }
 
+  let publishedCount = 0
   for (const pkg of missingPackages) {
-    console.log(`publishing ${pkg.packageJson.name}@${pkg.packageJson.version}`)
-    await publishPackage(pkg)
+    const id = `${pkg.packageJson.name}@${pkg.packageJson.version}`
+    console.log(`publishing ${id}`)
+    if (await publishPackage(pkg)) {
+      publishedCount += 1
+      continue
+    }
+    console.log(`skip already published ${id}`)
   }
 
-  console.log(`Published ${missingPackages.length} new package(s).`)
+  console.log(`Published ${publishedCount} new package(s).`)
 }
 
 main().catch((error) => {
