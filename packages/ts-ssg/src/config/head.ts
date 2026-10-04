@@ -12,12 +12,8 @@ const DEFAULTS: BasicHeadConfig = {
   title: 'Page | Page Title',
   viewport: 'width=device-width,initial-scale=1',
   description: 'The purestack page.',
-  canonicalUrl: undefined, // TODO: fix this, dynamically generate one.
-  openGraph: undefined /*{
-    title: 'Page Title',
-    description: 'The purestack page.',
-    url: 'https://purestack.studio',
-  },*/,
+  canonicalUrl: undefined,
+  openGraph: undefined,
   favIcon: {
     rel: 'icon',
     href: '/assets/favicon.svg',
@@ -29,7 +25,7 @@ export function getHead(config?: BasicHeadConfig) {
   const head = createHead(getHeadConfig(merge(DEFAULTS, config))).push(
     h('meta').attr({
       name: 'generator',
-      content: 'ts-ssg v1.0.0',
+      content: 'PureStack v1.1.2',
     }),
     h('meta').attr({
       name: 'color-scheme',

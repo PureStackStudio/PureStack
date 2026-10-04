@@ -5,6 +5,7 @@ dist
 *.tgz
 tsconfig.bundle.generated.json
 PureGate
+purestack-setup
 *.vsix
 .codex/*
 /.tmp

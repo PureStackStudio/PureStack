@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
+import type { SiteConfig } from '@purestack/ts-common'
 import { disableLogger, getLogger, type Logger } from 'logpot'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from '../config/config'
@@ -14,6 +15,7 @@ import {
 } from '../i18n/content'
 import { buildNavigation } from '../navigation/navigation'
 import { initBuiltinComponents } from '../regor/initBuiltinComponents'
+import { ContentRouteIndex } from './content-hrefs'
 import { renderPageFromFile } from './page'
 
 async function writeFile(filePath: string, contents = '') {
@@ -46,7 +48,7 @@ describe('page content compilation', () => {
 
       const config = resolveSiteConfig({ rootDir: root, contentDir, outDir })
       const page = await renderPageFromFile(
-        { config },
+        { config, contentRoutes: await indexContent(config) },
         toContentFile(contentDir, 'index.md'),
       )
 
@@ -76,7 +78,7 @@ describe('page content compilation', () => {
         },
       })
       const page = await renderPageFromFile(
-        { config },
+        { config, contentRoutes: await indexContent(config) },
         toContentFile(contentDir, 'index.md'),
       )
 
@@ -106,7 +108,7 @@ describe('page content compilation', () => {
         },
       })
       const page = await renderPageFromFile(
-        { config },
+        { config, contentRoutes: await indexContent(config) },
         toContentFile(contentDir, 'index.rmdx'),
       )
 
@@ -129,7 +131,7 @@ describe('page content compilation', () => {
 
       const config = resolveSiteConfig({ rootDir: root, contentDir, outDir })
       const page = await renderPageFromFile(
-        { config },
+        { config, contentRoutes: await indexContent(config) },
         toContentFile(contentDir, 'index.md'),
       )
 
@@ -159,7 +161,7 @@ describe('page content compilation', () => {
         siteTitle: 'Docs',
       })
       const page = await renderPageFromFile(
-        { config },
+        { config, contentRoutes: await indexContent(config) },
         toContentFile(contentDir, 'getting-started.md'),
       )
 
@@ -180,7 +182,7 @@ describe('page content compilation', () => {
 
       const config = resolveSiteConfig({ rootDir: root, contentDir, outDir })
       const page = await renderPageFromFile(
-        { config },
+        { config, contentRoutes: await indexContent(config) },
         toContentFile(contentDir, 'index.md'),
       )
 
@@ -206,7 +208,7 @@ describe('page content compilation', () => {
 
       const config = resolveSiteConfig({ rootDir: root, contentDir, outDir })
       const page = await renderPageFromFile(
-        { config },
+        { config, contentRoutes: await indexContent(config) },
         toContentFile(contentDir, 'index.md'),
       )
 
@@ -233,14 +235,113 @@ describe('page content compilation', () => {
         path.join(contentDir, 'docs', 'getting-started.md'),
         '<a href="usage/reads-and-writes.md">read and write API</a>',
       )
+      await writeFile(
+        path.join(contentDir, 'docs', 'usage', 'reads-and-writes.md'),
+        '# Reads and Writes',
+      )
 
       const config = resolveSiteConfig({ rootDir: root, contentDir, outDir })
       const page = await renderPageFromFile(
-        { config },
+        { config, contentRoutes: await indexContent(config) },
         toContentFile(contentDir, path.join('docs', 'getting-started.md')),
       )
 
-      expect(page.bodyHtml).toContain('href="/docs/usage/reads-and-writes/"')
+      expect(page.html).toContain('href="/docs/usage/reads-and-writes/"')
+    } finally {
+      await fs.rm(root, { recursive: true, force: true })
+    }
+  })
+
+  it('resolves every content link after Regor renders the page', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-page-'))
+    try {
+      const contentDir = path.join(root, 'content')
+      const outDir = path.join(root, 'out')
+      await writeFile(
+        path.join(contentDir, 'guides', 'semantic-tones.mdx'),
+        [
+          '# Semantic tones',
+          '',
+          'Read [themes](./themes) and [palettes][palette].',
+          '',
+          '[palette]: ./themes#palette',
+          '',
+          '<a href="../">Home</a>',
+          '',
+          '<BtnLink href="./themes">Static button</BtnLink>',
+          '',
+          `<BtnLink :href="'./themes' + '#create-a-skin'">Computed button</BtnLink>`,
+          '',
+          '```md',
+          '[Missing](./missing)',
+          '```',
+        ].join('\n'),
+      )
+      await writeFile(path.join(contentDir, 'guides', 'themes.mdx'), '# Themes')
+      await writeFile(path.join(contentDir, 'index.mdx'), '# Home')
+
+      const config = resolveSiteConfig({ rootDir: root, contentDir, outDir })
+      const page = await renderPageFromFile(
+        { config, contentRoutes: await indexContent(config) },
+        toContentFile(contentDir, path.join('guides', 'semantic-tones.mdx')),
+      )
+
+      expect(page.html).toContain('<a href="/guides/themes/">themes</a>')
+      expect(page.html).toContain('<a href="/guides/themes/#palette">')
+      expect(page.html).toContain('<a href="/">Home</a>')
+      expect(page.html).toMatch(/<a[^>]*href="\/guides\/themes\/"[^>]*>/)
+      expect(page.html).toContain('href="/guides/themes/#create-a-skin"')
+      expect(page.html).toContain('[Missing](./missing)')
+      expect(page.html).not.toMatch(/href="\.{1,2}\//)
+    } finally {
+      await fs.rm(root, { recursive: true, force: true })
+    }
+  })
+
+  it('resolves links on the plain markdown route', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-page-'))
+    try {
+      const contentDir = path.join(root, 'content')
+      const outDir = path.join(root, 'out')
+      await writeFile(path.join(contentDir, 'index.md'), '[Docs](./docs/)')
+      await writeFile(path.join(contentDir, 'docs', 'index.md'), '# Docs')
+
+      const config = resolveSiteConfig({
+        rootDir: root,
+        contentDir,
+        outDir,
+        mdx: { compileMdAsMdx: false },
+      })
+      const page = await renderPageFromFile(
+        { config, contentRoutes: await indexContent(config) },
+        toContentFile(contentDir, 'index.md'),
+      )
+
+      expect(page.html).toContain('<a href="/docs/">Docs</a>')
+    } finally {
+      await fs.rm(root, { recursive: true, force: true })
+    }
+  })
+
+  it('fails the page render when a content link matches no page', async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-page-'))
+    try {
+      const contentDir = path.join(root, 'content')
+      const outDir = path.join(root, 'out')
+      await writeFile(
+        path.join(contentDir, 'index.mdx'),
+        '<BtnLink href="./themse">Themes</BtnLink>',
+      )
+
+      const config = resolveSiteConfig({ rootDir: root, contentDir, outDir })
+      await expect(
+        renderPageFromFile(
+          { config, contentRoutes: await indexContent(config) },
+          toContentFile(contentDir, 'index.mdx'),
+        ),
+      ).rejects.toThrow(
+        'Content link "./themse" in "index.mdx" does not match any page.',
+      )
     } finally {
       await fs.rm(root, { recursive: true, force: true })
     }
@@ -270,7 +371,7 @@ describe('page content compilation', () => {
         basePath: '/admin-panel/',
       })
       const page = await renderPageFromFile(
-        { config },
+        { config, contentRoutes: await indexContent(config) },
         toContentFile(contentDir, 'index.mdx'),
       )
 
@@ -332,7 +433,7 @@ describe('page content compilation', () => {
         },
       })
       const page = await renderPageFromFile(
-        { config },
+        { config, contentRoutes: await indexContent(config) },
         toContentFile(contentDir, path.join('docs', 'index.mdx')),
       )
 
@@ -379,6 +480,7 @@ describe('page content compilation', () => {
         path.join(contentDir, 'tr', 'index.mdx'),
         ['---', 'title: Ana Sayfa', '---', '[Docs](docs/index.md)'].join('\n'),
       )
+      await writeFile(path.join(contentDir, 'en', 'docs', 'index.md'), '# Docs')
 
       const config = resolveSiteConfig({
         rootDir: root,
@@ -399,7 +501,11 @@ describe('page content compilation', () => {
         await discoverContent(contentDir),
       )
       const page = await renderPageFromFile(
-        { config, translationsByKey: buildTranslationsByKey(files) },
+        {
+          config,
+          contentRoutes: await indexContent(config),
+          translationsByKey: buildTranslationsByKey(files),
+        },
         files.find((file) => file.relPath === 'en/index.mdx') ??
           resolveContentFile(
             config,
@@ -438,6 +544,7 @@ describe('page content compilation', () => {
           '[Docs](/docs/index.md)',
         ].join('\n'),
       )
+      await writeFile(path.join(contentDir, 'docs', 'index.md'), '# Docs')
 
       const config = resolveSiteConfig({
         rootDir: root,
@@ -454,7 +561,7 @@ describe('page content compilation', () => {
         },
       })
       const page = await renderPageFromFile(
-        { config },
+        { config, contentRoutes: await indexContent(config) },
         resolveContentFile(config, toRawContentFile(contentDir, 'index.mdx')),
       )
 
@@ -498,7 +605,11 @@ describe('page content compilation', () => {
         await discoverContent(contentDir),
       )
       const page = await renderPageFromFile(
-        { config, translationsByKey: buildTranslationsByKey(files) },
+        {
+          config,
+          contentRoutes: await indexContent(config),
+          translationsByKey: buildTranslationsByKey(files),
+        },
         files.find((file) => file.relPath === 'tr/docs/index.md') ??
           resolveContentFile(
             config,
@@ -562,7 +673,7 @@ describe('page content compilation', () => {
         roots: ['docs'],
       })
       const page = await renderPageFromFile(
-        { config, navigation },
+        { config, contentRoutes: await indexContent(config), navigation },
         toContentFile(contentDir, path.join('docs', 'getting-started.md')),
       )
 
@@ -582,6 +693,12 @@ describe('page content compilation', () => {
     }
   })
 })
+
+async function indexContent(config: SiteConfig) {
+  return new ContentRouteIndex(
+    resolveContentFiles(config, await discoverContent(config.contentDir)),
+  )
+}
 
 function toContentFile(
   contentDir: string,

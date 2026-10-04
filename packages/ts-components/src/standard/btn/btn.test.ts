@@ -112,7 +112,8 @@ describe('Button rendering', () => {
     cleanup()
 
     expect(html).toContain('<a')
-    expect(html).toContain('href="/getting-started"')
+    // The page build resolves relative links from the file that wrote them.
+    expect(html).toContain('href="./getting-started"')
     expect(html).toContain('tone--neutral')
     expect(html).toContain('btn--lg')
     expect(html).toContain('<span class="btn__label">Read docs</span>')

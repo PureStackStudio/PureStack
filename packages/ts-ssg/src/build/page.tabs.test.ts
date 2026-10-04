@@ -14,6 +14,7 @@ import {
   type ResolvedContentFile,
   resolvePlainContentFile,
 } from '../i18n/content'
+import { ContentRouteIndex } from './content-hrefs'
 import { renderPageFromFile } from './page'
 
 async function writeFile(filePath: string, contents = '') {
@@ -50,6 +51,7 @@ describe('tabs runtime embedding', () => {
       const page = await renderPageFromFile(
         {
           config,
+          contentRoutes: new ContentRouteIndex([]),
           components: {
             ...defineIconComponents(getSvgIcon),
             ...defineTabsComponents(),
@@ -89,6 +91,7 @@ embed:
       const page = await renderPageFromFile(
         {
           config,
+          contentRoutes: new ContentRouteIndex([]),
         },
         toContentFile(contentDir, 'index.mdx'),
       )
@@ -122,6 +125,7 @@ embed:
       const page = await renderPageFromFile(
         {
           config,
+          contentRoutes: new ContentRouteIndex([]),
         },
         toContentFile(contentDir, 'index.mdx'),
       )

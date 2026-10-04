@@ -1,12 +1,6 @@
 import path from 'node:path'
 import type { SiteConfig } from '@purestack/ts-common'
-import {
-  DEFAULT_NAV_FILENAME,
-  discoverContent,
-  isContentFile,
-} from '../../discover/content'
-import { resolveContentFiles } from '../../i18n/content'
-import { assertUniqueContentRoutes } from '../../routing/route'
+import { DEFAULT_NAV_FILENAME, isContentFile } from '../../discover/content'
 import { copyStaticAsset } from '../assets'
 import {
   type AssetManifestEntry,
@@ -204,6 +198,7 @@ export class IncrementalChangeApplier {
         result,
       )
       this.input.scriptEntrypoints.removePage(relPath)
+      await this.input.contentState.refreshContent()
     }
     if (assetEntry) {
       await removeFile(assetEntry.outPath)
@@ -233,7 +228,7 @@ export class IncrementalChangeApplier {
       return
     }
 
-    await this.assertUniqueContentRoutes()
+    await this.input.contentState.refreshContent()
     await this.input.contentState.rebuildSingleContent({
       relPath,
       ext,
@@ -241,14 +236,6 @@ export class IncrementalChangeApplier {
       result,
     })
     await this.input.persistManifest()
-  }
-
-  private async assertUniqueContentRoutes() {
-    const contentFiles = resolveContentFiles(
-      this.input.config,
-      await discoverContent(this.input.config.contentDir),
-    )
-    assertUniqueContentRoutes(contentFiles)
   }
 
   private async handleAssetChange(input: {

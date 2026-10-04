@@ -32,7 +32,7 @@ describe('Button group rendering', () => {
     expect(html).toContain('<button')
     expect(html).toContain('<a')
     expect(html).toContain('<span class="btn__label">Save</span>')
-    expect(html).toContain('href="/docs"')
+    expect(html).toContain('href="./docs"')
   })
 
   it('renders a native dropdown menu with default trigger affordance', () => {
@@ -103,7 +103,7 @@ describe('Button group rendering', () => {
     </BtnGroup>`)
 
     expect(html).toContain('<span class="btn__label">Default</span>')
-    expect(html).toContain('href="/settings"')
+    expect(html).toContain('href="./settings"')
     expect(html).toContain('<span class="btn__label">Settings</span>')
     expect(html).toContain('<section class="menu-extra">')
     expect(html).toContain('<strong>Advanced</strong>')
