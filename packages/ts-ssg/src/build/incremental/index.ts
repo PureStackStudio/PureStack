@@ -177,6 +177,7 @@ class IncrementalRuntime {
     this.contentState = new IncrementalContentState({
       config: options.config,
       context: options.context,
+      hooks: options.hooks,
       log: options.log,
       onPageBuilt: (relPath, scriptEntrypoints) =>
         this.scriptEntrypoints.setPageEntrypoints(relPath, scriptEntrypoints),
@@ -230,10 +231,7 @@ class IncrementalRuntime {
     this.log.info('build started', { reason })
     const prepared = await this.prepareBuild(hooks)
     this.scriptEntrypoints.clearPageEntrypoints()
-    const pages = await this.contentState.renderAllPages(
-      prepared.contentFiles,
-      hooks,
-    )
+    const pages = await this.contentState.renderAllPages(prepared.contentFiles)
     const scriptAssetFiles = await this.scriptEntrypoints.syncState({
       result: this.changeApplier.createResult(reason),
       persist: false,

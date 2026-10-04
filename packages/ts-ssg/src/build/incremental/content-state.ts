@@ -16,7 +16,6 @@ import {
 import { resolveOutPath } from '../out-path'
 import {
   type BuildContext,
-  buildPage,
   renderPageFromFile,
   resolveHeaderFooterHtml,
   resolvePagePartials,
@@ -36,6 +35,7 @@ import type { IncrementalBuildResult } from './types'
 interface IncrementalContentStateInput {
   config: SiteConfig
   context: BuildContext
+  hooks: BuildHooks
   log: Logger
   onPageBuilt: (relPath: string, scriptEntrypoints: string[]) => void
   persistManifest: () => Promise<void>
@@ -86,30 +86,39 @@ export class IncrementalContentState {
     return count
   }
 
-  async renderAllPages(contentFiles: ResolvedContentFile[], hooks: BuildHooks) {
+  async renderAllPages(contentFiles: ResolvedContentFile[]) {
     let pages = 0
     for (const file of contentFiles) {
-      try {
-        await hooks.onPageStart?.(this.input.context, file)
-        const page = await renderPageFromFile(this.input.context, file)
-        this.input.onPageBuilt(file.relPath, page.scriptEntrypoints)
-        await hooks.onPageRendered?.(this.input.context, page)
-        await writePage(page, this.input.config.html.minify)
-        await hooks.onPageWritten?.(this.input.context, page)
-        pages += 1
-      } catch (error) {
-        if (this.input.context.writeErrorPages !== true) {
-          throw error
-        }
-        this.input.log.error('page build failed', {
-          relPath: file.relPath,
-          error: error instanceof Error ? error.message : String(error),
-        })
-        const page = await writePageError(this.input.context, file, error)
-        this.input.onPageBuilt(file.relPath, page.scriptEntrypoints)
-      }
+      if (await this.writePageWithHooks(file)) pages += 1
     }
     return pages
+  }
+
+  /**
+   * Renders and writes one page inside its page hooks. Full builds and
+   * incremental renders both come through here, so `build` and `serve`
+   * produce the same output. Returns false when an error page was written.
+   */
+  private async writePageWithHooks(file: ResolvedContentFile) {
+    const { context, hooks, config } = this.input
+    try {
+      await hooks.onPageStart?.(context, file)
+      const page = await renderPageFromFile(context, file)
+      this.input.onPageBuilt(file.relPath, page.scriptEntrypoints)
+      await hooks.onPageRendered?.(context, page)
+      await writePage(page, config.html.minify)
+      await hooks.onPageWritten?.(context, page)
+      return true
+    } catch (error) {
+      if (context.writeErrorPages !== true) throw error
+      this.input.log.error('page build failed', {
+        relPath: file.relPath,
+        error: error instanceof Error ? error.message : String(error),
+      })
+      const page = await writePageError(context, file, error)
+      this.input.onPageBuilt(file.relPath, page.scriptEntrypoints)
+      return false
+    }
   }
 
   async renderIfDirtyByOutPath(outPath: string) {
@@ -218,8 +227,7 @@ export class IncrementalContentState {
     const contentFile =
       contentFiles.find((file) => file.relPath === relPath) ??
       this.toResolvedContentFile(relPath, ext)
-    const page = await buildPage(this.input.context, contentFile)
-    this.input.onPageBuilt(contentFile.relPath, page.scriptEntrypoints)
+    await this.writePageWithHooks(contentFile)
     this.upsertContentManifestEntry(relPath, contentFile.ext, signature)
     result.changedPages += 1
     this.dirtyPages.delete(relPath)
@@ -228,8 +236,7 @@ export class IncrementalContentState {
   async rebuildSingleContent(input: RebuildSingleContentInput) {
     const { relPath, ext, signature, result } = input
     const contentFile = this.toResolvedContentFile(relPath, ext)
-    const page = await buildPage(this.input.context, contentFile)
-    this.input.onPageBuilt(contentFile.relPath, page.scriptEntrypoints)
+    await this.writePageWithHooks(contentFile)
     this.upsertContentManifestEntry(relPath, contentFile.ext, signature)
     result.changedPages += 1
   }
@@ -237,8 +244,7 @@ export class IncrementalContentState {
   async renderAndPersistRelPath(relPath: string, signature: FileSignature) {
     const ext = this.resolveContentExt(relPath)
     const contentFile = this.toResolvedContentFile(relPath, ext)
-    const page = await buildPage(this.input.context, contentFile)
-    this.input.onPageBuilt(contentFile.relPath, page.scriptEntrypoints)
+    await this.writePageWithHooks(contentFile)
     this.upsertContentManifestEntry(relPath, contentFile.ext, signature)
     this.dirtyPages.delete(relPath)
     await this.input.persistManifest()

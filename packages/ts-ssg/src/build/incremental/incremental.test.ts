@@ -6,6 +6,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from '../../config/config'
 import { makeRepoTempDir } from '../../test/repoTempDir'
 import { createEmptyManifest, readManifest, writeManifest } from '../manifest'
+import type { BuildHooks } from '../site'
 import { createIncrementalBuilder } from './index'
 
 async function withTempDir<T>(worker: (dir: string) => Promise<T>) {
@@ -430,6 +431,7 @@ describe('incremental builder', () => {
     base: string,
     mode: 'auto' | 'hybrid' | 'none',
     files: Record<string, string>,
+    hooks: BuildHooks = {},
   ) {
     const contentDir = path.join(base, 'content')
     const outDir = path.join(base, 'out')
@@ -449,7 +451,7 @@ describe('incremental builder', () => {
         outDir,
         navigation: { mode },
       },
-      options: { writeErrorPages: true },
+      options: { writeErrorPages: true, hooks },
     })
     await builder.buildAll('initial')
     const outPath = (urlPath: string) =>
@@ -762,6 +764,93 @@ describe('incremental builder', () => {
         expect(reorder.changedPages).toBe(0)
         expect(reorder.markedPages).toBeGreaterThan(0)
         expect(await site.renderIfDirty('/a/')).toBe(true)
+      })
+    })
+  })
+
+  describe('page hooks', () => {
+    function recordPageHooks() {
+      const calls: string[] = []
+      const record = (name: string, relPath: string) => {
+        calls.push(`${name}:${relPath.replaceAll('\\', '/')}`)
+      }
+      const hooks: BuildHooks = {
+        onPageStart: (_context, file) => record('start', file.relPath),
+        onPageRendered: (_context, page) => {
+          record('rendered', page.file.relPath)
+          page.html = page.html.replace('</body>', '<!-- hooked --></body>')
+        },
+        onPageWritten: (_context, page) => record('written', page.file.relPath),
+      }
+      return { calls, hooks }
+    }
+
+    it('runs the page hooks for every render, not only full builds', async () => {
+      await withTempDir(async (base) => {
+        const { calls, hooks } = recordPageHooks()
+        const site = await createSite(
+          base,
+          'none',
+          {
+            'header.mdx': '<p>Header v1</p>',
+            'index.mdx': '# Home',
+            'guides/a.mdx': '# A',
+          },
+          hooks,
+        )
+        expect(calls).toEqual(
+          expect.arrayContaining([
+            'start:index.mdx',
+            'rendered:index.mdx',
+            'written:index.mdx',
+            'start:guides/a.mdx',
+            'rendered:guides/a.mdx',
+            'written:guides/a.mdx',
+          ]),
+        )
+
+        calls.length = 0
+        await site.change('guides/a.mdx', '# A, edited')
+        expect(calls).toEqual([
+          'start:guides/a.mdx',
+          'rendered:guides/a.mdx',
+          'written:guides/a.mdx',
+        ])
+        expect(await site.read('/guides/a/')).toContain('<!-- hooked -->')
+
+        calls.length = 0
+        await site.change('header.mdx', '<p>Header v2</p>')
+        expect(calls).toEqual([])
+        expect(await site.renderIfDirty('/')).toBe(true)
+        expect(calls).toEqual([
+          'start:index.mdx',
+          'rendered:index.mdx',
+          'written:index.mdx',
+        ])
+        const html = await site.read('/')
+        expect(html).toContain('Header v2')
+        expect(html).toContain('<!-- hooked -->')
+      })
+    })
+
+    it('writes an error page when a page hook fails during a re-render', async () => {
+      await withTempDir(async (base) => {
+        let failing = false
+        const site = await createSite(
+          base,
+          'none',
+          { 'index.mdx': '# Home' },
+          {
+            onPageRendered: () => {
+              if (failing) throw new Error('Hook failed on purpose.')
+            },
+          },
+        )
+
+        failing = true
+        await site.change('index.mdx', '# Home, edited')
+
+        expect(await site.read('/')).toContain('Hook failed on purpose.')
       })
     })
   })

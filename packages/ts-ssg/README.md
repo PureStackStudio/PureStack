@@ -28,10 +28,12 @@ const contentDir = path.join(rootDir, 'content')
 const outDir = path.join(rootDir, 'dist', 'site')
 
 await buildSite({
-  rootDir,
-  contentDir,
-  outDir,
-  siteTitle: 'My Docs',
+  siteConfig: {
+    rootDir,
+    contentDir,
+    outDir,
+    siteTitle: 'My Docs',
+  },
 })
 ```
 
@@ -42,9 +44,13 @@ import path from 'node:path'
 import { startDevServer } from '@purestack/ts-ssg'
 
 await startDevServer({
-  rootDir: process.cwd(),
-  contentDir: path.join(process.cwd(), 'content'),
-  outDir: path.join(process.cwd(), 'dist', 'site'),
+  build: {
+    siteConfig: {
+      rootDir: process.cwd(),
+      contentDir: path.join(process.cwd(), 'content'),
+      outDir: path.join(process.cwd(), 'dist', 'site'),
+    },
+  },
   host: '127.0.0.1',
   port: 4173,
 })
@@ -306,57 +312,42 @@ Built-in templates:
 - `doc` (default)
 - `splash`
 
-Provide custom templates via `buildSite({ templates })`:
+Provide custom templates through `options.templates` and select one with the page's `template` frontmatter:
 
 ```ts
 import { h, type TSNode } from '@purestack/ts-html'
-import type { PageTemplateMap } from '@purestack/ts-ssg'
+import { buildSite, type PageTemplateMap } from '@purestack/ts-ssg'
 
 const templates: PageTemplateMap = {
-  product: ({ head, bodyHtml }) =>
+  product: ({ head, bodyHtml, headerHtml, footerHtml }) =>
     h('html').push(
       head,
-      h('body').push(h('main').attr({ class: 'product' }).raw(bodyHtml)),
+      h('body').push(
+        h('').raw(headerHtml ?? ''),
+        h('main').attr({ class: 'product' }).raw(bodyHtml),
+        h('').raw(footerHtml ?? ''),
+      ),
     ) as TSNode<'html'>,
 }
+
+await buildSite({ siteConfig: { contentDir: './content' }, options: { templates } })
 ```
+
+A template receives a `PageTemplateInput`: the prepared `head`, the compiled `bodyHtml`, the page's nearest `headerHtml` and `footerHtml`, `site` config, `navigation`, `outline`, and `pageInfo`, whose `frontmatter` keeps any custom fields the page defines.
 
 ## Components and Regor MDX
 
-Built-in component sets are initialized automatically each build:
+Every component in `@purestack/ts-components` is registered for each build, so content can use them directly. The [component reference](https://purestack.studio/components/) documents each one.
 
-- alert: `alertBox`
-- card grid: `card`, `cardGrid`
-- consent: `consent`
-- contact: `contactForm`
-- expandable panel: `expandablePanel`
-- panel: `panel`
-- footer: `siteFooter`
-- top bar: `topBar`
-- logo: `siteLogo`
-- navigation: `navMenu`, `navList`, `navItem`
-- page links: `pageLinks`
-- page toc: `pageToc`
-- pricing: `pricingTable`, `pricingPlan`, `pricingFeature`
-- search: `searchBox`
-- tabs: `tabs`, `tabPane`
-- theme toggle: `themeToggle`
+Register your own Regor components through `options.components`, or assign `context.components` in the `onConfigResolved` hook.
 
-Important rendering constraint: Regor components are rendered statically. Component state/events are not runtime-hydrated.
+Components render to static HTML at build time. For behavior in the browser, load a page script with `PageScript` or mount a browser-side Regor app with `RegorApp`.
 
 ## Theming
 
-Built-in skins export:
+The built-in skin is `standard`. Select a skin with `style.theme.skin` in `siteConfig.json`.
 
-- `standard`
-
-Theme utilities:
-
-- `builtInSkins`
-- `themes.resolve(...)`
-- `themes.setOptions(...)`
-- `themes.getOptions()`
-- `styleBuilder`
+Skins come from `@purestack/ts-style`: `themeSkins` holds the registered skins, and `registerSkin(name, skin)` adds your own before the build starts. See the [Themes guide](https://purestack.studio/guides/themes/) for creating one.
 
 `style.themes` controls generated files:
 
@@ -370,27 +361,45 @@ Theme utilities:
 - Regor MDX (`.mdx`, `.rmdx`): `remark-parse` + `remark-gfm` with Regor component markup preservation
 - HTML output via HAST + rehype
 - H2/H3 outline extraction for page TOC
-- Optional Shiki highlighting
+- Code highlighting with highlight.js or Shiki
 
-`BuildInput.mdx` options:
+`siteConfig.mdx` options:
 
-- `highlighter`: custom highlighter (`codeToHtml`)
-- `themes`: `{ light, dark }` for Shiki
-- `langs`: language list for Shiki
+- `highlighter`: `"highlightjs"` (default) or `"shiki"`
 - `disableHighlighter`: skip highlighting
+- `compileMdAsMdx`: compile `.md` files as Regor MDX (default `true`); set `false` to keep `.md` as plain Markdown
 
 ## Build Hooks
 
-Hook into build lifecycle with `BuildHooks`:
+Pass `BuildHooks` through `options.hooks` to `buildSite` or `startDevServer`. Hooks, templates, and components need the programmatic API; the CLI reads only `siteConfig.json`.
 
-- `onConfigResolved`
-- `onContentDiscovered`
-- `onNavigationBuilt`
-- `onPageStart`
-- `onPageRendered`
-- `onPageWritten`
-- `onStylesWritten`
-- `onBuildComplete`
+```ts
+import { type BuildHooks, startDevServer } from '@purestack/ts-ssg'
+
+const hooks: BuildHooks = {
+  onPageRendered(context, page) {
+    page.html = page.html.replace('</body>', '<!-- PureStack --></body>')
+  },
+}
+
+await startDevServer({ build: { siteConfig: { contentDir: './content' }, options: { hooks } } })
+```
+
+Every page render, in a full build or a dev server re-render, runs the page hooks:
+
+- `onPageStart(context, file)`: before the page renders.
+- `onPageRendered(context, page)`: after it renders; changes to `page.html` are written.
+- `onPageWritten(context, page)`: after the HTML file is written.
+
+Each full build also runs, in order:
+
+- `onConfigResolved(context)`: before any output; register components on `context.components` here.
+- `onContentDiscovered(context, files)`: after content discovery, before pages render.
+- `onNavigationBuilt(context, navigation)`
+- `onStylesWritten(context, result)`
+- `onBuildComplete(context, result)`
+
+The dev server runs a full build when it starts and when `siteConfig.json` changes; other edits re-render only the affected pages.
 
 Build option:
 
@@ -551,27 +560,25 @@ Behavior:
 
 ## API Surface
 
-Primary exports:
+Functions:
 
-- `buildSite`
-- `startDevServer`
-- `resolveConfig` (`resolveSiteConfig`)
+- `buildSite`, `startDevServer`, `runCli`
+- `resolveSiteConfig`
 - `normalizeFrontmatter`, `parseFrontmatterSource`
 - `buildNavigation`, `resolveNavigationConfig`, `resolvePageNavigation`
-- `createMdxHighlighter`
-- `componentRegistry`
+- `createMdxHighlighter`, `DEFAULT_MDX_CODE_LANGS`, `DEFAULT_MDX_CODE_THEMES`
 - `defaultTemplates`, `resolvePageTemplate`
-- `builtInSkins`, `themes`, `styleBuilder`
 
-Useful types:
+Types:
 
-- `BuildInput`, `BuildResult`, `BuildHooks`
-- `SiteConfig`, `PartialConfig`
-- `DevServerInput`, `DevServerHandle`
-- `PageFrontmatter`
-- `NavigationConfig`, `NavigationTree`, `NavItem`
-- `ThemeOptions`, `ThemePalette`
-- `TsSsgContext`
+- Build: `BuildInput`, `BuildOptions`, `BuildResult`, `BuildCountSummary`, `PublishOptions`
+- Hooks: `BuildHooks`, `BuildContext`, `ResolvedContentFile`, `PageRenderResult`, `NavigationTree`, `WriteStylesResult`
+- Templates: `PageTemplateMap`, `PageTemplate`, `PageTemplateInput`, `PageInfo`, `PageFrontmatter`
+- Config and components: `SiteConfig`, `SiteConfigInput`, `TsSsgContext`
+- Dev server: `DevServerInput`, `DevServerOptions`, `DevServerHandle`
+- Highlighting: `MdxCodeHighlighter`, `MdxCodeLangs`, `MdxCodeThemes`
+
+Related packages: `@purestack/ts-html` builds template markup (`h`), `@purestack/ts-style` provides skins (`registerSkin`, `themeSkins`), and `@purestack/ts-components` provides the built-in components.
 
 ## Build Result Shape
 
