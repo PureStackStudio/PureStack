@@ -141,22 +141,12 @@ export function injectLiveReload(
     `const parseJSON = (value) => {` +
     `try { return JSON.parse(value); } catch { return null; }` +
     `};` +
-    `const normalize = (value) => {` +
-    `if (!value) return '/';` +
-    `let next = value.startsWith('/') ? value : '/' + value;` +
-    `if (next.length > 1 && next.endsWith('/')) next = next.slice(0, -1);` +
-    `return next;` +
-    `};` +
     `const source = new EventSource('${endpoint}');` +
     `source.addEventListener('state', (event) => {` +
     `const payload = parseJSON(event.data);` +
     `const next = Number(payload?.version);` +
     `if (!Number.isFinite(next)) return;` +
     `if (next > pageVersion) location.reload();` +
-    `});` +
-    `source.addEventListener('page-rendered', (event) => {` +
-    `const payload = parseJSON(event.data);` +
-    `if (normalize(payload?.path) === normalize(location.pathname)) location.reload();` +
     `});` +
     `})();` +
     `</script>`

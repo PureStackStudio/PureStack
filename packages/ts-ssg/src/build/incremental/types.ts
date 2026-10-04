@@ -6,6 +6,8 @@ export interface IncrementalBuildResult {
   changedAssets: number
   deletedPages: number
   deletedAssets: number
+  /** Pages marked to render again on their next request. */
+  markedPages: number
   reason: string
 }
 

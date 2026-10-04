@@ -4,6 +4,7 @@ import path from 'node:path'
 
 import { disableLogger, getLogger, type Logger } from 'logpot'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import { makeRepoTempDir } from '../test/repoTempDir'
 
 import {
   type CopyStaticAssetsResult,
@@ -133,9 +134,7 @@ describe('static assets', () => {
   })
 
   it('minifies compiled ts assets when requested', async () => {
-    const root = await fs.mkdtemp(
-      path.join(process.cwd(), '.tmp-ts-ssg-assets-'),
-    )
+    const root = await makeRepoTempDir('.tmp-ts-ssg-assets-')
     const outDir = path.join(root, 'dist')
     try {
       const entryPath = path.join(root, 'login.ts')
@@ -171,9 +170,7 @@ describe('static assets', () => {
   })
 
   it('bundles source-condition packages after stripping unused Regor template tags', async () => {
-    const root = await fs.mkdtemp(
-      path.join(process.cwd(), '.tmp-ts-ssg-assets-'),
-    )
+    const root = await makeRepoTempDir('.tmp-ts-ssg-assets-')
     const outDir = path.join(root, 'dist')
     try {
       await writeFile(
@@ -257,9 +254,7 @@ describe('static assets', () => {
   })
 
   it('removes stale cache-keyed script siblings after writing a new bundle', async () => {
-    const root = await fs.mkdtemp(
-      path.join(process.cwd(), '.tmp-ts-ssg-assets-'),
-    )
+    const root = await makeRepoTempDir('.tmp-ts-ssg-assets-')
     const outDir = path.join(root, 'dist')
     try {
       const entryPath = path.join(root, 'login.ts')

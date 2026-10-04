@@ -18,6 +18,8 @@ import {
   type BuildContext,
   buildPage,
   renderPageFromFile,
+  resolveHeaderFooterHtml,
+  resolvePagePartials,
   writePage,
   writePageError,
 } from '../page'
@@ -57,6 +59,7 @@ interface RebuildSingleContentInput {
 
 export class IncrementalContentState {
   private readonly dirtyPages = new Set<string>()
+  private markedPages = 0
   private readonly renderInFlight = new Map<string, Promise<boolean>>()
   private readonly contentIndex: ManifestContentIndex
 
@@ -74,6 +77,13 @@ export class IncrementalContentState {
 
   clearDirtyPages() {
     this.dirtyPages.clear()
+  }
+
+  /** Pages marked to render on their next request since the last call. */
+  takeMarkedPageCount() {
+    const count = this.markedPages
+    this.markedPages = 0
+    return count
   }
 
   async renderAllPages(contentFiles: ResolvedContentFile[], hooks: BuildHooks) {
@@ -148,15 +158,46 @@ export class IncrementalContentState {
     if (filesChanged) this.markAllPagesDirty(contentRoutes.pages)
   }
 
-  async refreshNavigationAndMarkDirty() {
+  /**
+   * Rebuilds navigation. Every page shows it, so all pages become dirty when
+   * it changes; an edit that leaves it alone touches no other page.
+   */
+  async refreshNavigation() {
+    const { config, context } = this.input
     const contentFiles = await this.refreshContent()
-    this.input.context.navigation = await buildNavigation(
-      this.input.config.contentDir,
+    const navigation = await buildNavigation(
+      config.contentDir,
       contentFiles,
-      this.input.config.navigation,
+      config.navigation,
     )
-    this.markAllPagesDirty(contentFiles)
+    if (JSON.stringify(navigation) !== JSON.stringify(context.navigation)) {
+      context.navigation = navigation
+      this.markAllPagesDirty(contentFiles)
+    }
     return contentFiles
+  }
+
+  /**
+   * Compiles the header and footer partials again. Only pages whose nearest
+   * header or footer changed become dirty, so an edit in one folder leaves
+   * pages elsewhere alone.
+   */
+  async refreshPartials() {
+    const { context } = this.input
+    const pages = context.contentRoutes.pages
+    const before = pages.map((page) => resolvePagePartials(context, page))
+    await resolveHeaderFooterHtml(context)
+    this.markPagesDirty(
+      pages
+        .filter((page, index) => {
+          const after = resolvePagePartials(context, page)
+          return (
+            after.headerHtml !== before[index].headerHtml ||
+            after.footerHtml !== before[index].footerHtml
+          )
+        })
+        .map((page) => page.relPath),
+    )
   }
 
   async removeContentEntryForDeletedSource(
@@ -259,11 +300,14 @@ export class IncrementalContentState {
     )
   }
 
-  private markAllPagesDirty(contentFiles: ResolvedContentFile[]) {
+  private markAllPagesDirty(contentFiles: readonly ResolvedContentFile[]) {
     this.dirtyPages.clear()
-    for (const file of contentFiles) {
-      this.dirtyPages.add(file.relPath)
-    }
+    this.markPagesDirty(contentFiles.map((file) => file.relPath))
+  }
+
+  private markPagesDirty(relPaths: readonly string[]) {
+    for (const relPath of relPaths) this.dirtyPages.add(relPath)
+    this.markedPages += relPaths.length
   }
 
   private async renderPageByRelPath(relPath: string, onlyIfDirty: boolean) {

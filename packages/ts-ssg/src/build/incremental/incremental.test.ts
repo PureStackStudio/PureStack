@@ -3,13 +3,13 @@ import path from 'node:path'
 
 import { disableLogger, getLogger, type Logger } from 'logpot'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-
 import { resolveSiteConfig } from '../../config/config'
+import { makeRepoTempDir } from '../../test/repoTempDir'
 import { createEmptyManifest, readManifest, writeManifest } from '../manifest'
 import { createIncrementalBuilder } from './index'
 
 async function withTempDir<T>(worker: (dir: string) => Promise<T>) {
-  const base = await fs.mkdtemp(path.join(process.cwd(), '.tmp-ts-ssg-'))
+  const base = await makeRepoTempDir('.tmp-ts-ssg-')
   try {
     return await worker(base)
   } finally {
@@ -426,36 +426,62 @@ describe('incremental builder', () => {
     })
   })
 
+  async function createSite(
+    base: string,
+    mode: 'auto' | 'hybrid' | 'none',
+    files: Record<string, string>,
+  ) {
+    const contentDir = path.join(base, 'content')
+    const outDir = path.join(base, 'out')
+    const write = async (relPath: string, contents: string) => {
+      const filePath = path.join(contentDir, relPath)
+      await fs.mkdir(path.dirname(filePath), { recursive: true })
+      await fs.writeFile(filePath, contents, 'utf8')
+      return filePath
+    }
+    for (const [relPath, contents] of Object.entries(files)) {
+      await write(relPath, contents)
+    }
+    const builder = await createIncrementalBuilder({
+      siteConfig: {
+        rootDir: base,
+        contentDir,
+        outDir,
+        navigation: { mode },
+      },
+      options: { writeErrorPages: true },
+    })
+    await builder.buildAll('initial')
+    const outPath = (urlPath: string) =>
+      path.join(outDir, ...urlPath.split('/').filter(Boolean), 'index.html')
+    return {
+      builder,
+      contentDir,
+      outPath,
+      read: (urlPath: string) => fs.readFile(outPath(urlPath), 'utf8'),
+      change: async (relPath: string, contents: string) =>
+        builder.applyChange(await write(relPath, contents)),
+      remove: async (relPath: string) => {
+        const filePath = path.join(contentDir, relPath)
+        await fs.rm(filePath)
+        return builder.applyChange(filePath)
+      },
+      renderIfDirty: (urlPath: string) =>
+        builder.renderIfDirtyByOutPath(outPath(urlPath)),
+    }
+  }
+
   describe('content links', () => {
     async function createLinkSite(
       base: string,
       mode: 'auto' | 'none',
       files: Record<string, string>,
     ) {
-      const contentDir = path.join(base, 'content')
-      const outDir = path.join(base, 'out')
-      for (const [relPath, contents] of Object.entries(files)) {
-        await fs.mkdir(path.dirname(path.join(contentDir, relPath)), {
-          recursive: true,
-        })
-        await fs.writeFile(path.join(contentDir, relPath), contents, 'utf8')
-      }
-      const builder = await createIncrementalBuilder({
-        siteConfig: {
-          rootDir: base,
-          contentDir,
-          outDir,
-          navigation: { mode },
-        },
-        options: { writeErrorPages: true },
-      })
-      await builder.buildAll('initial')
-      const indexOutPath = path.join(outDir, 'index.html')
+      const site = await createSite(base, mode, files)
       return {
-        builder,
-        contentDir,
-        indexOutPath,
-        readIndex: () => fs.readFile(indexOutPath, 'utf8'),
+        ...site,
+        indexOutPath: site.outPath('/'),
+        readIndex: () => site.read('/'),
       }
     }
 
@@ -607,6 +633,135 @@ describe('incremental builder', () => {
         expect(
           await site.builder.renderIfDirtyByOutPath(site.indexOutPath),
         ).toBe(false)
+      })
+    })
+  })
+
+  describe('shared partials and navigation', () => {
+    it.each(['auto', 'none'] as const)(
+      'marks only the pages under an edited folder header (navigation %s)',
+      async (mode) => {
+        await withTempDir(async (base) => {
+          const site = await createSite(base, mode, {
+            'index.mdx': '# Home',
+            'guides/header.mdx': '<p>Guides header v1</p>',
+            'guides/a.mdx': '# A',
+            'guides/deep/header.mdx': '<p>Deep header</p>',
+            'guides/deep/b.mdx': '# B',
+            'components/c.mdx': '# C',
+          })
+
+          const result = await site.change(
+            'guides/header.mdx',
+            '<p>Guides header v2</p>',
+          )
+
+          expect(result.fullRebuild).toBe(false)
+          expect(result.changedPages).toBe(0)
+          expect(result.markedPages).toBe(1)
+          expect(await site.renderIfDirty('/guides/a/')).toBe(true)
+          expect(await site.read('/guides/a/')).toContain('Guides header v2')
+          expect(await site.renderIfDirty('/guides/deep/b/')).toBe(false)
+          expect(await site.renderIfDirty('/components/c/')).toBe(false)
+          expect(await site.renderIfDirty('/')).toBe(false)
+        })
+      },
+    )
+
+    it('marks the pages that gain or lose a folder header', async () => {
+      await withTempDir(async (base) => {
+        const site = await createSite(base, 'none', {
+          'header.mdx': '<p>Root header</p>',
+          'index.mdx': '# Home',
+          'guides/a.mdx': '# A',
+          'components/c.mdx': '# C',
+        })
+
+        const added = await site.change(
+          'components/header.mdx',
+          '<p>Components header</p>',
+        )
+        expect(added.markedPages).toBe(1)
+        expect(await site.renderIfDirty('/components/c/')).toBe(true)
+        expect(await site.read('/components/c/')).toContain('Components header')
+        expect(await site.renderIfDirty('/guides/a/')).toBe(false)
+
+        const removed = await site.remove('components/header.mdx')
+        expect(removed.markedPages).toBe(1)
+        expect(await site.renderIfDirty('/components/c/')).toBe(true)
+        expect(await site.read('/components/c/')).toContain('Root header')
+        expect(await site.renderIfDirty('/')).toBe(false)
+      })
+    })
+
+    it('marks every page when the root footer changes', async () => {
+      await withTempDir(async (base) => {
+        const site = await createSite(base, 'none', {
+          'footer.mdx': '<p>Footer v1</p>',
+          'index.mdx': '# Home',
+          'guides/a.mdx': '# A',
+        })
+
+        const result = await site.change('footer.mdx', '<p>Footer v2</p>')
+
+        expect(result.fullRebuild).toBe(false)
+        expect(result.markedPages).toBe(2)
+        expect(await site.renderIfDirty('/')).toBe(true)
+        expect(await site.renderIfDirty('/guides/a/')).toBe(true)
+        expect(await site.read('/guides/a/')).toContain('Footer v2')
+      })
+    })
+
+    it('marks other pages only when an edit changes navigation', async () => {
+      await withTempDir(async (base) => {
+        const site = await createSite(base, 'auto', {
+          'index.mdx': '# Home',
+          'a.mdx': ['---', 'title: A', '---', 'First draft.'].join('\n'),
+          'b.mdx': '# B',
+        })
+
+        const bodyEdit = await site.change(
+          'a.mdx',
+          ['---', 'title: A', '---', 'Second draft.'].join('\n'),
+        )
+        expect(bodyEdit.changedPages).toBe(1)
+        expect(bodyEdit.markedPages).toBe(0)
+        expect(await site.renderIfDirty('/b/')).toBe(false)
+
+        const titleEdit = await site.change(
+          'a.mdx',
+          ['---', 'title: Alpha', '---', 'Second draft.'].join('\n'),
+        )
+        expect(titleEdit.changedPages).toBe(1)
+        expect(titleEdit.markedPages).toBeGreaterThan(0)
+        expect(await site.renderIfDirty('/b/')).toBe(true)
+        expect(await site.read('/b/')).toContain('Alpha')
+      })
+    })
+
+    it('marks pages after a nav file edit only when navigation changes', async () => {
+      await withTempDir(async (base) => {
+        const site = await createSite(base, 'hybrid', {
+          'index.mdx': '# Home',
+          'a.mdx': '# A',
+          'b.mdx': '# B',
+          '_nav.json': '{"sequence":["a.mdx","b.mdx"]}',
+        })
+
+        const formatting = await site.change(
+          '_nav.json',
+          '{ "sequence": [ "a.mdx", "b.mdx" ] }\n',
+        )
+        expect(formatting.changedPages).toBe(0)
+        expect(formatting.markedPages).toBe(0)
+
+        const reorder = await site.change(
+          '_nav.json',
+          '{"sequence":["b.mdx","a.mdx"]}',
+        )
+        expect(reorder.changedPages).toBe(0)
+        expect(reorder.markedPages).toBeGreaterThan(0)
+        expect(await site.renderIfDirty('/a/')).toBe(true)
       })
     })
   })

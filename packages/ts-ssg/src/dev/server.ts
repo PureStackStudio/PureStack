@@ -82,7 +82,6 @@ export async function startDevServer(
   const { host, port, watch, liveReload } = resolveDevServerOptions(input)
 
   const clients: LiveReloadClients = new Map()
-  const backgroundRenderTasks = new Map<string, Promise<void>>()
   let liveReloadVersion = 0
   let initialBuildDone = false
   let shuttingDown = false
@@ -101,11 +100,6 @@ export async function startDevServer(
     liveReloadVersion += 1
     if (!liveReload) return
     emitState(reason)
-  }
-
-  const notifyPageRendered = (pathname: string) => {
-    if (!liveReload) return
-    broadcastJson(clients, 'page-rendered', { path: pathname })
   }
 
   const scheduleRebuild = (reason: string, filePath?: string) => {
@@ -193,7 +187,8 @@ export async function startDevServer(
         change.changedPages > 0 ||
         change.changedAssets > 0 ||
         change.deletedPages > 0 ||
-        change.deletedAssets > 0
+        change.deletedAssets > 0 ||
+        change.markedPages > 0
     }
     if (requiresFull) {
       await rebuild(requestState.reason, { recreateBuilder: true })
@@ -212,11 +207,10 @@ export async function startDevServer(
       basePath: config.basePath,
       i18n: config.i18n,
       liveReload,
-      incremental,
+      // A full rebuild replaces the builder, so requests ask for the current one.
+      getIncremental: () => incremental,
       clients,
       getLiveReloadVersion: () => liveReloadVersion,
-      backgroundRenderTasks,
-      notifyPageRendered,
       log,
     }),
   )
@@ -303,11 +297,9 @@ type DevServerRequestHandlerInput = {
   basePath: string
   i18n: I18nConfig
   liveReload: boolean
-  incremental: IncrementalBuilder
+  getIncremental: () => IncrementalBuilder
   clients: LiveReloadClients
   getLiveReloadVersion: () => number
-  backgroundRenderTasks: Map<string, Promise<void>>
-  notifyPageRendered: (pathname: string) => void
   log: Logger
 }
 
@@ -319,15 +311,14 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
     basePath,
     i18n,
     liveReload,
-    incremental,
+    getIncremental,
     clients,
     getLiveReloadVersion,
-    backgroundRenderTasks,
-    notifyPageRendered,
     log,
   } = input
 
   return async (req: http.IncomingMessage, res: http.ServerResponse) => {
+    const incremental = getIncremental()
     if (!req.url) {
       res.writeHead(400)
       res.end()
@@ -376,13 +367,10 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
       res,
       filePath: fileResult.filePath,
       ext: fileResult.ext,
-      publicPathname: pathname,
       liveReloadPath,
       liveReload,
       liveReloadVersion,
       incremental,
-      backgroundRenderTasks,
-      notifyPageRendered,
       log,
     })
   }
@@ -458,13 +446,10 @@ type ServeResolvedFileInput = {
   res: http.ServerResponse
   filePath: string
   ext: string
-  publicPathname: string
   liveReloadPath: string
   liveReload: boolean
   liveReloadVersion: number
   incremental: IncrementalBuilder
-  backgroundRenderTasks: Map<string, Promise<void>>
-  notifyPageRendered: (pathname: string) => void
   log: Logger
 }
 
@@ -474,30 +459,22 @@ async function serveResolvedFile(input: ServeResolvedFileInput): Promise<void> {
     res,
     filePath,
     ext,
-    publicPathname,
     liveReloadPath,
     liveReload,
     liveReloadVersion,
     incremental,
-    backgroundRenderTasks,
-    notifyPageRendered,
     log,
   } = input
   try {
     if (ext === '.html') {
+      // A page marked dirty renders before it is served, so the response
+      // always reflects the latest change.
+      await incremental.renderIfDirtyByOutPath(filePath)
       const html = await fsPromises.readFile(filePath, 'utf8')
       const injected = liveReload
         ? injectLiveReload(html, liveReloadPath, liveReloadVersion)
         : html
       writeHtmlResponse(res, 200, injected)
-      queueBackgroundRender({
-        filePath,
-        pathname: publicPathname,
-        incremental,
-        backgroundRenderTasks,
-        notifyPageRendered,
-        log,
-      })
       return
     }
 
@@ -507,42 +484,4 @@ async function serveResolvedFile(input: ServeResolvedFileInput): Promise<void> {
     res.end('Internal server error')
     logError(log, error, 'serve failed')
   }
-}
-
-type QueueBackgroundRenderInput = {
-  filePath: string
-  pathname: string
-  incremental: IncrementalBuilder
-  backgroundRenderTasks: Map<string, Promise<void>>
-  notifyPageRendered: (pathname: string) => void
-  log: Logger
-}
-
-function queueBackgroundRender(input: QueueBackgroundRenderInput) {
-  const {
-    filePath,
-    pathname,
-    incremental,
-    backgroundRenderTasks,
-    notifyPageRendered,
-    log,
-  } = input
-  const existing = backgroundRenderTasks.get(filePath)
-  if (existing) return
-  // One background render notification per output file prevents fan-out storms.
-  const task = incremental
-    .renderIfDirtyByOutPath(filePath)
-    .then((rendered) => {
-      if (rendered) {
-        notifyPageRendered(pathname)
-      }
-    })
-    .catch((error) => {
-      logError(log, error, 'background render failed')
-    })
-    .finally(() => {
-      backgroundRenderTasks.delete(filePath)
-    })
-  backgroundRenderTasks.set(filePath, task)
-  void task
 }

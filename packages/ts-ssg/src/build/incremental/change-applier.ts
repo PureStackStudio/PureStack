@@ -44,6 +44,7 @@ export class IncrementalChangeApplier {
       changedAssets: 0,
       deletedPages: 0,
       deletedAssets: 0,
+      markedPages: 0,
       reason,
     }
   }
@@ -127,14 +128,7 @@ export class IncrementalChangeApplier {
     }
 
     if (this.input.config.navigation.mode !== 'none') {
-      const contentFiles =
-        await this.input.contentState.refreshNavigationAndMarkDirty()
-      await this.input.contentState.rebuildContentRelPaths(
-        contentFiles.map((file) => file.relPath),
-        state.result,
-      )
-      await this.input.persistManifest()
-      return
+      await this.input.contentState.refreshNavigation()
     }
 
     if (state.assetEntry) {
@@ -158,7 +152,7 @@ export class IncrementalChangeApplier {
     signature: FileSignature | null,
   ) {
     if (!signature) {
-      await this.input.contentState.refreshNavigationAndMarkDirty()
+      await this.input.contentState.refreshNavigation()
       await this.input.contentState.removeContentEntryForDeletedSource(
         relPath,
         result,
@@ -166,8 +160,7 @@ export class IncrementalChangeApplier {
       return
     }
 
-    const contentFiles =
-      await this.input.contentState.refreshNavigationAndMarkDirty()
+    const contentFiles = await this.input.contentState.refreshNavigation()
     await this.input.contentState.rebuildNavigatedContent({
       contentFiles,
       relPath,
