@@ -19,7 +19,7 @@ import { initBuiltinComponents } from '../../regor/initBuiltinComponents'
 import { resolveRouteInfo } from '../../routing/route'
 import { copyStaticAssets } from '../assets'
 import { resolveBuildSiteConfig } from '../build-config'
-import { ContentRouteIndex } from '../content-hrefs'
+import { ContentRouteIndex } from '../content-urls'
 import { writeGeneratedFavicon } from '../favicon'
 import { prepareOutDir } from '../io'
 import {
@@ -98,7 +98,10 @@ async function createIncrementalRuntime(
   const scriptCacheKeys = new ScriptCacheKeyStore(manifest.assets)
   const context: BuildContext = {
     config,
-    contentRoutes: new ContentRouteIndex(discovered),
+    contentRoutes: new ContentRouteIndex(
+      discovered,
+      Object.keys(manifest.assets),
+    ),
     writeErrorPages: buildOptions.writeErrorPages === true,
     components: buildOptions.components,
     templates: buildOptions.templates,
@@ -274,7 +277,10 @@ class IncrementalRuntime {
       copiedAssets.tsDependencyIndex,
     )
     const contentFiles = await discoverSiteContent(this.config)
-    this.context.contentRoutes = new ContentRouteIndex(contentFiles)
+    this.context.contentRoutes = new ContentRouteIndex(
+      contentFiles,
+      copiedAssets.files.map((file) => file.relPath),
+    )
     await resolveHeaderFooterHtml(this.context)
     await hooks.onContentDiscovered?.(this.context, contentFiles)
     this.context.navigation = await buildNavigation(

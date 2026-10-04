@@ -1,6 +1,6 @@
 ---
 title: Links
-description: Link to pages, sections, and other sites. Write links relative to your file, and every build checks that they still work.
+description: Link to pages, sections, images, files, and other sites. Write links relative to your file, and every build checks that they still work.
 template: doc
 layout:
   showNav: true
@@ -13,7 +13,7 @@ nav:
 
 # Links
 
-Write a link the way you see your files. PureStack turns it into the right page address and checks it every time the site builds, so a renamed or deleted page never leaves a broken link behind.
+Write a link the way you see your files. PureStack turns it into the right address and checks it every time the site builds, so a renamed or deleted page or image never leaves a broken link behind.
 
 ## Link to another page
 
@@ -71,6 +71,26 @@ The same rule works for `href` on any tag, including components and links they b
 
 Links in a shared header or footer start from that header or footer file, so they work on every page that shows them.
 
+## Images and files
+
+Images, videos, downloads, and other files in your content folder follow the same rule:
+
+```md
+![Palette diagram](./images/palette.svg)
+
+[Download the checklist](./checklist.pdf)
+```
+
+```html
+<img src="./images/logo.png" srcset="./images/logo.png 1x, ./images/logo@2x.png 2x" alt="PureStack">
+
+<video src="./intro.mp4" poster="./intro.jpg" controls></video>
+```
+
+Write a file's full name, with its extension and the same capitals, so it works on any host.
+
+Files that a build step writes straight into the output aren't in your content folder, so PureStack can't check them. Link them from the site root, such as `/previews/demo.html`.
+
 ## Link outside your content
 
 Anything that starts with `/` or a protocol is used as written:
@@ -92,13 +112,13 @@ If the site lives under a base path, such as `/docs`, PureStack adds it to every
 The build stops and names the file and the link:
 
 ```text
-Content link "./themse" in "guides/semantic-tones.mdx" does not match any page.
+Content link "./themse" in "guides/semantic-tones.mdx" does not match any page or file.
 ```
 
 While `purestack serve` runs, only that page shows the error, and it updates as soon as you fix the link. Most fixes are one of these:
 
-- **A typo or different capitals.** `./Themes` doesn't find `themes.mdx`.
-- **The page moved.** Write the path again, starting from your file.
+- **A typo or different capitals.** `./Themes` doesn't find `themes.mdx`, and `./Logo.png` doesn't find `logo.png`.
+- **The page or file moved.** Write the path again, starting from your file.
 - **The page is built elsewhere.** Start the path at the site root, such as `/blog/`.
 
 ## Translated sites
@@ -115,10 +135,11 @@ Link pages inside your language folder as usual. If a page isn't translated yet,
 | The page one folder up | `../` |
 | A section of another page | `./themes#create-a-skin` |
 | A section of this page | `#quick-reference` |
+| An image in a subfolder | `./images/palette.svg` |
 | A page built separately | `/blog/` |
 | Another website | `https://example.com` |
 
 <AlertBox tone="accent" icon="tabler:bolt" title="Rule of thumb">
-  Link your own pages relative to your file. Use a full path or address for
-  everything else.
+  Link your own pages and files relative to your file. Use a full path or
+  address for everything else.
 </AlertBox>

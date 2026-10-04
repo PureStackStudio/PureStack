@@ -6,14 +6,14 @@ import { disableLogger, getLogger, type Logger } from 'logpot'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import { resolveSiteConfig } from '../config/config'
-import { discoverContent } from '../discover/content'
+import { discoverContent, discoverStaticAssets } from '../discover/content'
 import {
   type ResolvedContentFile,
   resolveContentFiles,
   resolvePlainContentFile,
 } from '../i18n/content'
 import { initBuiltinComponents } from '../regor/initBuiltinComponents'
-import { ContentRouteIndex } from './content-hrefs'
+import { ContentRouteIndex } from './content-urls'
 import {
   renderPageFromFile,
   resolveFooterHtmlByDirectory,
@@ -194,7 +194,7 @@ describe('footer hierarchy', () => {
           toContentFile(contentDir, 'index.mdx'),
         ),
       ).rejects.toThrow(
-        'Content link "./missing" in "header.mdx" does not match any page.',
+        'Content link "./missing" in "header.mdx" does not match any page or file.',
       )
     } finally {
       await fs.rm(root, { recursive: true, force: true })
@@ -205,6 +205,7 @@ describe('footer hierarchy', () => {
 async function indexContent(config: SiteConfig) {
   return new ContentRouteIndex(
     resolveContentFiles(config, await discoverContent(config.contentDir)),
+    (await discoverStaticAssets(config.contentDir)).map((file) => file.relPath),
   )
 }
 

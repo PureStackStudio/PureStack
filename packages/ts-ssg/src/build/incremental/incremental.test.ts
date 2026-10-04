@@ -528,6 +528,70 @@ describe('incremental builder', () => {
       },
     )
 
+    it.each(['auto', 'none'] as const)(
+      're-renders a page once its missing image is added (navigation %s)',
+      async (mode) => {
+        await withTempDir(async (base) => {
+          const site = await createLinkSite(base, mode, {
+            'index.mdx': '![Logo](./images/logo.png)',
+          })
+          expect(await site.readIndex()).toContain('points to a missing file')
+
+          const logoPath = path.join(site.contentDir, 'images', 'logo.png')
+          await fs.mkdir(path.dirname(logoPath), { recursive: true })
+          await fs.writeFile(logoPath, 'png', 'utf8')
+          const result = await site.builder.applyChange(logoPath)
+
+          expect(result.changedAssets).toBe(1)
+          expect(
+            await site.builder.renderIfDirtyByOutPath(site.indexOutPath),
+          ).toBe(true)
+          expect(await site.readIndex()).toContain('src="/images/logo.png"')
+        })
+      },
+    )
+
+    it.each(['auto', 'none'] as const)(
+      're-renders a page once its image is deleted (navigation %s)',
+      async (mode) => {
+        await withTempDir(async (base) => {
+          const site = await createLinkSite(base, mode, {
+            'index.mdx': '![Logo](./logo.png)',
+            'logo.png': 'png',
+          })
+          expect(await site.readIndex()).toContain('src="/logo.png"')
+
+          const logoPath = path.join(site.contentDir, 'logo.png')
+          await fs.rm(logoPath)
+          const result = await site.builder.applyChange(logoPath)
+
+          expect(result.deletedAssets).toBe(1)
+          expect(
+            await site.builder.renderIfDirtyByOutPath(site.indexOutPath),
+          ).toBe(true)
+          expect(await site.readIndex()).toContain('points to a missing file')
+        })
+      },
+    )
+
+    it('keeps pages clean when an image changes in place', async () => {
+      await withTempDir(async (base) => {
+        const site = await createLinkSite(base, 'none', {
+          'index.mdx': '![Logo](./logo.png)',
+          'logo.png': 'png',
+        })
+
+        const logoPath = path.join(site.contentDir, 'logo.png')
+        await fs.writeFile(logoPath, 'png, edited', 'utf8')
+        const result = await site.builder.applyChange(logoPath)
+
+        expect(result.changedAssets).toBe(1)
+        expect(
+          await site.builder.renderIfDirtyByOutPath(site.indexOutPath),
+        ).toBe(false)
+      })
+    })
+
     it('keeps other pages clean when an edit keeps the same pages', async () => {
       await withTempDir(async (base) => {
         const site = await createLinkSite(base, 'none', {

@@ -36,7 +36,7 @@ import {
   resolvePageNavigation,
 } from '../navigation/navigation'
 import { resolveRouteInfo } from '../routing/route'
-import type { ContentRouteIndex } from './content-hrefs'
+import type { ContentRouteIndex } from './content-urls'
 import { resolveHeadConfig } from './head-config'
 import { readSource, writeHtml } from './io'
 import { resolveOutPath } from './out-path'

@@ -514,6 +514,58 @@ describe('resolveSiteConfig sitemap', () => {
     expect(config.consent.services[0]?.scripts).toHaveLength(2)
   })
 
+  it('resolves relative config URLs from the content root', () => {
+    const config = resolveSiteConfig({
+      rootDir: process.cwd(),
+      style: { href: 'assets/custom.css' },
+      logo: {
+        href: './',
+        imageSrc: './assets/../assets/logo.svg?v=2',
+        imageSrcDark: 'assets\\logo-dark.svg#mark',
+      },
+      consent: {
+        privacyPolicyUrl: 'legal/privacy/',
+        categories: [
+          { id: 'necessary', label: 'Necessary', required: true },
+          { id: 'analytics', label: 'Analytics' },
+        ],
+        services: [
+          {
+            id: 'stats',
+            category: 'analytics',
+            scripts: [{ src: 'scripts/stats.js' }],
+          },
+        ],
+      },
+    })
+
+    expect(config.style.href).toBe('/assets/custom.css')
+    expect(config.logo.href).toBe('/')
+    expect(config.logo.imageSrc).toBe('/assets/logo.svg?v=2')
+    expect(config.logo.imageSrcDark).toBe('/assets/logo-dark.svg#mark')
+    expect(config.consent.privacyPolicyUrl).toBe('/legal/privacy/')
+    expect(config.consent.services[0]?.scripts[0]?.src).toBe(
+      '/scripts/stats.js',
+    )
+  })
+
+  it('keeps root-absolute and external config URLs as written', () => {
+    const config = resolveSiteConfig({
+      rootDir: process.cwd(),
+      style: { href: '/assets/site.css' },
+      logo: {
+        href: 'https://example.com/',
+        imageSrc: 'data:image/svg+xml,%3Csvg%3E%3C/svg%3E',
+      },
+      consent: { privacyPolicyUrl: 'https://example.com/privacy' },
+    })
+
+    expect(config.style.href).toBe('/assets/site.css')
+    expect(config.logo.href).toBe('https://example.com/')
+    expect(config.logo.imageSrc).toBe('data:image/svg+xml,%3Csvg%3E%3C/svg%3E')
+    expect(config.consent.privacyPolicyUrl).toBe('https://example.com/privacy')
+  })
+
   it('throws when consent service points to an unknown category', () => {
     expect(() =>
       resolveSiteConfig({

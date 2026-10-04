@@ -31,7 +31,11 @@ import {
   themes,
 } from '@purestack/ts-style'
 import type { DeepPartial } from '@purestack/ts-util'
-import { isPlainObject, normalizeBasePath } from '@purestack/ts-util'
+import {
+  isPlainObject,
+  normalizeBasePath,
+  urlNormalizer,
+} from '@purestack/ts-util'
 import { resolveNavigationConfig } from '../navigation/navigation'
 
 const DEFAULT_ROOT = path.resolve(
@@ -204,10 +208,8 @@ function resolveStyleConfig(
     styleFile?.fileName,
     'site.css',
   )
-  const href = resolveString(
-    styleInput?.href,
-    styleFile?.href,
-    `/assets/${fileName}`,
+  const href = resolveConfigUrl(
+    resolveString(styleInput?.href, styleFile?.href, `/assets/${fileName}`),
   )
   const themeNames = resolveThemes(styleInput?.themes, styleFile?.themes)
   const pretty = pickBoolean(styleInput?.pretty, styleFile?.pretty, false)
@@ -276,14 +278,19 @@ function resolveSiteLogoConfig(
     ),
     logoBackground: input?.logoBackground ?? file?.logoBackground,
     logoForeground: input?.logoForeground ?? file?.logoForeground,
-    href: href === null || href === '' ? href : resolveString(href, '/'),
+    href:
+      href === null || href === ''
+        ? href
+        : resolveConfigUrl(resolveString(href, '/')),
     subtitle: resolveOptionalString(input?.subtitle ?? file?.subtitle),
     suffix: resolveOptionalString(input?.suffix ?? file?.suffix),
     ariaLabel: resolveOptionalString(input?.ariaLabel ?? file?.ariaLabel),
     icon: resolveOptionalString(input?.icon ?? file?.icon),
-    imageSrc: resolveOptionalString(input?.imageSrc ?? file?.imageSrc),
-    imageSrcDark: resolveOptionalString(
-      input?.imageSrcDark ?? file?.imageSrcDark,
+    imageSrc: resolveConfigUrl(
+      resolveOptionalString(input?.imageSrc ?? file?.imageSrc),
+    ),
+    imageSrcDark: resolveConfigUrl(
+      resolveOptionalString(input?.imageSrcDark ?? file?.imageSrcDark),
     ),
     monogram: resolveOptionalString(input?.monogram ?? file?.monogram),
     brandColor: resolveOptionalString(input?.brandColor ?? file?.brandColor),
@@ -438,8 +445,8 @@ function resolveConsentConfig(
       file?.bannerDescription,
       'We use cookies and similar technologies to improve your experience. You can accept all, reject non-essential, or manage preferences.',
     ),
-    privacyPolicyUrl: resolveOptionalString(
-      input?.privacyPolicyUrl ?? file?.privacyPolicyUrl,
+    privacyPolicyUrl: resolveConfigUrl(
+      resolveOptionalString(input?.privacyPolicyUrl ?? file?.privacyPolicyUrl),
     ),
     privacyPolicyLabel: resolveString(
       input?.privacyPolicyLabel,
@@ -783,7 +790,7 @@ function resolveConsentServiceScripts(
   const resolved: ConsentScript[] = []
   for (const entry of scripts) {
     if (!isPlainObject(entry)) continue
-    const src = resolveOptionalString(entry.src)
+    const src = resolveConfigUrl(resolveOptionalString(entry.src))
     const content = resolveOptionalString(entry.content)
     if (!src && !content) {
       throw new Error(
@@ -848,6 +855,20 @@ function resolveOptionalString(value: unknown) {
   if (typeof value !== 'string') return undefined
   const normalized = value.trim()
   return normalized.length > 0 ? normalized : undefined
+}
+
+/**
+ * Site configuration lives at the content root, so its relative URLs start
+ * there: `assets/logo.svg` means `/assets/logo.svg` on every page.
+ */
+function resolveConfigUrl(value: string): string
+function resolveConfigUrl(value: string | undefined): string | undefined
+function resolveConfigUrl(value: string | undefined) {
+  if (!value || value.startsWith('/') || urlNormalizer.isSpecialHref(value)) {
+    return value
+  }
+  const { base, suffix } = urlNormalizer.splitSuffix(value)
+  return `${path.posix.normalize(`/${base.replaceAll('\\', '/')}`)}${suffix}`
 }
 
 function normalizeOptionalNumber(value: unknown) {

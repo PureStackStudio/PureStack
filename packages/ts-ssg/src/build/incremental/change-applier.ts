@@ -204,6 +204,7 @@ export class IncrementalChangeApplier {
       await removeFile(assetEntry.outPath)
       delete manifest.assets[relPath]
       this.input.scriptEntrypoints.removeTrackedEntrypoint(relPath)
+      this.input.contentState.refreshAssets()
       result.deletedAssets += 1
     }
     if (ext === '.ts') await this.handleScriptAssetChange(relPath, result)
@@ -268,6 +269,7 @@ export class IncrementalChangeApplier {
       outPath: assetCopy.outPath,
       ...signature,
     }
+    this.input.contentState.refreshAssets()
     result.changedAssets += 1
     await this.input.persistManifest()
   }
