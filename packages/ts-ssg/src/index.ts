@@ -1,10 +1,24 @@
+export type {
+  PageFrontmatter,
+  PageInfo,
+  PageTemplate,
+  PageTemplateInput,
+  PageTemplateMap,
+  SiteConfig,
+  SiteConfigInput,
+  TsSsgContext,
+} from '@purestack/ts-common'
+export type { BuildContext, PageRenderResult } from './build/page'
 export {
+  type BuildCountSummary,
   type BuildHooks,
   type BuildInput,
+  type BuildOptions,
   type BuildResult,
   buildSite,
   type PublishOptions,
 } from './build/site'
+export type { WriteStylesResult } from './build/styles'
 export { runCli } from './cli-runner'
 export { resolveSiteConfig } from './config/config'
 export {
@@ -17,6 +31,7 @@ export {
   normalizeFrontmatter,
   parseFrontmatterSource,
 } from './frontmatter/frontmatter'
+export type { ResolvedContentFile } from './i18n/content'
 export {
   createMdxHighlighter,
   DEFAULT_MDX_CODE_LANGS,

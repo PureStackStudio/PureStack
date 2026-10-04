@@ -74,15 +74,6 @@ export interface PageRenderResult {
   scriptEntrypoints: string[]
 }
 
-export async function buildPage(
-  context: BuildContext,
-  file: ResolvedContentFile,
-): Promise<PageRenderResult> {
-  const page = await renderPageFromFile(context, file)
-  await writePage(page, context.config.html.minify)
-  return page
-}
-
 export async function writePage(
   page: PageRenderResult,
   minify: boolean,
