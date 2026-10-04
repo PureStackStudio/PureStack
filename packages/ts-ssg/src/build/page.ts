@@ -358,24 +358,27 @@ async function renderPageShell(input: RenderPageShellInput): Promise<string> {
     navigation,
     outline,
     pageInfo,
-    headerHtml: resolveSpecialHtmlForPage(
-      pageInfo.relPath,
-      context.headerHtmlByDir,
-    ),
-    footerHtml: resolveFooterHtmlForPage(
-      pageInfo.relPath,
-      context.footerHtmlByDir,
-    ),
+    ...resolvePagePartials(context, pageInfo),
     consent: context.config.consent,
     analytics: context.config.analytics,
   })
 }
 
-function resolveFooterHtmlForPage(
-  pageRelPath: string,
-  footerHtmlByDir: Map<string, string> | undefined,
-): string | undefined {
-  return resolveSpecialHtmlForPage(pageRelPath, footerHtmlByDir)
+/** The header and footer a page shows: the nearest ones up its folders. */
+export function resolvePagePartials(
+  context: Pick<BuildContext, 'headerHtmlByDir' | 'footerHtmlByDir'>,
+  page: { relPath: string },
+) {
+  return {
+    headerHtml: resolveSpecialHtmlForPage(
+      page.relPath,
+      context.headerHtmlByDir,
+    ),
+    footerHtml: resolveSpecialHtmlForPage(
+      page.relPath,
+      context.footerHtmlByDir,
+    ),
+  }
 }
 
 function resolveSpecialHtmlForPage(

@@ -355,16 +355,14 @@ class IncrementalRuntime {
       result.fullRebuild = true
       return result
     }
-    if (isDefaultFooterFile(relPath)) {
-      result.fullRebuild = true
-      return result
-    }
-    if (isDefaultHeaderFile(relPath)) {
-      result.fullRebuild = true
-      return result
-    }
 
-    await this.changeApplier.applyFileChange(filePath, relPath, result)
+    this.contentState.takeMarkedPageCount()
+    if (isDefaultHeaderFile(relPath) || isDefaultFooterFile(relPath)) {
+      await this.contentState.refreshPartials()
+    } else {
+      await this.changeApplier.applyFileChange(filePath, relPath, result)
+    }
+    result.markedPages = this.contentState.takeMarkedPageCount()
     return result
   }
 

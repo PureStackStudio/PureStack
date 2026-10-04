@@ -52,44 +52,32 @@ The output is deterministic with `generatedAt` being the only volatile field.
 
 ## `applyChange(filePath)`
 
-Handles a single filesystem change event. It is structured as a fast path with
-early exits:
+Handles a single filesystem change event. The changed page renders right
+away; other affected pages are marked dirty and render on their next request
+(`renderIfDirtyByOutPath`). `IncrementalBuildResult.markedPages` counts them,
+so the dev server can reload the browser.
 
 1. **Ignore changes outside `contentDir`**: relative path starting with `..`.
-2. **Config file change**: if `isSiteConfigFile` ➜ mark `fullRebuild = true`.
-3. **Missing file (deletion)**:
-   - If a content entry exists and navigation is enabled ➜ rebuild navigation
-     for the affected subtree, update manifest, return.
-   - Otherwise delete the output(s), remove manifest entries, update counters.
-4. **Content change**:
-   - If the file is content (or was previously treated as content):
-     - No signature change ➜ no-op.
-     - With navigation enabled ➜ rebuild navigation subtree.
-     - Otherwise rebuild the single page and update its manifest entry.
-5. **Asset change**:
-   - If signature unchanged ➜ no-op.
-   - Otherwise copy static asset, update manifest entry.
+2. **`siteConfig.json`** ➜ `fullRebuild = true`. Config shapes every output.
+3. **Header or footer partial** (edit, add, or delete) ➜ compile the partials
+   again and mark only the pages whose nearest header or footer HTML changed.
+4. **`_nav.json`** ➜ rebuild navigation; mark every page only if it changed.
+5. **Content change**: no signature change ➜ no-op. Otherwise render the page,
+   refresh the content index and navigation, and mark pages as below.
+6. **Content deletion**: remove the output and manifest entry, then refresh.
+7. **Asset change**: copy the asset and update its manifest entry. A `.ts`
+   change rebuilds the script bundles that import it.
 
-The intent is to keep work proportional to the change while preserving
-navigation correctness when navigation is derived from content.
+## What marks other pages
 
-## Navigation-sensitive rebuilds
-
-When navigation is enabled, a single content change can affect:
-
-- The changed page.
-- Its ancestor folders (navigation nodes).
-- Any siblings within the affected folder scope.
-
-`rebuildNavigationForChange` therefore:
-
-1. Re-discovers content and rebuilds the full navigation tree.
-2. Computes affected folders up to `navigationConfig.maxDepth`.
-3. Rebuilds all pages in those folders.
-4. Deletes pages in those folders that no longer exist.
-
-This favors correctness over minimal work whenever navigation structure is
-content-derived.
+- **Navigation changed** ➜ every page, since every page shows navigation.
+  Navigation is compared as data, so an edit that leaves titles, order, and
+  structure alone marks nothing.
+- **A page or asset was added or removed** ➜ every page, since any content URL
+  may now resolve differently or fail.
+- **A header or footer changed** ➜ the pages that show it.
+- **A script bundle's hashed name changed** ➜ the pages that load it, rendered
+  right away.
 
 ## Manifest assembly
 

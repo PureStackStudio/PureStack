@@ -412,6 +412,7 @@ Tracked:
 In dev/watch mode:
 
 - file changes apply incrementally when safe,
+- a page affected by a shared change, such as a header, footer, or navigation edit, renders again on its next request, before it is served,
 - site config changes trigger full rebuild,
 - lazy route render can happen on first request for missing HTML route,
 - live reload is served over SSE (`/__ts-ssg/events`).

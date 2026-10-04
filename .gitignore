@@ -8,5 +8,5 @@ PureGate
 purestack-setup
 *.vsix
 .codex/*
-/.tmp
+/.tmp*
 /frontend/out/
