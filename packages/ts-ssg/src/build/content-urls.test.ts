@@ -2,19 +2,23 @@ import path from 'node:path'
 import type { SiteConfig } from '@purestack/ts-common'
 import { describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from '../config/config'
+import { isContentExt } from '../discover/contentExtensions'
 import { resolveContentFiles } from '../i18n/content'
-import { ContentRouteIndex, resolveContentHref } from './content-hrefs'
+import { ContentRouteIndex, resolveContentUrl } from './content-urls'
 
+/** Paths with a content extension become pages; the rest become assets. */
 function indexPages(relPaths: string[], config = createConfig()) {
+  const isPage = (relPath: string) => isContentExt(path.extname(relPath))
   return new ContentRouteIndex(
     resolveContentFiles(
       config,
-      relPaths.map((relPath) => ({
+      relPaths.filter(isPage).map((relPath) => ({
         absPath: relPath,
         relPath,
         ext: path.extname(relPath),
       })),
     ),
+    relPaths.filter((relPath) => !isPage(relPath)),
   )
 }
 
@@ -28,10 +32,10 @@ function createConfig(i18n?: Partial<SiteConfig['i18n']>) {
 function resolverFor(relPaths: string[], config = createConfig()) {
   const routes = indexPages(relPaths, config)
   return (href: string, sourceRelPath: string) =>
-    resolveContentHref(href, sourceRelPath, routes, config)
+    resolveContentUrl(href, sourceRelPath, routes, config)
 }
 
-describe('resolveContentHref', () => {
+describe('resolveContentUrl', () => {
   describe('relative to the source file across folder pages and leaf pages', () => {
     const resolve = resolverFor([
       'a/a.mdx',
@@ -237,15 +241,86 @@ describe('resolveContentHref', () => {
     ['/blog'],
     ['/guides/themes/'],
     ['/'],
+    ['/assets/site.css'],
+    ['/components/site/consent/guide-mode.html'],
+    ['data:image/png;base64,iVBORw0KGgo='],
+    ['cid:logo@example'],
     [''],
     [' ./themes'],
-    ['./diagram.svg'],
-    ['../assets/logo.png'],
-    ['../../../../outside.png'],
   ])('leaves %j unchanged', (href) => {
     const resolve = resolverFor(['index.mdx', 'guides/themes.mdx'])
 
     expect(resolve(href, 'guides/themes.mdx')).toBe(href)
+  })
+
+  describe('files', () => {
+    const resolve = resolverFor([
+      'index.mdx',
+      'guides/semantic-tones.mdx',
+      'guides/themes.mdx',
+      'guides/img.png',
+      'guides/diagrams/flow.svg',
+      'guides/my image.png',
+      'guides/LICENSE',
+      'guides/app.ts',
+      'assets/logo.png',
+      'guides\\windows.png',
+    ])
+    const source = 'guides/semantic-tones.mdx'
+
+    it.each([
+      ['./img.png', '/guides/img.png'],
+      ['img.png', '/guides/img.png'],
+      ['./diagrams/flow.svg#node', '/guides/diagrams/flow.svg#node'],
+      ['./img.png?v=2', '/guides/img.png?v=2'],
+      ['../assets/logo.png', '/assets/logo.png'],
+      ['./my%20image.png', '/guides/my image.png'],
+      ['./LICENSE', '/guides/LICENSE'],
+      ['./windows.png', '/guides/windows.png'],
+    ])('resolves %s to %s', (url, expected) => {
+      expect(resolve(url, source)).toBe(expected)
+    })
+
+    it('resolves files from header and other non-page sources', () => {
+      expect(resolve('./guides/img.png', 'header.mdx')).toBe('/guides/img.png')
+    })
+
+    it('fails when a file is missing or named with different capitals', () => {
+      expect(() => resolve('./missing.png', source)).toThrow(
+        'Content link "./missing.png" in "guides/semantic-tones.mdx" points to a missing file "guides/missing.png".',
+      )
+      expect(() => resolve('./IMG.png', source)).toThrow(
+        'points to a missing file "guides/IMG.png"',
+      )
+    })
+
+    it('fails for TypeScript sources, which are bundled rather than copied', () => {
+      expect(() => resolve('./app.ts', source)).toThrow(
+        'points to a missing file "guides/app.ts"',
+      )
+    })
+
+    it('fails when a file path escapes the content root', () => {
+      expect(() => resolve('../../../outside.png', source)).toThrow(
+        'Content link "../../../outside.png" in "guides/semantic-tones.mdx" escapes the content root.',
+      )
+    })
+
+    it('falls back to the default locale for untranslated files', () => {
+      const config = createConfig({
+        defaultLocale: 'en',
+        locales: ['en', 'tr'],
+        urlStrategy: 'prefix-all',
+      })
+      const resolveLocalized = resolverFor(
+        ['en/docs/a.mdx', 'tr/docs/a.mdx', 'en/docs/diagram.png'],
+        config,
+      )
+
+      expect(resolveLocalized('./diagram.png', 'tr/docs/a.mdx')).toBe(
+        '/en/docs/diagram.png',
+      )
+    })
   })
 
   it('fails with a hint when a relative link matches no page', () => {
@@ -255,7 +330,7 @@ describe('resolveContentHref', () => {
     ])
 
     expect(() => resolve('./themse', 'guides/semantic-tones.mdx')).toThrow(
-      'Content link "./themse" in "guides/semantic-tones.mdx" does not match any page. Write a root-absolute URL such as "/blog/" for pages outside this content folder.',
+      'Content link "./themse" in "guides/semantic-tones.mdx" does not match any page or file. Write a root-absolute URL such as "/blog/" for anything outside this content folder.',
     )
     expect(() => resolve('../blog/', 'guides/semantic-tones.mdx')).toThrow(
       'does not match any page',
@@ -386,12 +461,25 @@ describe('ContentRouteIndex', () => {
   it('compares page sets regardless of order', () => {
     const pages = indexPages(['a.mdx', 'b/index.mdx'])
 
-    expect(pages.hasSamePages(indexPages(['b/index.mdx', 'a.mdx']))).toBe(true)
-    expect(pages.hasSamePages(indexPages(['a.mdx']))).toBe(false)
+    expect(pages.hasSameFiles(indexPages(['b/index.mdx', 'a.mdx']))).toBe(true)
+    expect(pages.hasSameFiles(indexPages(['a.mdx']))).toBe(false)
     expect(
-      pages.hasSamePages(indexPages(['a.mdx', 'b/index.mdx', 'c.mdx'])),
+      pages.hasSameFiles(indexPages(['a.mdx', 'b/index.mdx', 'c.mdx'])),
     ).toBe(false)
-    expect(pages.hasSamePages(indexPages(['a.mdx', 'b/b.mdx']))).toBe(false)
-    expect(pages.hasSamePages(undefined)).toBe(false)
+    expect(pages.hasSameFiles(indexPages(['a.mdx', 'b/b.mdx']))).toBe(false)
+    expect(pages.hasSameFiles(undefined)).toBe(false)
+  })
+
+  it('compares asset sets and keeps them across page updates', () => {
+    const files = indexPages(['a.mdx', 'img.png'])
+
+    expect(files.hasSameFiles(indexPages(['img.png', 'a.mdx']))).toBe(true)
+    expect(files.hasSameFiles(indexPages(['a.mdx']))).toBe(false)
+    expect(files.hasSameFiles(indexPages(['a.mdx', 'logo.png']))).toBe(false)
+    expect(files.withPages(files.pages).hasSameFiles(files)).toBe(true)
+    expect(files.withAssets(['img.png', 'app.ts']).hasSameFiles(files)).toBe(
+      true,
+    )
+    expect(files.withAssets([]).hasAsset('img.png')).toBe(false)
   })
 })

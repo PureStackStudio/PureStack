@@ -95,6 +95,8 @@ The `--content` CLI option chooses the content directory. A custom runner can se
 
 The logo can use `imageSrc` and `imageSrcDark` instead of an icon, or a `monogram` mark. `imageSrc` takes priority over `icon`. `subtitle`, `appearance`, `wordmarkStyle`, `shape`, `tone`, colors, and size fields let you tune the mark and wordmark. Set `logo.href` to `null` or `""` for a noninteractive logo. For the full set of presentation fields, use the [schema](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-ssg/schema/siteConfig.schema.json) alongside the [SiteLogo component](/components/site/site-logo/).
 
+Relative paths in `siteConfig.json`, such as `imageSrc`, `style.href`, or `privacyPolicyUrl`, start at the content directory, where the file lives. `assets/logo.svg` becomes `/assets/logo.svg` on every page.
+
 ## Styles and themes
 
 PureStack generates a stylesheet for each configured theme. `light` and `dark` are required, and are the defaults. With the default filename, the generated files are `assets/site.css` and `assets/site.dark.css`.

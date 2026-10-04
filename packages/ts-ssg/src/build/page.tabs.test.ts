@@ -14,7 +14,7 @@ import {
   type ResolvedContentFile,
   resolvePlainContentFile,
 } from '../i18n/content'
-import { ContentRouteIndex } from './content-hrefs'
+import { ContentRouteIndex } from './content-urls'
 import { renderPageFromFile } from './page'
 
 async function writeFile(filePath: string, contents = '') {

@@ -7,7 +7,7 @@ import {
   resolveContentFile,
 } from '../../i18n/content'
 import { buildNavigation } from '../../navigation/navigation'
-import { ContentRouteIndex } from '../content-hrefs'
+import type { ContentRouteIndex } from '../content-urls'
 import {
   type BuildManifest,
   type FileSignature,
@@ -122,18 +122,30 @@ export class IncrementalContentState {
 
   /**
    * Re-reads the site's pages. Adding or removing a page can change where
-   * any content link resolves, so every page becomes dirty; edits that keep
+   * any content URL resolves, so every page becomes dirty; edits that keep
    * the same pages cost nothing beyond discovery.
    */
   async refreshContent() {
     const { config, context } = this.input
     const contentFiles = await discoverSiteContent(config)
-    const contentRoutes = new ContentRouteIndex(contentFiles)
-    const pagesChanged = !contentRoutes.hasSamePages(context.contentRoutes)
-    context.contentRoutes = contentRoutes
+    this.updateContentRoutes(context.contentRoutes.withPages(contentFiles))
     context.translationsByKey = buildTranslationsByKey(contentFiles)
-    if (pagesChanged) this.markAllPagesDirty(contentFiles)
     return contentFiles
+  }
+
+  /** Picks up added or removed assets from the manifest. */
+  refreshAssets() {
+    const { context, getManifest } = this.input
+    this.updateContentRoutes(
+      context.contentRoutes.withAssets(Object.keys(getManifest().assets)),
+    )
+  }
+
+  private updateContentRoutes(contentRoutes: ContentRouteIndex) {
+    const { context } = this.input
+    const filesChanged = !contentRoutes.hasSameFiles(context.contentRoutes)
+    context.contentRoutes = contentRoutes
+    if (filesChanged) this.markAllPagesDirty(contentRoutes.pages)
   }
 
   async refreshNavigationAndMarkDirty() {

@@ -1,10 +1,10 @@
 import type { SiteConfig } from '@purestack/ts-common'
 import { escapeHtml, withBasePath } from '@purestack/ts-util'
-import { type ContentRouteIndex, resolveContentHref } from './content-hrefs'
+import { type ContentRouteIndex, resolveContentUrl } from './content-urls'
 
 const CONTENT_SOURCE_TAG = 'purestack-content-source'
 const CONTENT_SOURCE_TAG_NAME = CONTENT_SOURCE_TAG.toUpperCase()
-const PUBLIC_URL_ATTRIBUTES = ['src', 'action', 'poster'] as const
+const CONTENT_URL_ATTRIBUTES = ['href', 'src', 'poster'] as const
 
 export interface PageUrlOptions {
   sourceRelPath: string
@@ -14,7 +14,7 @@ export interface PageUrlOptions {
 
 /**
  * Marks HTML written in another content file, such as a shared header, so
- * the links inside it resolve from that file rather than from the page.
+ * the URLs inside it resolve from that file rather than from the page.
  */
 export function markContentSource(html: string, sourceRelPath: string) {
   const file = escapeHtml(sourceRelPath.replaceAll('\\', '/'), true)
@@ -22,9 +22,9 @@ export function markContentSource(html: string, sourceRelPath: string) {
 }
 
 /**
- * Finishes every URL in a rendered page. Each `href` resolves from the
- * content file that wrote it, and root-absolute URLs gain the base path.
- * Source markers are removed, so the page keeps the markup its files wrote.
+ * Finishes every URL in a rendered page. Links, sources and posters resolve
+ * from the content file that wrote them, and root-absolute URLs gain the
+ * base path. Source markers are removed, so the page keeps its markup.
  */
 export function resolvePageUrls(document: Document, options: PageUrlOptions) {
   visitChildren(document, options.sourceRelPath, options)
@@ -57,52 +57,68 @@ function resolveElementUrls(
   options: PageUrlOptions,
 ) {
   const { basePath } = options.config
-  const href = element.getAttribute('href')
-  if (href !== null) {
-    const resolved = resolveContentHref(
-      href,
-      sourceRelPath,
-      options.contentRoutes,
-      options.config,
+  const finishUrl = (url: string) =>
+    withBasePath(
+      basePath,
+      resolveContentUrl(
+        url,
+        sourceRelPath,
+        options.contentRoutes,
+        options.config,
+      ),
     )
-    updateAttribute(element, 'href', href, withBasePath(basePath, resolved))
+  for (const name of CONTENT_URL_ATTRIBUTES) {
+    updateAttribute(element, name, finishUrl)
   }
-  if (!basePath) return
-  for (const name of PUBLIC_URL_ATTRIBUTES) {
-    const value = element.getAttribute(name)
-    if (value !== null) {
-      updateAttribute(element, name, value, withBasePath(basePath, value))
-    }
-  }
-  const srcset = element.getAttribute('srcset')
-  if (srcset !== null) {
-    updateAttribute(
-      element,
-      'srcset',
-      srcset,
-      withSrcsetBasePath(basePath, srcset),
-    )
-  }
+  updateAttribute(element, 'srcset', (srcset) =>
+    mapSrcsetUrls(srcset, finishUrl),
+  )
+  // A form posts to an endpoint, which is not a content file.
+  updateAttribute(element, 'action', (action) => withBasePath(basePath, action))
 }
 
-function withSrcsetBasePath(basePath: string, srcset: string) {
-  return srcset
-    .split(',')
-    .map((candidate) => {
-      const url = candidate.trim().split(/\s+/)[0]
-      return url
-        ? candidate.replace(url, withBasePath(basePath, url))
-        : candidate
-    })
-    .join(',')
+/**
+ * Maps each image candidate URL in a `srcset`. Like the HTML parser, a URL
+ * runs to the next whitespace, so commas inside `data:` URLs stay intact.
+ */
+function mapSrcsetUrls(srcset: string, mapUrl: (url: string) => string) {
+  let output = ''
+  let index = 0
+  while (index < srcset.length) {
+    const separatorStart = index
+    while (index < srcset.length && /[\s,]/.test(srcset[index])) index++
+    output += srcset.slice(separatorStart, index)
+    if (index >= srcset.length) break
+
+    const urlStart = index
+    while (index < srcset.length && !/\s/.test(srcset[index])) index++
+    const token = srcset.slice(urlStart, index)
+    const url = token.replace(/,+$/, '')
+    output += mapUrl(url) + token.slice(url.length)
+    if (url !== token) continue
+
+    const descriptorStart = index
+    let depth = 0
+    while (index < srcset.length) {
+      const current = srcset[index]
+      if (current === ',' && depth === 0) break
+      if (current === '(') depth++
+      if (current === ')') depth = Math.max(0, depth - 1)
+      index++
+    }
+    output += srcset.slice(descriptorStart, index)
+  }
+  return output
 }
 
 function updateAttribute(
   element: Element,
   name: string,
-  value: string,
-  next: string,
+  finish: (value: string) => string,
 ) {
+  const value = element.getAttribute(name)
+  if (value === null) return
+  const next = finish(value)
   if (next !== value) element.setAttribute(name, next)
 }
 

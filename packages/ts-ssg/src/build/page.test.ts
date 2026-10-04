@@ -5,7 +5,7 @@ import type { SiteConfig } from '@purestack/ts-common'
 import { disableLogger, getLogger, type Logger } from 'logpot'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from '../config/config'
-import { discoverContent } from '../discover/content'
+import { discoverContent, discoverStaticAssets } from '../discover/content'
 import {
   buildTranslationsByKey,
   type ResolvedContentFile,
@@ -15,7 +15,7 @@ import {
 } from '../i18n/content'
 import { buildNavigation } from '../navigation/navigation'
 import { initBuiltinComponents } from '../regor/initBuiltinComponents'
-import { ContentRouteIndex } from './content-hrefs'
+import { ContentRouteIndex } from './content-urls'
 import { renderPageFromFile } from './page'
 
 async function writeFile(filePath: string, contents = '') {
@@ -272,12 +272,19 @@ describe('page content compilation', () => {
           '',
           `<BtnLink :href="'./themes' + '#create-a-skin'">Computed button</BtnLink>`,
           '',
+          '![Palette diagram](./images/palette.svg)',
+          '',
           '```md',
           '[Missing](./missing)',
+          '![Missing](./missing.png)',
           '```',
         ].join('\n'),
       )
       await writeFile(path.join(contentDir, 'guides', 'themes.mdx'), '# Themes')
+      await writeFile(
+        path.join(contentDir, 'guides', 'images', 'palette.svg'),
+        '<svg xmlns="http://www.w3.org/2000/svg"></svg>',
+      )
       await writeFile(path.join(contentDir, 'index.mdx'), '# Home')
 
       const config = resolveSiteConfig({ rootDir: root, contentDir, outDir })
@@ -291,8 +298,12 @@ describe('page content compilation', () => {
       expect(page.html).toContain('<a href="/">Home</a>')
       expect(page.html).toMatch(/<a[^>]*href="\/guides\/themes\/"[^>]*>/)
       expect(page.html).toContain('href="/guides/themes/#create-a-skin"')
+      expect(page.html).toContain(
+        '<img src="/guides/images/palette.svg" alt="Palette diagram">',
+      )
       expect(page.html).toContain('[Missing](./missing)')
-      expect(page.html).not.toMatch(/href="\.{1,2}\//)
+      expect(page.html).toContain('![Missing](./missing.png)')
+      expect(page.html).not.toMatch(/(href|src)="\.{1,2}\//)
     } finally {
       await fs.rm(root, { recursive: true, force: true })
     }
@@ -340,7 +351,7 @@ describe('page content compilation', () => {
           toContentFile(contentDir, 'index.mdx'),
         ),
       ).rejects.toThrow(
-        'Content link "./themse" in "index.mdx" does not match any page.',
+        'Content link "./themse" in "index.mdx" does not match any page or file.',
       )
     } finally {
       await fs.rm(root, { recursive: true, force: true })
@@ -697,6 +708,7 @@ describe('page content compilation', () => {
 async function indexContent(config: SiteConfig) {
   return new ContentRouteIndex(
     resolveContentFiles(config, await discoverContent(config.contentDir)),
+    (await discoverStaticAssets(config.contentDir)).map((file) => file.relPath),
   )
 }
 
