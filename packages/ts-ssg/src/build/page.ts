@@ -36,15 +36,16 @@ import {
   resolvePageNavigation,
 } from '../navigation/navigation'
 import { resolveRouteInfo } from '../routing/route'
-import { resolvePageContentHref } from './content-hrefs'
+import type { ContentRouteIndex } from './content-hrefs'
 import { resolveHeadConfig } from './head-config'
 import { readSource, writeHtml } from './io'
 import { resolveOutPath } from './out-path'
-import { applyPublicBasePath } from './public-hrefs'
+import { markContentSource, resolvePageUrls } from './page-urls'
 import { renderPage } from './renderer'
 
 export interface BuildContext {
   config: SiteConfig
+  contentRoutes: ContentRouteIndex
   headerHtmlByDir?: Map<string, string>
   footerHtmlByDir?: Map<string, string>
   writeErrorPages?: boolean
@@ -120,13 +121,7 @@ export async function renderPageFromFile(
     const parsedContent = parseFrontmatterSource(source, file.relPath, {
       defaultShowToc: context.config.pageToc.enabled,
     })
-    const compiled = compilePageContent(
-      file,
-      parsedContent.body,
-      context.mdx,
-      context.config.mdx.compileMdAsMdx,
-      context.config,
-    )
+    const compiled = compilePageContent(context, file, parsedContent.body)
     const frontmatter = resolvePageFrontmatterTitle(
       parsedContent.frontmatter,
       compiled.outline,
@@ -161,15 +156,12 @@ export async function renderPageFromFile(
       outline: compiled.outline,
       pageInfo,
     })
-    const html = applyPublicBasePath(
-      renderPageApp(context, htmlShell, {
-        pageInfo,
-        navigation,
-        outline: compiled.outline,
-        scriptEntrypoints,
-      }),
-      context.config.basePath,
-    )
+    const html = renderPageApp(context, file, htmlShell, {
+      pageInfo,
+      navigation,
+      outline: compiled.outline,
+      scriptEntrypoints,
+    })
     const renderTimeMs =
       Number(process.hrtime.bigint() - renderStart) / 1_000_000
     return {
@@ -207,41 +199,49 @@ export async function renderPageFromFile(
   }
 }
 
+type ContentCompileContext = Pick<BuildContext, 'config' | 'mdx'>
+
+export async function resolveHeaderFooterHtml(context: BuildContext) {
+  context.headerHtmlByDir = await resolveHeaderHtmlByDirectory(context)
+  context.footerHtmlByDir = await resolveFooterHtmlByDirectory(context)
+}
+
 export async function resolveFooterHtmlByDirectory(
-  config: SiteConfig,
-  mdxOptions: MdxRenderOptions | undefined,
+  context: ContentCompileContext,
 ): Promise<Map<string, string>> {
-  const footers = await discoverDefaultFooters(config.contentDir)
-  return await resolveSpecialHtmlByDirectory(config, footers, mdxOptions)
+  const footers = await discoverDefaultFooters(context.config.contentDir)
+  return await resolveSpecialHtmlByDirectory(context, footers)
 }
 
 export async function resolveHeaderHtmlByDirectory(
-  config: SiteConfig,
-  mdxOptions: MdxRenderOptions | undefined,
+  context: ContentCompileContext,
 ): Promise<Map<string, string>> {
-  const headers = await discoverDefaultHeaders(config.contentDir)
-  return await resolveSpecialHtmlByDirectory(config, headers, mdxOptions)
+  const headers = await discoverDefaultHeaders(context.config.contentDir)
+  return await resolveSpecialHtmlByDirectory(context, headers)
 }
 
 async function resolveSpecialHtmlByDirectory(
-  config: SiteConfig,
+  context: ContentCompileContext,
   files: ContentFile[],
-  mdxOptions: MdxRenderOptions | undefined,
 ): Promise<Map<string, string>> {
   const htmlByDir = new Map<string, string>()
   for (const file of files) {
-    const localizedFile = resolveSpecialContentFile(config, file)
+    const localizedFile = resolveSpecialContentFile(context.config, file)
     const source = await readSource(localizedFile.absPath)
     const parsedContent = parseFrontmatterSource(source, localizedFile.relPath)
     const compiled = compilePageContent(
+      context,
       localizedFile,
       parsedContent.body,
-      mdxOptions,
-      config.mdx.compileMdAsMdx,
-      config,
     )
     const dirKey = toDirKey(localizedFile.relPath)
-    htmlByDir.set(dirKey, compiled.bodyHtml)
+    // Links in a partial resolve from the partial, not from each page.
+    htmlByDir.set(
+      dirKey,
+      compiled.bodyHtml.trim()
+        ? markContentSource(compiled.bodyHtml, localizedFile.relPath)
+        : compiled.bodyHtml,
+    )
   }
   return htmlByDir
 }
@@ -310,27 +310,19 @@ function resolvePageTranslations(
 }
 
 function compilePageContent(
+  context: ContentCompileContext,
   file: ResolvedContentFile,
   sourceBody: string,
-  mdxOptions: MdxRenderOptions | undefined,
-  compileMdAsMdx: boolean,
-  config: SiteConfig,
 ) {
-  const shouldCompileMdAsMdx = mdxOptions?.compileMdAsMdx ?? compileMdAsMdx
-  if (isRegorMdxContentExt(file.ext) || shouldCompileMdAsMdx) {
-    return compileMdx(sourceBody, {
-      ...(mdxOptions ?? {}),
-      sourceRelPath: file.relPath,
-      resolveContentHref: (href, sourceRelPath) =>
-        resolvePageContentHref(href, sourceRelPath, config),
-    })
-  }
-  return compileMarkdown(sourceBody, {
-    ...(mdxOptions ?? {}),
+  const { config, mdx } = context
+  const options: MdxRenderOptions = {
+    ...(mdx ?? {}),
     sourceRelPath: file.relPath,
-    resolveContentHref: (href, sourceRelPath) =>
-      resolvePageContentHref(href, sourceRelPath, config),
-  })
+  }
+  const compileMdAsMdx = mdx?.compileMdAsMdx ?? config.mdx.compileMdAsMdx
+  return isRegorMdxContentExt(file.ext) || compileMdAsMdx
+    ? compileMdx(sourceBody, options)
+    : compileMarkdown(sourceBody, options)
 }
 
 type RenderPageShellInput = {
@@ -429,12 +421,19 @@ type RenderAppContextInput = {
 
 function renderPageApp(
   context: BuildContext,
+  file: ResolvedContentFile,
   htmlShell: string,
   appContext: RenderAppContextInput,
 ) {
   const { scriptEntrypoints, ...baseContext } = appContext
   return renderApp(htmlShell, {
     components: context.components,
+    onRendered: (document) =>
+      resolvePageUrls(document, {
+        sourceRelPath: file.relPath,
+        contentRoutes: context.contentRoutes,
+        config: context.config,
+      }),
     context: {
       site: context.config,
       ...baseContext,

@@ -4,7 +4,6 @@ import { themes } from '@purestack/ts-style'
 import { toOutputAssetRelPath } from '@purestack/ts-util'
 import { getLogger, type Logger } from 'logpot'
 import {
-  discoverContent,
   isDefaultFooterFile,
   isDefaultHeaderFile,
   isSiteConfigFile,
@@ -14,16 +13,13 @@ import {
   buildTranslationsByKey,
   type ResolvedContentFile,
   resolveContentFile,
-  resolveContentFiles,
 } from '../../i18n/content'
 import { buildNavigation } from '../../navigation/navigation'
 import { initBuiltinComponents } from '../../regor/initBuiltinComponents'
-import {
-  assertUniqueContentRoutes,
-  resolveRouteInfo,
-} from '../../routing/route'
+import { resolveRouteInfo } from '../../routing/route'
 import { copyStaticAssets } from '../assets'
 import { resolveBuildSiteConfig } from '../build-config'
+import { ContentRouteIndex } from '../content-hrefs'
 import { writeGeneratedFavicon } from '../favicon'
 import { prepareOutDir } from '../io'
 import {
@@ -33,11 +29,7 @@ import {
   readManifest,
   writeManifest,
 } from '../manifest'
-import {
-  type BuildContext,
-  resolveFooterHtmlByDirectory,
-  resolveHeaderHtmlByDirectory,
-} from '../page'
+import { type BuildContext, resolveHeaderFooterHtml } from '../page'
 import { buildPagefindIndex } from '../pagefind'
 import { ScriptCacheKeyStore } from '../script-cache-key'
 import type { BuildHooks, BuildInput, BuildResult } from '../site'
@@ -49,6 +41,7 @@ import { ScriptEntrypointManager } from './script-entry-manager'
 import {
   buildManifest,
   countByExt,
+  discoverSiteContent,
   isOutsideContentRoot,
   resolveMdxBuildOptions,
   toContentFile,
@@ -91,11 +84,7 @@ async function createIncrementalRuntime(
   themes.setOptions(config.style.theme)
   initBuiltinComponents({ includeShikiStyles: isShikiEnabled(config.mdx) })
   const log = getLogger()
-  const discovered = resolveContentFiles(
-    config,
-    await discoverContent(config.contentDir),
-  )
-  assertUniqueContentRoutes(discovered)
+  const discovered = await discoverSiteContent(config)
   const navigation = await buildNavigation(
     config.contentDir,
     discovered,
@@ -109,6 +98,7 @@ async function createIncrementalRuntime(
   const scriptCacheKeys = new ScriptCacheKeyStore(manifest.assets)
   const context: BuildContext = {
     config,
+    contentRoutes: new ContentRouteIndex(discovered),
     writeErrorPages: buildOptions.writeErrorPages === true,
     components: buildOptions.components,
     templates: buildOptions.templates,
@@ -122,8 +112,7 @@ async function createIncrementalRuntime(
           })}`
       : undefined,
   }
-  context.headerHtmlByDir = await resolveHeaderHtmlByDirectory(config, mdx)
-  context.footerHtmlByDir = await resolveFooterHtmlByDirectory(config, mdx)
+  await resolveHeaderFooterHtml(context)
 
   return new IncrementalRuntime({
     config,
@@ -284,19 +273,9 @@ class IncrementalRuntime {
     this.scriptEntrypoints.rebuildDependencyIndex(
       copiedAssets.tsDependencyIndex,
     )
-    this.context.headerHtmlByDir = await resolveHeaderHtmlByDirectory(
-      this.config,
-      this.context.mdx,
-    )
-    this.context.footerHtmlByDir = await resolveFooterHtmlByDirectory(
-      this.config,
-      this.context.mdx,
-    )
-    const contentFiles = resolveContentFiles(
-      this.config,
-      await discoverContent(this.config.contentDir),
-    )
-    assertUniqueContentRoutes(contentFiles)
+    const contentFiles = await discoverSiteContent(this.config)
+    this.context.contentRoutes = new ContentRouteIndex(contentFiles)
+    await resolveHeaderFooterHtml(this.context)
     await hooks.onContentDiscovered?.(this.context, contentFiles)
     this.context.navigation = await buildNavigation(
       this.config.contentDir,

@@ -2,10 +2,15 @@
 import path from 'node:path'
 import type { SiteConfig, SiteMdxConfig } from '@purestack/ts-common'
 import { urlNormalizer } from '@purestack/ts-util'
-import type { ContentFile, StaticAssetFile } from '../../discover/content'
+import {
+  type ContentFile,
+  discoverContent,
+  type StaticAssetFile,
+} from '../../discover/content'
 import {
   type ResolvedContentFile,
   resolveContentFile,
+  resolveContentFiles,
   resolvePlainContentFile,
 } from '../../i18n/content'
 import type { MdxRenderOptions } from '../../mdx/compile'
@@ -16,7 +21,10 @@ import {
   type MdxCodeHighlighter,
 } from '../../mdx/highlight'
 import { createHljsHighlighter } from '../../mdx/highlightjs'
-import { resolveRouteInfo } from '../../routing/route'
+import {
+  assertUniqueContentRoutes,
+  resolveRouteInfo,
+} from '../../routing/route'
 import { resolveStaticOutPath } from '../assets'
 import {
   type AssetManifestEntry,
@@ -128,6 +136,16 @@ async function resolveHighlighter(
     DEFAULT_MDX_CODE_THEMES,
     DEFAULT_MDX_CODE_LANGS,
   )
+}
+
+/** Discovers the site's pages and rejects two pages sharing one URL. */
+export async function discoverSiteContent(config: SiteConfig) {
+  const contentFiles = resolveContentFiles(
+    config,
+    await discoverContent(config.contentDir),
+  )
+  assertUniqueContentRoutes(contentFiles)
+  return contentFiles
 }
 
 export function normalizeUrlPath(urlPath: string) {

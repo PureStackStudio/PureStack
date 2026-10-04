@@ -1,15 +1,13 @@
 import path from 'node:path'
 import type { SiteConfig } from '@purestack/ts-common'
 import type { Logger } from 'logpot'
-import { discoverContent } from '../../discover/content'
 import {
   buildTranslationsByKey,
   type ResolvedContentFile,
   resolveContentFile,
-  resolveContentFiles,
 } from '../../i18n/content'
 import { buildNavigation } from '../../navigation/navigation'
-import { assertUniqueContentRoutes } from '../../routing/route'
+import { ContentRouteIndex } from '../content-hrefs'
 import {
   type BuildManifest,
   type FileSignature,
@@ -25,6 +23,7 @@ import {
 } from '../page'
 import type { BuildHooks } from '../site'
 import {
+  discoverSiteContent,
   ManifestContentIndex,
   normalizeUrlPath,
   removeFile,
@@ -113,11 +112,7 @@ export class IncrementalContentState {
     const normalized = normalizeUrlPath(urlPath)
     let relPath = this.contentIndex.getRelPathByUrlPath(normalized)
     if (!relPath) {
-      const contentFiles = resolveContentFiles(
-        this.input.config,
-        await discoverContent(this.input.config.contentDir),
-      )
-      assertUniqueContentRoutes(contentFiles)
+      const contentFiles = await this.refreshContent()
       this.contentIndex.updateUrlPathMapFromFiles(contentFiles)
       relPath = this.contentIndex.getRelPathByUrlPath(normalized)
       if (!relPath) return false
@@ -125,18 +120,29 @@ export class IncrementalContentState {
     return this.renderPageByRelPath(relPath, false)
   }
 
+  /**
+   * Re-reads the site's pages. Adding or removing a page can change where
+   * any content link resolves, so every page becomes dirty; edits that keep
+   * the same pages cost nothing beyond discovery.
+   */
+  async refreshContent() {
+    const { config, context } = this.input
+    const contentFiles = await discoverSiteContent(config)
+    const contentRoutes = new ContentRouteIndex(contentFiles)
+    const pagesChanged = !contentRoutes.hasSamePages(context.contentRoutes)
+    context.contentRoutes = contentRoutes
+    context.translationsByKey = buildTranslationsByKey(contentFiles)
+    if (pagesChanged) this.markAllPagesDirty(contentFiles)
+    return contentFiles
+  }
+
   async refreshNavigationAndMarkDirty() {
-    const contentFiles = resolveContentFiles(
-      this.input.config,
-      await discoverContent(this.input.config.contentDir),
-    )
-    assertUniqueContentRoutes(contentFiles)
+    const contentFiles = await this.refreshContent()
     this.input.context.navigation = await buildNavigation(
       this.input.config.contentDir,
       contentFiles,
       this.input.config.navigation,
     )
-    this.input.context.translationsByKey = buildTranslationsByKey(contentFiles)
     this.markAllPagesDirty(contentFiles)
     return contentFiles
   }

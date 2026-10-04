@@ -1,6 +1,5 @@
 import { type TsSsgContext, tryResolveTsSsgContext } from '@purestack/ts-common'
 import type { SemanticTone } from '@purestack/ts-style'
-import { urlNormalizer } from '@purestack/ts-util'
 import {
   type ComputedRef,
   computed,
@@ -178,10 +177,9 @@ function resolveShowEndIcon(props: BtnBase) {
 }
 
 function resolveButtonHref(props: BtnLink, context: TsSsgContext | undefined) {
-  const normalized = urlNormalizer.normalizeHref(unref(props.href))
-  return normalized
-    ? (context?.resolvePublicHref(normalized) ?? normalized)
-    : undefined
+  const value = unref(props.href)
+  const href = typeof value === 'string' ? value.trim() : undefined
+  return href ? (context?.resolvePublicHref(href) ?? href) : undefined
 }
 
 function resolveButtonRel(props: BtnLink) {

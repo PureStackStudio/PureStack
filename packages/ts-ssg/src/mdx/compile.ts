@@ -5,7 +5,6 @@ import { toHast } from 'mdast-util-to-hast'
 import rehypeStringify from 'rehype-stringify'
 import { unified } from 'unified'
 import type { MdxCodeHighlighter } from './highlight'
-import { rewriteLinks } from './linkRewrite'
 import { applyShikiHighlighting } from './shikiHighlighting'
 
 export interface MdxCompileResult {
@@ -13,16 +12,10 @@ export interface MdxCompileResult {
   outline: PageOutlineItem[]
 }
 
-export type MdxContentHrefResolver = (
-  href: string,
-  sourceRelPath: string,
-) => string
-
 export interface MdxRenderOptions {
   highlighter?: MdxCodeHighlighter
   sourceRelPath?: string
   compileMdAsMdx?: boolean
-  resolveContentHref?: MdxContentHrefResolver
 }
 
 export function compileAstToHtml(
@@ -39,7 +32,6 @@ export function compileAstToHtml(
     applyShikiHighlighting(tree, options.highlighter)
   }
   keepCodeLiteral(tree)
-  rewriteLinks(tree, options)
   const bodyHtml = String(
     unified()
       .use(rehypeStringify, { allowDangerousHtml: true })

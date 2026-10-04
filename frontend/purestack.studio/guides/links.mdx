@@ -1,0 +1,124 @@
+---
+title: Links
+description: Link to pages, sections, and other sites. Write links relative to your file, and every build checks that they still work.
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: true
+nav:
+  order: 16
+  icon: tabler:link
+---
+
+# Links
+
+Write a link the way you see your files. PureStack turns it into the right page address and checks it every time the site builds, so a renamed or deleted page never leaves a broken link behind.
+
+## Link to another page
+
+Start from the file you are writing in, just like in your editor's file tree. Take this content folder:
+
+```text
+index.mdx
+guides/
+  index.mdx
+  semantic-tones.mdx
+  themes.mdx
+  components/
+    index.mdx
+    buttons.mdx
+```
+
+From `guides/semantic-tones.mdx`, these links work:
+
+| Write | Opens |
+| --- | --- |
+| `[Themes](./themes)` | `/guides/themes/`, a page in the same folder |
+| `[Buttons](./components/buttons)` | `/guides/components/buttons/`, a page in a subfolder |
+| `[Components](./components/)` | `/guides/components/`, the main page of a subfolder |
+| `[All guides](./)` | `/guides/`, the main page of this folder |
+| `[Home](../)` | `/`, the main page one folder up |
+
+The file extension is optional. `./themes` and `./themes.mdx` open the same page.
+
+A folder's main page is its `index.mdx`, or a file named after the folder, such as `components/components.mdx`. Link to the folder, like `./components/`, and you reach it either way.
+
+## Jump to a section
+
+Add `#` and the section name after the page:
+
+```md
+[Create a skin](./themes#create-a-skin)
+[Back to the top](#links)
+```
+
+A section name is its heading in lowercase, with hyphens between the words. The heading "Create a skin" becomes `#create-a-skin`. Try it: [create a skin](./themes#create-a-skin).
+
+PureStack checks that the page exists, not the section, so double-check section names after you rename a heading.
+
+## Links in components
+
+The same rule works for `href` on any tag, including components and links they build from a value:
+
+```mdx
+<BtnLink href="./themes" tone="accent">Read about themes</BtnLink>
+
+<BtnLink :href="nextPage">Next</BtnLink>
+
+<a href="../">Back to home</a>
+```
+
+Links in a shared header or footer start from that header or footer file, so they work on every page that shows them.
+
+## Link outside your content
+
+Anything that starts with `/` or a protocol is used as written:
+
+| Write | Use it for |
+| --- | --- |
+| `/blog/` | Pages served from the same domain but built separately |
+| `https://github.com/PureStackStudio/PureStack` | Other websites |
+| `mailto:hello@example.com` | Email |
+
+PureStack doesn't check these links, because the pages behind them aren't part of your content folder.
+
+You can link your own pages this way too, as in `/guides/themes/`, but a relative link is the better habit: if that page moves, the build tells you.
+
+If the site lives under a base path, such as `/docs`, PureStack adds it to every link for you. Set it once in the [site configuration](./site-config).
+
+## When a link is broken
+
+The build stops and names the file and the link:
+
+```text
+Content link "./themse" in "guides/semantic-tones.mdx" does not match any page.
+```
+
+While `purestack serve` runs, only that page shows the error, and it updates as soon as you fix the link. Most fixes are one of these:
+
+- **A typo or different capitals.** `./Themes` doesn't find `themes.mdx`.
+- **The page moved.** Write the path again, starting from your file.
+- **The page is built elsewhere.** Start the path at the site root, such as `/blog/`.
+
+## Translated sites
+
+Link pages inside your language folder as usual. If a page isn't translated yet, the link opens the default language's version, so you can translate at your own pace.
+
+## Quick reference
+
+| To reach | Write |
+| --- | --- |
+| A page in the same folder | `./themes` |
+| A page in a subfolder | `./components/buttons` |
+| A folder's main page | `./components/` |
+| The page one folder up | `../` |
+| A section of another page | `./themes#create-a-skin` |
+| A section of this page | `#quick-reference` |
+| A page built separately | `/blog/` |
+| Another website | `https://example.com` |
+
+<AlertBox tone="accent" icon="tabler:bolt" title="Rule of thumb">
+  Link your own pages relative to your file. Use a full path or address for
+  everything else.
+</AlertBox>

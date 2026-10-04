@@ -7,6 +7,8 @@ import { componentRegistry } from './componentRegistry'
 export interface RenderAppOptions<TContext extends TsSsgContext> {
   components: unknown
   context: TContext
+  /** Runs on the rendered document, before it becomes HTML. */
+  onRendered?: (document: Document) => void
 }
 
 export const renderApp = <TContext extends TsSsgContext>(
@@ -50,6 +52,7 @@ export const renderApp = <TContext extends TsSsgContext>(
       },
     )
     appendEmbeddedScriptsToDom(runtimeEmbeds, tsSsgContext)
+    options.onRendered?.(document)
     if (isDocument) {
       const documentHtml = document.documentElement?.outerHTML ?? ''
       return `<!DOCTYPE html>${documentHtml}`

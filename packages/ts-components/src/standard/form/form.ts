@@ -1,6 +1,5 @@
 import { tryResolveTsSsgContext } from '@purestack/ts-common'
 import type { SemanticTone } from '@purestack/ts-style'
-import { urlNormalizer } from '@purestack/ts-util'
 import {
   type ComponentHead,
   type ComputedRef,
@@ -164,10 +163,7 @@ function resolveFormAssistLink(
   return {
     ...head.props,
     normalizedHref: computed(() =>
-      resolvePublicHref(
-        urlNormalizer.normalizeHref(unref(head.props.href)),
-        head,
-      ),
+      resolvePublicHref(toTrimmedHref(unref(head.props.href)), head),
     ),
     resolvedRel: computed(
       () =>
@@ -177,6 +173,10 @@ function resolveFormAssistLink(
           : undefined),
     ),
   }
+}
+
+function toTrimmedHref(value: unknown) {
+  return typeof value === 'string' ? value.trim() : undefined
 }
 
 function resolvePublicHref(

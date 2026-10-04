@@ -425,4 +425,125 @@ describe('incremental builder', () => {
       expect(manifest?.assets['account/account.ts']?.outPath).toBe(bundle.path)
     })
   })
+
+  describe('content links', () => {
+    async function createLinkSite(
+      base: string,
+      mode: 'auto' | 'none',
+      files: Record<string, string>,
+    ) {
+      const contentDir = path.join(base, 'content')
+      const outDir = path.join(base, 'out')
+      for (const [relPath, contents] of Object.entries(files)) {
+        await fs.mkdir(path.dirname(path.join(contentDir, relPath)), {
+          recursive: true,
+        })
+        await fs.writeFile(path.join(contentDir, relPath), contents, 'utf8')
+      }
+      const builder = await createIncrementalBuilder({
+        siteConfig: {
+          rootDir: base,
+          contentDir,
+          outDir,
+          navigation: { mode },
+        },
+        options: { writeErrorPages: true },
+      })
+      await builder.buildAll('initial')
+      const indexOutPath = path.join(outDir, 'index.html')
+      return {
+        builder,
+        contentDir,
+        indexOutPath,
+        readIndex: () => fs.readFile(indexOutPath, 'utf8'),
+      }
+    }
+
+    it.each(['auto', 'none'] as const)(
+      're-renders a linking page once its missing target is added (navigation %s)',
+      async (mode) => {
+        await withTempDir(async (base) => {
+          const site = await createLinkSite(base, mode, {
+            'index.mdx': '[Guide](./guide)',
+          })
+          expect(await site.readIndex()).toContain('does not match any page')
+
+          const guidePath = path.join(site.contentDir, 'guide.mdx')
+          await fs.writeFile(guidePath, '# Guide', 'utf8')
+          await site.builder.applyChange(guidePath)
+
+          expect(
+            await site.builder.renderIfDirtyByOutPath(site.indexOutPath),
+          ).toBe(true)
+          expect(await site.readIndex()).toContain('href="/guide/"')
+        })
+      },
+    )
+
+    it.each(['auto', 'none'] as const)(
+      're-renders a linking page once its target is deleted (navigation %s)',
+      async (mode) => {
+        await withTempDir(async (base) => {
+          const site = await createLinkSite(base, mode, {
+            'index.mdx': '[Guide](./guide)',
+            'guide.mdx': '# Guide',
+          })
+          expect(await site.readIndex()).toContain('href="/guide/"')
+
+          const guidePath = path.join(site.contentDir, 'guide.mdx')
+          await fs.rm(guidePath)
+          const result = await site.builder.applyChange(guidePath)
+
+          expect(result.deletedPages).toBe(1)
+          expect(
+            await site.builder.renderIfDirtyByOutPath(site.indexOutPath),
+          ).toBe(true)
+          expect(await site.readIndex()).toContain('does not match any page')
+        })
+      },
+    )
+
+    it.each(['auto', 'none'] as const)(
+      're-renders pages whose header link target is deleted (navigation %s)',
+      async (mode) => {
+        await withTempDir(async (base) => {
+          const site = await createLinkSite(base, mode, {
+            'header.mdx': '<nav><a href="./guide">Guide</a></nav>',
+            'index.mdx': '# Home',
+            'guide.mdx': '# Guide',
+          })
+          expect(await site.readIndex()).toContain('href="/guide/"')
+
+          const guidePath = path.join(site.contentDir, 'guide.mdx')
+          await fs.rm(guidePath)
+          await site.builder.applyChange(guidePath)
+
+          expect(
+            await site.builder.renderIfDirtyByOutPath(site.indexOutPath),
+          ).toBe(true)
+          const indexHtml = await site.readIndex()
+          expect(indexHtml).toContain('header.mdx')
+          expect(indexHtml).toContain('does not match any page')
+        })
+      },
+    )
+
+    it('keeps other pages clean when an edit keeps the same pages', async () => {
+      await withTempDir(async (base) => {
+        const site = await createLinkSite(base, 'none', {
+          'index.mdx': '[Guide](./guide)',
+          'guide.mdx': '# Guide',
+        })
+
+        const guidePath = path.join(site.contentDir, 'guide.mdx')
+        await fs.writeFile(guidePath, '# Guide, edited', 'utf8')
+        const result = await site.builder.applyChange(guidePath)
+
+        expect(result.changedPages).toBe(1)
+        expect(
+          await site.builder.renderIfDirtyByOutPath(site.indexOutPath),
+        ).toBe(false)
+      })
+    })
+  })
 })
