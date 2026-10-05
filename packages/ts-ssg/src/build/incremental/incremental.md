@@ -86,6 +86,11 @@ so the dev server can reload the browser.
 - **A page or asset was added or removed** ➜ every page, since any content URL
   may now resolve differently or fail.
 - **A header or footer changed** ➜ the pages that show it.
+- **A file imported with `<import-codeblock>` or `<import-content>` changed**
+  ➜ the pages that import it, directly or through shared content, and the
+  headers and footers that import it (`refreshImporters`). A page that
+  failed because the file was missing records it too, so creating the file
+  renders it again.
 - **A script bundle's hashed name changed** ➜ the pages that load it, rendered
   right away.
 

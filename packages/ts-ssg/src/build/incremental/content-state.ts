@@ -1,5 +1,6 @@
 import path from 'node:path'
 import type { SiteConfig } from '@purestack/ts-common'
+import { toPosixPath } from '@purestack/ts-util'
 import type { Logger } from 'logpot'
 import {
   buildTranslationsByKey,
@@ -65,6 +66,8 @@ export class IncrementalContentState {
   private readonly dirtyPages = new Set<string>()
   private markedPages = 0
   private generatedPages = new Map<string, ResolvedContentFile>()
+  /** The files each page imports, by page. */
+  private importedFilesByPage = new Map<string, ReadonlySet<string>>()
   private readonly renderInFlight = new Map<string, Promise<boolean>>()
   private readonly contentIndex: ManifestContentIndex
 
@@ -92,6 +95,7 @@ export class IncrementalContentState {
   }
 
   async renderAllPages(contentFiles: ResolvedContentFile[]) {
+    this.importedFilesByPage.clear()
     let pages = 0
     for (const file of contentFiles) {
       if (await this.writePageWithHooks(file)) pages += 1
@@ -110,6 +114,7 @@ export class IncrementalContentState {
       await hooks.onPageStart?.(context, file)
       const page = await renderPageFromFile(context, file, hooks)
       this.input.onPageBuilt(file.relPath, page.scriptEntrypoints)
+      this.importedFilesByPage.set(file.relPath, new Set(page.importedFiles))
       await hooks.onPageRendered?.(context, page)
       await writePage(page, config.html.minify)
       await hooks.onPageWritten?.(context, page)
@@ -237,6 +242,22 @@ export class IncrementalContentState {
   }
 
   /**
+   * Marks the pages that import a changed file, and refreshes the headers and
+   * footers when one of them imports it.
+   */
+  async refreshImporters(relPath: string) {
+    const changed = toPosixPath(relPath)
+    if (this.input.context.partialImportedFiles?.has(changed)) {
+      await this.refreshPartials()
+    }
+    const importers: string[] = []
+    for (const [page, imports] of this.importedFilesByPage) {
+      if (imports.has(changed)) importers.push(page)
+    }
+    this.markPagesDirty(importers)
+  }
+
+  /**
    * Compiles the header and footer partials again. Only pages whose nearest
    * header or footer changed become dirty, so an edit in one folder leaves
    * pages elsewhere alone.
@@ -269,6 +290,7 @@ export class IncrementalContentState {
     delete this.input.getManifest().content[relPath]
     this.contentIndex.remove(relPath)
     this.dirtyPages.delete(relPath)
+    this.importedFilesByPage.delete(relPath)
     result.deletedPages += 1
   }
 
@@ -326,6 +348,7 @@ export class IncrementalContentState {
       await this.input.persistManifest()
     }
     this.dirtyPages.delete(relPath)
+    this.importedFilesByPage.delete(relPath)
     return false
   }
 

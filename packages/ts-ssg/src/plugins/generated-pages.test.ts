@@ -107,6 +107,10 @@ describe('generated pages', () => {
       'Plugin "bad" needs the generated page "feed.xml" to end in .md, .mdx, or .rmdx.',
     ],
     [
+      () => [{ path: '_shared/note.mdx', source: '' }],
+      'Plugin "bad" cannot generate "_shared/note.mdx"; a name starting with _ marks shared content, not a page.',
+    ],
+    [
       () => [{ path: 'guides/header.mdx', source: '' }],
       'Plugin "bad" cannot generate "guides/header.mdx"; headers and footers are written as files.',
     ],

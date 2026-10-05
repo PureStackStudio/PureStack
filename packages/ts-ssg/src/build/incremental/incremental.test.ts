@@ -942,6 +942,104 @@ describe('incremental builder', () => {
     })
   })
 
+  describe('code imports', () => {
+    const text = (html: string) => html.replace(/<[^>]+>/g, '')
+
+    it.each(['auto', 'none'] as const)(
+      'shows an imported file as code and renders its pages again when it changes (navigation %s)',
+      async (mode) => {
+        await withTempDir(async (base) => {
+          const site = await createSite(base, mode, {
+            'index.mdx':
+              '<div class="demo">\n  <import-codeblock src="./demo.ts"/>\n</div>',
+            'demo.ts': 'export const answer = 1',
+          })
+          expect(text(await site.read('/'))).toContain(
+            'export const answer = 1',
+          )
+
+          const result = await site.change('demo.ts', 'export const answer = 2')
+
+          expect(result.markedPages).toBeGreaterThan(0)
+          expect(await site.renderIfDirty('/')).toBe(true)
+          expect(text(await site.read('/'))).toContain(
+            'export const answer = 2',
+          )
+        })
+      },
+    )
+
+    it('renders a page again once the file it imports exists', async () => {
+      await withTempDir(async (base) => {
+        const site = await createSite(base, 'none', {
+          'index.mdx': '<import-codeblock src="./later.ts"/>',
+        })
+        expect(await site.read('/')).toContain(
+          'Code block import &quot;./later.ts&quot; in &quot;index.mdx&quot; does not match any file.',
+        )
+
+        const result = await site.change('later.ts', 'const later = true')
+
+        expect(result.markedPages).toBeGreaterThan(0)
+        expect(await site.renderIfDirty('/')).toBe(true)
+        expect(text(await site.read('/'))).toContain('const later = true')
+      })
+    })
+
+    it('refreshes the headers that import a changed file', async () => {
+      await withTempDir(async (base) => {
+        const site = await createSite(base, 'none', {
+          'header.mdx': '<import-codeblock src="./snippet.ts"/>',
+          'index.mdx': '# Home',
+          'snippet.ts': 'const version = 1',
+        })
+        expect(text(await site.read('/'))).toContain('const version = 1')
+
+        await site.change('snippet.ts', 'const version = 2')
+
+        expect(await site.renderIfDirty('/')).toBe(true)
+        expect(text(await site.read('/'))).toContain('const version = 2')
+      })
+    })
+
+    it.each(['auto', 'none'] as const)(
+      'shows shared content, which never becomes a page, and renders its pages again when it changes (navigation %s)',
+      async (mode) => {
+        await withTempDir(async (base) => {
+          const site = await createSite(base, mode, {
+            'index.mdx': '# Home\n\n<import-content src="./_shared/note.mdx"/>',
+            '_shared/note.mdx': 'Shared note, version 1.',
+            '_intro.mdx': 'An unused shared file.',
+          })
+          expect(text(await site.read('/'))).toContain(
+            'Shared note, version 1.',
+          )
+          expect(await fileExists(site.outPath('/_shared/note/'))).toBe(false)
+          expect(await fileExists(site.outPath('/_intro/'))).toBe(false)
+
+          const result = await site.change(
+            '_shared/note.mdx',
+            'Shared note, version 2.',
+          )
+
+          expect(result.markedPages).toBeGreaterThan(0)
+          expect(result.changedPages).toBe(0)
+          expect(await site.renderIfDirty('/')).toBe(true)
+          expect(text(await site.read('/'))).toContain(
+            'Shared note, version 2.',
+          )
+          expect(await fileExists(site.outPath('/_shared/note/'))).toBe(false)
+          const manifest = await readManifest(path.join(base, 'out'))
+          expect(
+            Object.keys(manifest?.content ?? {}).some((relPath) =>
+              relPath.includes('_'),
+            ),
+          ).toBe(false)
+        })
+      },
+    )
+  })
+
   describe('generated pages', () => {
     /** One page per tag in the posts' frontmatter, listing their titles. */
     const tagPages: PureStackPlugin = {

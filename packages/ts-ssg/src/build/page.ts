@@ -30,6 +30,7 @@ import {
   resolveContentFile,
   resolvePlainContentFile,
 } from '../i18n/content'
+import { expandImports } from '../mdx/imports'
 import { compileMarkdown } from '../mdx/md'
 import { compileMdx, type MdxRenderOptions } from '../mdx/mdx'
 import {
@@ -50,6 +51,8 @@ export interface BuildContext {
   contentRoutes: ContentRouteIndex
   headerHtmlByDir?: Map<string, string>
   footerHtmlByDir?: Map<string, string>
+  /** Content paths of the files headers and footers import. */
+  partialImportedFiles?: ReadonlySet<string>
   writeErrorPages?: boolean
   components?: Record<string, object>
   templates?: PageTemplateMap
@@ -82,6 +85,11 @@ export interface PageRenderResult {
   pageInfo: PageInfo
   outline?: PageOutlineItem[]
   scriptEntrypoints: string[]
+  /**
+   * Content paths of the files the page imports with import-codeblock and
+   * import-content, nested imports included.
+   */
+  importedFiles: string[]
 }
 
 export async function writePage(
@@ -118,12 +126,19 @@ export async function renderPageFromFile(
   const renderStart = process.hrtime.bigint()
   const { urlPath } = resolveRouteInfo(file)
   const outPath = resolveOutPath(context.config.outDir, file)
+  // Kept on an error page too, so creating a missing file renders it again.
+  const importedFiles = new Set<string>()
   try {
     const source = await readContentSource(file)
     const parsedContent = parseFrontmatterSource(source, file.relPath, {
       defaultShowToc: context.config.pageToc.enabled,
     })
-    const compiled = await compilePageContent(context, file, parsedContent.body)
+    const compiled = await compilePageContent(
+      context,
+      file,
+      parsedContent.body,
+      importedFiles,
+    )
     const frontmatter = resolvePageFrontmatterTitle(
       parsedContent.frontmatter,
       compiled.outline,
@@ -189,6 +204,7 @@ export async function renderPageFromFile(
       scriptEntrypoints: [...scriptEntrypoints].sort((a, b) =>
         a.localeCompare(b),
       ),
+      importedFiles: [...importedFiles],
     }
   } catch (error) {
     if (isError(error)) getLogger().warn(error as Error)
@@ -198,11 +214,12 @@ export async function renderPageFromFile(
       outPath,
     })
     if (context.writeErrorPages) {
-      return await writePageError(context, file, errorWithContext, {
+      const errorPage = await writePageError(context, file, errorWithContext, {
         outPath,
         urlPath,
         renderStart,
       })
+      return { ...errorPage, importedFiles: [...importedFiles] }
     }
     throw errorWithContext
   }
@@ -211,27 +228,38 @@ export async function renderPageFromFile(
 type ContentCompileContext = Pick<BuildContext, 'config' | 'mdx'>
 
 export async function resolveHeaderFooterHtml(context: BuildContext) {
-  context.headerHtmlByDir = await resolveHeaderHtmlByDirectory(context)
-  context.footerHtmlByDir = await resolveFooterHtmlByDirectory(context)
+  const importedFiles = new Set<string>()
+  context.headerHtmlByDir = await resolveHeaderHtmlByDirectory(
+    context,
+    importedFiles,
+  )
+  context.footerHtmlByDir = await resolveFooterHtmlByDirectory(
+    context,
+    importedFiles,
+  )
+  context.partialImportedFiles = importedFiles
 }
 
 export async function resolveFooterHtmlByDirectory(
   context: ContentCompileContext,
+  importedFiles = new Set<string>(),
 ): Promise<Map<string, string>> {
   const footers = await discoverDefaultFooters(context.config.contentDir)
-  return await resolveSpecialHtmlByDirectory(context, footers)
+  return await resolveSpecialHtmlByDirectory(context, footers, importedFiles)
 }
 
 export async function resolveHeaderHtmlByDirectory(
   context: ContentCompileContext,
+  importedFiles = new Set<string>(),
 ): Promise<Map<string, string>> {
   const headers = await discoverDefaultHeaders(context.config.contentDir)
-  return await resolveSpecialHtmlByDirectory(context, headers)
+  return await resolveSpecialHtmlByDirectory(context, headers, importedFiles)
 }
 
 async function resolveSpecialHtmlByDirectory(
   context: ContentCompileContext,
   files: ContentFile[],
+  importedFiles: Set<string>,
 ): Promise<Map<string, string>> {
   const htmlByDir = new Map<string, string>()
   for (const file of files) {
@@ -242,6 +270,7 @@ async function resolveSpecialHtmlByDirectory(
       context,
       localizedFile,
       parsedContent.body,
+      importedFiles,
     )
     const dirKey = toDirKey(localizedFile.relPath)
     // Links in a partial resolve from the partial, not from each page.
@@ -318,20 +347,30 @@ function resolvePageTranslations(
   return translations.length > 0 ? { translations } : {}
 }
 
-function compilePageContent(
+/**
+ * Compiles a page or partial body, after its import tags expand into what they
+ * name. `importedFiles` collects the files they name.
+ */
+async function compilePageContent(
   context: ContentCompileContext,
   file: ResolvedContentFile,
   sourceBody: string,
+  importedFiles: Set<string>,
 ) {
   const { config, mdx } = context
+  const body = await expandImports(sourceBody, {
+    contentDir: config.contentDir,
+    sourceRelPath: file.relPath,
+    onImport: (relPath) => importedFiles.add(relPath),
+  })
   const options: MdxRenderOptions = {
     ...(mdx ?? {}),
     sourceRelPath: file.relPath,
   }
   const compileMdAsMdx = mdx?.compileMdAsMdx ?? config.mdx.compileMdAsMdx
   return isRegorMdxContentExt(file.ext) || compileMdAsMdx
-    ? compileMdx(sourceBody, options)
-    : compileMarkdown(sourceBody, options)
+    ? compileMdx(body, options)
+    : compileMarkdown(body, options)
 }
 
 type RenderPageShellInput = {
@@ -585,6 +624,7 @@ export async function writePageError(
     },
     outline: [],
     scriptEntrypoints: [],
+    importedFiles: [],
   }
 }
 

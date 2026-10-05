@@ -146,6 +146,23 @@ export function maskRegorMarkup(
   return { segments, source: next }
 }
 
+/**
+ * Finds the opening tags named exactly one of `tagNames` outside code, skipping fenced
+ * code first and then the code Markdown parses, as Regor markup is found.
+ */
+export function findMarkupTags(
+  source: string,
+  parse: (source: string) => unknown,
+  tagNames: readonly string[],
+) {
+  const fenceRanges = collectFencedCodeRanges(source)
+  const root = parse(maskIgnoredRanges(source, fenceRanges))
+  const ignoredRanges = [...fenceRanges, ...collectIgnoredRanges(root)]
+  return scanTagTokens(maskIgnoredRanges(source, ignoredRanges)).filter(
+    (token) => token.kind === 'opening' && tagNames.includes(token.name),
+  )
+}
+
 export function restoreRegorMarkup(root: unknown, segments: MarkupSegment[]) {
   if (segments.length === 0) return
   const byPlaceholder = new Map(

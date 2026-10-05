@@ -92,6 +92,7 @@ a real launch.
 ## Content Model
 
 - Content files: `.md`, `.mdx`, `.rmdx`
+- Shared content: a content file whose name, or a folder above it, starts with `_` is never a page. Pages show it with `<import-content src="./_shared.mdx"/>`, which inserts its Markdown before compilation. It has no frontmatter, its own import tags resolve from it, and an import cycle fails the build.
 - Regor MDX files can use either `.mdx` or `.rmdx`.
   Use `.mdx` if you prefer the familiar MDX extension.
   Use `.rmdx` if you want to make the Regor-specific dialect explicit.
@@ -423,6 +424,7 @@ Add skins with a plugin's `skins` field. `themeSkins` in `@purestack/ts-style` h
 - Regor MDX (`.mdx`, `.rmdx`): `remark-parse` + `remark-gfm` with Regor component markup preservation
 - Plugin remark and rehype plugins, in plugin order
 - HTML output via HAST + rehype
+- `<import-codeblock src="./file.ts"/>` becomes a code block holding that file before compilation, anywhere a code block works; `src` resolves from the file the tag is in and must stay inside the content folder, and `lang` overrides the language inferred from the extension. Tags inside code stay as written, and the dev server re-renders the pages, headers, and footers that show a file when it changes.
 - H2/H3 outline extraction for page TOC
 - Code highlighting with highlight.js or Shiki
 

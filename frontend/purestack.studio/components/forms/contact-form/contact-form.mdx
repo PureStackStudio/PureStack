@@ -34,69 +34,7 @@ Fill in the required fields and submit. Native validation runs before the local 
 ```
   </TabPane>
   <TabPane id="contact-form-sample-1-source-1" label="playground.ts">
-```typescript
-import {
-  defineButtonComponents,
-  defineContactFormComponents,
-  defineFlexComponents,
-  defineFormComponents,
-} from '@purestack/ts-components'
-
-import { createApp, defineComponent, html, type Ref, ref } from 'regor'
-
-export interface ContactFormExample {
-  receipt: Ref<string>
-  capture: (event: Event) => void
-}
-
-const contactFormExampleTemplate = html`<Flex direction="column">
-  <div @submit.prevent="capture">
-    <ContactForm
-      title="Tell us about your project"
-      description="This preview keeps your message in this page."
-      action="#"
-      submitLabel="Preview message"
-    />
-  </div>
-  <FormStatus tone="success" :hidden="!receipt">{{ receipt }}</FormStatus>
-</Flex>`
-
-function createContactFormExample(): ContactFormExample {
-  const receipt = ref('')
-  return {
-    receipt,
-    capture: (event) => {
-      const form = event.target as HTMLFormElement
-      if (!form.reportValidity()) return
-      const data = new FormData(form)
-      receipt(
-        `Message preview ready for ${String(data.get('name') ?? '')}: ${String(data.get('message') ?? '')}`,
-      )
-    },
-  }
-}
-
-const component = defineComponent<ContactFormExample>(
-  contactFormExampleTemplate,
-  {
-    context: createContactFormExample,
-  },
-)
-
-createApp(
-  {
-    components: {
-      ContactFormExample: component,
-
-      ...defineContactFormComponents(),
-      ...defineButtonComponents(),
-      ...defineFlexComponents(),
-      ...defineFormComponents(),
-    },
-  },
-  { selector: 'app#contact-form-demo', template: html`<ContactFormExample />` },
-)
-```
+  <import-codeblock src="./playground.ts"/>
   </TabPane>
 </Tabs>
 

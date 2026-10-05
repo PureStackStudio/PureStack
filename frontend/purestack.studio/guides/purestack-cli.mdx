@@ -84,7 +84,7 @@ Routes follow filenames and folders:
 
 `guide/index.md` and `guide/guide.mdx` are alternative names for the same route; do not keep both. The build reports duplicate routes as an error. Page frontmatter supplies a page's title, description, template, navigation order, and layout choices. If a page omits `template`, PureStack uses the documentation template.
 
-Files such as `assets/logo.png` are copied into the output folder with their relative paths intact. The root `siteConfig.json` and navigation files are inputs to the build, not public assets. You can place `_nav.json` in a folder for custom or hybrid navigation, and `header.mdx` or `footer.mdx` for shared page sections. The [Site configuration guide](/guides/site-config/) shows how to enable and order navigation.
+Files such as `assets/logo.png` are copied into the output folder with their relative paths intact. The root `siteConfig.json` and navigation files are inputs to the build, not public assets. You can place `_nav.json` in a folder for custom or hybrid navigation, and `header.mdx` or `footer.mdx` for shared page sections. The [Site configuration guide](/guides/site-config/) shows how to enable and order navigation. A Markdown or MDX file whose name, or a folder above it, starts with `_` is never a page; pages show it with [`<import-content>`](/guides/shared-content/).
 
 A `purestack.config.ts` beside `siteConfig.json` adds code of your own, such as a brand skin, components, templates, or generated pages, through [plugins](/guides/plugins/). Every command loads it when it is present; like other `.ts` files in the content folder, it is never copied to the output.
 
