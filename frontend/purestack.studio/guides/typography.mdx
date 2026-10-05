@@ -217,7 +217,11 @@ Values you leave out keep the skin's settings.
 When you build your own skin, define the type once and merge it into both modes:
 
 ```ts
-import { registerSkin, type ThemePalette, themeSkins } from '@purestack/ts-style'
+import {
+  type ThemePalette,
+  type ThemeSkin,
+  themeSkins,
+} from '@purestack/ts-style'
 import { type DeepPartial, merge } from '@purestack/ts-util'
 
 const type = {
@@ -235,7 +239,7 @@ const type = {
   },
 } satisfies DeepPartial<ThemePalette>
 
-registerSkin('my-site', {
+export const mySiteSkin: ThemeSkin = {
   create: () => {
     const standard = themeSkins.standard.create()
     return {
@@ -243,10 +247,10 @@ registerSkin('my-site', {
       dark: merge(standard.dark, type),
     }
   },
-})
+}
 ```
 
-Keep the scale in order from `xxxs` up to `display`, with each step at least as large as the one before it. The [Themes guide](/guides/themes/) shows how to select a registered skin.
+Keep the scale in order from `xxxs` up to `display`, with each step at least as large as the one before it. The [Themes guide](/guides/themes/) shows how to add the skin with a plugin and select it.
 
 ### Change the root size
 

@@ -1825,13 +1825,6 @@ const selectorListCache = new Map<string, CompiledSelector[]>()
 
 export function resetMiniDomCaches() {
   selectorListCache.clear()
-  const doc = globalThis.document as
-    | (Document & { head?: ParentNode | null; body?: ParentNode | null })
-    | undefined
-  doc?.head?.replaceChildren()
-  doc?.body?.replaceChildren()
-  globalThis.localStorage?.clear()
-  globalThis.sessionStorage?.clear()
 }
 
 function getCompiledSelectors(selector: string) {

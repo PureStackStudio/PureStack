@@ -457,7 +457,7 @@ const navMenuPreviewTemplate = html`<iframe
 ></iframe>`
 const exampleTemplate = html`<NavMenu />`
 
-function createNavMenuPreviewDocument(site: SiteConfig): string {
+async function createNavMenuPreviewDocument(site: SiteConfig): Promise<string> {
   const context: TsSsgContext = {
     site: { ...site },
     pageInfo: {
@@ -512,7 +512,7 @@ function createNavMenuPreviewDocument(site: SiteConfig): string {
       },
     ],
   }
-  const body = renderApp(exampleTemplate, {
+  const body = await renderApp(exampleTemplate, {
     components: defineComponents(getSvgIcon),
     context,
   })
@@ -543,7 +543,7 @@ export async function writeNavMenuPreview(site: SiteConfig) {
     'nav-menu',
     'preview.html',
   )
-  const documentHtml = createNavMenuPreviewDocument(site)
+  const documentHtml = await createNavMenuPreviewDocument(site)
   await fs.mkdir(path.dirname(output), { recursive: true })
   await fs.writeFile(output, documentHtml, 'utf8')
 }

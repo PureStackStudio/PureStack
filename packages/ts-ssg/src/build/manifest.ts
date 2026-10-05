@@ -5,6 +5,7 @@ import path from 'node:path'
 import type { SiteConfig } from '@purestack/ts-common'
 import { ensureDir } from '@purestack/ts-util-node'
 import { getLogger } from 'logpot'
+import type { ContentFile } from '../discover/content'
 
 export const MANIFEST_VERSION = 1
 export const MANIFEST_DIRNAME = '.ts-ssg'
@@ -131,6 +132,20 @@ export async function readSignature(
     if (isEnoent(error)) return null
     throw error
   }
+}
+
+/**
+ * A generated page has no file, so its signature comes from its source: its
+ * size, or 0 for a source function, and the time it was generated. No file
+ * event ever compares it.
+ */
+export async function readContentSignature(
+  file: ContentFile,
+): Promise<FileSignature | null> {
+  if (file.source === undefined) return readSignature(file.absPath)
+  const size =
+    typeof file.source === 'string' ? Buffer.byteLength(file.source) : 0
+  return { mtimeMs: Date.now(), size }
 }
 
 export function signatureEqual(

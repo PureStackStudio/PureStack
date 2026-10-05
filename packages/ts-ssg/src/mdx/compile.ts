@@ -1,9 +1,10 @@
 import type { PageOutlineItem } from '@purestack/ts-common'
+import { toPosixPath } from '@purestack/ts-util'
 import type { Element, Root, Text } from 'hast'
 import type { Root as MdastRoot } from 'mdast'
-import { toHast } from 'mdast-util-to-hast'
 import rehypeStringify from 'rehype-stringify'
-import { unified } from 'unified'
+import remarkRehype from 'remark-rehype'
+import { type PluggableList, unified } from 'unified'
 import type { MdxCodeHighlighter } from './highlight'
 import { applyShikiHighlighting } from './shikiHighlighting'
 
@@ -16,13 +17,39 @@ export interface MdxRenderOptions {
   highlighter?: MdxCodeHighlighter
   sourceRelPath?: string
   compileMdAsMdx?: boolean
+  /** Turns the Markdown tree into HTML, with any content plugins. */
+  contentProcessor?: ContentProcessor
 }
 
-export function compileAstToHtml(
+export type ContentProcessor = ReturnType<typeof createContentProcessor>
+
+const DEFAULT_CONTENT_PROCESSOR = createContentProcessor()
+
+/**
+ * One processor per build: remark plugins on the Markdown tree, then the
+ * HTML tree, then rehype plugins. A single run shares one file, so remark
+ * plugins can pass data to rehype plugins through it.
+ */
+export function createContentProcessor(
+  remarkPlugins: PluggableList = [],
+  rehypePlugins: PluggableList = [],
+) {
+  return unified()
+    .use(remarkPlugins)
+    .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypePlugins)
+    .freeze()
+}
+
+export async function compileAstToHtml(
   file: MdastRoot,
   options: MdxRenderOptions,
-): MdxCompileResult {
-  const tree = toHast(file, { allowDangerousHtml: true })
+): Promise<MdxCompileResult> {
+  const processor = options.contentProcessor ?? DEFAULT_CONTENT_PROCESSOR
+  // Plugins see the same content path on every platform.
+  const tree: unknown = await processor.run(file, {
+    path: options.sourceRelPath && toPosixPath(options.sourceRelPath),
+  })
   if (!isHastRoot(tree)) {
     throw new Error('Content compilation did not produce a HAST root node.')
   }
@@ -59,8 +86,12 @@ function keepCodeLiteral(root: Root) {
   visit(root)
 }
 
-function isHastRoot(node: ReturnType<typeof toHast>): node is Root {
-  return Boolean(node && node.type === 'root')
+function isHastRoot(node: unknown): node is Root {
+  return (
+    typeof node === 'object' &&
+    node !== null &&
+    (node as { type?: unknown }).type === 'root'
+  )
 }
 
 function wrapTablesInScrollContainers(root: Root) {

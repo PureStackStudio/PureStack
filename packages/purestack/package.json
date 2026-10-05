@@ -1,6 +1,6 @@
 {
   "name": "purestack",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "packageManager": "yarn@4.9.2",
   "module": "./dist/purestack.mjs",
   "types": "./dist/purestack.d.mts",

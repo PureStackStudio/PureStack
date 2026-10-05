@@ -1,0 +1,551 @@
+---
+title: Plugins
+description: Add your own skins, components, page layouts, Markdown transforms, generated pages, and build steps to a PureStack site, bundled into plugins.
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: true
+nav:
+  order: 45
+  icon: tabler:plug
+---
+
+# Plugins
+
+A plugin is a named object that extends how PureStack builds your site. Each of its fields adds one kind of extension, so a single plugin can bring a brand skin together with the components and page layout that go with it. Find the field for what you need:
+
+| To | Use |
+| --- | --- |
+| Give the site its own colors | [`skins`](#add-a-skin) |
+| Reuse a piece of markup in your pages | [`components`](#add-components) |
+| Lay out some pages differently | [`templates`](#add-page-templates) |
+| Change how Markdown turns into HTML | [`markdown`](#transform-markdown) |
+| Build pages from data, such as one page per tag | [`pages`](#generate-pages) |
+| Change a whole page, header and footer included | [`hooks.onPageDocument`](#change-a-pages-dom) |
+| Write extra files, such as a feed | [`hooks`](#write-extra-files) |
+| Add styles or run code at other points in the build | [`hooks`](#run-code-during-the-build) |
+| Answer requests while you develop | [`devMiddleware`](#handle-requests-in-development) |
+
+## Add your first plugin
+
+Keep plugins in a folder of their own, beside the content folder:
+
+```text
+content/
+  siteConfig.json
+  purestack.config.ts
+  index.mdx
+plugins/
+  site.ts
+package.json
+```
+
+This plugin adds a component that shows a release badge:
+
+```ts
+// plugins/site.ts
+import { definePlugin } from 'purestack'
+import { defineComponent, html } from 'regor'
+
+export const sitePlugin = definePlugin({
+  name: 'site',
+  components: () => ({
+    releaseBadge: defineComponent<{ version?: string }>(
+      html`<Badge tone="success" variant="surface">v{{ version }}</Badge>`,
+      { props: ['version'] },
+    ),
+  }),
+})
+```
+
+List it in `purestack.config.ts`, next to `siteConfig.json`:
+
+```ts
+// content/purestack.config.ts
+import { defineConfig } from 'purestack'
+import { sitePlugin } from '../plugins/site'
+
+export default defineConfig({
+  plugins: [sitePlugin],
+})
+```
+
+Use the component in a page:
+
+```mdx
+Version 2.0 is out. <ReleaseBadge version="2.0" />
+```
+
+Start the development server as usual:
+
+```sh
+yarn purestack serve --content ./content
+```
+
+The badge appears on the page. Change its `tone` in `plugins/site.ts` while the server runs: the site rebuilds and the page reloads. `build` and `publish` load the same config, so the published site gets the same badge.
+
+## How the config loads
+
+- **Where it lives.** The CLI looks for `purestack.config.ts` in the folder passed to `--content`. It must default-export `defineConfig({ plugins: [...] })`.
+- **Your own files.** The config and the files it imports are bundled when the config loads, so they can be TypeScript and live in any folder, with no build step.
+- **Packages.** Packages load from `node_modules` as they are. `purestack`, `regor`, and the `@purestack/*` packages always resolve to the copies the CLI runs, so your components and skins register where the build looks for them. Install the ones you import anyway, so your editor knows their types.
+- **Reloading.** `serve` loads the config again, and rebuilds the site, when the config or one of your files changes. A package loads once; restart `serve` after updating one.
+- **Mistakes.** When a reload fails, the terminal shows the error and the site keeps its last working plugins until you fix it.
+
+Keep plugin code out of the content folder: TypeScript files there are [page scripts](/components/runtime/page-script/) for the browser.
+
+## Add a skin
+
+A skin is a light and dark palette pair. This one starts from the standard skin with brand colors:
+
+```ts
+import { themeSkins } from '@purestack/ts-style'
+import { definePlugin } from 'purestack'
+
+export const sitePlugin = definePlugin({
+  name: 'site',
+  skins: {
+    brand: {
+      create: () =>
+        themeSkins.standard.create({
+          accent: '#4b64c8',
+          neutral: '#293047',
+        }),
+    },
+  },
+})
+```
+
+Select it in `siteConfig.json`:
+
+```json
+{
+  "style": { "theme": { "skin": "brand" } }
+}
+```
+
+Give a skin its own name; `standard` belongs to the built-in skin. The [Themes guide](./themes) covers palettes in depth.
+
+## Add components
+
+`components` returns your [Regor](./regor) components by name, as the first plugin above does. It receives the resolved site config, so a component can depend on settings such as `config.siteTitle`.
+
+- **Create them inside `components`.** Regor needs the page document that the build sets up before it calls `components`. A component defined at the top of a module fails with `document is not defined`. To keep components in their own files, export a function that creates them, and call it from `components`.
+- **Names.** Register a component in camelCase, like `releaseBadge`, and write it in PascalCase in your pages: `<ReleaseBadge>`.
+- **Built-in components.** A component's template can use any [built-in component](/components/), as `<Badge>` does in the release badge. A component with a built-in one's name replaces it.
+- **Browser behavior.** Components render to HTML when the site builds. For behavior in the browser, add a [page script](/components/runtime/page-script/).
+
+## Add page templates
+
+A template renders a whole page around its content. Build the markup with `h` from `@purestack/ts-html`:
+
+```ts
+import { h } from '@purestack/ts-html'
+import { definePlugin } from 'purestack'
+
+export const sitePlugin = definePlugin({
+  name: 'site',
+  templates: {
+    landing: ({ head, bodyHtml, headerHtml, footerHtml }) =>
+      h('html').push(
+        head,
+        h('body').push(
+          h('').raw(headerHtml ?? ''),
+          h('main').attr({ class: 'landing' }).raw(bodyHtml),
+          h('').raw(footerHtml ?? ''),
+        ),
+      ),
+  },
+})
+```
+
+A page selects it in its frontmatter:
+
+```md
+---
+title: Welcome
+template: landing
+---
+```
+
+Besides the prepared `head` and the page's `bodyHtml`, a template receives the page's shared `headerHtml` and `footerHtml`, the `site` config, `navigation`, the heading `outline`, and `pageInfo`, whose `frontmatter` includes any custom fields the page defines. A template named `doc` or `splash` replaces the built-in one. [Run code during the build](#run-code-during-the-build) shows how to style `.landing`.
+
+## Transform Markdown
+
+`markdown` adds [remark](https://github.com/remarkjs/remark) plugins, which change the Markdown tree, and [rehype](https://github.com/rehypejs/rehype) plugins, which change the HTML tree. Every page, header, and footer goes through these steps:
+
+1. PureStack reads the Markdown. Regor markup, such as `<Badge tone="success">`, stays raw HTML.
+2. Your remark plugins run.
+3. The Markdown tree becomes an HTML tree.
+4. Your rehype plugins run.
+5. PureStack collects the headings for the table of contents and highlights code.
+6. Regor components render, and the template wraps the page.
+
+Because your rehype plugins run before step 5, a heading they change also changes in the table of contents.
+
+Install the plugins you need and list them, with options where a plugin takes them:
+
+```ts
+import { definePlugin } from 'purestack'
+import rehypeExternalLinks from 'rehype-external-links'
+import remarkSmartypants from 'remark-smartypants'
+
+export const sitePlugin = definePlugin({
+  name: 'site',
+  markdown: {
+    remarkPlugins: [remarkSmartypants],
+    rehypePlugins: [[rehypeExternalLinks, { target: '_blank' }]],
+  },
+})
+```
+
+A plugin of your own is a function that returns a tree transform. This one makes every image load lazily:
+
+```ts
+import type { Root } from 'hast'
+import { definePlugin } from 'purestack'
+import { visit } from 'unist-util-visit'
+
+function rehypeLazyImages() {
+  return (tree: Root) => {
+    visit(tree, 'element', (node) => {
+      if (node.tagName === 'img') node.properties.loading = 'lazy'
+    })
+  }
+}
+
+export const sitePlugin = definePlugin({
+  name: 'site',
+  markdown: { rehypePlugins: [rehypeLazyImages] },
+})
+```
+
+A transform also receives the file being processed. Its `path` is the page's path in the content folder, such as `blog/first.mdx`, always with forward slashes, so a plugin can treat some folders differently.
+
+## Generate pages
+
+`pages` adds pages that have no file of their own, such as one page per tag or one per entry of an API reference. It receives the site config and the content files, and returns the pages to add:
+
+| Field | Value |
+| --- | --- |
+| `path` | The content path the page takes, such as `blog/tags/regor.mdx`. |
+| `source` | The page's content, as a file at that path would hold it: frontmatter and Markdown. Give it as a string, or as a function that returns the string. |
+
+The returned pages can be the source string or a function returning the source string.
+
+Example tags plugin:
+
+```ts
+import { readFile } from 'node:fs/promises'
+import { definePlugin, parseFrontmatterSource } from 'purestack'
+
+export const tagsPlugin = definePlugin({
+  name: 'tags',
+  async pages({ files }) {
+    const postsByTag = new Map<string, string[]>()
+    for (const file of files) {
+      if (!file.urlPath.startsWith('/blog/')) continue
+      const source = await readFile(file.absPath, 'utf8')
+      const { frontmatter } = parseFrontmatterSource(source, file.relPath)
+      for (const tag of (frontmatter.tags as string[] | undefined) ?? []) {
+        const posts = postsByTag.get(tag) ?? []
+        posts.push(`- [${frontmatter.title}](${file.urlPath})`)
+        postsByTag.set(tag, posts)
+      }
+    }
+    return [...postsByTag].map(([tag, posts]) => ({
+      path: `blog/tags/${tag}.mdx`,
+      source: ['---', `title: Posts tagged ${tag}`, '---', ...posts].join('\n'),
+    }))
+  },
+})
+```
+
+An API reference can have thousands of pages, so this plugin returns functions instead. It adds one page for each JSON file in an `api/` folder beside `package.json`, and reads a file only when its page needs it:
+
+```ts
+import { readdir, readFile } from 'node:fs/promises'
+import { definePlugin } from 'purestack'
+
+export const apiPlugin = definePlugin({
+  name: 'api',
+  async pages() {
+    const files = await readdir('api')
+    return files.map((file) => ({
+      path: `api/${file.replace(/\.json$/, '.mdx')}`,
+      source: async () => {
+        const symbol = JSON.parse(await readFile(`api/${file}`, 'utf8'))
+        return ['---', `title: ${symbol.name}`, '---', symbol.summary].join('\n')
+      },
+    }))
+  },
+})
+```
+
+A generated page works like a file at its path. `blog/tags/regor.mdx` is served at `/blog/tags/regor/`, shows up in automatic navigation, uses its folder's header and footer, and other pages can [link to it](./links) as `./tags/regor`. Its frontmatter can select a template or set `nav` options, as in any page.
+
+- **Paths.** A path ends in `.md`, `.mdx`, or `.rmdx` and stays inside the content folder. It cannot be a `header.mdx` or `footer.mdx`, or the path of a real file or of another plugin's page.
+- **Files.** `files` lists the pages in the content folder, each with its `relPath`, its `absPath`, and the `urlPath` it is served at. Generated pages are never among them.
+- **Source functions.** PureStack calls a source function to render its page and, while navigation is on, to read the page's frontmatter. Return the same text until the data behind it changes, so navigation and the page agree.
+- **Updates.** `pages` runs once per build. While `serve` runs, it runs again whenever a content file or asset changes: a new tag on a post gets its page on the next reload, and a tag no one uses anymore loses its page. A page whose source is a function renders again on its next request, since PureStack keeps no text to compare.
+
+## Run code during the build
+
+Hooks run at fixed points in a build. Page hooks run every time a page renders, including each re-render while `serve` runs, and for generated pages too:
+
+| Hook | Runs |
+| --- | --- |
+| `onPageStart(context, file)` | Before a page renders. |
+| `onPageDocument(context, page)` | When its document is ready, before it becomes HTML. [Change the page's DOM](#change-a-pages-dom) here. |
+| `onPageRendered(context, page)` | After it becomes HTML. Changes to `page.html` are written. |
+| `onPageWritten(context, page)` | After its HTML file is written. |
+
+The other hooks run once per full build, in this order. `serve` runs a full build when it starts and whenever `siteConfig.json` or your plugins change:
+
+| Hook | Runs |
+| --- | --- |
+| `onConfigResolved(context)` | Before any output. Register styles here. |
+| `onContentDiscovered(context, files)` | After the pages are found, before they render. |
+| `onNavigationBuilt(context, navigation)` | After the navigation is built. |
+| `onStylesWritten(context, result)` | After the theme stylesheets are written. |
+| `onBuildComplete(context, result)` | After every page and asset is written. |
+
+Every hook receives `context.config`, the resolved site config. This hook gives the `landing` template's `<main>` a background that follows the light and dark themes:
+
+```ts
+import { styleBuilder, themes } from '@purestack/ts-style'
+import { definePlugin } from 'purestack'
+
+export const sitePlugin = definePlugin({
+  name: 'site',
+  hooks: {
+    onConfigResolved() {
+      themes.forEach((theme, palette) => {
+        styleBuilder.get(theme).select('.landing').css({
+          background: palette.semanticTone.info.surface.rest.background,
+        })
+      })
+    },
+  },
+})
+```
+
+## Change a page's DOM
+
+`onPageDocument` receives the whole page as a document, after its components and template render: header, navigation, content, and footer. Change it with the usual DOM methods instead of editing HTML text. This hook adds the date each page's file last changed to the end of its `<main>`:
+
+```ts
+import { stat } from 'node:fs/promises'
+import { definePlugin } from 'purestack'
+
+export const lastUpdatedPlugin = definePlugin({
+  name: 'last-updated',
+  hooks: {
+    async onPageDocument(context, { document, file }) {
+      // Generated pages have no file.
+      if (file.source !== undefined) return
+      const { mtime } = await stat(file.absPath)
+      const note = document.createElement('p')
+      note.className = 'last-updated'
+      note.textContent = `Last updated ${mtime.toISOString().slice(0, 10)}`
+      document.querySelector('main')?.appendChild(note)
+    },
+  },
+})
+```
+
+- **It can await.** The document stays the page's own while the hook awaits, even when `serve` renders several pages at once. Inside the hook, the global `document` is the page too, so libraries that use it work.
+- **Links resolve.** Links the hook adds, such as `<a href="./themes">`, resolve and are checked like links you write in a page.
+- **What it receives.** `page` holds the `document`, the page's `file`, its `frontmatter`, and the `urlPath` it is served at. For a [generated page](#generate-pages), `file.source` holds its source, and no file exists at `file.absPath`.
+
+Use `markdown` instead to change only the page's content, and `onPageRendered` for the final HTML text.
+
+## Write extra files
+
+A feed, a search index of your own, or any file built from the site's pages needs no special field. Collect pages as they render, and write the file once the build completes. Making the plugin a function lets each site pass its own options:
+
+```ts
+// plugins/feed.ts
+import { writeFile } from 'node:fs/promises'
+import path from 'node:path'
+import { definePlugin } from 'purestack'
+
+const escapeXml = (text: string) =>
+  text.replace(/[<>&"]/g, (char) => `&#${char.charCodeAt(0)};`)
+
+export function feed(options: { siteUrl: string; folder?: string }) {
+  const folder = options.folder ?? '/blog/'
+  const posts = new Map<string, { title: string; date: Date }>()
+  return definePlugin({
+    name: 'feed',
+    hooks: {
+      onConfigResolved() {
+        posts.clear()
+      },
+      onPageRendered(context, page) {
+        const { title, date } = page.frontmatter
+        if (!page.urlPath.startsWith(folder) || !title || !date) return
+        posts.set(page.urlPath, { title, date: new Date(date as string | Date) })
+      },
+      async onBuildComplete(context) {
+        const { basePath, outDir, siteTitle } = context.config
+        const url = (urlPath: string) => `${options.siteUrl}${basePath}${urlPath}`
+        const items = [...posts]
+          .sort(([, a], [, b]) => b.date.getTime() - a.date.getTime())
+          .map(([urlPath, post]) =>
+            [
+              '<item>',
+              `<title>${escapeXml(post.title)}</title>`,
+              `<link>${url(urlPath)}</link>`,
+              `<pubDate>${post.date.toUTCString()}</pubDate>`,
+              '</item>',
+            ].join(''),
+          )
+        const rss = [
+          '<?xml version="1.0" encoding="UTF-8"?>',
+          '<rss version="2.0"><channel>',
+          `<title>${escapeXml(siteTitle)}</title>`,
+          `<link>${url('/')}</link>`,
+          ...items,
+          '</channel></rss>',
+        ].join('\n')
+        await writeFile(path.join(outDir, 'feed.xml'), rss)
+      },
+    },
+  })
+}
+```
+
+```ts
+// content/purestack.config.ts
+export default defineConfig({
+  plugins: [feed({ siteUrl: 'https://example.com' })],
+})
+```
+
+- **Every page is included.** Every page renders before `onBuildComplete` runs, and `onConfigResolved` empties the list when the next full build starts.
+- **Write into `outDir`.** `context.config.outDir` points at `publishDir` during `publish`, so the file lands in the release folder too.
+- **Links include `basePath`.** `page.urlPath` is the path inside the site; adding `basePath` gives the address visitors use.
+- **While developing.** `serve` rewrites the file on full builds, not after each page edit.
+
+## Handle requests in development
+
+`devMiddleware` sees each request the development server receives, before the site does. Answer a request to handle it, for example to stand in for an API that your page scripts call:
+
+```ts
+import { definePlugin } from 'purestack'
+
+export const mockApiPlugin = definePlugin({
+  name: 'mock-api',
+  devMiddleware(request, response) {
+    if (request.url !== '/api/status') return
+    response.writeHead(200, { 'content-type': 'application/json' })
+    response.end(JSON.stringify({ ok: true }))
+  },
+})
+```
+
+- **Node's objects.** `request` and `response` are Node's [HTTP request and response](https://nodejs.org/api/http.html). `request.url` is the full path, with `basePath` if the site has one.
+- **Passing a request on.** Return without sending a response, and the next plugin sees the request, then the site. A header set with `response.setHeader` still applies to whatever answers, including the site's pages.
+- **Errors.** When the middleware throws, the terminal shows the error and the request gets status 500.
+- **Development only.** `build` and `publish` ignore it.
+
+## Combine plugins
+
+List plugins in the order they should apply:
+
+```ts
+export default defineConfig({
+  plugins: [sitePlugin, tagsPlugin, feed({ siteUrl: 'https://example.com' })],
+})
+```
+
+Hooks, remark and rehype plugins, page generators, and dev middleware all run in that order, one plugin after another. Skins, components, templates, and generated pages combine by name, so two plugins cannot add the same one; rename one of them.
+
+For a single hook, an inline plugin is enough:
+
+```ts
+export default defineConfig({
+  plugins: [sitePlugin, { name: 'notify', hooks: { onBuildComplete() {} } }],
+})
+```
+
+## Share a plugin as a package
+
+A plugin is a plain object, so any package can export one. The feed plugin above is already a function of its options, so it can move into a package unchanged, and each site lists it like a local plugin:
+
+```ts
+import { defineConfig } from 'purestack'
+import { feed } from 'purestack-feed'
+
+export default defineConfig({
+  plugins: [feed({ siteUrl: 'https://example.com' })],
+})
+```
+
+When you publish the package:
+
+- **Ship JavaScript.** Packages load without bundling, so publish compiled JavaScript with type declarations, not TypeScript source.
+- **Share the site's PureStack.** List `purestack`, and any `@purestack/*` package the plugin imports, under `peerDependencies`, not `dependencies`. The plugin then uses the site's copy instead of installing its own.
+
+## Build from a script
+
+`buildSite` and `startDevServer` run the same build as the CLI, for a project that needs its own build script. They do not look for `purestack.config.ts`; pass plugins in `options.plugins`:
+
+```ts
+import path from 'node:path'
+import { buildSite } from 'purestack'
+import { sitePlugin } from './plugins/site'
+
+await buildSite({
+  siteConfig: { contentDir: path.resolve('content') },
+  options: { plugins: [sitePlugin] },
+})
+```
+
+To have `startDevServer` load a config file and reload it as `serve` does, pass the file's path as `configFile`. Its plugins apply after those in `options.plugins`.
+
+## When something goes wrong
+
+PureStack checks every plugin before the build starts, so a mistake fails at once and names the plugin:
+
+```text
+Plugin "site" has an unknown hook "onPageRender". Hooks: onConfigResolved, …
+Plugins "site" and "docs" both define the component "releaseBadge".
+Plugin "site" cannot replace the built-in skin "standard". Give its skin another name.
+Plugin "tags" generates "blog/first.mdx", which is already a content file.
+```
+
+When a hook or page generator throws, the error names the plugin and where it failed:
+
+```text
+Plugin "feed" failed in onBuildComplete: ENOENT: no such file or directory
+```
+
+While `serve` runs, a failing page hook shows its error on that page and leaves the server running. Most other problems are one of these:
+
+- **`Unknown theme skin`.** The plugin with the skin is missing from `plugins`, or `purestack.config.ts` is not in the folder passed to `--content`.
+- **`Could not bundle`.** An import in the config, or in a file it imports, does not resolve. The message names it.
+- **`Could not run` with `document is not defined`.** A component is defined at the top of a module. Create it inside `components`, as [Add components](#add-components) shows.
+- **An edit has no effect while `serve` runs.** Only the config and your own files reload. After changing a package, restart `serve`.
+- **A file a hook writes is missing from the published site.** Write it into `context.config.outDir`, not a fixed folder.
+
+## Plugin reference
+
+Every field except `name` is optional.
+
+| Field | Type |
+| --- | --- |
+| `name` | `string`, unique among the site's plugins |
+| `skins` | Skins by name, each `{ create(): ThemeSkinPair }` |
+| `components` | `(config) => ({ [name]: component })` |
+| `templates` | Templates by name, each `(input) => TSNode<'html'>` |
+| `markdown` | `{ remarkPlugins?: PluggableList, rehypePlugins?: PluggableList }` |
+| `pages` | `({ config, files }) => { path, source }[]`, or a promise of them; `source` is the text, or a function that returns it |
+| `hooks` | Any of the hooks above |
+| `devMiddleware` | `(request, response) => void`, or a promise |
+
+## A complete example
+
+The PureStack Studio site you are reading uses one plugin for its skin, components, page layout, styles, and generated previews. Read the [Studio plugin](https://github.com/PureStackStudio/PureStack/blob/main/frontend/studioPlugin.ts) and the [config that adds it](https://github.com/PureStackStudio/PureStack/blob/main/frontend/purestack.studio/purestack.config.ts); the CLI builds and serves the site with no other code.

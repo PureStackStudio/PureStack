@@ -73,6 +73,8 @@ Flags:
 - `--no-watch` (`serve`)
 - `--no-reload` (`serve`)
 
+When the content directory holds a `purestack.config.ts`, every command loads its plugins; `serve` reloads it when it or a local file it imports changes. See [Plugins](#plugins).
+
 Examples from this monorepo:
 
 ```bash
@@ -305,6 +307,85 @@ Set `"pageLinks": true` in a nav file to render previous/next `BtnLink`
 controls after doc page content. The links follow the final visible navigation
 order, inherit into child folders, and skip external URLs.
 
+## Plugins
+
+A plugin is a named bundle of extensions: skins, components, templates, Markdown transforms, generated pages, build hooks, and dev server middleware. The [Plugins guide](https://purestack.studio/guides/plugins/) walks through each part.
+
+A site lists its plugins in `purestack.config.ts`, next to `siteConfig.json`, and the CLI loads it:
+
+```ts
+import { defineConfig } from '@purestack/ts-ssg'
+import { productPlugin } from '../plugins/product'
+
+export default defineConfig({ plugins: [productPlugin] })
+```
+
+The config and the local files it imports are bundled with esbuild when it loads; packages are imported from `node_modules`, and PureStack packages resolve to the copy running the build. `buildSite` and `startDevServer` do not look for the file: pass plugins through `options.plugins`, or give `startDevServer` the file as `configFile` to load and reload it as `serve` does. Config plugins apply after `options.plugins`.
+
+```ts
+import { h } from '@purestack/ts-html'
+import { buildSite, definePlugin } from '@purestack/ts-ssg'
+import { themeSkins } from '@purestack/ts-style'
+
+const productPlugin = definePlugin({
+  name: 'product',
+  skins: {
+    product: { create: () => themeSkins.standard.create() },
+  },
+  components: (config) => ({
+    // Regor components, built from the resolved site config
+  }),
+  templates: {
+    product: ({ head, bodyHtml }) =>
+      h('html').push(
+        head,
+        h('body').push(h('main').attr({ class: 'product' }).raw(bodyHtml)),
+      ),
+  },
+  hooks: {
+    onPageRendered(context, page) {
+      page.html = page.html.replace('</body>', '<!-- product --></body>')
+    },
+  },
+})
+
+await buildSite({
+  siteConfig: { contentDir: './content', style: { theme: { skin: 'product' } } },
+  options: { plugins: [productPlugin] },
+})
+```
+
+Plugins apply in order:
+
+- **Skins** are available while the site config resolves, so `style.theme.skin` can select one; they are removed afterwards and never leak into another build. A plugin skin cannot reuse a built-in skin's name, such as `standard`.
+- **Components** are built from the resolved site config and may replace built-in components by name.
+- **Templates** may replace the built-in `doc` and `splash` templates by name.
+- **Markdown** remark and rehype plugins run in plugin order on every page and shared header or footer: remark on the Markdown tree, then rehype on the HTML tree, before outline collection and code highlighting. Regor markup reaches them as raw HTML nodes, and `file.path` is the content path with forward slashes.
+- **Pages** generators return `{ path, source }` pages that build like files at those content paths. `source` is the text, or a function PureStack calls whenever it needs the text, without keeping what it returns. They see the site's content files, run on every build, and run again in the dev server whenever content or assets change; pages no longer generated are removed.
+- **Hooks** run every plugin's handler for each lifecycle event, one after another. An error names the plugin it came from.
+- **Dev middleware** sees each dev server request, except live reload, before the site; the first plugin to send headers handles it. Builds ignore it.
+
+Each plugin is checked when the build starts. An unknown field or hook name, such as `onPageRender`, a value of the wrong type, two plugins sharing a name, or two plugins defining the same skin, component, template, or generated page fails the build with the plugin's name. For a single hook, pass an inline plugin: `{ name: 'site', hooks: { … } }`.
+
+### Hooks
+
+Every page render, in a full build or a dev server re-render, runs the page hooks:
+
+- `onPageStart(context, file)`: before the page renders.
+- `onPageDocument(context, page)`: on the rendered document, before it becomes HTML and before its links resolve. `page` holds the `document`, `file`, `frontmatter`, and `urlPath`. The hook may await: the document, and the global `document` with it, stay this page's while other pages render.
+- `onPageRendered(context, page)`: after it becomes HTML; changes to `page.html` are written.
+- `onPageWritten(context, page)`: after the HTML file is written.
+
+Each full build also runs, in order:
+
+- `onConfigResolved(context)`: before any output; register styles here.
+- `onContentDiscovered(context, files)`: after content discovery, before pages render.
+- `onNavigationBuilt(context, navigation)`
+- `onStylesWritten(context, result)`
+- `onBuildComplete(context, result)`
+
+The dev server runs a full build when it starts, when `siteConfig.json` changes, and when `purestack.config.ts` or a file it imports changes; other edits re-render only the affected pages.
+
 ## Templates
 
 Built-in templates:
@@ -312,26 +393,7 @@ Built-in templates:
 - `doc` (default)
 - `splash`
 
-Provide custom templates through `options.templates` and select one with the page's `template` frontmatter:
-
-```ts
-import { h, type TSNode } from '@purestack/ts-html'
-import { buildSite, type PageTemplateMap } from '@purestack/ts-ssg'
-
-const templates: PageTemplateMap = {
-  product: ({ head, bodyHtml, headerHtml, footerHtml }) =>
-    h('html').push(
-      head,
-      h('body').push(
-        h('').raw(headerHtml ?? ''),
-        h('main').attr({ class: 'product' }).raw(bodyHtml),
-        h('').raw(footerHtml ?? ''),
-      ),
-    ) as TSNode<'html'>,
-}
-
-await buildSite({ siteConfig: { contentDir: './content' }, options: { templates } })
-```
+Add templates with a plugin's `templates` field and select one with the page's `template` frontmatter.
 
 A template receives a `PageTemplateInput`: the prepared `head`, the compiled `bodyHtml`, the page's nearest `headerHtml` and `footerHtml`, `site` config, `navigation`, `outline`, and `pageInfo`, whose `frontmatter` keeps any custom fields the page defines.
 
@@ -339,7 +401,7 @@ A template receives a `PageTemplateInput`: the prepared `head`, the compiled `bo
 
 Every component in `@purestack/ts-components` is registered for each build, so content can use them directly. The [component reference](https://purestack.studio/components/) documents each one.
 
-Register your own Regor components through `options.components`, or assign `context.components` in the `onConfigResolved` hook.
+Add your own Regor components with a plugin's `components` field. A component registered as `productCard` is used as `<ProductCard>` in content.
 
 Components render to static HTML at build time. For behavior in the browser, load a page script with `PageScript` or mount a browser-side Regor app with `RegorApp`.
 
@@ -347,7 +409,7 @@ Components render to static HTML at build time. For behavior in the browser, loa
 
 The built-in skin is `standard`. Select a skin with `style.theme.skin` in `siteConfig.json`.
 
-Skins come from `@purestack/ts-style`: `themeSkins` holds the registered skins, and `registerSkin(name, skin)` adds your own before the build starts. See the [Themes guide](https://purestack.studio/guides/themes/) for creating one.
+Add skins with a plugin's `skins` field. `themeSkins` in `@purestack/ts-style` holds the registered skins; see the [Themes guide](https://purestack.studio/guides/themes/) for creating one.
 
 `style.themes` controls generated files:
 
@@ -359,6 +421,7 @@ Skins come from `@purestack/ts-style`: `themeSkins` holds the registered skins, 
 
 - Markdown: `remark-parse` + `remark-gfm`
 - Regor MDX (`.mdx`, `.rmdx`): `remark-parse` + `remark-gfm` with Regor component markup preservation
+- Plugin remark and rehype plugins, in plugin order
 - HTML output via HAST + rehype
 - H2/H3 outline extraction for page TOC
 - Code highlighting with highlight.js or Shiki
@@ -369,41 +432,11 @@ Skins come from `@purestack/ts-style`: `themeSkins` holds the registered skins, 
 - `disableHighlighter`: skip highlighting
 - `compileMdAsMdx`: compile `.md` files as Regor MDX (default `true`); set `false` to keep `.md` as plain Markdown
 
-## Build Hooks
+## Build Options
 
-Pass `BuildHooks` through `options.hooks` to `buildSite` or `startDevServer`. Hooks, templates, and components need the programmatic API; the CLI reads only `siteConfig.json`.
-
-```ts
-import { type BuildHooks, startDevServer } from '@purestack/ts-ssg'
-
-const hooks: BuildHooks = {
-  onPageRendered(context, page) {
-    page.html = page.html.replace('</body>', '<!-- PureStack --></body>')
-  },
-}
-
-await startDevServer({ build: { siteConfig: { contentDir: './content' }, options: { hooks } } })
-```
-
-Every page render, in a full build or a dev server re-render, runs the page hooks:
-
-- `onPageStart(context, file)`: before the page renders.
-- `onPageRendered(context, page)`: after it renders; changes to `page.html` are written.
-- `onPageWritten(context, page)`: after the HTML file is written.
-
-Each full build also runs, in order:
-
-- `onConfigResolved(context)`: before any output; register components on `context.components` here.
-- `onContentDiscovered(context, files)`: after content discovery, before pages render.
-- `onNavigationBuilt(context, navigation)`
-- `onStylesWritten(context, result)`
-- `onBuildComplete(context, result)`
-
-The dev server runs a full build when it starts and when `siteConfig.json` changes; other edits re-render only the affected pages.
-
-Build option:
-
-- `writeErrorPages`: when true, render failures write an HTML error page to the target output path and an archive copy under `<outDir>/.ts-ssg/errors/`.
+- `plugins`: plugins to apply, in order; see [Plugins](#plugins).
+- `cleanOutDir`: empty the output folder before building.
+- `writeErrorPages`: when true, render failures write an HTML error page to the target output path and an archive copy under `<outDir>/.ts-ssg/errors/`. The dev server enables it.
 
 ## Incremental Build and Manifest
 
@@ -423,6 +456,8 @@ In dev/watch mode:
 - file changes apply incrementally when safe,
 - a page affected by a shared change, such as a header, footer, or navigation edit, renders again on its next request, before it is served,
 - site config changes trigger full rebuild,
+- a change to `purestack.config.ts` or a local file it imports loads the config again and triggers a full rebuild,
+- plugin generated pages regenerate when content or assets change,
 - lazy route render can happen on first request for missing HTML route,
 - live reload is served over SSE (`/__ts-ssg/events`).
 - dev server enables `writeErrorPages` automatically so template/MDX errors are visible immediately at the failing route.
@@ -563,6 +598,7 @@ Behavior:
 Functions:
 
 - `buildSite`, `startDevServer`, `runCli`
+- `definePlugin`, `defineConfig`
 - `resolveSiteConfig`
 - `normalizeFrontmatter`, `parseFrontmatterSource`
 - `buildNavigation`, `resolveNavigationConfig`, `resolvePageNavigation`
@@ -572,13 +608,13 @@ Functions:
 Types:
 
 - Build: `BuildInput`, `BuildOptions`, `BuildResult`, `BuildCountSummary`, `PublishOptions`
-- Hooks: `BuildHooks`, `BuildContext`, `ResolvedContentFile`, `PageRenderResult`, `NavigationTree`, `WriteStylesResult`
+- Plugins and hooks: `PureStackPlugin`, `PureStackConfig`, `PureStackMarkdown`, `GeneratedPage`, `PageGenerationContext`, `BuildHooks`, `BuildContext`, `ResolvedContentFile`, `PageDocument`, `PageRenderResult`, `NavigationTree`, `WriteStylesResult`
 - Templates: `PageTemplateMap`, `PageTemplate`, `PageTemplateInput`, `PageInfo`, `PageFrontmatter`
 - Config and components: `SiteConfig`, `SiteConfigInput`, `TsSsgContext`
 - Dev server: `DevServerInput`, `DevServerOptions`, `DevServerHandle`
 - Highlighting: `MdxCodeHighlighter`, `MdxCodeLangs`, `MdxCodeThemes`
 
-Related packages: `@purestack/ts-html` builds template markup (`h`), `@purestack/ts-style` provides skins (`registerSkin`, `themeSkins`), and `@purestack/ts-components` provides the built-in components.
+Related packages: `@purestack/ts-html` builds template markup (`h`), `@purestack/ts-style` provides skins (`themeSkins`, `ThemeSkin`), and `@purestack/ts-components` provides the built-in components.
 
 ## Build Result Shape
 

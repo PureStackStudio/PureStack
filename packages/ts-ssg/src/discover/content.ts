@@ -20,6 +20,11 @@ export interface ContentFile {
   absPath: string
   relPath: string
   ext: string
+  /**
+   * The source of a page a plugin generates, or a function that returns it.
+   * Such a page has no file.
+   */
+  source?: string | (() => string | Promise<string>)
 }
 
 export interface StaticAssetFile {

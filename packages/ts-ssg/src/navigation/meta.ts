@@ -1,4 +1,4 @@
-import fs from 'node:fs/promises'
+import { readContentSource } from '../discover/content-source'
 import { parseFrontmatterSource } from '../frontmatter/frontmatter'
 import { resolveRouteFileInfo } from '../routing/route'
 import type { ContentMeta, NavigationContentFile } from './model'
@@ -15,7 +15,7 @@ export async function loadContentMeta(
 ): Promise<ContentMeta[]> {
   const result: ContentMeta[] = []
   for (const file of files) {
-    const raw = await fs.readFile(file.absPath, 'utf8')
+    const raw = await readContentSource(file)
     const parsed = parseFrontmatterSource(raw, file.relPath)
     const frontmatter = parsed.frontmatter
     const route = resolveRouteFileInfo(file)

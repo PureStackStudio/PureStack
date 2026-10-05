@@ -26,13 +26,21 @@ reason about “what changed?” vs “what must be rebuilt?”.
 
 ## Lifecycle overview
 
-1. `createIncrementalBuilder` resolves config, navigation config, and initial
-   navigation tree.
+1. `createIncrementalBuilder` resolves the config, plugins, and build context.
+   It reads no content: discovery, page generation, navigation, and headers
+   and footers are prepared once, by `prepareContent` (see below).
 2. It loads the existing manifest, keeping it only if compatible with current
    config (`isCompatibleManifest`); otherwise it starts from
    `createEmptyManifest`.
-3. It returns `{ buildAll, applyChange }` for the caller to use in dev servers
-   or watch mode.
+3. It returns `{ buildAll, applyChange, renderIfDirtyByOutPath,
+   renderByUrlPath }` for the caller to use in dev servers or watch mode.
+
+The content is prepared once per full build. `buildAll` prepares it as part of
+the build. `applyChange` and the two render calls first await
+`ensureContentReady`: they wait for a build that is preparing, or, when no build
+has run, as when resuming from an earlier build's manifest, prepare the content
+from the manifest themselves. A failed preparation is tried again by the next
+call.
 
 ## `buildAll(reason)`
 
@@ -40,7 +48,9 @@ This is the canonical full build path:
 
 - Resolves user hooks from `input.hooks`.
 - Prepares output directory and copies static assets.
-- Discovers content and rebuilds navigation.
+- Discovers content, runs page generators, and rebuilds navigation, once
+  (`prepareContent`). Discovered pages join the URL index right away, so a
+  request during the build finds a new page.
 - Renders all pages sequentially.
 - Writes styles and captures style outputs/signature.
 - Discovers assets to build an authoritative manifest snapshot.
@@ -78,6 +88,23 @@ so the dev server can reload the browser.
 - **A header or footer changed** ➜ the pages that show it.
 - **A script bundle's hashed name changed** ➜ the pages that load it, rendered
   right away.
+
+## Generated pages
+
+Plugin `pages` generators run inside `discoverSiteContent`, so every discovery,
+full or incremental, sees the same content list. A generated page is a
+`ContentFile` whose `source` is its text, or a function that returns it; its
+`absPath` names no file. `readContentSource` reads either, or a real file.
+
+- `readContentSignature` signs a generated page by its source size (0 for a
+  source function) and the time it was generated, so the manifest keeps an
+  entry and an `outPath` for it like any page. No file event names a generated
+  page, so nothing compares it.
+- `refreshContent` regenerates pages. A page whose source text changed, or
+  whose source is a function, is marked dirty, and a page no longer generated
+  loses its output and manifest entry.
+- An asset change calls `refreshGeneratedPages`, since generators may read data
+  files. It does nothing when no plugin generates pages.
 
 ## Manifest assembly
 

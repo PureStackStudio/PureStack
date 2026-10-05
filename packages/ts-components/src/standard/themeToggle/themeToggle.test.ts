@@ -6,9 +6,9 @@ import { defineIconComponents } from '../icon/icon'
 import { defineThemeToggleComponents } from './themeToggle'
 
 describe('ThemeToggle rendering', () => {
-  it('renders one labelled toggle button the theme runtime can bind', () => {
+  it('renders one labelled toggle button the theme runtime can bind', async () => {
     const cleanup = ensureDomGlobals()
-    const html = renderApp(`<ThemeToggle/>`, {
+    const html = await renderApp(`<ThemeToggle/>`, {
       components: {
         ...defineIconComponents((name) => `<svg data-icon="${name}"></svg>`),
         ...defineThemeToggleComponents(),

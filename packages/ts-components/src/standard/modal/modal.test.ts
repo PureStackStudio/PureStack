@@ -6,13 +6,13 @@ import { defineButtonComponents } from '../btn/btn'
 import { defineModalComponents } from './modal'
 
 describe('Modal rendering', () => {
-  it('renders modal shell and trigger with configured motion classes', () => {
+  it('renders modal shell and trigger with configured motion classes', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineButtonComponents(),
       ...defineModalComponents(),
     }
-    const html = renderApp(
+    const html = await renderApp(
       '<Modal id="checkout" title="Checkout" size="lg" fade="true" slideFrom="right"><p>Body</p><template #footer><button>Confirm</button></template></Modal><ModalTrigger target="checkout" label="Open checkout" />',
       {
         components,
@@ -32,13 +32,13 @@ describe('Modal rendering', () => {
     expect(html).toContain('Confirm')
   })
 
-  it('supports full shell override via content slot', () => {
+  it('supports full shell override via content slot', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineButtonComponents(),
       ...defineModalComponents(),
     }
-    const html = renderApp(
+    const html = await renderApp(
       '<Modal id="custom"><template #content><article class="modal__panel"><p>Custom shell</p></article></template></Modal>',
       {
         components,
@@ -51,13 +51,13 @@ describe('Modal rendering', () => {
     expect(html).not.toContain('modal__close')
   })
 
-  it('hides close button when showClose is false', () => {
+  it('hides close button when showClose is false', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineButtonComponents(),
       ...defineModalComponents(),
     }
-    const html = renderApp(
+    const html = await renderApp(
       '<Modal id="no-close" title="No close" showClose="false"><p>Body</p></Modal>',
       {
         components,

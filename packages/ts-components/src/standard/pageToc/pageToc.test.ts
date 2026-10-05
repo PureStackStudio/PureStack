@@ -7,9 +7,9 @@ import { defineButtonComponents } from '../btn/btn'
 import { defineIconComponents } from '../icon/icon'
 import { definePageTocComponents } from './pageToc'
 
-function renderPageToc(template: string) {
+async function renderPageToc(template: string) {
   const cleanup = ensureDomGlobals()
-  const html = renderApp(template, {
+  const html = await renderApp(template, {
     components: {
       ...defineButtonComponents(),
       ...defineIconComponents(getSvgIcon),
@@ -24,8 +24,8 @@ function renderPageToc(template: string) {
 }
 
 describe('PageToc rendering', () => {
-  it('renders a stateless flat panel by default', () => {
-    const classes = renderPageToc(`<PageToc/>`)
+  it('renders a stateless flat panel by default', async () => {
+    const classes = await renderPageToc(`<PageToc/>`)
 
     expect(classes).toContain('page-toc')
     expect(classes).toContain('tone-fill-flat')
@@ -33,8 +33,8 @@ describe('PageToc rendering', () => {
     expect(classes).not.toContain('tone-fill-flat-hover')
   })
 
-  it('accepts tone, variant, variant mode and extra classes', () => {
-    const classes = renderPageToc(
+  it('accepts tone, variant, variant mode and extra classes', async () => {
+    const classes = await renderPageToc(
       `<PageToc tone="accent" variant="glass" variantMode="stateful" class="spotlight-from-top-right"/>`,
     )
 

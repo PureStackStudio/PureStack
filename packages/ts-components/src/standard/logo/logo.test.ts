@@ -13,10 +13,10 @@ const defineComponents = () => ({
 })
 
 describe('SiteLogo', () => {
-  it('renders natural brand text and resolves configured links under a base path', () => {
+  it('renders natural brand text and resolves configured links under a base path', async () => {
     const cleanup = ensureDomGlobals()
     try {
-      const html = renderApp(
+      const html = await renderApp(
         '<SiteLogo brand="Calc Core" subtitle="Backend engine" suffix="." icon="iconoir:cube" href="/"/>',
         {
           components: defineComponents(),
@@ -34,10 +34,10 @@ describe('SiteLogo', () => {
     }
   })
 
-  it('supports a named mark slot and omits navigation for a null href', () => {
+  it('supports a named mark slot and omits navigation for a null href', async () => {
     const cleanup = ensureDomGlobals()
     try {
-      const html = renderApp(
+      const html = await renderApp(
         '<SiteLogo brand="North Star" :href="null" layout="mark"><template #mark><span>Custom artwork</span></template></SiteLogo>',
         { components: defineComponents(), context: createTestContext() },
       )

@@ -87,7 +87,7 @@ describe('TopBar rendering', () => {
     }
   })
 
-  it('applies logo values from site config', () => {
+  it('applies logo values from site config', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineButtonComponents(),
@@ -100,7 +100,7 @@ describe('TopBar rendering', () => {
       ...defineThemeToggleComponents(),
       ...defineTopBarComponents(),
     }
-    const html = renderApp(`<TopBar signInEnabled="true"/>`, {
+    const html = await renderApp(`<TopBar signInEnabled="true"/>`, {
       components,
       context: createTestContext({
         site: {

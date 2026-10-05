@@ -36,6 +36,41 @@ export async function watchTree(
   }
 }
 
+/**
+ * Watches individual files through their folders, so an editor that saves by
+ * replacing the file is still noticed.
+ */
+export function watchFiles(
+  filePaths: readonly string[],
+  onChange: (filePath: string) => void,
+) {
+  const filesByDir = new Map<string, Set<string>>()
+  for (const filePath of filePaths) {
+    const dir = path.dirname(filePath)
+    const files = filesByDir.get(dir) ?? new Set<string>()
+    files.add(toPathKey(filePath))
+    filesByDir.set(dir, files)
+  }
+  const watchers = [...filesByDir].map(([dir, files]) =>
+    fs.watch(dir, (_event, filename) => {
+      if (!filename) return
+      const filePath = path.join(dir, filename.toString())
+      if (files.has(toPathKey(filePath))) onChange(filePath)
+    }),
+  )
+  return {
+    close() {
+      for (const watcher of watchers) watcher.close()
+    },
+  }
+}
+
+/** A path compared the way the file system does: case-blind on Windows. */
+export function toPathKey(filePath: string) {
+  const resolved = path.resolve(filePath)
+  return process.platform === 'win32' ? resolved.toLowerCase() : resolved
+}
+
 async function collectDirs(root: string) {
   const result = [root]
   const queue = [root]

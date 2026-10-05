@@ -5,10 +5,10 @@ import { createTestContext } from '../../test/testContext'
 import { defineGridComponents } from './grid'
 
 describe('Grid rendering', () => {
-  it('renders responsive grid variables and modifier classes', () => {
+  it('renders responsive grid variables and modifier classes', async () => {
     const cleanup = ensureDomGlobals()
     const components = defineGridComponents()
-    const html = renderApp(
+    const html = await renderApp(
       '<Grid columns="2" columnsMd="3" alignItems="center" justifyItems="start" dense="true">item</Grid>',
       {
         components,
@@ -27,10 +27,10 @@ describe('Grid rendering', () => {
     expect(html).toContain('item')
   })
 
-  it('renders stretch alignment and justification classes', () => {
+  it('renders stretch alignment and justification classes', async () => {
     const cleanup = ensureDomGlobals()
     const components = defineGridComponents()
-    const html = renderApp(
+    const html = await renderApp(
       '<Grid alignItems="stretch" justifyItems="stretch">item</Grid>',
       {
         components,
@@ -42,10 +42,10 @@ describe('Grid rendering', () => {
     expect(html).toContain('class="grid align-stretch justify-items-stretch"')
   })
 
-  it('renders custom template columns for base and responsive props', () => {
+  it('renders custom template columns for base and responsive props', async () => {
     const cleanup = ensureDomGlobals()
     const components = defineGridComponents()
-    const html = renderApp(
+    const html = await renderApp(
       '<Grid columns="minmax(0, 1fr) auto" columnsMd="200px 1fr">item</Grid>',
       {
         components,
@@ -58,10 +58,10 @@ describe('Grid rendering', () => {
     expect(html).toContain('--grid-template-columns-md: 200px 1fr')
   })
 
-  it('supports container as a semantic element override', () => {
+  it('supports container as a semantic element override', async () => {
     const cleanup = ensureDomGlobals()
     const components = defineGridComponents()
-    const html = renderApp(
+    const html = await renderApp(
       '<Grid container="section" columns="2">item</Grid>',
       {
         components,
@@ -75,10 +75,10 @@ describe('Grid rendering', () => {
     expect(html).toContain('--grid-template-columns: repeat(2, minmax(0, 1fr))')
   })
 
-  it('keeps responsive numeric columns working when base columns use a template', () => {
+  it('keeps responsive numeric columns working when base columns use a template', async () => {
     const cleanup = ensureDomGlobals()
     const components = defineGridComponents()
-    const html = renderApp(
+    const html = await renderApp(
       '<Grid columns="minmax(0, 1fr) auto" columnsMd="3">item</Grid>',
       {
         components,
@@ -94,13 +94,16 @@ describe('Grid rendering', () => {
     )
   })
 
-  it('keeps the base template across breakpoints when no responsive columns are set', () => {
+  it('keeps the base template across breakpoints when no responsive columns are set', async () => {
     const cleanup = ensureDomGlobals()
     const components = defineGridComponents()
-    const html = renderApp('<Grid columns="minmax(0, 1fr) auto">item</Grid>', {
-      components,
-      context: createTestContext(),
-    })
+    const html = await renderApp(
+      '<Grid columns="minmax(0, 1fr) auto">item</Grid>',
+      {
+        components,
+        context: createTestContext(),
+      },
+    )
     cleanup()
 
     expect(html).toContain('--grid-template-columns: minmax(0, 1fr) auto')

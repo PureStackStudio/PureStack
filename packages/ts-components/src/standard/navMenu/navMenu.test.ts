@@ -11,7 +11,7 @@ import { defineSignInComponents } from '../signIn/signIn'
 import { defineNavigationComponents } from './navMenu'
 
 describe('NavMenu rendering', () => {
-  it('evaluates r-else branches for leaf items', () => {
+  it('evaluates r-else branches for leaf items', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineButtonComponents(),
@@ -21,7 +21,7 @@ describe('NavMenu rendering', () => {
       ...defineSignInComponents(),
       ...defineNavigationComponents(),
     }
-    const html = renderApp(
+    const html = await renderApp(
       `<NavMenu
         :items="[
           { title: 'Home', url: '/home/' },
@@ -48,7 +48,7 @@ describe('NavMenu rendering', () => {
     expect(html).not.toContain('r-else=')
   })
 
-  it('renders a neutral flat panel by default and accepts tone and variant', () => {
+  it('renders a neutral flat panel by default and accepts tone and variant', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineButtonComponents(),
@@ -60,8 +60,8 @@ describe('NavMenu rendering', () => {
     }
     const render = (template: string) =>
       renderApp(template, { components, context: createTestContext() })
-    const defaultHtml = render(`<NavMenu :items="[]"></NavMenu>`)
-    const customHtml = render(
+    const defaultHtml = await render(`<NavMenu :items="[]"></NavMenu>`)
+    const customHtml = await render(
       `<NavMenu :items="[]" tone="accent" variant="glass" variantMode="stateful"></NavMenu>`,
     )
     cleanup()
@@ -76,9 +76,9 @@ describe('NavMenu rendering', () => {
     expect(customHtml).not.toContain('tone-fill-flat')
   })
 
-  it('adds a given class to the navigation panel', () => {
+  it('adds a given class to the navigation panel', async () => {
     const cleanup = ensureDomGlobals()
-    const html = renderApp(
+    const html = await renderApp(
       `<NavMenu :items="[]" class="spotlight-from-top-right"></NavMenu>`,
       {
         components: {
@@ -99,7 +99,7 @@ describe('NavMenu rendering', () => {
     expect(navClass).toContain('tone-fill-flat')
   })
 
-  it('marks the currentUrl item as the current page and opens its group', () => {
+  it('marks the currentUrl item as the current page and opens its group', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineButtonComponents(),
@@ -109,7 +109,7 @@ describe('NavMenu rendering', () => {
       ...defineSignInComponents(),
       ...defineNavigationComponents(),
     }
-    const html = renderApp(
+    const html = await renderApp(
       `<NavMenu
         currentUrl="/guides/themes/"
         :items="[
@@ -126,7 +126,7 @@ describe('NavMenu rendering', () => {
     expect(html.match(/aria-current="page"/g)).toHaveLength(1)
   })
 
-  it('renders stable state keys for collapsible groups', () => {
+  it('renders stable state keys for collapsible groups', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineButtonComponents(),
@@ -136,7 +136,7 @@ describe('NavMenu rendering', () => {
       ...defineSignInComponents(),
       ...defineNavigationComponents(),
     }
-    const html = renderApp(
+    const html = await renderApp(
       `<NavMenu
         :items="[
           {

@@ -6,13 +6,13 @@ import { defineButtonComponents } from '../btn/btn'
 import { defineContactFormComponents } from './contactForm'
 
 describe('ContactForm rendering', () => {
-  it('renders contact fields and action with configured labels', () => {
+  it('renders contact fields and action with configured labels', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineButtonComponents(),
       ...defineContactFormComponents(),
     }
-    const html = renderApp(
+    const html = await renderApp(
       `<ContactForm action="mailto:support@example.com" submitLabel="Send it" />`,
       {
         components,

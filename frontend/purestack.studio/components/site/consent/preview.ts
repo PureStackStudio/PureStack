@@ -40,7 +40,7 @@ const exampleTemplate = html`<SectionHeader
   Reset this example
 </Btn>`
 
-function createConsentPreviewDocument(site: SiteConfig): string {
+async function createConsentPreviewDocument(site: SiteConfig): Promise<string> {
   const context: TsSsgContext = {
     site: { ...site },
     pageInfo: {
@@ -104,7 +104,7 @@ function createConsentPreviewDocument(site: SiteConfig): string {
     ],
     services: [],
   }
-  const body = renderApp(exampleTemplate, {
+  const body = await renderApp(exampleTemplate, {
     components: defineComponents(getSvgIcon),
     context,
   })
@@ -134,7 +134,7 @@ export async function writeConsentPreview(site: SiteConfig) {
     'consent',
     'preview.html',
   )
-  const documentHtml = createConsentPreviewDocument(site)
+  const documentHtml = await createConsentPreviewDocument(site)
   await fs.mkdir(path.dirname(output), { recursive: true })
   await fs.writeFile(output, documentHtml, 'utf8')
 }

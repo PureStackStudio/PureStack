@@ -17,8 +17,8 @@ function withDom<T>(html: string, run: () => T): T {
 }
 
 describe('SiteFooter rendering', () => {
-  it('renders body content with legal links and socials in footer bottom', () => {
-    const html = withDom('<html><body></body></html>', () => {
+  it('renders body content with legal links and socials in footer bottom', async () => {
+    const html = await withDom('<html><body></body></html>', () => {
       const components = {
         ...defineButtonComponents(),
         ...defineIconComponents(getSvgIcon),
@@ -55,8 +55,8 @@ describe('SiteFooter rendering', () => {
     expect(html).toContain('GitHub')
   })
 
-  it('teleports to a custom host when teleport prop is provided', () => {
-    const html = withDom('<html><body></body></html>', () => {
+  it('teleports to a custom host when teleport prop is provided', async () => {
+    const html = await withDom('<html><body></body></html>', () => {
       const components = {
         ...defineButtonComponents(),
         ...defineIconComponents(getSvgIcon),

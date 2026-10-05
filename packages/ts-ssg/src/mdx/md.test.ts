@@ -14,7 +14,7 @@ describe('compileMarkdown', () => {
       '| level  | TRACE   |',
       '| worker | false   |',
     ].join('\n')
-    const html = renderApp(compileMarkdown(source).bodyHtml, {
+    const html = await renderApp((await compileMarkdown(source)).bodyHtml, {
       components: {},
       context: createTestContext(),
     })
@@ -32,16 +32,19 @@ describe('compileMarkdown', () => {
     const mdx = await resolveMdxBuildOptions({
       highlighter: 'highlightjs',
     })
-    const html = renderApp(compileMarkdown(source, mdx).bodyHtml, {
-      components: {},
-      context: createTestContext(),
-    })
+    const html = await renderApp(
+      (await compileMarkdown(source, mdx)).bodyHtml,
+      {
+        components: {},
+        context: createTestContext(),
+      },
+    )
 
     expect(html).toContain('<pre class="hljs shiki" r-pre>')
     expect(html).toContain('<code class="hljs language-typescript">')
   })
 
-  it('collects h1, h2, and h3 headings into the page outline', () => {
+  it('collects h1, h2, and h3 headings into the page outline', async () => {
     const source = [
       '# Getting Started',
       '',
@@ -52,7 +55,7 @@ describe('compileMarkdown', () => {
       '## Configure',
     ].join('\n')
 
-    expect(compileMarkdown(source).outline).toEqual([
+    expect((await compileMarkdown(source)).outline).toEqual([
       {
         id: 'getting-started',
         title: 'Getting Started',
@@ -80,7 +83,7 @@ describe('compileMarkdown', () => {
     ])
   })
 
-  it('does not attach skipped headings to stale ancestors', () => {
+  it('does not attach skipped headings to stale ancestors', async () => {
     const source = [
       '# First Page',
       '',
@@ -91,7 +94,7 @@ describe('compileMarkdown', () => {
       '### Skipped Section',
     ].join('\n')
 
-    expect(compileMarkdown(source).outline).toEqual([
+    expect((await compileMarkdown(source)).outline).toEqual([
       {
         id: 'first-page',
         title: 'First Page',

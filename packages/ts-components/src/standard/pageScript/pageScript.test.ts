@@ -5,10 +5,10 @@ import { createTestContext } from '../../test/testContext'
 import { defineScriptComponents } from './pageScript'
 
 describe('PageScript rendering', () => {
-  it('maps local .ts src to emitted .js path and defaults to module', () => {
+  it('maps local .ts src to emitted .js path and defaults to module', async () => {
     const cleanup = ensureDomGlobals()
     const components = defineScriptComponents()
-    const html = renderApp('<PageScript src="./login.ts" />', {
+    const html = await renderApp('<PageScript src="./login.ts" />', {
       components,
       context: createTestContext({
         pageInfo: {
@@ -24,10 +24,10 @@ describe('PageScript rendering', () => {
     expect(html).toContain('type="module"')
   })
 
-  it('resolves nested relative paths and keeps query/hash suffix', () => {
+  it('resolves nested relative paths and keeps query/hash suffix', async () => {
     const cleanup = ensureDomGlobals()
     const components = defineScriptComponents()
-    const html = renderApp(
+    const html = await renderApp(
       '<PageScript src="../scripts/policies.ts?mode=prod#boot" />',
       {
         components,
@@ -45,33 +45,36 @@ describe('PageScript rendering', () => {
     expect(html).toContain('type="module"')
   })
 
-  it('uses the SSG script public path resolver when available', () => {
+  it('uses the SSG script public path resolver when available', async () => {
     const cleanup = ensureDomGlobals()
     const components = defineScriptComponents()
     const resolvedScripts: string[] = []
-    const html = renderApp('<PageScript src="./login.ts?mode=prod#boot" />', {
-      components,
-      context: createTestContext({
-        pageInfo: {
-          relPath: 'login.mdx',
-          urlPath: '/login/',
-        },
-        resolveScriptPublicPath: (sourceRelPath) => {
-          resolvedScripts.push(sourceRelPath)
-          return '/login.ab12.js'
-        },
-      }),
-    })
+    const html = await renderApp(
+      '<PageScript src="./login.ts?mode=prod#boot" />',
+      {
+        components,
+        context: createTestContext({
+          pageInfo: {
+            relPath: 'login.mdx',
+            urlPath: '/login/',
+          },
+          resolveScriptPublicPath: (sourceRelPath) => {
+            resolvedScripts.push(sourceRelPath)
+            return '/login.ab12.js'
+          },
+        }),
+      },
+    )
     cleanup()
 
     expect(resolvedScripts).toEqual(['login.ts'])
     expect(html).toContain('src="/login.ab12.js?mode=prod#boot"')
   })
 
-  it('resolves local src relative to an explicit source owner', () => {
+  it('resolves local src relative to an explicit source owner', async () => {
     const cleanup = ensureDomGlobals()
     const components = defineScriptComponents()
-    const html = renderApp(
+    const html = await renderApp(
       '<PageScript src="./auth-state.ts" sourceRelPath="header.mdx" />',
       {
         components,
@@ -89,10 +92,10 @@ describe('PageScript rendering', () => {
     expect(html).not.toContain('/account/auth-state.js')
   })
 
-  it('maps same-name folder page scripts beside their folder page', () => {
+  it('maps same-name folder page scripts beside their folder page', async () => {
     const cleanup = ensureDomGlobals()
     const components = defineScriptComponents()
-    const html = renderApp('<PageScript src="./account.ts" />', {
+    const html = await renderApp('<PageScript src="./account.ts" />', {
       components,
       context: createTestContext({
         pageInfo: {
@@ -106,10 +109,10 @@ describe('PageScript rendering', () => {
     expect(html).toContain('src="/account/account.js"')
   })
 
-  it('renders RegorApp as app shell and reuses PageScript src mapping', () => {
+  it('renders RegorApp as app shell and reuses PageScript src mapping', async () => {
     const cleanup = ensureDomGlobals()
     const components = defineScriptComponents()
-    const html = renderApp(
+    const html = await renderApp(
       '<RegorApp src="./hosts.ts" id="hosts-app" name="hosts-main"></RegorApp>',
       {
         components,
@@ -130,10 +133,10 @@ describe('PageScript rendering', () => {
     expect(html).toContain('type="module"')
   })
 
-  it('passes RegorApp source owner through to its PageScript', () => {
+  it('passes RegorApp source owner through to its PageScript', async () => {
     const cleanup = ensureDomGlobals()
     const components = defineScriptComponents()
-    const html = renderApp(
+    const html = await renderApp(
       '<RegorApp src="./auth-state.ts" sourceRelPath="header.mdx"></RegorApp>',
       {
         components,

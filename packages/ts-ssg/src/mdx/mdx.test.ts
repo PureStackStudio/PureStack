@@ -47,7 +47,7 @@ describe('createMdxHighlighter', () => {
 })
 
 describe('compileMdxToHtml', () => {
-  it('preserves regor directive attributes as raw markup', () => {
+  it('preserves regor directive attributes as raw markup', async () => {
     const source = [
       '<Flex wrap="true">',
       '  <Btn :tone="\'accent\'" .size="buttonSize" @click="save" #icon="props">',
@@ -56,7 +56,7 @@ describe('compileMdxToHtml', () => {
       '</Flex>',
     ].join('\n')
 
-    const compiledHtml = compileMdxToHtml(source)
+    const compiledHtml = await compileMdxToHtml(source)
     expect(compiledHtml).toContain('<Flex wrap="true">')
     expect(compiledHtml).toContain(':tone="\'accent\'"')
     expect(compiledHtml).toContain('.size="buttonSize"')
@@ -65,21 +65,23 @@ describe('compileMdxToHtml', () => {
     expect(compiledHtml).not.toContain('<p><Flex')
   })
 
-  it('unwraps standalone opaque markup paragraphs created by markdown parsing', () => {
+  it('unwraps standalone opaque markup paragraphs created by markdown parsing', async () => {
     const source = ['<Badge icon="iconoir:check" />', '', 'Afterward.'].join(
       '\n',
     )
 
-    const compiledHtml = compileMdxToHtml(source)
+    const compiledHtml = await compileMdxToHtml(source)
     expect(compiledHtml).toContain('<Badge icon="iconoir:check" />')
     expect(compiledHtml).not.toContain('<p><Badge icon="iconoir:check" /></p>')
     expect(compiledHtml).toContain('<p>Afterward.</p>')
   })
 
-  it('annotates script components with the MDX source path', () => {
-    const compiledHtml = compileMdx(
-      '<PageScript src="./auth-state.ts" teleport="head"/>\n<RegorApp src="./app.ts" />',
-      { sourceRelPath: 'header.mdx' },
+  it('annotates script components with the MDX source path', async () => {
+    const compiledHtml = (
+      await compileMdx(
+        '<PageScript src="./auth-state.ts" teleport="head"/>\n<RegorApp src="./app.ts" />',
+        { sourceRelPath: 'header.mdx' },
+      )
     ).bodyHtml
 
     expect(compiledHtml).toContain(
@@ -90,18 +92,20 @@ describe('compileMdxToHtml', () => {
     )
   })
 
-  it('unwraps a standalone inline markup island when it is the only paragraph content', () => {
-    const compiledHtml = compileMdxToHtml('<span>inline</span>')
+  it('unwraps a standalone inline markup island when it is the only paragraph content', async () => {
+    const compiledHtml = await compileMdxToHtml('<span>inline</span>')
     expect(compiledHtml).toContain('<span>inline</span>')
     expect(compiledHtml).not.toContain('<p><span>inline</span></p>')
   })
 
-  it('keeps mixed paragraph text around inline markup islands', () => {
-    const compiledHtml = compileMdxToHtml('Prefix <span>inline</span> suffix')
+  it('keeps mixed paragraph text around inline markup islands', async () => {
+    const compiledHtml = await compileMdxToHtml(
+      'Prefix <span>inline</span> suffix',
+    )
     expect(compiledHtml).toContain('<p>Prefix <span>inline</span> suffix</p>')
   })
 
-  it('does not treat code spans or fenced code as regor markup', () => {
+  it('does not treat code spans or fenced code as regor markup', async () => {
     const source = [
       '`<Btn .size="buttonSize">`',
       '',
@@ -110,20 +114,22 @@ describe('compileMdxToHtml', () => {
       '```',
     ].join('\n')
 
-    const compiledHtml = compileMdxToHtml(source)
+    const compiledHtml = await compileMdxToHtml(source)
     expect(compiledHtml).toContain(
       '<code r-pre="">&#x3C;Btn .size="buttonSize"></code>',
     )
     expect(compiledHtml).toContain('&#x3C;Btn @click="save">')
   })
 
-  it('preserves prose spaces around inline code spans', () => {
+  it('preserves prose spaces around inline code spans', async () => {
     const source =
       'through `BlockCacheLifeTime` and `InactiveBlockCacheCleanupInterval`.'
 
-    const compiledHtml = compileMdx(source, {
-      highlighter: createHljsHighlighter(),
-    }).bodyHtml
+    const compiledHtml = (
+      await compileMdx(source, {
+        highlighter: createHljsHighlighter(),
+      })
+    ).bodyHtml
 
     expect(compiledHtml).toContain('through <code')
     expect(compiledHtml).toContain('</code> and <code')
@@ -132,7 +138,7 @@ describe('compileMdxToHtml', () => {
 
   it('renders a custom markup component at root level', async () => {
     const source = '<CustomComponent data-id="x" />\n\nParagraph text.'
-    const html = renderApp(compileMdxToHtml(source), {
+    const html = await renderApp(await compileMdxToHtml(source), {
       components: {},
       context: createTestContext(),
     })
@@ -147,7 +153,7 @@ describe('compileMdxToHtml', () => {
     ['with a highlighter', createHljsHighlighter()],
   ])(
     'keeps Regor template syntax literal inside Markdown code %s',
-    (_, highlighter) => {
+    async (_, highlighter) => {
       const source = [
         'Total {{ 1 + 1 }} with inline `{{ name }}` code.',
         '',
@@ -155,10 +161,13 @@ describe('compileMdxToHtml', () => {
         '<li r-for="item in items">{{ item }}</li>',
         '```',
       ].join('\n')
-      const html = renderApp(compileMdx(source, { highlighter }).bodyHtml, {
-        components: {},
-        context: createTestContext(),
-      })
+      const html = await renderApp(
+        (await compileMdx(source, { highlighter })).bodyHtml,
+        {
+          components: {},
+          context: createTestContext(),
+        },
+      )
       const text = html.replace(/<[^>]+>/g, '')
 
       expect(text).toContain('Total 2 with inline')
@@ -169,7 +178,7 @@ describe('compileMdxToHtml', () => {
 
   it('preserves whitespace inside opaque inline markup blocks', async () => {
     const source = ['<span>', '  Inline text', '</span>'].join('\n')
-    const compiledHtml = compileMdxToHtml(source)
+    const compiledHtml = await compileMdxToHtml(source)
 
     expect(compiledHtml).toContain('<span>\n  Inline text\n</span>')
     expect(compiledHtml).not.toContain('<span><p>')
@@ -186,7 +195,7 @@ describe('compileMdxToHtml', () => {
       'Another paragraph',
       'spanning two lines.',
     ].join('\n')
-    const html = renderApp(compileMdxToHtml(source), {
+    const html = await renderApp(await compileMdxToHtml(source), {
       components: {},
       context: createTestContext(),
     })
@@ -209,7 +218,7 @@ describe('compileMdxToHtml', () => {
       '',
       '<SiteFooter />',
     ].join('\n')
-    const html = renderApp(compileMdxToHtml(source), {
+    const html = await renderApp(await compileMdxToHtml(source), {
       components: {},
       context: createTestContext(),
     })
@@ -229,7 +238,7 @@ describe('compileMdxToHtml', () => {
       '| Bus  | Land |',
       '| Ship | Sea  |',
     ].join('\n')
-    const html = renderApp(compileMdxToHtml(source), {
+    const html = await renderApp(await compileMdxToHtml(source), {
       components: {},
       context: createTestContext(),
     })
@@ -256,10 +265,10 @@ describe('compileMdxToHtml', () => {
     ].join('\n')
 
     try {
-      const compiledHtml = compileMdxToHtml(source)
+      const compiledHtml = await compileMdxToHtml(source)
       expect(compiledHtml).not.toContain('<p><h2')
 
-      const html = renderApp(compiledHtml, {
+      const html = await renderApp(compiledHtml, {
         components: defineModalComponents(),
         context: createTestContext(),
       })
@@ -285,7 +294,7 @@ describe('compileMdxToHtml', () => {
       '</Modal>',
     ].join('\n')
 
-    const compiledHtml = compileMdxToHtml(source)
+    const compiledHtml = await compileMdxToHtml(source)
     expect(compiledHtml).not.toContain('<p><button')
     expect(compiledHtml).toContain('<template #footer>')
     expect(compiledHtml).toContain(
@@ -306,7 +315,7 @@ describe('compileMdxToHtml', () => {
       '</Modal>',
     ].join('\n')
 
-    const compiledHtml = compileMdxToHtml(source)
+    const compiledHtml = await compileMdxToHtml(source)
     expect(compiledHtml).toContain(
       '    Paragraph start <Badge>now</Badge> end.',
     )
@@ -324,7 +333,7 @@ describe('compileMdxToHtml', () => {
       '</Modal>',
     ].join('\n')
 
-    const compiledHtml = compileMdxToHtml(source)
+    const compiledHtml = await compileMdxToHtml(source)
     expect(compiledHtml).toContain('<p class="note">Keep me</p>')
   })
 
@@ -337,7 +346,7 @@ describe('compileMdxToHtml', () => {
       '</Modal>',
     ].join('\n')
 
-    const compiledHtml = compileMdxToHtml(source)
+    const compiledHtml = await compileMdxToHtml(source)
     expect(compiledHtml).toContain('    Prefix <Badge>now</Badge>')
     expect(compiledHtml).not.toContain('<p>Prefix <Badge>now</Badge></p>')
   })
@@ -354,7 +363,7 @@ describe('compileMdxToHtml', () => {
       '</Modal>',
     ].join('\n')
 
-    const compiledHtml = compileMdxToHtml(source)
+    const compiledHtml = await compileMdxToHtml(source)
     expect(compiledHtml).not.toContain('<p><h3')
     expect(compiledHtml).not.toContain('<p><button')
     expect(compiledHtml).toContain(
@@ -377,7 +386,7 @@ describe('compileMdxToHtml', () => {
       '</CardActions>',
     ].join('\n')
 
-    const compiledHtml = compileMdxToHtml(source)
+    const compiledHtml = await compileMdxToHtml(source)
     expect(compiledHtml).not.toContain('<p><Btn')
     expect(compiledHtml).not.toContain('</Btn></p>')
     expect(compiledHtml).toContain(
@@ -410,7 +419,7 @@ describe('compileMdxToHtml', () => {
       '<Btn tone="danger" icon="iconoir:pin" iconPosition="end">Delete item</Btn>',
     ].join('\n')
 
-    const compiledHtml = compileMdxToHtml(source)
+    const compiledHtml = await compileMdxToHtml(source)
     expect(compiledHtml).toContain(
       '<h2 id="10-variants-with-icons">10. Variants with icons</h2>',
     )
@@ -469,11 +478,11 @@ describe('compileMdxToHtml', () => {
     ].join('\n')
 
     try {
-      const compiledHtml = compileMdxToHtml(source)
+      const compiledHtml = await compileMdxToHtml(source)
       expect(compiledHtml).not.toContain('<p></p>')
       expect(compiledHtml).not.toContain('<p><p>')
 
-      const html = renderApp(compiledHtml, {
+      const html = await renderApp(compiledHtml, {
         components: defineModalComponents(),
         context: createTestContext(),
       })
@@ -498,7 +507,7 @@ describe('compileMdxToHtml', () => {
       '</Tabs>',
     ].join('\n')
 
-    const html = compileMdx(source).bodyHtml
+    const html = (await compileMdx(source)).bodyHtml
 
     expect(html).toContain('<Tabs id="install-flow">')
     expect(html).toContain('<TabPane id="npm" label="npm">')
@@ -509,7 +518,7 @@ describe('compileMdxToHtml', () => {
 
   it.each(['```', '~~~~'])(
     'preserves formatted source tabs with %s fences and no surrounding blank lines',
-    (fence) => {
+    async (fence) => {
       const source = [
         '<Tabs',
         '  tone="neutral"',
@@ -535,7 +544,7 @@ describe('compileMdxToHtml', () => {
         'Still visible.',
       ].join('\n')
 
-      const result = compileMdx(source, {
+      const result = await compileMdx(source, {
         sourceRelPath: 'components/buttons.mdx',
         highlighter: createHljsHighlighter(),
       })
@@ -588,8 +597,8 @@ describe('compileMdxToHtml', () => {
           : engine === 'highlightjs'
             ? createHljsHighlighter()
             : undefined
-      const result = compileMdx(source, { highlighter })
-      const rendered = renderApp(result.bodyHtml, {
+      const result = await compileMdx(source, { highlighter })
+      const rendered = await renderApp(result.bodyHtml, {
         components: {},
         context: createTestContext(),
       })
@@ -619,9 +628,11 @@ describe('compileMdxToHtml', () => {
       '</Tabs>',
     ].join('\n')
 
-    const html = compileMdx(source, {
-      highlighter: createHljsHighlighter(),
-    }).bodyHtml
+    const html = (
+      await compileMdx(source, {
+        highlighter: createHljsHighlighter(),
+      })
+    ).bodyHtml
 
     expect(html).toContain('<pre class="hljs shiki"')
     expect(html).toContain('<code class="hljs language-typescript">')
@@ -638,7 +649,7 @@ describe('compileMdxToHtml', () => {
       '</Tabs>',
     ].join('\n')
 
-    const html = compileMdx(source).bodyHtml
+    const html = (await compileMdx(source)).bodyHtml
 
     expect(html).toContain('<TabPane id="npm" label="npm">')
     expect(html).toContain(
@@ -655,9 +666,11 @@ describe('compileMdxToHtml', () => {
       '</Tabs>',
     ].join('\n')
 
-    const html = compileMdx(source, {
-      highlighter: createHljsHighlighter(),
-    }).bodyHtml
+    const html = (
+      await compileMdx(source, {
+        highlighter: createHljsHighlighter(),
+      })
+    ).bodyHtml
 
     expect(html).toContain('<code class="hljs shiki shiki-inline shiki-themes"')
     expect(html).toContain('answer')
