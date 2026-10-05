@@ -1,7 +1,3 @@
 {
-  "sequence": [
-    "index.mdx",
-    "search-and-metadata.mdx",
-    "deployment.mdx"
-  ]
+  "sequence": ["index.mdx", "search-and-metadata.mdx", "deployment.mdx"]
 }

@@ -89,7 +89,11 @@ const TREES: Record<TreeName, NavItem[]> = {
       title: 'Guides',
       icon: 'tabler:book',
       children: [
-        { title: 'Themes', url: '/guides/styling/themes/', icon: 'tabler:palette' },
+        {
+          title: 'Themes',
+          url: '/guides/styling/themes/',
+          icon: 'tabler:palette',
+        },
         {
           title: 'Components',
           icon: 'tabler:components',

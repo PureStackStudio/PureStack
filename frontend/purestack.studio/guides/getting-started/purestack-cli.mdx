@@ -66,7 +66,7 @@ Add `content/about.mdx` with its own title and body. Then start the preview serv
 yarn purestack serve --content ./content
 ```
 
-Open the URL printed as `serving at` after the first build. With the default settings it is `http://127.0.0.1:4173/`. The server binds to `0.0.0.0` by default; pass `--host 127.0.0.1` if it should listen only on your machine. If `basePath` is set in `siteConfig.json`, the printed URL includes it.
+Open the URL printed as `serving at` once shared setup finishes. Pages render as you open them. With the default settings the URL is `http://127.0.0.1:4173/`. The server binds to `0.0.0.0` by default; pass `--host 127.0.0.1` if it should listen only on your machine. If `basePath` is set in `siteConfig.json`, the printed URL includes it.
 
 ## Understand the content folder
 
@@ -97,7 +97,7 @@ Every build command requires `--content <dir>`. The path is resolved from the wo
 | Command | Result | Output folder |
 | --- | --- | --- |
 | `build` | Generates the complete static site. | `outDir` |
-| `serve` | Builds the site, starts an HTTP server, and watches content by default. | `outDir` |
+| `serve` | Starts an HTTP server, renders pages on request, and watches content by default. | `outDir` |
 | `publish` | Cleans and builds a release artifact. | `publishDir` |
 
 Use `yarn purestack --help` or `yarn purestack help` to print the CLI's own usage summary. Options can be written as `--content ./content` or `--content=./content`.
@@ -118,9 +118,14 @@ yarn purestack build --content ./content --clean
 ```sh
 yarn purestack serve --content ./content
 yarn purestack serve --content ./content --host 127.0.0.1 --port 4300
+yarn purestack serve --content ./content --clean --full-render
 ```
 
-The server uses port `4173` and host `0.0.0.0` unless you override them. It serves files from `outDir`, checks watched content changes, and reloads open pages after changes. Content changes are handled incrementally where possible; a change to `siteConfig.json`, to `purestack.config.ts`, or to a file the config imports causes a full rebuild so the new settings and plugins are applied.
+The server uses port `4173` and host `0.0.0.0` unless you override them. By default, startup prepares routes, navigation, and shared page sections. Each page renders on its first request and is cached for later requests; static assets copy when requested. Watched edits invalidate affected pages so they render again on the next request, and open pages reload automatically. Changes to `siteConfig.json`, `purestack.config.ts`, or a file the config imports refresh shared setup and invalidate cached pages.
+
+Use `--full-render` when you need every page, asset, and the complete search index generated before browsing. It runs one full build at startup, and site requests wait for that build to finish. After startup, watched edits use the same incremental invalidation and rendering on request as the default mode.
+
+When search is enabled, the default mode builds its search index when a Pagefind asset is requested and includes only pages opened in the current session. `--full-render` starts with a complete search index; later changes are handled incrementally. `build` and `publish` always index the complete site.
 
 These options belong to `serve`:
 
@@ -128,9 +133,10 @@ These options belong to `serve`:
 | --- | --- |
 | `--host <host>` | Listen on a particular interface, for example `127.0.0.1`. |
 | `--port <port>` | Listen on a different port. |
-| `--clean` | Remove `outDir` before the initial build. |
-| `--no-watch` | Keep the server running without watching the content directory. The initial build still runs. |
-| `--no-reload` | Keep watching and rebuilding, but do not inject the browser live reload script. |
+| `--clean` | Remove `outDir` before setup and when config changes reset shared setup. |
+| `--full-render` | Build every page, asset, and the complete search index once at startup. Watched edits remain incremental. |
+| `--no-watch` | Keep the server running without watching the content directory. Pages still render on request, or all at startup with `--full-render`. |
+| `--no-reload` | Keep watching and updating the site, but do not inject the browser live reload script. |
 
 Watching and browser reload are separate. For example, `--no-reload` is useful if another browser tool manages refreshes. The server displays page build errors as diagnostic pages so you can correct the source and continue editing.
 
@@ -169,10 +175,8 @@ The home page stays at `dist/site/index.html`, but links and the development ser
 | --- | --- |
 | `Missing required --content <dir> option` | Pass `--content` to `build`, `serve`, or `publish`. |
 | `Missing required siteConfig.json` | Check the path passed to `--content` and the file's exact name. |
-| `Unknown option` | Run `yarn purestack --help`; `--host`, `--port`, `--no-watch`, and `--no-reload` apply only to `serve`. |
+| `Unknown option` | Run `yarn purestack --help`; `--host`, `--port`, `--no-watch`, `--no-reload`, and `--full-render` apply only to `serve`. |
 | `Could not bundle …purestack.config.ts` | Check the imports in `purestack.config.ts` and the files it imports; the message names the import that failed. |
 | `Duplicate content routes detected` | Find two files that map to the same URL, such as `guide/index.md` and `guide/guide.mdx`. |
 | A page or asset returns 404 under a subpath | Check `basePath`, the URL printed by `serve`, and the path at which your host serves the output folder. |
 | `publish` fails while `serve` displayed an error page | Fix the page or asset error shown by the development server, then rerun `publish`. |
-
-The checked-in [sample content](https://github.com/PureStackStudio/PureStack/tree/main/packages/ts-ssg/sample-content) is a larger working site. PureStack Studio adds its own skin, components, styles, and templates through a [plugin](https://github.com/PureStackStudio/PureStack/blob/main/frontend/studioPlugin.ts) listed in its [`purestack.config.ts`](https://github.com/PureStackStudio/PureStack/blob/main/frontend/purestack.studio/purestack.config.ts); `yarn frontend` runs `purestack serve` on that site.

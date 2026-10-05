@@ -118,6 +118,9 @@ function parseCliArgs(args: string[]): CliState {
   if (options.includes('--no-reload')) {
     state.input.liveReload = false
   }
+  if (options.includes('--full-render')) {
+    state.input.fullRender = true
+  }
   if (options.includes('--clean')) {
     state.input.build ??= {}
     state.input.build.options ??= {}
@@ -167,7 +170,8 @@ function assertKnownOptions(
 
 function resolveFlagOptions(command: Exclude<CliCommand, 'help'>) {
   if (command === 'build') return ['--clean']
-  if (command === 'serve') return ['--clean', '--no-watch', '--no-reload']
+  if (command === 'serve')
+    return ['--clean', '--no-watch', '--no-reload', '--full-render']
   return []
 }
 
@@ -203,10 +207,10 @@ class CliUsageError extends Error {
 
 const USAGE = `Usage:
   purestack build --content <dir> [--clean]
-  purestack serve --content <dir> [--host <host>] [--port <port>] [--clean] [--no-watch] [--no-reload]
+  purestack serve --content <dir> [--host <host>] [--port <port>] [--clean] [--no-watch] [--no-reload] [--full-render]
   purestack publish --content <dir>
 
 Commands:
   build     Build a content directory into its configured outDir.
-  serve     Start the dev server for a content directory.
+  serve     Start the dev server; --full-render builds all pages once at startup.
   publish   Clean and build a publish artifact using the configured publishDir.`

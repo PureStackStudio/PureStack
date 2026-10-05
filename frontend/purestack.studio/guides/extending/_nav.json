@@ -1,7 +1,3 @@
 {
-  "sequence": [
-    "index.mdx",
-    "regor.mdx",
-    "plugins.mdx"
-  ]
+  "sequence": ["index.mdx", "regor.mdx", "plugins.mdx"]
 }

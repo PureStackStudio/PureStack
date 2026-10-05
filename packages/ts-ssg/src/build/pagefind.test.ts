@@ -59,4 +59,30 @@ describe('buildPagefindIndex', () => {
       await fs.rm(outDir, { recursive: true, force: true })
     }
   })
+
+  it('indexes only the selected pages when other HTML remains in output', async () => {
+    const outDir = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-pagefind-'))
+    try {
+      const opened = path.join(outDir, 'index.html')
+      const stale = path.join(outDir, 'stale.html')
+      await fs.writeFile(
+        opened,
+        '<html lang="en"><body data-pagefind-body>Opened page</body></html>',
+      )
+      await fs.writeFile(
+        stale,
+        '<html lang="en"><body data-pagefind-body>Stale page</body></html>',
+      )
+      const result = await buildPagefindIndex(
+        outDir,
+        { enabled: true, excludePaths: [] },
+        [],
+        [opened],
+      )
+      expect(result.indexedPages).toBe(1)
+      expect(result.errors).toEqual([])
+    } finally {
+      await fs.rm(outDir, { recursive: true, force: true })
+    }
+  })
 })

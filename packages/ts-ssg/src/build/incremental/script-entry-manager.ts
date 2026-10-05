@@ -14,7 +14,7 @@ interface ScriptEntrypointManagerInput {
   minifyScripts: boolean
   failOnAssetError: boolean
   cacheBusting: boolean
-  assets: Record<string, AssetManifestEntry>
+  getAssets: () => Record<string, AssetManifestEntry>
   scriptCacheKeys: ScriptCacheKeyStore
   persistManifest: () => Promise<void>
 }
@@ -23,6 +23,8 @@ export class ScriptEntrypointManager {
   private readonly pageEntrypoints = new Map<string, Set<string>>()
   private readonly entryDependencies = new Map<string, Set<string>>()
   private readonly dependentsByRelPath = new Map<string, Set<string>>()
+  private readonly dirtyEntrypoints = new Map<string, number>()
+  private dirtyVersion = 0
 
   constructor(private readonly input: ScriptEntrypointManagerInput) {}
 
@@ -54,6 +56,17 @@ export class ScriptEntrypointManager {
     this.removeEntrypoint(entryRelPath)
   }
 
+  invalidateEntrypoints(entries: Iterable<string>) {
+    for (const entry of entries) {
+      this.input.scriptCacheKeys.bump(entry)
+      // Retain dependency tracking so subsequent edits still find importers.
+      this.dirtyEntrypoints.set(
+        this.normalizeRelPath(entry),
+        ++this.dirtyVersion,
+      )
+    }
+  }
+
   usesCacheBusting() {
     return this.input.cacheBusting
   }
@@ -61,6 +74,11 @@ export class ScriptEntrypointManager {
   resolveImpactedEntryRelPaths(changedRelPath: string) {
     const normalized = this.normalizeRelPath(changedRelPath)
     const impacted = new Set<string>()
+    // Failed bundles have no dependency graph yet. A TypeScript edit may fix
+    // their entrypoint or create a missing import, so allow them to retry.
+    for (const entry of this.collectDesiredEntrypoints()) {
+      if (!this.entryDependencies.has(entry)) impacted.add(entry)
+    }
     if (this.entryDependencies.has(normalized)) {
       impacted.add(normalized)
     }
@@ -112,17 +130,17 @@ export class ScriptEntrypointManager {
     const nextEntries = this.collectDesiredEntrypoints()
     const currentEntries = new Set([
       ...this.entryDependencies.keys(),
-      ...Object.values(this.input.assets)
+      ...Object.values(this.input.getAssets())
         .filter((entry) => entry.ext.toLowerCase() === '.ts')
         .map((entry) => this.normalizeRelPath(entry.relPath)),
     ])
 
     for (const entryRelPath of currentEntries) {
       if (nextEntries.has(entryRelPath)) continue
-      const priorEntry = this.input.assets[entryRelPath]
+      const priorEntry = this.input.getAssets()[entryRelPath]
       if (priorEntry) {
         await removeFile(priorEntry.outPath)
-        delete this.input.assets[entryRelPath]
+        delete this.input.getAssets()[entryRelPath]
         result.deletedAssets += 1
       }
       this.input.scriptCacheKeys.remove(entryRelPath)
@@ -141,11 +159,25 @@ export class ScriptEntrypointManager {
     return this.getEntrypointAssetFiles()
   }
 
+  /** Only requested pages register scripts in the dev server. */
+  async buildMissingEntrypoints(result: IncrementalBuildResult) {
+    for (const entry of this.collectDesiredEntrypoints()) {
+      if (
+        !this.entryDependencies.has(entry) ||
+        this.dirtyEntrypoints.has(entry)
+      ) {
+        await this.rebuildSingleEntrypoint(entry, result)
+      }
+    }
+  }
+
   private async rebuildSingleEntrypoint(
     entryRelPath: string,
     result: IncrementalBuildResult,
     options: { bumpCacheKeys?: boolean } = {},
   ) {
+    const normalized = this.normalizeRelPath(entryRelPath)
+    const dirtyVersion = this.dirtyEntrypoints.get(normalized)
     const ext = path.extname(entryRelPath).toLowerCase() || '.ts'
     const assetFile = toAssetFile(
       this.input.config.contentDir,
@@ -154,10 +186,10 @@ export class ScriptEntrypointManager {
     )
     const signature = await readSignature(assetFile.absPath)
     if (!signature) {
-      const priorEntry = this.input.assets[entryRelPath]
+      const priorEntry = this.input.getAssets()[entryRelPath]
       if (priorEntry) {
         await removeFile(priorEntry.outPath)
-        delete this.input.assets[entryRelPath]
+        delete this.input.getAssets()[entryRelPath]
         result.deletedAssets += 1
       }
       this.input.scriptCacheKeys.remove(entryRelPath)
@@ -185,12 +217,12 @@ export class ScriptEntrypointManager {
       }
       return false
     }
-    const priorEntry = this.input.assets[entryRelPath]
+    const priorEntry = this.input.getAssets()[entryRelPath]
     if (priorEntry?.outPath && priorEntry.outPath !== assetCopy.outPath) {
       await removeFile(priorEntry.outPath)
     }
 
-    this.input.assets[entryRelPath] = {
+    this.input.getAssets()[entryRelPath] = {
       relPath: entryRelPath,
       ext,
       outPath: assetCopy.outPath,
@@ -198,6 +230,9 @@ export class ScriptEntrypointManager {
       ...signature,
     }
     result.changedAssets += 1
+    if (this.dirtyEntrypoints.get(normalized) === dirtyVersion) {
+      this.dirtyEntrypoints.delete(normalized)
+    }
     this.setEntrypointDependencies(
       entryRelPath,
       assetCopy.dependencyRelPaths.length > 0

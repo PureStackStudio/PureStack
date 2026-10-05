@@ -52,31 +52,39 @@ export class ManifestContentIndex {
   ) {}
 
   rebuildFromManifest(manifest: BuildManifest) {
-    this.outPathToRelPath.clear()
-    this.relPathToOutPath.clear()
-    this.urlPathToRelPath.clear()
-    this.relPathToUrlPath.clear()
+    this.clear()
     for (const entry of Object.values(manifest.content)) {
       this.set(entry.relPath, entry.outPath, entry.ext)
     }
   }
 
+  clear() {
+    this.outPathToRelPath.clear()
+    this.relPathToOutPath.clear()
+    this.urlPathToRelPath.clear()
+    this.relPathToUrlPath.clear()
+  }
+
   set(relPath: string, outPath: string, ext?: string) {
-    const prevOutPath = this.relPathToOutPath.get(relPath)
-    if (prevOutPath && prevOutPath !== outPath) {
-      this.outPathToRelPath.delete(prevOutPath)
-    }
+    this.setOutPath(relPath, outPath)
     const prevUrlPath = this.relPathToUrlPath.get(relPath)
     if (prevUrlPath) {
       this.urlPathToRelPath.delete(prevUrlPath)
     }
-    this.relPathToOutPath.set(relPath, outPath)
-    this.outPathToRelPath.set(outPath, relPath)
     const routeInfo = resolveRouteInfo(this.toContentFile(relPath, ext))
     this.relPathToUrlPath.set(relPath, routeInfo.urlPath)
     if (!this.urlPathToRelPath.has(routeInfo.urlPath)) {
       this.urlPathToRelPath.set(routeInfo.urlPath, relPath)
     }
+  }
+
+  setOutPath(relPath: string, outPath: string) {
+    const prevOutPath = this.relPathToOutPath.get(relPath)
+    if (prevOutPath && prevOutPath !== outPath) {
+      this.outPathToRelPath.delete(prevOutPath)
+    }
+    this.relPathToOutPath.set(relPath, outPath)
+    this.outPathToRelPath.set(outPath, relPath)
   }
 
   remove(relPath: string) {

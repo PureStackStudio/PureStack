@@ -18,14 +18,16 @@ const PAGEFIND_DIRNAME = 'pagefind'
  * Indexes the pages in `outDir` for search. `config.excludePaths` skips
  * pages by URL prefix; `skipFiles` skips individual pages, such as those
  * whose frontmatter sets `index: false`.
+ * `onlyFiles` limits a dev index to pages rendered in the current session.
  */
 export async function buildPagefindIndex(
   outDir: string,
   config: PagefindConfig,
   skipFiles: Iterable<string> = [],
+  onlyFiles?: Iterable<string>,
 ): Promise<BuildPagefindResult> {
   const log = getLogger()
-  const state = createPagefindBuildState(outDir, config, skipFiles)
+  const state = createPagefindBuildState(outDir, config, skipFiles, onlyFiles)
   if (!config.enabled) {
     await removePagefindOutput(state.outputPath)
     log.info('pagefind indexing disabled', {
@@ -78,12 +80,14 @@ type PagefindBuildState = {
   errors: string[]
   excludePaths: string[]
   skipFiles: ReadonlySet<string>
+  onlyFiles: ReadonlySet<string> | undefined
 }
 
 function createPagefindBuildState(
   outDir: string,
   config: PagefindConfig,
   skipFiles: Iterable<string>,
+  onlyFiles?: Iterable<string>,
 ): PagefindBuildState {
   return {
     startedAt: now(),
@@ -97,6 +101,10 @@ function createPagefindBuildState(
     skipFiles: new Set(
       [...skipFiles].map((filePath) => path.resolve(filePath)),
     ),
+    onlyFiles:
+      onlyFiles === undefined
+        ? undefined
+        : new Set([...onlyFiles].map((filePath) => path.resolve(filePath))),
   }
 }
 
@@ -149,15 +157,22 @@ async function populateAndWritePagefindIndex(
 ) {
   const { outDir, outputPath, excludePaths, skipFiles } = state
   const isSkipped = (filePath: string) =>
+    (state.onlyFiles !== undefined &&
+      !state.onlyFiles.has(path.resolve(filePath))) ||
     skipFiles.has(path.resolve(filePath)) ||
     shouldSkipPagefindPath(
       toPosixPath(path.relative(outDir, filePath)),
       excludePaths,
     )
-  const htmlFiles = await collectHtmlFiles(outDir)
+  const htmlFiles =
+    state.onlyFiles === undefined
+      ? await collectHtmlFiles(outDir)
+      : [...state.onlyFiles]
   const indexedBytes = await measureHtmlFiles(htmlFiles, isSkipped)
   const indexed =
-    excludePaths.length === 0 && skipFiles.size === 0
+    excludePaths.length === 0 &&
+    skipFiles.size === 0 &&
+    state.onlyFiles === undefined
       ? await indexHtmlDirectory(index, outDir)
       : await indexHtmlFiles(index, outDir, htmlFiles, isSkipped)
   const writeResult = await index.writeFiles({ outputPath })

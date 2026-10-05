@@ -72,6 +72,7 @@ Flags:
 - `--host 127.0.0.1` or `--host=127.0.0.1` (`serve`)
 - `--no-watch` (`serve`)
 - `--no-reload` (`serve`)
+- `--full-render` (`serve`; render all pages and build the complete search index once at startup)
 
 When the content directory holds a `purestack.config.ts`, every command loads its plugins; `serve` reloads it when it or a local file it imports changes. See [Plugins](#plugins).
 
@@ -80,6 +81,7 @@ Examples from this monorepo:
 ```bash
 yarn tsx packages/ts-ssg/src/cli.ts build --content ./packages/ts-ssg/sample-content
 yarn tsx packages/ts-ssg/src/cli.ts serve --content ./packages/ts-ssg/sample-content --port 4173
+yarn frontend --clean --full-render
 yarn tsx packages/ts-ssg/src/cli.ts publish --content ./packages/ts-ssg/sample-content
 ```
 
@@ -385,7 +387,7 @@ Each full build also runs, in order:
 - `onStylesWritten(context, result)`
 - `onBuildComplete(context, result)`
 
-The dev server runs a full build when it starts, when `siteConfig.json` changes, and when `purestack.config.ts` or a file it imports changes; other edits re-render only the affected pages.
+By default, the dev server prepares routes and shared navigation when it starts. Pages render on their first request and are cached until an edit affects them; static assets copy on request. Site or plugin config changes prepare a fresh request cache. Page hooks run only for pages that are requested; `onBuildComplete` belongs to full builds. With `--full-render` (or `startDevServer({ fullRender: true })`), startup runs one full build, including all pages, assets, and the complete search index. Site requests wait for that initial build to finish. After startup, watched changes use the same incremental invalidation and rendering on request as the default mode.
 
 ## Templates
 
@@ -457,10 +459,10 @@ In dev/watch mode:
 
 - file changes apply incrementally when safe,
 - a page affected by a shared change, such as a header, footer, or navigation edit, renders again on its next request, before it is served,
-- site config changes trigger full rebuild,
-- a change to `purestack.config.ts` or a local file it imports loads the config again and triggers a full rebuild,
+- site config changes refresh shared state and invalidate cached pages,
+- a change to `purestack.config.ts` or a local file it imports loads the config again and invalidates cached pages,
 - plugin generated pages regenerate when content or assets change,
-- lazy route render can happen on first request for missing HTML route,
+- pages render only when requested, including after file edits,
 - live reload is served over SSE (`/__ts-ssg/events`).
 - dev server enables `writeErrorPages` automatically so template/MDX errors are visible immediately at the failing route.
 
@@ -478,6 +480,8 @@ Optional config:
 - `pagefind.excludePaths`: array of route prefixes excluded from indexing (e.g. `["/privacy/", "/imprint/", "/terms/"]`).
 
 When `basePath` is configured, the search runtime loads Pagefind from the public mount path while Pagefind indexing still reads the normal output directory.
+
+In the default dev server mode, requesting a Pagefind asset builds the search index from pages rendered in the current session. Unopened pages are not compiled for search. Full builds index the complete site; `serve --full-render` starts with that complete index, then handles watched changes incrementally.
 
 When disabled, stale `<outDir>/pagefind` output is removed. Build logs include indexed page count and total indexed byte size when indexing runs.
 

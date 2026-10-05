@@ -12,8 +12,14 @@ export interface IncrementalBuildResult {
 }
 
 export interface IncrementalBuilder {
+  /** Prepares shared state without rendering pages or copying static assets. */
+  prepareForRequests: () => Promise<void>
   buildAll: (reason: string) => Promise<BuildResult>
   applyChange: (filePath: string) => Promise<IncrementalBuildResult>
   renderIfDirtyByOutPath: (outPath: string) => Promise<boolean>
-  renderByUrlPath: (urlPath: string) => Promise<boolean>
+  renderByUrlPath: (urlPath: string, locale?: string) => Promise<boolean>
+  /** Writes styles and discovered scripts before a dev response is served. */
+  preparePageAssets: () => Promise<void>
+  /** Returns true when the URL belongs to a discovered asset or dev search. */
+  prepareAssetByUrlPath: (urlPath: string) => Promise<boolean>
 }
