@@ -7,6 +7,8 @@ import {
   defineComponent,
   html,
   type RefOrValue,
+  type SRef,
+  unref,
 } from 'regor'
 import {
   type ComponentVariant,
@@ -15,7 +17,7 @@ import {
 } from '../componentVariant'
 
 export interface PageToc {
-  items?: PageOutlineItem[]
+  outline?: PageOutlineItem[] | SRef<PageOutlineItem[]>
   title?: string
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
@@ -119,7 +121,7 @@ function omitSingleDocumentHeading(items: PageOutlineItem[]) {
 }
 
 function resolveItems(props: PageToc, context: TsSsgContext | undefined) {
-  const items = props.items ?? context?.outline ?? []
+  const items = unref(props.outline) ?? context?.outline ?? []
   return toPageTocItems(omitSingleDocumentHeading(items))
 }
 
@@ -131,7 +133,7 @@ function resolveTitle(props: PageToc) {
 
 function definePageTocComponent() {
   return defineComponent<PageToc>(pageTocTemplate, {
-    props: ['items', 'title', 'tone', 'variant', 'variantMode'],
+    props: ['outline', 'title', 'tone', 'variant', 'variantMode'],
     context: (head) => {
       const context = resolveTsSsgContext(head)
       return {

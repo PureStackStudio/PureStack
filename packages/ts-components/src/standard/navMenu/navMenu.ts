@@ -27,10 +27,14 @@ export interface NavMenu {
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
   variantMode?: RefOrValue<ComponentVariantMode>
+  signInSignedIn?: RefOrValue<boolean>
   signInAvatarSrc?: RefOrValue<string>
   signInAvatarAlt?: RefOrValue<string>
   classes?: ComputedRef<string>
-  searchEnabled?: boolean
+  search?: RefOrValue<boolean>
+  signInEnabled?: RefOrValue<boolean>
+  resolvedSignInEnabled?: ComputedRef<boolean>
+  searchEnabled?: ComputedRef<boolean>
   navRoot?: string
 }
 
@@ -102,8 +106,11 @@ const navMenuTemplate = html`<nav
   <div class="nav__header-row">
     <div class="nav__header">Navigation</div>
     <SignIn
+      r-if="resolvedSignInEnabled"
       class="nav__account"
-      :avatarSrc="signInAvatarSrc"
+      :enabled="resolvedSignInEnabled"
+        :signedIn="signInSignedIn"
+        :avatarSrc="signInAvatarSrc"
       :avatarAlt="signInAvatarAlt"/>
     <button
       class="nav__panel-toggle tone-fill-surface-all tone-text-surface-all tone-border-surface-all"
@@ -233,9 +240,12 @@ function defineNavMenuComponent() {
     props: [
       'items',
       'currentUrl',
+      'search',
+      'signInEnabled',
       'tone',
       'variant',
       'variantMode',
+      'signInSignedIn',
       'signInAvatarSrc',
       'signInAvatarAlt',
     ],
@@ -253,7 +263,13 @@ function defineNavMenuComponent() {
             },
           ),
         ),
-        searchEnabled: context?.site.pagefind?.enabled === true,
+        searchEnabled: computed(
+          () => unref(props.search) ?? context?.site.pagefind?.enabled === true,
+        ),
+        resolvedSignInEnabled: computed(
+          () =>
+            unref(props.signInEnabled) ?? context?.site.auth?.enabled === true,
+        ),
         navRoot: normalizeNavStateKeyPart(context?.navigation?.root ?? ''),
         navItems: computed(() =>
           buildNavState(

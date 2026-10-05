@@ -14,12 +14,18 @@ export interface BuildPagefindResult {
 
 const PAGEFIND_DIRNAME = 'pagefind'
 
+/**
+ * Indexes the pages in `outDir` for search. `config.excludePaths` skips
+ * pages by URL prefix; `skipFiles` skips individual pages, such as those
+ * whose frontmatter sets `index: false`.
+ */
 export async function buildPagefindIndex(
   outDir: string,
   config: PagefindConfig,
+  skipFiles: Iterable<string> = [],
 ): Promise<BuildPagefindResult> {
   const log = getLogger()
-  const state = createPagefindBuildState(outDir, config)
+  const state = createPagefindBuildState(outDir, config, skipFiles)
   if (!config.enabled) {
     await removePagefindOutput(state.outputPath)
     log.info('pagefind indexing disabled', {
@@ -71,11 +77,13 @@ type PagefindBuildState = {
   indexedBytes: number
   errors: string[]
   excludePaths: string[]
+  skipFiles: ReadonlySet<string>
 }
 
 function createPagefindBuildState(
   outDir: string,
   config: PagefindConfig,
+  skipFiles: Iterable<string>,
 ): PagefindBuildState {
   return {
     startedAt: now(),
@@ -86,6 +94,9 @@ function createPagefindBuildState(
     indexedBytes: 0,
     errors: [],
     excludePaths: config.excludePaths,
+    skipFiles: new Set(
+      [...skipFiles].map((filePath) => path.resolve(filePath)),
+    ),
   }
 }
 
@@ -94,12 +105,7 @@ async function runPagefindBuild(state: PagefindBuildState): Promise<void> {
   const created = await createPagefindIndex()
   state.errors.push(...created.errors)
   state.index = created.index
-  const indexed = await populateAndWritePagefindIndex(
-    created.index,
-    state.outDir,
-    state.outputPath,
-    state.excludePaths,
-  )
+  const indexed = await populateAndWritePagefindIndex(created.index, state)
   state.indexedPages = indexed.indexedPages
   state.indexedBytes = indexed.indexedBytes
   state.errors.push(...indexed.errors)
@@ -139,16 +145,21 @@ async function createPagefindIndex(): Promise<CreatedPagefindIndex> {
 
 async function populateAndWritePagefindIndex(
   index: pagefind.PagefindIndex,
-  outDir: string,
-  outputPath: string,
-  excludePaths: string[],
+  state: PagefindBuildState,
 ) {
+  const { outDir, outputPath, excludePaths, skipFiles } = state
+  const isSkipped = (filePath: string) =>
+    skipFiles.has(path.resolve(filePath)) ||
+    shouldSkipPagefindPath(
+      toPosixPath(path.relative(outDir, filePath)),
+      excludePaths,
+    )
   const htmlFiles = await collectHtmlFiles(outDir)
-  const indexedBytes = await measureHtmlFiles(htmlFiles, outDir, excludePaths)
+  const indexedBytes = await measureHtmlFiles(htmlFiles, isSkipped)
   const indexed =
-    excludePaths.length === 0
+    excludePaths.length === 0 && skipFiles.size === 0
       ? await indexHtmlDirectory(index, outDir)
-      : await indexHtmlFiles(index, outDir, htmlFiles, excludePaths)
+      : await indexHtmlFiles(index, outDir, htmlFiles, isSkipped)
   const writeResult = await index.writeFiles({ outputPath })
   return {
     indexedPages: indexed.indexedPages,
@@ -172,13 +183,13 @@ async function indexHtmlFiles(
   index: pagefind.PagefindIndex,
   outDir: string,
   htmlFiles: string[],
-  excludePaths: string[],
+  isSkipped: (filePath: string) => boolean,
 ) {
   const errors: string[] = []
   let indexedPages = 0
   for (const filePath of htmlFiles) {
+    if (isSkipped(filePath)) continue
     const relPath = toPosixPath(path.relative(outDir, filePath))
-    if (shouldSkipPagefindPath(relPath, excludePaths)) continue
     const content = await fs.readFile(filePath, 'utf8')
     const response = await index.addHTMLFile({
       sourcePath: relPath,
@@ -197,13 +208,11 @@ async function indexHtmlFiles(
 
 async function measureHtmlFiles(
   htmlFiles: string[],
-  outDir: string,
-  excludePaths: string[],
+  isSkipped: (filePath: string) => boolean,
 ): Promise<number> {
   let bytes = 0
   for (const filePath of htmlFiles) {
-    const relPath = toPosixPath(path.relative(outDir, filePath))
-    if (shouldSkipPagefindPath(relPath, excludePaths)) continue
+    if (isSkipped(filePath)) continue
     bytes += (await fs.stat(filePath)).size
   }
   return bytes

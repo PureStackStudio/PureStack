@@ -3,6 +3,8 @@
   "files": {
     "includes": [
       "**",
+      "!frontend/out",
+      "!**/.*",
       "!**/dist",
       "!**/node_modules",
       "!**/.yarn",

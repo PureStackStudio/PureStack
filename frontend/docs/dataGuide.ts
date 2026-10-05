@@ -64,15 +64,17 @@ export function createChartAppearanceState(): ChartAppearanceState {
   }
 }
 
+export interface ChartAppearanceControls {
+  tone: Ref<SemanticTone>
+  variant: Ref<ComponentVariant>
+  variantMode: Ref<ComponentVariantMode>
+  width: Ref<number | string>
+  showWidth?: RefOrValue<boolean>
+  prefix: RefOrValue<string>
+}
+
 export function defineChartAppearanceControls() {
-  return defineComponent<{
-    tone: Ref<SemanticTone>
-    variant: Ref<ComponentVariant>
-    variantMode: Ref<ComponentVariantMode>
-    width: Ref<number | string>
-    showWidth?: RefOrValue<boolean>
-    prefix: RefOrValue<string>
-  }>(
+  return defineComponent<ChartAppearanceControls>(
     html`<Grid columns="1" columnsMd="3">
     <FormSelectField :id="prefix + '-tone'" label="Chart tone" :model="tone" :options="tones"/>
     <FormSelectField :id="prefix + '-variant'" label="Chart variant" :model="variant" :options="variants"/>
@@ -94,11 +96,13 @@ export function defineChartAppearanceControls() {
   )
 }
 
+export interface ChartAppearanceGallery {
+  component: RefOrValue<string>
+  axis: RefOrValue<'tone' | 'variant' | 'mode'>
+}
+
 export function defineChartAppearanceGallery() {
-  return defineComponent<{
-    component: RefOrValue<string>
-    axis: RefOrValue<'tone' | 'variant' | 'mode'>
-  }>(
+  return defineComponent<ChartAppearanceGallery>(
     html`<div class="component-appearance-grid data-chart-gallery">
     <div class="component-appearance-cell" r-for="sample in samples">
       <code>{{ sample.label }}</code>

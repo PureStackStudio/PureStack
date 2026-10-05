@@ -5,7 +5,29 @@ import {
   defineFormInputField,
   definePanelComponents,
 } from '@purestack/ts-components'
-import { batch, computed, createApp, defineComponent, html, ref } from 'regor'
+import {
+  batch,
+  type ComputedRef,
+  computed,
+  createApp,
+  defineComponent,
+  html,
+  type Ref,
+  ref,
+} from 'regor'
+
+export interface ReviewCounter {
+  prefix: string
+  title: string
+  completed: Ref<number>
+  goal: Ref<string>
+  note: Ref<string>
+  locked: Ref<boolean>
+  target: ComputedRef<number>
+  complete: () => void
+  undo: () => void
+  reset: () => void
+}
 
 const reviewTemplate = html`<Panel variant="surface" tone="neutral" bodyClass="p-3">
   <Flex direction="column" align="stretch">
@@ -31,7 +53,7 @@ for (const mount of document.querySelectorAll<HTMLElement>(
   createApp(
     {
       components: {
-        ReviewCounter: defineComponent(reviewTemplate, {
+        ReviewCounter: defineComponent<ReviewCounter>(reviewTemplate, {
           context: () => {
             const completed = ref(0)
             const goal = ref('5')

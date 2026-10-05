@@ -85,7 +85,7 @@ In a client-side app, pass a shallow `sref` for `items` and a `ref` for `current
 
 ## Docked in the doc layout
 
-This preview renders the menu exactly as the SSG does: from the site navigation, in its own document with the standard runtime. The current page opens its ancestor group. Expand Layout to inspect another branch; links open the real guides within the preview.
+This ordinary page uses the standard documentation template, which renders the site's navigation with its configured appearance and runtime. The narrow iframe uses the mobile layout: open the menu with the header's navigation toggle. Open the full page in a wide window to try desktop sidebar collapse, restore, and resizing. Links open the real guides within the preview.
 
 <Tabs group="nav-menu-sample-1" selectedTab="nav-menu-sample-1-preview" ariaLabel="A focused navigation tree example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="nav-menu-sample-1-preview" label="Preview">
@@ -94,15 +94,12 @@ This preview renders the menu exactly as the SSG does: from the site navigation,
 
 </div>
   </TabPane>
-  <TabPane id="nav-menu-sample-1-source-0" label="preview.mdx">
-```html
-<NavMenuPreview />
-```
-  </TabPane>
-  <TabPane id="nav-menu-sample-1-source-1" label="preview.ts">
-  <import-codeblock src="./preview.ts"/>
+  <TabPane id="nav-menu-sample-1-source-1" label="preview.mdx">
+  <import-codeblock src="./preview.mdx"/>
   </TabPane>
 </Tabs>
+
+<BtnLink href="./preview/" target="_blank" rel="noopener" variant="link">Open the full-page layout preview</BtnLink>
 
 ## All ten semantic tones
 
@@ -169,6 +166,9 @@ Use [NavList](/components/site/nav-list/) when you already have prepared row sta
   <a href="#nav-menu-prop-variantMode">variantMode</a>
   <a href="#nav-menu-prop-signInAvatarSrc">signInAvatarSrc</a>
   <a href="#nav-menu-prop-signInAvatarAlt">signInAvatarAlt</a>
+  <a href="#nav-menu-prop-search">search</a>
+  <a href="#nav-menu-prop-signInEnabled">signInEnabled</a>
+  <a href="#nav-menu-prop-signInSignedIn">signInSignedIn</a>
 </nav>
 
 <ApiProperty anchor="nav-menu-prop-items" name="items" valueType="NavItem[] | SRef&lt;NavItem[]&gt;" defaultValue="context navigation items, then global">
@@ -197,6 +197,18 @@ Use [NavList](/components/site/nav-list/) when you already have prepared row sta
 
 <ApiProperty anchor="nav-menu-prop-signInAvatarAlt" name="signInAvatarAlt" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
   <p>Avatar alternative text forwarded to the account control.</p>
+</ApiProperty>
+
+<ApiProperty anchor="nav-menu-prop-search" name="search" valueType="RefOrValue&lt;boolean&gt;" defaultValue="site.pagefind.enabled">
+  <p>Overrides search visibility for this instance.</p>
+</ApiProperty>
+
+<ApiProperty anchor="nav-menu-prop-signInEnabled" name="signInEnabled" valueType="RefOrValue&lt;boolean&gt;" defaultValue="site.auth.enabled">
+  <p>Overrides account control visibility for this instance.</p>
+</ApiProperty>
+
+<ApiProperty anchor="nav-menu-prop-signInSignedIn" name="signInSignedIn" valueType="RefOrValue&lt;boolean&gt;" defaultValue="runtime auth state">
+  <p>Forwards an explicit signed-in presentation to the account control.</p>
 </ApiProperty>
 
 ### Composition

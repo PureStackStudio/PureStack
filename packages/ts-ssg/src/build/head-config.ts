@@ -39,7 +39,9 @@ export function resolveHeadConfig(
     ...preview,
   }
 
-  return isPlainObject(head) ? merge(base, head) : base
+  const resolved = isPlainObject(head) ? merge(base, head) : base
+  if (frontmatter.index === false) resolved.robots = 'noindex'
+  return resolved
 }
 
 function resolvePreviewConfig(

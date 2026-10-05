@@ -7,15 +7,22 @@ describe('SignIn styles', () => {
     styleBuilder.reset()
   })
 
-  it('targets signed-in state on the document root', async () => {
+  it('uses the document auth state while allowing per-instance overrides', async () => {
     registerSignInStyles()
 
-    const css = await styleBuilder.render('light')
+    const css = (await styleBuilder.render('light')).replace(/\s+/g, ' ')
 
-    expect(css).toContain(':scope.signed-in .sign-in__signed-out-view')
-    expect(css).toContain(':scope.signed-in .sign-in__signed-in-view')
-    expect(css).toContain(':scope.signed-in .sign-in__signed-out-action')
-    expect(css).toContain(':scope.signed-in .sign-in__signed-in-action')
+    for (const part of [
+      'signed-out-view',
+      'signed-in-view',
+      'signed-out-action',
+      'signed-in-action',
+    ]) {
+      expect(css).toContain(
+        `:scope.signed-in .sign-in:not([data-signed-in="false"]) .sign-in__${part}`,
+      )
+      expect(css).toContain(`.sign-in[data-signed-in="true"] .sign-in__${part}`)
+    }
     expect(css).not.toContain(', .signed-in .sign-in__signed-out-view')
   })
 })

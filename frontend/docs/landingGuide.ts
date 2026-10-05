@@ -23,12 +23,14 @@ const variants: ComponentVariant[] = [
   'none',
 ]
 
+export interface LandingAppearanceGallery {
+  component: RefOrValue<string>
+  axis: RefOrValue<'tone' | 'variant' | 'mode'>
+}
+
 /** Full, simultaneously visible samples of each component's public appearance API. */
 export function defineLandingAppearanceGallery() {
-  return defineComponent<{
-    component: RefOrValue<string>
-    axis: RefOrValue<'tone' | 'variant' | 'mode'>
-  }>(
+  return defineComponent<LandingAppearanceGallery>(
     html`<div class="component-appearance-grid landing-appearance-gallery">
       <div class="component-appearance-cell" r-for="sample in samples">
         <code>{{ sample.label }}</code>

@@ -1,0 +1,25 @@
+---
+template: preview
+index: false
+title: sign-in preview
+---
+
+<Flex align="center" justify="between">
+  <span>Example workspace</span>
+  <SignIn :enabled="true" :signUp="false" label="Workspace account" tone="neutral">
+    <Flex
+      container="nav"
+      direction="column"
+      aria-label="Example account destinations"
+    >
+      <BtnLink href="/components/" variant="subtleBtn">Component library</BtnLink>
+      <BtnLink href="/components/site/site-logo/" variant="subtleBtn">
+        Workspace branding
+      </BtnLink>
+    </Flex>
+  </SignIn>
+</Flex>
+<p class="mt-4">
+  Open the account menu. These custom destinations are documentation links; this
+  preview does not sign you in.
+</p>

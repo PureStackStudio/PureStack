@@ -49,8 +49,12 @@ const variants: ComponentVariant[] = [
   'none',
 ]
 
+export interface SemanticToneGallery {
+  axis: RefOrValue<string>
+}
+
 export function defineSemanticToneGallery() {
-  return defineComponent<{ axis: RefOrValue<string> }>(
+  return defineComponent<SemanticToneGallery>(
     html`<div class="component-appearance-grid tone-guide-gallery">
       <article class="component-appearance-cell" r-for="sample in samples" :data-tone-sample="sample.label">
         <code>{{ sample.label }}</code>

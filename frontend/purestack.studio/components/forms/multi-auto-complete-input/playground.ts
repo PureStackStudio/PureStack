@@ -149,11 +149,13 @@ const component = defineComponent<MultiAutoCompleteInputExample>(
     context: createMultiAutoCompleteInputExample,
   },
 )
-const tagSuggestion = defineComponent<{
+export interface TagSuggestion {
   option: RefOrValue<ResolvedAutoCompleteOption | null>
   active?: RefOrValue<boolean>
   query?: RefOrValue<string>
-}>(
+}
+
+const tagSuggestion = defineComponent<TagSuggestion>(
   html`<Flex direction="column" r-if="option"><strong>{{ option.label }}</strong><span class="text-muted">{{ option.value }} · {{ active ? 'Active suggestion' : 'Available suggestion' }}{{ query ? ' · query: ' + query : '' }}</span></Flex>`,
   {
     props: ['option', 'active', 'query'],
