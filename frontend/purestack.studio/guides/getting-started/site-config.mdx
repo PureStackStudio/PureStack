@@ -15,7 +15,7 @@ nav:
 
 `siteConfig.json` is the site-wide starting point for a PureStack build. It controls where files are written, which styles and navigation are generated, and which optional features appear on every page. Page frontmatter still controls the title, description, template, and layout of an individual page.
 
-Put the file at the root of the content directory passed to the [PureStack CLI](/guides/purestack-cli/):
+Put the file at the root of the content directory passed to the [PureStack CLI](/guides/getting-started/purestack-cli/):
 
 ```text
 content/
@@ -119,7 +119,7 @@ PureStack generates a stylesheet for each configured theme. `light` and `dark` a
 
 `fileName` names the generated CSS file; `href` is the public stylesheet path inserted into pages. When `href` is omitted, it defaults to `/assets/` followed by `fileName`. If you set `href` explicitly, keep it aligned with the generated file. PureStack derives dark and any additional theme URLs from that light-theme `href`. `pretty` formats generated CSS with Prettier when `true`; it defaults to `false`.
 
-`theme.skin` selects a registered skin. A skin supplies the light and dark palettes; `theme.presets` and explicit theme tokens refine them. `remSize` and `mobileRemSize` optionally set the root font size. See [Themes](/guides/themes/) for custom skins and palette examples.
+`theme.skin` selects a registered skin. A skin supplies the light and dark palettes; `theme.presets` and explicit theme tokens refine them. `remSize` and `mobileRemSize` optionally set the root font size. See [Themes](/guides/styling/themes/) for custom skins and palette examples.
 
 ## Navigation and page contents
 
@@ -190,7 +190,7 @@ Place this in `content/guides/_nav.json`. A custom item's `url` is relative to t
 }
 ```
 
-`mdx.highlighter` accepts `highlightjs` (the default and faster option) or `shiki`. `disableHighlighter` turns highlighting off. `compileMdAsMdx` defaults to `true`, so `.md` files use the MDX/Regor markup pipeline; `.mdx` files use that pipeline in either case. The [Regor guide](/guides/regor/) explains the supported markup and components.
+`mdx.highlighter` accepts `highlightjs` (the default and faster option) or `shiki`. `disableHighlighter` turns highlighting off. `compileMdAsMdx` defaults to `true`, so `.md` files use the MDX/Regor markup pipeline; `.mdx` files use that pipeline in either case. The [Regor guide](/guides/extending/regor/) explains the supported markup and components.
 
 ## Search
 

@@ -80,7 +80,7 @@ Font-size utilities read the active theme's type scale. The available names are 
 <strong class="fs-h4">A prominent value</strong>
 ```
 
-The other numeric type controls are `fw-100` through `fw-900`, in steps of 100, and `lh-0` through `lh-7`. Line-height maps to `1.0` through `1.7` in steps of `0.1`: `lh-4` means `line-height: 1.4`. These classes set presentation only; keep headings as real `h1`–`h6` elements so the document outline remains meaningful. See [Typography](/guides/typography/) for page structure and theme customization.
+The other numeric type controls are `fw-100` through `fw-900`, in steps of 100, and `lh-0` through `lh-7`. Line-height maps to `1.0` through `1.7` in steps of `0.1`: `lh-4` means `line-height: 1.4`. These classes set presentation only; keep headings as real `h1`–`h6` elements so the document outline remains meaningful. See [Typography](/guides/styling/typography/) for page structure and theme customization.
 
 | Class | Effect |
 | --- | --- |
@@ -240,8 +240,8 @@ Combine them for hover feedback without custom CSS. Transitions and the nudge st
 
 ## Semantic tone classes
 
-Tone classes let plain markup use the same palette roles as components. `tone--info` selects a palette; `tone-fill-surface`, `tone-border-surface`, and `tone-text-surface` paint from it. The [Semantic tone classes guide](/guides/semantic-tones/) has a visual gallery of every tone, side-by-side role comparisons, and interactive state examples.
+Tone classes let plain markup use the same palette roles as components. `tone--info` selects a palette; `tone-fill-surface`, `tone-border-surface`, and `tone-text-surface` paint from it. The [Semantic tone classes guide](/guides/styling/semantic-tones/) has a visual gallery of every tone, side-by-side role comparisons, and interactive state examples.
 
 ## Check a class in your site
 
-The CLI generates utility rules into the site's theme stylesheets, normally `assets/site.css` and `assets/site.dark.css`. If a class has no effect, first check its spelling and whether its family is actually generated. Then check the element in both light and dark themes. The [Themes guide](/guides/themes/) explains how changing the palette changes the generated values, and the [Site configuration guide](/guides/site-config/) covers the stylesheet path.
+The CLI generates utility rules into the site's theme stylesheets, normally `assets/site.css` and `assets/site.dark.css`. If a class has no effect, first check its spelling and whether its family is actually generated. Then check the element in both light and dark themes. The [Themes guide](/guides/styling/themes/) explains how changing the palette changes the generated values, and the [Site configuration guide](/guides/getting-started/site-config/) covers the stylesheet path.

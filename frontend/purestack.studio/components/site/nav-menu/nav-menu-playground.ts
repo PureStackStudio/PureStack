@@ -89,7 +89,7 @@ const TREES: Record<TreeName, NavItem[]> = {
       title: 'Guides',
       icon: 'tabler:book',
       children: [
-        { title: 'Themes', url: '/guides/themes/', icon: 'tabler:palette' },
+        { title: 'Themes', url: '/guides/styling/themes/', icon: 'tabler:palette' },
         {
           title: 'Components',
           icon: 'tabler:components',
@@ -143,7 +143,7 @@ const TREES: Record<TreeName, NavItem[]> = {
 
 const DEFAULTS = {
   treeName: 'docs' as TreeName,
-  currentUrl: '/guides/themes/',
+  currentUrl: '/guides/styling/themes/',
   showIcons: true,
   tone: 'neutral' as SemanticTone,
   variant: 'flat' as ComponentVariant,

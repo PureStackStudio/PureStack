@@ -45,10 +45,38 @@ The page shows the passage as if you had written it there. Markdown and componen
 
 - **They are not pages.** A file whose name, or the name of a folder above it, starts with `_` is never published on its own, such as `_install.mdx` or `_shared/beta-note.mdx`.
 - **They have no frontmatter.** The page that shows a passage sets its title, template, and layout.
-- **Links work from the page.** A link inside a passage resolves from the page that shows it. When pages in different folders show the passage, start its links at the site root, such as `/guides/themes/`.
+- **Links work from the page.** A link inside a passage resolves from the page that shows it. When pages in different folders show the passage, start its links at the site root, such as `/guides/styling/themes/`.
 - **They can import too.** A shared file can show another shared file, or a file's [code](./code-blocks), with paths relative to the shared file itself.
 - **Inside a component, markup rules apply.** `<import-content>` works inside component markup too, such as a `TabPane`. There, the passage is read like anything else written inside a component: HTML, components, and code blocks work, but other Markdown, such as `**bold**`, lists, and `[links](./page)`, stays as written. Write passages meant for components in HTML.
 - **Edits show up.** While `purestack serve` runs, saving a shared file updates every page that shows it.
+
+## Share a header and footer
+
+Headers and footers use directory inheritance rather than `<import-content>`. Add `content/header.mdx` to supply the site's header:
+
+```mdx
+<TopBar tone="neutral" variant="surface" />
+```
+
+Add `content/footer.mdx` for its footer:
+
+```mdx
+<SiteFooter copyright="Acme documentation" />
+```
+
+A page uses the nearest header and the nearest footer found by walking up its source folders. For example, `content/guides/header.mdx` replaces the root header for pages under `guides`, while those pages can still inherit the root footer. The two lookups are independent. `.rmdx` is also supported; keep only one header and one footer per directory across these extensions.
+
+Links in these sections resolve from the header or footer file, unlike links in an imported passage, which resolve from the consuming page. Use a content-root script path when a shared section loads browser code, or set `PageScript.sourceRelPath` explicitly. Frontmatter `layout.showFooter: false` hides the footer on one page. Custom templates receive `headerHtml` and `footerHtml` and decide where to place them.
+
+## Choose a passage, component, or template
+
+| Reuse requirement | Use |
+| --- | --- |
+| The same prose on several pages | An underscore-prefixed file and `import-content` |
+| A shared header or footer for a section | `header.mdx` / `footer.mdx` in its directory |
+| Markup with inputs or slots | A [Regor component](../extending/regor#write-build-time-components) registered by a plugin |
+| A different document shell | A [page template](../extending/plugins#add-page-templates) |
+| Source code shown verbatim | [`import-codeblock`](./code-blocks) |
 
 ## When something is wrong
 

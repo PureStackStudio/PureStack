@@ -1,0 +1,81 @@
+---
+title: Deployment
+description: Prepare and inspect a production artifact, configure a static host, and diagnose differences from local development.
+template: doc
+nav:
+  icon: tabler:rocket
+layout:
+  showToc: true
+---
+
+# Deployment
+
+`purestack publish` prepares a local release directory. Your hosting provider or deployment pipeline uploads that directory. Before uploading, verify the generated artifact with the same public path and routing that the production host will use.
+
+## Keep source and output separate
+
+Set explicit output paths in `content/siteConfig.json`:
+
+```json
+{
+  "siteTitle": "Acme Docs",
+  "outDir": "../dist/site",
+  "publishDir": "../dist/publish"
+}
+```
+
+These paths resolve from the content directory. `build` and `serve` use `dist/site`; `publish` uses `dist/publish`. Keep both outside `content` so generated assets are not rediscovered as source assets. `publish` cleans `publishDir`, so that directory must contain only disposable build output.
+
+## Build the release
+
+From the project root, using your installed CLI:
+
+```sh
+yarn purestack publish --content ./content
+```
+
+The command cleans the release directory, minifies generated HTML and bundled browser scripts, disables CSS pretty printing, and treats script asset failures as errors. It loads `content/purestack.config.ts` if present. Plugins writing extra files should use `context.config.outDir`, which points to `publishDir` for this build.
+
+The artifact contains route directories with `index.html`, generated theme styles under `assets/`, copied static assets, referenced browser bundles, and optional Pagefind, sitemap, and robots outputs. Deploy the complete artifact so HTML and the script filenames it references come from the same build.
+
+## Configure the public mount path
+
+| Public site | `basePath` | `sitemap.baseUrl` | Host mount |
+| --- | --- | --- | --- |
+| `https://docs.example.com/` | Omit or empty | `https://docs.example.com` | Artifact root at `/` |
+| `https://example.com/docs/` | `/docs` | `https://example.com` | Artifact root at `/docs/` |
+
+`basePath` changes URLs, not the directory tree in the artifact. It does not create `dist/publish/docs/`. Configure the host to serve `dist/publish/index.html` at `/docs/` and nested route directories at their corresponding URLs.
+
+A static host must serve directory indexes: `/guides/install/` maps to `guides/install/index.html`. Check a nested URL directly, including after a browser refresh. [Hidden locale URLs](../content/localization#choose-a-url-strategy) need additional host-side language routing; prefixed locale URLs already map to separate directories.
+
+## Verify the release rather than only the preview
+
+`purestack serve` is a development server that rebuilds into `outDir`; it is not a command for serving an existing release directory unchanged. Use your host's local preview or a static file server pointed at `publishDir` to inspect the artifact over HTTP.
+
+Before upload, verify these concrete outcomes:
+
+1. The home page and a nested page load directly at the intended base path.
+2. Light and dark styles, images, and browser scripts return successfully.
+3. One interactive example responds to input with no browser console error.
+4. Search returns a known page, if enabled. Read Pagefind diagnostics even if the build succeeded.
+5. Canonical and sitemap URLs use the production origin, and preview images exist.
+6. Pages marked `index: false` are absent from the sitemap and search index.
+
+The generated HTML contains build-time values and public browser code. Do not put private credentials in frontmatter or browser entry points. `auth.enabled` controls account UI; enforce actual access restrictions in your application or host.
+
+## Account for development-only behavior
+
+Live reload, diagnostic error pages, watched rebuilds, locale preference handling, and plugin `devMiddleware` belong to the development server. They are not a production server shipped by `publish`. A browser app calling a mock endpoint needs a corresponding deployed endpoint or an explicit production API URL.
+
+## Troubleshoot a deployment
+
+| Symptom | Likely check |
+| --- | --- |
+| Home works, nested route is 404 | Host directory-index routing and mount path |
+| HTML loads without styles | `basePath`, `style.href`, and uploaded `assets/` directory |
+| Browser script is 404 | HTML and bundles came from different builds, or the mount path differs |
+| Search UI opens but finds nothing | Pagefind build diagnostics and uploaded `pagefind/` files |
+| Deleted pages remain available | Deploy a clean release artifact and check the host's stale-file/cache handling |
+| A draft is public | `draft` only hides generated navigation; remove unpublished source from the public build |
+| A local API stops working | Replace development middleware with a deployed service |

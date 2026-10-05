@@ -1,0 +1,8 @@
+{
+  "sequence": [
+    "index.mdx",
+    "purestack-cli.mdx",
+    "site-config.mdx",
+    "vscode-extension.mdx"
+  ]
+}
