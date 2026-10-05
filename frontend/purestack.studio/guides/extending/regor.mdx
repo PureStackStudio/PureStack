@@ -155,7 +155,7 @@ Write components in an `.mdx`, `.rmdx`, or `.md` page as you would write HTML el
 <Panel tone="info" bodyClass="p-3">
   <h2 class="mt-0">Before you begin</h2>
   <p>Keep your site configuration beside the content folder.</p>
-  <BtnLink href="/guides/purestack-cli/" tone="info" variant="link">Set up the site</BtnLink>
+  <BtnLink href="/guides/getting-started/purestack-cli/" tone="info" variant="link">Set up the site</BtnLink>
 </Panel>
 ```
 
@@ -179,7 +179,7 @@ Text in double braces is a Regor expression, anywhere in a page. Inside markup, 
 | Field | Contents |
 | --- | --- |
 | `tsSsgContext.pageInfo.frontmatter` | The page's frontmatter, including any custom fields you add |
-| `tsSsgContext.pageInfo.urlPath` | The page's URL, such as `/guides/regor/` |
+| `tsSsgContext.pageInfo.urlPath` | The page's URL, such as `/guides/extending/regor/` |
 | `tsSsgContext.pageInfo.relPath` | The source file path inside the content folder |
 | `tsSsgContext.site` | The resolved site configuration |
 | `tsSsgContext.navigation`, `tsSsgContext.outline` | The page's navigation and heading outline |
@@ -260,17 +260,19 @@ export function defineReleaseNoteComponents() {
 }
 ```
 
-Register it in a build script that calls `buildSite`. Components you pass in `components` are added to the built-in ones:
+Save the component module as `components/releaseNote.ts` beside your `content` directory. Register its factory in `content/purestack.config.ts` so the CLI loads it for builds and development:
 
 ```ts
-import { buildSite } from '@purestack/ts-ssg'
-import { defineReleaseNoteComponents } from './components/releaseNote'
+import { defineConfig, definePlugin } from 'purestack'
+import { defineReleaseNoteComponents } from '../components/releaseNote'
 
-await buildSite({
-  siteConfig: { contentDir: './content' },
-  options: {
-    components: { ...defineReleaseNoteComponents() },
-  },
+export default defineConfig({
+  plugins: [
+    definePlugin({
+      name: 'release-notes',
+      components: () => defineReleaseNoteComponents(),
+    }),
+  ],
 })
 ```
 
@@ -281,7 +283,7 @@ await buildSite({
 >
   Export the interface that types a component, as <code>ReleaseNote</code> is
   exported here. The
-  <a href="/guides/vscode-extension/">VS Code extension</a> finds components
+  <a href="/guides/getting-started/vscode-extension/">VS Code extension</a> finds components
   through their exported interfaces. Without the export, it can't complete the
   component's props or jump from a tag in your markup to the component's source.
 </AlertBox>
@@ -308,112 +310,7 @@ Place a `RegorApp` in a page and point it at a TypeScript file next to the page.
 <RegorApp id="launch-checklist" src="./regor-launch-checklist.ts"/>
 ```
 
-```ts
-import {
-  defineBadgeComponents,
-  defineButtonComponents,
-  defineFlexComponents,
-  defineFormComponents,
-  defineIconComponents,
-  definePanelComponents,
-} from '@purestack/ts-components'
-import { tabler_rocket } from '@purestack/ts-svg-icons'
-import {
-  batch,
-  type ComputedRef,
-  computed,
-  createApp,
-  defineComponent,
-  html,
-  type Ref,
-  ref,
-} from 'regor'
-
-export interface Task {
-  id: string
-  title: string
-  done: Ref<boolean>
-}
-
-export interface TaskRow {
-  task: Task
-}
-
-const taskRow = defineComponent<TaskRow>(
-  html`<FormCheck :id="'launch-' + task.id" :label="task.title" :checked="task.done" />`,
-  { props: ['task'] },
-)
-
-export interface LaunchChecklist {
-  tasks: Task[]
-  completed: ComputedRef<number>
-  ready: ComputedRef<boolean>
-  launched: Ref<boolean>
-  launch: () => void
-  reset: () => void
-}
-
-const launchChecklistTemplate = html`<Panel tone="neutral" variant="surfaceAlt" bodyClass="p-3">
-  <Flex direction="column">
-    <Flex justify="between" align="center" wrap="true">
-      <strong>Launch checklist</strong>
-      <Badge :tone="ready ? 'success' : 'warning'" variant="surface">
-        {{ completed }} of {{ tasks.length }} done
-      </Badge>
-    </Flex>
-    <TaskRow r-for="task in tasks" :task="task" />
-    <Flex wrap="true">
-      <Btn tone="accent" icon="tabler:rocket" :disabled="!ready || launched" @click="launch">Launch</Btn>
-      <Btn tone="neutral" variant="surface" @click="reset">Start over</Btn>
-    </Flex>
-    <FormStatus r-if="launched" role="status">Launched. Every check passed.</FormStatus>
-  </Flex>
-</Panel>`
-
-function createLaunchChecklist(): LaunchChecklist {
-  const tasks: Task[] = [
-    { id: 'docs', title: 'Docs reviewed', done: ref(true) },
-    { id: 'tests', title: 'Tests passing', done: ref(false) },
-    { id: 'notes', title: 'Release notes written', done: ref(false) },
-  ]
-  const launched = ref(false)
-  const completed = computed(() => tasks.filter((task) => task.done()).length)
-  const ready = computed(() => completed() === tasks.length)
-  return {
-    tasks,
-    completed,
-    ready,
-    launched,
-    launch: () => launched(true),
-    reset: () =>
-      batch(() => {
-        for (const task of tasks) task.done(false)
-        launched(false)
-      }),
-  }
-}
-
-createApp(
-  {
-    components: {
-      LaunchChecklist: defineComponent<LaunchChecklist>(
-        launchChecklistTemplate,
-        { context: createLaunchChecklist },
-      ),
-      TaskRow: taskRow,
-      ...defineBadgeComponents(),
-      ...defineButtonComponents(),
-      ...defineFlexComponents(),
-      ...defineFormComponents(),
-      ...defineIconComponents((name) =>
-        name === 'tabler:rocket' ? tabler_rocket : '',
-      ),
-      ...definePanelComponents(),
-    },
-  },
-  { selector: 'app#launch-checklist', template: html`<LaunchChecklist />` },
-)
-```
+<import-codeblock src="./regor-launch-checklist.ts"/>
 
 The app is an ordinary module. You can split it into several files, import npm packages, and share code with your build-time components. PureStack bundles it with esbuild when it builds the page.
 
@@ -424,7 +321,7 @@ Browser apps do not get the build's component list. Each app registers the compo
 <AlertBox tone="info" icon="tabler:info-circle" title="Register icons too">
   Register each icon your app shows, including the defaults that components draw
   themselves, such as the arrow in a select field. The
-  <a href="/guides/icons/#icons-in-browser-apps">Icons guide</a> lists those
+  <a href="/guides/styling/icons/#icons-in-browser-apps">Icons guide</a> lists those
   defaults.
 </AlertBox>
 
@@ -575,12 +472,12 @@ These patterns scale from a single widget to a multi-page admin tool with tables
 
 ## Use other libraries
 
-A [PageScript](/components/runtime/page-script/) loads any TypeScript entry point. Use it for small enhancements to the page's HTML, or to mount a component from another framework. PureStack bundles the script and its npm dependencies, so you can use React, Vue, a charting library, or no library at all.
+A [PageScript](/components/runtime/page-script/) loads a browser entry point. Use it to enhance existing HTML or mount a browser-compatible library. PureStack bundles local TypeScript and its imports with esbuild; framework-specific source formats may need an additional compilation step. Start with a plain TypeScript module, as shown in [runtime scripts](../../components/runtime).
 
 <AlertBox tone="warning" icon="tabler:alert-triangle" title="What you give up">
   Other frameworks can't use the built-in components, and they don't inherit the
   theme automatically. Use
-  <a href="/guides/semantic-tones/">semantic tone</a> classes or palette
+  <a href="/guides/styling/semantic-tones/">semantic tone</a> classes or palette
   variables to keep them visually consistent.
 </AlertBox>
 

@@ -1,0 +1,10 @@
+{
+  "sequence": [
+    "index.mdx",
+    "typography.mdx",
+    "utility-css-classes.mdx",
+    "semantic-tones.mdx",
+    "icons.mdx",
+    "themes.mdx"
+  ]
+}

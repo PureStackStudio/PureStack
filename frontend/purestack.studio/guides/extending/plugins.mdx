@@ -23,7 +23,7 @@ A plugin is a named object that extends how PureStack builds your site. Each of 
 | Change how Markdown turns into HTML | [`markdown`](#transform-markdown) |
 | Build pages from data, such as one page per tag | [`pages`](#generate-pages) |
 | Change a whole page, header and footer included | [`hooks.onPageDocument`](#change-a-pages-dom) |
-| Write extra files, such as a feed | [`hooks`](#write-extra-files) |
+| Write extra files, such as a JSON page index | [`hooks`](#write-extra-files) |
 | Add styles or run code at other points in the build | [`hooks`](#run-code-during-the-build) |
 | Answer requests while you develop | [`devMiddleware`](#handle-requests-in-development) |
 
@@ -48,10 +48,14 @@ This plugin adds a component that shows a release badge:
 import { definePlugin } from 'purestack'
 import { defineComponent, html } from 'regor'
 
+export interface ReleaseBadge {
+  version?: string
+}
+
 export const sitePlugin = definePlugin({
   name: 'site',
   components: () => ({
-    releaseBadge: defineComponent<{ version?: string }>(
+    releaseBadge: defineComponent<ReleaseBadge>(
       html`<Badge tone="success" variant="surface">v{{ version }}</Badge>`,
       { props: ['version'] },
     ),
@@ -93,7 +97,7 @@ The badge appears on the page. Change its `tone` in `plugins/site.ts` while the 
 - **Reloading.** `serve` loads the config again, and rebuilds the site, when the config or one of your files changes. A package loads once; restart `serve` after updating one.
 - **Mistakes.** When a reload fails, the terminal shows the error and the site keeps its last working plugins until you fix it.
 
-Keep plugin code out of the content folder: TypeScript files there are [page scripts](/components/runtime/page-script/) for the browser.
+Keep plugin code outside the content folder to make its build-time role clear. TypeScript files inside content are not automatically published; entries referenced by [PageScript](/components/runtime/page-script/) are bundled for the browser. `purestack.config.ts` is a build-time configuration file even though it lives inside content.
 
 ## Add a skin
 
@@ -125,7 +129,7 @@ Select it in `siteConfig.json`:
 }
 ```
 
-Give a skin its own name; `standard` belongs to the built-in skin. The [Themes guide](./themes) covers palettes in depth.
+Give a skin its own name; `standard` belongs to the built-in skin. The [Themes guide](../styling/themes) covers palettes in depth.
 
 ## Add components
 
@@ -232,7 +236,7 @@ A transform also receives the file being processed. Its `path` is the page's pat
 | `path` | The content path the page takes, such as `blog/tags/regor.mdx`. |
 | `source` | The page's content, as a file at that path would hold it: frontmatter and Markdown. Give it as a string, or as a function that returns the string. |
 
-The returned pages can be the source string or a function returning the source string.
+Return an array of `{ path, source }` objects. Each object's `source` can be text or a function returning text, synchronously or asynchronously.
 
 Example tags plugin:
 
@@ -283,7 +287,7 @@ export const apiPlugin = definePlugin({
 })
 ```
 
-A generated page works like a file at its path. `blog/tags/regor.mdx` is served at `/blog/tags/regor/`, shows up in automatic navigation, uses its folder's header and footer, and other pages can [link to it](./links) as `./tags/regor`. Its frontmatter can select a template or set `nav` options, as in any page.
+A generated page works like a file at its path. `blog/tags/regor.mdx` is served at `/blog/tags/regor/`, shows up in automatic navigation, uses its folder's header and footer, and other pages can [link to it](../content/links) as `./tags/regor`. Its frontmatter can select a template or set `nav` options, as in any page.
 
 - **Paths.** A path ends in `.md`, `.mdx`, or `.rmdx` and stays inside the content folder. It cannot be a `header.mdx` or `footer.mdx`, or the path of a real file or of another plugin's page.
 - **Files.** `files` lists the pages in the content folder, each with its `relPath`, its `absPath`, and the `urlPath` it is served at. Generated pages are never among them.
@@ -363,71 +367,25 @@ Use `markdown` instead to change only the page's content, and `onPageRendered` f
 
 ## Write extra files
 
-A feed, a search index of your own, or any file built from the site's pages needs no special field. Collect pages as they render, and write the file once the build completes. Making the plugin a function lets each site pass its own options:
+Collect page information in a page hook, then write a derived file after the full build. This example produces a JSON page index. Save it as `plugins/page-index.ts` beside the content directory:
+
+<import-codeblock src="./plugins/page-index.ts"/>
+
+Add the plugin in `content/purestack.config.ts`:
 
 ```ts
-// plugins/feed.ts
-import { writeFile } from 'node:fs/promises'
-import path from 'node:path'
-import { definePlugin } from 'purestack'
+import { defineConfig } from 'purestack'
+import { pageIndex } from '../plugins/page-index'
 
-const escapeXml = (text: string) =>
-  text.replace(/[<>&"]/g, (char) => `&#${char.charCodeAt(0)};`)
-
-export function feed(options: { siteUrl: string; folder?: string }) {
-  const folder = options.folder ?? '/blog/'
-  const posts = new Map<string, { title: string; date: Date }>()
-  return definePlugin({
-    name: 'feed',
-    hooks: {
-      onConfigResolved() {
-        posts.clear()
-      },
-      onPageRendered(context, page) {
-        const { title, date } = page.frontmatter
-        if (!page.urlPath.startsWith(folder) || !title || !date) return
-        posts.set(page.urlPath, { title, date: new Date(date as string | Date) })
-      },
-      async onBuildComplete(context) {
-        const { basePath, outDir, siteTitle } = context.config
-        const url = (urlPath: string) => `${options.siteUrl}${basePath}${urlPath}`
-        const items = [...posts]
-          .sort(([, a], [, b]) => b.date.getTime() - a.date.getTime())
-          .map(([urlPath, post]) =>
-            [
-              '<item>',
-              `<title>${escapeXml(post.title)}</title>`,
-              `<link>${url(urlPath)}</link>`,
-              `<pubDate>${post.date.toUTCString()}</pubDate>`,
-              '</item>',
-            ].join(''),
-          )
-        const rss = [
-          '<?xml version="1.0" encoding="UTF-8"?>',
-          '<rss version="2.0"><channel>',
-          `<title>${escapeXml(siteTitle)}</title>`,
-          `<link>${url('/')}</link>`,
-          ...items,
-          '</channel></rss>',
-        ].join('\n')
-        await writeFile(path.join(outDir, 'feed.xml'), rss)
-      },
-    },
-  })
-}
+export default defineConfig({ plugins: [pageIndex()] })
 ```
 
-```ts
-// content/purestack.config.ts
-export default defineConfig({
-  plugins: [feed({ siteUrl: 'https://example.com' })],
-})
-```
+After a build, open `page-index.json` in the output directory. Each entry contains a title and a public path. The plugin skips `index: false` pages and uses the same base-path helper as the framework.
 
-- **Every page is included.** Every page renders before `onBuildComplete` runs, and `onConfigResolved` empties the list when the next full build starts.
-- **Write into `outDir`.** `context.config.outDir` points at `publishDir` during `publish`, so the file lands in the release folder too.
-- **Links include `basePath`.** `page.urlPath` is the path inside the site; adding `basePath` gives the address visitors use.
-- **While developing.** `serve` rewrites the file on full builds, not after each page edit.
+- **Start clean.** `onConfigResolved` clears the collected pages for each full build.
+- **Use the resolved output path.** `context.config.outDir` points to `publishDir` during a release build.
+- **Know the lifecycle.** `onBuildComplete` runs after the full build. This example does not rewrite its index after every incremental page edit; run a full build to refresh it.
+- **Choose the data model.** This example keys entries by public URL. A hidden-URL multilingual site needs a locale-aware key if the index must retain every translation.
 
 ## Handle requests in development
 
@@ -457,7 +415,7 @@ List plugins in the order they should apply:
 
 ```ts
 export default defineConfig({
-  plugins: [sitePlugin, tagsPlugin, feed({ siteUrl: 'https://example.com' })],
+  plugins: [sitePlugin, tagsPlugin, pageIndex()],
 })
 ```
 
@@ -473,14 +431,14 @@ export default defineConfig({
 
 ## Share a plugin as a package
 
-A plugin is a plain object, so any package can export one. The feed plugin above is already a function of its options, so it can move into a package unchanged, and each site lists it like a local plugin:
+A plugin is a plain object, so a package can export one. The page-index plugin above is a factory and can be packaged with its types. The following uses `your-page-index-plugin` as a placeholder package name, not an existing PureStack dependency:
 
 ```ts
 import { defineConfig } from 'purestack'
-import { feed } from 'purestack-feed'
+import { pageIndex } from 'your-page-index-plugin'
 
 export default defineConfig({
-  plugins: [feed({ siteUrl: 'https://example.com' })],
+  plugins: [pageIndex()],
 })
 ```
 
@@ -520,7 +478,7 @@ Plugin "tags" generates "blog/first.mdx", which is already a content file.
 When a hook or page generator throws, the error names the plugin and where it failed:
 
 ```text
-Plugin "feed" failed in onBuildComplete: ENOENT: no such file or directory
+Plugin "page-index" failed in onBuildComplete: ENOENT: no such file or directory
 ```
 
 While `serve` runs, a failing page hook shows its error on that page and leaves the server running. Most other problems are one of these:

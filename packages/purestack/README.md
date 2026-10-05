@@ -125,7 +125,7 @@ const releaseNotes = definePlugin({
 export default defineConfig({ plugins: [releaseNotes] })
 ```
 
-The [Plugins guide](https://purestack.studio/guides/plugins/) covers each kind
+The [Plugins guide](https://purestack.studio/guides/extending/plugins/) covers each kind
 of extension.
 
 ## TypeScript API
@@ -149,10 +149,10 @@ console.log(`Built ${result.pages} pages in ${result.outDir}`)
 
 ## Learn more
 
-- [CLI guide](https://purestack.studio/guides/purestack-cli/)
-- [Site configuration](https://purestack.studio/guides/site-config/)
-- [Regor MDX guide](https://purestack.studio/guides/regor/)
-- [Plugins guide](https://purestack.studio/guides/plugins/)
+- [CLI guide](https://purestack.studio/guides/getting-started/purestack-cli/)
+- [Site configuration](https://purestack.studio/guides/getting-started/site-config/)
+- [Regor MDX guide](https://purestack.studio/guides/extending/regor/)
+- [Plugins guide](https://purestack.studio/guides/extending/plugins/)
 - [Working sample site](https://github.com/PureStackStudio/PureStack/tree/main/packages/ts-ssg/sample-content)
 
 MIT licensed. Source and issues: [PureStack on GitHub](https://github.com/PureStackStudio/PureStack).

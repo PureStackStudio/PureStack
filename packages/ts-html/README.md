@@ -1,12 +1,12 @@
 # @purestack/ts-html
 
-Type-safe HTML builder for TypeScript. `ts-html` provides an immutable, chainable API for creating HTML trees, setting attributes, and serializing to HTML with optional Prettier formatting. It is framework-agnostic and can be used on the server or in build tools (no DOM required).
+Type-safe HTML builder for TypeScript. `ts-html` provides a mutable, chainable API for creating HTML trees, setting attributes, and serializing to HTML with optional Prettier formatting. It is framework-agnostic and can be used on the server or in build tools (no DOM required).
 
 ## Why this package exists
 
 - Build HTML with TypeScript instead of template strings.
 - Get type-checked tags and attributes (including ARIA and event attrs).
-- Compose HTML with functional, immutable builders.
+- Compose HTML with chainable builders.
 - Generate predictable HTML output that can be prettified.
 
 ## Install
@@ -54,13 +54,13 @@ Creates a `TSNode` for the given tag. If `tag` is omitted or an empty string, it
 const fragment = h('').text('a').raw('<b>b</b>')
 ```
 
-### Immutable, Chainable Nodes
+### Mutable, Chainable Nodes
 
-Every method returns a new node. This allows functional composition and avoids mutation.
+Mutating methods change the current node and return it for chaining. Use fresh nodes for independent trees. `clone()` makes a shallow copy: it copies attributes and the children array but shares child nodes.
 
 ```ts
 const base = h('input')
-const typed = base.attr({ type: 'text' })
+const typed = base.clone().attr({ type: 'text' })
 
 base.toHtml()  // <input/>
 typed.toHtml() // <input type="text"/>

@@ -3,19 +3,11 @@
   "sequence": [
     "index.mdx",
     "components",
-    "purestack-cli.mdx",
-    "site-config.mdx",
-    "links.mdx",
-    "code-blocks.mdx",
-    "shared-content.mdx",
-    "vscode-extension.mdx",
-    "regor.mdx",
-    "typography.mdx",
-    "utility-css-classes.mdx",
-    "semantic-tones.mdx",
-    "icons.mdx",
-    "themes.mdx",
-    "plugins.mdx"
+    "getting-started/",
+    "content/",
+    "styling/",
+    "extending/",
+    "publishing/"
   ],
   "items": [
     {

@@ -13,7 +13,7 @@ nav:
 
 # Links
 
-Write a link the way you see your files. PureStack turns it into the right address and checks it every time the site builds, so a renamed or deleted page or image never leaves a broken link behind.
+Write local links relative to the source file. PureStack resolves them to public URLs and fails the build when the target page or asset is missing. Root-relative public URLs, external destinations, and fragment IDs have different validation rules, described below.
 
 ## Link to another page
 
@@ -53,7 +53,7 @@ Add `#` and the section name after the page:
 [Back to the top](#links)
 ```
 
-A section name is its heading in lowercase, with hyphens between the words. The heading "Create a skin" becomes `#create-a-skin`. Try it: [create a skin](./themes#create-a-skin).
+A section name is its heading in lowercase, with hyphens between the words. The heading "Create a skin" becomes `#create-a-skin`. Try it: [create a skin](../styling/themes#create-a-skin).
 
 PureStack checks that the page exists, not the section, so double-check section names after you rename a heading.
 
@@ -103,9 +103,9 @@ Anything that starts with `/` or a protocol is used as written:
 
 PureStack doesn't check these links, because the pages behind them aren't part of your content folder.
 
-You can link your own pages this way too, as in `/guides/themes/`, but a relative link is the better habit: if that page moves, the build tells you.
+You can link your own pages this way too, as in `/guides/styling/themes/`, but a relative link is the better habit: if that page moves, the build tells you.
 
-If the site lives under a base path, such as `/docs`, PureStack adds it to every link for you. Set it once in the [site configuration](./site-config).
+If the site lives under a base path, such as `/docs`, PureStack adds it to every link for you. Set it once in the [site configuration](../getting-started/site-config).
 
 ## When a link is broken
 

@@ -45,7 +45,7 @@ stays in Markdown; components, style builders, and scripts live in TypeScript.
 The aim is a source model that remains understandable as the product grows.
 
 `.mdx` and `.rmdx` pages use Regor components and expressions. Plain `.md`
-files work for prose pages. See the [Regor guide](https://purestack.studio/guides/regor/)
+files work for prose pages. See the [Regor guide](https://purestack.studio/guides/extending/regor/)
 for the markup and browser app model.
 
 ## Get your first page running
@@ -128,10 +128,10 @@ has a complete example.
 
 | I want to… | Start here |
 | :--- | :--- |
-| Configure a site | [Site configuration](https://purestack.studio/guides/site-config/) |
+| Configure a site | [Site configuration](https://purestack.studio/guides/getting-started/site-config/) |
 | Build a richer page | [Component catalog](https://purestack.studio/components/) |
 | Add browser behavior | [PageScript and RegorApp examples](packages/purestack/README.md) |
-| Understand the CLI | [CLI guide](https://purestack.studio/guides/purestack-cli/) |
+| Understand the CLI | [CLI guide](https://purestack.studio/guides/getting-started/purestack-cli/) |
 | Explore a complete project | [Sample content](packages/ts-ssg/sample-content) · [Website source](frontend) |
 | Work on PureStack itself | [Contribution guide](CONTRIBUTING.md) |
 
@@ -146,8 +146,8 @@ has a complete example.
 | `PageScript` and `RegorApp` | Bundle TypeScript and add browser behavior where requested. |
 | Static assets | Copies files from the content directory into the site output. |
 
-The [CLI guide](https://purestack.studio/guides/purestack-cli/) covers the
-commands and options. [Site configuration](https://purestack.studio/guides/site-config/)
+The [CLI guide](https://purestack.studio/guides/getting-started/purestack-cli/) covers the
+commands and options. [Site configuration](https://purestack.studio/guides/getting-started/site-config/)
 covers navigation, themes, search, sitemap, localization, and output paths.
 
 </details>

@@ -1,0 +1,78 @@
+---
+title: Localization
+description: Organize translated pages, choose locale URLs, and understand development language selection and production hosting requirements.
+template: doc
+nav:
+  icon: tabler:language
+layout:
+  showToc: true
+---
+
+# Localization
+
+PureStack recognizes translations by matching routes inside configured locale folders. You provide translated content; the build assigns locale URLs and associates matching pages. For a static host, start with `prefix-all`, which gives every language its own public URL.
+
+## Create matching content trees
+
+```text
+content/
+  siteConfig.json
+  en/
+    index.mdx
+    header.mdx
+    guides/
+      install.mdx
+  de/
+    index.mdx
+    header.mdx
+    guides/
+      install.mdx
+```
+
+Merge this into `siteConfig.json`:
+
+```json
+{
+  "i18n": {
+    "enabled": true,
+    "defaultLocale": "en",
+    "locales": ["en", "de"],
+    "urlStrategy": "prefix-all"
+  }
+}
+```
+
+Write each page's title, description, body, and navigation labels in its own language. A locale-level `header.mdx` or `footer.mdx` supplies translated shared sections to its descendants. Other files outside locale directories remain ordinary, nonlocalized content.
+
+With the example tree, visit `/en/guides/install/` and `/de/guides/install/`. Both output files live in their locale folders: `en/guides/install/index.html` and `de/guides/install/index.html`.
+
+## Understand how translations match
+
+PureStack removes the locale prefix and resolves the remaining route to form a translation key. `en/guides/install.mdx` and `de/guides/install.mdx` therefore belong together. Their titles can differ. Renaming the German file to `installation.mdx` gives it a different key; translation matching does not use the title.
+
+There is no automatic translation step. Create the corresponding file for every translation you want to publish. The association contains the translations that actually exist, not placeholder pages for missing ones.
+
+For navigation, configure roots using actual content paths, such as `en/guides` and `de/guides`, and put localized `_nav.json` files in those folders when using hybrid or custom mode.
+
+## Link within and between languages
+
+Relative source links follow the current content tree. From `de/guides/install.mdx`, a link to `../index.mdx` resolves to the German home page. Link to a specific locale explicitly when implementing a language switcher. See [translated links](./links#translated-sites) for root-relative resolution rules.
+
+The page context exposes `locale`, `locales`, and translation information for custom components. Built-in templates set the document language from the page locale. When translations have distinct absolute URLs, the head builder emits alternate-language links; configure `sitemap.baseUrl` to supply the public origin.
+
+## Choose a URL strategy
+
+| Strategy | Public URLs | Production requirement |
+| --- | --- | --- |
+| `prefix-all` (default) | `/en/guides/install/`, `/de/guides/install/` | Serve the generated locale directories. |
+| `hidden` | Both languages use `/guides/install/` | Route requests to the appropriate locale directory on the host or server. |
+
+`hidden` still writes separate locale directories. It does not produce one language-neutral HTML file, and uploading the output to a plain static host does not implement language selection.
+
+The development server chooses a requested locale using the configured query parameter, then the locale cookie, then `Accept-Language`, then the default locale. The defaults are `queryParam: "lang"` and `cookieName: "ts-ssg.lang"`. For example, `?lang=de` selects a configured German locale during development. Design and verify equivalent routing and cache behavior on your production host before using hidden URLs.
+
+## Defaults and validation
+
+A nonempty `locales` list enables localization even when `enabled` is omitted. `defaultLocale` falls back to the first locale; set it explicitly so list reordering does not change the default. Locale identifiers accept letters, numbers, and hyphens. Keep folder spelling and configured identifiers consistent.
+
+Before publishing, open a nested route in every language, follow a relative link, check the generated document's `lang` attribute, and inspect canonical and alternate links. A development redirect or preference cookie is server behavior, not a file that `publish` can upload for you.

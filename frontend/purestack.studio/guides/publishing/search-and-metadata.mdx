@@ -1,0 +1,110 @@
+---
+title: Search and metadata
+description: Configure Pagefind, control indexing, and verify canonical URLs, social previews, sitemap, and robots output.
+template: doc
+nav:
+  icon: tabler:search
+layout:
+  showToc: true
+---
+
+# Search and metadata
+
+PureStack can generate a Pagefind search index, page metadata, a sitemap, and `robots.txt`. These are separate outputs: hiding a page from navigation does not remove it from search, and enabling a sitemap does not enable access restrictions.
+
+## Enable search and verify a result
+
+Pagefind is enabled by default. This configuration excludes a section from search:
+
+```json
+{
+  "pagefind": {
+    "enabled": true,
+    "excludePaths": ["/internal-notes/"]
+  }
+}
+```
+
+The build writes search assets into `pagefind/` in the output directory. The [SearchBox component](/components/site/search-box/) supplies the built-in search UI; keep it in your header if you replace the default top bar.
+
+After building, serve the output over HTTP, search for a distinctive phrase from a public page, and open the result. Include the `pagefind/` directory in deployment. Setting `enabled: false` disables indexing and removes its generated output during a full index build.
+
+**Read the build's search diagnostics.** The Pagefind integration catches indexing errors and logs them; a successful build exit does not guarantee a usable search index. If search is empty, check the indexing log, emitted files, exclusion settings, and browser network requests.
+
+## Decide what should be indexed
+
+Use `index: false` in a page's frontmatter when the page should be excluded from generated navigation, Pagefind, and the sitemap. It also adds a robots `noindex` meta tag. The HTML remains accessible at its route.
+
+`pagefind.excludePaths` affects only search. Prefixes are matched against routes derived from HTML paths relative to the output directory. Do not include `basePath`; for localized output, include the locale directory, such as `/de/internal-notes/`. Missing leading or trailing slashes are normalized.
+
+`hidden: true` and `draft: true` only exclude a page from generated navigation. They do not exclude it from search or sitemap generation.
+
+## Set the public origin
+
+For `https://example.com/docs/`, merge this into `siteConfig.json`:
+
+```json
+{
+  "basePath": "/docs",
+  "sitemap": {
+    "enabled": true,
+    "baseUrl": "https://example.com"
+  }
+}
+```
+
+Use the origin for `baseUrl` and the mount path for `basePath`. A page at `/guides/install/` gets the public address `https://example.com/docs/guides/install/`. The sitemap and canonical URL use these settings. The origin also makes relative social-preview images absolute. Setting `baseUrl` is useful for metadata even when sitemap generation is disabled.
+
+## Give each page useful metadata
+
+In a page's frontmatter:
+
+```yaml
+title: Installation
+description: Install Acme and verify your first project build.
+preview:
+  image: /assets/install-preview.png
+  imageAlt: The completed Acme project setup
+  imageWidth: 1200
+  imageHeight: 630
+```
+
+Put the image at `content/assets/install-preview.png`. The configuration describes an existing image; it does not generate one.
+
+| Output | Precedence |
+| --- | --- |
+| Browser title | `siteTitle | page title`, or the available title when only one is set |
+| Description meta tag | Page `description`, subject to explicit `head` overrides |
+| Social title | Page `preview.title`, page `title`, site `preview.title`, site title |
+| Social description | Page `preview.description`, page `description`, site `preview.description` |
+| Social image | Page `preview.image`, then site `preview.image` |
+| Open Graph site name | Site `preview.siteName`, then `siteTitle` |
+
+A page-specific image uses its own dimensions; it does not inherit the site image's width and height. Set both when overriding an image. `preview` also supports image alt text, type, locale, and Twitter card/account fields. Explicit `head` settings merge over the generated head configuration; `index: false` still forces `robots: noindex` afterward.
+
+For a site-wide fallback, add `preview.image`, `imageAlt`, dimensions, and `siteName` to `siteConfig.json`. Keep page titles and descriptions specific to their content so shared previews identify the destination.
+
+## Generate sitemap and robots output
+
+Sitemap generation defaults to off. When enabled, `sitemap.baseUrl` is required. The default filenames are `sitemap.xml` and `robots.txt`; robots generation defaults to on within the enabled sitemap feature.
+
+```json
+{
+  "sitemap": {
+    "enabled": true,
+    "baseUrl": "https://example.com",
+    "robots": {
+      "enabled": true,
+      "userAgent": "*",
+      "allow": ["/"],
+      "disallow": ["/internal-notes/"]
+    }
+  }
+}
+```
+
+Robots rules do not prevent PureStack from generating a file. They also do not remove it from the sitemap; use `index: false` for that. Robots output is tied to sitemap generation, so enabling `robots` alone produces no file. The [configuration reference](../getting-started/site-config#sitemap-robots-and-social-previews) covers additional directives.
+
+## Inspect the artifact
+
+Open a generated HTML file and check its title, description, canonical link, Open Graph tags, and Twitter tags. Confirm that the preview image URL is reachable. Check a sitemap entry for the right origin, base path, and locale. For an `index: false` page, confirm its HTML exists, contains `noindex`, and is absent from search and the sitemap.

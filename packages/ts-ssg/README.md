@@ -310,7 +310,7 @@ order, inherit into child folders, and skip external URLs.
 
 ## Plugins
 
-A plugin is a named bundle of extensions: skins, components, templates, Markdown transforms, generated pages, build hooks, and dev server middleware. The [Plugins guide](https://purestack.studio/guides/plugins/) walks through each part.
+A plugin is a named bundle of extensions: skins, components, templates, Markdown transforms, generated pages, build hooks, and dev server middleware. The [Plugins guide](https://purestack.studio/guides/extending/plugins/) walks through each part.
 
 A site lists its plugins in `purestack.config.ts`, next to `siteConfig.json`, and the CLI loads it:
 
@@ -410,7 +410,7 @@ Components render to static HTML at build time. For behavior in the browser, loa
 
 The built-in skin is `standard`. Select a skin with `style.theme.skin` in `siteConfig.json`.
 
-Add skins with a plugin's `skins` field. `themeSkins` in `@purestack/ts-style` holds the registered skins; see the [Themes guide](https://purestack.studio/guides/themes/) for creating one.
+Add skins with a plugin's `skins` field. `themeSkins` in `@purestack/ts-style` holds the registered skins; see the [Themes guide](https://purestack.studio/guides/styling/themes/) for creating one.
 
 `style.themes` controls generated files:
 
