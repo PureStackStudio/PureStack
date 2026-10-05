@@ -22,8 +22,11 @@ export interface SignIn {
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
   variantMode?: RefOrValue<ComponentVariantMode>
-  authEnabled?: boolean
-  signUpEnabled?: boolean
+  enabled?: RefOrValue<boolean>
+  signUp?: RefOrValue<boolean>
+  signedIn?: RefOrValue<boolean>
+  authEnabled?: ComputedRef<boolean>
+  signUpEnabled?: ComputedRef<boolean>
   resolvedIcon?: ComputedRef<string>
   resolvedAccountIcon?: ComputedRef<string>
   resolvedLabel?: ComputedRef<string>
@@ -37,6 +40,7 @@ const DEFAULT_SIGN_IN_LABEL = 'Account'
 const signInTemplate = html`<details
   r-if="authEnabled"
   class="sign-in position-relative"
+  :data-signed-in="signedIn"
   data-menu-runtime
   data-menu-align="end"
 >
@@ -134,6 +138,9 @@ const signInTemplate = html`<details
 function defineSignInComponent() {
   return defineComponent<SignIn>(signInTemplate, {
     props: [
+      'enabled',
+      'signUp',
+      'signedIn',
       'avatarSrc',
       'avatarAlt',
       'icon',
@@ -155,8 +162,8 @@ function resolveSignIn(props: SignIn, head: unknown): SignIn {
   const auth = tryResolveTsSsgContext(head)?.site?.auth
   return {
     ...props,
-    authEnabled: auth?.enabled === true,
-    signUpEnabled: auth?.signUp === true,
+    authEnabled: computed(() => unref(props.enabled) ?? auth?.enabled === true),
+    signUpEnabled: computed(() => unref(props.signUp) ?? auth?.signUp === true),
     resolvedIcon: computed(() => unref(props.icon) || DEFAULT_SIGN_IN_ICON),
     resolvedAccountIcon: computed(
       () => unref(props.accountIcon) || DEFAULT_ACCOUNT_ICON,

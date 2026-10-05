@@ -1,9 +1,4 @@
 import type { SiteConfig } from '@purestack/ts-common'
-import { defineConsentPreviewComponent } from '../purestack.studio/components/site/consent/preview'
-import { defineNavMenuPreviewComponent } from '../purestack.studio/components/site/nav-menu/preview'
-import { definePageTocPreviewComponent } from '../purestack.studio/components/site/page-toc/preview'
-import { defineSignInPreviewComponent } from '../purestack.studio/components/site/sign-in/preview'
-import { defineTopBarPreviewComponent } from '../purestack.studio/components/site/top-bar/preview'
 import { defineApiPropertyComponent } from './apiProperty'
 import { defineComponentGuideComponents } from './componentGuide'
 import { defineChartAppearanceGallery } from './dataGuide'
@@ -11,7 +6,14 @@ import { defineFormAppearanceGallery } from './formAppearance'
 import { defineLandingAppearanceGallery } from './landingGuide'
 import { defineModalExampleComponents } from './modal'
 import { defineSemanticToneGallery } from './semanticToneGuide'
-import { defineSiteAppearanceGallery } from './siteGuide'
+import {
+  defineConsentPreviewComponent,
+  defineNavMenuPreviewComponent,
+  definePageTocPreviewComponent,
+  defineSignInPreviewComponent,
+  defineTopBarPreviewComponent,
+} from './sitePreviewComponents'
+import { defineSiteAppearanceGallery } from './sitePreviews'
 
 export function defineDocumentationComponents(site: SiteConfig) {
   return {

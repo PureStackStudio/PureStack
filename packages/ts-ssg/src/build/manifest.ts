@@ -34,6 +34,8 @@ export interface ContentManifestEntry extends FileSignature {
   relPath: string
   ext: string
   outPath: string
+  /** Set when the page's frontmatter sets `index: false`: no sitemap entry. */
+  index?: false
 }
 
 export interface AssetManifestEntry extends FileSignature {

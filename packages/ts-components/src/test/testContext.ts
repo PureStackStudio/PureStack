@@ -64,6 +64,7 @@ const DEFAULT_PAGE_INFO: PageInfo = {
     template: 'doc',
     hidden: false,
     draft: false,
+    index: true,
     nav: { hidden: false },
   },
 }

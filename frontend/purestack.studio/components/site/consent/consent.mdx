@@ -17,7 +17,7 @@ nav:
 
 ## Make and revise a choice
 
-Accept, reject or choose optional categories, then reopen settings. Reset clears only the isolated example’s saved choice. No tracking services are configured.
+This preview uses the Studio's real consent settings and shares its saved privacy choice. Open settings to review the configured categories.
 
 <Tabs group="consent-sample-1" selectedTab="consent-sample-1-preview" ariaLabel="Make and revise a choice example" tone="neutral" variant="surface" tabVariant="underline">
   <TabPane id="consent-sample-1-preview" label="Preview">
@@ -26,13 +26,8 @@ Accept, reject or choose optional categories, then reopen settings. Reset clears
 
 </ComponentExample>
   </TabPane>
-  <TabPane id="consent-sample-1-source-0" label="preview.mdx">
-```html
-<ConsentPreview />
-```
-  </TabPane>
-  <TabPane id="consent-sample-1-source-1" label="preview.ts">
-  <import-codeblock src="./preview.ts"/>
+  <TabPane id="consent-sample-1-source-1" label="preview.mdx">
+  <import-codeblock src="./preview.mdx"/>
   </TabPane>
 </Tabs>
 
@@ -62,7 +57,7 @@ Compare stateless and stateful outlineFill treatments. Hover the samples; a stat
 
 ## Every step of the preference flow
 
-Use the isolated working example to accept all, reject optional categories, manage individual categories, save, close, reopen, and reset. Its storage key is separate from this site’s own choice.
+Use the working example to open, save, close, and reopen the Studio's real privacy settings. It shares the site's categories, services, and storage key.
 
 <ComponentExample label="The complete choice lifecycle" caption="Required categories remain enabled. A saved choice is checked against policyVersion; changing that version asks for a fresh decision.">
 <div class="component-appearance-grid">

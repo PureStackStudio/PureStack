@@ -33,13 +33,8 @@ This preview reads the same logo configuration as the site. Search is disabled i
 
 </ComponentExample>
   </TabPane>
-  <TabPane id="top-bar-sample-1-source-0" label="preview.mdx">
-```html
-<TopBarPreview />
-```
-  </TabPane>
-  <TabPane id="top-bar-sample-1-source-1" label="preview.ts">
-  <import-codeblock src="./preview.ts"/>
+  <TabPane id="top-bar-sample-1-source-1" label="preview.mdx">
+  <import-codeblock src="./preview.mdx"/>
   </TabPane>
 </Tabs>
 
@@ -92,7 +87,7 @@ All supported values are visible together on the actual component, in an isolate
 
 ## Configuration controls the header
 
-The comparisons above show both logo components, site-configured search, and explicit account access with an avatar. SearchBox is included when site.pagefind.enabled is true; searchEnabled is accepted but is overwritten by that site setting. signInEnabled explicitly requests the account control, and site.auth.enabled must also be true.
+The comparisons above show both logo components, explicit search visibility, and account access with an avatar. The search prop overrides site.pagefind.enabled, and signInEnabled overrides site.auth.enabled for this header.
 
 The navigation toggle targets the doc layout’s fixed ID. Each header sample uses its own document. The working preview’s theme button switches that preview; appearance samples follow the guide’s theme.
 
@@ -127,7 +122,7 @@ Both the top position and available scrolling height use the same setting. Deskt
 
 Custom documentation templates can set `--ps-doc-layout-sidebar-top` and `--ps-doc-layout-sidebar-top-mobile` on a shared ancestor of their sidebars. The default doc template sets both from site configuration automatically.
 
-TopBar renders a fixed doc-nav-toggle ID and should appear once per document. Its mobile navigation toggle works with the standard doc layout. Logo content comes from site.logo. Search visibility currently follows site.pagefind.enabled, even when a searchEnabled prop is supplied.
+TopBar renders a fixed doc-nav-toggle ID and should appear once per document. Its mobile navigation toggle works with the standard doc layout. Logo content comes from site.logo. Search visibility defaults to site.pagefind.enabled; the search prop overrides it.
 
 ## API reference
 
@@ -147,7 +142,8 @@ TopBar renders a fixed doc-nav-toggle ID and should appear once per document. It
   <a href="#top-bar-prop-signInAvatarSrc">signInAvatarSrc</a>
   <a href="#top-bar-prop-signInAvatarAlt">signInAvatarAlt</a>
   <a href="#top-bar-prop-signInEnabled">signInEnabled</a>
-  <a href="#top-bar-prop-searchEnabled">searchEnabled</a>
+  <a href="#top-bar-prop-search">search</a>
+  <a href="#top-bar-prop-signInSignedIn">signInSignedIn</a>
 </nav>
 
 <ApiProperty
@@ -208,25 +204,27 @@ TopBar renders a fixed doc-nav-toggle ID and should appear once per document. It
 <ApiProperty
   anchor="top-bar-prop-signInEnabled"
   name="signInEnabled"
-  valueType="boolean"
-  defaultValue="false"
+  valueType="RefOrValue&lt;boolean&gt;"
+  defaultValue="site.auth.enabled"
 >
   <p>
-    Shows the SignIn slot in the header; site.auth.enabled must also be true for
-    the account component to render.
+    Overrides site.auth.enabled for the account control in this header.
   </p>
 </ApiProperty>
 
 <ApiProperty
-  anchor="top-bar-prop-searchEnabled"
-  name="searchEnabled"
-  valueType="boolean"
+  anchor="top-bar-prop-search"
+  name="search"
+  valueType="RefOrValue&lt;boolean&gt;"
   defaultValue="site.pagefind.enabled"
 >
   <p>
-    Registered prop currently resolved from site configuration. Configure
-    pagefind.enabled to control search visibility.
+    Overrides site.pagefind.enabled for this instance.
   </p>
+</ApiProperty>
+
+<ApiProperty anchor="top-bar-prop-signInSignedIn" name="signInSignedIn" valueType="RefOrValue&lt;boolean&gt;" defaultValue="runtime auth state">
+  <p>Forwards an explicit signed-in presentation to the account control.</p>
 </ApiProperty>
 
 ### Composition

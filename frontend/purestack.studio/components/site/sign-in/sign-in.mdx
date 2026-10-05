@@ -26,13 +26,8 @@ The isolated preview enables the account component locally and uses working docu
 
 </ComponentExample>
   </TabPane>
-  <TabPane id="sign-in-sample-1-source-0" label="preview.mdx">
-```html
-<SignInPreview />
-```
-  </TabPane>
-  <TabPane id="sign-in-sample-1-source-1" label="preview.ts">
-  <import-codeblock src="./preview.ts"/>
+  <TabPane id="sign-in-sample-1-source-1" label="preview.mdx">
+  <import-codeblock src="./preview.mdx"/>
   </TabPane>
 </Tabs>
 
@@ -68,7 +63,7 @@ Compare stateless and stateful outlineFill treatments. Hover the samples; a stat
 
 ## Account state and content slots
 
-The comparisons show signed-out menus with and without sign-up, signed-in menus with a default icon or image avatar, custom icons and an avatar slot, and auth disabled. These are explicit document states for presentation; they do not create a session. The original working preview has real documentation links in its default slot.
+The comparisons show signed-out menus with and without sign-up, signed-in menus with a default icon or image avatar, custom icons and an avatar slot, and auth disabled. These are explicit component states for presentation; they do not create a session. The original working preview has real documentation links in its default slot.
 
 The label prop supplies hidden trigger text; the trigger currently retains the fixed accessible label Account menu. avatarAlt applies to the image. The avatar slot takes precedence over the avatar image and accountIcon.
 
@@ -82,7 +77,7 @@ The label prop supplies hidden trigger text; the trigger currently retains the f
 
 ## Behavior and accessibility
 
-The component renders only when site.auth.enabled is true. It does not authenticate users itself. The standard auth-state hint controls signed-in versus signed-out presentation; the server remains responsible for session authorization. The native summary opens with Enter or Space, and the menu runtime handles Escape and outside clicks.
+The component defaults to site.auth.enabled; the enabled prop overrides it for an instance. The signUp prop overrides site.auth.signUp, and signedIn selects a static presentation without creating a session. It does not authenticate users itself. The standard auth-state hint controls signed-in versus signed-out presentation; the server remains responsible for session authorization. The native summary opens with Enter or Space, and the menu runtime handles Escape and outside clicks.
 
 ## API reference
 
@@ -100,6 +95,9 @@ The component renders only when site.auth.enabled is true. It does not authentic
   <a href="#sign-in-prop-tone">tone</a>
   <a href="#sign-in-prop-variant">variant</a>
   <a href="#sign-in-prop-variantMode">variantMode</a>
+  <a href="#sign-in-prop-enabled">enabled</a>
+  <a href="#sign-in-prop-signUp">signUp</a>
+  <a href="#sign-in-prop-signedIn">signedIn</a>
 </nav>
 
 <ApiProperty anchor="sign-in-prop-avatarSrc" name="avatarSrc" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
@@ -132,6 +130,18 @@ The component renders only when site.auth.enabled is true. It does not authentic
 
 <ApiProperty anchor="sign-in-prop-variantMode" name="variantMode" valueType="RefOrValue&lt;ComponentVariantMode&gt;" defaultValue="stateless">
   <p>Use stateless for content surfaces; stateful enables the treatment’s hover, focus and active styles. It does not add interaction handlers.</p>
+</ApiProperty>
+
+<ApiProperty anchor="sign-in-prop-enabled" name="enabled" valueType="RefOrValue&lt;boolean&gt;" defaultValue="site.auth.enabled">
+  <p>Overrides authentication UI visibility for this instance.</p>
+</ApiProperty>
+
+<ApiProperty anchor="sign-in-prop-signUp" name="signUp" valueType="RefOrValue&lt;boolean&gt;" defaultValue="site.auth.signUp">
+  <p>Overrides visibility of the default sign-up action.</p>
+</ApiProperty>
+
+<ApiProperty anchor="sign-in-prop-signedIn" name="signedIn" valueType="RefOrValue&lt;boolean&gt;" defaultValue="runtime auth state">
+  <p>Selects signed-in or signed-out presentation for this instance. Omit it to follow the runtime auth hint. This prop does not authenticate a session.</p>
 </ApiProperty>
 
 ### Composition

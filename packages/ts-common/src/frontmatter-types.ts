@@ -71,6 +71,15 @@ export interface PageFrontmatter {
   draft: boolean
 
   /**
+   * Keeps the page out of the site when set to `false`: out of generated
+   * navigation, the search index, and the sitemap, with a `noindex` robots
+   * meta tag. The page is still built, and links to it still work.
+   *
+   * Defaults to `true`.
+   */
+  index: boolean
+
+  /**
    * Navigation-specific overrides for this page.
    */
   nav: FrontmatterNavOptions

@@ -22,11 +22,14 @@ export interface TopBar {
   resolvedLogoComponent?: ComputedRef<string>
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
+  signInSignedIn?: RefOrValue<boolean>
   signInAvatarSrc?: RefOrValue<string>
   signInAvatarAlt?: RefOrValue<string>
   classes?: ComputedRef<string>
-  searchEnabled?: boolean
-  signInEnabled?: boolean
+  search?: RefOrValue<boolean>
+  searchEnabled?: ComputedRef<boolean>
+  signInEnabled?: RefOrValue<boolean>
+  resolvedSignInEnabled?: ComputedRef<boolean>
 }
 
 const DEFAULT_TOP_BAR_VARIANT: ComponentVariant = 'surfaceAlt'
@@ -40,7 +43,12 @@ function resolveTopBar(context: TsSsgContext, props: TopBar): TopBar {
       () =>
         unref(props.logoComponent) ?? context.site.logo.component ?? 'SiteLogo',
     ),
-    searchEnabled: context.site.pagefind?.enabled === true,
+    searchEnabled: computed(
+      () => unref(props.search) ?? context.site.pagefind?.enabled === true,
+    ),
+    resolvedSignInEnabled: computed(
+      () => unref(props.signInEnabled) ?? context.site.auth?.enabled === true,
+    ),
     classes: computed(() =>
       resolveComponentClasses(props, {
         defaultVariant: DEFAULT_TOP_BAR_VARIANT,
@@ -66,8 +74,10 @@ const topBarTemplate = html`<input
     <Flex class="topbar__controls flex-none" align="center" justify="end">
       <ThemeToggle/>
       <SignIn
-        r-if="signInEnabled"
+        r-if="resolvedSignInEnabled"
         class="topbar__account"
+        :enabled="resolvedSignInEnabled"
+        :signedIn="signInSignedIn"
         :avatarSrc="signInAvatarSrc"
         :avatarAlt="signInAvatarAlt"/>
       <label
@@ -87,10 +97,11 @@ function defineTopBarComponent() {
       'logoComponent',
       'tone',
       'variant',
+      'signInSignedIn',
       'signInAvatarSrc',
       'signInAvatarAlt',
       'signInEnabled',
-      'searchEnabled',
+      'search',
     ],
     context: (head) => resolveTopBar(resolveTsSsgContext(head), head.props),
   })

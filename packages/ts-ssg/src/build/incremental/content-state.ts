@@ -68,6 +68,8 @@ export class IncrementalContentState {
   private generatedPages = new Map<string, ResolvedContentFile>()
   /** The files each page imports, by page. */
   private importedFilesByPage = new Map<string, ReadonlySet<string>>()
+  /** Output paths of the pages whose frontmatter sets index: false. */
+  private unindexedPages = new Map<string, string>()
   private readonly renderInFlight = new Map<string, Promise<boolean>>()
   private readonly contentIndex: ManifestContentIndex
 
@@ -77,6 +79,10 @@ export class IncrementalContentState {
       input.config,
     )
     this.contentIndex.rebuildFromManifest(input.getManifest())
+    for (const entry of Object.values(input.getManifest().content)) {
+      if (entry.index === false)
+        this.unindexedPages.set(entry.relPath, entry.outPath)
+    }
   }
 
   rebuildIndexFromManifest() {
@@ -96,6 +102,7 @@ export class IncrementalContentState {
 
   async renderAllPages(contentFiles: ResolvedContentFile[]) {
     this.importedFilesByPage.clear()
+    this.unindexedPages.clear()
     let pages = 0
     for (const file of contentFiles) {
       if (await this.writePageWithHooks(file)) pages += 1
@@ -115,6 +122,11 @@ export class IncrementalContentState {
       const page = await renderPageFromFile(context, file, hooks)
       this.input.onPageBuilt(file.relPath, page.scriptEntrypoints)
       this.importedFilesByPage.set(file.relPath, new Set(page.importedFiles))
+      if (page.frontmatter.index === false) {
+        this.unindexedPages.set(file.relPath, page.outPath)
+      } else {
+        this.unindexedPages.delete(file.relPath)
+      }
       await hooks.onPageRendered?.(context, page)
       await writePage(page, config.html.minify)
       await hooks.onPageWritten?.(context, page)
@@ -291,6 +303,7 @@ export class IncrementalContentState {
     this.contentIndex.remove(relPath)
     this.dirtyPages.delete(relPath)
     this.importedFilesByPage.delete(relPath)
+    this.unindexedPages.delete(relPath)
     result.deletedPages += 1
   }
 
@@ -349,6 +362,7 @@ export class IncrementalContentState {
     }
     this.dirtyPages.delete(relPath)
     this.importedFilesByPage.delete(relPath)
+    this.unindexedPages.delete(relPath)
     return false
   }
 
@@ -364,8 +378,22 @@ export class IncrementalContentState {
       ext,
       outPath,
       ...signature,
+      ...(this.unindexedPages.has(relPath) ? { index: false as const } : {}),
     }
     this.contentIndex.set(relPath, outPath, ext)
+  }
+
+  /** Output paths of the pages whose frontmatter sets index: false. */
+  unindexedOutPaths() {
+    return [...this.unindexedPages.values()]
+  }
+
+  /** Marks the manifest entries of pages whose frontmatter sets index: false. */
+  markUnindexedEntries(manifest: BuildManifest) {
+    for (const relPath of this.unindexedPages.keys()) {
+      const entry = manifest.content[relPath]
+      if (entry) entry.index = false
+    }
   }
 
   private toResolvedContentFile(relPath: string, ext: string) {

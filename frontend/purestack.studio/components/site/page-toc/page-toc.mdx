@@ -26,13 +26,8 @@ The example uses a small outline in an isolated document. Each link resolves to 
 
 </ComponentExample>
   </TabPane>
-  <TabPane id="page-toc-sample-1-source-0" label="preview.mdx">
-```html
-<PageTocPreview />
-```
-  </TabPane>
-  <TabPane id="page-toc-sample-1-source-1" label="preview.ts">
-  <import-codeblock src="./preview.ts"/>
+  <TabPane id="page-toc-sample-1-source-1" label="preview.mdx">
+  <import-codeblock src="./preview.mdx"/>
   </TabPane>
 </Tabs>
 
@@ -106,14 +101,14 @@ The default doc template already renders the page TOC; do not add a second copy 
 </div>
 
 <nav class="api-index" aria-label="PageToc properties">
-  <a href="#page-toc-prop-items">items</a>
+  <a href="#page-toc-prop-outline">items</a>
   <a href="#page-toc-prop-title">title</a>
   <a href="#page-toc-prop-tone">tone</a>
   <a href="#page-toc-prop-variant">variant</a>
   <a href="#page-toc-prop-variantMode">variantMode</a>
 </nav>
 
-<ApiProperty anchor="page-toc-prop-items" name="items" valueType="PageOutlineItem[]" defaultValue="context.outline">
+<ApiProperty anchor="page-toc-prop-outline" name="outline" valueType="PageOutlineItem[]" defaultValue="context.outline">
   <p>PageOutlineItem[] with id, title, optional depth and children. Links are built as #id.</p>
 </ApiProperty>
 
@@ -136,7 +131,7 @@ The default doc template already renders the page TOC; do not add a second copy 
 ### Composition
 
 <div class="api-contract">
-<p>No slots. Register definePageTocComponents with BtnLink and Icon. SSG context supplies the outline when items is omitted; the standard runtime handles active-section and panel behavior.</p>
+<p>No slots. Register definePageTocComponents with BtnLink and Icon. SSG context supplies the outline when outline is omitted; the standard runtime handles active-section and panel behavior.</p>
 </div>
 
 ## Related components

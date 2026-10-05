@@ -45,6 +45,7 @@ export function normalizeFrontmatter(
     order: resolveNumber(resolveKey(raw, 'order')),
     hidden: resolveKey(raw, 'hidden') === true,
     draft: resolveKey(raw, 'draft') === true,
+    index: resolveKey(raw, 'index') !== false,
     nav: {
       ...rawNav,
       title: resolveString(resolveKey(rawNav, 'title')),

@@ -380,7 +380,11 @@ class IncrementalRuntime {
       pages,
     })
 
-    await buildPagefindIndex(this.config.outDir, this.config.pagefind)
+    await buildPagefindIndex(
+      this.config.outDir,
+      this.config.pagefind,
+      this.contentState.unindexedOutPaths(),
+    )
 
     this.manifest = await buildManifest(
       this.config,
@@ -394,6 +398,7 @@ class IncrementalRuntime {
         getScriptCacheKey: this.resolveScriptCacheKey,
       },
     )
+    this.contentState.markUnindexedEntries(this.manifest)
     await this.persistManifest()
     this.contentState.rebuildIndexFromManifest()
     this.contentState.clearDirtyPages()
@@ -457,7 +462,10 @@ class IncrementalRuntime {
   }
 
   private async writeSitemapFromManifest() {
-    const pages = Object.values(this.manifest.content).map((entry) => {
+    const indexed = Object.values(this.manifest.content).filter(
+      (entry) => entry.index !== false,
+    )
+    const pages = indexed.map((entry) => {
       const file = toContentFile(
         this.config.contentDir,
         entry.relPath,

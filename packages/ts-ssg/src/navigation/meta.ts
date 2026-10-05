@@ -27,7 +27,8 @@ export async function loadContentMeta(
     const hidden =
       resolveBoolean(nav?.hidden) ||
       resolveBoolean(frontmatter.hidden) ||
-      resolveBoolean(frontmatter.draft)
+      resolveBoolean(frontmatter.draft) ||
+      frontmatter.index === false
     const title =
       resolveString(nav?.title) ||
       resolveString(frontmatter.title) ||
