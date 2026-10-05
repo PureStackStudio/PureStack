@@ -52,6 +52,21 @@ export function isContentFile(_relPath: string, ext: string) {
   return isContentExt(ext)
 }
 
+/**
+ * A content file whose name, or the name of a folder above it, starts with _
+ * is shared content: pages show it with import-content, and it is never a
+ * page itself.
+ */
+export function isSharedContentFile(relPath: string) {
+  return (
+    isContentExt(path.extname(relPath)) &&
+    relPath
+      .replaceAll('\\', '/')
+      .split('/')
+      .some((name) => name.startsWith('_'))
+  )
+}
+
 export function isAgentsFile(relPath: string) {
   return path.basename(relPath).toUpperCase() === 'AGENTS.MD'
 }
@@ -86,6 +101,7 @@ export async function discoverContent(
     files,
     (relPath, ext) =>
       isContentFile(relPath, ext) &&
+      !isSharedContentFile(relPath) &&
       !isDefaultFooterFile(relPath) &&
       !isDefaultHeaderFile(relPath) &&
       !isAgentsFile(relPath),

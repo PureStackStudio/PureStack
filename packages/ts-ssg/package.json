@@ -45,6 +45,7 @@
     "@purestack/ts-common": "workspace:^",
     "@purestack/ts-components": "workspace:^",
     "@purestack/ts-html": "workspace:^",
+    "@purestack/ts-minidom": "workspace:^",
     "@purestack/ts-page-scripts": "workspace:^",
     "@purestack/ts-render": "workspace:^",
     "@purestack/ts-style": "workspace:^",

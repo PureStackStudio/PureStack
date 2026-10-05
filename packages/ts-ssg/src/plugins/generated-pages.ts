@@ -5,6 +5,7 @@ import {
   type ContentFile,
   isDefaultFooterFile,
   isDefaultHeaderFile,
+  isSharedContentFile,
 } from '../discover/content'
 import { isContentExt } from '../discover/contentExtensions'
 import type { ResolvedContentFile } from '../i18n/content'
@@ -133,6 +134,11 @@ function readGeneratedPage(pluginName: string, page: GeneratedPage) {
   if (!isContentExt(path.posix.extname(relPath))) {
     fail(
       `needs the generated page "${pagePath}" to end in .md, .mdx, or .rmdx.`,
+    )
+  }
+  if (isSharedContentFile(relPath)) {
+    fail(
+      `cannot generate "${pagePath}"; a name starting with _ marks shared content, not a page.`,
     )
   }
   if (isDefaultHeaderFile(relPath) || isDefaultFooterFile(relPath)) {

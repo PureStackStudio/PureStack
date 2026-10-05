@@ -1,0 +1,72 @@
+---
+title: Code blocks
+description: Show code in a page, written by hand or imported from a file, so the code a page shows always matches the file it comes from.
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: true
+nav:
+  order: 17
+  icon: tabler:code
+---
+
+# Code blocks
+
+Write short code in the page itself. When the code lives in a file, such as a playground's source, import it instead: the page then shows exactly what the file holds, and never falls out of date.
+
+## Write a code block
+
+Put the code between fences, with its language after the opening fence:
+
+````md
+```ts
+const answer = 42
+```
+````
+
+The language selects the highlighting. The [site configuration](./site-config#markdown-and-code-blocks) chooses the highlighter.
+
+## Show a file's code
+
+`<import-codeblock>` puts a file's code in the page, as if you had written the code block yourself:
+
+```mdx
+<import-codeblock src="./playground.ts"/>
+```
+
+| Attribute | Value |
+| --- | --- |
+| `src` | The file, relative to your page, or to the [shared file](./shared-content) the tag is in. It must be inside the content folder. |
+| `lang` | Optional. The language, when the file's extension does not tell it, such as `lang="scss"`. |
+
+It works anywhere a code block works: in Markdown, in component markup, and in headers and footers. A playground's source is the common case, next to the playground itself:
+
+```mdx
+<Tabs group="playground" selectedTab="playground-preview" ariaLabel="Playground example">
+  <TabPane id="playground-preview" label="Preview">
+    <RegorApp id="playground" src="./playground.ts"/>
+  </TabPane>
+  <TabPane id="playground-source" label="playground.ts">
+    <import-codeblock src="./playground.ts"/>
+  </TabPane>
+</Tabs>
+```
+
+- **It is not a component.** It becomes a code block before the page renders, so it takes plain attributes only, not bindings such as `:src`. Write it self-closing.
+- **Code stays code.** A tag inside a code block or inline code is shown as written, as on this page.
+- **Edits show up.** While `purestack serve` runs, saving the file updates every page that shows it.
+
+## When something is wrong
+
+The build stops and names the page and the tag:
+
+```text
+Code block import "./playgound.ts" in "components/actions/buttons/buttons.mdx" does not match any file.
+```
+
+While `purestack serve` runs, a page with this error shows it in place of its content and renders again as soon as the file exists. Most fixes are one of these:
+
+- **A typo or different capitals.** `./Playground.ts` doesn't find `playground.ts`.
+- **The file is outside the content folder.** Move it in, next to the page that shows it.
+- **The tag is not self-closing.** Write `<import-codeblock src="./playground.ts"/>`, not a pair of tags.

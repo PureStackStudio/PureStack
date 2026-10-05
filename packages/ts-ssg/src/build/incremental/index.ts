@@ -6,6 +6,7 @@ import { getLogger, type Logger } from 'logpot'
 import {
   isDefaultFooterFile,
   isDefaultHeaderFile,
+  isSharedContentFile,
   isSiteConfigFile,
   type StaticAssetFile,
 } from '../../discover/content'
@@ -415,9 +416,11 @@ class IncrementalRuntime {
     this.contentState.takeMarkedPageCount()
     if (isDefaultHeaderFile(relPath) || isDefaultFooterFile(relPath)) {
       await this.contentState.refreshPartials()
-    } else {
+    } else if (!isSharedContentFile(relPath)) {
+      // Shared content is never a page; its importers refresh below.
       await this.changeApplier.applyFileChange(filePath, relPath, result)
     }
+    await this.contentState.refreshImporters(relPath)
     result.markedPages = this.contentState.takeMarkedPageCount()
     return result
   }

@@ -1,0 +1,66 @@
+---
+title: Shared content
+description: Write a passage once and show it on many pages, from a shared file that is never published on its own.
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: true
+nav:
+  order: 18
+  icon: tabler:files
+---
+
+# Shared content
+
+Some passages belong on many pages: install steps, a note about a beta feature, a support link. Write such a passage once, in a file whose name starts with `_`, and show it wherever it belongs with `<import-content>`.
+
+## Share a passage
+
+Put the passage in its own file:
+
+```text
+content/
+  _install.mdx
+  guides/
+    getting-started.mdx
+    upgrade.mdx
+```
+
+```md
+Install PureStack with `yarn add purestack`, then start the site with `yarn purestack serve --content ./content`.
+```
+
+Then show it in each page, with a path relative to the page:
+
+```mdx
+## Install
+
+<import-content src="../_install.mdx"/>
+```
+
+The page shows the passage as if you had written it there. Markdown and components work, and its headings join the page's table of contents.
+
+## How shared files work
+
+- **They are not pages.** A file whose name, or the name of a folder above it, starts with `_` is never published on its own, such as `_install.mdx` or `_shared/beta-note.mdx`.
+- **They have no frontmatter.** The page that shows a passage sets its title, template, and layout.
+- **Links work from the page.** A link inside a passage resolves from the page that shows it. When pages in different folders show the passage, start its links at the site root, such as `/guides/themes/`.
+- **They can import too.** A shared file can show another shared file, or a file's [code](./code-blocks), with paths relative to the shared file itself.
+- **Inside a component, markup rules apply.** `<import-content>` works inside component markup too, such as a `TabPane`. There, the passage is read like anything else written inside a component: HTML, components, and code blocks work, but other Markdown, such as `**bold**`, lists, and `[links](./page)`, stays as written. Write passages meant for components in HTML.
+- **Edits show up.** While `purestack serve` runs, saving a shared file updates every page that shows it.
+
+## When something is wrong
+
+The build stops and names the page and the tag:
+
+```text
+Content import "./_instal.mdx" in "guides/upgrade.mdx" does not match any file.
+```
+
+Most fixes are one of these:
+
+- **A typo or different capitals.** `./_Install.mdx` doesn't find `_install.mdx`.
+- **The file is not shared.** Rename it so its name, or a folder above it, starts with `_`. A page cannot be imported.
+- **The file has frontmatter.** Remove it; the page's frontmatter applies.
+- **Two files import each other.** The message shows the chain, such as `guides/upgrade.mdx → _install.mdx → _requirements.mdx → _install.mdx`.
