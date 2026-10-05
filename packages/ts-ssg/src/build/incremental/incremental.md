@@ -32,8 +32,11 @@ reason about “what changed?” vs “what must be rebuilt?”.
 2. It loads the existing manifest, keeping it only if compatible with current
    config (`isCompatibleManifest`); otherwise it starts from
    `createEmptyManifest`.
-3. It returns `{ buildAll, applyChange, renderIfDirtyByOutPath,
-   renderByUrlPath }` for the caller to use in dev servers or watch mode.
+3. It returns full-build and request-rendering methods. The default dev server
+   calls `prepareForRequests`; build commands and `serve --full-render` call
+   `buildAll`. After the startup build, `serve --full-render` switches to
+   request rendering and reuses its pages, asset records, and search index.
+   Watched changes then use the same invalidation as the default dev mode.
 
 The content is prepared once per full build. `buildAll` prepares it as part of
 the build. `applyChange` and the two render calls first await
@@ -41,6 +44,16 @@ the build. `applyChange` and the two render calls first await
 has run, as when resuming from an earlier build's manifest, prepare the content
 from the manifest themselves. A failed preparation is tried again by the next
 call.
+
+`prepareForRequests` prepares config hooks, the output directory, routes,
+generated page definitions, navigation, and shared partials. It renders no
+pages and copies no static assets. Existing output is treated as stale in the
+new session, even without `--clean`. Requests share any in-flight render and
+reuse clean pages afterward. Before serving HTML, `preparePageAssets` builds
+missing scripts for rendered pages and writes their shared styles. Static
+assets copy through `prepareAssetByUrlPath` when requested. Pagefind assets
+trigger indexing of pages rendered in the current session, excluding stale
+HTML from earlier sessions. No background loop renders the rest of the site.
 
 ## `buildAll(reason)`
 
@@ -62,10 +75,11 @@ The output is deterministic with `generatedAt` being the only volatile field.
 
 ## `applyChange(filePath)`
 
-Handles a single filesystem change event. The changed page renders right
-away; other affected pages are marked dirty and render on their next request
-(`renderIfDirtyByOutPath`). `IncrementalBuildResult.markedPages` counts them,
-so the dev server can reload the browser.
+Handles a single filesystem change event. In request mode, affected pages
+become dirty and render on their next request; edited script bundles and static
+assets are rebuilt/copied when requested too. In full-build mode, the changed
+page renders right away. `IncrementalBuildResult.markedPages` counts pages
+invalidated by the change, so the dev server can reload the browser.
 
 1. **Ignore changes outside `contentDir`**: relative path starting with `..`.
 2. **`siteConfig.json`** ➜ `fullRebuild = true`. Config shapes every output.

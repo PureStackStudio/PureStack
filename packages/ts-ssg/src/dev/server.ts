@@ -37,6 +37,8 @@ export interface DevServerOptions {
   port?: number
   watch?: boolean
   liveReload?: boolean
+  /** Builds the complete site once at startup, then renders changes on request. */
+  fullRender?: boolean
 }
 
 export interface DevServerInput extends DevServerOptions {
@@ -63,6 +65,7 @@ type ResolvedDevServerOptions = {
   port: number
   watch: boolean
   liveReload: boolean
+  fullRender: boolean
 }
 
 type RebuildRequestState = {
@@ -91,11 +94,13 @@ export async function startDevServer(
   let devMiddleware = composeDevMiddleware(buildInput.options?.plugins ?? [])
   const log = getLogger()
 
-  const { host, port, watch, liveReload } = resolveDevServerOptions(input)
+  const { host, port, watch, liveReload, fullRender } =
+    resolveDevServerOptions(input)
+  let fullBuild: Promise<unknown> | undefined
 
   const clients: LiveReloadClients = new Map()
   let liveReloadVersion = 0
-  let initialBuildDone = false
+  let initialSetupDone = false
   let shuttingDown = false
   let watcher: { close: () => void } | undefined
   const requestState = createRebuildRequestState()
@@ -175,18 +180,20 @@ export async function startDevServer(
       if (options?.reloadConfig) {
         devMiddleware = composeDevMiddleware(buildInput.options?.plugins ?? [])
       }
-      await incremental.buildAll(reason)
-      if (!initialBuildDone) {
+      if (fullRender && !initialSetupDone) {
+        fullBuild = incremental.buildAll(reason)
+        await fullBuild
+      }
+      await incremental.prepareForRequests()
+      if (!initialSetupDone) {
         log.info('serving at', {
           url: `http://${displayHost}:${port}${withBasePath(config.basePath, '/')}`,
         })
-        initialBuildDone = true
+        initialSetupDone = true
       }
       notifyReload(reason)
     } catch (error) {
-      logError(log, error, 'build failed')
-    } finally {
-      // ensure rebuild flow completes even when build throws
+      logError(log, error, 'dev setup failed')
     }
   }
 
@@ -241,7 +248,10 @@ export async function startDevServer(
       basePath: config.basePath,
       i18n: config.i18n,
       liveReload,
-      // A full rebuild replaces the builder, so requests ask for the current one.
+      waitForFullBuild: async () => {
+        if (fullRender) await fullBuild
+      },
+      // Config changes replace the builder, so requests ask for the current one.
       getIncremental: () => incremental,
       handlePluginRequest: (req, res) => devMiddleware(req, res),
       clients,
@@ -264,6 +274,7 @@ export async function startDevServer(
       outDir: config.outDir,
       liveReload,
       watch,
+      fullRender,
     })
   })
 
@@ -343,6 +354,7 @@ function resolveDevServerOptions(
     port: input.port ?? DEFAULT_PORT,
     watch: input.watch ?? true,
     liveReload: input.liveReload ?? true,
+    fullRender: input.fullRender ?? false,
   }
 }
 
@@ -352,7 +364,7 @@ function createRebuildRequestState(): RebuildRequestState {
     inFlight: false,
     pending: false,
     timer: undefined,
-    reason: 'initial build',
+    reason: 'initial setup',
     changedPaths: new Set<string>(),
   }
 }
@@ -364,6 +376,7 @@ type DevServerRequestHandlerInput = {
   basePath: string
   i18n: I18nConfig
   liveReload: boolean
+  waitForFullBuild: () => Promise<void>
   getIncremental: () => IncrementalBuilder
   /** Resolves true when a plugin's dev middleware responded. */
   handlePluginRequest: (
@@ -383,6 +396,7 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
     basePath,
     i18n,
     liveReload,
+    waitForFullBuild,
     getIncremental,
     handlePluginRequest,
     clients,
@@ -391,7 +405,6 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
   } = input
 
   return async (req: http.IncomingMessage, res: http.ServerResponse) => {
-    const incremental = getIncremental()
     if (!req.url) {
       res.writeHead(400)
       res.end()
@@ -425,18 +438,27 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
     const localePreference = resolveRequestLocale(req, i18n)
     persistQueryLocalePreference(res, i18n, localePreference)
 
-    res.setTimeout(REQUEST_TIMEOUT_MS, () => {
-      res.destroy()
-    })
-
-    const fileResult = await resolveRequestFile({
-      outDir,
-      pathname: internalPathname,
-      locale: localePreference.locale,
-      i18n,
-      incremental,
-      log,
-    })
+    let fileResult: Awaited<ReturnType<typeof resolveRequestFile>>
+    let incremental: IncrementalBuilder
+    try {
+      await waitForFullBuild()
+      incremental = getIncremental()
+      res.setTimeout(REQUEST_TIMEOUT_MS, () => {
+        res.destroy()
+      })
+      fileResult = await resolveRequestFile({
+        outDir,
+        pathname: internalPathname,
+        locale: localePreference.locale,
+        i18n,
+        incremental,
+      })
+    } catch (error) {
+      logError(log, error, 'request preparation failed')
+      if (!res.headersSent) res.writeHead(500)
+      res.end('Internal server error')
+      return
+    }
     if (!fileResult) {
       res.writeHead(404)
       res.end('Not found')
@@ -469,39 +491,30 @@ type ResolveRequestFileInput = {
   locale?: string
   i18n: I18nConfig
   incremental: IncrementalBuilder
-  log: Logger
 }
 
 async function resolveRequestFile(input: ResolveRequestFileInput) {
-  const { outDir, pathname, locale, i18n, incremental, log } = input
-  let fileResult = await resolveStaticFile(outDir, pathname)
-  if (!fileResult && i18n.enabled && i18n.urlStrategy === 'hidden' && locale) {
-    fileResult = await resolveStaticFile(
-      outDir,
-      withHiddenLocale(locale, pathname),
-    )
+  const { outDir, pathname, locale, i18n, incremental } = input
+  let decodedPathname: string
+  try {
+    decodedPathname = decodeURIComponent(pathname)
+  } catch {
+    return null
   }
-  if (!fileResult && isLikelyHtmlPath(pathname)) {
-    try {
-      const rendered = await incremental.renderByUrlPath(pathname)
-      if (rendered) {
-        fileResult = await resolveStaticFile(outDir, pathname)
-        if (
-          !fileResult &&
-          i18n.enabled &&
-          i18n.urlStrategy === 'hidden' &&
-          locale
-        ) {
-          fileResult = await resolveStaticFile(
-            outDir,
-            withHiddenLocale(locale, pathname),
-          )
-        }
-      }
-    } catch (error) {
-      logError(log, error, 'lazy route render failed')
-    }
+  const asset = await incremental.prepareAssetByUrlPath(pathname)
+  if (
+    !asset &&
+    (isLikelyHtmlPath(decodedPathname) ||
+      decodedPathname.endsWith('/index.html'))
+  ) {
+    if (!(await incremental.renderByUrlPath(decodedPathname, locale)))
+      return null
   }
+  let fileResult =
+    i18n.enabled && i18n.urlStrategy === 'hidden' && locale
+      ? await resolveStaticFile(outDir, withHiddenLocale(locale, pathname))
+      : null
+  fileResult ??= await resolveStaticFile(outDir, pathname)
   return fileResult
 }
 
@@ -552,6 +565,7 @@ async function serveResolvedFile(input: ServeResolvedFileInput): Promise<void> {
       // A page marked dirty renders before it is served, so the response
       // always reflects the latest change.
       await incremental.renderIfDirtyByOutPath(filePath)
+      await incremental.preparePageAssets()
       const html = await fsPromises.readFile(filePath, 'utf8')
       const injected = liveReload
         ? injectLiveReload(html, liveReloadPath, liveReloadVersion)

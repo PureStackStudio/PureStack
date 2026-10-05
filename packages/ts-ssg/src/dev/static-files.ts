@@ -38,6 +38,9 @@ export async function resolveStaticFile(outDir: string, pathname: string) {
 
   try {
     const stats = await fsPromises.stat(candidate)
+    if (stats.isFile()) {
+      return { filePath: candidate, ext: path.extname(candidate).toLowerCase() }
+    }
     if (stats.isDirectory()) {
       candidate = path.join(candidate, 'index.html')
     }

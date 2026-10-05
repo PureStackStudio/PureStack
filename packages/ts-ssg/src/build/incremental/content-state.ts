@@ -43,6 +43,7 @@ interface IncrementalContentStateInput {
   log: Logger
   onPageBuilt: (relPath: string, scriptEntrypoints: string[]) => void
   onPageRemoved: (relPath: string) => void
+  renderOnRequest: () => boolean
   persistManifest: () => Promise<void>
   getManifest: () => BuildManifest
 }
@@ -63,7 +64,8 @@ interface RebuildSingleContentInput {
 }
 
 export class IncrementalContentState {
-  private readonly dirtyPages = new Set<string>()
+  private readonly dirtyPages = new Map<string, number>()
+  private dirtyVersion = 0
   private markedPages = 0
   private generatedPages = new Map<string, ResolvedContentFile>()
   /** The files each page imports, by page. */
@@ -120,7 +122,6 @@ export class IncrementalContentState {
     try {
       await hooks.onPageStart?.(context, file)
       const page = await renderPageFromFile(context, file, hooks)
-      this.input.onPageBuilt(file.relPath, page.scriptEntrypoints)
       this.importedFilesByPage.set(file.relPath, new Set(page.importedFiles))
       if (page.frontmatter.index === false) {
         this.unindexedPages.set(file.relPath, page.outPath)
@@ -130,6 +131,7 @@ export class IncrementalContentState {
       await hooks.onPageRendered?.(context, page)
       await writePage(page, config.html.minify)
       await hooks.onPageWritten?.(context, page)
+      this.input.onPageBuilt(file.relPath, page.scriptEntrypoints)
       return true
     } catch (error) {
       if (context.writeErrorPages !== true) throw error
@@ -149,9 +151,25 @@ export class IncrementalContentState {
     return this.renderPageByRelPath(relPath, true)
   }
 
-  async renderByUrlPath(urlPath: string) {
+  async renderByUrlPath(urlPath: string, locale?: string) {
     const normalized = normalizeUrlPath(urlPath)
-    let relPath = this.contentIndex.getRelPathByUrlPath(normalized)
+    const outputRelPath = urlPath.endsWith('/index.html')
+      ? this.contentIndex.getRelPathByOutPath(
+          path.resolve(this.input.config.outDir, `.${urlPath}`),
+        )
+      : undefined
+    let relPath =
+      outputRelPath ?? this.contentIndex.getRelPathByUrlPath(normalized)
+    if (
+      !outputRelPath &&
+      locale &&
+      this.input.config.i18n.urlStrategy === 'hidden'
+    ) {
+      relPath =
+        this.input.context.contentRoutes.pages.find(
+          (file) => file.urlPath === normalized && file.locale === locale,
+        )?.relPath ?? relPath
+    }
     if (!relPath) {
       const contentFiles = await this.refreshContent()
       this.contentIndex.updateUrlPathMapFromFiles(contentFiles)
@@ -175,6 +193,7 @@ export class IncrementalContentState {
       this.input.onPageRemoved(relPath)
     }
     this.updateContentRoutes(context.contentRoutes.withPages(contentFiles))
+    this.indexContentFiles(contentFiles)
     this.markPagesDirty(generated.changed)
     context.translationsByKey = buildTranslationsByKey(contentFiles)
     return contentFiles
@@ -185,7 +204,14 @@ export class IncrementalContentState {
    * before the build that discovered it writes the manifest.
    */
   indexContentFiles(contentFiles: ResolvedContentFile[]) {
+    this.contentIndex.clear()
     this.contentIndex.updateUrlPathMapFromFiles(contentFiles)
+    for (const file of contentFiles) {
+      this.contentIndex.setOutPath(
+        file.relPath,
+        resolveOutPath(this.input.config.outDir, file),
+      )
+    }
   }
 
   /** Generators may read data files, so an asset change runs them again. */
@@ -220,11 +246,9 @@ export class IncrementalContentState {
   }
 
   /** Picks up added or removed assets from the manifest. */
-  refreshAssets() {
-    const { context, getManifest } = this.input
-    this.updateContentRoutes(
-      context.contentRoutes.withAssets(Object.keys(getManifest().assets)),
-    )
+  refreshAssets(assetRelPaths = Object.keys(this.input.getManifest().assets)) {
+    const { context } = this.input
+    this.updateContentRoutes(context.contentRoutes.withAssets(assetRelPaths))
   }
 
   private updateContentRoutes(contentRoutes: ContentRouteIndex) {
@@ -304,6 +328,7 @@ export class IncrementalContentState {
     this.dirtyPages.delete(relPath)
     this.importedFilesByPage.delete(relPath)
     this.unindexedPages.delete(relPath)
+    this.input.onPageRemoved(relPath)
     result.deletedPages += 1
   }
 
@@ -327,11 +352,15 @@ export class IncrementalContentState {
   }
 
   async renderAndPersistRelPath(relPath: string, signature: FileSignature) {
+    const dirtyVersion = this.dirtyPages.get(relPath)
     const ext = this.resolveContentExt(relPath)
     const contentFile = this.toResolvedContentFile(relPath, ext)
     await this.writePageWithHooks(contentFile)
     this.upsertContentManifestEntry(relPath, contentFile.ext, signature)
-    this.dirtyPages.delete(relPath)
+    // An edit received while this render was running still needs a new render.
+    if (this.dirtyPages.get(relPath) === dirtyVersion) {
+      this.dirtyPages.delete(relPath)
+    }
     await this.input.persistManifest()
     return true
   }
@@ -358,6 +387,7 @@ export class IncrementalContentState {
       await removeFile(entry.outPath)
       delete this.input.getManifest().content[relPath]
       this.contentIndex.remove(relPath)
+      this.input.onPageRemoved(relPath)
       await this.input.persistManifest()
     }
     this.dirtyPages.delete(relPath)
@@ -409,17 +439,25 @@ export class IncrementalContentState {
     )
   }
 
-  private markAllPagesDirty(contentFiles: readonly ResolvedContentFile[]) {
+  markAllPagesDirty(contentFiles: readonly ResolvedContentFile[]) {
     this.dirtyPages.clear()
     this.markPagesDirty(contentFiles.map((file) => file.relPath))
   }
 
-  private markPagesDirty(relPaths: readonly string[]) {
-    for (const relPath of relPaths) this.dirtyPages.add(relPath)
+  markPagesDirty(relPaths: readonly string[]) {
+    for (const relPath of relPaths)
+      this.dirtyPages.set(relPath, ++this.dirtyVersion)
     this.markedPages += relPaths.length
   }
 
   private async renderPageByRelPath(relPath: string, onlyIfDirty: boolean) {
+    if (
+      this.input.renderOnRequest() &&
+      this.input.getManifest().content[relPath] &&
+      !this.dirtyPages.has(relPath)
+    ) {
+      return true
+    }
     if (onlyIfDirty && !this.dirtyPages.has(relPath)) return false
     const inFlight = this.renderInFlight.get(relPath)
     if (inFlight) return inFlight
@@ -430,7 +468,7 @@ export class IncrementalContentState {
         if (!signature) {
           return this.handleMissingRelPathSource(relPath)
         }
-        return this.renderAndPersistRelPath(relPath, signature)
+        return await this.renderAndPersistRelPath(relPath, signature)
       } catch (error) {
         this.input.log.error('incremental render failed', {
           relPath,

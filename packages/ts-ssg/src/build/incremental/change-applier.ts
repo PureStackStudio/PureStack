@@ -32,6 +32,7 @@ interface IncrementalChangeApplierInput {
   contentState: IncrementalContentState
   scriptEntrypoints: ScriptEntrypointManager
   persistManifest: () => Promise<void>
+  renderOnRequest: () => boolean
 }
 
 export class IncrementalChangeApplier {
@@ -56,7 +57,10 @@ export class IncrementalChangeApplier {
   ) {
     const state = await this.readChangeState(filePath, relPath, result)
     await this.applyChangeState(state)
-    if (isContentFile(relPath, state.ext) || state.ext === '.ts') {
+    if (
+      !this.input.renderOnRequest() &&
+      (isContentFile(relPath, state.ext) || state.ext === '.ts')
+    ) {
       await this.input.scriptEntrypoints.syncState({
         result,
         persist: true,
@@ -178,6 +182,16 @@ export class IncrementalChangeApplier {
     assetEntry: AssetManifestEntry | undefined
   }) {
     const { relPath, ext, result, contentEntry, assetEntry } = input
+    if (this.input.renderOnRequest() && isContentFile(relPath, ext)) {
+      await this.input.contentState.refreshNavigation()
+      await this.input.contentState.removeContentEntryForDeletedSource(
+        relPath,
+        result,
+      )
+      this.input.scriptEntrypoints.removePage(relPath)
+      await this.input.persistManifest()
+      return
+    }
     if (contentEntry && this.input.config.navigation.mode !== 'none') {
       await this.rebuildNavigationForChange(relPath, ext, result, null)
       this.input.scriptEntrypoints.removePage(relPath)
@@ -215,6 +229,17 @@ export class IncrementalChangeApplier {
     result: IncrementalBuildResult
   }) {
     const { relPath, ext, signature, contentEntry, result } = input
+    if (this.input.renderOnRequest()) {
+      // A watcher event is an invalidation even if a full startup build
+      // recorded the new signature after rendering the old source.
+      if (this.input.config.navigation.mode !== 'none') {
+        await this.input.contentState.refreshNavigation()
+      } else {
+        await this.input.contentState.refreshContent()
+      }
+      this.input.contentState.markPagesDirty([relPath])
+      return
+    }
     if (signatureEqual(contentEntry, signature)) return
 
     if (this.input.config.navigation.mode !== 'none') {
@@ -241,7 +266,8 @@ export class IncrementalChangeApplier {
     result: IncrementalBuildResult
   }) {
     const { relPath, ext, signature, assetEntry, result } = input
-    if (signatureEqual(assetEntry, signature)) return
+    if (!this.input.renderOnRequest() && signatureEqual(assetEntry, signature))
+      return
 
     if (ext === '.ts') {
       await this.handleScriptAssetChange(relPath, result)
@@ -276,6 +302,16 @@ export class IncrementalChangeApplier {
     const impactedEntries =
       this.input.scriptEntrypoints.resolveImpactedEntryRelPaths(relPath)
     if (impactedEntries.size === 0) return
+
+    if (this.input.renderOnRequest()) {
+      const pages =
+        this.input.scriptEntrypoints.getPageRelPathsForEntrypoints(
+          impactedEntries,
+        )
+      this.input.scriptEntrypoints.invalidateEntrypoints(impactedEntries)
+      this.input.contentState.markPagesDirty(pages)
+      return
+    }
 
     const rebuiltEntries =
       await this.input.scriptEntrypoints.rebuildEntrypoints(

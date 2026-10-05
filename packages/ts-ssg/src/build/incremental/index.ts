@@ -1,9 +1,12 @@
 import path from 'node:path'
 import type { SiteConfig } from '@purestack/ts-common'
 import { themes } from '@purestack/ts-style'
-import { toOutputAssetRelPath } from '@purestack/ts-util'
+import { toOutputAssetRelPath, toPosixPath } from '@purestack/ts-util'
 import { getLogger, type Logger } from 'logpot'
 import {
+  DEFAULT_NAV_FILENAME,
+  discoverStaticAssets,
+  isContentFile,
   isDefaultFooterFile,
   isDefaultHeaderFile,
   isSharedContentFile,
@@ -25,7 +28,7 @@ import {
 } from '../../plugins/plugin'
 import { initBuiltinComponents } from '../../regor/initBuiltinComponents'
 import { resolveRouteInfo } from '../../routing/route'
-import { copyStaticAssets } from '../assets'
+import { copyStaticAsset, copyStaticAssets } from '../assets'
 import { resolveBuildSiteConfig } from '../build-config'
 import { ContentRouteIndex } from '../content-urls'
 import { writeGeneratedFavicon } from '../favicon'
@@ -35,6 +38,7 @@ import {
   createEmptyManifest,
   isCompatibleManifest,
   readManifest,
+  readSignature,
   writeManifest,
 } from '../manifest'
 import { type BuildContext, resolveHeaderFooterHtml } from '../page'
@@ -51,6 +55,7 @@ import {
   countByExt,
   discoverSiteContent,
   isOutsideContentRoot,
+  removeFile,
   resolveMdxBuildOptions,
   toContentFile,
 } from './support'
@@ -165,6 +170,13 @@ class IncrementalRuntime {
   private readonly scriptCacheKeys: ScriptCacheKeyStore
   /** Settles once the content is prepared; see ensureContentReady. */
   private contentReady: Promise<void> | undefined
+  private assetWork: Promise<unknown> = Promise.resolve()
+  private pageAssetRevision = 0
+  private preparedAssetRevision = -1
+  private renderOnRequest = false
+  private staticAssets = new Map<string, StaticAssetFile>()
+  private searchRevision = -1
+  private manifestWork: Promise<unknown> = Promise.resolve()
 
   constructor(private readonly options: IncrementalRuntimeOptions) {
     this.scriptCacheKeys = options.scriptCacheKeys
@@ -176,7 +188,7 @@ class IncrementalRuntime {
       minifyScripts: options.minifyScripts,
       failOnAssetError: options.failOnAssetError,
       cacheBusting: options.config.scripts.cacheBusting,
-      assets: options.manifest.assets,
+      getAssets: () => this.manifest.assets,
       scriptCacheKeys: this.scriptCacheKeys,
       persistManifest: () => this.persistManifest(),
     })
@@ -186,9 +198,15 @@ class IncrementalRuntime {
       hooks: options.hooks,
       plugins: options.plugins,
       log: options.log,
-      onPageBuilt: (relPath, scriptEntrypoints) =>
-        this.scriptEntrypoints.setPageEntrypoints(relPath, scriptEntrypoints),
-      onPageRemoved: (relPath) => this.scriptEntrypoints.removePage(relPath),
+      onPageBuilt: (relPath, scriptEntrypoints) => {
+        this.scriptEntrypoints.setPageEntrypoints(relPath, scriptEntrypoints)
+        this.pageAssetRevision += 1
+      },
+      onPageRemoved: (relPath) => {
+        this.scriptEntrypoints.removePage(relPath)
+        this.pageAssetRevision += 1
+      },
+      renderOnRequest: () => this.renderOnRequest,
       persistManifest: () => this.persistManifest(),
       getManifest: () => this.manifest,
     })
@@ -198,16 +216,20 @@ class IncrementalRuntime {
       getManifest: () => this.manifest,
       contentState: this.contentState,
       scriptEntrypoints: this.scriptEntrypoints,
+      renderOnRequest: () => this.renderOnRequest,
       persistManifest: () => this.persistManifest(),
     })
   }
 
   toBuilder(): IncrementalBuilder {
     return {
+      prepareForRequests: this.prepareForRequests,
       buildAll: this.buildAll,
       applyChange: this.applyChange,
       renderIfDirtyByOutPath: this.renderIfDirtyByOutPath,
       renderByUrlPath: this.renderByUrlPath,
+      preparePageAssets: this.preparePageAssets,
+      prepareAssetByUrlPath: this.prepareAssetByUrlPath,
     }
   }
 
@@ -231,6 +253,44 @@ class IncrementalRuntime {
     this.options.manifest = value
   }
 
+  prepareForRequests = async (): Promise<void> => {
+    const switchingFromBuild =
+      !this.renderOnRequest && this.contentReady !== undefined
+    this.renderOnRequest = true
+    this.contentReady ??= this.settleContentReady(this.prepareRequestState())
+    await this.contentReady
+    if (switchingFromBuild) await this.discoverRequestAssets()
+  }
+
+  private async prepareRequestState() {
+    await this.options.hooks.onConfigResolved?.(this.context)
+    await prepareOutDir(this.config.outDir, { clean: this.options.cleanOutDir })
+    // Keep the records object shared with the script manager, but start this
+    // session with no rendered pages or copied assets, even without --clean.
+    this.manifest.content = {}
+    for (const key of Object.keys(this.manifest.assets))
+      delete this.manifest.assets[key]
+    this.scriptCacheKeys.clear()
+    await writeGeneratedFavicon(this.config)
+    await this.discoverRequestAssets()
+    const files = await this.prepareContent(
+      [...this.staticAssets.values()].map((file) => file.relPath),
+      this.options.hooks,
+    )
+    this.contentState.markAllPagesDirty(files)
+    this.contentState.takeMarkedPageCount()
+  }
+
+  private async discoverRequestAssets() {
+    const files = await discoverStaticAssets(this.config.contentDir)
+    this.staticAssets = new Map(
+      files.map((file) => [
+        `/${toPosixPath(toOutputAssetRelPath(file.relPath))}`,
+        file,
+      ]),
+    )
+  }
+
   buildAll = async (reason: string): Promise<BuildResult> => {
     const buildStartMs = Date.now()
     const hooks = this.resolveBuildHooks()
@@ -248,6 +308,7 @@ class IncrementalRuntime {
       rebuildAll: true,
     })
     const styleResult = await this.writeStylesWithHooks(hooks)
+    this.preparedAssetRevision = this.pageAssetRevision
     const finalResult = await this.finalizeBuild({
       ...prepared,
       assetFiles: [...prepared.assetFiles, ...scriptAssetFiles],
@@ -330,7 +391,9 @@ class IncrementalRuntime {
    */
   private ensureContentReady(): Promise<void> {
     this.contentReady ??= this.settleContentReady(
-      this.prepareContent(Object.keys(this.manifest.assets)),
+      this.renderOnRequest
+        ? this.prepareRequestState()
+        : this.prepareContent(Object.keys(this.manifest.assets)),
     )
     return this.contentReady
   }
@@ -385,6 +448,7 @@ class IncrementalRuntime {
       this.config.pagefind,
       this.contentState.unindexedOutPaths(),
     )
+    this.searchRevision = this.pageAssetRevision
 
     this.manifest = await buildManifest(
       this.config,
@@ -419,10 +483,31 @@ class IncrementalRuntime {
 
     await this.ensureContentReady()
     this.contentState.takeMarkedPageCount()
-    if (isDefaultHeaderFile(relPath) || isDefaultFooterFile(relPath)) {
+    const ext = path.extname(relPath).toLowerCase()
+    if (
+      this.renderOnRequest &&
+      !isContentFile(relPath, ext) &&
+      !isSharedContentFile(relPath) &&
+      !isDefaultHeaderFile(relPath) &&
+      !isDefaultFooterFile(relPath) &&
+      ext !== '.ts' &&
+      path.basename(relPath).toUpperCase() !==
+        DEFAULT_NAV_FILENAME.toUpperCase()
+    ) {
+      await removeFile(
+        path.join(this.config.outDir, toOutputAssetRelPath(relPath)),
+      )
+      delete this.manifest.assets[relPath]
+      await this.discoverRequestAssets()
+      this.contentState.refreshAssets(
+        [...this.staticAssets.values()].map((file) => file.relPath),
+      )
+      await this.contentState.refreshGeneratedPages()
+      result.changedAssets += 1
+    } else if (isDefaultHeaderFile(relPath) || isDefaultFooterFile(relPath)) {
       await this.contentState.refreshPartials()
-    } else if (!isSharedContentFile(relPath)) {
-      // Shared content is never a page; its importers refresh below.
+    } else if (!isSharedContentFile(relPath) || ext === '.ts') {
+      // Shared TypeScript can be a script dependency as well as an import.
       await this.changeApplier.applyFileChange(filePath, relPath, result)
     }
     await this.contentState.refreshImporters(relPath)
@@ -435,12 +520,96 @@ class IncrementalRuntime {
     return this.contentState.renderIfDirtyByOutPath(outPath)
   }
 
-  renderByUrlPath = async (urlPath: string): Promise<boolean> => {
+  renderByUrlPath = async (
+    urlPath: string,
+    locale?: string,
+  ): Promise<boolean> => {
     await this.ensureContentReady()
-    return this.contentState.renderByUrlPath(urlPath)
+    return this.contentState.renderByUrlPath(urlPath, locale)
   }
 
-  private async persistManifest() {
+  preparePageAssets = async (): Promise<void> => {
+    await this.ensureContentReady()
+    await this.queueAssetWork(async () => {
+      const revision = this.pageAssetRevision
+      if (revision === this.preparedAssetRevision) return
+      // Only pages rendered in this session have registered script entries.
+      await this.scriptEntrypoints.buildMissingEntrypoints(
+        this.changeApplier.createResult('requested page assets'),
+      )
+      const styles = await this.writeStylesWithHooks(this.options.hooks)
+      this.manifest.styles = {
+        signature: styles.signature,
+        outputs: styles.outputs,
+      }
+      this.preparedAssetRevision = revision
+    })
+  }
+
+  prepareAssetByUrlPath = async (urlPath: string): Promise<boolean> => {
+    await this.ensureContentReady()
+    if (!this.renderOnRequest) return false
+    let pathname: string
+    try {
+      pathname = decodeURIComponent(urlPath)
+    } catch {
+      return false
+    }
+    if (pathname.startsWith('/pagefind/')) {
+      await this.queueAssetWork(async () => {
+        if (this.searchRevision === this.pageAssetRevision) return
+        const revision = this.pageAssetRevision
+        await buildPagefindIndex(
+          this.config.outDir,
+          this.config.pagefind,
+          this.contentState.unindexedOutPaths(),
+          Object.values(this.manifest.content).map((entry) => entry.outPath),
+        )
+        this.searchRevision = revision
+      })
+      return true
+    }
+    const asset =
+      this.staticAssets.get(pathname) ??
+      this.staticAssets.get(
+        pathname.endsWith('/')
+          ? `${pathname}index.html`
+          : `${pathname}/index.html`,
+      )
+    if (!asset) return false
+    await this.queueAssetWork(async () => {
+      if (this.manifest.assets[asset.relPath]) return
+      const signature = await readSignature(asset.absPath)
+      if (!signature) return
+      const copied = await copyStaticAsset(
+        this.config.contentDir,
+        this.config.outDir,
+        asset,
+      )
+      if (!copied.copied) return
+      this.manifest.assets[asset.relPath] = {
+        relPath: asset.relPath,
+        ext: asset.ext,
+        outPath: copied.outPath,
+        ...signature,
+      }
+    })
+    return true
+  }
+
+  private queueAssetWork<T>(work: () => Promise<T>): Promise<T> {
+    const task = this.assetWork.then(work)
+    this.assetWork = task.catch(() => undefined)
+    return task
+  }
+
+  private persistManifest(): Promise<void> {
+    const task = this.manifestWork.then(() => this.writeManifestAndSitemap())
+    this.manifestWork = task.catch(() => undefined)
+    return task
+  }
+
+  private async writeManifestAndSitemap() {
     await writeManifest(this.config.outDir, this.manifest)
     const sitemap = await this.writeSitemapFromManifest()
     if (!sitemap) return
