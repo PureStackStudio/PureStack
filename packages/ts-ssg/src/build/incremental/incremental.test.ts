@@ -4,6 +4,8 @@ import path from 'node:path'
 import { disableLogger, getLogger, type Logger } from 'logpot'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from '../../config/config'
+import { parseFrontmatterSource } from '../../frontmatter/frontmatter'
+import type { PureStackPlugin } from '../../plugins/plugin'
 import { makeRepoTempDir } from '../../test/repoTempDir'
 import { createEmptyManifest, readManifest, writeManifest } from '../manifest'
 import type { BuildHooks } from '../site'
@@ -431,7 +433,7 @@ describe('incremental builder', () => {
     base: string,
     mode: 'auto' | 'hybrid' | 'none',
     files: Record<string, string>,
-    hooks: BuildHooks = {},
+    plugins: PureStackPlugin[] = [],
   ) {
     const contentDir = path.join(base, 'content')
     const outDir = path.join(base, 'out')
@@ -451,7 +453,7 @@ describe('incremental builder', () => {
         outDir,
         navigation: { mode },
       },
-      options: { writeErrorPages: true, hooks },
+      options: { writeErrorPages: true, plugins },
     })
     await builder.buildAll('initial')
     const outPath = (urlPath: string) =>
@@ -776,6 +778,8 @@ describe('incremental builder', () => {
       }
       const hooks: BuildHooks = {
         onPageStart: (_context, file) => record('start', file.relPath),
+        onPageDocument: (_context, page) =>
+          record('document', page.file.relPath),
         onPageRendered: (_context, page) => {
           record('rendered', page.file.relPath)
           page.html = page.html.replace('</body>', '<!-- hooked --></body>')
@@ -796,14 +800,16 @@ describe('incremental builder', () => {
             'index.mdx': '# Home',
             'guides/a.mdx': '# A',
           },
-          hooks,
+          [{ name: 'test', hooks }],
         )
         expect(calls).toEqual(
           expect.arrayContaining([
             'start:index.mdx',
+            'document:index.mdx',
             'rendered:index.mdx',
             'written:index.mdx',
             'start:guides/a.mdx',
+            'document:guides/a.mdx',
             'rendered:guides/a.mdx',
             'written:guides/a.mdx',
           ]),
@@ -813,6 +819,7 @@ describe('incremental builder', () => {
         await site.change('guides/a.mdx', '# A, edited')
         expect(calls).toEqual([
           'start:guides/a.mdx',
+          'document:guides/a.mdx',
           'rendered:guides/a.mdx',
           'written:guides/a.mdx',
         ])
@@ -824,6 +831,7 @@ describe('incremental builder', () => {
         expect(await site.renderIfDirty('/')).toBe(true)
         expect(calls).toEqual([
           'start:index.mdx',
+          'document:index.mdx',
           'rendered:index.mdx',
           'written:index.mdx',
         ])
@@ -833,24 +841,290 @@ describe('incremental builder', () => {
       })
     })
 
-    it('writes an error page when a page hook fails during a re-render', async () => {
+    it('lets onPageDocument await and change the document, resolving the links it adds', async () => {
       await withTempDir(async (base) => {
-        let failing = false
         const site = await createSite(
           base,
           'none',
-          { 'index.mdx': '# Home' },
+          { 'index.mdx': '# Home', 'guides/a.mdx': '# A' },
+          [
+            {
+              name: 'test',
+              hooks: {
+                async onPageDocument(
+                  _context,
+                  { document, file, frontmatter },
+                ) {
+                  await new Promise((resolve) => setTimeout(resolve, 5))
+                  if (file.relPath !== 'index.mdx') return
+                  const link = document.createElement('a')
+                  link.setAttribute('href', './guides/a')
+                  link.textContent = `After ${frontmatter.title}`
+                  document.body.appendChild(link)
+                },
+              },
+            },
+          ],
+        )
+
+        expect(await site.read('/')).toContain(
+          '<a href="/guides/a/">After Home</a>',
+        )
+      })
+    })
+
+    it('keeps each page on its own document while renders overlap', async () => {
+      await withTempDir(async (base) => {
+        const delays: Record<string, number> = { '/': 30, '/guides/a/': 1 }
+        const site = await createSite(
+          base,
+          'none',
           {
-            onPageRendered: () => {
-              if (failing) throw new Error('Hook failed on purpose.')
+            'header.mdx': '<p>Header v1</p>',
+            'index.mdx': '# Home',
+            'guides/a.mdx': '# A',
+          },
+          [
+            {
+              name: 'test',
+              hooks: {
+                async onPageDocument(_context, { urlPath }) {
+                  await new Promise((resolve) =>
+                    setTimeout(resolve, delays[urlPath]),
+                  )
+                  // The global document, as code a plugin calls would use it.
+                  const marker = globalThis.document.createElement('meta')
+                  marker.setAttribute('name', `page:${urlPath}`)
+                  globalThis.document.head.appendChild(marker)
+                },
+              },
+            },
+          ],
+        )
+
+        await site.change('header.mdx', '<p>Header v2</p>')
+        await Promise.all([
+          site.renderIfDirty('/'),
+          site.renderIfDirty('/guides/a/'),
+        ])
+
+        const home = await site.read('/')
+        const guide = await site.read('/guides/a/')
+        expect(home).toContain('Header v2')
+        expect(home).toContain('<meta name="page:/">')
+        expect(home).not.toContain('page:/guides/a/')
+        expect(guide).toContain('<meta name="page:/guides/a/">')
+        expect(guide).not.toContain('<meta name="page:/">')
+      })
+    })
+
+    it('writes an error page when a page hook fails during a re-render', async () => {
+      await withTempDir(async (base) => {
+        let failing = false
+        const site = await createSite(base, 'none', { 'index.mdx': '# Home' }, [
+          {
+            name: 'test',
+            hooks: {
+              onPageRendered: () => {
+                if (failing) throw new Error('Hook failed on purpose.')
+              },
             },
           },
-        )
+        ])
 
         failing = true
         await site.change('index.mdx', '# Home, edited')
 
-        expect(await site.read('/')).toContain('Hook failed on purpose.')
+        expect(await site.read('/')).toContain(
+          'Plugin &quot;test&quot; failed in onPageRendered: Hook failed on purpose.',
+        )
+      })
+    })
+  })
+
+  describe('generated pages', () => {
+    /** One page per tag in the posts' frontmatter, listing their titles. */
+    const tagPages: PureStackPlugin = {
+      name: 'tags',
+      async pages({ files }) {
+        const titlesByTag = new Map<string, string[]>()
+        for (const file of files) {
+          const source = await fs.readFile(file.absPath, 'utf8')
+          const { frontmatter } = parseFrontmatterSource(source, file.relPath)
+          for (const tag of (frontmatter.tags as string[] | undefined) ?? []) {
+            const titles = titlesByTag.get(tag) ?? []
+            titlesByTag.set(tag, [...titles, String(frontmatter.title)])
+          }
+        }
+        return [...titlesByTag].map(([tag, titles]) => ({
+          path: `tags/${tag}.mdx`,
+          source: titles.map((title) => `- ${title}`).join('\n'),
+        }))
+      },
+    }
+    const post = (title: string, tags: string[]) =>
+      [
+        '---',
+        `title: ${title}`,
+        `tags: [${tags.join(', ')}]`,
+        '---',
+        title,
+      ].join('\n')
+
+    it.each(['auto', 'none'] as const)(
+      'regenerates a page when the content it reads changes (navigation %s)',
+      async (mode) => {
+        await withTempDir(async (base) => {
+          const site = await createSite(
+            base,
+            mode,
+            {
+              'index.mdx': '# Home',
+              'post.mdx': post('First post', ['regor']),
+            },
+            [tagPages],
+          )
+          expect(await site.read('/tags/regor/')).toContain('First post')
+
+          const result = await site.change(
+            'post.mdx',
+            post('Renamed post', ['regor']),
+          )
+
+          expect(result.markedPages).toBeGreaterThan(0)
+          expect(await site.renderIfDirty('/tags/regor/')).toBe(true)
+          expect(await site.read('/tags/regor/')).toContain('Renamed post')
+        })
+      },
+    )
+
+    it.each(['auto', 'none'] as const)(
+      'reads a source function again for each render after a regeneration (navigation %s)',
+      async (mode) => {
+        await withTempDir(async (base) => {
+          let version = 'v1'
+          const site = await createSite(base, mode, { 'index.mdx': '# Home' }, [
+            {
+              name: 'status',
+              pages: () => [
+                { path: 'status.mdx', source: () => `# Status ${version}` },
+              ],
+            },
+          ])
+          expect(await site.read('/status/')).toContain('Status v1')
+
+          // The plugin's data changes; any content change regenerates pages.
+          version = 'v2'
+          await site.change('index.mdx', '# Home, edited')
+
+          expect(await site.renderIfDirty('/status/')).toBe(true)
+          expect(await site.read('/status/')).toContain('Status v2')
+        })
+      },
+    )
+
+    it('prepares content once when a request arrives during a build', async () => {
+      await withTempDir(async (base) => {
+        const contentDir = path.join(base, 'content')
+        await fs.mkdir(contentDir, { recursive: true })
+        await fs.writeFile(path.join(contentDir, 'index.mdx'), '# Home')
+        let generations = 0
+        const builder = await createIncrementalBuilder({
+          siteConfig: {
+            rootDir: base,
+            contentDir,
+            outDir: path.join(base, 'out'),
+          },
+          options: {
+            plugins: [
+              {
+                name: 'status',
+                pages: () => {
+                  generations += 1
+                  return [{ path: 'status.mdx', source: '# Status' }]
+                },
+              },
+            ],
+          },
+        })
+        expect(generations).toBe(0)
+
+        await Promise.all([
+          builder.buildAll('initial'),
+          builder.renderByUrlPath('/status/'),
+        ])
+
+        expect(generations).toBe(1)
+      })
+    })
+
+    it('removes the output of a page that is no longer generated', async () => {
+      await withTempDir(async (base) => {
+        const site = await createSite(
+          base,
+          'none',
+          { 'index.mdx': '# Home', 'post.mdx': post('First post', ['regor']) },
+          [tagPages],
+        )
+        const tagOutPath = site.outPath('/tags/regor/')
+        expect(await fileExists(tagOutPath)).toBe(true)
+
+        await site.change('post.mdx', post('First post', []))
+
+        expect(await fileExists(tagOutPath)).toBe(false)
+        const manifest = await readManifest(path.join(base, 'out'))
+        expect(
+          manifest?.content[path.join('tags', 'regor.mdx')],
+        ).toBeUndefined()
+      })
+    })
+
+    it('renders a newly generated page on its first request', async () => {
+      await withTempDir(async (base) => {
+        const site = await createSite(
+          base,
+          'none',
+          { 'index.mdx': '# Home', 'post.mdx': post('First post', ['regor']) },
+          [tagPages],
+        )
+
+        await site.change('post.mdx', post('First post', ['regor', 'css']))
+
+        expect(await site.builder.renderByUrlPath('/tags/css/')).toBe(true)
+        expect(await site.read('/tags/css/')).toContain('First post')
+      })
+    })
+
+    it('regenerates pages when a data file they read changes', async () => {
+      await withTempDir(async (base) => {
+        const menu: PureStackPlugin = {
+          name: 'menu',
+          async pages({ config }) {
+            const data = await fs.readFile(
+              path.join(config.contentDir, 'data', 'menu.json'),
+              'utf8',
+            )
+            const items = JSON.parse(data) as string[]
+            return [
+              {
+                path: 'menu.mdx',
+                source: items.map((i) => `- ${i}`).join('\n'),
+              },
+            ]
+          },
+        }
+        const site = await createSite(
+          base,
+          'none',
+          { 'index.mdx': '# Home', 'data/menu.json': '["Soup"]' },
+          [menu],
+        )
+        expect(await site.read('/menu/')).toContain('Soup')
+
+        await site.change('data/menu.json', '["Soup", "Salad"]')
+
+        expect(await site.renderIfDirty('/menu/')).toBe(true)
+        expect(await site.read('/menu/')).toContain('Salad')
       })
     })
   })

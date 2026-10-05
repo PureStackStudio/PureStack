@@ -15,6 +15,13 @@ import {
   resolveContentFile,
 } from '../../i18n/content'
 import { buildNavigation } from '../../navigation/navigation'
+import {
+  composePluginHooks,
+  type PureStackPlugin,
+  resolvePluginComponents,
+  resolvePluginContentProcessor,
+  resolvePluginTemplates,
+} from '../../plugins/plugin'
 import { initBuiltinComponents } from '../../regor/initBuiltinComponents'
 import { resolveRouteInfo } from '../../routing/route'
 import { copyStaticAssets } from '../assets'
@@ -60,6 +67,7 @@ export async function createIncrementalBuilder(
 interface IncrementalRuntimeOptions {
   config: SiteConfig
   hooks: BuildHooks
+  plugins: readonly PureStackPlugin[]
   cleanOutDir: boolean
   minifyScripts: boolean
   failOnAssetError: boolean
@@ -74,22 +82,20 @@ async function createIncrementalRuntime(
 ): Promise<IncrementalRuntime> {
   const buildOptions = input.options ?? {}
   const publishOptions = input.publish ?? {}
+  const plugins = buildOptions.plugins ?? []
   const config = resolveBuildSiteConfig(input)
-  const hooks = buildOptions.hooks ?? {}
+  const hooks = composePluginHooks(plugins)
   const cleanOutDir =
     publishOptions.enabled === true || buildOptions.cleanOutDir === true
   const minifyScripts = publishOptions.enabled === true
   const failOnAssetError = publishOptions.enabled === true
-  const mdx = await resolveMdxBuildOptions(config.mdx)
+  const mdx = {
+    ...(await resolveMdxBuildOptions(config.mdx)),
+    contentProcessor: resolvePluginContentProcessor(plugins),
+  }
   themes.setOptions(config.style.theme)
   initBuiltinComponents({ includeShikiStyles: isShikiEnabled(config.mdx) })
   const log = getLogger()
-  const discovered = await discoverSiteContent(config)
-  const navigation = await buildNavigation(
-    config.contentDir,
-    discovered,
-    config.navigation,
-  )
   const existing = await readManifest(config.outDir)
   const manifest =
     existing && isCompatibleManifest(existing, config)
@@ -98,15 +104,12 @@ async function createIncrementalRuntime(
   const scriptCacheKeys = new ScriptCacheKeyStore(manifest.assets)
   const context: BuildContext = {
     config,
-    contentRoutes: new ContentRouteIndex(
-      discovered,
-      Object.keys(manifest.assets),
-    ),
+    // The content is prepared once, by the first build or the first change or
+    // request; see IncrementalRuntime.ensureContentReady.
+    contentRoutes: new ContentRouteIndex([]),
     writeErrorPages: buildOptions.writeErrorPages === true,
-    components: buildOptions.components,
-    templates: buildOptions.templates,
-    navigation,
-    translationsByKey: buildTranslationsByKey(discovered),
+    components: resolvePluginComponents(plugins, config),
+    templates: resolvePluginTemplates(plugins),
     mdx,
     resolveScriptPublicPath: config.scripts.cacheBusting
       ? (sourceRelPath) =>
@@ -115,11 +118,11 @@ async function createIncrementalRuntime(
           })}`
       : undefined,
   }
-  await resolveHeaderFooterHtml(context)
 
   return new IncrementalRuntime({
     config,
     hooks,
+    plugins,
     cleanOutDir,
     minifyScripts,
     failOnAssetError,
@@ -159,6 +162,8 @@ class IncrementalRuntime {
   private readonly scriptEntrypoints: ScriptEntrypointManager
   private readonly changeApplier: IncrementalChangeApplier
   private readonly scriptCacheKeys: ScriptCacheKeyStore
+  /** Settles once the content is prepared; see ensureContentReady. */
+  private contentReady: Promise<void> | undefined
 
   constructor(private readonly options: IncrementalRuntimeOptions) {
     this.scriptCacheKeys = options.scriptCacheKeys
@@ -178,9 +183,11 @@ class IncrementalRuntime {
       config: options.config,
       context: options.context,
       hooks: options.hooks,
+      plugins: options.plugins,
       log: options.log,
       onPageBuilt: (relPath, scriptEntrypoints) =>
         this.scriptEntrypoints.setPageEntrypoints(relPath, scriptEntrypoints),
+      onPageRemoved: (relPath) => this.scriptEntrypoints.removePage(relPath),
       persistManifest: () => this.persistManifest(),
       getManifest: () => this.manifest,
     })
@@ -229,7 +236,9 @@ class IncrementalRuntime {
 
     this.scriptCacheKeys.clear()
     this.log.info('build started', { reason })
-    const prepared = await this.prepareBuild(hooks)
+    const preparing = this.prepareBuild(hooks)
+    this.contentReady = this.settleContentReady(preparing)
+    const prepared = await preparing
     this.scriptEntrypoints.clearPageEntrypoints()
     const pages = await this.contentState.renderAllPages(prepared.contentFiles)
     const scriptAssetFiles = await this.scriptEntrypoints.syncState({
@@ -274,21 +283,69 @@ class IncrementalRuntime {
     this.scriptEntrypoints.rebuildDependencyIndex(
       copiedAssets.tsDependencyIndex,
     )
-    const contentFiles = await discoverSiteContent(this.config)
+    const contentFiles = await this.prepareContent(
+      copiedAssets.files.map((file) => file.relPath),
+      hooks,
+    )
+    return { contentFiles, assetFiles: copiedAssets.files }
+  }
+
+  /**
+   * Discovers the pages, generated ones included, and prepares everything
+   * pages share: content routes, headers and footers, navigation, and
+   * translations. Runs once per full build.
+   */
+  private async prepareContent(assetRelPaths: string[], hooks?: BuildHooks) {
+    const contentFiles = await discoverSiteContent(
+      this.config,
+      this.options.plugins,
+    )
+    const generated = this.contentState.trackGeneratedPages(contentFiles)
+    for (const relPath of generated.removed) {
+      await this.contentState.handleMissingRelPathSource(relPath)
+    }
+    this.contentState.indexContentFiles(contentFiles)
     this.context.contentRoutes = new ContentRouteIndex(
       contentFiles,
-      copiedAssets.files.map((file) => file.relPath),
+      assetRelPaths,
     )
     await resolveHeaderFooterHtml(this.context)
-    await hooks.onContentDiscovered?.(this.context, contentFiles)
+    await hooks?.onContentDiscovered?.(this.context, contentFiles)
     this.context.navigation = await buildNavigation(
       this.config.contentDir,
       contentFiles,
       this.config.navigation,
     )
     this.context.translationsByKey = buildTranslationsByKey(contentFiles)
-    await hooks.onNavigationBuilt?.(this.context, this.context.navigation)
-    return { contentFiles, assetFiles: copiedAssets.files }
+    await hooks?.onNavigationBuilt?.(this.context, this.context.navigation)
+    return contentFiles
+  }
+
+  /**
+   * Waits until the content is prepared. A full build prepares it; a change
+   * or request that comes first, such as one resuming from an earlier
+   * build's manifest, prepares it from the manifest instead. Either way it is
+   * prepared once, and calls made meanwhile wait for it.
+   */
+  private ensureContentReady(): Promise<void> {
+    this.contentReady ??= this.settleContentReady(
+      this.prepareContent(Object.keys(this.manifest.assets)),
+    )
+    return this.contentReady
+  }
+
+  private settleContentReady(preparing: Promise<unknown>): Promise<void> {
+    const ready = preparing.then(
+      () => undefined,
+      (error: unknown) => {
+        // The next build, change, or request prepares the content again.
+        if (this.contentReady === ready) this.contentReady = undefined
+        throw error
+      },
+    )
+    // Whoever started the preparation handles its failure.
+    ready.catch(() => undefined)
+    return ready
   }
 
   private async writeStylesWithHooks(hooks: BuildHooks) {
@@ -354,6 +411,7 @@ class IncrementalRuntime {
       return result
     }
 
+    await this.ensureContentReady()
     this.contentState.takeMarkedPageCount()
     if (isDefaultHeaderFile(relPath) || isDefaultFooterFile(relPath)) {
       await this.contentState.refreshPartials()
@@ -365,10 +423,12 @@ class IncrementalRuntime {
   }
 
   renderIfDirtyByOutPath = async (outPath: string): Promise<boolean> => {
+    await this.ensureContentReady()
     return this.contentState.renderIfDirtyByOutPath(outPath)
   }
 
   renderByUrlPath = async (urlPath: string): Promise<boolean> => {
+    await this.ensureContentReady()
     return this.contentState.renderByUrlPath(urlPath)
   }
 

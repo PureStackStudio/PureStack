@@ -4,6 +4,11 @@ import { logError } from '@purestack/ts-util'
 import { createLogger, getLogger } from 'logpot'
 import { buildSite } from './build/site'
 import { SITE_CONFIG_FILENAME } from './config/config'
+import {
+  findProjectConfig,
+  loadProjectConfig,
+  withProjectConfig,
+} from './config/project-config'
 import { type DevServerInput, startDevServer } from './dev/server'
 
 export async function runCli(args: string[]) {
@@ -20,10 +25,13 @@ export async function runCli(args: string[]) {
     loggerCreated = true
     if (cli.command === 'serve') {
       keepLoggerOpen = true
-      await startDevServer(cli.input)
+      await startDevServer({ ...cli.input, configFile: cli.configFile })
       return
     }
-    await buildSite(cli.input.build)
+    const loaded = cli.configFile
+      ? await loadProjectConfig(cli.configFile)
+      : undefined
+    await buildSite(withProjectConfig(cli.input.build ?? {}, loaded))
   } catch (error) {
     if (error instanceof CliUsageError) {
       console.error(error.message)
@@ -48,6 +56,7 @@ interface CliState {
   command: CliCommand
   input: DevServerInput
   contentDir?: string
+  configFile?: string
 }
 
 function parseCliArgs(args: string[]): CliState {
@@ -120,6 +129,7 @@ function parseCliArgs(args: string[]): CliState {
   }
 
   assertContentConfig(state.contentDir)
+  state.configFile = findProjectConfig(state.contentDir)
   return state
 }
 
@@ -166,7 +176,9 @@ function resolveValueOptions(command: Exclude<CliCommand, 'help'>) {
   return ['--content']
 }
 
-function assertContentConfig(contentDir: string | undefined) {
+function assertContentConfig(
+  contentDir: string | undefined,
+): asserts contentDir is string {
   if (!contentDir) {
     throw new CliUsageError(
       `Missing required --content <dir> option.\n\n${USAGE}`,

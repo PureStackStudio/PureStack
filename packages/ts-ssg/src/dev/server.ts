@@ -1,5 +1,6 @@
 import fsPromises from 'node:fs/promises'
 import http from 'node:http'
+import path from 'node:path'
 import type { I18nConfig } from '@purestack/ts-common'
 import { logError, stripBasePath, withBasePath } from '@purestack/ts-util'
 import { getLogger, type Logger } from 'logpot'
@@ -8,7 +9,10 @@ import {
   createIncrementalBuilder,
   type IncrementalBuilder,
 } from '../build/incremental'
+import { ensureLogger } from '../build/logger'
 import type { BuildInput } from '../build/site'
+import { loadProjectConfig, withProjectConfig } from '../config/project-config'
+import { composeDevMiddleware } from '../plugins/plugin'
 import {
   broadcastJson,
   injectLiveReload,
@@ -26,7 +30,7 @@ import {
   serveStaticStream,
   writeHtmlResponse,
 } from './static-files'
-import { watchTree } from './watch-tree'
+import { toPathKey, watchFiles, watchTree } from './watch-tree'
 
 export interface DevServerOptions {
   host?: string
@@ -37,6 +41,11 @@ export interface DevServerOptions {
 
 export interface DevServerInput extends DevServerOptions {
   build?: BuildInput
+  /**
+   * A `purestack.config.ts` whose plugins the server adds to the build. It
+   * loads again when the config or a local file it imports changes.
+   */
+  configFile?: string
 }
 
 export interface DevServerHandle {
@@ -67,16 +76,19 @@ type RebuildRequestState = {
 export async function startDevServer(
   input: DevServerInput = {},
 ): Promise<DevServerHandle> {
+  await ensureLogger()
   const logger = getLogger()
-  const baseBuildInput = input.build ?? {}
-  const buildInput: BuildInput = {
-    ...baseBuildInput,
+  const baseBuildInput: BuildInput = {
+    ...input.build,
     options: {
       writeErrorPages: true,
-      ...(baseBuildInput.options ?? {}),
+      ...input.build?.options,
     },
   }
+  const projectConfig = trackProjectConfig(input.configFile)
+  let buildInput = await projectConfig.load(baseBuildInput)
   const config = resolveBuildSiteConfig(buildInput)
+  let devMiddleware = composeDevMiddleware(buildInput.options?.plugins ?? [])
   const log = getLogger()
 
   const { host, port, watch, liveReload } = resolveDevServerOptions(input)
@@ -134,16 +146,34 @@ export async function startDevServer(
     }
   }
 
+  // The content watcher already sees config files inside the content folder.
+  let dependencyWatcher: { close: () => void } | undefined
+  const watchConfigDependencies = () => {
+    dependencyWatcher?.close()
+    dependencyWatcher = watch
+      ? watchFiles(projectConfig.outside(config.contentDir), (filePath) => {
+          scheduleRebuild(`config change: ${filePath}`, filePath)
+        })
+      : undefined
+  }
+
   const displayHost = host === '0.0.0.0' ? LOOPBACK_HOST : host
   let incremental = await createIncrementalBuilder(buildInput)
 
   const rebuild = async (
     reason: string,
-    options?: { recreateBuilder?: boolean },
+    options?: { recreateBuilder?: boolean; reloadConfig?: boolean },
   ) => {
     try {
-      if (options?.recreateBuilder) {
+      if (options?.reloadConfig) {
+        buildInput = await projectConfig.load(baseBuildInput)
+        watchConfigDependencies()
+      }
+      if (options?.recreateBuilder || options?.reloadConfig) {
         incremental = await createIncrementalBuilder(buildInput)
+      }
+      if (options?.reloadConfig) {
+        devMiddleware = composeDevMiddleware(buildInput.options?.plugins ?? [])
       }
       await incremental.buildAll(reason)
       if (!initialBuildDone) {
@@ -165,6 +195,10 @@ export async function startDevServer(
     requestState.changedPaths.clear()
     if (paths.length === 0) {
       await rebuild(requestState.reason)
+      return
+    }
+    if (paths.some((filePath) => projectConfig.isDependency(filePath))) {
+      await rebuild(requestState.reason, { reloadConfig: true })
       return
     }
     let requiresFull = false
@@ -209,6 +243,7 @@ export async function startDevServer(
       liveReload,
       // A full rebuild replaces the builder, so requests ask for the current one.
       getIncremental: () => incremental,
+      handlePluginRequest: (req, res) => devMiddleware(req, res),
       clients,
       getLiveReloadVersion: () => liveReloadVersion,
       log,
@@ -238,6 +273,7 @@ export async function startDevServer(
     })
     log.info('watching content', { contentDir: config.contentDir })
   }
+  watchConfigDependencies()
 
   void requestRebuild()
 
@@ -251,6 +287,7 @@ export async function startDevServer(
     process.off('SIGINT', handleSignal)
     process.off('SIGTERM', handleSignal)
     watcher?.close()
+    dependencyWatcher?.close()
     await new Promise<void>((resolve) => server.close(() => resolve()))
     await logger.close()
   }
@@ -266,6 +303,36 @@ export async function startDevServer(
   process.on('SIGTERM', handleSignal)
 
   return { close: shutdown }
+}
+
+/** Loads the project config and tells which changed files belong to it. */
+function trackProjectConfig(configFile: string | undefined) {
+  let dependencies: string[] = []
+  let keys = new Set<string>()
+  return {
+    async load(input: BuildInput) {
+      if (!configFile) return input
+      const loaded = await loadProjectConfig(configFile)
+      dependencies = loaded.dependencies
+      keys = new Set(dependencies.map(toPathKey))
+      return withProjectConfig(input, loaded)
+    },
+    isDependency(filePath: string) {
+      return keys.has(toPathKey(filePath))
+    },
+    outside(dir: string) {
+      return dependencies.filter((filePath) => !isInsideDir(dir, filePath))
+    },
+  }
+}
+
+function isInsideDir(dir: string, filePath: string) {
+  const relative = path.relative(dir, filePath)
+  return (
+    relative.length > 0 &&
+    !relative.startsWith('..') &&
+    !path.isAbsolute(relative)
+  )
 }
 
 function resolveDevServerOptions(
@@ -298,6 +365,11 @@ type DevServerRequestHandlerInput = {
   i18n: I18nConfig
   liveReload: boolean
   getIncremental: () => IncrementalBuilder
+  /** Resolves true when a plugin's dev middleware responded. */
+  handlePluginRequest: (
+    req: http.IncomingMessage,
+    res: http.ServerResponse,
+  ) => Promise<boolean>
   clients: LiveReloadClients
   getLiveReloadVersion: () => number
   log: Logger
@@ -312,6 +384,7 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
     i18n,
     liveReload,
     getIncremental,
+    handlePluginRequest,
     clients,
     getLiveReloadVersion,
     log,
@@ -330,6 +403,15 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
 
     if (liveReload && pathname === liveReloadPath) {
       registerLiveReloadClient(clients, req, res, getLiveReloadVersion())
+      return
+    }
+
+    try {
+      if (await handlePluginRequest(req, res)) return
+    } catch (error) {
+      logError(log, error, 'dev middleware failed')
+      if (!res.headersSent) res.writeHead(500)
+      res.end()
       return
     }
 

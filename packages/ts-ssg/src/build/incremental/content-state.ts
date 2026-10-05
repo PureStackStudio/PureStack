@@ -7,10 +7,12 @@ import {
   resolveContentFile,
 } from '../../i18n/content'
 import { buildNavigation } from '../../navigation/navigation'
+import type { PureStackPlugin } from '../../plugins/plugin'
 import type { ContentRouteIndex } from '../content-urls'
 import {
   type BuildManifest,
   type FileSignature,
+  readContentSignature,
   readSignature,
 } from '../manifest'
 import { resolveOutPath } from '../out-path'
@@ -36,8 +38,10 @@ interface IncrementalContentStateInput {
   config: SiteConfig
   context: BuildContext
   hooks: BuildHooks
+  plugins: readonly PureStackPlugin[]
   log: Logger
   onPageBuilt: (relPath: string, scriptEntrypoints: string[]) => void
+  onPageRemoved: (relPath: string) => void
   persistManifest: () => Promise<void>
   getManifest: () => BuildManifest
 }
@@ -60,6 +64,7 @@ interface RebuildSingleContentInput {
 export class IncrementalContentState {
   private readonly dirtyPages = new Set<string>()
   private markedPages = 0
+  private generatedPages = new Map<string, ResolvedContentFile>()
   private readonly renderInFlight = new Map<string, Promise<boolean>>()
   private readonly contentIndex: ManifestContentIndex
 
@@ -103,7 +108,7 @@ export class IncrementalContentState {
     const { context, hooks, config } = this.input
     try {
       await hooks.onPageStart?.(context, file)
-      const page = await renderPageFromFile(context, file)
+      const page = await renderPageFromFile(context, file, hooks)
       this.input.onPageBuilt(file.relPath, page.scriptEntrypoints)
       await hooks.onPageRendered?.(context, page)
       await writePage(page, config.html.minify)
@@ -145,11 +150,56 @@ export class IncrementalContentState {
    * the same pages cost nothing beyond discovery.
    */
   async refreshContent() {
-    const { config, context } = this.input
-    const contentFiles = await discoverSiteContent(config)
+    const { config, context, plugins } = this.input
+    const contentFiles = await discoverSiteContent(config, plugins)
+    const generated = this.trackGeneratedPages(contentFiles)
+    for (const relPath of generated.removed) {
+      await this.handleMissingRelPathSource(relPath)
+      this.input.onPageRemoved(relPath)
+    }
     this.updateContentRoutes(context.contentRoutes.withPages(contentFiles))
+    this.markPagesDirty(generated.changed)
     context.translationsByKey = buildTranslationsByKey(contentFiles)
     return contentFiles
+  }
+
+  /**
+   * Maps the URLs of freshly discovered pages, so a request finds a new page
+   * before the build that discovered it writes the manifest.
+   */
+  indexContentFiles(contentFiles: ResolvedContentFile[]) {
+    this.contentIndex.updateUrlPathMapFromFiles(contentFiles)
+  }
+
+  /** Generators may read data files, so an asset change runs them again. */
+  async refreshGeneratedPages() {
+    if (this.input.plugins.some((plugin) => plugin.pages)) {
+      await this.refreshContent()
+    }
+  }
+
+  /**
+   * Remembers the generated pages among `contentFiles` and reports which
+   * ones changed their source or stopped being generated.
+   */
+  trackGeneratedPages(contentFiles: readonly ResolvedContentFile[]) {
+    const previous = this.generatedPages
+    const changed: string[] = []
+    this.generatedPages = new Map()
+    for (const file of contentFiles) {
+      if (file.source === undefined) continue
+      const before = previous.get(file.relPath)
+      // A source function's text is never kept, so it counts as changed on
+      // every regeneration; its page renders again when next requested.
+      const sourceChanged =
+        typeof file.source === 'function' || before?.source !== file.source
+      if (before && sourceChanged) changed.push(file.relPath)
+      this.generatedPages.set(file.relPath, file)
+    }
+    const removed = [...previous.keys()].filter(
+      (relPath) => !this.generatedPages.has(relPath),
+    )
+    return { changed, removed }
   }
 
   /** Picks up added or removed assets from the manifest. */
@@ -296,6 +346,8 @@ export class IncrementalContentState {
   }
 
   private toResolvedContentFile(relPath: string, ext: string) {
+    const generated = this.generatedPages.get(relPath)
+    if (generated) return generated
     const file = toContentFile(this.input.config.contentDir, relPath, ext)
     return resolveContentFile(this.input.config, file)
   }
@@ -343,6 +395,8 @@ export class IncrementalContentState {
   }
 
   private async readRelPathSignature(relPath: string) {
+    const generated = this.generatedPages.get(relPath)
+    if (generated) return readContentSignature(generated)
     const absPath = path.join(this.input.config.contentDir, relPath)
     return readSignature(absPath)
   }

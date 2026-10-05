@@ -8,13 +8,13 @@ import { defineIconComponents } from '../icon/icon'
 import { defineTabsComponents } from './tabs'
 
 describe('Tabs rendering', () => {
-  it('renders slotted tab content and active tab state', () => {
+  it('renders slotted tab content and active tab state', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineIconComponents(getSvgIcon),
       ...defineTabsComponents(),
     }
-    const html = renderApp(
+    const html = await renderApp(
       `<Tabs group="quickstart" selected-tab="usage">
         <TabPane id="install" label="Install">Run npm install</TabPane>
         <TabPane id="usage" label="Usage">
@@ -39,13 +39,13 @@ describe('Tabs rendering', () => {
     )
   })
 
-  it('inherits tab group from parent tabs and marks disabled panes', () => {
+  it('inherits tab group from parent tabs and marks disabled panes', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineIconComponents(getSvgIcon),
       ...defineTabsComponents(),
     }
-    const html = renderApp(
+    const html = await renderApp(
       `<Tabs group="sdk-tabs">
         <TabPane id="blocked" label="Blocked" disabled="true">blocked</TabPane>
         <TabPane id="ready" label="Ready">ready</TabPane>
@@ -64,13 +64,13 @@ describe('Tabs rendering', () => {
     expect(html).toContain('>Ready<')
   })
 
-  it('renders optional tab icons', () => {
+  it('renders optional tab icons', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineIconComponents(getSvgIcon),
       ...defineTabsComponents(),
     }
-    const html = renderApp(
+    const html = await renderApp(
       `<Tabs id="icon-tabs">
         <TabPane id="install" label="Install" icon="iconoir:code">Run npm install</TabPane>
       </Tabs>`,

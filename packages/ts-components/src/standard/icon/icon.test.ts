@@ -6,10 +6,10 @@ import { createTestContext } from '../../test/testContext'
 import { defineIconComponents } from './icon'
 
 describe('Icon rendering', () => {
-  it('renders svg content by icon name', () => {
+  it('renders svg content by icon name', async () => {
     const cleanup = ensureDomGlobals()
     const components = defineIconComponents(getSvgIcon)
-    const html = renderApp(`<Icon name="iconoir:code" />`, {
+    const html = await renderApp(`<Icon name="iconoir:code" />`, {
       components,
       context: createTestContext(),
     })
@@ -20,10 +20,10 @@ describe('Icon rendering', () => {
     expect(html).not.toContain('style="')
   })
 
-  it('passes accessibility attributes through to the icon root', () => {
+  it('passes accessibility attributes through to the icon root', async () => {
     const cleanup = ensureDomGlobals()
     const components = defineIconComponents(getSvgIcon)
-    const html = renderApp(
+    const html = await renderApp(
       `<Icon name="iconoir:pin" role="img" aria-label="Pinned" aria-hidden="false" />`,
       {
         components,
@@ -37,10 +37,10 @@ describe('Icon rendering', () => {
     expect(html).toMatch(/<span class="icon"[^>]*aria-hidden="false"/)
   })
 
-  it('renders nothing when icon name is missing', () => {
+  it('renders nothing when icon name is missing', async () => {
     const cleanup = ensureDomGlobals()
     const components = defineIconComponents(getSvgIcon)
-    const html = renderApp(`<Icon />`, {
+    const html = await renderApp(`<Icon />`, {
       components,
       context: createTestContext(),
     })
@@ -49,10 +49,10 @@ describe('Icon rendering', () => {
     expect(html).not.toContain('class="icon"')
   })
 
-  it('renders framed icons through IconFrame', () => {
+  it('renders framed icons through IconFrame', async () => {
     const cleanup = ensureDomGlobals()
     const components = defineIconComponents(getSvgIcon)
-    const html = renderApp(
+    const html = await renderApp(
       `<IconFrame name="iconoir:check" tone="success" variant="surface" class="icon-frame--lg" role="img" aria-label="Complete" />`,
       {
         components,
@@ -72,10 +72,10 @@ describe('Icon rendering', () => {
     expect(html).toContain('<svg')
   })
 
-  it('renders no frame when IconFrame has no icon name', () => {
+  it('renders no frame when IconFrame has no icon name', async () => {
     const cleanup = ensureDomGlobals()
     const components = defineIconComponents(getSvgIcon)
-    const html = renderApp(`<IconFrame />`, {
+    const html = await renderApp(`<IconFrame />`, {
       components,
       context: createTestContext(),
     })

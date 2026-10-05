@@ -21,6 +21,8 @@ import {
   type MdxCodeHighlighter,
 } from '../../mdx/highlight'
 import { createHljsHighlighter } from '../../mdx/highlightjs'
+import { generatePluginPages } from '../../plugins/generated-pages'
+import type { PureStackPlugin } from '../../plugins/plugin'
 import {
   assertUniqueContentRoutes,
   resolveRouteInfo,
@@ -31,6 +33,7 @@ import {
   type BuildManifest,
   type ContentManifestEntry,
   manifestConfigFromSiteConfig,
+  readContentSignature,
   readSignature,
   type StylesManifestEntry,
 } from '../manifest'
@@ -138,12 +141,21 @@ async function resolveHighlighter(
   )
 }
 
-/** Discovers the site's pages and rejects two pages sharing one URL. */
-export async function discoverSiteContent(config: SiteConfig) {
-  const contentFiles = resolveContentFiles(
-    config,
-    await discoverContent(config.contentDir),
-  )
+/**
+ * Discovers the site's pages, files and plugin-generated ones alike, and
+ * rejects two pages sharing one URL.
+ */
+export async function discoverSiteContent(
+  config: SiteConfig,
+  plugins: readonly PureStackPlugin[],
+) {
+  const discovered = await discoverContent(config.contentDir)
+  const files = resolveContentFiles(config, discovered)
+  const generated = await generatePluginPages(plugins, config, files)
+  const contentFiles =
+    generated.length > 0
+      ? resolveContentFiles(config, [...discovered, ...generated])
+      : files
   assertUniqueContentRoutes(contentFiles)
   return contentFiles
 }
@@ -195,7 +207,7 @@ export async function buildManifest(
 ): Promise<BuildManifest> {
   const content: Record<string, ContentManifestEntry> = {}
   for (const file of contentFiles) {
-    const signature = await readSignature(file.absPath)
+    const signature = await readContentSignature(file)
     if (!signature) continue
     const outPath = resolveOutPath(config.outDir, file)
     content[file.relPath] = {

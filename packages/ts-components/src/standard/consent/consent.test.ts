@@ -9,7 +9,7 @@ import { definePanelComponents } from '../panel/panel'
 import { defineConsentComponents } from './consent'
 
 describe('Consent component rendering', () => {
-  it('renders consent shell and categories when enabled', () => {
+  it('renders consent shell and categories when enabled', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineButtonComponents(),
@@ -18,7 +18,7 @@ describe('Consent component rendering', () => {
       ...definePanelComponents(),
       ...defineConsentComponents(),
     }
-    const html = renderApp(`<Consent />`, {
+    const html = await renderApp(`<Consent />`, {
       components,
       context: createTestContext({
         site: {

@@ -1,4 +1,10 @@
-export { createDom, ensureDomGlobals } from './createDom'
+export {
+  type AsyncScope,
+  createDom,
+  ensureDomGlobals,
+  runInDom,
+  useDomScope,
+} from './createDom'
 export { default as cssEscape } from './cssEscape'
 export {
   MiniComment,

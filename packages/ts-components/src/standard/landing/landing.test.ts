@@ -6,9 +6,9 @@ import { defineComponents } from '../../defineComponents'
 import { createTestContext } from '../../test/testContext'
 
 describe('Landing components rendering', () => {
-  it('renders landing band shaped edges with horizontal slant start coordinates', () => {
+  it('renders landing band shaped edges with horizontal slant start coordinates', async () => {
     const cleanup = ensureDomGlobals()
-    const html = renderApp(
+    const html = await renderApp(
       `<LandingBand
         display="grid"
         alignItems="center"
@@ -46,9 +46,9 @@ describe('Landing components rendering', () => {
     expect(html).toContain('padding-bottom: calc(1em + 3rem)')
   })
 
-  it('renders the landing section, metrics, feature card, and CTA actions', () => {
+  it('renders the landing section, metrics, feature card, and CTA actions', async () => {
     const cleanup = ensureDomGlobals()
-    const html = renderApp(
+    const html = await renderApp(
       `<LandingSection
         eyebrow="Product"
         title="A better page"
@@ -86,9 +86,9 @@ describe('Landing components rendering', () => {
     expect(html).toContain('href="/getting-started/"')
   })
 
-  it('renders code showcase result and comparison columns', () => {
+  it('renders code showcase result and comparison columns', async () => {
     const cleanup = ensureDomGlobals()
-    const html = renderApp(
+    const html = await renderApp(
       `<CodeShowcase
         title="Pricing model"
         language="C#"

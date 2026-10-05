@@ -7,13 +7,13 @@ import { defineIconComponents } from '../icon/icon'
 import { defineButtonComponents } from './btn'
 
 describe('Button rendering', () => {
-  it('renders default label button with default classes and type', () => {
+  it('renders default label button with default classes and type', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineIconComponents(getSvgIcon),
       ...defineButtonComponents(),
     }
-    const html = renderApp(`<Btn>Save</Btn>`, {
+    const html = await renderApp(`<Btn>Save</Btn>`, {
       components,
       context: createTestContext(),
     })
@@ -24,17 +24,17 @@ describe('Button rendering', () => {
     expect(html).not.toContain('btn__icon')
   })
 
-  it('renders icon at start and end based on iconPosition', () => {
+  it('renders icon at start and end based on iconPosition', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineIconComponents(getSvgIcon),
       ...defineButtonComponents(),
     }
-    const startHtml = renderApp(`<Btn icon="iconoir:code">Code</Btn>`, {
+    const startHtml = await renderApp(`<Btn icon="iconoir:code">Code</Btn>`, {
       components,
       context: createTestContext(),
     })
-    const endHtml = renderApp(
+    const endHtml = await renderApp(
       `<Btn icon="iconoir:code" iconPosition="end">Code</Btn>`,
       {
         components,
@@ -53,13 +53,13 @@ describe('Button rendering', () => {
     )
   })
 
-  it('renders icon-only button with aria label and icon-only class', () => {
+  it('renders icon-only button with aria label and icon-only class', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineIconComponents(getSvgIcon),
       ...defineButtonComponents(),
     }
-    const html = renderApp(
+    const html = await renderApp(
       `<Btn icon="iconoir:pin" iconOnly="true" ariaLabel="Pin item" />`,
       {
         components,
@@ -74,13 +74,13 @@ describe('Button rendering', () => {
     expect(html).not.toContain('btn__label')
   })
 
-  it('applies tone, size, type, disabled, and custom class', () => {
+  it('applies tone, size, type, disabled, and custom class', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineIconComponents(getSvgIcon),
       ...defineButtonComponents(),
     }
-    const html = renderApp(
+    const html = await renderApp(
       `<Btn tone="neutral" size="lg" type="submit" disabled="true" class="u-grow">Deploy</Btn>`,
       {
         components,
@@ -96,13 +96,13 @@ describe('Button rendering', () => {
     expect(html).toContain('disabled')
   })
 
-  it('renders BtnLink as an anchor with the same visual classes', () => {
+  it('renders BtnLink as an anchor with the same visual classes', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineIconComponents(getSvgIcon),
       ...defineButtonComponents(),
     }
-    const html = renderApp(
+    const html = await renderApp(
       `<BtnLink href="./getting-started" tone="neutral" size="lg">Read docs</BtnLink>`,
       {
         components,
@@ -120,13 +120,13 @@ describe('Button rendering', () => {
     expect(html).not.toContain('type="button"')
   })
 
-  it('renders BtnLink icons and resolves rel for external targets', () => {
+  it('renders BtnLink icons and resolves rel for external targets', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineIconComponents(getSvgIcon),
       ...defineButtonComponents(),
     }
-    const html = renderApp(
+    const html = await renderApp(
       `<BtnLink href="https://example.com/docs" target="_blank" icon="iconoir:code" iconPosition="end">Docs</BtnLink>`,
       {
         components,
@@ -141,17 +141,17 @@ describe('Button rendering', () => {
     expect(html).toContain('class="icon btn__icon"')
   })
 
-  it('supports warning and danger tones', () => {
+  it('supports warning and danger tones', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineIconComponents(getSvgIcon),
       ...defineButtonComponents(),
     }
-    const warningHtml = renderApp(`<Btn tone="warning">Warn</Btn>`, {
+    const warningHtml = await renderApp(`<Btn tone="warning">Warn</Btn>`, {
       components,
       context: createTestContext(),
     })
-    const dangerHtml = renderApp(`<Btn tone="danger">Delete</Btn>`, {
+    const dangerHtml = await renderApp(`<Btn tone="danger">Delete</Btn>`, {
       components,
       context: createTestContext(),
     })
@@ -161,13 +161,13 @@ describe('Button rendering', () => {
     expect(dangerHtml).toContain('tone--danger')
   })
 
-  it('supports none variant for fully custom classes', () => {
+  it('supports none variant for fully custom classes', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineIconComponents(getSvgIcon),
       ...defineButtonComponents(),
     }
-    const html = renderApp(
+    const html = await renderApp(
       `<Btn variant="none" class="custom-action">Custom</Btn>`,
       {
         components,
@@ -182,13 +182,13 @@ describe('Button rendering', () => {
     expect(html).not.toContain('tone-text-button-all')
   })
 
-  it('renders empty label span when button has no slot and no icon', () => {
+  it('renders empty label span when button has no slot and no icon', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineIconComponents(getSvgIcon),
       ...defineButtonComponents(),
     }
-    const html = renderApp(`<Btn />`, {
+    const html = await renderApp(`<Btn />`, {
       components,
       context: createTestContext(),
     })

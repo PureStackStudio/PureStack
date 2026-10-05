@@ -27,7 +27,7 @@ export type { MdxCompileResult, MdxRenderOptions }
 export function compileMdx(
   source: string,
   options: MdxRenderOptions = {},
-): MdxCompileResult {
+): Promise<MdxCompileResult> {
   const parser = unified().use(remarkParse).use(remarkGfm)
   const masked = maskRegorMarkup(source, (text) => parser.parse(text), {
     sourceRelPath: options.sourceRelPath,
@@ -41,6 +41,6 @@ export function compileMdx(
   return compileAstToHtml(file, options)
 }
 
-export function compileMdxToHtml(source: string): string {
-  return compileMdx(source).bodyHtml
+export async function compileMdxToHtml(source: string): Promise<string> {
+  return (await compileMdx(source)).bodyHtml
 }

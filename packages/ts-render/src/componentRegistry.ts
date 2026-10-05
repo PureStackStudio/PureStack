@@ -21,15 +21,6 @@ export const componentRegistry = {
   hasComponentName(name: string) {
     return hasComponentName(name, registry)
   },
-  snapshot(): Map<string, Component<never>> {
-    return new Map(registry)
-  },
-  restore(snapshot: Map<string, Component<never>>) {
-    registry.clear()
-    for (const [name, component] of snapshot) {
-      registry.set(name, component)
-    }
-  },
   clear() {
     registry.clear()
   },

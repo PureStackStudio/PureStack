@@ -18,6 +18,7 @@ import {
   discoverDefaultFooters,
   discoverDefaultHeaders,
 } from '../discover/content'
+import { readContentSource } from '../discover/content-source'
 import { isRegorMdxContentExt } from '../discover/contentExtensions'
 import {
   normalizeFrontmatter,
@@ -42,6 +43,7 @@ import { readSource, writeHtml } from './io'
 import { resolveOutPath } from './out-path'
 import { markContentSource, resolvePageUrls } from './page-urls'
 import { renderPage } from './renderer'
+import type { BuildHooks } from './site'
 
 export interface BuildContext {
   config: SiteConfig
@@ -55,6 +57,14 @@ export interface BuildContext {
   translationsByKey?: ContentTranslationsByKey
   mdx?: MdxRenderOptions
   resolveScriptPublicPath?: (sourceRelPath: string) => string
+}
+
+/** A page's rendered document, before it becomes HTML. */
+export interface PageDocument {
+  document: Document
+  file: ResolvedContentFile
+  frontmatter: PageFrontmatter
+  urlPath: string
 }
 
 export interface PageRenderResult {
@@ -103,16 +113,17 @@ export async function writePage(
 export async function renderPageFromFile(
   context: BuildContext,
   file: ResolvedContentFile,
+  hooks: Pick<BuildHooks, 'onPageDocument'> = {},
 ): Promise<PageRenderResult> {
   const renderStart = process.hrtime.bigint()
   const { urlPath } = resolveRouteInfo(file)
   const outPath = resolveOutPath(context.config.outDir, file)
   try {
-    const source = await readSource(file.absPath)
+    const source = await readContentSource(file)
     const parsedContent = parseFrontmatterSource(source, file.relPath, {
       defaultShowToc: context.config.pageToc.enabled,
     })
-    const compiled = compilePageContent(context, file, parsedContent.body)
+    const compiled = await compilePageContent(context, file, parsedContent.body)
     const frontmatter = resolvePageFrontmatterTitle(
       parsedContent.frontmatter,
       compiled.outline,
@@ -147,12 +158,19 @@ export async function renderPageFromFile(
       outline: compiled.outline,
       pageInfo,
     })
-    const html = renderPageApp(context, file, htmlShell, {
-      pageInfo,
-      navigation,
-      outline: compiled.outline,
-      scriptEntrypoints,
-    })
+    const html = await renderPageApp(
+      context,
+      file,
+      htmlShell,
+      { pageInfo, navigation, outline: compiled.outline, scriptEntrypoints },
+      (document) =>
+        hooks.onPageDocument?.(context, {
+          document,
+          file,
+          frontmatter,
+          urlPath,
+        }),
+    )
     const renderTimeMs =
       Number(process.hrtime.bigint() - renderStart) / 1_000_000
     return {
@@ -220,7 +238,7 @@ async function resolveSpecialHtmlByDirectory(
     const localizedFile = resolveSpecialContentFile(context.config, file)
     const source = await readSource(localizedFile.absPath)
     const parsedContent = parseFrontmatterSource(source, localizedFile.relPath)
-    const compiled = compilePageContent(
+    const compiled = await compilePageContent(
       context,
       localizedFile,
       parsedContent.body,
@@ -413,21 +431,28 @@ type RenderAppContextInput = {
   scriptEntrypoints: Set<string>
 }
 
+/**
+ * Renders the page's components into its shell. `onDocument` runs on the
+ * rendered document before its links resolve, so links it adds resolve too.
+ */
 function renderPageApp(
   context: BuildContext,
   file: ResolvedContentFile,
   htmlShell: string,
   appContext: RenderAppContextInput,
+  onDocument: (document: Document) => void | Promise<void>,
 ) {
   const { scriptEntrypoints, ...baseContext } = appContext
   return renderApp(htmlShell, {
     components: context.components,
-    onRendered: (document) =>
+    onRendered: async (document) => {
+      await onDocument(document)
       resolvePageUrls(document, {
         sourceRelPath: file.relPath,
         contentRoutes: context.contentRoutes,
         config: context.config,
-      }),
+      })
+    },
     context: {
       site: context.config,
       ...baseContext,

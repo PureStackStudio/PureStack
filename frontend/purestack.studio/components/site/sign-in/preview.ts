@@ -41,7 +41,7 @@ const exampleTemplate = html`<Flex align="center" justify="between">
   preview does not sign you in.
 </p>`
 
-function createSignInPreviewDocument(site: SiteConfig): string {
+async function createSignInPreviewDocument(site: SiteConfig): Promise<string> {
   const context: TsSsgContext = {
     site: { ...site },
     pageInfo: {
@@ -72,7 +72,7 @@ function createSignInPreviewDocument(site: SiteConfig): string {
     recordRuntimeEmbed: () => {},
   }
   context.site.auth = { ...context.site.auth, enabled: true, signUp: false }
-  const body = renderApp(exampleTemplate, {
+  const body = await renderApp(exampleTemplate, {
     components: defineComponents(getSvgIcon),
     context,
   })
@@ -101,7 +101,7 @@ export async function writeSignInPreview(site: SiteConfig) {
     'sign-in',
     'preview.html',
   )
-  const documentHtml = createSignInPreviewDocument(site)
+  const documentHtml = await createSignInPreviewDocument(site)
   await fs.mkdir(path.dirname(output), { recursive: true })
   await fs.writeFile(output, documentHtml, 'utf8')
 }

@@ -108,6 +108,26 @@ needs `--content` pointing to a directory with `siteConfig.json`.
 
 For the full option list, run `npx purestack --help`.
 
+## Add plugins
+
+Plugins add a site's own skins, components, templates, generated pages, and
+build steps. List them in `content/purestack.config.ts`; every command loads it,
+and `serve` reloads it when it or a file it imports changes:
+
+```ts
+import { defineConfig, definePlugin } from 'purestack'
+
+const releaseNotes = definePlugin({
+  name: 'release-notes',
+  pages: () => [{ path: 'releases.mdx', source: '# Releases' }],
+})
+
+export default defineConfig({ plugins: [releaseNotes] })
+```
+
+The [Plugins guide](https://purestack.studio/guides/plugins/) covers each kind
+of extension.
+
 ## TypeScript API
 
 The package also re-exports the `@purestack/ts-ssg` API. For example, a custom
@@ -124,14 +144,15 @@ const result = await buildSite({
 console.log(`Built ${result.pages} pages in ${result.outDir}`)
 ```
 
-`startDevServer`, build hooks, custom templates, and component registration are
-available for projects that need more control.
+`startDevServer` is available too. Neither function looks for
+`purestack.config.ts`; pass plugins through `options.plugins`.
 
 ## Learn more
 
 - [CLI guide](https://purestack.studio/guides/purestack-cli/)
 - [Site configuration](https://purestack.studio/guides/site-config/)
 - [Regor MDX guide](https://purestack.studio/guides/regor/)
+- [Plugins guide](https://purestack.studio/guides/plugins/)
 - [Working sample site](https://github.com/PureStackStudio/PureStack/tree/main/packages/ts-ssg/sample-content)
 
 MIT licensed. Source and issues: [PureStack on GitHub](https://github.com/PureStackStudio/PureStack).

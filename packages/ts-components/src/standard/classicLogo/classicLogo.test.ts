@@ -79,13 +79,13 @@ describe('ClassicLogo rendering', () => {
     }
   })
 
-  it('renders two brand words and subtitle', () => {
+  it('renders two brand words and subtitle', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineIconComponents(getSvgIcon),
       ...defineClassicLogoComponents(),
     }
-    const html = renderApp(
+    const html = await renderApp(
       `<ClassicLogo
         brand="Calc Core"
         letterColors="00001111"
@@ -140,10 +140,10 @@ describe('ClassicLogo rendering', () => {
     expect(html).toContain('href="/"')
   })
 
-  it('omits subtitle when not provided', () => {
+  it('omits subtitle when not provided', async () => {
     const cleanup = ensureDomGlobals()
     const components = defineClassicLogoComponents()
-    const html = renderApp(`<ClassicLogo />`, {
+    const html = await renderApp(`<ClassicLogo />`, {
       components,
       context: createTestContext(),
     })
@@ -152,10 +152,10 @@ describe('ClassicLogo rendering', () => {
     expect(html).not.toContain('classic-logo__subtitle')
   })
 
-  it('uses default fills when letter color maps are not provided', () => {
+  it('uses default fills when letter color maps are not provided', async () => {
     const cleanup = ensureDomGlobals()
     const components = defineClassicLogoComponents()
-    const html = renderApp(
+    const html = await renderApp(
       `<ClassicLogo brand="Calc Core" subtitle="backend-native engine" />`,
       {
         components,
@@ -174,13 +174,13 @@ describe('ClassicLogo rendering', () => {
     expect(html).not.toContain('--ps-classic-logo-glyph-foreground')
   })
 
-  it('renders the shared icon component when an icon name is provided', () => {
+  it('renders the shared icon component when an icon name is provided', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineIconComponents(getSvgIcon),
       ...defineClassicLogoComponents(),
     }
-    const html = renderApp(
+    const html = await renderApp(
       `<ClassicLogo
         brand="Calc Core"
         letterColors="00001111"

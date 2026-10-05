@@ -1,10 +1,12 @@
 import fs from 'node:fs/promises'
 import http from 'node:http'
 import net from 'node:net'
-import os from 'node:os'
 import path from 'node:path'
+import { themeSkins } from '@purestack/ts-style'
 import { disableLogger } from 'logpot'
 import { afterEach, beforeAll, describe, expect, it } from 'vitest'
+import { definePlugin } from '../plugins/plugin'
+import { makeRepoTempDir } from '../test/repoTempDir'
 import { type DevServerHandle, startDevServer } from './server'
 
 const HOST = '127.0.0.1'
@@ -23,10 +25,189 @@ describe('dev server', () => {
     liveReload?.close()
     await server?.close()
     if (root) await fs.rm(root, { recursive: true, force: true })
+    liveReload = undefined
+    server = undefined
+    root = undefined
   })
 
+  it('reloads purestack.config.ts when a file it imports changes', async () => {
+    root = await makeRepoTempDir('.tmp-ts-ssg-dev-config-')
+    const contentDir = path.join(root, 'content')
+    const markerPath = path.join(root, 'plugins', 'marker.ts')
+    const configFile = path.join(contentDir, 'purestack.config.ts')
+    await writeFile(path.join(contentDir, 'index.mdx'), '# Home')
+    await writeFile(markerPath, "export const marker = 'marker v1'")
+    await writeFile(
+      configFile,
+      [
+        "import { marker } from '../plugins/marker'",
+        'export default {',
+        '  plugins: [{',
+        "    name: 'marker',",
+        '    hooks: {',
+        '      onPageRendered(_context: unknown, page: { html: string }) {',
+        // biome-ignore lint/suspicious/noTemplateCurlyInString: Literal TypeScript source for the config file.
+        "        page.html = page.html.replace('</body>', `<!-- ${marker} --></body>`)",
+        '      },',
+        '    },',
+        '  }],',
+        '}',
+      ].join('\n'),
+    )
+
+    const port = await findFreePort()
+    server = await startDevServer({
+      host: HOST,
+      port,
+      configFile,
+      build: {
+        siteConfig: {
+          rootDir: root,
+          contentDir,
+          outDir: path.join(root, 'out'),
+        },
+      },
+    })
+    liveReload = listenForLiveReload(port)
+    await liveReload.reachVersion(1)
+    expect(await get(port, '/')).toContain('<!-- marker v1 -->')
+
+    // The plugin file sits outside the content folder.
+    await writeFile(markerPath, "export const marker = 'marker v2'")
+    await liveReload.reachVersion(2)
+
+    expect(await get(port, '/')).toContain('<!-- marker v2 -->')
+  }, 20_000)
+
+  it('starts with a plugin skin selected in the site config', async () => {
+    root = await makeRepoTempDir('.tmp-ts-ssg-dev-')
+    const contentDir = path.join(root, 'content')
+    await writeFile(path.join(contentDir, 'index.mdx'), '# Home')
+
+    const port = await findFreePort()
+    server = await startDevServer({
+      host: HOST,
+      port,
+      build: {
+        siteConfig: {
+          rootDir: root,
+          contentDir,
+          outDir: path.join(root, 'out'),
+          style: { theme: { skin: 'dev-plugin-skin' } },
+        },
+        options: {
+          plugins: [
+            definePlugin({
+              name: 'skin',
+              skins: {
+                'dev-plugin-skin': {
+                  create: () => themeSkins.standard.create(),
+                },
+              },
+            }),
+          ],
+        },
+      },
+    })
+    liveReload = listenForLiveReload(port)
+    await liveReload.reachVersion(1)
+
+    expect(await get(port, '/')).toContain('Home')
+  }, 20_000)
+
+  it('lets plugin dev middleware answer requests before the site', async () => {
+    root = await makeRepoTempDir('.tmp-ts-ssg-dev-middleware-')
+    const contentDir = path.join(root, 'content')
+    await writeFile(path.join(contentDir, 'index.mdx'), '# Home')
+
+    const port = await findFreePort()
+    server = await startDevServer({
+      host: HOST,
+      port,
+      build: {
+        siteConfig: {
+          rootDir: root,
+          contentDir,
+          outDir: path.join(root, 'out'),
+        },
+        options: {
+          plugins: [
+            definePlugin({
+              name: 'headers',
+              devMiddleware: (_request, response) => {
+                response.setHeader('x-dev', 'on')
+              },
+            }),
+            definePlugin({
+              name: 'api',
+              devMiddleware: async (request, response) => {
+                if (request.url === '/api/broken') throw new Error('No time.')
+                if (request.url !== '/api/time') return
+                await new Promise((resolve) => setTimeout(resolve, 10))
+                response.writeHead(200, { 'content-type': 'application/json' })
+                response.end('{"time":1}')
+              },
+            }),
+            definePlugin({
+              name: 'late',
+              devMiddleware: (_request, response) => {
+                response.end('late')
+              },
+            }),
+          ],
+        },
+      },
+    })
+    liveReload = listenForLiveReload(port)
+    await liveReload.reachVersion(1)
+    const origin = `http://${HOST}:${port}`
+
+    const api = await fetch(`${origin}/api/time`)
+    expect(await api.json()).toEqual({ time: 1 })
+    expect(api.headers.get('x-dev')).toBe('on')
+    // The first plugin to respond ends the chain, so "late" answers the rest.
+    expect(await (await fetch(`${origin}/`)).text()).toBe('late')
+    const broken = await fetch(`${origin}/api/broken`)
+    expect(broken.status).toBe(500)
+  }, 20_000)
+
+  it('serves the site when no dev middleware responds', async () => {
+    root = await makeRepoTempDir('.tmp-ts-ssg-dev-middleware-')
+    const contentDir = path.join(root, 'content')
+    await writeFile(path.join(contentDir, 'index.mdx'), '# Home')
+
+    const port = await findFreePort()
+    server = await startDevServer({
+      host: HOST,
+      port,
+      build: {
+        siteConfig: {
+          rootDir: root,
+          contentDir,
+          outDir: path.join(root, 'out'),
+        },
+        options: {
+          plugins: [
+            definePlugin({
+              name: 'headers',
+              devMiddleware: (_request, response) => {
+                response.setHeader('x-dev', 'on')
+              },
+            }),
+          ],
+        },
+      },
+    })
+    liveReload = listenForLiveReload(port)
+    await liveReload.reachVersion(1)
+
+    const page = await fetch(`http://${HOST}:${port}/`)
+    expect(await page.text()).toContain('Home')
+    expect(page.headers.get('x-dev')).toBe('on')
+  }, 20_000)
+
   it('serves the new header on the reload a header edit triggers', async () => {
-    root = await fs.mkdtemp(path.join(os.tmpdir(), 'ts-ssg-dev-'))
+    root = await makeRepoTempDir('.tmp-ts-ssg-dev-')
     const contentDir = path.join(root, 'content')
     const headerPath = path.join(contentDir, 'guides', 'header.mdx')
     await writeFile(headerPath, '<p>Header v1</p>')

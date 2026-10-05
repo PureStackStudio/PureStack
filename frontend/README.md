@@ -12,7 +12,8 @@ yarn frontend
 ```
 
 Open **http://127.0.0.1:4700**. The content watcher updates MDX and browser
-TypeScript; the process watcher reloads changes to the runner, components, and theme.
+TypeScript, and reloads the Studio plugin when it, a component, or the theme
+changes; the process watcher restarts the server when PureStack's own sources change.
 
 ```sh
 yarn frontend:build
@@ -23,14 +24,15 @@ yarn frontend:publish
 - `frontend:publish` creates a clean, minified production artifact in
   `frontend/out/purestack.studio/web`. This is a local build, not a deployment.
 - Serve the production folder as a static website at `https://purestack.studio`.
-- Use the site runner rather than invoking the generic CLI directly: the runner
-  registers the `studio` skin, composition components, template, and typed styles.
+- Each command runs the `purestack` CLI. It loads `purestack.studio/purestack.config.ts`,
+  whose plugin registers the `studio` skin, composition components, template, and typed styles.
 
 ## Source map
 
 | File | Purpose |
 | --- | --- |
-| `studio.ts` | Build/dev entry point and semantic HTML document template |
+| `studioPlugin.ts` | The Studio plugin: skin, components, templates, styles, and generated previews |
+| `purestack.studio/purestack.config.ts` | Adds the Studio plugin, so the CLI builds and serves the site |
 | `demoStyle.ts` | Typed CSS for the real Style API workbench preview |
 | `purestack.studio/index.mdx` | Landing page, source examples, and static component previews |
 | `purestack.studio/header.mdx`, `footer.mdx` | Shared navigation and footer |

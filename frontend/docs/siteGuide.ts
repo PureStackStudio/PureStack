@@ -321,9 +321,9 @@ export async function writeSiteGuidePreviews(site: SiteConfig) {
                 index,
               ),
             }))
-      const cards = samples
-        .map((sample) => {
-          const body = renderApp(sample.template, {
+      const cells = await Promise.all(
+        samples.map(async (sample) => {
+          const body = await renderApp(sample.template, {
             components: defineComponents(getSvgIcon),
             context: contextFor(site, sample),
           })
@@ -332,8 +332,9 @@ export async function writeSiteGuidePreviews(site: SiteConfig) {
           const isolated =
             name === 'TopBar' || name === 'SignIn' || sample.signedIn
           return `<section class="component-appearance-cell site-guide-sample"><code>${escapeAttribute(sample.label)}</code>${isolated ? `<iframe title="${escapeAttribute(sample.label)}" style="height:160px" srcdoc="${escapeAttribute(documentFor(site, inner, sample.signedIn))}"></iframe>` : body}</section>`
-        })
-        .join('')
+        }),
+      )
+      const cards = cells.join('')
       const targets =
         name === 'PageToc'
           ? '<section id="guide-intro"><h3>Introduction</h3><p>Outline links have real targets in this document.</p></section><section id="guide-detail"><h3>Details</h3><p>Nested entries link to supporting content.</p></section>'

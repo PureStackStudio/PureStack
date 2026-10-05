@@ -41,30 +41,36 @@ palettes. You can provide any subset of its semantic colors; omitted colors use
 the standard defaults:
 
 ```ts
-import { registerSkin, themeSkins } from '@purestack/ts-style'
+import { definePlugin } from '@purestack/ts-ssg'
+import { themeSkins } from '@purestack/ts-style'
 import { merge } from '@purestack/ts-util'
 
-registerSkin('my-site', {
-  create: () => {
-    const standard = themeSkins.standard.create({
-      accent: '#4b64c8',
-      neutral: '#293047',
-      secondary: '#168a75',
-      feature: '#b04783',
-    })
-    return {
-      light: merge(standard.light, {
-        font: { size: { body: '1rem' } },
-      }),
-      dark: merge(standard.dark, {
-        font: { size: { body: '1rem' } },
-      }),
-    }
+export const mySitePlugin = definePlugin({
+  name: 'my-site',
+  skins: {
+    'my-site': {
+      create: () => {
+        const standard = themeSkins.standard.create({
+          accent: '#4b64c8',
+          neutral: '#293047',
+          secondary: '#168a75',
+          feature: '#b04783',
+        })
+        return {
+          light: merge(standard.light, {
+            font: { size: { body: '1rem' } },
+          }),
+          dark: merge(standard.dark, {
+            font: { size: { body: '1rem' } },
+          }),
+        }
+      },
+    },
   },
 })
 ```
 
-Import the file that registers your skin before the site build begins, then set `"theme": { "skin": "my-site" }` in the style config. A skin is a full light/dark pair, and `merge` preserves palette values you do not override. You can also pass a list of built-in preset names, such as `['green']`, to `themeSkins.standard.create()`.
+Add the plugin to your build's `plugins`, then set `"theme": { "skin": "my-site" }` in the style config. A skin is a full light/dark pair, and `merge` preserves palette values you do not override. You can also pass a list of built-in preset names, such as `['green']`, to `themeSkins.standard.create()`.
 
 ## Extend styles with palette roles
 
@@ -82,4 +88,4 @@ themes.forEach((theme, palette) => {
 })
 ```
 
-Register such styles in your site runner before the build renders theme assets. For a real example, inspect the [Studio skin](https://github.com/PureStackStudio/PureStack/blob/main/frontend/theme/studioSkin.ts) and [Studio styles](https://github.com/PureStackStudio/PureStack/blob/main/frontend/theme/studioStyles.ts).
+Register such styles from a plugin's `onConfigResolved` hook, which runs before the build writes theme assets. For a real example, inspect the [Studio plugin](https://github.com/PureStackStudio/PureStack/blob/main/frontend/studioPlugin.ts), with its [skin](https://github.com/PureStackStudio/PureStack/blob/main/frontend/theme/studioSkin.ts) and [styles](https://github.com/PureStackStudio/PureStack/blob/main/frontend/theme/studioStyles.ts).

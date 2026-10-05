@@ -8,7 +8,11 @@ export type {
   SiteConfigInput,
   TsSsgContext,
 } from '@purestack/ts-common'
-export type { BuildContext, PageRenderResult } from './build/page'
+export type {
+  BuildContext,
+  PageDocument,
+  PageRenderResult,
+} from './build/page'
 export {
   type BuildCountSummary,
   type BuildHooks,
@@ -21,6 +25,7 @@ export {
 export type { WriteStylesResult } from './build/styles'
 export { runCli } from './cli-runner'
 export { resolveSiteConfig } from './config/config'
+export { defineConfig, type PureStackConfig } from './config/project-config'
 export {
   type DevServerHandle,
   type DevServerInput,
@@ -46,6 +51,13 @@ export {
   resolveNavigationConfig,
   resolvePageNavigation,
 } from './navigation/navigation'
+export {
+  definePlugin,
+  type GeneratedPage,
+  type PageGenerationContext,
+  type PureStackMarkdown,
+  type PureStackPlugin,
+} from './plugins/plugin'
 export {
   defaultTemplates,
   resolvePageTemplate,

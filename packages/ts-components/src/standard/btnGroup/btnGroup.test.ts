@@ -7,9 +7,9 @@ import { defineButtonComponents } from '../btn/btn'
 import { defineIconComponents } from '../icon/icon'
 import { defineBtnGroupComponents } from './btnGroup'
 
-function renderBtnGroup(markup: string) {
+async function renderBtnGroup(markup: string) {
   const cleanup = ensureDomGlobals()
-  const html = renderApp(markup, {
+  const html = await renderApp(markup, {
     components: {
       ...defineIconComponents(getSvgIcon),
       ...defineButtonComponents(),
@@ -22,8 +22,8 @@ function renderBtnGroup(markup: string) {
 }
 
 describe('Button group rendering', () => {
-  it('renders grouped actions without proxy item components', () => {
-    const html = renderBtnGroup(`<BtnGroup>
+  it('renders grouped actions without proxy item components', async () => {
+    const html = await renderBtnGroup(`<BtnGroup>
       <Btn>Save</Btn>
       <BtnLink href="./docs">Docs</BtnLink>
     </BtnGroup>`)
@@ -35,8 +35,8 @@ describe('Button group rendering', () => {
     expect(html).toContain('href="./docs"')
   })
 
-  it('renders a native dropdown menu with default trigger affordance', () => {
-    const html = renderBtnGroup(`<BtnGroupDropDown>
+  it('renders a native dropdown menu with default trigger affordance', async () => {
+    const html = await renderBtnGroup(`<BtnGroupDropDown>
       <Btn>Archive</Btn>
       <div class="custom-row">Custom</div>
     </BtnGroupDropDown>`)
@@ -53,8 +53,8 @@ describe('Button group rendering', () => {
     expect(html).toContain('class="custom-row"')
   })
 
-  it('supports icon-only dropdown triggers with accessible labels', () => {
-    const html = renderBtnGroup(
+  it('supports icon-only dropdown triggers with accessible labels', async () => {
+    const html = await renderBtnGroup(
       `<BtnGroupDropDown iconOnly="true" ariaLabel="More actions">
         <Btn>Delete</Btn>
       </BtnGroupDropDown>`,
@@ -66,8 +66,8 @@ describe('Button group rendering', () => {
     expect(html).not.toContain('<span class="btn__label">More</span>')
   })
 
-  it('applies group, trigger, and menu presentation props', () => {
-    const html = renderBtnGroup(`<BtnGroup align="end" wrap="true">
+  it('applies group, trigger, and menu presentation props', async () => {
+    const html = await renderBtnGroup(`<BtnGroup align="end" wrap="true">
       <BtnGroupDropDown
         align="start"
         label="Actions"
@@ -93,8 +93,8 @@ describe('Button group rendering', () => {
     expect(html).toContain('tone-fill-surface')
   })
 
-  it('keeps dropdown content open to links and arbitrary markup', () => {
-    const html = renderBtnGroup(`<BtnGroup>
+  it('keeps dropdown content open to links and arbitrary markup', async () => {
+    const html = await renderBtnGroup(`<BtnGroup>
       <Btn>Default</Btn>
       <BtnGroupDropDown label="More actions">
         <BtnLink href="./settings">Settings</BtnLink>

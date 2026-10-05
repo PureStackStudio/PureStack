@@ -1,9 +1,11 @@
-import type { PageTemplateMap, SiteConfigInput } from '@purestack/ts-common'
+import type { SiteConfigInput } from '@purestack/ts-common'
 import type { ResolvedContentFile } from '../i18n/content'
 import type { NavigationTree } from '../navigation/navigation'
+import type { PureStackPlugin } from '../plugins/plugin'
 import type { PublishOptions } from './build-config'
 import { createIncrementalBuilder } from './incremental'
-import type { BuildContext, PageRenderResult } from './page'
+import { ensureLogger } from './logger'
+import type { BuildContext, PageDocument, PageRenderResult } from './page'
 import type { WriteStylesResult } from './styles'
 
 export type { PublishOptions } from './build-config'
@@ -34,6 +36,14 @@ export interface BuildHooks {
     context: BuildContext,
     file: ResolvedContentFile,
   ) => void | Promise<void>
+  /**
+   * Runs on a page's rendered document, before it becomes HTML and before its
+   * links resolve, so links it adds resolve like written ones.
+   */
+  onPageDocument?: (
+    context: BuildContext,
+    page: PageDocument,
+  ) => void | Promise<void>
   onPageRendered?: (
     context: BuildContext,
     page: PageRenderResult,
@@ -55,9 +65,8 @@ export interface BuildHooks {
 export interface BuildOptions {
   cleanOutDir?: boolean
   writeErrorPages?: boolean
-  hooks?: BuildHooks
-  components?: Record<string, object>
-  templates?: PageTemplateMap
+  /** Extensions to apply, in order. See {@link PureStackPlugin}. */
+  plugins?: PureStackPlugin[]
 }
 
 export interface BuildInput {
@@ -67,6 +76,7 @@ export interface BuildInput {
 }
 
 export async function buildSite(input: BuildInput = {}): Promise<BuildResult> {
+  await ensureLogger()
   const builder = await createIncrementalBuilder(input)
   return builder.buildAll('full build')
 }

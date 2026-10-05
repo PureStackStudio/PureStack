@@ -27,7 +27,7 @@ const exampleTemplate = html`<TopBar tone="neutral" variant="surface" />
   changes this preview.
 </p>`
 
-function createTopBarPreviewDocument(site: SiteConfig): string {
+async function createTopBarPreviewDocument(site: SiteConfig): Promise<string> {
   const context: TsSsgContext = {
     site: { ...site },
     pageInfo: {
@@ -58,7 +58,7 @@ function createTopBarPreviewDocument(site: SiteConfig): string {
     recordRuntimeEmbed: () => {},
   }
   context.site.pagefind = { ...context.site.pagefind, enabled: false }
-  const body = renderApp(exampleTemplate, {
+  const body = await renderApp(exampleTemplate, {
     components: defineComponents(getSvgIcon),
     context,
   })
@@ -87,7 +87,7 @@ export async function writeTopBarPreview(site: SiteConfig) {
     'top-bar',
     'preview.html',
   )
-  const documentHtml = createTopBarPreviewDocument(site)
+  const documentHtml = await createTopBarPreviewDocument(site)
   await fs.mkdir(path.dirname(output), { recursive: true })
   await fs.writeFile(output, documentHtml, 'utf8')
 }

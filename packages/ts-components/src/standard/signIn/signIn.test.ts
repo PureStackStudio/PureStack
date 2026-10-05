@@ -11,9 +11,9 @@ import { defineSignInComponents } from './signIn'
 const getSvgIcon = (name: string) => `<svg data-icon="${name}"></svg>`
 
 describe('SignIn rendering', () => {
-  it('renders a circular icon trigger with default account links', () => {
+  it('renders a circular icon trigger with default account links', async () => {
     const cleanup = ensureDomGlobals()
-    const html = renderApp(`<SignIn />`, {
+    const html = await renderApp(`<SignIn />`, {
       components: {
         ...defineButtonComponents(),
         ...defineFlexComponents(),
@@ -45,9 +45,9 @@ describe('SignIn rendering', () => {
     expect(html).toContain('href="/signout/"')
   })
 
-  it('renders a supplied avatar image and custom menu content', () => {
+  it('renders a supplied avatar image and custom menu content', async () => {
     const cleanup = ensureDomGlobals()
-    const html = renderApp(
+    const html = await renderApp(
       `<SignIn avatarSrc="/me.png" avatarAlt="Ada Lovelace">
         <a href="/billing/">Billing</a>
       </SignIn>`,
@@ -77,7 +77,7 @@ describe('SignIn rendering', () => {
     expect(html).not.toContain('href="/settings/"')
   })
 
-  it('renders nothing when site auth is disabled or unavailable', () => {
+  it('renders nothing when site auth is disabled or unavailable', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
       ...defineButtonComponents(),
@@ -86,11 +86,11 @@ describe('SignIn rendering', () => {
       ...definePanelComponents(),
       ...defineSignInComponents(),
     }
-    const disabledHtml = renderApp(`<SignIn />`, {
+    const disabledHtml = await renderApp(`<SignIn />`, {
       components,
       context: createTestContext(),
     })
-    const noContextHtml = renderApp(`<SignIn />`, {
+    const noContextHtml = await renderApp(`<SignIn />`, {
       components,
       context: {} as never,
     })
@@ -100,9 +100,9 @@ describe('SignIn rendering', () => {
     expect(noContextHtml).not.toContain('class="sign-in"')
   })
 
-  it('hides sign up when site auth disables registration', () => {
+  it('hides sign up when site auth disables registration', async () => {
     const cleanup = ensureDomGlobals()
-    const html = renderApp(`<SignIn />`, {
+    const html = await renderApp(`<SignIn />`, {
       components: {
         ...defineButtonComponents(),
         ...defineFlexComponents(),
@@ -126,9 +126,9 @@ describe('SignIn rendering', () => {
     expect(html).toContain('href="/account/"')
   })
 
-  it('passes tone, variant, and variant mode to the panel', () => {
+  it('passes tone, variant, and variant mode to the panel', async () => {
     const cleanup = ensureDomGlobals()
-    const html = renderApp(
+    const html = await renderApp(
       `<SignIn tone="accent" variant="surfaceAlt" variantMode="stateless" />`,
       {
         components: {

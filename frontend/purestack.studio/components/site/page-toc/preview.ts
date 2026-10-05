@@ -32,7 +32,7 @@ const exampleTemplate = html`<PageToc title="Example contents" />
   <p>Keep headings descriptive and ordered.</p>
 </section>`
 
-function createPageTocPreviewDocument(site: SiteConfig): string {
+async function createPageTocPreviewDocument(site: SiteConfig): Promise<string> {
   const context: TsSsgContext = {
     site: { ...site },
     pageInfo: {
@@ -71,7 +71,7 @@ function createPageTocPreviewDocument(site: SiteConfig): string {
       children: [{ id: 'preview-contract', title: 'Contract', depth: 3 }],
     },
   ]
-  const body = renderApp(exampleTemplate, {
+  const body = await renderApp(exampleTemplate, {
     components: defineComponents(getSvgIcon),
     context,
   })
@@ -100,7 +100,7 @@ export async function writePageTocPreview(site: SiteConfig) {
     'page-toc',
     'preview.html',
   )
-  const documentHtml = createPageTocPreviewDocument(site)
+  const documentHtml = await createPageTocPreviewDocument(site)
   await fs.mkdir(path.dirname(output), { recursive: true })
   await fs.writeFile(output, documentHtml, 'utf8')
 }
