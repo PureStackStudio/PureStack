@@ -43,6 +43,25 @@ jobs:
       - name: Check line endings
         run: yarn check-eol
 
+      - name: Regenerate Regor component metadata
+        run: yarn regor-components
+
+      - name: Regenerate embedded scripts
+        run: yarn embed
+
+      - name: Format repository
+        run: yarn format
+
+      - name: Verify generated and formatted files are committed
+        shell: bash
+        run: |
+          if [[ -n "$(git status --porcelain --untracked-files=all)" ]]; then
+            echo "::error::Run yarn regor-components, yarn embed, and yarn format locally, then commit the resulting changes."
+            git status --short --untracked-files=all
+            git diff --stat
+            exit 1
+          fi
+
       - name: Lint without changing files
         run: yarn lint:ci
 
