@@ -59,6 +59,40 @@ describe('incremental builder', () => {
     await logger?.close()
   })
 
+  it('ignores directory notifications and refreshes removed subtrees without deleting directories as files', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      const outDir = path.join(base, 'out')
+      const assetsDir = path.join(contentDir, 'assets')
+      const emptyDir = path.join(contentDir, 'empty')
+      await fs.mkdir(assetsDir, { recursive: true })
+      await fs.mkdir(emptyDir)
+      await fs.mkdir(path.join(outDir, 'empty'), { recursive: true })
+      await fs.writeFile(path.join(assetsDir, 'example.txt'), 'asset content')
+      await fs.writeFile(path.join(contentDir, 'index.mdx'), '# Home')
+      const builder = await createIncrementalBuilder({
+        siteConfig: { rootDir: base, contentDir, outDir },
+      })
+      await builder.prepareForRequests()
+      await builder.prepareAssetByUrlPath('/assets/example.txt')
+      expect((await builder.applyChange(assetsDir)).fullRebuild).toBe(false)
+      expect((await builder.applyChange(contentDir)).fullRebuild).toBe(false)
+      expect(
+        await fs.readFile(path.join(outDir, 'assets', 'example.txt'), 'utf8'),
+      ).toBe('asset content')
+      await fs.rmdir(emptyDir)
+      expect((await builder.applyChange(emptyDir)).fullRebuild).toBe(false)
+      expect((await fs.stat(path.join(outDir, 'empty'))).isDirectory()).toBe(
+        true,
+      )
+      await fs.rm(assetsDir, { recursive: true, force: true })
+      expect((await builder.applyChange(assetsDir)).fullRebuild).toBe(true)
+      expect(
+        await fs.readFile(path.join(outDir, 'assets', 'example.txt'), 'utf8'),
+      ).toBe('asset content')
+    })
+  })
+
   it('removes deleted content outputs and updates manifest', async () => {
     await withTempDir(async (base) => {
       const contentDir = path.join(base, 'content')

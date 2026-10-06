@@ -96,7 +96,21 @@ export async function startDevServer(
 
   const { host, port, watch, liveReload, fullRender } =
     resolveDevServerOptions(input)
-  let fullBuild: Promise<unknown> | undefined
+  let setupReady: Promise<void> = Promise.resolve()
+  const activeResponses = new Set<Promise<void>>()
+  const beginSiteRequest = async () => {
+    while (true) {
+      const ready = setupReady
+      await ready
+      if (ready !== setupReady) continue
+      const finished = Promise.withResolvers<void>()
+      activeResponses.add(finished.promise)
+      return () => {
+        activeResponses.delete(finished.promise)
+        finished.resolve()
+      }
+    }
+  }
 
   const clients: LiveReloadClients = new Map()
   let liveReloadVersion = 0
@@ -169,7 +183,13 @@ export async function startDevServer(
     reason: string,
     options?: { recreateBuilder?: boolean; reloadConfig?: boolean },
   ) => {
+    const previousSetup = setupReady
+    const prepared = Promise.withResolvers<void>()
+    setupReady = prepared.promise
     try {
+      await previousSetup
+      // Output cleanup must not race HTML reads or streamed asset responses.
+      await Promise.all([...activeResponses])
       if (options?.reloadConfig) {
         buildInput = await projectConfig.load(baseBuildInput)
         watchConfigDependencies()
@@ -181,8 +201,7 @@ export async function startDevServer(
         devMiddleware = composeDevMiddleware(buildInput.options?.plugins ?? [])
       }
       if (fullRender && !initialSetupDone) {
-        fullBuild = incremental.buildAll(reason)
-        await fullBuild
+        await incremental.buildAll(reason)
       }
       await incremental.prepareForRequests()
       if (!initialSetupDone) {
@@ -194,6 +213,8 @@ export async function startDevServer(
       notifyReload(reason)
     } catch (error) {
       logError(log, error, 'dev setup failed')
+    } finally {
+      prepared.resolve()
     }
   }
 
@@ -248,9 +269,7 @@ export async function startDevServer(
       basePath: config.basePath,
       i18n: config.i18n,
       liveReload,
-      waitForFullBuild: async () => {
-        if (fullRender) await fullBuild
-      },
+      beginSiteRequest,
       // Config changes replace the builder, so requests ask for the current one.
       getIncremental: () => incremental,
       handlePluginRequest: (req, res) => devMiddleware(req, res),
@@ -267,16 +286,6 @@ export async function startDevServer(
   })
   server.keepAliveTimeout = 1000
   server.headersTimeout = 5000
-  server.listen(port, host, () => {
-    log.info('dev server listening', {
-      host,
-      port,
-      outDir: config.outDir,
-      liveReload,
-      watch,
-      fullRender,
-    })
-  })
 
   if (watch) {
     watcher = await watchTree(config.contentDir, (filePath) => {
@@ -287,6 +296,16 @@ export async function startDevServer(
   watchConfigDependencies()
 
   void requestRebuild()
+  server.listen(port, host, () => {
+    log.info('dev server listening', {
+      host,
+      port,
+      outDir: config.outDir,
+      liveReload,
+      watch,
+      fullRender,
+    })
+  })
 
   const shutdown = async () => {
     if (shuttingDown) return
@@ -376,7 +395,7 @@ type DevServerRequestHandlerInput = {
   basePath: string
   i18n: I18nConfig
   liveReload: boolean
-  waitForFullBuild: () => Promise<void>
+  beginSiteRequest: () => Promise<() => void>
   getIncremental: () => IncrementalBuilder
   /** Resolves true when a plugin's dev middleware responded. */
   handlePluginRequest: (
@@ -396,7 +415,7 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
     basePath,
     i18n,
     liveReload,
-    waitForFullBuild,
+    beginSiteRequest,
     getIncremental,
     handlePluginRequest,
     clients,
@@ -441,7 +460,13 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
     let fileResult: Awaited<ReturnType<typeof resolveRequestFile>>
     let incremental: IncrementalBuilder
     try {
-      await waitForFullBuild()
+      const finishRequest = await beginSiteRequest()
+      if (res.destroyed) {
+        finishRequest()
+        return
+      }
+      res.once('finish', finishRequest)
+      res.once('close', finishRequest)
       incremental = getIncremental()
       res.setTimeout(REQUEST_TIMEOUT_MS, () => {
         res.destroy()
