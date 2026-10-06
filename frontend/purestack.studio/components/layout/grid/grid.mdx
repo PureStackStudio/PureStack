@@ -41,6 +41,28 @@ nav:
 ```
 
 
+## Interactive playground
+
+Start with a preset, then change the column counts, gap, item alignment, and packing. Choose **Auto-fit cards** and reduce the preview width to see cards wrap without a media query. Choose **Dense board**, then turn dense packing off to compare how later items fill earlier gaps.
+
+Responsive overrides use the browser viewport, not the preview width. Resize your browser to cross a breakpoint; the live readout shows which setting applies. Empty overrides inherit the smaller breakpoint. Spacing uses the framework's gap utilities. Wide cards use the same `layout-featured-card` class as the guide's spanning examples, starting at sm.
+
+<Tabs group="grid-doc-playground" selectedTab="grid-doc-playground-preview" ariaLabel="Grid playground example and source" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="grid-doc-playground-preview" label="Preview">
+    <div class="component-preview-stage">
+      <RegorApp id="grid-playground" src="./playground.ts"/>
+    </div>
+  </TabPane>
+  <TabPane id="grid-doc-playground-mdx" label="playground.mdx">
+```html
+<RegorApp id="grid-playground" src="./playground.ts"/>
+```
+  </TabPane>
+  <TabPane id="grid-doc-playground-ts" label="playground.ts">
+    <import-codeblock src="./playground.ts"/>
+  </TabPane>
+</Tabs>
+
 ## A responsive card grid
 
 One column becomes two at sm and three at lg. Cards stretch to share the row height.
