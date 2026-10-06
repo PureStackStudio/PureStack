@@ -40,6 +40,28 @@ nav:
 ```
 
 
+## Interactive playground
+
+Start with a preset, then explore direction, distribution, alignment, and wrapping. **Shared baseline** uses the framework's typography utilities to make baseline alignment visible. **Flexible first item** uses `flex-1` to show how item growth consumes free space; **Wrapping cards** makes line wrapping easy to compare with nowrap and reverse wrapping. Item sizing uses the component's `flex-none`, `flex-auto`, `flex-fill`, and `flex-1` utilities.
+
+Change the preview width and height to explore both axes. Responsive overrides follow the browser viewport, so resize your browser to cross a breakpoint. Open **Responsive overrides** to configure direction, alignment, distribution, and wrapping independently at each breakpoint. The live readout shows the active settings, and the generated markup includes your component props and utility classes.
+
+<Tabs group="flex-doc-playground" selectedTab="flex-doc-playground-preview" ariaLabel="Flex playground example and source" tone="neutral" variant="surface" tabVariant="underline">
+  <TabPane id="flex-doc-playground-preview" label="Preview">
+    <div class="component-preview-stage">
+      <RegorApp id="flex-playground" src="./playground.ts"/>
+    </div>
+  </TabPane>
+  <TabPane id="flex-doc-playground-mdx" label="playground.mdx">
+```html
+<RegorApp id="flex-playground" src="./playground.ts"/>
+```
+  </TabPane>
+  <TabPane id="flex-doc-playground-ts" label="playground.ts">
+    <import-codeblock src="./playground.ts"/>
+  </TabPane>
+</Tabs>
+
 ## A responsive toolbar
 
 Resize the viewport: the title and action stack first, then share a row.

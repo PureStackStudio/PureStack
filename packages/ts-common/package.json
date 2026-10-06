@@ -1,6 +1,6 @@
 {
   "name": "@purestack/ts-common",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "packageManager": "yarn@4.9.2",
   "module": "./dist/ts-common.mjs",
   "types": "./dist/ts-common.d.mts",

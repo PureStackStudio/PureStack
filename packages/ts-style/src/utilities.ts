@@ -170,6 +170,8 @@ function applyDisplayUtilities(theme: string) {
 function applyLayoutUtilities(theme: string) {
   styleBuilder.select('.w-full', theme).width(force('100%'))
   styleBuilder.select('.h-full', theme).height(force('100%'))
+  styleBuilder.select('.max-w-full', theme).maxWidth(force('100%'))
+  styleBuilder.select('.list-none', theme).set('list-style', force('none'))
   styleBuilder.select('.max-h-inspector', theme).maxHeight(force('24rem'))
   styleBuilder.select('.auto-fit', theme).width(force('1%'))
   styleBuilder.select('.min-w-0', theme).minWidth(force('0'))
@@ -546,6 +548,9 @@ function applyTextUtilities(theme: string, palette: ThemePalette) {
   styleBuilder.select('.text-end', theme).textAlign('end !important')
   styleBuilder.select('.text-justify', theme).textAlign('justify !important')
   styleBuilder.select('.text-ellipsis', theme).textOverflow('ellipsis')
+  styleBuilder
+    .select('.wrap-anywhere', theme)
+    .set('overflow-wrap', force('anywhere'))
   styleBuilder.select('.uppercase', theme).textTransform('uppercase !important')
   styleBuilder.select('.lowercase', theme).textTransform('lowercase !important')
 

@@ -121,6 +121,12 @@ export function registerComponentGuideStyles() {
       .select('.layout-demo-item--tall')
       .css({ minHeight: '4rem', fontSize: '1.3rem' })
     root.select('.layout-demo-scroll').css({ overflowX: 'auto', minWidth: '0' })
+    root.select('.layout-playground-frame').css({ height: '20rem' })
+    root.select('.layout-playground-frame--compact').css({ height: '14rem' })
+    root.select('.layout-playground-frame--tall').css({ height: '28rem' })
+    root.select('.layout-playground-width--narrow').css({ width: '24rem' })
+    root.select('.layout-playground-width--medium').css({ width: '40rem' })
+    root.select('.layout-playground-width--wide').css({ width: '60rem' })
     root
       .select('.layout-demo-track--narrow')
       .css({ width: '9rem', minHeight: '7rem' })

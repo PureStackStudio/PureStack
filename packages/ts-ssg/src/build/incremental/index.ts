@@ -1,3 +1,4 @@
+import fsPromises from 'node:fs/promises'
 import path from 'node:path'
 import type { SiteConfig } from '@purestack/ts-common'
 import { themes } from '@purestack/ts-style'
@@ -475,13 +476,37 @@ class IncrementalRuntime {
     const result = this.changeApplier.createResult(
       `content change: ${filePath}`,
     )
-    if (isOutsideContentRoot(relPath)) return result
+    if (!relPath || isOutsideContentRoot(relPath)) return result
+    const sourceStats = await fsPromises
+      .stat(filePath)
+      .catch((error: NodeJS.ErrnoException) => {
+        if (error.code === 'ENOENT' || error.code === 'ENOTDIR')
+          return undefined
+        throw error
+      })
+    // Recursive watchers also emit directory events. They are not asset files.
+    if (sourceStats?.isDirectory()) return result
     if (isSiteConfigFile(relPath)) {
       result.fullRebuild = true
       return result
     }
 
     await this.ensureContentReady()
+    if (!sourceStats) {
+      const prefix = `${toPosixPath(relPath)}/`
+      const removedDirectory =
+        this.context.contentRoutes.pages.some((file) =>
+          toPosixPath(file.relPath).startsWith(prefix),
+        ) ||
+        [...this.staticAssets.values()].some((file) =>
+          toPosixPath(file.relPath).startsWith(prefix),
+        )
+      if (removedDirectory) {
+        // Refresh discovery for a removed subtree; never rm its output as a file.
+        result.fullRebuild = true
+        return result
+      }
+    }
     this.contentState.takeMarkedPageCount()
     const ext = path.extname(relPath).toLowerCase()
     if (
@@ -494,9 +519,18 @@ class IncrementalRuntime {
       path.basename(relPath).toUpperCase() !==
         DEFAULT_NAV_FILENAME.toUpperCase()
     ) {
-      await removeFile(
-        path.join(this.config.outDir, toOutputAssetRelPath(relPath)),
+      const cachedAsset = this.manifest.assets[relPath]
+      const knownAsset = this.staticAssets.get(
+        `/${toPosixPath(toOutputAssetRelPath(relPath))}`,
       )
+      // A missing, empty directory can also arrive as an event. Only invalidate
+      // output for paths previously discovered or copied as actual files.
+      if (cachedAsset || knownAsset) {
+        await removeFile(
+          cachedAsset?.outPath ??
+            path.join(this.config.outDir, toOutputAssetRelPath(relPath)),
+        )
+      }
       delete this.manifest.assets[relPath]
       await this.discoverRequestAssets()
       this.contentState.refreshAssets(

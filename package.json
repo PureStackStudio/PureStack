@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "purestack-repo",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "packageManager": "yarn@4.18.1",
   "type": "module",
   "sideEffects": false,
@@ -42,7 +42,7 @@
     "lint": "yarn workspaces foreach --no-private --all --verbose --topological -- run lint",
     "lint:ci": "yarn workspaces foreach --no-private --all --verbose --topological -- exec biome check ./src --formatter-enabled=false",
     "check-eol": "yarn tsx scripts/check-eol.ts",
-    "sync-purestack-version": "yarn tsx --no-warnings scripts/sync-purestack-version.ts",
+    "bump-version": "yarn tsx --no-warnings scripts/bump-version.ts",
     "bundle": "yarn tsx --no-warnings scripts/bundle.ts",
     "cleanup": "yarn tsx --no-warnings scripts/cleanup.ts",
     "publish-new-packages": "yarn tsx --no-warnings scripts/publish-new-packages.ts",
@@ -52,6 +52,6 @@
     "pack-vscode-ext": "yarn --cwd packages/ts-ssg-vscode build && yarn --cwd packages/ts-ssg-vscode package",
     "longest": "yarn tsx ./scripts/longest-functions.ts",
     "format": "biome format --write",
-    "pre-commit": "yarn check-eol && yarn sync-purestack-version && yarn regor-components && yarn embed && yarn format && yarn lint && yarn build && yarn test run"
+    "pre-commit": "yarn check-eol && yarn regor-components && yarn embed && yarn format && yarn lint && yarn build && yarn test run"
   }
 }

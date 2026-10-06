@@ -1,6 +1,6 @@
 {
   "name": "@purestack/ts-svg-icons",
-  "version": "1.1.2",
+  "version": "1.1.5",
   "packageManager": "yarn@4.9.2",
   "module": "./dist/ts-svg-icons.mjs",
   "types": "./dist/ts-svg-icons.d.mts",

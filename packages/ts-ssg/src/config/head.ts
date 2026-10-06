@@ -25,7 +25,7 @@ export function getHead(config?: BasicHeadConfig) {
   const head = createHead(getHeadConfig(merge(DEFAULTS, config))).push(
     h('meta').attr({
       name: 'generator',
-      content: 'PureStack v1.1.4',
+      content: 'PureStack v1.1.5',
     }),
     h('meta').attr({
       name: 'color-scheme',
