@@ -1,7 +1,7 @@
 import fsPromises from 'node:fs/promises'
 import path from 'node:path'
 import type { SiteConfig } from '@purestack/ts-common'
-import { themes } from '@purestack/ts-style'
+import { styleBuilder, themes } from '@purestack/ts-style'
 import { toOutputAssetRelPath, toPosixPath } from '@purestack/ts-util'
 import { getLogger, type Logger } from 'logpot'
 import {
@@ -174,6 +174,7 @@ class IncrementalRuntime {
   private assetWork: Promise<unknown> = Promise.resolve()
   private pageAssetRevision = 0
   private preparedAssetRevision = -1
+  private preparedStyleRevision = -1
   private renderOnRequest = false
   private staticAssets = new Map<string, StaticAssetFile>()
   private searchRevision = -1
@@ -227,6 +228,7 @@ class IncrementalRuntime {
       prepareForRequests: this.prepareForRequests,
       buildAll: this.buildAll,
       applyChange: this.applyChange,
+      applyChanges: this.applyChanges,
       renderIfDirtyByOutPath: this.renderIfDirtyByOutPath,
       renderByUrlPath: this.renderByUrlPath,
       preparePageAssets: this.preparePageAssets,
@@ -422,6 +424,7 @@ class IncrementalRuntime {
       },
       style,
     )
+    this.preparedStyleRevision = styleResult.revision
     await hooks.onStylesWritten?.(this.context, styleResult)
     return styleResult
   }
@@ -549,6 +552,27 @@ class IncrementalRuntime {
     return result
   }
 
+  applyChanges = async (
+    filePaths: readonly string[],
+    signal?: AbortSignal,
+  ): Promise<IncrementalBuildResult[]> => {
+    if (signal?.aborted || filePaths.length === 0) return []
+    await this.ensureContentReady()
+    const apply = async () => {
+      const results: IncrementalBuildResult[] = []
+      for (const filePath of new Set(filePaths)) {
+        if (signal?.aborted) break
+        const result = await this.applyChange(filePath)
+        results.push(result)
+        if (result.fullRebuild) break
+      }
+      return results
+    }
+    return this.renderOnRequest
+      ? this.contentState.withChangeBatch(apply)
+      : apply()
+  }
+
   renderIfDirtyByOutPath = async (outPath: string): Promise<boolean> => {
     await this.ensureContentReady()
     return this.contentState.renderIfDirtyByOutPath(outPath)
@@ -566,15 +590,21 @@ class IncrementalRuntime {
     await this.ensureContentReady()
     await this.queueAssetWork(async () => {
       const revision = this.pageAssetRevision
-      if (revision === this.preparedAssetRevision) return
+      if (
+        revision === this.preparedAssetRevision &&
+        this.preparedStyleRevision === styleBuilder.revision
+      )
+        return
       // Only pages rendered in this session have registered script entries.
       await this.scriptEntrypoints.buildMissingEntrypoints(
         this.changeApplier.createResult('requested page assets'),
       )
-      const styles = await this.writeStylesWithHooks(this.options.hooks)
-      this.manifest.styles = {
-        signature: styles.signature,
-        outputs: styles.outputs,
+      if (this.preparedStyleRevision !== styleBuilder.revision) {
+        const styles = await this.writeStylesWithHooks(this.options.hooks)
+        this.manifest.styles = {
+          signature: styles.signature,
+          outputs: styles.outputs,
+        }
       }
       this.preparedAssetRevision = revision
     })

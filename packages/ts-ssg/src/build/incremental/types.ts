@@ -16,6 +16,11 @@ export interface IncrementalBuilder {
   prepareForRequests: () => Promise<void>
   buildAll: (reason: string) => Promise<BuildResult>
   applyChange: (filePath: string) => Promise<IncrementalBuildResult>
+  /** Shares discovery/navigation across a burst; stops before the next file on abort. */
+  applyChanges: (
+    filePaths: readonly string[],
+    signal?: AbortSignal,
+  ) => Promise<IncrementalBuildResult[]>
   renderIfDirtyByOutPath: (outPath: string) => Promise<boolean>
   renderByUrlPath: (urlPath: string, locale?: string) => Promise<boolean>
   /** Writes styles and discovered scripts before a dev response is served. */

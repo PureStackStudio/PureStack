@@ -31,6 +31,54 @@ describe('dev server', () => {
   })
 
   it.each([true, false])(
+    'does not generate sitemap or robots with fullRender %s',
+    async (fullRender) => {
+      root = await makeRepoTempDir('.tmp-ts-ssg-dev-sitemap-')
+      const contentDir = path.join(root, 'content')
+      const outDir = path.join(root, 'out')
+      await writeFile(path.join(contentDir, 'index.md'), '# Home')
+      await writeFile(
+        path.join(contentDir, 'siteConfig.json'),
+        JSON.stringify({
+          sitemap: {
+            enabled: true,
+            baseUrl: 'https://example.com',
+            robots: { enabled: true },
+          },
+        }),
+      )
+      const port = await findFreePort()
+      server = await startDevServer({
+        host: HOST,
+        port,
+        watch: false,
+        fullRender,
+        build: {
+          siteConfig: {
+            rootDir: root,
+            contentDir,
+            outDir,
+            sitemap: {
+              enabled: true,
+              baseUrl: 'https://example.com',
+              robots: { enabled: true },
+            },
+          },
+        },
+      })
+      const response = await fetch(`http://${HOST}:${port}/`)
+      expect(response.status).toBe(200)
+      await response.text()
+      await expect(
+        fs.stat(path.join(outDir, 'sitemap.xml')),
+      ).rejects.toMatchObject({ code: 'ENOENT' })
+      await expect(
+        fs.stat(path.join(outDir, 'robots.txt')),
+      ).rejects.toMatchObject({ code: 'ENOENT' })
+    },
+  )
+
+  it.each([true, false])(
     'renders only requested pages and copies requested assets (clean %s)',
     async (cleanOutDir) => {
       root = await makeRepoTempDir('.tmp-ts-ssg-dev-startup-')
