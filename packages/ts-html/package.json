@@ -1,6 +1,6 @@
 {
   "name": "@purestack/ts-html",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "packageManager": "yarn@4.9.2",
   "module": "./dist/ts-html.mjs",
   "types": "./dist/ts-html.d.mts",

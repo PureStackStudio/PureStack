@@ -1,30 +1,22 @@
 import { globSync, readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { bumpVersion, versionPattern } from './version'
 
 const projectRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   '..',
 )
-if (process.argv.length > 2) {
-  throw new Error('Usage: yarn bump-version (no arguments)')
+if (process.argv.length > 3) {
+  throw new Error('Usage: yarn bump-version [delta] (default: 1)')
 }
 
-const versionPattern = /^(0|[1-9]\d*)\.([0-9])\.([0-9])$/
+const delta = process.argv[2] ?? '1'
 const rootManifest = JSON.parse(
   readFileSync(path.join(projectRoot, 'package.json'), 'utf8'),
 ) as { version: string }
 const currentVersion = rootManifest.version
-const current = versionPattern.exec(currentVersion)
-if (!current)
-  throw new Error(
-    `Expected a root version with single-digit minor and patch numbers, received ${currentVersion}.`,
-  )
-
-// Treat minor and patch as decimal digits, carrying into the next component.
-const [major, minor, patch] = current.slice(1).map(BigInt)
-const incremented = major * 100n + minor * 10n + patch + 1n
-const nextVersion = `${incremented / 100n}.${(incremented / 10n) % 10n}.${incremented % 10n}`
+const nextVersion = bumpVersion(currentVersion, delta)
 
 type Update = { relativePath: string; source: string }
 const updates: Update[] = []
