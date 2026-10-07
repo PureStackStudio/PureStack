@@ -27,6 +27,12 @@ yarn frontend:publish
 - Each command runs the `purestack` CLI. It loads `purestack.studio/purestack.config.ts`,
   whose plugin registers the `studio` skin, composition components, template, and typed styles.
 
+## Legal pages
+
+Imprint and Privacy Policy content lives in Git-ignored MDX files. Missing files
+are created automatically with placeholders; fill them before publishing.
+See [Private legal content](legal-content.md) for paths and setup.
+
 ## Source map
 
 | File | Purpose |

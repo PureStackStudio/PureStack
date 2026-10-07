@@ -646,6 +646,7 @@ describe('resolveSiteConfig sitemap', () => {
     )
     expect(ga4Service).toBeDefined()
     expect(ga4Service?.category).toBe('analytics')
+    expect(ga4Service?.ga4MeasurementId).toBe('G-TEST1234')
     expect(ga4Service?.scripts).toHaveLength(2)
   })
 

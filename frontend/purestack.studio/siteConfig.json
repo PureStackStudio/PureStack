@@ -49,7 +49,8 @@
   },
   "consent": {
     "enabled": true,
-    "policyVersion": "2026-09-16",
+    "policyVersion": "2026-10-07",
+    "privacyPolicyUrl": "/legal/privacy/",
     "categories": [
       {
         "id": "necessary",
@@ -58,14 +59,6 @@
       }
     ],
     "services": []
-  },
-  "analytics": {
-    "ga4": {
-      "enabled": true,
-      "measurementId": "G-90ZXV1S6NF",
-      "consentCategory": "necessary",
-      "serviceId": "necessary"
-    }
   },
   "pagefind": {
     "enabled": true,

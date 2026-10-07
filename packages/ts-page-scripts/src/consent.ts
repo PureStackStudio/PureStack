@@ -233,6 +233,15 @@ if (
       updatedAt: Date.now(),
     }
     applyConsentAttributes(currentState)
+    // Removing a script cannot stop an already-loaded tracker; disable collection first.
+    for (const service of services) {
+      if (!service.ga4MeasurementId) continue
+      const key = `ga-disable-${service.ga4MeasurementId}`
+      ;(window as unknown as Record<string, unknown>)[key] = !isServiceAllowed(
+        service,
+        currentState,
+      )
+    }
     loadAllowedServices(currentState)
     updateCheckboxes(currentState)
     if (persist) {
