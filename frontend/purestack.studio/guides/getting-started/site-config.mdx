@@ -27,7 +27,7 @@ content/
     _nav.json
 ```
 
-The CLI requires this file. A custom TypeScript runner can also pass site configuration directly. Most runner values take precedence over file values; for `navigation`, the file values take precedence where both specify the same field. Omitted fields use the defaults described below. The [JSON Schema](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-ssg/schema/siteConfig.schema.json) lists every supported field and is useful for editor completion.
+The CLI requires this file. A custom TypeScript runner can also pass site configuration directly. Most runner values take precedence over file values; for `navigation`, the file values take precedence where both specify the same field. Omitted fields use the defaults described below. The <a href="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-ssg/schema/siteConfig.schema.json" target="_blank" rel="noopener">JSON Schema</a> lists every supported field and is useful for editor completion.
 
 ## Start with a small config
 
@@ -93,7 +93,7 @@ The `--content` CLI option chooses the content directory. A custom runner can se
 }
 ```
 
-The logo can use `imageSrc` and `imageSrcDark` instead of an icon, or a `monogram` mark. `imageSrc` takes priority over `icon`. `subtitle`, `appearance`, `wordmarkStyle`, `shape`, `tone`, colors, and size fields let you tune the mark and wordmark. Set `logo.href` to `null` or `""` for a noninteractive logo. For the full set of presentation fields, use the [schema](https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-ssg/schema/siteConfig.schema.json) alongside the [SiteLogo component](/components/site/site-logo/).
+The logo can use `imageSrc` and `imageSrcDark` instead of an icon, or a `monogram` mark. `imageSrc` takes priority over `icon`. `subtitle`, `appearance`, `wordmarkStyle`, `shape`, `tone`, colors, and size fields let you tune the mark and wordmark. Set `logo.href` to `null` or `""` for a noninteractive logo. For the full set of presentation fields, use the <a href="https://github.com/PureStackStudio/PureStack/blob/main/packages/ts-ssg/schema/siteConfig.schema.json" target="_blank" rel="noopener">schema</a> alongside the [SiteLogo component](/components/site/site-logo/).
 
 Relative paths in `siteConfig.json`, such as `imageSrc`, `style.href`, or `privacyPolicyUrl`, start at the content directory, where the file lives. `assets/logo.svg` becomes `/assets/logo.svg` on every page.
 

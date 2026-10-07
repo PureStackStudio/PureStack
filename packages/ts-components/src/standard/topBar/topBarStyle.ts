@@ -59,6 +59,11 @@ export function registerTopBarShellStyles(
 
   styleBuilder.select('.topbar__controls', theme).marginLeft('auto')
   styleBuilder
+    .select('.topbar__actions', theme)
+    .display('flex')
+    .alignItems('center')
+    .gap('0rem')
+  styleBuilder
     .select('.topbar', theme)
     .media(mediaBelow(BREAKPOINTS.sm))
     .padding('0.75rem')

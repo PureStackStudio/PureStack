@@ -28,7 +28,7 @@ export function defineComponentGuideComponents() {
         <div class="component-header__identity"><code>{{ name }}</code><span>{{ kind }}</span></div>
         <nav class="component-header__links" aria-label="Component resources">
           <a href="#api-reference">API <span aria-hidden="true">↗</span></a>
-          <a :href="source" target="_blank" rel="noopener noreferrer">Source <span aria-hidden="true">↗</span></a>
+          <a :href="source" target="_blank" rel="noopener">Source <span aria-hidden="true">↗</span></a>
         </nav>
       </div>
       <p class="component-header__summary">{{ summary }}</p>

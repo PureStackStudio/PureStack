@@ -8,7 +8,7 @@ export interface StudioPackage {
   href?: RefOrValue<string>
 }
 
-const studioPackageTemplate = html`<a class="package-card" :href="href">
+const studioPackageTemplate = html`<a class="package-card" :href="href" target="_blank" rel="noopener">
   <span class="package-number">{{ number }}</span>
   <SectionHeader :title="title" :subtitle="summary" titleTag="h3">
     <code>{{ packageName }}</code>
