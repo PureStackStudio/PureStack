@@ -32,6 +32,19 @@ async function fileExists(filePath: string) {
   }
 }
 
+async function readThemeCss(outDir: string, theme: 'light' | 'dark') {
+  const assetsDir = path.join(outDir, 'assets')
+  const pattern =
+    theme === 'light'
+      ? /^site\.[a-z0-9]+\.css$/
+      : /^site\.[a-z0-9]+\.dark\.css$/
+  const files = (await fs.readdir(assetsDir)).filter((file) =>
+    pattern.test(file),
+  )
+  expect(files).toHaveLength(1)
+  return fs.readFile(path.join(assetsDir, files[0]), 'utf8')
+}
+
 async function readScriptBundle(
   outDir: string,
   pageRelPath = path.join('hosts', 'index.html'),
@@ -59,6 +72,42 @@ describe('incremental builder', () => {
   afterAll(async () => {
     await logger?.close()
   })
+
+  it.each([true, false])(
+    'builds pages linked to cache-keyed theme files (publish %s)',
+    async (publish) => {
+      await withTempDir(async (base) => {
+        const contentDir = path.join(base, 'content')
+        const publishDir = path.join(base, 'publish')
+        await fs.mkdir(contentDir)
+        await fs.writeFile(path.join(contentDir, 'index.md'), '# Home')
+        const builder = await createIncrementalBuilder({
+          siteConfig: {
+            rootDir: base,
+            contentDir,
+            publishDir,
+            outDir: publishDir,
+            basePath: '/docs',
+            style: { fileName: 'site.css', href: '/assets/site.css' },
+          },
+          publish: { enabled: publish },
+        })
+        await builder.buildAll('publish CSS cache keys')
+        const manifest = await readManifest(publishDir)
+        expect(manifest?.styles.outputs).toHaveLength(2)
+        const html = await fs.readFile(
+          path.join(publishDir, 'index.html'),
+          'utf8',
+        )
+        for (const output of manifest?.styles.outputs ?? []) {
+          const fileName = path.basename(output)
+          expect(fileName).toMatch(/^site\.[a-z0-9]+(?:\.dark)?\.css$/)
+          expect(html).toContain(`/docs/assets/${fileName}`)
+          expect((await fs.readFile(output, 'utf8')).length).toBeGreaterThan(0)
+        }
+      })
+    },
+  )
 
   it('keeps style changes during CSS generation pending for the next request', async () => {
     await withTempDir(async (base) => {
@@ -101,9 +150,9 @@ describe('incremental builder', () => {
         expect(writes).toBe(1)
         await builder.preparePageAssets()
         expect(writes).toBe(2)
-        expect(
-          await fs.readFile(path.join(outDir, 'assets', 'site.css'), 'utf8'),
-        ).toContain('.concurrent-style')
+        expect(await readThemeCss(outDir, 'light')).toContain(
+          '.concurrent-style',
+        )
         await builder.preparePageAssets()
         expect(writes).toBe(2)
       } finally {
@@ -374,14 +423,8 @@ describe('incremental builder', () => {
 
       await builder.buildAll('test highlightjs styles')
 
-      const lightCss = await fs.readFile(
-        path.join(outDir, 'assets', 'site.css'),
-        'utf8',
-      )
-      const darkCss = await fs.readFile(
-        path.join(outDir, 'assets', 'site.dark.css'),
-        'utf8',
-      )
+      const lightCss = await readThemeCss(outDir, 'light')
+      const darkCss = await readThemeCss(outDir, 'dark')
 
       expect(lightCss).not.toContain('pre.shiki.shiki-themes')
       expect(darkCss).not.toContain('pre.shiki.shiki-themes')

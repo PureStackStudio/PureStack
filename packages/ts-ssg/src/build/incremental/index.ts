@@ -44,7 +44,7 @@ import {
 } from '../manifest'
 import { type BuildContext, resolveHeaderFooterHtml } from '../page'
 import { buildPagefindIndex } from '../pagefind'
-import { ScriptCacheKeyStore } from '../script-cache-key'
+import { createScriptCacheKey, ScriptCacheKeyStore } from '../script-cache-key'
 import type { BuildHooks, BuildInput, BuildResult } from '../site'
 import { writeSitemap } from '../sitemap'
 import { type WriteStylesResult, writeStyles } from '../styles'
@@ -110,6 +110,7 @@ async function createIncrementalRuntime(
       : createEmptyManifest(config)
   const scriptCacheKeys = new ScriptCacheKeyStore(manifest.assets)
   const context: BuildContext = {
+    styleCacheKey: createScriptCacheKey(),
     config,
     // The content is prepared once, by the first build or the first change or
     // request; see IncrementalRuntime.ensureContentReady.
@@ -295,6 +296,7 @@ class IncrementalRuntime {
   }
 
   buildAll = async (reason: string): Promise<BuildResult> => {
+    this.context.styleCacheKey = createScriptCacheKey()
     const buildStartMs = Date.now()
     const hooks = this.resolveBuildHooks()
 
@@ -421,6 +423,7 @@ class IncrementalRuntime {
       {
         outDir,
         includeHljsTheme: isHighlightJsEnabled(this.config.mdx),
+        cacheKey: this.context.styleCacheKey,
       },
       style,
     )

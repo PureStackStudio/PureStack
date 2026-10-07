@@ -58,10 +58,12 @@ export function resolveThemes(
 export function resolveThemeFileName(
   fileName: string,
   theme: ThemeName,
+  cacheKey?: string,
 ): string {
   const normalized = normalizeThemeName(theme)
   const hasCss = fileName.toLowerCase().endsWith('.css')
-  const base = hasCss ? fileName.slice(0, -4) : fileName
+  const name = hasCss ? fileName.slice(0, -4) : fileName
+  const base = cacheKey ? `${name}.${cacheKey}` : name
   const suffix = '.css'
   if (normalized === 'light') {
     return `${base}${suffix}`
@@ -69,12 +71,17 @@ export function resolveThemeFileName(
   return `${base}.${normalized}${suffix}`
 }
 
-export function resolveThemeHref(styleHref: string, theme: ThemeName): string {
+export function resolveThemeHref(
+  styleHref: string,
+  theme: ThemeName,
+  cacheKey?: string,
+): string {
   if (!styleHref) return styleHref
   const { path, query, hash } = splitHref(styleHref)
   const normalized = normalizeThemeName(theme)
   const hasCss = path.toLowerCase().endsWith('.css')
-  const base = hasCss ? path.slice(0, -4) : path
+  const name = hasCss ? path.slice(0, -4) : path
+  const base = cacheKey ? `${name}.${cacheKey}` : name
   const suffix = '.css'
   const themedPath =
     normalized === 'light'
@@ -86,11 +93,12 @@ export function resolveThemeHref(styleHref: string, theme: ThemeName): string {
 export function resolveThemeStyleLinks(
   styleHref: string,
   themes: ThemeName[],
+  cacheKey?: string,
 ): ThemeStylesheetLink[] {
   if (!styleHref) return []
   const ordered = orderThemes(themes)
   return ordered.map((theme) => {
-    const href = resolveThemeHref(styleHref, theme)
+    const href = resolveThemeHref(styleHref, theme, cacheKey)
     return {
       theme,
       href,

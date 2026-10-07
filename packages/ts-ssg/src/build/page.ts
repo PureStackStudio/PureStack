@@ -47,6 +47,8 @@ import { renderPage } from './renderer'
 import type { BuildHooks } from './site'
 
 export interface BuildContext {
+  /** Shared by generated stylesheet filenames and links for this build/session. */
+  styleCacheKey?: string
   config: SiteConfig
   contentRoutes: ContentRouteIndex
   headerHtmlByDir?: Map<string, string>
@@ -399,6 +401,7 @@ async function renderPageShell(input: RenderPageShellInput): Promise<string> {
     styleLinks: resolveThemeStyleLinks(
       context.config.style.href,
       context.config.style.themes,
+      context.styleCacheKey,
     ),
     template,
     templates: context.templates,
