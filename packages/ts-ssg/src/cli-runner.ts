@@ -206,6 +206,7 @@ class CliUsageError extends Error {
 }
 
 const USAGE = `Usage:
+  purestack --version
   purestack build --content <dir> [--clean]
   purestack serve --content <dir> [--host <host>] [--port <port>] [--clean] [--no-watch] [--no-reload] [--full-render]
   purestack publish --content <dir>
@@ -213,4 +214,8 @@ const USAGE = `Usage:
 Commands:
   build     Build a content directory into its configured outDir.
   serve     Start the dev server; --full-render builds all pages once at startup.
-  publish   Clean and build a publish artifact using the configured publishDir.`
+  publish   Clean and build a publish artifact using the configured publishDir.
+
+Options:
+  --help, -h      Print this usage summary.
+  --version, -v   Print the installed PureStack version.`
