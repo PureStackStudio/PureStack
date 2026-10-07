@@ -18,6 +18,8 @@ export interface ConsentScript {
 }
 
 export interface ConsentService {
+  /** Set by the built-in GA4 integration to stop collection on consent withdrawal. */
+  ga4MeasurementId?: string
   id: string
   category: string
   label?: string

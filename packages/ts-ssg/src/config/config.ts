@@ -755,6 +755,7 @@ function appendGa4ConsentService(
       id: ga4.serviceId,
       category: ga4.consentCategory,
       label: 'Google Analytics 4',
+      ga4MeasurementId: ga4.measurementId,
       scripts: buildGa4ConsentScripts(ga4.measurementId),
     },
   ]

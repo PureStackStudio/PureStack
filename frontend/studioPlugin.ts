@@ -7,6 +7,7 @@ import { registerComponentGuideStyles } from './docs/componentGuide'
 import { defineDocumentationComponents } from './docs/docsComponents'
 import { previewTemplate } from './docs/previewTemplate'
 import { sitePreviewPages } from './docs/sitePreviews'
+import { ensureLegalContent } from './ensureLegalContent'
 import { studioSkin } from './theme/studioSkin'
 import { registerStudioStyles } from './theme/studioStyles'
 
@@ -43,7 +44,8 @@ export const studioPlugin = definePlugin({
     },
   },
   hooks: {
-    onConfigResolved() {
+    async onConfigResolved({ config }) {
+      await ensureLegalContent(config.contentDir)
       registerStudioStyles()
       registerApiReferenceStyles()
       registerComponentGuideStyles()

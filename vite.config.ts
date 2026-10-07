@@ -1,4 +1,3 @@
-import tsconfigPaths from 'vite-tsconfig-paths'
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
@@ -9,6 +8,7 @@ export default defineConfig({
   test: {
     include: [
       'packages/*/src/**/*.{test,spec}.{js,cjs,mjs,ts,cts,mts,jsx,tsx}',
+      'frontend/**/*.{test,spec}.{js,cjs,mjs,ts,cts,mts,jsx,tsx}',
     ],
     exclude: [
       'packages/_ts-ssg-vscode/src/**/*.{test,spec}.{js,cjs,mjs,ts,cts,mts,jsx,tsx}',

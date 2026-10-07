@@ -10,3 +10,4 @@ purestack-setup
 .codex/*
 /.tmp*
 /frontend/out/
+/frontend/purestack.studio/legal/_private/
