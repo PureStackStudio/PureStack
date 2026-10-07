@@ -6,11 +6,13 @@ import { hyphenizeCss } from './hyphenize'
 
 export abstract class RootStyle {
   static nextId = 1
+  static revision = 0
   id: number
   selector: string
   constructor(selector?: string) {
     this.id = BaseStyle.nextId++
     this.selector = selector ?? ''
+    RootStyle.revision += 1
   }
   abstract toCSS(): string
 }
@@ -25,7 +27,11 @@ export class BaseStyle<T extends RootStyle> extends RootStyle {
   }
 
   set(key: string, value: string | number) {
-    this.props.set(hyphenizeCss(key), autoVar(value))
+    key = hyphenizeCss(key)
+    value = autoVar(value)
+    if (this.props.get(key) === value) return this
+    this.props.set(key, value)
+    RootStyle.revision += 1
     return this
   }
 
@@ -84,7 +90,9 @@ export class BaseStyle<T extends RootStyle> extends RootStyle {
 
   use(css: T) {
     this.#asBaseStyle(css).props.forEach((value, key) => {
+      if (this.props.get(key) === value) return
       this.props.set(key, value)
+      RootStyle.revision += 1
     })
     return this
   }

@@ -72,20 +72,23 @@ const topBarTemplate = html`<input
       class="topbar__search flex-auto rounded-md tone-text-surface"
       variant="none"/>
     <Flex class="topbar__controls flex-none" align="center" justify="end">
-      <ThemeToggle/>
-      <SignIn
-        r-if="resolvedSignInEnabled"
-        class="topbar__account"
-        :enabled="resolvedSignInEnabled"
-        :signedIn="signInSignedIn"
-        :avatarSrc="signInAvatarSrc"
-        :avatarAlt="signInAvatarAlt"/>
-      <label
-        class="topbar__icon topbar__toggle"
-        for="doc-nav-toggle"
-        role="button"
-        aria-label="Toggle navigation"
-      ></label>
+      <div class="topbar__actions">
+        <ThemeToggle/>
+        <slot name="actions"></slot>
+        <SignIn
+          r-if="resolvedSignInEnabled"
+          class="topbar__account"
+          :enabled="resolvedSignInEnabled"
+          :signedIn="signInSignedIn"
+          :avatarSrc="signInAvatarSrc"
+          :avatarAlt="signInAvatarAlt"/>
+        <label
+          class="topbar__icon topbar__toggle"
+          for="doc-nav-toggle"
+          role="button"
+          aria-label="Toggle navigation"
+        ></label>
+      </div>
     </Flex>
   </Flex>
 </header>`

@@ -25,6 +25,9 @@ export function getThemeClass(theme: ThemeName) {
 
 export type StyleBuilder = typeof styleBuilder
 export const styleBuilder = {
+  get revision() {
+    return Style.revision
+  },
   get(theme: ThemeName) {
     if (!theme) {
       throw new Error(

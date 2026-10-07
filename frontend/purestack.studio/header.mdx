@@ -9,15 +9,27 @@
       <a href="#getting-started">Get started</a>
     </nav>
     <div class="header-actions">
-      <ThemeToggle/>
-      <a
-        class="header-source"
-        href="https://github.com/PureStackStudio/PureStack"
-        aria-label="PureStack GitHub repository"
-      >
-        <Icon name="tabler:brand-github"/><span>GitHub</span
-        ><span aria-hidden="true">↗</span>
-      </a>
+      <div class="topbar__actions">
+        <ThemeToggle/>
+        <a
+          class="topbar__icon"
+          href="https://github.com/PureStackStudio/PureStack"
+          target="_blank"
+          rel="noopener"
+          aria-label="PureStack GitHub repository"
+        >
+          <Icon name="tabler:brand-github"/>
+        </a>
+        <a
+          class="topbar__icon"
+          href="https://x.com/purestackstudio"
+          target="_blank"
+          rel="noopener"
+          aria-label="PureStack Studio on X"
+        >
+          <Icon name="tabler:brand-x"/>
+        </a>
+      </div>
       <details class="mobile-menu">
         <summary aria-label="Toggle navigation">
           <Icon name="tabler:menu-2"/>
@@ -28,7 +40,15 @@
           <a href="/guides/">Guides</a>
           <a href="/components/">Components</a>
           <a href="#getting-started">Get started</a>
-          <a href="https://github.com/PureStackStudio/PureStack">GitHub ↗</a>
+          <a
+            href="https://github.com/PureStackStudio/PureStack"
+            target="_blank"
+            rel="noopener"
+            >GitHub ↗</a
+          >
+          <a href="https://x.com/purestackstudio" target="_blank" rel="noopener"
+            >X ↗</a
+          >
         </nav>
       </details>
     </div>

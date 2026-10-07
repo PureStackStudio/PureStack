@@ -1,8 +1,9 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import { styleBuilder } from '@purestack/ts-style'
 
 import { disableLogger, getLogger, type Logger } from 'logpot'
-import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
 import { resolveSiteConfig } from '../../config/config'
 import { parseFrontmatterSource } from '../../frontmatter/frontmatter'
 import type { PureStackPlugin } from '../../plugins/plugin'
@@ -57,6 +58,161 @@ describe('incremental builder', () => {
 
   afterAll(async () => {
     await logger?.close()
+  })
+
+  it('keeps style changes during CSS generation pending for the next request', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      const outDir = path.join(base, 'out')
+      await fs.mkdir(contentDir)
+      await fs.writeFile(path.join(contentDir, 'index.md'), '# Home')
+      let writes = 0
+      const builder = await createIncrementalBuilder({
+        siteConfig: { rootDir: base, contentDir, outDir },
+        options: {
+          plugins: [
+            {
+              name: 'count-css',
+              hooks: {
+                onStylesWritten() {
+                  writes += 1
+                },
+              },
+            },
+          ],
+        },
+      })
+      await builder.prepareForRequests()
+      await builder.renderByUrlPath('/')
+      const render = styleBuilder.render.bind(styleBuilder)
+      let changed = false
+      const spy = vi
+        .spyOn(styleBuilder, 'render')
+        .mockImplementation(async (theme, pretty) => {
+          const css = await render(theme, pretty)
+          if (!changed) {
+            changed = true
+            styleBuilder.select('.concurrent-style', 'light').color('red')
+          }
+          return css
+        })
+      try {
+        await builder.preparePageAssets()
+        expect(writes).toBe(1)
+        await builder.preparePageAssets()
+        expect(writes).toBe(2)
+        expect(
+          await fs.readFile(path.join(outDir, 'assets', 'site.css'), 'utf8'),
+        ).toContain('.concurrent-style')
+        await builder.preparePageAssets()
+        expect(writes).toBe(2)
+      } finally {
+        spy.mockRestore()
+      }
+    })
+  })
+
+  it.each(['none', 'hybrid'] as const)(
+    'shares discovery across watcher bursts with %s navigation',
+    async (mode) => {
+      await withTempDir(async (base) => {
+        const contentDir = path.join(base, 'content')
+        const outDir = path.join(base, 'out')
+        await fs.mkdir(contentDir)
+        const files = Array.from({ length: 10 }, (_, index) =>
+          path.join(contentDir, `page${index}.md`),
+        )
+        for (const file of files) await fs.writeFile(file, '# Original')
+        let discoveries = 0
+        const builder = await createIncrementalBuilder({
+          siteConfig: {
+            rootDir: base,
+            contentDir,
+            outDir,
+            navigation: { mode },
+          },
+          options: {
+            plugins: [
+              {
+                name: 'count-discoveries',
+                pages() {
+                  discoveries += 1
+                  return []
+                },
+              },
+            ],
+          },
+        })
+        await builder.prepareForRequests()
+        await builder.renderByUrlPath('/page0/')
+        discoveries = 0
+        expect(await builder.applyChanges([...files, files[0]])).toHaveLength(
+          10,
+        )
+        expect(discoveries).toBe(1)
+
+        await fs.writeFile(files[0], '# Updated')
+        await fs.rm(files[1])
+        const added = path.join(contentDir, 'added.md')
+        await fs.writeFile(added, '# Added')
+        await builder.applyChanges([files[0], files[1], added])
+        expect(discoveries).toBe(2)
+        expect(await builder.renderByUrlPath('/page0/')).toBe(true)
+        expect(
+          await fs.readFile(path.join(outDir, 'page0', 'index.html'), 'utf8'),
+        ).toContain('Updated')
+        expect(await builder.renderByUrlPath('/added/')).toBe(true)
+        expect(await builder.renderByUrlPath('/page1/')).toBe(false)
+      })
+    },
+  )
+
+  it('stops a change batch on abort and clears its discovery cache after failure', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      await fs.mkdir(contentDir)
+      const first = path.join(contentDir, 'first.md')
+      const second = path.join(contentDir, 'second.md')
+      await fs.writeFile(first, '# First')
+      await fs.writeFile(second, '# Second')
+      const controller = new AbortController()
+      let abort = false
+      let fail = false
+      const builder = await createIncrementalBuilder({
+        siteConfig: {
+          rootDir: base,
+          contentDir,
+          outDir: path.join(base, 'out'),
+        },
+        options: {
+          plugins: [
+            {
+              name: 'control-discovery',
+              pages() {
+                if (fail) throw new Error('discovery failed')
+                if (abort) controller.abort()
+                return []
+              },
+            },
+          ],
+        },
+      })
+      await builder.prepareForRequests()
+      abort = true
+      expect(
+        await builder.applyChanges([first, second], controller.signal),
+      ).toHaveLength(1)
+      expect(await builder.applyChanges([second], controller.signal)).toEqual(
+        [],
+      )
+      abort = false
+      fail = true
+      await expect(builder.applyChanges([first])).rejects.toThrow(
+        'discovery failed',
+      )
+      fail = false
+      expect(await builder.applyChanges([first, second])).toHaveLength(2)
+    })
   })
 
   it('ignores directory notifications and refreshes removed subtrees without deleting directories as files', async () => {

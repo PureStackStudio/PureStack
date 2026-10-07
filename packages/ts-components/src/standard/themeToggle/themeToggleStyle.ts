@@ -20,7 +20,7 @@ function registerThemeToggleButtonStyles(
   palette: ThemePalette,
 ) {
   styleBuilder
-    .select('.theme-toggle', theme)
+    .select('.theme-toggle, a.topbar__icon', theme)
     .display('inline-grid')
     .placeItems('center')
     .flexShrink('0')
@@ -35,17 +35,17 @@ function registerThemeToggleButtonStyles(
     .transition('background 160ms ease, color 160ms ease')
 
   styleBuilder
-    .select('.theme-toggle:hover', theme)
+    .select('.theme-toggle:hover, a.topbar__icon:hover', theme)
     .background(palette.current.surface.hover.background)
     .borderColor(palette.current.surface.hover.border)
     .color(palette.current.text.default)
 
   styleBuilder
-    .select('.theme-toggle:active', theme)
+    .select('.theme-toggle:active, a.topbar__icon:active', theme)
     .background(palette.current.surface.active.background)
 
   styleBuilder
-    .select('.theme-toggle:focus-visible', theme)
+    .select('.theme-toggle:focus-visible, a.topbar__icon:focus-visible', theme)
     .outline(`2px solid ${palette.current.border.focus}`)
     .outlineOffset('2px')
 }
@@ -60,7 +60,7 @@ function registerThemeToggleGlyphStyles(theme: ThemeMode) {
   const hiddenTurn = theme === 'dark' ? '90deg' : '-90deg'
 
   styleBuilder
-    .select('.theme-toggle .theme-toggle__glyph', theme)
+    .select('.theme-toggle .theme-toggle__glyph, a.topbar__icon .icon', theme)
     .gridArea('1 / 1')
     .width('1.25rem')
     .height('1.25rem')

@@ -74,6 +74,21 @@ export class IncrementalContentState {
   private unindexedPages = new Map<string, string>()
   private readonly renderInFlight = new Map<string, Promise<boolean>>()
   private readonly contentIndex: ManifestContentIndex
+  private changeBatch:
+    | {
+        content?: Promise<ResolvedContentFile[]>
+        navigation?: Promise<ResolvedContentFile[]>
+      }
+    | undefined
+
+  async withChangeBatch<T>(apply: () => Promise<T>): Promise<T> {
+    this.changeBatch = {}
+    try {
+      return await apply()
+    } finally {
+      this.changeBatch = undefined
+    }
+  }
 
   constructor(private readonly input: IncrementalContentStateInput) {
     this.contentIndex = new ManifestContentIndex(
@@ -185,6 +200,14 @@ export class IncrementalContentState {
    * the same pages cost nothing beyond discovery.
    */
   async refreshContent() {
+    if (this.changeBatch) {
+      this.changeBatch.content ??= this.discoverContent()
+      return this.changeBatch.content
+    }
+    return this.discoverContent()
+  }
+
+  private async discoverContent() {
     const { config, context, plugins } = this.input
     const contentFiles = await discoverSiteContent(config, plugins)
     const generated = this.trackGeneratedPages(contentFiles)
@@ -263,6 +286,14 @@ export class IncrementalContentState {
    * it changes; an edit that leaves it alone touches no other page.
    */
   async refreshNavigation() {
+    if (this.changeBatch) {
+      this.changeBatch.navigation ??= this.rebuildNavigation()
+      return this.changeBatch.navigation
+    }
+    return this.rebuildNavigation()
+  }
+
+  private async rebuildNavigation() {
     const { config, context } = this.input
     const contentFiles = await this.refreshContent()
     const navigation = await buildNavigation(

@@ -100,32 +100,37 @@ describe('TopBar rendering', () => {
       ...defineThemeToggleComponents(),
       ...defineTopBarComponents(),
     }
-    const html = await renderApp(`<TopBar signInEnabled="true"/>`, {
-      components,
-      context: createTestContext({
-        site: {
-          logo: {
-            brand: 'Calc Core',
-            subtitle: 'Backend engine',
-            suffix: '.',
-            href: '/docs/',
-            icon: 'iconoir:cube',
-            size: 'lg',
-            appearance: 'badge',
-            markStyle: 'solid',
-            wordmarkStyle: 'gradient',
-            brandColor: '#111111',
-            accentColor: '#ff0066',
+    const html = await renderApp(
+      `<TopBar signInEnabled="true">
+      <template #actions><a href="https://x.com/purestackstudio" target="_blank" rel="noopener" aria-label="X account"><Icon name="tabler:brand-x"/></a></template>
+    </TopBar>`,
+      {
+        components,
+        context: createTestContext({
+          site: {
+            logo: {
+              brand: 'Calc Core',
+              subtitle: 'Backend engine',
+              suffix: '.',
+              href: '/docs/',
+              icon: 'iconoir:cube',
+              size: 'lg',
+              appearance: 'badge',
+              markStyle: 'solid',
+              wordmarkStyle: 'gradient',
+              brandColor: '#111111',
+              accentColor: '#ff0066',
+            },
+            auth: {
+              enabled: true,
+            },
+            pagefind: {
+              enabled: true,
+            },
           },
-          auth: {
-            enabled: true,
-          },
-          pagefind: {
-            enabled: true,
-          },
-        },
-      }),
-    })
+        }),
+      },
+    )
     cleanup()
 
     expect(html).toContain('>Calc Core</span>')
@@ -139,6 +144,10 @@ describe('TopBar rendering', () => {
     expect(html).toContain('name="q"')
     expect(html).toContain('class="sign-in position-relative topbar__account"')
     expect(html).toContain('data-icon="lucide:log-in"')
+    expect(html).toContain('href="https://x.com/purestackstudio"')
+    expect(html).toContain('data-icon="tabler:brand-x"')
+    expect(html).toContain('target="_blank"')
+    expect(html).toContain('rel="noopener"')
     expect((html.match(/class="flex/g) ?? []).length).toBeGreaterThan(1)
     expect(html).toContain('tone-fill-surface-alt')
     expect(html).toContain('tone-border-surface-alt')

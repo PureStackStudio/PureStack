@@ -83,6 +83,14 @@ export async function startDevServer(
   const logger = getLogger()
   const baseBuildInput: BuildInput = {
     ...input.build,
+    siteConfig: {
+      ...input.build?.siteConfig,
+      // Disabling sitemap generation also skips robots.txt; neither is needed in the dev server.
+      sitemap: {
+        ...input.build?.siteConfig?.sitemap,
+        enabled: false,
+      },
+    },
     options: {
       writeErrorPages: true,
       ...input.build?.options,
@@ -116,6 +124,7 @@ export async function startDevServer(
   let liveReloadVersion = 0
   let initialSetupDone = false
   let shuttingDown = false
+  const shutdownController = new AbortController()
   let watcher: { close: () => void } | undefined
   const requestState = createRebuildRequestState()
 
@@ -150,7 +159,7 @@ export async function startDevServer(
     if (requestState.inFlight) return
     requestState.inFlight = true
     try {
-      while (requestState.pending) {
+      while (requestState.pending && !shuttingDown) {
         requestState.pending = false
         if (requestState.changedPaths.size > 0) {
           await rebuildChanged()
@@ -188,8 +197,10 @@ export async function startDevServer(
     setupReady = prepared.promise
     try {
       await previousSetup
+      if (shuttingDown) return
       // Output cleanup must not race HTML reads or streamed asset responses.
       await Promise.all([...activeResponses])
+      if (shuttingDown) return
       if (options?.reloadConfig) {
         buildInput = await projectConfig.load(baseBuildInput)
         watchConfigDependencies()
@@ -210,7 +221,7 @@ export async function startDevServer(
         })
         initialSetupDone = true
       }
-      notifyReload(reason)
+      if (!shuttingDown) notifyReload(reason)
     } catch (error) {
       logError(log, error, 'dev setup failed')
     } finally {
@@ -231,15 +242,15 @@ export async function startDevServer(
     }
     let requiresFull = false
     let touched = false
-    for (const filePath of paths) {
-      let change: Awaited<ReturnType<typeof incremental.applyChange>>
-      try {
-        change = await incremental.applyChange(filePath)
-      } catch (error) {
-        logError(log, error, 'incremental apply failed')
-        requiresFull = true
-        break
-      }
+    let changes: Awaited<ReturnType<typeof incremental.applyChanges>> = []
+    try {
+      changes = await incremental.applyChanges(paths, shutdownController.signal)
+    } catch (error) {
+      logError(log, error, 'incremental apply failed')
+      requiresFull = true
+    }
+    if (shuttingDown) return
+    for (const change of changes) {
       if (change.fullRebuild) {
         requiresFull = true
         break
@@ -310,6 +321,9 @@ export async function startDevServer(
   const shutdown = async () => {
     if (shuttingDown) return
     shuttingDown = true
+    shutdownController.abort()
+    requestState.pending = false
+    requestState.changedPaths.clear()
     if (requestState.timer) {
       clearTimeout(requestState.timer)
       requestState.timer = undefined

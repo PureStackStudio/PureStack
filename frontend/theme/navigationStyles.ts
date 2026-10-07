@@ -21,7 +21,7 @@ export function registerNavigationStyles(root: Style, palette: ThemePalette) {
   root.select('.studio .header-actions').css({
     display: 'flex',
     alignItems: 'center',
-    gap: '8px',
+    gap: '0rem',
     flexShrink: '0',
   })
   root.select('.studio .desktop-nav').css({

@@ -9,8 +9,10 @@ import {
   styleBuilder,
 } from '@purestack/ts-style'
 import { ensureDir } from '@purestack/ts-util-node'
+import { getLogger } from 'logpot'
 
 export interface WriteStylesResult {
+  revision: number
   outPath: string
   outputs: string[]
   signature: string
@@ -25,16 +27,23 @@ export async function writeStyles(
   input: WriteStylesInput,
   style: SiteStyleConfig,
 ): Promise<WriteStylesResult> {
+  const log = getLogger()
   const { outDir, includeHljsTheme = false } = input
   const { fileName, themes, pretty } = style
   const resultPaths: string[] = []
   const hash = crypto.createHash('sha256')
   const orderedThemes = orderThemes(themes)
   styleBuilder.ensureThemes(orderedThemes)
+  // render() collects CSS synchronously, before awaiting formatting or file writes.
+  const rendering = Promise.all(
+    orderedThemes.map((theme) => styleBuilder.render(theme, pretty)),
+  )
+  const revision = styleBuilder.revision
+  const renderedThemes = await rendering
   let lightOutPath: string | undefined
 
-  for (const theme of orderedThemes) {
-    const rendered = await styleBuilder.render(theme, pretty)
+  for (const [index, theme] of orderedThemes.entries()) {
+    const rendered = renderedThemes[index]
     const css = await resolveOutputCss(
       rendered,
       theme,
@@ -45,6 +54,7 @@ export async function writeStyles(
     const outPath = path.join(outDir, 'assets', cssName)
     await ensureDir(outPath)
     await fs.writeFile(outPath, css)
+    log.info('css generated', { theme, outPath })
     hash.update(css)
     hash.update('\0')
     resultPaths.push(outPath)
@@ -54,6 +64,7 @@ export async function writeStyles(
   }
 
   return {
+    revision,
     outPath:
       lightOutPath ??
       path.join(outDir, 'assets', resolveThemeFileName(fileName, 'light')),
