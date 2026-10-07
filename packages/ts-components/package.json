@@ -1,6 +1,6 @@
 {
   "name": "@purestack/ts-components",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "packageManager": "yarn@4.9.2",
   "module": "./dist/ts-components.mjs",
   "types": "./dist/ts-components.d.mts",
