@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises'
-import { htmlMinifier } from '@node-minify/html-minifier'
 import { ensureDir } from '@purestack/ts-util-node'
+import { minify } from 'html-minifier-next'
 
 export async function readSource(absPath: string) {
   return fs.readFile(absPath, 'utf-8')
@@ -30,16 +30,20 @@ export async function prepareOutDir(
 }
 
 async function minifyHtml(input: string): Promise<string> {
-  const result = await htmlMinifier({
-    content: input,
-    settings: {
-      compressor: async () => ({ code: '' }),
-      options: {
-        collapseInlineTagWhitespace: false,
-        removeOptionalTags: false,
-        conservativeCollapse: true,
-      },
-    },
+  return minify(input, {
+    collapseBooleanAttributes: true,
+    collapseInlineTagWhitespace: false,
+    collapseWhitespace: true,
+    conservativeCollapse: true,
+    minifyCSS: true,
+    minifyJS: true,
+    removeAttributeQuotes: true,
+    removeComments: true,
+    removeEmptyAttributes: true,
+    removeOptionalTags: false,
+    removeRedundantAttributes: true,
+    removeScriptTypeAttributes: true,
+    removeStyleLinkTypeAttributes: true,
+    useShortDoctype: true,
   })
-  return result.code
 }

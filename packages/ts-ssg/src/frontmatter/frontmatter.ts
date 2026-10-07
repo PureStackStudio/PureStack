@@ -1,3 +1,4 @@
+import matter from '@11ty/gray-matter'
 import type {
   FrontmatterEmbedOptions,
   FrontmatterLayoutOptions,
@@ -6,7 +7,6 @@ import type {
   PreviewConfig,
 } from '@purestack/ts-common'
 import { pickSemanticTone } from '@purestack/ts-style'
-import matter from 'gray-matter'
 
 export function parseFrontmatterSource(
   source: string,

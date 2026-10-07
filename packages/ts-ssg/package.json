@@ -41,7 +41,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@node-minify/html-minifier": "^11.0.0",
+    "@11ty/gray-matter": "^3.0.0",
     "@purestack/ts-common": "workspace:^",
     "@purestack/ts-components": "workspace:^",
     "@purestack/ts-html": "workspace:^",
@@ -53,10 +53,10 @@
     "@purestack/ts-util": "workspace:^",
     "@purestack/ts-util-node": "workspace:^",
     "esbuild": "^0.28.0",
-    "gray-matter": "^4.0.3",
     "hast-util-from-html": "^2.0.3",
     "hast-util-to-html": "^9.0.5",
     "highlight.js": "^11.11.1",
+    "html-minifier-next": "^4.19.1",
     "logpot": "^1.0.7",
     "mdast-util-to-hast": "^13.2.1",
     "pagefind": "^1.4.0",
