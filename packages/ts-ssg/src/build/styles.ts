@@ -19,6 +19,7 @@ export interface WriteStylesResult {
 }
 
 export interface WriteStylesInput {
+  cacheKey?: string
   outDir: string
   includeHljsTheme?: boolean
 }
@@ -50,7 +51,7 @@ export async function writeStyles(
       !pretty,
       includeHljsTheme,
     )
-    const cssName = resolveThemeFileName(fileName, theme)
+    const cssName = resolveThemeFileName(fileName, theme, input.cacheKey)
     const outPath = path.join(outDir, 'assets', cssName)
     await ensureDir(outPath)
     await fs.writeFile(outPath, css)
@@ -67,7 +68,11 @@ export async function writeStyles(
     revision,
     outPath:
       lightOutPath ??
-      path.join(outDir, 'assets', resolveThemeFileName(fileName, 'light')),
+      path.join(
+        outDir,
+        'assets',
+        resolveThemeFileName(fileName, 'light', input.cacheKey),
+      ),
     outputs: resultPaths,
     signature: hash.digest('hex'),
   }
