@@ -27,6 +27,7 @@ export class Tabs {
   group: string = defaultGroup
   ariaLabel?: RefOrValue<string>
   selectedTab?: RefOrValue<string>
+  mobileSelect?: RefOrValue<boolean>
   tone?: RefOrValue<SemanticTone>
   variant?: RefOrValue<ComponentVariant>
   variantMode?: RefOrValue<ComponentVariantMode>
@@ -48,7 +49,7 @@ export interface TabPane {
   tabClasses?: ComputedRef<string>
 }
 
-const tabsTemplate = html`<section class="tabs" :class="classes">
+const tabsTemplate = html`<section class="tabs" :class="classes" :data-mobile-select="mobileSelect">
   <slot name="header"></slot>
   <div class="tabs__list" role="tablist" :aria-label="ariaLabel || 'Tabs'">
     <slot></slot>
@@ -96,6 +97,7 @@ function defineTabsComponent() {
       'ariaLabel',
       'group',
       'selectedTab',
+      'mobileSelect',
       'tone',
       'variant',
       'variantMode',

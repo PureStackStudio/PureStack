@@ -232,7 +232,7 @@ function enhanceTabs(root: HTMLElement) {
   }
 
   function shouldUseCompact() {
-    return media.matches
+    return root.getAttribute('data-mobile-select') === 'true' && media.matches
   }
 
   function computeHiddenIndexes() {
@@ -446,6 +446,12 @@ function enhanceTabs(root: HTMLElement) {
     resizeObserver.observe(buttonWrap)
   }
 
+  const mobileSelectObserver = new MutationObserver(applyLayout)
+  mobileSelectObserver.observe(root, {
+    attributes: true,
+    attributeFilter: ['data-mobile-select'],
+  })
+
   syncSelect()
   applyLayout()
 
@@ -459,6 +465,7 @@ function enhanceTabs(root: HTMLElement) {
       media.removeEventListener('change', applyLayout)
     }
     resizeObserver?.disconnect()
+    mobileSelectObserver.disconnect()
     document.removeEventListener('click', onDocumentClick)
     for (const [control, onControlChange] of controlChangeHandlers) {
       control.removeEventListener('change', onControlChange)

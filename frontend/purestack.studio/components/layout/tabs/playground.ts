@@ -39,6 +39,7 @@ export interface TabsPlayground {
   icons: Ref<boolean>
   header: Ref<boolean>
   teamDisabled: Ref<boolean>
+  mobileSelect: Ref<boolean>
   tones: FormSelectOption[]
   variants: FormSelectOption[]
   modes: FormSelectOption[]
@@ -54,7 +55,7 @@ const tabsPlaygroundTemplate = html`<Flex direction="column">
     <Badge tone="accent" variant="surface">Live playground</Badge>
   </Flex>
   <Tabs id="tabs-playground-preview" group="tabs-playground-views" :selectedTab="selected"
-    :tone="tone" :variant="shell" :tabVariant="controls" :variantMode="mode" ariaLabel="Project workspace">
+    :tone="tone" :variant="shell" :tabVariant="controls" :variantMode="mode" :mobileSelect="mobileSelect" ariaLabel="Project workspace">
     <template #header>
       <Flex r-if="header" class="tabs__header" justify="between" align="center" wrap="true">
         <div><p class="text-eyebrow m-0">PureStack Studio</p><h3 class="mt-1 mb-0">Project workspace</h3></div>
@@ -94,6 +95,7 @@ const tabsPlaygroundTemplate = html`<Flex direction="column">
       <FormCheck id="tabs-disabled" label="Disable Team" :checked="teamDisabled"/>
     </Flex>
   </div>
+  <FormCheck id="tabs-mobile-select" label="Use a select on mobile" :checked="mobileSelect"/>
   <Flex justify="between" align="center" wrap="true">
     <p class="text-muted m-0" role="status">Selected: <code id="tabs-selected">{{ selected }}</code></p>
     <Btn variant="outline" size="sm" @click="reset">Reset playground</Btn>
@@ -115,6 +117,7 @@ const tabsPlayground = defineComponent<TabsPlayground>(tabsPlaygroundTemplate, {
     const icons = ref(true)
     const header = ref(true)
     const teamDisabled = ref(true)
+    const mobileSelect = ref(false)
     const refresh = () => {
       if (teamDisabled() && selected() === 'tabs-lab-team')
         selected('tabs-lab-overview')
@@ -132,6 +135,7 @@ const tabsPlayground = defineComponent<TabsPlayground>(tabsPlaygroundTemplate, {
       icons,
       header,
       teamDisabled,
+      mobileSelect,
       refresh,
       tones: [
         'neutral',
@@ -180,6 +184,7 @@ const tabsPlayground = defineComponent<TabsPlayground>(tabsPlaygroundTemplate, {
             Tabs: {
               group: 'tabs-playground-views',
               selectedTab: selected(),
+              mobileSelect: mobileSelect(),
               tone: tone(),
               variant: shell(),
               tabVariant: controls(),
@@ -204,6 +209,7 @@ const tabsPlayground = defineComponent<TabsPlayground>(tabsPlaygroundTemplate, {
         icons(true)
         header(true)
         teamDisabled(true)
+        mobileSelect(false)
         refresh()
       },
     }

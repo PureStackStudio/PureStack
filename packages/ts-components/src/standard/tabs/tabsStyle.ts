@@ -215,17 +215,21 @@ function registerTabsPanelStyles(theme: ThemeMode) {
 }
 
 function registerTabsResponsiveStyles(theme: ThemeMode) {
-  styleBuilder.select('.tabs--enhanced .tabs__tabs-row', theme).display('flex')
+  styleBuilder
+    .select('.tabs--enhanced > .tabs__tabs-row', theme)
+    .display('flex')
 
   styleBuilder
-    .select('.tabs--compact .tabs__select-wrap', theme)
+    .select('.tabs--compact > .tabs__select-wrap', theme)
     .display('block')
 
-  styleBuilder.select('.tabs--enhanced .tabs__tab', theme).display('none')
+  styleBuilder
+    .select('.tabs--enhanced > .tabs__list > .tabs__item > .tabs__tab', theme)
+    .display('none')
 
-  styleBuilder.select('.tabs--compact .tabs__tabs-row', theme).display('none')
+  styleBuilder.select('.tabs--compact > .tabs__tabs-row', theme).display('none')
 
   styleBuilder
-    .select('.tabs--compact .tabs__list', theme)
+    .select('.tabs--compact > .tabs__list', theme)
     .gridTemplateColumns('1fr')
 }

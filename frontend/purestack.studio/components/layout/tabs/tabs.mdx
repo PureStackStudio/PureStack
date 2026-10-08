@@ -18,7 +18,7 @@ nav:
 <Grid columns="1" columnsMd="3">
   <Panel variant="outline" bodyClass="p-3"><p class="text-eyebrow mt-0">Selection</p><strong>One shared ref</strong><p class="text-muted mb-0">Connect the active pane to forms, buttons and the rest of your app.</p></Panel>
   <Panel variant="outline" bodyClass="p-3"><p class="text-eyebrow mt-0">State</p><strong>Panels stay mounted</strong><p class="text-muted mb-0">Switch views without discarding a draft or resetting an input.</p></Panel>
-  <Panel variant="outline" bodyClass="p-3"><p class="text-eyebrow mt-0">Space</p><strong>Controls adapt</strong><p class="text-muted mb-0">Overflow on narrow containers. A native selector on mobile.</p></Panel>
+  <Panel variant="outline" bodyClass="p-3"><p class="text-eyebrow mt-0">Space</p><strong>Controls adapt</strong><p class="text-muted mb-0">Overflow on narrow containers. An optional native selector on mobile.</p></Panel>
 </Grid>
 
 ## In context
@@ -127,7 +127,7 @@ const select = (id: string) => {
 }
 ```
 
-`refresh()` rebuilds the generated buttons and selector; it keeps the existing panel content. Scope it to the root you changed. Also refresh after inserting or removing panes. A ref assignment updates the underlying radio binding, but the current runtime does not watch every component prop automatically.
+`refresh()` rebuilds the generated buttons and selector; it keeps the existing panel content. Scope it to the root you changed. Also refresh after inserting or removing panes. A ref assignment updates the underlying radio binding, but the current runtime does not watch every component prop automatically. Changes to `mobileSelect` update the layout automatically and do not require a refresh.
 
 Choose an enabled pane explicitly when disabling or removing the selected pane. This keeps the model and visible view aligned. The playground demonstrates that policy in its `refresh` action.
 
@@ -157,9 +157,23 @@ Change the example's width without resizing the page. On desktop, the More tabs 
 | --- | --- | --- |
 | Wide viewport, enough container space | Horizontal buttons | Choose Full available width |
 | Wide viewport, narrow container | Buttons plus More tabs | Choose 280px or 360px |
-| Viewport at or below the framework's `sm` breakpoint (640px) | Native select | Open the page on a phone or resize the browser |
+| Viewport at or below the framework's `sm` breakpoint (640px), with `mobileSelect` enabled | Native select | Enable Use a select on mobile in the playground, then resize the browser |
+| Mobile viewport with `mobileSelect` disabled (default) | Buttons plus More tabs when needed | Leave Use a select on mobile unchecked in the playground |
 
-Container width determines overflow. **Viewport width** determines compact mode. A 280px component inside a desktop page still uses the overflow menu. Selection and panel state survive either transition.
+Container width determines overflow. When `mobileSelect` is enabled, **viewport width** determines compact mode. A 280px component inside a desktop page still uses the overflow menu. Selection and panel state survive either transition.
+
+### Use a select on mobile
+
+Tabs keep their buttons and overflow menu at every viewport width by default. Set `:mobileSelect="true"` on an individual Tabs to use a native select on mobile:
+
+```html
+<Tabs :mobileSelect="true" selectedTab="mobile-overview">
+  <TabPane id="mobile-overview" label="Overview">Overview content</TabPane>
+  <TabPane id="mobile-details" label="Details">Details content</TabPane>
+</Tabs>
+```
+
+The default is `false`. In a Regor app, bind a boolean ref with `:mobileSelect="mobileSelect"`; changing it switches between the mobile select and tab buttons without rebuilding the component or resetting its selected pane. The playground's Use a select on mobile checkbox demonstrates this.
 
 ## Header slots, overrides and nested groups
 
@@ -206,7 +220,7 @@ All variant values are available in the playground: `none`, `solid`, `surface`, 
 </div>
 
 <nav class="api-index" aria-label="Tabs API">
-  <a href="#tabs-group-api">group</a><a href="#tabs-selected-api">selectedTab</a><a href="#tabs-label-api">ariaLabel</a><a href="#tabs-tone-api">tone</a><a href="#tabs-variant-api">variants</a><a href="#pane-id-api">pane identity</a><a href="#pane-disabled-api">disabled</a><a href="#pane-style-api">pane styling</a><a href="#tabs-slots-api">slots</a><a href="#tabs-runtime-api">runtime</a>
+  <a href="#tabs-group-api">group</a><a href="#tabs-selected-api">selectedTab</a><a href="#tabs-mobile-select-api">mobileSelect</a><a href="#tabs-label-api">ariaLabel</a><a href="#tabs-tone-api">tone</a><a href="#tabs-variant-api">variants</a><a href="#pane-id-api">pane identity</a><a href="#pane-disabled-api">disabled</a><a href="#pane-style-api">pane styling</a><a href="#tabs-slots-api">slots</a><a href="#tabs-runtime-api">runtime</a>
 </nav>
 
 ### Tabs properties
@@ -218,6 +232,11 @@ All variant values are available in the playground: `none`, `solid`, `surface`, 
 <ApiProperty anchor="tabs-selected-api" name="selectedTab" valueType="RefOrValue&lt;string&gt;" defaultValue="not set">
   <p>The selected pane's id, not its label or index. Pass a ref to share selection with your application. A literal establishes an initial selection backed by an internal ref.</p>
   <p>Set an enabled pane explicitly for predictable initial state. Without a valid checked pane, the enhanced runtime chooses the first enabled pane; the CSS-only fallback displays the first pane.</p>
+</ApiProperty>
+
+<ApiProperty anchor="tabs-mobile-select-api" name="mobileSelect" valueType="RefOrValue&lt;boolean&gt;" defaultValue="false">
+  <p>Set true to use a native select at viewport widths up to 640px. By default, Tabs retain their buttons and overflow menu on mobile.</p>
+  <p>Bind a boolean ref to change this per instance. The browser runtime updates the layout automatically and preserves the selected pane; no refresh is needed for this prop.</p>
 </ApiProperty>
 
 <ApiProperty anchor="tabs-label-api" name="ariaLabel" valueType="RefOrValue&lt;string&gt;" defaultValue="Tabs">
@@ -484,7 +503,7 @@ A text label, an optional icon, a disabled view, and label fallback to the ID ar
 | Selecting one group clears another | Give each Tabs instance a different group |
 | The wrong panel opens or labels target another example | Make every TabPane id document-unique |
 | The model changes but enhanced controls look stale | Refresh the affected root after the DOM update |
-| A narrow desktop demo does not use a select | Compact mode follows viewport width, not container width |
+| A narrow desktop demo does not use a select | Enable mobileSelect; compact mode follows viewport width, not container width |
 | A header appears below the generated controls | Add tabs__header to the header-slot wrapper |
 | A selected pane becomes disabled | Move selection to an enabled pane before refreshing |
 
