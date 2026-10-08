@@ -9,7 +9,7 @@ import { defineTabsComponents } from './tabs'
 
 describe('Tabs rendering', () => {
   it.each([
-    [undefined, 'false'],
+    [undefined, null],
     [true, 'true'],
     [false, 'false'],
   ])(
@@ -31,7 +31,11 @@ describe('Tabs rendering', () => {
             }),
           },
         )
-        expect(html).toContain(`data-mobile-select="${expected}"`)
+        if (expected === null) {
+          expect(html).not.toContain('data-mobile-select=')
+        } else {
+          expect(html).toContain(`data-mobile-select="${expected}"`)
+        }
       } finally {
         cleanup()
       }
@@ -66,13 +70,13 @@ describe('Tabs rendering', () => {
       const root = document.querySelector('#configurable-tabs')
       const other = document.querySelector('#default-tabs')
       expect(root?.getAttribute('data-mobile-select')).toBe('false')
-      expect(other?.getAttribute('data-mobile-select')).toBe('false')
+      expect(other?.getAttribute('data-mobile-select')).toBeNull()
 
       mobileSelect(true)
       expect(root?.getAttribute('data-mobile-select')).toBe('true')
       mobileSelect(false)
       expect(root?.getAttribute('data-mobile-select')).toBe('false')
-      expect(other?.getAttribute('data-mobile-select')).toBe('false')
+      expect(other?.getAttribute('data-mobile-select')).toBeNull()
       expect(selectedTab()).toBe('details')
       expect(
         document.querySelector<HTMLInputElement>('#details')?.checked,

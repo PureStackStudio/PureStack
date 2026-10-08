@@ -49,7 +49,7 @@ export interface TabPane {
   tabClasses?: ComputedRef<string>
 }
 
-const tabsTemplate = html`<section class="tabs" :class="classes" :data-mobile-select="mobileSelect === true ? 'true' : 'false'">
+const tabsTemplate = html`<section class="tabs" :class="classes" :data-mobile-select="mobileSelect">
   <slot name="header"></slot>
   <div class="tabs__list" role="tablist" :aria-label="ariaLabel || 'Tabs'">
     <slot></slot>
