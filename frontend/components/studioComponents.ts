@@ -5,6 +5,7 @@ import { defineStudioCopyComponent } from './studioCopy'
 import { defineStudioFaqComponent } from './studioFaq'
 import { defineStudioFeatureComponent } from './studioFeature'
 import { defineStudioPackageComponent } from './studioPackage'
+import { defineStudioRegorConnectionComponent } from './studioRegorConnection'
 import { defineStudioWorkbenchComponent } from './studioWorkbench'
 
 export function defineStudioComponents() {
@@ -12,6 +13,7 @@ export function defineStudioComponents() {
     studioBrand: defineStudioBrandComponent(),
     studioFeature: defineStudioFeatureComponent(),
     studioPackage: defineStudioPackageComponent(),
+    studioRegorConnection: defineStudioRegorConnectionComponent(),
     studioCopy: defineStudioCopyComponent(),
     studioFaq: defineStudioFaqComponent(),
     studioCommand: defineStudioCommandComponent(),

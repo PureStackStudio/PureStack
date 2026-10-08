@@ -426,6 +426,43 @@ card.<span class="syntax-blue">toCSS</span>()</code></pre>
       pieces that make PureStack work.
     </p>
   </Flex>
+  <Grid
+    container="article"
+    class="regor-highlight"
+    columns="1"
+    columnsLg="1.2fr 0.8fr"
+    alignItems="center"
+    aria-labelledby="regor-title"
+  >
+    <div>
+      <span class="eyebrow"><Icon name="lucide:orbit"/>POWERED BY REGOR</span>
+      <h3 id="regor-title">Small signals. A whole frontend.</h3>
+      <p class="regor-summary">
+        Meet the reactive TypeScript library at PureStack's core. Regor connects
+        state to HTML and SVG, composes components, and updates the DOM directly.
+        The same component model renders your pages and powers your browser apps.
+      </p>
+      <Flex class="regor-actions" wrap="wrap" align="center">
+        <BtnLink
+          href="https://regor.purestack.studio"
+          target="_blank"
+          rel="noopener"
+          tone="accent"
+          variant="solid"
+          icon="tabler:arrow-up-right"
+          iconPosition="end"
+          >Explore Regor</BtnLink
+        >
+        <BtnLink
+          href="/guides/extending/regor/"
+          tone="accent"
+          variant="link"
+          >Regor in PureStack</BtnLink
+        >
+      </Flex>
+    </div>
+    <StudioRegorConnection/>
+  </Grid>
   <Grid class="package-grid" columns="1" columnsSm="2">
     <StudioPackage
       href="https://github.com/PureStackStudio/PureStack/tree/main/packages/ts-ssg"

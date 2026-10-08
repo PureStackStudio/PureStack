@@ -35,6 +35,7 @@
     "frontend": "yarn tsx --watch packages/purestack/src/cli.ts serve --content frontend/purestack.studio --port 4700",
     "frontend:build": "yarn purestack build --content frontend/purestack.studio",
     "frontend:publish": "yarn purestack publish --content frontend/purestack.studio",
+    "frontend:deploy": "pgdeploy deploy --host https://purestack.studio --package ./frontend/out/purestack.studio/web --allow-path 'pagefind/*,.ts-ssg/manifest.json'",
     "embed": "yarn tsx scripts/embed.ts && yarn format",
     "regor-components": "yarn tsx scripts/regor-components.ts",
     "gen-icons": "yarn tsx scripts/generate-icons.ts",
