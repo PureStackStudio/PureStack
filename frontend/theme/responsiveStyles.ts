@@ -490,6 +490,13 @@ export function registerResponsiveStyles(root: Style, palette: ThemePalette) {
   })
   root
     .media(mediaBelow(BREAKPOINTS.sm))
+    .select('.studio .regor-highlight')
+    .css({
+      gap: '24px',
+      padding: '24px',
+    })
+  root
+    .media(mediaBelow(BREAKPOINTS.sm))
     .select('.studio .feature-card, .studio .feature-small')
     .css({
       gridColumn: '1',

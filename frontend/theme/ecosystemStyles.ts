@@ -1,5 +1,5 @@
 import type { Style } from '@purestack/ts-css'
-import { BREAKPOINTS, mediaBelow, type ThemePalette } from '@purestack/ts-style'
+import type { ThemePalette } from '@purestack/ts-style'
 import { studioTypography } from './studioSkin'
 
 export function registerEcosystemStyles(root: Style, palette: ThemePalette) {
@@ -54,13 +54,6 @@ function registerRegorHighlightStyles(root: Style, palette: ThemePalette) {
     marginTop: '24px',
   })
   registerRegorConnectionStyles(root, palette)
-  root
-    .media(mediaBelow(BREAKPOINTS.sm))
-    .select('.studio .regor-highlight')
-    .css({
-      gap: '24px',
-      padding: '24px',
-    })
 }
 
 function registerRegorConnectionStyles(root: Style, palette: ThemePalette) {
