@@ -8,6 +8,81 @@ import { defineIconComponents } from '../icon/icon'
 import { defineTabsComponents } from './tabs'
 
 describe('Tabs rendering', () => {
+  it.each([
+    [undefined, 'false'],
+    [true, 'true'],
+    [false, 'false'],
+  ])(
+    'renders the mobile select setting %s as %s',
+    async (mobileSelect, expected) => {
+      const cleanup = ensureDomGlobals()
+      try {
+        const binding =
+          mobileSelect === undefined ? '' : `:mobileSelect="${mobileSelect}"`
+        const html = await renderApp(
+          `<Tabs ${binding}><TabPane id="overview" label="Overview">Content</TabPane></Tabs>`,
+          {
+            components: {
+              ...defineIconComponents(getSvgIcon),
+              ...defineTabsComponents(),
+            },
+            context: createTestContext({
+              pageInfo: { relPath: 'tabs.mdx', urlPath: '/tabs/' },
+            }),
+          },
+        )
+        expect(html).toContain(`data-mobile-select="${expected}"`)
+      } finally {
+        cleanup()
+      }
+    },
+  )
+
+  it('updates mobileSelect reactively per instance without changing selection', () => {
+    const cleanupDom = createDom(
+      '<html><body><div id="app"></div></body></html>',
+    )
+    const mobileSelect = ref(false)
+    const selectedTab = ref('details')
+    const app = createApp(
+      {
+        components: {
+          ...defineIconComponents(getSvgIcon),
+          ...defineTabsComponents(),
+        },
+        mobileSelect,
+        selectedTab,
+      },
+      {
+        selector: '#app',
+        template: `<Tabs id="configurable-tabs" group="configurable" :mobileSelect="mobileSelect" :selectedTab="selectedTab">
+          <TabPane id="overview" label="Overview">Overview</TabPane>
+          <TabPane id="details" label="Details">Details</TabPane>
+        </Tabs>
+        <Tabs id="default-tabs" group="default"><TabPane id="other" label="Other">Other</TabPane></Tabs>`,
+      },
+    )
+    try {
+      const root = document.querySelector('#configurable-tabs')
+      const other = document.querySelector('#default-tabs')
+      expect(root?.getAttribute('data-mobile-select')).toBe('false')
+      expect(other?.getAttribute('data-mobile-select')).toBe('false')
+
+      mobileSelect(true)
+      expect(root?.getAttribute('data-mobile-select')).toBe('true')
+      mobileSelect(false)
+      expect(root?.getAttribute('data-mobile-select')).toBe('false')
+      expect(other?.getAttribute('data-mobile-select')).toBe('false')
+      expect(selectedTab()).toBe('details')
+      expect(
+        document.querySelector<HTMLInputElement>('#details')?.checked,
+      ).toBe(true)
+    } finally {
+      app.unbind()
+      cleanupDom()
+    }
+  })
+
   it('renders slotted tab content and active tab state', async () => {
     const cleanup = ensureDomGlobals()
     const components = {
