@@ -432,7 +432,10 @@ export function normalizeEmailContentId(value: string) {
 }
 
 function stripImportant(value: string) {
-  return value.replace(/\s*!important\s*$/i, '').trim()
+  const trimmed = value.trim()
+  return trimmed.slice(-10).toLowerCase() === '!important'
+    ? trimmed.slice(0, -10).trimEnd()
+    : trimmed
 }
 
 function isSafeCssValue(value: string) {

@@ -825,8 +825,9 @@ function resolveCrossOrigin(
 
 function normalizeBaseUrl(value: string): string {
   const normalized = value.trim()
-  if (normalized.length === 0) return ''
-  return normalized.replace(/\/+$/, '')
+  let end = normalized.length
+  while (end > 0 && normalized[end - 1] === '/') --end
+  return normalized.slice(0, end)
 }
 
 function resolveRobotsConfig(

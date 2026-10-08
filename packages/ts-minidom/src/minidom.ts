@@ -1722,18 +1722,26 @@ function decodeEntities(value: string) {
     if (code < 0 || code > 0x10ffff) return '\uFFFD'
     return String.fromCodePoint(code)
   }
-  return value
-    .replace(/&#x([0-9a-fA-F]+);?/g, (_, hex: string) =>
-      safeCodePoint(Number.parseInt(hex, 16)),
-    )
-    .replace(/&#([0-9]+);?/g, (_, dec: string) =>
-      safeCodePoint(Number.parseInt(dec, 10)),
-    )
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&amp;/g, '&')
-    .replace(/&quot;/g, '"')
-    .replace(/&apos;/g, "'")
+  const namedEntities: Record<string, string> = {
+    lt: '<',
+    gt: '>',
+    amp: '&',
+    quot: '"',
+    apos: "'",
+  }
+  return value.replace(
+    /&#(?:x([0-9a-fA-F]+)|([0-9]+));?|&(lt|gt|amp|quot|apos);/g,
+    (
+      match: string,
+      hex: string | undefined,
+      dec: string | undefined,
+      named: string | undefined,
+    ) => {
+      if (hex !== undefined) return safeCodePoint(Number.parseInt(hex, 16))
+      if (dec !== undefined) return safeCodePoint(Number.parseInt(dec, 10))
+      return namedEntities[named ?? ''] ?? match
+    },
+  )
 }
 
 function escapeText(value: string) {

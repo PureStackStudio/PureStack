@@ -72,12 +72,12 @@ async function readNavFile(
 function normalizeNavRoot(value: unknown, folder: string) {
   const root = resolveString(value)
   if (!root) return undefined
-  const normalizedInput = root.replaceAll('\\', '/').replace(/^\/+|\/+$/g, '')
+  const normalizedInput = trimSlashes(root.replaceAll('\\', '/'))
   const joined = root.trim().startsWith('/')
     ? normalizedInput
     : path.posix.join(folder, normalizedInput)
   const normalized =
-    joined === '.' ? '' : path.posix.normalize(joined).replace(/^\/+|\/+$/g, '')
+    joined === '.' ? '' : trimSlashes(path.posix.normalize(joined))
   if (
     normalized === '..' ||
     normalized.startsWith('../') ||
@@ -88,6 +88,14 @@ function normalizeNavRoot(value: unknown, folder: string) {
     )
   }
   return normalized
+}
+
+function trimSlashes(value: string) {
+  let start = 0
+  let end = value.length
+  while (start < end && value[start] === '/') ++start
+  while (end > start && value[end - 1] === '/') --end
+  return value.slice(start, end)
 }
 
 function normalizeNavItems(value: unknown, folder: string): InternalNavItem[] {

@@ -36,7 +36,7 @@ export function hyphenizeCss(prop: string): string {
   // 1. Split acronym boundaries like "XMLHttp" → "XML-Http"
   // 2. Then split camelCase boundaries like "fooBar" → "foo-Bar"
   const withSeparators = withOpera
-    .replace(/([A-Z]+)([A-Z][a-z])/g, '$1-$2')
+    .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
     .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
 
   return withSeparators.toLowerCase()
