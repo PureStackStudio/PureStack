@@ -431,6 +431,28 @@ describe('resolveSiteConfig sitemap', () => {
     expect(config.sitemap.robots.allow).toEqual(['/'])
   })
 
+  it.each([
+    ['  https://docs.example.com///  ', 'https://docs.example.com'],
+    ['', ''],
+    ['   ', ''],
+    ['///', ''],
+    ['https://docs.example.com/path', 'https://docs.example.com/path'],
+    [
+      `https://docs.example.com/${'/'.repeat(200_000)}x`,
+      `https://docs.example.com/${'/'.repeat(200_000)}x`,
+    ],
+    [
+      `https://docs.example.com${'/'.repeat(200_000)}`,
+      'https://docs.example.com',
+    ],
+  ])('normalizes sitemap base URL case %#', (baseUrl, expected) => {
+    const config = resolveSiteConfig({
+      rootDir: process.cwd(),
+      sitemap: { baseUrl },
+    })
+    expect(config.sitemap.baseUrl).toBe(expected)
+  })
+
   it('resolves robots directives from sitemap config', () => {
     const config = resolveSiteConfig({
       rootDir: process.cwd(),

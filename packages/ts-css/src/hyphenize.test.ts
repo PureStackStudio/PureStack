@@ -32,6 +32,14 @@ describe('hyphenizeCss', () => {
     expect(hyphenizeCss('ID')).toBe('id') // all uppercase, no hyphen
   })
 
+  it('handles long uppercase runs with and without an acronym boundary', () => {
+    const acronym = 'A'.repeat(200_000)
+    expect(hyphenizeCss(acronym)).toBe(acronym.toLowerCase())
+    expect(hyphenizeCss(`${acronym}Value`)).toBe(
+      `${acronym.toLowerCase()}-value`,
+    )
+  })
+
   it('preserves existing kebab-case / hyphens', () => {
     expect(hyphenizeCss('font-size')).toBe('font-size')
     expect(hyphenizeCss('-moz-appearance')).toBe('-moz-appearance')
