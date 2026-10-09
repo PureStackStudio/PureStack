@@ -40,6 +40,6 @@
   },
   "dependencies": {
     "@purestack/ts-util": "workspace:^",
-    "prettier": "^3.8.1"
+    "prettier": "^3.9.9"
   }
 }
