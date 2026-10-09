@@ -40,8 +40,8 @@
   },
   "devDependencies": {
     "@phosphor-icons/core": "^2.1.1",
-    "@tabler/icons": "^3.48.0",
+    "@tabler/icons": "^3.49.0",
     "iconoir": "^7.12.1",
-    "lucide": "^1.48.0"
+    "lucide": "^1.52.0"
   }
 }

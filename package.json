@@ -18,7 +18,7 @@
     "url": "https://github.com/PureStackStudio/PureStack/issues"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.14",
+    "@biomejs/biome": "^2.5.15",
     "@types/node": "^25.6.2",
     "esbuild": "^0.28.0",
     "tsdown": "0.23.0",

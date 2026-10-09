@@ -155,18 +155,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@biomejs/biome@npm:^2.5.14":
-  version: 2.5.14
-  resolution: "@biomejs/biome@npm:2.5.14"
+"@biomejs/biome@npm:^2.5.15":
+  version: 2.5.15
+  resolution: "@biomejs/biome@npm:2.5.15"
   dependencies:
-    "@biomejs/cli-darwin-arm64": "npm:2.5.14"
-    "@biomejs/cli-darwin-x64": "npm:2.5.14"
-    "@biomejs/cli-linux-arm64": "npm:2.5.14"
-    "@biomejs/cli-linux-arm64-musl": "npm:2.5.14"
-    "@biomejs/cli-linux-x64": "npm:2.5.14"
-    "@biomejs/cli-linux-x64-musl": "npm:2.5.14"
-    "@biomejs/cli-win32-arm64": "npm:2.5.14"
-    "@biomejs/cli-win32-x64": "npm:2.5.14"
+    "@biomejs/cli-darwin-arm64": "npm:2.5.15"
+    "@biomejs/cli-darwin-x64": "npm:2.5.15"
+    "@biomejs/cli-linux-arm64": "npm:2.5.15"
+    "@biomejs/cli-linux-arm64-musl": "npm:2.5.15"
+    "@biomejs/cli-linux-x64": "npm:2.5.15"
+    "@biomejs/cli-linux-x64-musl": "npm:2.5.15"
+    "@biomejs/cli-win32-arm64": "npm:2.5.15"
+    "@biomejs/cli-win32-x64": "npm:2.5.15"
   dependenciesMeta:
     "@biomejs/cli-darwin-arm64":
       optional: true
@@ -186,62 +186,62 @@ __metadata:
       optional: true
   bin:
     biome: bin/biome
-  checksum: 10c0/db612f71783a33a11666d09febe8310993474671ca41191ae9c0fa7bfe96f7f6814a5f57dea445e70a88991d8d09a6c5212135aa2950158f320824e4f48ec0a4
+  checksum: 10c0/8c8f270eb8f11801968d064c5924cce2e0bc3f54317181486cfb9a0818048c4655bd7cbe59275633a9fe4fc92160a4fdb62fb603d80df0eebc2b6b67e52c675b
   languageName: node
   linkType: hard
 
-"@biomejs/cli-darwin-arm64@npm:2.5.14":
-  version: 2.5.14
-  resolution: "@biomejs/cli-darwin-arm64@npm:2.5.14"
+"@biomejs/cli-darwin-arm64@npm:2.5.15":
+  version: 2.5.15
+  resolution: "@biomejs/cli-darwin-arm64@npm:2.5.15"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@biomejs/cli-darwin-x64@npm:2.5.14":
-  version: 2.5.14
-  resolution: "@biomejs/cli-darwin-x64@npm:2.5.14"
+"@biomejs/cli-darwin-x64@npm:2.5.15":
+  version: 2.5.15
+  resolution: "@biomejs/cli-darwin-x64@npm:2.5.15"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@biomejs/cli-linux-arm64-musl@npm:2.5.14":
-  version: 2.5.14
-  resolution: "@biomejs/cli-linux-arm64-musl@npm:2.5.14"
+"@biomejs/cli-linux-arm64-musl@npm:2.5.15":
+  version: 2.5.15
+  resolution: "@biomejs/cli-linux-arm64-musl@npm:2.5.15"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@biomejs/cli-linux-arm64@npm:2.5.14":
-  version: 2.5.14
-  resolution: "@biomejs/cli-linux-arm64@npm:2.5.14"
+"@biomejs/cli-linux-arm64@npm:2.5.15":
+  version: 2.5.15
+  resolution: "@biomejs/cli-linux-arm64@npm:2.5.15"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@biomejs/cli-linux-x64-musl@npm:2.5.14":
-  version: 2.5.14
-  resolution: "@biomejs/cli-linux-x64-musl@npm:2.5.14"
+"@biomejs/cli-linux-x64-musl@npm:2.5.15":
+  version: 2.5.15
+  resolution: "@biomejs/cli-linux-x64-musl@npm:2.5.15"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@biomejs/cli-linux-x64@npm:2.5.14":
-  version: 2.5.14
-  resolution: "@biomejs/cli-linux-x64@npm:2.5.14"
+"@biomejs/cli-linux-x64@npm:2.5.15":
+  version: 2.5.15
+  resolution: "@biomejs/cli-linux-x64@npm:2.5.15"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@biomejs/cli-win32-arm64@npm:2.5.14":
-  version: 2.5.14
-  resolution: "@biomejs/cli-win32-arm64@npm:2.5.14"
+"@biomejs/cli-win32-arm64@npm:2.5.15":
+  version: 2.5.15
+  resolution: "@biomejs/cli-win32-arm64@npm:2.5.15"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@biomejs/cli-win32-x64@npm:2.5.14":
-  version: 2.5.14
-  resolution: "@biomejs/cli-win32-x64@npm:2.5.14"
+"@biomejs/cli-win32-x64@npm:2.5.15":
+  version: 2.5.15
+  resolution: "@biomejs/cli-win32-x64@npm:2.5.15"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -861,9 +861,9 @@ __metadata:
   resolution: "@purestack/ts-svg-icons@workspace:packages/ts-svg-icons"
   dependencies:
     "@phosphor-icons/core": "npm:^2.1.1"
-    "@tabler/icons": "npm:^3.48.0"
+    "@tabler/icons": "npm:^3.49.0"
     iconoir: "npm:^7.12.1"
-    lucide: "npm:^1.48.0"
+    lucide: "npm:^1.52.0"
   languageName: unknown
   linkType: soft
 
@@ -1120,10 +1120,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tabler/icons@npm:^3.48.0":
-  version: 3.48.0
-  resolution: "@tabler/icons@npm:3.48.0"
-  checksum: 10c0/52c4e582dede13508c6cf34b73c23f80449dde042ee487cb2ef082e92b50cb644f61072871a95f6a0ebb11b117d7f10581455906bb74ed0fa0a9924170876e80
+"@tabler/icons@npm:^3.49.0":
+  version: 3.49.0
+  resolution: "@tabler/icons@npm:3.49.0"
+  checksum: 10c0/8540c7182c67efcd7209d0ab2de75dd413eff0f61c5906d0e1b20bc53ef4eaadcd13e301e2e5829dac47ee710bc0d8301d99c1dd0aada683a87addb32742d34a
   languageName: node
   linkType: hard
 
@@ -1207,10 +1207,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/vscode@npm:^1.138.0":
-  version: 1.138.0
-  resolution: "@types/vscode@npm:1.138.0"
-  checksum: 10c0/75bbfbfcc522dbb29e956abdc0b94523578fefe90cba444313337c3bd1a1f211e43e9f9bcfc5e6442ba5e1d955fafa7af5d81509419f7818e6f4a24c76ed0c5a
+"@types/vscode@npm:^1.140.0":
+  version: 1.140.0
+  resolution: "@types/vscode@npm:1.140.0"
+  checksum: 10c0/23bef41bd8d2276191b142491ca523757255f2675d1cc65405004fb6c56125418a77cb0696b134087336e9ab85fbf77bd996bf38ab9e555f4330fb4191087b03
   languageName: node
   linkType: hard
 
@@ -3343,10 +3343,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lucide@npm:^1.48.0":
-  version: 1.48.0
-  resolution: "lucide@npm:1.48.0"
-  checksum: 10c0/9910e7843ffb20d0bdd2b378305fb0a1ff5b670d18dba7ea258f720585f9c8855c81a92094dd0233da3aee4a6896ead20742381f43bf7bb184ba3e3e038d3392
+"lucide@npm:^1.52.0":
+  version: 1.52.0
+  resolution: "lucide@npm:1.52.0"
+  checksum: 10c0/86ccd1be987e3e66b4b0ac2f2a9f14f0da2bf8cea878b6aab9b6b8375e672905b55d26f3583b7bb7cb9cb3ad17c07a40567371acb778aea56d264c0b70ec27d9
   languageName: node
   linkType: hard
 
@@ -4314,7 +4314,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "purestack-component-navigation@workspace:packages/ts-ssg-vscode"
   dependencies:
-    "@types/vscode": "npm:^1.138.0"
+    "@types/vscode": "npm:^1.140.0"
     "@vscode/vsce": "npm:^4.0.0"
     esbuild: "npm:^0.28.0"
     prettier: "npm:^3.8.1"
@@ -4326,7 +4326,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "purestack-repo@workspace:."
   dependencies:
-    "@biomejs/biome": "npm:^2.5.14"
+    "@biomejs/biome": "npm:^2.5.15"
     "@types/node": "npm:^25.6.2"
     esbuild: "npm:^0.28.0"
     tsdown: "npm:0.23.0"
