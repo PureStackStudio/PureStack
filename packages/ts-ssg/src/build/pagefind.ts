@@ -175,7 +175,13 @@ async function populateAndWritePagefindIndex(
     state.onlyFiles === undefined
       ? await indexHtmlDirectory(index, outDir)
       : await indexHtmlFiles(index, outDir, htmlFiles, isSkipped)
-  const writeResult = await index.writeFiles({ outputPath })
+  // Finish writes in Node before cleanup can stop Pagefind's native backend.
+  const writeResult = await index.getFiles()
+  for (const file of writeResult.files) {
+    const filePath = path.join(outputPath, file.path)
+    await fs.mkdir(path.dirname(filePath), { recursive: true })
+    await fs.writeFile(filePath, file.content)
+  }
   return {
     indexedPages: indexed.indexedPages,
     indexedBytes,
