@@ -15,7 +15,7 @@ Markdown for your content. TypeScript for your components, styles, and behavior.
 
 **[Explore the docs](https://purestack.studio/guides/)** ·
 **[Browse components](https://purestack.studio/components/)** ·
-**[See an example site](packages/ts-ssg/sample-content)** ·
+**[See an example site](https://regor.purestack.studio/)** ·
 **[Contribute](CONTRIBUTING.md)**
 
 </div>
