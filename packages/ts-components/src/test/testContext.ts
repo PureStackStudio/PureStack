@@ -2,7 +2,7 @@ import type {
   PageInfo,
   PageOutlineItem,
   SiteConfig,
-  TsSsgContext,
+  PageContext,
   TsSsgNavigation,
 } from '@purestack/ts-common'
 import { DEFAULT_THEME_OPTIONS } from '@purestack/ts-style'
@@ -91,7 +91,7 @@ export function createTestPageInfo(
 
 export function createTestContext(
   options: TestContextOptions = {},
-): TsSsgContext {
+): PageContext {
   const site = createTestSite(options.site)
   const pageInfo = createTestPageInfo(options.pageInfo)
   return {

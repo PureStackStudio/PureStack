@@ -19,7 +19,7 @@ describe('Composer', () => {
           ...defineComposerComponents(),
           ...defineIconComponents(() => ''),
         },
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
         messageHtml,
         messageText,
       },

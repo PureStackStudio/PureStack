@@ -180,7 +180,7 @@ describe('Tabs rendering', () => {
     const app = createApp(
       {
         components,
-        tsSsgContext: createTestContext({
+        pageContext: createTestContext({
           pageInfo: { relPath: 'tabs.mdx', urlPath: '/tabs/' },
         }),
         selectedTab,

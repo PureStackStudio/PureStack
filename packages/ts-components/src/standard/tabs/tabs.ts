@@ -1,4 +1,4 @@
-import { tryResolveTsSsgContext } from '@purestack/ts-common'
+import { tryResolvePageContext } from '@purestack/ts-common'
 import type { SemanticTone } from '@purestack/ts-style'
 import {
   type ComponentHead,
@@ -191,5 +191,5 @@ function resolveTabPane(head: ComponentHead<TabPane>): TabPane {
 }
 
 function markTabsRuntimeEmbed(head: ComponentHead<Tabs>) {
-  tryResolveTsSsgContext(head)?.recordRuntimeEmbed('tabs', 'head')
+  tryResolvePageContext(head)?.recordRuntimeEmbed('tabs', 'head')
 }

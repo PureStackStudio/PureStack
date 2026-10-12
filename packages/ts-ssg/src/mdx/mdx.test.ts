@@ -1,4 +1,4 @@
-import type { TsSsgContext } from '@purestack/ts-common'
+import type { PageContext } from '@purestack/ts-common'
 import { defineModalComponents } from '@purestack/ts-components'
 import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '@purestack/ts-render'
@@ -677,7 +677,7 @@ describe('compileMdxToHtml', () => {
   })
 })
 
-function createTestContext(): TsSsgContext {
+function createTestContext(): PageContext {
   const site = resolveSiteConfig({ rootDir: process.cwd() })
   return {
     site,

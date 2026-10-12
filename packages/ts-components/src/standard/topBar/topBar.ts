@@ -1,6 +1,6 @@
-import type { SiteLogoConfig, TsSsgContext } from '@purestack/ts-common'
+import type { SiteLogoConfig, PageContext } from '@purestack/ts-common'
 
-import { resolveTsSsgContext } from '@purestack/ts-common'
+import { resolvePageContext } from '@purestack/ts-common'
 import type { SemanticTone } from '@purestack/ts-style'
 import {
   type ComputedRef,
@@ -35,7 +35,7 @@ export interface TopBar {
 const DEFAULT_TOP_BAR_VARIANT: ComponentVariant = 'surfaceAlt'
 const DEFAULT_TOP_BAR_VARIANT_MODE: ComponentVariantMode = 'stateless'
 
-function resolveTopBar(context: TsSsgContext, props: TopBar): TopBar {
+function resolveTopBar(context: PageContext, props: TopBar): TopBar {
   return {
     ...props,
     siteLogo: context.site.logo,
@@ -106,7 +106,7 @@ function defineTopBarComponent() {
       'signInEnabled',
       'search',
     ],
-    context: (head) => resolveTopBar(resolveTsSsgContext(head), head.props),
+    context: (head) => resolveTopBar(resolvePageContext(head), head.props),
   })
 }
 

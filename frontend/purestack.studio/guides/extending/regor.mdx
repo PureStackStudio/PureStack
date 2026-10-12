@@ -17,7 +17,13 @@ highlights:
 
 # Regor
 
-<a href="https://github.com/PureStackStudio/Regor" target="_blank" rel="noopener">Regor</a> is the component framework PureStack is built on. It runs in two places:
+<a
+  href="https://github.com/PureStackStudio/Regor"
+  target="_blank"
+  rel="noopener"
+  >Regor</a
+>
+is the component framework PureStack is built on. It runs in two places:
 
 <Grid columns="1" columnsSm="2" class="gap-3 mb-4">
   <Panel tone="neutral" bodyClass="p-3">
@@ -153,7 +159,7 @@ Every page goes through the same four steps:
 | Where it runs | Your build, once per page | The visitor's browser |
 | What it produces | Static HTML | A live, interactive interface |
 | Event handlers, `r-model`, timers | Not kept | Run normally |
-| Page data (`tsSsgContext`) | Available | Not available |
+| Page data (`pageContext`) | Available | Not available |
 | Components | All built-in and registered components | The component families you register |
 
 ## Regor at build time
@@ -185,24 +191,24 @@ A plain attribute passes a string. An attribute that starts with a colon is a Re
 
 ### Expressions and page data
 
-Text in double braces is a Regor expression, anywhere in a page. Inside markup, expressions can read `tsSsgContext`, which holds the page and site data that PureStack provides during the build:
+Text in double braces is a Regor expression, anywhere in a page. Inside markup, expressions can read `pageContext`, which holds the page and site data that PureStack provides during the build:
 
 | Field | Contents |
 | --- | --- |
-| `tsSsgContext.pageInfo.frontmatter` | The page's frontmatter, including any custom fields you add |
-| `tsSsgContext.pageInfo.urlPath` | The page's URL, such as `/guides/extending/regor/` |
-| `tsSsgContext.pageInfo.relPath` | The source file path inside the content folder |
-| `tsSsgContext.site` | The resolved site configuration |
-| `tsSsgContext.navigation`, `tsSsgContext.outline` | The page's navigation and heading outline |
-| `tsSsgContext.locale`, `tsSsgContext.locales` | The page's language and the site's languages |
+| `pageContext.pageInfo.frontmatter` | The page's frontmatter, including any custom fields you add |
+| `pageContext.pageInfo.urlPath` | The page's URL, such as `/guides/extending/regor/` |
+| `pageContext.pageInfo.relPath` | The source file path inside the content folder |
+| `pageContext.site` | The resolved site configuration |
+| `pageContext.navigation`, `pageContext.outline` | The page's navigation and heading outline |
+| `pageContext.locale`, `pageContext.locales` | The page's language and the site's languages |
 
 This page lists three highlights in its frontmatter. The panel below reads them during the build:
 
 <Panel tone="accent" variant="surface" bodyClass="p-3" class="mb-4">
   <p class="text-eyebrow mt-0">From this page's frontmatter</p>
-  <strong>{{ tsSsgContext.pageInfo.frontmatter.title }}</strong>
+  <strong>{{ pageContext.pageInfo.frontmatter.title }}</strong>
   <ul class="mb-0">
-    <li r-for="item in tsSsgContext.pageInfo.frontmatter.highlights">
+    <li r-for="item in pageContext.pageInfo.frontmatter.highlights">
       {{ item }}
     </li>
   </ul>
@@ -218,9 +224,9 @@ highlights:
 ---
 
 <Panel tone="accent" variant="surface" bodyClass="p-3">
-  <strong>{{ tsSsgContext.pageInfo.frontmatter.title }}</strong>
+  <strong>{{ pageContext.pageInfo.frontmatter.title }}</strong>
   <ul>
-    <li r-for="item in tsSsgContext.pageInfo.frontmatter.highlights">{{ item }}</li>
+    <li r-for="item in pageContext.pageInfo.frontmatter.highlights">{{ item }}</li>
   </ul>
 </Panel>
 ```
@@ -294,9 +300,10 @@ export default defineConfig({
 >
   Export the interface that types a component, as <code>ReleaseNote</code> is
   exported here. The
-  <a href="/guides/getting-started/vscode-extension/">VS Code extension</a> finds components
-  through their exported interfaces. Without the export, it can't complete the
-  component's props or jump from a tag in your markup to the component's source.
+  <a href="/guides/getting-started/vscode-extension/">VS Code extension</a>
+  finds components through their exported interfaces. Without the export, it
+  can't complete the component's props or jump from a tag in your markup to the
+  component's source.
 </AlertBox>
 
 Then use it in any page. Content between the tags fills the `<slot>`:
@@ -307,7 +314,7 @@ Then use it in any page. Content between the tags fills the `<slot>`:
 </ReleaseNote>
 ```
 
-Tag names match registered keys regardless of case, so `<ReleaseNote>` finds `releaseNote`. The kebab-case form `<release-note>` works too. Components can also read page data. Pass the component head to `resolveTsSsgContext` from `@purestack/ts-common`, as the built-in navigation and page-link components do.
+Tag names match registered keys regardless of case, so `<ReleaseNote>` finds `releaseNote`. The kebab-case form `<release-note>` works too. Components can also read page data. Pass the component head to `resolvePageContext` from `@purestack/ts-common`, as the built-in navigation and page-link components do.
 
 ## Regor in the browser
 
@@ -332,8 +339,8 @@ Browser apps do not get the build's component list. Each app registers the compo
 <AlertBox tone="info" icon="tabler:info-circle" title="Register icons too">
   Register each icon your app shows, including the defaults that components draw
   themselves, such as the arrow in a select field. The
-  <a href="/guides/styling/icons/#icons-in-browser-apps">Icons guide</a> lists those
-  defaults.
+  <a href="/guides/styling/icons/#icons-in-browser-apps">Icons guide</a> lists
+  those defaults.
 </AlertBox>
 
 ### Template syntax

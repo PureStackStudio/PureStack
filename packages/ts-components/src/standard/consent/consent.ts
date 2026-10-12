@@ -1,9 +1,9 @@
 import type {
   ConsentCategory,
   ConsentConfig,
-  TsSsgContext,
+  PageContext,
 } from '@purestack/ts-common'
-import { resolveTsSsgContext } from '@purestack/ts-common'
+import { resolvePageContext } from '@purestack/ts-common'
 import type { SemanticTone } from '@purestack/ts-style'
 import { defineComponent, html, type RefOrValue } from 'regor'
 import type {
@@ -115,7 +115,9 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
         </Flex>
 
         <Flex align="center" wrap="true">
-          <Btn tone="accent" data-consent-action="save"> {{ saveLabel }} </Btn>
+          <Btn tone="accent" data-consent-action="save">
+            {{ saveLabel }}
+          </Btn>
           <Btn tone="accent" data-consent-action="accept-all">
             {{ acceptAllLabel }}
           </Btn>
@@ -142,12 +144,12 @@ const consentTemplate = html`<section class="consent" data-consent-root r-if="en
 function defineConsentComponent() {
   return defineComponent<Consent>(consentTemplate, {
     props: ['tone', 'variant', 'variantMode'],
-    context: (head) => resolveConsent(resolveTsSsgContext(head), head.props),
+    context: (head) => resolveConsent(resolvePageContext(head), head.props),
   })
 }
 
 function resolveConsent(
-  context: TsSsgContext,
+  context: PageContext,
   props: Partial<Consent>,
 ): Consent {
   const consent = context.site.consent

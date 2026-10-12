@@ -17,7 +17,7 @@ describe('BarChart rendering', () => {
     const app = createApp(
       {
         components: defineBarChartComponents(),
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
         items: values.map((value, index) => ({
           label: `Day ${index + 1}`,
           value,
@@ -57,7 +57,7 @@ describe('BarChart rendering', () => {
     const app = createApp(
       {
         components: defineBarChartComponents(),
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
         items: [
           { label: 'Core', value: 42, color: '#18a999' },
           { label: 'Edge', value: 28, color: '#f4a261' },
@@ -102,7 +102,7 @@ describe('BarChart rendering', () => {
     const app = createApp(
       {
         components: defineBarChartComponents(),
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
         items: [{ label: 'Invalid', value: Number.NaN }],
       },
       {
@@ -131,7 +131,7 @@ describe('BarChart rendering', () => {
     const app = createApp(
       {
         components: defineBarChartComponents(),
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
         items: [{ label: 'Core', value: 42 }],
       },
       {

@@ -6,7 +6,7 @@ export type {
   PageTemplateMap,
   SiteConfig,
   SiteConfigInput,
-  TsSsgContext,
+  PageContext,
 } from '@purestack/ts-common'
 export type {
   BuildContext,

@@ -17,7 +17,7 @@ describe('LineChart rendering', () => {
     const app = createApp(
       {
         components: defineLineChartComponents(),
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
         series: [
           {
             points: values.map((value, index) => ({
@@ -58,7 +58,7 @@ describe('LineChart rendering', () => {
     const app = createApp(
       {
         components: defineLineChartComponents(),
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
         series: [
           {
             label: 'Core',
@@ -120,7 +120,7 @@ describe('LineChart rendering', () => {
     const app = createApp(
       {
         components: defineLineChartComponents(),
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
         series: [
           { label: 'Invalid', points: [{ label: 'Now', value: 'n/a' }] },
         ],
@@ -151,7 +151,7 @@ describe('LineChart rendering', () => {
     const app = createApp(
       {
         components: defineLineChartComponents(),
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
         series: [
           {
             label: 'Core',

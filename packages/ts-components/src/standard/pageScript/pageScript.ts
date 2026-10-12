@@ -1,4 +1,4 @@
-import { resolveTsSsgContext } from '@purestack/ts-common'
+import { resolvePageContext } from '@purestack/ts-common'
 import {
   dirnamePosix,
   joinPosix,
@@ -41,10 +41,7 @@ const pageScriptTemplate = html`<script
   :nomodule="noModule"
 ></script>`
 
-const regorAppTemplate = html`<App><PageScript
-  :src="src"
-  :sourceRelPath="sourceRelPath"
-/></App>`
+const regorAppTemplate = html`<App><PageScript :src="src" :sourceRelPath="sourceRelPath"/></App>`
 
 function definePageScriptComponent() {
   return defineComponent<PageScript>(pageScriptTemplate, {
@@ -84,16 +81,16 @@ export function defineScriptComponents() {
 
 function resolvePageScript(head: ComponentHead<PageScript>): PageScript {
   const props = flatten(head.props)
-  const tsSsgContext = resolveTsSsgContext(head)
+  const pageContext = resolvePageContext(head)
   const ownerRelPath =
-    toOptionalString(props.sourceRelPath) ?? tsSsgContext.pageInfo.relPath
+    toOptionalString(props.sourceRelPath) ?? pageContext.pageInfo.relPath
   const src = resolveScriptSrc(
     props.src,
     ownerRelPath,
     (sourceRelPath) => {
-      tsSsgContext.recordScriptEntrypoint(sourceRelPath)
+      pageContext.recordScriptEntrypoint(sourceRelPath)
     },
-    tsSsgContext.resolveScriptPublicPath,
+    pageContext.resolveScriptPublicPath,
   )
   return {
     ...props,

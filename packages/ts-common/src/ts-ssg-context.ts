@@ -21,7 +21,7 @@ export interface TsSsgNavigation {
   pageLinks?: PageNavigationLinks
 }
 
-export interface TsSsgContext {
+export interface PageContext {
   site: SiteConfig
   pageInfo: PageInfo
   navigation?: TsSsgNavigation

@@ -16,7 +16,7 @@ describe('FormInputField', () => {
     const app = createApp(
       {
         components: defineFormInputField(),
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
         model,
         autocomplete,
       },
@@ -64,7 +64,7 @@ describe('FormInputField', () => {
           ),
           ...defineFormInputField(),
         },
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
         model,
       },
       {

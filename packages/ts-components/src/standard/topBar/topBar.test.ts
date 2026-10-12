@@ -34,7 +34,7 @@ describe('TopBar rendering', () => {
             { props: ['config'] },
           ),
         },
-        tsSsgContext: createTestContext({
+        pageContext: createTestContext({
           site: {
             basePath: '/docs',
             logo: {

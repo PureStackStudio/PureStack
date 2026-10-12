@@ -39,9 +39,9 @@ export type {
   PageTranslationInfo,
 } from './page-template-types'
 export {
-  resolveTsSsgContext,
-  tryResolveTsSsgContext,
-} from './resolveTsSsgContext'
+  resolvePageContext,
+  tryResolvePageContext,
+} from './resolvePageContext'
 export type {
   AnalyticsConfig,
   AuthConfig,
@@ -64,6 +64,6 @@ export type {
 } from './site-config-types'
 export type {
   PageOutlineItem,
-  TsSsgContext,
+  PageContext,
   TsSsgNavigation,
 } from './ts-ssg-context'
