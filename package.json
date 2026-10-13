@@ -8,6 +8,11 @@
   "workspaces": [
     "packages/*"
   ],
+  "dependencyConsistency": {
+    "exceptions": {
+      "typescript": "The repository uses TypeScript 7 for tsc; the VS Code extension needs TypeScript 6's JavaScript compiler API."
+    }
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -43,6 +48,7 @@
     "lint": "yarn workspaces foreach --no-private --all --verbose --topological -- run lint",
     "lint:ci": "yarn workspaces foreach --no-private --all --verbose --topological -- exec biome check ./src --formatter-enabled=false",
     "check-eol": "yarn tsx scripts/check-eol.ts",
+    "check-dependencies": "yarn tsx scripts/check-dependencies.ts",
     "bump-version": "yarn tsx --no-warnings scripts/bump-version.ts",
     "bundle": "yarn tsx --no-warnings scripts/bundle.ts",
     "cleanup": "yarn tsx --no-warnings scripts/cleanup.ts",
@@ -53,6 +59,6 @@
     "pack-vscode-ext": "yarn --cwd packages/ts-ssg-vscode build && yarn --cwd packages/ts-ssg-vscode package",
     "longest": "yarn tsx ./scripts/longest-functions.ts",
     "format": "biome format --write",
-    "pre-commit": "yarn check-eol && yarn regor-components && yarn embed && yarn format && yarn lint && yarn build && yarn test run"
+    "pre-commit": "yarn check-dependencies && yarn check-eol && yarn regor-components && yarn embed && yarn format && yarn lint && yarn build && yarn test run"
   }
 }
