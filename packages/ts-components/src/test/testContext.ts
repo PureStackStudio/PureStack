@@ -1,8 +1,8 @@
 import type {
+  PageContext,
   PageInfo,
   PageOutlineItem,
   SiteConfig,
-  PageContext,
   TsSsgNavigation,
 } from '@purestack/ts-common'
 import { DEFAULT_THEME_OPTIONS } from '@purestack/ts-style'

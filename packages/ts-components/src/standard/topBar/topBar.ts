@@ -1,4 +1,4 @@
-import type { SiteLogoConfig, PageContext } from '@purestack/ts-common'
+import type { PageContext, SiteLogoConfig } from '@purestack/ts-common'
 
 import { resolvePageContext } from '@purestack/ts-common'
 import type { SemanticTone } from '@purestack/ts-style'

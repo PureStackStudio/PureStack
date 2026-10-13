@@ -1,7 +1,7 @@
 import type {
+  PageContext,
   PageNavigationLink,
   PageNavigationLinks,
-  PageContext,
 } from '@purestack/ts-common'
 import { resolvePageContext } from '@purestack/ts-common'
 import { defineComponent, html } from 'regor'

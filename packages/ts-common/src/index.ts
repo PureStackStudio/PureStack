@@ -63,7 +63,7 @@ export type {
   SiteStyleConfigInput,
 } from './site-config-types'
 export type {
-  PageOutlineItem,
   PageContext,
+  PageOutlineItem,
   TsSsgNavigation,
 } from './ts-ssg-context'

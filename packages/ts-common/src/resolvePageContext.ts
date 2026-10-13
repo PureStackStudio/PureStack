@@ -25,9 +25,7 @@ export function resolvePageContext(head: unknown): PageContext {
   throw new Error('pageContext is not available in the Regor context stack.')
 }
 
-export function tryResolvePageContext(
-  head: unknown,
-): PageContext | undefined {
+export function tryResolvePageContext(head: unknown): PageContext | undefined {
   const stack = hasContextStack(head) && Array.isArray(head.ctx) ? head.ctx : []
   for (const ctx of stack) {
     if (!hasPageContext(ctx)) continue
