@@ -202,34 +202,11 @@ Text in double braces is a Regor expression, anywhere in a page. Inside markup, 
 | `pageContext.navigation`, `pageContext.outline` | The page's navigation and heading outline |
 | `pageContext.locale`, `pageContext.locales` | The page's language and the site's languages |
 
-This page lists three highlights in its frontmatter. The panel below reads them during the build:
+This page lists three highlights in its frontmatter. The panel below reads them during the build. `:context="pageContext.pageInfo"` makes `frontmatter` available directly inside the panel:
 
-<Panel tone="accent" variant="surface" bodyClass="p-3" class="mb-4">
-  <p class="text-eyebrow mt-0">From this page's frontmatter</p>
-  <strong>{{ pageContext.pageInfo.frontmatter.title }}</strong>
-  <ul class="mb-0">
-    <li r-for="item in pageContext.pageInfo.frontmatter.highlights">
-      {{ item }}
-    </li>
-  </ul>
-</Panel>
+<import-content src="./_regor-frontmatter.mdx"/>
 
-```mdx
----
-title: Regor
-highlights:
-  - One component model for pages and apps
-  - Plain TypeScript, no compiler plugin
-  - Built-in components and theme styles in both places
----
-
-<Panel tone="accent" variant="surface" bodyClass="p-3">
-  <strong>{{ pageContext.pageInfo.frontmatter.title }}</strong>
-  <ul>
-    <li r-for="item in pageContext.pageInfo.frontmatter.highlights">{{ item }}</li>
-  </ul>
-</Panel>
-```
+<import-codeblock src="./_regor-frontmatter.mdx"/>
 
 `r-if`, `r-else-if`, and `r-else` choose what to render. `r-for` repeats an element for each item. Loop over data from frontmatter, the page context, or component state.
 
@@ -322,11 +299,9 @@ Tag names match registered keys regardless of case, so `<ReleaseNote>` finds `re
 
 Place a `RegorApp` in a page and point it at a TypeScript file next to the page. It renders an `app` element with the `id` you give it and loads the script. The script calls `createApp` with the matching selector:
 
-<RegorApp id="launch-checklist" src="./regor-launch-checklist.ts"/>
+<import-content src="./_regor-launch-checklist.mdx"/>
 
-```mdx
-<RegorApp id="launch-checklist" src="./regor-launch-checklist.ts"/>
-```
+<import-codeblock src="./_regor-launch-checklist.mdx"/>
 
 <import-codeblock src="./regor-launch-checklist.ts"/>
 
@@ -490,7 +465,7 @@ These patterns scale from a single widget to a multi-page admin tool with tables
 
 ## Use other libraries
 
-A [PageScript](/components/runtime/page-script/) loads a browser entry point. Use it to enhance existing HTML or mount a browser-compatible library. PureStack bundles local TypeScript and its imports with esbuild; framework-specific source formats may need an additional compilation step. Start with a plain TypeScript module, as shown in [runtime scripts](../../components/runtime).
+A [PageScript](/components/runtime/page-script/) loads a browser entry point. Use it to enhance existing HTML or mount a browser-compatible library. PureStack bundles local TypeScript and its imports with esbuild; framework-specific source formats may need an additional compilation step. Start with a plain TypeScript module, as shown in [runtime scripts](../../../components/runtime).
 
 <AlertBox tone="warning" icon="tabler:alert-triangle" title="What you give up">
   Other frameworks can't use the built-in components, and they don't inherit the
