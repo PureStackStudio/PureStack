@@ -534,7 +534,7 @@ Supported URL strategies:
   `?lang=tr`, the configured cookie, `Accept-Language`, then `defaultLocale`.
 
 Rendered pages expose `locale`, `locales`, `defaultLocale`, and
-`resolveLocaleHref(locale)` through `TsSsgContext`. The default templates add
+`resolveLocaleHref(locale)` through `PageContext`. The default templates add
 `<html lang="...">`. Prefixed i18n pages emit canonical and `hreflang`
 alternate links when localized URLs are distinct.
 
@@ -616,7 +616,7 @@ Types:
 - Build: `BuildInput`, `BuildOptions`, `BuildResult`, `BuildCountSummary`, `PublishOptions`
 - Plugins and hooks: `PureStackPlugin`, `PureStackConfig`, `PureStackMarkdown`, `GeneratedPage`, `PageGenerationContext`, `BuildHooks`, `BuildContext`, `ResolvedContentFile`, `PageDocument`, `PageRenderResult`, `NavigationTree`, `WriteStylesResult`
 - Templates: `PageTemplateMap`, `PageTemplate`, `PageTemplateInput`, `PageInfo`, `PageFrontmatter`
-- Config and components: `SiteConfig`, `SiteConfigInput`, `TsSsgContext`
+- Config and components: `SiteConfig`, `SiteConfigInput`, `PageContext`
 - Dev server: `DevServerInput`, `DevServerOptions`, `DevServerHandle`
 - Highlighting: `MdxCodeHighlighter`, `MdxCodeLangs`, `MdxCodeThemes`
 

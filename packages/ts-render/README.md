@@ -1,7 +1,7 @@
 # @purestack/ts-render
 
 Server-side rendering for PureStack's Regor components. `renderApp` takes HTML,
-a component set, and a `TsSsgContext`, and resolves to the rendered HTML with
+a component set, and a `PageContext`, and resolves to the rendered HTML with
 any required component scripts attached.
 
 Each render gets a document of its own. With an async DOM scope installed, as

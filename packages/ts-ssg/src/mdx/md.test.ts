@@ -1,4 +1,4 @@
-import type { TsSsgContext } from '@purestack/ts-common'
+import type { PageContext } from '@purestack/ts-common'
 import { renderApp } from '@purestack/ts-render'
 import { describe, expect, it } from 'vitest'
 import { resolveMdxBuildOptions } from '../build/incremental/support'
@@ -123,7 +123,7 @@ describe('compileMarkdown', () => {
   })
 })
 
-function createTestContext(): TsSsgContext {
+function createTestContext(): PageContext {
   const site = resolveSiteConfig({ rootDir: process.cwd() })
   return {
     site,

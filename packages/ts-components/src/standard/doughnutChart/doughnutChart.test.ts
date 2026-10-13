@@ -13,7 +13,7 @@ describe('DoughnutChart rendering', () => {
     const app = createApp(
       {
         components: defineDoughnutChartComponents(),
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
         segments: [
           { label: 'Product', value: 64, color: '#18a999' },
           { label: 'Services', value: 36, color: '#f4a261' },
@@ -63,7 +63,7 @@ describe('DoughnutChart rendering', () => {
     const app = createApp(
       {
         components: defineDoughnutChartComponents(),
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
         segments: [{ label: 'None', value: 0 }],
       },
       {
@@ -93,7 +93,7 @@ describe('DoughnutChart rendering', () => {
     const app = createApp(
       {
         components: defineDoughnutChartComponents(),
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
         segments: [
           { label: 'Large', value: 99 },
           { label: 'Tiny', value: 1 },
@@ -137,7 +137,7 @@ describe('DoughnutChart rendering', () => {
     const app = createApp(
       {
         components: defineDoughnutChartComponents(),
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
         segments: [
           { label: 'Product', value: 60 },
           { label: 'Services', value: 40 },
@@ -169,7 +169,7 @@ describe('DoughnutChart rendering', () => {
     const app = createApp(
       {
         components: defineDoughnutChartComponents(),
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
         segments: [
           { label: 'Product', value: 60 },
           { label: 'Services', value: 40 },

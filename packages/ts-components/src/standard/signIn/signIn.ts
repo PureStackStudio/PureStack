@@ -1,4 +1,4 @@
-import { tryResolveTsSsgContext } from '@purestack/ts-common'
+import { tryResolvePageContext } from '@purestack/ts-common'
 import type { SemanticTone } from '@purestack/ts-style'
 import {
   type ComputedRef,
@@ -159,7 +159,7 @@ export function defineSignInComponents() {
 }
 
 function resolveSignIn(props: SignIn, head: unknown): SignIn {
-  const auth = tryResolveTsSsgContext(head)?.site?.auth
+  const auth = tryResolvePageContext(head)?.site?.auth
   return {
     ...props,
     authEnabled: computed(() => unref(props.enabled) ?? auth?.enabled === true),

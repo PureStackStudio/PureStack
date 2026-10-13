@@ -1,4 +1,4 @@
-import { tryResolveTsSsgContext } from '@purestack/ts-common'
+import { tryResolvePageContext } from '@purestack/ts-common'
 import type { SemanticTone } from '@purestack/ts-style'
 import {
   type ComponentHead,
@@ -73,7 +73,9 @@ const formAssistLinkTemplate = html`<a
   {{ label }}
 </a>`
 
-const formSubmitTemplate = html`<Btn type="submit" :tone="tone" :variant="variant">{{ label }}</Btn>`
+const formSubmitTemplate = html`<Btn type="submit" :tone="tone" :variant="variant"
+  >{{ label }}</Btn
+>`
 
 const formDividerTemplate = html`<div class="form-block__divider" :data-label="label"></div>`
 
@@ -154,7 +156,7 @@ function resolveAppForm(head: ComponentHead<AppForm>): AppForm {
 function resolvePublicAction(head: ComponentHead<AppForm>) {
   const action = unref(head.props.action)
   if (!action) return action
-  return tryResolveTsSsgContext(head)?.resolvePublicHref(action) ?? action
+  return tryResolvePageContext(head)?.resolvePublicHref(action) ?? action
 }
 
 function resolveFormAssistLink(
@@ -184,7 +186,7 @@ function resolvePublicHref(
   head: ComponentHead<FormAssistLink>,
 ) {
   if (!href) return undefined
-  return tryResolveTsSsgContext(head)?.resolvePublicHref(href) ?? href
+  return tryResolvePageContext(head)?.resolvePublicHref(href) ?? href
 }
 
 function resolveFormSubmit(head: ComponentHead<FormSubmit>): FormSubmit {

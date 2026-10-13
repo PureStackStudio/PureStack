@@ -1,4 +1,4 @@
-import { type TsSsgContext, tryResolveTsSsgContext } from '@purestack/ts-common'
+import { type PageContext, tryResolvePageContext } from '@purestack/ts-common'
 import type { SemanticTone } from '@purestack/ts-style'
 import {
   type ComputedRef,
@@ -104,7 +104,7 @@ function defineButtonLinkComponent() {
       'iconOnly',
       'ariaLabel',
     ],
-    context: (head) => resolveBtnLink(head.props, tryResolveTsSsgContext(head)),
+    context: (head) => resolveBtnLink(head.props, tryResolvePageContext(head)),
   })
 }
 
@@ -132,7 +132,7 @@ function resolveBtn(props: Btn): Btn {
 
 function resolveBtnLink(
   props: BtnLink,
-  context: TsSsgContext | undefined,
+  context: PageContext | undefined,
 ): BtnLink {
   return {
     ...props,
@@ -176,7 +176,7 @@ function resolveShowEndIcon(props: BtnBase) {
   return hasIcon && unref(props.iconPosition) === 'end'
 }
 
-function resolveButtonHref(props: BtnLink, context: TsSsgContext | undefined) {
+function resolveButtonHref(props: BtnLink, context: PageContext | undefined) {
   const value = unref(props.href)
   const href = typeof value === 'string' ? value.trim() : undefined
   return href ? (context?.resolvePublicHref(href) ?? href) : undefined

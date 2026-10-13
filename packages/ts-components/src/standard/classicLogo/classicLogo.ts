@@ -1,7 +1,7 @@
 import {
   type ClassicLogoConfig,
-  type TsSsgContext,
-  tryResolveTsSsgContext,
+  type PageContext,
+  tryResolvePageContext,
 } from '@purestack/ts-common'
 import {
   getCurrentThemePaletteVar,
@@ -19,8 +19,16 @@ import {
 } from 'regor'
 
 const logoTemplate = html`<div class="classic-logo" :style="logo.layoutStyle">
-  <a class="classic-logo__link" :href="logo.href === null ? undefined : (logo.href ?? '/')" :aria-label="logo.ariaLabel">
-    <span class="classic-logo__glyph" :style="logo.glyphStyle" aria-hidden="true">
+  <a
+    class="classic-logo__link"
+    :href="logo.href === null ? undefined : (logo.href ?? '/')"
+    :aria-label="logo.ariaLabel"
+  >
+    <span
+      class="classic-logo__glyph"
+      :style="logo.glyphStyle"
+      aria-hidden="true"
+    >
       <Icon :name="logo.icon" r-if="logo.icon"/>
       <span class="classic-logo__glyph-mark" r-else></span>
     </span>
@@ -105,7 +113,7 @@ interface ResolvedClassicLogo {
 
 function resolveClassicLogo(
   props: Partial<ClassicLogoConfig>,
-  context: TsSsgContext | undefined,
+  context: PageContext | undefined,
 ): ResolvedClassicLogo {
   const brand = props.brand
   const letterColors = props.letterColors
@@ -416,7 +424,7 @@ function defineClassicLogoComponent() {
             Object.entries(direct).filter(([, value]) => value !== undefined),
           ),
         }
-        return resolveClassicLogo(options, tryResolveTsSsgContext(head))
+        return resolveClassicLogo(options, tryResolvePageContext(head))
       }),
     }),
   })

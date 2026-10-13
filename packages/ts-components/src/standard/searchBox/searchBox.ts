@@ -1,6 +1,6 @@
-import type { TsSsgContext } from '@purestack/ts-common'
+import type { PageContext } from '@purestack/ts-common'
 
-import { resolveTsSsgContext } from '@purestack/ts-common'
+import { resolvePageContext } from '@purestack/ts-common'
 import type { SemanticTone } from '@purestack/ts-style'
 import { defineComponent, html, type RefOrValue } from 'regor'
 import type { ComponentVariant } from '../componentVariant'
@@ -36,7 +36,7 @@ function defineSearchBoxComponent() {
     context: (head) => ({
       tone: head.props.tone,
       variant: head.props.variant,
-      placeholder: resolveSearchPlaceholder(resolveTsSsgContext(head)),
+      placeholder: resolveSearchPlaceholder(resolvePageContext(head)),
     }),
   })
 }
@@ -45,7 +45,7 @@ export function defineSearchComponents() {
   return { searchBox: defineSearchBoxComponent() }
 }
 
-function resolveSearchPlaceholder(context: TsSsgContext): string {
+function resolveSearchPlaceholder(context: PageContext): string {
   const title = context?.site?.siteTitle
   if (typeof title !== 'string') return 'Search'
   const trimmed = title.trim()

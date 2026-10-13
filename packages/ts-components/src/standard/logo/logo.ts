@@ -1,7 +1,7 @@
 import {
   type LogoConfig,
-  type TsSsgContext,
-  tryResolveTsSsgContext,
+  type PageContext,
+  tryResolvePageContext,
 } from '@purestack/ts-common'
 import {
   getSemanticToneClass,
@@ -33,21 +33,52 @@ export interface SiteLogo extends ReactiveLogoOptions {
   initials?: ComputedRef<string>
 }
 
-const logoTemplate = html`<a class="site-logo" :class="classes" :style="logoStyle"
-  :href="resolvedHref" :role="resolvedHref ? undefined : 'img'" :aria-label="accessibleName">
-  <span class="site-logo__mark" r-if="options.layout !== 'wordmark'" aria-hidden="true">
+const logoTemplate = html`<a
+  class="site-logo"
+  :class="classes"
+  :style="logoStyle"
+  :href="resolvedHref"
+  :role="resolvedHref ? undefined : 'img'"
+  :aria-label="accessibleName"
+>
+  <span
+    class="site-logo__mark"
+    r-if="options.layout !== 'wordmark'"
+    aria-hidden="true"
+  >
     <slot name="mark">
       <span class="site-logo__images" r-if="resolvedImage">
-        <img class="site-logo__image" :class="{ 'site-logo__image--light': resolvedDarkImage }" :src="resolvedImage" alt="" decoding="async"/>
-        <img class="site-logo__image site-logo__image--dark" r-if="resolvedDarkImage" :src="resolvedDarkImage" alt="" decoding="async"/>
+        <img
+          class="site-logo__image"
+          :class="{ 'site-logo__image--light': resolvedDarkImage }"
+          :src="resolvedImage"
+          alt=""
+          decoding="async"/>
+        <img
+          class="site-logo__image site-logo__image--dark"
+          r-if="resolvedDarkImage"
+          :src="resolvedDarkImage"
+          alt=""
+          decoding="async"/>
       </span>
       <Icon r-else-if="options.icon" :name="options.icon"/>
       <span class="site-logo__monogram" r-else>{{ initials }}</span>
     </slot>
   </span>
-  <span class="site-logo__copy" r-if="options.layout !== 'mark'" aria-hidden="true">
-    <span class="site-logo__name"><span class="site-logo__brand">{{ options.brand }}</span><span class="site-logo__suffix" r-if="options.suffix">{{ options.suffix }}</span></span>
-    <span class="site-logo__subtitle" r-if="options.subtitle">{{ options.subtitle }}</span>
+  <span
+    class="site-logo__copy"
+    r-if="options.layout !== 'mark'"
+    aria-hidden="true"
+  >
+    <span class="site-logo__name"
+      ><span class="site-logo__brand">{{ options.brand }}</span
+      ><span class="site-logo__suffix" r-if="options.suffix"
+        >{{ options.suffix }}</span
+      ></span
+    >
+    <span class="site-logo__subtitle" r-if="options.subtitle"
+      >{{ options.subtitle }}</span
+    >
   </span>
 </a>`
 
@@ -78,7 +109,7 @@ const logoProps = [
   'gap',
 ] as const satisfies readonly (keyof LogoConfig)[]
 
-function resolveSiteLogo(props: SiteLogo, context?: TsSsgContext): SiteLogo {
+function resolveSiteLogo(props: SiteLogo, context?: PageContext): SiteLogo {
   const options = computed<LogoConfig>(() => {
     const config = flatten(unref(props.config) ?? {}) as Partial<LogoConfig>
     const read = <K extends keyof LogoConfig>(
@@ -186,7 +217,7 @@ export function defineLogoComponents() {
     siteLogo: defineComponent<SiteLogo>(logoTemplate, {
       props: ['config', ...logoProps],
       context: (head) =>
-        resolveSiteLogo(head.props, tryResolveTsSsgContext(head)),
+        resolveSiteLogo(head.props, tryResolvePageContext(head)),
     }),
   }
 }

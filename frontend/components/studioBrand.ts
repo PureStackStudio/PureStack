@@ -1,7 +1,7 @@
 import {
   type LogoConfig,
   type LogoSize,
-  resolveTsSsgContext,
+  resolvePageContext,
 } from '@purestack/ts-common'
 import { defineComponent, html, type RefOrValue } from 'regor'
 
@@ -17,7 +17,7 @@ export function defineStudioBrandComponent() {
     props: ['size'],
     context: (head) => ({
       ...head.props,
-      config: resolveTsSsgContext(head).site.logo,
+      config: resolvePageContext(head).site.logo,
     }),
   })
 }

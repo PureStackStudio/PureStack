@@ -1,7 +1,7 @@
 import {
   type NavItem,
-  type TsSsgContext,
-  tryResolveTsSsgContext,
+  type PageContext,
+  tryResolvePageContext,
 } from '@purestack/ts-common'
 import type { SemanticTone } from '@purestack/ts-style'
 import { urlNormalizer } from '@purestack/ts-util'
@@ -109,8 +109,8 @@ const navMenuTemplate = html`<nav
       r-if="resolvedSignInEnabled"
       class="nav__account"
       :enabled="resolvedSignInEnabled"
-        :signedIn="signInSignedIn"
-        :avatarSrc="signInAvatarSrc"
+      :signedIn="signInSignedIn"
+      :avatarSrc="signInAvatarSrc"
       :avatarAlt="signInAvatarAlt"/>
     <button
       class="nav__panel-toggle tone-fill-surface-all tone-text-surface-all tone-border-surface-all"
@@ -152,7 +152,7 @@ const navMenuTemplate = html`<nav
   </script>
 </nav>`
 
-function resolveNavItems(context?: TsSsgContext): NavItem[] {
+function resolveNavItems(context?: PageContext): NavItem[] {
   const items = context?.navigation?.items ?? []
   if (items.length > 0) return items
   return context?.navigation?.global ?? []
@@ -160,7 +160,7 @@ function resolveNavItems(context?: TsSsgContext): NavItem[] {
 
 function resolveCurrentPath(
   currentUrl: string | undefined,
-  context?: TsSsgContext,
+  context?: PageContext,
 ): string | undefined {
   const fromProp = urlNormalizer.normalizeInternalPath(currentUrl)
   if (fromProp) return fromProp
@@ -250,7 +250,7 @@ function defineNavMenuComponent() {
       'signInAvatarAlt',
     ],
     context: (head) => {
-      const context = tryResolveTsSsgContext(head)
+      const context = tryResolvePageContext(head)
       const props = head.props
       return {
         ...props,

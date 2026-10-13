@@ -65,7 +65,9 @@ export interface Composer {
 }
 
 const composerTemplate = html`<div class="composer-field">
-  <span class="composer-field__label" r-if="label">{{ label }}</span>
+  <span class="composer-field__label" r-if="label"
+    >{{ label }}</span
+  >
   <div class="composer" :class="classes">
     <div class="composer__toolbar" role="toolbar" aria-label="Composer tools">
       <button
@@ -74,7 +76,8 @@ const composerTemplate = html`<div class="composer-field">
         title="Bold"
         aria-label="Bold"
         :disabled="disabled"
-        @click="format('bold')">
+        @click="format('bold')"
+      >
         <Icon name="lucide:bold"/>
       </button>
       <button
@@ -83,7 +86,8 @@ const composerTemplate = html`<div class="composer-field">
         title="Italic"
         aria-label="Italic"
         :disabled="disabled"
-        @click="format('italic')">
+        @click="format('italic')"
+      >
         <Icon name="lucide:italic"/>
       </button>
       <button
@@ -92,7 +96,8 @@ const composerTemplate = html`<div class="composer-field">
         title="Underline"
         aria-label="Underline"
         :disabled="disabled"
-        @click="format('underline')">
+        @click="format('underline')"
+      >
         <Icon name="lucide:underline"/>
       </button>
       <span class="composer__divider" aria-hidden="true"></span>
@@ -102,7 +107,8 @@ const composerTemplate = html`<div class="composer-field">
         title="Align left"
         aria-label="Align left"
         :disabled="disabled"
-        @click="format('justifyLeft')">
+        @click="format('justifyLeft')"
+      >
         <Icon name="tabler:align-left"/>
       </button>
       <button
@@ -111,7 +117,8 @@ const composerTemplate = html`<div class="composer-field">
         title="Align center"
         aria-label="Align center"
         :disabled="disabled"
-        @click="format('justifyCenter')">
+        @click="format('justifyCenter')"
+      >
         <Icon name="tabler:align-center"/>
       </button>
       <button
@@ -120,7 +127,8 @@ const composerTemplate = html`<div class="composer-field">
         title="Align right"
         aria-label="Align right"
         :disabled="disabled"
-        @click="format('justifyRight')">
+        @click="format('justifyRight')"
+      >
         <Icon name="tabler:align-right"/>
       </button>
       <span class="composer__divider" aria-hidden="true"></span>
@@ -130,7 +138,8 @@ const composerTemplate = html`<div class="composer-field">
         title="Bulleted list"
         aria-label="Bulleted list"
         :disabled="disabled"
-        @click="format('insertUnorderedList')">
+        @click="format('insertUnorderedList')"
+      >
         <Icon name="lucide:list"/>
       </button>
       <button
@@ -139,7 +148,8 @@ const composerTemplate = html`<div class="composer-field">
         title="Numbered list"
         aria-label="Numbered list"
         :disabled="disabled"
-        @click="format('insertOrderedList')">
+        @click="format('insertOrderedList')"
+      >
         <Icon name="lucide:list-ordered"/>
       </button>
       <button
@@ -148,7 +158,8 @@ const composerTemplate = html`<div class="composer-field">
         title="Link"
         aria-label="Link"
         :disabled="disabled"
-        @click="createLink">
+        @click="createLink"
+      >
         <Icon name="lucide:link"/>
       </button>
       <span class="composer__divider" aria-hidden="true"></span>
@@ -158,7 +169,8 @@ const composerTemplate = html`<div class="composer-field">
         title="Clear formatting"
         aria-label="Clear formatting"
         :disabled="disabled"
-        @click="format('removeFormat')">
+        @click="format('removeFormat')"
+      >
         <Icon name="lucide:eraser"/>
       </button>
       <button
@@ -168,7 +180,8 @@ const composerTemplate = html`<div class="composer-field">
         aria-label="HTML source"
         :aria-pressed="sourceMode ? 'true' : 'false'"
         :disabled="disabled"
-        @click="toggleSourceMode">
+        @click="toggleSourceMode"
+      >
         <Icon name="lucide:code"/>
       </button>
     </div>
@@ -187,7 +200,8 @@ const composerTemplate = html`<div class="composer-field">
         @input="handleInput"
         @paste="handlePaste"
         @dragover="handleDragOver"
-        @drop="handleDrop"></div>
+        @drop="handleDrop"
+      ></div>
       <textarea
         r-if="sourceMode"
         :id="sourceId"
@@ -198,7 +212,8 @@ const composerTemplate = html`<div class="composer-field">
         :aria-label="label || placeholder || 'Message body source'"
         spellcheck="false"
         :value="sourceHtml"
-        @input="handleSourceInput"></textarea>
+        @input="handleSourceInput"
+      ></textarea>
     </div>
   </div>
 </div>`

@@ -105,7 +105,7 @@ describe('variable row measurements', () => {
               },
             ),
           },
-          tsSsgContext: createTestContext(),
+          pageContext: createTestContext(),
           items: Array.from({ length: 50000 }, (_, index) => ({
             label: `Row ${index}`,
           })),

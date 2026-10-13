@@ -13,7 +13,7 @@ describe('FormCheck', () => {
     const app = createApp(
       {
         components: defineFormComponents(),
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
       },
       {
         selector: '#app',
@@ -59,7 +59,7 @@ describe('FormCheck', () => {
     const app = createApp(
       {
         components: defineFormComponents(),
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
         checked,
         disabled,
       },
@@ -99,7 +99,7 @@ describe('FormCheck', () => {
     const app = createApp(
       {
         components: defineFormComponents(),
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
       },
       {
         selector: '#app',
@@ -133,7 +133,7 @@ describe('FormCheck', () => {
     const app = createApp(
       {
         components: defineFormComponents(),
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
       },
       {
         selector: '#app',
@@ -166,7 +166,7 @@ describe('FormCheck', () => {
     const app = createApp(
       {
         components: defineFormComponents(),
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
       },
       {
         selector: '#app',

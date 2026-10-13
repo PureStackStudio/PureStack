@@ -31,7 +31,7 @@ describe('MultiAutoCompleteInput', () => {
           ...defineIconComponents(() => ''),
           ...defineMultiAutoCompleteInputComponents(),
         },
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
         model,
         items,
         options,
@@ -91,7 +91,7 @@ describe('MultiAutoCompleteInput', () => {
           ...defineIconComponents(() => ''),
           ...defineMultiAutoCompleteInputComponents(),
         },
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
         model,
         items,
         createItem: (value: string) => ({
@@ -153,7 +153,7 @@ describe('MultiAutoCompleteInput', () => {
           ...defineIconComponents(() => ''),
           ...defineMultiAutoCompleteInputComponents(),
         },
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
         model,
         items,
         recordRemove: (

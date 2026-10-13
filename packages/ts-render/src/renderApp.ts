@@ -1,11 +1,11 @@
-import type { TsSsgContext } from '@purestack/ts-common'
+import type { PageContext } from '@purestack/ts-common'
 import { runInDom } from '@purestack/ts-minidom'
 import { buildModalScript, buildTabsScript } from '@purestack/ts-page-scripts'
 import { isPlainObject } from '@purestack/ts-util'
 import { createApp } from 'regor'
 import { componentRegistry } from './componentRegistry'
 
-export interface RenderAppOptions<TContext extends TsSsgContext> {
+export interface RenderAppOptions<TContext extends PageContext> {
   /** Components for this render, on top of the registered ones. */
   components: unknown
   context: TContext
@@ -20,7 +20,7 @@ export interface RenderAppOptions<TContext extends TsSsgContext> {
  * Renders Regor markup to HTML in a document of its own, so renders can
  * overlap, and `onRendered` can await, without seeing each other's pages.
  */
-export const renderApp = <TContext extends TsSsgContext>(
+export const renderApp = <TContext extends PageContext>(
   html: string,
   options: RenderAppOptions<TContext>,
 ): Promise<string> => {
@@ -35,7 +35,7 @@ export const renderApp = <TContext extends TsSsgContext>(
   return runInDom(htmlToParse, async (document) => {
     const runtimeEmbeds = new Map<string, 'body' | 'head'>()
     const baseContext = options.context
-    const tsSsgContext = {
+    const pageContext = {
       ...baseContext,
       recordRuntimeEmbed: (name: string, position: 'body' | 'head') => {
         const normalized = name.trim().toLowerCase()
@@ -51,13 +51,13 @@ export const renderApp = <TContext extends TsSsgContext>(
           ...componentRegistry.getAll(),
           ...(isPlainObject(options.components) ? options.components : {}),
         },
-        tsSsgContext,
+        pageContext,
       },
       {
         element: document.body,
       },
     )
-    appendEmbeddedScriptsToDom(runtimeEmbeds, tsSsgContext)
+    appendEmbeddedScriptsToDom(runtimeEmbeds, pageContext)
     await options.onRendered?.(document)
     if (isDocument) {
       return `<!DOCTYPE html>${document.documentElement?.outerHTML ?? ''}`
@@ -68,7 +68,7 @@ export const renderApp = <TContext extends TsSsgContext>(
 
 function appendEmbeddedScriptsToDom(
   runtimeEmbeds: Map<string, 'body' | 'head'>,
-  context: TsSsgContext,
+  context: PageContext,
 ) {
   appendRuntimeScript(
     resolveTabsEmbedPosition(runtimeEmbeds, context),
@@ -101,7 +101,7 @@ function ensureScriptParent(position: 'body' | 'head') {
 
 function resolveTabsEmbedPosition(
   runtimeEmbeds: Map<string, 'body' | 'head'>,
-  context: TsSsgContext,
+  context: PageContext,
 ) {
   const runtimePosition = runtimeEmbeds.get('tabs')
   if (runtimePosition) return runtimePosition
@@ -110,7 +110,7 @@ function resolveTabsEmbedPosition(
 
 function resolveModalEmbedPosition(
   runtimeEmbeds: Map<string, 'body' | 'head'>,
-  context: TsSsgContext,
+  context: PageContext,
 ) {
   const runtimePosition = runtimeEmbeds.get('modal')
   if (runtimePosition) return runtimePosition

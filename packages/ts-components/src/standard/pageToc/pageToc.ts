@@ -1,5 +1,5 @@
-import type { PageOutlineItem, TsSsgContext } from '@purestack/ts-common'
-import { resolveTsSsgContext } from '@purestack/ts-common'
+import type { PageContext, PageOutlineItem } from '@purestack/ts-common'
+import { resolvePageContext } from '@purestack/ts-common'
 import type { SemanticTone } from '@purestack/ts-style'
 import {
   type ComputedRef,
@@ -33,11 +33,7 @@ export interface PageTocItem extends PageOutlineItem {
   children?: PageTocItem[]
 }
 
-const pageTocTemplate = html`<nav
-  class="page-toc"
-  :class="classes"
-  aria-label="On this page"
->
+const pageTocTemplate = html`<nav class="page-toc" :class="classes" aria-label="On this page">
   <button
     class="page-toc__panel-toggle tone-fill-button-all tone-text-button-all tone-border-button-all"
     type="button"
@@ -120,7 +116,7 @@ function omitSingleDocumentHeading(items: PageOutlineItem[]) {
   return item.children ?? []
 }
 
-function resolveItems(props: PageToc, context: TsSsgContext | undefined) {
+function resolveItems(props: PageToc, context: PageContext | undefined) {
   const items = unref(props.outline) ?? context?.outline ?? []
   return toPageTocItems(omitSingleDocumentHeading(items))
 }
@@ -135,7 +131,7 @@ function definePageTocComponent() {
   return defineComponent<PageToc>(pageTocTemplate, {
     props: ['outline', 'title', 'tone', 'variant', 'variantMode'],
     context: (head) => {
-      const context = resolveTsSsgContext(head)
+      const context = resolvePageContext(head)
       return {
         title: resolveTitle(head.props),
         classes: computed(() =>

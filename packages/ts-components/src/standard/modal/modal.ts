@@ -1,4 +1,4 @@
-import { tryResolveTsSsgContext } from '@purestack/ts-common'
+import { tryResolvePageContext } from '@purestack/ts-common'
 import type { SemanticTone } from '@purestack/ts-style'
 import {
   type ComponentHead,
@@ -167,5 +167,5 @@ function resolveModalRootClass(props: Modal) {
 }
 
 function markModalRuntimeEmbed(head: ComponentHead<Modal>) {
-  tryResolveTsSsgContext(head)?.recordRuntimeEmbed('modal', 'head')
+  tryResolvePageContext(head)?.recordRuntimeEmbed('modal', 'head')
 }

@@ -1,9 +1,9 @@
 import type {
+  PageContext,
   PageNavigationLink,
   PageNavigationLinks,
-  TsSsgContext,
 } from '@purestack/ts-common'
-import { resolveTsSsgContext } from '@purestack/ts-common'
+import { resolvePageContext } from '@purestack/ts-common'
 import { defineComponent, html } from 'regor'
 
 export interface PageLinks extends PageNavigationLinks {
@@ -59,7 +59,7 @@ const pageLinksTemplate = html`<Grid
 
 function resolvePageLinks(
   props: PageLinks,
-  context: TsSsgContext | undefined,
+  context: PageContext | undefined,
 ): PageLinks {
   const previous = props.previous ?? context?.navigation?.pageLinks?.previous
   const next = props.next ?? context?.navigation?.pageLinks?.next
@@ -80,7 +80,7 @@ function resolvePageLink(link: PageNavigationLink | undefined) {
 function definePageLinksComponent() {
   return defineComponent<PageLinks>(pageLinksTemplate, {
     props: ['previous', 'next'],
-    context: (head) => resolvePageLinks(head.props, resolveTsSsgContext(head)),
+    context: (head) => resolvePageLinks(head.props, resolvePageContext(head)),
   })
 }
 

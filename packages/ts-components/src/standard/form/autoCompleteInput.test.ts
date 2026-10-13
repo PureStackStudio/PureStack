@@ -35,7 +35,7 @@ describe('AutoCompleteInput', () => {
           ...defineFormInputField(),
           ...defineAutoCompleteInputComponents(),
         },
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
         model,
         options,
       },
@@ -90,7 +90,7 @@ describe('AutoCompleteInput', () => {
           ...defineFormInputField(),
           ...defineAutoCompleteInputComponents(),
         },
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
         model,
         selectedValue,
         options,
@@ -137,9 +137,9 @@ describe('AutoCompleteInput', () => {
       query: string
     }>(
       html`<article class="person-row" :data-active="active">
-        <strong>{{ option.label }}</strong>
-        <small>{{ query }}</small>
-      </article>`,
+  <strong>{{ option.label }}</strong>
+  <small>{{ query }}</small>
+</article>`,
       {
         props: ['option', 'active', 'query'],
         context: (head) => head.props,
@@ -153,7 +153,7 @@ describe('AutoCompleteInput', () => {
           ...defineFormInputField(),
           ...defineAutoCompleteInputComponents(),
         },
-        tsSsgContext: createTestContext(),
+        pageContext: createTestContext(),
         model,
         options,
       },
