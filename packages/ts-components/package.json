@@ -55,7 +55,7 @@
     "@purestack/ts-page-scripts": "workspace:^",
     "@purestack/ts-style": "workspace:^",
     "@purestack/ts-util": "workspace:^",
-    "regor": "^1.7.3"
+    "regor": "^1.7.4"
   },
   "regorComponents": [
     "AlertBox",
