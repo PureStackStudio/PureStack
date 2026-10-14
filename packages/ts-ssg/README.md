@@ -370,6 +370,26 @@ Plugins apply in order:
 
 Each plugin is checked when the build starts. An unknown field or hook name, such as `onPageRender`, a value of the wrong type, two plugins sharing a name, or two plugins defining the same skin, component, template, or generated page fails the build with the plugin's name. For a single hook, pass an inline plugin: `{ name: 'site', hooks: { … } }`.
 
+### Code highlighting
+
+Use `markdown.resolveHighlighter(lang)` to select a code-to-HTML callback for a language:
+
+```ts
+import { definePlugin } from '@purestack/ts-ssg'
+import { renderCustomCode } from './custom-code'
+
+export const customCodePlugin = definePlugin({
+  name: 'custom-code',
+  markdown: {
+    resolveHighlighter: (lang) => lang === 'custom' ? renderCustomCode : null,
+  },
+})
+```
+
+The resolver can be synchronous or asynchronous and receives the trimmed, lowercase language, or `''` when absent. Its callback accepts `(code, lang?)` and returns the HTML as `string | Promise<string>`. Resolvers are awaited in plugin order; the first callback returned handles the block. If all return `null`, the configured default highlighter handles it, including its existing behavior for unknown languages.
+
+Custom callbacks also work when `mdx.disableHighlighter` is `true`. In that case, if all resolvers return `null`, the source is HTML-escaped and displayed in a plain `<pre><code>` block without syntax highlighting.
+
 ### Hooks
 
 Every page render, in a full build or a dev server re-render, runs the page hooks:

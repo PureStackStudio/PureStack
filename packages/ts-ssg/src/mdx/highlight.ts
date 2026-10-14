@@ -1,7 +1,7 @@
 import { createHighlighter, type Highlighter } from 'shiki'
 
 export interface MdxCodeHighlighter {
-  codeToHtml: (code: string, lang?: string) => string
+  codeToHtml: (code: string, lang?: string) => string | Promise<string>
 }
 
 export interface MdxCodeThemes {

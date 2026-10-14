@@ -1,11 +1,12 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import type { PageTemplateMap, SiteConfig } from '@purestack/ts-common'
 import { registerSkin, type ThemeSkin, themeSkins } from '@purestack/ts-style'
-import { isPlainObject } from '@purestack/ts-util'
+import { escapeHtml, isPlainObject } from '@purestack/ts-util'
 import type { PluggableList } from 'unified'
 import type { BuildHooks } from '../build/site'
 import type { ResolvedContentFile } from '../i18n/content'
 import { createContentProcessor } from '../mdx/compile'
+import type { MdxCodeHighlighter } from '../mdx/highlight'
 
 /**
  * A named bundle of extensions for a PureStack site. Plugins compose in
@@ -21,7 +22,7 @@ export interface PureStackPlugin {
   components?: (config: SiteConfig) => Record<string, object>
   /** Page templates, selected by the `template` frontmatter field. */
   templates?: PageTemplateMap
-  /** Remark and rehype plugins, run on every page and shared partial. */
+  /** Markdown transforms and highlighter resolution for pages and shared partials. */
   markdown?: PureStackMarkdown
   /**
    * Pages without files, such as tag or index pages. Runs whenever the
@@ -65,6 +66,13 @@ export interface GeneratedPage {
 }
 
 export interface PureStackMarkdown {
+  /** Resolves a lowercase language (empty when absent); null lets the next highlighter handle it. */
+  resolveHighlighter?: (
+    lang: string,
+  ) =>
+    | MdxCodeHighlighter['codeToHtml']
+    | null
+    | Promise<MdxCodeHighlighter['codeToHtml'] | null>
   /** Transform the Markdown tree, after Regor markup is restored. */
   remarkPlugins?: PluggableList
   /** Transform the HTML tree, before the outline and code highlighting. */
@@ -85,7 +93,7 @@ const PLUGIN_FIELDS = [
   'devMiddleware',
   'hooks',
 ]
-const MARKDOWN_FIELDS = ['remarkPlugins', 'rehypePlugins']
+const MARKDOWN_FIELDS = ['remarkPlugins', 'rehypePlugins', 'resolveHighlighter']
 
 const HOOK_NAMES = [
   'onConfigResolved',
@@ -164,7 +172,11 @@ function assertPluginFields(name: string, plugin: Record<string, unknown>) {
           `has an unknown markdown field "${field}". Markdown fields: ${MARKDOWN_FIELDS.join(', ')}.`,
         )
       }
-      if (list !== undefined && !Array.isArray(list)) {
+      if (list === undefined) continue
+      if (field === 'resolveHighlighter') {
+        if (typeof list !== 'function')
+          fail('needs `markdown.resolveHighlighter` to be a function.')
+      } else if (!Array.isArray(list)) {
         fail(`needs \`markdown.${field}\` to be a list of plugins.`)
       }
     }
@@ -267,6 +279,29 @@ export function resolvePluginContentProcessor(
     plugins.flatMap((plugin) => plugin.markdown?.remarkPlugins ?? []),
     plugins.flatMap((plugin) => plugin.markdown?.rehypePlugins ?? []),
   )
+}
+
+/** Tries plugin resolvers in order, then uses the default highlighter. */
+export function resolvePluginHighlighter(
+  plugins: readonly PureStackPlugin[],
+  fallback: MdxCodeHighlighter | undefined,
+): MdxCodeHighlighter | undefined {
+  const resolvers = plugins.flatMap(
+    (plugin) => plugin.markdown?.resolveHighlighter ?? [],
+  )
+  if (resolvers.length === 0) return fallback
+  return {
+    async codeToHtml(code, lang) {
+      const normalizedLang = lang?.trim().toLowerCase() ?? ''
+      for (const resolve of resolvers) {
+        const highlighter = await resolve(normalizedLang)
+        if (highlighter !== null) return highlighter(code, lang)
+      }
+      if (fallback) return fallback.codeToHtml(code, lang)
+      const language = lang ? ` class="language-${escapeHtml(lang, true)}"` : ''
+      return `<pre><code${language}>${escapeHtml(code)}</code></pre>`
+    },
+  }
 }
 
 /**

@@ -24,7 +24,7 @@ export {
 
 export type { MdxCompileResult, MdxRenderOptions }
 
-export function compileMdx(
+export async function compileMdx(
   source: string,
   options: MdxRenderOptions = {},
 ): Promise<MdxCompileResult> {
@@ -35,7 +35,7 @@ export function compileMdx(
   const file = parser.parse(masked.source)
   restoreRegorMarkup(
     file,
-    renderRegorMarkupCodeFences(masked.segments, options.highlighter),
+    await renderRegorMarkupCodeFences(masked.segments, options.highlighter),
   )
   normalizeMarkupParagraphs(file)
   return compileAstToHtml(file, options)

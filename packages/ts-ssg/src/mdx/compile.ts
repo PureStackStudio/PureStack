@@ -5,8 +5,8 @@ import type { Root as MdastRoot } from 'mdast'
 import rehypeStringify from 'rehype-stringify'
 import remarkRehype from 'remark-rehype'
 import { type PluggableList, unified } from 'unified'
+import { applyCodeHighlighting } from './codeHighlighting'
 import type { MdxCodeHighlighter } from './highlight'
-import { applyShikiHighlighting } from './shikiHighlighting'
 
 export interface MdxCompileResult {
   bodyHtml: string
@@ -56,7 +56,7 @@ export async function compileAstToHtml(
   wrapTablesInScrollContainers(tree)
   const outline = collectOutline(tree)
   if (options.highlighter) {
-    applyShikiHighlighting(tree, options.highlighter)
+    await applyCodeHighlighting(tree, options.highlighter)
   }
   keepCodeLiteral(tree)
   const bodyHtml = String(

@@ -22,7 +22,10 @@ import {
 } from '../../mdx/highlight'
 import { createHljsHighlighter } from '../../mdx/highlightjs'
 import { generatePluginPages } from '../../plugins/generated-pages'
-import type { PureStackPlugin } from '../../plugins/plugin'
+import {
+  type PureStackPlugin,
+  resolvePluginHighlighter,
+} from '../../plugins/plugin'
 import {
   assertUniqueContentRoutes,
   resolveRouteInfo,
@@ -128,8 +131,12 @@ export class ManifestContentIndex {
 
 export async function resolveMdxBuildOptions(
   mdx: Partial<SiteMdxConfig> | undefined,
+  plugins: readonly PureStackPlugin[] = [],
 ): Promise<MdxRenderOptions> {
-  const highlighter = await resolveHighlighter(mdx)
+  const highlighter = resolvePluginHighlighter(
+    plugins,
+    await resolveHighlighter(mdx),
+  )
   return {
     highlighter,
     compileMdAsMdx: mdx?.compileMdAsMdx ?? true,

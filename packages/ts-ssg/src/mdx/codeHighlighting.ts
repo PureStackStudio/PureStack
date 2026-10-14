@@ -1,44 +1,46 @@
 import type { Element, Root, Text } from 'hast'
 import { fromHtml } from 'hast-util-from-html'
 import { toHtml } from 'hast-util-to-html'
+import type { Raw } from 'mdast-util-to-hast'
 
 import type { MdxCodeHighlighter } from './highlight'
 
-export function applyShikiHighlighting(
+/** Applies the configured highlighter to code blocks and inline code. */
+export async function applyCodeHighlighting(
   root: Root,
   highlighter: MdxCodeHighlighter,
 ) {
-  const visit = (node: Root | Element) => {
+  const visit = async (node: Root | Element) => {
     const children = node.children ?? []
     for (let index = 0; index < children.length; index += 1) {
       const child = children[index]
       if (child.type !== 'element') continue
       if (child.tagName === 'pre') {
-        const highlighted = highlightPre(child, highlighter)
+        const highlighted = await highlightCodeBlock(child, highlighter)
         if (highlighted) {
           children[index] = highlighted
           continue
         }
       }
       if (child.tagName === 'code' && !isPre(node)) {
-        const highlighted = highlightInlineCode(child, highlighter)
+        const highlighted = await highlightInlineCode(child, highlighter)
         if (highlighted) {
           children[index] = highlighted
           continue
         }
       }
       if (child.children && child.children.length > 0) {
-        visit(child)
+        await visit(child)
       }
     }
   }
-  visit(root)
+  await visit(root)
 }
 
-function highlightPre(
+async function highlightCodeBlock(
   pre: Element,
   highlighter: MdxCodeHighlighter,
-): Element | undefined {
+): Promise<Element | Raw | undefined> {
   const code = pre.children?.find(
     (child) => child.type === 'element' && child.tagName === 'code',
   ) as Element | undefined
@@ -46,17 +48,17 @@ function highlightPre(
   const language = resolveLanguage(code) ?? resolveLanguage(pre)
   const text = collectText(code).trimEnd()
   if (text.length === 0) return undefined
-  return renderHighlightedPre(text, language, highlighter)
+  return renderHighlightedCodeBlock(text, language, highlighter)
 }
 
-function highlightInlineCode(
+async function highlightInlineCode(
   code: Element,
   highlighter: MdxCodeHighlighter,
-): Element | undefined {
+): Promise<Element | undefined> {
   const language = resolveLanguage(code)
   const text = collectText(code).trimEnd()
   if (text.length === 0) return undefined
-  const html = highlighter.codeToHtml(text, language)
+  const html = await highlighter.codeToHtml(text, language)
   const parsed = fromHtml(html, { fragment: true })
   const replacement = parsed.children?.find(
     (child) => child.type === 'element' && child.tagName === 'pre',
@@ -86,38 +88,49 @@ function highlightInlineCode(
   return code
 }
 
-function renderHighlightedPre(
+/** Preserves arbitrary block HTML; a single pre uses the site's code styling. */
+async function renderHighlightedCodeBlock(
   text: string,
   language: string | undefined,
   highlighter: MdxCodeHighlighter,
-): Element | undefined {
-  const html = highlighter.codeToHtml(text, language)
+): Promise<Element | Raw> {
+  const html = await highlighter.codeToHtml(text, language)
   const parsed = fromHtml(html, { fragment: true })
-  const replacement = parsed.children?.find(
-    (child) => child.type === 'element' && child.tagName === 'pre',
-  ) as Element | undefined
-  if (!replacement) return undefined
-  normalizeShikiPre(replacement)
+  const replacement = parsed.children[0]
+  if (
+    parsed.children.length !== 1 ||
+    replacement?.type !== 'element' ||
+    replacement.tagName !== 'pre'
+  ) {
+    return { type: 'raw', value: html }
+  }
+  normalizeHighlightedPre(replacement)
   return replacement
 }
 
-export function renderHighlightedPreHtml(
+/** Renders a code block inside component markup, keeping pre content literal. */
+export async function renderHighlightedCodeBlockHtml(
   text: string,
   language: string | undefined,
   highlighter: MdxCodeHighlighter,
-): string | undefined {
-  const replacement = renderHighlightedPre(text, language, highlighter)
-  if (!replacement) return undefined
+): Promise<string> {
+  const replacement = await renderHighlightedCodeBlock(
+    text,
+    language,
+    highlighter,
+  )
+  if (replacement.type === 'raw') return replacement.value
   replacement.properties['r-pre'] = ''
   return toHtml(replacement, { allowDangerousHtml: true })
 }
 
-export function renderHighlightedInlineCodeHtml(
+/** Extracts inline code from the highlighter's pre/code output. */
+export async function renderHighlightedInlineCodeHtml(
   text: string,
   language: string | undefined,
   highlighter: MdxCodeHighlighter,
-): string | undefined {
-  const html = highlighter.codeToHtml(text, language)
+): Promise<string | undefined> {
+  const html = await highlighter.codeToHtml(text, language)
   const parsed = fromHtml(html, { fragment: true })
   const replacement = parsed.children?.find(
     (child) => child.type === 'element' && child.tagName === 'pre',
@@ -184,7 +197,8 @@ function isPre(node: Root | Element) {
   return node.type === 'element' && node.tagName === 'pre'
 }
 
-function normalizeShikiPre(pre: Element) {
+/** The site's shared code styles use the shiki class for every highlighter. */
+function normalizeHighlightedPre(pre: Element) {
   if (!pre.properties) pre.properties = {}
   pre.properties.className = mergeClassNames(pre.properties.className, 'shiki')
   const style =

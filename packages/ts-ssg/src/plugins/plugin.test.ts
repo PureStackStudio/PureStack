@@ -6,6 +6,7 @@ import { registerSkin, themeSkins } from '@purestack/ts-style'
 import { disableLogger, getLogger, type Logger } from 'logpot'
 import { defineComponent, html } from 'regor'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import { resolveMdxBuildOptions } from '../build/incremental/support'
 import { buildSite } from '../build/site'
 import { resolveSiteConfig } from '../config/config'
 import { makeRepoTempDir } from '../test/repoTempDir'
@@ -16,6 +17,7 @@ import {
   definePlugin,
   type PureStackPlugin,
   resolvePluginComponents,
+  resolvePluginHighlighter,
   resolvePluginTemplates,
   withPluginSkins,
 } from './plugin'
@@ -40,6 +42,138 @@ describe('plugins', () => {
     const plugin = { name: 'docs' }
 
     expect(definePlugin(plugin)).toBe(plugin)
+  })
+
+  it('awaits resolver initialization and supports sync and async rendering callbacks', async () => {
+    const fallback = {
+      codeToHtml: (code: string) => `<pre><code>${code}</code></pre>`,
+    }
+    expect(resolvePluginHighlighter([], fallback)).toBe(fallback)
+    const highlighter = resolvePluginHighlighter(
+      [
+        {
+          name: 'custom',
+          markdown: {
+            resolveHighlighter: async (lang) => {
+              if (lang.startsWith('diagram-'))
+                return async (code) => `<figure>${code}</figure>`
+              if (lang === 'custom') return (code) => `<div>${code}</div>`
+              return null
+            },
+          },
+        },
+      ],
+      fallback,
+    )
+    if (!highlighter) throw new Error('Expected a composed highlighter.')
+    expect(await highlighter.codeToHtml('graph', ' DIAGRAM-FLOW ')).toBe(
+      '<figure>graph</figure>',
+    )
+    expect(await highlighter.codeToHtml('source', 'custom')).toBe(
+      '<div>source</div>',
+    )
+    expect(await highlighter.codeToHtml('source', 'ts')).toBe(
+      '<pre><code>source</code></pre>',
+    )
+  })
+
+  it('keeps custom languages working when default highlighting is disabled and escapes unmatched source', async () => {
+    const options = await resolveMdxBuildOptions({ disableHighlighter: true }, [
+      {
+        name: 'custom',
+        markdown: {
+          resolveHighlighter: (lang) =>
+            lang === 'diagram' ? async () => '<figure>rendered</figure>' : null,
+        },
+      },
+    ])
+    const highlighter = options.highlighter
+    if (!highlighter) throw new Error('Expected custom language handling.')
+    expect(await highlighter.codeToHtml('graph', 'diagram')).toBe(
+      '<figure>rendered</figure>',
+    )
+    expect(
+      await highlighter.codeToHtml('<script>source</script>', 'html'),
+    ).toBe(
+      '<pre><code class="language-html">&lt;script&gt;source&lt;/script&gt;</code></pre>',
+    )
+    expect(
+      (await resolveMdxBuildOptions({ disableHighlighter: true })).highlighter,
+    ).toBeUndefined()
+  })
+
+  it('tries sync and async resolvers in plugin order and stops at the first callback', async () => {
+    const calls: string[] = []
+    const highlighter = resolvePluginHighlighter(
+      ['first', 'second', 'third'].map<PureStackPlugin>((name) => ({
+        name,
+        markdown: {
+          resolveHighlighter: (lang) => {
+            calls.push(`${name}:${lang}`)
+            if (name === 'first') return Promise.resolve(null)
+            if (lang === 'diagram') return () => `<figure>${name}</figure>`
+            if (lang === 'hidden') return () => ''
+            return null
+          },
+        },
+      })),
+      {
+        codeToHtml: () => {
+          calls.push('default')
+          return '<pre>default</pre>'
+        },
+      },
+    )
+    if (!highlighter) throw new Error('Expected a composed highlighter.')
+    expect(await highlighter.codeToHtml('graph', 'diagram')).toBe(
+      '<figure>second</figure>',
+    )
+    expect(calls).toEqual(['first:diagram', 'second:diagram'])
+    calls.length = 0
+    expect(await highlighter.codeToHtml('source', 'hidden')).toBe('')
+    expect(calls).toEqual(['first:hidden', 'second:hidden'])
+    calls.length = 0
+    expect(await highlighter.codeToHtml('source')).toBe('<pre>default</pre>')
+    expect(calls).toEqual(['first:', 'second:', 'third:', 'default'])
+  })
+
+  it('propagates asynchronous resolver failures without falling back', async () => {
+    let fallbackCalled = false
+    const highlighter = resolvePluginHighlighter(
+      [
+        {
+          name: 'failing',
+          markdown: {
+            resolveHighlighter: async () => {
+              throw new Error('Could not initialize highlighter.')
+            },
+          },
+        },
+      ],
+      {
+        codeToHtml: () => {
+          fallbackCalled = true
+          return '<pre>default</pre>'
+        },
+      },
+    )
+    if (!highlighter) throw new Error('Expected a composed highlighter.')
+    await expect(highlighter.codeToHtml('source', 'custom')).rejects.toThrow(
+      'Could not initialize highlighter.',
+    )
+    expect(fallbackCalled).toBe(false)
+  })
+
+  it('validates highlighter resolver declarations', () => {
+    for (const resolveHighlighter of [[], {}, 42, null]) {
+      expect(() =>
+        assertValidPlugins([
+          { name: 'bad', markdown: { resolveHighlighter } } as never,
+        ]),
+      ).toThrow(
+        'Plugin "bad" needs `markdown.resolveHighlighter` to be a function.',
+      )
+    }
   })
 
   describe('hooks', () => {
@@ -309,7 +443,7 @@ describe('plugins', () => {
       ],
       [
         { name: 'typo', markdown: { remark: [] } },
-        'Plugin "typo" has an unknown markdown field "remark". Markdown fields: remarkPlugins, rehypePlugins.',
+        'Plugin "typo" has an unknown markdown field "remark". Markdown fields: remarkPlugins, rehypePlugins, resolveHighlighter.',
       ],
       [
         { name: 'bad', markdown: { rehypePlugins: () => {} } },
@@ -386,6 +520,20 @@ describe('plugins', () => {
           '<Greeting name="Ada" />',
           '',
           'Page note.',
+          '',
+          '```diagram',
+          'custom block',
+          '```',
+          '',
+          '<Panel>',
+          '```diagram',
+          'nested block',
+          '```',
+          '</Panel>',
+          '',
+          '```ts',
+          'const answer = 42',
+          '```',
         ].join('\n'),
       )
       await fs.writeFile(path.join(contentDir, 'header.mdx'), 'Header note.')
@@ -422,7 +570,13 @@ describe('plugins', () => {
                 .raw(bodyHtml),
             ),
         },
-        markdown: { rehypePlugins: [markParagraphs] },
+        markdown: {
+          rehypePlugins: [markParagraphs],
+          resolveHighlighter: async (lang) =>
+            lang === 'diagram'
+              ? async (code) => `<figure r-pre>${code}</figure>`
+              : null,
+        },
         hooks: {
           onConfigResolved: () => {
             calls.push('config')
@@ -449,6 +603,9 @@ describe('plugins', () => {
       )
       expect(pageHtml).toContain('<body class="landing">')
       expect(pageHtml).toContain('Hello Ada')
+      expect(pageHtml).toContain('<figure r-pre>custom block</figure>')
+      expect(pageHtml).toContain('<figure r-pre>nested block</figure>')
+      expect(pageHtml).toContain('language-typescript')
       // Content plugins reach pages and shared partials alike.
       expect(pageHtml).toContain('<p class="noted">Page note.</p>')
       expect(pageHtml).toContain('<p class="noted">Header note.</p>')
