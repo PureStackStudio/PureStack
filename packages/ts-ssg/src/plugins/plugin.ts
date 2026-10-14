@@ -2,11 +2,12 @@ import type { IncomingMessage, ServerResponse } from 'node:http'
 import type { PageTemplateMap, SiteConfig } from '@purestack/ts-common'
 import { registerSkin, type ThemeSkin, themeSkins } from '@purestack/ts-style'
 import { escapeHtml, isPlainObject } from '@purestack/ts-util'
+import type { HLJSApi } from 'highlight.js'
 import type { PluggableList } from 'unified'
 import type { BuildHooks } from '../build/site'
 import type { ResolvedContentFile } from '../i18n/content'
 import { createContentProcessor } from '../mdx/compile'
-import type { MdxCodeHighlighter } from '../mdx/highlight'
+import type { MdxCodeHighlighter, MdxShikiFactory } from '../mdx/highlight'
 
 /**
  * A named bundle of extensions for a PureStack site. Plugins compose in
@@ -66,6 +67,10 @@ export interface GeneratedPage {
 }
 
 export interface PureStackMarkdown {
+  /** Creates Shiki from PureStack's default creation options. Only used when Shiki is selected. */
+  createShiki?: MdxShikiFactory
+  /** Creates the configured highlight.js instance. Only used when highlight.js is selected. */
+  createHighlightJs?: () => HLJSApi | Promise<HLJSApi>
   /** Resolves a lowercase language (empty when absent); null lets the next highlighter handle it. */
   resolveHighlighter?: (
     lang: string,
@@ -93,7 +98,13 @@ const PLUGIN_FIELDS = [
   'devMiddleware',
   'hooks',
 ]
-const MARKDOWN_FIELDS = ['remarkPlugins', 'rehypePlugins', 'resolveHighlighter']
+const MARKDOWN_FIELDS = [
+  'remarkPlugins',
+  'rehypePlugins',
+  'resolveHighlighter',
+  'createShiki',
+  'createHighlightJs',
+]
 
 const HOOK_NAMES = [
   'onConfigResolved',
@@ -173,11 +184,11 @@ function assertPluginFields(name: string, plugin: Record<string, unknown>) {
         )
       }
       if (list === undefined) continue
-      if (field === 'resolveHighlighter') {
-        if (typeof list !== 'function')
-          fail('needs `markdown.resolveHighlighter` to be a function.')
-      } else if (!Array.isArray(list)) {
-        fail(`needs \`markdown.${field}\` to be a list of plugins.`)
+      if (field === 'remarkPlugins' || field === 'rehypePlugins') {
+        if (!Array.isArray(list))
+          fail(`needs \`markdown.${field}\` to be a list of plugins.`)
+      } else if (typeof list !== 'function') {
+        fail(`needs \`markdown.${field}\` to be a function.`)
       }
     }
   }
@@ -279,6 +290,23 @@ export function resolvePluginContentProcessor(
     plugins.flatMap((plugin) => plugin.markdown?.remarkPlugins ?? []),
     plugins.flatMap((plugin) => plugin.markdown?.rehypePlugins ?? []),
   )
+}
+
+/** A selected backend has one factory; choosing between competing factories would hide a plugin. */
+export function resolvePluginHighlighterFactory<
+  K extends 'createShiki' | 'createHighlightJs',
+>(plugins: readonly PureStackPlugin[], field: K): PureStackMarkdown[K] {
+  let owner: PureStackPlugin | undefined
+  for (const plugin of plugins) {
+    if (plugin.markdown?.[field] === undefined) continue
+    if (owner) {
+      throw new Error(
+        `Plugins "${owner.name}" and "${plugin.name}" both define markdown.${field}.`,
+      )
+    }
+    owner = plugin
+  }
+  return owner?.markdown?.[field]
 }
 
 /** Tries plugin resolvers in order, then uses the default highlighter. */

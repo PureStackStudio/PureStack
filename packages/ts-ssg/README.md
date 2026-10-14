@@ -390,6 +390,51 @@ The resolver can be synchronous or asynchronous and receives the trimmed, lowerc
 
 Custom callbacks also work when `mdx.disableHighlighter` is `true`. In that case, if all resolvers return `null`, the source is HTML-escaped and displayed in a plain `<pre><code>` block without syntax highlighting.
 
+#### Backend factories
+
+Use `markdown.createShiki(options)` or `markdown.createHighlightJs()` to create the default backend instance. Both factories can return an instance synchronously or asynchronously. Only the selected backend's factory runs, once when a build or dev server initializes its highlighter. If no factory is provided, PureStack uses its built-in factory. Factories are skipped when `mdx.disableHighlighter` is `true`. Two plugins providing a factory for the selected backend fail with both plugin names.
+
+The Shiki factory receives the native creation options containing PureStack's default languages and light/dark themes. Extend those options to add a TextMate grammar:
+
+```ts
+import { definePlugin } from '@purestack/ts-ssg'
+import { createHighlighter } from 'shiki'
+import grammar from './mylang.tmLanguage.json' with { type: 'json' }
+
+export const languagePlugin = definePlugin({
+  name: 'mylang',
+  markdown: {
+    createShiki: (options) => createHighlighter({
+      ...options,
+      langs: [...options.langs, grammar],
+    }),
+  },
+})
+```
+
+The highlight.js factory returns a configured `HLJSApi` instance. A fresh instance starts without languages, so register the languages your site needs:
+
+```ts
+import { definePlugin } from '@purestack/ts-ssg'
+import hljs from 'highlight.js'
+import typescript from 'highlight.js/lib/languages/typescript'
+import myLanguage from './mylang'
+
+export const languagePlugin = definePlugin({
+  name: 'mylang',
+  markdown: {
+    createHighlightJs: () => {
+      const instance = hljs.newInstance()
+      instance.registerLanguage('typescript', typescript)
+      instance.registerLanguage('mylang', myLanguage)
+      return instance
+    },
+  },
+})
+```
+
+These factories provide native backend instances for the default HTML adapters. `resolveHighlighter(lang)` still runs first for each code block; its returned callback takes precedence over the configured backend.
+
 ### Hooks
 
 Every page render, in a full build or a dev server re-render, runs the page hooks:
@@ -638,7 +683,7 @@ Types:
 - Templates: `PageTemplateMap`, `PageTemplate`, `PageTemplateInput`, `PageInfo`, `PageFrontmatter`
 - Config and components: `SiteConfig`, `SiteConfigInput`, `PageContext`
 - Dev server: `DevServerInput`, `DevServerOptions`, `DevServerHandle`
-- Highlighting: `MdxCodeHighlighter`, `MdxCodeLangs`, `MdxCodeThemes`
+- Highlighting: `MdxCodeHighlighter`, `MdxCodeLangs`, `MdxCodeThemes`, `MdxShikiFactory`
 
 Related packages: `@purestack/ts-html` builds template markup (`h`), `@purestack/ts-style` provides skins (`themeSkins`, `ThemeSkin`), and `@purestack/ts-components` provides the built-in components.
 

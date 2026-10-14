@@ -20,6 +20,7 @@ export {
   type MdxCodeHighlighter,
   type MdxCodeLangs,
   type MdxCodeThemes,
+  type MdxShikiFactory,
 } from './highlight'
 
 export type { MdxCompileResult, MdxRenderOptions }

@@ -44,6 +44,7 @@ export {
   type MdxCodeHighlighter,
   type MdxCodeLangs,
   type MdxCodeThemes,
+  type MdxShikiFactory,
 } from './mdx/highlight'
 export {
   buildNavigation,

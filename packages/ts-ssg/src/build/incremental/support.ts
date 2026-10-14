@@ -25,6 +25,7 @@ import { generatePluginPages } from '../../plugins/generated-pages'
 import {
   type PureStackPlugin,
   resolvePluginHighlighter,
+  resolvePluginHighlighterFactory,
 } from '../../plugins/plugin'
 import {
   assertUniqueContentRoutes,
@@ -135,7 +136,7 @@ export async function resolveMdxBuildOptions(
 ): Promise<MdxRenderOptions> {
   const highlighter = resolvePluginHighlighter(
     plugins,
-    await resolveHighlighter(mdx),
+    await resolveHighlighter(mdx, plugins),
   )
   return {
     highlighter,
@@ -145,14 +146,17 @@ export async function resolveMdxBuildOptions(
 
 async function resolveHighlighter(
   mdx: Partial<SiteMdxConfig> | undefined,
+  plugins: readonly PureStackPlugin[],
 ): Promise<MdxCodeHighlighter | undefined> {
   if (mdx?.disableHighlighter) return undefined
   if (mdx?.highlighter === 'highlightjs') {
-    return createHljsHighlighter()
+    const create = resolvePluginHighlighterFactory(plugins, 'createHighlightJs')
+    return createHljsHighlighter(await create?.())
   }
   return await createMdxHighlighter(
     DEFAULT_MDX_CODE_THEMES,
     DEFAULT_MDX_CODE_LANGS,
+    resolvePluginHighlighterFactory(plugins, 'createShiki'),
   )
 }
 
