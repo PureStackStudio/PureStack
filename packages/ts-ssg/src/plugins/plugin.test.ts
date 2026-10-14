@@ -3,9 +3,17 @@ import type { IncomingMessage, ServerResponse } from 'node:http'
 import path from 'node:path'
 import { h } from '@purestack/ts-html'
 import { registerSkin, themeSkins } from '@purestack/ts-style'
+import hljs from 'highlight.js'
+import typescript from 'highlight.js/lib/languages/typescript'
 import { disableLogger, getLogger, type Logger } from 'logpot'
 import { defineComponent, html } from 'regor'
+import {
+  createHighlighter,
+  type Highlighter,
+  type LanguageRegistration,
+} from 'shiki'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import { resolveMdxBuildOptions } from '../build/incremental/support'
 import { buildSite } from '../build/site'
 import { resolveSiteConfig } from '../config/config'
 import { makeRepoTempDir } from '../test/repoTempDir'
@@ -16,6 +24,7 @@ import {
   definePlugin,
   type PureStackPlugin,
   resolvePluginComponents,
+  resolvePluginHighlighter,
   resolvePluginTemplates,
   withPluginSkins,
 } from './plugin'
@@ -40,6 +49,310 @@ describe('plugins', () => {
     const plugin = { name: 'docs' }
 
     expect(definePlugin(plugin)).toBe(plugin)
+  })
+
+  it('awaits resolver initialization and supports sync and async rendering callbacks', async () => {
+    const fallback = {
+      codeToHtml: (code: string) => `<pre><code>${code}</code></pre>`,
+    }
+    expect(resolvePluginHighlighter([], fallback)).toBe(fallback)
+    const highlighter = resolvePluginHighlighter(
+      [
+        {
+          name: 'custom',
+          markdown: {
+            resolveHighlighter: async (lang) => {
+              if (lang.startsWith('diagram-'))
+                return async (code) => `<figure>${code}</figure>`
+              if (lang === 'custom') return (code) => `<div>${code}</div>`
+              return null
+            },
+          },
+        },
+      ],
+      fallback,
+    )
+    if (!highlighter) throw new Error('Expected a composed highlighter.')
+    expect(await highlighter.codeToHtml('graph', ' DIAGRAM-FLOW ')).toBe(
+      '<figure>graph</figure>',
+    )
+    expect(await highlighter.codeToHtml('source', 'custom')).toBe(
+      '<div>source</div>',
+    )
+    expect(await highlighter.codeToHtml('source', 'ts')).toBe(
+      '<pre><code>source</code></pre>',
+    )
+  })
+
+  it('keeps custom languages working when default highlighting is disabled and escapes unmatched source', async () => {
+    const options = await resolveMdxBuildOptions({ disableHighlighter: true }, [
+      {
+        name: 'custom',
+        markdown: {
+          createShiki: () => {
+            throw new Error('Shiki creation is disabled.')
+          },
+          createHighlightJs: () => {
+            throw new Error('Highlight.js creation is disabled.')
+          },
+          resolveHighlighter: (lang) =>
+            lang === 'diagram' ? async () => '<figure>rendered</figure>' : null,
+        },
+      },
+    ])
+    const highlighter = options.highlighter
+    if (!highlighter) throw new Error('Expected custom language handling.')
+    expect(await highlighter.codeToHtml('graph', 'diagram')).toBe(
+      '<figure>rendered</figure>',
+    )
+    expect(
+      await highlighter.codeToHtml('<script>source</script>', 'html'),
+    ).toBe(
+      '<pre><code class="language-html">&lt;script&gt;source&lt;/script&gt;</code></pre>',
+    )
+    expect(
+      (await resolveMdxBuildOptions({ disableHighlighter: true })).highlighter,
+    ).toBeUndefined()
+  })
+
+  it('tries sync and async resolvers in plugin order and stops at the first callback', async () => {
+    const calls: string[] = []
+    const highlighter = resolvePluginHighlighter(
+      ['first', 'second', 'third'].map<PureStackPlugin>((name) => ({
+        name,
+        markdown: {
+          resolveHighlighter: (lang) => {
+            calls.push(`${name}:${lang}`)
+            if (name === 'first') return Promise.resolve(null)
+            if (lang === 'diagram') return () => `<figure>${name}</figure>`
+            if (lang === 'hidden') return () => ''
+            return null
+          },
+        },
+      })),
+      {
+        codeToHtml: () => {
+          calls.push('default')
+          return '<pre>default</pre>'
+        },
+      },
+    )
+    if (!highlighter) throw new Error('Expected a composed highlighter.')
+    expect(await highlighter.codeToHtml('graph', 'diagram')).toBe(
+      '<figure>second</figure>',
+    )
+    expect(calls).toEqual(['first:diagram', 'second:diagram'])
+    calls.length = 0
+    expect(await highlighter.codeToHtml('source', 'hidden')).toBe('')
+    expect(calls).toEqual(['first:hidden', 'second:hidden'])
+    calls.length = 0
+    expect(await highlighter.codeToHtml('source')).toBe('<pre>default</pre>')
+    expect(calls).toEqual(['first:', 'second:', 'third:', 'default'])
+  })
+
+  it('propagates asynchronous resolver failures without falling back', async () => {
+    let fallbackCalled = false
+    const highlighter = resolvePluginHighlighter(
+      [
+        {
+          name: 'failing',
+          markdown: {
+            resolveHighlighter: async () => {
+              throw new Error('Could not initialize highlighter.')
+            },
+          },
+        },
+      ],
+      {
+        codeToHtml: () => {
+          fallbackCalled = true
+          return '<pre>default</pre>'
+        },
+      },
+    )
+    if (!highlighter) throw new Error('Expected a composed highlighter.')
+    await expect(highlighter.codeToHtml('source', 'custom')).rejects.toThrow(
+      'Could not initialize highlighter.',
+    )
+    expect(fallbackCalled).toBe(false)
+  })
+
+  it.each(['resolveHighlighter', 'createShiki', 'createHighlightJs'])(
+    'validates markdown.%s declarations',
+    (field) => {
+      for (const value of [[], {}, 42, null]) {
+        expect(() =>
+          assertValidPlugins([
+            { name: 'bad', markdown: { [field]: value } } as never,
+          ]),
+        ).toThrow(`Plugin "bad" needs \`markdown.${field}\` to be a function.`)
+      }
+    },
+  )
+
+  describe('highlighter factories', () => {
+    it.each(['sync', 'async'])(
+      'uses a %s Shiki factory with default options and custom grammars',
+      async (mode) => {
+        let created: Highlighter | undefined
+        let calls = 0
+        const grammar = {
+          name: 'creator-test',
+          scopeName: 'source.creator-test',
+          aliases: ['creator-test-alias'],
+          repository: {},
+          patterns: [
+            { name: 'keyword.control.creator-test', match: '\\blaunch\\b' },
+          ],
+        } satisfies LanguageRegistration
+        try {
+          // A pre-created instance may be returned synchronously or asynchronously.
+          if (mode === 'sync') {
+            created = await createHighlighter({
+              themes: ['github-light', 'github-dark'],
+              langs: ['ts-tags', grammar],
+            })
+          }
+          const options = await resolveMdxBuildOptions(
+            { highlighter: 'shiki' },
+            [
+              {
+                name: 'custom-shiki',
+                markdown: {
+                  createShiki: (defaults) => {
+                    calls += 1
+                    expect(defaults.langs).toContain('ts-tags')
+                    expect(defaults.themes).toEqual([
+                      'github-light',
+                      'github-dark',
+                    ])
+                    if (created) return created
+                    return createHighlighter({
+                      ...defaults,
+                      langs: [...defaults.langs, grammar],
+                    }).then((instance) => {
+                      created = instance
+                      return instance
+                    })
+                  },
+                  createHighlightJs: () => {
+                    throw new Error('Unused backend.')
+                  },
+                },
+              },
+            ],
+          )
+          if (!options.highlighter)
+            throw new Error('Expected Shiki highlighting.')
+          const first = options.highlighter.codeToHtml(
+            'launch',
+            'creator-test-alias',
+          )
+          expect(typeof first).toBe('string')
+          expect(first).toContain('launch')
+          expect(first).toContain('--shiki-light:')
+          expect(
+            options.highlighter.codeToHtml('launch again', 'creator-test'),
+          ).toContain('launch')
+          expect(calls).toBe(1)
+          expect(
+            options.highlighter.codeToHtml('const answer = 42', 'ts'),
+          ).toContain('answer')
+        } finally {
+          created?.dispose()
+        }
+      },
+    )
+
+    it.each(['sync', 'async'])(
+      'uses a %s highlight.js factory without changing the global registry',
+      async (mode) => {
+        let calls = 0
+        const options = await resolveMdxBuildOptions(
+          { highlighter: 'highlightjs' },
+          [
+            {
+              name: 'custom-highlightjs',
+              markdown: {
+                createHighlightJs: () => {
+                  calls += 1
+                  const instance = hljs.newInstance()
+                  instance.registerLanguage('typescript', typescript)
+                  instance.registerLanguage('creator-test', () => ({
+                    keywords: 'launch',
+                    aliases: ['creator-test-alias'],
+                    contains: [],
+                  }))
+                  instance.configure({ classPrefix: 'custom-' })
+                  return mode === 'async' ? Promise.resolve(instance) : instance
+                },
+                createShiki: () => {
+                  throw new Error('Unused backend.')
+                },
+              },
+            },
+          ],
+        )
+        if (!options.highlighter)
+          throw new Error('Expected highlight.js highlighting.')
+        const html = options.highlighter.codeToHtml(
+          'launch',
+          'creator-test-alias',
+        )
+        expect(typeof html).toBe('string')
+        expect(html).toContain('<span class="custom-keyword">launch</span>')
+        expect(
+          options.highlighter.codeToHtml('const answer = 42', 'ts'),
+        ).toContain('custom-keyword')
+        expect(calls).toBe(1)
+        expect(hljs.getLanguage('creator-test')).toBeUndefined()
+        const defaults = await resolveMdxBuildOptions({
+          highlighter: 'highlightjs',
+        })
+        expect(
+          defaults.highlighter?.codeToHtml('const answer = 42', 'ts'),
+        ).toContain('hljs-keyword')
+      },
+    )
+
+    it.each(['shiki', 'highlightjs'] as const)(
+      'rejects competing %s factories before creating an instance',
+      async (backend) => {
+        const field = backend === 'shiki' ? 'createShiki' : 'createHighlightJs'
+        const plugins = ['first', 'second'].map((name) => ({
+          name,
+          markdown: {
+            [field]: () => {
+              throw new Error('Must not create an instance.')
+            },
+          },
+        }))
+        await expect(
+          resolveMdxBuildOptions({ highlighter: backend }, plugins),
+        ).rejects.toThrow(
+          `Plugins "first" and "second" both define markdown.${field}.`,
+        )
+      },
+    )
+
+    it.each(['shiki', 'highlightjs'] as const)(
+      'propagates %s factory failures',
+      async (backend) => {
+        const field = backend === 'shiki' ? 'createShiki' : 'createHighlightJs'
+        await expect(
+          resolveMdxBuildOptions({ highlighter: backend }, [
+            {
+              name: 'failing',
+              markdown: {
+                [field]: async () => {
+                  throw new Error('Creation failed.')
+                },
+              },
+            },
+          ]),
+        ).rejects.toThrow('Creation failed.')
+      },
+    )
   })
 
   describe('hooks', () => {
@@ -309,7 +622,7 @@ describe('plugins', () => {
       ],
       [
         { name: 'typo', markdown: { remark: [] } },
-        'Plugin "typo" has an unknown markdown field "remark". Markdown fields: remarkPlugins, rehypePlugins.',
+        'Plugin "typo" has an unknown markdown field "remark". Markdown fields: remarkPlugins, rehypePlugins, resolveHighlighter, createShiki, createHighlightJs.',
       ],
       [
         { name: 'bad', markdown: { rehypePlugins: () => {} } },
@@ -386,6 +699,20 @@ describe('plugins', () => {
           '<Greeting name="Ada" />',
           '',
           'Page note.',
+          '',
+          '```diagram',
+          'custom block',
+          '```',
+          '',
+          '<Panel>',
+          '```diagram',
+          'nested block',
+          '```',
+          '</Panel>',
+          '',
+          '```ts',
+          'const answer = 42',
+          '```',
         ].join('\n'),
       )
       await fs.writeFile(path.join(contentDir, 'header.mdx'), 'Header note.')
@@ -422,7 +749,13 @@ describe('plugins', () => {
                 .raw(bodyHtml),
             ),
         },
-        markdown: { rehypePlugins: [markParagraphs] },
+        markdown: {
+          rehypePlugins: [markParagraphs],
+          resolveHighlighter: async (lang) =>
+            lang === 'diagram'
+              ? async (code) => `<figure r-pre>${code}</figure>`
+              : null,
+        },
         hooks: {
           onConfigResolved: () => {
             calls.push('config')
@@ -449,6 +782,9 @@ describe('plugins', () => {
       )
       expect(pageHtml).toContain('<body class="landing">')
       expect(pageHtml).toContain('Hello Ada')
+      expect(pageHtml).toContain('<figure r-pre>custom block</figure>')
+      expect(pageHtml).toContain('<figure r-pre>nested block</figure>')
+      expect(pageHtml).toContain('language-typescript')
       // Content plugins reach pages and shared partials alike.
       expect(pageHtml).toContain('<p class="noted">Page note.</p>')
       expect(pageHtml).toContain('<p class="noted">Header note.</p>')

@@ -1,8 +1,12 @@
 import { createHighlighter, type Highlighter } from 'shiki'
 
 export interface MdxCodeHighlighter {
-  codeToHtml: (code: string, lang?: string) => string
+  codeToHtml: (code: string, lang?: string) => string | Promise<string>
 }
+
+export type MdxShikiFactory = (
+  options: Parameters<typeof createHighlighter>[0],
+) => Highlighter | Promise<Highlighter>
 
 export interface MdxCodeThemes {
   light: string
@@ -53,10 +57,11 @@ const TYPESCRIPT_WITH_TAGS_LANG = 'ts-tags'
 export async function createMdxHighlighter(
   themes: MdxCodeThemes = DEFAULT_MDX_CODE_THEMES,
   langs: MdxCodeLangs = DEFAULT_MDX_CODE_LANGS,
+  create: MdxShikiFactory = createHighlighter,
 ): Promise<MdxCodeHighlighter> {
   const themeList = dedupe([themes.light, themes.dark])
   const langList = resolveLoadedLanguages(langs)
-  const highlighter: Highlighter = await createHighlighter({
+  const highlighter = await create({
     themes: themeList,
     langs: langList,
   })

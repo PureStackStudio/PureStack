@@ -1,4 +1,4 @@
-import hljs from 'highlight.js'
+import hljs, { type HLJSApi } from 'highlight.js'
 
 import type { MdxCodeHighlighter } from './highlight'
 
@@ -11,12 +11,14 @@ const languageAliases: Record<string, string> = {
   md: 'markdown',
 }
 
-export function createHljsHighlighter(): MdxCodeHighlighter {
+export function createHljsHighlighter(
+  highlighter: HLJSApi = hljs,
+): MdxCodeHighlighter {
   return {
     codeToHtml: (code: string, lang?: string) => {
       const normalizedLang = normalizeLanguage(lang)
-      if (normalizedLang && hljs.getLanguage(normalizedLang)) {
-        const highlighted = hljs.highlight(code, {
+      if (normalizedLang && highlighter.getLanguage(normalizedLang)) {
+        const highlighted = highlighter.highlight(code, {
           language: normalizedLang,
           ignoreIllegals: true,
         })

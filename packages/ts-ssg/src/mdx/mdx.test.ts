@@ -19,7 +19,7 @@ describe('createMdxHighlighter', () => {
         // biome-ignore lint/suspicious/noTemplateCurlyInString: Literal TypeScript source for the highlighter.
         'const view = html`<div class="greeting">Hello ${name}</div>`',
       ].join('\n')
-      const html = highlighter.codeToHtml(source, lang)
+      const html = await highlighter.codeToHtml(source, lang)
       const cleanup = ensureDomGlobals()
       try {
         const root = document.createElement('div')

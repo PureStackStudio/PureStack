@@ -97,7 +97,7 @@ async function createIncrementalRuntime(
   const minifyScripts = publishOptions.enabled === true
   const failOnAssetError = publishOptions.enabled === true
   const mdx = {
-    ...(await resolveMdxBuildOptions(config.mdx)),
+    ...(await resolveMdxBuildOptions(config.mdx, plugins)),
     contentProcessor: resolvePluginContentProcessor(plugins),
   }
   themes.setOptions(config.style.theme)

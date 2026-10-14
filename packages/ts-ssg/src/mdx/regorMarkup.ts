@@ -34,11 +34,11 @@ Internally, the interesting helpers are:
 So the short version is: `regorMarkup.ts` is the compatibility layer that lets this project support Regor component syntax inside `.mdx` files while still using a mostly markdown-first pipeline.
  */
 
-import type { MdxCodeHighlighter } from './highlight'
 import {
+  renderHighlightedCodeBlockHtml,
   renderHighlightedInlineCodeHtml,
-  renderHighlightedPreHtml,
-} from './shikiHighlighting'
+} from './codeHighlighting'
+import type { MdxCodeHighlighter } from './highlight'
 
 type MarkdownNode = {
   type?: unknown
@@ -191,15 +191,19 @@ export function restoreRegorMarkup(root: unknown, segments: MarkupSegment[]) {
   }
 }
 
-export function renderRegorMarkupCodeFences(
+export async function renderRegorMarkupCodeFences(
   segments: MarkupSegment[],
   highlighter?: MdxCodeHighlighter,
 ) {
   if (segments.length === 0) return segments
-  return segments.map((segment) => ({
-    ...segment,
-    source: replaceMarkupCodeFences(segment.source, highlighter),
-  }))
+  const rendered: MarkupSegment[] = []
+  for (const segment of segments) {
+    rendered.push({
+      ...segment,
+      source: await replaceMarkupCodeFences(segment.source, highlighter),
+    })
+  }
+  return rendered
 }
 
 export function normalizeMarkupParagraphs(root: unknown) {
@@ -591,7 +595,7 @@ function isParagraphNode(node: unknown): node is ParagraphNode {
   )
 }
 
-function replaceMarkupCodeFences(
+async function replaceMarkupCodeFences(
   source: string,
   highlighter?: MdxCodeHighlighter,
 ) {
@@ -613,14 +617,14 @@ function replaceMarkupCodeFences(
 
     if (markupStart < index) {
       next.push(
-        replaceMarkupInlineCode(
+        await replaceMarkupInlineCode(
           lines.slice(markupStart, index).join('\n'),
           highlighter,
         ),
       )
     }
     next.push(
-      renderCodeFenceBlock(body.join('\n'), fence.language, highlighter),
+      await renderCodeFenceBlock(body.join('\n'), fence.language, highlighter),
     )
     index = closeIndex
     markupStart = closeIndex + 1
@@ -628,7 +632,10 @@ function replaceMarkupCodeFences(
 
   if (markupStart < lines.length) {
     next.push(
-      replaceMarkupInlineCode(lines.slice(markupStart).join('\n'), highlighter),
+      await replaceMarkupInlineCode(
+        lines.slice(markupStart).join('\n'),
+        highlighter,
+      ),
     )
   }
   return next.join('\n')
@@ -672,14 +679,13 @@ function stripFenceIndent(line: string, indent: string) {
   return indent && line.startsWith(indent) ? line.slice(indent.length) : line
 }
 
-function renderCodeFenceBlock(
+async function renderCodeFenceBlock(
   code: string,
   language: string | undefined,
   highlighter?: MdxCodeHighlighter,
 ) {
   if (highlighter) {
-    const highlighted = renderHighlightedPreHtml(code, language, highlighter)
-    if (highlighted) return highlighted
+    return renderHighlightedCodeBlockHtml(code, language, highlighter)
   }
 
   const languageClass = language
@@ -688,7 +694,7 @@ function renderCodeFenceBlock(
   return `<pre r-pre><code${languageClass}>${escapeHtml(code)}</code></pre>`
 }
 
-function replaceMarkupInlineCode(
+async function replaceMarkupInlineCode(
   source: string,
   highlighter?: MdxCodeHighlighter,
 ) {
@@ -696,12 +702,12 @@ function replaceMarkupInlineCode(
   for (let index = 0; index < parts.length; index += 1) {
     const part = parts[index]
     if (!part || looksLikeTag(part)) continue
-    parts[index] = replaceInlineCodeInText(part, highlighter)
+    parts[index] = await replaceInlineCodeInText(part, highlighter)
   }
   return parts.join('')
 }
 
-function replaceInlineCodeInText(
+async function replaceInlineCodeInText(
   value: string,
   highlighter?: MdxCodeHighlighter,
 ) {
@@ -729,7 +735,7 @@ function replaceInlineCodeInText(
     }
 
     next += value.slice(index, start)
-    next += renderInlineCodeSpan(value.slice(start + 1, end), highlighter)
+    next += await renderInlineCodeSpan(value.slice(start + 1, end), highlighter)
     index = end + 1
   }
 
@@ -743,9 +749,12 @@ function findInlineCodeEnd(value: string, startIndex: number) {
   return -1
 }
 
-function renderInlineCodeSpan(code: string, highlighter?: MdxCodeHighlighter) {
+async function renderInlineCodeSpan(
+  code: string,
+  highlighter?: MdxCodeHighlighter,
+) {
   if (highlighter) {
-    const highlighted = renderHighlightedInlineCodeHtml(
+    const highlighted = await renderHighlightedInlineCodeHtml(
       code,
       undefined,
       highlighter,

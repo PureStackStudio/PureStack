@@ -1,11 +1,13 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import type { PageTemplateMap, SiteConfig } from '@purestack/ts-common'
 import { registerSkin, type ThemeSkin, themeSkins } from '@purestack/ts-style'
-import { isPlainObject } from '@purestack/ts-util'
+import { escapeHtml, isPlainObject } from '@purestack/ts-util'
+import type { HLJSApi } from 'highlight.js'
 import type { PluggableList } from 'unified'
 import type { BuildHooks } from '../build/site'
 import type { ResolvedContentFile } from '../i18n/content'
 import { createContentProcessor } from '../mdx/compile'
+import type { MdxCodeHighlighter, MdxShikiFactory } from '../mdx/highlight'
 
 /**
  * A named bundle of extensions for a PureStack site. Plugins compose in
@@ -21,7 +23,7 @@ export interface PureStackPlugin {
   components?: (config: SiteConfig) => Record<string, object>
   /** Page templates, selected by the `template` frontmatter field. */
   templates?: PageTemplateMap
-  /** Remark and rehype plugins, run on every page and shared partial. */
+  /** Markdown transforms and highlighter resolution for pages and shared partials. */
   markdown?: PureStackMarkdown
   /**
    * Pages without files, such as tag or index pages. Runs whenever the
@@ -65,6 +67,17 @@ export interface GeneratedPage {
 }
 
 export interface PureStackMarkdown {
+  /** Creates Shiki from PureStack's default creation options. Only used when Shiki is selected. */
+  createShiki?: MdxShikiFactory
+  /** Creates the configured highlight.js instance. Only used when highlight.js is selected. */
+  createHighlightJs?: () => HLJSApi | Promise<HLJSApi>
+  /** Resolves a lowercase language (empty when absent); null lets the next highlighter handle it. */
+  resolveHighlighter?: (
+    lang: string,
+  ) =>
+    | MdxCodeHighlighter['codeToHtml']
+    | null
+    | Promise<MdxCodeHighlighter['codeToHtml'] | null>
   /** Transform the Markdown tree, after Regor markup is restored. */
   remarkPlugins?: PluggableList
   /** Transform the HTML tree, before the outline and code highlighting. */
@@ -85,7 +98,13 @@ const PLUGIN_FIELDS = [
   'devMiddleware',
   'hooks',
 ]
-const MARKDOWN_FIELDS = ['remarkPlugins', 'rehypePlugins']
+const MARKDOWN_FIELDS = [
+  'remarkPlugins',
+  'rehypePlugins',
+  'resolveHighlighter',
+  'createShiki',
+  'createHighlightJs',
+]
 
 const HOOK_NAMES = [
   'onConfigResolved',
@@ -164,8 +183,12 @@ function assertPluginFields(name: string, plugin: Record<string, unknown>) {
           `has an unknown markdown field "${field}". Markdown fields: ${MARKDOWN_FIELDS.join(', ')}.`,
         )
       }
-      if (list !== undefined && !Array.isArray(list)) {
-        fail(`needs \`markdown.${field}\` to be a list of plugins.`)
+      if (list === undefined) continue
+      if (field === 'remarkPlugins' || field === 'rehypePlugins') {
+        if (!Array.isArray(list))
+          fail(`needs \`markdown.${field}\` to be a list of plugins.`)
+      } else if (typeof list !== 'function') {
+        fail(`needs \`markdown.${field}\` to be a function.`)
       }
     }
   }
@@ -267,6 +290,46 @@ export function resolvePluginContentProcessor(
     plugins.flatMap((plugin) => plugin.markdown?.remarkPlugins ?? []),
     plugins.flatMap((plugin) => plugin.markdown?.rehypePlugins ?? []),
   )
+}
+
+/** A selected backend has one factory; choosing between competing factories would hide a plugin. */
+export function resolvePluginHighlighterFactory<
+  K extends 'createShiki' | 'createHighlightJs',
+>(plugins: readonly PureStackPlugin[], field: K): PureStackMarkdown[K] {
+  let owner: PureStackPlugin | undefined
+  for (const plugin of plugins) {
+    if (plugin.markdown?.[field] === undefined) continue
+    if (owner) {
+      throw new Error(
+        `Plugins "${owner.name}" and "${plugin.name}" both define markdown.${field}.`,
+      )
+    }
+    owner = plugin
+  }
+  return owner?.markdown?.[field]
+}
+
+/** Tries plugin resolvers in order, then uses the default highlighter. */
+export function resolvePluginHighlighter(
+  plugins: readonly PureStackPlugin[],
+  fallback: MdxCodeHighlighter | undefined,
+): MdxCodeHighlighter | undefined {
+  const resolvers = plugins.flatMap(
+    (plugin) => plugin.markdown?.resolveHighlighter ?? [],
+  )
+  if (resolvers.length === 0) return fallback
+  return {
+    async codeToHtml(code, lang) {
+      const normalizedLang = lang?.trim().toLowerCase() ?? ''
+      for (const resolve of resolvers) {
+        const highlighter = await resolve(normalizedLang)
+        if (highlighter !== null) return highlighter(code, lang)
+      }
+      if (fallback) return fallback.codeToHtml(code, lang)
+      const language = lang ? ` class="language-${escapeHtml(lang, true)}"` : ''
+      return `<pre><code${language}>${escapeHtml(code)}</code></pre>`
+    },
+  }
 }
 
 /**
