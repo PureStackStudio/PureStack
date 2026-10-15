@@ -7,6 +7,7 @@ import remarkParse from 'remark-parse'
 import { unified } from 'unified'
 import { isSharedContentFile } from '../discover/content'
 import { isContentExt } from '../discover/contentExtensions'
+import { LANGUAGE_BY_EXTENSION } from './codeLanguages'
 import { findMarkupTags } from './regorMarkup'
 
 const IMPORT_TAGS = {
@@ -27,26 +28,6 @@ const IMPORT_TAGS = {
 type ImportTagName = keyof typeof IMPORT_TAGS
 
 const IMPORT_TAG_NAMES = Object.keys(IMPORT_TAGS) as ImportTagName[]
-
-const LANGUAGE_BY_EXTENSION: Record<string, string> = {
-  '.cjs': 'javascript',
-  '.css': 'css',
-  '.cts': 'typescript',
-  '.html': 'html',
-  '.js': 'javascript',
-  '.json': 'json',
-  '.jsx': 'jsx',
-  '.md': 'markdown',
-  '.mdx': 'mdx',
-  '.mjs': 'javascript',
-  '.mts': 'typescript',
-  '.rmdx': 'mdx',
-  '.sh': 'bash',
-  '.ts': 'typescript',
-  '.tsx': 'tsx',
-  '.yaml': 'yaml',
-  '.yml': 'yaml',
-}
 
 const parser = unified().use(remarkParse).use(remarkGfm)
 

@@ -12,6 +12,10 @@ describe('expandImports', () => {
     const files: Record<string, string> = {
       'guides/demo.ts': 'export const answer = 42\n',
       'guides/styles.css': '.demo { color: red; }\n',
+      'guides/example.PY': 'print(42)\n',
+      'guides/example.cs': 'public class Example {}\n',
+      'guides/example.ps1': 'Write-Host "Hello"\n',
+      'guides/example.sql': 'SELECT 42;\n',
       'shared/fence.md': 'Use a fence:\r\n\r\n```ts\r\nconst x = 1\r\n```\r\n',
       'guides/data.unknown': 'plain',
       'shared/_note.mdx':
@@ -55,6 +59,17 @@ describe('expandImports', () => {
     ).toBe('\n```scss\n.demo { color: red; }\n```\n')
     expect(await expand('<import-codeblock src="./data.unknown"/>')).toBe(
       '\n```\nplain\n```\n',
+    )
+  })
+
+  it.each([
+    ['example.PY', 'python', 'print(42)'],
+    ['example.cs', 'csharp', 'public class Example {}'],
+    ['example.ps1', 'powershell', 'Write-Host "Hello"'],
+    ['example.sql', 'sql', 'SELECT 42;'],
+  ])('infers the language for %s', async (file, language, code) => {
+    expect(await expand(`<import-codeblock src="./${file}"/>`)).toBe(
+      `\n\`\`\`${language}\n${code}\n\`\`\`\n`,
     )
   })
 
