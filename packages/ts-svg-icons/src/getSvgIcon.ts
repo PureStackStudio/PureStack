@@ -12,13 +12,6 @@ export type AvailableIconNames =
   | TablerIconName
   | (string & {})
 
-const SVG_ICONS: Record<AvailableIconNames, string> = {
-  ...ICONOIR_ICONS,
-  ...LUCIDE_ICONS,
-  ...PHOSPHOR_ICONS,
-  ...TABLER_ICONS,
-}
-
 /**
  * Returns an SVG string for a generated icon name or passes through raw SVG input.
  *
@@ -32,7 +25,11 @@ const SVG_ICONS: Record<AvailableIconNames, string> = {
  */
 export function getSvgIcon(name: AvailableIconNames): string {
   if (name?.includes('<svg')) return name
-  const icon = SVG_ICONS[name]
+  const icon =
+    ICONOIR_ICONS[name as IconoirIconName] ??
+    LUCIDE_ICONS[name as LucideIconName] ??
+    PHOSPHOR_ICONS[name as PhosphorIconName] ??
+    TABLER_ICONS[name as TablerIconName]
   if (!icon) throw new Error(`Unknown icon: ${name}`)
   return icon
 }

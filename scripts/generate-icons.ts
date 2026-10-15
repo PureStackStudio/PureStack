@@ -236,13 +236,6 @@ function renderGetSvgIconModule() {
     '  | TablerIconName',
     '  | (string & {})',
     '',
-    'const SVG_ICONS: Record<AvailableIconNames, string> = {',
-    '  ...ICONOIR_ICONS,',
-    '  ...LUCIDE_ICONS,',
-    '  ...PHOSPHOR_ICONS,',
-    '  ...TABLER_ICONS,',
-    '}',
-    '',
     '/**',
     ' * Returns an SVG string for a generated icon name or passes through raw SVG input.',
     ' *',
@@ -256,7 +249,11 @@ function renderGetSvgIconModule() {
     ' */',
     'export function getSvgIcon(name: AvailableIconNames): string {',
     "  if (name?.includes('<svg')) return name",
-    '  const icon = SVG_ICONS[name]',
+    '  const icon =',
+    '    ICONOIR_ICONS[name as IconoirIconName] ??',
+    '    LUCIDE_ICONS[name as LucideIconName] ??',
+    '    PHOSPHOR_ICONS[name as PhosphorIconName] ??',
+    '    TABLER_ICONS[name as TablerIconName]',
     `  if (!icon) throw new Error(\`Unknown icon: \${name}\`)`,
     '  return icon',
     '}',
@@ -295,6 +292,8 @@ async function readIconoirIcons(): Promise<GeneratedIcon[]> {
       .filter((entry) => entry.isFile() && entry.name.endsWith('.svg'))
       .map((entry) => entry.name)
       .sort()
+    if (svgFiles.length === 0)
+      throw new Error(`No Iconoir icons found in ${iconsDir}`)
     for (const fileName of svgFiles) {
       const sourceName = fileName.replace(/\.svg$/i, '')
       const publicName = `${sourceName}${variant.suffix}`
@@ -321,12 +320,12 @@ async function readLucideIcons(): Promise<GeneratedIcon[]> {
   )
   const files = await readdir(iconsDir, { withFileTypes: true })
   const iconModules = files
-    .filter((entry) => entry.isFile() && entry.name.endsWith('.js'))
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.mjs'))
     .map((entry) => entry.name)
     .sort()
   const icons: GeneratedIcon[] = []
   for (const fileName of iconModules) {
-    const sourceName = fileName.replace(/\.js$/i, '')
+    const sourceName = fileName.replace(/\.mjs$/i, '')
     const modulePath = path.join(iconsDir, fileName)
     const module = await import(pathToFileURL(modulePath).href)
     const iconNode = module.default as Array<[string, Record<string, string>]>
@@ -338,6 +337,8 @@ async function readLucideIcons(): Promise<GeneratedIcon[]> {
       svg: buildSvgString(lucideDefaultAttributes, innerSvg),
     })
   }
+  if (icons.length === 0)
+    throw new Error(`No Lucide icon modules found in ${iconsDir}`)
   return icons
 }
 
@@ -355,6 +356,8 @@ async function readPhosphorIcons(): Promise<GeneratedIcon[]> {
     .filter((entry) => entry.isFile() && entry.name.endsWith('.svg'))
     .map((entry) => entry.name)
     .sort()
+  if (svgFiles.length === 0)
+    throw new Error(`No Phosphor icons found in ${iconsDir}`)
   const icons: GeneratedIcon[] = []
   for (const fileName of svgFiles) {
     const sourceName = fileName.replace(/\.svg$/i, '')
@@ -389,6 +392,8 @@ async function readTablerIcons(): Promise<GeneratedIcon[]> {
       .filter((entry) => entry.isFile() && entry.name.endsWith('.svg'))
       .map((entry) => entry.name)
       .sort()
+    if (svgFiles.length === 0)
+      throw new Error(`No Tabler icons found in ${iconsDir}`)
     for (const fileName of svgFiles) {
       const sourceName = fileName.replace(/\.svg$/i, '')
       const publicName = `${sourceName}${variant.suffix}`
