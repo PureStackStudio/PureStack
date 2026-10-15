@@ -1,25 +1,26 @@
 import hljs, { type HLJSApi } from 'highlight.js'
 
+import { normalizeCodeLanguage } from './codeLanguages'
 import type { MdxCodeHighlighter } from './highlight'
 
-const languageAliases: Record<string, string> = {
-  js: 'javascript',
-  ts: 'typescript',
-  sh: 'bash',
-  shell: 'bash',
-  yml: 'yaml',
-  md: 'markdown',
-}
+// Use highlight.js names, or the closest grammar for Shiki-only languages.
+const hljsLanguages = new Map([
+  ['jsonc', 'json'],
+  ['mdx', 'markdown'],
+  ['objective-c', 'objectivec'],
+  ['ts-tags', 'typescript'],
+])
 
 export function createHljsHighlighter(
   highlighter: HLJSApi = hljs,
 ): MdxCodeHighlighter {
   return {
     codeToHtml: (code: string, lang?: string) => {
-      const normalizedLang = normalizeLanguage(lang)
-      if (normalizedLang && highlighter.getLanguage(normalizedLang)) {
+      const normalizedLang = normalizeCodeLanguage(lang ?? '')
+      const highlightLang = hljsLanguages.get(normalizedLang) ?? normalizedLang
+      if (highlightLang && highlighter.getLanguage(highlightLang)) {
         const highlighted = highlighter.highlight(code, {
-          language: normalizedLang,
+          language: highlightLang,
           ignoreIllegals: true,
         })
         return `<pre class="hljs"><code class="hljs language-${highlighted.language}">${highlighted.value}</code></pre>`
@@ -30,13 +31,6 @@ export function createHljsHighlighter(
       return `<pre class="hljs"><code class="hljs${langClass}">${escaped}</code></pre>`
     },
   }
-}
-
-function normalizeLanguage(lang: string | undefined): string | undefined {
-  if (!lang) return undefined
-  const normalized = lang.trim().toLowerCase()
-  if (!normalized) return undefined
-  return languageAliases[normalized] ?? normalized
 }
 
 function escapeHtml(value: string): string {

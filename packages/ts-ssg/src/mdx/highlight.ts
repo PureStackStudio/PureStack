@@ -1,4 +1,5 @@
 import { createHighlighter, type Highlighter } from 'shiki'
+import { DEFAULT_CODE_LANGUAGES, normalizeCodeLanguage } from './codeLanguages'
 
 export interface MdxCodeHighlighter {
   codeToHtml: (code: string, lang?: string) => string | Promise<string>
@@ -20,38 +21,8 @@ export const DEFAULT_MDX_CODE_THEMES: MdxCodeThemes = {
   dark: 'github-dark',
 }
 
-export const DEFAULT_MDX_CODE_LANGS: MdxCodeLangs = [
-  'bash',
-  'sh',
-  'shell',
-  'javascript',
-  'js',
-  'typescript',
-  'ts',
-  'ts-tags',
-  'jsx',
-  'tsx',
-  'json',
-  'html',
-  'css',
-  'markdown',
-  'mdx',
-  'yaml',
-  'yml',
-  'toml',
-  'diff',
-  'csharp',
-  'cpp',
-  'c',
-  'java',
-  'python',
-  'ruby',
-  'go',
-  'rust',
-  'xml',
-]
+export const DEFAULT_MDX_CODE_LANGS: MdxCodeLangs = DEFAULT_CODE_LANGUAGES
 
-const TYPESCRIPT_LANGS = new Set(['typescript', 'ts', 'cts', 'mts'])
 const TYPESCRIPT_WITH_TAGS_LANG = 'ts-tags'
 
 export async function createMdxHighlighter(
@@ -78,11 +49,10 @@ export async function createMdxHighlighter(
 }
 
 function resolveLoadedLanguages(langs: string[]) {
-  const resolved = dedupe(langs.map(normalizeLanguageName))
+  const resolved = dedupe(langs.map(normalizeCodeLanguage))
   if (
-    resolved.some((lang) => TYPESCRIPT_LANGS.has(lang)) &&
-    !resolved.includes(TYPESCRIPT_WITH_TAGS_LANG) &&
-    !resolved.includes('lit')
+    resolved.includes('typescript') &&
+    !resolved.includes(TYPESCRIPT_WITH_TAGS_LANG)
   ) {
     resolved.push(TYPESCRIPT_WITH_TAGS_LANG)
   }
@@ -90,14 +60,10 @@ function resolveLoadedLanguages(langs: string[]) {
 }
 
 function resolveHighlightLanguage(lang: string | undefined) {
-  const normalized = normalizeLanguageName(lang ?? 'text')
-  return TYPESCRIPT_LANGS.has(normalized)
+  const normalized = normalizeCodeLanguage(lang ?? 'text')
+  return normalized === 'typescript'
     ? TYPESCRIPT_WITH_TAGS_LANG
     : normalized || 'text'
-}
-
-function normalizeLanguageName(value: string) {
-  return value.trim().toLowerCase()
 }
 
 function dedupe(values: string[]) {
