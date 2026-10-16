@@ -60,13 +60,16 @@ HTML from earlier sessions. No background loop renders the rest of the site.
 This is the canonical full build path:
 
 - Resolves user hooks from `input.hooks`.
-- Prepares output directory and copies static assets.
+- Prepares the output directory and discovers static asset candidates.
 - Discovers content, runs page generators, and rebuilds navigation, once
   (`prepareContent`). Discovered pages join the URL index right away, so a
   request during the build finds a new page.
 - Renders all pages sequentially.
+- Collects registered imports from pages and partials, then copies the remaining
+  static assets. Generated pages and script bundles own their output paths;
+  static copying and import cleanup must not overwrite or remove them.
 - Writes styles and captures style outputs/signature.
-- Discovers assets to build an authoritative manifest snapshot.
+- Uses copied assets to build an authoritative manifest snapshot.
 - Writes the manifest to disk with `writeManifest`.
 - Emits `onBuildComplete` with the final result (including content/asset counts)
   after manifest state is refreshed.

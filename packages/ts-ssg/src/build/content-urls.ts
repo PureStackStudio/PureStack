@@ -8,8 +8,9 @@ import { resolveRouteInfo } from '../routing/route'
 const CONTENT_EXT_LIST = [...CONTENT_EXTS]
 
 /**
- * Every page and asset the build publishes from the content folder, keyed by
- * posix source path, so content URLs are checked without touching the disk.
+ * Discovered pages and assets, keyed by posix source path, so content URLs are
+ * checked without touching the disk. Render-time copy exclusions are separate:
+ * an edit can replace an import with a link before its asset is copied again.
  */
 export class ContentRouteIndex {
   private readonly pagesByRelPath = new Map<string, ResolvedContentFile>()

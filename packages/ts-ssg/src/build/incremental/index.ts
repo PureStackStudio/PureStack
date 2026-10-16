@@ -151,7 +151,6 @@ function isHighlightJsEnabled(mdx: SiteConfig['mdx'] | undefined): boolean {
 
 type BuildPreparationResult = {
   contentFiles: ResolvedContentFile[]
-  assetFiles: StaticAssetFile[]
 }
 
 type BuildSummaryInput = {
@@ -178,6 +177,7 @@ class IncrementalRuntime {
   private preparedStyleRevision = -1
   private renderOnRequest = false
   private staticAssets = new Map<string, StaticAssetFile>()
+  private importedFiles = new Set<string>()
   private searchRevision = -1
   private manifestWork: Promise<unknown> = Promise.resolve()
 
@@ -212,6 +212,8 @@ class IncrementalRuntime {
       renderOnRequest: () => this.renderOnRequest,
       persistManifest: () => this.persistManifest(),
       getManifest: () => this.manifest,
+      getAssetRelPaths: () =>
+        [...this.staticAssets.values()].map((file) => file.relPath),
     })
     this.changeApplier = new IncrementalChangeApplier({
       config: options.config,
@@ -220,6 +222,7 @@ class IncrementalRuntime {
       contentState: this.contentState,
       scriptEntrypoints: this.scriptEntrypoints,
       renderOnRequest: () => this.renderOnRequest,
+      isGeneratedOutput: (relPath) => this.isGeneratedOutput(relPath),
       persistManifest: () => this.persistManifest(),
     })
   }
@@ -263,7 +266,7 @@ class IncrementalRuntime {
     this.renderOnRequest = true
     this.contentReady ??= this.settleContentReady(this.prepareRequestState())
     await this.contentReady
-    if (switchingFromBuild) await this.discoverRequestAssets()
+    if (switchingFromBuild) await this.discoverAssets()
   }
 
   private async prepareRequestState() {
@@ -276,16 +279,17 @@ class IncrementalRuntime {
       delete this.manifest.assets[key]
     this.scriptCacheKeys.clear()
     await writeGeneratedFavicon(this.config)
-    await this.discoverRequestAssets()
+    await this.discoverAssets()
     const files = await this.prepareContent(
       [...this.staticAssets.values()].map((file) => file.relPath),
       this.options.hooks,
     )
+    await this.syncImportedAssets()
     this.contentState.markAllPagesDirty(files)
     this.contentState.takeMarkedPageCount()
   }
 
-  private async discoverRequestAssets() {
+  private async discoverAssets() {
     const files = await discoverStaticAssets(this.config.contentDir)
     this.staticAssets = new Map(
       files.map((file) => [
@@ -293,6 +297,60 @@ class IncrementalRuntime {
         file,
       ]),
     )
+  }
+
+  private publicStaticAssets() {
+    return [...this.staticAssets.values()].filter(
+      (file) =>
+        !this.importedFiles.has(toPosixPath(file.relPath)) &&
+        !this.isGeneratedOutput(file.relPath),
+    )
+  }
+
+  private isGeneratedOutput(relPath: string) {
+    const outPath = path.join(this.config.outDir, relPath)
+    return (
+      this.contentState.isPageOutput(outPath) ||
+      (path.extname(relPath).toLowerCase() === '.js' &&
+        this.scriptEntrypoints.ownsOutputPath(outPath))
+    )
+  }
+
+  /** Uses the render dependency records; no content is read or parsed here. */
+  private syncImportedAssets(duringBuild = false): Promise<void> {
+    return this.queueAssetWork(async () => {
+      const imported = this.contentState.getImportedFiles()
+      let changed = imported.size !== this.importedFiles.size
+      for (const relPath of imported) {
+        if (this.importedFiles.has(relPath)) continue
+        changed = true
+        const asset = this.staticAssets.get(`/${relPath}`)
+        if (!asset) continue
+        if (!this.isGeneratedOutput(asset.relPath)) {
+          const outPath = path.join(this.config.outDir, asset.relPath)
+          const stats = await fsPromises
+            .stat(outPath)
+            .catch((error: NodeJS.ErrnoException) => {
+              if (error.code === 'ENOENT' || error.code === 'ENOTDIR')
+                return undefined
+              throw error
+            })
+          // An extensionless source file can share its name with a page folder.
+          if (stats && !stats.isDirectory()) await removeFile(outPath)
+        }
+        delete this.manifest.assets[asset.relPath]
+      }
+      if (!duringBuild && !this.renderOnRequest) {
+        for (const relPath of this.importedFiles) {
+          if (imported.has(relPath)) continue
+          const asset = this.staticAssets.get(`/${relPath}`)
+          if (asset) await this.prepareStaticAsset(asset)
+        }
+      }
+      this.importedFiles = imported
+      if (!changed) return
+      if (!duringBuild) await this.persistManifest()
+    })
   }
 
   buildAll = async (reason: string): Promise<BuildResult> => {
@@ -307,6 +365,15 @@ class IncrementalRuntime {
     const prepared = await preparing
     this.scriptEntrypoints.clearPageEntrypoints()
     const pages = await this.contentState.renderAllPages(prepared.contentFiles)
+    await this.syncImportedAssets(true)
+    const copiedAssets = await copyStaticAssets(
+      this.config.contentDir,
+      this.config.outDir,
+      { files: this.publicStaticAssets() },
+    )
+    this.scriptEntrypoints.rebuildDependencyIndex(
+      copiedAssets.tsDependencyIndex,
+    )
     const scriptAssetFiles = await this.scriptEntrypoints.syncState({
       result: this.changeApplier.createResult(reason),
       persist: false,
@@ -316,7 +383,7 @@ class IncrementalRuntime {
     this.preparedAssetRevision = this.pageAssetRevision
     const finalResult = await this.finalizeBuild({
       ...prepared,
-      assetFiles: [...prepared.assetFiles, ...scriptAssetFiles],
+      assetFiles: [...copiedAssets.files, ...scriptAssetFiles],
       pages,
       styleResult,
       hooks,
@@ -339,22 +406,13 @@ class IncrementalRuntime {
     await hooks.onConfigResolved?.(this.context)
     await prepareOutDir(this.config.outDir, { clean: this.options.cleanOutDir })
     await writeGeneratedFavicon(this.config)
-    const copiedAssets = await copyStaticAssets(
-      this.config.contentDir,
-      this.config.outDir,
-      {
-        minifyScripts: this.options.minifyScripts,
-        getScriptCacheKey: this.resolveScriptCacheKey,
-      },
-    )
-    this.scriptEntrypoints.rebuildDependencyIndex(
-      copiedAssets.tsDependencyIndex,
-    )
+    await this.discoverAssets()
+    const assetFiles = [...this.staticAssets.values()]
     const contentFiles = await this.prepareContent(
-      copiedAssets.files.map((file) => file.relPath),
+      assetFiles.map((file) => file.relPath),
       hooks,
     )
-    return { contentFiles, assetFiles: copiedAssets.files }
+    return { contentFiles }
   }
 
   /**
@@ -398,9 +456,17 @@ class IncrementalRuntime {
     this.contentReady ??= this.settleContentReady(
       this.renderOnRequest
         ? this.prepareRequestState()
-        : this.prepareContent(Object.keys(this.manifest.assets)),
+        : this.prepareExistingContent(),
     )
     return this.contentReady
+  }
+
+  private async prepareExistingContent() {
+    await this.discoverAssets()
+    await this.prepareContent(
+      [...this.staticAssets.values()].map((file) => file.relPath),
+    )
+    await this.syncImportedAssets()
   }
 
   private settleContentReady(preparing: Promise<unknown>): Promise<void> {
@@ -515,6 +581,17 @@ class IncrementalRuntime {
     }
     this.contentState.takeMarkedPageCount()
     const ext = path.extname(relPath).toLowerCase()
+    const imported = this.importedFiles.has(toPosixPath(relPath))
+    const navigationFile =
+      path.basename(relPath).toUpperCase() ===
+      DEFAULT_NAV_FILENAME.toUpperCase()
+    const knownAsset = this.staticAssets.get(
+      `/${toPosixPath(toOutputAssetRelPath(relPath))}`,
+    )
+    if (!isContentFile(relPath, ext) && ext !== '.ts') {
+      await this.discoverAssets()
+      this.contentState.refreshAssets()
+    }
     if (
       this.renderOnRequest &&
       !isContentFile(relPath, ext) &&
@@ -522,35 +599,40 @@ class IncrementalRuntime {
       !isDefaultHeaderFile(relPath) &&
       !isDefaultFooterFile(relPath) &&
       ext !== '.ts' &&
-      path.basename(relPath).toUpperCase() !==
-        DEFAULT_NAV_FILENAME.toUpperCase()
+      !navigationFile
     ) {
       const cachedAsset = this.manifest.assets[relPath]
-      const knownAsset = this.staticAssets.get(
-        `/${toPosixPath(toOutputAssetRelPath(relPath))}`,
-      )
       // A missing, empty directory can also arrive as an event. Only invalidate
       // output for paths previously discovered or copied as actual files.
-      if (cachedAsset || knownAsset) {
+      if (
+        !imported &&
+        !this.isGeneratedOutput(relPath) &&
+        (cachedAsset || knownAsset)
+      ) {
         await removeFile(
           cachedAsset?.outPath ??
             path.join(this.config.outDir, toOutputAssetRelPath(relPath)),
         )
       }
       delete this.manifest.assets[relPath]
-      await this.discoverRequestAssets()
-      this.contentState.refreshAssets(
-        [...this.staticAssets.values()].map((file) => file.relPath),
-      )
       await this.contentState.refreshGeneratedPages()
-      result.changedAssets += 1
+      if (!imported) result.changedAssets += 1
     } else if (isDefaultHeaderFile(relPath) || isDefaultFooterFile(relPath)) {
       await this.contentState.refreshPartials()
-    } else if (!isSharedContentFile(relPath) || ext === '.ts') {
+    } else if (
+      ext === '.ts' ||
+      navigationFile ||
+      (!isSharedContentFile(relPath) &&
+        (isContentFile(relPath, ext) || !imported))
+    ) {
       // Shared TypeScript can be a script dependency as well as an import.
       await this.changeApplier.applyFileChange(filePath, relPath, result)
+    } else if (imported && !isContentFile(relPath, ext)) {
+      // Copy exclusion must not suppress generators that read this data file.
+      await this.contentState.refreshGeneratedPages()
     }
     await this.contentState.refreshImporters(relPath)
+    await this.syncImportedAssets()
     result.markedPages = this.contentState.takeMarkedPageCount()
     return result
   }
@@ -578,7 +660,9 @@ class IncrementalRuntime {
 
   renderIfDirtyByOutPath = async (outPath: string): Promise<boolean> => {
     await this.ensureContentReady()
-    return this.contentState.renderIfDirtyByOutPath(outPath)
+    const rendered = await this.contentState.renderIfDirtyByOutPath(outPath)
+    await this.syncImportedAssets()
+    return rendered
   }
 
   renderByUrlPath = async (
@@ -586,7 +670,9 @@ class IncrementalRuntime {
     locale?: string,
   ): Promise<boolean> => {
     await this.ensureContentReady()
-    return this.contentState.renderByUrlPath(urlPath, locale)
+    const rendered = await this.contentState.renderByUrlPath(urlPath, locale)
+    await this.syncImportedAssets()
+    return rendered
   }
 
   preparePageAssets = async (): Promise<void> => {
@@ -643,25 +729,37 @@ class IncrementalRuntime {
           ? `${pathname}index.html`
           : `${pathname}/index.html`,
       )
-    if (!asset) return false
+    if (
+      !asset ||
+      this.importedFiles.has(toPosixPath(asset.relPath)) ||
+      this.isGeneratedOutput(asset.relPath)
+    )
+      return false
     await this.queueAssetWork(async () => {
-      if (this.manifest.assets[asset.relPath]) return
-      const signature = await readSignature(asset.absPath)
-      if (!signature) return
-      const copied = await copyStaticAsset(
-        this.config.contentDir,
-        this.config.outDir,
-        asset,
-      )
-      if (!copied.copied) return
-      this.manifest.assets[asset.relPath] = {
-        relPath: asset.relPath,
-        ext: asset.ext,
-        outPath: copied.outPath,
-        ...signature,
+      if (!this.importedFiles.has(toPosixPath(asset.relPath))) {
+        await this.prepareStaticAsset(asset)
       }
     })
     return true
+  }
+
+  private async prepareStaticAsset(asset: StaticAssetFile) {
+    if (this.isGeneratedOutput(asset.relPath)) return
+    if (this.manifest.assets[asset.relPath]) return
+    const signature = await readSignature(asset.absPath)
+    if (!signature) return
+    const copied = await copyStaticAsset(
+      this.config.contentDir,
+      this.config.outDir,
+      asset,
+    )
+    if (!copied.copied) return
+    this.manifest.assets[asset.relPath] = {
+      relPath: asset.relPath,
+      ext: asset.ext,
+      outPath: copied.outPath,
+      ...signature,
+    }
   }
 
   private queueAssetWork<T>(work: () => Promise<T>): Promise<T> {

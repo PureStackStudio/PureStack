@@ -1178,6 +1178,351 @@ describe('incremental builder', () => {
   describe('code imports', () => {
     const text = (html: string) => html.replace(/<[^>]+>/g, '')
 
+    it('removes a deleted asset left by an earlier session before it is requested', async () => {
+      await withTempDir(async (base) => {
+        const site = await createSite(base, 'none', {
+          'index.mdx': '# Home',
+          'example.txt': 'previous output',
+        })
+        const builder = await createIncrementalBuilder({
+          siteConfig: {
+            rootDir: base,
+            contentDir: site.contentDir,
+            outDir: path.join(base, 'out'),
+            navigation: { mode: 'none' },
+          },
+        })
+        await builder.prepareForRequests()
+        const sourcePath = path.join(site.contentDir, 'example.txt')
+        await fs.rm(sourcePath)
+        await builder.applyChange(sourcePath)
+
+        expect(await fileExists(path.join(base, 'out', 'example.txt'))).toBe(
+          false,
+        )
+      })
+    })
+
+    it.each([false, true])(
+      'preserves a rendered page when an HTML source shares its output (imported: %s)',
+      async (imported) => {
+        await withTempDir(async (base) => {
+          const site = await createSite(base, 'none', {
+            'index.mdx': imported
+              ? '# Rendered home\n\n<import-codeblock src="./index.html"/>'
+              : '# Rendered home',
+            'index.html': '<p>Raw HTML source</p>',
+          })
+
+          expect(await site.read('/')).toContain('Rendered home')
+          expect(
+            (await readManifest(path.join(base, 'out')))?.assets['index.html'],
+          ).toBeUndefined()
+        })
+      },
+    )
+
+    it.each([false, true])(
+      'can replace an import with a link on the first render (lazy: %s)',
+      async (lazy) => {
+        await withTempDir(async (base) => {
+          const site = await createSite(base, 'none', {
+            'index.mdx': '<import-codeblock src="./example.txt"/>',
+            'example.txt': 'downloadable example',
+          })
+          if (lazy) await site.builder.prepareForRequests()
+
+          await site.change('index.mdx', '[Read the example](./example.txt)')
+          if (lazy) await site.builder.renderByUrlPath('/')
+
+          expect(await site.read('/')).toContain('href="/example.txt"')
+          expect(await site.read('/')).not.toContain('points to a missing file')
+        })
+      },
+    )
+
+    it.skipIf(process.platform !== 'win32')(
+      'protects page output names case-insensitively on Windows',
+      async () => {
+        await withTempDir(async (base) => {
+          const site = await createSite(base, 'none', {
+            'index.mdx': '# Rendered home',
+            'INDEX.html': '<p>Raw HTML source</p>',
+          })
+
+          expect(await site.read('/')).toContain('Rendered home')
+        })
+      },
+    )
+
+    it('does not delete a page directory when excluding an extensionless import', async () => {
+      await withTempDir(async (base) => {
+        const site = await createSite(base, 'none', {
+          'index.mdx': '<import-codeblock src="./sample"/>',
+          'sample.mdx': '# Sample page',
+          sample: 'extensionless example',
+        })
+
+        expect(await site.read('/sample/')).toContain('Sample page')
+      })
+    })
+
+    it('regenerates pages when their data file is also imported as code', async () => {
+      await withTempDir(async (base) => {
+        const site = await createSite(
+          base,
+          'none',
+          {
+            'index.mdx': '<import-codeblock src="./data.json"/>',
+            'data.json': '{"title":"First title"}',
+          },
+          [
+            {
+              name: 'data-pages',
+              async pages({ config }) {
+                const data = JSON.parse(
+                  await fs.readFile(
+                    path.join(config.contentDir, 'data.json'),
+                    'utf8',
+                  ),
+                ) as { title: string }
+                return [{ path: 'data.mdx', source: `# ${data.title}` }]
+              },
+            },
+          ],
+        )
+        await site.change('data.json', '{"title":"Second title"}')
+
+        expect(await site.renderIfDirty('/data/')).toBe(true)
+        expect(await site.read('/data/')).toContain('Second title')
+        expect(await fileExists(path.join(base, 'out', 'data.json'))).toBe(
+          false,
+        )
+      })
+    })
+
+    it.each(['app.js', 'app.JS'])(
+      'preserves a script bundle when an imported JS file shares its output (%s)',
+      async (examplePath) => {
+        await withTempDir(async (base) => {
+          const contentDir = path.join(base, 'content')
+          const outDir = path.join(base, 'out')
+          await fs.mkdir(contentDir)
+          const sourcePath = path.join(contentDir, 'index.mdx')
+          const source = '<RegorApp src="./app.ts" id="example-app" />'
+          await fs.writeFile(sourcePath, source)
+          await fs.writeFile(
+            path.join(contentDir, 'app.ts'),
+            "console.log('runtime bundle')",
+          )
+          await fs.writeFile(
+            path.join(contentDir, examplePath),
+            "console.log('example source')",
+          )
+          const builder = await createIncrementalBuilder({
+            siteConfig: {
+              rootDir: base,
+              contentDir,
+              outDir,
+              scripts: { cacheBusting: false },
+              mdx: { disableHighlighter: true },
+              navigation: { mode: 'none' },
+            },
+          })
+          await builder.buildAll('initial')
+          const bundlePath = path.join(outDir, 'app.js')
+          const original = await fs.readFile(bundlePath, 'utf8')
+          expect(original).toContain('runtime bundle')
+
+          await fs.writeFile(
+            sourcePath,
+            `${source}\n<import-codeblock src="./${examplePath}"/>`,
+          )
+          await builder.applyChange(sourcePath)
+          expect(await fs.readFile(bundlePath, 'utf8')).toBe(original)
+
+          await fs.writeFile(sourcePath, source)
+          await builder.applyChange(sourcePath)
+          expect(await fs.readFile(bundlePath, 'utf8')).toBe(original)
+        })
+      },
+    )
+
+    it.each([false, true])(
+      'updates static output as imports are edited (render on request: %s)',
+      async (lazy) => {
+        await withTempDir(async (base) => {
+          const contentDir = path.join(base, 'content')
+          const outDir = path.join(base, 'out')
+          await fs.mkdir(contentDir)
+          const write = async (relPath: string, source: string) => {
+            const filePath = path.join(contentDir, relPath)
+            await fs.writeFile(filePath, source)
+            return filePath
+          }
+          const initial = '<import-codeblock src="./example.css"/>'
+          await write('index.mdx', initial)
+          await write('example.css', '.example { color: red; }')
+          await write('data.json', '{"answer":42}')
+          const builder = await createIncrementalBuilder({
+            siteConfig: {
+              rootDir: base,
+              contentDir,
+              outDir,
+              navigation: { mode: 'none' },
+              mdx: { disableHighlighter: true },
+            },
+          })
+          if (lazy) {
+            await builder.prepareForRequests()
+            // Lazy builds learn imports from rendering, without scanning pages.
+            expect(await builder.prepareAssetByUrlPath('/example.css')).toBe(
+              true,
+            )
+            expect(await builder.renderByUrlPath('/')).toBe(true)
+          } else await builder.buildAll('initial')
+
+          expect(await fileExists(path.join(outDir, 'example.css'))).toBe(false)
+          expect(await builder.prepareAssetByUrlPath('/example.css')).toBe(
+            false,
+          )
+          if (lazy) {
+            expect(await builder.prepareAssetByUrlPath('/data.json')).toBe(true)
+          }
+          expect(await fileExists(path.join(outDir, 'data.json'))).toBe(true)
+
+          // Adding an import removes an asset that was already copied.
+          await builder.applyChange(
+            await write(
+              'index.mdx',
+              `${initial}\n<import-codeblock src="./data.json"/>`,
+            ),
+          )
+          expect(await builder.renderByUrlPath('/')).toBe(true)
+          expect(await fileExists(path.join(outDir, 'data.json'))).toBe(false)
+          expect(await builder.prepareAssetByUrlPath('/data.json')).toBe(false)
+          expect(
+            text(await fs.readFile(path.join(outDir, 'index.html'), 'utf8')),
+          ).toContain('{"answer":42}')
+          expect(
+            (await readManifest(outDir))?.assets['data.json'],
+          ).toBeUndefined()
+
+          // Imported file edits still refresh the page without copying a file.
+          const edit = await builder.applyChange(
+            await write('example.css', '.example { color: blue; }'),
+          )
+          expect(edit.changedAssets).toBe(0)
+          expect(await builder.renderByUrlPath('/')).toBe(true)
+          expect(
+            text(await fs.readFile(path.join(outDir, 'index.html'), 'utf8')),
+          ).toContain('color: blue')
+          expect(await fileExists(path.join(outDir, 'example.css'))).toBe(false)
+
+          // Removing the last import makes the file a public asset again.
+          await builder.applyChange(await write('index.mdx', initial))
+          expect(await builder.renderByUrlPath('/')).toBe(true)
+          if (lazy) {
+            expect(await builder.prepareAssetByUrlPath('/data.json')).toBe(true)
+          }
+          expect(
+            await fs.readFile(path.join(outDir, 'data.json'), 'utf8'),
+          ).toBe('{"answer":42}')
+          await fs.rm(path.join(contentDir, 'data.json'))
+          await builder.applyChange(path.join(contentDir, 'data.json'))
+          expect(await fileExists(path.join(outDir, 'data.json'))).toBe(false)
+          expect(
+            (await readManifest(outDir))?.assets['data.json'],
+          ).toBeUndefined()
+        })
+      },
+    )
+
+    it('keeps a file excluded until its last importing page releases it', async () => {
+      await withTempDir(async (base) => {
+        const site = await createSite(base, 'none', {
+          'index.mdx': '<import-codeblock src="./example.txt"/>',
+          'other.mdx': '<import-codeblock src="./example.txt"/>',
+          'example.txt': 'shared example',
+        })
+        const assetPath = path.join(base, 'out', 'example.txt')
+
+        await site.change('index.mdx', '# Home')
+        expect(await fileExists(assetPath)).toBe(false)
+
+        await site.remove('other.mdx')
+        expect(await fs.readFile(assetPath, 'utf8')).toBe('shared example')
+      })
+    })
+
+    it('copies assets after render registrations, including nested, partial, and generated imports', async () => {
+      await withTempDir(async (base) => {
+        const outDir = path.join(base, 'out')
+        const site = await createSite(
+          base,
+          'none',
+          {
+            'index.mdx': [
+              '# Home',
+              '<import-content src="./_shared/note.mdx"/>',
+              '',
+              '`<import-codeblock src="./inline.json"/>`',
+              '',
+              '```mdx\n<import-codeblock src="./fenced.json"/>\n```',
+            ].join('\n'),
+            '_shared/note.mdx': '<import-content src="./_nested.md"/>',
+            '_shared/_nested.md': '<import-codeblock src="../example.py"/>',
+            '_unused.mdx': '<import-codeblock src="./unused.json"/>',
+            'header.mdx': '<import-codeblock src="./header.txt"/>',
+            'footer.rmdx': '<import-codeblock src="./footer.sql"/>',
+            'example.py': 'print(42)',
+            'header.txt': 'header sample',
+            'footer.sql': 'SELECT 42;',
+            'generated.json': '{"generated":true}',
+            'inline.json': '{}',
+            'fenced.json': '{}',
+            'unused.json': '{}',
+            'public.css': 'body {}',
+          },
+          [
+            {
+              name: 'generated-import',
+              pages: () => [
+                {
+                  path: 'generated.mdx',
+                  source: () => '<import-codeblock src="./generated.json"/>',
+                },
+              ],
+              hooks: {
+                onPageWritten: async () => {
+                  expect(
+                    await fileExists(path.join(outDir, 'public.css')),
+                  ).toBe(false)
+                },
+              },
+            },
+          ],
+        )
+        const manifest = await readManifest(outDir)
+        expect(Object.keys(manifest?.assets ?? {}).sort()).toEqual([
+          'fenced.json',
+          'inline.json',
+          'public.css',
+          'unused.json',
+        ])
+        for (const relPath of [
+          'example.py',
+          'header.txt',
+          'footer.sql',
+          'generated.json',
+        ]) {
+          expect(await fileExists(path.join(outDir, relPath))).toBe(false)
+        }
+        expect(text(await site.read('/'))).toContain('print(42)')
+        expect(text(await site.read('/generated/'))).toContain('generated')
+      })
+    })
+
     it.each(['auto', 'none'] as const)(
       'shows an imported file as code and renders its pages again when it changes (navigation %s)',
       async (mode) => {

@@ -20,6 +20,11 @@ export interface StaticAssetBuildOptions {
   getScriptCacheKey?: (relPath: string) => string | undefined
 }
 
+export interface CopyStaticAssetsOptions extends StaticAssetBuildOptions {
+  /** Already discovered assets selected by the build after rendering. */
+  files?: readonly StaticAssetFile[]
+}
+
 export interface CopyStaticAssetResult {
   outPath: string
   copied: boolean
@@ -29,10 +34,12 @@ export interface CopyStaticAssetResult {
 export async function copyStaticAssets(
   contentDir: string,
   outDir: string,
-  options: StaticAssetBuildOptions = {},
+  options: CopyStaticAssetsOptions = {},
 ): Promise<CopyStaticAssetsResult> {
   const log = getLogger()
-  const assets = await discoverStaticAssets(contentDir)
+  const assets = options.files
+    ? [...options.files]
+    : await discoverStaticAssets(contentDir)
   const tsDependencyIndex: Record<string, string[]> = {}
   for (const asset of assets) {
     const outPath = resolveStaticOutPath(outDir, asset, options)

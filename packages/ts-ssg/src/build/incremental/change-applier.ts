@@ -33,6 +33,7 @@ interface IncrementalChangeApplierInput {
   scriptEntrypoints: ScriptEntrypointManager
   persistManifest: () => Promise<void>
   renderOnRequest: () => boolean
+  isGeneratedOutput: (relPath: string) => boolean
 }
 
 export class IncrementalChangeApplier {
@@ -274,6 +275,8 @@ export class IncrementalChangeApplier {
       await this.input.persistManifest()
       return
     }
+
+    if (this.input.isGeneratedOutput(relPath)) return
 
     const assetFile = toAssetFile(this.input.config.contentDir, relPath, ext)
     const assetCopy = await copyStaticAsset(
