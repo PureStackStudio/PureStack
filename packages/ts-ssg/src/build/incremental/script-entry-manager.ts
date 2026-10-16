@@ -2,11 +2,11 @@ import path from 'node:path'
 
 import type { SiteConfig } from '@purestack/ts-common'
 import type { StaticAssetFile } from '../../discover/content'
-import { copyStaticAsset } from '../assets'
+import { copyStaticAsset, resolveStaticOutPath } from '../assets'
 import type { AssetManifestEntry } from '../manifest'
 import { readSignature } from '../manifest'
 import type { ScriptCacheKeyStore } from '../script-cache-key'
-import { removeFile, toAssetFile } from './support'
+import { outputPathKey, removeFile, toAssetFile } from './support'
 import type { IncrementalBuildResult } from './types'
 
 interface ScriptEntrypointManagerInput {
@@ -69,6 +69,27 @@ export class ScriptEntrypointManager {
 
   usesCacheBusting() {
     return this.input.cacheBusting
+  }
+
+  ownsOutputPath(outPath: string) {
+    for (const relPath of this.collectDesiredEntrypoints()) {
+      const asset = toAssetFile(
+        this.input.config.contentDir,
+        relPath,
+        path.extname(relPath),
+      )
+      const scriptOutPath = resolveStaticOutPath(
+        this.input.config.outDir,
+        asset,
+        {
+          scriptCacheKey: this.input.cacheBusting
+            ? this.input.scriptCacheKeys.ensure(relPath)
+            : undefined,
+        },
+      )
+      if (outputPathKey(scriptOutPath) === outputPathKey(outPath)) return true
+    }
+    return false
   }
 
   resolveImpactedEntryRelPaths(changedRelPath: string) {

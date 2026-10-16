@@ -104,7 +104,7 @@ All eighteen supported treatments, shown in accent. Tone and variant are indepen
 <DropFiles label="Reference files" hint="Images and PDF only"
   emptyTitle="Add your references" emptyText="Choose files, drop them, or paste."
   accept="image/*,.pdf" :multiple="true" :disabled="locked" :files="files"
-  uploadIcon="lucide:cloud-upload" fileIcon="lucide:file" removeIcon="lucide:trash-2"
+  uploadIcon="lucide:cloud-upload" fileIcon="lucide:file" removeIcon="lucide:trash"
   :iconMap="fileIcons" :context="{ onChange: filesChanged }"/>
 ```
 
@@ -189,7 +189,7 @@ The drop zone opens the native picker with Enter or Space. File acceptance is a 
   <p>Fallback file icon when no type-specific mapping matches.</p>
 </ApiProperty>
 
-<ApiProperty anchor="drop-files-prop-removeIcon" name="removeIcon" valueType="RefOrValue&lt;string&gt;" defaultValue="lucide:trash-2">
+<ApiProperty anchor="drop-files-prop-removeIcon" name="removeIcon" valueType="RefOrValue&lt;string&gt;" defaultValue="lucide:trash">
   <p>Icon on each remove button.</p>
 </ApiProperty>
 

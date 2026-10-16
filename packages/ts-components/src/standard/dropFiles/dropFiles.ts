@@ -80,7 +80,7 @@ export interface DropFiles {
 
 const DEFAULT_UPLOAD_ICON = 'lucide:cloud-upload'
 const DEFAULT_FILE_ICON = 'lucide:file'
-const DEFAULT_REMOVE_ICON = 'lucide:trash-2'
+const DEFAULT_REMOVE_ICON = 'lucide:trash'
 
 const DEFAULT_ICON_MAP: DropFilesIconMap = {
   'image/*': 'lucide:file-image',

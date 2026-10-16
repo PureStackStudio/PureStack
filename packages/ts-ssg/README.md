@@ -491,7 +491,7 @@ Add skins with a plugin's `skins` field. `themeSkins` in `@purestack/ts-style` h
 - Regor MDX (`.mdx`, `.rmdx`): `remark-parse` + `remark-gfm` with Regor component markup preservation
 - Plugin remark and rehype plugins, in plugin order
 - HTML output via HAST + rehype
-- `<import-codeblock src="./file.ts"/>` becomes a code block holding that file before compilation, anywhere a code block works; `src` resolves from the file the tag is in and must stay inside the content folder, and `lang` overrides the language inferred from the extension. Tags inside code stay as written, and the dev server re-renders the pages, headers, and footers that show a file when it changes.
+- `<import-codeblock src="./file.ts"/>` becomes a code block holding that file before compilation, anywhere a code block works; `src` resolves from the file the tag is in and must stay inside the content folder, and `lang` overrides the language inferred from the extension. Both import tags register their files during rendering, including nested imports and imports in headers, footers, and generated pages. Full builds copy static assets after rendering and exclude these registered files. In lazy dev mode, an importing page's first render excludes its imports and removes any copies already in the output folder; removing the last import makes the file available as a static asset again after re-rendering. Tags inside code stay as written, and the dev server re-renders the pages, headers, and footers that show a file when it changes.
 - H2/H3 outline extraction for page TOC
 - Code highlighting with highlight.js or Shiki
 

@@ -46,6 +46,7 @@ interface IncrementalContentStateInput {
   renderOnRequest: () => boolean
   persistManifest: () => Promise<void>
   getManifest: () => BuildManifest
+  getAssetRelPaths: () => string[]
 }
 
 interface RebuildNavigatedContentInput {
@@ -108,6 +109,19 @@ export class IncrementalContentState {
 
   clearDirtyPages() {
     this.dirtyPages.clear()
+  }
+
+  /** Dependencies registered while rendering pages, headers, and footers. */
+  getImportedFiles() {
+    const imported = new Set(this.input.context.partialImportedFiles)
+    for (const files of this.importedFilesByPage.values()) {
+      for (const file of files) imported.add(file)
+    }
+    return imported
+  }
+
+  isPageOutput(outPath: string) {
+    return this.contentIndex.getRelPathByOutPath(outPath) !== undefined
   }
 
   /** Pages marked to render on their next request since the last call. */
@@ -268,8 +282,8 @@ export class IncrementalContentState {
     return { changed, removed }
   }
 
-  /** Picks up added or removed assets from the manifest. */
-  refreshAssets(assetRelPaths = Object.keys(this.input.getManifest().assets)) {
+  /** Source URL validation uses discovery, independently of copy exclusions. */
+  refreshAssets(assetRelPaths = this.input.getAssetRelPaths()) {
     const { context } = this.input
     this.updateContentRoutes(context.contentRoutes.withAssets(assetRelPaths))
   }

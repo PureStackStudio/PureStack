@@ -13,7 +13,7 @@ import {
   lucide_file_archive,
   lucide_file_image,
   lucide_file_text,
-  lucide_trash_2,
+  lucide_trash,
 } from '@purestack/ts-svg-icons'
 import {
   type ComputedRef,
@@ -65,7 +65,7 @@ const dropFilesExampleTemplate = html`<Flex direction="column">
   <DropFiles :files="referenceFiles" label="Design references" hint="Images and PDF files only."
     emptyTitle="Add your references" emptyText="Choose files, drop them, or paste."
     accept="image/*,.pdf" uploadIcon="lucide:file-image" fileIcon="lucide:file"
-    removeIcon="lucide:trash-2" :iconMap="fileIcons" :context="{ onChange: filesChanged }"/>
+    removeIcon="lucide:trash" :iconMap="fileIcons" :context="{ onChange: filesChanged }"/>
   <FormStatus>{{ activity }}</FormStatus>
   <ul><li r-for="file in referenceFiles">{{ file.name }} · {{ file.type || 'Unknown type' }} · {{ file.sizeLabel }} · {{ file.icon }}</li></ul>
 </Flex>`
@@ -97,7 +97,7 @@ const component = defineComponent<DropFilesExample>(dropFilesExampleTemplate, {
 const icons: Record<string, string> = {
   'lucide:cloud-upload': lucide_cloud_upload,
   'lucide:file': lucide_file,
-  'lucide:trash-2': lucide_trash_2,
+  'lucide:trash': lucide_trash,
   'lucide:file-image': lucide_file_image,
   'lucide:file-text': lucide_file_text,
   'lucide:file-archive': lucide_file_archive,

@@ -85,23 +85,23 @@ export class ManifestContentIndex {
   setOutPath(relPath: string, outPath: string) {
     const prevOutPath = this.relPathToOutPath.get(relPath)
     if (prevOutPath && prevOutPath !== outPath) {
-      this.outPathToRelPath.delete(prevOutPath)
+      this.outPathToRelPath.delete(outputPathKey(prevOutPath))
     }
     this.relPathToOutPath.set(relPath, outPath)
-    this.outPathToRelPath.set(outPath, relPath)
+    this.outPathToRelPath.set(outputPathKey(outPath), relPath)
   }
 
   remove(relPath: string) {
     const outPath = this.relPathToOutPath.get(relPath)
     const urlPath = this.relPathToUrlPath.get(relPath)
-    if (outPath) this.outPathToRelPath.delete(outPath)
+    if (outPath) this.outPathToRelPath.delete(outputPathKey(outPath))
     if (urlPath) this.urlPathToRelPath.delete(urlPath)
     this.relPathToOutPath.delete(relPath)
     this.relPathToUrlPath.delete(relPath)
   }
 
   getRelPathByOutPath(outPath: string) {
-    return this.outPathToRelPath.get(outPath)
+    return this.outPathToRelPath.get(outputPathKey(outPath))
   }
 
   getRelPathByUrlPath(urlPath: string) {
@@ -177,6 +177,12 @@ export async function discoverSiteContent(
       : files
   assertUniqueContentRoutes(contentFiles)
   return contentFiles
+}
+
+/** Compare output ownership using the host filesystem's path casing. */
+export function outputPathKey(outPath: string) {
+  const normalized = path.normalize(outPath)
+  return process.platform === 'win32' ? normalized.toLowerCase() : normalized
 }
 
 export function normalizeUrlPath(urlPath: string) {
