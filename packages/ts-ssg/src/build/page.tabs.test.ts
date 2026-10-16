@@ -14,8 +14,8 @@ import {
   type ResolvedContentFile,
   resolvePlainContentFile,
 } from '../i18n/content'
+import { renderDefaultPage as renderPageFromFile } from '../test/defaultPlugins'
 import { ContentRouteIndex } from './content-urls'
-import { renderPageFromFile } from './page'
 
 async function writeFile(filePath: string, contents = '') {
   await fs.mkdir(path.dirname(filePath), { recursive: true })

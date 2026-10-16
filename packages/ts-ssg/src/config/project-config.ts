@@ -9,12 +9,14 @@ import type { PureStackPlugin } from '../plugins/plugin'
 
 export const PROJECT_CONFIG_FILENAME = 'purestack.config.ts'
 
-const CONFIG_FIELDS = ['plugins']
+const CONFIG_FIELDS = ['plugins', 'defaultPlugins']
 const SKIP_PACKAGE_RESOLUTION = Symbol('skip package resolution')
 
 /** The code a site adds to PureStack, loaded from `purestack.config.ts`. */
 export interface PureStackConfig {
   plugins?: PureStackPlugin[]
+  /** Include the standard component, theme, and browser-runtime plugins. */
+  defaultPlugins?: boolean
 }
 
 export function defineConfig(config: PureStackConfig): PureStackConfig {
@@ -38,12 +40,18 @@ export function withProjectConfig(
   input: BuildInput,
   loaded: LoadedProjectConfig | undefined,
 ): BuildInput {
-  if (!loaded?.config.plugins) return input
+  if (!loaded) return input
   return {
     ...input,
     options: {
       ...input.options,
-      plugins: [...(input.options?.plugins ?? []), ...loaded.config.plugins],
+      ...(loaded.config.defaultPlugins !== undefined
+        ? { defaultPlugins: loaded.config.defaultPlugins }
+        : {}),
+      plugins: [
+        ...(input.options?.plugins ?? []),
+        ...(loaded.config.plugins ?? []),
+      ],
     },
   }
 }
@@ -154,6 +162,12 @@ function assertProjectConfig(
         `${filePath} has an unknown field "${field}". Config fields: ${CONFIG_FIELDS.join(', ')}.`,
       )
     }
+  }
+  if (
+    value.defaultPlugins !== undefined &&
+    typeof value.defaultPlugins !== 'boolean'
+  ) {
+    throw new Error(`${filePath} needs defaultPlugins to be a boolean.`)
   }
 }
 

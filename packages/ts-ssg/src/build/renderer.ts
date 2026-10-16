@@ -1,29 +1,15 @@
 import type {
-  AnalyticsConfig,
-  ConsentConfig,
-  PageFrontmatter,
+  PageHeadTemplate,
   PageInfo,
   PageNavigation,
   PageOutlineItem,
   PageTemplateMap,
   SiteConfig,
 } from '@purestack/ts-common'
-import { type BasicHeadConfig, h } from '@purestack/ts-html'
-import {
-  buildAuthStateHintScript,
-  buildCodeCopyScript,
-  buildConsentScript,
-  buildMenuRuntimeScript,
-  buildNavMenuScript,
-  buildPagefindSearchScript,
-  buildPageTocScript,
-  buildThemeSwitchScript,
-} from '@purestack/ts-page-scripts'
-import { type ThemeStylesheetLink, themes } from '@purestack/ts-style'
+import type { BasicHeadConfig } from '@purestack/ts-html'
+import type { ThemeStylesheetLink } from '@purestack/ts-style'
 import { getHead } from '../config/head'
-import { buildGa4Script } from '../templates/buildGa4Script'
 import { resolvePageTemplate } from '../templates/page-templates'
-import { isTocEnabled } from '../toc/isTocEnabled'
 
 export interface RenderPageInput {
   bodyHtml: string
@@ -31,38 +17,23 @@ export interface RenderPageInput {
   styleLinks?: ThemeStylesheetLink[]
   template?: string
   templates?: PageTemplateMap
+  headTemplates?: readonly PageHeadTemplate[]
   site: SiteConfig
   navigation?: PageNavigation
   outline?: PageOutlineItem[]
   pageInfo: PageInfo
   headerHtml?: string
   footerHtml?: string
-  consent?: ConsentConfig
-  analytics?: AnalyticsConfig
 }
 
 export async function renderPage(input: RenderPageInput): Promise<string> {
   const { bodyHtml, headConfig, styleLinks, template, templates } = input
-  const head = getHead(headConfig)
-  const themes = getStyleThemes(styleLinks)
-  head.push(h('style').raw(buildCriticalThemeStyle(themes.length > 0)))
-  appendAuthStateHintScript(head, input.site)
-  appendStyleLinkTags(head, styleLinks)
-  appendThemeSwitchScript(head, themes)
-  appendConsentScript(head, input.consent)
-  appendGa4Script(head, input.analytics, input.consent)
-  appendMenuScript(head)
-  if (isNavEnabled(input.pageInfo.frontmatter)) {
-    appendNavMenuScript(head)
-  }
-  appendCodeCopyScript(head)
-  appendPagefindSearchScript(head, input.site)
+  let head = getHead(headConfig)
   const { pageTemplate, templateName } = resolvePageTemplate(
     template,
     templates,
   )
-  appendTocScript(head, input.pageInfo.frontmatter, input.outline)
-  const html = await pageTemplate({
+  const templateInput = {
     head,
     bodyHtml,
     headConfig,
@@ -74,143 +45,10 @@ export async function renderPage(input: RenderPageInput): Promise<string> {
     pageInfo: input.pageInfo,
     headerHtml: input.headerHtml,
     footerHtml: input.footerHtml,
-  })
+  }
+  for (const renderHead of input.headTemplates ?? []) {
+    head = await renderHead({ ...templateInput, head })
+  }
+  const html = await pageTemplate({ ...templateInput, head })
   return html.toHtml()
-}
-
-function appendAuthStateHintScript(
-  head: ReturnType<typeof getHead>,
-  site: SiteConfig,
-) {
-  if (!site.auth.enabled || !site.auth.signedInStorageKey) return
-  const script = buildAuthStateHintScript(site.auth.signedInStorageKey)
-  if (!script) return
-  head.push(h('script').raw(script))
-}
-
-function getStyleThemes(
-  styleLinks: ThemeStylesheetLink[] | undefined,
-): string[] {
-  return (styleLinks ?? [])
-    .map((link) => link.dataTheme)
-    .filter((theme): theme is string => Boolean(theme))
-}
-
-function appendStyleLinkTags(
-  head: ReturnType<typeof getHead>,
-  styleLinks: ThemeStylesheetLink[] | undefined,
-) {
-  if (!styleLinks || styleLinks.length === 0) return
-  for (const link of styleLinks) {
-    head.push(
-      h('link').attr({
-        rel: link.rel,
-        href: link.href,
-        ...(link.media ? { media: link.media } : {}),
-        ...(link.dataTheme ? { 'data-theme': link.dataTheme } : {}),
-      }),
-    )
-  }
-}
-
-function appendThemeSwitchScript(
-  head: ReturnType<typeof getHead>,
-  themes: string[],
-) {
-  if (themes.length === 0) return
-  const script = buildThemeSwitchScript(themes)
-  head.push(h('script').raw(script))
-}
-
-function appendConsentScript(
-  head: ReturnType<typeof getHead>,
-  consent: ConsentConfig | undefined,
-) {
-  if (!consent?.enabled) return
-  head.push(h('script').raw(buildConsentScript(consent)))
-}
-
-function appendGa4Script(
-  head: ReturnType<typeof getHead>,
-  analytics: AnalyticsConfig | undefined,
-  consent: ConsentConfig | undefined,
-) {
-  const ga4 = analytics?.ga4
-  if (!ga4?.enabled || !ga4.measurementId) return
-  if (consent?.enabled) return
-  const script = buildGa4Script(ga4)
-  head.push(
-    h('script').attr({ async: 'true', src: script.src }),
-    h('script').raw(script.init),
-  )
-}
-
-function appendNavMenuScript(head: ReturnType<typeof getHead>) {
-  const script = buildNavMenuScript()
-  head.push(h('script').raw(script))
-}
-
-function appendMenuScript(head: ReturnType<typeof getHead>) {
-  const script = buildMenuRuntimeScript()
-  head.push(h('script').raw(script))
-}
-
-function isNavEnabled(frontmatter: PageFrontmatter) {
-  return frontmatter.layout.showNav !== false
-}
-
-function appendTocScript(
-  head: ReturnType<typeof getHead>,
-  frontmatter: PageFrontmatter,
-  outline: PageOutlineItem[] | undefined,
-) {
-  if (!isTocEnabled(frontmatter, outline)) return
-  const script = buildPageTocScript()
-  head.push(h('script').raw(script))
-}
-
-function appendCodeCopyScript(head: ReturnType<typeof getHead>) {
-  const script = buildCodeCopyScript()
-  head.push(h('script').raw(script))
-}
-
-function appendPagefindSearchScript(
-  head: ReturnType<typeof getHead>,
-  site: SiteConfig,
-) {
-  if (!site.pagefind.enabled) return
-  if (site.basePath) {
-    head.push(
-      h('script').raw(
-        `window.tsSsgPagefindBasePath=${JSON.stringify(site.basePath)};`,
-      ),
-    )
-  }
-  const script = buildPagefindSearchScript()
-  head.push(h('script').attr({ type: 'module' }).raw(script))
-}
-
-function buildCriticalThemeStyle(hasThemeGate: boolean) {
-  const options = themes.getOptions()
-  const lightPalette = options.palette.light
-  const darkPalette = options.palette.dark
-  const light = {
-    background: lightPalette.semanticTone.neutral.canvas,
-    text: lightPalette.semanticTone.neutral.text.default,
-  }
-  const dark = {
-    background: darkPalette.semanticTone.neutral.canvas,
-    text: darkPalette.semanticTone.neutral.text.default,
-  }
-  const css = [
-    ':root{color-scheme:light dark;}',
-    `html,body{background:${light.background};color:${light.text};}`,
-    '@media (prefers-color-scheme: dark){',
-    `html,body{background:${dark.background};color:${dark.text};}`,
-    '}',
-  ]
-  if (hasThemeGate) {
-    css.push('html:not([data-theme-ready]) body{visibility:hidden;}')
-  }
-  return css.join('')
 }

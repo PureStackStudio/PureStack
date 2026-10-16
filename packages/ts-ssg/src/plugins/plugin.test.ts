@@ -582,7 +582,7 @@ describe('plugins', () => {
       [null, 'Plugin 1 must be an object.'],
       [
         { name: 'typo', hook: {} },
-        'Plugin "typo" has an unknown field "hook". Plugin fields: name, skins, components, templates, markdown, pages, devMiddleware, hooks.',
+        'Plugin "typo" has an unknown field "hook". Plugin fields: name, defaults, skins, components, templates, head, styles, markdown, pages, devMiddleware, hooks.',
       ],
       [
         { name: 'typo', hooks: { onPageRender: () => {} } },
@@ -599,6 +599,18 @@ describe('plugins', () => {
       [
         { name: 'bad', components: { card: {} } },
         'Plugin "bad" needs `components` to be a function that returns components.',
+      ],
+      [
+        { name: 'bad', defaults: 'yes' },
+        'Plugin "bad" needs `defaults` to be a boolean.',
+      ],
+      [
+        { name: 'bad', head: {} },
+        'Plugin "bad" needs `head` to be a head template.',
+      ],
+      [
+        { name: 'bad', styles: {} },
+        'Plugin "bad" needs `styles` to be a stylesheet provider.',
       ],
       [
         { name: 'bad', templates: { landing: '<html>' } },

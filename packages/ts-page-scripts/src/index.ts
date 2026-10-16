@@ -8,6 +8,7 @@ export { buildNavMenuScript } from './embed/navMenu.embed'
 export { buildPagefindSearchScript } from './embed/pagefindSearch.embed'
 export { buildPageTocScript } from './embed/pageToc.embed'
 export { buildTabsScript } from './embed/tabs.embed'
+export { pageScriptsPlugin } from './plugin'
 export type {
   TsSsgMenusApi,
   TsSsgModalApi,

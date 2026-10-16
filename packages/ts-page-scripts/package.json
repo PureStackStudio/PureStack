@@ -39,6 +39,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@purestack/ts-common": "workspace:^"
+    "@purestack/ts-common": "workspace:^",
+    "@purestack/ts-html": "workspace:^"
   }
 }

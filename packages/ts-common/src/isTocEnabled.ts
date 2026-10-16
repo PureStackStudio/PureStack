@@ -1,4 +1,5 @@
-import type { PageFrontmatter, PageOutlineItem } from '@purestack/ts-common'
+import type { PageFrontmatter } from './frontmatter-types'
+import type { PageOutlineItem } from './ts-ssg-context'
 
 export function isTocEnabled(
   frontmatter: PageFrontmatter,

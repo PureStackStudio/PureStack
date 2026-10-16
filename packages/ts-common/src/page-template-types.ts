@@ -39,3 +39,8 @@ export type PageTemplate = (
 ) => TSNode<'html'> | Promise<TSNode<'html'>>
 
 export type PageTemplateMap = Record<string, PageTemplate>
+
+/** Composes head markup before the page template receives it. */
+export type PageHeadTemplate = (
+  input: PageTemplateInput,
+) => TSNode<'head'> | Promise<TSNode<'head'>>

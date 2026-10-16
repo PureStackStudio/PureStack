@@ -1,7 +1,6 @@
 import fsPromises from 'node:fs/promises'
 import path from 'node:path'
-import type { SiteConfig } from '@purestack/ts-common'
-import { styleBuilder, themes } from '@purestack/ts-style'
+import type { SiteConfig, WriteStylesResult } from '@purestack/ts-common'
 import { toOutputAssetRelPath, toPosixPath } from '@purestack/ts-util'
 import { getLogger, type Logger } from 'logpot'
 import {
@@ -21,13 +20,15 @@ import {
 } from '../../i18n/content'
 import { buildNavigation } from '../../navigation/navigation'
 import {
+  initializePluginContext,
+  resolveBuildPlugins,
+} from '../../plugins/default-plugins'
+import {
   composePluginHooks,
   type PureStackPlugin,
-  resolvePluginComponents,
   resolvePluginContentProcessor,
-  resolvePluginTemplates,
 } from '../../plugins/plugin'
-import { initBuiltinComponents } from '../../regor/initBuiltinComponents'
+import { initRenderer } from '../../regor/initRenderer'
 import { resolveRouteInfo } from '../../routing/route'
 import { copyStaticAsset, copyStaticAssets } from '../assets'
 import { resolveBuildSiteConfig } from '../build-config'
@@ -47,7 +48,6 @@ import { buildPagefindIndex } from '../pagefind'
 import { createScriptCacheKey, ScriptCacheKeyStore } from '../script-cache-key'
 import type { BuildHooks, BuildInput, BuildResult } from '../site'
 import { writeSitemap } from '../sitemap'
-import { type WriteStylesResult, writeStyles } from '../styles'
 import { IncrementalChangeApplier } from './change-applier'
 import { IncrementalContentState } from './content-state'
 import { ScriptEntrypointManager } from './script-entry-manager'
@@ -89,8 +89,8 @@ async function createIncrementalRuntime(
 ): Promise<IncrementalRuntime> {
   const buildOptions = input.options ?? {}
   const publishOptions = input.publish ?? {}
-  const plugins = buildOptions.plugins ?? []
-  const config = resolveBuildSiteConfig(input)
+  const plugins = resolveBuildPlugins(buildOptions)
+  const config = resolveBuildSiteConfig(input, plugins)
   const hooks = composePluginHooks(plugins)
   const cleanOutDir =
     publishOptions.enabled === true || buildOptions.cleanOutDir === true
@@ -100,8 +100,7 @@ async function createIncrementalRuntime(
     ...(await resolveMdxBuildOptions(config.mdx, plugins)),
     contentProcessor: resolvePluginContentProcessor(plugins),
   }
-  themes.setOptions(config.style.theme)
-  initBuiltinComponents({ includeShikiStyles: isShikiEnabled(config.mdx) })
+  initRenderer()
   const log = getLogger()
   const existing = await readManifest(config.outDir)
   const manifest =
@@ -116,8 +115,6 @@ async function createIncrementalRuntime(
     // request; see IncrementalRuntime.ensureContentReady.
     contentRoutes: new ContentRouteIndex([]),
     writeErrorPages: buildOptions.writeErrorPages === true,
-    components: resolvePluginComponents(plugins, config),
-    templates: resolvePluginTemplates(plugins),
     mdx,
     resolveScriptPublicPath: config.scripts.cacheBusting
       ? (sourceRelPath) =>
@@ -139,14 +136,6 @@ async function createIncrementalRuntime(
     manifest,
     scriptCacheKeys,
   })
-}
-
-function isShikiEnabled(mdx: SiteConfig['mdx'] | undefined): boolean {
-  return mdx?.disableHighlighter !== true && mdx?.highlighter === 'shiki'
-}
-
-function isHighlightJsEnabled(mdx: SiteConfig['mdx'] | undefined): boolean {
-  return mdx?.disableHighlighter !== true && mdx?.highlighter === 'highlightjs'
 }
 
 type BuildPreparationResult = {
@@ -270,7 +259,7 @@ class IncrementalRuntime {
   }
 
   private async prepareRequestState() {
-    await this.options.hooks.onConfigResolved?.(this.context)
+    await initializePluginContext(this.context, this.options.plugins)
     await prepareOutDir(this.config.outDir, { clean: this.options.cleanOutDir })
     // Keep the records object shared with the script manager, but start this
     // session with no rendered pages or copied assets, even without --clean.
@@ -403,7 +392,7 @@ class IncrementalRuntime {
   private async prepareBuild(
     hooks: BuildHooks,
   ): Promise<BuildPreparationResult> {
-    await hooks.onConfigResolved?.(this.context)
+    await initializePluginContext(this.context, this.options.plugins)
     await prepareOutDir(this.config.outDir, { clean: this.options.cleanOutDir })
     await writeGeneratedFavicon(this.config)
     await this.discoverAssets()
@@ -462,6 +451,7 @@ class IncrementalRuntime {
   }
 
   private async prepareExistingContent() {
+    await initializePluginContext(this.context, this.options.plugins)
     await this.discoverAssets()
     await this.prepareContent(
       [...this.staticAssets.values()].map((file) => file.relPath),
@@ -484,15 +474,10 @@ class IncrementalRuntime {
   }
 
   private async writeStylesWithHooks(hooks: BuildHooks) {
-    const { outDir, style } = this.config
-    const styleResult = await writeStyles(
-      {
-        outDir,
-        includeHljsTheme: isHighlightJsEnabled(this.config.mdx),
-        cacheKey: this.context.styleCacheKey,
-      },
-      style,
-    )
+    const styleResult = (await this.context.styles?.write({
+      outDir: this.config.outDir,
+      cacheKey: this.context.styleCacheKey,
+    })) ?? { revision: 0, outPath: '', outputs: [], signature: '' }
     this.preparedStyleRevision = styleResult.revision
     await hooks.onStylesWritten?.(this.context, styleResult)
     return styleResult
@@ -681,14 +666,14 @@ class IncrementalRuntime {
       const revision = this.pageAssetRevision
       if (
         revision === this.preparedAssetRevision &&
-        this.preparedStyleRevision === styleBuilder.revision
+        this.preparedStyleRevision === (this.context.styles?.revision ?? 0)
       )
         return
       // Only pages rendered in this session have registered script entries.
       await this.scriptEntrypoints.buildMissingEntrypoints(
         this.changeApplier.createResult('requested page assets'),
       )
-      if (this.preparedStyleRevision !== styleBuilder.revision) {
+      if (this.preparedStyleRevision !== (this.context.styles?.revision ?? 0)) {
         const styles = await this.writeStylesWithHooks(this.options.hooks)
         this.manifest.styles = {
           signature: styles.signature,

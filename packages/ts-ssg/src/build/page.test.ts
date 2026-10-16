@@ -14,9 +14,9 @@ import {
   resolvePlainContentFile,
 } from '../i18n/content'
 import { buildNavigation } from '../navigation/navigation'
-import { initBuiltinComponents } from '../regor/initBuiltinComponents'
+import { initRenderer } from '../regor/initRenderer'
+import { renderDefaultPage as renderPageFromFile } from '../test/defaultPlugins'
 import { ContentRouteIndex } from './content-urls'
-import { renderPageFromFile } from './page'
 
 async function writeFile(filePath: string, contents = '') {
   await fs.mkdir(path.dirname(filePath), { recursive: true })
@@ -29,7 +29,7 @@ describe('page content compilation', () => {
   beforeAll(() => {
     disableLogger()
     logger = getLogger()
-    initBuiltinComponents()
+    initRenderer()
   })
 
   afterAll(async () => {

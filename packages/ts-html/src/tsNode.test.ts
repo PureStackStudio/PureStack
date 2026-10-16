@@ -3,6 +3,22 @@ import { describe, expect, it } from 'vitest'
 import { h } from './tsNode'
 
 describe('TSNode', () => {
+  it('inserts before the matching stylesheet while leaving other links alone', () => {
+    const head = h('head').push(
+      h('link').attr({ rel: 'icon', href: '/favicon.svg' }),
+      h('').push(h('link').attr({ rel: 'stylesheet', href: '/site.css' })),
+    )
+    expect(
+      head.insertBefore('link', h('script').raw('hint()'), {
+        rel: 'stylesheet',
+      }),
+    ).toBe(true)
+    expect(head.toHtml()).toBe(
+      '<head><link rel="icon" href="/favicon.svg"/><script>hint()</script><link rel="stylesheet" href="/site.css"/></head>',
+    )
+    expect(head.insertBefore('meta', h('script').raw('missing()'))).toBe(false)
+    expect(head.toHtml()).not.toContain('missing()')
+  })
   describe('toHtml', () => {
     it('renders an empty tag', () => {
       expect(h('div').toHtml()).toBe('<div></div>')

@@ -2,7 +2,7 @@ import crypto from 'node:crypto'
 import fs from 'node:fs/promises'
 import { createRequire } from 'node:module'
 import path from 'node:path'
-import type { SiteStyleConfig } from '@purestack/ts-common'
+import type { SiteStyleConfig, WriteStylesResult } from '@purestack/ts-common'
 import {
   orderThemes,
   resolveThemeFileName,
@@ -10,13 +10,6 @@ import {
 } from '@purestack/ts-style'
 import { ensureDir } from '@purestack/ts-util-node'
 import { getLogger } from 'logpot'
-
-export interface WriteStylesResult {
-  revision: number
-  outPath: string
-  outputs: string[]
-  signature: string
-}
 
 export interface WriteStylesInput {
   cacheKey?: string

@@ -4,7 +4,6 @@ import path from 'node:path'
 import type { SiteConfig } from '@purestack/ts-common'
 import { disableLogger, getLogger, type Logger } from 'logpot'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-
 import { resolveSiteConfig } from '../config/config'
 import { discoverContent, discoverStaticAssets } from '../discover/content'
 import {
@@ -12,10 +11,10 @@ import {
   resolveContentFiles,
   resolvePlainContentFile,
 } from '../i18n/content'
-import { initBuiltinComponents } from '../regor/initBuiltinComponents'
+import { initRenderer } from '../regor/initRenderer'
+import { renderDefaultPage as renderPageFromFile } from '../test/defaultPlugins'
 import { ContentRouteIndex } from './content-urls'
 import {
-  renderPageFromFile,
   resolveFooterHtmlByDirectory,
   resolveHeaderHtmlByDirectory,
 } from './page'
@@ -31,7 +30,7 @@ describe('footer hierarchy', () => {
   beforeAll(() => {
     disableLogger()
     logger = getLogger()
-    initBuiltinComponents()
+    initRenderer()
   })
 
   afterAll(async () => {

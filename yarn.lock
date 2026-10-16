@@ -762,6 +762,7 @@ __metadata:
     "@purestack/ts-page-scripts": "workspace:^"
     "@purestack/ts-render": "workspace:^"
     "@purestack/ts-style": "workspace:^"
+    "@purestack/ts-svg-icons": "workspace:^"
     "@purestack/ts-util": "workspace:^"
     regor: "npm:^1.7.5"
   languageName: unknown
@@ -796,6 +797,7 @@ __metadata:
   resolution: "@purestack/ts-page-scripts@workspace:packages/ts-page-scripts"
   dependencies:
     "@purestack/ts-common": "workspace:^"
+    "@purestack/ts-html": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -824,6 +826,7 @@ __metadata:
     "@purestack/ts-render": "workspace:^"
     "@purestack/ts-style": "workspace:^"
     "@purestack/ts-svg-icons": "workspace:^"
+    "@purestack/ts-theme": "workspace:^"
     "@purestack/ts-util": "workspace:^"
     "@purestack/ts-util-node": "workspace:^"
     esbuild: "npm:^0.28.0"
@@ -864,6 +867,20 @@ __metadata:
     "@tabler/icons": "npm:^3.48.0"
     iconoir: "npm:^7.12.1"
     lucide: "npm:^1.48.0"
+  languageName: unknown
+  linkType: soft
+
+"@purestack/ts-theme@workspace:^, @purestack/ts-theme@workspace:packages/ts-theme":
+  version: 0.0.0-use.local
+  resolution: "@purestack/ts-theme@workspace:packages/ts-theme"
+  dependencies:
+    "@purestack/ts-common": "workspace:^"
+    "@purestack/ts-html": "workspace:^"
+    "@purestack/ts-page-scripts": "workspace:^"
+    "@purestack/ts-style": "workspace:^"
+    "@purestack/ts-util-node": "workspace:^"
+    highlight.js: "npm:^11.11.1"
+    logpot: "npm:^1.0.7"
   languageName: unknown
   linkType: soft
 

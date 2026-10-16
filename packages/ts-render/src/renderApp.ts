@@ -8,6 +8,8 @@ import { componentRegistry } from './componentRegistry'
 export interface RenderAppOptions<TContext extends PageContext> {
   /** Components for this render, on top of the registered ones. */
   components: unknown
+  /** Whether this render also inherits the shared component registry. */
+  inheritComponents?: boolean
   context: TContext
   /**
    * Runs on the rendered document, before it becomes HTML. It may be async:
@@ -48,7 +50,9 @@ export const renderApp = <TContext extends PageContext>(
     createApp(
       {
         components: {
-          ...componentRegistry.getAll(),
+          ...(options.inheritComponents === false
+            ? {}
+            : componentRegistry.getAll()),
           ...(isPlainObject(options.components) ? options.components : {}),
         },
         pageContext,
