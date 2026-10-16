@@ -1,11 +1,11 @@
-## Change
+## Summary
 
-Describe the problem and resulting behavior. Link a related issue if applicable.
+Summarize the change.
+
+## Changes
+
+Describe the changes.
 
 ## Validation
 
-Describe the checks you ran and include screenshots for visible UI changes.
-
-- [ ] Relevant tests and documentation updated.
-- [ ] CI passes.
-- [ ] Required generated assets regenerated manually, if applicable.
+Describe the validation.

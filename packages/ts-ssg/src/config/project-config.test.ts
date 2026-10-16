@@ -93,7 +93,11 @@ describe('purestack.config.ts', () => {
     ],
     [
       'export default { plugin: [] }',
-      'has an unknown field "plugin". Config fields: plugins.',
+      'has an unknown field "plugin". Config fields: plugins, defaultPlugins.',
+    ],
+    [
+      'export default { defaultPlugins: [] }',
+      'needs defaultPlugins to be a boolean.',
     ],
     ['export default {', 'Could not bundle'],
     ["throw new Error('Config failed on purpose.')", 'Could not run'],
@@ -120,6 +124,16 @@ describe('purestack.config.ts', () => {
       cleanOutDir: true,
       plugins: [first, fromConfig],
     })
+  })
+
+  it('loads and applies default plugin selection without a plugins array', async () => {
+    const projectRoot = await createProject({
+      [PROJECT_CONFIG_FILENAME]: 'export default { defaultPlugins: false }',
+    })
+    const loaded = await loadProjectConfig(
+      path.join(projectRoot, PROJECT_CONFIG_FILENAME),
+    )
+    expect(withProjectConfig({}, loaded).options?.defaultPlugins).toBe(false)
   })
 
   it('builds with the config when the CLI finds one', async () => {

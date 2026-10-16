@@ -154,6 +154,28 @@ export class TSNode<K extends HtmlTag> {
     return this
   }
 
+  /** Inserts before the first child matching a tag and attributes; returns whether it matched. */
+  insertBefore(
+    tag: HtmlTag,
+    node: TSNode<''>,
+    attributes: Attributes = {},
+  ): boolean {
+    for (let i = 0; i < this.#children.length; i++) {
+      const child = this.#children[i]
+      if (
+        child.#tag === tag &&
+        Object.entries(attributes).every(
+          ([key, value]) => child.#attributes[key] === value,
+        )
+      ) {
+        this.#children.splice(i, 0, node)
+        return true
+      }
+      if (child.insertBefore(tag, node, attributes)) return true
+    }
+    return false
+  }
+
   /**
    * Selects the first matching tag in a depth-first traversal (including this node),
    * replaces it using the provided callback, and returns this root.

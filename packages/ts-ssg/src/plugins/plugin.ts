@@ -1,5 +1,10 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
-import type { PageTemplateMap, SiteConfig } from '@purestack/ts-common'
+import type {
+  PageHeadTemplate,
+  PageTemplateMap,
+  SiteConfig,
+  SiteStyles,
+} from '@purestack/ts-common'
 import { registerSkin, type ThemeSkin, themeSkins } from '@purestack/ts-style'
 import { escapeHtml, isPlainObject } from '@purestack/ts-util'
 import type { HLJSApi } from 'highlight.js'
@@ -17,12 +22,18 @@ import type { MdxCodeHighlighter, MdxShikiFactory } from '../mdx/highlight'
 export interface PureStackPlugin {
   /** Names the plugin in conflict and hook error messages. */
   name: string
+  /** Components and templates supply defaults that ordinary contributions may override. */
+  defaults?: boolean
   /** Theme skins the site config can select with `style.theme.skin`. */
   skins?: Record<string, ThemeSkin>
   /** Regor components, built from the resolved site config. */
   components?: (config: SiteConfig) => Record<string, object>
   /** Page templates, selected by the `template` frontmatter field. */
   templates?: PageTemplateMap
+  /** Head template, composed before the selected page template. */
+  head?: PageHeadTemplate
+  /** The site's stylesheet provider, initialized before component factories. */
+  styles?: (config: SiteConfig) => SiteStyles
   /** Markdown transforms and highlighter resolution for pages and shared partials. */
   markdown?: PureStackMarkdown
   /**
@@ -90,9 +101,12 @@ export function definePlugin(plugin: PureStackPlugin): PureStackPlugin {
 
 const PLUGIN_FIELDS = [
   'name',
+  'defaults',
   'skins',
   'components',
   'templates',
+  'head',
+  'styles',
   'markdown',
   'pages',
   'devMiddleware',
@@ -167,6 +181,12 @@ function assertPluginFields(name: string, plugin: Record<string, unknown>) {
     devMiddleware,
     hooks,
   } = plugin
+  if (plugin.defaults !== undefined && typeof plugin.defaults !== 'boolean')
+    fail('needs `defaults` to be a boolean.')
+  if (plugin.head !== undefined && typeof plugin.head !== 'function')
+    fail('needs `head` to be a head template.')
+  if (plugin.styles !== undefined && typeof plugin.styles !== 'function')
+    fail('needs `styles` to be a stylesheet provider.')
   if (pages !== undefined && typeof pages !== 'function') {
     fail('needs `pages` to be a function that returns pages.')
   }
@@ -265,21 +285,52 @@ export function resolvePluginComponents(
   plugins: readonly PureStackPlugin[],
   config: SiteConfig,
 ) {
-  return mergeByName(plugins, 'component', (plugin) => {
-    const components = plugin.components?.(config)
-    if (components !== undefined && !isPlainObject(components)) {
-      throw new Error(
-        `Plugin "${plugin.name}" needs \`components\` to return an object of components.`,
-      )
-    }
-    return components
-  })
+  return mergeByName(
+    plugins,
+    'component',
+    (plugin) => {
+      const components = plugin.components?.(config)
+      if (components !== undefined && !isPlainObject(components)) {
+        throw new Error(
+          `Plugin "${plugin.name}" needs \`components\` to return an object of components.`,
+        )
+      }
+      return components
+    },
+    true,
+  )
 }
 
 export function resolvePluginTemplates(
   plugins: readonly PureStackPlugin[],
 ): PageTemplateMap {
-  return mergeByName(plugins, 'template', (plugin) => plugin.templates)
+  return mergeByName(plugins, 'template', (plugin) => plugin.templates, true)
+}
+
+export function resolvePluginStyles(
+  plugins: readonly PureStackPlugin[],
+  config: SiteConfig,
+) {
+  const providers = plugins.filter((plugin) => plugin.styles)
+  if (providers.length > 1) {
+    throw new Error(
+      `Plugins "${providers[0].name}" and "${providers[1].name}" both define styles.`,
+    )
+  }
+  const provider = providers[0]
+  const styles = provider?.styles?.(config)
+  if (
+    provider &&
+    (!styles ||
+      typeof styles.revision !== 'number' ||
+      typeof styles.links !== 'function' ||
+      typeof styles.write !== 'function')
+  ) {
+    throw new Error(
+      `Plugin "${provider.name}" needs \`styles\` to return a stylesheet provider.`,
+    )
+  }
+  return styles
 }
 
 /** The build's content processor, with every plugin's remark and rehype plugins. */
@@ -396,19 +447,29 @@ function mergeByName<T>(
   plugins: readonly PureStackPlugin[],
   kind: string,
   pick: (plugin: PureStackPlugin) => Record<string, T> | undefined,
+  allowDefaults = false,
 ) {
+  // Evaluate factories in plugin order, even when their contributions have
+  // different precedence. Metadata never changes initialization order.
+  const contributions = plugins.map((plugin) => ({
+    plugin,
+    values: pick(plugin),
+  }))
   const merged: Record<string, T> = {}
-  const owners = new Map<string, string>()
-  for (const plugin of plugins) {
-    for (const [name, value] of Object.entries(pick(plugin) ?? {})) {
-      const owner = owners.get(name)
-      if (owner) {
-        throw new Error(
-          `Plugins "${owner}" and "${plugin.name}" both define the ${kind} "${name}".`,
-        )
+  for (const defaults of allowDefaults ? [true, false] : [false]) {
+    const owners = new Map<string, string>()
+    for (const { plugin, values } of contributions) {
+      if (allowDefaults && (plugin.defaults === true) !== defaults) continue
+      for (const [name, value] of Object.entries(values ?? {})) {
+        const owner = owners.get(name)
+        if (owner) {
+          throw new Error(
+            `Plugins "${owner}" and "${plugin.name}" both define the ${kind} "${name}".`,
+          )
+        }
+        owners.set(name, plugin.name)
+        merged[name] = value
       }
-      owners.set(name, plugin.name)
-      merged[name] = value
     }
   }
   return merged

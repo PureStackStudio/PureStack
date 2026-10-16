@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { resolveSiteConfig } from '../config/config'
 import { normalizeFrontmatter } from '../frontmatter/frontmatter'
-import { renderPage } from './renderer'
+import { renderDefaultShell as renderPage } from '../test/defaultPlugins'
 
 describe('renderPage consent integration', () => {
   it('passes configured sidebar offsets to the documentation layout', async () => {
@@ -19,8 +19,8 @@ describe('renderPage consent integration', () => {
       },
       site,
     })
-    expect(html).toContain('--ps-doc-layout-sidebar-top: 8rem;')
-    expect(html).toContain('--ps-doc-layout-sidebar-top-mobile: 72px;')
+    expect(html).toMatch(/--ps-doc-layout-sidebar-top:\s*8rem;/)
+    expect(html).toMatch(/--ps-doc-layout-sidebar-top-mobile:\s*72px(?:;|")/)
   })
   it('injects the critical auth state hint when auth is enabled', async () => {
     const site = resolveSiteConfig({
@@ -137,8 +137,6 @@ describe('renderPage consent integration', () => {
         frontmatter: normalizeFrontmatter({}),
       },
       site,
-      consent: site.consent,
-      analytics: site.analytics,
     })
     expect(html).not.toContain('window.tsSsgConsent')
   })
@@ -166,8 +164,6 @@ describe('renderPage consent integration', () => {
         frontmatter: normalizeFrontmatter({}),
       },
       site,
-      consent: site.consent,
-      analytics: site.analytics,
     })
     expect(html).toContain('window.tsSsgConsent')
     expect(html).toContain('ga4')
@@ -190,8 +186,6 @@ describe('renderPage consent integration', () => {
         frontmatter: normalizeFrontmatter({}),
       },
       site,
-      consent: site.consent,
-      analytics: site.analytics,
     })
     expect(html).toContain('window.tsSsgConsent')
   })
@@ -216,8 +210,6 @@ describe('renderPage consent integration', () => {
         frontmatter: normalizeFrontmatter({}),
       },
       site,
-      consent: site.consent,
-      analytics: site.analytics,
     })
     expect(html).toContain('googletagmanager.com/gtag/js?id=G-TEST1234')
     expect(html).toMatch(
@@ -245,8 +237,6 @@ describe('renderPage consent integration', () => {
         frontmatter: normalizeFrontmatter({}),
       },
       site,
-      consent: site.consent,
-      analytics: site.analytics,
     })
     expect(html).not.toMatch(
       /<script[^>]*\bsrc="https:\/\/www\.googletagmanager\.com\/gtag\/js\?id=G-TEST1234"/,
@@ -270,8 +260,6 @@ describe('renderPage consent integration', () => {
       site,
       footerHtml:
         '<site-footer eyebrow="Ops"><template #status><span>Ready</span></template></site-footer>',
-      consent: site.consent,
-      analytics: site.analytics,
     })
     expect(html).toContain('<site-footer eyebrow="Ops"')
     expect(html).toContain('<span>Ready</span>')
@@ -288,8 +276,6 @@ describe('renderPage consent integration', () => {
       },
       site,
       headerHtml: '<top-bar></top-bar>',
-      consent: site.consent,
-      analytics: site.analytics,
     })
     expect(html).toContain('<top-bar></top-bar>')
   })
@@ -309,8 +295,6 @@ describe('renderPage consent integration', () => {
       },
       outline: [],
       site,
-      consent: site.consent,
-      analytics: site.analytics,
     })
     expect(html).not.toContain('class="doc-toc"')
     expect(html).not.toContain('doc-shell--toc')
@@ -427,8 +411,6 @@ describe('renderPage consent integration', () => {
         tone: 'neutral',
       },
       site,
-      consent: site.consent,
-      analytics: site.analytics,
     })
     expect(html).not.toContain('class="doc-sidebar"')
     expect(html).toContain('<body class="template-doc"')

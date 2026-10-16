@@ -1,4 +1,4 @@
-import type { SiteConfigInput } from '@purestack/ts-common'
+import type { SiteConfigInput, WriteStylesResult } from '@purestack/ts-common'
 import type { ResolvedContentFile } from '../i18n/content'
 import type { NavigationTree } from '../navigation/navigation'
 import type { PureStackPlugin } from '../plugins/plugin'
@@ -6,7 +6,6 @@ import type { PublishOptions } from './build-config'
 import { createIncrementalBuilder } from './incremental'
 import { ensureLogger } from './logger'
 import type { BuildContext, PageDocument, PageRenderResult } from './page'
-import type { WriteStylesResult } from './styles'
 
 export type { PublishOptions } from './build-config'
 
@@ -65,6 +64,8 @@ export interface BuildHooks {
 export interface BuildOptions {
   cleanOutDir?: boolean
   writeErrorPages?: boolean
+  /** Include the standard component, theme, and browser-runtime plugins. */
+  defaultPlugins?: boolean
   /** Extensions to apply, in order. See {@link PureStackPlugin}. */
   plugins?: PureStackPlugin[]
 }

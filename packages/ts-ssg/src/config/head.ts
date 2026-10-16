@@ -4,7 +4,6 @@ import {
   getHeadConfig,
   h,
 } from '@purestack/ts-html'
-import { themes } from '@purestack/ts-style'
 import { merge } from '@purestack/ts-util'
 
 const DEFAULTS: BasicHeadConfig = {
@@ -22,35 +21,10 @@ const DEFAULTS: BasicHeadConfig = {
 }
 
 export function getHead(config?: BasicHeadConfig) {
-  const head = createHead(getHeadConfig(merge(DEFAULTS, config))).push(
+  return createHead(getHeadConfig(merge(DEFAULTS, config))).push(
     h('meta').attr({
       name: 'generator',
       content: 'PureStack v1.1.13',
     }),
-    h('meta').attr({
-      name: 'color-scheme',
-      content: 'dark light',
-    }),
-    ...buildThemeColorMetaTags(),
   )
-  return head
-}
-
-function buildThemeColorMetaTags() {
-  const options = themes.getOptions()
-  const lightColor = options.palette.light.accent
-  const darkColor = options.palette.dark.accent
-
-  return [
-    h('meta').attr({
-      name: 'theme-color',
-      media: '(prefers-color-scheme: light)',
-      content: lightColor,
-    }),
-    h('meta').attr({
-      name: 'theme-color',
-      media: '(prefers-color-scheme: dark)',
-      content: darkColor,
-    }),
-  ]
 }

@@ -1,5 +1,5 @@
 {
-  "$schema": "../schema/siteConfig.schema.json",
+  "$schema": "https://raw.githubusercontent.com/PureStackStudio/PureStack/refs/heads/main/packages/ts-ssg/schema/siteConfig.schema.json",
   "siteTitle": "PureStack i18n Sample",
   "favicon": "tabler:globe",
   "logo": {

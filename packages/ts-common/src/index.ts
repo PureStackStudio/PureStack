@@ -11,6 +11,7 @@ export type {
   PageFrontmatter,
   ParsedFrontmatterSource,
 } from './frontmatter-types'
+export { isTocEnabled } from './isTocEnabled'
 export type {
   ClassicLogoConfig,
   LogoAppearance,
@@ -32,6 +33,7 @@ export type {
   PageNavigationLinks,
 } from './navMenu-types'
 export type {
+  PageHeadTemplate,
   PageInfo,
   PageTemplate,
   PageTemplateInput,
@@ -62,6 +64,7 @@ export type {
   SiteStyleConfig,
   SiteStyleConfigInput,
 } from './site-config-types'
+export type { SiteStyles, WriteStylesResult } from './site-styles'
 export type {
   PageContext,
   PageOutlineItem,

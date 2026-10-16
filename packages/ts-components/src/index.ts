@@ -15,6 +15,7 @@ export type {
   TsSsgTabsApi,
 } from '@purestack/ts-page-scripts'
 export { defineComponents } from './defineComponents'
+export { componentsPlugin } from './plugin'
 export { registerStyles } from './registerStyles'
 export type { AlertBox } from './standard/alertBox/alertBox'
 export { defineAlertComponents } from './standard/alertBox/alertBox'

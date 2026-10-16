@@ -314,6 +314,33 @@ order, inherit into child folders, and skip external URLs.
 
 A plugin is a named bundle of extensions: skins, components, templates, Markdown transforms, generated pages, build hooks, and dev server middleware. The [Plugins guide](https://purestack.studio/guides/extending/plugins/) walks through each part.
 
+Three plugins provide the standard site features and are enabled automatically for builds, publishing, and the development server:
+
+| Package | Factory | Features |
+| --- | --- | --- |
+| `@purestack/ts-components` | `componentsPlugin()` | Standard Regor components, SVG icons, and component styles |
+| `@purestack/ts-theme` | `themePlugin()` | `doc` and `splash` layouts, theme CSS files and links, critical colors, and theme switching |
+| `@purestack/ts-page-scripts` | `pageScriptsPlugin()` | Auth hint, consent and analytics, menus, code copying, search UI, and table of contents runtimes |
+
+These factories and `createDefaultPlugins()` are also exported from `@purestack/ts-ssg` and `purestack`. The stylesheet provider initializes before component factories. Components and templates resolve before every plugin's `onConfigResolved` hook runs in plugin order. Names do not change that order. Components are scoped to each build; config hooks can override them through `context.components`.
+
+Plugins can supply a `head` template, with the same input as a page template and a `TSNode<'head'>` result. Head templates compose in plugin order before the page template, so page templates can inspect or change the complete head. The lifecycle hook set is unchanged.
+
+The theme plugin supplies `styles(config)`, which returns the `SiteStyles` writer used for full builds and lazy development assets. Only one plugin can supply it. Component and template contributions marked `defaults: true` may be overridden by ordinary contributions; this flag controls merge precedence and never schedules hooks or factories. Conflicts within either group remain errors.
+
+To choose the integrations explicitly, set `defaultPlugins: false` in `purestack.config.ts` (or `options.defaultPlugins` programmatically):
+
+```ts
+import { componentsPlugin, defineConfig, themePlugin } from '@purestack/ts-ssg'
+
+export default defineConfig({
+  defaultPlugins: false,
+  plugins: [themePlugin(), componentsPlugin()],
+})
+```
+
+This keeps the standard layouts and components while omitting the page runtimes. Theme switching stays with the theme plugin, and component-specific Tabs/Modal embeds still follow each page's `embed` settings. Without the theme plugin, provide templates through another plugin. Extension templates and components can still override the standard ones. Explicitly listing a standard plugin while defaults are enabled replaces that plugin by name without adding a second instance; it retains its initialization position. Duplicate names within the supplied plugin list are errors.
+
 A site lists its plugins in `purestack.config.ts`, next to `siteConfig.json`, and the CLI loads it:
 
 ```ts

@@ -50,6 +50,7 @@
     "@purestack/ts-render": "workspace:^",
     "@purestack/ts-style": "workspace:^",
     "@purestack/ts-svg-icons": "workspace:^",
+    "@purestack/ts-theme": "workspace:^",
     "@purestack/ts-util": "workspace:^",
     "@purestack/ts-util-node": "workspace:^",
     "esbuild": "^0.28.0",

@@ -1,13 +1,17 @@
 export type {
   PageContext,
   PageFrontmatter,
+  PageHeadTemplate,
   PageInfo,
   PageTemplate,
   PageTemplateInput,
   PageTemplateMap,
   SiteConfig,
   SiteConfigInput,
+  SiteStyles,
+  WriteStylesResult,
 } from '@purestack/ts-common'
+export { defaultTemplates } from '@purestack/ts-theme'
 export type {
   BuildContext,
   PageDocument,
@@ -22,7 +26,6 @@ export {
   buildSite,
   type PublishOptions,
 } from './build/site'
-export type { WriteStylesResult } from './build/styles'
 export { runCli } from './cli-runner'
 export { resolveSiteConfig } from './config/config'
 export { defineConfig, type PureStackConfig } from './config/project-config'
@@ -53,13 +56,16 @@ export {
   resolvePageNavigation,
 } from './navigation/navigation'
 export {
+  componentsPlugin,
+  createDefaultPlugins,
+  pageScriptsPlugin,
+  themePlugin,
+} from './plugins/default-plugins'
+export {
   definePlugin,
   type GeneratedPage,
   type PageGenerationContext,
   type PureStackMarkdown,
   type PureStackPlugin,
 } from './plugins/plugin'
-export {
-  defaultTemplates,
-  resolvePageTemplate,
-} from './templates/page-templates'
+export { resolvePageTemplate } from './templates/page-templates'

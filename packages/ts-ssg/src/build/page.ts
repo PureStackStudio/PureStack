@@ -1,16 +1,17 @@
 import path from 'node:path'
 import type {
   PageFrontmatter,
+  PageHeadTemplate,
   PageInfo,
   PageNavigation,
   PageOutlineItem,
   PageTemplateMap,
   PageTranslationInfo,
   SiteConfig,
+  SiteStyles,
 } from '@purestack/ts-common'
 import type { BasicHeadConfig } from '@purestack/ts-html'
 import { renderApp } from '@purestack/ts-render'
-import { resolveThemeStyleLinks } from '@purestack/ts-style'
 import { isError, toOutputAssetRelPath, withBasePath } from '@purestack/ts-util'
 import { getLogger } from 'logpot'
 import {
@@ -49,6 +50,8 @@ import type { BuildHooks } from './site'
 export interface BuildContext {
   /** Shared by generated stylesheet filenames and links for this build/session. */
   styleCacheKey?: string
+  /** Style output owned by the site's stylesheet provider. */
+  styles?: SiteStyles
   config: SiteConfig
   contentRoutes: ContentRouteIndex
   headerHtmlByDir?: Map<string, string>
@@ -58,6 +61,7 @@ export interface BuildContext {
   writeErrorPages?: boolean
   components?: Record<string, object>
   templates?: PageTemplateMap
+  headTemplates?: readonly PageHeadTemplate[]
   navigation?: NavigationTree
   translationsByKey?: ContentTranslationsByKey
   mdx?: MdxRenderOptions
@@ -70,6 +74,7 @@ export interface PageDocument {
   file: ResolvedContentFile
   frontmatter: PageFrontmatter
   urlPath: string
+  outline?: PageOutlineItem[]
 }
 
 export interface PageRenderResult {
@@ -186,6 +191,7 @@ export async function renderPageFromFile(
           file,
           frontmatter,
           urlPath,
+          outline: compiled.outline,
         }),
     )
     const renderTimeMs =
@@ -398,20 +404,15 @@ async function renderPageShell(input: RenderPageShellInput): Promise<string> {
   return await renderPage({
     bodyHtml,
     headConfig,
-    styleLinks: resolveThemeStyleLinks(
-      context.config.style.href,
-      context.config.style.themes,
-      context.styleCacheKey,
-    ),
+    styleLinks: context.styles?.links(context.styleCacheKey),
     template,
     templates: context.templates,
+    headTemplates: context.headTemplates,
     site: context.config,
     navigation,
     outline,
     pageInfo,
     ...resolvePagePartials(context, pageInfo),
-    consent: context.config.consent,
-    analytics: context.config.analytics,
   })
 }
 
@@ -487,6 +488,7 @@ function renderPageApp(
   const { scriptEntrypoints, ...baseContext } = appContext
   return renderApp(htmlShell, {
     components: context.components,
+    inheritComponents: false,
     onRendered: async (document) => {
       await onDocument(document)
       resolvePageUrls(document, {
