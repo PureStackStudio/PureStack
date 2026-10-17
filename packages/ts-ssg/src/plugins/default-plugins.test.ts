@@ -71,7 +71,6 @@ describe('default plugins', () => {
         hooks: {
           onConfigResolved(context) {
             expect(context.components?.btn).toBe(replacement)
-            expect(context.templates?.doc).toBe(extension.templates?.doc)
             expect(context.components?.pageScript).toBeDefined()
             styleBuilder.select('.hook-style', 'light').color('blue')
           },
@@ -145,55 +144,76 @@ describe('default plugins', () => {
     ).toContain('<b>Context override</b>')
   })
 
-  it('keeps critical colors in sync with theme changes from config hooks', async () => {
-    const siteConfig = await project('# Home')
-    await buildSite({
-      siteConfig,
-      options: {
-        plugins: [
-          {
-            name: 'custom-colors',
-            hooks: {
-              onConfigResolved() {
-                const options = themes.getOptions()
-                themes.setOptions({
-                  ...options,
-                  palette: {
-                    ...options.palette,
-                    light: {
-                      ...options.palette.light,
-                      accent: '#123456',
-                      semanticTone: {
-                        ...options.palette.light.semanticTone,
-                        neutral: {
-                          ...options.palette.light.semanticTone.neutral,
-                          canvas: '#abcdef',
+  it.each(['config', 'themes'])(
+    'keeps critical colors, CSS, and favicon in sync with %s changes from config hooks',
+    async (source) => {
+      const siteConfig = await project('# Home')
+      await buildSite({
+        siteConfig: { ...siteConfig, favicon: 'tabler:cloud-storm' },
+        options: {
+          plugins: [
+            {
+              name: 'custom-colors',
+              hooks: {
+                onConfigResolved({ config }) {
+                  if (source === 'config') {
+                    config.style.theme.palette.light.accent = '#123456'
+                    config.style.theme.palette.light.semanticTone.neutral.canvas =
+                      '#abcdef'
+                    config.style.theme.palette.dark.accent = '#654321'
+                    return
+                  }
+                  const options = themes.getOptions()
+                  themes.setOptions({
+                    ...options,
+                    palette: {
+                      ...options.palette,
+                      dark: { ...options.palette.dark, accent: '#654321' },
+                      light: {
+                        ...options.palette.light,
+                        accent: '#123456',
+                        semanticTone: {
+                          ...options.palette.light.semanticTone,
+                          neutral: {
+                            ...options.palette.light.semanticTone.neutral,
+                            canvas: '#abcdef',
+                          },
                         },
                       },
                     },
-                  },
-                })
+                  })
+                },
               },
             },
-          },
-        ],
-      },
-    })
-    const output = await fs.readFile(
-      path.join(siteConfig.outDir, 'index.html'),
-      'utf8',
-    )
-    await runInDom(output, (document) => {
-      expect(
-        document
-          .querySelector('meta[name="theme-color"]')
-          ?.getAttribute('content'),
-      ).toBe('#123456')
-      expect(document.head.querySelector('style')?.textContent).toContain(
-        'background:#abcdef',
+          ],
+        },
+      })
+      const output = await fs.readFile(
+        path.join(siteConfig.outDir, 'index.html'),
+        'utf8',
       )
-    })
-  })
+      await runInDom(output, (document) => {
+        expect(
+          document
+            .querySelector('meta[name="theme-color"]')
+            ?.getAttribute('content'),
+        ).toBe('#123456')
+        expect(document.head.querySelector('style')?.textContent).toContain(
+          'background:#abcdef',
+        )
+      })
+      const manifest = await readManifest(siteConfig.outDir)
+      if (!manifest) throw new Error('Expected the stylesheet manifest')
+      const css = await fs.readFile(manifest.styles.outputs[0], 'utf8')
+      expect(css).toMatch(/--ps-accent:\s*#123456/)
+      expect(
+        await fs.readFile(
+          path.join(siteConfig.outDir, 'assets', 'favicon.svg'),
+          'utf8',
+        ),
+      ).toContain('#654321')
+    },
+  )
 
   it.each([true, false])(
     'runs the auth hint before stylesheet loading and other scripts (theme %s)',

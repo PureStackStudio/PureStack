@@ -2,6 +2,24 @@ import { describe, expect, it } from 'vitest'
 import { resolvePreviewConfig } from './preview'
 
 describe('social preview defaults', () => {
+  it.each([
+    ['  https://example.com///  ', 'https://example.com/guide/'],
+    [`https://example.com/${'/'.repeat(20_000)}`, 'https://example.com/guide/'],
+    [
+      `https://example.com/${'/'.repeat(20_000)}tail`,
+      'https://example.com/guide/',
+    ],
+    ['/'.repeat(20_000), undefined],
+    ['   ', undefined],
+  ])(
+    'normalizes base URLs with whitespace and repeated slashes (%#)',
+    (baseUrl, expected) => {
+      expect(
+        resolvePreviewConfig({}, { baseUrl, urlPath: '/guide/' }).canonicalUrl,
+      ).toBe(expected)
+    },
+  )
+
   it('preserves title fallbacks, absolute URLs, image dimensions, and Twitter defaults', () => {
     const head = resolvePreviewConfig(
       { title: 'Getting Started', description: 'Build your first thing.' },

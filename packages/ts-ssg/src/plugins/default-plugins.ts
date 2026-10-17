@@ -12,6 +12,10 @@ import { themePlugin } from '@purestack/ts-theme'
 import type { BuildContext } from '../build/page'
 import type { BuildOptions } from '../build/site'
 import {
+  resolvePluginHeadConfigTemplates,
+  resolvePluginHeadTemplates,
+} from './contributions'
+import {
   assertValidPlugins,
   composePluginHooks,
   type PureStackPlugin,
@@ -75,9 +79,7 @@ export async function initializePluginContext(
   context.search = resolvePluginSearch(plugins, context.config)
   context.components = resolvePluginComponents(plugins, context.config)
   context.templates = resolvePluginTemplates(plugins)
-  context.headTemplates = plugins.flatMap((plugin) => plugin.head ?? [])
-  context.headConfigTemplates = plugins.flatMap(
-    (plugin) => plugin.headConfig ?? [],
-  )
+  context.headTemplates = resolvePluginHeadTemplates(plugins)
+  context.headConfigTemplates = resolvePluginHeadConfigTemplates(plugins)
   await composePluginHooks(plugins).onConfigResolved?.(context)
 }

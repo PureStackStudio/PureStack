@@ -334,7 +334,7 @@ Plugins can supply a `head` template, with the same input as a page template and
 
 Metadata defaults compose through `headConfig({ site, pageInfo })` in plugin order, before explicit frontmatter `head` overrides and before head markup is rendered. It returns `BasicHeadConfig` or a promise. The SEO plugin uses this contribution for Open Graph, Twitter, canonical URLs, and translated alternate links; page templates receive the completed `headConfig`. Basic titles, descriptions, explicit head settings, and `index: false` enforcement remain in core.
 
-Auth hints, consent, and analytics are independent plugins in `ts-page-scripts`. The analytics plugin registers automatic GA4 consent services during `onConfigResolved`, before later config hooks and rendering. Omitting it removes automatic registration and direct tracking scripts. Explicitly configured consent services remain available. Analytics never bypasses enabled consent when the consent runtime plugin is omitted.
+Auth hints, consent, and analytics are independent plugins in `ts-page-scripts`. The analytics plugin contributes automatic GA4 consent services during configuration resolution, before any factory or lifecycle hook runs. Omitting it removes automatic registration and direct tracking scripts. Explicitly configured consent services remain available. Analytics never bypasses enabled consent when the consent runtime plugin is omitted.
 
 The theme plugin supplies `styles(config)`, which returns the `SiteStyles` writer used for full builds and lazy development assets. Only one plugin can supply it. Component, template, and default highlighter contributions marked `defaults: true` may be overridden by ordinary contributions; this flag controls merge precedence and never schedules hooks or factories. Conflicts within either group remain errors.
 
@@ -406,6 +406,51 @@ Plugins apply in order:
 - **Dev middleware** sees each dev server request, except live reload, before the site; the first plugin to send headers handles it. Builds ignore it.
 
 Each plugin is checked when the build starts. An unknown field or hook name, such as `onPageRender`, a value of the wrong type, two plugins sharing a name, or two plugins defining the same skin, component, template, or generated page fails the build with the plugin's name. For a single hook, pass an inline plugin: `{ name: 'site', hooks: { … } }`.
+
+### Plugin configuration
+
+Plugins contribute configuration through `config.resolve({ config, input, file })` and `config.finalize({ config, input, file })`. Both are optional and synchronous. Each returns an object to merge into the config; do not mutate the inputs. All resolvers run first in plugin order, applying configuration overrides. Then all finalizers run in plugin order, deriving dependent settings from the completed overrides. Finalizers should derive settings rather than change resolver inputs. Both phases finish before highlighters, Markdown processors, styles, search providers, components, and templates initialize. The analytics plugin finalizes its automatic GA4 service here, so later site resolvers can enable analytics, change its ID or category, or provide a manual service. The existing `onConfigResolved` hook still runs after factories, so it can customize initialized components and templates. Publishing applies its output-directory and minification overrides after configuration composition.
+
+Custom site settings belong under `extensions` in `siteConfig.json`. File values merge with programmatic input, which takes precedence. The standard JSON schema allows plugin namespaces here while continuing to reject unknown top-level fields. Each plugin owns validation, defaults, and normalization for its namespace. Other namespaces are preserved.
+
+```json
+{ "extensions": { "brand": { "label": "Acme" } } }
+```
+
+Use TypeScript module augmentation for typed settings:
+
+```ts
+import { definePlugin } from 'purestack'
+
+declare module '@purestack/ts-common' {
+  interface SiteExtensions {
+    brand?: { label: string }
+  }
+}
+
+export const brandPlugin = definePlugin({
+  name: 'brand',
+  config: {
+    resolve({ config }) {
+      const brand = config.extensions.brand
+      if (brand !== undefined &&
+          (brand === null || typeof brand !== 'object' ||
+           typeof brand.label !== 'string')) {
+        throw new Error('extensions.brand requires a string label.')
+      }
+      return { extensions: { brand: { label: brand?.label ?? 'Docs' } } }
+    },
+  },
+  components(config) {
+    // config.extensions.brand contains the normalized settings here.
+    return {}
+  },
+})
+```
+
+Raw `resolveSiteConfig(input)` resolves core settings and extension input. CLI and programmatic builds additionally compose their selected plugins' configuration contributions. Configuration contributions are synchronous and may run whenever a project configuration is resolved; keep file writes and other side effects in lifecycle hooks.
+
+Builder style state is isolated across asynchronous operations, including concurrent sites. Its owned theme options remain linked to `context.config.style.theme`, so in-place config-hook changes and `themes.setOptions` update page colors, CSS, and generated favicons consistently. Head, metadata, template, Markdown, provider, and lifecycle errors identify their owning plugin and preserve the original cause. Markdown wrappers preserve unified presets, duplicate-plugin option merging, and callback transforms.
 
 ### Code highlighting
 

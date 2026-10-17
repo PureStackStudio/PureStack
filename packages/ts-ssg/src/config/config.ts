@@ -17,6 +17,7 @@ import type {
   RobotsConfig,
   SiteConfig,
   SiteConfigInput,
+  SiteConfigResolver,
   SiteHtmlConfig,
   SiteLogoConfig,
   SiteMdxConfig,
@@ -32,7 +33,9 @@ import {
 } from '@purestack/ts-style'
 import type { DeepPartial } from '@purestack/ts-util'
 import {
+  clonePlainData,
   isPlainObject,
+  merge,
   normalizeBasePath,
   urlNormalizer,
 } from '@purestack/ts-util'
@@ -68,7 +71,10 @@ const DEFAULT_CONSENT_CATEGORIES: ConsentCategory[] = [
   },
 ]
 
-export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
+export function resolveSiteConfig(
+  input: SiteConfigInput = {},
+  resolvers: readonly SiteConfigResolver[] = [],
+): SiteConfig {
   const rootDir = input.rootDir ?? DEFAULT_ROOT
   const contentDir = input.contentDir ?? path.join(rootDir, 'sample-content')
   const fileConfig = loadSiteConfigFile(contentDir)
@@ -108,7 +114,14 @@ export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
   const preview = resolvePreviewConfig(input.preview, fileConfig.preview)
   const i18n = resolveI18nConfig(input.i18n, fileConfig.i18n)
   const mdx = resolveMdxConfig(input.mdx, fileConfig.mdx)
-  return {
+  for (const extensions of [fileConfig.extensions, input.extensions]) {
+    if (extensions !== undefined && !isPlainObject(extensions))
+      throw new Error('extensions must be an object of plugin settings.')
+  }
+  const config: SiteConfig = {
+    extensions: clonePlainData(
+      merge(fileConfig.extensions ?? {}, input.extensions),
+    ),
     rootDir,
     contentDir,
     outDir,
@@ -141,6 +154,22 @@ export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
     i18n,
     mdx,
   }
+  return applyConfigResolvers(config, resolvers, input, fileConfig)
+}
+
+export function applyConfigResolvers(
+  config: SiteConfig,
+  resolvers: readonly SiteConfigResolver[],
+  input: SiteConfigInput = {},
+  file: SiteConfigInput = {},
+): SiteConfig {
+  for (const resolve of resolvers) {
+    const contribution = resolve({ config, input, file })
+    if (!isPlainObject(contribution))
+      throw new Error('A configuration contribution must return an object.')
+    config = merge(config, clonePlainData(contribution))
+  }
+  return config
 }
 
 function resolveScriptsConfig(

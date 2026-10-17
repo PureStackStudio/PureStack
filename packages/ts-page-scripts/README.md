@@ -29,14 +29,16 @@ Three separate plugins from this package are also enabled by default:
 | --- | --- | --- |
 | `authStateHintPlugin()` | `purestack:auth-state-hint` | Apply the signed-in hint before stylesheets load, when auth is enabled |
 | `consentPlugin()` | `purestack:consent` | Initialize the consent browser runtime when consent is enabled |
-| `analyticsPlugin()` | `purestack:analytics` | Add direct GA4 scripts without consent, or register the consent-managed GA4 service during `onConfigResolved` |
+| `analyticsPlugin()` | `purestack:analytics` | Add direct GA4 scripts without consent, or contribute the consent-managed GA4 service during configuration resolution |
 
 Each factory can be selected independently of `pageScriptsPlugin()`. Omitting
 analytics removes automatic GA4 service registration as well as direct scripts;
 explicit user-defined consent services are preserved. When consent is enabled,
 analytics never bypasses it, including when the consent runtime plugin is omitted.
 The raw `resolveSiteConfig` result contains only explicitly configured consent
-services; automatic GA4 registration occurs when the analytics plugin initializes,
-before later config hooks and page rendering.
+services; automatic GA4 registration runs in `config.finalize`, after all
+configuration overrides and before
+styles, components, highlighters, search providers, and config hooks initialize.
+Omitting the analytics plugin also omits this contribution.
 
 For standalone `renderApp` calls, use `appendRuntimeScripts(document, runtimeEmbeds, frontmatter.embed)` from the renderer's `onRendered(document, runtimeEmbeds)` callback. The renderer itself has no knowledge of individual runtimes.

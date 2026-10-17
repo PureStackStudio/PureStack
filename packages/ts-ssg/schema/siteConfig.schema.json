@@ -4,6 +4,11 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Plugin-owned configuration namespaces. Each plugin validates and resolves its settings through its config contribution."
+    },
     "$schema": {
       "type": "string",
       "description": "JSON Schema file URL."

@@ -6,8 +6,10 @@ import type {
 import { h } from '@purestack/ts-html'
 import { buildThemeSwitchScript } from '@purestack/ts-page-scripts'
 import {
+  getStyleContext,
   registerNormalizeStyles,
   resolveThemeStyleLinks,
+  runWithStyleContext,
   styleBuilder,
   type ThemeOptions,
   themes,
@@ -38,7 +40,9 @@ export function themePlugin() {
 }
 
 function createSiteStyles(config: SiteConfig): SiteStyles {
+  const context = getStyleContext()
   themes.setOptions(config.style.theme)
+  config.style.theme = themes.getOptions()
   styleBuilder.reset()
   registerNormalizeStyles()
   registerDocLayoutStyles()
@@ -48,19 +52,21 @@ function createSiteStyles(config: SiteConfig): SiteStyles {
   })
   return {
     get revision() {
-      return styleBuilder.revision
+      return runWithStyleContext(context, () => styleBuilder.revision)
     },
     links: (cacheKey) =>
       resolveThemeStyleLinks(config.style.href, config.style.themes, cacheKey),
     write: (input) =>
-      writeStyles(
-        {
-          ...input,
-          includeHljsTheme:
-            !config.mdx.disableHighlighter &&
-            config.mdx.highlighter === 'highlightjs',
-        },
-        config.style,
+      runWithStyleContext(context, () =>
+        writeStyles(
+          {
+            ...input,
+            includeHljsTheme:
+              !config.mdx.disableHighlighter &&
+              config.mdx.highlighter === 'highlightjs',
+          },
+          config.style,
+        ),
       ),
   }
 }

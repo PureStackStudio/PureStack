@@ -1,4 +1,4 @@
-import { type DeepPartial, merge } from '@purestack/ts-util'
+import { clonePlainData, type DeepPartial, merge } from '@purestack/ts-util'
 import {
   registerSkin,
   type SkinPresetList,
@@ -6,6 +6,7 @@ import {
   type ThemeSkinName,
   themeSkins,
 } from './skins'
+import { getStyleContext } from './styleContext'
 import { normalizeThemeName, type ThemeName } from './themeAssets'
 import type { ThemePalette } from './themePalette'
 import { createThemePaletteVarBindings } from './themePaletteVars'
@@ -46,13 +47,10 @@ export const DEFAULT_THEME_OPTIONS: ThemeOptions = {
   },
 }
 
-let activeThemeOptions: ThemeOptions = DEFAULT_THEME_OPTIONS
-let activeThemePalettes = createThemePalettes(DEFAULT_THEME_OPTIONS)
-
 function resolveThemeOptions(
   ...values: Array<ThemeOptionsInput | undefined>
 ): ThemeOptions {
-  let merged = DEFAULT_THEME_OPTIONS
+  let merged = clonePlainData(DEFAULT_THEME_OPTIONS)
   for (const value of values) {
     if (!value) continue
     const skin = resolveSkinName(value.skin)
@@ -67,21 +65,28 @@ function resolveThemeOptions(
 }
 
 function setThemeOptions(options: ThemeOptions) {
-  activeThemeOptions = options
-  activeThemePalettes = createThemePalettes(options)
+  const context = getStyleContext()
+  // Keep a stable, owned object so the builder's config and theme stay linked.
+  const owned = getThemeOptions()
+  Object.assign(owned, clonePlainData(options))
+  context.palettes = createThemePalettes(owned)
 }
 
 function getThemeOptions(): ThemeOptions {
-  return activeThemeOptions
+  const context = getStyleContext()
+  context.options ??= clonePlainData(DEFAULT_THEME_OPTIONS)
+  return context.options
 }
 
 function getThemePalette(theme: ThemeName): ThemePalette {
-  return activeThemePalettes[resolveThemeMode(theme)]
+  const context = getStyleContext()
+  context.palettes ??= createThemePalettes(getThemeOptions())
+  return context.palettes[resolveThemeMode(theme)]
 }
 
 function getRawThemePalette(theme: ThemeName): ThemePalette {
   const mode = resolveThemeMode(theme)
-  return activeThemeOptions.palette[mode]
+  return getThemeOptions().palette[mode]
 }
 
 function resolveThemeMode(theme: ThemeName): ThemeMode {
@@ -107,7 +112,7 @@ function resolveThemeMode(theme: ThemeName): ThemeMode {
 
 function forEachTheme(run: (theme: ThemeMode, palette: ThemePalette) => void) {
   for (const theme of THEME_MODES) {
-    run(theme, activeThemePalettes[theme])
+    run(theme, getThemePalette(theme))
   }
 }
 
@@ -139,7 +144,7 @@ export const themes: Themes = {
   palette: (theme) => getThemePalette(theme),
   rawPalette: (theme) => getRawThemePalette(theme),
   forEach: (run) =>
-    forEachTheme((theme, palette) => run(theme, palette, activeThemeOptions)),
+    forEachTheme((theme, palette) => run(theme, palette, getThemeOptions())),
 }
 
 function mergeThemeOptions(

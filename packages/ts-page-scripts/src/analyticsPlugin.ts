@@ -3,7 +3,7 @@ import type {
   ConsentService,
   Ga4Config,
   PageTemplateInput,
-  SiteConfig,
+  SiteConfigResolution,
 } from '@purestack/ts-common'
 import { h } from '@purestack/ts-html'
 import { buildGa4Script } from './buildGa4Script'
@@ -12,14 +12,19 @@ import { buildGa4Script } from './buildGa4Script'
 export function analyticsPlugin() {
   return {
     name: 'purestack:analytics',
-    hooks: {
-      onConfigResolved({ config }: { config: SiteConfig }) {
-        if (config.consent.enabled)
-          config.consent.services = appendGa4ConsentService(
-            config.consent.services,
-            config.consent.categories,
-            config.analytics.ga4,
-          )
+    config: {
+      finalize({ config }: SiteConfigResolution) {
+        return {
+          consent: {
+            services: config.consent.enabled
+              ? appendGa4ConsentService(
+                  config.consent.services,
+                  config.consent.categories,
+                  config.analytics.ga4,
+                )
+              : config.consent.services,
+          },
+        }
       },
     },
     head({ head, site }: PageTemplateInput) {

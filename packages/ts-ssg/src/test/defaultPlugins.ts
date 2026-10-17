@@ -4,7 +4,9 @@ import { resolveHeadConfig } from '../build/head-config'
 import { type BuildContext, renderPageFromFile } from '../build/page'
 import { type RenderPageInput, renderPage } from '../build/renderer'
 import type { BuildHooks } from '../build/site'
+import { applyConfigResolvers } from '../config/config'
 import type { ResolvedContentFile } from '../i18n/content'
+import { resolvePluginConfigResolvers } from '../plugins/contributions'
 import {
   initializePluginContext,
   resolveBuildPlugins,
@@ -20,6 +22,10 @@ async function initialize(context: BuildContext) {
   const components = context.components
   const templates = context.templates
   const plugins = resolveBuildPlugins()
+  context.config = applyConfigResolvers(
+    context.config,
+    resolvePluginConfigResolvers(plugins),
+  )
   await initializePluginContext(context, plugins)
   context.mdx = {
     ...context.mdx,
@@ -54,13 +60,14 @@ export async function renderDefaultShell(input: RenderPageInput) {
   await initialize(context)
   const headConfig = merge(
     await resolveHeadConfig(
-      { site: input.site, pageInfo: input.pageInfo },
+      { site: context.config, pageInfo: input.pageInfo },
       context.headConfigTemplates,
     ),
     input.headConfig,
   )
   return renderPage({
     ...input,
+    site: context.config,
     headConfig,
     templates: context.templates,
     headTemplates: context.headTemplates,

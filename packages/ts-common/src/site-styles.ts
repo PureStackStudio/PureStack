@@ -7,7 +7,7 @@ export interface WriteStylesResult {
   signature: string
 }
 
-/** A plugin's stylesheet output, initialized before component factories. */
+/** A site's stylesheet output, initialized after config contributions and before component factories. */
 export interface SiteStyles {
   readonly revision: number
   links(cacheKey?: string): ThemeStylesheetLink[]

@@ -1,8 +1,6 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import type {
   MdxCodeHighlighter,
-  PageHeadConfigTemplate,
-  PageHeadTemplate,
   PageTemplateMap,
   SiteConfig,
   SiteMdxConfig,
@@ -11,271 +9,20 @@ import type {
 } from '@purestack/ts-common'
 import { registerSkin, type ThemeSkin, themeSkins } from '@purestack/ts-style'
 import { escapeHtml, isPlainObject } from '@purestack/ts-util'
-import type { PluggableList } from 'unified'
-import type { BuildHooks } from '../build/site'
-import type { ResolvedContentFile } from '../i18n/content'
-import { createContentProcessor } from '../mdx/compile'
+import { awaitPlugin, callPlugin } from './errors'
 
-/**
- * A named bundle of extensions for a PureStack site. Plugins compose in
- * order: skins, components, and templates merge by name, and each lifecycle
- * hook runs every plugin's handler in turn.
- */
-export interface PureStackPlugin {
-  /** Names the plugin in conflict and hook error messages. */
-  name: string
-  /** Components, templates, and the default highlighter supply defaults that ordinary contributions may override. */
-  defaults?: boolean
-  /** Theme skins the site config can select with `style.theme.skin`. */
-  skins?: Record<string, ThemeSkin>
-  /** Regor components, built from the resolved site config. */
-  components?: (config: SiteConfig) => Record<string, object>
-  /** Page templates, selected by the `template` frontmatter field. */
-  templates?: PageTemplateMap
-  /** Head template, composed before the selected page template. */
-  head?: PageHeadTemplate
-  /** Head defaults, composed before explicit page overrides and head templates. */
-  headConfig?: PageHeadConfigTemplate
-  /** The site's stylesheet provider, initialized before component factories. */
-  styles?: (config: SiteConfig) => SiteStyles
-  /** Search output, used for full builds and lazy development asset requests. */
-  search?: (config: SiteConfig) => SiteSearch
-  /** Markdown transforms and highlighter resolution for pages and shared partials. */
-  markdown?: PureStackMarkdown
-  /**
-   * Pages without files, such as tag or index pages. Runs whenever the
-   * site's content or assets change, so pages can follow other pages.
-   */
-  pages?: (
-    context: PageGenerationContext,
-  ) => GeneratedPage[] | Promise<GeneratedPage[]>
-  /**
-   * Sees every request the development server receives, before the site is
-   * served. Respond to handle it; otherwise the next plugin, then the site,
-   * handles it. Builds ignore it.
-   */
-  devMiddleware?: (
-    request: IncomingMessage,
-    response: ServerResponse,
-  ) => void | Promise<void>
-  /** Build lifecycle hooks. */
-  hooks?: BuildHooks
-}
+import type { PureStackPlugin } from './types'
 
-export interface PageGenerationContext {
-  config: SiteConfig
-  /** The site's content files; generated pages are not among them. */
-  files: readonly ResolvedContentFile[]
-}
-
-export interface GeneratedPage {
-  /**
-   * The content path the page takes, such as `blog/tags/regor.mdx`. Routes,
-   * links, navigation, and partials treat it like a file at that path.
-   */
-  path: string
-  /**
-   * Frontmatter and Markdown or Regor MDX, as a file would hold, or a
-   * function that returns it. PureStack never keeps what the function
-   * returns and calls it whenever it needs the text, so the plugin decides
-   * what to cache.
-   */
-  source: string | (() => string | Promise<string>)
-}
-
-export interface PureStackMarkdown {
-  /** Creates the site's default code highlighter once per build/session. */
-  createHighlighter?: (
-    config: Partial<SiteMdxConfig>,
-  ) => MdxCodeHighlighter | undefined | Promise<MdxCodeHighlighter | undefined>
-  /** Resolves a lowercase language (empty when absent); null lets the next highlighter handle it. */
-  resolveHighlighter?: (
-    lang: string,
-  ) =>
-    | MdxCodeHighlighter['codeToHtml']
-    | null
-    | Promise<MdxCodeHighlighter['codeToHtml'] | null>
-  /** Transform the Markdown tree, after Regor markup is restored. */
-  remarkPlugins?: PluggableList
-  /** Transform the HTML tree, before the outline and code highlighting. */
-  rehypePlugins?: PluggableList
-  /** Final HTML transforms after ordinary rehype plugins, before outline/highlighting. */
-  rehypePostPlugins?: PluggableList
-}
-
-export function definePlugin(plugin: PureStackPlugin): PureStackPlugin {
-  return plugin
-}
-
-const PLUGIN_FIELDS = [
-  'name',
-  'defaults',
-  'skins',
-  'components',
-  'templates',
-  'head',
-  'headConfig',
-  'styles',
-  'search',
-  'markdown',
-  'pages',
-  'devMiddleware',
-  'hooks',
-]
-const MARKDOWN_FIELDS = [
-  'remarkPlugins',
-  'rehypePlugins',
-  'rehypePostPlugins',
-  'resolveHighlighter',
-  'createHighlighter',
-]
-
-const HOOK_NAMES = [
-  'onConfigResolved',
-  'onContentDiscovered',
-  'onNavigationBuilt',
-  'onPageStart',
-  'onPageDocument',
-  'onPageRendered',
-  'onPageWritten',
-  'onStylesWritten',
-  'onBuildComplete',
-] as const satisfies readonly (keyof BuildHooks)[]
-
-// A built-in skin also backs the default theme, so a plugin replacing one
-// would apply only where a page selects it by name.
-const BUILT_IN_SKIN_NAMES = new Set(Object.keys(themeSkins))
-
-/**
- * Checks the shape of every plugin before the build uses it, so a typo such
- * as `onPageRender` fails with the plugin's name instead of being ignored.
- */
-export function assertValidPlugins(plugins: readonly PureStackPlugin[]) {
-  if (!Array.isArray(plugins)) {
-    throw new Error('`plugins` must be an array of plugins.')
-  }
-  const names = new Set<string>()
-  plugins.forEach((plugin: unknown, index) => {
-    if (!isPlainObject(plugin)) {
-      throw new Error(`Plugin ${index + 1} must be an object.`)
-    }
-    const { name } = plugin
-    if (typeof name !== 'string' || !name.trim()) {
-      throw new Error(`Plugin ${index + 1} needs a name.`)
-    }
-    if (names.has(name)) {
-      throw new Error(`The plugin "${name}" is listed more than once.`)
-    }
-    names.add(name)
-    assertPluginFields(name, plugin)
-  })
-}
-
-function assertPluginFields(name: string, plugin: Record<string, unknown>) {
-  const fail = (problem: string): never => {
-    throw new Error(`Plugin "${name}" ${problem}`)
-  }
-  for (const field of Object.keys(plugin)) {
-    if (!PLUGIN_FIELDS.includes(field)) {
-      fail(
-        `has an unknown field "${field}". Plugin fields: ${PLUGIN_FIELDS.join(', ')}.`,
-      )
-    }
-  }
-  const {
-    skins,
-    components,
-    templates,
-    markdown,
-    pages,
-    devMiddleware,
-    hooks,
-  } = plugin
-  if (plugin.defaults !== undefined && typeof plugin.defaults !== 'boolean')
-    fail('needs `defaults` to be a boolean.')
-  if (plugin.head !== undefined && typeof plugin.head !== 'function')
-    fail('needs `head` to be a head template.')
-  if (
-    plugin.headConfig !== undefined &&
-    typeof plugin.headConfig !== 'function'
-  )
-    fail('needs `headConfig` to be a head configuration template.')
-  if (plugin.styles !== undefined && typeof plugin.styles !== 'function')
-    fail('needs `styles` to be a stylesheet provider.')
-  if (plugin.search !== undefined && typeof plugin.search !== 'function')
-    fail('needs `search` to be a search provider.')
-  if (pages !== undefined && typeof pages !== 'function') {
-    fail('needs `pages` to be a function that returns pages.')
-  }
-  if (devMiddleware !== undefined && typeof devMiddleware !== 'function') {
-    fail('needs `devMiddleware` to be a function that handles requests.')
-  }
-  if (markdown !== undefined) {
-    if (!isPlainObject(markdown)) {
-      fail('needs `markdown` to be an object of remark and rehype plugins.')
-    }
-    for (const [field, list] of Object.entries(markdown as object)) {
-      if (!MARKDOWN_FIELDS.includes(field)) {
-        fail(
-          `has an unknown markdown field "${field}". Markdown fields: ${MARKDOWN_FIELDS.join(', ')}.`,
-        )
-      }
-      if (list === undefined) continue
-      if (
-        field === 'remarkPlugins' ||
-        field === 'rehypePlugins' ||
-        field === 'rehypePostPlugins'
-      ) {
-        if (!Array.isArray(list))
-          fail(`needs \`markdown.${field}\` to be a list of plugins.`)
-      } else if (typeof list !== 'function') {
-        fail(`needs \`markdown.${field}\` to be a function.`)
-      }
-    }
-  }
-  if (skins !== undefined) {
-    if (!isPlainObject(skins)) fail('needs `skins` to be an object of skins.')
-    for (const [skinName, skin] of Object.entries(skins as object)) {
-      if (!isPlainObject(skin) || typeof skin.create !== 'function') {
-        fail(`needs the skin "${skinName}" to have a create() function.`)
-      }
-      if (BUILT_IN_SKIN_NAMES.has(skinName)) {
-        fail(
-          `cannot replace the built-in skin "${skinName}". Give its skin another name.`,
-        )
-      }
-    }
-  }
-  if (components !== undefined && typeof components !== 'function') {
-    fail('needs `components` to be a function that returns components.')
-  }
-  if (templates !== undefined) {
-    if (!isPlainObject(templates)) {
-      fail('needs `templates` to be an object of templates.')
-    }
-    for (const [templateName, template] of Object.entries(
-      templates as object,
-    )) {
-      if (typeof template !== 'function') {
-        fail(`needs the template "${templateName}" to be a function.`)
-      }
-    }
-  }
-  if (hooks !== undefined) {
-    if (!isPlainObject(hooks)) fail('needs `hooks` to be an object of hooks.')
-    for (const [hookName, hook] of Object.entries(hooks as object)) {
-      if (!(HOOK_NAMES as readonly string[]).includes(hookName)) {
-        fail(
-          `has an unknown hook "${hookName}". Hooks: ${HOOK_NAMES.join(', ')}.`,
-        )
-      }
-      // Hooks are optional, so `undefined` turns one off conditionally.
-      if (hook !== undefined && typeof hook !== 'function') {
-        fail(`needs the hook "${hookName}" to be a function.`)
-      }
-    }
-  }
-}
+export { composePluginHooks } from './hooks'
+export { resolvePluginContentProcessor } from './markdown'
+export {
+  definePlugin,
+  type GeneratedPage,
+  type PageGenerationContext,
+  type PureStackMarkdown,
+  type PureStackPlugin,
+} from './types'
+export { assertValidPlugins } from './validation'
 
 /**
  * Runs `resolve` with every plugin skin registered. Skins are looked up only
@@ -310,7 +57,9 @@ export function resolvePluginComponents(
     plugins,
     'component',
     (plugin) => {
-      const components = plugin.components?.(config)
+      const components = callPlugin(plugin.name, 'components', () =>
+        plugin.components?.(config),
+      )
       if (components !== undefined && !isPlainObject(components)) {
         throw new Error(
           `Plugin "${plugin.name}" needs \`components\` to return an object of components.`,
@@ -325,7 +74,25 @@ export function resolvePluginComponents(
 export function resolvePluginTemplates(
   plugins: readonly PureStackPlugin[],
 ): PageTemplateMap {
-  return mergeByName(plugins, 'template', (plugin) => plugin.templates, true)
+  return mergeByName(
+    plugins,
+    'template',
+    (plugin) =>
+      plugin.templates &&
+      Object.fromEntries(
+        Object.entries(plugin.templates).map(([name, template]) => [
+          name,
+          async (input: Parameters<typeof template>[0]) =>
+            awaitPlugin(plugin.name, `templates.${name}`, async () => {
+              const result = await template(input)
+              if (!result || typeof result.toHtml !== 'function')
+                throw new Error('A page template must return an html node.')
+              return result
+            }),
+        ]),
+      ),
+    true,
+  )
 }
 
 export function resolvePluginStyles(
@@ -339,7 +106,9 @@ export function resolvePluginStyles(
     )
   }
   const provider = providers[0]
-  const styles = provider?.styles?.(config)
+  const styles =
+    provider &&
+    callPlugin(provider.name, 'styles', () => provider.styles?.(config))
   if (
     provider &&
     (!styles ||
@@ -351,18 +120,16 @@ export function resolvePluginStyles(
       `Plugin "${provider.name}" needs \`styles\` to return a stylesheet provider.`,
     )
   }
-  return styles
-}
-
-/** The build's content processor, with every plugin's remark and rehype plugins. */
-export function resolvePluginContentProcessor(
-  plugins: readonly PureStackPlugin[],
-) {
-  return createContentProcessor(
-    plugins.flatMap((plugin) => plugin.markdown?.remarkPlugins ?? []),
-    plugins.flatMap((plugin) => plugin.markdown?.rehypePlugins ?? []),
-    plugins.flatMap((plugin) => plugin.markdown?.rehypePostPlugins ?? []),
-  )
+  if (!styles || !provider) return undefined
+  return {
+    get revision() {
+      return callPlugin(provider.name, 'styles.revision', () => styles.revision)
+    },
+    links: (cacheKey?: string) =>
+      callPlugin(provider.name, 'styles.links', () => styles.links(cacheKey)),
+    write: (input: Parameters<SiteStyles['write']>[0]) =>
+      awaitPlugin(provider.name, 'styles.write', () => styles.write(input)),
+  }
 }
 
 /** Ordinary providers override defaults; competing providers fail before initialization. */
@@ -386,7 +153,7 @@ export async function createPluginHighlighter(
     owner = group[0] ?? owner
   }
   if (!owner) return undefined
-  try {
+  return awaitPlugin(owner.name, 'markdown.createHighlighter', async () => {
     const highlighter = await owner.markdown?.createHighlighter?.(config)
     if (
       highlighter !== undefined &&
@@ -395,14 +162,15 @@ export async function createPluginHighlighter(
       throw new Error(
         'markdown.createHighlighter must return a code highlighter or undefined.',
       )
-    return highlighter
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error)
-    throw new Error(
-      `Plugin "${owner.name}" failed in markdown.createHighlighter: ${message}`,
-      { cause: error },
+    return (
+      highlighter && {
+        codeToHtml: (code: string, lang?: string) =>
+          awaitPlugin(owner.name, 'markdown.createHighlighter.codeToHtml', () =>
+            highlighter.codeToHtml(code, lang),
+          ),
+      }
     )
-  }
+  })
 }
 
 export function resolvePluginSearch(
@@ -415,7 +183,9 @@ export function resolvePluginSearch(
       `Plugins "${providers[0].name}" and "${providers[1].name}" both define search.`,
     )
   const provider = providers[0]
-  const search = provider?.search?.(config)
+  const search =
+    provider &&
+    callPlugin(provider.name, 'search', () => provider.search?.(config))
   if (
     provider &&
     (!search ||
@@ -425,7 +195,15 @@ export function resolvePluginSearch(
     throw new Error(
       `Plugin "${provider.name}" needs search to return a search provider.`,
     )
-  return search
+  if (!search || !provider) return undefined
+  return {
+    ownsPath: (pathname: string) =>
+      callPlugin(provider.name, 'search.ownsPath', () =>
+        search.ownsPath(pathname),
+      ),
+    write: (input: Parameters<SiteSearch['write']>[0]) =>
+      awaitPlugin(provider.name, 'search.write', () => search.write(input)),
+  }
 }
 
 /** Tries plugin resolvers in order, then uses the default highlighter. */
@@ -433,16 +211,29 @@ export function resolvePluginHighlighter(
   plugins: readonly PureStackPlugin[],
   fallback: MdxCodeHighlighter | undefined,
 ): MdxCodeHighlighter | undefined {
-  const resolvers = plugins.flatMap(
-    (plugin) => plugin.markdown?.resolveHighlighter ?? [],
+  const resolvers = plugins.flatMap((plugin) =>
+    plugin.markdown?.resolveHighlighter
+      ? [{ plugin, resolve: plugin.markdown.resolveHighlighter }]
+      : [],
   )
   if (resolvers.length === 0) return fallback
   return {
     async codeToHtml(code, lang) {
       const normalizedLang = lang?.trim().toLowerCase() ?? ''
-      for (const resolve of resolvers) {
-        const highlighter = await resolve(normalizedLang)
-        if (highlighter !== null) return highlighter(code, lang)
+      for (const { plugin, resolve } of resolvers) {
+        const highlighter = await awaitPlugin(
+          plugin.name,
+          'markdown.resolveHighlighter',
+          () => resolve(normalizedLang),
+        )
+        if (highlighter !== null)
+          return awaitPlugin(plugin.name, 'markdown.resolveHighlighter', () => {
+            if (typeof highlighter !== 'function')
+              throw new Error(
+                'A highlighter resolver must return a function or null.',
+              )
+            return highlighter(code, lang)
+          })
       }
       if (fallback) return fallback.codeToHtml(code, lang)
       const language = lang ? ` class="language-${escapeHtml(lang, true)}"` : ''
@@ -461,54 +252,13 @@ export function composeDevMiddleware(plugins: readonly PureStackPlugin[]) {
   )
   return async (request: IncomingMessage, response: ServerResponse) => {
     for (const { plugin, handler } of handlers) {
-      try {
-        await handler(request, response)
-      } catch (error) {
-        const message = error instanceof Error ? error.message : String(error)
-        throw new Error(
-          `Plugin "${plugin.name}" failed in devMiddleware: ${message}`,
-          { cause: error },
-        )
-      }
+      await awaitPlugin(plugin.name, 'devMiddleware', () =>
+        handler(request, response),
+      )
       if (response.headersSent || response.writableEnded) return true
     }
     return false
   }
-}
-
-/** One set of hooks that runs each plugin's handlers in plugin order. */
-export function composePluginHooks(
-  plugins: readonly PureStackPlugin[],
-): BuildHooks {
-  const hooks: BuildHooks = {}
-  for (const name of HOOK_NAMES) {
-    const handlers = plugins.flatMap((plugin) => {
-      const handler = plugin.hooks?.[name]
-      return handler ? [{ plugin, handler }] : []
-    })
-    if (handlers.length === 0) continue
-    Object.assign(hooks, {
-      [name]: async (...args: unknown[]) => {
-        for (const { plugin, handler } of handlers) {
-          try {
-            // Called as a method of the plugin's hooks, as a build calls it.
-            await (handler as (...hookArgs: unknown[]) => unknown).apply(
-              plugin.hooks,
-              args,
-            )
-          } catch (error) {
-            const message =
-              error instanceof Error ? error.message : String(error)
-            throw new Error(
-              `Plugin "${plugin.name}" failed in ${name}: ${message}`,
-              { cause: error },
-            )
-          }
-        }
-      },
-    })
-  }
-  return hooks
 }
 
 function mergeByName<T>(

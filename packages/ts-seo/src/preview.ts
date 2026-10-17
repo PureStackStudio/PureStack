@@ -156,8 +156,10 @@ function resolveAbsoluteUrl(
 
 function normalizeBaseUrl(value: string | undefined): string | undefined {
   if (typeof value !== 'string') return undefined
-  const trimmed = value.trim().replace(/\/+$/, '')
-  return trimmed.length > 0 ? trimmed : undefined
+  const trimmed = value.trim()
+  let end = trimmed.length
+  while (end > 0 && trimmed[end - 1] === '/') end--
+  return end > 0 ? trimmed.slice(0, end) : undefined
 }
 
 function pickString(...values: Array<string | undefined>): string | undefined {

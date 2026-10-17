@@ -19,3 +19,12 @@ wraps tables in `div.table-scroll`, after ordinary custom rehype transforms and
 before outline collection and highlighting. Existing wrappers are preserved.
 Without the theme plugin, Markdown tables retain their original markup. This
 applies to Markdown, MDX, and shared Markdown partials.
+
+Palette and collected CSS state belong to the active builder's style context.
+The stylesheet provider retains that context for its revision and writer, even
+when another site is active. Lazy asset writes persist their stylesheet paths
+and signature to the build manifest.
+
+The resolved config and active theme share the builder's owned options object.
+In-place `context.config.style.theme` edits and `themes.setOptions` from config
+hooks update head colors, CSS variables, and favicon colors together.

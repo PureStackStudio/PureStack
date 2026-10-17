@@ -1,6 +1,13 @@
+import { AsyncLocalStorage } from 'node:async_hooks'
 import fsPromises from 'node:fs/promises'
 import path from 'node:path'
 import type { SiteConfig, WriteStylesResult } from '@purestack/ts-common'
+import {
+  createStyleContext,
+  runWithStyleContext,
+  type StyleContext,
+  useStyleScope,
+} from '@purestack/ts-style'
 import { toOutputAssetRelPath, toPosixPath } from '@purestack/ts-util'
 import { getLogger, type Logger } from 'logpot'
 import {
@@ -62,14 +69,20 @@ import type { IncrementalBuilder, IncrementalBuildResult } from './types'
 
 export type { IncrementalBuilder, IncrementalBuildResult } from './types'
 
+useStyleScope(new AsyncLocalStorage<StyleContext>())
+
 export async function createIncrementalBuilder(
   input: BuildInput = {},
 ): Promise<IncrementalBuilder> {
-  const runtime = await createIncrementalRuntime(input)
-  return runtime.toBuilder()
+  const styleContext = createStyleContext()
+  return runWithStyleContext(styleContext, async () => {
+    const runtime = await createIncrementalRuntime(input, styleContext)
+    return runtime.toBuilder()
+  })
 }
 
 interface IncrementalRuntimeOptions {
+  styleContext: StyleContext
   config: SiteConfig
   hooks: BuildHooks
   plugins: readonly PureStackPlugin[]
@@ -84,6 +97,7 @@ interface IncrementalRuntimeOptions {
 
 async function createIncrementalRuntime(
   input: BuildInput,
+  styleContext: StyleContext,
 ): Promise<IncrementalRuntime> {
   const buildOptions = input.options ?? {}
   const publishOptions = input.publish ?? {}
@@ -123,6 +137,7 @@ async function createIncrementalRuntime(
   }
 
   return new IncrementalRuntime({
+    styleContext,
     config,
     hooks,
     plugins,
@@ -215,15 +230,19 @@ class IncrementalRuntime {
   }
 
   toBuilder(): IncrementalBuilder {
+    const bind =
+      <A extends unknown[], R>(run: (...args: A) => R) =>
+      (...args: A): R =>
+        runWithStyleContext(this.options.styleContext, () => run(...args))
     return {
-      prepareForRequests: this.prepareForRequests,
-      buildAll: this.buildAll,
-      applyChange: this.applyChange,
-      applyChanges: this.applyChanges,
-      renderIfDirtyByOutPath: this.renderIfDirtyByOutPath,
-      renderByUrlPath: this.renderByUrlPath,
-      preparePageAssets: this.preparePageAssets,
-      prepareAssetByUrlPath: this.prepareAssetByUrlPath,
+      prepareForRequests: bind(this.prepareForRequests),
+      buildAll: bind(this.buildAll),
+      applyChange: bind(this.applyChange),
+      applyChanges: bind(this.applyChanges),
+      renderIfDirtyByOutPath: bind(this.renderIfDirtyByOutPath),
+      renderByUrlPath: bind(this.renderByUrlPath),
+      preparePageAssets: bind(this.preparePageAssets),
+      prepareAssetByUrlPath: bind(this.prepareAssetByUrlPath),
     }
   }
 
@@ -674,6 +693,7 @@ class IncrementalRuntime {
           signature: styles.signature,
           outputs: styles.outputs,
         }
+        await this.persistManifest()
       }
       this.preparedAssetRevision = revision
     })
