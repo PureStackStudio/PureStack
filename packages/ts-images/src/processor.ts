@@ -1,9 +1,11 @@
 import { createHash, randomUUID } from 'node:crypto'
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import { setTimeout } from 'node:timers/promises'
 import type { AssetSource } from '@purestack/ts-common'
 import { isPlainObject } from '@purestack/ts-util'
 import type sharpType from 'sharp'
+import { pruneImageCache, retireCacheEntry } from './cache'
 import type { ImagesConfig, ResolvedImagePreset } from './config'
 
 type OutputFormat = 'avif' | 'webp' | 'jpeg' | 'png'
@@ -62,6 +64,8 @@ export class ImageProcessor {
   private readonly inFlight = new Map<string, Promise<ProcessedImage>>()
   private backend: Promise<typeof sharpType> | undefined
   private cacheRoot: Promise<string> | undefined
+  private cacheMaintenance: Promise<void> | undefined
+  private nextCacheMaintenance = 0
 
   constructor(
     private readonly config: ImagesConfig,
@@ -184,7 +188,24 @@ export class ImageProcessor {
       this.cacheRoot = undefined
       throw error
     })
-    const directory = path.join(await this.cacheRoot, key)
+    const root = await this.cacheRoot
+    if (!this.cacheMaintenance && Date.now() >= this.nextCacheMaintenance) {
+      this.nextCacheMaintenance = Date.now() + 3_600_000
+      this.cacheMaintenance = pruneImageCache(
+        root,
+        this.config.cacheMaxAgeDays,
+        new Set([...this.inFlight.keys(), key]),
+      )
+        .catch((error) => {
+          this.nextCacheMaintenance = 0
+          throw error
+        })
+        .finally(() => {
+          this.cacheMaintenance = undefined
+        })
+    }
+    await this.cacheMaintenance
+    const directory = path.join(root, key)
     const directoryStat = await optionalStat(directory)
     if (directoryStat?.isSymbolicLink())
       throw new Error('Image cache entries must not be symlinks.')
@@ -197,7 +218,13 @@ export class ImageProcessor {
       })),
     )
     const cached = await readCache(directory, key, expected)
-    if (cached)
+    if (cached) {
+      const now = new Date()
+      await fs
+        .utimes(path.join(directory, 'manifest.json'), now, now)
+        .catch((error) => {
+          if (error.code !== 'ENOENT') throw error
+        })
       return {
         key,
         width,
@@ -207,6 +234,7 @@ export class ImageProcessor {
         sourceBytes: data.length,
         cache: 'hit',
       }
+    }
     const variants: ImageVariant[] = []
     for (const item of expected) {
       let pipeline = sharp(data, {
@@ -248,9 +276,6 @@ export class ImageProcessor {
         hash: digest(result.data),
       })
     }
-    await fs.mkdir(directory, { recursive: true })
-    for (const variant of variants)
-      await atomicWrite(path.join(directory, variant.file), variant.data)
     const manifest: CacheManifest = {
       version: 1,
       key,
@@ -260,13 +285,54 @@ export class ImageProcessor {
         width: variant.width,
         height: variant.height,
         bytes: variant.data.length,
-        hash: digest(variant.data),
+        hash: variant.hash,
       })),
     }
-    await atomicWrite(
-      path.join(directory, 'manifest.json'),
-      Buffer.from(JSON.stringify(manifest)),
-    )
+    // Encoding happens outside the cache. Publish only a complete immutable entry,
+    // so pruning and other builds cannot interrupt individual variant writes.
+    const temporary = path.join(root, `.purestack-images-${randomUUID()}.tmp`)
+    await fs.mkdir(temporary)
+    try {
+      for (const variant of variants)
+        await fs.writeFile(path.join(temporary, variant.file), variant.data)
+      await fs.writeFile(
+        path.join(temporary, 'manifest.json'),
+        JSON.stringify(manifest),
+      )
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          await fs.rename(temporary, directory)
+          break
+        } catch (error) {
+          if (
+            !['EEXIST', 'ENOTEMPTY', 'EPERM'].includes(
+              (error as NodeJS.ErrnoException).code ?? '',
+            )
+          )
+            throw error
+          // Another build may have published the same key while we encoded.
+          if (await readCache(directory, key, expected)) break
+          const stat = await optionalStat(directory)
+          if (stat?.isSymbolicLink())
+            throw new Error('Image cache entries must not be symlinks.')
+          try {
+            await retireCacheEntry(root, key)
+          } catch (error) {
+            if (
+              !['EPERM', 'EACCES', 'EBUSY'].includes(
+                (error as NodeJS.ErrnoException).code ?? '',
+              )
+            )
+              throw error
+            // Windows readers can briefly hold the old directory open. Cache
+            // publication is best effort; the encoded output is already complete.
+            await setTimeout(10 * (attempt + 1))
+          }
+        }
+      }
+    } finally {
+      await fs.rm(temporary, { recursive: true, force: true })
+    }
     return {
       key,
       width,
@@ -379,16 +445,6 @@ async function readCache(
     )
       return undefined
     throw error
-  }
-}
-
-async function atomicWrite(file: string, data: Uint8Array) {
-  const temporary = `${file}.${randomUUID()}.tmp`
-  try {
-    await fs.writeFile(temporary, data)
-    await fs.rename(temporary, file)
-  } finally {
-    await fs.rm(temporary, { force: true })
   }
 }
 

@@ -184,13 +184,13 @@ describe('dependency completion semantics', () => {
     expect(suggestions[1]).toEqual({
       componentName: 'BetaKebab',
       source: 'dependency',
-      filePath: fs.realpathSync(path.join(packageRoot, 'src', 'a.ts')),
+      filePath: fs.realpathSync.native(path.join(packageRoot, 'src', 'a.ts')),
       line: 1,
     })
     expect(suggestions[2]).toEqual({
       componentName: 'Gamma',
       source: 'dependency',
-      filePath: fs.realpathSync(path.join(packageRoot, 'src', 'z.ts')),
+      filePath: fs.realpathSync.native(path.join(packageRoot, 'src', 'z.ts')),
       line: 0,
     })
     expect(resolveComponentTarget(root, 'beta-kebab')).toEqual({

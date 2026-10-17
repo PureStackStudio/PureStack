@@ -445,6 +445,8 @@ describe('optional images plugin', () => {
     { widths: [] },
     { quality: { webp: 0 } },
     { concurrency: 0 },
+    { cacheMaxAgeDays: -1 },
+    { cacheMaxAgeDays: 1.5 },
     { formats: ['jpeg'] },
     { maxInputPixels: 0 },
     { extra: true },

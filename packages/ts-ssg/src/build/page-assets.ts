@@ -82,6 +82,7 @@ export class PageAssetManager {
     { hash: string; task: Promise<void> }
   >()
   private readonly hashes = new Map<string, string>()
+  private contentRoot: Promise<string> | undefined
   private work: Promise<unknown> = Promise.resolve()
   private reservedFor: BuildContext['contentRoutes'] | undefined
   private reserved = new Set<string>()
@@ -167,6 +168,7 @@ export class PageAssetManager {
   resetWrites() {
     this.hashes.clear()
     this.sourceOutputs.clear()
+    this.contentRoot = undefined
   }
 
   session(sourceRelPath: string): PageAssetSession | undefined {
@@ -203,7 +205,13 @@ export class PageAssetManager {
                 dependOn,
               )
               if (!resolved) return undefined
-              const root = await fs.realpath(this.context.config.contentDir)
+              this.contentRoot ??= fs
+                .realpath(this.context.config.contentDir)
+                .catch((error) => {
+                  this.contentRoot = undefined
+                  throw error
+                })
+              const root = await this.contentRoot
               const absPath = await fs.realpath(
                 path.resolve(root, resolved.relPath),
               )
@@ -239,14 +247,16 @@ export class PageAssetManager {
   }
 
   dependents(relPath: string) {
-    const key = relPath.replaceAll('\\', '/')
+    const key = fileKey(relPath.replaceAll('\\', '/'))
+    const dependsOn = (value: PageAssetReceipt) =>
+      value.dependencies.some((dependency) => fileKey(dependency) === key)
     return [
       ...new Set([
         ...[...this.pages]
-          .filter(([, value]) => value.dependencies.includes(key))
+          .filter(([, value]) => dependsOn(value))
           .map(([page]) => page),
         ...[...this.pending]
-          .filter(([value]) => value.dependencies.includes(key))
+          .filter(([value]) => dependsOn(value))
           .map(([, page]) => page),
       ]),
     ]

@@ -2,7 +2,7 @@ import fs from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
 import sharp from 'sharp'
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { imagePreset, resolveImagesConfig } from './config'
 import { ImageProcessor } from './processor'
 
@@ -12,6 +12,7 @@ describe('image processor and persistent cache', () => {
     root = await fs.mkdtemp(path.join(os.tmpdir(), 'purestack-image-test-'))
   })
   afterEach(async () => {
+    vi.restoreAllMocks()
     await fs.rm(root, { recursive: true, force: true })
   })
   const config = (options = {}) =>
@@ -71,7 +72,8 @@ describe('image processor and persistent cache', () => {
       first?.variants.map((variant) => variant.hash),
     )
     const file = path.join(settings.cacheDir, first?.key ?? '', fallback.file)
-    await fs.writeFile(file, 'Corrupt cache')
+    // Same-size corruption must still be detected by content verification.
+    await fs.writeFile(file, Buffer.alloc(fallback.data.length))
     expect(
       (await new ImageProcessor(settings).process(source(), settings))?.cache,
     ).toBe('miss')
@@ -233,5 +235,64 @@ describe('image processor and persistent cache', () => {
       new ImageProcessor(settings, [content]).process(source(), settings),
     ).rejects.toThrow('including symlink targets')
     expect(await fs.readdir(content)).toEqual([])
+  })
+
+  it('renews cache hits and prunes expired variants as source images change', async () => {
+    const settings = config({ widths: [16], formats: [], cacheMaxAgeDays: 1 })
+    const write = (background: string) =>
+      sharp({ create: { width: 32, height: 16, channels: 3, background } })
+        .png()
+        .toFile(source().absPath)
+    await write('red')
+    const first = await new ImageProcessor(settings).process(source(), settings)
+    if (!first) throw new Error('Expected image')
+    const manifest = path.join(settings.cacheDir, first.key, 'manifest.json')
+    const old = new Date(Date.now() - 3 * 86_400_000)
+    await fs.utimes(manifest, old, old)
+    // A requested entry is reused and renewed even if its prior age exceeded the limit.
+    expect(
+      (await new ImageProcessor(settings).process(source(), settings))?.cache,
+    ).toBe('hit')
+    expect((await fs.stat(manifest)).mtimeMs).toBeGreaterThan(old.getTime())
+    await fs.utimes(manifest, old, old)
+    await write('blue')
+    const next = await new ImageProcessor(settings).process(source(), settings)
+    expect(next?.key).not.toBe(first.key)
+    await expect(fs.stat(manifest)).rejects.toMatchObject({ code: 'ENOENT' })
+    expect(
+      (await new ImageProcessor(settings).process(source(), settings))?.cache,
+    ).toBe('hit')
+  })
+
+  it('publishes complete entries when independent processors share a cache, including corruption repair', async () => {
+    await sharp({
+      create: { width: 32, height: 16, channels: 3, background: 'green' },
+    })
+      .png()
+      .toFile(source().absPath)
+    const settings = config({ widths: [16], formats: ['webp'] })
+    const processTogether = () =>
+      Promise.all(
+        Array.from({ length: 4 }, () =>
+          new ImageProcessor(settings).process(source(), settings),
+        ),
+      )
+    const first = await processTogether()
+    expect(new Set(first.map((value) => value?.key)).size).toBe(1)
+    const value = first[0]
+    if (!value) throw new Error('Expected image')
+    await fs.writeFile(
+      path.join(settings.cacheDir, value.key, value.variants[0].file),
+      Buffer.alloc(value.variants[0].data.length),
+    )
+    const repaired = await processTogether()
+    for (const result of repaired)
+      expect(result?.variants.map((variant) => variant.hash)).toEqual(
+        value.variants.map((variant) => variant.hash),
+      )
+    expect(
+      (await new ImageProcessor(settings).process(source(), settings))?.cache,
+    ).toBe('hit')
+    expect(await fs.readdir(settings.cacheDir)).toEqual([value.key])
   })
 })

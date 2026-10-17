@@ -30,6 +30,8 @@ export interface ImagesOptions extends ImagePreset {
   include?: string[]
   exclude?: string[]
   cacheDir?: string
+  /** Remove entries unused for this many days; zero disables automatic cleanup. */
+  cacheMaxAgeDays?: number
   concurrency?: number
   maxInputPixels?: number
   maxSourceBytes?: number
@@ -41,6 +43,7 @@ export interface ImagesConfig extends ResolvedImagePreset {
   include: string[]
   exclude: string[]
   cacheDir: string
+  cacheMaxAgeDays: number
   concurrency: number
   maxInputPixels: number
   maxSourceBytes: number
@@ -99,6 +102,7 @@ export function resolveImagesConfig(
       'include',
       'exclude',
       'cacheDir',
+      'cacheMaxAgeDays',
       'concurrency',
       'maxInputPixels',
       'maxSourceBytes',
@@ -149,6 +153,13 @@ export function resolveImagesConfig(
     include: patterns(input.include, ['**/*'], 'images.include'),
     exclude: patterns(input.exclude, [], 'images.exclude'),
     cacheDir,
+    cacheMaxAgeDays: integer(
+      input.cacheMaxAgeDays,
+      30,
+      0,
+      36500,
+      'images.cacheMaxAgeDays',
+    ),
     concurrency: integer(input.concurrency, 2, 1, 16, 'images.concurrency'),
     maxInputPixels: integer(
       input.maxInputPixels,

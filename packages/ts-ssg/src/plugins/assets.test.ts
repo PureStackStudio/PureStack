@@ -119,6 +119,46 @@ describe('generic page assets', () => {
     )
   })
 
+  it('repairs same-size corrupted output instead of trusting its content-addressed filename', async () => {
+    const { input, outDir } = await fixture()
+    input.options = { ...input.options, cleanOutDir: false }
+    await buildSite(input)
+    const manifest = await readManifest(outDir)
+    const file = manifest?.pageAssets?.['a.md'].outputs[0].path
+    if (!file) throw new Error('Expected generated file')
+    await fs.writeFile(path.join(outDir, file), 'Other')
+    await buildSite(input)
+    expect(await fs.readFile(path.join(outDir, file), 'utf8')).toBe('First')
+  })
+
+  it.skipIf(process.platform !== 'win32')(
+    'recovers missing dependencies after a differently cased Windows watcher event',
+    async () => {
+      const { input, contentDir, outDir } = await fixture()
+      input.options = { ...input.options, writeErrorPages: true }
+      await fs.rm(path.join(contentDir, 'source.txt'))
+      const builder = await createIncrementalBuilder(input)
+      await builder.prepareForRequests()
+      await builder.renderByUrlPath('/a/')
+      expect(
+        await fs.readFile(path.join(outDir, 'a', 'index.html'), 'utf8'),
+      ).toContain('missing file')
+      await fs.writeFile(path.join(contentDir, 'source.txt'), 'Recovered')
+      await builder.applyChange(path.join(contentDir, 'SOURCE.TXT'))
+      expect(
+        await builder.renderIfDirtyByOutPath(
+          path.join(outDir, 'a', 'index.html'),
+        ),
+      ).toBe(true)
+      const manifest = await readManifest(outDir)
+      const file = manifest?.pageAssets?.['a.md'].outputs[0].path
+      if (!file) throw new Error('Expected generated output after recovery')
+      expect(await fs.readFile(path.join(outDir, file), 'utf8')).toBe(
+        'Recovered',
+      )
+    },
+  )
+
   it('restores dependency tracking from a manifest and cleans up when its processor is removed', async () => {
     const { input, contentDir, outDir } = await fixture()
     await fs.mkdir(path.join(contentDir, 'nested'))
