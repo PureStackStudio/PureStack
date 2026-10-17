@@ -1,4 +1,5 @@
 import type { PageContext } from '@purestack/ts-common'
+import { highlightPlugin } from '@purestack/ts-highlight'
 import { renderApp } from '@purestack/ts-render'
 import { describe, expect, it } from 'vitest'
 import { resolveMdxBuildOptions } from '../build/incremental/support'
@@ -20,7 +21,7 @@ describe('compileMarkdown', () => {
     })
 
     expect(html).toContain('<table>')
-    expect(html).toContain('<div class="table-scroll">')
+    expect(html).not.toContain('table-scroll')
     expect(html).toContain('<thead>')
     expect(html).toContain('<tbody>')
     expect(html).toContain('<th>Option</th>')
@@ -29,9 +30,12 @@ describe('compileMarkdown', () => {
 
   it('supports highlightjs backend', async () => {
     const source = '```ts\nconst x = 1\n```'
-    const mdx = await resolveMdxBuildOptions({
-      highlighter: 'highlightjs',
-    })
+    const mdx = await resolveMdxBuildOptions(
+      {
+        highlighter: 'highlightjs',
+      },
+      [highlightPlugin()],
+    )
     const html = await renderApp(
       (await compileMarkdown(source, mdx)).bodyHtml,
       {

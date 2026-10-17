@@ -17,6 +17,7 @@ import type {
   RobotsConfig,
   SiteConfig,
   SiteConfigInput,
+  SiteConfigResolver,
   SiteHtmlConfig,
   SiteLogoConfig,
   SiteMdxConfig,
@@ -32,7 +33,9 @@ import {
 } from '@purestack/ts-style'
 import type { DeepPartial } from '@purestack/ts-util'
 import {
+  clonePlainData,
   isPlainObject,
+  merge,
   normalizeBasePath,
   urlNormalizer,
 } from '@purestack/ts-util'
@@ -68,7 +71,10 @@ const DEFAULT_CONSENT_CATEGORIES: ConsentCategory[] = [
   },
 ]
 
-export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
+export function resolveSiteConfig(
+  input: SiteConfigInput = {},
+  resolvers: readonly SiteConfigResolver[] = [],
+): SiteConfig {
   const rootDir = input.rootDir ?? DEFAULT_ROOT
   const contentDir = input.contentDir ?? path.join(rootDir, 'sample-content')
   const fileConfig = loadSiteConfigFile(contentDir)
@@ -103,16 +109,19 @@ export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
     input.analytics,
     fileConfig.analytics,
   )
-  const consent = resolveConsentConfig(
-    input.consent,
-    fileConfig.consent,
-    analytics.ga4,
-  )
+  const consent = resolveConsentConfig(input.consent, fileConfig.consent)
   const pagefind = resolvePagefindConfig(input.pagefind, fileConfig.pagefind)
   const preview = resolvePreviewConfig(input.preview, fileConfig.preview)
   const i18n = resolveI18nConfig(input.i18n, fileConfig.i18n)
   const mdx = resolveMdxConfig(input.mdx, fileConfig.mdx)
-  return {
+  for (const extensions of [fileConfig.extensions, input.extensions]) {
+    if (extensions !== undefined && !isPlainObject(extensions))
+      throw new Error('extensions must be an object of plugin settings.')
+  }
+  const config: SiteConfig = {
+    extensions: clonePlainData(
+      merge(fileConfig.extensions ?? {}, input.extensions),
+    ),
     rootDir,
     contentDir,
     outDir,
@@ -145,6 +154,22 @@ export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
     i18n,
     mdx,
   }
+  return applyConfigResolvers(config, resolvers, input, fileConfig)
+}
+
+export function applyConfigResolvers(
+  config: SiteConfig,
+  resolvers: readonly SiteConfigResolver[],
+  input: SiteConfigInput = {},
+  file: SiteConfigInput = {},
+): SiteConfig {
+  for (const resolve of resolvers) {
+    const contribution = resolve({ config, input, file })
+    if (!isPlainObject(contribution))
+      throw new Error('A configuration contribution must return an object.')
+    config = merge(config, clonePlainData(contribution))
+  }
+  return config
 }
 
 function resolveScriptsConfig(
@@ -408,21 +433,17 @@ function resolveSitemapConfig(
 function resolveConsentConfig(
   input?: DeepPartial<ConsentConfig>,
   file?: DeepPartial<ConsentConfig>,
-  ga4?: Ga4Config,
 ): ConsentConfig {
   const enabled = input?.enabled ?? file?.enabled ?? false
   const categories = resolveConsentCategories(
     input?.categories,
     file?.categories,
   )
-  let services = resolveConsentServices(
+  const services = resolveConsentServices(
     input?.services,
     file?.services,
     categories,
   )
-  if (enabled) {
-    services = appendGa4ConsentService(services, categories, ga4)
-  }
   return {
     enabled,
     storageKey: resolveString(
@@ -731,52 +752,6 @@ function resolveConsentServices(
     seenServiceIds.add(id)
   }
   return services
-}
-
-function appendGa4ConsentService(
-  services: ConsentService[],
-  categories: ConsentCategory[],
-  ga4?: Ga4Config,
-) {
-  if (!ga4?.enabled || !ga4.measurementId) return services
-  const hasService = services.some((entry) => entry.id === ga4.serviceId)
-  if (hasService) return services
-  const hasCategory = categories.some(
-    (entry) => entry.id === ga4.consentCategory,
-  )
-  if (!hasCategory) {
-    throw new Error(
-      `analytics.ga4.consentCategory "${ga4.consentCategory}" does not exist in consent.categories.`,
-    )
-  }
-  return [
-    ...services,
-    {
-      id: ga4.serviceId,
-      category: ga4.consentCategory,
-      label: 'Google Analytics 4',
-      ga4MeasurementId: ga4.measurementId,
-      scripts: buildGa4ConsentScripts(ga4.measurementId),
-    },
-  ]
-}
-
-function buildGa4ConsentScripts(measurementId: string): ConsentScript[] {
-  const measurementIdLiteral = JSON.stringify(measurementId)
-  return [
-    {
-      src: `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`,
-      async: true,
-    },
-    {
-      content: [
-        'window.dataLayer = window.dataLayer || [];',
-        'function gtag(){dataLayer.push(arguments);}',
-        "gtag('js', new Date());",
-        `gtag('config', ${measurementIdLiteral});`,
-      ].join(' '),
-    },
-  ]
 }
 
 function resolveConsentServiceScripts(

@@ -1,12 +1,14 @@
 import type { PageContext } from '@purestack/ts-common'
 import { defineModalComponents } from '@purestack/ts-components'
+import {
+  createHljsHighlighter,
+  createMdxHighlighter,
+} from '@purestack/ts-highlight'
 import { ensureDomGlobals } from '@purestack/ts-minidom'
 import { renderApp } from '@purestack/ts-render'
 import { describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from '../config/config'
 import { normalizeFrontmatter } from '../frontmatter/frontmatter'
-import { createMdxHighlighter } from './highlight'
-import { createHljsHighlighter } from './highlightjs'
 import { compileMdx, compileMdxToHtml } from './mdx'
 
 describe('createMdxHighlighter', () => {
@@ -244,7 +246,7 @@ describe('compileMdxToHtml', () => {
     })
 
     expect(html).toContain('<table>')
-    expect(html).toContain('<div class="table-scroll">')
+    expect(html).not.toContain('table-scroll')
     expect(html).toContain('<thead>')
     expect(html).toContain('<tbody>')
     expect(html).toContain('<td>Bus</td>')

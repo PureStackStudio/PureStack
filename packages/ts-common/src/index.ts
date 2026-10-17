@@ -1,3 +1,9 @@
+export type { MdxCodeHighlighter } from './code-highlighter'
+export {
+  DEFAULT_CODE_LANGUAGES,
+  LANGUAGE_BY_EXTENSION,
+  normalizeCodeLanguage,
+} from './codeLanguages'
 export type {
   ConsentCategory,
   ConsentConfig,
@@ -33,6 +39,8 @@ export type {
   PageNavigationLinks,
 } from './navMenu-types'
 export type {
+  PageHeadConfigInput,
+  PageHeadConfigTemplate,
   PageHeadTemplate,
   PageInfo,
   PageTemplate,
@@ -56,7 +64,11 @@ export type {
   PreviewConfig,
   RobotsConfig,
   SiteConfig,
+  SiteConfigContributions,
   SiteConfigInput,
+  SiteConfigResolution,
+  SiteConfigResolver,
+  SiteExtensions,
   SiteHtmlConfig,
   SiteMdxConfig,
   SitemapConfig,
@@ -64,9 +76,12 @@ export type {
   SiteStyleConfig,
   SiteStyleConfigInput,
 } from './site-config-types'
+export type { SiteSearch } from './site-search'
 export type { SiteStyles, WriteStylesResult } from './site-styles'
 export type {
   PageContext,
   PageOutlineItem,
+  RuntimeEmbedPosition,
+  RuntimeEmbeds,
   TsSsgNavigation,
 } from './ts-ssg-context'

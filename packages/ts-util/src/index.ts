@@ -9,6 +9,7 @@ export {
 export { Base } from './base'
 export { Cache, type CacheOptions } from './cache'
 export { clamp } from './clamp'
+export { clonePlainData } from './clonePlainData'
 export { escapeHtml } from './escapeHtml'
 export { type LoggerLike, logError } from './logging'
 export { merge } from './merge'

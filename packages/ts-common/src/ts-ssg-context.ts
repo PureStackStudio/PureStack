@@ -13,6 +13,9 @@ export interface PageOutlineItem {
   children?: PageOutlineItem[]
 }
 
+export type RuntimeEmbedPosition = 'body' | 'head'
+export type RuntimeEmbeds = ReadonlyMap<string, RuntimeEmbedPosition>
+
 export interface TsSsgNavigation {
   folder?: string
   root?: string
@@ -35,5 +38,5 @@ export interface PageContext {
   resolvePublicHref: (href: string) => string
   recordScriptEntrypoint: (sourceRelPath: string) => void
   resolveScriptPublicPath?: (sourceRelPath: string) => string
-  recordRuntimeEmbed: (name: string, position: 'body' | 'head') => void
+  recordRuntimeEmbed: (name: string, position: RuntimeEmbedPosition) => void
 }

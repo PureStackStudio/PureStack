@@ -1,9 +1,9 @@
+import {
+  DEFAULT_CODE_LANGUAGES,
+  type MdxCodeHighlighter,
+  normalizeCodeLanguage,
+} from '@purestack/ts-common'
 import { createHighlighter, type Highlighter } from 'shiki'
-import { DEFAULT_CODE_LANGUAGES, normalizeCodeLanguage } from './codeLanguages'
-
-export interface MdxCodeHighlighter {
-  codeToHtml: (code: string, lang?: string) => string | Promise<string>
-}
 
 export type MdxShikiFactory = (
   options: Parameters<typeof createHighlighter>[0],

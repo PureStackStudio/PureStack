@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import type { SiteSearch } from '@purestack/ts-common'
 import { h } from '@purestack/ts-html'
 import { runInDom } from '@purestack/ts-minidom'
 import { styleBuilder, themes } from '@purestack/ts-style'
@@ -11,6 +12,7 @@ import { readManifest } from '../build/manifest'
 import { type BuildOptions, buildSite } from '../build/site'
 import { makeRepoTempDir } from '../test/repoTempDir'
 import {
+  authStateHintPlugin,
   componentsPlugin,
   pageScriptsPlugin,
   themePlugin,
@@ -69,7 +71,6 @@ describe('default plugins', () => {
         hooks: {
           onConfigResolved(context) {
             expect(context.components?.btn).toBe(replacement)
-            expect(context.templates?.doc).toBe(extension.templates?.doc)
             expect(context.components?.pageScript).toBeDefined()
             styleBuilder.select('.hook-style', 'light').color('blue')
           },
@@ -143,55 +144,76 @@ describe('default plugins', () => {
     ).toContain('<b>Context override</b>')
   })
 
-  it('keeps critical colors in sync with theme changes from config hooks', async () => {
-    const siteConfig = await project('# Home')
-    await buildSite({
-      siteConfig,
-      options: {
-        plugins: [
-          {
-            name: 'custom-colors',
-            hooks: {
-              onConfigResolved() {
-                const options = themes.getOptions()
-                themes.setOptions({
-                  ...options,
-                  palette: {
-                    ...options.palette,
-                    light: {
-                      ...options.palette.light,
-                      accent: '#123456',
-                      semanticTone: {
-                        ...options.palette.light.semanticTone,
-                        neutral: {
-                          ...options.palette.light.semanticTone.neutral,
-                          canvas: '#abcdef',
+  it.each(['config', 'themes'])(
+    'keeps critical colors, CSS, and favicon in sync with %s changes from config hooks',
+    async (source) => {
+      const siteConfig = await project('# Home')
+      await buildSite({
+        siteConfig: { ...siteConfig, favicon: 'tabler:cloud-storm' },
+        options: {
+          plugins: [
+            {
+              name: 'custom-colors',
+              hooks: {
+                onConfigResolved({ config }) {
+                  if (source === 'config') {
+                    config.style.theme.palette.light.accent = '#123456'
+                    config.style.theme.palette.light.semanticTone.neutral.canvas =
+                      '#abcdef'
+                    config.style.theme.palette.dark.accent = '#654321'
+                    return
+                  }
+                  const options = themes.getOptions()
+                  themes.setOptions({
+                    ...options,
+                    palette: {
+                      ...options.palette,
+                      dark: { ...options.palette.dark, accent: '#654321' },
+                      light: {
+                        ...options.palette.light,
+                        accent: '#123456',
+                        semanticTone: {
+                          ...options.palette.light.semanticTone,
+                          neutral: {
+                            ...options.palette.light.semanticTone.neutral,
+                            canvas: '#abcdef',
+                          },
                         },
                       },
                     },
-                  },
-                })
+                  })
+                },
               },
             },
-          },
-        ],
-      },
-    })
-    const output = await fs.readFile(
-      path.join(siteConfig.outDir, 'index.html'),
-      'utf8',
-    )
-    await runInDom(output, (document) => {
-      expect(
-        document
-          .querySelector('meta[name="theme-color"]')
-          ?.getAttribute('content'),
-      ).toBe('#123456')
-      expect(document.head.querySelector('style')?.textContent).toContain(
-        'background:#abcdef',
+          ],
+        },
+      })
+      const output = await fs.readFile(
+        path.join(siteConfig.outDir, 'index.html'),
+        'utf8',
       )
-    })
-  })
+      await runInDom(output, (document) => {
+        expect(
+          document
+            .querySelector('meta[name="theme-color"]')
+            ?.getAttribute('content'),
+        ).toBe('#123456')
+        expect(document.head.querySelector('style')?.textContent).toContain(
+          'background:#abcdef',
+        )
+      })
+      const manifest = await readManifest(siteConfig.outDir)
+      if (!manifest) throw new Error('Expected the stylesheet manifest')
+      const css = await fs.readFile(manifest.styles.outputs[0], 'utf8')
+      expect(css).toMatch(/--ps-accent:\s*#123456/)
+      expect(
+        await fs.readFile(
+          path.join(siteConfig.outDir, 'assets', 'favicon.svg'),
+          'utf8',
+        ),
+      ).toContain('#654321')
+    },
+  )
 
   it.each([true, false])(
     'runs the auth hint before stylesheet loading and other scripts (theme %s)',
@@ -204,6 +226,7 @@ describe('default plugins', () => {
           : {
               defaultPlugins: false,
               plugins: [
+                authStateHintPlugin(),
                 pageScriptsPlugin(),
                 {
                   name: 'plain',
@@ -510,6 +533,158 @@ describe('default plugins', () => {
         },
       }),
     ).rejects.toThrow('Plugins "first" and "second" both define styles.')
+    expect(calls).toBe(0)
+  })
+
+  it('generates the theme favicon after clean output preparation, including lazy requests', async () => {
+    const siteConfig = { ...(await project()), favicon: 'tabler:cloud-storm' }
+    await fs.mkdir(siteConfig.outDir, { recursive: true })
+    await fs.writeFile(path.join(siteConfig.outDir, 'stale.txt'), 'old')
+    const builder = await createIncrementalBuilder({
+      siteConfig,
+      options: { cleanOutDir: true },
+    })
+    await builder.buildAll('clean favicon')
+    await expect(
+      fs.access(path.join(siteConfig.outDir, 'stale.txt')),
+    ).rejects.toThrow()
+    const output = path.join(siteConfig.outDir, 'assets/favicon.svg')
+    expect(await fs.readFile(output, 'utf8')).toContain(
+      'icon-tabler-cloud-storm',
+    )
+    await fs.unlink(output)
+    const lazy = await createIncrementalBuilder({
+      siteConfig,
+      options: { cleanOutDir: true },
+    })
+    await lazy.prepareForRequests()
+    expect(await fs.readFile(output, 'utf8')).toContain(
+      'icon-tabler-cloud-storm',
+    )
+  })
+
+  it('keeps runtime embedding owned by the page scripts plugin', async () => {
+    const siteConfig = await project(
+      '---\nembed:\n  tabs: body\n  modal: head\n---\n# Home\n\n<Tabs><TabPane id="one">One</TabPane></Tabs>\n<Modal id="dialog">Dialog</Modal>',
+    )
+    await buildSite({
+      siteConfig,
+      options: {
+        defaultPlugins: false,
+        plugins: [themePlugin(), componentsPlugin()],
+      },
+    })
+    let output = await fs.readFile(
+      path.join(siteConfig.outDir, 'index.html'),
+      'utf8',
+    )
+    expect(output).not.toContain('window.tsSsgTabs')
+    expect(output).not.toContain('window.tsSsgModal')
+    await buildSite({
+      siteConfig,
+      options: {
+        plugins: [
+          {
+            name: 'inspect-runtimes',
+            hooks: {
+              onPageDocument(_context, page) {
+                expect(page.runtimeEmbeds.get('tabs')).toBe('head')
+                expect(page.runtimeEmbeds.get('modal')).toBe('head')
+                const scripts = [
+                  ...page.document.head.querySelectorAll('script'),
+                ].map((script) => script.textContent)
+                expect(
+                  scripts.some((source) => source?.includes('tsSsgTabs')),
+                ).toBe(true)
+                expect(
+                  scripts.some((source) => source?.includes('tsSsgModal')),
+                ).toBe(true)
+              },
+            },
+          },
+        ],
+      },
+    })
+    output = await fs.readFile(
+      path.join(siteConfig.outDir, 'index.html'),
+      'utf8',
+    )
+    expect(output).toContain('tsSsgTabs')
+    expect(output).toContain('tsSsgModal')
+  })
+
+  it('coordinates custom search providers for full builds and lazy revision changes', async () => {
+    const siteConfig = await project('# Public')
+    const hidden = path.join(siteConfig.contentDir, 'hidden.mdx')
+    await fs.writeFile(hidden, '---\nindex: false\n---\n# Hidden')
+    const writes: { excluded: string[]; only?: string[] }[] = []
+    const search: SiteSearch = {
+      ownsPath: (pathname) => pathname.startsWith('/custom-search/'),
+      async write(input) {
+        writes.push({
+          excluded: [...input.excludeFiles],
+          only: input.onlyFiles ? [...input.onlyFiles] : undefined,
+        })
+      },
+    }
+    const options = {
+      plugins: [{ name: 'purestack:pagefind', search: () => search }],
+    }
+    await buildSite({ siteConfig, options })
+    expect(writes).toHaveLength(1)
+    expect(writes[0].only).toBeUndefined()
+    expect(writes[0].excluded).toEqual([
+      path.join(siteConfig.outDir, 'hidden/index.html'),
+    ])
+    writes.length = 0
+    const builder = await createIncrementalBuilder({ siteConfig, options })
+    await builder.prepareForRequests()
+    await builder.renderByUrlPath('/')
+    await builder.renderByUrlPath('/hidden/')
+    expect(await builder.prepareAssetByUrlPath('/pagefind/pagefind.js')).toBe(
+      false,
+    )
+    await Promise.all([
+      builder.prepareAssetByUrlPath('/custom-search/index.js'),
+      builder.prepareAssetByUrlPath('/custom-search/index.js'),
+    ])
+    expect(writes).toHaveLength(1)
+    expect(writes[0].only?.sort()).toEqual(
+      [
+        path.join(siteConfig.outDir, 'hidden/index.html'),
+        path.join(siteConfig.outDir, 'index.html'),
+      ].sort(),
+    )
+    expect(writes[0].excluded).toEqual([
+      path.join(siteConfig.outDir, 'hidden/index.html'),
+    ])
+    await fs.unlink(hidden)
+    await builder.applyChange(hidden)
+    await builder.prepareAssetByUrlPath('/custom-search/index.js')
+    expect(writes).toHaveLength(2)
+    expect(writes[1].only).toEqual([path.join(siteConfig.outDir, 'index.html')])
+    expect(writes[1].excluded).toEqual([])
+  })
+
+  it('rejects competing search providers before initializing either', async () => {
+    const siteConfig = await project()
+    let calls = 0
+    const search = (): SiteSearch => {
+      calls++
+      return { ownsPath: () => false, write: async () => {} }
+    }
+    await expect(
+      buildSite({
+        siteConfig,
+        options: {
+          defaultPlugins: false,
+          plugins: [
+            { name: 'first', search },
+            { name: 'second', search },
+          ],
+        },
+      }),
+    ).rejects.toThrow('Plugins "first" and "second" both define search.')
     expect(calls).toBe(0)
   })
 })

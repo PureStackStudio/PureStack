@@ -1,13 +1,21 @@
 export type {
+  MdxCodeHighlighter,
   PageContext,
   PageFrontmatter,
+  PageHeadConfigInput,
+  PageHeadConfigTemplate,
   PageHeadTemplate,
   PageInfo,
   PageTemplate,
   PageTemplateInput,
   PageTemplateMap,
   SiteConfig,
+  SiteConfigContributions,
   SiteConfigInput,
+  SiteConfigResolution,
+  SiteConfigResolver,
+  SiteExtensions,
+  SiteSearch,
   SiteStyles,
   WriteStylesResult,
 } from '@purestack/ts-common'
@@ -41,24 +49,21 @@ export {
 } from './frontmatter/frontmatter'
 export type { ResolvedContentFile } from './i18n/content'
 export {
-  createMdxHighlighter,
-  DEFAULT_MDX_CODE_LANGS,
-  DEFAULT_MDX_CODE_THEMES,
-  type MdxCodeHighlighter,
-  type MdxCodeLangs,
-  type MdxCodeThemes,
-  type MdxShikiFactory,
-} from './mdx/highlight'
-export {
   buildNavigation,
   type NavigationTree,
   resolveNavigationConfig,
   resolvePageNavigation,
 } from './navigation/navigation'
 export {
+  analyticsPlugin,
+  authStateHintPlugin,
   componentsPlugin,
+  consentPlugin,
   createDefaultPlugins,
+  highlightPlugin,
+  pagefindPlugin,
   pageScriptsPlugin,
+  seoPlugin,
   themePlugin,
 } from './plugins/default-plugins'
 export {

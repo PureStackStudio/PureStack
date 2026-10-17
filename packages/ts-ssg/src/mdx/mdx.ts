@@ -14,14 +14,7 @@ import {
   restoreRegorMarkup,
 } from './regorMarkup'
 
-export {
-  DEFAULT_MDX_CODE_LANGS,
-  DEFAULT_MDX_CODE_THEMES,
-  type MdxCodeHighlighter,
-  type MdxCodeLangs,
-  type MdxCodeThemes,
-  type MdxShikiFactory,
-} from './highlight'
+export type { MdxCodeHighlighter } from '@purestack/ts-common'
 
 export type { MdxCompileResult, MdxRenderOptions }
 

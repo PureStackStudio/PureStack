@@ -1,6 +1,6 @@
 {
   "name": "@purestack/ts-render",
-  "version": "1.1.14",
+  "version": "1.1.15",
   "packageManager": "yarn@4.9.2",
   "module": "./dist/ts-render.mjs",
   "types": "./dist/ts-render.d.mts",
@@ -41,7 +41,6 @@
   "dependencies": {
     "@purestack/ts-common": "workspace:^",
     "@purestack/ts-minidom": "workspace:^",
-    "@purestack/ts-page-scripts": "workspace:^",
     "@purestack/ts-util": "workspace:^",
     "regor": "^1.7.5"
   }

@@ -314,19 +314,29 @@ order, inherit into child folders, and skip external URLs.
 
 A plugin is a named bundle of extensions: skins, components, templates, Markdown transforms, generated pages, build hooks, and dev server middleware. The [Plugins guide](https://purestack.studio/guides/extending/plugins/) walks through each part.
 
-Three plugins provide the standard site features and are enabled automatically for builds, publishing, and the development server:
+Nine plugins provide the standard site features and are enabled automatically for builds, publishing, and the development server:
 
 | Package | Factory | Features |
 | --- | --- | --- |
 | `@purestack/ts-components` | `componentsPlugin()` | Standard Regor components, SVG icons, and component styles |
-| `@purestack/ts-theme` | `themePlugin()` | `doc` and `splash` layouts, theme CSS files and links, critical colors, and theme switching |
-| `@purestack/ts-page-scripts` | `pageScriptsPlugin()` | Auth hint, consent and analytics, menus, code copying, search UI, and table of contents runtimes |
+| `@purestack/ts-theme` | `themePlugin()` | `doc` and `splash` layouts, theme CSS files and links, critical colors, theme switching, generated favicons, and Markdown table presentation |
+| `@purestack/ts-page-scripts` | `pageScriptsPlugin()` | Menus, code copying, search UI, table of contents, Tabs, and Modal runtimes |
+| `@purestack/ts-page-scripts` | `authStateHintPlugin()` | Early signed-in state hint |
+| `@purestack/ts-page-scripts` | `consentPlugin()` | Consent browser runtime |
+| `@purestack/ts-page-scripts` | `analyticsPlugin()` | Direct or consent-managed GA4 integration |
+| `@purestack/ts-seo` | `seoPlugin()` | Social previews, canonical URLs, and translated alternate links |
+| `@purestack/ts-highlight` | `highlightPlugin()` | Shiki and highlight.js backends and configured default selection |
+| `@purestack/ts-pagefind` | `pagefindPlugin()` | Full-build and lazy development search indexing |
 
 These factories and `createDefaultPlugins()` are also exported from `@purestack/ts-ssg` and `purestack`. The stylesheet provider initializes before component factories. Components and templates resolve before every plugin's `onConfigResolved` hook runs in plugin order. Names do not change that order. Components are scoped to each build; config hooks can override them through `context.components`.
 
 Plugins can supply a `head` template, with the same input as a page template and a `TSNode<'head'>` result. Head templates compose in plugin order before the page template, so page templates can inspect or change the complete head. The lifecycle hook set is unchanged.
 
-The theme plugin supplies `styles(config)`, which returns the `SiteStyles` writer used for full builds and lazy development assets. Only one plugin can supply it. Component and template contributions marked `defaults: true` may be overridden by ordinary contributions; this flag controls merge precedence and never schedules hooks or factories. Conflicts within either group remain errors.
+Metadata defaults compose through `headConfig({ site, pageInfo })` in plugin order, before explicit frontmatter `head` overrides and before head markup is rendered. It returns `BasicHeadConfig` or a promise. The SEO plugin uses this contribution for Open Graph, Twitter, canonical URLs, and translated alternate links; page templates receive the completed `headConfig`. Basic titles, descriptions, explicit head settings, and `index: false` enforcement remain in core.
+
+Auth hints, consent, and analytics are independent plugins in `ts-page-scripts`. The analytics plugin contributes automatic GA4 consent services during configuration resolution, before any factory or lifecycle hook runs. Omitting it removes automatic registration and direct tracking scripts. Explicitly configured consent services remain available. Analytics never bypasses enabled consent when the consent runtime plugin is omitted.
+
+The theme plugin supplies `styles(config)`, which returns the `SiteStyles` writer used for full builds and lazy development assets. Only one plugin can supply it. Component, template, and default highlighter contributions marked `defaults: true` may be overridden by ordinary contributions; this flag controls merge precedence and never schedules hooks or factories. Conflicts within either group remain errors.
 
 To choose the integrations explicitly, set `defaultPlugins: false` in `purestack.config.ts` (or `options.defaultPlugins` programmatically):
 
@@ -339,7 +349,7 @@ export default defineConfig({
 })
 ```
 
-This keeps the standard layouts and components while omitting the page runtimes. Theme switching stays with the theme plugin, and component-specific Tabs/Modal embeds still follow each page's `embed` settings. Without the theme plugin, provide templates through another plugin. Extension templates and components can still override the standard ones. Explicitly listing a standard plugin while defaults are enabled replaces that plugin by name without adding a second instance; it retains its initialization position. Duplicate names within the supplied plugin list are errors.
+This keeps the standard layouts and components while omitting automatic social metadata, page runtimes, code highlighting, and search indexing. Theme switching, generated favicons, and Markdown table wrappers stay with the theme plugin. Tabs and Modal embeds belong to the page scripts plugin and are omitted with it. Without the theme plugin, provide templates through another plugin. Extension templates and components can still override the standard ones. Explicitly listing a standard plugin while defaults are enabled replaces that plugin by name without adding a second instance; it retains its initialization position. Duplicate names within the supplied plugin list are errors.
 
 A site lists its plugins in `purestack.config.ts`, next to `siteConfig.json`, and the CLI loads it:
 
@@ -390,12 +400,57 @@ Plugins apply in order:
 - **Skins** are available while the site config resolves, so `style.theme.skin` can select one; they are removed afterwards and never leak into another build. A plugin skin cannot reuse a built-in skin's name, such as `standard`.
 - **Components** are built from the resolved site config and may replace built-in components by name.
 - **Templates** may replace the built-in `doc` and `splash` templates by name.
-- **Markdown** remark and rehype plugins run in plugin order on every page and shared header or footer: remark on the Markdown tree, then rehype on the HTML tree, before outline collection and code highlighting. Regor markup reaches them as raw HTML nodes, and `file.path` is the content path with forward slashes.
+- **Markdown** remark and rehype plugins run in plugin order on every page and shared header or footer: remark on the Markdown tree, then rehype on the HTML tree, followed by `rehypePostPlugins` for final presentation, before outline collection and code highlighting. Regor markup reaches them as raw HTML nodes, and `file.path` is the content path with forward slashes.
 - **Pages** generators return `{ path, source }` pages that build like files at those content paths. `source` is the text, or a function PureStack calls whenever it needs the text, without keeping what it returns. They see the site's content files, run on every build, and run again in the dev server whenever content or assets change; pages no longer generated are removed.
 - **Hooks** run every plugin's handler for each lifecycle event, one after another. An error names the plugin it came from.
 - **Dev middleware** sees each dev server request, except live reload, before the site; the first plugin to send headers handles it. Builds ignore it.
 
 Each plugin is checked when the build starts. An unknown field or hook name, such as `onPageRender`, a value of the wrong type, two plugins sharing a name, or two plugins defining the same skin, component, template, or generated page fails the build with the plugin's name. For a single hook, pass an inline plugin: `{ name: 'site', hooks: { … } }`.
+
+### Plugin configuration
+
+Plugins contribute configuration through `config.resolve({ config, input, file })` and `config.finalize({ config, input, file })`. Both are optional and synchronous. Each returns an object to merge into the config; do not mutate the inputs. All resolvers run first in plugin order, applying configuration overrides. Then all finalizers run in plugin order, deriving dependent settings from the completed overrides. Finalizers should derive settings rather than change resolver inputs. Both phases finish before highlighters, Markdown processors, styles, search providers, components, and templates initialize. The analytics plugin finalizes its automatic GA4 service here, so later site resolvers can enable analytics, change its ID or category, or provide a manual service. The existing `onConfigResolved` hook still runs after factories, so it can customize initialized components and templates. Publishing applies its output-directory and minification overrides after configuration composition.
+
+Custom site settings belong under `extensions` in `siteConfig.json`. File values merge with programmatic input, which takes precedence. The standard JSON schema allows plugin namespaces here while continuing to reject unknown top-level fields. Each plugin owns validation, defaults, and normalization for its namespace. Other namespaces are preserved.
+
+```json
+{ "extensions": { "brand": { "label": "Acme" } } }
+```
+
+Use TypeScript module augmentation for typed settings:
+
+```ts
+import { definePlugin } from 'purestack'
+
+declare module '@purestack/ts-common' {
+  interface SiteExtensions {
+    brand?: { label: string }
+  }
+}
+
+export const brandPlugin = definePlugin({
+  name: 'brand',
+  config: {
+    resolve({ config }) {
+      const brand = config.extensions.brand
+      if (brand !== undefined &&
+          (brand === null || typeof brand !== 'object' ||
+           typeof brand.label !== 'string')) {
+        throw new Error('extensions.brand requires a string label.')
+      }
+      return { extensions: { brand: { label: brand?.label ?? 'Docs' } } }
+    },
+  },
+  components(config) {
+    // config.extensions.brand contains the normalized settings here.
+    return {}
+  },
+})
+```
+
+Raw `resolveSiteConfig(input)` resolves core settings and extension input. CLI and programmatic builds additionally compose their selected plugins' configuration contributions. Configuration contributions are synchronous and may run whenever a project configuration is resolved; keep file writes and other side effects in lifecycle hooks.
+
+Builder style state is isolated across asynchronous operations, including concurrent sites. Its owned theme options remain linked to `context.config.style.theme`, so in-place config-hook changes and `themes.setOptions` update page colors, CSS, and generated favicons consistently. Head, metadata, template, Markdown, provider, and lifecycle errors identify their owning plugin and preserve the original cause. Markdown wrappers preserve unified presets, duplicate-plugin option merging, and callback transforms.
 
 ### Code highlighting
 
@@ -417,57 +472,44 @@ The resolver can be synchronous or asynchronous and receives the trimmed, lowerc
 
 Custom callbacks also work when `mdx.disableHighlighter` is `true`. In that case, if all resolvers return `null`, the source is HTML-escaped and displayed in a plain `<pre><code>` block without syntax highlighting.
 
-#### Backend factories
+#### Default highlighter provider
 
-Use `markdown.createShiki(options)` or `markdown.createHighlightJs()` to create the default backend instance. Both factories can return an instance synchronously or asynchronously. Only the selected backend's factory runs, once when a build or dev server initializes its highlighter. If no factory is provided, PureStack uses its built-in factory. Factories are skipped when `mdx.disableHighlighter` is `true`. Two plugins providing a factory for the selected backend fail with both plugin names.
+The default `highlightPlugin()` comes from `@purestack/ts-highlight`. It selects Shiki or highlight.js from `mdx.highlighter`, initializes the selected backend once, and skips creation when `mdx.disableHighlighter` is true. Its adapters preserve language aliases, tagged TypeScript templates, and light/dark themes.
 
-The Shiki factory receives the native creation options containing PureStack's default languages and light/dark themes. Extend those options to add a TextMate grammar:
+To configure the native Shiki factory, replace the default plugin:
 
 ```ts
-import { definePlugin } from '@purestack/ts-ssg'
+import { highlightPlugin } from '@purestack/ts-highlight'
+import { defineConfig } from '@purestack/ts-ssg'
 import { createHighlighter } from 'shiki'
 import grammar from './mylang.tmLanguage.json' with { type: 'json' }
 
-export const languagePlugin = definePlugin({
-  name: 'mylang',
-  markdown: {
+export default defineConfig({
+  plugins: [highlightPlugin({
     createShiki: (options) => createHighlighter({
       ...options,
       langs: [...options.langs, grammar],
     }),
-  },
+  })],
 })
 ```
 
-The highlight.js factory returns a configured `HLJSApi` instance. A fresh instance starts without languages, so register the languages your site needs:
+The same plugin accepts `createHighlightJs()`, which returns a configured highlight.js instance synchronously or asynchronously. Use `hljs.newInstance()` and register the grammars you need to avoid mutating the shared registry. Backend-specific factories belong to `HighlightPluginOptions`; the SSG plugin API uses the backend-independent `markdown.createHighlighter(config)` contract.
 
-```ts
-import { definePlugin } from '@purestack/ts-ssg'
-import hljs from 'highlight.js'
-import typescript from 'highlight.js/lib/languages/typescript'
-import myLanguage from './mylang'
+A custom `markdown.createHighlighter` receives the MDX configuration and returns an object with `codeToHtml(code, lang?)`, or `undefined` to leave source unhighlighted. An ordinary provider replaces the default without initializing it. Competing providers in the same precedence group fail before either initializes. Per-language `resolveHighlighter(lang)` callbacks still run before the selected provider.
 
-export const languagePlugin = definePlugin({
-  name: 'mylang',
-  markdown: {
-    createHighlightJs: () => {
-      const instance = hljs.newInstance()
-      instance.registerLanguage('typescript', typescript)
-      instance.registerLanguage('mylang', myLanguage)
-      return instance
-    },
-  },
-})
-```
+### Search providers
 
-These factories provide native backend instances for the default HTML adapters. `resolveHighlighter(lang)` still runs first for each code block; its returned callback takes precedence over the configured backend.
+The default `pagefindPlugin()` comes from `@purestack/ts-pagefind` and supplies `search(config): SiteSearch`. The builder calls its `write({ outDir, excludeFiles, onlyFiles })` method after a full build and when its `ownsPath(pathname)` matches a lazy development request. `excludeFiles` contains the output paths excluded by `index: false`; `onlyFiles` limits lazy indexing to pages rendered in this session. The builder coordinates revisions and concurrent requests, so content edits and deletions invalidate search output.
+
+Only one search provider may be installed. Replace `purestack:pagefind` by name, or set `defaultPlugins: false` and supply your own provider. A provider uses decoded URLs relative to the site's base path. Pagefind continues to honor `pagefind.enabled`, exclusions, output cleanup, and its existing warning behavior. The browser search runtime remains owned by `ts-page-scripts`.
 
 ### Hooks
 
 Every page render, in a full build or a dev server re-render, runs the page hooks:
 
 - `onPageStart(context, file)`: before the page renders.
-- `onPageDocument(context, page)`: on the rendered document, before it becomes HTML and before its links resolve. `page` holds the `document`, `file`, `frontmatter`, and `urlPath`. The hook may await: the document, and the global `document` with it, stay this page's while other pages render.
+- `onPageDocument(context, page)`: on the rendered document, before it becomes HTML and before its links resolve. `page` holds the `document`, `file`, `frontmatter`, `urlPath`, and recorded `runtimeEmbeds`. The hook may await: the document, and the global `document` with it, stay this page's while other pages render.
 - `onPageRendered(context, page)`: after it becomes HTML; changes to `page.html` are written.
 - `onPageWritten(context, page)`: after the HTML file is written.
 
@@ -700,7 +742,7 @@ Functions:
 - `resolveSiteConfig`
 - `normalizeFrontmatter`, `parseFrontmatterSource`
 - `buildNavigation`, `resolveNavigationConfig`, `resolvePageNavigation`
-- `createMdxHighlighter`, `DEFAULT_MDX_CODE_LANGS`, `DEFAULT_MDX_CODE_THEMES`
+- `highlightPlugin`, `pagefindPlugin`; backend helpers such as `createMdxHighlighter` are exported by `@purestack/ts-highlight`
 - `defaultTemplates`, `resolvePageTemplate`
 
 Types:

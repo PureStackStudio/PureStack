@@ -9,6 +9,8 @@ import type { SiteLogoConfig } from './logo-types'
 import type { NavigationConfig } from './navMenu-types'
 
 export interface SiteConfig {
+  /** Plugin-owned settings, normalized by their configuration contributions. */
+  extensions: SiteExtensions
   rootDir: string
   contentDir: string
   outDir: string
@@ -31,6 +33,11 @@ export interface SiteConfig {
   preview: PreviewConfig
   i18n: I18nConfig
   mdx: SiteMdxConfig
+}
+
+/** Plugins may augment this interface with optional, typed namespaces. */
+export interface SiteExtensions {
+  [plugin: string]: unknown
 }
 
 export interface DocLayoutConfig {
@@ -146,4 +153,21 @@ export type SiteStyleConfigInput = DeepPartial<
 
 export type SiteConfigInput = DeepPartial<Omit<SiteConfig, 'style'>> & {
   style?: SiteStyleConfigInput
+}
+
+/** Inputs for a pure configuration contribution, before build factories run. */
+export interface SiteConfigResolution {
+  config: SiteConfig
+  input: SiteConfigInput
+  file: SiteConfigInput
+}
+
+export type SiteConfigResolver = (
+  source: SiteConfigResolution,
+) => DeepPartial<SiteConfig>
+
+/** All overrides resolve before any plugin derives dependent settings. */
+export interface SiteConfigContributions {
+  resolve?: SiteConfigResolver
+  finalize?: SiteConfigResolver
 }

@@ -1,6 +1,13 @@
+import { AsyncLocalStorage } from 'node:async_hooks'
 import fsPromises from 'node:fs/promises'
 import path from 'node:path'
 import type { SiteConfig, WriteStylesResult } from '@purestack/ts-common'
+import {
+  createStyleContext,
+  runWithStyleContext,
+  type StyleContext,
+  useStyleScope,
+} from '@purestack/ts-style'
 import { toOutputAssetRelPath, toPosixPath } from '@purestack/ts-util'
 import { getLogger, type Logger } from 'logpot'
 import {
@@ -33,7 +40,6 @@ import { resolveRouteInfo } from '../../routing/route'
 import { copyStaticAsset, copyStaticAssets } from '../assets'
 import { resolveBuildSiteConfig } from '../build-config'
 import { ContentRouteIndex } from '../content-urls'
-import { writeGeneratedFavicon } from '../favicon'
 import { prepareOutDir } from '../io'
 import {
   type BuildManifest,
@@ -44,7 +50,6 @@ import {
   writeManifest,
 } from '../manifest'
 import { type BuildContext, resolveHeaderFooterHtml } from '../page'
-import { buildPagefindIndex } from '../pagefind'
 import { createScriptCacheKey, ScriptCacheKeyStore } from '../script-cache-key'
 import type { BuildHooks, BuildInput, BuildResult } from '../site'
 import { writeSitemap } from '../sitemap'
@@ -64,14 +69,20 @@ import type { IncrementalBuilder, IncrementalBuildResult } from './types'
 
 export type { IncrementalBuilder, IncrementalBuildResult } from './types'
 
+useStyleScope(new AsyncLocalStorage<StyleContext>())
+
 export async function createIncrementalBuilder(
   input: BuildInput = {},
 ): Promise<IncrementalBuilder> {
-  const runtime = await createIncrementalRuntime(input)
-  return runtime.toBuilder()
+  const styleContext = createStyleContext()
+  return runWithStyleContext(styleContext, async () => {
+    const runtime = await createIncrementalRuntime(input, styleContext)
+    return runtime.toBuilder()
+  })
 }
 
 interface IncrementalRuntimeOptions {
+  styleContext: StyleContext
   config: SiteConfig
   hooks: BuildHooks
   plugins: readonly PureStackPlugin[]
@@ -86,6 +97,7 @@ interface IncrementalRuntimeOptions {
 
 async function createIncrementalRuntime(
   input: BuildInput,
+  styleContext: StyleContext,
 ): Promise<IncrementalRuntime> {
   const buildOptions = input.options ?? {}
   const publishOptions = input.publish ?? {}
@@ -125,6 +137,7 @@ async function createIncrementalRuntime(
   }
 
   return new IncrementalRuntime({
+    styleContext,
     config,
     hooks,
     plugins,
@@ -217,15 +230,19 @@ class IncrementalRuntime {
   }
 
   toBuilder(): IncrementalBuilder {
+    const bind =
+      <A extends unknown[], R>(run: (...args: A) => R) =>
+      (...args: A): R =>
+        runWithStyleContext(this.options.styleContext, () => run(...args))
     return {
-      prepareForRequests: this.prepareForRequests,
-      buildAll: this.buildAll,
-      applyChange: this.applyChange,
-      applyChanges: this.applyChanges,
-      renderIfDirtyByOutPath: this.renderIfDirtyByOutPath,
-      renderByUrlPath: this.renderByUrlPath,
-      preparePageAssets: this.preparePageAssets,
-      prepareAssetByUrlPath: this.prepareAssetByUrlPath,
+      prepareForRequests: bind(this.prepareForRequests),
+      buildAll: bind(this.buildAll),
+      applyChange: bind(this.applyChange),
+      applyChanges: bind(this.applyChanges),
+      renderIfDirtyByOutPath: bind(this.renderIfDirtyByOutPath),
+      renderByUrlPath: bind(this.renderByUrlPath),
+      preparePageAssets: bind(this.preparePageAssets),
+      prepareAssetByUrlPath: bind(this.prepareAssetByUrlPath),
     }
   }
 
@@ -267,7 +284,6 @@ class IncrementalRuntime {
     for (const key of Object.keys(this.manifest.assets))
       delete this.manifest.assets[key]
     this.scriptCacheKeys.clear()
-    await writeGeneratedFavicon(this.config)
     await this.discoverAssets()
     const files = await this.prepareContent(
       [...this.staticAssets.values()].map((file) => file.relPath),
@@ -394,7 +410,6 @@ class IncrementalRuntime {
   ): Promise<BuildPreparationResult> {
     await initializePluginContext(this.context, this.options.plugins)
     await prepareOutDir(this.config.outDir, { clean: this.options.cleanOutDir })
-    await writeGeneratedFavicon(this.config)
     await this.discoverAssets()
     const assetFiles = [...this.staticAssets.values()]
     const contentFiles = await this.prepareContent(
@@ -501,11 +516,10 @@ class IncrementalRuntime {
       pages,
     })
 
-    await buildPagefindIndex(
-      this.config.outDir,
-      this.config.pagefind,
-      this.contentState.unindexedOutPaths(),
-    )
+    await this.context.search?.write({
+      outDir: this.config.outDir,
+      excludeFiles: this.contentState.unindexedOutPaths(),
+    })
     this.searchRevision = this.pageAssetRevision
 
     this.manifest = await buildManifest(
@@ -679,6 +693,7 @@ class IncrementalRuntime {
           signature: styles.signature,
           outputs: styles.outputs,
         }
+        await this.persistManifest()
       }
       this.preparedAssetRevision = revision
     })
@@ -693,16 +708,17 @@ class IncrementalRuntime {
     } catch {
       return false
     }
-    if (pathname.startsWith('/pagefind/')) {
+    if (this.context.search?.ownsPath(pathname)) {
       await this.queueAssetWork(async () => {
         if (this.searchRevision === this.pageAssetRevision) return
         const revision = this.pageAssetRevision
-        await buildPagefindIndex(
-          this.config.outDir,
-          this.config.pagefind,
-          this.contentState.unindexedOutPaths(),
-          Object.values(this.manifest.content).map((entry) => entry.outPath),
-        )
+        await this.context.search?.write({
+          outDir: this.config.outDir,
+          excludeFiles: this.contentState.unindexedOutPaths(),
+          onlyFiles: Object.values(this.manifest.content).map(
+            (entry) => entry.outPath,
+          ),
+        })
         this.searchRevision = revision
       })
       return true

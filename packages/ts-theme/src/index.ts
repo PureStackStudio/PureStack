@@ -6,13 +6,17 @@ import type {
 import { h } from '@purestack/ts-html'
 import { buildThemeSwitchScript } from '@purestack/ts-page-scripts'
 import {
+  getStyleContext,
   registerNormalizeStyles,
   resolveThemeStyleLinks,
+  runWithStyleContext,
   styleBuilder,
   type ThemeOptions,
   themes,
 } from '@purestack/ts-style'
 import { registerDocLayoutStyles } from './docLayoutStyles'
+import { writeGeneratedFavicon } from './favicon'
+import { markdownPresentation } from './markdownPresentation'
 import { registerMarkdownStyles } from './markdownStyles'
 import { defaultTemplates } from './templates'
 import { writeStyles } from './writeStyles'
@@ -25,13 +29,20 @@ export function themePlugin() {
     name: 'purestack:theme',
     defaults: true,
     templates: defaultTemplates,
+    markdown: { rehypePostPlugins: [markdownPresentation] },
     styles: createSiteStyles,
     head: renderThemeHead,
+    hooks: {
+      onContentDiscovered: ({ config }: { config: SiteConfig }) =>
+        writeGeneratedFavicon(config),
+    },
   }
 }
 
 function createSiteStyles(config: SiteConfig): SiteStyles {
+  const context = getStyleContext()
   themes.setOptions(config.style.theme)
+  config.style.theme = themes.getOptions()
   styleBuilder.reset()
   registerNormalizeStyles()
   registerDocLayoutStyles()
@@ -41,19 +52,21 @@ function createSiteStyles(config: SiteConfig): SiteStyles {
   })
   return {
     get revision() {
-      return styleBuilder.revision
+      return runWithStyleContext(context, () => styleBuilder.revision)
     },
     links: (cacheKey) =>
       resolveThemeStyleLinks(config.style.href, config.style.themes, cacheKey),
     write: (input) =>
-      writeStyles(
-        {
-          ...input,
-          includeHljsTheme:
-            !config.mdx.disableHighlighter &&
-            config.mdx.highlighter === 'highlightjs',
-        },
-        config.style,
+      runWithStyleContext(context, () =>
+        writeStyles(
+          {
+            ...input,
+            includeHljsTheme:
+              !config.mdx.disableHighlighter &&
+              config.mdx.highlighter === 'highlightjs',
+          },
+          config.style,
+        ),
       ),
   }
 }

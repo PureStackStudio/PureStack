@@ -1,10 +1,9 @@
 import { Style } from '@purestack/ts-css'
+import { getStyleContext } from './styleContext'
 
 import { normalizeThemeName, type ThemeName } from './themeAssets'
 import { themes } from './themeOptions'
 import { listThemePaletteVarEntries } from './themePaletteVars'
-
-const styleBuilders = new Map<ThemeName, Style>()
 
 /**
  * Palette variables land on every theme root with zero specificity, so a
@@ -26,7 +25,14 @@ export function getThemeClass(theme: ThemeName) {
 export type StyleBuilder = typeof styleBuilder
 export const styleBuilder = {
   get revision() {
-    return Style.revision
+    const context = getStyleContext()
+    return (
+      context.revisionOffset +
+      [...context.styles.values()].reduce(
+        (total, style) => total + style.revision,
+        0,
+      )
+    )
   },
   get(theme: ThemeName) {
     if (!theme) {
@@ -35,6 +41,7 @@ export const styleBuilder = {
       )
     }
     const normalized = normalizeThemeName(theme)
+    const styleBuilders = getStyleContext().styles
     const existing = styleBuilders.get(normalized)
     if (existing) return existing
     const created = new Style().scope(getThemeScopeSelector(normalized))
@@ -50,7 +57,7 @@ export const styleBuilder = {
   },
   has(theme: ThemeName) {
     const normalized = normalizeThemeName(theme)
-    return styleBuilders.has(normalized)
+    return getStyleContext().styles.has(normalized)
   },
   ensureThemes(themes: ThemeName[]) {
     const missing = themes.filter((theme) => !styleBuilder.has(theme))
@@ -61,7 +68,7 @@ export const styleBuilder = {
     }
   },
   list() {
-    return [...styleBuilders.keys()]
+    return [...getStyleContext().styles.keys()]
   },
   async render(theme: ThemeName, pretty: boolean = true) {
     const normalized = normalizeThemeName(theme)
@@ -74,7 +81,9 @@ export const styleBuilder = {
     return rendered
   },
   reset() {
-    styleBuilders.clear()
+    const context = getStyleContext()
+    context.revisionOffset = styleBuilder.revision + 1
+    context.styles.clear()
   },
 }
 

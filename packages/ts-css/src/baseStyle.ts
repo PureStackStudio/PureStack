@@ -6,13 +6,24 @@ import { hyphenizeCss } from './hyphenize'
 
 export abstract class RootStyle {
   static nextId = 1
-  static revision = 0
+  #revision = { value: 0 }
+  /** Changes anywhere in this style tree, independent of other trees. */
+  get revision() {
+    return this.#revision.value
+  }
+  protected changed() {
+    this.#revision.value += 1
+  }
+  protected shareRevision(child: RootStyle) {
+    this.#revision.value += child.#revision.value
+    child.#revision = this.#revision
+  }
   id: number
   selector: string
   constructor(selector?: string) {
     this.id = BaseStyle.nextId++
     this.selector = selector ?? ''
-    RootStyle.revision += 1
+    this.changed()
   }
   abstract toCSS(): string
 }
@@ -23,7 +34,11 @@ export class BaseStyle<T extends RootStyle> extends RootStyle {
   #createT: (selector?: string) => T
   constructor(createT: (selector?: string) => T, selector?: string) {
     super(selector)
-    this.#createT = createT
+    this.#createT = (selector) => {
+      const child = createT(selector)
+      this.shareRevision(child)
+      return child
+    }
   }
 
   set(key: string, value: string | number) {
@@ -31,7 +46,7 @@ export class BaseStyle<T extends RootStyle> extends RootStyle {
     value = autoVar(value)
     if (this.props.get(key) === value) return this
     this.props.set(key, value)
-    RootStyle.revision += 1
+    this.changed()
     return this
   }
 
@@ -92,7 +107,7 @@ export class BaseStyle<T extends RootStyle> extends RootStyle {
     this.#asBaseStyle(css).props.forEach((value, key) => {
       if (this.props.get(key) === value) return
       this.props.set(key, value)
-      RootStyle.revision += 1
+      this.changed()
     })
     return this
   }

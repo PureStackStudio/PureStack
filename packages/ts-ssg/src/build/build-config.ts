@@ -1,5 +1,6 @@
 import type { SiteConfig } from '@purestack/ts-common'
 import { resolveSiteConfig } from '../config/config'
+import { resolvePluginConfigResolvers } from '../plugins/contributions'
 import { resolveBuildPlugins } from '../plugins/default-plugins'
 import type { PureStackPlugin } from '../plugins/plugin'
 import { assertValidPlugins, withPluginSkins } from '../plugins/plugin'
@@ -15,7 +16,7 @@ export function resolveBuildSiteConfig(
 ): SiteConfig {
   assertValidPlugins(plugins)
   const config = withPluginSkins(plugins, () =>
-    resolveSiteConfig(input.siteConfig),
+    resolveSiteConfig(input.siteConfig, resolvePluginConfigResolvers(plugins)),
   )
   if (input.publish?.enabled !== true) return config
   return {

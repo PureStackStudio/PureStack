@@ -1,8 +1,11 @@
+import { LANGUAGE_BY_EXTENSION } from '@purestack/ts-common'
+import {
+  createHljsHighlighter,
+  createMdxHighlighter,
+  DEFAULT_MDX_CODE_LANGS,
+} from '@purestack/ts-highlight'
 import hljs from 'highlight.js'
 import { describe, expect, it, vi } from 'vitest'
-import { LANGUAGE_BY_EXTENSION } from './codeLanguages'
-import { createMdxHighlighter, DEFAULT_MDX_CODE_LANGS } from './highlight'
-import { createHljsHighlighter } from './highlightjs'
 
 describe('MDX code languages', () => {
   it('renders every inferred language with the default Shiki grammars', async () => {

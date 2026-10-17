@@ -1,0 +1,46 @@
+{
+  "name": "@purestack/ts-highlight",
+  "version": "1.1.15",
+  "packageManager": "yarn@4.9.2",
+  "module": "./dist/ts-highlight.mjs",
+  "types": "./dist/ts-highlight.d.mts",
+  "type": "module",
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PureStackStudio/PureStack.git",
+    "directory": "packages/ts-highlight"
+  },
+  "homepage": "https://purestack.studio",
+  "bugs": {
+    "url": "https://github.com/PureStackStudio/PureStack/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/ts-highlight.d.mts",
+      "import": "./dist/ts-highlight.mjs"
+    }
+  },
+  "license": "MIT",
+  "files": [
+    "dist/*.mjs",
+    "dist/*.mjs.map",
+    "dist/*.d.mts",
+    "dist/*.d.mts.map",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "lint": "biome check ./src --formatter-enabled=false --write",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@purestack/ts-common": "workspace:^",
+    "highlight.js": "^11.11.1",
+    "shiki": "^3.22.0"
+  }
+}

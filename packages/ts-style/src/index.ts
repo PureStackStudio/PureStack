@@ -11,6 +11,14 @@ export {
   type ThemeSkinRegistry,
   themeSkins,
 } from './skins'
+export {
+  createStyleContext,
+  getStyleContext,
+  runWithStyleContext,
+  type StyleContext,
+  type StyleScope,
+  useStyleScope,
+} from './styleContext'
 export * from './styles'
 export * from './themeAssets'
 export * from './themeOptions'

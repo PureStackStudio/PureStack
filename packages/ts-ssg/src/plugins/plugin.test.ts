@@ -3,15 +3,8 @@ import type { IncomingMessage, ServerResponse } from 'node:http'
 import path from 'node:path'
 import { h } from '@purestack/ts-html'
 import { registerSkin, themeSkins } from '@purestack/ts-style'
-import hljs from 'highlight.js'
-import typescript from 'highlight.js/lib/languages/typescript'
 import { disableLogger, getLogger, type Logger } from 'logpot'
 import { defineComponent, html } from 'regor'
-import {
-  createHighlighter,
-  type Highlighter,
-  type LanguageRegistration,
-} from 'shiki'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { resolveMdxBuildOptions } from '../build/incremental/support'
 import { buildSite } from '../build/site'
@@ -89,11 +82,8 @@ describe('plugins', () => {
       {
         name: 'custom',
         markdown: {
-          createShiki: () => {
-            throw new Error('Shiki creation is disabled.')
-          },
-          createHighlightJs: () => {
-            throw new Error('Highlight.js creation is disabled.')
+          createHighlighter: () => {
+            throw new Error('Highlighter creation is disabled.')
           },
           resolveHighlighter: (lang) =>
             lang === 'diagram' ? async () => '<figure>rendered</figure>' : null,
@@ -177,7 +167,7 @@ describe('plugins', () => {
     expect(fallbackCalled).toBe(false)
   })
 
-  it.each(['resolveHighlighter', 'createShiki', 'createHighlightJs'])(
+  it.each(['resolveHighlighter', 'createHighlighter'])(
     'validates markdown.%s declarations',
     (field) => {
       for (const value of [[], {}, 42, null]) {
@@ -190,169 +180,77 @@ describe('plugins', () => {
     },
   )
 
-  describe('highlighter factories', () => {
-    it.each(['sync', 'async'])(
-      'uses a %s Shiki factory with default options and custom grammars',
-      async (mode) => {
-        let created: Highlighter | undefined
-        let calls = 0
-        const grammar = {
-          name: 'creator-test',
-          scopeName: 'source.creator-test',
-          aliases: ['creator-test-alias'],
-          repository: {},
-          patterns: [
-            { name: 'keyword.control.creator-test', match: '\\blaunch\\b' },
-          ],
-        } satisfies LanguageRegistration
-        try {
-          // A pre-created instance may be returned synchronously or asynchronously.
-          if (mode === 'sync') {
-            created = await createHighlighter({
-              themes: ['github-light', 'github-dark'],
-              langs: ['ts-tags', grammar],
-            })
-          }
-          const options = await resolveMdxBuildOptions(
-            { highlighter: 'shiki' },
-            [
-              {
-                name: 'custom-shiki',
-                markdown: {
-                  createShiki: (defaults) => {
-                    calls += 1
-                    expect(defaults.langs).toContain('ts-tags')
-                    expect(defaults.themes).toEqual([
-                      'github-light',
-                      'github-dark',
-                    ])
-                    if (created) return created
-                    return createHighlighter({
-                      ...defaults,
-                      langs: [...defaults.langs, grammar],
-                    }).then((instance) => {
-                      created = instance
-                      return instance
-                    })
-                  },
-                  createHighlightJs: () => {
-                    throw new Error('Unused backend.')
-                  },
-                },
-              },
-            ],
-          )
-          if (!options.highlighter)
-            throw new Error('Expected Shiki highlighting.')
-          const first = options.highlighter.codeToHtml(
-            'launch',
-            'creator-test-alias',
-          )
-          expect(typeof first).toBe('string')
-          expect(first).toContain('launch')
-          expect(first).toContain('--shiki-light:')
-          expect(
-            options.highlighter.codeToHtml('launch again', 'creator-test'),
-          ).toContain('launch')
-          expect(calls).toBe(1)
-          expect(
-            options.highlighter.codeToHtml('const answer = 42', 'ts'),
-          ).toContain('answer')
-        } finally {
-          created?.dispose()
-        }
-      },
-    )
+  describe('highlighter providers', () => {
+    it('rejects competing providers before creating either', async () => {
+      const plugins = ['first', 'second'].map((name) => ({
+        name,
+        markdown: {
+          createHighlighter: () => {
+            throw new Error('Must not create an instance.')
+          },
+        },
+      }))
+      await expect(resolveMdxBuildOptions({}, plugins)).rejects.toThrow(
+        'Plugins "first" and "second" both define markdown.createHighlighter.',
+      )
+    })
 
-    it.each(['sync', 'async'])(
-      'uses a %s highlight.js factory without changing the global registry',
-      async (mode) => {
-        let calls = 0
-        const options = await resolveMdxBuildOptions(
-          { highlighter: 'highlightjs' },
-          [
-            {
-              name: 'custom-highlightjs',
-              markdown: {
-                createHighlightJs: () => {
-                  calls += 1
-                  const instance = hljs.newInstance()
-                  instance.registerLanguage('typescript', typescript)
-                  instance.registerLanguage('creator-test', () => ({
-                    keywords: 'launch',
-                    aliases: ['creator-test-alias'],
-                    contains: [],
-                  }))
-                  instance.configure({ classPrefix: 'custom-' })
-                  return mode === 'async' ? Promise.resolve(instance) : instance
-                },
-                createShiki: () => {
-                  throw new Error('Unused backend.')
-                },
-              },
-            },
-          ],
-        )
-        if (!options.highlighter)
-          throw new Error('Expected highlight.js highlighting.')
-        const html = options.highlighter.codeToHtml(
-          'launch',
-          'creator-test-alias',
-        )
-        expect(typeof html).toBe('string')
-        expect(html).toContain('<span class="custom-keyword">launch</span>')
-        expect(
-          options.highlighter.codeToHtml('const answer = 42', 'ts'),
-        ).toContain('custom-keyword')
-        expect(calls).toBe(1)
-        expect(hljs.getLanguage('creator-test')).toBeUndefined()
-        const defaults = await resolveMdxBuildOptions({
-          highlighter: 'highlightjs',
-        })
-        expect(
-          defaults.highlighter?.codeToHtml('const answer = 42', 'ts'),
-        ).toContain('hljs-keyword')
-      },
-    )
-
-    it.each(['shiki', 'highlightjs'] as const)(
-      'rejects competing %s factories before creating an instance',
-      async (backend) => {
-        const field = backend === 'shiki' ? 'createShiki' : 'createHighlightJs'
-        const plugins = ['first', 'second'].map((name) => ({
-          name,
+    it('lets an ordinary provider replace a default without initializing it', async () => {
+      const options = await resolveMdxBuildOptions({}, [
+        {
+          name: 'default',
+          defaults: true,
           markdown: {
-            [field]: () => {
-              throw new Error('Must not create an instance.')
+            createHighlighter: () => {
+              throw new Error('Unused default.')
             },
           },
-        }))
-        await expect(
-          resolveMdxBuildOptions({ highlighter: backend }, plugins),
-        ).rejects.toThrow(
-          `Plugins "first" and "second" both define markdown.${field}.`,
-        )
-      },
-    )
+        },
+        {
+          name: 'custom',
+          markdown: {
+            createHighlighter: () => ({
+              codeToHtml: (code) => `<pre>${code}</pre>`,
+            }),
+          },
+        },
+      ])
+      expect(await options.highlighter?.codeToHtml('source')).toBe(
+        '<pre>source</pre>',
+      )
+    })
 
-    it.each(['shiki', 'highlightjs'] as const)(
-      'propagates %s factory failures',
-      async (backend) => {
-        const field = backend === 'shiki' ? 'createShiki' : 'createHighlightJs'
-        await expect(
-          resolveMdxBuildOptions({ highlighter: backend }, [
-            {
-              name: 'failing',
-              markdown: {
-                [field]: async () => {
-                  throw new Error('Creation failed.')
-                },
+    it('attributes asynchronous provider failures to the plugin', async () => {
+      await expect(
+        resolveMdxBuildOptions({}, [
+          {
+            name: 'failing',
+            markdown: {
+              createHighlighter: async () => {
+                throw new Error('Creation failed.')
               },
             },
-          ]),
-        ).rejects.toThrow('Creation failed.')
-      },
-    )
+          },
+        ]),
+      ).rejects.toThrow(
+        'Plugin "failing" failed in markdown.createHighlighter: Creation failed.',
+      )
+    })
+
+    it('rejects invalid provider results', async () => {
+      await expect(
+        resolveMdxBuildOptions({}, [
+          {
+            name: 'invalid',
+            markdown: { createHighlighter: () => ({}) as never },
+          },
+        ]),
+      ).rejects.toThrow('must return a code highlighter')
+    })
+
+    it('leaves code unhighlighted when no provider is present', async () => {
+      expect((await resolveMdxBuildOptions({})).highlighter).toBeUndefined()
+    })
   })
 
   describe('hooks', () => {
@@ -582,7 +480,7 @@ describe('plugins', () => {
       [null, 'Plugin 1 must be an object.'],
       [
         { name: 'typo', hook: {} },
-        'Plugin "typo" has an unknown field "hook". Plugin fields: name, defaults, skins, components, templates, head, styles, markdown, pages, devMiddleware, hooks.',
+        'Plugin "typo" has an unknown field "hook". Plugin fields: name, defaults, skins, config, components, templates, head, headConfig, styles, search, markdown, pages, devMiddleware, hooks.',
       ],
       [
         { name: 'typo', hooks: { onPageRender: () => {} } },
@@ -605,8 +503,28 @@ describe('plugins', () => {
         'Plugin "bad" needs `defaults` to be a boolean.',
       ],
       [
+        { name: 'bad', config: () => ({}) },
+        'Plugin "bad" needs `config` to be an object of configuration contributions.',
+      ],
+      [
+        { name: 'bad', config: { resolve: {} } },
+        'Plugin "bad" needs `config.resolve` to be a configuration resolver.',
+      ],
+      [
+        { name: 'bad', config: { finalize: 42 } },
+        'Plugin "bad" needs `config.finalize` to be a configuration resolver.',
+      ],
+      [
+        { name: 'bad', config: { after: () => ({}) } },
+        'Plugin "bad" has an unknown config field "after". Config fields: resolve, finalize.',
+      ],
+      [
         { name: 'bad', head: {} },
         'Plugin "bad" needs `head` to be a head template.',
+      ],
+      [
+        { name: 'bad', headConfig: {} },
+        'Plugin "bad" needs `headConfig` to be a head configuration template.',
       ],
       [
         { name: 'bad', styles: {} },
@@ -634,11 +552,15 @@ describe('plugins', () => {
       ],
       [
         { name: 'typo', markdown: { remark: [] } },
-        'Plugin "typo" has an unknown markdown field "remark". Markdown fields: remarkPlugins, rehypePlugins, resolveHighlighter, createShiki, createHighlightJs.',
+        'Plugin "typo" has an unknown markdown field "remark". Markdown fields: remarkPlugins, rehypePlugins, rehypePostPlugins, resolveHighlighter, createHighlighter.',
       ],
       [
         { name: 'bad', markdown: { rehypePlugins: () => {} } },
         'Plugin "bad" needs `markdown.rehypePlugins` to be a list of plugins.',
+      ],
+      [
+        { name: 'bad', markdown: { rehypePostPlugins: () => {} } },
+        'Plugin "bad" needs `markdown.rehypePostPlugins` to be a list of plugins.',
       ],
       [
         { name: 'brand', skins: { standard: standardSkin } },

@@ -15,7 +15,7 @@ const SKIP_PACKAGE_RESOLUTION = Symbol('skip package resolution')
 /** The code a site adds to PureStack, loaded from `purestack.config.ts`. */
 export interface PureStackConfig {
   plugins?: PureStackPlugin[]
-  /** Include the standard component, theme, and browser-runtime plugins. */
+  /** Include the standard component, theme, browser-runtime, highlighting, and search plugins. */
   defaultPlugins?: boolean
 }
 

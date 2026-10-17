@@ -1,7 +1,8 @@
+import {
+  type MdxCodeHighlighter,
+  normalizeCodeLanguage,
+} from '@purestack/ts-common'
 import hljs, { type HLJSApi } from 'highlight.js'
-
-import { normalizeCodeLanguage } from './codeLanguages'
-import type { MdxCodeHighlighter } from './highlight'
 
 // Use highlight.js names, or the closest grammar for Shiki-only languages.
 const hljsLanguages = new Map([
