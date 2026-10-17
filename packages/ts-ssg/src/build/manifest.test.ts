@@ -8,6 +8,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from '../config/config'
 import {
   createEmptyManifest,
+  isCompatibleManifest,
   manifestPath,
   readManifest,
   signatureEqual,
@@ -30,6 +31,13 @@ async function writeRawManifest(outDir: string, contents: string) {
 }
 
 describe('manifest', () => {
+  it('reuses manifests without a theme and rejects changed style ownership', () => {
+    const bare = resolveSiteConfig({}, { defaultPlugins: false })
+    expect(isCompatibleManifest(createEmptyManifest(bare), bare)).toBe(true)
+    expect(
+      isCompatibleManifest(createEmptyManifest(bare), resolveSiteConfig()),
+    ).toBe(false)
+  })
   let logger: Logger | undefined
 
   beforeAll(async () => {

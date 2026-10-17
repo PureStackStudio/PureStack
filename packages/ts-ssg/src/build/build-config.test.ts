@@ -18,6 +18,8 @@ describe('resolveBuildSiteConfig', () => {
       }
       const first = resolveBuildSiteConfig(input)
       const second = resolveBuildSiteConfig(input)
+      if (!first.style || !second.style)
+        throw new Error('Expected theme settings')
       expect(first.style.fileName).toBe('site.css')
       expect(second.style.fileName).toBe(first.style.fileName)
       expect(first.style.href).toBe(input.siteConfig.style.href)
@@ -50,7 +52,7 @@ describe('resolveBuildSiteConfig', () => {
 
     expect(config.outDir).toBe(publishDir)
     expect(config.html.minify).toBe(true)
-    expect(config.style.pretty).toBe(false)
+    expect(config.style?.pretty).toBe(false)
   })
 
   it('keeps regular build config values when publish is not enabled', () => {
@@ -67,6 +69,6 @@ describe('resolveBuildSiteConfig', () => {
     })
 
     expect(config.html.minify).toBe(false)
-    expect(config.style.pretty).toBe(true)
+    expect(config.style?.pretty).toBe(true)
   })
 })

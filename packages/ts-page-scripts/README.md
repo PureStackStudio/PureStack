@@ -35,10 +35,6 @@ Each factory can be selected independently of `pageScriptsPlugin()`. Omitting
 analytics removes automatic GA4 service registration as well as direct scripts;
 explicit user-defined consent services are preserved. When consent is enabled,
 analytics never bypasses it, including when the consent runtime plugin is omitted.
-The raw `resolveSiteConfig` result contains only explicitly configured consent
-services; automatic GA4 registration runs in `config.finalize`, after all
-configuration overrides and before
-styles, components, highlighters, search providers, and config hooks initialize.
-Omitting the analytics plugin also omits this contribution.
+The auth, consent, and analytics plugins own their corresponding configuration defaults and validation. Automatic GA4 registration runs in `config.finalize`, after every plugin's `config.normalize` phase and before factories or config hooks initialize. `resolveSiteConfig()` includes these plugins by default; pass `{ defaultPlugins: false, plugins: [...] }` as its second argument to choose them explicitly. Omitting the analytics plugin omits automatic GA4 registration. Analytics still respects explicitly configured consent when the consent runtime plugin is omitted.
 
 For standalone `renderApp` calls, use `appendRuntimeScripts(document, runtimeEmbeds, frontmatter.embed)` from the renderer's `onRendered(document, runtimeEmbeds)` callback. The renderer itself has no knowledge of individual runtimes.

@@ -1,0 +1,50 @@
+{
+  "name": "@purestack/ts-images",
+  "version": "1.1.15",
+  "packageManager": "yarn@4.9.2",
+  "module": "./dist/ts-images.mjs",
+  "types": "./dist/ts-images.d.mts",
+  "type": "module",
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PureStackStudio/PureStack.git",
+    "directory": "packages/ts-images"
+  },
+  "homepage": "https://purestack.studio",
+  "bugs": {
+    "url": "https://github.com/PureStackStudio/PureStack/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/ts-images.d.mts",
+      "import": "./dist/ts-images.mjs"
+    }
+  },
+  "license": "MIT",
+  "files": [
+    "dist/*.mjs",
+    "dist/*.mjs.map",
+    "dist/*.d.mts",
+    "dist/*.d.mts.map",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "lint": "biome check ./src --formatter-enabled=false --write",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@purestack/ts-common": "workspace:^",
+    "@purestack/ts-util": "workspace:^",
+    "logpot": "^1.0.7",
+    "sharp": "^0.35.5"
+  },
+  "engines": {
+    "node": ">=22.20.0"
+  }
+}

@@ -15,6 +15,8 @@ export async function writeGeneratedFavicon(config: SiteConfig): Promise<void> {
 }
 
 function buildFaviconSvg(config: SiteConfig, iconSvg: string) {
+  if (!config.style)
+    throw new Error('Generated favicons require resolved style settings.')
   const viewBox = extractViewBox(iconSvg) ?? '0 0 24 24'
   const rootAttributesSource = extractSvgRootAttributes(iconSvg)
   const rootAttributes = rootAttributesSource

@@ -480,7 +480,7 @@ describe('plugins', () => {
       [null, 'Plugin 1 must be an object.'],
       [
         { name: 'typo', hook: {} },
-        'Plugin "typo" has an unknown field "hook". Plugin fields: name, defaults, skins, config, components, templates, head, headConfig, styles, search, markdown, pages, devMiddleware, hooks.',
+        'Plugin "typo" has an unknown field "hook". Plugin fields: name, defaults, skins, config, components, templates, head, headConfig, styles, search, assets, markdown, pages, devMiddleware, hooks.',
       ],
       [
         { name: 'typo', hooks: { onPageRender: () => {} } },
@@ -515,8 +515,12 @@ describe('plugins', () => {
         'Plugin "bad" needs `config.finalize` to be a configuration resolver.',
       ],
       [
+        { name: 'bad', config: { normalize: 42 } },
+        'Plugin "bad" needs `config.normalize` to be a configuration resolver.',
+      ],
+      [
         { name: 'bad', config: { after: () => ({}) } },
-        'Plugin "bad" has an unknown config field "after". Config fields: resolve, finalize.',
+        'Plugin "bad" has an unknown config field "after". Config fields: resolve, normalize, finalize.',
       ],
       [
         { name: 'bad', head: {} },

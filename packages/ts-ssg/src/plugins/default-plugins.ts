@@ -10,7 +10,9 @@ import { pagefindPlugin } from '@purestack/ts-pagefind'
 import { seoPlugin } from '@purestack/ts-seo'
 import { themePlugin } from '@purestack/ts-theme'
 import type { BuildContext } from '../build/page'
+import { getPageAssets } from '../build/page-assets'
 import type { BuildOptions } from '../build/site'
+import { resolvePluginAssets } from './assets'
 import {
   resolvePluginHeadConfigTemplates,
   resolvePluginHeadTemplates,
@@ -77,6 +79,8 @@ export async function initializePluginContext(
 ) {
   context.styles = resolvePluginStyles(plugins, context.config)
   context.search = resolvePluginSearch(plugins, context.config)
+  const assetProcessors = resolvePluginAssets(plugins, context.config)
+  getPageAssets(context)?.setProcessors(assetProcessors)
   context.components = resolvePluginComponents(plugins, context.config)
   context.templates = resolvePluginTemplates(plugins)
   context.headTemplates = resolvePluginHeadTemplates(plugins)

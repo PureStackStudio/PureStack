@@ -36,7 +36,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && tsc -p tsconfig.contracts.json",
     "lint": "biome check ./src --formatter-enabled=false --write",
     "test": "vitest"
   },
@@ -70,6 +70,8 @@
     "unified": "^11.0.5"
   },
   "devDependencies": {
-    "@purestack/ts-svg-icons": "workspace:^"
+    "@purestack/ts-images": "workspace:^",
+    "@purestack/ts-svg-icons": "workspace:^",
+    "sharp": "^0.35.5"
   }
 }

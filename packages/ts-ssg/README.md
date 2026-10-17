@@ -404,14 +404,50 @@ Plugins apply in order:
 - **Pages** generators return `{ path, source }` pages that build like files at those content paths. `source` is the text, or a function PureStack calls whenever it needs the text, without keeping what it returns. They see the site's content files, run on every build, and run again in the dev server whenever content or assets change; pages no longer generated are removed.
 - **Hooks** run every plugin's handler for each lifecycle event, one after another. An error names the plugin it came from.
 - **Dev middleware** sees each dev server request, except live reload, before the site; the first plugin to send headers handles it. Builds ignore it.
+- **Assets** processors inspect the completed page document, resolve local sources, and emit owned files. Core tracks their dependencies and output ownership across full builds and lazy development requests.
 
 Each plugin is checked when the build starts. An unknown field or hook name, such as `onPageRender`, a value of the wrong type, two plugins sharing a name, or two plugins defining the same skin, component, template, or generated page fails the build with the plugin's name. For a single hook, pass an inline plugin: `{ name: 'site', hooks: { … } }`.
 
+### Optional image optimization
+
+Install `@purestack/ts-images` and add `imagesPlugin()` to your config to optimize local raster images. It is not included in the default set:
+
+```ts
+import { defineConfig } from '@purestack/ts-ssg'
+import { imagesPlugin } from '@purestack/ts-images'
+
+export default defineConfig({
+  plugins: [imagesPlugin({ widths: [480, 960, 1440] })],
+})
+```
+
+Rendered images receive responsive AVIF/WebP sources, JPEG/PNG fallbacks, dimensions, and loading defaults. Author attributes are preserved, and original assets remain available. Remote images, SVGs, animations, and existing responsive markup pass through. See the [image plugin README](../ts-images/README.md) for presets, opt-outs, caching, limits, and diagnostics.
+
+### Asset processors
+
+An optional `assets(config)` factory returns a `SiteAssets` processor, or `undefined` to disable it. Each processor declares a unique lowercase `namespace` (letters, digits, `_`, and `-`) and a `processPage(input)` function. Processors run in plugin order after all `onPageDocument` hooks and before content URLs are rewritten. Their state belongs to one site.
+
+The factory creates one processor per build/session. A page awaits each processor in order, but lazy requests for different pages may invoke the same processor concurrently. Keep page-local state inside the call and coordinate shared queues or caches inside the processor. A config reload creates new processors. Full-build completion hooks do not run for individual lazy requests.
+
+`input.document` is the rendered DOM, including component output. `await input.resolveSource(element, url)` resolves local assets using shared-content provenance and locale fallback, records source dependencies, and returns `{ relPath, absPath, publicPath }`. It returns `undefined` for external URLs. Sources must remain inside the content root. `input.dependOn(relPath)` records additional content-relative dependencies, including missing files that may appear later.
+
+`await input.emit(fileName, bytes)` writes a `Uint8Array` under `/_assets/<namespace>/` and returns an encoded root-relative URL. Use immutable, content-addressed filenames: emitting different bytes under the same name is an error. Core applies the site's base path during URL rewriting. Await all emission work before `processPage` returns, and inspect template fragments explicitly when relevant; `querySelectorAll` does not traverse their content.
+
+Input methods expire when their processor call completes. Outstanding source-resolution or emission work fails the page; core waits for it to settle before cleanup. Saved handles cannot register dependencies or emit files later. Later processors see earlier DOM changes, but `resolveSource` resolves original content files only: an emitted URL is not implicitly added to the source inventory. Combine dependent transforms inside one processor when they need intermediate bytes.
+
+Core persists per-page dependencies and output references in the build manifest. Source edits invalidate dependent pages. Shared outputs remain until their final referencing page changes or disappears; failed renders release pending outputs. Removing a processor cleans up its recorded outputs. Source assets are retained, and generated outputs cannot overwrite them. Do not write these files directly from hooks: `emit` supplies ownership, safe paths, and atomic writes.
+
+Core registers actual compiled-script output paths, including cache-busted names, and rejects collisions regardless of which producer runs first. Processor instances, receipts, and ownership operations are private builder state; lifecycle hooks receive the public build context and page result.
+
 ### Plugin configuration
 
-Plugins contribute configuration through `config.resolve({ config, input, file })` and `config.finalize({ config, input, file })`. Both are optional and synchronous. Each returns an object to merge into the config; do not mutate the inputs. All resolvers run first in plugin order, applying configuration overrides. Then all finalizers run in plugin order, deriving dependent settings from the completed overrides. Finalizers should derive settings rather than change resolver inputs. Both phases finish before highlighters, Markdown processors, styles, search providers, components, and templates initialize. The analytics plugin finalizes its automatic GA4 service here, so later site resolvers can enable analytics, change its ID or category, or provide a manual service. The existing `onConfigResolved` hook still runs after factories, so it can customize initialized components and templates. Publishing applies its output-directory and minification overrides after configuration composition.
+`resolveSiteConfig(input)` returns `DefaultSiteConfig` when using the untouched standard plugin set. Supplying a `plugins` array returns `SiteConfig`, even with defaults enabled: entries can replace standard plugins by name and remove their configuration guarantees.
+
+Plugins contribute configuration through optional, synchronous `config.resolve`, `config.normalize`, and `config.finalize` functions, each receiving `{ config, input, file }` and returning an object to merge into config. Do not mutate the inputs. All resolvers run first in plugin order to supply defaults and overrides. All normalizers then validate and canonicalize the completed overrides. Finally, all finalizers derive dependent settings from the normalized config. Finalizers should not change the inputs used by other finalizers. Every phase finishes before highlighters, Markdown processors, styles, search providers, components, and templates initialize. Analytics derives its automatic GA4 consent service only after every normalizer finishes, regardless of plugin order. The existing `onConfigResolved` hook still runs after factories. Publishing applies its output-directory and minification overrides after configuration composition.
 
 Custom site settings belong under `extensions` in `siteConfig.json`. File values merge with programmatic input, which takes precedence. The standard JSON schema allows plugin namespaces here while continuing to reject unknown top-level fields. Each plugin owns validation, defaults, and normalization for its namespace. Other namespaces are preserved.
+
+`resolve` and `normalize` receive `SiteConfigDraft`: core fields are available, while plugin sections and nested extension values may still be partial. Every selected owner's normalizer runs before `finalize`, whose `SiteConfigFinalizer` receives normalized `SiteConfig`. Factories also receive normalized settings. Type augmentation describes the owning plugin's settings; it does not install that plugin. A plugin consuming another owner's settings must select that owner or validate those inputs itself.
 
 ```json
 { "extensions": { "brand": { "label": "Acme" } } }
@@ -448,7 +484,7 @@ export const brandPlugin = definePlugin({
 })
 ```
 
-Raw `resolveSiteConfig(input)` resolves core settings and extension input. CLI and programmatic builds additionally compose their selected plugins' configuration contributions. Configuration contributions are synchronous and may run whenever a project configuration is resolved; keep file writes and other side effects in lifecycle hooks.
+`resolveSiteConfig(input, { plugins, defaultPlugins })` composes the same selected plugins as a build, including the standard plugins by default. Plugin-owned sections (`style`, `docLayout`, `pageToc`, `logo`, `auth`, `consent`, `analytics`, `pagefind`, and `preview`) are optional in `SiteConfig`: an omitted plugin does not supply defaults or validate its unused input. A replacement plugin reads its settings from `input` and `file`, then contributes normalized config. Analytics also resolves explicitly configured consent when its browser runtime is omitted, so enabled consent is never bypassed. Configuration contributions are synchronous and may run whenever a project configuration is resolved; keep file writes and other side effects in lifecycle hooks.
 
 Builder style state is isolated across asynchronous operations, including concurrent sites. Its owned theme options remain linked to `context.config.style.theme`, so in-place config-hook changes and `themes.setOptions` update page colors, CSS, and generated favicons consistently. Head, metadata, template, Markdown, provider, and lifecycle errors identify their owning plugin and preserve the original cause. Markdown wrappers preserve unified presets, duplicate-plugin option merging, and callback transforms.
 

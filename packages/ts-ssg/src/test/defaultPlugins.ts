@@ -4,7 +4,7 @@ import { resolveHeadConfig } from '../build/head-config'
 import { type BuildContext, renderPageFromFile } from '../build/page'
 import { type RenderPageInput, renderPage } from '../build/renderer'
 import type { BuildHooks } from '../build/site'
-import { applyConfigResolvers } from '../config/config'
+import { applyConfigResolvers } from '../config/core-config'
 import type { ResolvedContentFile } from '../i18n/content'
 import { resolvePluginConfigResolvers } from '../plugins/contributions'
 import {

@@ -1,6 +1,7 @@
 import type {
   PageHeadConfigTemplate,
   PageHeadTemplate,
+  SiteConfig,
   SiteConfigResolver,
 } from '@purestack/ts-common'
 import { isPlainObject } from '@purestack/ts-util'
@@ -11,14 +12,20 @@ export function resolvePluginConfigResolvers(
   plugins: readonly PureStackPlugin[],
 ): SiteConfigResolver[] {
   const resolvers: SiteConfigResolver[] = []
-  for (const phase of ['resolve', 'finalize'] as const) {
+  for (const phase of ['resolve', 'normalize', 'finalize'] as const) {
     for (const plugin of plugins) {
-      const resolve = plugin.config?.[phase]
-      if (!resolve) continue
+      if (!plugin.config?.[phase]) continue
       const contribution = `config.${phase}`
       resolvers.push((source) =>
         callPlugin(plugin.name, contribution, () => {
-          const result = resolve.call(plugin.config, source)
+          // Finalizers see normalized settings only after all normalizers ran.
+          const result =
+            phase === 'finalize'
+              ? plugin.config?.finalize?.({
+                  ...source,
+                  config: source.config as SiteConfig,
+                })
+              : plugin.config?.[phase]?.(source)
           if (!isPlainObject(result))
             throw new Error(
               `${contribution} must return a configuration object synchronously.`,

@@ -919,9 +919,8 @@
       "properties": {
         "highlighter": {
           "type": "string",
-          "enum": ["shiki", "highlightjs"],
-          "description": "Syntax highlighter backend. Use highlightjs for faster builds.",
-          "default": "highlightjs"
+          "minLength": 1,
+          "description": "Backend identifier selected and validated by the installed highlighting plugin."
         },
         "disableHighlighter": {
           "type": "boolean",

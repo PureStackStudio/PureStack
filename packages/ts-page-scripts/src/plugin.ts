@@ -42,7 +42,7 @@ function renderScriptsHead({
   if (pageInfo.frontmatter.layout.showNav !== false)
     head.push(h('script').raw(buildNavMenuScript()))
   head.push(h('script').raw(buildCodeCopyScript()))
-  if (config.pagefind.enabled) {
+  if (config.pagefind?.enabled) {
     if (config.basePath)
       head.push(
         h('script').raw(

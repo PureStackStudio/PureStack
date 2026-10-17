@@ -50,6 +50,8 @@ describe('independent site builders', () => {
                 },
                 hooks: {
                   async onConfigResolved(context) {
+                    if (!context.config.style)
+                      throw new Error('Expected theme settings')
                     if (!context.styles)
                       throw new Error('Expected site stylesheet provider')
                     providers[name] = context.styles

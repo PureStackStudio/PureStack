@@ -46,6 +46,7 @@ import type { ContentRouteIndex } from './content-urls'
 import { resolveHeadConfig } from './head-config'
 import { readSource, writeHtml } from './io'
 import { resolveOutPath } from './out-path'
+import { getPageAssets } from './page-assets'
 import { markContentSource, resolvePageUrls } from './page-urls'
 import { renderPage } from './renderer'
 import type { BuildHooks } from './site'
@@ -142,10 +143,12 @@ export async function renderPageFromFile(
   const outPath = resolveOutPath(context.config.outDir, file)
   // Kept on an error page too, so creating a missing file renders it again.
   const importedFiles = new Set<string>()
+  const assets = getPageAssets(context)
+  const assetSession = assets?.session(file.relPath)
   try {
     const source = await readContentSource(file)
     const parsedContent = parseFrontmatterSource(source, file.relPath, {
-      defaultShowToc: context.config.pageToc.enabled,
+      defaultShowToc: context.config.pageToc?.enabled,
     })
     const compiled = await compilePageContent(
       context,
@@ -188,19 +191,21 @@ export async function renderPageFromFile(
       file,
       htmlShell,
       { pageInfo, navigation, outline: compiled.outline, scriptEntrypoints },
-      (document, runtimeEmbeds) =>
-        hooks.onPageDocument?.(context, {
+      async (document, runtimeEmbeds) => {
+        await hooks.onPageDocument?.(context, {
           document,
           file,
           frontmatter,
           urlPath,
           outline: compiled.outline,
           runtimeEmbeds,
-        }),
+        })
+        await assetSession?.process(document)
+      },
     )
     const renderTimeMs =
       Number(process.hrtime.bigint() - renderStart) / 1_000_000
-    return {
+    const result: PageRenderResult = {
       file,
       body: parsedContent.body,
       frontmatter,
@@ -218,6 +223,8 @@ export async function renderPageFromFile(
       ),
       importedFiles: [...importedFiles],
     }
+    if (assetSession) assets?.trackPage(result, assetSession.receipt)
+    return result
   } catch (error) {
     if (isError(error)) getLogger().warn(error as Error)
     const errorWithContext = attachPageContext(error, {
@@ -225,13 +232,23 @@ export async function renderPageFromFile(
       urlPath,
       outPath,
     })
+    await assetSession?.abort()
     if (context.writeErrorPages) {
       const errorPage = await writePageError(context, file, errorWithContext, {
         outPath,
         urlPath,
         renderStart,
       })
-      return { ...errorPage, importedFiles: [...importedFiles] }
+      const result: PageRenderResult = {
+        ...errorPage,
+        importedFiles: [...importedFiles],
+      }
+      if (assetSession)
+        assets?.trackPage(result, {
+          dependencies: assetSession.receipt.dependencies,
+          outputs: [],
+        })
+      return result
     }
     throw errorWithContext
   }
@@ -507,7 +524,7 @@ function renderPageApp(
     context: {
       site: context.config,
       ...baseContext,
-      theme: context.config.style.theme,
+      theme: context.config.style?.theme,
       basePath: context.config.basePath,
       locale: baseContext.pageInfo.locale,
       locales: context.config.i18n.locales,

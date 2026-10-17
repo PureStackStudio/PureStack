@@ -1,6 +1,7 @@
 import type {
   PageTemplateInput,
   SiteConfig,
+  SiteConfigResolution,
   SiteStyles,
 } from '@purestack/ts-common'
 import { h } from '@purestack/ts-html'
@@ -14,6 +15,13 @@ import {
   type ThemeOptions,
   themes,
 } from '@purestack/ts-style'
+import { merge } from '@purestack/ts-util'
+import {
+  resolveDocLayoutConfig,
+  resolveFavicon,
+  resolvePageTocConfig,
+  resolveStyleConfig,
+} from './config'
 import { registerDocLayoutStyles } from './docLayoutStyles'
 import { writeGeneratedFavicon } from './favicon'
 import { markdownPresentation } from './markdownPresentation'
@@ -28,6 +36,31 @@ export function themePlugin() {
   return {
     name: 'purestack:theme',
     defaults: true,
+    config: {
+      resolve({ config, input, file }: SiteConfigResolution) {
+        return {
+          style: merge(resolveStyleConfig(input, file), config.style),
+          docLayout: merge(
+            resolveDocLayoutConfig(input.docLayout, file.docLayout),
+            config.docLayout,
+          ),
+          pageToc: merge(
+            resolvePageTocConfig(input.pageToc, file.pageToc),
+            config.pageToc,
+          ),
+          favicon:
+            config.favicon ?? resolveFavicon(input.favicon, file.favicon),
+        }
+      },
+      normalize({ config }: SiteConfigResolution) {
+        return {
+          style: resolveStyleConfig({ style: config.style }, {}),
+          docLayout: resolveDocLayoutConfig(config.docLayout),
+          pageToc: resolvePageTocConfig(config.pageToc),
+          favicon: resolveFavicon(config.favicon),
+        }
+      },
+    },
     templates: defaultTemplates,
     markdown: { rehypePostPlugins: [markdownPresentation] },
     styles: createSiteStyles,
@@ -40,9 +73,11 @@ export function themePlugin() {
 }
 
 function createSiteStyles(config: SiteConfig): SiteStyles {
+  const style = config.style
+  if (!style) throw new Error('Theme styles require resolved style settings.')
   const context = getStyleContext()
-  themes.setOptions(config.style.theme)
-  config.style.theme = themes.getOptions()
+  themes.setOptions(style.theme)
+  style.theme = themes.getOptions()
   styleBuilder.reset()
   registerNormalizeStyles()
   registerDocLayoutStyles()
@@ -55,7 +90,7 @@ function createSiteStyles(config: SiteConfig): SiteStyles {
       return runWithStyleContext(context, () => styleBuilder.revision)
     },
     links: (cacheKey) =>
-      resolveThemeStyleLinks(config.style.href, config.style.themes, cacheKey),
+      resolveThemeStyleLinks(style.href, style.themes, cacheKey),
     write: (input) =>
       runWithStyleContext(context, () =>
         writeStyles(
@@ -65,7 +100,7 @@ function createSiteStyles(config: SiteConfig): SiteStyles {
               !config.mdx.disableHighlighter &&
               config.mdx.highlighter === 'highlightjs',
           },
-          config.style,
+          style,
         ),
       ),
   }

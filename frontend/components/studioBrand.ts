@@ -6,7 +6,7 @@ import {
 import { defineComponent, html, type RefOrValue } from 'regor'
 
 export interface StudioBrand {
-  config: LogoConfig
+  config?: LogoConfig
   size?: RefOrValue<LogoSize>
 }
 

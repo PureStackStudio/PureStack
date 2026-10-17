@@ -50,6 +50,7 @@ import {
   writeManifest,
 } from '../manifest'
 import { type BuildContext, resolveHeaderFooterHtml } from '../page'
+import { getPageAssets, PageAssetManager, setPageAssets } from '../page-assets'
 import { createScriptCacheKey, ScriptCacheKeyStore } from '../script-cache-key'
 import type { BuildHooks, BuildInput, BuildResult } from '../site'
 import { writeSitemap } from '../sitemap'
@@ -82,6 +83,7 @@ export async function createIncrementalBuilder(
 }
 
 interface IncrementalRuntimeOptions {
+  assets: PageAssetManager
   styleContext: StyleContext
   config: SiteConfig
   hooks: BuildHooks
@@ -128,15 +130,27 @@ async function createIncrementalRuntime(
     contentRoutes: new ContentRouteIndex([]),
     writeErrorPages: buildOptions.writeErrorPages === true,
     mdx,
-    resolveScriptPublicPath: config.scripts.cacheBusting
-      ? (sourceRelPath) =>
-          `/${toOutputAssetRelPath(sourceRelPath, {
-            cacheKey: scriptCacheKeys.ensure(sourceRelPath),
-          })}`
-      : undefined,
+    resolveScriptPublicPath: (sourceRelPath) => {
+      const output = toOutputAssetRelPath(sourceRelPath, {
+        cacheKey: config.scripts.cacheBusting
+          ? scriptCacheKeys.ensure(sourceRelPath)
+          : undefined,
+      })
+      getPageAssets(context)?.reserveSourceOutput(output)
+      return `/${output}`
+    },
   }
+  const assets = new PageAssetManager(
+    context,
+    existing?.config.contentDir === config.contentDir &&
+      existing.config.outDir === config.outDir
+      ? existing.pageAssets
+      : undefined,
+  )
+  setPageAssets(context, assets)
 
   return new IncrementalRuntime({
+    assets,
     styleContext,
     config,
     hooks,
@@ -196,8 +210,13 @@ class IncrementalRuntime {
       getAssets: () => this.manifest.assets,
       scriptCacheKeys: this.scriptCacheKeys,
       persistManifest: () => this.persistManifest(),
+      reserveOutput: (outPath) =>
+        this.assets.reserveSourceOutput(
+          path.relative(this.config.outDir, outPath),
+        ),
     })
     this.contentState = new IncrementalContentState({
+      assets: options.assets,
       config: options.config,
       context: options.context,
       hooks: options.hooks,
@@ -254,6 +273,10 @@ class IncrementalRuntime {
     return this.options.context
   }
 
+  private get assets() {
+    return this.options.assets
+  }
+
   private get log() {
     return this.options.log
   }
@@ -278,6 +301,7 @@ class IncrementalRuntime {
   private async prepareRequestState() {
     await initializePluginContext(this.context, this.options.plugins)
     await prepareOutDir(this.config.outDir, { clean: this.options.cleanOutDir })
+    this.assets.resetWrites()
     // Keep the records object shared with the script manager, but start this
     // session with no rendered pages or copied assets, even without --clean.
     this.manifest.content = {}
@@ -296,6 +320,8 @@ class IncrementalRuntime {
 
   private async discoverAssets() {
     const files = await discoverStaticAssets(this.config.contentDir)
+    for (const file of files)
+      this.assets.reserveSourceOutput(toOutputAssetRelPath(file.relPath))
     this.staticAssets = new Map(
       files.map((file) => [
         `/${toPosixPath(toOutputAssetRelPath(file.relPath))}`,
@@ -410,6 +436,7 @@ class IncrementalRuntime {
   ): Promise<BuildPreparationResult> {
     await initializePluginContext(this.context, this.options.plugins)
     await prepareOutDir(this.config.outDir, { clean: this.options.cleanOutDir })
+    this.assets.resetWrites()
     await this.discoverAssets()
     const assetFiles = [...this.staticAssets.values()]
     const contentFiles = await this.prepareContent(
@@ -438,6 +465,7 @@ class IncrementalRuntime {
       contentFiles,
       assetRelPaths,
     )
+    await this.assets.retainPages(contentFiles.map((file) => file.relPath))
     await resolveHeaderFooterHtml(this.context)
     await hooks?.onContentDiscovered?.(this.context, contentFiles)
     this.context.navigation = await buildNavigation(
@@ -500,11 +528,19 @@ class IncrementalRuntime {
 
   private createBuildSummary(input: BuildSummaryInput): BuildResult {
     const { contentFiles, assetFiles, pages } = input
+    const generated = new Set(
+      Object.values(this.assets.snapshot() ?? {}).flatMap((value) =>
+        value.outputs.map((output) => output.path),
+      ),
+    )
     return {
       outDir: this.config.outDir,
       pages,
       content: countByExt(contentFiles),
-      assets: countByExt(assetFiles),
+      assets: countByExt([
+        ...assetFiles,
+        ...[...generated].map((file) => ({ ext: path.extname(file) })),
+      ]),
     }
   }
 
@@ -578,6 +614,7 @@ class IncrementalRuntime {
         return result
       }
     }
+    const assetDependents = this.assets.dependents(relPath)
     this.contentState.takeMarkedPageCount()
     const ext = path.extname(relPath).toLowerCase()
     const imported = this.importedFiles.has(toPosixPath(relPath))
@@ -632,6 +669,11 @@ class IncrementalRuntime {
     }
     await this.contentState.refreshImporters(relPath)
     await this.syncImportedAssets()
+    if (assetDependents.length > 0) {
+      this.contentState.markPagesDirty(assetDependents)
+      if (!this.renderOnRequest)
+        await this.contentState.rebuildContentRelPaths(assetDependents, result)
+    }
     result.markedPages = this.contentState.takeMarkedPageCount()
     return result
   }
@@ -776,6 +818,9 @@ class IncrementalRuntime {
   }
 
   private async writeManifestAndSitemap() {
+    const pageAssets = this.assets.snapshot()
+    if (pageAssets) this.manifest.pageAssets = pageAssets
+    else delete this.manifest.pageAssets
     await writeManifest(this.config.outDir, this.manifest)
     const sitemap = await this.writeSitemapFromManifest()
     if (!sitemap) return

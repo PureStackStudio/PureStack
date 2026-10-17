@@ -15,7 +15,7 @@ export interface ConsentCategoryState extends ConsentCategory {
   inputId?: string
 }
 
-export interface Consent extends ConsentConfig {
+export interface Consent extends Partial<ConsentConfig> {
   settingsTeleport?: string
   categories: ConsentCategoryState[]
   tone?: RefOrValue<SemanticTone>
@@ -153,7 +153,7 @@ function resolveConsent(
   props: Partial<Consent>,
 ): Consent {
   const consent = context.site.consent
-  const categories = consent.categories.map((category) => ({
+  const categories = (consent?.categories ?? []).map((category) => ({
     id: category.id,
     label: category.label,
     description: category.description,
