@@ -1,4 +1,4 @@
-import type { PageOutlineItem } from '@purestack/ts-common'
+import type { MdxCodeHighlighter, PageOutlineItem } from '@purestack/ts-common'
 import { toPosixPath } from '@purestack/ts-util'
 import type { Element, Root, Text } from 'hast'
 import type { Root as MdastRoot } from 'mdast'
@@ -6,7 +6,6 @@ import rehypeStringify from 'rehype-stringify'
 import remarkRehype from 'remark-rehype'
 import { type PluggableList, unified } from 'unified'
 import { applyCodeHighlighting } from './codeHighlighting'
-import type { MdxCodeHighlighter } from './highlight'
 
 export interface MdxCompileResult {
   bodyHtml: string

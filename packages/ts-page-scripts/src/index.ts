@@ -16,3 +16,4 @@ export type {
   TsSsgPageTocApi,
   TsSsgTabsApi,
 } from './runtimeGlobals'
+export { appendRuntimeScripts } from './runtimeScripts'

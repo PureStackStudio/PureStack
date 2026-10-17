@@ -1,3 +1,4 @@
+import type { PageFrontmatter, RuntimeEmbeds } from '@purestack/ts-common'
 import { isTocEnabled, type PageTemplateInput } from '@purestack/ts-common'
 import { h } from '@purestack/ts-html'
 import { buildAuthStateHintScript } from './buildAuthStateHintScript'
@@ -8,10 +9,30 @@ import { buildMenuRuntimeScript } from './embed/menuRuntime.embed'
 import { buildNavMenuScript } from './embed/navMenu.embed'
 import { buildPagefindSearchScript } from './embed/pagefindSearch.embed'
 import { buildPageTocScript } from './embed/pageToc.embed'
+import { appendRuntimeScripts } from './runtimeScripts'
 
 /** The browser behaviors that accompany the default PureStack components. */
 export function pageScriptsPlugin() {
-  return { name: 'purestack:page-scripts', head: renderScriptsHead }
+  return {
+    name: 'purestack:page-scripts',
+    head: renderScriptsHead,
+    hooks: {
+      onPageDocument(
+        _context: unknown,
+        page: {
+          document: Document
+          runtimeEmbeds: RuntimeEmbeds
+          frontmatter: PageFrontmatter
+        },
+      ) {
+        appendRuntimeScripts(
+          page.document,
+          page.runtimeEmbeds,
+          page.frontmatter.embed,
+        )
+      },
+    },
+  }
 }
 
 function renderScriptsHead({

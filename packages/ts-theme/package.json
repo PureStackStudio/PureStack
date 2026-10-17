@@ -1,6 +1,6 @@
 {
   "name": "@purestack/ts-theme",
-  "version": "1.1.14",
+  "version": "1.1.15",
   "packageManager": "yarn@4.9.2",
   "module": "./dist/ts-theme.mjs",
   "types": "./dist/ts-theme.d.mts",
@@ -43,6 +43,7 @@
     "@purestack/ts-html": "workspace:^",
     "@purestack/ts-page-scripts": "workspace:^",
     "@purestack/ts-style": "workspace:^",
+    "@purestack/ts-svg-icons": "workspace:^",
     "@purestack/ts-util-node": "workspace:^",
     "highlight.js": "^11.11.1",
     "logpot": "^1.0.7"

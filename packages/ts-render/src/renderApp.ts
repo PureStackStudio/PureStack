@@ -1,6 +1,5 @@
-import type { PageContext } from '@purestack/ts-common'
+import type { PageContext, RuntimeEmbeds } from '@purestack/ts-common'
 import { runInDom } from '@purestack/ts-minidom'
-import { buildModalScript, buildTabsScript } from '@purestack/ts-page-scripts'
 import { isPlainObject } from '@purestack/ts-util'
 import { createApp } from 'regor'
 import { componentRegistry } from './componentRegistry'
@@ -15,7 +14,10 @@ export interface RenderAppOptions<TContext extends PageContext> {
    * Runs on the rendered document, before it becomes HTML. It may be async:
    * the document stays this render's own until it finishes.
    */
-  onRendered?: (document: Document) => void | Promise<void>
+  onRendered?: (
+    document: Document,
+    runtimeEmbeds: RuntimeEmbeds,
+  ) => void | Promise<void>
 }
 
 /**
@@ -61,62 +63,10 @@ export const renderApp = <TContext extends PageContext>(
         element: document.body,
       },
     )
-    appendEmbeddedScriptsToDom(runtimeEmbeds, pageContext)
-    await options.onRendered?.(document)
+    await options.onRendered?.(document, runtimeEmbeds)
     if (isDocument) {
       return `<!DOCTYPE html>${document.documentElement?.outerHTML ?? ''}`
     }
     return document.body?.innerHTML ?? ''
   })
-}
-
-function appendEmbeddedScriptsToDom(
-  runtimeEmbeds: Map<string, 'body' | 'head'>,
-  context: PageContext,
-) {
-  appendRuntimeScript(
-    resolveTabsEmbedPosition(runtimeEmbeds, context),
-    buildTabsScript,
-  )
-  appendRuntimeScript(
-    resolveModalEmbedPosition(runtimeEmbeds, context),
-    buildModalScript,
-  )
-}
-
-function appendRuntimeScript(
-  position: 'body' | 'head' | undefined,
-  scriptBuilder: () => string,
-) {
-  if (!position) return
-  const targetParent = ensureScriptParent(position)
-  if (!targetParent) return
-  const script = document.createElement('script')
-  script.textContent = scriptBuilder()
-  targetParent.appendChild(script)
-}
-
-function ensureScriptParent(position: 'body' | 'head') {
-  if (position === 'body') {
-    return document.body
-  }
-  return document.head
-}
-
-function resolveTabsEmbedPosition(
-  runtimeEmbeds: Map<string, 'body' | 'head'>,
-  context: PageContext,
-) {
-  const runtimePosition = runtimeEmbeds.get('tabs')
-  if (runtimePosition) return runtimePosition
-  return context?.pageInfo?.frontmatter?.embed?.tabs
-}
-
-function resolveModalEmbedPosition(
-  runtimeEmbeds: Map<string, 'body' | 'head'>,
-  context: PageContext,
-) {
-  const runtimePosition = runtimeEmbeds.get('modal')
-  if (runtimePosition) return runtimePosition
-  return context?.pageInfo?.frontmatter?.embed?.modal
 }

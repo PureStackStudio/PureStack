@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import { LANGUAGE_BY_EXTENSION } from '@purestack/ts-common'
 import { parseFragment } from '@purestack/ts-minidom'
 import { toPosixPath } from '@purestack/ts-util'
 import remarkGfm from 'remark-gfm'
@@ -7,7 +8,6 @@ import remarkParse from 'remark-parse'
 import { unified } from 'unified'
 import { isSharedContentFile } from '../discover/content'
 import { isContentExt } from '../discover/contentExtensions'
-import { LANGUAGE_BY_EXTENSION } from './codeLanguages'
 import { findMarkupTags } from './regorMarkup'
 
 const IMPORT_TAGS = {

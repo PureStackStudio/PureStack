@@ -1,0 +1,46 @@
+{
+  "name": "@purestack/ts-pagefind",
+  "version": "1.1.15",
+  "packageManager": "yarn@4.9.2",
+  "module": "./dist/ts-pagefind.mjs",
+  "types": "./dist/ts-pagefind.d.mts",
+  "type": "module",
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PureStackStudio/PureStack.git",
+    "directory": "packages/ts-pagefind"
+  },
+  "homepage": "https://purestack.studio",
+  "bugs": {
+    "url": "https://github.com/PureStackStudio/PureStack/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/ts-pagefind.d.mts",
+      "import": "./dist/ts-pagefind.mjs"
+    }
+  },
+  "license": "MIT",
+  "files": [
+    "dist/*.mjs",
+    "dist/*.mjs.map",
+    "dist/*.d.mts",
+    "dist/*.d.mts.map",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "lint": "biome check ./src --formatter-enabled=false --write",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@purestack/ts-common": "workspace:^",
+    "logpot": "^1.0.7",
+    "pagefind": "^1.4.0"
+  }
+}

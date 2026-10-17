@@ -7,7 +7,9 @@ import type {
   PageOutlineItem,
   PageTemplateMap,
   PageTranslationInfo,
+  RuntimeEmbeds,
   SiteConfig,
+  SiteSearch,
   SiteStyles,
 } from '@purestack/ts-common'
 import type { BasicHeadConfig } from '@purestack/ts-html'
@@ -52,6 +54,8 @@ export interface BuildContext {
   styleCacheKey?: string
   /** Style output owned by the site's stylesheet provider. */
   styles?: SiteStyles
+  /** Search output owned by the site's search provider. */
+  search?: SiteSearch
   config: SiteConfig
   contentRoutes: ContentRouteIndex
   headerHtmlByDir?: Map<string, string>
@@ -75,6 +79,7 @@ export interface PageDocument {
   frontmatter: PageFrontmatter
   urlPath: string
   outline?: PageOutlineItem[]
+  runtimeEmbeds: RuntimeEmbeds
 }
 
 export interface PageRenderResult {
@@ -185,13 +190,14 @@ export async function renderPageFromFile(
       file,
       htmlShell,
       { pageInfo, navigation, outline: compiled.outline, scriptEntrypoints },
-      (document) =>
+      (document, runtimeEmbeds) =>
         hooks.onPageDocument?.(context, {
           document,
           file,
           frontmatter,
           urlPath,
           outline: compiled.outline,
+          runtimeEmbeds,
         }),
     )
     const renderTimeMs =
@@ -483,14 +489,17 @@ function renderPageApp(
   file: ResolvedContentFile,
   htmlShell: string,
   appContext: RenderAppContextInput,
-  onDocument: (document: Document) => void | Promise<void>,
+  onDocument: (
+    document: Document,
+    runtimeEmbeds: RuntimeEmbeds,
+  ) => void | Promise<void>,
 ) {
   const { scriptEntrypoints, ...baseContext } = appContext
   return renderApp(htmlShell, {
     components: context.components,
     inheritComponents: false,
-    onRendered: async (document) => {
-      await onDocument(document)
+    onRendered: async (document, runtimeEmbeds) => {
+      await onDocument(document, runtimeEmbeds)
       resolvePageUrls(document, {
         sourceRelPath: file.relPath,
         contentRoutes: context.contentRoutes,

@@ -1,5 +1,7 @@
 import { componentsPlugin } from '@purestack/ts-components'
+import { highlightPlugin } from '@purestack/ts-highlight'
 import { pageScriptsPlugin } from '@purestack/ts-page-scripts'
+import { pagefindPlugin } from '@purestack/ts-pagefind'
 import { themePlugin } from '@purestack/ts-theme'
 import type { BuildContext } from '../build/page'
 import type { BuildOptions } from '../build/site'
@@ -8,17 +10,30 @@ import {
   composePluginHooks,
   type PureStackPlugin,
   resolvePluginComponents,
+  resolvePluginSearch,
   resolvePluginStyles,
   resolvePluginTemplates,
 } from './plugin'
 
-export { componentsPlugin, pageScriptsPlugin, themePlugin }
+export {
+  componentsPlugin,
+  highlightPlugin,
+  pagefindPlugin,
+  pageScriptsPlugin,
+  themePlugin,
+}
 
 /** A fresh set for each build/session; the libraries have no registration side effects. */
 export function createDefaultPlugins(): PureStackPlugin[] {
   // CSS initialization precedes component styles; theme startup precedes the
   // browser runtimes. Both use the ordinary plugin lifecycle below.
-  return [themePlugin(), componentsPlugin(), pageScriptsPlugin()]
+  return [
+    themePlugin(),
+    componentsPlugin(),
+    pageScriptsPlugin(),
+    highlightPlugin(),
+    pagefindPlugin(),
+  ]
 }
 
 export function resolveBuildPlugins(options: BuildOptions = {}) {
@@ -43,6 +58,7 @@ export async function initializePluginContext(
   plugins: readonly PureStackPlugin[],
 ) {
   context.styles = resolvePluginStyles(plugins, context.config)
+  context.search = resolvePluginSearch(plugins, context.config)
   context.components = resolvePluginComponents(plugins, context.config)
   context.templates = resolvePluginTemplates(plugins)
   context.headTemplates = plugins.flatMap((plugin) => plugin.head ?? [])

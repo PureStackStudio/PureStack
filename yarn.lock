@@ -777,6 +777,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@purestack/ts-highlight@workspace:^, @purestack/ts-highlight@workspace:packages/ts-highlight":
+  version: 0.0.0-use.local
+  resolution: "@purestack/ts-highlight@workspace:packages/ts-highlight"
+  dependencies:
+    "@purestack/ts-common": "workspace:^"
+    highlight.js: "npm:^11.11.1"
+    shiki: "npm:^3.22.0"
+  languageName: unknown
+  linkType: soft
+
 "@purestack/ts-html@workspace:^, @purestack/ts-html@workspace:packages/ts-html":
   version: 0.0.0-use.local
   resolution: "@purestack/ts-html@workspace:packages/ts-html"
@@ -798,6 +808,18 @@ __metadata:
   dependencies:
     "@purestack/ts-common": "workspace:^"
     "@purestack/ts-html": "workspace:^"
+    "@purestack/ts-minidom": "workspace:^"
+    "@purestack/ts-render": "workspace:^"
+  languageName: unknown
+  linkType: soft
+
+"@purestack/ts-pagefind@workspace:^, @purestack/ts-pagefind@workspace:packages/ts-pagefind":
+  version: 0.0.0-use.local
+  resolution: "@purestack/ts-pagefind@workspace:packages/ts-pagefind"
+  dependencies:
+    "@purestack/ts-common": "workspace:^"
+    logpot: "npm:^1.0.7"
+    pagefind: "npm:^1.4.0"
   languageName: unknown
   linkType: soft
 
@@ -807,7 +829,6 @@ __metadata:
   dependencies:
     "@purestack/ts-common": "workspace:^"
     "@purestack/ts-minidom": "workspace:^"
-    "@purestack/ts-page-scripts": "workspace:^"
     "@purestack/ts-util": "workspace:^"
     regor: "npm:^1.7.5"
   languageName: unknown
@@ -820,9 +841,11 @@ __metadata:
     "@11ty/gray-matter": "npm:^3.0.0"
     "@purestack/ts-common": "workspace:^"
     "@purestack/ts-components": "workspace:^"
+    "@purestack/ts-highlight": "workspace:^"
     "@purestack/ts-html": "workspace:^"
     "@purestack/ts-minidom": "workspace:^"
     "@purestack/ts-page-scripts": "workspace:^"
+    "@purestack/ts-pagefind": "workspace:^"
     "@purestack/ts-render": "workspace:^"
     "@purestack/ts-style": "workspace:^"
     "@purestack/ts-svg-icons": "workspace:^"
@@ -832,18 +855,15 @@ __metadata:
     esbuild: "npm:^0.28.0"
     hast-util-from-html: "npm:^2.0.3"
     hast-util-to-html: "npm:^9.0.5"
-    highlight.js: "npm:^11.11.1"
     html-minifier-next: "npm:^4.19.1"
     logpot: "npm:^1.0.7"
     mdast-util-to-hast: "npm:^13.2.1"
-    pagefind: "npm:^1.4.0"
     regor: "npm:^1.7.5"
     rehype-raw: "npm:^7.0.0"
     rehype-stringify: "npm:^10.0.1"
     remark-gfm: "npm:^4.0.1"
     remark-parse: "npm:^11.0.0"
     remark-rehype: "npm:^11.1.2"
-    shiki: "npm:^3.22.0"
     unified: "npm:^11.0.5"
   bin:
     ts-ssg: ./dist/cli.mjs
@@ -878,6 +898,7 @@ __metadata:
     "@purestack/ts-html": "workspace:^"
     "@purestack/ts-page-scripts": "workspace:^"
     "@purestack/ts-style": "workspace:^"
+    "@purestack/ts-svg-icons": "workspace:^"
     "@purestack/ts-util-node": "workspace:^"
     highlight.js: "npm:^11.11.1"
     logpot: "npm:^1.0.7"

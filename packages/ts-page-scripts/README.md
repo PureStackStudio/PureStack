@@ -18,7 +18,9 @@ import { pageScriptsPlugin } from '@purestack/ts-page-scripts'
 
 It preserves site configuration, page layout gates, consent-aware analytics,
 and the site's base path. Theme startup belongs to `@purestack/ts-theme`;
-component-specific Tabs/Modal embeds remain managed by the renderer.
+the plugin adds component-specific Tabs/Modal embeds through `onPageDocument`. Recorded component placement overrides frontmatter, and Tabs remains before Modal when both target the same parent.
 
 To omit the page runtimes, set `defaultPlugins: false` in `purestack.config.ts`
 or build options and list the other plugins you need.
+
+For standalone `renderApp` calls, use `appendRuntimeScripts(document, runtimeEmbeds, frontmatter.embed)` from the renderer's `onRendered(document, runtimeEmbeds)` callback. The renderer itself has no knowledge of individual runtimes.

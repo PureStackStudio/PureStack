@@ -91,13 +91,15 @@ The badge appears on the page. Change its `tone` in `plugins/site.ts` while the 
 
 ## Standard plugins
 
-PureStack includes three plugins automatically in `build`, `serve`, and `publish`:
+PureStack includes five plugins automatically in `build`, `serve`, and `publish`:
 
 | Package | Factory | Provides |
 | --- | --- | --- |
 | `@purestack/ts-components` | `componentsPlugin()` | Standard components, icons, and component styles |
-| `@purestack/ts-theme` | `themePlugin()` | The `doc` and `splash` templates, generated theme CSS, and theme switching |
-| `@purestack/ts-page-scripts` | `pageScriptsPlugin()` | Auth hint, consent and analytics, menus, navigation, code copying, search, and TOC runtimes |
+| `@purestack/ts-theme` | `themePlugin()` | The `doc` and `splash` templates, generated theme CSS, favicons, and theme switching |
+| `@purestack/ts-page-scripts` | `pageScriptsPlugin()` | Auth hint, consent and analytics, menus, navigation, code copying, search, TOC, Tabs, and Modal runtimes |
+| `@purestack/ts-highlight` | `highlightPlugin()` | Shiki or highlight.js code highlighting |
+| `@purestack/ts-pagefind` | `pagefindPlugin()` | Full-build and lazy development search indexing |
 
 The stylesheet provider initializes before component factories, then all config hooks run in plugin order. Names do not affect initialization. Components belong to each build, so hooks can override them through `context.components`. The theme and page runtime plugins supply head templates that run before the selected page template, preserving its ability to inspect or change the completed head. The lifecycle hook set is unchanged.
 
@@ -112,9 +114,13 @@ export default defineConfig({
 })
 ```
 
-This keeps the layouts and components while omitting the page runtimes. Theme switching belongs to the theme plugin; component-specific Tabs and Modal embeds still follow the page's `embed` settings. Without the theme plugin, another plugin must supply your page templates and any CSS output you need.
+This keeps the layouts and components while omitting page runtimes, code highlighting, and search indexing. Theme switching and favicon generation belong to the theme plugin. Tabs and Modal scripts belong to the page scripts plugin, including automatic component embeds and explicit frontmatter settings. Without the theme plugin, another plugin must supply your page templates and any CSS output you need.
 
 An explicitly listed standard plugin replaces the automatic instance by name and keeps its initialization position. You can also use `createDefaultPlugins()` to obtain the complete set. In programmatic builds, use `options.defaultPlugins` alongside `options.plugins`.
+
+The highlighting plugin selects the configured backend. Configure native backend factories through `highlightPlugin({ createShiki, createHighlightJs })`, or supply `markdown.createHighlighter(config)` for a different engine. The generic provider returns `{ codeToHtml(code, lang?) }`. Ordinary providers override the default without constructing it; per-language `markdown.resolveHighlighter` callbacks retain precedence.
+
+The Pagefind plugin supplies a `search` provider. To use another engine, replace `purestack:pagefind` or disable the default set and install your own provider. The builder supplies excluded output paths and the rendered-page list for lazy requests, and manages invalidation on edits and deletions. Sitemap and robots generation remain built in.
 
 ## How the config loads
 

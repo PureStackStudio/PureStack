@@ -1,5 +1,5 @@
+import { createHljsHighlighter } from '@purestack/ts-highlight'
 import { describe, expect, it } from 'vitest'
-import { createHljsHighlighter } from './highlightjs'
 import { compileMarkdown } from './md'
 import { compileMdx } from './mdx'
 

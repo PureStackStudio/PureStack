@@ -1,9 +1,8 @@
+import type { MdxCodeHighlighter } from '@purestack/ts-common'
 import type { Element, Root, Text } from 'hast'
 import { fromHtml } from 'hast-util-from-html'
 import { toHtml } from 'hast-util-to-html'
 import type { Raw } from 'mdast-util-to-hast'
-
-import type { MdxCodeHighlighter } from './highlight'
 
 /** Applies the configured highlighter to code blocks and inline code. */
 export async function applyCodeHighlighting(

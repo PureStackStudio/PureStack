@@ -14,18 +14,11 @@ import {
   resolvePlainContentFile,
 } from '../../i18n/content'
 import type { MdxRenderOptions } from '../../mdx/compile'
-import {
-  createMdxHighlighter,
-  DEFAULT_MDX_CODE_LANGS,
-  DEFAULT_MDX_CODE_THEMES,
-  type MdxCodeHighlighter,
-} from '../../mdx/highlight'
-import { createHljsHighlighter } from '../../mdx/highlightjs'
 import { generatePluginPages } from '../../plugins/generated-pages'
 import {
+  createPluginHighlighter,
   type PureStackPlugin,
   resolvePluginHighlighter,
-  resolvePluginHighlighterFactory,
 } from '../../plugins/plugin'
 import {
   assertUniqueContentRoutes,
@@ -136,28 +129,12 @@ export async function resolveMdxBuildOptions(
 ): Promise<MdxRenderOptions> {
   const highlighter = resolvePluginHighlighter(
     plugins,
-    await resolveHighlighter(mdx, plugins),
+    await createPluginHighlighter(plugins, mdx ?? {}),
   )
   return {
     highlighter,
     compileMdAsMdx: mdx?.compileMdAsMdx ?? true,
   }
-}
-
-async function resolveHighlighter(
-  mdx: Partial<SiteMdxConfig> | undefined,
-  plugins: readonly PureStackPlugin[],
-): Promise<MdxCodeHighlighter | undefined> {
-  if (mdx?.disableHighlighter) return undefined
-  if (mdx?.highlighter === 'highlightjs') {
-    const create = resolvePluginHighlighterFactory(plugins, 'createHighlightJs')
-    return createHljsHighlighter(await create?.())
-  }
-  return await createMdxHighlighter(
-    DEFAULT_MDX_CODE_THEMES,
-    DEFAULT_MDX_CODE_LANGS,
-    resolvePluginHighlighterFactory(plugins, 'createShiki'),
-  )
 }
 
 /**

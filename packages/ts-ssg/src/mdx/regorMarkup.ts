@@ -34,11 +34,11 @@ Internally, the interesting helpers are:
 So the short version is: `regorMarkup.ts` is the compatibility layer that lets this project support Regor component syntax inside `.mdx` files while still using a mostly markdown-first pipeline.
  */
 
+import type { MdxCodeHighlighter } from '@purestack/ts-common'
 import {
   renderHighlightedCodeBlockHtml,
   renderHighlightedInlineCodeHtml,
 } from './codeHighlighting'
-import type { MdxCodeHighlighter } from './highlight'
 
 type MarkdownNode = {
   type?: unknown

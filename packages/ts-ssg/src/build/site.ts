@@ -64,7 +64,7 @@ export interface BuildHooks {
 export interface BuildOptions {
   cleanOutDir?: boolean
   writeErrorPages?: boolean
-  /** Include the standard component, theme, and browser-runtime plugins. */
+  /** Include the standard component, theme, browser-runtime, highlighting, and search plugins. */
   defaultPlugins?: boolean
   /** Extensions to apply, in order. See {@link PureStackPlugin}. */
   plugins?: PureStackPlugin[]

@@ -33,7 +33,6 @@ import { resolveRouteInfo } from '../../routing/route'
 import { copyStaticAsset, copyStaticAssets } from '../assets'
 import { resolveBuildSiteConfig } from '../build-config'
 import { ContentRouteIndex } from '../content-urls'
-import { writeGeneratedFavicon } from '../favicon'
 import { prepareOutDir } from '../io'
 import {
   type BuildManifest,
@@ -44,7 +43,6 @@ import {
   writeManifest,
 } from '../manifest'
 import { type BuildContext, resolveHeaderFooterHtml } from '../page'
-import { buildPagefindIndex } from '../pagefind'
 import { createScriptCacheKey, ScriptCacheKeyStore } from '../script-cache-key'
 import type { BuildHooks, BuildInput, BuildResult } from '../site'
 import { writeSitemap } from '../sitemap'
@@ -267,7 +265,6 @@ class IncrementalRuntime {
     for (const key of Object.keys(this.manifest.assets))
       delete this.manifest.assets[key]
     this.scriptCacheKeys.clear()
-    await writeGeneratedFavicon(this.config)
     await this.discoverAssets()
     const files = await this.prepareContent(
       [...this.staticAssets.values()].map((file) => file.relPath),
@@ -394,7 +391,6 @@ class IncrementalRuntime {
   ): Promise<BuildPreparationResult> {
     await initializePluginContext(this.context, this.options.plugins)
     await prepareOutDir(this.config.outDir, { clean: this.options.cleanOutDir })
-    await writeGeneratedFavicon(this.config)
     await this.discoverAssets()
     const assetFiles = [...this.staticAssets.values()]
     const contentFiles = await this.prepareContent(
@@ -501,11 +497,10 @@ class IncrementalRuntime {
       pages,
     })
 
-    await buildPagefindIndex(
-      this.config.outDir,
-      this.config.pagefind,
-      this.contentState.unindexedOutPaths(),
-    )
+    await this.context.search?.write({
+      outDir: this.config.outDir,
+      excludeFiles: this.contentState.unindexedOutPaths(),
+    })
     this.searchRevision = this.pageAssetRevision
 
     this.manifest = await buildManifest(
@@ -693,16 +688,17 @@ class IncrementalRuntime {
     } catch {
       return false
     }
-    if (pathname.startsWith('/pagefind/')) {
+    if (this.context.search?.ownsPath(pathname)) {
       await this.queueAssetWork(async () => {
         if (this.searchRevision === this.pageAssetRevision) return
         const revision = this.pageAssetRevision
-        await buildPagefindIndex(
-          this.config.outDir,
-          this.config.pagefind,
-          this.contentState.unindexedOutPaths(),
-          Object.values(this.manifest.content).map((entry) => entry.outPath),
-        )
+        await this.context.search?.write({
+          outDir: this.config.outDir,
+          excludeFiles: this.contentState.unindexedOutPaths(),
+          onlyFiles: Object.values(this.manifest.content).map(
+            (entry) => entry.outPath,
+          ),
+        })
         this.searchRevision = revision
       })
       return true

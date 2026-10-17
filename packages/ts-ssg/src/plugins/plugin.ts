@@ -1,18 +1,19 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import type {
+  MdxCodeHighlighter,
   PageHeadTemplate,
   PageTemplateMap,
   SiteConfig,
+  SiteMdxConfig,
+  SiteSearch,
   SiteStyles,
 } from '@purestack/ts-common'
 import { registerSkin, type ThemeSkin, themeSkins } from '@purestack/ts-style'
 import { escapeHtml, isPlainObject } from '@purestack/ts-util'
-import type { HLJSApi } from 'highlight.js'
 import type { PluggableList } from 'unified'
 import type { BuildHooks } from '../build/site'
 import type { ResolvedContentFile } from '../i18n/content'
 import { createContentProcessor } from '../mdx/compile'
-import type { MdxCodeHighlighter, MdxShikiFactory } from '../mdx/highlight'
 
 /**
  * A named bundle of extensions for a PureStack site. Plugins compose in
@@ -22,7 +23,7 @@ import type { MdxCodeHighlighter, MdxShikiFactory } from '../mdx/highlight'
 export interface PureStackPlugin {
   /** Names the plugin in conflict and hook error messages. */
   name: string
-  /** Components and templates supply defaults that ordinary contributions may override. */
+  /** Components, templates, and the default highlighter supply defaults that ordinary contributions may override. */
   defaults?: boolean
   /** Theme skins the site config can select with `style.theme.skin`. */
   skins?: Record<string, ThemeSkin>
@@ -34,6 +35,8 @@ export interface PureStackPlugin {
   head?: PageHeadTemplate
   /** The site's stylesheet provider, initialized before component factories. */
   styles?: (config: SiteConfig) => SiteStyles
+  /** Search output, used for full builds and lazy development asset requests. */
+  search?: (config: SiteConfig) => SiteSearch
   /** Markdown transforms and highlighter resolution for pages and shared partials. */
   markdown?: PureStackMarkdown
   /**
@@ -78,10 +81,10 @@ export interface GeneratedPage {
 }
 
 export interface PureStackMarkdown {
-  /** Creates Shiki from PureStack's default creation options. Only used when Shiki is selected. */
-  createShiki?: MdxShikiFactory
-  /** Creates the configured highlight.js instance. Only used when highlight.js is selected. */
-  createHighlightJs?: () => HLJSApi | Promise<HLJSApi>
+  /** Creates the site's default code highlighter once per build/session. */
+  createHighlighter?: (
+    config: Partial<SiteMdxConfig>,
+  ) => MdxCodeHighlighter | undefined | Promise<MdxCodeHighlighter | undefined>
   /** Resolves a lowercase language (empty when absent); null lets the next highlighter handle it. */
   resolveHighlighter?: (
     lang: string,
@@ -107,6 +110,7 @@ const PLUGIN_FIELDS = [
   'templates',
   'head',
   'styles',
+  'search',
   'markdown',
   'pages',
   'devMiddleware',
@@ -116,8 +120,7 @@ const MARKDOWN_FIELDS = [
   'remarkPlugins',
   'rehypePlugins',
   'resolveHighlighter',
-  'createShiki',
-  'createHighlightJs',
+  'createHighlighter',
 ]
 
 const HOOK_NAMES = [
@@ -187,6 +190,8 @@ function assertPluginFields(name: string, plugin: Record<string, unknown>) {
     fail('needs `head` to be a head template.')
   if (plugin.styles !== undefined && typeof plugin.styles !== 'function')
     fail('needs `styles` to be a stylesheet provider.')
+  if (plugin.search !== undefined && typeof plugin.search !== 'function')
+    fail('needs `search` to be a search provider.')
   if (pages !== undefined && typeof pages !== 'function') {
     fail('needs `pages` to be a function that returns pages.')
   }
@@ -343,21 +348,67 @@ export function resolvePluginContentProcessor(
   )
 }
 
-/** A selected backend has one factory; choosing between competing factories would hide a plugin. */
-export function resolvePluginHighlighterFactory<
-  K extends 'createShiki' | 'createHighlightJs',
->(plugins: readonly PureStackPlugin[], field: K): PureStackMarkdown[K] {
+/** Ordinary providers override defaults; competing providers fail before initialization. */
+export async function createPluginHighlighter(
+  plugins: readonly PureStackPlugin[],
+  config: Partial<SiteMdxConfig>,
+): Promise<MdxCodeHighlighter | undefined> {
+  if (config.disableHighlighter) return undefined
+  const providers = plugins.filter(
+    (plugin) => plugin.markdown?.createHighlighter,
+  )
   let owner: PureStackPlugin | undefined
-  for (const plugin of plugins) {
-    if (plugin.markdown?.[field] === undefined) continue
-    if (owner) {
+  for (const defaults of [true, false]) {
+    const group = providers.filter(
+      (plugin) => (plugin.defaults === true) === defaults,
+    )
+    if (group.length > 1)
       throw new Error(
-        `Plugins "${owner.name}" and "${plugin.name}" both define markdown.${field}.`,
+        `Plugins "${group[0].name}" and "${group[1].name}" both define markdown.createHighlighter.`,
       )
-    }
-    owner = plugin
+    owner = group[0] ?? owner
   }
-  return owner?.markdown?.[field]
+  if (!owner) return undefined
+  try {
+    const highlighter = await owner.markdown?.createHighlighter?.(config)
+    if (
+      highlighter !== undefined &&
+      typeof highlighter?.codeToHtml !== 'function'
+    )
+      throw new Error(
+        'markdown.createHighlighter must return a code highlighter or undefined.',
+      )
+    return highlighter
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error)
+    throw new Error(
+      `Plugin "${owner.name}" failed in markdown.createHighlighter: ${message}`,
+      { cause: error },
+    )
+  }
+}
+
+export function resolvePluginSearch(
+  plugins: readonly PureStackPlugin[],
+  config: SiteConfig,
+) {
+  const providers = plugins.filter((plugin) => plugin.search)
+  if (providers.length > 1)
+    throw new Error(
+      `Plugins "${providers[0].name}" and "${providers[1].name}" both define search.`,
+    )
+  const provider = providers[0]
+  const search = provider?.search?.(config)
+  if (
+    provider &&
+    (!search ||
+      typeof search.ownsPath !== 'function' ||
+      typeof search.write !== 'function')
+  )
+    throw new Error(
+      `Plugin "${provider.name}" needs search to return a search provider.`,
+    )
+  return search
 }
 
 /** Tries plugin resolvers in order, then uses the default highlighter. */

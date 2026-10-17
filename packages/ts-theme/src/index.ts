@@ -13,6 +13,7 @@ import {
   themes,
 } from '@purestack/ts-style'
 import { registerDocLayoutStyles } from './docLayoutStyles'
+import { writeGeneratedFavicon } from './favicon'
 import { registerMarkdownStyles } from './markdownStyles'
 import { defaultTemplates } from './templates'
 import { writeStyles } from './writeStyles'
@@ -27,6 +28,10 @@ export function themePlugin() {
     templates: defaultTemplates,
     styles: createSiteStyles,
     head: renderThemeHead,
+    hooks: {
+      onContentDiscovered: ({ config }: { config: SiteConfig }) =>
+        writeGeneratedFavicon(config),
+    },
   }
 }
 
