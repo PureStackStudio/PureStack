@@ -1,6 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import type {
   MdxCodeHighlighter,
+  PageHeadConfigTemplate,
   PageHeadTemplate,
   PageTemplateMap,
   SiteConfig,
@@ -33,6 +34,8 @@ export interface PureStackPlugin {
   templates?: PageTemplateMap
   /** Head template, composed before the selected page template. */
   head?: PageHeadTemplate
+  /** Head defaults, composed before explicit page overrides and head templates. */
+  headConfig?: PageHeadConfigTemplate
   /** The site's stylesheet provider, initialized before component factories. */
   styles?: (config: SiteConfig) => SiteStyles
   /** Search output, used for full builds and lazy development asset requests. */
@@ -96,6 +99,8 @@ export interface PureStackMarkdown {
   remarkPlugins?: PluggableList
   /** Transform the HTML tree, before the outline and code highlighting. */
   rehypePlugins?: PluggableList
+  /** Final HTML transforms after ordinary rehype plugins, before outline/highlighting. */
+  rehypePostPlugins?: PluggableList
 }
 
 export function definePlugin(plugin: PureStackPlugin): PureStackPlugin {
@@ -109,6 +114,7 @@ const PLUGIN_FIELDS = [
   'components',
   'templates',
   'head',
+  'headConfig',
   'styles',
   'search',
   'markdown',
@@ -119,6 +125,7 @@ const PLUGIN_FIELDS = [
 const MARKDOWN_FIELDS = [
   'remarkPlugins',
   'rehypePlugins',
+  'rehypePostPlugins',
   'resolveHighlighter',
   'createHighlighter',
 ]
@@ -188,6 +195,11 @@ function assertPluginFields(name: string, plugin: Record<string, unknown>) {
     fail('needs `defaults` to be a boolean.')
   if (plugin.head !== undefined && typeof plugin.head !== 'function')
     fail('needs `head` to be a head template.')
+  if (
+    plugin.headConfig !== undefined &&
+    typeof plugin.headConfig !== 'function'
+  )
+    fail('needs `headConfig` to be a head configuration template.')
   if (plugin.styles !== undefined && typeof plugin.styles !== 'function')
     fail('needs `styles` to be a stylesheet provider.')
   if (plugin.search !== undefined && typeof plugin.search !== 'function')
@@ -209,7 +221,11 @@ function assertPluginFields(name: string, plugin: Record<string, unknown>) {
         )
       }
       if (list === undefined) continue
-      if (field === 'remarkPlugins' || field === 'rehypePlugins') {
+      if (
+        field === 'remarkPlugins' ||
+        field === 'rehypePlugins' ||
+        field === 'rehypePostPlugins'
+      ) {
         if (!Array.isArray(list))
           fail(`needs \`markdown.${field}\` to be a list of plugins.`)
       } else if (typeof list !== 'function') {
@@ -345,6 +361,7 @@ export function resolvePluginContentProcessor(
   return createContentProcessor(
     plugins.flatMap((plugin) => plugin.markdown?.remarkPlugins ?? []),
     plugins.flatMap((plugin) => plugin.markdown?.rehypePlugins ?? []),
+    plugins.flatMap((plugin) => plugin.markdown?.rehypePostPlugins ?? []),
   )
 }
 

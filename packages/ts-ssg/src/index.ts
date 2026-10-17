@@ -2,6 +2,8 @@ export type {
   MdxCodeHighlighter,
   PageContext,
   PageFrontmatter,
+  PageHeadConfigInput,
+  PageHeadConfigTemplate,
   PageHeadTemplate,
   PageInfo,
   PageTemplate,
@@ -49,11 +51,15 @@ export {
   resolvePageNavigation,
 } from './navigation/navigation'
 export {
+  analyticsPlugin,
+  authStateHintPlugin,
   componentsPlugin,
+  consentPlugin,
   createDefaultPlugins,
   highlightPlugin,
   pagefindPlugin,
   pageScriptsPlugin,
+  seoPlugin,
   themePlugin,
 } from './plugins/default-plugins'
 export {

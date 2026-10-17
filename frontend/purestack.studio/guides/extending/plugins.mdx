@@ -91,17 +91,25 @@ The badge appears on the page. Change its `tone` in `plugins/site.ts` while the 
 
 ## Standard plugins
 
-PureStack includes five plugins automatically in `build`, `serve`, and `publish`:
+PureStack includes nine plugins automatically in `build`, `serve`, and `publish`:
 
 | Package | Factory | Provides |
 | --- | --- | --- |
 | `@purestack/ts-components` | `componentsPlugin()` | Standard components, icons, and component styles |
-| `@purestack/ts-theme` | `themePlugin()` | The `doc` and `splash` templates, generated theme CSS, favicons, and theme switching |
-| `@purestack/ts-page-scripts` | `pageScriptsPlugin()` | Auth hint, consent and analytics, menus, navigation, code copying, search, TOC, Tabs, and Modal runtimes |
+| `@purestack/ts-theme` | `themePlugin()` | The `doc` and `splash` templates, generated theme CSS, favicons, theme switching, and Markdown table presentation |
+| `@purestack/ts-page-scripts` | `pageScriptsPlugin()` | Menus, navigation, code copying, search, TOC, Tabs, and Modal runtimes |
+| `@purestack/ts-page-scripts` | `authStateHintPlugin()` | Early signed-in state hint |
+| `@purestack/ts-page-scripts` | `consentPlugin()` | Consent browser runtime |
+| `@purestack/ts-page-scripts` | `analyticsPlugin()` | Direct or consent-managed GA4 integration |
+| `@purestack/ts-seo` | `seoPlugin()` | Social previews, canonical URLs, and translated alternate links |
 | `@purestack/ts-highlight` | `highlightPlugin()` | Shiki or highlight.js code highlighting |
 | `@purestack/ts-pagefind` | `pagefindPlugin()` | Full-build and lazy development search indexing |
 
 The stylesheet provider initializes before component factories, then all config hooks run in plugin order. Names do not affect initialization. Components belong to each build, so hooks can override them through `context.components`. The theme and page runtime plugins supply head templates that run before the selected page template, preserving its ability to inspect or change the completed head. The lifecycle hook set is unchanged.
+
+Metadata defaults compose through `headConfig({ site, pageInfo })` in plugin order, before explicit frontmatter `head` overrides and before head markup is rendered. It returns `BasicHeadConfig` or a promise. The SEO plugin uses this contribution for Open Graph, Twitter, canonical URLs, and translated alternate links; page templates receive the completed `headConfig`. Basic titles, descriptions, explicit head settings, and `index: false` enforcement remain in core.
+
+Auth hints, consent, and analytics are independent plugins in `ts-page-scripts`. The analytics plugin registers automatic GA4 consent services during `onConfigResolved`, before later config hooks and rendering. Omitting it removes automatic registration and direct tracking scripts. Explicitly configured consent services remain available. Analytics never bypasses enabled consent when the consent runtime plugin is omitted.
 
 To choose the standard integrations yourself, disable the automatic set and list the plugins you want. The factories are exported from `purestack`, `@purestack/ts-ssg`, and their individual packages:
 
@@ -114,7 +122,7 @@ export default defineConfig({
 })
 ```
 
-This keeps the layouts and components while omitting page runtimes, code highlighting, and search indexing. Theme switching and favicon generation belong to the theme plugin. Tabs and Modal scripts belong to the page scripts plugin, including automatic component embeds and explicit frontmatter settings. Without the theme plugin, another plugin must supply your page templates and any CSS output you need.
+This keeps the layouts and components while omitting automatic social metadata, page runtimes, code highlighting, and search indexing. Theme switching, favicon generation, and Markdown table wrappers belong to the theme plugin. Tabs and Modal scripts belong to the page scripts plugin, including automatic component embeds and explicit frontmatter settings. Without the theme plugin, another plugin must supply your page templates and any CSS output you need.
 
 An explicitly listed standard plugin replaces the automatic instance by name and keeps its initialization position. You can also use `createDefaultPlugins()` to obtain the complete set. In programmatic builds, use `options.defaultPlugins` alongside `options.plugins`.
 
@@ -209,6 +217,8 @@ template: landing
 Besides the prepared `head` and the page's `bodyHtml`, a template receives the page's shared `headerHtml` and `footerHtml`, the `site` config, `navigation`, the heading `outline`, and `pageInfo`, whose `frontmatter` includes any custom fields the page defines. A template named `doc` or `splash` replaces the built-in one. [Run code during the build](#run-code-during-the-build) shows how to style `.landing`.
 
 ## Transform Markdown
+
+Ordinary `rehypePlugins` run before `rehypePostPlugins`, which apply final presentation before outline collection and code highlighting. The theme plugin uses this final stage for `div.table-scroll`, so tables introduced by custom transforms receive the same scrolling behavior as source tables. Both stages run on pages and shared Markdown partials.
 
 `markdown` adds <a href="https://github.com/remarkjs/remark" target="_blank" rel="noopener">remark</a> plugins, which change the Markdown tree, and <a href="https://github.com/rehypejs/rehype" target="_blank" rel="noopener">rehype</a> plugins, which change the HTML tree. Every page, header, and footer goes through these steps:
 
@@ -534,8 +544,9 @@ Every field except `name` is optional.
 | `components` | `(config) => ({ [name]: component })` |
 | `templates` | Templates by name, each `(input) => TSNode<'html'>` |
 | `head` | `(input) => TSNode<'head'>`, or a promise; composes head markup before the page template |
+| `headConfig` | `({ site, pageInfo }) => BasicHeadConfig`, or a promise; metadata defaults before explicit page overrides |
 | `styles` | `(config) => SiteStyles`; one stylesheet provider, initialized before component factories |
-| `markdown` | `{ remarkPlugins?: PluggableList, rehypePlugins?: PluggableList }` |
+| `markdown` | `PureStackMarkdown`: remark, rehype, final rehype transforms, and highlighter providers |
 | `pages` | `({ config, files }) => { path, source }[]`, or a promise of them; `source` is the text, or a function that returns it |
 | `hooks` | Any of the hooks above |
 | `devMiddleware` | `(request, response) => void`, or a promise |

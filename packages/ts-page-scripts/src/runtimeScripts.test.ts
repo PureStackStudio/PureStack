@@ -6,11 +6,12 @@ import { appendRuntimeScripts } from './runtimeScripts'
 
 describe('appendRuntimeScripts', () => {
   it('supports standalone rendering through the generic renderer callback', async () => {
+    const context: Partial<PageContext> = { recordRuntimeEmbed: () => {} }
     const output = await renderApp(
       '<html><head></head><body><p>Standalone</p></body></html>',
       {
         components: {},
-        context: { recordRuntimeEmbed: () => {} } as PageContext,
+        context: context as PageContext,
         onRendered: (document, runtimeEmbeds) =>
           appendRuntimeScripts(document, runtimeEmbeds, { tabs: 'body' }),
       },
@@ -18,8 +19,8 @@ describe('appendRuntimeScripts', () => {
     expect(output).toContain('<p>Standalone</p>')
     expect(output).toContain('tsSsgTabs')
   })
-  it('preserves script order and lets recorded placement override frontmatter', async () => {
-    await runInDom('<html><head></head><body></body></html>', (document) => {
+  it('preserves script order and lets recorded placement override frontmatter', () => {
+    runInDom('<html><head></head><body></body></html>', (document) => {
       appendRuntimeScripts(
         document,
         new Map([
@@ -39,8 +40,8 @@ describe('appendRuntimeScripts', () => {
     })
   })
 
-  it('supports explicit frontmatter embeds without rendered components', async () => {
-    await runInDom('<html><head></head><body></body></html>', (document) => {
+  it('supports explicit frontmatter embeds without rendered components', () => {
+    runInDom('<html><head></head><body></body></html>', (document) => {
       appendRuntimeScripts(document, new Map(), { tabs: 'body', modal: 'body' })
       const scripts = [...document.body.querySelectorAll('script')]
       expect(scripts).toHaveLength(2)

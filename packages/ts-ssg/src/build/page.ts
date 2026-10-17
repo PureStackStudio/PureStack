@@ -1,6 +1,7 @@
 import path from 'node:path'
 import type {
   PageFrontmatter,
+  PageHeadConfigTemplate,
   PageHeadTemplate,
   PageInfo,
   PageNavigation,
@@ -66,6 +67,7 @@ export interface BuildContext {
   components?: Record<string, object>
   templates?: PageTemplateMap
   headTemplates?: readonly PageHeadTemplate[]
+  headConfigTemplates?: readonly PageHeadConfigTemplate[]
   navigation?: NavigationTree
   translationsByKey?: ContentTranslationsByKey
   mdx?: MdxRenderOptions
@@ -166,14 +168,10 @@ export async function renderPageFromFile(
       frontmatter,
       context.translationsByKey,
     )
-    const headConfig = resolveHeadConfig(frontmatter, {
-      siteTitle: context.config.siteTitle,
-      sitePreview: context.config.preview,
-      basePath: context.config.basePath,
-      baseUrl: context.config.sitemap.baseUrl,
-      urlPath,
-      translations: pageInfo.translations,
-    })
+    const headConfig = await resolveHeadConfig(
+      { site: context.config, pageInfo },
+      context.headConfigTemplates,
+    )
     const template = frontmatter.template
     const scriptEntrypoints = new Set<string>()
     const htmlShell = await renderPageShell({

@@ -834,6 +834,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@purestack/ts-seo@workspace:^, @purestack/ts-seo@workspace:packages/ts-seo":
+  version: 0.0.0-use.local
+  resolution: "@purestack/ts-seo@workspace:packages/ts-seo"
+  dependencies:
+    "@purestack/ts-common": "workspace:^"
+    "@purestack/ts-html": "workspace:^"
+    "@purestack/ts-util": "workspace:^"
+  languageName: unknown
+  linkType: soft
+
 "@purestack/ts-ssg@workspace:^, @purestack/ts-ssg@workspace:packages/ts-ssg":
   version: 0.0.0-use.local
   resolution: "@purestack/ts-ssg@workspace:packages/ts-ssg"
@@ -847,6 +857,7 @@ __metadata:
     "@purestack/ts-page-scripts": "workspace:^"
     "@purestack/ts-pagefind": "workspace:^"
     "@purestack/ts-render": "workspace:^"
+    "@purestack/ts-seo": "workspace:^"
     "@purestack/ts-style": "workspace:^"
     "@purestack/ts-svg-icons": "workspace:^"
     "@purestack/ts-theme": "workspace:^"
@@ -900,6 +911,7 @@ __metadata:
     "@purestack/ts-style": "workspace:^"
     "@purestack/ts-svg-icons": "workspace:^"
     "@purestack/ts-util-node": "workspace:^"
+    "@types/hast": "npm:^3.0.4"
     highlight.js: "npm:^11.11.1"
     logpot: "npm:^1.0.7"
   languageName: unknown

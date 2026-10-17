@@ -1,7 +1,13 @@
 import { componentsPlugin } from '@purestack/ts-components'
 import { highlightPlugin } from '@purestack/ts-highlight'
-import { pageScriptsPlugin } from '@purestack/ts-page-scripts'
+import {
+  analyticsPlugin,
+  authStateHintPlugin,
+  consentPlugin,
+  pageScriptsPlugin,
+} from '@purestack/ts-page-scripts'
 import { pagefindPlugin } from '@purestack/ts-pagefind'
+import { seoPlugin } from '@purestack/ts-seo'
 import { themePlugin } from '@purestack/ts-theme'
 import type { BuildContext } from '../build/page'
 import type { BuildOptions } from '../build/site'
@@ -16,10 +22,14 @@ import {
 } from './plugin'
 
 export {
+  analyticsPlugin,
+  authStateHintPlugin,
   componentsPlugin,
+  consentPlugin,
   highlightPlugin,
   pagefindPlugin,
   pageScriptsPlugin,
+  seoPlugin,
   themePlugin,
 }
 
@@ -28,8 +38,12 @@ export function createDefaultPlugins(): PureStackPlugin[] {
   // CSS initialization precedes component styles; theme startup precedes the
   // browser runtimes. Both use the ordinary plugin lifecycle below.
   return [
+    seoPlugin(),
     themePlugin(),
     componentsPlugin(),
+    authStateHintPlugin(),
+    consentPlugin(),
+    analyticsPlugin(),
     pageScriptsPlugin(),
     highlightPlugin(),
     pagefindPlugin(),
@@ -62,5 +76,8 @@ export async function initializePluginContext(
   context.components = resolvePluginComponents(plugins, context.config)
   context.templates = resolvePluginTemplates(plugins)
   context.headTemplates = plugins.flatMap((plugin) => plugin.head ?? [])
+  context.headConfigTemplates = plugins.flatMap(
+    (plugin) => plugin.headConfig ?? [],
+  )
   await composePluginHooks(plugins).onConfigResolved?.(context)
 }

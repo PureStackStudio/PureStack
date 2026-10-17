@@ -20,16 +20,24 @@ export interface PageTranslationInfo {
   relPath: string
 }
 
-export interface PageTemplateInput {
+export interface PageHeadConfigInput {
+  site: SiteConfig
+  pageInfo: PageInfo
+}
+
+/** Supplies head defaults before explicit page frontmatter overrides. */
+export type PageHeadConfigTemplate = (
+  input: PageHeadConfigInput,
+) => BasicHeadConfig | Promise<BasicHeadConfig>
+
+export interface PageTemplateInput extends PageHeadConfigInput {
   head: TSNode<'head'>
   bodyHtml: string
   headConfig?: BasicHeadConfig
   styleLinks?: ThemeStylesheetLink[]
   templateName: string
-  site: SiteConfig
   navigation?: PageNavigation
   outline?: PageOutlineItem[]
-  pageInfo: PageInfo
   headerHtml?: string
   footerHtml?: string
 }

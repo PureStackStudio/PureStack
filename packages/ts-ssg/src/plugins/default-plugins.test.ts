@@ -12,6 +12,7 @@ import { readManifest } from '../build/manifest'
 import { type BuildOptions, buildSite } from '../build/site'
 import { makeRepoTempDir } from '../test/repoTempDir'
 import {
+  authStateHintPlugin,
   componentsPlugin,
   pageScriptsPlugin,
   themePlugin,
@@ -205,6 +206,7 @@ describe('default plugins', () => {
           : {
               defaultPlugins: false,
               plugins: [
+                authStateHintPlugin(),
                 pageScriptsPlugin(),
                 {
                   name: 'plain',

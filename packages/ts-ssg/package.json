@@ -50,6 +50,7 @@
     "@purestack/ts-page-scripts": "workspace:^",
     "@purestack/ts-pagefind": "workspace:^",
     "@purestack/ts-render": "workspace:^",
+    "@purestack/ts-seo": "workspace:^",
     "@purestack/ts-style": "workspace:^",
     "@purestack/ts-theme": "workspace:^",
     "@purestack/ts-util": "workspace:^",

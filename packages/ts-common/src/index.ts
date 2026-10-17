@@ -39,6 +39,8 @@ export type {
   PageNavigationLinks,
 } from './navMenu-types'
 export type {
+  PageHeadConfigInput,
+  PageHeadConfigTemplate,
   PageHeadTemplate,
   PageInfo,
   PageTemplate,

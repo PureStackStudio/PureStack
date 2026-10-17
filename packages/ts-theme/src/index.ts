@@ -14,6 +14,7 @@ import {
 } from '@purestack/ts-style'
 import { registerDocLayoutStyles } from './docLayoutStyles'
 import { writeGeneratedFavicon } from './favicon'
+import { markdownPresentation } from './markdownPresentation'
 import { registerMarkdownStyles } from './markdownStyles'
 import { defaultTemplates } from './templates'
 import { writeStyles } from './writeStyles'
@@ -26,6 +27,7 @@ export function themePlugin() {
     name: 'purestack:theme',
     defaults: true,
     templates: defaultTemplates,
+    markdown: { rehypePostPlugins: [markdownPresentation] },
     styles: createSiteStyles,
     head: renderThemeHead,
     hooks: {

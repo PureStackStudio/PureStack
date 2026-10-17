@@ -1,5 +1,6 @@
 import fs from 'node:fs'
 import { createDom, ensureDomGlobals } from '@purestack/ts-minidom'
+import { analyticsPlugin } from '@purestack/ts-page-scripts'
 import { transformSync } from 'esbuild'
 import { describe, expect, it } from 'vitest'
 import { resolveSiteConfig } from './config'
@@ -21,7 +22,7 @@ const site = JSON.parse(
     'utf8',
   ),
 )
-const config = resolveSiteConfig({
+const resolved = resolveSiteConfig({
   consent: {
     enabled: true,
     policyVersion: '2026-10-07',
@@ -38,7 +39,9 @@ const config = resolveSiteConfig({
       serviceId: 'ga4',
     },
   },
-}).consent
+})
+analyticsPlugin().hooks.onConfigResolved({ config: resolved })
+const config = resolved.consent
 const disableKey = 'ga-disable-G-TEST1234'
 
 function withRuntime(

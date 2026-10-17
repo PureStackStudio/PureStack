@@ -1,9 +1,6 @@
 import type { PageFrontmatter, RuntimeEmbeds } from '@purestack/ts-common'
 import { isTocEnabled, type PageTemplateInput } from '@purestack/ts-common'
 import { h } from '@purestack/ts-html'
-import { buildAuthStateHintScript } from './buildAuthStateHintScript'
-import { buildConsentScript } from './buildConsentScript'
-import { buildGa4Script } from './buildGa4Script'
 import { buildCodeCopyScript } from './embed/codeCopy.embed'
 import { buildMenuRuntimeScript } from './embed/menuRuntime.embed'
 import { buildNavMenuScript } from './embed/navMenu.embed'
@@ -41,28 +38,6 @@ function renderScriptsHead({
   pageInfo,
   outline,
 }: PageTemplateInput) {
-  if (config.auth.enabled && config.auth.signedInStorageKey) {
-    const hint = buildAuthStateHintScript(config.auth.signedInStorageKey)
-    if (hint) {
-      const auth = h('script').raw(hint)
-      // The hint must run before stylesheet loading can delay other scripts.
-      if (
-        !head.insertBefore('link', auth, { rel: 'stylesheet' }) &&
-        !head.insertBefore('script', auth)
-      )
-        head.push(auth)
-    }
-  }
-  if (config.consent.enabled)
-    head.push(h('script').raw(buildConsentScript(config.consent)))
-  const ga4 = config.analytics.ga4
-  if (ga4.enabled && ga4.measurementId && !config.consent.enabled) {
-    const payload = buildGa4Script(ga4)
-    head.push(
-      h('script').attr({ async: 'true', src: payload.src }),
-      h('script').raw(payload.init),
-    )
-  }
   head.push(h('script').raw(buildMenuRuntimeScript()))
   if (pageInfo.frontmatter.layout.showNav !== false)
     head.push(h('script').raw(buildNavMenuScript()))

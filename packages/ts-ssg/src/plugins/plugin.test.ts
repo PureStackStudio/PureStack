@@ -480,7 +480,7 @@ describe('plugins', () => {
       [null, 'Plugin 1 must be an object.'],
       [
         { name: 'typo', hook: {} },
-        'Plugin "typo" has an unknown field "hook". Plugin fields: name, defaults, skins, components, templates, head, styles, search, markdown, pages, devMiddleware, hooks.',
+        'Plugin "typo" has an unknown field "hook". Plugin fields: name, defaults, skins, components, templates, head, headConfig, styles, search, markdown, pages, devMiddleware, hooks.',
       ],
       [
         { name: 'typo', hooks: { onPageRender: () => {} } },
@@ -505,6 +505,10 @@ describe('plugins', () => {
       [
         { name: 'bad', head: {} },
         'Plugin "bad" needs `head` to be a head template.',
+      ],
+      [
+        { name: 'bad', headConfig: {} },
+        'Plugin "bad" needs `headConfig` to be a head configuration template.',
       ],
       [
         { name: 'bad', styles: {} },
@@ -532,11 +536,15 @@ describe('plugins', () => {
       ],
       [
         { name: 'typo', markdown: { remark: [] } },
-        'Plugin "typo" has an unknown markdown field "remark". Markdown fields: remarkPlugins, rehypePlugins, resolveHighlighter, createHighlighter.',
+        'Plugin "typo" has an unknown markdown field "remark". Markdown fields: remarkPlugins, rehypePlugins, rehypePostPlugins, resolveHighlighter, createHighlighter.',
       ],
       [
         { name: 'bad', markdown: { rehypePlugins: () => {} } },
         'Plugin "bad" needs `markdown.rehypePlugins` to be a list of plugins.',
+      ],
+      [
+        { name: 'bad', markdown: { rehypePostPlugins: () => {} } },
+        'Plugin "bad" needs `markdown.rehypePostPlugins` to be a list of plugins.',
       ],
       [
         { name: 'brand', skins: { standard: standardSkin } },

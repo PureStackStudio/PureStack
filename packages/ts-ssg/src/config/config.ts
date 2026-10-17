@@ -103,11 +103,7 @@ export function resolveSiteConfig(input: SiteConfigInput = {}): SiteConfig {
     input.analytics,
     fileConfig.analytics,
   )
-  const consent = resolveConsentConfig(
-    input.consent,
-    fileConfig.consent,
-    analytics.ga4,
-  )
+  const consent = resolveConsentConfig(input.consent, fileConfig.consent)
   const pagefind = resolvePagefindConfig(input.pagefind, fileConfig.pagefind)
   const preview = resolvePreviewConfig(input.preview, fileConfig.preview)
   const i18n = resolveI18nConfig(input.i18n, fileConfig.i18n)
@@ -408,21 +404,17 @@ function resolveSitemapConfig(
 function resolveConsentConfig(
   input?: DeepPartial<ConsentConfig>,
   file?: DeepPartial<ConsentConfig>,
-  ga4?: Ga4Config,
 ): ConsentConfig {
   const enabled = input?.enabled ?? file?.enabled ?? false
   const categories = resolveConsentCategories(
     input?.categories,
     file?.categories,
   )
-  let services = resolveConsentServices(
+  const services = resolveConsentServices(
     input?.services,
     file?.services,
     categories,
   )
-  if (enabled) {
-    services = appendGa4ConsentService(services, categories, ga4)
-  }
   return {
     enabled,
     storageKey: resolveString(
@@ -731,52 +723,6 @@ function resolveConsentServices(
     seenServiceIds.add(id)
   }
   return services
-}
-
-function appendGa4ConsentService(
-  services: ConsentService[],
-  categories: ConsentCategory[],
-  ga4?: Ga4Config,
-) {
-  if (!ga4?.enabled || !ga4.measurementId) return services
-  const hasService = services.some((entry) => entry.id === ga4.serviceId)
-  if (hasService) return services
-  const hasCategory = categories.some(
-    (entry) => entry.id === ga4.consentCategory,
-  )
-  if (!hasCategory) {
-    throw new Error(
-      `analytics.ga4.consentCategory "${ga4.consentCategory}" does not exist in consent.categories.`,
-    )
-  }
-  return [
-    ...services,
-    {
-      id: ga4.serviceId,
-      category: ga4.consentCategory,
-      label: 'Google Analytics 4',
-      ga4MeasurementId: ga4.measurementId,
-      scripts: buildGa4ConsentScripts(ga4.measurementId),
-    },
-  ]
-}
-
-function buildGa4ConsentScripts(measurementId: string): ConsentScript[] {
-  const measurementIdLiteral = JSON.stringify(measurementId)
-  return [
-    {
-      src: `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`,
-      async: true,
-    },
-    {
-      content: [
-        'window.dataLayer = window.dataLayer || [];',
-        'function gtag(){dataLayer.push(arguments);}',
-        "gtag('js', new Date());",
-        `gtag('config', ${measurementIdLiteral});`,
-      ].join(' '),
-    },
-  ]
 }
 
 function resolveConsentServiceScripts(

@@ -1,4 +1,6 @@
+import { merge } from '@purestack/ts-util'
 import { ContentRouteIndex } from '../build/content-urls'
+import { resolveHeadConfig } from '../build/head-config'
 import { type BuildContext, renderPageFromFile } from '../build/page'
 import { type RenderPageInput, renderPage } from '../build/renderer'
 import type { BuildHooks } from '../build/site'
@@ -7,7 +9,10 @@ import {
   initializePluginContext,
   resolveBuildPlugins,
 } from '../plugins/default-plugins'
-import { composePluginHooks } from '../plugins/plugin'
+import {
+  composePluginHooks,
+  resolvePluginContentProcessor,
+} from '../plugins/plugin'
 import { initRenderer } from '../regor/initRenderer'
 
 async function initialize(context: BuildContext) {
@@ -16,6 +21,11 @@ async function initialize(context: BuildContext) {
   const templates = context.templates
   const plugins = resolveBuildPlugins()
   await initializePluginContext(context, plugins)
+  context.mdx = {
+    ...context.mdx,
+    contentProcessor:
+      context.mdx?.contentProcessor ?? resolvePluginContentProcessor(plugins),
+  }
   context.components = { ...context.components, ...components }
   context.templates = { ...context.templates, ...templates }
   return plugins
@@ -42,8 +52,16 @@ export async function renderDefaultShell(input: RenderPageInput) {
     templates: input.templates,
   }
   await initialize(context)
+  const headConfig = merge(
+    await resolveHeadConfig(
+      { site: input.site, pageInfo: input.pageInfo },
+      context.headConfigTemplates,
+    ),
+    input.headConfig,
+  )
   return renderPage({
     ...input,
+    headConfig,
     templates: context.templates,
     headTemplates: context.headTemplates,
     styleLinks: context.styles?.links(),

@@ -314,19 +314,27 @@ order, inherit into child folders, and skip external URLs.
 
 A plugin is a named bundle of extensions: skins, components, templates, Markdown transforms, generated pages, build hooks, and dev server middleware. The [Plugins guide](https://purestack.studio/guides/extending/plugins/) walks through each part.
 
-Five plugins provide the standard site features and are enabled automatically for builds, publishing, and the development server:
+Nine plugins provide the standard site features and are enabled automatically for builds, publishing, and the development server:
 
 | Package | Factory | Features |
 | --- | --- | --- |
 | `@purestack/ts-components` | `componentsPlugin()` | Standard Regor components, SVG icons, and component styles |
-| `@purestack/ts-theme` | `themePlugin()` | `doc` and `splash` layouts, theme CSS files and links, critical colors, theme switching, and generated favicons |
-| `@purestack/ts-page-scripts` | `pageScriptsPlugin()` | Auth hint, consent and analytics, menus, code copying, search UI, table of contents, Tabs, and Modal runtimes |
+| `@purestack/ts-theme` | `themePlugin()` | `doc` and `splash` layouts, theme CSS files and links, critical colors, theme switching, generated favicons, and Markdown table presentation |
+| `@purestack/ts-page-scripts` | `pageScriptsPlugin()` | Menus, code copying, search UI, table of contents, Tabs, and Modal runtimes |
+| `@purestack/ts-page-scripts` | `authStateHintPlugin()` | Early signed-in state hint |
+| `@purestack/ts-page-scripts` | `consentPlugin()` | Consent browser runtime |
+| `@purestack/ts-page-scripts` | `analyticsPlugin()` | Direct or consent-managed GA4 integration |
+| `@purestack/ts-seo` | `seoPlugin()` | Social previews, canonical URLs, and translated alternate links |
 | `@purestack/ts-highlight` | `highlightPlugin()` | Shiki and highlight.js backends and configured default selection |
 | `@purestack/ts-pagefind` | `pagefindPlugin()` | Full-build and lazy development search indexing |
 
 These factories and `createDefaultPlugins()` are also exported from `@purestack/ts-ssg` and `purestack`. The stylesheet provider initializes before component factories. Components and templates resolve before every plugin's `onConfigResolved` hook runs in plugin order. Names do not change that order. Components are scoped to each build; config hooks can override them through `context.components`.
 
 Plugins can supply a `head` template, with the same input as a page template and a `TSNode<'head'>` result. Head templates compose in plugin order before the page template, so page templates can inspect or change the complete head. The lifecycle hook set is unchanged.
+
+Metadata defaults compose through `headConfig({ site, pageInfo })` in plugin order, before explicit frontmatter `head` overrides and before head markup is rendered. It returns `BasicHeadConfig` or a promise. The SEO plugin uses this contribution for Open Graph, Twitter, canonical URLs, and translated alternate links; page templates receive the completed `headConfig`. Basic titles, descriptions, explicit head settings, and `index: false` enforcement remain in core.
+
+Auth hints, consent, and analytics are independent plugins in `ts-page-scripts`. The analytics plugin registers automatic GA4 consent services during `onConfigResolved`, before later config hooks and rendering. Omitting it removes automatic registration and direct tracking scripts. Explicitly configured consent services remain available. Analytics never bypasses enabled consent when the consent runtime plugin is omitted.
 
 The theme plugin supplies `styles(config)`, which returns the `SiteStyles` writer used for full builds and lazy development assets. Only one plugin can supply it. Component, template, and default highlighter contributions marked `defaults: true` may be overridden by ordinary contributions; this flag controls merge precedence and never schedules hooks or factories. Conflicts within either group remain errors.
 
@@ -341,7 +349,7 @@ export default defineConfig({
 })
 ```
 
-This keeps the standard layouts and components while omitting page runtimes, code highlighting, and search indexing. Theme switching and generated favicons stay with the theme plugin. Tabs and Modal embeds belong to the page scripts plugin and are omitted with it. Without the theme plugin, provide templates through another plugin. Extension templates and components can still override the standard ones. Explicitly listing a standard plugin while defaults are enabled replaces that plugin by name without adding a second instance; it retains its initialization position. Duplicate names within the supplied plugin list are errors.
+This keeps the standard layouts and components while omitting automatic social metadata, page runtimes, code highlighting, and search indexing. Theme switching, generated favicons, and Markdown table wrappers stay with the theme plugin. Tabs and Modal embeds belong to the page scripts plugin and are omitted with it. Without the theme plugin, provide templates through another plugin. Extension templates and components can still override the standard ones. Explicitly listing a standard plugin while defaults are enabled replaces that plugin by name without adding a second instance; it retains its initialization position. Duplicate names within the supplied plugin list are errors.
 
 A site lists its plugins in `purestack.config.ts`, next to `siteConfig.json`, and the CLI loads it:
 
@@ -392,7 +400,7 @@ Plugins apply in order:
 - **Skins** are available while the site config resolves, so `style.theme.skin` can select one; they are removed afterwards and never leak into another build. A plugin skin cannot reuse a built-in skin's name, such as `standard`.
 - **Components** are built from the resolved site config and may replace built-in components by name.
 - **Templates** may replace the built-in `doc` and `splash` templates by name.
-- **Markdown** remark and rehype plugins run in plugin order on every page and shared header or footer: remark on the Markdown tree, then rehype on the HTML tree, before outline collection and code highlighting. Regor markup reaches them as raw HTML nodes, and `file.path` is the content path with forward slashes.
+- **Markdown** remark and rehype plugins run in plugin order on every page and shared header or footer: remark on the Markdown tree, then rehype on the HTML tree, followed by `rehypePostPlugins` for final presentation, before outline collection and code highlighting. Regor markup reaches them as raw HTML nodes, and `file.path` is the content path with forward slashes.
 - **Pages** generators return `{ path, source }` pages that build like files at those content paths. `source` is the text, or a function PureStack calls whenever it needs the text, without keeping what it returns. They see the site's content files, run on every build, and run again in the dev server whenever content or assets change; pages no longer generated are removed.
 - **Hooks** run every plugin's handler for each lifecycle event, one after another. An error names the plugin it came from.
 - **Dev middleware** sees each dev server request, except live reload, before the site; the first plugin to send headers handles it. Builds ignore it.

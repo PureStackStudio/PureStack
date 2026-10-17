@@ -13,3 +13,9 @@ Enabled automatically by `@purestack/ts-ssg`. Supplies default page templates, a
 To choose plugins explicitly, set `defaultPlugins: false` in `purestack.config.ts` or build options. Without this plugin, provide page templates and any desired CSS through your own plugin.
 
 Favicon generation runs through `onContentDiscovered`, after output-directory preparation, in both full builds and lazy development sessions. It uses the configured icon and theme accent color.
+
+Markdown presentation also belongs to this plugin. Its final rehype transform
+wraps tables in `div.table-scroll`, after ordinary custom rehype transforms and
+before outline collection and highlighting. Existing wrappers are preserved.
+Without the theme plugin, Markdown tables retain their original markup. This
+applies to Markdown, MDX, and shared Markdown partials.
