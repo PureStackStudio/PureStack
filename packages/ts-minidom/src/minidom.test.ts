@@ -3,6 +3,29 @@ import { parseFragment } from './minidom'
 
 describe('parseFragment', () => {
   it.each([
+    '/images/photo.png',
+    './photo.png',
+    'https://example.com/photo.png',
+    '/images/',
+  ])('preserves slashes in unquoted attribute values: %s', (url) => {
+    const fragment = parseFragment(`<img src=${url} alt=Photo>`)
+    expect(fragment.firstElementChild?.getAttribute('src')).toBe(url)
+    expect(fragment.firstElementChild?.getAttribute('alt')).toBe('Photo')
+    expect(fragment.firstElementChild?.attributes.length).toBe(2)
+  })
+
+  it('treats a trailing slash as part of an unquoted value and keeps explicit self-closing syntax', () => {
+    expect(
+      parseFragment('<img src=/image.png/>').firstElementChild?.getAttribute(
+        'src',
+      ),
+    ).toBe('/image.png/')
+    const fragment = parseFragment('<image-box src="/image.png"/><p>After</p>')
+    expect(fragment.childNodes.length).toBe(2)
+    expect(fragment.firstElementChild?.getAttribute('src')).toBe('/image.png')
+  })
+
+  it.each([
     ['&#x26;lt;', '&lt;'],
     ['&#38;lt;', '&lt;'],
     ['&#x26;#60;', '&#60;'],

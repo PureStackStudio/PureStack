@@ -1676,14 +1676,9 @@ function parseAttributes(input: string, start: number) {
         i = endQuote === -1 ? input.length : endQuote + 1
       } else {
         const valueStart = i
-        while (i < input.length && /[^\s>/]/.test(input[i])) i += 1
+        // In an unquoted value, '/' is URL data, including directly before '>'.
+        while (i < input.length && /[^\s>]/.test(input[i])) i += 1
         value = decodeEntities(input.slice(valueStart, i))
-        if (input[i] === '/' && input[i + 1] === '>') {
-          selfClosing = true
-          i += 2
-          setParsedAttribute(attrs, name, value)
-          break
-        }
       }
     }
     if (nameStart === i) {

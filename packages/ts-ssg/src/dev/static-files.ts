@@ -135,6 +135,8 @@ function contentTypeForExt(ext: string) {
       return 'application/xml; charset=utf-8'
     case '.webp':
       return 'image/webp'
+    case '.avif':
+      return 'image/avif'
     default:
       return undefined
   }

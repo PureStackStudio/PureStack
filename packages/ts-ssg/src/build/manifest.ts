@@ -6,6 +6,7 @@ import type { SiteConfig } from '@purestack/ts-common'
 import { ensureDir } from '@purestack/ts-util-node'
 import { getLogger } from 'logpot'
 import type { ContentFile } from '../discover/content'
+import type { PageAssetReceipt } from './asset-receipt'
 
 export const MANIFEST_VERSION = 1
 export const MANIFEST_DIRNAME = '.ts-ssg'
@@ -21,7 +22,7 @@ export interface ManifestConfig {
   outDir: string
   basePath: string
   siteTitle: string
-  style: {
+  style?: {
     fileName: string
     href: string
     themes: string[]
@@ -57,6 +58,7 @@ export interface BuildManifest {
   content: Record<string, ContentManifestEntry>
   assets: Record<string, AssetManifestEntry>
   styles: StylesManifestEntry
+  pageAssets?: Record<string, PageAssetReceipt>
 }
 
 export function manifestPath(outDir: string) {
@@ -71,12 +73,16 @@ export function manifestConfigFromSiteConfig(
     outDir: config.outDir,
     basePath: config.basePath,
     siteTitle: config.siteTitle,
-    style: {
-      fileName: config.style.fileName,
-      href: config.style.href,
-      themes: config.style.themes,
-      pretty: config.style.pretty,
-    },
+    ...(config.style
+      ? {
+          style: {
+            fileName: config.style.fileName,
+            href: config.style.href,
+            themes: config.style.themes,
+            pretty: config.style.pretty,
+          },
+        }
+      : {}),
     signature: createManifestConfigSignature(config),
   }
 }
@@ -164,13 +170,14 @@ function manifestConfigEqual(left: ManifestConfig, right: ManifestConfig) {
     left.outDir === right.outDir &&
     left.basePath === right.basePath &&
     left.siteTitle === right.siteTitle &&
-    isPlainObject(left.style) &&
-    isPlainObject(right.style) &&
-    left.style.fileName === right.style.fileName &&
-    left.style.href === right.style.href &&
-    Array.isArray(left.style.themes) &&
-    left.style.themes.join('|') === right.style.themes.join('|') &&
-    left.style.pretty === right.style.pretty &&
+    ((left.style === undefined && right.style === undefined) ||
+      (isPlainObject(left.style) &&
+        isPlainObject(right.style) &&
+        left.style.fileName === right.style.fileName &&
+        left.style.href === right.style.href &&
+        Array.isArray(left.style.themes) &&
+        left.style.themes.join('|') === right.style.themes.join('|') &&
+        left.style.pretty === right.style.pretty)) &&
     left.signature === right.signature
   )
 }

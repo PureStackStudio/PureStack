@@ -185,7 +185,7 @@ describe('presentation integrations', () => {
         omitted !== 'purestack:consent',
       )
       expect(
-        config?.consent.services.some(
+        config?.consent?.services.some(
           (service) => service.ga4MeasurementId === 'G-TEST1234',
         ),
       ).toBe(omitted !== 'purestack:analytics')
@@ -214,7 +214,7 @@ describe('presentation integrations', () => {
             hooks: {
               onConfigResolved({ config }) {
                 expect(
-                  config.consent.services.filter(
+                  config.consent?.services.filter(
                     (service) => service.id === 'ga4',
                   ),
                 ).toHaveLength(1)
@@ -249,8 +249,8 @@ describe('presentation integrations', () => {
             name: 'inspect',
             hooks: {
               onConfigResolved({ config }) {
-                expect(config.consent.services).toHaveLength(1)
-                expect(config.consent.services[0].scripts[0].content).toBe(
+                expect(config.consent?.services).toHaveLength(1)
+                expect(config.consent?.services[0].scripts[0].content).toBe(
                   'window.manualAnalytics = true',
                 )
               },

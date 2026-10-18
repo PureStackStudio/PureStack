@@ -7,6 +7,7 @@ import { makeRepoTempDir } from '../test/repoTempDir'
 import {
   defineConfig,
   findProjectConfig,
+  loadPluginExport,
   loadProjectConfig,
   PROJECT_CONFIG_FILENAME,
   withProjectConfig,
@@ -84,6 +85,60 @@ describe('purestack.config.ts', () => {
     expect(loaded.dependencies.sort()).toEqual(
       [configFile, path.join(projectRoot, 'plugins', 'marker.ts')].sort(),
     )
+  })
+
+  it("uses PureStack's package copy for both JSON declarations and TypeScript imports", async () => {
+    const projectRoot = await createProject({
+      'node_modules/logpot/package.json': JSON.stringify({
+        name: 'logpot',
+        type: 'module',
+        exports: './index.mjs',
+      }),
+      'node_modules/logpot/index.mjs':
+        'throw new Error("The site copy must not load"); export function getLogger() {}',
+      'content/purestack.config.ts': [
+        "import { getLogger } from 'logpot'",
+        'export default { plugins: [{ name: "shared", hooks: { onBuildComplete: getLogger } }] }',
+      ].join('\n'),
+    })
+    const contentDir = path.join(projectRoot, 'content')
+    const fromJson = await loadPluginExport(
+      'logpot',
+      'getLogger',
+      path.join(contentDir, 'siteConfig.json'),
+    )
+    const fromTs = await loadProjectConfig(
+      path.join(contentDir, PROJECT_CONFIG_FILENAME),
+    )
+    expect(fromJson).toBeTypeOf('function')
+    expect(fromJson).toBe(fromTs.config.plugins?.[0].hooks?.onBuildComplete)
+  })
+
+  it('uses the same site-only package copy for JSON declarations and TypeScript imports', async () => {
+    const projectRoot = await createProject({
+      'node_modules/site-only-plugin/package.json': JSON.stringify({
+        name: 'site-only-plugin',
+        type: 'module',
+        exports: './index.mjs',
+      }),
+      'node_modules/site-only-plugin/index.mjs':
+        'export const plugin = { name: "site-only" }',
+      'content/purestack.config.ts': [
+        "import { plugin } from 'site-only-plugin'",
+        'export default { plugins: [plugin] }',
+      ].join('\n'),
+    })
+    const contentDir = path.join(projectRoot, 'content')
+    const fromJson = await loadPluginExport(
+      'site-only-plugin',
+      'plugin',
+      path.join(contentDir, 'siteConfig.json'),
+    )
+    const fromTs = await loadProjectConfig(
+      path.join(contentDir, PROJECT_CONFIG_FILENAME),
+    )
+    expect(fromJson).toEqual({ name: 'site-only' })
+    expect(fromJson).toBe(fromTs.config.plugins?.[0])
   })
 
   it.each([

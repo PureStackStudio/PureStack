@@ -29,7 +29,7 @@ export interface PageContext {
   pageInfo: PageInfo
   navigation?: TsSsgNavigation
   outline?: PageOutlineItem[]
-  theme: ThemeOptions
+  theme?: ThemeOptions
   basePath: string
   locale?: string
   locales: string[]

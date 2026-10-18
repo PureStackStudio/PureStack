@@ -19,12 +19,14 @@ import {
 import { resolveOutPath } from '../out-path'
 import {
   type BuildContext,
+  type PageRenderResult,
   renderPageFromFile,
   resolveHeaderFooterHtml,
   resolvePagePartials,
   writePage,
   writePageError,
 } from '../page'
+import type { PageAssetManager } from '../page-assets'
 import type { BuildHooks } from '../site'
 import {
   discoverSiteContent,
@@ -36,6 +38,7 @@ import {
 import type { IncrementalBuildResult } from './types'
 
 interface IncrementalContentStateInput {
+  assets: PageAssetManager
   config: SiteConfig
   context: BuildContext
   hooks: BuildHooks
@@ -148,9 +151,11 @@ export class IncrementalContentState {
    */
   private async writePageWithHooks(file: ResolvedContentFile) {
     const { context, hooks, config } = this.input
+    let renderedPage: PageRenderResult | undefined
     try {
       await hooks.onPageStart?.(context, file)
       const page = await renderPageFromFile(context, file, hooks)
+      renderedPage = page
       this.importedFilesByPage.set(file.relPath, new Set(page.importedFiles))
       if (page.frontmatter.index === false) {
         this.unindexedPages.set(file.relPath, page.outPath)
@@ -158,11 +163,19 @@ export class IncrementalContentState {
         this.unindexedPages.delete(file.relPath)
       }
       await hooks.onPageRendered?.(context, page)
+      this.input.assets.reserveSourceOutput(
+        path.relative(config.outDir, page.outPath),
+      )
       await writePage(page, config.html.minify)
       await hooks.onPageWritten?.(context, page)
+      await this.input.assets.commitPage(page)
       this.input.onPageBuilt(file.relPath, page.scriptEntrypoints)
       return true
     } catch (error) {
+      if (renderedPage)
+        await this.input.assets.abortPage(renderedPage, {
+          errorPage: context.writeErrorPages === true,
+        })
       if (context.writeErrorPages !== true) throw error
       this.input.log.error('page build failed', {
         relPath: file.relPath,
@@ -372,6 +385,7 @@ export class IncrementalContentState {
     this.contentIndex.remove(relPath)
     this.dirtyPages.delete(relPath)
     this.importedFilesByPage.delete(relPath)
+    await this.input.assets.removePage(relPath)
     this.unindexedPages.delete(relPath)
     this.input.onPageRemoved(relPath)
     result.deletedPages += 1
@@ -427,6 +441,7 @@ export class IncrementalContentState {
   }
 
   async handleMissingRelPathSource(relPath: string) {
+    await this.input.assets.removePage(relPath)
     const entry = this.input.getManifest().content[relPath]
     if (entry) {
       await removeFile(entry.outPath)

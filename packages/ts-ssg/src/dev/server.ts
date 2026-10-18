@@ -4,9 +4,8 @@ import path from 'node:path'
 import type { I18nConfig } from '@purestack/ts-common'
 import { logError, stripBasePath, withBasePath } from '@purestack/ts-util'
 import { getLogger, type Logger } from 'logpot'
-import { resolveBuildSiteConfig } from '../build/build-config'
 import {
-  createIncrementalBuilder,
+  createIncrementalBuildSession,
   type IncrementalBuilder,
 } from '../build/incremental'
 import { ensureLogger } from '../build/logger'
@@ -98,8 +97,9 @@ export async function startDevServer(
   }
   const projectConfig = trackProjectConfig(input.configFile)
   let buildInput = await projectConfig.load(baseBuildInput)
-  const config = resolveBuildSiteConfig(buildInput)
-  let devMiddleware = composeDevMiddleware(buildInput.options?.plugins ?? [])
+  const session = await createIncrementalBuildSession(buildInput)
+  const config = session.config
+  let devMiddleware = composeDevMiddleware(session.plugins)
   const log = getLogger()
 
   const { host, port, watch, liveReload, fullRender } =
@@ -186,7 +186,7 @@ export async function startDevServer(
   }
 
   const displayHost = host === '0.0.0.0' ? LOOPBACK_HOST : host
-  let incremental = await createIncrementalBuilder(buildInput)
+  let incremental = session.builder
 
   const rebuild = async (
     reason: string,
@@ -206,10 +206,9 @@ export async function startDevServer(
         watchConfigDependencies()
       }
       if (options?.recreateBuilder || options?.reloadConfig) {
-        incremental = await createIncrementalBuilder(buildInput)
-      }
-      if (options?.reloadConfig) {
-        devMiddleware = composeDevMiddleware(buildInput.options?.plugins ?? [])
+        const next = await createIncrementalBuildSession(buildInput)
+        incremental = next.builder
+        devMiddleware = composeDevMiddleware(next.plugins)
       }
       if (fullRender && !initialSetupDone) {
         await incremental.buildAll(reason)

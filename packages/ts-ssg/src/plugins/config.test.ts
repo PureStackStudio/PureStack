@@ -1,12 +1,15 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { h } from '@purestack/ts-html'
+import { imagesPlugin } from '@purestack/ts-images'
 import { analyticsPlugin } from '@purestack/ts-page-scripts'
 import { disableLogger, getLogger } from 'logpot'
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
 import { resolveBuildSiteConfig } from '../build/build-config'
-import { buildSite } from '../build/site'
+import { type BuildInput, buildSite } from '../build/site'
+import { resolveSiteConfig } from '../config/config'
 import { makeRepoTempDir } from '../test/repoTempDir'
+import { resolveBuildPlugins } from './default-plugins'
 import type { PureStackPlugin } from './plugin'
 
 declare module '@purestack/ts-common' {
@@ -15,7 +18,42 @@ declare module '@purestack/ts-common' {
   }
 }
 
+function resolveTestConfig(input: BuildInput) {
+  return resolveBuildSiteConfig(input, resolveBuildPlugins(input.options))
+}
+
 describe('plugin configuration', () => {
+  it('exposes partial plugin input during resolution and normalized settings during finalization', () => {
+    const observations: unknown[] = []
+    resolveSiteConfig(
+      { extensions: { images: { widths: [64] } } },
+      {
+        defaultPlugins: false,
+        plugins: [
+          imagesPlugin(),
+          {
+            name: 'phase-observer',
+            config: {
+              resolve({ config }) {
+                observations.push(config.extensions.images?.quality)
+                return {}
+              },
+              normalize({ config }) {
+                // This normalizer follows the image owner's normalizer.
+                observations.push(config.extensions.images?.quality?.webp)
+                return {}
+              },
+              finalize({ config }) {
+                observations.push(config.extensions.images?.presets.hero.widths)
+                return {}
+              },
+            },
+          },
+        ],
+      },
+    )
+    expect(observations).toEqual([undefined, 80, [960, 1440, 1920]])
+  })
   let root: string | undefined
   beforeAll(() => disableLogger())
   afterAll(async () => getLogger().close())
@@ -23,16 +61,58 @@ describe('plugin configuration', () => {
     if (root) await fs.rm(root, { recursive: true, force: true })
   })
 
+  it('lets an ordinary provider own a custom backend identifier with defaults installed', async () => {
+    root = await makeRepoTempDir('.tmp-plugin-backend-')
+    const contentDir = path.join(root, 'content'),
+      outDir = path.join(root, 'out')
+    await fs.mkdir(contentDir)
+    await fs.writeFile(
+      path.join(contentDir, 'index.md'),
+      '```ts\nconst answer = 42\n```',
+    )
+    let calls = 0
+    await buildSite({
+      siteConfig: {
+        rootDir: root,
+        contentDir,
+        outDir,
+        pagefind: { enabled: false },
+        mdx: { highlighter: 'custom-engine' },
+      },
+      options: {
+        plugins: [
+          {
+            name: 'custom-engine',
+            markdown: {
+              createHighlighter(config) {
+                calls++
+                expect(config.highlighter).toBe('custom-engine')
+                return {
+                  codeToHtml: () =>
+                    '<pre class="custom-engine"><code>Custom output</code></pre>',
+                }
+              },
+            },
+          },
+        ],
+      },
+    })
+    expect(calls).toBe(1)
+    expect(
+      await fs.readFile(path.join(outDir, 'index.html'), 'utf8'),
+    ).toContain('Custom output')
+  })
+
   it('owns mutable extension input and contributed settings across independent resolutions', () => {
     const input = {
       rootDir: process.cwd(),
       extensions: { brand: { text: 'Input' } },
     }
-    const first = resolveBuildSiteConfig({
+    const first = resolveTestConfig({
       siteConfig: input,
       options: { defaultPlugins: false },
     })
-    const second = resolveBuildSiteConfig({
+    const second = resolveTestConfig({
       siteConfig: input,
       options: { defaultPlugins: false },
     })
@@ -41,7 +121,7 @@ describe('plugin configuration', () => {
     expect(second.extensions.brand?.text).toBe('Input')
     expect(input.extensions.brand.text).toBe('Input')
     const contribution = { extensions: { brand: { text: 'Contributed' } } }
-    const configured = resolveBuildSiteConfig({
+    const configured = resolveTestConfig({
       options: {
         defaultPlugins: false,
         plugins: [{ name: 'brand', config: { resolve: () => contribution } }],
@@ -73,7 +153,7 @@ describe('plugin configuration', () => {
       config: {
         resolve({ config, input, file }) {
           calls.push('config')
-          expect(config.consent.services).toHaveLength(0)
+          expect(config.consent?.services).toHaveLength(0)
           return {
             extensions: {
               brand: {
@@ -87,14 +167,14 @@ describe('plugin configuration', () => {
         },
         finalize({ config }) {
           calls.push('finalize')
-          expect(config.consent.services).toHaveLength(1)
+          expect(config.consent?.services).toHaveLength(1)
           expect(config.extensions.brand?.text).toBe('From input')
           return {}
         },
       },
       styles(config) {
         calls.push('styles')
-        expect(config.consent.services).toHaveLength(1)
+        expect(config.consent?.services).toHaveLength(1)
         expect(config.extensions.brand?.text).toBe('From input')
         expect(config.extensions.otherPlugin).toEqual({ preserved: true })
         return {
@@ -110,7 +190,7 @@ describe('plugin configuration', () => {
       },
       components(config) {
         calls.push('components')
-        expect(config.consent.services).toHaveLength(1)
+        expect(config.consent?.services).toHaveLength(1)
         expect(config.extensions.brand?.text).toBe('From input')
         return {}
       },
@@ -122,7 +202,7 @@ describe('plugin configuration', () => {
         onConfigResolved({ config, components, templates }) {
           calls.push('hook')
           expect(config.extensions.brand?.text).toBe('From input')
-          expect(config.consent.services).toHaveLength(1)
+          expect(config.consent?.services).toHaveLength(1)
           expect(components).toEqual({})
           expect(templates?.doc).toBeTypeOf('function')
         },
@@ -150,7 +230,7 @@ describe('plugin configuration', () => {
 
   it('composes configuration in plugin order and retains publish output overrides', () => {
     const calls: string[] = []
-    const config = resolveBuildSiteConfig({
+    const config = resolveTestConfig({
       siteConfig: {
         rootDir: process.cwd(),
         siteTitle: 'Input',
@@ -196,7 +276,7 @@ describe('plugin configuration', () => {
     'attributes invalid config results to their plugin (%j)',
     (value) => {
       expect(() =>
-        resolveBuildSiteConfig({
+        resolveTestConfig({
           options: {
             defaultPlugins: false,
             plugins: [
@@ -214,7 +294,7 @@ describe('plugin configuration', () => {
     'attributes invalid config finalizers (%j)',
     (value) => {
       expect(() =>
-        resolveBuildSiteConfig({
+        resolveTestConfig({
           options: {
             defaultPlugins: false,
             plugins: [
@@ -295,7 +375,7 @@ describe('plugin configuration', () => {
               },
               components(config) {
                 observed = true
-                const services = config.consent.services
+                const services = config.consent?.services ?? []
                 expect(services).toHaveLength(enabled && finalConsent ? 1 : 0)
                 if (enabled && finalConsent)
                   expect(services[0].ga4MeasurementId).toBe('G-OVERRIDE')
@@ -318,7 +398,7 @@ describe('plugin configuration', () => {
   )
 
   it('honors consent categories and explicit services supplied by later resolvers', () => {
-    const config = resolveBuildSiteConfig({
+    const config = resolveTestConfig({
       siteConfig: {
         rootDir: process.cwd(),
         consent: { enabled: true },
@@ -334,7 +414,7 @@ describe('plugin configuration', () => {
               resolve: ({ config }) => ({
                 consent: {
                   categories: [
-                    ...config.consent.categories,
+                    ...(config.consent?.categories ?? []),
                     {
                       id: 'custom',
                       label: 'Custom',
@@ -349,8 +429,8 @@ describe('plugin configuration', () => {
         ],
       },
     })
-    expect(config.consent.services[0].category).toBe('custom')
-    const manual = resolveBuildSiteConfig({
+    expect(config.consent?.services[0].category).toBe('custom')
+    const manual = resolveTestConfig({
       siteConfig: {
         rootDir: process.cwd(),
         consent: { enabled: true },
@@ -378,16 +458,16 @@ describe('plugin configuration', () => {
         ],
       },
     })
-    expect(manual.consent.services).toHaveLength(1)
-    expect(manual.consent.services[0].label).toBe('Manual')
-    expect(manual.consent.services[0].ga4MeasurementId).toBeUndefined()
+    expect(manual.consent?.services).toHaveLength(1)
+    expect(manual.consent?.services[0].label).toBe('Manual')
+    expect(manual.consent?.services[0].ga4MeasurementId).toBeUndefined()
   })
 
   it.each([null, [], 42])(
     'rejects malformed extension containers (%j)',
     (extensions) => {
       expect(() =>
-        resolveBuildSiteConfig({
+        resolveTestConfig({
           siteConfig: { extensions } as never,
           options: { defaultPlugins: false },
         }),

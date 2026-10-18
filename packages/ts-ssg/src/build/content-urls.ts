@@ -1,6 +1,10 @@
 import path from 'node:path'
 import type { SiteConfig } from '@purestack/ts-common'
-import { isTypeScriptAssetPath, urlNormalizer } from '@purestack/ts-util'
+import {
+  isTypeScriptAssetPath,
+  stripBasePath,
+  urlNormalizer,
+} from '@purestack/ts-util'
 import { CONTENT_EXTS, isContentExt } from '../discover/contentExtensions'
 import type { ResolvedContentFile } from '../i18n/content'
 import { resolveRouteInfo } from '../routing/route'
@@ -33,6 +37,9 @@ export class ContentRouteIndex {
 
   get pages() {
     return [...this.pagesByRelPath.values()]
+  }
+  get assets() {
+    return [...this.assetRelPaths]
   }
 
   withPages(pages: readonly ResolvedContentFile[]) {
@@ -110,9 +117,7 @@ export function resolveContentUrl(
   if (isAbsolute && !isContentLink) return url
 
   const source = toPosixPath(sourceRelPath)
-  const targetRelPath = isAbsolute
-    ? resolveAbsoluteTargetRelPath(source, urlPath, config)
-    : path.posix.join(path.posix.dirname(source), decodePath(urlPath))
+  const targetRelPath = contentTargetRelPath(source, urlPath, config)
   if (escapesContentRoot(targetRelPath)) {
     throw new Error(
       `Content link "${url}" in "${source}" escapes the content root.`,
@@ -131,6 +136,53 @@ export function resolveContentUrl(
       ? `Content link "${url}" in "${source}" points to a missing file "${targetRelPath}".`
       : `Content link "${url}" in "${source}" does not match any page or file. Write a root-absolute URL such as "/blog/" for anything outside this content folder.`,
   )
+}
+
+/** Resolves a local asset with the same source-relative and locale fallback rules as page URLs. */
+export function resolveContentAsset(
+  url: string,
+  sourceRelPath: string,
+  routes: ContentRouteIndex,
+  config: SiteConfig,
+  dependOn: (relPath: string) => void,
+): { relPath: string; publicPath: string } | undefined {
+  if (!url || url.trim() !== url || urlNormalizer.isSpecialHref(url))
+    return undefined
+  const { base, suffix } = urlNormalizer.splitSuffix(url)
+  const urlPath = toPosixPath(stripBasePath(config.basePath, base))
+  const source = toPosixPath(sourceRelPath)
+  // Root-absolute asset URLs are site-wide, matching resolveContentUrl's pass-through.
+  const target = urlPath.startsWith('/')
+    ? path.posix.normalize(decodePath(urlPath).replace(/^\/+/, ''))
+    : contentTargetRelPath(source, urlPath, config)
+  if (escapesContentRoot(target))
+    throw new Error(`Asset "${url}" in "${source}" escapes the content root.`)
+  dependOn(target)
+  const found = urlPath.startsWith('/')
+    ? routes.hasAsset(target)
+      ? target
+      : undefined
+    : findWithLocaleFallback(target, source, config, (relPath) =>
+        routes.hasAsset(relPath) ? relPath : undefined,
+      )
+  if (!found) {
+    if (urlPath.startsWith('/')) return undefined
+    throw new Error(
+      `Asset "${url}" in "${source}" points to a missing file "${target}".`,
+    )
+  }
+  dependOn(found)
+  return { relPath: found, publicPath: `/${found}${suffix}` }
+}
+
+function contentTargetRelPath(
+  source: string,
+  urlPath: string,
+  config?: SiteConfig,
+) {
+  return urlPath.startsWith('/')
+    ? resolveAbsoluteTargetRelPath(source, urlPath, config)
+    : path.posix.join(path.posix.dirname(source), decodePath(urlPath))
 }
 
 function findPublicPath(

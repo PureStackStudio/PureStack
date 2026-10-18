@@ -10,6 +10,7 @@ import { outputPathKey, removeFile, toAssetFile } from './support'
 import type { IncrementalBuildResult } from './types'
 
 interface ScriptEntrypointManagerInput {
+  reserveOutput: (outPath: string) => void
   config: Pick<SiteConfig, 'contentDir' | 'outDir'>
   minifyScripts: boolean
   failOnAssetError: boolean
@@ -220,6 +221,11 @@ export class ScriptEntrypointManager {
 
     const priorCacheKey = this.input.scriptCacheKeys.get(entryRelPath)
     const cacheKey = this.resolveCacheKey(entryRelPath, options)
+    this.input.reserveOutput(
+      resolveStaticOutPath(this.input.config.outDir, assetFile, {
+        scriptCacheKey: cacheKey,
+      }),
+    )
     const assetCopy = await copyStaticAsset(
       this.input.config.contentDir,
       this.input.config.outDir,

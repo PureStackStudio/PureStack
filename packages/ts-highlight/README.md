@@ -14,6 +14,12 @@ initializes the selected engine once per build/session, and respects
 all use the same highlighter. Language aliases, inferred file extensions,
 tagged TypeScript templates, and light/dark Shiki themes are preserved.
 
+The plugin owns the `highlightjs` default and accepts `highlightjs` or `shiki`
+when its factory is selected. Core treats `mdx.highlighter` as an optional,
+provider-owned identifier. Omitting this plugin does not select or normalize an
+engine. Custom providers can use their own identifiers; replacing the default
+factory avoids initializing or validating the standard backends.
+
 Pass `createShiki(options)` or `createHighlightJs()` to customize the native
 backend. Both may return an instance synchronously or asynchronously; the
 unused factory is never called. The Shiki options contain the default

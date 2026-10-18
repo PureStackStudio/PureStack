@@ -26,3 +26,5 @@ in `@purestack/ts-ssg`.
 
 `resolvePreviewConfig(frontmatter, options)` is also exported for custom metadata
 plugins. It returns metadata defaults without applying explicit `head` overrides.
+
+The plugin owns site `preview` defaults and normalization, including trimmed strings and positive integer image dimensions. Omitting it leaves `config.preview` absent unless another plugin contributes it.

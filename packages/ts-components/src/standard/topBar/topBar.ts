@@ -17,7 +17,7 @@ import {
 } from '../componentVariant'
 
 export interface TopBar {
-  siteLogo: SiteLogoConfig
+  siteLogo?: SiteLogoConfig
   logoComponent?: RefOrValue<string>
   resolvedLogoComponent?: ComputedRef<string>
   tone?: RefOrValue<SemanticTone>
@@ -41,7 +41,9 @@ function resolveTopBar(context: PageContext, props: TopBar): TopBar {
     siteLogo: context.site.logo,
     resolvedLogoComponent: computed(
       () =>
-        unref(props.logoComponent) ?? context.site.logo.component ?? 'SiteLogo',
+        unref(props.logoComponent) ??
+        context.site.logo?.component ??
+        'SiteLogo',
     ),
     searchEnabled: computed(
       () => unref(props.search) ?? context.site.pagefind?.enabled === true,
