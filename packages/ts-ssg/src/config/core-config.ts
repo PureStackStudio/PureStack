@@ -33,13 +33,22 @@ const DEFAULT_ROOT = path.resolve(
 )
 export const SITE_CONFIG_FILENAME = 'siteConfig.json'
 
+export function resolveSiteContentDir(input: SiteConfigInput = {}) {
+  return (
+    input.contentDir ??
+    path.join(input.rootDir ?? DEFAULT_ROOT, 'sample-content')
+  )
+}
+
 export function resolveCoreSiteConfig(
   input: SiteConfigInput = {},
   resolvers: readonly SiteConfigResolver[] = [],
+  fileConfig: SiteConfigInput = loadSiteConfigFile(
+    resolveSiteContentDir(input),
+  ),
 ): SiteConfig {
   const rootDir = input.rootDir ?? DEFAULT_ROOT
-  const contentDir = input.contentDir ?? path.join(rootDir, 'sample-content')
-  const fileConfig = loadSiteConfigFile(contentDir)
+  const contentDir = resolveSiteContentDir(input)
   const outDir =
     input.outDir ??
     resolvePathFromFileConfig(fileConfig.outDir, contentDir) ??
@@ -280,7 +289,9 @@ function normalizeDirectiveList(value: unknown, fallback: string[]) {
   return normalized.length > 0 ? normalized : fallback
 }
 
-function loadSiteConfigFile(contentDir: string): SiteConfigInput {
+export function loadSiteConfigFile(
+  contentDir: string,
+): SiteConfigInput & { plugins?: string[]; defaultPlugins?: boolean } {
   const filePath = path.join(contentDir, SITE_CONFIG_FILENAME)
   try {
     const raw = fs.readFileSync(filePath, 'utf8')
@@ -288,7 +299,10 @@ function loadSiteConfigFile(contentDir: string): SiteConfigInput {
     if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
       throw new Error('siteConfig.json must contain a JSON object.')
     }
-    return parsed as SiteConfigInput
+    return parsed as SiteConfigInput & {
+      plugins?: string[]
+      defaultPlugins?: boolean
+    }
   } catch (error) {
     const err = error as NodeJS.ErrnoException
     if (err.code === 'ENOENT') return {}

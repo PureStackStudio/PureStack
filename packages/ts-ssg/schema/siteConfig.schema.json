@@ -4,6 +4,21 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
+    "defaultPlugins": {
+      "type": "boolean",
+      "default": true,
+      "description": "Include the standard plugin set. Set to false and list the plugins you want in plugins. An explicit defaultPlugins option in TypeScript/programmatic configuration takes precedence."
+    },
+    "plugins": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^(?:@[a-z0-9][a-z0-9._-]*/)?[a-z0-9][a-z0-9._-]*(?:/[a-zA-Z0-9._-]+)*(?:#[a-zA-Z_$][a-zA-Z0-9_$]*)?$",
+        "not": { "pattern": "(?:^|/)\\.{1,2}(?:/|#|$)" }
+      },
+      "uniqueItems": true,
+      "description": "Installed plugin package names (optionally with a package subpath and #exportName). Omit #exportName to select the default export. Each selected export must be a plugin object or a no-argument factory. Multiple plugins can be selected from one package. Package and package#default select the same export and cannot both be declared; the build checks these aliases and duplicate plugin names. Settings remain in the owning plugin's configuration namespace."
+    },
     "extensions": {
       "type": "object",
       "additionalProperties": true,

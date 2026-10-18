@@ -95,9 +95,42 @@ export async function loadProjectConfig(
   }
 }
 
-function bundleConfig(filePath: string, configDir: string) {
+/** Resolve installed plugin packages using ESM exports, without downloading anything. */
+export async function loadPluginExport(
+  specifier: string,
+  exportName: string,
+  siteConfigPath: string,
+): Promise<unknown> {
+  const bundled = await bundleConfig(
+    siteConfigPath,
+    path.dirname(siteConfigPath),
+    { specifier, exportName },
+  )
+  const code = bundled.outputFiles[0]?.text ?? ''
+  const module = await import(
+    `data:text/javascript;base64,${Buffer.from(code).toString('base64')}`
+  )
+  return module.default
+}
+
+function bundleConfig(
+  filePath: string,
+  configDir: string,
+  selectedExport?: { specifier: string; exportName: string },
+) {
   return build({
-    entryPoints: [filePath],
+    ...(selectedExport === undefined
+      ? { entryPoints: [filePath] }
+      : {
+          // JSON declarations name installed packages, not TypeScript path aliases.
+          tsconfigRaw: { compilerOptions: {} },
+          stdin: {
+            contents: `export { ${JSON.stringify(selectedExport.exportName)} as default } from ${JSON.stringify(selectedExport.specifier)}`,
+            resolveDir: configDir,
+            sourcefile: filePath,
+            loader: 'js' as const,
+          },
+        }),
     absWorkingDir: configDir,
     bundle: true,
     write: false,

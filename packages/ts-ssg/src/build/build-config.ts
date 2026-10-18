@@ -1,6 +1,5 @@
-import type { SiteConfig } from '@purestack/ts-common'
-import { resolveSiteConfig } from '../config/config'
-import { resolveBuildPlugins } from '../plugins/default-plugins'
+import type { SiteConfig, SiteConfigInput } from '@purestack/ts-common'
+import { resolveSelectedSiteConfig } from '../config/config'
 import type { PureStackPlugin } from '../plugins/plugin'
 import type { BuildInput } from './site'
 
@@ -9,13 +8,15 @@ export interface PublishOptions {
 }
 
 export function resolveBuildSiteConfig(
-  input: BuildInput = {},
-  plugins: readonly PureStackPlugin[] = resolveBuildPlugins(input.options),
+  input: BuildInput,
+  plugins: readonly PureStackPlugin[],
+  file?: SiteConfigInput,
 ): SiteConfig {
-  const config = resolveSiteConfig(input.siteConfig, {
-    defaultPlugins: false,
-    plugins: [...plugins],
-  })
+  const config = resolveSelectedSiteConfig(
+    input.siteConfig ?? {},
+    plugins,
+    file,
+  )
   if (input.publish?.enabled !== true) return config
   return {
     ...config,

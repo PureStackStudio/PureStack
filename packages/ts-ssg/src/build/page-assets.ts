@@ -1,4 +1,5 @@
 import { createHash, randomUUID } from 'node:crypto'
+import type { BigIntStats } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import type { PageAssetInput, SiteAssets } from '@purestack/ts-common'
@@ -81,7 +82,12 @@ export class PageAssetManager {
     string,
     { hash: string; task: Promise<void> }
   >()
-  private readonly hashes = new Map<string, string>()
+  private readonly reservedHashes = new Map<string, string>()
+  // Separate successful verification from hashes reserved for collision checks.
+  private readonly verifiedOutputs = new Map<
+    string,
+    { hash: string; stat: BigIntStats }
+  >()
   private contentRoot: Promise<string> | undefined
   private work: Promise<unknown> = Promise.resolve()
   private reservedFor: BuildContext['contentRoutes'] | undefined
@@ -166,7 +172,8 @@ export class PageAssetManager {
   }
 
   resetWrites() {
-    this.hashes.clear()
+    this.reservedHashes.clear()
+    this.verifiedOutputs.clear()
     this.sourceOutputs.clear()
     this.contentRoot = undefined
   }
@@ -342,12 +349,12 @@ export class PageAssetManager {
       return pending.task
     }
     const task = this.queue(async () => {
-      const previous = this.hashes.get(key)
+      const previous = this.reservedHashes.get(key)
       if (previous && previous !== hash)
         throw new Error(
           `Generated asset "${file.path}" was emitted with different contents. Use content-addressed names.`,
         )
-      this.hashes.set(key, hash)
+      this.reservedHashes.set(key, hash)
       await this.write(file.path, data, hash)
     })
     this.writing.set(key, { hash, task })
@@ -359,21 +366,43 @@ export class PageAssetManager {
   }
 
   private async write(relPath: string, data: Uint8Array, hash: string) {
-    const output = await this.outputPath(relPath)
-    const existing = await fs.readFile(output).catch((error) => {
-      if (error.code === 'ENOENT') return undefined
-      throw error
-    })
+    const key = fileKey(relPath)
+    const { output, stat } = await this.outputPath(relPath)
+    const verified = this.verifiedOutputs.get(key)
     if (
-      existing &&
-      createHash('sha256').update(existing).digest('hex') === hash
+      verified?.hash === hash &&
+      verified.stat.ino !== 0n &&
+      verified.stat.ctimeNs !== 0n &&
+      sameFileState(verified.stat, stat)
     )
       return
+    this.verifiedOutputs.delete(key)
+    // Size only rules out equality. Equal-sized files still require a hash check
+    // unless this build already confirmed their unchanged filesystem identity.
+    if (stat?.isFile() && stat.size === BigInt(data.byteLength)) {
+      const existing = await fs.readFile(output).catch((error) => {
+        if (error.code === 'ENOENT') return undefined
+        throw error
+      })
+      if (
+        existing &&
+        createHash('sha256').update(existing).digest('hex') === hash
+      ) {
+        const after = await outputStat(output)
+        if (after && sameFileState(stat, after)) {
+          this.verifiedOutputs.set(key, { hash, stat: after })
+          return
+        }
+      }
+    }
     await fs.mkdir(path.dirname(output), { recursive: true })
     const temporary = `${output}.${randomUUID()}.tmp`
     try {
       await fs.writeFile(temporary, data)
       await fs.rename(temporary, output)
+      const after = await outputStat(output)
+      if (after?.isFile() && after.size === BigInt(data.byteLength))
+        this.verifiedOutputs.set(key, { hash, stat: after })
     } finally {
       await fs.rm(temporary, { force: true })
     }
@@ -386,16 +415,15 @@ export class PageAssetManager {
       throw new Error('Generated asset escapes the output directory.')
     // A source/manifest must not redirect generated writes or cleanup via symlinks.
     let current = output
+    let outputState: BigIntStats | undefined
     while (current !== root) {
-      const stat = await fs.lstat(current).catch((error) => {
-        if (error.code === 'ENOENT') return undefined
-        throw error
-      })
+      const stat = await outputStat(current)
+      if (current === output) outputState = stat
       if (stat?.isSymbolicLink())
         throw new Error(`Generated asset path contains a symlink: ${current}`)
       current = path.dirname(current)
     }
-    return output
+    return { output, stat: outputState }
   }
 
   private async prune(candidates: GeneratedAssetReference[]) {
@@ -407,8 +435,10 @@ export class PageAssetManager {
     for (const candidate of candidates) {
       const file = reference(candidate)
       if (used.has(fileKey(file.path)) || this.sourceOwns(file.path)) continue
-      await fs.rm(await this.outputPath(file.path), { force: true })
-      this.hashes.delete(fileKey(file.path))
+      const { output } = await this.outputPath(file.path)
+      await fs.rm(output, { force: true })
+      this.reservedHashes.delete(fileKey(file.path))
+      this.verifiedOutputs.delete(fileKey(file.path))
     }
   }
 
@@ -417,6 +447,25 @@ export class PageAssetManager {
     this.work = task.catch(() => undefined)
     return task
   }
+}
+
+function outputStat(file: string) {
+  return fs.lstat(file, { bigint: true }).catch((error) => {
+    if (error.code !== 'ENOENT') throw error
+    return undefined
+  })
+}
+
+function sameFileState(before: BigIntStats, after: BigIntStats | undefined) {
+  return (
+    after?.isFile() === true &&
+    before.dev === after.dev &&
+    before.ino === after.ino &&
+    before.size === after.size &&
+    before.mtimeNs === after.mtimeNs &&
+    before.ctimeNs === after.ctimeNs &&
+    before.birthtimeNs === after.birthtimeNs
+  )
 }
 
 /** Every asynchronous input operation must settle before the page can commit or abort. */

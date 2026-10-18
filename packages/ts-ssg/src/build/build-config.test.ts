@@ -1,5 +1,6 @@
 import { resolveThemeFileName, resolveThemeHref } from '@purestack/ts-style'
 import { describe, expect, it } from 'vitest'
+import { createDefaultPlugins } from '../plugins/default-plugins'
 import { resolveBuildSiteConfig } from './build-config'
 
 describe('resolveBuildSiteConfig', () => {
@@ -16,8 +17,8 @@ describe('resolveBuildSiteConfig', () => {
         },
         publish: { enabled: publish },
       }
-      const first = resolveBuildSiteConfig(input)
-      const second = resolveBuildSiteConfig(input)
+      const first = resolveBuildSiteConfig(input, createDefaultPlugins())
+      const second = resolveBuildSiteConfig(input, createDefaultPlugins())
       if (!first.style || !second.style)
         throw new Error('Expected theme settings')
       expect(first.style.fileName).toBe('site.css')
@@ -33,22 +34,25 @@ describe('resolveBuildSiteConfig', () => {
 
   it('applies publish overrides above site config values', () => {
     const publishDir = `${process.cwd()}-publish`
-    const config = resolveBuildSiteConfig({
-      siteConfig: {
-        rootDir: process.cwd(),
-        outDir: `${process.cwd()}-dev`,
-        publishDir,
-        html: {
-          minify: false,
+    const config = resolveBuildSiteConfig(
+      {
+        siteConfig: {
+          rootDir: process.cwd(),
+          outDir: `${process.cwd()}-dev`,
+          publishDir,
+          html: {
+            minify: false,
+          },
+          style: {
+            pretty: true,
+          },
         },
-        style: {
-          pretty: true,
+        publish: {
+          enabled: true,
         },
       },
-      publish: {
-        enabled: true,
-      },
-    })
+      createDefaultPlugins(),
+    )
 
     expect(config.outDir).toBe(publishDir)
     expect(config.html.minify).toBe(true)
@@ -56,17 +60,20 @@ describe('resolveBuildSiteConfig', () => {
   })
 
   it('keeps regular build config values when publish is not enabled', () => {
-    const config = resolveBuildSiteConfig({
-      siteConfig: {
-        rootDir: process.cwd(),
-        html: {
-          minify: false,
-        },
-        style: {
-          pretty: true,
+    const config = resolveBuildSiteConfig(
+      {
+        siteConfig: {
+          rootDir: process.cwd(),
+          html: {
+            minify: false,
+          },
+          style: {
+            pretty: true,
+          },
         },
       },
-    })
+      createDefaultPlugins(),
+    )
 
     expect(config.html.minify).toBe(false)
     expect(config.style?.pretty).toBe(true)

@@ -7,6 +7,7 @@ import type { BuildOptions } from '../build/site'
 import { resolvePluginConfigResolvers } from '../plugins/contributions'
 import { resolveBuildPlugins } from '../plugins/default-plugins'
 import { assertValidPlugins, withPluginSkins } from '../plugins/plugin'
+import type { PureStackPlugin } from '../plugins/types'
 import { resolveCoreSiteConfig } from './core-config'
 
 export { SITE_CONFIG_FILENAME } from './core-config'
@@ -42,8 +43,17 @@ export function resolveSiteConfig(
   options: Pick<BuildOptions, 'plugins' | 'defaultPlugins'> = {},
 ): SiteConfig {
   const plugins = resolveBuildPlugins(options)
+  return resolveSelectedSiteConfig(input, plugins)
+}
+
+/** Internal build entrypoint: package selection and settings share one file snapshot. */
+export function resolveSelectedSiteConfig(
+  input: SiteConfigInput,
+  plugins: readonly PureStackPlugin[],
+  file?: SiteConfigInput,
+): SiteConfig {
   assertValidPlugins(plugins)
   return withPluginSkins(plugins, () =>
-    resolveCoreSiteConfig(input, resolvePluginConfigResolvers(plugins)),
+    resolveCoreSiteConfig(input, resolvePluginConfigResolvers(plugins), file),
   )
 }

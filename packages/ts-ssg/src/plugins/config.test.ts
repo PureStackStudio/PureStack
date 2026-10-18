@@ -6,15 +6,20 @@ import { analyticsPlugin } from '@purestack/ts-page-scripts'
 import { disableLogger, getLogger } from 'logpot'
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
 import { resolveBuildSiteConfig } from '../build/build-config'
-import { buildSite } from '../build/site'
+import { type BuildInput, buildSite } from '../build/site'
 import { resolveSiteConfig } from '../config/config'
 import { makeRepoTempDir } from '../test/repoTempDir'
+import { resolveBuildPlugins } from './default-plugins'
 import type { PureStackPlugin } from './plugin'
 
 declare module '@purestack/ts-common' {
   interface SiteExtensions {
     brand?: { text: string }
   }
+}
+
+function resolveTestConfig(input: BuildInput) {
+  return resolveBuildSiteConfig(input, resolveBuildPlugins(input.options))
 }
 
 describe('plugin configuration', () => {
@@ -103,11 +108,11 @@ describe('plugin configuration', () => {
       rootDir: process.cwd(),
       extensions: { brand: { text: 'Input' } },
     }
-    const first = resolveBuildSiteConfig({
+    const first = resolveTestConfig({
       siteConfig: input,
       options: { defaultPlugins: false },
     })
-    const second = resolveBuildSiteConfig({
+    const second = resolveTestConfig({
       siteConfig: input,
       options: { defaultPlugins: false },
     })
@@ -116,7 +121,7 @@ describe('plugin configuration', () => {
     expect(second.extensions.brand?.text).toBe('Input')
     expect(input.extensions.brand.text).toBe('Input')
     const contribution = { extensions: { brand: { text: 'Contributed' } } }
-    const configured = resolveBuildSiteConfig({
+    const configured = resolveTestConfig({
       options: {
         defaultPlugins: false,
         plugins: [{ name: 'brand', config: { resolve: () => contribution } }],
@@ -225,7 +230,7 @@ describe('plugin configuration', () => {
 
   it('composes configuration in plugin order and retains publish output overrides', () => {
     const calls: string[] = []
-    const config = resolveBuildSiteConfig({
+    const config = resolveTestConfig({
       siteConfig: {
         rootDir: process.cwd(),
         siteTitle: 'Input',
@@ -271,7 +276,7 @@ describe('plugin configuration', () => {
     'attributes invalid config results to their plugin (%j)',
     (value) => {
       expect(() =>
-        resolveBuildSiteConfig({
+        resolveTestConfig({
           options: {
             defaultPlugins: false,
             plugins: [
@@ -289,7 +294,7 @@ describe('plugin configuration', () => {
     'attributes invalid config finalizers (%j)',
     (value) => {
       expect(() =>
-        resolveBuildSiteConfig({
+        resolveTestConfig({
           options: {
             defaultPlugins: false,
             plugins: [
@@ -393,7 +398,7 @@ describe('plugin configuration', () => {
   )
 
   it('honors consent categories and explicit services supplied by later resolvers', () => {
-    const config = resolveBuildSiteConfig({
+    const config = resolveTestConfig({
       siteConfig: {
         rootDir: process.cwd(),
         consent: { enabled: true },
@@ -425,7 +430,7 @@ describe('plugin configuration', () => {
       },
     })
     expect(config.consent?.services[0].category).toBe('custom')
-    const manual = resolveBuildSiteConfig({
+    const manual = resolveTestConfig({
       siteConfig: {
         rootDir: process.cwd(),
         consent: { enabled: true },
@@ -462,7 +467,7 @@ describe('plugin configuration', () => {
     'rejects malformed extension containers (%j)',
     (extensions) => {
       expect(() =>
-        resolveBuildSiteConfig({
+        resolveTestConfig({
           siteConfig: { extensions } as never,
           options: { defaultPlugins: false },
         }),

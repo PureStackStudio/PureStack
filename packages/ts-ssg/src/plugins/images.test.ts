@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises'
 import net from 'node:net'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { h } from '@purestack/ts-html'
 import {
   type ImageDiagnostic,
@@ -8,6 +9,7 @@ import {
   imagesPlugin,
 } from '@purestack/ts-images'
 import { runInDom } from '@purestack/ts-minidom'
+import { build } from 'esbuild'
 import { disableLogger, getLogger } from 'logpot'
 import { defineComponent, html as markup } from 'regor'
 import sharp from 'sharp'
@@ -83,6 +85,110 @@ describe('optional images plugin', () => {
       await fs.readdir(path.join(outDir, '_assets', 'images')).catch(() => [])
     ).sort()
   }
+
+  it('enables the named image export and disables defaults through JSON for build, publish, and lazy development without a TypeScript config', async () => {
+    const { input, contentDir, outDir } = await fixture(undefined, {
+      formats: ['webp'],
+    })
+    await buildSite(input)
+    const expectedHtml = await html(outDir)
+    const expectedFiles = await generated(outDir)
+    const expectedBytes = await Promise.all(
+      expectedFiles.map((file) =>
+        fs.readFile(path.join(outDir, '_assets', 'images', file)),
+      ),
+    )
+    // A site-only package exercises fallback resolution without competing with
+    // the workspace's own image package. Its code is the real image integration.
+    const packageDir = path.join(root ?? '', 'node_modules', 'example-images')
+    await fs.mkdir(packageDir, { recursive: true })
+    const bundled = await build({
+      entryPoints: [
+        fileURLToPath(
+          new URL('../../../ts-images/src/index.ts', import.meta.url),
+        ),
+      ],
+      bundle: true,
+      write: false,
+      format: 'esm',
+      platform: 'node',
+      packages: 'external',
+      logLevel: 'silent',
+    })
+    await fs.writeFile(
+      path.join(packageDir, 'index.mjs'),
+      bundled.outputFiles[0].contents,
+    )
+    await fs.writeFile(
+      path.join(packageDir, 'package.json'),
+      JSON.stringify({
+        name: 'example-images',
+        type: 'module',
+        exports: { '.': { import: './index.mjs' } },
+      }),
+    )
+    const config = {
+      defaultPlugins: false,
+      plugins: ['example-images#imagesPlugin'],
+      publishDir: '../publish',
+      extensions: {
+        images: {
+          widths: [16, 32, 128],
+          formats: ['webp'],
+          cacheDir: path.join(root ?? '', 'cache'),
+          enabled: true,
+        },
+      },
+    }
+    await fs.writeFile(
+      path.join(contentDir, 'siteConfig.json'),
+      JSON.stringify(config),
+    )
+    input.options = {
+      ...input.options,
+      defaultPlugins: undefined,
+      plugins: input.options?.plugins?.filter(
+        (plugin) => plugin.name !== 'purestack:images',
+      ),
+    }
+    await buildSite(input)
+    expect(await html(outDir)).toBe(expectedHtml)
+    expect(await generated(outDir)).toEqual(expectedFiles)
+    expect(
+      await Promise.all(
+        expectedFiles.map((file) =>
+          fs.readFile(path.join(outDir, '_assets', 'images', file)),
+        ),
+      ),
+    ).toEqual(expectedBytes)
+    await buildSite({ ...input, publish: { enabled: true } })
+    expect(await generated(path.join(root ?? '', 'publish'))).toEqual(
+      expectedFiles,
+    )
+    const port = await freePort()
+    server = await startDevServer({
+      host: '127.0.0.1',
+      port,
+      watch: false,
+      liveReload: false,
+      build: input,
+    })
+    const response = await fetch(`http://127.0.0.1:${port}/docs/`)
+    expect(response.status).toBe(200)
+    expect(await response.text()).toContain('<picture>')
+    expect(await generated(outDir)).toEqual(expectedFiles)
+    await server.close()
+    server = undefined
+    config.extensions.images.enabled = false
+    await fs.writeFile(
+      path.join(contentDir, 'siteConfig.json'),
+      JSON.stringify(config),
+    )
+    await buildSite(input)
+    expect(await html(outDir)).not.toContain('srcset=')
+    expect(await generated(outDir)).toEqual([])
+    expect(await fs.stat(path.join(outDir, 'photo.png'))).toBeDefined()
+  })
 
   it('optimizes ordinary Markdown, emits real format bytes, reserves aspect ratio, and keeps the original', async () => {
     const { input, contentDir, outDir, diagnostics } = await fixture()

@@ -338,7 +338,19 @@ Auth hints, consent, and analytics are independent plugins in `ts-page-scripts`.
 
 The theme plugin supplies `styles(config)`, which returns the `SiteStyles` writer used for full builds and lazy development assets. Only one plugin can supply it. Component, template, and default highlighter contributions marked `defaults: true` may be overridden by ordinary contributions; this flag controls merge precedence and never schedules hooks or factories. Conflicts within either group remain errors.
 
-To choose the integrations explicitly, set `defaultPlugins: false` in `purestack.config.ts` (or `options.defaultPlugins` programmatically):
+To choose the integrations explicitly, set `defaultPlugins: false` in `siteConfig.json` and list the plugins you want:
+
+```json
+{
+  "defaultPlugins": false,
+  "plugins": [
+    "@purestack/ts-theme#themePlugin",
+    "@purestack/ts-components#componentsPlugin"
+  ]
+}
+```
+
+The same selection is available in `purestack.config.ts` (or `options.defaultPlugins` programmatically):
 
 ```ts
 import { componentsPlugin, defineConfig, themePlugin } from '@purestack/ts-ssg'
@@ -410,7 +422,18 @@ Each plugin is checked when the build starts. An unknown field or hook name, suc
 
 ### Optional image optimization
 
-Install `@purestack/ts-images` and add `imagesPlugin()` to your config to optimize local raster images. It is not included in the default set:
+Install `@purestack/ts-images` and list it in `siteConfig.json` to optimize local raster images. It is not included in the default set and no TypeScript config is required:
+
+```json
+{
+  "plugins": ["@purestack/ts-images#imagesPlugin"],
+  "extensions": {
+    "images": { "widths": [480, 960, 1440] }
+  }
+}
+```
+
+For callbacks or custom factory defaults, use `purestack.config.ts`:
 
 ```ts
 import { defineConfig } from '@purestack/ts-ssg'
@@ -433,6 +456,8 @@ The factory creates one processor per build/session. A page awaits each processo
 
 `await input.emit(fileName, bytes)` writes a `Uint8Array` under `/_assets/<namespace>/` and returns an encoded root-relative URL. Use immutable, content-addressed filenames: emitting different bytes under the same name is an error. Core applies the site's base path during URL rewriting. Await all emission work before `processPage` returns, and inspect template fragments explicitly when relevant; `querySelectorAll` does not traverse their content.
 
+Core verifies existing output bytes on first use in each build/session. Repeated emissions reuse successful verification while file identity, size, and modification/change timestamps remain unchanged; changed files are checked again and repaired when necessary. Different-sized files are replaced without reading their obsolete contents. Symlink checks still run for every emission, and pruning or a new build clears the verification state.
+
 Input methods expire when their processor call completes. Outstanding source-resolution or emission work fails the page; core waits for it to settle before cleanup. Saved handles cannot register dependencies or emit files later. Later processors see earlier DOM changes, but `resolveSource` resolves original content files only: an emitted URL is not implicitly added to the source inventory. Combine dependent transforms inside one processor when they need intermediate bytes.
 
 Core persists per-page dependencies and output references in the build manifest. Source edits invalidate dependent pages. Shared outputs remain until their final referencing page changes or disappears; failed renders release pending outputs. Removing a processor cleans up its recorded outputs. Source assets are retained, and generated outputs cannot overwrite them. Do not write these files directly from hooks: `emit` supplies ownership, safe paths, and atomic writes.
@@ -441,7 +466,26 @@ Core registers actual compiled-script output paths, including cache-busted names
 
 ### Plugin configuration
 
-`resolveSiteConfig(input)` returns `DefaultSiteConfig` when using the untouched standard plugin set. Supplying a `plugins` array returns `SiteConfig`, even with defaults enabled: entries can replace standard plugins by name and remove their configuration guarantees.
+`siteConfig.json` can select installed plugins through a `plugins` array. Use `package#exportName` to select a named JavaScript export, or just `package` for its default export. Package subpaths work too: `package/subpath#exportName`. Each selected export must be a plugin object or a no-argument factory; factories may be asynchronous and run once per builder/session. A package can expose several plugins without a default export:
+
+```json
+{
+  "plugins": [
+    "@purestack/ts-page-scripts#consentPlugin",
+    "@purestack/ts-page-scripts#analyticsPlugin"
+  ]
+}
+```
+
+The suffix is the exported symbol's name, not the returned plugin's `name`. A missing export is an error. Repeating a selection (including `package` together with `package#default`) or selecting different exports with the same plugin name is an error. Install packages in the site project; the loader never downloads them. Both JSON declarations and TypeScript config imports use PureStack's own copy of a package when available, keeping shared registries together; other packages resolve from the site. Each plugin still owns its configuration namespace, for example `extensions.images`.
+
+Plugin declarations execute installed JavaScript with the build process's permissions; treat changes to `plugins` as code changes, including when other site settings are edited through a CMS.
+
+JSON declarations compose with the standard plugins and `purestack.config.ts`. An explicit TypeScript/programmatic instance replaces a JSON-selected plugin with the same `name`. The JSON `defaultPlugins` flag defaults to `true`; set it to `false` to disable the automatic set and use only declared or explicitly supplied plugins. This also works without a `plugins` array. An explicit TypeScript/programmatic `defaultPlugins` value overrides the JSON flag. Build, publish, the programmatic builder, and the dev server all use this selection path. Changes to `siteConfig.json` recreate the dev builder and its middleware; restart the server after updating an installed package.
+
+The synchronous `resolveSiteConfig` helper normalizes settings using its explicitly supplied plugin instances and `options.defaultPlugins`; it does not apply JSON plugin selection (`plugins` or `defaultPlugins`) or load `purestack.config.ts`.
+
+`resolveSiteConfig(input)` returns `DefaultSiteConfig` when using the untouched standard plugin set. Supplying `options.plugins` returns `SiteConfig`, even with defaults enabled: entries can replace standard plugins by name and remove their configuration guarantees.
 
 Plugins contribute configuration through optional, synchronous `config.resolve`, `config.normalize`, and `config.finalize` functions, each receiving `{ config, input, file }` and returning an object to merge into config. Do not mutate the inputs. All resolvers run first in plugin order to supply defaults and overrides. All normalizers then validate and canonicalize the completed overrides. Finally, all finalizers derive dependent settings from the normalized config. Finalizers should not change the inputs used by other finalizers. Every phase finishes before highlighters, Markdown processors, styles, search providers, components, and templates initialize. Analytics derives its automatic GA4 consent service only after every normalizer finishes, regardless of plugin order. The existing `onConfigResolved` hook still runs after factories. Publishing applies its output-directory and minification overrides after configuration composition.
 
@@ -484,7 +528,7 @@ export const brandPlugin = definePlugin({
 })
 ```
 
-`resolveSiteConfig(input, { plugins, defaultPlugins })` composes the same selected plugins as a build, including the standard plugins by default. Plugin-owned sections (`style`, `docLayout`, `pageToc`, `logo`, `auth`, `consent`, `analytics`, `pagefind`, and `preview`) are optional in `SiteConfig`: an omitted plugin does not supply defaults or validate its unused input. A replacement plugin reads its settings from `input` and `file`, then contributes normalized config. Analytics also resolves explicitly configured consent when its browser runtime is omitted, so enabled consent is never bypassed. Configuration contributions are synchronous and may run whenever a project configuration is resolved; keep file writes and other side effects in lifecycle hooks.
+`resolveSiteConfig(input, { plugins, defaultPlugins })` composes the supplied plugin instances with the standard plugins by default. Plugin-owned sections (`style`, `docLayout`, `pageToc`, `logo`, `auth`, `consent`, `analytics`, `pagefind`, and `preview`) are optional in `SiteConfig`: an omitted plugin does not supply defaults or validate its unused input. A replacement plugin reads its settings from `input` and `file`, then contributes normalized config. Analytics also resolves explicitly configured consent when its browser runtime is omitted, so enabled consent is never bypassed. Configuration contributions are synchronous and may run whenever a project configuration is resolved; keep file writes and other side effects in lifecycle hooks.
 
 Builder style state is isolated across asynchronous operations, including concurrent sites. Its owned theme options remain linked to `context.config.style.theme`, so in-place config-hook changes and `themes.setOptions` update page colors, CSS, and generated favicons consistently. Head, metadata, template, Markdown, provider, and lifecycle errors identify their owning plugin and preserve the original cause. Markdown wrappers preserve unified presets, duplicate-plugin option merging, and callback transforms.
 

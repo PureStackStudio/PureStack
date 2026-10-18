@@ -4,7 +4,32 @@ Optional, build-time image optimization for PureStack. Ordinary Markdown and
 rendered HTML images gain responsive variants without a browser runtime or a
 special component. This package is **not** part of the default plugin set.
 
-Install it alongside PureStack, then add it in `purestack.config.ts`:
+Install it alongside PureStack:
+
+```sh
+npm install @purestack/ts-images
+```
+
+Enable it in `siteConfig.json`; no TypeScript config is required:
+
+```json
+{
+  "plugins": ["@purestack/ts-images#imagesPlugin"],
+  "extensions": {
+    "images": {
+      "widths": [480, 960, 1440],
+      "formats": ["avif", "webp"]
+    }
+  }
+}
+```
+
+Listing `imagesPlugin` enables its defaults, so `extensions.images` is optional.
+Use `extensions.images.enabled: false` to turn optimization off while retaining
+the declaration, or remove it from `plugins`. Build, publish, and the development
+server all load the JSON declaration; development reloads changes to this file.
+
+For callbacks or custom factory defaults, use `purestack.config.ts`:
 
 ```ts
 import { defineConfig } from '@purestack/ts-ssg'
@@ -14,6 +39,10 @@ export default defineConfig({
   plugins: [imagesPlugin({ widths: [480, 960, 1440], formats: ['avif', 'webp'] })],
 })
 ```
+
+An explicit TypeScript/plugin instance with the same plugin name takes precedence
+over a JSON declaration. This package exports the named `imagesPlugin` factory;
+use `package#exportName` to select named plugins from installed packages.
 
 ```md
 ![Dashboard overview](./images/dashboard.png)

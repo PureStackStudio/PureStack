@@ -1,6 +1,6 @@
 {
   "name": "@purestack/ts-seo",
-  "version": "1.1.15",
+  "version": "1.1.16",
   "packageManager": "yarn@4.9.2",
   "module": "./dist/ts-seo.mjs",
   "types": "./dist/ts-seo.d.mts",

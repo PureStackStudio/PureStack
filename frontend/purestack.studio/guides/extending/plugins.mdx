@@ -29,6 +29,49 @@ A plugin is a named object that extends how PureStack builds your site. Each of 
 
 ## Add your first plugin
 
+To use an installed plugin without writing TypeScript, list its package in
+`siteConfig.json`. For example, install `@purestack/ts-images`, then enable image
+optimization:
+
+```json
+{
+  "plugins": ["@purestack/ts-images#imagesPlugin"],
+  "extensions": {
+    "images": { "widths": [480, 960, 1440] }
+  }
+}
+```
+
+Use `package#exportName` to select a named export, for example
+`"@purestack/ts-images#imagesPlugin"`. Without a suffix, PureStack selects the
+default export. Each selected export must be a plugin object or a no-argument
+factory. Packages can expose multiple plugins; list each export separately:
+
+```json
+{
+  "plugins": [
+    "@purestack/ts-page-scripts#consentPlugin",
+    "@purestack/ts-page-scripts#analyticsPlugin"
+  ]
+}
+```
+
+The suffix is the JavaScript export name, not the plugin's `name`. Package
+subpaths also work: `package/subpath#exportName`. PureStack loads selections for
+builds, publishing, and development, and reloads them when this JSON file changes.
+Each plugin owns its settings; listing `imagesPlugin` enables
+its defaults even without `extensions.images`. Set `extensions.images.enabled`
+to `false` to disable optimization. An explicit plugin instance in
+`purestack.config.ts` replaces a JSON-selected plugin with the same name.
+
+Both config formats use PureStack's own copy of a package when available so
+shared registries stay together; other packages resolve from the site.
+Plugin declarations execute installed JavaScript with the build process's
+permissions, so treat changes to `plugins` as code changes even when a CMS edits
+other site settings.
+
+For local plugins and custom callbacks, use the TypeScript setup below.
+
 Keep plugins in a folder of their own, beside the content folder:
 
 ```text
@@ -111,7 +154,23 @@ Metadata defaults compose through `headConfig({ site, pageInfo })` in plugin ord
 
 Auth hints, consent, and analytics are independent plugins in `ts-page-scripts`. The analytics plugin contributes automatic GA4 consent services during configuration resolution, before any factory or lifecycle hook runs. Omitting it removes automatic registration and direct tracking scripts. Explicitly configured consent services remain available. Analytics never bypasses enabled consent when the consent runtime plugin is omitted.
 
-To choose the standard integrations yourself, disable the automatic set and list the plugins you want. The factories are exported from `purestack`, `@purestack/ts-ssg`, and their individual packages:
+To choose the standard integrations yourself, disable the automatic set and list the plugins you want in `siteConfig.json`:
+
+```json
+{
+  "defaultPlugins": false,
+  "plugins": [
+    "@purestack/ts-theme#themePlugin",
+    "@purestack/ts-components#componentsPlugin"
+  ]
+}
+```
+
+Omitting `defaultPlugins` keeps the automatic set enabled. An explicit
+TypeScript/programmatic `defaultPlugins` value overrides the JSON flag.
+Development reloads changes to either setting.
+
+The same selection is available in `purestack.config.ts`. The factories are exported from `purestack`, `@purestack/ts-ssg`, and their individual packages:
 
 ```ts
 import { componentsPlugin, defineConfig, themePlugin } from 'purestack'
@@ -175,7 +234,7 @@ export const brandPlugin = definePlugin({
 })
 ```
 
-`resolveSiteConfig(input, { plugins, defaultPlugins })` composes the same selected plugins as a build, including the standard plugins by default. Plugin-owned sections (`style`, `docLayout`, `pageToc`, `logo`, `auth`, `consent`, `analytics`, `pagefind`, and `preview`) are optional in `SiteConfig`: an omitted plugin does not supply defaults or validate its unused input. A replacement plugin reads its settings from `input` and `file`, then contributes normalized config. Analytics also resolves explicitly configured consent when its browser runtime is omitted, so enabled consent is never bypassed. Configuration contributions are synchronous and may run whenever a project configuration is resolved; keep file writes and other side effects in lifecycle hooks.
+`resolveSiteConfig(input, { plugins, defaultPlugins })` composes the supplied plugin instances with the standard plugins by default. This synchronous helper does not apply JSON plugin selection (`plugins` or `defaultPlugins`) or load `purestack.config.ts`. Plugin-owned sections (`style`, `docLayout`, `pageToc`, `logo`, `auth`, `consent`, `analytics`, `pagefind`, and `preview`) are optional in `SiteConfig`: an omitted plugin does not supply defaults or validate its unused input. A replacement plugin reads its settings from `input` and `file`, then contributes normalized config. Analytics also resolves explicitly configured consent when its browser runtime is omitted, so enabled consent is never bypassed. Configuration contributions are synchronous and may run whenever a project configuration is resolved; keep file writes and other side effects in lifecycle hooks.
 
 Builder style state is isolated across asynchronous operations, including concurrent sites. Its owned theme options remain linked to `context.config.style.theme`, so in-place config-hook changes and `themes.setOptions` update page colors, CSS, and generated favicons consistently. Head, metadata, template, Markdown, provider, and lifecycle errors identify their owning plugin and preserve the original cause. Markdown wrappers preserve unified presets, duplicate-plugin option merging, and callback transforms.
 
