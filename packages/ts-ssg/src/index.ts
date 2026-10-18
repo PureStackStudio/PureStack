@@ -1,5 +1,8 @@
 export type {
+  AssetSource,
+  CoreSiteConfig,
   MdxCodeHighlighter,
+  PageAssetInput,
   PageContext,
   PageFrontmatter,
   PageHeadConfigInput,
@@ -9,8 +12,11 @@ export type {
   PageTemplate,
   PageTemplateInput,
   PageTemplateMap,
+  SiteAssets,
   SiteConfig,
   SiteConfigContributions,
+  SiteConfigDraft,
+  SiteConfigFinalizer,
   SiteConfigInput,
   SiteConfigResolution,
   SiteConfigResolver,
@@ -35,7 +41,7 @@ export {
   type PublishOptions,
 } from './build/site'
 export { runCli } from './cli-runner'
-export { resolveSiteConfig } from './config/config'
+export { type DefaultSiteConfig, resolveSiteConfig } from './config/config'
 export { defineConfig, type PureStackConfig } from './config/project-config'
 export {
   type DevServerHandle,

@@ -219,45 +219,32 @@ function collectComponentSuggestions(workspaceRoot: string) {
   for (const dependencyPackage of getDependencyComponentPackages(
     workspaceRoot,
   )) {
-    for (const normalizedName of dependencyPackage.componentNames) {
-      if (seenNames.has(normalizedName)) continue
-
-      const target = resolveDependencyComponentSuggestion(
-        dependencyPackage,
-        normalizedName,
-      )
-      if (!target) continue
-
-      seenNames.add(normalizedName)
-      suggestions.push(target)
+    // Read each source once, rather than searching every file again for every
+    // registered name. This preserves first-file precedence and manifest filtering.
+    for (const filePath of dependencyPackage.files) {
+      let realPath: string | undefined
+      for (const definition of findComponentDefinitionsInFile(filePath)) {
+        const normalizedName = normalizeComponentName(definition.name)
+        if (
+          seenNames.has(normalizedName) ||
+          !dependencyPackage.componentNames.has(normalizedName)
+        )
+          continue
+        seenNames.add(normalizedName)
+        realPath ??= resolveRealPath(filePath)
+        suggestions.push({
+          componentName: definition.name,
+          filePath: realPath,
+          line: definition.line,
+          source: 'dependency',
+        })
+      }
     }
   }
 
   return suggestions.sort((left, right) =>
     left.componentName.localeCompare(right.componentName),
   )
-}
-
-function resolveDependencyComponentSuggestion(
-  dependencyPackage: DependencyComponentPackage,
-  normalizedComponentName: string,
-): ComponentSuggestion | undefined {
-  for (const filePath of dependencyPackage.files) {
-    const definition = findComponentDefinitionInFile(
-      filePath,
-      normalizedComponentName,
-    )
-    if (!definition) continue
-
-    return {
-      componentName: definition.name,
-      filePath: resolveRealPath(filePath),
-      line: definition.line,
-      source: 'dependency',
-    }
-  }
-
-  return undefined
 }
 
 function resolveRealPath(filePath: string) {

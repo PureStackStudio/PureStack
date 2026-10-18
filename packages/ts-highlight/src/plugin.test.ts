@@ -9,6 +9,17 @@ import { describe, expect, it } from 'vitest'
 import { highlightPlugin } from './index'
 
 describe('highlightPlugin', () => {
+  it('owns its default selection and validates identifiers only when its backend is used', async () => {
+    const plugin = highlightPlugin()
+    const fallback = await plugin.markdown.createHighlighter({})
+    expect(fallback?.codeToHtml('const answer = 42', 'ts')).toContain(
+      'hljs-keyword',
+    )
+    await expect(
+      plugin.markdown.createHighlighter({ highlighter: 'another-provider' }),
+    ).rejects.toThrow('Supply a custom markdown.createHighlighter provider')
+  })
+
   it.each(['sync', 'async'])(
     'uses a %s Shiki factory with default options and a custom grammar',
     async (mode) => {

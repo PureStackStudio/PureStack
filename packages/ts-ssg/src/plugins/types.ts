@@ -4,6 +4,7 @@ import type {
   PageHeadConfigTemplate,
   PageHeadTemplate,
   PageTemplateMap,
+  SiteAssets,
   SiteConfig,
   SiteConfigContributions,
   SiteMdxConfig,
@@ -27,7 +28,7 @@ export interface PureStackPlugin {
   defaults?: boolean
   /** Theme skins the site config can select with `style.theme.skin`. */
   skins?: Record<string, ThemeSkin>
-  /** Pure overrides, followed by derived settings; both run before factories. */
+  /** Pure overrides, normalization, and derived settings, before factories. */
   config?: SiteConfigContributions
   /** Regor components, built from the resolved site config. */
   components?: (config: SiteConfig) => Record<string, object>
@@ -41,6 +42,8 @@ export interface PureStackPlugin {
   styles?: (config: SiteConfig) => SiteStyles
   /** Search output, used for full builds and lazy development asset requests. */
   search?: (config: SiteConfig) => SiteSearch
+  /** Per-site document asset processors; core owns their outputs and dependencies. */
+  assets?: (config: SiteConfig) => SiteAssets | undefined
   /** Markdown transforms and highlighter resolution for pages and shared partials. */
   markdown?: PureStackMarkdown
   /**

@@ -1,9 +1,6 @@
-import type { SiteConfig } from '@purestack/ts-common'
-import { resolveSiteConfig } from '../config/config'
-import { resolvePluginConfigResolvers } from '../plugins/contributions'
-import { resolveBuildPlugins } from '../plugins/default-plugins'
+import type { SiteConfig, SiteConfigInput } from '@purestack/ts-common'
+import { resolveSelectedSiteConfig } from '../config/config'
 import type { PureStackPlugin } from '../plugins/plugin'
-import { assertValidPlugins, withPluginSkins } from '../plugins/plugin'
 import type { BuildInput } from './site'
 
 export interface PublishOptions {
@@ -11,12 +8,14 @@ export interface PublishOptions {
 }
 
 export function resolveBuildSiteConfig(
-  input: BuildInput = {},
-  plugins: readonly PureStackPlugin[] = resolveBuildPlugins(input.options),
+  input: BuildInput,
+  plugins: readonly PureStackPlugin[],
+  file?: SiteConfigInput,
 ): SiteConfig {
-  assertValidPlugins(plugins)
-  const config = withPluginSkins(plugins, () =>
-    resolveSiteConfig(input.siteConfig, resolvePluginConfigResolvers(plugins)),
+  const config = resolveSelectedSiteConfig(
+    input.siteConfig ?? {},
+    plugins,
+    file,
   )
   if (input.publish?.enabled !== true) return config
   return {
@@ -26,9 +25,13 @@ export function resolveBuildSiteConfig(
       ...config.html,
       minify: true,
     },
-    style: {
-      ...config.style,
-      pretty: false,
-    },
+    ...(config.style
+      ? {
+          style: {
+            ...config.style,
+            pretty: false,
+          },
+        }
+      : {}),
   }
 }

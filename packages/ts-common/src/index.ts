@@ -53,8 +53,14 @@ export {
   tryResolvePageContext,
 } from './resolvePageContext'
 export type {
+  AssetSource,
+  PageAssetInput,
+  SiteAssets,
+} from './site-assets'
+export type {
   AnalyticsConfig,
   AuthConfig,
+  CoreSiteConfig,
   DocLayoutConfig,
   Ga4Config,
   I18nConfig,
@@ -65,6 +71,8 @@ export type {
   RobotsConfig,
   SiteConfig,
   SiteConfigContributions,
+  SiteConfigDraft,
+  SiteConfigFinalizer,
   SiteConfigInput,
   SiteConfigResolution,
   SiteConfigResolver,

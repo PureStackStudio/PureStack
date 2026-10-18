@@ -66,6 +66,7 @@ function applyNormalizeMediaRules(theme: string) {
     .select('img, picture, video, canvas, svg', theme)
     .display('block')
     .maxWidth('100%')
+  styleBuilder.select('img', theme).height('auto')
   styleBuilder
     .select('button, input, textarea, select', theme)
     .font('inherit')

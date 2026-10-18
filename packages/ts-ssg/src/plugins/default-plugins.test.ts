@@ -157,6 +157,8 @@ describe('default plugins', () => {
               hooks: {
                 onConfigResolved({ config }) {
                   if (source === 'config') {
+                    if (!config.style)
+                      throw new Error('Expected theme settings')
                     config.style.theme.palette.light.accent = '#123456'
                     config.style.theme.palette.light.semanticTone.neutral.canvas =
                       '#abcdef'

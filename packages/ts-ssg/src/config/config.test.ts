@@ -651,7 +651,7 @@ describe('resolveSiteConfig sitemap', () => {
     expect(config.analytics.ga4.measurementId).toBe('G-TEST1234')
   })
 
-  it('leaves automatic ga4 consent registration to the analytics plugin', () => {
+  it('resolves automatic ga4 consent registration through the default analytics plugin', () => {
     const config = resolveSiteConfig({
       rootDir: process.cwd(),
       consent: {
@@ -666,7 +666,7 @@ describe('resolveSiteConfig sitemap', () => {
     const ga4Service = config.consent.services.find(
       (entry) => entry.id === 'ga4',
     )
-    expect(ga4Service).toBeUndefined()
+    expect(ga4Service?.ga4MeasurementId).toBe('G-TEST1234')
   })
 
   it('throws when ga4 is enabled without measurement id', () => {

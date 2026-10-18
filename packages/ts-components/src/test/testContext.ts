@@ -99,7 +99,7 @@ export function createTestContext(
     pageInfo,
     navigation: options.navigation,
     outline: options.outline,
-    theme: site.style.theme,
+    theme: site.style?.theme,
     basePath: site.basePath,
     locale: pageInfo.locale,
     locales: site.i18n.locales,

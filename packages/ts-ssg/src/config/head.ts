@@ -24,7 +24,7 @@ export function getHead(config?: BasicHeadConfig) {
   return createHead(getHeadConfig(merge(DEFAULTS, config))).push(
     h('meta').attr({
       name: 'generator',
-      content: 'PureStack v1.1.15',
+      content: 'PureStack v1.1.16',
     }),
   )
 }

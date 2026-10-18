@@ -21,32 +21,57 @@ export function markContentSource(html: string, sourceRelPath: string) {
   return `<${CONTENT_SOURCE_TAG} file="${file}">${html}</${CONTENT_SOURCE_TAG}>`
 }
 
+/** The innermost source marker wins for imported content and shared partials. */
+export function elementSourceRelPath(element: Element, fallback: string) {
+  for (
+    let parent: Element | null = element;
+    parent;
+    parent = parent.parentElement
+  ) {
+    if (parent.tagName === CONTENT_SOURCE_TAG_NAME)
+      return parent.getAttribute('file') ?? fallback
+  }
+  return fallback
+}
+
 /**
  * Finishes every URL in a rendered page. Links, sources and posters resolve
  * from the content file that wrote them, and root-absolute URLs gain the
  * base path. Source markers are removed, so the page keeps its markup.
  */
 export function resolvePageUrls(document: Document, options: PageUrlOptions) {
-  visitChildren(document, options.sourceRelPath, options)
+  visitSourceElements(
+    document,
+    options.sourceRelPath,
+    (element, source) => resolveElementUrls(element, source, options),
+    true,
+  )
 }
 
-function visitChildren(
+export function visitSourceElements(
   parent: ParentNode,
   sourceRelPath: string,
-  options: PageUrlOptions,
+  visit: (element: Element, sourceRelPath: string) => void,
+  unwrap = false,
 ) {
   for (const child of [...parent.childNodes]) {
     if (!isElement(child)) continue
     if (child.tagName === CONTENT_SOURCE_TAG_NAME) {
-      visitChildren(child, child.getAttribute('file') ?? sourceRelPath, options)
-      child.replaceWith(...child.childNodes)
+      visitSourceElements(
+        child,
+        child.getAttribute('file') ?? sourceRelPath,
+        visit,
+        unwrap,
+      )
+      if (unwrap) child.replaceWith(...child.childNodes)
       continue
     }
-    resolveElementUrls(child, sourceRelPath, options)
-    visitChildren(
+    visit(child, sourceRelPath)
+    visitSourceElements(
       isTemplate(child) ? child.content : child,
       sourceRelPath,
-      options,
+      visit,
+      unwrap,
     )
   }
 }

@@ -21,3 +21,5 @@ Extension component factories and config hooks can override standard components
 through `context.components` and register styles. When choosing plugins explicitly with `defaultPlugins: false`,
 include `@purestack/ts-theme` to emit CSS, or supply your own style writer through
 `context.styles`.
+
+The components plugin owns the site `logo` defaults and normalization. Without it, a custom plugin may contribute `logo`; components also accept an absent site logo config.

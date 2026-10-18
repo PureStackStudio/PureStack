@@ -25,6 +25,9 @@ function renderDocTemplate({
   footerHtml,
 }: PageTemplateInput) {
   const frontmatter = pageInfo.frontmatter
+  const { docLayout, pageToc } = site
+  if (!docLayout || !pageToc)
+    throw new Error('The doc template requires resolved theme settings.')
   const layout = resolveDocLayout(frontmatter, navigation, outline)
   const showFooter = frontmatter.layout.showFooter
   return h('html')
@@ -34,7 +37,7 @@ function renderDocTemplate({
       h('body')
         .attr({
           class: layout.bodyClass,
-          style: `${docLayoutVars.sidebarTop}: ${site.docLayout.sidebarTop}; ${docLayoutVars.sidebarTopMobile}: ${site.docLayout.sidebarTopMobile};`,
+          style: `${docLayoutVars.sidebarTop}: ${docLayout.sidebarTop}; ${docLayoutVars.sidebarTopMobile}: ${docLayout.sidebarTopMobile};`,
         })
         .push(
           buildTopBar(headerHtml),
@@ -72,13 +75,11 @@ function renderDocTemplate({
                       .attr({ class: 'doc-toc', id: 'doc-toc' })
                       .push(
                         h('page-toc').attr({
-                          tone: frontmatter.layout.tocTone ?? site.pageToc.tone,
-                          ...(site.pageToc.variant
-                            ? { variant: site.pageToc.variant }
+                          tone: frontmatter.layout.tocTone ?? pageToc.tone,
+                          ...(pageToc.variant
+                            ? { variant: pageToc.variant }
                             : {}),
-                          ...(site.pageToc.class
-                            ? { class: site.pageToc.class }
-                            : {}),
+                          ...(pageToc.class ? { class: pageToc.class } : {}),
                         }),
                       ),
                   ]

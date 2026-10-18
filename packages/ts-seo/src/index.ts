@@ -1,4 +1,9 @@
-import type { PageHeadConfigInput } from '@purestack/ts-common'
+import type {
+  PageHeadConfigInput,
+  SiteConfigResolution,
+} from '@purestack/ts-common'
+import { merge } from '@purestack/ts-util'
+import { resolvePreviewOptions } from './config'
 import { resolvePreviewConfig } from './preview'
 
 export { type PreviewHeadOptions, resolvePreviewConfig } from './preview'
@@ -7,6 +12,19 @@ export { type PreviewHeadOptions, resolvePreviewConfig } from './preview'
 export function seoPlugin() {
   return {
     name: 'purestack:seo',
+    config: {
+      resolve({ config, input, file }: SiteConfigResolution) {
+        return {
+          preview: merge(
+            resolvePreviewOptions(input.preview, file.preview),
+            config.preview,
+          ),
+        }
+      },
+      normalize({ config }: SiteConfigResolution) {
+        return { preview: resolvePreviewOptions(config.preview) }
+      },
+    },
     headConfig({ site, pageInfo }: PageHeadConfigInput) {
       return resolvePreviewConfig(pageInfo.frontmatter, {
         siteTitle: site.siteTitle,

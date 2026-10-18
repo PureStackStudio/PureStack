@@ -14,6 +14,7 @@ const PLUGIN_FIELDS = [
   'headConfig',
   'styles',
   'search',
+  'assets',
   'markdown',
   'pages',
   'devMiddleware',
@@ -82,9 +83,9 @@ function assertPluginFields(name: string, plugin: Record<string, unknown>) {
     if (!isPlainObject(plugin.config))
       fail('needs `config` to be an object of configuration contributions.')
     for (const [phase, resolve] of Object.entries(plugin.config as object)) {
-      if (phase !== 'resolve' && phase !== 'finalize')
+      if (phase !== 'resolve' && phase !== 'normalize' && phase !== 'finalize')
         fail(
-          `has an unknown config field "${phase}". Config fields: resolve, finalize.`,
+          `has an unknown config field "${phase}". Config fields: resolve, normalize, finalize.`,
         )
       if (resolve !== undefined && typeof resolve !== 'function')
         fail(`needs \`config.${phase}\` to be a configuration resolver.`)
@@ -101,6 +102,8 @@ function assertPluginFields(name: string, plugin: Record<string, unknown>) {
     fail('needs `styles` to be a stylesheet provider.')
   if (plugin.search !== undefined && typeof plugin.search !== 'function')
     fail('needs `search` to be a search provider.')
+  if (plugin.assets !== undefined && typeof plugin.assets !== 'function')
+    fail('needs `assets` to be an asset processor factory.')
   if (pages !== undefined && typeof pages !== 'function') {
     fail('needs `pages` to be a function that returns pages.')
   }

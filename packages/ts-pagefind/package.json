@@ -1,6 +1,6 @@
 {
   "name": "@purestack/ts-pagefind",
-  "version": "1.1.15",
+  "version": "1.1.16",
   "packageManager": "yarn@4.9.2",
   "module": "./dist/ts-pagefind.mjs",
   "types": "./dist/ts-pagefind.d.mts",
@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "@purestack/ts-common": "workspace:^",
+    "@purestack/ts-util": "workspace:^",
     "logpot": "^1.0.7",
     "pagefind": "^1.4.0"
   }

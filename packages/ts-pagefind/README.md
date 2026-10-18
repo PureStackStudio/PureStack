@@ -25,3 +25,5 @@ engine, replace `purestack:pagefind` by name or disable automatic plugins and
 supply a `search(config)` contribution. Its provider implements
 `ownsPath(pathname)` and `write({ outDir, excludeFiles, onlyFiles })`; no new
 lifecycle hook is required.
+
+The plugin owns `pagefind` defaults, exclusion-path normalization, and validation. Omitting it leaves `config.pagefind` absent unless another plugin contributes it; the standard browser scripts then omit Pagefind search initialization.

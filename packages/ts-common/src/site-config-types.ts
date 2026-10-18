@@ -8,31 +8,35 @@ import type { ConsentConfig } from './consent-types'
 import type { SiteLogoConfig } from './logo-types'
 import type { NavigationConfig } from './navMenu-types'
 
-export interface SiteConfig {
-  /** Plugin-owned settings, normalized by their configuration contributions. */
-  extensions: SiteExtensions
+/** Settings normalized by the builder before plugin configuration runs. */
+export interface CoreSiteConfig {
   rootDir: string
   contentDir: string
   outDir: string
   publishDir: string
   basePath: string
   siteTitle: string
-  favicon?: string
-  logo: SiteLogoConfig
-  docLayout: DocLayoutConfig
-  style: SiteStyleConfig
   html: SiteHtmlConfig
   navigation: NavigationConfig
-  pageToc: PageTocConfig
-  auth: AuthConfig
   scripts: SiteScriptsConfig
   sitemap: SitemapConfig
-  consent: ConsentConfig
-  analytics: AnalyticsConfig
-  pagefind: PagefindConfig
-  preview: PreviewConfig
   i18n: I18nConfig
   mdx: SiteMdxConfig
+}
+
+export interface SiteConfig extends CoreSiteConfig {
+  /** Plugin-owned settings, normalized by the installed owners. */
+  extensions: SiteExtensions
+  favicon?: string
+  logo?: SiteLogoConfig
+  docLayout?: DocLayoutConfig
+  style?: SiteStyleConfig
+  pageToc?: PageTocConfig
+  auth?: AuthConfig
+  consent?: ConsentConfig
+  analytics?: AnalyticsConfig
+  pagefind?: PagefindConfig
+  preview?: PreviewConfig
 }
 
 /** Plugins may augment this interface with optional, typed namespaces. */
@@ -140,7 +144,8 @@ export interface I18nConfig {
 }
 
 export interface SiteMdxConfig {
-  highlighter: 'shiki' | 'highlightjs'
+  /** An optional provider-owned backend identifier. Core does not select an engine. */
+  highlighter?: string
   disableHighlighter: boolean
   compileMdAsMdx: boolean
 }
@@ -155,9 +160,15 @@ export type SiteConfigInput = DeepPartial<Omit<SiteConfig, 'style'>> & {
   style?: SiteStyleConfigInput
 }
 
+/** Core fields are ready; plugin sections may still contain partial input. */
+export type SiteConfigDraft = CoreSiteConfig &
+  Omit<SiteConfigInput, keyof CoreSiteConfig | 'extensions'> & {
+    extensions: DeepPartial<SiteExtensions>
+  }
+
 /** Inputs for a pure configuration contribution, before build factories run. */
-export interface SiteConfigResolution {
-  config: SiteConfig
+export interface SiteConfigResolution<TConfig = SiteConfigDraft> {
+  config: TConfig
   input: SiteConfigInput
   file: SiteConfigInput
 }
@@ -166,8 +177,14 @@ export type SiteConfigResolver = (
   source: SiteConfigResolution,
 ) => DeepPartial<SiteConfig>
 
-/** All overrides resolve before any plugin derives dependent settings. */
+/** Runs after every installed owner's normalizer has completed. */
+export type SiteConfigFinalizer = (
+  source: SiteConfigResolution<SiteConfig>,
+) => DeepPartial<SiteConfig>
+
+/** Overrides, normalization, then dependent settings; all run before factories. */
 export interface SiteConfigContributions {
   resolve?: SiteConfigResolver
-  finalize?: SiteConfigResolver
+  normalize?: SiteConfigResolver
+  finalize?: SiteConfigFinalizer
 }

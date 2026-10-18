@@ -28,3 +28,5 @@ and signature to the build manifest.
 The resolved config and active theme share the builder's owned options object.
 In-place `context.config.style.theme` edits and `themes.setOptions` from config
 hooks update head colors, CSS variables, and favicon colors together.
+
+The plugin owns defaults and normalization for `style`, `docLayout`, `pageToc`, and `favicon`. These settings are resolved before factories. Without it, `style`, `docLayout`, and `pageToc` are absent unless another plugin contributes them; check optional settings before accessing them in shared hooks.
