@@ -67,7 +67,8 @@ await startDevServer({
 Flags:
 
 - `--content ./content` or `--content=./content` (required; directory must contain `siteConfig.json`)
-- `--clean` (`build`, `serve`)
+- `--clean` (`build`, `serve`; empty the output directory and ignore its incremental manifest)
+- `--no-cache` (`build`, `serve`, `publish`; skip persistent plugin caches outside the output directory, such as highlighted code and optimized images)
 - `--port 4173` or `--port=4173` (`serve`)
 - `--host 127.0.0.1` or `--host=127.0.0.1` (`serve`)
 - `--no-watch` (`serve`)
@@ -530,6 +531,8 @@ export const brandPlugin = definePlugin({
 
 `resolveSiteConfig(input, { plugins, defaultPlugins })` composes the supplied plugin instances with the standard plugins by default. Plugin-owned sections (`style`, `docLayout`, `pageToc`, `logo`, `auth`, `consent`, `analytics`, `pagefind`, and `preview`) are optional in `SiteConfig`: an omitted plugin does not supply defaults or validate its unused input. A replacement plugin reads its settings from `input` and `file`, then contributes normalized config. Analytics also resolves explicitly configured consent when its browser runtime is omitted, so enabled consent is never bypassed. Configuration contributions are synchronous and may run whenever a project configuration is resolved; keep file writes and other side effects in lifecycle hooks.
 
+`config.cache` is `false` when a run uses `--no-cache` or `options.cache: false`. A plugin that keeps a persistent cache outside the output directory should neither read nor write it then. Site settings cannot change this flag, and it never invalidates incremental output.
+
 Builder style state is isolated across asynchronous operations, including concurrent sites. Its owned theme options remain linked to `context.config.style.theme`, so in-place config-hook changes and `themes.setOptions` update page colors, CSS, and generated favicons consistently. Head, metadata, template, Markdown, provider, and lifecycle errors identify their owning plugin and preserve the original cause. Markdown wrappers preserve unified presets, duplicate-plugin option merging, and callback transforms.
 
 ### Code highlighting
@@ -576,7 +579,9 @@ export default defineConfig({
 
 The same plugin accepts `createHighlightJs()`, which returns a configured highlight.js instance synchronously or asynchronously. Use `hljs.newInstance()` and register the grammars you need to avoid mutating the shared registry. Backend-specific factories belong to `HighlightPluginOptions`; the SSG plugin API uses the backend-independent `markdown.createHighlighter(config)` contract.
 
-A custom `markdown.createHighlighter` receives the MDX configuration and returns an object with `codeToHtml(code, lang?)`, or `undefined` to leave source unhighlighted. An ordinary provider replaces the default without initializing it. Competing providers in the same precedence group fail before either initializes. Per-language `resolveHighlighter(lang)` callbacks still run before the selected provider.
+A custom `markdown.createHighlighter({ mdx, cache })` receives the MDX configuration and the run's cache policy, and returns an object with `codeToHtml(code, lang?)`, or `undefined` to leave source unhighlighted. The standard Shiki backend reuses highlighted code across builds from a cache in the OS temporary directory; `cache` is `false` for `--no-cache` runs. An ordinary provider replaces the default without initializing it. Competing providers in the same precedence group fail before either initializes. Per-language `resolveHighlighter(lang)` callbacks still run before the selected provider.
+
+Highlighters may also return `flush(): void | Promise<void>` to persist buffered computation results. Core awaits it after full builds, change batches, and lazy development renders, including failed batches. Resolver composition preserves the provider's flush method. Standalone consumers must await it themselves after rendering. `PersistentCache` from `@purestack/ts-util-node` supplies buffered JSON shards, separate files for large/binary values, and inter-process merging for build-time plugins and components; pass `enabled: cache` and return `flush: () => persistentCache.flush()` from a cached highlighter.
 
 ### Search providers
 

@@ -12,11 +12,10 @@ export function resolveBuildSiteConfig(
   plugins: readonly PureStackPlugin[],
   file?: SiteConfigInput,
 ): SiteConfig {
-  const config = resolveSelectedSiteConfig(
-    input.siteConfig ?? {},
-    plugins,
-    file,
-  )
+  const config: SiteConfig = {
+    ...resolveSelectedSiteConfig(input.siteConfig ?? {}, plugins, file),
+    cache: input.options?.cache !== false,
+  }
   if (input.publish?.enabled !== true) return config
   return {
     ...config,

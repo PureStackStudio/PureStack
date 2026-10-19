@@ -126,10 +126,11 @@ export class ManifestContentIndex {
 export async function resolveMdxBuildOptions(
   mdx: Partial<SiteMdxConfig> | undefined,
   plugins: readonly PureStackPlugin[] = [],
+  cache = true,
 ): Promise<MdxRenderOptions> {
   const highlighter = resolvePluginHighlighter(
     plugins,
-    await createPluginHighlighter(plugins, mdx ?? {}),
+    await createPluginHighlighter(plugins, { mdx: mdx ?? {}, cache }),
   )
   return {
     highlighter,

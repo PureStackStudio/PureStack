@@ -33,6 +33,10 @@
     "README.md",
     "LICENSE"
   ],
+  "dependencies": {
+    "@purestack/ts-util": "workspace:^",
+    "proper-lockfile": "^4.1.2"
+  },
   "scripts": {
     "build": "tsc",
     "lint": "biome check ./src --formatter-enabled=false --write",

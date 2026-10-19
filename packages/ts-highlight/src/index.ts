@@ -10,6 +10,7 @@ export {
   DEFAULT_MDX_CODE_THEMES,
   type MdxCodeLangs,
   type MdxCodeThemes,
+  type MdxHighlighterOptions,
   type MdxShikiFactory,
 } from './shiki'
 
@@ -31,13 +32,22 @@ export function highlightPlugin(options: HighlightPluginOptions = {}) {
       },
     },
     markdown: {
-      async createHighlighter(config: Partial<SiteMdxConfig>) {
-        if (config.disableHighlighter) return undefined
-        const backend = backendIdentifier(config.highlighter)
+      async createHighlighter({
+        mdx,
+        cache,
+      }: {
+        mdx: Partial<SiteMdxConfig>
+        cache: boolean
+      }) {
+        if (mdx.disableHighlighter) return undefined
+        const backend = backendIdentifier(mdx.highlighter)
         if (backend === 'highlightjs')
           return createHljsHighlighter(await options.createHighlightJs?.())
         if (backend === 'shiki')
-          return createMdxHighlighter(undefined, undefined, options.createShiki)
+          return createMdxHighlighter(undefined, undefined, {
+            create: options.createShiki,
+            cache,
+          })
         throw new Error(
           `The standard highlighting plugin does not support backend "${backend}". Supply a custom markdown.createHighlighter provider.`,
         )

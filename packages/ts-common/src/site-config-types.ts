@@ -22,6 +22,11 @@ export interface CoreSiteConfig {
   sitemap: SitemapConfig
   i18n: I18nConfig
   mdx: SiteMdxConfig
+  /**
+   * Whether plugins may read and write persistent caches outside the output
+   * directory. Set per run (`--no-cache`, `options.cache`), never by site settings.
+   */
+  cache: boolean
 }
 
 export interface SiteConfig extends CoreSiteConfig {
@@ -156,7 +161,9 @@ export type SiteStyleConfigInput = DeepPartial<
   theme?: ThemeOptionsInput
 }
 
-export type SiteConfigInput = DeepPartial<Omit<SiteConfig, 'style'>> & {
+export type SiteConfigInput = DeepPartial<
+  Omit<SiteConfig, 'style' | 'cache'>
+> & {
   style?: SiteStyleConfigInput
 }
 

@@ -75,6 +75,7 @@ export {
 export {
   definePlugin,
   type GeneratedPage,
+  type HighlighterConfig,
   type PageGenerationContext,
   type PureStackMarkdown,
   type PureStackPlugin,

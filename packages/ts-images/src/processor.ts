@@ -70,6 +70,8 @@ export class ImageProcessor {
   constructor(
     private readonly config: ImagesConfig,
     private readonly protectedDirectories: readonly string[] = [],
+    /** `false` encodes every image without reading or writing the cache. */
+    private readonly useCache = true,
   ) {
     this.queue = new WorkQueue(config.concurrency)
   }
@@ -184,6 +186,24 @@ export class ImageProcessor {
     fallback: OutputFormat,
     preset: ResolvedImagePreset,
   ): Promise<ProcessedImage> {
+    const expected = widths.flatMap((outputWidth) =>
+      formats.map((format) => ({
+        width: outputWidth,
+        height: Math.max(1, Math.round((height * outputWidth) / width)),
+        format,
+        file: fileName(outputWidth, format),
+      })),
+    )
+    if (!this.useCache)
+      return {
+        key,
+        width,
+        height,
+        fallback,
+        variants: await this.encode(sharp, data, expected, preset),
+        sourceBytes: data.length,
+        cache: 'miss',
+      }
     this.cacheRoot ??= this.prepareCache().catch((error) => {
       this.cacheRoot = undefined
       throw error
@@ -209,14 +229,6 @@ export class ImageProcessor {
     const directoryStat = await optionalStat(directory)
     if (directoryStat?.isSymbolicLink())
       throw new Error('Image cache entries must not be symlinks.')
-    const expected = widths.flatMap((outputWidth) =>
-      formats.map((format) => ({
-        width: outputWidth,
-        height: Math.max(1, Math.round((height * outputWidth) / width)),
-        format,
-        file: fileName(outputWidth, format),
-      })),
-    )
     const cached = await readCache(directory, key, expected)
     if (cached) {
       const now = new Date()
@@ -235,47 +247,7 @@ export class ImageProcessor {
         cache: 'hit',
       }
     }
-    const variants: ImageVariant[] = []
-    for (const item of expected) {
-      let pipeline = sharp(data, {
-        limitInputPixels: this.config.maxInputPixels,
-        failOn: 'warning',
-      })
-        .autoOrient()
-        .resize({ width: item.width, withoutEnlargement: true })
-        .toColorspace('srgb')
-      if (preset.metadata === 'preserve')
-        pipeline = pipeline.withMetadata({ orientation: 1 })
-      if (item.format === 'avif')
-        pipeline = pipeline.avif({
-          quality: preset.quality.avif,
-          lossless: preset.lossless,
-          effort: 4,
-        })
-      else if (item.format === 'webp')
-        pipeline = pipeline.webp({
-          quality: preset.quality.webp,
-          lossless: preset.lossless,
-          effort: 4,
-        })
-      else if (item.format === 'jpeg')
-        pipeline = pipeline.jpeg({
-          quality: preset.quality.jpeg,
-          mozjpeg: true,
-        })
-      else pipeline = pipeline.png({ compressionLevel: 9, palette: false })
-      const result = await pipeline
-        .timeout({ seconds: 30 })
-        .toBuffer({ resolveWithObject: true })
-      variants.push({
-        file: item.file,
-        format: item.format,
-        width: result.info.width,
-        height: result.info.height,
-        data: result.data,
-        hash: digest(result.data),
-      })
-    }
+    const variants = await this.encode(sharp, data, expected, preset)
     const manifest: CacheManifest = {
       version: 1,
       key,
@@ -342,6 +314,56 @@ export class ImageProcessor {
       sourceBytes: data.length,
       cache: 'miss',
     }
+  }
+
+  private async encode(
+    sharp: typeof sharpType,
+    data: Buffer,
+    expected: Array<{ file: string; width: number; format: OutputFormat }>,
+    preset: ResolvedImagePreset,
+  ): Promise<ImageVariant[]> {
+    const variants: ImageVariant[] = []
+    for (const item of expected) {
+      let pipeline = sharp(data, {
+        limitInputPixels: this.config.maxInputPixels,
+        failOn: 'warning',
+      })
+        .autoOrient()
+        .resize({ width: item.width, withoutEnlargement: true })
+        .toColorspace('srgb')
+      if (preset.metadata === 'preserve')
+        pipeline = pipeline.withMetadata({ orientation: 1 })
+      if (item.format === 'avif')
+        pipeline = pipeline.avif({
+          quality: preset.quality.avif,
+          lossless: preset.lossless,
+          effort: 4,
+        })
+      else if (item.format === 'webp')
+        pipeline = pipeline.webp({
+          quality: preset.quality.webp,
+          lossless: preset.lossless,
+          effort: 4,
+        })
+      else if (item.format === 'jpeg')
+        pipeline = pipeline.jpeg({
+          quality: preset.quality.jpeg,
+          mozjpeg: true,
+        })
+      else pipeline = pipeline.png({ compressionLevel: 9, palette: false })
+      const result = await pipeline
+        .timeout({ seconds: 30 })
+        .toBuffer({ resolveWithObject: true })
+      variants.push({
+        file: item.file,
+        format: item.format,
+        width: result.info.width,
+        height: result.info.height,
+        data: result.data,
+        hash: digest(result.data),
+      })
+    }
+    return variants
   }
 
   private async prepareCache() {

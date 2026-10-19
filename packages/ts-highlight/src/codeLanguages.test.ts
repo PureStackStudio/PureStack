@@ -22,11 +22,9 @@ describe('MDX code languages', () => {
   })
 
   it('renders every inferred language with the default Shiki grammars', async () => {
-    const highlighter = await createMdxHighlighter(
-      undefined,
-      undefined,
-      createTestShiki,
-    )
+    const highlighter = await createMdxHighlighter(undefined, undefined, {
+      create: createTestShiki,
+    })
     const languages = new Set([
       ...DEFAULT_MDX_CODE_LANGS,
       ...Object.values(LANGUAGE_BY_EXTENSION),
@@ -65,11 +63,9 @@ describe('MDX code languages', () => {
     ['gql', 'graphql', 'query { user { id } }'],
   ])('resolves %s with both highlighters', async (alias, language, code) => {
     // Loading by the alias must also work when defaults are overridden.
-    const shiki = await createMdxHighlighter(
-      undefined,
-      [alias],
-      createTestShiki,
-    )
+    const shiki = await createMdxHighlighter(undefined, [alias], {
+      create: createTestShiki,
+    })
     expect(await shiki.codeToHtml(code, alias)).toBe(
       await shiki.codeToHtml(code, language),
     )

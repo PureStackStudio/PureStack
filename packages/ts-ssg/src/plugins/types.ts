@@ -87,10 +87,16 @@ export interface GeneratedPage {
   source: string | (() => string | Promise<string>)
 }
 
+/** What a highlighter may depend on: Markdown settings and the run's cache policy. */
+export interface HighlighterConfig {
+  mdx: Partial<SiteMdxConfig>
+  cache: SiteConfig['cache']
+}
+
 export interface PureStackMarkdown {
   /** Creates the site's default code highlighter once per build/session. */
   createHighlighter?: (
-    config: Partial<SiteMdxConfig>,
+    config: HighlighterConfig,
   ) => MdxCodeHighlighter | undefined | Promise<MdxCodeHighlighter | undefined>
   /** Resolves a lowercase language (empty when absent); null lets the next highlighter handle it. */
   resolveHighlighter?: (

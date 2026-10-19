@@ -200,6 +200,35 @@ describe('image processor and persistent cache', () => {
     expect(imagePreset(settings, 'screenshot').lossless).toBe(true)
   })
 
+  it('encodes identical bytes without touching the cache when caching is off', async () => {
+    await sharp({
+      create: { width: 64, height: 32, channels: 3, background: 'teal' },
+    })
+      .png()
+      .toFile(source().absPath)
+    const settings = config()
+    const uncached = await new ImageProcessor(settings, [], false).process(
+      source(),
+      settings,
+    )
+    expect(uncached?.cache).toBe('miss')
+    await expect(fs.stat(settings.cacheDir)).rejects.toMatchObject({
+      code: 'ENOENT',
+    })
+    const cached = await new ImageProcessor(settings).process(
+      source(),
+      settings,
+    )
+    expect(cached?.variants.map((variant) => variant.hash)).toEqual(
+      uncached?.variants.map((variant) => variant.hash),
+    )
+    const again = await new ImageProcessor(settings, [], false).process(
+      source(),
+      settings,
+    )
+    expect(again?.cache).toBe('miss')
+  })
+
   it('rejects input byte and pixel limits with the source path', async () => {
     await sharp({
       create: { width: 64, height: 32, channels: 3, background: 'green' },

@@ -190,7 +190,11 @@ Place this in `content/guides/_nav.json`. A custom item's `url` is relative to t
 }
 ```
 
-`mdx.highlighter` accepts `highlightjs` (the default and faster option) or `shiki`. `disableHighlighter` turns highlighting off. `compileMdAsMdx` defaults to `true`, so `.md` files use the MDX/Regor markup pipeline; `.mdx` files use that pipeline in either case. The [Regor guide](/guides/extending/regor/) explains the supported markup and components.
+`mdx.highlighter` accepts `highlightjs` (the default) or `shiki`. The standard Shiki backend caches highlighted HTML across builds in the OS temporary directory. Cache keys include the code, language, themes, loaded languages, and Shiki version. On a warm build, cached blocks reuse their HTML, and Shiki initializes only when a block needs highlighting. Output from a custom `createShiki` factory is not cached.
+
+Use the CLI's [`--no-cache` flag](/guides/getting-started/purestack-cli/#build-generate-static-files) to bypass persistent caches for a run. This is a run option, not a `siteConfig.json` setting.
+
+`disableHighlighter` turns highlighting off. `compileMdAsMdx` defaults to `true`, so `.md` files use the MDX/Regor markup pipeline; `.mdx` files use that pipeline in either case. The [Regor guide](/guides/extending/regor/) explains the supported markup and components.
 
 ## Search
 

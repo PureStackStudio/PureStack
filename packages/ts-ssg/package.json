@@ -61,7 +61,7 @@
     "html-minifier-next": "^4.19.1",
     "logpot": "^1.0.7",
     "mdast-util-to-hast": "^13.2.1",
-    "regor": "^1.7.5",
+    "regor": "^1.7.6",
     "rehype-raw": "^7.0.0",
     "rehype-stringify": "^10.0.1",
     "remark-gfm": "^4.0.1",

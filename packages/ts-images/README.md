@@ -152,6 +152,9 @@ to the discovered route/asset inventory may also invalidate other pages under
 the normal URL-resolution rules. Dependencies survive manifest reuse and missing
 images remain tracked for error-page recovery.
 
+Runs with `--no-cache` (or `options.cache: false`) encode every image and
+neither read nor write the cache.
+
 The persistent cache survives cleaned output directories. Keys include input
 bytes, pixel settings, and codec versions; markup-only choices such as `alt`,
 loading, and `sizes` reuse encoded files. Cache contents are verified by hash,

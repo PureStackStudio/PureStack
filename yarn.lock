@@ -1018,7 +1018,7 @@ __metadata:
     "@purestack/ts-style": "workspace:^"
     "@purestack/ts-svg-icons": "workspace:^"
     "@purestack/ts-util": "workspace:^"
-    regor: "npm:^1.7.5"
+    regor: "npm:^1.7.6"
   languageName: unknown
   linkType: soft
 
@@ -1036,6 +1036,7 @@ __metadata:
   resolution: "@purestack/ts-highlight@workspace:packages/ts-highlight"
   dependencies:
     "@purestack/ts-common": "workspace:^"
+    "@purestack/ts-util-node": "workspace:^"
     highlight.js: "npm:^11.11.1"
     shiki: "npm:^3.22.0"
   languageName: unknown
@@ -1096,7 +1097,7 @@ __metadata:
     "@purestack/ts-common": "workspace:^"
     "@purestack/ts-minidom": "workspace:^"
     "@purestack/ts-util": "workspace:^"
-    regor: "npm:^1.7.5"
+    regor: "npm:^1.7.6"
   languageName: unknown
   linkType: soft
 
@@ -1136,7 +1137,7 @@ __metadata:
     html-minifier-next: "npm:^4.19.1"
     logpot: "npm:^1.0.7"
     mdast-util-to-hast: "npm:^13.2.1"
-    regor: "npm:^1.7.5"
+    regor: "npm:^1.7.6"
     rehype-raw: "npm:^7.0.0"
     rehype-stringify: "npm:^10.0.1"
     remark-gfm: "npm:^4.0.1"
@@ -1188,6 +1189,9 @@ __metadata:
 "@purestack/ts-util-node@workspace:^, @purestack/ts-util-node@workspace:packages/ts-util-node":
   version: 0.0.0-use.local
   resolution: "@purestack/ts-util-node@workspace:packages/ts-util-node"
+  dependencies:
+    "@purestack/ts-util": "workspace:^"
+    proper-lockfile: "npm:^4.1.2"
   languageName: unknown
   linkType: soft
 
@@ -4717,10 +4721,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regor@npm:^1.7.5":
-  version: 1.7.5
-  resolution: "regor@npm:1.7.5"
-  checksum: 10c0/a6a3ebde793e1b9d4d5c168540618b1bba427e31334f1dac54dc0f93fe3940fd2db9dd47151b986bb8aed959bf95ce01ee74c0a30aca292a02aa4402e9cb998b
+"regor@npm:^1.7.6":
+  version: 1.7.6
+  resolution: "regor@npm:1.7.6"
+  checksum: 10c0/3427b77e524ef2ee7957c65e25958c2aa0d88709d419a0e21ddd82181798af89cfa25a73ccb6c2e1336f80d44867716073c027a0e2e9ce865dda9003a732a6cb
   languageName: node
   linkType: hard
 

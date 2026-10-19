@@ -64,11 +64,11 @@ export function imagesPlugin(options: ImagesPluginOptions = {}) {
       if (!config)
         throw new Error('Images requires resolved extensions.images settings.')
       if (!config.enabled) return undefined
-      const processor = new ImageProcessor(config, [
-        site.contentDir,
-        site.outDir,
-        site.publishDir,
-      ])
+      const processor = new ImageProcessor(
+        config,
+        [site.contentDir, site.outDir, site.publishDir],
+        site.cache,
+      )
       return {
         namespace: 'images',
         async processPage(input) {

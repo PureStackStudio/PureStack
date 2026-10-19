@@ -278,7 +278,7 @@ describe('plugin diagnostics and composition', () => {
           },
         },
       ],
-      {},
+      { mdx: {}, cache: true },
     )
     await expect(backend?.codeToHtml('code')).rejects.toMatchObject({
       cause,

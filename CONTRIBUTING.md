@@ -53,6 +53,25 @@ enforce branch protection. See GitHub's [ruleset documentation](https://docs.git
 Dependabot opens weekly pull requests for GitHub Actions and dependencies. Review
 them through the same CI and pull request process as other changes.
 
+To publish one package manually, log in to npm once and run the command from the
+repository root:
+
+```sh
+npm login --registry=https://registry.npmjs.org
+yarn publish-package ts-images
+```
+
+Both short names (`ts-images`) and full names (`@purestack/ts-images`, `purestack`)
+are accepted. The command rebuilds and verifies all distributable bundles, packs
+only the selected workspace with Yarn to resolve its `workspace:` dependencies,
+then publishes its current version publicly to npm with the `latest` tag. npm's
+authentication prompts remain interactive. It does not bump versions or publish
+dependencies; the package's dependency versions must already be available on npm.
+
+Use `yarn publish-package ts-images --dry-run` to build, pack, and inspect npm's
+publish preview without uploading anything. An existing name/version cannot be
+published again; update the version through the normal release process first.
+
 The existing **Publish new npm packages** workflow remains a manual operation.
 It only publishes packages missing from npm; it is not a version-release workflow.
 Use its default dry run first and review the registry results before publishing.
