@@ -26,13 +26,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Aligns a flex container's lines within the flex container when there is extra space in the cross-axis, similar to how 'justify-content' aligns individual items within the main-axis..
-   * 
+   *
    * syntax:  `p { align-content: flex-start; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,C29,FF22,IE11,O12.1,S9
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-flexbox/#align-content
    *
    * values:
@@ -82,13 +82,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Aligns flex items along the cross axis of the current line of the flex container..
-   * 
+   *
    * syntax:  `p { align-items: flex-start; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,C29,FF22,IE11,O12.1,S9
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-flexbox/#align-items
    *
    * values:
@@ -132,13 +132,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines the default justify-self for all items of the box, giving them the default way of justifying each box along the appropriate axis.
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF45
-   * 
+   *
    * ref: https://www.w3.org/TR/css-grid-1/#row-align
    *
    * values:
@@ -188,13 +188,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines the way of justifying a box inside its container along the appropriate axis..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF45
-   * 
+   *
    * ref: https://www.w3.org/TR/css-grid-1/#row-align
    *
    * values:
@@ -242,13 +242,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Allows the default alignment along the cross axis to be overridden for individual flex items..
-   * 
+   *
    * syntax:  `p { align-self: flex-start; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,C29,FF22,IE11,O12.1,S9
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-flexbox/#align-items
    *
    * values:
@@ -326,13 +326,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Shorthand property combines six of the animation properties into a single property..
-   * 
+   *
    * syntax:  `div { animation: movearound 4s ease 3 normal; }`
-   * 
+   *
    * restriction: time, timing-function, enum, identifier, number
-   * 
+   *
    * browsers: E,C43,FF16,IE10,O12.1,S9
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-animations/#animation
    *
    * values:
@@ -382,13 +382,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines whether or not the animation should play in reverse on alternate cycles..
-   * 
+   *
    * syntax:  `div { animation-direction: normal; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,C43,FF16,IE10,O12.1,S9
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-animations/#animation-direction
    *
    * values:
@@ -428,13 +428,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines what values are applied by the animation outside the time it is executing..
-   * 
+   *
    * syntax:  `div { animation-fill-mode: forwards; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,C43,FF16,IE10,O12.1,S9
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-animations/#animation-fill-mode-property
    *
    * values:
@@ -492,13 +492,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines whether the animation is running or paused..
-   * 
+   *
    * syntax:  `div { animation-play-state: running; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,C43,FF16,IE10,O12.1,S9
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-animations/#animation-play-state
    *
    * values:
@@ -534,13 +534,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Determines whether or not the 'back' side of a transformed element is visible when facing the viewer. With an identity transform, the front side of an element faces the viewer..
-   * 
+   *
    * syntax:  `div { backface-visibility: hidden; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,C36,FF16,IE10,O23
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-transforms/#backface-visibility-property
    *
    * values:
@@ -558,13 +558,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Shorthand property for setting most background properties at the same place in the style sheet..
-   * 
+   *
    * syntax:  `section { background: url(image.png) no-repeat #999; }`
-   * 
+   *
    * restriction: enum, image, color, position, length, repeat, percentage, box
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-background/#background
    *
    * values:
@@ -586,13 +586,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies whether the background images are fixed with regard to the viewport ('fixed') or scroll along with the element ('scroll') or its contents ('local')..
-   * 
+   *
    * syntax:  `.box { background-attachment: fixed; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-background/#the-background-attachment
    *
    * values:
@@ -612,13 +612,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines the blending mode of each background layer..
-   * 
+   *
    * syntax:  `div { background-blend-mode: saturation; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C35,FF30,O22,S7.1
-   * 
+   *
    * ref: http://www.w3.org/TR/compositing-1/#propdef-background-blend-mode
    *
    * values:
@@ -772,13 +772,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the size of the background images..
-   * 
+   *
    * syntax:  `header { background-size: 20px; }`
-   * 
+   *
    * restriction: length, percentage
-   * 
+   *
    * browsers: E,C,FF4,IE9,O10,S4.1
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-background/#the-background-size
    *
    * values:
@@ -1086,13 +1086,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Selects a table's border model..
-   * 
+   *
    * syntax:  `table { border-collapse: collapse; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/CSS2/tables.html#borders
    *
    * values:
@@ -1128,13 +1128,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Shorthand property for setting 'border-image-source', 'border-image-slice', 'border-image-width', 'border-image-outset' and 'border-image-repeat'. Omitted values are set to their initial values..
-   * 
+   *
    * syntax:  `td { border-image: url(border.png) 30 30 round;}`
-   * 
+   *
    * restriction: length, percentage, number, url, enum
-   * 
+   *
    * browsers: E,C16,FF15,IE11,O15,S6
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-background/#border-image
    *
    * values:
@@ -1182,13 +1182,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies how the images for the sides and the middle part of the border image are scaled and tiled. If the second keyword is absent, it is assumed to be the same as the first..
-   * 
+   *
    * syntax:  `td { border-image-repeat: stretch; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,C16,FF15,IE11,O15,S6
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-background/#the-border-image-repeat
    *
    * values:
@@ -1750,13 +1750,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies whether individual boxes are treated as broken pieces of one continuous box, or whether each box is individually wrapped with the border and padding..
-   * 
+   *
    * syntax:  `div { box-decoration-break: clone; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF32,O11
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-break/#break-decoration
    *
    * values:
@@ -1774,13 +1774,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Attaches one or more drop-shadows to the box. The property is a comma-separated list of shadows, each specified by 2-4 length values, an optional color, and an optional 'inset' keyword. Omitted lengths are 0; omitted colors are a user agent chosen color..
-   * 
+   *
    * syntax:  `div { box-shadow: rgba(0,0,0,0.4) 10px 10px inset; }`
-   * 
+   *
    * restriction: length, color, enum
-   * 
+   *
    * browsers: E,C,FF4,IE9,O11.5,S5.1
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-background/#box-shadow
    *
    * values:
@@ -1798,13 +1798,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the behavior of the 'width' and 'height' properties..
-   * 
+   *
    * syntax:  `div { box-sizing: content-box; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,C10,FF29,IE8,O8,S5.1
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-ui/#box-sizing
    *
    * values:
@@ -1822,13 +1822,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the position of the caption box with respect to the table box..
-   * 
+   *
    * syntax:  `caption { caption-side: bottom; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,C,FF,IE8,O,S
-   * 
+   *
    * ref: http://www.w3.org/TR/CSS2/tables.html#caption-position
    *
    * values:
@@ -1872,13 +1872,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Indicates which sides of an element's box(es) may not be adjacent to an earlier floating box. The 'clear' property does not consider floats inside the element itself or in other block formatting contexts..
-   * 
+   *
    * syntax:  `footer { clear: both; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/2006/WD-CSS21-20060411/visuren.html#propdef-clear
    *
    * values:
@@ -1904,13 +1904,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Deprecated. Use the 'clip-path' property when support allows. Defines the visible portion of an element's box..
-   * 
+   *
    * syntax:  `span { clip: rect(0px, 60px, 200px, 0px); }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css-masking/#clip-property
    *
    * values:
@@ -1928,13 +1928,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies a clipping path where everything inside the path is visible and everything outside is clipped out..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: url, shape, geometry-box, enum
-   * 
+   *
    * browsers: FF3.5
-   * 
+   *
    * ref: http://www.w3.org/TR/css-masking/#the-clip-path
    *
    * values:
@@ -1952,13 +1952,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Indicates the algorithm which is to be used to determine what parts of the canvas are included inside the shape..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,C5,FF3,IE10,O9,S6
-   * 
+   *
    * ref: http://www.w3.org/TR/css-masking-1/#the-clip-rule
    *
    * values:
@@ -1994,13 +1994,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the color space for imaging operations performed via filter effects..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,C5,FF3,IE10,O9,S6
-   * 
+   *
    * ref: http://www.w3.org/TR/filter-effects/#ColorInterpolationFiltersProperty
    *
    * values:
@@ -2038,13 +2038,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * In continuous media, this property will only be consulted if the length of columns has been constrained. Otherwise, columns will automatically be balanced..
-   * 
+   *
    * syntax:  `article { column-fill: balance; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,IE10,O11.5,S9
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-multicol/#filling-columns
    *
    * values:
@@ -2152,13 +2152,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Describes the page/column break behavior after the generated box..
-   * 
+   *
    * syntax:  `article { column-span: all; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,IE10,O11.5,S9
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-multicol/#column-span0
    *
    * values:
@@ -2176,13 +2176,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Describes the width of columns in multicol elements..
-   * 
+   *
    * syntax:  `div { column-width: 100px; }`
-   * 
+   *
    * restriction: length, enum
-   * 
+   *
    * browsers: E,IE10,O11.5,S9
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-multicol/#column-width
    *
    * values:
@@ -2206,13 +2206,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Indicates that an element and its contents are, as much as possible, independent of the rest of the document tree..
-   * 
+   *
    * syntax:  `div { contain: strict; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C52,O40
-   * 
+   *
    * ref: https://drafts.csswg.org/css-containment-3/#propdef-contain
    *
    * values:
@@ -2240,13 +2240,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Determines which page-based occurrence of a given element is applied to a counter or string value..
-   * 
+   *
    * syntax:  `a:after { content: ' ( attr(href))';}`
-   * 
+   *
    * restriction: string, url
-   * 
+   *
    * browsers: E,C,FF1,IE8,O4,S1
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-content/#content
    *
    * values:
@@ -2354,13 +2354,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Allows control over cursor appearance in an element.
-   * 
+   *
    * syntax:  `nav { cursor: pointer; }`
-   * 
+   *
    * restriction: url, number, enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-ui/#cursor0
    *
    * values:
@@ -2462,13 +2462,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the inline base direction or directionality of any bidi paragraph, embedding, isolate, or override established by the box. Note: for HTML content use the 'dir' attribute and 'bdo' element rather than this property..
-   * 
+   *
    * syntax:  `div { direction: rtl; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css-writing-modes-3/#direction
    *
    * values:
@@ -2486,13 +2486,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * In combination with 'float' and 'position', determines the type of box or boxes that are generated for an element..
-   * 
+   *
    * syntax:  `p { display: inline; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css-display-3/#propdef-display
    *
    * values:
@@ -2610,13 +2610,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * In the separated borders model, this property controls the rendering of borders and backgrounds around cells that have no visible content..
-   * 
+   *
    * syntax:  `table { empty-cells: hide; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,C,FF1,IE7,O4,S1.2
-   * 
+   *
    * ref: http://www.w3.org/TR/CSS2/tables.html#empty-cells
    *
    * values:
@@ -2636,13 +2636,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Deprecated. Use 'isolation' property instead when support allows. Specifies how the accumulation of the background image is managed..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: integer, length, percentage, enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/filter-effects/#AccessBackgroundImage
    *
    * values:
@@ -2678,13 +2678,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Paints the interior of the given graphical element..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: color, enum, url
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/SVG2/painting.html#FillProperty
    *
    * values:
@@ -2728,13 +2728,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Indicates the algorithm (or winding rule) which is to be used to determine what parts of the canvas are included inside the shape..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/SVG2/painting.html#WindingRule
    *
    * values:
@@ -2752,13 +2752,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Processes an element's rendering before it is displayed in the document, by applying one or more filter effects..
-   * 
+   *
    * syntax:  `div { filter: opacity(50%); }`
-   * 
+   *
    * restriction: enum, url
-   * 
+   *
    * browsers: E13,FF35
-   * 
+   *
    * ref: http://www.w3.org/TR/filter-effects/#propdef-filter
    *
    * values:
@@ -2775,7 +2775,7 @@ export class Style extends BaseStyle<Style> {
 
    * grayscale(): Converts the input image to grayscale.
 
-   * hue-rotate(): Applies a hue rotation on the input image. 
+   * hue-rotate(): Applies a hue rotation on the input image.
 
    * invert(): Inverts the samples in the input image.
 
@@ -2796,13 +2796,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the components of a flexible length: the flex grow factor and flex shrink factor, and the flex basis..
-   * 
+   *
    * syntax:  `p { flex: 0 1 auto; }`
-   * 
+   *
    * restriction: length, number, percentage
-   * 
+   *
    * browsers: E,C29,FF22,IE11,O12.1,S9
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-flexbox/#flex
    *
    * values:
@@ -2822,13 +2822,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Sets the flex basis..
-   * 
+   *
    * syntax:  `p { flex-basis: 30%; }`
-   * 
+   *
    * restriction: length, number, percentage
-   * 
+   *
    * browsers: E,C29,FF22,IE11,O12.1,S9
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-flexbox/#flex-basis-propdef
    *
    * values:
@@ -2846,13 +2846,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies how flex items are placed in the flex container, by setting the direction of the flex container's main axis..
-   * 
+   *
    * syntax:  `div { flex-direction: column; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,C29,FF22,IE11,O12.1,S9
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-flexbox/#flex-direction
    *
    * values:
@@ -2874,13 +2874,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies how flexbox items are placed in the flexbox..
-   * 
+   *
    * syntax:  `div { flex-flow: column wrap; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,C29,FF28,IE11,O12.1,S9
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-flexbox/#flex-flow
    *
    * values:
@@ -2944,13 +2944,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Controls whether the flex container is single-line or multi-line, and the direction of the cross-axis, which determines the direction new lines are stacked in..
-   * 
+   *
    * syntax:  `div { flex-wrap: nowrap; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,C29,FF28,IE11,O12.1,S9
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-flexbox/#flex-wrap
    *
    * values:
@@ -2970,13 +2970,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies how a box should be floated. It may be set for any element, but only applies to elements that generate boxes that are not absolutely positioned..
-   * 
+   *
    * syntax:  `img { float: right; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/CSS21/visuren.html#propdef-float
    *
    * values:
@@ -3036,13 +3036,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Shorthand property for setting 'font-style', 'font-variant', 'font-weight', 'font-size', 'line-height', and 'font-family', at the same place in the style sheet. The syntax of this property is based on a traditional typographical shorthand notation to set multiple properties related to fonts..
-   * 
+   *
    * syntax:  `body { font: bold 12px arial, verdana; }`
-   * 
+   *
    * restriction: font
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-fonts/#propdef-font
    *
    * values:
@@ -3118,13 +3118,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies a prioritized list of font family names or generic family names. A user agent iterates through the list of family names until it matches an available font that contains a glyph for the character to be rendered..
-   * 
+   *
    * syntax:  `body { font-family: arial, verdana; }`
-   * 
+   *
    * restriction: font
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-fonts/#font-family0
    *
    * values:
@@ -3174,13 +3174,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Provides low-level control over OpenType font features. It is intended as a way of providing access to font features that are not widely used but are needed for a particular use case..
-   * 
+   *
    * syntax:  `body { font-feature-settings: 'hwid'; }`
-   * 
+   *
    * restriction: string, integer
-   * 
+   *
    * browsers: E,FF34,IE10
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-fonts/#propdef-font-feature-settings
    *
    * values:
@@ -3434,13 +3434,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Kerning is the contextual adjustment of inter-glyph spacing. This property controls metric kerning, kerning that utilizes adjustment data contained in the font..
-   * 
+   *
    * syntax:  `body { font-kerning: normal; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C33,FF34,O20
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-fonts/#propdef-font-kerning
    *
    * values:
@@ -3478,13 +3478,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Indicates the desired height of glyphs from the font. For scalable fonts, the font-size is a scale factor applied to the EM unit of the font. (Note that certain glyphs may bleed outside their EM box.) For non-scalable fonts, the font-size is converted into absolute units and matched against the declared font-size of the font, using the same absolute coordinate space for both of the matched values..
-   * 
+   *
    * syntax:  `div { font-size: 12px; }`
-   * 
+   *
    * restriction: length, percentage
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-fonts/#font-size-prop
    *
    * values:
@@ -3534,13 +3534,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Selects a normal, condensed, or expanded face from a font family..
-   * 
+   *
    * syntax:  `div { font-stretch: expanded; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,FF9,IE9
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-fonts/#font-stretch0
    *
    * values:
@@ -3576,13 +3576,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Allows italic or oblique faces to be selected. Italic forms are generally cursive in nature while oblique faces are typically sloped versions of the regular face..
-   * 
+   *
    * syntax:  `body { font-style: italic; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-fonts/#font-style0
    *
    * values:
@@ -3602,13 +3602,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Controls whether user agents are allowed to synthesize bold or oblique font faces when a font family lacks bold or italic faces..
-   * 
+   *
    * syntax:  `html:lang(ar) { font-synthesis: none; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF34,S9
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-fonts/#propdef-font-synthesis
    *
    * values:
@@ -3628,13 +3628,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies variant representations of the font.
-   * 
+   *
    * syntax:  `div { font-variant: small-caps; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-fonts/#font-variant-prop
    *
    * values:
@@ -3652,13 +3652,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * For any given character, fonts can provide a variety of alternate glyphs in addition to the default glyph for that character. This property provides control over the selection of these alternate glyphs..
-   * 
+   *
    * syntax:  `h2 { font-variant-alternates: styleset(3,5); }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF34
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-fonts/#propdef-font-variant-alternates
    *
    * values:
@@ -3688,13 +3688,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies control over capitalized forms..
-   * 
+   *
    * syntax:  `p { font-variant-caps: titling-caps; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF34
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-fonts/#font-variant-caps-prop
    *
    * values:
@@ -3722,13 +3722,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Allows control of glyph substitute and positioning in East Asian text..
-   * 
+   *
    * syntax:  `mark { font-variant-east-asian: normal; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF34
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-fonts/#font-variant-east-asian-prop
    *
    * values:
@@ -3762,13 +3762,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies control over which ligatures are enabled or disabled. A value of 'normal' implies that the defaults set by the font are used..
-   * 
+   *
    * syntax:  `div { font-variant-ligatures: historical-ligatures; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C18,FF34,O15,S6
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-fonts/#font-variant-ligatures-prop
    *
    * values:
@@ -3806,13 +3806,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies control over numerical forms..
-   * 
+   *
    * syntax:  `.amount { font-variant-numeric: oldstyle-nums diagonal-fractions; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF34
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-fonts/#font-variant-numeric-prop
    *
    * values:
@@ -3844,13 +3844,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the vertical position.
-   * 
+   *
    * syntax:  `sub { font-variant-position: subscript; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF34
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-fonts/#propdef-font-variant-position
    *
    * values:
@@ -3870,13 +3870,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies weight of glyphs in the font, their degree of blackness or stroke thickness..
-   * 
+   *
    * syntax:  `th { font-weight: bold; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-fonts/#font-weight-the-font-weight-property
    *
    * values:
@@ -3952,13 +3952,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Determine a grid item's size and location within the grid by contributing a line, a span, or nothing (automatic) to its grid placement. Shorthand for 'grid-row-start', 'grid-column-start', 'grid-row-end', and 'grid-column-end'..
-   * 
+   *
    * syntax:  `div { grid-area: span 3; }`
-   * 
+   *
    * restriction: identifier, integer
-   * 
+   *
    * browsers: FF52,C57,S10.1,O44
-   * 
+   *
    * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-area
    *
    * values:
@@ -3994,13 +3994,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the size of implicitly created columns..
-   * 
+   *
    * syntax:  `div { grid-auto-columns: 100px; }`
-   * 
+   *
    * restriction: length, percentage
-   * 
+   *
    * browsers: FF52,C57,S10.1,O44
-   * 
+   *
    * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-auto-columns
    *
    * values:
@@ -4022,13 +4022,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Controls how the auto-placement algorithm works, specifying exactly how auto-placed items get flowed into the grid..
-   * 
+   *
    * syntax:  `div { grid-auto-flow: column; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF52,C57,S10.1,O44
-   * 
+   *
    * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-auto-flow
    *
    * values:
@@ -4048,13 +4048,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the size of implicitly created rows..
-   * 
+   *
    * syntax:  `div { grid-auto-rows: 100px; }`
-   * 
+   *
    * restriction: length, percentage
-   * 
+   *
    * browsers: FF52,C57,S10.1,O44
-   * 
+   *
    * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-auto-rows
    *
    * values:
@@ -4076,13 +4076,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Shorthand for 'grid-column-start' and 'grid-column-end'..
-   * 
+   *
    * syntax:  `#item1 { grid-column: span 2 / auto; }`
-   * 
+   *
    * restriction: identifier, integer, enum
-   * 
+   *
    * browsers: FF52,C57,S10.1,O44
-   * 
+   *
    * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-column
    *
    * values:
@@ -4100,13 +4100,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Determine a grid item's size and location within the grid by contributing a line, a span, or nothing (automatic) to its grid placement..
-   * 
+   *
    * syntax:  `#item1 { grid-column-end: span 2; }`
-   * 
+   *
    * restriction: identifier, integer, enum
-   * 
+   *
    * browsers: FF52,C57,S10.1,O44
-   * 
+   *
    * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-column-end
    *
    * values:
@@ -4142,13 +4142,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Determine a grid item's size and location within the grid by contributing a line, a span, or nothing (automatic) to its grid placement..
-   * 
+   *
    * syntax:  `#item1 { grid-column-start: span 2; }`
-   * 
+   *
    * restriction: identifier, integer, enum
-   * 
+   *
    * browsers: FF52,C57,S10.1,O44
-   * 
+   *
    * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-column-start
    *
    * values:
@@ -4184,13 +4184,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Shorthand for 'grid-row-start' and 'grid-row-end'..
-   * 
+   *
    * syntax:  `#item1 { grid-row: span 2 / auto; }`
-   * 
+   *
    * restriction: identifier, integer, enum
-   * 
+   *
    * browsers: FF52,C57,S10.1,O44
-   * 
+   *
    * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-row
    *
    * values:
@@ -4208,13 +4208,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Determine a grid item's size and location within the grid by contributing a line, a span, or nothing (automatic) to its grid placement..
-   * 
+   *
    * syntax:  `#item1 { grid-row-end: span 2; }`
-   * 
+   *
    * restriction: identifier, integer, enum
-   * 
+   *
    * browsers: FF52,C57,S10.1,O44
-   * 
+   *
    * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-row-end
    *
    * values:
@@ -4250,13 +4250,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Determine a grid item's size and location within the grid by contributing a line, a span, or nothing (automatic) to its grid placement..
-   * 
+   *
    * syntax:  `#item1 { grid-row-start: span 2; }`
-   * 
+   *
    * restriction: identifier, integer, enum
-   * 
+   *
    * browsers: FF52,C57,S10.1,O44
-   * 
+   *
    * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-row-start
    *
    * values:
@@ -4274,13 +4274,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Shorthand for setting grid-template-columns, grid-template-rows, and grid-template-areas in a single declaration..
-   * 
+   *
    * syntax:  `#item1 { grid-template: auto 1fr auto / auto 1fr; }`
-   * 
+   *
    * restriction: identifier, length, percentage, string, enum
-   * 
+   *
    * browsers: FF52,C57,S10.1,O44
-   * 
+   *
    * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-template
    *
    * values:
@@ -4326,13 +4326,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * specifies, as a space-separated track list, the line names and track sizing functions of the grid..
-   * 
+   *
    * syntax:  `#item1 { grid-template-columns: 100px 1fr max-content minmax(min-content, 1fr); }`
-   * 
+   *
    * restriction: identifier, length, percentage, enum
-   * 
+   *
    * browsers: FF52,C57,S10.1,O44
-   * 
+   *
    * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-template-columns
    *
    * values:
@@ -4360,13 +4360,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * specifies, as a space-separated track list, the line names and track sizing functions of the grid..
-   * 
+   *
    * syntax:  `#item1 { grid-template-rows: 100px 1fr max-content minmax(min-content, 1fr); }`
-   * 
+   *
    * restriction: identifier, length, percentage, string, enum
-   * 
+   *
    * browsers: FF52,C57,S10.1,O44
-   * 
+   *
    * ref: http://www.w3.org/TR/css-grid-1/#propdef-grid-template-rows
    *
    * values:
@@ -4394,13 +4394,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the height of the content area, padding area or border area (depending on 'box-sizing') of certain boxes..
-   * 
+   *
    * syntax:  `footer { height: 100px; }`
-   * 
+   *
    * restriction: length, percentage
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-box/#height
    *
    * values:
@@ -4424,13 +4424,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Controls whether hyphenation is allowed to create more break opportunities within a line of text..
-   * 
+   *
    * syntax:  `div { hyphens: manual; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C55,FF43,O44
-   * 
+   *
    * ref: http://www.w3.org/TR/css-text-3/#hyphens-property
    *
    * values:
@@ -4450,13 +4450,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies an orthogonal rotation to be applied to an image before it is laid out..
-   * 
+   *
    * syntax:  `img.ninety { image-orientation: 90deg; }`
-   * 
+   *
    * restriction: angle
-   * 
+   *
    * browsers: FF26
-   * 
+   *
    * ref: http://www.w3.org/TR/css4-images/#image-orientation
    *
    * values:
@@ -4474,13 +4474,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Provides a hint to the user-agent about what aspects of an image are most important to preserve when the image is scaled, to aid the user-agent in the choice of an appropriate scaling algorithm..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,FF3.6,O11.6,S
-   * 
+   *
    * ref: https://drafts.csswg.org/css-images-3/#the-image-rendering
    *
    * values:
@@ -4506,13 +4506,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Controls the state of the input method editor for text fields..
-   * 
+   *
    * syntax:  `body { ime-mode: active; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,FF3,IE5
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-ui/#ime-mode
    *
    * values:
@@ -4554,13 +4554,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * In CSS setting to 'isolate' will turn the element into a stacking context. In SVG, it defines whether an element is isolated or not..
-   * 
+   *
    * syntax:  `div { isolation: isolate; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,FF,O,S
-   * 
+   *
    * ref: http://www.w3.org/TR/compositing-1/#isolation
    *
    * values:
@@ -4578,13 +4578,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Aligns flex items along the main axis of the current line of the flex container..
-   * 
+   *
    * syntax:  `p { justify-content: flex-start; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,C29,FF22,IE11,O12.1,S9
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-flexbox/#align-content
    *
    * values:
@@ -4702,13 +4702,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies what set of line breaking restrictions are in effect within the element..
-   * 
+   *
    * syntax:  `p { line-break: normal; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,IE5.5,C58,O45,S
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-text/#line-break0
    *
    * values:
@@ -4750,13 +4750,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Shorthand for setting 'list-style-type', 'list-style-position' and 'list-style-image'.
-   * 
+   *
    * syntax:  `ul { list-style: square url('square.png');}`
-   * 
+   *
    * restriction: image, enum, url
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-lists/#list-style
    *
    * values:
@@ -4828,13 +4828,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the position of the '::marker' pseudo-element's box in the list item..
-   * 
+   *
    * syntax:  `ul { list-style-position: inside; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-lists/#list-style-position
    *
    * values:
@@ -4852,13 +4852,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Used to construct the default contents of a list item's marker.
-   * 
+   *
    * syntax:  `<glyph> | <algorithmic> | <numeric> | <alphabetic> | <symbolic> | <non-repeating> | normal | none`
-   * 
+   *
    * restriction: enum, string
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-lists/#list-style-type
    *
    * values:
@@ -4964,13 +4964,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Shorthand property to set values for the thickness of the margin area. If left is omitted, it is the same as right. If bottom is omitted it is the same as top, if right is omitted it is the same as top. Negative values for margin properties are allowed, but there may be implementation-specific limits..
-   * 
+   *
    * syntax:  `div { margin: 4px 7px 2px 4px; }`
-   * 
+   *
    * restriction: length, percentage
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-box/#margin1
    *
    * values:
@@ -5132,13 +5132,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the marker symbol that shall be used for all points on the sets the value for all vertices on the given 'path' element or basic shape..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: url
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/SVG2/painting.html#MarkerProperty
    *
    * values:
@@ -5158,13 +5158,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the marker that will be drawn at the last vertices of the given markable element..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: url
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/SVG2/painting.html#VertexMarkerProperties
    *
    * values:
@@ -5184,13 +5184,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the marker that will be drawn at all vertices except the first and last..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: url
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/SVG2/painting.html#VertexMarkerProperties
    *
    * values:
@@ -5210,13 +5210,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the marker that will be drawn at the first vertices of the given markable element..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: url
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/SVG2/painting.html#VertexMarkerProperties
    *
    * values:
@@ -5236,13 +5236,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Sets the mask layer image of an element..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: url, image, enum
-   * 
+   *
    * browsers: E,FF53
-   * 
+   *
    * ref: http://www.w3.org/TR/css-masking-1/#the-mask-image
    *
    * values:
@@ -5260,13 +5260,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Indicates whether the mask layer image is treated as luminance mask or alpha mask..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: url, image, enum
-   * 
+   *
    * browsers: FF53
-   * 
+   *
    * ref: http://www.w3.org/TR/css-masking-1/#the-mask-mode
    *
    * values:
@@ -5340,13 +5340,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the size of the mask layer images..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: length, percentage, enum
-   * 
+   *
    * browsers: F53
-   * 
+   *
    * ref: http://www.w3.org/TR/css-masking-1/#the-mask-size
    *
    * values:
@@ -5366,13 +5366,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines whether the content of the <mask> element is treated as as luminance mask or alpha mask..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C24,FF35,O15,S7
-   * 
+   *
    * ref: http://www.w3.org/TR/css-masking-1/#the-mask-type
    *
    * values:
@@ -5408,13 +5408,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Allows authors to constrain content height to a certain range..
-   * 
+   *
    * syntax:  `footer { max-height: 300px; }`
-   * 
+   *
    * restriction: length, percentage
-   * 
+   *
    * browsers: E,C,FF1,IE7,O7,S1
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-box/#max-height
    *
    * values:
@@ -5456,13 +5456,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Allows authors to constrain content width to a certain range..
-   * 
+   *
    * syntax:  `footer { max-width: 300px; }`
-   * 
+   *
    * restriction: length, percentage
-   * 
+   *
    * browsers: E,C,FF1,IE7,O7,S1
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-box/#max-width
    *
    * values:
@@ -5504,13 +5504,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Allows authors to constrain content height to a certain range..
-   * 
+   *
    * syntax:  `footer { min-height: 300px; }`
-   * 
+   *
    * restriction: length, percentage
-   * 
+   *
    * browsers: E,C,FF1,IE7,O7,S1
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-box/#min-height
    *
    * values:
@@ -5552,13 +5552,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Allows authors to constrain content width to a certain range..
-   * 
+   *
    * syntax:  `footer { min-width: 300px; }`
-   * 
+   *
    * restriction: length, percentage
-   * 
+   *
    * browsers: E,C,FF1,IE7,O7,S1
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-box/#min-width
    *
    * values:
@@ -5582,13 +5582,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines the formula that must be used to mix the colors with the backdrop..
-   * 
+   *
    * syntax:  `div { mix-blend-mode: saturation; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C41,FF32,O29,S7.1
-   * 
+   *
    * ref: http://www.w3.org/TR/compositing-1/#propdef-mix-blend-mode
    *
    * values:
@@ -5634,13 +5634,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Shorthand property for setting 'motion-path', 'motion-offset' and 'motion-rotation'..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: url, length, percentage, angle, shape, geometry-box, enum
-   * 
+   *
    * browsers: C46,O33
-   * 
+   *
    * ref: http://www.w3.org/TR/motion-1/#propdef-motion
    *
    * values:
@@ -5682,13 +5682,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the motion path the element gets positioned at..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: url, shape, geometry-box, enum
-   * 
+   *
    * browsers: C46,O33
-   * 
+   *
    * ref: http://www.w3.org/TR/motion-1/#propdef-motion-path
    *
    * values:
@@ -5708,13 +5708,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines the direction of the element while positioning along the motion path..
-   * 
+   *
    * syntax:  `div { motion-rotation: 90%; }`
-   * 
+   *
    * restriction: angle
-   * 
+   *
    * browsers: C46,O33
-   * 
+   *
    * ref: http://www.w3.org/TR/motion-1/#propdef-motion-rotation
    *
    * values:
@@ -5732,13 +5732,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Shorthand property combines six of the animation properties into a single property..
-   * 
+   *
    * syntax:  `div { -moz-animation: movearound 4s ease 3 normal; }`
-   * 
+   *
    * restriction: time, enum, timing-function, identifier, number
-   * 
+   *
    * browsers: FF9
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-animations/#animation
    *
    * values:
@@ -5788,13 +5788,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines whether or not the animation should play in reverse on alternate cycles..
-   * 
+   *
    * syntax:  `div { -moz-animation-direction: normal; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF9
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-animations/#animation-direction
    *
    * values:
@@ -5870,13 +5870,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines whether the animation is running or paused..
-   * 
+   *
    * syntax:  `div { -moz-animation-play-state: running; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF9
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-animations/#animation-play-state
    *
    * values:
@@ -5912,13 +5912,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Used in Gecko (Firefox) to display an element using a platform-native styling based on the operating system's theme..
-   * 
+   *
    * syntax:  `.example { -moz-appearance: toolbarbutton; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF1
-   * 
+   *
    * ref: https://developer.mozilla.org/en/CSS/-moz-appearance
    *
    * values:
@@ -6068,13 +6068,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Determines whether or not the 'back' side of a transformed element is visible when facing the viewer. With an identity transform, the front side of an element faces the viewer..
-   * 
+   *
    * syntax:  `div { -moz-backface-visibility: hidden; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF10
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-3d-transforms/#backface-visibility
    *
    * values:
@@ -6110,13 +6110,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * In Gecko-based applications like Firefox, the -moz-background-inline-policy CSS property specifies how the background image of an inline element is determined when the content of the inline element wraps onto multiple lines. The choice of position has significant effects on repetition..
-   * 
+   *
    * syntax:  `div { -moz-background-inline-policy: bounding-box; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF1
-   * 
+   *
    * ref: https://developer.mozilla.org/en/CSS/-moz-background-inline-policy
    *
    * values:
@@ -6172,13 +6172,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Shorthand property for setting 'border-image-source', 'border-image-slice', 'border-image-width', 'border-image-outset' and 'border-image-repeat'. Omitted values are set to their initial values..
-   * 
+   *
    * syntax:  `td { -moz-border-image: url(border.png) 30 30 round;}`
-   * 
+   *
    * restriction: length, percentage, number, url, enum
-   * 
+   *
    * browsers: FF3.6
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-background/#border-image
    *
    * values:
@@ -6262,13 +6262,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies how a XUL box aligns its contents across (perpendicular to) the direction of its layout. The effect of this is only visible if there is extra space in the box..
-   * 
+   *
    * syntax:  `div { -moz-box-align: end; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF1
-   * 
+   *
    * ref: https://developer.mozilla.org/en/CSS/-moz-box-align
    *
    * values:
@@ -6292,13 +6292,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies whether a box lays out its contents normally (from the top or left edge), or in reverse (from the bottom or right edge)..
-   * 
+   *
    * syntax:  `div { -moz-box-direction: reverse; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF1
-   * 
+   *
    * ref: https://developer.mozilla.org/en/CSS/-moz-box-direction
    *
    * values:
@@ -6370,13 +6370,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * In Mozilla applications, -moz-box-orient specifies whether a box lays out its contents horizontally or vertically..
-   * 
+   *
    * syntax:  `div { -moz-box-orient: vertical; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF1
-   * 
+   *
    * ref: https://developer.mozilla.org/en/CSS/-moz-box-orient
    *
    * values:
@@ -6398,13 +6398,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies how a box packs its contents in the direction of its layout. The effect of this is only visible if there is extra space in the box..
-   * 
+   *
    * syntax:  `div { -moz-box-pack: end; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF1
-   * 
+   *
    * ref: https://developer.mozilla.org/en/CSS/-moz-box-pack
    *
    * values:
@@ -6426,13 +6426,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Box Model addition in CSS3..
-   * 
+   *
    * syntax:  `div { -moz-box-sizing: content-box; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF1
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-ui/#box-sizing
    *
    * values:
@@ -6596,13 +6596,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Provides low-level control over OpenType font features. It is intended as a way of providing access to font features that are not widely used but are needed for a particular use case..
-   * 
+   *
    * syntax:  `body { -moz-font-feature-settings: 'hwid'; }`
-   * 
+   *
    * restriction: string, integer
-   * 
+   *
    * browsers: FF4
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-fonts/#propdef-font-feature-settings
    *
    * values:
@@ -6640,13 +6640,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Controls whether hyphenation is allowed to create more break opportunities within a line of text..
-   * 
+   *
    * syntax:  `div { -moz-hyphens: manual; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF9
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-text/#hyphens0
    *
    * values:
@@ -6702,13 +6702,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Describes how the last line of a block or a line right before a forced line break is aligned when 'text-align' is set to 'justify'..
-   * 
+   *
    * syntax:  `div { -moz-text-align-last: right; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF12
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-text/#text-align-last0
    *
    * values:
@@ -6754,13 +6754,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies what line decorations, if any, are added to the element..
-   * 
+   *
    * syntax:  `div { -moz-text-decoration-line: underline; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF6
-   * 
+   *
    * ref: http://www.w3.org/TR/css-text-decor-3/#text-decoration-line
    *
    * values:
@@ -6782,13 +6782,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the line style for underline, line-through and overline text decoration..
-   * 
+   *
    * syntax:  `div { -moz-text-decoration-style: solid; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF6
-   * 
+   *
    * ref: http://www.w3.org/TR/css-text-decor-3/#text-decoration-style
    *
    * values:
@@ -6814,13 +6814,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies a size adjustment for displaying text content in mobile browsers..
-   * 
+   *
    * syntax:  `body { -moz-text-size-adjust: 150%; }`
-   * 
+   *
    * restriction: enum, percentage
-   * 
+   *
    * browsers: FF
-   * 
+   *
    * ref: http://dev.w3.org/csswg/css-size-adjust/
    *
    * values:
@@ -6838,13 +6838,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * A two-dimensional transformation is applied to an element through the 'transform' property. This property contains a list of transform functions similar to those allowed by SVG..
-   * 
+   *
    * syntax:  `div { -moz-transform: rotate(-90deg); }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF3.5
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-2d-transforms/#transform-property
    *
    * values:
@@ -6920,13 +6920,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Shorthand property combines four of the transition properties into a single property..
-   * 
+   *
    * syntax:  `div { -moz-transition: background-color linear 1s; }`
-   * 
+   *
    * restriction: time, property, timing-function, enum
-   * 
+   *
    * browsers: FF4
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-transitions/#transition
    *
    * values:
@@ -6980,13 +6980,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the name of the CSS property to which the transition is applied..
-   * 
+   *
    * syntax:  `div { -moz-transition-property: background-color; }`
-   * 
+   *
    * restriction: property
-   * 
+   *
    * browsers: FF4
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-transitions/#transition-property
    *
    * values:
@@ -7022,13 +7022,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Used to indicate whether the element can have focus..
-   * 
+   *
    * syntax:  `div { -moz-user-focus: ignore; }`
-   * 
-   * restriction: 
-   * 
+   *
+   * restriction:
+   *
    * browsers: FF1.5
-   * 
+   *
    * ref: https://developer.mozilla.org/en-US/docs/CSS/-moz-user-focus
    *
    * values:
@@ -7046,13 +7046,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Controls the appearance of selection..
-   * 
+   *
    * syntax:  `div { -moz-user-select: text; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF1.5
-   * 
+   *
    * ref: https://developer.mozilla.org/en/CSS/-moz-user-select
    *
    * values:
@@ -7100,13 +7100,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies how the contents of a replaced element should be scaled relative to the box established by its used height and width..
-   * 
+   *
    * syntax:  `p { object-fit: cover; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C32,FF36,O19,S7.1
-   * 
+   *
    * ref: http://www.w3.org/TR/css-images/#object-fit
    *
    * values:
@@ -7274,13 +7274,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Shorthand property for 'outline-style', 'outline-width', and 'outline-color'..
-   * 
+   *
    * syntax:  `header { outline: 5px solid red;}`
-   * 
+   *
    * restriction: length, line-width, line-style, color, enum
-   * 
+   *
    * browsers: E,C,FF1.5,IE8,O8,S1.2
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-ui/#outline0
    *
    * values:
@@ -7370,13 +7370,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Shorthand for setting 'overflow-x' and 'overflow-y'..
-   * 
+   *
    * syntax:  `div { overflow: hidden auto; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css-overflow-3/#overflow
    *
    * values:
@@ -7402,13 +7402,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies whether the UA may break within a word to prevent overflow when an otherwise-unbreakable string is too long to fit within the line box..
-   * 
+   *
    * syntax:  `div { overflow-wrap: break-word; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C23,O12.1,S6.1
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-text/#overflow-wrap0
    *
    * values:
@@ -7428,13 +7428,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the handling of overflow in the horizontal direction..
-   * 
+   *
    * syntax:  `div { overflow-x: hidden; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,C,FF1.5,IE5,O9.5,S3
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-box/#overflow-x
    *
    * values:
@@ -7458,13 +7458,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the handling of overflow in the vertical direction..
-   * 
+   *
    * syntax:  `div { overflow-y: hidden; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,C,FF1.5,IE5,O9.5,S3
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-box/#overflow-x
    *
    * values:
@@ -7668,13 +7668,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines rules for page breaks after an element..
-   * 
+   *
    * syntax:  `table { page-break-after: always; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-break/#page-break-properties
    *
    * values:
@@ -7702,13 +7702,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines rules for page breaks before an element..
-   * 
+   *
    * syntax:  `table { page-break-before: always; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-break/#page-break-properties
    *
    * values:
@@ -7732,13 +7732,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines rules for page breaks inside an element..
-   * 
+   *
    * syntax:  `table { page-break-inside: avoid; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,IE8,O7,S1.3
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-break/#page-break-properties
    *
    * values:
@@ -7756,13 +7756,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Controls the order that the three paint operations that shapes and text are rendered with: their fill, their stroke and any markers they might have..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C35,FF31,O22,S7.1
-   * 
+   *
    * ref: http://www.w3.org/TR/SVG2/painting.html#PaintOrderProperty
    *
    * values:
@@ -7820,13 +7820,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies under what circumstances a given element can be the target element for a pointer event..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/SVG2/interact.html#PointerEventsProperty
    *
    * values:
@@ -7837,7 +7837,7 @@ export class Style extends BaseStyle<Style> {
 
    * none: The given element does not receive pointer events.
 
-   * painted: The given element can be the target element for pointer events when the pointer is over a "painted" area. 
+   * painted: The given element can be the target element for pointer events when the pointer is over a "painted" area.
 
    * stroke: The given element can be the target element for pointer events whenever the pointer is over the perimeter of the element.
 
@@ -7858,13 +7858,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * undefined.
-   * 
+   *
    * syntax:  `div { position: absolute; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-positioning/#propdef-position
    *
    * values:
@@ -7932,13 +7932,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * `@`counter-style descriptor. Defines the ranges over which the counter style is defined..
-   * 
+   *
    * syntax:  `@counter-style { range: 2 infinite, 8 834048; }`
-   * 
+   *
    * restriction: integer, enum
-   * 
+   *
    * browsers: FF33
-   * 
+   *
    * ref: http://www.w3.org/TR/css-counter-styles-3/#descdef-counter-style-range
    *
    * values:
@@ -7956,13 +7956,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies whether or not an element is resizable by the user, and if so, along which axis/axes..
-   * 
+   *
    * syntax:  `div { resize: both; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,FF4,O15,S3
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-ui/#resize0
    *
    * values:
@@ -8006,13 +8006,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies how text is distributed within the various ruby boxes when their contents do not exactly fill their respective boxes..
-   * 
+   *
    * syntax:  `auto | start | left | center | end | right | distribute-letter | distribute-space | line-edge`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF10,IE5
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-ruby/#rubyalign
    *
    * values:
@@ -8046,13 +8046,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Determines whether, and on which side, ruby text is allowed to partially overhang any adjacent text in addition to its own base, when the ruby text is wider than the ruby base..
-   * 
+   *
    * syntax:  `auto | start | end | none`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF10,IE5
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-ruby/#rubyover
    *
    * values:
@@ -8074,13 +8074,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Used by the parent of elements with display: ruby-text to control the position of the ruby text with respect to its base..
-   * 
+   *
    * syntax:  `before | after | right`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF10,IE5
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-ruby/#ruby-position
    *
    * values:
@@ -8102,13 +8102,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Determines whether, and on which side, ruby text is allowed to partially overhang any adjacent text in addition to its own base, when the ruby text is wider than the ruby base..
-   * 
+   *
    * syntax:  `attr(x) | none`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF10
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-ruby/#rubyspan
    *
    * values:
@@ -8126,13 +8126,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the scrolling behavior for a scrolling box, when scrolling happens due to navigation or CSSOM scrolling APIs..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF36
-   * 
+   *
    * ref: http://www.w3.org/TR/cssom-view/#scroll-behavior
    *
    * values:
@@ -8150,13 +8150,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines the x and y coordinate within the element which will align with the nearest ancestor scroll container's snap-destination for the respective axis..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: position, length, percentage, enum
-   * 
+   *
    * browsers: FF39
-   * 
+   *
    * ref: http://www.w3.org/TR/css-snappoints-1/#propdef-scroll-snap-coordinate
    *
    * values:
@@ -8194,13 +8194,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines the positioning of snap points along the x axis of the scroll container it is applied to..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF39
-   * 
+   *
    * ref: http://www.w3.org/TR/css-snappoints-1/#propdef-scroll-snap-points-x
    *
    * values:
@@ -8218,13 +8218,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines the positioning of snap points along the y axis of the scroll container it is applied to..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF39
-   * 
+   *
    * ref: http://www.w3.org/TR/css-snappoints-1/#propdef-scroll-snap-points-y
    *
    * values:
@@ -8242,13 +8242,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines how strictly snap points are enforced on the scroll container..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF39
-   * 
+   *
    * ref: http://www.w3.org/TR/css-snappoints-1/#propdef-scroll-snap-type
    *
    * values:
@@ -8304,13 +8304,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies an orthogonal rotation to be applied to an image before it is laid out..
-   * 
+   *
    * syntax:  `div { shape-outside: margin-box; }`
-   * 
+   *
    * restriction: image, box, shape, enum
-   * 
+   *
    * browsers: C37,O24
-   * 
+   *
    * ref: http://www.w3.org/TR/css-shapes-1/#shape-outside-property
    *
    * values:
@@ -8346,13 +8346,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * `@`font-face descriptor. Specifies the resource containing font data. It is required, whether the font is downloadable or locally installed..
-   * 
+   *
    * syntax:  `src: url(font.woff) format('woff');`
-   * 
+   *
    * restriction: enum, url, identifier
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-fonts/#src-desc
    *
    * values:
@@ -8408,13 +8408,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Paints along the outline of the given graphical element..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: color, enum, url
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/SVG2/painting.html#StrokeProperty
    *
    * values:
@@ -8476,13 +8476,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the shape to be used at the end of open subpaths when they are stroked..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/SVG2/painting.html#StrokeLinecapProperty
    *
    * values:
@@ -8502,13 +8502,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the shape to be used at the corners of paths or basic shapes when they are stroked..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/SVG2/painting.html#StrokeLinejoinProperty
    *
    * values:
@@ -8604,13 +8604,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * `@`counter-style descriptor. Specifies which algorithm will be used to construct the counter's representation based on the counter value..
-   * 
+   *
    * syntax:  `@counter-style triangle { system: cyclic; }`
-   * 
+   *
    * restriction: enum, integer
-   * 
+   *
    * browsers: FF33
-   * 
+   *
    * ref: http://www.w3.org/TR/css-counter-styles-3/#descdef-counter-style-system
    *
    * values:
@@ -8656,13 +8656,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Controls the algorithm used to lay out the table cells, rows, and columns..
-   * 
+   *
    * syntax:  `table { table-layout: fixed; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/CSS2/tables.html#width-layout
    *
    * values:
@@ -8698,13 +8698,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Describes how inline contents of a block are horizontally aligned if the contents do not completely fill the line box..
-   * 
+   *
    * syntax:  `h2 { text-align: center; }`
-   * 
+   *
    * restriction: string
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-text/#text-align0
    *
    * values:
@@ -8732,13 +8732,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Describes how the last line of a block or a line right before a forced line break is aligned when 'text-align' is set to 'justify'..
-   * 
+   *
    * syntax:  `div { text-align-last: right; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,FF12,IE5
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-text/#text-align-last0
    *
    * values:
@@ -8766,13 +8766,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Used to align (start-, middle- or end-alignment) a string of text relative to a given point..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/SVG2/text.html#TextAnchorProperty
    *
    * values:
@@ -8792,13 +8792,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Decorations applied to font used for an element's text..
-   * 
+   *
    * syntax:  `a:visited { text-decoration: line-through; }`
-   * 
+   *
    * restriction: enum, color
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css-text-decor-3/#text-decoration-style
    *
    * values:
@@ -8848,13 +8848,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies what line decorations, if any, are added to the element..
-   * 
+   *
    * syntax:  `div { text-decoration-line: underline; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF36
-   * 
+   *
    * ref: http://www.w3.org/TR/css-text-decor-3/#text-decoration-line
    *
    * values:
@@ -8876,13 +8876,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the line style for underline, line-through and overline text decoration..
-   * 
+   *
    * syntax:  `div { text-decoration-style: solid; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: FF36
-   * 
+   *
    * ref: http://www.w3.org/TR/css-text-decor-3/#text-decoration-style
    *
    * values:
@@ -8908,13 +8908,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the indentation applied to lines of inline content in a block. The indentation only affects the first line of inline content in the block unless the 'hanging' keyword is specified, in which case it affects all lines except the first..
-   * 
+   *
    * syntax:  `li { text-indent: 5px; }`
-   * 
+   *
    * restriction: percentage, length
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-text/#text-indent0
    *
    * values:
@@ -8932,13 +8932,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the orientation of text within a line..
-   * 
+   *
    * syntax:  `span { text-orientation: mixed; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,O15,S5.1
-   * 
+   *
    * ref: http://www.w3.org/TR/css-writing-modes-3/#text-orientation
    *
    * values:
@@ -8964,13 +8964,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Text can overflow for example when it is prevented from wrapping..
-   * 
+   *
    * syntax:  `span { text-overflow: ellipsis; }`
-   * 
+   *
    * restriction: enum, string
-   * 
+   *
    * browsers: E,C,FF9,IE5.5,O11.6,S2
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-ui/#text-overflow0
    *
    * values:
@@ -8988,13 +8988,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * The creator of SVG content might want to provide a hint to the implementation about what tradeoffs to make as it renders text. The 'text-rendering' property provides these hints..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,FF3,O9,S5
-   * 
+   *
    * ref: http://www.w3.org/TR/SVG2/painting.html#TextRenderingProperty
    *
    * values:
@@ -9034,13 +9034,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Controls capitalization effects of an element's text..
-   * 
+   *
    * syntax:  `h1 { text-transform: capitalize; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-text/#text-transform0
    *
    * values:
@@ -9082,13 +9082,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Determines whether touch input may trigger default behavior supplied by user agent..
-   * 
+   *
    * syntax:  `div { touch-action: pan-x; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,C36,IE11,O23
-   * 
+   *
    * ref: http://www.w3.org/TR/pointerevents/#the-touch-action-css-property
    *
    * values:
@@ -9120,13 +9120,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * A two-dimensional transformation is applied to an element through the 'transform' property. This property contains a list of transform functions similar to those allowed by SVG..
-   * 
+   *
    * syntax:  `div { transform: rotate(-90deg); }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,C36,FF16,IE10,O12.1,S9
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-transforms/#transform-property
    *
    * values:
@@ -9202,13 +9202,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines how nested elements are rendered in 3D space..
-   * 
+   *
    * syntax:  `div { transform-style: flat; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,C36,FF16,IE10,O23,S9
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-transforms/#propdef-transform-style
    *
    * values:
@@ -9226,13 +9226,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Shorthand property combines four of the transition properties into a single property..
-   * 
+   *
    * syntax:  `div { transition: background-color linear 1s; }`
-   * 
+   *
    * restriction: time, property, timing-function, enum
-   * 
+   *
    * browsers: E,FF16,IE10,O12.5
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-transitions/#transition
    *
    * values:
@@ -9286,13 +9286,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the name of the CSS property to which the transition is applied..
-   * 
+   *
    * syntax:  `div { transition-property: background-color; }`
-   * 
+   *
    * restriction: property
-   * 
+   *
    * browsers: E,FF16,IE10,O12.5
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-transitions/#transition-property
    *
    * values:
@@ -9328,13 +9328,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * The level of embedding with respect to the bidirectional algorithm..
-   * 
+   *
    * syntax:  `p { unicode-bidi: embed; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css-writing-modes-3/#unicode-bidi
    *
    * values:
@@ -9360,13 +9360,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * `@`font-face descriptor. Defines the set of Unicode codepoints that may be supported by the font face for which it is declared..
-   * 
+   *
    * syntax:  `@font-face { unicode-range: U+26; }`
-   * 
+   *
    * restriction: unicode-range
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-fonts/#unicode-range-desc
    *
    * values:
@@ -9534,13 +9534,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Controls the appearance of selection..
-   * 
+   *
    * syntax:  `div { user-select: text; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css-ui-4/#propdef-user-select
    *
    * values:
@@ -9564,13 +9564,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Affects the vertical positioning of the inline boxes generated by an inline-level element inside a line box..
-   * 
+   *
    * syntax:  `div { vertical-align: middle; }`
-   * 
+   *
    * restriction: percentage, length
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-linebox/#vertical-align
    *
    * values:
@@ -9612,13 +9612,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies whether the boxes generated by an element are rendered. Invisible boxes still affect layout (set the 'display' property to 'none' to suppress box generation altogether)..
-   * 
+   *
    * syntax:  `img { visibility: hidden; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-box/#visibility
    *
    * values:
@@ -9638,13 +9638,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Shorthand property combines six of the animation properties into a single property..
-   * 
+   *
    * syntax:  `div { -webkit-animation: movearound 4s ease 3 normal; }`
-   * 
+   *
    * restriction: time, enum, timing-function, identifier, number
-   * 
+   *
    * browsers: C,S5
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-animations/#animation
    *
    * values:
@@ -9694,13 +9694,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines whether or not the animation should play in reverse on alternate cycles..
-   * 
+   *
    * syntax:  `div { -webkit-animation-direction: normal; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,S5
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-animations/#animation-direction
    *
    * values:
@@ -9740,13 +9740,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines what values are applied by the animation outside the time it is executing..
-   * 
+   *
    * syntax:  `div { -webkit-animation-fill-mode: forwards; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,S5
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-animations/#animation-fill-mode-property
    *
    * values:
@@ -9806,13 +9806,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines whether the animation is running or paused..
-   * 
+   *
    * syntax:  `div { -webkit-animation-play-state: running; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,S5
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-animations/#animation-play-state
    *
    * values:
@@ -9850,13 +9850,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Changes the appearance of buttons and other controls to resemble native controls..
-   * 
+   *
    * syntax:  `h3 { -webkit-appearance: button; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,S3
-   * 
+   *
    * ref: http://css-infos.net/property/-webkit-appearance
    *
    * values:
@@ -9958,13 +9958,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Applies a filter effect where the first filter in the list takes the element's background image as the input image..
-   * 
+   *
    * syntax:  `div { backdrop-filter: blur(2px); }`
-   * 
+   *
    * restriction: enum, url
-   * 
+   *
    * browsers: S9
-   * 
+   *
    * ref: https://drafts.fxtf.org/filters-2/#propdef-backdrop-filter
    *
    * values:
@@ -9981,7 +9981,7 @@ export class Style extends BaseStyle<Style> {
 
    * grayscale(): Converts the input image to grayscale.
 
-   * hue-rotate(): Applies a hue rotation on the input image. 
+   * hue-rotate(): Applies a hue rotation on the input image.
 
    * invert(): Inverts the samples in the input image.
 
@@ -10002,13 +10002,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Determines whether or not the 'back' side of a transformed element is visible when facing the viewer. With an identity transform, the front side of an element faces the viewer..
-   * 
+   *
    * syntax:  `div { -webkit-backface-visibility: hidden; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,S5
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-3d-transforms/#backface-visibility
    *
    * values:
@@ -10044,13 +10044,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * undefined.
-   * 
+   *
    * syntax:  `div { -webkit-background-composite: padding; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,S3
-   * 
+   *
    * ref: undefined
    *
    * values:
@@ -10086,13 +10086,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Shorthand property for setting 'border-image-source', 'border-image-slice', 'border-image-width', 'border-image-outset' and 'border-image-repeat'. Omitted values are set to their initial values..
-   * 
+   *
    * syntax:  `td { -webkit-border-image: url(border.png) 30 30 round;}`
-   * 
+   *
    * restriction: length, percentage, number, url, enum
-   * 
+   *
    * browsers: C,S5
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-background/#border-image
    *
    * values:
@@ -10122,13 +10122,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the alignment of nested elements within an outer flexible box element..
-   * 
+   *
    * syntax:  `div { -webkit-box-align: end; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,S3
-   * 
+   *
    * ref: http://css-infos.net/property/-webkit-box-align
    *
    * values:
@@ -10152,13 +10152,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * In webkit applications, -webkit-box-direction specifies whether a box lays out its contents normally (from the top or left edge), or in reverse (from the bottom or right edge)..
-   * 
+   *
    * syntax:  `div { -webkit-box-direction: reverse; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,S3
-   * 
+   *
    * ref: http://css-infos.net/property/-webkit-box-direction
    *
    * values:
@@ -10230,13 +10230,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * In webkit applications, -webkit-box-orient specifies whether a box lays out its contents horizontally or vertically..
-   * 
+   *
    * syntax:  `div { -webkit-box-orient: vertical; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,S3
-   * 
+   *
    * ref: http://css-infos.net/property/-webkit-box-orient
    *
    * values:
@@ -10258,13 +10258,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies alignment of child elements within the current element in the direction of orientation..
-   * 
+   *
    * syntax:  `div { -webkit-box-pack: end; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,S3
-   * 
+   *
    * ref: http://css-infos.net/property/-webkit-box-pack
    *
    * values:
@@ -10286,13 +10286,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines a reflection of a border box..
-   * 
+   *
    * syntax:  `div { -webkit-box-reflect: below 5px; }`
-   * 
-   * restriction: 
-   * 
+   *
+   * restriction:
+   *
    * browsers: C,S4
-   * 
+   *
    * ref: http://css-infos.net/property/-webkit-box-reflect
    *
    * values:
@@ -10314,13 +10314,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Box Model addition in CSS3..
-   * 
+   *
    * syntax:  `div { -webkit-box-sizing: content-box; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,S3
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-ui/#box-sizing
    *
    * values:
@@ -10338,13 +10338,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Describes the page/column break behavior before the generated box..
-   * 
+   *
    * syntax:  `h2 { -webkit-break-after: column; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: S7
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-multicol/#column-breaks
    *
    * values:
@@ -10380,13 +10380,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Describes the page/column break behavior before the generated box..
-   * 
+   *
    * syntax:  `h2 { -webkit-break-before: column; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: S7
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-multicol/#column-breaks
    *
    * values:
@@ -10422,13 +10422,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Describes the page/column break behavior inside the generated box..
-   * 
+   *
    * syntax:  `h2 { -webkit-break-inside: avoid-column; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: S7
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-multicol/#column-breaks
    *
    * values:
@@ -10452,13 +10452,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Describes the page/column break behavior before the generated box..
-   * 
+   *
    * syntax:  `h2 { -webkit-column-break-after: column; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,S3
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-multicol/#column-breaks
    *
    * values:
@@ -10494,13 +10494,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Describes the page/column break behavior before the generated box..
-   * 
+   *
    * syntax:  `h2 { -webkit-column-break-before: column; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,S3
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-multicol/#column-breaks
    *
    * values:
@@ -10536,13 +10536,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Describes the page/column break behavior inside the generated box..
-   * 
+   *
    * syntax:  `h2 { -webkit-column-break-inside: avoid-column; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,S3
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-multicol/#column-breaks
    *
    * values:
@@ -10692,13 +10692,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Describes the page/column break behavior after the generated box..
-   * 
+   *
    * syntax:  `article { -webkit-column-span: all; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,S3
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-multicol/#column-span0
    *
    * values:
@@ -10734,13 +10734,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Processes an element's rendering before it is displayed in the document, by applying one or more filter effects..
-   * 
+   *
    * syntax:  `img { -webkit-filter: blur(3px); }`
-   * 
+   *
    * restriction: enum, url
-   * 
+   *
    * browsers: C18,O15,S6
-   * 
+   *
    * ref: http://www.w3.org/TR/filter-effects/#propdef-filter
    *
    * values:
@@ -10757,7 +10757,7 @@ export class Style extends BaseStyle<Style> {
 
    * grayscale(): Converts the input image to grayscale.
 
-   * hue-rotate(): Applies a hue rotation on the input image. 
+   * hue-rotate(): Applies a hue rotation on the input image.
 
    * invert(): Inverts the samples in the input image.
 
@@ -10814,13 +10814,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * This property provides low-level control over OpenType font features. It is intended as a way of providing access to font features that are not widely used but are needed for a particular use case..
-   * 
+   *
    * syntax:  `body { -webkit-font-feature-settings: 'hwid'; }`
-   * 
+   *
    * restriction: string, integer
-   * 
+   *
    * browsers: C16
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-fonts/#propdef-font-feature-settings
    *
    * values:
@@ -10858,13 +10858,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Controls whether hyphenation is allowed to create more break opportunities within a line of text..
-   * 
+   *
    * syntax:  `div { -webkit-hyphens: manual; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: S5.1
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-text/#hyphens0
    *
    * values:
@@ -10884,13 +10884,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies line-breaking rules for CJK (Chinese, Japanese, and Korean) text..
-   * 
+   *
    * syntax:  `p { -webkit-line-break: normal; }`
-   * 
-   * restriction: 
-   * 
+   *
+   * restriction:
+   *
    * browsers: C,S3
-   * 
+   *
    * ref: http://css-infos.net/property/-webkit-line-break
    *
    * values:
@@ -10908,13 +10908,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * undefined.
-   * 
+   *
    * syntax:  `div { -webkit-margin-bottom-collapse: collapse; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,S3
-   * 
+   *
    * ref: undefined
    *
    * values:
@@ -10934,13 +10934,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * undefined.
-   * 
+   *
    * syntax:  `div { -webkit-margin-collapse: collapse; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,S3
-   * 
+   *
    * ref: undefined
    *
    * values:
@@ -10978,13 +10978,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * undefined.
-   * 
+   *
    * syntax:  `div { -webkit-margin-top-collapse: collapse; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,S3
-   * 
+   *
    * ref: undefined
    *
    * values:
@@ -11022,13 +11022,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Sets the mask layer image of an element..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: url, image, enum
-   * 
+   *
    * browsers: C,O15,S4
-   * 
+   *
    * ref: http://www.w3.org/TR/css-masking-1/#the-mask-image
    *
    * values:
@@ -11082,13 +11082,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the size of the mask layer images..
-   * 
+   *
    * syntax:  ` `
-   * 
+   *
    * restriction: length, percentage, enum
-   * 
+   *
    * browsers: C,O15,S4
-   * 
+   *
    * ref: http://www.w3.org/TR/css-masking-1/#the-mask-size
    *
    * values:
@@ -11108,13 +11108,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines the behavior of nonbreaking spaces within text..
-   * 
+   *
    * syntax:  `p { -webkit-nbsp-mode: space; }`
-   * 
-   * restriction: 
-   * 
+   *
+   * restriction:
+   *
    * browsers: C,S3
-   * 
+   *
    * ref: http://css-infos.net/property/-webkit-nbsp-mode
    *
    * values:
@@ -11132,13 +11132,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies whether to use native-style scrolling in an overflow:scroll element..
-   * 
+   *
    * syntax:  `div { -webkit-overflow-scrolling: touch; }`
-   * 
-   * restriction: 
-   * 
+   *
+   * restriction:
+   *
    * browsers: C,S5
-   * 
+   *
    * ref: http://css-infos.net/property/-webkit-nbsp-mode
    *
    * values:
@@ -11210,13 +11210,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * The 'region-fragment' property controls the behavior of the last region associated with a named flow..
-   * 
+   *
    * syntax:  `article { -webkit-region-fragment: break; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: S7
-   * 
+   *
    * ref: http://dev.w3.org/csswg/css-regions/#region-fragment
    *
    * values:
@@ -11270,13 +11270,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies a size adjustment for displaying text content in mobile browsers..
-   * 
+   *
    * syntax:  `div { -webkit-text-size-adjust: 60%; }`
-   * 
+   *
    * restriction: percentage
-   * 
+   *
    * browsers: E,C,S3
-   * 
+   *
    * ref: https://drafts.csswg.org/css-size-adjust/#text-size-adjust
    *
    * values:
@@ -11366,13 +11366,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * A two-dimensional transformation is applied to an element through the 'transform' property. This property contains a list of transform functions similar to those allowed by SVG..
-   * 
+   *
    * syntax:  `div { -webkit-transform: rotate(-90deg); }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,O12,S3.1
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-2d-transforms/#transform-property
    *
    * values:
@@ -11502,13 +11502,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Defines how nested elements are rendered in 3D space..
-   * 
+   *
    * syntax:  `div { -webkit-transform-style: flat; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,S4
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-3d-transforms/#transform-origin
    *
    * values:
@@ -11526,13 +11526,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Shorthand property combines four of the transition properties into a single property..
-   * 
+   *
    * syntax:  `div { -webkit-transition: background-color linear 1s; }`
-   * 
+   *
    * restriction: time, property, timing-function, enum
-   * 
+   *
    * browsers: C,O12,S5
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-transitions/#transition
    *
    * values:
@@ -11586,13 +11586,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the name of the CSS property to which the transition is applied..
-   * 
+   *
    * syntax:  `div { -webkit-transition-property: background-color; }`
-   * 
+   *
    * restriction: property
-   * 
+   *
    * browsers: C,O12,S5
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-transitions/#transition-property
    *
    * values:
@@ -11630,13 +11630,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * undefined.
-   * 
+   *
    * syntax:  `div { -webkit-user-drag: element; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: S3
-   * 
+   *
    * ref: undefined
    *
    * values:
@@ -11656,13 +11656,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Determines whether a user can edit the content of an element..
-   * 
+   *
    * syntax:  `div { -webkit-user-modify: read-only; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,S3
-   * 
+   *
    * ref: http://css-infos.net/property/-webkit-user-modify
    *
    * values:
@@ -11682,13 +11682,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Controls the appearance of selection..
-   * 
+   *
    * syntax:  `div { -webkit-user-select: text; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: C,S3
-   * 
+   *
    * ref: http://css-infos.net/property/-webkit-user-select
    *
    * values:
@@ -11726,13 +11726,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies the width of the content area, padding area or border area (depending on 'box-sizing') of certain boxes..
-   * 
+   *
    * syntax:  `header { width: 200px; }`
-   * 
+   *
    * restriction: length, percentage
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-box/#width
    *
    * values:
@@ -11756,13 +11756,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Provides a rendering hint to the user agent, stating what kinds of changes the author expects to perform on the element..
-   * 
+   *
    * syntax:  `body { will-change: scroll-position; }`
-   * 
+   *
    * restriction: enum, identifier
-   * 
+   *
    * browsers: C36,FF36,O24
-   * 
+   *
    * ref: http://www.w3.org/TR/css-will-change/
    *
    * values:
@@ -11782,13 +11782,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies line break opportunities for non-CJK scripts..
-   * 
+   *
    * syntax:  `p.album { word-break: break-all; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,C,FF15,IE5,S3
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-text/#word-break0
    *
    * values:
@@ -11826,13 +11826,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * Specifies whether the UA may break within a word to prevent overflow when an otherwise-unbreakable string is too long to fit..
-   * 
+   *
    * syntax:  `p { word-wrap: break-word; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: all
-   * 
+   *
    * ref: http://www.w3.org/TR/css3-text/#word-wrap0
    *
    * values:
@@ -11850,13 +11850,13 @@ export class Style extends BaseStyle<Style> {
 
   /**
    * This is a shorthand property for both 'direction' and 'block-progression'..
-   * 
+   *
    * syntax:  `span { writing-mode: lr-tb; }`
-   * 
+   *
    * restriction: enum
-   * 
+   *
    * browsers: E,FF41
-   * 
+   *
    * ref: http://www.w3.org/TR/css-writing-modes-3/#writing-mode
    *
    * values:
@@ -11914,35 +11914,2775 @@ export class Style extends BaseStyle<Style> {
     return this
   }
 
-  placeItems(value: string) {
-    this.set('place-items', value)
-    return this
-  }
-
-  inset(value: string) {
-    this.set('inset', value)
-    return this
-  }
-
-  scrollMarginTop(value: string) {
-    this.set('scroll-margin-top', value)
-    return this
-  }
-
-  appearance(value: CSSProps['webkitAppearance']) {
-    this.set('appearance', value)
-    return this
-  }
+  /**
+   * Sets the accent color of controls that expose an accent color.
+   *
+   * syntax:  `auto | <color>`
+   *
+   * restriction: color
+   *
+   * browsers: E93,FF92,C93,O79
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/accent-color
+   *
+   * values:
+   * ```md
+   * auto: Use the browser accent color.
+   * ```
+   * @param value -
+   */
   accentColor(value: CSSProps['accentColor']) {
     this.set('accent-color', value)
     return this
   }
-  breakInside(value: CSSProps['webkitBreakInside']) {
+
+  /**
+   * Controls how animation effects combine with underlying property values.
+   *
+   * syntax:  `<single-animation-composition>#`
+   *
+   * restriction: enum
+   *
+   * browsers: E112,FF115,S16,C112,O98
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/animation-composition
+   *
+   * values:
+   * ```md
+   * replace: Replace the underlying value.
+
+   * add: Add the effect to the underlying value.
+
+   * accumulate: Accumulate the effect with the underlying value.
+   * ```
+   * @param value -
+   */
+  animationComposition(value: CSSProps['animationComposition']) {
+    this.set('animation-composition', value)
+    return this
+  }
+
+  /**
+   * Controls the native platform appearance of a user interface element.
+   *
+   * syntax:  `none | auto | <compat-auto> | <compat-special>`
+   *
+   * restriction: enum
+   *
+   * browsers: E84,FF80,S15.4,C84,O70
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/appearance
+   *
+   * values:
+   * ```md
+   * none: Remove the native appearance.
+
+   * auto: Use the native appearance for the element.
+   * ```
+   * @param value -
+   */
+  appearance(value: CSSProps['appearance']) {
+    this.set('appearance', value)
+    return this
+  }
+
+  /**
+   * Sets the preferred width-to-height ratio used during automatic sizing.
+   *
+   * syntax:  `auto || <ratio>`
+   *
+   * restriction: ratio
+   *
+   * browsers: E88,FF89,S15,C88,O74
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/aspect-ratio
+   *
+   * values:
+   * ```md
+   * auto: Use the intrinsic ratio when available.
+   * ```
+   * @param value -
+   */
+  aspectRatio(value: CSSProps['aspectRatio']) {
+    this.set('aspect-ratio', value)
+    return this
+  }
+
+  /**
+   * Sets the horizontal starting position of each background image.
+   *
+   * syntax:  `[ center | [ [ left | right | x-start | x-end ]? <length-percentage>? ]! ]#`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E12,FF49,S1,C1,O15
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/background-position-x
+   *
+   * values:
+   * ```md
+   * left: Align with the left edge.
+
+   * center: Center horizontally.
+
+   * right: Align with the right edge.
+   * ```
+   * @param value -
+   */
+  backgroundPositionX(value: CSSProps['backgroundPositionX']) {
+    this.set('background-position-x', value)
+    return this
+  }
+
+  /**
+   * Sets the vertical starting position of each background image.
+   *
+   * syntax:  `[ center | [ [ top | bottom | y-start | y-end ]? <length-percentage>? ]! ]#`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E12,FF49,S1,C1,O15
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/background-position-y
+   *
+   * values:
+   * ```md
+   * top: Align with the top edge.
+
+   * center: Center vertically.
+
+   * bottom: Align with the bottom edge.
+   * ```
+   * @param value -
+   */
+  backgroundPositionY(value: CSSProps['backgroundPositionY']) {
+    this.set('background-position-y', value)
+    return this
+  }
+
+  /**
+   * Sets the width, style, and color of both logical block borders.
+   *
+   * syntax:  `<'border-block-start'>`
+   *
+   * restriction: length, color
+   *
+   * browsers: E87,FF66,S14.1,C87,O73
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/border-block
+   *
+   * @param value -
+   */
+  borderBlock(value: CSSProps['borderBlock']) {
+    this.set('border-block', value)
+    return this
+  }
+
+  /**
+   * Sets the colors of the logical block-start and block-end borders.
+   *
+   * syntax:  `<'border-top-color'>{1,2}`
+   *
+   * restriction: color
+   *
+   * browsers: E87,FF66,S14.1,C87,O73
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/border-block-color
+   *
+   * @param value -
+   */
+  borderBlockColor(value: CSSProps['borderBlockColor']) {
+    this.set('border-block-color', value)
+    return this
+  }
+
+  /**
+   * Sets the line styles of the logical block borders.
+   *
+   * syntax:  `<'border-top-style'>{1,2}`
+   *
+   * restriction: string
+   *
+   * browsers: E87,FF66,S14.1,C87,O73
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/border-block-style
+   *
+   * @param value -
+   */
+  borderBlockStyle(value: CSSProps['borderBlockStyle']) {
+    this.set('border-block-style', value)
+    return this
+  }
+
+  /**
+   * Sets the widths of the logical block borders.
+   *
+   * syntax:  `<'border-top-width'>{1,2}`
+   *
+   * restriction: length
+   *
+   * browsers: E87,FF66,S14.1,C87,O73
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/border-block-width
+   *
+   * @param value -
+   */
+  borderBlockWidth(value: CSSProps['borderBlockWidth']) {
+    this.set('border-block-width', value)
+    return this
+  }
+
+  /**
+   * Rounds the corner at the logical block-end and inline-end edges.
+   *
+   * syntax:  `<'border-top-left-radius'>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E89,FF66,S15,C89,O75
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/border-end-end-radius
+   *
+   * @param value -
+   */
+  borderEndEndRadius(value: CSSProps['borderEndEndRadius']) {
+    this.set('border-end-end-radius', value)
+    return this
+  }
+
+  /**
+   * Rounds the corner at the logical block-end and inline-start edges.
+   *
+   * syntax:  `<'border-top-left-radius'>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E89,FF66,S15,C89,O75
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/border-end-start-radius
+   *
+   * @param value -
+   */
+  borderEndStartRadius(value: CSSProps['borderEndStartRadius']) {
+    this.set('border-end-start-radius', value)
+    return this
+  }
+
+  /**
+   * Sets the width, style, and color of both logical inline borders.
+   *
+   * syntax:  `<'border-block-start'>`
+   *
+   * restriction: length, color
+   *
+   * browsers: E87,FF66,S14.1,C87,O73
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/border-inline
+   *
+   * @param value -
+   */
+  borderInline(value: CSSProps['borderInline']) {
+    this.set('border-inline', value)
+    return this
+  }
+
+  /**
+   * Sets the colors of the logical inline-start and inline-end borders.
+   *
+   * syntax:  `<'border-top-color'>{1,2}`
+   *
+   * restriction: color
+   *
+   * browsers: E87,FF66,S14.1,C87,O73
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/border-inline-color
+   *
+   * @param value -
+   */
+  borderInlineColor(value: CSSProps['borderInlineColor']) {
+    this.set('border-inline-color', value)
+    return this
+  }
+
+  /**
+   * Sets the line styles of the logical inline borders.
+   *
+   * syntax:  `<'border-top-style'>{1,2}`
+   *
+   * restriction: string
+   *
+   * browsers: E87,FF66,S14.1,C87,O73
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/border-inline-style
+   *
+   * @param value -
+   */
+  borderInlineStyle(value: CSSProps['borderInlineStyle']) {
+    this.set('border-inline-style', value)
+    return this
+  }
+
+  /**
+   * Sets the widths of the logical inline borders.
+   *
+   * syntax:  `<'border-top-width'>{1,2}`
+   *
+   * restriction: length
+   *
+   * browsers: E87,FF66,S14.1,C87,O73
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/border-inline-width
+   *
+   * @param value -
+   */
+  borderInlineWidth(value: CSSProps['borderInlineWidth']) {
+    this.set('border-inline-width', value)
+    return this
+  }
+
+  /**
+   * Rounds the corner at the logical block-start and inline-end edges.
+   *
+   * syntax:  `<'border-top-left-radius'>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E89,FF66,S15,C89,O75
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/border-start-end-radius
+   *
+   * @param value -
+   */
+  borderStartEndRadius(value: CSSProps['borderStartEndRadius']) {
+    this.set('border-start-end-radius', value)
+    return this
+  }
+
+  /**
+   * Rounds the corner at the logical block-start and inline-start edges.
+   *
+   * syntax:  `<'border-top-left-radius'>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E89,FF66,S15,C89,O75
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/border-start-start-radius
+   *
+   * @param value -
+   */
+  borderStartStartRadius(value: CSSProps['borderStartStartRadius']) {
+    this.set('border-start-start-radius', value)
+    return this
+  }
+
+  /**
+   * Controls page, column, or region breaks after the element.
+   *
+   * syntax:  `auto | avoid | always | all | avoid-page | page | left | right | recto | verso | avoid-column | column | avoid-region | region`
+   *
+   * restriction: enum
+   *
+   * browsers: E12,FF65,S10,C50,O37
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/break-after
+   *
+   * values:
+   * ```md
+   * auto: Allow automatic breaks.
+
+   * avoid: Avoid a break.
+
+   * page: Force a page break.
+
+   * column: Force a column break.
+   * ```
+   * @param value -
+   */
+  breakAfter(value: CSSProps['breakAfter']) {
+    this.set('break-after', value)
+    return this
+  }
+
+  /**
+   * Controls page, column, or region breaks before the element.
+   *
+   * syntax:  `auto | avoid | always | all | avoid-page | page | left | right | recto | verso | avoid-column | column | avoid-region | region`
+   *
+   * restriction: enum
+   *
+   * browsers: E12,FF65,S10,C50,O37
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/break-before
+   *
+   * values:
+   * ```md
+   * auto: Allow automatic breaks.
+
+   * avoid: Avoid a break.
+
+   * page: Force a page break.
+
+   * column: Force a column break.
+   * ```
+   * @param value -
+   */
+  breakBefore(value: CSSProps['breakBefore']) {
+    this.set('break-before', value)
+    return this
+  }
+
+  /**
+   * Controls whether page, column, or region breaks may occur inside the element.
+   *
+   * syntax:  `auto | avoid | avoid-page | avoid-column | avoid-region`
+   *
+   * restriction: enum
+   *
+   * browsers: E12,FF65,S10,C50,O37
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/break-inside
+   *
+   * values:
+   * ```md
+   * auto: Allow automatic breaks.
+
+   * avoid: Avoid breaks inside the element.
+
+   * avoid-page: Avoid page breaks inside the element.
+
+   * avoid-column: Avoid column breaks inside the element.
+   * ```
+   * @param value -
+   */
+  breakInside(value: CSSProps['breakInside']) {
     this.set('break-inside', value)
     return this
   }
-  lineClamp(value: string) {
+
+  /**
+   * Declares the color schemes supported by the element for browser-provided rendering.
+   *
+   * syntax:  `normal | [ light | dark | <custom-ident> ]+ && only?`
+   *
+   * restriction: string
+   *
+   * browsers: E81,FF96,S13,C81,O68
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/color-scheme
+   *
+   * values:
+   * ```md
+   * normal: Use the browser default color scheme.
+
+   * light: Support a light color scheme.
+
+   * dark: Support a dark color scheme.
+   * ```
+   * @param value -
+   */
+  colorScheme(value: CSSProps['colorScheme']) {
+    this.set('color-scheme', value)
+    return this
+  }
+
+  /**
+   * Sets the color of the rule drawn between columns.
+   *
+   * syntax:  `<color>`
+   *
+   * restriction: color
+   *
+   * browsers: E12,FF52,S9,C50,O11.1
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/column-rule-color
+   *
+   * @param value -
+   */
+  columnRuleColor(value: CSSProps['columnRuleColor']) {
+    this.set('column-rule-color', value)
+    return this
+  }
+
+  /**
+   * Provides a placeholder block size when size containment hides the actual content size.
+   *
+   * syntax:  `auto? [ none | <length> ]`
+   *
+   * restriction: length
+   *
+   * browsers: E95,FF107,S17,C95,O81
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/contain-intrinsic-block-size
+   *
+   * @param value -
+   */
+  containIntrinsicBlockSize(value: CSSProps['containIntrinsicBlockSize']) {
+    this.set('contain-intrinsic-block-size', value)
+    return this
+  }
+
+  /**
+   * Provides a placeholder height for size-contained content.
+   *
+   * syntax:  `auto? [ none | <length> ]`
+   *
+   * restriction: length
+   *
+   * browsers: E95,FF107,S17,C95,O81
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/contain-intrinsic-height
+   *
+   * @param value -
+   */
+  containIntrinsicHeight(value: CSSProps['containIntrinsicHeight']) {
+    this.set('contain-intrinsic-height', value)
+    return this
+  }
+
+  /**
+   * Provides a placeholder inline size for size-contained content.
+   *
+   * syntax:  `auto? [ none | <length> ]`
+   *
+   * restriction: length
+   *
+   * browsers: E95,FF107,S17,C95,O81
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/contain-intrinsic-inline-size
+   *
+   * @param value -
+   */
+  containIntrinsicInlineSize(value: CSSProps['containIntrinsicInlineSize']) {
+    this.set('contain-intrinsic-inline-size', value)
+    return this
+  }
+
+  /**
+   * Sets placeholder width and height values for size-contained content.
+   *
+   * syntax:  `[ auto? [ none | <length> ] ]{1,2}`
+   *
+   * restriction: length
+   *
+   * browsers: E83,FF107,S17,C83,O69
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/contain-intrinsic-size
+   *
+   * @param value -
+   */
+  containIntrinsicSize(value: CSSProps['containIntrinsicSize']) {
+    this.set('contain-intrinsic-size', value)
+    return this
+  }
+
+  /**
+   * Provides a placeholder width for size-contained content.
+   *
+   * syntax:  `auto? [ none | <length> ]`
+   *
+   * restriction: length
+   *
+   * browsers: E95,FF107,S17,C95,O81
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/contain-intrinsic-width
+   *
+   * @param value -
+   */
+  containIntrinsicWidth(value: CSSProps['containIntrinsicWidth']) {
+    this.set('contain-intrinsic-width', value)
+    return this
+  }
+
+  /**
+   * Sets a query container name and containment type.
+   *
+   * syntax:  `<'container-name'> [ / <'container-type'> ]?`
+   *
+   * restriction: string
+   *
+   * browsers: E105,FF110,S16,C105,O91
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/container
+   *
+   * @param value -
+   */
+  container(value: CSSProps['container']) {
+    this.set('container', value)
+    return this
+  }
+
+  /**
+   * Names the element for use in container queries.
+   *
+   * syntax:  `none | <custom-ident>+`
+   *
+   * restriction: identifier
+   *
+   * browsers: E105,FF110,S16,C105,O91
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/container-name
+   *
+   * @param value -
+   */
+  containerName(value: CSSProps['containerName']) {
+    this.set('container-name', value)
+    return this
+  }
+
+  /**
+   * Establishes the types of container queries supported by the element.
+   *
+   * syntax:  `normal | [ [ size | inline-size ] || scroll-state ]`
+   *
+   * restriction: string
+   *
+   * browsers: E105,FF110,S16,C105,O91
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/container-type
+   *
+   * values:
+   * ```md
+   * normal: Do not establish size containment for queries.
+
+   * size: Allow queries on both size axes.
+
+   * inline-size: Allow queries on the inline size.
+
+   * scroll-state: Allow scroll-state queries.
+   * ```
+   * @param value -
+   */
+  containerType(value: CSSProps['containerType']) {
+    this.set('container-type', value)
+    return this
+  }
+
+  /**
+   * Controls whether the browser renders the contents of an element.
+   *
+   * syntax:  `visible | auto | hidden`
+   *
+   * restriction: enum
+   *
+   * browsers: E85,FF125,S18,C85,O71
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/content-visibility
+   *
+   * values:
+   * ```md
+   * visible: Render the contents normally.
+
+   * auto: Allow rendering work to be skipped for offscreen content.
+
+   * hidden: Skip rendering the contents.
+   * ```
+   * @param value -
+   */
+  contentVisibility(value: CSSProps['contentVisibility']) {
+    this.set('content-visibility', value)
+    return this
+  }
+
+  /**
+   * Sets the values of named CSS counters.
+   *
+   * syntax:  `[ <counter-name> <integer>? ]+ | none`
+   *
+   * restriction: string
+   *
+   * browsers: E85,FF68,S17.2,C85,O71
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/counter-set
+   *
+   * @param value -
+   */
+  counterSet(value: CSSProps['counterSet']) {
+    this.set('counter-set', value)
+    return this
+  }
+
+  /**
+   * Sets the horizontal center coordinate of an SVG circle or ellipse.
+   *
+   * syntax:  `<length> | <percentage>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E79,FF69,S9,C43,O30
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/cx
+   *
+   * @param value -
+   */
+  cx(value: CSSProps['cx']) {
+    this.set('cx', value)
+    return this
+  }
+
+  /**
+   * Sets the vertical center coordinate of an SVG circle or ellipse.
+   *
+   * syntax:  `<length> | <percentage>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E79,FF69,S9,C43,O30
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/cy
+   *
+   * @param value -
+   */
+  cy(value: CSSProps['cy']) {
+    this.set('cy', value)
+    return this
+  }
+
+  /**
+   * Selects the dominant baseline used to align text.
+   *
+   * syntax:  `auto | text-bottom | alphabetic | ideographic | middle | central | mathematical | hanging | text-top`
+   *
+   * restriction: enum
+   *
+   * browsers: E79,FF1,S4,C1,O15
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/dominant-baseline
+   *
+   * values:
+   * ```md
+   * auto: Choose the baseline from the writing mode.
+
+   * alphabetic: Use the alphabetic baseline.
+
+   * middle: Use the middle baseline.
+
+   * central: Use the central baseline.
+
+   * hanging: Use the hanging baseline.
+   * ```
+   * @param value -
+   */
+  dominantBaseline(value: CSSProps['dominantBaseline']) {
+    this.set('dominant-baseline', value)
+    return this
+  }
+
+  /**
+   * Controls automatic optical-size adjustment in fonts that support it.
+   *
+   * syntax:  `auto | none`
+   *
+   * restriction: enum
+   *
+   * browsers: E17,FF62,S13.1,C79,O66
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/font-optical-sizing
+   *
+   * values:
+   * ```md
+   * auto: Adjust optical sizing to the text size.
+
+   * none: Disable automatic optical sizing.
+   * ```
+   * @param value -
+   */
+  fontOpticalSizing(value: CSSProps['fontOpticalSizing']) {
+    this.set('font-optical-sizing', value)
+    return this
+  }
+
+  /**
+   * Chooses the color palette used by a color font.
+   *
+   * syntax:  `normal | light | dark | <palette-identifier> | <palette-mix()>`
+   *
+   * restriction: string
+   *
+   * browsers: E101,FF107,S15.4,C101,O87
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/font-palette
+   *
+   * values:
+   * ```md
+   * normal: Use the default palette.
+
+   * light: Choose a palette suited to a light background.
+
+   * dark: Choose a palette suited to a dark background.
+   * ```
+   * @param value -
+   */
+  fontPalette(value: CSSProps['fontPalette']) {
+    this.set('font-palette', value)
+    return this
+  }
+
+  /**
+   * Controls whether missing small-cap glyphs may be synthesized.
+   *
+   * syntax:  `auto | none`
+   *
+   * restriction: enum
+   *
+   * browsers: E97,FF111,S16.4,C97,O83
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/font-synthesis-small-caps
+   *
+   * values:
+   * ```md
+   * auto: Allow synthetic small caps.
+
+   * none: Use only small-cap glyphs supplied by the font.
+   * ```
+   * @param value -
+   */
+  fontSynthesisSmallCaps(value: CSSProps['fontSynthesisSmallCaps']) {
+    this.set('font-synthesis-small-caps', value)
+    return this
+  }
+
+  /**
+   * Controls whether missing italic or oblique font styles may be synthesized.
+   *
+   * syntax:  `auto | none`
+   *
+   * restriction: enum
+   *
+   * browsers: E97,FF111,S16.4,C97,O83
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/font-synthesis-style
+   *
+   * values:
+   * ```md
+   * auto: Allow synthetic font styles.
+
+   * none: Use only styles supplied by the font.
+   * ```
+   * @param value -
+   */
+  fontSynthesisStyle(value: CSSProps['fontSynthesisStyle']) {
+    this.set('font-synthesis-style', value)
+    return this
+  }
+
+  /**
+   * Controls whether missing bold font weights may be synthesized.
+   *
+   * syntax:  `auto | none`
+   *
+   * restriction: enum
+   *
+   * browsers: E97,FF111,S16.4,C97,O83
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/font-synthesis-weight
+   *
+   * values:
+   * ```md
+   * auto: Allow synthetic bold weights.
+
+   * none: Use only weights supplied by the font.
+   * ```
+   * @param value -
+   */
+  fontSynthesisWeight(value: CSSProps['fontSynthesisWeight']) {
+    this.set('font-synthesis-weight', value)
+    return this
+  }
+
+  /**
+   * Sets individual variation-axis values for a variable font.
+   *
+   * syntax:  `normal | [ <string> <number> ]#`
+   *
+   * restriction: string
+   *
+   * browsers: E17,FF62,S11,C62,O49
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/font-variation-settings
+   *
+   * @param value -
+   */
+  fontVariationSettings(value: CSSProps['fontVariationSettings']) {
+    this.set('font-variation-settings', value)
+    return this
+  }
+
+  /**
+   * Selects the string displayed at automatic hyphenation breaks.
+   *
+   * syntax:  `auto | <string>`
+   *
+   * restriction: string
+   *
+   * browsers: E106,FF98,S17,C106,O92
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/hyphenate-character
+   *
+   * @param value -
+   */
+  hyphenateCharacter(value: CSSProps['hyphenateCharacter']) {
+    this.set('hyphenate-character', value)
+    return this
+  }
+
+  /**
+   * Sets the top, right, bottom, and left offsets of a positioned element.
+   *
+   * syntax:  `<'top'>{1,4}`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E87,FF66,S14.1,C87,O73
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/inset
+   *
+   * @param value -
+   */
+  inset(value: CSSProps['inset']) {
+    this.set('inset', value)
+    return this
+  }
+
+  /**
+   * Sets both logical block offsets of a positioned element.
+   *
+   * syntax:  `<'top'>{1,2}`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E87,FF63,S14.1,C87,O73
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/inset-block
+   *
+   * @param value -
+   */
+  insetBlock(value: CSSProps['insetBlock']) {
+    this.set('inset-block', value)
+    return this
+  }
+
+  /**
+   * Sets the logical block-end offset of a positioned element.
+   *
+   * syntax:  `<'top'>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E87,FF63,S14.1,C87,O73
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/inset-block-end
+   *
+   * @param value -
+   */
+  insetBlockEnd(value: CSSProps['insetBlockEnd']) {
+    this.set('inset-block-end', value)
+    return this
+  }
+
+  /**
+   * Sets the logical block-start offset of a positioned element.
+   *
+   * syntax:  `<'top'>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E87,FF63,S14.1,C87,O73
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/inset-block-start
+   *
+   * @param value -
+   */
+  insetBlockStart(value: CSSProps['insetBlockStart']) {
+    this.set('inset-block-start', value)
+    return this
+  }
+
+  /**
+   * Sets both logical inline offsets of a positioned element.
+   *
+   * syntax:  `<'top'>{1,2}`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E87,FF63,S14.1,C87,O73
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/inset-inline
+   *
+   * @param value -
+   */
+  insetInline(value: CSSProps['insetInline']) {
+    this.set('inset-inline', value)
+    return this
+  }
+
+  /**
+   * Sets the logical inline-end offset of a positioned element.
+   *
+   * syntax:  `<'top'>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E87,FF63,S14.1,C87,O73
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/inset-inline-end
+   *
+   * @param value -
+   */
+  insetInlineEnd(value: CSSProps['insetInlineEnd']) {
+    this.set('inset-inline-end', value)
+    return this
+  }
+
+  /**
+   * Sets the logical inline-start offset of a positioned element.
+   *
+   * syntax:  `<'top'>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E87,FF63,S14.1,C87,O73
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/inset-inline-start
+   *
+   * @param value -
+   */
+  insetInlineStart(value: CSSProps['insetInlineStart']) {
+    this.set('inset-inline-start', value)
+    return this
+  }
+
+  /**
+   * Limits the number of displayed lines in a block of text.
+   *
+   * syntax:  `none | <integer>`
+   *
+   * restriction: integer, string
+   *
+   * browsers: O15
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/line-clamp
+   *
+   * values:
+   * ```md
+   * none: Do not clamp the number of lines.
+   * ```
+   * @param value -
+   */
+  lineClamp(value: CSSProps['lineClamp']) {
     this.set('line-clamp', value)
+    return this
+  }
+
+  /**
+   * Sets the logical block-start and block-end margins.
+   *
+   * syntax:  `<'margin-top'>{1,2}`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E87,FF66,S14.1,C87,O73
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/margin-block
+   *
+   * @param value -
+   */
+  marginBlock(value: CSSProps['marginBlock']) {
+    this.set('margin-block', value)
+    return this
+  }
+
+  /**
+   * Sets the logical inline-start and inline-end margins.
+   *
+   * syntax:  `<'margin-top'>{1,2}`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E87,FF66,S14.1,C87,O73
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/margin-inline
+   *
+   * @param value -
+   */
+  marginInline(value: CSSProps['marginInline']) {
+    this.set('margin-inline', value)
+    return this
+  }
+
+  /**
+   * Sets the mask images, positions, sizing, clipping, and compositing layers.
+   *
+   * syntax:  `<mask-layer>#`
+   *
+   * restriction: string
+   *
+   * browsers: E120,FF53,S15.4,C120,O106
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/mask
+   *
+   * @param value -
+   */
+  mask(value: CSSProps['mask']) {
+    this.set('mask', value)
+    return this
+  }
+
+  /**
+   * Specifies the area affected by each mask layer.
+   *
+   * syntax:  `[ <coord-box> | no-clip ]#`
+   *
+   * restriction: string
+   *
+   * browsers: E120,FF53,S15.4,C120,O106
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/mask-clip
+   *
+   * values:
+   * ```md
+   * border-box: Clip the mask to the border box.
+
+   * padding-box: Clip the mask to the padding box.
+
+   * content-box: Clip the mask to the content box.
+
+   * no-clip: Do not clip the mask.
+   * ```
+   * @param value -
+   */
+  maskClip(value: CSSProps['maskClip']) {
+    this.set('mask-clip', value)
+    return this
+  }
+
+  /**
+   * Controls how each mask layer combines with the layers below it.
+   *
+   * syntax:  `<compositing-operator>#`
+   *
+   * restriction: string
+   *
+   * browsers: E120,FF53,S15.4,C120,O106
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/mask-composite
+   *
+   * values:
+   * ```md
+   * add: Add the current layer to the layers below.
+
+   * subtract: Keep the part outside the layers below.
+
+   * intersect: Keep only the overlapping part.
+
+   * exclude: Keep only the non-overlapping parts.
+   * ```
+   * @param value -
+   */
+  maskComposite(value: CSSProps['maskComposite']) {
+    this.set('mask-composite', value)
+    return this
+  }
+
+  /**
+   * Selects normal or compact layout for mathematical expressions.
+   *
+   * syntax:  `normal | compact`
+   *
+   * restriction: enum
+   *
+   * browsers: E109,FF117,S14.1,C109,O95
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/math-style
+   *
+   * values:
+   * ```md
+   * normal: Use normal mathematical layout.
+
+   * compact: Use compact mathematical layout.
+   * ```
+   * @param value -
+   */
+  mathStyle(value: CSSProps['mathStyle']) {
+    this.set('math-style', value)
+    return this
+  }
+
+  /**
+   * Sets the motion path, distance, rotation, position, and anchor.
+   *
+   * syntax:  `[ <'offset-position'>? [ <'offset-path'> [ <'offset-distance'> || <'offset-rotate'> ]? ]? ]! [ / <'offset-anchor'> ]?`
+   *
+   * restriction: string
+   *
+   * browsers: E79,FF72,S16,C55,O42
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/offset
+   *
+   * @param value -
+   */
+  offset(value: CSSProps['offset']) {
+    this.set('offset', value)
+    return this
+  }
+
+  /**
+   * Sets the point on the element that follows its motion path.
+   *
+   * syntax:  `auto | <position>`
+   *
+   * restriction: position
+   *
+   * browsers: E116,FF72,S16,C116,O102
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/offset-anchor
+   *
+   * @param value -
+   */
+  offsetAnchor(value: CSSProps['offsetAnchor']) {
+    this.set('offset-anchor', value)
+    return this
+  }
+
+  /**
+   * Sets how far the element has traveled along its motion path.
+   *
+   * syntax:  `<length-percentage>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E79,FF72,S16,C55,O42
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/offset-distance
+   *
+   * @param value -
+   */
+  offsetDistance(value: CSSProps['offsetDistance']) {
+    this.set('offset-distance', value)
+    return this
+  }
+
+  /**
+   * Defines the path followed by an element during motion.
+   *
+   * syntax:  `none | <offset-path> || <coord-box>`
+   *
+   * restriction: string
+   *
+   * browsers: E79,FF72,S15.4,C55,O45
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/offset-path
+   *
+   * @param value -
+   */
+  offsetPath(value: CSSProps['offsetPath']) {
+    this.set('offset-path', value)
+    return this
+  }
+
+  /**
+   * Sets the initial position used to establish the motion path.
+   *
+   * syntax:  `normal | auto | <position>`
+   *
+   * restriction: position
+   *
+   * browsers: E116,FF122,S16,C116,O102
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/offset-position
+   *
+   * @param value -
+   */
+  offsetPosition(value: CSSProps['offsetPosition']) {
+    this.set('offset-position', value)
+    return this
+  }
+
+  /**
+   * Sets the orientation of an element as it follows its motion path.
+   *
+   * syntax:  `[ auto | reverse ] || <angle>`
+   *
+   * restriction: angle
+   *
+   * browsers: E79,FF72,S16,C56,O43
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/offset-rotate
+   *
+   * values:
+   * ```md
+   * auto: Follow the direction of the path.
+
+   * reverse: Face opposite the direction of the path.
+   * ```
+   * @param value -
+   */
+  offsetRotate(value: CSSProps['offsetRotate']) {
+    this.set('offset-rotate', value)
+    return this
+  }
+
+  /**
+   * Controls overflow along the logical block axis.
+   *
+   * syntax:  `visible | hidden | clip | scroll | auto`
+   *
+   * restriction: enum
+   *
+   * browsers: E135,FF69,S26,C135,O120
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/overflow-block
+   *
+   * values:
+   * ```md
+   * visible: Allow content to overflow.
+
+   * hidden: Clip overflow while allowing programmatic scrolling.
+
+   * clip: Clip overflow without creating a scroll container.
+
+   * scroll: Provide scrolling even without overflow.
+
+   * auto: Provide scrolling when content overflows.
+   * ```
+   * @param value -
+   */
+  overflowBlock(value: CSSProps['overflowBlock']) {
+    this.set('overflow-block', value)
+    return this
+  }
+
+  /**
+   * Controls overflow along the logical inline axis.
+   *
+   * syntax:  `visible | hidden | clip | scroll | auto`
+   *
+   * restriction: enum
+   *
+   * browsers: E135,FF69,S26,C135,O120
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/overflow-inline
+   *
+   * values:
+   * ```md
+   * visible: Allow content to overflow.
+
+   * hidden: Clip overflow while allowing programmatic scrolling.
+
+   * clip: Clip overflow without creating a scroll container.
+
+   * scroll: Provide scrolling even without overflow.
+
+   * auto: Provide scrolling when content overflows.
+   * ```
+   * @param value -
+   */
+  overflowInline(value: CSSProps['overflowInline']) {
+    this.set('overflow-inline', value)
+    return this
+  }
+
+  /**
+   * Controls scroll chaining and boundary effects on both scroll axes.
+   *
+   * syntax:  `[ contain | none | auto ]{1,2}`
+   *
+   * restriction: string
+   *
+   * browsers: E18,FF59,S16,C63,O50
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/overscroll-behavior
+   *
+   * @param value -
+   */
+  overscrollBehavior(value: CSSProps['overscrollBehavior']) {
+    this.set('overscroll-behavior', value)
+    return this
+  }
+
+  /**
+   * Controls scroll chaining and boundary effects on the logical block axis.
+   *
+   * syntax:  `contain | none | auto`
+   *
+   * restriction: enum
+   *
+   * browsers: E79,FF73,S16,C77,O64
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/overscroll-behavior-block
+   *
+   * values:
+   * ```md
+   * auto: Allow scroll chaining and boundary effects.
+
+   * contain: Prevent scroll chaining.
+
+   * none: Prevent scroll chaining and boundary effects.
+   * ```
+   * @param value -
+   */
+  overscrollBehaviorBlock(value: CSSProps['overscrollBehaviorBlock']) {
+    this.set('overscroll-behavior-block', value)
+    return this
+  }
+
+  /**
+   * Controls scroll chaining and boundary effects on the logical inline axis.
+   *
+   * syntax:  `contain | none | auto`
+   *
+   * restriction: enum
+   *
+   * browsers: E79,FF73,S16,C77,O64
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/overscroll-behavior-inline
+   *
+   * values:
+   * ```md
+   * auto: Allow scroll chaining and boundary effects.
+
+   * contain: Prevent scroll chaining.
+
+   * none: Prevent scroll chaining and boundary effects.
+   * ```
+   * @param value -
+   */
+  overscrollBehaviorInline(value: CSSProps['overscrollBehaviorInline']) {
+    this.set('overscroll-behavior-inline', value)
+    return this
+  }
+
+  /**
+   * Controls horizontal scroll chaining and boundary effects.
+   *
+   * syntax:  `contain | none | auto`
+   *
+   * restriction: enum
+   *
+   * browsers: E18,FF59,S16,C63,O50
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/overscroll-behavior-x
+   *
+   * values:
+   * ```md
+   * auto: Allow scroll chaining and boundary effects.
+
+   * contain: Prevent scroll chaining.
+
+   * none: Prevent scroll chaining and boundary effects.
+   * ```
+   * @param value -
+   */
+  overscrollBehaviorX(value: CSSProps['overscrollBehaviorX']) {
+    this.set('overscroll-behavior-x', value)
+    return this
+  }
+
+  /**
+   * Controls vertical scroll chaining and boundary effects.
+   *
+   * syntax:  `contain | none | auto`
+   *
+   * restriction: enum
+   *
+   * browsers: E18,FF59,S16,C63,O50
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/overscroll-behavior-y
+   *
+   * values:
+   * ```md
+   * auto: Allow scroll chaining and boundary effects.
+
+   * contain: Prevent scroll chaining.
+
+   * none: Prevent scroll chaining and boundary effects.
+   * ```
+   * @param value -
+   */
+  overscrollBehaviorY(value: CSSProps['overscrollBehaviorY']) {
+    this.set('overscroll-behavior-y', value)
+    return this
+  }
+
+  /**
+   * Sets the logical block-start and block-end padding.
+   *
+   * syntax:  `<'padding-top'>{1,2}`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E87,FF66,S14.1,C87,O73
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/padding-block
+   *
+   * @param value -
+   */
+  paddingBlock(value: CSSProps['paddingBlock']) {
+    this.set('padding-block', value)
+    return this
+  }
+
+  /**
+   * Sets the logical inline-start and inline-end padding.
+   *
+   * syntax:  `<'padding-top'>{1,2}`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E87,FF66,S14.1,C87,O73
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/padding-inline
+   *
+   * @param value -
+   */
+  paddingInline(value: CSSProps['paddingInline']) {
+    this.set('padding-inline', value)
+    return this
+  }
+
+  /**
+   * Assigns the element to a named page in paged media.
+   *
+   * syntax:  `auto | <custom-ident>`
+   *
+   * restriction: identifier
+   *
+   * browsers: E85,FF110,S1,C85,O71
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/page
+   *
+   * @param value -
+   */
+  page(value: CSSProps['page']) {
+    this.set('page', value)
+    return this
+  }
+
+  /**
+   * Sets content alignment on the block and inline axes.
+   *
+   * syntax:  `<'align-content'> <'justify-content'>?`
+   *
+   * restriction: string
+   *
+   * browsers: E79,FF45,S9,C59,O46
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/place-content
+   *
+   * @param value -
+   */
+  placeContent(value: CSSProps['placeContent']) {
+    this.set('place-content', value)
+    return this
+  }
+
+  /**
+   * Sets item alignment on the block and inline axes.
+   *
+   * syntax:  `<'align-items'> <'justify-items'>?`
+   *
+   * restriction: string
+   *
+   * browsers: E79,FF45,S11,C59,O46
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/place-items
+   *
+   * @param value -
+   */
+  placeItems(value: CSSProps['placeItems']) {
+    this.set('place-items', value)
+    return this
+  }
+
+  /**
+   * Sets the alignment of an individual item on both axes.
+   *
+   * syntax:  `<'align-self'> <'justify-self'>?`
+   *
+   * restriction: string
+   *
+   * browsers: E79,FF45,S11,C59,O46
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/place-self
+   *
+   * @param value -
+   */
+  placeSelf(value: CSSProps['placeSelf']) {
+    this.set('place-self', value)
+    return this
+  }
+
+  /**
+   * Controls whether the browser may adjust colors when printing.
+   *
+   * syntax:  `economy | exact`
+   *
+   * restriction: enum
+   *
+   * browsers: E136,FF97,S15.4,C136,O121
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/print-color-adjust
+   *
+   * values:
+   * ```md
+   * economy: Allow adjustments that reduce printing cost.
+
+   * exact: Request that authored colors be preserved.
+   * ```
+   * @param value -
+   */
+  printColorAdjust(value: CSSProps['printColorAdjust']) {
+    this.set('print-color-adjust', value)
+    return this
+  }
+
+  /**
+   * Sets the radius of an SVG circle.
+   *
+   * syntax:  `<length> | <percentage>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E79,FF69,S9,C43,O30
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/r
+   *
+   * @param value -
+   */
+  r(value: CSSProps['r']) {
+    this.set('r', value)
+    return this
+  }
+
+  /**
+   * Sets rotation independently of the transform property.
+   *
+   * syntax:  `none | <angle> | [ x | y | z | <number>{3} ] && <angle>`
+   *
+   * restriction: angle
+   *
+   * browsers: E104,FF72,S14.1,C104,O90
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/rotate
+   *
+   * @param value -
+   */
+  rotate(value: CSSProps['rotate']) {
+    this.set('rotate', value)
+    return this
+  }
+
+  /**
+   * Sets the gap between rows in grid, flex, and multi-column layouts.
+   *
+   * syntax:  `normal | <length-percentage>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E16,FF52,S10.1,C47,O34
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/row-gap
+   *
+   * @param value -
+   */
+  rowGap(value: CSSProps['rowGap']) {
+    this.set('row-gap', value)
+    return this
+  }
+
+  /**
+   * Sets the horizontal radius of an SVG ellipse or rounded rectangle.
+   *
+   * syntax:  `<length> | <percentage>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E79,FF69,S17.4,C43,O30
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/rx
+   *
+   * @param value -
+   */
+  rx(value: CSSProps['rx']) {
+    this.set('rx', value)
+    return this
+  }
+
+  /**
+   * Sets the vertical radius of an SVG ellipse or rounded rectangle.
+   *
+   * syntax:  `<length> | <percentage>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E79,FF69,S17.4,C43,O30
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/ry
+   *
+   * @param value -
+   */
+  ry(value: CSSProps['ry']) {
+    this.set('ry', value)
+    return this
+  }
+
+  /**
+   * Sets scaling independently of the transform property.
+   *
+   * syntax:  `none | [ <number> | <percentage> ]{1,3}`
+   *
+   * restriction: number, percentage
+   *
+   * browsers: E104,FF72,S14.1,C104,O90
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scale
+   *
+   * @param value -
+   */
+  scale(value: CSSProps['scale']) {
+    this.set('scale', value)
+    return this
+  }
+
+  /**
+   * Sets the outsets of the scroll snap area on all four sides.
+   *
+   * syntax:  `<length>{1,4}`
+   *
+   * restriction: length
+   *
+   * browsers: E79,FF90,S14.1,C69,O56
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scroll-margin
+   *
+   * @param value -
+   */
+  scrollMargin(value: CSSProps['scrollMargin']) {
+    this.set('scroll-margin', value)
+    return this
+  }
+
+  /**
+   * Sets the scroll snap area outsets on both logical block edges.
+   *
+   * syntax:  `<length>{1,2}`
+   *
+   * restriction: length
+   *
+   * browsers: E79,FF68,S15,C69,O56
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scroll-margin-block
+   *
+   * @param value -
+   */
+  scrollMarginBlock(value: CSSProps['scrollMarginBlock']) {
+    this.set('scroll-margin-block', value)
+    return this
+  }
+
+  /**
+   * Sets the scroll snap area outset on the logical block-end edge.
+   *
+   * syntax:  `<length>`
+   *
+   * restriction: length
+   *
+   * browsers: E79,FF68,S15,C69,O56
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scroll-margin-block-end
+   *
+   * @param value -
+   */
+  scrollMarginBlockEnd(value: CSSProps['scrollMarginBlockEnd']) {
+    this.set('scroll-margin-block-end', value)
+    return this
+  }
+
+  /**
+   * Sets the scroll snap area outset on the logical block-start edge.
+   *
+   * syntax:  `<length>`
+   *
+   * restriction: length
+   *
+   * browsers: E79,FF68,S15,C69,O56
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scroll-margin-block-start
+   *
+   * @param value -
+   */
+  scrollMarginBlockStart(value: CSSProps['scrollMarginBlockStart']) {
+    this.set('scroll-margin-block-start', value)
+    return this
+  }
+
+  /**
+   * Sets the bottom outset of the scroll snap area.
+   *
+   * syntax:  `<length>`
+   *
+   * restriction: length
+   *
+   * browsers: E79,FF68,S14.1,C69,O56
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scroll-margin-bottom
+   *
+   * @param value -
+   */
+  scrollMarginBottom(value: CSSProps['scrollMarginBottom']) {
+    this.set('scroll-margin-bottom', value)
+    return this
+  }
+
+  /**
+   * Sets the scroll snap area outsets on both logical inline edges.
+   *
+   * syntax:  `<length>{1,2}`
+   *
+   * restriction: length
+   *
+   * browsers: E79,FF68,S15,C69,O56
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scroll-margin-inline
+   *
+   * @param value -
+   */
+  scrollMarginInline(value: CSSProps['scrollMarginInline']) {
+    this.set('scroll-margin-inline', value)
+    return this
+  }
+
+  /**
+   * Sets the scroll snap area outset on the logical inline-end edge.
+   *
+   * syntax:  `<length>`
+   *
+   * restriction: length
+   *
+   * browsers: E79,FF68,S15,C69,O56
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scroll-margin-inline-end
+   *
+   * @param value -
+   */
+  scrollMarginInlineEnd(value: CSSProps['scrollMarginInlineEnd']) {
+    this.set('scroll-margin-inline-end', value)
+    return this
+  }
+
+  /**
+   * Sets the scroll snap area outset on the logical inline-start edge.
+   *
+   * syntax:  `<length>`
+   *
+   * restriction: length
+   *
+   * browsers: E79,FF68,S15,C69,O56
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scroll-margin-inline-start
+   *
+   * @param value -
+   */
+  scrollMarginInlineStart(value: CSSProps['scrollMarginInlineStart']) {
+    this.set('scroll-margin-inline-start', value)
+    return this
+  }
+
+  /**
+   * Sets the left outset of the scroll snap area.
+   *
+   * syntax:  `<length>`
+   *
+   * restriction: length
+   *
+   * browsers: E79,FF68,S14.1,C69,O56
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scroll-margin-left
+   *
+   * @param value -
+   */
+  scrollMarginLeft(value: CSSProps['scrollMarginLeft']) {
+    this.set('scroll-margin-left', value)
+    return this
+  }
+
+  /**
+   * Sets the right outset of the scroll snap area.
+   *
+   * syntax:  `<length>`
+   *
+   * restriction: length
+   *
+   * browsers: E79,FF68,S14.1,C69,O56
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scroll-margin-right
+   *
+   * @param value -
+   */
+  scrollMarginRight(value: CSSProps['scrollMarginRight']) {
+    this.set('scroll-margin-right', value)
+    return this
+  }
+
+  /**
+   * Sets the top outset of the scroll snap area.
+   *
+   * syntax:  `<length>`
+   *
+   * restriction: length
+   *
+   * browsers: E79,FF68,S14.1,C69,O56
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scroll-margin-top
+   *
+   * @param value -
+   */
+  scrollMarginTop(value: CSSProps['scrollMarginTop']) {
+    this.set('scroll-margin-top', value)
+    return this
+  }
+
+  /**
+   * Sets the optimal viewing area insets on all four sides of a scrollport.
+   *
+   * syntax:  `[ auto | <length-percentage> ]{1,4}`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E79,FF68,S14.1,C69,O56
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scroll-padding
+   *
+   * @param value -
+   */
+  scrollPadding(value: CSSProps['scrollPadding']) {
+    this.set('scroll-padding', value)
+    return this
+  }
+
+  /**
+   * Sets the scrollport viewing area insets on both logical block edges.
+   *
+   * syntax:  `[ auto | <length-percentage> ]{1,2}`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E79,FF68,S15,C69,O56
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scroll-padding-block
+   *
+   * @param value -
+   */
+  scrollPaddingBlock(value: CSSProps['scrollPaddingBlock']) {
+    this.set('scroll-padding-block', value)
+    return this
+  }
+
+  /**
+   * Sets the scrollport viewing area inset on the logical block-end edge.
+   *
+   * syntax:  `auto | <length-percentage>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E79,FF68,S15,C69,O56
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scroll-padding-block-end
+   *
+   * @param value -
+   */
+  scrollPaddingBlockEnd(value: CSSProps['scrollPaddingBlockEnd']) {
+    this.set('scroll-padding-block-end', value)
+    return this
+  }
+
+  /**
+   * Sets the scrollport viewing area inset on the logical block-start edge.
+   *
+   * syntax:  `auto | <length-percentage>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E79,FF68,S15,C69,O56
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scroll-padding-block-start
+   *
+   * @param value -
+   */
+  scrollPaddingBlockStart(value: CSSProps['scrollPaddingBlockStart']) {
+    this.set('scroll-padding-block-start', value)
+    return this
+  }
+
+  /**
+   * Sets the bottom inset of the scrollport viewing area.
+   *
+   * syntax:  `auto | <length-percentage>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E79,FF68,S14.1,C69,O56
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scroll-padding-bottom
+   *
+   * @param value -
+   */
+  scrollPaddingBottom(value: CSSProps['scrollPaddingBottom']) {
+    this.set('scroll-padding-bottom', value)
+    return this
+  }
+
+  /**
+   * Sets the scrollport viewing area insets on both logical inline edges.
+   *
+   * syntax:  `[ auto | <length-percentage> ]{1,2}`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E79,FF68,S15,C69,O56
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scroll-padding-inline
+   *
+   * @param value -
+   */
+  scrollPaddingInline(value: CSSProps['scrollPaddingInline']) {
+    this.set('scroll-padding-inline', value)
+    return this
+  }
+
+  /**
+   * Sets the scrollport viewing area inset on the logical inline-end edge.
+   *
+   * syntax:  `auto | <length-percentage>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E79,FF68,S15,C69,O56
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scroll-padding-inline-end
+   *
+   * @param value -
+   */
+  scrollPaddingInlineEnd(value: CSSProps['scrollPaddingInlineEnd']) {
+    this.set('scroll-padding-inline-end', value)
+    return this
+  }
+
+  /**
+   * Sets the scrollport viewing area inset on the logical inline-start edge.
+   *
+   * syntax:  `auto | <length-percentage>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E79,FF68,S15,C69,O56
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scroll-padding-inline-start
+   *
+   * @param value -
+   */
+  scrollPaddingInlineStart(value: CSSProps['scrollPaddingInlineStart']) {
+    this.set('scroll-padding-inline-start', value)
+    return this
+  }
+
+  /**
+   * Sets the left inset of the scrollport viewing area.
+   *
+   * syntax:  `auto | <length-percentage>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E79,FF68,S14.1,C69,O56
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scroll-padding-left
+   *
+   * @param value -
+   */
+  scrollPaddingLeft(value: CSSProps['scrollPaddingLeft']) {
+    this.set('scroll-padding-left', value)
+    return this
+  }
+
+  /**
+   * Sets the right inset of the scrollport viewing area.
+   *
+   * syntax:  `auto | <length-percentage>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E79,FF68,S14.1,C69,O56
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scroll-padding-right
+   *
+   * @param value -
+   */
+  scrollPaddingRight(value: CSSProps['scrollPaddingRight']) {
+    this.set('scroll-padding-right', value)
+    return this
+  }
+
+  /**
+   * Sets the top inset of the scrollport viewing area.
+   *
+   * syntax:  `auto | <length-percentage>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E79,FF68,S14.1,C69,O56
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scroll-padding-top
+   *
+   * @param value -
+   */
+  scrollPaddingTop(value: CSSProps['scrollPaddingTop']) {
+    this.set('scroll-padding-top', value)
+    return this
+  }
+
+  /**
+   * Sets the alignment of the element within its scroll snap area.
+   *
+   * syntax:  `[ none | start | end | center ]{1,2}`
+   *
+   * restriction: string
+   *
+   * browsers: E79,FF68,S11,C69,O56
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scroll-snap-align
+   *
+   * values:
+   * ```md
+   * none: Do not define a snap position.
+
+   * start: Align with the start of the snapport.
+
+   * end: Align with the end of the snapport.
+
+   * center: Align with the center of the snapport.
+   * ```
+   * @param value -
+   */
+  scrollSnapAlign(value: CSSProps['scrollSnapAlign']) {
+    this.set('scroll-snap-align', value)
+    return this
+  }
+
+  /**
+   * Controls whether scrolling may pass over a snap position.
+   *
+   * syntax:  `normal | always`
+   *
+   * restriction: enum
+   *
+   * browsers: E79,FF103,S15,C75,O62
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scroll-snap-stop
+   *
+   * values:
+   * ```md
+   * normal: Allow scrolling to pass over the snap position.
+
+   * always: Require scrolling to stop at the snap position.
+   * ```
+   * @param value -
+   */
+  scrollSnapStop(value: CSSProps['scrollSnapStop']) {
+    this.set('scroll-snap-stop', value)
+    return this
+  }
+
+  /**
+   * Sets the thumb and track colors of scrollbars.
+   *
+   * syntax:  `auto | <color>{2}`
+   *
+   * restriction: color
+   *
+   * browsers: E121,FF64,S26.2,C121,O107
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scrollbar-color
+   *
+   * @param value -
+   */
+  scrollbarColor(value: CSSProps['scrollbarColor']) {
+    this.set('scrollbar-color', value)
+    return this
+  }
+
+  /**
+   * Reserves space for scrollbars to prevent layout changes.
+   *
+   * syntax:  `auto | stable && both-edges?`
+   *
+   * restriction: string
+   *
+   * browsers: E94,FF97,S18.2,C94,O80
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scrollbar-gutter
+   *
+   * values:
+   * ```md
+   * auto: Reserve space only when required by the scrollbar.
+
+   * stable: Reserve a stable scrollbar gutter.
+
+   * stable both-edges: Reserve matching gutters on both inline edges.
+   * ```
+   * @param value -
+   */
+  scrollbarGutter(value: CSSProps['scrollbarGutter']) {
+    this.set('scrollbar-gutter', value)
+    return this
+  }
+
+  /**
+   * Chooses the thickness of scrollbars.
+   *
+   * syntax:  `auto | thin | none`
+   *
+   * restriction: enum
+   *
+   * browsers: E121,FF64,S18.2,C121,O107
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/scrollbar-width
+   *
+   * values:
+   * ```md
+   * auto: Use the platform default thickness.
+
+   * thin: Use a thinner scrollbar.
+
+   * none: Hide the scrollbar without disabling scrolling.
+   * ```
+   * @param value -
+   */
+  scrollbarWidth(value: CSSProps['scrollbarWidth']) {
+    this.set('scrollbar-width', value)
+    return this
+  }
+
+  /**
+   * Provides rendering-quality hints for SVG shapes.
+   *
+   * syntax:  `auto | optimizeSpeed | crispEdges | geometricPrecision`
+   *
+   * restriction: enum
+   *
+   * browsers: E79,FF3,S4,C1,O15
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/shape-rendering
+   *
+   * values:
+   * ```md
+   * auto: Let the renderer balance speed and quality.
+
+   * optimizeSpeed: Favor rendering speed.
+
+   * crispEdges: Favor crisp edges.
+
+   * geometricPrecision: Favor geometric accuracy.
+   * ```
+   * @param value -
+   */
+  shapeRendering(value: CSSProps['shapeRendering']) {
+    this.set('shape-rendering', value)
+    return this
+  }
+
+  /**
+   * Controls automatic spacing between characters from different writing systems.
+   *
+   * syntax:  `normal | <autospace> | auto`
+   *
+   * restriction: string
+   *
+   * browsers: E140,FF145,S18.4,C140,O124
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/text-autospace
+   *
+   * @param value -
+   */
+  textAutospace(value: CSSProps['textAutospace']) {
+    this.set('text-autospace', value)
+    return this
+  }
+
+  /**
+   * Combines a sequence of characters into one upright unit in vertical text.
+   *
+   * syntax:  `none | all | [ digits <integer>? ]`
+   *
+   * restriction: string
+   *
+   * browsers: E79,FF48,S15.4,C48,O35
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/text-combine-upright
+   *
+   * values:
+   * ```md
+   * none: Do not combine characters.
+
+   * all: Combine all characters in the element.
+   * ```
+   * @param value -
+   */
+  textCombineUpright(value: CSSProps['textCombineUpright']) {
+    this.set('text-combine-upright', value)
+    return this
+  }
+
+  /**
+   * Controls whether text decoration lines avoid glyph strokes.
+   *
+   * syntax:  `auto | all | none`
+   *
+   * restriction: enum
+   *
+   * browsers: E79,FF70,S15.4,C64,O50
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/text-decoration-skip-ink
+   *
+   * values:
+   * ```md
+   * auto: Let the browser avoid glyph strokes.
+
+   * all: Avoid glyph strokes wherever possible.
+
+   * none: Draw continuous decoration lines.
+   * ```
+   * @param value -
+   */
+  textDecorationSkipInk(value: CSSProps['textDecorationSkipInk']) {
+    this.set('text-decoration-skip-ink', value)
+    return this
+  }
+
+  /**
+   * Sets the thickness of text decoration lines.
+   *
+   * syntax:  `auto | from-font | <length> | <percentage>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E89,FF70,S12.1,C89,O75
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/text-decoration-thickness
+   *
+   * values:
+   * ```md
+   * auto: Let the browser choose a thickness.
+
+   * from-font: Use the thickness specified by the font.
+   * ```
+   * @param value -
+   */
+  textDecorationThickness(value: CSSProps['textDecorationThickness']) {
+    this.set('text-decoration-thickness', value)
+    return this
+  }
+
+  /**
+   * Sets the style and color of emphasis marks beside text.
+   *
+   * syntax:  `<'text-emphasis-style'> || <'text-emphasis-color'>`
+   *
+   * restriction: string, color
+   *
+   * browsers: E99,FF46,S7,C99,O85
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/text-emphasis
+   *
+   * @param value -
+   */
+  textEmphasis(value: CSSProps['textEmphasis']) {
+    this.set('text-emphasis', value)
+    return this
+  }
+
+  /**
+   * Sets the color of text emphasis marks.
+   *
+   * syntax:  `<color>`
+   *
+   * restriction: color
+   *
+   * browsers: E99,FF46,S7,C99,O85
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/text-emphasis-color
+   *
+   * @param value -
+   */
+  textEmphasisColor(value: CSSProps['textEmphasisColor']) {
+    this.set('text-emphasis-color', value)
+    return this
+  }
+
+  /**
+   * Positions emphasis marks relative to the text.
+   *
+   * syntax:  `auto | [ over | under ] && [ right | left ]?`
+   *
+   * restriction: string
+   *
+   * browsers: E99,FF46,S7,C99,O85
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/text-emphasis-position
+   *
+   * @param value -
+   */
+  textEmphasisPosition(value: CSSProps['textEmphasisPosition']) {
+    this.set('text-emphasis-position', value)
+    return this
+  }
+
+  /**
+   * Selects the shape and fill of text emphasis marks.
+   *
+   * syntax:  `none | [ [ filled | open ] || [ dot | circle | double-circle | triangle | sesame ] ] | <string>`
+   *
+   * restriction: string
+   *
+   * browsers: E99,FF46,S7,C99,O85
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/text-emphasis-style
+   *
+   * @param value -
+   */
+  textEmphasisStyle(value: CSSProps['textEmphasisStyle']) {
+    this.set('text-emphasis-style', value)
+    return this
+  }
+
+  /**
+   * Sets the distance between an underline and its original position.
+   *
+   * syntax:  `auto | <length> | <percentage>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E87,FF70,S12.1,C87,O73
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/text-underline-offset
+   *
+   * @param value -
+   */
+  textUnderlineOffset(value: CSSProps['textUnderlineOffset']) {
+    this.set('text-underline-offset', value)
+    return this
+  }
+
+  /**
+   * Selects the placement of underlines in horizontal and vertical text.
+   *
+   * syntax:  `auto | from-font | [ under || [ left | right ] ]`
+   *
+   * restriction: string
+   *
+   * browsers: E12,FF74,S12.1,C33,O20
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/text-underline-position
+   *
+   * values:
+   * ```md
+   * auto: Let the browser choose the position.
+
+   * from-font: Use the underline position supplied by the font.
+
+   * under: Place the underline below the text content.
+
+   * left: Place the underline to the left in vertical text.
+
+   * right: Place the underline to the right in vertical text.
+   * ```
+   * @param value -
+   */
+  textUnderlinePosition(value: CSSProps['textUnderlinePosition']) {
+    this.set('text-underline-position', value)
+    return this
+  }
+
+  /**
+   * Sets text wrapping behavior and the strategy used to choose line breaks.
+   *
+   * syntax:  `<'text-wrap-mode'> || <'text-wrap-style'>`
+   *
+   * restriction: string
+   *
+   * browsers: E114,FF121,S17.4,C114,O100
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/text-wrap
+   *
+   * values:
+   * ```md
+   * wrap: Allow text to wrap.
+
+   * nowrap: Prevent text from wrapping.
+
+   * balance: Balance line lengths.
+
+   * pretty: Favor a more pleasing arrangement of line breaks.
+   * ```
+   * @param value -
+   */
+  textWrap(value: CSSProps['textWrap']) {
+    this.set('text-wrap', value)
+    return this
+  }
+
+  /**
+   * Controls whether text may wrap onto additional lines.
+   *
+   * syntax:  `wrap | nowrap`
+   *
+   * restriction: enum
+   *
+   * browsers: E130,FF124,S17.4,C130,O115
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/text-wrap-mode
+   *
+   * values:
+   * ```md
+   * wrap: Allow wrapping.
+
+   * nowrap: Prevent wrapping.
+   * ```
+   * @param value -
+   */
+  textWrapMode(value: CSSProps['textWrapMode']) {
+    this.set('text-wrap-mode', value)
+    return this
+  }
+
+  /**
+   * Chooses the strategy used to arrange wrapped text lines.
+   *
+   * syntax:  `auto | balance | stable | pretty`
+   *
+   * restriction: enum
+   *
+   * browsers: E130,FF124,S17.5,C130,O115
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/text-wrap-style
+   *
+   * values:
+   * ```md
+   * auto: Use the browser default wrapping strategy.
+
+   * balance: Balance line lengths.
+
+   * stable: Avoid changing earlier lines while editing.
+
+   * pretty: Favor a more pleasing arrangement of line breaks.
+   * ```
+   * @param value -
+   */
+  textWrapStyle(value: CSSProps['textWrapStyle']) {
+    this.set('text-wrap-style', value)
+    return this
+  }
+
+  /**
+   * Selects the reference box used by transforms and transform-origin.
+   *
+   * syntax:  `content-box | border-box | fill-box | stroke-box | view-box`
+   *
+   * restriction: enum
+   *
+   * browsers: E79,FF55,S11,C64,O51
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/transform-box
+   *
+   * values:
+   * ```md
+   * content-box: Use the content box.
+
+   * border-box: Use the border box.
+
+   * fill-box: Use the object bounding box.
+
+   * stroke-box: Use the stroke bounding box.
+
+   * view-box: Use the nearest SVG viewport.
+   * ```
+   * @param value -
+   */
+  transformBox(value: CSSProps['transformBox']) {
+    this.set('transform-box', value)
+    return this
+  }
+
+  /**
+   * Controls whether transitions may start for discrete properties.
+   *
+   * syntax:  `<transition-behavior-value>#`
+   *
+   * restriction: string
+   *
+   * browsers: E117,FF129,S17.4,C117,O103
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/transition-behavior
+   *
+   * values:
+   * ```md
+   * normal: Transition only continuously animatable properties.
+
+   * allow-discrete: Allow transitions of discrete properties.
+   * ```
+   * @param value -
+   */
+  transitionBehavior(value: CSSProps['transitionBehavior']) {
+    this.set('transition-behavior', value)
+    return this
+  }
+
+  /**
+   * Sets translation independently of the transform property.
+   *
+   * syntax:  `none | <length-percentage> [ <length-percentage> <length>? ]?`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E104,FF72,S14.1,C104,O90
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/translate
+   *
+   * @param value -
+   */
+  translate(value: CSSProps['translate']) {
+    this.set('translate', value)
+    return this
+  }
+
+  /**
+   * Controls how transformations affect SVG strokes and geometry.
+   *
+   * syntax:  `none | non-scaling-stroke | non-scaling-size | non-rotation | fixed-position`
+   *
+   * restriction: enum
+   *
+   * browsers: E79,FF15,S5.1,C6,O15
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/vector-effect
+   *
+   * values:
+   * ```md
+   * none: Apply the normal transformation behavior.
+
+   * non-scaling-stroke: Keep stroke width independent of scaling.
+
+   * non-scaling-size: Keep the object size independent of scaling.
+
+   * non-rotation: Keep the object orientation independent of rotation.
+
+   * fixed-position: Keep the object position independent of transformations.
+   * ```
+   * @param value -
+   */
+  vectorEffect(value: CSSProps['vectorEffect']) {
+    this.set('vector-effect', value)
+    return this
+  }
+
+  /**
+   * Assigns classes used to style view-transition pseudo-elements.
+   *
+   * syntax:  `none | <custom-ident>+`
+   *
+   * restriction: identifier
+   *
+   * browsers: E125,FF144,S18.2,C125,O111
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/view-transition-class
+   *
+   * @param value -
+   */
+  viewTransitionClass(value: CSSProps['viewTransitionClass']) {
+    this.set('view-transition-class', value)
+    return this
+  }
+
+  /**
+   * Names an element for capture and matching during a view transition.
+   *
+   * syntax:  `none | <custom-ident> | match-element`
+   *
+   * restriction: identifier
+   *
+   * browsers: E111,FF144,S18,C111,O97
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/view-transition-name
+   *
+   * @param value -
+   */
+  viewTransitionName(value: CSSProps['viewTransitionName']) {
+    this.set('view-transition-name', value)
+    return this
+  }
+
+  /**
+   * Controls how whitespace characters and segment breaks are collapsed.
+   *
+   * syntax:  `collapse | preserve | preserve-breaks | preserve-spaces | break-spaces`
+   *
+   * restriction: enum
+   *
+   * browsers: E114,FF124,S17.4,C114,O100
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/white-space-collapse
+   *
+   * values:
+   * ```md
+   * collapse: Collapse whitespace sequences and segment breaks.
+
+   * preserve: Preserve whitespace sequences and segment breaks.
+
+   * preserve-breaks: Preserve segment breaks while collapsing spaces.
+
+   * preserve-spaces: Preserve spaces while converting tabs and breaks to spaces.
+
+   * break-spaces: Preserve spaces and allow a break after each one.
+   * ```
+   * @param value -
+   */
+  whiteSpaceCollapse(value: CSSProps['whiteSpaceCollapse']) {
+    this.set('white-space-collapse', value)
+    return this
+  }
+
+  /**
+   * Sets the horizontal position of an SVG geometry element.
+   *
+   * syntax:  `<length> | <percentage>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E79,FF69,S9,C42,O29
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/x
+   *
+   * @param value -
+   */
+  x(value: CSSProps['x']) {
+    this.set('x', value)
+    return this
+  }
+
+  /**
+   * Sets the vertical position of an SVG geometry element.
+   *
+   * syntax:  `<length> | <percentage>`
+   *
+   * restriction: length, percentage
+   *
+   * browsers: E79,FF69,S9,C42,O29
+   *
+   * ref: https://developer.mozilla.org/docs/Web/CSS/y
+   *
+   * @param value -
+   */
+  y(value: CSSProps['y']) {
+    this.set('y', value)
     return this
   }
 }

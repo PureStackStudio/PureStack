@@ -64,6 +64,8 @@ its defaults even without `extensions.images`. Set `extensions.images.enabled`
 to `false` to disable optimization. An explicit plugin instance in
 `purestack.config.ts` replaces a JSON-selected plugin with the same name.
 
+The [Image optimization guide](/guides/content/image-optimization/) covers responsive sizing, presets, formats, caching, and per-image controls.
+
 Both config formats use PureStack's own copy of a package when available so
 shared registries stay together; other packages resolve from the site.
 Plugin declarations execute installed JavaScript with the build process's
@@ -242,18 +244,7 @@ Builder style state is isolated across asynchronous operations, including concur
 
 ## Optimize images
 
-Image optimization is optional. Install `@purestack/ts-images` alongside PureStack and add it to your existing plugin list:
-
-```ts
-import { defineConfig } from 'purestack'
-import { imagesPlugin } from '@purestack/ts-images'
-
-export default defineConfig({
-  plugins: [imagesPlugin({ widths: [480, 960, 1440] })],
-})
-```
-
-Ordinary Markdown images and rendered HTML images receive responsive AVIF/WebP sources, JPEG/PNG fallbacks, dimensions, and loading defaults. Originals remain available for links and downloads. Remote images, SVGs, animations, existing `picture` markup, and images with `srcset` pass through. Use `data-image-preset="hero"` for eager priority images, `data-image-preset="screenshot"` for lossless output, or `data-image-optimize="false"` to keep an individual image unchanged. Set `sizes` for your actual image layout.
+For installation and site configuration, follow the dedicated [Image optimization guide](/guides/content/image-optimization/). It covers JSON and TypeScript setup, responsive sizing, presets, caching, and per-image controls. The rest of this section explains the asset contribution for plugin authors.
 
 The plugin owns its `extensions.images` settings, persistent cache, and encoder limits. It uses the generic asset contribution: `assets(config)` returns a per-site processor with a unique namespace and `processPage(input)`. This runs after all `onPageDocument` hooks, before URL rewriting. `resolveSource(element, url)` resolves local inputs and registers dependencies; `dependOn(relPath)` registers additional inputs; `emit(fileName, bytes)` atomically writes an owned file and returns its URL. Use content-addressed names and await all writes. Core handles base paths, incremental invalidation, shared references, manifest persistence, and cleanup when pages or processors disappear. The builder contains no image format or encoder selection.
 

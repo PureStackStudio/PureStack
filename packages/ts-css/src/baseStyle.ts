@@ -136,6 +136,17 @@ export class BaseStyle<T extends RootStyle> extends RootStyle {
     return child
   }
 
+  /**
+   * Create or access a named animation block. Select frames with `select()`:
+   * `style.keyframes('fade-in').select('from').opacity('0')`.
+   * Names are emitted as supplied and remain global inside `@scope`.
+   */
+  keyframes(name: string) {
+    const trimmed = name.trim()
+    if (!trimmed) throw new Error('Keyframes name must be a non-empty string.')
+    return this.selectWithoutParentKey(`@keyframes ${trimmed}`)
+  }
+
   toCSS() {
     let result = ''
     const children = [...this.children.entries()].sort((a, b) => {
@@ -147,11 +158,11 @@ export class BaseStyle<T extends RootStyle> extends RootStyle {
     })
     const selector = this.selector
     if (isGroupingRule(selector)) {
-      const mediaContent = children
+      const blockContent = children
         .map((x) => `\r\n${x[1].toCSS()}`)
         .join('')
         .trimEnd()
-      result = `${selector} {${mediaContent}
+      result = `${selector} {${blockContent}
 }
 
 `
@@ -210,7 +221,11 @@ ${props}
 }
 
 function isGroupingRule(selector: string) {
-  return selector.startsWith('@media') || selector.startsWith('@scope')
+  return (
+    selector.startsWith('@media') ||
+    selector.startsWith('@scope') ||
+    selector.startsWith('@keyframes')
+  )
 }
 
 function buildScopeRule(rootSelector: string, limitSelector?: string) {
