@@ -28,6 +28,99 @@ describe('Style', () => {
     expect(st.props.get('foo-bar')).toBe('baz')
   })
 
+  it('builds motion paths and frame declarations with fluent properties', async () => {
+    const root = s()
+    const packet = root
+      .select('.packet')
+      .offsetPath("path('M0 0L100 100')")
+      .offsetRotate('auto')
+      .transformBox('fill-box')
+      .animation('travel 8s linear infinite')
+    const frame = root.keyframes('travel').select('to')
+    const before = root.revision
+
+    expect(frame.offsetDistance('$travel, 100%')).toBe(frame)
+    expect(root.revision).toBeGreaterThan(before)
+    const after = root.revision
+    frame.offsetDistance('$travel, 100%')
+    expect(root.revision).toBe(after)
+    expect(packet.offsetAnchor('center')).toBe(packet)
+    expect(await root.toPrettyCSS()).toBe(`.packet {
+  offset-path: path("M0 0L100 100");
+  offset-rotate: auto;
+  transform-box: fill-box;
+  animation: travel 8s linear infinite;
+  offset-anchor: center;
+}
+
+@keyframes travel {
+  to {
+    offset-distance: var(--travel, 100%);
+  }
+}
+`)
+  })
+
+  it('composes modern layout, logical, scroll, and typography properties', async () => {
+    const root = s('.card')
+      .aspectRatio('16 / 9')
+      .containerType('inline-size')
+      .marginBlock('1rem 2rem')
+      .paddingInline('$gutter')
+      .rowGap('1rem')
+      .scrollbarGutter('stable both-edges')
+      .textWrap('balance')
+      .fontVariationSettings('"wght" 650')
+      .css({ scrollPaddingBlockStart: '4rem', textUnderlineOffset: '.2em' })
+
+    expect(await root.toPrettyCSS()).toBe(`.card {
+  aspect-ratio: 16 / 9;
+  container-type: inline-size;
+  margin-block: 1rem 2rem;
+  padding-inline: var(--gutter);
+  row-gap: 1rem;
+  scrollbar-gutter: stable both-edges;
+  text-wrap: balance;
+  font-variation-settings: "wght" 650;
+  scroll-padding-block-start: 4rem;
+  text-underline-offset: 0.2em;
+}
+`)
+  })
+
+  it('keeps hand-added setters and existing numeric and string values after generation', () => {
+    const root = s('.existing')
+      .placeItems('center')
+      .inset('0')
+      .scrollMarginTop('4rem')
+      .appearance('none')
+      .accentColor('$accent')
+      .breakInside('avoid')
+      .lineClamp('3')
+      .whiteSpace('pre-wrap')
+      .opacity('.5')
+      .zIndex('auto')
+      .flexGrow(1)
+      .webkitAppearance('none')
+      .motionOffset('20%')
+
+    expect(Object.fromEntries(root.props)).toEqual({
+      'place-items': 'center',
+      inset: '0',
+      'scroll-margin-top': '4rem',
+      appearance: 'none',
+      'accent-color': 'var(--accent)',
+      'break-inside': 'avoid',
+      'line-clamp': '3',
+      'white-space': 'pre-wrap',
+      opacity: '.5',
+      'z-index': 'auto',
+      'flex-grow': 1,
+      '-webkit-appearance': 'none',
+      'motion-offset': '20%',
+    })
+  })
+
   it('uses properties from another Style instance', () => {
     const a = s().color('blue').zoom('normal')
     const b = s()

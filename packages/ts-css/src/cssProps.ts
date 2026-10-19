@@ -1905,4 +1905,194 @@ export type CSSProps = {
     | (string & {})
   zIndex: number | string
   zoom: 'normal' | (string & {})
+  accentColor: 'auto' | (string & {})
+  animationComposition: 'replace' | 'add' | 'accumulate' | (string & {})
+  appearance: 'none' | 'auto' | (string & {})
+  aspectRatio: 'auto' | (string & {})
+  backgroundPositionX: 'left' | 'center' | 'right' | (string & {})
+  backgroundPositionY: 'top' | 'center' | 'bottom' | (string & {})
+  borderBlock: string
+  borderBlockColor: string
+  borderBlockStyle: string
+  borderBlockWidth: string
+  borderEndEndRadius: string
+  borderEndStartRadius: string
+  borderInline: string
+  borderInlineColor: string
+  borderInlineStyle: string
+  borderInlineWidth: string
+  borderStartEndRadius: string
+  borderStartStartRadius: string
+  breakAfter: 'auto' | 'avoid' | 'page' | 'column' | (string & {})
+  breakBefore: 'auto' | 'avoid' | 'page' | 'column' | (string & {})
+  breakInside: 'auto' | 'avoid' | 'avoid-page' | 'avoid-column' | (string & {})
+  colorScheme: 'normal' | 'light' | 'dark' | (string & {})
+  columnRuleColor: string
+  containIntrinsicBlockSize: string
+  containIntrinsicHeight: string
+  containIntrinsicInlineSize: string
+  containIntrinsicSize: string
+  containIntrinsicWidth: string
+  container: string
+  containerName: string
+  containerType:
+    | 'normal'
+    | 'size'
+    | 'inline-size'
+    | 'scroll-state'
+    | (string & {})
+  contentVisibility: 'visible' | 'auto' | 'hidden' | (string & {})
+  counterSet: string
+  cx: string
+  cy: string
+  dominantBaseline:
+    | 'auto'
+    | 'alphabetic'
+    | 'middle'
+    | 'central'
+    | 'hanging'
+    | (string & {})
+  fontOpticalSizing: 'auto' | 'none' | (string & {})
+  fontPalette: 'normal' | 'light' | 'dark' | (string & {})
+  fontSynthesisSmallCaps: 'auto' | 'none' | (string & {})
+  fontSynthesisStyle: 'auto' | 'none' | (string & {})
+  fontSynthesisWeight: 'auto' | 'none' | (string & {})
+  fontVariationSettings: string
+  hyphenateCharacter: string
+  inset: string
+  insetBlock: string
+  insetBlockEnd: string
+  insetBlockStart: string
+  insetInline: string
+  insetInlineEnd: string
+  insetInlineStart: string
+  lineClamp: 'none' | (string & {})
+  marginBlock: string
+  marginInline: string
+  mask: string
+  maskClip:
+    | 'border-box'
+    | 'padding-box'
+    | 'content-box'
+    | 'no-clip'
+    | (string & {})
+  maskComposite: 'add' | 'subtract' | 'intersect' | 'exclude' | (string & {})
+  mathStyle: 'normal' | 'compact' | (string & {})
+  offset: string
+  offsetAnchor: string
+  offsetDistance: string
+  offsetPath: string
+  offsetPosition: string
+  offsetRotate: 'auto' | 'reverse' | (string & {})
+  overflowBlock:
+    | 'visible'
+    | 'hidden'
+    | 'clip'
+    | 'scroll'
+    | 'auto'
+    | (string & {})
+  overflowInline:
+    | 'visible'
+    | 'hidden'
+    | 'clip'
+    | 'scroll'
+    | 'auto'
+    | (string & {})
+  overscrollBehavior: string
+  overscrollBehaviorBlock: 'auto' | 'contain' | 'none' | (string & {})
+  overscrollBehaviorInline: 'auto' | 'contain' | 'none' | (string & {})
+  overscrollBehaviorX: 'auto' | 'contain' | 'none' | (string & {})
+  overscrollBehaviorY: 'auto' | 'contain' | 'none' | (string & {})
+  paddingBlock: string
+  paddingInline: string
+  page: string
+  placeContent: string
+  placeItems: string
+  placeSelf: string
+  printColorAdjust: 'economy' | 'exact' | (string & {})
+  r: string
+  rotate: string
+  rowGap: string
+  rx: string
+  ry: string
+  scale: string
+  scrollMargin: string
+  scrollMarginBlock: string
+  scrollMarginBlockEnd: string
+  scrollMarginBlockStart: string
+  scrollMarginBottom: string
+  scrollMarginInline: string
+  scrollMarginInlineEnd: string
+  scrollMarginInlineStart: string
+  scrollMarginLeft: string
+  scrollMarginRight: string
+  scrollMarginTop: string
+  scrollPadding: string
+  scrollPaddingBlock: string
+  scrollPaddingBlockEnd: string
+  scrollPaddingBlockStart: string
+  scrollPaddingBottom: string
+  scrollPaddingInline: string
+  scrollPaddingInlineEnd: string
+  scrollPaddingInlineStart: string
+  scrollPaddingLeft: string
+  scrollPaddingRight: string
+  scrollPaddingTop: string
+  scrollSnapAlign: 'none' | 'start' | 'end' | 'center' | (string & {})
+  scrollSnapStop: 'normal' | 'always' | (string & {})
+  scrollbarColor: string
+  scrollbarGutter: 'auto' | 'stable' | 'stable both-edges' | (string & {})
+  scrollbarWidth: 'auto' | 'thin' | 'none' | (string & {})
+  shapeRendering:
+    | 'auto'
+    | 'optimizeSpeed'
+    | 'crispEdges'
+    | 'geometricPrecision'
+    | (string & {})
+  textAutospace: string
+  textCombineUpright: 'none' | 'all' | (string & {})
+  textDecorationSkipInk: 'auto' | 'all' | 'none' | (string & {})
+  textDecorationThickness: 'auto' | 'from-font' | (string & {})
+  textEmphasis: string
+  textEmphasisColor: string
+  textEmphasisPosition: string
+  textEmphasisStyle: string
+  textUnderlineOffset: string
+  textUnderlinePosition:
+    | 'auto'
+    | 'from-font'
+    | 'under'
+    | 'left'
+    | 'right'
+    | (string & {})
+  textWrap: 'wrap' | 'nowrap' | 'balance' | 'pretty' | (string & {})
+  textWrapMode: 'wrap' | 'nowrap' | (string & {})
+  textWrapStyle: 'auto' | 'balance' | 'stable' | 'pretty' | (string & {})
+  transformBox:
+    | 'content-box'
+    | 'border-box'
+    | 'fill-box'
+    | 'stroke-box'
+    | 'view-box'
+    | (string & {})
+  transitionBehavior: 'normal' | 'allow-discrete' | (string & {})
+  translate: string
+  vectorEffect:
+    | 'none'
+    | 'non-scaling-stroke'
+    | 'non-scaling-size'
+    | 'non-rotation'
+    | 'fixed-position'
+    | (string & {})
+  viewTransitionClass: string
+  viewTransitionName: string
+  whiteSpaceCollapse:
+    | 'collapse'
+    | 'preserve'
+    | 'preserve-breaks'
+    | 'preserve-spaces'
+    | 'break-spaces'
+    | (string & {})
+  x: string
+  y: string
 } & Record<string & {}, string | number>

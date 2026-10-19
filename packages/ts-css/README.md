@@ -94,6 +94,35 @@ style.css({ display: 'grid', gap: '1rem' })
 style.media('max-width: 720px').css({ display: 'block' })
 ```
 
+### Keyframe Animations
+
+Use `.keyframes(name)` to create an animation definition and `.select()` to
+define its frames. Frame selectors are emitted without the parent selector.
+
+```ts
+const style = s()
+const frames = style.keyframes('zt-memory-cycle')
+frames.select('0%, 4%, 40%, 100%').transform('translateY(0)')
+frames.select('12%, 28%').transform('translateY(-8px)')
+
+style.select('.zt-slab-memory')
+  .animation('zt-memory-cycle 8s ease-in-out infinite')
+style.select('.zt-slab-memory')
+  .media('prefers-reduced-motion: reduce')
+  .animation('none !important')
+```
+
+Frames support `from`, `to`, percentages, and comma-separated percentage lists.
+Use existing property methods, `.css()`, or `.set()` for declarations, including
+motion-path properties such as `.set('offset-distance', '100%')`.
+Repeated names in the same container reuse their block; repeated frame selectors
+merge declarations using the normal style builder behavior. Definitions stay
+inside their containing media or scope block and participate in revision tracking.
+
+Names are trimmed and must be non-empty; supply a valid CSS animation name and
+valid frame selectors. Names are emitted without rewriting and remain global
+inside `@scope`. Use distinct names for animations with different definitions.
+
 ### CSS Variables via `autoVar`
 
 Values beginning with `$name` or `--name` are automatically converted to `var(...)`.
@@ -189,7 +218,8 @@ const button = s('.button').css({
 - `Style` extends `BaseStyle` and stores declarations in a map and nested selectors as children.
 - `.select()` creates a child style using the parent selector + the new selector (with automatic spacing unless a combinator or `:` is used).
 - `.media()` creates a sibling style under `@media(...)` and targets the current selector inside that media block.
-- `.toCSS()` serializes rules in a deterministic order: normal selectors first, then `@media` blocks, preserving creation order via internal IDs.
+- `.keyframes()` creates a named animation block whose children are unprefixed frame selectors.
+- `.toCSS()` serializes each container in a deterministic order: normal selectors first, then `@media`, `@scope`, and `@keyframes` blocks, preserving creation order within each group via internal IDs.
 - `.toPrettyCSS()` runs the output through Prettier (`parser: css`) with default formatting options.
 
 ## API Reference
@@ -204,6 +234,7 @@ Creates a `Style` instance. If a selector is provided, it becomes the root selec
 - `css(object)` - set many properties at once using `CSSProps`.
 - `select(selector)` - create or access a nested selector.
 - `media(query)` - create or access a `@media(...)` block scoped to this selector.
+- `keyframes(name)` - create or access a named animation; select its frames with `select()`.
 - `use(style)` - shallow-merge declarations from another style into this one.
 - `toCSS()` - serialize to CSS string.
 - `toPrettyCSS(options?)` - serialize and format using Prettier.
@@ -266,6 +297,7 @@ Key `BaseStyle` methods:
 - `css({...})`
 - `select(selector)`
 - `media(query)`
+- `keyframes(name)`
 - `use(style)`
 - `toCSS()`
 - `toPrettyCSS(options?)`
@@ -284,6 +316,22 @@ const stops = getGradient('#21a8c3', '#a50d60', 6, 'hsl')
 ## Type Safety
 
 `CSSProps` is a large type union of CSS properties used by `.css()` and property-specific methods on `Style`. It provides autocomplete and helps catch invalid property names or values.
+
+## Maintaining Property Metadata
+
+The generator combines the original `src/meta/cssProps.ts` with the handwritten
+additions in `src/meta/cssProps2.ts`. Maintain new properties in `cssProps2.ts`
+using the same `$`, `desc`, and optional `values.value` structure. Existing
+properties, including vendor-prefixed and older names, remain available.
+
+Regenerate the fluent methods and explicit property types from the repository root:
+
+```bash
+yarn tsx packages/ts-css/src/meta/generateStyle.ts
+```
+
+This updates `src/style.ts` and `src/cssProps.ts`. Keep property additions in the
+metadata so they survive subsequent generator runs.
 
 ## Tests
 

@@ -6,6 +6,9 @@ import { fileURLToPath } from 'node:url'
 import prettier from 'prettier'
 
 import { cssProps } from './cssProps'
+import { cssProps2 } from './cssProps2'
+
+const allCssProps = [...cssProps, ...cssProps2]
 
 const camelize = (s: string) =>
   (s.startsWith('-') ? s.substring(1) : s).replace(/-./g, (x) =>
@@ -62,7 +65,7 @@ function createCode() {
   const methods = createMethods()
   const code = `
 import { BaseStyle } from './baseStyle'
-import { CSSProps } from './cssProps'
+import type { CSSProps } from './cssProps'
 
 export class Style extends BaseStyle<Style> {
   constructor(selector?: string) {
@@ -108,7 +111,7 @@ function getAnyType(propType: PropType) {
     restriction === 'number(0-1)' ||
     restriction === 'number'
   )
-    return 'number'
+    return 'number | string'
   const stringType = ' | (string & {})'
   if (!propType?.values?.value) return 'string'
   if (!propType.values.value.map)
@@ -164,7 +167,7 @@ ${values}
 
 function createMethods() {
   let result = ''
-  for (const prop of cssProps) {
+  for (const prop of allCssProps) {
     result += createMethod(prop as PropType)
   }
   return result
@@ -172,7 +175,7 @@ function createMethods() {
 
 function createProps() {
   let result = ''
-  for (const prop of cssProps) {
+  for (const prop of allCssProps) {
     result += createProp(prop as PropType)
   }
   return result
@@ -203,6 +206,6 @@ writeCode('../cssProps.ts', formatted2)
 
 function writeCode(file: string, code: string) {
   const outTs = fileURLToPath(new URL(file, import.meta.url))
-  fs.writeFileSync(outTs, code)
+  fs.writeFileSync(outTs, code.replace(/[\t ]+$/gm, ''))
   console.log(`✅ Wrote ${outTs}`)
 }

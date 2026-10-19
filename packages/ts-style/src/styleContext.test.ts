@@ -69,6 +69,50 @@ describe('style contexts', () => {
     )
   })
 
+  it('tracks retained frame mutations only in their owning context', async () => {
+    const first = createStyleContext()
+    const second = createStyleContext()
+    const frame = runWithStyleContext(first, () =>
+      styleBuilder.get('light').keyframes('pulse').select('to').opacity('1'),
+    )
+    runWithStyleContext(second, () => {
+      styleBuilder.get('light').keyframes('pulse').select('to').opacity('.5')
+    })
+    const firstRevision = runWithStyleContext(
+      first,
+      () => styleBuilder.revision,
+    )
+    const secondRevision = runWithStyleContext(
+      second,
+      () => styleBuilder.revision,
+    )
+
+    frame.opacity('1')
+    expect(runWithStyleContext(first, () => styleBuilder.revision)).toBe(
+      firstRevision,
+    )
+    frame.opacity('.8')
+    expect(
+      runWithStyleContext(first, () => styleBuilder.revision),
+    ).toBeGreaterThan(firstRevision)
+    expect(runWithStyleContext(second, () => styleBuilder.revision)).toBe(
+      secondRevision,
+    )
+
+    const render = (context: typeof first) =>
+      runWithStyleContext(context, () => styleBuilder.render('light', false))
+    expect(await render(first)).toContain('opacity: .8;')
+    expect(await render(second)).toContain('opacity: .5;')
+    runWithStyleContext(first, () => styleBuilder.reset())
+    const afterReset = runWithStyleContext(first, () => styleBuilder.revision)
+    frame.opacity('.2')
+    expect(runWithStyleContext(first, () => styleBuilder.revision)).toBe(
+      afterReset,
+    )
+    expect(await render(first)).not.toContain('@keyframes')
+    expect(await render(second)).toContain('@keyframes pulse')
+  })
+
   it('restores nested contexts after async success and failure', async () => {
     const outer = createStyleContext()
     const inner = createStyleContext()

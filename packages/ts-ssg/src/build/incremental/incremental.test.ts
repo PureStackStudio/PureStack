@@ -161,6 +161,62 @@ describe('incremental builder', () => {
     })
   })
 
+  it('rewrites theme CSS after retained keyframe changes', async () => {
+    await withTempDir(async (base) => {
+      const contentDir = path.join(base, 'content')
+      const outDir = path.join(base, 'out')
+      await fs.mkdir(contentDir)
+      await fs.writeFile(path.join(contentDir, 'index.md'), '# Home')
+      let frame: ReturnType<typeof styleBuilder.select> | undefined
+      let writes = 0
+      const builder = await createIncrementalBuilder({
+        siteConfig: { rootDir: base, contentDir, outDir },
+        options: {
+          plugins: [
+            {
+              name: 'hero-motion',
+              hooks: {
+                onConfigResolved() {
+                  frame = styleBuilder
+                    .get('light')
+                    .keyframes('hero-pulse')
+                    .select('to')
+                    .opacity('.41')
+                  styleBuilder
+                    .select('.hero', 'light')
+                    .animation('hero-pulse 8s infinite')
+                },
+                onStylesWritten() {
+                  writes += 1
+                },
+              },
+            },
+          ],
+        },
+      })
+      await builder.prepareForRequests()
+      await builder.renderByUrlPath('/')
+      await builder.preparePageAssets()
+      const initialCss = await readThemeCss(outDir, 'light')
+      expect(
+        initialCss.match(/@keyframes hero-pulse\s*\{[^}]+\}/)?.[0],
+      ).toMatch(/opacity:\s*0?\.41;/)
+      const before = writes
+      if (!frame)
+        throw new Error('Expected the hero animation to be initialized.')
+      frame.opacity('.73')
+      await builder.preparePageAssets()
+      expect(writes).toBe(before + 1)
+      const updatedCss = await readThemeCss(outDir, 'light')
+      expect(
+        updatedCss.match(/@keyframes hero-pulse\s*\{[^}]+\}/)?.[0],
+      ).toMatch(/opacity:\s*0?\.73;/)
+      frame.opacity('.73')
+      await builder.preparePageAssets()
+      expect(writes).toBe(before + 1)
+    })
+  })
+
   it.each(['none', 'hybrid'] as const)(
     'shares discovery across watcher bursts with %s navigation',
     async (mode) => {
