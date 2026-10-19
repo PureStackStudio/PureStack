@@ -1,0 +1,286 @@
+---
+title: Image optimization
+description: Enable responsive images with ts-images, choose widths and formats, prioritize hero images, and reuse optimized assets across builds.
+template: doc
+layout:
+  showNav: true
+  showToc: true
+  showFooter: true
+nav:
+  icon: tabler:photo
+---
+
+# Image optimization
+
+`@purestack/ts-images` turns local images into responsive AVIF and WebP sources with JPEG or PNG fallbacks during the build. Keep writing ordinary Markdown or HTML images. The plugin adds responsive markup, missing dimensions, and loading defaults without a special component or browser script.
+
+Image optimization is optional and is not included in PureStack's default plugin set. Original files remain available for downloads and links, and source files are never edited.
+
+## Enable the plugin
+
+Install the package alongside PureStack. It requires Node.js 22.20 or newer and uses Sharp's platform-specific image codecs:
+
+```sh
+npm install @purestack/ts-images
+```
+
+Add the named plugin export to `content/siteConfig.json`, keeping any plugins already listed:
+
+```json
+{
+  "plugins": ["@purestack/ts-images#imagesPlugin"],
+  "extensions": {
+    "images": {
+      "widths": [480, 960, 1440],
+      "formats": ["avif", "webp"]
+    }
+  }
+}
+```
+
+No TypeScript configuration is required. Listing the plugin enables its defaults; the `extensions.images` section is optional. Settings in that section belong to the image plugin and are applied only when it is installed in the plugin list.
+
+Place images inside the content folder and reference them from your pages:
+
+```text
+content/
+  siteConfig.json
+  index.mdx
+  images/
+    dashboard.png
+```
+
+```md
+![Dashboard showing project activity](./images/dashboard.png)
+```
+
+Run your usual [build or publish command](/guides/getting-started/purestack-cli/). The same optimization applies to images in rendered components, page templates, and shared headers and footers. Images inserted later by browser JavaScript are outside the build's rendered document.
+
+## What visitors receive
+
+For an eligible image, the plugin generates a `<picture>` with AVIF and WebP sources and an `<img>` fallback. Each format has a `srcset` of available widths. The browser chooses a supported format and a suitable candidate for the image's layout and the screen's pixel density.
+
+The plugin preserves `alt`, classes, IDs, styles, links around images, and author-supplied loading attributes. It fills missing `width` and `height` attributes from the image's oriented aspect ratio so the browser can reserve space. If you supply one dimension, the other is derived; if you supply both, both are kept.
+
+Generated images are written under `/_assets/images/`, with your site's `basePath` applied automatically. Filenames include a hash of the encoded bytes. Shared variants are reused across pages, and generated files are removed when no page references them. Original assets remain available at their usual URLs.
+
+Widths are sorted, deduplicated, and capped at the source image's dimensions. A 700-pixel-wide source with widths `[480, 960, 1440]` produces 480- and 700-pixel candidates for each format. The plugin never enlarges a source image.
+
+## Match responsive images to your layout
+
+`widths` chooses the pixel widths to generate. `sizes` tells the browser how wide the image will appear in the layout. It does not set the image's CSS width.
+
+The default `sizes` is `100vw`, suitable for an image that spans the viewport. For an image that spans the viewport only up to a 960-pixel limit, configure:
+
+```json
+{
+  "extensions": {
+    "images": {
+      "widths": [480, 960, 1440, 1920],
+      "sizes": "(max-width: 960px) 100vw, 960px"
+    }
+  }
+}
+```
+
+Adjust `sizes` for your container widths, sidebars, and gutters. A browser may choose a larger candidate for a high-density screen, so a 960-pixel layout can benefit from a 1920-pixel source.
+
+An individual image can supply its own `sizes`, overriding the configured default:
+
+```html
+<img
+  src="./images/dashboard.png"
+  alt="Dashboard showing project activity"
+  sizes="(max-width: 640px) 100vw, 480px"
+  style="width: 100%; max-width: 480px; height: auto"
+>
+```
+
+Use HTML when you need per-image attributes. Markdown images use the global settings. More widths and formats generate more files and take more encoding time; choose candidates that serve your actual layouts.
+
+## Use presets for common images
+
+Presets group per-image choices. Select one with `data-image-preset`:
+
+```html
+<img src="./images/workshop.jpg" alt="The workshop" data-image-preset="hero">
+<img src="./images/settings.png" alt="Editor settings" data-image-preset="screenshot">
+<img src="./images/portrait.jpg" alt="A contributor" data-image-preset="thumbnail">
+```
+
+| Preset | Behavior |
+| --- | --- |
+| `content` | Uses the global image settings. |
+| `hero` | Generates 960, 1440, and 1920 widths and supplies eager loading with high fetch priority. |
+| `thumbnail` | Generates 160, 320, and 640 widths with `sizes="(max-width: 640px) 50vw, 320px"`. |
+| `screenshot` | Uses lossless WebP with a PNG fallback and inherits the global widths. |
+
+Preset widths are still capped at the source's dimensions. Presets inherit the resolved global settings before applying their own overrides. Override a built-in preset or add your own under `presets`:
+
+```json
+{
+  "extensions": {
+    "images": {
+      "presets": {
+        "card": {
+          "widths": [320, 640, 960],
+          "sizes": "(max-width: 640px) 100vw, 480px",
+          "quality": { "webp": 85 }
+        }
+      }
+    }
+  }
+}
+```
+
+```html
+<img src="./images/project.jpg" alt="Project overview" data-image-preset="card">
+```
+
+Presets can set `widths`, `formats`, `quality`, `sizes`, `loading`, `decoding`, `priority`, `lossless`, and `metadata`.
+
+### Prioritize the main image
+
+Images default to `loading="lazy"` and `decoding="async"`. For a prominent image visible when the page opens, use the `hero` preset or mark it directly:
+
+```html
+<img src="./images/cover.jpg" alt="The project workspace" data-image-priority>
+```
+
+Priority fills missing attributes with `loading="eager"` and `fetchpriority="high"`. Explicit `loading`, `decoding`, and `fetchpriority` attributes take precedence, so remove `loading="lazy"` if you want the priority default to apply. Mark the important image explicitly; the plugin does not infer which images are above the fold.
+
+## Choose formats, quality, and metadata
+
+The default formats are AVIF followed by WebP, with an automatic JPEG or PNG fallback. The order in `formats` determines source preference. PNG sources, transparent images, and lossless presets use a PNG fallback.
+
+```json
+{
+  "extensions": {
+    "images": {
+      "formats": ["avif", "webp"],
+      "quality": { "avif": 50, "webp": 80, "jpeg": 82 },
+      "metadata": "strip"
+    }
+  }
+}
+```
+
+Quality values range from 1 to 100. Use `lossless: true` when preserving detail matters more than file size, as with screenshots and diagrams. The `screenshot` preset provides that choice per image.
+
+Set `formats: []` to generate only responsive JPEG/PNG fallbacks without adding a `<picture>` wrapper. This can help when existing CSS depends on the image being a direct child of its parent.
+
+Images are automatically oriented and converted to sRGB. `metadata: "strip"` omits embedded metadata by default. `"preserve"` retains metadata with orientation normalized. Optimization can produce files larger than the original, especially for small or lossless images; inspect the results for representative sources before choosing settings for the whole site.
+
+## Control which images are processed
+
+Use `include` and `exclude` to select source files. Patterns match content-root-relative paths with forward slashes, regardless of the page referencing the image:
+
+```json
+{
+  "extensions": {
+    "images": {
+      "include": ["images/**"],
+      "exclude": ["images/downloads/**"]
+    }
+  }
+}
+```
+
+To keep one image's markup and source unchanged, opt out on that image:
+
+```html
+<img src="./images/diagram.png" alt="Source diagram" data-image-optimize="false">
+```
+
+To turn off all optimization while keeping the plugin declaration, set `extensions.images.enabled` to `false`. You can also remove the plugin from `plugins`.
+
+| Input | Treatment |
+| --- | --- |
+| Local JPEG, PNG, WebP, AVIF, single-frame GIF, and TIFF references | Eligible for optimization. |
+| External, data, and blob URLs | Left unchanged; the plugin does not download images. |
+| SVG and animated images, including APNG | Left unchanged. |
+| An image inside `<picture>`, or one with `srcset` already set | Existing responsive markup is preserved. |
+| CSS backgrounds, video posters, social preview metadata, and URLs in browser scripts | Original assets remain available; these references are not rewritten. |
+
+Because optimized images normally gain a `<picture>` parent, review direct-child selectors such as `.gallery > img`. Adjust the selector, use fallback-only output, or opt out where the original structure is required.
+
+## Builds, development, and caching
+
+Full builds and publishes process images referenced by rendered pages. During `serve`, images are processed when their pages render, and generated files exist before those pages are served. Editing a source image invalidates dependent pages. Local paths follow the same [content link and localization rules](./links) as other assets.
+
+The persistent encoding cache survives cleaned output directories. Its keys include source bytes, pixel settings, and codec versions. Changes to `alt`, loading attributes, or `sizes` can reuse encoded files. The default cache lives in the OS temporary directory under `purestack-images`, separated by content root.
+
+`cacheMaxAgeDays` defaults to 30. During use, cleanup removes entries unused for that many days, checking at most hourly per processor. Set it to `0` to disable cleanup. A custom `cacheDir` must stay outside the content and output directories; relative paths resolve from the build's `rootDir`, not the content folder. The default temporary cache needs no path configuration.
+
+To bypass persistent cache reads and writes for a run:
+
+```sh
+yarn purestack publish --content ./content --no-cache
+```
+
+The same flag works with `build` and `serve`. Programmatic builds use `options.cache: false`. Existing cache files remain in place, and development still reuses rendered pages until they are invalidated. See the [CLI guide](/guides/getting-started/purestack-cli/) for cache and output-cleaning behavior.
+
+Encoding concurrency defaults to two jobs per site, including output emission. Increase it only after measuring duration and memory on your build machine. Keeping fewer widths or formats also reduces work on a cache miss.
+
+## Configure from TypeScript
+
+For custom factory defaults or diagnostic callbacks, add the plugin to your existing `purestack.config.ts`:
+
+```ts
+import { imagesPlugin } from '@purestack/ts-images'
+import { defineConfig } from 'purestack'
+
+export default defineConfig({
+  plugins: [
+    imagesPlugin({
+      widths: [480, 960, 1440],
+      onDiagnostic(diagnostic) {
+        console.log(diagnostic)
+      },
+    }),
+  ],
+})
+```
+
+Factory settings supply defaults that `extensions.images` can override. An explicit TypeScript plugin instance replaces a JSON-selected instance with the same plugin name. Callbacks belong in TypeScript; JSON supplies settings only. The [Plugins guide](/guides/extending/plugins/) explains how plugin declarations compose.
+
+Diagnostics report the referring page, source path, cache result, original bytes, total generated bytes, variant count, and duration. Without a callback, completed optimizations are logged as `image optimized`. Total generated bytes include every variant; they are not the bytes a visitor downloads for a single image.
+
+## Settings reference
+
+All settings below belong under `extensions.images`, or can be supplied as factory defaults to `imagesPlugin()`.
+
+| Setting | Default | Purpose |
+| --- | --- | --- |
+| `enabled` | `true` | Enable optimization when the plugin is listed. |
+| `widths` | `[480, 960, 1440]` | 1 to 16 widths, each an integer from 1 to 16384; no upscaling. |
+| `formats` | `["avif", "webp"]` | Modern sources in preference order; `[]` generates only fallbacks. |
+| `quality` | `{ "avif": 50, "webp": 80, "jpeg": 82 }` | Encoder quality from 1 to 100. |
+| `sizes` | `"100vw"` | Default layout width hint; an image's own `sizes` takes precedence. |
+| `loading` | `"lazy"` | `"lazy"`, `"eager"`, or `false` to omit the default attribute. |
+| `decoding` | `"async"` | `"async"`, `"sync"`, `"auto"`, or `false`. |
+| `priority` | `false` | Supply missing eager-loading and high-priority attributes. |
+| `lossless` | `false` | Use lossless modern encoders and a PNG fallback. |
+| `metadata` | `"strip"` | Strip metadata or use `"preserve"`. |
+| `include` / `exclude` | `["**/*"]` / `[]` | Source selection using content-root-relative glob patterns. |
+| `presets` | `content`, `hero`, `thumbnail`, `screenshot` | Override built-ins or define named per-image settings. |
+| `cacheDir` | OS temporary cache per content root | Location outside content and output directories. |
+| `cacheMaxAgeDays` | `30` | Retain entries used within this many days; `0` disables expiry. |
+| `concurrency` | `2` | Per-site processing limit from 1 to 16. |
+| `maxInputPixels` | `40000000` | Maximum source pixel count. |
+| `maxSourceBytes` | `52428800` (50 MiB) | Maximum source file size. |
+| `onError` | `"error"` | Fail on optimization errors, or use `"warn"` to retain the original image. |
+
+## When something goes wrong
+
+| Symptom | Check |
+| --- | --- |
+| Images still reference their originals | Confirm the plugin is listed, `enabled` is true, the file matches `include`/`exclude`, and the input is eligible. Existing `<picture>` and `srcset` are intentionally preserved. |
+| A hero still loads lazily | Remove an explicit `loading="lazy"`; author-supplied attributes override priority defaults. |
+| The browser selects an unexpectedly large candidate | Match `sizes` to the actual layout and account for screen pixel density. |
+| A gallery's CSS stops matching | Optimization added a `<picture>` parent. Adjust direct-child selectors or opt out. |
+| The build reports an unknown preset | Define the name under `presets` or choose one of the built-in presets. |
+| A source exceeds the byte or pixel limit | Resize the source, exclude it, or deliberately adjust the corresponding limit. |
+| Sharp cannot load on the build machine | Install dependencies for that machine's platform and confirm Node.js 22.20 or newer. |
+
+`onError: "warn"` lets the plugin keep an original image after an optimization failure, but missing or invalid local URLs still follow PureStack's normal URL validation. Remote downloads, SVG optimization, animated transcoding, placeholders, and automatic cropping are outside this plugin's current scope.
