@@ -52,6 +52,7 @@
     "bump-version": "yarn tsx --no-warnings scripts/bump-version.ts",
     "bundle": "yarn tsx --no-warnings scripts/bundle.ts",
     "cleanup": "yarn tsx --no-warnings scripts/cleanup.ts",
+    "publish-package": "yarn tsx --no-warnings scripts/publish-package.ts",
     "publish-new-packages": "yarn tsx --no-warnings scripts/publish-new-packages.ts",
     "test": "vitest",
     "test:ci": "vitest run",
