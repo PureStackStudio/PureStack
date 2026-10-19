@@ -11,13 +11,38 @@ import { highlightPlugin } from './index'
 describe('highlightPlugin', () => {
   it('owns its default selection and validates identifiers only when its backend is used', async () => {
     const plugin = highlightPlugin()
-    const fallback = await plugin.markdown.createHighlighter({})
+    const fallback = await plugin.markdown.createHighlighter({
+      mdx: {},
+      cache: true,
+    })
     expect(fallback?.codeToHtml('const answer = 42', 'ts')).toContain(
       'hljs-keyword',
     )
     await expect(
-      plugin.markdown.createHighlighter({ highlighter: 'another-provider' }),
+      plugin.markdown.createHighlighter({
+        mdx: { highlighter: 'another-provider' },
+        cache: true,
+      }),
     ).rejects.toThrow('Supply a custom markdown.createHighlighter provider')
+  })
+
+  it('highlights Shiki code identically with and without the persistent cache', async () => {
+    const code = 'const view = html`<p class="note">Saved</p>`'
+    const render = async (cache: boolean) => {
+      const highlighter = await highlightPlugin().markdown.createHighlighter({
+        mdx: { highlighter: 'shiki' },
+        cache,
+      })
+      try {
+        return await highlighter?.codeToHtml(code, 'ts')
+      } finally {
+        await highlighter?.flush?.()
+      }
+    }
+    const uncached = await render(false)
+    expect(uncached).toContain('--shiki-light:')
+    expect(await render(true)).toBe(uncached)
+    expect(await render(true)).toBe(uncached)
   })
 
   it.each(['sync', 'async'])(
@@ -59,7 +84,8 @@ describe('highlightPlugin', () => {
           },
         })
         const highlighter = await plugin.markdown.createHighlighter({
-          highlighter: 'shiki',
+          mdx: { highlighter: 'shiki' },
+          cache: true,
         })
         expect(calls).toBe(1)
         expect(
@@ -99,7 +125,8 @@ describe('highlightPlugin', () => {
         },
       })
       const highlighter = await plugin.markdown.createHighlighter({
-        highlighter: 'highlightjs',
+        mdx: { highlighter: 'highlightjs' },
+        cache: true,
       })
       expect(calls).toBe(1)
       expect(highlighter?.codeToHtml('launch', 'creator-test-alias')).toContain(
@@ -110,7 +137,8 @@ describe('highlightPlugin', () => {
       )
       expect(hljs.getLanguage('creator-test')).toBeUndefined()
       const defaults = await highlightPlugin().markdown.createHighlighter({
-        highlighter: 'highlightjs',
+        mdx: { highlighter: 'highlightjs' },
+        cache: true,
       })
       expect(defaults?.codeToHtml('const answer = 42', 'ts')).toContain(
         'hljs-keyword',
@@ -127,7 +155,10 @@ describe('highlightPlugin', () => {
       createHighlightJs: fail,
     })
     expect(
-      await plugin.markdown.createHighlighter({ disableHighlighter: true }),
+      await plugin.markdown.createHighlighter({
+        mdx: { disableHighlighter: true },
+        cache: true,
+      }),
     ).toBeUndefined()
   })
 })

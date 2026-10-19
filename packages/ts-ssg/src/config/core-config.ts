@@ -94,6 +94,7 @@ export function resolveCoreSiteConfig(
     sitemap,
     i18n,
     mdx,
+    cache: true,
   }
   return applyConfigResolvers(config, resolvers, input, fileConfig)
 }

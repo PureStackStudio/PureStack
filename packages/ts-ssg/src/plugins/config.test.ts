@@ -86,7 +86,8 @@ describe('plugin configuration', () => {
             markdown: {
               createHighlighter(config) {
                 calls++
-                expect(config.highlighter).toBe('custom-engine')
+                expect(config.mdx.highlighter).toBe('custom-engine')
+                expect(config.cache).toBe(true)
                 return {
                   codeToHtml: () =>
                     '<pre class="custom-engine"><code>Custom output</code></pre>',

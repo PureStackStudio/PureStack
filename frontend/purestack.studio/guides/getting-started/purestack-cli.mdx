@@ -115,6 +115,10 @@ yarn purestack build --content ./content --clean
 
 `--clean` removes the configured `outDir` before rebuilding it. Use it when you need an output folder containing only files from the current build. Without `--clean`, PureStack keeps the directory and rewrites current outputs.
 
+`--no-cache` bypasses reads and writes to persistent computation caches kept outside the output directory, such as highlighted code and optimized images. It works with `build`, `serve`, and `publish`. Use it to compare uncached rendering or investigate a stale cached result. Existing cache files stay in place; a cold build with caching enabled also spends time populating its cache.
+
+During `serve`, pages still render on request and reuse their rendered output until invalidated. `--no-cache` affects computations when a page renders; it does not force rendering on every request. To rebuild into an empty output directory with persistent caches bypassed, combine `--clean` and `--no-cache` (`publish` already cleans its output directory).
+
 ### `serve`: preview and edit
 
 ```sh
@@ -136,6 +140,7 @@ These options belong to `serve`:
 | `--host <host>` | Listen on a particular interface, for example `127.0.0.1`. |
 | `--port <port>` | Listen on a different port. |
 | `--clean` | Remove `outDir` before setup and when config changes reset shared setup. |
+| `--no-cache` | Skip persistent caches, such as highlighted code and optimized images. |
 | `--full-render` | Build every page, asset, and the complete search index once at startup. Watched edits remain incremental. |
 | `--no-watch` | Keep the server running without watching the content directory. Pages still render on request, or all at startup with `--full-render`. |
 | `--no-reload` | Keep watching and updating the site, but do not inject the browser live reload script. |
@@ -150,7 +155,7 @@ yarn purestack publish --content ./content
 
 `publish` uses `publishDir` instead of `outDir`. It cleans that directory before building, minifies generated HTML and browser scripts, disables pretty printed CSS, and treats asset build errors as failures. It creates the same site content and optional search and sitemap outputs as `build`, according to `siteConfig.json`.
 
-Point your deployment process at `publishDir` after a successful run. `publish` prepares files locally; it does not upload them. It accepts `--content`, with no separate `--clean` flag because cleaning is built in.
+Point your deployment process at `publishDir` after a successful run. `publish` prepares files locally; it does not upload them. It accepts `--content` and `--no-cache`, with no separate `--clean` flag because cleaning is built in.
 
 ## Choose the public URL
 

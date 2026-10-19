@@ -42,6 +42,6 @@
     "@purestack/ts-common": "workspace:^",
     "@purestack/ts-minidom": "workspace:^",
     "@purestack/ts-util": "workspace:^",
-    "regor": "^1.7.5"
+    "regor": "^1.7.6"
   }
 }

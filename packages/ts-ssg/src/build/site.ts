@@ -63,6 +63,8 @@ export interface BuildHooks {
 
 export interface BuildOptions {
   cleanOutDir?: boolean
+  /** `false` skips persistent plugin caches outside the output directory. Defaults to `true`. */
+  cache?: boolean
   writeErrorPages?: boolean
   /** Include the standard component, theme, browser-runtime, highlighting, and search plugins. */
   defaultPlugins?: boolean

@@ -183,7 +183,9 @@ function manifestConfigEqual(left: ManifestConfig, right: ManifestConfig) {
 }
 
 function createManifestConfigSignature(config: SiteConfig) {
-  return createHash('sha256').update(JSON.stringify(config)).digest('hex')
+  // Caching changes build time, not output, so it never invalidates pages.
+  const { cache: _cache, ...output } = config
+  return createHash('sha256').update(JSON.stringify(output)).digest('hex')
 }
 
 function parseManifestJson(

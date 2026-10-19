@@ -185,7 +185,7 @@ This keeps the layouts and components while omitting automatic social metadata, 
 
 An explicitly listed standard plugin replaces the automatic instance by name and keeps its initialization position. You can also use `createDefaultPlugins()` to obtain the complete set. In programmatic builds, use `options.defaultPlugins` alongside `options.plugins`.
 
-The highlighting plugin selects the configured backend. Configure native backend factories through `highlightPlugin({ createShiki, createHighlightJs })`, or supply `markdown.createHighlighter(config)` for a different engine. The generic provider returns `{ codeToHtml(code, lang?) }`. Ordinary providers override the default without constructing it; per-language `markdown.resolveHighlighter` callbacks retain precedence.
+The highlighting plugin selects the configured backend. Configure native backend factories through `highlightPlugin({ createShiki, createHighlightJs })`, or supply `markdown.createHighlighter({ mdx, cache })` for a different engine. The generic provider returns `{ codeToHtml(code, lang?) }`. Ordinary providers override the default without constructing it; per-language `markdown.resolveHighlighter` callbacks retain precedence.
 
 The Pagefind plugin supplies a `search` provider. To use another engine, replace `purestack:pagefind` or disable the default set and install your own provider. The builder supplies excluded output paths and the rendered-page list for lazy requests, and manages invalidation on edits and deletions. Sitemap and robots generation remain built in.
 
@@ -235,6 +235,8 @@ export const brandPlugin = definePlugin({
 ```
 
 `resolveSiteConfig(input, { plugins, defaultPlugins })` composes the supplied plugin instances with the standard plugins by default. This synchronous helper does not apply JSON plugin selection (`plugins` or `defaultPlugins`) or load `purestack.config.ts`. Plugin-owned sections (`style`, `docLayout`, `pageToc`, `logo`, `auth`, `consent`, `analytics`, `pagefind`, and `preview`) are optional in `SiteConfig`: an omitted plugin does not supply defaults or validate its unused input. A replacement plugin reads its settings from `input` and `file`, then contributes normalized config. Analytics also resolves explicitly configured consent when its browser runtime is omitted, so enabled consent is never bypassed. Configuration contributions are synchronous and may run whenever a project configuration is resolved; keep file writes and other side effects in lifecycle hooks.
+
+`config.cache` is `false` when a run uses `--no-cache` or `options.cache: false`. A plugin that keeps a persistent cache outside the output directory should neither read nor write it then. Site settings cannot change this flag, and it never invalidates incremental output.
 
 Builder style state is isolated across asynchronous operations, including concurrent sites. Its owned theme options remain linked to `context.config.style.theme`, so in-place config-hook changes and `themes.setOptions` update page colors, CSS, and generated favicons consistently. Head, metadata, template, Markdown, provider, and lifecycle errors identify their owning plugin and preserve the original cause. Markdown wrappers preserve unified presets, duplicate-plugin option merging, and callback transforms.
 
@@ -616,6 +618,22 @@ When you publish the package:
 
 - **Ship JavaScript.** Packages load without bundling, so publish compiled JavaScript with type declarations, not TypeScript source.
 - **Share the site's PureStack.** List `purestack`, and any `@purestack/*` package the plugin imports, under `peerDependencies`, not `dependencies`. The plugin then uses the site's copy instead of installing its own.
+
+## Cache build-time computations
+
+Plugins and build-time components can use `PersistentCache` from
+`@purestack/ts-util-node` to reuse expensive results across builds. Create one
+cache per factory, use an owner namespace and implementation version, and include
+all output-affecting inputs in its keys. Pass `enabled: config.cache` to honor
+`--no-cache`.
+
+Only cache computed values: dependency tracking, styles, and asset emission must
+still run when a value is reused. The cache batches small values into JSON shards
+and keeps bounded memory. Await `cache.flush()` after the computation batch;
+periodic development flushing does not keep Node alive. Highlighters can return
+an optional `flush()` method, which core awaits after each build or development
+render batch, including failures. See the
+[cache API and component example](https://github.com/PureStackStudio/PureStack/tree/main/packages/ts-util-node#persistent-build-cache).
 
 ## Build from a script
 

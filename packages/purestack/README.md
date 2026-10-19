@@ -103,6 +103,8 @@ Run these commands from the project root:
 
 `publish` prepares files for a static host; it does not upload them. Use
 `--clean` with `build` or `serve` to clear the output directory before a build.
+Use `--no-cache` with any command to skip persistent caches, such as
+highlighted code and optimized images, for a fully cold build.
 Use `--host` and `--port` with `serve` to choose its address. Every command
 needs `--content` pointing to a directory with `siteConfig.json`.
 

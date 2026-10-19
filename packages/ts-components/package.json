@@ -56,7 +56,7 @@
     "@purestack/ts-style": "workspace:^",
     "@purestack/ts-svg-icons": "workspace:^",
     "@purestack/ts-util": "workspace:^",
-    "regor": "^1.7.5"
+    "regor": "^1.7.6"
   },
   "regorComponents": [
     "AlertBox",

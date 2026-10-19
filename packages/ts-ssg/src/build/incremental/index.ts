@@ -121,7 +121,7 @@ async function createIncrementalRuntime(
   const minifyScripts = publishOptions.enabled === true
   const failOnAssetError = publishOptions.enabled === true
   const mdx = {
-    ...(await resolveMdxBuildOptions(config.mdx, plugins)),
+    ...(await resolveMdxBuildOptions(config.mdx, plugins, config.cache)),
     contentProcessor: resolvePluginContentProcessor(plugins),
   }
   initRenderer()
@@ -260,12 +260,34 @@ class IncrementalRuntime {
 
   toBuilder(): IncrementalBuilder {
     const bind =
-      <A extends unknown[], R>(run: (...args: A) => R) =>
-      (...args: A): R =>
-        runWithStyleContext(this.options.styleContext, () => run(...args))
+      <A extends unknown[], R>(run: (...args: A) => Promise<R>) =>
+      (...args: A): Promise<R> =>
+        runWithStyleContext(this.options.styleContext, async () => {
+          let result: R
+          try {
+            result = await run(...args)
+          } catch (error) {
+            // Persist useful work from a failed batch without replacing its original error.
+            await Promise.resolve()
+              .then(() => this.context.mdx?.highlighter?.flush?.())
+              .catch(() => {})
+            throw error
+          }
+          await this.context.mdx?.highlighter?.flush?.()
+          return result
+        })
+    const buildAll = bind(this.buildAll)
     return {
       prepareForRequests: bind(this.prepareForRequests),
-      buildAll: bind(this.buildAll),
+      buildAll: async (reason) => {
+        const buildStartMs = Date.now()
+        const result = await buildAll(reason)
+        this.log.info('build completed', {
+          ...result,
+          totalDurationMs: Date.now() - buildStartMs,
+        })
+        return result
+      },
       applyChange: bind(this.applyChange),
       applyChanges: bind(this.applyChanges),
       renderIfDirtyByOutPath: bind(this.renderIfDirtyByOutPath),
@@ -396,7 +418,6 @@ class IncrementalRuntime {
 
   buildAll = async (reason: string): Promise<BuildResult> => {
     this.context.styleCacheKey = createScriptCacheKey()
-    const buildStartMs = Date.now()
     const hooks = this.resolveBuildHooks()
 
     this.scriptCacheKeys.clear()
@@ -422,19 +443,13 @@ class IncrementalRuntime {
     })
     const styleResult = await this.writeStylesWithHooks(hooks)
     this.preparedAssetRevision = this.pageAssetRevision
-    const finalResult = await this.finalizeBuild({
+    return this.finalizeBuild({
       ...prepared,
       assetFiles: [...copiedAssets.files, ...scriptAssetFiles],
       pages,
       styleResult,
       hooks,
     })
-
-    this.log.info('build completed', {
-      ...finalResult,
-      totalDurationMs: Date.now() - buildStartMs,
-    })
-    return finalResult
   }
 
   private resolveBuildHooks(): BuildHooks {

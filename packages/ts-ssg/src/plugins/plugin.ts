@@ -3,7 +3,6 @@ import type {
   MdxCodeHighlighter,
   PageTemplateMap,
   SiteConfig,
-  SiteMdxConfig,
   SiteSearch,
   SiteStyles,
 } from '@purestack/ts-common'
@@ -11,13 +10,14 @@ import { registerSkin, type ThemeSkin, themeSkins } from '@purestack/ts-style'
 import { escapeHtml, isPlainObject } from '@purestack/ts-util'
 import { awaitPlugin, callPlugin } from './errors'
 
-import type { PureStackPlugin } from './types'
+import type { HighlighterConfig, PureStackPlugin } from './types'
 
 export { composePluginHooks } from './hooks'
 export { resolvePluginContentProcessor } from './markdown'
 export {
   definePlugin,
   type GeneratedPage,
+  type HighlighterConfig,
   type PageGenerationContext,
   type PureStackMarkdown,
   type PureStackPlugin,
@@ -135,9 +135,9 @@ export function resolvePluginStyles(
 /** Ordinary providers override defaults; competing providers fail before initialization. */
 export async function createPluginHighlighter(
   plugins: readonly PureStackPlugin[],
-  config: Partial<SiteMdxConfig>,
+  config: HighlighterConfig,
 ): Promise<MdxCodeHighlighter | undefined> {
-  if (config.disableHighlighter) return undefined
+  if (config.mdx.disableHighlighter) return undefined
   const providers = plugins.filter(
     (plugin) => plugin.markdown?.createHighlighter,
   )
@@ -157,13 +157,25 @@ export async function createPluginHighlighter(
     const highlighter = await owner.markdown?.createHighlighter?.(config)
     if (
       highlighter !== undefined &&
-      typeof highlighter?.codeToHtml !== 'function'
+      (typeof highlighter?.codeToHtml !== 'function' ||
+        (highlighter.flush !== undefined &&
+          typeof highlighter.flush !== 'function'))
     )
       throw new Error(
         'markdown.createHighlighter must return a code highlighter or undefined.',
       )
     return (
       highlighter && {
+        ...(highlighter.flush
+          ? {
+              flush: () =>
+                awaitPlugin(
+                  owner.name,
+                  'markdown.createHighlighter.flush',
+                  () => highlighter.flush?.(),
+                ),
+            }
+          : {}),
         codeToHtml: (code: string, lang?: string) =>
           awaitPlugin(owner.name, 'markdown.createHighlighter.codeToHtml', () =>
             highlighter.codeToHtml(code, lang),
@@ -218,6 +230,7 @@ export function resolvePluginHighlighter(
   )
   if (resolvers.length === 0) return fallback
   return {
+    ...(fallback?.flush ? { flush: () => fallback.flush?.() } : {}),
     async codeToHtml(code, lang) {
       const normalizedLang = lang?.trim().toLowerCase() ?? ''
       for (const { plugin, resolve } of resolvers) {

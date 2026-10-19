@@ -126,6 +126,11 @@ function parseCliArgs(args: string[]): CliState {
     state.input.build.options ??= {}
     state.input.build.options.cleanOutDir = true
   }
+  if (options.includes('--no-cache')) {
+    state.input.build ??= {}
+    state.input.build.options ??= {}
+    state.input.build.options.cache = false
+  }
   if (command === 'publish') {
     state.input.build ??= {}
     state.input.build.publish = { enabled: true }
@@ -169,10 +174,16 @@ function assertKnownOptions(
 }
 
 function resolveFlagOptions(command: Exclude<CliCommand, 'help'>) {
-  if (command === 'build') return ['--clean']
+  if (command === 'build') return ['--clean', '--no-cache']
   if (command === 'serve')
-    return ['--clean', '--no-watch', '--no-reload', '--full-render']
-  return []
+    return [
+      '--clean',
+      '--no-cache',
+      '--no-watch',
+      '--no-reload',
+      '--full-render',
+    ]
+  return ['--no-cache']
 }
 
 function resolveValueOptions(command: Exclude<CliCommand, 'help'>) {
@@ -207,9 +218,9 @@ class CliUsageError extends Error {
 
 const USAGE = `Usage:
   purestack --version
-  purestack build --content <dir> [--clean]
-  purestack serve --content <dir> [--host <host>] [--port <port>] [--clean] [--no-watch] [--no-reload] [--full-render]
-  purestack publish --content <dir>
+  purestack build --content <dir> [--clean] [--no-cache]
+  purestack serve --content <dir> [--host <host>] [--port <port>] [--clean] [--no-cache] [--no-watch] [--no-reload] [--full-render]
+  purestack publish --content <dir> [--no-cache]
 
 Commands:
   build     Build a content directory into its configured outDir.
@@ -217,5 +228,7 @@ Commands:
   publish   Clean and build a publish artifact using the configured publishDir.
 
 Options:
+  --clean         Empty the output directory and ignore its incremental manifest.
+  --no-cache      Skip persistent plugin caches outside the output directory.
   --help, -h      Print this usage summary.
   --version, -v   Print the installed PureStack version.`
