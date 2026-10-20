@@ -82,6 +82,11 @@ page, cards, inset surfaces, and controls, plus border strength, saturation, and
 shadow density. Dark presets range from crisp slate to a brighter warm studio.
 Documentation derives its colors from these same roles, so its code panels and
 copy controls keep their own layers instead of sharing one flat reading surface.
+`theme/studioLandingColors.ts` keeps the landing page's original light-paper and
+deep-slate brightness while applying the selected color family's hues. Its
+palette overrides stay within the studio template; documentation retains each
+preset's distinct layer contrast. The initial background style uses the same
+template-specific palette before the full stylesheets load.
 `studioColorStyles.ts` emits the changed palette variables and documentation
 color variables. A tiny inline startup script before the
 stylesheet links restores `purestack-site-color` from local storage. The picker
