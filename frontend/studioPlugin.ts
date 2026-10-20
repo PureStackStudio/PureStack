@@ -5,9 +5,11 @@ import { card } from './demoStyle'
 import { registerApiReferenceStyles } from './docs/apiReferenceStyles'
 import { registerComponentGuideStyles } from './docs/componentGuide'
 import { defineDocumentationComponents } from './docs/docsComponents'
+import { addDocumentationLinks } from './docs/documentationLinks'
 import { previewTemplate } from './docs/previewTemplate'
 import { sitePreviewPages } from './docs/sitePreviews'
 import { ensureLegalContent } from './ensureLegalContent'
+import { registerDocumentationStyles } from './theme/documentationStyles'
 import { studioSkin } from './theme/studioSkin'
 import { registerStudioStyles } from './theme/studioStyles'
 
@@ -44,11 +46,15 @@ export const studioPlugin = definePlugin({
     },
   },
   hooks: {
+    onPageDocument(_context, { document }) {
+      addDocumentationLinks(document)
+    },
     async onConfigResolved({ config }) {
       await ensureLegalContent(config.contentDir)
       registerStudioStyles()
       registerApiReferenceStyles()
       registerComponentGuideStyles()
+      registerDocumentationStyles()
     },
   },
 })
