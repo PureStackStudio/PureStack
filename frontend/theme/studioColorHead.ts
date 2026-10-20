@@ -12,8 +12,20 @@ import {
 
 /** Runs before the stylesheet links and body, independently of the picker module. */
 export function buildSiteColorInitScript() {
-  const ids = JSON.stringify(studioColorPresets.map((preset) => preset.id))
-  return `(()=>{let c=${JSON.stringify(DEFAULT_SITE_COLOR)};try{let s=localStorage.getItem(${JSON.stringify(SITE_COLOR_STORAGE_KEY)});if(${ids}.includes(s))c=s}catch{}document.documentElement.setAttribute("data-site-color",c)})();`
+  const ids = serializeInlineScriptValue(
+    studioColorPresets.map((preset) => preset.id),
+  )
+  const defaultColor = serializeInlineScriptValue(DEFAULT_SITE_COLOR)
+  const storageKey = serializeInlineScriptValue(SITE_COLOR_STORAGE_KEY)
+  return `(()=>{let c=${defaultColor};try{let s=localStorage.getItem(${storageKey});if(${ids}.includes(s))c=s}catch{}document.documentElement.setAttribute("data-site-color",c)})();`
+}
+
+/** JSON string escaping alone does not prevent an HTML </script> terminator. */
+function serializeInlineScriptValue(value: string | readonly string[]) {
+  return JSON.stringify(value)
+    .replace(/</g, '\\u003c')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029')
 }
 
 const criticalStyles = new Map<boolean, string>()
