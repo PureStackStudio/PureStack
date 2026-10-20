@@ -1,27 +1,47 @@
-import type { ThemeMode, ThemePalette } from '@purestack/ts-style'
-import { paint, studioHues } from './studioSkinShared'
+import type { Style } from '@purestack/ts-css'
+import type { ThemePalette } from '@purestack/ts-style'
 
 export type DocumentationColors = ReturnType<typeof createDocumentationColors>
 
-/** Reading surfaces and their decorative accents, separate from the demo palette. */
-export function createDocumentationColors(
-  theme: ThemeMode,
-  palette: ThemePalette,
-) {
-  const neutral = paint(studioHues.neutral)
-  const dark = theme === 'dark'
-  const surface = dark ? neutral(0.265, 0.13) : neutral(0.99, 0.015)
-  const shadow = neutral(0.15, 0.1, dark ? 0.16 : 0.045)
+export const documentationColorBindings: DocumentationColors = {
+  canvas: 'var(--ps-studio-doc-canvas)',
+  surface: 'var(--ps-studio-doc-surface)',
+  code: 'var(--ps-studio-doc-code)',
+  control: 'var(--ps-studio-doc-control)',
+  ink: 'var(--ps-studio-doc-ink)',
+  heading: 'var(--ps-studio-doc-heading)',
+  muted: 'var(--ps-studio-doc-muted)',
+  border: 'var(--ps-studio-doc-border)',
+  shadow: 'var(--ps-studio-doc-shadow)',
+  tint: 'var(--ps-studio-doc-tint)',
+  elevation: 'var(--ps-studio-doc-elevation)',
+}
+
+/** Documentation uses the preset's actual hierarchy, including inset and control layers. */
+export function createDocumentationColors(palette: ThemePalette) {
+  const neutral = palette.semanticTone.neutral
+  const shadow = `color-mix(in srgb, ${neutral.overlay} 22%, transparent)`
 
   return {
-    canvas: dark ? neutral(0.235, 0.12) : neutral(0.975, 0.025),
-    surface,
-    ink: dark ? neutral(0.85, 0.08) : neutral(0.32, 0.12),
-    heading: dark ? neutral(0.93, 0.06) : neutral(0.25, 0.15),
-    muted: dark ? neutral(0.72, 0.1) : neutral(0.48, 0.12),
-    border: dark ? neutral(0.36, 0.12) : neutral(0.88, 0.05),
+    canvas: neutral.canvas,
+    surface: neutral.surface.rest.background,
+    code: neutral.surfaceAlt.rest.background,
+    control: neutral.button.rest.background,
+    ink: neutral.surfaceAlt.rest.text,
+    heading: neutral.text.default,
+    muted: neutral.text.subtle,
+    border: neutral.border.subtle,
     shadow,
-    tint: `color-mix(in srgb, ${palette.semanticTone.accent.text.default} 6%, ${surface})`,
-    elevation: `0 3px 12px ${shadow}, 0 16px 40px ${shadow}`,
+    tint: palette.semanticTone.accent.surfaceAlt.rest.background,
+    elevation: palette.effect.softShadow,
+  }
+}
+
+export function setDocumentationColorVariables(
+  root: Style,
+  colors: DocumentationColors,
+) {
+  for (const [name, value] of Object.entries(colors)) {
+    root.set(`--ps-studio-doc-${name}`, value)
   }
 }

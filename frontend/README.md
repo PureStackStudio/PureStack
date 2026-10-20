@@ -72,7 +72,25 @@ palette variables. Page-specific layout and decorative styles use `styleBuilder`
 and `themes.forEach`, with framework breakpoint tokens. They are emitted into
 `site.css` and `site.dark.css`; there is no separate handwritten CSS asset.
 
-To change the identity, edit the hues in `theme/studioSkinShared.ts`. To add a
+The palette icon before the theme toggle offers Cobalt, Violet, Teal, Emerald,
+Amber, and Rose. Edit `theme/studioColorPresets.ts` to adjust each complete color
+family: neutrals, accents, companion colors, and semantic roles. Each preset
+coordinates page backgrounds, reading surfaces, text, borders, controls, shadows,
+and highlights in both modes. Status colors retain their familiar meanings.
+`theme/studioSurfaceProfiles.ts` defines each preset's lightness steps for the
+page, cards, inset surfaces, and controls, plus border strength, saturation, and
+shadow density. Dark presets range from crisp slate to a brighter warm studio.
+Documentation derives its colors from these same roles, so its code panels and
+copy controls keep their own layers instead of sharing one flat reading surface.
+`studioColorStyles.ts` emits the changed palette variables and documentation
+color variables. A tiny inline startup script before the
+stylesheet links restores `purestack-site-color` from local storage. The picker
+uses the normal `PageScript` asset pipeline for its separately bundled runtime,
+supports native radio keyboard controls, and follows changes from other tabs.
+If storage is unavailable, the choice still applies for the current visit.
+
+To change a selectable identity, edit its preset; `theme/studioSkinShared.ts`
+defines the skin's baseline hues and shared typography. To add a
 reusable section,
 compose existing primitives in its own file under `components/`, register its
 definition in `studioComponents.ts`, and register only the extra layout styles

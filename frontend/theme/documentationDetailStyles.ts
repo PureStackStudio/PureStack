@@ -196,7 +196,7 @@ function registerCopyControlStyles(
   article: Style,
   colors: DocumentationColors,
 ) {
-  const { muted, surface, border } = colors
+  const { heading, control, border } = colors
 
   article
     .select(
@@ -204,8 +204,8 @@ function registerCopyControlStyles(
     )
     .opacity('0.65')
     .pointerEvents('auto')
-    .color(muted)
-    .background(surface)
+    .color(heading)
+    .background(control)
     .borderColor(border)
 
   article

@@ -29,9 +29,9 @@ const frameScript = `
 document.querySelectorAll('.site-guide-sample details.sign-in').forEach(menu=>menu.open=true);
 document.querySelectorAll('.site-guide-sample .consent__banner').forEach(banner=>{banner.hidden=false;banner.removeAttribute('aria-hidden')});
 if(window.parent!==window){
-  const sync=()=>{document.documentElement.dataset.theme=parent.document.documentElement.dataset.theme||'light';document.documentElement.setAttribute('data-theme-ready','true')};
+  const sync=()=>{document.documentElement.dataset.theme=parent.document.documentElement.dataset.theme||'light';document.documentElement.dataset.siteColor=parent.document.documentElement.dataset.siteColor||'cobalt';document.documentElement.setAttribute('data-theme-ready','true')};
   sync();
-  new MutationObserver(sync).observe(parent.document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+  new MutationObserver(sync).observe(parent.document.documentElement,{attributes:true,attributeFilter:['data-theme','data-site-color']});
   const minimumHeight=frameElement ? parseFloat(frameElement.style.height)||0 : 0;
   const resize=()=>{if(frameElement)frameElement.style.height=Math.max(minimumHeight,Math.ceil(document.body.getBoundingClientRect().height))+'px'};
   new ResizeObserver(resize).observe(document.body);

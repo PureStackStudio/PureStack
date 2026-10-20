@@ -137,8 +137,8 @@ function registerTopBarToggleGlyphStyles(theme: ThemeMode) {
     .height('0.125rem')
     .background('currentColor')
     .position('absolute')
-    .top('0.875rem')
-    .left('0.75rem')
+    .top('calc(50% - 0.4375rem)')
+    .left('calc(50% - 0.5625rem)')
     .transition('transform 200ms ease, top 200ms ease')
     .boxShadow('0 0.375rem 0 0 currentColor')
   styleBuilder
@@ -148,8 +148,8 @@ function registerTopBarToggleGlyphStyles(theme: ThemeMode) {
     .height('0.125rem')
     .background('currentColor')
     .position('absolute')
-    .top('1.625rem')
-    .left('0.75rem')
+    .top('calc(50% + 0.3125rem)')
+    .left('calc(50% - 0.5625rem)')
     .transition('transform 200ms ease, top 200ms ease')
 }
 
@@ -157,12 +157,12 @@ function registerTopBarToggleCheckedStateStyles(theme: ThemeMode) {
   styleBuilder.select('.doc-nav-toggle', theme).display('none')
   styleBuilder
     .select('.doc-nav-toggle:checked ~ .topbar .topbar__toggle::before', theme)
-    .top('1.25rem')
+    .top('calc(50% - 0.0625rem)')
     .transform('rotate(45deg)')
     .boxShadow('none')
   styleBuilder
     .select('.doc-nav-toggle:checked ~ .topbar .topbar__toggle::after', theme)
-    .top('1.25rem')
+    .top('calc(50% - 0.0625rem)')
     .transform('rotate(-45deg)')
 }
 

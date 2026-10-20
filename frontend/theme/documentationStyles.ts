@@ -2,6 +2,8 @@ import type { Style } from '@purestack/ts-css'
 import { styleBuilder, themes, type ThemePalette } from '@purestack/ts-style'
 import {
   createDocumentationColors,
+  documentationColorBindings,
+  setDocumentationColorVariables,
   type DocumentationColors,
 } from './documentationColors'
 import { registerDocumentationDetailStyles } from './documentationDetailStyles'
@@ -9,7 +11,11 @@ import { registerDocumentationDetailStyles } from './documentationDetailStyles'
 /** A reading treatment for the documentation, independent of the demo palette. */
 export function registerDocumentationStyles() {
   themes.forEach((theme, palette) => {
-    const colors = createDocumentationColors(theme, palette)
+    setDocumentationColorVariables(
+      styleBuilder.get(theme).select(':where(:scope)'),
+      createDocumentationColors(palette),
+    )
+    const colors = documentationColorBindings
     const docs = styleBuilder
       .get(theme)
       .scope('body.template-doc:not(.preview)')
@@ -97,7 +103,7 @@ function registerBlockquoteStyles(
 }
 
 function registerCodeStyles(article: Style, colors: DocumentationColors) {
-  const { surface, border, ink } = colors
+  const { code, border, ink } = colors
 
   article
     .select(
@@ -106,7 +112,7 @@ function registerCodeStyles(article: Style, colors: DocumentationColors) {
     .fontSize('0.875rem')
     .lineHeight('1.7')
     .letterSpacing('normal')
-    .background(surface)
+    .background(code)
     .borderColor(border)
     .color(ink)
 

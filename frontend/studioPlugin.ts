@@ -12,11 +12,15 @@ import { ensureLegalContent } from './ensureLegalContent'
 import { registerDocumentationStyles } from './theme/documentationStyles'
 import { studioSkin } from './theme/studioSkin'
 import { registerStudioStyles } from './theme/studioStyles'
+import { renderStudioColorHead } from './theme/studioColorHead'
+import { registerStudioColorStyles } from './theme/studioColorStyles'
+import { registerStudioColorPickerStyles } from './theme/studioColorPickerStyles'
 
 /** Everything purestack.studio adds to PureStack: skin, components, layout, previews. */
 export const studioPlugin = definePlugin({
   name: 'purestack-studio',
   skins: { studio: studioSkin },
+  head: renderStudioColorHead,
   components: (config) => ({
     ...defineStudioComponents(),
     ...defineDocumentationComponents(config),
@@ -55,6 +59,8 @@ export const studioPlugin = definePlugin({
       registerApiReferenceStyles()
       registerComponentGuideStyles()
       registerDocumentationStyles()
+      registerStudioColorStyles()
+      registerStudioColorPickerStyles()
     },
   },
 })
