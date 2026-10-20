@@ -6,6 +6,7 @@ import { copyStaticAsset, resolveStaticOutPath } from '../assets'
 import type { AssetManifestEntry } from '../manifest'
 import { readSignature } from '../manifest'
 import type { ScriptCacheKeyStore } from '../script-cache-key'
+import { SharedLibraryCache } from '../shared-libraries'
 import { outputPathKey, removeFile, toAssetFile } from './support'
 import type { IncrementalBuildResult } from './types'
 
@@ -15,6 +16,7 @@ interface ScriptEntrypointManagerInput {
   minifyScripts: boolean
   failOnAssetError: boolean
   cacheBusting: boolean
+  sharedLibraries: readonly string[]
   getAssets: () => Record<string, AssetManifestEntry>
   scriptCacheKeys: ScriptCacheKeyStore
   persistManifest: () => Promise<void>
@@ -26,8 +28,15 @@ export class ScriptEntrypointManager {
   private readonly dependentsByRelPath = new Map<string, Set<string>>()
   private readonly dirtyEntrypoints = new Map<string, number>()
   private dirtyVersion = 0
+  private readonly sharedLibraries: SharedLibraryCache
 
-  constructor(private readonly input: ScriptEntrypointManagerInput) {}
+  constructor(private readonly input: ScriptEntrypointManagerInput) {
+    this.sharedLibraries = new SharedLibraryCache({
+      ...input.config,
+      libraries: input.sharedLibraries,
+      reserveOutput: input.reserveOutput,
+    })
+  }
 
   rebuildDependencyIndex(index: Record<string, string[]>) {
     this.entryDependencies.clear()
@@ -39,6 +48,7 @@ export class ScriptEntrypointManager {
 
   clearPageEntrypoints() {
     this.pageEntrypoints.clear()
+    this.sharedLibraries.invalidate()
   }
 
   setPageEntrypoints(pageRelPath: string, scriptEntrypoints: string[]) {
@@ -93,7 +103,14 @@ export class ScriptEntrypointManager {
     return false
   }
 
-  resolveImpactedEntryRelPaths(changedRelPath: string) {
+  hasDependency(relPath: string) {
+    return this.dependentsByRelPath.has(this.normalizeRelPath(relPath))
+  }
+
+  invalidateDependency(changedRelPath: string) {
+    this.sharedLibraries.invalidate(
+      path.join(this.input.config.contentDir, changedRelPath),
+    )
     const normalized = this.normalizeRelPath(changedRelPath)
     const impacted = new Set<string>()
     // Failed bundles have no dependency graph yet. A TypeScript edit may fix
@@ -234,6 +251,9 @@ export class ScriptEntrypointManager {
         minifyScripts: this.input.minifyScripts,
         failOnError: this.input.failOnAssetError,
         scriptCacheKey: cacheKey,
+        reserveOutput: this.input.reserveOutput,
+        sharedLibraries: this.input.sharedLibraries,
+        sharedLibraryCache: this.sharedLibraries,
       },
     )
     if (!assetCopy.copied) {

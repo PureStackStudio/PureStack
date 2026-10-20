@@ -571,6 +571,160 @@ describe('incremental builder', () => {
     })
   })
 
+  it.each(
+    [false, true].flatMap((onDemand) =>
+      ['ts', 'js', 'mjs', 'json'].map((ext) => ({ onDemand, ext })),
+    ),
+  )(
+    'rebuilds every importing entry when shared $ext library source changes (on demand $onDemand)',
+    async ({ onDemand, ext }) => {
+      await withTempDir(async (base) => {
+        const source = (message: string) =>
+          ext === 'json'
+            ? JSON.stringify({ state: { message } })
+            : `export const state = { message: '${message}' }`
+        const sharedPath = `shared.${ext}`
+        const site = await createSite(base, 'none', {
+          'hosts.mdx': '<RegorApp src="./hosts.ts" id="hosts" />',
+          'account.mdx': '<RegorApp src="./account.ts" id="account" />',
+          'hosts.ts': "export { state } from 'fixture-library'",
+          'account.ts': "export { state } from 'fixture-library'",
+          [sharedPath]: source('before'),
+          'tsconfig.json': JSON.stringify({
+            compilerOptions: {
+              paths: { 'fixture-library': [`./${sharedPath}`] },
+            },
+          }),
+          'siteConfig.json': JSON.stringify({
+            scripts: { sharedLibraries: ['fixture-library'] },
+            mdx: { disableHighlighter: true },
+          }),
+        })
+        const outDir = path.join(base, 'out')
+        const beforeHosts = await readScriptBundle(outDir)
+        const beforeAccount = await readScriptBundle(
+          outDir,
+          'account/index.html',
+        )
+        if (onDemand) await site.builder.prepareForRequests()
+        const result = await site.change(sharedPath, source('after'))
+        expect(result.changedAssets).toBeGreaterThanOrEqual(onDemand ? 0 : 2)
+        expect(result.changedPages).toBe(onDemand ? 0 : 2)
+        if (onDemand) {
+          await site.builder.renderByUrlPath('/hosts/')
+          await site.builder.renderByUrlPath('/account/')
+          await site.builder.preparePageAssets()
+        }
+        const afterHosts = await readScriptBundle(outDir)
+        const afterAccount = await readScriptBundle(
+          outDir,
+          'account/index.html',
+        )
+        expect(afterHosts.content).not.toBe(beforeHosts.content)
+        expect(afterAccount.content).not.toBe(beforeAccount.content)
+        const runtimeImport =
+          /from\s*["']([^"']+fixture-library\.[A-Z0-9]+\.js)["']/.exec(
+            afterHosts.content,
+          )
+        expect(runtimeImport).toBeTruthy()
+        const runtimePath = path.resolve(
+          path.dirname(afterHosts.path),
+          runtimeImport?.[1] ?? '',
+        )
+        expect(await fs.readFile(runtimePath, 'utf8')).toContain('after')
+        expect(afterAccount.content).toContain(path.basename(runtimePath))
+      })
+    },
+  )
+
+  it.each(['tsconfig.json', 'tsconfig.paths.json'])(
+    'requests a full rebuild when shared-library aliases change in %s',
+    async (configFile) => {
+      await withTempDir(async (base) => {
+        const aliases = (source: string) =>
+          JSON.stringify({
+            compilerOptions: { paths: { 'fixture-library': [`./${source}`] } },
+          })
+        const site = await createSite(base, 'none', {
+          'hosts.mdx': '<RegorApp src="./hosts.ts" id="hosts" />',
+          'hosts.ts': "export { state } from 'fixture-library'",
+          'before.ts': "export const state = 'before'",
+          'after.ts': "export const state = 'after'",
+          'tsconfig.json':
+            configFile === 'tsconfig.json'
+              ? aliases('before.ts')
+              : JSON.stringify({ extends: `./${configFile}` }),
+          ...(configFile === 'tsconfig.json'
+            ? {}
+            : { [configFile]: aliases('before.ts') }),
+          'siteConfig.json': JSON.stringify({
+            scripts: { sharedLibraries: ['fixture-library'] },
+            mdx: { disableHighlighter: true },
+          }),
+        })
+        const outDir = path.join(base, 'out')
+        const before = await readScriptBundle(outDir)
+        const change = await site.change(configFile, aliases('after.ts'))
+        expect(change.fullRebuild).toBe(true)
+        await site.builder.buildAll('resolution config changed')
+        const after = await readScriptBundle(outDir)
+        expect(after.content).not.toBe(before.content)
+        const imported =
+          /from\s*["']([^"']+fixture-library\.[A-Z0-9]+\.js)["']/.exec(
+            after.content,
+          )
+        expect(imported).toBeTruthy()
+        const runtime = path.resolve(
+          path.dirname(after.path),
+          imported?.[1] ?? '',
+        )
+        expect(await fs.readFile(runtime, 'utf8')).toContain('after')
+      })
+    },
+  )
+
+  it('requests a full rebuild when a shared package changes its exports', async () => {
+    await withTempDir(async (base) => {
+      const manifest = (source: string) =>
+        JSON.stringify({
+          name: 'fixture-library',
+          type: 'module',
+          exports: `./${source}.js`,
+        })
+      const packagePath = 'node_modules/fixture-library/package.json'
+      const site = await createSite(base, 'none', {
+        'hosts.mdx': '<RegorApp src="./hosts.ts" id="hosts" />',
+        'hosts.ts': "export { state } from 'fixture-library'",
+        [packagePath]: manifest('before'),
+        'node_modules/fixture-library/before.js':
+          "export const state = 'before'",
+        'node_modules/fixture-library/after.js': "export const state = 'after'",
+        'siteConfig.json': JSON.stringify({
+          scripts: { sharedLibraries: ['fixture-library'] },
+          mdx: { disableHighlighter: true },
+        }),
+      })
+      const outDir = path.join(base, 'out')
+      const before = await readScriptBundle(outDir)
+      expect(
+        (await site.change(packagePath, manifest('after'))).fullRebuild,
+      ).toBe(true)
+      await site.builder.buildAll('package exports changed')
+      const after = await readScriptBundle(outDir)
+      expect(after.content).not.toBe(before.content)
+      const imported =
+        /from\s*["']([^"']+fixture-library\.[A-Z0-9]+\.js)["']/.exec(
+          after.content,
+        )
+      expect(imported).toBeTruthy()
+      const runtime = path.resolve(
+        path.dirname(after.path),
+        imported?.[1] ?? '',
+      )
+      expect(await fs.readFile(runtime, 'utf8')).toContain('after')
+    })
+  })
+
   it('removes ts entry bundle after deleting a scripted page with navigation enabled', async () => {
     await withTempDir(async (base) => {
       const contentDir = path.join(base, 'content')

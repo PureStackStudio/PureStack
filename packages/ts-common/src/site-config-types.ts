@@ -73,6 +73,8 @@ export interface AuthConfig {
 
 export interface SiteScriptsConfig {
   cacheBusting: boolean
+  /** Package import specifiers emitted as shared browser modules. Regor is always included. */
+  sharedLibraries: string[]
 }
 
 export interface SiteStyleConfig {

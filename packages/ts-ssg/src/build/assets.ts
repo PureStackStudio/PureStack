@@ -2,10 +2,11 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import { isTypeScriptAssetPath, toOutputAssetRelPath } from '@purestack/ts-util'
 import { ensureDir } from '@purestack/ts-util-node'
-import { build as buildScript, type Metafile } from 'esbuild'
+import { build as buildScript } from 'esbuild'
 import { getLogger } from 'logpot'
 import { discoverStaticAssets, type StaticAssetFile } from '../discover/content'
 import { regorTemplateTagsPlugin } from './regorTemplateTransform'
+import { SharedLibraryCache } from './shared-libraries'
 
 export interface CopyStaticAssetsResult {
   assets: number
@@ -18,6 +19,9 @@ export interface StaticAssetBuildOptions {
   failOnError?: boolean
   scriptCacheKey?: string
   getScriptCacheKey?: (relPath: string) => string | undefined
+  reserveOutput?: (outPath: string) => void
+  sharedLibraries?: readonly string[]
+  sharedLibraryCache?: SharedLibraryCache
 }
 
 export interface CopyStaticAssetsOptions extends StaticAssetBuildOptions {
@@ -41,14 +45,26 @@ export async function copyStaticAssets(
     ? [...options.files]
     : await discoverStaticAssets(contentDir)
   const tsDependencyIndex: Record<string, string[]> = {}
+  const scriptOptions = {
+    ...options,
+    sharedLibraryCache:
+      options.sharedLibraryCache ??
+      new SharedLibraryCache({
+        contentDir,
+        outDir,
+        libraries: options.sharedLibraries,
+        reserveOutput: options.reserveOutput,
+      }),
+  }
   for (const asset of assets) {
     const outPath = resolveStaticOutPath(outDir, asset, options)
     await ensureDir(outPath)
     const dependencyRelPaths = await writeStaticAsset(
       contentDir,
+      outDir,
       asset,
       outPath,
-      options,
+      scriptOptions,
     )
     await removeStaleScriptOutputFiles(asset, outPath, options)
     if (dependencyRelPaths.length > 0) {
@@ -71,6 +87,7 @@ export async function copyStaticAsset(
     await ensureDir(outPath)
     const dependencyRelPaths = await writeStaticAsset(
       contentDir,
+      outDir,
       asset,
       outPath,
       options,
@@ -123,11 +140,21 @@ function resolveScriptCacheKey(
 
 async function writeStaticAsset(
   contentDir: string,
+  outDir: string,
   asset: StaticAssetFile,
   outPath: string,
   options: StaticAssetBuildOptions,
 ) {
   if (isTypeScriptAssetPath(asset.relPath)) {
+    let sharedDependencyPaths: string[] = []
+    const sharedLibraries =
+      options.sharedLibraryCache ??
+      new SharedLibraryCache({
+        contentDir,
+        outDir,
+        libraries: options.sharedLibraries,
+        reserveOutput: options.reserveOutput,
+      })
     const buildResult = await buildScript({
       entryPoints: [asset.absPath],
       outfile: outPath,
@@ -140,9 +167,17 @@ async function writeStaticAsset(
       target: 'esnext',
       logLevel: 'silent',
       metafile: true,
-      plugins: [regorTemplateTagsPlugin()],
+      plugins: [
+        regorTemplateTagsPlugin(),
+        sharedLibraries.plugin(outPath, (inputPaths) => {
+          sharedDependencyPaths = inputPaths
+        }),
+      ],
     })
-    return collectDependencyRelPaths(buildResult.metafile, contentDir)
+    return collectDependencyRelPaths(
+      [...Object.keys(buildResult.metafile.inputs), ...sharedDependencyPaths],
+      contentDir,
+    )
   }
   await fs.copyFile(asset.absPath, outPath)
   return []
@@ -185,12 +220,11 @@ function isStaleScriptOutputFile(fileName: string, scriptName: string) {
 }
 
 function collectDependencyRelPaths(
-  metafile: Metafile | undefined,
+  inputPaths: readonly string[],
   root: string,
 ) {
   const deps = new Set<string>()
-  const inputs = metafile?.inputs ?? {}
-  for (const inputPath of Object.keys(inputs)) {
+  for (const inputPath of inputPaths) {
     const absPath = path.isAbsolute(inputPath)
       ? inputPath
       : path.resolve(inputPath)

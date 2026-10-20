@@ -63,6 +63,7 @@ With the folder layout above, `index.mdx` renders at `/`, and `guides/getting-st
 | `basePath` | Public mount path, such as `/docs`, used in generated URLs and the dev server. It does not add a `docs` folder inside the output directory. |
 | `html.minify` | Minifies generated HTML during a normal build; defaults to `false`. |
 | `scripts.cacheBusting` | Adds a build cache key to emitted local TypeScript script filenames; defaults to `true`. |
+| `scripts.sharedLibraries` | Package import specifiers shared across page scripts. Regor is always included. List subpaths explicitly; generated modules use content-hashed filenames under `assets/runtime/`. |
 
 For example, with `"outDir": "../dist/site"` in `content/siteConfig.json`, the build writes into `dist/site` beside `content`. `"basePath": "/docs"` makes the home page publicly available at `/docs/`, while its output file remains `dist/site/index.html`. Host that output at `/docs/`; changing the config alone cannot change a host's routing.
 

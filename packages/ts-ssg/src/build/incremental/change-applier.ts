@@ -216,7 +216,7 @@ export class IncrementalChangeApplier {
       await this.input.contentState.refreshGeneratedPages()
       result.deletedAssets += 1
     }
-    if (ext === '.ts') await this.handleScriptAssetChange(relPath, result)
+    if (ext === '.ts') await this.applyScriptDependencyChange(relPath, result)
     if (contentEntry || assetEntry) {
       await this.input.persistManifest()
     }
@@ -271,7 +271,7 @@ export class IncrementalChangeApplier {
       return
 
     if (ext === '.ts') {
-      await this.handleScriptAssetChange(relPath, result)
+      await this.applyScriptDependencyChange(relPath, result)
       await this.input.persistManifest()
       return
     }
@@ -298,12 +298,12 @@ export class IncrementalChangeApplier {
     await this.input.persistManifest()
   }
 
-  private async handleScriptAssetChange(
+  async applyScriptDependencyChange(
     relPath: string,
     result: IncrementalBuildResult,
   ) {
     const impactedEntries =
-      this.input.scriptEntrypoints.resolveImpactedEntryRelPaths(relPath)
+      this.input.scriptEntrypoints.invalidateDependency(relPath)
     if (impactedEntries.size === 0) return
 
     if (this.input.renderOnRequest()) {

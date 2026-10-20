@@ -119,8 +119,22 @@ function resolveScriptsConfig(
   input?: DeepPartial<SiteScriptsConfig>,
   file?: DeepPartial<SiteScriptsConfig>,
 ): SiteScriptsConfig {
+  const sharedLibraries = input?.sharedLibraries ?? file?.sharedLibraries ?? []
+  if (
+    !Array.isArray(sharedLibraries) ||
+    sharedLibraries.some(
+      (value) =>
+        typeof value !== 'string' ||
+        !/^(?:@[\w~-]+\/)?[\w~-][\w.~-]*(?:\/[\w~-][\w.~-]*)*$/.test(value),
+    )
+  ) {
+    throw new Error(
+      'scripts.sharedLibraries must be an array of package import specifiers.',
+    )
+  }
   return {
     cacheBusting: pickBoolean(input?.cacheBusting, file?.cacheBusting, true),
+    sharedLibraries: [...new Set(['regor', ...sharedLibraries])],
   }
 }
 
