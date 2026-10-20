@@ -16,7 +16,7 @@ export function registerDocumentationDetailStyles(
   registerComponentHeaderStyles(article, palette, colors)
   registerExampleFrameStyles(article, colors)
   registerCodeFrameStyles(article, colors)
-  registerCopyControlStyles(article, colors)
+  registerCopyControlStyles(article, palette, colors)
   registerTableFrameStyles(article, colors)
   registerAdjacentPageCardStyles(article, colors)
   registerAdjacentPageControlStyles(article, palette, colors)
@@ -194,25 +194,70 @@ function registerCodeFrameStyles(article: Style, colors: DocumentationColors) {
 
 function registerCopyControlStyles(
   article: Style,
+  palette: ThemePalette,
   colors: DocumentationColors,
 ) {
-  const { heading, control, border } = colors
+  const button =
+    ':is(:scope > pre, :scope > .tabs .tabs__panel-body > pre, .api-property__content pre, .api-contract pre) > .code-copy-button'
+  const idle = `${button}:not(.is-copied, .is-error)`
+  const { muted, surface, border } = colors
 
   article
-    .select(
-      ':scope > pre > .code-copy-button, .api-property__content > pre > .code-copy-button, .api-contract > pre > .code-copy-button',
-    )
-    .opacity('0.65')
-    .pointerEvents('auto')
-    .color(heading)
-    .background(control)
-    .borderColor(border)
+    .select(button)
+    .width('2.25rem')
+    .height('2.25rem')
+    .padding('0.5rem')
+    .borderRadius('0.625rem')
+    .boxShadow('none')
 
   article
-    .select(
-      ':scope > pre:is(:hover, :focus-within) > .code-copy-button, .api-property__content > pre:is(:hover, :focus-within) > .code-copy-button, .api-contract > pre:is(:hover, :focus-within) > .code-copy-button',
-    )
-    .opacity('1')
+    .select(idle)
+    .color(muted)
+    .background(surface)
+    .border(`1px solid ${border}`)
+
+  article.select(`${button} > svg`).width('1.125rem').height('1.125rem')
+  registerCopyControlInteractionStyles(article, idle, palette, colors)
+  registerCopyControlFeedbackStyles(article, button, palette)
+}
+
+function registerCopyControlInteractionStyles(
+  article: Style,
+  button: string,
+  palette: ThemePalette,
+  colors: DocumentationColors,
+) {
+  const accent = palette.semanticTone.accent
+  article
+    .select(`${button}:is(:hover, :focus-visible)`)
+    .background(colors.tint)
+    .borderColor(accent.border.default)
+    .color(accent.text.default)
+    .boxShadow(`0 2px 8px ${colors.shadow}`)
+
+  article
+    .select(`${button}:focus-visible`)
+    .outline(`2px solid ${accent.border.focus}`)
+    .outlineOffset('3px')
+
+  article.select(`${button}:active`).transform('scale(0.96)')
+}
+
+function registerCopyControlFeedbackStyles(
+  article: Style,
+  button: string,
+  palette: ThemePalette,
+) {
+  for (const [state, tone] of [
+    ['is-copied', palette.semanticTone.success],
+    ['is-error', palette.semanticTone.danger],
+  ] as const) {
+    article
+      .select(`${button}.${state}`)
+      .background(tone.surface.rest.background)
+      .borderColor(tone.border.default)
+      .color(tone.surface.rest.text)
+  }
 }
 
 function registerTableFrameStyles(article: Style, colors: DocumentationColors) {
