@@ -50,6 +50,7 @@ import {
 import { type BuildContext, resolveHeaderFooterHtml } from '../page'
 import { getPageAssets, PageAssetManager, setPageAssets } from '../page-assets'
 import { createScriptCacheKey, ScriptCacheKeyStore } from '../script-cache-key'
+import { isScriptConfigFile } from '../shared-libraries'
 import type { BuildHooks, BuildInput, BuildResult } from '../site'
 import { writeSitemap } from '../sitemap'
 import { IncrementalChangeApplier } from './change-applier'
@@ -217,6 +218,7 @@ class IncrementalRuntime {
       minifyScripts: options.minifyScripts,
       failOnAssetError: options.failOnAssetError,
       cacheBusting: options.config.scripts.cacheBusting,
+      sharedLibraries: options.config.scripts.sharedLibraries,
       getAssets: () => this.manifest.assets,
       scriptCacheKeys: this.scriptCacheKeys,
       persistManifest: () => this.persistManifest(),
@@ -618,7 +620,7 @@ class IncrementalRuntime {
       })
     // Recursive watchers also emit directory events. They are not asset files.
     if (sourceStats?.isDirectory()) return result
-    if (isSiteConfigFile(relPath)) {
+    if (isSiteConfigFile(relPath) || isScriptConfigFile(relPath)) {
       result.fullRebuild = true
       return result
     }
@@ -642,6 +644,9 @@ class IncrementalRuntime {
     const assetDependents = this.assets.dependents(relPath)
     this.contentState.takeMarkedPageCount()
     const ext = path.extname(relPath).toLowerCase()
+    if (ext !== '.ts' && this.scriptEntrypoints.hasDependency(relPath)) {
+      await this.changeApplier.applyScriptDependencyChange(relPath, result)
+    }
     const imported = this.importedFiles.has(toPosixPath(relPath))
     const navigationFile =
       path.basename(relPath).toUpperCase() ===

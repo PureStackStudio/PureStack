@@ -627,6 +627,18 @@ Add your own Regor components with a plugin's `components` field. A component re
 
 Components render to static HTML at build time. For behavior in the browser, load a page script with `PageScript` or mount a browser-side Regor app with `RegorApp`.
 
+TypeScript page scripts share Regor automatically, including imports from their component dependencies. Add other browser ESM libraries through `scripts.sharedLibraries` in `siteConfig.json`:
+
+```json
+{
+  "scripts": {
+    "sharedLibraries": ["my-library", "my-library/extra"]
+  }
+}
+```
+
+List exact package import specifiers, including any subpaths used by page scripts. Regor is always included. Shared entries build together so their common dependencies also share one module instance. Generated modules live under `assets/runtime/` with content-hashed filenames; their URLs stay the same when only a page script changes. Page scripts continue to build independently.
+
 ## Theming
 
 The built-in skin is `standard`. Select a skin with `style.theme.skin` in `siteConfig.json`.

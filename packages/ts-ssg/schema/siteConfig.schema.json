@@ -521,6 +521,15 @@
           "type": "boolean",
           "description": "When true, emitted local TypeScript script filenames include a build cache key so browsers fetch fresh bundles after rebuilds.",
           "default": true
+        },
+        "sharedLibraries": {
+          "type": "array",
+          "description": "Package import specifiers emitted together as shared browser modules under assets/runtime. List subpath imports explicitly. Regor is always included.",
+          "items": {
+            "type": "string",
+            "pattern": "^(?:@[\\w~-]+/)?[\\w~-][\\w.~-]*(?:/[\\w~-][\\w.~-]*)*$"
+          },
+          "default": ["regor"]
         }
       }
     },

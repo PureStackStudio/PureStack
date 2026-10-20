@@ -236,6 +236,7 @@ describe('resolveSiteConfig sitemap', () => {
   it('enables script cache busting by default and accepts overrides', () => {
     expect(resolveSiteConfig({ rootDir: process.cwd() }).scripts).toEqual({
       cacheBusting: true,
+      sharedLibraries: ['regor'],
     })
 
     const config = resolveSiteConfig({
@@ -245,6 +246,56 @@ describe('resolveSiteConfig sitemap', () => {
       },
     })
     expect(config.scripts.cacheBusting).toBe(false)
+  })
+
+  it('resolves shared libraries from file and input while always including Regor', () => {
+    const contentDir = fs.mkdtempSync(
+      path.join(os.tmpdir(), 'ts-ssg-libraries-'),
+    )
+    try {
+      fs.writeFileSync(
+        path.join(contentDir, 'siteConfig.json'),
+        JSON.stringify({
+          scripts: { sharedLibraries: ['file-library', 'file-library'] },
+        }),
+      )
+      expect(resolveSiteConfig({ contentDir }).scripts.sharedLibraries).toEqual(
+        ['regor', 'file-library'],
+      )
+      expect(
+        resolveSiteConfig({
+          contentDir,
+          scripts: {
+            sharedLibraries: [
+              '@scope/library',
+              '@scope/library/extra',
+              'regor',
+            ],
+          },
+        }).scripts.sharedLibraries,
+      ).toEqual(['regor', '@scope/library', '@scope/library/extra'])
+      expect(
+        resolveSiteConfig({ contentDir, scripts: { sharedLibraries: [] } })
+          .scripts.sharedLibraries,
+      ).toEqual(['regor'])
+      for (const sharedLibraries of [
+        'invalid',
+        [''],
+        ['../local'],
+        ['https://example.com/lib.js'],
+        [7],
+      ]) {
+        fs.writeFileSync(
+          path.join(contentDir, 'siteConfig.json'),
+          JSON.stringify({ scripts: { sharedLibraries } }),
+        )
+        expect(() => resolveSiteConfig({ contentDir })).toThrow(
+          'scripts.sharedLibraries',
+        )
+      }
+    } finally {
+      fs.rmSync(contentDir, { recursive: true, force: true })
+    }
   })
 
   it('resolves logo presentation and noninteractive overrides', () => {

@@ -31,6 +31,90 @@ describe('dev server', () => {
   })
 
   it.each([true, false])(
+    'serves one shared Regor runtime under a base path (fullRender %s)',
+    async (fullRender) => {
+      root = await makeRepoTempDir('.tmp-ts-ssg-dev-regor-')
+      const contentDir = path.join(root, 'content')
+      const outDir = path.join(root, 'out')
+      await writeFile(
+        path.join(
+          contentDir,
+          'node_modules',
+          'fixture-library',
+          'package.json',
+        ),
+        JSON.stringify({
+          name: 'fixture-library',
+          type: 'module',
+          exports: './index.js',
+        }),
+      )
+      await writeFile(
+        path.join(contentDir, 'node_modules', 'fixture-library', 'index.js'),
+        'export const state = { count: 1 }',
+      )
+      await writeFile(
+        path.join(contentDir, 'index.mdx'),
+        '<RegorApp src="./first.ts" id="first" />\n<RegorApp src="./nested/second.ts" id="second" />',
+      )
+      for (const relPath of ['first.ts', 'nested/second.ts']) {
+        await writeFile(
+          path.join(contentDir, relPath),
+          "import { sref } from 'regor'\nexport { state } from 'fixture-library'\nexport const value = sref(1)",
+        )
+      }
+      const port = await findFreePort()
+      server = await startDevServer({
+        host: HOST,
+        port,
+        watch: false,
+        fullRender,
+        build: {
+          siteConfig: {
+            rootDir: root,
+            contentDir,
+            outDir,
+            basePath: '/docs',
+            scripts: { sharedLibraries: ['fixture-library'] },
+            mdx: { disableHighlighter: true },
+          },
+        },
+      })
+      const pageUrl = `http://${HOST}:${port}/docs/`
+      const response = await fetch(pageUrl)
+      expect(response.status).toBe(200)
+      const html = await response.text()
+      const scripts = [...html.matchAll(/<script\b[^>]*\bsrc="([^"]+\.js)"/g)]
+      expect(scripts).toHaveLength(2)
+      const runtimeUrls: string[] = []
+      for (const [, src] of scripts) {
+        const scriptUrl = new URL(src, pageUrl)
+        const script = await fetch(scriptUrl)
+        expect(script.status).toBe(200)
+        const code = await script.text()
+        const imported = /from\s*["']([^"']+regor\.[A-Z0-9]+\.js)["']/.exec(
+          code,
+        )
+        expect(imported).toBeTruthy()
+        runtimeUrls.push(new URL(imported?.[1] ?? '', scriptUrl).href)
+      }
+      expect(runtimeUrls[0]).toBe(runtimeUrls[1])
+      expect(new URL(runtimeUrls[0]).pathname).toMatch(
+        /^\/docs\/assets\/runtime\/regor\./,
+      )
+      const runtime = await fetch(runtimeUrls[0])
+      expect(runtime.status).toBe(200)
+      expect(runtime.headers.get('content-type')).toContain('javascript')
+      expect(await runtime.text()).toContain('regor.runtime')
+      expect(
+        (await fs.readdir(path.join(outDir, 'assets', 'runtime'))).some(
+          (file) => file.startsWith('fixture-library.'),
+        ),
+      ).toBe(true)
+    },
+  )
+
+  it.each([true, false])(
     'does not generate sitemap or robots with fullRender %s',
     async (fullRender) => {
       root = await makeRepoTempDir('.tmp-ts-ssg-dev-sitemap-')
