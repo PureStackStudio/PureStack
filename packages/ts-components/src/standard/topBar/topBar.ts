@@ -75,6 +75,7 @@ const topBarTemplate = html`<input
       variant="none"/>
     <Flex class="topbar__controls flex-none" align="center" justify="end">
       <div class="topbar__actions">
+        <slot name="before-actions"></slot>
         <ThemeToggle/>
         <slot name="actions"></slot>
         <SignIn

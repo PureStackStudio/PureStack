@@ -4,6 +4,7 @@ import {
   createGhostTone,
   createStudioTone,
   paint,
+  type StudioHues,
   type StudioHue,
   type StudioTone,
   spotlight,
@@ -11,18 +12,37 @@ import {
   studioHues,
   studioSkinShared,
 } from './studioSkinShared'
+import {
+  studioSurfaceProfiles,
+  type StudioSurfaceProfile,
+} from './studioSurfaceProfiles'
 
-const n = paint(studioHues.neutral)
-const accent = paint(studioHues.accent)
-const shadow = (alpha: number) => n(0.25, 0.4, alpha)
-const disabled = state(n(0.965, 0.04), n(0.91, 0.06), n(0.58, 0.15))
-const overlay = n(0.25, 0.3, 0.25)
+type LightFoundation = ReturnType<typeof createLightFoundation>
+
+function createLightFoundation(hue: StudioHue, layers: StudioSurfaceProfile) {
+  const n = paint(hue)
+  return {
+    n,
+    layers,
+    shadow: (alpha: number) =>
+      n(layers.ink, layers.chroma, alpha * layers.shadow),
+    disabled: state(
+      n(layers.canvas, layers.chroma),
+      n(layers.borderSubtle, layers.chroma),
+      n(0.58, 0.12),
+    ),
+    overlay: n(layers.ink, layers.chroma, 0.25 * layers.shadow),
+  }
+}
 
 /** Paper-light tints with saturated fills that carry white text. */
-function createLightTone(hue: StudioHue): StudioTone {
+function createLightTone(
+  hue: StudioHue,
+  { overlay, disabled, layers }: LightFoundation,
+): StudioTone {
   const at = paint(hue)
-  const tint = at(0.975, 0.1)
-  const tintActive = at(0.925, 0.24)
+  const tint = at(layers.surface, layers.tint)
+  const tintActive = at(layers.surfaceAlt - 0.015, layers.tint * 1.3)
   return createStudioTone({
     fill: at(0.53),
     fillHover: at(0.47),
@@ -32,10 +52,13 @@ function createLightTone(hue: StudioHue): StudioTone {
     muted: at(0.52, 0.3),
     body: at(0.46, 0.85),
     tint,
-    tintHover: at(0.955, 0.16),
+    tintHover: at(layers.surfaceAlt, layers.tint),
     tintActive,
-    border: at(0.84, 0.3),
-    borderSubtle: at(0.9, 0.2),
+    tintAlt: at(layers.surfaceAlt, layers.tint),
+    tintAltHover: at(layers.surfaceAlt - 0.015, layers.tint * 1.15),
+    tintAltActive: at(layers.surfaceAlt - 0.03, layers.tint * 1.3),
+    border: at(layers.border, layers.tint * 1.5),
+    borderSubtle: at(layers.borderSubtle, layers.tint),
     rim: at(0.53),
     canvas: tint,
     spotlight: spotlight(tint, tintActive, '#ffffff66'),
@@ -44,57 +67,100 @@ function createLightTone(hue: StudioHue): StudioTone {
   })
 }
 
-function createNeutralTone(): StudioTone {
-  const ink = n(0.24, 0.3)
-  const muted = n(0.5, 0.25)
+function createNeutralTone(
+  hues: StudioHues,
+  { n, overlay, disabled, layers }: LightFoundation,
+): StudioTone {
+  const accent = paint(hues.accent)
+  const paper = n(layers.surface, layers.chroma * 0.4)
+  const ink = n(layers.ink, layers.chroma * 1.5)
+  const muted = n(layers.muted, layers.chroma)
   const text = { default: ink, subtle: muted }
   const border = {
-    default: n(0.86, 0.12),
-    subtle: n(0.92, 0.08),
+    default: n(layers.border, layers.chroma),
+    subtle: n(layers.borderSubtle, layers.chroma * 0.7),
     focus: accent(0.53),
   }
   return {
     tone: n(0.5, 0.3),
-    canvas: n(0.984, 0.04),
-    canvascolor: n(0.984, 0.04),
-    spotlight: spotlight('#ffffff', n(0.94, 0.12), '#ffffff66'),
+    canvas: n(layers.canvas, layers.chroma),
+    canvascolor: n(layers.canvas, layers.chroma),
+    spotlight: spotlight(
+      paper,
+      n(layers.surfaceAlt, layers.chroma),
+      n(layers.surface, layers.chroma * 0.4, 0.4),
+    ),
     overlay,
     text,
     border,
     root: { text, border },
     surface: {
-      rest: state('#ffffff', border.subtle, ink),
-      hover: state(n(0.97, 0.06), n(0.84, 0.14), ink),
-      active: state(n(0.945, 0.1), n(0.74, 0.2), ink),
+      rest: state(paper, border.subtle, ink),
+      hover: state(
+        n(layers.surface - 0.015, layers.chroma),
+        border.default,
+        ink,
+      ),
+      active: state(
+        n(layers.surface - 0.03, layers.chroma),
+        n(layers.border - 0.05, layers.chroma),
+        ink,
+      ),
       disabled,
       focusRing: border.focus,
     },
     surfaceAlt: {
-      rest: state(n(0.965, 0.07), n(0.91, 0.08), n(0.34, 0.3)),
-      hover: state(n(0.95, 0.09), n(0.84, 0.14), ink),
-      active: state(n(0.93, 0.12), n(0.74, 0.2), ink),
+      rest: state(
+        n(layers.surfaceAlt, layers.chroma),
+        border.subtle,
+        n(layers.ink + 0.06, layers.chroma),
+      ),
+      hover: state(
+        n(layers.surfaceAlt - 0.015, layers.chroma),
+        border.default,
+        ink,
+      ),
+      active: state(
+        n(layers.surfaceAlt - 0.03, layers.chroma),
+        n(layers.border - 0.05, layers.chroma),
+        ink,
+      ),
       disabled,
       focusRing: border.focus,
     },
     button: {
-      rest: state(n(0.955, 0.08), n(0.87, 0.12), ink),
-      hover: state(n(0.935, 0.1), n(0.78, 0.16), ink),
-      active: state(n(0.91, 0.13), n(0.68, 0.22), ink),
+      rest: state(n(layers.control, layers.chroma), border.default, ink),
+      hover: state(
+        n(layers.control - 0.015, layers.chroma),
+        n(layers.border - 0.04, layers.chroma),
+        ink,
+      ),
+      active: state(
+        n(layers.control - 0.03, layers.chroma),
+        n(layers.border - 0.08, layers.chroma),
+        ink,
+      ),
       disabled,
       focusRing: border.focus,
     },
   }
 }
 
-export function createStudioLightPalette(): ThemePalette {
-  const neutral = createNeutralTone()
+export function createStudioLightPalette(
+  hues: StudioHues = studioHues,
+  layers: StudioSurfaceProfile = studioSurfaceProfiles.cobalt.light,
+): ThemePalette {
+  const accent = paint(hues.accent)
+  const foundation = createLightFoundation(hues.neutral, layers)
+  const { shadow, overlay } = foundation
+  const neutral = createNeutralTone(hues, foundation)
   return merge(themeSkins.standard.create().light, {
     ...studioSkinShared,
     accent: accent(0.53),
     effect: {
       glowPrimary: `0 0 1.75rem ${accent(0.53, 1, 0.08)}`,
-      glowSecondary: `0 0 1.75rem ${paint(studioHues.secondary)(0.53, 1, 0.07)}`,
-      panelShadow: 'none',
+      glowSecondary: `0 0 1.75rem ${paint(hues.secondary)(0.53, 1, 0.07)}`,
+      panelShadow: `0 1px 3px ${shadow(0.05)}, 0 8px 20px ${shadow(0.04)}`,
       panelShadowStrong: `0 8px 24px ${shadow(0.07)}`,
       softShadow: `0 2px 8px ${shadow(0.03)}, 0 8px 24px ${shadow(0.04)}`,
       strongShadow: `0 8px 24px ${shadow(0.08)}, 0 24px 64px ${shadow(0.08)}`,
@@ -110,14 +176,14 @@ export function createStudioLightPalette(): ThemePalette {
     semanticTone: {
       neutral,
       ghost: createGhostTone(neutral),
-      accent: createLightTone(studioHues.accent),
-      secondary: createLightTone(studioHues.secondary),
-      feature: createLightTone(studioHues.feature),
-      custom: createLightTone(studioHues.custom),
-      info: createLightTone(studioHues.info),
-      success: createLightTone(studioHues.success),
-      warning: createLightTone(studioHues.warning),
-      danger: createLightTone(studioHues.danger),
+      accent: createLightTone(hues.accent, foundation),
+      secondary: createLightTone(hues.secondary, foundation),
+      feature: createLightTone(hues.feature, foundation),
+      custom: createLightTone(hues.custom, foundation),
+      info: createLightTone(hues.info, foundation),
+      success: createLightTone(hues.success, foundation),
+      warning: createLightTone(hues.warning, foundation),
+      danger: createLightTone(hues.danger, foundation),
     },
   } satisfies DeepPartial<ThemePalette>)
 }

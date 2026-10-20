@@ -231,7 +231,8 @@ TopBar renders a fixed doc-nav-toggle ID and should appear once per document. It
 
 <div class="api-contract">
   <p>
-    Use the actions slot to add links or controls beside the theme toggle.
+    Use the before-actions slot to add controls before the theme toggle, and
+    the actions slot to add links or controls after it.
     Register defineTopBarComponents and the selected logo component,
     SearchBox, ThemeToggle, SignIn, Flex and Icon families. Standard SSG
     registration provides these dependencies.

@@ -28,8 +28,7 @@
     "includeIndex": true,
     "sortBy": "order",
     "roots": ["guides", "components"],
-    "variant": "spotlight",
-    "class": "spotlight-from-bottom-right"
+    "variant": "flat"
   },
   "sitemap": {
     "enabled": true,

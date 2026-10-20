@@ -50,6 +50,8 @@ export const studioHues = {
   danger: { hue: 20, chroma: 0.17 },
 } satisfies Record<string, StudioHue>
 
+export type StudioHues = Record<keyof typeof studioHues, StudioHue>
+
 /** Returns a painter for one hue: lightness, chroma share and optional alpha. */
 export function paint({ hue, chroma }: StudioHue) {
   return (l: number, share = 1, alpha?: number) =>
@@ -87,6 +89,9 @@ export interface StudioToneRecipe {
   tint: string
   tintHover: string
   tintActive: string
+  tintAlt: string
+  tintAltHover: string
+  tintAltActive: string
   border: string
   borderSubtle: string
   rim: string
@@ -125,9 +130,9 @@ export function createStudioTone(recipe: StudioToneRecipe): StudioTone {
       focusRing: fill,
     },
     surfaceAlt: {
-      rest: state(recipe.tintHover, recipe.border, body),
-      hover: state(recipe.tintActive, rim, body),
-      active: state(recipe.tintActive, fill, body),
+      rest: state(recipe.tintAlt, recipe.border, body),
+      hover: state(recipe.tintAltHover, rim, body),
+      active: state(recipe.tintAltActive, fill, body),
       disabled,
       focusRing: fill,
     },
