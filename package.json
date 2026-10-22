@@ -6,7 +6,8 @@
   "type": "module",
   "sideEffects": false,
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "templates/*"
   ],
   "dependencyConsistency": {
     "exceptions": {
@@ -23,19 +24,19 @@
     "url": "https://github.com/PureStackStudio/PureStack/issues"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.14",
-    "@types/node": "^25.6.2",
+    "@biomejs/biome": "^2.6.2",
+    "@types/node": "^26.6.5",
     "esbuild": "^0.28.0",
     "tsdown": "0.23.0",
     "tsx": "^4.23.15",
     "typescript": "7.0.2",
     "typescript-parser": "npm:typescript@6.0.3",
-    "vite": "^8.3.3",
+    "vite": "^8.3.5",
     "vitest": "^5.0.3"
   },
   "files": [],
   "scripts": {
-    "purestack": "yarn tsx packages/purestack/src/cli.ts",
+    "purestack": "tsx packages/purestack/src/cli.ts",
     "dev": "yarn tsx --watch packages/ts-ssg/src/cli.ts serve --content packages/ts-ssg/sample-content",
     "frontend": "yarn tsx --watch packages/purestack/src/cli.ts serve --content frontend/purestack.studio --port 4700",
     "frontend:build": "yarn purestack build --content frontend/purestack.studio",
@@ -46,7 +47,7 @@
     "gen-icons": "yarn tsx scripts/generate-icons.ts",
     "build": "echo 'Building...' && yarn workspaces foreach --no-private --all --verbose --topological -- run build",
     "lint": "yarn workspaces foreach --no-private --all --verbose --topological -- run lint",
-    "lint:ci": "yarn workspaces foreach --no-private --all --verbose --topological -- exec biome check ./src --formatter-enabled=false",
+    "lint:ci": "yarn workspaces foreach --no-private --all --verbose --topological --exclude '@purestack/template-*' -- exec biome check ./src --formatter-enabled=false",
     "check-eol": "yarn tsx scripts/check-eol.ts",
     "check-dependencies": "yarn tsx scripts/check-dependencies.ts",
     "bump-version": "yarn tsx --no-warnings scripts/bump-version.ts",
@@ -56,7 +57,9 @@
     "publish-new-packages": "yarn tsx --no-warnings scripts/publish-new-packages.ts",
     "test": "vitest",
     "test:ci": "vitest run",
-    "package": "yarn workspaces foreach --no-private --all --parallel pack",
+    "package": "yarn workspaces foreach --no-private --all --parallel --exclude '@purestack/template-*' pack && tsx scripts/pack-templates.ts",
+    "verify-templates": "yarn package && tsx --no-warnings scripts/verify-templates.ts",
+    "verify-toolchain": "tsx scripts/verify-toolchain.ts",
     "pack-vscode-ext": "yarn --cwd packages/ts-ssg-vscode build && yarn --cwd packages/ts-ssg-vscode package",
     "longest": "yarn tsx ./scripts/longest-functions.ts",
     "format": "biome format --write",

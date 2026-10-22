@@ -6,7 +6,6 @@ const root = process.cwd()
 const ignoredDirectories = new Set([
   '.git',
   '.pnp',
-  '.puregate',
   '.vs',
   '.yarn',
   'artifacts',

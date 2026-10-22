@@ -1,0 +1,27 @@
+{
+  "name": "purestack-starter",
+  "private": true,
+  "type": "module",
+  "packageManager": "yarn@4.18.1",
+  "scripts": {
+    "dev": "purestack serve --content ./content --port 5000",
+    "build": "purestack build --content ./content",
+    "publish": "purestack publish --content ./content",
+    "test": "vitest",
+    "test:ci": "vitest run",
+    "lint": "biome lint .",
+    "format": "biome format --write .",
+    "check": "biome check .",
+    "check:fix": "biome check --write ."
+  },
+  "dependencies": {
+    "purestack": "{{purestackVersion}}"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@biomejs/biome": "^2.6.2",
+    "@purestack/ts-minidom": "{{purestackVersion}}",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
+  }
+}

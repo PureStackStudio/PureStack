@@ -31,6 +31,7 @@
     "dist/*.mjs.map",
     "dist/*.d.mts",
     "dist/*.d.mts.map",
+    "wizard/**/*",
     "README.md",
     "LICENSE"
   ],
@@ -40,6 +41,14 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@purestack/ts-ssg": "workspace:^"
+    "@purestack/ts-components": "workspace:^",
+    "@purestack/ts-ssg": "workspace:^",
+    "@purestack/ts-style": "workspace:^",
+    "@purestack/ts-svg-icons": "workspace:^",
+    "regor": "^1.7.6",
+    "tar": "^7.5.22"
+  },
+  "devDependencies": {
+    "@purestack/ts-minidom": "workspace:^"
   }
 }

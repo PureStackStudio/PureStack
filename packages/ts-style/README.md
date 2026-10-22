@@ -30,9 +30,11 @@ const root = styleBuilder.get(theme)
 const frames = root.keyframes('zt-memory-cycle')
 frames.select('0%, 4%, 40%, 100%').transform('translateY(0)')
 frames.select('12%, 28%').transform('translateY(-8px)')
-root.select('.zt-slab-memory')
+root
+  .select('.zt-slab-memory')
   .animation('zt-memory-cycle 8s ease-in-out infinite')
-root.select('.zt-slab-memory')
+root
+  .select('.zt-slab-memory')
   .media('prefers-reduced-motion: reduce')
   .animation('none !important')
 ```

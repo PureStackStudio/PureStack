@@ -1,0 +1,14 @@
+{
+  "siteTitle": "My Site",
+  "logo": {
+    "brand": "My Site",
+    "href": "/"
+  },
+  "style": {
+    "theme": {
+      "skin": "standard"
+    }
+  },
+  "outDir": "../dist/dev",
+  "publishDir": "../dist/publish"
+}

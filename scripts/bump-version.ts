@@ -1,7 +1,8 @@
-import { globSync, readFileSync, writeFileSync } from 'node:fs'
+import { readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { bumpVersion, versionPattern } from './version'
+import { workspaceManifestPaths } from './workspaces'
 
 const projectRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -36,10 +37,7 @@ function prepareUpdate(relativePath: string, pattern: RegExp) {
   if (updated !== source) updates.push({ relativePath, source: updated })
 }
 
-const manifests = [
-  'package.json',
-  ...globSync('packages/*/package.json', { cwd: projectRoot }).sort(),
-]
+const manifests = ['package.json', ...workspaceManifestPaths(projectRoot)]
 for (const manifestPath of manifests) {
   const manifest = JSON.parse(
     readFileSync(path.join(projectRoot, manifestPath), 'utf8'),

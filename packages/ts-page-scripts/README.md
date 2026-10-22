@@ -25,11 +25,11 @@ or build options and list the other plugins you need.
 
 Three separate plugins from this package are also enabled by default:
 
-| Factory | Plugin name | Responsibility |
-| --- | --- | --- |
-| `authStateHintPlugin()` | `purestack:auth-state-hint` | Apply the signed-in hint before stylesheets load, when auth is enabled |
-| `consentPlugin()` | `purestack:consent` | Initialize the consent browser runtime when consent is enabled |
-| `analyticsPlugin()` | `purestack:analytics` | Add direct GA4 scripts without consent, or contribute the consent-managed GA4 service during configuration resolution |
+| Factory                 | Plugin name                 | Responsibility                                                                                                        |
+| ----------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `authStateHintPlugin()` | `purestack:auth-state-hint` | Apply the signed-in hint before stylesheets load, when auth is enabled                                                |
+| `consentPlugin()`       | `purestack:consent`         | Initialize the consent browser runtime when consent is enabled                                                        |
+| `analyticsPlugin()`     | `purestack:analytics`       | Add direct GA4 scripts without consent, or contribute the consent-managed GA4 service during configuration resolution |
 
 Each factory can be selected independently of `pageScriptsPlugin()`. Omitting
 analytics removes automatic GA4 service registration as well as direct scripts;

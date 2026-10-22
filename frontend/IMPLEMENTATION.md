@@ -28,7 +28,6 @@ Browser pages register their components and mount them with direct `createApp`
 calls. There is no shared example contract, lookup table, or mounting helper.
 
 Browser verification found existing shared-framework accessibility issues:
-
 - The default doc template emits no `lang` for a site without locale routing.
 - Navigation and TOC header opacity gives insufficient text contrast in the
   studio skin.
@@ -61,7 +60,6 @@ borders, generous spacing, and an interactive source/preview workbench.
 This is an implementation-oriented architecture review of the package boundaries,
 core rendering/build paths, and relevant component APIs. It is not an exhaustive
 line-by-line audit of every source file or generated asset.
-
 - The public `purestack` package exports the SSG API and CLI. Current build
   input is `{ siteConfig, options, publish }`; older README examples using
   top-level `contentDir` are not the implementation's current API.

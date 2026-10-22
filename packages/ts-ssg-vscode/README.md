@@ -7,7 +7,6 @@ PureStack Component Tools turns VS Code into a real authoring environment for Pu
 It understands component tags in Markdown and MDX, understands Regor markup inside TypeScript `html` and `svg` tagged templates, and adds the editing behavior that makes those files feel first-class instead of “HTML inside a string”.
 
 This extension is built for the PureStack workflow:
-
 - author content in `.md`, `.mdx`, and `.rmdx`
 - build interactive UI with Regor components
 - write dynamic templates in TypeScript
@@ -54,7 +53,6 @@ This extension is built for the PureStack workflow:
 ### TypeScript
 
 The extension understands Regor markup editing inside these tagged templates:
-
 - `html`
 - `svg`
 
@@ -77,7 +75,6 @@ Component tags inside `.md`, `.mdx`, and `.rmdx` participate in navigation, hove
 Regor supports `.mdx` and `.rmdx` files for Markdown plus Regor components. Use `.mdx` if you prefer the familiar MDX extension. Use `.rmdx` if you want to make the Regor-specific dialect explicit.
 
 In `.mdx` and `.rmdx`, the extension also adds:
-
 - official MDX syntax highlighting
 - Regor-aware attribute highlighting
 - `PageFrontmatter`-aware YAML frontmatter IntelliSense
@@ -90,7 +87,6 @@ In `.mdx` and `.rmdx`, the extension also adds:
 ## Navigate From Markup To Code
 
 Place the cursor on a component tag such as `<Flex>` or `<Btn>` and use:
-
 - `F12`
 - `Ctrl+Click`
 - `Go to Definition`
@@ -98,7 +94,6 @@ Place the cursor on a component tag such as `<Flex>` or `<Btn>` and use:
 If the cursor is on an attribute, the extension will try to jump to the prop declaration instead of only the component type.
 
 Resolution works for both:
-
 - components defined inside the current workspace
 - Regor component libraries installed in `node_modules` that declare `regorComponents` in their `package.json`
 
@@ -113,7 +108,6 @@ Example:
 ```
 
 At `size=""`, the extension can suggest literal values when the prop type resolves to something like:
-
 - `'sm' | 'md' | 'lg'`
 - `true | false`
 
@@ -124,17 +118,14 @@ Prop value analysis unwraps generic wrappers recursively before type analysis, s
 The extension formats only the markup-aware regions it owns.
 
 In TypeScript:
-
 - only the content of `html` and `svg` tagged templates is reformatted
 - surrounding TypeScript stays untouched
 
 In Regor MDX:
-
 - standalone markup blocks are formatted
 - Markdown prose, frontmatter, and fenced code blocks are left alone
 
 Available commands:
-
 - `PureStack: Format HTML Templates`
 - `PureStack: Format Document With HTML Templates`
 
@@ -143,7 +134,6 @@ Available commands:
 ## Catch Broken Markup Early
 
 Invalid HTML structure inside supported markup regions is surfaced as diagnostics:
-
 - in TypeScript template bodies
 - in standalone Regor MDX markup blocks
 
@@ -152,7 +142,6 @@ Expressions are masked during validation so the error points at the surrounding 
 ## Type Markup Faster
 
 While editing supported markup:
-
 - typing `>` after an opening tag inserts the matching closing tag
 - typing `/` at the end of an opening tag completes `/>`
 - void HTML elements are not given unnecessary closing tags
@@ -187,7 +176,6 @@ completes to:
 Opening and closing tag names can be edited together through VS Code linked editing support.
 
 Important:
-
 - enable `editor.linkedEditing`
 
 With that setting on, renaming `<Card>` updates `</Card>` at the same time in supported TypeScript templates and MDX markup.
@@ -197,7 +185,6 @@ With that setting on, renaming `<Card>` updates `</Card>` at the same time in su
 Component resolution is intentionally simple and predictable.
 
 The extension:
-
 - scans workspace `.ts` files
 - keeps workspace files that contain `defineComponent`
 - looks for exported `interface`, `type`, or `class` names matching the component tag
@@ -207,7 +194,6 @@ The extension:
 - normalizes naming so PascalCase, kebab-case, and case differences resolve the same way
 
 This gives PureStack authoring a clean convention:
-
 - markup stays ergonomic
 - component source stays easy to locate
 - shared component libraries can participate in navigation
@@ -217,19 +203,16 @@ This gives PureStack authoring a clean convention:
 Prop suggestions are driven by the component metadata extracted from `defineComponent`.
 
 The extension reads:
-
 - the component type argument passed to `defineComponent<T>()`
 - the `props` declaration
 
 Supported prop declaration shapes:
-
 - `defineComponent(..., ['name', 'size'])`
 - `defineComponent(..., { props: ['name', 'size'] })`
 
 Only declared props are suggested. Context-only fields that are not exposed as props are ignored.
 
 For value completion, the extension currently does best when the final unwrapped type resolves to:
-
 - string literal unions
 - boolean
 - boolean literals
@@ -240,14 +223,12 @@ For value completion, the extension currently does best when the final unwrapped
 ### TypeScript templates
 
 Inside TypeScript tagged templates, the extension provides:
-
 - HTML or SVG highlighting
 - CSS highlighting in style regions
 - TypeScript highlighting inside `${...}`
 - TypeScript highlighting inside Regor `{{ ... }}` interpolation
 
 Behavior split:
-
 - `html` and `svg` receive the full editing pipeline: formatting, diagnostics, auto-close, and linked editing
 - `raw` remains syntax-highlighted, but is intentionally excluded from formatting and tag-editing behavior
 
@@ -256,7 +237,6 @@ Behavior split:
 Regor MDX support is built on the official MDX grammar and then extended for PureStack authoring.
 
 That includes:
-
 - MDX language registration for `.mdx` and `.rmdx`, with Regor MDX aliases
 - Regor MDX file icon
 - language configuration
@@ -269,7 +249,6 @@ The extension does not try to turn Regor MDX into a second TypeScript template s
 ## Formatting Rules
 
 PureStack formatting is intentionally conservative.
-
 - it formats only markup regions
 - it preserves embedded expressions
 - it respects editor indentation settings
@@ -287,7 +266,6 @@ The formatter uses Prettier’s HTML parser inside the extension bundle, with Pu
 The extension respects normal VS Code editing behavior where appropriate.
 
 Useful settings:
-
 - `editor.formatOnSave`
   Enables save-time formatting for supported TypeScript templates and MDX markup blocks.
 - `editor.linkedEditing`

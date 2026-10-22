@@ -19,6 +19,53 @@ Install `purestack` in your project with `yarn add purestack`. The commands belo
 
 ## Build a first site
 
+Create a standalone project from an official template:
+
+```sh
+npx purestack@latest init my-site --install --yes
+cd my-site
+yarn dev
+```
+
+The `starter` template creates a small site with a home page, about page, and
+browser TypeScript example. Run `npx purestack@latest init` to open Site Studio.
+The CLI serves ordinary wizard content through PureStack's existing server and
+prints its local URL. Configure site details, templates, template-defined
+settings, and project setup, then create the site with animated progress.
+Browse the live site while Studio stays open; source edits reload automatically.
+Choose **Finish Studio** to stop both local servers. Use `--yes` to create a
+site directly without opening Studio.
+
+```sh
+npx purestack@latest init my-site --template starter --git --yes
+npx purestack@latest init my-site --template starter --yes
+```
+
+`--git` initializes a repository without creating a commit. If the project is
+already inside a repository, the CLI keeps using that repository. `--install`
+installs dependencies with the template's package manager (Yarn for starter).
+Both actions are opt-in. `--yes` skips all prompts
+and uses defaults for omitted settings; the default template is starter.
+
+Ctrl+C stops Studio and its live site. Direct creation with `--yes` requires a directory.
+
+For scripted customization, use `--set palette=mint --set search=false`.
+The template's `template.ui.json` defines its categories, fields, choices,
+defaults, and configuration bindings. Use `true` or `false` for toggle values.
+Unspecified values use the template's declared defaults.
+
+Use `--title "My Documentation"` to set the site title and logo brand. Template
+versions can be selected explicitly with `--template starter@1.1.19`. Full npm
+package names and explicit local package-folder or `.tgz` paths are supported
+too. Run `npx purestack@latest init --help` for the complete option list.
+
+The destination must be absent or empty. Templates become editable project
+source and are not installed as project dependencies. Each project includes
+`README.md` and `AGENTS.md` with customization guidance. Run `yarn build` for
+development output and `yarn publish` for a local release artifact.
+
+### Set up a content directory manually
+
 Create this folder beside your project's `package.json`:
 
 ```text

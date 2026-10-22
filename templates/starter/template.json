@@ -1,0 +1,6 @@
+{
+  "formatVersion": 1,
+  "description": "A small site with a home page, about page, and browser TypeScript example.",
+  "purestack": "1.1.19",
+  "ui": "template.ui.json"
+}

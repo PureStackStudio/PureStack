@@ -1,7 +1,6 @@
 # Private legal content
 
 The public page wrappers import the complete legal text from these local files:
-
 - `frontend/purestack.studio/legal/_private/imprint.mdx`
 - `frontend/purestack.studio/legal/_private/privacy.mdx`
 

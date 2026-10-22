@@ -97,13 +97,13 @@ when a batch fails. Standalone highlighter users must await it themselves.
 Other plugin caches can use existing lifecycle hooks or explicit `try/finally`
 around their computation batches.
 
-| Option | Default | Purpose |
-| --- | --- | --- |
-| `directory` | `os.tmpdir()/purestack-cache` | Parent of the namespace directory |
-| `maxMemoryEntries` | `4096` | Maximum decoded values and buffered mutations per instance |
-| `maxMemoryBytes` | `16777216` (16 MiB) | Approximate budget split across decoded values, loaded shards, and buffered writes; encoding and in-flight flushes need temporary memory |
-| `maxAgeDays` | `30` | Disk retention for unused entries; `0` disables cleanup |
-| `flushIntervalMs` | `2000` | Best-effort periodic persistence; `0` disables the timer |
+| Option             | Default                       | Purpose                                                                                                                                  |
+| ------------------ | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `directory`        | `os.tmpdir()/purestack-cache` | Parent of the namespace directory                                                                                                        |
+| `maxMemoryEntries` | `4096`                        | Maximum decoded values and buffered mutations per instance                                                                               |
+| `maxMemoryBytes`   | `16777216` (16 MiB)           | Approximate budget split across decoded values, loaded shards, and buffered writes; encoding and in-flight flushes need temporary memory |
+| `maxAgeDays`       | `30`                          | Disk retention for unused entries; `0` disables cleanup                                                                                  |
+| `flushIntervalMs`  | `2000`                        | Best-effort periodic persistence; `0` disables the timer                                                                                 |
 
 Files live under `<directory>/<namespace>/00.json` through `1f.json`, with
 larger values in `blobs/<hash>.cache`. The key hash covers the version and input

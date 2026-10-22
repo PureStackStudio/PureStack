@@ -1,7 +1,8 @@
 import { execFile } from 'node:child_process'
-import { existsSync, globSync, readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 import { promisify } from 'node:util'
+import { workspaceManifestPaths } from './workspaces'
 
 const execFileAsync = promisify(execFile)
 const projectRoot = process.cwd()
@@ -26,6 +27,7 @@ interface PackageJson {
   private?: boolean
   version?: string
   exports?: Record<string, unknown>
+  purestackTemplate?: boolean
   dependencies?: Record<string, string>
   peerDependencies?: Record<string, string>
   optionalDependencies?: Record<string, string>
@@ -130,14 +132,13 @@ function isExecError(error: unknown): error is {
 }
 
 function discoverPublishablePackages() {
-  return globSync('packages/*/package.json')
-    .sort()
+  return workspaceManifestPaths(projectRoot)
     .map(readPackage)
     .filter(
       (pkg) =>
         !pkg.packageJson.private &&
         isPureStackPackageName(pkg.packageJson.name) &&
-        Boolean(pkg.packageJson.exports),
+        Boolean(pkg.packageJson.exports || pkg.packageJson.purestackTemplate),
     )
 }
 

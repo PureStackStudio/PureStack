@@ -1,7 +1,6 @@
 # `@purestack/ts-ssg`
 
 Static site generator for Markdown/Regor MDX content with:
-
 - deterministic file-based routing,
 - built-in themed UI components (Regor),
 - incremental rebuilds with manifest tracking,
@@ -59,13 +58,11 @@ await startDevServer({
 ## CLI Usage
 
 `src/cli.ts` provides the CLI:
-
 - `build`
 - `serve`
 - `publish`
 
 Flags:
-
 - `--content ./content` or `--content=./content` (required; directory must contain `siteConfig.json`)
 - `--clean` (`build`, `serve`; empty the output directory and ignore its incremental manifest)
 - `--no-cache` (`build`, `serve`, `publish`; skip persistent plugin caches outside the output directory, such as highlighted code and optimized images)
@@ -110,7 +107,6 @@ a real launch.
 ## Config Resolution
 
 Config comes from:
-
 1. defaults,
 2. `contentDir/siteConfig.json`,
 3. runtime input (`buildSite(...)` / `startDevServer(...)`) as highest priority.
@@ -244,7 +240,6 @@ layout:
 ```
 
 Notes:
-
 - `layout.navMode` accepts only `sidebar` or `drawer` (invalid values throw).
 - `draft: true` hides page from generated navigation.
 - Title fallback order for nav: `nav.title` -> `title` -> first `# heading` -> filename.
@@ -253,14 +248,12 @@ Notes:
 ## Navigation
 
 Types:
-
 - `auto`: generated from content.
 - `custom`: from nav files only.
 - `hybrid`: auto + nav files (merge/override per folder).
 - `none`: disabled.
 
 Exact behavior by mode (from `buildNavigation` + `resolveBaseFolderItems`):
-
 - `auto`: builds only automatic navigation from content frontmatter/headings. Custom nav files are not read.
 - `custom`: reads nav files and uses only their items.
 - `hybrid`: reads nav files and combines them with auto items.
@@ -273,7 +266,6 @@ Nav files are discovered per folder only in `custom` and `hybrid` modes.
 `"roots": ["docs"]` makes every page under `docs/` use the `docs` menu.
 
 Each nav file may be:
-
 1. an array (treated as `override`), or
 2. an object:
 
@@ -284,7 +276,11 @@ Each nav file may be:
   "pageLinks": true,
   "sequence": ["index.md", "github", "guide/", "guide/install.md"],
   "items": [
-    { "id": "github", "title": "GitHub", "url": "https://github.com/acme/docs" },
+    {
+      "id": "github",
+      "title": "GitHub",
+      "url": "https://github.com/acme/docs"
+    },
     {
       "title": "Guide",
       "url": "/guide/",
@@ -317,17 +313,17 @@ A plugin is a named bundle of extensions: skins, components, templates, Markdown
 
 Nine plugins provide the standard site features and are enabled automatically for builds, publishing, and the development server:
 
-| Package | Factory | Features |
-| --- | --- | --- |
-| `@purestack/ts-components` | `componentsPlugin()` | Standard Regor components, SVG icons, and component styles |
-| `@purestack/ts-theme` | `themePlugin()` | `doc` and `splash` layouts, theme CSS files and links, critical colors, theme switching, generated favicons, and Markdown table presentation |
-| `@purestack/ts-page-scripts` | `pageScriptsPlugin()` | Menus, code copying, search UI, table of contents, Tabs, and Modal runtimes |
-| `@purestack/ts-page-scripts` | `authStateHintPlugin()` | Early signed-in state hint |
-| `@purestack/ts-page-scripts` | `consentPlugin()` | Consent browser runtime |
-| `@purestack/ts-page-scripts` | `analyticsPlugin()` | Direct or consent-managed GA4 integration |
-| `@purestack/ts-seo` | `seoPlugin()` | Social previews, canonical URLs, and translated alternate links |
-| `@purestack/ts-highlight` | `highlightPlugin()` | Shiki and highlight.js backends and configured default selection |
-| `@purestack/ts-pagefind` | `pagefindPlugin()` | Full-build and lazy development search indexing |
+| Package                      | Factory                 | Features                                                                                                                                     |
+| ---------------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@purestack/ts-components`   | `componentsPlugin()`    | Standard Regor components, SVG icons, and component styles                                                                                   |
+| `@purestack/ts-theme`        | `themePlugin()`         | `doc` and `splash` layouts, theme CSS files and links, critical colors, theme switching, generated favicons, and Markdown table presentation |
+| `@purestack/ts-page-scripts` | `pageScriptsPlugin()`   | Menus, code copying, search UI, table of contents, Tabs, and Modal runtimes                                                                  |
+| `@purestack/ts-page-scripts` | `authStateHintPlugin()` | Early signed-in state hint                                                                                                                   |
+| `@purestack/ts-page-scripts` | `consentPlugin()`       | Consent browser runtime                                                                                                                      |
+| `@purestack/ts-page-scripts` | `analyticsPlugin()`     | Direct or consent-managed GA4 integration                                                                                                    |
+| `@purestack/ts-seo`          | `seoPlugin()`           | Social previews, canonical URLs, and translated alternate links                                                                              |
+| `@purestack/ts-highlight`    | `highlightPlugin()`     | Shiki and highlight.js backends and configured default selection                                                                             |
+| `@purestack/ts-pagefind`     | `pagefindPlugin()`      | Full-build and lazy development search indexing                                                                                              |
 
 These factories and `createDefaultPlugins()` are also exported from `@purestack/ts-ssg` and `purestack`. The stylesheet provider initializes before component factories. Components and templates resolve before every plugin's `onConfigResolved` hook runs in plugin order. Names do not change that order. Components are scoped to each build; config hooks can override them through `context.components`.
 
@@ -403,13 +399,15 @@ const productPlugin = definePlugin({
 })
 
 await buildSite({
-  siteConfig: { contentDir: './content', style: { theme: { skin: 'product' } } },
+  siteConfig: {
+    contentDir: './content',
+    style: { theme: { skin: 'product' } },
+  },
   options: { plugins: [productPlugin] },
 })
 ```
 
 Plugins apply in order:
-
 - **Skins** are available while the site config resolves, so `style.theme.skin` can select one; they are removed afterwards and never leak into another build. A plugin skin cannot reuse a built-in skin's name, such as `standard`.
 - **Components** are built from the resolved site config and may replace built-in components by name.
 - **Templates** may replace the built-in `doc` and `splash` templates by name.
@@ -514,9 +512,12 @@ export const brandPlugin = definePlugin({
   config: {
     resolve({ config }) {
       const brand = config.extensions.brand
-      if (brand !== undefined &&
-          (brand === null || typeof brand !== 'object' ||
-           typeof brand.label !== 'string')) {
+      if (
+        brand !== undefined &&
+        (brand === null ||
+          typeof brand !== 'object' ||
+          typeof brand.label !== 'string')
+      ) {
         throw new Error('extensions.brand requires a string label.')
       }
       return { extensions: { brand: { label: brand?.label ?? 'Docs' } } }
@@ -546,7 +547,7 @@ import { renderCustomCode } from './custom-code'
 export const customCodePlugin = definePlugin({
   name: 'custom-code',
   markdown: {
-    resolveHighlighter: (lang) => lang === 'custom' ? renderCustomCode : null,
+    resolveHighlighter: (lang) => (lang === 'custom' ? renderCustomCode : null),
   },
 })
 ```
@@ -568,12 +569,15 @@ import { createHighlighter } from 'shiki'
 import grammar from './mylang.tmLanguage.json' with { type: 'json' }
 
 export default defineConfig({
-  plugins: [highlightPlugin({
-    createShiki: (options) => createHighlighter({
-      ...options,
-      langs: [...options.langs, grammar],
+  plugins: [
+    highlightPlugin({
+      createShiki: (options) =>
+        createHighlighter({
+          ...options,
+          langs: [...options.langs, grammar],
+        }),
     }),
-  })],
+  ],
 })
 ```
 
@@ -592,14 +596,12 @@ Only one search provider may be installed. Replace `purestack:pagefind` by name,
 ### Hooks
 
 Every page render, in a full build or a dev server re-render, runs the page hooks:
-
 - `onPageStart(context, file)`: before the page renders.
 - `onPageDocument(context, page)`: on the rendered document, before it becomes HTML and before its links resolve. `page` holds the `document`, `file`, `frontmatter`, `urlPath`, and recorded `runtimeEmbeds`. The hook may await: the document, and the global `document` with it, stay this page's while other pages render.
 - `onPageRendered(context, page)`: after it becomes HTML; changes to `page.html` are written.
 - `onPageWritten(context, page)`: after the HTML file is written.
 
 Each full build also runs, in order:
-
 - `onConfigResolved(context)`: before any output; register styles here.
 - `onContentDiscovered(context, files)`: after content discovery, before pages render.
 - `onNavigationBuilt(context, navigation)`
@@ -608,10 +610,14 @@ Each full build also runs, in order:
 
 By default, the dev server prepares routes and shared navigation when it starts. Pages render on their first request and are cached until an edit affects them; static assets copy on request. Site or plugin config changes prepare a fresh request cache. Page hooks run only for pages that are requested; `onBuildComplete` belongs to full builds. With `--full-render` (or `startDevServer({ fullRender: true })`), startup runs one full build, including all pages, assets, and the complete search index. Site requests wait for that initial build to finish. After startup, watched changes use the same incremental invalidation and rendering on request as the default mode.
 
+An initial build error is logged while the dev server keeps watching for fixes.
+Embedded callers can set `startDevServer({ failOnInitialBuildError: true })` to
+reject startup and close the server instead. Studio previews use this option to
+report startup failures.
+
 ## Templates
 
 Built-in templates:
-
 - `doc` (default)
 - `splash`
 
@@ -646,7 +652,6 @@ The built-in skin is `standard`. Select a skin with `style.theme.skin` in `siteC
 Add skins with a plugin's `skins` field. `themeSkins` in `@purestack/ts-style` holds the registered skins; see the [Themes guide](https://purestack.studio/guides/styling/themes/) for creating one.
 
 `style.themes` controls generated files:
-
 - `assets/site.css` for `light`
 - `assets/site.dark.css` for `dark`
 - `assets/site.<theme>.css` for additional themes
@@ -662,7 +667,6 @@ Add skins with a plugin's `skins` field. `themeSkins` in `@purestack/ts-style` h
 - Code highlighting with highlight.js or Shiki
 
 `siteConfig.mdx` options:
-
 - `highlighter`: `"highlightjs"` (default) or `"shiki"`
 - `disableHighlighter`: skip highlighting
 - `compileMdAsMdx`: compile `.md` files as Regor MDX (default `true`); set `false` to keep `.md` as plain Markdown
@@ -676,18 +680,15 @@ Add skins with a plugin's `skins` field. `themeSkins` in `@purestack/ts-style` h
 ## Incremental Build and Manifest
 
 `ts-ssg` stores incremental metadata at:
-
 - `<outDir>/.ts-ssg/manifest.json`
 
 Tracked:
-
 - content file signatures (`mtimeMs`, `size`)
 - asset signatures
 - style signature
 - config compatibility signature
 
 In dev/watch mode:
-
 - file changes apply incrementally when safe,
 - a page affected by a shared change, such as a header, footer, or navigation edit, renders again on its next request, before it is served,
 - site config changes refresh shared state and invalidate cached pages,
@@ -702,11 +703,9 @@ In dev/watch mode:
 ### Pagefind
 
 When enabled, full builds run Pagefind indexing over `outDir` and write to:
-
 - `<outDir>/pagefind`
 
 Optional config:
-
 - `pagefind.enabled`: enables Pagefind indexing and the built-in search runtime. Defaults to `true`.
 - `pagefind.excludePaths`: array of route prefixes excluded from indexing (e.g. `["/privacy/", "/imprint/", "/terms/"]`).
 
@@ -719,12 +718,10 @@ When disabled, stale `<outDir>/pagefind` output is removed. Build logs include i
 ### Sitemap / Robots
 
 If enabled:
-
 - sitemap written to `<outDir>/<sitemap.fileName>`
 - robots written to `<outDir>/<sitemap.robots.fileName>` when `robots.enabled`
 
 Validation:
-
 - sitemap requires non-empty absolute `sitemap.baseUrl` when enabled.
 - sitemap and robots URLs include `basePath` when configured.
 
@@ -758,7 +755,6 @@ content/
 ```
 
 Supported URL strategies:
-
 - `prefix-all`: public URLs include the locale, e.g. `/en/docs/` and `/de/docs/`.
 - `hidden`: output is still written under locale folders, but canonical public
   routes stay unprefixed, e.g. `/docs/`. Hosts can select the locale using
@@ -774,7 +770,6 @@ alternate links when localized URLs are distinct.
 `ts-ssg` can gate optional third-party scripts behind explicit consent.
 
 Key behavior:
-
 - no non-essential service scripts execute before consent,
 - reject is as easy as accept (`accept all` and `reject non-essential`),
 - users can reopen settings any time via a persistent privacy button,
@@ -825,15 +820,53 @@ Configure GA4 directly in `siteConfig.json`:
 ```
 
 Behavior:
-
 - if consent is disabled, GA4 is injected directly in page head,
 - if consent is enabled, GA4 is automatically added as a consent-gated service,
 - defaults: `serviceId: "ga4"`, `consentCategory: "analytics"`.
 
+## Embedded servers and WebSockets
+
+`startDevServer()` resolves after listening and initial shared setup. Its handle
+provides the actual `url` (including `basePath`) and an idempotent async `close()`.
+Use `port: 0` to select an available port and `handleSignals: false` when an
+embedding application owns shutdown.
+Set `logLevel: 'WARN'` to initialize the default logger with warnings and errors
+only. An existing caller-owned logger is preserved.
+
+Optional `webSockets` endpoints share the existing HTTP listener:
+
+```ts
+const server = await startDevServer({
+  host: '127.0.0.1',
+  port: 0,
+  handleSignals: false,
+  build: { siteConfig: { contentDir: './content' } },
+  webSockets: [
+    {
+      path: '/events',
+      connect(peer) {
+        peer.send('Connected')
+        peer.onMessage((message) => peer.send(message))
+        peer.onClose(() => console.log('Disconnected'))
+      },
+    },
+  ],
+})
+console.log(server.url)
+// Later: await server.close()
+```
+
+Each endpoint has an exact `path`, an optional `maxPayload` in bytes (default
+1 MiB), and an optional synchronous `authorize(request)` callback. Returning
+false rejects the upgrade with HTTP 403. Use authorization and origin checks for
+endpoints that expose local operations. Paths are independent of the site's
+`basePath`; unmatched upgrades receive 404. Connections send and receive strings
+or binary `Uint8Array` messages. Listener registration returns unsubscribe
+functions. Shutdown closes WebSocket peers and live-reload streams too.
+
 ## API Surface
 
 Functions:
-
 - `buildSite`, `startDevServer`, `runCli`
 - `definePlugin`, `defineConfig`
 - `resolveSiteConfig`
@@ -843,12 +876,11 @@ Functions:
 - `defaultTemplates`, `resolvePageTemplate`
 
 Types:
-
 - Build: `BuildInput`, `BuildOptions`, `BuildResult`, `BuildCountSummary`, `PublishOptions`
 - Plugins and hooks: `PureStackPlugin`, `PureStackConfig`, `PureStackMarkdown`, `GeneratedPage`, `PageGenerationContext`, `BuildHooks`, `BuildContext`, `ResolvedContentFile`, `PageDocument`, `PageRenderResult`, `NavigationTree`, `WriteStylesResult`
 - Templates: `PageTemplateMap`, `PageTemplate`, `PageTemplateInput`, `PageInfo`, `PageFrontmatter`
 - Config and components: `SiteConfig`, `SiteConfigInput`, `PageContext`
-- Dev server: `DevServerInput`, `DevServerOptions`, `DevServerHandle`
+- Dev server: `DevServerInput`, `DevServerOptions`, `DevServerHandle`, `DevWebSocketEndpoint`, `DevWebSocketConnection`, `DevWebSocketMessage`
 - Highlighting: `MdxCodeHighlighter`, `MdxCodeLangs`, `MdxCodeThemes`, `MdxShikiFactory`
 
 Related packages: `@purestack/ts-html` builds template markup (`h`), `@purestack/ts-style` provides skins (`themeSkins`, `ThemeSkin`), and `@purestack/ts-components` provides the built-in components.

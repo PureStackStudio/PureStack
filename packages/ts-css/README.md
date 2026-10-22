@@ -30,21 +30,17 @@ import { s } from '@purestack/ts-css'
 
 const style = s()
 
-style
-  .select('body')
-  .css({
-    margin: '0',
-    fontFamily: "system-ui, -apple-system, 'Segoe UI', sans-serif",
-  })
+style.select('body').css({
+  margin: '0',
+  fontFamily: "system-ui, -apple-system, 'Segoe UI', sans-serif",
+})
 
-style
-  .select('.button')
-  .css({
-    background: '#1e90ff',
-    color: '#fff',
-    padding: '0.5rem 1rem',
-    borderRadius: '0.5rem',
-  })
+style.select('.button').css({
+  background: '#1e90ff',
+  color: '#fff',
+  padding: '0.5rem 1rem',
+  borderRadius: '0.5rem',
+})
 
 const css = style.toPrettyCSS()
 console.log(await css)
@@ -79,9 +75,9 @@ style.select('.card').css({
 
 ```ts
 const root = s('.card')
-root.select('> .title')     // ".card > .title"
-root.select(':hover')       // ".card:hover"
-root.select('.icon')        // ".card .icon"
+root.select('> .title') // ".card > .title"
+root.select(':hover') // ".card:hover"
+root.select('.icon') // ".card .icon"
 ```
 
 ### Media Queries
@@ -105,9 +101,11 @@ const frames = style.keyframes('zt-memory-cycle')
 frames.select('0%, 4%, 40%, 100%').transform('translateY(0)')
 frames.select('12%, 28%').transform('translateY(-8px)')
 
-style.select('.zt-slab-memory')
+style
+  .select('.zt-slab-memory')
   .animation('zt-memory-cycle 8s ease-in-out infinite')
-style.select('.zt-slab-memory')
+style
+  .select('.zt-slab-memory')
   .media('prefers-reduced-motion: reduce')
   .animation('none !important')
 ```
@@ -261,11 +259,10 @@ style.select('.hero').css({
   fontWeight: '700',
 })
 
-const page = h('html')
-  .push(
-    h('head').push(h('style').raw(style.toCSS())),
-    h('body').push(h('div').class('hero').text('Hello')),
-  )
+const page = h('html').push(
+  h('head').push(h('style').raw(style.toCSS())),
+  h('body').push(h('div').class('hero').text('Hello')),
+)
 
 console.log(page.toHtml())
 ```
@@ -279,20 +276,17 @@ Returns raw CSS as a string.
 ### `toPrettyCSS(options?)`
 
 Formats output using Prettier (parser: `css`) with defaults:
-
 - `tabWidth: 2`
 - `endOfLine: 'lf'`
 
 ## API Overview
 
 Exports:
-
 - `s(selector?)` -> `Style`
 - `Style` (extends `BaseStyle`)
 - `getColors`, `getGradient` (color utilities)
 
 Key `BaseStyle` methods:
-
 - `set(name, value)`
 - `css({...})`
 - `select(selector)`

@@ -24,8 +24,8 @@ export async function runCli(args: string[]) {
     await createLogger()
     loggerCreated = true
     if (cli.command === 'serve') {
-      keepLoggerOpen = true
       await startDevServer({ ...cli.input, configFile: cli.configFile })
+      keepLoggerOpen = true
       return
     }
     const loaded = cli.configFile
@@ -52,14 +52,14 @@ export async function runCli(args: string[]) {
 
 type CliCommand = 'build' | 'serve' | 'publish' | 'help'
 
-interface CliState {
+export interface CliState {
   command: CliCommand
   input: DevServerInput
   contentDir?: string
   configFile?: string
 }
 
-function parseCliArgs(args: string[]): CliState {
+export function parseCliArgs(args: string[], cwd = process.cwd()): CliState {
   const command = args[0]
   if (
     !command ||
@@ -106,7 +106,7 @@ function parseCliArgs(args: string[]): CliState {
   }
   const contentDir = readValue('--content')
   if (contentDir) {
-    state.contentDir = path.resolve(contentDir)
+    state.contentDir = path.resolve(cwd, contentDir)
     state.input.build ??= {}
     state.input.build.siteConfig ??= {}
     state.input.build.siteConfig.contentDir = state.contentDir

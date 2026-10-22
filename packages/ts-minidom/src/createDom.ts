@@ -103,7 +103,7 @@ function installDomGlobals() {
   globalsInstalled = true
   const globals = globalThis as Record<string, unknown>
   for (const key of DOM_GLOBAL_KEYS) {
-    processDom[key] = globals[key]
+    keepOriginal(processDom, key, Object.getOwnPropertyDescriptor(globals, key))
     Object.defineProperty(globals, key, {
       configurable: true,
       get: () => currentDom()[key],
@@ -112,6 +112,36 @@ function installDomGlobals() {
       },
     })
   }
+}
+
+/**
+ * Exposes a global's original value through the process DOM without reading
+ * it early. Node's Web Storage getters warn when read without a storage file.
+ */
+function keepOriginal(
+  dom: DomGlobals,
+  key: (typeof DOM_GLOBAL_KEYS)[number],
+  original: PropertyDescriptor | undefined,
+) {
+  const get = original?.get
+  if (!get) {
+    dom[key] = original?.value
+    return
+  }
+  Object.defineProperty(dom, key, {
+    configurable: true,
+    enumerable: true,
+    get: () => get.call(globalThis),
+    // Assigning replaces the original rather than writing through to it.
+    set: (value: unknown) => {
+      Object.defineProperty(dom, key, {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        value,
+      })
+    },
+  })
 }
 
 /**

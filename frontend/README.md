@@ -35,24 +35,24 @@ See [Private legal content](legal-content.md) for paths and setup.
 
 ## Source map
 
-| File | Purpose |
-| --- | --- |
-| `studioPlugin.ts` | The Studio plugin: skin, components, templates, styles, and generated previews |
-| `purestack.studio/purestack.config.ts` | Adds the Studio plugin, so the CLI builds and serves the site |
-| `demoStyle.ts` | Typed CSS for the real Style API workbench preview |
-| `purestack.studio/index.mdx` | Landing page, source examples, and static component previews |
-| `purestack.studio/header.mdx`, `footer.mdx` | Shared navigation and footer |
-| `purestack.studio/studio.ts` | Keyboard enhancement for native Tabs, clipboard feedback, mobile menu, and live Regor counter |
-| `components/studioComponents.ts` | Explicit registration of the Studio components |
-| `components/studio*.ts` | One file per component, with its exported interface, named template, and typed definition |
-| `theme/studioSkin.ts` | Dark studio skin using the standard semantic palette contract |
-| `theme/studioSkinLight.ts` | Light studio palette with warm white surfaces, green accents, and ten semantic tones |
-| `theme/studioSkinShared.ts` | Shared typography and corner radii for both studio modes |
-| `theme/studioStyles.ts` | Registers the page's typed style extensions in PureStack's generated theme stylesheets |
-| `theme/*Styles.ts` | Layout, typography, responsive rules, and component composition spacing |
-| `purestack.studio/siteConfig.json` | SEO, social preview, assets, and output paths |
-| `designs/social-preview.svg` | Editable source for the 1200×630 social preview PNG |
-| `purestack.studio/_designs/_newspaper.mdx` | Earlier design reference |
+| File                                        | Purpose                                                                                       |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `studioPlugin.ts`                           | The Studio plugin: skin, components, templates, styles, and generated previews                |
+| `purestack.studio/purestack.config.ts`      | Adds the Studio plugin, so the CLI builds and serves the site                                 |
+| `demoStyle.ts`                              | Typed CSS for the real Style API workbench preview                                            |
+| `purestack.studio/index.mdx`                | Landing page, source examples, and static component previews                                  |
+| `purestack.studio/header.mdx`, `footer.mdx` | Shared navigation and footer                                                                  |
+| `purestack.studio/studio.ts`                | Keyboard enhancement for native Tabs, clipboard feedback, mobile menu, and live Regor counter |
+| `components/studioComponents.ts`            | Explicit registration of the Studio components                                                |
+| `components/studio*.ts`                     | One file per component, with its exported interface, named template, and typed definition     |
+| `theme/studioSkin.ts`                       | Dark studio skin using the standard semantic palette contract                                 |
+| `theme/studioSkinLight.ts`                  | Light studio palette with warm white surfaces, green accents, and ten semantic tones          |
+| `theme/studioSkinShared.ts`                 | Shared typography and corner radii for both studio modes                                      |
+| `theme/studioStyles.ts`                     | Registers the page's typed style extensions in PureStack's generated theme stylesheets        |
+| `theme/*Styles.ts`                          | Layout, typography, responsive rules, and component composition spacing                       |
+| `purestack.studio/siteConfig.json`          | SEO, social preview, assets, and output paths                                                 |
+| `designs/social-preview.svg`                | Editable source for the 1200×630 social preview PNG                                           |
+| `purestack.studio/_designs/_newspaper.mdx`  | Earlier design reference                                                                      |
 
 ## Components and theme
 
@@ -110,7 +110,6 @@ sample site. GitHub links target `PureStackStudio/PureStack` and the `main` bran
 
 The component catalog is organized into seven category folders, each with an
 `index.mdx` overview and a matching group in the generated navigation:
-
 - `actions/`: buttons, grouped actions, badges, alerts and notifications.
 - `layout/`: layout primitives, content surfaces, icons, tabs and dialogs.
 - `forms/`: forms, fields, autocomplete, rich text and files.
