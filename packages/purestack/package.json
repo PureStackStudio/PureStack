@@ -1,6 +1,6 @@
 {
   "name": "purestack",
-  "version": "1.1.21",
+  "version": "1.1.22",
   "packageManager": "yarn@4.9.2",
   "module": "./dist/purestack.mjs",
   "types": "./dist/purestack.d.mts",
@@ -32,13 +32,16 @@
     "dist/*.d.mts",
     "dist/*.d.mts.map",
     "wizard/**/*",
+    "skills/purestack-development/SKILL.md",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
     "build": "tsc",
     "lint": "biome check ./src --formatter-enabled=false --write",
-    "test": "vitest"
+    "test": "vitest",
+    "prepack": "node -e \"const fs=require('node:fs');fs.mkdirSync('skills/purestack-development',{recursive:true});fs.copyFileSync('../../skills/purestack-development/SKILL.md','skills/purestack-development/SKILL.md')\"",
+    "postpack": "node -e \"require('node:fs').rmSync('skills',{recursive:true,force:true})\""
   },
   "dependencies": {
     "@purestack/ts-components": "workspace:^",

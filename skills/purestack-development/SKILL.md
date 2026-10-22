@@ -43,6 +43,7 @@ PureStack provides more than **11,000 icons**. Use them where they improve navig
 - Read the site's existing `siteConfig.json`, `purestack.config.ts`, plugins, theme files, components, shared MDX layout files, and nearby examples.
 - Consult the actual installed PureStack/Regor version, the official component catalog, and source definitions before choosing APIs, props, icons, utilities, or behavior. **Do not invent framework APIs or utility classes.**
 - Look for existing components and generated features covering the request: forms, navigation, dialogs, tabs, data display, theming, consent, search, browser runtime, animations, etc.
+- **Read the built-in components' source.** The installed package ships its TypeScript source in `node_modules/@purestack/ts-components/src/`, with one folder per component under `standard/`; for example, `standard/btn/btn.ts` defines the component and `standard/btn/btnStyle.ts` registers its fluent styles. Read it to confirm a component's props, slots, tones, variants, events, and generated classes, and to discover capabilities worth reusing instead of rebuilding. Treat it as read-only reference: never edit `node_modules` or copy a component to alter it; configure, compose, or wrap it instead.
 - Preserve established patterns unless they conflict with this skill's explicit rules; modernize noncompliant code when touching it where reasonably scoped.
 
 ### 2. Design the site as a composition
@@ -135,6 +136,8 @@ Divide the interface into components **before** writing its templates:
 - Extract meaningful UI responsibilities rather than wrapping every trivial element. When extending an existing oversized template, extract the affected sections instead of making the monolith larger.
 
 Use a dedicated file per nontrivial component, but **organize component folders logically rather than accumulating every component in one flat directory**. Group related components by feature or responsibility, for example `components/shell/`, `components/templates/`, `components/options/`, and `components/creation/`. Keep feature-specific helpers and child components with their owning feature; reserve `components/shared/` for components actually reused across features. Add subfolders as responsibilities grow, using meaningful names rather than arbitrary file-count limits or a folder for every trivial component. Keep imports and component registration explicit when reorganizing.
+
+**Learn from the built-in components.** Before writing a custom component, read a comparable one in `node_modules/@purestack/ts-components/src/standard/`. Its context type, `defineComponent` options, prop handling, and style module show the conventions custom components should follow.
 
 **Share substantial context with Regor's `requireContext`.** When several components need a lot of shared context, use a common ancestor's class context and access it with `head.requireContext(SharedContext)`. Avoid dozens of forwarded prop bindings or large per-screen prop maps.
 

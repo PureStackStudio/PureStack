@@ -1,6 +1,7 @@
 import { mkdtemp, readFile, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
+import { repositoryCheckout } from './checkout'
 import { fetchTemplate, inspectTemplate, unpackTemplate } from './template'
 import { readTemplateUi, type TemplateUi } from './template-ui'
 
@@ -36,17 +37,10 @@ export async function localTemplate(
 ) {
   if (!officialTemplates.some((template) => template.id === source))
     return source
-  const root = path.resolve(environment.packageRoot, '../..')
+  const root = await repositoryCheckout(environment.packageRoot)
+  if (!root) return source
+  const directory = path.join(root, 'templates', source)
   try {
-    const manifest = JSON.parse(
-      await readFile(path.join(root, 'package.json'), 'utf8'),
-    )
-    if (
-      manifest.name !== 'purestack-repo' ||
-      path.join(root, 'packages/purestack') !== environment.packageRoot
-    )
-      return source
-    const directory = path.join(root, 'templates', source)
     const template = JSON.parse(
       await readFile(path.join(directory, 'package.json'), 'utf8'),
     )

@@ -79,6 +79,14 @@ async function main() {
         ],
         temporary,
       )
+      assert.match(
+        await readFile(
+          path.join(directory, 'skills/purestack-development/SKILL.md'),
+          'utf8',
+        ),
+        /<!-- Managed by PureStack /,
+        'Generated sites must include the managed PureStack skill.',
+      )
       const packageFile = path.join(directory, 'package.json')
       const project = JSON.parse(await readFile(packageFile, 'utf8'))
       assert.equal(project.dependencies.purestack, 'latest')

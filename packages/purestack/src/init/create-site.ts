@@ -1,6 +1,7 @@
-import { cp, mkdtemp, rm } from 'node:fs/promises'
+import { cp, mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
+import { PURESTACK_SKILL_PATH, readPureStackSkill } from './agent-skill'
 import {
   type PackageManager,
   preparePackageManager,
@@ -44,7 +45,12 @@ export async function createSite(
   version: string,
   cwd: string,
   task: TaskRunner = (_label, action) => action(),
-  options: { templateRoot?: string; signal?: AbortSignal } = {},
+  options: {
+    templateRoot?: string
+    signal?: AbortSignal
+    /** The PureStack package whose agent skill the new site receives. */
+    packageRoot?: string
+  } = {},
 ): Promise<CreateSiteResult> {
   const perform: TaskRunner = async (label, action) => {
     options.signal?.throwIfAborted()
@@ -54,6 +60,10 @@ export async function createSite(
   }
   const directory = path.resolve(cwd, plan.directory)
   await assertEmptyDestination(directory)
+  const skill =
+    options.packageRoot === undefined
+      ? undefined
+      : await readPureStackSkill(options.packageRoot, version)
   const temporary = await mkdtemp(path.join(tmpdir(), 'purestack-init-'))
   let template: string
   let packageManager: PackageManager
@@ -84,6 +94,12 @@ export async function createSite(
         await readTemplateUi(unpacked),
         plan.values,
       )
+      if (skill !== undefined) {
+        const file = path.join(project.source, PURESTACK_SKILL_PATH)
+        await mkdir(path.dirname(file), { recursive: true })
+        await writeFile(file, skill)
+        project.files.push(PURESTACK_SKILL_PATH)
+      }
       await writeProject(project.source, project.files, directory)
     })
     template = `${project.name}@${project.version}`

@@ -10,3 +10,6 @@ tsconfig.bundle.generated.json
 /frontend/out/
 /frontend/purestack.studio/legal/_private/
 /private-docs
+
+# Copied from /skills while packing purestack; removed after packing
+/packages/purestack/skills/

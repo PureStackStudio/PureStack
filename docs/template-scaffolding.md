@@ -40,7 +40,11 @@ minimum version, such as `"1.1.19"`. The CLI must meet that minimum and have the
 same major version. Versions use plain `major.minor.patch`; ranges, prereleases,
 and build metadata are not supported. `template/` contains a complete standalone
 project, including `package.json`, `README.md`, `AGENTS.md`, and
-`content/siteConfig.json`.
+`content/siteConfig.json`. PureStack adds its development skill to every
+generated site at `skills/purestack-development/SKILL.md`, copied from the
+installed `purestack` package; templates must not include that file. Point the
+template's `AGENTS.md` to it and keep `AGENTS.md` for site-specific guidance.
+`purestack skills update` refreshes the copy after an upgrade.
 Project dependencies must use registry versions, ranges, tags, or `npm:` aliases.
 Workspace references, local paths, Git sources, and tarball URLs are rejected.
 

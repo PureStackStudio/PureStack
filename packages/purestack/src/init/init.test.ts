@@ -13,6 +13,7 @@ import path from 'node:path'
 import { gzipSync } from 'node:zlib'
 import { c } from 'tar'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { PURESTACK_SKILL_PATH } from './agent-skill'
 import { type CreateSitePlan, createSite } from './create-site'
 import * as managers from './package-manager'
 import * as processes from './process'
@@ -464,6 +465,38 @@ describe('project generation', () => {
     await expect(
       prepareProject(unpacked, path.join(temporary, 'project'), cliVersion),
     ).rejects.toThrow(/installation hook/)
+  })
+
+  it('rejects templates that ship their own PureStack skill', async () => {
+    const unpacked = await fixture()
+    const skill = path.join(unpacked, 'template', PURESTACK_SKILL_PATH)
+    await mkdir(path.dirname(skill), { recursive: true })
+    await writeFile(skill, '---\nname: other\n---\n')
+    await expect(
+      prepareProject(unpacked, path.join(temporary, 'project'), cliVersion),
+    ).rejects.toThrow(
+      'Template must not include skills/purestack-development/SKILL.md',
+    )
+  })
+
+  it('adds the managed PureStack skill to every created site', async () => {
+    const destination = path.join(temporary, 'project')
+    await createSite(
+      plan(destination, 'starter'),
+      cliVersion,
+      repository,
+      undefined,
+      {
+        templateRoot: await fixture(),
+        packageRoot: path.join(repository, 'packages/purestack'),
+      },
+    )
+    const skill = await readFile(
+      path.join(destination, PURESTACK_SKILL_PATH),
+      'utf8',
+    )
+    expect(skill).toMatch(/^---\nname: purestack-development\n/)
+    expect(skill).toContain(`<!-- Managed by PureStack ${cliVersion}.`)
   })
 
   it('preserves existing files and rejects a destination that changed after validation', async () => {

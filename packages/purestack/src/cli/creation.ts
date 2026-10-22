@@ -39,7 +39,11 @@ export async function createSiteWithProgress(
       environment.version,
       environment.cwd,
       progressTasks(output),
-      { templateRoot: request.templateRoot, signal: abort.signal },
+      {
+        templateRoot: request.templateRoot,
+        signal: abort.signal,
+        packageRoot: environment.packageRoot,
+      },
     )
     output.write(view.complete(result, nextCommands(result, environment.cwd)))
     return result.failures.length ? 1 : 0

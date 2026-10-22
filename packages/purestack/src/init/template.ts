@@ -9,6 +9,7 @@ import {
 } from 'node:fs/promises'
 import path from 'node:path'
 import { t, x } from 'tar'
+import { PURESTACK_SKILL_PATH } from './agent-skill'
 import type { PackageManager } from './package-manager'
 import { runNpm } from './process'
 import { isCompatibleVersion, parseVersion } from './version'
@@ -277,6 +278,10 @@ export async function prepareProject(
   ]) {
     if (!files.includes(file)) throw new Error(`Template is missing ${file}.`)
   }
+  if (files.includes(PURESTACK_SKILL_PATH))
+    throw new Error(
+      `Template must not include ${PURESTACK_SKILL_PATH.replaceAll(path.sep, '/')}; PureStack adds its own.`,
+    )
   const project = await readJson(path.join(source, 'package.json'))
   let packageManager: PackageManager = 'npm'
   if (project.packageManager !== undefined) {

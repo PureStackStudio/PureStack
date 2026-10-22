@@ -214,7 +214,11 @@ export class StudioSession {
           this.environment.version,
           this.environment.cwd,
           this.tasks(),
-          { templateRoot: template.root, signal: this.abort.signal },
+          {
+            templateRoot: template.root,
+            signal: this.abort.signal,
+            packageRoot: this.environment.packageRoot,
+          },
         )
         this.snapshot.result = {
           ...result,

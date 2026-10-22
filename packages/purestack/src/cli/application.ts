@@ -1,4 +1,5 @@
 import path from 'node:path'
+import { PURESTACK_SKILL_PATH, updatePureStackSkill } from '../init/agent-skill'
 import { type TemplateEnvironment, TemplateStore } from '../init/template-store'
 import { resolveTemplateValues } from '../init/template-ui'
 import {
@@ -15,6 +16,7 @@ const help = `PureStack
   purestack serve --content <directory>  Preview with live reload
   purestack build --content <directory>  Build static files
   purestack publish --content <dir>      Prepare a local release artifact
+  purestack skills update                Refresh this site's AI agent skill
   purestack --version                    Print the installed version
 
 Use purestack init --help to explore creation options.`
@@ -30,6 +32,19 @@ export async function runApplication(
     }
     if (!args.length || ['--help', '-h', 'help'].includes(args[0])) {
       console.log(args[0] === 'help' && args[1] === 'init' ? initHelp : help)
+      return 0
+    }
+    if (args[0] === 'skills') {
+      if (args[1] !== 'update' || args.length > 2)
+        throw new Error('Usage: purestack skills update')
+      const updated = await updatePureStackSkill(
+        environment.cwd,
+        environment.packageRoot,
+        environment.version,
+      )
+      console.log(
+        `${updated ? 'Updated' : 'Already up to date:'} ${PURESTACK_SKILL_PATH.replaceAll(path.sep, '/')} for PureStack ${environment.version}.`,
+      )
       return 0
     }
     if (args[0] !== 'init') {
