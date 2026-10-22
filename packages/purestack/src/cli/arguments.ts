@@ -23,7 +23,7 @@ export const initHelp = `Usage: purestack init [directory] [options]
 
 Start the local PureStack wizard and open the URL printed in your terminal.
 Configure your project, create it, and browse the live site in Studio.
-Studio stays open until you finish. Use --yes for direct creation.
+Studio stays open until you finish. Options below preset its choices.
 
   -t, --template <source>  Official alias, npm package, local folder, or .tgz
       --title <title>      Site title and logo brand
@@ -32,14 +32,13 @@ Studio stays open until you finish. Use --yes for direct creation.
       --port <number>      Studio port (default: automatic; 0 selects a free port)
       --install            Install dependencies with the template's package manager
       --git                Initialize or reuse a Git repository
-  -y, --yes                Create directly without opening Site Studio
+  -y, --yes                Skip Studio and create with these choices (scripts, CI)
   -h, --help               Show help
 
 Examples:
   purestack init
+  purestack init my-site --template starter --set palette=mint
   purestack init --host 127.0.0.1 --port 4700
-  purestack init my-site --template starter --yes
-  purestack init my-site --template starter --set palette=mint --install --yes
 
 Installation and Git initialization are opt-in. Relative paths use your current
 folder. In this checkout, unversioned official aliases use local templates.`

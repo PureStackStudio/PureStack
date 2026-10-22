@@ -1,8 +1,8 @@
 # PureStack starter template
 
-Create a site with `npx purestack@latest init my-site --template starter --yes`.
-This package distributes complete project source. It is copied by the CLI and
-does not become a dependency of the generated project.
+Create a site with `npx purestack@latest init` and choose **Starter** in
+PureStack Studio. This package distributes complete project source. It is copied
+into your project and does not become a dependency of it.
 
 The starter includes a responsive home page, About page, customization guide,
 shared navigation/footer, and an interactive launch checklist. Its custom skin

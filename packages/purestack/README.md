@@ -10,51 +10,35 @@ a page needs it.
 
 ## Build your first site
 
-Create a complete project from a template:
+Open PureStack Studio, the local site wizard:
 
 ```sh
-npx purestack@latest init my-site --install --yes
-cd my-site
-yarn dev
+npx purestack@latest init
 ```
 
-The `starter` template creates a small site with a home page, about page, and
-browser TypeScript example. Run `npx purestack@latest init` to serve the wizard's
-PureStack content and print its local URL. Configure site details, choose a
-template and its settings, and create your project with animated progress.
-Use **Browse live site** to open the running project. Studio stays open, and
-source edits reload the live site. **Finish Studio** stops both local servers.
-Use `--yes` to create projects directly without opening Studio.
+Studio prints a link to open in your browser. Configure your site's details,
+choose a template and its settings, decide whether to install dependencies and
+set up Git, then create the project and follow its progress. Use
+**Browse live site** to open the running project. Studio stays open, and source
+edits reload the live site. **Finish Studio** stops both local servers.
 
-Studio defaults to `127.0.0.1` and an automatically assigned port. Use
-`init --host 127.0.0.1 --port 4700` to choose its listener. Server logging starts
-at warning level; creation progress and next steps remain visible.
-The wizard is built completely at startup and served with file watching and
-live reload disabled.
+The `starter` template creates a site with a home page, about page, and
+customization guide. Template files become your project's source, and
+`AGENTS.md` explains customization and validation. Generated starter projects
+provide `yarn dev`, `yarn build`, and `yarn publish`; the latter prepares
+`dist/publish` for deployment without uploading anything.
 
-`--install` installs dependencies with the template's package manager (Yarn for
-starter), and `--git` initializes a repository.
-Both actions are opt-in. `--yes` uses defaults for omitted answers without prompts:
+Studio listens on `127.0.0.1` with an automatically assigned port. Command-line
+options can preset its choices, for example a folder, template, and options:
 
 ```sh
-npx purestack@latest init my-site --template starter --git --yes
-npx purestack@latest init my-site --template starter --yes
+npx purestack@latest init my-site --template starter --set palette=mint
 ```
 
-You can use an explicit template release, such as `--template starter@1.1.19`,
-a full npm package name, or a local package folder or `.tgz` path. Run
-`npx purestack@latest init --help` for all options, including `--title`.
-The destination must be absent or empty. Template files become your project's
-source, and `AGENTS.md` explains customization and validation.
-
-Generated starter projects provide `yarn dev`, `yarn build`, and `yarn publish`.
-The latter prepares `dist/publish` for deployment without uploading anything.
-
-Use `--set palette=mint --set search=false` to configure template-defined options
-without opening menus. Categories, fields, choices, defaults, and configuration
-bindings come from the template's `template.ui.json`. Unspecified values use its
-declared defaults. Creation output uses colored Unicode frames and honors
-`NO_COLOR`. The browser wizard uses PureStack's existing development server.
+Templates can be official aliases, explicit releases such as `starter@1.1.20`,
+npm package names, or local folders and `.tgz` archives. Run
+`npx purestack@latest init --help` for every option, including `--yes`, which
+creates a site without Studio for scripts and CI.
 
 ### Create a site manually
 

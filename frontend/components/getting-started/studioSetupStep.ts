@@ -5,9 +5,9 @@ export interface StudioSetupStep {
   description: string
 }
 
-const setupStepTemplate = html`<Panel tone="accent" variant="surface" class="p-0 mb-5" bodyClass="p-4">
+const setupStepTemplate = html`<Panel tone="accent" variant="solid" class="p-0 mb-5" bodyClass="p-4">
   <Flex align="center" class="gap-3 mb-3">
-    <IconFrame name="tabler:browser" tone="accent" variant="surface"/>
+    <IconFrame name="tabler:browser" tone="accent" variant="solid"/>
     <strong>{{ heading }}</strong>
   </Flex>
   <p class="mt-0 mb-3 fs-sm">{{ description }}</p>
@@ -23,7 +23,7 @@ export function defineStudioSetupStepComponent() {
     context: () => ({
       heading: 'Configure your site in your browser',
       description:
-        'init starts a local PureStack setup website. Open the URL printed in your terminal to get started.',
+        'PureStack CLI starts a local PureStack setup website. Open the URL printed in your terminal to get started.',
     }),
   })
 }

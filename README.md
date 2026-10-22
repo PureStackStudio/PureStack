@@ -50,22 +50,21 @@ for the markup and browser app model.
 
 ## Get your first page running
 
-Create a complete project, install its dependencies, and start the preview:
+Open PureStack Studio, the local site wizard:
 
 ```sh
-npx purestack@latest init my-site --install --yes
-cd my-site
-yarn dev
+npx purestack@latest init
 ```
 
-The `starter` template creates a small site. You can select it directly with
-`--template starter`, initialize Git with `--git`, or
-run `init` alone to configure and create a site in the local PureStack wizard.
-Studio shows progress, starts the live site, and stays open until you finish.
-Use `--yes` to create a site directly without opening Studio.
-Installation is opt-in with `--install`.
-Each project includes `README.md` and
-`AGENTS.md` to guide customization, plus build and publish scripts.
+Studio prints a link to open in your browser. Name your site, choose a template
+and its options, decide whether to install dependencies and set up Git, then
+create it. Studio shows each step, starts the live site, and stays open while
+you explore. Source edits appear on the live site automatically.
+
+Each project includes `README.md` and `AGENTS.md` to guide customization, plus
+dev, build, and publish scripts. Run `npx purestack@latest init --help` for
+options that preset Studio's choices, or that create a site without Studio in
+scripts and CI.
 
 To assemble a site manually instead, follow the steps below.
 

@@ -11,8 +11,7 @@ import { runWizard } from './wizard/run'
 
 const help = `PureStack
 
-  purestack init                         Open Site Studio
-  purestack init <directory> --yes       Create directly with defaults
+  purestack init                         Create a site in Site Studio
   purestack serve --content <directory>  Preview with live reload
   purestack build --content <directory>  Build static files
   purestack publish --content <dir>      Prepare a local release artifact
