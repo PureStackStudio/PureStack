@@ -85,14 +85,17 @@ export async function fetchTemplate(
       { capture: true, signal },
     ),
   )
-  if (
-    !Array.isArray(result) ||
-    result.length !== 1 ||
-    typeof result[0]?.filename !== 'string'
-  ) {
+  // npm 11 and earlier report a list; npm 12 keys each entry by package name.
+  const packed = Array.isArray(result)
+    ? result
+    : isRecord(result)
+      ? Object.values(result)
+      : []
+  const filename = isRecord(packed[0]) ? packed[0].filename : undefined
+  if (packed.length !== 1 || typeof filename !== 'string') {
     throw new Error('npm did not return a template archive.')
   }
-  const archive = path.resolve(temporary, result[0].filename)
+  const archive = path.resolve(temporary, filename)
   if (path.dirname(archive) !== temporary || !archive.endsWith('.tgz')) {
     throw new Error('npm returned an invalid template archive path.')
   }

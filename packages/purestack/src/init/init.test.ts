@@ -597,6 +597,27 @@ describe('project generation', () => {
     expect(git).not.toHaveBeenCalled()
   })
 
+  it.each([
+    ['npm 11 list', [{ filename: 'template.tgz' }]],
+    ['npm 12 map', { '@scope/template': { filename: 'template.tgz' } }],
+  ])('reads the archive from the %s pack output', async (_format, output) => {
+    vi.spyOn(processes, 'runNpm').mockResolvedValue(JSON.stringify(output))
+    expect(await fetchTemplate('starter', temporary, repository)).toBe(
+      path.join(temporary, 'template.tgz'),
+    )
+  })
+
+  it.each([
+    ['no entries', []],
+    ['several entries', { a: { filename: 'a.tgz' }, b: { filename: 'b.tgz' } }],
+    ['a missing filename', { '@scope/template': { name: 'x' } }],
+  ])('rejects pack output with %s', async (_case, output) => {
+    vi.spyOn(processes, 'runNpm').mockResolvedValue(JSON.stringify(output))
+    await expect(
+      fetchTemplate('starter', temporary, repository),
+    ).rejects.toThrow('npm did not return a template archive.')
+  })
+
   it('rejects npm pack results pointing outside the temporary directory', async () => {
     vi.spyOn(processes, 'runNpm').mockResolvedValue(
       JSON.stringify([{ filename: '../outside.tgz' }]),
