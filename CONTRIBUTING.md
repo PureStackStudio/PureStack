@@ -32,7 +32,6 @@ page scripts change, run `yarn embed` manually; do not edit generated files unde
 
 After pushing these files and obtaining the first successful CI run, create an
 active branch ruleset targeting `main` in **Settings → Rules → Rulesets**:
-
 - Require a pull request before merging and resolve all review conversations.
 - Require `Checks (ubuntu-latest)` and `Checks (windows-latest)` to pass.
 - Require branches to be up to date before merging.

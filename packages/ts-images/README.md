@@ -36,7 +36,9 @@ import { defineConfig } from '@purestack/ts-ssg'
 import { imagesPlugin } from '@purestack/ts-images'
 
 export default defineConfig({
-  plugins: [imagesPlugin({ widths: [480, 960, 1440], formats: ['avif', 'webp'] })],
+  plugins: [
+    imagesPlugin({ widths: [480, 960, 1440], formats: ['avif', 'webp'] }),
+  ],
 })
 ```
 
@@ -79,26 +81,26 @@ can override. Settings are also available under typed `extensions.images`:
 }
 ```
 
-| Setting | Default / behavior |
-| --- | --- |
-| `enabled` | `true`; `false` leaves image output untouched |
-| `widths` | `[480, 960, 1440]`; 1–16 widths, each an integer from 1 to 16384; no upscaling |
-| `formats` | `['avif', 'webp']`; order determines `<source>` preference; JPEG/PNG fallback is automatic |
-| `quality` | AVIF 50, WebP 80, JPEG 82; each 1–100 |
-| `sizes` | `100vw`; configure it for the image's actual layout slot |
-| `loading` | `lazy`; may be `eager` or `false` to omit the default |
-| `decoding` | `async`; may be `sync`, `auto`, or `false` |
-| `priority` | `false`; fills missing `loading="eager"` and `fetchpriority="high"` when enabled |
-| `lossless` | `false`; `true` enables lossless modern encoders and a PNG fallback |
-| `metadata` | `strip`; auto-orient first, convert to sRGB, then omit metadata; `preserve` retains metadata with orientation normalized |
-| `include` / `exclude` | `['**/*']` / `[]`; glob patterns on content-root-relative paths using `/` |
-| `cacheDir` | OS temporary cache, namespaced by content root; custom paths resolve from `rootDir` and must be outside content and output directories |
-| `cacheMaxAgeDays` | `30`; entries unused for this many days expire; `0` disables automatic cleanup |
-| `concurrency` | `2`; per-site limit from 1–16, including encoding and output emission |
-| `maxInputPixels` | 40 million |
-| `maxSourceBytes` | 50 MiB |
-| `onError` | `error`; `warn` retains the original image when optimization fails; invalid content URLs still obey core URL validation |
-| `presets` | Named per-image settings, inheriting the resolved global image settings |
+| Setting               | Default / behavior                                                                                                                     |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `enabled`             | `true`; `false` leaves image output untouched                                                                                          |
+| `widths`              | `[480, 960, 1440]`; 1–16 widths, each an integer from 1 to 16384; no upscaling                                                         |
+| `formats`             | `['avif', 'webp']`; order determines `<source>` preference; JPEG/PNG fallback is automatic                                             |
+| `quality`             | AVIF 50, WebP 80, JPEG 82; each 1–100                                                                                                  |
+| `sizes`               | `100vw`; configure it for the image's actual layout slot                                                                               |
+| `loading`             | `lazy`; may be `eager` or `false` to omit the default                                                                                  |
+| `decoding`            | `async`; may be `sync`, `auto`, or `false`                                                                                             |
+| `priority`            | `false`; fills missing `loading="eager"` and `fetchpriority="high"` when enabled                                                       |
+| `lossless`            | `false`; `true` enables lossless modern encoders and a PNG fallback                                                                    |
+| `metadata`            | `strip`; auto-orient first, convert to sRGB, then omit metadata; `preserve` retains metadata with orientation normalized               |
+| `include` / `exclude` | `['**/*']` / `[]`; glob patterns on content-root-relative paths using `/`                                                              |
+| `cacheDir`            | OS temporary cache, namespaced by content root; custom paths resolve from `rootDir` and must be outside content and output directories |
+| `cacheMaxAgeDays`     | `30`; entries unused for this many days expire; `0` disables automatic cleanup                                                         |
+| `concurrency`         | `2`; per-site limit from 1–16, including encoding and output emission                                                                  |
+| `maxInputPixels`      | 40 million                                                                                                                             |
+| `maxSourceBytes`      | 50 MiB                                                                                                                                 |
+| `onError`             | `error`; `warn` retains the original image when optimization fails; invalid content URLs still obey core URL validation                |
+| `presets`             | Named per-image settings, inheriting the resolved global image settings                                                                |
 
 The plugin owns normalization in the configuration pipeline. All resolver
 overrides finish before normalization and processor creation. Omitting the

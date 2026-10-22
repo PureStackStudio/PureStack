@@ -1,7 +1,9 @@
 import { execFile } from 'node:child_process'
-import { existsSync, globSync, readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { promisify } from 'node:util'
+import { workspaceManifestPaths } from './workspaces'
 
 const execFileAsync = promisify(execFile)
 const projectRoot = process.cwd()
@@ -26,6 +28,7 @@ interface PackageJson {
   private?: boolean
   version?: string
   exports?: Record<string, unknown>
+  purestackTemplate?: boolean
   dependencies?: Record<string, string>
   peerDependencies?: Record<string, string>
   optionalDependencies?: Record<string, string>
@@ -46,10 +49,11 @@ interface PublishOptions {
   provenance: boolean
 }
 
-const options = parseArgs(process.argv.slice(2))
-const publishablePackages = sortByWorkspaceDependencies(
-  discoverPublishablePackages(),
-)
+interface PackageFailure {
+  id: string
+  stage: 'registry check' | 'publish'
+  error: unknown
+}
 
 async function npmJson(args: string[]) {
   return execFileAsync(
@@ -73,7 +77,7 @@ async function npm(args: string[]) {
   )
 }
 
-async function packageExists(packageName: string) {
+async function packageExists(packageName: string, registry: string) {
   try {
     await npmJson([
       'view',
@@ -81,7 +85,7 @@ async function packageExists(packageName: string) {
       'version',
       '--prefer-online',
       '--registry',
-      options.registry,
+      registry,
     ])
     return true
   } catch (error) {
@@ -90,7 +94,11 @@ async function packageExists(packageName: string) {
   }
 }
 
-async function packageVersionExists(packageName: string, version: string) {
+async function packageVersionExists(
+  packageName: string,
+  version: string,
+  registry: string,
+) {
   try {
     await npmJson([
       'view',
@@ -98,7 +106,7 @@ async function packageVersionExists(packageName: string, version: string) {
       'version',
       '--prefer-online',
       '--registry',
-      options.registry,
+      registry,
     ])
     return true
   } catch (error) {
@@ -125,19 +133,20 @@ function isExecError(error: unknown): error is {
     typeof error === 'object' &&
     error !== null &&
     'stdout' in error &&
-    'stderr' in error
+    typeof error.stdout === 'string' &&
+    'stderr' in error &&
+    typeof error.stderr === 'string'
   )
 }
 
 function discoverPublishablePackages() {
-  return globSync('packages/*/package.json')
-    .sort()
+  return workspaceManifestPaths(projectRoot)
     .map(readPackage)
     .filter(
       (pkg) =>
         !pkg.packageJson.private &&
         isPureStackPackageName(pkg.packageJson.name) &&
-        Boolean(pkg.packageJson.exports),
+        Boolean(pkg.packageJson.exports || pkg.packageJson.purestackTemplate),
     )
 }
 
@@ -255,7 +264,7 @@ Options:
 `)
 }
 
-async function publishPackage(pkg: PackageInfo) {
+async function publishPackage(pkg: PackageInfo, options: PublishOptions) {
   if (!existsSync(pkg.packageTarballPath)) {
     throw new Error(
       `${pkg.packageJson.name} is missing ${path.relative(projectRoot, pkg.packageTarballPath)}. Run yarn package first.`,
@@ -293,7 +302,26 @@ function isAlreadyPublished(error: unknown) {
   )
 }
 
-async function main() {
+function reportFailures(failures: PackageFailure[]) {
+  if (!failures.length) return 0
+  console.error(`\nFailed ${failures.length} package(s):`)
+  for (const { id, stage, error } of failures) {
+    const message =
+      isExecError(error) && error.stderr.trim()
+        ? error.stderr.trim()
+        : error instanceof Error
+          ? error.message
+          : String(error)
+    console.error(`\n- ${id} (${stage})\n${message}`)
+  }
+  return 1
+}
+
+export async function publishNewPackages(args = process.argv.slice(2)) {
+  const options = parseArgs(args)
+  const publishablePackages = sortByWorkspaceDependencies(
+    discoverPublishablePackages(),
+  )
   if (publishablePackages.length === 0) {
     throw new Error('No publishable PureStack packages found.')
   }
@@ -303,52 +331,77 @@ async function main() {
   )
 
   const missingPackages: PackageInfo[] = []
+  const failures: PackageFailure[] = []
 
   for (const pkg of publishablePackages) {
-    if (!pkg.packageJson.version) {
-      throw new Error(`${pkg.packageJson.name} is missing version.`)
-    }
+    const id = pkg.packageJson.version
+      ? `${pkg.packageJson.name}@${pkg.packageJson.version}`
+      : pkg.packageJson.name
+    try {
+      if (!pkg.packageJson.version)
+        throw new Error(`${pkg.packageJson.name} is missing version.`)
 
-    const nameExists = await packageExists(pkg.packageJson.name)
-    const versionExists =
-      nameExists &&
-      (await packageVersionExists(
+      const nameExists = await packageExists(
         pkg.packageJson.name,
-        pkg.packageJson.version,
-      ))
-    if (versionExists) {
-      console.log(
-        `skip existing ${pkg.packageJson.name}@${pkg.packageJson.version}`,
+        options.registry,
       )
-      continue
-    }
+      const versionExists =
+        nameExists &&
+        (await packageVersionExists(
+          pkg.packageJson.name,
+          pkg.packageJson.version,
+          options.registry,
+        ))
+      if (versionExists) {
+        console.log(`skip existing ${id}`)
+        continue
+      }
 
-    missingPackages.push(pkg)
-    console.log(`missing ${pkg.packageJson.name}@${pkg.packageJson.version}`)
+      missingPackages.push(pkg)
+      console.log(`missing ${id}`)
+    } catch (error) {
+      failures.push({ id, stage: 'registry check', error })
+      console.error(`Registry check failed for ${id}; continuing.`)
+    }
   }
 
   if (!options.publish) {
     console.log(
       `Dry run complete. ${missingPackages.length} package version(s) would be published.`,
     )
-    return
+    return reportFailures(failures)
   }
 
   let publishedCount = 0
   for (const pkg of missingPackages) {
     const id = `${pkg.packageJson.name}@${pkg.packageJson.version}`
     console.log(`publishing ${id}`)
-    if (await publishPackage(pkg)) {
-      publishedCount += 1
-      continue
+    try {
+      if (await publishPackage(pkg, options)) {
+        publishedCount += 1
+        continue
+      }
+      console.log(`skip already published ${id}`)
+    } catch (error) {
+      failures.push({ id, stage: 'publish', error })
+      console.error(`Publish failed for ${id}; continuing.`)
     }
-    console.log(`skip already published ${id}`)
   }
 
   console.log(`Published ${publishedCount} new package(s).`)
+  return reportFailures(failures)
 }
 
-main().catch((error) => {
-  console.error('Publish-new-packages failed:', error)
-  process.exit(1)
-})
+if (
+  process.argv[1] &&
+  path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+) {
+  publishNewPackages()
+    .then((status) => {
+      process.exitCode = status
+    })
+    .catch((error: unknown) => {
+      console.error('Publish-new-packages failed:', error)
+      process.exitCode = 1
+    })
+}

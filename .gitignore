@@ -4,10 +4,9 @@ node_modules
 dist
 *.tgz
 tsconfig.bundle.generated.json
-PureGate
-purestack-setup
 *.vsix
 .codex/*
 /.tmp*
 /frontend/out/
 /frontend/purestack.studio/legal/_private/
+/private-docs

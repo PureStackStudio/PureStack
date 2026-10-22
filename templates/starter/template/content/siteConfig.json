@@ -1,0 +1,44 @@
+{
+  "siteTitle": "My Site",
+  "favicon": "lucide:sparkles",
+  "logo": {
+    "brand": "My Site",
+    "href": "/",
+    "icon": "lucide:sparkles",
+    "markStyle": "plain",
+    "ariaLabel": "My Site home",
+    "size": "md"
+  },
+  "style": {
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "theme": {
+      "skin": "starter",
+      "presets": [
+        "orange"
+      ]
+    }
+  },
+  "navigation": {
+    "mode": "auto",
+    "maxDepth": 3,
+    "sortBy": "order",
+    "pageLinks": false
+  },
+  "pagefind": {
+    "enabled": true
+  },
+  "auth": {
+    "enabled": false
+  },
+  "consent": {
+    "enabled": false
+  },
+  "sitemap": {
+    "enabled": false
+  },
+  "outDir": "../dist/dev",
+  "publishDir": "../dist/publish"
+}

@@ -23,5 +23,5 @@
       "@purestack/*": ["./packages/*/src"]
     }
   },
-  "include": ["./packages/*/src"]
+  "include": ["./packages/*/src", "./packages/purestack/wizard"]
 }

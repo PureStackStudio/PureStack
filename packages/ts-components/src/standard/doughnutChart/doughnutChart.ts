@@ -434,7 +434,7 @@ function resolvePositiveSegments(
       const value = readChartNumber(segment?.value, 0)
       return {
         label: resolveChartText(segment?.label) || `Segment ${index + 1}`,
-        value: value > 0 ? value : 0,
+        value: Math.max(value, 0),
         color: resolveChartText(segment?.color),
       }
     })

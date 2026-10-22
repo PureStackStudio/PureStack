@@ -22,12 +22,20 @@ import type { PageContext } from '@purestack/ts-common'
 import { appendRuntimeScripts } from '@purestack/ts-page-scripts'
 import { renderApp } from '@purestack/ts-render'
 
-export function renderStandalone(html: string, components: object, context: PageContext) {
+export function renderStandalone(
+  html: string,
+  components: object,
+  context: PageContext,
+) {
   return renderApp(html, {
     components,
     context,
     onRendered: (document, runtimeEmbeds) =>
-      appendRuntimeScripts(document, runtimeEmbeds, context.pageInfo.frontmatter.embed),
+      appendRuntimeScripts(
+        document,
+        runtimeEmbeds,
+        context.pageInfo.frontmatter.embed,
+      ),
   })
 }
 ```

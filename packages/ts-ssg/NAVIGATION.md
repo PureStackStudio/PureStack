@@ -5,6 +5,7 @@ the data model, config surface, and how the build pipeline injects navigation
 into page templates.
 
 ## Goals
+
 - Support **dynamic menus** derived from folder content.
 - Support **custom menus** defined per folder.
 - Keep the system **predictable**, **mergeable**, and **easy to override**.
@@ -163,7 +164,6 @@ that group's children. A nested `docs/usage/_nav.json` can still refine the
 `usage` folder by defining its own `sequence`.
 
 Sequence entries can match:
-
 - auto pages by source path, route, basename, or extensionless name, such as
   `getting-started.md`, `getting-started`, or `/docs/getting-started/`
 - auto folders by folder path or route, such as `usage/` or `/docs/usage/`
@@ -200,9 +200,7 @@ Unknown icon keys are ignored.
 Relative URLs inside `_nav.json` resolve from the folder that contains the file:
 
 ```json
-[
-  { "title": "Local Child", "url": "child/" }
-]
+[{ "title": "Local Child", "url": "child/" }]
 ```
 
 In `content/guide/_nav.json`, that becomes `/guide/child/`.
@@ -213,14 +211,15 @@ Per-page overrides are supported via `frontmatter.nav`:
 
 ```md
 ---
+
 title: Intro
 order: 2
 nav:
-  title: Start Here
-  order: 1
-  badge: New
-  icon: iconoir:star
-  hidden: false
+title: Start Here
+order: 1
+badge: New
+icon: iconoir:star
+hidden: false
 ---
 ```
 

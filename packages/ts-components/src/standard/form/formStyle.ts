@@ -128,6 +128,7 @@ function registerFormSelectFieldStyles(
 ) {
   registerFormSelectControlStyles(theme)
   registerFormSelectOptionStyles(theme, palette)
+  registerFormSelectPickerStyles(theme, palette)
   registerFormSelectIconStyles(theme)
 }
 
@@ -154,11 +155,75 @@ function registerFormSelectOptionStyles(
   palette: ThemePalette,
 ) {
   styleBuilder
-    .select('option, optgroup', theme)
-    .backgroundColor(palette.current.canvascolor)
+    .select('.form-block__select option, .form-block__select optgroup', theme)
+    .backgroundColor(palette.current.surface.rest.background)
+    .color(palette.current.text.default)
+    .fontFamily(palette.font.family.base)
+    .apply(palette.applyFont(palette.font.size.sm))
   styleBuilder
-    .select('option:disabled, optgroup:disabled', theme)
+    .select(
+      '.form-block__select option:disabled, .form-block__select optgroup:disabled',
+      theme,
+    )
     .color(palette.current.text.subtle)
+}
+
+function registerFormSelectPickerStyles(
+  theme: ThemeMode,
+  palette: ThemePalette,
+) {
+  // Keep the existing appearance:none rule for browsers without base-select.
+  // A separate rule lets unsupported values be ignored without losing it.
+  styleBuilder
+    .select('.form-block__select-shell > .form-block__select', theme)
+    .appearance('base-select')
+    .colorScheme(theme)
+  styleBuilder.select('.form-block__select::picker-icon', theme).display('none')
+  styleBuilder
+    .select('.form-block__select::picker(select)', theme)
+    .appearance('base-select')
+    .boxSizing('border-box')
+    .minWidth('anchor-size(width)')
+    .maxHeight('min(20rem, 60vh)')
+    .overflowY('auto')
+    .margin('0.375rem 0 0')
+    .padding('0.35rem')
+    .border(`1px solid ${palette.current.border.default}`)
+    .borderRadius(palette.radii.md)
+    .background(palette.current.surface.rest.background)
+    .color(palette.current.text.default)
+    .fontFamily(palette.font.family.base)
+    .apply(palette.applyFont(palette.font.size.sm))
+    .boxShadow(palette.effect.softShadow)
+  styleBuilder
+    .select('.form-block__select option', theme)
+    .display('flex')
+    .alignItems('center')
+    .gap('0.75em')
+    .padding('0.6em 0.75em')
+    .border('1px solid transparent')
+    .borderRadius(palette.radii.sm)
+    .cursor('pointer')
+  styleBuilder
+    .select('.form-block__select option:checked:not(:disabled)', theme)
+    .background(palette.semanticTone.accent.surface.rest.background)
+    .color(palette.semanticTone.accent.surface.rest.text)
+    .fontWeight(palette.font.weight.w600)
+  styleBuilder
+    .select(
+      '.form-block__select option:hover:not(:disabled), .form-block__select option:focus-visible:not(:disabled)',
+      theme,
+    )
+    .background(palette.current.surfaceAlt.rest.background)
+    .color(palette.current.text.default)
+    .borderColor(palette.semanticTone.accent.tone)
+    .outline('none')
+  styleBuilder
+    .select('.form-block__select option:disabled', theme)
+    .cursor('not-allowed')
+  styleBuilder
+    .select('.form-block__select option::checkmark', theme)
+    .color(palette.semanticTone.accent.tone)
 }
 
 function registerFormSelectIconStyles(theme: ThemeMode) {

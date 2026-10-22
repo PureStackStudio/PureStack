@@ -28,17 +28,16 @@ pnpm add @purestack/ts-html
 ```ts
 import { h } from '@purestack/ts-html'
 
-const html = h('html')
-  .push(
-    h('head').push(
-      h('title').text('Hello'),
-      h('meta').attr({ charset: 'utf-8' }),
-    ),
-    h('body').push(
-      h('main').push(h('h1').text('Hello world')),
-      h('script').raw('console.log("hello")'),
-    ),
-  )
+const html = h('html').push(
+  h('head').push(
+    h('title').text('Hello'),
+    h('meta').attr({ charset: 'utf-8' }),
+  ),
+  h('body').push(
+    h('main').push(h('h1').text('Hello world')),
+    h('script').raw('console.log("hello")'),
+  ),
+)
 
 const out = await html.toPrettyHtml()
 console.log(out)
@@ -62,7 +61,7 @@ Mutating methods change the current node and return it for chaining. Use fresh n
 const base = h('input')
 const typed = base.clone().attr({ type: 'text' })
 
-base.toHtml()  // <input/>
+base.toHtml() // <input/>
 typed.toHtml() // <input type="text"/>
 ```
 
@@ -79,7 +78,6 @@ const raw = h('p').raw('<b>raw</b>')
 ### Attributes
 
 `ts-html` exposes multiple attribute helpers to help with type safety:
-
 - `attr(...)` for tag-specific attributes
 - `attrAll(...)` for all attributes
 - `attrGlobal(...)` for global HTML attributes
@@ -133,7 +131,6 @@ const doc = h('html').push(head, h('body'))
 ```
 
 Relevant types:
-
 - `BasicHeadConfig` (high-level SEO config)
 - `HeadConfig` (low-level, explicit head element lists)
 

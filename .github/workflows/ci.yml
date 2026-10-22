@@ -14,6 +14,44 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  toolchain:
+    name: Fresh Corepack and Yarn (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '26'
+          package-manager-cache: false
+
+      # Node 25 and later no longer bundle Corepack. Runner images ship Yarn 1,
+      # whose global launcher blocks Corepack's own (EEXIST on Windows).
+      - name: Install and enable Corepack
+        shell: bash
+        run: |
+          npm uninstall --global yarn
+          npm install --global corepack@latest
+          corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Test package manager setup
+        run: yarn vitest run packages/purestack/src/init/package-manager.test.ts
+
+      - name: Verify fresh installation and reuse with isolated tools
+        run: yarn verify-toolchain
+
   checks:
     name: Checks (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
@@ -31,11 +69,17 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: '24'
+          node-version: '26'
           package-manager-cache: false
 
-      - name: Enable Corepack
-        run: corepack enable
+      # Node 25 and later no longer bundle Corepack. Runner images ship Yarn 1,
+      # whose global launcher blocks Corepack's own (EEXIST on Windows).
+      - name: Install and enable Corepack
+        shell: bash
+        run: |
+          npm uninstall --global yarn
+          npm install --global corepack@latest
+          corepack enable
 
       - name: Install dependencies
         run: yarn install --immutable
@@ -78,6 +122,6 @@ jobs:
         if: runner.os == 'Linux'
         run: yarn bundle
 
-      - name: Pack distributable packages
+      - name: Pack packages and verify standalone templates
         if: runner.os == 'Linux'
-        run: yarn package
+        run: yarn verify-templates

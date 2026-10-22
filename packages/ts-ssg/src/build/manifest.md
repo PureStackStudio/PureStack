@@ -21,7 +21,6 @@ The manifest is written to:
 ```
 
 The path is derived by `manifestPath(outDir)` using:
-
 - `MANIFEST_DIRNAME = ".ts-ssg"`
 - `MANIFEST_FILENAME = "manifest.json"`
 
@@ -31,7 +30,6 @@ static assets.
 ## Data model
 
 `BuildManifest` is a normalized snapshot:
-
 - `version`: schema version (`MANIFEST_VERSION`, currently `1`).
 - `generatedAt`: epoch millis updated on every write.
 - `config`: the build-relevant subset of `SiteConfig`.
@@ -49,7 +47,6 @@ by build logic to decide if a file needs to be reprocessed.
 
 `ManifestConfig` is intentionally limited to settings that affect output
 correctness:
-
 - `contentDir`, `outDir`, `siteTitle`
 - `style.fileName`, `style.href`, `style.themes`, `style.pretty`
 
@@ -71,7 +68,6 @@ captures the config snapshot, and initializes empty maps for content and assets.
 ### `isCompatibleManifest(manifest, config)`
 
 Guards incremental builds. It returns `false` when:
-
 - the manifest version differs from `MANIFEST_VERSION`, or
 - any of the config fields in the snapshot differ, or
 - the shape of `style.themes` is not an array or differs by value order.
@@ -83,7 +79,6 @@ output would be incorrect.
 
 Loads `{outDir}/.ts-ssg/manifest.json` and performs lightweight shape checks. It
 returns:
-
 - `BuildManifest` when the JSON parses and has the expected object shape.
 - `null` when the file does not exist (`ENOENT`) or fails basic validation.
 
@@ -104,7 +99,6 @@ pipeline to compare current disk state with the manifest.
 ## Implementation usage patterns
 
 Typical build flow (conceptual):
-
 1. `readManifest(outDir)`
 2. If `null`, call `createEmptyManifest(config)` and perform a full build.
 3. If present, call `isCompatibleManifest(manifest, config)`:
@@ -121,7 +115,6 @@ only volatile field.
 ## Extension points
 
 If you add build features that affect output validity, extend:
-
 - `ManifestConfig` and `manifestConfigFromSiteConfig`
 - `isCompatibleManifest` checks
 - `BuildManifest` fields (prefer version bump when changing schema)

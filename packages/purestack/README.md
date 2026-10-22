@@ -10,6 +10,54 @@ a page needs it.
 
 ## Build your first site
 
+Create a complete project from a template:
+
+```sh
+npx purestack@latest init my-site --install --yes
+cd my-site
+yarn dev
+```
+
+The `starter` template creates a small site with a home page, about page, and
+browser TypeScript example. Run `npx purestack@latest init` to serve the wizard's
+PureStack content and print its local URL. Configure site details, choose a
+template and its settings, and create your project with animated progress.
+Use **Browse live site** to open the running project. Studio stays open, and
+source edits reload the live site. **Finish Studio** stops both local servers.
+Use `--yes` to create projects directly without opening Studio.
+
+Studio defaults to `127.0.0.1` and an automatically assigned port. Use
+`init --host 127.0.0.1 --port 4700` to choose its listener. Server logging starts
+at warning level; creation progress and next steps remain visible.
+The wizard is built completely at startup and served with file watching and
+live reload disabled.
+
+`--install` installs dependencies with the template's package manager (Yarn for
+starter), and `--git` initializes a repository.
+Both actions are opt-in. `--yes` uses defaults for omitted answers without prompts:
+
+```sh
+npx purestack@latest init my-site --template starter --git --yes
+npx purestack@latest init my-site --template starter --yes
+```
+
+You can use an explicit template release, such as `--template starter@1.1.19`,
+a full npm package name, or a local package folder or `.tgz` path. Run
+`npx purestack@latest init --help` for all options, including `--title`.
+The destination must be absent or empty. Template files become your project's
+source, and `AGENTS.md` explains customization and validation.
+
+Generated starter projects provide `yarn dev`, `yarn build`, and `yarn publish`.
+The latter prepares `dist/publish` for deployment without uploading anything.
+
+Use `--set palette=mint --set search=false` to configure template-defined options
+without opening menus. Categories, fields, choices, defaults, and configuration
+bindings come from the template's `template.ui.json`. Unspecified values use its
+declared defaults. Creation output uses colored Unicode frames and honors
+`NO_COLOR`. The browser wizard uses PureStack's existing development server.
+
+### Create a site manually
+
 Create a Node project and install PureStack:
 
 ```sh
@@ -95,10 +143,10 @@ components, as the `Panel` example above does.
 
 Run these commands from the project root:
 
-| Command | Result |
-| --- | --- |
-| `npx purestack serve --content ./content` | Build, serve, watch, and reload locally. Default port: `4173`. |
-| `npx purestack build --content ./content` | Write the static site to `outDir` (`dist/site` in the example). |
+| Command                                     | Result                                                                                       |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `npx purestack serve --content ./content`   | Build, serve, watch, and reload locally. Default port: `4173`.                               |
+| `npx purestack build --content ./content`   | Write the static site to `outDir` (`dist/site` in the example).                              |
 | `npx purestack publish --content ./content` | Clean and build a minified release artifact in `publishDir` (`dist/publish` in the example). |
 
 `publish` prepares files for a static host; it does not upload them. Use

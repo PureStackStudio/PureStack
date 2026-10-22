@@ -1,14 +1,15 @@
 {
-  "$schema": "https://biomejs.dev/schemas/latest/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.6.2/schema.json",
   "files": {
     "includes": [
       "**",
       "!frontend/out",
+      "!templates/starter/template",
+      "!sites/*",
       "!**/.*",
       "!**/dist",
       "!**/node_modules",
-      "!**/.yarn",
-      "!**/.puregate"
+      "!**/.yarn"
     ],
     "ignoreUnknown": true
   },
@@ -21,7 +22,7 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
       "correctness": {
         "noUnusedImports": "error",
         "noUnusedVariables": "error"
@@ -35,6 +36,12 @@
     }
   },
   "overrides": [
+    {
+      "includes": ["**/SKILL.md"],
+      "formatter": {
+        "enabled": false
+      }
+    },
     {
       "includes": [
         "packages/ts-css/src/**",

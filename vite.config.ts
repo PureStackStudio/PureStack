@@ -9,6 +9,7 @@ export default defineConfig({
     include: [
       'packages/*/src/**/*.{test,spec}.{js,cjs,mjs,ts,cts,mts,jsx,tsx}',
       'frontend/**/*.{test,spec}.{js,cjs,mjs,ts,cts,mts,jsx,tsx}',
+      'scripts/**/*.{test,spec}.{js,cjs,mjs,ts,cts,mts,jsx,tsx}',
     ],
     exclude: [
       'packages/_ts-ssg-vscode/src/**/*.{test,spec}.{js,cjs,mjs,ts,cts,mts,jsx,tsx}',

@@ -1,7 +1,9 @@
 import { spawn } from 'node:child_process'
-import { globSync, readFileSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { packTemplate } from './pack-templates'
+import { workspaceManifestPaths } from './workspaces'
 
 const projectRoot = fileURLToPath(new URL('..', import.meta.url))
 
@@ -10,6 +12,7 @@ interface PackageJson {
   version?: string
   private?: boolean
   exports?: Record<string, unknown>
+  purestackTemplate?: boolean
 }
 
 function run(command: string, args: string[]) {
@@ -48,9 +51,7 @@ package, then runs npm publish --dry-run without uploading it.
 
   const requested = names[0]
   const packageNames = new Set([requested, `@purestack/${requested}`])
-  const packages = globSync('packages/*/package.json', {
-    cwd: projectRoot,
-  }).map((file) => ({
+  const packages = workspaceManifestPaths(projectRoot).map((file) => ({
     directory: path.dirname(path.join(projectRoot, file)),
     manifest: JSON.parse(
       readFileSync(path.join(projectRoot, file), 'utf8'),
@@ -59,7 +60,11 @@ package, then runs npm publish --dry-run without uploading it.
   const selected = packages.find((pkg) => packageNames.has(pkg.manifest.name))
   if (!selected) throw new Error(`Unknown workspace package: ${requested}`)
   const { directory, manifest } = selected
-  if (manifest.private || !manifest.exports || !manifest.version)
+  if (
+    manifest.private ||
+    (!manifest.exports && !manifest.purestackTemplate) ||
+    !manifest.version
+  )
     throw new Error(`${manifest.name} is not a versioned, publishable package.`)
 
   // Yarn's npm_execpath can point to a shell shim. Use the Corepack entry directly.
@@ -75,8 +80,11 @@ package, then runs npm publish --dry-run without uploading it.
   )
 
   // Reuse the repository's bundling and verification before packing fresh output.
-  await yarn(['bundle'])
-  await yarn(['workspace', manifest.name, 'pack', '--out', tarball])
+  if (manifest.purestackTemplate) await packTemplate(directory)
+  else {
+    await yarn(['bundle'])
+    await yarn(['workspace', manifest.name, 'pack', '--out', tarball])
+  }
 
   const publishArgs = [
     'publish',

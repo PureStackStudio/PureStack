@@ -1,0 +1,189 @@
+{
+  "version": 1,
+  "categories": [
+    {
+      "id": "appearance",
+      "label": "Appearance",
+      "description": "Shape your site. Light and dark themes are included.",
+      "categories": [
+        {
+          "id": "colors",
+          "label": "Colors",
+          "description": "Coordinated palettes for surfaces, accents, and components.",
+          "fields": [
+            {
+              "id": "palette",
+              "label": "Color palette",
+              "description": "Matching light and dark colors for your whole site.",
+              "type": "select",
+              "default": "orange",
+              "choices": [
+                {
+                  "value": "blue",
+                  "label": "Ocean",
+                  "description": "Clear blue with cool, composed surfaces.",
+                  "color": "#2874b7"
+                },
+                {
+                  "value": "mint",
+                  "label": "Mint",
+                  "description": "Soft green with a fresh, calm character.",
+                  "color": "#6dd59a"
+                },
+                {
+                  "value": "green",
+                  "label": "Forest",
+                  "description": "Natural green with earthy neutrals.",
+                  "color": "#50b728"
+                },
+                {
+                  "value": "pink",
+                  "label": "Orchid",
+                  "description": "Expressive purple and pink accents.",
+                  "color": "#ac21d7"
+                },
+                {
+                  "value": "orange",
+                  "label": "Ember",
+                  "description": "Warm orange and deep complementary tones.",
+                  "color": "#c7460a"
+                },
+                {
+                  "value": "red",
+                  "label": "Crimson",
+                  "description": "Confident red with slate neutrals.",
+                  "color": "#ea1111"
+                }
+              ],
+              "bindings": [
+                {
+                  "path": ["style", "theme", "presets"],
+                  "transform": "array"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "features",
+      "label": "Features",
+      "description": "Decide how readers explore and use your content.",
+      "categories": [
+        {
+          "id": "navigation",
+          "label": "Navigation",
+          "description": "Page navigation and a useful outline of each page.",
+          "fields": [
+            {
+              "id": "navigation-mode",
+              "label": "Page navigation",
+              "description": "Automatic navigation follows page files and frontmatter ordering.",
+              "type": "select",
+              "default": "auto",
+              "choices": [
+                {
+                  "value": "auto",
+                  "label": "Automatic"
+                },
+                {
+                  "value": "none",
+                  "label": "Hidden"
+                }
+              ],
+              "bindings": [
+                {
+                  "path": ["navigation", "mode"]
+                }
+              ]
+            },
+            {
+              "id": "table-of-contents",
+              "label": "Table of contents",
+              "description": "Show an outline built from the current page's headings.",
+              "type": "toggle",
+              "default": true,
+              "bindings": [
+                {
+                  "path": ["pageToc", "enabled"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "content-tools",
+          "label": "Content tools",
+          "description": "Search and code examples.",
+          "fields": [
+            {
+              "id": "search",
+              "label": "Site search",
+              "description": "Build a Pagefind index of your content when publishing.",
+              "type": "toggle",
+              "default": true,
+              "bindings": [
+                {
+                  "path": ["pagefind", "enabled"]
+                }
+              ]
+            },
+            {
+              "id": "highlight",
+              "label": "Syntax highlighting",
+              "description": "Highlight code examples in Markdown and MDX pages.",
+              "type": "toggle",
+              "default": true,
+              "bindings": [
+                {
+                  "path": ["mdx", "disableHighlighter"],
+                  "transform": "not"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "publishing",
+      "label": "Publishing",
+      "description": "Set the public address and mount path. You can change these later.",
+      "fields": [
+        {
+          "id": "site-url",
+          "label": "Public site URL",
+          "description": "Optional. An address such as https://example.com enables a sitemap.",
+          "type": "text",
+          "default": "",
+          "validation": "url",
+          "bindings": [
+            {
+              "path": ["sitemap", "baseUrl"],
+              "transform": "trim-slashes"
+            },
+            {
+              "path": ["sitemap", "enabled"],
+              "transform": "nonempty"
+            }
+          ]
+        },
+        {
+          "id": "base-path",
+          "label": "Public base path",
+          "description": "Leave empty for the domain root, or use a path such as /docs.",
+          "type": "text",
+          "default": "",
+          "validation": "base-path",
+          "bindings": [
+            {
+              "path": ["basePath"],
+              "transform": "trim-slashes"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

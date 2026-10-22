@@ -8,7 +8,6 @@
 ## Purpose
 
 `incremental.ts` provides the incremental build engine for `ts-ssg`. It owns:
-
 - The incremental builder API (`createIncrementalBuilder`).
 - The file-change application logic (`applyChange`).
 - Full rebuild orchestration (`buildAll`).
@@ -58,7 +57,6 @@ HTML from earlier sessions. No background loop renders the rest of the site.
 ## `buildAll(reason)`
 
 This is the canonical full build path:
-
 - Resolves user hooks from `input.hooks`.
 - Prepares the output directory and discovers static asset candidates.
 - Discovers content, runs page generators, and rebuilds navigation, once
@@ -83,7 +81,6 @@ become dirty and render on their next request; edited script bundles and static
 assets are rebuilt/copied when requested too. In full-build mode, the changed
 page renders right away. `IncrementalBuildResult.markedPages` counts pages
 invalidated by the change, so the dev server can reload the browser.
-
 1. **Ignore changes outside `contentDir`**: relative path starting with `..`.
 2. **`siteConfig.json`** ➜ `fullRebuild = true`. Config shapes every output.
 3. **Header or footer partial** (edit, add, or delete) ➜ compile the partials
@@ -117,7 +114,6 @@ Plugin `pages` generators run inside `discoverSiteContent`, so every discovery,
 full or incremental, sees the same content list. A generated page is a
 `ContentFile` whose `source` is its text, or a function that returns it; its
 `absPath` names no file. `readContentSource` reads either, or a real file.
-
 - `readContentSignature` signs a generated page by its source size (0 for a
   source function) and the time it was generated, so the manifest keeps an
   entry and an `outPath` for it like any page. No file event names a generated
@@ -131,7 +127,6 @@ full or incremental, sees the same content list. A generated page is a
 ## Manifest assembly
 
 `buildManifest` composes a fresh `BuildManifest` from:
-
 - Current signatures for content files (`resolveOutPath`).
 - Current signatures for assets (`resolveStaticOutPath`).
 - A styles signature, computed via `computeStylesSignature`.
@@ -142,7 +137,6 @@ state.
 ## Styles signature
 
 `computeStylesSignature`:
-
 - Orders themes deterministically (`orderThemes`).
 - Ensures themes are registered (`styleBuilder.ensureThemes`).
 - Reads each generated CSS file, hashes contents (SHA-256), and records outputs.
@@ -160,7 +154,6 @@ even when the build inputs are the same.
 ## Extension points
 
 If you add new build outputs or config that affect correctness:
-
 - Extend `BuildManifest` and `manifestConfigFromSiteConfig`.
 - Update `isCompatibleManifest` and bump `MANIFEST_VERSION`.
 - Consider how `applyChange` should classify and process the new file type.

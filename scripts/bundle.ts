@@ -1,10 +1,11 @@
-import { existsSync, globSync, readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { rm, stat, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { build, type InlineConfig } from 'tsdown'
 
 import { timeIt } from './timeIt'
+import { workspaceManifestPaths } from './workspaces'
 
 interface PackageJson extends Record<string, unknown> {
   name: string
@@ -52,7 +53,7 @@ const generatedTsconfigPath = path.join(
   projectRoot,
   'tsconfig.bundle.generated.json',
 )
-const packageJsonPaths = globSync('packages/*/package.json').sort()
+const packageJsonPaths = workspaceManifestPaths(projectRoot)
 const allPackages = packageJsonPaths.map(readPackageJson)
 const publishPackages = sortByWorkspaceDependencies(
   allPackages.filter(isPublishPackage),
@@ -332,7 +333,6 @@ async function bundlePackage(pkg: PublishPackage) {
           minify: false,
           deps: {
             neverBundle: pkg.externalPackageNames,
-            skipNodeModulesBundle: true,
           },
           outputOptions: {
             sourcemap: true,

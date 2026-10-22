@@ -40,15 +40,24 @@ export {
   buildSite,
   type PublishOptions,
 } from './build/site'
-export { runCli } from './cli-runner'
+export { type CliState, parseCliArgs, runCli } from './cli-runner'
 export { type DefaultSiteConfig, resolveSiteConfig } from './config/config'
-export { defineConfig, type PureStackConfig } from './config/project-config'
+export {
+  defineConfig,
+  findProjectConfig,
+  type PureStackConfig,
+} from './config/project-config'
 export {
   type DevServerHandle,
   type DevServerInput,
   type DevServerOptions,
   startDevServer,
 } from './dev/server'
+export type {
+  DevWebSocketConnection,
+  DevWebSocketEndpoint,
+  DevWebSocketMessage,
+} from './dev/websocket'
 export {
   normalizeFrontmatter,
   parseFrontmatterSource,

@@ -50,6 +50,25 @@ for the markup and browser app model.
 
 ## Get your first page running
 
+Create a complete project, install its dependencies, and start the preview:
+
+```sh
+npx purestack@latest init my-site --install --yes
+cd my-site
+yarn dev
+```
+
+The `starter` template creates a small site. You can select it directly with
+`--template starter`, initialize Git with `--git`, or
+run `init` alone to configure and create a site in the local PureStack wizard.
+Studio shows progress, starts the live site, and stays open until you finish.
+Use `--yes` to create a site directly without opening Studio.
+Installation is opt-in with `--install`.
+Each project includes `README.md` and
+`AGENTS.md` to guide customization, plus build and publish scripts.
+
+To assemble a site manually instead, follow the steps below.
+
 ### 1. Create a project
 
 ```sh
@@ -126,25 +145,25 @@ has a complete example.
 
 ## Pick your next step
 
-| I want to… | Start here |
-| :--- | :--- |
-| Configure a site | [Site configuration](https://purestack.studio/guides/getting-started/site-config/) |
-| Build a richer page | [Component catalog](https://purestack.studio/components/) |
-| Add browser behavior | [PageScript and RegorApp examples](packages/purestack/README.md) |
-| Understand the CLI | [CLI guide](https://purestack.studio/guides/getting-started/purestack-cli/) |
-| Explore a complete project | [Sample content](packages/ts-ssg/sample-content) · [Website source](frontend) |
-| Work on PureStack itself | [Contribution guide](CONTRIBUTING.md) |
+| I want to…                 | Start here                                                                         |
+| :------------------------- | :--------------------------------------------------------------------------------- |
+| Configure a site           | [Site configuration](https://purestack.studio/guides/getting-started/site-config/) |
+| Build a richer page        | [Component catalog](https://purestack.studio/components/)                          |
+| Add browser behavior       | [PageScript and RegorApp examples](packages/purestack/README.md)                   |
+| Understand the CLI         | [CLI guide](https://purestack.studio/guides/getting-started/purestack-cli/)        |
+| Explore a complete project | [Sample content](packages/ts-ssg/sample-content) · [Website source](frontend)      |
+| Work on PureStack itself   | [Contribution guide](CONTRIBUTING.md)                                              |
 
 <details>
 <summary><strong>How PureStack fits together</strong></summary>
 
-| Source | What PureStack does |
-| --- | --- |
-| `siteConfig.json` | Defines output paths, site identity, themes, navigation, and optional features. |
-| `.md`, `.mdx`, `.rmdx` | Turn content files into routes and HTML pages. |
-| Regor components | Render UI into pages at build time. |
-| `PageScript` and `RegorApp` | Bundle TypeScript and add browser behavior where requested. |
-| Static assets | Copies files from the content directory into the site output. |
+| Source                      | What PureStack does                                                             |
+| --------------------------- | ------------------------------------------------------------------------------- |
+| `siteConfig.json`           | Defines output paths, site identity, themes, navigation, and optional features. |
+| `.md`, `.mdx`, `.rmdx`      | Turn content files into routes and HTML pages.                                  |
+| Regor components            | Render UI into pages at build time.                                             |
+| `PageScript` and `RegorApp` | Bundle TypeScript and add browser behavior where requested.                     |
+| Static assets               | Copies files from the content directory into the site output.                   |
 
 The [CLI guide](https://purestack.studio/guides/getting-started/purestack-cli/) covers the
 commands and options. [Site configuration](https://purestack.studio/guides/getting-started/site-config/)
@@ -154,24 +173,28 @@ covers navigation, themes, search, sitemap, localization, and output paths.
 
 ## Repository map
 
+Use [sites/](sites/README.md) to test the workspace CLI directly. Its shared
+instructions are repository files; generated site directories are Git-ignored.
+
 The workspace contains the CLI, site generator, UI components, typed HTML/CSS
 builders, browser scripts, icon providers, and a private VS Code extension.
 
 <details>
 <summary><strong>Explore the packages and source directories</strong></summary>
 
-| Path | Purpose |
-| --- | --- |
-| [`packages/purestack`](packages/purestack) | Public `purestack` package, CLI, and TypeScript API. |
-| [`packages/ts-ssg`](packages/ts-ssg) | Content discovery, rendering, routing, builds, and development server. |
-| [`packages/ts-components`](packages/ts-components) | Built-in UI components and component metadata. |
-| [`packages/ts-style`](packages/ts-style) | Themes, skins, typography, and style generation. |
-| [`packages/ts-css`](packages/ts-css) and [`packages/ts-html`](packages/ts-html) | Typed CSS and HTML builders. |
-| [`packages/ts-page-scripts`](packages/ts-page-scripts) | Browser-side behavior used by site components. |
-| [`packages/ts-svg-icons`](packages/ts-svg-icons) | SVG icon providers and lookup. |
-| [`packages/ts-ssg-vscode`](packages/ts-ssg-vscode) | Private VS Code extension for PureStack content and components. |
-| [`frontend`](frontend) | Source for purestack.studio, built with PureStack. |
-| [`packages/ts-ssg/sample-content`](packages/ts-ssg/sample-content) | A larger example site with content, components, and browser scripts. |
+| Path                                                                            | Purpose                                                                |
+| ------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| [`packages/purestack`](packages/purestack)                                      | Public `purestack` package, CLI, and TypeScript API.                   |
+| [`packages/ts-ssg`](packages/ts-ssg)                                            | Content discovery, rendering, routing, builds, and development server. |
+| [`packages/ts-components`](packages/ts-components)                              | Built-in UI components and component metadata.                         |
+| [`packages/ts-style`](packages/ts-style)                                        | Themes, skins, typography, and style generation.                       |
+| [`packages/ts-css`](packages/ts-css) and [`packages/ts-html`](packages/ts-html) | Typed CSS and HTML builders.                                           |
+| [`packages/ts-page-scripts`](packages/ts-page-scripts)                          | Browser-side behavior used by site components.                         |
+| [`packages/ts-svg-icons`](packages/ts-svg-icons)                                | SVG icon providers and lookup.                                         |
+| [`packages/ts-ssg-vscode`](packages/ts-ssg-vscode)                              | Private VS Code extension for PureStack content and components.        |
+| [`templates/`](templates)                                                       | Official npm template packages, sharing the PureStack product version. |
+| [`frontend`](frontend)                                                          | Source for purestack.studio, built with PureStack.                     |
+| [`packages/ts-ssg/sample-content`](packages/ts-ssg/sample-content)              | A larger example site with content, components, and browser scripts.   |
 
 The remaining workspace packages provide shared types, utilities, rendering,
 and DOM support.
@@ -197,11 +220,11 @@ run `yarn frontend`; its development server opens at
 <http://127.0.0.1:4700/>. See the [frontend README](frontend/README.md) for
 the site-specific workflow.
 
-| Command | Purpose |
-| :--- | :--- |
-| `yarn lint:ci` | Check source without modifying files. |
-| `yarn test:ci` | Run the test suite once. |
-| `yarn bundle` | Build distributable packages. |
+| Command        | Purpose                                          |
+| :------------- | :----------------------------------------------- |
+| `yarn lint:ci` | Check source without modifying files.            |
+| `yarn test:ci` | Run the test suite once.                         |
+| `yarn bundle`  | Build distributable packages.                    |
 | `yarn package` | Pack non-private workspaces into local tarballs. |
 
 ---

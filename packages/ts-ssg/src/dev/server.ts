@@ -3,7 +3,7 @@ import http from 'node:http'
 import path from 'node:path'
 import type { I18nConfig } from '@purestack/ts-common'
 import { logError, stripBasePath, withBasePath } from '@purestack/ts-util'
-import { getLogger, type Logger } from 'logpot'
+import { getLogger, type LevelName, type Logger } from 'logpot'
 import {
   createIncrementalBuildSession,
   type IncrementalBuilder,
@@ -30,6 +30,7 @@ import {
   writeHtmlResponse,
 } from './static-files'
 import { toPathKey, watchFiles, watchTree } from './watch-tree'
+import { attachWebSockets, type DevWebSocketEndpoint } from './websocket'
 
 export interface DevServerOptions {
   host?: string
@@ -41,7 +42,14 @@ export interface DevServerOptions {
 }
 
 export interface DevServerInput extends DevServerOptions {
+  /** Reject startup on an initial build error instead of staying open for fixes. */
+  failOnInitialBuildError?: boolean
+  /** Minimum level for the default logger; an existing caller-owned logger is kept. */
+  logLevel?: LevelName
   build?: BuildInput
+  webSockets?: readonly DevWebSocketEndpoint[]
+  /** Embedded callers can own process signals and close the returned handle. */
+  handleSignals?: boolean
   /**
    * A `purestack.config.ts` whose plugins the server adds to the build. It
    * loads again when the config or a local file it imports changes.
@@ -50,6 +58,7 @@ export interface DevServerInput extends DevServerOptions {
 }
 
 export interface DevServerHandle {
+  readonly url: string
   close: () => Promise<void>
 }
 
@@ -78,7 +87,7 @@ type RebuildRequestState = {
 export async function startDevServer(
   input: DevServerInput = {},
 ): Promise<DevServerHandle> {
-  await ensureLogger()
+  const ownsLogger = await ensureLogger(input.logLevel)
   const logger = getLogger()
   const baseBuildInput: BuildInput = {
     ...input.build,
@@ -102,8 +111,14 @@ export async function startDevServer(
   let devMiddleware = composeDevMiddleware(session.plugins)
   const log = getLogger()
 
-  const { host, port, watch, liveReload, fullRender } =
-    resolveDevServerOptions(input)
+  const {
+    host,
+    port: requestedPort,
+    watch,
+    liveReload,
+    fullRender,
+  } = resolveDevServerOptions(input)
+  let port = requestedPort
   let setupReady: Promise<void> = Promise.resolve()
   const activeResponses = new Set<Promise<void>>()
   const beginSiteRequest = async () => {
@@ -127,6 +142,7 @@ export async function startDevServer(
   const shutdownController = new AbortController()
   let watcher: { close: () => void } | undefined
   const requestState = createRebuildRequestState()
+  let rebuildDone: Promise<void> = Promise.resolve()
 
   const emitState = (reason: string) => {
     if (!liveReload) return
@@ -158,6 +174,8 @@ export async function startDevServer(
     requestState.pending = true
     if (requestState.inFlight) return
     requestState.inFlight = true
+    const finished = Promise.withResolvers<void>()
+    rebuildDone = finished.promise
     try {
       while (requestState.pending && !shuttingDown) {
         requestState.pending = false
@@ -169,8 +187,10 @@ export async function startDevServer(
       }
     } catch (error) {
       logError(log, error, 'rebuild failed')
+      if (input.failOnInitialBuildError && !initialSetupDone) throw error
     } finally {
       requestState.inFlight = false
+      finished.resolve()
     }
   }
 
@@ -185,7 +205,11 @@ export async function startDevServer(
       : undefined
   }
 
-  const displayHost = host === '0.0.0.0' ? LOOPBACK_HOST : host
+  const displayHost =
+    host === '0.0.0.0' ? LOOPBACK_HOST : host === '::' ? '::1' : host
+  const urlHost = displayHost.includes(':') ? `[${displayHost}]` : displayHost
+  const getUrl = () =>
+    `http://${urlHost}:${port}${withBasePath(config.basePath, '/')}`
   let incremental = session.builder
 
   const rebuild = async (
@@ -216,13 +240,14 @@ export async function startDevServer(
       await incremental.prepareForRequests()
       if (!initialSetupDone) {
         log.info('serving at', {
-          url: `http://${displayHost}:${port}${withBasePath(config.basePath, '/')}`,
+          url: getUrl(),
         })
         initialSetupDone = true
       }
       if (!shuttingDown) notifyReload(reason)
     } catch (error) {
       logError(log, error, 'dev setup failed')
+      if (input.failOnInitialBuildError && !initialSetupDone) throw error
     } finally {
       prepared.resolve()
     }
@@ -273,8 +298,7 @@ export async function startDevServer(
 
   const server = http.createServer(
     createDevServerRequestHandler({
-      host,
-      port,
+      getUrl,
       outDir: config.outDir,
       basePath: config.basePath,
       i18n: config.i18n,
@@ -296,44 +320,33 @@ export async function startDevServer(
   })
   server.keepAliveTimeout = 1000
   server.headersTimeout = 5000
-
-  if (watch) {
-    watcher = await watchTree(config.contentDir, (filePath) => {
-      scheduleRebuild(`content change: ${filePath}`, filePath)
-    })
-    log.info('watching content', { contentDir: config.contentDir })
-  }
-  watchConfigDependencies()
-
-  void requestRebuild()
-  server.listen(port, host, () => {
-    log.info('dev server listening', {
-      host,
-      port,
-      outDir: config.outDir,
-      liveReload,
-      watch,
-      fullRender,
-    })
-  })
-
-  const shutdown = async () => {
-    if (shuttingDown) return
-    shuttingDown = true
-    shutdownController.abort()
-    requestState.pending = false
-    requestState.changedPaths.clear()
-    if (requestState.timer) {
-      clearTimeout(requestState.timer)
-      requestState.timer = undefined
-    }
-    process.off('SIGINT', handleSignal)
-    process.off('SIGTERM', handleSignal)
-    watcher?.close()
-    dependencyWatcher?.close()
-    await new Promise<void>((resolve) => server.close(() => resolve()))
-    await logger.close()
-  }
+  const closeWebSockets = attachWebSockets(
+    server,
+    input.webSockets ?? [],
+    (error) => logError(log, error, 'WebSocket endpoint failed'),
+  )
+  let closing: Promise<void> | undefined
+  const shutdown = () =>
+    (closing ??= (async () => {
+      shuttingDown = true
+      shutdownController.abort()
+      requestState.pending = false
+      requestState.changedPaths.clear()
+      if (requestState.timer) {
+        clearTimeout(requestState.timer)
+        requestState.timer = undefined
+      }
+      process.off('SIGINT', handleSignal)
+      process.off('SIGTERM', handleSignal)
+      watcher?.close()
+      dependencyWatcher?.close()
+      for (const response of clients.keys()) response.end()
+      clients.clear()
+      await closeWebSockets()
+      await new Promise<void>((resolve) => server.close(() => resolve()))
+      await rebuildDone
+      if (ownsLogger) await logger.close()
+    })())
 
   const handleSignal = (signal: NodeJS.Signals) => {
     log.info('dev server shutting down', { signal })
@@ -342,10 +355,38 @@ export async function startDevServer(
     })
   }
 
-  process.on('SIGINT', handleSignal)
-  process.on('SIGTERM', handleSignal)
-
-  return { close: shutdown }
+  if (input.handleSignals !== false) {
+    process.on('SIGINT', handleSignal)
+    process.on('SIGTERM', handleSignal)
+  }
+  try {
+    await new Promise<void>((resolve, reject) => {
+      server.once('error', reject)
+      server.listen(port, host, () => {
+        server.off('error', reject)
+        resolve()
+      })
+    })
+    const address = server.address()
+    if (!address || typeof address === 'string')
+      throw new Error('No TCP address.')
+    port = address.port
+    if (watch) {
+      watcher = await watchTree(config.contentDir, (filePath) => {
+        scheduleRebuild(`content change: ${filePath}`, filePath)
+      })
+      log.info('watching content', { contentDir: config.contentDir })
+    }
+    watchConfigDependencies()
+    await requestRebuild()
+    return {
+      url: getUrl(),
+      close: shutdown,
+    }
+  } catch (error) {
+    await shutdown()
+    throw error
+  }
 }
 
 /** Loads the project config and tells which changed files belong to it. */
@@ -402,8 +443,7 @@ function createRebuildRequestState(): RebuildRequestState {
 }
 
 type DevServerRequestHandlerInput = {
-  host: string
-  port: number
+  getUrl: () => string
   outDir: string
   basePath: string
   i18n: I18nConfig
@@ -422,8 +462,7 @@ type DevServerRequestHandlerInput = {
 
 function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
   const {
-    host,
-    port,
+    getUrl,
     outDir,
     basePath,
     i18n,
@@ -443,7 +482,7 @@ function createDevServerRequestHandler(input: DevServerRequestHandlerInput) {
       return
     }
 
-    const { pathname } = new URL(req.url, `http://${host}:${port}`)
+    const { pathname } = new URL(req.url, getUrl())
     const liveReloadPath = withBasePath(basePath, LIVE_RELOAD_PATH)
 
     if (liveReload && pathname === liveReloadPath) {
