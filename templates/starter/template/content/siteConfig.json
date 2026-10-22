@@ -5,7 +5,9 @@
     "brand": "My Site",
     "href": "/",
     "icon": "lucide:sparkles",
-    "markStyle": "soft"
+    "markStyle": "plain",
+    "ariaLabel": "My Site home",
+    "size": "md"
   },
   "style": {
     "themes": [

@@ -32,6 +32,8 @@
 - Other files in `content/`, including images, are copied as public assets.
 - `dist/` and `node_modules/` are generated. Change source instead of output.
 - Commit `yarn.lock` after installing. Keep Yarn's `node-modules` linker enabled.
+- PureStack dependencies use `latest`; installation resolves current releases and
+  the lockfile records their exact versions. Preserve the lockfile for repeatable installs.
 
 ## Customization rules
 

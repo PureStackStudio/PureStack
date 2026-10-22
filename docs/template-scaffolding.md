@@ -18,7 +18,7 @@ template-defined categories, configuration bindings, and extension points.
 - Git initialization is opt-in with `--git`; never create an initial commit.
 - Accept explicit npm package versions and local `.tgz` files or package folders.
 - Require an absent or empty destination. Stage and validate before writing.
-- Check compatibility against the running CLI and pin that exact PureStack version.
+- Check template compatibility against the running CLI. Keep the template's dependency selectors; the starter uses `latest` for PureStack packages.
 - Preserve generated files if installation or Git initialization fails, with retry
   instructions and a failing exit status.
 
@@ -44,12 +44,14 @@ project, including `package.json`, `README.md`, `AGENTS.md`, and
 Project dependencies must use registry versions, ranges, tags, or `npm:` aliases.
 Workspace references, local paths, Git sources, and tarball URLs are rejected.
 
-The generated package name, `purestack` dependency, site title, and logo brand
+The generated package name, site title, and logo brand
 are customized. Template-defined option bindings can configure appearance,
 features, publishing, and plugin settings. Unspecified values use the template's
-declared defaults. The `purestack` dependency uses the literal
-`{{purestackVersion}}` in the source template. Other `@purestack/*` dependencies
-can use the same token to share the CLI's product version, including test helpers.
+declared defaults. The starter declares `purestack` and its `@purestack/*`
+dependencies as `latest`. The package manager resolves their current published
+releases during installation and records the exact versions in the project's
+lockfile. The CLI preserves template dependency selectors instead of pinning them
+to its own version. Templates can also declare published versions, ranges, and tags.
 Keep `.gitignore` and `.yarnrc.yml` under their real names and explicitly include
 `template/.gitignore` and `template/.yarnrc.yml` in the package's `files` list.
 `yarn package` and `yarn publish-package` use npm to pack templates, preserving

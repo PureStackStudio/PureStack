@@ -15,14 +15,15 @@
     "check:fix": "biome check --write ."
   },
   "dependencies": {
-    "purestack": "{{purestackVersion}}",
-    "@purestack/ts-style": "{{purestackVersion}}",
-    "regor": "^1.7.6"
+    "purestack": "latest",
+    "@purestack/ts-components": "latest",
+    "@purestack/ts-style": "latest",
+    "regor": "latest"
   },
   "devDependencies": {
     "@types/node": "^26.6.5",
     "@biomejs/biome": "^2.6.2",
-    "@purestack/ts-minidom": "{{purestackVersion}}",
+    "@purestack/ts-minidom": "latest",
     "vite": "^8.3.5",
     "vitest": "^5.0.5"
   }

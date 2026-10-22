@@ -11,7 +11,8 @@ the wizard's color choices. Starter copy explains what to replace; it makes no
 fictional business claims.
 
 Generated projects use pinned Yarn 4, Vite-powered Vitest app tests, and Biome
-for linting, formatting, and import organization. See the generated
+for linting, formatting, and import organization. PureStack dependencies use
+`latest`, with exact installed versions recorded in the project's lockfile. See the generated
 [README](template/README.md) for commands and requirements.
 
 To test unpublished changes, pass this folder or its packed `.tgz` to

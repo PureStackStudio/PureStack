@@ -1,9 +1,8 @@
 {
   "extends": "../tsconfig.json",
-  "include": [
-    "./*.ts",
-    "./fixtures/*.ts",
-    "../packages/purestack/src/init/*.ts"
-  ],
-  "exclude": ["../packages/purestack/src/init/*.test.ts"]
+  "compilerOptions": {
+    "composite": false,
+    "incremental": false
+  },
+  "include": ["./**/*.ts"]
 }

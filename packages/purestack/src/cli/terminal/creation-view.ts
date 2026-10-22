@@ -60,7 +60,7 @@ export class CreationView {
   start(title: string, directory: string, version: string) {
     return `\n${this.frame(
       '◈ PURESTACK · CREATE SITE',
-      [title, '', `Directory  ${directory}`, `PureStack  ${version}`],
+      [title, '', `Directory  ${directory}`, `PureStack CLI  ${version}`],
       'accent',
     )}\n\n`
   }
@@ -101,7 +101,7 @@ export class CreationView {
       [
         `Directory  ${result.directory}`,
         `Template   ${result.template}`,
-        `PureStack  ${result.version}`,
+        `PureStack CLI  ${result.version}`,
       ],
       tone,
     )

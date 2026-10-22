@@ -81,7 +81,7 @@ async function main() {
       )
       const packageFile = path.join(directory, 'package.json')
       const project = JSON.parse(await readFile(packageFile, 'utf8'))
-      assert.equal(project.dependencies.purestack, framework.manifest.version)
+      assert.equal(project.dependencies.purestack, 'latest')
       assert(
         !Object.keys(project.dependencies).some((name) =>
           name.includes('template-'),

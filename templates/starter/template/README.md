@@ -65,5 +65,8 @@ inside another Yarn workspace. `yarn install` fills it with dependency resolutio
 commit the resulting lockfile. The project uses Yarn's `node-modules` linker.
 Biome checks supported code and JSON; edit MDX content separately.
 
+PureStack dependencies use `latest` to fetch current releases during installation.
+The lockfile records the exact versions used by your project.
+
 Read `AGENTS.md` before making automated changes. Framework documentation:
 <https://purestack.studio/guides/>.

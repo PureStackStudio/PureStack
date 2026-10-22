@@ -259,10 +259,10 @@ function isRegistryDependency(version: string) {
 export async function prepareProject(
   unpacked: string,
   directory: string,
-  purestackVersion: string,
+  cliVersion: string,
   title = path.basename(directory),
 ) {
-  const { pkg } = await inspectTemplate(unpacked, purestackVersion)
+  const { pkg } = await inspectTemplate(unpacked, cliVersion)
   const source = path.join(unpacked, 'template')
   const files = await listProjectFiles(source)
   for (const file of [
@@ -289,12 +289,9 @@ export async function prepareProject(
     if (match[1] === 'yarn') packageManager = 'yarn'
   }
   const dependencies = project.dependencies
-  if (
-    !isRecord(dependencies) ||
-    dependencies.purestack !== '{{purestackVersion}}'
-  )
+  if (!isRecord(dependencies) || typeof dependencies.purestack !== 'string')
     throw new Error(
-      'Template must declare dependencies.purestack as {{purestackVersion}}.',
+      'Template must declare dependencies.purestack as a published dependency version, range, or tag.',
     )
   for (const field of [
     'dependencies',
@@ -305,21 +302,11 @@ export async function prepareProject(
     const entries = project[field]
     if (entries === undefined) continue
     if (!isRecord(entries)) throw new Error(`Invalid project ${field}.`)
-    for (const [dependency, version] of Object.entries(entries)) {
-      if (
-        typeof version !== 'string' ||
-        (!isRegistryDependency(version) &&
-          !(
-            (dependency === 'purestack' ||
-              dependency.startsWith('@purestack/')) &&
-            version === '{{purestackVersion}}'
-          ))
-      )
+    for (const version of Object.values(entries)) {
+      if (typeof version !== 'string' || !isRegistryDependency(version))
         throw new Error(
           `Project ${field} must use published dependency versions.`,
         )
-      if (version === '{{purestackVersion}}')
-        entries[dependency] = purestackVersion
     }
   }
   const scripts = project.scripts
@@ -345,7 +332,6 @@ export async function prepareProject(
   }
   project.name = projectName(directory)
   project.private = true
-  dependencies.purestack = purestackVersion
   await writeJson(path.join(source, 'package.json'), project)
   const configFile = path.join(source, 'content', 'siteConfig.json')
   const config = await readJson(configFile)

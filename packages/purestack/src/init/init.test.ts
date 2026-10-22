@@ -203,12 +203,12 @@ describe('project generation', () => {
     expect(project).toMatchObject({
       name: 'my-docs',
       private: true,
-      dependencies: { purestack: cliVersion },
+      dependencies: { purestack: 'latest' },
     })
     expect(prepared.packageManager).toBe('yarn')
     expect(await readFile(path.join(destination, 'yarn.lock'), 'utf8')).toBe('')
     expect(project.packageManager).toBe('yarn@4.18.1')
-    expect(project.devDependencies['@purestack/ts-minidom']).toBe(cliVersion)
+    expect(project.devDependencies['@purestack/ts-minidom']).toBe('latest')
     const yarnConfig = await readFile(
       path.join(destination, '.yarnrc.yml'),
       'utf8',
@@ -216,8 +216,8 @@ describe('project generation', () => {
     expect(yarnConfig).toContain('nodeLinker: node-modules')
     expect(yarnConfig).toContain('npmMinimalAgeGate: 0')
     expect(project.dependencies).toMatchObject({
-      '@purestack/ts-style': cliVersion,
-      regor: '^1.7.6',
+      '@purestack/ts-style': 'latest',
+      regor: 'latest',
     })
     expect(
       JSON.parse(
@@ -240,6 +240,36 @@ describe('project generation', () => {
       await readFile(path.join(destination, 'AGENTS.md'), 'utf8'),
     ).toContain('yarn build')
   })
+
+  it('preserves template dependency selectors instead of replacing them with the CLI version', async () => {
+    const unpacked = await fixture()
+    const packageFile = path.join(unpacked, 'template/package.json')
+    const project = JSON.parse(await readFile(packageFile, 'utf8'))
+    project.dependencies.purestack = '1.2.3'
+    project.dependencies['@purestack/ts-style'] = '^1.2.0'
+    await writeFile(packageFile, JSON.stringify(project))
+
+    await prepareProject(unpacked, path.join(temporary, 'project'), cliVersion)
+
+    expect(
+      JSON.parse(await readFile(packageFile, 'utf8')).dependencies,
+    ).toEqual(project.dependencies)
+  })
+
+  it.each([undefined, 42])(
+    'rejects a missing or invalid PureStack dependency (%s)',
+    async (dependency) => {
+      const unpacked = await fixture()
+      const packageFile = path.join(unpacked, 'template/package.json')
+      const project = JSON.parse(await readFile(packageFile, 'utf8'))
+      project.dependencies.purestack = dependency
+      await writeFile(packageFile, JSON.stringify(project))
+
+      await expect(
+        prepareProject(unpacked, path.join(temporary, 'project'), cliVersion),
+      ).rejects.toThrow(/must declare dependencies.purestack/)
+    },
+  )
 
   it('rejects incompatible templates without creating a destination', async () => {
     const unpacked = await fixture()
@@ -390,6 +420,7 @@ describe('project generation', () => {
     ' package.tgz ',
     '',
     '{{unknown}}',
+    '{{purestackVersion}}',
   ])('rejects nonportable dependency %s', async (version) => {
     const unpacked = await fixture()
     const packageFile = path.join(unpacked, 'template/package.json')
