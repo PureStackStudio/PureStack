@@ -1,5 +1,9 @@
 import { defineComponent, html } from 'regor'
-import { LandingPage } from './context'
+import { landingContent } from '../../content/landing'
+
+export class LandingPage {
+  readonly content = landingContent
+}
 
 const pageTemplate = html`<div class="landing-page">
   <LandingHero/>

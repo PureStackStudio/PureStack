@@ -1,6 +1,6 @@
 import { defineComponent, html, type RefOrValue } from 'regor'
 import type { landingContent } from '../../../content/landing'
-import { LandingPage } from '../context'
+import { LandingPage } from '../page'
 
 export interface LandingHeroIntro {
   headingId: RefOrValue<string>

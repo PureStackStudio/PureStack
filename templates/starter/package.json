@@ -1,6 +1,6 @@
 {
   "name": "@purestack/template-starter",
-  "version": "1.1.20",
+  "version": "1.1.21",
   "description": "A polished general-purpose PureStack site with clear customization guidance.",
   "purestackTemplate": true,
   "license": "MIT",

@@ -19,7 +19,7 @@ Build high-quality, visually distinctive, maintainable websites **exclusively wi
 8. **Light and dark are mandatory.** Every site must support at least `light` and `dark`, with an actual, accessible `<ThemeToggle/>` in the shared interface. Check both themes across all components, custom effects, and interaction states. Do not make a static theme-only design.
 9. **Use MDX headers and footers.** PureStack supports shared `header.mdx` and `footer.mdx` files. Reuse them for global navigation, branding, the theme toggle, and shared footer content instead of duplicating the same markup on each page. Prefer native header/footer components whenever suitable.
 10. **Choose build-time versus browser-time intentionally.** PureStack/Regor components can render during site generation or execute in the browser. Render static content at build time; opt into browser execution only for stateful interaction and capabilities that actually require it. Use `RegorApp` for browser-mounted Regor apps and `PageScript` for browser-side TypeScript when applicable. Do not turn an otherwise static site into a client-rendered application.
-11. **Export Regor component contexts.** Every custom Regor component must use an **exported interface or exported class** as its context type and define the component as `defineComponent<MyComponent>(...)`. This is essential for programmatic discovery from MDX and Regor `html` templates, and for VS Code navigation. Avoid anonymous, private, or inferred context types for component definitions.
+11. **Export Regor component contexts from the defining file.** Every custom Regor component must use an **exported interface or exported class** as its context type and define the component as `defineComponent<MyComponent>(...)`. **Declare that interface or class in the same file that calls `defineComponent<>`**; the PureStack VS Code extension finds local components this way. Do not import the context type from another module, re-export it, or alias it. This is essential for programmatic discovery from MDX and Regor `html` templates, and for VS Code navigation. Avoid anonymous, private, or inferred context types for component definitions.
 12. **Divide and conquer with components. Never write a very long template in a single `html` block.** A page or dashboard component must compose focused child components rather than contain every section, form, navigation area, and conditional view inline. Extract substantial sections even when they are used only once; reuse is not a prerequisite for a component. Give each nontrivial component its own TypeScript module. Do not evade this rule by minifying markup, concatenating template strings, or moving fragments into string-returning helpers. Keep component registration explicit and easy to inspect.
 13. **Maintain production quality.** Use clear names, strong types, small focused modules, semantic HTML/MDX, accessibility, responsive behavior, consistent visual language, minimal runtime work, and robust error handling. No placeholder implementations, dead code, unnecessary abstractions, or quick fixes that undermine the architecture.
 
@@ -138,7 +138,7 @@ Use a dedicated file per nontrivial component, but **organize component folders 
 
 **Share substantial context with Regor's `requireContext`.** When several components need a lot of shared context, use a common ancestor's class context and access it with `head.requireContext(SharedContext)`. Avoid dozens of forwarded prop bindings or large per-screen prop maps.
 
-The **exported context type** and the generic argument to `defineComponent` must be the same:
+The **exported context type** and the generic argument to `defineComponent` must be the same, and both must live in the same file. A context class shared through `requireContext` may come from another module, but the component's own interface or class stays beside its `defineComponent<>` call:
 
 ```ts
 import { defineComponent, html, type RefOrValue } from 'regor'
@@ -227,7 +227,7 @@ Before reporting completion, check:
 - Components and utilities already available in PureStack were reused rather than recreated.
 - A site-specific skin starts from `themeSkins.standard.create()` and meaningfully customizes the returned `ThemePalette` for the site's unique identity. Both light and dark modes are generated, visually coherent, accessible, and switchable through `<ThemeToggle/>`.
 - Shared `header.mdx`/`footer.mdx` are used appropriately.
-- Each custom Regor component has an exported interface/class, `defineComponent<ExportedContext>()`, clear registration, and a focused module.
+- Each custom Regor component has an exported interface/class declared in the same file as its `defineComponent<ExportedContext>()` call, clear registration, and a focused module.
 - No very long, monolithic `html` blocks remain in the implemented interface. Root templates compose focused child components; substantial sections and conditional screens have their own components with explicit data/action contracts.
 - Build-time and browser-time execution are deliberate; static content works without JavaScript where applicable.
 - The site is responsive and visually coherent at mobile, tablet, and desktop widths in **both themes**.
