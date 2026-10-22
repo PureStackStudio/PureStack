@@ -30,7 +30,7 @@ describe('PureStack agent skill', () => {
   it('marks the shipped skill as managed without breaking its frontmatter', async () => {
     const skill = await readPureStackSkill(packageRoot, '9.8.7')
     const [frontmatter, rest] = skill.split(/(?<=\n---\n)/, 2)
-    expect(frontmatter).toMatch(/^---\nname: purestack-development\n/)
+    expect(frontmatter).toMatch(/^---\n\s*name: purestack-development\n/)
     expect(rest).toMatch(
       /^\n<!-- Managed by PureStack 9\.8\.7\. Run `purestack skills update`/,
     )

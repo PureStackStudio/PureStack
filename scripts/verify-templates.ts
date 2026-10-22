@@ -122,7 +122,9 @@ async function main() {
           : ['install', '--no-audit', '--no-fund'],
         directory,
       )
-      for (const script of ['check', 'test:ci', 'build', 'publish']) {
+      // Verify content, not formatting: the generated site's own format script
+      // reformats files the CLI writes.
+      for (const script of ['lint', 'test:ci', 'build', 'publish']) {
         if (typeof project.scripts?.[script] === 'string')
           await runPackageManager(manager, ['run', script], directory)
       }

@@ -23,11 +23,6 @@
       "semicolons": "asNeeded"
     }
   },
-  "json": {
-    "formatter": {
-      "expand": "always"
-    }
-  },
   "linter": {
     "enabled": true,
     "rules": {

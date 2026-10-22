@@ -495,7 +495,7 @@ describe('project generation', () => {
       path.join(destination, PURESTACK_SKILL_PATH),
       'utf8',
     )
-    expect(skill).toMatch(/^---\nname: purestack-development\n/)
+    expect(skill).toMatch(/^---\n\s*name: purestack-development\n/)
     expect(skill).toContain(`<!-- Managed by PureStack ${cliVersion}.`)
   })
 

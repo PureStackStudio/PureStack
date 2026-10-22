@@ -1,4 +1,5 @@
 ---
+
 name: purestack-development
 description: Build, redesign, or extend websites exclusively with PureStack and Regor. Use for every user request to create or modify a PureStack site, including its pages, components, styling, themes, layouts, and browser interactivity. Enforces TypeScript-first implementation, MDX, customized ThemePalette-based skins derived from PureStack's standard generator, fluent style APIs, reusable built-in components, and maintainable Regor components.
 ---

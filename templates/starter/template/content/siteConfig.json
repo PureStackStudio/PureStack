@@ -10,15 +10,10 @@
     "size": "md"
   },
   "style": {
-    "themes": [
-      "light",
-      "dark"
-    ],
+    "themes": ["light", "dark"],
     "theme": {
       "skin": "starter",
-      "presets": [
-        "orange"
-      ]
+      "presets": ["orange"]
     }
   },
   "navigation": {

@@ -37,12 +37,6 @@
   },
   "overrides": [
     {
-      "includes": ["**/SKILL.md"],
-      "formatter": {
-        "enabled": false
-      }
-    },
-    {
       "includes": [
         "packages/ts-css/src/**",
         "!packages/ts-css/src/meta/**",
