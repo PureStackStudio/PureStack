@@ -1,25 +1,15 @@
 ---
-title: Welcome
-description: Your new PureStack website starts here.
+title: A home for your next idea
+description: A considered starting point for your work, business, or community. Make it yours with PureStack.
 template: doc
+layout:
+  navMode: drawer
+  showToc: false
 nav:
+  title: Home
   order: 0
+  icon: lucide:sparkles
 ---
 
-# Make this site yours
-
-Edit `content/index.mdx`, save, and watch your changes appear.
-Add a page to the content folder to create another route, or visit [About](/about/).
-
-<Panel tone="info" variant="surface">
-  <p>Your content, components, styles, and browser code live in this project.</p>
-</Panel>
-
-## Add a little interaction
-
-<button id="hello-button" type="button">Say hello</button>
-<output id="hello-output" aria-live="polite"></output>
-
-<PageScript src="./hello.ts" />
-
-The button's behavior is in `content/hello.ts`. PureStack bundles it for the browser.
+<!-- Edit the copy in modules/content/landing.ts. Components live in modules/components/landing/. -->
+<LandingPage/>

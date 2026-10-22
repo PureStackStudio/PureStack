@@ -522,30 +522,29 @@ card.<span class="syntax-blue">toCSS</span>()</code></pre>
       <span class="eyebrow">03 / START BUILDING</span>
       <h2 id="start-title">Make something<br/><span>of your own.</span></h2>
       <p>
-        Install <code>purestack</code> from npm to build your own site. Explore
-        the source and run the included examples with the steps here, or follow
-        the <a href="/guides/getting-started/purestack-cli/">CLI guide</a> to start a project.
+        Start PureStack Studio with one command, then open it in your browser.
+        Choose a starting point, find your colors, and make it yours.
       </p>
       <ol class="start-steps">
         <li>
           <span>01</span>
           <div>
-            <strong>Get the source</strong>
-            <p>Clone the repository and install with Yarn.</p>
+            <strong>Open Studio</strong>
+            <p>Run init. Follow the link in your terminal.</p>
           </div>
         </li>
         <li>
           <span>02</span>
           <div>
-            <strong>Start the playground</strong>
-            <p>Run the included content site locally.</p>
+            <strong>Find your starting point</strong>
+            <p>Choose a template, colors, and the features you need.</p>
           </div>
         </li>
         <li>
           <span>03</span>
           <div>
-            <strong>Make it yours</strong>
-            <p>Edit a page. Add a component. Keep going.</p>
+            <strong>Create it. See it. Make it yours.</strong>
+            <p>Browse your new site. Your content and code are yours to shape.</p>
           </div>
         </li>
       </ol>
@@ -553,34 +552,28 @@ card.<span class="syntax-blue">toCSS</span>()</code></pre>
     <div class="start-terminal">
       <div class="terminal-heading">
         <span><Icon name="tabler:terminal-2"/>Your terminal</span
-        ><span>FROM SOURCE</span>
+        ><span>START WITH STUDIO</span>
       </div>
       <div class="terminal-body">
         <StudioCommand
-          target="command-clone"
-          label="Copy clone command"
-          description="# Clone the project"
-          command="git clone https://github.com/PureStackStudio/PureStack.git"/>
-        <StudioCommand
-          target="command-install"
-          label="Copy install commands"
-          description="# Install dependencies"
-          :command="'cd PureStack\nyarn install'"/>
+          target="command-init"
+          label="Copy Studio command"
+          description="# Your new site starts here"
+          command="npx purestack@latest init"/>
+        <StudioSetupStep/>
         <StudioCommand
           target="command-dev"
           label="Copy development command"
-          description="# Start the sample site"
+          description="# After setup, keep building in your project folder"
           command="yarn dev"/>
         <div class="terminal-address">
-          <span class="status-dot"></span>Open localhost:4173 in your browser
+          <span class="status-dot"></span>Choose. Create. Browse your live site.
         </div>
       </div>
       <a
         class="terminal-footer"
-        href="https://github.com/PureStackStudio/PureStack#development"
-        target="_blank"
-        rel="noopener"
-        >Setup details in the README <span aria-hidden="true">↗</span></a
+        href="/guides/getting-started/purestack-cli/"
+        >Your first site, step by step <span aria-hidden="true">↗</span></a
       >
     </div>
   </Grid>
@@ -624,10 +617,10 @@ card.<span class="syntax-blue">toCSS</span>()</code></pre>
       talk to whichever backend your product uses.
     </StudioFaq>
     <StudioFaq title="How do I install PureStack?">
-      Add the published package to your project with <code>yarn add purestack</code>.
-      The quick start above runs the included sample from a repository checkout;
-      the <a href="/guides/getting-started/purestack-cli/">CLI guide</a> shows how to build your
-      own site with the installed package.
+      Run <code>npx purestack@latest init</code> and open the link in your
+      terminal. Studio guides you through choosing and creating your site,
+      including optional dependency installation. Follow the
+      <a href="/guides/getting-started/purestack-cli/">CLI guide</a> for your first steps.
     </StudioFaq>
   </div>
 </Grid>

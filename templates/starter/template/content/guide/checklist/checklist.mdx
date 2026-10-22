@@ -1,0 +1,27 @@
+---
+title: Your first launch
+description: A small interactive checklist to help you finish and share your PureStack site.
+template: doc
+layout:
+  navMode: drawer
+  showToc: false
+nav:
+  title: Launch checklist
+  order: 0
+  icon: lucide:check-check
+---
+
+<SectionHeader eyebrow="A few thoughtful checks" title="Ready when you are." titleTag="h1" titleClass="starter-page-title" subtitle="A useful site starts with a clear message and a little care. Work through these steps before sharing yours."/>
+
+<Grid columns="1" columnsLg="minmax(0, 1.35fr) minmax(0, 0.65fr)" alignItems="start" class="gap-6">
+  <Panel variant="surface" class="p-0" bodyClass="p-5">
+    <RegorApp src="./checklist.ts" id="launch-checklist"/>
+  </Panel>
+  <Panel variant="surfaceAlt" class="p-0" bodyClass="p-5">
+    <IconFrame name="lucide:sparkles" tone="accent" variant="surface"/>
+    <h2 class="fs-h4 mt-4">Small interaction.<br/>Real source you can use.</h2>
+    <p class="text-subtle">This is a Regor app inside a PureStack page. Checkboxes update the progress without reloading the page.</p>
+    <p class="fs-sm">Checkmarks last for this visit. They are personal reminders; they do not inspect or edit your project.</p>
+    <BtnLink href="/guide/#find-the-right-file" variant="link" icon="lucide:arrow-right" iconPosition="end" class="p-0">Find your next change</BtnLink>
+  </Panel>
+</Grid>

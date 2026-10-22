@@ -15,7 +15,9 @@
     "check:fix": "biome check --write ."
   },
   "dependencies": {
-    "purestack": "{{purestackVersion}}"
+    "purestack": "{{purestackVersion}}",
+    "@purestack/ts-style": "{{purestackVersion}}",
+    "regor": "^1.7.6"
   },
   "devDependencies": {
     "@types/node": "^26.6.5",

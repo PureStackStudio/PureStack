@@ -1,0 +1,102 @@
+---
+title: Make this site yours
+description: A practical map for changing the words, design, pages, and interactions in your PureStack site.
+template: doc
+layout:
+  navMode: drawer
+  showToc: true
+nav:
+  title: Make it yours
+  order: 2
+  icon: lucide:book-open
+---
+
+<SectionHeader eyebrow="Your site, your direction" title="A clear place to start." titleTag="h1" titleClass="starter-page-title" subtitle="You do not need to change everything at once. Start with your message, choose a visual direction, then add what your visitors need."/>
+
+## Start with your message
+
+Edit `content/modules/content/landing.ts`. Replace the headline, introduction, and primary button
+with three things: what you do, who it helps, and what visitors should do next.
+The landing components under `content/modules/components/landing/` handle presentation.
+Keep the layout while you find the words. `content/index.mdx` composes the page.
+
+Then replace the prompts in `content/about.mdx` with your own story. Use facts you
+can stand behind. You can remove the guide and checklist pages before launch, or
+keep them as a reference while you work.
+
+<Panel variant="surfaceAlt" class="p-0" bodyClass="p-5">
+  <strong>Working with an AI assistant?</strong>
+  <p class="mb-0">Give it your audience, purpose, tone, and real content. Ask it to read README.md and AGENTS.md first, preserve the PureStack components, and show what it changed. It should ask for missing facts.</p>
+</Panel>
+
+## Choose what to change
+
+<Tabs ariaLabel="Customization areas" tone="neutral" variant="surface" tabVariant="outline">
+  <TabPane id="customize-content" label="Content" icon="lucide:file-text" class="p-4">
+    <h3 class="mt-0">Write pages in Markdown and MDX.</h3>
+    <p>Pages are ordinary source files. Add a page, give it a useful title, and choose where it belongs in navigation.</p>
+
+```mdx
+---
+title: Our work
+description: A short introduction to what we do.
+nav:
+  order: 3
+---
+
+# Work worth sharing
+
+Tell visitors what you do and why it matters.
+```
+
+    <p class="mb-0">Save this as <code>content/work.mdx</code> to create <code>/work/</code>. Update links in the header and footer when the new page is ready.</p>
+  </TabPane>
+  <TabPane id="customize-appearance" label="Appearance" icon="lucide:palette" class="p-4">
+    <h3 class="mt-0">One design language, two themes.</h3>
+    <p>Set your site title and logo in <code>content/siteConfig.json</code>. Its <code>style.theme.presets</code> setting selects a palette: orange, pink, blue, mint, green, or red. Use the header's theme toggle to check both modes.</p>
+    <p>The starter skin lives in <code>content/modules/theme/palette.ts</code>. It starts from PureStack's standard palette and refines typography, surfaces, and corners for light and dark. Keep brand-wide choices here.</p>
+    <p class="mb-0">Custom layout rules are grouped in <code>content/modules/styles/</code> and use PureStack's typed style builder. Prefer built-in components and utility classes for everyday layout.</p>
+  </TabPane>
+  <TabPane id="customize-interaction" label="Interaction" icon="lucide:check-check" class="p-4">
+    <h3 class="mt-0">Add behavior where it helps.</h3>
+    <p>These tabs are a built-in PureStack component. The launch checklist shows a small Regor app with reactive controls, computed progress, and a reset action.</p>
+    <p>Its page and TypeScript files live together in <code>content/guide/checklist/</code>. Tests live separately under <code>tests/</code>. Static pages stay static; interactive parts mount only where they are used.</p>
+    <BtnLink href="/guide/checklist/" variant="outline" icon="lucide:arrow-right" iconPosition="end">Try the checklist</BtnLink>
+  </TabPane>
+</Tabs>
+
+## Find the right file
+
+| What you want to change | Where to start |
+| --- | --- |
+| Name, logo, palette, search, navigation settings | `content/siteConfig.json` |
+| Home page headline, introduction, sections, and buttons | `content/modules/content/landing.ts` |
+| Landing page components and composition | `content/modules/components/landing/`, `content/index.mdx` |
+| About page story | `content/about.mdx` |
+| Shared navigation and footer | `content/header.mdx`, `content/footer.mdx`, `content/modules/components/shell/footer/` |
+| Site-wide colors, typography, and shape | `content/modules/theme/palette.ts` |
+| Custom layout and appearance rules | `content/modules/styles/` |
+| Site plugin registration | `content/purestack.config.ts` |
+| Browser interaction example | `content/guide/checklist/` |
+
+## Keep the useful parts
+
+<Flex direction="column" class="gap-3">
+  <ExpandablePanel title="How do I add pages and images?" icon="lucide:file-text" variant="surface">
+    <p>Add <code>.mdx</code> pages under <code>content/</code>. Use frontmatter for titles, descriptions, and navigation order. Images can live in a page's own folder or a shared assets folder, and be linked with ordinary relative paths.</p>
+    <p class="mb-0">When a page imports code or includes scripts, put the page and its private dependencies in a folder with the same name. The checklist is a working example. Keep shared application code in <code>content/modules/</code>.</p>
+  </ExpandablePanel>
+  <ExpandablePanel title="How do I add components or plugins?" icon="lucide:layers" variant="surface">
+    <p>Use PureStack's built-in components first. Register additional components, theme skins, or plugins through <code>content/purestack.config.ts</code>. Split larger interfaces into small components with exported, typed contexts.</p>
+    <p class="mb-0">The starter plugin in <code>content/modules/starter-plugin.ts</code> is the example to follow. Declare any package you import directly in <code>package.json</code>.</p>
+  </ExpandablePanel>
+  <ExpandablePanel title="What should I check before publishing?" icon="lucide:circle-check" variant="surface">
+    <p>Replace the starter copy, check links and mobile layouts, try both themes, and run the project's checks. Set your public site URL when you have one.</p>
+    <p class="mb-0"><code>yarn publish</code> builds a release in <code>dist/publish</code>. It creates local files; upload that folder to your static host when you are ready.</p>
+  </ExpandablePanel>
+</Flex>
+
+<Flex wrap="true" class="gap-3 mt-5 mb-5">
+  <BtnLink href="/guide/checklist/" tone="accent" icon="lucide:arrow-right" iconPosition="end">Work through the launch checklist</BtnLink>
+  <BtnLink href="https://purestack.studio/guides/" variant="outline" icon="lucide:book-open">PureStack documentation</BtnLink>
+</Flex>

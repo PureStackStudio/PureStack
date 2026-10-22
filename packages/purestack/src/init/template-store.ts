@@ -26,7 +26,7 @@ export const officialTemplates = [
     id: 'starter',
     label: 'Starter',
     description:
-      'A focused website with a home page, about page, and browser TypeScript.',
+      'A polished website with light and dark themes, a customization guide, and an interactive launch checklist.',
   },
 ]
 

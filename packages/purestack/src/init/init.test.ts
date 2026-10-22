@@ -66,6 +66,7 @@ async function fixture(template = 'starter') {
   const unpacked = path.join(temporary, 'fixture')
   await cp(path.join(repository, 'templates', template), unpacked, {
     recursive: true,
+    filter: (source) => path.basename(source) !== 'node_modules',
   })
   return unpacked
 }
@@ -214,7 +215,10 @@ describe('project generation', () => {
     )
     expect(yarnConfig).toContain('nodeLinker: node-modules')
     expect(yarnConfig).toContain('npmMinimalAgeGate: 0')
-    expect(Object.keys(project.dependencies)).toEqual(['purestack'])
+    expect(project.dependencies).toMatchObject({
+      '@purestack/ts-style': cliVersion,
+      regor: '^1.7.6',
+    })
     expect(
       JSON.parse(
         await readFile(
@@ -606,7 +610,7 @@ describe('project generation', () => {
       await readFile(path.join(directory, 'content/siteConfig.json'), 'utf8'),
     )
     expect(config).toMatchObject({
-      style: { theme: { skin: 'standard', presets: ['mint'] } },
+      style: { theme: { skin: 'starter', presets: ['mint'] } },
       navigation: { mode: 'none' },
       pagefind: { enabled: false },
       pageToc: { enabled: false },

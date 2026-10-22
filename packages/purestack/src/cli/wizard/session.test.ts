@@ -1,4 +1,5 @@
 import {
+  cp,
   mkdir,
   mkdtemp,
   readdir,
@@ -54,7 +55,11 @@ class BrowserPeer implements DevWebSocketConnection {
 
 async function fixture(previewFails = false) {
   const cwd = await mkdtemp(path.join(tmpdir(), 'purestack-studio-test-'))
-  const root = path.resolve('templates/starter')
+  const root = path.join(cwd, 'template')
+  await cp(path.resolve('templates/starter'), root, {
+    recursive: true,
+    filter: (source) => path.basename(source) !== 'node_modules',
+  })
   const template = {
     root,
     source: 'starter',

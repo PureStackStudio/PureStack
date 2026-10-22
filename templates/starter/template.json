@@ -1,6 +1,6 @@
 {
   "formatVersion": 1,
-  "description": "A small site with a home page, about page, and browser TypeScript example.",
+  "description": "A considered general-purpose site with light and dark themes, a customization guide, and an interactive launch checklist.",
   "purestack": "1.1.19",
   "ui": "template.ui.json"
 }

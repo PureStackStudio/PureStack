@@ -4,6 +4,12 @@ Create a site with `npx purestack@latest init my-site --template starter --yes`.
 This package distributes complete project source. It is copied by the CLI and
 does not become a dependency of the generated project.
 
+The starter includes a responsive home page, About page, customization guide,
+shared navigation/footer, and an interactive launch checklist. Its custom skin
+refines the standard PureStack palette for both light and dark, while preserving
+the wizard's color choices. Starter copy explains what to replace; it makes no
+fictional business claims.
+
 Generated projects use pinned Yarn 4, Vite-powered Vitest app tests, and Biome
 for linting, formatting, and import organization. See the generated
 [README](template/README.md) for commands and requirements.

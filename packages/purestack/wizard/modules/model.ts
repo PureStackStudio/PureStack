@@ -104,7 +104,7 @@ export class WizardModel {
       marker: 'S',
       title: 'Starter',
       description:
-        'A focused website with a home page, about page, and browser TypeScript.',
+        'A polished website with light and dark themes, a customization guide, and an interactive launch checklist.',
     },
   ])
   readonly summary = computed<WizardSummaryEntry[]>(() => [

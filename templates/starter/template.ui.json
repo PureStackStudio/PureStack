@@ -16,7 +16,7 @@
               "label": "Color palette",
               "description": "Matching light and dark colors for your whole site.",
               "type": "select",
-              "default": "blue",
+              "default": "orange",
               "choices": [
                 {
                   "value": "blue",

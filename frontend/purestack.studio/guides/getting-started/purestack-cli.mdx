@@ -1,6 +1,6 @@
 ---
 title: PureStack CLI
-description: Create a content site, preview changes, build static files, and prepare a clean publish artifact with the PureStack CLI.
+description: Open PureStack Studio, shape your starter site, and make it your own.
 template: doc
 layout:
   showNav: true
@@ -13,224 +13,110 @@ nav:
 
 # PureStack CLI
 
-The `purestack` command builds a static site from a content directory. It discovers Markdown and Regor MDX pages, creates routes and navigation, generates theme styles, copies assets, and builds a search index when enabled. The same command also runs a development server and prepares a clean folder for publishing.
+Choose a starting point, find your colors, and see your new site. PureStack Studio guides you through it in your browser.
 
-Install `purestack` in your project with `yarn add purestack`. The commands below use the installed `purestack` executable through Yarn. Run them from your project root. You can also explore the <a href="https://github.com/PureStackStudio/PureStack/tree/main/packages/ts-ssg/sample-content" target="_blank" rel="noopener">repository's sample site</a>.
+## Open Studio
 
-## Build a first site
-
-Create a standalone project from an official template:
+With Node.js 22.12+ and npm installed, run this where you want to create your project:
 
 ```sh
-npx purestack@latest init my-site --install --yes
+npx purestack@latest init
+```
+
+The command starts a local PureStack website: your setup wizard. Click the URL printed in your terminal and keep the terminal open while you explore.
+
+## Shape your site
+
+**1. Name it.** Choose a title and project folder, relative to where you ran the command.
+
+<figure class="m-0 my-5">
+  <a href="/assets/guides/purestack-cli/studio-site.png" target="_blank" rel="noopener">
+    <img src="/assets/guides/purestack-cli/studio-site.png" width="1440" height="820" loading="lazy" alt="PureStack Studio site details with a site title, project folder, and navigation between setup sections." class="w-full rounded-md b-1 b-subtle"/>
+  </a>
+  <figcaption class="fs-sm text-subtle mt-2">Give your site a name. Move between setup sections whenever you need.</figcaption>
+</figure>
+
+**2. Shape it.** Pick **Starter**, explore the palettes, and choose your features. Go back to adjust anything before creating.
+
+<figure class="m-0 my-5">
+  <a href="/assets/guides/purestack-cli/studio-options.png" target="_blank" rel="noopener">
+    <img src="/assets/guides/purestack-cli/studio-options.png" width="1440" height="820" loading="lazy" alt="PureStack Studio template options showing appearance settings and the Ember color palette." class="w-full rounded-md b-1 b-subtle"/>
+  </a>
+  <figcaption class="fs-sm text-subtle mt-2">Your template brings its own settings. Choose a palette and the features you want.</figcaption>
+</figure>
+
+**3. Create it.** Select **Install dependencies**, optionally enable Git, and click **Create site** after reviewing. Watch the progress, then choose **Browse live site**.
+
+<figure class="m-0 my-5">
+  <a href="/assets/guides/purestack-cli/studio-review.png" target="_blank" rel="noopener">
+    <img src="/assets/guides/purestack-cli/studio-review.png" width="1440" height="820" loading="lazy" alt="PureStack Studio review screen summarizing the site title, folder, starter template, and dependency installation before creating the site." class="w-full rounded-md b-1 b-subtle"/>
+  </a>
+  <figcaption class="fs-sm text-subtle mt-2">Review your choices, then create your site and open it live.</figcaption>
+</figure>
+
+Studio can set up Yarn during installation. Git setup creates or reuses a repository without making a commit.
+
+<Panel tone="accent" variant="surface" class="p-0" bodyClass="p-5">
+  <h3 class="mt-0">A real site. Your source.</h3>
+  <p class="mb-0">A responsive landing page, About page, light and dark themes, a customization guide, and an interactive launch checklist. All yours to edit, with guidance for you and your AI assistant.</p>
+</Panel>
+
+## Make the first change
+
+Open your project in your editor. Change the headline in `content/modules/content/landing.ts` and save. Your words appear on the live site.
+
+| Make it yours | Start here |
+| --- | --- |
+| Words, sections, and buttons | `content/modules/content/landing.ts` |
+| Site name, logo, and palette | `content/siteConfig.json` |
+| Your story | `content/about.mdx` |
+| Layouts and components | `content/modules/components/` |
+
+Your project’s `README.md`, `AGENTS.md`, and `/guide/` show the way. [PureStack Component Tools](/guides/getting-started/vscode-extension/) helps you edit pages and components in VS Code.
+
+## Come back and keep building
+
+**Finish Studio** stops both local servers and keeps your project. Next time:
+
+```sh
 cd my-site
 yarn dev
 ```
 
-The `starter` template creates a small site with a home page, about page, and
-browser TypeScript example. Run `npx purestack@latest init` to open Site Studio.
-The CLI serves ordinary wizard content through PureStack's existing server and
-prints its local URL. Configure site details, templates, template-defined
-settings, and project setup, then create the site with animated progress.
-Browse the live site while Studio stays open; source edits reload automatically.
-Choose **Finish Studio** to stop both local servers. Use `--yes` to create a
-site directly without opening Studio.
+Replace `my-site` with your folder name. Skipped installation? Run `yarn install` first.
 
-```sh
-npx purestack@latest init my-site --template starter --git --yes
-npx purestack@latest init my-site --template starter --yes
-```
+## Everyday commands
 
-`--git` initializes a repository without creating a commit. If the project is
-already inside a repository, the CLI keeps using that repository. `--install`
-installs dependencies with the template's package manager (Yarn for starter).
-Both actions are opt-in. `--yes` skips all prompts
-and uses defaults for omitted settings; the default template is starter.
-
-Ctrl+C stops Studio and its live site. Direct creation with `--yes` requires a directory.
-
-For scripted customization, use `--set palette=mint --set search=false`.
-The template's `template.ui.json` defines its categories, fields, choices,
-defaults, and configuration bindings. Use `true` or `false` for toggle values.
-Unspecified values use the template's declared defaults.
-
-Use `--title "My Documentation"` to set the site title and logo brand. Template
-versions can be selected explicitly with `--template starter@1.1.19`. Full npm
-package names and explicit local package-folder or `.tgz` paths are supported
-too. Run `npx purestack@latest init --help` for the complete option list.
-
-The destination must be absent or empty. Templates become editable project
-source and are not installed as project dependencies. Each project includes
-`README.md` and `AGENTS.md` with customization guidance. Run `yarn build` for
-development output and `yarn publish` for a local release artifact.
-
-### Set up a content directory manually
-
-Create this folder beside your project's `package.json`:
-
-```text
-content/
-  siteConfig.json
-  index.mdx
-  about.mdx
-  assets/
-    logo.png
-```
-
-The CLI requires `siteConfig.json` at the root of the directory passed to `--content`. Start with:
-
-```json
-{
-  "siteTitle": "Acme Docs",
-  "logo": { "brand": "Acme Docs", "href": "/" },
-  "style": { "theme": { "skin": "standard" } },
-  "outDir": "../dist/site",
-  "publishDir": "../dist/publish"
-}
-```
-
-Save that JSON as `content/siteConfig.json`. The two relative output paths are resolved from `content`, so they point to `dist/site` and `dist/publish` beside it. Light and dark theme styles are generated by default. The [Site configuration guide](/guides/getting-started/site-config/) explains every setting, including navigation, search, sitemap, localization, and consent.
-
-Now add a home page at `content/index.mdx`:
-
-```mdx
----
-title: Welcome
-description: Start here to learn Acme.
-template: doc
-nav:
-  order: 0
----
-
-# Welcome
-
-Read the [about page](/about/) or start writing your own guide.
-```
-
-Add `content/about.mdx` with its own title and body. Then start the preview server:
-
-```sh
-yarn purestack serve --content ./content
-```
-
-Open the URL printed as `serving at` once shared setup finishes. Pages render as you open them. With the default settings the URL is `http://127.0.0.1:4173/`. The server binds to `0.0.0.0` by default; pass `--host 127.0.0.1` if it should listen only on your machine. If `basePath` is set in `siteConfig.json`, the printed URL includes it.
-
-## Understand the content folder
-
-The CLI recognizes `.md`, `.mdx`, and `.rmdx` as pages. Both `.mdx` and `.rmdx` use the Regor MDX pipeline. `.md` also uses that pipeline by default; `mdx.compileMdAsMdx` can change how `.md` is compiled. See the [Regor guide](/guides/extending/regor/) for markup and component usage.
-
-Routes follow filenames and folders:
-
-| Source file | Public route | Generated page |
-| --- | --- | --- |
-| `index.mdx` | `/` | `index.html` |
-| `about.mdx` | `/about/` | `about/index.html` |
-| `guide/index.md` | `/guide/` | `guide/index.html` |
-| `guide/guide.mdx` | `/guide/` | `guide/index.html` |
-| `guide/install.rmdx` | `/guide/install/` | `guide/install/index.html` |
-
-`guide/index.md` and `guide/guide.mdx` are alternative names for the same route; do not keep both. The build reports duplicate routes as an error. Page frontmatter supplies a page's title, description, template, navigation order, and layout choices. If a page omits `template`, PureStack uses the documentation template.
-
-Set `index: false` in frontmatter for a preview or unlisted page. PureStack still builds it and resolves links to it, but excludes it from generated navigation, search, and the sitemap and adds a robots `noindex` tag. `hidden: true` only hides a page from navigation.
-
-Files such as `assets/logo.png` are copied into the output folder with their relative paths intact. The root `siteConfig.json` and navigation files are inputs to the build, not public assets. You can place `_nav.json` in a folder for custom or hybrid navigation, and `header.mdx` or `footer.mdx` for shared page sections. The [Site configuration guide](/guides/getting-started/site-config/) shows how to enable and order navigation. A Markdown or MDX file whose name, or a folder above it, starts with `_` is never a page; pages show it with [`<import-content>`](/guides/content/shared-content/).
-
-A `purestack.config.ts` beside `siteConfig.json` adds code of your own, such as a brand skin, components, templates, or generated pages, through [plugins](/guides/extending/plugins/). Every command loads it when it is present; like other `.ts` files in the content folder, it is never copied to the output.
-
-## Commands at a glance
-
-Every build command requires `--content <dir>`. The path is resolved from the working directory and must contain `siteConfig.json`.
-
-| Command | Result | Output folder |
-| --- | --- | --- |
-| `build` | Generates the complete static site. | `outDir` |
-| `serve` | Starts an HTTP server, renders pages on request, and watches content by default. | `outDir` |
-| `publish` | Cleans and builds a release artifact. | `publishDir` |
-
-Use `yarn purestack --help` or `yarn purestack help` to print the CLI's own usage summary. Options can be written as `--content ./content` or `--content=./content`.
-
-Use `yarn purestack --version` or `yarn purestack -v` to print the installed PureStack version.
-
-### `build`: generate static files
-
-```sh
-yarn purestack build --content ./content
-yarn purestack build --content ./content --clean
-```
-
-`build` renders all pages, writes the theme CSS and favicon when configured, copies static assets, writes a build manifest, and creates a Pagefind index when search is enabled. It writes a sitemap and `robots.txt` only when sitemap generation is enabled in `siteConfig.json`. The command exits when the build finishes; serve the resulting folder with your static host.
-
-`--clean` removes the configured `outDir` before rebuilding it. Use it when you need an output folder containing only files from the current build. Without `--clean`, PureStack keeps the directory and rewrites current outputs.
-
-`--no-cache` bypasses reads and writes to persistent computation caches kept outside the output directory, such as highlighted code and optimized images. It works with `build`, `serve`, and `publish`. Use it to compare uncached rendering or investigate a stale cached result. Existing cache files stay in place; a cold build with caching enabled also spends time populating its cache.
-
-During `serve`, pages still render on request and reuse their rendered output until invalidated. `--no-cache` affects computations when a page renders; it does not force rendering on every request. To rebuild into an empty output directory with persistent caches bypassed, combine `--clean` and `--no-cache` (`publish` already cleans its output directory).
-
-### `serve`: preview and edit
-
-```sh
-yarn purestack serve --content ./content
-yarn purestack serve --content ./content --host 127.0.0.1 --port 4300
-yarn purestack serve --content ./content --clean --full-render
-```
-
-The server uses port `4173` and host `0.0.0.0` unless you override them. By default, startup prepares routes, navigation, and shared page sections. Each page renders on its first request and is cached for later requests; static assets copy when requested. Watched edits invalidate affected pages so they render again on the next request, and open pages reload automatically. Changes to `siteConfig.json`, `purestack.config.ts`, or a file the config imports refresh shared setup and invalidate cached pages.
-
-Use `--full-render` when you need every page, asset, and the complete search index generated before browsing. It runs one full build at startup, and site requests wait for that build to finish. After startup, watched edits use the same incremental invalidation and rendering on request as the default mode.
-
-When search is enabled, the default mode builds its search index when a Pagefind asset is requested and includes only pages opened in the current session. `--full-render` starts with a complete search index; later changes are handled incrementally. `build` and `publish` always index the complete site.
-
-These options belong to `serve`:
-
-| Option | Effect |
+| Command | What it does |
 | --- | --- |
-| `--host <host>` | Listen on a particular interface, for example `127.0.0.1`. |
-| `--port <port>` | Listen on a different port. |
-| `--clean` | Remove `outDir` before setup and when config changes reset shared setup. |
-| `--no-cache` | Skip persistent caches, such as highlighted code and optimized images. |
-| `--full-render` | Build every page, asset, and the complete search index once at startup. Watched edits remain incremental. |
-| `--no-watch` | Keep the server running without watching the content directory. Pages still render on request, or all at startup with `--full-render`. |
-| `--no-reload` | Keep watching and updating the site, but do not inject the browser live reload script. |
+| `yarn dev` | Open your site locally. Saved changes reload in your browser. |
+| `yarn check` | Check code quality and formatting. |
+| `yarn test` | Run app tests while you work. |
+| `yarn build` | Generate the complete site in `dist/dev`. |
+| `yarn publish` | Prepare a clean release in `dist/publish`, ready for your host. |
 
-Watching and browser reload are separate. For example, `--no-reload` is useful if another browser tool manages refreshes. The server displays page build errors as diagnostic pages so you can correct the source and continue editing.
+Ready to go live? Follow the [deployment guide](/guides/publishing/deployment/).
 
-### `publish`: prepare a release folder
+<ExpandablePanel title="Need more control from the terminal?" variant="surface">
+
+<p>You can prefill Studio without skipping it:</p>
 
 ```sh
-yarn purestack publish --content ./content
+npx purestack@latest init my-site --title "My next idea"
 ```
 
-`publish` uses `publishDir` instead of `outDir`. It cleans that directory before building, minifies generated HTML and browser scripts, disables pretty printed CSS, and treats asset build errors as failures. It creates the same site content and optional search and sitemap outputs as `build`, according to `siteConfig.json`.
+<p>Run <code>npx purestack@latest init --help</code> for template selection, preset options, Studio’s host and port, and direct creation for scripts. For existing content, use commands such as <code>yarn purestack build --content ./content</code>.</p>
 
-Point your deployment process at `publishDir` after a successful run. `publish` prepares files locally; it does not upload them. It accepts `--content` and `--no-cache`, with no separate `--clean` flag because cleaning is built in.
+<h3 id="build-generate-static-files"><code>build</code>: generate static files</h3>
 
-## Choose the public URL
+<p>Writes the complete site to <code>outDir</code>. Use <code>--clean</code> to empty it first or <code>--no-cache</code> to bypass persistent caches.</p>
 
-The output directory is a filesystem path; `basePath` is a URL path. For a site hosted under `https://example.com/docs/`, set this in `content/siteConfig.json`:
+<h3 id="serve-preview-and-edit"><code>serve</code>: preview and edit</h3>
 
-```json
-{
-  "siteTitle": "Acme Docs",
-  "basePath": "/docs",
-  "outDir": "../dist/site",
-  "publishDir": "../dist/publish",
-  "sitemap": {
-    "enabled": true,
-    "baseUrl": "https://example.com"
-  }
-}
-```
+<p>Watches edits and reloads your browser. <code>--port</code> changes the address; <code>--full-render</code> builds every page before browsing.</p>
 
-The home page stays at `dist/site/index.html`, but links and the development server use `/docs/`. Your production host must serve the published folder at `/docs/`. `sitemap.baseUrl` supplies the origin; PureStack combines it with `basePath` for sitemap and canonical URLs. See [Site configuration](/guides/getting-started/site-config/) for the full path and SEO rules.
+<h3 id="publish-prepare-a-release-folder"><code>publish</code>: prepare a release folder</h3>
 
-## When a command fails
+<p>Cleans <code>publishDir</code> and prepares an optimized release locally. Set your public URL in <a href="/guides/getting-started/site-config/">site configuration</a>.</p>
 
-| Symptom | Check |
-| --- | --- |
-| `Missing required --content <dir> option` | Pass `--content` to `build`, `serve`, or `publish`. |
-| `Missing required siteConfig.json` | Check the path passed to `--content` and the file's exact name. |
-| `Unknown option` | Run `yarn purestack --help`; `--host`, `--port`, `--no-watch`, `--no-reload`, and `--full-render` apply only to `serve`. |
-| `Could not bundle …purestack.config.ts` | Check the imports in `purestack.config.ts` and the files it imports; the message names the import that failed. |
-| `Duplicate content routes detected` | Find two files that map to the same URL, such as `guide/index.md` and `guide/guide.mdx`. |
-| A page or asset returns 404 under a subpath | Check `basePath`, the URL printed by `serve`, and the path at which your host serves the output folder. |
-| `publish` fails while `serve` displayed an error page | Fix the page or asset error shown by the development server, then rerun `publish`. |
+</ExpandablePanel>

@@ -8,15 +8,38 @@ project-pinned Yarn version automatically. If you skipped installation, follow
 
 Run `yarn install` if dependencies were not installed during creation, then
 `yarn dev`. Open the address printed by the server. Edit
-`content/index.mdx` to change your home page; the preview reloads as you work.
+`content/modules/content/landing.ts` to change your home page copy; the preview reloads as you work.
 
 ## Customize
 
-- Set your title and brand in `content/siteConfig.json`.
-- Add `.md`, `.mdx`, or `.rmdx` files under `content/` to create routes.
-- Edit `content/about.mdx` for your about page.
-- `content/hello.ts` demonstrates browser behavior loaded with `PageScript`.
-- Add plugins to `content/purestack.config.ts` for custom components and themes.
+- Start with the headline, introduction, and primary button in `content/modules/content/landing.ts`.
+- `content/index.mdx` composes the landing page. Its focused components live under
+  `content/modules/components/landing/`, grouped into hero and foundation features.
+- Replace the prompts in `content/about.mdx` with your own facts and story.
+- Set your title, logo, and palette in `content/siteConfig.json`. The default is
+  orange; `blue`, `mint`, `green`, `pink`, and `red` also work in light and dark.
+- Set `favicon` in `content/siteConfig.json` to a verified PureStack icon name.
+- Edit `content/header.mdx` for header navigation. The shared footer is composed in
+  `content/footer.mdx`; its brand, navigation, and guide card components live under
+  `content/modules/components/shell/footer/`.
+- Add `.mdx` pages under `content/` to create routes. Use `.md` for plain prose
+  without frontmatter. Keep code and scripts beside their MDX page; the checklist
+  at `content/guide/checklist/` shows this structure.
+- Refine colors, typography, and corners in `content/modules/theme/palette.ts`.
+  This skin customizes PureStack's standard palette rather than replacing it.
+- Keep custom fluent style rules in `content/modules/styles/`. Prefer native
+  components and generated utilities for ordinary layout and spacing.
+- Register additional plugins in `content/purestack.config.ts`.
+
+Open `/guide/` for a file map and customization examples, and `/guide/checklist/`
+for the small interactive Regor app. The checklist is a reminder for the current
+visit; it does not automatically verify or change your files. Its component is
+`content/guide/checklist/checklist-component.ts`.
+
+The home page, About page, shared header, and footer contain deliberate starter
+copy. Replace it with your own content before launch. Remove the guide and
+checklist if they are no longer useful, updating links to them at the same time.
+Keep real claims and destinations; do not invent testimonials or statistics.
 
 Run `yarn build` to generate `dist/dev`. Run `yarn publish` to create
 a clean, minified release in `dist/publish`. These commands write local files;
@@ -31,8 +54,9 @@ deploy the release folder with your static hosting provider.
 - `yarn check`: check lint, formatting, and import organization together.
 - `yarn check:fix`: apply Biome's safe fixes and formatting.
 
-Add automated app tests under `tests/` as `*.test.ts`. The greeting example
-tests the browser entry in PureStack's DOM utilities without a browser server.
+Add automated app tests under `tests/` as `*.test.ts`. The checklist example
+tests checkbox interaction, computed progress, completion, and reset in
+PureStack's DOM utilities without a browser server.
 Keep tests outside `content/` so they are not published as site assets. PureStack
 still builds and serves the site; Vite is used by Vitest for tests only.
 

@@ -1,7 +1,8 @@
+import { defineStudioSetupStepComponent } from './getting-started/studioSetupStep'
 import { defineStudioActivityChartComponent } from './studioActivityChart'
 import { defineStudioBrandComponent } from './studioBrand'
-import { defineStudioCommandComponent } from './studioCommand'
 import { defineStudioColorPickerComponent } from './studioColorPicker'
+import { defineStudioCommandComponent } from './studioCommand'
 import { defineStudioCopyComponent } from './studioCopy'
 import { defineStudioFaqComponent } from './studioFaq'
 import { defineStudioFeatureComponent } from './studioFeature'
@@ -19,6 +20,7 @@ export function defineStudioComponents() {
     studioCopy: defineStudioCopyComponent(),
     studioFaq: defineStudioFaqComponent(),
     studioCommand: defineStudioCommandComponent(),
+    studioSetupStep: defineStudioSetupStepComponent(),
     studioActivityChart: defineStudioActivityChartComponent(),
     studioWorkbench: defineStudioWorkbenchComponent(),
   }

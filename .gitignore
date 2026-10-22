@@ -9,3 +9,4 @@ tsconfig.bundle.generated.json
 /.tmp*
 /frontend/out/
 /frontend/purestack.studio/legal/_private/
+/private-docs
