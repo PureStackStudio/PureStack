@@ -208,9 +208,12 @@ describe('project generation', () => {
     expect(await readFile(path.join(destination, 'yarn.lock'), 'utf8')).toBe('')
     expect(project.packageManager).toBe('yarn@4.18.1')
     expect(project.devDependencies['@purestack/ts-minidom']).toBe(cliVersion)
-    expect(
-      await readFile(path.join(destination, '.yarnrc.yml'), 'utf8'),
-    ).toContain('nodeLinker: node-modules')
+    const yarnConfig = await readFile(
+      path.join(destination, '.yarnrc.yml'),
+      'utf8',
+    )
+    expect(yarnConfig).toContain('nodeLinker: node-modules')
+    expect(yarnConfig).toContain('npmMinimalAgeGate: 0')
     expect(Object.keys(project.dependencies)).toEqual(['purestack'])
     expect(
       JSON.parse(
@@ -482,10 +485,12 @@ describe('project generation', () => {
       repository,
     )
     expect(result.installed).toBe(false)
-    expect(install).toHaveBeenCalledWith('yarn', ['install'], destination, {
-      capture: true,
-      signal: undefined,
-    })
+    expect(install).toHaveBeenCalledWith(
+      'yarn',
+      ['install', '--no-immutable'],
+      destination,
+      { capture: true, signal: undefined },
+    )
     expect(result.failures).toEqual([
       expect.stringContaining('Retry yarn install'),
     ])

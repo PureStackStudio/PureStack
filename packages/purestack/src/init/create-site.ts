@@ -108,8 +108,11 @@ export async function createSite(
         perform,
         options.signal,
       )
+      // The first install writes the lockfile, even where CI makes Yarn immutable.
+      const install =
+        packageManager === 'yarn' ? ['install', '--no-immutable'] : ['install']
       await perform('Install dependencies', () =>
-        runPackageManager(packageManager, ['install'], directory, {
+        runPackageManager(packageManager, install, directory, {
           capture: true,
           signal: options.signal,
         }),

@@ -59,9 +59,13 @@ async function main() {
     (await runYarn(['--version'], project, { capture: true, signal })).trim(),
     version,
   )
-  await runPackageManager('yarn', ['install', '--mode=skip-build'], project, {
-    signal,
-  })
+  // Like createSite: the first install writes the lockfile despite CI immutability.
+  await runPackageManager(
+    'yarn',
+    ['install', '--no-immutable', '--mode=skip-build'],
+    project,
+    { signal },
+  )
   assert.match(
     await readFile(path.join(project, 'yarn.lock'), 'utf8'),
     /__metadata/,

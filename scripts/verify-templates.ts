@@ -107,8 +107,9 @@ async function main() {
       }
       await runPackageManager(
         manager,
+        // Like createSite: the first install writes the lockfile despite CI immutability.
         manager === 'yarn'
-          ? ['install']
+          ? ['install', '--no-immutable']
           : ['install', '--no-audit', '--no-fund'],
         directory,
       )

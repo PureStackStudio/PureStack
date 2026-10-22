@@ -1,5 +1,5 @@
 import { existsSync } from 'node:fs'
-import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
+import { mkdir, mkdtemp, realpath, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -15,7 +15,10 @@ vi.mock('node:fs', async (importOriginal) => {
 let temporary: string
 
 beforeEach(async () => {
-  temporary = await mkdtemp(path.join(tmpdir(), 'purestack-yarn-runner-'))
+  // Child processes report resolved paths, e.g. /private/var on macOS.
+  temporary = await realpath(
+    await mkdtemp(path.join(tmpdir(), 'purestack-yarn-runner-')),
+  )
   vi.stubEnv('COREPACK_ROOT', undefined)
   vi.stubEnv('npm_execpath', undefined)
   vi.stubEnv('PATH', '')
