@@ -8,6 +8,7 @@ import {
   runPackageManager,
 } from '../packages/purestack/src/init/package-manager'
 import { runProcess } from '../packages/purestack/src/init/process'
+import { resolveCoreSiteConfig } from '../packages/ts-ssg/src/config/core-config'
 import { workspaceManifestPaths } from './workspaces'
 
 const root = process.cwd()
@@ -117,14 +118,16 @@ async function main() {
         if (typeof project.scripts?.[script] === 'string')
           await runPackageManager(manager, ['run', script], directory)
       }
-      for (const output of ['site', 'publish']) {
-        const html = await readFile(
-          path.join(directory, 'dist', output, 'index.html'),
-          'utf8',
-        )
+      // Each template chooses its output folders; resolve them as the build does.
+      const { outDir, publishDir } = resolveCoreSiteConfig({
+        rootDir: directory,
+        contentDir: path.join(directory, 'content'),
+      })
+      for (const output of [outDir, publishDir]) {
+        const html = await readFile(path.join(output, 'index.html'), 'utf8')
         assert(
           html.includes('Template verification'),
-          `${output} is missing the customized title.`,
+          `${path.relative(directory, output)} is missing the customized title.`,
         )
       }
       console.log(`Verified ${template.manifest.name}.`)

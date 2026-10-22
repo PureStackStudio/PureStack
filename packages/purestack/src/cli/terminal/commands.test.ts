@@ -7,10 +7,13 @@ import { changeDirectoryCommand } from './commands'
 
 let temporary: string
 beforeAll(async () => {
-  temporary = await mkdtemp(path.join(tmpdir(), 'purestack-shell-'))
+  // Shells keep the form they start in: RUNNER~1 on Windows, /private/var on macOS.
+  temporary = await realpath(
+    await mkdtemp(path.join(tmpdir(), 'purestack-shell-')),
+  )
 })
 afterAll(async () => {
-  expect(path.dirname(path.resolve(temporary))).toBe(path.resolve(tmpdir()))
+  expect(path.dirname(temporary)).toBe(await realpath(tmpdir()))
   expect(path.basename(temporary)).toMatch(/^purestack-shell-/)
   await rm(temporary, { recursive: true, force: true })
 })

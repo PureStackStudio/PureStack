@@ -18,7 +18,7 @@ Run `yarn install` if dependencies were not installed during creation, then
 - `content/hello.ts` demonstrates browser behavior loaded with `PageScript`.
 - Add plugins to `content/purestack.config.ts` for custom components and themes.
 
-Run `yarn build` to generate `dist/site`. Run `yarn publish` to create
+Run `yarn build` to generate `dist/dev`. Run `yarn publish` to create
 a clean, minified release in `dist/publish`. These commands write local files;
 deploy the release folder with your static hosting provider.
 
